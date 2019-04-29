@@ -2,114 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D661DCB5
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 09:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF080DCC6
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 09:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727314AbfD2HRn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 29 Apr 2019 03:17:43 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:37183 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727306AbfD2HRn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 03:17:43 -0400
-Received: by mail-oi1-f195.google.com with SMTP id k6so7517836oic.4;
-        Mon, 29 Apr 2019 00:17:42 -0700 (PDT)
+        id S1727272AbfD2HYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Apr 2019 03:24:36 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33479 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727253AbfD2HYg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 03:24:36 -0400
+Received: by mail-pf1-f195.google.com with SMTP id h5so4899103pfo.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 00:24:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=EIIJLhAFCZQq0dnycb/pG8Aeyu7w+W2KsYDQ22amdpc=;
+        b=RkyNnkD6b5O/wXFiudD845tzjN4PkowhqN+hY3W1YKjiXUIXttI7WfkK+g7gLdHD8w
+         MxQ2Ab5XtY7YGdv6aHENo665u5YFk4GMZ9Uwg65yHICn5ZuSN9rHfjM93vMdMhr5pEBU
+         ofgSu/d/nC/31Oluny1llmtG4af0itqOJp5vRLhaYS9uDYdeHao0r+japQEyxzOy5Sv1
+         Qho5epAdHYMprgTe6UXbM+yeWl6M7NPNSB8NWI11jOixlp0bxyMriayEVfz9nVH3jY1b
+         fRpoCzurCKyG9ykJEm8tan3C+gAg4S1Qqzjd2kUlSBcfVsEfHv8sjksjIX2CH1X0AmXp
+         6eJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=U0ILNQQnANwDaULFq9BnSLE4JegKbYYRqIG6pRQ8vEk=;
-        b=AzPOYPlmRlFY1ZMZ6XdFpNqOKSufwIYjmGx6OGsZaW2CFkoWeQ6tQ3+x8AJxK/B3W+
-         ZbZAhrJa90LxJVakt7HwjulDgHy/2xw6As8QtZsW2n/WnB5hJqwdl0ykQm6y2X/C42ix
-         LOmm27gFtTdSz+yQxeiQwWEtDhffXj6EpLDK6K8V4T2mShRuJr8EQHCjInEEHawPOU+V
-         6llXpBVfNduP81z5Ct+rJ/0Sq6EfdbDspDf+b/7h7dGaaW1m9PodJQNAWvcJg+U/zOvZ
-         otiXCGk3DVoUrGE1a38sOpdzQCrQfyHOP2J8i9Kj2y6ZvgkXfFxxZjtirDpNm8a2vhCu
-         C3tw==
-X-Gm-Message-State: APjAAAW+sC75NcFvGrNR6Dnmegz+pmG7Kt6jSOnLArpu9xnCNvoWj+gG
-        yIQPSz+QhR7tAsqdEy4koU9PwEyhKqJnfdw+0bknmRLI
-X-Google-Smtp-Source: APXvYqwr1JzPOuSpeIEP+9sUUFOH+slhC9WrQ3DVJQkPqRABjuPtCwtvgu2tX7fhE9UKdsflW3QhNDNgQMdTGy0lX/Q=
-X-Received: by 2002:aca:4a8a:: with SMTP id x132mr7422695oia.68.1556522262049;
- Mon, 29 Apr 2019 00:17:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <5fdabbb9-0a62-4802-f1ca-f83584f935fa@molgen.mpg.de>
-In-Reply-To: <5fdabbb9-0a62-4802-f1ca-f83584f935fa@molgen.mpg.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 29 Apr 2019 09:17:26 +0200
-Message-ID: <CAJZ5v0gobp60Pn5cdh0CohGAXSBs-EvntNqKc_dj_UTnOiogkQ@mail.gmail.com>
-Subject: Re: Why is suspend with s2idle available on POWER8 systems?
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=EIIJLhAFCZQq0dnycb/pG8Aeyu7w+W2KsYDQ22amdpc=;
+        b=LJvd6MAWlpn2tdGWtmO/OAM7Wxgho8t8EfvxRhEfJS1AtZLz9CJZIPi8Y2FTHjy0uz
+         UsiFb2dWWKnxrD1cpYxxdIm6Mh5lp9qxJzOBr8OZLPy9lZu/Hc2Z8fT5BItP2F9TPzgP
+         uAfIwJQi02sm/Wc8fxnAU2AYSfSb4W6qhMEADIPtQHsN6vbAVMkHovR1ZozjJimR2u+8
+         +p0d7s91HsCoJTLNHVR1gVmEsMD4xqEfeZCXUohw/wQDWNVmNkPKmkG/6BgfYvMPwtw2
+         8B0iCxuKhqj0CIhlShlAsM8EljY8cBBqgoZPilh6s5AKGVYAimFNVQFCYuWBbVRpbDec
+         9fYw==
+X-Gm-Message-State: APjAAAVXtrEG+OJ6p+WJddYBtht57KF62sKqsh4bQHM8trYm20xKNGmE
+        vGGuCbuIyiSsxuJm2JDnmM4=
+X-Google-Smtp-Source: APXvYqxoYJRKfp+4nBIyxclNtCzV853l5P0bwr+jybYaXtUUkPSaiY6++WuZJh9U8rL24ahqCLwi5Q==
+X-Received: by 2002:a65:4341:: with SMTP id k1mr56216224pgq.88.1556522675570;
+        Mon, 29 Apr 2019 00:24:35 -0700 (PDT)
+Received: from huyue2.ccdomain.com ([218.189.10.173])
+        by smtp.gmail.com with ESMTPSA id k186sm55954711pfc.137.2019.04.29.00.24.32
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Apr 2019 00:24:34 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        rafael.j.wysocki@intel.com
+Cc:     linux-pm@vger.kernel.org, huyue2@yulong.com
+Subject: [PATCH v3] cpufreq: Don't find governor for setpolicy drivers in cpufreq_init_policy()
+Date:   Mon, 29 Apr 2019 15:24:18 +0800
+Message-Id: <20190429072418.7860-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1.windows.2
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Apr 27, 2019 at 12:54 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Linux folks,
->
->
-> Updating an IBM S822LC from Ubuntu 18.10 to 19.04 some user space stuff
-> seems to have changed, so that going into sleep/suspend is enabled.
->
-> That raises two questions.
->
-> 1.  Is suspend actually supported on a POWER8 processor?
+From: Yue Hu <huyue2@yulong.com>
 
-Suspend-to-idle is a special variant of system suspend that does not
-depend on any special platform support.  It works by suspending
-devices and letting all of the CPUs in the system go idle (hence the
-name).
+In cpufreq_init_policy() we will check if there's last_governor for target
+and setpolicy type. However last_governor is set only if has_target() is
+true in cpufreq_offline(). That means find last_governor for setpolicy
+type is pointless. Also new_policy.governor will not be used if ->setpolicy
+callback is set in cpufreq_set_policy().
 
-Also see https://www.kernel.org/doc/html/latest/admin-guide/pm/sleep-states.html#suspend-to-idle
+Moreover, there's duplicate ->setpolicy check in using default policy path.
+Let's add a new helper function to avoid it. Also update a little comment.
 
->
-> > Apr 27 10:18:13 power NetworkManager[7534]: <info>  [1556353093.7224] manager: sleep: sleep requested (sleeping: no  e
-> > Apr 27 10:18:13 power systemd[1]: Reached target Sleep.
-> > Apr 27 10:18:13 power systemd[1]: Starting Suspend...
-> > Apr 27 10:18:13 power systemd-sleep[82190]: Suspending system...
-> > Apr 27 10:18:13 power kernel: PM: suspend entry (s2idle)
-> > -- Reboot --
->
-> > $ uname -m
-> > ppc64le
-> > $ more /proc/version
-> > Linux version 5.1.0-rc6+ (joey@power) (gcc version 8.3.0 (Ubuntu 8.3.0-6ubuntu1)) #1 SMP Sat Apr 27 10:01:48 CEST 2019
-> > $ more /sys/power/mem_sleep
-> > [s2idle]
-> > $ more /sys/power/state
-> > freeze mem
-> > $ grep _SUSPEND /boot/config-5.0.0-14-generic # also enabled in Ubuntu’s configuration
-> > CONFIG_ARCH_SUSPEND_POSSIBLE=y
-> > CONFIG_SUSPEND=y
-> > CONFIG_SUSPEND_FREEZER=y
-> > # CONFIG_SUSPEND_SKIP_SYNC is not set
-> > # CONFIG_PM_TEST_SUSPEND is not set
->
-> Should the Kconfig symbol `SUSPEND` be selectable? If yes, should their
-> be some detection during runtime?
->
-> 2.  If it is supported, what are the ways to getting it to resume? What
-> would the IPMI command be?
+Signed-off-by: Yue Hu <huyue2@yulong.com>
+---
+v2: fix ->setplicy typo.
+v3:
+  - let cpufreq_parse_governor() only handle !set_policy.
+  - fix using {} in the if block.
+  - change helper function name.
+  - update comment, commit message.
 
-That would depend on the distribution.
+ drivers/cpufreq/cpufreq.c | 116 ++++++++++++++++++++++++++--------------------
+ 1 file changed, 65 insertions(+), 51 deletions(-)
 
-Generally, you need to set up at least one device to generate wakeup interrupts.
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 0322cce..ce8a01d 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -578,50 +578,52 @@ static struct cpufreq_governor *find_governor(const char *str_governor)
+ 	return NULL;
+ }
+ 
++static int cpufreq_parse_policy(char *str_governor,
++				struct cpufreq_policy *policy)
++{
++	if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN)) {
++		policy->policy = CPUFREQ_POLICY_PERFORMANCE;
++		return 0;
++	}
++	if (!strncasecmp(str_governor, "powersave", CPUFREQ_NAME_LEN)) {
++		policy->policy = CPUFREQ_POLICY_POWERSAVE;
++		return 0;
++	}
++	return -EINVAL;
++}
++
+ /**
+- * cpufreq_parse_governor - parse a governor string
++ * cpufreq_parse_governor - parse a governor string only for !setpolicy
+  */
+ static int cpufreq_parse_governor(char *str_governor,
+ 				  struct cpufreq_policy *policy)
+ {
+-	if (cpufreq_driver->setpolicy) {
+-		if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN)) {
+-			policy->policy = CPUFREQ_POLICY_PERFORMANCE;
+-			return 0;
+-		}
+-
+-		if (!strncasecmp(str_governor, "powersave", CPUFREQ_NAME_LEN)) {
+-			policy->policy = CPUFREQ_POLICY_POWERSAVE;
+-			return 0;
+-		}
+-	} else {
+-		struct cpufreq_governor *t;
++	struct cpufreq_governor *t;
+ 
+-		mutex_lock(&cpufreq_governor_mutex);
++	mutex_lock(&cpufreq_governor_mutex);
+ 
+-		t = find_governor(str_governor);
+-		if (!t) {
+-			int ret;
++	t = find_governor(str_governor);
++	if (!t) {
++		int ret;
+ 
+-			mutex_unlock(&cpufreq_governor_mutex);
++		mutex_unlock(&cpufreq_governor_mutex);
+ 
+-			ret = request_module("cpufreq_%s", str_governor);
+-			if (ret)
+-				return -EINVAL;
++		ret = request_module("cpufreq_%s", str_governor);
++		if (ret)
++			return -EINVAL;
+ 
+-			mutex_lock(&cpufreq_governor_mutex);
++		mutex_lock(&cpufreq_governor_mutex);
+ 
+-			t = find_governor(str_governor);
+-		}
+-		if (t && !try_module_get(t->owner))
+-			t = NULL;
++		t = find_governor(str_governor);
++	}
++	if (t && !try_module_get(t->owner))
++		t = NULL;
+ 
+-		mutex_unlock(&cpufreq_governor_mutex);
++	mutex_unlock(&cpufreq_governor_mutex);
+ 
+-		if (t) {
+-			policy->governor = t;
+-			return 0;
+-		}
++	if (t) {
++		policy->governor = t;
++		return 0;
+ 	}
+ 
+ 	return -EINVAL;
+@@ -746,8 +748,13 @@ static ssize_t store_scaling_governor(struct cpufreq_policy *policy,
+ 	if (ret != 1)
+ 		return -EINVAL;
+ 
+-	if (cpufreq_parse_governor(str_governor, &new_policy))
+-		return -EINVAL;
++	if (cpufreq_driver->setpolicy) {
++		if (cpufreq_parse_policy(str_governor, &new_policy))
++			return -EINVAL;
++	} else {
++		if (cpufreq_parse_governor(str_governor, &new_policy))
++			return -EINVAL;
++	}
+ 
+ 	ret = cpufreq_set_policy(policy, &new_policy);
+ 
+@@ -1020,32 +1027,39 @@ __weak struct cpufreq_governor *cpufreq_default_governor(void)
+ 
+ static int cpufreq_init_policy(struct cpufreq_policy *policy)
+ {
+-	struct cpufreq_governor *gov = NULL;
++	struct cpufreq_governor *gov = NULL, *def_gov = NULL;
+ 	struct cpufreq_policy new_policy;
+ 
+ 	memcpy(&new_policy, policy, sizeof(*policy));
+ 
+-	/* Update governor of new_policy to the governor used before hotplug */
+-	gov = find_governor(policy->last_governor);
+-	if (gov) {
+-		pr_debug("Restoring governor %s for cpu %d\n",
++	def_gov = cpufreq_default_governor();
++
++	if (has_target()) {
++		/*
++		 * Update governor of new_policy to the governor used before
++		 * hotplug
++		 */
++		gov = find_governor(policy->last_governor);
++		if (gov) {
++			pr_debug("Restoring governor %s for cpu %d\n",
+ 				policy->governor->name, policy->cpu);
++		} else {
++			if (!def_gov)
++				return -ENODATA;
++			gov = def_gov;
++		}
++		new_policy.governor = gov;
+ 	} else {
+-		gov = cpufreq_default_governor();
+-		if (!gov)
+-			return -ENODATA;
+-	}
+-
+-	new_policy.governor = gov;
+-
+-	/* Use the default policy if there is no last_policy. */
+-	if (cpufreq_driver->setpolicy) {
+-		if (policy->last_policy)
++		/* Use the default policy if there is no last_policy. */
++		if (policy->last_policy) {
+ 			new_policy.policy = policy->last_policy;
+-		else
+-			cpufreq_parse_governor(gov->name, &new_policy);
++		} else {
++			if (!def_gov)
++				return -ENODATA;
++			cpufreq_parse_policy(def_gov->name, &new_policy);
++		}
+ 	}
+-	/* set default policy */
++
+ 	return cpufreq_set_policy(policy, &new_policy);
+ }
+ 
+-- 
+1.9.1
 
-The interface to do that are the /sys/devices/.../power/wakeup files,
-but that has to cause enble_irq_wake() to be called for the given IRQ,
-so some support in the underlying drivers need to be present for it to
-work.
-
-USB devices generally work as wakeup sources if the controllers reside
-on a PCI bus, for example.
-
-Thanks,
-Rafael
