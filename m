@@ -2,113 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A2EE03B
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 12:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080EAE081
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 12:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727730AbfD2KGR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Apr 2019 06:06:17 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39873 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727537AbfD2KGR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 06:06:17 -0400
-Received: by mail-pl1-f195.google.com with SMTP id e92so4839092plb.6
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 03:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=L9vsHR4UBkZjIkLHhWbQG/G5pySH9Fi+q7NDpTNHaBE=;
-        b=uxKMnOEcV1XL6nuDh8EcABzfXAttm4mDVRDlQy/FEUES52C6aSzR1OH3tv+5FhzHgE
-         QCOzmqxrATO5IKr/C1Cbkrhk3jqECs0J6Vixbcwqr8c1q2fSYJd/4FgqE/kVB/e/C5nT
-         B38WBzNfptwPtizb0MyGyMrIPk3OegQtQgOGqcNfHjB+ml3reh8y8JNRmYU4mRQXIgdk
-         O1W9IacgDouxJu6gHlm95y61Qvm/63ZHuA4jHF+CQSWQDQWUjTFz3p90IB7D3QZmC6RR
-         itmVKlODAsvPvoGvvIqT/Btdj2S4A5WZTGj/nBy3Dz1O9kCLJBLqsy7k0KJ+X+HXlW07
-         /i8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=L9vsHR4UBkZjIkLHhWbQG/G5pySH9Fi+q7NDpTNHaBE=;
-        b=qk+T+LO4K41TqnBj7du5XSdHAAyoLwHo1rWGX5MwcLg30GBHZlZtfMesI7k2eAcJII
-         +7e0DBqUIVa5KOp2z+0PSfd/vls3nPNPjhwK+LlmypazSObx8liIjz6rY6UEL7lnr+ie
-         WINn1LAO3hBarccYdRYh6DwwupyJ5t5GqNIrqenRE8derCky80qbgeoOCvvjeINN/Yg2
-         crDxqR+dxGWLZGqivGJqjHul2vCgfOwJFO0jRs6XpVdGfdR75ipWFNWM2Kko4kkKN5Zf
-         jRpLnm5+3W/BnnJ9BY5+37k3VWgsDrK7t4HIzLylZZFC7eTys23X6+qGC+QdDrudDrQt
-         hZ/Q==
-X-Gm-Message-State: APjAAAVek2PsqfDxhtQIpgXANt8fz+RlXZEwRcYfZCfGuISfhAs289kK
-        Hq6+PBpcQuwWEYDhuP8OLxTjWA==
-X-Google-Smtp-Source: APXvYqydBHPy2EfrVq0MajkI2l/Z3hRD8X5DKq4cRh8HrXA6oViHnG6KBNzcQm3idEmPi0xLQ+yZnw==
-X-Received: by 2002:a17:902:e285:: with SMTP id cf5mr24315457plb.77.1556532376778;
-        Mon, 29 Apr 2019 03:06:16 -0700 (PDT)
-Received: from localhost ([122.166.139.136])
-        by smtp.gmail.com with ESMTPSA id j9sm71802238pfc.43.2019.04.29.03.06.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 03:06:15 -0700 (PDT)
-Date:   Mon, 29 Apr 2019 15:36:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm changes for 5.2
-Message-ID: <20190429100613.xuqm3mdxzrc2np6o@vireshk-i7>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20180323-120-3dd1ac
+        id S1727608AbfD2K1k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Apr 2019 06:27:40 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39463 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727560AbfD2K1j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 06:27:39 -0400
+Received: from kresse.hi.pengutronix.de ([2001:67c:670:100:1d::2a])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1hL3Va-0006sr-JI; Mon, 29 Apr 2019 12:27:38 +0200
+Message-ID: <1556533656.2560.7.camel@pengutronix.de>
+Subject: Re: [PATCH v2 2/3] power: supply: Add driver for Microchip UCS1002
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>, linux-pm@vger.kernel.org
+Cc:     Enric Balletbo Serra <enric.balletbo@collabora.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 29 Apr 2019 12:27:36 +0200
+In-Reply-To: <20190429054741.7286-3-andrew.smirnov@gmail.com>
+References: <20190429054741.7286-1-andrew.smirnov@gmail.com>
+         <20190429054741.7286-3-andrew.smirnov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::2a
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Hi Andrey,
 
-This pull request contains:
+Am Sonntag, den 28.04.2019, 22:47 -0700 schrieb Andrey Smirnov:
+> Add driver for Microchip UCS1002 Programmable USB Port Power
+> Controller with Charger Emulation. The driver exposed a power supply
+> device to control/monitor various parameter of the device as well as a
+> regulator to allow controlling VBUS line.
+> 
+> > Signed-off-by: Enric Balletbo Serra <enric.balletbo@collabora.com>
+> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> > Cc: Chris Healy <cphealy@gmail.com>
+> > Cc: Lucas Stach <l.stach@pengutronix.de>
+> > Cc: Fabio Estevam <fabio.estevam@nxp.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> ---
+[...]
+> +	/* Enable charge rationing by default */
+> > +	ret = regmap_update_bits(info->regmap, UCS1002_REG_GENERAL_CFG,
+> > +				 F_RATION_EN, F_RATION_EN);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to read general config: %d\n", ret);
+> > +		return ret;
+> > +	}
+> +
+> > +	/*
+> > +	 * Ignore the M1, M2, PWR_EN, and EM_EN pin states. Set active
+> > +	 * mode selection to BC1.2 CDP.
+> > +	 */
+> > +	ret = regmap_update_bits(info->regmap, UCS1002_REG_SWITCH_CFG,
+> > +				 V_SET_ACTIVE_MODE_MASK,
+> +				 V_SET_ACTIVE_MODE_BC12_CDP);
 
-- Fix for possible object reference leak for few drivers (Wen Yang).
-- Fix for armada frequency calculation (Gregory).
-- Code cleanup in maple driver (Viresh).
+This doesn't work as the F_PIN_IGNORE bit isn't set, so the the
+external strap settings are applied. I had to apply the following diff
+to make the driver behave as expected again:
 
-This contains some non-ARM bits as well this time as the patches were
-picked up from a series.
+--- a/drivers/power/supply/ucs1002_power.c
++++ b/drivers/power/supply/ucs1002_power.c
+@@ -548,8 +548,8 @@ static int ucs1002_probe(struct i2c_client *client,
+         * mode selection to BC1.2 CDP.
+         */
+        ret = regmap_update_bits(info->regmap, UCS1002_REG_SWITCH_CFG,
+-                                V_SET_ACTIVE_MODE_MASK,
+-                                V_SET_ACTIVE_MODE_BC12_CDP);
++                                V_SET_ACTIVE_MODE_MASK | F_PIN_IGNORE,
++                                V_SET_ACTIVE_MODE_BC12_CDP | F_PIN_IGNORE);
 
---
-viresh
-
--------------------------8<-------------------------
-
-The following changes since commit 9e98c678c2d6ae3a17cb2de55d17f69dddaa231b:
-
-  Linux 5.1-rc1 (2019-03-17 14:22:26 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-
-for you to fetch changes up to 8db82563451f976597ab7b282ec655e4390a4088:
-
-  cpufreq: armada-37xx: fix frequency calculation for opp (2019-04-29 15:22:50 +0530)
-
-----------------------------------------------------------------
-Gregory CLEMENT (1):
-      cpufreq: armada-37xx: fix frequency calculation for opp
-
-Viresh Kumar (1):
-      cpufreq: maple: Remove redundant code from maple_cpufreq_init()
-
-Wen Yang (7):
-      cpufreq: ap806: fix possible object reference leak
-      cpufreq: imx6q: fix possible object reference leak
-      cpufreq: kirkwood: fix possible object reference leak
-      cpufreq: maple: fix possible object reference leak
-      cpufreq/pasemi: fix possible object reference leak
-      cpufreq: pmac32: fix possible object reference leak
-      cpufreq: ppc_cbe: fix possible object reference leak
-
- drivers/cpufreq/armada-37xx-cpufreq.c | 22 +++++++++++++++++++---
- drivers/cpufreq/armada-8k-cpufreq.c   |  1 +
- drivers/cpufreq/imx6q-cpufreq.c       |  4 ++--
- drivers/cpufreq/kirkwood-cpufreq.c    | 19 +++++++++++--------
- drivers/cpufreq/maple-cpufreq.c       |  6 +-----
- drivers/cpufreq/pasemi-cpufreq.c      |  1 +
- drivers/cpufreq/pmac32-cpufreq.c      |  2 ++
- drivers/cpufreq/ppc_cbe_cpufreq.c     |  1 +
- 8 files changed, 38 insertions(+), 18 deletions(-)
+Regards,
+Lucas
