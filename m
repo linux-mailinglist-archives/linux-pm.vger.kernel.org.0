@@ -2,131 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FABDDADB
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 05:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D21DB6B
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 07:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726844AbfD2Drr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 28 Apr 2019 23:47:47 -0400
-Received: from mga06.intel.com ([134.134.136.31]:24327 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726758AbfD2Drq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 28 Apr 2019 23:47:46 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Apr 2019 20:47:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,408,1549958400"; 
-   d="scan'208";a="319835562"
-Received: from longweif-mobl.ccr.corp.intel.com ([10.255.28.210])
-  by orsmga005.jf.intel.com with ESMTP; 28 Apr 2019 20:47:44 -0700
-Message-ID: <1556509663.2396.8.camel@intel.com>
-Subject: Re: [PATCH next 23/25] thermal: Use dev_get_drvdata()
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Date:   Mon, 29 Apr 2019 11:47:43 +0800
-In-Reply-To: <20190423075020.173734-24-wangkefeng.wang@huawei.com>
-References: <20190423075020.173734-1-wangkefeng.wang@huawei.com>
-         <20190423075020.173734-24-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726517AbfD2FPN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Apr 2019 01:15:13 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46942 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbfD2FPM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 01:15:12 -0400
+Received: by mail-pg1-f193.google.com with SMTP id n2so4559525pgg.13
+        for <linux-pm@vger.kernel.org>; Sun, 28 Apr 2019 22:15:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dIME1K5OMKPPfQtpraZOqL2Q3gyeTv99Vp+Caun75D0=;
+        b=kDuax2RabxYq1bY+PtLu3ES6rWjuC7gw/M4tY+SKKmRjrXYdaKM5o8ipuECBox5p6j
+         hmlI/2MJwvwxb4DJddtdtWyXPiYiYG4982eZbYbNFo1jPGWZemUuMVH27UsU1+MXTUD3
+         iydBtG1z85cD4ErUtGo2VRLGWrU2KEzOgKLryalNFBhF7sVFYdNOAw1IiELnhzWMLA9O
+         vgiypRGbvBSrCCT2xHM+XQpjSFmx2T0YyUu+jMxc1rQE3G2nCnpbU9R8EmgOIHE6+hwZ
+         pcMZgfbaoYLsSqKHhCQNvx97+uL1HVbQwC8KJMypPAteaB2zZZ/8mB074cKpnz87loVf
+         VkLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dIME1K5OMKPPfQtpraZOqL2Q3gyeTv99Vp+Caun75D0=;
+        b=t6E0vARTblEt6tr8/2DeZKXzXwSF+2xqCl6cNmot4/QAWf2Gj405w+02p3qKqVWrLv
+         ACFElTzdW/ZGx3G5WuZI/JpJypos1bh1sUWJBFrrAJQ68j1tAxE947I40gogZrFIDiCN
+         Bo2QNzvlb7IOD7/eCC4PTgwzDaS+BF1Bc60Fdn0rn/y7sJ5ln+BIymgRbxQM08zYWy76
+         UJmN7cq9KF/CgjOgxZhgIY3F82RnAHhNsArgz1OascrSlgrDH5AOyDIjmumWuQPfCHhp
+         FixYwcGdugILMsVj/KWWcD43ky0fyfGpWkkO1Qjqewhjq1nA/BSmPUjxcMr1tLccV2/M
+         CBCg==
+X-Gm-Message-State: APjAAAXoPEF3hErYF25dVmbDYOc3qvU3DkBY5PjWuI0IUEX7plhc/SUt
+        3N157zomQj6SPyremM7L9GK5PQ==
+X-Google-Smtp-Source: APXvYqwqRr6sATj+rovLxwBoSHlxaCOo43GpTipvozXEPvTgUzonZE4tNXPQZdgxPQNsMQf3BOV16w==
+X-Received: by 2002:aa7:9ac2:: with SMTP id x2mr11585597pfp.221.1556514911517;
+        Sun, 28 Apr 2019 22:15:11 -0700 (PDT)
+Received: from localhost ([122.166.139.136])
+        by smtp.gmail.com with ESMTPSA id v19sm64007058pfa.138.2019.04.28.22.15.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 28 Apr 2019 22:15:09 -0700 (PDT)
+Date:   Mon, 29 Apr 2019 10:45:07 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     rjw@rjwysocki.net, rafael.j.wysocki@intel.com,
+        linux-pm@vger.kernel.org, huyue2@yulong.com
+Subject: Re: [PATCH v2] cpufreq: Don't find governor for setpolicy drivers in
+ cpufreq_init_policy()
+Message-ID: <20190429051507.cabsr62rhc5evka5@vireshk-i7>
+References: <20190426063135.5200-1-zbestahu@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190426063135.5200-1-zbestahu@gmail.com>
+User-Agent: NeoMutt/20180323-120-3dd1ac
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 二, 2019-04-23 at 15:50 +0800, Kefeng Wang wrote:
-> Using dev_get_drvdata directly.
+On 26-04-19, 14:31, Yue Hu wrote:
+> From: Yue Hu <huyue2@yulong.com>
 > 
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Eduardo Valentin <edubezval@gmail.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  .../intel/int340x_thermal/processor_thermal_device.c      | 8 +-----
-> --
->  drivers/thermal/st/stm_thermal.c                          | 6 ++----
->  2 files changed, 3 insertions(+), 11 deletions(-)
+> In cpufreq_init_policy() we will check if there's last_governor for target
+> and setpolicy type. However last_governor is set only if has_target() is
+> true in cpufreq_offline(). That means find last_governor for setpolicy
+> type is pointless. Also new_policy.governor will not be used if ->setpolicy
+> callback is set in cpufreq_set_policy().
 > 
-> diff --git
-> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> index 8e1cf4d789be..4ad54b8d4778 100644
+> Moreover, there's duplicate ->setpolicy check in using default policy path.
+> Let's add a new helper function to avoid it. Also fix a little comment.
+> 
+> Signed-off-by: Yue Hu <huyue2@yulong.com>
 > ---
-> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> +++
-> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> @@ -81,8 +81,6 @@ static ssize_t
-> power_limit_##index##_##suffix##_show(struct device *dev, \
->  					struct device_attribute
-> *attr, \
->  					char *buf) \
->  { \
-> -	struct pci_dev *pci_dev; \
-> -	struct platform_device *pdev; \
->  	struct proc_thermal_device *proc_dev; \
->  	\
->  	if (proc_thermal_emum_mode == PROC_THERMAL_NONE) { \
-> @@ -91,11 +89,7 @@ static ssize_t
-> power_limit_##index##_##suffix##_show(struct device *dev, \
->  	} \
->  	\
->  	if (proc_thermal_emum_mode == PROC_THERMAL_PLATFORM_DEV) { \
-> -		pdev = to_platform_device(dev); \
-> -		proc_dev = platform_get_drvdata(pdev); \
-> -	} else { \
-> -		pci_dev = to_pci_dev(dev); \
-> -		proc_dev = pci_get_drvdata(pci_dev); \
-> +		proc_dev = dev_get_drvdata(dev); \
->  	} \
->  	return sprintf(buf, "%lu\n",\
->  	(unsigned long)proc_dev->power_limits[index].suffix * 1000);
-> \
+> v2: fix ->setplicy typo.
+> 
+>  drivers/cpufreq/cpufreq.c | 66 ++++++++++++++++++++++++++++-------------------
+>  1 file changed, 40 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 0322cce..b822a3e 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -578,6 +578,20 @@ static struct cpufreq_governor *find_governor(const char *str_governor)
+>  	return NULL;
+>  }
+>  
+> +static int cpufreq_parse_static_governor(char *str_governor,
+> +					struct cpufreq_policy *policy)
+> +{
+> +	if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN)) {
+> +		policy->policy = CPUFREQ_POLICY_PERFORMANCE;
+> +		return 0;
+> +	}
+> +	if (!strncasecmp(str_governor, "powersave", CPUFREQ_NAME_LEN)) {
+> +		policy->policy = CPUFREQ_POLICY_POWERSAVE;
+> +		return 0;
+> +	}
+> +	return -EINVAL;
+> +}
+> +
+>  /**
+>   * cpufreq_parse_governor - parse a governor string
+>   */
+> @@ -585,15 +599,7 @@ static int cpufreq_parse_governor(char *str_governor,
+>  				  struct cpufreq_policy *policy)
+>  {
 
-Sumeet has a patch to fix the same issue, which has been in my tree
-https://git.kernel.org/pub/scm/linux/kernel/git/rzhang/linux.git/commit
-/?h=next&id=1948d498dcf680bc650391f23da2f97e59f9126d
+There were only two callers of cpufreq_parse_governor() and one of them you have
+removed already.
 
-Plus, the previous fix is wrong because proc_dev will be left
-uninitialized if proc_thermal_emum_mode equals PROC_THERMAL_PCI.
+>  	if (cpufreq_driver->setpolicy) {
+> -		if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN)) {
+> -			policy->policy = CPUFREQ_POLICY_PERFORMANCE;
+> -			return 0;
+> -		}
+> -
+> -		if (!strncasecmp(str_governor, "powersave", CPUFREQ_NAME_LEN)) {
+> -			policy->policy = CPUFREQ_POLICY_POWERSAVE;
+> -			return 0;
+> -		}
+> +		return cpufreq_parse_static_governor(str_governor, policy);
 
-thanks,
-rui
+So I will rather remove above completely from here and let
+cpufreq_parse_governor() governor only handle !set_policy.
 
-> diff --git a/drivers/thermal/st/stm_thermal.c
-> b/drivers/thermal/st/stm_thermal.c
-> index bbd73c5a4a4e..cf9ddc52f30e 100644
-> --- a/drivers/thermal/st/stm_thermal.c
-> +++ b/drivers/thermal/st/stm_thermal.c
-> @@ -570,8 +570,7 @@ static int stm_thermal_prepare(struct
-> stm_thermal_sensor *sensor)
->  static int stm_thermal_suspend(struct device *dev)
->  {
->  	int ret;
-> -	struct platform_device *pdev = to_platform_device(dev);
-> -	struct stm_thermal_sensor *sensor =
-> platform_get_drvdata(pdev);
-> +	struct stm_thermal_sensor *sensor = dev_get_drvdata(dev);
->  
->  	ret = stm_thermal_sensor_off(sensor);
->  	if (ret)
-> @@ -585,8 +584,7 @@ static int stm_thermal_suspend(struct device
-> *dev)
->  static int stm_thermal_resume(struct device *dev)
->  {
->  	int ret;
-> -	struct platform_device *pdev = to_platform_device(dev);
-> -	struct stm_thermal_sensor *sensor =
-> platform_get_drvdata(pdev);
-> +	struct stm_thermal_sensor *sensor = dev_get_drvdata(dev);
->  
->  	ret = stm_thermal_prepare(sensor);
->  	if (ret)
+>  	} else {
+>  		struct cpufreq_governor *t;
+>  
+> @@ -1020,32 +1026,40 @@ __weak struct cpufreq_governor *cpufreq_default_governor(void)
+>  
+>  static int cpufreq_init_policy(struct cpufreq_policy *policy)
+>  {
+> -	struct cpufreq_governor *gov = NULL;
+> +	struct cpufreq_governor *gov = NULL, *def_gov = NULL;
+>  	struct cpufreq_policy new_policy;
+>  
+>  	memcpy(&new_policy, policy, sizeof(*policy));
+>  
+> -	/* Update governor of new_policy to the governor used before hotplug */
+> -	gov = find_governor(policy->last_governor);
+> -	if (gov) {
+> -		pr_debug("Restoring governor %s for cpu %d\n",
+> +	def_gov = cpufreq_default_governor();
+> +
+> +	if (has_target()) {
+> +		/*
+> +		 * Update governor of new_policy to the governor used before
+> +		 * hotplug
+> +		 */
+> +		gov = find_governor(policy->last_governor);
+> +		if (gov)
+
+You must use {} here in the if block as well for two reasons:
+- Below pr_debug is across multiple lines
+- And else part already uses {}
+
+> +			pr_debug("Restoring governor %s for cpu %d\n",
+>  				policy->governor->name, policy->cpu);
+> +		else {
+> +			if (!def_gov)
+> +				return -ENODATA;
+> +			gov = def_gov;
+> +		}
+> +		new_policy.governor = gov;
+>  	} else {
+> -		gov = cpufreq_default_governor();
+> -		if (!gov)
+> -			return -ENODATA;
+> -	}
+> -
+> -	new_policy.governor = gov;
+> -
+> -	/* Use the default policy if there is no last_policy. */
+> -	if (cpufreq_driver->setpolicy) {
+> +		/* Use the default policy if there is no last_policy. */
+>  		if (policy->last_policy)
+>  			new_policy.policy = policy->last_policy;
+> -		else
+> -			cpufreq_parse_governor(gov->name, &new_policy);
+> +		else {
+> +			if (!def_gov)
+> +				return -ENODATA;
+> +			cpufreq_parse_static_governor(def_gov->name,
+> +						      &new_policy);
+> +		}
+>  	}
+> -	/* set default policy */
+> +	/* Set new policy */
+
+Just drop the comment and make it a blank line.
+
+>  	return cpufreq_set_policy(policy, &new_policy);
+>  }
+>  
+> -- 
+> 1.9.1
+
+-- 
+viresh
