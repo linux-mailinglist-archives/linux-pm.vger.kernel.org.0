@@ -2,110 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8665EAA5
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 21:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92FAEB46
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 22:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729083AbfD2TKk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Apr 2019 15:10:40 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:37780 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729054AbfD2TKk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 15:10:40 -0400
-Received: by mail-it1-f196.google.com with SMTP id r85so818268itc.2;
-        Mon, 29 Apr 2019 12:10:39 -0700 (PDT)
+        id S1729365AbfD2UBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Apr 2019 16:01:38 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40122 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729237AbfD2UBi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 16:01:38 -0400
+Received: by mail-pf1-f196.google.com with SMTP id u17so1895711pfn.7;
+        Mon, 29 Apr 2019 13:01:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KkDvipA08mC8IxvH8qSF4bz6Gcm5+BjwC5oiwie6/+k=;
-        b=Ve8XuKyGlDC7d2Jvv5JaFeEFVAN2jn4Wg3QY/h79fYFFc1Gn6E1SWgOE0LXGs3cKFE
-         6uJSMSnHFL3OsVIykxCMPR0dttZ74X/ELKhgOBL/ILoONnzQ5ThckDLH1amLcUVNx3d6
-         W/GUBBAdD1ZPt3D110gl+7UoYrQEFRHsuAOLEsF1Rf6WgvZ7q0UqANogslubKvkn9tbF
-         9WbTvIoSc5HK9pb826UynoX6IbBoyw0t5qU8973CIGOQalIHLmjjCufU5CwqO/ovGSmV
-         FjgjjcPs9sqpnYkXcILGgODVrWI8Aef3xVhVoTbkJY1uRom7QOEMy/Pnn+J/nw8hHS0V
-         P/Nw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bTUR4BU7SNrbGwYw6ulkWST95/i8bxeFGfTLU+5eb+w=;
+        b=i1Ir2B4zXgvSHk/6PwCU9zPEunYN5ng1HEP5haDCn4gP7N4ELFmyA9Ewal0kte5wvR
+         BGKorEtWwnmHRmi3u8aPeQC0tpgWyES+BRWjW2xUy2i/2XS2fn2tjTqfatIdnqVAWJUq
+         kKXEQ5CwR0ukK09Kkgem2drxva8dQi6nLOqQpbroI4GE+vRtG/GBtw5W2e+SBV/lGld2
+         Ztfr2v5Jjv0mZO2FIru9oT5vJaChnTt6NWjAubIDV2KME1Zcf/T11O9ktP8polRJvqff
+         LtyEKepv5zIR4ZqfKbhC7HpyBj5I+eJZ11v8HXT1hBnP76CKFfbmIJ14sXg1e4iKVy5t
+         1pUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KkDvipA08mC8IxvH8qSF4bz6Gcm5+BjwC5oiwie6/+k=;
-        b=RI4LI1MzZQtp2BVEm0mp0MN9NN/FUWuyBl736HfLvXHbvqEOFJn7CM+sJfLZLThHZ6
-         nSIDKGfmN9Rb7+VrkihIJQAkYiNBnkXmG52a8MimgIhEPwuyOlxu5Mo8wX1tIlCd+PbF
-         6g7kSESYpSsrpwWKA8+TeoDs0GXocJ4wCVuZasaMUQqOpH/YIdZ8BP5wpMA40pio3t1D
-         eQsKRgw6XrKKpeUe3XI5+20B0uBwsH4JyzVigPoDpcHKeBvlZstBUM0XvkPV4LshEXWE
-         w2TPODtMChCRYoGkS+YdbCnEYf9oA5W2r/AZ6IxsAnAh9ZcqcsHeuF3PHhf2Ju6nbPCN
-         BM4g==
-X-Gm-Message-State: APjAAAVsBwIG9aeQ+XQbW8RdO03s8L13w8iACZk6TGt2WCeyj0lwZAH2
-        8my/gW0CKqkaNsq/wD2XiVqiK8zGRwROvCmzDZM=
-X-Google-Smtp-Source: APXvYqxjcgCsVThGvzbspmleSENSy0vAB6gHVpHLHIM/eJvNC75iwpTXhF3s96hudw8y9HP19dvMhBdh2kK5aKvCYO4=
-X-Received: by 2002:a02:62ce:: with SMTP id d197mr43109134jac.91.1556565038867;
- Mon, 29 Apr 2019 12:10:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190429054741.7286-1-andrew.smirnov@gmail.com>
- <20190429054741.7286-3-andrew.smirnov@gmail.com> <1556533656.2560.7.camel@pengutronix.de>
-In-Reply-To: <1556533656.2560.7.camel@pengutronix.de>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bTUR4BU7SNrbGwYw6ulkWST95/i8bxeFGfTLU+5eb+w=;
+        b=NehLj4bfujFwysHbS8fHREC6wjzkoVE5W2A7APhBP+qCWhSpl9KQhw3n8vjYR6tEpK
+         by9STkpuyrmqtqe8vgaRuKjciY1rdlPkXDGsunuPojkILDk6P5dnk8xorXAJwjfc5Ffy
+         MolB5FBODreC4L7LVhD5zUC27AqlZWnQpVGivGe46EAs0Zh/LDvEkfES7Jbp/U8nXcq/
+         5qbpjsSkF5fiFZzGK/dz/uPdaOfqm/6CYw2vmWXwwoajqPwWDZglqT4Nb6eWz7caHZX/
+         PIDDOdJx99T5jcX275Fnf8EOscdizhypoLr+NDCQ3eVo1FQuRbjenhCvdZJV1QRH/em0
+         VmiA==
+X-Gm-Message-State: APjAAAWitsksm/iGP6ghGIbr0nfCkDVpYnDnuhF5rJ07/qq8cIfvFARA
+        EtLE+QdI2MXwFSQqZhziQrCotNKXBHc=
+X-Google-Smtp-Source: APXvYqxKW8vbi4XT4G2atsGGPz4mRPCYyXzjOGBv5NqldSujI4elCwv1bTo5VHLoQR5TLomi0DnCJw==
+X-Received: by 2002:a62:be14:: with SMTP id l20mr29754296pff.241.1556567636750;
+        Mon, 29 Apr 2019 12:53:56 -0700 (PDT)
+Received: from squirtle.lan (c-24-22-235-96.hsd1.wa.comcast.net. [24.22.235.96])
+        by smtp.gmail.com with ESMTPSA id l2sm39841783pgl.2.2019.04.29.12.53.54
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Apr 2019 12:53:55 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Mon, 29 Apr 2019 12:10:27 -0700
-Message-ID: <CAHQ1cqECkn3242zVb55ifmgEHdq0se91=PpS1zDL4wj2WdZmbw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] power: supply: Add driver for Microchip UCS1002
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Enric Balletbo Serra <enric.balletbo@collabora.com>,
+To:     linux-pm@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Chris Healy <cphealy@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
         Fabio Estevam <fabio.estevam@nxp.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sebastian Reichel <sre@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Enric Balletbo Serra <enric.balletbo@collabora.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Driver for UCS1002
+Date:   Mon, 29 Apr 2019 12:53:46 -0700
+Message-Id: <20190429195349.20335-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 3:27 AM Lucas Stach <l.stach@pengutronix.de> wrote:
->
-> Hi Andrey,
->
-> Am Sonntag, den 28.04.2019, 22:47 -0700 schrieb Andrey Smirnov:
-> > Add driver for Microchip UCS1002 Programmable USB Port Power
-> > Controller with Charger Emulation. The driver exposed a power supply
-> > device to control/monitor various parameter of the device as well as a
-> > regulator to allow controlling VBUS line.
-> >
-> > > Signed-off-by: Enric Balletbo Serra <enric.balletbo@collabora.com>
-> > > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> > > Cc: Chris Healy <cphealy@gmail.com>
-> > > Cc: Lucas Stach <l.stach@pengutronix.de>
-> > > Cc: Fabio Estevam <fabio.estevam@nxp.com>
-> > > Cc: Guenter Roeck <linux@roeck-us.net>
-> > > Cc: Sebastian Reichel <sre@kernel.org>
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > ---
-> [...]
-> > +     /* Enable charge rationing by default */
-> > > +   ret = regmap_update_bits(info->regmap, UCS1002_REG_GENERAL_CFG,
-> > > +                            F_RATION_EN, F_RATION_EN);
-> > > +   if (ret) {
-> > > +           dev_err(dev, "Failed to read general config: %d\n", ret);
-> > > +           return ret;
-> > > +   }
-> > +
-> > > +   /*
-> > > +    * Ignore the M1, M2, PWR_EN, and EM_EN pin states. Set active
-> > > +    * mode selection to BC1.2 CDP.
-> > > +    */
-> > > +   ret = regmap_update_bits(info->regmap, UCS1002_REG_SWITCH_CFG,
-> > > +                            V_SET_ACTIVE_MODE_MASK,
-> > +                              V_SET_ACTIVE_MODE_BC12_CDP);
->
-> This doesn't work as the F_PIN_IGNORE bit isn't set, so the the
-> external strap settings are applied. I had to apply the following diff
-> to make the driver behave as expected again:
->
+Everyone:
 
-Ugh, I missed this since pins on my board are set properly. Thanks for
-catching that and sorry about the bug. Will fix in v3.
+This small series adds a driver for UCS1002 Programmable USB Port
+Power Controller with Charger Emulation. See [page] for product page
+and [datasheet] for device dataseet. Hopefully each individual patch
+is self explanatory.
+
+Note that this series is a revival of the upstreaming effort by Enric
+Balletbo Serra last version of which can be found at [original-effort]
+
+Feedback is welcome!
 
 Thanks,
 Andrey Smirnov
+
+Changes since [v2]:
+
+    - Fixed a bug pointed out by Lucas
+
+Changes since [v1]:
+
+    - Moved IRQ trigger specification to DT
+
+    - Fixed silent error paths in probe()
+    
+    - Dropped error message in ucs1002_set_max_current()
+
+    - Fixed license mismatch
+
+    - Changed the driver to configure the chip to BC1.2 CDP by default
+
+    - Made other small fixes as per feedback for v1
+
+[v2] https://lore.kernel.org/lkml/20190429054741.7286-1-andrew.smirnov@gmail.com
+[v1] https://lore.kernel.org/lkml/20190417084457.28747-1-andrew.smirnov@gmail.com/
+[page] https://www.microchip.com/wwwproducts/en/UCS1002-2
+[datasheet] https://ww1.microchip.com/downloads/en/DeviceDoc/UCS1002-2%20Data%20Sheet.pdf
+[original-effort] https://lore.kernel.org/lkml/1460705181-10493-1-git-send-email-enric.balletbo@collabora.com/
+
+Andrey Smirnov (3):
+  power: supply: core: Add POWER_SUPPLY_HEALTH_OVERCURRENT constant
+  power: supply: Add driver for Microchip UCS1002
+  dt-bindings: power: supply: Add bindings for Microchip UCS1002
+
+ .../power/supply/microchip,ucs1002.txt        |  27 +
+ drivers/power/supply/Kconfig                  |   9 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/power_supply_sysfs.c     |   2 +-
+ drivers/power/supply/ucs1002_power.c          | 646 ++++++++++++++++++
+ include/linux/power_supply.h                  |   1 +
+ 6 files changed, 685 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/microchip,ucs1002.txt
+ create mode 100644 drivers/power/supply/ucs1002_power.c
+
+-- 
+2.20.1
+
