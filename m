@@ -2,143 +2,268 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AE9DD12
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 09:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4416DD41
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 09:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727395AbfD2Hpy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Apr 2019 03:45:54 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:45767 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbfD2Hpy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 03:45:54 -0400
-Received: by mail-qt1-f195.google.com with SMTP id b3so10821881qtc.12
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 00:45:53 -0700 (PDT)
+        id S1727458AbfD2H4y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Apr 2019 03:56:54 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46745 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727409AbfD2H4y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 03:56:54 -0400
+Received: by mail-pf1-f193.google.com with SMTP id j11so4901314pff.13
+        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 00:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iDUyXCz0O3gZzXvhpaeHXxypPaGGAtfd/oSSAEOmf3Y=;
+        b=A7Hz3bTyQi/xz7ZgDCwYXZLrZiHD4mVW7eIvtAY6yfrXAH4XaIuJg/m+9GuXgo7N+u
+         hROxQxARjL1d9gw6Ri5mxxWCuQaIHeskHNFzp4L8gH4ETkC4sBIRd/VRAzWe/jyGC6MF
+         zMQJ+AIvJf8HunGLn+dhquQ2AWBjDdcMHKvOXfJ8w5q23CmjXzcucy76c6Ytjrk8a7CQ
+         2mxFwzpDtoPH66haEqviolJD462vUrf7JtUBXyO1zejfWMpf7wrTT26rZ+++YFBE30Lw
+         BC5WJZElK1GCa0KQTcWJjsE8KVJVH/cSZoo7L3flvMK5Ct07CLWsKv7xMl2W4bl1NW7h
+         gO+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G1fYVX4Wl40jdZ8+GWZHzYu+3eRKXOD4apXXEPaZ4Wc=;
-        b=Izy/3C2IqEkOYU91W9iiANqklE9VSsVhA0znutZj44eyQqCrYjELTDISmnbyqy8egM
-         ploPxwm+s8FIBDvUJD6j8JgQSoo9wYXDOqhqyBGYwYH9IwzNf2JG9i3GMjEcVMNEdYM+
-         Y2lfY5AwAtYuFij1Tm3n0ftvK2A3n1EnLtymiT77Q9C+MG+EblIsYae8A15TOV2Qf5Ks
-         /t9deUeJdVaBzSuk0fFzk6yQ5WXceloTiCIE67xDYZH2yZKuxM6gUYMGdXOvaqac/GvW
-         VjwTlmbHmJ1Ggif/8r+CFbl1QBgB2s0A2GkaI/THyopsudPGjZQgh57tdmg2sYgSbtvz
-         OMDw==
-X-Gm-Message-State: APjAAAX+u4csJKVxaHwaqLMV02xNjyq8YVMo2fen0V9d/MKxNOL5f/ec
-        5aZgswI4Gd8+fh7YY7ePtBRzR8JyqJkgKTnPT3olf/8n
-X-Google-Smtp-Source: APXvYqypk8m0KUmH/pdaKn2c6dXVHzcwhT3MS6/t9LfLWL9Bs64Cy4DoGt4GK6iloNtlI/ZK+yiFhuwRgID1pkwlfBw=
-X-Received: by 2002:a0c:e5d0:: with SMTP id u16mr18985451qvm.48.1556523953508;
- Mon, 29 Apr 2019 00:45:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iDUyXCz0O3gZzXvhpaeHXxypPaGGAtfd/oSSAEOmf3Y=;
+        b=OKaoNPxjatIxpacxQXRSkHletWnZXv47D1UhEJFKSptAuLW/NnoS509FVf+qeWXRrq
+         PHNkqBxmLLXYCXw1nJ6kx6+DhwkboIWr9K4q/eVZpZEzW6uL21itRNicF9kdHGBZJQse
+         i0OOmGIaoag3Q1oxINliuxvzka6VtpsOpDmpdhLA/TLLNVSL8JV4PjylxhoYbpU48vOR
+         8DOZqkwrMe3yILukxRJPOHPSGqlqHCaEZEItSyHR6+iVDJ07zvN7KJeHR1QFoFIsTsp6
+         DitLQX6UnI/Tw2gXm/Ji+aF9WZy9BUgNeSMTfcgJ1PeZkJYUAksA5zX+nwC6M6jd6KBf
+         KKzQ==
+X-Gm-Message-State: APjAAAUaRgjah9zxZ10grl7N6NvQCP4VlNPZwToykUsNRo3+8LgMAauU
+        +rdmQDRt7trXIwmYk2/7PeE=
+X-Google-Smtp-Source: APXvYqxJZUvKrJ454xdtJ2eT/PmPXRmJbFVgJQlRQk6RisbpuAl3PUv/aAL6DsNsDQnxHrNzoPZOxw==
+X-Received: by 2002:a65:5106:: with SMTP id f6mr58074635pgq.253.1556524613708;
+        Mon, 29 Apr 2019 00:56:53 -0700 (PDT)
+Received: from localhost ([218.189.10.173])
+        by smtp.gmail.com with ESMTPSA id s198sm21715557pfs.34.2019.04.29.00.56.51
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Apr 2019 00:56:53 -0700 (PDT)
+Date:   Mon, 29 Apr 2019 15:56:40 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>, huyue2@yulong.com
+Subject: Re: [PATCH v3] cpufreq: Don't find governor for setpolicy drivers
+ in cpufreq_init_policy()
+Message-ID: <20190429155640.00004adb.zbestahu@gmail.com>
+In-Reply-To: <CAJZ5v0jLd9gnw_QuD-aK6fFpdDACbKXJOBugrCNtx1tfmBKi5w@mail.gmail.com>
+References: <20190429072418.7860-1-zbestahu@gmail.com>
+        <CAJZ5v0jLd9gnw_QuD-aK6fFpdDACbKXJOBugrCNtx1tfmBKi5w@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-References: <20190422130814.GJ173520@google.com> <3a1139ef-10ed-6923-73c5-30fbf0c065c3@linux.intel.com>
-In-Reply-To: <3a1139ef-10ed-6923-73c5-30fbf0c065c3@linux.intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 29 Apr 2019 09:45:42 +0200
-Message-ID: <CAO-hwJKvXO6L7m0g1D6wycFP=Wu_qLDyLXTtmm0TkpxT5Z8ygw@mail.gmail.com>
-Subject: Re: [Bug 203297] Synaptics touchpad TM-3127 functionality broken by
- PCI runtime power management patch on 4.20.2
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Keijo Vaara <ferdasyn@rocketmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 26, 2019 at 2:14 PM Jarkko Nikula
-<jarkko.nikula@linux.intel.com> wrote:
->
-> On 4/22/19 4:08 PM, Bjorn Helgaas wrote:
-> > https://bugzilla.kernel.org/show_bug.cgi?id=203297
+On Mon, 29 Apr 2019 09:37:27 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+
+> On Mon, Apr 29, 2019 at 9:24 AM Yue Hu <zbestahu@gmail.com> wrote:
 > >
-> > Regression, suspected but as yet unconfirmed cause:
+> > From: Yue Hu <huyue2@yulong.com>
 > >
-> >    c5eb1190074c ("PCI / PM: Allow runtime PM without callback functions")
+> > In cpufreq_init_policy() we will check if there's last_governor for target
+> > and setpolicy type. However last_governor is set only if has_target() is
+> > true in cpufreq_offline(). That means find last_governor for setpolicy
+> > type is pointless. Also new_policy.governor will not be used if ->setpolicy
+> > callback is set in cpufreq_set_policy().
 > >
-> > backported to 4.20 stable as 39e1be324c2f.
+> > Moreover, there's duplicate ->setpolicy check in using default policy path.
+> > Let's add a new helper function to avoid it. Also update a little comment.
 > >
-> With help of Keijo it was confirmed above patch broke the Synaptics
-> touchpad. Not bisected but touchpad works again by forcing the i2c-i801
-> SMBus controller always on:
-> "echo on >/sys/bus/pci/devices/0000\:00\:1f.3/power/control"
->
-> Above patch is a generalized fix that fixed the runtime PM regression on
-> i2c-i801 and re-allow the controller go to runtime suspend when idle. So
-> most probably Synaptics touchpad was broken by i2c-i801 runtime PM also
-> before but got unnoticed. Which is easy since on many platforms SMBus
-> controller doesn't necessarily have the PCI PM capabilities.
->
-> I would like to ask help from input subsystem experts what kind of SMBus
-> power state dependency Synaptics RMI4 SMBus devices have since it cease
-> to work if SMBus controllers idles between transfers and how this is
-> best to fix?
+> > Signed-off-by: Yue Hu <huyue2@yulong.com>  
+> 
+> Have you tested this with the intel_pstate driver (in the active mode)?
 
-Hmm, I am not sure there is such an existing architecture you could
-use in a simple patch.
+No, just tested for ARM. It should be common logic from code perspective. Has
+any issue in this change?
 
-rmi-driver.c does indeed create an input device we could use to toggle
-on/off the PM state, but those callbacks are not wired to the
-transport driver (rmi_smbus.c), so it would required a little bit of
-extra work. And then, there are other RMI4 functions (firmware
-upgrade) that would not be happy if PM is in suspend while there is no
-open input node.
+> 
+> > ---
+> > v2: fix ->setplicy typo.
+> > v3:
+> >   - let cpufreq_parse_governor() only handle !set_policy.
+> >   - fix using {} in the if block.
+> >   - change helper function name.
+> >   - update comment, commit message.
+> >
+> >  drivers/cpufreq/cpufreq.c | 116 ++++++++++++++++++++++++++--------------------
+> >  1 file changed, 65 insertions(+), 51 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 0322cce..ce8a01d 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -578,50 +578,52 @@ static struct cpufreq_governor *find_governor(const char *str_governor)
+> >         return NULL;
+> >  }
+> >
+> > +static int cpufreq_parse_policy(char *str_governor,
+> > +                               struct cpufreq_policy *policy)
+> > +{
+> > +       if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN)) {
+> > +               policy->policy = CPUFREQ_POLICY_PERFORMANCE;
+> > +               return 0;
+> > +       }
+> > +       if (!strncasecmp(str_governor, "powersave", CPUFREQ_NAME_LEN)) {
+> > +               policy->policy = CPUFREQ_POLICY_POWERSAVE;
+> > +               return 0;
+> > +       }
+> > +       return -EINVAL;
+> > +}
+> > +
+> >  /**
+> > - * cpufreq_parse_governor - parse a governor string
+> > + * cpufreq_parse_governor - parse a governor string only for !setpolicy
+> >   */
+> >  static int cpufreq_parse_governor(char *str_governor,
+> >                                   struct cpufreq_policy *policy)
+> >  {
+> > -       if (cpufreq_driver->setpolicy) {
+> > -               if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN)) {
+> > -                       policy->policy = CPUFREQ_POLICY_PERFORMANCE;
+> > -                       return 0;
+> > -               }
+> > -
+> > -               if (!strncasecmp(str_governor, "powersave", CPUFREQ_NAME_LEN)) {
+> > -                       policy->policy = CPUFREQ_POLICY_POWERSAVE;
+> > -                       return 0;
+> > -               }
+> > -       } else {
+> > -               struct cpufreq_governor *t;
+> > +       struct cpufreq_governor *t;
+> >
+> > -               mutex_lock(&cpufreq_governor_mutex);
+> > +       mutex_lock(&cpufreq_governor_mutex);
+> >
+> > -               t = find_governor(str_governor);
+> > -               if (!t) {
+> > -                       int ret;
+> > +       t = find_governor(str_governor);
+> > +       if (!t) {
+> > +               int ret;
+> >
+> > -                       mutex_unlock(&cpufreq_governor_mutex);
+> > +               mutex_unlock(&cpufreq_governor_mutex);
+> >
+> > -                       ret = request_module("cpufreq_%s", str_governor);
+> > -                       if (ret)
+> > -                               return -EINVAL;
+> > +               ret = request_module("cpufreq_%s", str_governor);
+> > +               if (ret)
+> > +                       return -EINVAL;
+> >
+> > -                       mutex_lock(&cpufreq_governor_mutex);
+> > +               mutex_lock(&cpufreq_governor_mutex);
+> >
+> > -                       t = find_governor(str_governor);
+> > -               }
+> > -               if (t && !try_module_get(t->owner))
+> > -                       t = NULL;
+> > +               t = find_governor(str_governor);
+> > +       }
+> > +       if (t && !try_module_get(t->owner))
+> > +               t = NULL;
+> >
+> > -               mutex_unlock(&cpufreq_governor_mutex);
+> > +       mutex_unlock(&cpufreq_governor_mutex);
+> >
+> > -               if (t) {
+> > -                       policy->governor = t;
+> > -                       return 0;
+> > -               }
+> > +       if (t) {
+> > +               policy->governor = t;
+> > +               return 0;
+> >         }
+> >
+> >         return -EINVAL;
+> > @@ -746,8 +748,13 @@ static ssize_t store_scaling_governor(struct cpufreq_policy *policy,
+> >         if (ret != 1)
+> >                 return -EINVAL;
+> >
+> > -       if (cpufreq_parse_governor(str_governor, &new_policy))
+> > -               return -EINVAL;
+> > +       if (cpufreq_driver->setpolicy) {
+> > +               if (cpufreq_parse_policy(str_governor, &new_policy))
+> > +                       return -EINVAL;
+> > +       } else {
+> > +               if (cpufreq_parse_governor(str_governor, &new_policy))
+> > +                       return -EINVAL;
+> > +       }
+> >
+> >         ret = cpufreq_set_policy(policy, &new_policy);
+> >
+> > @@ -1020,32 +1027,39 @@ __weak struct cpufreq_governor *cpufreq_default_governor(void)
+> >
+> >  static int cpufreq_init_policy(struct cpufreq_policy *policy)
+> >  {
+> > -       struct cpufreq_governor *gov = NULL;
+> > +       struct cpufreq_governor *gov = NULL, *def_gov = NULL;
+> >         struct cpufreq_policy new_policy;
+> >
+> >         memcpy(&new_policy, policy, sizeof(*policy));
+> >
+> > -       /* Update governor of new_policy to the governor used before hotplug */
+> > -       gov = find_governor(policy->last_governor);
+> > -       if (gov) {
+> > -               pr_debug("Restoring governor %s for cpu %d\n",
+> > +       def_gov = cpufreq_default_governor();
+> > +
+> > +       if (has_target()) {
+> > +               /*
+> > +                * Update governor of new_policy to the governor used before
+> > +                * hotplug
+> > +                */
+> > +               gov = find_governor(policy->last_governor);
+> > +               if (gov) {
+> > +                       pr_debug("Restoring governor %s for cpu %d\n",
+> >                                 policy->governor->name, policy->cpu);
+> > +               } else {
+> > +                       if (!def_gov)
+> > +                               return -ENODATA;
+> > +                       gov = def_gov;
+> > +               }
+> > +               new_policy.governor = gov;
+> >         } else {
+> > -               gov = cpufreq_default_governor();
+> > -               if (!gov)
+> > -                       return -ENODATA;
+> > -       }
+> > -
+> > -       new_policy.governor = gov;
+> > -
+> > -       /* Use the default policy if there is no last_policy. */
+> > -       if (cpufreq_driver->setpolicy) {
+> > -               if (policy->last_policy)
+> > +               /* Use the default policy if there is no last_policy. */
+> > +               if (policy->last_policy) {
+> >                         new_policy.policy = policy->last_policy;
+> > -               else
+> > -                       cpufreq_parse_governor(gov->name, &new_policy);
+> > +               } else {
+> > +                       if (!def_gov)
+> > +                               return -ENODATA;
+> > +                       cpufreq_parse_policy(def_gov->name, &new_policy);
+> > +               }
+> >         }
+> > -       /* set default policy */
+> > +
+> >         return cpufreq_set_policy(policy, &new_policy);
+> >  }
+> >
+> > --
+> > 1.9.1
+> >  
 
-So I think this "hack" (with Mika's comments addressed) should go in
-until someone starts propagating the PM states correctly.
-
-Cheers,
-Benjamin
-
->
-> Instead of revert I think we'd need to have some method to force SMBus
-> controller on whenever the touchpad is active, like when there is a
-> userspace listening.
->
-> I'm not expert in this area so as quick proof of concept I had a
-> following hack which forces the I2C/SMBus adapter, and eventually the
-> parent PCI device of it on when the RMI4 SMBus device is probed and let
-> the SMBus controller to idle when removed.
->
-> According to Keijo it fixes the issue but I like to hear input experts
-> for better place to put these.
->
-> diff --git a/drivers/input/rmi4/rmi_smbus.c b/drivers/input/rmi4/rmi_smbus.c
-> index b6ccf39c6a7b..2b11d69be313 100644
-> --- a/drivers/input/rmi4/rmi_smbus.c
-> +++ b/drivers/input/rmi4/rmi_smbus.c
-> @@ -16,6 +16,7 @@
->   #include <linux/lockdep.h>
->   #include <linux/module.h>
->   #include <linux/pm.h>
-> +#include <linux/pm_runtime.h>
->   #include <linux/rmi.h>
->   #include <linux/slab.h>
->   #include "rmi_driver.h"
-> @@ -332,6 +333,9 @@ static int rmi_smb_probe(struct i2c_client *client,
->
->         dev_info(&client->dev, "registering SMbus-connected sensor\n");
->
-> +       /* Force SMBus adapter on while RMI4 device is connected */
-> +       pm_runtime_get(&client->adapter->dev);
-> +
->         error = rmi_register_transport_device(&rmi_smb->xport);
->         if (error) {
->                 dev_err(&client->dev, "failed to register sensor: %d\n", error);
-> @@ -346,6 +350,7 @@ static int rmi_smb_remove(struct i2c_client *client)
->         struct rmi_smb_xport *rmi_smb = i2c_get_clientdata(client);
->
->         rmi_unregister_transport_device(&rmi_smb->xport);
-> +       pm_runtime_put(&client->adapter->dev);
->
->         return 0;
->   }
->
-> --
-> Jarkko
