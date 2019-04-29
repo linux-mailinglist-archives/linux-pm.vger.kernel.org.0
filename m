@@ -2,380 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6177E2DD
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 14:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA899E452
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 16:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728116AbfD2Miv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Apr 2019 08:38:51 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:51230 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728081AbfD2Miv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 08:38:51 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190429123848euoutp02024f333a488e0776ab84e65e3a2187f2~Z8kYKno_f2101221012euoutp02P
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 12:38:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190429123848euoutp02024f333a488e0776ab84e65e3a2187f2~Z8kYKno_f2101221012euoutp02P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1556541528;
-        bh=aoHyV4TSTtaa6l6jijCfv/P1wEEkvPWF/Edn8HrTflk=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=B72XrwIYi81HmphQXg+QJz6vDJVhxI3IsWnI2qO49bAf8zh2DQgldjZgkd52fgl78
-         t5+I8BxUq6QDjbRKcdcCdRjMdWxJwdKi3WSf0hE4qlze9HpDqd1CwF8xGdJP9v4w0A
-         KiP90Go27lhnYxo9saGyybAQtIqy0cZ+VivLRq5U=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190429123848eucas1p11249ce0038a5ab56cdb3132f80d69c81~Z8kXaBpZm2624526245eucas1p1o;
-        Mon, 29 Apr 2019 12:38:48 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 63.87.04325.750F6CC5; Mon, 29
-        Apr 2019 13:38:47 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190429123847eucas1p1c0d8d38a912c0f61bed165c427bf6065~Z8kWpjv5n2634626346eucas1p1K;
-        Mon, 29 Apr 2019 12:38:47 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190429123847eusmtrp16605fdd82bf8dd5696f54a10c90231e7~Z8kWbTPQB1575515755eusmtrp1Q;
-        Mon, 29 Apr 2019 12:38:47 +0000 (GMT)
-X-AuditID: cbfec7f5-b8fff700000010e5-8f-5cc6f0575059
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 33.FE.04140.650F6CC5; Mon, 29
-        Apr 2019 13:38:46 +0100 (BST)
-Received: from [106.120.51.20] (unknown [106.120.51.20]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190429123846eusmtip1bff741572da010c5fa5c67c307e56fb6~Z8kVsJiJh3183831838eusmtip1W;
-        Mon, 29 Apr 2019 12:38:46 +0000 (GMT)
-Subject: Re: [PATCH v6 09/10] ARM: dts: exynos: add DMC device for
- exynos5422
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        =?UTF-8?Q?Bart=c5=82omiej_=c5=bbo=c5=82nierkiewicz?= 
-        <b.zolnierkie@samsung.com>, kgene@kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        kyungmin.park@samsung.com,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
-        treding@nvidia.com, digetx@gmail.com, willy.mh.wolff.ml@gmail.com
-From:   Lukasz Luba <l.luba@partner.samsung.com>
-Message-ID: <34ae95ae-9788-6334-d4ef-7f9add76b77c@partner.samsung.com>
-Date:   Mon, 29 Apr 2019 14:38:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
+        id S1728208AbfD2OKR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Apr 2019 10:10:17 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:60196 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728254AbfD2OKQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 10:10:16 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 5804E60791; Mon, 29 Apr 2019 14:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1556547015;
+        bh=VxBlg/oj/OYjZrDtYSr4dnVCDoQ5+k9iKUDJGDiPe3s=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=OKptvMqYR+jKjMZiSVoJ6tRr8aRB386SPDFUI1cVLOy1mX0wSP3qRyWo1gk6c9o4B
+         +ErLfsQ+sfVe/IDDMFInxIDO3zBbaLz6eWVsZ9YF4aIp7I8qdx1jQmFEer5Au+Y5Vp
+         Ioa3XIBwXKXyiPI2ZOFMjbZbaXE+wVl1zUd6LnKo=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED autolearn=no autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C79B26086B;
+        Mon, 29 Apr 2019 14:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1556547014;
+        bh=VxBlg/oj/OYjZrDtYSr4dnVCDoQ5+k9iKUDJGDiPe3s=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=KEFL1DCFiRO/5XZV0bFMVaUEaCiGbtKWa7KC47i1uSOS25wYNdAS89jFmNYUQ5fnK
+         E0b6sjNVI8Y46OnHrgYuTOqrFXEpciE74qp8DexPz5YY4VvB5j2Ruo3dykK1D4Zm4F
+         XGmZ+EwsqSD9MJWGcBjOJvPTqZtZkD4LLFXt75ho=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C79B26086B
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Brian Norris <briannorris@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Claire Chang <tientzu@google.com>,
+        Sriram R <srirrama@codeaurora.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Pradeep Kumar Chitrapu <pradeepc@codeaurora.org>,
+        "open list\:NETWORKING DRIVERS \(WIRELESS\)" 
+        <linux-wireless@vger.kernel.org>, ath10k@lists.infradead.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Todd Brandt <todd.e.brandt@intel.com>
+Subject: Re: [PATCH] ath10k: Drop WARN_ON()s that always trigger during system resume
+References: <2884043.Jv1Mn93hE8@aspire.rjw.lan>
+        <20190403195718.GA74723@google.com>
+        <87o94tutdz.fsf@kamboji.qca.qualcomm.com>
+        <CAJZ5v0ifD=DATprUeeO2_LGs04aEEhPB6AcGVPxWUdQaOma+ww@mail.gmail.com>
+Date:   Mon, 29 Apr 2019 17:10:08 +0300
+In-Reply-To: <CAJZ5v0ifD=DATprUeeO2_LGs04aEEhPB6AcGVPxWUdQaOma+ww@mail.gmail.com>
+        (Rafael J. Wysocki's message of "Mon, 29 Apr 2019 10:48:35 +0200")
+Message-ID: <87imuwsy0v.fsf@kamboji.qca.qualcomm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <CAJKOXPfE2Kt_afkH6wryRgdVqfvDUH82rMf_iKFuvDVSH00LJw@mail.gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SeUhUURTGu/OWeYpjr8n0UNEyUZTUmBRxITEFideGRrTQYo75UMkZdZ5W
-        Vn9MC1Y6almYTopFkDZampmaleWS5pJmKuZG4UiWOW2WZVOSrzeS//3Oud+55/sulyGU76nZ
-        TLguhtfrNBEq2pEsqR1rXrHzc+3eleYBNb6TXkDhzm+DFM6uaaZw3hcLwhcbsmS4KVGLUywf
-        CNzSUijHz08Oy3FbeSaNR5JqEE5vqZDhWzV9ctxzIpfG1cNnKPy4fSPusTnj0Wf9yEfJjX5P
-        JbkrhlaSu2/qk3NF5nM0l3TqI80lF5sRd7fxGDdSNC+A2e3oFcJHhB/i9R7eQY5hg8m9sqif
-        wUfeWwMMqNszATkwwK6GgvPPyQTkyCjZXARD9/qRVHxDUNkwSEvFCIJHlb9kkyOXvo7bR3IQ
-        JDZZ7IUVQVfXQyIBMcxM1h/Gbi4UB1zYZdD55wclagj2DgmlZeVyUUOzaigzR4saBbseHprj
-        5SKT7GJoKiklRZ7F7oLXtYWUpJkB9RkD//oO7FYo/DlOiEywbtA9kC2TeD6UWjMJcRewFxgw
-        pj1Akms/KOu4QEk8E4bqiuUSz4XGi0ZSYgEMSdfs+uNgScmya9ZCdV0rJXomJsIUlHuICKwv
-        NJ2eI6EzvLLOkBw4Q2rJZUJqK+BsvFK6YykUG1/YX9AVcvLT5OeRyjQll2lKFtOULKb/a68i
-        0ozc+FhBG8oLq3T8YbWg0QqxulD1gUhtEZr4gI3jdd/LUMXv4CrEMkjlpFgw9HSvktIcEuK0
-        VQgYQuWi4OomWooQTdxRXh+5Xx8bwQtVaA5DqtwUx6a92aNkQzUx/EGej+L1k6cyxmG2AS2n
-        vUYV07LdlVGBrcZtNVmVGe8eVaTTQvztZs7/U294sI9fYqNrm0t1XkL0Fpt1g9bX+JZL5QyB
-        2LYvbHr99kpbx6I1Ad4jOWyHxTnfaNvcmZN24EYQAzrkFP9ynzrwZF8acTN4dJN+x0FLq3Xn
-        k/1B7t1LHm++7hfnuu5du7uKFMI0nu6EXtD8BfwCn6x8AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPIsWRmVeSWpSXmKPExsVy+t/xu7phH47FGKxfZW2xccZ6VovrX56z
-        Wsw/co7VYvXHx4wWk0/NZbI4051r0f/4NbPF+fMb2C3ONr1ht7i8aw6bxefeI4wWM87vY7JY
-        e+Quu8XtxhVsFofftLNa7L/iZXH7N5/FtxOPGB2EPL59ncTiMbvhIovHzll32T02repk8+ht
-        fsfm0bdlFaPH5tPVHp83yQVwROnZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq
-        6dvZpKTmZJalFunbJehlPO+7w1TwI6ni5duABsZbhl2MnBwSAiYSUz79Y+li5OIQEljKKNHZ
-        0sECkRCTmLRvOzuELSzx51oXG0TRa0aJbdfmsIIkhAV8JfrfnAMrEhHQlLj+9zsrSBGzwEYW
-        iYuvepkgOpYzSXQ0fAZq5+BgE9CT2LGqEKSBV8BNYs+qNrBmFgFViTPbtoNtFhWIkDjzfgUL
-        RI2gxMmZT8BsToFAiQ0//jGD2MwCZhLzNj+EssUlbj2ZzwRhy0tsfzuHeQKj0Cwk7bOQtMxC
-        0jILScsCRpZVjCKppcW56bnFRnrFibnFpXnpesn5uZsYgZG/7djPLTsYu94FH2IU4GBU4uFV
-        eHU0Rog1say4MvcQowQHs5IIr8dxoBBvSmJlVWpRfnxRaU5q8SFGU6DnJjJLiSbnA5NSXkm8
-        oamhuYWlobmxubGZhZI4b4fAwRghgfTEktTs1NSC1CKYPiYOTqkGxiiJs4cXR4hwLGaZIPJn
-        Zf7Mfxat74QDKu0XfkgNKeQ+Wbh78hXnM+tuC23gfK0k6MMc1G5/w8FDNVrUsqIuNSTwuCDn
-        o/lzP25fLFItyh357m9Zqdk78dWWbVMXNdtvOT8tRvzipz1arBbpT97WZJRKsawUztNlW5+p
-        r8jLdszFQ/x+Q+NfJZbijERDLeai4kQA7hm40xIDAAA=
-X-CMS-MailID: 20190429123847eucas1p1c0d8d38a912c0f61bed165c427bf6065
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190419141952eucas1p11dc36f30c873a947122e0f7e8d55a3bb
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190419141952eucas1p11dc36f30c873a947122e0f7e8d55a3bb
-References: <CGME20190419141952eucas1p11dc36f30c873a947122e0f7e8d55a3bb@eucas1p1.samsung.com>
-        <1555683568-20882-1-git-send-email-l.luba@partner.samsung.com>
-        <1555683568-20882-10-git-send-email-l.luba@partner.samsung.com>
-        <CAJKOXPfE2Kt_afkH6wryRgdVqfvDUH82rMf_iKFuvDVSH00LJw@mail.gmail.com>
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
-Thank you the review, please check my comments below.
+> On Fri, Apr 26, 2019 at 9:18 AM Kalle Valo <kvalo@codeaurora.org> wrote:
+>>
+>> Brian Norris <briannorris@chromium.org> writes:
+>>
+>> > + Sriram, Pradeep, Claire
+>> >
+>> > On Sun, Mar 03, 2019 at 06:24:33PM +0100, Rafael J. Wysocki wrote:
+>> >
+>> > Ooh, exactly 1 month ago!
+>> >
+>> >> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> >>
+>> >> ath10k_mac_vif_chan() always returns an error for the given vif
+>> >> during system-wide resume which reliably triggers two WARN_ON()s
+>> >> in ath10k_bss_info_changed() and they are not particularly
+>> >> useful in that code path, so drop them.
+>> >>
+>> >
+>> > Particularly, when WOWLAN isn't enabled, we get called during resume via
+>> > ieee80211_reconfig(), where we're not associated and don't have any
+>> > channel contexts. AFAICT, we shouldn't need to communicate anything in
+>> > particular to the firmware here, and so failing the 'if' is definitely
+>> > not worth WARN-ing about.
+>> >
+>> > I'd love to see this get applied with:
+>> >
+>> > Fixes: cd93b83ad927 ("ath10k: support for multicast rate control")
+>> > Fixes: f279294e9ee2 ("ath10k: add support for configuring management packet rate")
+>> >
+>> > and sent to stable. This has been bugging people since 4.19. Spurious
+>> > WARN_ON()s can trigger reports to various crash trackers, and on some
+>> > systems appear as user-visible warnings ("System problem detected").
+>> >
+>> >> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> >
+>> > Reviewed-by: Brian Norris <briannorris@chromium.org>
+>> > Tested-by: Brian Norris <briannorris@chromium.org>
+>>
+>> I added these now to the commit log, thanks Brian.
+>>
+>> Rafael, could you please provide the hardware and firmware versions you
+>> tested this on? We have so many different firmware branches to support
+>> that I prefer to have that documented in the commit log. Providing
+>> ath10k startup messages in dmesg are enough,
+>
+> There you go:
+>
+> [    4.695349] ath10k_pci 0000:3a:00.0: enabling device (0000 -> 0002)
+> [    4.698165] ath10k_pci 0000:3a:00.0: pci irq msi oper_irq_mode 2
+> irq_mode 0 reset_mode 0
+> [    4.912240] ath10k_pci 0000:3a:00.0: qca6174 hw3.2 target
+> 0x05030000 chip_id 0x00340aff sub 1a56:1535
+> [    4.912255] ath10k_pci 0000:3a:00.0: kconfig debug 0 debugfs 0
+> tracing 0 dfs 0 testmode 0
+> [    4.912716] ath10k_pci 0000:3a:00.0: firmware ver
+> WLAN.RM.2.0-00180-QCARMSWPZ-1 api 4 features
+> wowlan,ignore-otp,no-4addr-pad crc32 75dee6c5
+> [    4.982563] ath10k_pci 0000:3a:00.0: board_file api 2 bmi_id N/A
+> crc32 19644295
 
-On 4/23/19 1:03 PM, Krzysztof Kozlowski wrote:
-> On Fri, 19 Apr 2019 at 16:19, Lukasz Luba <l.luba@partner.samsung.com> wrote:
->>
->> Add description of Dynamic Memory Controller and PPMU counters.
->> They are used by exynos5422-dmc driver.
->> There is a definition of the memory chip, hwich is then used during
-> 
-> which
-ACK
-> 
->> calculation of timings for each OPP.
->> The algorithm in the driver needs these two sets to bound the timings.
->>
->> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
->> ---
->>   arch/arm/boot/dts/exynos5420.dtsi             | 120 ++++++++++++++++++++++++++
->>   arch/arm/boot/dts/exynos5422-odroid-core.dtsi | 120 ++++++++++++++++++++++++++
->>   2 files changed, 240 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
->> index aaff158..b687cd7 100644
->> --- a/arch/arm/boot/dts/exynos5420.dtsi
->> +++ b/arch/arm/boot/dts/exynos5420.dtsi
->> @@ -14,6 +14,7 @@
->>   #include <dt-bindings/clock/exynos5420.h>
->>   #include <dt-bindings/clock/exynos-audss-clk.h>
->>   #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +#include <dt-bindings/pmu/exynos_ppmu.h>
->>
->>   / {
->>          compatible = "samsung,exynos5420", "samsung,exynos5";
->> @@ -235,6 +236,37 @@
->>                          status = "disabled";
->>                  };
->>
->> +               dmc: memory-controller@10c20000 {
->> +                       compatible = "samsung,exynos5422-dmc";
->> +                       reg = <0x10c20000 0x10000>, <0x10c30000 0x10000>,
-> 
-> I think in the driver you access range up to 0xff of each DREX memory
-> region. Do not map entire 0x10000 if not needed.
-I agree, I will map only 0x100.
-> 
-> 
->> +                               <0x10000000 0x1000>, <0x10030000 0x1000>;
->> +                       clocks = <&clock CLK_FOUT_SPLL>,
->> +                                <&clock CLK_MOUT_SCLK_SPLL>,
->> +                                <&clock CLK_FF_DOUT_SPLL2>,
->> +                                <&clock CLK_FOUT_BPLL>,
->> +                                <&clock CLK_MOUT_BPLL>,
->> +                                <&clock CLK_SCLK_BPLL>,
->> +                                <&clock CLK_MOUT_MX_MSPLL_CCORE>,
->> +                                <&clock CLK_MOUT_MX_MSPLL_CCORE_PHY>,
->> +                                <&clock CLK_MOUT_MCLK_CDREX>,
->> +                                <&clock CLK_DOUT_CLK2X_PHY0>,
->> +                                <&clock CLK_CLKM_PHY0>,
->> +                                <&clock CLK_CLKM_PHY1>;
->> +                       clock-names = "fout_spll",
->> +                                     "mout_sclk_spll",
->> +                                     "ff_dout_spll2",
->> +                                     "fout_bpll",
->> +                                     "mout_bpll",
->> +                                     "sclk_bpll",
->> +                                     "mout_mx_mspll_ccore",
->> +                                     "mout_mx_mspll_ccore_phy",
->> +                                     "mout_mclk_cdrex",
->> +                                     "dout_clk2x_phy0",
->> +                                     "clkm_phy0",
->> +                                     "clkm_phy1";
->> +                       status = "disabled";
->> +               };
->> +
->>                  nocp_mem0_0: nocp@10ca1000 {
->>                          compatible = "samsung,exynos5420-nocp";
->>                          reg = <0x10CA1000 0x200>;
->> @@ -271,6 +303,94 @@
->>                          status = "disabled";
->>                  };
->>
->> +               ppmu_dmc0_0: ppmu@10d00000 {
->> +                       compatible = "samsung,exynos-ppmu";
->> +                       reg = <0x10d00000 0x2000>;
->> +                       clocks = <&clock CLK_PCLK_PPMU_DREX0_0>;
->> +                       clock-names = "ppmu";
->> +                       events {
->> +                               ppmu_event0_dmc0_0: ppmu-event0-dmc0_0 {
->> +                                       event-name = "ppmu-event0-dmc0_0";
->> +                                       event-data-type = <PPMU_RO_DATA_CNT>;
->> +                               };
->> +                               ppmu_event1_dmc0_0: ppmu-event1-dmc0_0 {
->> +                                       event-name = "ppmu-event1-dmc0_0";
->> +                                       event-data-type = <PPMU_WO_DATA_CNT>;
->> +                               };
->> +                               ppmu_event3_dmc0_0: ppmu-event3-dmc0_0 {
->> +                                       event-name = "ppmu-event3-dmc0_0";
->> +                                       event-data-type = <(PPMU_RO_DATA_CNT |
->> +                                               PPMU_WO_DATA_CNT)>;
->> +                               };
->> +                       };
->> +               };
->> +
->> +               ppmu_dmc0_1: ppmu@10d10000 {
->> +                       compatible = "samsung,exynos-ppmu";
->> +                       reg = <0x10d10000 0x2000>;
->> +                       clocks = <&clock CLK_PCLK_PPMU_DREX0_1>;
->> +                       clock-names = "ppmu";
->> +                       events {
->> +                               ppmu_event0_dmc0_1: ppmu-event0-dmc0_1 {
->> +                                       event-name = "ppmu-event0-dmc0_1";
->> +                                       event-data-type = <PPMU_RO_DATA_CNT>;
->> +                               };
->> +                               ppmu_event1_dmc0_1: ppmu-event1-dmc0_1 {
->> +                                       event-name = "ppmu-event1-dmc0_1";
->> +                                       event-data-type = <PPMU_WO_DATA_CNT>;
->> +                               };
->> +                               ppmu_event3_dmc0_1: ppmu-event3-dmc0_1 {
->> +                                       event-name = "ppmu-event3-dmc0_1";
->> +                                       event-data-type = <(PPMU_RO_DATA_CNT |
->> +                                               PPMU_WO_DATA_CNT)>;
->> +                               };
->> +                       };
->> +               };
->> +
->> +               ppmu_dmc1_0: ppmu@10d60000 {
->> +                       compatible = "samsung,exynos-ppmu";
->> +                       reg = <0x10d60000 0x2000>;
->> +                       clocks = <&clock CLK_PCLK_PPMU_DREX1_0>;
->> +                       clock-names = "ppmu";
->> +                       events {
->> +                               ppmu_event0_dmc1_0: ppmu-event0-dmc1_0 {
->> +                                       event-name = "ppmu-event0-dmc1_0";
->> +                                       event-data-type = <PPMU_RO_DATA_CNT>;
->> +                               };
->> +                               ppmu_event1_dmc1_0: ppmu-event1-dmc1_0 {
->> +                                       event-name = "ppmu-event1-dmc1_0";
->> +                                       event-data-type = <PPMU_WO_DATA_CNT>;
->> +                               };
->> +                               ppmu_event3_dmc1_0: ppmu-event3-dmc1_0 {
->> +                                       event-name = "ppmu-event3-dmc1_0";
->> +                                       event-data-type = <(PPMU_RO_DATA_CNT |
->> +                                               PPMU_WO_DATA_CNT)>;
->> +                               };
->> +                       };
->> +               };
->> +
->> +               ppmu_dmc1_1: ppmu@10d70000 {
->> +                       compatible = "samsung,exynos-ppmu";
->> +                       reg = <0x10d70000 0x2000>;
->> +                       clocks = <&clock CLK_PCLK_PPMU_DREX1_1>;
->> +                       clock-names = "ppmu";
->> +                       events {
->> +                               ppmu_event0_dmc1_1: ppmu-event0-dmc1_1 {
->> +                                       event-name = "ppmu-event0-dmc1_1";
->> +                                       event-data-type = <PPMU_RO_DATA_CNT>;
->> +                               };
->> +                               ppmu_event1_dmc1_1: ppmu-event1-dmc1_1 {
->> +                                       event-name = "ppmu-event1-dmc1_1";
->> +                                       event-data-type = <PPMU_WO_DATA_CNT>;
->> +                               };
->> +                               ppmu_event3_dmc1_1: ppmu-event3-dmc1_1 {
->> +                                       event-name = "ppmu-event3-dmc1_1";
->> +                                       event-data-type = <(PPMU_RO_DATA_CNT |
->> +                                               PPMU_WO_DATA_CNT)>;
->> +                               };
->> +                       };
->> +               };
->> +
->>                  gsc_pd: power-domain@10044000 {
->>                          compatible = "samsung,exynos4210-pd";
->>                          reg = <0x10044000 0x20>;
->> diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
->> index 25d95de1..76bf0dbf 100644
->> --- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
->> +++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
->> @@ -34,6 +34,95 @@
->>                          clock-frequency = <24000000>;
->>                  };
->>          };
->> +
->> +       dmc_opp_table: opp_table2 {
->> +               compatible = "operating-points-v2";
->> +
->> +               opp00 {
->> +                       opp-hz = /bits/ 64 <165000000>;
->> +                       opp-microvolt = <875000>;
->> +               };
->> +               opp01 {
->> +                       opp-hz = /bits/ 64 <206000000>;
->> +                       opp-microvolt = <875000>;
->> +               };
->> +               opp02 {
->> +                       opp-hz = /bits/ 64 <275000000>;
->> +                       opp-microvolt = <875000>;
->> +               };
->> +               opp03 {
->> +                       opp-hz = /bits/ 64 <413000000>;
->> +                       opp-microvolt = <887500>;
->> +               };
->> +               opp04 {
->> +                       opp-hz = /bits/ 64 <543000000>;
->> +                       opp-microvolt = <937500>;
->> +               };
->> +               opp05 {
->> +                       opp-hz = /bits/ 64 <633000000>;
->> +                       opp-microvolt = <1012500>;
->> +               };
->> +               opp06 {
->> +                       opp-hz = /bits/ 64 <728000000>;
->> +                       opp-microvolt = <1037500>;
->> +               };
->> +               opp07 {
->> +                       opp-hz = /bits/ 64 <825000000>;
->> +                       opp-microvolt = <1050000>;
->> +               };
->> +       };
->> +
->> +       samsung_K3QF2F20DB: lpddr3 {
->> +               compatible      = "Samsung,K3QF2F20DB","jedec,lpddr3";
-> 
-> Missing space after coma.
-Good catch, thank you.
-> 
->> +               density         = <16384>;
->> +               io-width        = <32>;
->> +
->> +               tRFC-min-tck            = <17>;
->> +               tRRD-min-tck            = <2>;
->> +               tRPab-min-tck           = <2>;
->> +               tRPpb-min-tck           = <2>;
->> +               tRCD-min-tck            = <3>;
->> +               tRC-min-tck             = <6>;
->> +               tRAS-min-tck            = <5>;
->> +               tWTR-min-tck            = <2>;
->> +               tWR-min-tck             = <7>;
->> +               tRTP-min-tck            = <2>;
->> +               tW2W-C2C-min-tck        = <0>;
->> +               tR2R-C2C-min-tck        = <0>;
->> +               tWL-min-tck             = <8>;
->> +               tDQSCK-min-tck          = <5>;
->> +               tRL-min-tck             = <14>;
->> +               tFAW-min-tck            = <5>;
->> +               tXSR-min-tck            = <12>;
->> +               tXP-min-tck             = <2>;
->> +               tCKE-min-tck            = <2>;
->> +               tCKESR-min-tck          = <2>;
->> +               tMRD-min-tck            = <5>;
->> +
->> +               timings_samsung_K3QF2F20DB_800mhz: lpddr3-timings@0 {
-> 
-> @0 does not look correct... you do not have <reg>. No DTC warnings here?
-Rob also pointed out that it should have 'reg'. I have followed the
-LPDDR2 definitions, but in the meantime DT rules have changed and now
-'reg' is needed. I will put 'reg' instead of 'max-freq' if Rob agrees.
+Thanks, I added the info to the commit log.
 
-Regards,
-Lukasz
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
+>> I can then add it to the commit log.
+>
+> Still, I'm quite sure that the WARN_ON()s trigger during system resume
+> regardless of the hw/fw combination.
+
+Sure, I'm not claiming anything else. We just have so many different
+hw/fw combos that I want to have the environment documented in the
+commit log in case we need to investigate history in the future.
+
+-- 
+Kalle Valo
