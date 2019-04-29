@@ -2,100 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 476F9E832
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 18:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8665EAA5
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 21:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728823AbfD2Qzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Apr 2019 12:55:47 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46241 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728748AbfD2Qzr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 12:55:47 -0400
-Received: by mail-pf1-f195.google.com with SMTP id j11so5587863pff.13
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 09:55:47 -0700 (PDT)
+        id S1729083AbfD2TKk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Apr 2019 15:10:40 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:37780 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729054AbfD2TKk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 15:10:40 -0400
+Received: by mail-it1-f196.google.com with SMTP id r85so818268itc.2;
+        Mon, 29 Apr 2019 12:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=AMPQbvcwEN3ZxVejjVGKTdlBJSPIcIJE/Kqfir3TvYk=;
-        b=bIp8G+wuW7rQ37gmaDIBfuVrDfU8/YiaQDK8l32Oica8Kx/A1l2ujRTouhaWa+Z+ij
-         flAq4xBxcbvNGPlRN9vQpCyQPxD12S0O29alldRN9z70HpZdhWyiJSeZPCztOCgfQXnf
-         O4JwOSc6XAbQ3t2XNr1sX0N3pkIf9wisrgu5U=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KkDvipA08mC8IxvH8qSF4bz6Gcm5+BjwC5oiwie6/+k=;
+        b=Ve8XuKyGlDC7d2Jvv5JaFeEFVAN2jn4Wg3QY/h79fYFFc1Gn6E1SWgOE0LXGs3cKFE
+         6uJSMSnHFL3OsVIykxCMPR0dttZ74X/ELKhgOBL/ILoONnzQ5ThckDLH1amLcUVNx3d6
+         W/GUBBAdD1ZPt3D110gl+7UoYrQEFRHsuAOLEsF1Rf6WgvZ7q0UqANogslubKvkn9tbF
+         9WbTvIoSc5HK9pb826UynoX6IbBoyw0t5qU8973CIGOQalIHLmjjCufU5CwqO/ovGSmV
+         FjgjjcPs9sqpnYkXcILGgODVrWI8Aef3xVhVoTbkJY1uRom7QOEMy/Pnn+J/nw8hHS0V
+         P/Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=AMPQbvcwEN3ZxVejjVGKTdlBJSPIcIJE/Kqfir3TvYk=;
-        b=hvYlIbO44keTQ3AM+VAJuSD+8AxYaG+uFktcxH9QxrC1k1NGXxSQXkuCUnyGz7t3mA
-         xMnYjN3g9JmmbYNxSCgBehqwQ/8MXKYDHjURPp8OKC2TezAYEypPvf+BwDhgm6jV+xpA
-         oFX+FQo5uwUGinPs3HoqeUzzN+gJ8b/iAuZT63RTvaiyFA2AehrmhbyWBMrG94y3c0aA
-         LvV9KxLLVhTW+og5Gufn66rRowgnS9mWyxJkpeceuIl2Tfg9iO02hzFUG14uBwwJ0UgV
-         CPgEgSxfAMeonNixUybveEtLAQydgBZOZhbB75ks8to4nTezFi9fvb5FuCp3zrhr1boM
-         I90Q==
-X-Gm-Message-State: APjAAAUKUyFiP2nxZTMivtraBgMwRqXGlUTeG5X5O29mETCkugLQYCMH
-        4J/tlAYBFwLbMMpo1kzlm/2wHw==
-X-Google-Smtp-Source: APXvYqxUDG2Rl+yER4noZW2kdX8sLT0Bu5I2nqTLysmUo8pb2pNLanJKAOumCSV+467bL/eGFeLSWA==
-X-Received: by 2002:a63:500f:: with SMTP id e15mr59974587pgb.198.1556556946665;
-        Mon, 29 Apr 2019 09:55:46 -0700 (PDT)
-Received: from mannams-OptiPlex-7010.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id 132sm24490812pfw.87.2019.04.29.09.55.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 29 Apr 2019 09:55:45 -0700 (PDT)
-From:   Srinath Mannam <srinath.mannam@broadcom.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Srinath Mannam <srinath.mannam@broadcom.com>
-Subject: [PATCH] thermal: broadcom: Remove ACPI support
-Date:   Mon, 29 Apr 2019 22:25:29 +0530
-Message-Id: <1556556929-25704-1-git-send-email-srinath.mannam@broadcom.com>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KkDvipA08mC8IxvH8qSF4bz6Gcm5+BjwC5oiwie6/+k=;
+        b=RI4LI1MzZQtp2BVEm0mp0MN9NN/FUWuyBl736HfLvXHbvqEOFJn7CM+sJfLZLThHZ6
+         nSIDKGfmN9Rb7+VrkihIJQAkYiNBnkXmG52a8MimgIhEPwuyOlxu5Mo8wX1tIlCd+PbF
+         6g7kSESYpSsrpwWKA8+TeoDs0GXocJ4wCVuZasaMUQqOpH/YIdZ8BP5wpMA40pio3t1D
+         eQsKRgw6XrKKpeUe3XI5+20B0uBwsH4JyzVigPoDpcHKeBvlZstBUM0XvkPV4LshEXWE
+         w2TPODtMChCRYoGkS+YdbCnEYf9oA5W2r/AZ6IxsAnAh9ZcqcsHeuF3PHhf2Ju6nbPCN
+         BM4g==
+X-Gm-Message-State: APjAAAVsBwIG9aeQ+XQbW8RdO03s8L13w8iACZk6TGt2WCeyj0lwZAH2
+        8my/gW0CKqkaNsq/wD2XiVqiK8zGRwROvCmzDZM=
+X-Google-Smtp-Source: APXvYqxjcgCsVThGvzbspmleSENSy0vAB6gHVpHLHIM/eJvNC75iwpTXhF3s96hudw8y9HP19dvMhBdh2kK5aKvCYO4=
+X-Received: by 2002:a02:62ce:: with SMTP id d197mr43109134jac.91.1556565038867;
+ Mon, 29 Apr 2019 12:10:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190429054741.7286-1-andrew.smirnov@gmail.com>
+ <20190429054741.7286-3-andrew.smirnov@gmail.com> <1556533656.2560.7.camel@pengutronix.de>
+In-Reply-To: <1556533656.2560.7.camel@pengutronix.de>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Mon, 29 Apr 2019 12:10:27 -0700
+Message-ID: <CAHQ1cqECkn3242zVb55ifmgEHdq0se91=PpS1zDL4wj2WdZmbw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] power: supply: Add driver for Microchip UCS1002
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Enric Balletbo Serra <enric.balletbo@collabora.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Unlike DT framework, thermal-zones and its parameters can't be parsed
-using ACPI framework. So that ACPI support is removed in this driver.
+On Mon, Apr 29, 2019 at 3:27 AM Lucas Stach <l.stach@pengutronix.de> wrote:
+>
+> Hi Andrey,
+>
+> Am Sonntag, den 28.04.2019, 22:47 -0700 schrieb Andrey Smirnov:
+> > Add driver for Microchip UCS1002 Programmable USB Port Power
+> > Controller with Charger Emulation. The driver exposed a power supply
+> > device to control/monitor various parameter of the device as well as a
+> > regulator to allow controlling VBUS line.
+> >
+> > > Signed-off-by: Enric Balletbo Serra <enric.balletbo@collabora.com>
+> > > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> > > Cc: Chris Healy <cphealy@gmail.com>
+> > > Cc: Lucas Stach <l.stach@pengutronix.de>
+> > > Cc: Fabio Estevam <fabio.estevam@nxp.com>
+> > > Cc: Guenter Roeck <linux@roeck-us.net>
+> > > Cc: Sebastian Reichel <sre@kernel.org>
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: linux-pm@vger.kernel.org
+> > ---
+> [...]
+> > +     /* Enable charge rationing by default */
+> > > +   ret = regmap_update_bits(info->regmap, UCS1002_REG_GENERAL_CFG,
+> > > +                            F_RATION_EN, F_RATION_EN);
+> > > +   if (ret) {
+> > > +           dev_err(dev, "Failed to read general config: %d\n", ret);
+> > > +           return ret;
+> > > +   }
+> > +
+> > > +   /*
+> > > +    * Ignore the M1, M2, PWR_EN, and EM_EN pin states. Set active
+> > > +    * mode selection to BC1.2 CDP.
+> > > +    */
+> > > +   ret = regmap_update_bits(info->regmap, UCS1002_REG_SWITCH_CFG,
+> > > +                            V_SET_ACTIVE_MODE_MASK,
+> > +                              V_SET_ACTIVE_MODE_BC12_CDP);
+>
+> This doesn't work as the F_PIN_IGNORE bit isn't set, so the the
+> external strap settings are applied. I had to apply the following diff
+> to make the driver behave as expected again:
+>
 
-Signed-off-by: Srinath Mannam <srinath.mannam@broadcom.com>
-Reported-by: David Woodhouse <dwmw2@infradead.org>
----
- drivers/thermal/broadcom/sr-thermal.c | 8 --------
- 1 file changed, 8 deletions(-)
+Ugh, I missed this since pins on my board are set properly. Thanks for
+catching that and sorry about the bug. Will fix in v3.
 
-diff --git a/drivers/thermal/broadcom/sr-thermal.c b/drivers/thermal/broadcom/sr-thermal.c
-index 2284cbe..475ce29 100644
---- a/drivers/thermal/broadcom/sr-thermal.c
-+++ b/drivers/thermal/broadcom/sr-thermal.c
-@@ -3,7 +3,6 @@
-  * Copyright (C) 2018 Broadcom
-  */
- 
--#include <linux/acpi.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
- #include <linux/platform_device.h>
-@@ -100,18 +99,11 @@ static const struct of_device_id sr_thermal_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, sr_thermal_of_match);
- 
--static const struct acpi_device_id sr_thermal_acpi_ids[] = {
--	{ .id = "BRCM0500" },
--	{ /* sentinel */ }
--};
--MODULE_DEVICE_TABLE(acpi, sr_thermal_acpi_ids);
--
- static struct platform_driver sr_thermal_driver = {
- 	.probe		= sr_thermal_probe,
- 	.driver = {
- 		.name = "sr-thermal",
- 		.of_match_table = sr_thermal_of_match,
--		.acpi_match_table = ACPI_PTR(sr_thermal_acpi_ids),
- 	},
- };
- module_platform_driver(sr_thermal_driver);
--- 
-2.7.4
-
+Thanks,
+Andrey Smirnov
