@@ -2,95 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 080EAE081
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 12:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6753EE0AC
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Apr 2019 12:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727608AbfD2K1k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Apr 2019 06:27:40 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:39463 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727560AbfD2K1j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 06:27:39 -0400
-Received: from kresse.hi.pengutronix.de ([2001:67c:670:100:1d::2a])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1hL3Va-0006sr-JI; Mon, 29 Apr 2019 12:27:38 +0200
-Message-ID: <1556533656.2560.7.camel@pengutronix.de>
-Subject: Re: [PATCH v2 2/3] power: supply: Add driver for Microchip UCS1002
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>, linux-pm@vger.kernel.org
-Cc:     Enric Balletbo Serra <enric.balletbo@collabora.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 29 Apr 2019 12:27:36 +0200
-In-Reply-To: <20190429054741.7286-3-andrew.smirnov@gmail.com>
-References: <20190429054741.7286-1-andrew.smirnov@gmail.com>
-         <20190429054741.7286-3-andrew.smirnov@gmail.com>
+        id S1727630AbfD2KmE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Apr 2019 06:42:04 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:33885 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727560AbfD2KmE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Apr 2019 06:42:04 -0400
+Received: by mail-qt1-f195.google.com with SMTP id j6so11326293qtq.1
+        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 03:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mti7KwMi+FS7lNJiLBXoxgVN3ENDHL6rbQJBPEZLm8c=;
+        b=e6Z9KN+6jcezK4vxJLAWJ4wS+bpxKehspqny2MSjUgaOejBm5SChPK+bwk3HlBKrwj
+         cxjDmvPu1FDIMhcQNGe0i3iacMH6nOIdGlv9koKvO+L23/izsmwYOK3RSUyqLnk+Z4S/
+         40b9hQCT4A7O4M06WpDPjq4S0Nb9QQNLU2Rio=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mti7KwMi+FS7lNJiLBXoxgVN3ENDHL6rbQJBPEZLm8c=;
+        b=sTHWDJasXCiYBt0AOORff7ZpUqxFeOaRRHerkK3nIjrPlshNWm5pS5CDFBBqtBakRI
+         lYT46aW+3RexjwCIQtRAfqRLQtaZNJNq669cdXhtvSpMSzZSq13Z7vZGbm1BSfIaSe11
+         DAGHN7VOMcsqj82E9FHs6iiH8Gy/y9sBqhTA7Dj8Pi/5Q4TnN4iEhUTEMmJBN5DLkS/h
+         h7v/zSldmH5fu3fi4ac8mo8xBkJgeopk8hQ2Uqx5Odt20IAkiSlgD1iLgIuk6q4mt2Ym
+         yTeIiYjV6d37kWVIYYS+I6iwqFhW2lvjWdEurOy9Px8OfIkFYQW/5k6cf4b2g1O6GBtP
+         4lVw==
+X-Gm-Message-State: APjAAAU0Ysvnz/tMQlgT98CnT4I4Vb3sc5vXfxYej7L1yPtDn3t53OVD
+        ssMa+7yFM1cWVVl/FdcMpFxnocuZcZmskwOP
+X-Google-Smtp-Source: APXvYqycyiTnyRhxRweWHTdwDmD9ESRo9QrNZLKpgPCn67kakGwpUwoKDxnpO5ljOld6iEAj//c+1w==
+X-Received: by 2002:aed:3ebc:: with SMTP id n57mr35956736qtf.118.1556534522922;
+        Mon, 29 Apr 2019 03:42:02 -0700 (PDT)
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com. [209.85.222.178])
+        by smtp.gmail.com with ESMTPSA id p1sm6725543qkb.43.2019.04.29.03.42.01
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Apr 2019 03:42:02 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id f125so5596788qke.6
+        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 03:42:01 -0700 (PDT)
+X-Received: by 2002:a37:4c7:: with SMTP id 190mr37260660qke.128.1556534521618;
+ Mon, 29 Apr 2019 03:42:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <2884043.Jv1Mn93hE8@aspire.rjw.lan> <20190403195718.GA74723@google.com>
+ <87o94tutdz.fsf@kamboji.qca.qualcomm.com> <CAJZ5v0ifD=DATprUeeO2_LGs04aEEhPB6AcGVPxWUdQaOma+ww@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ifD=DATprUeeO2_LGs04aEEhPB6AcGVPxWUdQaOma+ww@mail.gmail.com>
+From:   Claire Chang <tientzu@chromium.org>
+Date:   Mon, 29 Apr 2019 18:41:50 +0800
+X-Gmail-Original-Message-ID: <CALiNf2_qV+iViHbS0tQquTMZfu6XfFvQCH14mdT5bixn94DZ2Q@mail.gmail.com>
+Message-ID: <CALiNf2_qV+iViHbS0tQquTMZfu6XfFvQCH14mdT5bixn94DZ2Q@mail.gmail.com>
+Subject: Re: [PATCH] ath10k: Drop WARN_ON()s that always trigger during system resume
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        Brian Norris <briannorris@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sriram R <srirrama@codeaurora.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Pradeep Kumar Chitrapu <pradeepc@codeaurora.org>,
+        "open list:NETWORKING DRIVERS (WIRELESS)" 
+        <linux-wireless@vger.kernel.org>, ath10k@lists.infradead.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Todd Brandt <todd.e.brandt@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::2a
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Andrey,
+Tested-by: Claire Chang <tientzu@chromium.org>
 
-Am Sonntag, den 28.04.2019, 22:47 -0700 schrieb Andrey Smirnov:
-> Add driver for Microchip UCS1002 Programmable USB Port Power
-> Controller with Charger Emulation. The driver exposed a power supply
-> device to control/monitor various parameter of the device as well as a
-> regulator to allow controlling VBUS line.
-> 
-> > Signed-off-by: Enric Balletbo Serra <enric.balletbo@collabora.com>
-> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> > Cc: Chris Healy <cphealy@gmail.com>
-> > Cc: Lucas Stach <l.stach@pengutronix.de>
-> > Cc: Fabio Estevam <fabio.estevam@nxp.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> ---
-[...]
-> +	/* Enable charge rationing by default */
-> > +	ret = regmap_update_bits(info->regmap, UCS1002_REG_GENERAL_CFG,
-> > +				 F_RATION_EN, F_RATION_EN);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to read general config: %d\n", ret);
-> > +		return ret;
-> > +	}
-> +
-> > +	/*
-> > +	 * Ignore the M1, M2, PWR_EN, and EM_EN pin states. Set active
-> > +	 * mode selection to BC1.2 CDP.
-> > +	 */
-> > +	ret = regmap_update_bits(info->regmap, UCS1002_REG_SWITCH_CFG,
-> > +				 V_SET_ACTIVE_MODE_MASK,
-> +				 V_SET_ACTIVE_MODE_BC12_CDP);
+> Still, I'm quite sure that the WARN_ON()s trigger during system resume
+> regardless of the hw/fw combination.
 
-This doesn't work as the F_PIN_IGNORE bit isn't set, so the the
-external strap settings are applied. I had to apply the following diff
-to make the driver behave as expected again:
+Also see this on sido:
 
---- a/drivers/power/supply/ucs1002_power.c
-+++ b/drivers/power/supply/ucs1002_power.c
-@@ -548,8 +548,8 @@ static int ucs1002_probe(struct i2c_client *client,
-         * mode selection to BC1.2 CDP.
-         */
-        ret = regmap_update_bits(info->regmap, UCS1002_REG_SWITCH_CFG,
--                                V_SET_ACTIVE_MODE_MASK,
--                                V_SET_ACTIVE_MODE_BC12_CDP);
-+                                V_SET_ACTIVE_MODE_MASK | F_PIN_IGNORE,
-+                                V_SET_ACTIVE_MODE_BC12_CDP | F_PIN_IGNORE);
-
-Regards,
-Lucas
+[    4.925278] ath10k_sdio mmc1:0001:1: qca6174 hw3.2 sdio target
+0x05030000 chip_id 0x00000000 sub 0000:0000
+[    4.935721] ath10k_sdio mmc1:0001:1: kconfig debug 1 debugfs 1
+tracing 1 dfs 0 testmode 1
+[    4.948750] ath10k_sdio mmc1:0001:1: firmware ver
+WLAN.RMH.4.4.1-00007-QCARMSWP-1 api 6 features wowlan,ignore-otp crc32
+b98adaf8
+[    5.132728] ath10k_sdio mmc1:0001:1: board_file api 2 bmi_id 0:4
+crc32 6364cfcc
