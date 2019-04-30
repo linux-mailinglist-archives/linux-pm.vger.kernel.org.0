@@ -2,91 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D45CBF07E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 08:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F415DF0AC
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 08:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbfD3GeH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 02:34:07 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:42243 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725554AbfD3GeH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 02:34:07 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 86A42220E2;
-        Tue, 30 Apr 2019 02:34:06 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 30 Apr 2019 02:34:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tobin.cc; h=date
-        :from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=5NmjIawd5LxDhUXwBKjmfIeG6PW
-        W2x4Hz4B05t/pcXM=; b=n6zv1ZnynAx2mPLBWm1rFfyGP6eVJD+Gsl61VXgmFXR
-        f1OyxNprq9uSujnzXlwfXJPMdKIHE/zV/KlsBIph8YJ/HkSdhVp0CJ2GABCMxN9s
-        k3SgKbtv/LsYOFfRfF6LxC7RpnsXK0dggkq8OyyWSrfyc33rN+8wC0oYvjFFlwGF
-        mydA7FJknk5CCaxeEkub3bfc7jrhT6ftpXIqCiWTQdYb7GBU9zoQlmanXEXxzsfc
-        nmEAMJQoYQy+KqcVloXAIOsASc0H9M4twUIl3Sq1OgO0T5b6+oeQECdWdzmaDf9N
-        omLvE5XhnpycjYTiCghUbjKb9XNqIvABmx+P7Sy3k2g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=5NmjIa
-        wd5LxDhUXwBKjmfIeG6PWW2x4Hz4B05t/pcXM=; b=mXTj1/NTxqd5Wt/OQm/B/7
-        ctR+eUWatN1GFJwwdZHej6ps4xGLmu5az1x0rtEGdwaW+pwG3O+1gRMujDg+WxEw
-        nnk6Jl0MsnR9nJ015+Y6NvtN5hq/gQ2HCYYYi2Vwg6pkAiyD5n3MJPkQ2xrMfp8q
-        g93wLsekAMg6VHsSMQPOVzlpvutTOya2fj8JYTL9G42HettSe7aXHPo8uZAO7uo7
-        zPDdbYBBC1zTHrp5WldSWB8LL/IodGLKxN8ODDQLp1XfEVwZrqQMqQMWHCX9tFUN
-        4GbW72i4gB7VcYbK8QXmkZXkBdMwSuJL/wAMuHlSiTCb4cjNKSTpSk2E8zbuJ0OQ
-        ==
-X-ME-Sender: <xms:XuzHXPz_HxUts5e5Gk-1J2woYEpUs0vI7k5vCPLITlgjgX7AbBaw0g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrieefgdduudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdludehmdenucfjughrpeffhffvuffkfhggtggujgfofgesthdtredt
-    ofervdenucfhrhhomhepfdfvohgsihhnucevrdcujfgrrhguihhnghdfuceomhgvsehtoh
-    gsihhnrdgttgeqnecukfhppeduvddurdeggedrvdeftddrudekkeenucfrrghrrghmpehm
-    rghilhhfrhhomhepmhgvsehtohgsihhnrdgttgenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:XuzHXC-fkrY1_FSs62YQEm7WZp48nBLGxQgPA2gSBvL5hTzPrL8K4g>
-    <xmx:XuzHXFwCOymmfo08tM2xgSzogVxdvvbVP27N8FLn8vfBxioWnk6TGQ>
-    <xmx:XuzHXCqBLOOkR5k-LaW9Qf3-b8TAKNtfpuM3ZoC1G5K9TdcRyHUCsA>
-    <xmx:XuzHXLmOA2EEb-aqg0-UIPjmsqUISTw8qdDcWFofLrZpDJuLcnQEjg>
-Received: from localhost (ppp121-44-230-188.bras2.syd2.internode.on.net [121.44.230.188])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 3A4F2103CD;
-        Tue, 30 Apr 2019 02:34:04 -0400 (EDT)
-Date:   Tue, 30 Apr 2019 16:33:26 +1000
-From:   "Tobin C. Harding" <me@tobin.cc>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>, tobin@kernel.org,
+        id S1725769AbfD3GqP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 02:46:15 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40621 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725790AbfD3GqO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 02:46:14 -0400
+Received: by mail-pg1-f196.google.com with SMTP id d31so6371456pgl.7;
+        Mon, 29 Apr 2019 23:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ny9jUsl8uuat0Ih56MKj3A5QL7L7pjAw7XWyUkIrdUQ=;
+        b=DeSUdYeAG5RVmBI7UsYUqPrgBV5WFoJ6jNz0N1AUqRDtNdBqPhz42vN+XiwLSuYMqL
+         WVkvd5mZX2cFaYBDG44etsB8dP2Sn2S2902GAtrR3g+1IMlIZZL0XqsyBQ12WiQqUsLS
+         +5r3tVpvTRzg26ggz9Q2Gof83xHtTzbjYjq7A45Yop/rYNWL7IQMaTCYe3ddPecgy+PP
+         VMbiIgzjUi2V+o9Mx1xiPfGzEpWq7NHwO5L0fJby6hELZ2EP0aDAmnT93uDoPkYoJsfG
+         dpDYuBuFRsHXURuePtz5u57uHT5RNzmDZP022i1b5lQr5WvKHRXqpGU5ddR6j3Dvoc5p
+         QRHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ny9jUsl8uuat0Ih56MKj3A5QL7L7pjAw7XWyUkIrdUQ=;
+        b=fm9D9NO4XjeMVwab4aTGVWoV8uYFTiR45u0+BTq1/rwNDWoL7njU7RuWBdPZ6eVZvN
+         TadOSHO6rCCImYenSA3u3WaNJG+umtuvr9EPIaCmu5ZCpDPubF5TUVvuLhEV+EZ2Qv16
+         5Bnvm/rq06GxhEarEpCr5Fs17h89IE0EdgA3/yz4kkx/RCb4bg2zOce4AzegQKXUgSZh
+         GbjNwx3MD4LT19cIMQXJztKZMgazaAWc+b3WPNRyRzcjiZ1RwK1Z4MuejfEG1XK0pGx0
+         JtqST0VthSqg6+Xk9c9bXAtxHnoGfQjy+e6JRi5+OpRdh6Cxlz8KgrX7j356S9CwSg7T
+         brEg==
+X-Gm-Message-State: APjAAAWR/Wi9oDTbu/4vwgejTSlnbeHk0P+7s6TSFpNTlP8PnsDTD8Fd
+        F5AI88zE7G+El9uoBiIRIZ7uns0oWGA=
+X-Google-Smtp-Source: APXvYqw5jczVZynupEVDwZS94Pkxypcw/lPFXdWbO6AoDhImmYahO2Cs9LwXWKHxTAMLacDOYTXbSQ==
+X-Received: by 2002:a63:8e4b:: with SMTP id k72mr21433095pge.428.1556606773602;
+        Mon, 29 Apr 2019 23:46:13 -0700 (PDT)
+Received: from squirtle.lan (c-24-22-235-96.hsd1.wa.comcast.net. [24.22.235.96])
+        by smtp.gmail.com with ESMTPSA id a9sm47336010pfo.17.2019.04.29.23.46.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Apr 2019 23:46:12 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Enric Balletbo Serra <enric.balletbo@collabora.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: Fix kobject memleak
-Message-ID: <20190430063326.GC32393@eros.localdomain>
-References: <815f7c7cea02e05c90d5bf678ea8717f01cc9f63.1556604312.git.viresh.kumar@linaro.org>
+Subject: [PATCH v4 0/3] Driver for UCS1002
+Date:   Mon, 29 Apr 2019 23:45:54 -0700
+Message-Id: <20190430064557.28469-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <815f7c7cea02e05c90d5bf678ea8717f01cc9f63.1556604312.git.viresh.kumar@linaro.org>
-X-Mailer: Mutt 1.11.4 (2019-03-13)
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 11:35:52AM +0530, Viresh Kumar wrote:
-> Currently the error return path from kobject_init_and_add() is not
-> followed by a call to kobject_put() - which means we are leaking the
-> kobject.
-> 
-> Fix it by adding a call to kobject_put() in the error path of
-> kobject_init_and_add().
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> Tobin fixed this for schedutil already.
 
-For what its worth:
+Everyone:
 
- Reviewed-by: Tobin C. Harding <tobin@kernel.org>
+This small series adds a driver for UCS1002 Programmable USB Port
+Power Controller with Charger Emulation. See [page] for product page
+and [datasheet] for device dataseet. Hopefully each individual patch
+is self explanatory.
 
-Thanks Viresh, one less for me to do!
+Note that this series is a revival of the upstreaming effort by Enric
+Balletbo Serra last version of which can be found at [original-effort]
 
-	Tobin
+Feedback is welcome!
+
+Thanks,
+Andrey Smirnov
+
+Changes since [v3]:
+
+    - Added a check for negative values to ucs1002_set_usb_type()
+
+Changes since [v2]:
+
+    - Fixed a bug pointed out by Lucas
+
+Changes since [v1]:
+
+    - Moved IRQ trigger specification to DT
+
+    - Fixed silent error paths in probe()
+    
+    - Dropped error message in ucs1002_set_max_current()
+
+    - Fixed license mismatch
+
+    - Changed the driver to configure the chip to BC1.2 CDP by default
+
+    - Made other small fixes as per feedback for v1
+
+[v3] https://lore.kernel.org/lkml/20190429195349.20335-1-andrew.smirnov@gmail.com
+[v2] https://lore.kernel.org/lkml/20190429054741.7286-1-andrew.smirnov@gmail.com
+[v1] https://lore.kernel.org/lkml/20190417084457.28747-1-andrew.smirnov@gmail.com/
+[page] https://www.microchip.com/wwwproducts/en/UCS1002-2
+[datasheet] https://ww1.microchip.com/downloads/en/DeviceDoc/UCS1002-2%20Data%20Sheet.pdf
+[original-effort] https://lore.kernel.org/lkml/1460705181-10493-1-git-send-email-enric.balletbo@collabora.com/
+
+Andrey Smirnov (3):
+  power: supply: core: Add POWER_SUPPLY_HEALTH_OVERCURRENT constant
+  power: supply: Add driver for Microchip UCS1002
+  dt-bindings: power: supply: Add bindings for Microchip UCS1002
+
+ .../power/supply/microchip,ucs1002.txt        |  27 +
+ drivers/power/supply/Kconfig                  |   9 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/power_supply_sysfs.c     |   2 +-
+ drivers/power/supply/ucs1002_power.c          | 646 ++++++++++++++++++
+ include/linux/power_supply.h                  |   1 +
+ 6 files changed, 685 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/microchip,ucs1002.txt
+ create mode 100644 drivers/power/supply/ucs1002_power.c
+
+-- 
+2.20.1
+
