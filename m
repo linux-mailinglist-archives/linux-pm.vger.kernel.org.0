@@ -2,144 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C059EFB3
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 06:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B689BEFB6
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 06:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbfD3Emu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 00:42:50 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39753 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725942AbfD3Emt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 00:42:49 -0400
-Received: by mail-pg1-f196.google.com with SMTP id l18so6239701pgj.6
-        for <linux-pm@vger.kernel.org>; Mon, 29 Apr 2019 21:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XFladZcZaPZX3qydS53BZ4NhIvorW1o6i79f0yhX41c=;
-        b=C2QQ038nRMeeh8liMY8vI3wnQ2mwGKvYVms4huqg7UAxAtABpfBMV6l1FL+hDRkO6I
-         u2jr8RW8JL6VTLwGCLs8kUqbZHL6c7UtKdyc4Pu/4lpPavVQEy8d7XZuh/pMPiN12IGW
-         UiCirF3FlwOaJsYJmP2x7nDfYywx/YOerO5iBHk0rzpj2llst/u4JE9VXXQf3b/1Uo2w
-         wCj1uyZ7TTIXLVUGdNIZ/7zSJiRi0ETva8nrzIZJxolFFg0mffO2aMhTIhhspBagzbmu
-         XmqnUgL3mgdnnIVdBPhKw4Cu4czy6uNwU23N5QntMVnr5fgjQ1Hv//wQ8AOG2HhdprsE
-         KEJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XFladZcZaPZX3qydS53BZ4NhIvorW1o6i79f0yhX41c=;
-        b=Q305W42nUPoHtz9wpddWUHoTkMyCOAGi6h/sBUg2lgMxNh96sxlSOWmUXrrXcIeX2w
-         NmJzXm8QPKbn1nlxQ1B+8Su9jbbMTIlTHmHGpJPw8+Q2YHfb3hi4IhdUL4rbWM3pRsHY
-         7s/MrJhx2I/vvgiQzKk0KBaAETINzaJ3/9CjMqFzE2T0hlmHnMMIPD2ZtLAu9V3qCfmN
-         tc+7K0ZbbII31Z7c+EoVNy5FtrCpq8wrAnAyvEpgHtzGLSGgQpOEQ0rTJk4zvqHXXbRP
-         +2IFBjhJ976/g9DYjJXsXp7YjGG9tJr+KL9fhW639EnoAXq958pW/3VDwK4c1mGumkoV
-         MzUg==
-X-Gm-Message-State: APjAAAWIrAsSpmR+HOC/Q5+hRNr5Xl37xD0m4QH2tgbp2izfmZMhrkcF
-        CCj9qIhi7WJBSIJKSawQC2HhyrNUWXI=
-X-Google-Smtp-Source: APXvYqygvKowI2kLyaUya2a23iV207l9gYzdYkTC41i4qd+O8xsEnQL3jMCSsZ0U/rtNySeVwEg96g==
-X-Received: by 2002:a63:b507:: with SMTP id y7mr31166599pge.237.1556599368986;
-        Mon, 29 Apr 2019 21:42:48 -0700 (PDT)
-Received: from localhost ([122.166.139.136])
-        by smtp.gmail.com with ESMTPSA id t13sm70049624pgo.14.2019.04.29.21.42.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 21:42:47 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 10:12:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Frank Lee <tiny.windzz@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        David Miller <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] dt-bindings: cpufreq: Document
- allwinner,cpu-operating-points-v2
-Message-ID: <20190430044245.s4viduudej6q2eq6@vireshk-i7>
-References: <20190410174139.20012-1-tiny.windzz@gmail.com>
- <20190410174139.20012-3-tiny.windzz@gmail.com>
- <20190426211540.GA890@bogus>
- <CAEExFWs2UwPLzgyO0apMOZf56um5isdZmf+7-wj_TqMozxZJQg@mail.gmail.com>
- <CAL_Jsq+0mQYyAqfY3nmF-oFx2X4qHU567chQ1s8p-rgD2GEFnw@mail.gmail.com>
+        id S1725788AbfD3EpP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 00:45:15 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:41778 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbfD3EpP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 00:45:15 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190430044511epoutp0235226180978cb5384875846d41180b55~aJwIrdnBh1375213752epoutp02H
+        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2019 04:45:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190430044511epoutp0235226180978cb5384875846d41180b55~aJwIrdnBh1375213752epoutp02H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1556599511;
+        bh=iLtmpVoztHGHt8Xumpmublav2Pa49uLZOMWWUpLkWwg=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=UZc/y0oObrRYS6wtNjgcdhNtgs6foULG2w9FiqcEj/0fEq91pbhM4MwsmatyrPKLJ
+         AIACessyWWSPPQUIs/Su3KUNg8KDWbvxx4h/Nxo5/Npt6B1Un0I9YDy0lg93QgLsbH
+         Pe1yU6Qyv/52NycZRMHIt4xqvyWzcSV8Xj99zCvs=
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.154]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190430044506epcas1p1dd0d0bb4b2dc94e7e24ffc613fe10d71~aJwEGxBA61614616146epcas1p1U;
+        Tue, 30 Apr 2019 04:45:06 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4F.F8.04108.0D2D7CC5; Tue, 30 Apr 2019 13:45:04 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190430044503epcas1p185cd2dcb2c6531565224bcab5c34a01f~aJwBXcrLA2935429354epcas1p1P;
+        Tue, 30 Apr 2019 04:45:03 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190430044503epsmtrp21a4dc724d7070e700c38fb0ff8e65038~aJwBWfPUh0204202042epsmtrp2I;
+        Tue, 30 Apr 2019 04:45:03 +0000 (GMT)
+X-AuditID: b6c32a39-8b7ff7000000100c-5d-5cc7d2d044c5
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        33.00.03692.FC2D7CC5; Tue, 30 Apr 2019 13:45:03 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190430044502epsmtip2dc62d609fa591c63dcc2f314fd5215ac~aJwAV2KzV2453724537epsmtip2Z;
+        Tue, 30 Apr 2019 04:45:02 +0000 (GMT)
+Subject: Re: [PATCH v6 06/10] dt-bindings: memory-controllers: add
+ Exynos5422 DMC device description
+To:     Lukasz Luba <l.luba@partner.samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     b.zolnierkie@samsung.com, krzk@kernel.org, kgene@kernel.org,
+        kyungmin.park@samsung.com, m.szyprowski@samsung.com,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
+        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
+        treding@nvidia.com, digetx@gmail.com, willy.mh.wolff.ml@gmail.com
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <babae08b-3ea6-30f4-6a46-85dea0eacd86@samsung.com>
+Date:   Tue, 30 Apr 2019 13:46:17 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+0mQYyAqfY3nmF-oFx2X4qHU567chQ1s8p-rgD2GEFnw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-1615-c6e4b7
+In-Reply-To: <1555683568-20882-7-git-send-email-l.luba@partner.samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDJsWRmVeSWpSXmKPExsWy7bCmge6FS8djDPavZ7XYOANIzD9yjtVi
+        9cfHjBaTT81lsjjTnWvR//g1s8X58xvYLc42vWG3uNUgY3F51xw2i8+9RxgtZpzfx2Sx9shd
+        dovbjSvYLA6/aWe12H/Fy+L2bz6LbyceMToIeXz7OonFY3bDRRaPnbPusntsWtXJ5tHb/I7N
+        4+C7PUwefVtWMXpsPl3t8XmTXABnVLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWF
+        uZJCXmJuqq2Si0+ArltmDtAzSgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwCywK9
+        4sTc4tK8dL3k/FwrQwMDI1OgwoTsjDvne5kK5slXXL7dzNjAOF+yi5GTQ0LARGLjqlusXYxc
+        HEICOxglOr69YYdwPjFK/L/8jgXC+cYosWbhJcYuRg6wlpOrgyHiexklLq1YA9XxnlFi977D
+        TCBzhQXSJGY928YEkhARWM4osW/qXUYQh1lgNZPEn69rWUGq2AS0JPa/uMEGYvMLKEpc/fGY
+        EcTmFbCT2HO1ix1kHYuAqsSig1kgYVGBCIn7xzawQpQISpyc+YQFxOYU8JboOtIGNoZZQFzi
+        1pP5TBC2vETz1tnMIHslBG6xS3zpWcsE8bWLxPQbU1ggbGGJV8e3sEPYUhKf3+1lg7CrJVae
+        PMIG0dzBKLFl/wVWiISxxP6lk5lAjmMW0JRYv0sfYhmfxLuvPayQIOKV6GgTgqhWlrj84C7U
+        WkmJxe2dUOM9JN4uPs06gVFxFpJ3ZiF5YRaSF2YhLFvAyLKKUSy1oDg3PbXYsMAUObo3MYJT
+        upblDsZj53wOMQpwMCrx8Hq8OxYjxJpYVlyZe4hRgoNZSYTX4/jRGCHelMTKqtSi/Pii0pzU
+        4kOMpsDAnsgsJZqcD8w3eSXxhqZGxsbGFiaGZqaGhkrivOsdnGOEBNITS1KzU1MLUotg+pg4
+        OKUaGPtP/fvXn/33V8T32CfFJ1hmec5P5fgvtHfxzlDZI/wr5yVJ+QlsN7i5+SmfINOJ22pB
+        KiU7lk4518TLVDjxvmuXbcPlT2vkH6om2Z4wm7uP8WCurtuZ1CcB6wXf+qS7u5V0K06zyc7c
+        qFZX+edGd8L8cFbFUD6HSiauOOmJE5Y6HV+wMiF6gxJLcUaioRZzUXEiAMwyW7H/AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGIsWRmVeSWpSXmKPExsWy7bCSvO75S8djDLZ9lrPYOGM9q8X8I+dY
+        LVZ/fMxoMfnUXCaLM925Fv2PXzNbnD+/gd3ibNMbdotbDTIWl3fNYbP43HuE0WLG+X1MFmuP
+        3GW3uN24gs3i8Jt2Vov9V7wsbv/ms/h24hGjg5DHt6+TWDxmN1xk8dg56y67x6ZVnWwevc3v
+        2DwOvtvD5NG3ZRWjx+bT1R6fN8kFcEZx2aSk5mSWpRbp2yVwZdw538tUME++4vLtZsYGxvmS
+        XYwcHBICJhInVwd3MXJxCAnsZpR4cXoCcxcjJ1BcUmLaxaPMEDXCEocPF0PUvGWUeDJvHytI
+        jbBAmsTlq89YQBIiAssZJeb+XQrmMAusZpKY9HELG0TLfUaJ248mgo1lE9CS2P/iBhuIzS+g
+        KHH1x2NGEJtXwE5iz9UudpB1LAKqEosOZoGERQUiJM68X8ECUSIocXLmEzCbU8BboutIG9gY
+        ZgF1iT/zLjFD2OISt57MZ4Kw5SWat85mnsAoPAtJ+ywkLbOQtMxC0rKAkWUVo2RqQXFuem6x
+        YYFhXmq5XnFibnFpXrpecn7uJkZwbGtp7mC8vCT+EKMAB6MSD6/Hu2MxQqyJZcWVuYcYJTiY
+        lUR4PY4fjRHiTUmsrEotyo8vKs1JLT7EKM3BoiTO+zTvWKSQQHpiSWp2ampBahFMlomDU6qB
+        kfM0M/u6EN5nOkYhhyxre/5UFgoc1rFVq7L2iKrpttRXKTHWCBVprtvfsDKTn+fA0Wvz6i+J
+        Lt67PvLfxSjbV2faw3Z9b3s8K2tj0z7f79MWMnx+NOH87gxp/c1dYosqT62TesZftm6zXNS3
+        btGT9hvMapr/HTu2s/x/lmK5iuD0ixypF86WK7EUZyQaajEXFScCALJjUMTpAgAA
+X-CMS-MailID: 20190430044503epcas1p185cd2dcb2c6531565224bcab5c34a01f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190419141947eucas1p13a27605e04169ab528ef5bfb385eddbc
+References: <1555683568-20882-1-git-send-email-l.luba@partner.samsung.com>
+        <CGME20190419141947eucas1p13a27605e04169ab528ef5bfb385eddbc@eucas1p1.samsung.com>
+        <1555683568-20882-7-git-send-email-l.luba@partner.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-04-19, 11:18, Rob Herring wrote:
-> On Sun, Apr 28, 2019 at 4:53 AM Frank Lee <tiny.windzz@gmail.com> wrote:
-> >
-> > On Sat, Apr 27, 2019 at 5:15 AM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Wed, Apr 10, 2019 at 01:41:39PM -0400, Yangtao Li wrote:
-> > > > Allwinner Process Voltage Scaling Tables defines the voltage and
-> > > > frequency value based on the speedbin blown in the efuse combination.
-> > > > The sunxi-cpufreq-nvmem driver reads the efuse value from the SoC to
-> > > > provide the OPP framework with required information.
-> > > > This is used to determine the voltage and frequency value for each
-> > > > OPP of operating-points-v2 table when it is parsed by the OPP framework.
-> > > >
-> > > > The "allwinner,cpu-operating-points-v2" DT extends the "operating-points-v2"
-> > > > with following parameters:
-> > > > - nvmem-cells (NVMEM area containig the speedbin information)
-> > > > - opp-microvolt-<name>: voltage in micro Volts.
-> > > >   At runtime, the platform can pick a <name> and matching
-> > > >   opp-microvolt-<name> property.
-> > > >                       HW:             <name>:
-> > > >                       sun50iw-h6      speed0 speed1 speed2
-> > >
-> > > We already have at least one way to support speed bins with QC kryo
-> > > binding. Why do we need a different way?
-> >
-> > For some SOCs, for some reason (making the CPU have approximate performance),
-> > they use the same frequency but different voltage. In the case where
-> > this speed bin
-> > is not a lot and opp uses the same frequency, too many repeated opp
-> > nodes are a bit
-> > redundant and not intuitive enough.
-> >
-> > So, I think it's worth the new method.
+On 19. 4. 19. 오후 11:19, Lukasz Luba wrote:
+> The patch adds description for DT binding for a new Exynos5422 Dynamic
+> Memory Controller device.
 > 
-> Well, I don't.
+> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
+> ---
+>  .../bindings/memory-controllers/exynos5422-dmc.txt | 73 ++++++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt
 > 
-> We can't have every SoC vendor doing their own thing just because they
-> want to. If there are technical reasons why existing bindings don't
-> work, then maybe we need to do something different. But I haven't
-> heard any reasons.
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt b/Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt
+> new file mode 100644
+> index 0000000..133b3cc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt
+> @@ -0,0 +1,73 @@
+> +* Exynos5422 frequency and voltage scaling for Dynamic Memory Controller device
+> +
+> +The Samsung Exynos5422 SoC has DMC (Dynamic Memory Controller) to which the DRAM
+> +memory chips are connected. The driver is to monitor the controller in runtime
+> +and switch frequency and voltage. To monitor the usage of the controller in
+> +runtime, the driver uses the PPMU (Platform Performance Monitoring Unit), which
+> +is able to measure the current load of the memory.
+> +When 'userspace' governor is used for the driver, an application is able to
+> +switch the DMC and memory frequency.
+> +
+> +Required properties for DMC device for Exynos5422:
+> +- compatible: Should be "samsung,exynos5422-bus".
 
-Well there is a good reason for attempting the new bindings and I wasn't sure if
-updating the earlier bindings or adding another one for platform is correct. As
-we aren't really adding new bindings, but just documentation around it.
+As I already mentioned on many times, it is not fixed.
+You have to fix it as following:
+- exynos5422-bus -> exynos5422-dmc
 
-So there are two ways OPP core support this thing:
+> +- clock-names : the name of clock used by the bus, "bus".
 
-- opp-supported-hw: This is a better fit if we have a smaller group of
-  frequencies to select from a bigger group, so we disable non-required OPPs
-  completely. This is what Qcom did as they wanted to select different
-  frequencies all together.
+The below examples doesn't contain the 'bus' clock name.
 
-- opp-microvolt-<name>: This is a better fit if the frequencies remain same and
-  only few of the properties like voltage/current have a different value. So we
-  don't disable any OPPs but just select the right voltage/current for those
-  frequencies. This avoids unnecessary duplication of the OPPs in DT and that's
-  what allwinner guys want.
+> +- clocks : phandles for clock specified in "clock-names" property.
+> +- devfreq-events : phandles for PPMU devices connected to this DMC.
+> +- vdd-supply : phandle for voltage regulator which is connected.
+> +- reg : registers of two CDREX controllers, chip information, clocks subsystem.
+> +- operating-points-v2 : phandle for OPPs described in v2 definition.
+> +- device-handle : phandle of the connected DRAM memory device. For more
+> +	information please refer to Documentation
+> +- devfreq-events : phandles of the PPMU events used by the controller.
+> +
+> +Example:
+> +
+> +	ppmu_dmc0_0: ppmu@10d00000 {
+> +		compatible = "samsung,exynos-ppmu";
+> +		reg = <0x10d00000 0x2000>;
+> +		clocks = <&clock CLK_PCLK_PPMU_DREX0_0>;
+> +		clock-names = "ppmu";
+> +		status = "okay";
+> +		events {
+> +			ppmu_event_dmc0_0: ppmu-event3-dmc0_0 {
+> +				event-name = "ppmu-event3-dmc0_0";
+> +			};
+> +		};
+> +	};
+> +
+> +	dmc: memory-controller@10c20000 {
+> +		compatible = "samsung,exynos5422-dmc";
+> +		reg = <0x10c20000 0x10000>, <0x10c30000 0x10000>,
+> +			<0x10000000 0x1000>, <0x10030000 0x1000>;
+> +		clocks = 	<&clock CLK_FOUT_SPLL>,
+> +				<&clock CLK_MOUT_SCLK_SPLL>,
+> +				<&clock CLK_FF_DOUT_SPLL2>,
+> +				<&clock CLK_FOUT_BPLL>,
+> +				<&clock CLK_MOUT_BPLL>,
+> +				<&clock CLK_SCLK_BPLL>,
+> +				<&clock CLK_MOUT_MX_MSPLL_CCORE>,
+> +				<&clock CLK_MOUT_MX_MSPLL_CCORE_PHY>,
+> +				<&clock CLK_MOUT_MCLK_CDREX>,
+> +				<&clock CLK_DOUT_CLK2X_PHY0>,
+> +				<&clock CLK_CLKM_PHY0>,
+> +				<&clock CLK_CLKM_PHY1>;
+> +		clock-names =	"fout_spll",
+> +				"mout_sclk_spll",
+> +				"ff_dout_spll2",
+> +				"fout_bpll",
+> +				"mout_bpll",
+> +				"sclk_bpll",
+> +				"mout_mx_mspll_ccore",
+> +				"mout_mx_mspll_ccore_phy",
+> +				"mout_mclk_cdrex",
+> +				"dout_clk2x_phy0",
+> +				"clkm_phy0",
+> +			        "clkm_phy1";
+> +		status = "okay";
+> +		operating-points-v2 = <&dmc_opp_table>;
+> +		devfreq-events = <&ppmu_event3_dmc0_0>,	<&ppmu_event3_dmc0_1>,
+> +				<&ppmu_event3_dmc1_0>, <&ppmu_event3_dmc1_1>;
+> +		operating-points-v2 = <&dmc_opp_table>;
+> +		device-handle = <&samsung_K3QF2F20DB>;
+> +		vdd-supply = <&buck1_reg>;
+> +	};
+> 
 
-The kryo nvmem bindings currently supports opp-supported-hw, maybe we can add
-mention support for second one in the same file and rename it well.
 
 -- 
-viresh
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
