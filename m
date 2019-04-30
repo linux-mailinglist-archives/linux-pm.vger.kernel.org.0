@@ -2,142 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC3FF3B4
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 12:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313ABF3FF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 12:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfD3KJ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 06:09:57 -0400
-Received: from regular1.263xmail.com ([211.150.70.195]:38048 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726646AbfD3KJ5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 06:09:57 -0400
-Received: from zhangqing?rock-chips.com (unknown [192.168.167.190])
-        by regular1.263xmail.com (Postfix) with ESMTP id 3CA569C2;
-        Tue, 30 Apr 2019 18:09:53 +0800 (CST)
-X-263anti-spam: KSV:0;BIG:0;
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-KSVirus-check: 0
-X-ADDR-CHECKED4: 1
-X-ABS-CHECKED: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P7395T139736951809792S1556618984950678_;
-        Tue, 30 Apr 2019 18:09:52 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <cf5845e1d8890c57b2f732eafc9012fa>
-X-RL-SENDER: zhangqing@rock-chips.com
-X-SENDER: zhangqing@rock-chips.com
-X-LOGIN-NAME: zhangqing@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-From:   Elaine Zhang <zhangqing@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        xxx@rock-chips.com, xf@rock-chips.com, huangtao@rock-chips.com,
-        Elaine Zhang <zhangqing@rock-chips.com>
-Subject: [PATCH v3 3/3] thermal: rockchip: Support the PX30 SoC in thermal driver
-Date:   Tue, 30 Apr 2019 18:09:46 +0800
-Message-Id: <1556618986-18923-4-git-send-email-zhangqing@rock-chips.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1556618986-18923-1-git-send-email-zhangqing@rock-chips.com>
-References: <1556618986-18923-1-git-send-email-zhangqing@rock-chips.com>
+        id S1727093AbfD3KOb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 06:14:31 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:49021 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726923AbfD3KOa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 06:14:30 -0400
+Received: from 79.184.254.69.ipv4.supernova.orange.pl (79.184.254.69) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
+ id 6ab32b2407bcd582; Tue, 30 Apr 2019 12:14:28 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [GIT PULL] cpufreq/arm changes for 5.2
+Date:   Tue, 30 Apr 2019 12:14:28 +0200
+Message-ID: <1633557.MMVXyUi1AQ@kreacher>
+In-Reply-To: <20190429100613.xuqm3mdxzrc2np6o@vireshk-i7>
+References: <20190429100613.xuqm3mdxzrc2np6o@vireshk-i7>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PX30 SOC has two Temperature Sensors for CPU and GPU.
+On Monday, April 29, 2019 12:06:13 PM CEST Viresh Kumar wrote:
+> Hi Rafael,
+> 
+> This pull request contains:
+> 
+> - Fix for possible object reference leak for few drivers (Wen Yang).
+> - Fix for armada frequency calculation (Gregory).
+> - Code cleanup in maple driver (Viresh).
+> 
+> This contains some non-ARM bits as well this time as the patches were
+> picked up from a series.
+> 
+> --
+> viresh
+> 
+> -------------------------8<-------------------------
+> 
+> The following changes since commit 9e98c678c2d6ae3a17cb2de55d17f69dddaa231b:
+> 
+>   Linux 5.1-rc1 (2019-03-17 14:22:26 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+> 
+> for you to fetch changes up to 8db82563451f976597ab7b282ec655e4390a4088:
+> 
+>   cpufreq: armada-37xx: fix frequency calculation for opp (2019-04-29 15:22:50 +0530)
 
-Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
----
- drivers/thermal/rockchip_thermal.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index 6dc7fc516abf..bda1ca199abd 100644
---- a/drivers/thermal/rockchip_thermal.c
-+++ b/drivers/thermal/rockchip_thermal.c
-@@ -225,11 +225,15 @@ struct rockchip_thermal_data {
- #define GRF_TSADC_TESTBIT_L			0x0e648
- #define GRF_TSADC_TESTBIT_H			0x0e64c
- 
-+#define PX30_GRF_SOC_CON2			0x0408
-+
- #define GRF_SARADC_TESTBIT_ON			(0x10001 << 2)
- #define GRF_TSADC_TESTBIT_H_ON			(0x10001 << 2)
- #define GRF_TSADC_VCM_EN_L			(0x10001 << 7)
- #define GRF_TSADC_VCM_EN_H			(0x10001 << 7)
- 
-+#define GRF_CON_TSADC_CH_INV			(0x10001 << 1)
-+
- /**
-  * struct tsadc_table - code to temperature conversion table
-  * @code: the value of adc channel
-@@ -692,6 +696,13 @@ static void rk_tsadcv3_initialize(struct regmap *grf, void __iomem *regs,
- 			       regs + TSADCV2_AUTO_CON);
- }
- 
-+static void rk_tsadcv4_initialize(struct regmap *grf, void __iomem *regs,
-+				  enum tshut_polarity tshut_polarity)
-+{
-+	rk_tsadcv2_initialize(grf, regs, tshut_polarity);
-+	regmap_write(grf, PX30_GRF_SOC_CON2, GRF_CON_TSADC_CH_INV);
-+}
-+
- static void rk_tsadcv2_irq_ack(void __iomem *regs)
- {
- 	u32 val;
-@@ -821,6 +832,30 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
- 	writel_relaxed(val, regs + TSADCV2_INT_EN);
- }
- 
-+static const struct rockchip_tsadc_chip px30_tsadc_data = {
-+	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-+	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-+	.chn_num = 2, /* 2 channels for tsadc */
-+
-+	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
-+	.tshut_temp = 95000,
-+
-+	.initialize = rk_tsadcv4_initialize,
-+	.irq_ack = rk_tsadcv3_irq_ack,
-+	.control = rk_tsadcv3_control,
-+	.get_temp = rk_tsadcv2_get_temp,
-+	.set_alarm_temp = rk_tsadcv2_alarm_temp,
-+	.set_tshut_temp = rk_tsadcv2_tshut_temp,
-+	.set_tshut_mode = rk_tsadcv2_tshut_mode,
-+
-+	.table = {
-+		.id = rk3328_code_table,
-+		.length = ARRAY_SIZE(rk3328_code_table),
-+		.data_mask = TSADCV2_DATA_MASK,
-+		.mode = ADC_INCREMENT,
-+	},
-+};
-+
- static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
- 	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
- 	.chn_num = 1, /* one channel for tsadc */
-@@ -993,6 +1028,9 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
- };
- 
- static const struct of_device_id of_rockchip_thermal_match[] = {
-+	{	.compatible = "rockchip,px30-tsadc",
-+		.data = (void *)&px30_tsadc_data,
-+	},
- 	{
- 		.compatible = "rockchip,rv1108-tsadc",
- 		.data = (void *)&rv1108_tsadc_data,
--- 
-1.9.1
+Pulled, thanks!
 
 
 
