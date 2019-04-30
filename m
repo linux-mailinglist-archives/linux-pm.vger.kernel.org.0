@@ -2,99 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DAEF409
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 12:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A0DF539
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 13:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbfD3KQP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 06:16:15 -0400
-Received: from mail-eopbgr50047.outbound.protection.outlook.com ([40.107.5.47]:63987
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726145AbfD3KQP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Apr 2019 06:16:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qVBYl4adfJw9avAY7gAeEW3zKUJvaL6L7QfhAggpSOY=;
- b=lKJI4XL0Vi8uSs+HXV6XTjqSqb5BQEAosh1M6a2ID1B+MI9lZ7DjN7g8PqLP7RHHJSStIQl01E6+1Mu5GMC8TXxhcTNdpTmuuBE63f3vM3Is6Pdn/4ea3X15tmrxVn/SvNgIwLdCuUwBvEZVGuVR0YWzA1u4Wzr/RqkhZzQ3Ims=
-Received: from AM0PR05MB6497.eurprd05.prod.outlook.com (20.179.34.15) by
- AM0PR05MB5668.eurprd05.prod.outlook.com (20.178.116.82) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1835.13; Tue, 30 Apr 2019 10:16:10 +0000
-Received: from AM0PR05MB6497.eurprd05.prod.outlook.com
- ([fe80::151:4fc5:f798:6ef1]) by AM0PR05MB6497.eurprd05.prod.outlook.com
- ([fe80::151:4fc5:f798:6ef1%5]) with mapi id 15.20.1835.018; Tue, 30 Apr 2019
- 10:16:10 +0000
-From:   Ido Schimmel <idosch@mellanox.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jiri Pirko <jiri@mellanox.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] mlxsw: Remove obsolete dependency on THERMAL=m
-Thread-Topic: [PATCH -next] mlxsw: Remove obsolete dependency on THERMAL=m
-Thread-Index: AQHU/zcWbVmtSGdyfka9Vz2WRuHnz6ZUfQUA
-Date:   Tue, 30 Apr 2019 10:16:10 +0000
-Message-ID: <20190430101608.GB6343@splinter>
-References: <20190430092832.7376-1-geert+renesas@glider.be>
-In-Reply-To: <20190430092832.7376-1-geert+renesas@glider.be>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM4PR07CA0026.eurprd07.prod.outlook.com
- (2603:10a6:205:1::39) To AM0PR05MB6497.eurprd05.prod.outlook.com
- (2603:10a6:208:13f::15)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=idosch@mellanox.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [193.47.165.251]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9633eb7e-cd1b-4f15-d57e-08d6cd54dde1
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM0PR05MB5668;
-x-ms-traffictypediagnostic: AM0PR05MB5668:
-x-microsoft-antispam-prvs: <AM0PR05MB5668EFFDF1B6CF8DCBAD0B42BF3A0@AM0PR05MB5668.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 00235A1EEF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(366004)(136003)(396003)(376002)(346002)(39860400002)(199004)(189003)(6116002)(11346002)(66066001)(66446008)(6486002)(66946007)(102836004)(476003)(86362001)(3846002)(256004)(26005)(6506007)(186003)(71200400001)(73956011)(71190400001)(446003)(14444005)(64756008)(1076003)(386003)(33716001)(4744005)(486006)(66556008)(68736007)(66476007)(229853002)(5660300002)(8676002)(6436002)(305945005)(6246003)(33656002)(8936002)(6512007)(53936002)(81166006)(81156014)(76176011)(97736004)(25786009)(9686003)(7736002)(4326008)(478600001)(54906003)(52116002)(316002)(2906002)(14454004)(99286004);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR05MB5668;H:AM0PR05MB6497.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: Pu5JHGbshK5Ff5dvh79QdFNfjpqLiF3JH6cLxfr0Ss9FJ5yQqWNJEcgMxzfBdBLWL38HkFvq04Seg8K290ZS2N6gzjpbg7WcxMAn3rFIKjk0oqAhGlIwYH41CYLZvGdcCRLOyPT400Mhy6pSkLJpxNlBdlBKMEaRotp2/cEpkFCwLee2l+XFuyuL8cDlNtuNk3/oGfnIB6ps1gC/AxaWgu70rqmRh4iir1A90kJpho/ed7xk0R5EOBy6p2LkVo91Hh0/0hi+PN1M1Ix0piQbQC19KXAZO4Ri4wF2VtYbJG5+1jhuN9caqH7/I6/9EGe2ycyJ3sy3vYdX1oDLMxYmmsQAlDnoHoP0YhNcCjbt+faHhKrnb1vBTVoxmacd4mEqIier2X+aXKIoxRdKZ9GNW7IKWZnufZEHnZTFTGpsOxI=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <323BFEDD0C772C4F9395BE241D4B9385@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727138AbfD3LPp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 07:15:45 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:40645 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726648AbfD3LPo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 07:15:44 -0400
+Received: by mail-vs1-f65.google.com with SMTP id e207so3454224vsd.7
+        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2019 04:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wSBbwzwwF7jNGcnQ7AVNOQW/kFea/OR3OycjgcD+M5c=;
+        b=rqr36y92aNmQTYvCTP0FbjlLcgvOVgOIBDQwTiV31lnCFvvEh8wCoUcO64jDLLDEVY
+         erRc/duAARlv2giV0RtYCNNtSSCmqITwLtB+L4/D0ucYfJzTeOIB89fcC/J2ZOZAffia
+         JrkKLpnlC9Wp/ICfZhlxo3jAJq+YRQRtDZQ/0aafaMj3L3tH3gTwA8JMsEShNcWpEvbU
+         AF/x1vC/l7cxkkQSdkJlKbiNVILNcykOjHmE2vL8rr2FlwozHnQquuhJRRpBH0lh71t+
+         6oQhOCuBTEy9fGKd3IkepvbwFpy3ufl0kWCdkGv4N7yE8fF1UMT07z7o1d6//HstvPZ0
+         CCsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wSBbwzwwF7jNGcnQ7AVNOQW/kFea/OR3OycjgcD+M5c=;
+        b=htuIpfjDK/m4/DlTUZsVfcUl83mOch3tkXYPnKL5CGMOC1QEhCNWpUSw9Gch9hk5qy
+         dAydIO3Z1quiOAHJaAs0s++ramiHeAGxIFurRvxaFzdDh+mY+Yox/Uxva/SN+xmqoAfA
+         Pic47oBJaIs9lHylIyuFkiL2XGnDuf2H7JbFMlq4Re+wimkDmnEBMLfOAOxVSEF7eXwg
+         EZmyYIkM5ALvI08/3Iqnac921ipIK3UPCytQ19GuGvZ36OcR7wzU23uP9zd9ZlGOefgs
+         sJ4VMGwIqGEJ+n24YIT3nub+tiKgcdtwJUmopK4PVPfrTJ9uYkxmtn7PaErzLX9ADkTm
+         Lq2Q==
+X-Gm-Message-State: APjAAAWUKLclcWUvNfC/T5bhyrREfwf8jABerFAFC6maOr8cXV3E05Mx
+        BVgWUNKNblaI2LffETOsvpxl/dPxsn3uXH6oj+tHvw==
+X-Google-Smtp-Source: APXvYqwIlfZlHtUketaXOMujjHfd/qGbL3oe7HXJ7joLacYaYzlaaHb9SIRBw0nNzNuiizbcbBYifZAmFXX0o+LqXyk=
+X-Received: by 2002:a67:8155:: with SMTP id c82mr5940813vsd.200.1556622943522;
+ Tue, 30 Apr 2019 04:15:43 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9633eb7e-cd1b-4f15-d57e-08d6cd54dde1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2019 10:16:10.6353
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR05MB5668
+References: <cover.1556313614.git.leonard.crestez@nxp.com> <68ccb5a90d1d2a596e7ed94ba3245171f013c781.1556313614.git.leonard.crestez@nxp.com>
+ <CAPDyKFpCCapBfNbsR1Q+nyg8aenVJWxj9qmTCCCfmONZR3t1sg@mail.gmail.com> <AM0PR04MB6434B2BBECCA6B2644CDF044EE390@AM0PR04MB6434.eurprd04.prod.outlook.com>
+In-Reply-To: <AM0PR04MB6434B2BBECCA6B2644CDF044EE390@AM0PR04MB6434.eurprd04.prod.outlook.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 30 Apr 2019 13:15:07 +0200
+Message-ID: <CAPDyKFr_CsHBTjAXC+g7Oxnz9WhhyhyW3BGJkr=dqkJECvsyRw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] PM / Domains: Add GENPD_FLAG_NO_RUNTIME_OFF flag
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Anson Huang <anson.huang@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Robin Gong <yibin.gong@nxp.com>,
+        Arulpandiyan Vadivel <Arulpandiyan_Vadivel@mentor.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 11:28:32AM +0200, Geert Uytterhoeven wrote:
-> The THERMAL configuration option was changed from tristate to bool, but
-> a dependency on THERMAL=3Dm was forgotten, leading to a warning when
-> running "make savedefconfig":
->=20
->     boolean symbol THERMAL tested for 'm'? test forced to 'n'
->=20
-> Fixes: be33e4fbbea581ea ("thermal/drivers/core: Remove the module Kconfig=
-'s option")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Mon, 29 Apr 2019 at 16:39, Leonard Crestez <leonard.crestez@nxp.com> wrote:
+>
+> On 4/29/2019 12:11 PM, Ulf Hansson wrote:
+> > On Fri, 26 Apr 2019 at 23:38, Leonard Crestez <leonard.crestez@nxp.com> wrote:
+> >>
+> >> This is for power domains which can only be powered off for suspend but
+> >> not as part of runtime PM.
+> >>
+> >> @@ -126,10 +126,11 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+> >>   #define genpd_status_on(genpd)         (genpd->status == GPD_STATE_ACTIVE)
+> >>   #define genpd_is_irq_safe(genpd)       (genpd->flags & GENPD_FLAG_IRQ_SAFE)
+> >>   #define genpd_is_always_on(genpd)      (genpd->flags & GENPD_FLAG_ALWAYS_ON)
+> >>   #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+> >>   #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+> >> +#define genpd_is_no_runtime_off(genpd) (genpd->flags & GENPD_FLAG_NO_RUNTIME_OFF) >
+> > May I suggest to switch the name to, GENPD_FLAG_RUNTIME_ON.
+> >
+> > Other than that, this looks good to me!
+>
+> Then it's easy to confuse genpd_status_on with genpd_is_runtime_on. How
+> about genpd_is_rpm_always_on?
 
-Reviewed-by: Ido Schimmel <idosch@mellanox.com>
+Even better, let's take that.
 
-I assume this will be applied to the thermal tree?
+Kind regards
+Uffe
