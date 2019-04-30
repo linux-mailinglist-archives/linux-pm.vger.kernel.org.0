@@ -2,113 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C827CFC27
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 17:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12800FD80
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 18:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbfD3PGQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 11:06:16 -0400
-Received: from mail-eopbgr130043.outbound.protection.outlook.com ([40.107.13.43]:54787
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726006AbfD3PGQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Apr 2019 11:06:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qCyXE2v0gaGjYZIuzW3baa0FKPpsncWzwhLAVdtmFlM=;
- b=Nnj7Nrxe5vJgrYIDfMOiYaavkMREGMOt8rX2bm1Y/yiy8ATDw5QpcLoPi6bftHJuIeeGxsBOz2sCneZrkdlvQBv4By9c6GuWYTAihrO6dWG4PNUDtYTX6MQn6W9LtMi1Ry0dxrMjgIWVnbhS6NYK5Cgrhfhzw6Qt68QmU31MAN0=
-Received: from AM6PR04MB6440.eurprd04.prod.outlook.com (20.179.244.217) by
- AM6PR04MB5478.eurprd04.prod.outlook.com (20.178.93.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.10; Tue, 30 Apr 2019 15:06:12 +0000
-Received: from AM6PR04MB6440.eurprd04.prod.outlook.com
- ([fe80::14c2:1e08:524c:6ff4]) by AM6PR04MB6440.eurprd04.prod.outlook.com
- ([fe80::14c2:1e08:524c:6ff4%2]) with mapi id 15.20.1856.008; Tue, 30 Apr 2019
- 15:06:12 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        id S1726014AbfD3QKM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 12:10:12 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45398 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbfD3QKM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 12:10:12 -0400
+Received: by mail-pf1-f195.google.com with SMTP id e24so7277667pfi.12;
+        Tue, 30 Apr 2019 09:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8GdBSdS8QndD/ZLVZE8zKkg0cfJEjJX1CoiB2a13sLs=;
+        b=gvXTpUDLxw0Xwd+vX3ZMoMUPAw2gvk5RpdVba+16D8dvMVhi0r0BSY4egykHOOLNQJ
+         425yCtL9AnXPJljoFpxU7wR8UPoeEPViRVlXUGwruHVJlAL6glFPEiCjFWHaJZuFxRqQ
+         e4vkk++SCi3orIzCF16QgzX3cMAZlBSKlIqzJkiUGfHveC3oT/AHh8ZzH04R3m5VQnYn
+         MSVc9psV+raeTE5uC6ccqTP0/ePb/EweMkFOx0iiWQ87A7lurWm8DCoyaQfWlaYmi+V9
+         HqBLWX+Sc+bjp0tveufu+bItEaPSQcQbuIWpvxkxLmgVRsD77er0EY2XBuTOK9vX3zG/
+         X2ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8GdBSdS8QndD/ZLVZE8zKkg0cfJEjJX1CoiB2a13sLs=;
+        b=Q+NHxWuJE1uX6/uGEksVmv9CeUsL/qGM592LvfqIsefP1CZbvr3xFpxO1Gg3/PdM1M
+         Ia43GBjQ/dA+s2/Mf/torIWO8MgkdTwnqtTUxOlZN2XqCEe01cLQW3Me0of9gu7EyBYO
+         dCvZUfoTlQTlZICiXrgfraOiYOB/8+5nh319yji5UYtTKwK1PmqNFFspVgCnCqfOMcPv
+         z4CJ3XW6r2prsO3+NUYqiuAUYOgTrA1k2Pwjet3x5jkuGoyC8ggO+yeMda16zffCMsBU
+         S1wc5D6jKsYQAoHNn2oCyCwglpx0ZKkSf1QmWDHaJRNU8ELPrNGobUY/Lb8VslV/Lr92
+         2i1A==
+X-Gm-Message-State: APjAAAVy1dwJmuWGKcPElXSA+7X36LhpGPFzSJFY8BAYYpmGw4qkMI19
+        T1HxlCwWBZs0+3m5FHyeSck=
+X-Google-Smtp-Source: APXvYqwG2VK1pxY4z7PobpHUSgQI3HIsh9tA2GOsvojPz5mZIzj2swWmY/X6Y30Dqfzc/AWbmZTnZw==
+X-Received: by 2002:aa7:8c84:: with SMTP id p4mr53368511pfd.164.1556640611430;
+        Tue, 30 Apr 2019 09:10:11 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y10sm52867263pfm.27.2019.04.30.09.10.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Apr 2019 09:10:10 -0700 (PDT)
+Date:   Tue, 30 Apr 2019 09:10:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Enric Balletbo Serra <enric.balletbo@collabora.com>,
+        Chris Healy <cphealy@gmail.com>,
         Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-CC:     Aisheng Dong <aisheng.dong@nxp.com>,
         Fabio Estevam <fabio.estevam@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v5 2/2] soc: imx: gpc: Use GENPD_FLAG_RPM_ALWAYS_ON for
- ERR009619
-Thread-Topic: [PATCH v5 2/2] soc: imx: gpc: Use GENPD_FLAG_RPM_ALWAYS_ON for
- ERR009619
-Thread-Index: AQHU/2Y/OY5ccvekDkmJRXHYA33jSA==
-Date:   Tue, 30 Apr 2019 15:06:12 +0000
-Message-ID: <8f53bef00e72aa35d146210bb71ca05b8a3af141.1556636234.git.leonard.crestez@nxp.com>
-References: <cover.1556636234.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1556636234.git.leonard.crestez@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [89.37.124.34]
-x-mailer: git-send-email 2.17.1
-x-clientproxiedby: VI1PR0902CA0058.eurprd09.prod.outlook.com
- (2603:10a6:802:1::47) To AM6PR04MB6440.eurprd04.prod.outlook.com
- (2603:10a6:20b:f4::25)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2aa435b3-0c2e-4f36-fd1c-08d6cd7d6239
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM6PR04MB5478;
-x-ms-traffictypediagnostic: AM6PR04MB5478:
-x-microsoft-antispam-prvs: <AM6PR04MB54782D46C4BA453664A70070EE3A0@AM6PR04MB5478.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 00235A1EEF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(376002)(346002)(136003)(39860400002)(366004)(199004)(189003)(8936002)(6116002)(50226002)(81156014)(3846002)(81166006)(8676002)(66446008)(4326008)(25786009)(64756008)(66476007)(66556008)(6512007)(73956011)(2906002)(66066001)(86362001)(66946007)(52116002)(53936002)(118296001)(36756003)(99286004)(316002)(110136005)(54906003)(7736002)(44832011)(305945005)(97736004)(14444005)(6506007)(386003)(102836004)(26005)(11346002)(186003)(446003)(256004)(486006)(476003)(6436002)(5660300002)(6486002)(14454004)(478600001)(71200400001)(71190400001)(68736007)(76176011)(2616005);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR04MB5478;H:AM6PR04MB6440.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: A8KeZJb3yRx9e626m8wGmurcZ4NXukO23oGR5KNBr9mhzDpkZLrukHYCKVDQqaVEBjoqPiS+wfeFelRBnJMWSvabjsc/qHzjeC0uOgRvLVL6LJ4ofC209nTfRhEn19vOEyh5GWG5XoNfAylgO0TdLhf6lQSkOuwEJ1PQsEpVk4yc6kjHlQHuNlyM+Sb54JbGjKIqyvy+wyvUoDE2IJG8CxoiL6SNC+r2a986F0zjzBRtLaqxIMV785c878KDaDflFgXO1qI/+90N7kNObXSAM8FWNN6FyDv/lPC11FlrxbCGEa1kZNfu9RRgSY57PL2I5fYTiF5jfoDD3ajwPFbb22o917+aI75YRMaEBSvpQ1EVcqSVIXTEwb/dEAIsPQCKvoxSiRxgpNHfH0AelEkp+vUjXEwcbpTWI/Q/iIPPW48=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] power: supply: Add driver for Microchip UCS1002
+Message-ID: <20190430161008.GA731@roeck-us.net>
+References: <20190430064557.28469-1-andrew.smirnov@gmail.com>
+ <20190430064557.28469-3-andrew.smirnov@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2aa435b3-0c2e-4f36-fd1c-08d6cd7d6239
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2019 15:06:12.4839
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5478
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190430064557.28469-3-andrew.smirnov@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-VGhpcyBhbGxvd3MgUFUgZG9tYWluIHRvIGJlIHR1cm5lZCBvZmYgaW4gc3VzcGVuZCBhbmQgc2F2
-ZSBwb3dlci4NCg0KU2lnbmVkLW9mZi1ieTogTGVvbmFyZCBDcmVzdGV6IDxsZW9uYXJkLmNyZXN0
-ZXpAbnhwLmNvbT4NCi0tLQ0KIGRyaXZlcnMvc29jL2lteC9ncGMuYyB8IDEzICsrKysrKysrKysr
-LS0NCiAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCg0K
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvc29jL2lteC9ncGMuYyBiL2RyaXZlcnMvc29jL2lteC9ncGMu
-Yw0KaW5kZXggYThmMWU0N2NlNjk4Li5kOTIzMWJkM2M2OTEgMTAwNjQ0DQotLS0gYS9kcml2ZXJz
-L3NvYy9pbXgvZ3BjLmMNCisrKyBiL2RyaXZlcnMvc29jL2lteC9ncGMuYw0KQEAgLTQyNywxNCAr
-NDI3LDIzIEBAIHN0YXRpYyBpbnQgaW14X2dwY19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNl
-ICpwZGV2KQ0KIAkJZGV2X2VycigmcGRldi0+ZGV2LCAiZmFpbGVkIHRvIGluaXQgcmVnbWFwOiAl
-ZFxuIiwNCiAJCQlyZXQpOw0KIAkJcmV0dXJuIHJldDsNCiAJfQ0KIA0KLQkvKiBEaXNhYmxlIFBV
-IHBvd2VyIGRvd24gaW4gbm9ybWFsIG9wZXJhdGlvbiBpZiBFUlIwMDk2MTkgaXMgcHJlc2VudCAq
-Lw0KKwkvKg0KKwkgKiBEaXNhYmxlIFBVIHBvd2VyIGRvd24gYnkgcnVudGltZSBQTSBpZiBFUlIw
-MDk2MTkgaXMgcHJlc2VudC4NCisJICoNCisJICogVGhlIFBSRSBjbG9jayB3aWxsIGJlIHBhdXNl
-ZCBmb3Igc2V2ZXJhbCBjeWNsZXMgd2hlbiB0dXJuaW5nIG9uIHRoZQ0KKwkgKiBQVSBkb21haW4g
-TERPIGZyb20gcG93ZXIgZG93biBzdGF0ZS4gSWYgUFJFIGlzIGluIHVzZSBhdCB0aGF0IHRpbWUs
-DQorCSAqIHRoZSBJUFUvUFJHIGNhbm5vdCBnZXQgdGhlIGNvcnJlY3QgZGlzcGxheSBkYXRhIGZy
-b20gdGhlIFBSRS4NCisJICoNCisJICogVGhpcyBpcyBub3QgYSBjb25jZXJuIHdoZW4gdGhlIHdo
-b2xlIHN5c3RlbSBlbnRlcnMgc3VzcGVuZCBzdGF0ZSwgc28NCisJICogaXQncyBzYWZlIHRvIHBv
-d2VyIGRvd24gUFUgaW4gdGhpcyBjYXNlLg0KKwkgKi8NCiAJaWYgKG9mX2lkX2RhdGEtPmVycjAw
-OTYxOV9wcmVzZW50KQ0KIAkJaW14X2dwY19kb21haW5zW0dQQ19QR0NfRE9NQUlOX1BVXS5iYXNl
-LmZsYWdzIHw9DQotCQkJCUdFTlBEX0ZMQUdfQUxXQVlTX09OOw0KKwkJCQlHRU5QRF9GTEFHX1JQ
-TV9BTFdBWVNfT047DQogDQogCS8qIEtlZXAgRElTUCBhbHdheXMgb24gaWYgRVJSMDA2Mjg3IGlz
-IHByZXNlbnQgKi8NCiAJaWYgKG9mX2lkX2RhdGEtPmVycjAwNjI4N19wcmVzZW50KQ0KIAkJaW14
-X2dwY19kb21haW5zW0dQQ19QR0NfRE9NQUlOX0RJU1BMQVldLmJhc2UuZmxhZ3MgfD0NCiAJCQkJ
-R0VOUERfRkxBR19BTFdBWVNfT047DQotLSANCjIuMTcuMQ0KDQo=
+On Mon, Apr 29, 2019 at 11:45:56PM -0700, Andrey Smirnov wrote:
+> Add driver for Microchip UCS1002 Programmable USB Port Power
+> Controller with Charger Emulation. The driver exposed a power supply
+> device to control/monitor various parameter of the device as well as a
+> regulator to allow controlling VBUS line.
+> 
+> Signed-off-by: Enric Balletbo Serra <enric.balletbo@collabora.com>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Cc: Chris Healy <cphealy@gmail.com>
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Fabio Estevam <fabio.estevam@nxp.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
