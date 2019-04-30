@@ -2,176 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 237C6100F1
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 22:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217B01014B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 22:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726431AbfD3Uga (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 16:36:30 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:35162 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726328AbfD3Uga (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 16:36:30 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190430203628euoutp0139d2365d20759636b891dd8c81a7793a~aWut4YlQZ1962319623euoutp01A
-        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2019 20:36:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190430203628euoutp0139d2365d20759636b891dd8c81a7793a~aWut4YlQZ1962319623euoutp01A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1556656588;
-        bh=9vsMiykLOjeRt1UBwt+uh9cpWO5LxcvBibQAYduQZ2k=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=qkOJAd42VxebsGSE7i8GchRoB2K3SxV+SPRpSysABmd+Mv/Ph1ZjUYCo0lF06xYA5
-         JTqoaLC+sWVlgZMDrODAZ9OT9swRwgqbqsn0VvmiOgpmkPPeElCI3exODP1OuTy9o7
-         umGYaD07/zQLYYlJmTfSSbCNy2dTm81D0PV2CewU=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190430203627eucas1p2cd7cdeda0a90d5f910b62e2a28f30dcd~aWus59kQn1819918199eucas1p2Z;
-        Tue, 30 Apr 2019 20:36:27 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 18.34.04377.BC1B8CC5; Tue, 30
-        Apr 2019 21:36:27 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190430203626eucas1p1b6c7ee4f818e4cce513bb3d2c9fed071~aWurnSe8y3007630076eucas1p1y;
-        Tue, 30 Apr 2019 20:36:26 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190430203625eusmtrp278c27e285d1adecadf4629eef010cd59~aWurXp6U51705217052eusmtrp2j;
-        Tue, 30 Apr 2019 20:36:25 +0000 (GMT)
-X-AuditID: cbfec7f4-113ff70000001119-92-5cc8b1cb95d0
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 40.F2.04140.9C1B8CC5; Tue, 30
-        Apr 2019 21:36:25 +0100 (BST)
-Received: from [106.120.51.20] (unknown [106.120.51.20]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190430203624eusmtip1b4f8457819f10c76a30cfc5f09f71ffe~aWuqdkACg1788717887eusmtip1j;
-        Tue, 30 Apr 2019 20:36:24 +0000 (GMT)
-Subject: Re: [PATCH v3 1/4] include: dt-bindings: add Performance Monitoring
- Unit for Exynos
-To:     Chanwoo Choi <cw00.choi@samsung.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     b.zolnierkie@samsung.com, krzk@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, kyungmin.park@samsung.com,
-        m.szyprowski@samsung.com, s.nawrocki@samsung.com,
-        myungjoo.ham@samsung.com, kgene@kernel.org,
-        willy.mh.wolff.ml@gmail.com
-From:   Lukasz Luba <l.luba@partner.samsung.com>
-Message-ID: <d07544be-50c8-4520-4637-b0938701df1e@partner.samsung.com>
-Date:   Tue, 30 Apr 2019 22:36:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <a1ff3566-6117-b670-a2f3-b60a2bbec14a@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0gUURTHuzs7O6O0eh0tTxZFS0WZWUbRQNEDSoaMKCHIFHPNSSNdayc1
-        S0p7mImv/GC5VhqY2mL5aBUVtNDV9VFqWmlt0mM10zQSLYzNasdR8tvvnPu79/wPXJpg3pBu
-        9AnNGV6rUYerFPbyyqZf7evaypoDNmRVOLJlt0pItmdikGRzje0km275SrAdHaUU+/zSCMWW
-        W16TbHfNbQU7nmpE7K2OOhn70NhHsfd7XshYc0KRgr1aa6TYhpFrJPuz+RPaibniu8WIq9b1
-        UVy5/rqCe5x/kUsz6BE3Xr70gOKI/bYQPvxENK9dvz3IPszQ+5E49QyfbX97mYhHlcpkZEcD
-        3gTXphLlIjO4CEFB+hKJJxBYKnwlHkdQmrZ51h9rsVDJyN7WL7T5TQWEVIwiaK9rRKLljAPh
-        kSF72nLBLQhSE/pIsSDEp1o+vLYVNK3AnlClPy1eUGJvaEvpo0SW45Xwt/IKIfICfBjeN5WS
-        kuMELdn901Ht8A7orP+sEJnArvC2P1cm8TK4XJEznQjwFAVNrT8UUu7dUPJgAEnsDMMmAyXx
-        EvhbLV0GLEB86r0ZJw4s6XdmnK3QYHoxnZnAa6CkZr3U3gXvcqtkYhuwA/SOOkkRHCCz8iYh
-        tZWQlMhI9mowpHTODFoIhcVZVAZS6eYsppuzjG7OMrr/c/OQXI9c+SghIpQXNmr4GE9BHSFE
-        aUI9j0VGlCPbh2v7Y5qoQjW/g+sRppFqvrLTuzmAIdXRQmxEPQKaULkoOVNjAKMMUcee47WR
-        R7VR4bxQjxbTcpWr8vy8D/4MDlWf4U/y/CleO3sqo+3c4hH9Msx9uCvej/F5+ZPrn9q7JXPt
-        7t+NOYHuhxo8Mhz8vm/zLTnSvYhpJZfHfHI6FzLo8W3VgBW+BN94OmCefO/ddeH0cH7c+aKh
-        rH2MOc9/aJffQb47cGzF9rHqTMfIrII9PtZXVp+uIK9JU/X+JHP2k97M4XmHj1vNRnV/rQeV
-        w6nkQpjay53QCup/Qh2NJWwDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAIsWRmVeSWpSXmKPExsVy+t/xu7onN56IMTiwWMli44z1rBbXvzxn
-        tZh/5ByrRf/j18wW589vYLc42/SG3WLT42usFpd3zWGz+Nx7hNFixvl9TBZrj9xlt1h6/SKT
-        xe3GFWwWrXuPsFscftPOavHtxCNGBwGPNfPWMHrsnHWX3WPTqk42j81L6j36tqxi9Pi8SS6A
-        LUrPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEvY8uN
-        h8wFZwQqzt1qZm5g3MbbxcjJISFgIvHx5GP2LkYuDiGBpYwSH94fZ4NIiElM2redHcIWlvhz
-        rYsNoug1o8Se/3PAioQF4iTWbZkJ1i0icJJRYvaEv0wgDrPAZ0aJ6WsuM0O0TGGSOLS2Acjh
-        4GAT0JPYsaoQpJtXwE3idM9dsBUsAqoS/7e1MIPYogIREmfer2CBqBGUODnzCZjNKWAvceHQ
-        M7DNzAJmEvM2P2SGsMUlbj2ZzwRhy0s0b53NPIFRaBaS9llIWmYhaZmFpGUBI8sqRpHU0uLc
-        9NxiI73ixNzi0rx0veT83E2MwNjeduznlh2MXe+CDzEKcDAq8fBqeJ6IEWJNLCuuzD3EKMHB
-        rCTC63H8aIwQb0piZVVqUX58UWlOavEhRlOg5yYyS4km5wPTTl5JvKGpobmFpaG5sbmxmYWS
-        OG+HwMEYIYH0xJLU7NTUgtQimD4mDk6pBsaKMqeDEp6GNdNfup3y4anKX6Z3+E/j3fDwE+pv
-        OXafv+5qpaCc87/LKktA9Yu/U0LQTdW+eavfL33rIjhJ5ZiptI+oteUGy/RvK1ztZt3peZps
-        16gd+78gylsl4zSDRpnavM0i89WzJyqWvNa/vEjCWGfVm2cMBnEaBW3FodW19Qftnt05pMRS
-        nJFoqMVcVJwIALxxx3kDAwAA
-X-CMS-MailID: 20190430203626eucas1p1b6c7ee4f818e4cce513bb3d2c9fed071
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190419134820eucas1p154e839769af0e1b8bae17ce3efa0ba93
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190419134820eucas1p154e839769af0e1b8bae17ce3efa0ba93
-References: <1555681688-19643-1-git-send-email-l.luba@partner.samsung.com>
-        <CGME20190419134820eucas1p154e839769af0e1b8bae17ce3efa0ba93@eucas1p1.samsung.com>
-        <1555681688-19643-2-git-send-email-l.luba@partner.samsung.com>
-        <a1ff3566-6117-b670-a2f3-b60a2bbec14a@samsung.com>
+        id S1727341AbfD3U5A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 16:57:00 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:41311 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727245AbfD3U4Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 16:56:25 -0400
+Received: by mail-io1-f66.google.com with SMTP id r10so13452415ioc.8;
+        Tue, 30 Apr 2019 13:56:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :reply-to:organization;
+        bh=w/ZY9LTiyXKRM2OFIeRR1GiI8yAd/kYfgFgfki8il0s=;
+        b=YtJt6pfFzExu2nn2LD/pkgzdudwBDuE9TUPd9cJOxZbchHajih+IO9O2DlwWaCge8C
+         vrkIQHu3PXCNJroWsn2EKTyqnZs1lZt9GDmUMILlmp7LelLOpoWJyhV8dcE9vlizJ19N
+         woTX8yMwAUWG5+cublTU0hJeSToDwqWSQTZSFHfuE5EdS+BDRIsIsTksACKYCP94PFQt
+         +EK8VSoBqV19fmYDF42i7XdigDYg5k0rEG1FkkuEc/VhcUFzaqMEwqbJESKImL/zEI0l
+         qT8MQiXa6+aQXeytm0s5b8vjtCu7GYrJbv7CcjaF9jclweaI+PpBUnF3iZHEGBsLSJ0a
+         ljCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:reply-to:organization;
+        bh=w/ZY9LTiyXKRM2OFIeRR1GiI8yAd/kYfgFgfki8il0s=;
+        b=FdAshPbIlgkXeCD7mpRQP+Qf4mJVELFw3h2qIIXgyFtnJ+69/h/Y1wSBgO6O/bWts2
+         i/YjUpgJIAar3Bm8JfPG+9BGo3IcWZZsEVBLmhf1MhfXRlvHTtomSRGJ6HZethwey6OF
+         xAHnGqXg6Ez7Ut+E6U/vSM0UjpqLHSNzbHOUqkgmr4NJf7NSeEY43jybDTa9/zfebezH
+         JRXYlwDqWE6IiYsol0XE82wfzs2CkgJo79K4cna/ZdT+/j+/cKBosi1X+sP64v93oPjR
+         iu+oOgIqTwQJZodngnlFJd+Ps5xJiUL3vf+UwkjM4jmnJ9kriNf0E3uADN2PzMYgHjDK
+         wdCA==
+X-Gm-Message-State: APjAAAVsDBb9h4r+9uEvVythR4YB1ttZbxJ/Fbsf4HsUNbKQ0R/EUSD7
+        SjCkBI8KEMDV9d57VfhCj1A=
+X-Google-Smtp-Source: APXvYqw+hkhvc4UfnFK9B4mXemX3ZTN3zSJ+I9BaX1p+MLWYR/R/gF5jtQXW0ZqQtut+wXsAqlbIiw==
+X-Received: by 2002:a6b:ee13:: with SMTP id i19mr6970437ioh.113.1556657784833;
+        Tue, 30 Apr 2019 13:56:24 -0700 (PDT)
+Received: from nuc8.lan (h69-131-112-51.cntcnh.dsl.dynamic.tds.net. [69.131.112.51])
+        by smtp.gmail.com with ESMTPSA id s7sm9799349ioo.17.2019.04.30.13.56.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Apr 2019 13:56:24 -0700 (PDT)
+From:   Len Brown <lenb@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
+Subject: [PATCH 08/14] powercap/intel_rapl: Simplify rapl_find_package()
+Date:   Tue, 30 Apr 2019 16:55:53 -0400
+Message-Id: <f1e0f58b39cc60cbb90f4b3e476b5827041d0a12.1553624867.git.len.brown@intel.com>
+X-Mailer: git-send-email 2.18.0-rc0
+In-Reply-To: <75386dff62ee869eb7357dff1e60dfd9b3e68023.1553624867.git.len.brown@intel.com>
+References: <75386dff62ee869eb7357dff1e60dfd9b3e68023.1553624867.git.len.brown@intel.com>
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Zhang Rui <rui.zhang@intel.com>
 
+Syntax only, no functional or semantic change.
 
-On 4/30/19 6:56 AM, Chanwoo Choi wrote:
-> Hi,
-> 
-> I agree of this patch. But, I add the minor comments.
-> 
-> If you edit them according to my comment, feel free to add my following tag:
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> 
-> On 19. 4. 19. 오후 10:48, Lukasz Luba wrote:
->> This patch add support of a new feature which can be used in DT:
->> Performance Monitoring Unit with defined event data type.
->> In this patch the event data types are defined for Exynos PPMU.
->> The patch also updates the MAINTAINERS file accordingly and
->> adds the header file to devfreq event subsystem.
->>
->> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
->> ---
->>   MAINTAINERS                           |  1 +
->>   include/dt-bindings/pmu/exynos_ppmu.h | 26 ++++++++++++++++++++++++++
->>   2 files changed, 27 insertions(+)
->>   create mode 100644 include/dt-bindings/pmu/exynos_ppmu.h
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 3671fde..1ba4b9b 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -4560,6 +4560,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git
->>   S:	Supported
->>   F:	drivers/devfreq/event/
->>   F:	drivers/devfreq/devfreq-event.c
->> +F:	include/dt-bindings/pmu/exynos_ppmu.h
->>   F:	include/linux/devfreq-event.h
->>   F:	Documentation/devicetree/bindings/devfreq/event/
->>   
->> diff --git a/include/dt-bindings/pmu/exynos_ppmu.h b/include/dt-bindings/pmu/exynos_ppmu.h
->> new file mode 100644
->> index 0000000..08fdce9
->> --- /dev/null
->> +++ b/include/dt-bindings/pmu/exynos_ppmu.h
->> @@ -0,0 +1,26 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Samsung Exynos PPMU event types for counting in regs
->> + *
->> + * Copyright (c) 2019, Samsung
-> 
-> Mabye, "Samsung Electronics" instead of 'Samsung'.
-ACK
-> 
->> + * Author: Lukasz Luba <l.luba@partner.samsung.com>
->> + */
->> +
->> +#ifndef __DT_BINDINGS_PMU_EXYNOS_PPMU_H
->> +#define __DT_BINDINGS_PMU_EXYNOS_PPMU_H
->> +
->> +
-> 
-> Remove unneeded blank line.
-OK done. I will add your 'Acked-by' in the next version.
+Simplify how the code to discover a package is called.
+Rename find_package_by_id() to rapl_find_package_domain()
 
-Regards,
-Lukasz
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Len Brown <len.brown@intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/powercap/intel_rapl.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
+index 6cdb2c14eee4..8b2f3631aba6 100644
+--- a/drivers/powercap/intel_rapl.c
++++ b/drivers/powercap/intel_rapl.c
+@@ -264,8 +264,9 @@ static struct powercap_control_type *control_type; /* PowerCap Controller */
+ static struct rapl_domain *platform_rapl_domain; /* Platform (PSys) domain */
+ 
+ /* caller to ensure CPU hotplug lock is held */
+-static struct rapl_package *find_package_by_id(int id)
++static struct rapl_package *rapl_find_package_domain(int cpu)
+ {
++	int id = topology_physical_package_id(cpu);
+ 	struct rapl_package *rp;
+ 
+ 	list_for_each_entry(rp, &rapl_packages, plist) {
+@@ -1298,7 +1299,7 @@ static int __init rapl_register_psys(void)
+ 	rd->rpl[0].name = pl1_name;
+ 	rd->rpl[1].prim_id = PL2_ENABLE;
+ 	rd->rpl[1].name = pl2_name;
+-	rd->rp = find_package_by_id(0);
++	rd->rp = rapl_find_package_domain(0);
+ 
+ 	power_zone = powercap_register_zone(&rd->power_zone, control_type,
+ 					    "psys", NULL,
+@@ -1454,8 +1455,9 @@ static void rapl_remove_package(struct rapl_package *rp)
+ }
+ 
+ /* called from CPU hotplug notifier, hotplug lock held */
+-static struct rapl_package *rapl_add_package(int cpu, int pkgid)
++static struct rapl_package *rapl_add_package(int cpu)
+ {
++	int id = topology_physical_package_id(cpu);
+ 	struct rapl_package *rp;
+ 	int ret;
+ 
+@@ -1464,7 +1466,7 @@ static struct rapl_package *rapl_add_package(int cpu, int pkgid)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	/* add the new package to the list */
+-	rp->id = pkgid;
++	rp->id = id;
+ 	rp->lead_cpu = cpu;
+ 
+ 	/* check if the package contains valid domains */
+@@ -1495,12 +1497,11 @@ static struct rapl_package *rapl_add_package(int cpu, int pkgid)
+  */
+ static int rapl_cpu_online(unsigned int cpu)
+ {
+-	int pkgid = topology_physical_package_id(cpu);
+ 	struct rapl_package *rp;
+ 
+-	rp = find_package_by_id(pkgid);
++	rp = rapl_find_package_domain(cpu);
+ 	if (!rp) {
+-		rp = rapl_add_package(cpu, pkgid);
++		rp = rapl_add_package(cpu);
+ 		if (IS_ERR(rp))
+ 			return PTR_ERR(rp);
+ 	}
+@@ -1510,11 +1511,10 @@ static int rapl_cpu_online(unsigned int cpu)
+ 
+ static int rapl_cpu_down_prep(unsigned int cpu)
+ {
+-	int pkgid = topology_physical_package_id(cpu);
+ 	struct rapl_package *rp;
+ 	int lead_cpu;
+ 
+-	rp = find_package_by_id(pkgid);
++	rp = rapl_find_package_domain(cpu);
+ 	if (!rp)
+ 		return 0;
+ 
+-- 
+2.18.0-rc0
 
