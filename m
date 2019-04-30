@@ -2,321 +2,314 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA4EF154
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 09:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECBAF288
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 11:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725938AbfD3HdX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 03:33:23 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:25672 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726119AbfD3HdX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 03:33:23 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190430073319epoutp0247272fef64b8dfbb5108d7871c2e86c1~aMC7vMTAo1098510985epoutp02C
-        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2019 07:33:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190430073319epoutp0247272fef64b8dfbb5108d7871c2e86c1~aMC7vMTAo1098510985epoutp02C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1556609599;
-        bh=e34k/yVofLPdOOX6XLtJ1nlpeN11FL4odbRWUg/xKsE=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=C09iPBFtB/qBwwP9DqEKJ9SudDeEv6GjWNtohAVKHpEJ6GVl5nnPWW6ahJM7Aa4bZ
-         XWpp4yeG0/tVgtlLp1OuEfRhafgUMbR4TGRnT1KC2KPKtRMux5cTV9J4wY1SpuffcU
-         lldQbZrGFkFF2BmkCiyvnZEff4rta+W4z3fSHzdI=
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.153]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190430073316epcas1p115013adba89d57243ab2883855e9a86e~aMC4oH7Ue1033710337epcas1p13;
-        Tue, 30 Apr 2019 07:33:16 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        32.37.04108.B3AF7CC5; Tue, 30 Apr 2019 16:33:15 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20190430073315epcas1p362e81786c257ddeace6be27afa1332fd~aMC38Hk5a0610506105epcas1p3E;
-        Tue, 30 Apr 2019 07:33:15 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190430073315epsmtrp23a1daa0b667fdf7f0025e5ccb8be04fe~aMC37Mfwh2858628586epsmtrp2K;
-        Tue, 30 Apr 2019 07:33:15 +0000 (GMT)
-X-AuditID: b6c32a39-d0c179c00000100c-71-5cc7fa3b2f53
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        26.EA.03692.B3AF7CC5; Tue, 30 Apr 2019 16:33:15 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190430073314epsmtip1c91c030ccb46c91972456cba60effb23~aMC3p85_71626316263epsmtip1V;
-        Tue, 30 Apr 2019 07:33:14 +0000 (GMT)
-Subject: Re: [PATCH v3 2/4] drivers: devfreq: events: extend events by type
- of counted data
-To:     Lukasz Luba <l.luba@partner.samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     b.zolnierkie@samsung.com, krzk@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, kyungmin.park@samsung.com,
-        m.szyprowski@samsung.com, s.nawrocki@samsung.com,
-        myungjoo.ham@samsung.com, kgene@kernel.org,
-        willy.mh.wolff.ml@gmail.com
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <3557d507-0463-89de-4025-fbeaaef78bed@samsung.com>
-Date:   Tue, 30 Apr 2019 16:34:30 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
+        id S1726916AbfD3JLT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 05:11:19 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:36227 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726926AbfD3JLT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 05:11:19 -0400
+Received: by mail-it1-f196.google.com with SMTP id v143so3576146itc.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Apr 2019 02:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=74N8uVDgnbUU0QJxHwKxdfXzPWk/Zhn2TmoGdHEfMro=;
+        b=ldYgztHLOex01cWo7A8vpjaHy+3VBSZrTEvsXM2SOVENFEAAXRUeUNZxJ5XS2PXj5l
+         6t/yfMBBxtDy0KJ0Jukw4LWzu0TYWUJU7qraZejg65DLny0TdVgOJebBb9ZUCnoFfKru
+         /U6HNt738iugvH50W7FlM/3+FUa4G+domWWepkZXnhlXfxSO95K8hmWWli59IqIcfeVg
+         ss0wkp2oHpYw1UYkYfApDq9aU517Slnm+KOu5nO+o9sar9Ii5bDPzwUKM6/eatOgbwBF
+         ll8M2lhgdELpOnW/KOE6cfRBvtgryj+CJHGV7Je5JmFYFJ7XMociMhedhuoKRqDs2vOj
+         PDQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=74N8uVDgnbUU0QJxHwKxdfXzPWk/Zhn2TmoGdHEfMro=;
+        b=WOOrwWIRt+edUvRdtQ9HqXPm/fDyVE9hCHSqtnfOwEC8s5iRLltQN+pC/8eVHuAusl
+         ij/38nEw7Ap0aQQ9fc82osGBh7el5OyMkZwNgikLxarknExYX51i5aXSSvEYXaCFrOPX
+         b6163ururhF0TJR8a5Z+0y1tLlZzBS0wSghEOV91C+nHMy5HGxSVT8mupJXlp/o9Gx1s
+         sgjWJUfzEyeGIwTKnL99MEr2b4gCE0Bk7M8cCKtY3ZnKoWsHqUuIXbtnwP36HDN8LYyV
+         t5YDO0UqLynSwEP8U+GoS8Vm/WNEp7VbUFNpKsOdyUQr2qmOP0Luxrd6PCWoQFqDk+q/
+         F1RA==
+X-Gm-Message-State: APjAAAUh7vwAuLWBvXt6/PzHdnFIAjax7jJQC8s9QGhS6JPiJS6CuQtc
+        YHwycbab7Mnj3TughrsjkoSHn8GhUTPAuGxtjotJAQ==
+X-Google-Smtp-Source: APXvYqxbYlBvWIHtRFN78GqEkysV6RnX4j67zaKjrkqgheGXygI16+B7GQxThoj2QX6LH0gcp2FUQWsFCnwGhVMEl2k=
+X-Received: by 2002:a24:4d85:: with SMTP id l127mr2917671itb.53.1556615478181;
+ Tue, 30 Apr 2019 02:11:18 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1555681688-19643-3-git-send-email-l.luba@partner.samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNJsWRmVeSWpSXmKPExsWy7bCmrq71r+MxBt8+m1lsnLGe1WL+kXOs
-        Fv2PXzNbnD+/gd3ibNMbdotbDTIWmx5fY7W4vGsOm8Xn3iOMFjPO72OyWHvkLrvF0usXmSxu
-        N65gs2jde4Td4vCbdlaLbyceMToIeKyZt4bRY+esu+wem1Z1snlsXlLvcfDdHiaPvi2rGD0+
-        b5ILYI/KtslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wB
-        ul1JoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BZoFecmFtcmpeul5yfa2VoYGBk
-        ClSYkJ3xZEcbY8Em84qmSdvZGhi3aXQxcnJICJhINH59y9TFyMUhJLCDUWLhvg9sEM4nRol7
-        PYtZIJxvjBJ/1u5kgWn5e7+NGcQWEtjLKLH5oyxE0XtGiQk7PrOCJIQFYiVuTZjGCpIQETjL
-        KPGgaRvYXGaBz4wSJx9cA6tiE9CS2P/iBhuIzS+gKHH1x2NGEJtXwE7iwpHfQDUcHCwCqhJb
-        nruAhEUFIiTuH9vAClEiKHFy5hOwizgFvCWmv+4CG8MsIC5x68l8JghbXqJ562xmkL0SAsfY
-        JZ782swM8YKLRE9zIyuELSzx6vgWdghbSuLzu71sEHa1xMqTR9ggmjsYJbbsvwDVYCyxf+lk
-        JpDjmAU0Jdbv0odYxifx7msP2M0SArwSHW1CENXKEpcf3GWCsCUlFrd3Qo33kJh1egnTBEbF
-        WUjemYXkhVlIXpiFsGwBI8sqRrHUguLc9NRiwwJT5OjexAhO2FqWOxiPnfM5xCjAwajEw+vx
-        7liMEGtiWXFl7iFGCQ5mJRFej+NHY4R4UxIrq1KL8uOLSnNSiw8xmgIDeyKzlGhyPjCb5JXE
-        G5oaGRsbW5gYmpkaGiqJ8653cI4REkhPLEnNTk0tSC2C6WPi4JRqYHRLu7ZHIcS+YV8ff6Dg
-        tsvPCgsfaGVfkDnfqaQ2c77Voq6mzC0v+z/Lqa/zObgjeWP4o92zXJ4WM52+JNbKVJycPMHq
-        Au/8KxMu8xzTv69/rHFT09Luvl+KXgxKGwtn6+kuYjQX2PpOYp5WppHARu+3bPMWpzH3LW3b
-        p1DM8cTirEr8yr5Tm5VYijMSDbWYi4oTASvwA0DuAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGIsWRmVeSWpSXmKPExsWy7bCSnK71r+MxBlMWc1hsnLGe1WL+kXOs
-        Fv2PXzNbnD+/gd3ibNMbdotbDTIWmx5fY7W4vGsOm8Xn3iOMFjPO72OyWHvkLrvF0usXmSxu
-        N65gs2jde4Td4vCbdlaLbyceMToIeKyZt4bRY+esu+wem1Z1snlsXlLvcfDdHiaPvi2rGD0+
-        b5ILYI/isklJzcksSy3St0vgyniyo42xYJN5RdOk7WwNjNs0uhg5OSQETCT+3m9j7mLk4hAS
-        2M0osXnBcnaIhKTEtItHgRIcQLawxOHDxRA1bxklrtycwAZSIywQKzF/8T5GkISIwFlGiUWT
-        FrCDOMwCnxklpq+5DDX2PqPEo2ftTCAtbAJaEvtf3ABr5xdQlLj64zEjiM0rYCdx4chvVpB1
-        LAKqElueu4CERQUiJM68X8ECUSIocXLmEzCbU8BbYvrrLrAxzALqEn/mXWKGsMUlbj2ZzwRh
-        y0s0b53NPIFReBaS9llIWmYhaZmFpGUBI8sqRsnUguLc9NxiwwLDvNRyveLE3OLSvHS95Pzc
-        TYzg2NXS3MF4eUn8IUYBDkYlHl6Pd8dihFgTy4orcw8xSnAwK4nwehw/GiPEm5JYWZValB9f
-        VJqTWnyIUZqDRUmc92nesUghgfTEktTs1NSC1CKYLBMHp1QDo7/77AWrLefJL88Q/P5VKPlu
-        QOAN5ycu79L6ly6cxn1vbdBF27oLDdqCRuzzPVy3nZnziNPHWEqDqUFOqJe/SuhHqNRpKYdP
-        l2+vsPrx6GaM3ZfZix1cjhdnZaydeXXTtNUBc16+zJyz4YdVBc93jpB/mYuyLu+9+77uqK4r
-        846dST+ftC1fb67EUpyRaKjFXFScCABR6hro2QIAAA==
-X-CMS-MailID: 20190430073315epcas1p362e81786c257ddeace6be27afa1332fd
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190419134821eucas1p2461a27e28387ff2b87c149f09582d2a0
-References: <1555681688-19643-1-git-send-email-l.luba@partner.samsung.com>
-        <CGME20190419134821eucas1p2461a27e28387ff2b87c149f09582d2a0@eucas1p2.samsung.com>
-        <1555681688-19643-3-git-send-email-l.luba@partner.samsung.com>
+References: <20190423090451.23711-1-brgl@bgdev.pl>
+In-Reply-To: <20190423090451.23711-1-brgl@bgdev.pl>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 30 Apr 2019 11:11:07 +0200
+Message-ID: <CAMRc=MfDVc6nTRTOcDzKtqphtC1J+uDGwwgtuVLCO9yqVUz1nQ@mail.gmail.com>
+Subject: Re: [PATCH v10 00/11] mfd: add support for max77650 PMIC
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+wt., 23 kwi 2019 o 11:04 Bartosz Golaszewski <brgl@bgdev.pl> napisa=C5=82(a=
+):
+>
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>
+> This series adds support for max77650 ultra low-power PMIC. It provides
+> the core mfd driver and a set of five sub-drivers for the regulator,
+> power supply, gpio, leds and input subsystems.
+>
+> Patches 1-4 add the DT binding documents. Patch 5 documents mfd_add_devic=
+es().
+> Patches 6-10 add all drivers. Last patch adds a MAINTAINERS entry for thi=
+s
+> device.
+>
+> The regulator part is already upstream.
+>
+> v1 -> v2:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> General:
+> - use C++ style comments for the SPDX license identifier and the
+>   copyright header
+> - s/MODULE_LICENSE("GPL")/MODULE_LICENSE("GPL v2")/
+> - lookup the virtual interrupt numbers in the MFD driver, setup
+>   resources for child devices and use platform_get_irq_byname()
+>   in sub-drivers
+> - picked up review tags
+> - use devm_request_any_context_irq() for interrupt requests
+>
+> LEDs:
+> - changed the max77650_leds_ prefix to max77650_led_
+> - drop the max77650_leds structure as the only field it held was the
+>   regmap pointer, move said pointer to struct max77650_led
+> - change the driver name to "max77650-led"
+> - drop the last return value check and return the result of
+>   regmap_write() directly
+> - change the labeling scheme to one consistent with other LED drivers
+>
+> ONKEY:
+> - drop the key reporting helper and call the input functions directly
+>   from interrupt handlers
+> - rename the rv local variable to error
+> - drop parent device asignment
+>
+> Regulator:
+> - drop the unnecessary init_data lookup from the driver code
+> - drop unnecessary include
+>
+> Charger:
+> - disable the charger on driver remove
+> - change the power supply type to POWER_SUPPLY_TYPE_USB
+>
+> GPIO:
+> - drop interrupt support until we have correct implementation of hierarch=
+ical
+>   irqs in gpiolib
+>
+> v2 -> v3:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> General:
+> - dropped regulator patches as they're already in Mark Brown's branch
+>
+> LED:
+> - fix the compatible string in the DT binding example
+> - use the max_brightness property
+> - use a common prefix ("MAX77650_LED") for all defines in the driver
+>
+> MFD:
+> - add the MODULE_DEVICE_TABLE()
+> - add a sentinel to the of_device_id array
+> - constify the pointers to irq names
+> - use an enum instead of defines for interrupt indexes
+>
+> v3 -> v4:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> GPIO:
+> - as discussed with Linus Walleij: the gpio-controller is now part of
+>   the core mfd module (we don't spawn a sub-node anymore), the binding
+>   document for GPIO has been dropped, the GPIO properties have been
+>   defined in the binding document for the mfd core, the interrupt
+>   functionality has been reintroduced with the irq directly passed from
+>   the mfd part
+> - due to the above changes the Reviewed-by tag from Linus was dropped
+>
+> v4 -> v5:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> General:
+> - add a patch documenting mfd_add_devices()
+>
+> MFD:
+> - pass the regmap irq_chip irq domain to mfd over mfd_add_devices so that
+>   the hw interrupts from resources can be correctly mapped to virtual irq=
+s
+> - remove the enum listing cell indexes
+> - extend Kconfig help
+> - add a link to the programming manual
+> - use REGMAP_IRQ_REG() for regmap interrupts (except for GPI which has
+>   is composed of two hw interrupts for rising and falling edge)
+> - add error messages in probe
+> - use PLATFORM_DEVID_NONE constant in devm_mfd_add_devices()
+> - set irq_base to 0 in regmap_add_irq_chip() as other users to, it's only
+>   relevant if it's > 0
+>
+> Charger:
+> - use non-maxim specific property names for minimum input voltage and cur=
+rent
+>   limit
+> - code shrink by using the enable/disable charger helpers everywhere
+> - use more descriptive names for constants
+>
+> Onkey:
+> - use EV_SW event type for slide mode
+>
+> LED:
+> - remove stray " from Kconfig help
+>
+> v5 -> v6:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> MFD:
+> - remove stray spaces in the binding document
+> - rename the example dt node
+> - remove unnecessary interrupt-parent property from the bindings
+>
+> LED:
+> - add a missing dependency on LEDS_CLASS to Kconfig
+>
+> Onkey:
+> - use boolean for the slide button property
+>
+> Charger:
+> - fix the property names in DT example
+> - make constants even more readable
+>
+> v6 -> v7:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> Charger:
+> - rename the current limit property to current-limit-microamp
+>
+> v7 -> v8:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> General:
+> - collected acks from Lee
+> - changed the documentation for mfd_add_devices() as suggested by Lee
+> - rebased on top of v5.1-rc3
+>
+> v8 > v9:
+> =3D=3D=3D=3D=3D=3D=3D=3D
+>
+> General:
+> - collected new tags
+> - rebased on top of v5.1-rc4
+>
+> MFD:
+> - various improvements in error messages
+> - coding style tweaks
+>
+> Charger:
+> - named the two optional properties in a more descriptive way, so that
+>   we can make them generic for charger bindings if more potential users
+>   appear
+>
+> v9 -> v10:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> General:
+> - added the review tag from Sebastian
+> - rebased on top of v5.1-rc6
+>
+> Charger:
+> - fixed the example in the binding document
+>
+> Bartosz Golaszewski (11):
+>   dt-bindings: mfd: add DT bindings for max77650
+>   dt-bindings: power: supply: add DT bindings for max77650
+>   dt-bindings: leds: add DT bindings for max77650
+>   dt-bindings: input: add DT bindings for max77650
+>   mfd: core: document mfd_add_devices()
+>   mfd: max77650: new core mfd driver
+>   power: supply: max77650: add support for battery charger
+>   gpio: max77650: add GPIO support
+>   leds: max77650: add LEDs support
+>   input: max77650: add onkey support
+>   MAINTAINERS: add an entry for max77650 mfd driver
+>
+>  .../bindings/input/max77650-onkey.txt         |  26 ++
+>  .../bindings/leds/leds-max77650.txt           |  57 +++
+>  .../devicetree/bindings/mfd/max77650.txt      |  46 +++
+>  .../power/supply/max77650-charger.txt         |  28 ++
+>  MAINTAINERS                                   |  14 +
+>  drivers/gpio/Kconfig                          |   7 +
+>  drivers/gpio/Makefile                         |   1 +
+>  drivers/gpio/gpio-max77650.c                  | 190 +++++++++
+>  drivers/input/misc/Kconfig                    |   9 +
+>  drivers/input/misc/Makefile                   |   1 +
+>  drivers/input/misc/max77650-onkey.c           | 121 ++++++
+>  drivers/leds/Kconfig                          |   6 +
+>  drivers/leds/Makefile                         |   1 +
+>  drivers/leds/leds-max77650.c                  | 147 +++++++
+>  drivers/mfd/Kconfig                           |  14 +
+>  drivers/mfd/Makefile                          |   1 +
+>  drivers/mfd/max77650.c                        | 232 +++++++++++
+>  drivers/mfd/mfd-core.c                        |  13 +
+>  drivers/power/supply/Kconfig                  |   7 +
+>  drivers/power/supply/Makefile                 |   1 +
+>  drivers/power/supply/max77650-charger.c       | 368 ++++++++++++++++++
+>  include/linux/mfd/max77650.h                  |  59 +++
+>  22 files changed, 1349 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/input/max77650-onke=
+y.txt
+>  create mode 100644 Documentation/devicetree/bindings/leds/leds-max77650.=
+txt
+>  create mode 100644 Documentation/devicetree/bindings/mfd/max77650.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/max776=
+50-charger.txt
+>  create mode 100644 drivers/gpio/gpio-max77650.c
+>  create mode 100644 drivers/input/misc/max77650-onkey.c
+>  create mode 100644 drivers/leds/leds-max77650.c
+>  create mode 100644 drivers/mfd/max77650.c
+>  create mode 100644 drivers/power/supply/max77650-charger.c
+>  create mode 100644 include/linux/mfd/max77650.h
+>
+> --
+> 2.21.0
+>
 
-On 19. 4. 19. 오후 10:48, Lukasz Luba wrote:
-> This patch adds posibility to choose what type of data should be counted
-> by the PPMU counter. Now the type comes from DT where the event has been
-> defined. When there is no 'event-data-type' the default value is used,
-> which is 'read data in bytes'.
-> It is needed when you want to know not only read+write data bytes but
-> i.e. only write data in byte, or number of read requests, etc.
-> 
-> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> ---
->  drivers/devfreq/event/exynos-ppmu.c | 61 +++++++++++++++++++++++++------------
->  include/linux/devfreq-event.h       |  6 ++++
->  2 files changed, 48 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-> index c61de0b..073bf2c 100644
-> --- a/drivers/devfreq/event/exynos-ppmu.c
-> +++ b/drivers/devfreq/event/exynos-ppmu.c
-> @@ -154,9 +154,9 @@ static int exynos_ppmu_set_event(struct devfreq_event_dev *edev)
->  	if (ret < 0)
->  		return ret;
->  
-> -	/* Set the event of Read/Write data count  */
-> +	/* Set the event of proper data type monitoring */
->  	ret = regmap_write(info->regmap, PPMU_BEVTxSEL(id),
-> -				PPMU_RO_DATA_CNT | PPMU_WO_DATA_CNT);
-> +			   edev->desc->data_type);
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -368,23 +368,11 @@ static int exynos_ppmu_v2_set_event(struct devfreq_event_dev *edev)
->  	if (ret < 0)
->  		return ret;
->  
-> -	/* Set the event of Read/Write data count  */
-> -	switch (id) {
-> -	case PPMU_PMNCNT0:
-> -	case PPMU_PMNCNT1:
-> -	case PPMU_PMNCNT2:
-> -		ret = regmap_write(info->regmap, PPMU_V2_CH_EVx_TYPE(id),
-> -				PPMU_V2_RO_DATA_CNT | PPMU_V2_WO_DATA_CNT);
-> -		if (ret < 0)
-> -			return ret;
-> -		break;
-> -	case PPMU_PMNCNT3:
-> -		ret = regmap_write(info->regmap, PPMU_V2_CH_EVx_TYPE(id),
-> -				PPMU_V2_EVT3_RW_DATA_CNT);
-> -		if (ret < 0)
-> -			return ret;
-> -		break;
-> -	}
-> +	/* Set the event of proper data type monitoring */
-> +	ret = regmap_write(info->regmap, PPMU_V2_CH_EVx_TYPE(id),
-> +			   edev->desc->data_type);
-> +	if (ret < 0)
-> +		return ret;
->  
->  	/* Reset cycle counter/performance counter and enable PPMU */
->  	ret = regmap_read(info->regmap, PPMU_V2_PMNC, &pmnc);
-> @@ -508,6 +496,7 @@ static int of_get_devfreq_events(struct device_node *np,
->  	struct device *dev = info->dev;
->  	struct device_node *events_np, *node;
->  	int i, j, count;
-> +	int ret;
->  
->  	events_np = of_get_child_by_name(np, "events");
->  	if (!events_np) {
-> @@ -544,6 +533,40 @@ static int of_get_devfreq_events(struct device_node *np,
->  		desc[j].driver_data = info;
->  
->  		of_property_read_string(node, "event-name", &desc[j].name);
-> +		ret = of_property_read_u32(node, "event-data-type",
-> +					   &desc[j].data_type);
-> +		if (ret) {
-> +			/* Set the event of proper data type counting.
-> +			 * Check if the data type has been defined in DT,
-> +			 * use default if not.
-> +			 */
-> +			if (of_device_is_compatible(np,
-> +					"samsung,exynos-ppmu-v2")) {
+Hi Lee,
 
-It is not proper to compare the compatible string again
-in the device driver. Instead, you can define the ppmu device type
-as following and then use 'struct of_device_id' in order to
-identify the device type.
+just a gentle ping before I leave on vacation.
 
-	enum exynos_ppmu_type {
-		EXYNOS_TYPE_PPMU,
-		EXYNOS_TYPE_PPMU_V2,
-	};
+All the relevant Acks are there. Any chance of getting this in for
+v5.2? Obviously this cannot cause any regressions so it shouldn't be
+too late in the release cycle.
 
- static const struct of_device_id exynos_ppmu_id_match[] = {
-        {
-                .compatible = "samsung,exynos-ppmu",
--               .data = (void *)&exynos_ppmu_ops,
-+               .data = (void *)EXYNOS_TYPE_PPMU,
-        }, {
-                .compatible = "samsung,exynos-ppmu-v2",
--               .data = (void *)&exynos_ppmu_v2_ops,
-+               .data = (void *)EXYNOS_TYPE_PPMU_V2,
-        },
-
-
-The many device drivers in the mainline uses this code
-in order to get the device type. You can refer the example
-in the drivers/mfd/max14577.c.
-
-(snip)
-
-
-Example, I add the example. but it is not tested. 
-
---- a/drivers/devfreq/event/exynos-ppmu.c
-+++ b/drivers/devfreq/event/exynos-ppmu.c
-@@ -16,6 +16,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/suspend.h>
-@@ -23,6 +24,11 @@
- 
- #include "exynos-ppmu.h"
- 
-+enum exynos_ppmu_type {
-+       EXYNOS_TYPE_PPMU,
-+       EXYNOS_TYPE_PPMU_V2,
-+};
-+
- struct exynos_ppmu_data {
-        struct clk *clk;
- };
-@@ -36,6 +42,7 @@ struct exynos_ppmu {
-        struct regmap *regmap;
- 
-        struct exynos_ppmu_data ppmu;
-+       enum exynos_ppmu_type ppmu_type;
- };
- 
- #define PPMU_EVENT(name)                       \
- 
-        /* Reset cycle counter/performance counter and enable PPMU */
-        ret = regmap_read(info->regmap, PPMU_V2_PMNC, &pmnc);
-@@ -483,31 +476,23 @@ static const struct devfreq_event_ops exynos_ppmu_v2_ops = {
- static const struct of_device_id exynos_ppmu_id_match[] = {
-        {
-                .compatible = "samsung,exynos-ppmu",
--               .data = (void *)&exynos_ppmu_ops,
-+               .data = (void *)EXYNOS_TYPE_PPMU,
-        }, {
-                .compatible = "samsung,exynos-ppmu-v2",
--               .data = (void *)&exynos_ppmu_v2_ops,
-+               .data = (void *)EXYNOS_TYPE_PPMU_V2,
-        },
-        { /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, exynos_ppmu_id_match);
- 
--static struct devfreq_event_ops *exynos_bus_get_ops(struct device_node *np)
--{
--       const struct of_device_id *match;
--
--       match = of_match_node(exynos_ppmu_id_match, np);
--       return (struct devfreq_event_ops *)match->data;
--}
--
- static int of_get_devfreq_events(struct device_node *np,
-                                 struct exynos_ppmu *info)
- {
-        struct devfreq_event_desc *desc;
--       struct devfreq_event_ops *event_ops;
-        struct device *dev = info->dev;
-        struct device_node *events_np, *node;
-        int i, j, count;
- 
-        events_np = of_get_child_by_name(np, "events");
-        if (!events_np) {
-@@ -515,7 +500,6 @@ static int of_get_devfreq_events(struct device_node *np,
-                        "failed to get child node of devfreq-event devices\n");
-                return -EINVAL;
-        }
--       event_ops = exynos_bus_get_ops(np);
- 
-        count = of_get_child_count(events_np);
-        desc = devm_kcalloc(dev, count, sizeof(*desc), GFP_KERNEL);
-@@ -540,11 +524,38 @@ static int of_get_devfreq_events(struct device_node *np,
-                        continue;
-                }
- 
--               desc[j].ops = event_ops;
-+               switch (info->ppmu_type) {
-+               case EXYNOS_TYPE_PPMU:
-+                       desc[j].ops = &exynos_ppmu_ops;
-+                       break;
-+               case EXYNOS_TYPE_PPMU_V2:
-+                       desc[j].ops = &exynos_ppmu_v2_ops;
-+                       break;
-+               }
-+
-
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+Thanks in advance,
+Bartosz Golaszewski
