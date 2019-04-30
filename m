@@ -2,55 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6E310141
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 22:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930E91014A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Apr 2019 22:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727344AbfD3U4a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 16:56:30 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:38394 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727286AbfD3U43 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 16:56:29 -0400
-Received: by mail-io1-f65.google.com with SMTP id y6so13456528ior.5;
-        Tue, 30 Apr 2019 13:56:28 -0700 (PDT)
+        id S1726372AbfD3U4w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 16:56:52 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:40238 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727341AbfD3U4a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 16:56:30 -0400
+Received: by mail-io1-f68.google.com with SMTP id m9so7076904iok.7;
+        Tue, 30 Apr 2019 13:56:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :reply-to:organization;
-        bh=ROo2mEOaZoS8Oj0lfCLj/EE9ivwrxNSCdoSlWp9ZnaE=;
-        b=QkPM7Zc/RMsVp8vnKI9tA4uY2PTmlvB+7I7/bWa5WDKvt5xOgYokrAqIznZ+MCRsPe
-         iinV2wLdyjADf0Y5rog9NEimP6AzqdPr9N5xkd6c+4PE+ai78TRZ+Qzw8Uh4svIP4U7a
-         QsgH64o4Ez4AZO4YKrIwNAZKx0fN7ZPufhluf6XU1nVcFDZCrCDj1d7OzSbZE0Jz9TV0
-         9I5r1fVmfYT/jrspbv+gIDqCKCBsiQy0qQUvGC2OiMW2SF3AM6PJi9msG3mE23j2bk0H
-         cn4MNmXAWePMmWlSd6z0Eb8sOFm8sSL4UQlWTSTu2LtXKCjVEpH6SzR7C2bdHpBNUuN8
-         iuAA==
+        bh=cOQ9Mqdvt9WYryBTzeuet0z6FEgVKdqlQkfL8BULl5A=;
+        b=PL+yn0dZoCL4WNr3nSM/5DIUfF1uDT2OtRGMvozVcz98zDCwDrq4S+gJHuV1FhIruu
+         mL9gvttqtycTM+DXHWrMczzxpBiZftUdgHnPclipziEpebhWp7bF6d61SPghEagz1N71
+         9MtNmRtNpdpw+XN+oLj9uBRbfhJ0E0+S11KfcfzYQRwPb6DdPQ7KXr73OWRE9TojWPq1
+         UqRXN3q24UB1Zmc8gMGTTqfCXWXGsqtPUpACX9gGi88UbR4s43E9bVX1WwuE1NbWoS0l
+         DvjeZExKADawTmFD2SZqumI6DvD8eq2zNTqiF66GBiU94OC06r/M+7j2LahJ3nm173YH
+         4EVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:reply-to:organization;
-        bh=ROo2mEOaZoS8Oj0lfCLj/EE9ivwrxNSCdoSlWp9ZnaE=;
-        b=PLCgZcdIax8rMVu9HWHBUXRxwUPxftU4gC0uRseMnTNMcj8LaUJOgShYH5Lbg+B8kV
-         4GsPocqX/UFUVQVtPcFIc5CDuG2XRiktXj806EykoV6FBjOhmoaMbycJUgYVEcVuQhBg
-         C4b0OgYsoItR4pxNH0pc4MXSZMEUlCn6AfMoHID/4/kmz8lwJvl419hwGwVVGITer6ns
-         ur50zRKb2N7wK4tc9slUoOBKqh2J/xpdaFqRIjOzpFlWp+Y8kh79xpMax9iNk6Z7t4tG
-         lhJJsJ4IWVh8RhSI7r9yNIFt2bKm8dksj3u8B4Qz6rwcYNyBZqHdbQ2NuhBbE1SbFHrK
-         8I/g==
-X-Gm-Message-State: APjAAAVL8VSaAFLQIn2lPFxeKqSAOM95ReI1Mx0utVGeQ58kEeyGfPWZ
-        NjGisBEBfn44sbJVbxqt1Cc=
-X-Google-Smtp-Source: APXvYqwBwbmbaPsfHN+w4uZj+X/nrqzlTn8MFQEtc1rGP8dthOerSxRODMr+x/FR9hltcYHiDN1yYA==
-X-Received: by 2002:a6b:e20e:: with SMTP id z14mr1460352ioc.169.1556657788437;
-        Tue, 30 Apr 2019 13:56:28 -0700 (PDT)
+        bh=cOQ9Mqdvt9WYryBTzeuet0z6FEgVKdqlQkfL8BULl5A=;
+        b=qgRMXik8Tum7hWWxy9HNkotZaA9FlaZkGuJEzEiGc+PXHmrJJsh6csV5sa7pXWSmBh
+         GRE3JAfHZIJNi9d1tIFF1aIo6UejSKa3wxMOsb0/9SgfsJDiERfnLqIouAIG/ZLDnlMB
+         ar8MHq0vm8pRE5GOvm2+IaFu2u4adSJxQYcfjuJCs4B0Y4WRwWFh7bbU+aYLJ9eDfn5h
+         TO90CYQ7RM58dAqUALqmAiVHP5SZM9FII7IfhxX2WOPpE6GVKrURhT3438jHmtVEab4c
+         1/S1bDig1t4BdmdfeMeX+450EQdYqMPmEa41ycNZBAoq3/5AKjwOHopVIyJdAkGH/Qwf
+         CZgA==
+X-Gm-Message-State: APjAAAXKiOjvrBZDaGtdl4/sxM+nXNq0hQcr2bjH+jdftw9WnR/SHR9/
+        ORbQFIxcdch/wfvjJeOrrkl1U8X9
+X-Google-Smtp-Source: APXvYqxyFeIxzLvmQXsCqirfnkWmKTBSbtuPpFfbNwLy1JnBpUP8CLCuaFrKLeMcvDTfQuMRZMXhmg==
+X-Received: by 2002:a6b:6e0f:: with SMTP id d15mr233767ioh.116.1556657789718;
+        Tue, 30 Apr 2019 13:56:29 -0700 (PDT)
 Received: from nuc8.lan (h69-131-112-51.cntcnh.dsl.dynamic.tds.net. [69.131.112.51])
-        by smtp.gmail.com with ESMTPSA id s7sm9799349ioo.17.2019.04.30.13.56.27
+        by smtp.gmail.com with ESMTPSA id s7sm9799349ioo.17.2019.04.30.13.56.28
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 13:56:27 -0700 (PDT)
+        Tue, 30 Apr 2019 13:56:29 -0700 (PDT)
 From:   Len Brown <lenb@kernel.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
-Subject: [PATCH 11/14] powercap/intel_rapl: update rapl domain name and debug messages
-Date:   Tue, 30 Apr 2019 16:55:56 -0400
-Message-Id: <80fb3b7e0cc9daaacb583e9bb2914e490a3ee7b2.1553624867.git.len.brown@intel.com>
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH 12/14] hwmon/coretemp: Support multi-die/package
+Date:   Tue, 30 Apr 2019 16:55:57 -0400
+Message-Id: <f18272b6a1470d7fe6c08def9a334cfc9503ee50.1553624867.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.18.0-rc0
 In-Reply-To: <75386dff62ee869eb7357dff1e60dfd9b3e68023.1553624867.git.len.brown@intel.com>
 References: <75386dff62ee869eb7357dff1e60dfd9b3e68023.1553624867.git.len.brown@intel.com>
@@ -63,194 +64,75 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Zhang Rui <rui.zhang@intel.com>
 
-The RAPL domain "name" attribute contains "Package-N",
-which is ambiguous on multi-die per-package systems.
+This patch introduces coretemp driver support
+for new dual-die/package systems.
 
-Update the name to "package-X-die-Y" on those systems.
+On the new dual-die/package systems, the package temperature MSRs becomes
+die-scope. Thus instead of one hwmon device per physical package, now
+there should be one hwmon device for each die on these systems.
 
-No change on systems without multi-die.
-
-Driver debug messages are also updated.
+On the hardwares that do not have multi-die support,
+topology_logical_die_id() equals topology_physical_package_id(), thus the
+only difference is that physical package id is used as the coretemp
+platform device id, instead of logical package id on these systems.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-pm@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org
 ---
- drivers/powercap/intel_rapl.c | 57 ++++++++++++++++++++---------------
- 1 file changed, 32 insertions(+), 25 deletions(-)
+ drivers/hwmon/coretemp.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
-index 38c89db15150..f2c097c15afb 100644
---- a/drivers/powercap/intel_rapl.c
-+++ b/drivers/powercap/intel_rapl.c
-@@ -178,12 +178,15 @@ struct rapl_domain {
- #define power_zone_to_rapl_domain(_zone) \
- 	container_of(_zone, struct rapl_domain, power_zone)
+diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
+index 5d34f7271e67..57f348d43819 100644
+--- a/drivers/hwmon/coretemp.c
++++ b/drivers/hwmon/coretemp.c
+@@ -435,7 +435,7 @@ static int chk_ucode_version(unsigned int cpu)
  
-+/* maximum rapl package domain name: package-%d-die-%d */
-+#define PACKAGE_DOMAIN_NAME_LENGTH 30
- 
--/* Each physical package contains multiple domains, these are the common
-+
-+/* Each rapl package contains multiple domains, these are the common
-  * data across RAPL domains within a package.
-  */
- struct rapl_package {
--	unsigned int id; /* physical package/socket id */
-+	unsigned int id; /* logical die id, equals physical 1-die systems */
- 	unsigned int nr_domains;
- 	unsigned long domain_map; /* bit map of active domains */
- 	unsigned int power_unit;
-@@ -198,6 +201,7 @@ struct rapl_package {
- 	int lead_cpu; /* one active cpu per package for access */
- 	/* Track active cpus */
- 	struct cpumask cpumask;
-+	char name[PACKAGE_DOMAIN_NAME_LENGTH];
- };
- 
- struct rapl_defaults {
-@@ -926,8 +930,8 @@ static int rapl_check_unit_core(struct rapl_package *rp, int cpu)
- 	value = (msr_val & TIME_UNIT_MASK) >> TIME_UNIT_OFFSET;
- 	rp->time_unit = 1000000 / (1 << value);
- 
--	pr_debug("Core CPU package %d energy=%dpJ, time=%dus, power=%duW\n",
--		rp->id, rp->energy_unit, rp->time_unit, rp->power_unit);
-+	pr_debug("Core CPU %s energy=%dpJ, time=%dus, power=%duW\n",
-+		rp->name, rp->energy_unit, rp->time_unit, rp->power_unit);
- 
- 	return 0;
- }
-@@ -951,8 +955,8 @@ static int rapl_check_unit_atom(struct rapl_package *rp, int cpu)
- 	value = (msr_val & TIME_UNIT_MASK) >> TIME_UNIT_OFFSET;
- 	rp->time_unit = 1000000 / (1 << value);
- 
--	pr_debug("Atom package %d energy=%dpJ, time=%dus, power=%duW\n",
--		rp->id, rp->energy_unit, rp->time_unit, rp->power_unit);
-+	pr_debug("Atom %s energy=%dpJ, time=%dus, power=%duW\n",
-+		rp->name, rp->energy_unit, rp->time_unit, rp->power_unit);
- 
- 	return 0;
- }
-@@ -1179,7 +1183,7 @@ static void rapl_update_domain_data(struct rapl_package *rp)
- 	u64 val;
- 
- 	for (dmn = 0; dmn < rp->nr_domains; dmn++) {
--		pr_debug("update package %d domain %s data\n", rp->id,
-+		pr_debug("update %s domain %s data\n", rp->name,
- 			 rp->domains[dmn].name);
- 		/* exclude non-raw primitives */
- 		for (prim = 0; prim < NR_RAW_PRIMITIVES; prim++) {
-@@ -1204,7 +1208,6 @@ static void rapl_unregister_powercap(void)
- static int rapl_package_register_powercap(struct rapl_package *rp)
+ static struct platform_device *coretemp_get_pdev(unsigned int cpu)
  {
- 	struct rapl_domain *rd;
--	char dev_name[17]; /* max domain name = 7 + 1 + 8 for int + 1 for null*/
- 	struct powercap_zone *power_zone = NULL;
- 	int nr_pl, ret;
+-	int pkgid = topology_logical_package_id(cpu);
++	int pkgid = topology_logical_die_id(cpu);
  
-@@ -1215,20 +1218,16 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
- 	for (rd = rp->domains; rd < rp->domains + rp->nr_domains; rd++) {
- 		if (rd->id == RAPL_DOMAIN_PACKAGE) {
- 			nr_pl = find_nr_power_limit(rd);
--			pr_debug("register socket %d package domain %s\n",
--				rp->id, rd->name);
--			memset(dev_name, 0, sizeof(dev_name));
--			snprintf(dev_name, sizeof(dev_name), "%s-%d",
--				rd->name, rp->id);
-+			pr_debug("register package domain %s\n", rp->name);
- 			power_zone = powercap_register_zone(&rd->power_zone,
- 							control_type,
--							dev_name, NULL,
-+							rp->name, NULL,
- 							&zone_ops[rd->id],
- 							nr_pl,
- 							&constraint_ops);
- 			if (IS_ERR(power_zone)) {
--				pr_debug("failed to register package, %d\n",
--					rp->id);
-+				pr_debug("failed to register power zone %s\n",
-+					rp->name);
- 				return PTR_ERR(power_zone);
- 			}
- 			/* track parent zone in per package/socket data */
-@@ -1254,8 +1253,8 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
- 						&constraint_ops);
+ 	if (pkgid >= 0 && pkgid < max_packages)
+ 		return pkg_devices[pkgid];
+@@ -579,7 +579,7 @@ static struct platform_driver coretemp_driver = {
  
- 		if (IS_ERR(power_zone)) {
--			pr_debug("failed to register power_zone, %d:%s:%s\n",
--				rp->id, rd->name, dev_name);
-+			pr_debug("failed to register power_zone, %s:%s\n",
-+				rp->name, rd->name);
- 			ret = PTR_ERR(power_zone);
- 			goto err_cleanup;
- 		}
-@@ -1268,7 +1267,7 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
- 	 * failed after the first domain setup.
+ static struct platform_device *coretemp_device_add(unsigned int cpu)
+ {
+-	int err, pkgid = topology_logical_package_id(cpu);
++	int err, pkgid = topology_logical_die_id(cpu);
+ 	struct platform_device *pdev;
+ 
+ 	if (pkgid < 0)
+@@ -703,7 +703,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
+ 	 * the rest.
  	 */
- 	while (--rd >= rp->domains) {
--		pr_debug("unregister package %d domain %s\n", rp->id, rd->name);
-+		pr_debug("unregister %s domain %s\n", rp->name, rd->name);
- 		powercap_unregister_zone(control_type, &rd->power_zone);
+ 	if (cpumask_empty(&pd->cpumask)) {
+-		pkg_devices[topology_logical_package_id(cpu)] = NULL;
++		pkg_devices[topology_logical_die_id(cpu)] = NULL;
+ 		platform_device_unregister(pdev);
+ 		return 0;
  	}
- 
-@@ -1378,8 +1377,8 @@ static void rapl_detect_powerlimit(struct rapl_domain *rd)
- 	/* check if the domain is locked by BIOS, ignore if MSR doesn't exist */
- 	if (!rapl_read_data_raw(rd, FW_LOCK, false, &val64)) {
- 		if (val64) {
--			pr_info("RAPL package %d domain %s locked by BIOS\n",
--				rd->rp->id, rd->name);
-+			pr_info("RAPL %s domain %s locked by BIOS\n",
-+				rd->rp->name, rd->name);
- 			rd->state |= DOMAIN_STATE_BIOS_LOCKED;
- 		}
- 	}
-@@ -1408,10 +1407,10 @@ static int rapl_detect_domains(struct rapl_package *rp, int cpu)
- 	}
- 	rp->nr_domains = bitmap_weight(&rp->domain_map,	RAPL_DOMAIN_MAX);
- 	if (!rp->nr_domains) {
--		pr_debug("no valid rapl domains found in package %d\n", rp->id);
-+		pr_debug("no valid rapl domains found in %s\n", rp->name);
- 		return -ENODEV;
- 	}
--	pr_debug("found %d domains on package %d\n", rp->nr_domains, rp->id);
-+	pr_debug("found %d domains on %s\n", rp->nr_domains, rp->name);
- 
- 	rp->domains = kcalloc(rp->nr_domains + 1, sizeof(struct rapl_domain),
- 			GFP_KERNEL);
-@@ -1444,8 +1443,8 @@ static void rapl_remove_package(struct rapl_package *rp)
- 			rd_package = rd;
- 			continue;
- 		}
--		pr_debug("remove package, undo power limit on %d: %s\n",
--			 rp->id, rd->name);
-+		pr_debug("remove package, undo power limit on %s: %s\n",
-+			 rp->name, rd->name);
- 		powercap_unregister_zone(control_type, &rd->power_zone);
- 	}
- 	/* do parent zone last */
-@@ -1459,6 +1458,7 @@ static struct rapl_package *rapl_add_package(int cpu)
+@@ -732,6 +732,7 @@ static enum cpuhp_state coretemp_hp_online;
+ static int __init coretemp_init(void)
  {
- 	int id = topology_logical_die_id(cpu);
- 	struct rapl_package *rp;
-+	struct cpuinfo_x86 *c = &cpu_data(cpu);
- 	int ret;
+ 	int err;
++	struct cpuinfo_x86 *c = &cpu_data(0);
  
- 	rp = kzalloc(sizeof(struct rapl_package), GFP_KERNEL);
-@@ -1469,6 +1469,13 @@ static struct rapl_package *rapl_add_package(int cpu)
- 	rp->id = id;
- 	rp->lead_cpu = cpu;
+ 	/*
+ 	 * CPUID.06H.EAX[0] indicates whether the CPU has thermal
+@@ -741,7 +742,7 @@ static int __init coretemp_init(void)
+ 	if (!x86_match_cpu(coretemp_ids))
+ 		return -ENODEV;
  
-+	if (c->x86_max_dies > 1)
-+		snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH,
-+			"package-%d-die-%d", c->phys_proc_id, c->cpu_die_id);
-+	else
-+		snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH, "package-%d",
-+			c->phys_proc_id);
-+
- 	/* check if the package contains valid domains */
- 	if (rapl_detect_domains(rp, cpu) ||
- 		rapl_defaults->check_unit(rp, cpu)) {
+-	max_packages = topology_max_packages();
++	max_packages = topology_max_packages() * c->x86_max_dies;
+ 	pkg_devices = kcalloc(max_packages, sizeof(struct platform_device *),
+ 			      GFP_KERNEL);
+ 	if (!pkg_devices)
 -- 
 2.18.0-rc0
 
