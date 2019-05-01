@@ -2,82 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BAB10456
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2019 05:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA721045F
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2019 05:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbfEADna (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Apr 2019 23:43:30 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:42818 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbfEADna (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 23:43:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=NX9lVh4U+E8N0tdek5TWZY7FDPPnmK0y+fQRg+gjxcc=; b=mtLLfELQooqikemDiLpl9Y8N7w
-        xK/DC/j9Djd+FBLHw3fa6omLGrwIn9MTk7GSaOusgp9brphU33RyqEPwDdIEMFxZ/VraaoPfvzFt1
-        Boq2DDzDV+ID9xP8FpGt3kNDyasVCINSk9tWg6PINrLcjb+PwM7nqzGjZhESGFyzbuYhxm1ZVVMad
-        XBATV4F8LqsyyBCi66uHNh6XJgMHbgpX8AdvV41ah8CBcJNXYZd3MIpB0XS6LwyA6bx0z+OXrQaAI
-        nu+MKSa92E5jUgKarpd3mC7nJeed77uJCupOYy8FUFzh72iNXV3o/ELcHR8N5gfdn/d40ZyiiTp93
-        d5i+4LCg==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=dragon.dunlab)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hLg9X-0004t2-65; Wed, 01 May 2019 03:43:27 +0000
-Subject: Re: [PATCH v5 2/3] power: supply: Add driver for Microchip UCS1002
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>, linux-pm@vger.kernel.org
-Cc:     Enric Balletbo Serra <enric.balletbo@collabora.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20190501033434.18548-1-andrew.smirnov@gmail.com>
- <20190501033434.18548-3-andrew.smirnov@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <7002fe8e-7686-fe84-374f-766f99f8317d@infradead.org>
-Date:   Tue, 30 Apr 2019 20:43:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726004AbfEADpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Apr 2019 23:45:08 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:36242 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725958AbfEADpI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Apr 2019 23:45:08 -0400
+Received: by mail-it1-f194.google.com with SMTP id v143so8320254itc.1;
+        Tue, 30 Apr 2019 20:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TkB4s1r5PgKZ71uFpCZrkh9Mfe0SQFgPVceh4zEIkSk=;
+        b=r2U9bzmZ4Y6ku1VauS7d9URFGDT4u5JUD7x0BNTY8EPKVgOGKi4B0Rqy9IIPKuaQYz
+         hG3GjtDOkNtEYw/aRPyUtfR0ouV2NDJGL+ytieVOP/7GGlVs31JK9wxyTQRi6WYM7LXQ
+         GNupGNRgjxle5/iHjwCUgtFaz1x1+C7ukuwHKCgskbrzAuHQMG9hfI7ekZyQSDDxORe5
+         l5YonGybDLIYk0hMmgNnDdBehyX2eZcEnIXhhEXLrD936AZ83a8ThriwX9BqauKOZHos
+         XpRfNS0purqncEtQ7g4OPhcFNpzjQtrNbRdhBFo8gl2lvR/1q1rr+r92HLADczj9zzbs
+         tt/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TkB4s1r5PgKZ71uFpCZrkh9Mfe0SQFgPVceh4zEIkSk=;
+        b=nixPt1PalCuQZbKD0skd68p7ejmLXEJSuU8iv7npvYoJfV7nTpkA0we72+XTZF6OO+
+         9bncvXm/M0BMRyLgbJOeYIDc3869OocUzuxEp4qrUogLG430fcQJs65qWTldhMtGlvm2
+         MktodUneHAe+VK7r2uSKfpGJQYRzDv0ZcLiglSd/iJLu3naQb6xdelO9VQX3vyVQxMfg
+         C0rj9f9A2+jeB4E6s1vAcF4XHQPZSSegL5W9udmcEsBYTKocku9V/fVNrX0slxswWBvx
+         7sjxtep0oFFjvbjBWazj0eG4W8BzwPHJVI0gAE+iwcGWx+Tfyj6N8cvhQU+hXqguCmbu
+         YoPQ==
+X-Gm-Message-State: APjAAAX7gngn+M/chZZRvLH0gowyHcpMXFBIy+p1wyuK46O9d1x4IewW
+        rfgiSN1SBOfafYeno0SR8Qdo9+rEyA6mYYoNYS4=
+X-Google-Smtp-Source: APXvYqzLrMqPKXV9+qRMezJD64nBLRaRn4e3qS42BmiTaPw+hgZdIxV+ckAZw+e3Lf1qZMsMEU3u87FCKEVCosnWcg0=
+X-Received: by 2002:a24:6c54:: with SMTP id w81mr6507934itb.78.1556682307120;
+ Tue, 30 Apr 2019 20:45:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190501033434.18548-3-andrew.smirnov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190410174139.20012-1-tiny.windzz@gmail.com> <20190410174139.20012-3-tiny.windzz@gmail.com>
+ <20190426211540.GA890@bogus> <CAEExFWs2UwPLzgyO0apMOZf56um5isdZmf+7-wj_TqMozxZJQg@mail.gmail.com>
+ <CAL_Jsq+0mQYyAqfY3nmF-oFx2X4qHU567chQ1s8p-rgD2GEFnw@mail.gmail.com> <20190430044245.s4viduudej6q2eq6@vireshk-i7>
+In-Reply-To: <20190430044245.s4viduudej6q2eq6@vireshk-i7>
+From:   Frank Lee <tiny.windzz@gmail.com>
+Date:   Wed, 1 May 2019 11:44:55 +0800
+Message-ID: <CAEExFWsAQ3b42YqfW-b8vuq_NZgfDe+0D5TzP09ber0Ljvv43g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: cpufreq: Document allwinner,cpu-operating-points-v2
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        David Miller <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Tue, Apr 30, 2019 at 12:42 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 29-04-19, 11:18, Rob Herring wrote:
+> > On Sun, Apr 28, 2019 at 4:53 AM Frank Lee <tiny.windzz@gmail.com> wrote:
+> > >
+> > > On Sat, Apr 27, 2019 at 5:15 AM Rob Herring <robh@kernel.org> wrote:
+> > > >
+> > > > On Wed, Apr 10, 2019 at 01:41:39PM -0400, Yangtao Li wrote:
+> > > > > Allwinner Process Voltage Scaling Tables defines the voltage and
+> > > > > frequency value based on the speedbin blown in the efuse combination.
+> > > > > The sunxi-cpufreq-nvmem driver reads the efuse value from the SoC to
+> > > > > provide the OPP framework with required information.
+> > > > > This is used to determine the voltage and frequency value for each
+> > > > > OPP of operating-points-v2 table when it is parsed by the OPP framework.
+> > > > >
+> > > > > The "allwinner,cpu-operating-points-v2" DT extends the "operating-points-v2"
+> > > > > with following parameters:
+> > > > > - nvmem-cells (NVMEM area containig the speedbin information)
+> > > > > - opp-microvolt-<name>: voltage in micro Volts.
+> > > > >   At runtime, the platform can pick a <name> and matching
+> > > > >   opp-microvolt-<name> property.
+> > > > >                       HW:             <name>:
+> > > > >                       sun50iw-h6      speed0 speed1 speed2
+> > > >
+> > > > We already have at least one way to support speed bins with QC kryo
+> > > > binding. Why do we need a different way?
+> > >
+> > > For some SOCs, for some reason (making the CPU have approximate performance),
+> > > they use the same frequency but different voltage. In the case where
+> > > this speed bin
+> > > is not a lot and opp uses the same frequency, too many repeated opp
+> > > nodes are a bit
+> > > redundant and not intuitive enough.
+> > >
+> > > So, I think it's worth the new method.
+> >
+> > Well, I don't.
+> >
+> > We can't have every SoC vendor doing their own thing just because they
+> > want to. If there are technical reasons why existing bindings don't
+> > work, then maybe we need to do something different. But I haven't
+> > heard any reasons.
+>
+> Well there is a good reason for attempting the new bindings and I wasn't sure if
+> updating the earlier bindings or adding another one for platform is correct. As
+> we aren't really adding new bindings, but just documentation around it.
+We didn't really add anything else, it still revolves around the
+features that opp already supports.
+>
+> So there are two ways OPP core support this thing:
+>
+> - opp-supported-hw: This is a better fit if we have a smaller group of
+>   frequencies to select from a bigger group, so we disable non-required OPPs
+>   completely. This is what Qcom did as they wanted to select different
+>   frequencies all together.
+>
+> - opp-microvolt-<name>: This is a better fit if the frequencies remain same and
+>   only few of the properties like voltage/current have a different value. So we
+>   don't disable any OPPs but just select the right voltage/current for those
+>   frequencies. This avoids unnecessary duplication of the OPPs in DT and that's
+>   what allwinner guys want.
+>
+> The kryo nvmem bindings currently supports opp-supported-hw, maybe we can add
+> mention support for second one in the same file and rename it well.
+So which way is correct?
 
-On 4/30/19 8:34 PM, Andrey Smirnov wrote:
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index e901b9879e7e..c614c8a196f3 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -660,4 +660,13 @@ config FUEL_GAUGE_SC27XX
->  	 Say Y here to enable support for fuel gauge with SC27XX
->  	 PMIC chips.
->  
-> +config CHARGER_UCS1002
-> +        tristate "Microchip UCS1002 USB Port Power Controller"
-
-Please indent the tristate line with a tab instead of spaces.
-
-> +	depends on I2C
-> +	depends on OF
-> +	select REGMAP_I2C
-> +	help
-> +	  Say Y to enable support for Microchip UCS1002 Programmable
-> +	  USB Port Power Controller with Charger Emulation.
-> +
->  endif # POWER_SUPPLY
-
-
-thnx.
--- 
-~Randy
+Thx,
+Yangtao
+>
+> --
+> viresh
