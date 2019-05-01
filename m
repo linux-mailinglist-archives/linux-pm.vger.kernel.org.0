@@ -2,27 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 963A6106EE
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2019 12:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30443106F1
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2019 12:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbfEAKXw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 May 2019 06:23:52 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61309 "EHLO
+        id S1726166AbfEAKYc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 May 2019 06:24:32 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:62132 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbfEAKXw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 May 2019 06:23:52 -0400
+        with ESMTP id S1725959AbfEAKYb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 May 2019 06:24:31 -0400
 Received: from 79.184.254.69.ipv4.supernova.orange.pl (79.184.254.69) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
- id 71690d2d1aeaf7d2; Wed, 1 May 2019 12:23:51 +0200
+ id 2b44ea8a5b6b638e; Wed, 1 May 2019 12:24:29 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Yue Hu <zbestahu@gmail.com>
-Cc:     viresh.kumar@linaro.org, rafael.j.wysocki@intel.com,
-        linux-pm@vger.kernel.org, huyue2@yulong.com
-Subject: Re: [PATCH] cpufreq: Remove needless bios_limit check in show_bios_limit()
-Date:   Wed, 01 May 2019 12:23:50 +0200
-Message-ID: <21353710.QnO7stapYA@kreacher>
-In-Reply-To: <20190416024027.6516-1-zbestahu@gmail.com>
-References: <20190416024027.6516-1-zbestahu@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Yangtao Li <tiny.windzz@gmail.com>
+Cc:     Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PM / Domains: remove unnecessary unlikely()
+Date:   Wed, 01 May 2019 12:24:29 +0200
+Message-ID: <4341173.rtllOHV0ML@kreacher>
+In-Reply-To: <CAPDyKFpR6bwjUG_WtgvXJznBHcZBMOfTkj_Lb7aHPryvxC5mxQ@mail.gmail.com>
+References: <20190416162305.24375-1-tiny.windzz@gmail.com> <CAPDyKFpR6bwjUG_WtgvXJznBHcZBMOfTkj_Lb7aHPryvxC5mxQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -31,41 +35,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, April 16, 2019 4:40:27 AM CEST Yue Hu wrote:
-> From: Yue Hu <huyue2@yulong.com>
+On Wednesday, April 17, 2019 10:38:14 AM CEST Ulf Hansson wrote:
+> On Tue, 16 Apr 2019 at 18:23, Yangtao Li <tiny.windzz@gmail.com> wrote:
+> >
+> > WARN_ON() already contains an unlikely(), so it's not necessary to use
+> > unlikely.
+> >
+> > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 > 
-> Initially, bios_limit attribute will be created if driver->bios_limit
-> is set in cpufreq_add_dev_interface(). So remove the redundant check
-> for latter show operation.
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 > 
-> Signed-off-by: Yue Hu <huyue2@yulong.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+> Kind regards
+> Uffe
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index d9123de..047662b 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -857,11 +857,9 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
->  {
->  	unsigned int limit;
->  	int ret;
-> -	if (cpufreq_driver->bios_limit) {
-> -		ret = cpufreq_driver->bios_limit(policy->cpu, &limit);
-> -		if (!ret)
-> -			return sprintf(buf, "%u\n", limit);
-> -	}
-> +	ret = cpufreq_driver->bios_limit(policy->cpu, &limit);
-> +	if (!ret)
-> +		return sprintf(buf, "%u\n", limit);
->  	return sprintf(buf, "%u\n", policy->cpuinfo.max_freq);
->  }
->  
+> > ---
+> >  drivers/base/power/domain.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 96a6dc9d305c..598a4e02aee1 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -391,11 +391,9 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+> >         if (unlikely(!genpd->set_performance_state))
+> >                 return -EINVAL;
+> >
+> > -       if (unlikely(!dev->power.subsys_data ||
+> > -                    !dev->power.subsys_data->domain_data)) {
+> > -               WARN_ON(1);
+> > +       if (WARN_ON(!dev->power.subsys_data ||
+> > +                    !dev->power.subsys_data->domain_data))
+> >                 return -EINVAL;
+> > -       }
+> >
+> >         genpd_lock(genpd);
+> >
+> > --
+> > 2.17.0
+> >
 > 
 
-Applied, thanks!
-
+Patch applied, thanks!
 
 
 
