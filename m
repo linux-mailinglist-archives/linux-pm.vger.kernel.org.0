@@ -2,583 +2,779 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 797F910800
-	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2019 14:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12EA10842
+	for <lists+linux-pm@lfdr.de>; Wed,  1 May 2019 15:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbfEAMrn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 May 2019 08:47:43 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35834 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbfEAMrn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 May 2019 08:47:43 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: gportay)
-        with ESMTPSA id D0591281890
-Date:   Wed, 1 May 2019 08:47:54 -0400
-From:   =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@collabora.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sandy Huang <hjc@rock-chips.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Derek Basehore <dbasehore@chromium.org>,
-        Lin Huang <hl@rock-chips.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        kernel@collabora.com
-Subject: Re: [RFC 2/4] drm: rockchip: Add DDR devfreq support.
-Message-ID: <20190501124754.h7kiksljhofldpz2@archlinux.localdomain>
-References: <20190430180524.22710-1-gael.portay@collabora.com>
- <20190430180524.22710-3-gael.portay@collabora.com>
+        id S1726352AbfEANWA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 May 2019 09:22:00 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46593 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725993AbfEANWA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 May 2019 09:22:00 -0400
+Received: by mail-pl1-f196.google.com with SMTP id bi2so3404128plb.13;
+        Wed, 01 May 2019 06:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WP0vzWQ0K7moCtdMUn5/d28f8JOzkwdNMOZyCz/7XgM=;
+        b=GQ4Z8FZhKdjRDDT2QddYYsvPWa9QOk5HqY7M0vjW+gfZK/aD/4wcAv7k5XCExwumXI
+         CjbN9ESFoSQMzFHGK8w67MPEqPHIlUH+BrsUdAko22UMvtQjHlNYICtc2xaEZmyTsWt2
+         oXOZkRcFCq7zbo2rHnmKkrE+e1aMrn3wVjZA2y2e8fG9C6zu1ci+J1jesB6fqEs1XOil
+         rqUAzam0yqjjwqPZ7jk96hAGpLZGBTF2bk2VrXU0RzXg6zECqZW61w2tYKoE0moCB1R9
+         cb/m5rNJIMUh25UZNLJlezRnK6KM6t2DbTgnUfZFpZy9l6lqjlknO3JzeUBIM9SL6dXI
+         Pa9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WP0vzWQ0K7moCtdMUn5/d28f8JOzkwdNMOZyCz/7XgM=;
+        b=kiyuWbnjnmPRvAuj6c5MVQeVFrmUqZ9zoQAJ7TTd5kfO8C44Kb3vyLxClrxLxZaIZV
+         SXqUOITPdUReZ5xrZBhSEg7z8n3qtyEZ6o/xBtVTdHKvPlnfjMof4ZkB28yOh4zdkVRF
+         aJzv6ZCL3AufwBatYyBCrHgYb6ogNPiqZbwB0SC3GvMRlx9qz+GqG5YCvdgxvc0tZDOe
+         Ua5DDXeE9FSmRxXs4uLRsA8zqHF9E1N8Qd31z04Id6vJdbs1DhG1MXQ72gwgn6U0dGUY
+         pAa2W3WodSSJU0rtwcWqXdH9/E7Z8qsoJSeKgrqO9MoCF2towRNFo4gGWBQc7rHL+UbU
+         wENQ==
+X-Gm-Message-State: APjAAAU1JruPEJ/eGgr0lMgIg4/hOpk10/CoR855fZC3YLQKU0BD6ZLb
+        0b/xx7stUXTPugGYet4Wi/AZ4xPT
+X-Google-Smtp-Source: APXvYqyv5PH5WfrpOe2EqvKfMbzRHnBiajjMw0Vv5ZIqwT9716pQIv3XdosthPXXyW8pB/gkgXRYEA==
+X-Received: by 2002:a17:902:e293:: with SMTP id cf19mr18285694plb.151.1556716919028;
+        Wed, 01 May 2019 06:21:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a129sm58129184pfa.152.2019.05.01.06.21.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 01 May 2019 06:21:57 -0700 (PDT)
+Subject: Re: [PATCH v5 2/3] power: supply: Add driver for Microchip UCS1002
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>, linux-pm@vger.kernel.org
+Cc:     Enric Balletbo Serra <enric.balletbo@collabora.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20190501033434.18548-1-andrew.smirnov@gmail.com>
+ <20190501033434.18548-3-andrew.smirnov@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <b8aed36f-b89e-4256-4896-9fd625b1f502@roeck-us.net>
+Date:   Wed, 1 May 2019 06:21:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <20190501033434.18548-3-andrew.smirnov@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190430180524.22710-3-gael.portay@collabora.com>
-User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This commit adds the support for devfreq to control the DDR frequency
-dynamically.
+On 4/30/19 8:34 PM, Andrey Smirnov wrote:
+> Add driver for Microchip UCS1002 Programmable USB Port Power
+> Controller with Charger Emulation. The driver exposed a power supply
+> device to control/monitor various parameter of the device as well as a
+> regulator to allow controlling VBUS line.
+> 
+> Signed-off-by: Enric Balletbo Serra <enric.balletbo@collabora.com>
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Cc: Chris Healy <cphealy@gmail.com>
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
 
-Glitches affect the display when the DMC devfreq device changes the DDR
-frequency during the scanout. The DRM driver synchronizes the rate
-change within the VBLANK.
+With the 'tristate' indentation problem fixed:
 
-The VOP locks the DMC devfreq device that causes it to notified when a
-rate change is wanted. Then, the VOP enables the VBLANK interrupt,
-releases the lock when the interrupt arises and locks the devfreq device
-again after the vblank pulse ends using a timer.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-The DRM driver disables the devfreq device if more than one CRTC becomes
-active.
-
-Signed-off-by: Gaël PORTAY <gael.portay@collabora.com>
----
-
-All,
-
-I forgot to apply the fixup commit (that fixes the rebase on 5.1) when I
-sent the patch.
-
-Here is what the commit looks like.
-
-Sorry for the noise.
-
-Regards,
-Gaël
-
- drivers/gpu/drm/rockchip/rockchip_drm_drv.c |  51 ++++++-
- drivers/gpu/drm/rockchip/rockchip_drm_drv.h |   6 +
- drivers/gpu/drm/rockchip/rockchip_drm_fb.c  | 142 +++++++++++++++++++-
- drivers/gpu/drm/rockchip/rockchip_drm_fb.h  |   3 +-
- drivers/gpu/drm/rockchip/rockchip_drm_vop.c |  82 +++++++++++
- 5 files changed, 280 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-index d7fa17f12769..ef843568a7f8 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-@@ -19,6 +19,8 @@
- #include <drm/drm_gem_cma_helper.h>
- #include <drm/drm_of.h>
- #include <drm/drm_probe_helper.h>
-+#include <linux/devfreq.h>
-+#include <linux/devfreq-event.h>
- #include <linux/dma-mapping.h>
- #include <linux/dma-iommu.h>
- #include <linux/pm_runtime.h>
-@@ -78,6 +80,46 @@ void rockchip_drm_dma_detach_device(struct drm_device *drm_dev,
- 	iommu_detach_device(domain, dev);
- }
- 
-+#if IS_ENABLED(CONFIG_ARM_RK3399_DMC_DEVFREQ)
-+static int rockchip_drm_init_devfreq(struct device *dev,
-+				     struct rockchip_drm_private *priv)
-+{
-+	struct devfreq *devfreq;
-+	struct devfreq_event_dev *edev;
-+	int ret;
-+
-+	devfreq = devfreq_get_devfreq_by_phandle(dev, 0);
-+	if (IS_ERR(devfreq)) {
-+		ret = PTR_ERR(devfreq);
-+		if (ret == -ENODEV) {
-+			DRM_DEV_INFO(dev, "devfreq missing, skip\n");
-+			return 0;
-+		}
-+		return ret;
-+	}
-+
-+	edev = devfreq_event_get_edev_by_phandle(devfreq->dev.parent, 0);
-+	if (IS_ERR(edev)) {
-+		ret = PTR_ERR(edev);
-+		if (ret == -ENODEV) {
-+			DRM_DEV_INFO(dev, "devfreq edev missing, skip\n");
-+			return 0;
-+		}
-+		return ret;
-+	}
-+
-+	priv->devfreq = devfreq;
-+	priv->devfreq_event_dev = edev;
-+	return 0;
-+}
-+#else
-+static int rockchip_drm_init_devfreq(struct device *dev,
-+				     struct rockchip_drm_private *priv)
-+{
-+	return 0;
-+}
-+#endif
-+
- static int rockchip_drm_init_iommu(struct drm_device *drm_dev)
- {
- 	struct rockchip_drm_private *private = drm_dev->dev_private;
-@@ -137,13 +179,19 @@ static int rockchip_drm_bind(struct device *dev)
- 	INIT_LIST_HEAD(&private->psr_list);
- 	mutex_init(&private->psr_list_lock);
- 
-+	ret = rockchip_drm_init_devfreq(dev, private);
-+	if (ret)
-+		goto err_free;
-+
- 	ret = rockchip_drm_init_iommu(drm_dev);
- 	if (ret)
- 		goto err_free;
- 
- 	drm_mode_config_init(drm_dev);
- 
--	rockchip_drm_mode_config_init(drm_dev);
-+	ret = rockchip_drm_mode_config_init(drm_dev);
-+	if (ret)
-+		goto err_free;
- 
- 	/* Try to bind all sub drivers. */
- 	ret = component_bind_all(dev, drm_dev);
-@@ -201,6 +249,7 @@ static void rockchip_drm_unbind(struct device *dev)
- 	drm_atomic_helper_shutdown(drm_dev);
- 	component_unbind_all(dev, drm_dev);
- 	drm_mode_config_cleanup(drm_dev);
-+	rockchip_drm_mode_config_fini(drm_dev);
- 	rockchip_iommu_cleanup(drm_dev);
- 
- 	drm_dev->dev_private = NULL;
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.h b/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
-index ce48568ec8a0..0ac7e31b5605 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.h
-@@ -18,6 +18,7 @@
- #define _ROCKCHIP_DRM_DRV_H
- 
- #include <drm/drm_fb_helper.h>
-+#include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_gem.h>
- 
-@@ -57,6 +58,10 @@ struct rockchip_drm_private {
- 	struct drm_mm mm;
- 	struct list_head psr_list;
- 	struct mutex psr_list_lock;
-+
-+	struct devfreq *devfreq;
-+	struct devfreq_event_dev *devfreq_event_dev;
-+	struct drm_private_obj ddrfreq_lock_manager;
- };
- 
- int rockchip_drm_dma_attach_device(struct drm_device *drm_dev,
-@@ -66,6 +71,7 @@ void rockchip_drm_dma_detach_device(struct drm_device *drm_dev,
- int rockchip_drm_wait_vact_end(struct drm_crtc *crtc, unsigned int mstimeout);
- 
- int rockchip_drm_endpoint_is_subdriver(struct device_node *ep);
-+uint32_t rockchip_drm_get_vblank_ns(struct drm_display_mode *mode);
- extern struct platform_driver cdn_dp_driver;
- extern struct platform_driver dw_hdmi_rockchip_pltfm_driver;
- extern struct platform_driver dw_mipi_dsi_rockchip_driver;
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-index 97438bbbe389..f508d5558e16 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
-@@ -13,6 +13,7 @@
-  */
- 
- #include <linux/kernel.h>
-+#include <linux/devfreq.h>
- #include <drm/drm.h>
- #include <drm/drmP.h>
- #include <drm/drm_atomic.h>
-@@ -25,6 +26,56 @@
- #include "rockchip_drm_gem.h"
- #include "rockchip_drm_psr.h"
- 
-+struct rockchip_ddrfreq_lock_state {
-+	struct drm_private_state base;
-+	int lock_counter;
-+};
-+
-+#define to_ddrfreq_lock_state(x) container_of(x, \
-+				       struct rockchip_ddrfreq_lock_state, base)
-+
-+struct drm_private_state *rockchip_atomic_duplicate_ddrfreq_lock_state(
-+						    struct drm_private_obj *obj)
-+{
-+	struct rockchip_ddrfreq_lock_state *ddrfreq_lock_state;
-+
-+	ddrfreq_lock_state = kmemdup(obj->state, sizeof(*ddrfreq_lock_state),
-+				     GFP_KERNEL);
-+	if (!ddrfreq_lock_state)
-+		return NULL;
-+
-+	__drm_atomic_helper_private_obj_duplicate_state(obj,
-+						     &ddrfreq_lock_state->base);
-+
-+	return &ddrfreq_lock_state->base;
-+}
-+
-+void rockchip_atomic_destroy_ddrfreq_lock_state(struct drm_private_obj *obj,
-+						struct drm_private_state *state)
-+{
-+	struct rockchip_ddrfreq_lock_state *ddrfreq_lock_state =
-+						   to_ddrfreq_lock_state(state);
-+
-+	kfree(ddrfreq_lock_state);
-+}
-+
-+struct drm_private_state_funcs rockchip_ddrfreq_lock_state_funcs = {
-+	.atomic_duplicate_state = rockchip_atomic_duplicate_ddrfreq_lock_state,
-+	.atomic_destroy_state = rockchip_atomic_destroy_ddrfreq_lock_state,
-+};
-+
-+static struct rockchip_ddrfreq_lock_state *rockchip_get_ddrfreq_lock_state(
-+		    struct drm_atomic_state *state, struct drm_private_obj *obj)
-+{
-+	struct drm_private_state *priv_state;
-+
-+	priv_state = drm_atomic_get_private_obj_state(state, obj);
-+	if (IS_ERR(priv_state))
-+		return ERR_CAST(priv_state);
-+
-+	return to_ddrfreq_lock_state(priv_state);
-+}
-+
- static int rockchip_drm_fb_dirty(struct drm_framebuffer *fb,
- 				 struct drm_file *file,
- 				 unsigned int flags, unsigned int color,
-@@ -127,10 +178,44 @@ rockchip_user_fb_create(struct drm_device *dev, struct drm_file *file_priv,
- 	return ERR_PTR(ret);
- }
- 
-+uint32_t rockchip_drm_get_vblank_ns(struct drm_display_mode *mode)
-+{
-+	uint64_t vblank_time = mode->vtotal - mode->vdisplay;
-+
-+	vblank_time *= (uint64_t)NSEC_PER_SEC * mode->htotal;
-+	do_div(vblank_time, mode->clock * 1000);
-+
-+	return vblank_time;
-+}
-+
- static void
- rockchip_atomic_helper_commit_tail_rpm(struct drm_atomic_state *old_state)
- {
- 	struct drm_device *dev = old_state->dev;
-+	struct rockchip_drm_private *priv = dev->dev_private;
-+	struct drm_crtc_state *old_crtc_state, *new_crtc_state;
-+	struct rockchip_ddrfreq_lock_state *ddrfreq_lock_state;
-+	struct drm_crtc *crtc;
-+	int i;
-+
-+	for_each_oldnew_crtc_in_state(old_state, crtc, old_crtc_state,
-+				      new_crtc_state, i) {
-+		if (old_crtc_state->enable == new_crtc_state->enable)
-+			continue;
-+
-+		ddrfreq_lock_state = rockchip_get_ddrfreq_lock_state(old_state,
-+						   &priv->ddrfreq_lock_manager);
-+		if (IS_ERR(ddrfreq_lock_state))
-+			break;
-+
-+		/* TODO This logic based on the previous state looks weird :/ */
-+		if (old_crtc_state->enable &&
-+		    ddrfreq_lock_state->lock_counter == 2)
-+			devfreq_resume_device(priv->devfreq);
-+		else if (!old_crtc_state->enable &&
-+			 ddrfreq_lock_state->lock_counter == 1)
-+			devfreq_suspend_device(priv->devfreq);
-+	}
- 
- 	rockchip_drm_psr_inhibit_get_state(old_state);
- 
-@@ -154,10 +239,41 @@ static const struct drm_mode_config_helper_funcs rockchip_mode_config_helpers =
- 	.atomic_commit_tail = rockchip_atomic_helper_commit_tail_rpm,
- };
- 
-+static int rockchip_drm_atomic_check(struct drm_device *dev,
-+				     struct drm_atomic_state *state)
-+{
-+	struct rockchip_drm_private *priv = dev->dev_private;
-+	struct rockchip_ddrfreq_lock_state *ddrfreq_lock_state;
-+	struct drm_crtc_state *crtc_state;
-+	struct drm_crtc *crtc;
-+	int ret;
-+	int i;
-+
-+	ret = drm_atomic_helper_check(dev, state);
-+	if (ret == 0) {
-+		for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
-+			if (!crtc_state->active_changed)
-+				continue;
-+
-+			ddrfreq_lock_state = rockchip_get_ddrfreq_lock_state(
-+					    state, &priv->ddrfreq_lock_manager);
-+			if (IS_ERR(ddrfreq_lock_state))
-+				return PTR_ERR(ddrfreq_lock_state);
-+
-+			if (crtc_state->enable)
-+				ddrfreq_lock_state->lock_counter++;
-+			else
-+				ddrfreq_lock_state->lock_counter--;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
- static const struct drm_mode_config_funcs rockchip_drm_mode_config_funcs = {
- 	.fb_create = rockchip_user_fb_create,
- 	.output_poll_changed = drm_fb_helper_output_poll_changed,
--	.atomic_check = drm_atomic_helper_check,
-+	.atomic_check = rockchip_drm_atomic_check,
- 	.atomic_commit = drm_atomic_helper_commit,
- };
- 
-@@ -175,8 +291,11 @@ rockchip_drm_framebuffer_init(struct drm_device *dev,
- 	return fb;
- }
- 
--void rockchip_drm_mode_config_init(struct drm_device *dev)
-+int rockchip_drm_mode_config_init(struct drm_device *dev)
- {
-+	struct rockchip_drm_private *priv = dev->dev_private;
-+	struct rockchip_ddrfreq_lock_state *ddrfreq_lock_state;
-+
- 	dev->mode_config.min_width = 0;
- 	dev->mode_config.min_height = 0;
- 
-@@ -190,4 +309,23 @@ void rockchip_drm_mode_config_init(struct drm_device *dev)
- 
- 	dev->mode_config.funcs = &rockchip_drm_mode_config_funcs;
- 	dev->mode_config.helper_private = &rockchip_mode_config_helpers;
-+
-+	ddrfreq_lock_state = kzalloc(sizeof(*ddrfreq_lock_state),
-+				     GFP_KERNEL);
-+	if (!ddrfreq_lock_state)
-+		return -ENOMEM;
-+
-+	drm_atomic_private_obj_init(dev,
-+				    &priv->ddrfreq_lock_manager,
-+				    &ddrfreq_lock_state->base,
-+				    &rockchip_ddrfreq_lock_state_funcs);
-+
-+	return 0;
-+}
-+
-+void rockchip_drm_mode_config_fini(struct drm_device *dev)
-+{
-+	struct rockchip_drm_private *priv = dev->dev_private;
-+
-+	drm_atomic_private_obj_fini(&priv->ddrfreq_lock_manager);
- }
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fb.h b/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-index f1265cb1aee8..a81df4ef8b35 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_fb.h
-@@ -21,5 +21,6 @@ rockchip_drm_framebuffer_init(struct drm_device *dev,
- 			      struct drm_gem_object *obj);
- void rockchip_drm_framebuffer_fini(struct drm_framebuffer *fb);
- 
--void rockchip_drm_mode_config_init(struct drm_device *dev);
-+int rockchip_drm_mode_config_init(struct drm_device *dev);
-+void rockchip_drm_mode_config_fini(struct drm_device *dev);
- #endif /* _ROCKCHIP_DRM_FB_H */
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-index 0d4ade9d4722..e76a68ae3991 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-@@ -36,6 +36,8 @@
- #include <linux/component.h>
- #include <linux/overflow.h>
- 
-+#include <linux/devfreq.h>
-+
- #include <linux/reset.h>
- #include <linux/delay.h>
- 
-@@ -141,6 +143,12 @@ struct vop {
- 
- 	struct completion line_flag_completion;
- 
-+	/* devfreq locking */
-+	spinlock_t devfreq_lock;
-+	bool want_to_change_rate;
-+	struct devfreq_dev_userlock devfreq_userlock;
-+	struct hrtimer vblank_timer;
-+
- 	const struct vop_data *data;
- 
- 	uint32_t *regsbak;
-@@ -632,9 +640,12 @@ static void vop_crtc_atomic_disable(struct drm_crtc *crtc,
- 				    struct drm_crtc_state *old_state)
- {
- 	struct vop *vop = to_vop(crtc);
-+	struct rockchip_drm_private *priv = vop->crtc.dev->dev_private;
- 
- 	WARN_ON(vop->event);
- 
-+	devfreq_unlock_device(priv->devfreq, &vop->devfreq_userlock, 0);
-+
- 	mutex_lock(&vop->vop_lock);
- 	drm_crtc_vblank_off(crtc);
- 
-@@ -1028,6 +1039,7 @@ static void vop_crtc_atomic_enable(struct drm_crtc *crtc,
- {
- 	struct vop *vop = to_vop(crtc);
- 	const struct vop_data *vop_data = vop->data;
-+	struct rockchip_drm_private *priv = vop->crtc.dev->dev_private;
- 	struct rockchip_crtc_state *s = to_rockchip_crtc_state(crtc->state);
- 	struct drm_display_mode *adjusted_mode = &crtc->state->adjusted_mode;
- 	u16 hsync_len = adjusted_mode->hsync_end - adjusted_mode->hsync_start;
-@@ -1123,6 +1135,11 @@ static void vop_crtc_atomic_enable(struct drm_crtc *crtc,
- 
- 	VOP_REG_SET(vop, common, standby, 0);
- 	mutex_unlock(&vop->vop_lock);
-+
-+	ret = devfreq_lock_device(priv->devfreq, &vop->devfreq_userlock);
-+	if (ret)
-+		DRM_DEV_ERROR(vop->dev,
-+			      "cannot lock devfreq - err %d\n", ret);
- }
- 
- static bool vop_fs_irq_is_pending(struct vop *vop)
-@@ -1349,10 +1366,44 @@ static void vop_handle_vblank(struct vop *vop)
- 		drm_flip_work_commit(&vop->fb_unref_work, system_unbound_wq);
- }
- 
-+static enum hrtimer_restart vblank_timer_function(struct hrtimer *timer)
-+{
-+	struct vop *vop = container_of(timer, struct vop, vblank_timer);
-+	struct rockchip_drm_private *priv = vop->crtc.dev->dev_private;
-+	struct devfreq *devfreq = priv->devfreq;
-+
-+	drm_crtc_vblank_put(&vop->crtc);
-+
-+	devfreq_lock_device(devfreq, &vop->devfreq_userlock);
-+
-+	spin_lock(&vop->devfreq_lock);
-+	vop->want_to_change_rate = false;
-+	spin_unlock(&vop->devfreq_lock);
-+
-+	return HRTIMER_NORESTART;
-+}
-+
-+static void want_to_change_rate(struct devfreq_dev_userlock *userlock,
-+				struct devfreq *devfreq)
-+{
-+	struct vop *vop = container_of(userlock, struct vop, devfreq_userlock);
-+	int err;
-+
-+	spin_lock(&vop->devfreq_lock);
-+	vop->want_to_change_rate = true;
-+	spin_unlock(&vop->devfreq_lock);
-+
-+	err = drm_crtc_vblank_get(&vop->crtc);
-+	if (err)
-+		DRM_DEV_ERROR(vop->dev, "couldn't get vblank %d\n", err);
-+}
-+
- static irqreturn_t vop_isr(int irq, void *data)
- {
- 	struct vop *vop = data;
- 	struct drm_crtc *crtc = &vop->crtc;
-+	struct rockchip_drm_private *priv = crtc->dev->dev_private;
-+	ktime_t vblank_timeout;
- 	uint32_t active_irqs;
- 	int ret = IRQ_NONE;
- 
-@@ -1398,6 +1449,19 @@ static irqreturn_t vop_isr(int irq, void *data)
- 	}
- 
- 	if (active_irqs & FS_INTR) {
-+		spin_lock(&vop->devfreq_lock);
-+		if (vop->want_to_change_rate) {
-+			vop->want_to_change_rate = false;
-+			vblank_timeout = ktime_add_ns(ktime_get(),
-+				       rockchip_drm_get_vblank_ns(&crtc->mode));
-+			hrtimer_start(&vop->vblank_timer, vblank_timeout,
-+				      HRTIMER_MODE_ABS);
-+			devfreq_unlock_device(priv->devfreq,
-+					      &vop->devfreq_userlock,
-+					      vblank_timeout);
-+		}
-+		spin_unlock(&vop->devfreq_lock);
-+
- 		drm_crtc_handle_vblank(crtc);
- 		vop_handle_vblank(vop);
- 		active_irqs &= ~FS_INTR;
-@@ -1746,6 +1810,7 @@ static int vop_bind(struct device *dev, struct device *master, void *data)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
- 	const struct vop_data *vop_data;
-+	struct rockchip_drm_private *priv;
- 	struct drm_device *drm_dev = data;
- 	struct vop *vop;
- 	struct resource *res;
-@@ -1815,6 +1880,20 @@ static int vop_bind(struct device *dev, struct device *master, void *data)
- 		}
- 	}
- 
-+	hrtimer_init(&vop->vblank_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS);
-+	vop->vblank_timer.function = vblank_timer_function;
-+
-+	INIT_LIST_HEAD(&vop->devfreq_userlock.node);
-+	vop->devfreq_userlock.want_to_change_rate = want_to_change_rate;
-+
-+	priv = vop->crtc.dev->dev_private;
-+	ret = devfreq_register_dev_user_lock(&vop->devfreq_userlock,
-+					     priv->devfreq);
-+	if (ret)
-+		DRM_DEV_ERROR(&pdev->dev,
-+			      "cannot register to devfreq user lock - err %d\n",
-+			      ret);
-+
- 	return 0;
- 
- err_disable_pm_runtime:
-@@ -1826,6 +1905,9 @@ static int vop_bind(struct device *dev, struct device *master, void *data)
- static void vop_unbind(struct device *dev, struct device *master, void *data)
- {
- 	struct vop *vop = dev_get_drvdata(dev);
-+	struct rockchip_drm_private *priv = vop->crtc.dev->dev_private;
-+
-+	devfreq_unregister_dev_user_lock(&vop->devfreq_userlock, priv->devfreq);
- 
- 	if (vop->rgb)
- 		rockchip_rgb_fini(vop->rgb);
--- 
-2.21.0
+> ---
+>   drivers/power/supply/Kconfig         |   9 +
+>   drivers/power/supply/Makefile        |   1 +
+>   drivers/power/supply/ucs1002_power.c | 646 +++++++++++++++++++++++++++
+>   3 files changed, 656 insertions(+)
+>   create mode 100644 drivers/power/supply/ucs1002_power.c
+> 
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index e901b9879e7e..c614c8a196f3 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -660,4 +660,13 @@ config FUEL_GAUGE_SC27XX
+>   	 Say Y here to enable support for fuel gauge with SC27XX
+>   	 PMIC chips.
+>   
+> +config CHARGER_UCS1002
+> +        tristate "Microchip UCS1002 USB Port Power Controller"
+> +	depends on I2C
+> +	depends on OF
+> +	select REGMAP_I2C
+> +	help
+> +	  Say Y to enable support for Microchip UCS1002 Programmable
+> +	  USB Port Power Controller with Charger Emulation.
+> +
+>   endif # POWER_SUPPLY
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index b731c2a9b695..c56803a9e4fe 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -87,3 +87,4 @@ obj-$(CONFIG_AXP288_CHARGER)	+= axp288_charger.o
+>   obj-$(CONFIG_CHARGER_CROS_USBPD)	+= cros_usbpd-charger.o
+>   obj-$(CONFIG_CHARGER_SC2731)	+= sc2731_charger.o
+>   obj-$(CONFIG_FUEL_GAUGE_SC27XX)	+= sc27xx_fuel_gauge.o
+> +obj-$(CONFIG_CHARGER_UCS1002)	+= ucs1002_power.o
+> diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/ucs1002_power.c
+> new file mode 100644
+> index 000000000000..d66b4eff9b7a
+> --- /dev/null
+> +++ b/drivers/power/supply/ucs1002_power.c
+> @@ -0,0 +1,646 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Driver for UCS1002 Programmable USB Port Power Controller
+> + *
+> + * Copyright (C) 2019 Zodiac Inflight Innovations
+> + */
+> +#include <linux/bits.h>
+> +#include <linux/freezer.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/kthread.h>
+> +#include <linux/device.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/driver.h>
+> +#include <linux/regulator/of_regulator.h>
+> +
+> +/* UCS1002 Registers */
+> +#define UCS1002_REG_CURRENT_MEASUREMENT	0x00
+> +
+> +/*
+> + * The Total Accumulated Charge registers store the total accumulated
+> + * charge delivered from the VS source to a portable device. The total
+> + * value is calculated using four registers, from 01h to 04h. The bit
+> + * weighting of the registers is given in mA/hrs.
+> + */
+> +#define UCS1002_REG_TOTAL_ACC_CHARGE	0x01
+> +
+> +/* Other Status Register */
+> +#define UCS1002_REG_OTHER_STATUS	0x0f
+> +#  define F_ADET_PIN			BIT(4)
+> +#  define F_CHG_ACT			BIT(3)
+> +
+> +/* Interrupt Status */
+> +#define UCS1002_REG_INTERRUPT_STATUS	0x10
+> +#  define F_DISCHARGE_ERR		BIT(6)
+> +#  define F_RESET			BIT(5)
+> +#  define F_MIN_KEEP_OUT		BIT(4)
+> +#  define F_TSD				BIT(3)
+> +#  define F_OVER_VOLT			BIT(2)
+> +#  define F_BACK_VOLT			BIT(1)
+> +#  define F_OVER_ILIM			BIT(0)
+> +
+> +/* Pin Status Register */
+> +#define UCS1002_REG_PIN_STATUS		0x14
+> +#  define UCS1002_PWR_STATE_MASK	0x03
+> +#  define F_PWR_EN_PIN			BIT(6)
+> +#  define F_M2_PIN			BIT(5)
+> +#  define F_M1_PIN			BIT(4)
+> +#  define F_EM_EN_PIN			BIT(3)
+> +#  define F_SEL_PIN			BIT(2)
+> +#  define F_ACTIVE_MODE_MASK		GENMASK(5, 3)
+> +#  define F_ACTIVE_MODE_PASSTHROUGH	F_M2_PIN
+> +#  define F_ACTIVE_MODE_DEDICATED	F_EM_EN_PIN
+> +#  define F_ACTIVE_MODE_BC12_DCP	(F_M2_PIN | F_EM_EN_PIN)
+> +#  define F_ACTIVE_MODE_BC12_SDP	F_M1_PIN
+> +#  define F_ACTIVE_MODE_BC12_CDP	(F_M1_PIN | F_M2_PIN | F_EM_EN_PIN)
+> +
+> +/* General Configuration Register */
+> +#define UCS1002_REG_GENERAL_CFG		0x15
+> +#  define F_RATION_EN			BIT(3)
+> +
+> +/* Emulation Configuration Register */
+> +#define UCS1002_REG_EMU_CFG		0x16
+> +
+> +/* Switch Configuration Register */
+> +#define UCS1002_REG_SWITCH_CFG		0x17
+> +#  define F_PIN_IGNORE			BIT(7)
+> +#  define F_EM_EN_SET			BIT(5)
+> +#  define F_M2_SET			BIT(4)
+> +#  define F_M1_SET			BIT(3)
+> +#  define F_S0_SET			BIT(2)
+> +#  define F_PWR_EN_SET			BIT(1)
+> +#  define F_LATCH_SET			BIT(0)
+> +#  define V_SET_ACTIVE_MODE_MASK	GENMASK(5, 3)
+> +#  define V_SET_ACTIVE_MODE_PASSTHROUGH	F_M2_SET
+> +#  define V_SET_ACTIVE_MODE_DEDICATED	F_EM_EN_SET
+> +#  define V_SET_ACTIVE_MODE_BC12_DCP	(F_M2_SET | F_EM_EN_SET)
+> +#  define V_SET_ACTIVE_MODE_BC12_SDP	F_M1_SET
+> +#  define V_SET_ACTIVE_MODE_BC12_CDP	(F_M1_SET | F_M2_SET | F_EM_EN_SET)
+> +
+> +/* Current Limit Register */
+> +#define UCS1002_REG_ILIMIT		0x19
+> +#  define UCS1002_ILIM_SW_MASK		GENMASK(3, 0)
+> +
+> +/* Product ID */
+> +#define UCS1002_REG_PRODUCT_ID		0xfd
+> +#  define UCS1002_PRODUCT_ID		0x4e
+> +
+> +/* Manufacture name */
+> +#define UCS1002_MANUFACTURER		"SMSC"
+> +
+> +struct ucs1002_info {
+> +	struct power_supply *charger;
+> +	struct i2c_client *client;
+> +	struct regmap *regmap;
+> +	struct regulator_desc *regulator_descriptor;
+> +	bool present;
+> +};
+> +
+> +static enum power_supply_property ucs1002_props[] = {
+> +	POWER_SUPPLY_PROP_ONLINE,
+> +	POWER_SUPPLY_PROP_CHARGE_NOW,
+> +	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_CURRENT_MAX,
+> +	POWER_SUPPLY_PROP_PRESENT, /* the presence of PED */
+> +	POWER_SUPPLY_PROP_MANUFACTURER,
+> +	POWER_SUPPLY_PROP_USB_TYPE,
+> +	POWER_SUPPLY_PROP_HEALTH,
+> +};
+> +
+> +static int ucs1002_get_online(struct ucs1002_info *info,
+> +			      union power_supply_propval *val)
+> +{
+> +	unsigned int reg;
+> +	int ret;
+> +
+> +	ret = regmap_read(info->regmap, UCS1002_REG_OTHER_STATUS, &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	val->intval = !!(reg & F_CHG_ACT);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ucs1002_get_charge(struct ucs1002_info *info,
+> +			      union power_supply_propval *val)
+> +{
+> +	/*
+> +	 * To fit within 32 bits some values are rounded (uA/h)
+> +	 *
+> +	 * For Total Accumulated Charge Middle Low Byte register, addr
+> +	 * 03h, byte 2
+> +	 *
+> +	 *   B0: 0.01084 mA/h rounded to 11 uA/h
+> +	 *   B1: 0.02169 mA/h rounded to 22 uA/h
+> +	 *   B2: 0.04340 mA/h rounded to 43 uA/h
+> +	 *   B3: 0.08676 mA/h rounded to 87 uA/h
+> +	 *   B4: 0.17350 mA/h rounded to 173 uÃ/h
+> +	 *
+> +	 * For Total Accumulated Charge Low Byte register, addr 04h,
+> +	 * byte 3
+> +	 *
+> +	 *   B6: 0.00271 mA/h rounded to 3 uA/h
+> +	 *   B7: 0.005422 mA/h rounded to 5 uA/h
+> +	 */
+> +	static const int bit_weights_uAh[BITS_PER_TYPE(u32)] = {
+> +		/*
+> +		 * Bit corresponding to low byte (offset 0x04)
+> +		 * B0 B1 B2 B3 B4 B5 B6 B7
+> +		 */
+> +		0, 0, 0, 0, 0, 0, 3, 5,
+> +		/*
+> +		 * Bit corresponding to middle low byte (offset 0x03)
+> +		 * B0 B1 B2 B3 B4 B5 B6 B7
+> +		 */
+> +		11, 22, 43, 87, 173, 347, 694, 1388,
+> +		/*
+> +		 * Bit corresponding to middle high byte (offset 0x02)
+> +		 * B0 B1 B2 B3 B4 B5 B6 B7
+> +		 */
+> +		2776, 5552, 11105, 22210, 44420, 88840, 177700, 355400,
+> +		/*
+> +		 * Bit corresponding to high byte (offset 0x01)
+> +		 * B0 B1 B2 B3 B4 B5 B6 B7
+> +		 */
+> +		710700, 1421000, 2843000, 5685000, 11371000, 22742000,
+> +		45484000, 90968000,
+> +	};
+> +	unsigned long total_acc_charger;
+> +	unsigned int reg;
+> +	int i, ret;
+> +
+> +	ret = regmap_bulk_read(info->regmap, UCS1002_REG_TOTAL_ACC_CHARGE,
+> +			       &reg, sizeof(u32));
+> +	if (ret)
+> +		return ret;
+> +
+> +	total_acc_charger = be32_to_cpu(reg); /* BE as per offsets above */
+> +	val->intval = 0;
+> +
+> +	for_each_set_bit(i, &total_acc_charger, ARRAY_SIZE(bit_weights_uAh))
+> +		val->intval += bit_weights_uAh[i];
+> +
+> +	return 0;
+> +}
+> +
+> +static int ucs1002_get_current(struct ucs1002_info *info,
+> +			       union power_supply_propval *val)
+> +{
+> +	/*
+> +	 * The Current Measurement register stores the measured
+> +	 * current value delivered to the portable device. The range
+> +	 * is from 9.76 mA to 2.5 A.
+> +	 */
+> +	static const int bit_weights_uA[BITS_PER_TYPE(u8)] = {
+> +		9760, 19500, 39000, 78100, 156200, 312300, 624600, 1249300,
+> +	};
+> +	unsigned long current_measurement;
+> +	unsigned int reg;
+> +	int i, ret;
+> +
+> +	ret = regmap_read(info->regmap, UCS1002_REG_CURRENT_MEASUREMENT, &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	current_measurement = reg;
+> +	val->intval = 0;
+> +
+> +	for_each_set_bit(i, &current_measurement, ARRAY_SIZE(bit_weights_uA))
+> +		val->intval += bit_weights_uA[i];
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * The Current Limit register stores the maximum current used by the
+> + * port switch. The range is from 500mA to 2.5 A.
+> + */
+> +static const u32 ucs1002_current_limit_uA[] = {
+> +	500000, 900000, 1000000, 1200000, 1500000, 1800000, 2000000, 2500000,
+> +};
+> +
+> +static int ucs1002_get_max_current(struct ucs1002_info *info,
+> +				   union power_supply_propval *val)
+> +{
+> +	unsigned int reg;
+> +	int ret;
+> +
+> +	ret = regmap_read(info->regmap, UCS1002_REG_ILIMIT, &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	val->intval = ucs1002_current_limit_uA[reg & UCS1002_ILIM_SW_MASK];
+> +
+> +	return 0;
+> +}
+> +
+> +static int ucs1002_set_max_current(struct ucs1002_info *info, u32 val)
+> +{
+> +	unsigned int reg;
+> +	int ret, idx;
+> +
+> +	for (idx = 0; idx < ARRAY_SIZE(ucs1002_current_limit_uA); idx++) {
+> +		if (val == ucs1002_current_limit_uA[idx])
+> +			break;
+> +	}
+> +
+> +	if (idx == ARRAY_SIZE(ucs1002_current_limit_uA))
+> +		return -EINVAL;
+> +
+> +	ret = regmap_write(info->regmap, UCS1002_REG_ILIMIT, idx);
+> +	if (ret)
+> +		return ret;
+> +	/*
+> +	 * Any current limit setting exceeding the one set via ILIM
+> +	 * pin will be rejected, so we read out freshly changed limit
+> +	 * to make sure that it took effect.
+> +	 */
+> +	ret = regmap_read(info->regmap, UCS1002_REG_ILIMIT, &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (reg != idx)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static enum power_supply_usb_type ucs1002_usb_types[] = {
+> +	POWER_SUPPLY_USB_TYPE_PD,
+> +	POWER_SUPPLY_USB_TYPE_SDP,
+> +	POWER_SUPPLY_USB_TYPE_DCP,
+> +	POWER_SUPPLY_USB_TYPE_CDP,
+> +	POWER_SUPPLY_USB_TYPE_UNKNOWN,
+> +};
+> +
+> +static int ucs1002_set_usb_type(struct ucs1002_info *info, int val)
+> +{
+> +	unsigned int mode;
+> +
+> +	if (val < 0 || val >= ARRAY_SIZE(ucs1002_usb_types))
+> +		return -EINVAL;
+> +
+> +	switch (ucs1002_usb_types[val]) {
+> +	case POWER_SUPPLY_USB_TYPE_PD:
+> +		mode = V_SET_ACTIVE_MODE_DEDICATED;
+> +		break;
+> +	case POWER_SUPPLY_USB_TYPE_SDP:
+> +		mode = V_SET_ACTIVE_MODE_BC12_SDP;
+> +		break;
+> +	case POWER_SUPPLY_USB_TYPE_DCP:
+> +		mode = V_SET_ACTIVE_MODE_BC12_DCP;
+> +		break;
+> +	case POWER_SUPPLY_USB_TYPE_CDP:
+> +		mode = V_SET_ACTIVE_MODE_BC12_CDP;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return regmap_update_bits(info->regmap, UCS1002_REG_SWITCH_CFG,
+> +				  V_SET_ACTIVE_MODE_MASK, mode);
+> +}
+> +
+> +static int ucs1002_get_usb_type(struct ucs1002_info *info,
+> +				union power_supply_propval *val)
+> +{
+> +	enum power_supply_usb_type type;
+> +	unsigned int reg;
+> +	int ret;
+> +
+> +	ret = regmap_read(info->regmap, UCS1002_REG_PIN_STATUS, &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (reg & F_ACTIVE_MODE_MASK) {
+> +	default:
+> +		type = POWER_SUPPLY_USB_TYPE_UNKNOWN;
+> +		break;
+> +	case F_ACTIVE_MODE_DEDICATED:
+> +		type = POWER_SUPPLY_USB_TYPE_PD;
+> +		break;
+> +	case F_ACTIVE_MODE_BC12_SDP:
+> +		type = POWER_SUPPLY_USB_TYPE_SDP;
+> +		break;
+> +	case F_ACTIVE_MODE_BC12_DCP:
+> +		type = POWER_SUPPLY_USB_TYPE_DCP;
+> +		break;
+> +	case F_ACTIVE_MODE_BC12_CDP:
+> +		type = POWER_SUPPLY_USB_TYPE_CDP;
+> +		break;
+> +	};
+> +
+> +	val->intval = type;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ucs1002_get_health(struct ucs1002_info *info,
+> +			      union power_supply_propval *val)
+> +{
+> +	unsigned int reg;
+> +	int ret, health;
+> +
+> +	ret = regmap_read(info->regmap, UCS1002_REG_INTERRUPT_STATUS, &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (reg & F_TSD)
+> +		health = POWER_SUPPLY_HEALTH_OVERHEAT;
+> +	else if (reg & (F_OVER_VOLT | F_BACK_VOLT))
+> +		health = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
+> +	else if (reg & F_OVER_ILIM)
+> +		health = POWER_SUPPLY_HEALTH_OVERCURRENT;
+> +	else if (reg & (F_DISCHARGE_ERR | F_MIN_KEEP_OUT))
+> +		health = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+> +	else
+> +		health = POWER_SUPPLY_HEALTH_GOOD;
+> +
+> +	val->intval = health;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ucs1002_get_property(struct power_supply *psy,
+> +				enum power_supply_property psp,
+> +				union power_supply_propval *val)
+> +{
+> +	struct ucs1002_info *info = power_supply_get_drvdata(psy);
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_ONLINE:
+> +		return ucs1002_get_online(info, val);
+> +	case POWER_SUPPLY_PROP_CHARGE_NOW:
+> +		return ucs1002_get_charge(info, val);
+> +	case POWER_SUPPLY_PROP_CURRENT_NOW:
+> +		return ucs1002_get_current(info, val);
+> +	case POWER_SUPPLY_PROP_CURRENT_MAX:
+> +		return ucs1002_get_max_current(info, val);
+> +	case POWER_SUPPLY_PROP_USB_TYPE:
+> +		return ucs1002_get_usb_type(info, val);
+> +	case POWER_SUPPLY_PROP_HEALTH:
+> +		return ucs1002_get_health(info, val);
+> +	case POWER_SUPPLY_PROP_PRESENT:
+> +		val->intval = info->present;
+> +		return 0;
+> +	case POWER_SUPPLY_PROP_MANUFACTURER:
+> +		val->strval = UCS1002_MANUFACTURER;
+> +		return 0;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int ucs1002_set_property(struct power_supply *psy,
+> +				enum power_supply_property psp,
+> +				const union power_supply_propval *val)
+> +{
+> +	struct ucs1002_info *info = power_supply_get_drvdata(psy);
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CURRENT_MAX:
+> +		return ucs1002_set_max_current(info, val->intval);
+> +	case POWER_SUPPLY_PROP_USB_TYPE:
+> +		return ucs1002_set_usb_type(info, val->intval);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int ucs1002_property_is_writeable(struct power_supply *psy,
+> +					 enum power_supply_property psp)
+> +{
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_CURRENT_MAX:
+> +	case POWER_SUPPLY_PROP_USB_TYPE:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +static const struct power_supply_desc ucs1002_charger_desc = {
+> +	.name			= "ucs1002",
+> +	.type			= POWER_SUPPLY_TYPE_USB,
+> +	.usb_types		= ucs1002_usb_types,
+> +	.num_usb_types		= ARRAY_SIZE(ucs1002_usb_types),
+> +	.get_property		= ucs1002_get_property,
+> +	.set_property		= ucs1002_set_property,
+> +	.property_is_writeable	= ucs1002_property_is_writeable,
+> +	.properties		= ucs1002_props,
+> +	.num_properties		= ARRAY_SIZE(ucs1002_props),
+> +};
+> +
+> +static irqreturn_t ucs1002_charger_irq(int irq, void *data)
+> +{
+> +	int ret, regval;
+> +	bool present;
+> +	struct ucs1002_info *info = data;
+> +
+> +	present = info->present;
+> +
+> +	ret = regmap_read(info->regmap, UCS1002_REG_OTHER_STATUS, &regval);
+> +	if (ret)
+> +		return IRQ_HANDLED;
+> +
+> +	/* update attached status */
+> +	info->present = regval & F_ADET_PIN;
+> +
+> +	/* notify the change */
+> +	if (present != info->present)
+> +		power_supply_changed(info->charger);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t ucs1002_alert_irq(int irq, void *data)
+> +{
+> +	struct ucs1002_info *info = data;
+> +
+> +	power_supply_changed(info->charger);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static const struct regulator_ops ucs1002_regulator_ops = {
+> +	.is_enabled	= regulator_is_enabled_regmap,
+> +	.enable		= regulator_enable_regmap,
+> +	.disable	= regulator_disable_regmap,
+> +};
+> +
+> +static const struct regulator_desc ucs1002_regulator_descriptor = {
+> +	.name		= "ucs1002-vbus",
+> +	.ops		= &ucs1002_regulator_ops,
+> +	.type		= REGULATOR_VOLTAGE,
+> +	.owner		= THIS_MODULE,
+> +	.enable_reg	= UCS1002_REG_SWITCH_CFG,
+> +	.enable_mask	= F_PWR_EN_SET,
+> +	.enable_val	= F_PWR_EN_SET,
+> +	.fixed_uV	= 5000000,
+> +	.n_voltages	= 1,
+> +};
+> +
+> +static int ucs1002_probe(struct i2c_client *client,
+> +			 const struct i2c_device_id *dev_id)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct power_supply_config charger_config = {};
+> +	const struct regmap_config regmap_config = {
+> +		.reg_bits = 8,
+> +		.val_bits = 8,
+> +	};
+> +	struct regulator_config regulator_config = {};
+> +	int irq_a_det, irq_alert, ret;
+> +	struct regulator_dev *rdev;
+> +	struct ucs1002_info *info;
+> +	unsigned int regval;
+> +
+> +	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	info->regmap = devm_regmap_init_i2c(client, &regmap_config);
+> +	ret = PTR_ERR_OR_ZERO(info->charger);
+> +	if (ret) {
+> +		dev_err(dev, "Regmap initialization failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	info->client = client;
+> +
+> +	irq_a_det = of_irq_get_byname(dev->of_node, "a_det");
+> +	irq_alert = of_irq_get_byname(dev->of_node, "alert");
+> +
+> +	charger_config.of_node = dev->of_node;
+> +	charger_config.drv_data = info;
+> +
+> +	ret = regmap_read(info->regmap, UCS1002_REG_PRODUCT_ID, &regval);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read product ID: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	if (regval != UCS1002_PRODUCT_ID) {
+> +		dev_err(dev,
+> +			"Product ID does not match (0x%02x != 0x%02x)\n",
+> +			regval, UCS1002_PRODUCT_ID);
+> +		return -ENODEV;
+> +	}
+> +
+> +	/* Enable charge rationing by default */
+> +	ret = regmap_update_bits(info->regmap, UCS1002_REG_GENERAL_CFG,
+> +				 F_RATION_EN, F_RATION_EN);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read general config: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * Ignore the M1, M2, PWR_EN, and EM_EN pin states. Set active
+> +	 * mode selection to BC1.2 CDP.
+> +	 */
+> +	ret = regmap_update_bits(info->regmap, UCS1002_REG_SWITCH_CFG,
+> +				 V_SET_ACTIVE_MODE_MASK | F_PIN_IGNORE,
+> +				 V_SET_ACTIVE_MODE_BC12_CDP | F_PIN_IGNORE);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to configure default mode: %d\n", ret);
+> +		return ret;
+> +	}
+> +	/*
+> +	 * Be safe and set initial current limit to 500mA
+> +	 */
+> +	ret = ucs1002_set_max_current(info, 500000);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to set max current default: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	info->charger = devm_power_supply_register(dev, &ucs1002_charger_desc,
+> +						   &charger_config);
+> +	ret = PTR_ERR_OR_ZERO(info->charger);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register power supply: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = regmap_read(info->regmap, UCS1002_REG_PIN_STATUS, &regval);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read pin status: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	info->regulator_descriptor =
+> +		devm_kmemdup(dev, &ucs1002_regulator_descriptor,
+> +			     sizeof(ucs1002_regulator_descriptor),
+> +			     GFP_KERNEL);
+> +	if (!info->regulator_descriptor)
+> +		return -ENOMEM;
+> +
+> +	info->regulator_descriptor->enable_is_inverted = !(regval & F_SEL_PIN);
+> +
+> +	regulator_config.dev = dev;
+> +	regulator_config.of_node = dev->of_node;
+> +	regulator_config.regmap = info->regmap;
+> +
+> +	rdev = devm_regulator_register(dev, info->regulator_descriptor,
+> +				       &regulator_config);
+> +	ret = PTR_ERR_OR_ZERO(info->charger);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register VBUS regulator: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	if (irq_a_det > 0) {
+> +		ret = devm_request_threaded_irq(dev, irq_a_det, NULL,
+> +						ucs1002_charger_irq,
+> +						IRQF_ONESHOT,
+> +						"ucs1002-a_det", info);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to request A_DET threaded irq: %d\n",
+> +				ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (irq_alert > 0) {
+> +		ret = devm_request_threaded_irq(dev, irq_alert, NULL,
+> +						ucs1002_alert_irq,
+> +						IRQF_ONESHOT,
+> +						"ucs1002-alert", info);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to request ALERT threaded irq: %d\n",
+> +				ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id ucs1002_of_match[] = {
+> +	{ .compatible = "microchip,ucs1002", },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ucs1002_of_match);
+> +
+> +static struct i2c_driver ucs1002_driver = {
+> +	.driver = {
+> +		   .name = "ucs1002",
+> +		   .of_match_table = ucs1002_of_match,
+> +	},
+> +	.probe = ucs1002_probe,
+> +};
+> +module_i2c_driver(ucs1002_driver);
+> +
+> +MODULE_DESCRIPTION("Microchip UCS1002 Programmable USB Port Power Controller");
+> +MODULE_AUTHOR("Enric Balletbo Serra <enric.balletbo@collabora.com>");
+> +MODULE_AUTHOR("Andrey Smirnov <andrew.smirnov@gmail.com>");
+> +MODULE_LICENSE("GPL");
+> 
 
