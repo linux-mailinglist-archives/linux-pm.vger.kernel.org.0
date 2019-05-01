@@ -2,34 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD3D10F74
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2019 00:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2116911029
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2019 01:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726294AbfEAW5m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 May 2019 18:57:42 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37532 "EHLO
+        id S1726193AbfEAX1n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 May 2019 19:27:43 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37578 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbfEAW5l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 May 2019 18:57:41 -0400
+        with ESMTP id S1726125AbfEAX1m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 May 2019 19:27:42 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id C35C0261212
+        with ESMTPSA id 10868263A05
 Received: by earth.universe (Postfix, from userid 1000)
-        id B9AF23C0D1B; Thu,  2 May 2019 00:57:36 +0200 (CEST)
-Date:   Thu, 2 May 2019 00:57:36 +0200
+        id 658DA3C0D1B; Thu,  2 May 2019 01:27:38 +0200 (CEST)
+Date:   Thu, 2 May 2019 01:27:38 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] power: supply: axp288_fuel_gauge: Add ACEPC T8 and T11
- mini PCs to the blacklist
-Message-ID: <20190501225736.jhbyklotrtndux5v@earth.universe>
-References: <20190422204301.6233-1-hdegoede@redhat.com>
+To:     Nick Crews <ncrews@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>, linux-pm@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Duncan Laurie <dlaurie@chromium.org>,
+        Oleh Lamzin <lamzin@google.com>,
+        Bartosz Fabianowski <bartfab@google.com>,
+        Daniel Erat <derat@google.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Simon Glass <sjg@chromium.org>, jchwong@chromium.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Subject: Re: [PATCH v5 1/3] power_supply: Add Standard, Adaptive, and Custom
+ charge types
+Message-ID: <20190501232738.wvxvhcomj5xyesbk@earth.universe>
+References: <20190417214022.7jk3usygcpnls3pr@earth.universe>
+ <20190418164314.161065-1-ncrews@chromium.org>
+ <e5ec00fc-5075-85f7-4bd3-1745687f9a3e@collabora.com>
+ <CAHX4x87APA8eSD0pCwkBFcR_JxRQsxsH-Ur7186BnHBF=PZf+A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4pxoyuqearsvopnh"
+        protocol="application/pgp-signature"; boundary="al42vkdcvxlghjvs"
 Content-Disposition: inline
-In-Reply-To: <20190422204301.6233-1-hdegoede@redhat.com>
+In-Reply-To: <CAHX4x87APA8eSD0pCwkBFcR_JxRQsxsH-Ur7186BnHBF=PZf+A@mail.gmail.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -37,93 +47,163 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---4pxoyuqearsvopnh
-Content-Type: text/plain; charset=utf-8
+--al42vkdcvxlghjvs
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Nick,
 
-On Mon, Apr 22, 2019 at 10:43:01PM +0200, Hans de Goede wrote:
-> The ACEPC T8 and T11 Cherry Trail Z8350 mini PCs use an AXP288 and as PCs,
-> rather then portables, they does not have a battery. Still for some
-> reason the AXP288 not only thinks there is a battery, it actually
-> thinks it is discharging while the PC is running, slowly going to
-> 0% full, causing userspace to shutdown the system due to the battery
-> being critically low after a while.
->
-> This commit adds the ACEPC T8 and T11 to the axp288 fuel-gauge driver
-> blacklist, so that we stop reporting bogus battery readings on this devic=
-e.
->=20
-> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=3D1690852
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-
-Thanks, you made my day =F0=9F=98=82. Queued to power-supply's for-next bra=
-nch.
+Yes. I merged the three patches adding the generic power supply
+properties, thanks.
 
 -- Sebastian
 
->  drivers/power/supply/axp288_fuel_gauge.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+On Wed, May 01, 2019 at 10:34:38AM -0600, Nick Crews wrote:
+> Hi Sebastian, does this look like an acceptable way of splitting up the
+> content into multiple commits?
 >=20
-> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/sup=
-ply/axp288_fuel_gauge.c
-> index 9ff2461820d8..368281bc0d2b 100644
-> --- a/drivers/power/supply/axp288_fuel_gauge.c
-> +++ b/drivers/power/supply/axp288_fuel_gauge.c
-> @@ -685,6 +685,26 @@ static void fuel_gauge_init_irq(struct axp288_fg_inf=
-o *info)
->   * detection reports one despite it not being there.
->   */
->  static const struct dmi_system_id axp288_fuel_gauge_blacklist[] =3D {
-> +	{
-> +		/* ACEPC T8 Cherry Trail Z8350 mini PC */
-> +		.matches =3D {
-> +			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "To be filled by O.E.M."),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "Cherry Trail CR"),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_SKU, "T8"),
-> +			/* also match on somewhat unique bios-version */
-> +			DMI_EXACT_MATCH(DMI_BIOS_VERSION, "1.000"),
-> +		},
-> +	},
-> +	{
-> +		/* ACEPC T11 Cherry Trail Z8350 mini PC */
-> +		.matches =3D {
-> +			DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "To be filled by O.E.M."),
-> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "Cherry Trail CR"),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_SKU, "T11"),
-> +			/* also match on somewhat unique bios-version */
-> +			DMI_EXACT_MATCH(DMI_BIOS_VERSION, "1.000"),
-> +		},
-> +	},
->  	{
->  		/* Intel Cherry Trail Compute Stick, Windows version */
->  		.matches =3D {
-> --=20
-> 2.21.0
+> Sorry to bug, and thanks,
+> Nick
 >=20
+> On Tue, Apr 23, 2019 at 7:55 AM Enric Balletbo i Serra <
+> enric.balletbo@collabora.com> wrote:
+>=20
+> >
+> >
+> > On 18/4/19 18:43, Nick Crews wrote:
+> > > Add "Standard", "Adaptive", and "Custom" modes to the charge_type
+> > > property, to expand the existing "Trickle" and "Fast" modes.
+> > > I am adding them in order to support a new Chrome OS device,
+> > > but these properties should be general enough that they can be
+> > > used on other devices.
+> > >
+> > > The meaning of "Standard" is obvious, but "Adaptive" and "Custom" are
+> > > more tricky: "Adaptive" means that the charge controller uses some
+> > > custom algorithm to change the charge type automatically, with no
+> > > configuration needed. "Custom" means that the charge controller uses =
+the
+> > > POWER_SUPPLY_PROP_CHARGE_CONTROL_* properties as configuration for so=
+me
+> > > other algorithm.
+> > >
+> > > v5 changes:
+> > > - Split up adding the charge types and adding the
+> > >   POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD and
+> > >   POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD properties into
+> > >   two different commits.
+> > > v4 changes:
+> > > - Add documentation for the new properties, and add documentation for
+> > >   the the previously missing charge_control_limit and
+> > >   charge_control_limit_max properties.
+> > >
+> > > Signed-off-by: Nick Crews <ncrews@chromium.org>
+> >
+> > Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> >
+> > > ---
+> > >  Documentation/ABI/testing/sysfs-class-power | 12 +++++++++---
+> > >  drivers/power/supply/power_supply_sysfs.c   |  2 +-
+> > >  include/linux/power_supply.h                |  8 ++++++--
+> > >  3 files changed, 16 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/Documentation/ABI/testing/sysfs-class-power
+> > b/Documentation/ABI/testing/sysfs-class-power
+> > > index 5e23e22dce1b..544c4e0ef8b6 100644
+> > > --- a/Documentation/ABI/testing/sysfs-class-power
+> > > +++ b/Documentation/ABI/testing/sysfs-class-power
+> > > @@ -119,10 +119,16 @@ Date:           July 2009
+> > >  Contact:     linux-pm@vger.kernel.org
+> > >  Description:
+> > >               Represents the type of charging currently being applied=
+ to
+> > the
+> > > -             battery.
+> > > +             battery. "Trickle", "Fast", and "Standard" all mean
+> > different
+> > > +             charging speeds. "Adaptive" means that the charger uses
+> > some
+> > > +             algorithm to adjust the charge rate dynamically, without
+> > > +             any user configuration required. "Custom" means that the
+> > charger
+> > > +             uses the charge_control_* properties as configuration f=
+or
+> > some
+> > > +             different algorithm.
+> > >
+> > > -             Access: Read
+> > > -             Valid values: "Unknown", "N/A", "Trickle", "Fast"
+> > > +             Access: Read, Write
+> > > +             Valid values: "Unknown", "N/A", "Trickle", "Fast",
+> > "Standard",
+> > > +                           "Adaptive", "Custom"
+> > >
+> > >  What:
+> > /sys/class/power_supply/<supply_name>/charge_term_current
+> > >  Date:                July 2014
+> > > diff --git a/drivers/power/supply/power_supply_sysfs.c
+> > b/drivers/power/supply/power_supply_sysfs.c
+> > > index dce24f596160..64dff5cfecc3 100644
+> > > --- a/drivers/power/supply/power_supply_sysfs.c
+> > > +++ b/drivers/power/supply/power_supply_sysfs.c
+> > > @@ -56,7 +56,7 @@ static const char * const power_supply_status_text[=
+] =3D
+> > {
+> > >  };
+> > >
+> > >  static const char * const power_supply_charge_type_text[] =3D {
+> > > -     "Unknown", "N/A", "Trickle", "Fast"
+> > > +     "Unknown", "N/A", "Trickle", "Fast", "Standard", "Adaptive",
+> > "Custom"
+> > >  };
+> > >
+> > >  static const char * const power_supply_health_text[] =3D {
+> > > diff --git a/include/linux/power_supply.h b/include/linux/power_suppl=
+y.h
+> > > index 2f9c201a54d1..e86e05d8134d 100644
+> > > --- a/include/linux/power_supply.h
+> > > +++ b/include/linux/power_supply.h
+> > > @@ -40,11 +40,15 @@ enum {
+> > >       POWER_SUPPLY_STATUS_FULL,
+> > >  };
+> > >
+> > > +/* What algorithm is the charger using? */
+> > >  enum {
+> > >       POWER_SUPPLY_CHARGE_TYPE_UNKNOWN =3D 0,
+> > >       POWER_SUPPLY_CHARGE_TYPE_NONE,
+> > > -     POWER_SUPPLY_CHARGE_TYPE_TRICKLE,
+> > > -     POWER_SUPPLY_CHARGE_TYPE_FAST,
+> > > +     POWER_SUPPLY_CHARGE_TYPE_TRICKLE,       /* slow speed */
+> > > +     POWER_SUPPLY_CHARGE_TYPE_FAST,          /* fast speed */
+> > > +     POWER_SUPPLY_CHARGE_TYPE_STANDARD,      /* normal speed */
+> > > +     POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,      /* dynamically adjusted
+> > speed */
+> > > +     POWER_SUPPLY_CHARGE_TYPE_CUSTOM,        /* use CHARGE_CONTROL_*
+> > props */
+> > >  };
+> > >
+> > >  enum {
+> > >
+> >
 
---4pxoyuqearsvopnh
+--al42vkdcvxlghjvs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlzKJF0ACgkQ2O7X88g7
-+pqOAA/+OYV/kWE96sNXL8NC8HBO1UDZCTL5+6c0WPit1ocVRYXw8Zl2bBD9UeGG
-+qWPTgzJrlxv4WIv420x99yjJNYoCJTyZsLjpLAGxuIJ37vRMOYOgd6eh/qsiown
-T45XYWVTtdznhpeciJxW+FkqxfKGriZgD7aaV4tzAoXjb/nGvYwy4MSTnL+fpwzi
-yVkEJvBbIGyp2S+gHNotPXvZ6g7mKd9uEO8kBUi4OlPjD44ZtE8cVx1t2lNAqJQv
-8yRHFaQSJM99aRVdtQ6DoEYft3A35FkSuWAW741h8K/GSH93yFfNEw4GE1lBOPoW
-Y4Yn4XoISo5RIwWjUJafpOuEnEQF+SKaFuDP62wwUpJOpLN8gF/BJS/WhmZSaizx
-dE9764X7AfylMlj2v//tAS0jfPrsMeafZdGfnwZuAOyy8y2IJ3j7pPOqIZLLD9LR
-T1iNAADQU0An0HX60tewCxzEUMrnf+2miret0l5g25s3uWCOlBcNImUuG3sgfZRA
-PTQJdsIdsqVpqBGm1MbbKIcuJ222MqtWt7d9BW45xtLoecGKHHLtvjZBdo5gDxqY
-W5vtZr7ZAwT9bqPqHCqouurW+AADa7d1SZiGo/blIklO3K0uJ+27lKWNXEtCHwm+
-yyerIOhx4wiq9uFtaHrAjOosfe0gZ8VIfgaJfYgvU97efGypTgk=
-=91c6
+iQIyBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlzKK18ACgkQ2O7X88g7
++ppqnw/1EwBjVwQBpcZbEi9Yrv1AvPaTcjsCcFuc6dVU8IlmR86JbO0yAYL9zEIW
+B8QzrPazNUYVsjyAOCBcjMx1jqsC4e2yB9KIDqADVq/u1+KvwoBFMYDHwLdaCb96
+KhWXkLuGCQx8T3UgShaF+hpjPaRFzHqok0KNVXtHD7gkapM+YBmK2FgXK5uI+MwX
+vficrtDIhsuWk9xtJ8XndnXhre0H2OrHbxIqabjQPSPvm6i8OYvTFi1r7Erdxhpu
+j0PnmFD31YRqPyPUke0SQOeifOwNBQ+JEUgMsC9QRMd5NX31oHArxReHSc1ZqxUl
+dTK6r2CE8hOKStYxPqP8OqEalqcQfyiRtIMcEBF2cA3MTkv+xAqFXGPWZMOatJlL
+kPLqnxNpE9PRFmOXCaVsB/rrlBe7nUWGWdekmgatdy9Eb5xUvM3N4Oc6692Q0Ckk
+UDYIPO7GzFC72tZXhSNGQoXbyhchF13vnl+ohfB9pOeqIW1jKDLAD8gy7/ocTAcZ
+u3BzYa6p4IgQ9WX+Pm2CxIf0o0foBOQOckJyHjsZZzSUVA14h/HRaOx0mB65vuCu
+r98frFNiqbAX+yDFn1eiYeCUvmoj46t6MYyhSeT1RSjw5Abrd/4zr9Z0q78mwBTP
+/dhYwN3n4hatvZ1Ah+rQW4kJe3h4Z/nC6N2Pjtjv7R7Z79iswQ==
+=fv/A
 -----END PGP SIGNATURE-----
 
---4pxoyuqearsvopnh--
+--al42vkdcvxlghjvs--
