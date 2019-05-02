@@ -2,50 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3800C122EB
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2019 21:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921BB1230C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2019 22:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbfEBTuy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 May 2019 15:50:54 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42318 "EHLO
+        id S1726300AbfEBUP6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 May 2019 16:15:58 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:42372 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbfEBTuy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 May 2019 15:50:54 -0400
+        with ESMTP id S1725962AbfEBUP6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 May 2019 16:15:58 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id A84AF28423D
+        with ESMTPSA id EEC07263A23
 Received: by earth.universe (Postfix, from userid 1000)
-        id 65A1B3C0D1B; Thu,  2 May 2019 21:50:49 +0200 (CEST)
-Date:   Thu, 2 May 2019 21:50:49 +0200
+        id 908E33C0D1B; Thu,  2 May 2019 22:15:54 +0200 (CEST)
+Date:   Thu, 2 May 2019 22:15:54 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        heikki.haikola@fi.rohmeurope.com, mikko.mutanen@fi.rohmeurope.com
-Subject: Re: [PATCH v14 7/8] power: supply: Initial support for ROHM BD70528
- PMIC charger block
-Message-ID: <20190502195049.brysexbyyq7khtr4@earth.universe>
-References: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
- <eece016c86483d55befab1a06fb299c9d6d17134.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+To:     Phong Tran <tranmanphong@gmail.com>
+Cc:     ndesaulniers@google.com, natechancellor@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH] power: supply: core: fix clang -Wunsequenced
+Message-ID: <20190502201554.qvuunxprepxhvzbm@earth.universe>
+References: <20190502012704.12505-1-tranmanphong@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bhukgbujt2wxql42"
+        protocol="application/pgp-signature"; boundary="fryypaezrgitn536"
 Content-Disposition: inline
-In-Reply-To: <eece016c86483d55befab1a06fb299c9d6d17134.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <20190502012704.12505-1-tranmanphong@gmail.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -53,80 +37,75 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---bhukgbujt2wxql42
+--fryypaezrgitn536
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, May 02, 2019 at 12:17:12PM +0300, Matti Vaittinen wrote:
-> ROHM BD70528 PMIC includes battery charger block. Support charger
-> staus queries and doing few basic settings like input current limit
-> and charging current.
+On Thu, May 02, 2019 at 08:27:06AM +0700, Phong Tran wrote:
+> The increment operator of  pointer in be32_to_cpu() is not explicitly.
+> It made the warning from clang:
 >=20
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> drivers/power/supply/power_supply_core.c:674:36: error: multiple
+> unsequenced modifications to 'list' [-Werror,-Wunsequenced]
+> drivers/power/supply/power_supply_core.c:675:41: error: multiple
+> unsequenced modifications to 'list' [-Werror,-Wunsequenced]
+>=20
+> Link: https://github.com/ClangBuiltLinux/linux/issues/460
+>=20
+> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+> ---
 
-Please only add Acked-by when you receive one, especially when you
-do not implement all requested changes :)
-
-[...]
-
-> +static int bd70528_get_irqs(struct platform_device *pdev,
-> +			    struct bd70528_psy *bdpsy)
-> +{
-> +	int irq, i, ret;
-> +	unsigned int mask;
-> +	const struct irq_name_pair bd70528_chg_irqs[] =3D {
-> +		{ .n =3D "bd70528-bat-ov-res", .h =3D BD_IRQ_HND(BAT_OV_RES) },
-> +		{ .n =3D "bd70528-bat-ov-det", .h =3D BD_IRQ_HND(BAT_OV_DET) },
-> +		{ .n =3D "bd70528-bat-dead", .h =3D BD_IRQ_HND(DBAT_DET) },
-> +		{ .n =3D "bd70528-bat-warmed", .h =3D BD_IRQ_HND(COLD_RES) },
-> +		{ .n =3D "bd70528-bat-cold", .h =3D BD_IRQ_HND(COLD_DET) },
-> +		{ .n =3D "bd70528-bat-cooled", .h =3D BD_IRQ_HND(HOT_RES) },
-> +		{ .n =3D "bd70528-bat-hot", .h =3D BD_IRQ_HND(HOT_DET) },
-> +		{ .n =3D "bd70528-chg-tshd", .h =3D BD_IRQ_HND(CHG_TSD) },
-> +		{ .n =3D "bd70528-bat-removed", .h =3D BD_IRQ_HND(BAT_RMV) },
-> +		{ .n =3D "bd70528-bat-detected", .h =3D BD_IRQ_HND(BAT_DET) },
-> +		{ .n =3D "bd70528-dcin2-ov-res", .h =3D BD_IRQ_HND(DCIN2_OV_RES) },
-> +		{ .n =3D "bd70528-dcin2-ov-det", .h =3D BD_IRQ_HND(DCIN2_OV_DET) },
-> +		{ .n =3D "bd70528-dcin2-removed", .h =3D BD_IRQ_HND(DCIN2_RMV) },
-> +		{ .n =3D "bd70528-dcin2-detected", .h =3D BD_IRQ_HND(DCIN2_DET) },
-> +		{ .n =3D "bd70528-dcin1-removed", .h =3D BD_IRQ_HND(DCIN1_RMV) },
-> +		{ .n =3D "bd70528-dcin1-detected", .h =3D BD_IRQ_HND(DCIN1_DET) },
-> +	};
-
-Please also make it static. That will move the whole thing to
-read-only (because of const) data section. This improves the
-security and the required cpu time at the same time (no need
-to copy values to the stack).
-
-But this can be changed later, so no need to block the whole
-patchset just because of this. If Lee wants to merge this for
-5.2, that would be fine with me. But please add it directly in
-a new patch revision if the patch does not make it into 5.2.
+Thanks, queued to power-supply's for-next branch.
 
 -- Sebastian
 
---bhukgbujt2wxql42
+>  drivers/power/supply/power_supply_core.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index c917a8b43b2b..7cc6f5fac0d0 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -665,8 +665,10 @@ int power_supply_get_battery_info(struct power_suppl=
+y *psy,
+>  		}
+> =20
+>  		for (i =3D 0; i < tab_len; i++) {
+> -			table[i].ocv =3D be32_to_cpu(*list++);
+> -			table[i].capacity =3D be32_to_cpu(*list++);
+> +			table[i].ocv =3D be32_to_cpu(*list);
+> +			list++;
+> +			table[i].capacity =3D be32_to_cpu(*list);
+> +			list++;
+>  		}
+>  	}
+> =20
+> --=20
+> 2.21.0
+>=20
+
+--fryypaezrgitn536
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlzLShUACgkQ2O7X88g7
-+pqErhAAgZNXEYhrDHkaaYDwxjL4Ch28ycvgjE9+HjCig5co2F2nW25/cQPj3IeQ
-KLwc3hAAy0RzDKTc72fMtg//7b8L21Dzj4Qz4pHmQ3vhOETyAvwt3mOK8kiCSh9F
-MlrJ7vtUSnOo3S/QGiBCQ6gjTzrkyYWYtJAK3UabGbwagf9t8bKAUquWNbwFbvuu
-0Q2L++Z8eX4O0b8sbLJ5YxCx9eib2j3W6C2CNHUFG+WLjLom4IskqYq3Y7KELQ4U
-1YQbFUI5p+WFnxZU0uklYPEBfMCRBXd4iG2XBc8c/KBMkeQKOlXkURqUl7lmNT9u
-jgdqBpp0qgOlmJE7YsJTFjgyuwWR/BWLpE9QMKxBR1Ua94G6HRnoNiveq2qty18b
-s6G53YnvJsjI2y0cnP0+wACEKBATa33dUCLDABsKlyXl1jSdeE8csDM3XZ/SMNxZ
-CWayrYggYz3nk9y1bnJK3bkyVNAKaDRlNOA+kezZGAPUdcojFJOWin45Vkm5CFma
-t9SNRSBFArbG/9x/iOcETTVE+Hb7w5czGr+D41vJd/OUM/oE+sCt4ylIi4PA6a/y
-IF5fC7XzuTspKeoLuUo7WWght3JjD5+aGZ5OF6GKOSn7sdn0N2D53CdXp482U+jv
-a3ojwbXAqujhOIZhw5WYMfXjMyfKvhoPjjSIbk+NNRt8ksWKMc8=
-=CJv+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlzLT/IACgkQ2O7X88g7
++ppo8g//S3Llctg446+FE7ffQ++R08/UBFsJPdxlsna5xwxbicUoYy2AC1vbXEai
+6N4ptFzxGtatqXBD8XqweeMIERjrIL9O0mS35mO3eQ74AUEMkTfyCacOkx1OsAq/
+9nRj/BxHtHwYRRI6Uv3RTIw/wi58HTS83DhIPBnumMKSawdq1oRqgRKsOJrlsVum
+EU1jB1Cq7m68mzg2Ypzh0JwJVEWRnxRBKmZn9zKvYB3kT0yL/5MLDjyF0HbzjZDC
+dycMrKNSuu4G03278veQWH/k0mvejiYzKBQoEyCYuPkJ7SXiTXyin6aPDY+3vfTK
+DqtSJAvm5UZ5cM5YU74hpIs/zuhLl7ORx3hR8Idx7KuXBT/Ls4LQCCz4lRJLtEuP
+tPGqHoeJQxpjQlFIgLAgplAHJf70zDrjpJ2ZO2n9dZShkM1lGPMvLidazVAXWz70
+xD9rkl8aW5lgqm+ccKvCOKl5GQf+3EJYmUQXIlxfGqUa3uEXqVDGMULgghDuy24B
+dzinRcFgk4MiVBGWBH1klrCHcO1g8BgkdBLftiz8UwqwfAXlXZQqkmcWgzRTCr8+
+gxNzt4o4yPu+9549VeVbrYq7MoPDZPlLeIR+0/tn5jW/aFW1qo08VhQHbNTGKdFL
+OULL6mDn5NlQkjumD2LaEs0XCH+xPW6VMeKwjRg/oQCrEnc3klg=
+=0jkf
 -----END PGP SIGNATURE-----
 
---bhukgbujt2wxql42--
+--fryypaezrgitn536--
