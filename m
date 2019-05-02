@@ -2,188 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F7C11284
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2019 07:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4F011348
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2019 08:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbfEBFOp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 May 2019 01:14:45 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:44420 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbfEBFOp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 May 2019 01:14:45 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190502051442epoutp03794012e6393ae2133d3f9c082f425249~axcezCnBQ1995019950epoutp03i
-        for <linux-pm@vger.kernel.org>; Thu,  2 May 2019 05:14:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190502051442epoutp03794012e6393ae2133d3f9c082f425249~axcezCnBQ1995019950epoutp03i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1556774082;
-        bh=XLV5tk/LWS1F7CKYRYZhM+g9pIWwdU+llTi5XmZU/PA=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=tzF7wPw4YIhQnWIo7q+2WHw+c+uVD5aJqQqgf8G3m8mFSjVZFGMdoL5CmloQu6J/n
-         oq2F+8pxyr5H1nh3uD23dKMotWqXINIKNge4uE/QQxO8bEPswdSGF2dxEtRS38oEue
-         lomfqdqrHLY8dqsbrVajeXh+p8len4pAkmhTcXyo=
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.152]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190502051439epcas1p19684e29355ffd9313a8c98a9d0db47fb~axccJ6NvN1771017710epcas1p1L;
-        Thu,  2 May 2019 05:14:39 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B5.F4.04143.FBC7ACC5; Thu,  2 May 2019 14:14:39 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190502051439epcas1p2a6894ac4ccfe59d87388fa949d6ef7e3~axcbvID3i0842208422epcas1p2q;
-        Thu,  2 May 2019 05:14:39 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190502051439epsmtrp141fd018dbbe33a58dfb424b6652788f0~axcbuFVsZ2560525605epsmtrp15;
-        Thu,  2 May 2019 05:14:39 +0000 (GMT)
-X-AuditID: b6c32a37-f31ff7000000102f-b2-5cca7cbf70f7
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E2.DC.03662.FBC7ACC5; Thu,  2 May 2019 14:14:39 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190502051439epsmtip2241f85ad7a40881b2e0a68a46e7dc486~axcbcjc_q1959519595epsmtip2Q;
-        Thu,  2 May 2019 05:14:39 +0000 (GMT)
-Subject: Re: [PATCH v6 03/10] clk: samsung: add BPLL rate table for Exynos
- 5422 SoC
-To:     Lukasz Luba <l.luba@partner.samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     b.zolnierkie@samsung.com, krzk@kernel.org, kgene@kernel.org,
-        kyungmin.park@samsung.com, m.szyprowski@samsung.com,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
-        treding@nvidia.com, digetx@gmail.com, willy.mh.wolff.ml@gmail.com
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <62f85c18-d3ac-3425-8ee3-538f8c677603@samsung.com>
-Date:   Thu, 2 May 2019 14:15:57 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
+        id S1726279AbfEBGTj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 May 2019 02:19:39 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:8295 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726202AbfEBGTj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 May 2019 02:19:39 -0400
+X-UUID: 7e95605b17544ffc80cac70bcfe2c597-20190502
+X-UUID: 7e95605b17544ffc80cac70bcfe2c597-20190502
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 759783719; Thu, 02 May 2019 14:19:33 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 2 May 2019 14:19:31 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 2 May 2019 14:19:31 +0800
+Message-ID: <1556777971.12123.35.camel@mtksdaap41>
+Subject: Re: [RFC v1 1/3] dt-bindings: soc: add mtk svs dt-bindings
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+CC:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, "Kevin Hilman" <khilman@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <Angus.Lin@mediatek.com>,
+        <Andy-YT.Liu@mediatek.com>
+Date:   Thu, 2 May 2019 14:19:31 +0800
+In-Reply-To: <155665629219.168659.8221738507474891604@swboyd.mtv.corp.google.com>
+References: <20190430112012.4514-1-roger.lu@mediatek.com>
+         <20190430112012.4514-2-roger.lu@mediatek.com>
+         <155665629219.168659.8221738507474891604@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <1555683568-20882-4-git-send-email-l.luba@partner.samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNJsWRmVeSWpSXmKPExsWy7bCmge7+mlMxBtefG1psnLGe1WL+kXOs
-        Fqs/Pma0mHxqLpPFme5ci/7Hr5ktzp/fwG5xtukNu8WtBhmLy7vmsFl87j3CaDHj/D4mi7VH
-        7rJb3G5cwWZx+E07q8X+K14Wt3/zWXw78YjRQcjj29dJLB6zGy6yeOycdZfdY9OqTjaP3uZ3
-        bB4H3+1h8ujbsorRY/Ppao/Pm+QCOKOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0t
-        LcyVFPISc1NtlVx8AnTdMnOAnlFSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFFgW
-        6BUn5haX5qXrJefnWhkaGBiZAhUmZGfMmfScreCiVMWkRXfYGxivinYxcnBICJhIfPlT0MXI
-        xSEksINRYvPRE4wQzidGiZONS9kgnG+MEqv3PGXvYuQE6zg4eRUjiC0ksJdRYmUnH0TReyB7
-        92NmkISwQKhE69zjTCAJEYHljBL7pt4Fm8sssJpJ4s/XtawgVWwCWhL7X9xgA7H5BRQlrv54
-        DDaWV8BOYsrLJWA1LAIqEvs33WMCsUUFIiTuH9vAClEjKHFy5hMWEJtTwFvi27plYOcxC4hL
-        3HoynwnClpdo3jqbGWSxhMA9dond7Q8YIb52kVjyzhviHWGJV8e3QL0mJfGyvw3KrpZYefII
-        G0RvB6PElv0XWCESxhL7l05mApnDLKApsX6XPsQuPol3X3tYIcbzSnS0CUFUK0tcfnCXCcKW
-        lFjc3skGYXtIPD76ln0Co+IsJN/MQvLBLCQfzEJYtoCRZRWjWGpBcW56arFhgTFybG9iBCd0
-        LfMdjBvO+RxiFOBgVOLh/TH1ZIwQa2JZcWXuIUYJDmYlEd5be4BCvCmJlVWpRfnxRaU5qcWH
-        GE2BgT2RWUo0OR+YbfJK4g1NjYyNjS1MDM1MDQ2VxHnXOzjHCAmkJ5akZqemFqQWwfQxcXBK
-        NTDqd25Ypnl/V5+VK8eEb4vOLt21qLg4+pnztoDZDaxFKy+daHh9MSoo6M9K13k+z68e2xE+
-        c9fe15W6EwOeu0h9Y2s72PEhfvZP7xNLt9yad71YyfPhldwP6/O6bXkmJBgluXIY+17cdfeh
-        bcFW3Sl/v1/OOPVX53CBv7KNnz3n9j9v7/DmOHibKrEUZyQaajEXFScCADDQNpv+AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsWy7bCSvO7+mlMxBpNmC1lsnLGe1WL+kXOs
-        Fqs/Pma0mHxqLpPFme5ci/7Hr5ktzp/fwG5xtukNu8WtBhmLy7vmsFl87j3CaDHj/D4mi7VH
-        7rJb3G5cwWZx+E07q8X+K14Wt3/zWXw78YjRQcjj29dJLB6zGy6yeOycdZfdY9OqTjaP3uZ3
-        bB4H3+1h8ujbsorRY/Ppao/Pm+QCOKO4bFJSczLLUov07RK4MuZMes5WcFGqYtKiO+wNjFdF
-        uxg5OSQETCQOTl7F2MXIxSEksJtR4t/vbcwQCUmJaRePAtkcQLawxOHDxRA1bxkl7j04yAJS
-        IywQKtE69zgTSEJEYDmjxNy/S1lAHGaB1UwSkz5uYYNouc8ocfXaC1aQFjYBLYn9L26wgdj8
-        AooSV388ZgSxeQXsJKa8XAJWwyKgIrF/0z0mEFtUIELizPsVLBA1ghInZz4BszkFvCW+rVvG
-        DmIzC6hL/Jl3iRnCFpe49WQ+E4QtL9G8dTbzBEbhWUjaZyFpmYWkZRaSlgWMLKsYJVMLinPT
-        c4sNC4zyUsv1ihNzi0vz0vWS83M3MYLjW0trB+OJE/GHGAU4GJV4eH9MPRkjxJpYVlyZe4hR
-        goNZSYT31h6gEG9KYmVValF+fFFpTmrxIUZpDhYlcV75/GORQgLpiSWp2ampBalFMFkmDk6p
-        BsZq3zRpyZc13BnnHNLirDv2H9zEWyYvLsV5dZHwfNOO6Qk3c2Tmeild3OTrrBh4Zs7pmTeE
-        fZ6s/nBDtPrKegsTrQ3yi69Ln7mesCJLfPJX/gvWj+7MzMs8/aJ0SomPVXO+YZzQt/MzV3e+
-        8HO7v9iyb8E39f+7zpb+XHi2/KGznHIX3zx2MT0lluKMREMt5qLiRABQQiCD6wIAAA==
-X-CMS-MailID: 20190502051439epcas1p2a6894ac4ccfe59d87388fa949d6ef7e3
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190419141943eucas1p220d77bacfc4fcba8ec6a10f540e1a27d
-References: <1555683568-20882-1-git-send-email-l.luba@partner.samsung.com>
-        <CGME20190419141943eucas1p220d77bacfc4fcba8ec6a10f540e1a27d@eucas1p2.samsung.com>
-        <1555683568-20882-4-git-send-email-l.luba@partner.samsung.com>
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 2E2F08777EB39D1A247C11B19DDF97D305EB6283DD65100F47975443F62BB5352000:8
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+Dear Stephen,
 
-On 19. 4. 19. 오후 11:19, Lukasz Luba wrote:
-> Add new table rate for BPLL for Exynos5422 SoC supporting Dynamic Memory
-> Controller frequencies for driver's DRAM timings.
+Thanks for the review.
+
+On Tue, 2019-04-30 at 13:31 -0700, Stephen Boyd wrote:
+> Quoting Roger Lu (2019-04-30 04:20:10)
+> > Document the binding for enabling mtk svs on MediaTek SoC.
+> > 
+> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> > ---
+> >  .../devicetree/bindings/power/mtk-svs.txt     | 70 +++++++++++++++++++
+> >  1 file changed, 70 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/power/mtk-svs.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/power/mtk-svs.txt b/Documentation/devicetree/bindings/power/mtk-svs.txt
+> > new file mode 100644
+> > index 000000000000..355329db74ba
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/mtk-svs.txt
+> > @@ -0,0 +1,70 @@
+> > +* Mediatek Smart Voltage Scaling (MTK SVS)
+> > +
+> > +This describes the device tree binding for the MTK SVS controller
+> > +which helps provide the optimized CPU/GPU/CCI voltages. This device also
+> > +needs thermal data to calculate thermal slope for accurately compensate
+> > +the voltages when temperature change.
+> > +
+> > +Required properties:
+> > +- compatible:
+> > +  - "mediatek,mt8183-svs" : For MT8183 family of SoCs
+> > +- reg: Address range of the MTK SVS controller.
+> > +- interrupts: IRQ for the MTK SVS controller.
+> > +- clocks, clock-names: Clocks needed for the svs controller. required
+> > +                       clocks are:
+> > +                      "main_clk": Main clock needed for register access
+> > +- nvmem-cells: Phandle to the calibration data provided by a nvmem device.
+> > +- nvmem-cell-names: Should be "svs-calibration-data" and "calibration-data"
+> > +- svs_xxx: Phandle of svs_bank device for controlling corresponding opp
 > 
-> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> ---
->  drivers/clk/samsung/clk-exynos5420.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+> Properties shouldn't have underscores in them. Use dashes?
+Ok. I'll use dashes.
+
 > 
-> diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
-> index d9e6653..ddee8bd 100644
-> --- a/drivers/clk/samsung/clk-exynos5420.c
-> +++ b/drivers/clk/samsung/clk-exynos5420.c
-> @@ -1323,6 +1323,17 @@ static const struct samsung_pll_rate_table exynos5420_pll2550x_24mhz_tbl[] __ini
->  	PLL_35XX_RATE(24 * MHZ, 200000000,  200, 3, 3),
->  };
->  
-> +static const struct samsung_pll_rate_table exynos5422_bpll_rate_table[] = {
-> +	PLL_35XX_RATE(24 * MHZ, 825000000, 275, 4, 1),
-> +	PLL_35XX_RATE(24 * MHZ, 728000000, 182, 3, 1),
-> +	PLL_35XX_RATE(24 * MHZ, 633000000, 211, 4, 1),
-> +	PLL_35XX_RATE(24 * MHZ, 543000000, 181, 2, 2),
-> +	PLL_35XX_RATE(24 * MHZ, 413000000, 413, 6, 2),
-> +	PLL_35XX_RATE(24 * MHZ, 275000000, 275, 3, 3),
-> +	PLL_35XX_RATE(24 * MHZ, 206000000, 206, 3, 3),
-> +	PLL_35XX_RATE(24 * MHZ, 165000000, 110, 2, 3),
-> +};
-> +
->  static const struct samsung_pll_rate_table exynos5420_epll_24mhz_tbl[] = {
->  	PLL_36XX_RATE(24 * MHZ, 600000000U, 100, 2, 1, 0),
->  	PLL_36XX_RATE(24 * MHZ, 400000000U, 200, 3, 2, 0),
-> @@ -1465,7 +1476,7 @@ static void __init exynos5x_clk_init(struct device_node *np,
->  		exynos5x_plls[apll].rate_table = exynos5420_pll2550x_24mhz_tbl;
->  		exynos5x_plls[epll].rate_table = exynos5420_epll_24mhz_tbl;
->  		exynos5x_plls[kpll].rate_table = exynos5420_pll2550x_24mhz_tbl;
-> -		exynos5x_plls[bpll].rate_table = exynos5420_pll2550x_24mhz_tbl;
-> +		exynos5x_plls[bpll].rate_table = exynos5422_bpll_rate_table;
-
-According to your previous reply, the released odroid-xu3 board by hardkernel
-might be only CONFIG_SOC_EXYNOS5422_REV_0. Because the kernel configurattion
-from hardkernel has 'CONFIG_SOC_EXYNOS5422_REV_0=y'. I'm ok about adding bpll rate_table.
-
-But, just I have one question. I think that this bpll rate_table is for
-only Exynos5422 series. Because the kernel of hardkernel used
-driver/clk/samsung/clk-exynos5422.c instead of clk-exynos5420.c commonn driver.
-It means that the clk-exynos5422.c of hardkernel's kernel support only Exynos5422
-without any considering the Exynos5420 series. 
-
-I think that it might need to check the soc version to use
-bpll rate_table as following:
-
---- a/drivers/clk/samsung/clk-exynos5420.c
-+++ b/drivers/clk/samsung/clk-exynos5420.c
-@@ -1438,7 +1438,10 @@ static void __init exynos5x_clk_init(struct device_node *np,
-                exynos5x_plls[apll].rate_table = exynos5420_pll2550x_24mhz_tbl;
-                exynos5x_plls[epll].rate_table = exynos5420_epll_24mhz_tbl;
-                exynos5x_plls[kpll].rate_table = exynos5420_pll2550x_24mhz_tbl;
--               exynos5x_plls[bpll].rate_table = exynos5422_bpll_rate_table;
-+
-+               if (soc == EXYNOS5800)
-+                       exynos5x_plls[bpll].rate_table
-+                               = exynos5422_bpll_rate_table;
-        }
-
-
->  	}
->  
->  	samsung_clk_register_pll(ctx, exynos5x_plls, ARRAY_SIZE(exynos5x_plls),
+> > +           table and power-domains.
+> > +- vxxx-supply: Phandle to each regulator. vxxx can be "vcpu_little",
+> > +              "vcpu_big", "vcci" and "vgpu".
+> > +
+> > +Example:
+> > +
+> > +       svs: svs@1100b000 {
+> > +               compatible = "mediatek,mt8183-svs";
+> > +               reg = <0 0x1100b000 0 0x1000>;
+> > +               interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW 0>;
+> > +               clocks = <&infracfg CLK_INFRA_THERM>;
+> > +               clock-names = "main_clk";
+> > +               nvmem-cells = <&svs_calibration>, <&thermal_calibration>;
+> > +               nvmem-cell-names = "svs-calibration-data", "calibration-data";
+> > +
+> > +               svs_cpu_little: svs_cpu_little {
+> > +                       compatible = "mediatek,mt8183-svs-cpu-little";
+> > +                       operating-points-v2 = <&cluster0_opp>;
+> > +               };
+> > +
+> > +               svs_cpu_big: svs_cpu_big {
+> > +                       compatible = "mediatek,mt8183-svs-cpu-big";
+> > +                       operating-points-v2 = <&cluster1_opp>;
+> > +               };
+> > +
+> > +               svs_cci: svs_cci {
+> > +                       compatible = "mediatek,mt8183-svs-cci";
+> > +                       operating-points-v2 = <&cluster2_opp>;
+> > +               };
+> > +
+> > +               svs_gpu: svs_gpu {
+> > +                       compatible = "mediatek,mt8183-svs-gpu";
+> > +                       power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
+> > +                       operating-points-v2 = <&gpu_opp_table>;
+> > +               };
 > 
+> It looks like you need multiple OPPs for a single device, because it has
+> different independent power supplies it wants to associate the OPP
+> tables with?
+Yes. SVS has different controllers inside the hardware in order to
+calculate and optimize different OPP table voltage part.
+
+> Why can't these OPP tables be attached to the devices that
+> use them, i.e. CPU, GPU, CCI, etc.? Seems odd that those devices don't
+> have OPP tables that this hardware block can look up somehow.
+Those OPP tables are attached by our DVFS node (please refers below
+patch). SVS just shares with their OPP table and help optimize these OPP
+tables' voltage part.
+
+Add cpufreq DTS node to the mt8183 and mt8183-evb
+https://patchwork.kernel.org/patch/10921675/
 
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+> Similarly,
+> the power domains should probably be part of the devices that are using
+> them and not these sub-nodes that are mirroring the other hardware
+> blocks in the system?
+Oh. There is a svs controller in GPU power-domain. We need to turn on
+GPU power so that svs controller can work functionally. Therefore, we
+add GPU power-domains in our svs_gpu sub-node.
+
+
+> 
+> > +       };
+> > +
+> > +       &svs_cpu_little {
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+
+
