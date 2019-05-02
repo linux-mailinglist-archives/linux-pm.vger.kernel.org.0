@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F4311632
-	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2019 11:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC56211634
+	for <lists+linux-pm@lfdr.de>; Thu,  2 May 2019 11:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726255AbfEBJMF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 May 2019 05:12:05 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33550 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbfEBJMF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 May 2019 05:12:05 -0400
-Received: by mail-lj1-f194.google.com with SMTP id f23so1518551ljc.0;
-        Thu, 02 May 2019 02:12:02 -0700 (PDT)
+        id S1726225AbfEBJMw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 May 2019 05:12:52 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:45929 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726196AbfEBJMw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 May 2019 05:12:52 -0400
+Received: by mail-lf1-f65.google.com with SMTP id t11so1296260lfl.12;
+        Thu, 02 May 2019 02:12:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=xL/m2P5dlV8hbi1y9xpWTHjQHcFeQVvFFfKvK3YKYj0=;
-        b=hOy4rpSy96vIBjkFupeMlHmquN/+M0wEyCNld5fPcW8vsCpRm1EdJLq4hUag8Zy/Zb
-         dv3iFekNEpseGJkTuE/r9j/57RzMPEUGZ2aQOY1PlZQrECwoqnWckqNkYiR55vblrGg1
-         87qMfuAOR7yQRqQnHKd/0WcEy8W2RwLou61bPEhZVdc0DZel2SflBDD5IgL6/UpwUc6E
-         mTQFpV9QR+h7OMZxs04vkOgkMJBWxwjqAV3StcPPsbmQ2dWK9wpTF68jWVqAPldRwxvc
-         T5X9tFuOfsziBauVAV8u3R8gj5L8YB08cBvMmFh2xi74DBpUbPVppotWqa7VEuhak+6h
-         SewQ==
-X-Gm-Message-State: APjAAAW11RNZv4A08+FJKHqTsYEvmA4J83BhvIjqzfYov1anrS0Bx//T
-        z2JvIp5sC1TEDq34Px0Tw2E=
-X-Google-Smtp-Source: APXvYqy2IKRFBsTXglzfnOxi7PRK+DBi/Q8rcmmy16+PCMRE3wuvVKz9VAi/PqJncO/vS1Tuk+o+BQ==
-X-Received: by 2002:a2e:9d99:: with SMTP id c25mr1116009ljj.29.1556788321571;
-        Thu, 02 May 2019 02:12:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=uCotCnuEgN6SHIykHRh7vsXKjnpDUqVREHXaBRYEKys=;
+        b=uJooS0J1pZ/gF2WDMRnQ+DVq5O8hi7gZLtn/tUxAUOIJ8XuptFOMrEO+i7yktk06wR
+         bqq8Bia7mrDaLT+1T8OYe1GV6WcKQZHQITI9LDgCTCv3hSsdoyKnlS1wMvqB7vlxf/tn
+         yad32uGd31Aiz1nTyhGqkTEzLrZ+twCBtBXnb4+n62Fsgiqys76ad/th0aRICFXAocib
+         8ysL6XKnSJo3dudP1Zl2OIw1PFwwxh3ddxKirEqs/0EUg+VxZi5se9l1B0QwZlHkN9wb
+         8tMKOG5/GA2d0gv6tf49/3XmcqOS7lhC/78TNbHGqqJO7xGF2Az4HdJwAlE2fwoABqDJ
+         t28A==
+X-Gm-Message-State: APjAAAVvNHMTL5Nbden30v17A2Ny/9CmNlmfNndyDXCNUYyt/5eUR6Np
+        17R8OEnrC42spc4GbT5U/zNG2NZo
+X-Google-Smtp-Source: APXvYqwWMHUjuBJFTexJ/OsKSfFDS0zijFdLPtpygoJy3kbB7P9GvXZQ26iII0dFZ3qfs8FpaRUjuA==
+X-Received: by 2002:ac2:54a1:: with SMTP id w1mr1493214lfk.46.1556788368211;
+        Thu, 02 May 2019 02:12:48 -0700 (PDT)
 Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id q11sm9351647lfc.51.2019.05.02.02.11.59
+        by smtp.gmail.com with ESMTPSA id i66sm8688820lji.43.2019.05.02.02.12.46
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 May 2019 02:12:00 -0700 (PDT)
-Date:   Thu, 2 May 2019 12:11:47 +0300
+        Thu, 02 May 2019 02:12:47 -0700 (PDT)
+Date:   Thu, 2 May 2019 12:12:39 +0300
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         mazziesaccount@gmail.com
@@ -54,235 +54,299 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
         heikki.haikola@fi.rohmeurope.com, mikko.mutanen@fi.rohmeurope.com
-Subject: [PATCH v14 0/8] support ROHM BD70528 PMIC
-Message-ID: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v14 1/8] mfd: regulator: clk: split rohm-bd718x7.h
+Message-ID: <f545d8dc79d4e6ae4f882ffaa0d9d9b146f58d2b.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Patch series introducing support for ROHM BD70528 PMIC
+Split the bd718x7.h to ROHM common and bd718x7 specific parts
+so that we do not need to add same things in every new ROHM
+PMIC header. Please note that this change requires changes also
+in bd718x7 sub-device drivers for regulators and clk.
 
-Resending the series as I forgot Lee from the recipient list of
-the original mail.
-
-ROHM BD70528 is a programmable Power Management IC for battery
-powered 'ultra low power' systems like the pre-announced NXP
-i.MX7 ULP. This patch series introduces support for the PMIC. Please
-note that this driver only supports HW setup where PMIC is connected
-to I2C on A7 core. The other scenario is to use M4 as a power manager
-and connect pmic to M4. On such setups the A7 can only access pmic
-via M4 core using RPMSG virtio. Such setup depends on RPMSG
-implementation on M4 core and is currently not supported by this
-patch series.
-
-RTC block of the bd70528 can support 'wake' irq which wakes PMIC
-from standby state. Wake irq's can be armed to wake up system up
-to 24 hours from arming. bd70528 can also generate alarm interrupts
-which can be armed to occur years after triggering. The RTC driver
-does always arm both the waker and alarm irqs and does not utilize
-longer period of alarm interrupts. All the RTC timers are limited
-to occur within the next 24 hours. Any suggestions on more elegant
-timer support are welcome =)
-
-GPIO portion of bd70528 driver adds I/O support for driving GPIO
-pins or reading the state. The interrupt functionality is provided
-by regmap-irq. Current GPIO driver is not aware of whether the pin(s)
-are used for I/O or interrupts and it is up-to driver user to
-ensure there is no misconfiguration or "double use".
-
-The power-supply patch included in series is only poorly tested as I
-lack of hardware with real battery connected. Reset and ADC are not
-supported by this series.
-
-Changelog v14: Changes proposed by Sebastian Reichel
-- Only charger driver changed
-- Constifying/staticizing structs
-- Use dev_get_regmap() instead of providing regmap pointer in parent's
-  driver data
-- Power type MAINS instead of BATTERY
-
-Changelog v13:
-- Moved WDT enable/disable code from MFD to WDT
-- Added WDT enable/disable stubs for cases where WDT is omitted from
-  Kconfig
-
-Changelog v12:
-- No functional changes
-- Fixed styling issues pointed by Lee Jones
-- Fixed styling issues pointed by Alexandre Belloni
-- Fixed various styling issues
-
-Changelog v11:
-- No functional changes
-- Rebased on linux 5.1-rc2
-- Dropped patch 9 which was already applied by Mark
-- renamed dt-bindings patch as suggested by Rob
-  
-Changelog v10:
-- Exported locking functions for RTC lock and as a result dropped hid
-  the struct bd70528 from sub-devices who no longer needed it.
-- removed linux/gpio.h header from GPIO driver.
-
-Changelog v9: Changes suggested by Lee Jones
-- MFD, DT-binding, RTC and WDT changed
-- DT-bindings: Spelling fixes
-- RTC and WDT: Use exported function instead of function pointer for WDT
-  arming/disarming
-- MFD: Export WDT arming/disarming function instead of providing a
-  pointer to it.
-- Various styling fixes.
-
-Changelog v8:
-- regulators(*), wdt, gpio, rtc, mfd(*) and dt-bindings unchanged.
-  (*)Patches 1-3 squashed to not break bisecting.
-
-- removed unnecessary newline from clk
-- fixed possible use of uninitialized 'reg' from power-supply.
-  Found by 0-day tests and reported by Dan Carpenter.
-
-Changelog v7:
-Only patch 2 changed.
-- Avoid out-of-array-bounds access at regulator probe if unsupported
-  chip type is passed to bd718x7 regulator driver.
-
-Changelog v6:
-Only patch 10 changed.
-- styling fixes pointed by Gunter Roeck
-- dropped RFC tag
-
-Changelog v5 (RFC):
-Only patch 7 changed.
-- Explained why lock is not needed at GPIO value getting
-- removed ampersands from function pointer assignments.
-
-Changelog v4 (RFC):
-patches 1,2,3,4,5,10 are unchanged from v3
-DT-binding fixes suggested by Rob Herring:
-- drop interrupt-parent
-- drop clock-frequency
-- change pmic node name to a generic one
-RTC:
-- enable RTC block's irqs before registering rtc
-GPIO fixes after initial testing:
-- fix getting GPIO value when direction is output
-POWER:
-- Add ASCII art intended to clarify the charger HW state machine
-
-Changelog v3 (RFC):
-patches 1,2,3,4,5,6,7,8 and 10 are unchanged from v2
-RTC fixups suggested by Guenter Roeck:
-- create bd70528_set_time_locked function in order to simplify
-  error handling and to make mutex lock/unlock path more obvious
-- don't ignore errors on bd70528_set_time_locked
-- simplify bd70528_read_alarm enabled condition setting
-- add __packed to structs where members are mapped to HW registers
-- remove unnecessary brackets from enable condition in set_wake
-RTC: fixups suggested by Alessandro Belloni
-- don't use deprecated devm_rtc_device_register
-- add alarm_irq_enable callback
-- add range_min and range_max
-WDT:
-- add regmap and mutex pointers to WDT data so that they can be accessed
-  without dereferencing the parent data
-- remove parent data pointer from WDT data
-- embed struct watchdog_device into WDT data in order to avoid double
-  allocation.
-GPIO:
-- remove unused header as pointed by Linus Walleij
-POWER:
-- do not copy the whole MFD data (especially the mutex to avoid
-  all possibilities of accidentally using the copy of a mutex)
-
-Changelog v2 (RFC): Mainly feedback from Guenter Roeck:
-- patches 1, 2, 3, 4, 5, 9 are unchanged.
-- mfd: own mutex for each bd70528 instance - embed in struct bd70528
-- watchdog: do not copy parent device data
-- watchdog: fix deadlock caused by double locked mutex
-- watchdog: set initial timeouts and WDT parent information
-- watchdog: remove unnecessary ping function from ops
-- watchdog: and the comment regarding it
-- watchdog: allocate watchdog struct in order to allow multiple WDG
-  instances
-- rtc: bd70528 fix the order of mutex unlock and re-enabling RTC based
-  timers
-- rtc: fix the irq mask register address
-- power: fix the irq mask register address
-- regulator/regmap-irq: Drop the patches 1, 8 and 9 from original series
-  as those were already applied by Mark 
-
-Patch 1:
-	split the bd718x7.h to generic and chip specific portions.
-	(breaks compilation without patch 2 and 3)
-	- adapt bd718x7.h changes to bd718x7 regulator driver
-	- adapt bd718x7.h changes to bd718x7 clk driver
-Patch 2:
-	add MFD core support for bd70528
-Patch 3:
-	support bd70528 clk using bd718x7 clk driver
-Patch 4:
-	document DT bindings for BD70528
-Patch 5:
-	support BD70528 GPIO block
-Patch 6:
-	support BD70528 RTC
-Patch 7:
-	support BD70528 battery charger
-Patch 8:
-	support BD70528 watchdog
-
-This patch series is based on Linus' v5.1-rc2 tag.
-
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Acked-by: Mark Brown <broonie@kernel.org>
+Acked-by: Stephen Boyd <sboyd@kernel.org>
+Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 ---
+Changelog v14: No changes
 
-
-Matti Vaittinen (8):
-  mfd: regulator: clk: split rohm-bd718x7.h
-  mfd: bd70528: Support ROHM bd70528 PMIC - core
-  clk: bd718x7: Support ROHM BD70528 clk block
-  dt-bindings: mfd: Document first ROHM BD70528 bindings
-  gpio: Initial support for ROHM bd70528 GPIO block
-  rtc: bd70528: Initial support for ROHM bd70528 RTC
-  power: supply: Initial support for ROHM BD70528 PMIC charger block
-  watchdog: bd70528: Initial support for ROHM BD70528 watchdog block
-
- .../bindings/mfd/rohm,bd70528-pmic.txt        | 102 +++
- drivers/clk/Kconfig                           |   6 +-
- drivers/clk/clk-bd718x7.c                     |  24 +-
- drivers/gpio/Kconfig                          |  11 +
- drivers/gpio/Makefile                         |   1 +
- drivers/gpio/gpio-bd70528.c                   | 232 ++++++
- drivers/mfd/Kconfig                           |  17 +
- drivers/mfd/Makefile                          |   1 +
- drivers/mfd/rohm-bd70528.c                    | 316 ++++++++
- drivers/mfd/rohm-bd718x7.c                    |  23 +-
- drivers/power/supply/Kconfig                  |   9 +
- drivers/power/supply/Makefile                 |   1 +
- drivers/power/supply/bd70528-charger.c        | 743 ++++++++++++++++++
- drivers/regulator/bd718x7-regulator.c         |  25 +-
- drivers/rtc/Kconfig                           |   8 +
- drivers/rtc/Makefile                          |   1 +
- drivers/rtc/rtc-bd70528.c                     | 500 ++++++++++++
- drivers/watchdog/Kconfig                      |  12 +
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/bd70528_wdt.c                | 290 +++++++
- include/linux/mfd/rohm-bd70528.h              | 408 ++++++++++
- include/linux/mfd/rohm-bd718x7.h              |  22 +-
- include/linux/mfd/rohm-generic.h              |  20 +
- 23 files changed, 2727 insertions(+), 46 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd70528-pmic.txt
- create mode 100644 drivers/gpio/gpio-bd70528.c
- create mode 100644 drivers/mfd/rohm-bd70528.c
- create mode 100644 drivers/power/supply/bd70528-charger.c
- create mode 100644 drivers/rtc/rtc-bd70528.c
- create mode 100644 drivers/watchdog/bd70528_wdt.c
- create mode 100644 include/linux/mfd/rohm-bd70528.h
+ drivers/clk/clk-bd718x7.c             |  6 +++---
+ drivers/mfd/rohm-bd718x7.c            | 23 ++++++++++++-----------
+ drivers/regulator/bd718x7-regulator.c | 25 +++++++++++++------------
+ include/linux/mfd/rohm-bd718x7.h      | 22 ++++++++--------------
+ include/linux/mfd/rohm-generic.h      | 20 ++++++++++++++++++++
+ 5 files changed, 56 insertions(+), 40 deletions(-)
  create mode 100644 include/linux/mfd/rohm-generic.h
 
+diff --git a/drivers/clk/clk-bd718x7.c b/drivers/clk/clk-bd718x7.c
+index 60422c72d142..461228ebf703 100644
+--- a/drivers/clk/clk-bd718x7.c
++++ b/drivers/clk/clk-bd718x7.c
+@@ -17,7 +17,7 @@ struct bd718xx_clk {
+ 	u8 reg;
+ 	u8 mask;
+ 	struct platform_device *pdev;
+-	struct bd718xx *mfd;
++	struct rohm_regmap_dev *mfd;
+ };
+ 
+ static int bd71837_clk_set(struct clk_hw *hw, int status)
+@@ -68,7 +68,7 @@ static int bd71837_clk_probe(struct platform_device *pdev)
+ 	int rval = -ENOMEM;
+ 	const char *parent_clk;
+ 	struct device *parent = pdev->dev.parent;
+-	struct bd718xx *mfd = dev_get_drvdata(parent);
++	struct rohm_regmap_dev *mfd = dev_get_drvdata(parent);
+ 	struct clk_init_data init = {
+ 		.name = "bd718xx-32k-out",
+ 		.ops = &bd71837_clk_ops,
+@@ -119,5 +119,5 @@ static struct platform_driver bd71837_clk = {
+ module_platform_driver(bd71837_clk);
+ 
+ MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+-MODULE_DESCRIPTION("BD71837 chip clk driver");
++MODULE_DESCRIPTION("BD71837/BD71847 chip clk driver");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/mfd/rohm-bd718x7.c b/drivers/mfd/rohm-bd718x7.c
+index a29d529a96f4..7beb444a57cb 100644
+--- a/drivers/mfd/rohm-bd718x7.c
++++ b/drivers/mfd/rohm-bd718x7.c
+@@ -98,18 +98,19 @@ static int bd718xx_i2c_probe(struct i2c_client *i2c,
+ 		return -ENOMEM;
+ 
+ 	bd718xx->chip_irq = i2c->irq;
+-	bd718xx->chip_type = (unsigned int)(uintptr_t)
++	bd718xx->chip.chip_type = (unsigned int)(uintptr_t)
+ 				of_device_get_match_data(&i2c->dev);
+-	bd718xx->dev = &i2c->dev;
++	bd718xx->chip.dev = &i2c->dev;
+ 	dev_set_drvdata(&i2c->dev, bd718xx);
+ 
+-	bd718xx->regmap = devm_regmap_init_i2c(i2c, &bd718xx_regmap_config);
+-	if (IS_ERR(bd718xx->regmap)) {
++	bd718xx->chip.regmap = devm_regmap_init_i2c(i2c,
++						    &bd718xx_regmap_config);
++	if (IS_ERR(bd718xx->chip.regmap)) {
+ 		dev_err(&i2c->dev, "regmap initialization failed\n");
+-		return PTR_ERR(bd718xx->regmap);
++		return PTR_ERR(bd718xx->chip.regmap);
+ 	}
+ 
+-	ret = devm_regmap_add_irq_chip(&i2c->dev, bd718xx->regmap,
++	ret = devm_regmap_add_irq_chip(&i2c->dev, bd718xx->chip.regmap,
+ 				       bd718xx->chip_irq, IRQF_ONESHOT, 0,
+ 				       &bd718xx_irq_chip, &bd718xx->irq_data);
+ 	if (ret) {
+@@ -118,7 +119,7 @@ static int bd718xx_i2c_probe(struct i2c_client *i2c,
+ 	}
+ 
+ 	/* Configure short press to 10 milliseconds */
+-	ret = regmap_update_bits(bd718xx->regmap,
++	ret = regmap_update_bits(bd718xx->chip.regmap,
+ 				 BD718XX_REG_PWRONCONFIG0,
+ 				 BD718XX_PWRBTN_PRESS_DURATION_MASK,
+ 				 BD718XX_PWRBTN_SHORT_PRESS_10MS);
+@@ -129,7 +130,7 @@ static int bd718xx_i2c_probe(struct i2c_client *i2c,
+ 	}
+ 
+ 	/* Configure long press to 10 seconds */
+-	ret = regmap_update_bits(bd718xx->regmap,
++	ret = regmap_update_bits(bd718xx->chip.regmap,
+ 				 BD718XX_REG_PWRONCONFIG1,
+ 				 BD718XX_PWRBTN_PRESS_DURATION_MASK,
+ 				 BD718XX_PWRBTN_LONG_PRESS_10S);
+@@ -149,7 +150,7 @@ static int bd718xx_i2c_probe(struct i2c_client *i2c,
+ 
+ 	button.irq = ret;
+ 
+-	ret = devm_mfd_add_devices(bd718xx->dev, PLATFORM_DEVID_AUTO,
++	ret = devm_mfd_add_devices(bd718xx->chip.dev, PLATFORM_DEVID_AUTO,
+ 				   bd718xx_mfd_cells,
+ 				   ARRAY_SIZE(bd718xx_mfd_cells), NULL, 0,
+ 				   regmap_irq_get_domain(bd718xx->irq_data));
+@@ -162,11 +163,11 @@ static int bd718xx_i2c_probe(struct i2c_client *i2c,
+ static const struct of_device_id bd718xx_of_match[] = {
+ 	{
+ 		.compatible = "rohm,bd71837",
+-		.data = (void *)BD718XX_TYPE_BD71837,
++		.data = (void *)ROHM_CHIP_TYPE_BD71837,
+ 	},
+ 	{
+ 		.compatible = "rohm,bd71847",
+-		.data = (void *)BD718XX_TYPE_BD71847,
++		.data = (void *)ROHM_CHIP_TYPE_BD71847,
+ 	},
+ 	{ }
+ };
+diff --git a/drivers/regulator/bd718x7-regulator.c b/drivers/regulator/bd718x7-regulator.c
+index b2191be49670..1c8c8497ac0a 100644
+--- a/drivers/regulator/bd718x7-regulator.c
++++ b/drivers/regulator/bd718x7-regulator.c
+@@ -1152,12 +1152,12 @@ static int bd718xx_probe(struct platform_device *pdev)
+ {
+ 	struct bd718xx *mfd;
+ 	struct regulator_config config = { 0 };
+-	struct bd718xx_pmic_inits pmic_regulators[] = {
+-		[BD718XX_TYPE_BD71837] = {
++	struct bd718xx_pmic_inits pmic_regulators[ROHM_CHIP_TYPE_AMOUNT] = {
++		[ROHM_CHIP_TYPE_BD71837] = {
+ 			.r_datas = bd71837_regulators,
+ 			.r_amount = ARRAY_SIZE(bd71837_regulators),
+ 		},
+-		[BD718XX_TYPE_BD71847] = {
++		[ROHM_CHIP_TYPE_BD71847] = {
+ 			.r_datas = bd71847_regulators,
+ 			.r_amount = ARRAY_SIZE(bd71847_regulators),
+ 		},
+@@ -1173,15 +1173,15 @@ static int bd718xx_probe(struct platform_device *pdev)
+ 		goto err;
+ 	}
+ 
+-	if (mfd->chip_type >= BD718XX_TYPE_AMOUNT ||
+-	    !pmic_regulators[mfd->chip_type].r_datas) {
++	if (mfd->chip.chip_type >= ROHM_CHIP_TYPE_AMOUNT ||
++	    !pmic_regulators[mfd->chip.chip_type].r_datas) {
+ 		dev_err(&pdev->dev, "Unsupported chip type\n");
+ 		err = -EINVAL;
+ 		goto err;
+ 	}
+ 
+ 	/* Register LOCK release */
+-	err = regmap_update_bits(mfd->regmap, BD718XX_REG_REGLOCK,
++	err = regmap_update_bits(mfd->chip.regmap, BD718XX_REG_REGLOCK,
+ 				 (REGLOCK_PWRSEQ | REGLOCK_VREG), 0);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to unlock PMIC (%d)\n", err);
+@@ -1200,7 +1200,8 @@ static int bd718xx_probe(struct platform_device *pdev)
+ 	 * bit allowing HW defaults for power rails to be used
+ 	 */
+ 	if (!use_snvs) {
+-		err = regmap_update_bits(mfd->regmap, BD718XX_REG_TRANS_COND1,
++		err = regmap_update_bits(mfd->chip.regmap,
++					 BD718XX_REG_TRANS_COND1,
+ 					 BD718XX_ON_REQ_POWEROFF_MASK |
+ 					 BD718XX_SWRESET_POWEROFF_MASK |
+ 					 BD718XX_WDOG_POWEROFF_MASK |
+@@ -1215,17 +1216,17 @@ static int bd718xx_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	for (i = 0; i < pmic_regulators[mfd->chip_type].r_amount; i++) {
++	for (i = 0; i < pmic_regulators[mfd->chip.chip_type].r_amount; i++) {
+ 
+ 		const struct regulator_desc *desc;
+ 		struct regulator_dev *rdev;
+ 		const struct bd718xx_regulator_data *r;
+ 
+-		r = &pmic_regulators[mfd->chip_type].r_datas[i];
++		r = &pmic_regulators[mfd->chip.chip_type].r_datas[i];
+ 		desc = &r->desc;
+ 
+ 		config.dev = pdev->dev.parent;
+-		config.regmap = mfd->regmap;
++		config.regmap = mfd->chip.regmap;
+ 
+ 		rdev = devm_regulator_register(&pdev->dev, desc, &config);
+ 		if (IS_ERR(rdev)) {
+@@ -1254,7 +1255,7 @@ static int bd718xx_probe(struct platform_device *pdev)
+ 		 */
+ 		if (!use_snvs || !rdev->constraints->always_on ||
+ 		    !rdev->constraints->boot_on) {
+-			err = regmap_update_bits(mfd->regmap, r->init.reg,
++			err = regmap_update_bits(mfd->chip.regmap, r->init.reg,
+ 						 r->init.mask, r->init.val);
+ 			if (err) {
+ 				dev_err(&pdev->dev,
+@@ -1264,7 +1265,7 @@ static int bd718xx_probe(struct platform_device *pdev)
+ 			}
+ 		}
+ 		for (j = 0; j < r->additional_init_amnt; j++) {
+-			err = regmap_update_bits(mfd->regmap,
++			err = regmap_update_bits(mfd->chip.regmap,
+ 						 r->additional_inits[j].reg,
+ 						 r->additional_inits[j].mask,
+ 						 r->additional_inits[j].val);
+diff --git a/include/linux/mfd/rohm-bd718x7.h b/include/linux/mfd/rohm-bd718x7.h
+index fd194bfc836f..7f2dbde402a1 100644
+--- a/include/linux/mfd/rohm-bd718x7.h
++++ b/include/linux/mfd/rohm-bd718x7.h
+@@ -4,14 +4,9 @@
+ #ifndef __LINUX_MFD_BD718XX_H__
+ #define __LINUX_MFD_BD718XX_H__
+ 
++#include <linux/mfd/rohm-generic.h>
+ #include <linux/regmap.h>
+ 
+-enum {
+-	BD718XX_TYPE_BD71837 = 0,
+-	BD718XX_TYPE_BD71847,
+-	BD718XX_TYPE_AMOUNT
+-};
+-
+ enum {
+ 	BD718XX_BUCK1 = 0,
+ 	BD718XX_BUCK2,
+@@ -321,18 +316,17 @@ enum {
+ 	BD718XX_PWRBTN_LONG_PRESS_15S
+ };
+ 
+-struct bd718xx_clk;
+-
+ struct bd718xx {
+-	unsigned int chip_type;
+-	struct device *dev;
+-	struct regmap *regmap;
+-	unsigned long int id;
++	/*
++	 * Please keep this as the first member here as some
++	 * drivers (clk) supporting more than one chip may only know this
++	 * generic struct 'struct rohm_regmap_dev' and assume it is
++	 * the first chunk of parent device's private data.
++	 */
++	struct rohm_regmap_dev chip;
+ 
+ 	int chip_irq;
+ 	struct regmap_irq_chip_data *irq_data;
+-
+-	struct bd718xx_clk *clk;
+ };
+ 
+ #endif /* __LINUX_MFD_BD718XX_H__ */
+diff --git a/include/linux/mfd/rohm-generic.h b/include/linux/mfd/rohm-generic.h
+new file mode 100644
+index 000000000000..bff15ac26f2c
+--- /dev/null
++++ b/include/linux/mfd/rohm-generic.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/* Copyright (C) 2018 ROHM Semiconductors */
++
++#ifndef __LINUX_MFD_ROHM_H__
++#define __LINUX_MFD_ROHM_H__
++
++enum {
++	ROHM_CHIP_TYPE_BD71837 = 0,
++	ROHM_CHIP_TYPE_BD71847,
++	ROHM_CHIP_TYPE_BD70528,
++	ROHM_CHIP_TYPE_AMOUNT
++};
++
++struct rohm_regmap_dev {
++	unsigned int chip_type;
++	struct device *dev;
++	struct regmap *regmap;
++};
++
++#endif
 -- 
 2.17.2
 
