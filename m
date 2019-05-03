@@ -2,88 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C274C12811
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 08:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9853B1288C
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 09:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726517AbfECGx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 May 2019 02:53:29 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39845 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726182AbfECGx3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 02:53:29 -0400
-Received: by mail-pg1-f196.google.com with SMTP id w22so956402pgi.6
-        for <linux-pm@vger.kernel.org>; Thu, 02 May 2019 23:53:29 -0700 (PDT)
+        id S1726585AbfECHQl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 May 2019 03:16:41 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:34510 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726583AbfECHQl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 03:16:41 -0400
+Received: by mail-qt1-f193.google.com with SMTP id j6so5654287qtq.1
+        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 00:16:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mrZORLKQrD0+dA9tzmgTZsIYZ2E2nmGSbLpObi4k/no=;
-        b=b5GBuW8j0AOo084lBENajV86iGsi8yHS3gw33fr5OLy+n/GiN3k4Fa3b5zQHJoRscd
-         E/TcH04HbvzS5TqfMxXoiGJZOuIwjeiKNRagV2fdLFVJp8Py8Awf0ZNPn0DODo2LsbrO
-         01SdIHQ1qoo5FlRlnw5IaO+rYXkIbt2aVU9DLs6l1T1ba3iTac1F0wmGAxSZQ8NPlQKE
-         T+RfCX+fX6fjrZ+EY/phUmSkzV1YOSWQRqA+7+I7QOWqZNvEtePl4POhlMLW/aZkp+dk
-         FzP7REC1ZikawPLuvyOtkA96qxN4jYxOpgRA0W+iNPcZ7j/3aMfWy+zluHST0m02Jvg4
-         T5OQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KlnuPNTSqAOsReFStbtqUTb18X37z9g45qyDj7kddRA=;
+        b=hEJ22Rh6lnEcmSMaMMuUlZdfXJ7KCYTX3AM2srreiE8Sf6OAnRXfVnZRnjcSn4jHPY
+         3p24HRD5HVSh44RxdFmCpqu/1sYnULlRTl0XRo2uF6K5RVegrPF0550505OwkW0+qT+m
+         5FmONnZuEwLBqfg9dGyH0yJSkdmST31cbhVaE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mrZORLKQrD0+dA9tzmgTZsIYZ2E2nmGSbLpObi4k/no=;
-        b=B1uqbOxaGo4FyzuVHHq5n+s8+cZi9deWyh9OASUYiqiKcEBRVKXngVzS5HUcHvinKw
-         j56jmzNNixtpmM5YeApB7GZUnQdUyGHCn6snmag5JJaFG3Yhrmnwt30HnkN3XUbuOugF
-         1VZXsqGkhr8G5C/ImdHfAP8w3y+54lKvDT3Nu3eU4ZWPABZappzbLYowJvy//mRvHHQx
-         I4gXzcW3JAb5caPJlC80Q8elsqFHhgmZZpm1nny1+OBAfMmdQtlltp0Da7/r4rozkE4S
-         SK9XOFzmoxBAWcddt8SonUa4xNpCaaO0dQyhLW6vOjW5cxKBvGOqrNKvMK35xXvOv8Iz
-         YrFg==
-X-Gm-Message-State: APjAAAXWiTSbLaWJ1C4g6IsKs5Ujx1UZpyzxaPIS226phiSim07F/oBi
-        5wvashVjrCJ5SWJEpGCigrA+aoXG8h4=
-X-Google-Smtp-Source: APXvYqy4Bp3FMEGX6Ci1dt3HcOdM4s0sFs1cVaN1t6Nuk43F5Ep6L09TGrGiIjjKOrxmQjmvzfasew==
-X-Received: by 2002:a62:448d:: with SMTP id m13mr9024302pfi.182.1556866408984;
-        Thu, 02 May 2019 23:53:28 -0700 (PDT)
-Received: from localhost ([171.61.121.242])
-        by smtp.gmail.com with ESMTPSA id s85sm2357007pfa.23.2019.05.02.23.53.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 23:53:28 -0700 (PDT)
-Date:   Fri, 3 May 2019 12:23:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Anson Huang <anson.huang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 3/3] arm64: dts: imx8mq: Add cpu speed grading and all
- OPPs
-Message-ID: <20190503065326.cdammgpkykikencu@vireshk-i7>
-References: <cover.1556836868.git.leonard.crestez@nxp.com>
- <59286bf8fcdca332df4004c3d141727f0188ad6f.1556836868.git.leonard.crestez@nxp.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KlnuPNTSqAOsReFStbtqUTb18X37z9g45qyDj7kddRA=;
+        b=COpvPYkYBjFp/UlmQ47czQCzyFzENjHtuFFF+6ayWpMMT54pmItOg82QDsyxB8m4gg
+         zKqhcD6LHQ0mUJp6IvD9LxilSxC1h/s/2xqcA5a2XcJ10n6IK/L0rATjGSMlFd5Oi/Ra
+         cLSgEFjR9iA3dGmaNDltORJf0BPVSiqHrIRMEoS+1w6qF5+Rpi86DPx0bxaw7k3RzqJD
+         rdF5xE7ennHOe6fyaWLXfMkHQL85pCS3fb64bdNjCbJbke7YA9erFFWgJYf13k4G7+BF
+         PVzsQqiH/eIflN5ohRVR/BpHH2Ci/P2CKqUocfhQSI2AZYeHHU5uWYlSFcZq/8zdKUuu
+         95mw==
+X-Gm-Message-State: APjAAAUiy/AXtPZ+XvYOHGUWrxrpv0ojJ5HqiPimdhaTI5G4VtEBHLkI
+        p1YjoSyWjGxwyBN3iFePFuB90V+iytJQjXIu7L7RkA==
+X-Google-Smtp-Source: APXvYqwhRV3TvOuByNuwZ+DDBwx1hJ5Ye6qvgO/XvXATKgGv9cIvbe0igodjrM3jyeRk2df7QWBovKlHBg7m9FObZ4Q=
+X-Received: by 2002:ad4:534b:: with SMTP id v11mr6824906qvs.31.1556867800383;
+ Fri, 03 May 2019 00:16:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <59286bf8fcdca332df4004c3d141727f0188ad6f.1556836868.git.leonard.crestez@nxp.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <1556793795-25204-1-git-send-email-michael.kao@mediatek.com> <1556793795-25204-3-git-send-email-michael.kao@mediatek.com>
+In-Reply-To: <1556793795-25204-3-git-send-email-michael.kao@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Fri, 3 May 2019 15:16:29 +0800
+Message-ID: <CAJMQK-jujDXt18M8610G4GpHdrikTD0ZZG_=C2YTt63UfxuHuQ@mail.gmail.com>
+Subject: Re: [PATCH 2/8] arm64: dts: mt8183: add/update dynamic power coefficients
+To:     "michael.kao" <michael.kao@mediatek.com>
+Cc:     fan.chen@mediatek.com, jamesjj.liao@mediatek.com,
+        dawei.chien@mediatek.com, louis.yu@mediatek.com,
+        roger.lu@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-05-19, 22:44, Leonard Crestez wrote:
-> Add nvmem-cells reference to cpu and fill the OPP table with all known
-> OPPs.
-> 
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+On Thu, May 2, 2019 at 10:43 AM michael.kao <michael.kao@mediatek.com> wrote:
+>
+> Add dynamic power coefficients for all cores and update those of
+> CPU0 and CPU4.
+>
+> Signed-off-by: Michael.Kao <michael.kao@mediatek.com>
 > ---
->  arch/arm64/boot/dts/freescale/imx8mq.dtsi | 23 ++++++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index b92116f..5668fb8 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -58,6 +58,8 @@
+>                         compatible = "arm,cortex-a53";
+>                         reg = <0x000>;
+>                         enable-method = "psci";
+> +                       dynamic-power-coefficient = <84>;
+> +                       #cooling-cells = <2>;
+Should this line be in [3/8] arm64: dts: mt8183: Add #cooling-cells to
+CPU nodes?
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
--- 
-viresh
+>                 };
+>
+>                 cpu1: cpu@1 {
+> @@ -65,6 +67,8 @@
+>                         compatible = "arm,cortex-a53";
+>                         reg = <0x001>;
+>                         enable-method = "psci";
+> +                       dynamic-power-coefficient = <84>;
+> +                       #cooling-cells = <2>;
+>                 };
+>
+>                 cpu2: cpu@2 {
+> @@ -72,6 +76,8 @@
+>                         compatible = "arm,cortex-a53";
+>                         reg = <0x002>;
+>                         enable-method = "psci";
+> +                       dynamic-power-coefficient = <84>;
+> +                       #cooling-cells = <2>;
+>                 };
+>
+>                 cpu3: cpu@3 {
+> @@ -79,6 +85,8 @@
+>                         compatible = "arm,cortex-a53";
+>                         reg = <0x003>;
+>                         enable-method = "psci";
+> +                       dynamic-power-coefficient = <84>;
+> +                       #cooling-cells = <2>;
+>                 };
+>
+>                 cpu4: cpu@100 {
+> @@ -86,6 +94,8 @@
+>                         compatible = "arm,cortex-a73";
+>                         reg = <0x100>;
+>                         enable-method = "psci";
+> +                       dynamic-power-coefficient = <211>;
+> +                       #cooling-cells = <2>;
+>                 };
+>
+>                 cpu5: cpu@101 {
+> @@ -93,6 +103,8 @@
+>                         compatible = "arm,cortex-a73";
+>                         reg = <0x101>;
+>                         enable-method = "psci";
+> +                       dynamic-power-coefficient = <211>;
+> +                       #cooling-cells = <2>;
+>                 };
+>
+>                 cpu6: cpu@102 {
+> @@ -100,6 +112,8 @@
+>                         compatible = "arm,cortex-a73";
+>                         reg = <0x102>;
+>                         enable-method = "psci";
+> +                       dynamic-power-coefficient = <211>;
+> +                       #cooling-cells = <2>;
+>                 };
+>
+>                 cpu7: cpu@103 {
+> @@ -107,6 +121,8 @@
+>                         compatible = "arm,cortex-a73";
+>                         reg = <0x103>;
+>                         enable-method = "psci";
+> +                       dynamic-power-coefficient = <211>;
+> +                       #cooling-cells = <2>;
+>                 };
+>         };
+>
