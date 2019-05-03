@@ -2,161 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB7313272
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 18:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E726132A7
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 19:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbfECQqy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 May 2019 12:46:54 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:45577 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728547AbfECQqy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 12:46:54 -0400
-Received: by mail-pl1-f194.google.com with SMTP id o5so2941918pls.12
-        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 09:46:53 -0700 (PDT)
+        id S1728194AbfECRA5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 May 2019 13:00:57 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:43907 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727173AbfECRA5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 13:00:57 -0400
+Received: by mail-io1-f65.google.com with SMTP id v9so5753833iol.10;
+        Fri, 03 May 2019 10:00:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=I6Kj7J5O6mOYwdObKv7gUJ8XCyM1RwJ3zMEkMb1FKIA=;
-        b=CyQ4K5S6LZCPez3P3h4Yxxkjx5MBxsP5BHCmBIL6WSY0qUlz3mMC4lIpY2Vhriry6a
-         oXx9z7VzntcU6eC6xQcsSIzOqmACQmL8DeTBYaE8HymEL4qWrTlVSAmi/F6yKSegpaUY
-         yzTiLzZgcSRyaY8DoLKKDvUdX+If3vo60mwTg=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eTbUIhgZYyKpsDYDRp4MfMyEXJIR47VXE6EtVxEkJu0=;
+        b=mkmHELI/w4WO18UJsmI8W+qPs6MVtLJfL2UnMEYKjpOqQ9s+ZoSzUkhq8TMenx9fAd
+         vtvZ+wFz8kufYakunf+udHAv7PqiblNiMutSwoabNQCLynS3SLMVSBDWNqBmUKHIA7aU
+         BsVHatWsMPpg16Gra/EJCjqQUyPc9P3iYMzCwR6Imiwv8mOFLCu0KsjzxSA43BaXk80Z
+         /mVwx3V1kB42IUbC8x2QMHddkyxEgNkUSZPIBrDCcshFHKODN3baYGtwqwj4XnuAeeOX
+         jxywXScjmDY1tqPQOfWgYiH5zG2vzw+v2GobWcq+KYaRZ2PnxnScw7gjmmB1gdl8LQ1b
+         OFzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=I6Kj7J5O6mOYwdObKv7gUJ8XCyM1RwJ3zMEkMb1FKIA=;
-        b=i77/86cHyjOeSHJ8lJTY+/8MXIRGtaa+qGIjTja/QFRX8/i2qzi+gHlD+lRhy4Ok//
-         ytsoPUzJVGfFY9+tqGNmgjvnMI477BioYohliIbf8Ars4e6i17XbTvAr7Rz95NCMCKWo
-         9xz2VjLZxU4kO0CnrsHwvK26UvjETb/P2OCLy+R4frqVj4Xebwgf2kaBtTINrozuP/cd
-         PApW+nlRCAWnfCO9xCVIjOPS9iPUjkq64nZnTOYY4ANK0DGk9OY5sOZcRW5yWX9NWq3Z
-         /u3zebn1b0g5tvl0SozcN3ZEkrh1wYD3br2ewMbhb31hj0Ig/AWNLJYFJmFlQnJ3KjoA
-         YCNQ==
-X-Gm-Message-State: APjAAAVwNtKEOlNMuFNd9p3GALGSNm9OWG37uGUzajh2Gxq4+ki1qprG
-        DEYpbNSMcYOwLeULFGkoWI46+g==
-X-Google-Smtp-Source: APXvYqxWg5BvQCMW5sbTPT2MdGAVLNcxxY3llDZ9nW22Kb9AR5oS4k2LVUS2tXpLJVTQ1tgp8Uwwrg==
-X-Received: by 2002:a17:902:1c1:: with SMTP id b59mr11866780plb.182.1556902013175;
-        Fri, 03 May 2019 09:46:53 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
-        by smtp.gmail.com with ESMTPSA id f21sm3394538pfn.30.2019.05.03.09.46.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eTbUIhgZYyKpsDYDRp4MfMyEXJIR47VXE6EtVxEkJu0=;
+        b=IIL/bzlojUHeQnronjGA4drThNndmWrDWhGBVaj9+NMtzT1X+haAKDe3bDf/VBcinp
+         GY3tE1Bbu6N2LLZiPWDZCOkEldsHZ8nrMZjAngYEG3tjJC3XFvbKybt8ezlJBgema6RZ
+         1ORTm9Cw+a+sa4Ox/B9Yl1P/zCGFSF8piaGeDV1FpHhDsmVuG3RsZyk0TpzOUH04XBRL
+         9S1Eb5zVVGTYk+lqO32jHORKa0uFPD7cpWaIKVxhZVpW7mpEs2ThK0a37u38TlUB9btS
+         /J9VCW82mJnDFiVP9u9r5kwfzpeTCPdwL27ACKTPB/jvMQYdT5JKNn56fSCrwFayEGns
+         iEaQ==
+X-Gm-Message-State: APjAAAV9rh1WA8WgLdDbO1kkeNlPcKQIhApelbiSvaNPz+9Cj5Yq8n8y
+        xDp+5r/Kfx19Rx1yUQ53XFKk8JcX
+X-Google-Smtp-Source: APXvYqxLc8bElvECYOdB7Xyv2KXEZk73Rl2/Z+xbMljjSU7C78r3p1wUkPsuZN8b8ViQdP7LTGTScQ==
+X-Received: by 2002:a5d:9a18:: with SMTP id s24mr2662210iol.200.1556902855739;
+        Fri, 03 May 2019 10:00:55 -0700 (PDT)
+Received: from localhost.localdomain (182-254-181-166.mobile.uscc.com. [166.181.254.182])
+        by smtp.gmail.com with ESMTPSA id n184sm1342588itc.28.2019.05.03.10.00.51
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 03 May 2019 09:46:52 -0700 (PDT)
-Date:   Fri, 3 May 2019 09:46:51 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     "michael.kao" <michael.kao@mediatek.com>, fan.chen@mediatek.com,
-        jamesjj.liao@mediatek.com, dawei.chien@mediatek.com,
-        louis.yu@mediatek.com, roger.lu@mediatek.com,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/8] arm64: dts: mt8183: add thermal zone node
-Message-ID: <20190503164651.GB40515@google.com>
-References: <1556793795-25204-1-git-send-email-michael.kao@mediatek.com>
- <1556793795-25204-2-git-send-email-michael.kao@mediatek.com>
- <CAJMQK-isJf6f+OubbCdoXs8L2cup=rm3Z8Mr7Q26QshMP-0wxA@mail.gmail.com>
+        Fri, 03 May 2019 10:00:54 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Enric Balletbo Serra <enric.balletbo@collabora.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/3] Driver for UCS1002
+Date:   Fri,  3 May 2019 12:00:39 -0500
+Message-Id: <20190503170042.19334-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJMQK-isJf6f+OubbCdoXs8L2cup=rm3Z8Mr7Q26QshMP-0wxA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Everyone:
 
-On Fri, May 03, 2019 at 04:03:58PM +0800, Hsin-Yi Wang wrote:
-> On Thu, May 2, 2019 at 10:43 AM michael.kao <michael.kao@mediatek.com> wrote:
-> >
-> > Add thermal zone node to Mediatek MT8183 dts file.
-> >
-> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> > ---
-> >  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 64 ++++++++++++++++++++++++++++++++
-> >  1 file changed, 64 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index 926df75..b92116f 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -334,6 +334,67 @@
-> >                         status = "disabled";
-> >                 };
-> >
-> > +               thermal: thermal@1100b000 {
-> > +                       #thermal-sensor-cells = <1>;
-> > +                       compatible = "mediatek,mt8183-thermal";
-> > +                       reg = <0 0x1100b000 0 0x1000>;
-> > +                       interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
-> > +                       clocks = <&infracfg CLK_INFRA_THERM>,
-> > +                                <&infracfg CLK_INFRA_AUXADC>;
-> > +                       clock-names = "therm", "auxadc";
-> > +                       resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
-> > +                       mediatek,auxadc = <&auxadc>;
-> > +                       mediatek,apmixedsys = <&apmixedsys>;
-> > +                       mediatek,hw-reset-temp = <117000>;
-> > +                       nvmem-cells = <&thermal_calibration>;
-> > +                       nvmem-cell-names = "calibration-data";
-> > +               };
-> > +
-> > +               thermal-zones {
-> > +                       cpu_thermal: cpu_thermal {
-> > +                               polling-delay-passive = <1000>;
-> > +                               polling-delay = <1000>;
-> > +
-> > +                               thermal-sensors = <&thermal 0>;
-> > +                               sustainable-power = <1500>;
-> > +                       };
-> > +
-> > +                       tzts1: tzts1 {
-> > +                               polling-delay-passive = <1000>;
-> > +                               polling-delay = <1000>;
-> > +                               thermal-sensors = <&thermal 1>;
-> Is sustainable-power required for tzts? Though it's an optional
-> property, kernel would have warning:
-> [    0.631556] thermal thermal_zone1: power_allocator:
-> sustainable_power will be estimated
-> [    0.639586] thermal thermal_zone2: power_allocator:
-> sustainable_power will be estimated
-> [    0.647611] thermal thermal_zone3: power_allocator:
-> sustainable_power will be estimated
-> [    0.655635] thermal thermal_zone4: power_allocator:
-> sustainable_power will be estimated
-> [    0.663658] thermal thermal_zone5: power_allocator:
-> sustainable_power will be estimated
-> if no sustainable-power assigned.
+This small series adds a driver for UCS1002 Programmable USB Port
+Power Controller with Charger Emulation. See [page] for product page
+and [datasheet] for device dataseet. Hopefully each individual patch
+is self explanatory.
 
-The property is indeed optional, if it isn't specified IPA will use
-the sum of the minimum power of all 'power actors' of the zone as
-estimate (see estimate_sustainable_power()). This may lead to overly
-agressive throttling, since the nominal sustainable power will always
-be <= the requested power.
+Note that this series is a revival of the upstreaming effort by Enric
+Balletbo Serra last version of which can be found at [original-effort]
 
-In my understanding the sustainable power may varies between devices,
-even for the same SoC. One could have all the hardware crammed into a
-tiny plastic enclosure (e.g. ASUS Chromebit), another might have a
-laptop form factor and a metal enclosure (e.g. ASUS C201). Both
-examples are based on an Rockchip rk3288, but they have completely
-different thermal behavior, and would likely have different values for
-'sustainable-power'.
+Feedback is welcome!
 
-In this sense I tend to consider 'sustainable-power' more a device,
-than a SoC property. You could specify a 'reasonable' value as a
-starting point, but it will likely not be optimal for all or even most
-devices. The warning might even be useful for device makers by
-indicating them that there is room for tweaking.
+Thanks,
+Andrey Smirnov
 
-I'm not an expert in the matter though, just happend to look into this
-recently :)
+Changes since [v5]:
 
-Cheers
+    - Collected Reviewed-by for "power: supply: Add driver for
+      Microchip UCS1002" from Guenter
+    
+    - Fixed Kconfig indentation issue
 
-Matthias
+Changes since [v4]:
+
+    - Chagned "interrupts-extended" -> "interrupts" in DT bindings description
+
+    - Collected Reviewed-by from Rob
+
+Changes since [v3]:
+
+    - Added a check for negative values to ucs1002_set_usb_type()
+
+Changes since [v2]:
+
+    - Fixed a bug pointed out by Lucas
+
+Changes since [v1]:
+
+    - Moved IRQ trigger specification to DT
+
+    - Fixed silent error paths in probe()
+    
+    - Dropped error message in ucs1002_set_max_current()
+
+    - Fixed license mismatch
+
+    - Changed the driver to configure the chip to BC1.2 CDP by default
+
+    - Made other small fixes as per feedback for v1
+
+[v5] https://lore.kernel.org/lkml/20190501033434.18548-1-andrew.smirnov@gmail.com
+[v4] https://lore.kernel.org/lkml/20190430064557.28469-1-andrew.smirnov@gmail.com
+[v3] https://lore.kernel.org/lkml/20190429195349.20335-1-andrew.smirnov@gmail.com
+[v2] https://lore.kernel.org/lkml/20190429054741.7286-1-andrew.smirnov@gmail.com
+[v1] https://lore.kernel.org/lkml/20190417084457.28747-1-andrew.smirnov@gmail.com/
+[page] https://www.microchip.com/wwwproducts/en/UCS1002-2
+[datasheet] https://ww1.microchip.com/downloads/en/DeviceDoc/UCS1002-2%20Data%20Sheet.pdf
+[original-effort] https://lore.kernel.org/lkml/1460705181-10493-1-git-send-email-enric.balletbo@collabora.com/
+
+
+Andrey Smirnov (3):
+  power: supply: core: Add POWER_SUPPLY_HEALTH_OVERCURRENT constant
+  power: supply: Add driver for Microchip UCS1002
+  dt-bindings: power: supply: Add bindings for Microchip UCS1002
+
+ .../power/supply/microchip,ucs1002.txt        |  27 +
+ drivers/power/supply/Kconfig                  |   9 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/power_supply_sysfs.c     |   2 +-
+ drivers/power/supply/ucs1002_power.c          | 646 ++++++++++++++++++
+ include/linux/power_supply.h                  |   1 +
+ 6 files changed, 685 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/microchip,ucs1002.txt
+ create mode 100644 drivers/power/supply/ucs1002_power.c
+
+-- 
+2.21.0
+
