@@ -2,116 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E0E128A0
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 09:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743631296F
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 10:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbfECHVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 May 2019 03:21:25 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:42697 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbfECHVZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 03:21:25 -0400
-Received: by mail-pl1-f194.google.com with SMTP id x15so2279796pln.9
-        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 00:21:24 -0700 (PDT)
+        id S1725798AbfECIEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 May 2019 04:04:11 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:40458 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbfECIEL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 04:04:11 -0400
+Received: by mail-qt1-f195.google.com with SMTP id k24so1925817qtq.7
+        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 01:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=cuSlUL65Xiw709t0yCxPP8D9MQj3q7kiVJeq2I3hujg=;
-        b=VYeihwAthmmT61RYkOnOcb6q+9n+gbWqi60UQimsI9/9mDBote8mHHNY/Me7oDCN/I
-         83elSHOXuEbO+1KhEMiOh8ERvYrYzVBYR5ztvK5PnvQ+bWX1LJbC00lnKNgvp2/3U10u
-         M9DFrJ901h+wgC/9KBugvwZrmkZazcrE9J3EVEOxUGSWVtsSfl7mcfm+RHP0g5y2sBYJ
-         2ISuxAE3nznT+/7VBdc2PH6s799QU2vTOJoVqu5eCddLyEK1laGnRxiOSNVnEykZTmZn
-         1rdN0oydsy/lZ3PtdSDjDgO2k5jKqpjrnRJaODQcBVOYj5qcab7uz+ZVqvewQhoFHfAj
-         A6HA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QyYnh8hGNxo4y79JyoBAvnyJOsqV/eKCHgC2055Dj70=;
+        b=TFsaDfJktcepJhaSVkSy9jmcH5WklitGZ2BBIrKTkDmfye484EI32NBvqAF18RhDM4
+         icz2jBCDxSTj6qmQVp0LN0YlkJPVgxnXUunfIEesZ1FOAC5727DnzDgNJ++yI7ZM9nil
+         K47/JWKZTYl0cyTlCD15zHWhm1WvSpjJECOdY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cuSlUL65Xiw709t0yCxPP8D9MQj3q7kiVJeq2I3hujg=;
-        b=PtyWqMA11NEyI6JJGdrIax88yANQLB5RxYQJjFwG9YEe0yc3sr4/aYaOXw20WYbFiJ
-         4LVDRZjdk4JyTJjXEo1kjZ7So814gdqsgGcgS0FjG6bWRNJQnoShxMj2H8kZjyNPVndN
-         ypuVIfMcEoGhrEb73fcDfHdt9AnRgDdVtUBygk+9W1HRXcqjox/ELuXhGInQj3QoQtfM
-         j3HrgJcz9fKvxT/wBCeyUOhOrLUFzJsEDyVWIRfPc8fwIv4YMaM7Pnce1b5y9kb5mmEt
-         SVIcfzo6dmaF69xTQJ40HWu+a1frmYJ8IuTgPChRDJGijY2KaReTetBdJSjtOZGG4WxP
-         BPgg==
-X-Gm-Message-State: APjAAAWsjXrT1MajIC0d0iBgbbhzcV+x6s4bDZl/E7SG6V54NpAo996p
-        wMye7DNUBTofV9m0ezb/sgQMLw==
-X-Google-Smtp-Source: APXvYqx0sjBi/uQUbVukjr1ZlV+7VB+uA96jSCHmJbR//3T/bGuSLeTjAs7jL9nJZkSTJKuSKtfFdw==
-X-Received: by 2002:a17:902:3281:: with SMTP id z1mr8326525plb.44.1556868084055;
-        Fri, 03 May 2019 00:21:24 -0700 (PDT)
-Received: from localhost ([171.61.121.242])
-        by smtp.gmail.com with ESMTPSA id f14sm1602581pgj.24.2019.05.03.00.21.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 May 2019 00:21:23 -0700 (PDT)
-Date:   Fri, 3 May 2019 12:51:20 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QyYnh8hGNxo4y79JyoBAvnyJOsqV/eKCHgC2055Dj70=;
+        b=g/bxmcZMthtqTvJbaJZFEzVpNsGcpvvRhLo9yvOTjS2u8Q5vRszikddWPDh+AEA/er
+         tTz5nS4WOjDnIWICIG3upAWoaAQUBTzNcC1rowWhCrYBEpHjyXCAYtwQ01lq2HFvC6xZ
+         bfDSvEdj8VR8MNtMh21D+oZud9nzD1UA4iF9uKPI0/QxwX9HuGAI7KYQkj/unOqJC6mt
+         +JsphYCwMAG8IBXh6Qf1j7E3xZfFfkACKXjsbd9/0oCAkELtxrcVWOjhyiwDDJoxMZ+e
+         M8DjtZSRtsrUd4/17dV3ypbIF6lvvMnArHw2fqxBmq+Tc58jzrNNN2ymT1G07Clq/FHt
+         fNOQ==
+X-Gm-Message-State: APjAAAWmqqwoWQC2Wb0kE41whH1Z/L+8wK/Br1sTlH4FTDrpemMBFvd9
+        D4wGBNqMNqj5vsPm6BzMoCpVammC0bvgCY5UkAIO0w==
+X-Google-Smtp-Source: APXvYqwK9NYfQA/9uIkz+E3ZSXoSVmvGacXxJP1bm9lZj8RtDGEHaMjRHL1WIrVFMhk5ZLbA20X7lzzIyVAj/Hr6Db0=
+X-Received: by 2002:ac8:3822:: with SMTP id q31mr7331051qtb.0.1556870649914;
+ Fri, 03 May 2019 01:04:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <1556793795-25204-1-git-send-email-michael.kao@mediatek.com> <1556793795-25204-2-git-send-email-michael.kao@mediatek.com>
+In-Reply-To: <1556793795-25204-2-git-send-email-michael.kao@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Fri, 3 May 2019 16:03:58 +0800
+Message-ID: <CAJMQK-isJf6f+OubbCdoXs8L2cup=rm3Z8Mr7Q26QshMP-0wxA@mail.gmail.com>
+Subject: Re: [PATCH 1/8] arm64: dts: mt8183: add thermal zone node
+To:     "michael.kao" <michael.kao@mediatek.com>
+Cc:     fan.chen@mediatek.com, jamesjj.liao@mediatek.com,
+        dawei.chien@mediatek.com, louis.yu@mediatek.com,
+        roger.lu@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH] thermal: cpu_cooling: Actually trace CPU load in
- thermal_power_cpu_get_power
-Message-ID: <20190503072120.bm7xtvxc6k4s2kyc@vireshk-i7>
-References: <20190502183238.182058-1-mka@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190502183238.182058-1-mka@chromium.org>
-User-Agent: NeoMutt/20180716-391-311a52
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-05-19, 11:32, Matthias Kaehlcke wrote:
-> The CPU load values passed to the thermal_power_cpu_get_power
-> tracepoint are zero for all CPUs, unless, unless the
-> thermal_power_cpu_limit tracepoint is enabled too:
-> 
->   irq/41-rockchip-98    [000] ....   290.972410: thermal_power_cpu_get_power:
->   cpus=0000000f freq=1800000 load={{0x0,0x0,0x0,0x0}} dynamic_power=4815
-> 
-> vs
-> 
->   irq/41-rockchip-96    [000] ....    95.773585: thermal_power_cpu_get_power:
->   cpus=0000000f freq=1800000 load={{0x56,0x64,0x64,0x5e}} dynamic_power=4959
->   irq/41-rockchip-96    [000] ....    95.773596: thermal_power_cpu_limit:
->   cpus=0000000f freq=408000 cdev_state=10 power=416
-> 
-> There seems to be no good reason for omitting the CPU load information
-> depending on another tracepoint. My guess is that the intention was to
-> check whether thermal_power_cpu_get_power is (still) enabled, however
-> 'load_cpu != NULL' already indicates that it was at least enabled when
-> cpufreq_get_requested_power() was entered, there seems little gain
-> from omitting the assignment if the tracepoint was just disabled, so
-> just remove the check.
-> 
-> Fixes: 6828a4711f99 ("thermal: add trace events to the power allocator governor")
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+On Thu, May 2, 2019 at 10:43 AM michael.kao <michael.kao@mediatek.com> wrote:
+>
+> Add thermal zone node to Mediatek MT8183 dts file.
+>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
 > ---
->  drivers/thermal/cpu_cooling.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
-> index f7c1f49ec87f..b437804e099b 100644
-> --- a/drivers/thermal/cpu_cooling.c
-> +++ b/drivers/thermal/cpu_cooling.c
-> @@ -458,7 +458,7 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
->  			load = 0;
->  
->  		total_load += load;
-> -		if (trace_thermal_power_cpu_limit_enabled() && load_cpu)
-> +		if (load_cpu)
->  			load_cpu[i] = load;
->  
->  		i++;
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 64 ++++++++++++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 926df75..b92116f 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -334,6 +334,67 @@
+>                         status = "disabled";
+>                 };
+>
+> +               thermal: thermal@1100b000 {
+> +                       #thermal-sensor-cells = <1>;
+> +                       compatible = "mediatek,mt8183-thermal";
+> +                       reg = <0 0x1100b000 0 0x1000>;
+> +                       interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
+> +                       clocks = <&infracfg CLK_INFRA_THERM>,
+> +                                <&infracfg CLK_INFRA_AUXADC>;
+> +                       clock-names = "therm", "auxadc";
+> +                       resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
+> +                       mediatek,auxadc = <&auxadc>;
+> +                       mediatek,apmixedsys = <&apmixedsys>;
+> +                       mediatek,hw-reset-temp = <117000>;
+> +                       nvmem-cells = <&thermal_calibration>;
+> +                       nvmem-cell-names = "calibration-data";
+> +               };
+> +
+> +               thermal-zones {
+> +                       cpu_thermal: cpu_thermal {
+> +                               polling-delay-passive = <1000>;
+> +                               polling-delay = <1000>;
+> +
+> +                               thermal-sensors = <&thermal 0>;
+> +                               sustainable-power = <1500>;
+> +                       };
+> +
+> +                       tzts1: tzts1 {
+> +                               polling-delay-passive = <1000>;
+> +                               polling-delay = <1000>;
+> +                               thermal-sensors = <&thermal 1>;
+Is sustainable-power required for tzts? Though it's an optional
+property, kernel would have warning:
+[    0.631556] thermal thermal_zone1: power_allocator:
+sustainable_power will be estimated
+[    0.639586] thermal thermal_zone2: power_allocator:
+sustainable_power will be estimated
+[    0.647611] thermal thermal_zone3: power_allocator:
+sustainable_power will be estimated
+[    0.655635] thermal thermal_zone4: power_allocator:
+sustainable_power will be estimated
+[    0.663658] thermal thermal_zone5: power_allocator:
+sustainable_power will be estimated
+if no sustainable-power assigned.
 
-@Javi: I find this change to be fine, do you have any comments on this ?
-
--- 
-viresh
+> +                       };
+> +
+> +                       tzts2: tzts2 {
+> +                               polling-delay-passive = <1000>;
+> +                               polling-delay = <1000>;
+> +                               thermal-sensors = <&thermal 2>;
+> +                       };
+> +
+> +                       tzts3: tzts3 {
+> +                               polling-delay-passive = <1000>;
+> +                               polling-delay = <1000>;
+> +                               thermal-sensors = <&thermal 3>;
+> +                       };
+> +
+> +                       tzts4: tzts4 {
+> +                               polling-delay-passive = <1000>;
+> +                               polling-delay = <1000>;
+> +                               thermal-sensors = <&thermal 4>;
+> +                       };
+> +
+> +                       tzts5: tzts5 {
+> +                               polling-delay-passive = <1000>;
+> +                               polling-delay = <1000>;
+> +                               thermal-sensors = <&thermal 5>;
+> +                       };
+> +
+> +                       tztsABB: tztsABB {
+> +                               polling-delay-passive = <1000>;
+> +                               polling-delay = <1000>;
+> +                               thermal-sensors = <&thermal 6>;
+> +                       };
+> +               };
+>                 audiosys: syscon@11220000 {
+>                         compatible = "mediatek,mt8183-audiosys", "syscon";
+>                         reg = <0 0x11220000 0 0x1000>;
+> @@ -368,6 +429,9 @@
+>                         compatible = "mediatek,mt8183-efuse",
+>                                      "mediatek,efuse";
+>                         reg = <0 0x11f10000 0 0x1000>;
+> +                       thermal_calibration: calib@180 {
+> +                               reg = <0x180 0xc>;
+> +                       };
+>                 };
+>
+>                 mfgcfg: syscon@13000000 {
