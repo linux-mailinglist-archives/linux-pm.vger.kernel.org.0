@@ -2,152 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9853B1288C
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 09:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E0E128A0
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 09:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726585AbfECHQl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 May 2019 03:16:41 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:34510 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726583AbfECHQl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 03:16:41 -0400
-Received: by mail-qt1-f193.google.com with SMTP id j6so5654287qtq.1
-        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 00:16:40 -0700 (PDT)
+        id S1726302AbfECHVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 May 2019 03:21:25 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42697 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725768AbfECHVZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 03:21:25 -0400
+Received: by mail-pl1-f194.google.com with SMTP id x15so2279796pln.9
+        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 00:21:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KlnuPNTSqAOsReFStbtqUTb18X37z9g45qyDj7kddRA=;
-        b=hEJ22Rh6lnEcmSMaMMuUlZdfXJ7KCYTX3AM2srreiE8Sf6OAnRXfVnZRnjcSn4jHPY
-         3p24HRD5HVSh44RxdFmCpqu/1sYnULlRTl0XRo2uF6K5RVegrPF0550505OwkW0+qT+m
-         5FmONnZuEwLBqfg9dGyH0yJSkdmST31cbhVaE=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cuSlUL65Xiw709t0yCxPP8D9MQj3q7kiVJeq2I3hujg=;
+        b=VYeihwAthmmT61RYkOnOcb6q+9n+gbWqi60UQimsI9/9mDBote8mHHNY/Me7oDCN/I
+         83elSHOXuEbO+1KhEMiOh8ERvYrYzVBYR5ztvK5PnvQ+bWX1LJbC00lnKNgvp2/3U10u
+         M9DFrJ901h+wgC/9KBugvwZrmkZazcrE9J3EVEOxUGSWVtsSfl7mcfm+RHP0g5y2sBYJ
+         2ISuxAE3nznT+/7VBdc2PH6s799QU2vTOJoVqu5eCddLyEK1laGnRxiOSNVnEykZTmZn
+         1rdN0oydsy/lZ3PtdSDjDgO2k5jKqpjrnRJaODQcBVOYj5qcab7uz+ZVqvewQhoFHfAj
+         A6HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KlnuPNTSqAOsReFStbtqUTb18X37z9g45qyDj7kddRA=;
-        b=COpvPYkYBjFp/UlmQ47czQCzyFzENjHtuFFF+6ayWpMMT54pmItOg82QDsyxB8m4gg
-         zKqhcD6LHQ0mUJp6IvD9LxilSxC1h/s/2xqcA5a2XcJ10n6IK/L0rATjGSMlFd5Oi/Ra
-         cLSgEFjR9iA3dGmaNDltORJf0BPVSiqHrIRMEoS+1w6qF5+Rpi86DPx0bxaw7k3RzqJD
-         rdF5xE7ennHOe6fyaWLXfMkHQL85pCS3fb64bdNjCbJbke7YA9erFFWgJYf13k4G7+BF
-         PVzsQqiH/eIflN5ohRVR/BpHH2Ci/P2CKqUocfhQSI2AZYeHHU5uWYlSFcZq/8zdKUuu
-         95mw==
-X-Gm-Message-State: APjAAAUiy/AXtPZ+XvYOHGUWrxrpv0ojJ5HqiPimdhaTI5G4VtEBHLkI
-        p1YjoSyWjGxwyBN3iFePFuB90V+iytJQjXIu7L7RkA==
-X-Google-Smtp-Source: APXvYqwhRV3TvOuByNuwZ+DDBwx1hJ5Ye6qvgO/XvXATKgGv9cIvbe0igodjrM3jyeRk2df7QWBovKlHBg7m9FObZ4Q=
-X-Received: by 2002:ad4:534b:: with SMTP id v11mr6824906qvs.31.1556867800383;
- Fri, 03 May 2019 00:16:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <1556793795-25204-1-git-send-email-michael.kao@mediatek.com> <1556793795-25204-3-git-send-email-michael.kao@mediatek.com>
-In-Reply-To: <1556793795-25204-3-git-send-email-michael.kao@mediatek.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Fri, 3 May 2019 15:16:29 +0800
-Message-ID: <CAJMQK-jujDXt18M8610G4GpHdrikTD0ZZG_=C2YTt63UfxuHuQ@mail.gmail.com>
-Subject: Re: [PATCH 2/8] arm64: dts: mt8183: add/update dynamic power coefficients
-To:     "michael.kao" <michael.kao@mediatek.com>
-Cc:     fan.chen@mediatek.com, jamesjj.liao@mediatek.com,
-        dawei.chien@mediatek.com, louis.yu@mediatek.com,
-        roger.lu@mediatek.com, Zhang Rui <rui.zhang@intel.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cuSlUL65Xiw709t0yCxPP8D9MQj3q7kiVJeq2I3hujg=;
+        b=PtyWqMA11NEyI6JJGdrIax88yANQLB5RxYQJjFwG9YEe0yc3sr4/aYaOXw20WYbFiJ
+         4LVDRZjdk4JyTJjXEo1kjZ7So814gdqsgGcgS0FjG6bWRNJQnoShxMj2H8kZjyNPVndN
+         ypuVIfMcEoGhrEb73fcDfHdt9AnRgDdVtUBygk+9W1HRXcqjox/ELuXhGInQj3QoQtfM
+         j3HrgJcz9fKvxT/wBCeyUOhOrLUFzJsEDyVWIRfPc8fwIv4YMaM7Pnce1b5y9kb5mmEt
+         SVIcfzo6dmaF69xTQJ40HWu+a1frmYJ8IuTgPChRDJGijY2KaReTetBdJSjtOZGG4WxP
+         BPgg==
+X-Gm-Message-State: APjAAAWsjXrT1MajIC0d0iBgbbhzcV+x6s4bDZl/E7SG6V54NpAo996p
+        wMye7DNUBTofV9m0ezb/sgQMLw==
+X-Google-Smtp-Source: APXvYqx0sjBi/uQUbVukjr1ZlV+7VB+uA96jSCHmJbR//3T/bGuSLeTjAs7jL9nJZkSTJKuSKtfFdw==
+X-Received: by 2002:a17:902:3281:: with SMTP id z1mr8326525plb.44.1556868084055;
+        Fri, 03 May 2019 00:21:24 -0700 (PDT)
+Received: from localhost ([171.61.121.242])
+        by smtp.gmail.com with ESMTPSA id f14sm1602581pgj.24.2019.05.03.00.21.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 May 2019 00:21:23 -0700 (PDT)
+Date:   Fri, 3 May 2019 12:51:20 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH] thermal: cpu_cooling: Actually trace CPU load in
+ thermal_power_cpu_get_power
+Message-ID: <20190503072120.bm7xtvxc6k4s2kyc@vireshk-i7>
+References: <20190502183238.182058-1-mka@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190502183238.182058-1-mka@chromium.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 2, 2019 at 10:43 AM michael.kao <michael.kao@mediatek.com> wrote:
->
-> Add dynamic power coefficients for all cores and update those of
-> CPU0 and CPU4.
->
-> Signed-off-by: Michael.Kao <michael.kao@mediatek.com>
+On 02-05-19, 11:32, Matthias Kaehlcke wrote:
+> The CPU load values passed to the thermal_power_cpu_get_power
+> tracepoint are zero for all CPUs, unless, unless the
+> thermal_power_cpu_limit tracepoint is enabled too:
+> 
+>   irq/41-rockchip-98    [000] ....   290.972410: thermal_power_cpu_get_power:
+>   cpus=0000000f freq=1800000 load={{0x0,0x0,0x0,0x0}} dynamic_power=4815
+> 
+> vs
+> 
+>   irq/41-rockchip-96    [000] ....    95.773585: thermal_power_cpu_get_power:
+>   cpus=0000000f freq=1800000 load={{0x56,0x64,0x64,0x5e}} dynamic_power=4959
+>   irq/41-rockchip-96    [000] ....    95.773596: thermal_power_cpu_limit:
+>   cpus=0000000f freq=408000 cdev_state=10 power=416
+> 
+> There seems to be no good reason for omitting the CPU load information
+> depending on another tracepoint. My guess is that the intention was to
+> check whether thermal_power_cpu_get_power is (still) enabled, however
+> 'load_cpu != NULL' already indicates that it was at least enabled when
+> cpufreq_get_requested_power() was entered, there seems little gain
+> from omitting the assignment if the tracepoint was just disabled, so
+> just remove the check.
+> 
+> Fixes: 6828a4711f99 ("thermal: add trace events to the power allocator governor")
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index b92116f..5668fb8 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -58,6 +58,8 @@
->                         compatible = "arm,cortex-a53";
->                         reg = <0x000>;
->                         enable-method = "psci";
-> +                       dynamic-power-coefficient = <84>;
-> +                       #cooling-cells = <2>;
-Should this line be in [3/8] arm64: dts: mt8183: Add #cooling-cells to
-CPU nodes?
+>  drivers/thermal/cpu_cooling.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
+> index f7c1f49ec87f..b437804e099b 100644
+> --- a/drivers/thermal/cpu_cooling.c
+> +++ b/drivers/thermal/cpu_cooling.c
+> @@ -458,7 +458,7 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
+>  			load = 0;
+>  
+>  		total_load += load;
+> -		if (trace_thermal_power_cpu_limit_enabled() && load_cpu)
+> +		if (load_cpu)
+>  			load_cpu[i] = load;
+>  
+>  		i++;
 
->                 };
->
->                 cpu1: cpu@1 {
-> @@ -65,6 +67,8 @@
->                         compatible = "arm,cortex-a53";
->                         reg = <0x001>;
->                         enable-method = "psci";
-> +                       dynamic-power-coefficient = <84>;
-> +                       #cooling-cells = <2>;
->                 };
->
->                 cpu2: cpu@2 {
-> @@ -72,6 +76,8 @@
->                         compatible = "arm,cortex-a53";
->                         reg = <0x002>;
->                         enable-method = "psci";
-> +                       dynamic-power-coefficient = <84>;
-> +                       #cooling-cells = <2>;
->                 };
->
->                 cpu3: cpu@3 {
-> @@ -79,6 +85,8 @@
->                         compatible = "arm,cortex-a53";
->                         reg = <0x003>;
->                         enable-method = "psci";
-> +                       dynamic-power-coefficient = <84>;
-> +                       #cooling-cells = <2>;
->                 };
->
->                 cpu4: cpu@100 {
-> @@ -86,6 +94,8 @@
->                         compatible = "arm,cortex-a73";
->                         reg = <0x100>;
->                         enable-method = "psci";
-> +                       dynamic-power-coefficient = <211>;
-> +                       #cooling-cells = <2>;
->                 };
->
->                 cpu5: cpu@101 {
-> @@ -93,6 +103,8 @@
->                         compatible = "arm,cortex-a73";
->                         reg = <0x101>;
->                         enable-method = "psci";
-> +                       dynamic-power-coefficient = <211>;
-> +                       #cooling-cells = <2>;
->                 };
->
->                 cpu6: cpu@102 {
-> @@ -100,6 +112,8 @@
->                         compatible = "arm,cortex-a73";
->                         reg = <0x102>;
->                         enable-method = "psci";
-> +                       dynamic-power-coefficient = <211>;
-> +                       #cooling-cells = <2>;
->                 };
->
->                 cpu7: cpu@103 {
-> @@ -107,6 +121,8 @@
->                         compatible = "arm,cortex-a73";
->                         reg = <0x103>;
->                         enable-method = "psci";
-> +                       dynamic-power-coefficient = <211>;
-> +                       #cooling-cells = <2>;
->                 };
->         };
->
+@Javi: I find this change to be fine, do you have any comments on this ?
+
+-- 
+viresh
