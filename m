@@ -2,96 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E35C612B16
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 11:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7F212B18
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 11:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726372AbfECJxv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 May 2019 05:53:51 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38695 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725777AbfECJxu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 05:53:50 -0400
-Received: by mail-pl1-f196.google.com with SMTP id a59so2476799pla.5
-        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 02:53:50 -0700 (PDT)
+        id S1727378AbfECJy0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 May 2019 05:54:26 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43020 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727377AbfECJy0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 05:54:26 -0400
+Received: by mail-pg1-f196.google.com with SMTP id t22so2481560pgi.10
+        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 02:54:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=7ofI+h15j0GDGeZlGya+AQMCUiaNuXspnxN2fkw4ZPM=;
-        b=XtPjLfB4MfBv111fFqlawZ6xTJC06jqxFZkxP39ROc0QJQq6zttHP6PioCI2yu7LAs
-         uyn8BhF8NAMkl2O/YMWE9UTar43p7GWt+t8N9TXAm3h9H4EX25VTTOfReC/TsIsyksxC
-         SIsIq85ROqWXPQ/qLli3NXG2AGcSAWIO7vmLvFEUkpFlS0/IlEqrX62DpJSGQenx0ApH
-         c09V3at9K3FBPE3JE7jqNf0BPIJlh0eaoA8Sa/shqFfBSGs/QsgfzSlmNzOk8J9Rpn3J
-         YavkUHS69gqJgDUM1ETZMyCGoz/bsdrYCIhmOycJwR9DUN+fqGP7G/c4MP00SgX3aj1S
-         qxjQ==
+        bh=C0o2C2dvxi0pLMdXrDdXumezhHQvfHIWUdutqFX4avo=;
+        b=CmgJv+ovQfwvMZ8hYrU6a3KAmlaqUCKfjDSp83hy2eKiLdEJ4JPXjrBJqG14F9XqA/
+         63eOwi3EkVjl+6D/641S48T8xo5/+soZmiSsx8FZG8MJNjuvkgpCckX5B7TdvVcx7LGV
+         f+xOAwRPKBwwoRwKkqvQ+vDiOq7OhkELe3l6uvDfjSQDo1VC3gSVoa22s2Q2D7S0On1w
+         wgP3TRWiWVyVbqssaGJTP4T2Q8KqSekqh+Buw9TLma8BXAJFkwYJBJaMHWjl+sVhdII1
+         RtireCfFfJXDEh0wbQIcmVPQeuxSoPZwj1SU2QM9oQST4DJ1VMOWRQuzuNsvvBtrekmx
+         8JJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7ofI+h15j0GDGeZlGya+AQMCUiaNuXspnxN2fkw4ZPM=;
-        b=qX4RAh5bGvqsvR+mqEUlsTvzZFceTo2fuUDO452HxyAlRbsqYlnOF/pvoDBZcYNm3M
-         IF0E4nUNVUxvpheAZdW6IHBDg8XIP5uAm4P4/uae17x84SqDr+iLzlppKa7oD8BljUjP
-         vWC44Eu+SJ30HwGjBKEhsRpTuTuQ7xFWhI1R2uwY5jNVpsyB+z68eDoFtfHMf7OiZeEy
-         PQ0YxyzFy/NENcZePoF4wLIuI0ouOBxfV72CXmXYiGeEvnAcTKMT/7UIUnmGFWbHi2W8
-         60N39tnuAbF9zr6+2wtqR/kPOJzP1Z/u+Ge/iMGuK4tXNg/MIP+JrcUnOy+UqmNtv4wh
-         iOCA==
-X-Gm-Message-State: APjAAAVR7G7cP2iLTaLuq5wALw1iFTEw/+GDIzsO66JP19Y1qVRRwkfE
-        ixN7LsIVe2IbdOQ2CZJqMWUr1vUsvTo=
-X-Google-Smtp-Source: APXvYqwUPnOXZMe8Yq112fG/6x0/D//pZltFFv/1QHPPu10XD1agsD8njebFqKPeke/C7LLZJatj1g==
-X-Received: by 2002:a17:902:b206:: with SMTP id t6mr9139257plr.130.1556877229775;
-        Fri, 03 May 2019 02:53:49 -0700 (PDT)
+        bh=C0o2C2dvxi0pLMdXrDdXumezhHQvfHIWUdutqFX4avo=;
+        b=SRsRJ9+PGUQGSf0NIi2aacx9DwchJQD1aMJf/dF8x3tHpSToYlQgJPrADLmhnXm+R0
+         JKH+UQe2h+ggOm7J5m/lv7nYiva6vo2H60GCltt+jIwX9Vdwkim2D/26BCaN8snkcSTY
+         F90rAEk3XM0nB6KO4fhrzP1XuSrRBetrBw1bQPDax+R+hwQt6lkzyAFcSc51alQndJZK
+         iIlwPJ3iugPbqS6QheVN0M8eE5prr/Ya0/ywpjbcyOiCbviYotKRYpa+DlZi3NHyjERK
+         QPk2zMd/izBlCutvjQHIJxjNh5WJBoWKgdeG4yI0jKwUtvsjn+7fHs/6QQ/XlJ04T7wq
+         niEg==
+X-Gm-Message-State: APjAAAVZBtSw2ETBunhiR6FWBMnC46+3kzo1+DEIDyfYLsnBFkXwdI2M
+        zAiSriboDZNWtQt9e0Ll6UYO4sW81fw=
+X-Google-Smtp-Source: APXvYqwvKwHE2OHYzzhBFYFV6Lf8kjUsbmnwDw43+ppDTskuURRW+KyLhklRJn7iA21MO0JSDONaUA==
+X-Received: by 2002:aa7:9151:: with SMTP id 17mr9215458pfi.192.1556877265425;
+        Fri, 03 May 2019 02:54:25 -0700 (PDT)
 Received: from localhost ([171.61.121.242])
-        by smtp.gmail.com with ESMTPSA id b14sm2154078pfi.92.2019.05.03.02.53.47
+        by smtp.gmail.com with ESMTPSA id x4sm2353103pfm.19.2019.05.03.02.54.24
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 May 2019 02:53:47 -0700 (PDT)
-Date:   Fri, 3 May 2019 15:23:45 +0530
+        Fri, 03 May 2019 02:54:24 -0700 (PDT)
+Date:   Fri, 3 May 2019 15:24:22 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Anson Huang <anson.huang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 1/3] cpufreq: Add imx-cpufreq-dt driver
-Message-ID: <20190503095345.axz6pojgfmhgqjqa@vireshk-i7>
-References: <cover.1556836868.git.leonard.crestez@nxp.com>
- <df3a41d8bf57b8dd8f8c17599eeca98d6e43962c.1556836868.git.leonard.crestez@nxp.com>
- <20190503065227.afqgmylbjwhg2mc3@vireshk-i7>
- <AM0PR04MB64345196835732B019F1D885EE350@AM0PR04MB6434.eurprd04.prod.outlook.com>
+To:     Quentin Perret <quentin.perret@arm.com>
+Cc:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
+        amit.kachhap@gmail.com, rjw@rjwysocki.net, will.deacon@arm.com,
+        catalin.marinas@arm.com, daniel.lezcano@linaro.org,
+        dietmar.eggemann@arm.com, ionela.voinescu@arm.com,
+        mka@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 0/3] Make IPA use PM_EM
+Message-ID: <20190503095422.dw5ssdd6bz2wxaqn@vireshk-i7>
+References: <20190503094409.3499-1-quentin.perret@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM0PR04MB64345196835732B019F1D885EE350@AM0PR04MB6434.eurprd04.prod.outlook.com>
+In-Reply-To: <20190503094409.3499-1-quentin.perret@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-05-19, 09:44, Leonard Crestez wrote:
-> On 03.05.2019 09:52, Viresh Kumar wrote:
+On 03-05-19, 10:44, Quentin Perret wrote:
+> Changes in v3:
+> **************
+>  - Changed warning message for unordered tables to something more
+>    explicit (Viresh)
+>  - Changes WARN() into a pr_err() for consistency
 
-> > Why add another virtual device-driver pair here? The only reason why we have
-> > been adding it was to get deferred probe to work which doesn't look like the
-> > case for this driver. Why not do everything from the init() routine ?
-> 
-> The imx-cpufreq-dt platform_driver reads from fuses (nvmem/imx-ocotp) 
-> which can be theoretically be built as a module and also has clock 
-
-I am not against making this driver a module, that is okay.
-
-> requirements. No sure we should rely that the call to read from nvmem 
-> never returns EPROBE_DEFER.
-
-Okay, I didn't realize that we can get EPROBE_DEFER from
-nvmem_cell_read_u32(). Should be fine then.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
