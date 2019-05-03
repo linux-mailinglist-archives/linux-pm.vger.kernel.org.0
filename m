@@ -2,157 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA9B12777
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 08:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F8D12806
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 08:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbfECGFP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 May 2019 02:05:15 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:21969 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbfECGFP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 02:05:15 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190503055452epoutp0357e833ea161f281731331fbb3e05a639~bFo1U0t5c0389603896epoutp039
-        for <linux-pm@vger.kernel.org>; Fri,  3 May 2019 05:54:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190503055452epoutp0357e833ea161f281731331fbb3e05a639~bFo1U0t5c0389603896epoutp039
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1556862892;
-        bh=bh5XtgQ1qOIEzWQkUMF9WzZzfp+VhQ0jfzAUY192woc=;
-        h=Subject:To:From:Date:In-Reply-To:References:From;
-        b=m333RpsCP889JU8lfVpcSd57cHWQeIcL3ux3ZzBMMUc1ckp3i8ZuRjxRTrWtzJHwn
-         Y5BFLyTOad6LV1c9k6A3A7iPaTSPMTEczJ+XF/vTwhBKEkKfvMr+MgSzh33zDV41cB
-         RkKc9NUWV/YUHjPbZ4lukvci4Dnx9Pkz7E93zbWo=
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.154]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20190503055448epcas1p48321277e3d821f6de6163599d611b974~bFoxq3Zue1759217592epcas1p4m;
-        Fri,  3 May 2019 05:54:48 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        59.2B.04139.6A7DBCC5; Fri,  3 May 2019 14:54:46 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20190503055446epcas1p47a828dc5b5e17f6535ea5b85d29b7039~bFovcPEu62017020170epcas1p4p;
-        Fri,  3 May 2019 05:54:46 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190503055446epsmtrp2b9c4d8e42e723295688c0a33414649ad~bFovblQaK0607806078epsmtrp2C;
-        Fri,  3 May 2019 05:54:46 +0000 (GMT)
-X-AuditID: b6c32a35-98bff7000000102b-ed-5ccbd7a6fa82
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6B.65.03662.5A7DBCC5; Fri,  3 May 2019 14:54:46 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190503055445epsmtip1063f05784ff627b7cbea21b4603eec63~bFovP_EW-3064830648epsmtip1G;
-        Fri,  3 May 2019 05:54:45 +0000 (GMT)
-Subject: Re: [PATCH] PM / devfreq: Fix spelling typo
-To:     =?UTF-8?Q?Ga=c3=abl_PORTAY?= <gael.portay@collabora.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-pm@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <dad0fc34-480e-64c3-38f8-9b5e31210322@samsung.com>
-Date:   Fri, 3 May 2019 14:56:04 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
+        id S1727015AbfECGuc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 May 2019 02:50:32 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37520 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726985AbfECGub (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 02:50:31 -0400
+Received: by mail-pl1-f193.google.com with SMTP id z8so2257797pln.4
+        for <linux-pm@vger.kernel.org>; Thu, 02 May 2019 23:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZusQRLArOzmqo4smuWdH+L1kBJBE5kLkpXfXVHOX9rM=;
+        b=dyMaPAIFugojW/MQ5xQzBnuUPvFWpgJpjzGIYRhRbgp8ViJVXWSp5Pw/YEpjDAwc1F
+         qsHcQ0tT1uAnj6XB9QNHEwD8Kjmqpkek25svpvwD6JMexr+LhkfjvJVY09BvnlNa/eOQ
+         MyEDkuoNpoxumnuim514KRgzXiyCxXp+9c2RxtGLXYwyYbTe77x6B8fOFpQP7agMcrZj
+         qdn82U9oxl1ClwmodiKgJs9t2n6+Bcxr8W9LNKkd9jaJDs9+pqjIG7CFnTI5qKWOZy61
+         J62U+Ovb92AJ7fMe2Hc5fpNYvYlfpqM+29FQ0M4yz5zOX4VlRUyBtp5W5l57meWDWi6I
+         37vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZusQRLArOzmqo4smuWdH+L1kBJBE5kLkpXfXVHOX9rM=;
+        b=hM01cdoeXWuF63mJMqtH6K+ejiQYk+PXujIBbz+RL5C5YCvTl9Mqv9pda1/BKgM3Xa
+         1BzXrp1QTjkdMbwVm9gJaySw++fx+tbBW0UWEahEYk9gSTtcFWghxKFcCZg+39e3TlNK
+         MwqlLTJoOjAmV78Y9Z1Sx/l4BxRW+XfpDWT2QR58KzqGGCKehh72e/KnTU0Sq4yii6Jc
+         b/0gDNFeTOmFJAyb40wOwoIQjf44DPZvk4jPYJnhNsx/JEW0GDNJmfS6DWK/D76DOiju
+         jxkLj0p1MjyCvSMiza746Pi4xCk2aHzq68SS52Jj24IH8Lzc5wc+ccT4iKYd12Ky7x3g
+         vA7A==
+X-Gm-Message-State: APjAAAVzCFttgTp6R7+BJoaQtV9M0YJWk4bmftM2/PyMqP5+alAX9MqA
+        FP/RyrlHAJ17GUZJy/bdgDfn6Q==
+X-Google-Smtp-Source: APXvYqxhFfCsYglwk894BNIFGSrE92DJ4O80HqScawkzC6+i9SiA0jZsiC9+5lqhAu02+9EHvIxQFQ==
+X-Received: by 2002:a17:902:bd88:: with SMTP id q8mr8314189pls.287.1556866230990;
+        Thu, 02 May 2019 23:50:30 -0700 (PDT)
+Received: from localhost ([171.61.121.242])
+        by smtp.gmail.com with ESMTPSA id n67sm1668508pfn.22.2019.05.02.23.50.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 23:50:29 -0700 (PDT)
+Date:   Fri, 3 May 2019 12:20:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Anson Huang <anson.huang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 0/3] cpufreq: Add imx-cpufreq-dt driver
+Message-ID: <20190503065026.qwroewhu5lxckqgl@vireshk-i7>
+References: <cover.1556836868.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20190502182736.5587-1-gael.portay@collabora.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjk+LIzCtJLcpLzFFi42LZdlhTV3fZ9dMxBlsWSVss2fWGzeJs0xt2
-        i8+9RxgtbjeuYHNg8dhxdwmjR9+WVYwenzfJBTBHZdtkpCampBYppOYl56dk5qXbKnkHxzvH
-        m5oZGOoaWlqYKynkJeam2iq5+AToumXmAG1TUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gq
-        pRak5BRYFugVJ+YWl+al6yXn51oZGhgYmQIVJmRnfDvQw1qwWrii98AExgbG0/xdjJwcEgIm
-        Es1n1jB1MXJxCAnsYJR4ufIYG4TziVFi/cOHrBDON0aJhzNeM8G09DfcZYZI7GWUOPbrKlTL
-        e0aJjoNXmEGqhIGqnm+YzwJiiwisA6ra5ABiswloSex/cYMNxOYXUJS4+uMxI4jNK2An8XP+
-        DLBeFgEVie5Tp8FqRAUiJO4f28AKUSMocXLmE7CZnED1ry51gdUzC4hL3HoynwnClpdo3job
-        7DoJgR1sErOe/oI620Viz5+jzBC2sMSr41vYIWwpic/v9rJB2NUSK08eYYNo7mCU2LL/AitE
-        wlhi/9LJQIM4gDZoSqzfpQ+xjE/i3dceVpCwhACvREebEES1ssTlB3eh1kpKLG7vhBrvIdFx
-        eAM0sCYyStxftYR5AqPCLCS/zULyzywk/8xC2LyAkWUVo1hqQXFuemqxYYEhcnxvYgSnRS3T
-        HYxTzvkcYhTgYFTi4ZW4dypGiDWxrLgy9xCjBAezkghv3EegEG9KYmVValF+fFFpTmrxIUZT
-        YNBPZJYSTc4Hpuy8knhDUyNjY2MLE0MzU0NDJXHe9Q7OMUIC6YklqdmpqQWpRTB9TBycUg2M
-        5Wx1O6Iipjx7se7yM+kpDypv6rJmPE3k2X059LuUwYcE0Q1b39UduZjylWW1svHiWaemMS0u
-        uifnrJ0ot31N+iYZ1T+3dRacXrLhB/+X6OM7VRM+KQcnJDydn/vywgWbr19lfJv3mGxdYtF0
-        dN2Vdm3L2ek3alOmS1X5NVm5rWZ2u6n95b22nxJLcUaioRZzUXEiAGN75bahAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDLMWRmVeSWpSXmKPExsWy7bCSnO6y66djDNrXMlos2fWGzeJs0xt2
-        i8+9RxgtbjeuYHNg8dhxdwmjR9+WVYwenzfJBTBHcdmkpOZklqUW6dslcGV8O9DDWrBauKL3
-        wATGBsbT/F2MnBwSAiYS/Q13mbsYuTiEBHYzSsxoXcUIkZCUmHbxKFCCA8gWljh8uBii5i2j
-        xLVvD9hBaoSBmp9vmM8CkhARWMcoMb3rHxtE1URGidmL34FVsQloSex/cYMNxOYXUJS4+uMx
-        2AZeATuJn/NnMIPYLAIqEt2nToPViApESJx5v4IFokZQ4uTMJ2A2J1D9q0tdYPXMAuoSf+Zd
-        grLFJW49mc8EYctLNG+dzTyBUWgWkvZZSFpmIWmZhaRlASPLKkbJ1ILi3PTcYsMCo7zUcr3i
-        xNzi0rx0veT83E2M4DjQ0trBeOJE/CFGAQ5GJR5eiXunYoRYE8uKK3MPMUpwMCuJ8MZ9BArx
-        piRWVqUW5ccXleakFh9ilOZgURLnlc8/FikkkJ5YkpqdmlqQWgSTZeLglGpg7HtfKMl0rXnK
-        0ekLXENtjIrfWLSL/Vt9vz96s3j+x4DDZcHP/Y5rf174N/qCYIjIwavR7W3KK9Ol9e9wNfQl
-        fZQ3erNZbt6LCJNrp6x+FIW+KLGvUnp2fuuz+wvFcxbzh19Zvotzfaa4aYNOu865S2p3Bb5F
-        npvJ/dpxfSXPnAX1JxZwZFZvV2Ipzkg01GIuKk4EAMGaYYV/AgAA
-X-CMS-MailID: 20190503055446epcas1p47a828dc5b5e17f6535ea5b85d29b7039
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190502182729epcas5p3db445dcd9831a3a623ac3c1a6039e94a
-References: <CGME20190502182729epcas5p3db445dcd9831a3a623ac3c1a6039e94a@epcas5p3.samsung.com>
-        <20190502182736.5587-1-gael.portay@collabora.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1556836868.git.leonard.crestez@nxp.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 5. 3. 오전 3:27, Gaël PORTAY wrote:
-> Add missing 'r' in "monitoing".
+On 02-05-19, 22:44, Leonard Crestez wrote:
+> Right now in upstream imx8m cpufreq support just lists a common subset
+> of OPPs because the higher ones should only be attempted after checking
+> speed grading in fuses.
 > 
-> Signed-off-by: Gaël PORTAY <gael.portay@collabora.com>
+> Add a small driver which checks speed grading from nvmem cells before
+> registering cpufreq-dt.
+> 
 > ---
->  drivers/devfreq/devfreq.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 0ae3de76833b..20d1afa2d474 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -400,7 +400,7 @@ static void devfreq_monitor(struct work_struct *work)
->   * devfreq_monitor_start() - Start load monitoring of devfreq instance
->   * @devfreq:	the devfreq instance.
->   *
-> - * Helper function for starting devfreq device load monitoing. By
-> + * Helper function for starting devfreq device load monitoring. By
->   * default delayed work based monitoring is supported. Function
->   * to be called from governor in response to DEVFREQ_GOV_START
->   * event when device is added to devfreq framework.
-> @@ -418,7 +418,7 @@ EXPORT_SYMBOL(devfreq_monitor_start);
->   * devfreq_monitor_stop() - Stop load monitoring of a devfreq instance
->   * @devfreq:	the devfreq instance.
->   *
-> - * Helper function to stop devfreq device load monitoing. Function
-> + * Helper function to stop devfreq device load monitoring. Function
->   * to be called from governor in response to DEVFREQ_GOV_STOP
->   * event when device is removed from devfreq framework.
->   */
-> @@ -432,7 +432,7 @@ EXPORT_SYMBOL(devfreq_monitor_stop);
->   * devfreq_monitor_suspend() - Suspend load monitoring of a devfreq instance
->   * @devfreq:	the devfreq instance.
->   *
-> - * Helper function to suspend devfreq device load monitoing. Function
-> + * Helper function to suspend devfreq device load monitoring. Function
->   * to be called from governor in response to DEVFREQ_GOV_SUSPEND
->   * event or when polling interval is set to zero.
->   *
-> @@ -459,7 +459,7 @@ EXPORT_SYMBOL(devfreq_monitor_suspend);
->   * devfreq_monitor_resume() - Resume load monitoring of a devfreq instance
->   * @devfreq:    the devfreq instance.
->   *
-> - * Helper function to resume devfreq device load monitoing. Function
-> + * Helper function to resume devfreq device load monitoring. Function
->   * to be called from governor in response to DEVFREQ_GOV_RESUME
->   * event or when polling interval is set to non-zero.
->   */
-> 
+> By default kconfig builds it as a module even though it's very small.
+> Couldn't find a way for MODULE_DEVICE_TABLE to match on root node compat
+> string and there was no other appropriate node so register the
+> imx-cpufreq-dt platfrom device directly from imx8 soc driver instead. I
+> checked module is probed by default and rmmod/modprobe again works.
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+I have suggested something in 1/3 for this.
+
+> It seems that cpufreq-dt insists on adding the opp and regulator itself
+> so can't actually call dev_pm_opp_of_add_table and then
+> dev_pm_opp_disable
+
+Well we can surely implement it someway if that is what you want, like we can
+pass postinit() callback in platform data to cpufreq-dt which can get called
+after OPP table is added, etc.
+
+But disabling OPPs after they are added isn't a great way of handling it as
+well.
+
+> so implementation was switched to opp-supported-hw.
+
+I will say that this is far better than disabling the OPPs after adding them. So
+this is a good way of doing it.
+
+> Maybe I'm confused by API quirks?
+> 
+> The market segment logic was dropped because I couldn't find any good
+> references in datasheets for why lower or intermediary OPPs should be
+> disabled on certain market segments. Using opp-supported-hw means that
+> adding this in the future would require changing flags inside DT instead
+> of code, that seems undesirable for DT compat reasons.
+> 
+> This could also be extended to mach-imx7d speed grading.
+> 
+> I never noticed anything wrong with going above the fused speed grading
+> however it's technically unsafe so the cpufreq parts should go in before
+> DT changes.
+> 
+> Other changes since v1:
+>  * Turn into a proper module
+>  * Support imx8mq
+> Link to v1 (RFC): https://patchwork.kernel.org/patch/10916769/
+> 
+> Leonard Crestez (3):
+>   cpufreq: Add imx-cpufreq-dt driver
+>   arm64: dts: imx8mm: Add cpu speed grading and all OPPs
+>   arm64: dts: imx8mq: Add cpu speed grading and all OPPs
+> 
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi | 23 +++++-
+>  arch/arm64/boot/dts/freescale/imx8mq.dtsi | 23 +++++-
+>  drivers/cpufreq/Kconfig.arm               | 10 +++
+>  drivers/cpufreq/Makefile                  |  1 +
+>  drivers/cpufreq/cpufreq-dt-platdev.c      |  3 +
+>  drivers/cpufreq/imx-cpufreq-dt.c          | 99 +++++++++++++++++++++++
+>  drivers/soc/imx/soc-imx8.c                |  3 +
+>  7 files changed, 160 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/cpufreq/imx-cpufreq-dt.c
+> 
+> -- 
+> 2.17.1
+> 
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+viresh
