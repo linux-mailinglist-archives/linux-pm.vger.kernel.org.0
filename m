@@ -2,123 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CA812CEA
-	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 13:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB7313272
+	for <lists+linux-pm@lfdr.de>; Fri,  3 May 2019 18:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727394AbfECLwC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 May 2019 07:52:02 -0400
-Received: from mail-eopbgr00074.outbound.protection.outlook.com ([40.107.0.74]:7078
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726572AbfECLwC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 May 2019 07:52:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IL9tHpfERm+wBemS2dF2mrgoaJJVNfuFwRvN38GFaCg=;
- b=SblWqdZQBBHEKgDz4gt32ZmACKLZpMcmp54X++vH0StVQ4jjtda8ww1gb4VBdyrZZQLrC1eBlRXprrMACCQ8xq98XrSxw1NB1BJJq1JbGR2+ucsrhsxT6nZuST4ouee2UAf/UttonZPcv8iS085KPhOZt9LplwYkOmeSpCFG3us=
-Received: from AM0PR04MB6434.eurprd04.prod.outlook.com (20.179.252.215) by
- AM0PR04MB6611.eurprd04.prod.outlook.com (20.179.255.80) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1835.14; Fri, 3 May 2019 11:51:57 +0000
-Received: from AM0PR04MB6434.eurprd04.prod.outlook.com
- ([fe80::19be:75a:9fe:7cec]) by AM0PR04MB6434.eurprd04.prod.outlook.com
- ([fe80::19be:75a:9fe:7cec%7]) with mapi id 15.20.1856.008; Fri, 3 May 2019
- 11:51:57 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Anson Huang <anson.huang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 0/3] cpufreq: Add imx-cpufreq-dt driver
-Thread-Topic: [PATCH v2 0/3] cpufreq: Add imx-cpufreq-dt driver
-Thread-Index: AQHVATiQtlzuIooEwkqEvC93VXXdZg==
-Date:   Fri, 3 May 2019 11:51:57 +0000
-Message-ID: <AM0PR04MB64343A9439DF8FA943BFE2D4EE350@AM0PR04MB6434.eurprd04.prod.outlook.com>
-References: <cover.1556836868.git.leonard.crestez@nxp.com>
- <20190503065026.qwroewhu5lxckqgl@vireshk-i7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a7a28f38-3903-404b-9a00-08d6cfbdbedf
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB6611;
-x-ms-traffictypediagnostic: AM0PR04MB6611:
-x-microsoft-antispam-prvs: <AM0PR04MB66117A615FDD7AB9F1BF5922EE350@AM0PR04MB6611.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0026334A56
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(366004)(396003)(136003)(376002)(346002)(189003)(199004)(305945005)(81166006)(486006)(476003)(8936002)(3846002)(256004)(33656002)(7736002)(91956017)(5660300002)(6116002)(229853002)(55016002)(446003)(6436002)(4326008)(44832011)(9686003)(99286004)(8676002)(478600001)(53936002)(52536014)(66476007)(66946007)(73956011)(102836004)(81156014)(64756008)(66446008)(7696005)(66066001)(76176011)(26005)(6506007)(53546011)(76116006)(66556008)(74316002)(71200400001)(2906002)(54906003)(86362001)(14454004)(6916009)(6246003)(68736007)(71190400001)(25786009)(186003)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6611;H:AM0PR04MB6434.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: jZk7JGdsmdmpBrMH02tNS8OouJJhUj/qwQJg6Iv/DZ7UvEbRYfXvHzpI+xjDINHPQhwY0k21n7zmpkRN9AQIF41ETBpcAeuivT8d3tsnUzP8G9Wb+pwOAY4S/VQIU162I324dAOxxVINVMScVwKf8xu5gT3dET3TxB53S3oiaIcs/RhD+DrQP4ebU3TNmqX3sehxVgxvKr+cbUsjwMn7PZqyKUi2HVR+mWzsfAy2v6oBpOj/0DXjLIHDyDGeeBw3DcetD4MgLADUB2Rjht+67e3icKA6Hs2av1zrKuGrF8gmn81+PoBqo+xPB9udHFM0aW+ZLODSz2BoAzuhXekAVoX/cdqa2qKD70E0MCJrKtoMM20eR6bl4X6AsOEfZsujA209KtpO/h4s2vP64d729UpibTmC1Nu28raKpi7LjIU=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726468AbfECQqy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 May 2019 12:46:54 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45577 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728547AbfECQqy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 May 2019 12:46:54 -0400
+Received: by mail-pl1-f194.google.com with SMTP id o5so2941918pls.12
+        for <linux-pm@vger.kernel.org>; Fri, 03 May 2019 09:46:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=I6Kj7J5O6mOYwdObKv7gUJ8XCyM1RwJ3zMEkMb1FKIA=;
+        b=CyQ4K5S6LZCPez3P3h4Yxxkjx5MBxsP5BHCmBIL6WSY0qUlz3mMC4lIpY2Vhriry6a
+         oXx9z7VzntcU6eC6xQcsSIzOqmACQmL8DeTBYaE8HymEL4qWrTlVSAmi/F6yKSegpaUY
+         yzTiLzZgcSRyaY8DoLKKDvUdX+If3vo60mwTg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=I6Kj7J5O6mOYwdObKv7gUJ8XCyM1RwJ3zMEkMb1FKIA=;
+        b=i77/86cHyjOeSHJ8lJTY+/8MXIRGtaa+qGIjTja/QFRX8/i2qzi+gHlD+lRhy4Ok//
+         ytsoPUzJVGfFY9+tqGNmgjvnMI477BioYohliIbf8Ars4e6i17XbTvAr7Rz95NCMCKWo
+         9xz2VjLZxU4kO0CnrsHwvK26UvjETb/P2OCLy+R4frqVj4Xebwgf2kaBtTINrozuP/cd
+         PApW+nlRCAWnfCO9xCVIjOPS9iPUjkq64nZnTOYY4ANK0DGk9OY5sOZcRW5yWX9NWq3Z
+         /u3zebn1b0g5tvl0SozcN3ZEkrh1wYD3br2ewMbhb31hj0Ig/AWNLJYFJmFlQnJ3KjoA
+         YCNQ==
+X-Gm-Message-State: APjAAAVwNtKEOlNMuFNd9p3GALGSNm9OWG37uGUzajh2Gxq4+ki1qprG
+        DEYpbNSMcYOwLeULFGkoWI46+g==
+X-Google-Smtp-Source: APXvYqxWg5BvQCMW5sbTPT2MdGAVLNcxxY3llDZ9nW22Kb9AR5oS4k2LVUS2tXpLJVTQ1tgp8Uwwrg==
+X-Received: by 2002:a17:902:1c1:: with SMTP id b59mr11866780plb.182.1556902013175;
+        Fri, 03 May 2019 09:46:53 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
+        by smtp.gmail.com with ESMTPSA id f21sm3394538pfn.30.2019.05.03.09.46.52
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 03 May 2019 09:46:52 -0700 (PDT)
+Date:   Fri, 3 May 2019 09:46:51 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     "michael.kao" <michael.kao@mediatek.com>, fan.chen@mediatek.com,
+        jamesjj.liao@mediatek.com, dawei.chien@mediatek.com,
+        louis.yu@mediatek.com, roger.lu@mediatek.com,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/8] arm64: dts: mt8183: add thermal zone node
+Message-ID: <20190503164651.GB40515@google.com>
+References: <1556793795-25204-1-git-send-email-michael.kao@mediatek.com>
+ <1556793795-25204-2-git-send-email-michael.kao@mediatek.com>
+ <CAJMQK-isJf6f+OubbCdoXs8L2cup=rm3Z8Mr7Q26QshMP-0wxA@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7a28f38-3903-404b-9a00-08d6cfbdbedf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2019 11:51:57.6028
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6611
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJMQK-isJf6f+OubbCdoXs8L2cup=rm3Z8Mr7Q26QshMP-0wxA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03.05.2019 09:50, Viresh Kumar wrote:=0A=
-> On 02-05-19, 22:44, Leonard Crestez wrote:=0A=
->> Right now in upstream imx8m cpufreq support just lists a common subset=
-=0A=
->> of OPPs because the higher ones should only be attempted after checking=
-=0A=
->> speed grading in fuses.=0A=
->>=0A=
->> Add a small driver which checks speed grading from nvmem cells before=0A=
->> registering cpufreq-dt.=0A=
->>=0A=
->> It seems that cpufreq-dt insists on adding the opp and regulator itself=
-=0A=
->> so can't actually call dev_pm_opp_of_add_table and then=0A=
->> dev_pm_opp_disable=0A=
-> =0A=
-> Well we can surely implement it someway if that is what you want, like we=
- can=0A=
-> pass postinit() callback in platform data to cpufreq-dt which can get cal=
-led=0A=
-> after OPP table is added, etc.=0A=
-> =0A=
-> But disabling OPPs after they are added isn't a great way of handling it =
-as=0A=
-> well.=0A=
-> =0A=
->> so implementation was switched to opp-supported-hw.=0A=
-> =0A=
-> I will say that this is far better than disabling the OPPs after adding t=
-hem. So=0A=
-> this is a good way of doing it.=0A=
-=0A=
-The intention seems to be that dev_pm_opp_disable is used at run-time =0A=
-for stuff like thermal issues while init-time opp selection should be =0A=
-done in other ways.=0A=
-=0A=
-Is this what you mean? It's not very obvious from API.=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+Hi,
+
+On Fri, May 03, 2019 at 04:03:58PM +0800, Hsin-Yi Wang wrote:
+> On Thu, May 2, 2019 at 10:43 AM michael.kao <michael.kao@mediatek.com> wrote:
+> >
+> > Add thermal zone node to Mediatek MT8183 dts file.
+> >
+> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> > ---
+> >  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 64 ++++++++++++++++++++++++++++++++
+> >  1 file changed, 64 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > index 926df75..b92116f 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > @@ -334,6 +334,67 @@
+> >                         status = "disabled";
+> >                 };
+> >
+> > +               thermal: thermal@1100b000 {
+> > +                       #thermal-sensor-cells = <1>;
+> > +                       compatible = "mediatek,mt8183-thermal";
+> > +                       reg = <0 0x1100b000 0 0x1000>;
+> > +                       interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
+> > +                       clocks = <&infracfg CLK_INFRA_THERM>,
+> > +                                <&infracfg CLK_INFRA_AUXADC>;
+> > +                       clock-names = "therm", "auxadc";
+> > +                       resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
+> > +                       mediatek,auxadc = <&auxadc>;
+> > +                       mediatek,apmixedsys = <&apmixedsys>;
+> > +                       mediatek,hw-reset-temp = <117000>;
+> > +                       nvmem-cells = <&thermal_calibration>;
+> > +                       nvmem-cell-names = "calibration-data";
+> > +               };
+> > +
+> > +               thermal-zones {
+> > +                       cpu_thermal: cpu_thermal {
+> > +                               polling-delay-passive = <1000>;
+> > +                               polling-delay = <1000>;
+> > +
+> > +                               thermal-sensors = <&thermal 0>;
+> > +                               sustainable-power = <1500>;
+> > +                       };
+> > +
+> > +                       tzts1: tzts1 {
+> > +                               polling-delay-passive = <1000>;
+> > +                               polling-delay = <1000>;
+> > +                               thermal-sensors = <&thermal 1>;
+> Is sustainable-power required for tzts? Though it's an optional
+> property, kernel would have warning:
+> [    0.631556] thermal thermal_zone1: power_allocator:
+> sustainable_power will be estimated
+> [    0.639586] thermal thermal_zone2: power_allocator:
+> sustainable_power will be estimated
+> [    0.647611] thermal thermal_zone3: power_allocator:
+> sustainable_power will be estimated
+> [    0.655635] thermal thermal_zone4: power_allocator:
+> sustainable_power will be estimated
+> [    0.663658] thermal thermal_zone5: power_allocator:
+> sustainable_power will be estimated
+> if no sustainable-power assigned.
+
+The property is indeed optional, if it isn't specified IPA will use
+the sum of the minimum power of all 'power actors' of the zone as
+estimate (see estimate_sustainable_power()). This may lead to overly
+agressive throttling, since the nominal sustainable power will always
+be <= the requested power.
+
+In my understanding the sustainable power may varies between devices,
+even for the same SoC. One could have all the hardware crammed into a
+tiny plastic enclosure (e.g. ASUS Chromebit), another might have a
+laptop form factor and a metal enclosure (e.g. ASUS C201). Both
+examples are based on an Rockchip rk3288, but they have completely
+different thermal behavior, and would likely have different values for
+'sustainable-power'.
+
+In this sense I tend to consider 'sustainable-power' more a device,
+than a SoC property. You could specify a 'reasonable' value as a
+starting point, but it will likely not be optimal for all or even most
+devices. The warning might even be useful for device makers by
+indicating them that there is room for tweaking.
+
+I'm not an expert in the matter though, just happend to look into this
+recently :)
+
+Cheers
+
+Matthias
