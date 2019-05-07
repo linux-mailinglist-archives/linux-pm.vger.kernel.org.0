@@ -2,201 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F81B16C92
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 22:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8746616D70
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 00:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbfEGUtG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 May 2019 16:49:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726329AbfEGUtG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 7 May 2019 16:49:06 -0400
-Received: from localhost (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5ED85205C9;
-        Tue,  7 May 2019 20:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557262144;
-        bh=UgQi0e7oHFXGjN1t4VrSnFtRC24frVRuEPTYfkilrW0=;
-        h=In-Reply-To:References:From:Subject:Cc:To:Date:From;
-        b=wxmG5tUCN0ycumdAr5/YRmGR0VS6AW087jInglKNSFP74iCaL9HDqJd0HLwAUYT/F
-         TNmpN2BxlDjHfQzQm3/94TRUXspHIbucrf9jvaUpSHO+GHrTTODDiGrafiurVmYr3b
-         9cRG+CeH6C9+gOusj5zihFQMz3pxy+0EUL75anQU=
-Content-Type: text/plain; charset="utf-8"
+        id S1726426AbfEGWOu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 May 2019 18:14:50 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:41987 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725843AbfEGWOu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 18:14:50 -0400
+Received: by mail-lf1-f68.google.com with SMTP id w23so12994550lfc.9
+        for <linux-pm@vger.kernel.org>; Tue, 07 May 2019 15:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=mFHlOpzADIsLrMHX2bCJUB1TTgI0AYRZ5LSjKxTsWv8=;
+        b=iN/QF2cYDVLZHPrKeWMr/UiSOrZL2wO2/u7+gIWaQlrcPX5k/lOZJMoMyxbMhsINjX
+         o/kk9wcuj74xiewm/PN9DnCIGa1cKH0N+0tsoiUvFKoui1xHYOu+6N7uqnfaURKuRekE
+         yAaXW2P0oKF09OOnAcNoJPoZYthzIZKX3qxRgOCh6GusIgYjJIodVDCbrgxeIMfdSY0T
+         VngU6u8u3yIAH4xzloHNa3sBvVth4mes4HsFlE6DOzm7L+XlOFe1QqnhMeqfDZqbIWhA
+         C8ikZTi/3NqGLqrUiA9iIMJiEuMDYNLhDGS+dbYDBXDtjQ7/SZI2Wpz+x72PIM2X/ncc
+         VGBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=mFHlOpzADIsLrMHX2bCJUB1TTgI0AYRZ5LSjKxTsWv8=;
+        b=iEAdbVYZuLT4tiymanphpkIN65bCvyVF/9v0tJ4GMnOfCjQj2d5gem8MaZ0IdVn8hA
+         6wxsAQe3Azj2DaeNnFnwCy593iYT7k2zh0sjuC2OupQ2AU6FBCoIgZuQdg7KtJ/0F+Vu
+         mv/NqeAE4+Sqw6QMJLw2a8re0gqpO4OOUx3ciV9WLtbOAc8v77b9LQ0Xvbaai4MlbcoX
+         r0pHwEjduzJlQR2EIMemV29PgCbWuzNW2fbY3XQm8R1srgUSIu+7l/vuqMj/7hYiYQUX
+         CSGjeZCW3vXbkegCNdrwmOElA2XUleXBu8KpJP5SGccnrfo9D41VCk0cbwveltJbG0rh
+         JVVg==
+X-Gm-Message-State: APjAAAXrClKrUDKeVbEDlxXxs2RJtXKc6sWMVrnyAUBjpXXTzs+CUMuf
+        U6J1e8FmDf7g0VxFGogDOyttOUiiA+4=
+X-Google-Smtp-Source: APXvYqxYobQnx20Gdvpbk7T26X5A6p73Pw8k4/eFtH0prJyY57De4FlGE/wYJiCSLt4JsFDFnqWtpQ==
+X-Received: by 2002:ac2:554a:: with SMTP id l10mr16320812lfk.45.1557267287737;
+        Tue, 07 May 2019 15:14:47 -0700 (PDT)
+Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
+        by smtp.gmail.com with ESMTPSA id v11sm3621141lfb.68.2019.05.07.15.14.46
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 07 May 2019 15:14:46 -0700 (PDT)
+Date:   Wed, 8 May 2019 00:14:46 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Simon Horman <horms@verge.net.au>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Yoshihiro Kaneko <ykaneko0929@gmail.com>
+Subject: Re: [PATCH repost] thermal: rcar_thermal: update calculation formula
+ for E3
+Message-ID: <20190507221446.GB16573@bigcity.dyn.berto.se>
+References: <20190418071514.13027-1-horms+renesas@verge.net.au>
+ <20190418081209.GT28515@bigcity.dyn.berto.se>
+ <CAMuHMdVX5t-Q5tM5bj95muAZ+8+phohtQSsAO-rCeCofiqVMKQ@mail.gmail.com>
+ <20190426095511.tkgbxkf43psesgkv@verge.net.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1557215457.2147.90.camel@mtksdaap41>
-References: <20190430112012.4514-1-roger.lu@mediatek.com> <20190430112012.4514-2-roger.lu@mediatek.com> <155665629219.168659.8221738507474891604@swboyd.mtv.corp.google.com> <1556777971.12123.35.camel@mtksdaap41> <155691770027.200842.16164651681407381397@swboyd.mtv.corp.google.com> <1557215457.2147.90.camel@mtksdaap41>
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC v1 1/3] dt-bindings: soc: add mtk svs dt-bindings
-Cc:     Mark Rutland <mark.rutland@arm.com>, Nishanth Menon <nm@ti.com>,
-        Angus.Lin@mediatek.com, devicetree@vger.kernel.org,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org, Andy-YT.Liu@mediatek.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, HenryC.Chen@mediatek.com
-To:     Roger Lu <roger.lu@mediatek.com>
-Message-ID: <155726214346.14659.17800352563837760252@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.8
-Date:   Tue, 07 May 2019 13:49:03 -0700
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190426095511.tkgbxkf43psesgkv@verge.net.au>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Roger Lu (2019-05-07 00:50:57)
-> Dear Stephen,
->=20
-> Sorry for the late reply.
->=20
-> On Fri, 2019-05-03 at 14:08 -0700, Stephen Boyd wrote:
-> > Quoting Roger Lu (2019-05-01 23:19:31)
-> > > On Tue, 2019-04-30 at 13:31 -0700, Stephen Boyd wrote:
-> > > > Quoting Roger Lu (2019-04-30 04:20:10)
-> > > > > diff --git a/Documentation/devicetree/bindings/power/mtk-svs.txt =
-b/Documentation/devicetree/bindings/power/mtk-svs.txt
-> > > > > new file mode 100644
-> > > > > index 000000000000..355329db74ba
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/power/mtk-svs.txt
-> > [..]
-> > > > > +
-> > > > > +               svs_gpu: svs_gpu {
-> > > > > +                       compatible =3D "mediatek,mt8183-svs-gpu";
-> > > > > +                       power-domains =3D <&scpsys MT8183_POWER_D=
-OMAIN_MFG_2D>;
-> > > > > +                       operating-points-v2 =3D <&gpu_opp_table>;
-> > > > > +               };
-> > > >=20
-> > > > It looks like you need multiple OPPs for a single device, because i=
-t has
-> > > > different independent power supplies it wants to associate the OPP
-> > > > tables with?
-> > > Yes. SVS has different controllers inside the hardware in order to
-> > > calculate and optimize different OPP table voltage part.
-> >=20
-> > So is there more than one SVS register region that needs certain devices
-> > to be powered on or at least have their power domain enabled so that the
-> > SVS hardware can read the voltage and adjust accordingly? I should read
-> > the driver I suppose.
-> No, basically, each SVS controller (aka SVS bank) only has one SVS
-> register region that needs to be powered on for the init.
-> In MT8183 SVS case, SVS has four controllers (banks). Each SVS bank
-> needs corresponding power domain to be on for its init.
->=20
-> #SVS bank corresponding power domain
-> svs_cpu_little: Needs CPU-A53 power on for init
-> svs_cpu_big: Needs CPU-A73 power on for init
-> svs_cci: Needs CPU-A53 power on for init
-> svs_gpu: Needs MFG_2D power on for init
->=20
-> P.S SVS driver will use pm_runtime_get_sync() to turn on power before
-> svs bank init and pm_runtime_put_sync() to turn off power power after
-> svs bank init.
+Hello,
 
-Ok. How are you making sure that certain CPUs are powered on?
+On 2019-04-26 11:55:11 +0200, Simon Horman wrote:
+> On Wed, Apr 24, 2019 at 09:10:56AM +0200, Geert Uytterhoeven wrote:
+> > Hi Niklas,
+> > 
+> > On Thu, Apr 18, 2019 at 10:12 AM Niklas Söderlund
+> > <niklas.soderlund@ragnatech.se> wrote:
+> > > On 2019-04-18 09:15:14 +0200, Simon Horman wrote:
+> > > > From: Yoshihiro Kaneko <ykaneko0929@gmail.com>
+> > > >
+> > > > HW manual changes temperature calculation formula for E3:
+> > >
+> > > Is this not also true for V3M and D3?
+> > >
+> > > > - When CTEMP is less than 24
+> > > >    T = CTEMP[5:0] * 5.5 - 72
+> > > > - When CTEMP is equal to/greater than 24
+> > > >    T = CTEMP[5:0] * 5 - 60
+> > > >
+> > > > This was inspired by a patch in the BSP by Van Do <van.do.xw@renesas.com>
+> > > >
+> > > > Signed-off-by: Yoshihiro Kaneko <ykaneko0929@gmail.com>
+> > > > Tested-by: Simon Horman <horms+renesas@verge.net.au>
+> > > > Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> > > > Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+> > > > ---
+> > > >  drivers/thermal/rcar_thermal.c | 11 ++++++++++-
+> > > >  1 file changed, 10 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> > > > index 97462e9b40d8..11df0cc63bed 100644
+> > > > --- a/drivers/thermal/rcar_thermal.c
+> > > > +++ b/drivers/thermal/rcar_thermal.c
+> > > > @@ -52,6 +52,7 @@ struct rcar_thermal_chip {
+> > > >       unsigned int irq_per_ch : 1;
+> > > >       unsigned int needs_suspend_resume : 1;
+> > > >       unsigned int nirqs;
+> > > > +     unsigned int ctemp_bands;
+> > >
+> > > Would it be possible to rename this to something indicating that this is
+> > > a gen3 thing? Maybe move it to the bit fields above and name it gen3 ?
+> > 
+> > Is that really a good thing to do? This structure describes features of
+> > the thermal module, and we're already beyond the point where a simple
+> > check  for gen2 or gen3 was sufficient.
+> > Here the feature is having multiple temperature bands.
+> > What if some other Gen3 SoC starts having 3 temperature bands?
 
->=20
-> >=20
-> > >=20
-> > > > Why can't these OPP tables be attached to the devices that
-> > > > use them, i.e. CPU, GPU, CCI, etc.? Seems odd that those devices do=
-n't
-> > > > have OPP tables that this hardware block can look up somehow.
-> > > Those OPP tables are attached by our DVFS node (please refers below
-> > > patch). SVS just shares with their OPP table and help optimize these =
-OPP
-> > > tables' voltage part.
-> > >=20
-> > > Add cpufreq DTS node to the mt8183 and mt8183-evb
-> > > https://patchwork.kernel.org/patch/10921675/
-> >=20
-> > Cool thanks for the pointer.
-> >=20
-> > >=20
-> > >=20
-> > > > Similarly,
-> > > > the power domains should probably be part of the devices that are u=
-sing
-> > > > them and not these sub-nodes that are mirroring the other hardware
-> > > > blocks in the system?
-> > > Oh. There is a svs controller in GPU power-domain. We need to turn on
-> > > GPU power so that svs controller can work functionally. Therefore, we
-> > > add GPU power-domains in our svs_gpu sub-node.
-> > >=20
-> > >=20
-> >=20
-> > Sorry, I'm not really following what you're saying too closely. I think
-> > I get it but it sounds complicated.
-> >=20
-> > I'm mostly wondering if having properties like svs-gpu =3D <&gpu_node>,
-> > and svs-cci =3D <&cci_node> would work for you. The idea would be to li=
-nk
-> > this hardware block to the nodes that it's going to adjust the OPPs of.
-> > Once you have the node, use some sort of OPP API to get the OPP table
-> > for a device_node and adjust it at runtime for the current OPP.
-> Yes, I understand your idea. Thank you. I share my design purpose and
-> the troubles I encountered when linking other hardware block.
->=20
-> #my design purpose
-> 1. SVS bank doesn't need all the resources in other device node like
-> cci_node. Therefore, I model SVS sub-nodes to declare what svs bank
-> needs.
+Good point, after reviewing your comment I now agree with the original 
+patch.
 
-Do you mean that there are other properties in the cci_node that the SVS
-hardware block doesn't use? That doesn't sound like a problem to me. I
-view nodes in the SoC bus as all memory mapped IO devices and it sounds
-like SVS is a hardware IP core that's off to the side in the system that
-has some sensors that goes into various other IP blocks in the system.
-It's correct to model the registers and interrupts, etc. as one node for
-the one hardware block that's delivered by the hardware engineers.
+> > 
+> > > > @@ -263,7 +267,12 @@ static int rcar_thermal_get_current_temp(struct rcar_thermal_priv *priv,
+> > > >               return ret;
+> > > >
+> > > >       mutex_lock(&priv->lock);
+> > > > -     tmp =  MCELSIUS((priv->ctemp * 5) - 65);
+> > > > +     if (priv->chip->ctemp_bands == 1)
+> > > > +             tmp =  MCELSIUS((priv->ctemp * 5) - 65);
+> > > > +     else if (priv->ctemp < 24)
+> > > > +             tmp = MCELSIUS(((priv->ctemp * 55) - 720) / 10);
+> > > > +     else
+> > > > +             tmp = MCELSIUS((priv->ctemp * 5) - 60);
+> > >
+> > > I confirm that the calculations here are correct, but hard to read ;-)
+> > > With the rename about how about.
+> > >
+> > >     if (priv->chip->gen3) {
+> > >         if (priv->ctemp < 24)
+> > >                 tmp = MCELSIUS(((priv->ctemp * 55) - 720) / 10);
+> > >         else
+> > >                 tmp = MCELSIUS((priv->ctemp * 5) - 60);
+> > >     } else {
+> > >             tmp =  MCELSIUS((priv->ctemp * 5) - 65);
+> > >     }
+> > 
+> > _Iff_ we decide on going for the rename, I'd still write it as:
+> > 
+> >     if (!priv->chip->gen3)
+> >             tmp =  MCELSIUS((priv->ctemp * 5) - 65);
+> >     else if (priv->ctemp < 24)
+> >             tmp = MCELSIUS(((priv->ctemp * 55) - 720) / 10);
+> >     else
+> >             tmp = MCELSIUS((priv->ctemp * 5) - 60);
+> > 
+> > Always fold your if/else if/else constructs to minimize the need for indentation
+> > and braces ;-)
+> 
+> From my PoV I think the patch is fine in its current form.
+> Niklas do you feel particularly strongly about changing it?
 
->=20
-> #troubles - linking other hardware block
-> 1. I don't know how to get cpu devcie after we link CPU node
-> (svs_cpu_little =3D <cpu0>). I use "get_cpu_device(unsigned cpu)" in Linux
-> driver to attain cpuX device generally.
+No I do not feel strongly about this and would be fine with the patch in 
+it's current form. With and update commit message to mention V3M and D3 
+feel free to add
 
-This should probably be some sort of list property that points to all
-the CPUs in the little and big clusters. Then the code can iterate
-through the node pointers and look for an OPP table in any of them by
-combining of_cpu_node_to_id() with get_cpu_device()?
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-> 2. Our MT8183 has three gpu-related node as below, svs_gpu need the
-> reference of gpu (OPP table) & gpu_core2 (power-domain MFG_2D) to make
-> sure svs_gpu can init and update gpu OPP table. I don't know how to
-> refer two nodes by one property. Therefore, I model a svs_gpu to declare
-> what it needs.
->=20
-> gpu: mali@13040000 {
->         ...
->         power-domains =3D <&scpsys MT8183_POWER_DOMAIN_MFG_CORE0>;
->         operating-points-v2 =3D <&gpu_opp_table>;
->         ...
-> }
->=20
-> gpu_core1: mali_gpu_core1 {
->         ...
->         power-domains =3D <&scpsys MT8183_POWER_DOMAIN_MFG_CORE1>;
-> };
->=20
-> gpu_core2: mali_gpu_core2 {
->         ...
->         power-domains =3D <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
-> };
-
-These three nodes should be combined into one node for the GPU. The
-power domains will need to be referred to by name. Luckily we have
-support for multiple power domains in the kernel now so this should
-work. Let us know if it doesn't work for some reason.
-
->=20
-> P.S MT8183 GPU won't do upstream. So, there is no patchwork weblink to
-> refer.
-
-Sure.
-
+-- 
+Regards,
+Niklas Söderlund
