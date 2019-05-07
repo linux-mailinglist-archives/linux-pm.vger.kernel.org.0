@@ -2,48 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAFF15FE4
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 10:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DFF15FED
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 10:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726564AbfEGI6P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 May 2019 04:58:15 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:33793 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726517AbfEGI6O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 04:58:14 -0400
-Received: by mail-qt1-f196.google.com with SMTP id j6so18127229qtq.1
-        for <linux-pm@vger.kernel.org>; Tue, 07 May 2019 01:58:13 -0700 (PDT)
+        id S1726236AbfEGI6v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 May 2019 04:58:51 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46272 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726394AbfEGI6p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 04:58:45 -0400
+Received: by mail-qt1-f195.google.com with SMTP id i31so18062755qti.13
+        for <linux-pm@vger.kernel.org>; Tue, 07 May 2019 01:58:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bgt65WYUyh4keq60HSFM9ou9BWNsxqpsxUheEsmJ/Ps=;
-        b=LFXHlmUi0/8ulUeaMb6kFoZgCQOYaGhjD0Rv5sOqvJAdFWnGFpVQ9T+NX2HpuBvduI
-         C14vwFf0hjhSV2f2O2geQK9TiX/sTj5gFNlhRPzsoJh5tR6YgCfF2VtBRUQjbjagINNw
-         +fcIApgzTmb4yoNs2rPZdhdJuD4mwJN06wYHM=
+         :cc;
+        bh=N4j8vIu2wMMo6UT4+kjIlyoObNO3WTbPl4WCu+/nidM=;
+        b=ctTKjgV+zvGS9Gu1Me48lcXJj5NqtLOU2qUZfsGcBDnwCUXDVEdjcq3QLVxixOlQSa
+         xDxe0j3pLX2v9kUw9PZ+P910lyFYWbJbJkIgwu+caLtqZ49bbGbcdHpr8qyqbT9Oy5rV
+         ZfEOk3QiUo7CLg9q/N5n5gysIRNWmEcCZxpLQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bgt65WYUyh4keq60HSFM9ou9BWNsxqpsxUheEsmJ/Ps=;
-        b=RjmATyBzZyMODli1bsNRyBWSiYGaIBvJLAD//Fhl4e7ju0me6IFyk5T6aV+gFKdxu5
-         FGws3kuMCIK3B/BOWyZaGCRVNiNwjOS0HOgbxmJT//q5D/3Brk0xZqrPtAapUEvuOQn+
-         CILj+xDF1xMQKeAQCEfzRizw/1/AEy7ZlGvV0I0IPRAib/JKcRsMLuunQHfqPnlGkg8N
-         1VM31JWROa/nV2De3Y3iUj4sIzyVtaBMgYb4c13zwcvwYWBVW1AjHbKR4iIF2fEpYFnD
-         i3oef3PFvQTMxUgFfa6wzQR99/+spfX2RllWpohyNbTN0uuMi/MxflQOYv+xwiEXmF3O
-         JStQ==
-X-Gm-Message-State: APjAAAUOVUGgZRZKu7OiWbOdwM7MvgzsTpf7aCc6Pa8+fmmbNfexf7tc
-        h3Iy6xZ+M9L1JXfvI0T+wwerIIbHcyderWbIXxcoGw==
-X-Google-Smtp-Source: APXvYqxRKpUMVzA6AG7GCIY/+g/BwxuTBk4WFdQofQEHMln8CxbzW33eb9ZBrRV8Z4nlMUPH71Flva1Aw5lznF2Ik9Q=
-X-Received: by 2002:ac8:2963:: with SMTP id z32mr25699870qtz.236.1557219493495;
- Tue, 07 May 2019 01:58:13 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=N4j8vIu2wMMo6UT4+kjIlyoObNO3WTbPl4WCu+/nidM=;
+        b=j1Mh3HKmi5PhkhPkQXOyfcxx42c/97Oh+gNXccBTQY5gprtZyXE0jd7YrZngbhErY/
+         U/yr+nKzdhsblvHYP7HnTA/71LXRS0AH7qkVauZmfS4fYBRIfYufdaaRufvF+RIMlKnu
+         KJtJpwSHdUdoVMD4Q+gWg7X22m9TJfHYECZZsmrPz7yoc+ZIzaSgqxSyr3R11pr5QGf+
+         EMmzqEpgpSklyzNNnbj4t0yQ2nON/jewzDiPSlk8TA+MDMOGVug7geore1gzZ8qqGBRH
+         vQkvEX+kMdFmI2XGgSzrHrETjScY6cKSsGOGs5v/VSFVhvb/BGRZQOs7xskdpTDGyaFn
+         roIg==
+X-Gm-Message-State: APjAAAW+tZhm7aDGXPXWKPLCJNBZkvRiHLLAKUlcEW0E6u5ejvT1VnKL
+        T/s2f0Ygy93PI5wM092zYIwCusVJfhWBLyc4wKb9sA==
+X-Google-Smtp-Source: APXvYqwh0Jp85DeTO2qBWgQsuEyExRB1yb+3NzYLBg178fUUMnHKuPVE2ZV5rt3C9hW9+lUMAdlXGFQiVeB/ea6x5qw=
+X-Received: by 2002:ac8:3fe3:: with SMTP id v32mr24484207qtk.307.1557219524087;
+ Tue, 07 May 2019 01:58:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <1556793795-25204-1-git-send-email-michael.kao@mediatek.com> <1556793795-25204-5-git-send-email-michael.kao@mediatek.com>
-In-Reply-To: <1556793795-25204-5-git-send-email-michael.kao@mediatek.com>
+References: <1556793795-25204-1-git-send-email-michael.kao@mediatek.com> <1556793795-25204-6-git-send-email-michael.kao@mediatek.com>
+In-Reply-To: <1556793795-25204-6-git-send-email-michael.kao@mediatek.com>
 From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Tue, 7 May 2019 16:57:47 +0800
-Message-ID: <CAJMQK-i===iehSxLky1rZMnYhZfrnAJzWtDxT2OLOwRnKwaZoA@mail.gmail.com>
-Subject: Re: [PATCH 4/8] arm64: dts: mt8183: Configure CPU cooling
+Date:   Tue, 7 May 2019 16:58:18 +0800
+Message-ID: <CAJMQK-hKoK1hfK+XJuyExxp3rDWY9py6j3_jwEMfVeJcYYM7XA@mail.gmail.com>
+Subject: Re: [PATCH 5/8] arm64: dts: mt8183: Increase polling frequency for
+ CPU thermal zone
 To:     "michael.kao" <michael.kao@mediatek.com>
 Cc:     fan.chen@mediatek.com, jamesjj.liao@mediatek.com,
         dawei.chien@mediatek.com, louis.yu@mediatek.com,
@@ -58,101 +59,38 @@ Cc:     fan.chen@mediatek.com, jamesjj.liao@mediatek.com,
         linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 2, 2019 at 10:43 AM michael.kao <michael.kao@mediatek.com> wrot=
-e:
+On Thu, May 2, 2019 at 10:43 AM michael.kao <michael.kao@mediatek.com> wrote:
 >
 > From: Matthias Kaehlcke <mka@chromium.org>
 >
-> Add two passive trip points at 68=C2=B0C and 85=C2=B0C for the CPU temper=
-ature.
+> Evaluate the thermal zone every 500ms while not cooling and every
+> 100ms when passive cooling is performed.
 >
 > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
 > ---
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 55 ++++++++++++++++++++++++++=
-++++++
->  1 file changed, 55 insertions(+)
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/d=
-ts/mediatek/mt8183.dtsi
-> index 95f1d7b..0b3294b 100644
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 0b3294b..be879ac 100644
 > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -375,6 +375,61 @@
+> @@ -370,8 +370,8 @@
 >
->                                 thermal-sensors =3D <&thermal 0>;
->                                 sustainable-power =3D <1500>;
-> +
-> +                               trips {
-> +                                       threshold: trip-point@0 {
-> +                                               temperature =3D <68000>;
-> +                                               hysteresis =3D <2000>;
-> +                                               type =3D "passive";
-> +                                       };
-> +
-> +                                       target: trip-point@1 {
-> +                                               temperature =3D <85000>;
-> +                                               hysteresis =3D <2000>;
-> +                                               type =3D "passive";
-> +                                       };
-> +
-> +                                       cpu_crit: cpu-crit {
-> +                                               temperature =3D <115000>;
-> +                                               hysteresis =3D <2000>;
-> +                                               type =3D "critical";
-> +                                       };
-> +                               };
-> +
-> +                               cooling-maps {
-> +                                       map0 {
-> +                                               trip =3D <&target>;
-> +                                               cooling-device =3D <&cpu0
-> +                                                       THERMAL_NO_LIMIT
-> +                                                       THERMAL_NO_LIMIT>=
-,
-> +                                                                <&cpu1
-> +                                                       THERMAL_NO_LIMIT
-> +                                                       THERMAL_NO_LIMIT>=
-,
-> +                                                                <&cpu2
-> +                                                       THERMAL_NO_LIMIT
-> +                                                       THERMAL_NO_LIMIT>=
-,
-> +                                                                <&cpu3
-> +                                                       THERMAL_NO_LIMIT
-> +                                                       THERMAL_NO_LIMIT>=
-;
-> +                                               contribution =3D <3072>;
-> +                                       };
-> +                                       map1 {
-> +                                               trip =3D <&target>;
-> +                                               cooling-device =3D <&cpu4
-> +                                                       THERMAL_NO_LIMIT
-> +                                                       THERMAL_NO_LIMIT>=
-,
-> +                                                                <&cpu5
-> +                                                       THERMAL_NO_LIMIT
-> +                                                       THERMAL_NO_LIMIT>=
-,
-> +                                                                <&cpu6
-> +                                                       THERMAL_NO_LIMIT
-> +                                                       THERMAL_NO_LIMIT>=
-,
-> +                                                                <&cpu7
-> +                                                       THERMAL_NO_LIMIT
-> +                                                       THERMAL_NO_LIMIT>=
-;
-> +                                               contribution =3D <1024>;
-> +                                       };
-> +                               };
->                         };
+>                 thermal-zones {
+>                         cpu_thermal: cpu_thermal {
+> -                               polling-delay-passive = <1000>;
+> -                               polling-delay = <1000>;
+> +                               polling-delay-passive = <100>;
+> +                               polling-delay = <500>;
 >
->                         tzts1: tzts1 {
+>                                 thermal-sensors = <&thermal 0>;
+>                                 sustainable-power = <1500>;
 
 Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
