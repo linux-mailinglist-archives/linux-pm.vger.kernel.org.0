@@ -2,167 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CD615E45
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 09:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E992815E97
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 09:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbfEGHfb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 May 2019 03:35:31 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:43267 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726276AbfEGHfb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 03:35:31 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190507073528epoutp04e331e42ad939d93b6ea47b9a5dddea93~cVlz4woDt1479014790epoutp04m
-        for <linux-pm@vger.kernel.org>; Tue,  7 May 2019 07:35:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190507073528epoutp04e331e42ad939d93b6ea47b9a5dddea93~cVlz4woDt1479014790epoutp04m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1557214528;
-        bh=FYl5euwdsPPChv+/efoMBPph1L1YgFkS2vAGuXunfFQ=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=cxWAMWq2M/AmkIyrnwUPCh7Qawr1xeZVDhFqyiPKTWMO1FVkyPdIfd4DLzYBbuJ+c
-         LEIZFjkprrDcfywUF/NjwysffPohzoN39cBlugA6F1d9vEvZc953c/funFOizVX/xK
-         OAkvaEzg34GiFrZCDboUlzV7+EIP4hnx+sT581YM=
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.158]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190507073525epcas1p29ade2ba4a25f0272b8c0a0e3b34bd3ed~cVlxIu9Xm1903619036epcas1p2O;
-        Tue,  7 May 2019 07:35:25 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A2.D5.04143.D3531DC5; Tue,  7 May 2019 16:35:25 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190507073524epcas1p198f3608c10098e2e270c9392b302622f~cVlwgQVs71535215352epcas1p1V;
-        Tue,  7 May 2019 07:35:24 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190507073524epsmtrp2f5d59f52c51bd3e01489ff281025c441~cVlwdyvmE0559305593epsmtrp26;
-        Tue,  7 May 2019 07:35:24 +0000 (GMT)
-X-AuditID: b6c32a37-f31ff7000000102f-13-5cd1353ded4d
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C9.68.03662.C3531DC5; Tue,  7 May 2019 16:35:24 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190507073524epsmtip2156111aa2fcaed3035b1ad7ba65ac495~cVlwMz6W22664026640epsmtip26;
-        Tue,  7 May 2019 07:35:24 +0000 (GMT)
-Subject: Re: [PATCH v7 03/13] clk: samsung: add BPLL rate table for Exynos
- 5422 SoC
-To:     Lukasz Luba <l.luba@partner.samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     b.zolnierkie@samsung.com, krzk@kernel.org, kgene@kernel.org,
-        kyungmin.park@samsung.com, m.szyprowski@samsung.com,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
-        treding@nvidia.com, digetx@gmail.com, willy.mh.wolff.ml@gmail.com
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <1db8ffb8-1038-edbc-81b5-689f8a4c3c6b@samsung.com>
-Date:   Tue, 7 May 2019 16:36:50 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
+        id S1726723AbfEGHvI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 May 2019 03:51:08 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:35261 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726750AbfEGHvH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 03:51:07 -0400
+X-UUID: 25b8602bc64a437d8fa19b99705f6c37-20190507
+X-UUID: 25b8602bc64a437d8fa19b99705f6c37-20190507
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 2061938430; Tue, 07 May 2019 15:50:58 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs03n2.mediatek.inc (172.21.101.182) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 7 May 2019 15:50:57 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 7 May 2019 15:50:57 +0800
+Message-ID: <1557215457.2147.90.camel@mtksdaap41>
+Subject: Re: [RFC v1 1/3] dt-bindings: soc: add mtk svs dt-bindings
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>, Nishanth Menon <nm@ti.com>,
+        <Angus.Lin@mediatek.com>, <devicetree@vger.kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        <linux-kernel@vger.kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <Andy-YT.Liu@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>, <HenryC.Chen@mediatek.com>
+Date:   Tue, 7 May 2019 15:50:57 +0800
+In-Reply-To: <155691770027.200842.16164651681407381397@swboyd.mtv.corp.google.com>
+References: <20190430112012.4514-1-roger.lu@mediatek.com>
+         <20190430112012.4514-2-roger.lu@mediatek.com>
+         <155665629219.168659.8221738507474891604@swboyd.mtv.corp.google.com>
+         <1556777971.12123.35.camel@mtksdaap41>
+         <155691770027.200842.16164651681407381397@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <1557155521-30949-4-git-send-email-l.luba@partner.samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLJsWRmVeSWpSXmKPExsWy7bCmvq6t6cUYg5Zn4hYbZ6xntZh/5Byr
-        xeqPjxktJp+ay2RxpjvXov/xa2aL8+c3sFucbXrDbnGrQcbi8q45bBafe48wWsw4v4/JYu2R
-        u+wWtxtXsFkcftPOarH/ipfF7d98Ft9OPGJ0EPL49nUSi8fshossHjtn3WX32LSqk82jt/kd
-        m8fBd3uYPPq2rGL02Hy62uPzJrkAzqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNL
-        C3MlhbzE3FRbJRefAF23zBygZ5QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BZYF
-        esWJucWleel6yfm5VoYGBkamQIUJ2Rk7T/xiKvgtWNE/cy9jA2MLfxcjJ4eEgInEzbkf2boY
-        uTiEBHYwSpz7t5IRwvnEKNG5aTeU841R4s7rm+wwLRse9DFBJPYySszqWQTV/55R4tilDlaQ
-        KmGBUIkdfzYzgyREBJYzSuybehdsFrPAaiaJP1/XglWxCWhJ7H9xgw3E5hdQlLj64zEjiM0r
-        YCexe8F3oDgHB4uAisSuSfogYVGBCIn7xzawQpQISpyc+YQFxOYU8JY4uqYJ7DxmAXGJW0/m
-        M0HY8hLNW2eDHSEhcI9dYuaZ7YwQP7hIHN10mw3CFpZ4dXwL1G9SEp/f7YWKV0usPHmEDaK5
-        g1Fiy/4LrBAJY4n9SyczgRzHLKApsX6XPsQyPol3X3tYQcISArwSHW1CENXKEpcf3GWCsCUl
-        Frd3Qo33kNi9aiX7BEbFWUjemYXkhVlIXpiFsGwBI8sqRrHUguLc9NRiwwJj5PjexAhO6lrm
-        Oxg3nPM5xCjAwajEw/vA9kKMEGtiWXFl7iFGCQ5mJRHexGfnYoR4UxIrq1KL8uOLSnNSiw8x
-        mgIDeyKzlGhyPjDj5JXEG5oaGRsbW5gYmpkaGiqJ8653cI4REkhPLEnNTk0tSC2C6WPi4JRq
-        YOQ96fT51YGbzeLTdRK+xyQq73pVcDq5qeWOwNalZxJ0TmZFTI/cF3L+WscezdDHixdVL0ic
-        pW7eL3HjsmfvhfuGwokZrmezn6dIfN9zi6nn9/zJU0RF5LaEuEmvm+tr2f/KlXc349bYadPj
-        Jz5jZ3y0zMg29/3RSq1yw3/iPCdLJxxdsPrl/iglluKMREMt5qLiRABgx4SiAAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOIsWRmVeSWpSXmKPExsWy7bCSvK6N6cUYg5+ntSw2zljPajH/yDlW
-        i9UfHzNaTD41l8niTHeuRf/j18wW589vYLc42/SG3eJWg4zF5V1z2Cw+9x5htJhxfh+Txdoj
-        d9ktbjeuYLM4/Kad1WL/FS+L27/5LL6deMToIOTx7eskFo/ZDRdZPHbOusvusWlVJ5tHb/M7
-        No+D7/YwefRtWcXosfl0tcfnTXIBnFFcNimpOZllqUX6dglcGTtP/GIq+C1Y0T9zL2MDYwt/
-        FyMnh4SAicSGB31MXYxcHEICuxklXl36wwSRkJSYdvEocxcjB5AtLHH4cDFEzVtGiSUNF8Bq
-        hAVCJXb82cwMkhARWM4oMffvUhYQh1lgNZPEpI9b2CBa7jNKnGv4xgrSwiagJbH/xQ02EJtf
-        QFHi6o/HjCA2r4CdxO4F39lA1rEIqEjsmqQPEhYViJA4834FC0SJoMTJmU/AbE4Bb4mja5rY
-        QWxmAXWJP/MuMUPY4hK3nsxngrDlJZq3zmaewCg8C0n7LCQts5C0zELSsoCRZRWjZGpBcW56
-        brFhgVFearlecWJucWleul5yfu4mRnB0a2ntYDxxIv4QowAHoxIPb4f1hRgh1sSy4srcQ4wS
-        HMxKIryJz87FCPGmJFZWpRblxxeV5qQWH2KU5mBREueVzz8WKSSQnliSmp2aWpBaBJNl4uCU
-        amCcobb88p3fdzcyiBTMan7DMtWwleWucuS51x6L5M0/rGpj2h9rw1C67MjTF/P3BTGYXLjq
-        f+tYqZU9zwnBFYYvfA4FJ0UUGBT5r9ku9ebPPo1Sw3/rfme80172u6zjsrM+X33J5gI/5nPG
-        yxSnxgfrz/rSeyT24sHEjc2XnDpm8z5bZ16aEtyixFKckWioxVxUnAgASH8NyeoCAAA=
-X-CMS-MailID: 20190507073524epcas1p198f3608c10098e2e270c9392b302622f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190506151212eucas1p24110f75fa6ed945f9ae7614fbb8aa13d
-References: <1557155521-30949-1-git-send-email-l.luba@partner.samsung.com>
-        <CGME20190506151212eucas1p24110f75fa6ed945f9ae7614fbb8aa13d@eucas1p2.samsung.com>
-        <1557155521-30949-4-git-send-email-l.luba@partner.samsung.com>
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 2A70FA32ECE4104952054275D588E9976EED734ADF312A104C76D8D354D178072000:8
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+Dear Stephen,
 
-On 19. 5. 7. 오전 12:11, Lukasz Luba wrote:
-> Add new table rate for BPLL for Exynos5422 SoC supporting Dynamic Memory
-> Controller frequencies for driver's DRAM timings.
-> 
-> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> ---
->  drivers/clk/samsung/clk-exynos5420.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
-> index af62b6d..23c60a5 100644
-> --- a/drivers/clk/samsung/clk-exynos5420.c
-> +++ b/drivers/clk/samsung/clk-exynos5420.c
-> @@ -1335,6 +1335,17 @@ static const struct samsung_pll_rate_table exynos5420_pll2550x_24mhz_tbl[] __ini
->  	PLL_35XX_RATE(24 * MHZ, 200000000,  200, 3, 3),
->  };
->  
-> +static const struct samsung_pll_rate_table exynos5422_bpll_rate_table[] = {
-> +	PLL_35XX_RATE(24 * MHZ, 825000000, 275, 4, 1),
-> +	PLL_35XX_RATE(24 * MHZ, 728000000, 182, 3, 1),
-> +	PLL_35XX_RATE(24 * MHZ, 633000000, 211, 4, 1),
-> +	PLL_35XX_RATE(24 * MHZ, 543000000, 181, 2, 2),
-> +	PLL_35XX_RATE(24 * MHZ, 413000000, 413, 6, 2),
-> +	PLL_35XX_RATE(24 * MHZ, 275000000, 275, 3, 3),
-> +	PLL_35XX_RATE(24 * MHZ, 206000000, 206, 3, 3),
-> +	PLL_35XX_RATE(24 * MHZ, 165000000, 110, 2, 3),
-> +};
-> +
->  static const struct samsung_pll_rate_table exynos5420_epll_24mhz_tbl[] = {
->  	PLL_36XX_RATE(24 * MHZ, 600000000U, 100, 2, 1, 0),
->  	PLL_36XX_RATE(24 * MHZ, 400000000U, 200, 3, 2, 0),
-> @@ -1477,9 +1488,13 @@ static void __init exynos5x_clk_init(struct device_node *np,
->  		exynos5x_plls[apll].rate_table = exynos5420_pll2550x_24mhz_tbl;
->  		exynos5x_plls[epll].rate_table = exynos5420_epll_24mhz_tbl;
->  		exynos5x_plls[kpll].rate_table = exynos5420_pll2550x_24mhz_tbl;
-> -		exynos5x_plls[bpll].rate_table = exynos5420_pll2550x_24mhz_tbl;
->  	}
->  
-> +	if (soc == EXYNOS5420)
-> +		exynos5x_plls[bpll].rate_table = exynos5420_pll2550x_24mhz_tbl;
-> +	else
-> +		exynos5x_plls[bpll].rate_table = exynos5422_bpll_rate_table;
-> +
->  	samsung_clk_register_pll(ctx, exynos5x_plls, ARRAY_SIZE(exynos5x_plls),
->  					reg_base);
->  	samsung_clk_register_fixed_rate(ctx, exynos5x_fixed_rate_clks,
-> 
+Sorry for the late reply.
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+On Fri, 2019-05-03 at 14:08 -0700, Stephen Boyd wrote:
+> Quoting Roger Lu (2019-05-01 23:19:31)
+> > On Tue, 2019-04-30 at 13:31 -0700, Stephen Boyd wrote:
+> > > Quoting Roger Lu (2019-04-30 04:20:10)
+> > > > diff --git a/Documentation/devicetree/bindings/power/mtk-svs.txt b/Documentation/devicetree/bindings/power/mtk-svs.txt
+> > > > new file mode 100644
+> > > > index 000000000000..355329db74ba
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/power/mtk-svs.txt
+> [..]
+> > > > +
+> > > > +               svs_gpu: svs_gpu {
+> > > > +                       compatible = "mediatek,mt8183-svs-gpu";
+> > > > +                       power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
+> > > > +                       operating-points-v2 = <&gpu_opp_table>;
+> > > > +               };
+> > > 
+> > > It looks like you need multiple OPPs for a single device, because it has
+> > > different independent power supplies it wants to associate the OPP
+> > > tables with?
+> > Yes. SVS has different controllers inside the hardware in order to
+> > calculate and optimize different OPP table voltage part.
+> 
+> So is there more than one SVS register region that needs certain devices
+> to be powered on or at least have their power domain enabled so that the
+> SVS hardware can read the voltage and adjust accordingly? I should read
+> the driver I suppose.
+No, basically, each SVS controller (aka SVS bank) only has one SVS
+register region that needs to be powered on for the init.
+In MT8183 SVS case, SVS has four controllers (banks). Each SVS bank
+needs corresponding power domain to be on for its init.
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+#SVS bank corresponding power domain
+svs_cpu_little: Needs CPU-A53 power on for init
+svs_cpu_big: Needs CPU-A73 power on for init
+svs_cci: Needs CPU-A53 power on for init
+svs_gpu: Needs MFG_2D power on for init
+
+P.S SVS driver will use pm_runtime_get_sync() to turn on power before
+svs bank init and pm_runtime_put_sync() to turn off power power after
+svs bank init.
+
+> 
+> > 
+> > > Why can't these OPP tables be attached to the devices that
+> > > use them, i.e. CPU, GPU, CCI, etc.? Seems odd that those devices don't
+> > > have OPP tables that this hardware block can look up somehow.
+> > Those OPP tables are attached by our DVFS node (please refers below
+> > patch). SVS just shares with their OPP table and help optimize these OPP
+> > tables' voltage part.
+> > 
+> > Add cpufreq DTS node to the mt8183 and mt8183-evb
+> > https://patchwork.kernel.org/patch/10921675/
+> 
+> Cool thanks for the pointer.
+> 
+> > 
+> > 
+> > > Similarly,
+> > > the power domains should probably be part of the devices that are using
+> > > them and not these sub-nodes that are mirroring the other hardware
+> > > blocks in the system?
+> > Oh. There is a svs controller in GPU power-domain. We need to turn on
+> > GPU power so that svs controller can work functionally. Therefore, we
+> > add GPU power-domains in our svs_gpu sub-node.
+> > 
+> > 
+> 
+> Sorry, I'm not really following what you're saying too closely. I think
+> I get it but it sounds complicated.
+> 
+> I'm mostly wondering if having properties like svs-gpu = <&gpu_node>,
+> and svs-cci = <&cci_node> would work for you. The idea would be to link
+> this hardware block to the nodes that it's going to adjust the OPPs of.
+> Once you have the node, use some sort of OPP API to get the OPP table
+> for a device_node and adjust it at runtime for the current OPP.
+Yes, I understand your idea. Thank you. I share my design purpose and
+the troubles I encountered when linking other hardware block.
+
+#my design purpose
+1. SVS bank doesn't need all the resources in other device node like
+cci_node. Therefore, I model SVS sub-nodes to declare what svs bank
+needs.
+
+#troubles - linking other hardware block
+1. I don't know how to get cpu devcie after we link CPU node
+(svs_cpu_little = <cpu0>). I use "get_cpu_device(unsigned cpu)" in Linux
+driver to attain cpuX device generally.
+2. Our MT8183 has three gpu-related node as below, svs_gpu need the
+reference of gpu (OPP table) & gpu_core2 (power-domain MFG_2D) to make
+sure svs_gpu can init and update gpu OPP table. I don't know how to
+refer two nodes by one property. Therefore, I model a svs_gpu to declare
+what it needs.
+
+gpu: mali@13040000 {
+	...
+	power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_CORE0>;
+	operating-points-v2 = <&gpu_opp_table>;
+	...
+}
+
+gpu_core1: mali_gpu_core1 {
+	...
+	power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_CORE1>;
+};
+
+gpu_core2: mali_gpu_core2 {
+	...
+	power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
+};
+
+P.S MT8183 GPU won't do upstream. So, there is no patchwork weblink to
+refer.
+
+> It sounds like it might be a little more complicated if the hardware goes
+> haywire when the device like GPU is powered down and the power domain is
+> shut off. Hopefully it isn't though, so that the driver can mostly sit
+> on top of the SVS hardware and poke OPP every once and a while when the
+> voltage needs to change, regardless of the power state of the device.
+
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+
+
