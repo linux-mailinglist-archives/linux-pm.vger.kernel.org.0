@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADE216182
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 11:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F15116183
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727078AbfEGJw6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 May 2019 05:52:58 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36866 "EHLO
+        id S1726369AbfEGJxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 May 2019 05:53:01 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36886 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726369AbfEGJw6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 05:52:58 -0400
+        with ESMTP id S1726607AbfEGJxA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 05:53:00 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: eballetbo)
-        with ESMTPSA id A7E7D28071E
+        with ESMTPSA id 9EEDA282A09
 From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
 To:     linux-pm@vger.kernel.org, sre@kernel.org
 Cc:     Sameer Nanda <snanda@chromium.org>, bleung@chromium.org,
@@ -21,10 +21,12 @@ Cc:     Sameer Nanda <snanda@chromium.org>, bleung@chromium.org,
         linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
         groeck@chromium.org, Adam.Thomson.Opensource@diasemi.com,
         kernel@collabora.com, Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v4 1/2] power: supply: add input power and voltage limit properties
-Date:   Tue,  7 May 2019 11:52:47 +0200
-Message-Id: <20190507095248.17915-1-enric.balletbo@collabora.com>
+Subject: [PATCH v4 2/2] power: supply: cros: allow to set input voltage and current limit
+Date:   Tue,  7 May 2019 11:52:48 +0200
+Message-Id: <20190507095248.17915-2-enric.balletbo@collabora.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190507095248.17915-1-enric.balletbo@collabora.com>
+References: <20190507095248.17915-1-enric.balletbo@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -32,152 +34,191 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For thermal management strategy you might be interested on limit the
-input power for a power supply. We already have current limit but
-basically what we probably want is to limit power. So, introduce the
-input_power_limit property.
+This patch allows reading and writing the input voltage and current
+limit through the POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT and
+POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT sysfs properties. This allows
+userspace to see current values and to re-configure these values at
+runtime based on system-level knowledge or user input.
 
-Although the common use case is limit the input power, in some
-specific cases it is the voltage that is problematic (i.e some regulators
-have different efficiencies at higher voltage resulting in more heat).
-So introduce also the input_voltage_limit property.
-
-This happens in one Chromebook and is used on the Pixel C's thermal
-management strategy to effectively limit the input power to 5V 3A when
-the screen is on. When the screen is on, the display, the CPU, and the GPU
-all contribute more heat to the system than while the screen is off, and
-we made a tradeoff to throttle the charger in order to give more of the
-thermal budget to those other components.
-
-So there's nothing fundamentally broken about the hardware that would
-cause the Pixel C to malfunction if we were charging at 9V or 12V instead
-of 5V when the screen is on, i.e. if userspace doesn't change this.
-
-What would happen is that you wouldn't meet Google's skin temperature
-targets on the system if the charger was allowed to run at 9V or 12V with
-the screen on.
-
-For folks hacking on Pixel Cs (which is now outside of Google's official
-support window for Android) and customizing their own kernel and userspace
-this would be acceptable, but we wanted to expose this feature in the
-power supply properties because the feature does exist in the Emedded
-Controller firmware of the Pixel C and all of Google's Chromebooks with
-USB-C made since 2015 in case someone running an up to date kernel wanted
-to limit the charging power for thermal or other reasons.
-
-This patch exposes a new property, similar to input current limit, to
-re-configure the maximum voltage from the external supply at runtime
-based on system-level knowledge or user input.
+By default there is no limit, this is reported as a -1 when reading from
+userspace. Writing a value will set the current or voltage limit in uA
+or uV, and writing any negative value will remove that limit.
 
 Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Acked-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
 ---
 
-Changes in v4:
-- Add also input_power_limit.
-
-Changes in v3:
-- Improve commit log and documentation with Benson comments.
-
+Changes in v4: None
+Changes in v3: None
 Changes in v2:
-- Document the new property in ABI/testing/sysfs-class-power.
-- Add the Reviewed-by Guenter Roeck tag.
+- Fix the upper limit that can be set.
+- Remove unnecessary else.
 
- Documentation/ABI/testing/sysfs-class-power | 32 +++++++++++++++++++++
- Documentation/power/power_supply_class.txt  |  4 +++
- drivers/power/supply/power_supply_sysfs.c   |  2 ++
- include/linux/power_supply.h                |  2 ++
- 4 files changed, 40 insertions(+)
+ drivers/power/supply/cros_usbpd-charger.c | 116 ++++++++++++++++++++++
+ 1 file changed, 116 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index 5e23e22dce1b..962a27a1daf8 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -331,10 +331,42 @@ Description:
- 		supply. Normally this is configured based on the type of
- 		connection made (e.g. A configured SDP should output a maximum
- 		of 500mA so the input current limit is set to the same value).
-+		Use preferably input_power_limit, and for problems that can be
-+		solved using power limit use input_current_limit.
+diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
+index 7e9c3984ef6a..3a9ea94c3de3 100644
+--- a/drivers/power/supply/cros_usbpd-charger.c
++++ b/drivers/power/supply/cros_usbpd-charger.c
+@@ -53,6 +53,8 @@ struct charger_data {
+ };
  
- 		Access: Read, Write
- 		Valid values: Represented in microamps
- 
-+What:		/sys/class/power_supply/<supply_name>/input_voltage_limit
-+Date:		May 2019
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+		This entry configures the incoming VBUS voltage limit currently
-+		set in the supply. Normally this is configured based on
-+		system-level knowledge or user input (e.g. This is part of the
-+		Pixel C's thermal management strategy to effectively limit the
-+		input power to 5V when the screen is on to meet Google's skin
-+		temperature targets). Note that this feature should not be
-+		used for safety critical things.
-+		Use preferably input_power_limit, and for problems that can be
-+		solved using power limit use input_voltage_limit.
-+
-+		Access: Read, Write
-+		Valid values: Represented in microvolts
-+
-+What:		/sys/class/power_supply/<supply_name>/input_power_limit
-+Date:		May 2019
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+		This entry configures the incoming power limit currently set
-+		in the supply. Normally this is configured based on
-+		system-level knowledge or user input. Use preferably this
-+		feature to limit the incoming power and use current/voltage
-+		limit only for problems that can be solved using power limit.
-+
-+		Access: Read, Write
-+		Valid values: Represented in microwatts
-+
- What:		/sys/class/power_supply/<supply_name>/online,
- Date:		May 2007
- Contact:	linux-pm@vger.kernel.org
-diff --git a/Documentation/power/power_supply_class.txt b/Documentation/power/power_supply_class.txt
-index 300d37896e51..1e3c705111db 100644
---- a/Documentation/power/power_supply_class.txt
-+++ b/Documentation/power/power_supply_class.txt
-@@ -137,6 +137,10 @@ power supply object.
- 
- INPUT_CURRENT_LIMIT - input current limit programmed by charger. Indicates
- the current drawn from a charging source.
-+INPUT_VOLTAGE_LIMIT - input voltage limit programmed by charger. Indicates
-+the voltage limit from a charging source.
-+INPUT_POWER_LIMIT - input power limit programmed by charger. Indicates
-+the power limit from a charging source.
- 
- CHARGE_CONTROL_LIMIT - current charge control limit setting
- CHARGE_CONTROL_LIMIT_MAX - maximum charge control limit setting
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 5358a80d854f..860db617d241 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -275,6 +275,8 @@ static struct device_attribute power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(charge_control_limit),
- 	POWER_SUPPLY_ATTR(charge_control_limit_max),
- 	POWER_SUPPLY_ATTR(input_current_limit),
-+	POWER_SUPPLY_ATTR(input_voltage_limit),
-+	POWER_SUPPLY_ATTR(input_power_limit),
- 	POWER_SUPPLY_ATTR(energy_full_design),
- 	POWER_SUPPLY_ATTR(energy_empty_design),
- 	POWER_SUPPLY_ATTR(energy_full),
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 2f9c201a54d1..ba135a5d8996 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -122,6 +122,8 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT,
- 	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+ static enum power_supply_property cros_usbpd_charger_props[] = {
++	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
 +	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
-+	POWER_SUPPLY_PROP_INPUT_POWER_LIMIT,
- 	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
- 	POWER_SUPPLY_PROP_ENERGY_EMPTY_DESIGN,
- 	POWER_SUPPLY_PROP_ENERGY_FULL,
+ 	POWER_SUPPLY_PROP_ONLINE,
+ 	POWER_SUPPLY_PROP_STATUS,
+ 	POWER_SUPPLY_PROP_CURRENT_MAX,
+@@ -80,6 +82,10 @@ static enum power_supply_usb_type cros_usbpd_charger_usb_types[] = {
+ 	POWER_SUPPLY_USB_TYPE_APPLE_BRICK_ID
+ };
+ 
++/* Input voltage/current limit in mV/mA. Default to none. */
++static u16 input_voltage_limit = EC_POWER_LIMIT_NONE;
++static u16 input_current_limit = EC_POWER_LIMIT_NONE;
++
+ static bool cros_usbpd_charger_port_is_dedicated(struct port_data *port)
+ {
+ 	return port->port_number >= port->charger->num_usbpd_ports;
+@@ -324,6 +330,26 @@ static int cros_usbpd_charger_get_port_status(struct port_data *port,
+ 	return ret;
+ }
+ 
++static int cros_usbpd_charger_set_ext_power_limit(struct charger_data *charger,
++						  u16 current_lim,
++						  u16 voltage_lim)
++{
++	struct ec_params_external_power_limit_v1 req;
++	int ret;
++
++	req.current_lim = current_lim;
++	req.voltage_lim = voltage_lim;
++
++	ret = cros_usbpd_charger_ec_command(charger, 0,
++					    EC_CMD_EXTERNAL_POWER_LIMIT,
++					    &req, sizeof(req), NULL, 0);
++	if (ret < 0)
++		dev_err(charger->dev,
++			"Unable to set the 'External Power Limit': %d\n", ret);
++
++	return ret;
++}
++
+ static void cros_usbpd_charger_power_changed(struct power_supply *psy)
+ {
+ 	struct port_data *port = power_supply_get_drvdata(psy);
+@@ -396,6 +422,18 @@ static int cros_usbpd_charger_get_prop(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_USB_TYPE:
+ 		val->intval = port->psy_usb_type;
+ 		break;
++	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++		if (input_current_limit == EC_POWER_LIMIT_NONE)
++			val->intval = -1;
++		else
++			val->intval = input_current_limit * 1000;
++		break;
++	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
++		if (input_voltage_limit == EC_POWER_LIMIT_NONE)
++			val->intval = -1;
++		else
++			val->intval = input_voltage_limit * 1000;
++		break;
+ 	case POWER_SUPPLY_PROP_MODEL_NAME:
+ 		val->strval = port->model_name;
+ 		break;
+@@ -409,6 +447,81 @@ static int cros_usbpd_charger_get_prop(struct power_supply *psy,
+ 	return 0;
+ }
+ 
++static int cros_usbpd_charger_set_prop(struct power_supply *psy,
++				       enum power_supply_property psp,
++				       const union power_supply_propval *val)
++{
++	struct port_data *port = power_supply_get_drvdata(psy);
++	struct charger_data *charger = port->charger;
++	struct device *dev = charger->dev;
++	u16 intval;
++	int ret;
++
++	/* U16_MAX in mV/mA is the maximum supported value */
++	if (val->intval >= U16_MAX * 1000)
++		return -EINVAL;
++	/* A negative number is used to clear the limit */
++	if (val->intval < 0)
++		intval = EC_POWER_LIMIT_NONE;
++	else	/* Convert from uA/uV to mA/mV */
++		intval = val->intval / 1000;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++		ret = cros_usbpd_charger_set_ext_power_limit(charger, intval,
++							input_voltage_limit);
++		if (ret < 0)
++			break;
++
++		input_current_limit = intval;
++		if (input_current_limit == EC_POWER_LIMIT_NONE)
++			dev_info(dev,
++			  "External Current Limit cleared for all ports\n");
++		else
++			dev_info(dev,
++			  "External Current Limit set to %dmA for all ports\n",
++			  input_current_limit);
++		break;
++	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
++		ret = cros_usbpd_charger_set_ext_power_limit(charger,
++							input_current_limit,
++							intval);
++		if (ret < 0)
++			break;
++
++		input_voltage_limit = intval;
++		if (input_voltage_limit == EC_POWER_LIMIT_NONE)
++			dev_info(dev,
++			  "External Voltage Limit cleared for all ports\n");
++		else
++			dev_info(dev,
++			  "External Voltage Limit set to %dmV for all ports\n",
++			  input_voltage_limit);
++		break;
++	default:
++		ret = -EINVAL;
++	}
++
++	return ret;
++}
++
++static int cros_usbpd_charger_property_is_writeable(struct power_supply *psy,
++						enum power_supply_property psp)
++{
++	int ret;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
++		ret = 1;
++		break;
++	default:
++		ret = 0;
++	}
++
++	return ret;
++}
++
+ static int cros_usbpd_charger_ec_event(struct notifier_block *nb,
+ 				       unsigned long queued_during_suspend,
+ 				       void *_notify)
+@@ -525,6 +638,9 @@ static int cros_usbpd_charger_probe(struct platform_device *pd)
+ 
+ 		psy_desc = &port->psy_desc;
+ 		psy_desc->get_property = cros_usbpd_charger_get_prop;
++		psy_desc->set_property = cros_usbpd_charger_set_prop;
++		psy_desc->property_is_writeable =
++				cros_usbpd_charger_property_is_writeable;
+ 		psy_desc->external_power_changed =
+ 					cros_usbpd_charger_power_changed;
+ 		psy_cfg.drv_data = port;
 -- 
 2.20.1
 
