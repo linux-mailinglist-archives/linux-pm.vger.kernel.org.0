@@ -2,177 +2,247 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8746616D70
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 00:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C1B16D81
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 00:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbfEGWOu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 May 2019 18:14:50 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41987 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725843AbfEGWOu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 18:14:50 -0400
-Received: by mail-lf1-f68.google.com with SMTP id w23so12994550lfc.9
-        for <linux-pm@vger.kernel.org>; Tue, 07 May 2019 15:14:48 -0700 (PDT)
+        id S1726451AbfEGWUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 May 2019 18:20:54 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:46709 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726426AbfEGWUx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 18:20:53 -0400
+Received: by mail-ua1-f68.google.com with SMTP id a95so1568249uaa.13
+        for <linux-pm@vger.kernel.org>; Tue, 07 May 2019 15:20:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=mFHlOpzADIsLrMHX2bCJUB1TTgI0AYRZ5LSjKxTsWv8=;
-        b=iN/QF2cYDVLZHPrKeWMr/UiSOrZL2wO2/u7+gIWaQlrcPX5k/lOZJMoMyxbMhsINjX
-         o/kk9wcuj74xiewm/PN9DnCIGa1cKH0N+0tsoiUvFKoui1xHYOu+6N7uqnfaURKuRekE
-         yAaXW2P0oKF09OOnAcNoJPoZYthzIZKX3qxRgOCh6GusIgYjJIodVDCbrgxeIMfdSY0T
-         VngU6u8u3yIAH4xzloHNa3sBvVth4mes4HsFlE6DOzm7L+XlOFe1QqnhMeqfDZqbIWhA
-         C8ikZTi/3NqGLqrUiA9iIMJiEuMDYNLhDGS+dbYDBXDtjQ7/SZI2Wpz+x72PIM2X/ncc
-         VGBg==
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kG2WwpyR7pHycbjDjCi479hB08AsdI45LDcaIB/Ay64=;
+        b=hjN9Yj59LATp2bF3ohozr0h4VitiflbvzeOSSbSaBGOTZncsE7cab9AvJ68MTAf1J8
+         AigRqhDNeiAuuGqitKYp/2M77PEINn2xOVFTboK++LZvbxCTNMTYZgwMBtdOQm1X1eG9
+         4C6IMmkj2+4bQd5SP+0N/ZyMHWP9b86jy3rIH84FOb0vMCDIA5WZ+ndL74A0c9bAQ2SA
+         9kccjisOJ6osEzEdxaxcxA4iQGkx/X2L6heAONlMtlyU766jXtqbhtoUE5Pi5AAA9ElW
+         36e/N46YOH+pvb322fsrB0QNHmsFDi9PWJLbt4DYxsh+kDAH5JHvq+c0F5rGJgHMD087
+         Vwnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=mFHlOpzADIsLrMHX2bCJUB1TTgI0AYRZ5LSjKxTsWv8=;
-        b=iEAdbVYZuLT4tiymanphpkIN65bCvyVF/9v0tJ4GMnOfCjQj2d5gem8MaZ0IdVn8hA
-         6wxsAQe3Azj2DaeNnFnwCy593iYT7k2zh0sjuC2OupQ2AU6FBCoIgZuQdg7KtJ/0F+Vu
-         mv/NqeAE4+Sqw6QMJLw2a8re0gqpO4OOUx3ciV9WLtbOAc8v77b9LQ0Xvbaai4MlbcoX
-         r0pHwEjduzJlQR2EIMemV29PgCbWuzNW2fbY3XQm8R1srgUSIu+7l/vuqMj/7hYiYQUX
-         CSGjeZCW3vXbkegCNdrwmOElA2XUleXBu8KpJP5SGccnrfo9D41VCk0cbwveltJbG0rh
-         JVVg==
-X-Gm-Message-State: APjAAAXrClKrUDKeVbEDlxXxs2RJtXKc6sWMVrnyAUBjpXXTzs+CUMuf
-        U6J1e8FmDf7g0VxFGogDOyttOUiiA+4=
-X-Google-Smtp-Source: APXvYqxYobQnx20Gdvpbk7T26X5A6p73Pw8k4/eFtH0prJyY57De4FlGE/wYJiCSLt4JsFDFnqWtpQ==
-X-Received: by 2002:ac2:554a:: with SMTP id l10mr16320812lfk.45.1557267287737;
-        Tue, 07 May 2019 15:14:47 -0700 (PDT)
-Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
-        by smtp.gmail.com with ESMTPSA id v11sm3621141lfb.68.2019.05.07.15.14.46
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 May 2019 15:14:46 -0700 (PDT)
-Date:   Wed, 8 May 2019 00:14:46 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Yoshihiro Kaneko <ykaneko0929@gmail.com>
-Subject: Re: [PATCH repost] thermal: rcar_thermal: update calculation formula
- for E3
-Message-ID: <20190507221446.GB16573@bigcity.dyn.berto.se>
-References: <20190418071514.13027-1-horms+renesas@verge.net.au>
- <20190418081209.GT28515@bigcity.dyn.berto.se>
- <CAMuHMdVX5t-Q5tM5bj95muAZ+8+phohtQSsAO-rCeCofiqVMKQ@mail.gmail.com>
- <20190426095511.tkgbxkf43psesgkv@verge.net.au>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kG2WwpyR7pHycbjDjCi479hB08AsdI45LDcaIB/Ay64=;
+        b=r09yxAul2DEDF0o+TOaLDD5fkiN+GbXx/IBfq9N830tUUReodZ+li7XUiG/7hHQlJp
+         P7BMWQSZdx1AUnUPnfeIBH/dItJUUKaZUSEKgafNeVr0Sh5bDRGSF6ICf5XZolKdjZ7N
+         OfpjGZkvFCV62uonXmZ1FiVwoDMOWNBqgJa/gFdYPZuo6WwHaC3t9ShrXBE8raJDIQ4B
+         1UcZZPqQPG2L7TnAEnvfC7/i3XVO/MS5p+PXAR1UOqfuAtn8QxXlQ8Jo5p+14EXvXg/I
+         VhVWhCvYLDhslTCXtvE8ub9lwcrtLMkja2nKq/CHf/7ZxOZOeNfd7VQYc/0Az3EoNE8K
+         NESg==
+X-Gm-Message-State: APjAAAVqthCwX8R//JksohGXeeO4TPrBBUuSK+t816GyCZTCUoIhiC9R
+        CqrmWHd5u1wNtP07KBb156rk67b6ne76XlWJ2bn4kg==
+X-Google-Smtp-Source: APXvYqwrszAopFQoWDWwRSifkvHAk3lphGUdOi1S0fZjHRLaae+7hRt/vMsz3eDDRvkDSU+RSKY7jYNP9xERgU+voI8=
+X-Received: by 2002:ab0:70d4:: with SMTP id r20mr16052105ual.67.1557267652335;
+ Tue, 07 May 2019 15:20:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190426095511.tkgbxkf43psesgkv@verge.net.au>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+References: <1540920209-28954-1-git-send-email-rplsssn@codeaurora.org>
+In-Reply-To: <1540920209-28954-1-git-send-email-rplsssn@codeaurora.org>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Wed, 8 May 2019 03:50:40 +0530
+Message-ID: <CAHLCerPi4Fd1eoPY=Gvo=FkVTGOt=ummAqHfWBi645Yb0O5-sg@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: sdm845: Add PSCI cpuidle low power states
+To:     "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
+Cc:     Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        evgreen@chromium.org, Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>, ilina@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Tue, Oct 30, 2018 at 10:53 PM Raju P.L.S.S.S.N
+<rplsssn@codeaurora.org> wrote:
+>
+> Add device bindings for cpuidle states for cpu devices.
 
-On 2019-04-26 11:55:11 +0200, Simon Horman wrote:
-> On Wed, Apr 24, 2019 at 09:10:56AM +0200, Geert Uytterhoeven wrote:
-> > Hi Niklas,
-> > 
-> > On Thu, Apr 18, 2019 at 10:12 AM Niklas Söderlund
-> > <niklas.soderlund@ragnatech.se> wrote:
-> > > On 2019-04-18 09:15:14 +0200, Simon Horman wrote:
-> > > > From: Yoshihiro Kaneko <ykaneko0929@gmail.com>
-> > > >
-> > > > HW manual changes temperature calculation formula for E3:
-> > >
-> > > Is this not also true for V3M and D3?
-> > >
-> > > > - When CTEMP is less than 24
-> > > >    T = CTEMP[5:0] * 5.5 - 72
-> > > > - When CTEMP is equal to/greater than 24
-> > > >    T = CTEMP[5:0] * 5 - 60
-> > > >
-> > > > This was inspired by a patch in the BSP by Van Do <van.do.xw@renesas.com>
-> > > >
-> > > > Signed-off-by: Yoshihiro Kaneko <ykaneko0929@gmail.com>
-> > > > Tested-by: Simon Horman <horms+renesas@verge.net.au>
-> > > > Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> > > > Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
-> > > > ---
-> > > >  drivers/thermal/rcar_thermal.c | 11 ++++++++++-
-> > > >  1 file changed, 10 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> > > > index 97462e9b40d8..11df0cc63bed 100644
-> > > > --- a/drivers/thermal/rcar_thermal.c
-> > > > +++ b/drivers/thermal/rcar_thermal.c
-> > > > @@ -52,6 +52,7 @@ struct rcar_thermal_chip {
-> > > >       unsigned int irq_per_ch : 1;
-> > > >       unsigned int needs_suspend_resume : 1;
-> > > >       unsigned int nirqs;
-> > > > +     unsigned int ctemp_bands;
-> > >
-> > > Would it be possible to rename this to something indicating that this is
-> > > a gen3 thing? Maybe move it to the bit fields above and name it gen3 ?
-> > 
-> > Is that really a good thing to do? This structure describes features of
-> > the thermal module, and we're already beyond the point where a simple
-> > check  for gen2 or gen3 was sufficient.
-> > Here the feature is having multiple temperature bands.
-> > What if some other Gen3 SoC starts having 3 temperature bands?
+Raju: Did this patch fall through the cracks? It would be nice to land
+this while Lina works on setting up the infrastructure to do
+hierarchical power domains.
 
-Good point, after reviewing your comment I now agree with the original 
-patch.
+> Cc: <devicetree@vger.kernel.org>
+> Signed-off-by: Raju P.L.S.S.S.N <rplsssn@codeaurora.org>
+> ---
+> Changes in v2
+>  - Address comments from Doug
+> ---
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 62 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 0c9a2aa..3a8381e 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -96,6 +96,7 @@
+>                         reg = <0x0 0x0>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_0>;
+> +                       cpu-idle-states = <&C0_CPU_PD &C0_CPU_RPD &CLUSTER_PD>;
 
-> > 
-> > > > @@ -263,7 +267,12 @@ static int rcar_thermal_get_current_temp(struct rcar_thermal_priv *priv,
-> > > >               return ret;
-> > > >
-> > > >       mutex_lock(&priv->lock);
-> > > > -     tmp =  MCELSIUS((priv->ctemp * 5) - 65);
-> > > > +     if (priv->chip->ctemp_bands == 1)
-> > > > +             tmp =  MCELSIUS((priv->ctemp * 5) - 65);
-> > > > +     else if (priv->ctemp < 24)
-> > > > +             tmp = MCELSIUS(((priv->ctemp * 55) - 720) / 10);
-> > > > +     else
-> > > > +             tmp = MCELSIUS((priv->ctemp * 5) - 60);
-> > >
-> > > I confirm that the calculations here are correct, but hard to read ;-)
-> > > With the rename about how about.
-> > >
-> > >     if (priv->chip->gen3) {
-> > >         if (priv->ctemp < 24)
-> > >                 tmp = MCELSIUS(((priv->ctemp * 55) - 720) / 10);
-> > >         else
-> > >                 tmp = MCELSIUS((priv->ctemp * 5) - 60);
-> > >     } else {
-> > >             tmp =  MCELSIUS((priv->ctemp * 5) - 65);
-> > >     }
-> > 
-> > _Iff_ we decide on going for the rename, I'd still write it as:
-> > 
-> >     if (!priv->chip->gen3)
-> >             tmp =  MCELSIUS((priv->ctemp * 5) - 65);
-> >     else if (priv->ctemp < 24)
-> >             tmp = MCELSIUS(((priv->ctemp * 55) - 720) / 10);
-> >     else
-> >             tmp = MCELSIUS((priv->ctemp * 5) - 60);
-> > 
-> > Always fold your if/else if/else constructs to minimize the need for indentation
-> > and braces ;-)
-> 
-> From my PoV I think the patch is fine in its current form.
-> Niklas do you feel particularly strongly about changing it?
+May I suggest using more generic names here instead of C0_CPU_PD and
+move the QC-specific description to the idle-state-name property? C0
+and C4 isn't easy to understand at a glance. Neither is PD and RPD.
 
-No I do not feel strongly about this and would be fine with the patch in 
-it's current form. With and update commit message to mention V3M and D3 
-feel free to add
+Something like big_cpu_retention, big_cpu_sleep, little_cpu_retention,
+little_cpu_sleep, cluster_sleep?
+Or big_cpu_idle_0, big_cpu_idle_1, big_cpu_idle_2 for states with
+increasing breakeven times.
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+I've commented below on what it might look like.
 
--- 
-Regards,
-Niklas Söderlund
+>                         L2_0: l2-cache {
+>                                 compatible = "cache";
+>                                 next-level-cache = <&L3_0>;
+> @@ -111,6 +112,7 @@
+>                         reg = <0x0 0x100>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_100>;
+> +                       cpu-idle-states = <&C0_CPU_PD &C0_CPU_RPD &CLUSTER_PD>;
+>                         L2_100: l2-cache {
+>                                 compatible = "cache";
+>                                 next-level-cache = <&L3_0>;
+> @@ -123,6 +125,7 @@
+>                         reg = <0x0 0x200>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_200>;
+> +                       cpu-idle-states = <&C0_CPU_PD &C0_CPU_RPD &CLUSTER_PD>;
+>                         L2_200: l2-cache {
+>                                 compatible = "cache";
+>                                 next-level-cache = <&L3_0>;
+> @@ -135,6 +138,7 @@
+>                         reg = <0x0 0x300>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_300>;
+> +                       cpu-idle-states = <&C0_CPU_PD &C0_CPU_RPD &CLUSTER_PD>;
+>                         L2_300: l2-cache {
+>                                 compatible = "cache";
+>                                 next-level-cache = <&L3_0>;
+> @@ -147,6 +151,7 @@
+>                         reg = <0x0 0x400>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_400>;
+> +                       cpu-idle-states = <&C4_CPU_PD &C4_CPU_RPD &CLUSTER_PD>;
+>                         L2_400: l2-cache {
+>                                 compatible = "cache";
+>                                 next-level-cache = <&L3_0>;
+> @@ -159,6 +164,7 @@
+>                         reg = <0x0 0x500>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_500>;
+> +                       cpu-idle-states = <&C4_CPU_PD &C4_CPU_RPD &CLUSTER_PD>;
+>                         L2_500: l2-cache {
+>                                 compatible = "cache";
+>                                 next-level-cache = <&L3_0>;
+> @@ -171,6 +177,7 @@
+>                         reg = <0x0 0x600>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_600>;
+> +                       cpu-idle-states = <&C4_CPU_PD &C4_CPU_RPD &CLUSTER_PD>;
+>                         L2_600: l2-cache {
+>                                 compatible = "cache";
+>                                 next-level-cache = <&L3_0>;
+> @@ -183,11 +190,66 @@
+>                         reg = <0x0 0x700>;
+>                         enable-method = "psci";
+>                         next-level-cache = <&L2_700>;
+> +                       cpu-idle-states = <&C4_CPU_PD &C4_CPU_RPD &CLUSTER_PD>;
+>                         L2_700: l2-cache {
+>                                 compatible = "cache";
+>                                 next-level-cache = <&L3_0>;
+>                         };
+>                 };
+> +
+> +               idle-states {
+> +                       entry-method = "psci";
+> +
+> +                       C0_CPU_PD: c0-power-down {
+
+big_cpu_retention: big-cpu-retention
+
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x40000003>;
+> +                               entry-latency-us = <350>;
+> +                               exit-latency-us = <461>;
+> +                               min-residency-us = <1890>;
+> +                               local-timer-stop;
+> +                               idle-state-name = "power-down";
+
+"big-cpu-power-down"
+
+> +                       };
+> +
+> +                       C0_CPU_RPD: c0-rail-power-down {
+
+big_cpu_sleep: big-cpu-sleep
+
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x40000004>;
+> +                               entry-latency-us = <360>;
+> +                               exit-latency-us = <531>;
+> +                               min-residency-us = <3934>;
+> +                               local-timer-stop;
+> +                               idle-state-name = "rail-power-down";
+
+"big-cpu-rail-power-down"
+
+> +                       };
+> +
+> +                       C4_CPU_PD: c4-power-down {
+
+little_cpu_retention: little-cpu-retention
+
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x40000003>;
+> +                               entry-latency-us = <264>;
+> +                               exit-latency-us = <621>;
+> +                               min-residency-us = <952>;
+> +                               local-timer-stop;
+> +                               idle-state-name = "power-down";
+
+"little-cpu-power-down" and so and so forth. You get the idea.
+
+> +                       };
+> +
+> +                       C4_CPU_RPD: c4-rail-power-down {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x40000004>;
+> +                               entry-latency-us = <702>;
+> +                               exit-latency-us = <1061>;
+> +                               min-residency-us = <4488>;
+> +                               local-timer-stop;
+> +                               idle-state-name = "rail-power-down";
+> +                       };
+> +
+> +                       CLUSTER_PD: cluster-power-down {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x400000F4>;
+> +                               entry-latency-us = <3263>;
+> +                               exit-latency-us = <6562>;
+> +                               min-residency-us = <9987>;
+> +                               local-timer-stop;
+> +                               idle-state-name = "cluster-power-down";
+> +                       };
+> +               };
+>         };
+>
+>         pmu {
+> --
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of the Code Aurora Forum, hosted by The Linux Foundation.
+>
