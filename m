@@ -2,223 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F15116183
-	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 11:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18C4161BA
+	for <lists+linux-pm@lfdr.de>; Tue,  7 May 2019 12:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbfEGJxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 May 2019 05:53:01 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36886 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726607AbfEGJxA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 05:53:00 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 9EEDA282A09
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     linux-pm@vger.kernel.org, sre@kernel.org
-Cc:     Sameer Nanda <snanda@chromium.org>, bleung@chromium.org,
-        rjw@rjwysocki.net, gwendal@chromium.org,
-        linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
-        groeck@chromium.org, Adam.Thomson.Opensource@diasemi.com,
-        kernel@collabora.com, Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v4 2/2] power: supply: cros: allow to set input voltage and current limit
-Date:   Tue,  7 May 2019 11:52:48 +0200
-Message-Id: <20190507095248.17915-2-enric.balletbo@collabora.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190507095248.17915-1-enric.balletbo@collabora.com>
-References: <20190507095248.17915-1-enric.balletbo@collabora.com>
+        id S1726520AbfEGKKr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 May 2019 06:10:47 -0400
+Received: from foss.arm.com ([217.140.101.70]:49178 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726340AbfEGKKq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 May 2019 06:10:46 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2FE5F374;
+        Tue,  7 May 2019 03:10:46 -0700 (PDT)
+Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A6553F5AF;
+        Tue,  7 May 2019 03:10:43 -0700 (PDT)
+Date:   Tue, 7 May 2019 11:10:37 +0100
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>
+Subject: Re: [PATCH v8 03/16] sched/core: uclamp: Enforce last task's
+ UCLAMP_MAX
+Message-ID: <20190507101037.zmkp4trqr4de5yws@e110439-lin>
+References: <20190402104153.25404-1-patrick.bellasi@arm.com>
+ <20190402104153.25404-4-patrick.bellasi@arm.com>
+ <CAJuCfpHN4kMBScdEdJodtmbHQ2qhVDnXrJKFDdaSYyjWH0JH5Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpHN4kMBScdEdJodtmbHQ2qhVDnXrJKFDdaSYyjWH0JH5Q@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch allows reading and writing the input voltage and current
-limit through the POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT and
-POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT sysfs properties. This allows
-userspace to see current values and to re-configure these values at
-runtime based on system-level knowledge or user input.
+On 17-Apr 13:36, Suren Baghdasaryan wrote:
+>  Hi Patrick,
+> 
+> On Tue, Apr 2, 2019 at 3:42 AM Patrick Bellasi <patrick.bellasi@arm.com> wrote:
+> >
+> > When a task sleeps it removes its max utilization clamp from its CPU.
+> > However, the blocked utilization on that CPU can be higher than the max
+> > clamp value enforced while the task was running. This allows undesired
+> > CPU frequency increases while a CPU is idle, for example, when another
+> > CPU on the same frequency domain triggers a frequency update, since
+> > schedutil can now see the full not clamped blocked utilization of the
+> > idle CPU.
+> >
+> > Fix this by using
+> >   uclamp_rq_dec_id(p, rq, UCLAMP_MAX)
+> >     uclamp_rq_max_value(rq, UCLAMP_MAX, clamp_value)
+> > to detect when a CPU has no more RUNNABLE clamped tasks and to flag this
+> > condition.
+> >
+> 
+> If I understand the intent correctly, you are trying to exclude idle
+> CPUs from affecting calculations of rq UCLAMP_MAX value. If that is
+> true I think description can be simplified a bit :)
 
-By default there is no limit, this is reported as a -1 when reading from
-userspace. Writing a value will set the current or voltage limit in uA
-or uV, and writing any negative value will remove that limit.
+That's not entirely correct. What I want to avoid is an OPP increase
+because of an idle CPU. Maybe an example can explain it better,
+consider this sequence:
 
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
----
+ 1. A task is running unconstrained on a CPUx and it generates a 100%
+    utilization
+ 2. The task is now constrained by setting util_max=20
+ 3. We now select an OPP which provides 20% capacity on CPUx
 
-Changes in v4: None
-Changes in v3: None
-Changes in v2:
-- Fix the upper limit that can be set.
-- Remove unnecessary else.
+In this scenario the task is still running flat out on that CPUx which
+will keep it's util_avg to 1024. Note that after Vincet's PELT rewrite
+we don't converge down to the current capacity.
 
- drivers/power/supply/cros_usbpd-charger.c | 116 ++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+ 4. The task sleep, it's removed from CPUx but the "blocked
+    utilization" is still 1024
 
-diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index 7e9c3984ef6a..3a9ea94c3de3 100644
---- a/drivers/power/supply/cros_usbpd-charger.c
-+++ b/drivers/power/supply/cros_usbpd-charger.c
-@@ -53,6 +53,8 @@ struct charger_data {
- };
- 
- static enum power_supply_property cros_usbpd_charger_props[] = {
-+	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_CURRENT_MAX,
-@@ -80,6 +82,10 @@ static enum power_supply_usb_type cros_usbpd_charger_usb_types[] = {
- 	POWER_SUPPLY_USB_TYPE_APPLE_BRICK_ID
- };
- 
-+/* Input voltage/current limit in mV/mA. Default to none. */
-+static u16 input_voltage_limit = EC_POWER_LIMIT_NONE;
-+static u16 input_current_limit = EC_POWER_LIMIT_NONE;
-+
- static bool cros_usbpd_charger_port_is_dedicated(struct port_data *port)
- {
- 	return port->port_number >= port->charger->num_usbpd_ports;
-@@ -324,6 +330,26 @@ static int cros_usbpd_charger_get_port_status(struct port_data *port,
- 	return ret;
- }
- 
-+static int cros_usbpd_charger_set_ext_power_limit(struct charger_data *charger,
-+						  u16 current_lim,
-+						  u16 voltage_lim)
-+{
-+	struct ec_params_external_power_limit_v1 req;
-+	int ret;
-+
-+	req.current_lim = current_lim;
-+	req.voltage_lim = voltage_lim;
-+
-+	ret = cros_usbpd_charger_ec_command(charger, 0,
-+					    EC_CMD_EXTERNAL_POWER_LIMIT,
-+					    &req, sizeof(req), NULL, 0);
-+	if (ret < 0)
-+		dev_err(charger->dev,
-+			"Unable to set the 'External Power Limit': %d\n", ret);
-+
-+	return ret;
-+}
-+
- static void cros_usbpd_charger_power_changed(struct power_supply *psy)
- {
- 	struct port_data *port = power_supply_get_drvdata(psy);
-@@ -396,6 +422,18 @@ static int cros_usbpd_charger_get_prop(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_USB_TYPE:
- 		val->intval = port->psy_usb_type;
- 		break;
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		if (input_current_limit == EC_POWER_LIMIT_NONE)
-+			val->intval = -1;
-+		else
-+			val->intval = input_current_limit * 1000;
-+		break;
-+	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
-+		if (input_voltage_limit == EC_POWER_LIMIT_NONE)
-+			val->intval = -1;
-+		else
-+			val->intval = input_voltage_limit * 1000;
-+		break;
- 	case POWER_SUPPLY_PROP_MODEL_NAME:
- 		val->strval = port->model_name;
- 		break;
-@@ -409,6 +447,81 @@ static int cros_usbpd_charger_get_prop(struct power_supply *psy,
- 	return 0;
- }
- 
-+static int cros_usbpd_charger_set_prop(struct power_supply *psy,
-+				       enum power_supply_property psp,
-+				       const union power_supply_propval *val)
-+{
-+	struct port_data *port = power_supply_get_drvdata(psy);
-+	struct charger_data *charger = port->charger;
-+	struct device *dev = charger->dev;
-+	u16 intval;
-+	int ret;
-+
-+	/* U16_MAX in mV/mA is the maximum supported value */
-+	if (val->intval >= U16_MAX * 1000)
-+		return -EINVAL;
-+	/* A negative number is used to clear the limit */
-+	if (val->intval < 0)
-+		intval = EC_POWER_LIMIT_NONE;
-+	else	/* Convert from uA/uV to mA/mV */
-+		intval = val->intval / 1000;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		ret = cros_usbpd_charger_set_ext_power_limit(charger, intval,
-+							input_voltage_limit);
-+		if (ret < 0)
-+			break;
-+
-+		input_current_limit = intval;
-+		if (input_current_limit == EC_POWER_LIMIT_NONE)
-+			dev_info(dev,
-+			  "External Current Limit cleared for all ports\n");
-+		else
-+			dev_info(dev,
-+			  "External Current Limit set to %dmA for all ports\n",
-+			  input_current_limit);
-+		break;
-+	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
-+		ret = cros_usbpd_charger_set_ext_power_limit(charger,
-+							input_current_limit,
-+							intval);
-+		if (ret < 0)
-+			break;
-+
-+		input_voltage_limit = intval;
-+		if (input_voltage_limit == EC_POWER_LIMIT_NONE)
-+			dev_info(dev,
-+			  "External Voltage Limit cleared for all ports\n");
-+		else
-+			dev_info(dev,
-+			  "External Voltage Limit set to %dmV for all ports\n",
-+			  input_voltage_limit);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int cros_usbpd_charger_property_is_writeable(struct power_supply *psy,
-+						enum power_supply_property psp)
-+{
-+	int ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
-+		ret = 1;
-+		break;
-+	default:
-+		ret = 0;
-+	}
-+
-+	return ret;
-+}
-+
- static int cros_usbpd_charger_ec_event(struct notifier_block *nb,
- 				       unsigned long queued_during_suspend,
- 				       void *_notify)
-@@ -525,6 +638,9 @@ static int cros_usbpd_charger_probe(struct platform_device *pd)
- 
- 		psy_desc = &port->psy_desc;
- 		psy_desc->get_property = cros_usbpd_charger_get_prop;
-+		psy_desc->set_property = cros_usbpd_charger_set_prop;
-+		psy_desc->property_is_writeable =
-+				cros_usbpd_charger_property_is_writeable;
- 		psy_desc->external_power_changed =
- 					cros_usbpd_charger_power_changed;
- 		psy_cfg.drv_data = port;
+After this point: the CPU is idle, its "blocked utilization" starts
+to "slowly" decay but we _already_ removed the 20% util_max constraint
+on that CPU since there are no RUNNABLE tasks (i.e no active buckets).
+
+At this point in time, if there is a schedutil update requested from
+another CPU of the same frequency domain, by looking at CPUx we will
+see its full "blocked utilization" signal, which can be above 20%.
+
+> In particular it took me some time to understand what "blocked
+> utilization" means, however if it's a widely accepted term then feel
+> free to ignore my input.
+
+Yes, "blocked utilization" is a commonly used term to refer to the
+utilization generated by tasks executed on a CPU.
+
+[...]
+
+> > +static inline unsigned int
+> > +uclamp_idle_value(struct rq *rq, unsigned int clamp_id, unsigned int clamp_value)
+> > +{
+> > +       /*
+> > +        * Avoid blocked utilization pushing up the frequency when we go
+> > +        * idle (which drops the max-clamp) by retaining the last known
+> > +        * max-clamp.
+> > +        */
+> > +       if (clamp_id == UCLAMP_MAX) {
+> > +               rq->uclamp_flags |= UCLAMP_FLAG_IDLE;
+> > +               return clamp_value;
+> > +       }
+> > +
+> > +       return uclamp_none(UCLAMP_MIN);
+> > +}
+> > +
+> > +static inline void uclamp_idle_reset(struct rq *rq, unsigned int clamp_id,
+> > +                                    unsigned int clamp_value)
+> > +{
+> > +       /* Reset max-clamp retention only on idle exit */
+> > +       if (!(rq->uclamp_flags & UCLAMP_FLAG_IDLE))
+> > +               return;
+> > +
+> > +       WRITE_ONCE(rq->uclamp[clamp_id].value, clamp_value);
+> > +}
+> > +
+> >  static inline
+> > -unsigned int uclamp_rq_max_value(struct rq *rq, unsigned int clamp_id)
+> > +unsigned int uclamp_rq_max_value(struct rq *rq, unsigned int clamp_id,
+> > +                                unsigned int clamp_value)
+> 
+> IMHO the name of uclamp_rq_max_value() is a bit misleading because:
+
+That's very similar to what you proposed in:
+
+   https://lore.kernel.org/lkml/20190314122256.7wb3ydswpkfmntvf@e110439-lin/
+
+> 1. It does not imply that it has to be called only when there are no
+> more runnable tasks on a CPU. This is currently the case because it's
+> called only from uclamp_rq_dec_id() and only when bucket->tasks==0 but
+> nothing in the name of this function indicates that it can't be called
+> from other places.
+> 2. It does not imply that it marks rq UCLAMP_FLAG_IDLE.
+
+Even if you call it from other places, which is not required, it does
+not arm. That function still return the current max clamp for a CPU
+given its current state. If the CPU is idle we set the flag one more
+time but that's not a problem too.
+
+However, do you have any other proposal for a better name ?
+
+> >  {
+> >         struct uclamp_bucket *bucket = rq->uclamp[clamp_id].bucket;
+> >         int bucket_id = UCLAMP_BUCKETS - 1;
+> > @@ -771,7 +798,7 @@ unsigned int uclamp_rq_max_value(struct rq *rq, unsigned int clamp_id)
+> >         }
+> >
+> >         /* No tasks -- default clamp values */
+> > -       return uclamp_none(clamp_id);
+> > +       return uclamp_idle_value(rq, clamp_id, clamp_value);
+> >  }
+
+[...]
+
 -- 
-2.20.1
+#include <best/regards.h>
 
+Patrick Bellasi
