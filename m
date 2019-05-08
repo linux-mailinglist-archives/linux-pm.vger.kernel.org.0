@@ -2,58 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 171BE17168
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 08:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16E8171BC
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 08:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726281AbfEHGXP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 May 2019 02:23:15 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42800 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726082AbfEHGXP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 02:23:15 -0400
-Received: by mail-ot1-f68.google.com with SMTP id f23so17328186otl.9;
-        Tue, 07 May 2019 23:23:14 -0700 (PDT)
+        id S1726711AbfEHGgs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 May 2019 02:36:48 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37946 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726470AbfEHGgs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 02:36:48 -0400
+Received: by mail-ot1-f66.google.com with SMTP id s19so535933otq.5;
+        Tue, 07 May 2019 23:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=T+tyGbMaopKmWkanLnS4vwc4EFD/12DJf9lYYTnMcYE=;
-        b=JY3mDGTZh8Q1FegBs0pUtECemyuGZ9OJAlygaaiKwl/V3/xj8jvOWla0h5oLDIksI4
-         MxypC2FsA2aBkSOCZGCjef3haoNERra1PMiZ7MocJaapFyguEWSLID/HdBjVAXF0R15D
-         +iP6EmSUq9Lb9SvynJtNWnK+zXAupVXFm0g4QFbN3ZWJOWD9C/RBL0ZfqzDZstmRZbg5
-         KyCGWsCBPyWrk5ilRJS2JJuumrjayjAa9EhZN0nfl/RUCT0OWmWAkjNZ0WnEXHcyiuVL
-         BZUOYs+W4AFCpVtXYRprGhWVivnU+86RcXji1C1g+lWGSa+1smE2P20yAMiwmctw50cM
-         /U5A==
+        bh=ILPuJKMpXz/TGJ/DYJE8UvDmgrstn7HuFsyVscBxQKI=;
+        b=vg58rsxfD7QT/9v+ibEUjFSC4lO/J1HR0o9RuN46D/rH6h5o+AWVFWfwey6tERVRqK
+         qzidJUHLcyMa+ZRrth3RdKSzIJwva8HJpvPg85B7qjhEC1AVjYIWJaf5wRblNgtDdNbN
+         OxiYPcHbkU4BbbeA8ltyn1YQyq0fdBYvCJ8Sb75MjMq+s2ib6/m/xOA/ZtZTTPnRSheQ
+         TWdpdZDijQuti1TpAv5QoQ2Flf7Wnp/Xk1sYuebqS92uymgaofS8hd79DTGLZjc5Vp4g
+         P1tgQsI2sFxImxVwzNKJTeJBG2G8KOc34Xe/b2/whAKWRRfgUYTjmUNe4TRB/8wfrDQ+
+         Xc0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=T+tyGbMaopKmWkanLnS4vwc4EFD/12DJf9lYYTnMcYE=;
-        b=rAR1vZTpwDh+3/3lxygWPUyMfEmo9gpiVW0OPlFyeVk6Sv7VeCzhx48goSlebrUdak
-         lHKv/woWV58xbzRRIOPo9iIVWWDVRiDRT06QRNz9AGeSGLdwvDy6qCVz/BK9yO55vH9y
-         YUtALuyuR/1UgZ364Ku2tL9yUVrvZ1qaX4H0bZ6Y7xnHCUsQztGKvpA4Uco85eR46NsB
-         UgPV8rlwlfkANBquthqcI1rd5YiKzBCUpVzQA7NGW1F1zWC8DFcyeb21LG77YcO8VeoL
-         XsoDUW21fTUj8eV0tGeFwBMMmfWDmZmSjzr9HVZa8LZbV55CmY9+Xe8ettk4XrWV5hyp
-         Rxig==
-X-Gm-Message-State: APjAAAWLjdVxgVvlWU1uR5MiC+mRlb5SMoRAlBGc8cI2Jw17olgoSumZ
-        0BbLOqISR/RAmq9LFg8qB+ZawvWnur4ccGjkO+w=
-X-Google-Smtp-Source: APXvYqyQCWU0DIRe43TcFErDvvvlTRxCFSSpHvwCuXDpeSEuQzaRP5Hm16iwYjtfGjNMWyFfk91jhpBRyKxgqlaXPms=
-X-Received: by 2002:a9d:760b:: with SMTP id k11mr8228968otl.135.1557296594435;
- Tue, 07 May 2019 23:23:14 -0700 (PDT)
+        bh=ILPuJKMpXz/TGJ/DYJE8UvDmgrstn7HuFsyVscBxQKI=;
+        b=qXjgV1xeMYaUkO0ynyPwV5lFCJBGe4cgTgBVY/LQRD8VfMq2QqkTwXdUmf6Yi49JLC
+         Q7gXjU7idBQos5/wgVkuM9trx94CATMLwWNw0haZianUftJLQ7ykZUq5sOcgGnchA8UV
+         R8VVu5lZMjcOIcpJ/cIDuGZpyJt5T+nRA5bsAlhzwZDYsvhPyKoTaRiWp+7EzE+B3djB
+         YE+aogoC1bajKn7nkHHY5VA1bVrj7JaHN3oQFRQtppmZkouA8hA0SxPpl8d7wp3M/fxY
+         zekAQFquYi9Hvs3WX3hciwsMI+8qN/MPcH14VjBQuJq9KCP7vQ7CnigcQfAc2d0BSNvl
+         xjOQ==
+X-Gm-Message-State: APjAAAUOSRPZQLPxEav7Ozk25fC2ByEYaisVMtrbkUzJ6FLvHTr2I6Uo
+        +4UPOtiFuRQSbbo3KM1rSYHuCPxuUXCa4SY6hVs=
+X-Google-Smtp-Source: APXvYqwn9YSQzZtyDIXdJHxE8L14ytklZxVHuRaMizk4VYOAQ6RMvWUrBJ5P6UO58k9kYjJMQtihpRiQS463wlJBck8=
+X-Received: by 2002:a9d:6209:: with SMTP id g9mr4584183otj.153.1557297407525;
+ Tue, 07 May 2019 23:36:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <1555436655-5262-1-git-send-email-ykaneko0929@gmail.com>
- <1555436655-5262-2-git-send-email-ykaneko0929@gmail.com> <20190418084041.GW28515@bigcity.dyn.berto.se>
-In-Reply-To: <20190418084041.GW28515@bigcity.dyn.berto.se>
+ <1555436655-5262-2-git-send-email-ykaneko0929@gmail.com> <20190424145436.camftb32c7v2ya2f@verge.net.au>
+In-Reply-To: <20190424145436.camftb32c7v2ya2f@verge.net.au>
 From:   Yoshihiro Kaneko <ykaneko0929@gmail.com>
-Date:   Wed, 8 May 2019 15:23:03 +0900
-Message-ID: <CAH1o70JBD4j_jpH9_FkkUvHivuUMMvB1Nfgum2MWeySVP=d_pg@mail.gmail.com>
+Date:   Wed, 8 May 2019 15:36:36 +0900
+Message-ID: <CAH1o70LX97ir=T1R5SjBnsTQmnbUdN8LadByTH_-4eRgp27PzQ@mail.gmail.com>
 Subject: Re: [PATCH/RFT v2 1/3] thermal: rcar_gen3_thermal: Update value of Tj_1
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To:     Simon Horman <horms@verge.net.au>
 Cc:     Linux PM list <linux-pm@vger.kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Simon Horman <horms@verge.net.au>,
         Magnus Damm <magnus.damm@gmail.com>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -63,18 +62,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Niklas-san,
+Hi Simon-san,
 
-Thanks for your review!
+Thanks for testing this patch!
 
-2019=E5=B9=B44=E6=9C=8818=E6=97=A5(=E6=9C=A8) 17:40 Niklas S=C3=B6derlund <=
-niklas.soderlund@ragnatech.se>:
+2019=E5=B9=B44=E6=9C=8824=E6=97=A5(=E6=B0=B4) 23:54 Simon Horman <horms@ver=
+ge.net.au>:
 >
 > Hi Kaneko-san,
 >
-> Thanks for your work.
->
-> On 2019-04-17 02:44:13 +0900, Yoshihiro Kaneko wrote:
+> On Wed, Apr 17, 2019 at 02:44:13AM +0900, Yoshihiro Kaneko wrote:
 > > As evaluation of hardware team, temperature calculation formula
 > > of M3-W is difference from all other SoCs as below:
 > > - M3-W: Tj_1: 116 (so Tj_1 - Tj_3 =3D 157)
@@ -104,13 +101,18 @@ _gen3_thermal.c
 > > +                                      int *ptat, int *thcode,
 > > +                                      unsigned int ths_tj_1)
 >
-> I would move tj_1 inside struce rcar_gen3_thermal_tsc as you in 2/3 move
-> tj_2 there. You could still keep the value in .data but init the tj_1 in
-> the struct at probe instead of passing it as an argument.
+> While testing I found that the type of ths_tj_1 needs to be int
+> rather than unsigned int, in order for the FIXPT logic to work correctly.
+>
+> And with that change in place the entire series appears to work correctly=
+.
+>
+> My suggestion is to change the types of ths_tj_1 here, rcar_gen3_ths_tj_1
+> in rcar_gen3_thermal_probe(), and rcar_gen3_ths_tj_1 and
+> rcar_gen3_ths_tj_1_m3_w, which are gloabl to this file accordingly.
 
-This function is a simple subroutine, is not called back.
-Therefore, I think that it is not necessary to move tj_1 into
-rcar_gen3_thermal_tsc.
+I understood. Why did I decide to use unsigned?
+I will fix it in v3.
 
 Thanks,
 Kaneko
@@ -202,7 +204,3 @@ _of_ops);
 > > --
 > > 1.9.1
 > >
->
-> --
-> Regards,
-> Niklas S=C3=B6derlund
