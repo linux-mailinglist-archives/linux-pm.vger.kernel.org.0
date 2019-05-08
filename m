@@ -2,316 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9873E17A11
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 15:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C5D17A1B
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 15:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727472AbfEHNLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 May 2019 09:11:39 -0400
-Received: from mga12.intel.com ([192.55.52.136]:1677 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbfEHNLi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 May 2019 09:11:38 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 May 2019 06:11:37 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
-  by orsmga001.jf.intel.com with ESMTP; 08 May 2019 06:11:29 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hOMM4-0000is-79; Wed, 08 May 2019 16:11:28 +0300
-Date:   Wed, 8 May 2019 16:11:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-usb@vger.kernel.org, kvm@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-mtd@lists.infradead.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, alsa-devel@alsa-project.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH 03/16] lib,treewide: add new match_string() helper/macro
-Message-ID: <20190508131128.GL9224@smile.fi.intel.com>
-References: <20190508112842.11654-1-alexandru.ardelean@analog.com>
- <20190508112842.11654-5-alexandru.ardelean@analog.com>
+        id S1727526AbfEHNNH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 May 2019 09:13:07 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:60904 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727500AbfEHNNG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 09:13:06 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190508131305euoutp0210fc1c2ee4b1af3dd048abba10371e3f~ct137VvsT3233832338euoutp02g
+        for <linux-pm@vger.kernel.org>; Wed,  8 May 2019 13:13:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190508131305euoutp0210fc1c2ee4b1af3dd048abba10371e3f~ct137VvsT3233832338euoutp02g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1557321185;
+        bh=eXhCUDgM0oIHnRivX2ZhfLzQLHq/huckSvDHj9jbwrY=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=NQNam05B7uPudHnTdG5BxMpqH5SkCKOLcazEjlvqq0r3z8WZxBlt4g0QvcKWjeuO4
+         EbuIVTROArxPAR7E1mvf/WFA6dpvZzP8UhXFVoXAODMcZsCoM1nMe+cY3mtTWTozUU
+         qYOtuVBlkq4/+yIEC5rdKVwJ7g7CU8MTNS+ztZOA=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190508131304eucas1p1c5466948d6a2dad412a52db9e4ef6d6c~ct13DMXrs2066020660eucas1p1O;
+        Wed,  8 May 2019 13:13:04 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 87.25.04298.0E5D2DC5; Wed,  8
+        May 2019 14:13:04 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190508131303eucas1p15db96735e01d8bd535861b91aa7298b8~ct12NBAx-0289202892eucas1p1R;
+        Wed,  8 May 2019 13:13:03 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190508131303eusmtrp24dd788c179063640d11b24074a8c30ad~ct11_14KZ0688306883eusmtrp2K;
+        Wed,  8 May 2019 13:13:03 +0000 (GMT)
+X-AuditID: cbfec7f2-f2dff700000010ca-85-5cd2d5e065ed
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id E3.C0.04140.FD5D2DC5; Wed,  8
+        May 2019 14:13:03 +0100 (BST)
+Received: from [106.120.51.20] (unknown [106.120.51.20]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190508131302eusmtip2160fd4fca1c240b849c598e039e50fbd~ct11KeAkx0788807888eusmtip2z;
+        Wed,  8 May 2019 13:13:02 +0000 (GMT)
+Subject: Re: [PATCH v7 11/13] ARM: dts: exynos: add syscon to clock
+ compatible
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        =?UTF-8?Q?Bart=c5=82omiej_=c5=bbo=c5=82nierkiewicz?= 
+        <b.zolnierkie@samsung.com>, kgene@kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        kyungmin.park@samsung.com,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
+        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
+        treding@nvidia.com, digetx@gmail.com, willy.mh.wolff.ml@gmail.com
+From:   Lukasz Luba <l.luba@partner.samsung.com>
+Message-ID: <f60314f9-61bc-a9e1-7ddd-f068c241e860@partner.samsung.com>
+Date:   Wed, 8 May 2019 15:13:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190508112842.11654-5-alexandru.ardelean@analog.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAJKOXPf3tZGp-UQagGKNs0xFBGz2NwBdA2R=Y25C5jTK_ZcMXg@mail.gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0gUURjFuzszO+PibuNq+WVStBVUlCYEXirCoGQoCIMCM6O2nDR1zHZ8
+        m7RWWq2ZpVS6alZQmibqJmoWBj7zlWmJoliigpFamo8o0XKcjfzv3PP9Lt85l8sQ2q+UE3Mu
+        JIw3hOiDdUoVWVb/q21bf2eH73ZLmQaXpBdRuGtqmMI5te8oXDAxiHBaU7YCtyQJOGVwhMBt
+        bcU0br08SuMPlVlKPJlci3B6W5UCF9b20bg3Pk+Ja0avUfjNxwO4d1aDZ94OIA8tNzOdSnKZ
+        xnaSe2nuozlL/g0ll3zlm5K7VZqPuBfNsdykZY0X46Pa7ccHn4vgDa57TqkC7iYkk6HjK6Ky
+        ujMJI5pnTYhhgN0BuaZDJmTDaNk8BPXl+0xItaCnEDzOalHIh0kED2qGFRIlXSice0XIg1wE
+        VR1JVmoMwUDBtUXKnvWC8t9ppKQd2M3QNfeTkiCCLSGhvKKSlnYrWReoyL8gMWrWE8bSTIs8
+        yW6A7JIiWtIrWG/4XF9MyYwdNGYMLTI27GG48m1cKWmCdYSeoRyFrNdC+VjWYjpgMxiYzUtA
+        cux9MPFpzqrt4WtDKS1rZ/jzMsdaTQRj8iMrcxEGU7KtzC6oaWinpMzEQpmiSlfZ3guvc4sp
+        +Rk10D1mJ0fQQGrZfUK21XA9USvTm6D05nvropWQ+/wefRvpzEuKmZeUMS8pY/6/9yEi85Ej
+        Hy4K/rzoFsJHuoh6QQwP8Xc5c16woIUf2Dzf8KMCTXecrkYsg3S26oDqDl8tpY8Qo4VqBAyh
+        c1B33Vmw1H766BjecP6kITyYF6vRaobUOapjl/Uf17L++jA+iOdDecO/qYKxcTIijd8TLlqY
+        D/L1znzscWTYFlLNV50SY7SJG9LfC6FB7qODnhvPCpeSwm+3Buytuzo0crTEUXPQeaST/KBa
+        f9k93rndZ2Kmafn17zF469qnRQNDqjOBPTfvx8Q1r1vlGmmMsnuWJLR4Irqx8YCDJfBE3fjU
+        /sMpx77E3Wj32umqetOjI8UAvdsWwiDq/wJGjqJpfQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgleLIzCtJLcpLzFFi42I5/e/4Pd37Vy/FGNz8LWCxccZ6VovrX56z
+        Wsw/co7VYvXHx4wWk0/NZbI4051r0f/4NbPF+fMb2C3ONr1ht7i8aw6bxefeI4wWM87vY7JY
+        e+Quu8XtxhVsFofftLNa7L/iZXH7N5/FtxOPGB2EPL59ncTiMbvhIovHzll32T02repk8+ht
+        fsfm0bdlFaPH5tPVHp83yQVwROnZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq
+        6dvZpKTmZJalFunbJehlTG3tZSn4IFox58Zs5gbGfwJdjJwcEgImEmv/7mbuYuTiEBJYyihx
+        7sRrJoiEmMSkfdvZIWxhiT/Xutggil4zSmw7uAOsSFjAT+LU7M2sILaIgKbE9b/fWUGKmAU2
+        skhcfNXLBNGxmlli9fPvQKM4ONgE9CR2rCoEaeAVcJN4O7mLBcRmEVCRmLtxPdg2UYEIiTPv
+        V7BA1AhKnJz5BMzmFAiUaH73gQ3EZhYwk5i3+SEzhC0ucevJfCYIW15i+9s5zBMYhWYhaZ+F
+        pGUWkpZZSFoWMLKsYhRJLS3OTc8tNtIrTswtLs1L10vOz93ECIz9bcd+btnB2PUu+BCjAAej
+        Eg9vxqFLMUKsiWXFlbmHGCU4mJVEeK9PBArxpiRWVqUW5ccXleakFh9iNAV6biKzlGhyPjAt
+        5ZXEG5oamltYGpobmxubWSiJ83YIHIwREkhPLEnNTk0tSC2C6WPi4JRqYOwqX7rz1hmnMxe/
+        W81/lpnv7ZrrWl05WX9X10HuPi0lg733Dy8RTv33ce1X5X015W81Z/yffuf+n+vc+b9/M5/b
+        lLCqjLP5WcgFnl67ORPf3I7WS5/4vca9Is9TwXHq3AO7J5xUOZJiUyfK+aWF6Y/H10Tnx9ou
+        Z3Vq92eFKzmmd95meG3zuUCJpTgj0VCLuag4EQCliK9xEwMAAA==
+X-CMS-MailID: 20190508131303eucas1p15db96735e01d8bd535861b91aa7298b8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190506151219eucas1p2feab00f7b7c1c5fdd5614423fb38eae2
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190506151219eucas1p2feab00f7b7c1c5fdd5614423fb38eae2
+References: <CGME20190506151219eucas1p2feab00f7b7c1c5fdd5614423fb38eae2@eucas1p2.samsung.com>
+        <1557155521-30949-1-git-send-email-l.luba@partner.samsung.com>
+        <1557155521-30949-12-git-send-email-l.luba@partner.samsung.com>
+        <CAJKOXPd6GKVPixMiG37SoHiswaih-3S+o7QJn=WbuqdZzu-s_w@mail.gmail.com>
+        <8d02ef2c-c5dd-6a72-9638-d858df3ea16d@partner.samsung.com>
+        <CAJKOXPf3tZGp-UQagGKNs0xFBGz2NwBdA2R=Y25C5jTK_ZcMXg@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 08, 2019 at 02:28:29PM +0300, Alexandru Ardelean wrote:
-> This change re-introduces `match_string()` as a macro that uses
-> ARRAY_SIZE() to compute the size of the array.
-> The macro is added in all the places that do
-> `match_string(_a, ARRAY_SIZE(_a), s)`, since the change is pretty
-> straightforward.
 
-Can you split include/linux/ change from the rest?
-
+On 5/8/19 12:17 PM, Krzysztof Kozlowski wrote:
+> On Wed, 8 May 2019 at 11:50, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+>>
+>>
+>> On 5/8/19 9:22 AM, Krzysztof Kozlowski wrote:
+>>> On Mon, 6 May 2019 at 17:12, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+>>>>
+>>>> In order get the clock by phandle and use it with regmap it needs to be
+>>>> compatible with syscon. The DMC driver uses two registers from clock
+>>>> register set and needs the regmap of them.
+>>>>
+>>>> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
+>>>> ---
+>>>>    arch/arm/boot/dts/exynos5800.dtsi | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/arm/boot/dts/exynos5800.dtsi b/arch/arm/boot/dts/exynos5800.dtsi
+>>>> index 57d3b31..0a2b328 100644
+>>>> --- a/arch/arm/boot/dts/exynos5800.dtsi
+>>>> +++ b/arch/arm/boot/dts/exynos5800.dtsi
+>>>> @@ -17,7 +17,7 @@
+>>>>    };
+>>>>
+>>>>    &clock {
+>>>> -       compatible = "samsung,exynos5800-clock";
+>>>> +       compatible = "samsung,exynos5800-clock", "syscon";
+>>>
+>>> What about Exynos5420 DTSI?
+>> OK, I will also add it to 5420 dtsi.
+>> --------------------------8<------------------------------------------
+>> diff --git a/arch/arm/boot/dts/exynos5420.dtsi
+>> b/arch/arm/boot/dts/exynos5420.dtsi
+>> index aaff158..d9203f0 100644
+>> --- a/arch/arm/boot/dts/exynos5420.dtsi
+>> +++ b/arch/arm/boot/dts/exynos5420.dtsi
+>> @@ -173,7 +173,7 @@
+>>                   };
+>>
+>>                   clock: clock-controller@10010000 {
+>> -                       compatible = "samsung,exynos5420-clock";
+>> +                       compatible = "samsung,exynos5420-clock", "syscon";
+>>                           reg = <0x10010000 0x30000>;
+>>                           #clock-cells = <1>;
+>>                   };
+>> diff --git a/arch/arm/boot/dts/exynos5800.dtsi
+>> b/arch/arm/boot/dts/exynos5800.dtsi
+>> index 57d3b31..0a2b328 100644
+>> --- a/arch/arm/boot/dts/exynos5800.dtsi
+>> +++ b/arch/arm/boot/dts/exynos5800.dtsi
+>> @@ -17,7 +17,7 @@
+>>    };
+>>
+>>    &clock {
+>> -       compatible = "samsung,exynos5800-clock";
+>> +       compatible = "samsung,exynos5800-clock", "syscon";
+>>    };
+>> ----------------------------->8-----------------------------------
+>>
+>> Can I add your ack after that?
 > 
-> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-> ---
->  drivers/clk/bcm/clk-bcm2835.c                    | 4 +---
->  drivers/gpio/gpiolib-of.c                        | 2 +-
->  drivers/gpu/drm/i915/intel_pipe_crc.c            | 2 +-
->  drivers/mfd/omap-usb-host.c                      | 2 +-
->  drivers/net/wireless/intel/iwlwifi/mvm/debugfs.c | 2 +-
->  drivers/pci/pcie/aer.c                           | 2 +-
->  drivers/usb/common/common.c                      | 4 ++--
->  drivers/usb/typec/class.c                        | 8 +++-----
->  drivers/usb/typec/tps6598x.c                     | 2 +-
->  drivers/vfio/vfio.c                              | 4 +---
->  include/linux/string.h                           | 9 +++++++++
->  sound/firewire/oxfw/oxfw.c                       | 2 +-
->  sound/soc/codecs/max98088.c                      | 2 +-
->  sound/soc/codecs/max98095.c                      | 2 +-
->  14 files changed, 25 insertions(+), 22 deletions(-)
+> No need for ack. The DTS have to go through arm-soc so I will pick it
+> up when dependencies get in and bindings are accepted (acked or
+> applied). We have now merge window so I guess this will go to v5.4-rc1
+> at earliest.
 > 
-> diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-> index a775f6a1f717..1ab388590ead 100644
-> --- a/drivers/clk/bcm/clk-bcm2835.c
-> +++ b/drivers/clk/bcm/clk-bcm2835.c
-> @@ -1390,9 +1390,7 @@ static struct clk_hw *bcm2835_register_clock(struct bcm2835_cprman *cprman,
->  	for (i = 0; i < data->num_mux_parents; i++) {
->  		parents[i] = data->parents[i];
->  
-> -		ret = __match_string(cprman_parent_names,
-> -				     ARRAY_SIZE(cprman_parent_names),
-> -				     parents[i]);
-> +		ret = match_string(cprman_parent_names, parents[i]);
->  		if (ret >= 0)
->  			parents[i] = cprman->real_parent_names[ret];
->  	}
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 27d6f04ab58e..71e886869d78 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -279,7 +279,7 @@ static struct gpio_desc *of_find_regulator_gpio(struct device *dev, const char *
->  	if (!con_id)
->  		return ERR_PTR(-ENOENT);
->  
-> -	i = __match_string(whitelist, ARRAY_SIZE(whitelist), con_id);
-> +	i = match_string(whitelist, con_id);
->  	if (i < 0)
->  		return ERR_PTR(-ENOENT);
->  
-> diff --git a/drivers/gpu/drm/i915/intel_pipe_crc.c b/drivers/gpu/drm/i915/intel_pipe_crc.c
-> index 286fad1f0e08..6fc4f3d3d1f6 100644
-> --- a/drivers/gpu/drm/i915/intel_pipe_crc.c
-> +++ b/drivers/gpu/drm/i915/intel_pipe_crc.c
-> @@ -449,7 +449,7 @@ display_crc_ctl_parse_source(const char *buf, enum intel_pipe_crc_source *s)
->  		return 0;
->  	}
->  
-> -	i = __match_string(pipe_crc_sources, ARRAY_SIZE(pipe_crc_sources), buf);
-> +	i = match_string(pipe_crc_sources, buf);
->  	if (i < 0)
->  		return i;
->  
-> diff --git a/drivers/mfd/omap-usb-host.c b/drivers/mfd/omap-usb-host.c
-> index 9aaacb5bdb26..53dff34c0afc 100644
-> --- a/drivers/mfd/omap-usb-host.c
-> +++ b/drivers/mfd/omap-usb-host.c
-> @@ -509,7 +509,7 @@ static int usbhs_omap_get_dt_pdata(struct device *dev,
->  			continue;
->  
->  		/* get 'enum usbhs_omap_port_mode' from port mode string */
-> -		ret = __match_string(port_modes, ARRAY_SIZE(port_modes), mode);
-> +		ret = match_string(port_modes, mode);
->  		if (ret < 0) {
->  			dev_warn(dev, "Invalid port%d-mode \"%s\" in device tree\n",
->  					i, mode);
-> diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/debugfs.c b/drivers/net/wireless/intel/iwlwifi/mvm/debugfs.c
-> index 59ce3ff35553..778b4dfd8b75 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/mvm/debugfs.c
-> +++ b/drivers/net/wireless/intel/iwlwifi/mvm/debugfs.c
-> @@ -667,7 +667,7 @@ iwl_dbgfs_bt_force_ant_write(struct iwl_mvm *mvm, char *buf,
->  	};
->  	int ret, bt_force_ant_mode;
->  
-> -	ret = __match_string(modes_str, ARRAY_SIZE(modes_str), buf);
-> +	ret = match_string(modes_str, buf);
->  	if (ret < 0)
->  		return ret;
->  
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index 41a0773a1cbc..2278caba109c 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -203,7 +203,7 @@ void pcie_ecrc_get_policy(char *str)
->  {
->  	int i;
->  
-> -	i = __match_string(ecrc_policy_str, ARRAY_SIZE(ecrc_policy_str), str);
-> +	i = match_string(ecrc_policy_str, str);
->  	if (i < 0)
->  		return;
->  
-> diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> index bca0c404c6ca..5a651d311d38 100644
-> --- a/drivers/usb/common/common.c
-> +++ b/drivers/usb/common/common.c
-> @@ -68,7 +68,7 @@ enum usb_device_speed usb_get_maximum_speed(struct device *dev)
->  	if (ret < 0)
->  		return USB_SPEED_UNKNOWN;
->  
-> -	ret = __match_string(speed_names, ARRAY_SIZE(speed_names), maximum_speed);
-> +	ret = match_string(speed_names, maximum_speed);
->  
->  	return (ret < 0) ? USB_SPEED_UNKNOWN : ret;
->  }
-> @@ -106,7 +106,7 @@ static enum usb_dr_mode usb_get_dr_mode_from_string(const char *str)
->  {
->  	int ret;
->  
-> -	ret = __match_string(usb_dr_modes, ARRAY_SIZE(usb_dr_modes), str);
-> +	ret = match_string(usb_dr_modes, str);
->  	return (ret < 0) ? USB_DR_MODE_UNKNOWN : ret;
->  }
->  
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 4abc5a76ec51..38ac776cba8a 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1409,8 +1409,7 @@ EXPORT_SYMBOL_GPL(typec_set_pwr_opmode);
->   */
->  int typec_find_port_power_role(const char *name)
->  {
-> -	return __match_string(typec_port_power_roles,
-> -			      ARRAY_SIZE(typec_port_power_roles), name);
-> +	return match_string(typec_port_power_roles, name);
->  }
->  EXPORT_SYMBOL_GPL(typec_find_port_power_role);
->  
-> @@ -1424,7 +1423,7 @@ EXPORT_SYMBOL_GPL(typec_find_port_power_role);
->   */
->  int typec_find_power_role(const char *name)
->  {
-> -	return __match_string(typec_roles, ARRAY_SIZE(typec_roles), name);
-> +	return match_string(typec_roles, name);
->  }
->  EXPORT_SYMBOL_GPL(typec_find_power_role);
->  
-> @@ -1438,8 +1437,7 @@ EXPORT_SYMBOL_GPL(typec_find_power_role);
->   */
->  int typec_find_port_data_role(const char *name)
->  {
-> -	return __match_string(typec_port_data_roles,
-> -			      ARRAY_SIZE(typec_port_data_roles), name);
-> +	return match_string(typec_port_data_roles, name);
->  }
->  EXPORT_SYMBOL_GPL(typec_find_port_data_role);
->  
-> diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-> index 0389e4391faf..0c4e47868590 100644
-> --- a/drivers/usb/typec/tps6598x.c
-> +++ b/drivers/usb/typec/tps6598x.c
-> @@ -423,7 +423,7 @@ static int tps6598x_check_mode(struct tps6598x *tps)
->  	if (ret)
->  		return ret;
->  
-> -	switch (__match_string(modes, ARRAY_SIZE(modes), mode)) {
-> +	switch (match_string(modes, mode)) {
->  	case TPS_MODE_APP:
->  		return 0;
->  	case TPS_MODE_BOOT:
-> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-> index b31585ecf48f..fe8283d3781b 100644
-> --- a/drivers/vfio/vfio.c
-> +++ b/drivers/vfio/vfio.c
-> @@ -637,9 +637,7 @@ static bool vfio_dev_whitelisted(struct device *dev, struct device_driver *drv)
->  			return true;
->  	}
->  
-> -	return __match_string(vfio_driver_whitelist,
-> -			      ARRAY_SIZE(vfio_driver_whitelist),
-> -			      drv->name) >= 0;
-> +	return match_string(vfio_driver_whitelist, drv->name) >= 0;
->  }
->  
->  /*
-> diff --git a/include/linux/string.h b/include/linux/string.h
-> index 531d04308ff9..07e9f89088df 100644
-> --- a/include/linux/string.h
-> +++ b/include/linux/string.h
-> @@ -194,6 +194,15 @@ static inline int strtobool(const char *s, bool *res)
->  int __match_string(const char * const *array, size_t n, const char *string);
->  int __sysfs_match_string(const char * const *array, size_t n, const char *s);
->  
-> +/**
-> + * match_string - matches given string in an array
-> + * @_a: array of strings
-> + * @_s: string to match with
-> + *
-> + * Helper for __match_string(). Calculates the size of @a automatically.
-> + */
-> +#define match_string(_a, _s) __match_string(_a, ARRAY_SIZE(_a), _s)
-> +
->  /**
->   * sysfs_match_string - matches given string in an array
->   * @_a: array of strings
-> diff --git a/sound/firewire/oxfw/oxfw.c b/sound/firewire/oxfw/oxfw.c
-> index 9ec5316f3bb5..433fc84c4f90 100644
-> --- a/sound/firewire/oxfw/oxfw.c
-> +++ b/sound/firewire/oxfw/oxfw.c
-> @@ -57,7 +57,7 @@ static bool detect_loud_models(struct fw_unit *unit)
->  	if (err < 0)
->  		return false;
->  
-> -	return __match_string(models, ARRAY_SIZE(models), model) >= 0;
-> +	return match_string(models, model) >= 0;
->  }
->  
->  static int name_card(struct snd_oxfw *oxfw)
-> diff --git a/sound/soc/codecs/max98088.c b/sound/soc/codecs/max98088.c
-> index 3ef743075bda..911ffe84c37e 100644
-> --- a/sound/soc/codecs/max98088.c
-> +++ b/sound/soc/codecs/max98088.c
-> @@ -1405,7 +1405,7 @@ static int max98088_get_channel(struct snd_soc_component *component, const char
->  {
->  	int ret;
->  
-> -	ret = __match_string(eq_mode_name, ARRAY_SIZE(eq_mode_name), name);
-> +	ret = match_string(eq_mode_name, name);
->  	if (ret < 0)
->  		dev_err(component->dev, "Bad EQ channel name '%s'\n", name);
->  	return ret;
-> diff --git a/sound/soc/codecs/max98095.c b/sound/soc/codecs/max98095.c
-> index cd69916d5dcb..d182d45d0c83 100644
-> --- a/sound/soc/codecs/max98095.c
-> +++ b/sound/soc/codecs/max98095.c
-> @@ -1636,7 +1636,7 @@ static int max98095_get_bq_channel(struct snd_soc_component *component,
->  {
->  	int ret;
->  
-> -	ret = __match_string(bq_mode_name, ARRAY_SIZE(bq_mode_name), name);
-> +	ret = match_string(bq_mode_name, name);
->  	if (ret < 0)
->  		dev_err(component->dev, "Bad biquad channel name '%s'\n", name);
->  	return ret;
-> -- 
-> 2.17.1
+> If you want to speed up things in future, be sure that dependencies
+> (headers) are applied as early as possible.
+Thank you Krzysztof for the explanation, good to know that.
+
+Regards,
+Lukasz
 > 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> Best regards,
+> Krzysztof
+> 
+> 
