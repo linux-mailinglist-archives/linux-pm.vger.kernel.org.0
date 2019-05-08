@@ -2,123 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC4D16DF8
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 01:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A98616FB4
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 05:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbfEGXyH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 May 2019 19:54:07 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:39601 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726368AbfEGXyH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 19:54:07 -0400
-Received: by mail-lf1-f68.google.com with SMTP id f1so354956lfl.6
-        for <linux-pm@vger.kernel.org>; Tue, 07 May 2019 16:54:06 -0700 (PDT)
+        id S1727005AbfEHDyH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 May 2019 23:54:07 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46615 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726889AbfEHDyH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 May 2019 23:54:07 -0400
+Received: by mail-pf1-f193.google.com with SMTP id j11so9736094pff.13
+        for <linux-pm@vger.kernel.org>; Tue, 07 May 2019 20:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=QNaGI2GD35FNHKpaisMd7Mb++bashXvi1hqDDOr6Y20=;
-        b=qTYA5JC2UtqQi1Puhr92FNgpB5llHarohMUSh7nKWbLR074m0i0U3ykD0Kimw8LIGJ
-         VHamCvN8DpC1iO2PQOOrSBVtRjytiIbz/aELoB/0QwATQu+SH8+OJk+t7C4ou4PFLySm
-         NADosKT1RWMXouX8XisFkCRonZ5QMDdjlknvP4EafRwA0ah3c7p9tCHU4DQgHtuo9Daz
-         cQMwpUFCRaFjqwoQPF76azpyL+5nAmPhwIrJ/Nj7lty0/YG6SauqQcElftx04XFUEjhc
-         G21iLOmF7nA9mjIwraqo9+n6tjrPeKg/BRjMkY8gHJVjhEiL0ZTPHchRSP4AeGrVI4ae
-         cVCA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cVIqQuQhPNK8bauPkhz1EwiDMHC+lDayWMP+2CUUfv0=;
+        b=DhU6DoiKidW/7p6JsZv10IZ/XDAWdrhdxkMqTcB+c0Qdhxwatdtvd57A02FxSV/pyX
+         mCHLQyV0CgIToWefPLues8oVW5cmhEMZEjFHmJ9BJHdneraVo3PGQRhMfpB+eEKRKH3u
+         HzA/4I5+nmpMdFakyMCTX//lwuxC7Xcp+Z+TJ11hYWfMQQLswPAzrusv2hQlhdxPVudn
+         faH4mp2I3YnSMUD2S3Pj0lXxdMLkRPBNnC+SE7Qes1Cvs4hjO01b+h25Qge4pzDTs72W
+         1nYxvEYOrjOQJcUb/TL8lJodz1/EZVenBG+XNl7pV132kvdLBsfBsYmXeOr2xaL9erUW
+         T5qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=QNaGI2GD35FNHKpaisMd7Mb++bashXvi1hqDDOr6Y20=;
-        b=hDAznFayLFlhmHb7cJ72ru0CKk+gG/KE/3jUWILhnSXEaXtK+h4Qzqm96JvlpF/Xkl
-         TLza2b/p4SOX2DlaJRfithLNm61fnWHZbZQjKcCmHfHwO5pLzFBkklxfbhRnEiezbp6z
-         vxur+8egKivFoTI7pwMN4LmV6rMM/1c7NslzV6gezFkm0SBWikEB7YKOaI2pVo18P/TL
-         tVtW5hUIqH/XxSBaBcB+5r6MFVZpNu3rJ8v3T8xZD9ii+YHgiDClIXJwP72fZLEnT4Em
-         6bvxOti3ELZmKNqUX9hAU//jsJ23JqJEAU3g/Civrx6ciW4f8DPpgyo0i8AHvOKvdgB8
-         8E7A==
-X-Gm-Message-State: APjAAAXM2OTXy5JFYEEf7vFdcr/jl3QFTv5LqrV4bv0efxDfT7F4ZYMw
-        sOdOKpFvgysXQVRv8A8oSiXz+g==
-X-Google-Smtp-Source: APXvYqydoAUVbppS2HV4ZpYsr3VsJCICRDmG0N4Q6P6HR2w9HSV1Zh4qeo5wt0jD10HXiGeF/TUbPw==
-X-Received: by 2002:a19:f243:: with SMTP id d3mr17540768lfk.168.1557273245412;
-        Tue, 07 May 2019 16:54:05 -0700 (PDT)
-Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
-        by smtp.gmail.com with ESMTPSA id j19sm3594338lfj.52.2019.05.07.16.54.03
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 May 2019 16:54:03 -0700 (PDT)
-From:   "Niklas =?iso-8859-1?Q?S=F6derlund?=" <niklas.soderlund@ragnatech.se>
-X-Google-Original-From: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Date:   Wed, 8 May 2019 01:54:03 +0200
-To:     Jiada Wang <jiada_wang@mentor.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, horms+renesas@verge.net.au,
-        geert+renesas@glider.be, sergei.shtylyov@cogentembedded.com,
-        marek.vasut+renesas@gmail.com, kuninori.morimoto.gx@renesas.com,
-        hien.dang.eb@renesas.com, fabrizio.castro@bp.renesas.com,
-        dien.pham.ry@renesas.com, biju.das@bp.renesas.com,
-        erosca@de.adit-jv.com, george_davis@mentor.com,
-        joshua_frkuska@mentor.com
-Subject: Re: [PATCH v4 0/2] thermal: rcar_gen3_thermal: fix IRQ issues
-Message-ID: <20190507235403.GA24112@bigcity.dyn.berto.se>
-References: <20190424051145.23072-1-jiada_wang@mentor.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cVIqQuQhPNK8bauPkhz1EwiDMHC+lDayWMP+2CUUfv0=;
+        b=a9WUwjCOC4QlnVZQ3NnnQfdElvEkB7fGVziOwNlBn4rwdGR/jwS9ijMj6+f8nn0OzQ
+         SjpPZiKkqRj7SagEDiMXyJjgedEsu9nFsTHVWBlJsoGYhZvV8bP2BmBCeecFLKphtNml
+         s2v+wzztbEvzQzusItc/Ui8E2eBAJE4DxHH9N8Nem8EijN90GLWx8O/0NPjSOorMoVFm
+         Sg4XJFS/lQnMuA6vH7smP2MUxs8bsOUNFoWT0zTHkhvwr41Ffv7K5RJ9r4W7QijabKDq
+         bQF93Cmywa6HazCYFeoMWUSOq6BDpRqkYjcN3pisUYl4KBoyIAErJZg3Gj7BkdAYfOef
+         9JmA==
+X-Gm-Message-State: APjAAAXA29yXnLwnVoWCjHF3Y9HmtkOBxr5KWgbe3pl353YPSKoPZ7O1
+        uHiFfIFUaa5W8Yh6ZI2Tf+9x7Q==
+X-Google-Smtp-Source: APXvYqxfvhpxtDtzrYT9I5+J5woyqtPOqke43/sMpYFxgaxbSBZA6lUQ9FQDpN6Smn0aLtYKbbTrZg==
+X-Received: by 2002:a63:360e:: with SMTP id d14mr44517659pga.188.1557287646303;
+        Tue, 07 May 2019 20:54:06 -0700 (PDT)
+Received: from localhost ([122.172.118.99])
+        by smtp.gmail.com with ESMTPSA id 13sm18559568pfi.172.2019.05.07.20.54.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 May 2019 20:54:04 -0700 (PDT)
+Date:   Wed, 8 May 2019 09:24:02 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Anson Huang <anson.huang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/4] cpufreq: Add imx-cpufreq-dt driver
+Message-ID: <20190508035402.7pbikzpkzxxesmlw@vireshk-i7>
+References: <cover.1557236799.git.leonard.crestez@nxp.com>
+ <607242a278a4532d0b4285e0fb56abfd5767fdd1.1557236799.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190424051145.23072-1-jiada_wang@mentor.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <607242a278a4532d0b4285e0fb56abfd5767fdd1.1557236799.git.leonard.crestez@nxp.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jiada,
-
-Thanks for your patches.
-
-On 2019-04-24 14:11:43 +0900, Jiada Wang wrote:
-> There are issues with interrupt handling in rcar_gen3_thermal driver.
+On 07-05-19, 13:52, Leonard Crestez wrote:
+> Right now in upstream imx8m cpufreq support just lists a common subset
+> of OPPs because the higher ones should only be attempted after checking
+> speed grading in fuses.
 > 
-> Currently IRQ is remain enabled after .remove, later if device is probed,
-> IRQ is requested before .thermal_init, this may cause IRQ function be
-> triggered but not able to clear IRQ status, thus cause system to hang.
+> Add a small driver which checks speed grading from nvmem cells before
+> registering cpufreq-dt.
 > 
-> Since the irq line isn't shared between different devices,
-> so the proper interrupt type flag should be IRQF_ONESHOT.
+> This driver allows unlocking all frequencies for imx8mm and imx8mq and
+> could be applied to other chips like imx7d
 > 
-> This patch-set fix these interrupt handling retated issues.
-
-I really like this series, nice work.
-
-Tested-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 > 
 > ---
-> v4: remove 'spinlock_t lock'
->     add Fixes tag in ("thermal: rcar_gen3_thermal: fix interrupt type")
->     fix typos in ("thermal: rcar_gen3_thermal: disable interrupt in .remove")
+>  drivers/cpufreq/Kconfig.arm          | 10 +++
+>  drivers/cpufreq/Makefile             |  1 +
+>  drivers/cpufreq/cpufreq-dt-platdev.c |  3 +
+>  drivers/cpufreq/imx-cpufreq-dt.c     | 96 ++++++++++++++++++++++++++++
+>  drivers/soc/imx/soc-imx8.c           |  3 +
+>  5 files changed, 113 insertions(+)
+>  create mode 100644 drivers/cpufreq/imx-cpufreq-dt.c
 > 
-> v3: fix to use correct code base
->     remove unused "flag" variable in rcar_gen3_thermal_irq
-> 
-> v2: use irq type IRQF_ONESHOT instead of IRQF_SHARED
->     disable interrupt in .remove
-> 
-> v1: initial version
-> 
-> Jiada Wang (2):
->   thermal: rcar_gen3_thermal: fix interrupt type
->   thermal: rcar_gen3_thermal: disable interrupt in .remove
-> 
->  drivers/thermal/rcar_gen3_thermal.c | 41 +++++++----------------------
->  1 file changed, 9 insertions(+), 32 deletions(-)
-> 
-> -- 
-> 2.19.2
-> 
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 179a1d302f48..78ed9ef49e68 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -90,10 +90,20 @@ config ARM_IMX6Q_CPUFREQ
+>  	help
+>  	  This adds cpufreq driver support for Freescale i.MX6 series SoCs.
+>  
+>  	  If in doubt, say N.
+>  
+> +config ARM_IMX_CPUFREQ_DT
+> +	tristate "Freescale i.MX8M cpufreq support"
+> +	depends on ARCH_MXC && CPUFREQ_DT
+> +	default m if ARCH_MXC && CPUFREQ_DT
+
+As I said in the previous version, the if block above is redundant and
+not required.
+
+> +	help
+> +	  This adds cpufreq driver support for Freescale i.MX8M series SoCs,
+> +	  based on cpufreq-dt.
+> +
+> +	  If in doubt, say N.
 
 -- 
-Regards,
-Niklas Söderlund
+viresh
