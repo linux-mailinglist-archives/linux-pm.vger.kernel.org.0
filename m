@@ -2,50 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F97517405
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 10:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A17174DA
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 11:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726694AbfEHIhL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 May 2019 04:37:11 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:35061 "EHLO
+        id S1727009AbfEHJRh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 May 2019 05:17:37 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:50321 "EHLO
         mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726685AbfEHIhL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 04:37:11 -0400
+        with ESMTP id S1726455AbfEHJRg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 05:17:36 -0400
 Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190508083708euoutp010dbad9a4def17a2ed490799f85d4b8b0~cqE8f6fAl3260832608euoutp01Z
-        for <linux-pm@vger.kernel.org>; Wed,  8 May 2019 08:37:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190508083708euoutp010dbad9a4def17a2ed490799f85d4b8b0~cqE8f6fAl3260832608euoutp01Z
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190508091734euoutp01752b0f2ae1403f64f6c1d4b3f58824b4~cqoPvcVPJ2157321573euoutp01C
+        for <linux-pm@vger.kernel.org>; Wed,  8 May 2019 09:17:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190508091734euoutp01752b0f2ae1403f64f6c1d4b3f58824b4~cqoPvcVPJ2157321573euoutp01C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1557304628;
-        bh=F3hQPMWOwaji0kBc2pg5RjljvpKabT6uMTMspmYFhOs=;
+        s=mail20170921; t=1557307054;
+        bh=7tBkm4ZtupatdeJAm08/bLQ2G9rQyH25ePfOtf7iIms=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Iw7wxEbuRT5A/IMIbZj8Vh3pOgnSkxVygAO6g9SCn1u2Z4fbySTGE1oNzc0ZvBbnV
-         x/zaWKlEjIplZxsKacDT82HRpqvRljqFjxAS2+Fohr9i3Lg14ruEMuytqHlIdVfoXO
-         EiB3RlYLKkR7a3CNIz0H16FXoKjYwJRDW5rbMfzo=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190508083708eucas1p189f0865c3609ac36d585abb57ee7546e~cqE7xrJZT2103621036eucas1p1C;
-        Wed,  8 May 2019 08:37:08 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id F9.FF.04298.33592DC5; Wed,  8
-        May 2019 09:37:07 +0100 (BST)
+        b=INDpxIdwtQrw9uk2mQLNO8Dm7G5mi60bbKneFh58YF1vB7nssHx/IEf+lGPwO7V/2
+         PBWES5ThBkvLoZmVZ6ufPl/hC/US+dE2yNMdqpsL35j0yQZgWhCDdNDFsGAgVlrYFC
+         Vxl2Y2ZjzDgM4lE9a422r4bjGvG4l63zsug632pU=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190508091733eucas1p24c03e56cdbdb8fe30d3509b04a94f975~cqoOy1isp0746207462eucas1p2g;
+        Wed,  8 May 2019 09:17:33 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id FE.86.04325.DAE92DC5; Wed,  8
+        May 2019 10:17:33 +0100 (BST)
 Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190508083707eucas1p21512b3ba36832c438f5fa84b349825cc~cqE66jLb82357823578eucas1p2H;
-        Wed,  8 May 2019 08:37:07 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190508091732eucas1p157ea16882d06a949ac3ca7e401254e4c~cqoN3MYQ-0568605686eucas1p1N;
+        Wed,  8 May 2019 09:17:32 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190508083707eusmtrp24e8bc6cb5578878c2c24721e347d8948~cqE65wZe11036210362eusmtrp2c;
-        Wed,  8 May 2019 08:37:07 +0000 (GMT)
-X-AuditID: cbfec7f2-f13ff700000010ca-7f-5cd295335a98
+        20190508091732eusmtrp261ff770e5e358e93647d59bb1812443e~cqoNo6_Ch0062100621eusmtrp2V;
+        Wed,  8 May 2019 09:17:32 +0000 (GMT)
+X-AuditID: cbfec7f5-b8fff700000010e5-83-5cd29ead5f34
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id DB.BF.04146.33592DC5; Wed,  8
-        May 2019 09:37:07 +0100 (BST)
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id F6.03.04140.CAE92DC5; Wed,  8
+        May 2019 10:17:32 +0100 (BST)
 Received: from [106.120.51.20] (unknown [106.120.51.20]) by
         eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190508083706eusmtip16972ae35246c4fa91bb13324925bcbda~cqE6LTCLv1756717567eusmtip1a;
-        Wed,  8 May 2019 08:37:06 +0000 (GMT)
-Subject: Re: [PATCH v7 05/13] dt-bindings: ddr: add LPDDR3 memories
+        20190508091731eusmtip1b4b3fb389cc4ca1dbd0962761eb0a285~cqoMpYRy30741107411eusmtip19;
+        Wed,  8 May 2019 09:17:31 +0000 (GMT)
+Subject: Re: [PATCH v7 07/13] dt-bindings: memory-controllers: add
+ Exynos5422 DMC device description
 To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
@@ -56,123 +57,178 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         jroedel@suse.de, treding@nvidia.com, digetx@gmail.com,
         willy.mh.wolff.ml@gmail.com
 From:   Lukasz Luba <l.luba@partner.samsung.com>
-Message-ID: <8ace8d5a-9cb2-4b41-0ed2-bcb33b349d69@partner.samsung.com>
-Date:   Wed, 8 May 2019 10:37:15 +0200
+Message-ID: <fdcbad67-65c8-36f4-1473-e2c46ccc431a@partner.samsung.com>
+Date:   Wed, 8 May 2019 11:17:43 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190507170004.GA20489@bogus>
+In-Reply-To: <20190507170422.GA25179@bogus>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SWUxTURT09q0QSi6tyokajQUSl4gSTbyKC8at0Q/90MQoRqo8EaUF+lhU
-        NKnggsjqBhYR/CA1IAErAUTcWmRxq6AGBBEFElEBgVKjQUXLg8jfnJk5OTPJ4SlFPzOND9VF
-        CXqdJkzFutJlNT9tCxZfagxc5EhYTG5lFTOkaegTQ3KrXzCkcKATkQtPcmTk2TktSev8ShGb
-        rYQjz+N7OPKq8ipL7CnViGTZ7stIUXUbR1pP3GDJSFUFR6w9Zxjy4PUm0jrsTr7XdaAApfq7
-        4zytzjY00Oo7xjZObS44y6pTEvpYdWppAVLffhqntptnbuV3uq4IFsJCYwT9wlVBrgcG6+LZ
-        iCR8uNzewhlQijwJufCAl8C1zIcoCbnyCnwDQcfge1oahhC8qfpKSYMdwcXBU+z4SmbvZ5kk
-        mBCYihtYaehFYP5WOOpS4rVQbrEhJ56MZ8Pw6cuM00ThexTYuz7+E3iexb5QURDp9MjxBug3
-        PeacNI294ckHLyc9Be+A9poSRrJ4QP2VLtqJXfB8qP+cLHNiCntCS1fuGJ4F5b1XR1MDzuGh
-        qu8HI6VeB+aS+LEGSvhSW8pJeAaM3JGWAYtgSLmOJHwMOtNyxjz+YK1tYJzZKDwXiisXSvQa
-        aDnZN9oEsDs093pIEdzhfFkmJdFySDytkNxzoDT55dihqWC6eZlLRyrjhGLGCWWME8oY/9/N
-        Q3QB8hSiRW2IIPrphFhfUaMVo3UhvvvCtWb07w+f/qkdrECOxr0WhHmkcpN3RzQEKhhNjHhE
-        a0HAU6rJ8qaMxkCFPFhz5KigD9+jjw4TRAuaztMqT3ncpA+7FDhEEyUcEoQIQT+uyniXaQY0
-        S5PbzVi7jwdtJNXpm7f8aV76ht627DpLmwyyR0zlymNurzJaHlUkegQH6prf/UqIPamzN8p3
-        VPUPmPLnHRxed9dPVjeknD/QFBCUGr3+4/60zOxrSh9r9/ZdoQPJ4FG2vDTP59nv3d9GvCN+
-        vA23BgU4Mora9ZGJ/g631V7DhnwVLR7Q+M2j9KLmL0xG+NCDAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphleLIzCtJLcpLzFFi42I5/e/4XV3jqZdiDPa+5bHYOGM9q8X1L89Z
-        LeYfOcdqsfrjY0aLyafmMlmc6c616H/8mtni/PkN7BZnm96wW1zeNYfN4nPvEUaLGef3MVms
-        PXKX3eJ24wo2i/97drBbHH7Tzmqx/4qXxe3ffBbfTjxidBD2+PZ1EovH7IaLLB47Z91l99i0
-        qpPNo7f5HZtH35ZVjB6bT1d7fN4kF8ARpWdTlF9akqqQkV9cYqsUbWhhpGdoaaFnZGKpZ2hs
-        HmtlZKqkb2eTkpqTWZZapG+XoJfx6UQTW0GXQMX2z7fYGxh7ebsYOTkkBEwkpr99ydTFyMUh
-        JLCUUWLt7B+sEAkxiUn7trND2MISf651sUEUvWaUuN94hwkkISzgLLH90HlGEFtEQFHid9s0
-        VpAiZoG9zBLrd82F6mhgkmjo3wo0ioODTUBPYseqQpAGXgE3iQ/Lj4KFWQRUJE49UAYJiwpE
-        SJx5v4IFokRQ4uTMJ2A2p4C2xMmXPWB7mQXMJOZtfsgMYYtL3HoyHyouL7H97RzmCYxCs5C0
-        z0LSMgtJyywkLQsYWVYxiqSWFuem5xYb6hUn5haX5qXrJefnbmIEpoBtx35u3sF4aWPwIUYB
-        DkYlHt4JeRdjhFgTy4orcw8xSnAwK4nwXp94KUaINyWxsiq1KD++qDQntfgQoynQbxOZpUST
-        84HpKa8k3tDU0NzC0tDc2NzYzEJJnLdD4GCMkEB6YklqdmpqQWoRTB8TB6dUAyNnhWfF5bhd
-        GmeiWxmvfIn+9DZ3367mlHcdN4pbOD69z1vzNLw4mnGBLPsf9yT1tcmzkh3TPrBK77r7V+B1
-        sfsj0/Ubt5YZlBZsms739UTC5V1r1z2ZpRb+Vkw3nG/XnhJHz5zcRQ6Lg7zzVt3fFZF+T/yB
-        /pmrjut6Ao/9n/eex75jaWnm5zwlluKMREMt5qLiRAAiXRQUFwMAAA==
-X-CMS-MailID: 20190508083707eucas1p21512b3ba36832c438f5fa84b349825cc
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf0zMcRjHfe77s1vXPl3Us5jmmPkxlfzYZ2NC5MaGGeZHxuGr0CX3FZLZ
+        YQtHRZG6utKGUllJSx3Srrj8qBR2lJ9do6GMK41D3H1r+u/1PJ/38zzv9/bhKWU3489vj9kj
+        6GI00SpWTlfc+9E45WpOS0Sw8Zc/uZZRwhBbzweG5NY1MqToqx2RtAcmGXl0UktS7J8o0tRU
+        ypGGI5858sSczRJHUh0iGU3VMnK17hVH2g4XsKT/ViVHaj8fY8idp4tJm9OLfK9vR3N91N97
+        U2l1lr6ZVlcZX3HqssITrDrpaDerTi4vROrrDxPUjrLRy/l18tlbhejtewVd0JxN8qi8Pt/Y
+        mvH7G1ovcXpkCjAgDx7wdLCWO2gDkvNKXICg+lsRJRU9COw/v3FS4UBwPctID4687KtjXazE
+        +QicLSGSqAtBzp8qt8gHbwPLxVbOxcPxGHAmpjMuEYVvU+DoeIcMiOdZHAiVhbtdGgUOh5vn
+        kt1LaTwOCp73ylw8Aq+BN/dKGUnjDfczO9z7PfBksDTa3HoK+0FrR65M4gC40ZXtjgDYxMOT
+        9Bec5HoBPOsrYSX2gY/W8oH+KOivkoYBi6BPykMSHwR7imlAMwtqrc2MyzOFJ0KJOciFgOdB
+        SeNKCb3geZe35MALUivOU1JbAccTldKOCVB+6vHAHV/IL07nTiOVcUgu45AsxiFZjP/PXkB0
+        IfIT4kRtpCBOixH2BYoarRgXExm4ZZe2DP37hQ//WHsrUfWvzRaEeaTyVHTGNkcoGc1eMV5r
+        QcBTquEK25mWCKViqyb+gKDbtVEXFy2IFjSSp1V+ioRhb9crcaRmj7BTEGIF3eCrjPfw16O5
+        1rtt9bM23Jl/WTfz0uMKsNviXmptb4PHZkUfOTvNGeFn8Lnx/ktxWGnY7xGr67PNh7yVst0F
+        Ts36XNOB6V/0xYcmjpvX/fX1jitrX6O8ZaGzaxpqtezBcMOq9pBrae2hJ3Mqlsp9twTFX/BX
+        9c3woHsyVywMM7NJt9IWLen08txpVtFilGbqJEonav4CmWKjuIEDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphleLIzCtJLcpLzFFi42I5/e/4Xd018y7FGCzbLGexccZ6VovrX56z
+        Wsw/co7VYvXHx4wWk0/NZbI4051r0f/4NbPF+fMb2C3ONr1ht7i8aw6bxefeI4wWM87vY7JY
+        e+Quu8XtxhVsFv/37GC3OPymndVi/xUvi9u/+Sy+nXjE6CDs8e3rJBaP2Q0XWTx2zrrL7rFp
+        VSebR2/zOzaPvi2rGD02n672+LxJLoAjSs+mKL+0JFUhI7+4xFYp2tDCSM/Q0kLPyMRSz9DY
+        PNbKyFRJ384mJTUnsyy1SN8uQS9j4XexggNqFWdvLWVvYJwr38XIySEhYCJx5/sRti5GLg4h
+        gaWMEq/Wt7BCJMQkJu3bzg5hC0v8udYFVfSaUeLnsw+MIAlhgTSJG0umsoHYIgKKEr/bprGC
+        FDEL7GWWWL9rLlRHA5PEyZnzWLoYOTjYBPQkdqwqBGngFXCT2D21D6yZRUBFYsWNr0wgtqhA
+        hMSZ9ytYIGoEgVqfgNmcAtoSh85dB6tnFjCTmLf5ITOELS5x68l8JghbXmL72znMExiFZiFp
+        n4WkZRaSlllIWhYwsqxiFEktLc5Nzy020itOzC0uzUvXS87P3cQITAHbjv3csoOx613wIUYB
+        DkYlHt4XBRdjhFgTy4orcw8xSnAwK4nwXp94KUaINyWxsiq1KD++qDQntfgQoynQcxOZpUST
+        84HpKa8k3tDU0NzC0tDc2NzYzEJJnLdD4GCMkEB6YklqdmpqQWoRTB8TB6dUA+MyxsT3Ms8W
+        xGo8kGBLeHykU+q05aa3ndyPVcJlPhYZKHQw81vJPT7KKbZwxSYjiTC147df9E84c2L5E4u3
+        827znFzqbt9sddthwq6ZC4JaHXnvWtjt3/1aoGfS9n/6/VtzH5+UDzk988HqV917Kndf36Of
+        ZlPvelS18IWt9a3cDu61f1hORc1TYinOSDTUYi4qTgQAC7T/4xcDAAA=
+X-CMS-MailID: 20190508091732eucas1p157ea16882d06a949ac3ca7e401254e4c
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190506151214eucas1p17114a7dce506c77ae0bb96b93fd2d838
+X-RootMTR: 20190506151215eucas1p2c57147edac5671c5ec9a223efb6b4adc
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20190506151214eucas1p17114a7dce506c77ae0bb96b93fd2d838
+X-CMS-RootMailID: 20190506151215eucas1p2c57147edac5671c5ec9a223efb6b4adc
 References: <1557155521-30949-1-git-send-email-l.luba@partner.samsung.com>
-        <CGME20190506151214eucas1p17114a7dce506c77ae0bb96b93fd2d838@eucas1p1.samsung.com>
-        <1557155521-30949-6-git-send-email-l.luba@partner.samsung.com>
-        <20190507170004.GA20489@bogus>
+        <CGME20190506151215eucas1p2c57147edac5671c5ec9a223efb6b4adc@eucas1p2.samsung.com>
+        <1557155521-30949-8-git-send-email-l.luba@partner.samsung.com>
+        <20190507170422.GA25179@bogus>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rob,
 
-On 5/7/19 7:00 PM, Rob Herring wrote:
-> On Mon, May 06, 2019 at 05:11:53PM +0200, Lukasz Luba wrote:
->> Specifies the AC timing parameters of the LPDDR3 memory device.
+On 5/7/19 7:04 PM, Rob Herring wrote:
+> On Mon, May 06, 2019 at 05:11:55PM +0200, Lukasz Luba wrote:
+>> The patch adds description for DT binding for a new Exynos5422 Dynamic
+>> Memory Controller device.
 >>
 >> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
 >> ---
->>   .../devicetree/bindings/ddr/lpddr3-timings.txt     | 58 +++++++++++++
->>   Documentation/devicetree/bindings/ddr/lpddr3.txt   | 97 ++++++++++++++++++++++
->>   2 files changed, 155 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/ddr/lpddr3-timings.txt
->>   create mode 100644 Documentation/devicetree/bindings/ddr/lpddr3.txt
+>>   .../bindings/memory-controllers/exynos5422-dmc.txt | 74 ++++++++++++++++++++++
+>>   1 file changed, 74 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt
 >>
->> diff --git a/Documentation/devicetree/bindings/ddr/lpddr3-timings.txt b/Documentation/devicetree/bindings/ddr/lpddr3-timings.txt
+>> diff --git a/Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt b/Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt
 >> new file mode 100644
->> index 0000000..3a2ef3a
+>> index 0000000..be602a9
 >> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/ddr/lpddr3-timings.txt
->> @@ -0,0 +1,58 @@
->> +* AC timing parameters of LPDDR3 memories for a given speed-bin.
+>> +++ b/Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt
+>> @@ -0,0 +1,74 @@
+>> +* Exynos5422 frequency and voltage scaling for Dynamic Memory Controller device
 >> +
->> +The structures are based on LPDDR2 and extended where needed.
+>> +The Samsung Exynos5422 SoC has DMC (Dynamic Memory Controller) to which the DRAM
+>> +memory chips are connected. The driver is to monitor the controller in runtime
+>> +and switch frequency and voltage. To monitor the usage of the controller in
+>> +runtime, the driver uses the PPMU (Platform Performance Monitoring Unit), which
+>> +is able to measure the current load of the memory.
+>> +When 'userspace' governor is used for the driver, an application is able to
+>> +switch the DMC and memory frequency.
 >> +
->> +Required properties:
->> +- compatible : Should be "jedec,lpddr3-timings"
->> +- min-freq : minimum DDR clock frequency for the speed-bin. Type is <u32>
->> +- reg : maximum DDR clock frequency for the speed-bin. Type is <u32>
->> +
->> +Optional properties:
->> +
->> +The following properties represent AC timing parameters from the memory
->> +data-sheet of the device for a given speed-bin. All these properties are
->> +of type <u32> and the default unit is ps (pico seconds).
->> +- tRFC
->> +- tRRD
->> +- tRPab
->> +- tRPpb
->> +- tRCD
->> +- tRC
->> +- tRAS
->> +- tWTR
->> +- tWR
->> +- tRTP
->> +- tW2W-C2C
->> +- tR2R-C2C
->> +- tFAW
->> +- tXSR
->> +- tXP
->> +- tCKE
->> +- tCKESR
->> +- tMRD
->> +
->> +Example:
->> +
->> +timings_samsung_K3QF2F20DB_800mhz: lpddr3-timings@0 {
+>> +Required properties for DMC device for Exynos5422:
+>> +- compatible: Should be "samsung,exynos5422-dmc".
+>> +- clock-names : the name of clock used by the controller.
+>> +- clocks : phandles for clock specified in "clock-names" property.
 > 
-> Now the unit-address should be @800000000
-Added @800000000 to the both files.
+> Need to enumerate the clocks and their order.
+OK I will add a list here and above in 'clock-names' in the right order.
 > 
-> With that and the other example fixed,
+>> +- devfreq-events : phandles for PPMU devices connected to this DMC.
+>> +- vdd-supply : phandle for voltage regulator which is connected.
+>> +- reg : registers of two CDREX controllers.
+>> +- operating-points-v2 : phandle for OPPs described in v2 definition.
+>> +- device-handle : phandle of the connected DRAM memory device. For more
+>> +	information please refer to Documentation
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-Thank you.
+> Documentation... ?
+I should have changed it after I moved the lpddr3.txt files in the doc
+dir. I missed it, my apologies.
+> 
+>> +- devfreq-events : phandles of the PPMU events used by the controller.
+>> +- samsung,syscon-chipid : phandle of the ChipID used by the controller.
+>> +- samsung,syscon-clk : phandle of the clock register set used by the controller.
+> 
+> Looks like a hack. Can't you get this from the clocks property? What is
+> this for?
+As Krzysztof commented in the next message, the chipid register contains
+information about memory size and the clock register set has some
+registers from DMC (timings settings) which are not typical 'clocks'.
+Chanwoo suggested to use syscon regmap to access these clock registers
+safely. Krzysztof suggested to use syscon regmap similar to Sylwester's
+AVS driver while accessing chipid registers.
+That's why they are here. Both register sets contain needed information
+for proper operation of the driver.
 
 Regards,
 Lukasz
-
+> 
+>> +
+>> +Example:
+>> +
+>> +	ppmu_dmc0_0: ppmu@10d00000 {
+>> +		compatible = "samsung,exynos-ppmu";
+>> +		reg = <0x10d00000 0x2000>;
+>> +		clocks = <&clock CLK_PCLK_PPMU_DREX0_0>;
+>> +		clock-names = "ppmu";
+>> +		events {
+>> +			ppmu_event_dmc0_0: ppmu-event3-dmc0_0 {
+>> +				event-name = "ppmu-event3-dmc0_0";
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	dmc: memory-controller@10c20000 {
+>> +		compatible = "samsung,exynos5422-dmc";
+>> +		reg = <0x10c20000 0x100>, <0x10c30000 0x100>,
+>> +		clocks = 	<&clock CLK_FOUT_SPLL>,
+>> +				<&clock CLK_MOUT_SCLK_SPLL>,
+>> +				<&clock CLK_FF_DOUT_SPLL2>,
+>> +				<&clock CLK_FOUT_BPLL>,
+>> +				<&clock CLK_MOUT_BPLL>,
+>> +				<&clock CLK_SCLK_BPLL>,
+>> +				<&clock CLK_MOUT_MX_MSPLL_CCORE>,
+>> +				<&clock CLK_MOUT_MX_MSPLL_CCORE_PHY>,
+>> +				<&clock CLK_MOUT_MCLK_CDREX>,
+>> +				<&clock CLK_DOUT_CLK2X_PHY0>,
+>> +				<&clock CLK_CLKM_PHY0>,
+>> +				<&clock CLK_CLKM_PHY1>;
+>> +		clock-names =	"fout_spll",
+>> +				"mout_sclk_spll",
+>> +				"ff_dout_spll2",
+>> +				"fout_bpll",
+>> +				"mout_bpll",
+>> +				"sclk_bpll",
+>> +				"mout_mx_mspll_ccore",
+>> +				"mout_mx_mspll_ccore_phy",
+>> +				"mout_mclk_cdrex",
+>> +				"dout_clk2x_phy0",
+>> +				"clkm_phy0",
+>> +			        "clkm_phy1";
+>> +		operating-points-v2 = <&dmc_opp_table>;
+>> +		devfreq-events = <&ppmu_event3_dmc0_0>,	<&ppmu_event3_dmc0_1>,
+>> +				<&ppmu_event3_dmc1_0>, <&ppmu_event3_dmc1_1>;
+>> +		operating-points-v2 = <&dmc_opp_table>;
+>> +		device-handle = <&samsung_K3QF2F20DB>;
+>> +		vdd-supply = <&buck1_reg>;
+>> +		samsung,syscon-clk = <&clock>;
+>> +		samsung,syscon-chipid = <&chipid>;
+>> +	};
+>> -- 
+>> 2.7.4
+>>
+> 
+> 
