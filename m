@@ -2,138 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E4517F42
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 19:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6D517FF9
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 20:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729132AbfEHRnV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 May 2019 13:43:21 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:41840 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729122AbfEHRnV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 May 2019 13:43:21 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D6C0A78;
-        Wed,  8 May 2019 10:43:20 -0700 (PDT)
-Received: from e107049-lin.arm.com (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 138AB3F575;
-        Wed,  8 May 2019 10:43:18 -0700 (PDT)
-From:   douglas.raillard@arm.com
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        quentin.perret@arm.com, douglas.raillard@arm.com,
-        patrick.bellasi@arm.com, dietmar.eggemann@arm.com
-Subject: [RFC PATCH 7/7] sched/cpufreq: Boost schedutil frequency ramp up
-Date:   Wed,  8 May 2019 18:43:01 +0100
-Message-Id: <20190508174301.4828-8-douglas.raillard@arm.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190508174301.4828-1-douglas.raillard@arm.com>
-References: <20190508174301.4828-1-douglas.raillard@arm.com>
+        id S1726681AbfEHSmL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 May 2019 14:42:11 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:53210 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725910AbfEHSmL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 14:42:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=QkojuoKjlRx99FreCBXd8uMCKzFV4ejE/54/aBGxim4=; b=dT+DeY8lE/Z1A7+znLacFSsaP
+        DZ5Fl9+uTUZQBO1AyhdDIvkusWBYz4k6WCStuCcIX960z9J377EmXYz4l0m/17/X+ZMLiytQufq/e
+        pFgthAalIqOkUtE7hWoQAW8QMFgUHQCnN7m2cU44mPWj8ehnTCXbrJpL9/oRpqPjYbFxj+MiwzzAn
+        89p+vATzYA40ZmPKFKoPv4SQh6wjR3ykHB7uTSILi+b964qVuVlU0i0nDKR7Dwxv2g7qnUYBkrI43
+        Sk6MY//bPrr1Nkq+kb+4F0ORDLUX7m67XDBUPAs1hpYuFA9VasufR18ZAWjD5xcWZbYwvmoQuwGmD
+        hFU9tSVTw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hORW0-0007R8-Cv; Wed, 08 May 2019 18:42:04 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4E708980308; Wed,  8 May 2019 20:42:02 +0200 (CEST)
+Date:   Wed, 8 May 2019 20:42:02 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Patrick Bellasi <patrick.bellasi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Tejun Heo <tj@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH v8 04/16] sched/core: uclamp: Add system default clamps
+Message-ID: <20190508184202.GA32547@worktop.programming.kicks-ass.net>
+References: <20190402104153.25404-1-patrick.bellasi@arm.com>
+ <20190402104153.25404-5-patrick.bellasi@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190402104153.25404-5-patrick.bellasi@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Douglas RAILLARD <douglas.raillard@arm.com>
+On Tue, Apr 02, 2019 at 11:41:40AM +0100, Patrick Bellasi wrote:
+> Add a privileged interface to define a system default configuration via:
+> 
+>   /proc/sys/kernel/sched_uclamp_util_{min,max}
 
-In some situations, it can be interesting to spend temporarily more
-power if that can give a useful frequency boost.
-
-The sugov_cpu_is_busy() heuristic is reused to check if there has been
-some idle time on all CPUs in the considered perf domain since last call
-to schedutil's get_next_freq(). If not, it is assumed that at least one
-CPU is in a frequency ramp up phase and the domain will be allowed to
-spend extra power to reach a stable OPP in a shorter amount of time.
-
-Since the extra power expenditure is bounded, it cannot skyrocket even
-on platforms with a large number of cores in the same frequency domain
-and/or very high ratio between lowest and highest OPP cost.
-
-Signed-off-by: Douglas RAILLARD <douglas.raillard@arm.com>
----
- kernel/sched/cpufreq_schedutil.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index ce4b90cafbb5..513b32bf14c5 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -218,6 +218,8 @@ static void sugov_cpu_is_busy_update(struct sugov_cpu *sg_cpu
-  * @sg_policy: schedutil policy object to compute the new frequency for.
-  * @util: Current CPU utilization.
-  * @max: CPU capacity.
-+ * @busy: true if at least one CPU in the policy is busy, which means it had no
-+ *	idle time since its last frequency change.
-  *
-  * If the utilization is frequency-invariant, choose the new frequency to be
-  * proportional to it, that is
-@@ -231,20 +233,28 @@ static void sugov_cpu_is_busy_update(struct sugov_cpu *sg_cpu
-  *
-  * Take C = 1.25 for the frequency tipping point at (util / max) = 0.8.
-  *
-+ * An energy-aware boost is then applied if busy is true. The boost will allow
-+ * selecting frequencies at most twice as costly in term of energy.
-+ *
-  * The lowest driver-supported frequency which is equal or greater than the raw
-  * next_freq (as calculated above) is returned, subject to policy min/max and
-  * cpufreq driver limitations.
-  */
- static unsigned int get_next_freq(struct sugov_policy *sg_policy,
--				  unsigned long util, unsigned long max)
-+				  unsigned long util, unsigned long max,
-+				  bool busy)
- {
- 	struct cpufreq_policy *policy = sg_policy->policy;
- 	unsigned int freq = arch_scale_freq_invariant() ?
- 				policy->cpuinfo.max_freq : policy->cur;
- 	struct em_perf_domain *pd = sugov_policy_get_pd(sg_policy);
- 
--	/* Maximum power we are ready to spend. */
--	unsigned int cost_margin = 0;
-+	/*
-+	 * Maximum power we are ready to spend.
-+	 * When one CPU is busy in the policy, we apply a boost to help it reach
-+	 * the needed frequency faster.
-+	 */
-+	unsigned int cost_margin = busy ? 1024/2 : 0;
- 
- 	freq = map_util_freq(util, freq, max);
- 
-@@ -534,7 +544,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
- 	sugov_cpu_is_busy_update(sg_cpu, util);
- 	max = sg_cpu->max;
- 	util = sugov_iowait_apply(sg_cpu, time, util, max);
--	next_f = get_next_freq(sg_policy, util, max);
-+	next_f = get_next_freq(sg_policy, util, max, busy);
- 	/*
- 	 * Do not reduce the frequency if the CPU has not been idle
- 	 * recently, as the reduction is likely to be premature then.
-@@ -567,6 +577,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 	unsigned long util = 0, max = 1;
- 	unsigned int j;
- 	unsigned long sg_cpu_util = 0;
-+	bool busy = false;
- 
- 	for_each_cpu(j, policy->cpus) {
- 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-@@ -577,6 +588,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 			sg_cpu_util = j_util;
- 		j_max = j_sg_cpu->max;
- 		j_util = sugov_iowait_apply(j_sg_cpu, time, j_util, j_max);
-+		busy |= sugov_cpu_is_busy(j_sg_cpu);
- 
- 		if (j_util * max > j_max * util) {
- 			util = j_util;
-@@ -592,7 +604,7 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- 	 */
- 	sugov_cpu_is_busy_update(sg_cpu, sg_cpu_util);
- 
--	return get_next_freq(sg_policy, util, max);
-+	return get_next_freq(sg_policy, util, max, busy);
- }
- 
- static void
--- 
-2.21.0
-
+Isn't the 'u' in "uclamp" already for util?
