@@ -2,48 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49855175D0
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 12:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53982175DA
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 12:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbfEHKRR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 May 2019 06:17:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38126 "EHLO mail.kernel.org"
+        id S1726495AbfEHKTT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 May 2019 06:19:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39088 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725778AbfEHKRR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 May 2019 06:17:17 -0400
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+        id S1725778AbfEHKTT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 May 2019 06:19:19 -0400
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C154121734;
-        Wed,  8 May 2019 10:17:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B8F2D216C4;
+        Wed,  8 May 2019 10:19:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557310636;
-        bh=KL1Q3vlKVL3j046YaKILm/LmrgoI4TLlKqkWFmfAQ7g=;
+        s=default; t=1557310758;
+        bh=KgiLwHa8c628XCTksNuq14BZQuGqDsnA4pu3qRgYcxQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YVLTTYCi/QTkkeZkwQCmWTvVGZB9bg3Gc7Ycl+8+KsX2Ht9krSX36dHOOybc+6VSq
-         y4k1hc7Cz4Rgbd0wV8UlccDN2JZfpfGQx/cEaWwCgr/oeXVejP+lpMxiODl4FvXn96
-         jJM+67HkVIUVG4X7bWI7P6Gf7EJ+YJk0WJeQaC34=
-Received: by mail-lj1-f173.google.com with SMTP id f23so16998166ljc.0;
-        Wed, 08 May 2019 03:17:15 -0700 (PDT)
-X-Gm-Message-State: APjAAAUOaRO+aAj0+1zhI+VpEOY5BK5QPXjQ707L2Mjv2a7J5X/g/1Bt
-        fpRcAwPx3MxdSP1bMSLIc39ipoESH2h4j3JTwUA=
-X-Google-Smtp-Source: APXvYqwOdonWj+6joWoBvoSPOTkNm4EAhRQGXYIbBGr5SdSjgH67jPQ2ri7SNavGm/G3C86isfQRaipLXLI8WusYDpU=
-X-Received: by 2002:a2e:9b49:: with SMTP id o9mr13804437ljj.113.1557310634000;
- Wed, 08 May 2019 03:17:14 -0700 (PDT)
+        b=2wft5YmM3CM2rKVQmpR6hOXN83mEVRAGkfTMAnH44HifrmzxdXs+02+K45kkV3yXn
+         SvHDi2skTrO4pZqoo9fwE+uG5WIJDdk33/r0LrAJsE606iivCAE2HAmf2kBc4cwQEU
+         7Zu6tEOESBQf/upZesMJd6wJb1Pb3iqzL6f13vfE=
+Received: by mail-lj1-f176.google.com with SMTP id y10so10458062lji.9;
+        Wed, 08 May 2019 03:19:17 -0700 (PDT)
+X-Gm-Message-State: APjAAAXgi3EkamGkdwSyIYhaXl/j71xt21dN/Bnzc6qsQ/4L/R2NwiJv
+        GtiYwcES88ib3iU1KwpsJYoqxB/mJ+aFwv1b45I=
+X-Google-Smtp-Source: APXvYqwYkt5J0rET0wyrGnqJH8poPsUWaDooXeIeenTxmEqd6U1lzC8GOwJ2ZxmNmgblZZPq0m1QyUUqoG45zpuRE0s=
+X-Received: by 2002:a2e:82cb:: with SMTP id n11mr20509505ljh.183.1557310756058;
+ Wed, 08 May 2019 03:19:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190506151219eucas1p2feab00f7b7c1c5fdd5614423fb38eae2@eucas1p2.samsung.com>
- <1557155521-30949-1-git-send-email-l.luba@partner.samsung.com>
- <1557155521-30949-12-git-send-email-l.luba@partner.samsung.com>
- <CAJKOXPd6GKVPixMiG37SoHiswaih-3S+o7QJn=WbuqdZzu-s_w@mail.gmail.com> <8d02ef2c-c5dd-6a72-9638-d858df3ea16d@partner.samsung.com>
-In-Reply-To: <8d02ef2c-c5dd-6a72-9638-d858df3ea16d@partner.samsung.com>
+References: <1557155521-30949-1-git-send-email-l.luba@partner.samsung.com>
+ <CGME20190506151215eucas1p2c57147edac5671c5ec9a223efb6b4adc@eucas1p2.samsung.com>
+ <1557155521-30949-8-git-send-email-l.luba@partner.samsung.com>
+ <20190507170422.GA25179@bogus> <CAJKOXPdacKBrKeCyCaE7VS8-NOR4Oo27XY7rx20P2ORY2vBBSg@mail.gmail.com>
+ <ab489925-040c-815c-2aef-50ed0ee6cd6c@partner.samsung.com>
+In-Reply-To: <ab489925-040c-815c-2aef-50ed0ee6cd6c@partner.samsung.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 8 May 2019 12:17:02 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPf3tZGp-UQagGKNs0xFBGz2NwBdA2R=Y25C5jTK_ZcMXg@mail.gmail.com>
-Message-ID: <CAJKOXPf3tZGp-UQagGKNs0xFBGz2NwBdA2R=Y25C5jTK_ZcMXg@mail.gmail.com>
-Subject: Re: [PATCH v7 11/13] ARM: dts: exynos: add syscon to clock compatible
+Date:   Wed, 8 May 2019 12:19:04 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPc2Swoi+xc_=QTMdY8p2DTtf5SprpfMFC6B9QCNUtxm-w@mail.gmail.com>
+Message-ID: <CAJKOXPc2Swoi+xc_=QTMdY8p2DTtf5SprpfMFC6B9QCNUtxm-w@mail.gmail.com>
+Subject: Re: [PATCH v7 07/13] dt-bindings: memory-controllers: add Exynos5422
+ DMC device description
 To:     Lukasz Luba <l.luba@partner.samsung.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         "linux-samsung-soc@vger.kernel.org" 
         <linux-samsung-soc@vger.kernel.org>,
         =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
@@ -60,72 +62,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 8 May 2019 at 11:50, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+On Wed, 8 May 2019 at 11:45, Lukasz Luba <l.luba@partner.samsung.com> wrote:
 >
 >
-> On 5/8/19 9:22 AM, Krzysztof Kozlowski wrote:
-> > On Mon, 6 May 2019 at 17:12, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+> On 5/8/19 9:19 AM, Krzysztof Kozlowski wrote:
+> > On Tue, 7 May 2019 at 19:04, Rob Herring <robh@kernel.org> wrote:
+> >>> +- devfreq-events : phandles of the PPMU events used by the controller.
+> >>> +- samsung,syscon-chipid : phandle of the ChipID used by the controller.
+> >>> +- samsung,syscon-clk : phandle of the clock register set used by the controller.
 > >>
-> >> In order get the clock by phandle and use it with regmap it needs to be
-> >> compatible with syscon. The DMC driver uses two registers from clock
-> >> register set and needs the regmap of them.
-> >>
-> >> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> >> ---
-> >>   arch/arm/boot/dts/exynos5800.dtsi | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/arm/boot/dts/exynos5800.dtsi b/arch/arm/boot/dts/exynos5800.dtsi
-> >> index 57d3b31..0a2b328 100644
-> >> --- a/arch/arm/boot/dts/exynos5800.dtsi
-> >> +++ b/arch/arm/boot/dts/exynos5800.dtsi
-> >> @@ -17,7 +17,7 @@
-> >>   };
-> >>
-> >>   &clock {
-> >> -       compatible = "samsung,exynos5800-clock";
-> >> +       compatible = "samsung,exynos5800-clock", "syscon";
+> >> Looks like a hack. Can't you get this from the clocks property? What is
+> >> this for?
 > >
-> > What about Exynos5420 DTSI?
-> OK, I will also add it to 5420 dtsi.
-> --------------------------8<------------------------------------------
-> diff --git a/arch/arm/boot/dts/exynos5420.dtsi
-> b/arch/arm/boot/dts/exynos5420.dtsi
-> index aaff158..d9203f0 100644
-> --- a/arch/arm/boot/dts/exynos5420.dtsi
-> +++ b/arch/arm/boot/dts/exynos5420.dtsi
-> @@ -173,7 +173,7 @@
->                  };
+> > Hi Rob,
+> >
+> > Lukasz uses these two syscon regmaps to read certain registers. For
+> > chipid he reads it to check the size of attached memory (only 2 GB
+> > version is supported). This indeed looks like a hack. However the
+> > second regmap (clk) is needed to get the timing data from registers
+> > from DMC clock driver address space. These are registers with memory
+> > timing so their data is not exposed anyway in common clk framework.
+> >
+> > Best regards,
+> > Krzysztof
 >
->                  clock: clock-controller@10010000 {
-> -                       compatible = "samsung,exynos5420-clock";
-> +                       compatible = "samsung,exynos5420-clock", "syscon";
->                          reg = <0x10010000 0x30000>;
->                          #clock-cells = <1>;
->                  };
-> diff --git a/arch/arm/boot/dts/exynos5800.dtsi
-> b/arch/arm/boot/dts/exynos5800.dtsi
-> index 57d3b31..0a2b328 100644
-> --- a/arch/arm/boot/dts/exynos5800.dtsi
-> +++ b/arch/arm/boot/dts/exynos5800.dtsi
-> @@ -17,7 +17,7 @@
->   };
->
->   &clock {
-> -       compatible = "samsung,exynos5800-clock";
-> +       compatible = "samsung,exynos5800-clock", "syscon";
->   };
-> ----------------------------->8-----------------------------------
->
-> Can I add your ack after that?
+> Thank you Krzysztof for a fast response. I have also responded to Rob.
+> I wouldn't call accessing chipid registers as a hack, though. The DMC
+> registers do not contain information about the memory chip since it is
+> in phase of production the board not the chip. Thus, chipid regs (which
+> loads from e-fuses) are best place to put information about memory
+> type/size.
 
-No need for ack. The DTS have to go through arm-soc so I will pick it
-up when dependencies get in and bindings are accepted (acked or
-applied). We have now merge window so I guess this will go to v5.4-rc1
-at earliest.
-
-If you want to speed up things in future, be sure that dependencies
-(headers) are applied as early as possible.
+By hack I meant that you have to read chipid instead of DTS... but as
+you pointed, the DTS could not match the real fused values so actually
+it makes sense to read them.
 
 Best regards,
 Krzysztof
