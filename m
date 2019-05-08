@@ -2,102 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E654D17951
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 14:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E73A1795E
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 14:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728462AbfEHMWH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 May 2019 08:22:07 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:46886 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726751AbfEHMWG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 08:22:06 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x48CJBEV086953;
-        Wed, 8 May 2019 12:20:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2018-07-02;
- bh=Vy0vJPC+R/qK4BTy9W8k2EK+1DkuBwwYmX4Im7RV/1I=;
- b=rwrtMH5vFY76MnriFuwWJRty7cv6d48ndLvoH9qa0iSpe18cQhaRn84K+EEAZ1el4f/y
- JYXzNPHiRG6Um3c2LeXmrh0vIUgokB68rrApoaQDWIhQiq3xdWk5gSEBW5t2CsNm+NQD
- vMj6o0elaMb6F0MU58KC4FWtRSn89CRe22TBfRL7zCGITD8/HSnJoDvmL6xh8b//HGVN
- 0/+i+9yb5Er16ot7xGaUWYdgVLnSKYTBDh5U+VgaaiAGanyy3YqtlO3+pRPaxxQxAHqK
- Taf9LSC6aD/fmeyve7zi016PT3fCR2HgfwqDVjH/4iBaBbfLBHPj+ptzQwZZXQN8uHEa Qg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 2s94b63etg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 08 May 2019 12:20:31 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x48CJL8V107697;
-        Wed, 8 May 2019 12:20:30 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2s94ag20en-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 08 May 2019 12:20:30 +0000
-Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x48CKNew007185;
-        Wed, 8 May 2019 12:20:24 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 08 May 2019 05:20:22 -0700
-Date:   Wed, 8 May 2019 15:20:10 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-usb@vger.kernel.org, kvm@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-mtd@lists.infradead.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, alsa-devel@alsa-project.org,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com
-Subject: Re: [PATCH 09/16] mmc: sdhci-xenon: use new match_string()
- helper/macro
-Message-ID: <20190508122010.GC21059@kadam>
-References: <20190508112842.11654-1-alexandru.ardelean@analog.com>
- <20190508112842.11654-11-alexandru.ardelean@analog.com>
+        id S1728482AbfEHMXl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 May 2019 08:23:41 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:61947 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727575AbfEHMXl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 08:23:41 -0400
+X-UUID: 0258ad8330e14eaa8eb091acd65846a1-20190508
+X-UUID: 0258ad8330e14eaa8eb091acd65846a1-20190508
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        (envelope-from <michael.kao@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 235792297; Wed, 08 May 2019 20:23:37 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 8 May 2019 20:23:35 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 8 May 2019 20:23:35 +0800
+Message-ID: <1557318215.29634.7.camel@mtksdccf07>
+Subject: Re: [PATCH 1/8] arm64: dts: mt8183: add thermal zone node
+From:   Michael Kao <michael.kao@mediatek.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CC:     Matthias Kaehlcke <mka@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, <fan.chen@mediatek.com>,
+        <jamesjj.liao@mediatek.com>, <dawei.chien@mediatek.com>,
+        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
+Date:   Wed, 8 May 2019 20:23:35 +0800
+In-Reply-To: <c6cf6170-331d-8ffc-d272-e5d8ee648eda@linaro.org>
+References: <1556793795-25204-1-git-send-email-michael.kao@mediatek.com>
+         <1556793795-25204-2-git-send-email-michael.kao@mediatek.com>
+         <CAJMQK-isJf6f+OubbCdoXs8L2cup=rm3Z8Mr7Q26QshMP-0wxA@mail.gmail.com>
+         <20190503164651.GB40515@google.com>
+         <c6cf6170-331d-8ffc-d272-e5d8ee648eda@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190508112842.11654-11-alexandru.ardelean@analog.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9250 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=644
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905080079
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9250 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=665 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905080079
+X-TM-SNTS-SMTP: AA13AA691B0CF73F1B5A1F4F47777D55CE9FB045FE730AE38B5FDF7571CED59C2000:8
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 08, 2019 at 02:28:35PM +0300, Alexandru Ardelean wrote:
-> -static const char * const phy_types[] = {
-> -	"emmc 5.0 phy",
-> -	"emmc 5.1 phy"
-> -};
-> -
->  enum xenon_phy_type_enum {
->  	EMMC_5_0_PHY,
->  	EMMC_5_1_PHY,
->  	NR_PHY_TYPES
+On Mon, 2019-05-06 at 12:43 +0200, Daniel Lezcano wrote:
+> On 03/05/2019 18:46, Matthias Kaehlcke wrote:
+> > Hi,
+> > 
+> > On Fri, May 03, 2019 at 04:03:58PM +0800, Hsin-Yi Wang wrote:
+> >> On Thu, May 2, 2019 at 10:43 AM michael.kao <michael.kao@mediatek.com> wrote:
+> >>>
+> >>> Add thermal zone node to Mediatek MT8183 dts file.
+> >>>
+> >>> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> >>> ---
+> >>>  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 64 ++++++++++++++++++++++++++++++++
+> >>>  1 file changed, 64 insertions(+)
+> >>>
+> >>> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> >>> index 926df75..b92116f 100644
+> >>> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> >>> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> >>> @@ -334,6 +334,67 @@
+> >>>                         status = "disabled";
+> >>>                 };
+> >>>
+> >>> +               thermal: thermal@1100b000 {
+> >>> +                       #thermal-sensor-cells = <1>;
+> >>> +                       compatible = "mediatek,mt8183-thermal";
+> >>> +                       reg = <0 0x1100b000 0 0x1000>;
+> >>> +                       interrupts = <0 76 IRQ_TYPE_LEVEL_LOW>;
+> >>> +                       clocks = <&infracfg CLK_INFRA_THERM>,
+> >>> +                                <&infracfg CLK_INFRA_AUXADC>;
+> >>> +                       clock-names = "therm", "auxadc";
+> >>> +                       resets = <&infracfg  MT8183_INFRACFG_AO_THERM_SW_RST>;
+> >>> +                       mediatek,auxadc = <&auxadc>;
+> >>> +                       mediatek,apmixedsys = <&apmixedsys>;
+> >>> +                       mediatek,hw-reset-temp = <117000>;
+> >>> +                       nvmem-cells = <&thermal_calibration>;
+> >>> +                       nvmem-cell-names = "calibration-data";
+> >>> +               };
+> >>> +
+> >>> +               thermal-zones {
+> >>> +                       cpu_thermal: cpu_thermal {
+> >>> +                               polling-delay-passive = <1000>;
+> >>> +                               polling-delay = <1000>;
+> >>> +
+> >>> +                               thermal-sensors = <&thermal 0>;
+> >>> +                               sustainable-power = <1500>;
+> >>> +                       };
+> >>> +
+> >>> +                       tzts1: tzts1 {
+> >>> +                               polling-delay-passive = <1000>;
+> >>> +                               polling-delay = <1000>;
+> >>> +                               thermal-sensors = <&thermal 1>;
+> >> Is sustainable-power required for tzts? Though it's an optional
+> >> property, kernel would have warning:
+> >> [    0.631556] thermal thermal_zone1: power_allocator:
+> >> sustainable_power will be estimated
+> >> [    0.639586] thermal thermal_zone2: power_allocator:
+> >> sustainable_power will be estimated
+> >> [    0.647611] thermal thermal_zone3: power_allocator:
+> >> sustainable_power will be estimated
+> >> [    0.655635] thermal thermal_zone4: power_allocator:
+> >> sustainable_power will be estimated
+> >> [    0.663658] thermal thermal_zone5: power_allocator:
+> >> sustainable_power will be estimated
+> >> if no sustainable-power assigned.
+> > 
+> > The property is indeed optional, if it isn't specified IPA will use
+> > the sum of the minimum power of all 'power actors' of the zone as
+> > estimate (see estimate_sustainable_power()). This may lead to overly
+> > agressive throttling, since the nominal sustainable power will always
+> > be <= the requested power.
+> > 
+> > In my understanding the sustainable power may varies between devices,
+> > even for the same SoC. One could have all the hardware crammed into a
+> > tiny plastic enclosure (e.g. ASUS Chromebit), another might have a
+> > laptop form factor and a metal enclosure (e.g. ASUS C201). Both
+> > examples are based on an Rockchip rk3288, but they have completely
+> > different thermal behavior, and would likely have different values for
+> > 'sustainable-power'.
+> > 
+> > In this sense I tend to consider 'sustainable-power' more a device,
+> > than a SoC property. You could specify a 'reasonable' value as a
+> > starting point, but it will likely not be optimal for all or even most
+> > devices. The warning might even be useful for device makers by
+> > indicating them that there is room for tweaking.
+> 
+> 
+> The sustainable power is the power dissipated by the devices belonging
+> to the thermal zone at the given trip temperature.
+> 
+> With the power numbers and the cooling devices, the IPA will change the
+> states of the cooling devices to leverage the dissipated power to the
+> sustainable power.
+> 
+> The contribution is the cooling effect of the cooling device.
+> 
+> However, the IPA is limited to one thermal zone and the cooling device
+> is the cpu cooling device. There is the devfreq cooling device but as
+> the graphic driver is not upstream, it is found in the android tree only
+> for the moment.
+> 
+> As you mentioned the sustainable power can vary depending on the form
+> factor and the production process for the same SoC (they can go to
+> higher frequencies thus dissipate more power). That is the reason why we
+> split the DT per SoC and we override the values on a per SoC version basis.
+> 
+> You can have a look the rk3399.dtsi and their variant for experimental
+> board (*-rock960.dts) and the chromebook version (*-gru-kevin.dts).
+> 
+> Do you want a empiric procedure to find out the sustainable power ?
+> 
+> 
+> 
+OK, I will add the cooling map. But the tzts1 ~ tzts6 don't need to binding cooler.
+The "cpu_thermal" is max value of tzts1 ~tzts6. And cpu_thermal bind
+cooler with IPA. tzts1~6 don't need to add cooler. So, do I just add
+cooling map without any binding any cooling-cell?
 
-There is no need for NR_PHY_TYPES now so you could remove that as well.
+I think thermal framework will add estimated sustainable power. Maybe I
+should add by myself. What's procedure do you recommend to find
+sustainable power?
 
-regards,
-dan carpenter
 
