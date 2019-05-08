@@ -2,169 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5400D1703D
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 06:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171BE17168
+	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 08:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725860AbfEHE7X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 May 2019 00:59:23 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45420 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbfEHE7X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 00:59:23 -0400
-Received: by mail-pf1-f196.google.com with SMTP id e24so9827559pfi.12;
-        Tue, 07 May 2019 21:59:22 -0700 (PDT)
+        id S1726281AbfEHGXP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 May 2019 02:23:15 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:42800 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726082AbfEHGXP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 02:23:15 -0400
+Received: by mail-ot1-f68.google.com with SMTP id f23so17328186otl.9;
+        Tue, 07 May 2019 23:23:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :user-agent:message-id:content-transfer-encoding;
-        bh=uv+cr3UWPmACRlIEgtiQra2smdl7Sym7R7Qit7K6ZOI=;
-        b=vR7G+WW+PTmaYxKx2JGjnx+TO/SASNtV+ssRlB3l+F0QMJKpix/+cpLJSDrcrxR/c9
-         KF3teCnDJJY2t32VOLE2a0gF6hKfj51wdBPOuTugo7saOm+pob3TNc2DFtPPT3fh1FeI
-         87pA0u2rHIHslKyY5k1KWIzKj2oFLfTY0OH54DMXRbpKMb9VVQg+SXlHWCcWtkrh3qXg
-         /Nr61iswM325GRSgC7naQPeyLgEYm9L6EcVztp/tfhPrkuWn6IwCUGI/WKmg7xOZo+Ov
-         etQETSpFqQFV+5zYDv+CSkndRcXRCF4gjE4aWXKvchEY9yjwh+QWhKQ6Ik6xiagxeO03
-         J6+w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=T+tyGbMaopKmWkanLnS4vwc4EFD/12DJf9lYYTnMcYE=;
+        b=JY3mDGTZh8Q1FegBs0pUtECemyuGZ9OJAlygaaiKwl/V3/xj8jvOWla0h5oLDIksI4
+         MxypC2FsA2aBkSOCZGCjef3haoNERra1PMiZ7MocJaapFyguEWSLID/HdBjVAXF0R15D
+         +iP6EmSUq9Lb9SvynJtNWnK+zXAupVXFm0g4QFbN3ZWJOWD9C/RBL0ZfqzDZstmRZbg5
+         KyCGWsCBPyWrk5ilRJS2JJuumrjayjAa9EhZN0nfl/RUCT0OWmWAkjNZ0WnEXHcyiuVL
+         BZUOYs+W4AFCpVtXYRprGhWVivnU+86RcXji1C1g+lWGSa+1smE2P20yAMiwmctw50cM
+         /U5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:user-agent:message-id:content-transfer-encoding;
-        bh=uv+cr3UWPmACRlIEgtiQra2smdl7Sym7R7Qit7K6ZOI=;
-        b=Z3z7TlbXXvYX4AK579zghrBGv1xiIdEU6/Mtz/i2bJ12qbds5h9J6KvChppS+Gl8ke
-         Z+3jy7wDeKJzIM0PI2m1VW+2cv1Fn77yhIjGst/95GHMuDyE4juKF5dYD831eMa1oolA
-         aZefXUhbkeG8zsSRFmjdLmyuFrz9bWSLWyam+UcehOrgw9Vq0sUyh1gHTYtshZ40dB/3
-         ICP+YNE7w3RjfX3rkR6l4IVRTS9pxJtbBof7tYvHjeyBgO9K78cBznBYUKLM6gi4Mwnq
-         91w0txPI1OpONYP10bUfnRQOxF/b+G4Lh/HvNLJ5O/MpgBTBXcsi2UNIrGIfla66wLUL
-         3ZXQ==
-X-Gm-Message-State: APjAAAXzPuzFUB6Ic3yB+ofttULk/O2r9JRJexVJYcF7F3yb+PY2iY6o
-        uAVWoZ5jbVX1OublTHsw5KY=
-X-Google-Smtp-Source: APXvYqysggG6fawTukJyxPpFmm6P68sY/iFM72uVHKOky45vKDFnfbonXbQljCpqxIE/VfDS3QCX2w==
-X-Received: by 2002:a62:4602:: with SMTP id t2mr46014067pfa.26.1557291562322;
-        Tue, 07 May 2019 21:59:22 -0700 (PDT)
-Received: from localhost ([203.63.161.72])
-        by smtp.gmail.com with ESMTPSA id k67sm26046002pfb.44.2019.05.07.21.59.20
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 May 2019 21:59:21 -0700 (PDT)
-Date:   Wed, 08 May 2019 14:59:07 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 0/1] Forced-wakeup for stop lite states on Powernv
-To:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
-        rjw@rjwysocki.net
-References: <20190422063231.51043-1-huntbag@linux.vnet.ibm.com>
-In-Reply-To: <20190422063231.51043-1-huntbag@linux.vnet.ibm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=T+tyGbMaopKmWkanLnS4vwc4EFD/12DJf9lYYTnMcYE=;
+        b=rAR1vZTpwDh+3/3lxygWPUyMfEmo9gpiVW0OPlFyeVk6Sv7VeCzhx48goSlebrUdak
+         lHKv/woWV58xbzRRIOPo9iIVWWDVRiDRT06QRNz9AGeSGLdwvDy6qCVz/BK9yO55vH9y
+         YUtALuyuR/1UgZ364Ku2tL9yUVrvZ1qaX4H0bZ6Y7xnHCUsQztGKvpA4Uco85eR46NsB
+         UgPV8rlwlfkANBquthqcI1rd5YiKzBCUpVzQA7NGW1F1zWC8DFcyeb21LG77YcO8VeoL
+         XsoDUW21fTUj8eV0tGeFwBMMmfWDmZmSjzr9HVZa8LZbV55CmY9+Xe8ettk4XrWV5hyp
+         Rxig==
+X-Gm-Message-State: APjAAAWLjdVxgVvlWU1uR5MiC+mRlb5SMoRAlBGc8cI2Jw17olgoSumZ
+        0BbLOqISR/RAmq9LFg8qB+ZawvWnur4ccGjkO+w=
+X-Google-Smtp-Source: APXvYqyQCWU0DIRe43TcFErDvvvlTRxCFSSpHvwCuXDpeSEuQzaRP5Hm16iwYjtfGjNMWyFfk91jhpBRyKxgqlaXPms=
+X-Received: by 2002:a9d:760b:: with SMTP id k11mr8228968otl.135.1557296594435;
+ Tue, 07 May 2019 23:23:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1557291178.ow4spjzq5t.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8
+References: <1555436655-5262-1-git-send-email-ykaneko0929@gmail.com>
+ <1555436655-5262-2-git-send-email-ykaneko0929@gmail.com> <20190418084041.GW28515@bigcity.dyn.berto.se>
+In-Reply-To: <20190418084041.GW28515@bigcity.dyn.berto.se>
+From:   Yoshihiro Kaneko <ykaneko0929@gmail.com>
+Date:   Wed, 8 May 2019 15:23:03 +0900
+Message-ID: <CAH1o70JBD4j_jpH9_FkkUvHivuUMMvB1Nfgum2MWeySVP=d_pg@mail.gmail.com>
+Subject: Re: [PATCH/RFT v2 1/3] thermal: rcar_gen3_thermal: Update value of Tj_1
+To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Simon Horman <horms@verge.net.au>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Abhishek Goel's on April 22, 2019 4:32 pm:
-> Currently, the cpuidle governors determine what idle state a idling CPU
-> should enter into based on heuristics that depend on the idle history on
-> that CPU. Given that no predictive heuristic is perfect, there are cases
-> where the governor predicts a shallow idle state, hoping that the CPU wil=
-l
-> be busy soon. However, if no new workload is scheduled on that CPU in the
-> near future, the CPU will end up in the shallow state.
->=20
-> Motivation
-> ----------
-> In case of POWER, this is problematic, when the predicted state in the
-> aforementioned scenario is a lite stop state, as such lite states will
-> inhibit SMT folding, thereby depriving the other threads in the core from
-> using the core resources.
->=20
-> So we do not want to get stucked in such states for longer duration. To
-> address this, the cpuidle-core can queue timer to correspond with the
-> residency value of the next available state. This timer will forcefully
-> wakeup the cpu. Few such iterations will essentially train the governor t=
-o
-> select a deeper state for that cpu, as the timer here corresponds to the
-> next available cpuidle state residency. Cpu will be kicked out of the lit=
-e
-> state and end up in a non-lite state.
->=20
-> Experiment
-> ----------
-> I performed experiments for three scenarios to collect some data.
->=20
-> case 1 :
-> Without this patch and without tick retained, i.e. in a upstream kernel,
-> It would spend more than even a second to get out of stop0_lite.
->=20
-> case 2 : With tick retained in a upstream kernel -
->=20
-> Generally, we have a sched tick at 4ms(CONF_HZ =3D 250). Ideally I expect=
-ed
-> it to take 8 sched tick to get out of stop0_lite. Experimentally,
-> observation was
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-> sample          min            max           99percentile
-> 20              4ms            12ms          4ms
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
->=20
-> It would take atleast one sched tick to get out of stop0_lite.
->=20
-> case 2 :  With this patch (not stopping tick, but explicitly queuing a
->           timer)
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> sample          min             max             99percentile
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> 20              144us           192us           144us
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20
-> In this patch, we queue a timer just before entering into a stop0_lite
-> state. The timer fires at (residency of next available state + exit laten=
-cy
-> of next available state * 2). Let's say if next state(stop0) is available
-> which has residency of 20us, it should get out in as low as (20+2*2)*8
-> [Based on the forumla (residency + 2xlatency)*history length] microsecond=
-s
-> =3D 192us. Ideally we would expect 8 iterations, it was observed to get o=
-ut
-> in 6-7 iterations. Even if let's say stop2 is next available state(stop0
-> and stop1 both are unavailable), it would take (100+2*10)*8 =3D 960us to =
-get
-> into stop2.
->=20
-> So, We are able to get out of stop0_lite generally in 150us(with this
-> patch) as compared to 4ms(with tick retained). As stated earlier, we do n=
-ot
-> want to get stuck into stop0_lite as it inhibits SMT folding for other
-> sibling threads, depriving them of core resources. Current patch is using
-> forced-wakeup only for stop0_lite, as it gives performance benefit(primar=
-y
-> reason) along with lowering down power consumption. We may extend this
-> model for other states in future.
+Hi Niklas-san,
 
-I still have to wonder, between our snooze loop and stop0, what does
-stop0_lite buy us.
+Thanks for your review!
 
-That said, the problem you're solving here is a generic one that all
-stop states have, I think. Doesn't the same thing apply going from
-stop0 to stop5? You might under estimate the sleep time and lose power
-savings and therefore performance there too. Shouldn't we make it
-generic for all stop states?
+2019=E5=B9=B44=E6=9C=8818=E6=97=A5(=E6=9C=A8) 17:40 Niklas S=C3=B6derlund <=
+niklas.soderlund@ragnatech.se>:
+>
+> Hi Kaneko-san,
+>
+> Thanks for your work.
+>
+> On 2019-04-17 02:44:13 +0900, Yoshihiro Kaneko wrote:
+> > As evaluation of hardware team, temperature calculation formula
+> > of M3-W is difference from all other SoCs as below:
+> > - M3-W: Tj_1: 116 (so Tj_1 - Tj_3 =3D 157)
+> > - Others: Tj_1: 126 (so Tj_1 - Tj_3 =3D 167)
+> >
+> > Signed-off-by: Yoshihiro Kaneko <ykaneko0929@gmail.com>
+> > ---
+> >  drivers/thermal/rcar_gen3_thermal.c | 41 +++++++++++++++++++++++++++--=
+--------
+> >  1 file changed, 30 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar=
+_gen3_thermal.c
+> > index 88fa41c..a2fd0fd 100644
+> > --- a/drivers/thermal/rcar_gen3_thermal.c
+> > +++ b/drivers/thermal/rcar_gen3_thermal.c
+> > @@ -124,11 +124,11 @@ static inline void rcar_gen3_thermal_write(struct=
+ rcar_gen3_thermal_tsc *tsc,
+> >  #define RCAR3_THERMAL_GRAN 500 /* mili Celsius */
+> >
+> >  /* no idea where these constants come from */
+> > -#define TJ_1 116
+> >  #define TJ_3 -41
+> >
+> >  static void rcar_gen3_thermal_calc_coefs(struct equation_coefs *coef,
+> > -                                      int *ptat, int *thcode)
+> > +                                      int *ptat, int *thcode,
+> > +                                      unsigned int ths_tj_1)
+>
+> I would move tj_1 inside struce rcar_gen3_thermal_tsc as you in 2/3 move
+> tj_2 there. You could still keep the value in .data but init the tj_1 in
+> the struct at probe instead of passing it as an argument.
+
+This function is a simple subroutine, is not called back.
+Therefore, I think that it is not necessary to move tj_1 into
+rcar_gen3_thermal_tsc.
 
 Thanks,
-Nick
+Kaneko
 
-=
+>
+> >  {
+> >       int tj_2;
+> >
+> > @@ -139,15 +139,15 @@ static void rcar_gen3_thermal_calc_coefs(struct e=
+quation_coefs *coef,
+> >        * the dividend (4095 * 4095 << 14 > INT_MAX) so keep it unscaled
+> >        */
+> >       tj_2 =3D (FIXPT_INT((ptat[1] - ptat[2]) * 157)
+> > -             / (ptat[0] - ptat[2])) - FIXPT_INT(41);
+> > +             / (ptat[0] - ptat[2])) + FIXPT_INT(TJ_3);
+> >
+> >       coef->a1 =3D FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[2]),
+> >                            tj_2 - FIXPT_INT(TJ_3));
+> >       coef->b1 =3D FIXPT_INT(thcode[2]) - coef->a1 * TJ_3;
+> >
+> >       coef->a2 =3D FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]),
+> > -                          tj_2 - FIXPT_INT(TJ_1));
+> > -     coef->b2 =3D FIXPT_INT(thcode[0]) - coef->a2 * TJ_1;
+> > +                          tj_2 - FIXPT_INT(ths_tj_1));
+> > +     coef->b2 =3D FIXPT_INT(thcode[0]) - coef->a2 * ths_tj_1;
+> >  }
+> >
+> >  static int rcar_gen3_thermal_round(int temp)
+> > @@ -318,12 +318,29 @@ static void rcar_gen3_thermal_init(struct rcar_ge=
+n3_thermal_tsc *tsc)
+> >       usleep_range(1000, 2000);
+> >  }
+> >
+> > +static const unsigned int rcar_gen3_ths_tj_1 =3D 126;
+> > +static const unsigned int rcar_gen3_ths_tj_1_m3_w =3D 116;
+> >  static const struct of_device_id rcar_gen3_thermal_dt_ids[] =3D {
+> > -     { .compatible =3D "renesas,r8a774a1-thermal", },
+> > -     { .compatible =3D "renesas,r8a7795-thermal", },
+> > -     { .compatible =3D "renesas,r8a7796-thermal", },
+> > -     { .compatible =3D "renesas,r8a77965-thermal", },
+> > -     { .compatible =3D "renesas,r8a77980-thermal", },
+> > +     {
+> > +             .compatible =3D "renesas,r8a774a1-thermal",
+> > +             .data =3D &rcar_gen3_ths_tj_1_m3_w,
+> > +     },
+> > +     {
+> > +             .compatible =3D "renesas,r8a7795-thermal",
+> > +             .data =3D &rcar_gen3_ths_tj_1,
+> > +     },
+> > +     {
+> > +             .compatible =3D "renesas,r8a7796-thermal",
+> > +             .data =3D &rcar_gen3_ths_tj_1_m3_w,
+> > +     },
+> > +     {
+> > +             .compatible =3D "renesas,r8a77965-thermal",
+> > +             .data =3D &rcar_gen3_ths_tj_1,
+> > +     },
+> > +     {
+> > +             .compatible =3D "renesas,r8a77980-thermal",
+> > +             .data =3D &rcar_gen3_ths_tj_1,
+> > +     },
+> >       {},
+> >  };
+> >  MODULE_DEVICE_TABLE(of, rcar_gen3_thermal_dt_ids);
+> > @@ -349,6 +366,7 @@ static int rcar_gen3_thermal_probe(struct platform_=
+device *pdev)
+> >  {
+> >       struct rcar_gen3_thermal_priv *priv;
+> >       struct device *dev =3D &pdev->dev;
+> > +     const unsigned int *rcar_gen3_ths_tj_1 =3D of_device_get_match_da=
+ta(dev);
+> >       struct resource *res;
+> >       struct thermal_zone_device *zone;
+> >       int ret, irq, i;
+> > @@ -422,7 +440,8 @@ static int rcar_gen3_thermal_probe(struct platform_=
+device *pdev)
+> >               priv->tscs[i] =3D tsc;
+> >
+> >               priv->thermal_init(tsc);
+> > -             rcar_gen3_thermal_calc_coefs(&tsc->coef, ptat, thcode[i])=
+;
+> > +             rcar_gen3_thermal_calc_coefs(&tsc->coef, ptat, thcode[i],
+> > +                                          *rcar_gen3_ths_tj_1);
+> >
+> >               zone =3D devm_thermal_zone_of_sensor_register(dev, i, tsc=
+,
+> >                                                           &rcar_gen3_tz=
+_of_ops);
+> > --
+> > 1.9.1
+> >
+>
+> --
+> Regards,
+> Niklas S=C3=B6derlund
