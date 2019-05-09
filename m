@@ -2,143 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5731895F
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 14:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C614189B9
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 14:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725961AbfEIMAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 08:00:03 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:40976 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725963AbfEIMAD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 08:00:03 -0400
-Received: from mail-pf1-f200.google.com ([209.85.210.200])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1hOhiS-0006kY-R3
-        for linux-pm@vger.kernel.org; Thu, 09 May 2019 12:00:01 +0000
-Received: by mail-pf1-f200.google.com with SMTP id c12so1464098pfb.2
-        for <linux-pm@vger.kernel.org>; Thu, 09 May 2019 05:00:00 -0700 (PDT)
+        id S1726561AbfEIM04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 08:26:56 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35999 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726426AbfEIM04 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 08:26:56 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d21so1094050plr.3
+        for <linux-pm@vger.kernel.org>; Thu, 09 May 2019 05:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ingics-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c02pZ3BCbGVMDzCadj3qTa03L2qacf4T10fVMWu3XUE=;
+        b=YPhMHKNxEPDNw1vDdp4Mbh9zIpMVdEhn0M53Hq/NY5pp3frBuRpJI9J5KRHHh9D+TH
+         U+jt1gWJEgKOep9eanQluguijkRECoK8eSEIB0AD6yT3aFg+3XR9kLcGE9cR6XFfC5sU
+         e4cQxgrIpvg+ebn5yHNnbv74jJ994NeZdX4g3vq+dMfyIfOg9jARN0QoB0Wbb2KH1M0q
+         CXzZotLxwXfVhoi4P+MN0azYOjlDPSUQq5zkPRi0at9oK+XsOPtA1mbTQUo1S2uqLM8V
+         DBShkr7JvhSUtKuFQGGSbTseDniNo5IR8Efg2M/DKlYiMc1R7QY580j7jFVZCV6ICRQe
+         H95g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=E3TYfjvumInlqPDbN4Vbyl7YloQy+afwdCg60dhd7F0=;
-        b=emt3Kb8ttc4X/ma2UMnjzv6FZxOx9lpXQAt9Nmkb7FCMs7MVkZzZjvKKuufB5qlSPW
-         mZ6vlOq0d/wdqC/wvqYIWYd0A2eg1SaKcdJVaHaVzKTTM/+PJNPlGOFNVh0E4YFoVjBg
-         rpZPjNhBLACH+1FAWWsuiOIyrxAspaIuqeR0lx9At+yjeVPGim3EFUJBVwkq0EUY8D+N
-         9dc1P8G6l5yy7422nRRm5CVZ0G8EFQZRs7n9psp8X8GhsK01CaMWO9NSjs9deO+W6LTk
-         hj8d3FbqRMlCl8wjYsmvpAM+0GNABarUbFqt/wXeTRzhR9SkuBYnzNaXVHkA/8o5wiO6
-         pRsA==
-X-Gm-Message-State: APjAAAXEnwEOQMDMWkHQZpsYA/d6NgaEZ08SKUR8BoUrb7bFWKVuAfsu
-        w5BR4kSFFTDGQm0koeSByyADs3ccasQQ5cyhq8xqYZBUxyyOKlBtCLlLCrbhzqEglupZJ0BR0ZT
-        vL1AgNy9RAWro8UjPd7ORVCv9Y74H7R/lgVE+
-X-Received: by 2002:a62:5103:: with SMTP id f3mr4624689pfb.146.1557403199490;
-        Thu, 09 May 2019 04:59:59 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzB5E7z/u9EHWChcxhdicQVecXs0mOSIs+L3HYhGGVLiG0ziOSNWMEfQATir0Eew7MlZhwziQ==
-X-Received: by 2002:a62:5103:: with SMTP id f3mr4624646pfb.146.1557403199255;
-        Thu, 09 May 2019 04:59:59 -0700 (PDT)
-Received: from 2001-b011-380f-14b9-f0ba-4a15-3e79-97f9.dynamic-ip6.hinet.net (2001-b011-380f-14b9-f0ba-4a15-3e79-97f9.dynamic-ip6.hinet.net. [2001:b011:380f:14b9:f0ba:4a15:3e79:97f9])
-        by smtp.gmail.com with ESMTPSA id 19sm2126839pfz.84.2019.05.09.04.59.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c02pZ3BCbGVMDzCadj3qTa03L2qacf4T10fVMWu3XUE=;
+        b=SSTF3w52hij1HFMPWelqe5k4/dnla8qeiJ07LOve1sfMjQFjXRpqApQ5tYh5SIEGay
+         vwVOdP16NqSNJaSeZFb55ztdlE7KCR/3TIUYYRjPe5v8cIPaN6a+pitOHvD3K08IHN+C
+         hwoVZV+gQik4UpvtsQDhoqqKlMalW5mgiXORo31+aD0v6OxWApBZbp8BMNSdi9J9mHrx
+         AoRTdBM7heqFjL6FzGuD/1qvAIIqA1l9pZeZv5KT/JVyUxQf5slsSzSsVI1PENtveYFX
+         9RuxUoeSLepWXT7F5yQlC5YfcCJQUxYHKPwHY5YDwvfywU1JRL8W3wh9QMedVdN7ZEfM
+         yHTQ==
+X-Gm-Message-State: APjAAAVoRZzBRMEB6ROE3dvyM3CrIQqqd7j4VD/L5gwyvzBH710ENp8g
+        gDnlWECeUbBxo7dn1aTui9Tp3+Prblw=
+X-Google-Smtp-Source: APXvYqxoUhBHCAyX7vxhC+MAxymZVP229mWk57mPJoAJicq8suKjib2M1NiRMGEx4RA+7+lC1GosuQ==
+X-Received: by 2002:a17:902:694c:: with SMTP id k12mr4531005plt.149.1557404815114;
+        Thu, 09 May 2019 05:26:55 -0700 (PDT)
+Received: from localhost.localdomain (220-133-186-239.HINET-IP.hinet.net. [220.133.186.239])
+        by smtp.gmail.com with ESMTPSA id u5sm3194775pfb.60.2019.05.09.05.26.52
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 04:59:58 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8;
-        delsp=yes;
-        format=flowed
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
-Subject: Re: [PATCH] nvme-pci: Use non-operational power state instead of D3
- on Suspend-to-Idle
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <20190509103142.GA19550@lst.de>
-Date:   Thu, 9 May 2019 19:59:55 +0800
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Thu, 09 May 2019 05:26:53 -0700 (PDT)
+From:   Axel Lin <axel.lin@ingics.com>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Enric Balletbo Serra <enric.balletbo@collabora.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-pm@vger.kernel.org, Axel Lin <axel.lin@ingics.com>
+Subject: [PATCH] power: supply: ucs1002: Fix checking return value of devm_regulator_register
+Date:   Thu,  9 May 2019 20:26:36 +0800
+Message-Id: <20190509122636.21885-1-axel.lin@ingics.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Message-Id: <AB325926-0D77-4851-8E8A-A10599756BF9@canonical.com>
-References: <3CDA9F13-B17C-456F-8CE1-3A63C6E0DC8F@canonical.com>
- <f8a043b00909418bad6adcdb62d16e6e@AUSX13MPC105.AMER.DELL.COM>
- <20190508195159.GA1530@lst.de>
- <b43f2c0078f245398101fa9a40cfc2dc@AUSX13MPC105.AMER.DELL.COM>
- <20190509061237.GA15229@lst.de>
- <064701C3-2BD4-4D93-891D-B7FBB5040FC4@canonical.com>
- <CAJZ5v0ggMwpJt=XWXu4gU51o8y4BpJ4KZ5RKzfk3+v8GGb-QbQ@mail.gmail.com>
- <A4DD2E9F-054E-4D4B-9F77-D69040EBE120@canonical.com>
- <20190509095601.GA19041@lst.de>
- <225CF4F7-C8E1-4C66-B362-97E84596A54E@canonical.com>
- <20190509103142.GA19550@lst.de>
-To:     Christoph Hellwig <hch@lst.de>
-X-Mailer: Apple Mail (2.3445.104.8)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-at 18:31, Christoph Hellwig <hch@lst.de> wrote:
+Current code checks wrong return value, it should check rdev rather than
+info->charger. Fix it.
 
-> On Thu, May 09, 2019 at 06:28:32PM +0800, Kai-Heng Feng wrote:
->> Based on my testing if queues (IRQ) are not disabled, NVMe controller
->> won’t be quiesced.
->> Symptoms can be high power drain or system freeze.
->>
->> I can check with vendors whether this also necessary under Windows.
->
-> System freeze sounds odd.  And we had a patch from a person on the
-> Cc list here that was handed to me through a few indirections that
-> just skipps the suspend entirely for some cases, which seemd to
-> work fine with the controllers in question.
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+---
+ drivers/power/supply/ucs1002_power.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That works fine for some devices, but for Toshiba NVMes this said scenario  
-freezes the system, hence the new patch here.
-
-And for all NVMes I tested this new suspend routine saves even more power  
-than simply skipping suspend.
-
->
->>> Otherwise I think we should use a "no-op" suspend, just leaving the
->>> power management to the device, or a simple setting the device to the
->>> deepest power state for everything else, where everything else is
->>> suspend, or suspend to idle.
->>
->> I am not sure I get your idea. Does this “no-op” suspend happen in NVMe
->> driver or PM core?
->
-> no-op means we don't want to do anything in nvme.  If that happens
-> by not calling nvme or stubbing out the method for that particular
-> case does not matter.
-
-Ok, but we still need to figure out how to prevent the device device from  
-tradition to D3.
-
->
->>> And of course than we have windows modern standby actually mandating
->>> runtime D3 in some case, and vague handwaving mentions of this being
->>> forced on the platforms, which I'm not entirely sure how they fit
->>> into the above picture.
->>
->> I was told that Windows doesn’t use runtime D3, APST is used exclusively.
->
-> As far as I know the default power management modes in the Microsoft
-> NVMe driver is explicit power management transitions, and in the Intel
-> RST driver that is commonly used it is APST.  But both could still
-> be comined with runtime D3 in theory, I'm just not sure if they are.
->
-> Microsoft has been pushing for aggressive runtime D3 for a while, but
-> I don't know if that includes NVMe devices.
-
-Ok, I’ll check with vendors about this.
-
-Kai-Heng
-
->
->> Kai-Heng
-> ---end quoted text—
-
+diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/ucs1002_power.c
+index d66b4eff9b7a..33409b13232a 100644
+--- a/drivers/power/supply/ucs1002_power.c
++++ b/drivers/power/supply/ucs1002_power.c
+@@ -592,7 +592,7 @@ static int ucs1002_probe(struct i2c_client *client,
+ 
+ 	rdev = devm_regulator_register(dev, info->regulator_descriptor,
+ 				       &regulator_config);
+-	ret = PTR_ERR_OR_ZERO(info->charger);
++	ret = PTR_ERR_OR_ZERO(rdev);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register VBUS regulator: %d\n", ret);
+ 		return ret;
+-- 
+2.20.1
 
