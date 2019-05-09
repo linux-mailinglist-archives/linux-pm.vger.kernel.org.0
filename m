@@ -2,22 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FBD18A56
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 15:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781EA18C8F
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 16:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbfEINJO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 09:09:14 -0400
-Received: from foss.arm.com ([217.140.101.70]:40990 "EHLO foss.arm.com"
+        id S1726805AbfEIO7I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 10:59:08 -0400
+Received: from foss.arm.com ([217.140.101.70]:43652 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726054AbfEINJO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 May 2019 09:09:14 -0400
+        id S1726234AbfEIO7I (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 May 2019 10:59:08 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3DB9374;
-        Thu,  9 May 2019 06:09:13 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 372C6374;
+        Thu,  9 May 2019 07:59:07 -0700 (PDT)
 Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF5EF3F7BD;
-        Thu,  9 May 2019 06:09:10 -0700 (PDT)
-Date:   Thu, 9 May 2019 14:09:08 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 402583F6C4;
+        Thu,  9 May 2019 07:59:04 -0700 (PDT)
+Date:   Thu, 9 May 2019 15:59:01 +0100
 From:   Patrick Bellasi <patrick.bellasi@arm.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -35,45 +35,121 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Joel Fernandes <joelaf@google.com>,
         Steve Muckle <smuckle@google.com>,
         Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH v8 00/16] Add utilization clamping support
-Message-ID: <20190509130908.vn24ucm5b2k36knc@e110439-lin>
+Subject: Re: [PATCH v8 05/16] sched/core: Allow sched_setattr() to use the
+ current policy
+Message-ID: <20190509145901.um7rrsslg7de4blf@e110439-lin>
 References: <20190402104153.25404-1-patrick.bellasi@arm.com>
- <20190509130215.GV2623@hirez.programming.kicks-ass.net>
+ <20190402104153.25404-6-patrick.bellasi@arm.com>
+ <20190508192131.GD32547@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190509130215.GV2623@hirez.programming.kicks-ass.net>
+In-Reply-To: <20190508192131.GD32547@worktop.programming.kicks-ass.net>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-May 15:02, Peter Zijlstra wrote:
-> On Tue, Apr 02, 2019 at 11:41:36AM +0100, Patrick Bellasi wrote:
-> > Series Organization
-> > ===================
-> > 
-> > The series is organized into these main sections:
-> > 
-> >  - Patches [01-07]: Per task (primary) API
-> >  - Patches [08-09]: Schedutil integration for FAIR and RT tasks
-> >  - Patches [10-11]: Integration with EAS's energy_compute()
+On 08-May 21:21, Peter Zijlstra wrote:
+> On Tue, Apr 02, 2019 at 11:41:41AM +0100, Patrick Bellasi wrote:
+> > diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
+> > index 22627f80063e..075c610adf45 100644
+> > --- a/include/uapi/linux/sched.h
+> > +++ b/include/uapi/linux/sched.h
+> > @@ -40,6 +40,8 @@
+> >  /* SCHED_ISO: reserved but not implemented yet */
+> >  #define SCHED_IDLE		5
+> >  #define SCHED_DEADLINE		6
+> > +/* Must be the last entry: used to sanity check attr.policy values */
+> > +#define SCHED_POLICY_MAX	SCHED_DEADLINE
 > 
-> Aside from the comments already provided, I think this is starting to
-> look really good.
+> This is a wee bit sad to put in a uapi header; but yeah, where else :/
+> 
+> Another option would be something like:
+> 
+> enum {
+> 	SCHED_NORMAL = 0,
+> 	SCHED_FIFO = 1,
+> 	SCHED_RR = 2,
+> 	SCHED_BATCH = 3,
+> 	/* SCHED_ISO = 4, reserved */
+> 	SCHED_IDLE = 5,
+> 	SCHED_DEADLINE = 6,
+> 	SCHED_POLICY_NR
+> };
+> 
+> >  /* Can be ORed in to make sure the process is reverted back to SCHED_NORMAL on fork */
+> >  #define SCHED_RESET_ON_FORK     0x40000000
+> > @@ -50,9 +52,11 @@
+> >  #define SCHED_FLAG_RESET_ON_FORK	0x01
+> >  #define SCHED_FLAG_RECLAIM		0x02
+> >  #define SCHED_FLAG_DL_OVERRUN		0x04
+> > +#define SCHED_FLAG_KEEP_POLICY		0x08
+> >  
+> >  #define SCHED_FLAG_ALL	(SCHED_FLAG_RESET_ON_FORK	| \
+> >  			 SCHED_FLAG_RECLAIM		| \
+> > -			 SCHED_FLAG_DL_OVERRUN)
+> > +			 SCHED_FLAG_DL_OVERRUN		| \
+> > +			 SCHED_FLAG_KEEP_POLICY)
+> >  
+> >  #endif /* _UAPI_LINUX_SCHED_H */
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index d368ac26b8aa..20efb32e1a7e 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -4907,8 +4907,17 @@ SYSCALL_DEFINE3(sched_setattr, pid_t, pid, struct sched_attr __user *, uattr,
+> >  	if (retval)
+> >  		return retval;
+> >  
+> > -	if ((int)attr.sched_policy < 0)
+> > +	/*
+> > +	 * A valid policy is always required from userspace, unless
+> > +	 * SCHED_FLAG_KEEP_POLICY is set and the current policy
+> > +	 * is enforced for this call.
+> > +	 */
+> > +	if (attr.sched_policy > SCHED_POLICY_MAX &&
+> > +	    !(attr.sched_flags & SCHED_FLAG_KEEP_POLICY)) {
+> >  		return -EINVAL;
+> > +	}
+> 
+> And given I just looked at those darn SCHED_* things, I now note the
+> above does 'funny' things when passed: attr.policy=4.
 
-Thanks Peter for the very useful review...
- 
-> Thanks!
-> 
-> >  - Patches [12-16]: Per task group (secondary) API
-> 
-> I still have to stare at these, but maybe a little later...
+Looking better at the code, I see now that we don't really need that
+check anymore. Indeed, v8 introduced the support to change policy
+specific and independent attributes at the same time. Thus:
 
-... I'll soon post a v9 to factor in all the last comments from this
-round so that you have a better base for when you wanna start looking
-at the cgroup bits.
+1. the policy validity is already checked in:
+
+     sched_setattr()
+       sched_setattr()
+         __sched_setscheduler()
+            valid_policy()
+
+   which knows how to deal with attr.policy=4 (i.e. -EINVAL)
+
+2. when we pass in SCHED_FLAG_KEEP_POLICY we force the current policy
+   by setting attr.sched_policy = SETPARAM_POLICY, so we just need a
+   non negative policy being defined (usually 0 by default).
+
+Thus, I'll remove the new #define and update the check above to be just:
+
+	if (attr.sched_flags & SCHED_FLAG_KEEP_POLICY)
+		attr.sched_policy = SETPARAM_POLICY;
+	else if ((int)attr.sched_policy < 0)
+		return -EINVAL;
+
+which should cover the additional case:
+
+   you can syscall with just SCHED_FLAG_KEEP_POLICY set if you want to
+   change only cross-policy attributes.
+
+> > +	if (attr.sched_flags & SCHED_FLAG_KEEP_POLICY)
+> > +		attr.sched_policy = SETPARAM_POLICY;
+> >  
+> >  	rcu_read_lock();
+> >  	retval = -ESRCH;
 
 -- 
 #include <best/regards.h>
