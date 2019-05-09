@@ -2,179 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9223E18125
-	for <lists+linux-pm@lfdr.de>; Wed,  8 May 2019 22:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0F41834E
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 03:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726821AbfEHUig (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 May 2019 16:38:36 -0400
-Received: from mail-it1-f194.google.com ([209.85.166.194]:34635 "EHLO
-        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726809AbfEHUif (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 May 2019 16:38:35 -0400
-Received: by mail-it1-f194.google.com with SMTP id p18so3224894itm.1
-        for <linux-pm@vger.kernel.org>; Wed, 08 May 2019 13:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/pWq4NMffd2Goxyok0cFwj6OmMY5Es24yiMIZ4tAIzk=;
-        b=H1jCf74HNYUbkblpIXMW/glrh729QmQPkXetwf8v37dxuTFy2OSTq6IExP4p54tv5G
-         /6GlD0bHTvuxIlayFoqf+kibgMfi0zzK9E3Ix7WZFdtjgl8FmRhZ9qN9VyY5yR6nUV3Z
-         jRw2WkIjkj6Bbb/ez7oEI+fsrs8vHXGFB5nLQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/pWq4NMffd2Goxyok0cFwj6OmMY5Es24yiMIZ4tAIzk=;
-        b=sD3BNBEAYUtuk0IwC0JcjXSvRYojWSv1FiXFWNtVgOID49jBaUuladmhCKWhjUimxp
-         4dN47OX+qP/62RjZO87LOJSEaIMjileC+PzYJaUNDxyUiebLPlC74XEZtvIi9tmhC6BO
-         xbJOGi08TLCCD6dkyzQSObZM2wuDWyC1gcvagvaAdAuvfKmdEIhI4kwMHSesiXZYQ8Z/
-         PvOFz/4QjC8pgU7I7fOaWcsvmyo9EDttTbp7qt1JFDGOHw10GUuw0wihOc2rLYGe7VXa
-         yngosAfwOYR16bOyRBcPCYT6atUKLOIiPyR+kZJ0+I1ZWCaqxvRpwlYtSijM9aXksQel
-         lOtw==
-X-Gm-Message-State: APjAAAWKLNiCe8StOIiKQPw+6NYXeErQlQKGnkzpc37W2lWr/74mUCnF
-        A/pKqIQ5Ccz95vDKse7tYwEKpw==
-X-Google-Smtp-Source: APXvYqwvbQIxXhuS0H3tkdEvh36ILxuRxU6HJUIlF6Ds6VrgC8t5dlljMlNkjvGhec6g+MxRUMjsLQ==
-X-Received: by 2002:a24:9c47:: with SMTP id b68mr5136416ite.169.1557347912682;
-        Wed, 08 May 2019 13:38:32 -0700 (PDT)
-Received: from ncrews2.bld.corp.google.com ([2620:15c:183:200:cb43:2cd4:65f5:5c84])
-        by smtp.gmail.com with ESMTPSA id l129sm96060ioa.28.2019.05.08.13.38.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 08 May 2019 13:38:32 -0700 (PDT)
-From:   Nick Crews <ncrews@chromium.org>
-To:     enric.balletbo@collabora.com, bleung@chromium.org, sre@kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, dlaurie@chromium.org,
-        lamzin@google.com, bartfab@google.com, derat@google.com,
-        dtor@google.com, sjg@chromium.org, jchwong@chromium.org,
-        tbroch@chromium.org, Nick Crews <ncrews@chromium.org>
-Subject: [PATCH v9 2/2] platform/chrome: wilco_ec: Add charging config device
-Date:   Wed,  8 May 2019 14:38:26 -0600
-Message-Id: <20190508203826.120741-2-ncrews@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190508203826.120741-1-ncrews@chromium.org>
-References: <20190508203826.120741-1-ncrews@chromium.org>
+        id S1726557AbfEIBoa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 May 2019 21:44:30 -0400
+Received: from mail-eopbgr50071.outbound.protection.outlook.com ([40.107.5.71]:35652
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725832AbfEIBo3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 May 2019 21:44:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k9ELYKSBiXWdzpFWHHWDuQIQFqmUUCVacw447iKxdOU=;
+ b=PGGS4Ypwt+s71aHzPuxrNLTmOr4Pdb1dI07ms2tKFWhCFX1NvDQWT9R6X6PANWHfZIPEW19nEeLUupwfgmsxZS0+ZIrQi9SBSEMWzdhp51IaYIZrrdzl32YocSXa+D0zQaNfwVa+/LIRsiqehLci6pTKIrwmkUwq8wIni2W6YzM=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3929.eurprd04.prod.outlook.com (52.134.70.31) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1878.20; Thu, 9 May 2019 01:44:22 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::d035:3bd0:a56a:189d]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::d035:3bd0:a56a:189d%2]) with mapi id 15.20.1878.022; Thu, 9 May 2019
+ 01:44:22 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Anson Huang <anson.huang@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "horms+renesas@verge.net.au" <horms+renesas@verge.net.au>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "jagan@amarulasolutions.com" <jagan@amarulasolutions.com>,
+        "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
+        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V12 3/5] thermal: imx_sc: add i.MX system controller
+ thermal support
+Thread-Topic: [PATCH V12 3/5] thermal: imx_sc: add i.MX system controller
+ thermal support
+Thread-Index: AQHU9AOc8iXKmYQeMUm4+FbUnbYclKZiKWGA
+Date:   Thu, 9 May 2019 01:44:22 +0000
+Message-ID: <DB3PR0402MB3916791537B7C3C85B13A22BF5330@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <1555384609-7030-1-git-send-email-Anson.Huang@nxp.com>
+ <1555384609-7030-3-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1555384609-7030-3-git-send-email-Anson.Huang@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cb208fb9-95d1-464a-079d-08d6d41fdc19
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3929;
+x-ms-traffictypediagnostic: DB3PR0402MB3929:
+x-microsoft-antispam-prvs: <DB3PR0402MB39292EE51B69545540F21EAFF5330@DB3PR0402MB3929.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3044;
+x-forefront-prvs: 003245E729
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(39860400002)(376002)(346002)(396003)(189003)(199004)(13464003)(5660300002)(316002)(52536014)(7696005)(99286004)(229853002)(478600001)(76176011)(68736007)(8936002)(102836004)(11346002)(53546011)(476003)(446003)(9686003)(81156014)(44832011)(55016002)(81166006)(33656002)(53936002)(73956011)(8676002)(2501003)(486006)(26005)(6436002)(76116006)(66946007)(64756008)(66446008)(66476007)(66556008)(110136005)(14454004)(86362001)(4326008)(66066001)(6246003)(25786009)(186003)(2201001)(6506007)(2906002)(7736002)(305945005)(7416002)(256004)(71200400001)(71190400001)(3846002)(6116002)(74316002)(921003)(1121003)(15866825006);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3929;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 4J6dnRLo50SdI3GYGrlskzQ5kZnI3ARVO+AohaY9TvLUjG58H7tD1T9htMCzA8R30Px1J2W2w4Iqf7QmNiaqYyipvr16zio8H96MG+BYh0MxXH7MDozeD79b9NdAHhbTtXnjjjBsHaldk2iZK+iVbbVQP/34X/HQkROA+hCOFIxwZQLFfisgPbHNA0XJ+ZK2/dFBJE0D6Td0twhQdJaBlcsGpB5vExiEP+HSKR46FdIcrqy6FdPRy58sOkxWm2GnWomerxQIg+VY8aEGRyttwoghG6wzZjKnfqsliVrKw+Sa+Ia/VNYG6uYcO8/VzlbQyGi8J2OBzpIq3J47ArVqS7IjHMv+YW8NEF71Izk2NDyJWVLICvs1Owykh3WwUOvCaYY/sEx0MiXnRsx74gqyivVpfz1ccVZQzvT1aX+IAVA=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb208fb9-95d1-464a-079d-08d6d41fdc19
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 01:44:22.0475
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3929
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a device to control the charging algorithm used on Wilco devices,
-which will be picked up by the drivers/power/supply/wilco-charger.c
-driver. See Documentation/ABI/testing/sysfs-class-power-wilco for the
-userspace interface and other info.
-
-Signed-off-by: Nick Crews <ncrews@chromium.org>
-Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
----
-v9 changes:
--Split up adding the driver and adding the device.
-v8 changes:
--Several documentation and comment fixups.
-v6 changes:
--Remove CHARGE_MODE_ILLEGAL from enum charge_mode. It's not a
- public type, and error checking could be performed in other ways.
--Split up the commit so properties are added in a first commit
--Move CONFIG_CHARGER_WILCO to the power/supply Kconfig
--Use PTR_ERR_OR_ZERO() macro in probe()
-v5 changes:
--Remove OP_SYNC, it has no immediate use case.
--Merge properties.h into wilco-ec.h
--Remove enum get_set_sync_op from the public interface,
- since without OP_SYNC they are irrelevant.
--Fix Kconfigs and Makefiles so they actually work
- with the v4 changes
--Tweak some formatting, spacing, and comments
--Fix validation of charge_type so illegal values
- can't be set. Before negative error codes were
- accidentally getting casted to positive numbers
--Remove more unneeded parentheses.
-v4 changes:
--Use put_unaligned_le32() to store PID in request.
--Move implementation from
- drivers/platform/chrome/wilco_ec/charge_config.c to
- drivers/power/supply/wilco_charger.c
--Move drivers/platform/chrome/wilco_ec/properties.h to
- include/linux/platform_data/wilco-ec-properties.h
--Remove parentheses in switch statement in psp_val_to_charge_mode()
--Check for any negatvie return code from psp_val_to_charge_mode()
- instead of just -EINVAL so its less brittle
--Tweak comments in wilco-ec-properties.h
-v3 changes:
--Add this changelog
--Fix commit message tags
-v2 changes:
--Update Documentation to say KernelVersion 5.2
--Update Documentation to explain Trickle mode better.
--rename things from using *PCC* to *CHARGE*
--Split up conversions between POWER_SUPPLY_PROP_CHARGE_TYPE values
-and Wilco EC codes
--Use devm_ flavor of power_supply_register(), which simplifies things
--Add extra error checking on property messages received from the EC
--Fix bug in memcpy() calls in properties.c
--Refactor fill_property_id()
--Add valid input checks to charge_type
--Properly convert charge_type when get()ting
-
- drivers/platform/chrome/wilco_ec/core.c | 13 +++++++++++++
- include/linux/platform_data/wilco-ec.h  |  2 ++
- 2 files changed, 15 insertions(+)
-
-diff --git a/drivers/platform/chrome/wilco_ec/core.c b/drivers/platform/chrome/wilco_ec/core.c
-index 05e1e2be1c91..a8e3ef59f4ea 100644
---- a/drivers/platform/chrome/wilco_ec/core.c
-+++ b/drivers/platform/chrome/wilco_ec/core.c
-@@ -89,8 +89,20 @@ static int wilco_ec_probe(struct platform_device *pdev)
- 		goto unregister_debugfs;
- 	}
- 
-+	/* Register child device to be found by charger config driver. */
-+	ec->charger_pdev = platform_device_register_data(dev, "wilco-charger",
-+							 PLATFORM_DEVID_AUTO,
-+							 NULL, 0);
-+	if (IS_ERR(ec->charger_pdev)) {
-+		dev_err(dev, "Failed to create charger platform device\n");
-+		ret = PTR_ERR(ec->charger_pdev);
-+		goto unregister_rtc;
-+	}
-+
- 	return 0;
- 
-+unregister_rtc:
-+	platform_device_unregister(ec->rtc_pdev);
- unregister_debugfs:
- 	if (ec->debugfs_pdev)
- 		platform_device_unregister(ec->debugfs_pdev);
-@@ -102,6 +114,7 @@ static int wilco_ec_remove(struct platform_device *pdev)
- {
- 	struct wilco_ec_device *ec = platform_get_drvdata(pdev);
- 
-+	platform_device_unregister(ec->charger_pdev);
- 	platform_device_unregister(ec->rtc_pdev);
- 	if (ec->debugfs_pdev)
- 		platform_device_unregister(ec->debugfs_pdev);
-diff --git a/include/linux/platform_data/wilco-ec.h b/include/linux/platform_data/wilco-ec.h
-index 50a21bd5fd44..66d9f177bec2 100644
---- a/include/linux/platform_data/wilco-ec.h
-+++ b/include/linux/platform_data/wilco-ec.h
-@@ -32,6 +32,7 @@
-  * @data_size: Size of the data buffer used for EC communication.
-  * @debugfs_pdev: The child platform_device used by the debugfs sub-driver.
-  * @rtc_pdev: The child platform_device used by the RTC sub-driver.
-+ * @charger_pdev: Child platform_device used by the charger config sub-driver.
-  */
- struct wilco_ec_device {
- 	struct device *dev;
-@@ -43,6 +44,7 @@ struct wilco_ec_device {
- 	size_t data_size;
- 	struct platform_device *debugfs_pdev;
- 	struct platform_device *rtc_pdev;
-+	struct platform_device *charger_pdev;
- };
- 
- /**
--- 
-2.20.1
-
+UGluZy4uLg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEFuc29uIEh1
+YW5nIFttYWlsdG86QW5zb24uSHVhbmdAbnhwLmNvbV0NCj4gU2VudDogVHVlc2RheSwgQXByaWwg
+MTYsIDIwMTkgMTE6MjIgQU0NCj4gVG86IHJvYmgrZHRAa2VybmVsLm9yZzsgbWFyay5ydXRsYW5k
+QGFybS5jb207IHNoYXduZ3VvQGtlcm5lbC5vcmc7DQo+IHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU7
+IGtlcm5lbEBwZW5ndXRyb25peC5kZTsgZmVzdGV2YW1AZ21haWwuY29tOw0KPiBjYXRhbGluLm1h
+cmluYXNAYXJtLmNvbTsgd2lsbC5kZWFjb25AYXJtLmNvbTsgcnVpLnpoYW5nQGludGVsLmNvbTsN
+Cj4gZWR1YmV6dmFsQGdtYWlsLmNvbTsgZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZzsgQWlzaGVu
+ZyBEb25nDQo+IDxhaXNoZW5nLmRvbmdAbnhwLmNvbT47IHVsZi5oYW5zc29uQGxpbmFyby5vcmc7
+IERhbmllbCBCYWx1dGENCj4gPGRhbmllbC5iYWx1dGFAbnhwLmNvbT47IFBlbmcgRmFuIDxwZW5n
+LmZhbkBueHAuY29tPjsNCj4gaGVpa29Ac250ZWNoLmRlOyBob3JtcytyZW5lc2FzQHZlcmdlLm5l
+dC5hdTsgYWdyb3NzQGtlcm5lbC5vcmc7DQo+IG9sb2ZAbGl4b20ubmV0OyBiam9ybi5hbmRlcnNz
+b25AbGluYXJvLm9yZzsgamFnYW5AYW1hcnVsYXNvbHV0aW9ucy5jb207DQo+IGVucmljLmJhbGxl
+dGJvQGNvbGxhYm9yYS5jb207IG1hcmMudy5nb256YWxlekBmcmVlLmZyOw0KPiBkZXZpY2V0cmVl
+QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJt
+LQ0KPiBrZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgtcG1Admdlci5rZXJuZWwub3Jn
+DQo+IENjOiBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPg0KPiBTdWJqZWN0OiBbUEFU
+Q0ggVjEyIDMvNV0gdGhlcm1hbDogaW14X3NjOiBhZGQgaS5NWCBzeXN0ZW0gY29udHJvbGxlcg0K
+PiB0aGVybWFsIHN1cHBvcnQNCj4gDQo+IGkuTVg4UVhQIGlzIGFuIEFSTXY4IFNvQyB3aGljaCBo
+YXMgYSBDb3J0ZXgtTTQgc3lzdGVtIGNvbnRyb2xsZXIgaW5zaWRlLA0KPiB0aGUgc3lzdGVtIGNv
+bnRyb2xsZXIgaXMgaW4gY2hhcmdlIG9mIGNvbnRyb2xsaW5nIHBvd2VyLCBjbG9jayBhbmQgdGhl
+cm1hbA0KPiBzZW5zb3JzIGV0Yy4uDQo+IA0KPiBUaGlzIHBhdGNoIGFkZHMgaS5NWCBzeXN0ZW0g
+Y29udHJvbGxlciB0aGVybWFsIGRyaXZlciBzdXBwb3J0LCBMaW51eCBrZXJuZWwNCj4gaGFzIHRv
+IGNvbW11bmljYXRlIHdpdGggc3lzdGVtIGNvbnRyb2xsZXIgdmlhIE1VIChtZXNzYWdlIHVuaXQp
+IElQQyB0byBnZXQNCj4gZWFjaCB0aGVybWFsIHNlbnNvcidzIHRlbXBlcmF0dXJlLCBpdCBzdXBw
+b3J0cyBtdWx0aXBsZSBzZW5zb3JzIHdoaWNoIGFyZQ0KPiBwYXNzZWQgZnJvbSBkZXZpY2UgdHJl
+ZSwgcGxlYXNlIHNlZSB0aGUgYmluZGluZyBkb2MgZm9yIGRldGFpbHMuDQo+IA0KPiBTaWduZWQt
+b2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gLS0tDQo+IENoYW5n
+ZXMgc2luY2UgVjExOg0KPiAJLSBtb3ZlIHRoZSBBUEkgb2YgZ2V0dGluZyB0aGVybWFsIHpvbmUg
+c2Vuc29yIElEIHRvIG9mLXRoZXJtYWwuYyBhcw0KPiBnZW5lcmljIEFQSTsNCj4gCS0gcmVtb3Zl
+IHVubmVjZXNzYXJ5IF9fcGFja2VkLg0KPiAtLS0NCj4gIGRyaXZlcnMvdGhlcm1hbC9LY29uZmln
+ICAgICAgICAgIHwgIDExICsrKysNCj4gIGRyaXZlcnMvdGhlcm1hbC9NYWtlZmlsZSAgICAgICAg
+IHwgICAxICsNCj4gIGRyaXZlcnMvdGhlcm1hbC9pbXhfc2NfdGhlcm1hbC5jIHwgMTM3DQo+ICsr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgMyBmaWxlcyBjaGFuZ2Vk
+LCAxNDkgaW5zZXJ0aW9ucygrKQ0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvdGhlcm1h
+bC9pbXhfc2NfdGhlcm1hbC5jDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aGVybWFsL0tj
+b25maWcgYi9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZyBpbmRleA0KPiA2NTNhYTI3Li40ZTRmYTdl
+IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvS2NvbmZpZw0KPiArKysgYi9kcml2ZXJz
+L3RoZXJtYWwvS2NvbmZpZw0KPiBAQCAtMjIzLDYgKzIyMywxNyBAQCBjb25maWcgSU1YX1RIRVJN
+QUwNCj4gIAkgIGNwdWZyZXEgaXMgdXNlZCBhcyB0aGUgY29vbGluZyBkZXZpY2UgdG8gdGhyb3R0
+bGUgQ1BVcyB3aGVuIHRoZQ0KPiAgCSAgcGFzc2l2ZSB0cmlwIGlzIGNyb3NzZWQuDQo+IA0KPiAr
+Y29uZmlnIElNWF9TQ19USEVSTUFMDQo+ICsJdHJpc3RhdGUgIlRlbXBlcmF0dXJlIHNlbnNvciBk
+cml2ZXIgZm9yIE5YUCBpLk1YIFNvQ3Mgd2l0aCBTeXN0ZW0NCj4gQ29udHJvbGxlciINCj4gKwlk
+ZXBlbmRzIG9uIChBUkNIX01YQyAmJiBJTVhfU0NVKSB8fCBDT01QSUxFX1RFU1QNCj4gKwlkZXBl
+bmRzIG9uIE9GDQo+ICsJaGVscA0KPiArCSAgU3VwcG9ydCBmb3IgVGVtcGVyYXR1cmUgTW9uaXRv
+ciAoVEVNUE1PTikgZm91bmQgb24gTlhQIGkuTVgNCj4gU29DcyB3aXRoDQo+ICsJICBzeXN0ZW0g
+Y29udHJvbGxlciBpbnNpZGUsIExpbnV4IGtlcm5lbCBoYXMgdG8gY29tbXVuaWNhdGUgd2l0aA0K
+PiBzeXN0ZW0NCj4gKwkgIGNvbnRyb2xsZXIgdmlhIE1VIChtZXNzYWdlIHVuaXQpIElQQyB0byBn
+ZXQgdGVtcGVyYXR1cmUgZnJvbQ0KPiB0aGVybWFsDQo+ICsJICBzZW5zb3IuIEl0IHN1cHBvcnRz
+IG9uZSBjcml0aWNhbCB0cmlwIHBvaW50IGFuZCBvbmUNCj4gKwkgIHBhc3NpdmUgdHJpcCBwb2lu
+dCBmb3IgZWFjaCB0aGVybWFsIHNlbnNvci4NCj4gKw0KPiAgY29uZmlnIE1BWDc3NjIwX1RIRVJN
+QUwNCj4gIAl0cmlzdGF0ZSAiVGVtcGVyYXR1cmUgc2Vuc29yIGRyaXZlciBmb3IgTWF4aW0gTUFY
+Nzc2MjAgUE1JQyINCj4gIAlkZXBlbmRzIG9uIE1GRF9NQVg3NzYyMA0KPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy90aGVybWFsL01ha2VmaWxlIGIvZHJpdmVycy90aGVybWFsL01ha2VmaWxlIGluZGV4
+DQo+IDQ4NmQ2ODIuLjQwNjI2MjcgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdGhlcm1hbC9NYWtl
+ZmlsZQ0KPiArKysgYi9kcml2ZXJzL3RoZXJtYWwvTWFrZWZpbGUNCj4gQEAgLTQwLDYgKzQwLDcg
+QEAgb2JqLSQoQ09ORklHX0RCODUwMF9USEVSTUFMKQkrPQ0KPiBkYjg1MDBfdGhlcm1hbC5vDQo+
+ICBvYmotJChDT05GSUdfQVJNQURBX1RIRVJNQUwpCSs9IGFybWFkYV90aGVybWFsLm8NCj4gIG9i
+ai0kKENPTkZJR19UQU5HT19USEVSTUFMKQkrPSB0YW5nb190aGVybWFsLm8NCj4gIG9iai0kKENP
+TkZJR19JTVhfVEhFUk1BTCkJKz0gaW14X3RoZXJtYWwubw0KPiArb2JqLSQoQ09ORklHX0lNWF9T
+Q19USEVSTUFMKQkrPSBpbXhfc2NfdGhlcm1hbC5vDQo+ICBvYmotJChDT05GSUdfTUFYNzc2MjBf
+VEhFUk1BTCkJKz0gbWF4Nzc2MjBfdGhlcm1hbC5vDQo+ICBvYmotJChDT05GSUdfUU9SSVFfVEhF
+Uk1BTCkJKz0gcW9yaXFfdGhlcm1hbC5vDQo+ICBvYmotJChDT05GSUdfREE5MDYyX1RIRVJNQUwp
+CSs9IGRhOTA2Mi10aGVybWFsLm8NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdGhlcm1hbC9pbXhf
+c2NfdGhlcm1hbC5jDQo+IGIvZHJpdmVycy90aGVybWFsL2lteF9zY190aGVybWFsLmMNCj4gbmV3
+IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAwMC4uZGNmMTZmYw0KPiAtLS0gL2Rldi9u
+dWxsDQo+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC9pbXhfc2NfdGhlcm1hbC5jDQo+IEBAIC0wLDAg
+KzEsMTM3IEBADQo+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMCsNCj4gKy8q
+DQo+ICsgKiBDb3B5cmlnaHQgMjAxOC0yMDE5IE5YUC4NCj4gKyAqLw0KPiArDQo+ICsjaW5jbHVk
+ZSA8bGludXgvZXJyLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvZmlybXdhcmUvaW14L3NjaS5oPg0K
+PiArI2luY2x1ZGUgPGxpbnV4L21vZHVsZS5oPg0KPiArI2luY2x1ZGUgPGxpbnV4L29mLmg+DQo+
+ICsjaW5jbHVkZSA8bGludXgvb2ZfZGV2aWNlLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvcGxhdGZv
+cm1fZGV2aWNlLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvc2xhYi5oPg0KPiArI2luY2x1ZGUgPGxp
+bnV4L3RoZXJtYWwuaD4NCj4gKw0KPiArI2luY2x1ZGUgInRoZXJtYWxfY29yZS5oIg0KPiArDQo+
+ICsjZGVmaW5lIElNWF9TQ19NSVNDX0ZVTkNfR0VUX1RFTVAJMTMNCj4gKyNkZWZpbmUgSU1YX1ND
+X0NfVEVNUAkJCTANCj4gKw0KPiArc3RhdGljIHN0cnVjdCBpbXhfc2NfaXBjICp0aGVybWFsX2lw
+Y19oYW5kbGU7DQo+ICsNCj4gK3N0cnVjdCBpbXhfc2Nfc2Vuc29yIHsNCj4gKwlzdHJ1Y3QgdGhl
+cm1hbF96b25lX2RldmljZSAqdHpkOw0KPiArCXUzMiByZXNvdXJjZV9pZDsNCj4gK307DQo+ICsN
+Cj4gK3N0cnVjdCByZXFfZ2V0X3RlbXAgew0KPiArCXUxNiByZXNvdXJjZV9pZDsNCj4gKwl1OCB0
+eXBlOw0KPiArfSBfX3BhY2tlZDsNCj4gKw0KPiArc3RydWN0IHJlc3BfZ2V0X3RlbXAgew0KPiAr
+CXUxNiBjZWxzaXVzOw0KPiArCXU4IHRlbnRoczsNCj4gK30gX19wYWNrZWQ7DQo+ICsNCj4gK3N0
+cnVjdCBpbXhfc2NfbXNnX21pc2NfZ2V0X3RlbXAgew0KPiArCXN0cnVjdCBpbXhfc2NfcnBjX21z
+ZyBoZHI7DQo+ICsJdW5pb24gew0KPiArCQlzdHJ1Y3QgcmVxX2dldF90ZW1wIHJlcTsNCj4gKwkJ
+c3RydWN0IHJlc3BfZ2V0X3RlbXAgcmVzcDsNCj4gKwl9IGRhdGE7DQo+ICt9Ow0KPiArDQo+ICtz
+dGF0aWMgaW50IGlteF9zY190aGVybWFsX2dldF90ZW1wKHZvaWQgKmRhdGEsIGludCAqdGVtcCkg
+ew0KPiArCXN0cnVjdCBpbXhfc2NfbXNnX21pc2NfZ2V0X3RlbXAgbXNnOw0KPiArCXN0cnVjdCBp
+bXhfc2NfcnBjX21zZyAqaGRyID0gJm1zZy5oZHI7DQo+ICsJc3RydWN0IGlteF9zY19zZW5zb3Ig
+KnNlbnNvciA9IGRhdGE7DQo+ICsJaW50IHJldDsNCj4gKw0KPiArCW1zZy5kYXRhLnJlcS5yZXNv
+dXJjZV9pZCA9IHNlbnNvci0+cmVzb3VyY2VfaWQ7DQo+ICsJbXNnLmRhdGEucmVxLnR5cGUgPSBJ
+TVhfU0NfQ19URU1QOw0KPiArDQo+ICsJaGRyLT52ZXIgPSBJTVhfU0NfUlBDX1ZFUlNJT047DQo+
+ICsJaGRyLT5zdmMgPSBJTVhfU0NfUlBDX1NWQ19NSVNDOw0KPiArCWhkci0+ZnVuYyA9IElNWF9T
+Q19NSVNDX0ZVTkNfR0VUX1RFTVA7DQo+ICsJaGRyLT5zaXplID0gMjsNCj4gKw0KPiArCXJldCA9
+IGlteF9zY3VfY2FsbF9ycGModGhlcm1hbF9pcGNfaGFuZGxlLCAmbXNnLCB0cnVlKTsNCj4gKwlp
+ZiAocmV0KSB7DQo+ICsJCXByX2VycigicmVhZCB0ZW1wIHNlbnNvciAlZCBmYWlsZWQsIHJldCAl
+ZFxuIiwNCj4gKwkJCXNlbnNvci0+cmVzb3VyY2VfaWQsIHJldCk7DQo+ICsJCXJldHVybiByZXQ7
+DQo+ICsJfQ0KPiArDQo+ICsJKnRlbXAgPSBtc2cuZGF0YS5yZXNwLmNlbHNpdXMgKiAxMDAwICsg
+bXNnLmRhdGEucmVzcC50ZW50aHMgKiAxMDA7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4gK30NCj4g
+Kw0KPiArc3RhdGljIGNvbnN0IHN0cnVjdCB0aGVybWFsX3pvbmVfb2ZfZGV2aWNlX29wcyBpbXhf
+c2NfdGhlcm1hbF9vcHMgPSB7DQo+ICsJLmdldF90ZW1wID0gaW14X3NjX3RoZXJtYWxfZ2V0X3Rl
+bXAsDQo+ICt9Ow0KPiArDQo+ICtzdGF0aWMgaW50IGlteF9zY190aGVybWFsX3Byb2JlKHN0cnVj
+dCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpIHsNCj4gKwlzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wLCAq
+Y2hpbGQ7DQo+ICsJaW50IHJldDsNCj4gKw0KPiArCXJldCA9IGlteF9zY3VfZ2V0X2hhbmRsZSgm
+dGhlcm1hbF9pcGNfaGFuZGxlKTsNCj4gKwlpZiAocmV0KQ0KPiArCQlyZXR1cm4gcmV0Ow0KPiAr
+DQo+ICsJbnAgPSBvZl9maW5kX25vZGVfYnlfbmFtZShOVUxMLCAidGhlcm1hbC16b25lcyIpOw0K
+PiArCWlmICghbnApDQo+ICsJCXJldHVybiAtRU5PREVWOw0KPiArDQo+ICsJZm9yX2VhY2hfYXZh
+aWxhYmxlX2NoaWxkX29mX25vZGUobnAsIGNoaWxkKSB7DQo+ICsJCXN0cnVjdCBvZl9waGFuZGxl
+X2FyZ3Mgc2Vuc29yX3NwZWNzOw0KPiArCQlzdHJ1Y3QgaW14X3NjX3NlbnNvciAqc2Vuc29yID0N
+Cj4gKwkJCWRldm1fa3phbGxvYygmcGRldi0+ZGV2LCBzaXplb2YoKnNlbnNvciksDQo+IEdGUF9L
+RVJORUwpOw0KPiArCQlpZiAoIXNlbnNvcikNCj4gKwkJCXJldHVybiAtRU5PTUVNOw0KPiArDQo+
+ICsJCXJldCA9IHRoZXJtYWxfem9uZV9vZl9nZXRfc2Vuc29yX2lkKGNoaWxkLA0KPiArCQkJCQkJ
+ICAgICZzZW5zb3Jfc3BlY3MsDQo+ICsJCQkJCQkgICAgJnNlbnNvci0+cmVzb3VyY2VfaWQpOw0K
+PiArCQlpZiAocmV0IDwgMCkgew0KPiArCQkJZGV2X2VycigmcGRldi0+ZGV2LA0KPiArCQkJCSJm
+YWlsZWQgdG8gZ2V0IHZhbGlkIHNlbnNvciByZXNvdXJjZSBpZDogJWRcbiIsDQo+ICsJCQkJcmV0
+KTsNCj4gKwkJCWJyZWFrOw0KPiArCQl9DQo+ICsNCj4gKwkJc2Vuc29yLT50emQgPQ0KPiBkZXZt
+X3RoZXJtYWxfem9uZV9vZl9zZW5zb3JfcmVnaXN0ZXIoJnBkZXYtPmRldiwNCj4gKwkJCQkJCQkJ
+ICAgc2Vuc29yLQ0KPiA+cmVzb3VyY2VfaWQsDQo+ICsJCQkJCQkJCSAgIHNlbnNvciwNCj4gKw0K
+PiAmaW14X3NjX3RoZXJtYWxfb3BzKTsNCj4gKwkJaWYgKElTX0VSUihzZW5zb3ItPnR6ZCkpIHsN
+Cj4gKwkJCWRldl9lcnIoJnBkZXYtPmRldiwgImZhaWxlZCB0byByZWdpc3RlciB0aGVybWFsDQo+
+IHpvbmVcbiIpOw0KPiArCQkJcmV0ID0gUFRSX0VSUihzZW5zb3ItPnR6ZCk7DQo+ICsJCQlicmVh
+azsNCj4gKwkJfQ0KPiArCX0NCj4gKw0KPiArCXJldHVybiByZXQ7DQo+ICt9DQo+ICsNCj4gK3N0
+YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGlteF9zY190aGVybWFsX3RhYmxlW10gPSB7
+DQo+ICsJeyAuY29tcGF0aWJsZSA9ICJmc2wsaW14LXNjLXRoZXJtYWwiLCB9LA0KPiArCXt9DQo+
+ICt9Ow0KPiArTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgaW14X3NjX3RoZXJtYWxfdGFibGUpOw0K
+PiArDQo+ICtzdGF0aWMgc3RydWN0IHBsYXRmb3JtX2RyaXZlciBpbXhfc2NfdGhlcm1hbF9kcml2
+ZXIgPSB7DQo+ICsJCS5wcm9iZSA9IGlteF9zY190aGVybWFsX3Byb2JlLA0KPiArCQkuZHJpdmVy
+ID0gew0KPiArCQkJLm5hbWUgPSAiaW14LXNjLXRoZXJtYWwiLA0KPiArCQkJLm9mX21hdGNoX3Rh
+YmxlID0gaW14X3NjX3RoZXJtYWxfdGFibGUsDQo+ICsJCX0sDQo+ICt9Ow0KPiArbW9kdWxlX3Bs
+YXRmb3JtX2RyaXZlcihpbXhfc2NfdGhlcm1hbF9kcml2ZXIpOw0KPiArDQo+ICtNT0RVTEVfQVVU
+SE9SKCJBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4iKTsNCj4gK01PRFVMRV9ERVND
+UklQVElPTigiVGhlcm1hbCBkcml2ZXIgZm9yIE5YUCBpLk1YIFNvQ3Mgd2l0aCBzeXN0ZW0NCj4g
+K2NvbnRyb2xsZXIiKTsgTU9EVUxFX0xJQ0VOU0UoIkdQTCB2MiIpOw0KPiAtLQ0KPiAyLjcuNA0K
+DQo=
