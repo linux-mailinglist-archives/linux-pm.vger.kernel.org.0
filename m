@@ -2,91 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 245C519480
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 23:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078951949A
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 23:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbfEIVTm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 17:19:42 -0400
-Received: from shell.v3.sk ([90.176.6.54]:45844 "EHLO shell.v3.sk"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726806AbfEIVTm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 May 2019 17:19:42 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 763F057F2F;
-        Thu,  9 May 2019 23:19:40 +0200 (CEST)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id FXU6NnfE1peR; Thu,  9 May 2019 23:19:31 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 0573C10402C;
-        Thu,  9 May 2019 23:19:24 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9aOyP7FwSBZ1; Thu,  9 May 2019 23:19:20 +0200 (CEST)
-Received: from furthur.local (g-server-2.ign.cz [91.219.240.2])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 37EA857F2F;
-        Thu,  9 May 2019 23:19:19 +0200 (CEST)
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        James Cameron <quozl@laptop.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH RFC 7/7] ARM: dts: mmp2: Add GPU core
-Date:   Thu,  9 May 2019 23:19:11 +0200
-Message-Id: <20190509211911.17998-8-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190509211911.17998-1-lkundrak@v3.sk>
-References: <20190509211911.17998-1-lkundrak@v3.sk>
+        id S1726704AbfEIV2p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 17:28:45 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:45726 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726219AbfEIV2o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 17:28:44 -0400
+Received: from 79.184.254.161.ipv4.supernova.orange.pl (79.184.254.161) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
+ id 37c162ea729ea0f2; Thu, 9 May 2019 23:28:42 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Ido Schimmel <idosch@idosch.org>, x86 <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Laura Abbott <labbott@fedoraproject.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Simon Schricker <sschricker@suse.de>,
+        Borislav Petkov <bp@suse.de>, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH] x86: intel_epb: Take CONFIG_PM into account
+Date:   Thu, 09 May 2019 23:28:41 +0200
+Message-ID: <3431308.1mSSVdqTRr@kreacher>
+In-Reply-To: <20190509174338.GA24432@splinter>
+References: <1637073.gl2OfxWTjI@aspire.rjw.lan> <1627338.1fd8ofggM8@kreacher> <20190509174338.GA24432@splinter>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The base address, clock and power domain gotten from the OLPC OS kernel;
-the data sheet is not available.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Commit b9c273babce7 (PM / arch: x86: MSR_IA32_ENERGY_PERF_BIAS sysfs
+interface) caused kernels built with CONFIG_PM unset to crash on
+systems supporting the Performance and Energy Bias Hint (EPB),
+because it attempts to add files to sysfs directories that don't
+exist on those systems.
+
+Prevent that from happening by taking CONFIG_PM into account so
+that the code depending on it is not compiled at all when it is
+not set.
+
+Fixes: b9c273babce7 (PM / arch: x86: MSR_IA32_ENERGY_PERF_BIAS sysfs interface)
+Reported-by: Ido Schimmel <idosch@mellanox.com>
+Tested-by: Ido Schimmel <idosch@mellanox.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- arch/arm/boot/dts/mmp2.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/x86/kernel/cpu/intel_epb.c |   22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/mmp2.dtsi b/arch/arm/boot/dts/mmp2.dtsi
-index 8ad3e6673e1f..2f1d9fa8064f 100644
---- a/arch/arm/boot/dts/mmp2.dtsi
-+++ b/arch/arm/boot/dts/mmp2.dtsi
-@@ -8,6 +8,7 @@
-  */
-=20
- #include <dt-bindings/clock/marvell,mmp2.h>
-+#include <dt-bindings/power/marvell,mmp2.h>
-=20
- / {
- 	#address-cells =3D <1>;
-@@ -41,6 +42,17 @@
- 			reg =3D <0xd4200000 0x00200000>;
- 			ranges;
-=20
-+			gpu: gpu@d420d000 {
-+				compatible =3D "vivante,gc";
-+				reg =3D <0xd420d000 0x4000>;
-+				interrupts =3D <8>;
-+				status =3D "disabled";
-+				clocks =3D <&soc_clocks MMP2_CLK_GPU_GC>,
-+					 <&soc_clocks MMP2_CLK_GPU_BUS>;
-+				clock-names =3D "core", "bus";
-+				power-domains =3D <&soc_clocks MMP2_POWER_DOMAIN_GPU>;
-+			};
+Index: linux-pm/arch/x86/kernel/cpu/intel_epb.c
+===================================================================
+--- linux-pm.orig/arch/x86/kernel/cpu/intel_epb.c
++++ linux-pm/arch/x86/kernel/cpu/intel_epb.c
+@@ -97,6 +97,7 @@ static void intel_epb_restore(void)
+ 	wrmsrl(MSR_IA32_ENERGY_PERF_BIAS, (epb & ~EPB_MASK) | val);
+ }
+ 
++#ifdef CONFIG_PM
+ static struct syscore_ops intel_epb_syscore_ops = {
+ 	.suspend = intel_epb_save,
+ 	.resume = intel_epb_restore,
+@@ -193,6 +194,25 @@ static int intel_epb_offline(unsigned in
+ 	return 0;
+ }
+ 
++static inline void register_intel_ebp_syscore_ops(void)
++{
++	register_syscore_ops(&intel_epb_syscore_ops);
++}
++#else /* !CONFIG_PM */
++static int intel_epb_online(unsigned int cpu)
++{
++	intel_epb_restore();
++	return 0;
++}
 +
- 			intc: interrupt-controller@d4282000 {
- 				compatible =3D "mrvl,mmp2-intc";
- 				interrupt-controller;
---=20
-2.21.0
++static int intel_epb_offline(unsigned int cpu)
++{
++	return intel_epb_save();
++}
++
++static inline void register_intel_ebp_syscore_ops(void) {}
++#endif
++
+ static __init int intel_epb_init(void)
+ {
+ 	int ret;
+@@ -206,7 +226,7 @@ static __init int intel_epb_init(void)
+ 	if (ret < 0)
+ 		goto err_out_online;
+ 
+-	register_syscore_ops(&intel_epb_syscore_ops);
++	register_intel_ebp_syscore_ops();
+ 	return 0;
+ 
+ err_out_online:
+
+
 
