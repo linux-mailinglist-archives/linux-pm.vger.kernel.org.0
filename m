@@ -2,103 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3E218A20
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 14:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF50018A37
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 15:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbfEIM4h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 08:56:37 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38302 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726438AbfEIM4h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 08:56:37 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 10so1292338pfo.5
-        for <linux-pm@vger.kernel.org>; Thu, 09 May 2019 05:56:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ingics-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1HpTewxiim19d7oKXXVsZ1kcLd1qCPkwllFbArifBlM=;
-        b=DCYqb0zLOH1x6pFvn/tFs5h9P6Sub/PNF6wmobp5sT/9oUP/ZDBvaGq32unTTNZ5ne
-         i75pHJL4LfvvgkRUvGKdX2X5kOvxpuKfLxVG/hy9dTU6mTAIf3oVYkNLiBvlcghez83/
-         DrKyhAlZAC2A8v0CPusuiS3Fmogy5+6VUb20g0ELIUVq0+fviUEtMq6WlAAxBKdoASAL
-         9OZ+Xfb5FWkEjAxz1YLqM9y1Rvoigmf5PaBwLYnYg1DXwYhjqpjlyK99A6c8Rvt2PQzg
-         vUlmgLJBnwSkVt/nEJy5bwXxJAaFhH64HJ8n+IqQUSGwQjUEZS2AX3FrhUqmVRvk3ldI
-         Z2hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1HpTewxiim19d7oKXXVsZ1kcLd1qCPkwllFbArifBlM=;
-        b=hZUD0s1sTImLzOzGOWPHvKEoEBvMlmjYAFCQih1XEQcaM9M8mrswYLpjMm13QwF52b
-         tktrDNG6hcZmRmVJc+LFbAQ9LhF5IvFeXWravwv52NpS+FvfoqhndniXRNGNN7gSf6gV
-         RFUptjhhj9HoIrg5c+v3e/egZ283L80NOAEmhWQ/itJwk34tRlbIUCmuu/cGZqIIn6jy
-         WWylwmUXToSWiOyBTeD+Iog5oi/oyCV5gHGjZP/uy3tvWOblnHZ2kSmNXEsk9jTHEKxD
-         XYRxuv3O4wDGrc5ulPwfQ08z1zg5rAdsS4L0Qvy20q5yXvTCjksYNN6ak5BLYVPfSu6G
-         5/mQ==
-X-Gm-Message-State: APjAAAVrQVEkteSXYIgUmp42S/bEwlRhdtbh1SPD3nw0Pv8SioQwpmJc
-        eGbTzjzX+OaBf+QePz+PC3y25g==
-X-Google-Smtp-Source: APXvYqwISlQAr3NUrG/IIUdBbUHdL/M/6knorFKWD7dyKfKF1nZ9H/53/Mjp6kYgI2AQ24QogRY63Q==
-X-Received: by 2002:a63:2ad2:: with SMTP id q201mr5191410pgq.94.1557406596192;
-        Thu, 09 May 2019 05:56:36 -0700 (PDT)
-Received: from localhost.localdomain (220-133-186-239.HINET-IP.hinet.net. [220.133.186.239])
-        by smtp.gmail.com with ESMTPSA id e8sm3855676pfc.47.2019.05.09.05.56.33
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 05:56:35 -0700 (PDT)
-From:   Axel Lin <axel.lin@ingics.com>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Enric Balletbo Serra <enric.balletbo@collabora.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-pm@vger.kernel.org, Axel Lin <axel.lin@ingics.com>
-Subject: [PATCH] power: supply: ucs1002: Fix wrong return value checking
-Date:   Thu,  9 May 2019 20:56:14 +0800
-Message-Id: <20190509125614.28921-1-axel.lin@ingics.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726656AbfEINCZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 09:02:25 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:57618 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726054AbfEINCZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 09:02:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Zs0QwpA986xBV8SHwzSyfAtMa6UMTB6GSBeVfJrlmPg=; b=oKXDYugMnMb7TATIUk352eY8M
+        kC6Q/0/Jfs4X6iuyC4CytddI06oUr//opY/9OmboGGQ/FEay0t6+gZSljBPYHUygpF79SIRuIUfi0
+        fl2WudmUn0sK/3wI5H3kfPg9cVNSvnPeec+KeswOh9cMMiUq1aC1kfBp5nI3gd+FT8gz67iXXT4ZR
+        GPGvL+GDSHLzMDNKN35dsw3jI3j41na34Gu0Y0+z76vGXKOW/TOmP4lSWLBz8OUjyaonmVzNLiVtr
+        PngCxAwPnRi1oILq5cJ10hM3MRkkgNxnDiqGsKdq6g44YQ4PI4VDy03xXxwL6bspqaY9cnDEjTva6
+        87iTWVlzQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hOigj-0006DQ-JA; Thu, 09 May 2019 13:02:17 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5ECA32006F48C; Thu,  9 May 2019 15:02:15 +0200 (CEST)
+Date:   Thu, 9 May 2019 15:02:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Patrick Bellasi <patrick.bellasi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Tejun Heo <tj@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH v8 00/16] Add utilization clamping support
+Message-ID: <20190509130215.GV2623@hirez.programming.kicks-ass.net>
+References: <20190402104153.25404-1-patrick.bellasi@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190402104153.25404-1-patrick.bellasi@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix wrong return value checking for devm_regulator_register and
-devm_regmap_init_i2c. This looks like a copy-n-paste mistake.
+On Tue, Apr 02, 2019 at 11:41:36AM +0100, Patrick Bellasi wrote:
+> Series Organization
+> ===================
+> 
+> The series is organized into these main sections:
+> 
+>  - Patches [01-07]: Per task (primary) API
+>  - Patches [08-09]: Schedutil integration for FAIR and RT tasks
+>  - Patches [10-11]: Integration with EAS's energy_compute()
 
-Fixes: 9a2688e42638 ("power: supply: Add driver for Microchip UCS1002")
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
----
-This patch replaces my previous patches:
-[PATCH] power: supply: ucs1002: Fix checking return value of devm_regulator_register
-[PATCH] power: supply: ucs1002: Fix checking return value of devm_regmap_init_i2c
+Aside from the comments already provided, I think this is starting to
+look really good.
 
-BTW, I though Fixes tag is mainly for backport stable commit which is not this case.
-Anyway, added fixes tag base on the comment of Enric Balletbo i Serra.
+Thanks!
 
- drivers/power/supply/ucs1002_power.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>  - Patches [12-16]: Per task group (secondary) API
 
-diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/ucs1002_power.c
-index d66b4eff9b7a..1c89d030c045 100644
---- a/drivers/power/supply/ucs1002_power.c
-+++ b/drivers/power/supply/ucs1002_power.c
-@@ -508,7 +508,7 @@ static int ucs1002_probe(struct i2c_client *client,
- 		return -ENOMEM;
- 
- 	info->regmap = devm_regmap_init_i2c(client, &regmap_config);
--	ret = PTR_ERR_OR_ZERO(info->charger);
-+	ret = PTR_ERR_OR_ZERO(info->regmap);
- 	if (ret) {
- 		dev_err(dev, "Regmap initialization failed: %d\n", ret);
- 		return ret;
-@@ -592,7 +592,7 @@ static int ucs1002_probe(struct i2c_client *client,
- 
- 	rdev = devm_regulator_register(dev, info->regulator_descriptor,
- 				       &regulator_config);
--	ret = PTR_ERR_OR_ZERO(info->charger);
-+	ret = PTR_ERR_OR_ZERO(rdev);
- 	if (ret) {
- 		dev_err(dev, "Failed to register VBUS regulator: %d\n", ret);
- 		return ret;
--- 
-2.20.1
-
+I still have to stare at these, but maybe a little later...
