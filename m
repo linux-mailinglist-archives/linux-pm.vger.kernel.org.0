@@ -2,102 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB3C1894F
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 13:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5731895F
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 14:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726084AbfEILz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 07:55:27 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:57712 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbfEILz1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 07:55:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Hq8JE4thyp+lzrmCnHR5cSrNW6JqUDn9n8hfz4f5RFk=; b=pVD/QBmLIKMmuUuLka9RM28lB
-        LIO/eId0a0sd1ITEKaO1oieQEi5M93xR67oGimnhC9suP1W6ExMN4kIlE1cpNGp7xT6zSYRKbL8DI
-        wwzUhCQ4qLrQTMxNAvNIwpxu4Jpc3tTWio+wDhFkYpez3phumYCkEN4wg8prZeNNkW6W/F1Wl1SpZ
-        vC/JmnDRXkzfoG08leRfHQIEUPnfGrgHz1A0xPpvxYuGG1rV+CBkKSlZeVJDkcaayERpcS1wzG8gV
-        CZCfhmhcqzKxbWoDPjxhsnOXgyTUMQYiMw5mt90yWew6jnuLRbCiqpgb8KIgrT3RhkU7090mt+OEW
-        Q0NhQdxsg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hOhdv-0002jd-7H; Thu, 09 May 2019 11:55:19 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E56932029F87C; Thu,  9 May 2019 13:55:17 +0200 (CEST)
-Date:   Thu, 9 May 2019 13:55:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Tejun Heo <tj@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH v8 05/16] sched/core: Allow sched_setattr() to use the
- current policy
-Message-ID: <20190509115517.GT2623@hirez.programming.kicks-ass.net>
-References: <20190402104153.25404-1-patrick.bellasi@arm.com>
- <20190402104153.25404-6-patrick.bellasi@arm.com>
- <20190508192131.GD32547@worktop.programming.kicks-ass.net>
- <20190509091807.7d3iykkn3oj4b737@e110439-lin>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190509091807.7d3iykkn3oj4b737@e110439-lin>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1725961AbfEIMAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 08:00:03 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:40976 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725963AbfEIMAD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 08:00:03 -0400
+Received: from mail-pf1-f200.google.com ([209.85.210.200])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hOhiS-0006kY-R3
+        for linux-pm@vger.kernel.org; Thu, 09 May 2019 12:00:01 +0000
+Received: by mail-pf1-f200.google.com with SMTP id c12so1464098pfb.2
+        for <linux-pm@vger.kernel.org>; Thu, 09 May 2019 05:00:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=E3TYfjvumInlqPDbN4Vbyl7YloQy+afwdCg60dhd7F0=;
+        b=emt3Kb8ttc4X/ma2UMnjzv6FZxOx9lpXQAt9Nmkb7FCMs7MVkZzZjvKKuufB5qlSPW
+         mZ6vlOq0d/wdqC/wvqYIWYd0A2eg1SaKcdJVaHaVzKTTM/+PJNPlGOFNVh0E4YFoVjBg
+         rpZPjNhBLACH+1FAWWsuiOIyrxAspaIuqeR0lx9At+yjeVPGim3EFUJBVwkq0EUY8D+N
+         9dc1P8G6l5yy7422nRRm5CVZ0G8EFQZRs7n9psp8X8GhsK01CaMWO9NSjs9deO+W6LTk
+         hj8d3FbqRMlCl8wjYsmvpAM+0GNABarUbFqt/wXeTRzhR9SkuBYnzNaXVHkA/8o5wiO6
+         pRsA==
+X-Gm-Message-State: APjAAAXEnwEOQMDMWkHQZpsYA/d6NgaEZ08SKUR8BoUrb7bFWKVuAfsu
+        w5BR4kSFFTDGQm0koeSByyADs3ccasQQ5cyhq8xqYZBUxyyOKlBtCLlLCrbhzqEglupZJ0BR0ZT
+        vL1AgNy9RAWro8UjPd7ORVCv9Y74H7R/lgVE+
+X-Received: by 2002:a62:5103:: with SMTP id f3mr4624689pfb.146.1557403199490;
+        Thu, 09 May 2019 04:59:59 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzB5E7z/u9EHWChcxhdicQVecXs0mOSIs+L3HYhGGVLiG0ziOSNWMEfQATir0Eew7MlZhwziQ==
+X-Received: by 2002:a62:5103:: with SMTP id f3mr4624646pfb.146.1557403199255;
+        Thu, 09 May 2019 04:59:59 -0700 (PDT)
+Received: from 2001-b011-380f-14b9-f0ba-4a15-3e79-97f9.dynamic-ip6.hinet.net (2001-b011-380f-14b9-f0ba-4a15-3e79-97f9.dynamic-ip6.hinet.net. [2001:b011:380f:14b9:f0ba:4a15:3e79:97f9])
+        by smtp.gmail.com with ESMTPSA id 19sm2126839pfz.84.2019.05.09.04.59.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 May 2019 04:59:58 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
+Subject: Re: [PATCH] nvme-pci: Use non-operational power state instead of D3
+ on Suspend-to-Idle
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <20190509103142.GA19550@lst.de>
+Date:   Thu, 9 May 2019 19:59:55 +0800
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8bit
+Message-Id: <AB325926-0D77-4851-8E8A-A10599756BF9@canonical.com>
+References: <3CDA9F13-B17C-456F-8CE1-3A63C6E0DC8F@canonical.com>
+ <f8a043b00909418bad6adcdb62d16e6e@AUSX13MPC105.AMER.DELL.COM>
+ <20190508195159.GA1530@lst.de>
+ <b43f2c0078f245398101fa9a40cfc2dc@AUSX13MPC105.AMER.DELL.COM>
+ <20190509061237.GA15229@lst.de>
+ <064701C3-2BD4-4D93-891D-B7FBB5040FC4@canonical.com>
+ <CAJZ5v0ggMwpJt=XWXu4gU51o8y4BpJ4KZ5RKzfk3+v8GGb-QbQ@mail.gmail.com>
+ <A4DD2E9F-054E-4D4B-9F77-D69040EBE120@canonical.com>
+ <20190509095601.GA19041@lst.de>
+ <225CF4F7-C8E1-4C66-B362-97E84596A54E@canonical.com>
+ <20190509103142.GA19550@lst.de>
+To:     Christoph Hellwig <hch@lst.de>
+X-Mailer: Apple Mail (2.3445.104.8)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 09, 2019 at 10:18:07AM +0100, Patrick Bellasi wrote:
-> On 08-May 21:21, Peter Zijlstra wrote:
-> > On Tue, Apr 02, 2019 at 11:41:41AM +0100, Patrick Bellasi wrote:
-> > > diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
-> > > index 22627f80063e..075c610adf45 100644
-> > > --- a/include/uapi/linux/sched.h
-> > > +++ b/include/uapi/linux/sched.h
-> > > @@ -40,6 +40,8 @@
-> > >  /* SCHED_ISO: reserved but not implemented yet */
-> > >  #define SCHED_IDLE		5
-> > >  #define SCHED_DEADLINE		6
-> > > +/* Must be the last entry: used to sanity check attr.policy values */
-> > > +#define SCHED_POLICY_MAX	SCHED_DEADLINE
-> > 
-> > This is a wee bit sad to put in a uapi header; but yeah, where else :/
-> > 
-> > Another option would be something like:
-> > 
-> > enum {
-> > 	SCHED_NORMAL = 0,
-> > 	SCHED_FIFO = 1,
-> > 	SCHED_RR = 2,
-> > 	SCHED_BATCH = 3,
-> > 	/* SCHED_ISO = 4, reserved */
-> > 	SCHED_IDLE = 5,
-> > 	SCHED_DEADLINE = 6,
-> > 	SCHED_POLICY_NR
-> > };
-> 
-> I just wanted to minimize the changes by keeping the same structure...
-> If you prefer the above I can add a refactoring patch just to update
-> existing definitions before adding this patch...
+at 18:31, Christoph Hellwig <hch@lst.de> wrote:
 
-Right; I've no idea really. The thing that started all this was adding
-that define to UAPI. Maybe we can do without it and instead put in a
-comment to check sched_setattr() any time we add a new policy and just
-hard code the thing.
+> On Thu, May 09, 2019 at 06:28:32PM +0800, Kai-Heng Feng wrote:
+>> Based on my testing if queues (IRQ) are not disabled, NVMe controller
+>> won’t be quiesced.
+>> Symptoms can be high power drain or system freeze.
+>>
+>> I can check with vendors whether this also necessary under Windows.
+>
+> System freeze sounds odd.  And we had a patch from a person on the
+> Cc list here that was handed to me through a few indirections that
+> just skipps the suspend entirely for some cases, which seemd to
+> work fine with the controllers in question.
+
+That works fine for some devices, but for Toshiba NVMes this said scenario  
+freezes the system, hence the new patch here.
+
+And for all NVMes I tested this new suspend routine saves even more power  
+than simply skipping suspend.
+
+>
+>>> Otherwise I think we should use a "no-op" suspend, just leaving the
+>>> power management to the device, or a simple setting the device to the
+>>> deepest power state for everything else, where everything else is
+>>> suspend, or suspend to idle.
+>>
+>> I am not sure I get your idea. Does this “no-op” suspend happen in NVMe
+>> driver or PM core?
+>
+> no-op means we don't want to do anything in nvme.  If that happens
+> by not calling nvme or stubbing out the method for that particular
+> case does not matter.
+
+Ok, but we still need to figure out how to prevent the device device from  
+tradition to D3.
+
+>
+>>> And of course than we have windows modern standby actually mandating
+>>> runtime D3 in some case, and vague handwaving mentions of this being
+>>> forced on the platforms, which I'm not entirely sure how they fit
+>>> into the above picture.
+>>
+>> I was told that Windows doesn’t use runtime D3, APST is used exclusively.
+>
+> As far as I know the default power management modes in the Microsoft
+> NVMe driver is explicit power management transitions, and in the Intel
+> RST driver that is commonly used it is APST.  But both could still
+> be comined with runtime D3 in theory, I'm just not sure if they are.
+>
+> Microsoft has been pushing for aggressive runtime D3 for a while, but
+> I don't know if that includes NVMe devices.
+
+Ok, I’ll check with vendors about this.
+
+Kai-Heng
+
+>
+>> Kai-Heng
+> ---end quoted text—
+
 
