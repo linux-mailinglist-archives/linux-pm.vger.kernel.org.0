@@ -2,136 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CF618795
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 11:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE991879C
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 11:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726281AbfEIJSN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 05:18:13 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:35490 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726084AbfEIJSN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 May 2019 05:18:13 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C16C9374;
-        Thu,  9 May 2019 02:18:12 -0700 (PDT)
-Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC5FA3F575;
-        Thu,  9 May 2019 02:18:09 -0700 (PDT)
-Date:   Thu, 9 May 2019 10:18:07 +0100
-From:   Patrick Bellasi <patrick.bellasi@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Tejun Heo <tj@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH v8 05/16] sched/core: Allow sched_setattr() to use the
- current policy
-Message-ID: <20190509091807.7d3iykkn3oj4b737@e110439-lin>
-References: <20190402104153.25404-1-patrick.bellasi@arm.com>
- <20190402104153.25404-6-patrick.bellasi@arm.com>
- <20190508192131.GD32547@worktop.programming.kicks-ass.net>
+        id S1725847AbfEIJTt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 9 May 2019 05:19:49 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39656 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725826AbfEIJTt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 05:19:49 -0400
+Received: by mail-oi1-f195.google.com with SMTP id x16so1368672oic.6;
+        Thu, 09 May 2019 02:19:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4keILsDdqaPQc14jyFTpZX6LIK4odMSSe93jLxQHABU=;
+        b=W/XbgC50ALdwluJg8m1rzMozunxBIpTUeZbRPKhhgiDg1S1AU+MvbVsXsAkrVGNi1t
+         pvgyT9rSbhHEHQQUKrbnW407KD7h2u6gcZTXp/oPHSvGDOp5IzmFdAW0RSwTyjctqdhl
+         X8wyCJdQDWR/wIRpgBZWcQ0F9uepetkkSUwhxilL+um7KqtDWPiCdP+CGvuVWY+CP/eV
+         72K2dCXFCu/cTGnWh4/4cIdUXZ9XV9iNjcFwGyOacM0SvcpRjBiP00YDTOxxsmePvl/F
+         dkWvf5zKSBgorncu5wkgACPcqjsBVBeJlOZ4yE75/AX0XJvalJhcXS1l9/PFSdJ4OR4i
+         YZYg==
+X-Gm-Message-State: APjAAAXDK50venox4rqDpyXyK/J05ryQeHj23XYLjG/s0+JYvCu7yE8o
+        81jMfuW3/EpLUUL97YzuSV8g7wCzWbrh9X91H7I=
+X-Google-Smtp-Source: APXvYqzINNimXp/wssQDr1dHiM1zCcFSUTOXnE+YF/EMLzLVAtAUB+htJwxgffMl8EOF4ySMIiljSIyv+JYs/ghVU6M=
+X-Received: by 2002:aca:f444:: with SMTP id s65mr777412oih.115.1557393588629;
+ Thu, 09 May 2019 02:19:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190508192131.GD32547@worktop.programming.kicks-ass.net>
-User-Agent: NeoMutt/20180716
+References: <20190508185955.11406-1-kai.heng.feng@canonical.com>
+ <20190508191624.GA8365@localhost.localdomain> <3CDA9F13-B17C-456F-8CE1-3A63C6E0DC8F@canonical.com>
+ <f8a043b00909418bad6adcdb62d16e6e@AUSX13MPC105.AMER.DELL.COM>
+ <20190508195159.GA1530@lst.de> <b43f2c0078f245398101fa9a40cfc2dc@AUSX13MPC105.AMER.DELL.COM>
+ <20190509061237.GA15229@lst.de> <064701C3-2BD4-4D93-891D-B7FBB5040FC4@canonical.com>
+ <20190509065223.GA15984@lst.de>
+In-Reply-To: <20190509065223.GA15984@lst.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 May 2019 11:19:37 +0200
+Message-ID: <CAJZ5v0h51nMCte4yL76nMWaYrrXDPrOK=CeUpc50=r2Pp_icPw@mail.gmail.com>
+Subject: Re: [PATCH] nvme-pci: Use non-operational power state instead of D3
+ on Suspend-to-Idle
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-May 21:21, Peter Zijlstra wrote:
-> On Tue, Apr 02, 2019 at 11:41:41AM +0100, Patrick Bellasi wrote:
-> > diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
-> > index 22627f80063e..075c610adf45 100644
-> > --- a/include/uapi/linux/sched.h
-> > +++ b/include/uapi/linux/sched.h
-> > @@ -40,6 +40,8 @@
-> >  /* SCHED_ISO: reserved but not implemented yet */
-> >  #define SCHED_IDLE		5
-> >  #define SCHED_DEADLINE		6
-> > +/* Must be the last entry: used to sanity check attr.policy values */
-> > +#define SCHED_POLICY_MAX	SCHED_DEADLINE
-> 
-> This is a wee bit sad to put in a uapi header; but yeah, where else :/
-> 
-> Another option would be something like:
-> 
-> enum {
-> 	SCHED_NORMAL = 0,
-> 	SCHED_FIFO = 1,
-> 	SCHED_RR = 2,
-> 	SCHED_BATCH = 3,
-> 	/* SCHED_ISO = 4, reserved */
-> 	SCHED_IDLE = 5,
-> 	SCHED_DEADLINE = 6,
-> 	SCHED_POLICY_NR
-> };
+On Thu, May 9, 2019 at 8:52 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Thu, May 09, 2019 at 02:48:59PM +0800, Kai-Heng Feng wrote:
+> > Not really, for hibernation pm_suspend_via_s2idle() evaluates to false so
+> > the old code path will be taken.
+> >
+> >>
+> >> And more to the points - if these "modern MS standby" systems are
+> >> becoming common, which it looks they are, we need support in the PM core
+> >> for those instead of working around the decisions in low-level drivers.
+> >
+> > Rafael, what do you think about this?
+> > Including this patch, there are five drivers that use
+> > pm_suspend_via_{firmware,s2idle}() to differentiate between S2I and S3.
+> > So I think maybe it’s time to introduce a new suspend callback for S2I?
+>
+> We also really need something like that to avoid the PCI_DEV_FLAGS_NO_D3
+> abuse - that flag is a quirk statically set on a device at probe time
+> to prevent any entering of D3 state.
 
-I just wanted to minimize the changes by keeping the same structure...
-If you prefer the above I can add a refactoring patch just to update
-existing definitions before adding this patch...
+I agree that PCI_DEV_FLAGS_NO_D3 has to be avoided.
 
-> 
-> >  /* Can be ORed in to make sure the process is reverted back to SCHED_NORMAL on fork */
-> >  #define SCHED_RESET_ON_FORK     0x40000000
-> > @@ -50,9 +52,11 @@
-> >  #define SCHED_FLAG_RESET_ON_FORK	0x01
-> >  #define SCHED_FLAG_RECLAIM		0x02
-> >  #define SCHED_FLAG_DL_OVERRUN		0x04
-> > +#define SCHED_FLAG_KEEP_POLICY		0x08
-> >  
-> >  #define SCHED_FLAG_ALL	(SCHED_FLAG_RESET_ON_FORK	| \
-> >  			 SCHED_FLAG_RECLAIM		| \
-> > -			 SCHED_FLAG_DL_OVERRUN)
-> > +			 SCHED_FLAG_DL_OVERRUN		| \
-> > +			 SCHED_FLAG_KEEP_POLICY)
-> >  
-> >  #endif /* _UAPI_LINUX_SCHED_H */
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index d368ac26b8aa..20efb32e1a7e 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -4907,8 +4907,17 @@ SYSCALL_DEFINE3(sched_setattr, pid_t, pid, struct sched_attr __user *, uattr,
-> >  	if (retval)
-> >  		return retval;
-> >  
-> > -	if ((int)attr.sched_policy < 0)
-> > +	/*
-> > +	 * A valid policy is always required from userspace, unless
-> > +	 * SCHED_FLAG_KEEP_POLICY is set and the current policy
-> > +	 * is enforced for this call.
-> > +	 */
-> > +	if (attr.sched_policy > SCHED_POLICY_MAX &&
-> > +	    !(attr.sched_flags & SCHED_FLAG_KEEP_POLICY)) {
-> >  		return -EINVAL;
-> > +	}
-> 
-> And given I just looked at those darn SCHED_* things, I now note the
-> above does 'funny' things when passed: attr.policy=4.
+However, IMO introducing a new set of suspend (and resume) callbacks
+for S2I would not be practical, because
 
-... and maybe factor in the same refactoring patch a check on
-SCHED_ISO being not yet supported.
+(a) the only difference between S2I and S2R from a driver perspective
+is that it may be expected to do something "special" about setting the
+device power state in the S2I case (the rest of what needs to be done
+during system-wide suspend/resume remains the same in both cases),
 
-> 
-> > +	if (attr.sched_flags & SCHED_FLAG_KEEP_POLICY)
-> > +		attr.sched_policy = SETPARAM_POLICY;
-> >  
-> >  	rcu_read_lock();
-> >  	retval = -ESRCH;
+(b) the new callbacks would only be really useful for a handful of drivers.
 
--- 
-#include <best/regards.h>
+> >> per definition, although they might not be too useful.  I suspect checking
+> >> APSTA might be safer, but if we don't want to rely on APST we should
+> >> check for a power state supporting the condition that the MS document
+> >> quoted in the original document supports.
+> >
+> > If Modern Standby or Connected Standby is not supported by servers, I
+> > don’t think the design documents mean much here.
+> > We probably should check if the platform firmware really supports S2I
+> > instead.
+>
+> That too.  As said this really is a platform decision, and needs to
+> be managed by the platform code through the PM core.
 
-Patrick Bellasi
+I'm not what you mean by "platform decision" here.
+
+>  Individual drivers like nvme can just implement the behavior, but are the absolute wrong
+> place to make decisions on what kinds of suspend to enter.
+
+Right, the choice of the target system state has already been made
+when their callbacks get invoked (and it has been made by user space,
+not by the platform).
