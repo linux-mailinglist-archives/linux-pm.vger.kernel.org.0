@@ -2,163 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4BC18841
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 12:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2932318853
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 12:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbfEIKXZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 06:23:25 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:33871 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725869AbfEIKXY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 06:23:24 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 459A3155A8;
-        Thu,  9 May 2019 06:23:21 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 09 May 2019 06:23:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=C5Kt50
-        Zn7uloNUav3T5eCOtcBzViQn5Dx3VKkV1Ch8s=; b=F/nWylnnH37S5lM3Fy+hFV
-        2wCHwWziMjN2LDAXU/y+BawQLnjsOJJxV5OSgSLohdRQADtRkXmkGQ5pHaRFw9Js
-        SC58CyYuW9/UgmT2jrncV9rj8FaVj2D40qA/kVPi1P0WLTrHv6CCWD4fG2+cyIfq
-        lbMEJT+fn9H4nW046wb6rxhM9zoSrs+90R4971GC5chArl46uHx+56eGYgEWNS3i
-        TuiH0IpxXwsdx0ZwjVvD69NE2uELlD/S38eNK/wYf45NE0YSqWphkdFRkbA19ySy
-        Zj+8i/13sD+77cSM6201c5Xu06IqU+f85nYtWdVfghLXF2IlfZxC0Rlyzv6opjzA
-        ==
-X-ME-Sender: <xms:l__TXCVwD4dMjurF0hRUWl9HwilfHUarTyyYAbZczzy87YurSeR-qg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrkeehgddvlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucfkphepuddtle
-    drieehrdeffedrudeftdenucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehi
-    ughoshgthhdrohhrghenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:l__TXFfDtYIv9dK5oxaq2L2prlqYQh54Urr8jwjz4DQzgcW6VwwcDw>
-    <xmx:l__TXID6y60Qy24s0QTUzRFleU70cx5fqY-J2RKjTxT-bNVzus4NVg>
-    <xmx:l__TXAj60K9WP0Q70CGdQ0oh0PqTUatq1vHtVOxg-eRwIEWUHfxe6Q>
-    <xmx:mf_TXCSgT0h3J_gAMwQWKrDRvO2JHh-BZXkFuivuY-tKhMEMJYpsLA>
-Received: from localhost (bzq-109-65-33-130.red.bezeqint.net [109.65.33.130])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 518F91037C;
-        Thu,  9 May 2019 06:23:18 -0400 (EDT)
-Date:   Thu, 9 May 2019 13:23:15 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
+        id S1726187AbfEIK2k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 06:28:40 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39443 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbfEIK2k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 06:28:40 -0400
+Received: from mail-pl1-f200.google.com ([209.85.214.200])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hOgI1-0000aZ-Vt
+        for linux-pm@vger.kernel.org; Thu, 09 May 2019 10:28:38 +0000
+Received: by mail-pl1-f200.google.com with SMTP id bg6so1303751plb.8
+        for <linux-pm@vger.kernel.org>; Thu, 09 May 2019 03:28:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=iqO4jAPKI5EtPAMUNTTqbiH8EXREdlEaOkeV8WUNd4o=;
+        b=IEdPtj+mGG5WNCQsqagTy7ZogvRgKaoNtMS3a4rLyGfcYEm7sdwu2Xgx0wcywS/yUX
+         DKxoZPl4evnMM5SZRTtpwkVIF5nIrlxY7Z/AtCPTsauQFiOwNP5pt0X63Ua8EujWgLaG
+         77VluYfvExI+lqpac4I4KA3HaOT+EVRYyr2WoLyy3i/XXr/0omnLNBoD6nUg4uUBRoUr
+         tFy0AH69yjqIYT47ZA0vr4AfFiKNDgK4wKLjYWhugPDYh5Q7cU0cLPKDP6x0RfVJG2tW
+         AFmujNGrReDxrlhPsT9REzSF2Cvki2p/8gPjvDaeuBQA77cQ7THULwPVZnDuldFlWlpX
+         O0Vg==
+X-Gm-Message-State: APjAAAVvwtS7LcmTFcSoJzux57B2mYobzNLCDQdcxDa+OWnNJpTBFUGB
+        gW8cJXAKA45gC1NzHFT7BhzAdG7kI7OU2z2hCeGUY84Ls/cATNCbElOoBKO4Hd1bFi1ZBWHxVlC
+        9wW2AABU6dZ54dog2E+S4O4ecwvsMlZwEdy0f
+X-Received: by 2002:a17:902:9002:: with SMTP id a2mr3830413plp.43.1557397716748;
+        Thu, 09 May 2019 03:28:36 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyirYEaLJu/laJ4c1rSpRcvUuVa2X9DdCx+9zraOT/K7aD24GwK2dDRqBBw+jE7Tbbvs7nkUw==
+X-Received: by 2002:a17:902:9002:: with SMTP id a2mr3830334plp.43.1557397716088;
+        Thu, 09 May 2019 03:28:36 -0700 (PDT)
+Received: from 2001-b011-380f-14b9-f0ba-4a15-3e79-97f9.dynamic-ip6.hinet.net (2001-b011-380f-14b9-f0ba-4a15-3e79-97f9.dynamic-ip6.hinet.net. [2001:b011:380f:14b9:f0ba:4a15:3e79:97f9])
+        by smtp.gmail.com with ESMTPSA id b144sm2638855pfb.68.2019.05.09.03.28.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 May 2019 03:28:35 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
+Subject: Re: [PATCH] nvme-pci: Use non-operational power state instead of D3
+ on Suspend-to-Idle
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <20190509095601.GA19041@lst.de>
+Date:   Thu, 9 May 2019 18:28:32 +0800
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Laura Abbott <labbott@fedoraproject.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Simon Schricker <sschricker@suse.de>,
-        Borislav Petkov <bp@suse.de>, Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH 2/2] PM / arch: x86: MSR_IA32_ENERGY_PERF_BIAS sysfs
- interface
-Message-ID: <20190509102315.GA31824@splinter>
-References: <1637073.gl2OfxWTjI@aspire.rjw.lan>
- <1762575.ER2xjzr9E1@aspire.rjw.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1762575.ER2xjzr9E1@aspire.rjw.lan>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+        LKML <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8bit
+Message-Id: <225CF4F7-C8E1-4C66-B362-97E84596A54E@canonical.com>
+References: <20190508185955.11406-1-kai.heng.feng@canonical.com>
+ <20190508191624.GA8365@localhost.localdomain>
+ <3CDA9F13-B17C-456F-8CE1-3A63C6E0DC8F@canonical.com>
+ <f8a043b00909418bad6adcdb62d16e6e@AUSX13MPC105.AMER.DELL.COM>
+ <20190508195159.GA1530@lst.de>
+ <b43f2c0078f245398101fa9a40cfc2dc@AUSX13MPC105.AMER.DELL.COM>
+ <20190509061237.GA15229@lst.de>
+ <064701C3-2BD4-4D93-891D-B7FBB5040FC4@canonical.com>
+ <CAJZ5v0ggMwpJt=XWXu4gU51o8y4BpJ4KZ5RKzfk3+v8GGb-QbQ@mail.gmail.com>
+ <A4DD2E9F-054E-4D4B-9F77-D69040EBE120@canonical.com>
+ <20190509095601.GA19041@lst.de>
+To:     Christoph Hellwig <hch@lst.de>
+X-Mailer: Apple Mail (2.3445.104.8)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 21, 2019 at 11:20:17PM +0100, Rafael J. Wysocki wrote:
-> +static struct attribute *intel_epb_attrs[] = {
-> +	&dev_attr_energy_perf_bias.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group intel_epb_attr_group = {
-> +	.name = power_group_name,
-> +	.attrs =  intel_epb_attrs
-> +};
-> +
->  static int intel_epb_online(unsigned int cpu)
->  {
-> +	struct device *cpu_dev = get_cpu_device(cpu);
-> +
->  	intel_epb_restore();
-> +	if (!cpuhp_tasks_frozen)
-> +		sysfs_merge_group(&cpu_dev->kobj, &intel_epb_attr_group);
-> +
->  	return 0;
->  }
->  
->  static int intel_epb_offline(unsigned int cpu)
->  {
-> -	return intel_epb_save();
-> +	struct device *cpu_dev = get_cpu_device(cpu);
-> +
-> +	if (!cpuhp_tasks_frozen)
-> +		sysfs_unmerge_group(&cpu_dev->kobj, &intel_epb_attr_group);
-> +
-> +	intel_epb_save();
-> +	return 0;
->  }
+at 17:56, Christoph Hellwig <hch@lst.de> wrote:
 
-Hi,
+> On Thu, May 09, 2019 at 05:42:30PM +0800, Kai-Heng Feng wrote:
+>>> That would be a set of 6 new suspend and resume callbacks, mind you,
+>>> and there's quite a few of them already.  And the majority of drivers
+>>> would not need to use them anyway.
+>>
+>> I think suspend_to_idle() and resume_from_idle() should be enough?
+>> What are other 4 callbacks?
+>>
+>>> Also, please note that, possibly apart from the device power state
+>>> setting, the S2I and S2R handling really aren't that different at all.
+>>> You basically need to carry out the same preparations during suspend
+>>> and reverse them during resume in both cases.
+>>
+>> But for this case, it’s quite different to the original suspend and
+>> resume callbacks.
+>
+> Let's think of what cases we needed.
+>
+> The "classic" suspend in the nvme driver basically shuts down the
+> device entirely.  This is useful for:
+>
+>  a) device that have no power management
+>  b) System power states that eventually power off the entire PCIe bus.
+>     I think that would:
+>
+>      - suspend to disk (hibernate)
+>      - classic suspend to ram
+>
+> The we have the sequence in your patch.  This seems to be related to
+> some of the MS wording, but I'm not sure what for example tearing down
+> the queues buys us.  Can you explain a bit more where those bits
+> make a difference?
 
-I just booted net-next and got the following NULL pointer dereference
-[1] during boot. I believe it is caused by this patch.
+Based on my testing if queues (IRQ) are not disabled, NVMe controller won’t  
+be quiesced.
+Symptoms can be high power drain or system freeze.
 
-CONFIG_PM is disabled in my config which means 'power_group_name' is
-defined as NULL. When I enable CONFIG_PM the issue is not reproduced.
+I can check with vendors whether this also necessary under Windows.
 
-Thanks
+>
+> Otherwise I think we should use a "no-op" suspend, just leaving the
+> power management to the device, or a simple setting the device to the
+> deepest power state for everything else, where everything else is
+> suspend, or suspend to idle.
 
-[1]
-[    1.230241] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[    1.231043] #PF: supervisor read access in kernel mode
-[    1.231043] #PF: error_code(0x0000) - not-present page
-[    1.231043] PGD 0 P4D 0
-[    1.231043] Oops: 0000 [#1] SMP
-[    1.231043] CPU: 0 PID: 12 Comm: cpuhp/0 Not tainted 5.1.0-custom-07273-g80f232121b69 #1392
-[    1.231043] Hardware name: Mellanox Technologies Ltd. MSN2100-CB2FO/SA001017, BIOS 5.6.5 06/07/2016
-[    1.231043] RIP: 0010:strlen+0x0/0x20
-[    1.231043] Code: b5 20 75 eb c6 42 01 00 0f b6 10 f6 82 40 bf 4d b5 20 74 14 48 c7 c1 40 bf 4d b5 48 83 c0 01 0f b6 10 f6 04 11 20 75 f3 c3 90 <80> 3f 00 74 10 48 89 f8
-48 83 c0 01 80 38 00 75 f7 48 29 f8 c3 31
-[    1.231043] RSP: 0000:ffffb587c0cd3dc8 EFLAGS: 00010246
-[    1.231043] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
-[    1.231043] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-[    1.231043] RBP: 0000000000000000 R08: ffff8e6137a160c8 R09: 0000000000000000
-[    1.231043] R10: 0000000000000000 R11: ffff8e613652ec80 R12: 0000000000000000
-[    1.231043] R13: 0000000000000000 R14: ffff8e6137a160c8 R15: ffffffffb4690120
-[    1.231043] FS:  0000000000000000(0000) GS:ffff8e6137a00000(0000) knlGS:0000000000000000
-[    1.231043] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    1.231043] CR2: 0000000000000000 CR3: 0000000200409000 CR4: 00000000001006f0
-[    1.231043] Call Trace:
-[    1.231043]  kernfs_name_hash+0xd/0x80
-[    1.231043]  kernfs_find_ns+0x30/0xc0
-[    1.231043]  kernfs_find_and_get_ns+0x27/0x50
-[    1.231043]  sysfs_merge_group+0x2e/0x100
-[    1.231043]  ? __switch_to_asm+0x40/0x70
-[    1.231043]  intel_epb_online+0x2a/0x30
-[    1.231043]  cpuhp_invoke_callback+0x8f/0x550
-[    1.231043]  ? sort_range+0x20/0x20
-[    1.231043]  cpuhp_thread_fun+0x9b/0x100
-[    1.231043]  smpboot_thread_fn+0xc0/0x160
-[    1.231043]  kthread+0x10d/0x130
-[    1.231043]  ? __kthread_create_on_node+0x180/0x180
-[    1.231043]  ret_from_fork+0x35/0x40
-[    1.231043] CR2: 0000000000000000
-[    1.231043] ---[ end trace c8ea60276791261c ]---
-[    1.231043] RIP: 0010:strlen+0x0/0x20
-[    1.231043] Code: b5 20 75 eb c6 42 01 00 0f b6 10 f6 82 40 bf 4d b5 20 74 14 48 c7 c1 40 bf 4d b5 48 83 c0 01 0f b6 10 f6 04 11 20 75 f3 c3 90 <80> 3f 00 74 10 48 89 f8
-48 83 c0 01 80 38 00 75 f7 48 29 f8 c3 31
-[    1.231043] RSP: 0000:ffffb587c0cd3dc8 EFLAGS: 00010246
-[    1.231043] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
-[    1.231043] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-[    1.231043] RBP: 0000000000000000 R08: ffff8e6137a160c8 R09: 0000000000000000
-[    1.231043] R10: 0000000000000000 R11: ffff8e613652ec80 R12: 0000000000000000
-[    1.231043] R13: 0000000000000000 R14: ffff8e6137a160c8 R15: ffffffffb4690120
-[    1.231043] FS:  0000000000000000(0000) GS:ffff8e6137a00000(0000) knlGS:0000000000000000
-[    1.231043] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    1.231043] CR2: 0000000000000000 CR3: 0000000200409000 CR4: 00000000001006f0
+I am not sure I get your idea. Does this “no-op” suspend happen in NVMe  
+driver or PM core?
+
+>
+> And of course than we have windows modern standby actually mandating
+> runtime D3 in some case, and vague handwaving mentions of this being
+> forced on the platforms, which I'm not entirely sure how they fit
+> into the above picture.
+
+I was told that Windows doesn’t use runtime D3, APST is used exclusively.
+
+Kai-Heng
+
+
