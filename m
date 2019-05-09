@@ -2,162 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C60186F1
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 10:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAB618763
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 11:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbfEIIpk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 04:45:40 -0400
-Received: from foss.arm.com ([217.140.101.70]:34416 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725847AbfEIIpk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 May 2019 04:45:40 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3761374;
-        Thu,  9 May 2019 01:45:39 -0700 (PDT)
-Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADA693F575;
-        Thu,  9 May 2019 01:45:36 -0700 (PDT)
-Date:   Thu, 9 May 2019 09:45:34 +0100
-From:   Patrick Bellasi <patrick.bellasi@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Tejun Heo <tj@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH v8 04/16] sched/core: uclamp: Add system default clamps
-Message-ID: <20190509084534.weyrsq5vl7r3ryns@e110439-lin>
-References: <20190402104153.25404-1-patrick.bellasi@arm.com>
- <20190402104153.25404-5-patrick.bellasi@arm.com>
- <20190508190011.GB32547@worktop.programming.kicks-ass.net>
+        id S1725928AbfEIJED (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 05:04:03 -0400
+Received: from mail-eopbgr50040.outbound.protection.outlook.com ([40.107.5.40]:41968
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725847AbfEIJED (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 May 2019 05:04:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HvJEZvcf+/zKQ9BGas0DqEcVVrbh1g65utD51tDgLKk=;
+ b=mFvhM2nQ5d4nR1OZ/i33zpQVpUzO2fEHfIzcB9g5J5AKTS4WeUuoVCd6zng2GYE/hIeLbqbGBbisDI1bXJuIlpd/j92I9Qsnl8lVflPkkbpXQXl8wnVQoQumBUbArF28YBkhmUdfY/QH1CLBL7AmOdB8xbdnpmGeWaYYQbkaYJE=
+Received: from AM0PR04MB6434.eurprd04.prod.outlook.com (20.179.252.215) by
+ AM0PR04MB4276.eurprd04.prod.outlook.com (52.134.91.150) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.12; Thu, 9 May 2019 09:03:57 +0000
+Received: from AM0PR04MB6434.eurprd04.prod.outlook.com
+ ([fe80::19be:75a:9fe:7cec]) by AM0PR04MB6434.eurprd04.prod.outlook.com
+ ([fe80::19be:75a:9fe:7cec%7]) with mapi id 15.20.1878.019; Thu, 9 May 2019
+ 09:03:57 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Anson Huang <anson.huang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/4] cpufreq: Add imx-cpufreq-dt driver
+Thread-Topic: [PATCH v3 1/4] cpufreq: Add imx-cpufreq-dt driver
+Thread-Index: AQHVBNwYbcAcEPdpgkaJW0PvBwINFA==
+Date:   Thu, 9 May 2019 09:03:57 +0000
+Message-ID: <AM0PR04MB64349B11B2A914F705B6D302EE330@AM0PR04MB6434.eurprd04.prod.outlook.com>
+References: <cover.1557236799.git.leonard.crestez@nxp.com>
+ <607242a278a4532d0b4285e0fb56abfd5767fdd1.1557236799.git.leonard.crestez@nxp.com>
+ <20190508035402.7pbikzpkzxxesmlw@vireshk-i7>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [95.76.3.64]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 71a42e18-3478-429c-edb6-08d6d45d4536
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB4276;
+x-ms-traffictypediagnostic: AM0PR04MB4276:
+x-microsoft-antispam-prvs: <AM0PR04MB42761E359C3148878C04EA10EE330@AM0PR04MB4276.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1468;
+x-forefront-prvs: 003245E729
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(376002)(346002)(366004)(39860400002)(396003)(199004)(189003)(66556008)(66946007)(64756008)(66446008)(73956011)(66476007)(8936002)(68736007)(486006)(446003)(102836004)(52536014)(44832011)(7696005)(6506007)(26005)(76176011)(476003)(186003)(74316002)(53546011)(4744005)(99286004)(54906003)(33656002)(256004)(25786009)(71190400001)(55016002)(71200400001)(6436002)(6916009)(6246003)(7736002)(2906002)(53936002)(5660300002)(66066001)(3846002)(6116002)(316002)(8676002)(91956017)(86362001)(76116006)(81156014)(81166006)(14454004)(305945005)(478600001)(229853002)(4326008)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4276;H:AM0PR04MB6434.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: cnCCRj2TTFaxyOUTmxMW9/zuFaHrZlAb41wy8eShKBt4t9QV+/6XLNfrWjUDnMEk/3zBh3ux5ceNSeqeJqxllXcbBMneKVlV4Iu13niCPn8wQlRWevUNpEAh8U2zVMqJFNP4aNrz0nLgbpXaswllvYhcnznVS0IzzFGp0M3kwgj1jvYpf5bOQPjrHCMT8Syi7udl8M2oXaGGGiDWDkR7FRUepWnQ8nJByAuxPfht7F7DSTiuoVZsd3UVyKGZcqrtj2bCpT2Oav+pKMdXhBo+GCzZDVK1L2p78p0gqShOw2HFyDgF1OFBZs2n1H2nwnUZnJ+32B2JJ3aSf0F5SsZP4bZJb9pNsSfMkDL8wQFcTNfsutXyXs74of/vrcZ0f0SIUpYJy2t4ZyJ7EGCdj0GtaRwku6rUSkUwPUPLoL9cEfk=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190508190011.GB32547@worktop.programming.kicks-ass.net>
-User-Agent: NeoMutt/20180716
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71a42e18-3478-429c-edb6-08d6d45d4536
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 09:03:57.6649
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4276
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-May 21:00, Peter Zijlstra wrote:
-> 
-> There was a bunch of repetition that seemed fragile; does something like
-> the below make sense?
-
-Absolutely yes... will add to v9, thanks.
- 
-> Index: linux-2.6/kernel/sched/core.c
-> ===================================================================
-> --- linux-2.6.orig/kernel/sched/core.c
-> +++ linux-2.6/kernel/sched/core.c
-> @@ -770,6 +770,9 @@ unsigned int sysctl_sched_uclamp_util_ma
->  /* All clamps are required to be less or equal than these values */
->  static struct uclamp_se uclamp_default[UCLAMP_CNT];
->  
-> +#define for_each_clamp_id(clamp_id)	\
-> +	for ((clamp_id) = 0; (clamp_id) < UCLAMP_CNT; (clamp_id)++)
-> +
->  /* Integer rounded range for each bucket */
->  #define UCLAMP_BUCKET_DELTA DIV_ROUND_CLOSEST(SCHED_CAPACITY_SCALE, UCLAMP_BUCKETS)
->  
-> @@ -790,6 +793,12 @@ static inline unsigned int uclamp_none(i
->  	return SCHED_CAPACITY_SCALE;
->  }
->  
-> +static inline void uclamp_se_set(struct uclamp_se *uc_se, unsigned int value)
-> +{
-> +	uc_se->value = value;
-> +	uc_se->bucket_id = uclamp_bucket_id(value);
-> +}
-> +
->  static inline unsigned int
->  uclamp_idle_value(struct rq *rq, unsigned int clamp_id, unsigned int clamp_value)
->  {
-> @@ -977,7 +986,7 @@ static inline void uclamp_rq_inc(struct
->  	if (unlikely(!p->sched_class->uclamp_enabled))
->  		return;
->  
-> -	for (clamp_id = 0; clamp_id < UCLAMP_CNT; ++clamp_id)
-> +	for_each_clamp_id(clamp_id)
->  		uclamp_rq_inc_id(p, rq, clamp_id);
->  
->  	/* Reset clamp idle holding when there is one RUNNABLE task */
-> @@ -992,7 +1001,7 @@ static inline void uclamp_rq_dec(struct
->  	if (unlikely(!p->sched_class->uclamp_enabled))
->  		return;
->  
-> -	for (clamp_id = 0; clamp_id < UCLAMP_CNT; ++clamp_id)
-> +	for_each_clamp_id(clamp_id)
->  		uclamp_rq_dec_id(p, rq, clamp_id);
->  }
->  
-> @@ -1021,16 +1030,13 @@ int sysctl_sched_uclamp_handler(struct c
->  	}
->  
->  	if (old_min != sysctl_sched_uclamp_util_min) {
-> -		uclamp_default[UCLAMP_MIN].value =
-> -			sysctl_sched_uclamp_util_min;
-> -		uclamp_default[UCLAMP_MIN].bucket_id =
-> -			uclamp_bucket_id(sysctl_sched_uclamp_util_min);
-> +		uclamp_se_set(&uclamp_default[UCLAMP_MIN],
-> +			      sysctl_sched_uclamp_util_min);
->  	}
-> +
->  	if (old_max != sysctl_sched_uclamp_util_max) {
-> -		uclamp_default[UCLAMP_MAX].value =
-> -			sysctl_sched_uclamp_util_max;
-> -		uclamp_default[UCLAMP_MAX].bucket_id =
-> -			uclamp_bucket_id(sysctl_sched_uclamp_util_max);
-> +		uclamp_se_set(&uclamp_default[UCLAMP_MAX],
-> +			      sysctl_sched_uclamp_util_max);
->  	}
->  
->  	/*
-> @@ -1052,7 +1058,7 @@ static void uclamp_fork(struct task_stru
->  {
->  	unsigned int clamp_id;
->  
-> -	for (clamp_id = 0; clamp_id < UCLAMP_CNT; ++clamp_id)
-> +	for_each_clamp_id(clamp_id)
->  		p->uclamp[clamp_id].active = false;
->  }
->  
-> @@ -1067,17 +1073,12 @@ static void __init init_uclamp(void)
->  		cpu_rq(cpu)->uclamp_flags = 0;
->  	}
->  
-> -	for (clamp_id = 0; clamp_id < UCLAMP_CNT; ++clamp_id) {
-> -		struct uclamp_se *uc_se = &init_task.uclamp_req[clamp_id];
-> -
-> -		uc_se->value = uclamp_none(clamp_id);
-> -		uc_se->bucket_id = uclamp_bucket_id(uc_se->value);
-> -	}
-> +	for_each_clamp_id(clamp_id)
-> +		uclamp_se_set(&init_task.uclamp_req[clamp_id], uclamp_none(clamp_id));
->  
->  	/* System defaults allow max clamp values for both indexes */
-> -	uc_max.value = uclamp_none(UCLAMP_MAX);
-> -	uc_max.bucket_id = uclamp_bucket_id(uc_max.value);
-> -	for (clamp_id = 0; clamp_id < UCLAMP_CNT; ++clamp_id)
-> +	uclamp_se_set(&uc_max, uclamp_none(UCLAMP_MAX));
-> +	for_each_clamp_id(clamp_id)
->  		uclamp_default[clamp_id] = uc_max;
->  }
->  
-> 
-
--- 
-#include <best/regards.h>
-
-Patrick Bellasi
+On 5/8/2019 6:54 AM, Viresh Kumar wrote:=0A=
+> On 07-05-19, 13:52, Leonard Crestez wrote:=0A=
+=0A=
+>> +config ARM_IMX_CPUFREQ_DT=0A=
+>> +	tristate "Freescale i.MX8M cpufreq support"=0A=
+>> +	depends on ARCH_MXC && CPUFREQ_DT=0A=
+>> +	default m if ARCH_MXC && CPUFREQ_DT=0A=
+> =0A=
+> As I said in the previous version, the if block above is redundant and=0A=
+> not required.=0A=
+=0A=
+Sorry, I misread and thought you were referring to () rather than what's =
+=0A=
+inside.=0A=
+=0A=
+Is "default m" otherwise OK? It's a reasonable implication of ARCH_MXC=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
