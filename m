@@ -2,71 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D94291858F
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 08:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442C118658
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 09:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726234AbfEIGwn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 02:52:43 -0400
-Received: from verein.lst.de ([213.95.11.211]:43907 "EHLO newverein.lst.de"
+        id S1725943AbfEIHqu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 03:46:50 -0400
+Received: from mail.eat-dinner.eu ([80.211.38.224]:36260 "EHLO eat-dinner.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726099AbfEIGwn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 May 2019 02:52:43 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id F1B9967358; Thu,  9 May 2019 08:52:23 +0200 (CEST)
-Date:   Thu, 9 May 2019 08:52:23 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Christoph Hellwig <hch@lst.de>, rafael.j.wysocki@intel.com,
-        Mario.Limonciello@dell.com, Keith Busch <kbusch@kernel.org>,
-        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] nvme-pci: Use non-operational power state instead of
- D3 on Suspend-to-Idle
-Message-ID: <20190509065223.GA15984@lst.de>
-References: <20190508185955.11406-1-kai.heng.feng@canonical.com> <20190508191624.GA8365@localhost.localdomain> <3CDA9F13-B17C-456F-8CE1-3A63C6E0DC8F@canonical.com> <f8a043b00909418bad6adcdb62d16e6e@AUSX13MPC105.AMER.DELL.COM> <20190508195159.GA1530@lst.de> <b43f2c0078f245398101fa9a40cfc2dc@AUSX13MPC105.AMER.DELL.COM> <20190509061237.GA15229@lst.de> <064701C3-2BD4-4D93-891D-B7FBB5040FC4@canonical.com>
+        id S1725774AbfEIHqu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 May 2019 03:46:50 -0400
+Received: by eat-dinner.eu (Postfix, from userid 1001)
+        id 82214A3997; Thu,  9 May 2019 09:35:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=eat-dinner.eu;
+        s=mail; t=1557387870;
+        bh=1wXsRnVQKyR5953v1mK5+VSjATpkqCFjMxx9a9NW6X4=;
+        h=Date:From:To:Subject:From;
+        b=X3/kIYmKyzCH9VcIFa+5Zm7ERmbvXR31oUJFFUhUHjHkXt4ptNwoDXUmvzIeW6Q9v
+         ixyK1NfsjWcIAL1pr8sESte72WDP3wPU0xH5qjcMzaWin/F4D40yWo9I3ZMwylDkW5
+         7Y9juqrOHUKbw8B8lM0Ei5CPjfoi8Jrpf1EiT3OA=
+Received: by mail.eat-dinner.eu for <linux-pm@vger.kernel.org>; Thu,  9 May 2019 07:35:14 GMT
+Message-ID: <20190509084500-0.1.1f.q6b.0.3qp50k8j85@eat-dinner.eu>
+Date:   Thu,  9 May 2019 07:35:14 GMT
+From:   =?UTF-8?Q? "Kapolcs_M=C3=A1ty=C3=A1s" ?= 
+        <kapolcs.matyas@eat-dinner.eu>
+To:     <linux-pm@vger.kernel.org>
+Subject: =?UTF-8?Q?Dolgoz=C3=B3i_juttat=C3=A1sok?=
+X-Mailer: mail.eat-dinner.eu
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <064701C3-2BD4-4D93-891D-B7FBB5040FC4@canonical.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 09, 2019 at 02:48:59PM +0800, Kai-Heng Feng wrote:
-> Not really, for hibernation pm_suspend_via_s2idle() evaluates to false so 
-> the old code path will be taken.
->
->>
->> And more to the points - if these "modern MS standby" systems are
->> becoming common, which it looks they are, we need support in the PM core
->> for those instead of working around the decisions in low-level drivers.
->
-> Rafael, what do you think about this?
-> Including this patch, there are five drivers that use 
-> pm_suspend_via_{firmware,s2idle}() to differentiate between S2I and S3.
-> So I think maybe it’s time to introduce a new suspend callback for S2I?
+=C3=9Cdv=C3=B6zl=C3=B6m!
+=20
+2019 janu=C3=A1rt=C3=B3l v=C3=A1ltozik a nem b=C3=A9r jelleg=C5=B1 juttat=
+=C3=A1sok rendje.
+=20
+Egy kiv=C3=A1l=C3=B3 lehet=C5=91s=C3=A9ggel =C3=A9lehet, amennyiben a mi =
+k=C3=A1rty=C3=A1nkat v=C3=A1lasztja!
+=20
+Ez a k=C3=A1rtya:
+=20
+Korl=C3=A1tlanul felhaszn=C3=A1lhat=C3=B3:
+=20
+k=C3=A9szp=C3=A9nzfelv=C3=A9tel
+=C3=A9lelmiszer v=C3=A1s=C3=A1rl=C3=A1s
+eg=C3=A9szs=C3=A9g=C3=BCgyi ell=C3=A1t=C3=A1s
+elektronikai term=C3=A9kek v=C3=A1s=C3=A1rl=C3=A1sa
+oktat=C3=A1s
+sz=C3=A1ll=C3=A1s
+=20
+K=C3=A1rty=C3=A1nk az egyetlen olyan val=C3=B3ban szabadfelhaszn=C3=A1l=C3=
+=A1s=C3=BA k=C3=A1rtya, melyet minden POS termin=C3=A1l elfogad!
+=20
+Amennyiben k=C3=A1rty=C3=A1nk felkeltette =C3=A9rdekl=C5=91d=C3=A9s=C3=A9=
+t, mint dolgoz=C3=B3i juttat=C3=A1s, k=C3=A9rem keressen fel a tov=C3=A1b=
+bi t=C3=A1j=C3=A9koztat=C3=A1s =C3=A9rdek=C3=A9ben!
+=20
+=C3=96r=C3=B6mmel =C3=A1llunk rendelkez=C3=A9s=C3=A9re mindenben!
 
-We also really need something like that to avoid the PCI_DEV_FLAGS_NO_D3
-abuse - that flag is a quirk statically set on a device at probe time
-to prevent any entering of D3 state.
 
->> per definition, although they might not be too useful.  I suspect checking
->> APSTA might be safer, but if we don't want to rely on APST we should
->> check for a power state supporting the condition that the MS document
->> quoted in the original document supports.
->
-> If Modern Standby or Connected Standby is not supported by servers, I 
-> don’t think the design documents mean much here.
-> We probably should check if the platform firmware really supports S2I 
-> instead.
-
-That too.  As said this really is a platform decision, and needs to
-be managed by the platform code through the PM core.  Individual drivers
-like nvme can just implement the behavior, but are the absolute wrong
-place to make decisions on what kinds of suspend to enter.
+Kapolcs M=C3=A1ty=C3=A1s
+Hungary Team Leader
