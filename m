@@ -2,113 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC1418503
-	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 08:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CB918587
+	for <lists+linux-pm@lfdr.de>; Thu,  9 May 2019 08:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbfEIGAb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 May 2019 02:00:31 -0400
-Received: from shell.v3.sk ([90.176.6.54]:42741 "EHLO shell.v3.sk"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726179AbfEIGAb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 May 2019 02:00:31 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 7BEEA103F1D;
-        Thu,  9 May 2019 08:00:25 +0200 (CEST)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id b9a4ApfXUWPC; Thu,  9 May 2019 08:00:17 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 24B8F103F83;
-        Thu,  9 May 2019 08:00:17 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Ca1YT6Fkg_LU; Thu,  9 May 2019 08:00:14 +0200 (CEST)
-Received: from nedofet.lan (ip-89-102-31-34.net.upcbroadband.cz [89.102.31.34])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 5DB71103F1D;
-        Thu,  9 May 2019 08:00:13 +0200 (CEST)
-Message-ID: <267d992479dcdf8c0425407e131f112ece53f5c6.camel@v3.sk>
-Subject: Re: [PATCH v6 0/10] Add support for OLPC XO 1.75 Embedded Controller
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        id S1726415AbfEIGtH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 May 2019 02:49:07 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35216 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726109AbfEIGtG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 May 2019 02:49:06 -0400
+Received: from mail-pg1-f197.google.com ([209.85.215.197])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hOcrZ-0003dt-4i
+        for linux-pm@vger.kernel.org; Thu, 09 May 2019 06:49:05 +0000
+Received: by mail-pg1-f197.google.com with SMTP id s5so989618pgv.21
+        for <linux-pm@vger.kernel.org>; Wed, 08 May 2019 23:49:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=32kiJIP116e2mLUfbaNVIRXAUg5m0z/rzvErm/or1eE=;
+        b=NI6pQnmrXCBldvrkvfK0MSM0t/onJPjQcIXnSngnv25LxV+t4OC8OwBWLujkjhDwGm
+         gXmM5II+dSHdi6+3M6CyRlIMvgiPAKNcTe45gR4ShNF97PxMsw9ikDbD7poQQUfRlNYj
+         IjTrDp7xS/fXvYLbJ2ikPd68kVwcmf235l25GIk+6gtMNm0EOVV62zG4DtxJqJcK+AK1
+         Cb2TChvgY6EtDKE7+koTIgBNx3MJ3oKKoP9xHPbpBW7en7mhgkH9OBoUPQIinwFORguY
+         5l/lB4HzyqrZJETHFabrAjCWWuZ37hwuo5PcFAGbyEa8hT82X6K5qIWlGpL2zTNxkVBf
+         ApBg==
+X-Gm-Message-State: APjAAAXqyE6VRXJ3uAi44GCbt1+rdilCQN376QEFHEDhcLGGEl2SdLmc
+        fLTDG9pxIfR1JQpYcqErWrncihpYRA0FiIiyAZCZqAQ17ugyItK/2CIVVP/8bWOtV/PH8jj89LK
+        P8rKeTbLKsxea8DRxqjlruWLkLBfGvOyfILg5
+X-Received: by 2002:a17:902:2927:: with SMTP id g36mr2893654plb.6.1557384543703;
+        Wed, 08 May 2019 23:49:03 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxJPM/iiIg9NOJAfxK2pfbyNTkSEm2UBAYNaAFq1fQROUzkh4woLlPJ4IuDqPN3TMlHwJyvEA==
+X-Received: by 2002:a17:902:2927:: with SMTP id g36mr2893630plb.6.1557384543367;
+        Wed, 08 May 2019 23:49:03 -0700 (PDT)
+Received: from 2001-b011-380f-14b9-f0ba-4a15-3e79-97f9.dynamic-ip6.hinet.net (2001-b011-380f-14b9-f0ba-4a15-3e79-97f9.dynamic-ip6.hinet.net. [2001:b011:380f:14b9:f0ba:4a15:3e79:97f9])
+        by smtp.gmail.com with ESMTPSA id i12sm1460088pgb.61.2019.05.08.23.49.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 08 May 2019 23:49:02 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
+Subject: Re: [PATCH] nvme-pci: Use non-operational power state instead of D3
+ on Suspend-to-Idle
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <20190509061237.GA15229@lst.de>
+Date:   Thu, 9 May 2019 14:48:59 +0800
+Cc:     Mario.Limonciello@dell.com, Keith Busch <kbusch@kernel.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Date:   Thu, 09 May 2019 08:00:10 +0200
-In-Reply-To: <CAHp75VcXteqg200aB6w_6ngR7=cj3S7HQOELOTV4rYUmCe+dLw@mail.gmail.com>
-References: <20190424074353.458446-1-lkundrak@v3.sk>
-         <CAHp75VcXteqg200aB6w_6ngR7=cj3S7HQOELOTV4rYUmCe+dLw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1 (3.32.1-1.fc30) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        LKML <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8bit
+Message-Id: <064701C3-2BD4-4D93-891D-B7FBB5040FC4@canonical.com>
+References: <20190508185955.11406-1-kai.heng.feng@canonical.com>
+ <20190508191624.GA8365@localhost.localdomain>
+ <3CDA9F13-B17C-456F-8CE1-3A63C6E0DC8F@canonical.com>
+ <f8a043b00909418bad6adcdb62d16e6e@AUSX13MPC105.AMER.DELL.COM>
+ <20190508195159.GA1530@lst.de>
+ <b43f2c0078f245398101fa9a40cfc2dc@AUSX13MPC105.AMER.DELL.COM>
+ <20190509061237.GA15229@lst.de>
+To:     Christoph Hellwig <hch@lst.de>, rafael.j.wysocki@intel.com
+X-Mailer: Apple Mail (2.3445.104.8)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2019-05-08 at 18:07 +0300, Andy Shevchenko wrote:
-> On Wed, Apr 24, 2019 at 10:44 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
-> > Hello!
-> > 
-> > This is a sixth spin of the patch set that adds support for the Embedded
-> > Controller on an OLPC XO 1.75 machine.
-> > 
-> > Compared to the previous version there are only some trivial-ish changes to
-> > [06/10] and addition of Reviewd-by tags; as indicated in changelogs of
-> > individual patches.
-> > 
-> > In my opinion the first seven patches are ready for merge as they are:
-> > 
-> >   [01/10] dt-bindings: olpc,xo1.75-ec: Add OLPC XO-1.75 EC
-> >   [02/10] Platform: OLPC: Remove an unused include
-> >   [03/10] Platform: OLPC: Move EC-specific functionality out from
-> >   [04/10] Platform: OLPC: Avoid a warning if the EC didn't
-> >   [05/10] Platform: OLPC: Use BIT() and GENMASK() for event masks
-> >   [06/10] Platform: OLPC: Add XO-1.75 EC driver
-> >   [07/10] Platform: OLPC: Add a regulator for the DCON
-> > 
-> > The patch [08/10] relies on changes to the OLPC battery driver that have
-> > recently landed in the power-supply tree (without them enabling
-> > CONFIG_BATTERY_OLPC on ARM would break build):
-> > 
-> >   [08/10] power: supply: olpc_battery: Allow building the driver
-> > 
-> > Sebastian Reichel provided an signed tag of an immutable branch that has
-> > the necessary bits and was merged into the power-supply tree for 5.2:
-> > 
-> >   git pull git://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git psy-olpc-1.75-battery-signed
-> > 
-> > The patch [10/10] was split of from the rest because Russell King found the
-> > patch [09/10] it depends on possibly objectionable. They should not be
-> > applied without further input from Russell:
-> > 
-> >   [09/10] ARM: export arm_pm_restart
-> >   [10/10] Platform: OLPC: Add restart support to XO-1.75 EC
-> > 
-> > Tested to work on an OLPC XO 1.75 and also tested not to break x86
-> > support with an OLPC XO 1 machine. I don't have a XO 1.5, but it's
-> > unlikely this breaks it when XO 1 works.
-> 
-> Pushed first 8 to my review and testing queue, thanks!
+Cc Rafael and linux-pm
 
-Thank you.
+at 14:12, Christoph Hellwig <hch@lst.de> wrote:
 
-Looking at kbuild bot errors, it seems I managed to somehow mess up
-again. It is not true that just the [08/10] patch relies on the
-psy-olpc-1.75-battery-signed branch of power-supply tree (see above);
-in fact [03/10] also does on x86.
+> On Wed, May 08, 2019 at 08:28:30PM +0000, Mario.Limonciello@dell.com wrote:
+>> You might think this would be adding runtime_suspend/runtime_resume
+>> callbacks, but those also get called actually at runtime which is not
+>> the goal here.  At runtime, these types of disks should rely on APST which
+>> should calculate the appropriate latencies around the different power  
+>> states.
+>>
+>> This code path is only applicable in the suspend to idle state, which  
+>> /does/
+>> call suspend/resume functions associated with dev_pm_ops.  There isn't
+>> a dedicated function in there for use only in suspend to idle, which is
+>> why pm_suspend_via_s2idle() needs to get called.
+>
+> The problem is that it also gets called for others paths:
+>
+> #ifdef CONFIG_PM_SLEEP
+> #define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>         .suspend = suspend_fn, \
+> 	.resume = resume_fn, \
+> 	.freeze = suspend_fn, \
+> 	.thaw = resume_fn, \
+> 	.poweroff = suspend_fn, \
+> 	.restore = resume_fn,
+> #else
+> else
+> #define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+> #endif
+>
+> #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> const struct dev_pm_ops name = { \
+> 	SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> }
+>
+> And at least for poweroff this new code seems completely wrong, even
+> for freeze it looks rather borderline.
 
-Would it be possible to include that branch in your testing as well? It
-is going to be included in the power-supply pull for 5.2.
+Not really, for hibernation pm_suspend_via_s2idle() evaluates to false so  
+the old code path will be taken.
 
-Also, it seems patches [09/10] and [10/10] landed in your queue; they
-are not ready.
+>
+> And more to the points - if these "modern MS standby" systems are
+> becoming common, which it looks they are, we need support in the PM core
+> for those instead of working around the decisions in low-level drivers.
 
-Lubo
+Rafael, what do you think about this?
+Including this patch, there are five drivers that use  
+pm_suspend_via_{firmware,s2idle}() to differentiate between S2I and S3.
+So I think maybe it’s time to introduce a new suspend callback for S2I?
+
+>
+>> SIMPLE_DEV_PM_OPS normally sets the same function for suspend and
+>> freeze (hibernate), so to avoid any changes to the hibernate case it seems
+>> to me that there needs to be a new nvme_freeze() that calls into the  
+>> existing
+>> nvme_dev_disable for the freeze pm op and nvme_thaw() that calls into the
+>> existing nvme_reset_ctrl for the thaw pm op.
+>
+> At least, yes.
+
+Hibernation should remain the same as stated above.
+
+>
+>>> enterprise class NVMe devices
+>>> that don't do APST and don't really do different power states at
+>>> all in many cases.
+>>
+>> Enterprise class NVMe devices that don't do APST - do they typically
+>> have a non-zero value for ndev->ctrl.npss?
+>>
+>> If not, they wouldn't enter this new codepath even if the server entered  
+>> into S2I.
+>
+> No, devices that do set NPSS will have at least some power states
+> per definition, although they might not be too useful.  I suspect checking
+> APSTA might be safer, but if we don't want to rely on APST we should
+> check for a power state supporting the condition that the MS document
+> quoted in the original document supports.
+
+If Modern Standby or Connected Standby is not supported by servers, I don’t  
+think the design documents mean much here.
+We probably should check if the platform firmware really supports S2I  
+instead.
+
+Kai-Heng
 
