@@ -2,147 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B3219A67
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2019 11:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAA419B15
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2019 12:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727299AbfEJJPj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 May 2019 05:15:39 -0400
-Received: from mail-eopbgr730061.outbound.protection.outlook.com ([40.107.73.61]:35200
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726992AbfEJJPi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 10 May 2019 05:15:38 -0400
+        id S1727240AbfEJKMa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 May 2019 06:12:30 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:47035 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727289AbfEJKM0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 May 2019 06:12:26 -0400
+Received: by mail-pl1-f194.google.com with SMTP id bi2so2602948plb.13
+        for <linux-pm@vger.kernel.org>; Fri, 10 May 2019 03:12:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector1-analog-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wSA47lRaD47gVkjnR4QZVVI1SlFOWw1QUqW5W1oYeBg=;
- b=P6j9qkyh/W9HoJNWlkiVn/q6miOnRfxuL4pYK6RankU/nkLaNOXsosVR+gcsuu3XAwFd6cCTRB1MoJlA6P/+7hwoSPcs/v94ubYmmHkZsEjQZMDFPXRh598iyCuxRg3vxxT0+p7oYdCqVHV63UCp9RKgx9ZRCph3+zfILCQVp14=
-Received: from DM6PR03CA0057.namprd03.prod.outlook.com (20.178.24.34) by
- BN3PR03MB2257.namprd03.prod.outlook.com (10.167.5.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.22; Fri, 10 May 2019 09:15:30 +0000
-Received: from SN1NAM02FT044.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::209) by DM6PR03CA0057.outlook.office365.com
- (2603:10b6:5:100::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1878.21 via Frontend
- Transport; Fri, 10 May 2019 09:15:30 +0000
-Authentication-Results: spf=pass (sender IP is 137.71.25.55)
- smtp.mailfrom=analog.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=analog.com;
-Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
- 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
- client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
-Received: from nwd2mta1.analog.com (137.71.25.55) by
- SN1NAM02FT044.mail.protection.outlook.com (10.152.72.173) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1856.11
- via Frontend Transport; Fri, 10 May 2019 09:15:29 +0000
-Received: from NWD2HUBCAS9.ad.analog.com (nwd2hubcas9.ad.analog.com [10.64.69.109])
-        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x4A9FSgk007201
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Fri, 10 May 2019 02:15:28 -0700
-Received: from NWD2MBX7.ad.analog.com ([fe80::190e:f9c1:9a22:9663]) by
- NWD2HUBCAS9.ad.analog.com ([fe80::44a2:871b:49ab:ea47%12]) with mapi id
- 14.03.0415.000; Fri, 10 May 2019 05:15:28 -0400
-From:   "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
-To:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-rpi-kernel@lists.infradead.org" 
-        <linux-rpi-kernel@lists.infradead.org>,
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=YEAAdnjFo5d+nFsQyBOaqPUBBRxUoX1ZF3WyvxMrBkU=;
+        b=dl1ae2wHT+zVPYcECGFIgL/JB+F87tAIPyE5pOOUzeAWOS8WhEZFvYwWwvDt6dQfgl
+         Sij0E5EcRupjwid6veCbXVlELd9V4px46nUA76L/Ai8p6ARnK8ST9zb5Ec8Pm85yVDbp
+         7e9ecxLxiR7+VeJkkfIEvNeqH2Udtv6W0KSgIjZ3p82GQFvga5A51plKiGWCVJ9Ku9PS
+         vaSndTfCi3RIhfoFOLxje1cSNTFWABYzd+t6143p8X2M48ByiV9Zr6hJdgDUO8KSnbOx
+         /Q9xTOyATyexqP+H41AZg6czlsQXGWjTK4FwgW74IdyATyMZFQDa1CL6t3ACjeCQi3zO
+         3q5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=YEAAdnjFo5d+nFsQyBOaqPUBBRxUoX1ZF3WyvxMrBkU=;
+        b=Ws8XOG/LJ4jqUVHnat9E91aRLUrhOprnK5LAIZz/Ef3nxJ+O1KGvLAMtSp8a16QjOM
+         Hcvj5P1j7Ezv8tp1gy8/tg8MN6BkcsZfp7rPX4Dpj+K5mQmqyDp51b3BD5aPwVy/+rU3
+         H0K4NsxjNMqUeltnt299XkCZP5ZQbEX7IaGhm7vlXixQi5F/fybGxWUTHTKvepDQ3ESO
+         NrUeHhrmwRBl1XbZPT7uAbqr9wgWLtPEplUeUOrzcnQpmQhS5DSNYvsN2+OUpoLM6Z2p
+         BIz+HpdZZezTIR0+kMq/95jC5664cnIQ87SmXBpSBdBr34FN76p5IrZMj4facpHqFuJM
+         YYQw==
+X-Gm-Message-State: APjAAAWXtqwnhCSuD4RJZaT3+l0SQkesdjGXhhkd/BXyNChYlay9/Nd6
+        y+3mxqzt6R0n1ZTDYUhdDioeiw==
+X-Google-Smtp-Source: APXvYqxKrnh807PzQYhRXIk7/R9rWTSh3mHRassJS1OSBIxgT137TWREOpor2e2oLQn4J3ONB28xVg==
+X-Received: by 2002:a17:902:d24:: with SMTP id 33mr11638563plu.148.1557483143830;
+        Fri, 10 May 2019 03:12:23 -0700 (PDT)
+Received: from localhost ([122.172.118.99])
+        by smtp.gmail.com with ESMTPSA id b14sm5970214pfi.92.2019.05.10.03.12.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 May 2019 03:12:21 -0700 (PDT)
+Date:   Fri, 10 May 2019 15:42:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Andy Tang <andy.tang@nxp.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 03/16] lib,treewide: add new match_string() helper/macro
-Thread-Topic: [PATCH 03/16] lib,treewide: add new match_string() helper/macro
-Thread-Index: AQHVBZFQXT7pBvOEwE+osXNwuBSvQKZhdwMAgAACFgCAAADdAIAC38WA
-Date:   Fri, 10 May 2019 09:15:27 +0000
-Message-ID: <4df165bc4247e60aa4952fd55cb0c77e60712767.camel@analog.com>
-References: <20190508112842.11654-1-alexandru.ardelean@analog.com>
-         <20190508112842.11654-5-alexandru.ardelean@analog.com>
-         <20190508131128.GL9224@smile.fi.intel.com>
-         <20190508131856.GB10138@kroah.com>
-         <b2440bc9485456a7a90a488c528997587b22088b.camel@analog.com>
-In-Reply-To: <b2440bc9485456a7a90a488c528997587b22088b.camel@analog.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.50.1.244]
-x-adiroutedonprem: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BE5857B429D5854D8FB2F6D2ED721097@analog.com>
-Content-Transfer-Encoding: base64
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>
+Subject: Re: [EXT] Re: [PATCH v6] arm64: dts: ls1088a: add one more thermal
+ zone node
+Message-ID: <20190510101219.oruzvzlk7mm6iahw@vireshk-i7>
+References: <20190423022507.34969-1-andy.tang@nxp.com>
+ <20190510031335.GD15856@dragon>
+ <VI1PR04MB4333D24227603D1497BA3CB9F30C0@VI1PR04MB4333.eurprd04.prod.outlook.com>
+ <9fb2e306-38c7-2af7-5470-ff5bc4e23370@linaro.org>
+ <VI1PR04MB4333372C1DABD0E4C9DD7FE8F30C0@VI1PR04MB4333.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(1496009)(39860400002)(136003)(376002)(396003)(346002)(2980300002)(189003)(199004)(486006)(126002)(86362001)(186003)(436003)(426003)(11346002)(476003)(2501003)(478600001)(2616005)(47776003)(336012)(446003)(229853002)(5660300002)(305945005)(70206006)(70586007)(6116002)(3846002)(7416002)(118296001)(7736002)(8676002)(54906003)(8936002)(6246003)(7636002)(102836004)(76176011)(110136005)(7696005)(246002)(2486003)(23676004)(36756003)(26005)(356004)(316002)(2906002)(50466002)(14454004)(4326008)(106002)(142933001);DIR:OUT;SFP:1101;SCL:1;SRVR:BN3PR03MB2257;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fa9ce3d9-4ae4-4703-3aac-08d6d5280c52
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4709054)(2017052603328)(7193020);SRVR:BN3PR03MB2257;
-X-MS-TrafficTypeDiagnostic: BN3PR03MB2257:
-X-Microsoft-Antispam-PRVS: <BN3PR03MB2257FE51D1B5A3F49D339355F90C0@BN3PR03MB2257.namprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 0033AAD26D
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: U4QfQ9HE8G1hEmln7GMZMyZmGsSziLWs3MNhXESgKInyvjzvkf4zPUY0jxBs8jtBjx7o2HFh8RIrr84vqRJr33sBZ52u9jfyq+UnxjAZSIrQ7IYKCUViOV5wTfc+RZS4gKq+m/p9jOSvcbzSH0ANK7KYyLAnpQ4IIqqF/SOcdGtx+WMbS/bT2TaFvdKuG59b7NKK6kGPGcMgRa7VYxax9zMBVy+dB0vsn0G86Hyi3v99BIScotX2/E538fCfuzOtpR0Q6tUTkRJPRYlQSs8X/zugHmiwjsghQR5RqizMR7EABuUEf3qu55yG2t4YMjpnXTwsjzfXpumUi61GtQtgLgw/49vgzi5xG43Mo9YB/ngdoLZaVP0/kyKOb+jNhjx6GOpJZiy+Hc8kiON1awKOp8PYEbFqiQg2JSn2ulHzU0I=
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2019 09:15:29.1206
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa9ce3d9-4ae4-4703-3aac-08d6d5280c52
-X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN3PR03MB2257
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <VI1PR04MB4333372C1DABD0E4C9DD7FE8F30C0@VI1PR04MB4333.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gV2VkLCAyMDE5LTA1LTA4IGF0IDE2OjIyICswMzAwLCBBbGV4YW5kcnUgQXJkZWxlYW4gd3Jv
-dGU6DQo+IE9uIFdlZCwgMjAxOS0wNS0wOCBhdCAxNToxOCArMDIwMCwgR3JlZyBLSCB3cm90ZToN
-Cj4gPiANCj4gPiANCj4gPiBPbiBXZWQsIE1heSAwOCwgMjAxOSBhdCAwNDoxMToyOFBNICswMzAw
-LCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+ID4gPiBPbiBXZWQsIE1heSAwOCwgMjAxOSBhdCAw
-MjoyODoyOVBNICswMzAwLCBBbGV4YW5kcnUgQXJkZWxlYW4gd3JvdGU6DQo+ID4gPiA+IFRoaXMg
-Y2hhbmdlIHJlLWludHJvZHVjZXMgYG1hdGNoX3N0cmluZygpYCBhcyBhIG1hY3JvIHRoYXQgdXNl
-cw0KPiA+ID4gPiBBUlJBWV9TSVpFKCkgdG8gY29tcHV0ZSB0aGUgc2l6ZSBvZiB0aGUgYXJyYXku
-DQo+ID4gPiA+IFRoZSBtYWNybyBpcyBhZGRlZCBpbiBhbGwgdGhlIHBsYWNlcyB0aGF0IGRvDQo+
-ID4gPiA+IGBtYXRjaF9zdHJpbmcoX2EsIEFSUkFZX1NJWkUoX2EpLCBzKWAsIHNpbmNlIHRoZSBj
-aGFuZ2UgaXMgcHJldHR5DQo+ID4gPiA+IHN0cmFpZ2h0Zm9yd2FyZC4NCj4gPiA+IA0KPiA+ID4g
-Q2FuIHlvdSBzcGxpdCBpbmNsdWRlL2xpbnV4LyBjaGFuZ2UgZnJvbSB0aGUgcmVzdD8NCj4gPiAN
-Cj4gPiBUaGF0IHdvdWxkIGJyZWFrIHRoZSBidWlsZCwgd2h5IGRvIHlvdSB3YW50IGl0IHNwbGl0
-IG91dD8gIFRoaXMgbWFrZXMNCj4gPiBzZW5zZSBhbGwgYXMgYSBzaW5nbGUgcGF0Y2ggdG8gbWUu
-DQo+ID4gDQo+IA0KPiBOb3QgcmVhbGx5Lg0KPiBJdCB3b3VsZCBiZSBqdXN0IGJlIHRoZSBuZXcg
-bWF0Y2hfc3RyaW5nKCkgaGVscGVyL21hY3JvIGluIGEgbmV3IGNvbW1pdC4NCj4gQW5kIHRoZSBj
-b252ZXJzaW9ucyBvZiB0aGUgc2ltcGxlIHVzZXJzIG9mIG1hdGNoX3N0cmluZygpICh0aGUgb25l
-cyB1c2luZw0KPiBBUlJBWV9TSVpFKCkpIGluIGFub3RoZXIgY29tbWl0Lg0KPiANCg0KSSBzaG91
-bGQgaGF2ZSBhc2tlZCBpbiBteSBwcmV2aW91cyByZXBseS4NCkxlYXZlIHRoaXMgYXMtaXMgb3Ig
-cmUtZm9ybXVsYXRlIGluIDIgcGF0Y2hlcyA/DQoNCk5vIHN0cm9uZyBwcmVmZXJlbmNlIGZyb20g
-bXkgc2lkZS4NCg0KVGhhbmtzDQpBbGV4DQoNCj4gVGhhbmtzDQo+IEFsZXgNCj4gDQo+ID4gdGhh
-bmtzLA0KPiA+IA0KPiA+IGdyZWcgay1oDQo=
+On 10-05-19, 08:47, Andy Tang wrote:
+> + Viresh for help.
+> 
+> > -----Original Message-----
+> > From: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Sent: 2019年5月10日 15:17
+> > To: Andy Tang <andy.tang@nxp.com>; Shawn Guo <shawnguo@kernel.org>
+> > Cc: Leo Li <leoyang.li@nxp.com>; robh+dt@kernel.org;
+> > mark.rutland@arm.com; linux-arm-kernel@lists.infradead.org;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > linux-pm@vger.kernel.org; rui.zhang@intel.com; edubezval@gmail.com
+> > Subject: Re: [EXT] Re: [PATCH v6] arm64: dts: ls1088a: add one more thermal
+> > zone node
+> > 
+> > Caution: EXT Email
+> > 
+> > On 10/05/2019 05:40, Andy Tang wrote:
+> > >> -----Original Message-----
+> > >> From: Shawn Guo <shawnguo@kernel.org>
+> > >> Sent: 2019年5月10日 11:14
+> > >> To: Andy Tang <andy.tang@nxp.com>
+> > >> Cc: Leo Li <leoyang.li@nxp.com>; robh+dt@kernel.org;
+> > >> mark.rutland@arm.com; linux-arm-kernel@lists.infradead.org;
+> > >> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > >> linux-pm@vger.kernel.org; daniel.lezcano@linaro.org;
+> > >> rui.zhang@intel.com; edubezval@gmail.com
+> > >> Subject: [EXT] Re: [PATCH v6] arm64: dts: ls1088a: add one more
+> > >> thermal zone node
+> > >>
+> > >> Caution: EXT Email
+> > >>
+> > >> On Tue, Apr 23, 2019 at 10:25:07AM +0800, Yuantian Tang wrote:
+> > >>> Ls1088a has 2 thermal sensors, core cluster and SoC platform. Core
+> > >>> cluster sensor is used to monitor the temperature of core and SoC
+> > >>> platform is for platform. The current dts only support the first sensor.
+> > >>> This patch adds the second sensor node to dts to enable it.
+> > >>>
+> > >>> Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+> > >>> ---
+> > >>> v6:
+> > >>>         - add cooling device map to cpu0-7 in platform node.
+> > > I like to explain a little. I think it makes sense that multiple thermal zone
+> > map to same cooling device.
+> > > In this way, no matter which thermal zone raises a temp alarm, it can call
+> > cooling device to chill out.
+> > > I also asked cpufreq maintainer about the cooling map issue, he think it
+> > would be fine.
+
+Yes, you asked me and I said it should be okay.
+
+> > > I have tested and no issue found.
+> > >
+> > > Daniel, what's your thought?
+> > 
+> > If there are multiple thermal zones, they will be managed by different
+> > instances of a thermal governor. Each instances will act on the shared cooling
+> > device and will collide in their decisions:
+> > 
+> >  - If the sensors are closed, their behavior will be similar regarding the
+> > temperature. The governors may take the same decision for the cooling
+> > device. But in such case having just one thermal zone managed is enough.
+> > 
+> >  - If the sensors are not closed, their behavior will be different regarding the
+> > temperature. The governors will take different decision regarding the cooling
+> > device (one will decrease the freq, other will increase the freq).
+> > 
+> > As the thermal governors are not able to manage several thermal zones and
+> > there is one cooling device (the cpu cooling device), this setup won't work as
+> > expected IMO.
+> > 
+> > The setup making sense is having a thermal zone per 'cluster' and a cooling
+> > device per 'cluster'. That means the platform has one clock line per 'cluster'.
+> > The thermal management happens in a self-contained thermal zone (one
+> > cooling device - one governor - one thermal zone).
+> > 
+> > In the case of HMP, other combinations are possible to be optimal.
+
+But not sure how I missed the obvious, though I do remember thinking about this.
+
+So the problem is that the cpu_cooling driver will get requests in parallel to
+set different max frequencies and the last call will always win and may result
+in undesired outcome.
+
+Sorry about creating the confusion.
+
+-- 
+viresh
