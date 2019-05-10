@@ -2,179 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6451983B
-	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2019 08:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5F11987F
+	for <lists+linux-pm@lfdr.de>; Fri, 10 May 2019 08:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbfEJGIu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 May 2019 02:08:50 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:35238 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726914AbfEJGIu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 May 2019 02:08:50 -0400
-Received: from mail-pf1-f200.google.com ([209.85.210.200])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1hOyfG-0008Lw-Er
-        for linux-pm@vger.kernel.org; Fri, 10 May 2019 06:05:50 +0000
-Received: by mail-pf1-f200.google.com with SMTP id a141so3382086pfa.13
-        for <linux-pm@vger.kernel.org>; Thu, 09 May 2019 23:05:50 -0700 (PDT)
+        id S1726985AbfEJGi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 May 2019 02:38:58 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:53548 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726940AbfEJGi6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 May 2019 02:38:58 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 198so6108151wme.3;
+        Thu, 09 May 2019 23:38:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=h4iloC0KtdgJLw+SNGEEUmnBN4eoRDfhXPOMnZhH8Go=;
-        b=RXO7iSAwORnjE2IvOgfhEohiUslH9CAu8Z1HpmmzrosVs0Yq1P84l1V/ZvuFURQ2bL
-         /dhVUJEvmPHsc5LLH05+b8Vyr8gxk1IMGLNDfUzcqfW3xsCCn4d6yWn/FzrE9vuslyEs
-         a3GTqZNlw3HaCmXHe0UrAbKi3cn4xd1jm4wcBvQO7KSnIeVpxCqrIv/TeHuAIeev2uZz
-         qU7gAmwRsxgnI8LqqMw7qLfjbUyFEui8V2pKbtKrvGzRUN6Cf66BIcpyyEth9sen3sbS
-         uuNZjv9pIPxLe33Ng74ykrOzWygPOzaoWNfjK97gURZhzyhH2HlCqfVFr+N6LI0zuoks
-         x9Bw==
-X-Gm-Message-State: APjAAAW4GxLJYJ49r4t7Oje5toimxPW5xoD4diAmkJli/RkLIv4VZqvz
-        Zapr+9k7meLlmJ2n8+MBEV0KjQEpTUwaoHfo2DfZhtEdnTQ39M//lTZNk7IHK9bwI0taH2WjpyT
-        mAVT2tRM+6tlMn16/iWm5I4fb7c+NTkg8lRCN
-X-Received: by 2002:a17:902:84:: with SMTP id a4mr10873387pla.210.1557468348970;
-        Thu, 09 May 2019 23:05:48 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxXPyaUtQNX07mwCNZ8kOnyUyv6UZtI2eN6ht8y+GbBqPCDNxHpJxPrJO5YXlmuD/in1wCC7Q==
-X-Received: by 2002:a17:902:84:: with SMTP id a4mr10873365pla.210.1557468348655;
-        Thu, 09 May 2019 23:05:48 -0700 (PDT)
-Received: from 2001-b011-380f-14b9-e18f-0df6-9a4b-4e37.dynamic-ip6.hinet.net (2001-b011-380f-14b9-e18f-0df6-9a4b-4e37.dynamic-ip6.hinet.net. [2001:b011:380f:14b9:e18f:df6:9a4b:4e37])
-        by smtp.gmail.com with ESMTPSA id u123sm8618461pfu.67.2019.05.09.23.05.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 23:05:48 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8;
-        delsp=yes;
-        format=flowed
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
-Subject: Re: [PATCH] nvme-pci: Use non-operational power state instead of D3
- on Suspend-to-Idle
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <495d76c66aec41a8bfbbf527820f8eb9@AUSX13MPC101.AMER.DELL.COM>
-Date:   Fri, 10 May 2019 14:05:42 +0800
-Cc:     Keith Busch <kbusch@kernel.org>, hch@lst.de, axboe@fb.com,
-        sagi@grimberg.me, rafael@kernel.org, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, keith.busch@intel.com
-Content-Transfer-Encoding: 8bit
-Message-Id: <BC5EB1D0-8718-48B3-ACAB-F7E5571D821D@canonical.com>
-References: <064701C3-2BD4-4D93-891D-B7FBB5040FC4@canonical.com>
- <CAJZ5v0ggMwpJt=XWXu4gU51o8y4BpJ4KZ5RKzfk3+v8GGb-QbQ@mail.gmail.com>
- <A4DD2E9F-054E-4D4B-9F77-D69040EBE120@canonical.com>
- <20190509095601.GA19041@lst.de>
- <225CF4F7-C8E1-4C66-B362-97E84596A54E@canonical.com>
- <20190509103142.GA19550@lst.de>
- <AB325926-0D77-4851-8E8A-A10599756BF9@canonical.com>
- <31b7d7959bf94c15a04bab0ced518444@AUSX13MPC101.AMER.DELL.COM>
- <20190509192807.GB9675@localhost.localdomain>
- <7a002851c435481593f8629ec9193e40@AUSX13MPC101.AMER.DELL.COM>
- <20190509215409.GD9675@localhost.localdomain>
- <495d76c66aec41a8bfbbf527820f8eb9@AUSX13MPC101.AMER.DELL.COM>
-To:     Mario.Limonciello@dell.com
-X-Mailer: Apple Mail (2.3445.104.8)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IFp57boJpfFhBFAlb/ed9iGf+JEpk1sdcUGlB20djWg=;
+        b=oG3NSzC6Lua47W6H00tTMGdYhVpuhfUAj4P5VckCsd0W1KK+c8JX2wxAvabs3lxa4I
+         IWQA6nIPTe7WkUqzGTKXKwruQQwbWV7AOgmVWf+fIgT4T5IQ8glfHOufg9KFh72GSY5h
+         RbbINPGDpCarsFSv8YlIcv99uRBCpg3Ieu5Zr4nZbg5iy97gwlE5EK8ayQ8zoeZMkduI
+         jr7mV45gse4HiLbHYAdSqL0kpyieIghhBaBJ/AjBW7KxP3c2xyOTKDm6RtyqCPM8cEnj
+         YtoKJ7ygkvUQpxeJweXUI5/q64/MjRXeR0GnYRwEKmFmsFZZEXCXQM6g2Uu7u1Qf58mC
+         F/GA==
+X-Gm-Message-State: APjAAAVkNdULo6KiEZgaJ4wrVWw1/sQZjkQBOQrbyb5nxmrjWBu7R+gs
+        LMF9DhjNpoxmUKiCjRkA3w==
+X-Google-Smtp-Source: APXvYqy0ffVTpZ93KEfreFdAk/op7nwYCihsXMgZGjbL+ijh1TtplNVyEONJ+ltirTEFGVqEzrCV+A==
+X-Received: by 2002:a1c:1a49:: with SMTP id a70mr5297420wma.120.1557470336581;
+        Thu, 09 May 2019 23:38:56 -0700 (PDT)
+Received: from tesla ([2a02:c7d:8e07:7c00:3e97:eff:feb3:72f1])
+        by smtp.googlemail.com with ESMTPSA id s3sm6811893wre.97.2019.05.09.23.38.55
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 09 May 2019 23:38:55 -0700 (PDT)
+Received: from javi by tesla with local (Exim 4.92)
+        (envelope-from <javi@tesla>)
+        id 1hOzBG-0004dh-7s; Fri, 10 May 2019 07:38:54 +0100
+Date:   Fri, 10 May 2019 07:38:54 +0100
+From:   Javi Merino <javi.merino@kernel.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH] thermal: cpu_cooling: Actually trace CPU load in
+ thermal_power_cpu_get_power
+Message-ID: <20190510063854.GA20477@tesla>
+References: <20190502183238.182058-1-mka@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190502183238.182058-1-mka@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-at 06:19, <Mario.Limonciello@dell.com> <Mario.Limonciello@dell.com> wrote:
+On Thu, May 02, 2019 at 11:32:38AM -0700, Matthias Kaehlcke wrote:
+> The CPU load values passed to the thermal_power_cpu_get_power
+> tracepoint are zero for all CPUs, unless, unless the
+> thermal_power_cpu_limit tracepoint is enabled too:
+> 
+>   irq/41-rockchip-98    [000] ....   290.972410: thermal_power_cpu_get_power:
+>   cpus=0000000f freq=1800000 load={{0x0,0x0,0x0,0x0}} dynamic_power=4815
+> 
+> vs
+> 
+>   irq/41-rockchip-96    [000] ....    95.773585: thermal_power_cpu_get_power:
+>   cpus=0000000f freq=1800000 load={{0x56,0x64,0x64,0x5e}} dynamic_power=4959
+>   irq/41-rockchip-96    [000] ....    95.773596: thermal_power_cpu_limit:
+>   cpus=0000000f freq=408000 cdev_state=10 power=416
+> 
+> There seems to be no good reason for omitting the CPU load information
+> depending on another tracepoint. My guess is that the intention was to
+> check whether thermal_power_cpu_get_power is (still) enabled, however
+> 'load_cpu != NULL' already indicates that it was at least enabled when
+> cpufreq_get_requested_power() was entered, there seems little gain
+> from omitting the assignment if the tracepoint was just disabled, so
+> just remove the check.
+> 
+> Fixes: 6828a4711f99 ("thermal: add trace events to the power allocator governor")
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 
->> -----Original Message-----
->> From: Keith Busch <kbusch@kernel.org>
->> Sent: Thursday, May 9, 2019 4:54 PM
->> To: Limonciello, Mario
->> Cc: kai.heng.feng@canonical.com; hch@lst.de; axboe@fb.com;
->> sagi@grimberg.me; rafael@kernel.org; linux-pm@vger.kernel.org;
->> rafael.j.wysocki@intel.com; linux-kernel@vger.kernel.org; linux-
->> nvme@lists.infradead.org; keith.busch@intel.com
->> Subject: Re: [PATCH] nvme-pci: Use non-operational power state instead  
->> of D3 on
->> Suspend-to-Idle
->>
->>
->> [EXTERNAL EMAIL]
->>
->> On Thu, May 09, 2019 at 09:37:58PM +0000, Mario.Limonciello@dell.com  
->> wrote:
->>>> +int nvme_set_power(struct nvme_ctrl *ctrl, unsigned npss)
->>>> +{
->>>> +	int ret;
->>>> +
->>>> +	mutex_lock(&ctrl->scan_lock);
->>>> +	nvme_start_freeze(ctrl);
->>>> +	nvme_wait_freeze(ctrl);
->>>> +	ret = nvme_set_features(ctrl, NVME_FEAT_POWER_MGMT, npss, NULL, 0,
->>>> +				NULL);
->>>> +	nvme_unfreeze(ctrl);
->>>> +	mutex_unlock(&ctrl->scan_lock);
->>>> +
->>>> +	return ret;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(nvme_set_power);
->>>
->>> I believe without memory barriers at the end disks with HMB this will
->>> still kernel panic (Such as Toshiba BG3).
->>
->> Well, the mutex has an implied memory barrier, but your HMB explanation
->> doesn't make much sense to me anyway. The "mb()" in this thread's original
->> patch is a CPU memory barrier, and the CPU had better not be accessing
->> HMB memory. Is there something else going on here?
->
-> Kai Heng will need to speak up a bit in his time zone as he has this disk  
-> on hand,
-> but what I recall from our discussion was that DMA operation MemRd after
-> resume was the source of the hang.
+Yep, looks good to me.
 
-Yes, that’ what I was told by the NVMe vendor, so all I know is to impose a  
-memory barrier.
-If mb() shouldn’t be used here, what’s the correct variant to use in this  
-context?
+Acked-by: Javi Merino <javi.merino@kernel.org>
 
->
->>> This still allows D3 which we found at least failed to go into deepest  
->>> state and
->> blocked
->>> platform s0ix for the following SSDs (maybe others):
->>> Hynix PC601
->>> LiteOn CL1
->>
->> We usually write features to spec first, then quirk non-compliant
->> devices after.
->
-> NVME spec doesn't talk about a relationship between SetFeatures w/
-> NVME_FEAT_POWER_MGMGT and D3 support, nor order of events.
->
-> This is why we opened a dialog with storage vendors, including  
-> contrasting the behavior
-> of Microsoft Windows inbox NVME driver and Intel's Windows RST driver.
->
-> Those two I mention that come to mind immediately because they were most  
-> recently
-> tested to fail.  Our discussion with storage vendors overwhelmingly  
-> requested
-> that we don't use D3 under S2I because their current firmware  
-> architecture won't
-> support it.
->
-> For example one vendor told us with current implementation that receiving  
-> D3hot
-> after NVME shutdown will prevent being able to enter L1.2.  D3hot entry  
-> was supported
-> by an IRQ handler that isn't serviced in NVME shutdown state.
->
-> Another vendor told us that with current implementation it's impossible  
-> to transition
-> to PS4 (at least via APST) while L1.2 D3hot is active.
-
-I tested the patch from Keith and it has two issues just as simply skipping  
-nvme_dev_disable():
-1) It consumes more power in S2I
-2) System freeze after resume
-
-Also I don’t think it’s a spec. It’s a guide to let OEM/ODM pick and  
-assemble Modern Standby compliant machines, so what Windows NVMe driver  
-really does is still opaque to us.
-
-Kai-Heng
-
-
+> ---
+>  drivers/thermal/cpu_cooling.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
+> index f7c1f49ec87f..b437804e099b 100644
+> --- a/drivers/thermal/cpu_cooling.c
+> +++ b/drivers/thermal/cpu_cooling.c
+> @@ -458,7 +458,7 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
+>  			load = 0;
+>  
+>  		total_load += load;
+> -		if (trace_thermal_power_cpu_limit_enabled() && load_cpu)
+> +		if (load_cpu)
+>  			load_cpu[i] = load;
+>  
+>  		i++;
+> -- 
+> 2.21.0.593.g511ec345e18-goog
+> 
