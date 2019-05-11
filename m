@@ -2,216 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D36DF1A929
-	for <lists+linux-pm@lfdr.de>; Sat, 11 May 2019 21:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3814E1A93D
+	for <lists+linux-pm@lfdr.de>; Sat, 11 May 2019 21:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbfEKTEX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 May 2019 15:04:23 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:34781 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbfEKTEX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 May 2019 15:04:23 -0400
-Received: by mail-pl1-f193.google.com with SMTP id w7so4394803plz.1;
-        Sat, 11 May 2019 12:04:23 -0700 (PDT)
+        id S1726033AbfEKTZF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 May 2019 15:25:05 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43717 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbfEKTZF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 May 2019 15:25:05 -0400
+Received: by mail-pg1-f194.google.com with SMTP id t22so4642700pgi.10;
+        Sat, 11 May 2019 12:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mGaRnqVCoyCZOIBZ9izPfSHfOocCoIwti//LG4qze0c=;
-        b=MI8w5cGx0btx5xiSYFrJJoCJwkyQlKKgVznkYSIQQyeEo51cg4O3QncAEZ2yQ7qAEk
-         ClKCFyKB1BtyCtfMJwqORCb+mHsBhx7bTBh5eO8Jp3JnAfuRr3yXyhzH2FdDTyChiPFY
-         PE2ibBHBRZGKjU7qWeRcDtASrk8YyzIvVIvPuVYmqf0YuDwlA0xS+6nOJ8q+ejqY5zDc
-         9ia25Yc+pKfzsShQKYxWWvitFtb498YlRPX0Hh1mT2kH4erY8pugknQ/Uh8aTUBOkGHQ
-         HKxxl0UPHcS5VYEdyxZmQD10jgPJWiCP2rgMNouweQ6cXUE/bgDzk0G/U3cbc4n20Xgp
-         savA==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=koge2frMwY+TltXqt/qyrkfkpXH+dUytXf+ZhSr+NI0=;
+        b=ju3UudD57ScsZshKrD3KFLS6n12pOfUK6z1Ujd2ZBAydDwIE+3sdp7ZXiv0mRrtc6N
+         G36Qk2orxejN/NFYkMH9Pfd2xMR7EPJqQ+Kw2MjGRZqNsOozq7b24PVQVbUUJKAOiHn9
+         oSieIoFkdkH48XFXiUrFqtKJTrV+oeVOznCmJhlxkcOSX/C6oZpZAEqWdr5wQkNBMDVs
+         fea3h+4ZUqqrAgiQLPbx8ToVsDKZc2pTsPqqnZN8kBAkLbCvveOafgOsW2ddJnDhRGMT
+         vZ7qC08ruxUXtgUiRnROuocxfjPqYYgFUG3ik1teFdBZuGAV8VqdORWJoqSbfk2WDakc
+         Vtdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mGaRnqVCoyCZOIBZ9izPfSHfOocCoIwti//LG4qze0c=;
-        b=oYK29aTCgr3XJTqrLbtU4cnsnDgqMQKdp69GBmYPJcVUp9fLvOgTOg/WCLN7pzCLBH
-         zsU/iLUb985r2xFqqPFHN9HCcHxPxz5nY7zJdmV3GMTMEMXUbYMcHWQpgGXbZzVW8KgV
-         GbXxeMQAAzHJR7sfsXW+39KzzAiTeM1wg7wcU3Rom8xq2tOeQNTt93f11kKTjOTtCrJp
-         ZwzgjRK2EBgGSBuWwWCByFxYDCRq/HZub3JzVZI10BDoIZQI5lSbHstu1rx8lelh4HwE
-         avq4DPEHdMhk5YUUHz/4Q/+QOPSXRwpg+NaZGaF1hY78/mTxWEnhk03K59SH6fMTYgMx
-         tMpg==
-X-Gm-Message-State: APjAAAW6g5jso73lZXqCYBhVrAfawLN8GZt4pvJ32dM/GC3m4VIQcizH
-        Ee9i1d2D2FD4zbZDzNHhCzE=
-X-Google-Smtp-Source: APXvYqyt/eaU9d15W8IfOa5xOEidfRGbLhiHRr2EdYIRq+a25FXzjyRxhMHBQ2aiAInKd+bzRgMYIg==
-X-Received: by 2002:a17:902:20e2:: with SMTP id v31mr21870303plg.138.1557601462677;
-        Sat, 11 May 2019 12:04:22 -0700 (PDT)
-Received: from localhost.localdomain ([2607:fb90:4a55:a659:7256:81ff:febd:926d])
-        by smtp.gmail.com with ESMTPSA id u38sm9494634pgn.73.2019.05.11.12.04.20
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=koge2frMwY+TltXqt/qyrkfkpXH+dUytXf+ZhSr+NI0=;
+        b=qw1oAjl2V6PTz4EIa7HxJl5IKGn5xHmloTtyaWm8EqTRkAWOHnlvB2+Wu5cNZ8K2HF
+         ISiDxqP32j+yjWFqahMIN/XeWABhxD4WCC8RByMgn7gNKtOzzO8ywtMip73Lf8SikNKt
+         p02n1FcyDRqW+u5oG85VzuLwPQkHEas6La4I7apioh/HbF69H7Zn5k0inVNM3B/bERVP
+         +R+p/6snn36adXHlmpKx7KP5iR0VDvpo/fFwVcRzwR2kyb1jlmFAytNukj80qi/04xdf
+         RhLWLtLlbSiyJ5KgB131Jg6Gfc9POfvUzbk70JN9DIFRWjqOKP7ktGnHPmpdVSGHF9z2
+         KwKw==
+X-Gm-Message-State: APjAAAUmUrxSImReTpPIXXa/A3ih9ZOpliMJDZxkhCf38gPCXONwosPD
+        F199vDTPxBlfrvLxcL0xx5ORA7Ec+Yw=
+X-Google-Smtp-Source: APXvYqz5GFANMOLS2G8X55ATmWDTmtSRvrdy/Jn217NOAvKY/i4/+VQJGmG9QZBcwOsvErPFHPuTSQ==
+X-Received: by 2002:a62:d044:: with SMTP id p65mr4107462pfg.37.1557602704436;
+        Sat, 11 May 2019 12:25:04 -0700 (PDT)
+Received: from localhost.localdomain ([2607:fb90:4e8b:2a8:7256:81ff:febd:926d])
+        by smtp.gmail.com with ESMTPSA id a80sm25972795pfj.105.2019.05.11.12.25.02
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 11 May 2019 12:04:22 -0700 (PDT)
-Date:   Sat, 11 May 2019 12:04:18 -0700
+        Sat, 11 May 2019 12:25:03 -0700 (PDT)
+Date:   Sat, 11 May 2019 12:25:00 -0700
 From:   Eduardo Valentin <edubezval@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-pm@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH 1/6] thermal: Introduce
- devm_thermal_of_cooling_device_register
-Message-ID: <20190511190415.GA22816@localhost.localdomain>
-References: <1555617500-10862-1-git-send-email-linux@roeck-us.net>
- <1555617500-10862-2-git-send-email-linux@roeck-us.net>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>
+Subject: Re: [PATCH - resend 1/3] thermal/drivers/cpu_cooling: Fixup the
+ header and copyright
+Message-ID: <20190511192451.GA15554@localhost.localdomain>
+References: <20190428095106.5171-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1555617500-10862-2-git-send-email-linux@roeck-us.net>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190428095106.5171-1-daniel.lezcano@linaro.org>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Guenter,
+On Sun, Apr 28, 2019 at 11:51:03AM +0200, Daniel Lezcano wrote:
+> The copyright format does not conform to the format requested by
+> Linaro: https://wiki.linaro.org/Copyright
+>=20
+> Fix it.
+>=20
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Viresh Kumar <viresh.kumar@linaro.org>
 
-On Thu, Apr 18, 2019 at 12:58:15PM -0700, Guenter Roeck wrote:
-> thermal_of_cooling_device_register() and thermal_cooling_device_register()
-> are typically called from driver probe functions, and
-> thermal_cooling_device_unregister() is called from remove functions. This
-> makes both a perfect candidate for device managed functions.
-> 
-> Introduce devm_thermal_of_cooling_device_register(). This function can
-> also be used to replace thermal_cooling_device_register() by passing a NULL
-> pointer as device node. The new function requires both struct device *
-> and struct device_node * as parameters since the struct device_node *
-> parameter is not always identical to dev->of_node.
-> 
-> Don't introduce a device managed remove function since it is not needed
-> at this point.
+Based on the series and other patches of it, I am assuming this is an
+Acked-by..
 
-I don't have any objection on adding this API. Only a minor thing below:
+Applied as Acked-by.
 
-
-> 
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  drivers/thermal/thermal_core.c | 49 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/thermal.h        |  5 +++++
->  2 files changed, 54 insertions(+)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 6590bb5cb688..e0b530603db6 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1046,6 +1046,55 @@ thermal_of_cooling_device_register(struct device_node *np,
->  }
->  EXPORT_SYMBOL_GPL(thermal_of_cooling_device_register);
->  
-> +static void thermal_cooling_device_release(struct device *dev, void *res)
-> +{
-> +	thermal_cooling_device_unregister(
-> +				*(struct thermal_cooling_device **)res);
-> +}
-> +
-> +/**
-> + * devm_thermal_of_cooling_device_register() - register an OF thermal cooling
-> + *					       device
-> + * @dev:	a valid struct device pointer of a sensor device.
-> + * @np:		a pointer to a device tree node.
-> + * @type:	the thermal cooling device type.
-> + * @devdata:	device private data.
-> + * @ops:	standard thermal cooling devices callbacks.
+>  drivers/thermal/cpu_cooling.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
+> index ee8419a6390c..42aeb9087cab 100644
+> --- a/drivers/thermal/cpu_cooling.c
+> +++ b/drivers/thermal/cpu_cooling.c
+> @@ -2,9 +2,11 @@
+>   *  linux/drivers/thermal/cpu_cooling.c
+>   *
+>   *  Copyright (C) 2012	Samsung Electronics Co., Ltd(http://www.samsung.c=
+om)
+> - *  Copyright (C) 2012  Amit Daniel <amit.kachhap@linaro.org>
+>   *
+> - *  Copyright (C) 2014  Viresh Kumar <viresh.kumar@linaro.org>
+> + *  Copyright (C) 2012-2018 Linaro Limited.
 > + *
-> + * This function will register a cooling device with device tree node reference.
-> + * This interface function adds a new thermal cooling device (fan/processor/...)
-> + * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
-> + * to all the thermal zone devices registered at the same time.
-> + *
-> + * Return: a pointer to the created struct thermal_cooling_device or an
-> + * ERR_PTR. Caller must check return value with IS_ERR*() helpers.
-> + */
-> +struct thermal_cooling_device *
-> +devm_thermal_of_cooling_device_register(struct device *dev,
-> +				struct device_node *np,
-> +				char *type, void *devdata,
-> +				const struct thermal_cooling_device_ops *ops)
-> +{
-> +	struct thermal_cooling_device **ptr, *tcd;
-> +
-> +	ptr = devres_alloc(thermal_cooling_device_release, sizeof(*ptr),
-> +			   GFP_KERNEL);
-> +	if (!ptr)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	tcd = __thermal_cooling_device_register(np, type, devdata, ops);
-> +	if (IS_ERR(tcd)) {
-> +		devres_free(ptr);
-> +		return tcd;
-> +	}
-> +
-> +	*ptr = tcd;
-> +	devres_add(dev, ptr);
-> +
-> +	return tcd;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_thermal_of_cooling_device_register);
-> +
->  static void __unbind(struct thermal_zone_device *tz, int mask,
->  		     struct thermal_cooling_device *cdev)
->  {
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 5f4705f46c2f..43cf4fdd71d4 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -447,6 +447,11 @@ struct thermal_cooling_device *thermal_cooling_device_register(char *, void *,
->  struct thermal_cooling_device *
->  thermal_of_cooling_device_register(struct device_node *np, char *, void *,
->  				   const struct thermal_cooling_device_ops *);
-> +struct thermal_cooling_device *
-> +devm_thermal_of_cooling_device_register(struct device *dev,
-> +				struct device_node *np,
-> +				char *type, void *devdata,
-> +				const struct thermal_cooling_device_ops *ops);
-
-We need to stub this in case thermal is not selected.
-
->  void thermal_cooling_device_unregister(struct thermal_cooling_device *);
->  struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name);
->  int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
-
-Something like:
-
-
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 43cf4fd..9b1b365 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -508,6 +508,14 @@ static inline struct thermal_cooling_device *
- thermal_of_cooling_device_register(struct device_node *np,
-        char *type, void *devdata, const struct thermal_cooling_device_ops *ops)
- { return ERR_PTR(-ENODEV); }
-+struct thermal_cooling_device *
-+devm_thermal_of_cooling_device_register(struct device *dev,
-+                               struct device_node *np,
-+                               char *type, void *devdata,
-+                               const struct thermal_cooling_device_ops *ops)
-+{
-+       return ERR_PTR(-ENODEV);
-+}
- static inline void thermal_cooling_device_unregister(
-        struct thermal_cooling_device *cdev)
- { }
-~
-
-
-If you want I can amend this to your patch and apply it.
-
-Also, do you prefer me to collect only this patch and you would collect hwmon changes,
-or are you ok if I collect all the series?
-
+> + *  Authors:	Amit Daniel <amit.kachhap@linaro.org>
+> + *		Viresh Kumar <viresh.kumar@linaro.org>
+>   *
+>   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~
+>   *  This program is free software; you can redistribute it and/or modify
