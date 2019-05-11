@@ -2,94 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C7E1A70E
-	for <lists+linux-pm@lfdr.de>; Sat, 11 May 2019 09:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EC31A73B
+	for <lists+linux-pm@lfdr.de>; Sat, 11 May 2019 10:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728320AbfEKHXU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 May 2019 03:23:20 -0400
-Received: from verein.lst.de ([213.95.11.211]:56604 "EHLO newverein.lst.de"
+        id S1727935AbfEKI43 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 May 2019 04:56:29 -0400
+Received: from shell.v3.sk ([90.176.6.54]:51860 "EHLO shell.v3.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726849AbfEKHXU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 11 May 2019 03:23:20 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 2FA1068AFE; Sat, 11 May 2019 09:22:59 +0200 (CEST)
-Date:   Sat, 11 May 2019 09:22:58 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Keith Busch <keith.busch@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, Rafael Wysocki <rafael@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Kai Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH] nvme/pci: Use host managed power state for suspend
-Message-ID: <20190511072258.GB14764@lst.de>
-References: <20190510212937.11661-1-keith.busch@intel.com>
+        id S1725887AbfEKI43 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 11 May 2019 04:56:29 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 3E9C8104088;
+        Sat, 11 May 2019 10:56:25 +0200 (CEST)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id SgZ03tkjHUY6; Sat, 11 May 2019 10:56:20 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id E5B9E104101;
+        Sat, 11 May 2019 10:56:19 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id u9iqiHrguB1a; Sat, 11 May 2019 10:56:19 +0200 (CEST)
+Received: from furthur.local (g-server-2.ign.cz [91.219.240.2])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id CC94C104088;
+        Sat, 11 May 2019 10:56:18 +0200 (CEST)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH] power: supply: olpc_battery: force the le/be casts
+Date:   Sat, 11 May 2019 10:56:14 +0200
+Message-Id: <20190511085614.29677-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190510212937.11661-1-keith.busch@intel.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A couple nitpicks, mostly leftover from the previous iteration
-(I didn't see replies to those comments from you, despite seeing
-a reply to my mail, assuming it didn't get lost):
+The endianness of data returned from the EC depends on the particular EC
+version determined at run time. Cast from little/big endian explicitey
+in the routine that flips endianness to the native one to make sparse
+happy.
 
-> +int nvme_set_power(struct nvme_ctrl *ctrl, unsigned ps)
-> +{
-> +	return nvme_set_features(ctrl, NVME_FEAT_POWER_MGMT, ps, NULL, 0, NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(nvme_set_power);
-> +
-> +int nvme_get_power(struct nvme_ctrl *ctrl, u32 *result)
-> +{
-> +	struct nvme_command c;
-> +	union nvme_result res;
-> +	int ret;
-> +
-> +	if (!result)
-> +		return -EINVAL;
-> +
-> +	memset(&c, 0, sizeof(c));
-> +	c.features.opcode = nvme_admin_get_features;
-> +	c.features.fid = cpu_to_le32(NVME_FEAT_POWER_MGMT);
-> +
-> +	ret = __nvme_submit_sync_cmd(ctrl->admin_q, &c, &res,
-> +			NULL, 0, 0, NVME_QID_ANY, 0, 0, false);
-> +	if (ret >= 0)
-> +		*result = le32_to_cpu(res.u32);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(nvme_get_power);
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Reported-by: kbuild test robot <lkp@intel.com>
+Fixes: 76311b9a3295 ("power: supply: olpc_battery: Add OLPC XO 1.75 suppo=
+rt")
+---
+ drivers/power/supply/olpc_battery.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-At this point I'd rather see those in the PCIe driver.  While the
-power state feature is generic in the spec I don't see it actually
-being used anytime anywhere else any time soon.
+diff --git a/drivers/power/supply/olpc_battery.c b/drivers/power/supply/o=
+lpc_battery.c
+index 4ccd242fcf72..066ec9a11153 100644
+--- a/drivers/power/supply/olpc_battery.c
++++ b/drivers/power/supply/olpc_battery.c
+@@ -326,9 +326,9 @@ static int olpc_bat_get_voltage_max_design(union powe=
+r_supply_propval *val)
+ static u16 ecword_to_cpu(struct olpc_battery_data *data, u16 ec_word)
+ {
+ 	if (data->little_endian)
+-		return le16_to_cpu(ec_word);
++		return le16_to_cpu((__force __le16)ec_word);
+ 	else
+-		return be16_to_cpu(ec_word);
++		return be16_to_cpu((__force __be16)ec_word);
+ }
+=20
+ /*********************************************************************
+@@ -340,7 +340,7 @@ static int olpc_bat_get_property(struct power_supply =
+*psy,
+ {
+ 	struct olpc_battery_data *data =3D power_supply_get_drvdata(psy);
+ 	int ret =3D 0;
+-	__be16 ec_word;
++	u16 ec_word;
+ 	uint8_t ec_byte;
+ 	__be64 ser_buf;
+=20
+--=20
+2.21.0
 
-But maybe we can add a nvme_get_features helper ala nvme_set_features
-in the core to avoid a little boilerplate code for the future?
-
-> +	ret = nvme_set_power(&dev->ctrl, dev->ctrl.npss);
-> +	if (ret < 0)
-> +		return ret;
-
-I can't find any wording in the spec that guarantees the highest
-numerical power state is the deepest.  But maybe I'm just missing
-something as such an ordering would be really helpful?
-
->  static int nvme_suspend(struct device *dev)
->  {
->  	struct pci_dev *pdev = to_pci_dev(dev);
->  	struct nvme_dev *ndev = pci_get_drvdata(pdev);
->  
-> +	/*
-> +	 * Try to use nvme if the device supports host managed power settings
-> +	 * and platform firmware is not involved.
-> +	 */
-
-This just comments that what, but I think we need a why here as the
-what is fairly obvious..
