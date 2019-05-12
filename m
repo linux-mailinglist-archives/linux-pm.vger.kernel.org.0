@@ -2,120 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BF51AC7B
-	for <lists+linux-pm@lfdr.de>; Sun, 12 May 2019 15:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071DA1AC9E
+	for <lists+linux-pm@lfdr.de>; Sun, 12 May 2019 16:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbfELNmB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 May 2019 09:42:01 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:41755 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbfELNmB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 May 2019 09:42:01 -0400
-X-Originating-IP: 109.190.253.16
-Received: from localhost (unknown [109.190.253.16])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 8AE6DE0005;
-        Sun, 12 May 2019 13:41:53 +0000 (UTC)
-Date:   Sun, 12 May 2019 15:41:52 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, wens@csie.org, catalin.marinas@arm.com,
-        will.deacon@arm.com, davem@davemloft.net,
-        mchehab+samsung@kernel.org, gregkh@linuxfoundation.org,
-        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
-        paulmck@linux.ibm.com, andy.gross@linaro.org, olof@lixom.net,
-        bjorn.andersson@linaro.org, jagan@amarulasolutions.com,
-        marc.w.gonzalez@free.fr, stefan.wahren@i2se.com,
-        enric.balletbo@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] dt-bindings: thermal: add binding document for h6
- thermal controller
-Message-ID: <20190512134152.yrletgtiglxncyo4@flea>
-References: <20190512082614.9045-1-tiny.windzz@gmail.com>
- <20190512082614.9045-4-tiny.windzz@gmail.com>
+        id S1726446AbfELObC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 May 2019 10:31:02 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:33409 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726442AbfELObC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 May 2019 10:31:02 -0400
+Received: by mail-pl1-f193.google.com with SMTP id y3so5105359plp.0;
+        Sun, 12 May 2019 07:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8MmPir51Pep1QquiMlNrOGRX1Y2TZtpKY9viaAkjkQI=;
+        b=rhWhYEal8pAMHfedEvpe/VBQbVlKLqFtXxiQi/XHXYuwxAEt9D0juekW4ZFobDtJXQ
+         44oh2TGhUvx6yE/t+ilpT/WGKb0/DTK+h2WOhXvxp8TTaIkkeW+cKK4y7p+dSW7tmY5o
+         ktiEfu0TC5Ll2KqXN1KEHgdtYaIzNAohjSs5RsxOiKeOjZjnust9Vn9J3p1V2q5GVsvD
+         vJM2pOAkNyUS7obCx76y1hN6YownFya1JANnazvaCz/y3t2hlyUv3z8uSoCOxwFr1Inr
+         f3Ef8OXBgVB+ArWaaaLwqXAjynxcN7FgSAr9r8xloN1WhGyu/+2QxvCUMkRMghxMcpoY
+         kuvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8MmPir51Pep1QquiMlNrOGRX1Y2TZtpKY9viaAkjkQI=;
+        b=GFlx3vGsWuytvd7/rw05rhhrYXzmRFn669qUi56o2/ZRP3XhH9SBTiOTfQrQmuIdzA
+         aWq/omnV31/pM5rEo950F8mkmcFjPxC4n2gEmVF3SIckpe4q2qHzEazUs9lRhgKK8Yfo
+         E2Vv2++F/58CswYIlIRGEgpWhHPcxgmrV0eJXnGRj5xZ4tS1HA9IkkWuukaseINxiLGd
+         U+/5v/ZlFyru4+Xo68ChdNUETw28+MlVEiEtRMlwMWeGAXO1KGb6VIsWC9PQard0OXX4
+         NkrYLfxjDUInzT5X4cYFRcKBPo6ymtOxBsErL9/gRiUdEnb06HHLlxLY/EJNb29lmjsd
+         sJ0Q==
+X-Gm-Message-State: APjAAAU/uiXkwXLa9nntENCncNRerlLOAT83FrttqIrsn3mpD3UHbeBg
+        5dbfDP36S467I6BhCZW+Xx4=
+X-Google-Smtp-Source: APXvYqyHv4eu6dOl7ANFLZc88b1efraMSjQavaCvSp5oLIBuxCMPX9SS9p4rYP6iiwoMUxxTzZ0OmQ==
+X-Received: by 2002:a17:902:7594:: with SMTP id j20mr25677961pll.78.1557671461643;
+        Sun, 12 May 2019 07:31:01 -0700 (PDT)
+Received: from localhost ([123.213.206.190])
+        by smtp.gmail.com with ESMTPSA id z187sm15546976pfb.132.2019.05.12.07.31.00
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 12 May 2019 07:31:00 -0700 (PDT)
+Date:   Sun, 12 May 2019 23:30:58 +0900
+From:   Minwoo Im <minwoo.im.dev@gmail.com>
+To:     Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+Cc:     Keith Busch <keith.busch@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        Kai Heng Feng <kai.heng.feng@canonical.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        "hange-folder>?" <toggle-mailboxes@minwooim-desktop>
+Subject: Re: [PATCH] nvme/pci: Use host managed power state for suspend
+Message-ID: <20190512143056.GA7761@minwooim-desktop>
+References: <20190510212937.11661-1-keith.busch@intel.com>
+ <SN6PR04MB452735778FD952AA838E78C9860E0@SN6PR04MB4527.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ahljv2wucenn7ylv"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190512082614.9045-4-tiny.windzz@gmail.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <SN6PR04MB452735778FD952AA838E78C9860E0@SN6PR04MB4527.namprd04.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (ed9d7727) (2018-07-16)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+> > +	union nvme_result res;
+> > +	int ret;
+> > +
+> > +	if (!result)
+> > +		return -EINVAL;
+> > +
+> > +	memset(&c, 0, sizeof(c));
+> > +	c.features.opcode = nvme_admin_get_features;
+> > +	c.features.fid = cpu_to_le32(NVME_FEAT_POWER_MGMT);
+> > +
+> > +	ret = __nvme_submit_sync_cmd(ctrl->admin_q, &c, &res,
+> > +			NULL, 0, 0, NVME_QID_ANY, 0, 0, false);
+> > +	if (ret >= 0)
+> > +		*result = le32_to_cpu(res.u32);
+> May be add a check for result here in above if before deref pointer :-
+> 	if (ret >= 0 && result)
+> 
 
---ahljv2wucenn7ylv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi,
-
-On Sun, May 12, 2019 at 04:26:14AM -0400, Yangtao Li wrote:
-> This patch adds binding document for allwinner h6 thermal controller.
->
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> ---
->  .../bindings/thermal/sun50i-thermal.txt       | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sun50i-thermal.txt
-
-We're starting to convert to YAML for binding descriptions that will
-allow to validate that all DT are properly using the binding. It would
-be great if you could use it as well.
-
-> diff --git a/Documentation/devicetree/bindings/thermal/sun50i-thermal.txt b/Documentation/devicetree/bindings/thermal/sun50i-thermal.txt
-> new file mode 100644
-> index 000000000000..67eda7794262
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sun50i-thermal.txt
-> @@ -0,0 +1,32 @@
-> +Binding for Thermal Sensor of Allwinner SOC.
-> +
-> +This describes the device tree binding for the Allwinner thermal controller
-> +which measures the on-SoC temperatures.
-> +
-> +Required properties:
-> +- compatible:
-> +  - "allwinner,sun50i-h6-ths" : For H6
-> +- reg: Address range of the thermal controller
-> +- clocks, clock-names: Clocks needed for the thermal controller.
-> +		       The required clocks for h6 are: "bus".
-
-If there's a single clock, then we don't need clock-names
-
-> +- resets, reset-names: Reference to the reset controller controlling
-> +		       the thermal controller.
-
-Ditto.
-
-> +- nvmem-cells: A phandle to the calibration data provided by a nvmem device. If
-> +	       unspecified default values shall be used.
-> +- nvmem-cell-names: Should be "calib"
-
-I thought you said that nvmem support was optional in the
-driver. Maybe we could make it optional in the DT too?
-
-Thanks!
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---ahljv2wucenn7ylv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXNgioAAKCRDj7w1vZxhR
-xXgAAP9K2xJnOzxte2sR5B23CXZbzrx5rlhRaXia5y6fdipxGQD+JTw1nNbgTjV+
-hD+q/NKIiRukijuarNG8O3iM1Nov6wI=
-=TJRY
------END PGP SIGNATURE-----
-
---ahljv2wucenn7ylv--
+'result' already has been checked in a few lines above.
