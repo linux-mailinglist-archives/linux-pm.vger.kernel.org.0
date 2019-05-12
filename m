@@ -2,22 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DCB1AE50
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 00:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994321AE59
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 00:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbfELWQR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 May 2019 18:16:17 -0400
-Received: from vps.xff.cz ([195.181.215.36]:51298 "EHLO vps.xff.cz"
+        id S1727000AbfELWkB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 May 2019 18:40:01 -0400
+Received: from vps.xff.cz ([195.181.215.36]:51402 "EHLO vps.xff.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726924AbfELWQR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 12 May 2019 18:16:17 -0400
+        id S1726664AbfELWkB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 12 May 2019 18:40:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1557699373; bh=P3samiJb5f84CMqzlj9sz7yN/KHtJtZ5NVmbGPI/Co4=;
+        t=1557700796; bh=4dvAP9xhVtVOsBt9SghI6QQI6gvQN6dXQLc9agBeNxA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n//o1REl3n3dLCsXhP5ADRiUtT8PReyA6Vnx3XZOR/otrY+1IGwcwfowxCWrLEEz1
-         Rrfk76mRNzQyzPQA+4KvB5tpudEUAyDDbjDV+99wmRx0NQ2RJGaMdcMojPDeDov1dv
-         q/WibJp12f+iHu3EImQemMYG+i+gme7OrHCIhIqU=
-Date:   Mon, 13 May 2019 00:16:12 +0200
+        b=fu5YpMX93v1eM/19Xz31Wf1Tm3LBCGSp+CS4jsY97cYcSk1GbpDCWP2/s1wW6GO+X
+         a+8bPgaubFV/90BYEqUgg5cbHB9w5TrhtZdLrOCCkNYUog9eZs9wWWi+2e9/rNIiLN
+         RC0F8AVcekdbVIUzhvFtBKaypGg17h5i2Hb/owMs=
+Date:   Mon, 13 May 2019 00:39:55 +0200
 From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
 To:     Yangtao Li <tiny.windzz@gmail.com>
 Cc:     rui.zhang@intel.com, edubezval@gmail.com,
@@ -33,7 +33,7 @@ Cc:     rui.zhang@intel.com, edubezval@gmail.com,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org
 Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
-Message-ID: <20190512221612.ubmknvim4utnqpl4@core.my.home>
+Message-ID: <20190512223955.6lhclj6jr2akmsdx@core.my.home>
 Mail-Followup-To: Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
         edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
         mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
@@ -57,9 +57,78 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Yangtao,
-
 On Sun, May 12, 2019 at 04:26:13AM -0400, Yangtao Li wrote:
+> This patch adds the support for allwinner thermal sensor, within
+> allwinner SoC. It will register sensors for thermal framework
+> and use device tree to bind cooling device.
+> 
+> Based on driver code found here:
+> https://megous.com/git/linux and https://github.com/Allwinner-Homlet/H6-BSP4.9-linux
+> 
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> ---
+>  MAINTAINERS                      |   7 +
+>  drivers/thermal/Kconfig          |  14 ++
+>  drivers/thermal/Makefile         |   1 +
+>  drivers/thermal/sun50i_thermal.c | 357 +++++++++++++++++++++++++++++++
+>  4 files changed, 379 insertions(+)
+>  create mode 100644 drivers/thermal/sun50i_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3c65228e93c5..8da56582e72a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -674,6 +674,13 @@ L:	linux-crypto@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/crypto/sunxi-ss/
+>  
+> +ALLWINNER THERMAL DRIVER
+> +M:	Yangtao Li <tiny.windzz@gmail.com>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/thermal/sun50i-thermal.txt
+> +F:	drivers/thermal/sun50i_thermal.c
+> +
+>  ALLWINNER VPU DRIVER
+>  M:	Maxime Ripard <maxime.ripard@bootlin.com>
+>  M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 653aa27a25a4..2a8d1c98c6ca 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -252,6 +252,20 @@ config SPEAR_THERMAL
+>  	  Enable this to plug the SPEAr thermal sensor driver into the Linux
+>  	  thermal framework.
+>  
+> +config SUN50I_THERMAL
+> +	tristate "Allwinner sun50i thermal driver"
+> +	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on OF
+> +	depends on RESET_CONTROLLER
+> +	help
+> +	  Support for the sun50i thermal sensor driver into the Linux thermal
+> +	  framework.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called sun50i-thermal.
+> +
+>  config ROCKCHIP_THERMAL
+>  	tristate "Rockchip thermal driver"
+>  	depends on ARCH_ROCKCHIP || COMPILE_TEST
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 486d682be047..a09b30b90003 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -30,6 +30,7 @@ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
+>  # platform thermal drivers
+>  obj-y				+= broadcom/
+>  obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
+> +obj-$(CONFIG_SUN50I_THERMAL)	+= sun50i_thermal.o
+>  obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
+>  obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
+>  obj-$(CONFIG_RCAR_GEN3_THERMAL)	+= rcar_gen3_thermal.o
 > diff --git a/drivers/thermal/sun50i_thermal.c b/drivers/thermal/sun50i_thermal.c
 > new file mode 100644
 > index 000000000000..3bdb3677b3d4
@@ -141,15 +210,6 @@ On Sun, May 12, 2019 at 04:26:13AM -0400, Yangtao Li wrote:
 > +/* Temp Unit: millidegree Celsius */
 > +static int tsens_reg2temp(struct tsens_device *tmdev,
 > +			      int reg)
-
-Please name all functions so that they are more clearly identifiable
-in stack traces as belonging to this driver. For example:
-
-  sun8i_ths_reg2temp
-
-The same applies for all tsens_* functions below. tsens_* is too
-generic.
-
 > +{
 > +	return (reg + tmdev->chip->offset) * tmdev->chip->scale;
 > +}
@@ -252,9 +312,6 @@ generic.
 > +	 * pair when being filled at factory test stage.
 > +	 * The unit of stored FT temperature is 0.1 degreee celusis.
 > +	 */
-
-Please describe the calibration data layout more clearly.
-
 > +	ft_temp = caldata[0] & FT_TEMP_MASK;
 > +
 > +	for (; i < tmdev->chip->sensor_num; i++) {
@@ -275,13 +332,12 @@ Please describe the calibration data layout more clearly.
 > +		cdata = CALIBRATE_DEFAULT - delta;
 > +		if (cdata & ~TEMP_CALIB_MASK) {
 > +			dev_warn(dev, "sensor%d calibration value error", i);
-
-Please use a more descriptive error message. What error is this?
-
+> +
 > +			continue;
 > +		}
 > +
 > +		calib_offest = tmdev->chip->temp_calib_base + (i / 2) * 0x4;
+> +
 > +		if (i % 2) {
 > +			int val;
 > +
@@ -338,9 +394,7 @@ Please use a more descriptive error message. What error is this?
 > +	ret = tsens_register(tmdev);
 > +	if (ret)
 > +		return ret;
-
-Why split this out of probe into separate functions?
-
+> +
 > +	ret = tmdev->chip->enable(tmdev);
 > +	if (ret)
 > +		return ret;
@@ -374,17 +428,7 @@ Why split this out of probe into separate functions?
 > +	ret = tsens_calibrate(tmdev);
 > +	if (ret)
 > +		return ret;
-
-If this fails (it may likely fail with EPROBE_DEFER) you are leaving reset
-deasserted, and clock enabled.
-
-Overall, I think, reset/clock management and nvmem reading will be common
-to all the HW variants, so it doesn't make much sense splitting it out
-of probe into separate functions, and makes it more error prone.
-
-thank you and regards,
-	o.
-
+> +
 > +	/*
 > +	 * clkin = 24MHz
 > +	 * T acquire = clkin / (SUN50I_THS_CTRL0_T_ACQ + 1)
@@ -399,6 +443,27 @@ thank you and regards,
 > +	/* period = (SUN50I_H6_THS_PC_TEMP_PERIOD + 1) * 4096 / clkin; ~10ms */
 > +	regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
 > +		     SUN50I_H6_THS_PC_TEMP_PERIOD(58));
+
+Also this math is not all that clear:
+
+  period = (SUN50I_H6_THS_PC_TEMP_PERIOD + 1) * 4096 / clkin; ~10ms
+
+SUN50I_H6_THS_PC_TEMP_PERIOD is a macro with an argument. So how does
+this work?
+
+Also, related to this, I've noticed that you removed the interrupt
+processing from the original driver. Without that you have to make sure
+that OF contains non-zero polling-delay and polling-delay-passive.
+
+Nonzero values are necessary for enabling polling mode of the tz core,
+otherwise tz core will not read values periodically from your driver.
+
+You should documment it in the DT bindings, too. Or keep the interrupt
+handling for THS.
+
+regards,
+	o.
+
 > +	/* enable sensor */
 > +	val = GENMASK(tmdev->chip->sensor_num - 1, 0);
 > +	regmap_write(tmdev->regmap, SUN50I_H6_THS_ENABLE, val);
