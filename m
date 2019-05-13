@@ -2,522 +2,243 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 994321AE59
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 00:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4437A1AE97
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 02:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbfELWkB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 May 2019 18:40:01 -0400
-Received: from vps.xff.cz ([195.181.215.36]:51402 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbfELWkB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 12 May 2019 18:40:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1557700796; bh=4dvAP9xhVtVOsBt9SghI6QQI6gvQN6dXQLc9agBeNxA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fu5YpMX93v1eM/19Xz31Wf1Tm3LBCGSp+CS4jsY97cYcSk1GbpDCWP2/s1wW6GO+X
-         a+8bPgaubFV/90BYEqUgg5cbHB9w5TrhtZdLrOCCkNYUog9eZs9wWWi+2e9/rNIiLN
-         RC0F8AVcekdbVIUzhvFtBKaypGg17h5i2Hb/owMs=
-Date:   Mon, 13 May 2019 00:39:55 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        catalin.marinas@arm.com, will.deacon@arm.com, davem@davemloft.net,
-        mchehab+samsung@kernel.org, gregkh@linuxfoundation.org,
-        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
-        paulmck@linux.ibm.com, andy.gross@linaro.org, olof@lixom.net,
-        bjorn.andersson@linaro.org, jagan@amarulasolutions.com,
-        marc.w.gonzalez@free.fr, stefan.wahren@i2se.com,
-        enric.balletbo@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
-Message-ID: <20190512223955.6lhclj6jr2akmsdx@core.my.home>
-Mail-Followup-To: Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
-        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        catalin.marinas@arm.com, will.deacon@arm.com, davem@davemloft.net,
-        mchehab+samsung@kernel.org, gregkh@linuxfoundation.org,
-        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
-        paulmck@linux.ibm.com, andy.gross@linaro.org, olof@lixom.net,
-        bjorn.andersson@linaro.org, jagan@amarulasolutions.com,
-        marc.w.gonzalez@free.fr, stefan.wahren@i2se.com,
-        enric.balletbo@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <20190512082614.9045-1-tiny.windzz@gmail.com>
- <20190512082614.9045-3-tiny.windzz@gmail.com>
+        id S1727141AbfEMAew (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 May 2019 20:34:52 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:3751 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727132AbfEMAew (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 May 2019 20:34:52 -0400
+X-UUID: 9070c3f4360d43eeb6298196dbac0799-20190513
+X-UUID: 9070c3f4360d43eeb6298196dbac0799-20190513
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1730307996; Mon, 13 May 2019 08:34:42 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 13 May 2019 08:34:41 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 13 May 2019 08:34:41 +0800
+Message-ID: <1557707681.30313.68.camel@mtksdaap41>
+Subject: Re: [RFC v1 1/3] dt-bindings: soc: add mtk svs dt-bindings
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>, Nishanth Menon <nm@ti.com>,
+        <Angus.Lin@mediatek.com>, <devicetree@vger.kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        <linux-kernel@vger.kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <Andy-YT.Liu@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>, <HenryC.Chen@mediatek.com>,
+        <Nick.Fan@mediatek.com>, <yt.lee@mediatek.com>
+Date:   Mon, 13 May 2019 08:34:41 +0800
+In-Reply-To: <155726214346.14659.17800352563837760252@swboyd.mtv.corp.google.com>
+References: <20190430112012.4514-1-roger.lu@mediatek.com>
+         <20190430112012.4514-2-roger.lu@mediatek.com>
+         <155665629219.168659.8221738507474891604@swboyd.mtv.corp.google.com>
+         <1556777971.12123.35.camel@mtksdaap41>
+         <155691770027.200842.16164651681407381397@swboyd.mtv.corp.google.com>
+         <1557215457.2147.90.camel@mtksdaap41>
+         <155726214346.14659.17800352563837760252@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190512082614.9045-3-tiny.windzz@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, May 12, 2019 at 04:26:13AM -0400, Yangtao Li wrote:
-> This patch adds the support for allwinner thermal sensor, within
-> allwinner SoC. It will register sensors for thermal framework
-> and use device tree to bind cooling device.
+
+Dear Stephen,
+
+Sorry for the late reply.
+
+On Tue, 2019-05-07 at 13:49 -0700, Stephen Boyd wrote:
+> Quoting Roger Lu (2019-05-07 00:50:57)
+> > Dear Stephen,
+> > 
+> > Sorry for the late reply.
+> > 
+> > On Fri, 2019-05-03 at 14:08 -0700, Stephen Boyd wrote:
+> > > Quoting Roger Lu (2019-05-01 23:19:31)
+> > > > On Tue, 2019-04-30 at 13:31 -0700, Stephen Boyd wrote:
+> > > > > Quoting Roger Lu (2019-04-30 04:20:10)
+> > > > > > diff --git a/Documentation/devicetree/bindings/power/mtk-svs.txt b/Documentation/devicetree/bindings/power/mtk-svs.txt
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..355329db74ba
+> > > > > > --- /dev/null
+> > > > > > +++ b/Documentation/devicetree/bindings/power/mtk-svs.txt
+> > > [..]
+> > > > > > +
+> > > > > > +               svs_gpu: svs_gpu {
+> > > > > > +                       compatible = "mediatek,mt8183-svs-gpu";
+> > > > > > +                       power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
+> > > > > > +                       operating-points-v2 = <&gpu_opp_table>;
+> > > > > > +               };
+> > > > > 
+> > > > > It looks like you need multiple OPPs for a single device, because it has
+> > > > > different independent power supplies it wants to associate the OPP
+> > > > > tables with?
+> > > > Yes. SVS has different controllers inside the hardware in order to
+> > > > calculate and optimize different OPP table voltage part.
+> > > 
+> > > So is there more than one SVS register region that needs certain devices
+> > > to be powered on or at least have their power domain enabled so that the
+> > > SVS hardware can read the voltage and adjust accordingly? I should read
+> > > the driver I suppose.
+> > No, basically, each SVS controller (aka SVS bank) only has one SVS
+> > register region that needs to be powered on for the init.
+> > In MT8183 SVS case, SVS has four controllers (banks). Each SVS bank
+> > needs corresponding power domain to be on for its init.
+> > 
+> > #SVS bank corresponding power domain
+> > svs_cpu_little: Needs CPU-A53 power on for init
+> > svs_cpu_big: Needs CPU-A73 power on for init
+> > svs_cci: Needs CPU-A53 power on for init
+> > svs_gpu: Needs MFG_2D power on for init
+> > 
+> > P.S SVS driver will use pm_runtime_get_sync() to turn on power before
+> > svs bank init and pm_runtime_put_sync() to turn off power power after
+> > svs bank init.
 > 
-> Based on driver code found here:
-> https://megous.com/git/linux and https://github.com/Allwinner-Homlet/H6-BSP4.9-linux
+> Ok. How are you making sure that certain CPUs are powered on?
+
+Before SVS banks init, We add a qos request to prevent CPU from entering
+idle for making sure CPU powers are on. Also, we'll remove this qos
+request after SVS banks init are done.
+
+pm_qos_add_request(&qos_request, PM_QOS_CPU_DMA_LATENCY, 0); //prevent CPU idle
+pm_qos_remove_request(&qos_request); //release above request
+
 > 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> ---
->  MAINTAINERS                      |   7 +
->  drivers/thermal/Kconfig          |  14 ++
->  drivers/thermal/Makefile         |   1 +
->  drivers/thermal/sun50i_thermal.c | 357 +++++++++++++++++++++++++++++++
->  4 files changed, 379 insertions(+)
->  create mode 100644 drivers/thermal/sun50i_thermal.c
+> > 
+> > > 
+> > > > 
+> > > > > Why can't these OPP tables be attached to the devices that
+> > > > > use them, i.e. CPU, GPU, CCI, etc.? Seems odd that those devices don't
+> > > > > have OPP tables that this hardware block can look up somehow.
+> > > > Those OPP tables are attached by our DVFS node (please refers below
+> > > > patch). SVS just shares with their OPP table and help optimize these OPP
+> > > > tables' voltage part.
+> > > > 
+> > > > Add cpufreq DTS node to the mt8183 and mt8183-evb
+> > > > https://patchwork.kernel.org/patch/10921675/
+> > > 
+> > > Cool thanks for the pointer.
+> > > 
+> > > > 
+> > > > 
+> > > > > Similarly,
+> > > > > the power domains should probably be part of the devices that are using
+> > > > > them and not these sub-nodes that are mirroring the other hardware
+> > > > > blocks in the system?
+> > > > Oh. There is a svs controller in GPU power-domain. We need to turn on
+> > > > GPU power so that svs controller can work functionally. Therefore, we
+> > > > add GPU power-domains in our svs_gpu sub-node.
+> > > > 
+> > > > 
+> > > 
+> > > Sorry, I'm not really following what you're saying too closely. I think
+> > > I get it but it sounds complicated.
+> > > 
+> > > I'm mostly wondering if having properties like svs-gpu = <&gpu_node>,
+> > > and svs-cci = <&cci_node> would work for you. The idea would be to link
+> > > this hardware block to the nodes that it's going to adjust the OPPs of.
+> > > Once you have the node, use some sort of OPP API to get the OPP table
+> > > for a device_node and adjust it at runtime for the current OPP.
+> > Yes, I understand your idea. Thank you. I share my design purpose and
+> > the troubles I encountered when linking other hardware block.
+> > 
+> > #my design purpose
+> > 1. SVS bank doesn't need all the resources in other device node like
+> > cci_node. Therefore, I model SVS sub-nodes to declare what svs bank
+> > needs.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3c65228e93c5..8da56582e72a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -674,6 +674,13 @@ L:	linux-crypto@vger.kernel.org
->  S:	Maintained
->  F:	drivers/crypto/sunxi-ss/
->  
-> +ALLWINNER THERMAL DRIVER
-> +M:	Yangtao Li <tiny.windzz@gmail.com>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/sun50i-thermal.txt
-> +F:	drivers/thermal/sun50i_thermal.c
-> +
->  ALLWINNER VPU DRIVER
->  M:	Maxime Ripard <maxime.ripard@bootlin.com>
->  M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 653aa27a25a4..2a8d1c98c6ca 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -252,6 +252,20 @@ config SPEAR_THERMAL
->  	  Enable this to plug the SPEAr thermal sensor driver into the Linux
->  	  thermal framework.
->  
-> +config SUN50I_THERMAL
-> +	tristate "Allwinner sun50i thermal driver"
-> +	depends on ARCH_SUNXI || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	depends on NVMEM
-> +	depends on OF
-> +	depends on RESET_CONTROLLER
-> +	help
-> +	  Support for the sun50i thermal sensor driver into the Linux thermal
-> +	  framework.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called sun50i-thermal.
-> +
->  config ROCKCHIP_THERMAL
->  	tristate "Rockchip thermal driver"
->  	depends on ARCH_ROCKCHIP || COMPILE_TEST
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 486d682be047..a09b30b90003 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -30,6 +30,7 @@ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
->  # platform thermal drivers
->  obj-y				+= broadcom/
->  obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
-> +obj-$(CONFIG_SUN50I_THERMAL)	+= sun50i_thermal.o
->  obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
->  obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
->  obj-$(CONFIG_RCAR_GEN3_THERMAL)	+= rcar_gen3_thermal.o
-> diff --git a/drivers/thermal/sun50i_thermal.c b/drivers/thermal/sun50i_thermal.c
-> new file mode 100644
-> index 000000000000..3bdb3677b3d4
-> --- /dev/null
-> +++ b/drivers/thermal/sun50i_thermal.c
-> @@ -0,0 +1,357 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Thermal sensor driver for Allwinner SOC
-> + * Copyright (C) 2019 Yangtao Li
-> + *
-> + * Based on the work of Icenowy Zheng <icenowy@aosc.io>
-> + * Based on the work of Ondrej Jirman <megous@megous.com>
-> + * Based on the work of Josef Gajdusek <atx@atx.name>
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/device.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset.h>
-> +#include <linux/slab.h>
-> +#include <linux/thermal.h>
-> +
-> +#define MAX_SENSOR_NUM	4
-> +
-> +#define FT_TEMP_MASK				GENMASK(11, 0)
-> +#define TEMP_CALIB_MASK				GENMASK(11, 0)
-> +#define TEMP_TO_REG				672
-> +#define CALIBRATE_DEFAULT			0x800
-> +
-> +#define SUN50I_THS_CTRL0			0x00
-> +#define SUN50I_H6_THS_ENABLE			0x04
-> +#define SUN50I_H6_THS_PC			0x08
-> +#define SUN50I_H6_THS_MFC			0x30
-> +#define SUN50I_H6_TEMP_CALIB			0xa0
-> +#define SUN50I_H6_TEMP_DATA			0xc0
-> +
-> +#define SUN50I_THS_CTRL0_T_ACQ(x)		((GENMASK(15, 0) & (x)) << 16)
-> +#define SUN50I_THS_FILTER_EN			BIT(2)
-> +#define SUN50I_THS_FILTER_TYPE(x)		(GENMASK(1, 0) & (x))
-> +#define SUN50I_H6_THS_PC_TEMP_PERIOD(x)		((GENMASK(19, 0) & (x)) << 12)
-> +
-> +/* millidegree celsius */
-> +#define SUN50I_H6_FT_DEVIATION			7000
-> +
-> +struct tsens_device;
-> +
-> +struct tsensor {
-> +	struct tsens_device		*tmdev;
-> +	struct thermal_zone_device	*tzd;
-> +	int				id;
-> +};
-> +
-> +struct sun50i_thermal_chip {
-> +	int	sensor_num;
-> +	int	offset;
-> +	int	scale;
-> +	int	ft_deviation;
-> +	int	temp_calib_base;
-> +	int	temp_data_base;
-> +	int	(*enable)(struct tsens_device *tmdev);
-> +	int	(*disable)(struct tsens_device *tmdev);
-> +};
-> +
-> +
-> +struct tsens_device {
-> +	const struct sun50i_thermal_chip	*chip;
-> +	struct device				*dev;
-> +	struct regmap				*regmap;
-> +	struct reset_control			*reset;
-> +	struct clk				*bus_clk;
-> +	struct tsensor				sensor[MAX_SENSOR_NUM];
-> +};
-> +
-> +/* Temp Unit: millidegree Celsius */
-> +static int tsens_reg2temp(struct tsens_device *tmdev,
-> +			      int reg)
-> +{
-> +	return (reg + tmdev->chip->offset) * tmdev->chip->scale;
-> +}
-> +
-> +static int tsens_get_temp(void *data, int *temp)
-> +{
-> +	struct tsensor *s = data;
-> +	struct tsens_device *tmdev = s->tmdev;
-> +	int val;
-> +
-> +	regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
-> +		    0x4 * s->id, &val);
-> +
-> +	if (unlikely(val == 0))
-> +		return -EBUSY;
-> +
-> +	*temp = tsens_reg2temp(tmdev, val);
-> +	if (tmdev->chip->ft_deviation)
-> +		*temp += tmdev->chip->ft_deviation;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct thermal_zone_of_device_ops tsens_ops = {
-> +	.get_temp = tsens_get_temp,
-> +};
-> +
-> +static const struct regmap_config config = {
-> +	.reg_bits = 32,
-> +	.val_bits = 32,
-> +	.reg_stride = 4,
-> +	.fast_io = true,
-> +};
-> +
-> +static int tsens_init(struct tsens_device *tmdev)
-> +{
-> +	struct device *dev = tmdev->dev;
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct resource *mem;
-> +	void __iomem *base;
-> +
-> +	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	base = devm_ioremap_resource(dev, mem);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	tmdev->regmap = devm_regmap_init_mmio_clk(dev, "bus",
-> +						  base,
-> +						  &config);
-> +	if (IS_ERR(tmdev->regmap))
-> +		return PTR_ERR(tmdev->regmap);
-> +
-> +	tmdev->reset = devm_reset_control_get(dev, "bus");
-> +	if (IS_ERR(tmdev->reset))
-> +		return PTR_ERR(tmdev->reset);
-> +
-> +	tmdev->bus_clk = devm_clk_get(&pdev->dev, "bus");
-> +	if (IS_ERR(tmdev->bus_clk))
-> +		return PTR_ERR(tmdev->bus_clk);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Even if the external calibration data stored in sid is not accessible,
-> + * the THS hardware can still work, although the data won't be so accurate.
-> + * The default value of calibration register is 0x800 for every sensor,
-> + * and the calibration value is usually 0x7xx or 0x8xx, so they won't be
-> + * away from the default value for a lot.
-> + *
-> + * So here we do not return error if the calibartion data is
-> + * not available, except the probe needs deferring.
-> + */
-> +static int tsens_calibrate(struct tsens_device *tmdev)
-> +{
-> +	struct nvmem_cell *calcell;
-> +	struct device *dev = tmdev->dev;
-> +	u16 *caldata;
-> +	size_t callen;
-> +	int ft_temp;
-> +	int i = 0;
-> +
-> +	calcell = devm_nvmem_cell_get(dev, "calib");
-> +	if (IS_ERR(calcell)) {
-> +		if (PTR_ERR(calcell) == -EPROBE_DEFER)
-> +			return -EPROBE_DEFER;
-> +
-> +		goto out;
-> +	}
-> +
-> +	caldata = nvmem_cell_read(calcell, &callen);
-> +	if (IS_ERR(caldata))
-> +		goto out;
-> +
-> +	if (!caldata[0] || callen < 2 + 2 * tmdev->chip->sensor_num)
-> +		goto out_free;
-> +
-> +	/*
-> +	 * The calbration data on H6 is stored as temperature-value
-> +	 * pair when being filled at factory test stage.
-> +	 * The unit of stored FT temperature is 0.1 degreee celusis.
-> +	 */
-> +	ft_temp = caldata[0] & FT_TEMP_MASK;
-> +
-> +	for (; i < tmdev->chip->sensor_num; i++) {
-> +		int reg = (int)caldata[i + 1];
-> +		int sensor_temp = tsens_reg2temp(tmdev, reg);
-> +		int delta, cdata, calib_offest;
-> +
-> +		/*
-> +		 * To calculate the calibration value:
-> +		 *
-> +		 * X(in Celsius) = Ts - ft_temp
-> +		 * delta = X * 10000 / TEMP_TO_REG
-> +		 * cdata = CALIBRATE_DEFAULT - delta
-> +		 *
-> +		 * cdata: calibration value
-> +		 */
-> +		delta = (sensor_temp - ft_temp * 100) * 10 / TEMP_TO_REG;
-> +		cdata = CALIBRATE_DEFAULT - delta;
-> +		if (cdata & ~TEMP_CALIB_MASK) {
-> +			dev_warn(dev, "sensor%d calibration value error", i);
-> +
-> +			continue;
-> +		}
-> +
-> +		calib_offest = tmdev->chip->temp_calib_base + (i / 2) * 0x4;
-> +
-> +		if (i % 2) {
-> +			int val;
-> +
-> +			regmap_read(tmdev->regmap, calib_offest, &val);
-> +			val = (val & TEMP_CALIB_MASK) | (cdata << 16);
-> +			regmap_write(tmdev->regmap, calib_offest, val);
-> +		} else
-> +			regmap_write(tmdev->regmap, calib_offest, cdata);
-> +	}
-> +
-> +out_free:
-> +	kfree(caldata);
-> +out:
-> +	return 0;
-> +}
-> +
-> +static int tsens_register(struct tsens_device *tmdev)
-> +{
-> +	struct thermal_zone_device *tzd;
-> +	int i = 0;
-> +
-> +	for (; i < tmdev->chip->sensor_num; i++) {
-> +		tmdev->sensor[i].tmdev = tmdev;
-> +		tmdev->sensor[i].id = i;
-> +		tmdev->sensor[i].tzd = devm_thermal_zone_of_sensor_register(
-> +					tmdev->dev, i, &tmdev->sensor[i],
-> +					&tsens_ops);
-> +		if (IS_ERR(tmdev->sensor[i].tzd))
-> +			return PTR_ERR(tzd);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int tsens_probe(struct platform_device *pdev)
-> +{
-> +	struct tsens_device *tmdev;
-> +	struct device *dev = &pdev->dev;
-> +	int ret;
-> +
-> +	tmdev = devm_kzalloc(dev, sizeof(*tmdev), GFP_KERNEL);
-> +	if (!tmdev)
-> +		return -ENOMEM;
-> +
-> +	tmdev->dev = dev;
-> +	tmdev->chip = of_device_get_match_data(&pdev->dev);
-> +	if (!tmdev->chip)
-> +		return -EINVAL;
-> +
-> +	ret = tsens_init(tmdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = tsens_register(tmdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = tmdev->chip->enable(tmdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	platform_set_drvdata(pdev, tmdev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int tsens_remove(struct platform_device *pdev)
-> +{
-> +	struct tsens_device *tmdev = platform_get_drvdata(pdev);
-> +
-> +	tmdev->chip->disable(tmdev);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sun50i_thermal_enable(struct tsens_device *tmdev)
-> +{
-> +	int ret, val;
-> +
-> +	ret = reset_control_deassert(tmdev->reset);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = clk_prepare_enable(tmdev->bus_clk);
-> +	if (ret)
-> +		goto assert_reset;
-> +
-> +	ret = tsens_calibrate(tmdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * clkin = 24MHz
-> +	 * T acquire = clkin / (SUN50I_THS_CTRL0_T_ACQ + 1)
-> +	 *           = 20us
-> +	 */
-> +	regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
-> +		     SUN50I_THS_CTRL0_T_ACQ(479));
-> +	/* average over 4 samples */
-> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
-> +		     SUN50I_THS_FILTER_EN |
-> +		     SUN50I_THS_FILTER_TYPE(1));
-> +	/* period = (SUN50I_H6_THS_PC_TEMP_PERIOD + 1) * 4096 / clkin; ~10ms */
-> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
-> +		     SUN50I_H6_THS_PC_TEMP_PERIOD(58));
-
-Also this math is not all that clear:
-
-  period = (SUN50I_H6_THS_PC_TEMP_PERIOD + 1) * 4096 / clkin; ~10ms
-
-SUN50I_H6_THS_PC_TEMP_PERIOD is a macro with an argument. So how does
-this work?
-
-Also, related to this, I've noticed that you removed the interrupt
-processing from the original driver. Without that you have to make sure
-that OF contains non-zero polling-delay and polling-delay-passive.
-
-Nonzero values are necessary for enabling polling mode of the tz core,
-otherwise tz core will not read values periodically from your driver.
-
-You should documment it in the DT bindings, too. Or keep the interrupt
-handling for THS.
-
-regards,
-	o.
-
-> +	/* enable sensor */
-> +	val = GENMASK(tmdev->chip->sensor_num - 1, 0);
-> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_ENABLE, val);
-> +
-> +	return 0;
-> +
-> +assert_reset:
-> +	reset_control_assert(tmdev->reset);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sun50i_thermal_disable(struct tsens_device *tmdev)
-> +{
-> +	clk_disable_unprepare(tmdev->bus_clk);
-> +	reset_control_assert(tmdev->reset);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct sun50i_thermal_chip sun50i_h6_ths = {
-> +	.sensor_num = 2,
-> +	.offset = -2794,
-> +	.scale = -67,
-> +	.ft_deviation = SUN50I_H6_FT_DEVIATION,
-> +	.temp_calib_base = SUN50I_H6_TEMP_CALIB,
-> +	.temp_data_base = SUN50I_H6_TEMP_DATA,
-> +	.enable = sun50i_thermal_enable,
-> +	.disable = sun50i_thermal_disable,
-> +};
-> +
-> +static const struct of_device_id of_tsens_match[] = {
-> +	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, of_tsens_match);
-> +
-> +static struct platform_driver tsens_driver = {
-> +	.probe = tsens_probe,
-> +	.remove = tsens_remove,
-> +	.driver = {
-> +		.name = "sun50i-thermal",
-> +		.of_match_table = of_tsens_match,
-> +	},
-> +};
-> +module_platform_driver(tsens_driver);
-> +
-> +MODULE_DESCRIPTION("Thermal sensor driver for Allwinner SOC");
-> +MODULE_LICENSE("GPL v2");
-> -- 
-> 2.17.0
+> Do you mean that there are other properties in the cci_node that the SVS
+> hardware block doesn't use? That doesn't sound like a problem to me. I
+> view nodes in the SoC bus as all memory mapped IO devices and it sounds
+> like SVS is a hardware IP core that's off to the side in the system that
+> has some sensors that goes into various other IP blocks in the system.
+> It's correct to model the registers and interrupts, etc. as one node for
+> the one hardware block that's delivered by the hardware engineers.
 > 
+> > 
+> > #troubles - linking other hardware block
+> > 1. I don't know how to get cpu devcie after we link CPU node
+> > (svs_cpu_little = <cpu0>). I use "get_cpu_device(unsigned cpu)" in Linux
+> > driver to attain cpuX device generally.
 > 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> This should probably be some sort of list property that points to all
+> the CPUs in the little and big clusters. Then the code can iterate
+> through the node pointers and look for an OPP table in any of them by
+> combining of_cpu_node_to_id() with get_cpu_device()?
+
+Okay. However, it becomes complicated when SVS banks link to other
+hardware block to get desired OPP table and power-domains
+
+1. We cannot guarantee the design decision of our SVS Hardware designer. They might put
+controller in the hardware block whose dts node doesn't provide the OPP table and
+power-domains that SVS bank wants.
+
+#For example:
+If there is a SVS bank that wants GPU OPP table but it needs two power-domains(GPU, Vencoder)
+for init. Then, it becomes complicated and confusing when SVS sub-node tries to link many nodes.
+Therefore, we want to add a sub-node to focus on what SVS bank requires.
+
+2. SVS banks depend on other hardware's power only. All the SVS banks' control registers
+are in SVS hardware. So, we think It's good that SVS sub-node describe what their bank requires.
+
+3. We want SVS driver to have a generic way to attain device for using pm_runtime and OPP API.
+If SVS banks link to CPU and other subsys device node. It means that SVS driver have to maintain
+different topology in order to get CPU and other subsys device (e.g cci).
+
+> 
+> > 2. Our MT8183 has three gpu-related node as below, svs_gpu need the
+> > reference of gpu (OPP table) & gpu_core2 (power-domain MFG_2D) to make
+> > sure svs_gpu can init and update gpu OPP table. I don't know how to
+> > refer two nodes by one property. Therefore, I model a svs_gpu to declare
+> > what it needs.
+> > 
+> > gpu: mali@13040000 {
+> >         ...
+> >         power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_CORE0>;
+> >         operating-points-v2 = <&gpu_opp_table>;
+> >         ...
+> > }
+> > 
+> > gpu_core1: mali_gpu_core1 {
+> >         ...
+> >         power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_CORE1>;
+> > };
+> > 
+> > gpu_core2: mali_gpu_core2 {
+> >         ...
+> >         power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
+> > };
+> 
+> These three nodes should be combined into one node for the GPU. The
+> power domains will need to be referred to by name. Luckily we have
+> support for multiple power domains in the kernel now so this should
+> work. Let us know if it doesn't work for some reason.
+
+Cools. I'll inform our GPU maintainer to check it. Thanks a lot.
+
+> 
+> > 
+> > P.S MT8183 GPU won't do upstream. So, there is no patchwork weblink to
+> > refer.
+> 
+> Sure.
+> 
+
+
+
+
