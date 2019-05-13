@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8511BDC5
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 21:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922981BE07
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 21:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbfEMTZP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 May 2019 15:25:15 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:33151 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729651AbfEMTXV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 May 2019 15:23:21 -0400
-Received: by mail-lf1-f66.google.com with SMTP id x132so9958879lfd.0
-        for <linux-pm@vger.kernel.org>; Mon, 13 May 2019 12:23:19 -0700 (PDT)
+        id S1727005AbfEMTbc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 May 2019 15:31:32 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:47089 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726290AbfEMTbb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 May 2019 15:31:31 -0400
+Received: by mail-lj1-f193.google.com with SMTP id h21so10338243ljk.13
+        for <linux-pm@vger.kernel.org>; Mon, 13 May 2019 12:31:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=o5+9luZ7sCLYkQQCN67HXS68IdQpduZUcgaX5OCzqos=;
-        b=FV//hyoMnEuhzttuAwy+3IjGHtAXZchGsvSZSUyMAJmSDn6Qk/tkPJX+DlL6/5jYzf
-         jjMWLRDOaqPCtvzv2sKC48W9o1aofdOROz4I4viJvVGZPZnvq+pyPn3BVrwCJB/hIPhj
-         xoxPevY6gXOnHpj09x2OwoTmPkocCKVcE7Z93ckD9UyadrfNo3LJ7pOTKkOK+xuf6SLV
-         Afnne5GeWsYyFeQRUOEE13gZvwjrLN5xx482cgJ/AFWRxxE3zyhRueMlyLJa7HIuxd+d
-         tSoTPkin1gaqwGLGobS1zs6UV3QuJLhH0X8bHUVoBjRumtVozN5vQTbZ8hJpt19iAGq+
-         W/Ww==
+        bh=tL+sK5pEBsAoCFopnPPwt4es9T7EwxPGgYEkm8O7IBI=;
+        b=PleXZ03XqpXkNBmDfAycSfGQdOAnwKcgjPE/yvddT6ahyVQYQIimbvzlM0ZT24i2e5
+         LUFZWo+Tdttrv0PhN9+zyZsiyAIl0piyFql/WuOFoJwf6rT/ApfowwA2yVJk5ycqSnHJ
+         tVjZQ/8bSIufYfq7D+pcmCxP7awzaUFp1ndubavu4Rg3LGgEgIDKhT1v5im0eJXErzwM
+         yeE7sM0FGOsZqtCWMwGXPx4qW6dtJwALcEcJrbDFKC6sEY00Uvvm8/vcCf8KVozLm45m
+         GNwRj8IB28P/Qgq9gd8i2bHXXGget+HBMR2KuUq4pUtz49trTZoVO+c/X53DLD2flOHv
+         U9zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=o5+9luZ7sCLYkQQCN67HXS68IdQpduZUcgaX5OCzqos=;
-        b=MP38HEFUUefBBSi5L3NnxW5WYASbOZQG7C/AL6j3RO53jclnb+WJaoQugA+TjM+h06
-         qXH6SwcafO9XyJolIqNVpZfHL+mlKI+Fp6AZERZ6Xf/If8FQNS2Llf9SZnvFDyJEA/To
-         MdMGShhWuButM5hflAnk3F/6gaPXzsy5qebKRvRPOaR6IboGRwthjOvyFopu7Zo8M9Tg
-         3h5vHIcqIBJGRq46YDqKuKDZHqEe/wi9UtE4s/jswCnVSxCOW+CN74YKmtnYI5fsfB4G
-         sb5X6jujzgB4WwQ+oY+pfKuyUZxwzIoc0mbAtvbePVE1MtLrrJ+K0r836pgax58rSwlH
-         gHVA==
-X-Gm-Message-State: APjAAAXQ99/fuQGC3ePKAMzu9n4WqStsi0hS86RQPtQjXnQH+85P2arP
-        RD0G3A5VGudTeTOFo9G1YYuWYA==
-X-Google-Smtp-Source: APXvYqw2t+LdElc4Xj4e0QzMBJlLjpK3q+ffxnx73kmsSfuwHRWHbqmUdPJVxZsVxNzXZK8vAzoQbQ==
-X-Received: by 2002:a19:4a04:: with SMTP id x4mr14103234lfa.124.1557775398769;
-        Mon, 13 May 2019 12:23:18 -0700 (PDT)
+        bh=tL+sK5pEBsAoCFopnPPwt4es9T7EwxPGgYEkm8O7IBI=;
+        b=S5K8Z8PSxid0Qa/48RSWbwKUMyL4Mzh17w7QhEY/nnKQMNoR3LgArdEgAkLKjc7O6K
+         siPDiwwZXtLTX5EQYORt0E67LPpXj3stwh9BBV427vzf+KLUSurvROy3mFHfuMa2E7PF
+         6VIr01nXq0cHxCv00WRElw9Fejy1/wdWOY63siZjenARoDtixRQRlFlp0/rOgUwDgMn8
+         SM6T1Bay8s/tI3f/dwmHvKDKpYrBg3Q9ST2S3j8NUnlHKJYxex/q1aH57TmnSxsYXfPz
+         esUQjYemc//HXc7K2LrmMpUsGfD7aoazsHsD0x/Y7JD4cBtDxSz6ueHDfcFzDba1Ap4Y
+         1NHg==
+X-Gm-Message-State: APjAAAWdO4RYhjlqeAxfOe2yLdQe5BGZbAvykrYSEaYAfE/AV7srNwia
+        iGQTcncA7VtwIYr1jxchqtzrVA==
+X-Google-Smtp-Source: APXvYqx4whMnRpTm4m80h2xmvQbwZJE+FnBv/f7E0p3WgnHRPkfQ9mN1Bj/AUSzvNa+UTmcvCbPkvw==
+X-Received: by 2002:a2e:81cf:: with SMTP id s15mr14626643ljg.193.1557775400776;
+        Mon, 13 May 2019 12:23:20 -0700 (PDT)
 Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id q21sm3449365lfa.84.2019.05.13.12.23.17
+        by smtp.gmail.com with ESMTPSA id q21sm3449365lfa.84.2019.05.13.12.23.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 May 2019 12:23:18 -0700 (PDT)
+        Mon, 13 May 2019 12:23:19 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -63,11 +63,10 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Souvik Chakravarty <souvik.chakravarty@arm.com>,
         linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Lina Iyer <lina.iyer@linaro.org>
-Subject: [PATCH 07/18] drivers: firmware: psci: Prepare to use OS initiated suspend mode
-Date:   Mon, 13 May 2019 21:22:49 +0200
-Message-Id: <20190513192300.653-8-ulf.hansson@linaro.org>
+        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 08/18] drivers: firmware: psci: Prepare to support PM domains
+Date:   Mon, 13 May 2019 21:22:50 +0200
+Message-Id: <20190513192300.653-9-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190513192300.653-1-ulf.hansson@linaro.org>
 References: <20190513192300.653-1-ulf.hansson@linaro.org>
@@ -76,100 +75,104 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The per CPU variable psci_power_state, contains an array of fixed values,
-which reflects the corresponding arm,psci-suspend-param parsed from DT, for
-each of the available CPU idle states.
+Subsequent changes implements support for PM domains to PSCI. Those changes
+are mainly implemented in a new separate c-file, hence a couple of the
+internal PSCI functions needs to be shared to be accessible. Let's do that
+via adding a new PSCI header file.
 
-This isn't sufficient when using the hierarchical CPU topology in DT in
-combination with having PSCI OS initiated (OSI) mode enabled. More
-precisely, in OSI mode, Linux is responsible of telling the PSCI FW what
-idle state the cluster (a group of CPUs) should enter, while in PSCI
-Platform Coordinated (PC) mode, each CPU independently votes for an idle
-state of the cluster.
+Moreover, to implement support for PM domains, switching the PSCI FW into
+the OS initiated mode is sometimes needed. Therefore, let's share a new
+function that implement this.
 
-For this reason, let's introduce an additional per CPU variable called
-domain_state and implement two helper functions to read/write its values.
-Following patches, which implements PM domain support for PSCI, will use
-the domain_state variable and set it to corresponding bits that represents
-the selected idle state for the cluster.
-
-Finally, in psci_cpu_suspend_enter() and psci_suspend_finisher(), let's
-take into account the values in the domain_state, as to get the complete
-suspend parameter.
-
-Co-developed-by: Lina Iyer <lina.iyer@linaro.org>
-Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
 
 Changes:
-	- Clarify changelog.
-	- Drop changes in psci_cpu_on() as it belongs in the patch for hotplug.
-	- Move some code inside "#ifdef CONFIG_CPU_IDLE".
+	- Convert psci_set_osi_mode() to return an int.
+	- Don't share psci_get_domain_state() as that's no longer needed.
+	- Update changelog.
 
 ---
- drivers/firmware/psci/psci.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ drivers/firmware/psci/psci.c | 17 ++++++++++++++---
+ drivers/firmware/psci/psci.h | 16 ++++++++++++++++
+ 2 files changed, 30 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/firmware/psci/psci.h
 
 diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index b11560f7c4b9..4aec513136e4 100644
+index 4aec513136e4..0e91d864e346 100644
 --- a/drivers/firmware/psci/psci.c
 +++ b/drivers/firmware/psci/psci.c
-@@ -285,6 +285,17 @@ static int __init psci_features(u32 psci_func_id)
+@@ -34,6 +34,8 @@
+ #include <asm/smp_plat.h>
+ #include <asm/suspend.h>
  
- #ifdef CONFIG_CPU_IDLE
- static DEFINE_PER_CPU_READ_MOSTLY(u32 *, psci_power_state);
-+static DEFINE_PER_CPU(u32, domain_state);
++#include "psci.h"
 +
-+static inline u32 psci_get_domain_state(void)
-+{
-+	return __this_cpu_read(domain_state);
-+}
-+
-+static inline void psci_set_domain_state(u32 state)
-+{
-+	__this_cpu_write(domain_state, state);
-+}
- 
- static int psci_dt_parse_state_node(struct device_node *np, u32 *state)
- {
-@@ -420,15 +431,17 @@ int psci_cpu_init_idle(struct cpuidle_driver *drv, unsigned int cpu)
- static int psci_suspend_finisher(unsigned long index)
- {
- 	u32 *state = __this_cpu_read(psci_power_state);
-+	u32 composite_state = state[index - 1] | psci_get_domain_state();
- 
--	return psci_ops.cpu_suspend(state[index - 1],
--				    __pa_symbol(cpu_resume));
-+	return psci_ops.cpu_suspend(composite_state, __pa_symbol(cpu_resume));
+ /*
+  * While a 64-bit OS can make calls with SMC32 calling conventions, for some
+  * calls it is necessary to use SMC64 to pass or return 64-bit values.
+@@ -96,7 +98,7 @@ static inline bool psci_has_ext_power_state(void)
+ 				PSCI_1_0_FEATURES_CPU_SUSPEND_PF_MASK;
  }
  
- int psci_cpu_suspend_enter(unsigned long index)
+-static inline bool psci_has_osi_support(void)
++bool psci_has_osi_support(void)
  {
- 	int ret;
- 	u32 *state = __this_cpu_read(psci_power_state);
-+	u32 composite_state = state[index - 1] | psci_get_domain_state();
-+
- 	/*
- 	 * idle state index 0 corresponds to wfi, should never be called
- 	 * from the cpu_suspend operations
-@@ -436,11 +449,14 @@ int psci_cpu_suspend_enter(unsigned long index)
- 	if (WARN_ON_ONCE(!index))
- 		return -EINVAL;
- 
--	if (!psci_power_state_loses_context(state[index - 1]))
--		ret = psci_ops.cpu_suspend(state[index - 1], 0);
-+	if (!psci_power_state_loses_context(composite_state))
-+		ret = psci_ops.cpu_suspend(composite_state, 0);
- 	else
- 		ret = cpu_suspend(index, psci_suspend_finisher);
- 
-+	/* Clear the domain state to start fresh when back from idle. */
-+	psci_set_domain_state(0);
-+
- 	return ret;
+ 	return psci_cpu_suspend_feature & PSCI_1_0_OS_INITIATED;
+ }
+@@ -161,6 +163,15 @@ static u32 psci_get_version(void)
+ 	return invoke_psci_fn(PSCI_0_2_FN_PSCI_VERSION, 0, 0, 0);
  }
  
++int psci_set_osi_mode(void)
++{
++	int err;
++
++	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE,
++			     PSCI_1_0_SUSPEND_MODE_OSI, 0, 0);
++	return psci_to_linux_errno(err);
++}
++
+ static int psci_cpu_suspend(u32 state, unsigned long entry_point)
+ {
+ 	int err;
+@@ -292,12 +303,12 @@ static inline u32 psci_get_domain_state(void)
+ 	return __this_cpu_read(domain_state);
+ }
+ 
+-static inline void psci_set_domain_state(u32 state)
++void psci_set_domain_state(u32 state)
+ {
+ 	__this_cpu_write(domain_state, state);
+ }
+ 
+-static int psci_dt_parse_state_node(struct device_node *np, u32 *state)
++int psci_dt_parse_state_node(struct device_node *np, u32 *state)
+ {
+ 	int err = of_property_read_u32(np, "arm,psci-suspend-param", state);
+ 
+diff --git a/drivers/firmware/psci/psci.h b/drivers/firmware/psci/psci.h
+new file mode 100644
+index 000000000000..f2277c3ad405
+--- /dev/null
++++ b/drivers/firmware/psci/psci.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __PSCI_H
++#define __PSCI_H
++
++struct device_node;
++
++int psci_set_osi_mode(void);
++bool psci_has_osi_support(void);
++
++#ifdef CONFIG_CPU_IDLE
++void psci_set_domain_state(u32 state);
++int psci_dt_parse_state_node(struct device_node *np, u32 *state);
++#endif
++
++#endif /* __PSCI_H */
 -- 
 2.17.1
 
