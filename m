@@ -2,193 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE021B3F4
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 12:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463F61B468
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 13:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbfEMKZs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 May 2019 06:25:48 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37230 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbfEMKZs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 May 2019 06:25:48 -0400
-Received: by mail-pg1-f194.google.com with SMTP id e6so6551319pgc.4
-        for <linux-pm@vger.kernel.org>; Mon, 13 May 2019 03:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Cs4aUpEKLgkAcSCD22Xunu2gCyCIqjqZsKFA+jxsKFs=;
-        b=E6ocS6ygS7TjcWC/tuQWZe961EteD5fozF5U2IzltzajiuzaGrAl/WYpQLDLnVnY+U
-         RB57sfO59hNfQPNEtTKoyaPMQ09qdDd7et3LcQLqrsfxiJEnkoZh6bLriw+Fa429kfW+
-         Bj2LA/6jXXR4vcXuvP7HK5cNpXmPm4sTz9lnyT39q06YBRzmyiAFjqIK9tPxC+3Ngumr
-         ltBJxwtQkucUsL00OsYT4kOEARRYCA28M3W6BuTUAzJ7O+zvsH629DV5UAxqcRqBkx/X
-         66eWmxQJG3DLaud5TjbhXlZkwfV+biYQtpaK6I98+8E4Lqculi7X4A48ziAVspAA6OEX
-         2OSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Cs4aUpEKLgkAcSCD22Xunu2gCyCIqjqZsKFA+jxsKFs=;
-        b=lBMqh/K+Yzd96dhp3bofQBZNoBXQ8Cr8exKky1ykCkDbNLKoc2HdFph6oFwFXcilfZ
-         gs6tz5xejdP+jiiJl8MgSTduiTtxgBOOfCe8uSsh3FCwiP2d9aZHmG1D8HOS2LszO5LQ
-         MtDLKgaHTiVGIOr7G7+9wG7l9W1bqasmv+2BrGSoAM+Ab1Ap/XVVLmfxgJ8wIXyJs488
-         LCGejldjbbTBoyECt7FnBZUCxytFumoTgdL+omw1zn4xHlN5uvxWQqHJ+CqUZl18I2sz
-         VrhE19+DXvJsPD3a9DJBCJ5DpjXEFY1Sj0IQO3AHnnG5onenuAr+tfVXHejylWinplwt
-         lB7Q==
-X-Gm-Message-State: APjAAAWLhfT5CaA8XiJt3LiLk0yWOqBiYVDwP/i+IdZFS8S/rhLjq/pi
-        ZkeSCI1T3okXGOg/gYLE5Ru2IA==
-X-Google-Smtp-Source: APXvYqzbmJsX+4GZxq8SyAHW3ZX9wWVFmYis7J+0XfnuY/KUNMOwb4XKqykwaRAzLZpuya52PEcK2A==
-X-Received: by 2002:a65:56c5:: with SMTP id w5mr30123588pgs.434.1557743147101;
-        Mon, 13 May 2019 03:25:47 -0700 (PDT)
-Received: from localhost ([122.172.118.99])
-        by smtp.gmail.com with ESMTPSA id s5sm3927132pgj.60.2019.05.13.03.25.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 May 2019 03:25:46 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>, niklas.cassel@linaro.org,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] opp: Allocate genpd_virt_devs from dev_pm_opp_attach_genpd()
-Date:   Mon, 13 May 2019 15:54:11 +0530
-Message-Id: <9f22d5954319fc315bc98e347e69839931648ecc.1557742920.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
-In-Reply-To: <1bc9053f5c41a10832b58a2a81decbad7f1aded9.1557742920.git.viresh.kumar@linaro.org>
-References: <1bc9053f5c41a10832b58a2a81decbad7f1aded9.1557742920.git.viresh.kumar@linaro.org>
+        id S1729205AbfEMLBl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 May 2019 07:01:41 -0400
+Received: from mail-eopbgr50048.outbound.protection.outlook.com ([40.107.5.48]:59894
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727838AbfEMLBk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 13 May 2019 07:01:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MO6gaIlOGNiwxpeyq1/UarEoxpVmmpAv5XZMDwy+bUs=;
+ b=Gz+RpwjmBj6SdA18JLV7LQ9yubJj+S9UcbQ32iNxzibwDEzS5AVFExUnHwF+yz5olPPlF/oaZy7Jp/D9J7jubupK4cqtbyDGulQC8ivC4aRs9tOTwN2tlopSqiIJUoGORDD5ZoDrTIcPzHSD3IvKvoCcDAF+CpSY7AILsQKzD0c=
+Received: from AM0PR04MB6434.eurprd04.prod.outlook.com (20.179.252.215) by
+ AM0PR04MB5138.eurprd04.prod.outlook.com (52.134.89.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1878.24; Mon, 13 May 2019 11:01:37 +0000
+Received: from AM0PR04MB6434.eurprd04.prod.outlook.com
+ ([fe80::19be:75a:9fe:7cec]) by AM0PR04MB6434.eurprd04.prod.outlook.com
+ ([fe80::19be:75a:9fe:7cec%7]) with mapi id 15.20.1878.024; Mon, 13 May 2019
+ 11:01:37 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lucas Stach <l.stach@pengutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: [PATCH v4 0/5] cpufreq: Add imx-cpufreq-dt driver for speed grading
+Thread-Topic: [PATCH v4 0/5] cpufreq: Add imx-cpufreq-dt driver for speed
+ grading
+Thread-Index: AQHVCXs8MBVHQc8rXk+VbTw870d1OQ==
+Date:   Mon, 13 May 2019 11:01:37 +0000
+Message-ID: <cover.1557742902.git.leonard.crestez@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [89.37.124.34]
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: VI1PR04CA0134.eurprd04.prod.outlook.com
+ (2603:10a6:803:f0::32) To AM0PR04MB6434.eurprd04.prod.outlook.com
+ (2603:10a6:208:16c::23)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c118f5d9-fc81-42ec-7f23-08d6d7925e81
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB5138;
+x-ms-traffictypediagnostic: AM0PR04MB5138:
+x-ms-exchange-purlcount: 3
+x-microsoft-antispam-prvs: <AM0PR04MB513891F95DB3E83E63735157EE0F0@AM0PR04MB5138.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0036736630
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(396003)(346002)(376002)(366004)(136003)(189003)(199004)(7736002)(2906002)(6306002)(44832011)(99286004)(36756003)(6512007)(53936002)(54906003)(110136005)(476003)(2616005)(4326008)(52116002)(256004)(486006)(6116002)(3846002)(14444005)(66066001)(8676002)(81156014)(81166006)(478600001)(102836004)(7416002)(14454004)(966005)(68736007)(5660300002)(50226002)(8936002)(6486002)(25786009)(66446008)(64756008)(66556008)(66476007)(71190400001)(71200400001)(86362001)(6436002)(6506007)(386003)(66946007)(73956011)(316002)(26005)(305945005)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5138;H:AM0PR04MB6434.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: gN2oYHLkf37KAcdh14g8gP4EzbCxF7hyWR4jmtg42lS5mBttH62C26wMF0C6QqIAuHFB/jkUS94AgBIC4hBmvWpWgUwvWPeBmy0vjg5S25qdEVik9iIF1vQsICnShw4wajtazY2QU8zkuylr4wFKGgUgci3dy+2stIqUIp7GWjVjdInSUhN7hqKsAMD5HNxutUGeF/wZYsORcoZS4j4dvTRQF+uBQ2tAxB1jWX2Q1bXPZuowhYdKW+rrS9BKqFntrOsUVJHx4u6y3jr4XUYrc/9UX3KcwO+pFC0zomnKFwrvOILX399Tox8eYsEZP+ntyMaHvxLA9TUFQfUSc4MwLUYS3vAQhrp1rXH3zjwh+TNDPJfMouAfMdmi/iCUIdCnokhUDi4Wxer6NJW7ma2mWhC8h9I0IynGr/sZmka9CS4=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-ID: <13C41D9609273F49A77AE0DA0AB8AA6B@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c118f5d9-fc81-42ec-7f23-08d6d7925e81
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2019 11:01:37.2824
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5138
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the space for the array of virtual devices is allocated along
-with the OPP table, but that isn't going to work well from now onwards.
-For single power domain case, a driver can either use the original
-device structure for setting the performance state (if genpd attached
-with dev_pm_domain_attach()) or use the virtual device structure (if
-genpd attached with dev_pm_domain_attach_by_name(), which returns the
-virtual device) and so we can't know in advance if we are going to need
-genpd_virt_devs array or not.
+Right now in upstream imx8m cpufreq support just lists a common subset
+of OPPs because the higher ones should only be attempted after checking
+speed grading in fuses.
 
-Lets delay the allocation a bit and do it along with
-dev_pm_opp_attach_genpd() rather. The deallocation is done from
-dev_pm_opp_detach_genpd().
+Driver reads from nvmem and calls dev_pm_opp_set_supported_hw before
+registering cpufreq-dt.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 10 ++++++++++
- drivers/opp/of.c   | 30 ++----------------------------
- 2 files changed, 12 insertions(+), 28 deletions(-)
+Changes since v3:
+ * Drop default m entirely (Viresh)
+Link to v3: https://patchwork.kernel.org/project/linux-arm-kernel/list/?ser=
+ies=3D114685
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 67d6b0caeab1..764e05a2fa66 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1755,6 +1755,9 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
- 		dev_pm_domain_detach(opp_table->genpd_virt_devs[index], false);
- 		opp_table->genpd_virt_devs[index] = NULL;
- 	}
-+
-+	kfree(opp_table->genpd_virt_devs);
-+	opp_table->genpd_virt_devs = NULL;
- }
- 
- /**
-@@ -1798,6 +1801,12 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names
- 
- 	mutex_lock(&opp_table->genpd_virt_dev_lock);
- 
-+	opp_table->genpd_virt_devs = kcalloc(opp_table->required_opp_count,
-+					     sizeof(*opp_table->genpd_virt_devs),
-+					     GFP_KERNEL);
-+	if (!opp_table->genpd_virt_devs)
-+		goto unlock;
-+
- 	while (*name) {
- 		index = of_property_match_string(dev->of_node,
- 						 "power-domain-names", *name);
-@@ -1836,6 +1845,7 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names
- 
- err:
- 	_opp_detach_genpd(opp_table);
-+unlock:
- 	mutex_unlock(&opp_table->genpd_virt_dev_lock);
- 
- put_table:
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index c10c782d15aa..a637f30552a3 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -141,7 +141,6 @@ static struct opp_table *_find_table_of_opp_np(struct device_node *opp_np)
- static void _opp_table_free_required_tables(struct opp_table *opp_table)
- {
- 	struct opp_table **required_opp_tables = opp_table->required_opp_tables;
--	struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
- 	int i;
- 
- 	if (!required_opp_tables)
-@@ -155,10 +154,8 @@ static void _opp_table_free_required_tables(struct opp_table *opp_table)
- 	}
- 
- 	kfree(required_opp_tables);
--	kfree(genpd_virt_devs);
- 
- 	opp_table->required_opp_count = 0;
--	opp_table->genpd_virt_devs = NULL;
- 	opp_table->required_opp_tables = NULL;
- }
- 
-@@ -171,9 +168,8 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
- 					     struct device_node *opp_np)
- {
- 	struct opp_table **required_opp_tables;
--	struct device **genpd_virt_devs = NULL;
- 	struct device_node *required_np, *np;
--	int count, count_pd, i;
-+	int count, i;
- 
- 	/* Traversing the first OPP node is all we need */
- 	np = of_get_next_available_child(opp_np, NULL);
-@@ -186,33 +182,11 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
- 	if (!count)
- 		goto put_np;
- 
--	/*
--	 * Check the number of power-domains to know if we need to deal
--	 * with virtual devices. In some cases we have devices with multiple
--	 * power domains but with only one of them being scalable, hence
--	 * 'count' could be 1, but we still have to deal with multiple genpds
--	 * and virtual devices.
--	 */
--	count_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
--					      "#power-domain-cells");
--	if (!count_pd)
--		goto put_np;
--
--	if (count_pd > 1) {
--		genpd_virt_devs = kcalloc(count, sizeof(*genpd_virt_devs),
--					GFP_KERNEL);
--		if (!genpd_virt_devs)
--			goto put_np;
--	}
--
- 	required_opp_tables = kcalloc(count, sizeof(*required_opp_tables),
- 				      GFP_KERNEL);
--	if (!required_opp_tables) {
--		kfree(genpd_virt_devs);
-+	if (!required_opp_tables)
- 		goto put_np;
--	}
- 
--	opp_table->genpd_virt_devs = genpd_virt_devs;
- 	opp_table->required_opp_tables = required_opp_tables;
- 	opp_table->required_opp_count = count;
- 
--- 
-2.21.0.rc0.269.g1a574e7a288b
+Changes since v2:
+ * Minor reformatting in Kconfig (Viresh)
+ * Open-code imx_cpufreq_dt_match_node (Viresh)
+ * Add mkt_segment bits to supported_hw and update .dtsi to match after
+reviewing latest datasheets.
+ * Add devicetree list (keep forgetting dts needs to be reviewed)
+Link to v2: https://patchwork.kernel.org/project/linux-arm-kernel/list/?ser=
+ies=3D113163
+
+Link to v1 (RFC): https://patchwork.kernel.org/patch/10916769/
+
+Driver is built as a module. It depends on nvmem-imx which can also be a
+module.
+
+I never noticed anything wrong with going above the fused speed grading
+however it's technically unsafe so the cpufreq code changes should go in
+before DT changes.
+
+Leonard Crestez (5):
+  cpufreq: Add imx-cpufreq-dt driver
+  dt-bindings: imx-cpufreq-dt: Document opp-supported-hw usage
+  arm64: dts: imx8mm: Add cpu speed grading and all OPPs
+  arm64: dts: imx8mq: Add cpu speed grading and all OPPs
+  arm64: defconfig: ARM_IMX_CPUFREQ_DT=3Dm
+
+ .../bindings/cpufreq/imx-cpufreq-dt.txt       | 37 +++++++
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     | 17 +++-
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     | 26 ++++-
+ arch/arm64/configs/defconfig                  |  1 +
+ drivers/cpufreq/Kconfig.arm                   |  9 ++
+ drivers/cpufreq/Makefile                      |  1 +
+ drivers/cpufreq/cpufreq-dt-platdev.c          |  3 +
+ drivers/cpufreq/imx-cpufreq-dt.c              | 96 +++++++++++++++++++
+ drivers/soc/imx/soc-imx8.c                    |  3 +
+ 9 files changed, 191 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/imx-cpufreq-d=
+t.txt
+ create mode 100644 drivers/cpufreq/imx-cpufreq-dt.c
+
+--=20
+2.17.1
 
