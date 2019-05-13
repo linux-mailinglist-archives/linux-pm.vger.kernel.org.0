@@ -2,178 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5CC1B32D
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 11:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893851B38A
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 12:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726866AbfEMJtp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 May 2019 05:49:45 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58018 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727662AbfEMJto (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 May 2019 05:49:44 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4D9lwBC056799
-        for <linux-pm@vger.kernel.org>; Mon, 13 May 2019 05:49:43 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sf5rbhk2v-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Mon, 13 May 2019 05:49:43 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
-        Mon, 13 May 2019 10:49:41 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 13 May 2019 10:49:37 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4D9naI05570582
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 May 2019 09:49:36 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8AE954C044;
-        Mon, 13 May 2019 09:49:36 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F4B64C040;
-        Mon, 13 May 2019 09:49:35 +0000 (GMT)
-Received: from oc0383214508.ibm.com (unknown [9.124.35.159])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 13 May 2019 09:49:35 +0000 (GMT)
-Subject: Re: [PATCH 0/1] Forced-wakeup for stop lite states on Powernv
-To:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
-        rjw@rjwysocki.net
-References: <20190422063231.51043-1-huntbag@linux.vnet.ibm.com>
- <1557291178.ow4spjzq5t.astroid@bobo.none>
-From:   Abhishek <huntbag@linux.vnet.ibm.com>
-Date:   Mon, 13 May 2019 15:19:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1728734AbfEMKCA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 13 May 2019 06:02:00 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:33309 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728113AbfEMKCA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 May 2019 06:02:00 -0400
+X-Originating-IP: 80.215.106.0
+Received: from localhost (unknown [80.215.106.0])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 9B95724000F;
+        Mon, 13 May 2019 10:01:50 +0000 (UTC)
+Date:   Mon, 13 May 2019 12:01:49 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
+        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, wens@csie.org, catalin.marinas@arm.com,
+        will.deacon@arm.com, davem@davemloft.net,
+        mchehab+samsung@kernel.org, gregkh@linuxfoundation.org,
+        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
+        paulmck@linux.ibm.com, andy.gross@linaro.org, olof@lixom.net,
+        bjorn.andersson@linaro.org, jagan@amarulasolutions.com,
+        marc.w.gonzalez@free.fr, stefan.wahren@i2se.com,
+        enric.balletbo@collabora.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
+Message-ID: <20190513100149.w3uvpnuqql4eqwid@flea>
+References: <20190512082614.9045-1-tiny.windzz@gmail.com>
+ <20190512082614.9045-3-tiny.windzz@gmail.com>
+ <20190512223955.6lhclj6jr2akmsdx@core.my.home>
 MIME-Version: 1.0
-In-Reply-To: <1557291178.ow4spjzq5t.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19051309-0016-0000-0000-0000027B14D7
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051309-0017-0000-0000-000032D7D821
-Message-Id: <b2fcf69a-aecd-ea81-b497-737642354736@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-13_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905130070
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20190512223955.6lhclj6jr2akmsdx@core.my.home>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/08/2019 10:29 AM, Nicholas Piggin wrote:
-> Abhishek Goel's on April 22, 2019 4:32 pm:
->> Currently, the cpuidle governors determine what idle state a idling CPU
->> should enter into based on heuristics that depend on the idle history on
->> that CPU. Given that no predictive heuristic is perfect, there are cases
->> where the governor predicts a shallow idle state, hoping that the CPU will
->> be busy soon. However, if no new workload is scheduled on that CPU in the
->> near future, the CPU will end up in the shallow state.
->>
->> Motivation
->> ----------
->> In case of POWER, this is problematic, when the predicted state in the
->> aforementioned scenario is a lite stop state, as such lite states will
->> inhibit SMT folding, thereby depriving the other threads in the core from
->> using the core resources.
->>
->> So we do not want to get stucked in such states for longer duration. To
->> address this, the cpuidle-core can queue timer to correspond with the
->> residency value of the next available state. This timer will forcefully
->> wakeup the cpu. Few such iterations will essentially train the governor to
->> select a deeper state for that cpu, as the timer here corresponds to the
->> next available cpuidle state residency. Cpu will be kicked out of the lite
->> state and end up in a non-lite state.
->>
->> Experiment
->> ----------
->> I performed experiments for three scenarios to collect some data.
->>
->> case 1 :
->> Without this patch and without tick retained, i.e. in a upstream kernel,
->> It would spend more than even a second to get out of stop0_lite.
->>
->> case 2 : With tick retained in a upstream kernel -
->>
->> Generally, we have a sched tick at 4ms(CONF_HZ = 250). Ideally I expected
->> it to take 8 sched tick to get out of stop0_lite. Experimentally,
->> observation was
->>
->> =========================================================
->> sample          min            max           99percentile
->> 20              4ms            12ms          4ms
->> =========================================================
->>
->> It would take atleast one sched tick to get out of stop0_lite.
->>
->> case 2 :  With this patch (not stopping tick, but explicitly queuing a
->>            timer)
->>
->> ============================================================
->> sample          min             max             99percentile
->> ============================================================
->> 20              144us           192us           144us
->> ============================================================
->>
->> In this patch, we queue a timer just before entering into a stop0_lite
->> state. The timer fires at (residency of next available state + exit latency
->> of next available state * 2). Let's say if next state(stop0) is available
->> which has residency of 20us, it should get out in as low as (20+2*2)*8
->> [Based on the forumla (residency + 2xlatency)*history length] microseconds
->> = 192us. Ideally we would expect 8 iterations, it was observed to get out
->> in 6-7 iterations. Even if let's say stop2 is next available state(stop0
->> and stop1 both are unavailable), it would take (100+2*10)*8 = 960us to get
->> into stop2.
->>
->> So, We are able to get out of stop0_lite generally in 150us(with this
->> patch) as compared to 4ms(with tick retained). As stated earlier, we do not
->> want to get stuck into stop0_lite as it inhibits SMT folding for other
->> sibling threads, depriving them of core resources. Current patch is using
->> forced-wakeup only for stop0_lite, as it gives performance benefit(primary
->> reason) along with lowering down power consumption. We may extend this
->> model for other states in future.
-> I still have to wonder, between our snooze loop and stop0, what does
-> stop0_lite buy us.
+On Mon, May 13, 2019 at 12:39:55AM +0200, Ondřej Jirman wrote:
+> > +	/*
+> > +	 * clkin = 24MHz
+> > +	 * T acquire = clkin / (SUN50I_THS_CTRL0_T_ACQ + 1)
+> > +	 *           = 20us
+> > +	 */
+> > +	regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
+> > +		     SUN50I_THS_CTRL0_T_ACQ(479));
+> > +	/* average over 4 samples */
+> > +	regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
+> > +		     SUN50I_THS_FILTER_EN |
+> > +		     SUN50I_THS_FILTER_TYPE(1));
+> > +	/* period = (SUN50I_H6_THS_PC_TEMP_PERIOD + 1) * 4096 / clkin; ~10ms */
+> > +	regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
+> > +		     SUN50I_H6_THS_PC_TEMP_PERIOD(58));
 >
-> That said, the problem you're solving here is a generic one that all
-> stop states have, I think. Doesn't the same thing apply going from
-> stop0 to stop5? You might under estimate the sleep time and lose power
-> savings and therefore performance there too. Shouldn't we make it
-> generic for all stop states?
+> Also this math is not all that clear:
 >
-> Thanks,
-> Nick
+>   period = (SUN50I_H6_THS_PC_TEMP_PERIOD + 1) * 4096 / clkin; ~10ms
 >
+> SUN50I_H6_THS_PC_TEMP_PERIOD is a macro with an argument. So how does
+> this work?
 >
-When a cpu is in snooze, it takes both space and time of core. When in 
-stop0_lite,
-it free up time but it still takes space. When it is in stop0 or deeper, 
-it free up both
-space and time slice of core.
-In stop0_lite, cpu doesn't free up the core resources and thus inhibits 
-thread
-folding. When a cpu goes to stop0, it will free up the core resources 
-thus increasing
-the single thread performance of other sibling thread.
-Hence, we do not want to get stuck in stop0_lite for long duration, and 
-want to quickly
-move onto the next state.
-If we get stuck in any other state we would possibly be losing on to 
-power saving,
-but will still be able to gain the performance benefits for other 
-sibling threads.
+> Also, related to this, I've noticed that you removed the interrupt
+> processing from the original driver. Without that you have to make sure
+> that OF contains non-zero polling-delay and polling-delay-passive.
+>
+> Nonzero values are necessary for enabling polling mode of the tz core,
+> otherwise tz core will not read values periodically from your driver.
+>
+> You should documment it in the DT bindings, too. Or keep the interrupt
+> handling for THS.
 
-Thanks,
-Abhishek
+If there's interrupts for this in the H6, yeah we should use them over
+polling.
 
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
