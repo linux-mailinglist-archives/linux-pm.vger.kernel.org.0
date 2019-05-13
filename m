@@ -2,71 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7730F1B76C
-	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 15:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA951B782
+	for <lists+linux-pm@lfdr.de>; Mon, 13 May 2019 15:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729558AbfEMNwx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 May 2019 09:52:53 -0400
-Received: from foss.arm.com ([217.140.101.70]:56538 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729452AbfEMNwx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 13 May 2019 09:52:53 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEB6680D;
-        Mon, 13 May 2019 06:52:52 -0700 (PDT)
-Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63A453F71E;
-        Mon, 13 May 2019 06:52:51 -0700 (PDT)
-Subject: Re: [RFC PATCH 0/7] sched/cpufreq: Make schedutil energy aware
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, quentin.perret@arm.com,
-        patrick.bellasi@arm.com,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>, rjw@rjwysocki.net
-References: <20190508174301.4828-1-douglas.raillard@arm.com>
- <CAOh2x=k23D_FefOnmLjExj1d+UiothgOmyUk=1mqFknpHNwWGg@mail.gmail.com>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Organization: ARM
-Message-ID: <054f34d5-1b88-9337-501f-321519f5d27c@arm.com>
-Date:   Mon, 13 May 2019 14:52:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1730044AbfEMN4P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 May 2019 09:56:15 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:49318 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727272AbfEMN4P (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 13 May 2019 09:56:15 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 7B970CC575E000F61F42;
+        Mon, 13 May 2019 21:56:09 +0800 (CST)
+Received: from localhost (10.177.31.96) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Mon, 13 May 2019
+ 21:56:01 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <rui.zhang@intel.com>, <edubezval@gmail.com>,
+        <daniel.lezcano@linaro.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH] thermal: tegra: Make tegra210_tsensor_thermtrips static
+Date:   Mon, 13 May 2019 21:55:59 +0800
+Message-ID: <20190513135559.43836-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-In-Reply-To: <CAOh2x=k23D_FefOnmLjExj1d+UiothgOmyUk=1mqFknpHNwWGg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.177.31.96]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh, Rafael,
+Fix sparse warning:
 
-On 5/13/19 8:12 AM, Viresh Kumar wrote:
-> On Wed, May 8, 2019 at 11:57 PM <douglas.raillard@arm.com> wrote:
->>
->> From: Douglas RAILLARD <douglas.raillard@arm.com>
->>
->> Make schedutil cpufreq governor energy-aware.
-> 
-> Hi Douglas,
-> 
-> I was wondering on why the cpufreq maintainers weren't cc'd for this set and
-> then I noticed that get_maintainers doesn't report us at all for schedutil :(
->
-> I have sent a patch to fix that, but please include us as well in the
-> future even
-> if get_maintainers doesn't report us :)
+drivers/thermal/tegra/tegra210-soctherm.c:211:33: warning:
+ symbol 'tegra210_tsensor_thermtrips' was not declared. Should it be static?
 
-Looks like it was a mix of me not checking my checklist and get_maintainers
-not catching it, I'll make sure both of you are in CC next time :)
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/thermal/tegra/tegra210-soctherm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> --
-> viresh
+diff --git a/drivers/thermal/tegra/tegra210-soctherm.c b/drivers/thermal/tegra/tegra210-soctherm.c
+index d31b500..d0ff793 100644
+--- a/drivers/thermal/tegra/tegra210-soctherm.c
++++ b/drivers/thermal/tegra/tegra210-soctherm.c
+@@ -208,7 +208,7 @@ static const struct tegra_soctherm_fuse tegra210_soctherm_fuse = {
+ 	.fuse_spare_realignment = 0,
+ };
+ 
+-struct tsensor_group_thermtrips tegra210_tsensor_thermtrips[] = {
++static struct tsensor_group_thermtrips tegra210_tsensor_thermtrips[] = {
+ 	{.id = TEGRA124_SOCTHERM_SENSOR_NUM},
+ 	{.id = TEGRA124_SOCTHERM_SENSOR_NUM},
+ 	{.id = TEGRA124_SOCTHERM_SENSOR_NUM},
+-- 
+2.7.4
 
-Thanks,
-Douglas
+
