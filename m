@@ -2,253 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C061C571
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2019 10:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268D61C57A
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2019 10:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726078AbfENI4F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 May 2019 04:56:05 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:38584 "EHLO
+        id S1726332AbfENI6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 May 2019 04:58:41 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:41118 "EHLO
         mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725916AbfENI4F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 May 2019 04:56:05 -0400
-Received: by mail-vs1-f66.google.com with SMTP id v9so9832721vse.5
-        for <linux-pm@vger.kernel.org>; Tue, 14 May 2019 01:56:04 -0700 (PDT)
+        with ESMTP id S1726084AbfENI6l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 May 2019 04:58:41 -0400
+Received: by mail-vs1-f66.google.com with SMTP id g187so9819075vsc.8
+        for <linux-pm@vger.kernel.org>; Tue, 14 May 2019 01:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oVt8RYr5RdB+WurCG7zdyCjwz+OuS1MURA7BPyKce6o=;
-        b=rSq0q56gaNVxf6qXwNn5F+wWqxGeQ6MRboOnrrL/HUIljKZ2vPgYVY0RAMq+seQI04
-         NvkXs2+o7AOtuBRVEe6vT+hyRsT2X/4K8R/uM3Sl9O/7qcQ5LU5JLtYkhKchnJPqKmfX
-         QzC7eaFwbPxpqaHuS6Zda8xMcOzLmzr0lCtoQiTiZWJjcMvRf/Nx3inrbiRza2weMCpf
-         JCX8xUOlGenGlfmXz1T4hDTrKOHafwH5fPayqQuc8Ro90LGDAtiQj+xLlg7/d6wk4brO
-         ny/ULghHwng7NR7bFFDVlDWTxpS/Ba9llUy4DqYenMUGCIGsA37vvhFTjvggYoXmr9xl
-         8PlA==
+        bh=MLSCBYZPRnRjPoWF2biQlF2E7iPn0TGMhmM3d3DWvJk=;
+        b=q8lxVzyzoXF98rEkWk5wquphTuXEip2RN7SWX+ji6R038d7laVaDsxolVn4Lifr3L4
+         nDasZXSsGt9J3K/Dma2aHgNQXDd5PmwH0TmaWaaa1ielTpN5NpWI1KuO6GzoTid1P87V
+         W+5QUyaNPx3uISiPfkM3GUlQFtkj6y4HL+j6jrliPgZKgTNgOWzvACEQGlWMm/hygShh
+         Hk/tX4mdGKpaW3Nb3aJUV384CKlCitHayN9Zw9WXdnfRaWYon4saa+Za6XYQRGPeEULH
+         F5R1ANYbch30daXqS7q1vJFNPngTOJVKDjhVvf3ixaqY34sSs44//FI0jLdvax1IQdpR
+         9YTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oVt8RYr5RdB+WurCG7zdyCjwz+OuS1MURA7BPyKce6o=;
-        b=XHVkbuVsYOL3NmHC22ciGkDm45i65e1cwD9Tvi3aBYHilaAAmFPj6uqa3f+y0JQ/mI
-         IQ3O6SNPmh/rG40HRI07JsRjCR+ynEFvjwmxWSVD2fV/wou+gABWsIRniR3yMwM71vC9
-         mWVMksdCyhNvJyarN3hk3nQSWn4ZYMuoOPIJH268kaKkp1RbpD0BmLq8Y/wQyqND5vSt
-         vz9Pf6WzmHyq8x6se4HKFg/SWV3JVPvZsgSsbXRv6mHM9wKScyhVbkhkV63IVzYtFDyW
-         ioQ9bqD30aSAKpCr2OSpq9YBkMjECAWV+6tQI8sE6Qnfh0ahxp/u/MeJNvJyOxabRdLS
-         kJaw==
-X-Gm-Message-State: APjAAAWdcfuAMAFTD/AkiHWFbUp7eqqMhd13WJkFLXcjC1jW21R6otdd
-        3FJKlPtSq5qVVRtugSB+5h8GwQ9fMqg62bfHk3FtyA==
-X-Google-Smtp-Source: APXvYqwSVaXrwCauRCJL/4hOQ3MyyDQduK/fUJOjRMMJ27PpxVCkYn43uXkSyOQ9pM0+n46FJJoIttk8io8DGgEg6Iw=
-X-Received: by 2002:a67:f99a:: with SMTP id b26mr9915748vsq.200.1557824163696;
- Tue, 14 May 2019 01:56:03 -0700 (PDT)
+        bh=MLSCBYZPRnRjPoWF2biQlF2E7iPn0TGMhmM3d3DWvJk=;
+        b=jO+zIWF/QwYNWcSq5WuqwZutqeheZr8GUPJZzv/vMfJ4dUYhlDIhmAE1AKxC42/NSg
+         IPvNJKmEEANADKxlRSa9bLDNbOhkhevVJsTd/CY87wTNd64yi6IWNS9QIfjKEYZvno3c
+         lo/e5a1CIABGWmemJzBHRm0VgZyrWO1C8vhdC58jGQAwF87366Q9H2GaCwvfeL8GohLY
+         j47lOFaF4O/OGILt7TskTON1o7eTXTFkly/sn4rinoeiS7No9ccTXj/+sP+Y3r6OvyFz
+         JOj8JovDzGqz1609M24CLQvSPdU5n3J1gEmE9U6waaXbhAPkkVRmfgKWLdcEhsrrMBDs
+         7/tQ==
+X-Gm-Message-State: APjAAAVqQfHAHaEJiaiu96ux8svRyMQFwN4WcQe8yB/gufzEW092fHGm
+        nW8Iu3UX6AfSJhLBWowuU+KFsQQpq8MZ7Y3SYlOBdA==
+X-Google-Smtp-Source: APXvYqwycH28jEcSrDkjPUkWW/Zcz25ycb6BQFN7+w/8A+3I/hQsVj2ek7HBD2590jjCbU0ruGu2wcP3lpcGlb4hlPI=
+X-Received: by 2002:a67:ebc5:: with SMTP id y5mr13449930vso.34.1557824320126;
+ Tue, 14 May 2019 01:58:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190509211911.17998-1-lkundrak@v3.sk> <20190509211911.17998-6-lkundrak@v3.sk>
-In-Reply-To: <20190509211911.17998-6-lkundrak@v3.sk>
+References: <20190513192300.653-1-ulf.hansson@linaro.org> <CAJZ5v0gbK3AFCVC1b9LyXeMOM8fKR1=ECXZwaeSYRSqcK0UgYA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gbK3AFCVC1b9LyXeMOM8fKR1=ECXZwaeSYRSqcK0UgYA@mail.gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 14 May 2019 10:55:27 +0200
-Message-ID: <CAPDyKFpAAKpR+Y4uHNjkwLsf3adJVVW9WSRApPtAB2s_FyomEQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 5/7] clk: mmp2: create a power domain for the GPU core
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+Date:   Tue, 14 May 2019 10:58:04 +0200
+Message-ID: <CAPDyKFpU3u248Gi+FnrVdY-EWXJQuu14uNV9d3Xs0W-K-EMEhg@mail.gmail.com>
+Subject: Re: [PATCH 00/18] ARM/ARM64: Support hierarchical CPU arrangement for PSCI
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Raju P . L . S . S . S . N" <rplsssn@codeaurora.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
         Kevin Hilman <khilman@kernel.org>,
-        James Cameron <quozl@laptop.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
+        Lina Iyer <ilina@codeaurora.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souvik Chakravarty <souvik.chakravarty@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 9 May 2019 at 23:19, Lubomir Rintel <lkundrak@v3.sk> wrote:
+On Tue, 14 May 2019 at 10:08, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> The power management unit on MMP2 is able to gate clock for the GC860 GPU.
+> On Mon, May 13, 2019 at 9:23 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > This series enables support for hierarchical CPU arrangement, managed by PSCI
+> > for ARM/ARM64. It's based on using the generic PM domain (genpd), which
+> > recently was extended to manage devices belonging to CPUs.
 >
-> There's some special dance required to initialize the unit after the power
-> has been enabled. If not followed, either the GPU's memory interface or the
-> GPU core doesn't work or the SoC just hangs.
->
-> Once the power has been applied to the GPU block, it doesn't seem
-> possible to turn it off entirely and initialize again.
+> ACK for the patches touching cpuidle in this series (from the
+> framework perspective), but I'm assuming it to be taken care of by
+> ARM/ARM64 maintainers.
 
-I didn't quite see this constraint being managed in the code below.
-Can you please elaborate on how you intend to deal with this?
+Thanks for the ack! Yes, this is for PSCI/ARM maintainers.
 
-We have a GENPD_FLAG_ALWAYS_ON, that might be useful here.
-
-We also have new flag/behavior, likely to be merged soon [1], which
-uses a flag called GENPD_FLAG_RPM_ALWAYS_ON....
-
->
-> As the data sheet is missing, neither the details about initialization, nor
-> the reason why it can't be reinitialized are understood. The meaning of
-> most bits in the APMU_GPU register are partially described in [1].
->
-> [1] http://lists.laptop.org/pipermail/devel/2019-April/039053.html
->
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->  arch/arm/mach-mmp/Kconfig     |  2 +
->  drivers/clk/mmp/clk-of-mmp2.c | 91 +++++++++++++++++++++++++++++++++++
->  2 files changed, 93 insertions(+)
->
-> diff --git a/arch/arm/mach-mmp/Kconfig b/arch/arm/mach-mmp/Kconfig
-> index 94500bed56ab..a0efaefbfc74 100644
-> --- a/arch/arm/mach-mmp/Kconfig
-> +++ b/arch/arm/mach-mmp/Kconfig
-> @@ -124,6 +124,8 @@ config MACH_MMP2_DT
->         select PINCTRL_SINGLE
->         select ARCH_HAS_RESET_CONTROLLER
->         select CPU_PJ4
-> +       select PM_GENERIC_DOMAINS if PM
-> +       select PM_GENERIC_DOMAINS_OF if PM && OF
-
-selecting PM_GENERIC_DOMAINS_OF isn't needed as it defaults to y, in
-case PM_GENERIC_DOMAINS and OF.
-
-See /kernel/power/Kconfig
-
->         help
->           Include support for Marvell MMP2 based platforms using
->           the device tree.
-> diff --git a/drivers/clk/mmp/clk-of-mmp2.c b/drivers/clk/mmp/clk-of-mmp2.c
-> index 45f94c89cdc1..7bbf70b2ccd2 100644
-> --- a/drivers/clk/mmp/clk-of-mmp2.c
-> +++ b/drivers/clk/mmp/clk-of-mmp2.c
-> @@ -16,8 +16,11 @@
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/of_address.h>
-> +#include <linux/pm_domain.h>
-> +#include <linux/clk.h>
->
->  #include <dt-bindings/clock/marvell,mmp2.h>
-> +#include <dt-bindings/power/marvell,mmp2.h>
->
->  #include "clk.h"
->  #include "reset.h"
-> @@ -58,6 +61,8 @@
->
->  struct mmp2_clk_unit {
->         struct mmp_clk_unit unit;
-> +       struct genpd_onecell_data pd_data;
-> +       struct generic_pm_domain gpu_pm_domain;
->         void __iomem *mpmu_base;
->         void __iomem *apmu_base;
->         void __iomem *apbc_base;
-> @@ -325,6 +330,90 @@ static void mmp2_clk_reset_init(struct device_node *np,
->         mmp_clk_reset_register(np, cells, nr_resets);
->  }
->
-> +static int mmp2_gpu_pm_domain_power_on(struct generic_pm_domain *genpd)
-> +{
-> +       struct mmp2_clk_unit *pxa_unit = container_of(genpd,
-> +                       struct mmp2_clk_unit, gpu_pm_domain);
-> +       struct mmp_clk_unit *unit = &pxa_unit->unit;
-> +       void __iomem *reg = pxa_unit->apmu_base + APMU_GPU;
-> +       unsigned long flags = 0;
-> +       u32 tmp;
-> +       int ret;
-> +
-> +       spin_lock_irqsave(&gpu_lock, flags);
-> +
-> +       /* Power up the module. */
-> +       tmp = readl(reg);
-> +       tmp &= ~0x8700;
-> +       tmp |= 0x8600;
-> +       writel(tmp, reg);
-> +
-> +       ret = clk_prepare_enable(unit->clk_table[MMP2_CLK_GPU_GC]);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = clk_prepare_enable(unit->clk_table[MMP2_CLK_GPU_BUS]);
-> +       if (ret) {
-> +               clk_disable_unprepare(unit->clk_table[MMP2_CLK_GPU_GC]);
-> +               return ret;
-> +       }
-> +
-> +       /* Disable isolation now that clocks are running. */
-> +       tmp = readl(reg);
-> +       tmp |= 0x100;
-> +       writel(tmp, reg);
-> +       udelay(1);
-> +
-> +       spin_unlock_irqrestore(&gpu_lock, flags);
-> +
-> +       return 0;
-> +}
-> +
-> +static int mmp2_gpu_pm_domain_power_off(struct generic_pm_domain *genpd)
-> +{
-> +       struct mmp2_clk_unit *pxa_unit = container_of(genpd,
-> +                       struct mmp2_clk_unit, gpu_pm_domain);
-> +       struct mmp_clk_unit *unit = &pxa_unit->unit;
-> +       void __iomem *reg = pxa_unit->apmu_base + APMU_GPU;
-> +       unsigned long flags = 0;
-> +       u32 tmp;
-> +
-> +       spin_lock_irqsave(&gpu_lock, flags);
-
-Why is this lock needed?
-
-> +
-> +       /*
-> +        * Re-enable isolation. We must not touch the other bits,
-> +        * otherwise the * GPU hangs without a known way to recover.
-> +        */
-> +       tmp = readl(reg);
-> +       tmp &= ~0x100;
-> +       writel(tmp, reg);
-> +       udelay(1);
-> +
-> +       clk_disable_unprepare(unit->clk_table[MMP2_CLK_GPU_BUS]);
-> +       clk_disable_unprepare(unit->clk_table[MMP2_CLK_GPU_GC]);
-> +
-> +       spin_unlock_irqrestore(&gpu_lock, flags);
-> +
-> +       return 0;
-> +}
-> +
-> +static struct generic_pm_domain *mmp2_pm_onecell_domains[MMP2_NR_POWER_DOMAINS];
-> +
-> +static void mmp2_pm_domain_init(struct device_node *np,
-> +                       struct mmp2_clk_unit *pxa_unit)
-> +{
-> +       pm_genpd_init(&pxa_unit->gpu_pm_domain, NULL, true);
-
-pm_genpd_init(), should be called after the below initialization has
-been done. Please re-order this.
-
-> +       pxa_unit->gpu_pm_domain.name = "GPU";
-> +       pxa_unit->gpu_pm_domain.power_on = mmp2_gpu_pm_domain_power_on;
-> +       pxa_unit->gpu_pm_domain.power_off = mmp2_gpu_pm_domain_power_off;
-> +       mmp2_pm_onecell_domains[MMP2_POWER_DOMAIN_GPU]
-> +                               = &pxa_unit->gpu_pm_domain;
-> +
-> +       pxa_unit->pd_data.domains = mmp2_pm_onecell_domains;
-> +       pxa_unit->pd_data.num_domains = ARRAY_SIZE(mmp2_pm_onecell_domains);
-> +       of_genpd_add_provider_onecell(np, &pxa_unit->pd_data);
-> +}
-> +
->  static void __init mmp2_clk_init(struct device_node *np)
->  {
->         struct mmp2_clk_unit *pxa_unit;
-> @@ -351,6 +440,8 @@ static void __init mmp2_clk_init(struct device_node *np)
->                 goto unmap_apmu_region;
->         }
->
-> +       mmp2_pm_domain_init(np, pxa_unit);
-> +
->         mmp_clk_init(np, &pxa_unit->unit, MMP2_NR_CLKS);
->
->         mmp2_pll_init(pxa_unit);
-> --
-> 2.21.0
->
+BTW, apologize for sending this in the merge window, but wanted to
+take the opportunity for people to have a look before OSPM Pisa next
+week.
 
 Kind regards
 Uffe
-
-[1]
-https://www.spinics.net/lists/arm-kernel/msg724822.html
