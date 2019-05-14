@@ -2,82 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 778E71C3B3
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2019 09:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540181C434
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2019 09:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbfENHPT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 May 2019 03:15:19 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:49368 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726218AbfENHPT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 May 2019 03:15:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6184374;
-        Tue, 14 May 2019 00:15:18 -0700 (PDT)
-Received: from queper01-ThinkPad-T460s (unknown [10.37.8.231])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23D5F3F71E;
-        Tue, 14 May 2019 00:15:14 -0700 (PDT)
-Date:   Tue, 14 May 2019 08:15:08 +0100
-From:   Quentin Perret <quentin.perret@arm.com>
-To:     Eduardo Valentin <edubezval@gmail.com>
-Cc:     rui.zhang@intel.com, javi.merino@kernel.org,
-        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
-        will.deacon@arm.com, catalin.marinas@arm.com,
-        daniel.lezcano@linaro.org, dietmar.eggemann@arm.com,
-        ionela.voinescu@arm.com, mka@chromium.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 3/3] thermal: cpu_cooling: Migrate to using the EM
- framework
-Message-ID: <20190514071506.ykjg67elsydaehlz@queper01-ThinkPad-T460s>
-References: <20190503094409.3499-1-quentin.perret@arm.com>
- <20190503094409.3499-4-quentin.perret@arm.com>
- <20190514034056.GA5621@localhost.localdomain>
+        id S1725881AbfENHyM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 May 2019 03:54:12 -0400
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:43327 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbfENHyM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 May 2019 03:54:12 -0400
+Received: by mail-ua1-f65.google.com with SMTP id u4so2392680uau.10
+        for <linux-pm@vger.kernel.org>; Tue, 14 May 2019 00:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zf8IJjcdPrQOgX1z3j6gO2WdWT6UVn+L7AhNfe6yMi8=;
+        b=IAsJ4EQAYOn036lV8psLdhXQfclTm/pOQHGolyhy+F/M9PN51UF1V/AzbmQ2+szdeA
+         50WNp67zAeq6LM46Rm5S8gA77LBMEMw1JsVn/tpSuW3Fmn2xta1oG5hpd6oQAlItiBS0
+         V7wGhDfi+6qvy0RGWnt2gDFdS1UQBmLgdXkSmdDpeafokFQHUZoUqTZIOHCETe6JfFAC
+         a7PnXUppJHzhn2AVGetOalutM2jS6ypHR9488igXkCBQ8h9ghd/iSRHKRauDRdWVhy3O
+         1dBuucve8gsrdUniXl3OAxGA0NC4JSN5HrSsxuOzyO7z9KI/68uSfGyLt3t1vA/hmfgL
+         34qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zf8IJjcdPrQOgX1z3j6gO2WdWT6UVn+L7AhNfe6yMi8=;
+        b=ltpQg4PMK2UuugajjdieyLqxKjpvKdGfVyI9KPuIEK04mA1HXiZVyHS8mDDYQkwlrn
+         8rVCz1gsRwMlNYWG2aiskuha0g8krA2WOWjBeh9lgnYPQUThaRdZ5I54GIWxakyVG34u
+         WWc74b7vLYnzE4wAY9/wWxx9peb6fJAyQjAy0+Jbe+gPWX2/xvgUl+mx6CON0P5CPqrE
+         XsOKUukHj0zncijxsOZ1ub8sUxWWTj5TeEYlh21oc7ukbsEovBACGvdg5fT9C+dI2lJy
+         Vn4exv9P5NqEuu0+COVFZCt57yH5AAPX8+Rg+kz+blJt6iJRic/KU+WctoYVYw9P6pk9
+         6c4w==
+X-Gm-Message-State: APjAAAXHLwRQ0SURnOFcnsSdYnFzDsBhvRW3SX+hEY2/VREKzLsyhyWx
+        HzqXKoazqap6U67dYjPwSybzySEvUeHc1hxiIvrJ6w==
+X-Google-Smtp-Source: APXvYqw26na4iAl9OES8/pXHjHR4OX/mYE4JxGMYMoMM698JgOYmYEnp2SYDxqwKYvDyL7iTIXPA7w04vcm/XFFuFFI=
+X-Received: by 2002:ab0:30a1:: with SMTP id b1mr13121475uam.104.1557820450699;
+ Tue, 14 May 2019 00:54:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190514034056.GA5621@localhost.localdomain>
-User-Agent: NeoMutt/20171215
+References: <20190320094918.20234-1-rnayak@codeaurora.org> <20190320094918.20234-9-rnayak@codeaurora.org>
+In-Reply-To: <20190320094918.20234-9-rnayak@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 14 May 2019 09:53:34 +0200
+Message-ID: <CAPDyKFppirfM7B9TB=jZzo67E=rdMnfVKEjdv0wn1zBAUoY_HA@mail.gmail.com>
+Subject: Re: [RFC v2 08/11] arm64: dts: sdm845: Add ufs opps and power-domains
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Eduardo,
+On Wed, 20 Mar 2019 at 10:50, Rajendra Nayak <rnayak@codeaurora.org> wrote:
+>
+> Add the additional power domain and the OPP table for ufs on sdm845
+> so the driver can set the appropriate performance state of the
+> power domain while setting the clock rate.
+>
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 027ffe6e93e8..a3af4a1757b4 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -1140,6 +1140,21 @@
+>                         };
+>                 };
+>
+> +               ufs_opp_table: ufs-opp-table {
+> +                       compatible = "operating-points-v2";
+> +
+> +                       opp-50000000 {
+> +                               opp-hz = /bits/ 64 <50000000>;
+> +                               required-opps = <&rpmhpd_opp_min_svs>;
+> +                       };
+> +
+> +                       opp-200000000 {
+> +                               opp-hz = /bits/ 64 <200000000>;
+> +                               required-opps = <&rpmhpd_opp_nom>;
+> +
+> +                       };
+> +               };
+> +
+>                 ufs_mem_hc: ufshc@1d84000 {
+>                         compatible = "qcom,sdm845-ufshc", "qcom,ufshc",
+>                                      "jedec,ufs-2.0";
+> @@ -1148,7 +1163,7 @@
+>                         phys = <&ufs_mem_phy_lanes>;
+>                         phy-names = "ufsphy";
+>                         lanes-per-direction = <2>;
+> -                       power-domains = <&gcc UFS_PHY_GDSC>;
+> +                       power-domains = <&gcc UFS_PHY_GDSC>, <&rpmhpd SDM845_CX>;
 
-On Monday 13 May 2019 at 20:40:59 (-0700), Eduardo Valentin wrote:
-> On Fri, May 03, 2019 at 10:44:09AM +0100, Quentin Perret wrote:
-> > The newly introduced Energy Model framework manages power cost tables in
-> > a generic way. Moreover, it supports a several types of models since the
-> > tables can come from DT or firmware (through SCMI) for example. On the
-> > other hand, the cpu_cooling subsystem manages its own power cost tables
-> > using only DT data.
-> > 
-> > In order to avoid the duplication of data in the kernel, and in order to
-> > enable IPA with EMs coming from more than just DT, remove the private
-> > tables from cpu_cooling.c and migrate it to using the centralized EM
-> > framework.
-> > 
-> > The case where the thermal subsystem is used without an Energy Model
-> > (cpufreq_cooling_ops) is handled by looking directly at CPUFreq's
-> > frequency table which is already a dependency for cpu_cooling.c anyway.
-> > Since the thermal framework expects the cooling states in a particular
-> > order, bail out whenever the CPUFreq table is unsorted, since that is
-> > fairly uncommon in general, and there are currently no users of
-> > cpu_cooling for this use-case.
-> 
-> Will this break DT in any way? After this change, are the existing DTs
-> still compatible with this cpu cooling?
+You probably want to use "power-domain-names" as well.
 
-Yes, all existing DTs stay compatible with this CPU cooling. The EM can
-still be built using the 'dynamic-power-coefficient' DT property thanks
-to the recently introduced dev_pm_opp_of_register_em() helper, see
-a4f342b9607d ("PM / OPP: Introduce a power estimation helper"). And all
-relevant cpufreq drivers have already been updated to use that function.
+[...]
 
-So, this patch should cause no functional change for all existing users.
-It's really just plumbing. I can probably explain that better in this
-commit message rather than the cover letter if you feel it is necessary.
-
-Thanks,
-Quentin
+Kind regards
+Uffe
