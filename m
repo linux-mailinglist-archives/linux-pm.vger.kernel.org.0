@@ -2,107 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1367B1C5A7
-	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2019 11:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA211C69D
+	for <lists+linux-pm@lfdr.de>; Tue, 14 May 2019 12:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726363AbfENJGt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 May 2019 05:06:49 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:47144 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725916AbfENJGs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 May 2019 05:06:48 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4E94G1o081272;
-        Tue, 14 May 2019 09:06:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
- bh=AFcPid8g1evBUZbdGB5w31PAavHQp4SXmHUvWUHa/V4=;
- b=T283ubYR2SjszhxiJktfMFutYpivzz3oQAt0HLtUk8qE/wsdlem/pC6AMX8mFwfyzbWA
- hleQ+aalGa0KEsaoGqtbZAGyQf3FvM4DqrGIrp4lf8bjGFRhGA5xXLjozzlwYELAwaL6
- opSwqkS3xJ+9ke5xgTe7t5/2f9XU/cn9BxXqx4aZAc+NYTgfINPHwwGf7MB8ewTXpvJ8
- F/v1fj06Bly8QylsIUTsmQj/OeNP0sCvLe27xZQCzatIvgkGPXsHLZleVdjXA/Pa7sBT
- JCAi3E6ymjO4y4tpm4mBGftRUZ6+AUsQlLECsSrxXGQOV6yvMqFuN2h786bZ19RR0HSL vA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2sdnttmhe9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 09:06:43 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4E96AbX104265;
-        Tue, 14 May 2019 09:06:43 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2sf3cn53eu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 09:06:43 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4E96gIV012039;
-        Tue, 14 May 2019 09:06:42 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 14 May 2019 02:06:42 -0700
-Date:   Tue, 14 May 2019 12:06:35 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     amit.kucheria@linaro.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: [bug report] drivers: thermal: tsens: Merge tsens-8974 into
- tsens-v0_1
-Message-ID: <20190514090635.GA21833@mwanda>
+        id S1726201AbfENKFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 May 2019 06:05:36 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:12085 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726369AbfENKFf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 May 2019 06:05:35 -0400
+X-UUID: ed43b230cdd94b658c5208c3594f28a3-20190514
+X-UUID: ed43b230cdd94b658c5208c3594f28a3-20190514
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <lecopzer.chen@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 595000805; Tue, 14 May 2019 18:05:29 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 14 May 2019 18:05:27 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 14 May 2019 18:05:27 +0800
+From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
+To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lecopzer.chen@mediatek.com>
+CC:     <srv_heupstream@mediatek.com>, <yj.chiang@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] test_power: Add CURRENT and CHARGE_COUNTER properties
+Date:   Tue, 14 May 2019 18:04:58 +0800
+Message-ID: <1557828298-16591-1-git-send-email-lecopzer.chen@mediatek.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9256 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=575
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905140066
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9256 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=607 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905140067
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Amit Kucheria,
+From: "Lecopzer Chen" <lecopzer.chen@mediatek.com>
 
-The patch c80cbb79e851: "drivers: thermal: tsens: Merge tsens-8974
-into tsens-v0_1" from Mar 20, 2019, leads to the following static
-checker warning:
+Emulate battery current (variable) and battery CHARGE_COUNTER
+(same as battery_capacity) properties.
 
-	drivers/thermal/qcom/tsens-v0_1.c:237 calibrate_8974()
-	warn: mask and shift to zero
+Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+Cc: YJ Chiang <yj.chiang@mediatek.com>
 
-drivers/thermal/qcom/tsens-v0_1.c
-   226                  case ONE_PT_CALIB:
-   227                  case ONE_PT_CALIB2:
-   228                          base1 = bkp[0] & BASE1_MASK;
-   229                          p1[0] = (bkp[0] & S0_P1_MASK) >> S0_P1_SHIFT;
-   230                          p1[1] = (bkp[0] & S1_P1_MASK) >> S1_P1_SHIFT;
-   231                          p1[2] = (bkp[0] & S2_P1_MASK) >> S2_P1_SHIFT;
-   232                          p1[3] = (bkp[0] & S3_P1_MASK) >> S3_P1_SHIFT;
-   233                          p1[4] = (bkp[1] & S4_P1_MASK);
-   234                          p1[5] = (bkp[1] & S5_P1_MASK) >> S5_P1_SHIFT;
-   235                          p1[6] = (bkp[1] & S6_P1_MASK) >> S6_P1_SHIFT;
-   236                          p1[7] = (bkp[1] & S7_P1_MASK) >> S7_P1_SHIFT;
-   237                          p1[8] = (bkp[2] & S8_P1_MASK_BKP) >> S8_P1_SHIFT;
-                                                  ^^^^^^^^^^^^^^     ^^^^^^^^^^^
-#define S8_P1_MASK_BKP          0x3f
-#define S8_P1_SHIFT 24
+---
+ drivers/power/supply/test_power.c | 33 +++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-Other places define S8_P1_SHIFT as 4, so that's maybe something to
-consider.
+diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
+index 57246cdbd042..9f85060c84de 100644
+--- a/drivers/power/supply/test_power.c
++++ b/drivers/power/supply/test_power.c
+@@ -36,6 +36,7 @@ static int battery_present		= 1; /* true */
+ static int battery_technology		= POWER_SUPPLY_TECHNOLOGY_LION;
+ static int battery_capacity		= 50;
+ static int battery_voltage		= 3300;
++static int battery_current		= 1600;
+ 
+ static bool module_initialized;
+ 
+@@ -101,6 +102,7 @@ static int test_power_get_battery_property(struct power_supply *psy,
+ 		break;
+ 	case POWER_SUPPLY_PROP_CAPACITY:
+ 	case POWER_SUPPLY_PROP_CHARGE_NOW:
++	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
+ 		val->intval = battery_capacity;
+ 		break;
+ 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+@@ -117,6 +119,10 @@ static int test_power_get_battery_property(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+ 		val->intval = battery_voltage;
+ 		break;
++	case POWER_SUPPLY_PROP_CURRENT_AVG:
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++		val->intval = battery_current;
++		break;
+ 	default:
+ 		pr_info("%s: some properties deliberately report errors.\n",
+ 			__func__);
+@@ -138,6 +144,7 @@ static enum power_supply_property test_power_battery_props[] = {
+ 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+ 	POWER_SUPPLY_PROP_CHARGE_FULL,
+ 	POWER_SUPPLY_PROP_CHARGE_NOW,
++	POWER_SUPPLY_PROP_CHARGE_COUNTER,
+ 	POWER_SUPPLY_PROP_CAPACITY,
+ 	POWER_SUPPLY_PROP_CAPACITY_LEVEL,
+ 	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
+@@ -147,6 +154,8 @@ static enum power_supply_property test_power_battery_props[] = {
+ 	POWER_SUPPLY_PROP_SERIAL_NUMBER,
+ 	POWER_SUPPLY_PROP_TEMP,
+ 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_CURRENT_AVG,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
+ };
+ 
+ static char *test_power_ac_supplied_to[] = {
+@@ -450,6 +459,21 @@ static int param_set_battery_voltage(const char *key,
+ 
+ #define param_get_battery_voltage param_get_int
+ 
++static int param_set_battery_current(const char *key,
++					const struct kernel_param *kp)
++{
++	int tmp;
++
++	if (1 != sscanf(key, "%d", &tmp))
++		return -EINVAL;
++
++	battery_current = tmp;
++	signal_power_supply_changed(test_power_supplies[TEST_BATTERY]);
++	return 0;
++}
++
++#define param_get_battery_current param_get_int
++
+ static const struct kernel_param_ops param_ops_ac_online = {
+ 	.set = param_set_ac_online,
+ 	.get = param_get_ac_online,
+@@ -490,6 +514,11 @@ static const struct kernel_param_ops param_ops_battery_voltage = {
+ 	.get = param_get_battery_voltage,
+ };
+ 
++static const struct kernel_param_ops param_ops_battery_current = {
++	.set = param_set_battery_current,
++	.get = param_get_battery_current,
++};
++
+ #define param_check_ac_online(name, p) __param_check(name, p, void);
+ #define param_check_usb_online(name, p) __param_check(name, p, void);
+ #define param_check_battery_status(name, p) __param_check(name, p, void);
+@@ -498,6 +527,7 @@ static const struct kernel_param_ops param_ops_battery_voltage = {
+ #define param_check_battery_health(name, p) __param_check(name, p, void);
+ #define param_check_battery_capacity(name, p) __param_check(name, p, void);
+ #define param_check_battery_voltage(name, p) __param_check(name, p, void);
++#define param_check_battery_current(name, p) __param_check(name, p, void);
+ 
+ 
+ module_param(ac_online, ac_online, 0644);
+@@ -528,6 +558,9 @@ MODULE_PARM_DESC(battery_capacity, "battery capacity (percentage)");
+ module_param(battery_voltage, battery_voltage, 0644);
+ MODULE_PARM_DESC(battery_voltage, "battery voltage (millivolts)");
+ 
++module_param(battery_current, battery_current, 0644);
++MODULE_PARM_DESC(battery_current, "battery current (milliampere)");
++
+ MODULE_DESCRIPTION("Power supply driver for testing");
+ MODULE_AUTHOR("Anton Vorontsov <cbouatmailru@gmail.com>");
+ MODULE_LICENSE("GPL");
+-- 
+2.18.0
 
-   238                          p1[9] = (bkp[2] & S9_P1_MASK_BKP) >> S9_P1_BKP_SHIFT;
-   239                          p1[10] = (bkp[2] & S10_P1_MASK_BKP) >> S10_P1_BKP_SHIFT;
-   240                          break;
-   241                  }
-   242          } else {
-   243                  mode = (calib[1] & CAL_SEL_0_1) >> CAL_SEL_SHIFT;
-   244                  mode |= (calib[3] & CAL_SEL_2) >> CAL_SEL_SHIFT_2;
-
-regards,
-dan carpenter
