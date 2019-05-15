@@ -2,344 +2,248 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7083D1F4DF
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 14:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28181F60A
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 15:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727207AbfEOMzD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 May 2019 08:55:03 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:59366 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726923AbfEOMzD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 08:55:03 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id CF0C1281ED8
-Subject: Re: [PATCH v8 1/2] platform/chrome: wilco_ec: Add property helper
- library
-To:     Nick Crews <ncrews@chromium.org>, bleung@chromium.org,
-        sre@kernel.org, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, dlaurie@chromium.org,
-        lamzin@google.com, bartfab@google.com, derat@google.com,
-        dtor@google.com, sjg@chromium.org, jchwong@chromium.org,
-        tbroch@chromium.org
-References: <20190424165651.236391-1-ncrews@chromium.org>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <d5bf4678-e5d1-c01d-4701-5d81e24986a1@collabora.com>
-Date:   Wed, 15 May 2019 14:54:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190424165651.236391-1-ncrews@chromium.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+        id S1726622AbfEONyY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 May 2019 09:54:24 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33138 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725953AbfEONyY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 09:54:24 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4FDsApq171151
+        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 09:54:23 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2sgjn3dbr2-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 09:54:18 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
+        Wed, 15 May 2019 14:53:36 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 15 May 2019 14:53:34 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4FDrXMd59899980
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 May 2019 13:53:33 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D2A452052;
+        Wed, 15 May 2019 13:53:33 +0000 (GMT)
+Received: from localhost.localdomain.com (unknown [9.102.18.182])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1919552051;
+        Wed, 15 May 2019 13:53:30 +0000 (GMT)
+From:   Parth Shah <parth@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
+        dsmythies@telus.net
+Subject: [RFCv2 0/6] TurboSched: A scheduler for sustaining Turbo Frequencies for longer durations
+Date:   Wed, 15 May 2019 19:23:16 +0530
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 19051513-0016-0000-0000-0000027C0337
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19051513-0017-0000-0000-000032D8D3F5
+Message-Id: <20190515135322.19393-1-parth@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-15_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905150087
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Abstract
+========
 
-On 24/4/19 18:56, Nick Crews wrote:
-> A Property is typically a data item that is stored to NVRAM
-> by the EC. Each of these data items has an index associated
-> with it, known as the Property ID (PID). Properties may have
-> variable lengths, up to a max of WILCO_EC_PROPERTY_MAX_SIZE
-> bytes. Properties can be simple integers, or they may be more
-> complex binary data.
-> 
-> This patch adds support for getting and setting properties.
-> This will be useful for setting the charge algorithm and charge
-> schedules, which all use properties.
-> 
-> Signed-off-by: Nick Crews <ncrews@chromium.org>
+The modern servers allows multiple cores to run at range of
+frequencies higher than rated range of frequencies. But the power budget
+of the system inhibits sustaining these higher frequencies for
+longer durations.
 
-The following patch is queued to the for-next branch for the autobuilders to
-play with, if all goes well I'll add the patch for 5.3 when current merge window
-closes.
+However when certain cores are put to idle states, the power can be
+effectively channelled to other busy cores, allowing them to sustain
+the higher frequency.
 
-Thanks,
- Enric
+One way to achieve this is to pack tasks onto fewer cores keeping others idle,
+but it may lead to performance penalty for such tasks and sustaining higher
+frequencies proves to be of no benefit. But if one can identify unimportant low
+utilization tasks which can be packed on the already active cores then waking up
+of new cores can be avoided. Such tasks are short and/or bursty "jitter tasks"
+and waking up new core is expensive for such case.
 
-> ---
-> v7 changes:
-> -Remove bogus gerrit FROMLIST tag in commit title
-> v6 changes:
-> -Add EC_* prefix to enum property_ops so they are more unique.
-> -Split up the commit so properties are added in a first commit
-> v5 changes:
-> -Remove OP_SYNC, it has no immediate use case.
-> -Merge properties.h into wilco-ec.h
-> -Remove enum get_set_sync_op from the public interface,
->  since without OP_SYNC they are irrelevant.
-> -Fix Kconfigs and Makefiles so they actually work
->  with the v4 changes
-> -Tweak some formatting, spacing, and comments
-> -Fix validation of charge_type so illegal values
->  can't be set. Before negative error codes were
->  accidentally getting casted to positive numbers
-> -Remove more unneeded parentheses.
-> v4 changes:
-> -Use put_unaligned_le32() to store PID in request.
-> -Move implementation from
->  drivers/platform/chrome/wilco_ec/charge_config.c to
->  drivers/power/supply/wilco_charger.c
-> -Move drivers/platform/chrome/wilco_ec/properties.h to
->  include/linux/platform_data/wilco-ec-properties.h
-> -Remove parentheses in switch statement in psp_val_to_charge_mode()
-> -Check for any negatvie return code from psp_val_to_charge_mode()
->  instead of just -EINVAL so its less brittle
-> -Tweak comments in wilco-ec-properties.h
-> v3 changes:
-> -Add this changelog
-> -Fix commit message tags
-> v2 changes:
-> -Update Documentation to say KernelVersion 5.2
-> -Update Documentation to explain Trickle mode better.
-> -rename things from using *PCC* to *CHARGE*
-> -Split up conversions between POWER_SUPPLY_PROP_CHARGE_TYPE values
-> and Wilco EC codes
-> -Use devm_ flavor of power_supply_register(), which simplifies things
-> -Add extra error checking on property messages received from the EC
-> -Fix bug in memcpy() calls in properties.c
-> -Refactor fill_property_id()
-> -Add valid input checks to charge_type
-> -Properly convert charge_type when get()ting
-> 
->  drivers/platform/chrome/wilco_ec/Makefile     |   2 +-
->  drivers/platform/chrome/wilco_ec/properties.c | 132 ++++++++++++++++++
->  include/linux/platform_data/wilco-ec.h        |  71 ++++++++++
->  3 files changed, 204 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/platform/chrome/wilco_ec/properties.c
-> 
-> diff --git a/drivers/platform/chrome/wilco_ec/Makefile b/drivers/platform/chrome/wilco_ec/Makefile
-> index 063e7fb4ea17..29b734137786 100644
-> --- a/drivers/platform/chrome/wilco_ec/Makefile
-> +++ b/drivers/platform/chrome/wilco_ec/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -wilco_ec-objs				:= core.o mailbox.o
-> +wilco_ec-objs				:= core.o mailbox.o properties.o
->  obj-$(CONFIG_WILCO_EC)			+= wilco_ec.o
->  wilco_ec_debugfs-objs			:= debugfs.o
->  obj-$(CONFIG_WILCO_EC_DEBUGFS)		+= wilco_ec_debugfs.o
-> diff --git a/drivers/platform/chrome/wilco_ec/properties.c b/drivers/platform/chrome/wilco_ec/properties.c
-> new file mode 100644
-> index 000000000000..e69682c95ea2
-> --- /dev/null
-> +++ b/drivers/platform/chrome/wilco_ec/properties.c
-> @@ -0,0 +1,132 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2019 Google LLC
-> + */
-> +
-> +#include <linux/platform_data/wilco-ec.h>
-> +#include <linux/string.h>
-> +#include <linux/unaligned/le_memmove.h>
-> +
-> +/* Operation code; what the EC should do with the property */
-> +enum ec_property_op {
-> +	EC_OP_GET = 0,
-> +	EC_OP_SET = 1,
-> +};
-> +
-> +struct ec_property_request {
-> +	u8 op; /* One of enum ec_property_op */
-> +	u8 property_id[4]; /* The 32 bit PID is stored Little Endian */
-> +	u8 length;
-> +	u8 data[WILCO_EC_PROPERTY_MAX_SIZE];
-> +} __packed;
-> +
-> +struct ec_property_response {
-> +	u8 reserved[2];
-> +	u8 op; /* One of enum ec_property_op */
-> +	u8 property_id[4]; /* The 32 bit PID is stored Little Endian */
-> +	u8 length;
-> +	u8 data[WILCO_EC_PROPERTY_MAX_SIZE];
-> +} __packed;
-> +
-> +static int send_property_msg(struct wilco_ec_device *ec,
-> +			     struct ec_property_request *rq,
-> +			     struct ec_property_response *rs)
-> +{
-> +	struct wilco_ec_message ec_msg;
-> +	int ret;
-> +
-> +	memset(&ec_msg, 0, sizeof(ec_msg));
-> +	ec_msg.type = WILCO_EC_MSG_PROPERTY;
-> +	ec_msg.request_data = rq;
-> +	ec_msg.request_size = sizeof(*rq);
-> +	ec_msg.response_data = rs;
-> +	ec_msg.response_size = sizeof(*rs);
-> +
-> +	ret = wilco_ec_mailbox(ec, &ec_msg);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (rs->op != rq->op)
-> +		return -EBADMSG;
-> +	if (memcmp(rq->property_id, rs->property_id, sizeof(rs->property_id)))
-> +		return -EBADMSG;
-> +
-> +	return 0;
-> +}
-> +
-> +int wilco_ec_get_property(struct wilco_ec_device *ec,
-> +			  struct wilco_ec_property_msg *prop_msg)
-> +{
-> +	struct ec_property_request rq;
-> +	struct ec_property_response rs;
-> +	int ret;
-> +
-> +	memset(&rq, 0, sizeof(rq));
-> +	rq.op = EC_OP_GET;
-> +	put_unaligned_le32(prop_msg->property_id, rq.property_id);
-> +
-> +	ret = send_property_msg(ec, &rq, &rs);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	prop_msg->length = rs.length;
-> +	memcpy(prop_msg->data, rs.data, rs.length);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(wilco_ec_get_property);
-> +
-> +int wilco_ec_set_property(struct wilco_ec_device *ec,
-> +			  struct wilco_ec_property_msg *prop_msg)
-> +{
-> +	struct ec_property_request rq;
-> +	struct ec_property_response rs;
-> +	int ret;
-> +
-> +	memset(&rq, 0, sizeof(rq));
-> +	rq.op = EC_OP_SET;
-> +	put_unaligned_le32(prop_msg->property_id, rq.property_id);
-> +	rq.length = prop_msg->length;
-> +	memcpy(rq.data, prop_msg->data, prop_msg->length);
-> +
-> +	ret = send_property_msg(ec, &rq, &rs);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (rs.length != prop_msg->length)
-> +		return -EBADMSG;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(wilco_ec_set_property);
-> +
-> +int wilco_ec_get_byte_property(struct wilco_ec_device *ec, u32 property_id,
-> +			       u8 *val)
-> +{
-> +	struct wilco_ec_property_msg msg;
-> +	int ret;
-> +
-> +	msg.property_id = property_id;
-> +
-> +	ret = wilco_ec_get_property(ec, &msg);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (msg.length != 1)
-> +		return -EBADMSG;
-> +
-> +	*val = msg.data[0];
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(wilco_ec_get_byte_property);
-> +
-> +int wilco_ec_set_byte_property(struct wilco_ec_device *ec, u32 property_id,
-> +			       u8 val)
-> +{
-> +	struct wilco_ec_property_msg msg;
-> +
-> +	msg.property_id = property_id;
-> +	msg.data[0] = val;
-> +	msg.length = 1;
-> +
-> +	return wilco_ec_set_property(ec, &msg);
-> +}
-> +EXPORT_SYMBOL_GPL(wilco_ec_set_byte_property);
-> diff --git a/include/linux/platform_data/wilco-ec.h b/include/linux/platform_data/wilco-ec.h
-> index 1ff224793c99..50a21bd5fd44 100644
-> --- a/include/linux/platform_data/wilco-ec.h
-> +++ b/include/linux/platform_data/wilco-ec.h
-> @@ -123,4 +123,75 @@ struct wilco_ec_message {
->   */
->  int wilco_ec_mailbox(struct wilco_ec_device *ec, struct wilco_ec_message *msg);
->  
-> +/*
-> + * A Property is typically a data item that is stored to NVRAM
-> + * by the EC. Each of these data items has an index associated
-> + * with it, known as the Property ID (PID). Properties may have
-> + * variable lengths, up to a max of WILCO_EC_PROPERTY_MAX_SIZE
-> + * bytes. Properties can be simple integers, or they may be more
-> + * complex binary data.
-> + */
-> +
-> +#define WILCO_EC_PROPERTY_MAX_SIZE	4
-> +
-> +/**
-> + * struct ec_property_set_msg - Message to get or set a property.
-> + * @property_id: Which property to get or set.
-> + * @length: Number of bytes of |data| that are used.
-> + * @data: Actual property data.
-> + */
-> +struct wilco_ec_property_msg {
-> +	u32 property_id;
-> +	int length;
-> +	u8 data[WILCO_EC_PROPERTY_MAX_SIZE];
-> +};
-> +
-> +/**
-> + * wilco_ec_get_property() - Retrieve a property from the EC.
-> + * @ec: Embedded Controller device.
-> + * @prop_msg: Message for request and response.
-> + *
-> + * The property_id field of |prop_msg| should be filled before calling this
-> + * function. The result will be stored in the data and length fields.
-> + *
-> + * Return: 0 on success, negative error code on failure.
-> + */
-> +int wilco_ec_get_property(struct wilco_ec_device *ec,
-> +			  struct wilco_ec_property_msg *prop_msg);
-> +
-> +/**
-> + * wilco_ec_set_property() - Store a property on the EC.
-> + * @ec: Embedded Controller device.
-> + * @prop_msg: Message for request and response.
-> + *
-> + * The property_id, length, and data fields of |prop_msg| should be
-> + * filled before calling this function.
-> + *
-> + * Return: 0 on success, negative error code on failure.
-> + */
-> +int wilco_ec_set_property(struct wilco_ec_device *ec,
-> +			  struct wilco_ec_property_msg *prop_msg);
-> +
-> +/**
-> + * wilco_ec_get_byte_property() - Retrieve a byte-size property from the EC.
-> + * @ec: Embedded Controller device.
-> + * @property_id: Which property to retrieve.
-> + * @val: The result value, will be filled by this function.
-> + *
-> + * Return: 0 on success, negative error code on failure.
-> + */
-> +int wilco_ec_get_byte_property(struct wilco_ec_device *ec, u32 property_id,
-> +			       u8 *val);
-> +
-> +/**
-> + * wilco_ec_get_byte_property() - Store a byte-size property on the EC.
-> + * @ec: Embedded Controller device.
-> + * @property_id: Which property to store.
-> + * @val: Value to store.
-> + *
-> + * Return: 0 on success, negative error code on failure.
-> + */
-> +int wilco_ec_set_byte_property(struct wilco_ec_device *ec, u32 property_id,
-> +			       u8 val);
-> +
->  #endif /* WILCO_EC_H */
-> 
+Current CFS algorithm in kernel scheduler is performance oriented and hence
+tries to assign any idle CPU first for the waking up of new tasks. This policy
+is perfect for major categories of the workload, but for jitter tasks, one
+can save energy by packing it onto active cores and allow other cores to run at
+higher frequencies.
+
+These patch-set tunes the task wake up logic in scheduler to pack exclusively
+classified jitter tasks onto busy cores. The work involves the use of additional
+attributes inside "cpu" cgroup controller to manually classify tasks as jitter. 
+
+
+Implementation
+==============
+
+These patches uses UCLAMP mechanism from "cpu" cgroup controller which
+can be used to classify the jitter tasks. The task wakeup logic uses
+this information to pack such tasks onto cores which are busy running
+other workloads. The task packing is done at `select_task_rq_fair` only
+so that in case of wrong decision load balancer may pull the classified
+jitter tasks to performance giving CPU.
+
+Any tasks added to the "cpu" cgroup tagged with cpu.util.max=1 are
+classified as jitter. We define a core to be non-idle if it is over
+12.5% utilized; the jitters are packed over these cores using First-fit
+approach.
+
+To demonstrate/benchmark, one can use a synthetic workload generator
+`turbo_bench.c` available at
+https://github.com/parthsl/tools/blob/master/benchmarks/turbo_bench.c
+
+Following snippet demonstrates the use of TurboSched feature:
+```
+mkdir -p /sys/fs/cgroup/cpu/jitter
+echo 0 > /proc/sys/kernel/sched_uclamp_util_min;
+echo 0 > /sys/fs/cgroup/cpu/jitter/cpu.util.min;
+echo 0 > /sys/fs/cgroup/cpu/jitter/cpu.util.max;
+i=8;
+./turbo_bench -t 30 -h $i -n $i &
+./turbo_bench -t 30 -h 0 -n $i &
+echo $! > /sys/fs/cgroup/cpu/jitter/cgroup.procs
+```
+
+Current implementation uses only jitter classified tasks to be packed on any
+busy cores, but can be further optimized by getting userspace input of
+important tasks and keeping track of such tasks. This leads to optimized
+searching of non idle cores and also more accurate as userspace hints
+are safer than auto classified busy cores/tasks.
+
+
+Result
+======
+
+The patch-set proves to be useful for the system and the workload where
+frequency boost is found to be useful than packing tasks into cores. IBM POWER 9
+system shows the benefit for a workload can be up to 13%.
+
+                   Performance benefit of TurboSched over CFS                  
+     +-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+   
+     | + + + +  + + + + + + + +  + + + + + + + +  + + + + + + + +  + + + + |   
+  15 +-+                                  Performance benefit in %       +-+   
+     |                    **                                               |   
+     |                    **                                               |   
+  10 +-+                ********                                         +-+   
+     |                  ********                                           |   
+     |              ************   *                                       |   
+   5 +-+            ************   *                                     +-+   
+     |            * ************   * ****                                  |   
+     |       ** * * ************ * * ******                                |   
+     |       ** * * ************ * * ************ *                        |   
+   0 +-******** * * ************ * * ************ * * * ********** * * * **+   
+     |     **                                           ****               |   
+     |     **                                                              |   
+  -5 +-+   **                                                            +-+   
+     | + + + +  + + + + + + + +  + + + + + + + +  + + + + + + + +  + + + + |   
+     +-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+   
+       1 2 3 4  5 6 7 8 9101112 1314151617181920 2122232425262728 29303132     
+                             Workload threads count                            
+
+
+                     Frequency benefit of TurboSched over CFS                   
+  20 +-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+   
+     | + + + +  + + + + + + + +  + + + + + + + +  + + + + + + + +  + + + + |   
+     |                                      Frequency benefit in %         |   
+  15 +-+                  **                                             +-+   
+     |                    **                                               |   
+     |              ********                                               |   
+  10 +-+          * ************                                         +-+   
+     |            * ************                                           |   
+     |            * ************                                           |   
+   5 +-+        * * ************   *                                     +-+   
+     |       ** * * ************ * *                                       |   
+     |     **** * * ************ * * ******                 **             |   
+   0 +-******** * * ************ * * ************ * * * ********** * * * **+   
+     |   **                                                                |   
+     |   **                                                                |   
+  -5 +-+ **                                                              +-+   
+     | + + + +  + + + + + + + +  + + + + + + + +  + + + + + + + +  + + + + |   
+     +-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+-+-+-+--+-+-+-+-+   
+       1 2 3 4  5 6 7 8 9101112 1314151617181920 2122232425262728 29303132     
+                             Workload threads count                            
+
+These numbers are w.r.t. `turbo_bench.c` test benchmark which spawns multiple
+threads of a mix of High Utilization and Low Utilization(jitters). X-axis
+represents the count of both the categories of tasks spawned.
+
+
+Series organization
+==============
+- Patches [01-03]: Cgroup based jitter tasks classification
+- Patches [04]: Defines Core Capacity to limit task packing
+- Patches [05-06]: Tune CFS task wakeup logic to pack tasks onto busy
+  cores
+
+Series can be applied on top of Patrick Bellasi's UCLAMP RFCv8[3]
+patches with branch on tip/sched/core and UCLAMP_TASK_GROUP config
+options enabled.
+
+
+Changelogs
+=========
+This patch set is a respin of TurboSched RFCv1
+https://lwn.net/Articles/783959/
+which includes the following main changes
+
+- No WOF tasks classification, only jitter tasks are classified from
+  the cpu cgroup controller
+- Use of Spinlock rather than mutex to count number of jitters in the
+  system classified from cgroup
+- Architecture specific implementation of Core capacity multiplication
+  factor changes dynamically based on the number of active threads in
+  the core
+- Selection of non idle core in the system is bounded by DIE domain
+- Use of UCLAMP mechanism to classify jitter tasks
+- Removed "highutil_cpu_mask", and rather uses sd for DIE domain to find
+  better fit
+
+
+References
+==========
+
+[1] "TurboSched : A scheduler for sustaining Turbo frequency for longer
+durations" https://lwn.net/Articles/783959/
+
+[2] "Turbo_bench: Synthetic workload generator"
+https://github.com/parthsl/tools/blob/master/benchmarks/turbo_bench.c
+
+[3] "Patrick Bellasi, Add utilization clamping support"
+https://lore.kernel.org/lkml/20190402104153.25404-1-patrick.bellasi@arm.com/
+
+
+Parth Shah (6):
+  sched/core: Add manual jitter classification from cgroup interface
+  sched: Introduce switch to enable TurboSched mode
+  sched/core: Update turbo_sched count only when required
+  sched/fair: Define core capacity to limit task packing
+  sched/fair: Tune task wake-up logic to pack jitter tasks
+  sched/fair: Bound non idle core search by DIE domain
+
+ arch/powerpc/include/asm/topology.h |   7 ++
+ arch/powerpc/kernel/smp.c           |  37 ++++++++
+ kernel/sched/core.c                 |  32 +++++++
+ kernel/sched/fair.c                 | 127 +++++++++++++++++++++++++++-
+ kernel/sched/sched.h                |   8 ++
+ 5 files changed, 210 insertions(+), 1 deletion(-)
+
+-- 
+2.17.1
+
