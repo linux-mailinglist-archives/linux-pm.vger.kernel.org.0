@@ -2,136 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAAE1EB48
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 11:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 269801EB88
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 11:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725977AbfEOJq0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 May 2019 05:46:26 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:39496 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726856AbfEOJqZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 May 2019 05:46:25 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A67580D;
-        Wed, 15 May 2019 02:46:25 -0700 (PDT)
-Received: from e110439-lin.cambridge.arm.com (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 629CA3F703;
-        Wed, 15 May 2019 02:46:22 -0700 (PDT)
-From:   Patrick Bellasi <patrick.bellasi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-api@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: [PATCH v9 16/16] sched/core: uclamp: Update CPU's refcount on TG's clamp changes
-Date:   Wed, 15 May 2019 10:44:59 +0100
-Message-Id: <20190515094459.10317-17-patrick.bellasi@arm.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190515094459.10317-1-patrick.bellasi@arm.com>
-References: <20190515094459.10317-1-patrick.bellasi@arm.com>
+        id S1726410AbfEOJ4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 May 2019 05:56:34 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39579 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726302AbfEOJ4d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 05:56:33 -0400
+Received: by mail-wr1-f66.google.com with SMTP id w8so1939106wrl.6
+        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 02:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5JYhbd/vO4XoD/CtHSzLTiUyvf3UwZx+Y3JbyqMKmfs=;
+        b=gBB5sus/t6TCjIaVANYvetAi+rVR0U8RlHgIDuV/jFgGLO+E1mCWhtrSTMhXNFruCm
+         oPrKOEGbTeOD1NtJi1vidX6vzkumsEJOBrlGTQnk8hrfl1chmz5IH8f9cRpeQRJsdiaR
+         YY4qKKN1F0c3u1J9yFL/C5SX10FLE0/hxCSwJYrZ6Hl0aeJ22yn9zSx3wRh5puqiTPyR
+         Kk9DCJ71sIF1+eThGf3kvQ2mzTptKwPEdKUL6Lj4wJ08VOl+Lsw4LOR4suWgQntD8A5+
+         5/DLw2QsC6AceztCAROjPZPOBJNb88rLyqNCJFD2VqR6wwI4RdqabmfoXRyqZkfptEus
+         tDpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5JYhbd/vO4XoD/CtHSzLTiUyvf3UwZx+Y3JbyqMKmfs=;
+        b=uT9BsMLNb7jwqAH9rpVz0Y6UK7/fHe/mcFZG1WZrRKpk+UpiI/Sb2eMipQrjMZ4UPR
+         71vpQya7/pEpU6bj1CNRrPjyhTRiT95stJQRSggDVT1+Tel7Yh5tHwXQIVbG2PIbY3V+
+         /QAzqA8HQcAKOQPRdkZObPEEBdOorHIdMHTL7+0G8e0P+392j+pdJU+TW0lke/AxwHrb
+         lDcXHKn7rs9WRVOshIvZCMbcATFRVzgToj/zzL2Waz0KGOUzslMOvrnIJJi2HfWjJgLr
+         smqVevZX3vdIHR+KNFTvRxnmysUK8c45itfTJC2yBt4+O6Q2UpyijU4/xea4W6T9kkX4
+         IvTQ==
+X-Gm-Message-State: APjAAAV3korKTCo2SmYxIWG9Ez7hB6LbZOlTy31fH9eVe14j478ixRUV
+        +BcQwUDeoOVoN1vRZv+lgATgTg==
+X-Google-Smtp-Source: APXvYqxozk+6bk7th/l8gbao/9YhKjUJ5EJNO5OynkqEGlmWbYZkWun7AiVJeD9feyohHwCreEO9hQ==
+X-Received: by 2002:adf:b3d1:: with SMTP id x17mr24575739wrd.31.1557914191908;
+        Wed, 15 May 2019 02:56:31 -0700 (PDT)
+Received: from [192.168.0.41] (sju31-1-78-210-255-2.fbx.proxad.net. [78.210.255.2])
+        by smtp.googlemail.com with ESMTPSA id j13sm1096094wru.78.2019.05.15.02.56.30
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 May 2019 02:56:31 -0700 (PDT)
+Subject: Re: [PATCH v4 2/3] PM / EM: Expose perf domain struct
+To:     Quentin Perret <quentin.perret@arm.com>
+Cc:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
+        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
+        will.deacon@arm.com, catalin.marinas@arm.com,
+        dietmar.eggemann@arm.com, ionela.voinescu@arm.com,
+        mka@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20190515082318.7993-1-quentin.perret@arm.com>
+ <20190515082318.7993-3-quentin.perret@arm.com>
+ <0ced18eb-e424-fe6b-b11e-165a3c108170@linaro.org>
+ <20190515091658.sbpg6qiovhtblqyr@queper01-lin>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <698400c0-e0a4-4a86-b9df-cdb9bd683c0f@linaro.org>
+Date:   Wed, 15 May 2019 11:56:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <20190515091658.sbpg6qiovhtblqyr@queper01-lin>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On updates of task group (TG) clamp values, ensure that these new values
-are enforced on all RUNNABLE tasks of the task group, i.e. all RUNNABLE
-tasks are immediately boosted and/or clamped as requested.
+On 15/05/2019 11:17, Quentin Perret wrote:
+> Hi Daniel,
+> 
+> On Wednesday 15 May 2019 at 11:06:18 (+0200), Daniel Lezcano wrote:
+>> On 15/05/2019 10:23, Quentin Perret wrote:
+>>> In the current state, the perf_domain struct is fully defined only when
+>>> CONFIG_ENERGY_MODEL=y. Since we need to write code that compiles both
+>>> with or without that option in the thermal framework, make sure to
+>>> actually define the struct regardless of the config option. That allows
+>>> to avoid using stubbed accessor functions all the time in code paths
+>>> that use the EM.
+>>>
+>>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>>> Signed-off-by: Quentin Perret <quentin.perret@arm.com>
+>>
+>> This patch implies the cpu cooling device can be set without the energy
+>> model.
+>>
+>> Isn't it possible to make a strong dependency for the cpu cooling device
+>> on the energy model option, add the energy model as default on arm arch
+>> and drop this patch?
+> 
+> Right, that should work too.
+> 
+>> After all, the cpu cooling is using the em framework.
+> 
+> The reason I did it that way is simply to keep things flexible. If you
+> don't compile in THERMAL_GOV_POWER_ALLOCATOR, you will never use the EM
+> for CPU thermal. So I thought it would be good to not mandate compiling
+> in ENERGY_MODEL in this case -- that should save a bit of space.
+> 
+> But TBH I don't have a strong opinion on this one, so if everybody
+> agrees it's fine to just make CPU_THERMAL depend on ENERGY_MODEL, I'm
+> happy to drop this patch and fix patch 3/3. That would indeed simplify
+> things a bit.
 
-Do that by slightly refactoring uclamp_bucket_inc(). An additional
-parameter *cgroup_subsys_state (css) is used to walk the list of tasks
-in the TGs and update the RUNNABLE ones. Do that by taking the rq
-lock for each task, the same mechanism used for cpu affinity masks
-updates.
+Ok in this case it will be better to drop the 2/3 and add a small series
+doing for the cpu_cooling.c
 
-Signed-off-by: Patrick Bellasi <patrick.bellasi@arm.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Tejun Heo <tj@kernel.org>
----
- kernel/sched/core.c | 48 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 354d925a6ba8..0c078d586f36 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1031,6 +1031,51 @@ static inline void uclamp_rq_dec(struct rq *rq, struct task_struct *p)
- 		uclamp_rq_dec_id(rq, p, clamp_id);
- }
- 
-+static inline void
-+uclamp_update_active(struct task_struct *p, unsigned int clamp_id)
-+{
-+	struct rq_flags rf;
-+	struct rq *rq;
-+
-+	/*
-+	 * Lock the task and the rq where the task is (or was) queued.
-+	 *
-+	 * We might lock the (previous) rq of a !RUNNABLE task, but that's the
-+	 * price to pay to safely serialize util_{min,max} updates with
-+	 * enqueues, dequeues and migration operations.
-+	 * This is the same locking schema used by __set_cpus_allowed_ptr().
-+	 */
-+	rq = task_rq_lock(p, &rf);
-+
-+	/*
-+	 * Setting the clamp bucket is serialized by task_rq_lock().
-+	 * If the task is not yet RUNNABLE and its task_struct is not
-+	 * affecting a valid clamp bucket, the next time it's enqueued,
-+	 * it will already see the updated clamp bucket value.
-+	 */
-+	if (!p->uclamp[clamp_id].active)
-+		goto done;
-+
-+	uclamp_rq_dec_id(rq, p, clamp_id);
-+	uclamp_rq_inc_id(rq, p, clamp_id);
-+
-+done:
-+
-+	task_rq_unlock(rq, p, &rf);
-+}
-+
-+static inline void
-+uclamp_update_active_tasks(struct cgroup_subsys_state *css, int clamp_id)
-+{
-+	struct css_task_iter it;
-+	struct task_struct *p;
-+
-+	css_task_iter_start(css, 0, &it);
-+	while ((p = css_task_iter_next(&it)))
-+		uclamp_update_active(p, clamp_id);
-+	css_task_iter_end(&it);
-+}
-+
- #ifdef CONFIG_UCLAMP_TASK_GROUP
- static void cpu_util_update_eff(struct cgroup_subsys_state *css,
- 				unsigned int clamp_id);
-@@ -7044,6 +7089,9 @@ static void cpu_util_update_eff(struct cgroup_subsys_state *css,
- 
- 		uc_se->value = value;
- 		uc_se->bucket_id = uclamp_bucket_id(value);
-+
-+		/* Immediately update descendants RUNNABLE tasks */
-+		uclamp_update_active_tasks(css, clamp_id);
- 	}
- }
- 
+/* structure freq */
+
+/* power2state */
+
+/* state2power*/
+
+/* getrequestedpower */
+
+/* All functions needed for the above */
+
+#endif
+
+static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+        .get_max_state          = cpufreq_get_max_state,
+        .get_cur_state          = cpufreq_get_cur_state,
+        .set_cur_state          = cpufreq_set_cur_state,
+#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+        .get_requested_power    = cpufreq_get_requested_power,
+        .state2power            = cpufreq_state2power,
+        .power2state            = cpufreq_power2state,
+#endif
+};
+
+So you don't have to care about ENERGY_MODEL to be set as
+THERMAL_GOV_POWER_ALLOCATOR depends on it.
+
+I think the result for cpu_cooling.c will be even more cleaner with the
+em change.
+
+
+
+
 -- 
-2.21.0
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
