@@ -2,133 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A39B11EA88
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 11:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460C31EAA3
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 11:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725953AbfEOJAN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 May 2019 05:00:13 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40586 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725871AbfEOJAN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 05:00:13 -0400
-Received: by mail-oi1-f193.google.com with SMTP id r136so1255768oie.7;
-        Wed, 15 May 2019 02:00:12 -0700 (PDT)
+        id S1726422AbfEOJGX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 May 2019 05:06:23 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38642 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725953AbfEOJGX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 05:06:23 -0400
+Received: by mail-wm1-f65.google.com with SMTP id f2so1662661wmj.3
+        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 02:06:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wFA5k42n2PvTkAtvZj4SXJNDy7f4n0IZQu6P7nqdQFk=;
+        b=X4kG2qR8EPO/1PEqo1rglf1NosQAvqluV2o4RPotqdHeFYQETZNlwgC5sp94OvPiJs
+         DoCeYV3ZOP1Mg/eir1rrA11RbRZTRbQh5fZ0eCusGa01sTnEZ9/1RYUpnVv6pmKr8h6H
+         txEz1vwXOa8iN9LsTSXQCGhGcnw+2W+BKlFY3oNZ3kASHHImApY32cJo0XMVKVke55Dn
+         ge0bcdddHtdn1nfNfs6ecsrMZuRL+6mXCZ9f6pZ5htntcHAxs0/uki1KLEg44imWSWc8
+         IHOQUocdgwy+zjsnuLk5nXtH8Fev4zefuKu5pl1FvGyF8z/MZWm3NOSPPFHpjkK1/e2k
+         9/4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lrqj6jKrkXcRwqIiYwyrhsIxd6bZvvZrh2+SSoZ20J0=;
-        b=tLbNnFqCG9b+NM2rIAUZ3p401DLBMhEowpQVywyUJuqe1NuU7hLXgyOfLcuIEGNEIY
-         haRT3DT1ooSlHyJ3S43fgJAJbNOBMY7tmmobwebz/n9GHyV8fDqi6vZr9sWHFgssBueJ
-         Xq1H2T2vGslplMg3CDjxYVo3mJK1zZ7ZZ9FdI9JMY7OeJfiIjOlychV4DiW82shbblQM
-         vRCD4uYg8mdgyEzIcvJpkyyRwqidgYmBhGkwP5+OMGFEeYvj1us69HXMO9UuS67eW8AB
-         DkIvqWEf7iBkhllkR9Z8yK9rOtQNMpGDSngFbE1K00nvUqzQMYnvGOYmRbLyOSzWoj8J
-         9N3w==
-X-Gm-Message-State: APjAAAWk4IHf4+IRvt2UFihEeI8lr06/xN5nsRqW+PV0Ygx2M0bmRv+Q
-        DnousFCZiId3rYhK5KskGoCW86g7JDevlPNcDR8RcQ==
-X-Google-Smtp-Source: APXvYqwHaBsNdrxgMt9H08QfD06eGXj4HaMnSdWMvb9W72y+vEGR3kUnlh0NIou/5pP1CEOGRrXrlsI/Ydn/lftSsq8=
-X-Received: by 2002:aca:f4c3:: with SMTP id s186mr5432131oih.68.1557910812335;
- Wed, 15 May 2019 02:00:12 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wFA5k42n2PvTkAtvZj4SXJNDy7f4n0IZQu6P7nqdQFk=;
+        b=pU1VTFYVt0Ns4t4WfamavHRv6bT6yJg/c0ckqM1tOno5yfj430EkoBo7c3FQvNXKOe
+         psLwuHuArtmcBod/wtmcEH4cibbjTqYwC21y7SF6YSV68j3fF4Pf6CkaaSrs9wVkIEWk
+         5HfDyKyrLvEju7qUeRMu5Tv3effelVgpI+ME4RogtwQWq696YtFakrUsBVBib/2lw8x9
+         uQ+5GaG7yWCpLDUyKQUuFkoW5iRELLshD5VgBKhfcdVxWXeCjkI3fgs8gdLKCl1ucKAM
+         8Hyrs17rX9N49qwe9Qu/2hCXxFQl7jG3fD2sKlZJEZtX2pkp125vR4H5urso2AToUtDD
+         WmJw==
+X-Gm-Message-State: APjAAAUiSR7HxGp3ePHnU5zp41odCQJCh3qmjPR+XWBtRqWC4qxiKNDq
+        n/8DakKrO1lNjwu207Kks3pGEQ==
+X-Google-Smtp-Source: APXvYqzTYoePwqDD9esqOsGPBmEw78/sLxWA/IkhxSEMuPrS10a39mEN7tjOCD7++ZBv5UIs+Cb13g==
+X-Received: by 2002:a1c:f70c:: with SMTP id v12mr21725967wmh.86.1557911180708;
+        Wed, 15 May 2019 02:06:20 -0700 (PDT)
+Received: from [192.168.0.41] (sju31-1-78-210-255-2.fbx.proxad.net. [78.210.255.2])
+        by smtp.googlemail.com with ESMTPSA id f7sm1151307wmc.26.2019.05.15.02.06.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 May 2019 02:06:20 -0700 (PDT)
+Subject: Re: [PATCH v4 2/3] PM / EM: Expose perf domain struct
+To:     Quentin Perret <quentin.perret@arm.com>, edubezval@gmail.com,
+        rui.zhang@intel.com, javi.merino@kernel.org,
+        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
+        will.deacon@arm.com, catalin.marinas@arm.com
+Cc:     dietmar.eggemann@arm.com, ionela.voinescu@arm.com,
+        mka@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20190515082318.7993-1-quentin.perret@arm.com>
+ <20190515082318.7993-3-quentin.perret@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <0ced18eb-e424-fe6b-b11e-165a3c108170@linaro.org>
+Date:   Wed, 15 May 2019 11:06:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <20190510212937.11661-1-keith.busch@intel.com> <0080aaff18e5445dabca509d4113eca8@AUSX13MPC105.AMER.DELL.COM>
- <955722d8fc16425dbba0698c4806f8fd@AUSX13MPC105.AMER.DELL.COM>
- <20190513143741.GA25500@lst.de> <b12ff66f8c224e4199ff1b90ed6bc393@AUSX13MPC105.AMER.DELL.COM>
- <20190513145522.GA15421@localhost.localdomain> <d69ff7154191492eaa8f55535a7effa5@AUSX13MPC105.AMER.DELL.COM>
- <20190513150458.GA15437@localhost.localdomain> <CAJZ5v0g3cCYK3rAQn09pCr7LMrRr=zQy_ceaEB5AKhVx604YgA@mail.gmail.com>
- <20190514221609.GC19977@localhost.localdomain>
-In-Reply-To: <20190514221609.GC19977@localhost.localdomain>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 May 2019 11:00:01 +0200
-Message-ID: <CAJZ5v0hrzV+cz+112sfgJ1eNznuf5oLH+kpFwhQb5VA05EAS2g@mail.gmail.com>
-Subject: Re: [PATCH] nvme/pci: Use host managed power state for suspend
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <keith.busch@intel.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190515082318.7993-3-quentin.perret@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 15, 2019 at 12:21 AM Keith Busch <kbusch@kernel.org> wrote:
->
-> On Tue, May 14, 2019 at 10:04:22AM +0200, Rafael J. Wysocki wrote:
-> > On Mon, May 13, 2019 at 5:10 PM Keith Busch <kbusch@kernel.org> wrote:
-> > >
-> > > On Mon, May 13, 2019 at 03:05:42PM +0000, Mario.Limonciello@dell.com wrote:
-> > > > This system power state - suspend to idle is going to freeze threads.
-> > > > But we're talking a multi threaded kernel.  Can't there be a timing problem going
-> > > > on then too?  With a disk flush being active in one task and the other task trying
-> > > > to put the disk into the deepest power state.  If you don't freeze the queues how
-> > > > can you guarantee that didn't happen?
-> > >
-> > > But if an active data flush task is running, then we're not idle and
-> > > shouldn't go to low power.
-> >
-> > To be entirely precise, system suspend prevents user space from
-> > running while it is in progress.  It doesn't do that to kernel
-> > threads, at least not by default, though, so if there is a kernel
-> > thread flushing the data, it needs to be stopped or suspended somehow
-> > directly in the system suspend path.  [And yes, system suspend (or
-> > hibernation) may take place at any time so long as all user space can
-> > be prevented from running then (by means of the tasks freezer).]
-> >
-> > However, freezing the queues from a driver ->suspend callback doesn't
-> > help in general and the reason why is hibernation.  Roughly speaking,
-> > hibernation works in two steps, the first of which creates a snapshot
-> > image of system memory and the second one writes that image to
-> > persistent storage.  Devices are resumed between the two steps in
-> > order to make it possible to do the write, but that would unfreeze the
-> > queues and let the data flusher run.  If it runs, it may cause the
-> > memory snapshot image that has just been created to become outdated
-> > and restoring the system memory contents from that image going forward
-> > may cause corruption to occur.
-> >
-> > Thus freezing the queues from a driver ->suspend callback should not
-> > be relied on for correctness if the same callback is used for system
-> > suspend and hibernation, which is the case here.  If doing that
-> > prevents the system from crashing, it is critical to find out why IMO,
-> > as that may very well indicate a broader issue, not necessarily in the
-> > driver itself.
-> >
-> > But note that even if the device turns out to behave oddly, it still
-> > needs to be handled, unless it may be prevented from shipping to users
-> > in that shape.  If it ships, users will face the odd behavior anyway.
->
-> Thanks for all the information. I'll take another shot at this, should
-> have it posted tomorrow.
->
-> It's mostly not a problem to ensure enqueued and dispatched requests are
-> completed before returning from our suspend callback. I originally had
-> that behavior and backed it out when I thought it wasn't necessary. So
-> I'll reintroduce that. I'm not sure yet how we may handle kernel tasks
-> that are about to read/write pages, but haven't yet enqueued their
-> requests.
+On 15/05/2019 10:23, Quentin Perret wrote:
+> In the current state, the perf_domain struct is fully defined only when
+> CONFIG_ENERGY_MODEL=y. Since we need to write code that compiles both
+> with or without that option in the thermal framework, make sure to
+> actually define the struct regardless of the config option. That allows
+> to avoid using stubbed accessor functions all the time in code paths
+> that use the EM.
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Quentin Perret <quentin.perret@arm.com>
 
-That is a hard problem in general.
+This patch implies the cpu cooling device can be set without the energy
+model.
 
-Currently, there are two ways to prevent a kernel thread from running
-across hibernation.  One of them is to freeze it with the help of the
-tasks freezer, but that isn't nice.  The second one would be to
-register a PM notifier with register_pm_notifier() and then stop the
-thread on the PM_HIBERNATION_PREPARE events (and restart it on the
-PM_POST_HIBERNATION and PM_POST_RESTORE events).  The drawback here
-is, though, that PM_HIBERNATION_PREPARE is signaled before freezing
-user space which may produce some deadlock scenarios in principle if
-anything in user space may be blocked waiting for the stopped kernel
-thread.
+Isn't it possible to make a strong dependency for the cpu cooling device
+on the energy model option, add the energy model as default on arm arch
+and drop this patch?
 
-It may be necessary to add PM_HIBERNATION/SUSPEND_POSTFREEZE and
-_PRETHAW events to the PM notifier for that, which will be signaled
-after running the tasks freezer and before unfreezing tasks,
-respectively.  Or something else to that effect.
+After all, the cpu cooling is using the em framework.
 
-If you need something like that, please let me know and I will prepare
-a core patch to add it.
+> ---
+>  include/linux/energy_model.h | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index aa027f7bcb3e..fb32b86a467d 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -9,7 +9,6 @@
+>  #include <linux/sched/topology.h>
+>  #include <linux/types.h>
+>  
+> -#ifdef CONFIG_ENERGY_MODEL
+>  /**
+>   * em_cap_state - Capacity state of a performance domain
+>   * @frequency:	The CPU frequency in KHz, for consistency with CPUFreq
+> @@ -40,6 +39,7 @@ struct em_perf_domain {
+>  	unsigned long cpus[0];
+>  };
+>  
+> +#ifdef CONFIG_ENERGY_MODEL
+>  #define EM_CPU_MAX_POWER 0xFFFF
+>  
+>  struct em_data_callback {
+> @@ -160,7 +160,6 @@ static inline int em_pd_nr_cap_states(struct em_perf_domain *pd)
+>  }
+>  
+>  #else
+> -struct em_perf_domain {};
+>  struct em_data_callback {};
+>  #define EM_DATA_CB(_active_power_cb) { }
+>  
+> 
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
