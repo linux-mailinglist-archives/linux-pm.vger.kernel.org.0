@@ -2,171 +2,344 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EAD1F2FF
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 14:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7083D1F4DF
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 14:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729005AbfEOMJs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 May 2019 08:09:48 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:39879 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728953AbfEOLHl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 07:07:41 -0400
-Received: by mail-wm1-f65.google.com with SMTP id n25so2037563wmk.4
-        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 04:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WLYROLqwvq+iq4Tg13SMOpkpNE1f0nENSLKE//G0bsk=;
-        b=euq/YjOxetpfM+ZIRd16tqOJMUNMAQ639aAlV8Z7Ibig9LpEwqAJTeSnRJZv9QFR0A
-         n3DaSssaT4KUsdSZYEJF2jvAGai5fUuS8T0WPRkz4o4p20gpJt7tecOOpF/0sXYuCt4c
-         +gkH9sxfIb3PHS15GjRWakzRNBq90imKo8mOxdUlQBch12slcyqyLT1bNw+kIeI5Y2BK
-         hqlOAm4od8MxLkFSusv/wFPi/FAd6Jl5afhpMqIgF782USJg1GQqr6rRATkZmQKNyr4T
-         Reyohk2YroZHi9UP9N4sj4WdzXhQOZgyYey7kYxrPMDf/koP7KIAwgEvhf/7CifOKhnp
-         mmaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WLYROLqwvq+iq4Tg13SMOpkpNE1f0nENSLKE//G0bsk=;
-        b=Fuiigog1OOZVPOrzYzznp8f7Z9imioNfAVnZmCaxXREbzcXZCOv9RCvD5oVGNPfYYU
-         QJfPhr0JeX4oqwRe5zedRaQZcKDj0Uxgtg5uSNK32qYPFRkFlLfPGF1fbNR1tNaDOGI1
-         pWh4pjI4Sa0Wt8Sqy4quYNZnLLm/OAtZ7lw7nmbOw1NfpsMKRdJEsllJk6ebK0oUTxRq
-         xumquFVlzUMvhN+FoVbvrO/ALEplajfq+6TuK5I2wpxWxHEYcSOWBfoGC4bVTjJPdRrJ
-         Yru6Zs/2cwtAzarlLBP483NS2EoQ56aDgmeOJi3T/FEd+JdkQ/0w15WbINcXKq+qLNrA
-         EiGA==
-X-Gm-Message-State: APjAAAXFDCxIsuI03sJoVm0spP1Chr9sHn9usJsj8ZG+eisMR9U/UWcD
-        u8AlkTjPe6++L74I44leyV8mhA==
-X-Google-Smtp-Source: APXvYqyk+jOEfdcEqATmFYCA0jxw/O5gBV5d9uEck/eUQUqWql3DtCIln4vAuhSqj4YJxAvSRHH8IQ==
-X-Received: by 2002:a1c:f407:: with SMTP id z7mr22070590wma.34.1557918459197;
-        Wed, 15 May 2019 04:07:39 -0700 (PDT)
-Received: from [192.168.0.41] (sju31-1-78-210-255-2.fbx.proxad.net. [78.210.255.2])
-        by smtp.googlemail.com with ESMTPSA id 130sm1924399wmd.15.2019.05.15.04.07.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 May 2019 04:07:38 -0700 (PDT)
-Subject: Re: [PATCH v4 2/3] PM / EM: Expose perf domain struct
-To:     Quentin Perret <quentin.perret@arm.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, edubezval@gmail.com,
-        rui.zhang@intel.com, javi.merino@kernel.org,
-        amit.kachhap@gmail.com, rjw@rjwysocki.net, will.deacon@arm.com,
-        catalin.marinas@arm.com, dietmar.eggemann@arm.com,
-        ionela.voinescu@arm.com, mka@chromium.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20190515082318.7993-3-quentin.perret@arm.com>
- <0ced18eb-e424-fe6b-b11e-165a3c108170@linaro.org>
- <20190515091658.sbpg6qiovhtblqyr@queper01-lin>
- <698400c0-e0a4-4a86-b9df-cdb9bd683c0f@linaro.org>
- <20190515100748.q3t4kt72h2akdpcs@queper01-lin>
- <cf1474cb-7e31-7070-b988-a0c4d3f6f081@linaro.org>
- <20190515102200.s6uq63qnwea6xtpl@vireshk-i7>
- <20190515104043.vogspxgkapp6qsny@queper01-lin>
- <20190515104651.tv5odug7ce4zlupc@queper01-lin>
- <5b55e432-f8b0-91ae-a7de-fe02e0cad322@linaro.org>
- <20190515110156.ru2wxqvwffqgq3t3@queper01-lin>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <a4c0ab68-f8d0-a70d-58e5-b8de55199000@linaro.org>
-Date:   Wed, 15 May 2019 13:07:36 +0200
+        id S1727207AbfEOMzD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 May 2019 08:55:03 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:59366 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726923AbfEOMzD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 08:55:03 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id CF0C1281ED8
+Subject: Re: [PATCH v8 1/2] platform/chrome: wilco_ec: Add property helper
+ library
+To:     Nick Crews <ncrews@chromium.org>, bleung@chromium.org,
+        sre@kernel.org, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, dlaurie@chromium.org,
+        lamzin@google.com, bartfab@google.com, derat@google.com,
+        dtor@google.com, sjg@chromium.org, jchwong@chromium.org,
+        tbroch@chromium.org
+References: <20190424165651.236391-1-ncrews@chromium.org>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <d5bf4678-e5d1-c01d-4701-5d81e24986a1@collabora.com>
+Date:   Wed, 15 May 2019 14:54:57 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190515110156.ru2wxqvwffqgq3t3@queper01-lin>
+In-Reply-To: <20190424165651.236391-1-ncrews@chromium.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/05/2019 13:01, Quentin Perret wrote:
-> On Wednesday 15 May 2019 at 12:51:57 (+0200), Daniel Lezcano wrote:
->> On 15/05/2019 12:46, Quentin Perret wrote:
->>> On Wednesday 15 May 2019 at 11:40:44 (+0100), Quentin Perret wrote:
->>
->> [ ... ]
->>
->>>> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
->>>>         if (capacitance) {
->>>>                 ret = update_freq_table(cpufreq_cdev, capacitance);
->>>>                 if (ret) {
->>>>                         cdev = ERR_PTR(ret);
->>>>                         goto remove_ida;
->>>>                 }
->>>> -
->>>> -               cooling_ops = &cpufreq_power_cooling_ops;
->>>> -       } else {
->>>> -               cooling_ops = &cpufreq_cooling_ops;
->>>>         }
->>>> +#endif
->>>> +       cooling_ops = &cpufreq_cooling_ops;
->>>
->>> Argh, that is actually broken with !capacitance and
->>> THERMAL_GOV_POWER_ALLOCATOR=y ... Perhaps it's best to keep the two
->>> thermal_cooling_device_ops struct separated in the end.
->>
->> Or alternatively you can keep one structure but instead of filling the
->> state2power,power2state and getrequestedpower fields in the declaration,
->> you fill them in the if (capacitance) block, no?
-> 
-> Something like the below ? Yes, that works too. I'll write a proper
-> patch and send that next week or so.
+Hi,
 
-Yes, exactly. And IMHO, that helps for the understanding of code also.
-
-> --->8---
+On 24/4/19 18:56, Nick Crews wrote:
+> A Property is typically a data item that is stored to NVRAM
+> by the EC. Each of these data items has an index associated
+> with it, known as the Property ID (PID). Properties may have
+> variable lengths, up to a max of WILCO_EC_PROPERTY_MAX_SIZE
+> bytes. Properties can be simple integers, or they may be more
+> complex binary data.
 > 
->  /* Bind cpufreq callbacks to thermal cooling device ops */
+> This patch adds support for getting and setting properties.
+> This will be useful for setting the charge algorithm and charge
+> schedules, which all use properties.
 > 
->  static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
-> -       .get_max_state = cpufreq_get_max_state,
-> -       .get_cur_state = cpufreq_get_cur_state,
-> -       .set_cur_state = cpufreq_set_cur_state,
-> -};
-> -
-> -static struct thermal_cooling_device_ops cpufreq_power_cooling_ops = {
->         .get_max_state          = cpufreq_get_max_state,
->         .get_cur_state          = cpufreq_get_cur_state,
->         .set_cur_state          = cpufreq_set_cur_state,
-> -       .get_requested_power    = cpufreq_get_requested_power,
-> -       .state2power            = cpufreq_state2power,
-> -       .power2state            = cpufreq_power2state,
->  };
+> Signed-off-by: Nick Crews <ncrews@chromium.org>
+
+The following patch is queued to the for-next branch for the autobuilders to
+play with, if all goes well I'll add the patch for 5.3 when current merge window
+closes.
+
+Thanks,
+ Enric
+
+> ---
+> v7 changes:
+> -Remove bogus gerrit FROMLIST tag in commit title
+> v6 changes:
+> -Add EC_* prefix to enum property_ops so they are more unique.
+> -Split up the commit so properties are added in a first commit
+> v5 changes:
+> -Remove OP_SYNC, it has no immediate use case.
+> -Merge properties.h into wilco-ec.h
+> -Remove enum get_set_sync_op from the public interface,
+>  since without OP_SYNC they are irrelevant.
+> -Fix Kconfigs and Makefiles so they actually work
+>  with the v4 changes
+> -Tweak some formatting, spacing, and comments
+> -Fix validation of charge_type so illegal values
+>  can't be set. Before negative error codes were
+>  accidentally getting casted to positive numbers
+> -Remove more unneeded parentheses.
+> v4 changes:
+> -Use put_unaligned_le32() to store PID in request.
+> -Move implementation from
+>  drivers/platform/chrome/wilco_ec/charge_config.c to
+>  drivers/power/supply/wilco_charger.c
+> -Move drivers/platform/chrome/wilco_ec/properties.h to
+>  include/linux/platform_data/wilco-ec-properties.h
+> -Remove parentheses in switch statement in psp_val_to_charge_mode()
+> -Check for any negatvie return code from psp_val_to_charge_mode()
+>  instead of just -EINVAL so its less brittle
+> -Tweak comments in wilco-ec-properties.h
+> v3 changes:
+> -Add this changelog
+> -Fix commit message tags
+> v2 changes:
+> -Update Documentation to say KernelVersion 5.2
+> -Update Documentation to explain Trickle mode better.
+> -rename things from using *PCC* to *CHARGE*
+> -Split up conversions between POWER_SUPPLY_PROP_CHARGE_TYPE values
+> and Wilco EC codes
+> -Use devm_ flavor of power_supply_register(), which simplifies things
+> -Add extra error checking on property messages received from the EC
+> -Fix bug in memcpy() calls in properties.c
+> -Refactor fill_property_id()
+> -Add valid input checks to charge_type
+> -Properly convert charge_type when get()ting
 > 
->  /* Notifier for cpufreq policy change */
-> @@ -674,18 +667,19 @@ __cpufreq_cooling_register(struct device_node *np,
->                         pr_debug("%s: freq:%u KHz\n", __func__, freq);
->         }
+>  drivers/platform/chrome/wilco_ec/Makefile     |   2 +-
+>  drivers/platform/chrome/wilco_ec/properties.c | 132 ++++++++++++++++++
+>  include/linux/platform_data/wilco-ec.h        |  71 ++++++++++
+>  3 files changed, 204 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/platform/chrome/wilco_ec/properties.c
 > 
-> +       cooling_ops = &cpufreq_cooling_ops;
-> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
->         if (capacitance) {
->                 ret = update_freq_table(cpufreq_cdev, capacitance);
->                 if (ret) {
->                         cdev = ERR_PTR(ret);
->                         goto remove_ida;
->                 }
-> -
-> -               cooling_ops = &cpufreq_power_cooling_ops;
-> -       } else {
-> -               cooling_ops = &cpufreq_cooling_ops;
-> +               cooling_ops->get_requested_power = cpufreq_get_requested_power;
-> +               cooling_ops->state2power = cpufreq_state2power;
-> +               cooling_ops->power2state = cpufreq_power2state;
->         }
-> -
-> +#endif
->         cdev = thermal_of_cooling_device_register(np, dev_name, cpufreq_cdev,
->                                                   cooling_ops);
->         if (IS_ERR(cdev))
+> diff --git a/drivers/platform/chrome/wilco_ec/Makefile b/drivers/platform/chrome/wilco_ec/Makefile
+> index 063e7fb4ea17..29b734137786 100644
+> --- a/drivers/platform/chrome/wilco_ec/Makefile
+> +++ b/drivers/platform/chrome/wilco_ec/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -wilco_ec-objs				:= core.o mailbox.o
+> +wilco_ec-objs				:= core.o mailbox.o properties.o
+>  obj-$(CONFIG_WILCO_EC)			+= wilco_ec.o
+>  wilco_ec_debugfs-objs			:= debugfs.o
+>  obj-$(CONFIG_WILCO_EC_DEBUGFS)		+= wilco_ec_debugfs.o
+> diff --git a/drivers/platform/chrome/wilco_ec/properties.c b/drivers/platform/chrome/wilco_ec/properties.c
+> new file mode 100644
+> index 000000000000..e69682c95ea2
+> --- /dev/null
+> +++ b/drivers/platform/chrome/wilco_ec/properties.c
+> @@ -0,0 +1,132 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2019 Google LLC
+> + */
+> +
+> +#include <linux/platform_data/wilco-ec.h>
+> +#include <linux/string.h>
+> +#include <linux/unaligned/le_memmove.h>
+> +
+> +/* Operation code; what the EC should do with the property */
+> +enum ec_property_op {
+> +	EC_OP_GET = 0,
+> +	EC_OP_SET = 1,
+> +};
+> +
+> +struct ec_property_request {
+> +	u8 op; /* One of enum ec_property_op */
+> +	u8 property_id[4]; /* The 32 bit PID is stored Little Endian */
+> +	u8 length;
+> +	u8 data[WILCO_EC_PROPERTY_MAX_SIZE];
+> +} __packed;
+> +
+> +struct ec_property_response {
+> +	u8 reserved[2];
+> +	u8 op; /* One of enum ec_property_op */
+> +	u8 property_id[4]; /* The 32 bit PID is stored Little Endian */
+> +	u8 length;
+> +	u8 data[WILCO_EC_PROPERTY_MAX_SIZE];
+> +} __packed;
+> +
+> +static int send_property_msg(struct wilco_ec_device *ec,
+> +			     struct ec_property_request *rq,
+> +			     struct ec_property_response *rs)
+> +{
+> +	struct wilco_ec_message ec_msg;
+> +	int ret;
+> +
+> +	memset(&ec_msg, 0, sizeof(ec_msg));
+> +	ec_msg.type = WILCO_EC_MSG_PROPERTY;
+> +	ec_msg.request_data = rq;
+> +	ec_msg.request_size = sizeof(*rq);
+> +	ec_msg.response_data = rs;
+> +	ec_msg.response_size = sizeof(*rs);
+> +
+> +	ret = wilco_ec_mailbox(ec, &ec_msg);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (rs->op != rq->op)
+> +		return -EBADMSG;
+> +	if (memcmp(rq->property_id, rs->property_id, sizeof(rs->property_id)))
+> +		return -EBADMSG;
+> +
+> +	return 0;
+> +}
+> +
+> +int wilco_ec_get_property(struct wilco_ec_device *ec,
+> +			  struct wilco_ec_property_msg *prop_msg)
+> +{
+> +	struct ec_property_request rq;
+> +	struct ec_property_response rs;
+> +	int ret;
+> +
+> +	memset(&rq, 0, sizeof(rq));
+> +	rq.op = EC_OP_GET;
+> +	put_unaligned_le32(prop_msg->property_id, rq.property_id);
+> +
+> +	ret = send_property_msg(ec, &rq, &rs);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	prop_msg->length = rs.length;
+> +	memcpy(prop_msg->data, rs.data, rs.length);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(wilco_ec_get_property);
+> +
+> +int wilco_ec_set_property(struct wilco_ec_device *ec,
+> +			  struct wilco_ec_property_msg *prop_msg)
+> +{
+> +	struct ec_property_request rq;
+> +	struct ec_property_response rs;
+> +	int ret;
+> +
+> +	memset(&rq, 0, sizeof(rq));
+> +	rq.op = EC_OP_SET;
+> +	put_unaligned_le32(prop_msg->property_id, rq.property_id);
+> +	rq.length = prop_msg->length;
+> +	memcpy(rq.data, prop_msg->data, prop_msg->length);
+> +
+> +	ret = send_property_msg(ec, &rq, &rs);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (rs.length != prop_msg->length)
+> +		return -EBADMSG;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(wilco_ec_set_property);
+> +
+> +int wilco_ec_get_byte_property(struct wilco_ec_device *ec, u32 property_id,
+> +			       u8 *val)
+> +{
+> +	struct wilco_ec_property_msg msg;
+> +	int ret;
+> +
+> +	msg.property_id = property_id;
+> +
+> +	ret = wilco_ec_get_property(ec, &msg);
+> +	if (ret < 0)
+> +		return ret;
+> +	if (msg.length != 1)
+> +		return -EBADMSG;
+> +
+> +	*val = msg.data[0];
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(wilco_ec_get_byte_property);
+> +
+> +int wilco_ec_set_byte_property(struct wilco_ec_device *ec, u32 property_id,
+> +			       u8 val)
+> +{
+> +	struct wilco_ec_property_msg msg;
+> +
+> +	msg.property_id = property_id;
+> +	msg.data[0] = val;
+> +	msg.length = 1;
+> +
+> +	return wilco_ec_set_property(ec, &msg);
+> +}
+> +EXPORT_SYMBOL_GPL(wilco_ec_set_byte_property);
+> diff --git a/include/linux/platform_data/wilco-ec.h b/include/linux/platform_data/wilco-ec.h
+> index 1ff224793c99..50a21bd5fd44 100644
+> --- a/include/linux/platform_data/wilco-ec.h
+> +++ b/include/linux/platform_data/wilco-ec.h
+> @@ -123,4 +123,75 @@ struct wilco_ec_message {
+>   */
+>  int wilco_ec_mailbox(struct wilco_ec_device *ec, struct wilco_ec_message *msg);
+>  
+> +/*
+> + * A Property is typically a data item that is stored to NVRAM
+> + * by the EC. Each of these data items has an index associated
+> + * with it, known as the Property ID (PID). Properties may have
+> + * variable lengths, up to a max of WILCO_EC_PROPERTY_MAX_SIZE
+> + * bytes. Properties can be simple integers, or they may be more
+> + * complex binary data.
+> + */
+> +
+> +#define WILCO_EC_PROPERTY_MAX_SIZE	4
+> +
+> +/**
+> + * struct ec_property_set_msg - Message to get or set a property.
+> + * @property_id: Which property to get or set.
+> + * @length: Number of bytes of |data| that are used.
+> + * @data: Actual property data.
+> + */
+> +struct wilco_ec_property_msg {
+> +	u32 property_id;
+> +	int length;
+> +	u8 data[WILCO_EC_PROPERTY_MAX_SIZE];
+> +};
+> +
+> +/**
+> + * wilco_ec_get_property() - Retrieve a property from the EC.
+> + * @ec: Embedded Controller device.
+> + * @prop_msg: Message for request and response.
+> + *
+> + * The property_id field of |prop_msg| should be filled before calling this
+> + * function. The result will be stored in the data and length fields.
+> + *
+> + * Return: 0 on success, negative error code on failure.
+> + */
+> +int wilco_ec_get_property(struct wilco_ec_device *ec,
+> +			  struct wilco_ec_property_msg *prop_msg);
+> +
+> +/**
+> + * wilco_ec_set_property() - Store a property on the EC.
+> + * @ec: Embedded Controller device.
+> + * @prop_msg: Message for request and response.
+> + *
+> + * The property_id, length, and data fields of |prop_msg| should be
+> + * filled before calling this function.
+> + *
+> + * Return: 0 on success, negative error code on failure.
+> + */
+> +int wilco_ec_set_property(struct wilco_ec_device *ec,
+> +			  struct wilco_ec_property_msg *prop_msg);
+> +
+> +/**
+> + * wilco_ec_get_byte_property() - Retrieve a byte-size property from the EC.
+> + * @ec: Embedded Controller device.
+> + * @property_id: Which property to retrieve.
+> + * @val: The result value, will be filled by this function.
+> + *
+> + * Return: 0 on success, negative error code on failure.
+> + */
+> +int wilco_ec_get_byte_property(struct wilco_ec_device *ec, u32 property_id,
+> +			       u8 *val);
+> +
+> +/**
+> + * wilco_ec_get_byte_property() - Store a byte-size property on the EC.
+> + * @ec: Embedded Controller device.
+> + * @property_id: Which property to store.
+> + * @val: Value to store.
+> + *
+> + * Return: 0 on success, negative error code on failure.
+> + */
+> +int wilco_ec_set_byte_property(struct wilco_ec_device *ec, u32 property_id,
+> +			       u8 val);
+> +
+>  #endif /* WILCO_EC_H */
 > 
-
-
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
