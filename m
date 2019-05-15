@@ -2,52 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8E61EC04
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 12:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB9A1EC3B
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 12:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbfEOKWE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 May 2019 06:22:04 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:33514 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726281AbfEOKWE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 06:22:04 -0400
-Received: by mail-pf1-f196.google.com with SMTP id z28so1149314pfk.0
-        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 03:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=k8VFYCF5oSPyusd7YzU9vI+LHK0xPFnRUxwFyUrCXLA=;
-        b=EQ9N1mnr6ZAQq91qE17FWFlHoZ4Bl9lxk2XZrVv8D4dzNfpeTPdY4yjSYCJ/BGq6Ad
-         pRw0mXLb6lIhWlkK4SgDPmsHvY/IMBXn13WhNY1RgbOSH7JVAwUV17GOrEjX2BEYId2w
-         8GMP4LMKrYY+0Fodr89ONmqevJq/47UWBeMeiTuFr5Dct+zv4FmkIRniK8RG1ug3sIXa
-         wU1smfWprasCjvoeBliO9XQ9ZCFAhYkFdf1a0PqqhU1KnPZbQ4zB0T6PjItaIVqqXece
-         7CQVEGFgRQVINfSdZyIZ7fiHoWStH62Sf3jk1mSvPbdl/2JSxYYUCxkt7W8b6Dt2Wspf
-         3rLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=k8VFYCF5oSPyusd7YzU9vI+LHK0xPFnRUxwFyUrCXLA=;
-        b=SLLwI1UzAaWlVAA8tXOkHyO8gMqnIxN6lUjB1qap1c2+2101PY4WIaOC6djkeG4ps4
-         zblxnIVodLkIqYfYUtC0C7ISPl0ykG7uBpEfzpc31Z3N4+4WidZxmusIlYFil7222FMu
-         rzGdUWOi4KK7IJ4GvDf6cpPjRIHf48GrPb6HWwmHsjeS9M+el4rAfPqH56EjHqB98Tfm
-         bStdV8iu3d9AT1xVTheWNZAQQ+Mu0xYupHvXXjNPr0lf+yb+/yIU8ZwvII7w3ATfzjxH
-         Xi9mByMrM39KCHIt+gImVlv7uTqE3bM6lZZ0mJnTYUeUJXKsAp0ASrMaK0UUB3MLjkxu
-         y5jg==
-X-Gm-Message-State: APjAAAVhmyLCWCX2V5on+psBA37mUuKzNzE1bHSSrUZzxqRIaJouLzwz
-        QcTj7YhjBzZlxX2HR5iHtix6hQ==
-X-Google-Smtp-Source: APXvYqzzEK+huRkxpvvZM1btAPYw8+s8wBsDTQMcogYLW7ON2rMCIGENU0s1Jb8JEFb5VT952F7iiw==
-X-Received: by 2002:a63:ee10:: with SMTP id e16mr37077998pgi.207.1557915723540;
-        Wed, 15 May 2019 03:22:03 -0700 (PDT)
-Received: from localhost ([122.172.118.99])
-        by smtp.gmail.com with ESMTPSA id n13sm3827336pgh.6.2019.05.15.03.22.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 May 2019 03:22:02 -0700 (PDT)
-Date:   Wed, 15 May 2019 15:52:00 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Quentin Perret <quentin.perret@arm.com>, edubezval@gmail.com,
+        id S1725953AbfEOKku (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 May 2019 06:40:50 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:40458 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725939AbfEOKku (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 May 2019 06:40:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E81B80D;
+        Wed, 15 May 2019 03:40:49 -0700 (PDT)
+Received: from queper01-lin (queper01-lin.cambridge.arm.com [10.1.195.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F4153F703;
+        Wed, 15 May 2019 03:40:46 -0700 (PDT)
+Date:   Wed, 15 May 2019 11:40:45 +0100
+From:   Quentin Perret <quentin.perret@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, edubezval@gmail.com,
         rui.zhang@intel.com, javi.merino@kernel.org,
         amit.kachhap@gmail.com, rjw@rjwysocki.net, will.deacon@arm.com,
         catalin.marinas@arm.com, dietmar.eggemann@arm.com,
@@ -55,7 +28,7 @@ Cc:     Quentin Perret <quentin.perret@arm.com>, edubezval@gmail.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH v4 2/3] PM / EM: Expose perf domain struct
-Message-ID: <20190515102200.s6uq63qnwea6xtpl@vireshk-i7>
+Message-ID: <20190515104043.vogspxgkapp6qsny@queper01-lin>
 References: <20190515082318.7993-1-quentin.perret@arm.com>
  <20190515082318.7993-3-quentin.perret@arm.com>
  <0ced18eb-e424-fe6b-b11e-165a3c108170@linaro.org>
@@ -63,20 +36,303 @@ References: <20190515082318.7993-1-quentin.perret@arm.com>
  <698400c0-e0a4-4a86-b9df-cdb9bd683c0f@linaro.org>
  <20190515100748.q3t4kt72h2akdpcs@queper01-lin>
  <cf1474cb-7e31-7070-b988-a0c4d3f6f081@linaro.org>
+ <20190515102200.s6uq63qnwea6xtpl@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf1474cb-7e31-7070-b988-a0c4d3f6f081@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20190515102200.s6uq63qnwea6xtpl@vireshk-i7>
+User-Agent: NeoMutt/20171215
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-05-19, 12:16, Daniel Lezcano wrote:
-> Viresh what do you think ?
+On Wednesday 15 May 2019 at 15:52:00 (+0530), Viresh Kumar wrote:
+> On 15-05-19, 12:16, Daniel Lezcano wrote:
+> > Viresh what do you think ?
+> 
+> I agree with your last suggestions. They do make sense.
 
-I agree with your last suggestions. They do make sense.
+Good :-)
 
--- 
-viresh
+So, FWIW, the below compiles w/ or w/o THERMAL_GOV_POWER_ALLOCATOR. I'll
+test it and clean it up some more and put it as patch 1 in the series if
+that's OK.
+
+Thanks,
+Quentin
+
+
+diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
+index f7c1f49ec87f..ee431848ef71 100644
+--- a/drivers/thermal/cpu_cooling.c
++++ b/drivers/thermal/cpu_cooling.c
+@@ -58,7 +58,9 @@
+  */
+ struct freq_table {
+        u32 frequency;
++#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+        u32 power;
++#endif
+ };
+ 
+ /**
+@@ -109,28 +111,6 @@ static DEFINE_IDA(cpufreq_ida);
+ static DEFINE_MUTEX(cooling_list_lock);
+ static LIST_HEAD(cpufreq_cdev_list);
+ 
+-/* Below code defines functions to be used for cpufreq as cooling device */
+-
+-/**
+- * get_level: Find the level for a particular frequency
+- * @cpufreq_cdev: cpufreq_cdev for which the property is required
+- * @freq: Frequency
+- *
+- * Return: level corresponding to the frequency.
+- */
+-static unsigned long get_level(struct cpufreq_cooling_device *cpufreq_cdev,
+-                              unsigned int freq)
+-{
+-       struct freq_table *freq_table = cpufreq_cdev->freq_table;
+-       unsigned long level;
+-
+-       for (level = 1; level <= cpufreq_cdev->max_level; level++)
+-               if (freq > freq_table[level].frequency)
+-                       break;
+-
+-       return level - 1;
+-}
+-
+ /**
+  * cpufreq_thermal_notifier - notifier callback for cpufreq policy change.
+  * @nb:        struct notifier_block * with callback info.
+@@ -184,6 +164,27 @@ static int cpufreq_thermal_notifier(struct notifier_block *nb,
+        return NOTIFY_OK;
+ }
+ 
++#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
++/**
++ * get_level: Find the level for a particular frequency
++ * @cpufreq_cdev: cpufreq_cdev for which the property is required
++ * @freq: Frequency
++ *
++ * Return: level corresponding to the frequency.
++ */
++static unsigned long get_level(struct cpufreq_cooling_device *cpufreq_cdev,
++                              unsigned int freq)
++{
++       struct freq_table *freq_table = cpufreq_cdev->freq_table;
++       unsigned long level;
++
++       for (level = 1; level <= cpufreq_cdev->max_level; level++)
++               if (freq > freq_table[level].frequency)
++                       break;
++
++       return level - 1;
++}
++
+ /**
+  * update_freq_table() - Update the freq table with power numbers
+  * @cpufreq_cdev:      the cpufreq cooling device in which to update the table
+@@ -333,80 +334,6 @@ static u32 get_dynamic_power(struct cpufreq_cooling_device *cpufreq_cdev,
+        return (raw_cpu_power * cpufreq_cdev->last_load) / 100;
+ }
+ 
+-/* cpufreq cooling device callback functions are defined below */
+-
+-/**
+- * cpufreq_get_max_state - callback function to get the max cooling state.
+- * @cdev: thermal cooling device pointer.
+- * @state: fill this variable with the max cooling state.
+- *
+- * Callback for the thermal cooling device to return the cpufreq
+- * max cooling state.
+- *
+- * Return: 0 on success, an error code otherwise.
+- */
+-static int cpufreq_get_max_state(struct thermal_cooling_device *cdev,
+-                                unsigned long *state)
+-{
+-       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
+-
+-       *state = cpufreq_cdev->max_level;
+-       return 0;
+-}
+-
+-/**
+- * cpufreq_get_cur_state - callback function to get the current cooling state.
+- * @cdev: thermal cooling device pointer.
+- * @state: fill this variable with the current cooling state.
+- *
+- * Callback for the thermal cooling device to return the cpufreq
+- * current cooling state.
+- *
+- * Return: 0 on success, an error code otherwise.
+- */
+-static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
+-                                unsigned long *state)
+-{
+-       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
+-
+-       *state = cpufreq_cdev->cpufreq_state;
+-
+-       return 0;
+-}
+-
+-/**
+- * cpufreq_set_cur_state - callback function to set the current cooling state.
+- * @cdev: thermal cooling device pointer.
+- * @state: set this variable to the current cooling state.
+- *
+- * Callback for the thermal cooling device to change the cpufreq
+- * current cooling state.
+- *
+- * Return: 0 on success, an error code otherwise.
+- */
+-static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+-                                unsigned long state)
+-{
+-       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
+-       unsigned int clip_freq;
+-
+-       /* Request state should be less than max_level */
+-       if (WARN_ON(state > cpufreq_cdev->max_level))
+-               return -EINVAL;
+-
+-       /* Check if the old cooling action is same as new cooling action */
+-       if (cpufreq_cdev->cpufreq_state == state)
+-               return 0;
+-
+-       clip_freq = cpufreq_cdev->freq_table[state].frequency;
+-       cpufreq_cdev->cpufreq_state = state;
+-       cpufreq_cdev->clipped_freq = clip_freq;
+-
+-       cpufreq_update_policy(cpufreq_cdev->policy->cpu);
+-
+-       return 0;
+-}
+-
+ /**
+  * cpufreq_get_requested_power() - get the current power
+  * @cdev:      &thermal_cooling_device pointer
+@@ -551,22 +478,93 @@ static int cpufreq_power2state(struct thermal_cooling_device *cdev,
+                                      power);
+        return 0;
+ }
++#endif /* CONFIG_THERMAL_GOV_POWER_ALLOCATOR */
++
++/* cpufreq cooling device callback functions are defined below */
++
++/**
++ * cpufreq_get_max_state - callback function to get the max cooling state.
++ * @cdev: thermal cooling device pointer.
++ * @state: fill this variable with the max cooling state.
++ *
++ * Callback for the thermal cooling device to return the cpufreq
++ * max cooling state.
++ *
++ * Return: 0 on success, an error code otherwise.
++ */
++static int cpufreq_get_max_state(struct thermal_cooling_device *cdev,
++                                unsigned long *state)
++{
++       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
++
++       *state = cpufreq_cdev->max_level;
++       return 0;
++}
++
++/**
++ * cpufreq_get_cur_state - callback function to get the current cooling state.
++ * @cdev: thermal cooling device pointer.
++ * @state: fill this variable with the current cooling state.
++ *
++ * Callback for the thermal cooling device to return the cpufreq
++ * current cooling state.
++ *
++ * Return: 0 on success, an error code otherwise.
++ */
++static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
++                                unsigned long *state)
++{
++       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
++
++       *state = cpufreq_cdev->cpufreq_state;
++
++       return 0;
++}
++
++/**
++ * cpufreq_set_cur_state - callback function to set the current cooling state.
++ * @cdev: thermal cooling device pointer.
++ * @state: set this variable to the current cooling state.
++ *
++ * Callback for the thermal cooling device to change the cpufreq
++ * current cooling state.
++ *
++ * Return: 0 on success, an error code otherwise.
++ */
++static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
++                                unsigned long state)
++{
++       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
++       unsigned int clip_freq;
++
++       /* Request state should be less than max_level */
++       if (WARN_ON(state > cpufreq_cdev->max_level))
++               return -EINVAL;
++
++       /* Check if the old cooling action is same as new cooling action */
++       if (cpufreq_cdev->cpufreq_state == state)
++               return 0;
++
++       clip_freq = cpufreq_cdev->freq_table[state].frequency;
++       cpufreq_cdev->cpufreq_state = state;
++       cpufreq_cdev->clipped_freq = clip_freq;
++
++       cpufreq_update_policy(cpufreq_cdev->policy->cpu);
++
++       return 0;
++}
+ 
+ /* Bind cpufreq callbacks to thermal cooling device ops */
+ 
+ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+-       .get_max_state = cpufreq_get_max_state,
+-       .get_cur_state = cpufreq_get_cur_state,
+-       .set_cur_state = cpufreq_set_cur_state,
+-};
+-
+-static struct thermal_cooling_device_ops cpufreq_power_cooling_ops = {
+        .get_max_state          = cpufreq_get_max_state,
+        .get_cur_state          = cpufreq_get_cur_state,
+        .set_cur_state          = cpufreq_set_cur_state,
++#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+        .get_requested_power    = cpufreq_get_requested_power,
+        .state2power            = cpufreq_state2power,
+        .power2state            = cpufreq_power2state,
++#endif
+ };
+ 
+ /* Notifier for cpufreq policy change */
+@@ -674,17 +672,16 @@ __cpufreq_cooling_register(struct device_node *np,
+                        pr_debug("%s: freq:%u KHz\n", __func__, freq);
+        }
+ 
++#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+        if (capacitance) {
+                ret = update_freq_table(cpufreq_cdev, capacitance);
+                if (ret) {
+                        cdev = ERR_PTR(ret);
+                        goto remove_ida;
+                }
+-
+-               cooling_ops = &cpufreq_power_cooling_ops;
+-       } else {
+-               cooling_ops = &cpufreq_cooling_ops;
+        }
++#endif
++       cooling_ops = &cpufreq_cooling_ops;
+ 
+        cdev = thermal_of_cooling_device_register(np, dev_name, cpufreq_cdev,
+                                                  cooling_ops);
