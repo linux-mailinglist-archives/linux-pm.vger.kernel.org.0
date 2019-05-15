@@ -2,66 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A85B1EADC
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 11:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878241EAFA
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 11:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725902AbfEOJWt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 May 2019 05:22:49 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:38912 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725871AbfEOJWs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 May 2019 05:22:48 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C126341;
-        Wed, 15 May 2019 02:22:48 -0700 (PDT)
-Received: from queper01-lin (queper01-lin.cambridge.arm.com [10.1.195.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBFCF3F703;
-        Wed, 15 May 2019 02:22:45 -0700 (PDT)
-Date:   Wed, 15 May 2019 10:22:44 +0100
-From:   Quentin Perret <quentin.perret@arm.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
-        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
-        will.deacon@arm.com, catalin.marinas@arm.com,
-        dietmar.eggemann@arm.com, ionela.voinescu@arm.com,
-        mka@chromium.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/3] arm64: defconfig: Enable CONFIG_ENERGY_MODEL
-Message-ID: <20190515092242.azcracudtdnruwnz@queper01-lin>
-References: <20190515082318.7993-1-quentin.perret@arm.com>
- <20190515082318.7993-2-quentin.perret@arm.com>
- <2f598ea3-752d-0f1d-fd33-f07cda3b7bd0@linaro.org>
+        id S1726098AbfEOJef (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 May 2019 05:34:35 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:43860 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725871AbfEOJef (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 05:34:35 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4F9OKDw107179;
+        Wed, 15 May 2019 09:34:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
+ bh=GUI7ZbGATOrJEgO4TwLWVEHn+UrdekXRQuwSfP9RpvI=;
+ b=u0q6UkQ0/t170K/e7xsR0gLqwxWaU/i+UtI+vnDXqSIcjg4p0b7Cwdsg7LTmwFnhFe2Y
+ Tkklp2I0VK4pj0+LZc+PqOWyL5km30X+Vex/NNrkyVXj80OypLBknrNUy8qJ6Kjyr3CU
+ 4Pkjq+kLmP9VUFJ02CkOn4VfBel2XE/UrNkEpl8gfOBRiYPk1B1W5ZSsesBsOcgtYbHx
+ CtLZCUg7FvtNYMJtXEMBFLR4Yu5CWR2CW6MouKg+5xmiVw44+FdNuAEcFSz7wUxwK7fS
+ Hj1d+WG666of5O0CIpfdzuvRYsjB+Zct8Ze7xlVic4cDeSYZPWkUYPoTM0AfeOf9ezbr 5A== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2sdq1qkgrr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 May 2019 09:34:30 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4F9XffB097925;
+        Wed, 15 May 2019 09:34:30 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2sdnqk4484-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 May 2019 09:34:30 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4F9YTHN027732;
+        Wed, 15 May 2019 09:34:29 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 15 May 2019 02:34:28 -0700
+Date:   Wed, 15 May 2019 12:34:21 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Talel Shenhar <talel@amazon.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] thermal: mmio: remove some dead code
+Message-ID: <20190515093420.GC3409@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2f598ea3-752d-0f1d-fd33-f07cda3b7bd0@linaro.org>
-User-Agent: NeoMutt/20171215
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9257 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905150061
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9257 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905150061
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday 15 May 2019 at 10:46:09 (+0200), Daniel Lezcano wrote:
-> On 15/05/2019 10:23, Quentin Perret wrote:
-> > The recently introduced Energy Model (EM) framework manages power cost
-> > tables for the CPUs of the system. Its only user right now is the
-> > scheduler, in the context of Energy Aware Scheduling (EAS).
-> > 
-> > However, the EM framework also offers a generic infrastructure that
-> > could replace subsystem-specific implementations of the same concepts,
-> > as this is the case in the thermal framework.
-> > 
-> > So, in order to prepare the migration of the thermal subsystem to use
-> > the EM framework, enable it in the default arm64 defconfig, which is the
-> > most commonly used architecture for IPA. This will also compile-in all
-> > of the EAS code, although it won't be enabled by default -- EAS requires
-> > to use the 'schedutil' CPUFreq governor while arm64 defaults to
-> > 'performance'.
-> > 
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > Signed-off-by: Quentin Perret <quentin.perret@arm.com>
-> 
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+The platform_get_resource() function doesn't return error pointers, it
+returns NULL.  The way this is normally done, is that we pass the NULL
+resource to devm_ioremap_resource() and then check for errors from that.
+See the comment in front of devm_ioremap_resource() for more details.
 
-Thanks !
-Quentin
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/thermal/thermal_mmio.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/drivers/thermal/thermal_mmio.c b/drivers/thermal/thermal_mmio.c
+index de3cceea23bc..40524fa13533 100644
+--- a/drivers/thermal/thermal_mmio.c
++++ b/drivers/thermal/thermal_mmio.c
+@@ -53,13 +53,6 @@ static int thermal_mmio_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (IS_ERR(resource)) {
+-		dev_err(&pdev->dev,
+-			"fail to get platform memory resource (%ld)\n",
+-			PTR_ERR(resource));
+-		return PTR_ERR(resource);
+-	}
+-
+ 	sensor->mmio_base = devm_ioremap_resource(&pdev->dev, resource);
+ 	if (IS_ERR(sensor->mmio_base)) {
+ 		dev_err(&pdev->dev, "failed to ioremap memory (%ld)\n",
+-- 
+2.20.1
