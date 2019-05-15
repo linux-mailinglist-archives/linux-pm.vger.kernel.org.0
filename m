@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F22731F60E
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 15:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151691F603
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 15:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726392AbfEONzW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 May 2019 09:55:22 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56060 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726646AbfEONzW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 09:55:22 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4FDtCe8132225
-        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 09:55:20 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sgk3ukvw9-1
+        id S1727771AbfEONxz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 May 2019 09:53:55 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40664 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728031AbfEONxz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 May 2019 09:53:55 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4FDrRU2140395
+        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 09:53:54 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2sgkpdsgf4-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 09:55:16 -0400
+        for <linux-pm@vger.kernel.org>; Wed, 15 May 2019 09:53:53 -0400
 Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Wed, 15 May 2019 14:53:48 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Wed, 15 May 2019 14:53:51 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 15 May 2019 14:53:46 +0100
+        Wed, 15 May 2019 14:53:48 +0100
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4FDrjOD49414252
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4FDrmHE45088980
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 May 2019 13:53:45 GMT
+        Wed, 15 May 2019 13:53:48 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 21FEB52052;
-        Wed, 15 May 2019 13:53:45 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id DCE855204E;
+        Wed, 15 May 2019 13:53:47 +0000 (GMT)
 Received: from localhost.localdomain.com (unknown [9.102.18.182])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B9D8E52050;
-        Wed, 15 May 2019 13:53:42 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 789C452057;
+        Wed, 15 May 2019 13:53:45 +0000 (GMT)
 From:   Parth Shah <parth@linux.ibm.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
         dsmythies@telus.net
-Subject: [RFCv2 4/6] sched/fair: Define core capacity to limit task packing
-Date:   Wed, 15 May 2019 19:23:20 +0530
+Subject: [RFCv2 5/6] sched/fair: Tune task wake-up logic to pack jitter tasks
+Date:   Wed, 15 May 2019 19:23:21 +0530
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190515135322.19393-1-parth@linux.ibm.com>
 References: <20190515135322.19393-1-parth@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 19051513-0016-0000-0000-0000027C033A
+x-cbid: 19051513-0008-0000-0000-000002E6FA57
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051513-0017-0000-0000-000032D8D3F7
-Message-Id: <20190515135322.19393-5-parth@linux.ibm.com>
+x-cbparentid: 19051513-0009-0000-0000-000022539A27
+Message-Id: <20190515135322.19393-6-parth@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-15_08:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
@@ -62,122 +62,169 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The task packing on a core needs to be bounded based on its capacity. This
-patch defines a new method which acts as a tipping point for task packing.
+The algorithm finds the first non idle core in the system and tries to
+place a task in the least utilized CPU in the chosen core. To maintain
+cache hotness, work of finding non idle core starts from the prev_cpu,
+which also reduces task ping-pong behaviour inside of the core.
 
-The Core capacity is the method which limits task packing above certain
-point. In general, the capacity of a core is defined to be the aggregated
-sum of all the CPUs in the Core.
+The CPU/core is defined as under-utilized when the aggregated utilization
+of the given CPUs is less than 12.5%. The function is named as
+core_underutilized because of its specific use in finding a non idle core.
 
-Some architectures does not have core capacity linearly increasing with the
-number of threads( or CPUs) in the core. For such cases, architecture
-specific calculations needs to be done to find core capacity.
+This patch uses the core_underutilized method to calculate whether the core
+should be considered sufficiently busy or not. Since core with low
+utilization should not be selected for packing, the margin of
+under-utilization is kept at 12.5% of core capacity. This number is
+experimental and can be modified as per the need. More larger the number,
+more aggressive task packing will be.
 
-The `arch_scale_core_capacity` is currently tuned for `powerpc` arch by
-scaling capacity w.r.t to the number of online SMT in the core.
-
-The patch provides default handler for other architecture by scaling core
-capacity w.r.t. to the capacity of all the threads in the core.
-
-ToDo: SMT mode is calculated each time a jitter task wakes up leading to
-redundant decision time which can be eliminated by keeping track of online
-CPUs during hotplug task.
+12.5% is an experimental number which identifies whether the core is
+considered to be idle or not.  For task packing, the algorithm should
+select the best core where the task can be accommodated such that it does
+not wake up an idle core. But the jitter tasks should not be placed on the
+core which is about to go idle. Since the core having aggregated
+utilization of <12.5%, it may go idle soon and hence packing on such core
+should be ignored. The experiment showed that keeping this threshold to
+12.5% gives better decision capability on not selecting the core which will
+idle out soon.
 
 Signed-off-by: Parth Shah <parth@linux.ibm.com>
 ---
- arch/powerpc/include/asm/topology.h |  4 ++++
- arch/powerpc/kernel/smp.c           | 32 +++++++++++++++++++++++++++++
- kernel/sched/fair.c                 | 19 +++++++++++++++++
- 3 files changed, 55 insertions(+)
+ kernel/sched/fair.c | 100 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 99 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
-index f85e2b01c3df..1c777ee67180 100644
---- a/arch/powerpc/include/asm/topology.h
-+++ b/arch/powerpc/include/asm/topology.h
-@@ -132,6 +132,10 @@ static inline void shared_proc_topology_init(void) {}
- #define topology_sibling_cpumask(cpu)	(per_cpu(cpu_sibling_map, cpu))
- #define topology_core_cpumask(cpu)	(per_cpu(cpu_core_map, cpu))
- #define topology_core_id(cpu)		(cpu_to_core_id(cpu))
-+#define arch_scale_core_capacity	powerpc_scale_core_capacity
-+
-+unsigned long powerpc_scale_core_capacity(int first_smt,
-+					  unsigned long smt_cap);
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 2578e6bdf85b..d2d556eb6d0f 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5323,6 +5323,8 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+ /* Working cpumask for: load_balance, load_balance_newidle. */
+ DEFINE_PER_CPU(cpumask_var_t, load_balance_mask);
+ DEFINE_PER_CPU(cpumask_var_t, select_idle_mask);
++/* A cpumask to find active cores in the system. */
++DEFINE_PER_CPU(cpumask_var_t, turbo_sched_mask);
  
- int dlpar_cpu_readd(int cpu);
- #endif
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index e784342bdaa1..256ab2a50f6e 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1173,6 +1173,38 @@ static void remove_cpu_from_masks(int cpu)
+ #ifdef CONFIG_NO_HZ_COMMON
+ /*
+@@ -6248,6 +6250,73 @@ static inline unsigned long arch_scale_core_capacity(int first_thread,
  }
  #endif
+ 
++/*
++ * Core is defined as under-utilized in case if the aggregated utilization of a
++ * all the CPUs in a core is less than 12.5%
++ */
++static inline bool core_underutilized(unsigned long core_util,
++				      unsigned long core_capacity)
++{
++	return core_util < (core_capacity >> 3);
++}
++
++/*
++ * Try to find a non idle core in the system  with spare capacity
++ * available for task packing, thereby keeping minimal cores active.
++ * Uses first fit algorithm to pack low util jitter tasks on active cores.
++ */
++static int select_non_idle_core(struct task_struct *p, int prev_cpu)
++{
++	struct cpumask *cpus = this_cpu_cpumask_var_ptr(turbo_sched_mask);
++	int iter_cpu, sibling;
++
++	cpumask_and(cpus, cpu_online_mask, &p->cpus_allowed);
++
++	for_each_cpu_wrap(iter_cpu, cpus, prev_cpu) {
++		unsigned long core_util = 0;
++		unsigned long core_cap = arch_scale_core_capacity(iter_cpu,
++				capacity_of(iter_cpu));
++		unsigned long est_util = 0, est_util_enqueued = 0;
++		unsigned long util_best_cpu = (unsigned int)-1;
++		int best_cpu = iter_cpu;
++		struct cfs_rq *cfs_rq;
++
++		for_each_cpu(sibling, cpu_smt_mask(iter_cpu)) {
++			__cpumask_clear_cpu(sibling, cpus);
++			core_util += cpu_util(sibling);
++
++			/*
++			 * Keep track of least utilized CPU in the core
++			 */
++			if (cpu_util(sibling) < util_best_cpu) {
++				util_best_cpu = cpu_util(sibling);
++				best_cpu = sibling;
++			}
++		}
++
++		/*
++		 * Find if the selected task will fit into the tracked minutil
++		 * CPU or not by estimating the utilization of the CPU.
++		 */
++		cfs_rq = &cpu_rq(best_cpu)->cfs;
++		est_util = READ_ONCE(cfs_rq->avg.util_avg) + task_util(p);
++		est_util_enqueued = READ_ONCE(cfs_rq->avg.util_est.enqueued);
++		est_util_enqueued += _task_util_est(p);
++		est_util = max(est_util, est_util_enqueued);
++
++		if (!core_underutilized(core_util, core_cap) && est_util < core_cap) {
++			/*
++			 * Try to bias towards prev_cpu to avoid task ping-pong
++			 * behaviour inside the core.
++			 */
++			if (cpumask_test_cpu(prev_cpu, cpu_smt_mask(iter_cpu)))
++				return prev_cpu;
++
++			return best_cpu;
++		}
++	}
++	return -1;
++}
+ #endif
+ 
+ /*
+@@ -6704,6 +6773,31 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	return -1;
+ }
  
 +#ifdef CONFIG_SCHED_SMT
 +/*
-+ * Calculate capacity of a core based on the active threads in the core
-+ * Scale the capacity of first SM-thread based on total number of
-+ * active threads in the respective smt_mask.
-+ *
-+ * The scaling is done such that for
-+ * SMT-4, core_capacity = 1.5x first_cpu_capacity
-+ * and for SMT-8, core_capacity multiplication factor is 2x
-+ *
-+ * So, core_capacity multiplication factor = (1 + smt_mode*0.125)
-+ *
-+ * @first_cpu: First/any CPU id in the core
-+ * @cap: Capacity of the first_cpu
++ * Select all tasks of type 1(jitter) for task packing
 + */
-+inline unsigned long powerpc_scale_core_capacity(int first_cpu,
-+		unsigned long cap) {
-+	struct cpumask select_idles;
-+	struct cpumask *cpus = &select_idles;
-+	int cpu, smt_mode = 0;
-+
-+	cpumask_and(cpus, cpu_smt_mask(first_cpu), cpu_online_mask);
-+
-+	/* Find SMT mode from active SM-threads */
-+	for_each_cpu(cpu, cpus)
-+		smt_mode++;
-+
-+	/* Scale core capacity based on smt mode */
-+	return smt_mode == 1 ? cap : ((cap * smt_mode) >> 3) + cap;
-+}
-+#endif
-+
- static inline void add_cpu_to_smallcore_masks(int cpu)
- {
- 	struct cpumask *this_l1_cache_map = per_cpu(cpu_l1_cache_map, cpu);
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index b7eea9dc4644..2578e6bdf85b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6231,6 +6231,25 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, int t
- 	return cpu;
- }
- 
-+#ifdef CONFIG_SCHED_SMT
-+
-+#ifndef arch_scale_core_capacity
-+static inline unsigned long arch_scale_core_capacity(int first_thread,
-+						     unsigned long smt_cap)
++static int turbosched_select_idle_sibling(struct task_struct *p, int prev_cpu,
++					  int target)
 +{
-+	/* Default capacity of core is sum of cap of all the threads */
-+	unsigned long ret = 0;
-+	int sibling;
++	int new_cpu;
 +
-+	for_each_cpu(sibling, cpu_smt_mask(first_thread))
-+		ret += cpu_rq(sibling)->cpu_capacity;
++	if (unlikely(task_group(p)->turbo_sched_enabled)) {
++		new_cpu = select_non_idle_core(p, prev_cpu);
++		if (new_cpu >= 0)
++			return new_cpu;
++	}
 +
-+	return ret;
++	return select_idle_sibling(p, prev_cpu, target);
 +}
-+#endif
-+
++#else
++static int turbosched_select_idle_sibling(struct task_struct *p, int prev_cpu,
++					  int target)
++{
++	return select_idle_sibling(p, prev_cpu, target);
++}
 +#endif
 +
  /*
-  * Try and locate an idle core/thread in the LLC cache domain.
-  */
+  * select_task_rq_fair: Select target runqueue for the waking task in domains
+  * that have the 'sd_flag' flag set. In practice, this is SD_BALANCE_WAKE,
+@@ -6769,7 +6863,11 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
+ 	} else if (sd_flag & SD_BALANCE_WAKE) { /* XXX always ? */
+ 		/* Fast path */
+ 
+-		new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
++		if (is_turbosched_enabled())
++			new_cpu = turbosched_select_idle_sibling(p, prev_cpu,
++								 new_cpu);
++		else
++			new_cpu = select_idle_sibling(p, prev_cpu, new_cpu);
+ 
+ 		if (want_affine)
+ 			current->recent_used_cpu = cpu;
 -- 
 2.17.1
 
