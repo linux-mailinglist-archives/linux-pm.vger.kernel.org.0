@@ -2,344 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE671EC45
-	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 12:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF9D1EC4B
+	for <lists+linux-pm@lfdr.de>; Wed, 15 May 2019 12:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbfEOKq7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 May 2019 06:46:59 -0400
-Received: from foss.arm.com ([217.140.101.70]:40524 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725953AbfEOKq7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 May 2019 06:46:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 141AF80D;
-        Wed, 15 May 2019 03:46:58 -0700 (PDT)
-Received: from queper01-lin (queper01-lin.cambridge.arm.com [10.1.195.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 87C383F703;
-        Wed, 15 May 2019 03:46:55 -0700 (PDT)
-Date:   Wed, 15 May 2019 11:46:54 +0100
-From:   Quentin Perret <quentin.perret@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, edubezval@gmail.com,
-        rui.zhang@intel.com, javi.merino@kernel.org,
-        amit.kachhap@gmail.com, rjw@rjwysocki.net, will.deacon@arm.com,
-        catalin.marinas@arm.com, dietmar.eggemann@arm.com,
-        ionela.voinescu@arm.com, mka@chromium.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 2/3] PM / EM: Expose perf domain struct
-Message-ID: <20190515104651.tv5odug7ce4zlupc@queper01-lin>
-References: <20190515082318.7993-1-quentin.perret@arm.com>
- <20190515082318.7993-3-quentin.perret@arm.com>
- <0ced18eb-e424-fe6b-b11e-165a3c108170@linaro.org>
- <20190515091658.sbpg6qiovhtblqyr@queper01-lin>
- <698400c0-e0a4-4a86-b9df-cdb9bd683c0f@linaro.org>
- <20190515100748.q3t4kt72h2akdpcs@queper01-lin>
- <cf1474cb-7e31-7070-b988-a0c4d3f6f081@linaro.org>
- <20190515102200.s6uq63qnwea6xtpl@vireshk-i7>
- <20190515104043.vogspxgkapp6qsny@queper01-lin>
+        id S1726599AbfEOKrW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 May 2019 06:47:22 -0400
+Received: from mail-eopbgr130053.outbound.protection.outlook.com ([40.107.13.53]:61093
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726580AbfEOKrV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 May 2019 06:47:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vaisala.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yzYdVqYYMzd2E5SC/gDOMMJ4+4uTCL+l84JT8yl4O2M=;
+ b=OZkwlGBzw4/lBSmWo1BaQ8G/C5e4LAolfWHd2o1pZqAzpefrWRy+qC2IwZF0mYfiD5/OiOaZSq3sT/K1n+FLWTWPL1X5xhqvLejKVOqVjkdXSLgHD2qVscIQsQJgocoTBQWEyO3JJbAdhvYHP686SZLJG37E2iANWiD7IjZn/dE=
+Received: from DB7PR06MB5563.eurprd06.prod.outlook.com (20.178.104.212) by
+ DB7PR06MB4775.eurprd06.prod.outlook.com (20.177.192.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.16; Wed, 15 May 2019 10:47:15 +0000
+Received: from DB7PR06MB5563.eurprd06.prod.outlook.com
+ ([fe80::b431:2268:b6f:7fe4]) by DB7PR06MB5563.eurprd06.prod.outlook.com
+ ([fe80::b431:2268:b6f:7fe4%7]) with mapi id 15.20.1900.010; Wed, 15 May 2019
+ 10:47:15 +0000
+From:   Han Nandor <nandor.han@vaisala.com>
+To:     "sre@kernel.org" <sre@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+CC:     Han Nandor <nandor.han@vaisala.com>
+Subject: [PATCH v4 1/2] power: reset: nvmem-reboot-mode: use NVMEM as reboot
+ mode write interface
+Thread-Topic: [PATCH v4 1/2] power: reset: nvmem-reboot-mode: use NVMEM as
+ reboot mode write interface
+Thread-Index: AQHVCwuPZD9cMLoVakaS8MDITRakpA==
+Date:   Wed, 15 May 2019 10:47:14 +0000
+Message-ID: <20190515104658.25535-2-nandor.han@vaisala.com>
+References: <20190515104658.25535-1-nandor.han@vaisala.com>
+In-Reply-To: <20190515104658.25535-1-nandor.han@vaisala.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HE1PR0501CA0041.eurprd05.prod.outlook.com
+ (2603:10a6:3:1a::51) To DB7PR06MB5563.eurprd06.prod.outlook.com
+ (2603:10a6:10:83::20)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=nandor.han@vaisala.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.17.2
+x-originating-ip: [193.143.230.131]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b25eeb9d-07d7-4d5a-5a7b-08d6d922b15f
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:DB7PR06MB4775;
+x-ms-traffictypediagnostic: DB7PR06MB4775:
+x-tenant-id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
+x-microsoft-antispam-prvs: <DB7PR06MB4775E79F492886A0DB7801C885090@DB7PR06MB4775.eurprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-forefront-prvs: 0038DE95A2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(376002)(39860400002)(346002)(396003)(199004)(189003)(1076003)(50226002)(68736007)(2906002)(6506007)(386003)(81166006)(5660300002)(53936002)(36756003)(8936002)(52116002)(6486002)(99286004)(14444005)(76176011)(71200400001)(6116002)(71190400001)(4326008)(6436002)(256004)(3846002)(81156014)(110136005)(316002)(446003)(186003)(26005)(25786009)(8676002)(64756008)(2201001)(66556008)(66446008)(66476007)(478600001)(66946007)(73956011)(102836004)(7736002)(86362001)(66066001)(107886003)(2501003)(6512007)(14454004)(476003)(11346002)(486006)(2616005)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR06MB4775;H:DB7PR06MB5563.eurprd06.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: vaisala.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 7KPt67Dni79B5+ZIxw3rQKm92Iy+1quwp4DiqNcU8q2LdQrsLcWwNVcRVavs+USQbcQLHVoHCQa9cvgB4fhM18LrMJ7EEWqtKYFgmTcApghfOetMAaMW61ZC3bNqMkybqUZkolBKc000D4+/0fWm2vu12JCY4XxBaGteKPPx843oA8OBDOzxEem0vP1pZMuDLowOzQpT02qf/JbN6DJjzdmq8GjDlXYLiy7sP6JJsWNXjKnjAp2jY1+CpPt9KCEXtPRVvjEx8uo/as1kFv5CUusz0O9Em7TzC/cR/4eZqrO9qpk4kXlkyICHC0tflO1b+mxUl3TZC338aBIDMoB1aBZ4cqAlpnLXw3mF/AnvNTFl+uCfe525PTC6XGWGqLhfGKgLXNFtTET5R/Zcaz7ukd3+xvoEp68W1sK0+utPLPE=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190515104043.vogspxgkapp6qsny@queper01-lin>
-User-Agent: NeoMutt/20171215
+X-OriginatorOrg: vaisala.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b25eeb9d-07d7-4d5a-5a7b-08d6d922b15f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2019 10:47:14.9974
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR06MB4775
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday 15 May 2019 at 11:40:44 (+0100), Quentin Perret wrote:
-> On Wednesday 15 May 2019 at 15:52:00 (+0530), Viresh Kumar wrote:
-> > On 15-05-19, 12:16, Daniel Lezcano wrote:
-> > > Viresh what do you think ?
-> > 
-> > I agree with your last suggestions. They do make sense.
-> 
-> Good :-)
-> 
-> So, FWIW, the below compiles w/ or w/o THERMAL_GOV_POWER_ALLOCATOR. I'll
-> test it and clean it up some more and put it as patch 1 in the series if
-> that's OK.
-> 
-> Thanks,
-> Quentin
-> 
-> 
-> diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
-> index f7c1f49ec87f..ee431848ef71 100644
-> --- a/drivers/thermal/cpu_cooling.c
-> +++ b/drivers/thermal/cpu_cooling.c
-> @@ -58,7 +58,9 @@
->   */
->  struct freq_table {
->         u32 frequency;
-> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
->         u32 power;
-> +#endif
->  };
->  
->  /**
-> @@ -109,28 +111,6 @@ static DEFINE_IDA(cpufreq_ida);
->  static DEFINE_MUTEX(cooling_list_lock);
->  static LIST_HEAD(cpufreq_cdev_list);
->  
-> -/* Below code defines functions to be used for cpufreq as cooling device */
-> -
-> -/**
-> - * get_level: Find the level for a particular frequency
-> - * @cpufreq_cdev: cpufreq_cdev for which the property is required
-> - * @freq: Frequency
-> - *
-> - * Return: level corresponding to the frequency.
-> - */
-> -static unsigned long get_level(struct cpufreq_cooling_device *cpufreq_cdev,
-> -                              unsigned int freq)
-> -{
-> -       struct freq_table *freq_table = cpufreq_cdev->freq_table;
-> -       unsigned long level;
-> -
-> -       for (level = 1; level <= cpufreq_cdev->max_level; level++)
-> -               if (freq > freq_table[level].frequency)
-> -                       break;
-> -
-> -       return level - 1;
-> -}
-> -
->  /**
->   * cpufreq_thermal_notifier - notifier callback for cpufreq policy change.
->   * @nb:        struct notifier_block * with callback info.
-> @@ -184,6 +164,27 @@ static int cpufreq_thermal_notifier(struct notifier_block *nb,
->         return NOTIFY_OK;
->  }
->  
-> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
-> +/**
-> + * get_level: Find the level for a particular frequency
-> + * @cpufreq_cdev: cpufreq_cdev for which the property is required
-> + * @freq: Frequency
-> + *
-> + * Return: level corresponding to the frequency.
-> + */
-> +static unsigned long get_level(struct cpufreq_cooling_device *cpufreq_cdev,
-> +                              unsigned int freq)
-> +{
-> +       struct freq_table *freq_table = cpufreq_cdev->freq_table;
-> +       unsigned long level;
-> +
-> +       for (level = 1; level <= cpufreq_cdev->max_level; level++)
-> +               if (freq > freq_table[level].frequency)
-> +                       break;
-> +
-> +       return level - 1;
-> +}
-> +
->  /**
->   * update_freq_table() - Update the freq table with power numbers
->   * @cpufreq_cdev:      the cpufreq cooling device in which to update the table
-> @@ -333,80 +334,6 @@ static u32 get_dynamic_power(struct cpufreq_cooling_device *cpufreq_cdev,
->         return (raw_cpu_power * cpufreq_cdev->last_load) / 100;
->  }
->  
-> -/* cpufreq cooling device callback functions are defined below */
-> -
-> -/**
-> - * cpufreq_get_max_state - callback function to get the max cooling state.
-> - * @cdev: thermal cooling device pointer.
-> - * @state: fill this variable with the max cooling state.
-> - *
-> - * Callback for the thermal cooling device to return the cpufreq
-> - * max cooling state.
-> - *
-> - * Return: 0 on success, an error code otherwise.
-> - */
-> -static int cpufreq_get_max_state(struct thermal_cooling_device *cdev,
-> -                                unsigned long *state)
-> -{
-> -       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-> -
-> -       *state = cpufreq_cdev->max_level;
-> -       return 0;
-> -}
-> -
-> -/**
-> - * cpufreq_get_cur_state - callback function to get the current cooling state.
-> - * @cdev: thermal cooling device pointer.
-> - * @state: fill this variable with the current cooling state.
-> - *
-> - * Callback for the thermal cooling device to return the cpufreq
-> - * current cooling state.
-> - *
-> - * Return: 0 on success, an error code otherwise.
-> - */
-> -static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
-> -                                unsigned long *state)
-> -{
-> -       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-> -
-> -       *state = cpufreq_cdev->cpufreq_state;
-> -
-> -       return 0;
-> -}
-> -
-> -/**
-> - * cpufreq_set_cur_state - callback function to set the current cooling state.
-> - * @cdev: thermal cooling device pointer.
-> - * @state: set this variable to the current cooling state.
-> - *
-> - * Callback for the thermal cooling device to change the cpufreq
-> - * current cooling state.
-> - *
-> - * Return: 0 on success, an error code otherwise.
-> - */
-> -static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
-> -                                unsigned long state)
-> -{
-> -       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-> -       unsigned int clip_freq;
-> -
-> -       /* Request state should be less than max_level */
-> -       if (WARN_ON(state > cpufreq_cdev->max_level))
-> -               return -EINVAL;
-> -
-> -       /* Check if the old cooling action is same as new cooling action */
-> -       if (cpufreq_cdev->cpufreq_state == state)
-> -               return 0;
-> -
-> -       clip_freq = cpufreq_cdev->freq_table[state].frequency;
-> -       cpufreq_cdev->cpufreq_state = state;
-> -       cpufreq_cdev->clipped_freq = clip_freq;
-> -
-> -       cpufreq_update_policy(cpufreq_cdev->policy->cpu);
-> -
-> -       return 0;
-> -}
-> -
->  /**
->   * cpufreq_get_requested_power() - get the current power
->   * @cdev:      &thermal_cooling_device pointer
-> @@ -551,22 +478,93 @@ static int cpufreq_power2state(struct thermal_cooling_device *cdev,
->                                       power);
->         return 0;
->  }
-> +#endif /* CONFIG_THERMAL_GOV_POWER_ALLOCATOR */
-> +
-> +/* cpufreq cooling device callback functions are defined below */
-> +
-> +/**
-> + * cpufreq_get_max_state - callback function to get the max cooling state.
-> + * @cdev: thermal cooling device pointer.
-> + * @state: fill this variable with the max cooling state.
-> + *
-> + * Callback for the thermal cooling device to return the cpufreq
-> + * max cooling state.
-> + *
-> + * Return: 0 on success, an error code otherwise.
-> + */
-> +static int cpufreq_get_max_state(struct thermal_cooling_device *cdev,
-> +                                unsigned long *state)
-> +{
-> +       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-> +
-> +       *state = cpufreq_cdev->max_level;
-> +       return 0;
-> +}
-> +
-> +/**
-> + * cpufreq_get_cur_state - callback function to get the current cooling state.
-> + * @cdev: thermal cooling device pointer.
-> + * @state: fill this variable with the current cooling state.
-> + *
-> + * Callback for the thermal cooling device to return the cpufreq
-> + * current cooling state.
-> + *
-> + * Return: 0 on success, an error code otherwise.
-> + */
-> +static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
-> +                                unsigned long *state)
-> +{
-> +       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-> +
-> +       *state = cpufreq_cdev->cpufreq_state;
-> +
-> +       return 0;
-> +}
-> +
-> +/**
-> + * cpufreq_set_cur_state - callback function to set the current cooling state.
-> + * @cdev: thermal cooling device pointer.
-> + * @state: set this variable to the current cooling state.
-> + *
-> + * Callback for the thermal cooling device to change the cpufreq
-> + * current cooling state.
-> + *
-> + * Return: 0 on success, an error code otherwise.
-> + */
-> +static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
-> +                                unsigned long state)
-> +{
-> +       struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-> +       unsigned int clip_freq;
-> +
-> +       /* Request state should be less than max_level */
-> +       if (WARN_ON(state > cpufreq_cdev->max_level))
-> +               return -EINVAL;
-> +
-> +       /* Check if the old cooling action is same as new cooling action */
-> +       if (cpufreq_cdev->cpufreq_state == state)
-> +               return 0;
-> +
-> +       clip_freq = cpufreq_cdev->freq_table[state].frequency;
-> +       cpufreq_cdev->cpufreq_state = state;
-> +       cpufreq_cdev->clipped_freq = clip_freq;
-> +
-> +       cpufreq_update_policy(cpufreq_cdev->policy->cpu);
-> +
-> +       return 0;
-> +}
->  
->  /* Bind cpufreq callbacks to thermal cooling device ops */
->  
->  static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
-> -       .get_max_state = cpufreq_get_max_state,
-> -       .get_cur_state = cpufreq_get_cur_state,
-> -       .set_cur_state = cpufreq_set_cur_state,
-> -};
-> -
-> -static struct thermal_cooling_device_ops cpufreq_power_cooling_ops = {
->         .get_max_state          = cpufreq_get_max_state,
->         .get_cur_state          = cpufreq_get_cur_state,
->         .set_cur_state          = cpufreq_set_cur_state,
-> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
->         .get_requested_power    = cpufreq_get_requested_power,
->         .state2power            = cpufreq_state2power,
->         .power2state            = cpufreq_power2state,
-> +#endif
->  };
->  
->  /* Notifier for cpufreq policy change */
-> @@ -674,17 +672,16 @@ __cpufreq_cooling_register(struct device_node *np,
->                         pr_debug("%s: freq:%u KHz\n", __func__, freq);
->         }
->  
-> +#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
->         if (capacitance) {
->                 ret = update_freq_table(cpufreq_cdev, capacitance);
->                 if (ret) {
->                         cdev = ERR_PTR(ret);
->                         goto remove_ida;
->                 }
-> -
-> -               cooling_ops = &cpufreq_power_cooling_ops;
-> -       } else {
-> -               cooling_ops = &cpufreq_cooling_ops;
->         }
-> +#endif
-> +       cooling_ops = &cpufreq_cooling_ops;
-
-Argh, that is actually broken with !capacitance and
-THERMAL_GOV_POWER_ALLOCATOR=y ... Perhaps it's best to keep the two
-thermal_cooling_device_ops struct separated in the end.
-
->  
->         cdev = thermal_of_cooling_device_register(np, dev_name, cpufreq_cdev,
->                                                   cooling_ops);
+QWRkIGEgbmV3IHJlYm9vdCBtb2RlIHdyaXRlIGludGVyZmFjZSB0aGF0IGlzIHVzaW5nIGFuIE5W
+TUVNIGNlbGwNCnRvIHN0b3JlIHRoZSByZWJvb3QgbW9kZSBtYWdpYy4NCg0KU2lnbmVkLW9mZi1i
+eTogTmFuZG9yIEhhbiA8bmFuZG9yLmhhbkB2YWlzYWxhLmNvbT4NCi0tLQ0KIGRyaXZlcnMvcG93
+ZXIvcmVzZXQvS2NvbmZpZyAgICAgICAgICAgICB8ICA5ICsrKw0KIGRyaXZlcnMvcG93ZXIvcmVz
+ZXQvTWFrZWZpbGUgICAgICAgICAgICB8ICAxICsNCiBkcml2ZXJzL3Bvd2VyL3Jlc2V0L252bWVt
+LXJlYm9vdC1tb2RlLmMgfCA3NiArKysrKysrKysrKysrKysrKysrKysrKysrDQogMyBmaWxlcyBj
+aGFuZ2VkLCA4NiBpbnNlcnRpb25zKCspDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvcG93
+ZXIvcmVzZXQvbnZtZW0tcmVib290LW1vZGUuYw0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9wb3dl
+ci9yZXNldC9LY29uZmlnIGIvZHJpdmVycy9wb3dlci9yZXNldC9LY29uZmlnDQppbmRleCA2NTMz
+YWE1NjBhYTEuLmJiNGE0ZTg1NGY5NiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvcG93ZXIvcmVzZXQv
+S2NvbmZpZw0KKysrIGIvZHJpdmVycy9wb3dlci9yZXNldC9LY29uZmlnDQpAQCAtMjQ1LDUgKzI0
+NSwxNCBAQCBjb25maWcgUE9XRVJfUkVTRVRfU0MyN1hYDQogCSAgUE1JQ3MgaW5jbHVkZXMgdGhl
+IFNDMjcyMCwgU0MyNzIxLCBTQzI3MjMsIFNDMjczMA0KIAkgIGFuZCBTQzI3MzEgY2hpcHMuDQog
+DQorY29uZmlnIE5WTUVNX1JFQk9PVF9NT0RFDQorCXRyaXN0YXRlICJHZW5lcmljIE5WTUVNIHJl
+Ym9vdCBtb2RlIGRyaXZlciINCisJc2VsZWN0IFJFQk9PVF9NT0RFDQorCWhlbHANCisJICBTYXkg
+eSBoZXJlIHdpbGwgZW5hYmxlIHJlYm9vdCBtb2RlIGRyaXZlci4gVGhpcyB3aWxsDQorCSAgZ2V0
+IHJlYm9vdCBtb2RlIGFyZ3VtZW50cyBhbmQgc3RvcmUgaXQgaW4gYSBOVk1FTSBjZWxsLA0KKwkg
+IHRoZW4gdGhlIGJvb3Rsb2FkZXIgY2FuIHJlYWQgaXQgYW5kIHRha2UgZGlmZmVyZW50DQorCSAg
+YWN0aW9uIGFjY29yZGluZyB0byB0aGUgbW9kZS4NCisNCiBlbmRpZg0KIA0KZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvcG93ZXIvcmVzZXQvTWFrZWZpbGUgYi9kcml2ZXJzL3Bvd2VyL3Jlc2V0L01ha2Vm
+aWxlDQppbmRleCAwYWViZWU5NTRhYzEuLjg1ZGEzMTk4ZTRlMCAxMDA2NDQNCi0tLSBhL2RyaXZl
+cnMvcG93ZXIvcmVzZXQvTWFrZWZpbGUNCisrKyBiL2RyaXZlcnMvcG93ZXIvcmVzZXQvTWFrZWZp
+bGUNCkBAIC0yOSwzICsyOSw0IEBAIG9iai0kKENPTkZJR19QT1dFUl9SRVNFVF9aWCkgKz0gengt
+cmVib290Lm8NCiBvYmotJChDT05GSUdfUkVCT09UX01PREUpICs9IHJlYm9vdC1tb2RlLm8NCiBv
+YmotJChDT05GSUdfU1lTQ09OX1JFQk9PVF9NT0RFKSArPSBzeXNjb24tcmVib290LW1vZGUubw0K
+IG9iai0kKENPTkZJR19QT1dFUl9SRVNFVF9TQzI3WFgpICs9IHNjMjd4eC1wb3dlcm9mZi5vDQor
+b2JqLSQoQ09ORklHX05WTUVNX1JFQk9PVF9NT0RFKSArPSBudm1lbS1yZWJvb3QtbW9kZS5vDQpk
+aWZmIC0tZ2l0IGEvZHJpdmVycy9wb3dlci9yZXNldC9udm1lbS1yZWJvb3QtbW9kZS5jIGIvZHJp
+dmVycy9wb3dlci9yZXNldC9udm1lbS1yZWJvb3QtbW9kZS5jDQpuZXcgZmlsZSBtb2RlIDEwMDY0
+NA0KaW5kZXggMDAwMDAwMDAwMDAwLi5lMjI5MzA4ZDQzZTINCi0tLSAvZGV2L251bGwNCisrKyBi
+L2RyaXZlcnMvcG93ZXIvcmVzZXQvbnZtZW0tcmVib290LW1vZGUuYw0KQEAgLTAsMCArMSw3NiBA
+QA0KKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wKw0KKy8qDQorICogQ29weXJp
+Z2h0IChjKSBWYWlzYWxhIE95ai4gQWxsIHJpZ2h0cyByZXNlcnZlZC4NCisgKi8NCisNCisjaW5j
+bHVkZSA8bGludXgvaW5pdC5oPg0KKyNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCisjaW5jbHVk
+ZSA8bGludXgva2VybmVsLmg+DQorI2luY2x1ZGUgPGxpbnV4L29mLmg+DQorI2luY2x1ZGUgPGxp
+bnV4L252bWVtLWNvbnN1bWVyLmg+DQorI2luY2x1ZGUgPGxpbnV4L3BsYXRmb3JtX2RldmljZS5o
+Pg0KKyNpbmNsdWRlIDxsaW51eC9yZWJvb3QtbW9kZS5oPg0KKw0KK3N0cnVjdCBudm1lbV9yZWJv
+b3RfbW9kZSB7DQorCXN0cnVjdCByZWJvb3RfbW9kZV9kcml2ZXIgcmVib290Ow0KKwlzdHJ1Y3Qg
+bnZtZW1fY2VsbCAqY2VsbDsNCit9Ow0KKw0KK3N0YXRpYyBpbnQgbnZtZW1fcmVib290X21vZGVf
+d3JpdGUoc3RydWN0IHJlYm9vdF9tb2RlX2RyaXZlciAqcmVib290LA0KKwkJCQkgICAgdW5zaWdu
+ZWQgaW50IG1hZ2ljKQ0KK3sNCisJaW50IHJldDsNCisJc3RydWN0IG52bWVtX3JlYm9vdF9tb2Rl
+ICpudm1lbV9yYm07DQorDQorCW52bWVtX3JibSA9IGNvbnRhaW5lcl9vZihyZWJvb3QsIHN0cnVj
+dCBudm1lbV9yZWJvb3RfbW9kZSwgcmVib290KTsNCisNCisJcmV0ID0gbnZtZW1fY2VsbF93cml0
+ZShudm1lbV9yYm0tPmNlbGwsICZtYWdpYywgc2l6ZW9mKG1hZ2ljKSk7DQorCWlmIChyZXQgPCAw
+KQ0KKwkJZGV2X2VycihyZWJvb3QtPmRldiwgInVwZGF0ZSByZWJvb3QgbW9kZSBiaXRzIGZhaWxl
+ZFxuIik7DQorDQorCXJldHVybiByZXQ7DQorfQ0KKw0KK3N0YXRpYyBpbnQgbnZtZW1fcmVib290
+X21vZGVfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCit7DQorCWludCByZXQ7
+DQorCXN0cnVjdCBudm1lbV9yZWJvb3RfbW9kZSAqbnZtZW1fcmJtOw0KKw0KKwludm1lbV9yYm0g
+PSBkZXZtX2t6YWxsb2MoJnBkZXYtPmRldiwgc2l6ZW9mKCpudm1lbV9yYm0pLCBHRlBfS0VSTkVM
+KTsNCisJaWYgKCFudm1lbV9yYm0pDQorCQlyZXR1cm4gLUVOT01FTTsNCisNCisJbnZtZW1fcmJt
+LT5yZWJvb3QuZGV2ID0gJnBkZXYtPmRldjsNCisJbnZtZW1fcmJtLT5yZWJvb3Qud3JpdGUgPSBu
+dm1lbV9yZWJvb3RfbW9kZV93cml0ZTsNCisNCisJbnZtZW1fcmJtLT5jZWxsID0gZGV2bV9udm1l
+bV9jZWxsX2dldCgmcGRldi0+ZGV2LCAicmVib290LW1vZGUiKTsNCisJaWYgKElTX0VSUihudm1l
+bV9yYm0tPmNlbGwpKSB7DQorCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJmYWlsZWQgdG8gZ2V0IHRo
+ZSBudm1lbSBjZWxsIHJlYm9vdC1tb2RlXG4iKTsNCisJCXJldHVybiBQVFJfRVJSKG52bWVtX3Ji
+bS0+Y2VsbCk7DQorCX0NCisNCisJcmV0ID0gZGV2bV9yZWJvb3RfbW9kZV9yZWdpc3RlcigmcGRl
+di0+ZGV2LCAmbnZtZW1fcmJtLT5yZWJvb3QpOw0KKwlpZiAocmV0KQ0KKwkJZGV2X2VycigmcGRl
+di0+ZGV2LCAiY2FuJ3QgcmVnaXN0ZXIgcmVib290IG1vZGVcbiIpOw0KKw0KKwlyZXR1cm4gcmV0
+Ow0KK30NCisNCitzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBudm1lbV9yZWJvb3Rf
+bW9kZV9vZl9tYXRjaFtdID0gew0KKwl7IC5jb21wYXRpYmxlID0gIm52bWVtLXJlYm9vdC1tb2Rl
+IiB9LA0KKwl7fQ0KK307DQorTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgbnZtZW1fcmVib290X21v
+ZGVfb2ZfbWF0Y2gpOw0KKw0KK3N0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyIG52bWVtX3Jl
+Ym9vdF9tb2RlX2RyaXZlciA9IHsNCisJLnByb2JlID0gbnZtZW1fcmVib290X21vZGVfcHJvYmUs
+DQorCS5kcml2ZXIgPSB7DQorCQkubmFtZSA9ICJudm1lbS1yZWJvb3QtbW9kZSIsDQorCQkub2Zf
+bWF0Y2hfdGFibGUgPSBudm1lbV9yZWJvb3RfbW9kZV9vZl9tYXRjaCwNCisJfSwNCit9Ow0KK21v
+ZHVsZV9wbGF0Zm9ybV9kcml2ZXIobnZtZW1fcmVib290X21vZGVfZHJpdmVyKTsNCisNCitNT0RV
+TEVfQVVUSE9SKCJOYW5kb3IgSGFuIDxuYW5kb3IuaGFuQHZhaXNhbGEuY29tPiIpOw0KK01PRFVM
+RV9ERVNDUklQVElPTigiTlZNRU0gcmVib290IG1vZGUgZHJpdmVyIik7DQorTU9EVUxFX0xJQ0VO
+U0UoIkdQTCIpOw0KLS0gDQoyLjE3LjINCg0K
