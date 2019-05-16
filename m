@@ -2,178 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9815320133
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 10:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83D720271
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 11:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbfEPIWs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 04:22:48 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42038 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726363AbfEPIWs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 04:22:48 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4G8M3AS063064
-        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 04:22:46 -0400
-Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sh3vqs7hp-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 04:22:45 -0400
-Received: from localhost
-        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <ego@linux.vnet.ibm.com>;
-        Thu, 16 May 2019 09:22:45 +0100
-Received: from b03cxnp08025.gho.boulder.ibm.com (9.17.130.17)
-        by e33.co.us.ibm.com (192.168.1.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 16 May 2019 09:22:42 +0100
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4G8MffA15860102
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 May 2019 08:22:41 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7016FBE053;
-        Thu, 16 May 2019 08:22:41 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2731EBE054;
-        Thu, 16 May 2019 08:22:41 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.124.35.248])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 16 May 2019 08:22:41 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id 2046C2E3894; Thu, 16 May 2019 13:52:38 +0530 (IST)
-Date:   Thu, 16 May 2019 13:52:38 +0530
-From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     ego@linux.vnet.ibm.com, daniel.lezcano@linaro.org, dja@axtens.net,
-        Abhishek <huntbag@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, rjw@rjwysocki.net
-Subject: Re: [PATCH 0/1] Forced-wakeup for stop lite states on Powernv
-Reply-To: ego@linux.vnet.ibm.com
-References: <20190422063231.51043-1-huntbag@linux.vnet.ibm.com>
- <1557291178.ow4spjzq5t.astroid@bobo.none>
- <b2fcf69a-aecd-ea81-b497-737642354736@linux.vnet.ibm.com>
- <1557981860.eltms77ctp.astroid@bobo.none>
- <20190516053659.GA20396@in.ibm.com>
- <1557986956.6pmjz10b9z.astroid@bobo.none>
+        id S1726454AbfEPJXc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 05:23:32 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41148 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726363AbfEPJXc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 05:23:32 -0400
+Received: by mail-pg1-f194.google.com with SMTP id z3so1265124pgp.8
+        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 02:23:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=reAgSdPZ/Igx7TP/G4DFm5yRB5oI6NXcR4YRtQByf1A=;
+        b=AabVOpc0gax5y+C34MwQA8XkHzluhPkc93PJn6cEymixXWGT8AUzl1dNJ4pU9uVb1e
+         GpB82yMP99M52j2Y3rQUP6OoCY7o5ErYKmID6yVZnXfsn6IPu8VxP/fenqWHRtteWZMi
+         V/2Bf6FeKafR4m81+5tNZzKmTbeBs3AQsOtixYHzFiaHD06OQLy6Lxo63jB00qGRbVFc
+         fAx0TdpgM2u404lkqC5aO2sl/qL9QzVSGbo9dJK0nM2UKvvAc+cAc0b2ntQz6dICxBuu
+         rGnQfWI/5ZuRroAP2vMMcyGvLK3+pxmvkI+fmWJKuGQOOal7lYdksBx/uJxR/I9nB9Xk
+         6xsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=reAgSdPZ/Igx7TP/G4DFm5yRB5oI6NXcR4YRtQByf1A=;
+        b=pB8Fj+dZcRbDCF6jpa2G7ZrY34tuYzM3wKXUCLdoncgVaFoJvTpuC8dQE+9LEu6on1
+         54wDSWJbrHyLmLlfcxyeh4s31Xdp5lxH4FamNCkwdp6jXjuCkOV6Zo82TXU2yh8QQXPd
+         JFVt5TI0UIsVXbmDEvFahc58c8qaao+WMNDywWPqCBmUsAjzoItWKCDbByghqkCR2VXl
+         juhK0JXzGwDSf8jmBCxZY1JBACs4uJbmYX8HIqz+6YGXjm8K8nXpCo1QVPKI5JbNgqFL
+         rNQxjzJkQWDsOYrZmx6FB5vY2L8NoG+5awxWrQE3FJzUAw8HSR8xomrgfEqG6hEkK2Wz
+         /FsA==
+X-Gm-Message-State: APjAAAWacXgQbBPoUQQNJ+cojrPxT+2p8ROh1dgwW1TyJvdoAbva+YfW
+        08fQkVBMQHwA7sgQz7Iwg4x9bA==
+X-Google-Smtp-Source: APXvYqzNARvSk1LSdQloLfBOFGXDLFTRU7QAXyWtKTnPx1omDlEXCkQ0bQF3o6bztshPU1rHZXHIEQ==
+X-Received: by 2002:a65:5347:: with SMTP id w7mr94039pgr.375.1557998611813;
+        Thu, 16 May 2019 02:23:31 -0700 (PDT)
+Received: from localhost ([122.172.118.99])
+        by smtp.gmail.com with ESMTPSA id s80sm14002886pfs.117.2019.05.16.02.23.30
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 May 2019 02:23:31 -0700 (PDT)
+Date:   Thu, 16 May 2019 14:53:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com, fan.chen@mediatek.com
+Subject: Re: [PATCH 0/8] Add cpufreq and cci devfreq for mt8183, and SVS
+ support
+Message-ID: <20190516092328.4n7kuqw7bxokhdjp@vireshk-i7>
+References: <1557997725-12178-1-git-send-email-andrew-sh.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1557986956.6pmjz10b9z.astroid@bobo.none>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-TM-AS-GCONF: 00
-x-cbid: 19051608-0036-0000-0000-00000ABC3AF4
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011104; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000285; SDB=6.01204051; UDB=6.00632055; IPR=6.00984981;
- MB=3.00026913; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-16 08:22:45
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051608-0037-0000-0000-00004BD0A5B6
-Message-Id: <20190516082238.GB20396@in.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-16_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905160057
+In-Reply-To: <1557997725-12178-1-git-send-email-andrew-sh.cheng@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Nicholas,
-
-On Thu, May 16, 2019 at 04:13:17PM +1000, Nicholas Piggin wrote:
-
+On 16-05-19, 17:08, Andrew-sh.Cheng wrote:
+> From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
 > 
-> > The motivation behind this patch was a HPC customer issue where they
-> > were observing some CPUs in the core getting stuck at stop0_lite
-> > state, thereby lowering the performance on the other CPUs of the core
-> > which were running the application.
-> > 
-> > Disabling stop0_lite via sysfs didn't help since we would fallback to
-> > snooze and it would make matters worse.
+> MT8183 supports CPU DVFS and CCI DVFS, and LITTLE cpus and CCI are in the same voltage domain.
+> So, this series is to add drivers to handle the voltage coupling between CPU and CCI DVFS.
 > 
-> snooze has the timeout though, so it should kick into stop0 properly
-> (and if it doesn't that's another issue that should be fixed in this
-> series).
->
-> I'm not questioning the patch for stop0_lite, to be clear. I think
-> the logic is sound. I just raise one urelated issue that happens to
-> be for stop0_lite as well (should we even enable it on P9?), and one
-> peripheral issue (should we make a similar fix for deeper stop states?)
->
+> For SVS support, add OPP_EVENT_ADJUST_VOLTAGE and corresponding reaction.
 
-I think it makes sense to generalize this from the point of view of
-CPUs remaining in shallower idle states for long durations on tickless
-kernels.
+No version information here or what has changed. That doesn't help.
 
-> > 
-> >> 
-> >> We should always have fewer states unless proven otherwise.
-> > 
-> > I agree.
-> > 
-> >> 
-> >> That said, we enable it today so I don't want to argue this point
-> >> here, because it is a different issue from your patch.
-> >> 
-> >> > When it is in stop0 or deeper, 
-> >> > it free up both
-> >> > space and time slice of core.
-> >> > In stop0_lite, cpu doesn't free up the core resources and thus inhibits 
-> >> > thread
-> >> > folding. When a cpu goes to stop0, it will free up the core resources 
-> >> > thus increasing
-> >> > the single thread performance of other sibling thread.
-> >> > Hence, we do not want to get stuck in stop0_lite for long duration, and 
-> >> > want to quickly
-> >> > move onto the next state.
-> >> > If we get stuck in any other state we would possibly be losing on to 
-> >> > power saving,
-> >> > but will still be able to gain the performance benefits for other 
-> >> > sibling threads.
-> >> 
-> >> That's true, but stop0 -> deeper stop is also a benefit (for
-> >> performance if we have some power/thermal constraints, and/or for power
-> >> usage).
-> >> 
-> >> Sure it may not be so noticable as the SMT switch, but I just wonder
-> >> if the infrastructure should be there for the same reason.
-> >> 
-> >> I was testing interrupt frequency on some tickless workloads configs,
-> >> and without too much trouble you can get CPUs to sleep with no
-> >> interrupts for many minutes. Hours even. We wouldn't want the CPU to
-> >> stay in stop0 for that long.
-> > 
-> > If it stays in stop0 or even stop2 for that long, we would want to
-> > "promote" it to a deeper state, such as say STOP5 which allows the
-> > other cores to run at higher frequencies.
+I believe this is V3.
+
+Don't resend it but please mention the changes in reply now. Thanks.
+
+> Andrew-sh.Cheng (7):
+>   cpufreq: mediatek: change to regulator_get_optional
+>   cpufreq: mediatek: add clock enable for intermediate clock
+>   cpufreq: mediatek: Add support for mt8183
+>   dt-bindings: devfreq: add compatible for mt8183 cci devfreq
+>   devfreq: add mediatek cci devfreq
+>   cpufreq: mediatek: add opp notification for SVS support
+>   devfreq: cci devfreq register opp notification for SVS support
 > 
-> So we would want this same logic for all but the deepest runtime
-> stop state?
-
-Yes. We can, in steps, promote individual threads of the core to
-eventually request a deeper state such as stop4/5. On a completely
-idle tickless system, eventually we should see the core go to the
-deeper idle state.
-
+> Stephen Boyd (1):
+>   PM / OPP: Support adjusting OPP voltages at runtime
 > 
-> >> Just thinking about the patch itself, I wonder do you need a full
-> >> kernel timer, or could we just set the decrementer? Is there much 
-> >> performance cost here?
-> >>
-> > 
-> > Good point. A decrementer would do actually.
+>  .../bindings/devfreq/mt8183-cci-devfreq.txt        |  20 ++
+>  drivers/cpufreq/cpufreq-dt-platdev.c               |   1 +
+>  drivers/cpufreq/mediatek-cpufreq.c                 |  88 +++++-
+>  drivers/devfreq/Kconfig                            |  10 +
+>  drivers/devfreq/Makefile                           |   1 +
+>  drivers/devfreq/mt8183-cci-devfreq.c               | 310 +++++++++++++++++++++
+>  drivers/opp/core.c                                 |  78 ++++++
+>  include/linux/pm_opp.h                             |  11 +
+>  8 files changed, 517 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt
+>  create mode 100644 drivers/devfreq/mt8183-cci-devfreq.c
 > 
-> That would be good if it does, might save a few cycles.
-> 
-> Thanks,
-> Nick
->
+> -- 
+> 2.12.5
 
---
-Thanks and Regards
-gautham.
-
+-- 
+viresh
