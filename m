@@ -2,120 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6CC20E72
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 20:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F4320E7C
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 20:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbfEPSK7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 14:10:59 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:36731 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726314AbfEPSK7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 14:10:59 -0400
-Received: by mail-io1-f67.google.com with SMTP id e19so3366769iob.3;
-        Thu, 16 May 2019 11:10:58 -0700 (PDT)
+        id S1726635AbfEPSOL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 14:14:11 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:38344 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbfEPSOL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 14:14:11 -0400
+Received: by mail-it1-f196.google.com with SMTP id i63so7830387ita.3;
+        Thu, 16 May 2019 11:14:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rrGlTyg4XJrCjk7zo+Wrsd+XH074LHjGtQBQcTuoJf8=;
-        b=e6Rkx2rEJlR6Pl2yJlIYa/FZ2zIzhZ5FqSoNux6pGC2cWT4VG3VtLz0dC5EFO+ax7A
-         fnQ487yNANJ4O3ukMIjS/hevihf6hMlG7XZiS0NrWZO5kEc4q5O0oEVjmpxG0OZCY6V5
-         jp53iKg3oyxCYy/xDgCqzVCQtwOz2SS08UbDDQU/grZbTGPJsiebIM3zJ/GlhCEaiUAD
-         0TI/2THjAlSnQDJwcCVgMXgPh+COK2Et6tK9Rq4XMzIt/5XZz9bqaxvHyv/QiPi/sOdb
-         IPh1Za3RIy24L4KLOQVCjvobjLNRpFwByWSFLzJLaNrUcxcQ0RPZ7WmYiqUvcLHgMkT8
-         WOMw==
+         :cc;
+        bh=oYizfKO0iUCkCx87QTv9y+9/yguDDJWHGpNmrjjyMQE=;
+        b=T1a1UQAWEN1zwXTAxJ0W6YsgQvMdJVGrZGrDTxkDkBdftsG7bFuxqMMuyRYIbwpp3N
+         zpUtrb0fyJY34h5ZAqJ5AKxT5uAswqiB8LO5sX7EJZTZgfYEuGvfO/pb8QwJVTKmVOqr
+         MpYvM0qdYL46t4TGTV4SiIP/n20fxoie6h4lu9vHtVeHW6WMLT7uWNa4D7JCmGJdqinU
+         Pff5NHk3/urnJe9KHzJ6+b6680Gwf/AWHqMdWWb+a/6DEl/LFjfmKJv/qzjGlsL+oluN
+         QFRErVrPnqIzZrVDXUDAYofBl17/UhgtMEOjPMZ4uAeyPqGuIKtX1oJjyRayHP/2d5U4
+         lc4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rrGlTyg4XJrCjk7zo+Wrsd+XH074LHjGtQBQcTuoJf8=;
-        b=b+1CETYyolkvuNcOvAeSM/ERwzR+IYUzfIcrdeBa9L44MCZ49YVIWdaIUdnwSuP3sT
-         ejOjWoO7TSsqXUnIHIBNqVF0/+Fu2BwnDA8YkPvkqS+dM2vXy5yE+aAcR9m6iI9zr9ab
-         2KXephf6f98r1fhRFomLVec9O5+RJrFqdz/qHqzwC2XldissUEvdgMiPPY6E0Y7MMir5
-         uUTxS2Qarj9I/UflDUBDaPqzZ4XTthHTRFm1serHD1vUFKdoNmjtAV/dF+xm9y729o+v
-         O742vBFoltMwo56BdxB/Zh0op4zMBOuiSCgdCy0IqxJcmj1kuU2mFsgrOTen8n+fwJRD
-         UWCw==
-X-Gm-Message-State: APjAAAVKIB8rPAwhmAp+8gWn0TGA9tw4Jxq+USvzAZSXDgkeZvthEGnx
-        /dooZa9WnR0shFXJBv9MBJpyUWPmnRgkI1t/0qQ=
-X-Google-Smtp-Source: APXvYqyN7uANqDZJ6+qL41HrSGltOXSAYi6UW1Aa3IiAikG26LjBrhhWgLXP44A77oh8vNwx8s4k5mvjhxpuwUynad8=
-X-Received: by 2002:a5d:9616:: with SMTP id w22mr1735164iol.40.1558030258541;
- Thu, 16 May 2019 11:10:58 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=oYizfKO0iUCkCx87QTv9y+9/yguDDJWHGpNmrjjyMQE=;
+        b=aI3BJkR77k41yerUhldC952Lgy/oKTQNv9pFBpp6ZHJXfWHgNppFPPKR63/OgKNvji
+         WOEectIMFLrFFPfkZPpWVc3p+bvNXB7fLNa6FV3/3ZNjO2yw7UW26KV6kxV36U+KWg5U
+         bmlCZOBl7xzdvEVv0lkmUZuT3kxYRUh8ba+ICWZYza8TjF4oCYJbDNVs0w/48Zf6Ie6u
+         xeGx5x3cFESJ2dKxx1GXmfQdsCCB/RMzYNultjszjl/Ux9VUYapFRZ/H6nvcJuLi3IJp
+         J0HnF6EkFzgNjjLUGaEgscd7vcywjSnxUJNUFno03ZVo6wOqQvSShYDvTKkOccxRog08
+         TLeg==
+X-Gm-Message-State: APjAAAXXykYoKxaINn+ab7wg/iSsFv4vFk9F6yssAfPJjgiq8rV5gEe0
+        Ue3/o0J0gJc52+tHt/XwASXbTEd3TW+lgHNXpyQ=
+X-Google-Smtp-Source: APXvYqzg91EbMijFJyKzCeNsU32nhaqbI5CANe+33pKz919XCTOUPyqfIi2K6fq6NPt65fI6+i8jOiwXWRTfBrRl2y4=
+X-Received: by 2002:a05:660c:105:: with SMTP id w5mr1049148itj.37.1558030450144;
+ Thu, 16 May 2019 11:14:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190512082614.9045-1-tiny.windzz@gmail.com> <20190512082614.9045-3-tiny.windzz@gmail.com>
- <20190512133930.t5txssl7mou2gljt@flea> <20190512214128.qjyys3vfpwdiacib@core.my.home>
- <20190516150252.hf4u3bloo37chy6q@flea>
-In-Reply-To: <20190516150252.hf4u3bloo37chy6q@flea>
+References: <20190512082614.9045-1-tiny.windzz@gmail.com> <20190512082614.9045-4-tiny.windzz@gmail.com>
+ <20190512134152.yrletgtiglxncyo4@flea>
+In-Reply-To: <20190512134152.yrletgtiglxncyo4@flea>
 From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Fri, 17 May 2019 02:10:47 +0800
-Message-ID: <CAEExFWu-T2mGQ9Teo7TQOcJsEzXi_dB=S8CFv7MiwHyu5z4-ow@mail.gmail.com>
-Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
+Date:   Fri, 17 May 2019 02:13:58 +0800
+Message-ID: <CAEExFWvkM86ajB4io8yopkKEOfRE3UObRpqoi=Sq0RtDnuaRWA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] dt-bindings: thermal: add binding document for h6
+ thermal controller
 To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        catalin.marinas@arm.com, will.deacon@arm.com,
-        bjorn.andersson@linaro.org,
+Cc:     rui.zhang@intel.com, Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, robh+dt@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, catalin.marinas@arm.com,
+        will.deacon@arm.com, David Miller <davem@davemloft.net>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        paulmck@linux.ibm.com, stefan.wahren@i2se.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andy Gross <andy.gross@linaro.org>, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, marc.w.gonzalez@free.fr,
-        Eduardo Valentin <edubezval@gmail.com>,
-        enric.balletbo@collabora.com, robh+dt@kernel.org,
-        Jonathan.Cameron@huawei.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        olof@lixom.net, David Miller <davem@davemloft.net>
+        Jonathan.Cameron@huawei.com,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        paulmck@linux.ibm.com, Andy Gross <andy.gross@linaro.org>,
+        olof@lixom.net, bjorn.andersson@linaro.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        marc.w.gonzalez@free.fr, stefan.wahren@i2se.com,
+        enric.balletbo@collabora.com, Linux PM <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 16, 2019 at 11:03 PM Maxime Ripard
-<maxime.ripard@bootlin.com> wrote:
+On Sun, May 12, 2019 at 9:41 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
 >
 > Hi,
 >
-> On Sun, May 12, 2019 at 11:41:28PM +0200, Ond=C5=99ej Jirman wrote:
-> > > > +static int tsens_get_temp(void *data, int *temp)
-> > > > +{
-> > > > + struct tsensor *s =3D data;
-> > > > + struct tsens_device *tmdev =3D s->tmdev;
-> > > > + int val;
-> > > > +
-> > > > + regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
-> > > > +             0x4 * s->id, &val);
-> > > > +
-> > > > + if (unlikely(val =3D=3D 0))
-> > > > +         return -EBUSY;
-> > >
-> > > I'm not sure why a val equals to 0 would be associated with EBUSY?
+> On Sun, May 12, 2019 at 04:26:14AM -0400, Yangtao Li wrote:
+> > This patch adds binding document for allwinner h6 thermal controller.
 > >
-> > Thermal zone driver can (will) call get_temp before we got the
-> > first interrupt and the thermal data. In that case val will be 0.
-> >
-> > Resulting in:
-> >
-> >  (val + offset) * scale =3D (-2794) * -67 =3D 187198
-> >
-> > 187=C2=B0C and immediate shutdown during boot - based on cirtical
-> > temperature being reached.
-> >
-> > Busy here means, get_temp does not yet have data. Thermal zone
-> > driver just reports any error to dmesg output.
+> > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> > ---
+> >  .../bindings/thermal/sun50i-thermal.txt       | 32 +++++++++++++++++++
+> >  1 file changed, 32 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/thermal/sun50i-thermal.txt
 >
-> Ah, that makes sense.
->
-> I guess if we're switching to an interrupt-based driver, then we can
-> just use a waitqueue, or is get_temp supposed to be atomic?
-I think get_temp should not be bloacked.
+> We're starting to convert to YAML for binding descriptions that will
+> allow to validate that all DT are properly using the binding. It would
+> be great if you could use it as well.
 
+What have been changed to this now?
+
+>
+> > diff --git a/Documentation/devicetree/bindings/thermal/sun50i-thermal.txt b/Documentation/devicetree/bindings/thermal/sun50i-thermal.txt
+> > new file mode 100644
+> > index 000000000000..67eda7794262
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/sun50i-thermal.txt
+> > @@ -0,0 +1,32 @@
+> > +Binding for Thermal Sensor of Allwinner SOC.
+> > +
+> > +This describes the device tree binding for the Allwinner thermal controller
+> > +which measures the on-SoC temperatures.
+> > +
+> > +Required properties:
+> > +- compatible:
+> > +  - "allwinner,sun50i-h6-ths" : For H6
+> > +- reg: Address range of the thermal controller
+> > +- clocks, clock-names: Clocks needed for the thermal controller.
+> > +                    The required clocks for h6 are: "bus".
+>
+> If there's a single clock, then we don't need clock-names
+
+Yeah, but, IIRC, H3 have two clk.
+So I'd like to keep it.
+
+>
+> > +- resets, reset-names: Reference to the reset controller controlling
+> > +                    the thermal controller.
+>
+> Ditto.
+
+Done.
+
+Thx,
 Yangtao
 >
+> > +- nvmem-cells: A phandle to the calibration data provided by a nvmem device. If
+> > +            unspecified default values shall be used.
+> > +- nvmem-cell-names: Should be "calib"
+>
+> I thought you said that nvmem support was optional in the
+> driver. Maybe we could make it optional in the DT too?
+>
+> Thanks!
 > Maxime
 >
 > --
