@@ -2,146 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B2320D52
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 18:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C7F20D7B
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 18:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726727AbfEPQsS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 12:48:18 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38704 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728668AbfEPQsS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 12:48:18 -0400
-Received: by mail-pg1-f193.google.com with SMTP id j26so1844677pgl.5
-        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 09:48:17 -0700 (PDT)
+        id S1726856AbfEPQzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 12:55:37 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34997 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfEPQzh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 12:55:37 -0400
+Received: by mail-pf1-f193.google.com with SMTP id t87so2164322pfa.2;
+        Thu, 16 May 2019 09:55:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=xGzOdEjbkXQI4XN5U9fk3ggStqgmR5/EE4ixhly3O2A=;
-        b=Bu0Qn4kktWsD3rAV1GUd3JeYgoHJy5Xy55l8u9PsPgiqlneSxFPvzvxLfoLgM89pOW
-         1n1Y8ArrxGdys3wg+GHraGMinlicbCuIIFmc3NDk187p7cjfJXyq7Yzy+6kAGsvGTLCC
-         D+Ny8OPi8JMucEPU+wI1awvKVfL4KXzEmoziGasIyMtoEKkTMPuHGvqSfD3a/i9Cm3g5
-         heZZSZf+vEB7Il04F16l3g2xTH+tgo0hFrZj01evzTu+QvHeRWZJtIKwmgkMfwEsBjha
-         H0s2ChNcFMT2IBTDaSxuyyi/YbPFAPtlxvjRPsSIXA+BbELDk3aylFHO3L/9uYnLQQG/
-         hCiw==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EAZuaSOFLPgJxOfkuE/RETBPBEFS9w8pXwe5DKxj3jc=;
+        b=Mde2YlhG7yTq8WVVRYWPZKNPot9dDb1OTgQhm/zFDYDcGEXigQoKN8OkBi46VzNrKy
+         gT8PkyM45K9GvYcErJxIbJkUQsREpqAEMDj41efjuvc61FT9Wrjsd/H4MK92+pP6BMh9
+         B0tUFeM9aobU6BIvdQ7aHU1X7fWv0IAqZ49YslhHpHWtaJ+FTEaf4oZIiWRi72CZsoVT
+         cwh5V3MK1XSDSxl5WkV2VLLWAxKJgGux2ejDUj9pqErha4IcqJvlYEEYZK5BpKnAgKKR
+         1bBPXp3j6A9xe2efxc6Pk/wQJayXvE2cTBHRycki3fUIWSXrN0+Xv0c8rJpuiX8xcSPL
+         qKog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=xGzOdEjbkXQI4XN5U9fk3ggStqgmR5/EE4ixhly3O2A=;
-        b=QtA47d1Kn4Rihsgt5QN5SJQ7TgcEbxVNHU4wqiGIgm1wKTXRvF0dJPxFweiuMcGpZ/
-         uDa/RaqnyQmPS0AZOIgpbu0vHYF7bbFoF8A3RiiFxZc+xGyigP87iIsPge5SKxhrhdll
-         zYy1dCqtvMkA0BZHxYUJ6cmyB6YamRs51yx1rr385edgyRXBB2o7sCUNGzMZ6wI0N2Yl
-         PvbmDZ+VTc08kFnLLPA162hPG4Rl0FFQQQlJkS1W6eWBAZ53rQboM54yvSGkJuazEAWC
-         M/IOzIg3RKuVa/Kk3+Q6dWgciHEV2p6vy/jhIhi6W3wTkOytI9/yEDy6UtB+U7EAMD6I
-         QSrA==
-X-Gm-Message-State: APjAAAUr5b3QYwFigEddxxItDntSKA+VI3TNJz9Gw5MJvQOvkru/xmZc
-        qNzOMxMNpPstvf+GZWPEUZYfL/Ez3Fs=
-X-Google-Smtp-Source: APXvYqzil0ehZc90CSqN+2Pmtn8vNBmPO90h4w8n8jHTQZYQTOuEdi+W+6QpL8RYioHUuG01uoCPiA==
-X-Received: by 2002:a63:9a52:: with SMTP id e18mr50918024pgo.335.1558025297166;
-        Thu, 16 May 2019 09:48:17 -0700 (PDT)
-Received: from localhost ([123.213.206.190])
-        by smtp.gmail.com with ESMTPSA id q193sm9884262pfc.52.2019.05.16.09.48.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 May 2019 09:48:16 -0700 (PDT)
-Date:   Fri, 17 May 2019 01:48:13 +0900
-From:   Minwoo Im <minwoo.im.dev@gmail.com>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        Keith Busch <keith.busch@intel.com>,
-        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@fb.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EAZuaSOFLPgJxOfkuE/RETBPBEFS9w8pXwe5DKxj3jc=;
+        b=ay38/lMsIKoRs6LQ4o60o2G1Z2f7MjY8RQMrkb66e/GvR16EiaaWz0zcN0LtFQKcKd
+         VJTATk9K5a0spwjLben19PMiHQ0YZUhdicDMzOSI7iylQ7Zk90SZ44NlUZSYRWtFoLg0
+         zYwqAEJiZpfeyry0x3ylw+s9VZy9ySGkgRPzhJL8lKhnC33n5HPBntDoiwhXoF++cs2Y
+         DBaLP98ObfCb99Wxc1EcThIJy9nhIlUzz6VJ4tLXrwOPTcQKXh8Hb3UdmPZSdDWGLYui
+         RjVGHXCaMu0ouifwTdQmauFmdNqC4apKqibnyfF/cSfnNQch7veK+ERTykYd5l5bYaD2
+         F2yw==
+X-Gm-Message-State: APjAAAXm5oMji4yZcjZguEGyfXMv3NdhUNCFQBF36VUztVljF+QhHEXG
+        CdDp1fHy04d0pWGTJokaJ0Tr9cTl
+X-Google-Smtp-Source: APXvYqx7/fR+YFTBealEB1eVL6PMrU8y84ftgQoiHQ9J3my7pDkqFDmJGluga/cEErBpiNrRP8iZSA==
+X-Received: by 2002:a62:164f:: with SMTP id 76mr56070014pfw.172.1558025736036;
+        Thu, 16 May 2019 09:55:36 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q142sm2615058pfc.27.2019.05.16.09.55.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 May 2019 09:55:34 -0700 (PDT)
+Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.2-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
-Message-ID: <20190516164811.GF24001@minwooim-desktop>
-References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com>
- <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
- <20190516143212.GE24001@minwooim-desktop>
- <CAC5umyjxxWzCgyMOS=Q7BBBJY+n6xD1dg49fQ0W5okPh58Z1Kw@mail.gmail.com>
+        Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Rui Zhang <rui.zhang@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20190516044313.GA17751@localhost.localdomain>
+ <CAHk-=wiaO_8SiEB9QM3vOTniiT67K6CBH0uHJ82-Dp_+6kxH3g@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <cd06dc28-1076-259a-ba94-bad116771da8@roeck-us.net>
+Date:   Thu, 16 May 2019 09:55:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAC5umyjxxWzCgyMOS=Q7BBBJY+n6xD1dg49fQ0W5okPh58Z1Kw@mail.gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <CAHk-=wiaO_8SiEB9QM3vOTniiT67K6CBH0uHJ82-Dp_+6kxH3g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-05-17 01:17:31, Akinobu Mita wrote:
-> 2019年5月16日(木) 23:32 Minwoo Im <minwoo.im.dev@gmail.com>:
-> >
-> > > +     if (sensor < 0 || sensor > 8)
-> > > +             return -EINVAL;
-> >
-> > Does we really need to check the negative case here ?  Am I missing
-> > something in this context ?  If we really want to check it in this
-> > level, can we check the invalid case in the following function?
+On 5/16/19 8:07 AM, Linus Torvalds wrote:
+> On Wed, May 15, 2019 at 9:43 PM Eduardo Valentin <edubezval@gmail.com> wrote:
+>>
+>> - thermal core has a new devm_* API for registering cooling devices, thanks to Guenter R.
+>>    I took the entire series, that is why you see changes on drivers/hwmon in this pull.
 > 
-> The negative case should never happen, so it can be just removed.
-
-Cool.
-
+> This clashed badly with commit 6b1ec4789fb1 ("hwmon: (pwm-fan) Add RPM
+> support via external interrupt"), which added a timer to the pwm-fan
+> handling.
 > 
-> > > +static struct thermal_zone_device *
-> > > +nvme_thermal_zone_register(struct nvme_ctrl *ctrl, int sensor)
-> > > +{
-> > > +     struct thermal_zone_device *tzdev;
-> > > +     char type[THERMAL_NAME_LENGTH];
-> > > +     int ret;
-> > > +
-> > > +     snprintf(type, sizeof(type), "nvme_temp%d", sensor);
-> >
-> > Before preparing "nvme_temp%d", maybe we can make it sure here. :)
-> > What do you say?
+> In particular, that timer now needed the same kind of cleanup changes,
+> and I'd like you guys (particularly Guenther, who was involved on both
+> sides) to double-check my merge.
 > 
-> The nvme_thermal_zone_register() is only called from
-> nvme_thermal_zones_register() which is defined just below, and it's very
-> clear that the value of 'sensor' is from 0 to ARRAY_SIZE(ctrl->tzdev) - 1.
-
-If so, we don't need to check the negative case above there.
-
+> The way I solved it was to just make the pwm_fan_pwm_disable()
+> callback do both the pwm_diable() _and_ the del_timer_sync() on the
+> new timer. That seemed to be the simplest solution that meshed with
+> the new devm cleanup model, but while I build-tested the result, I
+> obviously did no actual use testing. And maybe there's some reason why
+> that approach is flawed.
 > 
-> > > +int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
-> > > +{
-> > > +     struct nvme_smart_log *log;
-> > > +     int ret;
-> > > +     int i;
-> > > +
-> > > +     log = kzalloc(sizeof(*log), GFP_KERNEL);
-> > > +     if (!log)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     ret = nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
-> > > +                        log, sizeof(*log), 0);
-> > > +     if (ret) {
-> > > +             ret = ret > 0 ? -EINVAL : ret;
-> > > +             goto free_log;
-> > > +     }
-> > > +
-> > > +     for (i = 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
-> > > +             struct thermal_zone_device *tzdev;
-> > > +
-> > > +             if (i && !le16_to_cpu(log->temp_sensor[i - 1]))
-> > > +                     continue;
-> > > +             if (ctrl->tzdev[i])
-> > > +                     continue;
-> > > +
-> > > +             tzdev = nvme_thermal_zone_register(ctrl, i);
-> > > +             if (!IS_ERR(tzdev))
-> > > +                     ctrl->tzdev[i] = tzdev;
-> >
-> > Quenstion here. Are we okay not to print some warnings here in case
-> > of error returned?
-> 
-> I'm going to print warning in case of thermal_zone_device_register() error.
-> For sysfs_create_link() error, the warning is printed by the function
-> itself.
+> Guenther?
 
-Sounds great.
+Sorry for the trouble. Looks like I did too much cleanup this time around.
 
-Thanks,
+Looks ok. I'll have to send a follow-up patch - we should check the
+return value of devm_add_action_or_reset(). No idea why I didn't do that
+in this series. I'll do that after the commit window closes (and after
+I am back from vacation).
+
+Thanks a lot for sorting this out.
+
+Guenter
