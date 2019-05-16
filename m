@@ -2,82 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A598207FE
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 15:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1220F2096D
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 16:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbfEPNWy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 09:22:54 -0400
-Received: from foss.arm.com ([217.140.101.70]:45662 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726955AbfEPNWy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 May 2019 09:22:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 708481715;
-        Thu, 16 May 2019 06:22:54 -0700 (PDT)
-Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A0F53F703;
-        Thu, 16 May 2019 06:22:52 -0700 (PDT)
-Date:   Thu, 16 May 2019 14:22:50 +0100
-From:   Patrick Bellasi <patrick.bellasi@arm.com>
-To:     Quentin Perret <quentin.perret@arm.com>
-Cc:     douglas.raillard@arm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-        dietmar.eggemann@arm.com
-Subject: Re: [RFC PATCH 1/7] PM: Introduce em_pd_get_higher_freq()
-Message-ID: <20190516132250.hedtianse7rnk3wq@e110439-lin>
-References: <20190508174301.4828-1-douglas.raillard@arm.com>
- <20190508174301.4828-2-douglas.raillard@arm.com>
- <20190516124200.opxczohjelhvrzmo@e110439-lin>
- <20190516130148.uhq55ptut47usnae@queper01-lin>
+        id S1726696AbfEPOXn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 10:23:43 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:35414 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726692AbfEPOXm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 10:23:42 -0400
+Received: by mail-pg1-f193.google.com with SMTP id t1so234365pgc.2
+        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 07:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Jrk+rpw8J8CTsHQ9cBEqb7CiKn9QorTOHcoV2OsZp1c=;
+        b=Aslk4mGoDz9R6CtfPxhVAJtoT/vFRymvtpoC087MDA4WZmiXrQcxlGHfwraASUXaGt
+         Uo7Ksvx3PYAfBaD+q0+/5NvquE9c0oiPc/hCQX0HxAP3WwMxcVIN0H75y5dI708tKEU3
+         wAdpQhUZwEF1gIT+bZKbaw00uRhalfbvYy+7p9DMoGlwA6Gh1FqKFn1IZZrKLJgzY6QS
+         jn3BD8W7gvsgbNTrkuM1ReMi7Se2x9bMKAHfnWLQ9SlgJN4KyQPohy0o7LMpyMOoF3BN
+         mxJPNAoH+JMRJyVrsBotjH416Z0bLEEcsEZWA+WbONcPd3/kkSjMKp0mhOHd+qILERpC
+         W85g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Jrk+rpw8J8CTsHQ9cBEqb7CiKn9QorTOHcoV2OsZp1c=;
+        b=s2PTN7PD4mUmF8WnLxBEXpTkDmjKeFouzB9bUfmwRkQ+K8NybkTYFxG6UkLRCGuScY
+         KUvhGT7ETER1Nr4b6rPE1WjbruNlLAXLT80lg39osrie1I3sDbjwG7EH8auCyQSSHQPu
+         6WfsTVtaapMe6q6cIlv0zKFY7Eep6CPHooR3f2+FthFOETcyNUI8GZkfsVu6C7fUHRtN
+         EFzUIfYP51Ig5PyutAP8jbpkjqI5Ty5CPvc0E7CaRKtGAx2uYrAmvqWKqAf1CSX4Jixy
+         1Juvp6ZrPRTSIqeZE4xjfUWyODuCm+7iroRx1uciZMVlIgSikviE4K+uclFm7ct5ZJMg
+         WKKQ==
+X-Gm-Message-State: APjAAAXd8cweGQZYk/724TJjcM0slA0MmrE/hJhlzNr34c8QKqCseidz
+        /jC01E4ZpXoxPRZ46SZXnWU=
+X-Google-Smtp-Source: APXvYqwDAcFXdXnj1KLwN2Q/551ng9KWAxjNfcCJzigXn+gFyg4EtYIZF0kgOgBWLvaDwr5Kz9TIrA==
+X-Received: by 2002:aa7:8e04:: with SMTP id c4mr53893146pfr.48.1558016621914;
+        Thu, 16 May 2019 07:23:41 -0700 (PDT)
+Received: from localhost ([123.213.206.190])
+        by smtp.gmail.com with ESMTPSA id j22sm7140939pfn.121.2019.05.16.07.23.40
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 16 May 2019 07:23:41 -0700 (PDT)
+Date:   Thu, 16 May 2019 23:23:38 +0900
+From:   Minwoo Im <minwoo.im.dev@gmail.com>
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        Keith Busch <keith.busch@intel.com>,
+        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@fb.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
+Message-ID: <20190516142337.GD24001@minwooim-desktop>
+References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com>
+ <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190516130148.uhq55ptut47usnae@queper01-lin>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-May 14:01, Quentin Perret wrote:
-> On Thursday 16 May 2019 at 13:42:00 (+0100), Patrick Bellasi wrote:
-> > > +static inline unsigned long em_pd_get_higher_freq(struct em_perf_domain *pd,
-> > > +	unsigned long min_freq, unsigned long cost_margin)
-> > > +{
-> > > +	unsigned long max_cost = 0;
-> > > +	struct em_cap_state *cs;
-> > > +	int i;
-> > > +
-> > > +	if (!pd)
-> > > +		return min_freq;
-> > > +
-> > > +	/* Compute the maximum allowed cost */
-> > > +	for (i = 0; i < pd->nr_cap_states; i++) {
-> > > +		cs = &pd->table[i];
-> > > +		if (cs->frequency >= min_freq) {
-> > > +			max_cost = cs->cost + (cs->cost * cost_margin) / 1024;
-> >                                                                          ^^^^
-> > ... end here we should probably better use SCHED_CAPACITY_SCALE
-> > instead of hard-coding in values, isn't it?
-> 
-> I'm not sure to agree. This isn't part of the scheduler per se, and the
-> cost thing isn't in units of capacity, but in units of power, so I don't
-> think SCHED_CAPACITY_SCALE is correct here.
+Hi Akinobu,
 
-Right, I get the units do not match and it would not be elegant to use
-it here...
+Great feature here, I think.
 
-> But I agree these hard coded values (that one, and the 512 in one of the
-> following patches) could use some motivation :-)
+> -static int nvme_set_features(struct nvme_ctrl *dev, unsigned fid, unsigned dword11,
+> -		      void *buffer, size_t buflen, u32 *result)
+> +static int nvme_features(struct nvme_ctrl *dev, u8 opcode, unsigned int fid,
+> +			 unsigned int dword11, void *buffer, size_t buflen,
+> +			 u32 *result)
+>  {
+>  	struct nvme_command c;
+>  	union nvme_result res;
+>  	int ret;
+>  
+>  	memset(&c, 0, sizeof(c));
+> -	c.features.opcode = nvme_admin_set_features;
+> +	c.features.opcode = opcode;
+>  	c.features.fid = cpu_to_le32(fid);
+>  	c.features.dword11 = cpu_to_le32(dword11);
+>  
+> @@ -1132,6 +1133,22 @@ static int nvme_set_features(struct nvme_ctrl *dev, unsigned fid, unsigned dword
+>  	return ret;
+>  }
+>  
+> +static int nvme_get_features(struct nvme_ctrl *dev, unsigned int fid,
+> +			     unsigned int dword11, void *buffer, size_t buflen,
+> +			     u32 *result)
+> +{
+> +	return nvme_features(dev, nvme_admin_get_features, fid, dword11, buffer,
+> +			     buflen, result);
+> +}
+> +
+> +static int nvme_set_features(struct nvme_ctrl *dev, unsigned int fid,
+> +			     unsigned int dword11, void *buffer, size_t buflen,
+> +			     u32 *result)
+> +{
+> +	return nvme_features(dev, nvme_admin_set_features, fid, dword11, buffer,
+> +			     buflen, result);
+> +}
+> +
 
-... ultimately SCHED_CAPACITY_SCALE is just SCHED_FIXEDPOINT_SCALE,
-which is adimensional. Perhaps we should use that or yet another alias
-for the same.
-
-> Thanks,
-> Quentin
-
--- 
-#include <best/regards.h>
-
-Patrick Bellasi
+I think it's okay to separate this part from this patch. :)
+(I guess I have seen this kind of patch from Keith, though)
