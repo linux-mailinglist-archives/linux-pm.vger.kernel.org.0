@@ -2,61 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A665A20B49
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 17:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41EC20B2F
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 17:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbfEPPbj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 11:31:39 -0400
-Received: from mga05.intel.com ([192.55.52.43]:63398 "EHLO mga05.intel.com"
+        id S1727495AbfEPP3B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 11:29:01 -0400
+Received: from mga06.intel.com ([134.134.136.31]:48288 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726692AbfEPPbj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 May 2019 11:31:39 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1727434AbfEPP3B (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 May 2019 11:29:01 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 May 2019 08:31:38 -0700
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 May 2019 08:29:00 -0700
 X-ExtLoop1: 1
-Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
-  by fmsmga004.fm.intel.com with ESMTP; 16 May 2019 08:31:38 -0700
-Date:   Thu, 16 May 2019 09:26:23 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     Keith Busch <keith.busch@intel.com>,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
-Message-ID: <20190516152622.GC23416@localhost.localdomain>
-References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com>
- <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
- <20190515191518.GA21916@localhost.localdomain>
- <CAC5umyhh7eNHa4D9sndsoB7EgTJZTEL9OTd=a+7x817XvPZ_eQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAC5umyhh7eNHa4D9sndsoB7EgTJZTEL9OTd=a+7x817XvPZ_eQ@mail.gmail.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
+Received: from jzhan56-mobl.ccr.corp.intel.com ([10.249.170.73])
+  by fmsmga005.fm.intel.com with ESMTP; 16 May 2019 08:28:59 -0700
+Message-ID: <1558020541.12827.25.camel@intel.com>
+Subject: [GIT PULL] Thermal management updates for v5.2-rc1
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Eduardo Valentin <edubezval@gmail.com>
+Date:   Thu, 16 May 2019 23:29:01 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 17, 2019 at 12:22:51AM +0900, Akinobu Mita wrote:
-> > Since this routine is intended for use in the device initialization path,
-> > the error returns are extra important. We have used < 0 to indicate we
-> > need to abandon initialization because we won't be able communicate with
-> > the device if we proceed. Since thermal reporting is not mandatory to
-> > manage our controllers, out-of-memory or a device that doesn't support
-> > SMART should just return 0. We should only halt init if the controller
-> > is unresponsive here.
-> 
-> Make sense.  I'll change the return type to void, and print warning in
-> case of some errors as Minwoo said in other reply.
+Hi, Linus,
 
-Oh, still needs to be an 'int' return, but just suppress non-fatal
-errors by returning 0. If the 'nvme_get_log' times out, though, we need
-to return that error since the caller will need to abort initialization.
+Please pull from
+  git://git.kernel.org/pub/scm/linux/kernel/git/rzhang/linux.git next
+
+to receive the latest Thermal management updates for v5.2-rc1 with
+top-most commit 6df24c3e81b9ba9c5e8d815e593826c169e3f366:
+
+  Merge branches 'thermal-core', 'thermal-built-it' and 'thermal-intel' 
+into next (2019-05-07 21:54:11 +0800)
+
+on top of commit dc4060a5dc2557e6b5aa813bf5b73677299d62d2:
+
+  Linux 5.1-rc5 (2019-04-14 15:17:41 -0700)
+
+Specifics:
+
+- Remove the 'module' Kconfig option for thermal subsystem framework
+because the thermal framework are required to be ready as early as
+possible to avoid overheat at boot time. (Daniel Lezcano)
+
+- Fix a bug that thermal framework pokes disabled thermal zones upon
+resume. (Wei Wang)
+
+- A couple of cleanups and trivial fixes on int340x thermal drivers.
+(Srinivas Pandruvada, Zhang Rui, Sumeet Pawnikar)
+
+thanks,
+rui
+
+----------------------------------------------------------------
+Daniel Lezcano (5):
+      thermal/drivers/core: Remove the module Kconfig's option
+      thermal/drivers/core: Remove module unload code
+      thermal/drivers/core: Remove depends on THERMAL in Kconfig
+      thermal/drivers/core: Fix typo in the option name
+      hwmon/drivers/core: Simplify complex dependency
+
+Geert Uytterhoeven (1):
+      mlxsw: Remove obsolete dependency on THERMAL=m
+
+Jean-Francois Dagenais (1):
+      thermal: make device_register's type argument const
+
+Srinivas Pandruvada (1):
+      drivers: thermal: processor_thermal: Downgrade error message
+
+Sumeet Pawnikar (1):
+      thermal: intel: int340x: processor_thermal_device: simplify to
+get driver data
+
+Wei Wang (1):
+      thermal: core: skip update disabled thermal zones after suspend
+
+Zhang Rui (2):
+      thermal/int3403_thermal: favor _TMP instead of PTYP
+      Merge branches 'thermal-core', 'thermal-built-it' and 'thermal-
+intel' into next
+
+ arch/arm/configs/mini2440_defconfig                |  2 +-
+ arch/arm/configs/pxa_defconfig                     |  2 +-
+ arch/mips/configs/ip22_defconfig                   |  2 +-
+ arch/mips/configs/ip27_defconfig                   |  2 +-
+ arch/unicore32/configs/unicore32_defconfig         |  2 +-
+ drivers/hwmon/hwmon.c                              |  4 +--
+ drivers/net/ethernet/mellanox/mlxsw/Kconfig        |  1 -
+ drivers/thermal/Kconfig                            |  8 +++---
+ drivers/thermal/intel/Kconfig                      |  1 -
+ .../intel/int340x_thermal/int3403_thermal.c        | 16 +++++------
+ .../int340x_thermal/processor_thermal_device.c     | 13 ++-------
+ drivers/thermal/qcom/Kconfig                       |  1 -
+ drivers/thermal/thermal_core.c                     | 31 +++++++++-----
+--------
+ include/linux/thermal.h                            |  6 ++---
+ 14 files changed, 34 insertions(+), 57 deletions(-)
