@@ -2,107 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 359B420A94
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 17:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C10520AB2
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 17:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726889AbfEPPDE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 11:03:04 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:58399 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbfEPPDE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 11:03:04 -0400
-Received: from localhost (unknown [80.215.79.199])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 1129E200018;
-        Thu, 16 May 2019 15:02:52 +0000 (UTC)
-Date:   Thu, 16 May 2019 17:02:52 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>, mark.rutland@arm.com,
-        daniel.lezcano@linaro.org, catalin.marinas@arm.com,
-        will.deacon@arm.com, bjorn.andersson@linaro.org,
-        mchehab+samsung@kernel.org, paulmck@linux.ibm.com,
-        stefan.wahren@i2se.com, linux-pm@vger.kernel.org, wens@csie.org,
-        jagan@amarulasolutions.com, andy.gross@linaro.org,
-        rui.zhang@intel.com, devicetree@vger.kernel.org,
-        marc.w.gonzalez@free.fr, edubezval@gmail.com,
-        enric.balletbo@collabora.com, robh+dt@kernel.org,
-        Jonathan.Cameron@huawei.com, linux-arm-kernel@lists.infradead.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        olof@lixom.net, davem@davemloft.net
-Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
-Message-ID: <20190516150252.hf4u3bloo37chy6q@flea>
-References: <20190512082614.9045-1-tiny.windzz@gmail.com>
- <20190512082614.9045-3-tiny.windzz@gmail.com>
- <20190512133930.t5txssl7mou2gljt@flea>
- <20190512214128.qjyys3vfpwdiacib@core.my.home>
+        id S1727146AbfEPPIP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 11:08:15 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:33877 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726790AbfEPPIP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 11:08:15 -0400
+Received: by mail-lf1-f67.google.com with SMTP id v18so2945036lfi.1
+        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 08:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FGHxW899Amf7ZgHaxb24JsnGeNM4NZvWTEPA1jMV4y8=;
+        b=AtS0tP7u7iyJ1QEm//4O5HaN3+5kkE2tr9Yqtj73YWBv2pnZkSMIsKWKaScHGyv6fO
+         H8ljLoZWHA0lu28jqNo2CZO4sASGLxZBPHEQMwNQVDmIJ70k63fFucdxmDo8LHK54i46
+         +sia9Wr5owuEX/MqfRs/YVPWurP/Jf7wXvQDA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FGHxW899Amf7ZgHaxb24JsnGeNM4NZvWTEPA1jMV4y8=;
+        b=bgIDBQINfihkvnQgwdXZW36qAKBvqw4msMrrrwRy8AGtmZ2YZ89APJ7tqvRVzEZxy+
+         SRJlu5/AFERVjoT8EtC/gDXzfOKCxzX0CNB59sBxYHic290QLyIUTV6Gbv5MS+1ekni5
+         1DTXe/V2yPHjxEi1h4+SWBcb3zMfJu1CvfNCLlRNiJ20rinqDvvZUdBERw9GoFSGTKbw
+         CjXzbk+HLFihyx4jWbJk8lAxEyKmoA+X+VZW2HsRnBRY3yM9BMgsmwF6Y2wXDReg8cLI
+         z9mxmpMc/HficMLYXdUv1lugC5Im+oWk7CnV9NvERFNKV6d+FC8XTLG0Zh70G2AyVcum
+         af2g==
+X-Gm-Message-State: APjAAAV6/Bx2Jp732ZAO+Lq0fMEcVsL7/ZlKhvLbr1HMioT+p5zSeiOc
+        c89BJ/N0BPg1aar2h8r2xpr8kqwOghQ=
+X-Google-Smtp-Source: APXvYqwYvBOYE2o1csBpSkObFCpaY2suQ/wggIT/fY2cbffOOmo8PCcqJOmhWJqXrXbk1cBd8MjKrA==
+X-Received: by 2002:a19:a50b:: with SMTP id o11mr11443381lfe.2.1558019292566;
+        Thu, 16 May 2019 08:08:12 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id z11sm934611ljb.68.2019.05.16.08.08.11
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 May 2019 08:08:11 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id c17so2950040lfi.2
+        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 08:08:11 -0700 (PDT)
+X-Received: by 2002:ac2:510b:: with SMTP id q11mr22478766lfb.11.1558019290857;
+ Thu, 16 May 2019 08:08:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7vj27y3kfhi2ktlo"
-Content-Disposition: inline
-In-Reply-To: <20190512214128.qjyys3vfpwdiacib@core.my.home>
-User-Agent: NeoMutt/20180716
+References: <20190516044313.GA17751@localhost.localdomain>
+In-Reply-To: <20190516044313.GA17751@localhost.localdomain>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 16 May 2019 08:07:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiaO_8SiEB9QM3vOTniiT67K6CBH0uHJ82-Dp_+6kxH3g@mail.gmail.com>
+Message-ID: <CAHk-=wiaO_8SiEB9QM3vOTniiT67K6CBH0uHJ82-Dp_+6kxH3g@mail.gmail.com>
+Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.2-rc1
+To:     Eduardo Valentin <edubezval@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rui Zhang <rui.zhang@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---7vj27y3kfhi2ktlo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Sun, May 12, 2019 at 11:41:28PM +0200, Ond=C5=99ej Jirman wrote:
-> > > +static int tsens_get_temp(void *data, int *temp)
-> > > +{
-> > > +	struct tsensor *s =3D data;
-> > > +	struct tsens_device *tmdev =3D s->tmdev;
-> > > +	int val;
-> > > +
-> > > +	regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
-> > > +		    0x4 * s->id, &val);
-> > > +
-> > > +	if (unlikely(val =3D=3D 0))
-> > > +		return -EBUSY;
-> >
-> > I'm not sure why a val equals to 0 would be associated with EBUSY?
+On Wed, May 15, 2019 at 9:43 PM Eduardo Valentin <edubezval@gmail.com> wrote:
 >
-> Thermal zone driver can (will) call get_temp before we got the
-> first interrupt and the thermal data. In that case val will be 0.
->
-> Resulting in:
->
->  (val + offset) * scale =3D (-2794) * -67 =3D 187198
->
-> 187=C2=B0C and immediate shutdown during boot - based on cirtical
-> temperature being reached.
->
-> Busy here means, get_temp does not yet have data. Thermal zone
-> driver just reports any error to dmesg output.
+> - thermal core has a new devm_* API for registering cooling devices, thanks to Guenter R.
+>   I took the entire series, that is why you see changes on drivers/hwmon in this pull.
 
-Ah, that makes sense.
+This clashed badly with commit 6b1ec4789fb1 ("hwmon: (pwm-fan) Add RPM
+support via external interrupt"), which added a timer to the pwm-fan
+handling.
 
-I guess if we're switching to an interrupt-based driver, then we can
-just use a waitqueue, or is get_temp supposed to be atomic?
+In particular, that timer now needed the same kind of cleanup changes,
+and I'd like you guys (particularly Guenther, who was involved on both
+sides) to double-check my merge.
 
-Maxime
+The way I solved it was to just make the pwm_fan_pwm_disable()
+callback do both the pwm_diable() _and_ the del_timer_sync() on the
+new timer. That seemed to be the simplest solution that meshed with
+the new devm cleanup model, but while I build-tested the result, I
+obviously did no actual use testing. And maybe there's some reason why
+that approach is flawed.
 
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Guenther?
 
---7vj27y3kfhi2ktlo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXN17nAAKCRDj7w1vZxhR
-xZVgAQDEhhE/FQspXxx58VLtzI/e0Kz9gZa92QnGGjDbVWxBTwEA1iAzA+XGbDtR
-1TM7/Hc1lwDV+qLHJYnbwcFfq+6XBAg=
-=qzgC
------END PGP SIGNATURE-----
-
---7vj27y3kfhi2ktlo--
+                    Linus
