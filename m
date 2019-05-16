@@ -2,127 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C454020C87
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 18:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D60A20CA2
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 18:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726951AbfEPQGC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 12:06:02 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46552 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726336AbfEPQGC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 12:06:02 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4GG56OR033609
-        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 12:06:01 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2sh9auwawn-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 12:06:01 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Thu, 16 May 2019 17:05:38 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 16 May 2019 17:05:35 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4GG5Yv948365702
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 May 2019 16:05:34 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E85DB5204E;
-        Thu, 16 May 2019 16:05:33 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.91.88])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 0BEC65205A;
-        Thu, 16 May 2019 16:05:31 +0000 (GMT)
-Subject: Re: [RFCv2 0/6] TurboSched: A scheduler for sustaining Turbo
- Frequencies for longer durations
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, dietmar.eggemann@arm.com, dsmythies@telus.net
-References: <20190515135322.19393-1-parth@linux.ibm.com>
- <20190515164854.GZ2589@hirez.programming.kicks-ass.net>
-From:   Parth Shah <parth@linux.ibm.com>
-Date:   Thu, 16 May 2019 21:35:30 +0530
+        id S1726510AbfEPQL7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 12:11:59 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:51275 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726464AbfEPQL6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 12:11:58 -0400
+Received: from [192.168.178.167] ([109.104.36.193]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MiJhW-1gn2TT1ffC-00fP2t; Thu, 16 May 2019 18:11:33 +0200
+Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.2-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rui Zhang <rui.zhang@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20190516044313.GA17751@localhost.localdomain>
+ <CAHk-=wiaO_8SiEB9QM3vOTniiT67K6CBH0uHJ82-Dp_+6kxH3g@mail.gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Message-ID: <4803994d-f519-a6b6-f5bb-a2f50d91ecd7@i2se.com>
+Date:   Thu, 16 May 2019 18:11:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.0
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190515164854.GZ2589@hirez.programming.kicks-ass.net>
+In-Reply-To: <CAHk-=wiaO_8SiEB9QM3vOTniiT67K6CBH0uHJ82-Dp_+6kxH3g@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19051616-0012-0000-0000-0000031C671D
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19051616-0013-0000-0000-000021550957
-Message-Id: <82883320-fb98-ec7b-ad1a-0c4248a0225b@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-16_14:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905160102
+Content-Language: en-US
+X-Provags-ID: V03:K1:HfXg+VerHg3XpZ/wJRmyjEJyPoEOVangfVhRYd6re0+8tLoYnmn
+ oW1tto1qS1QQOe7GOCE7EoevUdRqBEDQ///1l974DU6oDx8+IabIbaeHwU/cfjP4DjKA6Br
+ iX868FUXz7c1nOxAIHoyQKpsGy9mRzS1My2eaC6up74sSVDaK/QmuAXrROr7bb8NTBl3wqX
+ WwVEm4CNLpPMKwjYQor6A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xkwv5xkBN+U=:bwfz0IV+WlLUs6KTbOUP5F
+ m86RxkHI2Kj0QzfcXKAjfZ5U5Tv7ptnKNtgLYdvqIaRk+mynEvOkxWqy/MzaMhk2DxJ8qmr1i
+ FBBq9iBvmcz6A0jmH8HHgyLkeFMI4b1ivawHRk9zA+MuopGSHO7SdkTaytpD95zlyhTHG7ZDQ
+ ucuLHN5pnxVV68A4Nmp9c0lUFiAVLgEK+i/F2C3PPpQ0XCvarGXzmUjPrxOHJqU2QX6PvWsGX
+ 7Q9b4MC3s9hQr7h6v0tAOK3o6Rmu+Uhgbp2eEQrGQ8hdzl6K99Bznt7mBbvxE1z2aXy5hPFUb
+ OV9sLFfI8Kx69V1noe0ltzTDcdPaH2a+ggeMHMgiSZZ9xquruK+FaGafE4VQTIudsJH48+EIl
+ rSt1kfKbUf/shkzxbsBa/sbVRmRUl1D+AK66qqyVbU/BiLoaN6Qynfy/xLAcuVSILSJOY4dbR
+ 7JdgG3YikQQCtVEL1l6/s9BDOO7LESCW0XUCY5LGG+iLrAm3N4R0kYfYfuwW78nhncv8jtp0m
+ sr0lIxldMQxoJvNbROex1vVUYSmoQEQq79zvls/eFyz56tPHv1DY/EovlT4wMNQR251Wjy0dG
+ T1UGNyfAZBE26//8UjJj16wsHH76ZeD17CE+X5ynrrYrtdL0Z6By2LMrwezH072eTf80EEZWU
+ rBOygeHEXUARE33jk7VUERqnLNl4Jm54LKIwbG4Djr1MUF7bzT0Q+/QXFtbrCrW1zLGjwZy74
+ f9Pte2LM5Iz96JyVVZepWzFQnZb4JJPFlHnxWCJVjG0cTnXW3KZNh+p2ZO8=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Linus,
 
+On 16.05.19 17:07, Linus Torvalds wrote:
+> On Wed, May 15, 2019 at 9:43 PM Eduardo Valentin <edubezval@gmail.com> wrote:
+>> - thermal core has a new devm_* API for registering cooling devices, thanks to Guenter R.
+>>   I took the entire series, that is why you see changes on drivers/hwmon in this pull.
+> This clashed badly with commit 6b1ec4789fb1 ("hwmon: (pwm-fan) Add RPM
+> support via external interrupt"), which added a timer to the pwm-fan
+> handling.
+>
+> In particular, that timer now needed the same kind of cleanup changes,
+> and I'd like you guys (particularly Guenther, who was involved on both
+> sides) to double-check my merge.
+>
+> The way I solved it was to just make the pwm_fan_pwm_disable()
+> callback do both the pwm_diable() _and_ the del_timer_sync() on the
+> new timer. That seemed to be the simplest solution that meshed with
+> the new devm cleanup model, but while I build-tested the result, I
+> obviously did no actual use testing. And maybe there's some reason why
+> that approach is flawed.
 
-On 5/15/19 10:18 PM, Peter Zijlstra wrote:
-> On Wed, May 15, 2019 at 07:23:16PM +0530, Parth Shah wrote:
->> Abstract
->> ========
->>
->> The modern servers allows multiple cores to run at range of
->> frequencies higher than rated range of frequencies. But the power budget
->> of the system inhibits sustaining these higher frequencies for
->> longer durations.
->>
->> However when certain cores are put to idle states, the power can be
->> effectively channelled to other busy cores, allowing them to sustain
->> the higher frequency.
->>
->> One way to achieve this is to pack tasks onto fewer cores keeping others idle,
->> but it may lead to performance penalty for such tasks and sustaining higher
->> frequencies proves to be of no benefit. But if one can identify unimportant low
->> utilization tasks which can be packed on the already active cores then waking up
->> of new cores can be avoided. Such tasks are short and/or bursty "jitter tasks"
->> and waking up new core is expensive for such case.
->>
->> Current CFS algorithm in kernel scheduler is performance oriented and hence
->> tries to assign any idle CPU first for the waking up of new tasks. This policy
->> is perfect for major categories of the workload, but for jitter tasks, one
->> can save energy by packing it onto active cores and allow other cores to run at
->> higher frequencies.
->>
->> These patch-set tunes the task wake up logic in scheduler to pack exclusively
->> classified jitter tasks onto busy cores. The work involves the use of additional
->> attributes inside "cpu" cgroup controller to manually classify tasks as jitter. 
-> 
-> Why does this make sense? Don't these higher freq bins burn power like
-> stupid? That is, it makes sense to use turbo-bins for single threaded
-> workloads that are CPU-bound and need performance.
-> 
-> But why pack a bunch of 'crap' tasks onto a core and give it turbo;
-> that's just burning power without getting anything back for it.
-> 
+i will try to test on our custom i.MX6 board. Unfortunately this take
+some time since it isn't mainline yet (at least until tomorrow).
 
-Thanks for taking interest in my patch series.
-I will try my best to answer your question.
+Stefan
 
-This patch series tries to pack jitter tasks on the busier cores to avoid waking
-up any idle core as long as possible. This approach is supposed to give more
-performance to the CPU bound tasks by sustaining Turbo for a longer duration.
-
-Current implementation for task wake up is biased towards waking an idle CPU first,
-which in turn consumes power as the CPU leaves idle domain.
-For the system supporting Turbo frequencies, power budget is fixed and hence to
-maintain this budget the system may throttle the frequency.
-
-So the idea is, if we can pack the jitter tasks on already running cores, then we
-can avoid waking up new cores and save power thereby sustaining Turbo for longer
-duration.
-
+>
+> Guenther?
+>
+>                     Linus
