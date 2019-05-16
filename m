@@ -2,56 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BD420AC0
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 17:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE59720B06
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 17:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727421AbfEPPKU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 11:10:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49990 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727642AbfEPPKQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 May 2019 11:10:16 -0400
-Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.2-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558019415;
-        bh=mUyc2xuEAed3mqC/ucfURS9n6vSCDevchf0xwuprgJY=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=NAEsEg81ofSviZZ7rqrBV0s5+zoHV2HvDsZQ335DSfniwDm0VXHZSC3S+l1DnVqmI
-         qZ1/WALenK1o/ZhwwRQ36x6w23yP2l5X5sO8vtTbwaTDI1JVDgmHNJL1kEPSr0iStB
-         4l3Ftm1DrVNtquDf1vqQRxzT2uNdEwa7teJIQ9rI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190516044313.GA17751@localhost.localdomain>
-References: <20190516044313.GA17751@localhost.localdomain>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190516044313.GA17751@localhost.localdomain>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal
- linus
-X-PR-Tracked-Commit-Id: 37bcec5d9f71bd13142a97d2196b293c9ac23823
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a455eda33faafcaac1effb31d682765b14ef868c
-Message-Id: <155801941590.14983.9829892889813749060.pr-tracker-bot@kernel.org>
-Date:   Thu, 16 May 2019 15:10:15 +0000
-To:     Eduardo Valentin <edubezval@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Rui Zhang <rui.zhang@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        id S1726801AbfEPPXD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 11:23:03 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41076 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727568AbfEPPXD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 11:23:03 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q17so2018085pfq.8
+        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 08:23:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RatfLeFW1W1PAQOYZjHmZ1EvB3m/ZFWDsSmlE4eB5TA=;
+        b=k6skFBX8Cz5Py454S2p2l8dOkOmY/q+Csr4dBPw3M35zGWyLwJSvFgS11iKH3C6V3M
+         MTr9CqQc6IhCwwA1J4q3YTUqxBSJZThn4yBYEPQfnL4ytBBRnCdovLJikDvx/Ndkm2b2
+         8ej1YfDXFyLJVuw22aUHlaM4ctgPSA88mKGNLjlzmLan1Q7uT0Ez/76NkSJ3ZURJCyq8
+         38IxfMxxFLQkE4ydHQHz0l49uxgbicTUjRU2WyKIOBZqqZzKsx1cB9a6+iqyDXW4rSvI
+         Nsz4VpwQozesX4/tBzIB0pJIaqKZv/cM8jDxKUHbSB7ks60/IXbzrxv58RfRQkF62Tes
+         Kh0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RatfLeFW1W1PAQOYZjHmZ1EvB3m/ZFWDsSmlE4eB5TA=;
+        b=fD5t224QMvl9OafCJMCW/iRfJ681/o36l9xX/19FoJHXzovCrl6D9dLvRb4nFWBXG1
+         BERu2Jg8bqCI/wKoqzmgZZv7GxNxnF5D5qSYw/p/LAHUP8QIuOwKqxKwj9b9Y2SUeD9e
+         k0a9vjZaY/OgVgVycInmd90lgVMg0HVEdFa5lQywAyb1cS/HWaO0sQ40KW+RB3UzymLa
+         ZdttedxokIcO+MzbgcgioiqrC63LXeATslD5VRLqVR+AfbwkKVMIMp0yO3pom/2RaFsu
+         m8CI/WYpJ/o8GFgFUcmpSR0n4C1q4rwtEAJGA1wrG6WO0WCE2VFUzx+Kr9pj/HkmozL7
+         9kHg==
+X-Gm-Message-State: APjAAAVeAoueM53WoNNyebpwZCApbBGjGsq9/+Qi7ASjZ7E1sgBV5uoD
+        Eq57uEpVuhawMhodWFwxIZHjo87UJJVCiBlHGc8=
+X-Google-Smtp-Source: APXvYqxeNr+MdDWiWuHTWTqqy3z5Ly9hhk2u0giMF6RLyo/pDNLlpteGewSk5DyowpxZ2mKTpmRyXPff/IrbrkKM7No=
+X-Received: by 2002:a62:1a51:: with SMTP id a78mr53460390pfa.133.1558020182082;
+ Thu, 16 May 2019 08:23:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com>
+ <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com> <20190515191518.GA21916@localhost.localdomain>
+In-Reply-To: <20190515191518.GA21916@localhost.localdomain>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Fri, 17 May 2019 00:22:51 +0900
+Message-ID: <CAC5umyhh7eNHa4D9sndsoB7EgTJZTEL9OTd=a+7x817XvPZ_eQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
+To:     Keith Busch <keith.busch@intel.com>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Wed, 15 May 2019 21:43:14 -0700:
+2019=E5=B9=B45=E6=9C=8816=E6=97=A5(=E6=9C=A8) 4:20 Keith Busch <keith.busch=
+@intel.com>:
+>
+> On Thu, May 16, 2019 at 12:17:16AM +0900, Akinobu Mita wrote:
+> > +int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
+> > +{
+> > +     struct nvme_smart_log *log;
+> > +     int ret;
+> > +     int i;
+> > +
+> > +     log =3D kzalloc(sizeof(*log), GFP_KERNEL);
+> > +     if (!log)
+> > +             return -ENOMEM;
+> > +
+> > +     ret =3D nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
+> > +                        log, sizeof(*log), 0);
+> > +     if (ret) {
+> > +             ret =3D ret > 0 ? -EINVAL : ret;
+> > +             goto free_log;
+> > +     }
+> > +
+> > +     for (i =3D 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
+> > +             struct thermal_zone_device *tzdev;
+> > +
+> > +             if (i && !le16_to_cpu(log->temp_sensor[i - 1]))
+> > +                     continue;
+> > +             if (ctrl->tzdev[i])
+> > +                     continue;
+> > +
+> > +             tzdev =3D nvme_thermal_zone_register(ctrl, i);
+> > +             if (!IS_ERR(tzdev))
+> > +                     ctrl->tzdev[i] =3D tzdev;
+> > +     }
+> > +
+> > +free_log:
+> > +     kfree(log);
+> > +
+> > +     return ret;
+> > +}
+>
+> Since this routine is intended for use in the device initialization path,
+> the error returns are extra important. We have used < 0 to indicate we
+> need to abandon initialization because we won't be able communicate with
+> the device if we proceed. Since thermal reporting is not mandatory to
+> manage our controllers, out-of-memory or a device that doesn't support
+> SMART should just return 0. We should only halt init if the controller
+> is unresponsive here.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal linus
+Make sense.  I'll change the return type to void, and print warning in
+case of some errors as Minwoo said in other reply.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a455eda33faafcaac1effb31d682765b14ef868c
+> In general, I'm okay with this feature.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+OK.  I'll prepare the next version.
