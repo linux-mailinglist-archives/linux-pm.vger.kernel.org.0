@@ -2,117 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B04220DF6
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 19:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFAF20E0A
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 19:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728788AbfEPR0p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 13:26:45 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:39725 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726696AbfEPR0o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 13:26:44 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w22so1888929pgi.6;
-        Thu, 16 May 2019 10:26:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=IlWeur6t+kwpySn24VqBEqPmtDVwsekAH2F04m0wTVs=;
-        b=kmjzUz3GIXj8W64WIGM6+ZbI2+dQj9d4/0V7occ3VNHHmSGZx+WJbW4ov8IlbOpc/Q
-         H06J4n6ZaSwGd7m/zNkCZ9brpjtsO2VyItzHeZv76NCFPvMkRDKroHSdbOFS86s2oaX3
-         4ENJ7aXVpwPqGZZP6sEuEJDitLli+kY6sS2YgtkdKDb33mMc0H5niZSwvwWoq8cE25es
-         z1n5KkU7sY3BayPkuPe3wNxlR7eqmuf7UOfxNRGzeyh3XGQCGFgjGJy6QZ0ZK86TBhSF
-         MkLcU9S8HW74a4Sz25uQLuACZAbr6wfsMD/3Kk6VY55w+awNLxFQhazriM2XTAoBknRT
-         GOwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=IlWeur6t+kwpySn24VqBEqPmtDVwsekAH2F04m0wTVs=;
-        b=cANxjfEYUPFy9j4JP2hMVfideVfCaFDTlTT6GHykju+46VqYUcQ99dLFjmDFFbtm59
-         CeT/zd19YuD9nsCgg5wGYri/90y+fqIQpI2Nh3EVU7IuWC9Ty6sSXPMaeUSkkUgVd3q6
-         o33WHJZBSPR0LrbT//2y/7bUrvKpATtFD3sI18bWm3+pbYEVz0JoSgny3kBs8E2nTAnm
-         xU+uSfHVIKToy4YL/QrkmDQCgHMelNrC8hIW9kloERPN4skIWcbS9Xu7KD4FTtmyfGWt
-         uV3kQoJBEe6aVMW28BRRVZa6ulugGhz+Reo3Z9VHVqo4JCYl1DWXsrgs2xYMuSpgfVMa
-         Cxgw==
-X-Gm-Message-State: APjAAAU8T2sgVHO2C0GRBnUHgZlIyy4Y4Afh+crC8y4OktAcxbGCXinl
-        CGDnwZhA65voc87nODJgWC4=
-X-Google-Smtp-Source: APXvYqxvISxdB727dwDNTOKXmKUrUn9+Kd3oUXSQ3tEcgfKkDjc40yubFAx2AFYNL5X0JTxXM4yK/A==
-X-Received: by 2002:aa7:8f22:: with SMTP id y2mr44011586pfr.22.1558027604243;
-        Thu, 16 May 2019 10:26:44 -0700 (PDT)
-Received: from localhost (68.168.130.77.16clouds.com. [68.168.130.77])
-        by smtp.gmail.com with ESMTPSA id r18sm16175557pfg.141.2019.05.16.10.26.43
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 May 2019 10:26:43 -0700 (PDT)
-From:   Yangtao Li <tiny.windzz@gmail.com>
-To:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        davem@davemloft.net, mchehab+samsung@kernel.org,
-        gregkh@linuxfoundation.org, linus.walleij@linaro.org,
-        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
-        paulmck@linux.ibm.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH v2 2/2] dt-bindings: thermal: add binding document for h6 thermal controller
-Date:   Thu, 16 May 2019 13:26:33 -0400
-Message-Id: <20190516172633.12607-3-tiny.windzz@gmail.com>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20190516172633.12607-1-tiny.windzz@gmail.com>
-References: <20190516172633.12607-1-tiny.windzz@gmail.com>
+        id S1727205AbfEPRgy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 13:36:54 -0400
+Received: from vps.xff.cz ([195.181.215.36]:38042 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726409AbfEPRgx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 May 2019 13:36:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1558028210; bh=Jbc9aeVDZK4IVUtlH1rcpyyERggWBjuR3RQpcFzD1T0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MlzYyqsQURfuYpPc0op+qkOyLkPN7dYIRo4j+mrkhYHYwLuQlaIADILnCGtJtfM/p
+         RYtugzjmO7W2kVQcT7sWXDmiim8a3h/ixlJwffwkjNodM1ejasX5tJQxeVlwlHpes7
+         kiNj2m5G9DqxzV/jlVa7mK4k/8GmC7OxVxUcO1Fk=
+Date:   Thu, 16 May 2019 19:36:49 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>, mark.rutland@arm.com,
+        daniel.lezcano@linaro.org, catalin.marinas@arm.com,
+        will.deacon@arm.com, bjorn.andersson@linaro.org,
+        mchehab+samsung@kernel.org, paulmck@linux.ibm.com,
+        stefan.wahren@i2se.com, linux-pm@vger.kernel.org, wens@csie.org,
+        jagan@amarulasolutions.com, andy.gross@linaro.org,
+        rui.zhang@intel.com, devicetree@vger.kernel.org,
+        marc.w.gonzalez@free.fr, edubezval@gmail.com,
+        enric.balletbo@collabora.com, robh+dt@kernel.org,
+        Jonathan.Cameron@huawei.com, linux-arm-kernel@lists.infradead.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        olof@lixom.net, davem@davemloft.net
+Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
+Message-ID: <20190516173649.5s2s32ol43kbbhzg@core.my.home>
+Mail-Followup-To: Maxime Ripard <maxime.ripard@bootlin.com>,
+        Yangtao Li <tiny.windzz@gmail.com>, mark.rutland@arm.com,
+        daniel.lezcano@linaro.org, catalin.marinas@arm.com,
+        will.deacon@arm.com, bjorn.andersson@linaro.org,
+        mchehab+samsung@kernel.org, paulmck@linux.ibm.com,
+        stefan.wahren@i2se.com, linux-pm@vger.kernel.org, wens@csie.org,
+        jagan@amarulasolutions.com, andy.gross@linaro.org,
+        rui.zhang@intel.com, devicetree@vger.kernel.org,
+        marc.w.gonzalez@free.fr, edubezval@gmail.com,
+        enric.balletbo@collabora.com, robh+dt@kernel.org,
+        Jonathan.Cameron@huawei.com, linux-arm-kernel@lists.infradead.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        olof@lixom.net, davem@davemloft.net
+References: <20190512082614.9045-1-tiny.windzz@gmail.com>
+ <20190512082614.9045-3-tiny.windzz@gmail.com>
+ <20190512133930.t5txssl7mou2gljt@flea>
+ <20190512214128.qjyys3vfpwdiacib@core.my.home>
+ <20190516150252.hf4u3bloo37chy6q@flea>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190516150252.hf4u3bloo37chy6q@flea>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds binding document for allwinner h6 thermal controller.
+Hello Maxime,
 
-Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
----
- .../bindings/thermal/sun8i-thermal.txt        | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sun8i-thermal.txt
+On Thu, May 16, 2019 at 05:02:52PM +0200, Maxime Ripard wrote:
+> Hi,
+> 
+> On Sun, May 12, 2019 at 11:41:28PM +0200, Ondřej Jirman wrote:
+> > > > +static int tsens_get_temp(void *data, int *temp)
+> > > > +{
+> > > > +	struct tsensor *s = data;
+> > > > +	struct tsens_device *tmdev = s->tmdev;
+> > > > +	int val;
+> > > > +
+> > > > +	regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
+> > > > +		    0x4 * s->id, &val);
+> > > > +
+> > > > +	if (unlikely(val == 0))
+> > > > +		return -EBUSY;
+> > >
+> > > I'm not sure why a val equals to 0 would be associated with EBUSY?
+> >
+> > Thermal zone driver can (will) call get_temp before we got the
+> > first interrupt and the thermal data. In that case val will be 0.
+> >
+> > Resulting in:
+> >
+> >  (val + offset) * scale = (-2794) * -67 = 187198
+> >
+> > 187°C and immediate shutdown during boot - based on cirtical
+> > temperature being reached.
+> >
+> > Busy here means, get_temp does not yet have data. Thermal zone
+> > driver just reports any error to dmesg output.
+> 
+> Ah, that makes sense.
+> 
+> I guess if we're switching to an interrupt-based driver, then we can
+> just use a waitqueue, or is get_temp supposed to be atomic?
 
-diff --git a/Documentation/devicetree/bindings/thermal/sun8i-thermal.txt b/Documentation/devicetree/bindings/thermal/sun8i-thermal.txt
-new file mode 100644
-index 000000000000..bd417260501f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sun8i-thermal.txt
-@@ -0,0 +1,34 @@
-+* Allwinner Thermal
-+
-+This describes the device tree binding for the Allwinner thermal controller
-+which measures the on-SoC temperatures.
-+
-+Required properties:
-+- compatible:
-+  - "allwinner,sun50i-h6-ths" : For H6
-+- reg: Address range of the thermal controller
-+- clocks, clock-names: Clocks needed for the thermal controller.
-+		       The required clocks for h6 are: "bus".
-+- resets: Reference to the reset controller controlling the thermal controller.
-+- interrupts: IRQ for the thermal controller
-+- #thermal-sensor-cells : For H6 Should be 1.
-+			  See ./thermal.txt for a description.
-+
-+Optional properties:
-+- nvmem-cells: A phandle to the calibration data provided by a nvmem device. If
-+	       unspecified default values shall be used.
-+- nvmem-cell-names: Should be "calib".
-+
-+Example:
-+
-+	ths: ths@1c25000 {
-+		compatible = "allwinner,sun50i-h6-ths";
-+		reg = <0x05070400 0x100>;
-+		clocks = <&ccu CLK_BUS_THS>;
-+		clock-names = "bus";
-+		resets = <&ccu RST_BUS_THS>;
-+		interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
-+		nvmem-cells = <&tsen_calib>;
-+		nvmem-cell-names = "calib";
-+		#thermal-sensor-cells = <1>;
-+	};
--- 
-2.17.0
+I'm not entirely sure, because I might have inadverently used a combination of
+interrupt and polling when testing this. It may be that if we set polling-delay
+to 0 in dts, that tz core will not try to call get_temp prematurely at all, and
+will simply wait for temperature update from the interrupt.
+
+I guess this needs to be tested/checked in tz code.
+
+regards,
+	o.
+
+> Maxime
+> 
+> --
+> Maxime Ripard, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+
+
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
