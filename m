@@ -2,35 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D3A20586
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 13:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC33A2057C
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 13:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728085AbfEPLlQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 07:41:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49908 "EHLO mail.kernel.org"
+        id S1727227AbfEPLlV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 07:41:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50036 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728027AbfEPLlP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 May 2019 07:41:15 -0400
+        id S1727432AbfEPLlV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 May 2019 07:41:21 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 32ADC20848;
-        Thu, 16 May 2019 11:41:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B710621473;
+        Thu, 16 May 2019 11:41:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558006875;
-        bh=T6aXJe2Zr2//tXSlxLh7XzBkICmPA++E5NuVLPMekLw=;
+        s=default; t=1558006880;
+        bh=bUyXWGB3gUA1gzD12Q5t7MP+umkmBgIDi9SySOhsxUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q9avlh4QHJuXYyrvO+MyHvNJo4Zk+99MAi/vFFNmkLjqoGsfUoK1zwfaT9k5WxRoe
-         y7f5z7OdEFhvroMzBWP/SFbBiUC1t8rHS7/IKa0/D20RbFDHld4FcsFFwUUxB7rG2l
-         bN50lTMjdHKs6bTqZUV1NjDRI+OB0YamOvKxZfVs=
+        b=c+d2eTeK/DELHxrK9MafJ8yPCtEp0ONuG24GgY2pFWjAdVi5StOhAVpSBhiIeMSqJ
+         GPP5XS0MjJy/lQXtivJnHweBll9LDWRC7CA49QquazwwcJewUzl12eKQupcZ1JGR0T
+         d1oXoIvt/ReiyUOyFdD/lopgOItRwNOalfRxQ3SQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tony Lindgren <tony@atomide.com>, Pavel Machek <pavel@ucw.cz>,
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Chris Healy <cphealy@gmail.com>, linux-pm@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 06/16] power: supply: cpcap-battery: Fix division by zero
-Date:   Thu, 16 May 2019 07:40:57 -0400
-Message-Id: <20190516114107.8963-6-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 11/16] power: supply: sysfs: prevent endless uevent loop with CONFIG_POWER_SUPPLY_DEBUG
+Date:   Thu, 16 May 2019 07:41:02 -0400
+Message-Id: <20190516114107.8963-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190516114107.8963-1-sashal@kernel.org>
 References: <20190516114107.8963-1-sashal@kernel.org>
@@ -43,44 +44,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Andrey Smirnov <andrew.smirnov@gmail.com>
 
-[ Upstream commit dbe7208c6c4aec083571f2ec742870a0d0edbea3 ]
+[ Upstream commit 349ced9984ff540ce74ca8a0b2e9b03dc434b9dd ]
 
-If called fast enough so samples do not increment, we can get
-division by zero in kernel:
+Fix a similar endless event loop as was done in commit
+8dcf32175b4e ("i2c: prevent endless uevent loop with
+CONFIG_I2C_DEBUG_CORE"):
 
-__div0
-cpcap_battery_cc_raw_div
-cpcap_battery_get_property
-power_supply_get_property.part.1
-power_supply_get_property
-power_supply_show_property
-power_supply_uevent
+  The culprit is the dev_dbg printk in the i2c uevent handler. If
+  this is activated (for instance by CONFIG_I2C_DEBUG_CORE) it results
+  in an endless loop with systemd-journald.
 
-Fixes: 874b2adbed12 ("power: supply: cpcap-battery: Add a battery driver")
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Acked-by: Pavel Machek <pavel@ucw.cz>
+  This happens if user-space scans the system log and reads the uevent
+  file to get information about a newly created device, which seems
+  fair use to me. Unfortunately reading the "uevent" file uses the
+  same function that runs for creating the uevent for a new device,
+  generating the next syslog entry
+
+Both CONFIG_I2C_DEBUG_CORE and CONFIG_POWER_SUPPLY_DEBUG were reported
+in https://bugs.freedesktop.org/show_bug.cgi?id=76886 but only former
+seems to have been fixed. Drop debug prints as it was done in I2C
+subsystem to resolve the issue.
+
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc: Chris Healy <cphealy@gmail.com>
+Cc: linux-pm@vger.kernel.org
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/cpcap-battery.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/power/supply/power_supply_sysfs.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
-index ee71a2b37b12c..fe7fcf3a2ad03 100644
---- a/drivers/power/supply/cpcap-battery.c
-+++ b/drivers/power/supply/cpcap-battery.c
-@@ -221,6 +221,9 @@ static int cpcap_battery_cc_raw_div(struct cpcap_battery_ddata *ddata,
- 	int avg_current;
- 	u32 cc_lsb;
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index 5204f115970fe..eb5dc74820539 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -325,15 +325,11 @@ int power_supply_uevent(struct device *dev, struct kobj_uevent_env *env)
+ 	char *prop_buf;
+ 	char *attrname;
  
-+	if (!divider)
-+		return 0;
-+
- 	sample &= 0xffffff;		/* 24-bits, unsigned */
- 	offset &= 0x7ff;		/* 10-bits, signed */
+-	dev_dbg(dev, "uevent\n");
+-
+ 	if (!psy || !psy->desc) {
+ 		dev_dbg(dev, "No power supply yet\n");
+ 		return ret;
+ 	}
  
+-	dev_dbg(dev, "POWER_SUPPLY_NAME=%s\n", psy->desc->name);
+-
+ 	ret = add_uevent_var(env, "POWER_SUPPLY_NAME=%s", psy->desc->name);
+ 	if (ret)
+ 		return ret;
+@@ -369,8 +365,6 @@ int power_supply_uevent(struct device *dev, struct kobj_uevent_env *env)
+ 			goto out;
+ 		}
+ 
+-		dev_dbg(dev, "prop %s=%s\n", attrname, prop_buf);
+-
+ 		ret = add_uevent_var(env, "POWER_SUPPLY_%s=%s", attrname, prop_buf);
+ 		kfree(attrname);
+ 		if (ret)
 -- 
 2.20.1
 
