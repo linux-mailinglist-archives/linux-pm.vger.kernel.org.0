@@ -2,93 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4717620655
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 13:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA1E20663
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 14:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727532AbfEPLul (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 07:50:41 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:41571 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727527AbfEPLuk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 07:50:40 -0400
-Received: by mail-lj1-f196.google.com with SMTP id k8so2794457lja.8
-        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 04:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZfZWKHa7k32vSF2Rgion0TnHTAjuA1aCE2qsRonqXP0=;
-        b=axwfrku8av26C74Qcnj8NMFl8LQW3ytVsyxJwHyHrABKFSul4eTIQRAgniBSpRNR2T
-         SUCKllbRVUhjH9a5M8vQ2ZctPU2aRCPW2zzHfrExJfmGQGGJKj+UZ8gMQKIIKMCg8q+W
-         d71EwYTR3Nq/rACyFL4CAxYsp4QgSeBRv2U7Q+fNBUsAFO7pdw4soy6W9pOYAyCeXSbD
-         CqdAcuzevt6wp/8joMtEkxOTMm36jy27fYgJD0kUVC1x24NqeVW7JvAfFlnUf7AVqtb0
-         wSTH5rhMPlygfwvgCPaK4TGfEgwd4+eSNjsCqRVenL0HNST+g99Optp097VsBxKhX9Dm
-         4j2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZfZWKHa7k32vSF2Rgion0TnHTAjuA1aCE2qsRonqXP0=;
-        b=fe2hXZUQ5tDm+YntzMC4JSqzfs9hG+RvAnbIPBh/Vdyr9jGvQUGaJs5hs0dZMit2Zx
-         RioFj2OjUUslgd9wjMQERw5WWV3GtMjNW69+g3h5W8JRlVS5KXAhnE0vgYxLZhG8GYur
-         fyBn9rlO69+orL79fdYcgJMmoiFkAhZB7cliaq2lug3758KUkJoyFIFxwEjs3GGDLJet
-         LcugGFcALEktxKorxWNZOkZPB/2LNf0TcpD0XkUmacqM3ALxcCKvYgFX3Wr9822yYycB
-         WmFrde3cy55TW6NkgtT41Nsz/wneddfzA4URNRjk0gYVLOb+iZA2KWrxLjixe1pRpP/w
-         E2OQ==
-X-Gm-Message-State: APjAAAWCM/6eNX+kFtennkYnirAFT0eTLPpig83wHJqorUR7yrjsAAjd
-        mL1cRQF3qnXu02AKxc6EoCkYtdfvHa4tS+npRpdeyg==
-X-Google-Smtp-Source: APXvYqwaxRjeq7pjR9npAXmwgyhZKdqhC73PwgIVTdnHjqNpDaNtDJResi7MGSU8C3U2sKn8oJY/87TKdcHLFfT0UHI=
-X-Received: by 2002:a2e:60a:: with SMTP id 10mr3127929ljg.126.1558007438447;
- Thu, 16 May 2019 04:50:38 -0700 (PDT)
+        id S1726995AbfEPLxX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 07:53:23 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:19201 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726878AbfEPLxX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 May 2019 07:53:23 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 3C055305B418;
+        Thu, 16 May 2019 11:53:23 +0000 (UTC)
+Received: from prarit.bos.redhat.com (prarit-guest.khw1.lab.eng.bos.redhat.com [10.16.200.63])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B5742600C4;
+        Thu, 16 May 2019 11:53:22 +0000 (UTC)
+Subject: Re: [PATCH] x86/turbostat: Dynamically increase output buffer
+To:     Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <20190515233949.GA4369@hori.linux.bs1.fc.nec.co.jp>
+From:   Prarit Bhargava <prarit@redhat.com>
+Message-ID: <c9d381c9-6db4-326d-ceba-ebc5baca36cd@redhat.com>
+Date:   Thu, 16 May 2019 07:53:22 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <cover.1553828158.git.vilhelm.gray@gmail.com> <1cc8b30bb3954ca2a0961ffb0a2eed8a005ed670.1553828158.git.vilhelm.gray@gmail.com>
-In-Reply-To: <1cc8b30bb3954ca2a0961ffb0a2eed8a005ed670.1553828158.git.vilhelm.gray@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 16 May 2019 13:50:26 +0200
-Message-ID: <CACRpkdbCt1PAJ1rBvKvZ2ydLgJmKXuLN4mRtSU8CaW=U7EcFbQ@mail.gmail.com>
-Subject: Re: [PATCH v14 01/11] bitops: Introduce the for_each_set_clump8 macro
-To:     William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Phil Reid <preid@electromag.com.au>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190515233949.GA4369@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Thu, 16 May 2019 11:53:23 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 29, 2019 at 4:03 AM William Breathitt Gray
-<vilhelm.gray@gmail.com> wrote:
 
-> This macro iterates for each 8-bit group of bits (clump) with set bits,
-> within a bitmap memory region. For each iteration, "start" is set to the
-> bit offset of the found clump, while the respective clump value is
-> stored to the location pointed by "clump". Additionally, the
-> bitmap_get_value8 and bitmap_set_value8 functions are introduced to
-> respectively get and set an 8-bit value in a bitmap memory region.
->
-> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On 5/15/19 7:39 PM, Naoya Horiguchi wrote:
+> Hi Prarit,
+> 
+>> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+>> index c7727be9719f..12c6be991968 100644
+>> --- a/tools/power/x86/turbostat/turbostat.c
+>> +++ b/tools/power/x86/turbostat/turbostat.c
+>> @@ -625,6 +625,33 @@ unsigned long long bic_lookup(char *name_list, enum show_hide_mode mode)
+>>  	return retval;
+>>  }
+>>  
+>> +static int curr_buf_size;
+>> +static int output_buffer_size;
+>> +
+>> +void output(char *fmt, ...)
+>> +{
+>> +	va_list argptr;
+>> +	va_list argptr2;
+>> +	char *new_output_buffer;
+>> +
+>> +	va_start(argptr, fmt);
+>> +	va_copy(argptr2, argptr);
+>> +	curr_buf_size += vsnprintf(NULL, 0, fmt, argptr2);
+>> +	if (curr_buf_size >= output_buffer_size) {
+>> +		/* increase the output buffer size by 1024 */
+>> +		output_buffer_size += 1024;
+>> +		new_output_buffer = calloc(1, output_buffer_size);
+>> +		if (!new_output_buffer)
+>> +			err(-1, "calloc new output buffer");
+>> +		strncpy(new_output_buffer, output_buffer,
+>> +			(int)(outp - output_buffer));
+> 
+> You allocate a new buffer and copy data unconditionally in every buffer
+> extension, which looks to me slow/inefficient.
+> Why don't you using realloc() as done in my previous patch
+> (https://lkml.org/lkml/2019/4/18/1330)?
 
-Yours,
-Linus Walleij
+Oh, I didn't see your patch.  Has Len commented on it?
+
+> realloc() internally relocates the buffer if necessary (i.e. overlapping
+> is detected).> If you are worry about zeroing of the extended region, you may add memset().
+
+How about this?  Why don't I add the memset, remove the extra line below, and
+use your append_to_output_buffer(), but rename it to just output()?
+
+I'll add a Signed-off-by: from you and resubmit?  Are you okay with that?
+
+P.
+
+> 
+>> +		outp = new_output_buffer + (outp - output_buffer);
+>> +		free(output_buffer);
+>> +		output_buffer = new_output_buffer;
+>> +	}
+>> +	outp += vsprintf(outp, fmt, argptr);
+>> +	va_end(argptr);
+>> +}
+>>  
+>>  void print_header(char *delim)
+>>  {
+>> @@ -632,173 +659,173 @@ void print_header(char *delim)
+> ...
+>>  		if (DO_BIC(BIC_Pkgpc6))
+>> -			outp += sprintf(outp, "pc6: %016llX\n", p->pc6);
+>> +			output("pc6: %016llX\n", p->pc6);
+>>  		if (DO_BIC(BIC_Pkgpc7))
+>> -			outp += sprintf(outp, "pc7: %016llX\n", p->pc7);
+>> -		outp += sprintf(outp, "pc8: %016llX\n", p->pc8);
+>> -		outp += sprintf(outp, "pc9: %016llX\n", p->pc9);
+>> -		outp += sprintf(outp, "pc10: %016llX\n", p->pc10);
+>> -		outp += sprintf(outp, "pc10: %016llX\n", p->pc10);
+>> -		outp += sprintf(outp, "cpu_lpi: %016llX\n", p->cpu_lpi);
+>> -		outp += sprintf(outp, "sys_lpi: %016llX\n", p->sys_lpi);
+>> -		outp += sprintf(outp, "Joules PKG: %0X\n", p->energy_pkg);
+>> -		outp += sprintf(outp, "Joules COR: %0X\n", p->energy_cores);
+>> -		outp += sprintf(outp, "Joules GFX: %0X\n", p->energy_gfx);
+>> -		outp += sprintf(outp, "Joules RAM: %0X\n", p->energy_dram);
+>> -		outp += sprintf(outp, "Throttle PKG: %0X\n",
+>> +			output("pc7: %016llX\n", p->pc7);
+>> +		output("pc8: %016llX\n", p->pc8);
+>> +		output("pc9: %016llX\n", p->pc9);
+>> +		output("pc10: %016llX\n", p->pc10);
+>> +		output("pc10: %016llX\n", p->pc10);
+> 
+> You can remove the duplicate line.
+> 
+> Thanks,
+> Naoya Horiguchi
+> 
