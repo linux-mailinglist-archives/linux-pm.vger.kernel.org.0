@@ -2,93 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D63209D6
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 16:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 359B420A94
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 17:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbfEPOgH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 10:36:07 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38168 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726687AbfEPOgH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 10:36:07 -0400
-Received: by mail-pf1-f194.google.com with SMTP id b76so1956867pfb.5
-        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 07:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Z6qc+xOm2mSY89YuD64kBnRl0lHCdqO6siMkABQG/tQ=;
-        b=kvfajCTwE168YKYYVnpejF49F7QgA/sI8IkR1mGExszOMXoDHkiw2gfW1k7K7emDqT
-         gW225qmmYOHVcXMEzXNwTqG8V/sehXeCqsDCKbbh/lSCH+xvw+vdKsL3nnta61rB7Gsl
-         TZGJTzkzgNAEHI4E92y8BEKQUt1ft30R6GgYUERKeMnpW9QwXHSY5AzpNSxxlhOjJCOx
-         CBTFJ6rIEx07fpX8L3FdoIezgAkfklL0PYjcLTpHBcaT2AkglhyJkfwktl+gU+MfOph8
-         RlUohURVcdOPlrTxF7wUVZV+dmbPDV7egtLFQgr2nwW3yb7Egi8wNMi9mdln0hdG5mJ2
-         nnCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Z6qc+xOm2mSY89YuD64kBnRl0lHCdqO6siMkABQG/tQ=;
-        b=c9nZWKlxVK8oo1YCP4vfYPZhnL3ffymROgdmlsUsHEW8xse14WZiHTVlT3ZfmrsBKf
-         ZVaDffURL8/UQscNaOLUIwA+AQdRjAyCHOoUc0YXsnippi2Yskw6S2DHn1ssPO7Ypi5q
-         Mejd04bGynL/1sEI4UDAc9W27j944jNeBvjBScVQbIeXSeLpOYmQqnuwrj9Ep2Y2VE6V
-         f2U37JK4C9yJkXOaUrxw35vzVMRjeYeMn/pKPZ2IHAj3ip1p4xev3I1uXC4WLsTT0R3Q
-         F/TqgxElqI8VdnakQjKHxOrCl4iOtR2e1rHSmm7hbjTov5pwsYmo9PwQldBcmdyWz4AS
-         oIuw==
-X-Gm-Message-State: APjAAAVZ0PV9jRko3Agq/gRigxC83cvZP/fuydxZ/fg0g0G9WZ5Gs9v/
-        PYL+WNNGUHTdxWcW4ek6a8R4BJ0HP8yS8zb7hhk=
-X-Google-Smtp-Source: APXvYqzUd0FpORBfMUBCtYZD0eBrsi/cm9uTYfatp9Rvw0K4bfMa/R3P/Ge8HZtbKCnlO+nXa6XPepUPHKgD/uQj6gk=
-X-Received: by 2002:a62:86c4:: with SMTP id x187mr53672089pfd.34.1558017366120;
- Thu, 16 May 2019 07:36:06 -0700 (PDT)
+        id S1726889AbfEPPDE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 11:03:04 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:58399 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726687AbfEPPDE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 11:03:04 -0400
+Received: from localhost (unknown [80.215.79.199])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 1129E200018;
+        Thu, 16 May 2019 15:02:52 +0000 (UTC)
+Date:   Thu, 16 May 2019 17:02:52 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Yangtao Li <tiny.windzz@gmail.com>, mark.rutland@arm.com,
+        daniel.lezcano@linaro.org, catalin.marinas@arm.com,
+        will.deacon@arm.com, bjorn.andersson@linaro.org,
+        mchehab+samsung@kernel.org, paulmck@linux.ibm.com,
+        stefan.wahren@i2se.com, linux-pm@vger.kernel.org, wens@csie.org,
+        jagan@amarulasolutions.com, andy.gross@linaro.org,
+        rui.zhang@intel.com, devicetree@vger.kernel.org,
+        marc.w.gonzalez@free.fr, edubezval@gmail.com,
+        enric.balletbo@collabora.com, robh+dt@kernel.org,
+        Jonathan.Cameron@huawei.com, linux-arm-kernel@lists.infradead.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        olof@lixom.net, davem@davemloft.net
+Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
+Message-ID: <20190516150252.hf4u3bloo37chy6q@flea>
+References: <20190512082614.9045-1-tiny.windzz@gmail.com>
+ <20190512082614.9045-3-tiny.windzz@gmail.com>
+ <20190512133930.t5txssl7mou2gljt@flea>
+ <20190512214128.qjyys3vfpwdiacib@core.my.home>
 MIME-Version: 1.0
-References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com> <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
-In-Reply-To: <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Thu, 16 May 2019 23:35:55 +0900
-Message-ID: <CAC5umygg7BPhyoKsBDPAoafXHmJnqE1gEarafJDRCrdUnw-3aA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
-To:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7vj27y3kfhi2ktlo"
+Content-Disposition: inline
+In-Reply-To: <20190512214128.qjyys3vfpwdiacib@core.my.home>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=E5=B9=B45=E6=9C=8816=E6=97=A5(=E6=9C=A8) 0:17 Akinobu Mita <akinobu.mi=
-ta@gmail.com>:
->
-> The NVMe controller reports up to nine temperature values in the SMART /
-> Health log page (the composite temperature and temperature sensor 1 throu=
-gh
-> temperature sensor 8).
-> The temperature threshold feature (Feature Identifier 04h) configures the
-> asynchronous event request command to complete when the temperature is
-> crossed its correspoinding temperature threshold.
->
-> This adds infrastructure to provide these temperatures and thresholds via
-> thermal zone devices.
->
-> The nvme_thermal_zones_register() creates up to nine thermal zone devices
-> for valid temperature sensors including composite temperature.
->
-> /sys/class/thermal/thermal_zone[0-*]:
->     |---temp: Temperature
->     |---trip_point_0_temp: Over temperature threshold
->     |---trip_point_0_hyst: Under temperature threshold
 
-I misunderstood the under temperature threshold.  It is not hysteresis
-for the upper temperature threshold.  It is used to notify cold temperature
-that the device may not correctly work.
+--7vj27y3kfhi2ktlo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So we should provide another trip point for under temperature threshold,
-but there is no suitable thermal trip type for cold temperature.
+Hi,
 
-I'm going to remove trip_point_0_hyst and not utilize the under temperature
-threshold.
+On Sun, May 12, 2019 at 11:41:28PM +0200, Ond=C5=99ej Jirman wrote:
+> > > +static int tsens_get_temp(void *data, int *temp)
+> > > +{
+> > > +	struct tsensor *s =3D data;
+> > > +	struct tsens_device *tmdev =3D s->tmdev;
+> > > +	int val;
+> > > +
+> > > +	regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
+> > > +		    0x4 * s->id, &val);
+> > > +
+> > > +	if (unlikely(val =3D=3D 0))
+> > > +		return -EBUSY;
+> >
+> > I'm not sure why a val equals to 0 would be associated with EBUSY?
+>
+> Thermal zone driver can (will) call get_temp before we got the
+> first interrupt and the thermal data. In that case val will be 0.
+>
+> Resulting in:
+>
+>  (val + offset) * scale =3D (-2794) * -67 =3D 187198
+>
+> 187=C2=B0C and immediate shutdown during boot - based on cirtical
+> temperature being reached.
+>
+> Busy here means, get_temp does not yet have data. Thermal zone
+> driver just reports any error to dmesg output.
+
+Ah, that makes sense.
+
+I guess if we're switching to an interrupt-based driver, then we can
+just use a waitqueue, or is get_temp supposed to be atomic?
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--7vj27y3kfhi2ktlo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXN17nAAKCRDj7w1vZxhR
+xZVgAQDEhhE/FQspXxx58VLtzI/e0Kz9gZa92QnGGjDbVWxBTwEA1iAzA+XGbDtR
+1TM7/Hc1lwDV+qLHJYnbwcFfq+6XBAg=
+=qzgC
+-----END PGP SIGNATURE-----
+
+--7vj27y3kfhi2ktlo--
