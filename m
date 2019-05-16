@@ -2,118 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3999A209CA
-	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 16:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D63209D6
+	for <lists+linux-pm@lfdr.de>; Thu, 16 May 2019 16:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727487AbfEPOcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 10:32:18 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41589 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726943AbfEPOcS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 10:32:18 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q17so1943166pfq.8
-        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 07:32:17 -0700 (PDT)
+        id S1726692AbfEPOgH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 10:36:07 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38168 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726687AbfEPOgH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 May 2019 10:36:07 -0400
+Received: by mail-pf1-f194.google.com with SMTP id b76so1956867pfb.5
+        for <linux-pm@vger.kernel.org>; Thu, 16 May 2019 07:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=USTSvosZQUwlXRNslyvBhxvhMTuh+Dka6Kqkcn0/koE=;
-        b=HDZ5DESSf2+w/sQOh+tvO5tlHvqP3VAIAW1HMBygMxEriMoQQsX3DYKC5JS+EvaxMc
-         Q0X9rMfzmuaoaEclHD0L7pHm9HVAmpuEngUAqRD7DkAY51M/oWYYLdpiKVLictrefpjW
-         9gtLsWXzgLMJqYmwxZY8M3nTQCf0t+/kiMTFT6C83NzLY0G9dzkKAn4Mpu2ElkOp8ebQ
-         IBdFpCovUnBnQHztto6/2JYntlnCTta8FBytwMW2knLxKLGtSPUYIDkLeTv+zsscznyL
-         KCsq8X6uWZBiEWKCT8kgjlQOqnOPytvbFBOePLYdq05KpT7yx1Sk4iJ8JVALNyz4zD8v
-         KP+g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Z6qc+xOm2mSY89YuD64kBnRl0lHCdqO6siMkABQG/tQ=;
+        b=kvfajCTwE168YKYYVnpejF49F7QgA/sI8IkR1mGExszOMXoDHkiw2gfW1k7K7emDqT
+         gW225qmmYOHVcXMEzXNwTqG8V/sehXeCqsDCKbbh/lSCH+xvw+vdKsL3nnta61rB7Gsl
+         TZGJTzkzgNAEHI4E92y8BEKQUt1ft30R6GgYUERKeMnpW9QwXHSY5AzpNSxxlhOjJCOx
+         CBTFJ6rIEx07fpX8L3FdoIezgAkfklL0PYjcLTpHBcaT2AkglhyJkfwktl+gU+MfOph8
+         RlUohURVcdOPlrTxF7wUVZV+dmbPDV7egtLFQgr2nwW3yb7Egi8wNMi9mdln0hdG5mJ2
+         nnCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=USTSvosZQUwlXRNslyvBhxvhMTuh+Dka6Kqkcn0/koE=;
-        b=U9t6rKafAlCK0B+qvVbXh5sMqDzdYtLvV2rzgENbRVqJaWi4yPOiOEGS9ugubCcYy8
-         f7c7pOIO5xO2eiHq0bWClL5uwYOWakONv6NzZ077g8ZRsaTLWGFrBlnnk3CR/Fpop248
-         uayPITevduqp9HqHf+KUHqdRFRDRZOwjcalkG1sUCzkJaEk01hMqab6dYJeGNcZ/zpWm
-         XdYvt7E0Hhjy8t13ljnFimSP/HheAjJzsD7To9mQrC5Gi3P80/LFswaZBFfzF9pKcZWo
-         IxmUG3btXHpX77W4nK1czr1A5kclBghUdg9C0FPk+Qmv8Imq73q7+UXUtAeXpgbACinY
-         4dkA==
-X-Gm-Message-State: APjAAAVoU2OdGk5lD2tG7BNhsRV4SumZuZitZDOy0XJGOPlznSsHXRan
-        UuX4F5EjpzObwLfCphssPYVSeoSIGJ0=
-X-Google-Smtp-Source: APXvYqwCpI4XV53P0/CJGDU6R6OJTH8Uh6keGYXPsieiQpLG8032FEf/PC6zQYVpJaJ17vwm6ROlJQ==
-X-Received: by 2002:aa7:880f:: with SMTP id c15mr56520046pfo.100.1558017137148;
-        Thu, 16 May 2019 07:32:17 -0700 (PDT)
-Received: from localhost ([123.213.206.190])
-        by smtp.gmail.com with ESMTPSA id f28sm12694022pfk.104.2019.05.16.07.32.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 May 2019 07:32:16 -0700 (PDT)
-Date:   Thu, 16 May 2019 23:32:14 +0900
-From:   Minwoo Im <minwoo.im.dev@gmail.com>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        Keith Busch <keith.busch@intel.com>,
-        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@fb.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
-Message-ID: <20190516143212.GE24001@minwooim-desktop>
-References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com>
- <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Z6qc+xOm2mSY89YuD64kBnRl0lHCdqO6siMkABQG/tQ=;
+        b=c9nZWKlxVK8oo1YCP4vfYPZhnL3ffymROgdmlsUsHEW8xse14WZiHTVlT3ZfmrsBKf
+         ZVaDffURL8/UQscNaOLUIwA+AQdRjAyCHOoUc0YXsnippi2Yskw6S2DHn1ssPO7Ypi5q
+         Mejd04bGynL/1sEI4UDAc9W27j944jNeBvjBScVQbIeXSeLpOYmQqnuwrj9Ep2Y2VE6V
+         f2U37JK4C9yJkXOaUrxw35vzVMRjeYeMn/pKPZ2IHAj3ip1p4xev3I1uXC4WLsTT0R3Q
+         F/TqgxElqI8VdnakQjKHxOrCl4iOtR2e1rHSmm7hbjTov5pwsYmo9PwQldBcmdyWz4AS
+         oIuw==
+X-Gm-Message-State: APjAAAVZ0PV9jRko3Agq/gRigxC83cvZP/fuydxZ/fg0g0G9WZ5Gs9v/
+        PYL+WNNGUHTdxWcW4ek6a8R4BJ0HP8yS8zb7hhk=
+X-Google-Smtp-Source: APXvYqzUd0FpORBfMUBCtYZD0eBrsi/cm9uTYfatp9Rvw0K4bfMa/R3P/Ge8HZtbKCnlO+nXa6XPepUPHKgD/uQj6gk=
+X-Received: by 2002:a62:86c4:: with SMTP id x187mr53672089pfd.34.1558017366120;
+ Thu, 16 May 2019 07:36:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com> <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
 In-Reply-To: <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Thu, 16 May 2019 23:35:55 +0900
+Message-ID: <CAC5umygg7BPhyoKsBDPAoafXHmJnqE1gEarafJDRCrdUnw-3aA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
+To:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> +	if (sensor < 0 || sensor > 8)
-> +		return -EINVAL;
+2019=E5=B9=B45=E6=9C=8816=E6=97=A5(=E6=9C=A8) 0:17 Akinobu Mita <akinobu.mi=
+ta@gmail.com>:
+>
+> The NVMe controller reports up to nine temperature values in the SMART /
+> Health log page (the composite temperature and temperature sensor 1 throu=
+gh
+> temperature sensor 8).
+> The temperature threshold feature (Feature Identifier 04h) configures the
+> asynchronous event request command to complete when the temperature is
+> crossed its correspoinding temperature threshold.
+>
+> This adds infrastructure to provide these temperatures and thresholds via
+> thermal zone devices.
+>
+> The nvme_thermal_zones_register() creates up to nine thermal zone devices
+> for valid temperature sensors including composite temperature.
+>
+> /sys/class/thermal/thermal_zone[0-*]:
+>     |---temp: Temperature
+>     |---trip_point_0_temp: Over temperature threshold
+>     |---trip_point_0_hyst: Under temperature threshold
 
-Does we really need to check the negative case here ?  Am I missing
-something in this context ?  If we really want to check it in this
-level, can we check the invalid case in the following function?
+I misunderstood the under temperature threshold.  It is not hysteresis
+for the upper temperature threshold.  It is used to notify cold temperature
+that the device may not correctly work.
 
-> +static struct thermal_zone_device *
-> +nvme_thermal_zone_register(struct nvme_ctrl *ctrl, int sensor)
-> +{
-> +	struct thermal_zone_device *tzdev;
-> +	char type[THERMAL_NAME_LENGTH];
-> +	int ret;
-> +
-> +	snprintf(type, sizeof(type), "nvme_temp%d", sensor);
+So we should provide another trip point for under temperature threshold,
+but there is no suitable thermal trip type for cold temperature.
 
-Before preparing "nvme_temp%d", maybe we can make it sure here. :)
-What do you say?
-
-> +int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
-> +{
-> +	struct nvme_smart_log *log;
-> +	int ret;
-> +	int i;
-> +
-> +	log = kzalloc(sizeof(*log), GFP_KERNEL);
-> +	if (!log)
-> +		return -ENOMEM;
-> +
-> +	ret = nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
-> +			   log, sizeof(*log), 0);
-> +	if (ret) {
-> +		ret = ret > 0 ? -EINVAL : ret;
-> +		goto free_log;
-> +	}
-> +
-> +	for (i = 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
-> +		struct thermal_zone_device *tzdev;
-> +
-> +		if (i && !le16_to_cpu(log->temp_sensor[i - 1]))
-> +			continue;
-> +		if (ctrl->tzdev[i])
-> +			continue;
-> +
-> +		tzdev = nvme_thermal_zone_register(ctrl, i);
-> +		if (!IS_ERR(tzdev))
-> +			ctrl->tzdev[i] = tzdev;
-
-Quenstion here. Are we okay not to print some warnings here in case
-of error returned?
+I'm going to remove trip_point_0_hyst and not utilize the under temperature
+threshold.
