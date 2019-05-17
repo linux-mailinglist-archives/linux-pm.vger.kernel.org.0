@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4662123F
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 04:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1069D21238
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 04:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727594AbfEQCqe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 May 2019 22:46:34 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:58074 "EHLO inva020.nxp.com"
+        id S1727184AbfEQCqf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 May 2019 22:46:35 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:45886 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727184AbfEQCqc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 May 2019 22:46:32 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CF84D1A010B;
-        Fri, 17 May 2019 04:46:29 +0200 (CEST)
+        id S1727259AbfEQCqd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 May 2019 22:46:33 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4A996200268;
+        Fri, 17 May 2019 04:46:31 +0200 (CEST)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 29CAE1A000F;
-        Fri, 17 May 2019 04:46:24 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6B82C200037;
+        Fri, 17 May 2019 04:46:25 +0200 (CEST)
 Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 4ED96402BF;
-        Fri, 17 May 2019 10:46:17 +0800 (SGT)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 9147A4030D;
+        Fri, 17 May 2019 10:46:18 +0800 (SGT)
 From:   Ran Wang <ran.wang_1@nxp.com>
 To:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>
@@ -30,9 +30,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ran Wang <ran.wang_1@nxp.com>
-Subject: [PATCH 2/3] Documentation: dt: binding: fsl: Add 'little-endian' and update Chassis define
-Date:   Fri, 17 May 2019 10:47:47 +0800
-Message-Id: <20190517024748.15534-2-ran.wang_1@nxp.com>
+Subject: [PATCH 3/3] soc: fsl: add RCPM driver
+Date:   Fri, 17 May 2019 10:47:48 +0800
+Message-Id: <20190517024748.15534-3-ran.wang_1@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190517024748.15534-1-ran.wang_1@nxp.com>
 References: <20190517024748.15534-1-ran.wang_1@nxp.com>
@@ -42,44 +42,177 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-By default, QorIQ SoC's RCPM register block is Big Endian. But
-there are some exceptions, such as LS1088A and LS2088A, are Little
-Endian. So add this optional property to help identify them.
+The NXP's QorIQ Processors based on ARM Core have RCPM module
+(Run Control and Power Management), which performs all device-level
+tasks associated with power management such as wakeup source control.
 
-Actually LS2021A and other Layerscapes won't totally follow Chassis
-2.1, so separate them from powerpc SoC.
+This driver depends on PM wakeup source framework which help to
+collect wake information.
 
 Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
 ---
- Documentation/devicetree/bindings/soc/fsl/rcpm.txt |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ drivers/soc/fsl/Kconfig  |    8 +++
+ drivers/soc/fsl/Makefile |    1 +
+ drivers/soc/fsl/rcpm.c   |  124 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 133 insertions(+), 0 deletions(-)
+ create mode 100644 drivers/soc/fsl/rcpm.c
 
-diff --git a/Documentation/devicetree/bindings/soc/fsl/rcpm.txt b/Documentation/devicetree/bindings/soc/fsl/rcpm.txt
-index e284e4e..058154c 100644
---- a/Documentation/devicetree/bindings/soc/fsl/rcpm.txt
-+++ b/Documentation/devicetree/bindings/soc/fsl/rcpm.txt
-@@ -20,6 +20,7 @@ Required properites:
- 	* "fsl,qoriq-rcpm-1.0": for chassis 1.0 rcpm
- 	* "fsl,qoriq-rcpm-2.0": for chassis 2.0 rcpm
- 	* "fsl,qoriq-rcpm-2.1": for chassis 2.1 rcpm
-+	* "fsl,qoriq-rcpm-2.1+": for chassis 2.1+ rcpm
- 
- All references to "1.0" and "2.0" refer to the QorIQ chassis version to
- which the chip complies.
-@@ -27,7 +28,12 @@ Chassis Version		Example Chips
- ---------------		-------------------------------
- 1.0				p4080, p5020, p5040, p2041, p3041
- 2.0				t4240, b4860, b4420
--2.1				t1040, ls1021
-+2.1				t1040,
-+2.1+			ls1021a, ls1012a, ls1043a, ls1046a
+diff --git a/drivers/soc/fsl/Kconfig b/drivers/soc/fsl/Kconfig
+index 3b85e18..a25e05b 100644
+--- a/drivers/soc/fsl/Kconfig
++++ b/drivers/soc/fsl/Kconfig
+@@ -50,4 +50,12 @@ config FSL_SLEEP_FSM
+ if ARM || ARM64
+ source "drivers/soc/fsl/Kconfig.arm"
+ endif
 +
-+Optional properties:
-+ - little-endian : RCPM register block is Little Endian. Without it RCPM
-+   will be Big Endian (default case).
- 
- Example:
- The RCPM node for T4240:
++config FSL_RCPM
++	bool "Freescale RCPM support"
++	depends on PM_SLEEP
++	help
++	  The NXP's QorIQ Processors based on ARM Core have RCPM module
++	  (Run Control and Power Management), which performs all device-level
++	  tasks associated with power management, such as wakeup source control.
+ endmenu
+diff --git a/drivers/soc/fsl/Makefile b/drivers/soc/fsl/Makefile
+index db7b09b..aab9f9b 100644
+--- a/drivers/soc/fsl/Makefile
++++ b/drivers/soc/fsl/Makefile
+@@ -11,3 +11,4 @@ obj-$(CONFIG_FSL_MC_DPIO) 		+= dpio/
+ obj-$(CONFIG_FSL_LS2_CONSOLE)		+= ls2-console/
+ obj-$(CONFIG_LS_SOC_DRIVERS)		+= layerscape/
+ obj-$(CONFIG_FSL_SLEEP_FSM)	+= sleep_fsm.o
++obj-$(CONFIG_FSL_RCPM)		+= rcpm.o
+diff --git a/drivers/soc/fsl/rcpm.c b/drivers/soc/fsl/rcpm.c
+new file mode 100644
+index 0000000..b817319
+--- /dev/null
++++ b/drivers/soc/fsl/rcpm.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// rcpm.c - Freescale QorIQ RCPM driver
++//
++// Copyright 2019 NXP
++//
++// Author: Ran Wang <ran.wang_1@nxp.com>,
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/of_address.h>
++#include <linux/slab.h>
++#include <linux/suspend.h>
++#include <linux/kernel.h>
++
++#define RCPM_WAKEUP_CELL_MAX_SIZE	7
++
++struct rcpm {
++	unsigned int wakeup_cells;
++	void __iomem *ippdexpcr_base;
++	bool	little_endian;
++};
++
++static int rcpm_pm_prepare(struct device *dev)
++{
++	struct device_node *np = dev->of_node;
++	struct wakeup_source *ws;
++	struct rcpm *rcpm;
++	u32 value[RCPM_WAKEUP_CELL_MAX_SIZE + 1], tmp;
++	int i, ret;
++
++	rcpm = dev_get_drvdata(dev);
++	if (!rcpm)
++		return -EINVAL;
++
++	/* Begin with first registered wakeup source */
++	ws = wakeup_source_get_next(NULL);
++	while (ws) {
++		ret = device_property_read_u32_array(ws->attached_dev,
++				"fsl,rcpm-wakeup", value, rcpm->wakeup_cells + 1);
++
++		/*  Wakeup source should refer to current rcpm device */
++		if (ret || (np->phandle != value[0])) {
++			dev_info(dev, "%s doesn't refer to this rcpm\n",
++					ws->name);
++			ws = wakeup_source_get_next(ws);
++			continue;
++		}
++
++		for (i = 0; i < rcpm->wakeup_cells; i++) {
++			/* We can only OR related bits */
++			if (value[i + 1]) {
++				if (rcpm->little_endian) {
++					tmp = ioread32(rcpm->ippdexpcr_base + i * 4);
++					tmp |= value[i + 1];
++					iowrite32(tmp, rcpm->ippdexpcr_base + i * 4);
++				} else {
++					tmp = ioread32be(rcpm->ippdexpcr_base + i * 4);
++					tmp |= value[i + 1];
++					iowrite32be(tmp, rcpm->ippdexpcr_base + i * 4);
++				}
++			}
++		}
++		ws = wakeup_source_get_next(ws);
++	}
++
++	return 0;
++}
++
++static const struct dev_pm_ops rcpm_pm_ops = {
++	.prepare =  rcpm_pm_prepare,
++};
++
++static int rcpm_probe(struct platform_device *pdev)
++{
++	struct device	*dev = &pdev->dev;
++	struct resource *r;
++	struct rcpm		*rcpm;
++	int ret;
++
++	rcpm = devm_kzalloc(dev, sizeof(*rcpm), GFP_KERNEL);
++	if (!rcpm)
++		return -ENOMEM;
++
++	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!r)
++		return -ENODEV;
++
++	rcpm->ippdexpcr_base = devm_ioremap_resource(&pdev->dev, r);
++	if (IS_ERR(rcpm->ippdexpcr_base)) {
++		ret =  PTR_ERR(rcpm->ippdexpcr_base);
++		return ret;
++	}
++
++	rcpm->little_endian = device_property_read_bool(
++			&pdev->dev, "little-endian");
++
++	ret = device_property_read_u32(&pdev->dev,
++			"fsl,#rcpm-wakeup-cells", &rcpm->wakeup_cells);
++	if (ret)
++		return ret;
++
++	dev_set_drvdata(&pdev->dev, rcpm);
++
++	return 0;
++}
++
++static const struct of_device_id rcpm_of_match[] = {
++	{ .compatible = "fsl,qoriq-rcpm-2.1+", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, rcpm_of_match);
++
++static struct platform_driver rcpm_driver = {
++	.driver = {
++		.name = "rcpm",
++		.of_match_table = rcpm_of_match,
++		.pm	= &rcpm_pm_ops,
++	},
++	.probe = rcpm_probe,
++};
++
++module_platform_driver(rcpm_driver);
 -- 
 1.7.1
 
