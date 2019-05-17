@@ -2,76 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EE2214B7
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 09:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D1D2155D
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 10:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728470AbfEQHoA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 May 2019 03:44:00 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:40767 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728323AbfEQHn7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 03:43:59 -0400
-X-Originating-IP: 80.215.154.25
-Received: from localhost (unknown [80.215.154.25])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 37CA020009;
-        Fri, 17 May 2019 07:43:51 +0000 (UTC)
-Date:   Fri, 17 May 2019 09:43:50 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, wens@csie.org, davem@davemloft.net,
-        mchehab+samsung@kernel.org, gregkh@linuxfoundation.org,
-        linus.walleij@linaro.org, Jonathan.Cameron@huawei.com,
-        nicolas.ferre@microchip.com, paulmck@linux.ibm.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] add thermal driver for h6
-Message-ID: <20190517074350.m4wtxn5rgiqkjgnz@flea>
-References: <20190516172633.12607-1-tiny.windzz@gmail.com>
+        id S1727843AbfEQI3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 May 2019 04:29:23 -0400
+Received: from mail.tastiess.eu ([194.182.86.235]:52320 "EHLO mail.tastiess.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727581AbfEQI3W (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 May 2019 04:29:22 -0400
+X-Greylist: delayed 571 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 May 2019 04:29:22 EDT
+Received: by mail.tastiess.eu (Postfix, from userid 1001)
+        id D7115881BC; Fri, 17 May 2019 10:17:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tastiess.eu; s=mail;
+        t=1558081185; bh=Pq3JAJM5iF8ICERSPFAm/P648K1IfJ1sBmhj3v1LJ9Q=;
+        h=Date:From:To:Subject:From;
+        b=MFgf8SVq/PTYuAr3OAbGOrCW0GHbHfSmkg2xJurtXT1DihZstK98iBVYKNAjYf9NW
+         jO08tzh39tBPhHqZfhHHjVZJTo7s9xm4iKMc6ulTYzP+OhYCxyH2WveLd06MjEWvFi
+         bXMaSG4NeBmaAYZGOKqG/86D5TbmcbaO4rqMD3Dw=
+Received: by mail.tastiess.eu for <linux-pm@vger.kernel.org>; Fri, 17 May 2019 08:17:15 GMT
+Message-ID: <20190517095349-0.1.b.f0h.0.ea74i08oyq@tastiess.eu>
+Date:   Fri, 17 May 2019 08:17:15 GMT
+From:   =?UTF-8?Q? "Kapolcs_M=C3=A1ty=C3=A1s" ?= <matyas@tastiess.eu>
+To:     <linux-pm@vger.kernel.org>
+Subject: =?UTF-8?Q?Dolgoz=C3=B3i_juttat=C3=A1sok?=
+X-Mailer: mail.tastiess.eu
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uiqnaa7feozmkfnb"
-Content-Disposition: inline
-In-Reply-To: <20190516172633.12607-1-tiny.windzz@gmail.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+=C3=9Cdv=C3=B6zl=C3=B6m!
 
---uiqnaa7feozmkfnb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+2019 janu=C3=A1rj=C3=A1t=C3=B3l jelent=C5=91sen =C3=A1talakult mind a jut=
+tat=C3=A1sok ad=C3=B3z=C3=A1sa, mind a piacon el=C3=A9rhet=C5=91 juttat=C3=
+=A1si term=C3=A9kek k=C3=B6re. =20
 
-Hi,
+Amennyiben =C3=96nnek is fejt=C3=B6r=C3=A9st okoz, mivel p=C3=B3tolja a k=
+or=C3=A1bban haszn=C3=A1lt Erzs=C3=A9bet utalv=C3=A1nyt, ismerje meg k=C3=
+=A1rty=C3=A1inkat =C3=A9s utalv=C3=A1nyainkat, melyek az =C3=96n c=C3=A9g=
+=C3=A9nek is k=C3=ADv=C3=A1l=C3=B3 alternat=C3=ADv=C3=A1t ny=C3=BAjthatna=
+k.
 
-On Thu, May 16, 2019 at 01:26:31PM -0400, Yangtao Li wrote:
-> This patchset supprt H6 thermal controller.
+A SZ=C3=89P k=C3=A1rty=C3=A1hoz k=C3=A9pest juttat=C3=A1si k=C3=A1rty=C3=A1=
+inkat j=C3=B3val sz=C3=A9lesebb k=C3=B6rben haszn=C3=A1lhatj=C3=A1k k=C3=A1=
+rtyabirtokosaink t=C3=B6bbek k=C3=B6z=C3=B6tt =C3=A9lelmiszer v=C3=A1s=C3=
+=A1rl=C3=A1sra, eg=C3=A9szs=C3=A9g=C3=BCgyi szolg=C3=A1ltat=C3=A1sokra, e=
+lektronikai term=C3=A9kekre, =C3=BCd=C3=BCl=C3=A9sre, tankol=C3=A1sra =E2=
+=80=93 ak=C3=A1r k=C3=A9szp=C3=A9nzfelv=C3=A9teli lehet=C5=91s=C3=A9ggel =
+is.
 
-The discussion is still ongoing on the v1, it would have been better
-to wait a bit on it to settle before sending a new version.
+Szeretn=C3=A9 megismerni, milyen lehet=C5=91s=C3=A9geket k=C3=ADn=C3=A1lu=
+nk juttat=C3=A1si term=C3=A9keinkkel? =20
 
-Anyway, some comment made there still apply.
 
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---uiqnaa7feozmkfnb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXN5mNgAKCRDj7w1vZxhR
-xdGaAQDw2HatyDwe99md5xjAb+SPPeYer/Zb4obBMYGlhQuO9AEAkn/HI2qNYsxw
-/7OQTPnikOxNibnfTB1JZq1yrq3HeAs=
-=fhoH
------END PGP SIGNATURE-----
-
---uiqnaa7feozmkfnb--
+Kapolcs M=C3=A1ty=C3=A1s
+Hungary Team Leader =20
