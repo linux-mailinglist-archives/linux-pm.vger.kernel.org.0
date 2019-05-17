@@ -2,56 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C2921801
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 14:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4523421820
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 14:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbfEQMJw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 May 2019 08:09:52 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:33508 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727221AbfEQMJv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 08:09:51 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id AA5C125AD7D;
-        Fri, 17 May 2019 22:09:49 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id B05CF94048B; Fri, 17 May 2019 14:09:47 +0200 (CEST)
-Date:   Fri, 17 May 2019 14:09:47 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Yoshihiro Kaneko <ykaneko0929@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        id S1728472AbfEQMZw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 May 2019 08:25:52 -0400
+Received: from mout.kundenserver.de ([212.227.17.13]:35425 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728073AbfEQMZw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 08:25:52 -0400
+Received: from [192.168.178.167] ([109.104.37.130]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N4i3d-1gi8y90Jhn-011mLu; Fri, 17 May 2019 14:25:26 +0200
+Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.2-rc1
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH/RFT v3 0/3] thermal: rcar_gen3_thermal: Update
- calculation formula due to HW evaluation
-Message-ID: <20190517120946.2losrmjowl6uuqeq@verge.net.au>
-References: <1557777835-19454-1-git-send-email-ykaneko0929@gmail.com>
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rui Zhang <rui.zhang@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20190516044313.GA17751@localhost.localdomain>
+ <CAHk-=wiaO_8SiEB9QM3vOTniiT67K6CBH0uHJ82-Dp_+6kxH3g@mail.gmail.com>
+ <4803994d-f519-a6b6-f5bb-a2f50d91ecd7@i2se.com>
+Message-ID: <d6da5203-c113-5cec-c12e-9af91a9ff716@i2se.com>
+Date:   Fri, 17 May 2019 14:25:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1557777835-19454-1-git-send-email-ykaneko0929@gmail.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <4803994d-f519-a6b6-f5bb-a2f50d91ecd7@i2se.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:f5a1GGMzwh+OJVKp3JEevbnxv4E4pHWmhaLPs4AP+6XsV4DhPVI
+ 1ZC4jRQoyl9v8RmeHk35a2Z+mETuGNKmnSalWnfyWN3xuqgq6wyyj4zMJ93nflBbzD2KQ7J
+ oMteAHY2B07z65HLNdvYftDwhmb/ZxofvDOW3t2+5JEY2bdPOp8msDZztRhVgGLCcMIeVfy
+ oJWxd9caAfRPHR+p9dlxA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cqbDtugd1ew=:CgicXDFd3qtxngcDKrjVr7
+ ZgnuByVbxmgO8qKH+zqNdqbbY3dELmRo8Nwy3YDhZziw+/XvQ/0WVGdjFg5GFBA8bVXlvZ1pA
+ dNDb0F4M1keUPQebLWqwHOkHVr/MuC+OsddbxUVmFCzJyHQ/6P3AWHU0wb1hY6tLGgLXkUotw
+ k8af0d8TYRgtOcPgS0diKDE588GiOdHIiOysfAxoTN+SzB+H2U1DZWYT7AOYhPbVCIvYD8h6W
+ GsZUe5gvOwlMmpJe1mdprG2GCUSciJd5xxN1eeYoaWrNaNtdELWKFscw0Q2kWJ0Z4OrnqptSr
+ 2k3r1ocNiS1qliMQpWNj7QxilEhVpbRnbC9YrxwD/U0sDaER9DPbKf4L7iw1z0R16oRXk5g2F
+ llntN61/SMKG55Cj+a2zEhdnYqRJ/3VTsuoJK5zP4A5ABIkcmzPcq/o/1PZn+5yBdK7lEmuS3
+ UyI4VXxkuRyyLjSx1NR/Ay0mMgFRHzekggtHklBX5kCyKcYjukstTulL1xFbLud1sitW73BQk
+ qhhcYEOyRaX6spwBvvOEDxAH/vHXqyKsTfLtI93oWKeNuvJG/U14vxq4yPQtF+uz4jnA9x5y1
+ XrNysL4X8nbh4uedlbyuq4Adm/OuMhJgIKlMF7DB8FUVPd/B4IjxS9tlQhEx8DvDEVQfrzU9D
+ MsnIJo/zVc9b8BICMBNOQmx8sAFTbOxsq2koIJnRNb/8gNYU8FeJaeRAU/B4t1ic+40an2YT2
+ 30KSelRlJ/5YC9mDdaL4w8Qqbb9nhNI/ZbD3bB4lhmqJ9EQvOSObiLt5npE=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 14, 2019 at 05:03:52AM +0900, Yoshihiro Kaneko wrote:
-> This series was inspired by a patch in the BSP by Dien Pham <dien.pham.ry@renesas.com>.
-> 
-> This series is based on the master branch of Linus Torvalds's linux tree.
+On 16.05.19 18:11, Stefan Wahren wrote:
+> Hi Linus,
+>
+> On 16.05.19 17:07, Linus Torvalds wrote:
+>> On Wed, May 15, 2019 at 9:43 PM Eduardo Valentin <edubezval@gmail.com> wrote:
+>>> - thermal core has a new devm_* API for registering cooling devices, thanks to Guenter R.
+>>>   I took the entire series, that is why you see changes on drivers/hwmon in this pull.
+>> This clashed badly with commit 6b1ec4789fb1 ("hwmon: (pwm-fan) Add RPM
+>> support via external interrupt"), which added a timer to the pwm-fan
+>> handling.
+>>
+>> In particular, that timer now needed the same kind of cleanup changes,
+>> and I'd like you guys (particularly Guenther, who was involved on both
+>> sides) to double-check my merge.
+>>
+>> The way I solved it was to just make the pwm_fan_pwm_disable()
+>> callback do both the pwm_diable() _and_ the del_timer_sync() on the
+>> new timer. That seemed to be the simplest solution that meshed with
+>> the new devm cleanup model, but while I build-tested the result, I
+>> obviously did no actual use testing. And maybe there's some reason why
+>> that approach is flawed.
+> i will try to test on our custom i.MX6 board. Unfortunately this take
+> some time since it isn't mainline yet (at least until tomorrow).
 
-Thanks Kaneko-san,
+Okay, today's test based on your tree ( a6a4b66bd8f ) were successful.
 
-this looks good to me.
+Thanks
+Stefan
 
-For all patches:
-
-Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
-Tested-by: Simon Horman <horms+renesas@verge.net.au>
-
-
-
+>
+> Stefan
+>
+>> Guenther?
+>>
+>>                     Linus
