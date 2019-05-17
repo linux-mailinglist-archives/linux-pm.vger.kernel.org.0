@@ -2,84 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F119D218A1
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 14:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E589821A3C
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 17:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728924AbfEQMxT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 May 2019 08:53:19 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:34786 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728914AbfEQMxS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 08:53:18 -0400
-Received: by mail-wm1-f68.google.com with SMTP id j187so9263776wma.1
-        for <linux-pm@vger.kernel.org>; Fri, 17 May 2019 05:53:17 -0700 (PDT)
+        id S1729175AbfEQPCJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 May 2019 11:02:09 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:40376 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728935AbfEQPCJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 11:02:09 -0400
+Received: by mail-pl1-f193.google.com with SMTP id g69so3473456plb.7
+        for <linux-pm@vger.kernel.org>; Fri, 17 May 2019 08:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=s7B7wWE3RrzKwEWxic7OC8bzl//pottNx24ZlL4GUWw=;
+        b=Do2gPjc2pR68y+NaLBOo2f6vzFZO9xcifvUgBNtbnRxe6SSUxV0tm7CFZJqcPduowr
+         WVHVI8sX53lUeAzaIf1viLAIS9G5m8xJbbi/INh5XW1Qpo+/TNDh2ZGB+ON0b89dtOBE
+         TxNqQlECdTOZoVp/ty63KqYAf1HCFHblskqz6RmSqPo6R5+HRX1t2djXqL6gGNpsCtRM
+         Ujd3zLw0M5qSJDRiSmVPZ4HPPgVYcMBflrRw88h7d8I2lqva1WQIxH4sHW6Mcd5LfL04
+         JA08QR4Z/paAovFslD5YndhcBu+HX+pJ2D/2Jj5sEoSOLgrXXbjrTVhkeBYPtjpCdfWj
+         xNlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zcYe+aG05w2UO1ZXKc7jrJL+Ovz86Hm2R29bKoYuqSk=;
-        b=rH+kGDRgLjtYMbwtzFJ/+HV77STlFFl9+9e0qxF5qNH187nZGa3EUzb5HtpMlZGFT6
-         mckiPHYZVo2XqQmO1fByTS99DIzkCwIQ0iUbQ8XHGjZbhI8b5QBZtMCne7nKV7amcR/s
-         w4+XsqLKG9SBEjX8GOUoBqoAhmgiF2hDtuTD8WHAsJ5S/xIfNjTMr7awPUo+K/bLURrZ
-         qxFHpmXdAiB3O2i2y7SrnQ668XS/UyRoDj3aZAIPC8+B157NId4jYGjfIgIn1RCqE5d3
-         rHQOIOyDVBQTQjLJj75ZTCKZMfEzs1y7e0ycrN335/0eP7kUTr/XM1F5BL47ednF4iBY
-         QRTg==
-X-Gm-Message-State: APjAAAVfAcnrPt/s914noi2vpl2+yVSq0FAXhZSGMSFWkw+lKcHCe0+3
-        XAjnXHYdH+o9YhsIMmpV64khLqlgmgw=
-X-Google-Smtp-Source: APXvYqzvQo4PLIOLgEYS45mThRlVYeoSKfB0i310BFOLRFwKSRuu+NOfl46fdrqxPtJzbnmADzwaFw==
-X-Received: by 2002:a1c:7dcf:: with SMTP id y198mr2040524wmc.94.1558097596479;
-        Fri, 17 May 2019 05:53:16 -0700 (PDT)
-Received: from localhost.localdomain ([151.29.174.33])
-        by smtp.gmail.com with ESMTPSA id q3sm6514366wrr.16.2019.05.17.05.53.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 17 May 2019 05:53:15 -0700 (PDT)
-Date:   Fri, 17 May 2019 14:53:13 +0200
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ANNOUNCE][CFP] Power Management and Scheduling in the Linux
- Kernel III edition (OSPM-summit 2019)
-Message-ID: <20190517125313.GJ14991@localhost.localdomain>
-References: <20190114161910.GB5581@localhost.localdomain>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s7B7wWE3RrzKwEWxic7OC8bzl//pottNx24ZlL4GUWw=;
+        b=n7GbUc5ebGpIN75iDUqiEl/Hqh/932mhwS9FzxPaFCTRylYecFD0ZNoMR2uYK5+RF/
+         i5u3ZJypLTrSnI8Y8mUpwr3MD7EyRojQkwSjystBUQjnBxXLp5uitbUyrFO3p8n4rgff
+         0xGpCc+C+OdkKkPr654D2tUisq667a2jreI/WaoznFr+y+vvcBlKb4VIfBDbZnceRCi/
+         F9dyvs5ezITX8jORvi8SX0jjL+lKYs585rjFAKukbbjUn0I6Xt64i+jienoGnsMKk4rg
+         Ctu0lLuah/uHiWLbTfMlnlbeiAqo4A3JAZL1ECDI8NV+n2xWKOtrOrPxJ5brCRoFAqM4
+         7GDQ==
+X-Gm-Message-State: APjAAAWisf6glom7RUy3oUjtuiRsKgHnvsl1R7kwEjaOvKhTKVvaVwkd
+        lG8JfYlAPEzGToCDH3UdUNZY/5F88o1bLTzhUcM=
+X-Google-Smtp-Source: APXvYqzvZjIYhpk+hS1KThgi15JOpBB8AKw1u6tMVoqxNqc+vxfn1E+pCdtKTjkoK1SiqdPQ1Zcowvva9sLKf1j76Ow=
+X-Received: by 2002:a17:902:6a83:: with SMTP id n3mr58027713plk.109.1558105328823;
+ Fri, 17 May 2019 08:02:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190114161910.GB5581@localhost.localdomain>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com>
+ <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com> <2bf1e2cf-b922-d947-c939-375aba75994d@intel.com>
+In-Reply-To: <2bf1e2cf-b922-d947-c939-375aba75994d@intel.com>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Sat, 18 May 2019 00:01:57 +0900
+Message-ID: <CAC5umygRTpq3GktaMKBdC8+-ghkJKCzFME+rm+V6vasrOAyOPw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
+To:     "Heitke, Kenneth" <kenneth.heitke@intel.com>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        Keith Busch <keith.busch@intel.com>,
+        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@fb.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+2019=E5=B9=B45=E6=9C=8817=E6=97=A5(=E9=87=91) 6:22 Heitke, Kenneth <kenneth=
+.heitke@intel.com>:
+>
+>
+>
+> On 5/15/2019 9:17 AM, Akinobu Mita wrote:
+> > The NVMe controller reports up to nine temperature values in the SMART =
+/
+> > Health log page (the composite temperature and temperature sensor 1 thr=
+ough
+> > temperature sensor 8).
+> > The temperature threshold feature (Feature Identifier 04h) configures t=
+he
+> > asynchronous event request command to complete when the temperature is
+> > crossed its correspoinding temperature threshold.
+>
+> s/correspoinding/corresponding/
 
-On 14/01/19 17:19, Juri Lelli wrote:
-> Power Management and Scheduling in the Linux Kernel (OSPM-summit) III edition
-> May 20-22, 2019
-> Scuola Superiore Sant'Anna
-> Pisa, Italy
-> 
-> ---
-> 
-> .:: FOCUS
-> 
-> The III edition of the Power Management and Scheduling in the Linux
-> Kernel (OSPM) summit aims at fostering discussions on power management
-> and (real-time) scheduling techniques. Summit will be held in Pisa
-> (Italy) on May 20-22, 2019.
+OK.
 
-Next week!
+> > +
+> > +static void nvme_thermal_init(struct nvme_ctrl *ctrl)
+> > +{
+> > +     INIT_WORK(&ctrl->thermal_work, nvme_thermal_work);
+> > +}
+>
+> Does this work queue need to be destroyed at some point?
 
-FYI, final schedule is online (Italy (GMT+2)):
-
-http://retis.sssup.it/ospm-summit/program.html
-
-Live streaming events have been created and are accessible both from the
-summit schedule ("live streaming" links) and at:
-
-https://bit.ly/2Vz3yKg
-
-Best,
-
-- Juri
+This is work_struct, not workqueue.  So it can't be destroyed.
+But I noticed that we should call flush_work for thermal_work at
+unregistering thermal zone devices.
