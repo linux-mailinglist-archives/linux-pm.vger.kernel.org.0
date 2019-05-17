@@ -2,78 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5D121ABE
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 17:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AC921B17
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 18:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728791AbfEQPgd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 May 2019 11:36:33 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:40001 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728632AbfEQPgc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 11:36:32 -0400
-Received: by mail-pl1-f195.google.com with SMTP id g69so3513675plb.7
-        for <linux-pm@vger.kernel.org>; Fri, 17 May 2019 08:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=46oHXKvqSKWOuSCep8CgcAD851AYqrmGpjUGnxm4x+Q=;
-        b=L9MqeWCSAyXVGeJCFI/FaJ3sCxf/aJ5yg2oT3O6lhu/oOBqXXWD3ZFQNTak6miv1Ql
-         8mlbx7Ha0iF5Qqd9GY/JUMQLKHiVuV/dJW6qARLP6zqNPYBMzV5jax5GwOsDdOafVzBf
-         CypQyGcXFiY11xx4tEEfCCNdyFtl56FE48Gb1gLAjS8Xt+OD3peA41KSk8n65cxl2IRo
-         VB8vCZ6Q0X5lYvxWC+4aCAQCfkivbHzCWJ7xj2lnYMkP7ykZbAdkz6U8RqCycghQ7fwH
-         hS5pH/laHP4Lz6bOdbZOBrDvjSmMuf6RBn9WdoXo8Y8OQ7kk8QWUWsA3UZfW7Wf5bYJ4
-         NnQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=46oHXKvqSKWOuSCep8CgcAD851AYqrmGpjUGnxm4x+Q=;
-        b=sQy4/KtI2JWNDcppsULGlO7Z2AqWMDRDPtChUG66SawCoibtaVUc7Biw7Fss1LUi6f
-         U9C0xu8vOPtNjCcBQSWePCMgwI7OR3l3jiEvcRVEFxW5wlf9znc7xf8ODScFD9IWN2Xs
-         QqrIYSwN2LLHKJwogRImTPM/xOJoY/f0XGMHQJ+O/8TIHqbWTKoEe3jgnMhsmKUMs0y/
-         E5PXKH5pew/PqdQYrejj9SZkZdVl2vuXNwmTNkgnFKHuSSQc9peseSY6RqiUgOD+Go2M
-         f3/p7Ii3zQvpqsWGbQXdABdlzeD17QpIGSHoJ2ZkxvAHuPEttb7laq9X91EpqrPHUENi
-         9MPQ==
-X-Gm-Message-State: APjAAAU6u+7P4e1EzBRp6mYqvprwz+1fOm+bhvGyXCPD4T9FtTy619K0
-        P9b15uI+GwNiDNmm/DAURtRmZDIOoQFVgxLBP/MhvQ==
-X-Google-Smtp-Source: APXvYqxzP0QWgEuoEYzgQJxETVLl03tm1qImUSkV4WabYS1+qZ+EYdKcv8RUBdDHD5xoUJkkk+GfiSfuppl6Sd56ulQ=
-X-Received: by 2002:a17:902:56a:: with SMTP id 97mr18854602plf.20.1558107392336;
- Fri, 17 May 2019 08:36:32 -0700 (PDT)
+        id S1728837AbfEQQC6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 May 2019 12:02:58 -0400
+Received: from mga04.intel.com ([192.55.52.120]:62944 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728482AbfEQQC6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 May 2019 12:02:58 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 May 2019 09:02:57 -0700
+X-ExtLoop1: 1
+Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
+  by fmsmga004.fm.intel.com with ESMTP; 17 May 2019 09:02:57 -0700
+Date:   Fri, 17 May 2019 09:57:43 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] PCI: PM: Avoid possible suspend-to-idle issue
+Message-ID: <20190517155743.GB25006@localhost.localdomain>
+References: <2315917.ZGeXE6pBFC@kreacher>
 MIME-Version: 1.0
-References: <1557933437-4693-1-git-send-email-akinobu.mita@gmail.com>
- <1557933437-4693-2-git-send-email-akinobu.mita@gmail.com> <2bf1e2cf-b922-d947-c939-375aba75994d@intel.com>
- <CAC5umygRTpq3GktaMKBdC8+-ghkJKCzFME+rm+V6vasrOAyOPw@mail.gmail.com> <20190517150924.GA25006@localhost.localdomain>
-In-Reply-To: <20190517150924.GA25006@localhost.localdomain>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Sat, 18 May 2019 00:36:21 +0900
-Message-ID: <CAC5umyhu6_s_CTvOL4_Rp7unqcw+jt9fPo++iGnumqDFQJecxA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] nvme: add thermal zone infrastructure
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     "Heitke, Kenneth" <kenneth.heitke@intel.com>,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        Keith Busch <keith.busch@intel.com>,
-        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@fb.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>, Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2315917.ZGeXE6pBFC@kreacher>
+User-Agent: Mutt/1.9.1 (2017-09-22)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=E5=B9=B45=E6=9C=8818=E6=97=A5(=E5=9C=9F) 0:14 Keith Busch <kbusch@kern=
-el.org>:
->
-> On Sat, May 18, 2019 at 12:01:57AM +0900, Akinobu Mita wrote:
-> >
-> > This is work_struct, not workqueue.  So it can't be destroyed.
-> > But I noticed that we should call flush_work for thermal_work at
-> > unregistering thermal zone devices.
->
-> Instead of creating yet-another-work_struct, let's append this event's
-> action to the existing async_event_work.
+On Fri, May 17, 2019 at 11:08:50AM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> If a PCI driver leaves the device handled by it in D0 and calls
+> pci_save_state() on the device in its ->suspend() or ->suspend_late()
+> callback, it can expect the device to stay in D0 over the whole
+> s2idle cycle.  However, that may not be the case if there is a
+> spurious wakeup while the system is suspended, because in that case
+> pci_pm_suspend_noirq() will run again after pci_pm_resume_noirq()
+> which calls pci_restore_state(), via pci_pm_default_resume_early(),
+> so state_saved is cleared and the second iteration of
+> pci_pm_suspend_noirq() will invoke pci_prepare_to_sleep() which
+> may change the power state of the device.
+> 
+> To avoid that, add a new internal flag, skip_bus_pm, that will be set
+> by pci_pm_suspend_noirq() when it runs for the first time during the
+> given system suspend-resume cycle if the state of the device has
+> been saved already and the device is still in D0.  Setting that flag
+> will cause the next iterations of pci_pm_suspend_noirq() to set
+> state_saved for pci_pm_resume_noirq(), so that it always restores the
+> device state from the originally saved data, and avoid calling
+> pci_prepare_to_sleep() for the device.
+> 
+> Fixes: 33e4f80ee69b ("ACPI / PM: Ignore spurious SCI wakeups from suspend-to-idle")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Good idea.
+LGTM
+
+Reviewed-by: Keith Busch <keith.busch@intel.com>
