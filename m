@@ -2,62 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D1D2155D
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 10:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A55215F9
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 11:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbfEQI3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 May 2019 04:29:23 -0400
-Received: from mail.tastiess.eu ([194.182.86.235]:52320 "EHLO mail.tastiess.eu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727581AbfEQI3W (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 17 May 2019 04:29:22 -0400
-X-Greylist: delayed 571 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 May 2019 04:29:22 EDT
-Received: by mail.tastiess.eu (Postfix, from userid 1001)
-        id D7115881BC; Fri, 17 May 2019 10:17:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tastiess.eu; s=mail;
-        t=1558081185; bh=Pq3JAJM5iF8ICERSPFAm/P648K1IfJ1sBmhj3v1LJ9Q=;
-        h=Date:From:To:Subject:From;
-        b=MFgf8SVq/PTYuAr3OAbGOrCW0GHbHfSmkg2xJurtXT1DihZstK98iBVYKNAjYf9NW
-         jO08tzh39tBPhHqZfhHHjVZJTo7s9xm4iKMc6ulTYzP+OhYCxyH2WveLd06MjEWvFi
-         bXMaSG4NeBmaAYZGOKqG/86D5TbmcbaO4rqMD3Dw=
-Received: by mail.tastiess.eu for <linux-pm@vger.kernel.org>; Fri, 17 May 2019 08:17:15 GMT
-Message-ID: <20190517095349-0.1.b.f0h.0.ea74i08oyq@tastiess.eu>
-Date:   Fri, 17 May 2019 08:17:15 GMT
-From:   =?UTF-8?Q? "Kapolcs_M=C3=A1ty=C3=A1s" ?= <matyas@tastiess.eu>
-To:     <linux-pm@vger.kernel.org>
-Subject: =?UTF-8?Q?Dolgoz=C3=B3i_juttat=C3=A1sok?=
-X-Mailer: mail.tastiess.eu
+        id S1728366AbfEQJIz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 May 2019 05:08:55 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:47578 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728072AbfEQJIy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 05:08:54 -0400
+Received: from 79.184.255.148.ipv4.supernova.orange.pl (79.184.255.148) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
+ id bfe72647a9c6f78a; Fri, 17 May 2019 11:08:50 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: [PATCH] PCI: PM: Avoid possible suspend-to-idle issue
+Date:   Fri, 17 May 2019 11:08:50 +0200
+Message-ID: <2315917.ZGeXE6pBFC@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=C3=9Cdv=C3=B6zl=C3=B6m!
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-2019 janu=C3=A1rj=C3=A1t=C3=B3l jelent=C5=91sen =C3=A1talakult mind a jut=
-tat=C3=A1sok ad=C3=B3z=C3=A1sa, mind a piacon el=C3=A9rhet=C5=91 juttat=C3=
-=A1si term=C3=A9kek k=C3=B6re. =20
+If a PCI driver leaves the device handled by it in D0 and calls
+pci_save_state() on the device in its ->suspend() or ->suspend_late()
+callback, it can expect the device to stay in D0 over the whole
+s2idle cycle.  However, that may not be the case if there is a
+spurious wakeup while the system is suspended, because in that case
+pci_pm_suspend_noirq() will run again after pci_pm_resume_noirq()
+which calls pci_restore_state(), via pci_pm_default_resume_early(),
+so state_saved is cleared and the second iteration of
+pci_pm_suspend_noirq() will invoke pci_prepare_to_sleep() which
+may change the power state of the device.
 
-Amennyiben =C3=96nnek is fejt=C3=B6r=C3=A9st okoz, mivel p=C3=B3tolja a k=
-or=C3=A1bban haszn=C3=A1lt Erzs=C3=A9bet utalv=C3=A1nyt, ismerje meg k=C3=
-=A1rty=C3=A1inkat =C3=A9s utalv=C3=A1nyainkat, melyek az =C3=96n c=C3=A9g=
-=C3=A9nek is k=C3=ADv=C3=A1l=C3=B3 alternat=C3=ADv=C3=A1t ny=C3=BAjthatna=
-k.
+To avoid that, add a new internal flag, skip_bus_pm, that will be set
+by pci_pm_suspend_noirq() when it runs for the first time during the
+given system suspend-resume cycle if the state of the device has
+been saved already and the device is still in D0.  Setting that flag
+will cause the next iterations of pci_pm_suspend_noirq() to set
+state_saved for pci_pm_resume_noirq(), so that it always restores the
+device state from the originally saved data, and avoid calling
+pci_prepare_to_sleep() for the device.
 
-A SZ=C3=89P k=C3=A1rty=C3=A1hoz k=C3=A9pest juttat=C3=A1si k=C3=A1rty=C3=A1=
-inkat j=C3=B3val sz=C3=A9lesebb k=C3=B6rben haszn=C3=A1lhatj=C3=A1k k=C3=A1=
-rtyabirtokosaink t=C3=B6bbek k=C3=B6z=C3=B6tt =C3=A9lelmiszer v=C3=A1s=C3=
-=A1rl=C3=A1sra, eg=C3=A9szs=C3=A9g=C3=BCgyi szolg=C3=A1ltat=C3=A1sokra, e=
-lektronikai term=C3=A9kekre, =C3=BCd=C3=BCl=C3=A9sre, tankol=C3=A1sra =E2=
-=80=93 ak=C3=A1r k=C3=A9szp=C3=A9nzfelv=C3=A9teli lehet=C5=91s=C3=A9ggel =
-is.
+Fixes: 33e4f80ee69b ("ACPI / PM: Ignore spurious SCI wakeups from suspend-to-idle")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/pci-driver.c |   17 ++++++++++++++++-
+ include/linux/pci.h      |    1 +
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-Szeretn=C3=A9 megismerni, milyen lehet=C5=91s=C3=A9geket k=C3=ADn=C3=A1lu=
-nk juttat=C3=A1si term=C3=A9keinkkel? =20
+Index: linux-pm/drivers/pci/pci-driver.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -734,6 +734,8 @@ static int pci_pm_suspend(struct device
+ 	struct pci_dev *pci_dev = to_pci_dev(dev);
+ 	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+ 
++	pci_dev->skip_bus_pm = false;
++
+ 	if (pci_has_legacy_pm_support(pci_dev))
+ 		return pci_legacy_suspend(dev, PMSG_SUSPEND);
+ 
+@@ -827,7 +829,20 @@ static int pci_pm_suspend_noirq(struct d
+ 		}
+ 	}
+ 
+-	if (!pci_dev->state_saved) {
++	if (pci_dev->skip_bus_pm) {
++		/*
++		 * The function is running for the second time in a row without
++		 * going through full resume, which is possible only during
++		 * suspend-to-idle in a spurious wakeup case.  Moreover, the
++		 * device was originally left in D0, so its power state should
++		 * not be changed here and the device register values saved
++		 * originally should be restored on resume again.
++		 */
++		pci_dev->state_saved = true;
++	} else if (pci_dev->state_saved) {
++		if (pci_dev->current_state == PCI_D0)
++			pci_dev->skip_bus_pm = true;
++	} else {
+ 		pci_save_state(pci_dev);
+ 		if (pci_power_manageable(pci_dev))
+ 			pci_prepare_to_sleep(pci_dev);
+Index: linux-pm/include/linux/pci.h
+===================================================================
+--- linux-pm.orig/include/linux/pci.h
++++ linux-pm/include/linux/pci.h
+@@ -344,6 +344,7 @@ struct pci_dev {
+ 						   D3cold, not set for devices
+ 						   powered on/off by the
+ 						   corresponding bridge */
++	unsigned int	skip_bus_pm:1;	/* Internal: Skip bus-level PM */
+ 	unsigned int	ignore_hotplug:1;	/* Ignore hotplug events */
+ 	unsigned int	hotplug_user_indicators:1; /* SlotCtl indicators
+ 						      controlled exclusively by
 
 
-Kapolcs M=C3=A1ty=C3=A1s
-Hungary Team Leader =20
+
