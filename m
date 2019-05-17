@@ -2,93 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4523421820
-	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 14:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F119D218A1
+	for <lists+linux-pm@lfdr.de>; Fri, 17 May 2019 14:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728472AbfEQMZw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 May 2019 08:25:52 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:35425 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728073AbfEQMZw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 08:25:52 -0400
-Received: from [192.168.178.167] ([109.104.37.130]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N4i3d-1gi8y90Jhn-011mLu; Fri, 17 May 2019 14:25:26 +0200
-Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.2-rc1
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Rui Zhang <rui.zhang@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20190516044313.GA17751@localhost.localdomain>
- <CAHk-=wiaO_8SiEB9QM3vOTniiT67K6CBH0uHJ82-Dp_+6kxH3g@mail.gmail.com>
- <4803994d-f519-a6b6-f5bb-a2f50d91ecd7@i2se.com>
-Message-ID: <d6da5203-c113-5cec-c12e-9af91a9ff716@i2se.com>
-Date:   Fri, 17 May 2019 14:25:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1728924AbfEQMxT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 May 2019 08:53:19 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:34786 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728914AbfEQMxS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 May 2019 08:53:18 -0400
+Received: by mail-wm1-f68.google.com with SMTP id j187so9263776wma.1
+        for <linux-pm@vger.kernel.org>; Fri, 17 May 2019 05:53:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zcYe+aG05w2UO1ZXKc7jrJL+Ovz86Hm2R29bKoYuqSk=;
+        b=rH+kGDRgLjtYMbwtzFJ/+HV77STlFFl9+9e0qxF5qNH187nZGa3EUzb5HtpMlZGFT6
+         mckiPHYZVo2XqQmO1fByTS99DIzkCwIQ0iUbQ8XHGjZbhI8b5QBZtMCne7nKV7amcR/s
+         w4+XsqLKG9SBEjX8GOUoBqoAhmgiF2hDtuTD8WHAsJ5S/xIfNjTMr7awPUo+K/bLURrZ
+         qxFHpmXdAiB3O2i2y7SrnQ668XS/UyRoDj3aZAIPC8+B157NId4jYGjfIgIn1RCqE5d3
+         rHQOIOyDVBQTQjLJj75ZTCKZMfEzs1y7e0ycrN335/0eP7kUTr/XM1F5BL47ednF4iBY
+         QRTg==
+X-Gm-Message-State: APjAAAVfAcnrPt/s914noi2vpl2+yVSq0FAXhZSGMSFWkw+lKcHCe0+3
+        XAjnXHYdH+o9YhsIMmpV64khLqlgmgw=
+X-Google-Smtp-Source: APXvYqzvQo4PLIOLgEYS45mThRlVYeoSKfB0i310BFOLRFwKSRuu+NOfl46fdrqxPtJzbnmADzwaFw==
+X-Received: by 2002:a1c:7dcf:: with SMTP id y198mr2040524wmc.94.1558097596479;
+        Fri, 17 May 2019 05:53:16 -0700 (PDT)
+Received: from localhost.localdomain ([151.29.174.33])
+        by smtp.gmail.com with ESMTPSA id q3sm6514366wrr.16.2019.05.17.05.53.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 17 May 2019 05:53:15 -0700 (PDT)
+Date:   Fri, 17 May 2019 14:53:13 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [ANNOUNCE][CFP] Power Management and Scheduling in the Linux
+ Kernel III edition (OSPM-summit 2019)
+Message-ID: <20190517125313.GJ14991@localhost.localdomain>
+References: <20190114161910.GB5581@localhost.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <4803994d-f519-a6b6-f5bb-a2f50d91ecd7@i2se.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:f5a1GGMzwh+OJVKp3JEevbnxv4E4pHWmhaLPs4AP+6XsV4DhPVI
- 1ZC4jRQoyl9v8RmeHk35a2Z+mETuGNKmnSalWnfyWN3xuqgq6wyyj4zMJ93nflBbzD2KQ7J
- oMteAHY2B07z65HLNdvYftDwhmb/ZxofvDOW3t2+5JEY2bdPOp8msDZztRhVgGLCcMIeVfy
- oJWxd9caAfRPHR+p9dlxA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cqbDtugd1ew=:CgicXDFd3qtxngcDKrjVr7
- ZgnuByVbxmgO8qKH+zqNdqbbY3dELmRo8Nwy3YDhZziw+/XvQ/0WVGdjFg5GFBA8bVXlvZ1pA
- dNDb0F4M1keUPQebLWqwHOkHVr/MuC+OsddbxUVmFCzJyHQ/6P3AWHU0wb1hY6tLGgLXkUotw
- k8af0d8TYRgtOcPgS0diKDE588GiOdHIiOysfAxoTN+SzB+H2U1DZWYT7AOYhPbVCIvYD8h6W
- GsZUe5gvOwlMmpJe1mdprG2GCUSciJd5xxN1eeYoaWrNaNtdELWKFscw0Q2kWJ0Z4OrnqptSr
- 2k3r1ocNiS1qliMQpWNj7QxilEhVpbRnbC9YrxwD/U0sDaER9DPbKf4L7iw1z0R16oRXk5g2F
- llntN61/SMKG55Cj+a2zEhdnYqRJ/3VTsuoJK5zP4A5ABIkcmzPcq/o/1PZn+5yBdK7lEmuS3
- UyI4VXxkuRyyLjSx1NR/Ay0mMgFRHzekggtHklBX5kCyKcYjukstTulL1xFbLud1sitW73BQk
- qhhcYEOyRaX6spwBvvOEDxAH/vHXqyKsTfLtI93oWKeNuvJG/U14vxq4yPQtF+uz4jnA9x5y1
- XrNysL4X8nbh4uedlbyuq4Adm/OuMhJgIKlMF7DB8FUVPd/B4IjxS9tlQhEx8DvDEVQfrzU9D
- MsnIJo/zVc9b8BICMBNOQmx8sAFTbOxsq2koIJnRNb/8gNYU8FeJaeRAU/B4t1ic+40an2YT2
- 30KSelRlJ/5YC9mDdaL4w8Qqbb9nhNI/ZbD3bB4lhmqJ9EQvOSObiLt5npE=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190114161910.GB5581@localhost.localdomain>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16.05.19 18:11, Stefan Wahren wrote:
-> Hi Linus,
->
-> On 16.05.19 17:07, Linus Torvalds wrote:
->> On Wed, May 15, 2019 at 9:43 PM Eduardo Valentin <edubezval@gmail.com> wrote:
->>> - thermal core has a new devm_* API for registering cooling devices, thanks to Guenter R.
->>>   I took the entire series, that is why you see changes on drivers/hwmon in this pull.
->> This clashed badly with commit 6b1ec4789fb1 ("hwmon: (pwm-fan) Add RPM
->> support via external interrupt"), which added a timer to the pwm-fan
->> handling.
->>
->> In particular, that timer now needed the same kind of cleanup changes,
->> and I'd like you guys (particularly Guenther, who was involved on both
->> sides) to double-check my merge.
->>
->> The way I solved it was to just make the pwm_fan_pwm_disable()
->> callback do both the pwm_diable() _and_ the del_timer_sync() on the
->> new timer. That seemed to be the simplest solution that meshed with
->> the new devm cleanup model, but while I build-tested the result, I
->> obviously did no actual use testing. And maybe there's some reason why
->> that approach is flawed.
-> i will try to test on our custom i.MX6 board. Unfortunately this take
-> some time since it isn't mainline yet (at least until tomorrow).
+Hi,
 
-Okay, today's test based on your tree ( a6a4b66bd8f ) were successful.
+On 14/01/19 17:19, Juri Lelli wrote:
+> Power Management and Scheduling in the Linux Kernel (OSPM-summit) III edition
+> May 20-22, 2019
+> Scuola Superiore Sant'Anna
+> Pisa, Italy
+> 
+> ---
+> 
+> .:: FOCUS
+> 
+> The III edition of the Power Management and Scheduling in the Linux
+> Kernel (OSPM) summit aims at fostering discussions on power management
+> and (real-time) scheduling techniques. Summit will be held in Pisa
+> (Italy) on May 20-22, 2019.
 
-Thanks
-Stefan
+Next week!
 
->
-> Stefan
->
->> Guenther?
->>
->>                     Linus
+FYI, final schedule is online (Italy (GMT+2)):
+
+http://retis.sssup.it/ospm-summit/program.html
+
+Live streaming events have been created and are accessible both from the
+summit schedule ("live streaming" links) and at:
+
+https://bit.ly/2Vz3yKg
+
+Best,
+
+- Juri
