@@ -2,97 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE39D2311E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 12:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEC12317C
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 12:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730263AbfETKNz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 May 2019 06:13:55 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:46099 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727108AbfETKNz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 06:13:55 -0400
-Received: by mail-pg1-f195.google.com with SMTP id t187so6554597pgb.13
-        for <linux-pm@vger.kernel.org>; Mon, 20 May 2019 03:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gSl0hdak9nrx3AjRA/ypcoIYXLtCzaU4jnEbvPcvNt8=;
-        b=JRFd3PDnga0E3LWtPoEqEV/39WriE8SzZ1OaF7n/NU7nJdlpwBoLgwLmjKEJpAvjPX
-         XZ1SmHbXXZ193KXruJGSbPsK93YJQfC5wXGkZOU3cIdhtTLLZLncciU/VgFYv4ypoWcA
-         UiHM6mh2RtiZrTevU5N3B6/lVDmfAWk6wlP9NRY324hi0FxwNsGhi9wdsu0rHb0Vhx/n
-         MGClOrhlg89rFShwBGqLaf99mD6KezVo7RAEdSWVDA5RW2t3yQjpL46CSYkkwWwS81n8
-         YTa9BrWd0ZSm0L2gZBK3heWtESBBTKDrSRGtSF/T6+IdbseVqzVpkKLX6PPaHhg3PXvH
-         S4cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gSl0hdak9nrx3AjRA/ypcoIYXLtCzaU4jnEbvPcvNt8=;
-        b=ha62jHxUzF0p4EhfqGsylRZ44LrxNvZOYKbKBuVjal+tgQNRtIyYR97SfuVe12ZN6z
-         4v9YTfv4NDnpVxSS1+RjOugE3gYWB4XuUjU+XQlx0ur64maKGUEeluywoo+T79xqYUuc
-         tNpXt4B1gHoyBYmdwhAxQhSGY89asXmmJjpeya/rZRmIsTLedXLwikP+T//nt3lIsBe2
-         bQIYC2QvDLQG4F0chE5DnyaYc/rI8ETWpGP1jv4JFnMqits8Fuj332uYpCtEm188dOdX
-         8iOu7AolH+CC2TQTmZft7BBV3j0K3p76BYCURboKEoauNCI7nCUVNVAVZxgDdnljQFNG
-         O5kA==
-X-Gm-Message-State: APjAAAWD/v2rHJFagsoBtuQDqXb4GlDAZTT5uJiQ9EowtkpZ548+PeYU
-        R85sp1V1Dros4AOnlxcaSkV2WA==
-X-Google-Smtp-Source: APXvYqyOW0QZtrH8O3rgAfo54rMSqrN3OZdfxdsodXTr+NokNvxXkGxPwDt1wmWe8pWIuVP0SPHygA==
-X-Received: by 2002:a62:1ec3:: with SMTP id e186mr33157231pfe.197.1558347234346;
-        Mon, 20 May 2019 03:13:54 -0700 (PDT)
-Received: from localhost ([122.172.118.99])
-        by smtp.gmail.com with ESMTPSA id i17sm22287324pfo.103.2019.05.20.03.13.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 03:13:52 -0700 (PDT)
-Date:   Mon, 20 May 2019 15:43:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 0/5] cpufreq: Add imx-cpufreq-dt driver for speed
- grading
-Message-ID: <20190520101351.huda4rmpdzaegnj7@vireshk-i7>
-References: <cover.1557742902.git.leonard.crestez@nxp.com>
- <20190514071322.avosfk4fzz2hzzx6@vireshk-i7>
- <20190520071417.GU15856@dragon>
+        id S1731045AbfETKkB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 May 2019 06:40:01 -0400
+Received: from mga01.intel.com ([192.55.52.88]:54204 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728551AbfETKkB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 20 May 2019 06:40:01 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 May 2019 03:40:00 -0700
+X-ExtLoop1: 1
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 20 May 2019 03:39:58 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 20 May 2019 13:39:57 +0300
+Date:   Mon, 20 May 2019 13:39:57 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH] PCI: PM: Avoid possible suspend-to-idle issue
+Message-ID: <20190520103957.GL2781@lahna.fi.intel.com>
+References: <2315917.ZGeXE6pBFC@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190520071417.GU15856@dragon>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <2315917.ZGeXE6pBFC@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-05-19, 15:14, Shawn Guo wrote:
-> On Tue, May 14, 2019 at 12:43:22PM +0530, Viresh Kumar wrote:
-> > On 13-05-19, 11:01, Leonard Crestez wrote:
-> > > Right now in upstream imx8m cpufreq support just lists a common subset
-> > > of OPPs because the higher ones should only be attempted after checking
-> > > speed grading in fuses.
-> > > 
-> > > Driver reads from nvmem and calls dev_pm_opp_set_supported_hw before
-> > > registering cpufreq-dt.
-> > 
-> > Who will apply patches 3-5 ?
+On Fri, May 17, 2019 at 11:08:50AM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Me.  Will apply them after the first two get applied.
+> If a PCI driver leaves the device handled by it in D0 and calls
+> pci_save_state() on the device in its ->suspend() or ->suspend_late()
+> callback, it can expect the device to stay in D0 over the whole
+> s2idle cycle.  However, that may not be the case if there is a
+> spurious wakeup while the system is suspended, because in that case
+> pci_pm_suspend_noirq() will run again after pci_pm_resume_noirq()
+> which calls pci_restore_state(), via pci_pm_default_resume_early(),
+> so state_saved is cleared and the second iteration of
+> pci_pm_suspend_noirq() will invoke pci_prepare_to_sleep() which
+> may change the power state of the device.
+> 
+> To avoid that, add a new internal flag, skip_bus_pm, that will be set
+> by pci_pm_suspend_noirq() when it runs for the first time during the
+> given system suspend-resume cycle if the state of the device has
+> been saved already and the device is still in D0.  Setting that flag
+> will cause the next iterations of pci_pm_suspend_noirq() to set
+> state_saved for pci_pm_resume_noirq(), so that it always restores the
+> device state from the originally saved data, and avoid calling
+> pci_prepare_to_sleep() for the device.
+> 
+> Fixes: 33e4f80ee69b ("ACPI / PM: Ignore spurious SCI wakeups from suspend-to-idle")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Applied just now.
-
--- 
-viresh
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
