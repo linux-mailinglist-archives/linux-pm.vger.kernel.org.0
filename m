@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 673AD22AEE
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 06:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEACE22AF4
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 06:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729812AbfETEnV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 May 2019 00:43:21 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:39394 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729675AbfETEnU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 00:43:20 -0400
-Received: by mail-pl1-f196.google.com with SMTP id g9so6091025plm.6
-        for <linux-pm@vger.kernel.org>; Sun, 19 May 2019 21:43:20 -0700 (PDT)
+        id S1728619AbfETErI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 May 2019 00:47:08 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43218 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727539AbfETErI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 00:47:08 -0400
+Received: by mail-pg1-f196.google.com with SMTP id t22so6126591pgi.10
+        for <linux-pm@vger.kernel.org>; Sun, 19 May 2019 21:47:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=+XiwKGCePMesqEFsZbk88+d/XnSzWj4VH7Ml5qL5pt0=;
-        b=unoGz+98418sHeX4y3va9Fw7O/7rbEjL0hqVIq1my/Asr2dzM38M5H+2LqZvHB8AAU
-         CqAQ6kJMNTvZsHuKd08/xPftA/HCBVOpd9T/IVsfET13Jf59zZ2lgw7rBogYKdMYL5HO
-         D19WNFD3+CXw7ekYEu/sBvRFOLcPxesn9XRptLA4MN0cxd/h+H6ijVajWhreBcZlEb89
-         1zto6lDvOL6iTVNTtZLtBD5/usk/MiY8ToYMfmuWPSFpLXmjSRm7UfgLrVM9IDZz023L
-         +jA3+5k0WyY/BV+s9tNRRQvSDaqiY473/tMDg9LXbhdS9165ETFM0jaOZW2A2jQBuMSY
-         XRug==
+        bh=znPD6qSCRqBSVISTFwv2IDS0tUXtYPowDMtFJwfIVG4=;
+        b=S6RC8/KF8MMJum/v07irupW0Jzz5U1cWZxnJgMBycQ7J895LZbEdp2S6H280gXSoa0
+         SJ5+zv7fSANzrQNVh5LnV0BQn9+ZCCh0UNQnRg6VIf68xhokxw9TRlKz8vZ3/u0h7zq9
+         oOhxl34eO8SRYCHxm57SuDWotd0GD9ObvR+77sI12lTOU4dHqSZjOWPMIMQYBpTQUS/f
+         t+vlbGUb6r/jcyjTS9A5/DVvxWSHfBLDeTq1EPzFNxc/gvD4wFXOtLXUGJVEsGOG6BoH
+         VcfIbzffj7ppyKXxEua+4ulXi/67rNtwR0vWGY1TmVrciBOjTa8cWJg5zsyHXsctJQ6W
+         eJdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+XiwKGCePMesqEFsZbk88+d/XnSzWj4VH7Ml5qL5pt0=;
-        b=XR7GdPw2ebGHSg/eTTprC657kAypK7Ke0KiEKxVcrUrcRY04+aid6OFGm8U8uIipTk
-         jZ2foascNmzlqvD00mnxxCR8RMn93lLwiwObHbf+LcORTkphY8yOXgY6mbgH4LpENbVU
-         JXpDnjnaDiwdA5ena1JS33sJ5XAB8PE8zxRrF5EB1Lp1S1YSAAjdYv9bZvn5b4w163OS
-         xlaSzOIteYy3C1GVNE/MxE505eU+1ANIe2l99QbmVQpfxKA2Owo8qIXzNPn8W8M5l7ip
-         jGsYozA1vByKkKfbf0xKb1SCRqLsHRHVBs7J9kmT0jomPvCMx1aGk+EvKW5uQNHN2l3K
-         4/qQ==
-X-Gm-Message-State: APjAAAX5gSdZY75meCccR+X3MewjkvwO5Xr0R9idxx6UsweX8LLSg6Rg
-        UzsEoSpm7IMorw4zdmWhzBBOIw==
-X-Google-Smtp-Source: APXvYqxKxyg7Aak1yT0b9mdNSLwjCHjek+L8V1ZtJqzVLOZXXZuDfEEcEGssLjb+LtYO06CzCKIoow==
-X-Received: by 2002:a17:902:8e8a:: with SMTP id bg10mr19217573plb.247.1558327400037;
-        Sun, 19 May 2019 21:43:20 -0700 (PDT)
+        bh=znPD6qSCRqBSVISTFwv2IDS0tUXtYPowDMtFJwfIVG4=;
+        b=W9JvcpftNN1YRHIXXUP5QeiEZ9MOOAhKiePY36SGNNeP+paupYpJ9D9dnQCDlqhjLj
+         a5QZq+C5q0h3Xn5ien/L13xm10tVPJmsTtS+0gKZAYRRPEqU8UF9bsnnjpqlnelxSKEF
+         WyWJRu/cHrjFs6c0RR9g6uejszjlfLvIBqb/gwpvQQKx5D1bxQ1mKg+nvVOiQrD370t7
+         D8kQOWt1uH4im/d4KvZZ/IMKMQNW0zQ+XKtEtClHh8LhzRJo/zmvwYCtMZ70jaZBW+hU
+         FDCVLNVNKUvtjjFy0EHB3DuufmlAvlVPM1wSwESavoJyIzE501odQKkk5izONTqlKsuW
+         ue0w==
+X-Gm-Message-State: APjAAAW6ptEP0lJGoBcVozzzVFix6XivXrT+jO7XWq2u0q97k+7bkgyv
+        hGfvaJlnBTpjNtLYbr3+Oich+A==
+X-Google-Smtp-Source: APXvYqw2fylBLzNgfG8L7skLbYmkylnXBeuW32Xv1x+By0k9dxCCF49gfY26D3/iHYdXTo1cfNHHCQ==
+X-Received: by 2002:a63:1c4:: with SMTP id 187mr46179260pgb.317.1558327627746;
+        Sun, 19 May 2019 21:47:07 -0700 (PDT)
 Received: from localhost ([122.172.118.99])
-        by smtp.gmail.com with ESMTPSA id b16sm27365221pfd.12.2019.05.19.21.43.18
+        by smtp.gmail.com with ESMTPSA id s28sm22716058pgl.88.2019.05.19.21.47.06
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 19 May 2019 21:43:19 -0700 (PDT)
-Date:   Mon, 20 May 2019 10:13:17 +0530
+        Sun, 19 May 2019 21:47:06 -0700 (PDT)
+Date:   Mon, 20 May 2019 10:17:04 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -58,16 +58,17 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com, fan.chen@mediatek.com
-Subject: Re: [PATCH 4/8] dt-bindings: devfreq: add compatible for mt8183 cci
- devfreq
-Message-ID: <20190520044317.pwciu4bjuz5jh7f7@vireshk-i7>
+        srv_heupstream@mediatek.com, fan.chen@mediatek.com,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Roger Lu <roger.lu@mediatek.com>
+Subject: Re: [PATCH 6/8] PM / OPP: Support adjusting OPP voltages at runtime
+Message-ID: <20190520044704.unftq6q5vy73z5bo@vireshk-i7>
 References: <1557997725-12178-1-git-send-email-andrew-sh.cheng@mediatek.com>
- <1557997725-12178-5-git-send-email-andrew-sh.cheng@mediatek.com>
+ <1557997725-12178-7-git-send-email-andrew-sh.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1557997725-12178-5-git-send-email-andrew-sh.cheng@mediatek.com>
+In-Reply-To: <1557997725-12178-7-git-send-email-andrew-sh.cheng@mediatek.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -75,49 +76,32 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 16-05-19, 17:08, Andrew-sh.Cheng wrote:
-> From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+> From: Stephen Boyd <sboyd@codeaurora.org>
 > 
-> This adds dt-binding documentation of cci devfreq
-> for Mediatek MT8183 SoC platform.
+> On some SoCs the Adaptive Voltage Scaling (AVS) technique is
+> employed to optimize the operating voltage of a device. At a
+> given frequency, the hardware monitors dynamic factors and either
+> makes a suggestion for how much to adjust a voltage for the
+> current frequency, or it automatically adjusts the voltage
+> without software intervention. Add an API to the OPP library for
+> the former case, so that AVS type devices can update the voltages
+> for an OPP when the hardware determines the voltage should
+> change. The assumption is that drivers like CPUfreq or devfreq
+> will register for the OPP notifiers and adjust the voltage
+> according to suggestions that AVS makes.
 > 
-> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> This patch is devired from [1] submitted by Stephen.
+> [1] https://lore.kernel.org/patchwork/patch/599279/
+> 
+> Signed-off-by: Stephen Boyd <sboyd@codeaurora.org>
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 > ---
->  .../bindings/devfreq/mt8183-cci-devfreq.txt          | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt b/Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt
-> new file mode 100644
-> index 000000000000..3189902902e0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt
-> @@ -0,0 +1,20 @@
-> +* Mediatek Cache Coherent Interconnect(CCI) frequency device
-> +
-> +Required properties:
-> +- compatible: should contain "mediatek,mt8183-cci" for frequency scaling of CCI
+>  drivers/opp/core.c     | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_opp.h | 11 +++++++
+>  2 files changed, 89 insertions(+)
 
-Example doesn't have this compatible .
-
-> +- clocks: for frequency scaling of CCI
-> +- clock-names: for frequency scaling of CCI driver to reference
-> +- regulator: for voltage scaling of CCI
-> +- operating-points-v2: for frequency scaling of CCI opp table
-> +
-> +Example:
-> +	cci: cci {
-> +		compatible = "mediatek,cci";
-> +		clocks = <&apmixedsys CLK_APMIXED_CCIPLL>;
-> +		clock-names = "cci_clock";
-> +		operating-points-v2 = <&cci_opp>;
-> +	};
-> +
-> +	&cci {
-> +		proc-supply = <&mt6358_vproc12_reg>;
-> +	};
-> \ No newline at end of file
-> -- 
-> 2.12.5
+This is an rcu implementation which got removed long back from OPP core. Please
+align this with the latest changes.
 
 -- 
 viresh
