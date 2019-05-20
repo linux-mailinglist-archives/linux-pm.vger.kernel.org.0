@@ -2,71 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B2C22CBB
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 09:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D38A22CDC
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 09:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729755AbfETHPM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 May 2019 03:15:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47796 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726053AbfETHPL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 20 May 2019 03:15:11 -0400
-Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 563A52081C;
-        Mon, 20 May 2019 07:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558336511;
-        bh=9Ws2DvYBg8/lRkMwUR/N+FNcmhvVHWsnSL7L2wc1H0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DMGZXzSweW9P9nn+k3NVg4QRhte4ublBQOGA/yf3I6zYyphGuasDy9bVTciFU/lgG
-         yJKzzEgomkntyFOodMCbj+kOaVDOUo4GLuhKajN450YJBjkpE2dzXyfDHu1jIZf0FY
-         EHHENrURaK6wpVxGlCdUtKl9lhFMi8Bs2XclVRBs=
-Date:   Mon, 20 May 2019 15:14:18 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
+        id S1728000AbfETH0d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 May 2019 03:26:33 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:45133 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725983AbfETH0d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 03:26:33 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 6E3138033F; Mon, 20 May 2019 09:26:21 +0200 (CEST)
+Date:   Mon, 20 May 2019 09:26:30 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Ran Wang <ran.wang_1@nxp.com>
+Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 0/5] cpufreq: Add imx-cpufreq-dt driver for speed
- grading
-Message-ID: <20190520071417.GU15856@dragon>
-References: <cover.1557742902.git.leonard.crestez@nxp.com>
- <20190514071322.avosfk4fzz2hzzx6@vireshk-i7>
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] soc: fsl: add RCPM driver
+Message-ID: <20190520072630.GA3674@amd>
+References: <20190520065816.32360-1-ran.wang_1@nxp.com>
+ <20190520065816.32360-3-ran.wang_1@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="2oS5YaxWCcQjTEyO"
 Content-Disposition: inline
-In-Reply-To: <20190514071322.avosfk4fzz2hzzx6@vireshk-i7>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <20190520065816.32360-3-ran.wang_1@nxp.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 14, 2019 at 12:43:22PM +0530, Viresh Kumar wrote:
-> On 13-05-19, 11:01, Leonard Crestez wrote:
-> > Right now in upstream imx8m cpufreq support just lists a common subset
-> > of OPPs because the higher ones should only be attempted after checking
-> > speed grading in fuses.
-> > 
-> > Driver reads from nvmem and calls dev_pm_opp_set_supported_hw before
-> > registering cpufreq-dt.
-> 
-> Who will apply patches 3-5 ?
 
-Me.  Will apply them after the first two get applied.
+--2oS5YaxWCcQjTEyO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Shawn
+Hi!
+
+> The NXP's QorIQ Processors based on ARM Core have RCPM module
+> (Run Control and Power Management), which performs all device-level
+> tasks associated with power management such as wakeup source control.
+>=20
+> This driver depends on PM wakeup source framework which help to
+> collect wake information.
+>=20
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+
+> +// Copyright 2019 NXP
+> +//
+> +// Author: Ran Wang <ran.wang_1@nxp.com>,
+
+extra ,
+
+> +	rcpm =3D dev_get_drvdata(dev);
+> +	if (!rcpm)
+> +		return -EINVAL;
+> +
+> +	/* Begin with first registered wakeup source */
+> +	ws =3D wakeup_source_get_next(NULL);
+> +	while (ws) {
+
+while (ws =3D wakeup_source_get_next(NULL))
+
+?
+
+								Pavel
+							=09
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--2oS5YaxWCcQjTEyO
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAlziVqYACgkQMOfwapXb+vJYYgCfeELdsln2HAPCMPJgO2RvIdz1
+T5EAn0hVPEYV4vYlN3zVpYR6YBxZjFlI
+=Gqqe
+-----END PGP SIGNATURE-----
+
+--2oS5YaxWCcQjTEyO--
