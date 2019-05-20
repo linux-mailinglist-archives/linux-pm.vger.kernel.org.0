@@ -2,110 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF825231C8
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 12:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE3C231DE
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 13:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731317AbfETKv4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 May 2019 06:51:56 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:36270 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730549AbfETKv4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 06:51:56 -0400
-Received: by mail-pl1-f193.google.com with SMTP id d21so6562323plr.3
-        for <linux-pm@vger.kernel.org>; Mon, 20 May 2019 03:51:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1YuRtghB95O7LhcsLf1/GyzlG0H9oHKpVmg43qxycAc=;
-        b=kYY51UqLfQVqkc2pUGOEqHYiVJK7aLiK83xI/QmKPQ83rVUHjubs4HhY3WgnjPV8Ph
-         +p6tCG9P+dJnHcchn3HiDctSF0yQA26bk8LSB219E644Gsm0Z1FLqUnsS3+r6pJNU7JM
-         F9fLagHSp3Mz6H1zX6oNBvGJ6baL05JXajQShS4uasI188DbB4upGMpFgPkkW+o5f/bL
-         ZE36aahLuXDGd9PJjztiqIChzQIpcJ3YH/cNwgrxJTR7413qQpHk/qUWWIKNe90WjxM9
-         DRjIBj6m38yHeJnptCfjNj2CpXQpeb1y+/vPkFdyv5gLFdczZtBRPIChvp1j2Pp2eUc4
-         ZEUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1YuRtghB95O7LhcsLf1/GyzlG0H9oHKpVmg43qxycAc=;
-        b=Nzk02jP1LPAv+FHoOBh4IEPXfN6qC+TMiXZhUowGPekPsainKHXjpPMpnhf07FQJpz
-         4SksJmOx2GpaldzNg1ydY+aauZCP68KgqGmKPY1zVhJ//Z7ezftB+v3/wOxSiUNzFCKo
-         XZI/ODU5216Hk/p7mIpHhsAubvrPhuj5B+qcaalUlCFCD1uWDN3fuyf+H+JHAN4N6Dvi
-         CD65ZSaQbLC0NMQ1d8tBvwtdA8CA5KM3m5yJS792EPhic67iQaboK9E62o0vEg/u8gPV
-         gwJfYoFXTdWW0Y6ExcvLCMNPOwZTykBL+SNbbzcYTlWuSubpvEcU3Mbv8DKsM0zJJrDW
-         kSEg==
-X-Gm-Message-State: APjAAAVlPp+n18lR0o8kzRA5lMSof4LGZW/eWWfrKi8MlZ2YVN3/Qwa0
-        OO2zpCn3KwFWXiY4dAh9uGzgQKhKeBo=
-X-Google-Smtp-Source: APXvYqx2xIC25FoDnT5f3U0WxisE/vb00p1qHkPCPrdQV39EMhcy4uT+6FeiH4ZP+MSjumuKX4Eyww==
-X-Received: by 2002:a17:902:f20b:: with SMTP id gn11mr75087490plb.126.1558349515329;
-        Mon, 20 May 2019 03:51:55 -0700 (PDT)
-Received: from localhost ([122.172.118.99])
-        by smtp.gmail.com with ESMTPSA id k9sm20248370pfa.180.2019.05.20.03.51.54
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 03:51:54 -0700 (PDT)
-Date:   Mon, 20 May 2019 16:21:53 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     stefan.wahren@i2se.com, devicetree@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        mbrugger@suse.de, rjw@rjwysocki.net, sboyd@kernel.org,
-        eric@anholt.net, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, ptesarik@suse.com,
-        ssuloev@orpaltech.com, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC v2 0/5] cpufreq support for the Raspberry Pi
-Message-ID: <20190520105153.ftlnjx7ocr2qkxhd@vireshk-i7>
-References: <20190520104708.11980-1-nsaenzjulienne@suse.de>
+        id S1731353AbfETK7o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 May 2019 06:59:44 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:56389 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731332AbfETK7o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 06:59:44 -0400
+X-Originating-IP: 90.88.22.185
+Received: from localhost (aaubervilliers-681-1-80-185.w90-88.abo.wanadoo.fr [90.88.22.185])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 561FC1C000A;
+        Mon, 20 May 2019 10:59:32 +0000 (UTC)
+Date:   Mon, 20 May 2019 12:59:31 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Frank Lee <tiny.windzz@gmail.com>, rui.zhang@intel.com,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, robh+dt@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, catalin.marinas@arm.com,
+        will.deacon@arm.com, David Miller <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan.Cameron@huawei.com,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        paulmck@linux.ibm.com, Andy Gross <andy.gross@linaro.org>,
+        olof@lixom.net, bjorn.andersson@linaro.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        marc.w.gonzalez@free.fr, stefan.wahren@i2se.com,
+        enric.balletbo@collabora.com, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
+Message-ID: <20190520105931.5xa4j3hhxadtgxie@flea>
+References: <20190512082614.9045-1-tiny.windzz@gmail.com>
+ <20190512082614.9045-3-tiny.windzz@gmail.com>
+ <20190512221612.ubmknvim4utnqpl4@core.my.home>
+ <CAEExFWv5A5mhpV7afQT=AaYx2ko5QnfbM6HvfuTgT1Na=ssOcw@mail.gmail.com>
+ <20190516182936.h6xdzp3gtg4ikave@core.my.home>
+ <CAEExFWvDO3wJd6wp1hFudf3EGF0NixgKAwAd5-b1=VLF+7-jCw@mail.gmail.com>
+ <20190519142239.eolisexp5mrdyafz@core.my.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cs6fqv7etllvtecf"
 Content-Disposition: inline
-In-Reply-To: <20190520104708.11980-1-nsaenzjulienne@suse.de>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20190519142239.eolisexp5mrdyafz@core.my.home>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-05-19, 12:47, Nicolas Saenz Julienne wrote:
-> Hi all,
-> as some of you may recall I've been spending some time looking into
-> providing 'cpufreq' support for the Raspberry Pi platform[1]. I think
-> I'm close to something workable, so I'd love for you to comment on it.
-> 
-> There has been some design changes since the last version. Namely the
-> fact that I now make sure *only* the CPU frequency is updated. The
-> firmware API we use has two modes, with or without turbo. Enabling turbo
-> implies not only scaling the CPU clock but also the VPU and other
-> peripheral related clocks.  This is problematic as some of them are not
-> prepared for this kind frequency changes. I spent some time adapting the
-> peripheral drivers, but the result was disappointing as they poorly
-> support live frequency changes (which most other chips accept, think for
-> instance I2C and clock stretching) but also turned out hard to integrate
-> into the kernel. As we were planning to use 'clk_notifiers' which turns
-> out not to be such a good idea as it's prone to deadlocks and not
-> recommended by the clock maintainers[2]. It's also worth mentioning that
-> the foundation kernel doesn't support VPU frequency scaling either.
-> 
-> With this in mind, and as suggested by clock maintainers[2], I've
-> decided to integrate the firmware clock interface into the bcm2835 clock
-> driver. This, in my opinion, provides the least friction with the
-> firmware and lets us write very simple and portable higher level
-> drivers. As I did with the 'cpufreq' driver which simply queries the max
-> and min frequencies available, which are configurable in the firmware,
-> to then trigger the generic 'cpufreq-dt'.
-> 
-> In the future we could further integrate other firmware dependent clocks
-> into the main driver. For instance to be able to scale the VPU clock,
-> which should be operated through a 'devfreq' driver.
-> 
-> This was tested on a RPi3b+ and if the series is well received I'll test
-> it further on all platforms I own.
 
-Please always supply version history on what has changed from V1. And
-why do you keep sending it as RFC ? Just keep the default PATCH thing,
-the patches are in good shape I would say.
+--cs6fqv7etllvtecf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-viresh
+On Sun, May 19, 2019 at 04:22:39PM +0200, Ond=C5=99ej Jirman wrote:
+> On Sat, May 18, 2019 at 12:34:57AM +0800, Frank Lee wrote:
+> > HI,
+> >
+> > On Fri, May 17, 2019 at 2:29 AM Ond=C5=99ej Jirman <megous@megous.com> =
+wrote:
+> > >
+> > > Hi Yangtao,
+> > >
+> > > thank you for work on this driver.
+> > >
+> > > On Fri, May 17, 2019 at 02:06:53AM +0800, Frank Lee wrote:
+> > > > HI Ond=C5=99ej,
+> > > >
+> > > > On Mon, May 13, 2019 at 6:16 AM Ond=C5=99ej Jirman <megous@megous.c=
+om> wrote:
+> > > > > > +
+> > > > > > +/* Temp Unit: millidegree Celsius */
+> > > > > > +static int tsens_reg2temp(struct tsens_device *tmdev,
+> > > > > > +                           int reg)
+> > > > >
+> > > > > Please name all functions so that they are more clearly identifia=
+ble
+> > > > > in stack traces as belonging to this driver. For example:
+> > > > >
+> > > > >   sun8i_ths_reg2temp
+> > > > >
+> > > > > The same applies for all tsens_* functions below. tsens_* is too
+> > > > > generic.
+> > > >
+> > > > Done but no sun8i_ths_reg2temp.
+> > > >
+> > > > ths_reg2tem() should be a generic func.
+> > > > I think it should be suitable for all platforms=EF=BC=8C so no plat=
+form prefix.
+> > >
+> > > You've missed my point. The driver name is sun8i_thermal and if you g=
+et
+> > > and oops from the kernel you'll get a stack trace where there are jus=
+t function
+> > > names. If you use too generic function names, it will not be clear wh=
+ich
+> > > driver is oopsing.
+> > >
+> > >   - sun8i_ths_reg2temp will tell you much more clearly where to searc=
+h than
+> > >   - ths_reg2temp
+> > >
+> > > Of course you can always grep, but most thermal drivers are thermal s=
+ensor (ths)
+> > > drivers, and if multiple of them used this too-generic naming scheme =
+you'd
+> > > have hard time debugging.
+> > >
+> > > Look at other thermal drivers. They usually encode driver name in the=
+ function
+> > > names to help with identification (even if these are static driver-lo=
+cal
+> > > functions).
+> > >
+> >
+> > Can we change to sunxi_ths_ prefix?
+>
+> It should probably match the driver name, but yes, that's better.
+
+Not really. This driver will not support all the Allwinner devices, so
+sunxi is seriously misleading.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--cs6fqv7etllvtecf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXOKIjwAKCRDj7w1vZxhR
+xTP8APwM6R/JGZlZh8LDRMjlyCgFBIRiGljCGv2QrzA5AEuMMQD+K7kvKFJY3y7e
+kwh8XD4UChjl2L6sIApfpG0X2XN63Qc=
+=BTfA
+-----END PGP SIGNATURE-----
+
+--cs6fqv7etllvtecf--
