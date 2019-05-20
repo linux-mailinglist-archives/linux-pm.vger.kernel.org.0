@@ -2,105 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE7E2303F
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 11:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B69230AC
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 11:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729720AbfETJZC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 May 2019 05:25:02 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:48494 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729357AbfETJZC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 05:25:02 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id C27EA80450; Mon, 20 May 2019 11:24:49 +0200 (CEST)
-Date:   Mon, 20 May 2019 11:24:59 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Ran Wang <ran.wang_1@nxp.com>
-Cc:     Pavel Machek <pavel@denx.de>, Leo Li <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1729675AbfETJvE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 May 2019 05:51:04 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:38282 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730353AbfETJvD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 20 May 2019 05:51:03 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 483F120028A;
+        Mon, 20 May 2019 11:51:01 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4968320018B;
+        Mon, 20 May 2019 11:50:55 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E68B6402A2;
+        Mon, 20 May 2019 17:50:47 +0800 (SGT)
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH V2 3/3] soc: fsl: add RCPM driver
-Message-ID: <20190520092459.GC9748@amd>
-References: <20190517033946.30763-1-ran.wang_1@nxp.com>
- <20190517033946.30763-3-ran.wang_1@nxp.com>
- <20190519213844.GH31403@amd>
- <AM5PR0402MB2865EC5E1EF12C6C1D3C5566F1060@AM5PR0402MB2865.eurprd04.prod.outlook.com>
- <20190520085647.GA9748@amd>
- <AM5PR0402MB2865F4574B19761848B001F9F1060@AM5PR0402MB2865.eurprd04.prod.outlook.com>
- <20190520090748.GB9748@amd>
- <AM5PR0402MB2865E28B2E2296CB878ACEA2F1060@AM5PR0402MB2865.eurprd04.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="0lnxQi9hkpPO77W3"
-Content-Disposition: inline
-In-Reply-To: <AM5PR0402MB2865E28B2E2296CB878ACEA2F1060@AM5PR0402MB2865.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ran Wang <ran.wang_1@nxp.com>
+Subject: [PATCH v4 1/3] PM: wakeup: Add routine to help fetch wakeup source object.
+Date:   Mon, 20 May 2019 17:52:36 +0800
+Message-Id: <20190520095238.29210-1-ran.wang_1@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Some user might want to go through all registered wakeup sources
+and doing things accordingly. For example, SoC PM driver might need to
+do HW programming to prevent powering down specific IP which wakeup
+source depending on. And is user's responsibility to identify if this
+wakeup source he is interested in.
 
---0lnxQi9hkpPO77W3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+---
+Change in v4:
+	- None.
 
-Hi!
+Change in v3:
+	- Adjust indentation of *attached_dev;.
 
-> > > > You are right, but the current code is "interesting". What about
-> > > >
-> > > >     ws =3D NULL;
-> > > >     while (ws =3D wakeup_source_get_next(NULL)) ...
-> > > >
-> > > > then?
-> > >
-> > > Did you mean:
-> > >      ws =3D NULL;
-> > >      while (ws =3D wakeup_source_get_next(ws)) ...
-> > >
-> > >    Yes, that will be the same to my original logic, do you recommend
-> > > to change to this? :)
-> >=20
-> > Yes please. It will be less confusing to the reader.
->=20
-> OK, if no other comment, I will work out v4, fix this and extra ','
-> =20
-> > Thanks (and sorry for cross-talk),
->=20
-> That's OK, thanks for your time.
+Change in v2:
+	- None.
 
-You can add
+ drivers/base/power/wakeup.c |   18 ++++++++++++++++++
+ include/linux/pm_wakeup.h   |    3 +++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index 5b2b6a0..6904485 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -14,6 +14,7 @@
+ #include <linux/suspend.h>
+ #include <linux/seq_file.h>
+ #include <linux/debugfs.h>
++#include <linux/of_device.h>
+ #include <linux/pm_wakeirq.h>
+ #include <trace/events/power.h>
+ 
+@@ -226,6 +227,22 @@ void wakeup_source_unregister(struct wakeup_source *ws)
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(wakeup_source_unregister);
++/**
++ * wakeup_source_get_next - Get next wakeup source from the list
++ * @ws: Previous wakeup source object, null means caller want first one.
++ */
++struct wakeup_source *wakeup_source_get_next(struct wakeup_source *ws)
++{
++	struct list_head *ws_head = &wakeup_sources;
++
++	if (ws)
++		return list_next_or_null_rcu(ws_head, &ws->entry,
++				struct wakeup_source, entry);
++	else
++		return list_entry_rcu(ws_head->next,
++				struct wakeup_source, entry);
++}
++EXPORT_SYMBOL_GPL(wakeup_source_get_next);
+ 
+ /**
+  * device_wakeup_attach - Attach a wakeup source object to a device object.
+@@ -242,6 +259,7 @@ static int device_wakeup_attach(struct device *dev, struct wakeup_source *ws)
+ 		return -EEXIST;
+ 	}
+ 	dev->power.wakeup = ws;
++	ws->attached_dev = dev;
+ 	if (dev->power.wakeirq)
+ 		device_wakeup_attach_irq(dev, dev->power.wakeirq);
+ 	spin_unlock_irq(&dev->power.lock);
+diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+index 0ff134d..913b2fb 100644
+--- a/include/linux/pm_wakeup.h
++++ b/include/linux/pm_wakeup.h
+@@ -50,6 +50,7 @@
+  * @wakeup_count: Number of times the wakeup source might abort suspend.
+  * @active: Status of the wakeup source.
+  * @has_timeout: The wakeup source has been activated with a timeout.
++ * @attached_dev: The device it attached to
+  */
+ struct wakeup_source {
+ 	const char 		*name;
+@@ -70,6 +71,7 @@ struct wakeup_source {
+ 	unsigned long		wakeup_count;
+ 	bool			active:1;
+ 	bool			autosleep_enabled:1;
++	struct device		*attached_dev;
+ };
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -101,6 +103,7 @@ static inline void device_set_wakeup_path(struct device *dev)
+ extern void wakeup_source_remove(struct wakeup_source *ws);
+ extern struct wakeup_source *wakeup_source_register(const char *name);
+ extern void wakeup_source_unregister(struct wakeup_source *ws);
++extern struct wakeup_source *wakeup_source_get_next(struct wakeup_source *ws);
+ extern int device_wakeup_enable(struct device *dev);
+ extern int device_wakeup_disable(struct device *dev);
+ extern void device_set_wakeup_capable(struct device *dev, bool capable);
+-- 
+1.7.1
 
-to that version.
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---0lnxQi9hkpPO77W3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAlzicmsACgkQMOfwapXb+vI/kACfXfr5zSF0QsKLaIDUnn6ldYdL
-9rUAn1IvhOf/+HglBb9Ro5uZKDJsTOI+
-=fAL6
------END PGP SIGNATURE-----
-
---0lnxQi9hkpPO77W3--
