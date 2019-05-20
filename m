@@ -2,72 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDD1233AA
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 14:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11ED0234D5
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 14:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387826AbfETMT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 May 2019 08:19:28 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:50843 "EHLO
+        id S2389850AbfETMbN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 May 2019 08:31:13 -0400
+Received: from mout.kundenserver.de ([212.227.126.131]:57939 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387820AbfETMT1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 08:19:27 -0400
+        with ESMTP id S2390275AbfETMbM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 08:31:12 -0400
 Received: from [192.168.178.167] ([109.104.33.162]) by
  mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MqsL3-1gpFl41RHl-00mrvz; Mon, 20 May 2019 14:19:07 +0200
-Subject: Re: [RFC v2 4/5] dts: bcm2837: add per-cpu clock devices
+ id 1MVMuN-1h3E3m0KCl-00SRFw; Mon, 20 May 2019 14:30:53 +0200
+Subject: Re: [RFC v2 5/5] cpufreq: add driver for Raspbery Pi
 To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
-        sboyd@kernel.org, eric@anholt.net, ptesarik@suse.com,
-        linux-rpi-kernel@lists.infradead.org, ssuloev@orpaltech.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mturquette@baylibre.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     mbrugger@suse.de, sboyd@kernel.org, eric@anholt.net,
+        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        ptesarik@suse.com, linux-rpi-kernel@lists.infradead.org,
+        ssuloev@orpaltech.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, mturquette@baylibre.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20190520104708.11980-1-nsaenzjulienne@suse.de>
- <20190520104708.11980-5-nsaenzjulienne@suse.de>
+ <20190520104708.11980-6-nsaenzjulienne@suse.de>
 From:   Stefan Wahren <stefan.wahren@i2se.com>
-Message-ID: <af50c1e9-5f52-e06b-8d0b-c9f72fba1324@i2se.com>
-Date:   Mon, 20 May 2019 14:19:04 +0200
+Message-ID: <b23de4a1-e156-e458-d294-4206d87aa394@i2se.com>
+Date:   Mon, 20 May 2019 14:30:51 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190520104708.11980-5-nsaenzjulienne@suse.de>
+In-Reply-To: <20190520104708.11980-6-nsaenzjulienne@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Provags-ID: V03:K1:bNR85Xr5Ix+/N8OQzcAK+XY4eUmxwoteVwKocla9a9I7HzkvLcM
- /uiEboQgspShU1W4QTj7siUuy0oqooMehPTXT7eDhfGc4LVkxMDK8Ve1bX0/mEX0dvWe9cY
- ZBTCwKlQSXk3lfET5gAOnFazcF6lfCik5yk+iEsANhQDdrD/6+D6LHXfcPesRRjYroYeLA5
- r4Oi7dFGZg0MqE9xQ+Aeg==
+X-Provags-ID: V03:K1:8EPy0TEJACtLRM++yjvBbmbVCw2iG8lr+b2JXdcGP7gvIcA4EEF
+ 56n5p7w6xmP6ibp3AyK5HtXHzKAv9Bq8BsS2bg2iccrymCgCiJAjQ4TkTr7vGZecgfh5pVx
+ hFT+McXrzs0zuDaAwa4gcZC2IHmf/QjzYzdSV0nE1ZKWOFCxpfSuORzsoNbnkSWwGgwXnAk
+ 9AUB7HqT/Rv21BjVmbEKA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6J1Fp4MKs28=:EUhQ8mvrBMpbz/M+ADxWx3
- r/nxWy6+BZ9mkIz0Jn843As9r2wZB17pO/yhpXhG8Wcd6DfI3VO8BU+joDy00A6lI4nTkkvpb
- juD4rVnuBJvH8GH0iARDEgvNWwaj2NnvHhllrxCQsaD9F4LkHDbPlcDtCh9tBCLHHvlg2+CMi
- zo7li5BCz7kfnu6fh4mLkgG7/LlDT5OsIsePWv9qZvbt5oOkfJuRENFOVVFhml8ZKAEf576aV
- Uh4KmJ9u+g5H2zk1KqHGPfMt5Qgzsioxxjoa/kjddfijnYCtvBznCcemvh/OiGN4uJVZBKjbN
- dTv81y2YGx47evOYezaPrDgGCmDPICIaregOF4cCz40R1xoKKhF77HqsSDQKXs/WG6CBD+Eo5
- a2k2IKVKIEpfBK6NCkM4i2pUOU6aLtDYe0L4ocYMu+Y82Qg3GvFYvUYSmiQl3DRZ+TMCJhrNv
- mdvkgm7848M7em8ysrSzfVwYssutfMW11SojWGyXlgqEN6HeOXSKwbhzz3RnhhbkpKs5tF0Y0
- XJrrxF4+a5Ym/LrItbxkz53pjRwiOr+QirImQtfP+mA0gHI1DK5IKkMloFOZJWmjX5oavoAdN
- TRnAretttyb/aSU1GjCjDfUPBYsFoDCfFHHL0soDOkZL0Pq3zjA2QADigHSIquHz60uPPAYWv
- xmXaDQBQsoL1BguVHzwiFVpiEY1xf904cAZMJEEIRKeWCxWQxM81yyASMd1drUXqPdg096jtA
- 4wM1Bfs/IbW91rTOPRpHtsyA76i1t7j850Kw3ZzTMdDk643oku66LbG8L0hLRUl59drWFpCcU
- HtB52UfDRRY9i4xIkEgI15kY27xVxBk1+4VSC1i7DK3ybJD3zSb+QTSnswW/27Q34u0eNWZ23
- vzkE8vSFO7liN76e2kHw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oYIxwR3Gy8w=:WYzhHcJaMcyZ+BIqULb+5H
+ ci6BYAOtjHdDZOMuqgG/ejVx61x9vJMvtKwcYw3PhVtnxd8ZA9wBsdxOkUlpPK27+z915WKKa
+ 3eeBGNa82w2KtxWzBhfLqeP+xdcmQjau0I+c2cWaqVL+wBntXBwbzM8rfvLfQdXv3FUYsH9j8
+ eYr26BuKzVpPA/pYl9KbZVC47cfubAtziM5tnxwSwPRlWrgHP39RrxVyuB2ecxHH49Ge/Rt6K
+ dJA7T/91PuYfMtxRzz+5gZ3aZf6nnpT9NhQbbtCAhtg6YRGx6SL/H36Tdt2emsnD1GlhXlcij
+ OQFyYDLP6lJHTb8iStv6FAzGDTHdNxKETDeTsG9Pmdih9bc29n8mhFYvsIsA/9YsmsffEN4jT
+ SHdd0HPsTrTW4tCcgfbVgTMq+Phfkl+SiAIA0kmNOthusgaDyeyKwvq67+tJpzaxyAmg6ZQIV
+ YfkNYqPQ0hFY6DI1BE54Hpu27Mlh+xltQQdXzzB5yjljibFYwuJNYV3OcR/hV34EOdrlrV6rF
+ wPliF0seMgDjg0NVDBwLfDMmSmPCNMzFh+heKtdH0eeVbq3Riw5LzNbYtmrP0WdeP3/yecUtr
+ 1p5nwjAdlxXQaFI/0Q/TYr8wCFrCHHze2e7j1Afeiwmbk9Kg6TkF/VuJuMlAB+/yr94rbDOGe
+ 0mgpn/IN1+gnN3rGeWR/P/lM5tdgqnXu8jNWrK2ta1i5fmzql4gRS8odH5lc/3GQ6fpsfuQGc
+ CCcxFE/fS+qf0Ojx1BpdZ6fT2n7XQT/vgR/Z9EJx0JWHtmNpQ7Ln9jK/xtg=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Nicolas,
-
 On 20.05.19 12:47, Nicolas Saenz Julienne wrote:
-> The four CPUs share a same clock source called pllb_arm. The clock can
-> be scaled through the raspberrypi firmware interface.
-do you see a problem with applying this also to bcm2835.dtsi and
-bcm2836.dtsi?
+> Raspberry Pi's firmware offers and interface though which update it's
+> performance requirements. It allows us to request for specific runtime
+> frequencies, which the firmware might or might not respect, depending on
+> the firmware configuration and thermals.
+>
+> As the maximum and minimum frequencies are configurable in the firmware
+> there is no way to know in advance their values. So the Raspberry Pi
+> cpufreq driver queries them, builds an opp frequency table to then
+> launch cpufreq-dt.
+>
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> ---
+>  drivers/cpufreq/Kconfig.arm           |  8 +++
+>  drivers/cpufreq/Makefile              |  1 +
+>  drivers/cpufreq/raspberrypi-cpufreq.c | 83 +++++++++++++++++++++++++++
+>  3 files changed, 92 insertions(+)
+>  create mode 100644 drivers/cpufreq/raspberrypi-cpufreq.c
+>
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 179a1d302f48..f6eba7ae50d0 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -308,3 +308,11 @@ config ARM_PXA2xx_CPUFREQ
+>  	  This add the CPUFreq driver support for Intel PXA2xx SOCs.
+>  
+>  	  If in doubt, say N.
+> +
+> +config ARM_RASPBERRYPI_CPUFREQ
+> +	tristate "Raspberry Pi cpufreq support"
+> +	depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
+
+The driver doesn't really require the firmware driver to compile, how about:
+
+select RASPBERRYPI_FIRMWARE
+
+> +	help
+> +	  This adds the CPUFreq driver for Raspberry Pi
+> +
+> +	  If in doubt, say N.
+> diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+> index 689b26c6f949..02678e9b2ff5 100644
+> --- a/drivers/cpufreq/Makefile
+> +++ b/drivers/cpufreq/Makefile
+> @@ -84,6 +84,7 @@ obj-$(CONFIG_ARM_TEGRA124_CPUFREQ)	+= tegra124-cpufreq.o
+>  obj-$(CONFIG_ARM_TEGRA186_CPUFREQ)	+= tegra186-cpufreq.o
+>  obj-$(CONFIG_ARM_TI_CPUFREQ)		+= ti-cpufreq.o
+>  obj-$(CONFIG_ARM_VEXPRESS_SPC_CPUFREQ)	+= vexpress-spc-cpufreq.o
+> +obj-$(CONFIG_ARM_RASPBERRYPI_CPUFREQ) 	+= raspberrypi-cpufreq.o
+>  
+>  
+>  ##################################################################################
+> diff --git a/drivers/cpufreq/raspberrypi-cpufreq.c b/drivers/cpufreq/raspberrypi-cpufreq.c
+> new file mode 100644
+> index 000000000000..a85988867d56
+> --- /dev/null
+> +++ b/drivers/cpufreq/raspberrypi-cpufreq.c
+> @@ -0,0 +1,83 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Raspberry Pi cpufreq driver
+> + *
+> + * Copyright (C) 2019, Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> + */
+> +
+> +#include <linux/of.h>
+> +#include <linux/clk.h>
+> +#include <linux/cpu.h>
+> +#include <linux/module.h>
+> +#include <linux/pm_opp.h>
+> +#include <linux/cpufreq.h>
+> +#include <linux/platform_device.h>
+> +
+> +static const struct of_device_id machines[] __initconst = {
+> +	{ .compatible = "raspberrypi,3-model-b-plus" },
+> +	{ .compatible = "raspberrypi,3-model-b" },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +static int __init raspberrypi_cpufreq_driver_init(void)
+> +{
+> +	struct platform_device *pdev;
+> +	struct device *cpu_dev;
+> +	struct clk *clk;
+> +	long min, max;
+> +	long rate;
+> +	int ret;
+> +
+> +	if (!of_match_node(machines, of_root))
+> +		return -ENODEV;
+> +
+> +	cpu_dev = get_cpu_device(0);
+> +	if (!cpu_dev) {
+> +		pr_err("Cannot get CPU for cpufreq driver\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	clk = clk_get(cpu_dev, 0);
+
+I suggest use the expected clock ID.
+
