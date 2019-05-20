@@ -2,217 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EB522AE8
-	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 06:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673AD22AEE
+	for <lists+linux-pm@lfdr.de>; Mon, 20 May 2019 06:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729859AbfETEj6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 May 2019 00:39:58 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:45558 "EHLO
+        id S1729812AbfETEnV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 May 2019 00:43:21 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:39394 "EHLO
         mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729354AbfETEj6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 00:39:58 -0400
-Received: by mail-pl1-f196.google.com with SMTP id a5so6063558pls.12
-        for <linux-pm@vger.kernel.org>; Sun, 19 May 2019 21:39:58 -0700 (PDT)
+        with ESMTP id S1729675AbfETEnU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 May 2019 00:43:20 -0400
+Received: by mail-pl1-f196.google.com with SMTP id g9so6091025plm.6
+        for <linux-pm@vger.kernel.org>; Sun, 19 May 2019 21:43:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=6kLQS1F3wuaAKNzg7vhydNFCxmz6B8BC90U2/spM1FQ=;
-        b=fSKOdMcYitED5vQB9z2lLQZzixgZJPjE55iq07B6vr8Ej2UsgG6MWktZCgkSIwSCsI
-         aohOXRN9tt1F7VgFsnlcygQ7jqTbvUgw6N76+vl6RtfNAdC3G4mduge0EeP5fPDEK4ir
-         wU/F+17NKlSNGzFgpAlEmXY3l1oiBbt1vWu0oWzpMlAkDiDmpiADM+IPJ6D9TPJWj442
-         SN2oowpO8va4CfRwrxDy9oOOpjqYLzFKql3ekqUzEZrzBHQbwiNHBe7Sg6f1Xtuz0ONw
-         5i7EFPbWB0o08yFmOp/Szdm3eGDWPS1zSOUygHorOQwitj+oZJ+5FXTq8pMQJfuhyjp7
-         v6ag==
+        bh=+XiwKGCePMesqEFsZbk88+d/XnSzWj4VH7Ml5qL5pt0=;
+        b=unoGz+98418sHeX4y3va9Fw7O/7rbEjL0hqVIq1my/Asr2dzM38M5H+2LqZvHB8AAU
+         CqAQ6kJMNTvZsHuKd08/xPftA/HCBVOpd9T/IVsfET13Jf59zZ2lgw7rBogYKdMYL5HO
+         D19WNFD3+CXw7ekYEu/sBvRFOLcPxesn9XRptLA4MN0cxd/h+H6ijVajWhreBcZlEb89
+         1zto6lDvOL6iTVNTtZLtBD5/usk/MiY8ToYMfmuWPSFpLXmjSRm7UfgLrVM9IDZz023L
+         +jA3+5k0WyY/BV+s9tNRRQvSDaqiY473/tMDg9LXbhdS9165ETFM0jaOZW2A2jQBuMSY
+         XRug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6kLQS1F3wuaAKNzg7vhydNFCxmz6B8BC90U2/spM1FQ=;
-        b=Rc6oFKfnlfSA/Qqxn0CJZs1D2FftWo2pJAJFIIoHXbRi8hwjUNf1pXftOPNxrF5KTr
-         4j74BKXw7LfJZYWKA8/UCeM8z9VnIwinpuwrrcXB3ZNLmgzuM4ms9F8jl1B2y/Ly9x4t
-         16kRi+pNxRfZEc/Id+ZjV2Fjet4hyrB11KVVXnNfHzp+lL19KE/tD2eX49yfDcIjwxs4
-         GnA31KTra+EqjmEHQJzDW8r6+UjNUBmHTkA38KSvYYgaUSBZxDYeUoJhJ9ykRcKgUf/S
-         POgOBa4NOtaTvuIftaBucCoGxiTUi6DynBYubcJEVkA/KycjM3NKPNtGOIOxNCQ6YGXB
-         rM6w==
-X-Gm-Message-State: APjAAAUx+LcA+3xSXFxzC31i1DKd0B4/Jd+ugPVA1ibFi4u5ZFVvvVu+
-        FWs/QysAbkkqXNYAHwaYLGFYkg==
-X-Google-Smtp-Source: APXvYqyXXC8k4W+c885rLWWP0fBPIxR3BpaGuJalf+p3A4fKVt/ZLy575wTVOvd0xsFl16aHF4pYzA==
-X-Received: by 2002:a17:902:ab98:: with SMTP id f24mr72325766plr.223.1558327197415;
-        Sun, 19 May 2019 21:39:57 -0700 (PDT)
+        bh=+XiwKGCePMesqEFsZbk88+d/XnSzWj4VH7Ml5qL5pt0=;
+        b=XR7GdPw2ebGHSg/eTTprC657kAypK7Ke0KiEKxVcrUrcRY04+aid6OFGm8U8uIipTk
+         jZ2foascNmzlqvD00mnxxCR8RMn93lLwiwObHbf+LcORTkphY8yOXgY6mbgH4LpENbVU
+         JXpDnjnaDiwdA5ena1JS33sJ5XAB8PE8zxRrF5EB1Lp1S1YSAAjdYv9bZvn5b4w163OS
+         xlaSzOIteYy3C1GVNE/MxE505eU+1ANIe2l99QbmVQpfxKA2Owo8qIXzNPn8W8M5l7ip
+         jGsYozA1vByKkKfbf0xKb1SCRqLsHRHVBs7J9kmT0jomPvCMx1aGk+EvKW5uQNHN2l3K
+         4/qQ==
+X-Gm-Message-State: APjAAAX5gSdZY75meCccR+X3MewjkvwO5Xr0R9idxx6UsweX8LLSg6Rg
+        UzsEoSpm7IMorw4zdmWhzBBOIw==
+X-Google-Smtp-Source: APXvYqxKxyg7Aak1yT0b9mdNSLwjCHjek+L8V1ZtJqzVLOZXXZuDfEEcEGssLjb+LtYO06CzCKIoow==
+X-Received: by 2002:a17:902:8e8a:: with SMTP id bg10mr19217573plb.247.1558327400037;
+        Sun, 19 May 2019 21:43:20 -0700 (PDT)
 Received: from localhost ([122.172.118.99])
-        by smtp.gmail.com with ESMTPSA id p6sm7867707pfn.151.2019.05.19.21.39.55
+        by smtp.gmail.com with ESMTPSA id b16sm27365221pfd.12.2019.05.19.21.43.18
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 19 May 2019 21:39:55 -0700 (PDT)
-Date:   Mon, 20 May 2019 10:09:53 +0530
+        Sun, 19 May 2019 21:43:19 -0700 (PDT)
+Date:   Mon, 20 May 2019 10:13:17 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     stefan.wahren@i2se.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        mbrugger@suse.de, sboyd@kernel.org, eric@anholt.net,
-        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        ptesarik@suse.com, linux-rpi-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [RFC 5/5] cpufreq: add driver for Raspbery Pi
-Message-ID: <20190520043953.dsmxnxpggkzq4fnm@vireshk-i7>
-References: <20190517153508.18314-1-nsaenzjulienne@suse.de>
- <20190517153508.18314-6-nsaenzjulienne@suse.de>
+To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com, fan.chen@mediatek.com
+Subject: Re: [PATCH 4/8] dt-bindings: devfreq: add compatible for mt8183 cci
+ devfreq
+Message-ID: <20190520044317.pwciu4bjuz5jh7f7@vireshk-i7>
+References: <1557997725-12178-1-git-send-email-andrew-sh.cheng@mediatek.com>
+ <1557997725-12178-5-git-send-email-andrew-sh.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190517153508.18314-6-nsaenzjulienne@suse.de>
+In-Reply-To: <1557997725-12178-5-git-send-email-andrew-sh.cheng@mediatek.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-05-19, 17:35, Nicolas Saenz Julienne wrote:
-> Raspberry Pi's firmware offers and interface though which update it's
-> performance requirements. It allows us to request for specific runtime
-> frequencies, which the firmware might or might not respect, depending on
-> the firmware configuration and thermals.
+On 16-05-19, 17:08, Andrew-sh.Cheng wrote:
+> From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
 > 
-> As the maximum and minimum frequencies are configurable in the firmware
-> there is no way to know in advance their values. So the Raspberry Pi
-> cpufreq driver queries them, builds an opp frequency table to then
-> launch cpufreq-dt.
+> This adds dt-binding documentation of cci devfreq
+> for Mediatek MT8183 SoC platform.
 > 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
 > ---
->  drivers/cpufreq/Kconfig.arm           |  8 +++
->  drivers/cpufreq/Makefile              |  1 +
->  drivers/cpufreq/raspberrypi-cpufreq.c | 79 +++++++++++++++++++++++++++
->  3 files changed, 88 insertions(+)
->  create mode 100644 drivers/cpufreq/raspberrypi-cpufreq.c
+>  .../bindings/devfreq/mt8183-cci-devfreq.txt          | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt
 > 
-> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> index 179a1d302f48..70e5f13f7632 100644
-> --- a/drivers/cpufreq/Kconfig.arm
-> +++ b/drivers/cpufreq/Kconfig.arm
-> @@ -308,3 +308,11 @@ config ARM_PXA2xx_CPUFREQ
->  	  This add the CPUFreq driver support for Intel PXA2xx SOCs.
->  
->  	  If in doubt, say N.
-> +
-> +config ARM_RASPBERRYPI_CPUFREQ
-> +	tristate "Raspberry Pi cpufreq support"
-> +	depends on RASPBERRYPI_FIRMWARE || (RASPBERRYPI_FIRMWARE=n && COMPILE_TEST)
-
-What about:
-        depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
-
-> +	help
-> +	  This adds the CPUFreq driver for Raspberry Pi
-> +
-> +	  If in doubt, say N.
-> diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-> index 689b26c6f949..02678e9b2ff5 100644
-> --- a/drivers/cpufreq/Makefile
-> +++ b/drivers/cpufreq/Makefile
-> @@ -84,6 +84,7 @@ obj-$(CONFIG_ARM_TEGRA124_CPUFREQ)	+= tegra124-cpufreq.o
->  obj-$(CONFIG_ARM_TEGRA186_CPUFREQ)	+= tegra186-cpufreq.o
->  obj-$(CONFIG_ARM_TI_CPUFREQ)		+= ti-cpufreq.o
->  obj-$(CONFIG_ARM_VEXPRESS_SPC_CPUFREQ)	+= vexpress-spc-cpufreq.o
-> +obj-$(CONFIG_ARM_RASPBERRYPI_CPUFREQ) 	+= raspberrypi-cpufreq.o
->  
->  
->  ##################################################################################
-> diff --git a/drivers/cpufreq/raspberrypi-cpufreq.c b/drivers/cpufreq/raspberrypi-cpufreq.c
+> diff --git a/Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt b/Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt
 > new file mode 100644
-> index 000000000000..53cb3e5a8457
+> index 000000000000..3189902902e0
 > --- /dev/null
-> +++ b/drivers/cpufreq/raspberrypi-cpufreq.c
-> @@ -0,0 +1,79 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Raspberry Pi cpufreq driver
-> + *
-> + * Copyright (C) 2019, Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> + */
+> +++ b/Documentation/devicetree/bindings/devfreq/mt8183-cci-devfreq.txt
+> @@ -0,0 +1,20 @@
+> +* Mediatek Cache Coherent Interconnect(CCI) frequency device
 > +
-> +#include <linux/of.h>
-> +#include <linux/clk.h>
-> +#include <linux/cpu.h>
-> +#include <linux/module.h>
-> +#include <linux/pm_opp.h>
-> +#include <linux/cpufreq.h>
-> +#include <linux/platform_device.h>
-> +
-> +static const struct of_device_id machines[] __initconst = {
-> +	{ .compatible = "raspberrypi,3-model-b-plus" },
-> +	{ .compatible = "raspberrypi,3-model-b" },
-> +	{ /* sentinel */ }
-> +};
-> +
-> +static int __init raspberrypi_cpufreq_driver_init(void)
-> +{
-> +	struct platform_device *pdev;
-> +	struct cpumask shared_cpus;
-> +	struct device *cpu_dev;
-> +	struct clk *clk;
-> +	long min, max;
-> +	long rate;
-> +	int ret;
-> +
-> +	if (!of_match_node(machines, of_root))
-> +		return -ENODEV;
-> +
-> +	cpu_dev = get_cpu_device(0);
-> +	if (!cpu_dev) {
-> +		pr_err("Cannot get CPU for cpufreq driver\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	clk = clk_get(cpu_dev, 0);
-> +	if (IS_ERR(clk)) {
-> +		dev_err(cpu_dev, "Cannot get clock for CPU0\n");
-> +		return PTR_ERR(clk);
-> +	}
+> +Required properties:
+> +- compatible: should contain "mediatek,mt8183-cci" for frequency scaling of CCI
 
-You want to do a clk_put() somewhere ?
+Example doesn't have this compatible .
 
+> +- clocks: for frequency scaling of CCI
+> +- clock-names: for frequency scaling of CCI driver to reference
+> +- regulator: for voltage scaling of CCI
+> +- operating-points-v2: for frequency scaling of CCI opp table
 > +
-> +	/*
-> +	 * The max and min frequencies are configurable in the Raspberry Pi
-> +	 * firmware, so we query them at runtime
-> +	 */
-> +	min = clk_round_rate(clk, 0);
-> +	max = clk_round_rate(clk, ULONG_MAX);
+> +Example:
+> +	cci: cci {
+> +		compatible = "mediatek,cci";
+> +		clocks = <&apmixedsys CLK_APMIXED_CCIPLL>;
+> +		clock-names = "cci_clock";
+> +		operating-points-v2 = <&cci_opp>;
+> +	};
 > +
-> +	for (rate = min; rate < max; rate += 100000000) {
-> +		ret = dev_pm_opp_add(cpu_dev, rate, 0);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	ret = dev_pm_opp_add(cpu_dev, max, 0);
-> +	if (ret)
-> +		return ret;
-
-On errors, you should remove all previously added OPPs.
-
-> +
-> +	cpumask_setall(&shared_cpus);
-> +	dev_pm_opp_set_sharing_cpus(cpu_dev, &shared_cpus);
-
-Why are these required? This must be done by the cpufreq-dt driver anyway ?
-
-> +
-> +	pdev = platform_device_register_data(NULL, "cpufreq-dt", -1, NULL, 0);
-> +	ret = PTR_ERR_OR_ZERO(pdev);
-> +	if (ret)
-> +		dev_err(cpu_dev, "Failed to create platform device, %d\n", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +late_initcall(raspberrypi_cpufreq_driver_init);
-> +
-> +MODULE_AUTHOR("Nicolas Saenz Julienne <nsaenzjulienne@suse.de");
-> +MODULE_DESCRIPTION("Raspberry Pi cpufreq driver");
-> +MODULE_LICENSE("GPL v2");
+> +	&cci {
+> +		proc-supply = <&mt6358_vproc12_reg>;
+> +	};
+> \ No newline at end of file
 > -- 
-> 2.21.0
+> 2.12.5
 
 -- 
 viresh
