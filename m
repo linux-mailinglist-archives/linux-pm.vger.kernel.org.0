@@ -2,171 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC80D254D9
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 18:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52042254CD
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 18:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728176AbfEUQFH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 May 2019 12:05:07 -0400
-Received: from mailgate2.uni-hannover.de ([130.75.2.114]:53604 "EHLO
-        mailgate2.uni-hannover.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728067AbfEUQFG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 12:05:06 -0400
-X-Greylist: delayed 558 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 May 2019 12:05:03 EDT
-Received: from kolab.sra.uni-hannover.de (kolab.sra.uni-hannover.de [130.75.33.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailgate2.uni-hannover.de (Postfix) with ESMTPS id 6426A2087;
-        Tue, 21 May 2019 17:55:43 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at sra.uni-hannover.de
-Received: from lab.sra.uni-hannover.de (aerobus.sra.uni-hannover.de
- [130.75.33.87])
- by kolab.sra.uni-hannover.de (Postfix) with SMTP id 1984B3E027C;
- Tue, 21 May 2019 17:55:22 +0200 (CEST)
-Received: (nullmailer pid 14993 invoked by uid 20151);
- Tue, 21 May 2019 15:55:41 -0000
-From:   Lukas Prause <langspielplatte@black-mesa.xyz>
-To:     lizefan@huawei.com, tj@kernel.org, hannes@cmpxchg.org,
-        peterz@infradead.org, mingo@redhat.com, will.deacon@arm.com,
-        rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
-        rostedt@goodmis.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukas Prause <langspielplatte@black-mesa.xyz>,
-        Lennart Glauer <mail@lennart-glauer.de>
-Subject: [PATCH] Fix comments with paths pointing to renamed or moved files.
-Date:   Tue, 21 May 2019 17:54:30 +0200
-Message-Id: <20190521155430.14941-1-langspielplatte@black-mesa.xyz>
-X-Mailer: git-send-email 2.17.1
+        id S1728221AbfEUQE2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 May 2019 12:04:28 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:41967 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbfEUQE2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 12:04:28 -0400
+Received: by mail-pl1-f181.google.com with SMTP id f12so8652691plt.8
+        for <linux-pm@vger.kernel.org>; Tue, 21 May 2019 09:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=nk+/ciJTmIcBRGNtwKGKAlhXjyIqj/WCax4ZAyWNJvI=;
+        b=n8itc6KpW9b62d7kZTafU9Be8Rh6F3YYh0MblP5v2Rd3atB0SxQyAo+DvmdmP+IL0R
+         Ti0i4Ry9D7v/OBhYDoRsK6Zs8SnwsSMrz8XebxeNVkjS1CV0YwkyjX13IlgXGUOw3B6V
+         nVL7MAFl0h/IGpEO72nqYRMyhRLiUo1DAxWluV6a8BPXmpHArCgujY7t/5xCJdgj3CBP
+         EjtSZWYrcWw/AxoepLPYIFWeeLk1gY+Kj1C5bG+f7d8yAgbS3zoVVd1ua8RcV5bM6CTf
+         sEvp7jpYUF3HV8J5wPHuL+khaX2bVmtd+9JJ8ddmZl/TlXVI24O76xeFZ8ERRHZrQwGF
+         n4cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=nk+/ciJTmIcBRGNtwKGKAlhXjyIqj/WCax4ZAyWNJvI=;
+        b=m55atzbmr5To3kLw88CmcMK8cxw+H3YwK1O5Wfwcjh+1X/S0mLIYUsaqDnVAN9KRB7
+         2k7k4Fcro73v23w+RKJKmJwWWR7DeHwe3HSoqwUmv6SIBMyOn6yIciris88XQg72xaU8
+         wgUZJLkD/FQ3Z/qUcN3IOhjPZIXTREL3v3GvhyUEsU3RCtHb4h5c0oophXNjwhwCCA7D
+         Xzd35gXYXCEuIsWC+a4wUlxHTKWwcR1BYKJILfaBGzllvsF5DcT/tIE4XblWgWosuIKs
+         CFgFcdECiGmBVggFSIX6du5gRvXSKit9rqY7IkBEAqcH1jeoxaTN/rHEr4Ebe+L1dXjK
+         kTOg==
+X-Gm-Message-State: APjAAAXCN4u7mmt8+l0X0L9RlPeuNpiJxZ189y/Ax99MPo8ZF4W1fQhV
+        gN29XihHJwQYsvhL8e6Z9NE=
+X-Google-Smtp-Source: APXvYqxRakC6491Var96axSgPs7513lbbFuXi1FP2lOh833bGTyI8P9IlnxdSUuvQR3n5FsuxgeA6A==
+X-Received: by 2002:a17:902:1021:: with SMTP id b30mr45020517pla.324.1558454667844;
+        Tue, 21 May 2019 09:04:27 -0700 (PDT)
+Received: from mita-MS-7A45.lan ([240f:34:212d:1:9cd0:73e8:b74a:624e])
+        by smtp.gmail.com with ESMTPSA id j5sm28954786pfa.15.2019.05.21.09.04.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 21 May 2019 09:04:27 -0700 (PDT)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Kenneth Heitke <kenneth.heitke@intel.com>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+Subject: [PATCH v2 0/4] nvme: add thermal zone devices
+Date:   Wed, 22 May 2019 01:04:05 +0900
+Message-Id: <1558454649-28783-1-git-send-email-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch corrects renamed or moved paths in comments.
+The NVMe controller reports up to nine temperature values in the SMART /
+Health log page (the composite temperature and temperature sensor 1 through
+temperature sensor 8).
+The temperature threshold feature (Feature Identifier 04h) configures the
+asynchronous event request command to complete when the temperature is
+crossed its corresponding temperature threshold.
 
-Signed-off-by: Lukas Prause <langspielplatte@black-mesa.xyz>
-Signed-off-by: Lennart Glauer <mail@lennart-glauer.de>
----
- kernel/cgroup/cpuset.c       |  2 +-
- kernel/locking/mutex-debug.h |  2 +-
- kernel/power/power.h         |  2 +-
- kernel/sched/core.c          |  2 +-
- kernel/trace/trace.h         | 14 +++++++-------
- 5 files changed, 11 insertions(+), 11 deletions(-)
+This provide these temperatures and thresholds via thermal zone devices.
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 6a1942ed781c..6381622e2f2f 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -329,7 +329,7 @@ static struct cpuset top_cpuset = {
-  * cpumasks and nodemasks.
-  *
-  * Accessing a task's cpuset should be done in accordance with the
-- * guidelines for accessing subsystem state in kernel/cgroup.c
-+ * guidelines for accessing subsystem state in kernel/cgroup/cgroup.c
-  */
- 
- static DEFINE_MUTEX(cpuset_mutex);
-diff --git a/kernel/locking/mutex-debug.h b/kernel/locking/mutex-debug.h
-index 1edd3f45a4ec..0dee0a07cd4c 100644
---- a/kernel/locking/mutex-debug.h
-+++ b/kernel/locking/mutex-debug.h
-@@ -8,7 +8,7 @@
-  *
-  * This file contains mutex debugging related internal declarations,
-  * prototypes and inline functions, for the CONFIG_DEBUG_MUTEXES case.
-- * More details are in kernel/mutex-debug.c.
-+ * More details are in kernel/locking/mutex-debug.c.
-  */
- 
- /*
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index 9e58bdc8a562..5de8b0c7f657 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -182,7 +182,7 @@ extern int swsusp_unmark(void);
- #endif
- 
- struct timeval;
--/* kernel/power/swsusp.c */
-+/* kernel/power/hibernate.c */
- extern void swsusp_show_speed(ktime_t, ktime_t, unsigned int, char *);
- 
- #ifdef CONFIG_SUSPEND
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 102dfcf0a29a..0ce0dc44ffc3 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3334,7 +3334,7 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
-  *   1. Explicit blocking: mutex, semaphore, waitqueue, etc.
-  *
-  *   2. TIF_NEED_RESCHED flag is checked on interrupt and userspace return
-- *      paths. For example, see arch/x86/entry_64.S.
-+ *      paths. For example, see arch/x86/entry/entry_64.S.
-  *
-  *      To drive preemption between tasks, the scheduler sets the flag in timer
-  *      interrupt handler scheduler_tick().
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 1974ce818ddb..0c304d6f5b31 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -1684,7 +1684,7 @@ extern int register_trigger_hist_enable_disable_cmds(void);
-  *	initialization such as incrementing a per-trigger reference
-  *	count, for instance.  This is usually implemented by the
-  *	generic utility function @event_trigger_init() (see
-- *	trace_event_triggers.c).
-+ *	trace_events_trigger.c).
-  *
-  * @free: An optional de-initialization function called for the
-  *	trigger when the trigger is unregistered (via the
-@@ -1693,12 +1693,12 @@ extern int register_trigger_hist_enable_disable_cmds(void);
-  *	per-trigger reference count and freeing corresponding trigger
-  *	data, for instance.  This is usually implemented by the
-  *	generic utility function @event_trigger_free() (see
-- *	trace_event_triggers.c).
-+ *	trace_events_trigger.c).
-  *
-  * @print: The callback function invoked to have the trigger print
-  *	itself.  This is usually implemented by a wrapper function
-  *	that calls the generic utility function @event_trigger_print()
-- *	(see trace_event_triggers.c).
-+ *	(see trace_events_trigger.c).
-  */
- struct event_trigger_ops {
- 	void			(*func)(struct event_trigger_data *data,
-@@ -1758,7 +1758,7 @@ struct event_trigger_ops {
-  *	the appropriate trace event.  It makes use of the other
-  *	event_command callback functions to orchestrate this, and is
-  *	usually implemented by the generic utility function
-- *	@event_trigger_callback() (see trace_event_triggers.c).
-+ *	@event_trigger_callback() (see trace_events_trigger.c).
-  *
-  * @reg: Adds the trigger to the list of triggers associated with the
-  *	event, and enables the event trigger itself, after
-@@ -1767,13 +1767,13 @@ struct event_trigger_ops {
-  *	make the decision as to whether or not multiple instances of
-  *	the trigger should be allowed.  This is usually implemented by
-  *	the generic utility function @register_trigger() (see
-- *	trace_event_triggers.c).
-+ *	trace_events_trigger.c).
-  *
-  * @unreg: Removes the trigger from the list of triggers associated
-  *	with the event, and disables the event trigger itself, after
-  *	initializing it (via the event_trigger_ops @free() function).
-  *	This is usually implemented by the generic utility function
-- *	@unregister_trigger() (see trace_event_triggers.c).
-+ *	@unregister_trigger() (see trace_events_trigger.c).
-  *
-  * @unreg_all: An optional function called to remove all the triggers
-  *	from the list of triggers associated with the event.  Called
-@@ -1783,7 +1783,7 @@ struct event_trigger_ops {
-  *	for the trigger.  If no @set_filter() method is set for the
-  *	event command, filters set by the user for the command will be
-  *	ignored.  This is usually implemented by the generic utility
-- *	function @set_trigger_filter() (see trace_event_triggers.c).
-+ *	function @set_trigger_filter() (see trace_events_trigger.c).
-  *
-  * @get_trigger_ops: The callback function invoked to retrieve the
-  *	event_trigger_ops implementation associated with the command.
+* v2
+- s/correspoinding/corresponding/ typo in commit log
+- Borrowed nvme_get_features() from Keith's patch
+- Temperature threshold notification is splitted into another patch
+- Change the data type of 'sensor' to unsigned
+- Add BUILD_BUG_ON for the array size of tzdev member in nvme_ctrl
+- Add WARN_ON_ONCE for paranoid checks
+- Fix off-by-one error in nvme_get_temp
+- Validate 'sensor' where the value is actually used
+- Define and utilize two enums related to the temperature threshold feature
+- Remove hysteresis value for this trip point and don't utilize the under
+  temperature threshold
+- Print error message for thermal_zone_device_register() failure
+- Add function comments for nvme_thermal_zones_{,un}register
+- Suppress non-fatal errors from nvme_thermal_zones_register()
+- Add comment about implemented temperature sensors 
+- Instead of creating a new 'thermal_work', append async smart event's
+  action to the existing async_event_work
+- Add comment for tzdev member in nvme_ctrl
+- Call nvme_thermal_zones_unregister() earlier than the last reference
+  release
+
+Akinobu Mita (3):
+  nvme: add thermal zone infrastructure
+  nvme: notify thermal framework when temperature threshold events occur
+  nvme-pci: support thermal zone
+
+Keith Busch (1):
+  nvme: Export get and set features
+
+ drivers/nvme/host/core.c | 317 ++++++++++++++++++++++++++++++++++++++++++++++-
+ drivers/nvme/host/nvme.h |  31 +++++
+ drivers/nvme/host/pci.c  |   5 +
+ include/linux/nvme.h     |  12 ++
+ 4 files changed, 362 insertions(+), 3 deletions(-)
+
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Eduardo Valentin <edubezval@gmail.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Keith Busch <keith.busch@intel.com>
+Cc: Jens Axboe <axboe@fb.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Sagi Grimberg <sagi@grimberg.me>
+Cc: Minwoo Im <minwoo.im.dev@gmail.com>
+Cc: Kenneth Heitke <kenneth.heitke@intel.com>
+Cc: Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
 -- 
-2.17.1
+2.7.4
+
