@@ -2,131 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE70B25465
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 17:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC80D254D9
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 18:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728973AbfEUPrJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 May 2019 11:47:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42456 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728212AbfEUPrI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 21 May 2019 11:47:08 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B497EAE1F;
-        Tue, 21 May 2019 15:47:05 +0000 (UTC)
-Message-ID: <a142b72b828a798610d885d81189dd21b1870d78.camel@suse.de>
-Subject: Re: [RFC v2 3/5] clk: bcm2835: use firmware interface to update pllb
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Eric Anholt <eric@anholt.net>
-Cc:     linux-pm@vger.kernel.org, sboyd@kernel.org,
-        viresh.kumar@linaro.org, mturquette@baylibre.com,
-        ptesarik@suse.com, rjw@rjwysocki.net, linux-kernel@vger.kernel.org,
-        mbrugger@suse.de, linux-rpi-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        ssuloev@orpaltech.com
-Date:   Tue, 21 May 2019 17:47:03 +0200
-In-Reply-To: <6383b357-3f7e-f031-f59f-61c598e44763@i2se.com>
-References: <20190520104708.11980-1-nsaenzjulienne@suse.de>
-         <20190520104708.11980-4-nsaenzjulienne@suse.de>
-         <ebc78880-418f-f507-021c-41295113e041@i2se.com>
-         <6383b357-3f7e-f031-f59f-61c598e44763@i2se.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-zPUlS9r+c6dQNQzC21+7"
-User-Agent: Evolution 3.32.2 
-MIME-Version: 1.0
+        id S1728176AbfEUQFH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 May 2019 12:05:07 -0400
+Received: from mailgate2.uni-hannover.de ([130.75.2.114]:53604 "EHLO
+        mailgate2.uni-hannover.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728067AbfEUQFG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 12:05:06 -0400
+X-Greylist: delayed 558 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 May 2019 12:05:03 EDT
+Received: from kolab.sra.uni-hannover.de (kolab.sra.uni-hannover.de [130.75.33.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailgate2.uni-hannover.de (Postfix) with ESMTPS id 6426A2087;
+        Tue, 21 May 2019 17:55:43 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at sra.uni-hannover.de
+Received: from lab.sra.uni-hannover.de (aerobus.sra.uni-hannover.de
+ [130.75.33.87])
+ by kolab.sra.uni-hannover.de (Postfix) with SMTP id 1984B3E027C;
+ Tue, 21 May 2019 17:55:22 +0200 (CEST)
+Received: (nullmailer pid 14993 invoked by uid 20151);
+ Tue, 21 May 2019 15:55:41 -0000
+From:   Lukas Prause <langspielplatte@black-mesa.xyz>
+To:     lizefan@huawei.com, tj@kernel.org, hannes@cmpxchg.org,
+        peterz@infradead.org, mingo@redhat.com, will.deacon@arm.com,
+        rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
+        rostedt@goodmis.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lukas Prause <langspielplatte@black-mesa.xyz>,
+        Lennart Glauer <mail@lennart-glauer.de>
+Subject: [PATCH] Fix comments with paths pointing to renamed or moved files.
+Date:   Tue, 21 May 2019 17:54:30 +0200
+Message-Id: <20190521155430.14941-1-langspielplatte@black-mesa.xyz>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This patch corrects renamed or moved paths in comments.
 
---=-zPUlS9r+c6dQNQzC21+7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Lukas Prause <langspielplatte@black-mesa.xyz>
+Signed-off-by: Lennart Glauer <mail@lennart-glauer.de>
+---
+ kernel/cgroup/cpuset.c       |  2 +-
+ kernel/locking/mutex-debug.h |  2 +-
+ kernel/power/power.h         |  2 +-
+ kernel/sched/core.c          |  2 +-
+ kernel/trace/trace.h         | 14 +++++++-------
+ 5 files changed, 11 insertions(+), 11 deletions(-)
 
-Hi Stefan, thanks for your comments!
-
-On Tue, 2019-05-21 at 14:40 +0200, Stefan Wahren wrote:
-> Hi Nicolas,
->=20
-> On 20.05.19 14:11, Stefan Wahren wrote:
-> > Hi Nicolas,
-> >=20
-> > the following comments applies only in case Eric is fine with the whole
-> > approach.
-> >=20
-> > On 20.05.19 12:47, Nicolas Saenz Julienne wrote:
-> > > Raspberry Pi's firmware, which runs in a dedicated processor, keeps
-> > maybe we should clarify that the firmware is running in the VPU
-> > > track of the board's temperature and voltage. It's resposible for
-> > > scaling the CPU frequency whenever it deems the device reached an uns=
-afe
-> > > state. On top of that the firmware provides an interface which allows
-> > > Linux to to query the clock's state or change it's frequency.
-> > I think this requires a separate update of the devicetree binding.
-> > > Being the sole user of the bcm2835 clock driver, this integrates the
-> > > firmware interface into the clock driver and adds a first user: the C=
-PU
-> > > pll, also known as 'pllb'.
-> > Please verify that the kernel still works (and this clock driver probe)
-> > under the following conditions:
-> >=20
-> > - CONFIG_RASPBERRYPI_FIRMWARE=3Dn
-> > - CONFIG_RASPBERRYPI_FIRMWARE=3Dm
-> > - older DTBs without patch #1
-> i thought about this and the case this driver would return
-> -EPROBE_DEFER. The clock driver is too essential for doing such a thing.
-> So i think the best solution would be to move these changes into a
-> separate driver which should be register by the clock driver (similiar
-> to vchiq). This also avoid the need of a new device tree binding.
-
-I understand your concerns.
-
-Wouldn't you prefer registering the device trough the device tree? I'd go w=
-ith
-the same approach as the firmware touchscreen driver, which is registered a=
-fter
-the firmware's probe trough dt's 'simple-bus'. That said, it's not a strong=
-ly
-held opinion, I'm happy with whatever solution as long as it works.
-
-I get from your comments that you'd like the register based version of 'pll=
-b'
-and 'pllb_arm' to be loaded if for some reason the firmware isn't available=
-. Is
-that right? The main problem I see with this is the duplication of 'pllb' a=
-nd
-'pllb_arm'. Both drivers will create the same clock device through differen=
-t
-interfaces. Any suggestions on how to deal with that? If not I can simply
-remove 'pllb' and 'pllb_arm' from clk-bcm2835.c.
-
-Regards,
-Nicolas
-
-
---=-zPUlS9r+c6dQNQzC21+7
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAlzkHXcACgkQlfZmHno8
-x/58Pwf+J/igXfZ06sc7Gr74B5NqVdWqbVe+23xD1sjLpwUKTfWtUJAnbRuk8LOt
-+XgjgwGqFMQHMRLpibxSSqUZrXT+TNh1SiicBzJ9KWNbz42xRcvek4A8sgBDTeUs
-l6EVVtCNw+g8nPnT95arGKZ3xEIVAGdsg8tASLoyqbcNOJNb8r2QoXmsdK5oGQ/C
-TsgPRiwPvc9TvvqDSkojXxMgEfxfh8pNcYTQ8KFs/HKFOrM+C7hny7s3q02r/xhA
-Clhqd5Ur2BlhxvgOflW5i9eMeugVL1+g7pZUplzddVC1JA4U3KMD+RVZxXKhzg2S
-srJIknJIKqm1VdajX7OLqqjUae1Dkw==
-=kanr
------END PGP SIGNATURE-----
-
---=-zPUlS9r+c6dQNQzC21+7--
-
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 6a1942ed781c..6381622e2f2f 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -329,7 +329,7 @@ static struct cpuset top_cpuset = {
+  * cpumasks and nodemasks.
+  *
+  * Accessing a task's cpuset should be done in accordance with the
+- * guidelines for accessing subsystem state in kernel/cgroup.c
++ * guidelines for accessing subsystem state in kernel/cgroup/cgroup.c
+  */
+ 
+ static DEFINE_MUTEX(cpuset_mutex);
+diff --git a/kernel/locking/mutex-debug.h b/kernel/locking/mutex-debug.h
+index 1edd3f45a4ec..0dee0a07cd4c 100644
+--- a/kernel/locking/mutex-debug.h
++++ b/kernel/locking/mutex-debug.h
+@@ -8,7 +8,7 @@
+  *
+  * This file contains mutex debugging related internal declarations,
+  * prototypes and inline functions, for the CONFIG_DEBUG_MUTEXES case.
+- * More details are in kernel/mutex-debug.c.
++ * More details are in kernel/locking/mutex-debug.c.
+  */
+ 
+ /*
+diff --git a/kernel/power/power.h b/kernel/power/power.h
+index 9e58bdc8a562..5de8b0c7f657 100644
+--- a/kernel/power/power.h
++++ b/kernel/power/power.h
+@@ -182,7 +182,7 @@ extern int swsusp_unmark(void);
+ #endif
+ 
+ struct timeval;
+-/* kernel/power/swsusp.c */
++/* kernel/power/hibernate.c */
+ extern void swsusp_show_speed(ktime_t, ktime_t, unsigned int, char *);
+ 
+ #ifdef CONFIG_SUSPEND
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 102dfcf0a29a..0ce0dc44ffc3 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3334,7 +3334,7 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+  *   1. Explicit blocking: mutex, semaphore, waitqueue, etc.
+  *
+  *   2. TIF_NEED_RESCHED flag is checked on interrupt and userspace return
+- *      paths. For example, see arch/x86/entry_64.S.
++ *      paths. For example, see arch/x86/entry/entry_64.S.
+  *
+  *      To drive preemption between tasks, the scheduler sets the flag in timer
+  *      interrupt handler scheduler_tick().
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 1974ce818ddb..0c304d6f5b31 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1684,7 +1684,7 @@ extern int register_trigger_hist_enable_disable_cmds(void);
+  *	initialization such as incrementing a per-trigger reference
+  *	count, for instance.  This is usually implemented by the
+  *	generic utility function @event_trigger_init() (see
+- *	trace_event_triggers.c).
++ *	trace_events_trigger.c).
+  *
+  * @free: An optional de-initialization function called for the
+  *	trigger when the trigger is unregistered (via the
+@@ -1693,12 +1693,12 @@ extern int register_trigger_hist_enable_disable_cmds(void);
+  *	per-trigger reference count and freeing corresponding trigger
+  *	data, for instance.  This is usually implemented by the
+  *	generic utility function @event_trigger_free() (see
+- *	trace_event_triggers.c).
++ *	trace_events_trigger.c).
+  *
+  * @print: The callback function invoked to have the trigger print
+  *	itself.  This is usually implemented by a wrapper function
+  *	that calls the generic utility function @event_trigger_print()
+- *	(see trace_event_triggers.c).
++ *	(see trace_events_trigger.c).
+  */
+ struct event_trigger_ops {
+ 	void			(*func)(struct event_trigger_data *data,
+@@ -1758,7 +1758,7 @@ struct event_trigger_ops {
+  *	the appropriate trace event.  It makes use of the other
+  *	event_command callback functions to orchestrate this, and is
+  *	usually implemented by the generic utility function
+- *	@event_trigger_callback() (see trace_event_triggers.c).
++ *	@event_trigger_callback() (see trace_events_trigger.c).
+  *
+  * @reg: Adds the trigger to the list of triggers associated with the
+  *	event, and enables the event trigger itself, after
+@@ -1767,13 +1767,13 @@ struct event_trigger_ops {
+  *	make the decision as to whether or not multiple instances of
+  *	the trigger should be allowed.  This is usually implemented by
+  *	the generic utility function @register_trigger() (see
+- *	trace_event_triggers.c).
++ *	trace_events_trigger.c).
+  *
+  * @unreg: Removes the trigger from the list of triggers associated
+  *	with the event, and disables the event trigger itself, after
+  *	initializing it (via the event_trigger_ops @free() function).
+  *	This is usually implemented by the generic utility function
+- *	@unregister_trigger() (see trace_event_triggers.c).
++ *	@unregister_trigger() (see trace_events_trigger.c).
+  *
+  * @unreg_all: An optional function called to remove all the triggers
+  *	from the list of triggers associated with the event.  Called
+@@ -1783,7 +1783,7 @@ struct event_trigger_ops {
+  *	for the trigger.  If no @set_filter() method is set for the
+  *	event command, filters set by the user for the command will be
+  *	ignored.  This is usually implemented by the generic utility
+- *	function @set_trigger_filter() (see trace_event_triggers.c).
++ *	function @set_trigger_filter() (see trace_events_trigger.c).
+  *
+  * @get_trigger_ops: The callback function invoked to retrieve the
+  *	event_trigger_ops implementation associated with the command.
+-- 
+2.17.1
