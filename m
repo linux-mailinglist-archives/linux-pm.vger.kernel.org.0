@@ -2,92 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E74A247F9
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 08:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E98C724928
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 09:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfEUGWw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 May 2019 02:22:52 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:32775 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbfEUGWv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 02:22:51 -0400
-Received: by mail-pl1-f193.google.com with SMTP id y3so7940556plp.0
-        for <linux-pm@vger.kernel.org>; Mon, 20 May 2019 23:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=y2m5dpNz16ZybgYk5tQ8GutOzZqz8vAuz2rdBiTBnjw=;
-        b=l9FHorTul2Tyg2dOrb6zBPnqrZNmerYqH7eUWz8QrYYH0IhCHHLfh32l4hP3eIA/X7
-         vAjYlCEuZb1wqfD9LentK6vgUI8A/1mrqJ9S052A1vrO93c315n4VxO7f9kRYZ/dwhpt
-         a2aJmXtu4Ef1cIkwGn8dhSCJPXp5lNBa9khww/rmBXfha/2d2tEcDNaiPXcmM3XDnEaQ
-         mx1DNLV+4klz/BgBK87ZGo3hmiGMX2Wio0auyYuss6yzMBipwqekj/2uRHVRH1p/MxLn
-         /xGx4aZ9zZwmOx4XOBcEUeoMV+xdaLp+hhXsm7XNYpMPkIwBvPkWXUbq5Wi0Owu0YWlS
-         uo5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=y2m5dpNz16ZybgYk5tQ8GutOzZqz8vAuz2rdBiTBnjw=;
-        b=eOl99EPsXENhtIjuWKESOtM79Tn+iYiHIEI+qJTogxjme5a11QgIAxOT/uAdhheAAI
-         UxSZbk9mB/siCIzw7Mj9SEl0BiYI02FlCR99Dj2FVMwVSXs9bTp2yVECP6OlE6/z9AP2
-         FbAhHclyL4VuMuyfWpRvZt7RpQk+1zqCJvWvRUD1eLVCw2z+Y7HV0n9BAdtyM5o1wl3s
-         kBoBYpS/a/i1wKnfkYHW0j7luBef/TqgdjY53sUcpOhu1WdhEAFvemBYrsJnOdDRGvmI
-         l1hU7b5bASgoW81bCw1BxlqQEY5yEU5QZCPWIznUA6cnVHT67kffefPlnrPfpjSWgedM
-         4Qrg==
-X-Gm-Message-State: APjAAAUeATN2YCKhk4b9V25ybpy36EGKq3KvQM9t4PALb0b3dLjU3oBS
-        EVL1YUWC53p5qNKfk3XSJgL8IGverMQ=
-X-Google-Smtp-Source: APXvYqz2YMCSRvKN2MJ+jWniKEVRU5sQ/FMpg7ookR4wjHFWBAIZ3T0Rpg+BvD1LhysbsKdoQyBKgQ==
-X-Received: by 2002:a17:902:8d96:: with SMTP id v22mr5073943plo.282.1558419770837;
-        Mon, 20 May 2019 23:22:50 -0700 (PDT)
-Received: from localhost ([122.172.118.99])
-        by smtp.gmail.com with ESMTPSA id n27sm42589245pfb.129.2019.05.20.23.22.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 23:22:50 -0700 (PDT)
-Date:   Tue, 21 May 2019 11:52:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, swboyd@chromium.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org,
-        vincent.guittot@linaro.org
-Subject: Re: [RFC v2 00/11] DVFS in the OPP core
-Message-ID: <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
+        id S1726296AbfEUHlh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 May 2019 03:41:37 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:46563 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726193AbfEUHlg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 03:41:36 -0400
+X-Originating-IP: 90.88.22.185
+Received: from localhost (aaubervilliers-681-1-80-185.w90-88.abo.wanadoo.fr [90.88.22.185])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 329F5240014;
+        Tue, 21 May 2019 07:41:22 +0000 (UTC)
+Date:   Tue, 21 May 2019 09:41:22 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Frank Lee <tiny.windzz@gmail.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        catalin.marinas@arm.com, will.deacon@arm.com,
+        bjorn.andersson@linaro.org,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        paulmck@linux.ibm.com, stefan.wahren@i2se.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andy Gross <andy.gross@linaro.org>, rui.zhang@intel.com,
+        devicetree@vger.kernel.org, marc.w.gonzalez@free.fr,
+        Eduardo Valentin <edubezval@gmail.com>,
+        enric.balletbo@collabora.com, robh+dt@kernel.org,
+        Jonathan.Cameron@huawei.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        olof@lixom.net, David Miller <davem@davemloft.net>
+Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
+Message-ID: <20190521074122.syyctwvfsorl45dv@flea>
+References: <20190512082614.9045-1-tiny.windzz@gmail.com>
+ <20190512082614.9045-3-tiny.windzz@gmail.com>
+ <20190512133930.t5txssl7mou2gljt@flea>
+ <20190512214128.qjyys3vfpwdiacib@core.my.home>
+ <20190516150252.hf4u3bloo37chy6q@flea>
+ <CAEExFWu-T2mGQ9Teo7TQOcJsEzXi_dB=S8CFv7MiwHyu5z4-ow@mail.gmail.com>
+ <20190517073151.mz6hcmzubk7iqfre@flea>
+ <CAEExFWtban8Fjw6aZ5gdeC2GNk1vdqFoaJB_o-JtYZ_z70AJcQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oyv7cdm2vd7as2px"
 Content-Disposition: inline
-In-Reply-To: <20190320094918.20234-1-rnayak@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAEExFWtban8Fjw6aZ5gdeC2GNk1vdqFoaJB_o-JtYZ_z70AJcQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-03-19, 15:19, Rajendra Nayak wrote:
-> This is a v2 of the RFC posted earlier by Stephen Boyd [1]
-> 
-> As part of v2 I still follow the same approach of dev_pm_opp_set_rate()
-> API using clk framework to round the frequency passed and making it
-> accept 0 as a valid frequency indicating the frequency isn't required
-> anymore. It just has a few more drivers converted to use this approach
-> like dsi/dpu and ufs.
-> ufs demonstrates the case of having to handle multiple power domains, one
-> of which is scalable.
-> 
-> The patches are based on 5.1-rc1 and depend on some ufs fixes I posted
-> earlier [2] and a DT patch to include the rpmpd header [3]
-> 
-> [1] https://lkml.org/lkml/2019/1/28/2086
-> [2] https://lkml.org/lkml/2019/3/8/70
-> [3] https://lkml.org/lkml/2019/3/20/120
 
-Hi Rajendra,
+--oyv7cdm2vd7as2px
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I am inclined to apply/push this series for 5.3-rc1, will it be
-possible for you to spend some time on this at priority ?
+Hi,
 
--- 
-viresh
+On Sat, May 18, 2019 at 01:19:54AM +0800, Frank Lee wrote:
+> On Fri, May 17, 2019 at 3:32 PM Maxime Ripard <maxime.ripard@bootlin.com>=
+ wrote:
+> >
+> > On Fri, May 17, 2019 at 02:10:47AM +0800, Frank Lee wrote:
+> > > > On Sun, May 12, 2019 at 11:41:28PM +0200, Ond=C5=99ej Jirman wrote:
+> > > > > > > +static int tsens_get_temp(void *data, int *temp)
+> > > > > > > +{
+> > > > > > > + struct tsensor *s =3D data;
+> > > > > > > + struct tsens_device *tmdev =3D s->tmdev;
+> > > > > > > + int val;
+> > > > > > > +
+> > > > > > > + regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
+> > > > > > > +             0x4 * s->id, &val);
+> > > > > > > +
+> > > > > > > + if (unlikely(val =3D=3D 0))
+> > > > > > > +         return -EBUSY;
+> > > > > >
+> > > > > > I'm not sure why a val equals to 0 would be associated with EBU=
+SY?
+> > > > >
+> > > > > Thermal zone driver can (will) call get_temp before we got the
+> > > > > first interrupt and the thermal data. In that case val will be 0.
+> > > > >
+> > > > > Resulting in:
+> > > > >
+> > > > >  (val + offset) * scale =3D (-2794) * -67 =3D 187198
+> > > > >
+> > > > > 187=C2=B0C and immediate shutdown during boot - based on cirtical
+> > > > > temperature being reached.
+> > > > >
+> > > > > Busy here means, get_temp does not yet have data. Thermal zone
+> > > > > driver just reports any error to dmesg output.
+> > > >
+> > > > Ah, that makes sense.
+> > > >
+> > > > I guess if we're switching to an interrupt-based driver, then we can
+> > > > just use a waitqueue, or is get_temp supposed to be atomic?
+> > >
+> > > I think get_temp should not be bloacked.
+> >
+> > Why not?
+>
+> Maybe, I am wrong. I also want to know if we should do this.
+
+I guess it really all depends on whether you can sleep or not in
+get_temps. If you can, then you should wait for the value to be
+converted and the THS raising an interrupt.
+
+If you can't, then we should ask what the thermal frameworks expects
+in such a case.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--oyv7cdm2vd7as2px
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXOOrogAKCRDj7w1vZxhR
+xULTAQC1mWNEVwrK+oid9JOzl0rrU7ybLUMo5gBPlvdd1iIu+QEAzEe9pVgCRCN6
+Z8AqbAjBGsyR2h/P/5jg1jYC4d/GBQg=
+=MglJ
+-----END PGP SIGNATURE-----
+
+--oyv7cdm2vd7as2px--
