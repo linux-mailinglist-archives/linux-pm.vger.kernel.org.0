@@ -2,100 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE46A24EE6
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 14:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E8D24F0B
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 14:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727969AbfEUMY3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 May 2019 08:24:29 -0400
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:54890 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726740AbfEUMY3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 08:24:29 -0400
-X-AuditID: c0a8fbf4-501ff700000014c1-05-5ce3edfb5f31
-Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 81.5F.05313.BFDE3EC5; Tue, 21 May 2019 14:24:27 +0200 (CEST)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
- 14.03.0439.000; Tue, 21 May 2019 14:24:21 +0200
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "Haikola, Heikki" <Heikki.Haikola@fi.rohmeurope.com>,
-        "Okada, Koki" <Koki.Okada@fi.rohmeurope.com>
-Subject: Re: [PATCH v14 0/8] support ROHM BD70528 PMIC
-Thread-Topic: [PATCH v14 0/8] support ROHM BD70528 PMIC
-Thread-Index: AQHVAMcZ2S9oIqrnW0ecnOWL7FvEJaZ1ZiIAgAALIoCAAAvhAA==
-Date:   Tue, 21 May 2019 12:24:20 +0000
-Message-ID: <ee483dcc519f89ee5413832833bc61e9a32c315f.camel@fi.rohmeurope.com>
-References: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
-         <3a78cc77499d5027f527be51a7c40f6c5d70338c.camel@fi.rohmeurope.com>
-         <20190521114149.GG3274@piout.net>
-In-Reply-To: <20190521114149.GG3274@piout.net>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AAC4464FFDE1E446A5B4B52FFE129B7F@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1727969AbfEUMl2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 May 2019 08:41:28 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:50737 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726750AbfEUMl1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 08:41:27 -0400
+Received: from [192.168.178.167] ([109.104.45.223]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mz9lL-1gfcTu2sbL-00wEc7; Tue, 21 May 2019 14:41:01 +0200
+Subject: Re: [RFC v2 3/5] clk: bcm2835: use firmware interface to update pllb
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Eric Anholt <eric@anholt.net>
+Cc:     linux-arm-kernel@lists.infradead.org, ptesarik@suse.com,
+        sboyd@kernel.org, viresh.kumar@linaro.org, mturquette@baylibre.com,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, mbrugger@suse.de, ssuloev@orpaltech.com
+References: <20190520104708.11980-1-nsaenzjulienne@suse.de>
+ <20190520104708.11980-4-nsaenzjulienne@suse.de>
+ <ebc78880-418f-f507-021c-41295113e041@i2se.com>
+Message-ID: <6383b357-3f7e-f031-f59f-61c598e44763@i2se.com>
+Date:   Tue, 21 May 2019 14:40:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUwTdxjH97v3IjePAvIbviRc4h/TCIOQ8YshyjQkt5gsJEQTt2Z4yEmb
-        0ZdcWwPjD6tRFHwJEoyzKTAMbAh1tZ1LhIECQ9LBMmUog4zN1FYJTkADarQNesep8Nd97/k+
-        n+f7XPIcg+sXqFTGZHFIskUs46k4orct6t8SnQkbPplsI1DLyF0aHZ/9gUYLDUMEOheKUKhp
-        4E8S3Xt2E6Dnd05gqD72I4aenvqPRD83xQAa7fJQaP70AECDHXcoNP7TdRpFmv/AUOvfIxjy
-        tAYJNDKUj471DNBoccxPoOFfHSg8vYjnrRG8jV4gzI0fo4VGb6XQ6f6XFgLt1ZQwOdZNCZe8
-        XlLofOGihfONLzFhPrChIO7LVbnFouNgoanUkrFt3yrjzOhrYLumK2++MUe7wHe6GqBjIJcN
-        Ixef4DUgjtFzYwD+X/uc1F6CAIZaYlgNYBiKy4U1E7QKJHE7YeOtKkLtwblnOjhWO0WoRiL3
-        KbzZdYPQmnLgL8FJXNM74F9NEUzVBLcR+l8NLvWw3Bfw1YPA22QfgHdvt5KqoePS4ZPZ2SUN
-        uPWw2jW7BONcCgw8fEFqa3OwpfsWrulkOB1efFvnYc/LEKEujXMfQ19XhobmwbPn6ihNp8H6
-        kyFa2yEB/n4hQtSCNe4VCe5l2r2Cdq+g3Svo7wHZDqBZNJWVig4pM12WnOmy1WhWHvut5gDQ
-        7mbhGnjd/3k/4BjAx7PRybBBT4oH7RXmfvARg/HJ7OkMpfRhsbWkwijajUWys0yy9wPI4HwS
-        Ozx036BnS8SKbyXZ+s5ayxB8Chvt6jPoOTX5G0mySfI7dx3D8JAllFvVJ8hSqVR+wFTmWLYx
-        RqcOj0tNskuWEkkWnQ5jkXouRXblXlQrXsm98ljBWbtNNCtVDR0Cm5nei6EGnJnpm2rA9YTF
-        apFSU1haTeLUVqPT8j7oEUhRvjeRnVMHxSu/0vs5j5QITIlYTy9FOMRlK9UFCp2b9qzOD7io
-        rZf27D7i+cC/yxfLT9+4LphtGgk11111tE3oY5m5qLX8a5+r5bNKT96++q/Sooln/MlXmoK3
-        6+Ztv90LLxbXHs6SKvNz+L3hgkP7Ozyk7XFWe1rH5aebKzsKd1Z1JhgWCrb46q/mZE/tHc0+
-        XzV99P7E9up/6s6c4Am7UczchMt28Q1YkxBbBwQAAA==
+In-Reply-To: <ebc78880-418f-f507-021c-41295113e041@i2se.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:tiKWVTmj0/g6cApKXUC8RRsZ+jzrxl/tRzq9vOMKmDYvP0avI57
+ S32E8AJVOWyViyljIeairozBYEi/9tS3d9Quw2v/CXkw1a6Ar/crQaVR2APWjjJGUJ60Nmz
+ nZxhLgGefhNTSdMfJ5IvnUvMZRFoS2G0atk28i59/4Gi004Fp1AZZlWoUamsxO3xaRfcezn
+ ZcSESHjDxbmzXOZpl4Oaw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VAEVr3c8/0g=:H9FaA9a655WuE86lTBUiV4
+ 2OJ0EepMNcKZDh29WOG6N+37XmL8YWraPTsNDcx7Rcf5OUR9+v1spI6wGk3DqpqMAcbBTkYXU
+ irJhNgFzv/ehQJyoulSGeHTVIaCj/69YyDXUVPakRsvPb7fytYzSd+G/oU6+D9e+I2KQlcdBs
+ CJqaFK1sW1UAEZQ13+kumPGYC463OkExAGsUsNvLNfw7i/a7IVT/0V5OD6zYs11hHtvV0SSIl
+ wdjummx1yyjp5j2WYl1h9O7/QQZ1uo50V+AjtmGZx9gT//W9WmNnykfdJuAXgkCtZ6hNlXB7X
+ F3nBUgXaNIb80nqocavO2b/2Fg+Bk2Q+bVTG47IHHKdD4hLsum7dMGUaBLs7oyJWJzXHE3/CU
+ OX7QgcXooNyVJLSNQ649qi9KFPjYrgeg0+HK8MJKM+f9zggdSGXrdiHl34vhA30lVkJ2JT4wE
+ gQr9/s/obESz4h4X9wyILrQf0Q8t//x1ONi9NubbHANW7XBAlGLRL9KvUdOhGrmQ2Ofl76kJi
+ NZ0/Iu0opHBvrEUr5CQrCYE4zcOFa4ydGZSKAoPjmuCKM/3N1igCCedn6fTdp9RR6UVIVrieM
+ 3QMxnrsaGyx4qt+BtEe1ikMK6T6EVLQGOb7jkCxsoKFPYmuLJicghwwAhW7FVaDgGHGSIGYus
+ a+KY2w+DQWj7xERtmRI3FaqGxWQGHAc9NkezH98aiMdImPcbmDSiHr0xWsZ3HBlI27xs4GHAD
+ 4v+WV6ijitxntnFIA4En+ZvAntlNK5t+0DuJDVlop7vKvyiX4ON55G5Lljo=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGVsbG8gQWxleGFuZHJlLA0KDQpPbiBUdWUsIDIwMTktMDUtMjEgYXQgMTM6NDEgKzAyMDAsIEFs
-ZXhhbmRyZSBCZWxsb25pIHdyb3RlOg0KPiBPbiAyMS8wNS8yMDE5IDExOjAxOjUzKzAwMDAsIFZh
-aXR0aW5lbiwgTWF0dGkgd3JvdGU6DQo+ID4gSGVsbG8gQWxsLA0KPiA+IA0KPiA+IE9uIFRodSwg
-MjAxOS0wNS0wMiBhdCAxMjoxMSArMDMwMCwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPiA+ID4g
-UGF0Y2ggc2VyaWVzIGludHJvZHVjaW5nIHN1cHBvcnQgZm9yIFJPSE0gQkQ3MDUyOCBQTUlDDQo+
-ID4gPiANCj4gPiANCj4gPiBKdXN0IHRob3VnaHQgSSdkIGFzayBpZiB0aGVyZSdzIGFueSBjaGFu
-Y2VzIHRvIGdldCB0aGlzIHNlcmllcyBpbg0KPiA+IDUuMj8NCj4gPiBJdCBzZWVtcyB0byBtZSB0
-aGUgV0RUIHBhcnQgKHBhdGNoIDgpIHdhcyBhbHJlYWR5IG1lcmdlZCBpbiBidXQNCj4gPiByZXN0
-IG9mDQo+ID4gdGhlIHBhdGNoZXMgc2VlbSB0byBiZSBpbiBsaW1ibyBzb21ld2hlcmUgOikNCj4g
-PiANCj4gPiBJIGd1ZXNzIG1vc3Qgb2YgdGhlIHBhdGNoZXMgaGF2ZSByZWxldmFudCBhY2tzIC0g
-c28gd29uZGVyIGlmIHRoZQ0KPiA+IHJlc3QNCj4gPiBjYW4gZ28gdGhyb3VnaCBMZWUncyB0cmVl
-PyBJIGFkbWl0IEkgYW0gZ2V0dGluZyBzbGlnaHRseSBpbXBhdGllbnQNCj4gPiAtDQo+ID4gc29y
-cnkgZm9yIHRoYXQgOl0NCj4gPiANCj4gDQo+IE5vcGUsIHRoZSA1LjIgbWVyZ2Ugd2luZG93cyBp
-cyBjbG9zZWQuIFRoaXMgd2lsbCBoYXZlIHRvIHdhaXQgZm9yDQo+IDUuMy4NCg0KT2gsIHRoYXQn
-cyB1bmZvcnR1bmF0ZSA6KCBUaGFua3MgZm9yIHRoZSByZXBseSB0aG91Z2guDQoNCkJlc3QgUmVn
-YXJkcw0KCU1hdHRpIFZhaXR0aW5lbg0KDQo=
+Hi Nicolas,
+
+On 20.05.19 14:11, Stefan Wahren wrote:
+> Hi Nicolas,
+>
+> the following comments applies only in case Eric is fine with the whole
+> approach.
+>
+> On 20.05.19 12:47, Nicolas Saenz Julienne wrote:
+>> Raspberry Pi's firmware, which runs in a dedicated processor, keeps
+> maybe we should clarify that the firmware is running in the VPU
+>> track of the board's temperature and voltage. It's resposible for
+>> scaling the CPU frequency whenever it deems the device reached an unsafe
+>> state. On top of that the firmware provides an interface which allows
+>> Linux to to query the clock's state or change it's frequency.
+> I think this requires a separate update of the devicetree binding.
+>> Being the sole user of the bcm2835 clock driver, this integrates the
+>> firmware interface into the clock driver and adds a first user: the CPU
+>> pll, also known as 'pllb'.
+> Please verify that the kernel still works (and this clock driver probe)
+> under the following conditions:
+>
+> - CONFIG_RASPBERRYPI_FIRMWARE=n
+> - CONFIG_RASPBERRYPI_FIRMWARE=m
+> - older DTBs without patch #1
+i thought about this and the case this driver would return
+-EPROBE_DEFER. The clock driver is too essential for doing such a thing.
+So i think the best solution would be to move these changes into a
+separate driver which should be register by the clock driver (similiar
+to vchiq). This also avoid the need of a new device tree binding.
