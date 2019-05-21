@@ -2,229 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2821B24C9C
-	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 12:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74C024D72
+	for <lists+linux-pm@lfdr.de>; Tue, 21 May 2019 13:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbfEUK1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 May 2019 06:27:25 -0400
-Received: from vps.xff.cz ([195.181.215.36]:38106 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726344AbfEUK1Z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 21 May 2019 06:27:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1558434441; bh=H6MrKqqtdax1I2XXyrIgpDdBNiCoz5e/dUQ3W4MknQk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m29HCqX2SN+8L1d5/7f5EvQHqPXlEn9XXs31rwizmVmEdBITHL/a3TU6OMvTBHDcw
-         yUjXEsxaziEiajsSIS0H84WyhAC2+H0eBJWcb+jZqN2avYXfv90LK3Q1e+1qfkVgAJ
-         uJODrBg6bk4nHXnynQwSIMwDEaWMaD5TL+M7adhA=
-Date:   Tue, 21 May 2019 12:27:21 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Frank Lee <tiny.windzz@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        catalin.marinas@arm.com, will.deacon@arm.com,
-        bjorn.andersson@linaro.org,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        paulmck@linux.ibm.com, stefan.wahren@i2se.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andy Gross <andy.gross@linaro.org>, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, marc.w.gonzalez@free.fr,
-        Eduardo Valentin <edubezval@gmail.com>,
-        enric.balletbo@collabora.com, robh+dt@kernel.org,
-        Jonathan.Cameron@huawei.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        olof@lixom.net, David Miller <davem@davemloft.net>
-Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
-Message-ID: <20190521102721.5hgks6guzlhubj6d@core.my.home>
-Mail-Followup-To: Maxime Ripard <maxime.ripard@bootlin.com>,
-        Frank Lee <tiny.windzz@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, catalin.marinas@arm.com,
-        will.deacon@arm.com, bjorn.andersson@linaro.org,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        paulmck@linux.ibm.com, stefan.wahren@i2se.com,
-        Linux PM <linux-pm@vger.kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andy Gross <andy.gross@linaro.org>, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, marc.w.gonzalez@free.fr,
-        Eduardo Valentin <edubezval@gmail.com>,
-        enric.balletbo@collabora.com, robh+dt@kernel.org,
-        Jonathan.Cameron@huawei.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        olof@lixom.net, David Miller <davem@davemloft.net>
-References: <20190512082614.9045-1-tiny.windzz@gmail.com>
- <20190512082614.9045-3-tiny.windzz@gmail.com>
- <20190512133930.t5txssl7mou2gljt@flea>
- <CAEExFWvcMbiCJ4HD0UAtv1P6AuBJ=oUdmhu886BNZhrRz483Ug@mail.gmail.com>
- <20190517073634.izdmba3yqvxviyg3@flea>
- <CAEExFWtNhTqLR+v3o6vn0Y4L65i_XsrEeiex6DNLEPEkhseCjA@mail.gmail.com>
- <20190521080515.qlni2lnmcwh7itl7@flea>
+        id S1726242AbfEULCC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 May 2019 07:02:02 -0400
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:51106 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbfEULCC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 07:02:02 -0400
+X-AuditID: c0a8fbf4-519ff700000014c1-ea-5ce3daa70e1e
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 28.9E.05313.7AAD3EC5; Tue, 21 May 2019 13:01:59 +0200 (CEST)
+Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0439.000; Tue, 21 May 2019 13:01:54 +0200
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>
+CC:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "Haikola, Heikki" <Heikki.Haikola@fi.rohmeurope.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v14 0/8] support ROHM BD70528 PMIC
+Thread-Topic: [PATCH v14 0/8] support ROHM BD70528 PMIC
+Thread-Index: AQHVAMcZ2S9oIqrnW0ecnOWL7FvEJaZ1ZiIA
+Date:   Tue, 21 May 2019 11:01:53 +0000
+Message-ID: <3a78cc77499d5027f527be51a7c40f6c5d70338c.camel@fi.rohmeurope.com>
+References: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <431A5F4502DF11498E73A4ADCF92A350@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190521080515.qlni2lnmcwh7itl7@flea>
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTVxzOuff23lvgboeCcsTHtAkzkiiyEDkGY3Qb2dX4SkzMRkjqVa5c
+        sj7YbWuoJqZmMyrMhWSYzYqABvBVN+iimwUUmmIQVEKGtSiotQ2I8RlUomK3e1sU/jnnO7/v
+        fN/3O8nvsKTuNZ3OlphtomwWjHo6gWo/9c6z+OTtcOHSwDjG9X03Gbz/aSODXx7rpvDhUITG
+        tf4bGnzvVSfAr/sPELhq4iSBX/x8V4P/qp0A+F9vNY3HDvkBvnK2n8bBPy4xOHL8GoEbbvUR
+        uLqhi8J93fl4X5ufwdFAM4V7Wmw4PBolV83k3TVuwD8L7mP4Gvdu/qJriOE9Zw7S/GCgleZP
+        u90a/uK4k+F/q3lD8GOeeZsSChJXbBNsOzeXFJuzVm5NlEarA3SpX1M23Plc4wRNmnKgZRHM
+        QQ17WxScwOpgAKCR0NDkoQuga9VHmXLAsjRcgcoHYjAVLkfNfcmqloS9WlTb+KmKU+Ay1Om9
+        TKk4Feai812DZBx/gSp/amJUTMEMdNdZGbvDwQ3oeNUgULEOfo1GLjhj9lqYj5rqYq0BOBcd
+        dD4l4lFpyDM8PtkyRPWtvWQcz0Cj4ehkXY/a3oQo1YaEi9Cf3qy4dBWaOHV10mYBqqoIMfEO
+        ktHVIxGqEsx0TUtwTald09SuaWrXNHUd0JwByCSUGIsFm5i9RBbtS2SLZFK27RaTB8Rn5uU/
+        4D/fGh+ALNAncVFfuFCnEXZaHSYfmMUS+hncoSyl9Mk2S5FDEqySQbYbRasPIJbUp3I93Q8K
+        dVyR4NglypYP1GyW0qdx77wdhTqoJn8viqWi/IGdw7J6xJUOKKbJslgslu0oMdqmaILVquYJ
+        6alW0VwkyoLdJhnUUTFYlVlRqSQld2NQkXPWUsGkVOPSbpDNtp8IHSPZJx0jylo38LaG1FFm
+        i1lMT+NWqnlQFUh288e4RyBNeXUKt1hlk5TP9NHtkRJEKEFzmViQTZii0p3gx105Be3mzzPs
+        kSZ/8PCzxN9zf2hd+/B579Bq03BOSsTw9qvArS/n9OfJxr+9dWDPXu+6aNl364ce99dGzha3
+        NebeyV6zNm+sucVm6DgibeIrte+jT77dcv/90usVwfz5mXnLTOduN4YLPlvO8q7MigwHAo6F
+        wYauJKNU/8uv33T26CmrJGRnkrJV+B/6QzoeCQQAAA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Maxime,
-
-On Tue, May 21, 2019 at 10:05:15AM +0200, Maxime Ripard wrote:
-> On Sat, May 18, 2019 at 01:27:39AM +0800, Frank Lee wrote:
-> > On Fri, May 17, 2019 at 3:36 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
-> > >
-> > > On Fri, May 17, 2019 at 01:51:56AM +0800, Frank Lee wrote:
-> > > > > > +struct sun50i_thermal_chip {
-> > > > > > +     int     sensor_num;
-> > > > > > +     int     offset;
-> > > > > > +     int     scale;
-> > > > > > +     int     ft_deviation;
-> > > > > > +     int     temp_calib_base;
-> > > > > > +     int     temp_data_base;
-> > > > > > +     int     (*enable)(struct tsens_device *tmdev);
-> > > > > > +     int     (*disable)(struct tsens_device *tmdev);
-> > > > > > +};
-> > > > >
-> > > > > I'm not super fond of having a lot of quirks that are not needed. If
-> > > > > we ever need those quirks when adding support for a new SoC, then
-> > > > > yeah, we should totally have some, but only when and if it's needed.
-> > > > >
-> > > > > Otherwise, the driver is more complicated for no particular reason.
-> > > >
-> > > > This is unavoidable because of the difference in soc.
-> > >
-> > > I know, but this isn't my point.
-> > >
-> > > My point is that at this time of the driver development, we don't know
-> > > what is going to be needed to support all of those SoCs.
-> > >
-> > > Some of the parameters you added might not be needed, some parameters
-> > > might be missing, we don't know. So let's keep it simple for now.
-> > >
-> > > > > > +static int tsens_probe(struct platform_device *pdev)
-> > > > > > +{
-> > > > > > +     struct tsens_device *tmdev;
-> > > > > > +     struct device *dev = &pdev->dev;
-> > > > > > +     int ret;
-> > > > > > +
-> > > > > > +     tmdev = devm_kzalloc(dev, sizeof(*tmdev), GFP_KERNEL);
-> > > > > > +     if (!tmdev)
-> > > > > > +             return -ENOMEM;
-> > > > > > +
-> > > > > > +     tmdev->dev = dev;
-> > > > > > +     tmdev->chip = of_device_get_match_data(&pdev->dev);
-> > > > > > +     if (!tmdev->chip)
-> > > > > > +             return -EINVAL;
-> > > > > > +
-> > > > > > +     ret = tsens_init(tmdev);
-> > > > > > +     if (ret)
-> > > > > > +             return ret;
-> > > > > > +
-> > > > > > +     ret = tsens_register(tmdev);
-> > > > > > +     if (ret)
-> > > > > > +             return ret;
-> > > > > > +
-> > > > > > +     ret = tmdev->chip->enable(tmdev);
-> > > > > > +     if (ret)
-> > > > > > +             return ret;
-> > > > > >
-> > > > > > +     platform_set_drvdata(pdev, tmdev);
-> > > > >
-> > > > > Your registration should be the very last thing you do. Otherwise, you
-> > > > > have a small window where the get_temp callback can be called, but the
-> > > > > driver will not be functional yet.
-> > > >
-> > > > No. Anyway, ths data qcquisition is ms level.
-> > >
-> > > That's kind of irrelevant. There's nothing preventing get_temp to be
-> > > called right away.
-> >
-> > As Ondřej said,
-> >
-> > Registration after enabling will lead to call tz update on non-registered tz
-> > from an interrupt handler.
-> 
-> I'm probably missing something but you're not using the interrupts, so
-> how could an interrupt handler call it?
-> 
-> Also, other drivers seem to be doing that just fine (mtk_thermal for
-> example), so surely there's a way?
-
-Last version is using the interrupts.
-
-Drivers do it in various ways. For example imx_thermal (and others like
-hisi_thermal) does it the suggested way. It enables interrupts after thermal
-zone registration, so that IRQ handler doesn't get invoked before the tzd is
-registered.
-
-regards,
-	o.
-
-> > > > > > +     ret = tsens_calibrate(tmdev);
-> > > > > > +     if (ret)
-> > > > > > +             return ret;
-> > > > > > +
-> > > > > > +     /*
-> > > > > > +      * clkin = 24MHz
-> > > > > > +      * T acquire = clkin / (SUN50I_THS_CTRL0_T_ACQ + 1)
-> > > > > > +      *           = 20us
-> > > > > > +      */
-> > > > > > +     regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
-> > > > > > +                  SUN50I_THS_CTRL0_T_ACQ(479));
-> > > > > > +     /* average over 4 samples */
-> > > > > > +     regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
-> > > > > > +                  SUN50I_THS_FILTER_EN |
-> > > > > > +                  SUN50I_THS_FILTER_TYPE(1));
-> > > > > > +     /* period = (SUN50I_H6_THS_PC_TEMP_PERIOD + 1) * 4096 / clkin; ~10ms */
-> > > > > > +     regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
-> > > > > > +                  SUN50I_H6_THS_PC_TEMP_PERIOD(58));
-> > > > > > +     /* enable sensor */
-> > > > > > +     val = GENMASK(tmdev->chip->sensor_num - 1, 0);
-> > > > > > +     regmap_write(tmdev->regmap, SUN50I_H6_THS_ENABLE, val);
-> > > > > > +
-> > > > > > +     return 0;
-> > > > > > +
-> > > > > > +assert_reset:
-> > > > > > +     reset_control_assert(tmdev->reset);
-> > > > > > +
-> > > > > > +     return ret;
-> > > > >
-> > > > > Can't we do that with runtime_pm?
-> > > >
-> > > > Saving energy doesn't make much sense compared to system security.
-> > >
-> > > I'm not sure what you mean by security.
-> >
-> > Protect system hardware from damage.
-> 
-> The point of runtime_pm is to keep the device on as long as it is
-> used, so it wouldn't change anything there.
-> 
-> I mean, you can even enable it in the probe if you want, my point is
-> that the hooks that you have are exact equivalents to the one provided
-> by runtime_pm already, so there's no need to define them in the first
-> place.
-> 
-> Maxime
-> 
-> --
-> Maxime Ripard, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-
-
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-
+SGVsbG8gQWxsLA0KDQpPbiBUaHUsIDIwMTktMDUtMDIgYXQgMTI6MTEgKzAzMDAsIE1hdHRpIFZh
+aXR0aW5lbiB3cm90ZToNCj4gUGF0Y2ggc2VyaWVzIGludHJvZHVjaW5nIHN1cHBvcnQgZm9yIFJP
+SE0gQkQ3MDUyOCBQTUlDDQo+IA0KSnVzdCB0aG91Z2h0IEknZCBhc2sgaWYgdGhlcmUncyBhbnkg
+Y2hhbmNlcyB0byBnZXQgdGhpcyBzZXJpZXMgaW4gNS4yPw0KSXQgc2VlbXMgdG8gbWUgdGhlIFdE
+VCBwYXJ0IChwYXRjaCA4KSB3YXMgYWxyZWFkeSBtZXJnZWQgaW4gYnV0IHJlc3Qgb2YNCnRoZSBw
+YXRjaGVzIHNlZW0gdG8gYmUgaW4gbGltYm8gc29tZXdoZXJlIDopDQoNCkkgZ3Vlc3MgbW9zdCBv
+ZiB0aGUgcGF0Y2hlcyBoYXZlIHJlbGV2YW50IGFja3MgLSBzbyB3b25kZXIgaWYgdGhlIHJlc3QN
+CmNhbiBnbyB0aHJvdWdoIExlZSdzIHRyZWU/IEkgYWRtaXQgSSBhbSBnZXR0aW5nIHNsaWdodGx5
+IGltcGF0aWVudCAtDQpzb3JyeSBmb3IgdGhhdCA6XQ0KDQpCciwNCglNYXR0aSBWYWl0dGluZW4N
+Cg==
