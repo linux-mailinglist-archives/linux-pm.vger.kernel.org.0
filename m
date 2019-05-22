@@ -2,126 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4355B25A65
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2019 00:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B76C25E73
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2019 09:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbfEUWnU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 May 2019 18:43:20 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37146 "EHLO
+        id S1726514AbfEVHDs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 May 2019 03:03:48 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:54088 "EHLO
         mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726271AbfEUWnU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 May 2019 18:43:20 -0400
-Received: by mail-wm1-f66.google.com with SMTP id 7so212872wmo.2
-        for <linux-pm@vger.kernel.org>; Tue, 21 May 2019 15:43:18 -0700 (PDT)
+        with ESMTP id S1728085AbfEVHDr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 May 2019 03:03:47 -0400
+Received: by mail-wm1-f66.google.com with SMTP id 198so957656wme.3
+        for <linux-pm@vger.kernel.org>; Wed, 22 May 2019 00:03:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rh5zhmB9pIXrzawqY8AKtcg1nijof3Pl+JZMPvAKIzI=;
-        b=sBHQ9lvYYxn/XTvH7+SdJa/IDZqqFTmcRI3bdiKSLSVdBpU9GaM3Bu6X25o8dM/3a2
-         qI1wkOioqEXX2qHB++OCUs/P4XIPejw/FJK9z8V50OKPZaEa4bzEWIJ+ToAP9P85LVid
-         KHU+joijWlZm0cGtqdgbRK9mSKz6GJvrKcjt/Tt735dU3Hx7+CJquNnwAH/ggWevEV1C
-         kHweFjDll9zVhB0K4XL9QTFLrZPq19CamY5CNdgnYa5Nff+/ZSAGgQ0BAt09x9KCujos
-         PbBWhTCh8P8lBLPGjiKULHPCwYUSajJ5WnP2Fm8BpQuB+dT/5dF0ue/9iT4Q7jAU23lR
-         V/7g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XyUExAoRIQds+qaoHz71XnnFutNbjVISu9zM0HA1E0Q=;
+        b=j0btQvTz6E4xGvDiw4VXPhX7YQ6nOsdnHrZV5hlXZT8LnvPguOHY0A6C6F68DbXgsT
+         1UZhr3USWTP4RQO8tV7nSgQ0Qc/kY39lSydBLYpOCjwSlv5H2+Qi+g4BDAUAi1x932SM
+         XbR8r4HMZKgdKZkDlupKGCxhxW1rD4dXaEQ6iqD0mXyurCQXabhgh0ecB185tLLTyvGw
+         00ni7naU2QWh99Fh2Gk0f5LqnEZFfHe1QNv72nxj0WOtZPhF4fQ5r/AdkP6LtJWKmFEt
+         P6nUcthiKbsZTEfR1UkN/tMrHpjj8QCaXHmVrJ7NwfZBxou9cKvUqGxVz2GKzq3jfusk
+         ZCJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rh5zhmB9pIXrzawqY8AKtcg1nijof3Pl+JZMPvAKIzI=;
-        b=ZH9Nm9bH+JjVLrT0ZvagnLiJHSGkPQgxEWVrKTrvDxgBeMQvNJcnoIe3A7jsmiokms
-         cBRaHh/Ac4CFU3dgS585+Vr97sYFTHt7PHM6K1NJnk7c+GD24S9uWMTE/pKxA/EsRI3q
-         KvvKh5vf6L36+IhmkaCBHwBnEfT/ryLCoRw+ejyu+LoVYv/FMfOfskBjGoQYDUrNHIZh
-         Vx+Uj5ygiH1WUY2ODME5FziH/i8hUWh6l68WkjSnNc34ode4KPbtvTIN2kAv4gY/rs1e
-         V/+Xm4zJl7rVblcI/iQ013tk9BkWBaShqv2iiT0FUkR33C+tQxTCaDVrnKqj56IchF8H
-         b1Rw==
-X-Gm-Message-State: APjAAAWXcxwt9gFBLSuDw72aNdMv7EO5gVwvYLJtVXLCW5yqVsGy/06i
-        e8Hke9JImtnn8U05t5oMQ1zNtmwxFImCW3lu359V
-X-Google-Smtp-Source: APXvYqwGSHyBn5RiOCFkhuZPXWdleQytgHyzzVkjLADG8gu+JFArhym1azbwi1YXhYp8TCGjSWX5MV989/0Pk0bWPJE=
-X-Received: by 2002:a1c:6783:: with SMTP id b125mr4851689wmc.79.1558478597215;
- Tue, 21 May 2019 15:43:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190521130357.20803-1-miquel.raynal@bootlin.com> <20190521130357.20803-3-miquel.raynal@bootlin.com>
-In-Reply-To: <20190521130357.20803-3-miquel.raynal@bootlin.com>
-From:   Bjorn Helgaas <bhelgaas@google.com>
-Date:   Tue, 21 May 2019 17:43:05 -0500
-Message-ID: <CAErSpo5i3y4CxZXV7E4tUR66uXaUa3B_-YT2+zfzZUGMmge7Ow@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] clk: mvebu: armada-37xx-periph: change
- suspend/resume time
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XyUExAoRIQds+qaoHz71XnnFutNbjVISu9zM0HA1E0Q=;
+        b=jSXgxFLq/WpHjyyVrS66KFRi/YtXrC74GhAdPaQN5ufxJIVIql+qaGtlOdgYXA4+aU
+         M5/j2AtWeHb0i6zAtlCRa0jD/eWCMX7GIFg5gcVrH/s4SrFB19Gkxp8q41s8KrF7pBKE
+         F4l0WyhORRNs5OPSp8ZRyVj4gG60vB0FDBDexoEimIugrYfgclsqQy7x5A/gekBSw59l
+         VL56xoCfQw+YoGiOct7hkkJaVnEvJ5l3i8jspfqTami58M1rE2C5vWDYVb0gJCRyGhQv
+         R4TFpNOfnYcHh+MWgfvEnjlpVJHT2hNjBxoxR62PKorWCxtJcCVIrX/xpAq36CS8mey0
+         wC5w==
+X-Gm-Message-State: APjAAAWdC3yuRhq53fM6uxjJsdZq/+MoVx2VvHBbd3DOB5uFj2IQn7x0
+        qAOSshQIT146IVjg2Eej6BcFNQ==
+X-Google-Smtp-Source: APXvYqyI/8BkHq8u9vd6mhfC6UOZUI4KUX4YD1XbWpr2TILi4b1BFlR3W0pVD27X22wwcaFNwPfa+w==
+X-Received: by 2002:a1c:4107:: with SMTP id o7mr6321092wma.122.1558508625472;
+        Wed, 22 May 2019 00:03:45 -0700 (PDT)
+Received: from apalos (ppp-94-66-229-5.home.otenet.gr. [94.66.229.5])
+        by smtp.gmail.com with ESMTPSA id p8sm15598396wro.0.2019.05.22.00.03.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 May 2019 00:03:44 -0700 (PDT)
+Date:   Wed, 22 May 2019 10:03:41 +0300
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Christian Neubert <christian.neubert.86@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org,
         Antoine Tenart <antoine.tenart@bootlin.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
         Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Nadav Haklai <nadavh@marvell.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        stable@vger.kernel.org
+Subject: Re: [PATCH] clk: mvebu: armada-37xx-periph: Fix initialization for
+ cpu clocks
+Message-ID: <20190522070341.GA32613@apalos>
+References: <20190314121541.GB19385@apalos>
+ <CAC5LXJcCs4nr-qFOWzUJpUBAJ9ngG-cgeTCVCFBKFc1SPzHMuQ@mail.gmail.com>
+ <20190314134428.GA24768@apalos>
+ <874l85v8p6.fsf@FE-laptop>
+ <20190318112844.GA1708@apalos>
+ <87h8c0s955.fsf@FE-laptop>
+ <20190318122113.GA4834@apalos>
+ <20190424093015.rcr5auamfccxf6ei@vireshk-i7>
+ <20190425123303.GA12659@apalos>
+ <20190520112042.mpamnabxpwciih5m@vireshk-i7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190520112042.mpamnabxpwciih5m@vireshk-i7>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Tue, May 21, 2019 at 8:04 AM
-To: Michael Turquette, Stephen Boyd, Rob Herring, Mark Rutland
-Cc: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>, Thomas
-Petazzoni, Antoine Tenart, Gregory Clement, Maxime Chevallier, Nadav
-Haklai, Bjorn Helgaas, Rafael J . Wysocki, <linux-pm@vger.kernel.org>,
-Miquel Raynal
+Hi Viresh, Gregory
+On Mon, May 20, 2019 at 04:50:42PM +0530, Viresh Kumar wrote:
+> On 25-04-19, 15:33, Ilias Apalodimas wrote:
+> > Hi Viresh,
+> > 
+> > > > > Also, during this week-end, Christian suggested that the issue might
+> > > > > come from the AVS support.
+> > > > > 
+> > > > > Could you disable it and check you still have the issue?
+> > > > > 
+> > > > > For this, you just have to remove the avs node in
+> > > > > arch/arm64/boot/dts/marvell/armada-37xx.dtsi and rebuild the dtb.
+> > > > Sure. You'll have to wait for a week though. Currently on a trip. I'll run that
+> > > >  once i return
+> > > 
+> > > @Ilias: Can you please try this now and confirm to Gregory ?
+> > I am more overloaded than usual and totally forgot about this. Apologies.
+> > I'll try finding some time and do this.
+> 
+> Ping Ilias.
+Sorry for the huge delay. 
+Applying this patch and removing tha 'avs' node from
+arch/arm64/boot/dts/marvell/armada-37xx.dtsi seems to work.
+Changing between governors does not freeze the board any more. I haven't checked
+the actual impact on the CPU speed but the values on 
+/sys/devices/system/cpu/cpufreq/policy0/scaling_governor are correct
 
-> Armada 3700 PCIe IP relies on the PCIe clock managed by this
-> driver. For reasons related to the PCI core's organization when
-> suspending/resuming, PCI host controller drivers must reconfigure
-> their register at suspend_noirq()/resume_noirq() which happens after
-> suspend()/suspend_late() and before resume_early()/resume().
-
-"For reasons related to the PCI core's organization" manages to
-suggest that this change wouldn't be needed if only the PCI core did
-something differently, without actually being specific about what it
-would need to do differently.
-
-Is there something the PCI core could do better to make this easier?
-Or is it just something like "the PCI core needs to access registers
-after suspend_late()"?  You mention the host controller, but of course
-that's not itself a PCI device, so the PCI core doesn't have much to
-do with it directly.
-
-s/register/registers/ ?
-
-> Device link support in the clock framework enforce that the clock
-> driver's resume() callback will be called before the PCIe
-> driver's. But, any resume_noirq() callback will be called before all
-> the registered resume() callbacks.
->
-> The solution to support PCIe resume operation is to change the
-> "priority" of this clock driver PM callbacks to "_noirq()".
->
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/clk/mvebu/armada-37xx-periph.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/clk/mvebu/armada-37xx-periph.c b/drivers/clk/mvebu/armada-37xx-periph.c
-> index 1e18c5a875bd..bee45e43a85f 100644
-> --- a/drivers/clk/mvebu/armada-37xx-periph.c
-> +++ b/drivers/clk/mvebu/armada-37xx-periph.c
-> @@ -715,8 +715,8 @@ static int __maybe_unused armada_3700_periph_clock_resume(struct device *dev)
->  }
->
->  static const struct dev_pm_ops armada_3700_periph_clock_pm_ops = {
-> -       SET_SYSTEM_SLEEP_PM_OPS(armada_3700_periph_clock_suspend,
-> -                               armada_3700_periph_clock_resume)
-> +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(armada_3700_periph_clock_suspend,
-> +                                     armada_3700_periph_clock_resume)
->  };
->
->  static int armada_3700_periph_clock_probe(struct platform_device *pdev)
-> --
-> 2.19.1
->
+Cheers
+/Ilias
