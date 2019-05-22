@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE95F26F56
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2019 21:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAB826E33
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2019 21:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731392AbfEVTYz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 May 2019 15:24:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46122 "EHLO mail.kernel.org"
+        id S1731768AbfEVTrM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 May 2019 15:47:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49732 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731446AbfEVTYy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 22 May 2019 15:24:54 -0400
+        id S1731164AbfEVT1b (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 22 May 2019 15:27:31 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D2EF2173C;
-        Wed, 22 May 2019 19:24:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 364B420879;
+        Wed, 22 May 2019 19:27:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553093;
-        bh=TVgHAsyH4rPgT15fmHL2KXvgi3eWmCoEVO52DV8rrnA=;
+        s=default; t=1558553250;
+        bh=2Ej++43+0ra7hQ2n3/xZ3y5xmW7GGAxykRpfXfRSlHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r5IRXEaFQKOw/PU1o/48keqRnpSMxuEe/yR3j5QMzKdgKcSleaDyOL1jyeBBElcyd
-         Dwl6/YshI1cR3GtYDGmUPCaSyvaN+yd57AmaBFsdVQqWABY3TWJgjLg/MtxMXkJ7P8
-         zWI1lOrC1y32VDXNi6H7+S9m2fePfsWp8Me1G+Dc=
+        b=fhCH2P8DMvjHxDnDk2ufsO8fpCfk3fSdxtSZJP0+dhLAG+xfT0KwmQk45p9EJ1+cL
+         aT3XEYBBiR8k8fYERumt/me7GoQfxIeyq6C5Y+E1Vfq2r+8PxrZt5sL0Oii2LK8sQt
+         EnHdGL88XU2BK5xHNohUlrbBfUqq1+3v97e6iooU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
@@ -35,12 +35,12 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Ingo Molnar <mingo@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 043/317] sched/cpufreq: Fix kobject memleak
-Date:   Wed, 22 May 2019 15:19:04 -0400
-Message-Id: <20190522192338.23715-43-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 034/244] sched/cpufreq: Fix kobject memleak
+Date:   Wed, 22 May 2019 15:23:00 -0400
+Message-Id: <20190522192630.24917-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
-References: <20190522192338.23715-1-sashal@kernel.org>
+In-Reply-To: <20190522192630.24917-1-sashal@kernel.org>
+References: <20190522192630.24917-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -79,7 +79,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+)
 
 diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index ef0e33e21b988..97b094963253d 100644
+index 505c9a55d5551..d3213594d1a7a 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
 @@ -1103,6 +1103,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
@@ -91,7 +91,7 @@ index ef0e33e21b988..97b094963253d 100644
  	}
  
 diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
-index ffa9adeaba31b..9d1d9bf02710b 100644
+index 6d53f7d9fc7a9..69fc5cf4782fb 100644
 --- a/drivers/cpufreq/cpufreq_governor.c
 +++ b/drivers/cpufreq/cpufreq_governor.c
 @@ -459,6 +459,8 @@ int cpufreq_dbs_governor_init(struct cpufreq_policy *policy)
