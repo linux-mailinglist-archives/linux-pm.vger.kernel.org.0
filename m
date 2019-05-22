@@ -2,60 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CC226956
-	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2019 19:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C21D269F5
+	for <lists+linux-pm@lfdr.de>; Wed, 22 May 2019 20:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728533AbfEVRqu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 May 2019 13:46:50 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:40534 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727984AbfEVRqt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 May 2019 13:46:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=9DJVgy8Tpl4BdMwoiRb2/qFYVN8qm/rU2GhZn7zukJQ=; b=myOqGtDDnNTCMPsyTqdFZ7JDi
-        FQsFH+/LNyytXjUP+rnFY0Xd58s+5dA+RlE1u67ydhV3fzTNRiEeH1oGher1RRQaCJkKxNaGJT3Jv
-        hogXw3WN952EAJFDEga/l0fJnUl6vpcsvezTyX8G8VEpuijEwDmBbQU7dKFh9dZf7NHBXhBjZ9Ykr
-        jDRWhd9Sdjsoqr4MKv7pZ/XB1beSyb2Kk6R2mCt+8zWAfYm/jAjZZTTei1OtBdBW0Yq5uKi7O1PFY
-        CV/c9AtfCFSad6qEa0EkkNo7qXkwacsR8446YoRXzSUe9iWf54pF6KFG12yXuw0YXTrCFD7vpERew
-        EURCg4XqA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hTVKC-0008GA-T1; Wed, 22 May 2019 17:46:48 +0000
-Date:   Wed, 22 May 2019 10:46:48 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        Keith Busch <keith.busch@intel.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
-        Jens Axboe <axboe@fb.com>,
-        Kenneth Heitke <kenneth.heitke@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Minwoo Im <minwoo.im.dev@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v2 4/4] nvme-pci: support thermal zone
-Message-ID: <20190522174648.GA26477@infradead.org>
-References: <1558454649-28783-1-git-send-email-akinobu.mita@gmail.com>
- <1558454649-28783-5-git-send-email-akinobu.mita@gmail.com>
+        id S1729588AbfEVSgQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 May 2019 14:36:16 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:60089 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728272AbfEVSgQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 May 2019 14:36:16 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 6221680477; Wed, 22 May 2019 20:36:04 +0200 (CEST)
+Date:   Wed, 22 May 2019 20:36:14 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Lukas Prause <langspielplatte@black-mesa.xyz>
+Cc:     lizefan@huawei.com, tj@kernel.org, hannes@cmpxchg.org,
+        peterz@infradead.org, mingo@redhat.com, will.deacon@arm.com,
+        rjw@rjwysocki.net, len.brown@intel.com, rostedt@goodmis.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lennart Glauer <mail@lennart-glauer.de>
+Subject: Re: [PATCH] Fix comments with paths pointing to renamed or moved
+ files.
+Message-ID: <20190522183614.GD10003@amd>
+References: <20190521155430.14941-1-langspielplatte@black-mesa.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="sXc4Kmr5FA7axrvy"
 Content-Disposition: inline
-In-Reply-To: <1558454649-28783-5-git-send-email-akinobu.mita@gmail.com>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20190521155430.14941-1-langspielplatte@black-mesa.xyz>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Is there any good reason why we need to call this from the PCIe driver
-instead of handling it all in the core?
 
-Sure non-PCIe devices are usually external, but so are some PCIe
-devices, so if we really care about that we need some sort of flag
-anyway.
+--sXc4Kmr5FA7axrvy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue 2019-05-21 17:54:30, Lukas Prause wrote:
+> This patch corrects renamed or moved paths in comments.
+>=20
+> Signed-off-by: Lukas Prause <langspielplatte@black-mesa.xyz>
+> Signed-off-by: Lennart Glauer <mail@lennart-glauer.de>
+
+Acked-by: Pavel Machek <pavel@ucw.cz>
+
+> diff --git a/kernel/power/power.h b/kernel/power/power.h
+> index 9e58bdc8a562..5de8b0c7f657 100644
+> --- a/kernel/power/power.h
+> +++ b/kernel/power/power.h
+> @@ -182,7 +182,7 @@ extern int swsusp_unmark(void);
+>  #endif
+> =20
+>  struct timeval;
+> -/* kernel/power/swsusp.c */
+> +/* kernel/power/hibernate.c */
+>  extern void swsusp_show_speed(ktime_t, ktime_t, unsigned int, char *);
+> =20
+>  #ifdef CONFIG_SUSPEND
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--sXc4Kmr5FA7axrvy
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAlzllp4ACgkQMOfwapXb+vJZkQCfeKwSOh2FKYaMG98zV3Dzre+t
+L5cAoIt7HOw2sWn9bbsMWeOfbg1PjNGy
+=AwUp
+-----END PGP SIGNATURE-----
+
+--sXc4Kmr5FA7axrvy--
