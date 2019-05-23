@@ -2,130 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 517D927EFB
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2019 16:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB15427F6A
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2019 16:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730369AbfEWOCO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 23 May 2019 10:02:14 -0400
-Received: from mga18.intel.com ([134.134.136.126]:43223 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730323AbfEWOCO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 23 May 2019 10:02:14 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 May 2019 07:02:13 -0700
-X-ExtLoop1: 1
-Received: from fmsmsx103.amr.corp.intel.com ([10.18.124.201])
-  by orsmga008.jf.intel.com with ESMTP; 23 May 2019 07:02:13 -0700
-Received: from fmsmsx118.amr.corp.intel.com (10.18.116.18) by
- FMSMSX103.amr.corp.intel.com (10.18.124.201) with Microsoft SMTP Server (TLS)
- id 14.3.408.0; Thu, 23 May 2019 07:02:13 -0700
-Received: from shsmsx104.ccr.corp.intel.com (10.239.4.70) by
- fmsmsx118.amr.corp.intel.com (10.18.116.18) with Microsoft SMTP Server (TLS)
- id 14.3.408.0; Thu, 23 May 2019 07:02:12 -0700
-Received: from shsmsx108.ccr.corp.intel.com ([169.254.8.126]) by
- SHSMSX104.ccr.corp.intel.com ([169.254.5.33]) with mapi id 14.03.0415.000;
- Thu, 23 May 2019 22:02:11 +0800
-From:   "Zhang, Rui" <rui.zhang@intel.com>
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>
-CC:     "tomeu.vizoso@collabora.com" <tomeu.vizoso@collabora.com>,
-        "guillaume.tucker@collabora.com" <guillaume.tucker@collabora.com>,
-        "mgalka@collabora.com" <mgalka@collabora.com>,
-        "matthew.hart@linaro.org" <matthew.hart@linaro.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: mainline/master boot bisection: v5.2-rc1-165-g54dee406374c on
- rk3288-veyron-jaq
-Thread-Topic: mainline/master boot bisection: v5.2-rc1-165-g54dee406374c on
- rk3288-veyron-jaq
-Thread-Index: AQHVEQ59ng5b65ntw0ypm8xLYzn0kaZ4KgWAgAAB5wCAAJHx8A==
-Date:   Thu, 23 May 2019 14:02:11 +0000
-Message-ID: <744357E9AAD1214791ACBA4B0B9092637757AD75@SHSMSX108.ccr.corp.intel.com>
-References: <5ce6040d.1c69fb81.60b3b.29fb@mx.google.com>
- <20190523131207.GC17245@sirena.org.uk>
- <ac2f06ac-2bf5-7af6-06c3-37b865c43738@collabora.com>
-In-Reply-To: <ac2f06ac-2bf5-7af6-06c3-37b865c43738@collabora.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiMWIyNDI1MTEtODVlNy00ZmQzLWFlZWUtYzI3OGQ0ODdiMDBlIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoibXUyNlNRZ3U4RWtRSEI1Q1ZFdjlOMURGMmlRVnc0M29SemtQREFEb0FGd0NLdDdUSkNEVXNqS2JzcXV4VXhEcCJ9
-x-ctpclassification: CTP_NT
-dlp-product: dlpe-windows
-dlp-version: 11.0.600.7
-dlp-reaction: no-action
-x-originating-ip: [10.239.127.40]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1730708AbfEWOVk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 May 2019 10:21:40 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:42399 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730706AbfEWOVk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 May 2019 10:21:40 -0400
+Received: by mail-pl1-f196.google.com with SMTP id go2so2820386plb.9
+        for <linux-pm@vger.kernel.org>; Thu, 23 May 2019 07:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ndu0C78u89Vpd1DZzdszrXEuSgM18mXqDDSkzxtz1S4=;
+        b=CVNBJ/cjDL3pknGbhrYYTqpqp06CVRzA5cs2LqAxogdYA+R8Av9i31Yp/FiVvnm4wM
+         hDMU4+a0Eq3Sx9hM5F/7Vi/1FNJmQxkYTpm69IM1yJ1W1YVduMnK2QrSLq9k9m9aOu/1
+         kGxBBAjH474TdBOmWWzEHMR7b2BStg82cCKNv4SqfrymthZ7krc0bSM5A28Y4HblwKCQ
+         AIbAc4Ldoi+326GgW01FDBLjUEYYnAmzCNqo+39HrCETwIDh6bKYLI+kodRZtir+XJs1
+         TRPXXKkMb8sZ2fmNSlMzW/iFokac72VlGhV1jypclCNRXn1Iixrg0MPKYORzFbuC/ah7
+         myyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ndu0C78u89Vpd1DZzdszrXEuSgM18mXqDDSkzxtz1S4=;
+        b=uNl1w1BJ8Z4UDjSkokl+dvMO0T2quIryY1e/PC0cj67up5U0mG9qvACqq13e7XdjfB
+         slrlID3uBefCF5WFLSN/VBOKz9NaLDSiC2y0WNDewKoo5UCpOvvwJCcevN9FrG/yJ+Td
+         O1216YI0Y3NEHzLwxWCpAulooEdTp07vCLARg07jGC7baV7ix/WfGkZgROWvlMV5xn6h
+         o5irYMRV4ikoNvyszNxQ9u1FZPb0MYDHvZiDbpQmRfzs8HcahZsPLb7ZRq+V1aolSP2X
+         Zkn1Q0s8gB0CXt4+oYl/XMnk+fuk3TldKWc9aI9Fw4LwN7OPwpHwswFJKLEyFX9bJ+6K
+         O9Hw==
+X-Gm-Message-State: APjAAAUZQFZ7WmwPN5dqji/2DpcLW8WSdqOE9e9EOFKQUsiEK2GmOUJq
+        P9LUEmBtf4u4t1YuOEDTlmLiKx4gbB8dMHVy53U=
+X-Google-Smtp-Source: APXvYqyz0tMzVw19CQQcSqtHkHaiGJKrShsUgAzME/k1OZ9BDWY8ufKzGVZYuJ52SoOWAsRj+hyc/QHFjIvRzUGzSuI=
+X-Received: by 2002:a17:902:7283:: with SMTP id d3mr54000194pll.274.1558621299898;
+ Thu, 23 May 2019 07:21:39 -0700 (PDT)
 MIME-Version: 1.0
+References: <1558454649-28783-1-git-send-email-akinobu.mita@gmail.com>
+ <1558454649-28783-5-git-send-email-akinobu.mita@gmail.com> <20190522174648.GA26477@infradead.org>
+In-Reply-To: <20190522174648.GA26477@infradead.org>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Thu, 23 May 2019 23:21:28 +0900
+Message-ID: <CAC5umyhsnk_g5N+k_dMiBenPopGCLHg35+X2Jg+sEPBf2ZLKHA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] nvme-pci: support thermal zone
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        Keith Busch <keith.busch@intel.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
+        Jens Axboe <axboe@fb.com>,
+        Kenneth Heitke <kenneth.heitke@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+2019=E5=B9=B45=E6=9C=8823=E6=97=A5(=E6=9C=A8) 2:46 Christoph Hellwig <hch@i=
+nfradead.org>:
+>
+> Is there any good reason why we need to call this from the PCIe driver
+> instead of handling it all in the core?
 
+OK. I'll move the thermal zones registration and unregistration into the
+core module.
 
-> -----Original Message-----
-> From: Enric Balletbo i Serra [mailto:enric.balletbo@collabora.com]
-> Sent: Thursday, May 23, 2019 9:19 PM
-> To: Mark Brown <broonie@kernel.org>; Eduardo Valentin
-> <edubezval@gmail.com>; Elaine Zhang <zhangqing@rock-chips.com>
-> Cc: tomeu.vizoso@collabora.com; guillaume.tucker@collabora.com;
-> mgalka@collabora.com; matthew.hart@linaro.org; khilman@baylibre.com;
-> Daniel Lezcano <daniel.lezcano@linaro.org>; Heiko Stuebner
-> <heiko@sntech.de>; linux-pm@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-rockchip@lists.infradead.org; Zhang, Rui
-> <rui.zhang@intel.com>; linux-arm-kernel@lists.infradead.org
-> Subject: Re: mainline/master boot bisection: v5.2-rc1-165-g54dee406374c on
-> rk3288-veyron-jaq
-> Importance: High
-> 
-> Hi Mark,
-> 
-> On 23/5/19 15:12, Mark Brown wrote:
-> > On Wed, May 22, 2019 at 07:23:09PM -0700, kernelci.org bot wrote:
-> >
-> >>   Details:    https://kernelci.org/boot/id/5ce5984c59b514e6a47a364c
-> >>   Plain log:  https://storage.kernelci.org//mainline/master/v5.2-rc1-165-
-> g54dee406374c/arm/multi_v7_defconfig+CONFIG_EFI=y+CONFIG_ARM_LPAE
-> =y/gcc-8/lab-collabora/boot-rk3288-veyron-jaq.txt
-> >>   HTML log:   https://storage.kernelci.org//mainline/master/v5.2-rc1-165-
-> g54dee406374c/arm/multi_v7_defconfig+CONFIG_EFI=y+CONFIG_ARM_LPAE
-> =y/gcc-8/lab-collabora/boot-rk3288-veyron-jaq.html
-> >>   Result:     28694e009e51 thermal: rockchip: fix up the tsadc pinctrl setting
-> error
-> >
-> > It looks like this issue has persisted for a while without any kind of
-> > fix happening - given that the bisection has identified this commit as
-> > causing the regression and confirmed that reverting it fixes shouldn't
-> > we just revert?  My guess would be that there's some error with the
-> > pinctrl settings in the DT for the board.
-> >
-> 
-> After some discussion Heiko sent a patch that reverts the offending commit
-> one day ago [1] and it's waiting for maintainer to pick-up the patch.
-> 
-I thought Eduardo will take the patch.
-But I will apply it and queue it for -rc2 anyway.
+Call nvme_thermal_zones_register() in nvme_init_identify(), and call
+nvme_thermal_zones_unregister() in nvme_stop_ctrl().
 
-Thanks,
-Rui
+> Sure non-PCIe devices are usually external, but so are some PCIe
+> devices, so if we really care about that we need some sort of flag
+> anyway.
 
-> The reason why we think is best reverting that fix it is explained here [2]
-> 
-> [1] https://lkml.org/lkml/2019/5/22/467
-> [2] https://lkml.org/lkml/2019/4/30/270
-> 
-> Thanks,
->  Enric
+I'm going to not use the flag in next version.
+If there is a demand, we'll have 'use_tz' or 'no_tz' flag in nvme_ctrl.
