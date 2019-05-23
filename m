@@ -2,171 +2,258 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD1927874
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2019 10:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17217279A2
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2019 11:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727434AbfEWIvM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 May 2019 04:51:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55230 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726230AbfEWIvM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 23 May 2019 04:51:12 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B42A7ADD8;
-        Thu, 23 May 2019 08:51:09 +0000 (UTC)
-Message-ID: <c756c54d5e924d61b8ec6eccecf9bfdce7c2b543.camel@suse.de>
-Subject: Re: [RFC v2 3/5] clk: bcm2835: use firmware interface to update pllb
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Eric Anholt <eric@anholt.net>
-Cc:     linux-arm-kernel@lists.infradead.org, ptesarik@suse.com,
-        sboyd@kernel.org, viresh.kumar@linaro.org, mturquette@baylibre.com,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, mbrugger@suse.de, ssuloev@orpaltech.com
-Date:   Thu, 23 May 2019 10:51:07 +0200
-In-Reply-To: <1599901940.259900.1558475026379@email.ionos.de>
-References: <20190520104708.11980-1-nsaenzjulienne@suse.de>
-         <20190520104708.11980-4-nsaenzjulienne@suse.de>
-         <ebc78880-418f-f507-021c-41295113e041@i2se.com>
-         <6383b357-3f7e-f031-f59f-61c598e44763@i2se.com>
-         <a142b72b828a798610d885d81189dd21b1870d78.camel@suse.de>
-         <1599901940.259900.1558475026379@email.ionos.de>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-rttIxA1wzU/XwAkxrIx0"
-User-Agent: Evolution 3.32.2 
+        id S1729949AbfEWJrD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 May 2019 05:47:03 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:39768 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729836AbfEWJrC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 May 2019 05:47:02 -0400
+Received: by mail-it1-f196.google.com with SMTP id 9so7560601itf.4
+        for <linux-pm@vger.kernel.org>; Thu, 23 May 2019 02:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tomeuvizoso-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o9qGD0rptCcynbI2Mi951+wYe+LZmUVw5Jbzq7H7LuE=;
+        b=CYr4mNCVYoClhW3/8KzkrGw0dE/MQHcvxvP02Ix25c2AXtHjUi6HuS5n6lOmJLe3I+
+         MAwq6uwmjDrAW/w17OmU6Yn8bERVwkWmwN1qNuM098qBCB9hiGPEIhyB+IPgDHu1N0zq
+         xWYovIiVH+KrCA4ArtGgYjTG9YvGdVD3EcQ2Z2X4348OvmqTF0c7ZlWUtZd7tuwPHmUu
+         kfplabBQ/kUlvT0injsaYJCX6XlOSiyP5Zk7+qHQ6JgLT8p+pGwGTltGH3q4mXlAgUsx
+         OVJscuOEIGffRr+EB4W+jBtSL6cKQ2KjPxz2dhPXRjFZQO5XLKuoeGVm6r5LAL7JN5/b
+         y4lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o9qGD0rptCcynbI2Mi951+wYe+LZmUVw5Jbzq7H7LuE=;
+        b=STC01zQbkqHdCBnVooSzBsqPJnAAJYcxYffrbYTmhYkK/JYMQvaWhSJsjLCWcwlwJq
+         1NvNvbe7AL7HEb/9cy5cCYXNb/rAHArukTBUeiZ69skaZlC55H5JStUwjYNiSDDtre1u
+         9VsWXp/lyiY9C0YVeMjewgDi5nHOD6VJzpvz8JEIpjqh47cLXyImnQVksuiQSQzZgjG7
+         IcjY2btR9WqBIDrpBHGfTtvIyXDiP48sKLVVVdSiiqQO8Md0lP/3PMPJH00eU1RK2ibH
+         gJVdQl6KBD7Rl4fsZqtSHmeKIvXZEzL0AOiWJ/7mTZ3pr35qqBgCdV2a2HtR2+yfyDrZ
+         Vitw==
+X-Gm-Message-State: APjAAAWGMgeJGruqAVotA3TH7iLnqXURMKrUbGFf164F/6uNMCx7nuql
+        pmcUYkCwdlo023Pa+mp5nwPEWRUGgWM=
+X-Google-Smtp-Source: APXvYqw04EWOtc5PFMSYjltUREiEsqKv1Vo8bnTZ2SsqOP5C6NXP2cDsk+3tM0w5QwLnuvAU/dqBSg==
+X-Received: by 2002:a24:734c:: with SMTP id y73mr12377749itb.72.1558604821564;
+        Thu, 23 May 2019 02:47:01 -0700 (PDT)
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com. [209.85.166.41])
+        by smtp.gmail.com with ESMTPSA id j125sm2017635itb.27.2019.05.23.02.47.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 May 2019 02:47:00 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id m7so4322977ioa.6;
+        Thu, 23 May 2019 02:47:00 -0700 (PDT)
+X-Received: by 2002:a6b:9257:: with SMTP id u84mr12698696iod.55.1558604820400;
+ Thu, 23 May 2019 02:47:00 -0700 (PDT)
 MIME-Version: 1.0
+References: <20190516044313.GA17751@localhost.localdomain>
+In-Reply-To: <20190516044313.GA17751@localhost.localdomain>
+From:   Tomeu Vizoso <tomeu@tomeuvizoso.net>
+Date:   Thu, 23 May 2019 11:46:47 +0200
+X-Gmail-Original-Message-ID: <CAAObsKD0_+cJQW0YtF9AkWn8XYP9wSYHTi_UhRiba7tH5EWTdw@mail.gmail.com>
+Message-ID: <CAAObsKD0_+cJQW0YtF9AkWn8XYP9wSYHTi_UhRiba7tH5EWTdw@mail.gmail.com>
+Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.2-rc1
+To:     Eduardo Valentin <edubezval@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Rui Zhang <rui.zhang@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Eduardo,
 
---=-rttIxA1wzU/XwAkxrIx0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I saw that for 5.1 [0] you included a kernelci boot report for your
+tree, but not for 5.2. Have you found anything that should be improved
+in KernelCI for it to be more useful to maintainers like you?
 
-On Tue, 2019-05-21 at 23:43 +0200, Stefan Wahren wrote:
-> > Nicolas Saenz Julienne <nsaenzjulienne@suse.de> hat am 21. Mai 2019 um =
-17:47
-> > geschrieben:
-> >=20
-> >=20
-> > Hi Stefan, thanks for your comments!
-> >=20
-> > On Tue, 2019-05-21 at 14:40 +0200, Stefan Wahren wrote:
-> > > Hi Nicolas,
-> > >=20
-> > > On 20.05.19 14:11, Stefan Wahren wrote:
-> > > > Hi Nicolas,
-> > > >=20
-> > > > the following comments applies only in case Eric is fine with the w=
-hole
-> > > > approach.
-> > > >=20
-> > > > On 20.05.19 12:47, Nicolas Saenz Julienne wrote:
-> > > > > Raspberry Pi's firmware, which runs in a dedicated processor, kee=
-ps
-> > > > maybe we should clarify that the firmware is running in the VPU
-> > > > > track of the board's temperature and voltage. It's resposible for
-> > > > > scaling the CPU frequency whenever it deems the device reached an
-> > > > > unsafe
-> > > > > state. On top of that the firmware provides an interface which al=
-lows
-> > > > > Linux to to query the clock's state or change it's frequency.
-> > > > I think this requires a separate update of the devicetree binding.
-> > > > > Being the sole user of the bcm2835 clock driver, this integrates =
-the
-> > > > > firmware interface into the clock driver and adds a first user: t=
-he
-> > > > > CPU
-> > > > > pll, also known as 'pllb'.
-> > > > Please verify that the kernel still works (and this clock driver pr=
-obe)
-> > > > under the following conditions:
-> > > >=20
-> > > > - CONFIG_RASPBERRYPI_FIRMWARE=3Dn
-> > > > - CONFIG_RASPBERRYPI_FIRMWARE=3Dm
-> > > > - older DTBs without patch #1
-> > > i thought about this and the case this driver would return
-> > > -EPROBE_DEFER. The clock driver is too essential for doing such a thi=
-ng.
-> > > So i think the best solution would be to move these changes into a
-> > > separate driver which should be register by the clock driver (similia=
-r
-> > > to vchiq). This also avoid the need of a new device tree binding.
-> >=20
-> > I understand your concerns.
-> >=20
-> > Wouldn't you prefer registering the device trough the device tree? I'd =
-go
-> > with
-> > the same approach as the firmware touchscreen driver, which is register=
-ed
-> > after
-> > the firmware's probe trough dt's 'simple-bus'. That said, it's not a
-> > strongly
-> > held opinion, I'm happy with whatever solution as long as it works.
->=20
-> A devicetree binding always introduce some kind of inflexibility. In case
-> someone finds a better solution later things can get really messy. A rece=
-nt
-> example is the clock handling for i2c-bcm2835.
+[0] https://lore.kernel.org/lkml/20190306161207.GA7365@localhost.localdomain/
 
-Fair enough.
+I found about this when trying to understand why the boot on the
+veyron-jaq board has been broken in 5.2-rc1.
 
-> > I get from your comments that you'd like the register based version of
-> > 'pllb'
-> > and 'pllb_arm' to be loaded if for some reason the firmware isn't avail=
-able.
-> > Is
-> > that right?=20
->=20
-> This wasn't my intention. I would prefer a simple approch here (no handov=
-er).=20
->=20
-> > The main problem I see with this is the duplication of 'pllb' and
-> > 'pllb_arm'. Both drivers will create the same clock device through diff=
-erent
-> > interfaces. Any suggestions on how to deal with that? If not I can simp=
-ly
-> > remove 'pllb' and 'pllb_arm' from clk-bcm2835.c.
->=20
-> Yes. So even if this driver is disabled, there shouldn't be a regression.=
- Or
-> did i miss something?
+Thanks,
 
-No, there shoudn't be any regressions as these clocks are not being used at=
- the
-moment.
+Tomeu
 
-I'll send a follow-up series soon :)
-
-Regrads,
-Nicolas
-
-
---=-rttIxA1wzU/XwAkxrIx0
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAlzmXvsACgkQlfZmHno8
-x/5grgf8DaKHj4n6xgx7Eziw8ZvWeoGXlEqp0jORn3i0LMRCmP3NfeQjeI6JKcqk
-cr+LKsKAOdKqi+LSK5E97AD+dhifsZBkQWdXiiWmlqTALBoRx9jug+Bz5hcXQWSP
-GEc7b3ptWKWhdHCkNYDPUMs/2QECyhvdzS64cqzxyWVitzkue3oucEuHBB0zKEVS
-d4O3HJXxgFhUE0hyBEmlaPm94mBq9wIywm01Ifj2Lmzb/gXrM8mYfyZoxW9jM7tl
-2bXiN04WcM6kSq+J4t+3v+baNCP6YlHDnDU7scJ2grPkydirg+E5O87YrKJ0RGys
-okD9UnL1HYEPsLM94xjqSw+H5f2sgQ==
-=kYhp
------END PGP SIGNATURE-----
-
---=-rttIxA1wzU/XwAkxrIx0--
-
+On Thu, 16 May 2019 at 06:43, Eduardo Valentin <edubezval@gmail.com> wrote:
+>
+> Hello Linus,
+>
+> Please consider the following thermal soc changes for v5.2-rc1.
+>
+> The following changes since commit 37624b58542fb9f2d9a70e6ea006ef8a5f66c30b:
+>
+>   Linux 5.1-rc7 (2019-04-28 17:04:13 -0700)
+>
+> are available in the git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal linus
+>
+> for you to fetch changes up to 37bcec5d9f71bd13142a97d2196b293c9ac23823:
+>
+>   hwmon: (pwm-fan) Use devm_thermal_of_cooling_device_register (2019-05-14 07:00:47 -0700)
+>
+> Specifics:
+> - thermal core has a new devm_* API for registering cooling devices, thanks to Guenter R.
+>   I took the entire series, that is why you see changes on drivers/hwmon in this pull.
+> - rockchip thermal driver gains support to PX30 SoC, thanks to Elaine Z.
+> - the generic-adc thermal driver now considers the lookup table DT property as optional,
+>   thanks to Jean-Francois D.
+> - Refactoring of tsens thermal driver, thanks to Amit K.
+> - Cleanups on cpu cooling driver, thanks to Daniel L.
+> - broadcom thermal driver dropped support to ACPI, thanks to Srinath M.
+> - tegra thermal driver gains support to OC hw throttle and GPU throtle, thanks to Wei Ni.
+> - Fixes in several thermal drivers.
+>
+> BR,
+>
+> Eduardo Valentin
+>
+> ----------------------------------------------------------------
+> Amit Kucheria (21):
+>       drivers: thermal: tsens: Document the data structures
+>       drivers: thermal: tsens: Rename tsens_data
+>       drivers: thermal: tsens: Rename tsens_device
+>       drivers: thermal: tsens: Rename variable tmdev
+>       drivers: thermal: tsens: Use consistent names for variables
+>       drivers: thermal: tsens: Function prototypes should have argument names
+>       drivers: thermal: tsens: Rename tsens-8916 to prepare to merge with tsens-8974
+>       drivers: thermal: tsens: Rename constants to prepare to merge with tsens-8974
+>       drivers: thermal: tsens: Merge tsens-8974 into tsens-v0_1
+>       drivers: thermal: tsens: Introduce reg_fields to deal with register description
+>       drivers: thermal: tsens: Save reference to the device pointer and use it
+>       drivers: thermal: tsens: Don't print error message on -EPROBE_DEFER
+>       drivers: thermal: tsens: Add new operation to check if a sensor is enabled
+>       drivers: thermal: tsens: change data type for sensor IDs
+>       drivers: thermal: tsens: Introduce IP-specific max_sensor count
+>       drivers: thermal: tsens: simplify get_temp_tsens_v2 routine
+>       drivers: thermal: tsens: Move get_temp_tsens_v2 to allow sharing
+>       drivers: thermal: tsens: Common get_temp() learns to do ADC conversion
+>       dt: thermal: tsens: Add bindings for qcs404
+>       drivers: thermal: tsens: Add generic support for TSENS v1 IP
+>       drivers: thermal: tsens: Move calibration constants to header file
+>
+> Andrey Smirnov (1):
+>       thermal: qoriq: Remove unnecessary DT node is NULL check
+>
+> Daniel Lezcano (4):
+>       thermal/drivers/cpu_cooling: Remove pointless test in power2state()
+>       thermal/drivers/cpu_cooling: Fixup the header and copyright
+>       thermal/drivers/cpu_cooling: Add Software Package Data Exchange (SPDX)
+>       thermal/drivers/cpu_cooling: Remove pointless field
+>
+> Elaine Zhang (3):
+>       thermal: rockchip: fix up the tsadc pinctrl setting error
+>       dt-bindings: rockchip-thermal: Support the PX30 SoC compatible
+>       thermal: rockchip: Support the PX30 SoC in thermal driver
+>
+> Enrico Weigelt, metux IT consult (1):
+>       drivers: thermal: Kconfig: pedantic cleanups
+>
+> Guenter Roeck (6):
+>       thermal: Introduce devm_thermal_of_cooling_device_register
+>       hwmon: (aspeed-pwm-tacho) Use devm_thermal_of_cooling_device_register
+>       hwmon: (gpio-fan) Use devm_thermal_of_cooling_device_register
+>       hwmon: (mlxreg-fan) Use devm_thermal_of_cooling_device_register
+>       hwmon: (npcm750-pwm-fan) Use devm_thermal_of_cooling_device_register
+>       hwmon: (pwm-fan) Use devm_thermal_of_cooling_device_register
+>
+> Hoan Nguyen An (1):
+>       thermal: rcar_gen3_thermal: Fix init value of IRQCTL register
+>
+> Jean-Francois Dagenais (2):
+>       thermal: generic-adc: make lookup table optional
+>       dt-bindings: thermal: generic-adc: make lookup-table optional
+>
+> Jiada Wang (3):
+>       thermal: rcar_gen3_thermal: fix interrupt type
+>       thermal: rcar_gen3_thermal: disable interrupt in .remove
+>       thermal: rcar_gen3_thermal: Fix to show correct trip points number
+>
+> Matthias Kaehlcke (1):
+>       thermal: cpu_cooling: Actually trace CPU load in thermal_power_cpu_get_power
+>
+> Srinath Mannam (1):
+>       thermal: broadcom: Remove ACPI support
+>
+> Talel Shenhar (3):
+>       dt-bindings: thermal: al-thermal: Add binding documentation
+>       thermal: Introduce Amazon's Annapurna Labs Thermal Driver
+>       thermal: Fix build error of missing devm_ioremap_resource on UM
+>
+> Wei Ni (9):
+>       of: Add bindings of thermtrip for Tegra soctherm
+>       thermal: tegra: support hw and sw shutdown
+>       of: Add bindings of gpu hw throttle for Tegra soctherm
+>       thermal: tegra: add support for gpu hw-throttle
+>       thermal: tegra: add support for thermal IRQ
+>       thermal: tegra: add set_trips functionality
+>       thermal: tegra: add support for EDP IRQ
+>       of: Add bindings of OC hw throttle for Tegra soctherm
+>       thermal: tegra: enable OC hw throttle
+>
+> Wolfram Sang (1):
+>       thermal: stm32: simplify getting .driver_data
+>
+> Yangtao Li (1):
+>       of: thermal: Improve print information
+>
+> Yoshihiro Kaneko (1):
+>       thermal: rcar_thermal: update calculation formula for R-Car Gen3 SoCs
+>
+>  .../bindings/thermal/amazon,al-thermal.txt         |  33 +
+>  .../bindings/thermal/nvidia,tegra124-soctherm.txt  |  62 +-
+>  .../devicetree/bindings/thermal/qcom-tsens.txt     |  14 +
+>  .../bindings/thermal/rockchip-thermal.txt          |   1 +
+>  .../bindings/thermal/thermal-generic-adc.txt       |  10 +-
+>  MAINTAINERS                                        |   6 +
+>  drivers/hwmon/aspeed-pwm-tacho.c                   |   6 +-
+>  drivers/hwmon/gpio-fan.c                           |  25 +-
+>  drivers/hwmon/mlxreg-fan.c                         |  31 +-
+>  drivers/hwmon/npcm750-pwm-fan.c                    |   6 +-
+>  drivers/hwmon/pwm-fan.c                            |  73 +-
+>  drivers/thermal/Kconfig                            |  11 +
+>  drivers/thermal/Makefile                           |   1 +
+>  drivers/thermal/broadcom/sr-thermal.c              |   8 -
+>  drivers/thermal/cpu_cooling.c                      |  30 +-
+>  drivers/thermal/of-thermal.c                       |   3 +
+>  drivers/thermal/qcom/Makefile                      |   4 +-
+>  drivers/thermal/qcom/tsens-8916.c                  | 105 ---
+>  drivers/thermal/qcom/tsens-8960.c                  |  84 +-
+>  drivers/thermal/qcom/tsens-common.c                | 159 +++-
+>  .../thermal/qcom/{tsens-8974.c => tsens-v0_1.c}    | 166 +++-
+>  drivers/thermal/qcom/tsens-v1.c                    | 193 +++++
+>  drivers/thermal/qcom/tsens-v2.c                    | 111 +--
+>  drivers/thermal/qcom/tsens.c                       | 100 ++-
+>  drivers/thermal/qcom/tsens.h                       | 291 ++++++-
+>  drivers/thermal/qoriq_thermal.c                    |   5 -
+>  drivers/thermal/rcar_gen3_thermal.c                |  51 +-
+>  drivers/thermal/rcar_thermal.c                     |  11 +-
+>  drivers/thermal/rockchip_thermal.c                 |  74 +-
+>  drivers/thermal/st/Kconfig                         |  22 +-
+>  drivers/thermal/st/stm_thermal.c                   |   6 +-
+>  drivers/thermal/tegra/Kconfig                      |   4 +-
+>  drivers/thermal/tegra/soctherm.c                   | 961 +++++++++++++++++++--
+>  drivers/thermal/tegra/soctherm.h                   |  16 +
+>  drivers/thermal/tegra/tegra124-soctherm.c          |   7 +-
+>  drivers/thermal/tegra/tegra132-soctherm.c          |   7 +-
+>  drivers/thermal/tegra/tegra210-soctherm.c          |  15 +-
+>  drivers/thermal/thermal-generic-adc.c              |   9 +-
+>  drivers/thermal/thermal_core.c                     |  49 ++
+>  drivers/thermal/thermal_mmio.c                     | 129 +++
+>  include/dt-bindings/thermal/tegra124-soctherm.h    |   8 +-
+>  include/linux/thermal.h                            |  13 +
+>  42 files changed, 2330 insertions(+), 590 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/amazon,al-thermal.txt
+>  delete mode 100644 drivers/thermal/qcom/tsens-8916.c
+>  rename drivers/thermal/qcom/{tsens-8974.c => tsens-v0_1.c} (56%)
+>  create mode 100644 drivers/thermal/qcom/tsens-v1.c
+>  create mode 100644 drivers/thermal/thermal_mmio.c
