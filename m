@@ -2,115 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1076127C53
-	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2019 14:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D4627DC3
+	for <lists+linux-pm@lfdr.de>; Thu, 23 May 2019 15:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729361AbfEWMCK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 May 2019 08:02:10 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:9815 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728309AbfEWMCJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 23 May 2019 08:02:09 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 458p5V4Lx7z9v2NT;
-        Thu, 23 May 2019 14:02:06 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=mYh3up+P; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id t0X21tqOHZa6; Thu, 23 May 2019 14:02:06 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 458p5V2pLmz9v2NS;
-        Thu, 23 May 2019 14:02:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1558612926; bh=dxjR5/OUEbuHjryrELjiCz2BmB568YPeDBsdsR3B27c=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=mYh3up+PAV5q1CkXEn+MOv/nsPx6DdMICOFeThJ9qrLIPZA+jhtbkBC+HHc9/cL0A
-         hZ2n1Zjj7fl/dhUGlc8qA57UwniCg+wLUPsvmBPHhgH6vGW6sFn8oCHfLDVYRlxTco
-         ll+LSYtlKlkVUYiJJDsANgkM8wdmay41mIKPj+do=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9C6A68B860;
-        Thu, 23 May 2019 14:02:07 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id r1aNl5ZvA7nM; Thu, 23 May 2019 14:02:07 +0200 (CEST)
-Received: from PO15451 (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 895C78B858;
-        Thu, 23 May 2019 14:02:06 +0200 (CEST)
-Subject: Re: [PATCH] powerpc/power: Expose pfn_is_nosave prototype
-To:     Mathieu Malaterre <malat@debian.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        Pavel Machek <pavel@ucw.cz>, linuxppc-dev@lists.ozlabs.org
-References: <20190523114736.30268-1-malat@debian.org>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <11ffdbd5-60a9-b1fa-aa83-9d3c60e3d462@c-s.fr>
-Date:   Thu, 23 May 2019 14:02:05 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1729698AbfEWNMb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 May 2019 09:12:31 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40108 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729430AbfEWNMb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 May 2019 09:12:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=QvlfoLHm0G7/InzihE6PxMP0/Z/oolwPHati4bZmwQk=; b=wvGRj18ykIjgLomRO2wv+zz2c
+        6FN4MniOthn8MoyoxeRJ587gb7wWgPnLnueeF74OHNrJ/hje8VjT3sxKa6EcouM0RxxZJzqEvmabM
+        AchRocYS+FjBtFfeXPh/wbVWtTD85UB+eYfe1ecuWyHP9DUwL8Ogby4rV6hkzuPnj3kJs=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hTnVy-0000AJ-Rd; Thu, 23 May 2019 13:12:10 +0000
+Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
+        id 386DD1126D24; Thu, 23 May 2019 14:12:07 +0100 (BST)
+Date:   Thu, 23 May 2019 14:12:07 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Eduardo Valentin <edubezval@gmail.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Cc:     tomeu.vizoso@collabora.com, guillaume.tucker@collabora.com,
+        mgalka@collabora.com, matthew.hart@linaro.org,
+        khilman@baylibre.com, enric.balletbo@collabora.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: mainline/master boot bisection: v5.2-rc1-165-g54dee406374c on
+ rk3288-veyron-jaq
+Message-ID: <20190523131207.GC17245@sirena.org.uk>
+References: <5ce6040d.1c69fb81.60b3b.29fb@mx.google.com>
 MIME-Version: 1.0
-In-Reply-To: <20190523114736.30268-1-malat@debian.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JgQwtEuHJzHdouWu"
+Content-Disposition: inline
+In-Reply-To: <5ce6040d.1c69fb81.60b3b.29fb@mx.google.com>
+X-Cookie: I brake for chezlogs!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+--JgQwtEuHJzHdouWu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Le 23/05/2019 à 13:47, Mathieu Malaterre a écrit :
-> The declaration for pfn_is_nosave is only available in
-> kernel/power/power.h. Since this function can be override in arch,
-> expose it globally. Having a prototype will make sure to avoid warning
-> (sometime treated as error with W=1) such as:
-> 
->    arch/powerpc/kernel/suspend.c:18:5: error: no previous prototype for 'pfn_is_nosave' [-Werror=missing-prototypes]
-> 
-> This moves the declaration into a globally visible header file and add
-> missing include to avoid a warning in powerpc.
+On Wed, May 22, 2019 at 07:23:09PM -0700, kernelci.org bot wrote:
 
-Then you should also drop it from kernel/power/power.h and 
-arch/s390/kernel/entry.h
+>   Details:    https://kernelci.org/boot/id/5ce5984c59b514e6a47a364c
+>   Plain log:  https://storage.kernelci.org//mainline/master/v5.2-rc1-165-g54dee406374c/arm/multi_v7_defconfig+CONFIG_EFI=y+CONFIG_ARM_LPAE=y/gcc-8/lab-collabora/boot-rk3288-veyron-jaq.txt
+>   HTML log:   https://storage.kernelci.org//mainline/master/v5.2-rc1-165-g54dee406374c/arm/multi_v7_defconfig+CONFIG_EFI=y+CONFIG_ARM_LPAE=y/gcc-8/lab-collabora/boot-rk3288-veyron-jaq.html
+>   Result:     28694e009e51 thermal: rockchip: fix up the tsadc pinctrl setting error
 
-Christophe
+It looks like this issue has persisted for a while without any kind of
+fix happening - given that the bisection has identified this commit as
+causing the regression and confirmed that reverting it fixes shouldn't
+we just revert?  My guess would be that there's some error with the
+pinctrl settings in the DT for the board.
 
-> 
-> Signed-off-by: Mathieu Malaterre <malat@debian.org>
-> ---
->   arch/powerpc/kernel/suspend.c | 1 +
->   include/linux/suspend.h       | 1 +
->   2 files changed, 2 insertions(+)
-> 
-> diff --git a/arch/powerpc/kernel/suspend.c b/arch/powerpc/kernel/suspend.c
-> index a531154cc0f3..9e1b6b894245 100644
-> --- a/arch/powerpc/kernel/suspend.c
-> +++ b/arch/powerpc/kernel/suspend.c
-> @@ -8,6 +8,7 @@
->    */
->   
->   #include <linux/mm.h>
-> +#include <linux/suspend.h>
->   #include <asm/page.h>
->   #include <asm/sections.h>
->   
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 3f529ad9a9d2..2660bbdf5230 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -395,6 +395,7 @@ extern bool system_entering_hibernation(void);
->   extern bool hibernation_available(void);
->   asmlinkage int swsusp_save(void);
->   extern struct pbe *restore_pblist;
-> +int pfn_is_nosave(unsigned long pfn);
->   #else /* CONFIG_HIBERNATION */
->   static inline void register_nosave_region(unsigned long b, unsigned long e) {}
->   static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
-> 
+--JgQwtEuHJzHdouWu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlzmnCYACgkQJNaLcl1U
+h9DdRQf+JZtHoJEVkzFX602V6UOrnMDu66zIL9WEt8FQA28mY1VFaEe5jdz2Qhow
+EoBDngfyg8tk3oipmTqKRQ6xmCwGyTzYJBJn/OXjCqJHV09ZtJFmlo70EVppBO/c
+rClNwCjcwaQpC1fekhcBbZdx0AmeVNkfSD/CKtEa0ZppBeqxch+u9CEL4QzR9LPC
+TSTRNXixW9s7SdI/RVs9EO0Gskr0w+M1QBPjhyegJHlny7FI9QYPU9RMUrtuIqrH
+zcVRf7D/rzmnS6jHOZCvEQ49PXwcBHv/KnNp6t7ttNz5gr0EIKhaFEICSnTSjMh+
+eFF4fQBLHILKCtKUTkNWZKbi4Qcl6Q==
+=m0Lf
+-----END PGP SIGNATURE-----
+
+--JgQwtEuHJzHdouWu--
