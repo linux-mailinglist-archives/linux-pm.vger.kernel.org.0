@@ -2,182 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EB6298B0
-	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 15:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A1929970
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 15:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391436AbfEXNP7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 May 2019 09:15:59 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:45122 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391454AbfEXNP7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 May 2019 09:15:59 -0400
-Received: by mail-ot1-f66.google.com with SMTP id t24so8614561otl.12
-        for <linux-pm@vger.kernel.org>; Fri, 24 May 2019 06:15:58 -0700 (PDT)
+        id S2403935AbfEXNyF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 May 2019 09:54:05 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38592 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403917AbfEXNyF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 May 2019 09:54:05 -0400
+Received: by mail-pl1-f193.google.com with SMTP id f97so4223384plb.5;
+        Fri, 24 May 2019 06:54:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WbM2LHjiKTY+9+3kLdGdCgm4glTt5XXlGcOyxX/K4fI=;
-        b=jD0wZt/ia++5OEv1+vFgCsAfXbjJ3WLF8YSvAMbMdw5PtHEWttTs8Lvkuciy7k+JBf
-         6Cb/fBWFKt6h8h43NOnZbDokjOnbh0JYYSb8gorylXTGmV7yL4QxMUk8m8xAjRn9h9P3
-         go1OMNLBf7T70y8UzgJfNYWAD0WEmSKTpRkD0=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KAeJ4wUrvHpOLw7ye4R6Tb6Y50k1ZsjRygN64gReTaY=;
+        b=o3G4QU3iUKDI4Yn+sOyq2Wunya0S3SZMeAbdgf0jLfUS2IieDIk08IaeNje3CTh0Si
+         35Z2B1TTjBz2CUk8lM2ToK3ruzwuVNnGOzgProJV37jpfsvCHsZ+bS1M4V/qqyDeMTU6
+         diRb2qSpY/kIQhHXv02o5O0x77tf5Myj7NQQn2r7BcAyD48Vo6En/JzB806VJROR7OP3
+         +BKGjW1vAMfwcjNnoIjCmmA9uAxA7TT0aCL7MQ35HfVmtYVoa3mfUIAwe8AiJ8S3cjek
+         5XrE3luolet+3RPjAX6/MzgYAs4HFzEgLVyABl7JlpVI966fH4NA6JP+XCcBwGUwwv1V
+         4bVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WbM2LHjiKTY+9+3kLdGdCgm4glTt5XXlGcOyxX/K4fI=;
-        b=cgBZ1rqshoydCQO35XJ0IbNEPviSXPK6yUAEDc868t2KXYMr9Tc33pRIRmD973digY
-         wLOkp2v0g/2S/rKS3YniQ7w/QDgcXvRp7tqUpa7GSgZHCgaYfUdQgCBrJyc8grQHe/lM
-         qphjV55chLZpBfOVQ5DqwkJChYVqErp2M0Qh1mzXX0V698C6U0QDIB+s3a6yKQvJ1NXw
-         viKkWD5ImyJuTBttUbZ4sjZvweKekhwMJja/kFBzKjRGdRsH5Qx292IXTAQ/x64SYKsK
-         TLcCuEMyXMmaWS9WleM0ceAjePOFVa4oNv+Zx93SE71Fs5PB76nFi7Gl4ilKwYZcnpYt
-         ALOg==
-X-Gm-Message-State: APjAAAUC4UyxYCzgDOsihAQ29CySu0/dZbcCRSNDeM/yQjvO1waHQuUR
-        XrXV+5AvhQ6eQ3GL06bMlQ/QgAGXLS9GMuU/qwh/ww==
-X-Google-Smtp-Source: APXvYqzYvbI98itpS0F9VsEq/N+NUGgG7PndBlowPnu06UxQRS9rukPdoQcI9sAIXURDXo30fEZWH1MRe9ln7CpXfI8=
-X-Received: by 2002:a9d:6e07:: with SMTP id e7mr28531134otr.53.1558703758437;
- Fri, 24 May 2019 06:15:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KAeJ4wUrvHpOLw7ye4R6Tb6Y50k1ZsjRygN64gReTaY=;
+        b=TsDg5VTQqYiHNzYtGBTD4N4qXy7+cN/PfuNu538W4nuydU3vdIMeJYwibnVMuiXuD9
+         kJysfg4OtKyVUuA8XaKaJTLo3SZ13hYi187wBakte44XwdUpJp2Hur8R66z6I2y7Y+z6
+         Wvvlc2RjGbVNelD2crtjq/wukdsp9mSzU+fOXLqGfG4q1608MiAhiChbWxZVRXY3b+Aj
+         BO/0UOPYzSF1hu95zzWS7xSVhKf570TbzEueyhDwW+81EmLF3BE6AQTkZy7fcezH9X4k
+         Po9ekVoSpBs82xeA6Fvzu7Q5CJGBgegWmvH//Jc7mThhzYHxjNLV4ufT9w7i+hTeyxqa
+         +GOA==
+X-Gm-Message-State: APjAAAXgiPjsnZ6a+JwrWd1SotyBIbqQq48dP1nFsC7eBequpEbShiPF
+        nP4aGwEVlBEFL86/8ZyMJQL13bdjWcs=
+X-Google-Smtp-Source: APXvYqxt0sBXbvNKCDDuFXzkLiwx1WjCENXPktOMxi3noMT4ujCq0YhAiiM5MtGU1DAS+zEj2ORk2Q==
+X-Received: by 2002:a17:902:7617:: with SMTP id k23mr63034749pll.175.1558706044369;
+        Fri, 24 May 2019 06:54:04 -0700 (PDT)
+Received: from localhost.localdomain ([2601:644:8201:32e0:7256:81ff:febd:926d])
+        by smtp.gmail.com with ESMTPSA id g8sm3556133pfk.83.2019.05.24.06.54.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 24 May 2019 06:54:03 -0700 (PDT)
+Date:   Fri, 24 May 2019 06:54:00 -0700
+From:   Eduardo Valentin <edubezval@gmail.com>
+To:     Tomeu Vizoso <tomeu@tomeuvizoso.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Rui Zhang <rui.zhang@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] Thermal-SoC management changes for v5.2-rc1
+Message-ID: <20190524135358.GA2750@localhost.localdomain>
+References: <20190516044313.GA17751@localhost.localdomain>
+ <CAAObsKD0_+cJQW0YtF9AkWn8XYP9wSYHTi_UhRiba7tH5EWTdw@mail.gmail.com>
+ <20190524024047.GE1936@localhost.localdomain>
+ <CAAObsKB_CsPk5uFCCsQs+UD3EYzAwEAWZCiH1_L4t2rXmymjTQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <CGME20190523215902epcas5p40e3aca0efb342c8d778529fef416c3fd@epcas5p4.samsung.com>
- <20190523215853.16622-1-robdclark@gmail.com> <9c63ac15-9917-7adc-3ef8-3e44060797bd@samsung.com>
-In-Reply-To: <9c63ac15-9917-7adc-3ef8-3e44060797bd@samsung.com>
-From:   Rob Clark <robdclark@chromium.org>
-Date:   Fri, 24 May 2019 06:15:46 -0700
-Message-ID: <CAJs_Fx4hw3nrUAksQxTrVrJubQAxADE5FmBrSs+EOmE3jwL9bg@mail.gmail.com>
-Subject: Re: [PATCH] PM / devfreq: try_then_request_governor should not return NULL
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAObsKB_CsPk5uFCCsQs+UD3EYzAwEAWZCiH1_L4t2rXmymjTQ@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ahh, thanks, I've not moved to the latest -rc yet..
+Hello,
 
-That commit would be a good candidate for 5.1.y stable branch
+On Fri, May 24, 2019 at 10:23:09AM +0200, Tomeu Vizoso wrote:
+> On Fri, 24 May 2019 at 04:40, Eduardo Valentin <edubezval@gmail.com> wrote:
+> >
+> > On Thu, May 23, 2019 at 11:46:47AM +0200, Tomeu Vizoso wrote:
+> > > Hi Eduardo,
+> > >
+> > > I saw that for 5.1 [0] you included a kernelci boot report for your
+> > > tree, but not for 5.2. Have you found anything that should be improved
+> > > in KernelCI for it to be more useful to maintainers like you?
+> >
+> > Honestly, I take a couple of automated testing as input before sending
+> > my pulls to Linux: (a) my local test, (b) kernel-ci, and (c) 0-day.
+> >
+> > There was really no reason specifically for me to not add the report
+> > from kernelci, except..
+> > >
+> > > [0] https://lore.kernel.org/lkml/20190306161207.GA7365@localhost.localdomain/
+> > >
+> > > I found about this when trying to understand why the boot on the
+> > > veyron-jaq board has been broken in 5.2-rc1.
+> > >
+> >
+> > I remember a report saying this failed, but from what I could tell from
+> > the boot log, the board booted and hit terminal. But apparently, after
+> > all reports from developers, the veyron-jaq boards were in a hang state.
+> >
+> > That was hard for me to tell from your logs, as they looked like
+> > a regular boot that hits terminal.
+> >
+> > Maybe I should have looked for a specific output of a command you guys
+> > run, saying "successful boot" somewhere?
+> 
+> I think what is easiest and clearest is to consider the bisection
+> reports as a very strong indication that something is quite wrong in
+> the branch.
 
-BR,
--R
+OK. I hear you.
 
-On Fri, May 24, 2019 at 12:13 AM Chanwoo Choi <cw00.choi@samsung.com> wrote=
-:
->
-> Hi,
->
-> This issue[1] is already fixed on latest linux.git
-> You can check it. Thanks.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
-mmit/?id=3Db53b0128052ffd687797d5f4deeb76327e7b5711
->
-> Regards,
-> Chanwoo Choi
->
->
-> On 19. 5. 24. =EC=98=A4=EC=A0=84 6:58, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > The two spots it is called expect either an IS_ERR() or a valid pointer=
-,
-> > but not NULL.
-> >
-> > Fixes this crash that I came across:
-> >
-> >    Unable to handle kernel NULL pointer dereference at virtual address =
-0000000000000030
-> >    Mem abort info:
-> >      ESR =3D 0x96000005
-> >      Exception class =3D DABT (current EL), IL =3D 32 bits
-> >      SET =3D 0, FnV =3D 0
-> >      EA =3D 0, S1PTW =3D 0
-> >    Data abort info:
-> >      ISV =3D 0, ISS =3D 0x00000005
-> >      CM =3D 0, WnR =3D 0
-> >    [0000000000000030] user address but active_mm is swapper
-> >    Internal error: Oops: 96000005 [#1] PREEMPT SMP
-> >    Modules linked in:
-> >    Process kworker/2:1 (pid: 212, stack limit =3D 0x(____ptrval____))
-> >    CPU: 2 PID: 212 Comm: kworker/2:1 Not tainted 5.1.0-43338-g460e69846=
-75c-dirty #54
-> >    Hardware name: Google Cheza (rev3+) (DT)
-> >    Workqueue: events deferred_probe_work_func
-> >    pstate: 00c00009 (nzcv daif +PAN +UAO)
-> >    pc : devfreq_add_device+0x2e4/0x410
-> >    lr : devfreq_add_device+0x2d4/0x410
-> >    sp : ffffff8013d93740
-> >    x29: ffffff8013d93790 x28: ffffffc0f54f8670
-> >    x27: 0000000000000001 x26: 0000000000000007
-> >    x25: ffffff80124abfd8 x24: 0000000000000000
-> >    x23: ffffffc0fabc4048 x22: ffffffc0fabc4388
-> >    x21: ffffffc0fabc4010 x20: ffffffc0fa243010
-> >    x19: ffffffc0fabc4000 x18: 0000000091c3d373
-> >    x17: 0000000000000400 x16: 000000000000001a
-> >    x15: 000000019e06d400 x14: 0000000000000001
-> >    x13: 0000000000000000 x12: 00000000000006b6
-> >    x11: 0000000000000000 x10: 0000000000000000
-> >    x9 : ffffffc0fa18ba00 x8 : 0000000000000000
-> >    x7 : 0000000000000000 x6 : ffffff80127a3d9a
-> >    x5 : ffffff8013d93550 x4 : 0000000000000000
-> >    x3 : 0000000000000000 x2 : 0000000000000000
-> >    x1 : 00000000000000fe x0 : 0000000000000000
-> >    Call trace:
-> >     devfreq_add_device+0x2e4/0x410
-> >     devm_devfreq_add_device+0x64/0xac
-> >     msm_gpu_init+0x320/0x5c0
-> >     adreno_gpu_init+0x21c/0x274
-> >     a6xx_gpu_init+0x68/0xf4
-> >     adreno_bind+0x158/0x284
-> >     component_bind_all+0x110/0x204
-> >     msm_drm_bind+0x118/0x5b8
-> >     try_to_bring_up_master+0x15c/0x19c
-> >     component_master_add_with_match+0xb4/0xec
-> >     msm_pdev_probe+0x1f0/0x27c
-> >     platform_drv_probe+0x90/0xb0
-> >     really_probe+0x120/0x298
-> >     driver_probe_device+0x64/0xfc
-> >     __device_attach_driver+0x8c/0xa4
-> >     bus_for_each_drv+0x88/0xd0
-> >     __device_attach+0xac/0x134
-> >     device_initial_probe+0x20/0x2c
-> >     bus_probe_device+0x34/0x90
-> >     deferred_probe_work_func+0x74/0xac
-> >     process_one_work+0x210/0x428
-> >     worker_thread+0x278/0x3e4
-> >     kthread+0x120/0x130
-> >     ret_from_fork+0x10/0x18
-> >    Code: aa0003f8 b13ffc1f 54000762 f901c278 (f9401b08)
-> >    ---[ end trace a6ecc18ce5894375 ]---
-> >    Kernel panic - not syncing: Fatal exception
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >  drivers/devfreq/devfreq.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> > index 0ae3de76833b..d29f66f0e52a 100644
-> > --- a/drivers/devfreq/devfreq.c
-> > +++ b/drivers/devfreq/devfreq.c
-> > @@ -254,7 +254,7 @@ static struct devfreq_governor *try_then_request_go=
-vernor(const char *name)
-> >               /* Restore previous state before return */
-> >               mutex_lock(&devfreq_list_lock);
-> >               if (err)
-> > -                     return NULL;
-> > +                     return ERR_PTR(err);
-> >
-> >               governor =3D find_devfreq_governor(name);
-> >       }
-> >
->
->
-> --
-> Best Regards,
-> Chanwoo Choi
-> Samsung Electronics
+> 
+> Because if a board stopped booting and the bisection found a
+> suspicious patch, and reverting it gets the board booting again, then
+> chances are very high that the patch in question broke that boot.
+> 
+
+
+Yeah, for sure If I had understood the report properly I could have
+nacked the patch.
+
+> Do you think the wording could be improved to make it clearer? Or
+> maybe some other changes to make all this more useful to maintainers
+> like you?
+> 
+
+Well, from my perspective, I need to judge if the failure on your report
+is really related to my changes. Many times, specially on build errors,
+we get failures that are unrelated. Build errors are more straight
+forward do judge. Similarly, we need to find out if a boot issue is
+caused by a change on the branch or something existing. On boot issues
+from kernelci reports, I think the false negatives I have been seeing
+is lab/boards failing to boot. Those can also be easy to spot as the
+in most cases the kernel wont even load. 
+
+For this particular case, as I described before, the kernel would
+load and hit the shell command line, but in fact it was in hang state
+IIRC. That is probably why it has not straight forward to understand
+from the log. Maybe a successful boot message somewhere would have
+helped to spot the problem (or the opposite of it, something
+saying, I was expecting to execute a command and board was
+unresponsive).
+
