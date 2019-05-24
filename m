@@ -2,112 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F1828F3E
-	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 04:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A436028F43
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 04:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731697AbfEXCtI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 May 2019 22:49:08 -0400
-Received: from mail-it1-f193.google.com ([209.85.166.193]:38817 "EHLO
-        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731522AbfEXCtI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 May 2019 22:49:08 -0400
-Received: by mail-it1-f193.google.com with SMTP id i63so11620169ita.3;
-        Thu, 23 May 2019 19:49:08 -0700 (PDT)
+        id S1731697AbfEXCuW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 May 2019 22:50:22 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39404 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731522AbfEXCuV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 May 2019 22:50:21 -0400
+Received: by mail-pf1-f194.google.com with SMTP id z26so4375309pfg.6;
+        Thu, 23 May 2019 19:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vAHtKv7wiLYKCEkr3cbu7GfPBp0LIuyfDvpGOBSxNWk=;
-        b=sur0YmTeovQti6f+AxK9Ntb6kmiFaT9IX63hBoQV00faFSDOuK1HOuBze6dvotY5JS
-         Z5cAOtAwaP+kS3d+s9fovemAxpiHNkCFatZeuDR2M9TiJ7twl2h4RUh68UQVv5fq7GmK
-         oUkkolyLu4jYtDUfmD4w/+nP9Cpql2HU8gbzb3q/STkzEP3rza9UKmBCq7pBeiR2pe46
-         0JX57ix+ZO1BS5Z8iofremcSZdCi2FR+ZKva2cVtOkhMa6Nn0yHjOh4z9cutw8jDto3n
-         IutztA+08cWmqH8IYR5pAs3Tui+DtuAiBX8dBC+nk4XiW4pBJkzhp5GHL48YLsTY3Opa
-         IF4w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5EPIY/pbD369tpqlqejU7R1YiZWbc6ywy0lqYpQEtdM=;
+        b=c2DllOpso5AVzkkHXVu+qbWk5XqTYnoaosdSauvtXEM6CeATCXPU2HbEJcF7sjbW2j
+         TctxTr8i0XTElyxQgQO5Cyzi10Fs0nJqM3koRiym1kOGcBD8El8jm3dTnQSkq5XDXls8
+         4w/DkMIq9xau7ZdH1c8zIlFllzEjGkV5jf33ZMAoVTksfzStb3YB7mn3O3eywQNPzUIN
+         nzC8V4sMyWqYAEE39MHX1uj2bTIA7DtybWVdTBbzXpQ5n4rfOx9/N2vNw3FrjOQ1Ir5q
+         TLtiA9EbTD4WbfE+edftd8w3vC8Hmh0/KQ6qJeHIEm37bfihy4sH7qJi3ikT7AtF3WFD
+         RXzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vAHtKv7wiLYKCEkr3cbu7GfPBp0LIuyfDvpGOBSxNWk=;
-        b=XPBkg0gHlYthpD37sH0ni06HJAHxxoOdHK8IXl5SAU95MKF3LDE+fIbe0es5RDftea
-         9bEorU0WjM4R5Zc9DxbEHF2v4RGMqZ7z1SryQCKeCngAiE/tDDu6RxNQpXKDlCwrP/Ti
-         FvVfOw1R66PTTI/tmAxEokWzXJDzix9FRBIggY+/3xI+ajluYu1277lH8pAOwey9/lX1
-         9RljOED6+kPl4DL88TsKkbaONClcVcrr3ztZjbYXHM3iuANUCG+UlM0jKM5xEAK2WR2H
-         MJuQ8jrrxskz2MpJM6QZ3CcEsUfSf+yrZ0YGHJQ4+IYtZY5y82O1TK3lEnSw7r0by7VI
-         JOzQ==
-X-Gm-Message-State: APjAAAUALf9gcVvApmZP7g2zQGJmEy46B9J70fQIpPJdmd+9PJdtsEdL
-        ieqrDA7+jQM2bEGIm1ZOYPtHTZaF9s19jFTb4AY=
-X-Google-Smtp-Source: APXvYqx0HyrzaAc4jLzzo4MliTjY34qzuDLvuzTKQZWMixPfQwzNTb7VSP+LW6cZPKIKTELVhoNREL3bLNT3jBVDdHU=
-X-Received: by 2002:a05:6638:233:: with SMTP id f19mr4106816jaq.24.1558666147485;
- Thu, 23 May 2019 19:49:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5EPIY/pbD369tpqlqejU7R1YiZWbc6ywy0lqYpQEtdM=;
+        b=cPxTpLhgbxlC1WRmcNrxqM10dVQg4yCsqbFKd5JWjw6tjz7TKEqp4+DnLrPjn5RSJM
+         08cOlCX29/k0FU/UuYv6Mhm9I4mF+HMqGsjP4VhBEVyAMH9jPiqRuN2lKV67FtfejOEQ
+         eQQplsmkaXmAOM4XYU2OknaSg9ZVXri4PA8/0j0brrM+jIxRK3PQ/B34SLQzEOxu2ONX
+         TJkhMywDsjjCJN6eWir+kKaFA85I2EkVDrlJLabHnb+PEBUsHtk+nqp2whMqTlQdxji4
+         i03QlQIr6Sl8FsGc6ll6GLl9nQLG9Np6cDMZ3KkrgA+qQQWmfYUwMvLDT1s8Wl87HqMB
+         Vfbw==
+X-Gm-Message-State: APjAAAVXfhm1PQ73dXYqKeI3xBP+vdAqe/ckiS0/JeRkJvSLj82VZE9J
+        jN428WLduxraNiDWFjiYO0w=
+X-Google-Smtp-Source: APXvYqwxVidXiS0+EqeoVmwsLOqoIKJwKRoOXpXMybgw5n+Fqj9odHC+S6EmYXD29O06mFuOfNB+0w==
+X-Received: by 2002:a63:1e4d:: with SMTP id p13mr103218869pgm.125.1558666220433;
+        Thu, 23 May 2019 19:50:20 -0700 (PDT)
+Received: from localhost.localdomain ([2601:644:8201:32e0:7256:81ff:febd:926d])
+        by smtp.gmail.com with ESMTPSA id y16sm750850pfl.140.2019.05.23.19.50.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 May 2019 19:50:19 -0700 (PDT)
+Date:   Thu, 23 May 2019 19:50:18 -0700
+From:   Eduardo Valentin <edubezval@gmail.com>
+To:     Yuantian Tang <andy.tang@nxp.com>
+Cc:     rui.zhang@intel.com, robh+dt@kernel.org, daniel.lezcano@linaro.org,
+        mark.rutland@arm.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: thermal: Make cooling-maps property optional
+Message-ID: <20190524025017.GA4146@localhost.localdomain>
+References: <20190515093647.47656-1-andy.tang@nxp.com>
 MIME-Version: 1.0
-References: <20190416172203.4679-1-daniel.lezcano@linaro.org>
- <20190423154430.GA16014@localhost.localdomain> <bc10d520-4d15-74d6-0dc2-fd63df8d9a21@linaro.org>
- <ff407865-8606-60c2-62d8-60ae96d1984d@linaro.org>
-In-Reply-To: <ff407865-8606-60c2-62d8-60ae96d1984d@linaro.org>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Thu, 23 May 2019 19:48:56 -0700
-Message-ID: <CAHQ1cqG-cb=1hyO8oeV4k-6Pq4q+aqhH8RPx04i2oPTNhAhiVg@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/of: Add a get_temp_id callback function
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Chris Healy <cphealy@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190515093647.47656-1-andy.tang@nxp.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 9:51 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 24/04/2019 01:08, Daniel Lezcano wrote:
-> > On 23/04/2019 17:44, Eduardo Valentin wrote:
-> >> Hello,
-> >>
-> >> On Tue, Apr 16, 2019 at 07:22:03PM +0200, Daniel Lezcano wrote:
-> >>> Currently when we register a sensor, we specify the sensor id and a data
-> >>> pointer to be passed when the get_temp function is called. However the
-> >>> sensor_id is not passed to the get_temp callback forcing the driver to
-> >>> do extra allocation and adding back pointer to find out from the sensor
-> >>> information the driver data and then back to the sensor id.
-> >>>
-> >>> Add a new callback get_temp_id() which will be called if set. It will
-> >>> call the get_temp_id() with the sensor id.
-> >>>
-> >>> That will be more consistent with the registering function.
-> >>
-> >> I still do not understand why we need to have a get_id callback.
-> >> The use cases I have seen so far, which I have been intentionally rejecting, are
-> >> mainly solvable by creating other compatible entries. And really, if you
-> >> have, say a bandgap, chip that supports multiple sensors, but on
-> >> SoC version A it has 5 sensors, and on SoC version B it has only 4,
-> >> or on SoC version C, it has 5 but they are either logially located
-> >> in different places (gpu vs iva regions), these are all cases in which
-> >> you want a different compatible!
-> >>
-> >> Do you mind sharing why you need a get sensor id callback?
-> >
-> > It is not a get sensor id callback, it is a get_temp callback which pass
-> > the sensor id.
-> >
-> > See in the different drivers, it is a common pattern there is a
-> > structure for the driver, then a structure for the sensor. When the
-> > get_temp is called, the callback needs info from the sensor structure
-> > and from the driver structure, so a back pointer to the driver structure
-> > is added in the sensor structure.
->
-> Hi Eduardo,
->
-> does the explanation clarifies the purpose of this change?
->
+On Wed, May 15, 2019 at 05:36:47PM +0800, Yuantian Tang wrote:
+> There may be no cooling device on system, or there are no enough
+> cooling devices for each thermal zone in multiple thermal zone
+> cases since cooling devices can't be shared.
+> So make this property optional to remove such limitations.
 
-Eduardo, did you ever have a chance to revisit this thread? I would
-really like to make some progress on this one to unblock my i.MX8MQ
-hwmon series.
+Yeah, I am  not sure that is enough reason to make this property
+optional. Let me maybe ask you why do you care creating a thermal
+zone if your control has no actions? Or rather, why bothering
+setting up a control that has no actuators?
 
-Thanks,
-Andrey Smirnov
+> 
+> Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+> ---
+>  .../devicetree/bindings/thermal/thermal.txt        |    4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal.txt b/Documentation/devicetree/bindings/thermal/thermal.txt
+> index ca14ba9..694e834 100644
+> --- a/Documentation/devicetree/bindings/thermal/thermal.txt
+> +++ b/Documentation/devicetree/bindings/thermal/thermal.txt
+> @@ -142,11 +142,11 @@ Required properties:
+>  - trips:		A sub-node which is a container of only trip point nodes
+>    Type: sub-node	required to describe the thermal zone.
+>  
+> +
+> +Optional property:
+>  - cooling-maps:		A sub-node which is a container of only cooling device
+>    Type: sub-node	map nodes, used to describe the relation between trips
+>  			and cooling devices.
+> -
+> -Optional property:
+>  - coefficients:		An array of integers (one signed cell) containing
+>    Type: array		coefficients to compose a linear relation between
+>    Elem size: one cell	the sensors listed in the thermal-sensors property.
+> -- 
+> 1.7.1
+> 
