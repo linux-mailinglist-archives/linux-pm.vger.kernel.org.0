@@ -2,146 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1122963B
-	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 12:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EB6298B0
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 15:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390539AbfEXKo3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 May 2019 06:44:29 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53319 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390535AbfEXKo3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 May 2019 06:44:29 -0400
-Received: by mail-wm1-f68.google.com with SMTP id 198so8862703wme.3;
-        Fri, 24 May 2019 03:44:27 -0700 (PDT)
+        id S2391436AbfEXNP7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 May 2019 09:15:59 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45122 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391454AbfEXNP7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 May 2019 09:15:59 -0400
+Received: by mail-ot1-f66.google.com with SMTP id t24so8614561otl.12
+        for <linux-pm@vger.kernel.org>; Fri, 24 May 2019 06:15:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0jy20rK00X/Jpvye1eiZdw+BT0nVJunFQCUMU0sD3iQ=;
-        b=X1PxbDFgBqLM2NhmlrzxN/Z4MQHhxPSqs6aIHaPvF6iBAMLHzmH4nUvsmk//1HfYtC
-         M7+RiqIUBnxnUqtQ25FtAlI9TYUuDf8FA0WWWY/sJW0s+MvmNdXDzLauptvrWs2cUaqj
-         xB+/SW80bPKdsBGtHWxc3y8FmFHI5GngHXc59KD+O5Lr2DZmG38IJpvxIEkC6uuIeR/7
-         wWJu9Qn8qPhvMRywg+V6bnzPeOFiQ/IORcoYGzLsMY7vtwENi1rb4BA++E0rVIYk3rnv
-         Y0vPlbwObLKxWrwWEwMTrgKOWFImoQkdIM62Bc2RaeWmlzzqiOrhfp4C5RF5aK4p4H/c
-         49DQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WbM2LHjiKTY+9+3kLdGdCgm4glTt5XXlGcOyxX/K4fI=;
+        b=jD0wZt/ia++5OEv1+vFgCsAfXbjJ3WLF8YSvAMbMdw5PtHEWttTs8Lvkuciy7k+JBf
+         6Cb/fBWFKt6h8h43NOnZbDokjOnbh0JYYSb8gorylXTGmV7yL4QxMUk8m8xAjRn9h9P3
+         go1OMNLBf7T70y8UzgJfNYWAD0WEmSKTpRkD0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=0jy20rK00X/Jpvye1eiZdw+BT0nVJunFQCUMU0sD3iQ=;
-        b=dxKknvKYCf+qdGu5T4HpBMZ1JuqQ4tf9CezMFm2bmpuxekMSz8gPS2sPR2q9L5+qP3
-         OzbC77RH80chMLppMfi5jeucEsRVgVJy0rtDFM3+ecdmdsT5B/uaxdFQN2453zwwDT0g
-         +PMLK4hENioCAxCZaV+fgkbkUtBWintsQm0G8DqYntHfBLid4nCx1gVQQVi8U/DU/bwx
-         pXK2DEuNbWG3GwI6gPkGk3jfD71/O+Bw/7dGeqLRokXarfpvBvU8PdGedmZMFGj2pX/X
-         f+7GFNUvRR0ZkmEkydnr7VmBbuqywDD1UKi1p+5aC6lIpruVzoE9Wxpt4Kc9SgUDpG27
-         u4dw==
-X-Gm-Message-State: APjAAAUysrWhKLDeQyJi2f+YbeDLqUxBzXOhzSgN5KO/Vl561VLV7zKs
-        ksYYVOTwpDGNfhk2XX3eBoc=
-X-Google-Smtp-Source: APXvYqyeytuN8l7DauI//G/eM6aGcU8yhn6PWpRVKMHeZ4rs7BNDg9Pkie2MVw5YsStjKFsnchTflQ==
-X-Received: by 2002:a1c:6c0a:: with SMTP id h10mr16235945wmc.135.1558694666632;
-        Fri, 24 May 2019 03:44:26 -0700 (PDT)
-Received: from macbookpro.malat.net ([2a01:e34:ee1e:860:6f23:82e6:aa2d:bbd1])
-        by smtp.gmail.com with ESMTPSA id o6sm4589463wrh.55.2019.05.24.03.44.25
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 24 May 2019 03:44:25 -0700 (PDT)
-Received: by macbookpro.malat.net (Postfix, from userid 1000)
-        id 9E40B11415E7; Fri, 24 May 2019 12:44:24 +0200 (CEST)
-From:   Mathieu Malaterre <malat@debian.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Mathieu Malaterre <malat@debian.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v2] powerpc/power: Expose pfn_is_nosave prototype
-Date:   Fri, 24 May 2019 12:44:18 +0200
-Message-Id: <20190524104418.17194-1-malat@debian.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190523114736.30268-1-malat@debian.org>
-References: <20190523114736.30268-1-malat@debian.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WbM2LHjiKTY+9+3kLdGdCgm4glTt5XXlGcOyxX/K4fI=;
+        b=cgBZ1rqshoydCQO35XJ0IbNEPviSXPK6yUAEDc868t2KXYMr9Tc33pRIRmD973digY
+         wLOkp2v0g/2S/rKS3YniQ7w/QDgcXvRp7tqUpa7GSgZHCgaYfUdQgCBrJyc8grQHe/lM
+         qphjV55chLZpBfOVQ5DqwkJChYVqErp2M0Qh1mzXX0V698C6U0QDIB+s3a6yKQvJ1NXw
+         viKkWD5ImyJuTBttUbZ4sjZvweKekhwMJja/kFBzKjRGdRsH5Qx292IXTAQ/x64SYKsK
+         TLcCuEMyXMmaWS9WleM0ceAjePOFVa4oNv+Zx93SE71Fs5PB76nFi7Gl4ilKwYZcnpYt
+         ALOg==
+X-Gm-Message-State: APjAAAUC4UyxYCzgDOsihAQ29CySu0/dZbcCRSNDeM/yQjvO1waHQuUR
+        XrXV+5AvhQ6eQ3GL06bMlQ/QgAGXLS9GMuU/qwh/ww==
+X-Google-Smtp-Source: APXvYqzYvbI98itpS0F9VsEq/N+NUGgG7PndBlowPnu06UxQRS9rukPdoQcI9sAIXURDXo30fEZWH1MRe9ln7CpXfI8=
+X-Received: by 2002:a9d:6e07:: with SMTP id e7mr28531134otr.53.1558703758437;
+ Fri, 24 May 2019 06:15:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CGME20190523215902epcas5p40e3aca0efb342c8d778529fef416c3fd@epcas5p4.samsung.com>
+ <20190523215853.16622-1-robdclark@gmail.com> <9c63ac15-9917-7adc-3ef8-3e44060797bd@samsung.com>
+In-Reply-To: <9c63ac15-9917-7adc-3ef8-3e44060797bd@samsung.com>
+From:   Rob Clark <robdclark@chromium.org>
+Date:   Fri, 24 May 2019 06:15:46 -0700
+Message-ID: <CAJs_Fx4hw3nrUAksQxTrVrJubQAxADE5FmBrSs+EOmE3jwL9bg@mail.gmail.com>
+Subject: Re: [PATCH] PM / devfreq: try_then_request_governor should not return NULL
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The declaration for pfn_is_nosave is only available in
-kernel/power/power.h. Since this function can be override in arch,
-expose it globally. Having a prototype will make sure to avoid warning
-(sometime treated as error with W=1) such as:
+Ahh, thanks, I've not moved to the latest -rc yet..
 
-  arch/powerpc/kernel/suspend.c:18:5: error: no previous prototype for 'pfn_is_nosave' [-Werror=missing-prototypes]
+That commit would be a good candidate for 5.1.y stable branch
 
-This moves the declaration into a globally visible header file and add
-missing include to avoid a warning on powerpc. Also remove the
-duplicated prototypes since not required anymore.
+BR,
+-R
 
-Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-Signed-off-by: Mathieu Malaterre <malat@debian.org>
----
-v2: As suggestion by christophe remove duplicates prototypes
-
- arch/powerpc/kernel/suspend.c | 1 +
- arch/s390/kernel/entry.h      | 1 -
- include/linux/suspend.h       | 1 +
- kernel/power/power.h          | 2 --
- 4 files changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/arch/powerpc/kernel/suspend.c b/arch/powerpc/kernel/suspend.c
-index a531154cc0f3..9e1b6b894245 100644
---- a/arch/powerpc/kernel/suspend.c
-+++ b/arch/powerpc/kernel/suspend.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/mm.h>
-+#include <linux/suspend.h>
- #include <asm/page.h>
- #include <asm/sections.h>
- 
-diff --git a/arch/s390/kernel/entry.h b/arch/s390/kernel/entry.h
-index 20420c2b8a14..b2956d49b6ad 100644
---- a/arch/s390/kernel/entry.h
-+++ b/arch/s390/kernel/entry.h
-@@ -63,7 +63,6 @@ void __init startup_init(void);
- void die(struct pt_regs *regs, const char *str);
- int setup_profiling_timer(unsigned int multiplier);
- void __init time_init(void);
--int pfn_is_nosave(unsigned long);
- void s390_early_resume(void);
- unsigned long prepare_ftrace_return(unsigned long parent, unsigned long sp, unsigned long ip);
- 
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 6b3ea9ea6a9e..e8b8a7bede90 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -395,6 +395,7 @@ extern bool system_entering_hibernation(void);
- extern bool hibernation_available(void);
- asmlinkage int swsusp_save(void);
- extern struct pbe *restore_pblist;
-+int pfn_is_nosave(unsigned long pfn);
- #else /* CONFIG_HIBERNATION */
- static inline void register_nosave_region(unsigned long b, unsigned long e) {}
- static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index 9e58bdc8a562..44bee462ff57 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -75,8 +75,6 @@ static inline void hibernate_reserved_size_init(void) {}
- static inline void hibernate_image_size_init(void) {}
- #endif /* !CONFIG_HIBERNATION */
- 
--extern int pfn_is_nosave(unsigned long);
--
- #define power_attr(_name) \
- static struct kobj_attribute _name##_attr = {	\
- 	.attr	= {				\
--- 
-2.20.1
-
+On Fri, May 24, 2019 at 12:13 AM Chanwoo Choi <cw00.choi@samsung.com> wrote=
+:
+>
+> Hi,
+>
+> This issue[1] is already fixed on latest linux.git
+> You can check it. Thanks.
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+mmit/?id=3Db53b0128052ffd687797d5f4deeb76327e7b5711
+>
+> Regards,
+> Chanwoo Choi
+>
+>
+> On 19. 5. 24. =EC=98=A4=EC=A0=84 6:58, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > The two spots it is called expect either an IS_ERR() or a valid pointer=
+,
+> > but not NULL.
+> >
+> > Fixes this crash that I came across:
+> >
+> >    Unable to handle kernel NULL pointer dereference at virtual address =
+0000000000000030
+> >    Mem abort info:
+> >      ESR =3D 0x96000005
+> >      Exception class =3D DABT (current EL), IL =3D 32 bits
+> >      SET =3D 0, FnV =3D 0
+> >      EA =3D 0, S1PTW =3D 0
+> >    Data abort info:
+> >      ISV =3D 0, ISS =3D 0x00000005
+> >      CM =3D 0, WnR =3D 0
+> >    [0000000000000030] user address but active_mm is swapper
+> >    Internal error: Oops: 96000005 [#1] PREEMPT SMP
+> >    Modules linked in:
+> >    Process kworker/2:1 (pid: 212, stack limit =3D 0x(____ptrval____))
+> >    CPU: 2 PID: 212 Comm: kworker/2:1 Not tainted 5.1.0-43338-g460e69846=
+75c-dirty #54
+> >    Hardware name: Google Cheza (rev3+) (DT)
+> >    Workqueue: events deferred_probe_work_func
+> >    pstate: 00c00009 (nzcv daif +PAN +UAO)
+> >    pc : devfreq_add_device+0x2e4/0x410
+> >    lr : devfreq_add_device+0x2d4/0x410
+> >    sp : ffffff8013d93740
+> >    x29: ffffff8013d93790 x28: ffffffc0f54f8670
+> >    x27: 0000000000000001 x26: 0000000000000007
+> >    x25: ffffff80124abfd8 x24: 0000000000000000
+> >    x23: ffffffc0fabc4048 x22: ffffffc0fabc4388
+> >    x21: ffffffc0fabc4010 x20: ffffffc0fa243010
+> >    x19: ffffffc0fabc4000 x18: 0000000091c3d373
+> >    x17: 0000000000000400 x16: 000000000000001a
+> >    x15: 000000019e06d400 x14: 0000000000000001
+> >    x13: 0000000000000000 x12: 00000000000006b6
+> >    x11: 0000000000000000 x10: 0000000000000000
+> >    x9 : ffffffc0fa18ba00 x8 : 0000000000000000
+> >    x7 : 0000000000000000 x6 : ffffff80127a3d9a
+> >    x5 : ffffff8013d93550 x4 : 0000000000000000
+> >    x3 : 0000000000000000 x2 : 0000000000000000
+> >    x1 : 00000000000000fe x0 : 0000000000000000
+> >    Call trace:
+> >     devfreq_add_device+0x2e4/0x410
+> >     devm_devfreq_add_device+0x64/0xac
+> >     msm_gpu_init+0x320/0x5c0
+> >     adreno_gpu_init+0x21c/0x274
+> >     a6xx_gpu_init+0x68/0xf4
+> >     adreno_bind+0x158/0x284
+> >     component_bind_all+0x110/0x204
+> >     msm_drm_bind+0x118/0x5b8
+> >     try_to_bring_up_master+0x15c/0x19c
+> >     component_master_add_with_match+0xb4/0xec
+> >     msm_pdev_probe+0x1f0/0x27c
+> >     platform_drv_probe+0x90/0xb0
+> >     really_probe+0x120/0x298
+> >     driver_probe_device+0x64/0xfc
+> >     __device_attach_driver+0x8c/0xa4
+> >     bus_for_each_drv+0x88/0xd0
+> >     __device_attach+0xac/0x134
+> >     device_initial_probe+0x20/0x2c
+> >     bus_probe_device+0x34/0x90
+> >     deferred_probe_work_func+0x74/0xac
+> >     process_one_work+0x210/0x428
+> >     worker_thread+0x278/0x3e4
+> >     kthread+0x120/0x130
+> >     ret_from_fork+0x10/0x18
+> >    Code: aa0003f8 b13ffc1f 54000762 f901c278 (f9401b08)
+> >    ---[ end trace a6ecc18ce5894375 ]---
+> >    Kernel panic - not syncing: Fatal exception
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >  drivers/devfreq/devfreq.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> > index 0ae3de76833b..d29f66f0e52a 100644
+> > --- a/drivers/devfreq/devfreq.c
+> > +++ b/drivers/devfreq/devfreq.c
+> > @@ -254,7 +254,7 @@ static struct devfreq_governor *try_then_request_go=
+vernor(const char *name)
+> >               /* Restore previous state before return */
+> >               mutex_lock(&devfreq_list_lock);
+> >               if (err)
+> > -                     return NULL;
+> > +                     return ERR_PTR(err);
+> >
+> >               governor =3D find_devfreq_governor(name);
+> >       }
+> >
+>
+>
+> --
+> Best Regards,
+> Chanwoo Choi
+> Samsung Electronics
