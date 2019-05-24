@@ -2,262 +2,512 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1EF28F19
-	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 04:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E940D28F28
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 04:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731726AbfEXCXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 May 2019 22:23:37 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:34292 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727037AbfEXCXh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 May 2019 22:23:37 -0400
-Received: by mail-pl1-f195.google.com with SMTP id w7so3511497plz.1;
-        Thu, 23 May 2019 19:23:36 -0700 (PDT)
+        id S1727037AbfEXCf0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 May 2019 22:35:26 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:34932 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731752AbfEXCf0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 May 2019 22:35:26 -0400
+Received: by mail-pg1-f196.google.com with SMTP id t1so4169077pgc.2
+        for <linux-pm@vger.kernel.org>; Thu, 23 May 2019 19:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=e1DbnTPIJ1iejRn7jLSDK3DKtKxc2O4mzdLRsl8BYBo=;
-        b=Gk7n6wp3Y4UsB9vY3npw4yhb+kfnlc75G4i1dcH9U4uIvu4ZLHyPXmLaSUfMNBk3QH
-         y5GL8if6wC5qAkh3cupGFrjaK2uSWXSmWLp6YkvRXInTH4BkCUEK66bouJ7RAkecmsh8
-         A3tJUCrGjUbSMOvtJ3TO7WeT2KyZxxoeuE/9kK9qDaJk4ccZnhqapQG6NFodrQNlFyYD
-         AFj+q5wZbe3Xc8OLeOn2KYi6H8JnBESMEKQEodzXC1MLRb+xttucfUvZf+rEpFwssdNu
-         jsBB7/xyzQHOT2i5+UbC6k6+KbPEcvC1SseoxCExrjtFS4UM9uuN+yMCyEOog52Cf8gh
-         gDsw==
+         :content-disposition:in-reply-to:user-agent;
+        bh=LUgxF60OTbMNy6s9uKVW7xrioq5cVfZVd0zFDDAFqlw=;
+        b=u4FWXcJdVxSz1D6T13Oos61aUkRj0YPmoQxmuOBysegqCOzy+UcdOYwhO9uPB/3WGa
+         TJun0F5NiHv+ze7ixzIsPL9C2E5LVPcSVokfxnMjffkdS/JlSQ6JYur2EI+N1hi/JKS/
+         YlKC6rCdiz85St2dppaTALQSXIaNkbsGD+zVekrQyYY4O1MzI5OZ0MxYJJX+pb6Y7tv0
+         +g0mdIHpV/O4dK4X808iEqDXJmj0eVIh4/2HqhZ7zptM0EaK8PWdEc+3Nq39GU3B/ORf
+         6xbNaQC9DvT6NQNZ4GtjS6HkidfnL6ot0+cGBj7TRor+0UoY5kenk7uPOvXHPMe2vo7h
+         Mw7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=e1DbnTPIJ1iejRn7jLSDK3DKtKxc2O4mzdLRsl8BYBo=;
-        b=MXF+HI1nS/OrR+7UUlBfD78m6wLY1t1WJ16d0j6eKBL2SLDO7osvUf0UprsgtjtEUn
-         xcM9hpJwdnwD02WAb3S880uJLY4QTr5ZdvKr1P2TI/bkyN2236GuEWP1/wL6a/xvUmvM
-         To+sukSE0erNhP4sYoamEOJ3+uvfOIRDvT7Coc2W5dG5wx5CSfSjfokDMZE79dmSe1RZ
-         7arjk10o7JoWHn4ep1wkya4spr5fuHd3sFbraCrKDbkI2KKoomehWWs1P2CcAncjd8aa
-         CjpK+F0ctPekQNixR1UUIHzq/bomE0tfqJIR2ZuUVZDX4KSktE4qyRpE+jvBvbCnqNEX
-         +3qw==
-X-Gm-Message-State: APjAAAVKQknQY0JmupmA+XwlQ4MCjqAozW5ymRKNWluGgPnyo+mjY6/u
-        plMMHdjdR30T7WWE0pLJhME=
-X-Google-Smtp-Source: APXvYqzFOHPG8VXCtgNKg6xY9VwfLQ02d2QBKiL28RccT9f8vHkEsAGNSfDCyuD7aKNbidRRdkiPnA==
-X-Received: by 2002:a17:902:4383:: with SMTP id j3mr103569105pld.320.1558664615922;
-        Thu, 23 May 2019 19:23:35 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LUgxF60OTbMNy6s9uKVW7xrioq5cVfZVd0zFDDAFqlw=;
+        b=fHKlTDjZt2s1/1/WESyuLHFJBIIOrzNWFp9lscWxdKGmboQwNxYhZNOF6KutH7v5Ls
+         R5LqpQK9e+Ohsh/GbOFlQVAmE3qroI+TpMx5ZYgoXlAk+ZqEliij0t3QiJRzYFnFyL/A
+         1wVOWt/rLLg+cN/ebAEXLQLRFBS7QI/J7SUF67AjdCIMq03CpwjmzWnT6UHRJwaIcOIY
+         IymzUEsXp8ISJ4te0aUyr8CqtUyavwgSgKQI3q+Z/wVbRKdR2CdUXa4w0K85xj2cVzCx
+         7azaUsRM+Ijp0zEdaC9dbsgNvtG3DCYrZWhiYe7un9nH8VMHk8YDvPAk8NM90E85IITD
+         RiIA==
+X-Gm-Message-State: APjAAAXlesv+Ep/ehsRMkhGdNSyjyf7dLCCbWHjAMBFmoVf5sES2yHok
+        NpvHtqYc+JptshiDbGokV5g=
+X-Google-Smtp-Source: APXvYqw+Q7RI96c5sW7zGe1fJrVlfONSlLFLUaqFBTeLwPGfJEMkryo7m9NeAX4ZUwEbak7xLPMYHQ==
+X-Received: by 2002:a17:90a:2a85:: with SMTP id j5mr6132025pjd.107.1558665324869;
+        Thu, 23 May 2019 19:35:24 -0700 (PDT)
 Received: from localhost.localdomain ([2601:644:8201:32e0:7256:81ff:febd:926d])
-        by smtp.gmail.com with ESMTPSA id a8sm818118pfk.14.2019.05.23.19.23.34
+        by smtp.gmail.com with ESMTPSA id j2sm810050pfb.157.2019.05.23.19.35.23
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 May 2019 19:23:35 -0700 (PDT)
-Date:   Thu, 23 May 2019 19:23:33 -0700
+        Thu, 23 May 2019 19:35:24 -0700 (PDT)
+Date:   Thu, 23 May 2019 19:35:22 -0700
 From:   Eduardo Valentin <edubezval@gmail.com>
-To:     "elaine.zhang" <zhangqing@rock-chips.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        huangtao@rock-chips.com, Linux PM list <linux-pm@vger.kernel.org>,
-        xxx@rock-chips.com, xf@rock-chips.com,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
         Zhang Rui <rui.zhang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Doug Anderson <dianders@chromium.org>, vicencb@gmail.com
-Subject: Re: [PATCH v3 1/3] thermal: rockchip: fix up the tsadc pinctrl
- setting error
-Message-ID: <20190524022331.GB1936@localhost.localdomain>
-References: <1556618986-18923-1-git-send-email-zhangqing@rock-chips.com>
- <785392a0-282a-1e51-a4d6-a6d5ca478949@linaro.org>
- <CAFqH_53nbiwzQKctNa7MBzgCcsRFn1p8g31Xgvo3E9k6eA8AKw@mail.gmail.com>
- <2174314.1vfUlvne1O@phil>
- <a6780f8f-4144-f817-b4b8-c40f6aa5e806@rock-chips.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Kenneth Heitke <kenneth.heitke@intel.com>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+Subject: Re: [PATCH v2 2/4] nvme: add thermal zone infrastructure
+Message-ID: <20190524023520.GC1936@localhost.localdomain>
+References: <1558454649-28783-1-git-send-email-akinobu.mita@gmail.com>
+ <1558454649-28783-3-git-send-email-akinobu.mita@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a6780f8f-4144-f817-b4b8-c40f6aa5e806@rock-chips.com>
+In-Reply-To: <1558454649-28783-3-git-send-email-akinobu.mita@gmail.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 23, 2019 at 09:34:37AM +0800, elaine.zhang wrote:
-> hi, Heiko & Enric:
-> 
-> 在 2019/5/22 下午8:27, Heiko Stuebner 写道:
-> >Hi Enric,
-> >
-> >Am Montag, 20. Mai 2019, 15:38:32 CEST schrieb Enric Balletbo Serra:
-> >>Hi all,
-> >>
-> >>As pointed by [1] and [2] this commit, that now is upstream, breaks
-> >>veyron (rk3288) and kevin (rk3399) boards. The problem is especially
-> >>critical for veyron boards because they don't boot anymore.
-> >>
-> >>I didn't look deep at the problem but I have some concerns about this
-> >>patch, see below.
-> >>
-> >>[1] https://www.spinics.net/lists/linux-rockchip/msg24657.html
-> >>[2] https://www.spinics.net/lists/linux-rockchip/msg24735.html
-> >>
-> >>Missatge de Daniel Lezcano <daniel.lezcano@linaro.org> del dia dt., 30
-> >>d’abr. 2019 a les 15:39:
-> >>>On 30/04/2019 12:09, Elaine Zhang wrote:
-> >>>>Explicitly use the pinctrl to set/unset the right mode
-> >>>>instead of relying on the pinctrl init mode.
-> >>>>And it requires setting the tshut polarity before select pinctrl.
-> >>>>
-> >>>>When the temperature sensor mode is set to 0, it will automatically
-> >>>>reset the board via the Clock-Reset-Unit (CRU) if the over temperature
-> >>>>threshold is reached. However, when the pinctrl initializes, it does a
-> >>>>transition to "otp_out" which may lead the SoC restart all the time.
-> >>>>
-> >>>>"otp_out" IO may be connected to the RESET circuit on the hardware.
-> >>>>If the IO is in the wrong state, it will trigger RESET.
-> >>>>(similar to the effect of pressing the RESET button)
-> >>>>which will cause the soc to restart all the time.
-> >>>>
-> >>>>Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> >>>Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >>>
-> >>>
-> >>>
-> >>>>---
-> >>>>  drivers/thermal/rockchip_thermal.c | 36 +++++++++++++++++++++++++++++++++---
-> >>>>  1 file changed, 33 insertions(+), 3 deletions(-)
-> >>>>
-> >>>>diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-> >>>>index 9c7643d62ed7..6dc7fc516abf 100644
-> >>>>--- a/drivers/thermal/rockchip_thermal.c
-> >>>>+++ b/drivers/thermal/rockchip_thermal.c
-> >>>>@@ -172,6 +172,9 @@ struct rockchip_thermal_data {
-> >>>>       int tshut_temp;
-> >>>>       enum tshut_mode tshut_mode;
-> >>>>       enum tshut_polarity tshut_polarity;
-> >>>>+     struct pinctrl *pinctrl;
-> >>>>+     struct pinctrl_state *gpio_state;
-> >>>>+     struct pinctrl_state *otp_state;
-> >>>>  };
-> >>>>
-> >>>>  /**
-> >>>>@@ -1242,6 +1245,8 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
-> >>>>               return error;
-> >>>>       }
-> >>>>
-> >>>>+     thermal->chip->control(thermal->regs, false);
-> >>>>+
-> >>That's the line that causes the hang. Commenting this makes the veyron
-> >>boot again. Probably this needs to go after chip->initialize?
-> >It needs to go after the clk_enable calls.
-> >At this point the tsadc may still be unclocked.
-> 
-> The clk is enable by default.
-> 
-> 
-> The reason for this modification:
-> 
-> The otp Pin polarity setting for tsadc must be set when tsadc is turned off.
-> 
-> The order:
-> 
-> Close the tsadc->Set the otp pin polarity ->Set the pinctrl->initialize the
-> tsadc->Open the tsadc
-> 
-> 
-> As for the problem you mentioned, I guess: The default polarity of otp does
-> not match the default state, that is, the otp is triggered by default, and
-> then the reset circuit of the hardware takes effect and is restarted all the
-> time.
-> Modification:
-> 1. For this hardware, otp pin default state is modified.
-> 2. The mode of using CRU is rockchip,hw-tshut-mode = <0> in DTS;
-> /* tshut mode 0:CRU 1:GPIO */
-> 
-> Recommended use method 2. You can try it.
-> 
-> >
-> >>>>       error = clk_prepare_enable(thermal->clk);
-> >>>>       if (error) {
-> >>>>               dev_err(&pdev->dev, "failed to enable converter clock: %d\n",
-> >>>>@@ -1267,6 +1272,30 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
-> >>>>       thermal->chip->initialize(thermal->grf, thermal->regs,
-> >>>>                                 thermal->tshut_polarity);
-> >>>>
-> >>>>+     if (thermal->tshut_mode == TSHUT_MODE_GPIO) {
-> >>>>+             thermal->pinctrl = devm_pinctrl_get(&pdev->dev);
-> >>>>+             if (IS_ERR(thermal->pinctrl)) {
-> >>>>+                     dev_err(&pdev->dev, "failed to find thermal pinctrl\n");
-> >>>>+                     return PTR_ERR(thermal->pinctrl);
-> >>>>+             }
-> >>>>+
-> >>>>+             thermal->gpio_state = pinctrl_lookup_state(thermal->pinctrl,
-> >>>>+                                                        "gpio");
-> >>Shouldn't this mode be documented properly in the binding first?
-> >More importantly, it should be _backwards-compatible_, aka work with
-> >old devicetrees without that property and not break thermal handling for
-> >them entirely.
-> If need  _backwards-compatible_,  It's can't return
-> PTR_ERR(thermal->pinctrl) when get
-> 
-> devm_pinctrl_get failed.
-> 
-> >
-> >>The binding [3] talks about init, default and sleep states but *not*
-> >>gpio and otpout. The patch series looks incomplete to me or not using
-> >>the proper names.
-> >>
-> >>[3] https://elixir.bootlin.com/linux/v5.2-rc1/source/Documentation/devicetree/bindings/thermal/rockchip-thermal.txt
-> >>
-> >>>>+             if (IS_ERR_OR_NULL(thermal->gpio_state)) {
-> >>>>+                     dev_err(&pdev->dev, "failed to find thermal gpio state\n");
-> >>>>+                     return -EINVAL;
-> >>>>+             }
-> >>>>+
-> >>>>+             thermal->otp_state = pinctrl_lookup_state(thermal->pinctrl,
-> >>>>+                                                       "otpout");
-> >>>>+             if (IS_ERR_OR_NULL(thermal->otp_state)) {
-> >>>>+                     dev_err(&pdev->dev, "failed to find thermal otpout state\n");
-> >>>>+                     return -EINVAL;
-> >>>>+             }
-> >>>>+
-> >>Same here otpout is not a documented.
-> >>
-> >>As this change is now in mainline and is causing veyron to hang I'd
-> >>suggest reverting this change for now. Even fixing the root cause
-> >>(maybe the one I pointed above) after this patch we will have the
-> >>thermal driver to fail because "gpio" and "otpout" states are not
-> >>defined nor documented (a change on this will need some reviews and
-> >>acks and time I guess).
-> >I definitly agree here. Handling + checking the binding change
-> >as well as needed fallback code is definitly not material for -rc-kernels
-> >so we should just revert for now and let Elaine fix the issues for 5.3.
-> >
-> >Anyone volunteering for sending a revert-patch to Eduardo? :-)
-> 
-> I agree to revert the patch,and I will correct it and push it later.
+Hello Mita,
 
+On Wed, May 22, 2019 at 01:04:07AM +0900, Akinobu Mita wrote:
+> The NVMe controller reports up to nine temperature values in the SMART /
+> Health log page (the composite temperature and temperature sensor 1 through
+> temperature sensor 8).
 
-Great! Collecting the revert that was already sent I will send out to
-coming rc so we clear the breakage.
+Is this a fixed number or we should be more flexible on the amount of
+sensors?
+
+> The temperature threshold feature (Feature Identifier 04h) configures the
+> asynchronous event request command to complete when the temperature is
+> crossed its corresponding temperature threshold.
+> 
+> This adds infrastructure to provide these temperatures and thresholds via
+> thermal zone devices.
+> 
+> The nvme_thermal_zones_register() creates up to nine thermal zone devices
+> for all implemented temperature sensors including the composite
+> temperature.
+
+great!
 
 > 
-> Do I need to commit the revert the patch now?@Heiko
+> /sys/class/thermal/thermal_zone[0-*]:
+>     |---temp: Temperature
+>     |---trip_point_0_temp: Over temperature threshold
 > 
-
-
-Yeah, you should see it in the next rc after I send this to Linus.
-
-Meanwhile, it would be good if you good send another version of your
-patch that does not break the other boards.
-
-> >
-> >Heiko
-> >
-> >
-> >
-> >
-> >
-> >
-> >
+> The thermal_zone[0-*] contains a symlink to the corresponding nvme device.
+> On the other hand, the following symlinks to the thermal zone devices are
+> created in the nvme device sysfs directory.
 > 
+> - nvme_temp0: Composite temperature
+> - nvme_temp1: Temperature sensor 1
+> ...
+> - nvme_temp8: Temperature sensor 8
+> 
+> The nvme_thermal_zones_unregister() removes the registered thermal zone
+> devices and symlinks.
+> 
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Eduardo Valentin <edubezval@gmail.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Keith Busch <keith.busch@intel.com>
+> Cc: Jens Axboe <axboe@fb.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Sagi Grimberg <sagi@grimberg.me>
+> Cc: Minwoo Im <minwoo.im.dev@gmail.com>
+> Cc: Kenneth Heitke <kenneth.heitke@intel.com>
+> Cc: Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> ---
+> * v2
+> - s/correspoinding/corresponding/ typo in commit log
+> - Borrowed nvme_get_features() from Keith's patch
+> - Temperature threshold notification is splitted into another patch
+> - Change the data type of 'sensor' to unsigned
+> - Add BUILD_BUG_ON for the array size of tzdev member in nvme_ctrl
+> - Add WARN_ON_ONCE for paranoid checks
+> - Fix off-by-one error in nvme_get_temp
+> - Validate 'sensor' where the value is actually used
+> - Define and utilize two enums related to the temperature threshold feature
+> - Remove hysteresis value for this trip point and don't utilize the under
+>   temperature threshold
+> - Print error message for thermal_zone_device_register() failure
+> - Add function comments for nvme_thermal_zones_{,un}register
+> - Suppress non-fatal errors from nvme_thermal_zones_register()
+> - Add comment about implemented temperature sensors 
+> - Instead of creating a new 'thermal_work', append async smart event's
+>   action to the existing async_event_work
+> - Add comment for tzdev member in nvme_ctrl
+> 
+>  drivers/nvme/host/core.c | 265 +++++++++++++++++++++++++++++++++++++++++++++++
+>  drivers/nvme/host/nvme.h |  27 +++++
+>  include/linux/nvme.h     |   5 +
+>  3 files changed, 297 insertions(+)
+> 
+> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+> index c04df80..0ec303c 100644
+> --- a/drivers/nvme/host/core.c
+> +++ b/drivers/nvme/host/core.c
+> @@ -2179,6 +2179,271 @@ static void nvme_set_latency_tolerance(struct device *dev, s32 val)
+>  	}
+>  }
+>  
+> +#ifdef CONFIG_THERMAL
+> +
+> +static int nvme_get_temp(struct nvme_ctrl *ctrl, unsigned int sensor, int *temp)
+> +{
+> +	struct nvme_smart_log *log;
+> +	int ret;
+> +
+> +	BUILD_BUG_ON(ARRAY_SIZE(log->temp_sensor) + 1 !=
+> +		     ARRAY_SIZE(ctrl->tzdev));
+
+When would this be triggered?
+
+> +
+> +	if (WARN_ON_ONCE(sensor > ARRAY_SIZE(log->temp_sensor)))
+> +		return -EINVAL;
+> +
+> +	log = kzalloc(sizeof(*log), GFP_KERNEL);
+
+Do we really need to allocate memory every time we want to read
+temperature? Is this struct too large to fit stack?
+
+> +	if (!log)
+> +		return -ENOMEM;
+> +
+> +	ret = nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
+> +			   log, sizeof(*log), 0);
+> +	if (ret) {
+> +		ret = ret > 0 ? -EINVAL : ret;
+> +		goto free_log;
+> +	}
+> +
+> +	if (sensor)
+> +		*temp = le16_to_cpu(log->temp_sensor[sensor - 1]);
+> +	else
+> +		*temp = get_unaligned_le16(log->temperature);
+> +
+> +	if (!*temp)
+> +		ret = -EINVAL;
+> +
+> +free_log:
+> +	kfree(log);
+> +
+> +	return ret;
+> +}
+> +
+> +static unsigned int nvme_tz_type_to_sensor(const char *type)
+> +{
+> +	unsigned int sensor;
+> +
+> +	if (sscanf(type, "nvme_temp%u", &sensor) != 1)
+> +		return UINT_MAX;
+> +
+> +	return sensor;
+> +}
+> +
+> +#define KELVIN_TO_MILLICELSIUS(t) DECI_KELVIN_TO_MILLICELSIUS((t) * 10)
+> +#define MILLICELSIUS_TO_KELVIN(t) ((MILLICELSIUS_TO_DECI_KELVIN(t) + 5) / 10)
+> +
+> +static int nvme_tz_get_temp(struct thermal_zone_device *tzdev,
+> +			    int *temp)
+> +{
+> +	unsigned int sensor = nvme_tz_type_to_sensor(tzdev->type);
+> +	struct nvme_ctrl *ctrl = tzdev->devdata;
+> +	int ret;
+> +
+> +	ret = nvme_get_temp(ctrl, sensor, temp);
+> +	if (!ret)
+> +		*temp = KELVIN_TO_MILLICELSIUS(*temp);
+> +
+> +	return ret;
+> +}
+> +
+> +static int nvme_tz_get_trip_type(struct thermal_zone_device *tzdev,
+> +				 int trip, enum thermal_trip_type *type)
+> +{
+> +	*type = THERMAL_TRIP_ACTIVE;
+> +
+> +	return 0;
+> +}
+> +
+> +static int nvme_get_over_temp_thresh(struct nvme_ctrl *ctrl,
+> +				     unsigned int sensor, int *temp)
+> +{
+> +	unsigned int threshold = sensor << NVME_TEMP_THRESH_SELECT_SHIFT;
+> +	int status;
+> +	int ret;
+> +
+> +	if (WARN_ON_ONCE(sensor >= ARRAY_SIZE(ctrl->tzdev)))
+> +		return -EINVAL;
+> +
+> +	ret = nvme_get_features(ctrl, NVME_FEAT_TEMP_THRESH, threshold, NULL, 0,
+> +				&status);
+> +	if (!ret)
+> +		*temp = status & NVME_TEMP_THRESH_MASK;
+> +
+> +	return ret > 0 ? -EINVAL : ret;
+> +}
+> +
+> +static int nvme_set_over_temp_thresh(struct nvme_ctrl *ctrl,
+> +				     unsigned int sensor, int temp)
+> +{
+> +	unsigned int threshold = sensor << NVME_TEMP_THRESH_SELECT_SHIFT;
+> +	int status;
+> +	int ret;
+> +
+> +	if (WARN_ON_ONCE(sensor >= ARRAY_SIZE(ctrl->tzdev)))
+> +		return -EINVAL;
+> +
+> +	if (temp > NVME_TEMP_THRESH_MASK)
+> +		return -EINVAL;
+> +
+> +	threshold |= temp & NVME_TEMP_THRESH_MASK;
+> +
+> +	ret = nvme_set_features(ctrl, NVME_FEAT_TEMP_THRESH, threshold, NULL, 0,
+> +				&status);
+> +
+> +	return ret > 0 ? -EINVAL : ret;
+> +}
+> +
+> +static int nvme_tz_get_trip_temp(struct thermal_zone_device *tzdev,
+> +				 int trip, int *temp)
+> +{
+> +	unsigned int sensor = nvme_tz_type_to_sensor(tzdev->type);
+> +	struct nvme_ctrl *ctrl = tzdev->devdata;
+> +	int ret;
+> +
+> +	ret = nvme_get_over_temp_thresh(ctrl, sensor, temp);
+> +	if (!ret)
+> +		*temp = KELVIN_TO_MILLICELSIUS(*temp);
+> +
+> +	return ret;
+> +}
+> +
+> +static int nvme_tz_set_trip_temp(struct thermal_zone_device *tzdev,
+> +				 int trip, int temp)
+> +{
+> +	unsigned int sensor = nvme_tz_type_to_sensor(tzdev->type);
+> +	struct nvme_ctrl *ctrl = tzdev->devdata;
+> +
+> +	temp = MILLICELSIUS_TO_KELVIN(temp);
+> +
+> +	return nvme_set_over_temp_thresh(ctrl, sensor, temp);
+> +}
+> +
+> +static struct thermal_zone_device_ops nvme_tz_ops = {
+> +	.get_temp = nvme_tz_get_temp,
+> +	.get_trip_type = nvme_tz_get_trip_type,
+> +	.get_trip_temp = nvme_tz_get_trip_temp,
+> +	.set_trip_temp = nvme_tz_set_trip_temp,
+> +};
+> +
+> +static struct thermal_zone_params nvme_tz_params = {
+> +	.governor_name = "user_space",
+> +	.no_hwmon = true,
+> +};
+> +
+> +static struct thermal_zone_device *
+> +nvme_thermal_zone_register(struct nvme_ctrl *ctrl, unsigned int sensor)
+> +{
+> +	struct thermal_zone_device *tzdev;
+> +	char type[THERMAL_NAME_LENGTH];
+> +	int ret;
+> +
+> +	snprintf(type, sizeof(type), "nvme_temp%d", sensor);
+> +
+
+Do we have something more meaningful or descriptive here? A more
+interesting type would be a string that could remind of the sensor
+location. Unless nvme_temp0 is enough to understand where this
+temperature is coming from, I would ask to get something more
+descriptive.
+
+> +	tzdev = thermal_zone_device_register(type, 1, 1, ctrl, &nvme_tz_ops,
+> +					     &nvme_tz_params, 0, 0);
+
+Have you considered if there is a use case for using of-thermal here?
+
+> +	if (IS_ERR(tzdev)) {
+> +		dev_err(ctrl->device,
+> +			"Failed to register thermal zone device: %ld\n",
+> +			PTR_ERR(tzdev));
+> +		return tzdev;
+> +	}
+> +
+> +	ret = sysfs_create_link(&ctrl->ctrl_device.kobj,
+> +				&tzdev->device.kobj, type);
+> +	if (ret)
+> +		goto device_unregister;
+> +
+> +	ret = sysfs_create_link(&tzdev->device.kobj,
+> +				&ctrl->ctrl_device.kobj, "device");
+> +	if (ret)
+> +		goto remove_link;
+> +
+> +	return tzdev;
+> +
+> +remove_link:
+> +	sysfs_remove_link(&ctrl->ctrl_device.kobj, type);
+> +device_unregister:
+> +	thermal_zone_device_unregister(tzdev);
+> +
+> +	return ERR_PTR(ret);
+> +}
+> +
+> +/**
+> + * nvme_thermal_zones_register() - register nvme thermal zone devices
+> + * @ctrl: controller instance
+> + *
+> + * This function creates up to nine thermal zone devices for all implemented
+> + * temperature sensors including the composite temperature.
+> + * Each thermal zone device provides a single trip point temperature that is
+> + * associated with an over temperature threshold.
+> + */
+> +int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
+> +{
+> +	struct nvme_smart_log *log;
+> +	int ret;
+> +	int i;
+> +
+> +	log = kzalloc(sizeof(*log), GFP_KERNEL);
+> +	if (!log)
+> +		return 0; /* non-fatal error */
+> +
+> +	ret = nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
+> +			   log, sizeof(*log), 0);
+> +	if (ret) {
+> +		dev_err(ctrl->device, "Failed to get SMART log: %d\n", ret);
+> +		ret = ret > 0 ? -EINVAL : ret;
+> +		goto free_log;
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
+> +		struct thermal_zone_device *tzdev;
+> +
+> +		/*
+> +		 * All implemented temperature sensors report a non-zero value
+> +		 * in temperature sensor fields in the smart log page.
+> +		 */
+> +		if (i && !le16_to_cpu(log->temp_sensor[i - 1]))
+> +			continue;
+> +		if (ctrl->tzdev[i])
+> +			continue;
+> +
+> +		tzdev = nvme_thermal_zone_register(ctrl, i);
+> +		if (!IS_ERR(tzdev))
+> +			ctrl->tzdev[i] = tzdev;
+> +	}
+> +
+> +free_log:
+> +	kfree(log);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(nvme_thermal_zones_register);
+> +
+> +/**
+> + * nvme_thermal_zones_unregister() - unregister nvme thermal zone devices
+> + * @ctrl: controller instance
+> + *
+> + * This function removes the registered thermal zone devices and symlinks.
+> + */
+> +void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
+> +		struct thermal_zone_device *tzdev = ctrl->tzdev[i];
+> +
+> +		if (!tzdev)
+> +			continue;
+> +
+> +		sysfs_remove_link(&tzdev->device.kobj, "device");
+> +		sysfs_remove_link(&ctrl->ctrl_device.kobj, tzdev->type);
+> +		thermal_zone_device_unregister(tzdev);
+> +
+> +		ctrl->tzdev[i] = NULL;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(nvme_thermal_zones_unregister);
+> +
+> +#endif /* CONFIG_THERMAL */
+> +
+>  struct nvme_core_quirk_entry {
+>  	/*
+>  	 * NVMe model and firmware strings are padded with spaces.  For
+> diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+> index bb673b8..0bc4e85 100644
+> --- a/drivers/nvme/host/nvme.h
+> +++ b/drivers/nvme/host/nvme.h
+> @@ -15,6 +15,7 @@
+>  #include <linux/sed-opal.h>
+>  #include <linux/fault-inject.h>
+>  #include <linux/rcupdate.h>
+> +#include <linux/thermal.h>
+>  
+>  extern unsigned int nvme_io_timeout;
+>  #define NVME_IO_TIMEOUT	(nvme_io_timeout * HZ)
+> @@ -248,6 +249,14 @@ struct nvme_ctrl {
+>  
+>  	struct page *discard_page;
+>  	unsigned long discard_page_busy;
+> +
+> +#ifdef CONFIG_THERMAL
+> +	/*
+> +	 * tzdev[0]: composite temperature
+> +	 * tzdev[1-8]: temperature sensor 1 through 8
+> +	 */
+> +	struct thermal_zone_device *tzdev[9];
+> +#endif
+>  };
+>  
+>  enum nvme_iopolicy {
+> @@ -559,6 +568,24 @@ static inline void nvme_mpath_stop(struct nvme_ctrl *ctrl)
+>  }
+>  #endif /* CONFIG_NVME_MULTIPATH */
+>  
+> +#ifdef CONFIG_THERMAL
+> +
+> +int nvme_thermal_zones_register(struct nvme_ctrl *ctrl);
+> +void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl);
+> +
+> +#else
+> +
+> +static inline int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl)
+> +{
+> +}
+> +
+> +#endif /* CONFIG_THERMAL */
+> +
+>  #ifdef CONFIG_NVM
+>  int nvme_nvm_register(struct nvme_ns *ns, char *disk_name, int node);
+>  void nvme_nvm_unregister(struct nvme_ns *ns);
+> diff --git a/include/linux/nvme.h b/include/linux/nvme.h
+> index 658ac75..54f0a13 100644
+> --- a/include/linux/nvme.h
+> +++ b/include/linux/nvme.h
+> @@ -780,6 +780,11 @@ struct nvme_write_zeroes_cmd {
+>  
+>  /* Features */
+>  
+> +enum {
+> +	NVME_TEMP_THRESH_MASK		= 0xffff,
+> +	NVME_TEMP_THRESH_SELECT_SHIFT	= 16,
+> +};
+> +
+>  struct nvme_feat_auto_pst {
+>  	__le64 entries[32];
+>  };
+> -- 
+> 2.7.4
 > 
