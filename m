@@ -2,101 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E44290B3
-	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 08:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E835F290FC
+	for <lists+linux-pm@lfdr.de>; Fri, 24 May 2019 08:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388513AbfEXGEC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 May 2019 02:04:02 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:50270 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388070AbfEXGEC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 May 2019 02:04:02 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 60D4860C8B; Fri, 24 May 2019 06:04:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1558677840;
-        bh=+LXeINwGo6CiisA+JrfBkpcV33DtSDYcwasClLqFltM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MnQgEBJBFX7Jr6ZKTlpvPMRJlQPlORXWJeNHd18+CdO6x9V93JYSt8nqTFP73lTVe
-         Kc87IbU8eSlsJ0klkz6GlvCLKXc6yFpvAFoopfpj6hJVstNPzdnt9epwSyXMx7viOQ
-         idTFVhIbOwNG/+qmb2jqYeYdR78lpVY7V7ALMvB0=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.131.117.43] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id CA5026063A;
-        Fri, 24 May 2019 06:03:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1558677838;
-        bh=+LXeINwGo6CiisA+JrfBkpcV33DtSDYcwasClLqFltM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=WtaCR2+wyWWFjJzU9+IBN0PVFNR69TJTy4vvAyk+MUIWQoA6bLptg7h6mGWmvgSYC
-         ceLZ777Tzuy2Vfg1oiS6jsaRdeMMBSozslhkgH9uA3OjPW/L2iqMfhWCfqhoBEh3TL
-         vBuirdXrib/G+OD5P4nw7QuflaX7JS6fFb70beys=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CA5026063A
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [RFC v2 00/11] DVFS in the OPP core
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, swboyd@chromium.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org,
-        vincent.guittot@linaro.org
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <85dbc630-f526-c06f-8a8b-9bbc3b794693@codeaurora.org>
-Date:   Fri, 24 May 2019 11:33:52 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2388260AbfEXGco (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 May 2019 02:32:44 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:34236 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388185AbfEXGco (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 24 May 2019 02:32:44 -0400
+Received: from [46.183.103.17] (helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <heiko@sntech.de>)
+        id 1hU3ka-0002QF-W5; Fri, 24 May 2019 08:32:21 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Eduardo Valentin <edubezval@gmail.com>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH] Revert "thermal: rockchip: fix up the tsadc pinctrl setting error"
+Date:   Fri, 24 May 2019 08:32:19 +0200
+Message-ID: <2521723.3ZzQbFiSsD@phil>
+In-Reply-To: <20190524022042.GA1936@localhost.localdomain>
+References: <20190522141236.26987-1-heiko@sntech.de> <CAD=FV=UxwqkHpsxXhEHrQDY6MtymeT3Gn_G4Q5xSh6pZVWTRHA@mail.gmail.com> <20190524022042.GA1936@localhost.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 5/21/2019 11:52 AM, Viresh Kumar wrote:
-> On 20-03-19, 15:19, Rajendra Nayak wrote:
->> This is a v2 of the RFC posted earlier by Stephen Boyd [1]
->>
->> As part of v2 I still follow the same approach of dev_pm_opp_set_rate()
->> API using clk framework to round the frequency passed and making it
->> accept 0 as a valid frequency indicating the frequency isn't required
->> anymore. It just has a few more drivers converted to use this approach
->> like dsi/dpu and ufs.
->> ufs demonstrates the case of having to handle multiple power domains, one
->> of which is scalable.
->>
->> The patches are based on 5.1-rc1 and depend on some ufs fixes I posted
->> earlier [2] and a DT patch to include the rpmpd header [3]
->>
->> [1] https://lkml.org/lkml/2019/1/28/2086
->> [2] https://lkml.org/lkml/2019/3/8/70
->> [3] https://lkml.org/lkml/2019/3/20/120
+Am Freitag, 24. Mai 2019, 04:20:43 CEST schrieb Eduardo Valentin:
+> On Wed, May 22, 2019 at 08:34:34AM -0700, Doug Anderson wrote:
+> > Hi,
+> > 
+> > On Wed, May 22, 2019 at 7:12 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> > >
+> > > This reverts commit 28694e009e512451ead5519dd801f9869acb1f60.
+> > >
+> > > The commit causes multiple issues in that:
+> > > - the added call to ->control does potentially run unclocked
+> > >   causing a hang of the machine
+> > > - the added pinctrl-states are undocumented in the binding
+> > > - the added pinctrl-states are not backwards compatible, breaking
+> > >   old devicetrees.
+> > >
+> > > Fixes: 28694e009e51 ("thermal: rockchip: fix up the tsadc pinctrl setting error")
+> > > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> > > ---
+> > >  drivers/thermal/rockchip_thermal.c | 36 +++---------------------------
+> > >  1 file changed, 3 insertions(+), 33 deletions(-)
+> > 
+> > In case it helps with the urgency, there are lots of people who have
+> > all independently needed to identify which commit stopped their boards
+> > from booting mainline or broke temperature reading.  I'm aware of at
+> > least these reports:
+> > 
+> > Reported-by: kernelci.org bot <bot@kernelci.org>
+> > Reported-by: Enric Balletbo Serra <eballetbo@gmail.com>
+> > Reported-by: Vicente Bergas <vicencb@gmail.com>
+> > Reported-by: Jack Mitchell <ml@embed.me.uk>
+> > Reported-by: Douglas Anderson <dianders@chromium.org>
+> > 
+> > I can confirm that my board boots again after this revert, thus:
+> > 
+> > Tested-by: Douglas Anderson <dianders@chromium.org>
 > 
-> Hi Rajendra,
-> 
-> I am inclined to apply/push this series for 5.3-rc1, will it be
-> possible for you to spend some time on this at priority ?
+> I see. I can collect this revert if that is what unblocks you guys.
+>
+> Elaine, do you mind checking why these pinctrl changes are causing
+> boot issues?
 
-Hey Viresh, I was on vacation, just got back. I will refresh this series
-and address your previous feedback, I haven't received much feedback for the
-driver changes :/ but we can atleast review and get the OPP layer changes
-finalized. thanks.
+The pinctrl issue is secondary, it makes the thermal driver fail to
+probe, due to not handling existing devicetrees properly.
+Hence the driver needs to stay backwards compatible with existing
+devicetrees.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+The hang is caused by the call to the per-soc ->control callback before
+the clocks get enabled, relying on it being on at boot and that isn't the
+case everywhere.
+
+Heiko
+
+
