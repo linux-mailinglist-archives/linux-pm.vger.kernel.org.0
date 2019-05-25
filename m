@@ -2,111 +2,308 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8432A666
-	for <lists+linux-pm@lfdr.de>; Sat, 25 May 2019 20:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6882A69A
+	for <lists+linux-pm@lfdr.de>; Sat, 25 May 2019 20:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727602AbfEYSNk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 25 May 2019 14:13:40 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36766 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727575AbfEYSNj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 May 2019 14:13:39 -0400
-Received: by mail-pl1-f195.google.com with SMTP id d21so5442408plr.3;
-        Sat, 25 May 2019 11:13:39 -0700 (PDT)
+        id S1727551AbfEYSs1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 25 May 2019 14:48:27 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:50648 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727252AbfEYSs0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 May 2019 14:48:26 -0400
+Received: by mail-it1-f196.google.com with SMTP id a186so11131043itg.0;
+        Sat, 25 May 2019 11:48:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EnB6+3mIR1GUxLAogalYOOntDr+t9u6MSm9vkJ1kPoo=;
-        b=sf1yzaTwgKxt+8JN/8Rimolz5jnu9NNXetAgOkIApDyLNJDdFaArYWTeELrst+ysF6
-         OSYnqiTZkrfnVB3cRFLG1/wpr673pY8FrlPEfzb0E1jSiQ00Tp4GR3TUB70v3povEMVb
-         j7mqnt1fWgFe4kDI/gFfX5/cwTOO7x0syZnVkF05kV4qYXzJ+0RoQndloQT7i8rLlGaS
-         JDR6h3bcHn1uLys10XUTwd95nyEM4NM+bEuMw3l+TMNrxel0VQhsO+Ie3cORtnR4nBeW
-         1M7RLnhQ2jVU97gHKeXAfGqKyYqQPG4j2OqeRb8Xto4qa71HzwBL0KWJYT4mP/lnyyGe
-         F9ig==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sZoCbpozx2WzELJxdxaEDmEhop+Xro7Vi+HBCV+TS1o=;
+        b=g0VlUeJTLjDj5kTn6r0gK/cmgEqbLqLXv/SixD12M7rAecVh4wyIoDyB1RIZZX1bNq
+         XLZzlKhjoNlZTRqsXwAiyjiSA8j+2YKfYWaGWwMHigj9naufogTW+W09t2VTXJ1IgVop
+         ezhiQ5R7WL0pj3/99Xxt9Xgl7KrlCfyKwKRsarGozt2fCLtwNeCf/6awYLoIDQBDZzar
+         dnYzUd+rKaezLtLUlWf8Pr/7+zWAYQAuCCHGB3rScQ7vrjmbvBgAM3bwpApjMyjOEkxL
+         kw7joZYoRDgo2uXv6tTjCNhrVmCo4XowRbYPNsw/IBGiiH8rtAktmYkE0c05OP3LFx0b
+         U8XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=EnB6+3mIR1GUxLAogalYOOntDr+t9u6MSm9vkJ1kPoo=;
-        b=txOrLSRZ/Y5rWZyMZuzKmar5FEiGe//55eVX+E1bjypagpa28hchji86psFwNU1pbc
-         BFiqxqsAc3bP6UPPu7vtSISisbt8rQN2i1weD+ofxDsUVkLhyeKk59g1U6VftzWmVrOI
-         EHxg+8hvOfBzxq+4X/fdlpH9k8kZADpbhkrhJjEhHLKP4M0YuxHIfuXj/osFARIdSWeT
-         VqeqlAUhbKcUhkz/M8moJVssEfgDDiBb5QgudW64QjaeRDqbUDZ9VaW281M+Hd1biBxr
-         0rtFw26xs0rbxaSnrhjWClGRkJcvQDDkz1/ae/yXbyrsquwRSjWnuCWebyVKQC2KBHyX
-         kApg==
-X-Gm-Message-State: APjAAAWalH8s4de9xMdzu2y+eH4Bf9NMxxZ9EHw0eG4uFrYdOYgQ/613
-        VBrmF9KZqV1TCYDLbXIgHYo=
-X-Google-Smtp-Source: APXvYqzz6527zTMOTWddGiv92U6XysI9bjqHAgREMygNcxWlnY6V/lVUVwTzV9Erzysf5B8LGDBWJQ==
-X-Received: by 2002:a17:902:2983:: with SMTP id h3mr88692846plb.267.1558808019178;
-        Sat, 25 May 2019 11:13:39 -0700 (PDT)
-Received: from localhost (68.168.130.77.16clouds.com. [68.168.130.77])
-        by smtp.gmail.com with ESMTPSA id s66sm18914576pfb.37.2019.05.25.11.13.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 25 May 2019 11:13:38 -0700 (PDT)
-From:   Yangtao Li <tiny.windzz@gmail.com>
-To:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        davem@davemloft.net, mchehab+samsung@kernel.org,
-        gregkh@linuxfoundation.org, linus.walleij@linaro.org,
-        nicolas.ferre@microchip.com, paulmck@linux.ibm.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH v3 3/3] thermal: fix indentation in makefile
-Date:   Sat, 25 May 2019 14:13:29 -0400
-Message-Id: <20190525181329.18657-4-tiny.windzz@gmail.com>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20190525181329.18657-1-tiny.windzz@gmail.com>
-References: <20190525181329.18657-1-tiny.windzz@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=sZoCbpozx2WzELJxdxaEDmEhop+Xro7Vi+HBCV+TS1o=;
+        b=feoLV4YXWsjf/PuyU5PkcbQNSNAvvNhgNLQMB8upPMtErRiqISMgIKa6Tdxxv8VFSF
+         wDwBOoX90Iclhf0OF12cH4+cqf88BbpEwvz/1Xppzo44Nriy5PbLp2O+FSRcPTzQlkx3
+         D9J6WNEPWxUWebrKspIx73UW/haC52GZc1Zk6kr3sSmkmgV6p9/pYbM8y+0MxaWc134i
+         gLTTw7fKys3UFKJQZs4f2PFKeaRBnU8LjKvGHGU1YzxIIdJ1vPrjSpP10oYDxuzE3ToH
+         hQkxorIRbmiz3KxTD4azKLZdEOAdA0HdcHR2JocVG147h4W3UhdzSyoFVpQVYl9xTD2Y
+         CUAQ==
+X-Gm-Message-State: APjAAAUbSMhfaye96EPiK+j6F4pPTVqRFl13fVmzEafUhjDDbtWzvfYZ
+        ez0G1HN8ZuH83RLO/H2pkaybfIrC9rX1JWN8S6A=
+X-Google-Smtp-Source: APXvYqztVIy2Z3QZqJKHiF6I+2B4HprXc4s8f7rIl/bjVuS8V9KQ9z4GtrTMWDdHlIylrt/2fcxNBjuSxvgr6pbHjE4=
+X-Received: by 2002:a02:cabb:: with SMTP id e27mr19684986jap.12.1558810105828;
+ Sat, 25 May 2019 11:48:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190512082614.9045-1-tiny.windzz@gmail.com> <20190512082614.9045-3-tiny.windzz@gmail.com>
+ <20190512221612.ubmknvim4utnqpl4@core.my.home> <CAEExFWv5A5mhpV7afQT=AaYx2ko5QnfbM6HvfuTgT1Na=ssOcw@mail.gmail.com>
+ <20190516182936.h6xdzp3gtg4ikave@core.my.home> <CAEExFWvDO3wJd6wp1hFudf3EGF0NixgKAwAd5-b1=VLF+7-jCw@mail.gmail.com>
+ <20190519142239.eolisexp5mrdyafz@core.my.home>
+In-Reply-To: <20190519142239.eolisexp5mrdyafz@core.my.home>
+From:   Frank Lee <tiny.windzz@gmail.com>
+Date:   Sun, 26 May 2019 02:48:13 +0800
+Message-ID: <CAEExFWsc_YB8NORW4ULfuoicL=xr_oAdtHSaxz4ELv53qvCAsQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] thermal: sun50i: add thermal driver for h6
+To:     Frank Lee <tiny.windzz@gmail.com>, rui.zhang@intel.com,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, robh+dt@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, catalin.marinas@arm.com,
+        will.deacon@arm.com, David Miller <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan.Cameron@huawei.com,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        paulmck@linux.ibm.com, Andy Gross <andy.gross@linaro.org>,
+        olof@lixom.net, bjorn.andersson@linaro.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        marc.w.gonzalez@free.fr, stefan.wahren@i2se.com,
+        enric.balletbo@collabora.com, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To unify code style.
+HI Ond=C5=99ej,
 
-Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
----
- drivers/thermal/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Sun, May 19, 2019 at 10:22 PM Ond=C5=99ej Jirman <megous@megous.com> wro=
+te:
+>
+> Hello Yangtao,
+>
+> On Sat, May 18, 2019 at 12:34:57AM +0800, Frank Lee wrote:
+> > HI,
+> >
+> > On Fri, May 17, 2019 at 2:29 AM Ond=C5=99ej Jirman <megous@megous.com> =
+wrote:
+> > >
+> > > Hi Yangtao,
+> > >
+> > > thank you for work on this driver.
+> > >
+> > > On Fri, May 17, 2019 at 02:06:53AM +0800, Frank Lee wrote:
+> > > > HI Ond=C5=99ej,
+> > > >
+> > > > On Mon, May 13, 2019 at 6:16 AM Ond=C5=99ej Jirman <megous@megous.c=
+om> wrote:
+> > > > > > +
+> > > > > > +/* Temp Unit: millidegree Celsius */
+> > > > > > +static int tsens_reg2temp(struct tsens_device *tmdev,
+> > > > > > +                           int reg)
+> > > > >
+> > > > > Please name all functions so that they are more clearly identifia=
+ble
+> > > > > in stack traces as belonging to this driver. For example:
+> > > > >
+> > > > >   sun8i_ths_reg2temp
+> > > > >
+> > > > > The same applies for all tsens_* functions below. tsens_* is too
+> > > > > generic.
+> > > >
+> > > > Done but no sun8i_ths_reg2temp.
+> > > >
+> > > > ths_reg2tem() should be a generic func.
+> > > > I think it should be suitable for all platforms=EF=BC=8C so no plat=
+form prefix.
+> > >
+> > > You've missed my point. The driver name is sun8i_thermal and if you g=
+et
+> > > and oops from the kernel you'll get a stack trace where there are jus=
+t function
+> > > names. If you use too generic function names, it will not be clear wh=
+ich
+> > > driver is oopsing.
+> > >
+> > >   - sun8i_ths_reg2temp will tell you much more clearly where to searc=
+h than
+> > >   - ths_reg2temp
+> > >
+> > > Of course you can always grep, but most thermal drivers are thermal s=
+ensor (ths)
+> > > drivers, and if multiple of them used this too-generic naming scheme =
+you'd
+> > > have hard time debugging.
+> > >
+> > > Look at other thermal drivers. They usually encode driver name in the=
+ function
+> > > names to help with identification (even if these are static driver-lo=
+cal
+> > > functions).
+> > >
+> >
+> > Can we change to sunxi_ths_ prefix?
+>
+> It should probably match the driver name, but yes, that's better.
+>
+> > > > > > +static int tsens_probe(struct platform_device *pdev)
+> > > > > > +{
+> > > > > > +     struct tsens_device *tmdev;
+> > > > > > +     struct device *dev =3D &pdev->dev;
+> > > > > > +     int ret;
+> > > > > > +
+> > > > > > +     tmdev =3D devm_kzalloc(dev, sizeof(*tmdev), GFP_KERNEL);
+> > > > > > +     if (!tmdev)
+> > > > > > +             return -ENOMEM;
+> > > > > > +
+> > > > > > +     tmdev->dev =3D dev;
+> > > > > > +     tmdev->chip =3D of_device_get_match_data(&pdev->dev);
+> > > > > > +     if (!tmdev->chip)
+> > > > > > +             return -EINVAL;
+> > > > > > +
+> > > > > > +     ret =3D tsens_init(tmdev);
+> > > > > > +     if (ret)
+> > > > > > +             return ret;
+> > > > > > +
+> > > > > > +     ret =3D tsens_register(tmdev);
+> > > > > > +     if (ret)
+> > > > > > +             return ret;
+> > > > >
+> > > > > Why split this out of probe into separate functions?
+> > > > >
+> > > > > > +     ret =3D tmdev->chip->enable(tmdev);
+> > > > > > +     if (ret)
+> > > > > > +             return ret;
+> > > > > > +
+> > > > > > +     platform_set_drvdata(pdev, tmdev);
+> > > > > > +
+> > > > > > +     return ret;
+> > > > > > +}
+> > > > > > +
+> > > > > > +static int tsens_remove(struct platform_device *pdev)
+> > > > > > +{
+> > > > > > +     struct tsens_device *tmdev =3D platform_get_drvdata(pdev)=
+;
+> > > > > > +
+> > > > > > +     tmdev->chip->disable(tmdev);
+> > > > > > +
+> > > > > > +     return 0;
+> > > > > > +}
+> > > > > > +
+> > > > > > +static int sun50i_thermal_enable(struct tsens_device *tmdev)
+> > > > > > +{
+> > > > > > +     int ret, val;
+> > > > > > +
+> > > > > > +     ret =3D reset_control_deassert(tmdev->reset);
+> > > > > > +     if (ret)
+> > > > > > +             return ret;
+> > > > > > +
+> > > > > > +     ret =3D clk_prepare_enable(tmdev->bus_clk);
+> > > > > > +     if (ret)
+> > > > > > +             goto assert_reset;
+> > > > > > +
+> > > > > > +     ret =3D tsens_calibrate(tmdev);
+> > > > > > +     if (ret)
+> > > > > > +             return ret;
+> > > > >
+> > > > > If this fails (it may likely fail with EPROBE_DEFER) you are leav=
+ing reset
+> > > > > deasserted, and clock enabled.
+> > > > >
+> > > > > Overall, I think, reset/clock management and nvmem reading will b=
+e common
+> > > > > to all the HW variants, so it doesn't make much sense splitting i=
+t out
+> > > > > of probe into separate functions, and makes it more error prone.
+> > > >
+> > > > Our long-term goal is to support all platforms.
+> > > > Bacicallt there is a differencr between each generation.
+> > > > So I feel it necessary to isolate these differences.
+> > > >
+> > > > Maybe:
+> > > > At some point, we can draw a part of the public part and platform
+> > > > difference into different
+> > > > files. something like qcom thermal driver.
+> > >
+> > > I understand, but I wrote ths drivers for H3/H5/A83T and it so far it=
+ looks like
+> > > all of them would share these 3 calls.
+> > >
+> > > You'll be enabling clock/reset and callibrating everywhere. So puttin=
+g this to
+> > > per-SoC function seems premature.
+> >
+> > In fact, enalbe and disable are the suspend and resume functions.(PM
+> > callback will be added in the future)
+> > When exiting from s2ram, the register will become the initial value.
+> > We need to do all the work, enabling reset/clk ,calibrating and
+> > initializing other reg.
+> >
+> > So I think it is no need to put enabling reset/clk and calibrating to
+> > probe func, and I'd like
+> > to keep enable and disable func.
+>
+> I know, I don't think it needs to be per-soc. These actions are all share=
+d by
+> all SoCs. Maybe with an exception that some SoCs may need one more clock,=
+ but
+> that can be made optionally-required by some flag in struct sunxi_thermal=
+_chip.
+>
+> Only highly SoC specific thing is configuring the THS registers for sampl=
+ing
+> frequency/averaging/enabling interrupts. The reset/clock enable is generi=
+c, and
+> already abstracted by the clock/reset framework.
+>
+> So what I suggest is having:
+>
+> sunxi_ths_enable()
+>         reset deassert
+>         bus clock prepare enable
+>         optionally module clock prepare enable (in the future)
+>         call per-soc calibration
+>         call per-soc setup callback
+>
+> sunxi_ths_disable()
+>         reset assert
+>         bus clock unprepare disable
+>         optionally module clock unprepare disable
+>
+> And if you could move devm_nvmem_cell_get to probe that should make per-S=
+oC
+> calibration callback also less repetitive and could avoid undoing the ena=
+ble
+> in case it returns EPROBE_DEFER (which is possible).
+>
+> All this should make it easier to support PM in the future and add less
+> cumbersome to add support for A83T and H3/H5.
+>
+> BTW, what are your plans for more SoC support? I'd like to add support fo=
+r
+> A83T and H3/H5, maybe even during the 5.3 cycle if this driver happens to=
+ land
+> early enough. If you don't have any plans I'll take it on.
+>
 
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index fa6f8b206281..d7eafb5ef8ef 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -5,7 +5,7 @@
- 
- obj-$(CONFIG_THERMAL)		+= thermal_sys.o
- thermal_sys-y			+= thermal_core.o thermal_sysfs.o \
--					thermal_helpers.o
-+				   thermal_helpers.o
- 
- # interface to/from other layers providing sensors
- thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
-@@ -25,11 +25,11 @@ thermal_sys-$(CONFIG_CPU_THERMAL)	+= cpu_cooling.o
- thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
- 
- # devfreq cooling
--thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
-+thermal_sys-$(CONFIG_DEVFREQ_THERMAL) 	+= devfreq_cooling.o
- 
- # platform thermal drivers
- obj-y				+= broadcom/
--obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
-+obj-$(CONFIG_THERMAL_MMIO)	+= thermal_mmio.o
- obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
- obj-$(CONFIG_SUN8I_THERMAL)     += sun8i_thermal.o
- obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
-@@ -50,7 +50,7 @@ obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
- obj-y				+= st/
- obj-$(CONFIG_QCOM_TSENS)	+= qcom/
- obj-y				+= tegra/
--obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-+obj-$(CONFIG_HISI_THERMAL)     	+= hisi_thermal.o
- obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
- obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
- obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
--- 
-2.17.0
+I plan to support h3 and a33 later.
+Can you support other platforms?
 
+Cheers,
+Yangtao
+
+> thank you and regards,
+>         o.
+>
+> > >
+> > > thank you and regards,
+> > >         o.
+> > >
+> > > > Regards,
+> > > > Yangtao
+> >
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
