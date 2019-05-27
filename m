@@ -2,83 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B982B561
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 14:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3610A2B71C
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 15:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727341AbfE0MdZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 May 2019 08:33:25 -0400
-Received: from michel.telenet-ops.be ([195.130.137.88]:37444 "EHLO
-        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbfE0MdZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 May 2019 08:33:25 -0400
-Received: from ramsan ([84.194.111.163])
-        by michel.telenet-ops.be with bizsmtp
-        id HQZQ2000R3XaVaC06QZQlf; Mon, 27 May 2019 14:33:24 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hVEoe-0001VO-Di; Mon, 27 May 2019 14:33:24 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hVEoe-0001oD-CK; Mon, 27 May 2019 14:33:24 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] clk: renesas: cpg-mssr: Use genpd of_node instead of local copy
-Date:   Mon, 27 May 2019 14:33:23 +0200
-Message-Id: <20190527123323.6912-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S1726209AbfE0N75 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 May 2019 09:59:57 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:50108 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726185AbfE0N75 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 27 May 2019 09:59:57 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id BCDD59305DE19F6E293A;
+        Mon, 27 May 2019 21:44:03 +0800 (CST)
+Received: from localhost (10.177.31.96) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.439.0; Mon, 27 May 2019
+ 21:43:55 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <amit.kucheria@linaro.org>, <agross@kernel.org>,
+        <david.brown@linaro.org>, <rui.zhang@intel.com>,
+        <edubezval@gmail.com>, <daniel.lezcano@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] drivers: thermal: tsens: Change hw_id type to int in is_sensor_enabled
+Date:   Mon, 27 May 2019 21:41:24 +0800
+Message-ID: <20190527134124.14784-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.177.31.96]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit 6a0ae73d95956f7e ("PM / Domain: Add support to parse
-domain's OPP table"), of_genpd_add_provider_simple() fills in
-the dev.of_node field in the generic_pm_domain structure.
+Sensor hw_id is int type other u32, is_sensor_enabled
+should use int to compare, this fix smatch warning:
 
-Hence cpg_mssr_is_pm_clk() can use that instead of its own copy in the
-driver-private cpg_mssr_clk_domain structure.
+drivers/thermal/qcom/tsens-common.c:72
+ is_sensor_enabled() warn: unsigned 'hw_id' is never less than zero.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fixes: 3e6a8fb33084 ("drivers: thermal: tsens: Add new operation to check if a sensor is enabled")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
-To be queued in clk-renesas-for-v5.3.
+ drivers/thermal/qcom/tsens-common.c | 2 +-
+ drivers/thermal/qcom/tsens.h        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- drivers/clk/renesas/renesas-cpg-mssr.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
-index 0201809bbd377df4..d1054204f3a75022 100644
---- a/drivers/clk/renesas/renesas-cpg-mssr.c
-+++ b/drivers/clk/renesas/renesas-cpg-mssr.c
-@@ -447,7 +447,6 @@ static void __init cpg_mssr_register_mod_clk(const struct mssr_mod_clk *mod,
+diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+index 928e8e81ba69..5df4eed84535 100644
+--- a/drivers/thermal/qcom/tsens-common.c
++++ b/drivers/thermal/qcom/tsens-common.c
+@@ -64,7 +64,7 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+ 	}
+ }
  
- struct cpg_mssr_clk_domain {
- 	struct generic_pm_domain genpd;
--	struct device_node *np;
- 	unsigned int num_core_pm_clks;
- 	unsigned int core_pm_clks[0];
- };
-@@ -459,7 +458,7 @@ static bool cpg_mssr_is_pm_clk(const struct of_phandle_args *clkspec,
+-bool is_sensor_enabled(struct tsens_priv *priv, u32 hw_id)
++bool is_sensor_enabled(struct tsens_priv *priv, int hw_id)
  {
- 	unsigned int i;
+ 	u32 val;
+ 	int ret;
+diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+index eefe3844fb4e..15264806f6a8 100644
+--- a/drivers/thermal/qcom/tsens.h
++++ b/drivers/thermal/qcom/tsens.h
+@@ -315,7 +315,7 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *pt1, u32 *pt2, u32 mo
+ int init_common(struct tsens_priv *priv);
+ int get_temp_tsens_valid(struct tsens_priv *priv, int i, int *temp);
+ int get_temp_common(struct tsens_priv *priv, int i, int *temp);
+-bool is_sensor_enabled(struct tsens_priv *priv, u32 hw_id);
++bool is_sensor_enabled(struct tsens_priv *priv, int hw_id);
  
--	if (clkspec->np != pd->np || clkspec->args_count != 2)
-+	if (clkspec->np != pd->genpd.dev.of_node || clkspec->args_count != 2)
- 		return false;
- 
- 	switch (clkspec->args[0]) {
-@@ -549,7 +548,6 @@ static int __init cpg_mssr_add_clk_domain(struct device *dev,
- 	if (!pd)
- 		return -ENOMEM;
- 
--	pd->np = np;
- 	pd->num_core_pm_clks = num_core_pm_clks;
- 	memcpy(pd->core_pm_clks, core_pm_clks, pm_size);
- 
+ /* TSENS target */
+ extern const struct tsens_plat_data data_8960;
 -- 
 2.17.1
+
 
