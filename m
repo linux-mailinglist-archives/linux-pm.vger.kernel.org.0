@@ -2,123 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E782B2AA
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 13:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C44A2B2C2
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 13:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbfE0LCy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 May 2019 07:02:54 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:63556 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725991AbfE0LCx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 May 2019 07:02:53 -0400
-Received: from 79.184.255.36.ipv4.supernova.orange.pl (79.184.255.36) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
- id cfb2f764cd3f14d9; Mon, 27 May 2019 13:02:50 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH] PCI: PM: Avoid possible suspend-to-idle issue
-Date:   Mon, 27 May 2019 13:02:49 +0200
-Message-ID: <10983642.dUqMSvAAlD@kreacher>
-In-Reply-To: <2315917.ZGeXE6pBFC@kreacher>
-References: <2315917.ZGeXE6pBFC@kreacher>
+        id S1726628AbfE0LIU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 May 2019 07:08:20 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33778 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726476AbfE0LIT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 May 2019 07:08:19 -0400
+Received: by mail-lf1-f68.google.com with SMTP id y17so3899079lfe.0;
+        Mon, 27 May 2019 04:08:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Amea0yxkLSVnpaE1taY7uaOdM5gfTzcYzLxuO6OKCas=;
+        b=BKs52VrGHojs+UDliJtM01DfUgVVHdsVVD5nzpm0ePBH9WsHF4xQhIyZCjdFlX9kvs
+         FD9qyFI7iZBjboRFl5Bl8uFNTTibGtV6bbBqF+L8/nqI4KWZla1bXFeB/JXayox5Fo7F
+         HrYumraLrj9FN3OK1AwuMZsFEgw84cK6wvRTBNtuY5OMvNd8biBtGqpCugtISBAe3nj/
+         mlgNFp+R8J4ve/Vc4uj8InYRrH16hg+GIl7O1yXTNBLaz7xPkr8txyRfYFogwU2mrb5w
+         A3wUlTFkWLsewA5h4zEvJTE6gnaFEkUmhmjpzV50zF13PcSKB+gi0Jpzf6ftC3eAYh+O
+         ax1g==
+X-Gm-Message-State: APjAAAUeXTNDE0xSOAiSALUTpYYSXqsrLsXQHulUthnOCkmduoYzQHP5
+        dnQsBa28ly4aemdAFlucVLeDx5iMi8hytC46y97JlYqS
+X-Google-Smtp-Source: APXvYqwcDy3XDaO0BzfXYp7vMfly1veQPO3ujWmlKLecl2HkSq5qfBAdcdVmkJpkAvRKefsRCQFJTTLWQ/j2c66om+Y=
+X-Received: by 2002:ac2:546a:: with SMTP id e10mr3644980lfn.75.1558955298038;
+ Mon, 27 May 2019 04:08:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20190525120155.108948-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20190525120155.108948-1-wangkefeng.wang@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 May 2019 13:08:05 +0200
+Message-ID: <CAMuHMdX=o+gT6fbpZcj8jQbHi9LJci9CX72DG5j+DKYxuSkYvQ@mail.gmail.com>
+Subject: Re: [PATCH] drivers: base: power: Use of_clk_get_parent_count()
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, May 17, 2019 11:08:50 AM CEST Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If a PCI driver leaves the device handled by it in D0 and calls
-> pci_save_state() on the device in its ->suspend() or ->suspend_late()
-> callback, it can expect the device to stay in D0 over the whole
-> s2idle cycle.  However, that may not be the case if there is a
-> spurious wakeup while the system is suspended, because in that case
-> pci_pm_suspend_noirq() will run again after pci_pm_resume_noirq()
-> which calls pci_restore_state(), via pci_pm_default_resume_early(),
-> so state_saved is cleared and the second iteration of
-> pci_pm_suspend_noirq() will invoke pci_prepare_to_sleep() which
-> may change the power state of the device.
-> 
-> To avoid that, add a new internal flag, skip_bus_pm, that will be set
-> by pci_pm_suspend_noirq() when it runs for the first time during the
-> given system suspend-resume cycle if the state of the device has
-> been saved already and the device is still in D0.  Setting that flag
-> will cause the next iterations of pci_pm_suspend_noirq() to set
-> state_saved for pci_pm_resume_noirq(), so that it always restores the
-> device state from the originally saved data, and avoid calling
-> pci_prepare_to_sleep() for the device.
-> 
-> Fixes: 33e4f80ee69b ("ACPI / PM: Ignore spurious SCI wakeups from suspend-to-idle")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/pci/pci-driver.c |   17 ++++++++++++++++-
->  include/linux/pci.h      |    1 +
->  2 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> Index: linux-pm/drivers/pci/pci-driver.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-driver.c
-> +++ linux-pm/drivers/pci/pci-driver.c
-> @@ -734,6 +734,8 @@ static int pci_pm_suspend(struct device
->  	struct pci_dev *pci_dev = to_pci_dev(dev);
->  	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
->  
-> +	pci_dev->skip_bus_pm = false;
-> +
->  	if (pci_has_legacy_pm_support(pci_dev))
->  		return pci_legacy_suspend(dev, PMSG_SUSPEND);
->  
-> @@ -827,7 +829,20 @@ static int pci_pm_suspend_noirq(struct d
->  		}
->  	}
->  
-> -	if (!pci_dev->state_saved) {
-> +	if (pci_dev->skip_bus_pm) {
-> +		/*
-> +		 * The function is running for the second time in a row without
-> +		 * going through full resume, which is possible only during
-> +		 * suspend-to-idle in a spurious wakeup case.  Moreover, the
-> +		 * device was originally left in D0, so its power state should
-> +		 * not be changed here and the device register values saved
-> +		 * originally should be restored on resume again.
-> +		 */
-> +		pci_dev->state_saved = true;
-> +	} else if (pci_dev->state_saved) {
-> +		if (pci_dev->current_state == PCI_D0)
-> +			pci_dev->skip_bus_pm = true;
-> +	} else {
->  		pci_save_state(pci_dev);
->  		if (pci_power_manageable(pci_dev))
->  			pci_prepare_to_sleep(pci_dev);
-> Index: linux-pm/include/linux/pci.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/pci.h
-> +++ linux-pm/include/linux/pci.h
-> @@ -344,6 +344,7 @@ struct pci_dev {
->  						   D3cold, not set for devices
->  						   powered on/off by the
->  						   corresponding bridge */
-> +	unsigned int	skip_bus_pm:1;	/* Internal: Skip bus-level PM */
->  	unsigned int	ignore_hotplug:1;	/* Ignore hotplug events */
->  	unsigned int	hotplug_user_indicators:1; /* SlotCtl indicators
->  						      controlled exclusively by
-> 
+Hi Kefeng,
 
-Bjorn, I've assumed no concerns or objections from you regarding this one and
-queued it up.
+On Sat, May 25, 2019 at 1:54 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+> Use of_clk_get_parent_count() instead of open coding.
+>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-If that assumption is incorrect, please let me know.
+Thanks for your patch!
+
+> --- a/drivers/base/power/clock_ops.c
+> +++ b/drivers/base/power/clock_ops.c
+> @@ -195,8 +195,7 @@ int of_pm_clk_add_clks(struct device *dev)
+>         if (!dev || !dev->of_node)
+>                 return -EINVAL;
+>
+> -       count = of_count_phandle_with_args(dev->of_node, "clocks",
+> -                                          "#clock-cells");
+> +       count = of_clk_get_parent_count(dev->of_node);
+>         if (count <= 0)
+>                 return -ENODEV;
 
 
+Given of_clk_get_parent_count() is provided by <linux/of_clk.h>, I think
+you should add an include for that.
 
+With the above fixed:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
