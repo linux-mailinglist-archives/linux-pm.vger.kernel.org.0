@@ -2,61 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E502ACA1
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 01:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1292AD09
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 04:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725851AbfEZXgr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 May 2019 19:36:47 -0400
-Received: from gateway21.websitewelcome.com ([192.185.46.109]:39923 "EHLO
-        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725838AbfEZXgr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 May 2019 19:36:47 -0400
-X-Greylist: delayed 1389 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 May 2019 19:36:46 EDT
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway21.websitewelcome.com (Postfix) with ESMTP id 577C8400C307F
-        for <linux-pm@vger.kernel.org>; Sun, 26 May 2019 18:13:36 -0500 (CDT)
+        id S1726291AbfE0Cqq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 May 2019 22:46:46 -0400
+Received: from gateway23.websitewelcome.com ([192.185.49.60]:31204 "EHLO
+        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726274AbfE0Cqq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 May 2019 22:46:46 -0400
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id D7C1D4215
+        for <linux-pm@vger.kernel.org>; Sun, 26 May 2019 21:23:04 -0500 (CDT)
 Received: from br164.hostgator.com.br ([192.185.176.180])
         by cmsmtp with SMTP
-        id V2Keht7JX2PzOV2KehG8NX; Sun, 26 May 2019 18:13:36 -0500
+        id V5I0hpBY9iQerV5I0hQ8b4; Sun, 26 May 2019 21:23:04 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        d=castello.eng.br; s=default; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CxkfiD4KZYM31MyYyEMRm8MEp37SM1b9k7E3WaUhpIk=; b=xwkq7pijV48c7i+TemwbqEMd/0
-        qZYoc8x5OHRwXRietoDv7B7CCRb0f1LGrOAB0niRk+xIAQZwq2vybBbmD3GCfaJTGhW7QSktyyHHu
-        poe0HtRtJbSuaSMkhwn+uAlMrBDNwPzgA8YUF+lnifmeyBM8X1BX5X3B29I+/1QG1Rmq+dnZHcEa1
-        wLxAsJGayBpvYqse8wbLVamsROkFuJidefqlcW+34N0XVLnD/geLZBkzcktw1wFER9sMS3Dsr7ifV
-        m7hT9uq5oUhcSDhvv7MbeSd09T6N2Y717xFClQfKdsP/R6WyXCpzW5b1y6HGr55iM3cTVVyn+jHTd
-        6RIG0YSQ==;
-Received: from [177.34.20.96] (port=44604 helo=[192.168.0.28])
+        bh=+9yYQvPdqu/4ckQremg+mZtepkUtNgj5O30UnNMkG3w=; b=1I9NjLgfXph4PCH5IRGFnTTpvK
+        es0ioV8NiTwRSy91IX4ZqnXxkBBlukmuuES/ui3CNCZgUHkdco+sFkF1vShQNPLGPkWMvVRa/kocC
+        JvYMZpd5bUIX829puwT6FbfeZtVshu2u6Ly2SHL4q4IPLUN9RP15ceaXS63O6GFz9VrskIAWuKDce
+        IfbQZKlB97ETjyuBOKJbfLO26aFK8kIuzfLUCGEFRN3ZJ+IcwQ639bBCqvnyAzDJEbeys6mGEHLA7
+        VV6lB/vI9VbmXsJuMOa1cIGcaMXm/RQQS2Pc0xfd9+//BQBPnlSZvbb4L4Sqn5cdU/kdiGHnBa9Tr
+        XzCoEoxQ==;
+Received: from [177.34.20.96] (port=57660 helo=castello.castello.in)
         by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
         (Exim 4.91)
         (envelope-from <matheus@castello.eng.br>)
-        id 1hV2Kd-0021VO-LO; Sun, 26 May 2019 20:13:35 -0300
-Subject: Re: [PATCH v2 2/4] dt-bindings: power: supply: Max17040: Add low
- level SOC alert threshold
-To:     Rob Herring <robh@kernel.org>
-Cc:     sre@kernel.org, krzk@kernel.org, mark.rutland@arm.com,
-        cw00.choi@samsung.com, b.zolnierkie@samsung.com,
-        lee.jones@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CAJKOXPfvs=uETF0-xpwCWc5khSpWjpz2zz354Jcx1bVjm9cG2A@mail.gmail.com>
- <20190415012635.6369-1-matheus@castello.eng.br>
- <20190415012635.6369-3-matheus@castello.eng.br>
- <20190429221353.GA25837@bogus>
+        id 1hV5Hz-003JNX-W4; Sun, 26 May 2019 23:23:04 -0300
 From:   Matheus Castello <matheus@castello.eng.br>
-Message-ID: <bca953be-8e9e-b20c-abeb-42f3615c7ddb@castello.eng.br>
-Date:   Sun, 26 May 2019 20:13:31 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+To:     sre@kernel.org, krzk@kernel.org, robh+dt@kernel.org
+Cc:     mark.rutland@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, lee.jones@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matheus Castello <matheus@castello.eng.br>
+Subject: [PATCH v3 0/5] power: supply: MAX17040: Add IRQ for low level and alert SOC changes
+Date:   Sun, 26 May 2019 23:22:53 -0300
+Message-Id: <20190527022258.32748-1-matheus@castello.eng.br>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <CAJKOXPf=nPrmw6Vzi_=LmO=dVsV4Gvoc-q75XP2FBEgm9Gxv0A@mail.gmail.com>
+References: <CAJKOXPf=nPrmw6Vzi_=LmO=dVsV4Gvoc-q75XP2FBEgm9Gxv0A@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190429221353.GA25837@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - br164.hostgator.com.br
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -65,13 +58,13 @@ X-AntiAbuse: Sender Address Domain - castello.eng.br
 X-BWhitelist: no
 X-Source-IP: 177.34.20.96
 X-Source-L: No
-X-Exim-ID: 1hV2Kd-0021VO-LO
+X-Exim-ID: 1hV5Hz-003JNX-W4
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.0.28]) [177.34.20.96]:44604
+X-Source-Sender: (castello.castello.in) [177.34.20.96]:57660
 X-Source-Auth: matheus@castello.eng.br
-X-Email-Count: 8
+X-Email-Count: 15
 X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
 X-Local-Domain: yes
 Sender: linux-pm-owner@vger.kernel.org
@@ -79,84 +72,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/29/19 7:13 PM, Rob Herring wrote:
-> On Sun, Apr 14, 2019 at 10:26:33PM -0300, Matheus Castello wrote:
->> For configure low level state of charge threshold alert signaled from
->> max17040 we add "maxim,alert-soc-level" property.
->>
->> Signed-off-by: Matheus Castello <matheus@castello.eng.br>
->> ---
->>   .../power/supply/max17040_battery.txt         | 24 +++++++++++++++++++
->>   1 file changed, 24 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
->> new file mode 100644
->> index 000000000000..9b2cc67d556f
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
->> @@ -0,0 +1,24 @@
->> +max17040_battery
->> +~~~~~~~~~~~~~~~~
->> +
->> +Required properties :
->> + - compatible : "maxim,max17040" or "maxim,max77836-battery"
-> 
-> This is really a charger, not a battery.
-> 
+This series add IRQ handler for low level SOC alert, define a devicetree
+binding attribute to configure the alert level threshold and check for
+changes in SOC and power supply status for send uevents.
 
-max17040 is a fuel gauge, max77836 MUIC has it integrated. Because of 
-this we use it in the compatible list.
+Max17040 have a pin for alert host about low level state of charge and
+this alert can be configured in a threshold from 1% up to 32% of SOC.
 
->> +
->> +Optional properties :
->> +- maxim,alert-soc-level :	The alert threshold that sets the state of
->> + 				charge level where an interrupt is generated.
->> +                          	Can be configured from 1 up to 32. If skipped
->> +				the power up default value of 4 will be used.
-> 
-> Units? This is a low or high alert? Does a common property make sense
-> here?
-> 
+Tested on Toradex Colibri iMX7D, with a SparkFun Lipo Fuel Gauge module
+based on MAXIM MAX17043.
 
-It is a low level alert. I will change the name of the property to 
-"maxim,alert-low-soc-level" to make this clear and I will put the 
-percent unit in the description.
+Thanks Krzysztof and Rob for yours time reviewing it. Let me know what
+you think about the fixes.
 
-I do not find any common property that I can use here, if I am wrong let 
-me know.
+Krzysztof I added a new patch to the series to check the battery charge up
+and clear ALRT bit when the SOC is above alert threshold, so not generating
+duplicate interrupts.
 
->> +- interrupt-parent : 		The GPIO bank from the interrupt line.
-> 
-> Drop this. interrupt-parent is implied.
+Changes since v1:
+(Suggested by Krzysztof Kozlowski)
+- Put common code from max17040_work and max17040_thread_handler in a function
+- Code style fixes
+- Define mask and low level threshold alert default
+- Check return value from max17040_set_soc_threshold
+- Set low level state of charge threshold before IRQ
+- CC maintainers from drivers/mfd/max14577
+- Use flags from FDT client->flags instead hard coded it
+- Mention interrupts on DT Documentation
+- Fix "maxim,max77836-battery" missed from DT Documentation
+- Fix commit description
 
-Ok, I will do.
+Changes since v2:
+(Suggested by Krzysztof Kozlowski)
+- Fix ebusy exception
+- Remove device_init_wakeup from probe, let wakeup-source from DT decide that
+- Fix the use of "charger" to fuel-gauge on device tree description
+- Clear ALRT bit while setting the SOC threshold
+- Check SOC and clear ALRT bit when the SOC are above alert threshold
+- Fix unnecessary uevent when SOC is an ERRNO
+- Notify user space when power supply status change
 
-> 
->> +- interrupts : 			Interrupt line see Documentation/devicetree/
->> +				bindings/interrupt-controller/interrupts.txt
->> +
->> +Example:
->> +
->> +	battery-charger@36 {
->> +		compatible = "maxim,max17040";
->> +		reg = <0x36>;
->> +		maxim,alert-soc-level = <10>;
->> +		interrupt-parent = <&gpio7>;
->> +		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
-> 
-> Usually there are battery properties that need to be described too...
-> 
+(Suggested by Rob Herring)
+- Fix the use of "charger" to fuel-gauge on device tree description
+- Add the (%) units on the description of property
+- Drop interrupt-parent
+- Fix name of property to let clear that is a low level SOC alert
 
-I will fix this for "battery-fuel-gauge@36". I will also add the 
-description for wake-source as optional property.
+Matheus Castello (5):
+  power: supply: max17040: Add IRQ handler for low SOC alert
+  dt-bindings: power: supply: Max17040: Add low level SOC alert
+    threshold
+  power: supply: max17040: Config alert SOC low level threshold from FDT
+  power: supply: max17040: Clear ALRT bit when the SOC are above
+    threshold
+  power: supply: max17040: Send uevent in SOC and status change
 
-Thanks.
+ .../power/supply/max17040_battery.txt         |  28 ++++
+ drivers/power/supply/max17040_battery.c       | 134 +++++++++++++++++-
+ 2 files changed, 158 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
 
-Best Regards,
-Matheus Castello
+--
+2.20.1
 
->> +	};
->> -- 
->> 2.17.0
->>
