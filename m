@@ -2,31 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4102B23C
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 12:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C412B263
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 12:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfE0KeF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 May 2019 06:34:05 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56694 "EHLO
+        id S1726377AbfE0KpV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 May 2019 06:45:21 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:44511 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbfE0KeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 May 2019 06:34:05 -0400
+        with ESMTP id S1725943AbfE0KpV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 May 2019 06:45:21 -0400
 Received: from 79.184.255.36.ipv4.supernova.orange.pl (79.184.255.36) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
- id 6298d57505205ada; Mon, 27 May 2019 12:34:02 +0200
+ id 294efc5ec800b2d8; Mon, 27 May 2019 12:45:18 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH] drivers: base: power: Use of_clk_get_parent_count()
-Date:   Mon, 27 May 2019 12:34:02 +0200
-Message-ID: <2586134.4dTKnEaoxt@kreacher>
-In-Reply-To: <20190525120155.108948-1-wangkefeng.wang@huawei.com>
-References: <20190525120155.108948-1-wangkefeng.wang@huawei.com>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v2] PM: sleep: Add kerneldoc comments to some functions
+Date:   Mon, 27 May 2019 12:45:18 +0200
+Message-ID: <36259828.LPqo0PWuvG@kreacher>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -35,32 +29,87 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Saturday, May 25, 2019 2:01:55 PM CEST Kefeng Wang wrote:
-> Use of_clk_get_parent_count() instead of open coding.
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  drivers/base/power/clock_ops.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
-> index 59d19dd64928..9c7e83267eac 100644
-> --- a/drivers/base/power/clock_ops.c
-> +++ b/drivers/base/power/clock_ops.c
-> @@ -195,8 +195,7 @@ int of_pm_clk_add_clks(struct device *dev)
->  	if (!dev || !dev->of_node)
->  		return -EINVAL;
->  
-> -	count = of_count_phandle_with_args(dev->of_node, "clocks",
-> -					   "#clock-cells");
-> +	count = of_clk_get_parent_count(dev->of_node);
->  	if (count <= 0)
->  		return -ENODEV;
->  
-> 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I need someone to look at this from DT perspective.
+Add kerneldoc comments to pm_suspend_via_firmware(),
+pm_resume_via_firmware() and pm_suspend_via_s2idle() to explain
+what they do.
 
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+-> v2:
+  Put more information into the pm_suspend_via_firmware() kerneldoc comment.
+
+---
+ include/linux/suspend.h |   31 +++++++++++++++++++++++++++++++
+ kernel/power/suspend.c  |    6 ++++++
+ 2 files changed, 37 insertions(+)
+
+Index: linux-pm/include/linux/suspend.h
+===================================================================
+--- linux-pm.orig/include/linux/suspend.h
++++ linux-pm/include/linux/suspend.h
+@@ -227,11 +227,42 @@ static inline void pm_set_resume_via_fir
+ 	pm_suspend_global_flags |= PM_SUSPEND_FLAG_FW_RESUME;
+ }
+ 
++/**
++ * pm_suspend_via_firmware - Check if platform firmware will suspend the system.
++ *
++ * To be called during system-wide power management transitions to sleep states
++ * or during the subsequent system-wide transitions back to the working state.
++ *
++ * Return 'true' if the platform firmware is going to be invoked at the end of
++ * the system-wide power management transition (to a sleep state) in progress in
++ * order to complete it, or if the platform firmware has been invoked in order
++ * to complete the last (or preceding) transition of the system to a sleep
++ * state.
++ *
++ * This matters if the caller needs or wants to carry out some special actions
++ * depending on whether or not control will be passed to the platform firmware
++ * subsequently (for example, the device may need to be reset before letting the
++ * platform firmware manipulate it, which is not necessary when the platform
++ * firmware is not going to be invoked) or when such special actions may have
++ * been carried out during the preceding transition of the system to a sleep
++ * state (as they may need to be taken into account).
++ */
+ static inline bool pm_suspend_via_firmware(void)
+ {
+ 	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_FW_SUSPEND);
+ }
+ 
++/**
++ * pm_resume_via_firmware - Check if platform firmware has woken up the system.
++ *
++ * To be called during system-wide power management transitions from sleep
++ * states.
++ *
++ * Return 'true' if the platform firmware has passed control to the kernel at
++ * the beginning of the system-wide power management transition in progress, so
++ * the event that woke up the system from sleep has been handled by the platform
++ * firmware.
++ */
+ static inline bool pm_resume_via_firmware(void)
+ {
+ 	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_FW_RESUME);
+Index: linux-pm/kernel/power/suspend.c
+===================================================================
+--- linux-pm.orig/kernel/power/suspend.c
++++ linux-pm/kernel/power/suspend.c
+@@ -62,6 +62,12 @@ static DECLARE_SWAIT_QUEUE_HEAD(s2idle_w
+ enum s2idle_states __read_mostly s2idle_state;
+ static DEFINE_RAW_SPINLOCK(s2idle_lock);
+ 
++/**
++ * pm_suspend_via_s2idle - Check if suspend-to-idle is the default suspend.
++ *
++ * Return 'true' if suspend-to-idle has been selected as the default system
++ * suspend method.
++ */
+ bool pm_suspend_via_s2idle(void)
+ {
+ 	return mem_sleep_current == PM_SUSPEND_TO_IDLE;
 
 
 
