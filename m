@@ -2,34 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B382B285
-	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 12:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523FB2B28F
+	for <lists+linux-pm@lfdr.de>; Mon, 27 May 2019 12:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfE0Kxp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 May 2019 06:53:45 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:63322 "EHLO
+        id S1726425AbfE0K4K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 May 2019 06:56:10 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:55312 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726476AbfE0Kxo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 May 2019 06:53:44 -0400
+        with ESMTP id S1725814AbfE0K4K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 May 2019 06:56:10 -0400
 Received: from 79.184.255.36.ipv4.supernova.orange.pl (79.184.255.36) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
- id 3e9dcd1393346651; Mon, 27 May 2019 12:53:42 +0200
+ id c71e16143d68c4a3; Mon, 27 May 2019 12:56:08 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Mathieu Malaterre <malat@debian.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] powerpc/power: Expose pfn_is_nosave prototype
-Date:   Mon, 27 May 2019 12:53:41 +0200
-Message-ID: <1929721.iDiXxTFbjN@kreacher>
-In-Reply-To: <20190524104418.17194-1-malat@debian.org>
-References: <20190523114736.30268-1-malat@debian.org> <20190524104418.17194-1-malat@debian.org>
+To:     x86 <x86@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Ido Schimmel <idosch@idosch.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Laura Abbott <labbott@fedoraproject.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Simon Schricker <sschricker@suse.de>,
+        Borislav Petkov <bp@suse.de>, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH] x86: intel_epb: Do not build when CONFIG_PM is unset
+Date:   Mon, 27 May 2019 12:56:07 +0200
+Message-ID: <3844875.YPkTDDlcrF@kreacher>
+In-Reply-To: <20190509174338.GA24432@splinter>
+References: <1637073.gl2OfxWTjI@aspire.rjw.lan> <1627338.1fd8ofggM8@kreacher> <20190509174338.GA24432@splinter>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -38,82 +40,110 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, May 24, 2019 12:44:18 PM CEST Mathieu Malaterre wrote:
-> The declaration for pfn_is_nosave is only available in
-> kernel/power/power.h. Since this function can be override in arch,
-> expose it globally. Having a prototype will make sure to avoid warning
-> (sometime treated as error with W=1) such as:
-> 
->   arch/powerpc/kernel/suspend.c:18:5: error: no previous prototype for 'pfn_is_nosave' [-Werror=missing-prototypes]
-> 
-> This moves the declaration into a globally visible header file and add
-> missing include to avoid a warning on powerpc. Also remove the
-> duplicated prototypes since not required anymore.
-> 
-> Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-> Signed-off-by: Mathieu Malaterre <malat@debian.org>
-> ---
-> v2: As suggestion by christophe remove duplicates prototypes
-> 
->  arch/powerpc/kernel/suspend.c | 1 +
->  arch/s390/kernel/entry.h      | 1 -
->  include/linux/suspend.h       | 1 +
->  kernel/power/power.h          | 2 --
->  4 files changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/powerpc/kernel/suspend.c b/arch/powerpc/kernel/suspend.c
-> index a531154cc0f3..9e1b6b894245 100644
-> --- a/arch/powerpc/kernel/suspend.c
-> +++ b/arch/powerpc/kernel/suspend.c
-> @@ -8,6 +8,7 @@
->   */
->  
->  #include <linux/mm.h>
-> +#include <linux/suspend.h>
->  #include <asm/page.h>
->  #include <asm/sections.h>
->  
-> diff --git a/arch/s390/kernel/entry.h b/arch/s390/kernel/entry.h
-> index 20420c2b8a14..b2956d49b6ad 100644
-> --- a/arch/s390/kernel/entry.h
-> +++ b/arch/s390/kernel/entry.h
-> @@ -63,7 +63,6 @@ void __init startup_init(void);
->  void die(struct pt_regs *regs, const char *str);
->  int setup_profiling_timer(unsigned int multiplier);
->  void __init time_init(void);
-> -int pfn_is_nosave(unsigned long);
->  void s390_early_resume(void);
->  unsigned long prepare_ftrace_return(unsigned long parent, unsigned long sp, unsigned long ip);
->  
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 6b3ea9ea6a9e..e8b8a7bede90 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -395,6 +395,7 @@ extern bool system_entering_hibernation(void);
->  extern bool hibernation_available(void);
->  asmlinkage int swsusp_save(void);
->  extern struct pbe *restore_pblist;
-> +int pfn_is_nosave(unsigned long pfn);
->  #else /* CONFIG_HIBERNATION */
->  static inline void register_nosave_region(unsigned long b, unsigned long e) {}
->  static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
-> diff --git a/kernel/power/power.h b/kernel/power/power.h
-> index 9e58bdc8a562..44bee462ff57 100644
-> --- a/kernel/power/power.h
-> +++ b/kernel/power/power.h
-> @@ -75,8 +75,6 @@ static inline void hibernate_reserved_size_init(void) {}
->  static inline void hibernate_image_size_init(void) {}
->  #endif /* !CONFIG_HIBERNATION */
->  
-> -extern int pfn_is_nosave(unsigned long);
-> -
->  #define power_attr(_name) \
->  static struct kobj_attribute _name##_attr = {	\
->  	.attr	= {				\
-> 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-With an ACK from the powerpc maintainers, I could apply this one.
+Commit 9ed0985332a6 ("x86: intel_epb: Take CONFIG_PM into account")
+prevented the majority of the Performance and Energy Bias Hint (EPB)
+handling code from being built when CONFIG_PM is unset to fix a
+regression introduced by commit b9c273babce7 ("PM / arch: x86:
+MSR_IA32_ENERGY_PERF_BIAS sysfs interface").
 
+In hindsight, however, it would be better to skip all of the EPB
+handling code for CONFIG_PM unset as there really is no reason for
+it to be there in that case.  Namely, if the EPB is not touched
+by the kernel at all with CONFIG_PM unset, there is no need to
+worry about modifying the EPB inadvertently on CPU online and since
+the system will not suspend or hibernate then, there is no need to
+worry about possible modifications of the EPB by the platform
+firmware during system-wide PM transitions.
+
+For this reason, revert the changes made by commit 9ed0985332a6
+and only allow intel_epb.o to be built when CONFIG_PM is set.
+
+Note that this changes the behavior of the kernels built with
+CONFIG_PM unset as they will not modify the EPB on boot if it is
+zero initially any more, so it is not a fix strictly speaking, but
+users building their kernels with CONFIG_PM unset really should not
+expect them to take energy efficiency into account.  Moreover, if
+CONFIG_PM is unset for performance reasons, leaving EPB as set
+initially by the platform firmware will actually be consistent
+with the user's expectations.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+This is complementary to the EPB handling changes made in the current
+development cycle, so IMO it would be good to do it in this cycle too
+if there are no technical concerns or objections regarding it.
+
+---
+ arch/x86/kernel/cpu/Makefile    |    5 ++++-
+ arch/x86/kernel/cpu/intel_epb.c |   22 +---------------------
+ 2 files changed, 5 insertions(+), 22 deletions(-)
+
+Index: linux-pm/arch/x86/kernel/cpu/Makefile
+===================================================================
+--- linux-pm.orig/arch/x86/kernel/cpu/Makefile
++++ linux-pm/arch/x86/kernel/cpu/Makefile
+@@ -28,7 +28,10 @@ obj-y			+= cpuid-deps.o
+ obj-$(CONFIG_PROC_FS)	+= proc.o
+ obj-$(CONFIG_X86_FEATURE_NAMES) += capflags.o powerflags.o
+ 
+-obj-$(CONFIG_CPU_SUP_INTEL)		+= intel.o intel_pconfig.o intel_epb.o
++ifdef CONFIG_CPU_SUP_INTEL
++obj-y			+= intel.o intel_pconfig.o
++obj-$(CONFIG_PM)	+= intel_epb.o
++endif
+ obj-$(CONFIG_CPU_SUP_AMD)		+= amd.o
+ obj-$(CONFIG_CPU_SUP_HYGON)		+= hygon.o
+ obj-$(CONFIG_CPU_SUP_CYRIX_32)		+= cyrix.o
+Index: linux-pm/arch/x86/kernel/cpu/intel_epb.c
+===================================================================
+--- linux-pm.orig/arch/x86/kernel/cpu/intel_epb.c
++++ linux-pm/arch/x86/kernel/cpu/intel_epb.c
+@@ -97,7 +97,6 @@ static void intel_epb_restore(void)
+ 	wrmsrl(MSR_IA32_ENERGY_PERF_BIAS, (epb & ~EPB_MASK) | val);
+ }
+ 
+-#ifdef CONFIG_PM
+ static struct syscore_ops intel_epb_syscore_ops = {
+ 	.suspend = intel_epb_save,
+ 	.resume = intel_epb_restore,
+@@ -194,25 +193,6 @@ static int intel_epb_offline(unsigned in
+ 	return 0;
+ }
+ 
+-static inline void register_intel_ebp_syscore_ops(void)
+-{
+-	register_syscore_ops(&intel_epb_syscore_ops);
+-}
+-#else /* !CONFIG_PM */
+-static int intel_epb_online(unsigned int cpu)
+-{
+-	intel_epb_restore();
+-	return 0;
+-}
+-
+-static int intel_epb_offline(unsigned int cpu)
+-{
+-	return intel_epb_save();
+-}
+-
+-static inline void register_intel_ebp_syscore_ops(void) {}
+-#endif
+-
+ static __init int intel_epb_init(void)
+ {
+ 	int ret;
+@@ -226,7 +206,7 @@ static __init int intel_epb_init(void)
+ 	if (ret < 0)
+ 		goto err_out_online;
+ 
+-	register_intel_ebp_syscore_ops();
++	register_syscore_ops(&intel_epb_syscore_ops);
+ 	return 0;
+ 
+ err_out_online:
 
 
 
