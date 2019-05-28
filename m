@@ -2,99 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2F22CA46
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2019 17:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1D32CA9C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2019 17:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbfE1PWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 May 2019 11:22:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34630 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726719AbfE1PWC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 28 May 2019 11:22:02 -0400
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8697220665;
-        Tue, 28 May 2019 15:21:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559056921;
-        bh=PalDUvKBMeq6uuZipz24GPUGFzG5XkO+thRy1zun59M=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=VziaK6AGw22sF91IPVjUlLI7s8SEbHlbbR1CSpa1YqBT8UxDZoOWojiMM3382H+JT
-         +MZcVPm1TwlQSpEFl0F1+rKWz7a9M3QCnT8QhNJXNH6pAr0zp3c4xRsuQ4szoKw6Am
-         aaStj644mgDbJhWmtR/8ipXC9RtNt1dVev24xfLI=
-Date:   Tue, 28 May 2019 17:21:56 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Dongli Zhang <dongli.zhang@oracle.com>
-cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org,
-        Keith Busch <keith.busch@intel.com>,
-        Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: "nosmt" breaks resuming from hibernation (was Re: [5.2-rc1 regression]:
- nvme vs. hibernation)
-In-Reply-To: <nycvar.YFH.7.76.1905271126480.1962@cbobk.fhfr.pm>
-Message-ID: <nycvar.YFH.7.76.1905281709130.1962@cbobk.fhfr.pm>
-References: <nycvar.YFH.7.76.1905241706280.1962@cbobk.fhfr.pm> <20190524154429.GE15192@localhost.localdomain> <nycvar.YFH.7.76.1905250023380.1962@cbobk.fhfr.pm> <92a15981-dfdc-0ac9-72ee-920555a3c1a4@oracle.com>
- <nycvar.YFH.7.76.1905271126480.1962@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1726619AbfE1PtC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 May 2019 11:49:02 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:59632 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726452AbfE1PtC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 May 2019 11:49:02 -0400
+Received: from 79.184.255.225.ipv4.supernova.orange.pl (79.184.255.225) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
+ id f088da01f68d15dd; Tue, 28 May 2019 17:48:59 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Mathieu Malaterre <malat@debian.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] powerpc/power: Expose pfn_is_nosave prototype
+Date:   Tue, 28 May 2019 17:48:58 +0200
+Message-ID: <7467366.tOSDWnDKPa@kreacher>
+In-Reply-To: <875zpvqsy9.fsf@concordia.ellerman.id.au>
+References: <20190523114736.30268-1-malat@debian.org> <1929721.iDiXxTFbjN@kreacher> <875zpvqsy9.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 27 May 2019, Jiri Kosina wrote:
-
-> > Looks this has been discussed in the past.
-> > 
-> > http://lists.infradead.org/pipermail/linux-nvme/2019-April/023234.html
-> > 
-> > I created a fix for a case but not good enough.
-> > 
-> > http://lists.infradead.org/pipermail/linux-nvme/2019-April/023277.html
+On Tuesday, May 28, 2019 3:16:30 AM CEST Michael Ellerman wrote:
+> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
+> > On Friday, May 24, 2019 12:44:18 PM CEST Mathieu Malaterre wrote:
+> >> The declaration for pfn_is_nosave is only available in
+> >> kernel/power/power.h. Since this function can be override in arch,
+> >> expose it globally. Having a prototype will make sure to avoid warning
+> >> (sometime treated as error with W=1) such as:
+> >> 
+> >>   arch/powerpc/kernel/suspend.c:18:5: error: no previous prototype for 'pfn_is_nosave' [-Werror=missing-prototypes]
+> >> 
+> >> This moves the declaration into a globally visible header file and add
+> >> missing include to avoid a warning on powerpc. Also remove the
+> >> duplicated prototypes since not required anymore.
+> >> 
+> >> Cc: Christophe Leroy <christophe.leroy@c-s.fr>
+> >> Signed-off-by: Mathieu Malaterre <malat@debian.org>
+> >> ---
+> >> v2: As suggestion by christophe remove duplicates prototypes
+> >> 
+> >>  arch/powerpc/kernel/suspend.c | 1 +
+> >>  arch/s390/kernel/entry.h      | 1 -
+> >>  include/linux/suspend.h       | 1 +
+> >>  kernel/power/power.h          | 2 --
+> >>  4 files changed, 2 insertions(+), 3 deletions(-)
+> >> 
+> >> diff --git a/kernel/power/power.h b/kernel/power/power.h
+> >> index 9e58bdc8a562..44bee462ff57 100644
+> >> --- a/kernel/power/power.h
+> >> +++ b/kernel/power/power.h
+> >> @@ -75,8 +75,6 @@ static inline void hibernate_reserved_size_init(void) {}
+> >>  static inline void hibernate_image_size_init(void) {}
+> >>  #endif /* !CONFIG_HIBERNATION */
+> >>  
+> >> -extern int pfn_is_nosave(unsigned long);
+> >> -
+> >>  #define power_attr(_name) \
+> >>  static struct kobj_attribute _name##_attr = {	\
+> >>  	.attr	= {				\
+> >> 
+> >
+> > With an ACK from the powerpc maintainers, I could apply this one.
 > 
-> That removes the warning, but I still seem to have ~1:1 chance of reboot 
-> (triple fault?) immediately after hibernation image is read from disk. 
+> Sent.
 
-[ some x86/PM folks added ]
+Thanks!
 
-I isolated this to 'nosmt' being present in the "outer" (resuming) kernel, 
-and am still not sure whether this is x86 issue or nvme/PCI/blk-mq issue.
 
-For the newcomers to this thread: on my thinkpad x270, 'nosmt' reliably 
-breaks resume from hibernation; after the image is read out from disk and 
-attempt is made to jump to the old kernel, machine reboots.
-
-I verified that it succesfully makes it to the point where restore_image() 
-is called from swsusp_arch_resume() (and verified that only BSP is alive 
-at that time), but the old kernel never comes back and triplefault-like 
-reboot happens.
-
-It's sufficient to remove "nosmt" from the *resuming* kernel, and that 
-makes the issue go away (and we resume to the old kernel that has SMT 
-correctly disabled). So it has something to do with enabling & disabling 
-the siblings before we do the CR3 dance and jump to the old kernel.
-
-I haven't yet been able to isolate this to being (or not being) relevant 
-to the pending nvme CQS warning above.
-
-Any ideas how to debug this welcome. I haven't been able to reproduce it 
-in a VM, so it's either something specific to that machine in general, or 
-to nvme specifically.
-
-Dongli Zhang, could you please try hibernation with "nosmt" on the system 
-where you originally saw the initial pending CQS warning? Are you by any 
-chance seeing the issue as well?
-
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
 
