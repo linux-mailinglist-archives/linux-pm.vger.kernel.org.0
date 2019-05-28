@@ -2,136 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 879E82C070
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2019 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A965E2C086
+	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2019 09:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbfE1HkI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 May 2019 03:40:08 -0400
-Received: from mail-eopbgr770071.outbound.protection.outlook.com ([40.107.77.71]:63759
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727853AbfE1HkF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 28 May 2019 03:40:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector1-analog-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EVygfSY8hqy/DBUvsHRCgGvieeoiCENlb8QcgTW8Qa0=;
- b=ug3p+80+pta3QSOyYVopWCIPknnTa/9XApeIFW+44+SXRahs8pvbg98CvxDZWD2q7UoHIhgUD6Sn7ZbGyOWHdj4WAzkhg9cumlMLts6dyltoEMjlw9eglOAVG8lj96mIW2ArwyzQcb/gVfwCJxWUUom9Q8RHLT+KaOaucx79tQQ=
-Received: from BN3PR03CA0110.namprd03.prod.outlook.com (2603:10b6:400:4::28)
- by BLUPR03MB552.namprd03.prod.outlook.com (2a01:111:e400:883::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1922.22; Tue, 28 May
- 2019 07:39:58 +0000
-Received: from SN1NAM02FT022.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::202) by BN3PR03CA0110.outlook.office365.com
- (2603:10b6:400:4::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1943.16 via Frontend
- Transport; Tue, 28 May 2019 07:39:58 +0000
-Authentication-Results: spf=pass (sender IP is 137.71.25.55)
- smtp.mailfrom=analog.com; lists.freedesktop.org; dkim=none (message not
- signed) header.d=none;lists.freedesktop.org; dmarc=bestguesspass action=none
- header.from=analog.com;
-Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
- 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
- client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
-Received: from nwd2mta1.analog.com (137.71.25.55) by
- SN1NAM02FT022.mail.protection.outlook.com (10.152.72.148) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1922.16
- via Frontend Transport; Tue, 28 May 2019 07:39:57 +0000
-Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
-        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x4S7duOZ023275
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Tue, 28 May 2019 00:39:56 -0700
-Received: from saturn.analog.com (10.50.1.244) by NWD2HUBCAS7.ad.analog.com
- (10.64.69.107) with Microsoft SMTP Server id 14.3.408.0; Tue, 28 May 2019
- 03:39:56 -0400
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, <linux-omap@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <devel@driverdev.osuosl.org>,
-        <linux-usb@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <andriy.shevchenko@linux.intel.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH 3/3][V2] lib: re-introduce new match_string() helper/macro
-Date:   Tue, 28 May 2019 10:39:32 +0300
-Message-ID: <20190528073932.25365-3-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190528073932.25365-1-alexandru.ardelean@analog.com>
-References: <20190508112842.11654-1-alexandru.ardelean@analog.com>
- <20190528073932.25365-1-alexandru.ardelean@analog.com>
+        id S1727271AbfE1Hp7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 May 2019 03:45:59 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:33410 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727049AbfE1Hp7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 May 2019 03:45:59 -0400
+Received: by mail-lj1-f196.google.com with SMTP id w1so16734984ljw.0;
+        Tue, 28 May 2019 00:45:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AqCbj+PvdF23UrKqSJAv31hwd4U45LJaqwM+eNLDJ3M=;
+        b=nMji94foU88CwozI5MqZAp75FohaMXC/RQMGAFKxXkyls2EQCwtkGHu8WybWQwFHyk
+         szM7HghMNBGWaTGQh6FDNs7uCRmEiEA+hYXxm7BjJo+VJVIpsHW+lSujfjDCAg4HWBWy
+         9QKm/+AITn1eiPas7WbJGk/vXlgXkYVqT9xOMKidaXesbNZi/KjRKhao1xkprQ9maaDz
+         sO4fslFKKYc9ZGuqzWlNxLXdgcN4v6FdxI8lV8SeUuuLsNqHqizhS16qdk4X5cjCprJG
+         EVlfpt41zFTlwbYq1CT4geu78uqw02osYUeKtpGPNSwTuHDCQ4havRCmzsn2Qn+9G8T8
+         5naA==
+X-Gm-Message-State: APjAAAVknhqNYYXBeS7UFrh3hZlRIetapErfHBAVF3uIIsyxe0iaQ3LV
+        G4Ie0iL3Xpch4/BOo87pmIpYSoeF644G2UyrDUI=
+X-Google-Smtp-Source: APXvYqwnoCo6SJTjNhrqM6Tn9L0kCkH7psfShIb3MEMqL6q3sprsI8Mw18tbRD01Q1Glqdb0OIELkMMx9S+RytEI1MM=
+X-Received: by 2002:a2e:9185:: with SMTP id f5mr34080351ljg.51.1559029557096;
+ Tue, 28 May 2019 00:45:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(1496009)(136003)(39860400002)(346002)(396003)(376002)(2980300002)(199004)(189003)(126002)(2441003)(86362001)(44832011)(5660300002)(2201001)(478600001)(446003)(476003)(2616005)(53416004)(47776003)(316002)(11346002)(2870700001)(2906002)(6666004)(356004)(50226002)(51416003)(7696005)(7416002)(76176011)(48376002)(4326008)(305945005)(70586007)(70206006)(336012)(26005)(77096007)(186003)(1076003)(7636002)(246002)(486006)(426003)(7406005)(110136005)(54906003)(106002)(107886003)(50466002)(36756003)(8936002)(8676002)(921003)(83996005)(1121003)(2101003);DIR:OUT;SFP:1101;SCL:1;SRVR:BLUPR03MB552;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;A:1;MX:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9f7495c6-88de-4750-c0e9-08d6e33faf63
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(4709054)(1401327)(2017052603328);SRVR:BLUPR03MB552;
-X-MS-TrafficTypeDiagnostic: BLUPR03MB552:
-X-Microsoft-Antispam-PRVS: <BLUPR03MB5526A3F85F374B6EF9329F1F91E0@BLUPR03MB552.namprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1443;
-X-Forefront-PRVS: 00514A2FE6
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: MswgKhZP9m+ZsGUEhWl3phwXCL8yuqzj7xcxpK+dGlJBf9m5zMl51gqC3LUtKdWQ8Os49FCltfeNbu6Phw/B8l5WNlH00oAhRzdjikewQHYUEmLqJ6/urfczkkAV7S6v3P1UMtUMTOYDySCPLD3RO66kjwZftNeRvVV3dsDqCax4qYOjNj2PWP5gkM5PjRZmJWiCQ5YjWYviSRnNrXmzdalwSZTQ416f6pMfl95WCkKeJFuhdayQMWJGsRNhTOHuxm5bGOp4NnJa6ZTV5K+ilvVE4Xb082rHyJdnAOFnjmjlMMgU1yiCJ2yKYrrmhTGSsWl7mABejle5Gq03Z59rpn0+AbER3kkbBxVnYXW8nX3mrHd8Gqzr89K0YpmuIcGMyscsEWrsfpd9tI6dbYg4W4+zRy2MwWGNPPr9JWXwDBM=
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2019 07:39:57.3627
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f7495c6-88de-4750-c0e9-08d6e33faf63
-X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLUPR03MB552
+References: <5cec74e8.1c69fb81.37335.9d7b@mx.google.com> <0edab48f-06e5-9ed8-09be-7c9976ae1afb@collabora.com>
+In-Reply-To: <0edab48f-06e5-9ed8-09be-7c9976ae1afb@collabora.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 May 2019 09:45:45 +0200
+Message-ID: <CAMuHMdUF1Csi1ZMccOj=kurijMLcA6G+TP_spsE+fnMvZR71Vw@mail.gmail.com>
+Subject: Re: linusw/for-next boot bisection: v5.2-rc1-8-g73a790c68d7e on rk3288-veyron-jaq
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Elaine Zhang <zhangqing@rock-chips.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Matt Hart <matthew.hart@linaro.org>, mgalka@collabora.com,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This change re-introduces `match_string()` as a macro that uses
-ARRAY_SIZE() to compute the size of the array.
+Hi Guillaume,
 
-After this change, work can start on migrating subsystems to use this new
-helper. Since the original helper is pretty used, migrating to this new one
-will take a while, and will be reviewed by each subsystem.
+On Tue, May 28, 2019 at 9:13 AM Guillaume Tucker
+<guillaume.tucker@collabora.com> wrote:
+> On 28/05/2019 00:38, kernelci.org bot wrote:
+> > * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> > * This automated bisection report was sent to you on the basis  *
+> > * that you may be involved with the breaking commit it has      *
+> > * found.  No manual investigation has been done to verify it,   *
+> > * and the root cause of the problem may be somewhere else.      *
+> > * Hope this helps!                                              *
+> > * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> >
+> > linusw/for-next boot bisection: v5.2-rc1-8-g73a790c68d7e on rk3288-veyron-jaq
+> >
+> > Summary:
+> >   Start:      73a790c68d7e Merge branch 'devel' into for-next
+> >   Details:    https://kernelci.org/boot/id/5cebf03d59b514dd627a3629
+> >   Plain log:  https://storage.kernelci.org//linusw/for-next/v5.2-rc1-8-g73a790c68d7e/arm/multi_v7_defconfig/gcc-8/lab-collabora/boot-rk3288-veyron-jaq.txt
+> >   HTML log:   https://storage.kernelci.org//linusw/for-next/v5.2-rc1-8-g73a790c68d7e/arm/multi_v7_defconfig/gcc-8/lab-collabora/boot-rk3288-veyron-jaq.html
+> >   Result:     28694e009e51 thermal: rockchip: fix up the tsadc pinctrl setting error
+> >
+> > Checks:
+> >   revert:     PASS
+> >   verify:     PASS
+> >
+> > Parameters:
+> >   Tree:       linusw
+> >   URL:        https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git/
+> >   Branch:     for-next
+> >   Target:     rk3288-veyron-jaq
+> >   CPU arch:   arm
+> >   Lab:        lab-collabora
+> >   Compiler:   gcc-8
+> >   Config:     multi_v7_defconfig
+> >   Test suite: boot
+> >
+> > Breaking commit found:
+> >
+> > -------------------------------------------------------------------------------
+> > commit 28694e009e512451ead5519dd801f9869acb1f60
+> > Author: Elaine Zhang <zhangqing@rock-chips.com>
+> > Date:   Tue Apr 30 18:09:44 2019 +0800
+> >
+> >     thermal: rockchip: fix up the tsadc pinctrl setting error
+>
+> This commit has now been reverted in mainline.  Would it be OK
+> for you to rebase your for-next branch on v5.2-rc2 or cherry-pick
+> the revert to avoid recurring bisections?
+>
+> Ideally this should have been fixed or reverted in mainline
+> before v5.2-rc1 was released, or even earlier when this was first
+> found in -next on 13th May.  Unfortunately it was overlooked and
+> then spread to other branches like yours.
 
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- include/linux/string.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+I'm afraid it's gonna spread to even more for-next branches, as most
+subsystem maintainers base their for-next branch on the previous rc1
+release.  Typically maintainers do not rebase their for-next branches,
+and do not cherry-pick fixes, unless they are critical for their
+subsystem.  So you can expect this to show up in e.g. the m68k for-next
+branch soon...
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index 7149fcdf62df..34491b075449 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -198,6 +198,15 @@ static inline int strtobool(const char *s, bool *res)
- int __match_string(const char * const *array, size_t n, const char *string);
- int __sysfs_match_string(const char * const *array, size_t n, const char *s);
- 
-+/**
-+ * match_string - matches given string in an array
-+ * @_a: array of strings
-+ * @_s: string to match with
-+ *
-+ * Helper for __match_string(). Calculates the size of @a automatically.
-+ */
-+#define match_string(_a, _s) __match_string(_a, ARRAY_SIZE(_a), _s)
-+
- /**
-  * sysfs_match_string - matches given string in an array
-  * @_a: array of strings
+Can't you mark this as a known issue, to prevent spending cycles on the
+same bisection, and sending out more bisection reports for the same
+issue?
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
