@@ -2,94 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 670132D910
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 11:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5E62DA3B
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 12:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbfE2JbI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 05:31:08 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39320 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726005AbfE2JbI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 May 2019 05:31:08 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4T9RY0a028209
-        for <linux-pm@vger.kernel.org>; Wed, 29 May 2019 05:31:07 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ssq04hg93-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Wed, 29 May 2019 05:31:07 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
-        Wed, 29 May 2019 10:31:06 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 29 May 2019 10:31:03 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4T9V2n028049590
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 May 2019 09:31:02 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B242AE045;
-        Wed, 29 May 2019 09:31:02 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CB81AE053;
-        Wed, 29 May 2019 09:31:01 +0000 (GMT)
-Received: from boston16h.aus.stglabs.ibm.com (unknown [9.3.23.78])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 29 May 2019 09:31:01 +0000 (GMT)
-From:   Abhishek Goel <huntbag@linux.vnet.ibm.com>
-To:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Abhishek Goel <huntbag@linux.vnet.ibm.com>
-Subject: [PATCH] cpupower : frequency-set -r option misses the last cpu in related cpu list
-Date:   Wed, 29 May 2019 04:30:33 -0500
-X-Mailer: git-send-email 2.17.1
-X-TM-AS-GCONF: 00
-x-cbid: 19052909-0016-0000-0000-0000028091A9
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052909-0017-0000-0000-000032DDA13B
-Message-Id: <20190529093033.30068-1-huntbag@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-29_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905290063
+        id S1725911AbfE2KS3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 May 2019 06:18:29 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46231 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725894AbfE2KS3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 May 2019 06:18:29 -0400
+Received: from kresse.hi.pengutronix.de ([2001:67c:670:100:1d::2a])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1hVvf9-0005sa-MY; Wed, 29 May 2019 12:18:27 +0200
+Message-ID: <1559125106.4039.27.camel@pengutronix.de>
+Subject: Re: [PATCH] thermal: imx: register as OF sensor
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Eduardo Valentin <edubezval@gmail.com>
+Cc:     linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        kernel@pengutronix.de, patchwork-lst@pengutronix.de
+Date:   Wed, 29 May 2019 12:18:26 +0200
+In-Reply-To: <1549966759.2546.25.camel@pengutronix.de>
+References: <20181105165134.28963-1-l.stach@pengutronix.de>
+         <20181106001152.GA4242@localhost.localdomain>
+         <1541495682.2508.11.camel@pengutronix.de>
+         <1549966759.2546.25.camel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::2a
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To set frequency on specific cpus using cpupower, following syntax can
-be used :
-cpupower -c #i frequency-set -f #f -r
+Hi Eduardo,
 
-While setting frequency using cpupower frequency-set command, if we use
-'-r' option, it is expected to set frequency for all cpus related to
-cpu #i. But it is observed to be missing the last cpu in related cpu
-list. This patch fixes the problem.
+Am Dienstag, den 12.02.2019, 11:19 +0100 schrieb Lucas Stach:
+> Hi all,
+> 
+> Am Dienstag, den 06.11.2018, 10:14 +0100 schrieb Lucas Stach:
+> > Hi Eduardo,
+> > 
+> > Am Montag, den 05.11.2018, 16:11 -0800 schrieb Eduardo Valentin:
+> > > On Mon, Nov 05, 2018 at 05:51:34PM +0100, Lucas Stach wrote:
+> > > > To make the internal sensor usable with a thermal zone description
+> > > > provided via DT, also register our device as a OF sensor.
+> > > 
+> > > Not sure I understand your patch. I see you probably want to
+> > > have thermal zones described in DT that can make use of the
+> > > imx sensors, but here you may end up in a situation with double
+> > > registration of the same driver.
+> > > 
+> > > Typically drivers will have either mode. Some of them kept
+> > > both modes, legacy and of- based, but at run time one is picked,
+> > > not both at the same time.
+> > 
+> > So the thing here is that the thermal zone registered by the driver has
+> > a value on its own, as it adds a critical trip-point for the maximum
+> > SoC temperature, as determined by the fuses.
+> > 
+> > So I think there is some merit in keeping both the "legacy" thermal
+> > zone and the OF sensor. I also don't see where this would be an issue,
+> > but I admit not having looked too closely at all the details of the
+> > thermal framework. Do you have any guidance here?
+> 
+> Any preference on how to move forward with this? This patch is blocking
+> the introduction of thermal policies to some mainline DTs.
 
-Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
----
- tools/power/cpupower/utils/cpufreq-set.c | 2 ++
- 1 file changed, 2 insertions(+)
+Please let me know how we can move forward with this. This is blocking
+other patches and has been in limbo for quite a long time.
 
-diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
-index 1eef0aed6..08a405593 100644
---- a/tools/power/cpupower/utils/cpufreq-set.c
-+++ b/tools/power/cpupower/utils/cpufreq-set.c
-@@ -306,6 +306,8 @@ int cmd_freq_set(int argc, char **argv)
- 				bitmask_setbit(cpus_chosen, cpus->cpu);
- 				cpus = cpus->next;
- 			}
-+			/* Set the last cpu in related cpus list */
-+			bitmask_setbit(cpus_chosen, cpus->cpu);
- 			cpufreq_put_related_cpus(cpus);
- 		}
- 	}
--- 
-2.17.1
-
+Regards,
+Lucas
+> > 
+> > > > 
+> > > > > > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> > > > 
+> > > > ---
+> > > >  drivers/thermal/imx_thermal.c | 17 ++++++++++++++++-
+> > > >  1 file changed, 16 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> > > > index aa452acb60b6..32f406099479 100644
+> > > > --- a/drivers/thermal/imx_thermal.c
+> > > > +++ b/drivers/thermal/imx_thermal.c
+> > > > @@ -202,7 +202,7 @@ static struct thermal_soc_data thermal_imx7d_data = {
+> > > >  
+> > > >  struct imx_thermal_data {
+> > > > > > > > > > > > > > > > > > > > > >  	struct cpufreq_policy *policy;
+> > > > > > > > > > > > > > > > > > > > > > -	struct thermal_zone_device *tz;
+> > > > > > > > > > > > > > > > > > > > > > +	struct thermal_zone_device *tz, *sensor;
+> > > > > > > > > > > > > > > > > > > > > >  	struct thermal_cooling_device *cdev;
+> > > > > > > > > > >  	enum thermal_device_mode mode;
+> > > > > > 
+> > > > > >  	struct regmap *tempmon;
+> > > > 
+> > > > @@ -338,6 +338,13 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+> > > > > >  	return 0;
+> > > > 
+> > > >  }
+> > > >  
+> > > > +static int imx_of_sensor_get_temp(void *data, int *temp)
+> > > > +{
+> > > > > > +	struct imx_thermal_data *thermal_data = data;
+> > > > 
+> > > > +
+> > > > > > +	return imx_get_temp(thermal_data->tz, temp);
+> > > > 
+> > > > +}
+> > > > +
+> > > >  static int imx_get_mode(struct thermal_zone_device *tz,
+> > > > > >  			enum thermal_device_mode *mode)
+> > > > 
+> > > >  {
+> > > > @@ -482,6 +489,10 @@ static struct thermal_zone_device_ops imx_tz_ops = {
+> > > > > >  	.set_trip_temp = imx_set_trip_temp,
+> > > > 
+> > > >  };
+> > > >  
+> > > > +static const struct thermal_zone_of_device_ops imx_tz_of_ops = {
+> > > > > > +	.get_temp = imx_of_sensor_get_temp,
+> > > > 
+> > > > +};
+> > > > +
+> > > >  static int imx_init_calib(struct platform_device *pdev, u32 ocotp_ana1)
+> > > >  {
+> > > > > >  	struct imx_thermal_data *data = platform_get_drvdata(pdev);
+> > > > 
+> > > > @@ -798,6 +809,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
+> > > > > > > > > > >  		return ret;
+> > > > > > 
+> > > > > >  	}
+> > > > 
+> > > >  
+> > > > > > > > > > > +	data->sensor = thermal_zone_of_sensor_register(&pdev->dev, 0, data,
+> > > > > > 
+> > > > > > +						       &imx_tz_of_ops);
+> > > > 
+> > > > +
+> > > > > > > > > > > > > > > > > > > > > >  	dev_info(&pdev->dev, "%s CPU temperature grade - max:%dC"
+> > > > > > > > > > >  		 " critical:%dC passive:%dC\n", data->temp_grade,
+> > > > > > 
+> > > > > >  		 data->temp_max / 1000, data->temp_critical / 1000,
+> > > > 
+> > > > @@ -848,6 +862,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
+> > > > > > > > > > >  	if (!IS_ERR(data->thermal_clk))
+> > > > > > 
+> > > > > >  		clk_disable_unprepare(data->thermal_clk);
+> > > > 
+> > > >  
+> > > > > > > > > > > > > > > > > > > > > > +	thermal_zone_of_sensor_unregister(&pdev->dev, data->sensor);
+> > > > > > > > > > > > > > > > > > > > > >  	thermal_zone_device_unregister(data->tz);
+> > > > > > > > > > >  	cpufreq_cooling_unregister(data->cdev);
+> > > > > > 
+> > > > > >  	cpufreq_cpu_put(data->policy);
+> > > > 
+> > > > -- 
+> > > > 2.19.1
+> > > > 
+> > 
+> > 
+> 
+> 
