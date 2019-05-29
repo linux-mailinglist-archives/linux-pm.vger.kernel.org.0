@@ -2,223 +2,230 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD1B2D400
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 04:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07942D412
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 05:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfE2Cxg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 May 2019 22:53:36 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43614 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726131AbfE2Cxg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 May 2019 22:53:36 -0400
-Received: by mail-pg1-f195.google.com with SMTP id f25so402899pgv.10;
-        Tue, 28 May 2019 19:53:35 -0700 (PDT)
+        id S1726141AbfE2DCc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 May 2019 23:02:32 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36186 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725816AbfE2DCc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 May 2019 23:02:32 -0400
+Received: by mail-pg1-f194.google.com with SMTP id a3so431518pgb.3;
+        Tue, 28 May 2019 20:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=IRbOxDloc34+bVD1clrnHE8qeNgQWI5zIDtydL1C1Nk=;
-        b=SVXxzt3Szs/n4Egthe5l0wstUwHu0GteoKDAV1UOOTMEs4O42+JUV93q+YzJyiNbHS
-         y/Hrj+22ObeUhL9Llc6jnyxaaAhGn/yaYUNnI1J4TB05rzceiu9GQCVnIP08Mppaj1QT
-         Xkt0T9CIf4OWKlsTUUMkviEwe4Bn2+CGNhx0M5IY2sN31sDsU5GYOtR6Ep/Oh9/kON/O
-         9FPEErzHqo47d/ZlI+2KFsDWa+Fs4N1GptqE/yqqkQ9n+1AparOin8QDEiCvDTss6o1h
-         bFqeI9VJOVud2nwvWzMv227PCqhKFrVyoSb3eCQ8WvTbCWGtvbUKIzfoEwqQPH7x8gwe
-         Y9JQ==
+        bh=X6hCgGrg1/EebBkiZczSeiIYTj567ezCT4B+Qvt2s6Q=;
+        b=E7MD6iUCYh7UBE8D8v6Tj9XnZ+OUEjLsn2t7PjrybNOo62FmkyX8L6GN+YvLcvreBf
+         1K/b9tbQ1rSkY+RJnEpVfTgNzLxYFF6usqJTmHXT+jDAo0jfSt/XLCnXIx70y9IYfxti
+         CqvXgmkijrm0NNrTeidIZWiufx4mLZZDvLr3TgD/+VqLGthmsv80JpGVXSNZ7u5UTaKU
+         65tp8D8zynwlLPjy4TGsnQgZa3bOZJ8lZb77FNu+9s7Mgu55R77DLLy8AxMfyyM/P8pg
+         vc4s/pueNLcGft20cBN2Z2nthMGvUjBkHoSnWgJS8zswD2cBuLQ8XbEUt+lAP0AoGHCB
+         hTZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IRbOxDloc34+bVD1clrnHE8qeNgQWI5zIDtydL1C1Nk=;
-        b=RyD3URBBUo87M/UnQWRgtUrUWcfroRl26l5QYjMNpjz4M03e6VuaUkbtMgli15ZUa1
-         BNbfyQP0sKvsoPn6sGNPnSZjy7D0DL+Fq5nmMNS8p0+EppCeARgw1Y/F/vHE0/PLYKnk
-         z/x4YlRBLznu57tiPEpAycOTJb5wA2aat00t3hn6oHI7kUfKHe5i/IO9aojj4yHFvFGe
-         NN6IOC115yvzl3rH5zBtjg6P9xZN65OqtkwJLfrsBT7ILiP7AetCpvx5exidOaK+le1m
-         9/edQhbF31ffyHfb/GOU8TQjHvSZelaqsOS+mZJKZvLMdaYMaY4cYb/A1pplHubNh/11
-         t+Lg==
-X-Gm-Message-State: APjAAAW7qJlmcpEdQ8uFzMM158wDwL1ei9gvs0g+mPIplcRDu1MtHP+X
-        PnJE6ZusESS8MWks/JI5a20=
-X-Google-Smtp-Source: APXvYqwSGGDaSrL60LvaJmFCEVVVRHqpXuqZZDAXAzAI/Eqcp7AQAAnqTtBorkEQgcScBJHiEeOuLQ==
-X-Received: by 2002:a63:4826:: with SMTP id v38mr10318770pga.417.1559098415428;
-        Tue, 28 May 2019 19:53:35 -0700 (PDT)
+        bh=X6hCgGrg1/EebBkiZczSeiIYTj567ezCT4B+Qvt2s6Q=;
+        b=nVGi9+CKmwkmZQ/93Y6Us1zCGrHByvXt/c/M79el38S6ByByx5b2PI0l1X5FX8aDpe
+         hveTupG+IAPwQWZdDru0novvCu3meY1NzzU09jaG7jXjAwabI2Ow901TXObdhdrSVKtO
+         m3dRD9Y41jBOczZ4r289ZtIJ93NNATbcdH+Q5KvjqIog/AlA5dX1PfxS6H1sXIyFMPzp
+         dkbpbAJA4k7tTkI8V0P1RC98E5NoGwGnxuFgLJ5GjBkhjfzb/k6Mxk1qG46/y7YQLqXi
+         r8mwXP36hk0TY2CoiCvTf/nh9iL1QCHh3PqrTjtPBuMXuH1+77tBYM4vB/89JraWKORR
+         LxBg==
+X-Gm-Message-State: APjAAAVcmDjFNiQK4Li82WsbuzcIGvXRQiBEqoH6r7QONDLkw2aC17QZ
+        tLYs2MibHYhOKI19g4Sf8Wr3x4Ee6v0=
+X-Google-Smtp-Source: APXvYqyPsBpkG44hSDy7mXOJP8h3S5s7ICBOVNki4QTwaMsFGNf1xnTpWdMo6loLPLw8LZJQ9Rgn+A==
+X-Received: by 2002:a17:90a:b885:: with SMTP id o5mr9397531pjr.52.1559098951071;
+        Tue, 28 May 2019 20:02:31 -0700 (PDT)
 Received: from localhost.localdomain ([2601:644:8201:32e0:7256:81ff:febd:926d])
-        by smtp.gmail.com with ESMTPSA id x24sm3893935pjq.27.2019.05.28.19.53.34
+        by smtp.gmail.com with ESMTPSA id d9sm13532565pgl.20.2019.05.28.20.02.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 19:53:34 -0700 (PDT)
-Date:   Tue, 28 May 2019 19:53:32 -0700
+        Tue, 28 May 2019 20:02:30 -0700 (PDT)
+Date:   Tue, 28 May 2019 20:02:27 -0700
 From:   Eduardo Valentin <edubezval@gmail.com>
-To:     Yuantian Tang <andy.tang@nxp.com>
-Cc:     shawnguo@kernel.org, leoyang.li@nxp.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+To:     Anson.Huang@nxp.com
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        catalin.marinas@arm.com, will.deacon@arm.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, aisheng.dong@nxp.com,
+        ulf.hansson@linaro.org, peng.fan@nxp.com, daniel.baluta@nxp.com,
+        maxime.ripard@bootlin.com, olof@lixom.net,
+        jagan@amarulasolutions.com, horms+renesas@verge.net.au,
+        leonard.crestez@nxp.com, bjorn.andersson@linaro.org,
+        dinguyen@kernel.org, enric.balletbo@collabora.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
-Subject: Re: [PATCH] arm64: dts: ls1028a: Add Thermal Monitor Unit node
-Message-ID: <20190529025331.GB2419@localhost.localdomain>
-References: <20190425082640.37982-1-andy.tang@nxp.com>
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH RESEND V13 2/5] thermal: of-thermal: add API for getting
+ sensor ID from DT
+Message-ID: <20190529030225.GA2662@localhost.localdomain>
+References: <20190528060621.47342-1-Anson.Huang@nxp.com>
+ <20190528060621.47342-2-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190425082640.37982-1-andy.tang@nxp.com>
+In-Reply-To: <20190528060621.47342-2-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 25, 2019 at 04:26:40PM +0800, Yuantian Tang wrote:
-> The Thermal Monitoring Unit (TMU) monitors and reports the
-> temperature from 2 remote temperature measurement sites
-> located on ls1028a chip.
-> Add TMU dts node to enable this feature.
+On Tue, May 28, 2019 at 02:06:18PM +0800, Anson.Huang@nxp.com wrote:
+> From: Anson Huang <Anson.Huang@nxp.com>
 > 
-> Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+> On some platforms like i.MX8QXP, the thermal driver needs a
+> real HW sensor ID from DT thermal zone, the HW sensor ID is
+> used to get temperature from SCU firmware, and the virtual
+> sensor ID starting from 0 to N is NOT used at all, this patch
+> adds new API thermal_zone_of_get_sensor_id() to provide the
+> feature of getting sensor ID from DT thermal zone's node.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+> Changes since V12:
+> 	- adjust the second parameter of thermal_zone_of_get_sensor_id() API, then caller no need
+> 	  to pass the of_phandle_args structure and put the sensor_specs.np manually, also putting
+> 	  the sensor node device check inside this API to make it easy for usage;
 
-I dont see anything wrong from a thermal standpoint.
+What happened to using nxp,resource-id property in your driver?
+Why do we need this as an API in of-thermal? What other drivers may
+benefit of this?
 
-Acked-by: Eduardo Valentin <edubezval@gmail.com>
-
-Please get this via your arch tree maintainer to avoid merge conflicts.
+Regardless, this patch needs to document the new API under
+Documentation/
 
 > ---
->  arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi |  114 ++++++++++++++++++++++++
->  1 files changed, 114 insertions(+), 0 deletions(-)
+>  drivers/thermal/of-thermal.c | 66 +++++++++++++++++++++++++++++++++-----------
+>  include/linux/thermal.h      | 10 +++++++
+>  2 files changed, 60 insertions(+), 16 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> index b045812..a25f5fc 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> @@ -29,6 +29,7 @@
->  			clocks = <&clockgen 1 0>;
->  			next-level-cache = <&l2>;
->  			cpu-idle-states = <&CPU_PH20>;
-> +			#cooling-cells = <2>;
->  		};
+> diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
+> index dc5093b..a53792b 100644
+> --- a/drivers/thermal/of-thermal.c
+> +++ b/drivers/thermal/of-thermal.c
+> @@ -449,6 +449,54 @@ thermal_zone_of_add_sensor(struct device_node *zone,
+>  }
 >  
->  		cpu1: cpu@1 {
-> @@ -39,6 +40,7 @@
->  			clocks = <&clockgen 1 0>;
->  			next-level-cache = <&l2>;
->  			cpu-idle-states = <&CPU_PH20>;
-> +			#cooling-cells = <2>;
->  		};
+>  /**
+> + * thermal_zone_of_get_sensor_id - get sensor ID from a DT thermal zone
+> + * @tz_np: a valid thermal zone device node.
+> + * @sensor_np: a sensor node of a valid sensor device.
+> + * @id: a sensor ID pointer will be passed back.
+> + *
+> + * This function will get sensor ID from a given thermal zone node, use
+> + * "thermal-sensors" as list name, and get sensor ID from first phandle's
+> + * argument.
+> + *
+> + * Return: 0 on success, proper error code otherwise.
+> + */
+> +
+> +int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
+> +				  struct device_node *sensor_np,
+> +				  u32 *id)
+> +{
+> +	struct of_phandle_args sensor_specs;
+> +	int ret;
+> +
+> +	ret = of_parse_phandle_with_args(tz_np,
+> +					 "thermal-sensors",
+> +					 "#thermal-sensor-cells",
+> +					 0,
+> +					 &sensor_specs);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (sensor_specs.np != sensor_np) {
+> +		of_node_put(sensor_specs.np);
+> +		return -ENODEV;
+> +	}
+> +
+> +	if (sensor_specs.args_count >= 1) {
+> +		*id = sensor_specs.args[0];
+> +		WARN(sensor_specs.args_count > 1,
+> +		     "%pOFn: too many cells in sensor specifier %d\n",
+> +		     sensor_specs.np, sensor_specs.args_count);
+> +	} else {
+> +		*id = 0;
+> +	}
+> +
+> +	of_node_put(sensor_specs.np);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_zone_of_get_sensor_id);
+> +
+> +/**
+>   * thermal_zone_of_sensor_register - registers a sensor to a DT thermal zone
+>   * @dev: a valid struct device pointer of a sensor device. Must contain
+>   *       a valid .of_node, for the sensor node.
+> @@ -499,36 +547,22 @@ thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
+>  	sensor_np = of_node_get(dev->of_node);
 >  
->  		l2: l2-cache {
-> @@ -398,6 +400,118 @@
->  			status = "disabled";
->  		};
+>  	for_each_available_child_of_node(np, child) {
+> -		struct of_phandle_args sensor_specs;
+>  		int ret, id;
 >  
-> +		tmu: tmu@1f00000 {
-> +			compatible = "fsl,qoriq-tmu";
-> +			reg = <0x0 0x1f80000 0x0 0x10000>;
-> +			interrupts = <0 23 0x4>;
-> +			fsl,tmu-range = <0xb0000 0xa0026 0x80048 0x70061>;
-> +			fsl,tmu-calibration = <0x00000000 0x00000024
-> +					       0x00000001 0x0000002b
-> +					       0x00000002 0x00000031
-> +					       0x00000003 0x00000038
-> +					       0x00000004 0x0000003f
-> +					       0x00000005 0x00000045
-> +					       0x00000006 0x0000004c
-> +					       0x00000007 0x00000053
-> +					       0x00000008 0x00000059
-> +					       0x00000009 0x00000060
-> +					       0x0000000a 0x00000066
-> +					       0x0000000b 0x0000006d
+>  		/* For now, thermal framework supports only 1 sensor per zone */
+> -		ret = of_parse_phandle_with_args(child, "thermal-sensors",
+> -						 "#thermal-sensor-cells",
+> -						 0, &sensor_specs);
+> +		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
+>  		if (ret)
+>  			continue;
+>  
+> -		if (sensor_specs.args_count >= 1) {
+> -			id = sensor_specs.args[0];
+> -			WARN(sensor_specs.args_count > 1,
+> -			     "%pOFn: too many cells in sensor specifier %d\n",
+> -			     sensor_specs.np, sensor_specs.args_count);
+> -		} else {
+> -			id = 0;
+> -		}
+> -
+> -		if (sensor_specs.np == sensor_np && id == sensor_id) {
+> +		if (id == sensor_id) {
+>  			tzd = thermal_zone_of_add_sensor(child, sensor_np,
+>  							 data, ops);
+>  			if (!IS_ERR(tzd))
+>  				tzd->ops->set_mode(tzd, THERMAL_DEVICE_ENABLED);
+>  
+> -			of_node_put(sensor_specs.np);
+>  			of_node_put(child);
+>  			goto exit;
+>  		}
+> -		of_node_put(sensor_specs.np);
+>  	}
+>  exit:
+>  	of_node_put(sensor_np);
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 15a4ca5..5edffe6 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -375,6 +375,9 @@ struct thermal_trip {
+>  
+>  /* Function declarations */
+>  #ifdef CONFIG_THERMAL_OF
+> +int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
+> +				  struct device_node *sensor_np,
+> +				  u32 *id);
+>  struct thermal_zone_device *
+>  thermal_zone_of_sensor_register(struct device *dev, int id, void *data,
+>  				const struct thermal_zone_of_device_ops *ops);
+> @@ -386,6 +389,13 @@ struct thermal_zone_device *devm_thermal_zone_of_sensor_register(
+>  void devm_thermal_zone_of_sensor_unregister(struct device *dev,
+>  					    struct thermal_zone_device *tz);
+>  #else
 > +
-> +					       0x00010000 0x0000001c
-> +					       0x00010001 0x00000024
-> +					       0x00010002 0x0000002c
-> +					       0x00010003 0x00000035
-> +					       0x00010004 0x0000003d
-> +					       0x00010005 0x00000045
-> +					       0x00010006 0x0000004d
-> +					       0x00010007 0x00000045
-> +					       0x00010008 0x0000005e
-> +					       0x00010009 0x00000066
-> +					       0x0001000a 0x0000006e
-> +
-> +					       0x00020000 0x00000018
-> +					       0x00020001 0x00000022
-> +					       0x00020002 0x0000002d
-> +					       0x00020003 0x00000038
-> +					       0x00020004 0x00000043
-> +					       0x00020005 0x0000004d
-> +					       0x00020006 0x00000058
-> +					       0x00020007 0x00000063
-> +					       0x00020008 0x0000006e
-> +
-> +					       0x00030000 0x00000010
-> +					       0x00030001 0x0000001c
-> +					       0x00030002 0x00000029
-> +					       0x00030003 0x00000036
-> +					       0x00030004 0x00000042
-> +					       0x00030005 0x0000004f
-> +					       0x00030006 0x0000005b
-> +					       0x00030007 0x00000068>;
-> +			little-endian;
-> +			#thermal-sensor-cells = <1>;
-> +		};
-> +
-> +		thermal-zones {
-> +			core-cluster {
-> +				polling-delay-passive = <1000>;
-> +				polling-delay = <5000>;
-> +				thermal-sensors = <&tmu 0>;
-> +
-> +				trips {
-> +					core_cluster_alert: core-cluster-alert {
-> +						temperature = <85000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +					};
-> +
-> +					core_cluster_crit: core-cluster-crit {
-> +						temperature = <95000>;
-> +						hysteresis = <2000>;
-> +						type = "critical";
-> +					};
-> +				};
-> +
-> +				cooling-maps {
-> +					map0 {
-> +						trip = <&core_cluster_alert>;
-> +						cooling-device =
-> +							<&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +					};
-> +				};
-> +			};
-> +
-> +			ddr-controller {
-> +				polling-delay-passive = <1000>;
-> +				polling-delay = <5000>;
-> +				thermal-sensors = <&tmu 1>;
-> +
-> +				trips {
-> +					ddr_controller_alert: ddr-controller-alert {
-> +						temperature = <85000>;
-> +						hysteresis = <2000>;
-> +						type = "passive";
-> +					};
-> +
-> +					ddr_controller_crit: ddr-controller-crit {
-> +						temperature = <95000>;
-> +						hysteresis = <2000>;
-> +						type = "critical";
-> +					};
-> +				};
-> +
-> +				cooling-maps {
-> +					map0 {
-> +						trip = <&ddr_controller_alert>;
-> +						cooling-device =
-> +							<&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +							<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		pcie@1f0000000 { /* Integrated Endpoint Root Complex */
->  			compatible = "pci-host-ecam-generic";
->  			reg = <0x01 0xf0000000 0x0 0x100000>;
+> +static int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
+> +					 struct device_node *sensor_np,
+> +					 u32 *id)
+> +{
+> +	return -ENOENT;
+> +}
+>  static inline struct thermal_zone_device *
+>  thermal_zone_of_sensor_register(struct device *dev, int id, void *data,
+>  				const struct thermal_zone_of_device_ops *ops)
