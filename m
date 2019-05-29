@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 246ED2E00F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 16:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2CB2E040
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 16:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfE2Oq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 10:46:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34448 "EHLO mail.kernel.org"
+        id S1726687AbfE2OzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 May 2019 10:55:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38924 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726068AbfE2Oq1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 May 2019 10:46:27 -0400
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+        id S1726240AbfE2OzB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 May 2019 10:55:01 -0400
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CDBA123ABA;
-        Wed, 29 May 2019 14:46:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9D2C223B19;
+        Wed, 29 May 2019 14:55:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559141186;
-        bh=8rorXxnzSizFaq/FwdOra1IJYD1LwqZRGLVPZflpURU=;
+        s=default; t=1559141701;
+        bh=LRmVdjDfCx+iRHnx/tteucrVD9i835WHaCbePlhLWRk=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ChjW1N1j0JLE1k+6PI9oRVCzrm0/6xRkmhZMyeTJiffjNss00ok4MLacKMa3US1rx
-         FN6/LJ31a97fa8G5S3LutlyDmu8cEB6Lm/KdhgnODWeKxs1hm23F35PNDM5Mwk4708
-         9DKoVs51KUk90xiw83kAhL3spQ+sPr7jJkVV7S2w=
-Received: by mail-lj1-f182.google.com with SMTP id e13so2719077ljl.11;
-        Wed, 29 May 2019 07:46:25 -0700 (PDT)
-X-Gm-Message-State: APjAAAWgJCxU0p/Z2v4j5PbvnL/kZeguBzqiXVIi4zrjxxYLQxaC33Jn
-        fPCBOQi0PiD4+vN5Bp4MIJSfdZRcepu2uprPIF0=
-X-Google-Smtp-Source: APXvYqxtJA+YU8qUOjC0WysP9KRgGAX0/VOWIsIUq8MPRay9hybngeVcKiAzZaJtnygTzi7YGPErKMp9WeCpZWwBji4=
-X-Received: by 2002:a2e:9cc4:: with SMTP id g4mr59526686ljj.47.1559141178602;
- Wed, 29 May 2019 07:46:18 -0700 (PDT)
+        b=BSnkMURPbHIQyJR6xI3csCIcpEyI0H7IYzYtgDBn9Zs52KbmvZSHYvU0wJ4MwwgVl
+         uthsUtmAVKB7sMufy5GCCjXTz3eD+EN60IwwLDKqltxU1IdlHKuPpnRYT7Y8w51ezP
+         XULafr/o3P7VESNxjkWLx5VHCWjq+yOKyqBbUCoQ=
+Received: by mail-lj1-f180.google.com with SMTP id y15so331554ljd.9;
+        Wed, 29 May 2019 07:55:00 -0700 (PDT)
+X-Gm-Message-State: APjAAAUV5GVAPpvxs0hsFzui9y3UyGDnst1t1vjKuzu2ZGKf2+UeKo6V
+        yeU+QpfJGQiWkTfdRIBz7q94V63131VY0Hu4peQ=
+X-Google-Smtp-Source: APXvYqxLCHSTSKRtNMOeK3w1Vw8PySGLMX5dD0AObBoh6u42Fc0i9Za2sWvtQXUMhZOw5+Z47zy+mzrPzD2fvtbbbaU=
+X-Received: by 2002:a2e:9a9a:: with SMTP id p26mr4207037lji.64.1559141698364;
+ Wed, 29 May 2019 07:54:58 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAJKOXPf=nPrmw6Vzi_=LmO=dVsV4Gvoc-q75XP2FBEgm9Gxv0A@mail.gmail.com>
- <20190527022258.32748-1-matheus@castello.eng.br> <20190527022258.32748-4-matheus@castello.eng.br>
-In-Reply-To: <20190527022258.32748-4-matheus@castello.eng.br>
+ <20190527022258.32748-1-matheus@castello.eng.br> <20190527022258.32748-5-matheus@castello.eng.br>
+In-Reply-To: <20190527022258.32748-5-matheus@castello.eng.br>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 29 May 2019 16:46:07 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPd2F6iy0ZqYf+X2k=eQ=tY1zG4gVbrr68XqE9+w4HK6dw@mail.gmail.com>
-Message-ID: <CAJKOXPd2F6iy0ZqYf+X2k=eQ=tY1zG4gVbrr68XqE9+w4HK6dw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] power: supply: max17040: Config alert SOC low
- level threshold from FDT
+Date:   Wed, 29 May 2019 16:54:47 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcFPwBJ26V2rOS7t5H221B0H-MsDmC4Xb7gGHRX_ETxtQ@mail.gmail.com>
+Message-ID: <CAJKOXPcFPwBJ26V2rOS7t5H221B0H-MsDmC4Xb7gGHRX_ETxtQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] power: supply: max17040: Clear ALRT bit when the
+ SOC are above threshold
 To:     Matheus Castello <matheus@castello.eng.br>
 Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
         Chanwoo Choi <cw00.choi@samsung.com>,
@@ -53,71 +53,88 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 27 May 2019 at 04:46, Matheus Castello <matheus@castello.eng.br> wrote:
+On Mon, 27 May 2019 at 04:45, Matheus Castello <matheus@castello.eng.br> wrote:
 >
-> For configuration of fuel gauge alert for a low level state of charge
-> interrupt we add a function to config level threshold and a device tree
-> binding property to set it in flatned device tree node.
->
-> Now we can use "maxim,alert-low-soc-level" property with the values from
-> 1% up to 32% to configure alert interrupt threshold.
+> In order to not generate duplicate interrupts we clear the ALRT bit when
+> the SOC is in a state that shows that the battery is charged above the set
+> threshold for the SOC low level alert.
+
+I think interrupt/alert bit should be cleared while handling
+interrupt, not later because:
+1. It is logical to clear it when servicing it,
+2. It is simpler - no need for "chip->alert_bit",
+3. The alert threshold is understood as alert/warning so every
+interrupt should generate uevent. I understand you wanted to remove
+"duplicate interrupts" but in fact there are no duplicates. Every next
+interrupt comes from change of SoC while being below the critical
+level. Therefore on each such change user-space should be woken up and
+notified (e.g. to show the message to the user).
+
+I also think this should be squashed with previous patch as it does
+not make sense as standalone commit.
+
 >
 > Signed-off-by: Matheus Castello <matheus@castello.eng.br>
 > ---
->  drivers/power/supply/max17040_battery.c | 52 +++++++++++++++++++++++--
->  1 file changed, 49 insertions(+), 3 deletions(-)
+>  drivers/power/supply/max17040_battery.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 >
 > diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-> index b7433e9ca7c2..2f4851608cfe 100644
+> index 2f4851608cfe..61e6fcfea8a1 100644
 > --- a/drivers/power/supply/max17040_battery.c
 > +++ b/drivers/power/supply/max17040_battery.c
-> @@ -29,6 +29,9 @@
->  #define MAX17040_DELAY         1000
->  #define MAX17040_BATTERY_FULL  95
->
-> +#define MAX17040_ATHD_MASK             0xFFC0
-> +#define MAX17040_ATHD_DEFAULT_POWER_UP 4
-> +
->  struct max17040_chip {
->         struct i2c_client               *client;
->         struct delayed_work             work;
-> @@ -43,6 +46,8 @@ struct max17040_chip {
->         int soc;
->         /* State Of Charge */
+> @@ -48,6 +48,7 @@ struct max17040_chip {
 >         int status;
-> +       /* Low alert threshold from 32% to 1% of the State of Charge */
-> +       u32 low_soc_alert_threshold;
+>         /* Low alert threshold from 32% to 1% of the State of Charge */
+>         u32 low_soc_alert_threshold;
+> +       int alert_bit;
 >  };
 >
 >  static int max17040_get_property(struct power_supply *psy,
-> @@ -99,6 +104,28 @@ static void max17040_reset(struct i2c_client *client)
->         max17040_write_reg(client, MAX17040_CMD, 0x0054);
+> @@ -107,6 +108,7 @@ static void max17040_reset(struct i2c_client *client)
+>  static int max17040_set_low_soc_threshold_alert(struct i2c_client *client,
+>         u32 level)
+>  {
+> +       struct max17040_chip *chip = i2c_get_clientdata(client);
+>         int ret;
+>         u16 data;
+>
+> @@ -118,6 +120,7 @@ static int max17040_set_low_soc_threshold_alert(struct i2c_client *client,
+>                 data &= MAX17040_ATHD_MASK;
+>                 data |= level;
+>                 max17040_write_reg(client, MAX17040_RCOMP, data);
+> +               chip->alert_bit = 0;
+>                 ret = 0;
+>         } else {
+>                 ret = -EINVAL;
+> @@ -144,6 +147,11 @@ static void max17040_get_soc(struct i2c_client *client)
+>         soc = max17040_read_reg(client, MAX17040_SOC);
+>
+>         chip->soc = (soc >> 8);
+> +
+> +       /* check SOC level to clear ALRT bit */
+> +       if (chip->soc > chip->low_soc_alert_threshold && chip->alert_bit)
+> +               max17040_set_low_soc_threshold_alert(client,
+> +                       chip->low_soc_alert_threshold);
 >  }
 >
-> +static int max17040_set_low_soc_threshold_alert(struct i2c_client *client,
-> +       u32 level)
-> +{
-> +       int ret;
-> +       u16 data;
-> +
-> +       /* check if level is between 1% and 32% */
-> +       if (level > 0 && level < 33) {
-> +               level = 32 - level;
-> +               data = max17040_read_reg(client, MAX17040_RCOMP);
-> +               /* clear the alrt bit and set LSb 5 bits */
-> +               data &= MAX17040_ATHD_MASK;
-> +               data |= level;
-> +               max17040_write_reg(client, MAX17040_RCOMP, data);
-> +               ret = 0;
-> +       } else {
-> +               ret = -EINVAL;
-> +       }
+>  static void max17040_get_version(struct i2c_client *client)
+> @@ -229,6 +237,9 @@ static irqreturn_t max17040_thread_handler(int id, void *dev)
+>         /* send uevent */
+>         power_supply_changed(chip->battery);
+>
+> +       /* ALRT bit is seted */
 
-This is unusual way of handling error... when you parse DTS, you
-accept any value for "level" (even incorrect one). You validate the
-value later when setting it and show an error... however you ignore
-the error of max17040_write_reg() here... This is correct but looks
-unusual.
+s/seted/set/
 
 Best regards,
 Krzysztof
+
+> +       chip->alert_bit = 1;
+> +
+>         return IRQ_HANDLED;
+>  }
+>
+> --
+> 2.20.1
+>
