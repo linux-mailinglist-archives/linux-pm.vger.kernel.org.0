@@ -2,76 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF3F2E2FC
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 19:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AC62E304
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 19:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbfE2RPk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 13:15:40 -0400
-Received: from Galois.linutronix.de ([146.0.238.70]:55272 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbfE2RPk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 May 2019 13:15:40 -0400
-Received: from [207.225.69.115] (helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hW2Aa-0001c2-BS; Wed, 29 May 2019 19:15:20 +0200
-Date:   Wed, 29 May 2019 10:15:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-cc:     Jiri Kosina <jikos@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        id S1726024AbfE2RRj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 May 2019 13:17:39 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:15582 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725917AbfE2RRj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 May 2019 13:17:39 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id A17B6309B15E;
+        Wed, 29 May 2019 17:17:33 +0000 (UTC)
+Received: from treble (ovpn-123-24.rdu2.redhat.com [10.10.123.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C4D0210027CA;
+        Wed, 29 May 2019 17:17:28 +0000 (UTC)
+Date:   Wed, 29 May 2019 12:17:26 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] x86/power: Fix 'nosmt' vs. hibernation triple fault
  during resume
-In-Reply-To: <20190529170048.GD2623@hirez.programming.kicks-ass.net>
-Message-ID: <alpine.DEB.2.21.1905291006540.24611@nanos.tec.linutronix.de>
-References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm> <nycvar.YFH.7.76.1905291230130.1962@cbobk.fhfr.pm> <20190529161028.a6kpywzpjazgql5u@treble> <nycvar.YFH.7.76.1905291818470.1962@cbobk.fhfr.pm>
- <20190529170048.GD2623@hirez.programming.kicks-ass.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+Message-ID: <20190529171726.obom7xql72bgbjhc@treble>
+References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm>
+ <nycvar.YFH.7.76.1905291230130.1962@cbobk.fhfr.pm>
+ <20190529161028.a6kpywzpjazgql5u@treble>
+ <nycvar.YFH.7.76.1905291818470.1962@cbobk.fhfr.pm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <nycvar.YFH.7.76.1905291818470.1962@cbobk.fhfr.pm>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.49]); Wed, 29 May 2019 17:17:38 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 29 May 2019, Peter Zijlstra wrote:
-> On Wed, May 29, 2019 at 06:26:59PM +0200, Jiri Kosina wrote:
-> > On Wed, 29 May 2019, Josh Poimboeuf wrote:
+On Wed, May 29, 2019 at 06:26:59PM +0200, Jiri Kosina wrote:
+> On Wed, 29 May 2019, Josh Poimboeuf wrote:
 > 
-> > > Is there are reason why maxcpus= doesn't do the CR4.MCE booted_once
-> > > dance?
-> > 
-> > I am not sure whether it's really needed. My understanding is that the MCE 
-> > issue happens only after primary sibling has been brought up; if that 
-> > never happened, MCE wouldn't be broadcasted to that core at all in the 
-> > first place.
-> > 
-> > But this needs to be confirmed by Intel.
+> > hibernation_restore() is called by user space at runtime, via ioctl or 
+> > sysfs.  So I think this still doesn't fix the case where you've disabled 
+> > CPUs at runtime via sysfs, and then resumed from hibernation.  Or are we 
+> > declaring that this is not a supported scenario?
 > 
-> (I'm not confirming anything, as I've no clue), but that code stems from
-> long before we found out about that brilliant MCE stuff (which was
-> fairly recent).
+> Yeah I personally find that scenario awkward :) Anyway, cpuhp_smt_enable() 
+> is going to online even those potentially "manually" offlined CPUs, isn't 
+> it?
+> 
+> Are you perhaps suggesting to call enable_nonboot_cpus() instead of 
+> cpuhp_smt_enable() here to make it more explicit?
 
-Actually we knew about the brilliant MCE wreckage for a long time and
-maxcpus was always considered to be a debug/testing bandaid and not to be
-used for anything serious used in production.
+Maybe, but I guess that wouldn't work as-is because it relies on
+the frozen_cpus mask.  
 
-Of course 'nosmt' changed that because that is aimed at production
-scenarios so we were forced to deal with that 'feature'.
+But maybe this is just a scenario we don't care about anyway?
 
-We could do the same thing with 'maxcpus' now that we have all the
-mechanisms there at our fingertips already, but I'd rather not do it.
+I still have the question about whether we could make mwait_play_dead()
+monitor a fixed address.  If we could get that to work, that seems more
+robust to me.
 
-Thanks,
+Another question.  With your patch, if booted with nosmt, is SMT still
+disabled after you resume from hibernation?  I don't see how SMT would
+get disabled again.
 
-	tglx
+> > Is there are reason why maxcpus= doesn't do the CR4.MCE booted_once
+> > dance?
+> 
+> I am not sure whether it's really needed. My understanding is that the MCE 
+> issue happens only after primary sibling has been brought up; if that 
+> never happened, MCE wouldn't be broadcasted to that core at all in the 
+> first place.
+> 
+> But this needs to be confirmed by Intel.
 
+Right, but can't maxcpus= create scenarios where only the primary
+sibling has been brought up?
+
+Anyway, Thomas indicated on IRC that maxcpus= may be deprecated and
+should probably be documented as such.  So maybe it's another scenario
+we don't care about.
+
+-- 
+Josh
