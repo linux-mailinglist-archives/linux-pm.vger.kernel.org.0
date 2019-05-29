@@ -2,143 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE66A2D102
-	for <lists+linux-pm@lfdr.de>; Tue, 28 May 2019 23:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDF32D3D4
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 04:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728034AbfE1Vbu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 May 2019 17:31:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39990 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727144AbfE1Vbu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 28 May 2019 17:31:50 -0400
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E323C2075B;
-        Tue, 28 May 2019 21:31:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559079109;
-        bh=B3o8n9SYmJUHF3FbOoAq6ElBxC4Irv0C7SwxfW0q6xM=;
-        h=Date:From:To:cc:Subject:From;
-        b=WUGHTvBWnKfY4zuHnA2yGwugqnDj8KRilM6MCZy2qP0sWTxds0Dprg8EWhOaJEwu3
-         FvNMjV2PbIGEkSXGybFZh8W7JwcdwYUmdGR+hD2j0s7OBtNf9CjTl+s8n1QuQmhY2Q
-         AKmsOTHF9VF33eLsC9dzKzy0Oy61Ve2jniQ8kcAs=
-Date:   Tue, 28 May 2019 23:31:45 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     x86@kernel.org, linux-pm@vger.kernel.org,
+        id S1725917AbfE2Ceg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 May 2019 22:34:36 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40072 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725816AbfE2Cef (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 May 2019 22:34:35 -0400
+Received: by mail-pg1-f196.google.com with SMTP id d30so384549pgm.7;
+        Tue, 28 May 2019 19:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=h4HAswLo5xWylyhxHYQaGkQiPnSlTO4ftDNVwHlm10E=;
+        b=BdijjK50B4yGs2xl1j13xH1Nea+/zyun0B4RhsO/A6piYaISkz9mwd6HXAxV2giSbx
+         /ZctzsJGZcwcb6rR1cXFLB1ORIxZInUr8qObA+0Kc2EYTzos0bOxznQKvBWp52FWx9sU
+         dnZT37oa67uXnAM/fpDYfj0b63duM6O86iOG2MbrtN7xzw8H1zqf1S/r2YbZVQ1VQgI8
+         n5kAWrQxtAejzSfZs3Z4sO6CqokjNVtnhS1DKQAIEdsxXdif1mpd0D5V2ffK+dMgFlZG
+         0BoOpbnAoycIkR4BoAZZc6Dso7Syz39z8/EDZykdtz1XupQSyrcCYH8MkVG1A1s3PRLt
+         cz6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=h4HAswLo5xWylyhxHYQaGkQiPnSlTO4ftDNVwHlm10E=;
+        b=paCgnMLxpKyv0pmSoa2JWUak+oZ8gMSTgvXlpxFr6FiAu9wtqhRBHrPdSeRS8fNkSV
+         4u0JO8L58yepnHuAmepNd9snKraSf8AUGDbBQxhyzEsVTUhg8IRTsDiCc2rgriTEQjIt
+         f4mgmpXwaRsKt7yw+mtBPLLduN/38+N50RoBlixHGJu2Yh/eECHem7yOiFLGjdjLbYNw
+         cVFXfW6PHT6yaCnjbQvKxfq8U7OAZ5M54LVKJepiprs6P6lPYRBkFMU0xwkCuvsHoKkj
+         RyaJ9nTUeVY+pHxJGvuWXrTSdSpc3DasJLNZjuzBKjrw4NIYgNBGxW/yXvbHtln8jb3Z
+         NTVg==
+X-Gm-Message-State: APjAAAU5MEPc5eKLTxCoWn8yVQvsnQ2QcMcQ3sCayghYVO2UZioHV2Ht
+        qBMHwxIEykc7j4RQgOXwUYFpun3+
+X-Google-Smtp-Source: APXvYqyofbBxvyS5ovPaLMDcXQsE5q3ulrvYaBAWd1va1isSW/QGyl9IdZGEFFsHVqa9GjNYBISZ+w==
+X-Received: by 2002:a17:90a:ae10:: with SMTP id t16mr9470350pjq.51.1559097274267;
+        Tue, 28 May 2019 19:34:34 -0700 (PDT)
+Received: from localhost ([2601:644:8201:32e0:7256:81ff:febd:926d])
+        by smtp.gmail.com with ESMTPSA id f16sm10422064pja.18.2019.05.28.19.34.32
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 May 2019 19:34:32 -0700 (PDT)
+From:   Eduardo Valentin <edubezval@gmail.com>
+To:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/power: Fix 'nosmt' vs. hibernation triple fault during
- resume
-Message-ID: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Cc:     Stephen Boyd <sboyd@kernel.org>, bot@kernelci.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        kernel-build-reports@lists.linaro.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH 1/1] Revert "drivers: thermal: tsens: Add new operation to check if a sensor is enabled"
+Date:   Tue, 28 May 2019 19:34:26 -0700
+Message-Id: <1559097266-12780-1-git-send-email-edubezval@gmail.com>
+X-Mailer: git-send-email 2.1.4
+In-Reply-To: <CAJ=6tTqOW5s_dhEuy3su+R6=tUY_ZiuAuCMG1A8Y-Lz-aHXw2Q@mail.gmail.com>
+References: <CAJ=6tTqOW5s_dhEuy3su+R6=tUY_ZiuAuCMG1A8Y-Lz-aHXw2Q@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Jiri Kosina <jkosina@suse.cz>
+This reverts commit 3e6a8fb3308419129c7a52de6eb42feef5a919a0.
 
-As explained in
-
-	0cc3cd21657b ("cpu/hotplug: Boot HT siblings at least once")
-
-we always, no matter what, have to bring up x86 HT siblings during boot at 
-least once in order to avoid first MCE bringing the system to its knees.
-
-That means that whenever 'nosmt' is supplied on the kernel command-line, 
-all the HT siblings are as a result sitting in mwait or cpudile after 
-going through the online-offline cycle at least once.
-
-This causes a serious issue though when a kernel, which saw 'nosmt' on its 
-commandline, is going to perform resume from hibernation: if the resume 
-from the hibernated image is successful, cr3 is flipped in order to point 
-to the address space of the kernel that is being resumed, which in turn 
-means that all the HT siblings are all of a sudden mwaiting on address 
-which is no longer valid.
-
-That results in triple fault shortly after cr3 is switched, and machine 
-reboots.
-
-Fix this by always waking up all the SMT siblings before initiating the 
-'restore from hibernation' process; this guarantees that all the HT 
-siblings will be properly carried over to the resumed kernel waiting in 
-resume_play_dead(), and acted upon accordingly afterwards, based on the 
-target kernel configuration.
-
-Cc: stable@vger.kernel.org # v4.19+
-Debugged-by: Thomas Gleixner <tglx@linutronix.de>
-Fixes: 0cc3cd21657b ("cpu/hotplug: Boot HT siblings at least once")
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Cc: Andy Gross <agross@kernel.org>
+Cc: David Brown <david.brown@linaro.org>
+Cc: Amit Kucheria <amit.kucheria@linaro.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Suggested-by: Amit Kucheria <amit.kucheria@linaro.org>
+Reported-by: Andy Gross <andygro@gmail.com>
+Signed-off-by: Eduardo Valentin <edubezval@gmail.com>
 ---
- arch/x86/power/cpu.c | 11 +++++++++++
- include/linux/cpu.h  |  2 ++
- kernel/cpu.c         |  2 +-
- 3 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index a7d966964c6f..bde8ce1f6c6c 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -299,9 +299,20 @@ int hibernate_resume_nonboot_cpu_disable(void)
- 	 * address in its instruction pointer may not be possible to resolve
- 	 * any more at that point (the page tables used by it previously may
- 	 * have been overwritten by hibernate image data).
-+	 *
-+	 * First, make sure that we wake up all the potentially disabled SMT
-+	 * threads which have been initially brought up and then put into
-+	 * mwait/cpuidle sleep.
-+	 * Those will be put to proper (not interfering with hibernation
-+	 * resume) sleep afterwards, and the resumed kernel will decide itself
-+	 * what to do with them.
- 	 */
- 	smp_ops.play_dead = resume_play_dead;
-+	ret = cpuhp_smt_enable();
-+	if (ret)
-+		goto out;
- 	ret = disable_nonboot_cpus();
-+out:
- 	smp_ops.play_dead = play_dead;
- 	return ret;
- }
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index 3813fe45effd..b5523552a607 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -201,10 +201,12 @@ enum cpuhp_smt_control {
- extern enum cpuhp_smt_control cpu_smt_control;
- extern void cpu_smt_disable(bool force);
- extern void cpu_smt_check_topology(void);
-+extern int cpuhp_smt_enable(void);
- #else
- # define cpu_smt_control		(CPU_SMT_NOT_IMPLEMENTED)
- static inline void cpu_smt_disable(bool force) { }
- static inline void cpu_smt_check_topology(void) { }
-+static inline int cpuhp_smt_enable(void) { return 0; }
- #endif
- 
- /*
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index f2ef10460698..3ff5ce0e4132 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2093,7 +2093,7 @@ static int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval)
- 	return ret;
+Added this for next -rc, as per request.
+
+ drivers/thermal/qcom/tsens-common.c | 14 --------------
+ drivers/thermal/qcom/tsens-v0_1.c   |  1 -
+ drivers/thermal/qcom/tsens-v2.c     |  1 -
+ drivers/thermal/qcom/tsens.c        |  5 -----
+ drivers/thermal/qcom/tsens.h        |  1 -
+ 5 files changed, 22 deletions(-)
+
+diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+index 928e8e8..528df88 100644
+--- a/drivers/thermal/qcom/tsens-common.c
++++ b/drivers/thermal/qcom/tsens-common.c
+@@ -64,20 +64,6 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+ 	}
  }
  
--static int cpuhp_smt_enable(void)
-+int cpuhp_smt_enable(void)
+-bool is_sensor_enabled(struct tsens_priv *priv, u32 hw_id)
+-{
+-	u32 val;
+-	int ret;
+-
+-	if ((hw_id > (priv->num_sensors - 1)) || (hw_id < 0))
+-		return -EINVAL;
+-	ret = regmap_field_read(priv->rf[SENSOR_EN], &val);
+-	if (ret)
+-		return ret;
+-
+-	return val & (1 << hw_id);
+-}
+-
+ static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
  {
- 	int cpu, ret = 0;
+ 	int degc, num, den;
+diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+index a319283..6f26fad 100644
+--- a/drivers/thermal/qcom/tsens-v0_1.c
++++ b/drivers/thermal/qcom/tsens-v0_1.c
+@@ -334,7 +334,6 @@ static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
+ 	/* CTRL_OFFSET */
+ 	[TSENS_EN]     = REG_FIELD(SROT_CTRL_OFF, 0,  0),
+ 	[TSENS_SW_RST] = REG_FIELD(SROT_CTRL_OFF, 1,  1),
+-	[SENSOR_EN]    = REG_FIELD(SROT_CTRL_OFF, 3, 13),
  
-
+ 	/* ----- TM ------ */
+ 	/* INTERRUPT ENABLE */
+diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+index 1099069..0a4f2b8 100644
+--- a/drivers/thermal/qcom/tsens-v2.c
++++ b/drivers/thermal/qcom/tsens-v2.c
+@@ -44,7 +44,6 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+ 	/* CTRL_OFF */
+ 	[TSENS_EN]     = REG_FIELD(SROT_CTRL_OFF,    0,  0),
+ 	[TSENS_SW_RST] = REG_FIELD(SROT_CTRL_OFF,    1,  1),
+-	[SENSOR_EN]    = REG_FIELD(SROT_CTRL_OFF,    3, 18),
+ 
+ 	/* ----- TM ------ */
+ 	/* INTERRUPT ENABLE */
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 36b0b52..0627d86 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -85,11 +85,6 @@ static int tsens_register(struct tsens_priv *priv)
+ 	struct thermal_zone_device *tzd;
+ 
+ 	for (i = 0;  i < priv->num_sensors; i++) {
+-		if (!is_sensor_enabled(priv, priv->sensor[i].hw_id)) {
+-			dev_err(priv->dev, "sensor %d: disabled\n",
+-				priv->sensor[i].hw_id);
+-			continue;
+-		}
+ 		priv->sensor[i].priv = priv;
+ 		priv->sensor[i].id = i;
+ 		tzd = devm_thermal_zone_of_sensor_register(priv->dev, i,
+diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+index eefe384..2fd9499 100644
+--- a/drivers/thermal/qcom/tsens.h
++++ b/drivers/thermal/qcom/tsens.h
+@@ -315,7 +315,6 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *pt1, u32 *pt2, u32 mo
+ int init_common(struct tsens_priv *priv);
+ int get_temp_tsens_valid(struct tsens_priv *priv, int i, int *temp);
+ int get_temp_common(struct tsens_priv *priv, int i, int *temp);
+-bool is_sensor_enabled(struct tsens_priv *priv, u32 hw_id);
+ 
+ /* TSENS target */
+ extern const struct tsens_plat_data data_8960;
 -- 
-Jiri Kosina
-SUSE Labs
+2.1.4
+
