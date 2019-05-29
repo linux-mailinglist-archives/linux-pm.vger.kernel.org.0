@@ -2,132 +2,258 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD272D416
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 05:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B755B2D43C
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 05:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfE2DFr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 May 2019 23:05:47 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36456 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725816AbfE2DFr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 May 2019 23:05:47 -0400
-Received: by mail-pg1-f195.google.com with SMTP id a3so435857pgb.3;
-        Tue, 28 May 2019 20:05:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Yae+joByYceDAtdWhJGQ+9TqNvlrFL7154XbmhADCzk=;
-        b=loJI8CmBiDK4QXBglvOWt2m+NRvAhk4f5Dpdw5nuyIoVvwObyRmIIUVGmvd+FJfS/V
-         ojqBViP2eZMFN4PrCjFp2vYaQP/xmsQowtHlPbbltDN9JTV/MQUAciCuFbIyOsUa62NC
-         mT99NxZ1PC/nn6YWjHryuP+TmQUNFLHbDlidgSRKaGnUoexUoJM4CDsYz88VUbdqoT5X
-         6wtYHSrpu4+CwzrqBfOvCvGZnImijdLv6e+on6dB3VxcHbH8DABwY7Zky1fnpEeDB2aF
-         Cks3yYjP8tOWQbmD6QGz2QKW1VTSqye9kFjf0txnn8VNvPTFsPduE0rIuGIDpf1tVZ9z
-         A3vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Yae+joByYceDAtdWhJGQ+9TqNvlrFL7154XbmhADCzk=;
-        b=dhZmTmuL0Ijn3H/ew3LI5SFp5+Hta6Tr47CFc5DEntnP7PnyVaS3L55bH/sIARA/PC
-         01Z5VFOaJDn6A/Of5x6en4ahuivWYfHOkcuJOLdyRjZoLzW1yX0CiwY6Dhe1zBC47xvD
-         WwGfcUa6nTUdP2icaA/x5RkX5VPLU9cXC6Fq4pAZe9rsHyOXjoTTtkoG6WMoAJcBawWh
-         +osyBVOATr66QcToxALUmgo/k2DSjwJHln4DXOB/scMKQyREqawoM5RlWVSPkIW91AeK
-         FebhV3P8WBRBivey6RH4myc+N/m4VWkerIHS18iyz0GhehK489aDnYIISCZyNjpGayp8
-         RMLA==
-X-Gm-Message-State: APjAAAVg/wdbcLQYKI5rbTlEwazeGpZinkFwS/bDIuKeAqQ3uCIZGX95
-        GngHE6GvmQY84FqW2SO8eJk=
-X-Google-Smtp-Source: APXvYqyyAaMniytWmPWiZn/pkCsfkmPCIhT/hrGDPfJcVMyRDShfxmyDZOZFAswfsVwf7gqBNJ+SfQ==
-X-Received: by 2002:a65:44cb:: with SMTP id g11mr134373637pgs.193.1559099146241;
-        Tue, 28 May 2019 20:05:46 -0700 (PDT)
-Received: from localhost.localdomain ([2601:644:8201:32e0:7256:81ff:febd:926d])
-        by smtp.gmail.com with ESMTPSA id f10sm12830922pgq.73.2019.05.28.20.05.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 20:05:45 -0700 (PDT)
-Date:   Tue, 28 May 2019 20:05:43 -0700
-From:   Eduardo Valentin <edubezval@gmail.com>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Chris Healy <cphealy@gmail.com>
-Subject: Re: [PATCH] thermal/drivers/of: Add a get_temp_id callback function
-Message-ID: <20190529030542.GA2654@localhost.localdomain>
-References: <20190416172203.4679-1-daniel.lezcano@linaro.org>
- <20190423154430.GA16014@localhost.localdomain>
- <bc10d520-4d15-74d6-0dc2-fd63df8d9a21@linaro.org>
- <ff407865-8606-60c2-62d8-60ae96d1984d@linaro.org>
- <CAHQ1cqG-cb=1hyO8oeV4k-6Pq4q+aqhH8RPx04i2oPTNhAhiVg@mail.gmail.com>
+        id S1725855AbfE2D06 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 May 2019 23:26:58 -0400
+Received: from mail-eopbgr130054.outbound.protection.outlook.com ([40.107.13.54]:36320
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725828AbfE2D05 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 28 May 2019 23:26:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+nU6qwhV2UvDgcipwtDOBThwVYFgHLhUR+q1ywhUqxU=;
+ b=daSmc58+fSFB0q3tKS1TZy+jK7kjwzRfvziifj5njUgCrLndzDgAbZdf0CCXVv55NFolsP+h1yMX68+rUuLLHmf64Cs8sxhBV4+jP8g9bdloZCFKFG0oyrFe0dWE6kDlXhppDx2jcmIBeYQaOPV4rgvoja31Rs89aYgPpllu+XM=
+Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (52.134.122.155) by
+ VI1PR04MB5597.eurprd04.prod.outlook.com (20.178.125.74) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.16; Wed, 29 May 2019 03:26:46 +0000
+Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
+ ([fe80::497a:768:c7b1:34e0]) by VI1PR04MB4333.eurprd04.prod.outlook.com
+ ([fe80::497a:768:c7b1:34e0%6]) with mapi id 15.20.1922.021; Wed, 29 May 2019
+ 03:26:46 +0000
+From:   Andy Tang <andy.tang@nxp.com>
+To:     Eduardo Valentin <edubezval@gmail.com>
+CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>
+Subject: RE: [EXT] Re: [PATCH] arm64: dts: ls1028a: Add Thermal Monitor Unit
+ node
+Thread-Topic: [EXT] Re: [PATCH] arm64: dts: ls1028a: Add Thermal Monitor Unit
+ node
+Thread-Index: AQHU+0Gute7V4LpN/kG0bCUPuN8YU6aBnOMAgAAEY9A=
+Date:   Wed, 29 May 2019 03:26:46 +0000
+Message-ID: <VI1PR04MB43330251231DB7E379DBF49AF31F0@VI1PR04MB4333.eurprd04.prod.outlook.com>
+References: <20190425082640.37982-1-andy.tang@nxp.com>
+ <20190529025331.GB2419@localhost.localdomain>
+In-Reply-To: <20190529025331.GB2419@localhost.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=andy.tang@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ed03dcd8-f2eb-453b-a448-08d6e3e57ae3
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5597;
+x-ms-traffictypediagnostic: VI1PR04MB5597:
+x-microsoft-antispam-prvs: <VI1PR04MB55976495B228339176F25239F31F0@VI1PR04MB5597.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0052308DC6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(346002)(39860400002)(396003)(376002)(199004)(189003)(13464003)(66476007)(66446008)(73956011)(64756008)(66556008)(305945005)(7736002)(76116006)(66946007)(68736007)(7416002)(7696005)(102836004)(8936002)(81166006)(8676002)(4326008)(76176011)(6916009)(33656002)(74316002)(53546011)(54906003)(1411001)(9686003)(81156014)(6506007)(6246003)(53936002)(99286004)(55016002)(26005)(476003)(256004)(186003)(44832011)(86362001)(5660300002)(6436002)(478600001)(446003)(229853002)(52536014)(486006)(25786009)(71200400001)(71190400001)(66066001)(316002)(6116002)(3846002)(2906002)(14444005)(14454004)(11346002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5597;H:VI1PR04MB4333.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 7eORb9MB7+2um/wVCnzHI2pawgcls86E15dciyWCT/ZJisPlgucEVKl/Tmoux2PAPLkbfh9x0kq/csnQbB506Ml9dMkMDoFt8c9TTgTvi1xgvEjX9ZXLT37ssWx2U6QyqqCNxyN/MUn6kJL8yfQvq4+ATnz4xIJI0yzpgEdz+aalTGKwOWIvR8yCoL649KvkAIlGovxnI5fRqXKUmkRGWJjscGIrtQJjNbQa4y4t8Wf2U269Kk+Z7EcvC/QCfs2tO2gvo2w5M8qBE3xIPcpRXdMv6wNcggtuQhRqhDEtDA0wsI56/TEWP+fwHF20JX7R4lASNtg56jFYFJgjwnDJhqWfBx/lYovH0ZDljNSgXJPrXGINC1vi/CUwrqgntRD2Iokbylg7MJX6KDOt/iFfVN8xqwuIVBi+pPuybiU1Pc8=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHQ1cqG-cb=1hyO8oeV4k-6Pq4q+aqhH8RPx04i2oPTNhAhiVg@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed03dcd8-f2eb-453b-a448-08d6e3e57ae3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2019 03:26:46.6519
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: andy.tang@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5597
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 23, 2019 at 07:48:56PM -0700, Andrey Smirnov wrote:
-> On Mon, Apr 29, 2019 at 9:51 AM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 24/04/2019 01:08, Daniel Lezcano wrote:
-> > > On 23/04/2019 17:44, Eduardo Valentin wrote:
-> > >> Hello,
-> > >>
-> > >> On Tue, Apr 16, 2019 at 07:22:03PM +0200, Daniel Lezcano wrote:
-> > >>> Currently when we register a sensor, we specify the sensor id and a data
-> > >>> pointer to be passed when the get_temp function is called. However the
-> > >>> sensor_id is not passed to the get_temp callback forcing the driver to
-> > >>> do extra allocation and adding back pointer to find out from the sensor
-> > >>> information the driver data and then back to the sensor id.
-> > >>>
-> > >>> Add a new callback get_temp_id() which will be called if set. It will
-> > >>> call the get_temp_id() with the sensor id.
-> > >>>
-> > >>> That will be more consistent with the registering function.
-> > >>
-> > >> I still do not understand why we need to have a get_id callback.
-> > >> The use cases I have seen so far, which I have been intentionally rejecting, are
-> > >> mainly solvable by creating other compatible entries. And really, if you
-> > >> have, say a bandgap, chip that supports multiple sensors, but on
-> > >> SoC version A it has 5 sensors, and on SoC version B it has only 4,
-> > >> or on SoC version C, it has 5 but they are either logially located
-> > >> in different places (gpu vs iva regions), these are all cases in which
-> > >> you want a different compatible!
-> > >>
-> > >> Do you mind sharing why you need a get sensor id callback?
-> > >
-> > > It is not a get sensor id callback, it is a get_temp callback which pass
-> > > the sensor id.
-> > >
-> > > See in the different drivers, it is a common pattern there is a
-> > > structure for the driver, then a structure for the sensor. When the
-> > > get_temp is called, the callback needs info from the sensor structure
-> > > and from the driver structure, so a back pointer to the driver structure
-> > > is added in the sensor structure.
-> >
-
-Do you mind sending a patch showing how one could convert an existing
-driver to use this new API?
-
-> > Hi Eduardo,
-> >
-> > does the explanation clarifies the purpose of this change?
-> >
-> 
-> Eduardo, did you ever have a chance to revisit this thread? I would
-> really like to make some progress on this one to unblock my i.MX8MQ
-> hwmon series.
-
-The problem I have with this patch is that it is an API which resides
-only in of-thermal. Growing APIs on DT only diverges of-thermal from
-thermal core and platform drivers.
-
-Besides, this patch needs to document the API in Documention/
-
-> 
-> Thanks,
-> Andrey Smirnov
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBFZHVhcmRvIFZhbGVudGluIDxl
+ZHViZXp2YWxAZ21haWwuY29tPg0KPiBTZW50OiAyMDE5xOo11MIyOcjVIDEwOjU0DQo+IFRvOiBB
+bmR5IFRhbmcgPGFuZHkudGFuZ0BueHAuY29tPg0KPiBDYzogc2hhd25ndW9Aa2VybmVsLm9yZzsg
+TGVvIExpIDxsZW95YW5nLmxpQG54cC5jb20+Ow0KPiByb2JoK2R0QGtlcm5lbC5vcmc7IG1hcmsu
+cnV0bGFuZEBhcm0uY29tOw0KPiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7
+IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
+b3JnOyBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGRhbmllbC5sZXpjYW5vQGxpbmFyby5v
+cmc7IHJ1aS56aGFuZ0BpbnRlbC5jb20NCj4gU3ViamVjdDogW0VYVF0gUmU6IFtQQVRDSF0gYXJt
+NjQ6IGR0czogbHMxMDI4YTogQWRkIFRoZXJtYWwgTW9uaXRvciBVbml0DQo+IG5vZGUNCj4gDQo+
+IENhdXRpb246IEVYVCBFbWFpbA0KPiANCj4gT24gVGh1LCBBcHIgMjUsIDIwMTkgYXQgMDQ6MjY6
+NDBQTSArMDgwMCwgWXVhbnRpYW4gVGFuZyB3cm90ZToNCj4gPiBUaGUgVGhlcm1hbCBNb25pdG9y
+aW5nIFVuaXQgKFRNVSkgbW9uaXRvcnMgYW5kIHJlcG9ydHMgdGhlIHRlbXBlcmF0dXJlDQo+ID4g
+ZnJvbSAyIHJlbW90ZSB0ZW1wZXJhdHVyZSBtZWFzdXJlbWVudCBzaXRlcyBsb2NhdGVkIG9uIGxz
+MTAyOGEgY2hpcC4NCj4gPiBBZGQgVE1VIGR0cyBub2RlIHRvIGVuYWJsZSB0aGlzIGZlYXR1cmUu
+DQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBZdWFudGlhbiBUYW5nIDxhbmR5LnRhbmdAbnhwLmNv
+bT4NCj4gDQo+IEkgZG9udCBzZWUgYW55dGhpbmcgd3JvbmcgZnJvbSBhIHRoZXJtYWwgc3RhbmRw
+b2ludC4NCj4gDQo+IEFja2VkLWJ5OiBFZHVhcmRvIFZhbGVudGluIDxlZHViZXp2YWxAZ21haWwu
+Y29tPg0KPiANCj4gUGxlYXNlIGdldCB0aGlzIHZpYSB5b3VyIGFyY2ggdHJlZSBtYWludGFpbmVy
+IHRvIGF2b2lkIG1lcmdlIGNvbmZsaWN0cy4NClRoYW5rcyBmb3IgeW91ciByZXZpZXcuIA0KVGhl
+IG9ubHkgY29uY2VybiBmb3IgYXJjaCB0cmVlIG1haW50YWluZXIgaXMgdGhhdCAiY29vbGluZy1t
+YXBzIiBpcyBhIHJlcXVpcmVkIHByb3BlcnR5Lg0KU28gSSBoYXZlIHRvIGFkZCBjb29saW5nLW1h
+cHMgZm9yIGVhY2ggem9uZS4gDQpTaW5jZSB0aGVyZSBhcmUgdHdvIHRoZXJtYWwgem9uZXMgYnV0
+IG9ubHkgb25lIGNvb2xpbmcgZGV2aWNlLCB3aGljaCBpcyBjcHVmcmVxLCBJIGhhdmUgdG8NCnVz
+ZSBDUFVGUkVRIGFzIGNvb2xpbmcgZGV2aWNlIHR3aWNlIHdoaWNoIG1heSBjYXVzZSBjb29saW5n
+IGRlY2lzaW9uIGNvbmZsaWN0Lg0KVGhlIGNhc2Ugd2lsbCBnZXQgd29yc2Ugd2hlbiB3ZSBoYXZl
+IDcgdGhlcm1hbCB6b25lcy4NClRoaXMgbWFrZXMgbWUgdGhpbmsgIm1heWJlIHdlIG5lZWQgdG8g
+Y2hhbmdlIGNvb2xpbmctbWFwcyB0byBhbiBvcHRpb25hbCBwcm9wZXJ0eSIuDQpJbiB0aGlzIHdh
+eSwgd2UgY2FuIHB1dCB0aGUgY29vbGluZyBkZXZpY2VzIHRvIHNwZWNpZmljIHRoZXJtYWwgem9u
+ZXMgYW5kIGxlYXZlIHRoZSB6b25lcyB3aXRob3V0DQpDb29saW5nIGRldmljZXMgdG8gZG8gdGhl
+IGRlZmF1bHQgYWN0aW9uIHdoaWNoIGlzIHJlc2V0IG9yIHBvd2Vyb2ZmIHNvYy4NCldoYXQncyB5
+b3VyIG9waW5pb24gYWJvdXQgdGhpcz8NCg0KQlIsDQpBbmR5DQoNCj4gDQo+ID4gLS0tDQo+ID4g
+IGFyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2ZzbC1sczEwMjhhLmR0c2kgfCAgMTE0DQo+
+ID4gKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gIDEgZmlsZXMgY2hhbmdlZCwgMTE0IGlu
+c2VydGlvbnMoKyksIDAgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9h
+cm02NC9ib290L2R0cy9mcmVlc2NhbGUvZnNsLWxzMTAyOGEuZHRzaQ0KPiA+IGIvYXJjaC9hcm02
+NC9ib290L2R0cy9mcmVlc2NhbGUvZnNsLWxzMTAyOGEuZHRzaQ0KPiA+IGluZGV4IGIwNDU4MTIu
+LmEyNWY1ZmMgMTAwNjQ0DQo+ID4gLS0tIGEvYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUv
+ZnNsLWxzMTAyOGEuZHRzaQ0KPiA+ICsrKyBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxl
+L2ZzbC1sczEwMjhhLmR0c2kNCj4gPiBAQCAtMjksNiArMjksNyBAQA0KPiA+ICAgICAgICAgICAg
+ICAgICAgICAgICBjbG9ja3MgPSA8JmNsb2NrZ2VuIDEgMD47DQo+ID4gICAgICAgICAgICAgICAg
+ICAgICAgIG5leHQtbGV2ZWwtY2FjaGUgPSA8JmwyPjsNCj4gPiAgICAgICAgICAgICAgICAgICAg
+ICAgY3B1LWlkbGUtc3RhdGVzID0gPCZDUFVfUEgyMD47DQo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgICNjb29saW5nLWNlbGxzID0gPDI+Ow0KPiA+ICAgICAgICAgICAgICAgfTsNCj4gPg0KPiA+
+ICAgICAgICAgICAgICAgY3B1MTogY3B1QDEgew0KPiA+IEBAIC0zOSw2ICs0MCw3IEBADQo+ID4g
+ICAgICAgICAgICAgICAgICAgICAgIGNsb2NrcyA9IDwmY2xvY2tnZW4gMSAwPjsNCj4gPiAgICAg
+ICAgICAgICAgICAgICAgICAgbmV4dC1sZXZlbC1jYWNoZSA9IDwmbDI+Ow0KPiA+ICAgICAgICAg
+ICAgICAgICAgICAgICBjcHUtaWRsZS1zdGF0ZXMgPSA8JkNQVV9QSDIwPjsNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgI2Nvb2xpbmctY2VsbHMgPSA8Mj47DQo+ID4gICAgICAgICAgICAgICB9
+Ow0KPiA+DQo+ID4gICAgICAgICAgICAgICBsMjogbDItY2FjaGUgew0KPiA+IEBAIC0zOTgsNiAr
+NDAwLDExOCBAQA0KPiA+ICAgICAgICAgICAgICAgICAgICAgICBzdGF0dXMgPSAiZGlzYWJsZWQi
+Ow0KPiA+ICAgICAgICAgICAgICAgfTsNCj4gPg0KPiA+ICsgICAgICAgICAgICAgdG11OiB0bXVA
+MWYwMDAwMCB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiZnNsLHFv
+cmlxLXRtdSI7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIHJlZyA9IDwweDAgMHgxZjgwMDAw
+IDB4MCAweDEwMDAwPjsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgaW50ZXJydXB0cyA9IDww
+IDIzIDB4ND47DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIGZzbCx0bXUtcmFuZ2UgPSA8MHhi
+MDAwMCAweGEwMDI2IDB4ODAwNDgNCj4gMHg3MDA2MT47DQo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgIGZzbCx0bXUtY2FsaWJyYXRpb24gPSA8MHgwMDAwMDAwMCAweDAwMDAwMDI0DQo+ID4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAwMDAwMQ0KPiAw
+eDAwMDAwMDJiDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgMHgwMDAwMDAwMg0KPiAweDAwMDAwMDMxDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgMHgwMDAwMDAwMw0KPiAweDAwMDAwMDM4DQo+ID4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAwMDAwNA0KPiAweDAw
+MDAwMDNmDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+MHgwMDAwMDAwNQ0KPiAweDAwMDAwMDQ1DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgMHgwMDAwMDAwNg0KPiAweDAwMDAwMDRjDQo+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAwMDAwNw0KPiAweDAwMDAw
+MDUzDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgw
+MDAwMDAwOA0KPiAweDAwMDAwMDU5DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgMHgwMDAwMDAwOQ0KPiAweDAwMDAwMDYwDQo+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAwMDAwYQ0KPiAweDAwMDAwMDY2
+DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAw
+MDAwYg0KPiAweDAwMDAwMDZkDQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIDB4MDAwMTAwMDANCj4gMHgwMDAwMDAxYw0KPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDB4MDAwMTAwMDENCj4gMHgwMDAw
+MDAyNA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDB4
+MDAwMTAwMDINCj4gMHgwMDAwMDAyYw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIDB4MDAwMTAwMDMNCj4gMHgwMDAwMDAzNQ0KPiA+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDB4MDAwMTAwMDQNCj4gMHgwMDAwMDAz
+ZA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDB4MDAw
+MTAwMDUNCj4gMHgwMDAwMDA0NQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIDB4MDAwMTAwMDYNCj4gMHgwMDAwMDA0ZA0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDB4MDAwMTAwMDcNCj4gMHgwMDAwMDA0NQ0K
+PiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDB4MDAwMTAw
+MDgNCj4gMHgwMDAwMDA1ZQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIDB4MDAwMTAwMDkNCj4gMHgwMDAwMDA2Ng0KPiA+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIDB4MDAwMTAwMGENCj4gMHgwMDAwMDA2ZQ0KPiA+
+ICsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAweDAw
+MDIwMDAwDQo+IDB4MDAwMDAwMTgNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAweDAwMDIwMDAxDQo+IDB4MDAwMDAwMjINCj4gPiArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAweDAwMDIwMDAyDQo+IDB4MDAwMDAwMmQN
+Cj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAweDAwMDIw
+MDAzDQo+IDB4MDAwMDAwMzgNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAweDAwMDIwMDA0DQo+IDB4MDAwMDAwNDMNCj4gPiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAweDAwMDIwMDA1DQo+IDB4MDAwMDAwNGQNCj4g
+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAweDAwMDIwMDA2
+DQo+IDB4MDAwMDAwNTgNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAweDAwMDIwMDA3DQo+IDB4MDAwMDAwNjMNCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAweDAwMDIwMDA4DQo+IDB4MDAwMDAwNmUNCj4gPiAr
+DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAz
+MDAwMA0KPiAweDAwMDAwMDEwDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgMHgwMDAzMDAwMQ0KPiAweDAwMDAwMDFjDQo+ID4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAzMDAwMg0KPiAweDAwMDAwMDI5DQo+
+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAzMDAw
+Mw0KPiAweDAwMDAwMDM2DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgMHgwMDAzMDAwNA0KPiAweDAwMDAwMDQyDQo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAzMDAwNQ0KPiAweDAwMDAwMDRmDQo+ID4g
+KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMHgwMDAzMDAwNg0K
+PiAweDAwMDAwMDViDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgMHgwMDAzMDAwNw0KPiAweDAwMDAwMDY4PjsNCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgbGl0dGxlLWVuZGlhbjsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgI3RoZXJtYWwtc2Vu
+c29yLWNlbGxzID0gPDE+Ow0KPiA+ICsgICAgICAgICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAg
+ICAgICAgICB0aGVybWFsLXpvbmVzIHsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgY29yZS1j
+bHVzdGVyIHsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwb2xsaW5nLWRlbGF5
+LXBhc3NpdmUgPSA8MTAwMD47DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcG9s
+bGluZy1kZWxheSA9IDw1MDAwPjsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0
+aGVybWFsLXNlbnNvcnMgPSA8JnRtdSAwPjsNCj4gPiArDQo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgdHJpcHMgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgY29yZV9jbHVzdGVyX2FsZXJ0Og0KPiBjb3JlLWNsdXN0ZXItYWxlcnQgew0KPiA+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0ZW1wZXJhdHVyZSA9
+DQo+IDw4NTAwMD47DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIGh5c3RlcmVzaXMgPQ0KPiA8MjAwMD47DQo+ID4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHR5cGUgPSAicGFzc2l2ZSI7DQo+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9Ow0KPiA+ICsNCj4gPiArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIGNvcmVfY2x1c3Rlcl9jcml0Og0KPiBjb3JlLWNsdXN0
+ZXItY3JpdCB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHRlbXBlcmF0dXJlID0NCj4gPDk1MDAwPjsNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgaHlzdGVyZXNpcyA9DQo+IDwyMDAwPjsNCj4gPiArICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJjcml0aWNh
+bCI7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9Ow0KPiA+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGNvb2xpbmctbWFwcyB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBtYXAwIHsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgdHJpcCA9DQo+IDwmY29yZV9jbHVzdGVyX2FsZXJ0PjsNCj4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29vbGluZy1kZXZp
+Y2UgPQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIDwmY3B1MA0KPiBUSEVSTUFMX05PX0xJTUlUIFRIRVJNQUxfTk9fTElNSVQ+LA0KPiA+
+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwm
+Y3B1MQ0KPiBUSEVSTUFMX05PX0xJTUlUIFRIRVJNQUxfTk9fTElNSVQ+Ow0KPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfTsNCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICB9Ow0KPiA+ICsgICAgICAgICAgICAgICAgICAgICB9Ow0KPiA+ICsNCj4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgZGRyLWNvbnRyb2xsZXIgew0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHBvbGxpbmctZGVsYXktcGFzc2l2ZSA9IDwxMDAwPjsNCj4gPiArICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICBwb2xsaW5nLWRlbGF5ID0gPDUwMDA+Ow0KPiA+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRoZXJtYWwtc2Vuc29ycyA9IDwmdG11IDE+Ow0K
+PiA+ICsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0cmlwcyB7DQo+ID4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZHJfY29udHJvbGxlcl9hbGVydDoN
+Cj4gZGRyLWNvbnRyb2xsZXItYWxlcnQgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICB0ZW1wZXJhdHVyZSA9DQo+IDw4NTAwMD47DQo+ID4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGh5c3RlcmVzaXMgPQ0KPiA8
+MjAwMD47DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHR5cGUgPSAicGFzc2l2ZSI7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICB9Ow0KPiA+ICsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IGRkcl9jb250cm9sbGVyX2NyaXQ6DQo+IGRkci1jb250cm9sbGVyLWNyaXQgew0KPiA+ICsgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0ZW1wZXJhdHVyZSA9DQo+
+IDw5NTAwMD47DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIGh5c3RlcmVzaXMgPQ0KPiA8MjAwMD47DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHR5cGUgPSAiY3JpdGljYWwiOw0KPiA+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfTsNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB9Ow0KPiA+ICsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb29s
+aW5nLW1hcHMgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbWFw
+MCB7DQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRy
+aXAgPQ0KPiA8JmRkcl9jb250cm9sbGVyX2FsZXJ0PjsNCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgY29vbGluZy1kZXZpY2UgPQ0KPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwmY3B1MA0KPiBU
+SEVSTUFMX05PX0xJTUlUIFRIRVJNQUxfTk9fTElNSVQ+LA0KPiA+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwmY3B1MQ0KPiBUSEVSTUFMX05P
+X0xJTUlUIFRIRVJNQUxfTk9fTElNSVQ+Ow0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgfTsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9Ow0KPiA+
+ICsgICAgICAgICAgICAgICAgICAgICB9Ow0KPiA+ICsgICAgICAgICAgICAgfTsNCj4gPiArDQo+
+ID4gICAgICAgICAgICAgICBwY2llQDFmMDAwMDAwMCB7IC8qIEludGVncmF0ZWQgRW5kcG9pbnQg
+Um9vdCBDb21wbGV4DQo+ICovDQo+ID4gICAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUg
+PSAicGNpLWhvc3QtZWNhbS1nZW5lcmljIjsNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgcmVn
+ID0gPDB4MDEgMHhmMDAwMDAwMCAweDAgMHgxMDAwMDA+Ow0K
