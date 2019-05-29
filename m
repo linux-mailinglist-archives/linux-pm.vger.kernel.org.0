@@ -2,208 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DD92E32F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 19:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49EF2E33F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 19:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbfE2RZr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 13:25:47 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:49932 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725990AbfE2RZr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 May 2019 13:25:47 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74818341;
-        Wed, 29 May 2019 10:25:46 -0700 (PDT)
-Received: from redmoon (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D1533F5AF;
-        Wed, 29 May 2019 10:25:44 -0700 (PDT)
-Date:   Wed, 29 May 2019 18:25:41 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Niklas Cassel <niklas.cassel@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        PM <linux-pm@vger.kernel.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v4] arm64: dts: qcom: msm8998: Add PSCI cpuidle low power
- states
-Message-ID: <20190529172541.GB25642@redmoon>
-References: <346cd9f0-583d-f467-83d0-e73768bf5aac@free.fr>
- <20190523214619.GB25133@centauri>
- <f9aa108f-cb0a-2cee-7fce-e2803dcadb24@free.fr>
- <c41508c7-35b2-aa40-c468-384e51d3d7b6@free.fr>
+        id S1726547AbfE2R3y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 May 2019 13:29:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33414 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726018AbfE2R3y (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 May 2019 13:29:54 -0400
+Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1821323F98;
+        Wed, 29 May 2019 17:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559150994;
+        bh=GjeXbG5a4/TCvqedsRpiu3Uwp6Fw3Us0T1y7WfWByvU=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=UF8RXpJDjkY3rMBsElIE5D9QiCUeq99CA5mfV96q7RfqwKoqR0GQ9Kdu5U7CEeXxh
+         81NE9muFdMl2wt0cnXbVHV7cQTjKpfxGqOon9bggH/Lye5cIX3pwc1dQVVV59/RXWT
+         sgQf0yEYeKB9fQ8ob2UXnlaDVz9vqXEZwI99yWbU=
+Date:   Wed, 29 May 2019 19:29:49 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] x86/power: Fix 'nosmt' vs. hibernation triple fault
+ during resume
+In-Reply-To: <20190529171726.obom7xql72bgbjhc@treble>
+Message-ID: <nycvar.YFH.7.76.1905291921060.1962@cbobk.fhfr.pm>
+References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm> <nycvar.YFH.7.76.1905291230130.1962@cbobk.fhfr.pm> <20190529161028.a6kpywzpjazgql5u@treble> <nycvar.YFH.7.76.1905291818470.1962@cbobk.fhfr.pm> <20190529171726.obom7xql72bgbjhc@treble>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c41508c7-35b2-aa40-c468-384e51d3d7b6@free.fr>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 29, 2019 at 01:08:44PM +0200, Marc Gonzalez wrote:
-> + linux-pm
-> 
-> On 24/05/2019 14:32, Marc Gonzalez wrote:
-> 
-> > From: Amit Kucheria <amit.kucheria@linaro.org>
-> > 
-> > Add device bindings for cpuidle states for cpu devices.
-> > 
-> > [marc: rebase, fix arm,psci-suspend-param, fix entry-latency-us]
-> > Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
-> > ---
-> > Changes from v3:
-> > - Fixup all 4 entry-latency-us (Niklas)
-> > Changes from v2:
-> > - Rebase
-> > - Fixup arm,psci-suspend-param for power-collapse states (otherwise: reboot)
-> > ---
-> >  arch/arm64/boot/dts/qcom/msm8998.dtsi | 50 +++++++++++++++++++++++++++
-> >  1 file changed, 50 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> > index 412195b9794c..ac6bd32c0e7d 100644
-> > --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> > @@ -78,6 +78,7 @@
-> >  			compatible = "arm,armv8";
-> >  			reg = <0x0 0x0>;
-> >  			enable-method = "psci";
-> > +			cpu-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-> >  			next-level-cache = <&L2_0>;
-> >  			L2_0: l2-cache {
-> >  				compatible = "arm,arch-cache";
-> > @@ -96,6 +97,7 @@
-> >  			compatible = "arm,armv8";
-> >  			reg = <0x0 0x1>;
-> >  			enable-method = "psci";
-> > +			cpu-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-> >  			next-level-cache = <&L2_0>;
-> >  			L1_I_1: l1-icache {
-> >  				compatible = "arm,arch-cache";
-> > @@ -110,6 +112,7 @@
-> >  			compatible = "arm,armv8";
-> >  			reg = <0x0 0x2>;
-> >  			enable-method = "psci";
-> > +			cpu-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-> >  			next-level-cache = <&L2_0>;
-> >  			L1_I_2: l1-icache {
-> >  				compatible = "arm,arch-cache";
-> > @@ -124,6 +127,7 @@
-> >  			compatible = "arm,armv8";
-> >  			reg = <0x0 0x3>;
-> >  			enable-method = "psci";
-> > +			cpu-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-> >  			next-level-cache = <&L2_0>;
-> >  			L1_I_3: l1-icache {
-> >  				compatible = "arm,arch-cache";
-> > @@ -138,6 +142,7 @@
-> >  			compatible = "arm,armv8";
-> >  			reg = <0x0 0x100>;
-> >  			enable-method = "psci";
-> > +			cpu-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-> >  			next-level-cache = <&L2_1>;
-> >  			L2_1: l2-cache {
-> >  				compatible = "arm,arch-cache";
-> > @@ -156,6 +161,7 @@
-> >  			compatible = "arm,armv8";
-> >  			reg = <0x0 0x101>;
-> >  			enable-method = "psci";
-> > +			cpu-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-> >  			next-level-cache = <&L2_1>;
-> >  			L1_I_101: l1-icache {
-> >  				compatible = "arm,arch-cache";
-> > @@ -170,6 +176,7 @@
-> >  			compatible = "arm,armv8";
-> >  			reg = <0x0 0x102>;
-> >  			enable-method = "psci";
-> > +			cpu-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-> >  			next-level-cache = <&L2_1>;
-> >  			L1_I_102: l1-icache {
-> >  				compatible = "arm,arch-cache";
-> > @@ -184,6 +191,7 @@
-> >  			compatible = "arm,armv8";
-> >  			reg = <0x0 0x103>;
-> >  			enable-method = "psci";
-> > +			cpu-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-> >  			next-level-cache = <&L2_1>;
-> >  			L1_I_103: l1-icache {
-> >  				compatible = "arm,arch-cache";
-> > @@ -230,6 +238,48 @@
-> >  				};
-> >  			};
-> >  		};
-> > +
-> > +		idle-states {
-> > +			entry-method = "psci";
-> > +
-> > +			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
-> > +				compatible = "arm,idle-state";
-> > +				idle-state-name = "little-retention";
-> > +				arm,psci-suspend-param = <0x00000002>;
-> > +				entry-latency-us = <81>;
-> > +				exit-latency-us = <86>;
-> > +				min-residency-us = <200>;
-> > +			};
-> > +
-> > +			LITTLE_CPU_SLEEP_1: cpu-sleep-0-1 {
-> > +				compatible = "arm,idle-state";
-> > +				idle-state-name = "little-power-collapse";
-> > +				arm,psci-suspend-param = <0x40000003>;
-> > +				entry-latency-us = <273>;
-> > +				exit-latency-us = <612>;
-> > +				min-residency-us = <1000>;
-> > +				local-timer-stop;
-> > +			};
-> > +
-> > +			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
-> > +				compatible = "arm,idle-state";
-> > +				idle-state-name = "big-retention";
-> > +				arm,psci-suspend-param = <0x00000002>;
-> > +				entry-latency-us = <79>;
-> > +				exit-latency-us = <82>;
-> > +				min-residency-us = <200>;
-> > +			};
-> > +
-> > +			BIG_CPU_SLEEP_1: cpu-sleep-1-1 {
-> > +				compatible = "arm,idle-state";
-> > +				idle-state-name = "big-power-collapse";
-> > +				arm,psci-suspend-param = <0x40000003>;
-> > +				entry-latency-us = <336>;
-> > +				exit-latency-us = <525>;
-> > +				min-residency-us = <1000>;
-> > +				local-timer-stop;
-> > +			};
-> > +		};
-> 
-> Niklas and I have been discussing the min-residency-us prop.
-> 
-> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/arm/idle-states.txt
-> 
-> I thought a requirement would be
-> 
-> 	min-residency > entry-latency + exit-latency
-> 
-> but it doesn't seem to be the case.
-> 
-> Do the values proposed here look kosher?
+On Wed, 29 May 2019, Josh Poimboeuf wrote:
 
-As the document describes the right values should be computed by
-plotting energy consumption.
+> I still have the question about whether we could make mwait_play_dead() 
+> monitor a fixed address.  If we could get that to work, that seems more 
+> robust to me.
 
-min-residency is a worst case scenario because the energy consumed to
-enter an idle state depends on the system state (eg cache state), so the
-worst case value should be added there.
+Hmm, does it really?
 
-Lorenzo
+That'd mean the resumer and resumee must have the same fixmap. How are you 
+going to guarantee that? Currently the resuming kernel doesn't really have 
+to be the same as the one that is being resumed.
+
+> Another question.  With your patch, if booted with nosmt, is SMT still 
+> disabled after you resume from hibernation?  
+
+Yup, it is.
+
+> I don't see how SMT would get disabled again.
+
+The target kernel only onlines the CPUs which were online at the time of 
+hibernation (and are therefore in frozen_cpus mask).
+
+-- 
+Jiri Kosina
+SUSE Labs
+
