@@ -2,230 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B07942D412
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 05:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD272D416
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 05:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfE2DCc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 May 2019 23:02:32 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36186 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725816AbfE2DCc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 May 2019 23:02:32 -0400
-Received: by mail-pg1-f194.google.com with SMTP id a3so431518pgb.3;
-        Tue, 28 May 2019 20:02:31 -0700 (PDT)
+        id S1726141AbfE2DFr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 May 2019 23:05:47 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36456 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725816AbfE2DFr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 May 2019 23:05:47 -0400
+Received: by mail-pg1-f195.google.com with SMTP id a3so435857pgb.3;
+        Tue, 28 May 2019 20:05:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=X6hCgGrg1/EebBkiZczSeiIYTj567ezCT4B+Qvt2s6Q=;
-        b=E7MD6iUCYh7UBE8D8v6Tj9XnZ+OUEjLsn2t7PjrybNOo62FmkyX8L6GN+YvLcvreBf
-         1K/b9tbQ1rSkY+RJnEpVfTgNzLxYFF6usqJTmHXT+jDAo0jfSt/XLCnXIx70y9IYfxti
-         CqvXgmkijrm0NNrTeidIZWiufx4mLZZDvLr3TgD/+VqLGthmsv80JpGVXSNZ7u5UTaKU
-         65tp8D8zynwlLPjy4TGsnQgZa3bOZJ8lZb77FNu+9s7Mgu55R77DLLy8AxMfyyM/P8pg
-         vc4s/pueNLcGft20cBN2Z2nthMGvUjBkHoSnWgJS8zswD2cBuLQ8XbEUt+lAP0AoGHCB
-         hTZw==
+        bh=Yae+joByYceDAtdWhJGQ+9TqNvlrFL7154XbmhADCzk=;
+        b=loJI8CmBiDK4QXBglvOWt2m+NRvAhk4f5Dpdw5nuyIoVvwObyRmIIUVGmvd+FJfS/V
+         ojqBViP2eZMFN4PrCjFp2vYaQP/xmsQowtHlPbbltDN9JTV/MQUAciCuFbIyOsUa62NC
+         mT99NxZ1PC/nn6YWjHryuP+TmQUNFLHbDlidgSRKaGnUoexUoJM4CDsYz88VUbdqoT5X
+         6wtYHSrpu4+CwzrqBfOvCvGZnImijdLv6e+on6dB3VxcHbH8DABwY7Zky1fnpEeDB2aF
+         Cks3yYjP8tOWQbmD6QGz2QKW1VTSqye9kFjf0txnn8VNvPTFsPduE0rIuGIDpf1tVZ9z
+         A3vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=X6hCgGrg1/EebBkiZczSeiIYTj567ezCT4B+Qvt2s6Q=;
-        b=nVGi9+CKmwkmZQ/93Y6Us1zCGrHByvXt/c/M79el38S6ByByx5b2PI0l1X5FX8aDpe
-         hveTupG+IAPwQWZdDru0novvCu3meY1NzzU09jaG7jXjAwabI2Ow901TXObdhdrSVKtO
-         m3dRD9Y41jBOczZ4r289ZtIJ93NNATbcdH+Q5KvjqIog/AlA5dX1PfxS6H1sXIyFMPzp
-         dkbpbAJA4k7tTkI8V0P1RC98E5NoGwGnxuFgLJ5GjBkhjfzb/k6Mxk1qG46/y7YQLqXi
-         r8mwXP36hk0TY2CoiCvTf/nh9iL1QCHh3PqrTjtPBuMXuH1+77tBYM4vB/89JraWKORR
-         LxBg==
-X-Gm-Message-State: APjAAAVcmDjFNiQK4Li82WsbuzcIGvXRQiBEqoH6r7QONDLkw2aC17QZ
-        tLYs2MibHYhOKI19g4Sf8Wr3x4Ee6v0=
-X-Google-Smtp-Source: APXvYqyPsBpkG44hSDy7mXOJP8h3S5s7ICBOVNki4QTwaMsFGNf1xnTpWdMo6loLPLw8LZJQ9Rgn+A==
-X-Received: by 2002:a17:90a:b885:: with SMTP id o5mr9397531pjr.52.1559098951071;
-        Tue, 28 May 2019 20:02:31 -0700 (PDT)
+        bh=Yae+joByYceDAtdWhJGQ+9TqNvlrFL7154XbmhADCzk=;
+        b=dhZmTmuL0Ijn3H/ew3LI5SFp5+Hta6Tr47CFc5DEntnP7PnyVaS3L55bH/sIARA/PC
+         01Z5VFOaJDn6A/Of5x6en4ahuivWYfHOkcuJOLdyRjZoLzW1yX0CiwY6Dhe1zBC47xvD
+         WwGfcUa6nTUdP2icaA/x5RkX5VPLU9cXC6Fq4pAZe9rsHyOXjoTTtkoG6WMoAJcBawWh
+         +osyBVOATr66QcToxALUmgo/k2DSjwJHln4DXOB/scMKQyREqawoM5RlWVSPkIW91AeK
+         FebhV3P8WBRBivey6RH4myc+N/m4VWkerIHS18iyz0GhehK489aDnYIISCZyNjpGayp8
+         RMLA==
+X-Gm-Message-State: APjAAAVg/wdbcLQYKI5rbTlEwazeGpZinkFwS/bDIuKeAqQ3uCIZGX95
+        GngHE6GvmQY84FqW2SO8eJk=
+X-Google-Smtp-Source: APXvYqyyAaMniytWmPWiZn/pkCsfkmPCIhT/hrGDPfJcVMyRDShfxmyDZOZFAswfsVwf7gqBNJ+SfQ==
+X-Received: by 2002:a65:44cb:: with SMTP id g11mr134373637pgs.193.1559099146241;
+        Tue, 28 May 2019 20:05:46 -0700 (PDT)
 Received: from localhost.localdomain ([2601:644:8201:32e0:7256:81ff:febd:926d])
-        by smtp.gmail.com with ESMTPSA id d9sm13532565pgl.20.2019.05.28.20.02.29
+        by smtp.gmail.com with ESMTPSA id f10sm12830922pgq.73.2019.05.28.20.05.45
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 20:02:30 -0700 (PDT)
-Date:   Tue, 28 May 2019 20:02:27 -0700
+        Tue, 28 May 2019 20:05:45 -0700 (PDT)
+Date:   Tue, 28 May 2019 20:05:43 -0700
 From:   Eduardo Valentin <edubezval@gmail.com>
-To:     Anson.Huang@nxp.com
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        catalin.marinas@arm.com, will.deacon@arm.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, aisheng.dong@nxp.com,
-        ulf.hansson@linaro.org, peng.fan@nxp.com, daniel.baluta@nxp.com,
-        maxime.ripard@bootlin.com, olof@lixom.net,
-        jagan@amarulasolutions.com, horms+renesas@verge.net.au,
-        leonard.crestez@nxp.com, bjorn.andersson@linaro.org,
-        dinguyen@kernel.org, enric.balletbo@collabora.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Linux-imx@nxp.com
-Subject: Re: [PATCH RESEND V13 2/5] thermal: of-thermal: add API for getting
- sensor ID from DT
-Message-ID: <20190529030225.GA2662@localhost.localdomain>
-References: <20190528060621.47342-1-Anson.Huang@nxp.com>
- <20190528060621.47342-2-Anson.Huang@nxp.com>
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Chris Healy <cphealy@gmail.com>
+Subject: Re: [PATCH] thermal/drivers/of: Add a get_temp_id callback function
+Message-ID: <20190529030542.GA2654@localhost.localdomain>
+References: <20190416172203.4679-1-daniel.lezcano@linaro.org>
+ <20190423154430.GA16014@localhost.localdomain>
+ <bc10d520-4d15-74d6-0dc2-fd63df8d9a21@linaro.org>
+ <ff407865-8606-60c2-62d8-60ae96d1984d@linaro.org>
+ <CAHQ1cqG-cb=1hyO8oeV4k-6Pq4q+aqhH8RPx04i2oPTNhAhiVg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190528060621.47342-2-Anson.Huang@nxp.com>
+In-Reply-To: <CAHQ1cqG-cb=1hyO8oeV4k-6Pq4q+aqhH8RPx04i2oPTNhAhiVg@mail.gmail.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 28, 2019 at 02:06:18PM +0800, Anson.Huang@nxp.com wrote:
-> From: Anson Huang <Anson.Huang@nxp.com>
-> 
-> On some platforms like i.MX8QXP, the thermal driver needs a
-> real HW sensor ID from DT thermal zone, the HW sensor ID is
-> used to get temperature from SCU firmware, and the virtual
-> sensor ID starting from 0 to N is NOT used at all, this patch
-> adds new API thermal_zone_of_get_sensor_id() to provide the
-> feature of getting sensor ID from DT thermal zone's node.
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
-> Changes since V12:
-> 	- adjust the second parameter of thermal_zone_of_get_sensor_id() API, then caller no need
-> 	  to pass the of_phandle_args structure and put the sensor_specs.np manually, also putting
-> 	  the sensor node device check inside this API to make it easy for usage;
+On Thu, May 23, 2019 at 07:48:56PM -0700, Andrey Smirnov wrote:
+> On Mon, Apr 29, 2019 at 9:51 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+> >
+> > On 24/04/2019 01:08, Daniel Lezcano wrote:
+> > > On 23/04/2019 17:44, Eduardo Valentin wrote:
+> > >> Hello,
+> > >>
+> > >> On Tue, Apr 16, 2019 at 07:22:03PM +0200, Daniel Lezcano wrote:
+> > >>> Currently when we register a sensor, we specify the sensor id and a data
+> > >>> pointer to be passed when the get_temp function is called. However the
+> > >>> sensor_id is not passed to the get_temp callback forcing the driver to
+> > >>> do extra allocation and adding back pointer to find out from the sensor
+> > >>> information the driver data and then back to the sensor id.
+> > >>>
+> > >>> Add a new callback get_temp_id() which will be called if set. It will
+> > >>> call the get_temp_id() with the sensor id.
+> > >>>
+> > >>> That will be more consistent with the registering function.
+> > >>
+> > >> I still do not understand why we need to have a get_id callback.
+> > >> The use cases I have seen so far, which I have been intentionally rejecting, are
+> > >> mainly solvable by creating other compatible entries. And really, if you
+> > >> have, say a bandgap, chip that supports multiple sensors, but on
+> > >> SoC version A it has 5 sensors, and on SoC version B it has only 4,
+> > >> or on SoC version C, it has 5 but they are either logially located
+> > >> in different places (gpu vs iva regions), these are all cases in which
+> > >> you want a different compatible!
+> > >>
+> > >> Do you mind sharing why you need a get sensor id callback?
+> > >
+> > > It is not a get sensor id callback, it is a get_temp callback which pass
+> > > the sensor id.
+> > >
+> > > See in the different drivers, it is a common pattern there is a
+> > > structure for the driver, then a structure for the sensor. When the
+> > > get_temp is called, the callback needs info from the sensor structure
+> > > and from the driver structure, so a back pointer to the driver structure
+> > > is added in the sensor structure.
+> >
 
-What happened to using nxp,resource-id property in your driver?
-Why do we need this as an API in of-thermal? What other drivers may
-benefit of this?
+Do you mind sending a patch showing how one could convert an existing
+driver to use this new API?
 
-Regardless, this patch needs to document the new API under
-Documentation/
-
-> ---
->  drivers/thermal/of-thermal.c | 66 +++++++++++++++++++++++++++++++++-----------
->  include/linux/thermal.h      | 10 +++++++
->  2 files changed, 60 insertions(+), 16 deletions(-)
+> > Hi Eduardo,
+> >
+> > does the explanation clarifies the purpose of this change?
+> >
 > 
-> diff --git a/drivers/thermal/of-thermal.c b/drivers/thermal/of-thermal.c
-> index dc5093b..a53792b 100644
-> --- a/drivers/thermal/of-thermal.c
-> +++ b/drivers/thermal/of-thermal.c
-> @@ -449,6 +449,54 @@ thermal_zone_of_add_sensor(struct device_node *zone,
->  }
->  
->  /**
-> + * thermal_zone_of_get_sensor_id - get sensor ID from a DT thermal zone
-> + * @tz_np: a valid thermal zone device node.
-> + * @sensor_np: a sensor node of a valid sensor device.
-> + * @id: a sensor ID pointer will be passed back.
-> + *
-> + * This function will get sensor ID from a given thermal zone node, use
-> + * "thermal-sensors" as list name, and get sensor ID from first phandle's
-> + * argument.
-> + *
-> + * Return: 0 on success, proper error code otherwise.
-> + */
-> +
-> +int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
-> +				  struct device_node *sensor_np,
-> +				  u32 *id)
-> +{
-> +	struct of_phandle_args sensor_specs;
-> +	int ret;
-> +
-> +	ret = of_parse_phandle_with_args(tz_np,
-> +					 "thermal-sensors",
-> +					 "#thermal-sensor-cells",
-> +					 0,
-> +					 &sensor_specs);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (sensor_specs.np != sensor_np) {
-> +		of_node_put(sensor_specs.np);
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (sensor_specs.args_count >= 1) {
-> +		*id = sensor_specs.args[0];
-> +		WARN(sensor_specs.args_count > 1,
-> +		     "%pOFn: too many cells in sensor specifier %d\n",
-> +		     sensor_specs.np, sensor_specs.args_count);
-> +	} else {
-> +		*id = 0;
-> +	}
-> +
-> +	of_node_put(sensor_specs.np);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_of_get_sensor_id);
-> +
-> +/**
->   * thermal_zone_of_sensor_register - registers a sensor to a DT thermal zone
->   * @dev: a valid struct device pointer of a sensor device. Must contain
->   *       a valid .of_node, for the sensor node.
-> @@ -499,36 +547,22 @@ thermal_zone_of_sensor_register(struct device *dev, int sensor_id, void *data,
->  	sensor_np = of_node_get(dev->of_node);
->  
->  	for_each_available_child_of_node(np, child) {
-> -		struct of_phandle_args sensor_specs;
->  		int ret, id;
->  
->  		/* For now, thermal framework supports only 1 sensor per zone */
-> -		ret = of_parse_phandle_with_args(child, "thermal-sensors",
-> -						 "#thermal-sensor-cells",
-> -						 0, &sensor_specs);
-> +		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
->  		if (ret)
->  			continue;
->  
-> -		if (sensor_specs.args_count >= 1) {
-> -			id = sensor_specs.args[0];
-> -			WARN(sensor_specs.args_count > 1,
-> -			     "%pOFn: too many cells in sensor specifier %d\n",
-> -			     sensor_specs.np, sensor_specs.args_count);
-> -		} else {
-> -			id = 0;
-> -		}
-> -
-> -		if (sensor_specs.np == sensor_np && id == sensor_id) {
-> +		if (id == sensor_id) {
->  			tzd = thermal_zone_of_add_sensor(child, sensor_np,
->  							 data, ops);
->  			if (!IS_ERR(tzd))
->  				tzd->ops->set_mode(tzd, THERMAL_DEVICE_ENABLED);
->  
-> -			of_node_put(sensor_specs.np);
->  			of_node_put(child);
->  			goto exit;
->  		}
-> -		of_node_put(sensor_specs.np);
->  	}
->  exit:
->  	of_node_put(sensor_np);
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 15a4ca5..5edffe6 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -375,6 +375,9 @@ struct thermal_trip {
->  
->  /* Function declarations */
->  #ifdef CONFIG_THERMAL_OF
-> +int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
-> +				  struct device_node *sensor_np,
-> +				  u32 *id);
->  struct thermal_zone_device *
->  thermal_zone_of_sensor_register(struct device *dev, int id, void *data,
->  				const struct thermal_zone_of_device_ops *ops);
-> @@ -386,6 +389,13 @@ struct thermal_zone_device *devm_thermal_zone_of_sensor_register(
->  void devm_thermal_zone_of_sensor_unregister(struct device *dev,
->  					    struct thermal_zone_device *tz);
->  #else
-> +
-> +static int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
-> +					 struct device_node *sensor_np,
-> +					 u32 *id)
-> +{
-> +	return -ENOENT;
-> +}
->  static inline struct thermal_zone_device *
->  thermal_zone_of_sensor_register(struct device *dev, int id, void *data,
->  				const struct thermal_zone_of_device_ops *ops)
+> Eduardo, did you ever have a chance to revisit this thread? I would
+> really like to make some progress on this one to unblock my i.MX8MQ
+> hwmon series.
+
+The problem I have with this patch is that it is an API which resides
+only in of-thermal. Growing APIs on DT only diverges of-thermal from
+thermal core and platform drivers.
+
+Besides, this patch needs to document the API in Documention/
+
+> 
+> Thanks,
+> Andrey Smirnov
