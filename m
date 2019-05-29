@@ -2,28 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B49EF2E33F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 19:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB0F2E404
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 20:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbfE2R3y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 13:29:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33414 "EHLO mail.kernel.org"
+        id S1726054AbfE2SCw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 May 2019 14:02:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49328 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726018AbfE2R3y (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 May 2019 13:29:54 -0400
+        id S1726024AbfE2SCv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 May 2019 14:02:51 -0400
 Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1821323F98;
-        Wed, 29 May 2019 17:29:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5974524020;
+        Wed, 29 May 2019 18:02:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559150994;
-        bh=GjeXbG5a4/TCvqedsRpiu3Uwp6Fw3Us0T1y7WfWByvU=;
+        s=default; t=1559152971;
+        bh=J1gLsjzvEkY7rS5KobvWe5qx+tH7eR2x9ewus4g2TrM=;
         h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=UF8RXpJDjkY3rMBsElIE5D9QiCUeq99CA5mfV96q7RfqwKoqR0GQ9Kdu5U7CEeXxh
-         81NE9muFdMl2wt0cnXbVHV7cQTjKpfxGqOon9bggH/Lye5cIX3pwc1dQVVV59/RXWT
-         sgQf0yEYeKB9fQ8ob2UXnlaDVz9vqXEZwI99yWbU=
-Date:   Wed, 29 May 2019 19:29:49 +0200 (CEST)
+        b=R1xa4dU9ejuliWV5FRLjxgbtuQU06pHSLaRZPEXd4lskPsDwwOR9WDmQRGwvqq973
+         n2FcuNBKw1mcHtppG5SjMdyef8q89ki2X14a3EBhF6h7OelgF+uHUrsWoyuQ4xPvKA
+         Knso4QgKfDFQL2eJB2p0xzHQCAMXLKr3VP3HD0ms=
+Date:   Wed, 29 May 2019 20:02:47 +0200 (CEST)
 From:   Jiri Kosina <jikos@kernel.org>
 To:     Josh Poimboeuf <jpoimboe@redhat.com>
 cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -35,9 +35,10 @@ cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] x86/power: Fix 'nosmt' vs. hibernation triple fault
  during resume
-In-Reply-To: <20190529171726.obom7xql72bgbjhc@treble>
-Message-ID: <nycvar.YFH.7.76.1905291921060.1962@cbobk.fhfr.pm>
+In-Reply-To: <nycvar.YFH.7.76.1905291921060.1962@cbobk.fhfr.pm>
+Message-ID: <nycvar.YFH.7.76.1905292000310.1962@cbobk.fhfr.pm>
 References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm> <nycvar.YFH.7.76.1905291230130.1962@cbobk.fhfr.pm> <20190529161028.a6kpywzpjazgql5u@treble> <nycvar.YFH.7.76.1905291818470.1962@cbobk.fhfr.pm> <20190529171726.obom7xql72bgbjhc@treble>
+ <nycvar.YFH.7.76.1905291921060.1962@cbobk.fhfr.pm>
 User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -46,27 +47,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 29 May 2019, Josh Poimboeuf wrote:
+On Wed, 29 May 2019, Jiri Kosina wrote:
 
-> I still have the question about whether we could make mwait_play_dead() 
-> monitor a fixed address.  If we could get that to work, that seems more 
-> robust to me.
+> The target kernel only onlines the CPUs which were online at the time of 
+> hibernation (and are therefore in frozen_cpus mask).
 
-Hmm, does it really?
+Hm, there is a catch though. After resume, the SMT siblings are now in hlt 
+instead of mwait.
 
-That'd mean the resumer and resumee must have the same fixmap. How are you 
-going to guarantee that? Currently the resuming kernel doesn't really have 
-to be the same as the one that is being resumed.
+Which means that the resumed kernel has to do one more online/offline 
+cycle for them, to push them to mwait again.
 
-> Another question.  With your patch, if booted with nosmt, is SMT still 
-> disabled after you resume from hibernation?  
+Bah.
 
-Yup, it is.
-
-> I don't see how SMT would get disabled again.
-
-The target kernel only onlines the CPUs which were online at the time of 
-hibernation (and are therefore in frozen_cpus mask).
+I'll send v3 shortly, so please don't apply v2 just yet.
 
 -- 
 Jiri Kosina
