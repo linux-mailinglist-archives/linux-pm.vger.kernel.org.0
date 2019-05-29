@@ -2,178 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C672E280
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 18:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7652E2B5
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 19:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726581AbfE2QrU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 12:47:20 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42954 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726097AbfE2QrU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 May 2019 12:47:20 -0400
-Received: by mail-pf1-f194.google.com with SMTP id r22so1981509pfh.9
-        for <linux-pm@vger.kernel.org>; Wed, 29 May 2019 09:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4Tv6+Gs1+EQ5+P4YCY4cdNnU3gxm7lIyvRNXI6TMLyQ=;
-        b=G81QM3OsXRTmIPE0lZDNPld9Gjec7ThwCiarz3PlcrNtprZJRRJbRzKS1iZ5UFwg2E
-         SKHZT2obo9Sa2W1v4pOGqQPxO5ViDtPUTois9dSsPBVysA9ZujxoayloHZvSdjPSmYuw
-         kETUz0mTnFhMjuT0aYwUysqPdTsySiZqLVg/8zjj3lCo7mF0NUt8aEtWb8MR2QHiAChW
-         snSwaK59AbMikcsiL63JKsMdVg5XTjPv9QJGeUep3YxtHXwuwZ5pOZeroRJulvnxRgeF
-         kPXv8EEv3VzP7II13egjiTNzuaNP/11dWfA+vE8z3Jqa4+V1a59bcteOv0Dq2seSSagh
-         0zDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4Tv6+Gs1+EQ5+P4YCY4cdNnU3gxm7lIyvRNXI6TMLyQ=;
-        b=K2A3Ybz87TCTlW+3IcSP3SazRk44ZQ0NjF/jpQ68SACx1NyJSa0stnjzBBvXOxvu0z
-         FR0zGImNgdnPDU3oFZCAUmqdi0JcOhZ+swSub7DVrMyBsuVoCjgE3W+x5CEbOf4C8EJC
-         bPUuA9ne7YKB8EW65xOooZ4ReCBQPSaCPpq5EGE6mYFu0i1xtTSU5mDktmYBzQ2zfHXk
-         cdr2e5AcuG/6CNHW37hsMrMaqr7KoLHqXaHB0/9g0jdXJF8KYATMOBAu741yfQSBcZ7u
-         RBr1rJRdzMbE1pFMz9AsrxHkpaQW3ZPgma6wuDuH9ygiOCdwLckslXzIiGN4y3SED04G
-         EG3A==
-X-Gm-Message-State: APjAAAXORPHd/KV/Hj7zJhaX0yRUa34IhZgJA/h9LM4RTr2XGW4y1bhp
-        BILh+2zgnrAt1pMYzW+qh7Nf/+WnigwwXeVvRXk=
-X-Google-Smtp-Source: APXvYqxN3FUqJ2Jtgk9qZ+mXgZN0IunAk+t8P2x9TLTwoLRzR6cF1cOOR6Ye44qr/bs4cSb2x1s7nd30zWLnZexKot8=
-X-Received: by 2002:a17:90a:d681:: with SMTP id x1mr4681224pju.13.1559148439268;
- Wed, 29 May 2019 09:47:19 -0700 (PDT)
+        id S1725956AbfE2RA7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 May 2019 13:00:59 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:53612 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbfE2RA7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 May 2019 13:00:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Rql5GG/ybmT6SurmXd44Bjbh2qIVyT0VkM96NAFNiuY=; b=jdAco6Qh4fkIH/71oUSSsoO7u
+        lk/BCu4M3STYvMP8qWc8qxfDNG9NRTTOJthuMX6pFjkDv51ePcJUUZhFoyOOUBAcneWneFAPIznKI
+        uPXl855Y50siczUlOJg0ioKM4UHriKcxQK1MM2/2yL5RKdv/zePr5OceUBlFl3fnwwDpHMa2PH9pi
+        SQ383xI5o8py9HY8VmcxItqK50zXYQOUehWpRfyEfVZAe6bA2Nh4Y/Qy7Va8E4pnJiQ9z8pb8iCs7
+        62/VcszK1uGMGe11Xy1e/cqBxPwvdYlJtzbkG6piUKJX6sQ0HEuvkaADhVIhIgQu66bcKacREQJLZ
+        X3LzfNL8Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hW1wX-0001KV-Ov; Wed, 29 May 2019 17:00:49 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 281D7201B8CFE; Wed, 29 May 2019 19:00:48 +0200 (CEST)
+Date:   Wed, 29 May 2019 19:00:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] x86/power: Fix 'nosmt' vs. hibernation triple fault
+ during resume
+Message-ID: <20190529170048.GD2623@hirez.programming.kicks-ass.net>
+References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm>
+ <nycvar.YFH.7.76.1905291230130.1962@cbobk.fhfr.pm>
+ <20190529161028.a6kpywzpjazgql5u@treble>
+ <nycvar.YFH.7.76.1905291818470.1962@cbobk.fhfr.pm>
 MIME-Version: 1.0
-References: <1558888143-5121-1-git-send-email-akinobu.mita@gmail.com>
- <1558888143-5121-3-git-send-email-akinobu.mita@gmail.com> <20190529151517.GC28274@minwooim-desktop>
-In-Reply-To: <20190529151517.GC28274@minwooim-desktop>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Thu, 30 May 2019 01:47:08 +0900
-Message-ID: <CAC5umyhusw+sQOn5H7ZMP=aVi00GY7R_Jff6447R=yXyUpjFoQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] nvme: add thermal zone devices
-To:     Minwoo Im <minwoo.im.dev@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Kenneth Heitke <kenneth.heitke@intel.com>,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <nycvar.YFH.7.76.1905291818470.1962@cbobk.fhfr.pm>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=E5=B9=B45=E6=9C=8830=E6=97=A5(=E6=9C=A8) 0:15 Minwoo Im <minwoo.im.dev=
-@gmail.com>:
->
-> > +/**
-> > + * nvme_thermal_zones_register() - register nvme thermal zone devices
-> > + * @ctrl: controller instance
-> > + *
-> > + * This function creates up to nine thermal zone devices for all imple=
-mented
-> > + * temperature sensors including the composite temperature.
-> > + * Each thermal zone device provides a single trip point temperature t=
-hat is
-> > + * associated with an over temperature threshold.
-> > + */
-> > +static int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
-> > +{
-> > +     struct nvme_smart_log *log;
-> > +     int ret;
-> > +     int i;
-> > +
-> > +     log =3D kzalloc(sizeof(*log), GFP_KERNEL);
-> > +     if (!log)
-> > +             return 0; /* non-fatal error */
->
-> Do we need to print something like warning here? If kzalloc() fails, it
-> would be good to be distinguished between the nvme failure and internal
-> failure like this.
+On Wed, May 29, 2019 at 06:26:59PM +0200, Jiri Kosina wrote:
+> On Wed, 29 May 2019, Josh Poimboeuf wrote:
 
-We usually remove the error message on kmalloc failure because it's
-redundant as long as we don't set __GFP_NOWARN.
+> > Is there are reason why maxcpus= doesn't do the CR4.MCE booted_once
+> > dance?
+> 
+> I am not sure whether it's really needed. My understanding is that the MCE 
+> issue happens only after primary sibling has been brought up; if that 
+> never happened, MCE wouldn't be broadcasted to that core at all in the 
+> first place.
+> 
+> But this needs to be confirmed by Intel.
 
-> > +
-> > +     ret =3D nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
-> > +                        log, sizeof(*log), 0);
-> > +     if (ret) {
-> > +             dev_err(ctrl->device, "Failed to get SMART log: %d\n", re=
-t);
-> > +             /* If the device provided a response, then it's non-fatal=
- */
-> > +             if (ret > 0)
-> > +                     ret =3D 0;
->
-> It seems like that nvme_init_identify() is just check the internal error
-> which is in negative value now as you have posted.  Why don't we just
-> return the value of "ret" itself without updating it to 0 ?
-
-Both ways work for me.
-
-I personally prefer not to return (leak) the nvme status code from
-foo_register() function.
-
-> > +             goto free_log;
-> > +     }
-> > +
-> > +     for (i =3D 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
-> > +             struct thermal_zone_device *tzdev;
-> > +             int temp;
-> > +
-> > +             if (i)
-> > +                     temp =3D le16_to_cpu(log->temp_sensor[i - 1]);
-> > +             else
-> > +                     temp =3D get_unaligned_le16(log->temperature);
-> > +
-> > +             /*
-> > +              * All implemented temperature sensors report a non-zero =
-value
-> > +              * in temperature sensor fields in the smart log page.
-> > +              */
-> > +             if (!temp)
-> > +                     continue;
-> > +             if (ctrl->tzdev[i])
-> > +                     continue;
-> > +
-> > +             tzdev =3D nvme_thermal_zone_register(ctrl, i);
-> > +             if (!IS_ERR(tzdev))
-> > +                     ctrl->tzdev[i] =3D tzdev;
-> > +     }
-> > +
-> > +free_log:
-> > +     kfree(log);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +/**
-> > + * nvme_thermal_zones_unregister() - unregister nvme thermal zone devi=
-ces
-> > + * @ctrl: controller instance
-> > + *
-> > + * This function removes the registered thermal zone devices and symli=
-nks.
-> > + */
-> > +static void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl)
-> > +{
-> > +     int i;
-> > +
-> > +     for (i =3D 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
-> > +             struct thermal_zone_device *tzdev =3D ctrl->tzdev[i];
-> > +             char name[20];
->
-> Simple query here :)
->
-> If we are not going to allow the name of link exceed the length of its
-> own device name like nvmeX_tempY, then can we THERMAL_NAME_LENGTH macro
-> here?  If the name of link is not exactly about the device name itself,
-> then it's fine.  What do you think about it ?
-
-Of course we can use THERMAL_NAME_LENGTH here.  But this char array is
-used only for the symbolic link name.
-It's not used for thermal cooling device type, thermal zone device type,
-or thermal governor name.  So I just used a random constant to avoid
-confusion.
+(I'm not confirming anything, as I've no clue), but that code stems from
+long before we found out about that brilliant MCE stuff (which was
+fairly recent).
