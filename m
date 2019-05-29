@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4922DFF8
-	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 16:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246ED2E00F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 May 2019 16:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbfE2Ok3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 10:40:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60654 "EHLO mail.kernel.org"
+        id S1726141AbfE2Oq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 May 2019 10:46:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34448 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726012AbfE2Ok3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 May 2019 10:40:29 -0400
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+        id S1726068AbfE2Oq1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 May 2019 10:46:27 -0400
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3202323A82;
-        Wed, 29 May 2019 14:40:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDBA123ABA;
+        Wed, 29 May 2019 14:46:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559140828;
-        bh=EAdtr7sRR0pl/EFHtygZt/Pp3BubgxUN3LjE7D6cOlk=;
+        s=default; t=1559141186;
+        bh=8rorXxnzSizFaq/FwdOra1IJYD1LwqZRGLVPZflpURU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ao2UBId6fsrnjUhuVoz6EJkA6GBDiM237jsCkERiAcLuVEJzhicF1ZqGKUx9BeyXo
-         BHFsJrCUR/wHqtB+c1ttFIp1jVQIl4sRydzpPaUGpcH9euyaqyF+muzyT5+xw2av5D
-         szPdjEW6MCHzJ+gAOzBCeR8nJQ35SKzXf58VWQbo=
-Received: by mail-lf1-f43.google.com with SMTP id v18so2312709lfi.1;
-        Wed, 29 May 2019 07:40:28 -0700 (PDT)
-X-Gm-Message-State: APjAAAX667em/enyT5T9gTnLllqVXaYr1g3CwEr/uks+NIhD2ksjEgve
-        mRiWQU97TKDf0rQMfcJXxsAfZDBLfOe6g/Bxjdk=
-X-Google-Smtp-Source: APXvYqzGwBFLfzLcIP1wJ+4vix58xGXZlLe1e6Gmb4rGT85Ek2cI7Vkp9JES0OgdOXg8ziQZzIohPTW6iOjEkmCNDlw=
-X-Received: by 2002:ac2:4d0d:: with SMTP id r13mr16779577lfi.30.1559140826498;
- Wed, 29 May 2019 07:40:26 -0700 (PDT)
+        b=ChjW1N1j0JLE1k+6PI9oRVCzrm0/6xRkmhZMyeTJiffjNss00ok4MLacKMa3US1rx
+         FN6/LJ31a97fa8G5S3LutlyDmu8cEB6Lm/KdhgnODWeKxs1hm23F35PNDM5Mwk4708
+         9DKoVs51KUk90xiw83kAhL3spQ+sPr7jJkVV7S2w=
+Received: by mail-lj1-f182.google.com with SMTP id e13so2719077ljl.11;
+        Wed, 29 May 2019 07:46:25 -0700 (PDT)
+X-Gm-Message-State: APjAAAWgJCxU0p/Z2v4j5PbvnL/kZeguBzqiXVIi4zrjxxYLQxaC33Jn
+        fPCBOQi0PiD4+vN5Bp4MIJSfdZRcepu2uprPIF0=
+X-Google-Smtp-Source: APXvYqxtJA+YU8qUOjC0WysP9KRgGAX0/VOWIsIUq8MPRay9hybngeVcKiAzZaJtnygTzi7YGPErKMp9WeCpZWwBji4=
+X-Received: by 2002:a2e:9cc4:: with SMTP id g4mr59526686ljj.47.1559141178602;
+ Wed, 29 May 2019 07:46:18 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAJKOXPf=nPrmw6Vzi_=LmO=dVsV4Gvoc-q75XP2FBEgm9Gxv0A@mail.gmail.com>
- <20190527022258.32748-1-matheus@castello.eng.br> <20190527022258.32748-3-matheus@castello.eng.br>
-In-Reply-To: <20190527022258.32748-3-matheus@castello.eng.br>
+ <20190527022258.32748-1-matheus@castello.eng.br> <20190527022258.32748-4-matheus@castello.eng.br>
+In-Reply-To: <20190527022258.32748-4-matheus@castello.eng.br>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 29 May 2019 16:40:15 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcigVQEzR3xQMcc9hcSXn0VVCvNR+U2F0the62orR98qw@mail.gmail.com>
-Message-ID: <CAJKOXPcigVQEzR3xQMcc9hcSXn0VVCvNR+U2F0the62orR98qw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] dt-bindings: power: supply: Max17040: Add low
- level SOC alert threshold
+Date:   Wed, 29 May 2019 16:46:07 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPd2F6iy0ZqYf+X2k=eQ=tY1zG4gVbrr68XqE9+w4HK6dw@mail.gmail.com>
+Message-ID: <CAJKOXPd2F6iy0ZqYf+X2k=eQ=tY1zG4gVbrr68XqE9+w4HK6dw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] power: supply: max17040: Config alert SOC low
+ level threshold from FDT
 To:     Matheus Castello <matheus@castello.eng.br>
 Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
         Chanwoo Choi <cw00.choi@samsung.com>,
@@ -53,61 +53,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 27 May 2019 at 04:45, Matheus Castello <matheus@castello.eng.br> wrote:
+On Mon, 27 May 2019 at 04:46, Matheus Castello <matheus@castello.eng.br> wrote:
 >
-> For configure low level state of charge threshold alert signaled from
-> max17040 we add "maxim,alert-low-soc-level" property.
+> For configuration of fuel gauge alert for a low level state of charge
+> interrupt we add a function to config level threshold and a device tree
+> binding property to set it in flatned device tree node.
+>
+> Now we can use "maxim,alert-low-soc-level" property with the values from
+> 1% up to 32% to configure alert interrupt threshold.
 >
 > Signed-off-by: Matheus Castello <matheus@castello.eng.br>
 > ---
->  .../power/supply/max17040_battery.txt         | 28 +++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+>  drivers/power/supply/max17040_battery.c | 52 +++++++++++++++++++++++--
+>  1 file changed, 49 insertions(+), 3 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-> new file mode 100644
-> index 000000000000..a13e8d50ff7b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-> @@ -0,0 +1,28 @@
-> +max17040_battery
-> +~~~~~~~~~~~~~~~~
+> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+> index b7433e9ca7c2..2f4851608cfe 100644
+> --- a/drivers/power/supply/max17040_battery.c
+> +++ b/drivers/power/supply/max17040_battery.c
+> @@ -29,6 +29,9 @@
+>  #define MAX17040_DELAY         1000
+>  #define MAX17040_BATTERY_FULL  95
+>
+> +#define MAX17040_ATHD_MASK             0xFFC0
+> +#define MAX17040_ATHD_DEFAULT_POWER_UP 4
 > +
-> +Required properties :
-> + - compatible : "maxim,max17040" or "maxim,max77836-battery"
+>  struct max17040_chip {
+>         struct i2c_client               *client;
+>         struct delayed_work             work;
+> @@ -43,6 +46,8 @@ struct max17040_chip {
+>         int soc;
+>         /* State Of Charge */
+>         int status;
+> +       /* Low alert threshold from 32% to 1% of the State of Charge */
+> +       u32 low_soc_alert_threshold;
+>  };
+>
+>  static int max17040_get_property(struct power_supply *psy,
+> @@ -99,6 +104,28 @@ static void max17040_reset(struct i2c_client *client)
+>         max17040_write_reg(client, MAX17040_CMD, 0x0054);
+>  }
+>
+> +static int max17040_set_low_soc_threshold_alert(struct i2c_client *client,
+> +       u32 level)
+> +{
+> +       int ret;
+> +       u16 data;
 > +
-> +Optional properties :
-> +- maxim,alert-low-soc-level :  The alert threshold that sets the state of
-> +                               charge level (%) where an interrupt is
-> +                               generated. Can be configured from 1 up to 32
-> +                               (%). If skipped the power up default value of
-> +                               4 (%) will be used.
-> +- interrupts :                         Interrupt line see Documentation/devicetree/
-> +                               bindings/interrupt-controller/interrupts.txt
+> +       /* check if level is between 1% and 32% */
+> +       if (level > 0 && level < 33) {
+> +               level = 32 - level;
+> +               data = max17040_read_reg(client, MAX17040_RCOMP);
+> +               /* clear the alrt bit and set LSb 5 bits */
+> +               data &= MAX17040_ATHD_MASK;
+> +               data |= level;
+> +               max17040_write_reg(client, MAX17040_RCOMP, data);
+> +               ret = 0;
+> +       } else {
+> +               ret = -EINVAL;
+> +       }
 
-Based on driver's behavior, I understand that these two properties
-come in pair so maxim,alert-low-soc-level (or its default value) will
-be used if and only if interrupts property is present. Maybe mention
-this? In general looks fine to me:
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+This is unusual way of handling error... when you parse DTS, you
+accept any value for "level" (even incorrect one). You validate the
+value later when setting it and show an error... however you ignore
+the error of max17040_write_reg() here... This is correct but looks
+unusual.
 
 Best regards,
 Krzysztof
-
-> +- wakeup-source :              This device has wakeup capabilities. Use this
-> +                               property to use alert low SOC level interrupt
-> +                               as wake up source.
-> +
-> +Example:
-> +
-> +       battery-fuel-gauge@36 {
-> +               compatible = "maxim,max17040";
-> +               reg = <0x36>;
-> +               maxim,alert-low-soc-level = <10>;
-> +               interrupt-parent = <&gpio7>;
-> +               interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
-> +               wakeup-source;
-> +       };
-> --
-> 2.20.1
->
