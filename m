@@ -2,101 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DF82EDC0
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2019 05:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0C42F771
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2019 08:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729288AbfE3Dkg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 23:40:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34838 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731428AbfE3DV1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 May 2019 23:21:27 -0400
-Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2707B249FC;
-        Thu, 30 May 2019 03:21:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559186487;
-        bh=VJkP1uPKZV04dqxxoe5F7J+u19z62vXuWKURf8fiC+Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jCf721i2BKK+2IUcSdSjPwhIe2kC1l/iX7HtkbeqyI6JazOCH66GgZydEFNG3zUiF
-         Jf4yyDh1AFEUjA08jaJRraJViyyBd6gkGlaH5Kh6VVTQh+feMs8oNR4OomoCD4fUDh
-         GZX86/neXbBipiV0MT/Rq2N/Ln3QVBEuZ2Ehca34=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wen Yang <wen.yang99@zte.com.cn>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 087/128] cpufreq: pmac32: fix possible object reference leak
-Date:   Wed, 29 May 2019 20:06:59 -0700
-Message-Id: <20190530030450.494881621@linuxfoundation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190530030432.977908967@linuxfoundation.org>
-References: <20190530030432.977908967@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1727269AbfE3G1z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 May 2019 02:27:55 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:39690 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbfE3G1z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 May 2019 02:27:55 -0400
+Received: by mail-qt1-f194.google.com with SMTP id i34so5663811qta.6
+        for <linux-pm@vger.kernel.org>; Wed, 29 May 2019 23:27:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EDB9NEzcrpM7vrzDugTKwabI3NuPP3IyLOyki6rb9uw=;
+        b=TeMX9NEYaD2Qb/D8oQumCOS5CTT5UUG3au1rn0yH9MGA8q2jHPcpr5bZd7JUPdwRha
+         m5ZvqEa54g94x1DtzRPQXWKXAZdSvFoMgS4B1EAeBL+A2iVZ3Rdip21Yh6WWJhg1s3dc
+         r2HUIPMkLO6PQjVZQzMZFNnBB2IZuUatc64XY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EDB9NEzcrpM7vrzDugTKwabI3NuPP3IyLOyki6rb9uw=;
+        b=sk7/hNMK1u0XmT+woWk0LEeQNUJa6efWS5Y01sGD+f0twjfn9GJvCNFEC2kKN4OVVm
+         b8J2LVKMe/k1Ys8mxnxSAtDyuEz7CVGluvrUpexA0OLe6vxTyl98J4USDCLvOHVdHxhD
+         Z1lBIrjvOEMdKnac1YtRk5aGewZdhyZSqGnmRJckBIkolAo+b4f8dDBZQLOAeM2UMxoY
+         nhfUKK7vjXLxoMvoq4hdZwNAHLk7fM8yamXSYJh+0vFNYjUvO1Nztb2FRyCh2mjCcBde
+         E0ZbkiY+IPvy4ZJUQ5uahWj2ni/U4C4tEQ4myB9jtHEROGUu6VZxg71fyShVoXKz+ePJ
+         zvYA==
+X-Gm-Message-State: APjAAAVM1mMQgWwVpetBulu2oRhJnnOPYXwFi9iZ/SAODl1kS0aIrwLf
+        ER3/sNBNlSDDtcW1BI0qYSgqqij6+k7/WfdAyxwf4A==
+X-Google-Smtp-Source: APXvYqzHDlQemfhL+uQX+PxIu9PwWEguqnHq/qbjiPCrDdlMTXx+BXHgxPzV/YR2FBce1yN3dYhDwycDzH8cXlXCGsc=
+X-Received: by 2002:ac8:ecc:: with SMTP id w12mr1935044qti.344.1559197674339;
+ Wed, 29 May 2019 23:27:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <1557494826-6044-1-git-send-email-michael.kao@mediatek.com> <1557494826-6044-2-git-send-email-michael.kao@mediatek.com>
+In-Reply-To: <1557494826-6044-2-git-send-email-michael.kao@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Thu, 30 May 2019 14:27:28 +0800
+Message-ID: <CAJMQK-giJTeERnqjxoSMjF-JXxW9SPmeARWf3f9ZyRgBsYN5fg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] arm64: dts: mt8183: add thermal zone node
+To:     "michael.kao" <michael.kao@mediatek.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[ Upstream commit 8d10dc28a9ea6e8c02e825dab28699f3c72b02d9 ]
+On Fri, May 10, 2019 at 9:27 PM michael.kao <michael.kao@mediatek.com> wrote:
 
-The call to of_find_node_by_name returns a node pointer with refcount
-incremented thus it must be explicitly decremented after the last
-usage.
+> +
+> +                       tzts1: tzts1 {
+> +                               polling-delay-passive = <0>;
+> +                               polling-delay = <0>;
+> +                               thermal-sensors = <&thermal 1>;
+> +                               sustainable-power = <0>;
+> +                               trips {};
+> +                               cooling-maps {};
+> +                       };
+> +
+Is 0 a valid initial sustainable-power setting? Since we'll still get
+warning[1] about this, though it might not be harmful.
 
-Detected by coccinelle with the following warnings:
-./drivers/cpufreq/pmac32-cpufreq.c:557:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 552, but without a corresponding object release within this function.
-./drivers/cpufreq/pmac32-cpufreq.c:569:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 552, but without a corresponding object release within this function.
-./drivers/cpufreq/pmac32-cpufreq.c:598:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 587, but without a corresponding object release within this function.
+If 0 is a valid setting, maybe we should consider showing the warning
+of not setting this property in [2]?
 
-Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linux-pm@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/cpufreq/pmac32-cpufreq.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
-index ff44016ea0312..641f8021855a7 100644
---- a/drivers/cpufreq/pmac32-cpufreq.c
-+++ b/drivers/cpufreq/pmac32-cpufreq.c
-@@ -551,6 +551,7 @@ static int pmac_cpufreq_init_7447A(struct device_node *cpunode)
- 	volt_gpio_np = of_find_node_by_name(NULL, "cpu-vcore-select");
- 	if (volt_gpio_np)
- 		voltage_gpio = read_gpio(volt_gpio_np);
-+	of_node_put(volt_gpio_np);
- 	if (!voltage_gpio){
- 		pr_err("missing cpu-vcore-select gpio\n");
- 		return 1;
-@@ -587,6 +588,7 @@ static int pmac_cpufreq_init_750FX(struct device_node *cpunode)
- 	if (volt_gpio_np)
- 		voltage_gpio = read_gpio(volt_gpio_np);
- 
-+	of_node_put(volt_gpio_np);
- 	pvr = mfspr(SPRN_PVR);
- 	has_cpu_l2lve = !((pvr & 0xf00) == 0x100);
- 
--- 
-2.20.1
-
-
-
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/thermal/power_allocator.c#L570
+[2] https://elixir.bootlin.com/linux/latest/source/drivers/thermal/of-thermal.c#L1049
