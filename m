@@ -2,45 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FFA2F58A
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2019 06:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD7E2F2F2
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2019 06:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727731AbfE3DLV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 23:11:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50704 "EHLO mail.kernel.org"
+        id S1730232AbfE3EZF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 May 2019 00:25:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35654 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728485AbfE3DLV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 May 2019 23:11:21 -0400
+        id S1729984AbfE3DOr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 May 2019 23:14:47 -0400
 Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9E3FC244EF;
-        Thu, 30 May 2019 03:11:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A31F024559;
+        Thu, 30 May 2019 03:14:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559185880;
-        bh=/99T5uGxFQn15j8AMqCqgRgRyWsCwjoz1OCJDHQPzpM=;
+        s=default; t=1559186086;
+        bh=wu2UiETOHpDMk85zi6HmzdGCjZjRP7IcwSTkCaWKgdI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EpLcz3fvYdo22FOz28hAgg6Te6XH2vSVSbYlOjb5bJSqWig6eim+SFJ57/N/F6jqn
-         bDrfwzovT1rqLGl6NlWvVZD3yD7loyIfBu01//bqQdweI7R68xxN++iznZjBfbgolb
-         7zzknXJypPR45LDZHzZOOyKr1VgDW1oauFW59Paw=
+        b=lNrA6+RjuseYm6PubStO10htadKioNOWqR3sC76NkCXLBM2uDhnwdPnvGjGRqkOUF
+         k67Pb3wLTvuMlyMadwmlORocNNjJPDBhQgRkBm2bmLYRpL36ZDmSELcQU65Qf9eYxZ
+         utzAqfHCrnpbd+6qwJAdqb6y5Kmj8D9P9eWYlQf8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Wen Yang <wen.yang99@zte.com.cn>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.1 230/405] cpufreq: ap806: fix possible object reference leak
-Date:   Wed, 29 May 2019 20:03:48 -0700
-Message-Id: <20190530030552.668913585@linuxfoundation.org>
+        linux-pm@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.0 206/346] cpufreq: ppc_cbe: fix possible object reference leak
+Date:   Wed, 29 May 2019 20:04:39 -0700
+Message-Id: <20190530030551.578361464@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190530030540.291644921@linuxfoundation.org>
-References: <20190530030540.291644921@linuxfoundation.org>
+In-Reply-To: <20190530030540.363386121@linuxfoundation.org>
+References: <20190530030540.363386121@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,44 +45,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[ Upstream commit b623fa320f8360f049a6f3c3ccc487cb85af4c5b ]
+[ Upstream commit 233298032803f2802fe99892d0de4ab653bfece4 ]
 
-The call to of_find_compatible_node returns a node pointer with refcount
+The call to of_get_cpu_node returns a node pointer with refcount
 incremented thus it must be explicitly decremented after the last
 usage.
 
 Detected by coccinelle with the following warnings:
-./drivers/cpufreq/armada-8k-cpufreq.c:187:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 130, but without a corresponding object release within this function.
-./drivers/cpufreq/armada-8k-cpufreq.c:191:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 130, but without a corresponding object release within this function.
+./drivers/cpufreq/ppc_cbe_cpufreq.c:89:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 76, but without a corresponding object release within this function.
+./drivers/cpufreq/ppc_cbe_cpufreq.c:89:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 76, but without a corresponding object release within this function.
 
 Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
-Cc: Jason Cooper <jason@lakedaemon.net>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Gregory Clement <gregory.clement@bootlin.com>
-Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
 Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/armada-8k-cpufreq.c | 1 +
+ drivers/cpufreq/ppc_cbe_cpufreq.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpufreq/armada-8k-cpufreq.c b/drivers/cpufreq/armada-8k-cpufreq.c
-index b3f4bd647e9b3..988ebc326bdbb 100644
---- a/drivers/cpufreq/armada-8k-cpufreq.c
-+++ b/drivers/cpufreq/armada-8k-cpufreq.c
-@@ -132,6 +132,7 @@ static int __init armada_8k_cpufreq_init(void)
- 		of_node_put(node);
- 		return -ENODEV;
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
+index 41a0f0be3f9ff..8414c3a4ea08c 100644
+--- a/drivers/cpufreq/ppc_cbe_cpufreq.c
++++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
+@@ -86,6 +86,7 @@ static int cbe_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	if (!cbe_get_cpu_pmd_regs(policy->cpu) ||
+ 	    !cbe_get_cpu_mic_tm_regs(policy->cpu)) {
+ 		pr_info("invalid CBE regs pointers for cpufreq\n");
++		of_node_put(cpu);
+ 		return -EINVAL;
  	}
-+	of_node_put(node);
  
- 	nb_cpus = num_possible_cpus();
- 	freq_tables = kcalloc(nb_cpus, sizeof(*freq_tables), GFP_KERNEL);
 -- 
 2.20.1
 
