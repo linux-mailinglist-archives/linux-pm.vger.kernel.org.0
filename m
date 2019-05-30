@@ -2,41 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2E32F299
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2019 06:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765252F280
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2019 06:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730051AbfE3DPB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 May 2019 23:15:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36672 "EHLO mail.kernel.org"
+        id S1729665AbfE3EWi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 May 2019 00:22:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728321AbfE3DPA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 May 2019 23:15:00 -0400
+        id S1730100AbfE3DPF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 May 2019 23:15:05 -0400
 Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5693E24579;
-        Thu, 30 May 2019 03:14:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7337024595;
+        Thu, 30 May 2019 03:15:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559186099;
-        bh=cYj6tGVRkcCfyzn1WMPn2V4eRoSHbAJSj6gDIu0hjcw=;
+        s=default; t=1559186104;
+        bh=KFjWdcM0j1PIjGo1SD5vVsinYegNqV/OwabGD7l4Pfo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EVXqANYtI6cG03JA8u8S0PI/qxZ2fWsE+xsh8JaEnitfZ7NYjgQy+ehT1h6wYk+sM
-         b5Yjv78X9AnBJ0IQIxw53hR/rE/KMNuKJN02HkVnT7prlgJmUpKtHOan31D3sTpVBR
-         5bemLGJWEPkP+nQliBZDhqXpmvxbEB5YmhJv/4sg=
+        b=Pq5rW2Cxe4u1bomJp/fvhgQbmHXyVVlHJQoFi3v2yq97ugK/RH7zSNz5Fjq5U2aXC
+         +/CsUkV3sIdFaMZECOHvWfo/4UUs8QMF9/nCBzevz9w0Rpie9BngF+r/1UBQHF7zBH
+         WUEM/I0ZPcLNB/36vA8EPonitOHaipfdhKpKhqPA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Wen Yang <wen.yang99@zte.com.cn>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.0 208/346] cpufreq: pmac32: fix possible object reference leak
-Date:   Wed, 29 May 2019 20:04:41 -0700
-Message-Id: <20190530030551.670288965@linuxfoundation.org>
+        linux-pm@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.0 209/346] cpufreq: kirkwood: fix possible object reference leak
+Date:   Wed, 29 May 2019 20:04:42 -0700
+Message-Id: <20190530030551.716687141@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190530030540.363386121@linuxfoundation.org>
 References: <20190530030540.363386121@linuxfoundation.org>
@@ -49,52 +45,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[ Upstream commit 8d10dc28a9ea6e8c02e825dab28699f3c72b02d9 ]
+[ Upstream commit 7c468966f05ac9c17bb5948275283d34e6fe0660 ]
 
-The call to of_find_node_by_name returns a node pointer with refcount
+The call to of_get_child_by_name returns a node pointer with refcount
 incremented thus it must be explicitly decremented after the last
 usage.
 
 Detected by coccinelle with the following warnings:
-./drivers/cpufreq/pmac32-cpufreq.c:557:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 552, but without a corresponding object release within this function.
-./drivers/cpufreq/pmac32-cpufreq.c:569:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 552, but without a corresponding object release within this function.
-./drivers/cpufreq/pmac32-cpufreq.c:598:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 587, but without a corresponding object release within this function.
+./drivers/cpufreq/kirkwood-cpufreq.c:127:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 118, but without a corresponding object release within this function.
+./drivers/cpufreq/kirkwood-cpufreq.c:133:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 118, but without a corresponding object release within this function.
+
+and also do some cleanup:
+- of_node_put(np);
+- np = NULL;
+...
+of_node_put(np);
 
 Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
 Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
 Cc: linux-pm@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/pmac32-cpufreq.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/cpufreq/kirkwood-cpufreq.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
-index 52f0d91d30c17..9b4ce2eb8222c 100644
---- a/drivers/cpufreq/pmac32-cpufreq.c
-+++ b/drivers/cpufreq/pmac32-cpufreq.c
-@@ -552,6 +552,7 @@ static int pmac_cpufreq_init_7447A(struct device_node *cpunode)
- 	volt_gpio_np = of_find_node_by_name(NULL, "cpu-vcore-select");
- 	if (volt_gpio_np)
- 		voltage_gpio = read_gpio(volt_gpio_np);
-+	of_node_put(volt_gpio_np);
- 	if (!voltage_gpio){
- 		pr_err("missing cpu-vcore-select gpio\n");
- 		return 1;
-@@ -588,6 +589,7 @@ static int pmac_cpufreq_init_750FX(struct device_node *cpunode)
- 	if (volt_gpio_np)
- 		voltage_gpio = read_gpio(volt_gpio_np);
+diff --git a/drivers/cpufreq/kirkwood-cpufreq.c b/drivers/cpufreq/kirkwood-cpufreq.c
+index c2dd43f3f5d8a..8d63a6dc8383c 100644
+--- a/drivers/cpufreq/kirkwood-cpufreq.c
++++ b/drivers/cpufreq/kirkwood-cpufreq.c
+@@ -124,13 +124,14 @@ static int kirkwood_cpufreq_probe(struct platform_device *pdev)
+ 	priv.cpu_clk = of_clk_get_by_name(np, "cpu_clk");
+ 	if (IS_ERR(priv.cpu_clk)) {
+ 		dev_err(priv.dev, "Unable to get cpuclk\n");
+-		return PTR_ERR(priv.cpu_clk);
++		err = PTR_ERR(priv.cpu_clk);
++		goto out_node;
+ 	}
  
-+	of_node_put(volt_gpio_np);
- 	pvr = mfspr(SPRN_PVR);
- 	has_cpu_l2lve = !((pvr & 0xf00) == 0x100);
+ 	err = clk_prepare_enable(priv.cpu_clk);
+ 	if (err) {
+ 		dev_err(priv.dev, "Unable to prepare cpuclk\n");
+-		return err;
++		goto out_node;
+ 	}
  
+ 	kirkwood_freq_table[0].frequency = clk_get_rate(priv.cpu_clk) / 1000;
+@@ -161,20 +162,22 @@ static int kirkwood_cpufreq_probe(struct platform_device *pdev)
+ 		goto out_ddr;
+ 	}
+ 
+-	of_node_put(np);
+-	np = NULL;
+-
+ 	err = cpufreq_register_driver(&kirkwood_cpufreq_driver);
+-	if (!err)
+-		return 0;
++	if (err) {
++		dev_err(priv.dev, "Failed to register cpufreq driver\n");
++		goto out_powersave;
++	}
+ 
+-	dev_err(priv.dev, "Failed to register cpufreq driver\n");
++	of_node_put(np);
++	return 0;
+ 
++out_powersave:
+ 	clk_disable_unprepare(priv.powersave_clk);
+ out_ddr:
+ 	clk_disable_unprepare(priv.ddr_clk);
+ out_cpu:
+ 	clk_disable_unprepare(priv.cpu_clk);
++out_node:
+ 	of_node_put(np);
+ 
+ 	return err;
 -- 
 2.20.1
 
