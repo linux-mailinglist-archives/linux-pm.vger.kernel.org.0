@@ -2,521 +2,270 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F9E2F949
-	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2019 11:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B27E2FA12
+	for <lists+linux-pm@lfdr.de>; Thu, 30 May 2019 12:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbfE3JU5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 May 2019 05:20:57 -0400
-Received: from foss.arm.com ([217.140.101.70]:33060 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726903AbfE3JU5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 May 2019 05:20:57 -0400
+        id S1727451AbfE3KPx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 May 2019 06:15:53 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:33778 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725440AbfE3KPw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 30 May 2019 06:15:52 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28E4C15BF;
-        Thu, 30 May 2019 02:20:56 -0700 (PDT)
-Received: from queper01-lin.cambridge.arm.com (queper01-lin.cambridge.arm.com [10.1.195.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5681C3F59C;
-        Thu, 30 May 2019 02:20:53 -0700 (PDT)
-From:   Quentin Perret <quentin.perret@arm.com>
-To:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
-        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
-        will.deacon@arm.com, catalin.marinas@arm.com,
-        daniel.lezcano@linaro.org, dietmar.eggemann@arm.com,
-        ionela.voinescu@arm.com, mka@chromium.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, quentin.perret@arm.com
-Subject: [PATCH v5 3/3] thermal: cpu_cooling: Migrate to using the EM framework
-Date:   Thu, 30 May 2019 10:20:38 +0100
-Message-Id: <20190530092038.12020-4-quentin.perret@arm.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190530092038.12020-1-quentin.perret@arm.com>
-References: <20190530092038.12020-1-quentin.perret@arm.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C25D9374;
+        Thu, 30 May 2019 03:15:51 -0700 (PDT)
+Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E2533F5AF;
+        Thu, 30 May 2019 03:15:50 -0700 (PDT)
+Date:   Thu, 30 May 2019 11:15:45 +0100
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     Tejun Heo <tj@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-api@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v9 00/16] Add utilization clamping support
+Message-ID: <20190530101545.gdznufqxeddl3rjp@e110439-lin>
+References: <20190515094459.10317-1-patrick.bellasi@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190515094459.10317-1-patrick.bellasi@arm.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The newly introduced Energy Model framework manages power cost tables in
-a generic way. Moreover, it supports several types of models since the
-tables can come from DT or firmware (through SCMI) for example. On the
-other hand, the cpu_cooling subsystem manages its own power cost tables
-using only DT data.
+Hi Tejun,
+this is just a gentle ping.
 
-In order to avoid the duplication of data in the kernel, and in order to
-enable IPA with EMs coming from more than just DT, remove the private
-tables from cpu_cooling.c and migrate it to using the centralized EM
-framework. Doing so should have no visible functional impact for
-existing users of IPA since:
+I had a chance to speak with Peter and Rafael at the last OSPM and
+they both seems to be reasonably happy with the current status of the
+core bits.
 
- - recent extenstions to the the PM_OPP infrastructure enable the
-   registration of EMs in PM_EM using the DT property used by IPA;
+Thus, it would be very useful if you can jump into the discussion and
+start the review of the cgroups integration bits.
+You can find them in the last 5 patches of this series.
 
- - the existing upstream cpufreq drivers marked with the
-   'CPUFREQ_IS_COOLING_DEV' flag all use the aforementioned PM_OPP
-   infrastructure, which means they all support PM_EM. The only two
-   exceptions are qoriq-cpufreq which doesn't in fact use an EM and
-   scmi-cpufreq which doesn't use DT for power costs.
+Luckily on the CGroup side, we don't start from ground zero.
+Many aspects and pain points have been already discussed in the past
+and have been addressed by the current version.
 
-For existing users of cpu_cooling, PM_EM tables will contain the exact
-same power values that IPA used to compute on its own until now. The
-only new dependency for them is to compile in CONFIG_ENERGY_MODEL.
+For you benefit, here is a list of previously discussed items:
 
-The case where the thermal subsystem is used without an Energy Model
-(cpufreq_cooling_ops) is handled by looking directly at CPUFreq's
-frequency table which is already a dependency for cpu_cooling.c anyway.
-Since the thermal framework expects the cooling states in a particular
-order, bail out whenever the CPUFreq table is unsorted, since that is
-fairly uncommon in general, and there are currently no users of
-cpu_cooling for this use-case.
+ - A child can never obtain more than its ancestors
+   https://lore.kernel.org/lkml/20180426185845.GO1911913@devbig577.frc2.facebook.com/
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Quentin Perret <quentin.perret@arm.com>
----
- drivers/thermal/Kconfig       |   1 +
- drivers/thermal/cpu_cooling.c | 250 ++++++++++++----------------------
- 2 files changed, 91 insertions(+), 160 deletions(-)
+ - Enforcing consistency rules among parent-child groups
+   https://lore.kernel.org/lkml/20180410200514.GA793541@devbig577.frc2.facebook.com/
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 9966364a6deb..340853a3ca48 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -144,6 +144,7 @@ config THERMAL_GOV_USER_SPACE
- 
- config THERMAL_GOV_POWER_ALLOCATOR
- 	bool "Power allocator thermal governor"
-+	depends on ENERGY_MODEL
- 	help
- 	  Enable this to manage platform thermals by dynamically
- 	  allocating and limiting power to devices.
-diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
-index 498f59ab64b2..83486775e593 100644
---- a/drivers/thermal/cpu_cooling.c
-+++ b/drivers/thermal/cpu_cooling.c
-@@ -19,6 +19,7 @@
- #include <linux/slab.h>
- #include <linux/cpu.h>
- #include <linux/cpu_cooling.h>
-+#include <linux/energy_model.h>
- 
- #include <trace/events/thermal.h>
- 
-@@ -36,21 +37,6 @@
-  *	...
-  */
- 
--/**
-- * struct freq_table - frequency table along with power entries
-- * @frequency:	frequency in KHz
-- * @power:	power in mW
-- *
-- * This structure is built when the cooling device registers and helps
-- * in translating frequency to power and vice versa.
-- */
--struct freq_table {
--	u32 frequency;
--#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
--	u32 power;
--#endif
--};
--
- /**
-  * struct time_in_idle - Idle time stats
-  * @time: previous reading of the absolute time that this cpu was idle
-@@ -72,7 +58,7 @@ struct time_in_idle {
-  *	frequency.
-  * @max_level: maximum cooling level. One less than total number of valid
-  *	cpufreq frequencies.
-- * @freq_table: Freq table in descending order of frequencies
-+ * @em: Reference on the Energy Model of the device
-  * @cdev: thermal_cooling_device pointer to keep track of the
-  *	registered cooling device.
-  * @policy: cpufreq policy.
-@@ -88,7 +74,7 @@ struct cpufreq_cooling_device {
- 	unsigned int cpufreq_state;
- 	unsigned int clipped_freq;
- 	unsigned int max_level;
--	struct freq_table *freq_table;	/* In descending order */
-+	struct em_perf_domain *em;
- 	struct cpufreq_policy *policy;
- 	struct list_head node;
- 	struct time_in_idle *idle_time;
-@@ -162,114 +148,40 @@ static int cpufreq_thermal_notifier(struct notifier_block *nb,
- static unsigned long get_level(struct cpufreq_cooling_device *cpufreq_cdev,
- 			       unsigned int freq)
- {
--	struct freq_table *freq_table = cpufreq_cdev->freq_table;
--	unsigned long level;
-+	int i;
- 
--	for (level = 1; level <= cpufreq_cdev->max_level; level++)
--		if (freq > freq_table[level].frequency)
-+	for (i = cpufreq_cdev->max_level - 1; i >= 0; i--) {
-+		if (freq > cpufreq_cdev->em->table[i].frequency)
- 			break;
--
--	return level - 1;
--}
--
--/**
-- * update_freq_table() - Update the freq table with power numbers
-- * @cpufreq_cdev:	the cpufreq cooling device in which to update the table
-- * @capacitance: dynamic power coefficient for these cpus
-- *
-- * Update the freq table with power numbers.  This table will be used in
-- * cpu_power_to_freq() and cpu_freq_to_power() to convert between power and
-- * frequency efficiently.  Power is stored in mW, frequency in KHz.  The
-- * resulting table is in descending order.
-- *
-- * Return: 0 on success, -EINVAL if there are no OPPs for any CPUs,
-- * or -ENOMEM if we run out of memory.
-- */
--static int update_freq_table(struct cpufreq_cooling_device *cpufreq_cdev,
--			     u32 capacitance)
--{
--	struct freq_table *freq_table = cpufreq_cdev->freq_table;
--	struct dev_pm_opp *opp;
--	struct device *dev = NULL;
--	int num_opps = 0, cpu = cpufreq_cdev->policy->cpu, i;
--
--	dev = get_cpu_device(cpu);
--	if (unlikely(!dev)) {
--		pr_warn("No cpu device for cpu %d\n", cpu);
--		return -ENODEV;
--	}
--
--	num_opps = dev_pm_opp_get_opp_count(dev);
--	if (num_opps < 0)
--		return num_opps;
--
--	/*
--	 * The cpufreq table is also built from the OPP table and so the count
--	 * should match.
--	 */
--	if (num_opps != cpufreq_cdev->max_level + 1) {
--		dev_warn(dev, "Number of OPPs not matching with max_levels\n");
--		return -EINVAL;
--	}
--
--	for (i = 0; i <= cpufreq_cdev->max_level; i++) {
--		unsigned long freq = freq_table[i].frequency * 1000;
--		u32 freq_mhz = freq_table[i].frequency / 1000;
--		u64 power;
--		u32 voltage_mv;
--
--		/*
--		 * Find ceil frequency as 'freq' may be slightly lower than OPP
--		 * freq due to truncation while converting to kHz.
--		 */
--		opp = dev_pm_opp_find_freq_ceil(dev, &freq);
--		if (IS_ERR(opp)) {
--			dev_err(dev, "failed to get opp for %lu frequency\n",
--				freq);
--			return -EINVAL;
--		}
--
--		voltage_mv = dev_pm_opp_get_voltage(opp) / 1000;
--		dev_pm_opp_put(opp);
--
--		/*
--		 * Do the multiplication with MHz and millivolt so as
--		 * to not overflow.
--		 */
--		power = (u64)capacitance * freq_mhz * voltage_mv * voltage_mv;
--		do_div(power, 1000000000);
--
--		/* power is stored in mW */
--		freq_table[i].power = power;
- 	}
- 
--	return 0;
-+	return cpufreq_cdev->max_level - i - 1;
- }
- 
- static u32 cpu_freq_to_power(struct cpufreq_cooling_device *cpufreq_cdev,
- 			     u32 freq)
- {
- 	int i;
--	struct freq_table *freq_table = cpufreq_cdev->freq_table;
- 
--	for (i = 1; i <= cpufreq_cdev->max_level; i++)
--		if (freq > freq_table[i].frequency)
-+	for (i = cpufreq_cdev->max_level - 1; i >= 0; i--) {
-+		if (freq > cpufreq_cdev->em->table[i].frequency)
- 			break;
-+	}
- 
--	return freq_table[i - 1].power;
-+	return cpufreq_cdev->em->table[i + 1].power;
- }
- 
- static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
- 			     u32 power)
- {
- 	int i;
--	struct freq_table *freq_table = cpufreq_cdev->freq_table;
- 
--	for (i = 1; i <= cpufreq_cdev->max_level; i++)
--		if (power > freq_table[i].power)
-+	for (i = cpufreq_cdev->max_level - 1; i >= 0; i--) {
-+		if (power > cpufreq_cdev->em->table[i].power)
- 			break;
-+	}
- 
--	return freq_table[i - 1].frequency;
-+	return cpufreq_cdev->em->table[i + 1].frequency;
- }
- 
- /**
-@@ -410,7 +322,7 @@ static int cpufreq_state2power(struct thermal_cooling_device *cdev,
- 			       struct thermal_zone_device *tz,
- 			       unsigned long state, u32 *power)
- {
--	unsigned int freq, num_cpus;
-+	unsigned int freq, num_cpus, idx;
- 	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
- 
- 	/* Request state should be less than max_level */
-@@ -419,7 +331,8 @@ static int cpufreq_state2power(struct thermal_cooling_device *cdev,
- 
- 	num_cpus = cpumask_weight(cpufreq_cdev->policy->cpus);
- 
--	freq = cpufreq_cdev->freq_table[state].frequency;
-+	idx = cpufreq_cdev->max_level - state;
-+	freq = cpufreq_cdev->em->table[idx].frequency;
- 	*power = cpu_freq_to_power(cpufreq_cdev, freq) * num_cpus;
- 
- 	return 0;
-@@ -463,8 +376,60 @@ static int cpufreq_power2state(struct thermal_cooling_device *cdev,
- 				      power);
- 	return 0;
- }
-+
-+static inline bool em_is_sane(struct cpufreq_cooling_device *cpufreq_cdev,
-+			      struct em_perf_domain *em) {
-+	struct cpufreq_policy *policy;
-+	unsigned int nr_levels;
-+
-+	if (!em)
-+		return false;
-+
-+	policy = cpufreq_cdev->policy;
-+	if (!cpumask_equal(policy->related_cpus, to_cpumask(em->cpus))) {
-+		pr_err("The span of pd %*pbl is misaligned with cpufreq policy %*pbl\n",
-+			cpumask_pr_args(to_cpumask(em->cpus)),
-+			cpumask_pr_args(policy->related_cpus));
-+		return false;
-+	}
-+
-+	nr_levels = cpufreq_cdev->max_level + 1;
-+	if (em->nr_cap_states != nr_levels) {
-+		pr_err("The number of cap states in pd %*pbl (%u) doesn't match the number of cooling levels (%u)\n",
-+			cpumask_pr_args(to_cpumask(em->cpus)),
-+			em->nr_cap_states, nr_levels);
-+		return false;
-+	}
-+
-+	return true;
-+}
- #endif /* CONFIG_THERMAL_GOV_POWER_ALLOCATOR */
- 
-+static unsigned int get_state_freq(struct cpufreq_cooling_device *cpufreq_cdev,
-+                             unsigned long state)
-+{
-+       struct cpufreq_policy *policy;
-+       unsigned long idx;
-+
-+#ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
-+       /* Use the Energy Model table if available */
-+       if (cpufreq_cdev->em) {
-+               idx = cpufreq_cdev->max_level - state;
-+               return cpufreq_cdev->em->table[idx].frequency;
-+       }
-+#endif
-+
-+       /* Otherwise, fallback on the CPUFreq table */
-+       policy = cpufreq_cdev->policy;
-+       if (policy->freq_table_sorted == CPUFREQ_TABLE_SORTED_ASCENDING)
-+               idx = cpufreq_cdev->max_level - state;
-+       else
-+               idx = state;
-+
-+       return policy->freq_table[idx].frequency;
-+}
-+
-+
- /* cpufreq cooling device callback functions are defined below */
- 
- /**
-@@ -530,7 +495,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
- 	if (cpufreq_cdev->cpufreq_state == state)
- 		return 0;
- 
--	clip_freq = cpufreq_cdev->freq_table[state].frequency;
-+	clip_freq = get_state_freq(cpufreq_cdev, state);
- 	cpufreq_cdev->cpufreq_state = state;
- 	cpufreq_cdev->clipped_freq = clip_freq;
- 
-@@ -552,26 +517,12 @@ static struct notifier_block thermal_cpufreq_notifier_block = {
- 	.notifier_call = cpufreq_thermal_notifier,
- };
- 
--static unsigned int find_next_max(struct cpufreq_frequency_table *table,
--				  unsigned int prev_max)
--{
--	struct cpufreq_frequency_table *pos;
--	unsigned int max = 0;
--
--	cpufreq_for_each_valid_entry(pos, table) {
--		if (pos->frequency > max && pos->frequency < prev_max)
--			max = pos->frequency;
--	}
--
--	return max;
--}
--
- /**
-  * __cpufreq_cooling_register - helper function to create cpufreq cooling device
-  * @np: a valid struct device_node to the cooling device device tree node
-  * @policy: cpufreq policy
-  * Normally this should be same as cpufreq policy->related_cpus.
-- * @capacitance: dynamic power coefficient for these cpus
-+ * @em: Energy Model of the cpufreq policy
-  *
-  * This interface function registers the cpufreq cooling device with the name
-  * "thermal-cpufreq-%x". This api can support multiple instances of cpufreq
-@@ -583,12 +534,13 @@ static unsigned int find_next_max(struct cpufreq_frequency_table *table,
-  */
- static struct thermal_cooling_device *
- __cpufreq_cooling_register(struct device_node *np,
--			struct cpufreq_policy *policy, u32 capacitance)
-+			struct cpufreq_policy *policy,
-+			struct em_perf_domain *em)
- {
- 	struct thermal_cooling_device *cdev;
- 	struct cpufreq_cooling_device *cpufreq_cdev;
- 	char dev_name[THERMAL_NAME_LENGTH];
--	unsigned int freq, i, num_cpus;
-+	unsigned int i, num_cpus;
- 	int ret;
- 	struct thermal_cooling_device_ops *cooling_ops;
- 	bool first;
-@@ -622,55 +574,38 @@ __cpufreq_cooling_register(struct device_node *np,
- 	/* max_level is an index, not a counter */
- 	cpufreq_cdev->max_level = i - 1;
- 
--	cpufreq_cdev->freq_table = kmalloc_array(i,
--					sizeof(*cpufreq_cdev->freq_table),
--					GFP_KERNEL);
--	if (!cpufreq_cdev->freq_table) {
--		cdev = ERR_PTR(-ENOMEM);
--		goto free_idle_time;
--	}
--
- 	ret = ida_simple_get(&cpufreq_ida, 0, 0, GFP_KERNEL);
- 	if (ret < 0) {
- 		cdev = ERR_PTR(ret);
--		goto free_table;
-+		goto free_idle_time;
- 	}
- 	cpufreq_cdev->id = ret;
- 
- 	snprintf(dev_name, sizeof(dev_name), "thermal-cpufreq-%d",
- 		 cpufreq_cdev->id);
- 
--	/* Fill freq-table in descending order of frequencies */
--	for (i = 0, freq = -1; i <= cpufreq_cdev->max_level; i++) {
--		freq = find_next_max(policy->freq_table, freq);
--		cpufreq_cdev->freq_table[i].frequency = freq;
--
--		/* Warn for duplicate entries */
--		if (!freq)
--			pr_warn("%s: table has duplicate entries\n", __func__);
--		else
--			pr_debug("%s: freq:%u KHz\n", __func__, freq);
--	}
--
- 	cooling_ops = &cpufreq_cooling_ops;
- #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
--	if (capacitance) {
--		ret = update_freq_table(cpufreq_cdev, capacitance);
--		if (ret) {
--			cdev = ERR_PTR(ret);
--			goto remove_ida;
--		}
-+	if (em_is_sane(cpufreq_cdev, em)) {
-+		cpufreq_cdev->em = em;
- 		cooling_ops->get_requested_power = cpufreq_get_requested_power;
- 		cooling_ops->state2power = cpufreq_state2power;
- 		cooling_ops->power2state = cpufreq_power2state;
--	}
-+	} else
- #endif
-+	if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED) {
-+		pr_err("%s: unsorted frequency tables are not supported\n",
-+				__func__);
-+		cdev = ERR_PTR(-EINVAL);
-+		goto remove_ida;
-+	}
-+
- 	cdev = thermal_of_cooling_device_register(np, dev_name, cpufreq_cdev,
- 						  cooling_ops);
- 	if (IS_ERR(cdev))
- 		goto remove_ida;
- 
--	cpufreq_cdev->clipped_freq = cpufreq_cdev->freq_table[0].frequency;
-+	cpufreq_cdev->clipped_freq = get_state_freq(cpufreq_cdev, 0);
- 
- 	mutex_lock(&cooling_list_lock);
- 	/* Register the notifier for first cpufreq cooling device */
-@@ -686,8 +621,6 @@ __cpufreq_cooling_register(struct device_node *np,
- 
- remove_ida:
- 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
--free_table:
--	kfree(cpufreq_cdev->freq_table);
- free_idle_time:
- 	kfree(cpufreq_cdev->idle_time);
- free_cdev:
-@@ -709,7 +642,7 @@ __cpufreq_cooling_register(struct device_node *np,
- struct thermal_cooling_device *
- cpufreq_cooling_register(struct cpufreq_policy *policy)
- {
--	return __cpufreq_cooling_register(NULL, policy, 0);
-+	return __cpufreq_cooling_register(NULL, policy, NULL);
- }
- EXPORT_SYMBOL_GPL(cpufreq_cooling_register);
- 
-@@ -737,7 +670,6 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
- {
- 	struct device_node *np = of_get_cpu_node(policy->cpu, NULL);
- 	struct thermal_cooling_device *cdev = NULL;
--	u32 capacitance = 0;
- 
- 	if (!np) {
- 		pr_err("cpu_cooling: OF node not available for cpu%d\n",
-@@ -746,10 +678,9 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
- 	}
- 
- 	if (of_find_property(np, "#cooling-cells", NULL)) {
--		of_property_read_u32(np, "dynamic-power-coefficient",
--				     &capacitance);
-+		struct em_perf_domain *em = em_cpu_get(policy->cpu);
- 
--		cdev = __cpufreq_cooling_register(np, policy, capacitance);
-+		cdev = __cpufreq_cooling_register(np, policy, em);
- 		if (IS_ERR(cdev)) {
- 			pr_err("cpu_cooling: cpu%d failed to register as cooling device: %ld\n",
- 			       policy->cpu, PTR_ERR(cdev));
-@@ -791,7 +722,6 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 	thermal_cooling_device_unregister(cdev);
- 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
- 	kfree(cpufreq_cdev->idle_time);
--	kfree(cpufreq_cdev->freq_table);
- 	kfree(cpufreq_cdev);
- }
- EXPORT_SYMBOL_GPL(cpufreq_cooling_unregister);
+ - Use "effective" attributes to enforce restrictions:
+   https://lore.kernel.org/lkml/20180409222417.GK3126663@devbig577.frc2.facebook.com
+   https://lore.kernel.org/lkml/20180410200514.GA793541@devbig577.frc2.facebook.com
+
+ - Tasks on a subgroup can only be more boosted and/or capped,
+   i.e. parent always set an upper bound on both max and min clamps
+   https://lore.kernel.org/lkml/20180409222417.GK3126663@devbig577.frc2.facebook.com
+   https://lore.kernel.org/lkml/20180410200514.GA793541@devbig577.frc2.facebook.com
+
+ - Put everything at system level outside of the cgroup interface,
+   i.e. no root group tunable attributes
+   https://lore.kernel.org/lkml/20180409222417.GK3126663@devbig577.frc2.facebook.com/
+
+ - CGroups don't need any hierarchical behaviors on their own
+   https://lore.kernel.org/lkml/20180723153040.GG1934745@devbig577.frc2.facebook.com/
+
+Looking forward to get some more feedbacks from you.
+
+Cheers,
+Patrick
+
+On 15-May 10:44, Patrick Bellasi wrote:
+> Hi all, this is a respin of:
+> 
+>   https://lore.kernel.org/lkml/20190402104153.25404-1-patrick.bellasi@arm.com/
+> 
+> which includes the following main changes:
+> 
+>  - fix "max local update" by moving into uclamp_rq_inc_id()
+>  - use for_each_clamp_id() and uclamp_se_set() to make code less fragile
+>  - rename sysfs node: s/sched_uclamp_util_{min,max}/sched_util_clamp_{min,max}/
+>  - removed not used uclamp_eff_bucket_id()
+>  - move uclamp_bucket_base_value() definition into patch using it
+>  - get rid of not necessary SCHED_POLICY_MAX define
+>  - update sched_setattr() syscall to just force the current policy on
+>    SCHED_FLAG_KEEP_POLICY
+>  - return EOPNOTSUPP from uclamp_validate() on !CONFIG_UCLAMP_TASK
+>  - make alloc_uclamp_sched_group() a void function
+>  - simplify bits_per() definition
+>  - add rq's lockdep assert to uclamp_rq_{inc,dec}_id()
+> 
+> With the above, I think we captured all the major inputs from Peter [1].
+> Thus, this v9 is likely the right version to unlock Tejun's review [2] on the
+> remaining cgroup related bits, i.e. patches [12-16].
+> 
+> Cheers Patrick
+> 
+> 
+> Series Organization
+> ===================
+> 
+> The series is organized into these main sections:
+> 
+>  - Patches [01-07]: Per task (primary) API
+>  - Patches [08-09]: Schedutil integration for FAIR and RT tasks
+>  - Patches [10-11]: Integration with EAS's energy_compute()
+>  - Patches [12-16]: Per task group (secondary) API
+> 
+> It is based on today's tip/sched/core and the full tree is available here:
+> 
+>    git://linux-arm.org/linux-pb.git   lkml/utilclamp_v9
+>    http://www.linux-arm.org/git?p=linux-pb.git;a=shortlog;h=refs/heads/lkml/utilclamp_v9
+> 
+> 
+> Newcomer's Short Abstract
+> =========================
+> 
+> The Linux scheduler tracks a "utilization" signal for each scheduling entity
+> (SE), e.g. tasks, to know how much CPU time they use. This signal allows the
+> scheduler to know how "big" a task is and, in principle, it can support
+> advanced task placement strategies by selecting the best CPU to run a task.
+> Some of these strategies are represented by the Energy Aware Scheduler [3].
+> 
+> When the schedutil cpufreq governor is in use, the utilization signal allows
+> the Linux scheduler to also drive frequency selection. The CPU utilization
+> signal, which represents the aggregated utilization of tasks scheduled on that
+> CPU, is used to select the frequency which best fits the workload generated by
+> the tasks.
+> 
+> The current translation of utilization values into a frequency selection is
+> simple: we go to max for RT tasks or to the minimum frequency which can
+> accommodate the utilization of DL+FAIR tasks.
+> However, utilization values by themselves cannot convey the desired
+> power/performance behaviors of each task as intended by user-space.
+> As such they are not ideally suited for task placement decisions.
+> 
+> Task placement and frequency selection policies in the kernel can be improved
+> by taking into consideration hints coming from authorized user-space elements,
+> like for example the Android middleware or more generally any "System
+> Management Software" (SMS) framework.
+> 
+> Utilization clamping is a mechanism which allows to "clamp" (i.e. filter) the
+> utilization generated by RT and FAIR tasks within a range defined by user-space.
+> The clamped utilization value can then be used, for example, to enforce a
+> minimum and/or maximum frequency depending on which tasks are active on a CPU.
+> 
+> The main use-cases for utilization clamping are:
+> 
+>  - boosting: better interactive response for small tasks which
+>    are affecting the user experience.
+> 
+>    Consider for example the case of a small control thread for an external
+>    accelerator (e.g. GPU, DSP, other devices). Here, from the task utilization
+>    the scheduler does not have a complete view of what the task's requirements
+>    are and, if it's a small utilization task, it keeps selecting a more energy
+>    efficient CPU, with smaller capacity and lower frequency, thus negatively
+>    impacting the overall time required to complete task activations.
+> 
+>  - capping: increase energy efficiency for background tasks not affecting the
+>    user experience.
+> 
+>    Since running on a lower capacity CPU at a lower frequency is more energy
+>    efficient, when the completion time is not a main goal, then capping the
+>    utilization considered for certain (maybe big) tasks can have positive
+>    effects, both on energy consumption and thermal headroom.
+>    This feature allows also to make RT tasks more energy friendly on mobile
+>    systems where running them on high capacity CPUs and at the maximum
+>    frequency is not required.
+> 
+> From these two use-cases, it's worth noticing that frequency selection
+> biasing, introduced by patches 9 and 10 of this series, is just one possible
+> usage of utilization clamping. Another compelling extension of utilization
+> clamping is in helping the scheduler in making tasks placement decisions.
+> 
+> Utilization is (also) a task specific property the scheduler uses to know
+> how much CPU bandwidth a task requires, at least as long as there is idle time.
+> Thus, the utilization clamp values, defined either per-task or per-task_group,
+> can represent tasks to the scheduler as being bigger (or smaller) than what
+> they actually are.
+> 
+> Utilization clamping thus enables interesting additional optimizations, for
+> example on asymmetric capacity systems like Arm big.LITTLE and DynamIQ CPUs,
+> where:
+> 
+>  - boosting: try to run small/foreground tasks on higher-capacity CPUs to
+>    complete them faster despite being less energy efficient.
+> 
+>  - capping: try to run big/background tasks on low-capacity CPUs to save power
+>    and thermal headroom for more important tasks
+> 
+> This series does not present this additional usage of utilization clamping but
+> it's an integral part of the EAS feature set, where [4] is one of its main
+> components.
+> 
+> Android kernels use SchedTune, a solution similar to utilization clamping, to
+> bias both 'frequency selection' and 'task placement'. This series provides the
+> foundation to add similar features to mainline while focusing, for the
+> time being, just on schedutil integration.
+> 
+> 
+> References
+> ==========
+> 
+> [1] Message-ID: <20190509130215.GV2623@hirez.programming.kicks-ass.net>
+>     https://lore.kernel.org/lkml/20190509130215.GV2623@hirez.programming.kicks-ass.net/
+> 
+> [2] Message-ID: <20180911162827.GJ1100574@devbig004.ftw2.facebook.com>
+>     https://lore.kernel.org/lkml/20180911162827.GJ1100574@devbig004.ftw2.facebook.com/
+> 
+> [3] Energy Aware Scheduling
+>     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/scheduler/sched-energy.txt?h=v5.1
+> 
+> [4] Expressing per-task/per-cgroup performance hints
+>     Linux Plumbers Conference 2018
+>     https://linuxplumbersconf.org/event/2/contributions/128/
+> 
+> 
+> Patrick Bellasi (16):
+>   sched/core: uclamp: Add CPU's clamp buckets refcounting
+>   sched/core: uclamp: Add bucket local max tracking
+>   sched/core: uclamp: Enforce last task's UCLAMP_MAX
+>   sched/core: uclamp: Add system default clamps
+>   sched/core: Allow sched_setattr() to use the current policy
+>   sched/core: uclamp: Extend sched_setattr() to support utilization
+>     clamping
+>   sched/core: uclamp: Reset uclamp values on RESET_ON_FORK
+>   sched/core: uclamp: Set default clamps for RT tasks
+>   sched/cpufreq: uclamp: Add clamps for FAIR and RT tasks
+>   sched/core: uclamp: Add uclamp_util_with()
+>   sched/fair: uclamp: Add uclamp support to energy_compute()
+>   sched/core: uclamp: Extend CPU's cgroup controller
+>   sched/core: uclamp: Propagate parent clamps
+>   sched/core: uclamp: Propagate system defaults to root group
+>   sched/core: uclamp: Use TG's clamps to restrict TASK's clamps
+>   sched/core: uclamp: Update CPU's refcount on TG's clamp changes
+> 
+>  Documentation/admin-guide/cgroup-v2.rst |  46 ++
+>  include/linux/log2.h                    |  34 ++
+>  include/linux/sched.h                   |  58 ++
+>  include/linux/sched/sysctl.h            |  11 +
+>  include/linux/sched/topology.h          |   6 -
+>  include/uapi/linux/sched.h              |  14 +-
+>  include/uapi/linux/sched/types.h        |  66 ++-
+>  init/Kconfig                            |  75 +++
+>  kernel/sched/core.c                     | 754 +++++++++++++++++++++++-
+>  kernel/sched/cpufreq_schedutil.c        |  22 +-
+>  kernel/sched/fair.c                     |  44 +-
+>  kernel/sched/rt.c                       |   4 +
+>  kernel/sched/sched.h                    | 123 +++-
+>  kernel/sysctl.c                         |  16 +
+>  14 files changed, 1229 insertions(+), 44 deletions(-)
+> 
+> -- 
+> 2.21.0
+> 
+
 -- 
-2.21.0
+#include <best/regards.h>
 
+Patrick Bellasi
