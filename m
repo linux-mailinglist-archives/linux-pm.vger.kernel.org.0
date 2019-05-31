@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A792D310E9
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 17:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8E5310DA
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 17:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbfEaPKP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 May 2019 11:10:15 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:57807 "EHLO
+        id S1726421AbfEaPJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 May 2019 11:09:50 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:53487 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726418AbfEaPKP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 May 2019 11:10:15 -0400
+        with ESMTP id S1726037AbfEaPJu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 May 2019 11:09:50 -0400
 Received: from orion.localdomain ([77.7.63.28]) by mrelayeu.kundenserver.de
  (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MHoZM-1hLEQr02bu-00ExVB; Fri, 31 May 2019 17:09:11 +0200
+ 1N2V8T-1gaooq2QRD-013vOa; Fri, 31 May 2019 17:09:11 +0200
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
@@ -21,29 +21,29 @@ Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
         martin.petersen@oracle.com, aacraid@microsemi.com,
         linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 1/3] drivers: cpufreq: cpufreq-nforce2: remove unnecessary #ifdef MODULE
-Date:   Fri, 31 May 2019 17:09:02 +0200
-Message-Id: <1559315344-10384-2-git-send-email-info@metux.net>
+Subject: [PATCH 2/3] drivers: scsci: remove unnecessary #ifdef MODULE
+Date:   Fri, 31 May 2019 17:09:03 +0200
+Message-Id: <1559315344-10384-3-git-send-email-info@metux.net>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1559315344-10384-1-git-send-email-info@metux.net>
 References: <1559315344-10384-1-git-send-email-info@metux.net>
-X-Provags-ID: V03:K1:AJheLpqoCJKbh6Psp+1Aqo/PyA4RuHOgwjoUpGVJuTXuR6QfiD4
- gt34TkkfESTrbAeNrt1ni2kUVHZ6MDEnErBlyN638nhUJDyM18ZaBgONmUM7O3HgrhBrQm7
- ihsmaC7fHGMHq8L2Sgi74UuUcAi4N0QzjP+mBe1H3SVdjiNHb8oHOKrJetvWIJYvHgNktrD
- daZE8Tab/M1BWb2Man7uQ==
+X-Provags-ID: V03:K1:vRieALr69N/p9CGP2TmTdjYIaR7yt8zI1oJIboQVelsLO9ZBK4b
+ 7+fLJ+7X4tp6PmW/HUQ3cXeovgj8VOqyN5fHrvXiqj2TvHm/tnl7ZT9fX4Ufhj8Eljw4E87
+ kAnB0ARfOLeJoyoe8xdU7bJg2gJ7EuilpTuLbQBSqBtupjMOlZq0BazVnffUrUVtup3SGgF
+ 1bdYZyK7ePS8Gu7h7l5Bw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qHX4061IyVQ=:hCuUIvpC9QTPluiqGmqw/+
- uRykCwCRpIe0OdB5gTV9n2PrNOtMjomKVLyqVPITGGAMxWeNoiPpi1l8RkMY1BLRha0b1f8n+
- wZi/7zE7tTbAYAPLq9hGToxizzx3EpVQ6LoOIsafPMbkb6Ra0ZNmZjdX6oxPuXnLOOvNv/w5W
- MZNgf4bcYTSj/vSYVS5JmAoEthTBc2jv8vcHD3znGnHHcTHAAVeLDEOv9YCTFJHv4OvKaddVd
- Z5YtbsuREczNcvLqpHLmy673pK4tYKwLpI0FP7B7RtHHaaYEvrNg5vIXsAVZLfofco3E5DKh4
- IwQMvqSQut32S+EA//6IYrt1Yj0Sg7I8kevLUHiHtPGAPgyu7qyP6UU0juNh7ss3Y90rt9q6P
- YQhRAVpbSAhJ/uIMQZPxOpDrQXb2E8WYRTd4uNK2qwCdazVKjt2yhayA+3qKLN10pgYTKc9eh
- 9b9cSGvxbAB7XTro5aWU6AU3TE43vLpT+21epTkMWG1+0m7VEp/8pjnpE7XV5smlfjftbmJ7b
- z+vgz9tMZJELVXgw2jaNtU0bgw9ZnW10/0BH/+bgYI0bsWkEoCtCA3A/uQgMUYTNDZCkflqp0
- Cp7ZwJEvNdK001VE7Yun8GTLxQ2ZT/UxTWMpOo/z+nEjUbZMtA+KxjQjHz6s9TWDOgKtosuAn
- vzw3QG2zdh95eC9HAJ15vBNAQ+nt9uoFqOUCMut+qeks6+gB4M4DpdI8AUtlCn6T9+CV5nGSl
- 6Y82LiOO8CZ6DVsAnHKTAVz6xyMaJ9l3r5XjDw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8iWc5OqMQLo=:SAi3pINLsLrKq8qqkf5y4X
+ hSVd4KQuUvvD3aMzTkHaaY8+SFKLu4gYZUQb4UiDYlimTtQYK6I7AoTb/zvR6G9kpWlcXeQSD
+ clMop8KQ4IAb/8+B5vPZ7iSxkdHeBqYu0LTqpLvUljw35yGz9VoLrfHTt3/9OaWMlXg/q6Uet
+ T+72o8Swkm9nDHfvWsAExTUbPnmOkDgN7i7LV5dHq6IsQfzx2+lnXDLeGI2fICPql9his15JD
+ qTC7R+Hix4Zw0OWYyUVAA5b3QdDNs6kNreNaMbZp4TiFjyHlvu1aRIeqU74zAj3VrhxExyPQG
+ Wz2C2A2gNdCIBY5JQEqwBzbxpLzX9bWRW+DKD1WBYESMXBBpBbd205rAnvcEvyMLun9NwBLAy
+ HiAVX2gvg2nxURxZEYEbhR1v8LQsCYt4A4AZ5IBUg3hvNkXq/q9MeNbN2yWy7mmpsh2FPlnJB
+ qrl2mZxhjqcT3ykoQF2XZHmttU1b45Nj4z/vxpVg0GfFScIW4k/aNrVe0lg5j7S/Yv8qIZsn/
+ JDEjgngwo4FSENa93fGtkniZ9YtDJCAtiRBWZnWZeE9T69SVvg26PuxWooZ7AUkXFm+2etFa0
+ M+Zr0s1PvXhsPJuWcxzrteuqz/3M2FtZDUBzPeGzjjeW6N/qwyC5/otRGKw6E7gUc2260KHRY
+ bLxZmH9ia9sEPntik7KptcGpkoYqpjf1WhGt9iRo8S3j6Ey2mu/2+0HwTSQHhhcMpEQgpudDi
+ 11gE65yfBOXMl3a168kbyuVucUmivPdMdfqZ3w==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -54,27 +54,49 @@ so the extra check here is not necessary.
 
 Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- drivers/cpufreq/cpufreq-nforce2.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/scsi/BusLogic.c | 2 --
+ drivers/scsi/dpt_i2o.c  | 3 ---
+ 2 files changed, 5 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq-nforce2.c b/drivers/cpufreq/cpufreq-nforce2.c
-index 33c309a..b8a6c9e 100644
---- a/drivers/cpufreq/cpufreq-nforce2.c
-+++ b/drivers/cpufreq/cpufreq-nforce2.c
-@@ -374,13 +374,11 @@ static int nforce2_cpu_exit(struct cpufreq_policy *policy)
- 	.exit = nforce2_cpu_exit,
- };
+diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+index e41e51f..68cc68b 100644
+--- a/drivers/scsi/BusLogic.c
++++ b/drivers/scsi/BusLogic.c
+@@ -3893,7 +3893,6 @@ static void __exit blogic_exit(void)
+ 
+ __setup("BusLogic=", blogic_setup);
  
 -#ifdef MODULE
- static const struct pci_device_id nforce2_ids[] = {
- 	{ PCI_VENDOR_ID_NVIDIA, PCI_DEVICE_ID_NVIDIA_NFORCE2 },
- 	{}
+ /*static struct pci_device_id blogic_pci_tbl[] = {
+ 	{ PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_MULTIMASTER,
+ 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
+@@ -3909,7 +3908,6 @@ static void __exit blogic_exit(void)
+ 	{PCI_DEVICE(PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_FLASHPOINT)},
+ 	{0, },
  };
- MODULE_DEVICE_TABLE(pci, nforce2_ids);
 -#endif
+ MODULE_DEVICE_TABLE(pci, blogic_pci_tbl);
  
- /**
-  * nforce2_detect_chipset - detect the Southbridge which contains FSB PLL logic
+ module_init(blogic_init);
+diff --git a/drivers/scsi/dpt_i2o.c b/drivers/scsi/dpt_i2o.c
+index a3afd14..eb5cfe8 100644
+--- a/drivers/scsi/dpt_i2o.c
++++ b/drivers/scsi/dpt_i2o.c
+@@ -180,14 +180,11 @@ static u8 adpt_read_blink_led(adpt_hba* host)
+  *============================================================================
+  */
+ 
+-#ifdef MODULE
+ static struct pci_device_id dptids[] = {
+ 	{ PCI_DPT_VENDOR_ID, PCI_DPT_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
+ 	{ PCI_DPT_VENDOR_ID, PCI_DPT_RAPTOR_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
+ 	{ 0, }
+ };
+-#endif
+-
+ MODULE_DEVICE_TABLE(pci,dptids);
+ 
+ static int adpt_detect(struct scsi_host_template* sht)
 -- 
 1.9.1
 
