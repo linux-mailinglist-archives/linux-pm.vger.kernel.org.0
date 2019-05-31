@@ -2,73 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7B830582
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 01:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF2030616
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 03:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbfE3XmH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 May 2019 19:42:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40138 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726029AbfE3XmH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 May 2019 19:42:07 -0400
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1D1D26326;
-        Thu, 30 May 2019 23:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559259726;
-        bh=7YYCFKd7B2wsWdoExXGWhul/2UFex3PfcEkHVhp7QmM=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=iCCQvAeEk4ar0WlA2Eh6zNCuaHx2ypdtJd5QMrpKQVCvc4tNANhzTCjVF166QH0H3
-         h0cCWQrsc1YOgFu/flWMGFw981pZMu2iNpAW/Ztokzs6c8zqqh4N2fgKxEwzu+vSTs
-         n6slvQREgUtD+Lzlz4+yT58HOQa43deSSdrE+iJA=
-Date:   Fri, 31 May 2019 01:42:02 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] x86/power: Fix 'nosmt' vs. hibernation triple fault
- during resume
-In-Reply-To: <20190530233804.syv4brpe3ndslyvo@treble>
-Message-ID: <nycvar.YFH.7.76.1905310139380.1962@cbobk.fhfr.pm>
-References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm> <nycvar.YFH.7.76.1905300007470.1962@cbobk.fhfr.pm> <CAJZ5v0ja5sQ73zMvUtV+w79LC_d+g6UdomL36rV-EpVDxEzbhA@mail.gmail.com> <alpine.DEB.2.21.1905301425330.2265@nanos.tec.linutronix.de>
- <CAJZ5v0go1g9KhE=mc19VCFrBuEERzFZCoRD4xt=tF=EnMjfH=A@mail.gmail.com> <20190530233804.syv4brpe3ndslyvo@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1726430AbfEaBQy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 May 2019 21:16:54 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37365 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726372AbfEaBQx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 May 2019 21:16:53 -0400
+Received: by mail-pl1-f195.google.com with SMTP id e7so2796626pln.4;
+        Thu, 30 May 2019 18:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gLXj7SNsIj8HMSdYiQOSKdVgfa5Ol1Nfhh6XVY2TIDE=;
+        b=MuAVA6GLtz4NhogDw/q6IUmvTdo3V2l3ftVmCQ145byUcvTJ0xuuq/czk5JMyskzK8
+         IYrwEmHiIs8tvOnT5oF6TFc5JozBcZ7qxHxsJCy24GzaWXuln3gkn3ZKzQaCD/ajVo8F
+         l9UWEGpDFeMuVtzk+ym9MgfmgS6enbw/Atc+Bk8Cn/YGi4y6LklIeCbdX5KCQwqSIvlh
+         +vffeioRk1+Qq7gHZ/LCCUEvRSGhpxnI+eyZ4JmL5V2Wnj8/+wTtjDrZzTPF5nVkDbu5
+         dDMC8FHjIT0lMcjNfq1vO8hBWdr8YICmsmP4inDdITYNp3Q+Uo9OlZd4ZTrwaVxTzuT0
+         vUFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gLXj7SNsIj8HMSdYiQOSKdVgfa5Ol1Nfhh6XVY2TIDE=;
+        b=iosEoyy3dsrGBKam3ZCjMBplfTEOeXkfsR4+YDIN/gBMaLCiAoXGj8AJEln13wRpo+
+         o5xt2bpXrjjA18rEw/hwkdkUVHDkGdJFKfcQdclDkrNKIe1duGpig5E3ZxJ9oa2+ab0J
+         DXUD8zbaewtHptl3sJ74shlaknNj+POOVB7NzFJwz8G+wLN+96lbaKclLggfJUaAyPOt
+         WF48GcIH1gvVlZJljHqc5zBpZaKhBTscSSXTswC5JfnNz3lB2BijtH1O9kzJQfYbu3MQ
+         8Fl4asTaYpjMvHS7Bdszp5fs7xytstDYJPUAPUMp7LgU9XObyScfQZUgAMrHztMmnzG+
+         a3Bw==
+X-Gm-Message-State: APjAAAVZhpqFTJI8fn1txqX4rzA5kCwPuohL5vyEAjaYx9Rh8R+T8tii
+        EO1jZXSk4TlOfnZvBUM2x9J5CAvCNrE=
+X-Google-Smtp-Source: APXvYqxI0VFiQXPy0cW0eTAPQXkCFQgZY43EA//KH7MT/4y5HSQYXi/MN26OOMClsQy+mtwg5Fgd8g==
+X-Received: by 2002:a17:902:bf08:: with SMTP id bi8mr6088108plb.206.1559265412795;
+        Thu, 30 May 2019 18:16:52 -0700 (PDT)
+Received: from localhost.lan (c-24-22-235-96.hsd1.wa.comcast.net. [24.22.235.96])
+        by smtp.gmail.com with ESMTPSA id v93sm3807335pjb.6.2019.05.30.18.16.51
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 30 May 2019 18:16:52 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] HWMON compatibility layer for power supplies
+Date:   Thu, 30 May 2019 18:16:18 -0700
+Message-Id: <20190531011620.9383-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 30 May 2019, Josh Poimboeuf wrote:
+Everyone:
 
-> > >     Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-> > 
-> > Yes, it is, thanks!
-> 
-> I still think changing monitor/mwait to use a fixmap address would be a
-> much cleaner way to fix this.  I can try to work up a patch tomorrow.
-
-I disagree with that from the backwards compatibility point of view.
-
-I personally am quite frequently using differnet combinations of 
-resumer/resumee kernels, and I've never been biten by it so far. I'd guess 
-I am not the only one.
-Fixmap sort of breaks that invariant.
+This small series contains the code I wrote to expose various power
+supply sensors via HWMON layer in order to be able to access all of
+the sensors in the system with libsensors. Not sure if this is an
+something that can be accepted upstream, so I am hoping to get some
+quick feedback.
 
 Thanks,
+Andrey Smirnov
+
+
+Changes since [v1]:
+
+  - All multiplications converted to use check_mul_overflow()
+
+  - All divisions converted to use DIV_ROUND_CLOSEST()
+
+  - Places that were ignoring errors now don't
+
+  - Alphabetized include list
+
+Andrey Smirnov (2):
+  power: supply: Add HWMON compatibility layer
+  power: supply: ucs1002: Add HWMON interface
+
+ drivers/power/supply/Kconfig              |  14 +
+ drivers/power/supply/Makefile             |   1 +
+ drivers/power/supply/power_supply_hwmon.c | 349 ++++++++++++++++++++++
+ drivers/power/supply/ucs1002_power.c      |   6 +
+ include/linux/power_supply.h              |   9 +
+ 5 files changed, 379 insertions(+)
+ create mode 100644 drivers/power/supply/power_supply_hwmon.c
 
 -- 
-Jiri Kosina
-SUSE Labs
+2.21.0
 
