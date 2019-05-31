@@ -2,72 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C9B310A2
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 16:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD4C310E3
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 17:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbfEaOyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 May 2019 10:54:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45414 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726418AbfEaOyZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 31 May 2019 10:54:25 -0400
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78D9326B11;
-        Fri, 31 May 2019 14:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559314464;
-        bh=ut6HGUXoVdKpKxWkBmLKfiQdl1KWbFSfImiaNPxTLes=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=dtMoYgEbe/Pum8dAabX3qtFT9mAjn3HZSFuHy0mwILYh9Ui1Y+W/JhgzAE4Nfq2ku
-         YOvaYRm/5M9b6O9Is8whzrh2+SS0zwG6yLEfcalSeD/TRsG11SNpvMlN8vsuoAVFPZ
-         g4pOv/CJ07M/7HJItd7xbthrqoy0BCAmv7KHlC7Q=
-Date:   Fri, 31 May 2019 16:54:20 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Andy Lutomirski <luto@amacapital.net>
-cc:     Andy Lutomirski <luto@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] x86/power: Fix 'nosmt' vs. hibernation triple fault
- during resume
-In-Reply-To: <B7AC83ED-3F11-42B9-8506-C842A5937B50@amacapital.net>
-Message-ID: <nycvar.YFH.7.76.1905311651450.1962@cbobk.fhfr.pm>
-References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm> <20190531051456.fzkvn62qlkf6wqra@treble> <nycvar.YFH.7.76.1905311045240.1962@cbobk.fhfr.pm> <5564116.e9OFvgDRbB@kreacher> <CALCETrUpseta+NrhVwzzVFTe-BkBHtDUJBO22ci3mAsVR+XOog@mail.gmail.com>
- <nycvar.YFH.7.76.1905311628330.1962@cbobk.fhfr.pm> <B7AC83ED-3F11-42B9-8506-C842A5937B50@amacapital.net>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1726589AbfEaPKH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 May 2019 11:10:07 -0400
+Received: from mout.kundenserver.de ([212.227.17.13]:53015 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726418AbfEaPKG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 May 2019 11:10:06 -0400
+Received: from orion.localdomain ([77.7.63.28]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MZkxd-1h3HwP1gaV-00WlMu; Fri, 31 May 2019 17:09:10 +0200
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, khalid@gonehiking.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, aacraid@microsemi.com,
+        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: clean some unneeded #ifdef MODULE
+Date:   Fri, 31 May 2019 17:09:01 +0200
+Message-Id: <1559315344-10384-1-git-send-email-info@metux.net>
+X-Mailer: git-send-email 1.9.1
+X-Provags-ID: V03:K1:PrS//R/BJWbSCiEFeyNXflSE6uQtBtKrpHigy2MFykA7Fp+zNo3
+ 7XrHrtMx38tuo5kYPHGcelicWyYAAWToMO+L8sI8UiUEk+D3CrxvZhAgH1QjaWmEXGlfLy/
+ 7Yt/wrGlKG0Sc3XToaE+UPAhqFV6iwRe+tRWZmjFyQJxo73VextLvoxa2lP/ItlAq9TVd8r
+ gpruHdRRfy3w8KTu26AaA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oJnEBJlP45s=:MJrLj4/4u/r7O5pAS0zSqq
+ xLqf1yfhcB4u0OP7KGbtCcjZ7Vl5vLiRfQp6xjMmgJ4Ob53afyKw5Y+vEDpErNKahjsf8IseG
+ DBhJTLPq5nPJt3GSUKvVrNwQOWzn7H3DbhKdZFB8mKcjkdQ6dqIXsNl8LvHT2ODHDwRNvswig
+ ARAVfcRlGpuk3rYUtiAt3QbxFNtv1cD46ze5VqyCb4IxPwAD/volq5Lf5Np/sNFEsO5s5LTqB
+ CLNyKTBGfaz1LMecQ965jZOSSpbypkWMRx9+TPjcVMy/FDOsI4htnZaU5S0X13tFs6kbC1jN6
+ 4LeOsfy6iEIj+BtmTR95aFKi+x50HVfWpbugfnYcaHj5/0OwoUnJIekUQxoqncxW+MX1UNRZh
+ TgZ/Xn8I0reR4LrEKvOA4/6udduSkUTIDOD4/leWMsKFgLnquiWsMX1/Ot2+VvWaMcL4PPE3g
+ 96qUtJQMrnsApV0cq2gsjp0qZxREVVdkeESm1dmoR7/1pfvek23Vit69ey+LGROIGSG7UvgEx
+ 3dgpzTUKcEmcZfgoi+dIElY+jYBt51/OS9gMFmIiWElbfH9tb0T6wzK8XNpPrQ6lE3JB1ORXC
+ xl7pQE4POXvucv7/qdIC+tz2pfu3PPFg7HZ9yH3+PWuLgcnvPWCTUmkVO6QSuYzVB1AcVeVu6
+ wVLX3MZg/O4whpB1hvMflkNgS7m62s80P+M4rmUfKbVWbJYcQlw+2Je2oIqfqu2yavasnO9qv
+ f9qsXC3nT2/Ig6bZNidmaaTCuGpyk8DDs0knkA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 31 May 2019, Andy Lutomirski wrote:
+Hi folks,
 
-> For that matter, what actually happens if we get an SMI while halted?  
-> Does RSM go directly to sleep or does it re-fetch the HLT?
+here're some patches that clean up uncessary cases of #ifdef MODULE.
+These ifdef's just exlude MODULE_DEVICE_TABLE's when the kernel is
+built w/o module support. As MODULE_DEVICE_TABLE() macro already
+checks for that, these extra #ifdef's shouldn't be necessary.
 
-Our mails just crossed, I replied to Josh's mwait() proposal patch a 
-minute ago.
 
-HLT is guaranteed to be re-entered if SMM interrupted it, while MWAIT is 
-not.
-
-So as a short-term fix for 5.2, I still believe in v4 of my patch that 
-does the mwait->hlt->mwait transition across hibernate/resume, and for 5.3 
-I can look into forcing it to wait-for-SIPI proper.
-
--- 
-Jiri Kosina
-SUSE Labs
+--mtx
 
