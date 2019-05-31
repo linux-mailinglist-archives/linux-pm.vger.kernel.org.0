@@ -2,80 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1FB310E8
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 17:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B233110A
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 17:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726816AbfEaPKM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 May 2019 11:10:12 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:44159 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726418AbfEaPKM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 May 2019 11:10:12 -0400
-Received: from orion.localdomain ([77.7.63.28]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MatZt-1h099n0hvH-00cSMW; Fri, 31 May 2019 17:09:12 +0200
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
+        id S1726418AbfEaPPi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 May 2019 11:15:38 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34310 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726616AbfEaPPi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 May 2019 11:15:38 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4VFCw2N086840
+        for <linux-pm@vger.kernel.org>; Fri, 31 May 2019 11:15:37 -0400
+Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2su57em1e6-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-pm@vger.kernel.org>; Fri, 31 May 2019 11:15:37 -0400
+Received: from localhost
+        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-pm@vger.kernel.org> from <jejb@linux.ibm.com>;
+        Fri, 31 May 2019 16:15:36 +0100
+Received: from b03cxnp07029.gho.boulder.ibm.com (9.17.130.16)
+        by e33.co.us.ibm.com (192.168.1.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 31 May 2019 16:15:31 +0100
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4VFFUN811665728
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 May 2019 15:15:30 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A89616A047;
+        Fri, 31 May 2019 15:15:30 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F36C56A051;
+        Fri, 31 May 2019 15:15:25 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.204.144])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 31 May 2019 15:15:25 +0000 (GMT)
+Subject: Re: clean some unneeded #ifdef MODULE
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org
 Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
-        linux@roeck-us.net, khalid@gonehiking.org, jejb@linux.ibm.com,
+        linux@roeck-us.net, khalid@gonehiking.org,
         martin.petersen@oracle.com, aacraid@microsemi.com,
         linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 3/3] drivers: hwmon: i5k_amb: remove unnecessary #ifdef MODULE
-Date:   Fri, 31 May 2019 17:09:04 +0200
-Message-Id: <1559315344-10384-4-git-send-email-info@metux.net>
-X-Mailer: git-send-email 1.9.1
+Date:   Fri, 31 May 2019 18:15:24 +0300
 In-Reply-To: <1559315344-10384-1-git-send-email-info@metux.net>
 References: <1559315344-10384-1-git-send-email-info@metux.net>
-X-Provags-ID: V03:K1:UFXCTI+KzrMW9xbCJ12euR95G6kfoQ3hucMGBBHRk8vAmA8h++y
- atYci0mi+NPhgAE1qhS6aZ9fGOnaGrLanWLtyFr96kZuMR4dOIvcznbAJDB9G2EeSOK6AS0
- lGVHgmvWbj42YrhlmZlOZLH2a2664ODGUNdeTJS1NeKevgeQCC8/7SMQUfNUrn0boYWSrA+
- 1Hs6drrmGWuHAgOwRG04g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2bZ6GxbGq4A=:ulLt4MudFSLl1iwUUZQWW6
- 1HlUAPB291wGvY/suiq7ef/3DgpQB7zw1CELV8v9xLGZI5pZ7hNnJFnZxt/uhZtL8yz9gM6AF
- pEUD4OWbgd8aN/lqcrOSltvBpVBIFFzaDEzp9lej83UkigEap+16tP/HQKZPRm2YXY7fS4GdZ
- sxALxl0IIIfwiCV6qV6e/WcwRHdYzZX/E1MmELfLhLmiU4YN9ofSR62E0GF7WGhyRSy44y9HV
- nGyCMsp2SjgeEUMtPzgBLiDrhlPiGTJlEgTmR29AsC0nij/mlaIKehcjHIrFBcHzcELKqFJoR
- ZDEATb8yRVuyWDbLcNExBx1w1+N1gDVXN0UAIrU7oI/BepyLZHKao0LoTIzHhtJWl9EKd22HD
- 0tu0/Je45iqqaLMw3Ie9zymLbMLX59VfsrbKtLMRc2gkMfVzTNtOLNtwd17cdsP4qmOICkF8a
- YdyPbs6FmGuJNICL4rA308o80o8J24AQk6sJtcyIuQBivSHzSVrB1MaByuBLl/4k0gQ4uAtpz
- GFXsQtt7Gr4v+EnfMAuBsigtybzCe/dutPGZjXedmrPk29OrGGCKgDD8K5vbl/pGp9IdSK0vm
- Hr8Js3sXUE83hR2V59JQqfcl9nyYj5juyuA9y8fUAPibfZLpAcxf5sBwMXziqjwwhzs9yEth+
- brLvA60uevkbOKmlEQ35cayuxpHD9RlW5uxAWm+VynpY6HAoZDlVz2EoVZ2Cdso6xsJFcs94S
- 3Y2FVSOy6m2lFLYFvY+0lZoE0Ki+BSZKeWCcYw==
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19053115-0036-0000-0000-00000AC5467E
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011191; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01211268; UDB=6.00636449; IPR=6.00992305;
+ MB=3.00027133; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-31 15:15:34
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19053115-0037-0000-0000-00004C032C0B
+Message-Id: <1559315724.2878.7.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-31_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=938 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905310095
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
-so the extra check here is not necessary.
+On Fri, 2019-05-31 at 17:09 +0200, Enrico Weigelt, metux IT consult
+wrote:
+> Hi folks,
+> 
+> here're some patches that clean up uncessary cases of #ifdef MODULE.
+> These ifdef's just exlude MODULE_DEVICE_TABLE's when the kernel is
+> built w/o module support. As MODULE_DEVICE_TABLE() macro already
+> checks for that, these extra #ifdef's shouldn't be necessary.
 
-Signed-off-by: Enrico Weigelt <info@metux.net>
----
- drivers/hwmon/i5k_amb.c | 2 --
- 1 file changed, 2 deletions(-)
+Isn't the problem the #ifdefs are trying to solve a complaint about an
+unused variable in the non-module case? if so, is that fixed some other
+way?
 
-diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
-index 2cf73d8..622405b 100644
---- a/drivers/hwmon/i5k_amb.c
-+++ b/drivers/hwmon/i5k_amb.c
-@@ -495,14 +495,12 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
- 	{ 0, 0 }
- };
- 
--#ifdef MODULE
- static const struct pci_device_id i5k_amb_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
- 	{ 0, }
- };
- MODULE_DEVICE_TABLE(pci, i5k_amb_ids);
--#endif
- 
- static int i5k_amb_probe(struct platform_device *pdev)
- {
--- 
-1.9.1
+James
 
