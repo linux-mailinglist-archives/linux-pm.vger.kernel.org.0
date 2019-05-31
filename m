@@ -2,87 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC2C31661
-	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 23:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4669B3167C
+	for <lists+linux-pm@lfdr.de>; Fri, 31 May 2019 23:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727470AbfEaVFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 May 2019 17:05:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49856 "EHLO mail.kernel.org"
+        id S1727184AbfEaVQv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 May 2019 17:16:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58608 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726558AbfEaVFU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 31 May 2019 17:05:20 -0400
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
+        id S1726719AbfEaVQv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 31 May 2019 17:16:51 -0400
+Received: from localhost (unknown [69.71.4.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 789C626F19;
-        Fri, 31 May 2019 21:05:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C017926F38;
+        Fri, 31 May 2019 21:16:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559336719;
-        bh=OyWxQmoLlrjhQfe/SkU8EcjxzVmOe+TJQ64dkJFwohQ=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=uy0cmpr3YnluHIkHBo3T/eYDLuvYIPVSKhiS0TBXkG0koQ5q9dk+z1M7besKyVPUC
-         U6//gQMMXscBrTrlCsf5NIf/pPb0Q0zxX8dxKs5mWpeR/lUC1bjWM6AM5fgGxvaKKc
-         elmm/Jdub7AY3qwyP8u3HGkTgS/QVbC97xLtxJus=
-Date:   Fri, 31 May 2019 23:05:15 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Andy Lutomirski <luto@kernel.org>
-cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        s=default; t=1559337410;
+        bh=c2pv3UGEvPHler4RZI9AO4XMMtkbISSMYlJ167PAtPE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LdBjFu6KfciYCDWWmv+DuahF7VCnvl9Odv8PL7Kuy3LLohhYqw2h1hmvEo7l35v9H
+         XbrSSTcz5TCAN5taXh0JwSvcrqspZYxIZgF+qItCAPe3XV9qm8svY7UoKYiwMsEW3v
+         sWGFOkmBMAerGoooJXv92W12ZYlUkNmBBVuKNClU=
+Date:   Fri, 31 May 2019 16:16:48 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] x86/power: Fix 'nosmt' vs. hibernation triple fault
- during resume
-In-Reply-To: <CALCETrUQzZTRnvmOS09UvRM9UCGEDvSdbJtkeeEa2foMf+hF2w@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.1905312251350.1962@cbobk.fhfr.pm>
-References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm> <20190531051456.fzkvn62qlkf6wqra@treble> <nycvar.YFH.7.76.1905311045240.1962@cbobk.fhfr.pm> <5564116.e9OFvgDRbB@kreacher> <CALCETrUpseta+NrhVwzzVFTe-BkBHtDUJBO22ci3mAsVR+XOog@mail.gmail.com>
- <nycvar.YFH.7.76.1905311628330.1962@cbobk.fhfr.pm> <B7AC83ED-3F11-42B9-8506-C842A5937B50@amacapital.net> <nycvar.YFH.7.76.1905311651450.1962@cbobk.fhfr.pm> <CALCETrUQzZTRnvmOS09UvRM9UCGEDvSdbJtkeeEa2foMf+hF2w@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PCI: PM: Avoid resuming devices in D3hot during system
+ suspend
+Message-ID: <20190531211648.GB58810@google.com>
+References: <4561083.VtDMOnK5Me@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4561083.VtDMOnK5Me@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 31 May 2019, Andy Lutomirski wrote:
-
-> The Intel SDM Vol 3 34.10 says:
+On Fri, May 31, 2019 at 11:49:30AM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> If the HLT instruction is restarted, the processor will generate a
-> memory access to fetch the HLT instruction (if it is
-> not in the internal cache), and execute a HLT bus transaction. This
-> behavior results in multiple HLT bus transactions
-> for the same HLT instruction.
+> The current code resumes devices in D3hot during system suspend if
+> the target power state for them is D3cold, but that is not necessary
+> in general.  It only is necessary to do that if the platform firmware
+> requires the device to be resumed, but that should be covered by
+> the platform_pci_need_resume() check anyway, so rework
+> pci_dev_keep_suspended() to avoid returning 'false' for devices
+> in D3hot which need not be resumed due to platform firmware
+> requirements.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/pci/pci.c |   15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> Index: linux-pm/drivers/pci/pci.c
+> ===================================================================
+> --- linux-pm.orig/drivers/pci/pci.c
+> +++ linux-pm/drivers/pci/pci.c
+> @@ -2474,10 +2474,19 @@ bool pci_dev_keep_suspended(struct pci_d
+>  {
+>  	struct device *dev = &pci_dev->dev;
+>  	bool wakeup = device_may_wakeup(dev);
+> +	pci_power_t target_state;
+>  
+> -	if (!pm_runtime_suspended(dev)
+> -	    || pci_target_state(pci_dev, wakeup) != pci_dev->current_state
+> -	    || platform_pci_need_resume(pci_dev))
+> +	if (!pm_runtime_suspended(dev) || platform_pci_need_resume(pci_dev))
+> +		return false;
+> +
+> +	target_state = pci_target_state(pci_dev, wakeup);
 
-Which basically means that both hibernation and kexec have been broken in 
-this respect for gazillions of years, and seems like noone noticed. Makes 
-one wonder what the reason for that might be.
+Nit, add a blank line here.
 
-Either SDM is not precise and the refetch actually never happens for real 
-(or is always in these cases satisfied from I$ perhaps?), or ... ?
+> +	/*
+> +	 * If the earlier platform check has not triggered, D3cold is just power
+> +	 * removal on top of D3hot, so no need to resume the device in that
+> +	 * case.
+> +	 */
+> +	if (target_state != pci_dev->current_state &&
+> +	    target_state != PCI_D3cold && pci_dev->current_state != PCI_D3hot)
+>  		return false;
 
-So my patch basically puts things back where they have been for ages 
-(while mwait is obviously much worse, as that gets woken up by the write 
-to the monitored address, which inevitably does happen during resume), but 
-seems like SDM is suggesting that we've been in a grey zone wrt RSM at 
-least for all those ages.
+This is more a comment on the existing code than on this particular
+patch, but I find this whole function hard to understand, and I think
+one reason is that there are a lot of negative conditions, both in
+this function and in its callers.  This "target_state != ... &&
+target_state != ...  && current_state != ..." is one example.  Another
+is the function name itself.  It might be easier to read as something
+like this:
 
-So perhaps we really should ditch resume_play_dead() altogether 
-eventually, and replace it with sending INIT IPI around instead (and then 
-waking the CPUs properly via INIT INIT START). I'd still like to do that 
-for 5.3 though, as that'd be slightly bigger surgery, and conservatively 
-put things basically back to state they have been up to now for 5.2.
+  bool pci_dev_need_resume(...)
+  {
+    if (!pm_runtime_suspended(...))
+      return true;
 
-Thanks,
+    if (platform_pci_need_resume(...))
+      return true;
 
--- 
-Jiri Kosina
-SUSE Labs
+    if (target_state != current_state)
+      return true;
 
+    ...
+
+Another reason I think it's hard to read is that
+"pci_dev_keep_suspended" suggests that this is a pure boolean function
+without side-effects, but in fact it also fiddles with the PME state
+in some cases.  I don't have any ideas for that part.
+
+Bjorn
