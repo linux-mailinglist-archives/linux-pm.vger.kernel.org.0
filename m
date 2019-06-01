@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FE831E05
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jun 2019 15:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2698531DBF
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jun 2019 15:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728564AbfFANY0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Jun 2019 09:24:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54468 "EHLO mail.kernel.org"
+        id S1729496AbfFANZd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Jun 2019 09:25:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55892 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729209AbfFANY0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 1 Jun 2019 09:24:26 -0400
+        id S1729494AbfFANZd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 1 Jun 2019 09:25:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 60D3F27355;
-        Sat,  1 Jun 2019 13:24:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB71527385;
+        Sat,  1 Jun 2019 13:25:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559395465;
+        s=default; t=1559395532;
         bh=dre30RdEQXy41bPIIowne0S263PWWWGLIDPuhU17HJQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c9RmorXG4qA6JqrabuNUOG1FGznLnxNgr4UWb+PdrEQGEK0b8CvfkekIwGW62Fbes
-         7wFSk9fQKaNEmqxYuKqYJWCqemOBrnZuVhkAkkOgo3yII0NzflU4eSj1K7F50JOqMa
-         CM4+3uTH/1WveTzbWhHczJ8VU6OZbiXbclAEL8nk=
+        b=2oH2IBtG7+n5FLDgBySCsUEPzVGyMY6NCw/1Kar0ZDpjPIN8jWl4+FVlE40Eh40Uq
+         qbDg7WQr8zUtmGqxaKlbjWA3ZFDMswVHSUZf176HppVccioBQ89Akvyb0ToUFjFLEx
+         gvaKl7lbcZeN7QyNMAAGxZk2z+M3C02XnlNN93V4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
         Eduardo Valentin <edubezval@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 15/99] drivers: thermal: tsens: Don't print error message on -EPROBE_DEFER
-Date:   Sat,  1 Jun 2019 09:22:22 -0400
-Message-Id: <20190601132346.26558-15-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 12/74] drivers: thermal: tsens: Don't print error message on -EPROBE_DEFER
+Date:   Sat,  1 Jun 2019 09:23:59 -0400
+Message-Id: <20190601132501.27021-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190601132346.26558-1-sashal@kernel.org>
-References: <20190601132346.26558-1-sashal@kernel.org>
+In-Reply-To: <20190601132501.27021-1-sashal@kernel.org>
+References: <20190601132501.27021-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
