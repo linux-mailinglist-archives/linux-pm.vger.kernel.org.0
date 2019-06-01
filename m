@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DC531F9B
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jun 2019 16:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE3831F97
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jun 2019 16:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbfFAOCe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Jun 2019 10:02:34 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:54587 "EHLO
+        id S1726652AbfFAOCa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Jun 2019 10:02:30 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:39123 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726143AbfFAOCa (ORCPT
+        with ESMTP id S1726013AbfFAOCa (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jun 2019 10:02:30 -0400
 Received: from orion.localdomain ([95.114.112.19]) by mrelayeu.kundenserver.de
  (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MS3vJ-1h8iCv3O8p-00TSvX; Sat, 01 Jun 2019 16:01:46 +0200
+ 1MRTIx-1hCWtS1bmf-00NOdl; Sat, 01 Jun 2019 16:01:47 +0200
 From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
@@ -21,29 +21,29 @@ Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
         martin.petersen@oracle.com, aacraid@microsemi.com,
         linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 2/3] drivers: scsi: remove unnecessary #ifdef MODULE
-Date:   Sat,  1 Jun 2019 16:01:39 +0200
-Message-Id: <1559397700-15585-3-git-send-email-info@metux.net>
+Subject: [PATCH 3/3] drivers: hwmon: i5k_amb: remove unnecessary #ifdef MODULE
+Date:   Sat,  1 Jun 2019 16:01:40 +0200
+Message-Id: <1559397700-15585-4-git-send-email-info@metux.net>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1559397700-15585-1-git-send-email-info@metux.net>
 References: <1559397700-15585-1-git-send-email-info@metux.net>
-X-Provags-ID: V03:K1:g52S7+6K+q7a6APcfLktQhtu6ysHVyU98fi+mu/EcNS2n+TBuZt
- a8WSpwzjfTZQh17F+xrRcraDx578GIi1tpiQ/rZ6OhbFzrLYTScnlur1ZUSxWWt7MBmIFR2
- MECVgJKk8DrwvVZm0XgHMGOempAKuwdBeM/fVJ/EUlHMaf3O+9gpiIjNuKKsv3uberbFF6o
- 5crXOBT37nAt7QTHbw7Iw==
+X-Provags-ID: V03:K1:Uf07aEan7IAl+nMPJVoauPGY3tAx+SpH5WZIUWYrVAiwM4ruUrl
+ 1j5M4Bv/Eq/zrLWd7J4UhOJT+teoWZyQ+eAnr+3sfAzfq1nHyqkH4en3lfiFGUjY4gk/vzu
+ nYFbaOW1BbKDMIcfeC2exMzSwNwZJAJ6e6WzFCyDZlvnAkBDCjeZcQLQ/6UHzshutYcoayi
+ Q8o2upcrzAXRJiD+AJgmw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:z05ZqzbJR2I=:xRzDes0nICf8as6QyE5kyp
- JRZUQd3TBI5k6cgFV4h0/rWxs8I+kKBTjpl3l8H0BiS6XTGo7AOBIyD2U6Po+mANLSoPDf5m0
- ErP/6ywGyTIB19Z4bN1RNaOYuqlLzsB0N6QMIZVJ8VT1Dw0vzp6xOyATN7MKXHnvNNc/PtL02
- jfnv/ks80t8drbIvWpxKUaiCEUEiK+Up6nLUo2nNbIOPc0Es5/rJBPAennFdmtHr/o4XCTlsF
- n9yuG+DZ3zAwpAzOLK7bCSIAer9oSGtd37i1IJR2Qohd+sHBZ/rPzadtAufL/U2qCOSZtfaEu
- BrONKjeSgbRavmljSGskd3VqIMQfAaqNPIfaNzq6Wm9HXSKUu76BBtgeHfGLJDUeNzATSxelX
- U+I3Qrb5XSZQGNGTWf6VbsV80jByhlpIwMQzaJv2cFc4cRzTEi8x95D8BGQ3yAZwp7F/Pj3El
- qLAYf2ZaPjBBTLSDbKt4TQU/TXO7E5UGLOaplyhwxwFNMfjPmQUuH9ftO1aoMJ3TiW1aMUnGc
- x2pgfQb2qRU+TIsQ3n5mlrMiVMgZjd4sFAq90zQ7uXeo4hHnE1wdqc4UFK55EA9pcEvx7Zj+H
- ryawlrQnliSamCk5wtFS81Q8x/0C01o0V6tADTjV7DorTn2EFs9AYQdUPyLmsjhZmZ15CyoIz
- Mx18H6Qy8x0prwveBbO/1UroNMcUQmAxBDyzUqphtvSjzIujtaWmXrhfECYq7uLHg7s6Q1Nan
- oAnwhjy7dsHuHOyE32xYfP/gGOUAhWyw+8Q6qQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:l8x9QWxf8zs=:xd+EqbnZ2qTUJdaZquAU5U
+ t8kfaqegmGmPvFY+r/WDW3k7SFwqj+q1Iuhvfrflz116yYuSqkc2EtvrBS/UQJU3YaO6cShFh
+ O5fUeNvLMYpOO8YgBUntUE4XfDPxyuqlz9VWEyTIXsmBqvnLsiqBofSQtjvrCP5RaNSpiCjyJ
+ EgrNflZzNB/98p+ys/dIStdu4yFrR1/naeMzlCFnS9wiVgYKqNz8tnf3JnlUs4aiFmLgVe/nT
+ AzjeRsuBCtoBoFmHX8DCnw3i1bVx72vDpnwjzgY4FNxqzhMnMvm5HfteKmAxcSM0DN9cQ3Ns7
+ dQaGXhqCkot/mOPYrC8UmoiSzqnswF4kWd2ad9InMvpw5IAleEV1RZCvoLlkJk1E8QhSMnFr9
+ 4rjio+sx8BV1a0tBv6MmBGdb9cysjfpPNUJeBcepKN/7JGbql85PHNQ5bN3N8s+SX6/HWfsZu
+ iahc1Et8ff8fE6ko7bKhuHMuRE+M5BDHbofgseni67mLuD1ymMED3+WVUZj43g09KLBZ7dQvX
+ oSyp/on4QsqiUXMAOVivpnufHnH/i7iq2SwaghNjhQoUL9i8g3XydQkPph9N/tqpfZeMApkK2
+ gWnmEJbQsrZS6GEw1rkqYSen1iWlqczHt3fIiSlh3yceylDmTXR2LY7GUMajCrbRa2zrSc0oH
+ 4UFhSUaWrzY5F24KmE9tAzhFFePnblgMly7uf/1ZJal1/cnOpTZ7TMBzVv/JNBMO+vB49NmSR
+ ZNoZV433PfwMe1y34tR58ipgoJMFp2rFJmI6xA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -54,49 +54,28 @@ so the extra check here is not necessary.
 
 Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- drivers/scsi/BusLogic.c | 2 --
- drivers/scsi/dpt_i2o.c  | 3 ---
- 2 files changed, 5 deletions(-)
+ drivers/hwmon/i5k_amb.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-index e41e51f..68cc68b 100644
---- a/drivers/scsi/BusLogic.c
-+++ b/drivers/scsi/BusLogic.c
-@@ -3893,7 +3893,6 @@ static void __exit blogic_exit(void)
- 
- __setup("BusLogic=", blogic_setup);
- 
--#ifdef MODULE
- /*static struct pci_device_id blogic_pci_tbl[] = {
- 	{ PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_MULTIMASTER,
- 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
-@@ -3909,7 +3908,6 @@ static void __exit blogic_exit(void)
- 	{PCI_DEVICE(PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_FLASHPOINT)},
- 	{0, },
+diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
+index b09c39a..b674c2f 100644
+--- a/drivers/hwmon/i5k_amb.c
++++ b/drivers/hwmon/i5k_amb.c
+@@ -482,14 +482,12 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
+ 	{ 0, 0 }
  };
--#endif
- MODULE_DEVICE_TABLE(pci, blogic_pci_tbl);
- 
- module_init(blogic_init);
-diff --git a/drivers/scsi/dpt_i2o.c b/drivers/scsi/dpt_i2o.c
-index abc74fd..9b28f9f 100644
---- a/drivers/scsi/dpt_i2o.c
-+++ b/drivers/scsi/dpt_i2o.c
-@@ -177,14 +177,11 @@ static u8 adpt_read_blink_led(adpt_hba* host)
-  *============================================================================
-  */
  
 -#ifdef MODULE
- static struct pci_device_id dptids[] = {
- 	{ PCI_DPT_VENDOR_ID, PCI_DPT_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
- 	{ PCI_DPT_VENDOR_ID, PCI_DPT_RAPTOR_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
+ static const struct pci_device_id i5k_amb_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
  	{ 0, }
  };
+ MODULE_DEVICE_TABLE(pci, i5k_amb_ids);
 -#endif
--
- MODULE_DEVICE_TABLE(pci,dptids);
  
- static int adpt_detect(struct scsi_host_template* sht)
+ static int i5k_amb_probe(struct platform_device *pdev)
+ {
 -- 
 1.9.1
 
