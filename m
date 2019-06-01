@@ -2,83 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2698531DBF
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jun 2019 15:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CFD31F9F
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jun 2019 16:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729496AbfFANZd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Jun 2019 09:25:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55892 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729494AbfFANZd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 1 Jun 2019 09:25:33 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB71527385;
-        Sat,  1 Jun 2019 13:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559395532;
-        bh=dre30RdEQXy41bPIIowne0S263PWWWGLIDPuhU17HJQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2oH2IBtG7+n5FLDgBySCsUEPzVGyMY6NCw/1Kar0ZDpjPIN8jWl4+FVlE40Eh40Uq
-         qbDg7WQr8zUtmGqxaKlbjWA3ZFDMswVHSUZf176HppVccioBQ89Akvyb0ToUFjFLEx
-         gvaKl7lbcZeN7QyNMAAGxZk2z+M3C02XnlNN93V4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 12/74] drivers: thermal: tsens: Don't print error message on -EPROBE_DEFER
-Date:   Sat,  1 Jun 2019 09:23:59 -0400
-Message-Id: <20190601132501.27021-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190601132501.27021-1-sashal@kernel.org>
-References: <20190601132501.27021-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1726143AbfFAOCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Jun 2019 10:02:43 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:52767 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726634AbfFAOCm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jun 2019 10:02:42 -0400
+Received: from orion.localdomain ([95.114.112.19]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MuUrM-1gfeyh2gPS-00rU8U; Sat, 01 Jun 2019 16:01:45 +0200
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, khalid@gonehiking.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, aacraid@microsemi.com,
+        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: remove unneeded #ifdef MODULE
+Date:   Sat,  1 Jun 2019 16:01:37 +0200
+Message-Id: <1559397700-15585-1-git-send-email-info@metux.net>
+X-Mailer: git-send-email 1.9.1
+X-Provags-ID: V03:K1:hGTgP1y7zY+DVXA/rOYqRPbljVCiVHRqPra8wSw4Lkfo1xHjwNn
+ eK9ZzEYzFoatUXTklAva012EmlLrpLSb5plOGiEEGxCWI39nTOi/JdUF5xvW8bmZeubpcSc
+ xc8pnImbQFOUGhhWZLVGngY7hE7GncvcAlxymgO3klVT6wdQkYncmMKsMOeeuEsQKS0QShc
+ StwfyiM1ZO9f+Gk1pPJCg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:d0/aFr6L5/Q=:dJYAEC1kzUKCKAKaj1w7ME
+ FSAvSirVALQTSLvxpmanuY0cyWrJUEcUF64D/ArKTxkOK9sw2FxEmipp29+ADmoAMKkAxUSWM
+ VlUckQ3W5mhQCPS4OG22rHvGAZRHAGVGC58h3bOQJVCcg7r3c9ZaH3MFIswYfqDg39zG0919Y
+ H6oRs1tUaGqdL6Xy9zaStkgTtFHs7hOeIlGU17FEpdA4wQQFxyihmCcKhIDooSxeJBeDOE5xW
+ svi/gvFfIWe/QO8LpJyCyp9FMnHg47NcutYWxd5yvDyXdrS+73TWw/aOiWkg2VZiVCQs8Gcoy
+ q9H27W7399HD88fTcZBIv7uyWmk9dODuqr1PoJ0NAgBnEWnS1uYisLZ+QN8oJKlBSa/EgKyn3
+ OyScGXWW/H0E4OkggsSp6DVYsn1KPBQXKEt+zTO2lTrHdFiqisk24EfmeMrSqSrWcY7CIvHFe
+ kJHhQZ+TiS5EXEACMa/24cIN9Rz5U7L8RmmY3FXdEL1nvmP0zlBlRFXPdWQn9zvxPFLDksBfU
+ m1uVq6R/tOm6U3rkF+qAB7lOIkI5nbN4B5JH3y0XFQF5sJRG5ooKitxAjLNEFhWryzGiHij4h
+ 5zp4maKCCbi83lNTcfG9AS2VdVUzpSyH8jqtOVUO0G9elkHJCIRrVR3bwE/49TXOcBB+WQ+MI
+ GVtfS40Gbg/noJkoNf3q6cdxwX545eiBElw20LPpVnpLl8a1ZHpDU7CMANVsa/epfhWqPgh3U
+ Uy4qF0JDswsG9vefLymMZZohFAAWJpuiTzibPw==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Amit Kucheria <amit.kucheria@linaro.org>
+Hi folks,
 
-[ Upstream commit fc7d18cf6a923cde7f5e7ba2c1105bb106d3e29a ]
+here're some patches that remove some (IMHO) unncessary cases of #ifdef MODULE
+These basically switch off calls to MODULE_DEVICE_TABLE() macro, which already
+checks for MODULE symbol on its own.
 
-We print a calibration failure message on -EPROBE_DEFER from
-nvmem/qfprom as follows:
-[    3.003090] qcom-tsens 4a9000.thermal-sensor: version: 1.4
-[    3.005376] qcom-tsens 4a9000.thermal-sensor: tsens calibration failed
-[    3.113248] qcom-tsens 4a9000.thermal-sensor: version: 1.4
-
-This confuses people when, in fact, calibration succeeds later when
-nvmem/qfprom device is available. Don't print this message on a
--EPROBE_DEFER.
-
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-Signed-off-by: Eduardo Valentin <edubezval@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/thermal/qcom/tsens.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 3f9fe6aa51ccc..ebbe1ec7b9e83 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -162,7 +162,8 @@ static int tsens_probe(struct platform_device *pdev)
- 	if (tmdev->ops->calibrate) {
- 		ret = tmdev->ops->calibrate(tmdev);
- 		if (ret < 0) {
--			dev_err(dev, "tsens calibration failed\n");
-+			if (ret != -EPROBE_DEFER)
-+				dev_err(dev, "tsens calibration failed\n");
- 			return ret;
- 		}
- 	}
--- 
-2.20.1
+have fun
+--mtx 
 
