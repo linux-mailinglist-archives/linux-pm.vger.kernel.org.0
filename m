@@ -2,22 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FF93253E
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 00:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959493258C
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 00:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbfFBWDP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Jun 2019 18:03:15 -0400
-Received: from gateway34.websitewelcome.com ([192.185.148.212]:12133 "EHLO
-        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726270AbfFBWDP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jun 2019 18:03:15 -0400
-X-Greylist: delayed 1477 seconds by postgrey-1.27 at vger.kernel.org; Sun, 02 Jun 2019 18:03:14 EDT
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 0E7F5A9830
-        for <linux-pm@vger.kernel.org>; Sun,  2 Jun 2019 16:38:37 -0500 (CDT)
+        id S1726714AbfFBW01 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Jun 2019 18:26:27 -0400
+Received: from gateway30.websitewelcome.com ([192.185.146.7]:11330 "EHLO
+        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726305AbfFBW01 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jun 2019 18:26:27 -0400
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id BBDBE548E
+        for <linux-pm@vger.kernel.org>; Sun,  2 Jun 2019 17:26:25 -0500 (CDT)
 Received: from br164.hostgator.com.br ([192.185.176.180])
         by cmsmtp with SMTP
-        id XYBYhEZ752qH7XYBZhRXXR; Sun, 02 Jun 2019 16:38:37 -0500
+        id XYvphDGpo90onXYvphFUDA; Sun, 02 Jun 2019 17:26:25 -0500
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=castello.eng.br; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -25,19 +24,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3yY6puF5yr6t9ajzI5zXVjuhpN5P/MQwRyHXK2uCu9Y=; b=weVrd+TD99WJUSZK0UrQH42JTt
-        qtv4X92WOjdU8XJmSO7aM4e3pRacAVkOnZ/DOlx5uv/KMLXNQq1FsE0KdYN6KRcEiwAYBLbADUwro
-        u2k7eCKfqjnboMEtV6c0pcXLLpPieOul+FO9B3yj3WpJF667TwKKdvXpRxORfKrMZcSBjxzHV7q1W
-        UCCHDakokr4RyB0GuUVxpojYIvw4mcQcT+I61sG5IkEoCqJBZQe9JgYlmYAUAg40ZLW36MBV+XApH
-        Zqx5zW712hoY9kF75XDRyDCz1fpHmcu6GTkEF5Ku71nq9lcNHYi/BEZgI1DM5h3yd7B1L/rWj1w8i
-        /F3u0lnw==;
-Received: from [177.34.20.96] (port=54464 helo=[192.168.0.28])
+        bh=fezTM9m3wc+a13i+Crf4N2vBAfcXMkeA56RD9iSpWiQ=; b=HasRlNXPjNW9sHRjqiFcAxboAz
+        zfO+LOoyh4RPxHdLb3Y0A1t7aX3OSdlym+OvIHXwINInvyX2cbltSDcZM2Pf04hNIFf+32iguueKl
+        jgn3zCEG4EyQLghdJg6IKKUl+/3OZWKM5w9IES0h9kNBW711l+G7ISNUfn4UWoI729iXAm2zSU9IZ
+        nSBhrbipqri2uMIWd4jtmGQGZ90GtwTcD2GXrsdMaSCuYll5imZjeaeWyAJaeYVRypX4lDBWCI2wc
+        7J+Txf6M26VAiBFcLk7L+OdsBpwGl8VR7g/mQuJFEYuqSemdglm96NdiilPoQ65dRhxYmpr1ExrsQ
+        jUeu2pEA==;
+Received: from [177.34.20.96] (port=55390 helo=[192.168.0.28])
         by br164.hostgator.com.br with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
         (Exim 4.91)
         (envelope-from <matheus@castello.eng.br>)
-        id 1hXYBY-003QwH-8q; Sun, 02 Jun 2019 18:38:36 -0300
-Subject: Re: [PATCH v3 2/5] dt-bindings: power: supply: Max17040: Add low
- level SOC alert threshold
+        id 1hXYvp-003efM-5g; Sun, 02 Jun 2019 19:26:25 -0300
+Subject: Re: [PATCH v3 3/5] power: supply: max17040: Config alert SOC low
+ level threshold from FDT
 To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
         Chanwoo Choi <cw00.choi@samsung.com>,
@@ -47,15 +46,15 @@ Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
         linux-kernel@vger.kernel.org
 References: <CAJKOXPf=nPrmw6Vzi_=LmO=dVsV4Gvoc-q75XP2FBEgm9Gxv0A@mail.gmail.com>
  <20190527022258.32748-1-matheus@castello.eng.br>
- <20190527022258.32748-3-matheus@castello.eng.br>
- <CAJKOXPdtsyY_GhniBAb0yV=HOhGx+x4xRPqNgdO+d0MDZRZ_7w@mail.gmail.com>
+ <20190527022258.32748-4-matheus@castello.eng.br>
+ <CAJKOXPd2F6iy0ZqYf+X2k=eQ=tY1zG4gVbrr68XqE9+w4HK6dw@mail.gmail.com>
 From:   Matheus Castello <matheus@castello.eng.br>
-Message-ID: <71c4f6b6-fbbb-14ba-0cf0-2377498fdfbc@castello.eng.br>
-Date:   Sun, 2 Jun 2019 18:38:26 -0300
+Message-ID: <69a4f003-4413-1316-6145-f8bef2171e86@castello.eng.br>
+Date:   Sun, 2 Jun 2019 19:26:20 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAJKOXPdtsyY_GhniBAb0yV=HOhGx+x4xRPqNgdO+d0MDZRZ_7w@mail.gmail.com>
+In-Reply-To: <CAJKOXPd2F6iy0ZqYf+X2k=eQ=tY1zG4gVbrr68XqE9+w4HK6dw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -67,11 +66,11 @@ X-AntiAbuse: Sender Address Domain - castello.eng.br
 X-BWhitelist: no
 X-Source-IP: 177.34.20.96
 X-Source-L: No
-X-Exim-ID: 1hXYBY-003QwH-8q
+X-Exim-ID: 1hXYvp-003efM-5g
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.0.28]) [177.34.20.96]:54464
+X-Source-Sender: ([192.168.0.28]) [177.34.20.96]:55390
 X-Source-Auth: matheus@castello.eng.br
 X-Email-Count: 8
 X-Source-Cap: Y2FzdGUyNDg7Y2FzdGUyNDg7YnIxNjQuaG9zdGdhdG9yLmNvbS5icg==
@@ -81,40 +80,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> On Mon, 27 May 2019 at 04:45, Matheus Castello <matheus@castello.eng.br> wrote:
+
+
+On 5/29/19 11:46 AM, Krzysztof Kozlowski wrote:
+> On Mon, 27 May 2019 at 04:46, Matheus Castello <matheus@castello.eng.br> wrote:
 >>
->> For configure low level state of charge threshold alert signaled from
->> max17040 we add "maxim,alert-low-soc-level" property.
+>> For configuration of fuel gauge alert for a low level state of charge
+>> interrupt we add a function to config level threshold and a device tree
+>> binding property to set it in flatned device tree node.
+>>
+>> Now we can use "maxim,alert-low-soc-level" property with the values from
+>> 1% up to 32% to configure alert interrupt threshold.
 >>
 >> Signed-off-by: Matheus Castello <matheus@castello.eng.br>
 >> ---
->>   .../power/supply/max17040_battery.txt         | 28 +++++++++++++++++++
->>   1 file changed, 28 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+>>   drivers/power/supply/max17040_battery.c | 52 +++++++++++++++++++++++--
+>>   1 file changed, 49 insertions(+), 3 deletions(-)
 >>
->> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
->> new file mode 100644
->> index 000000000000..a13e8d50ff7b
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
->> @@ -0,0 +1,28 @@
->> +max17040_battery
->> +~~~~~~~~~~~~~~~~
+>> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+>> index b7433e9ca7c2..2f4851608cfe 100644
+>> --- a/drivers/power/supply/max17040_battery.c
+>> +++ b/drivers/power/supply/max17040_battery.c
+>> @@ -29,6 +29,9 @@
+>>   #define MAX17040_DELAY         1000
+>>   #define MAX17040_BATTERY_FULL  95
+>>
+>> +#define MAX17040_ATHD_MASK             0xFFC0
+>> +#define MAX17040_ATHD_DEFAULT_POWER_UP 4
 >> +
->> +Required properties :
->> + - compatible : "maxim,max17040" or "maxim,max77836-battery"
+>>   struct max17040_chip {
+>>          struct i2c_client               *client;
+>>          struct delayed_work             work;
+>> @@ -43,6 +46,8 @@ struct max17040_chip {
+>>          int soc;
+>>          /* State Of Charge */
+>>          int status;
+>> +       /* Low alert threshold from 32% to 1% of the State of Charge */
+>> +       u32 low_soc_alert_threshold;
+>>   };
+>>
+>>   static int max17040_get_property(struct power_supply *psy,
+>> @@ -99,6 +104,28 @@ static void max17040_reset(struct i2c_client *client)
+>>          max17040_write_reg(client, MAX17040_CMD, 0x0054);
+>>   }
+>>
+>> +static int max17040_set_low_soc_threshold_alert(struct i2c_client *client,
+>> +       u32 level)
+>> +{
+>> +       int ret;
+>> +       u16 data;
+>> +
+>> +       /* check if level is between 1% and 32% */
+>> +       if (level > 0 && level < 33) {
+>> +               level = 32 - level;
+>> +               data = max17040_read_reg(client, MAX17040_RCOMP);
+>> +               /* clear the alrt bit and set LSb 5 bits */
+>> +               data &= MAX17040_ATHD_MASK;
+>> +               data |= level;
+>> +               max17040_write_reg(client, MAX17040_RCOMP, data);
+>> +               ret = 0;
+
+I will put the return of max17040_write_reg on ret, instead of ret = 0.
+
+>> +       } else {
+>> +               ret = -EINVAL;
+>> +       }
 > 
-> One more comment. The datasheet for max17040 says that there is on
-> ALERT pin and ALERT bits in RCOMP register. Which device are you
-> using? If it turns out that max17040 does not support it, then the
-> driver and bindings should reflect this - interrupts should not be set
-> on max17040.
+> This is unusual way of handling error... when you parse DTS, you
+> accept any value for "level" (even incorrect one). You validate the
+> value later when setting it and show an error... however you ignore
+> the error of max17040_write_reg() here... This is correct but looks
+> unusual.
 > 
 
-Yes you are right, max17040 have no ALERT pin. I am using max17043. Let 
-me know what you think would be best, put a note about it in the 
-description, add a compatibles like "maxim,max17043" and 
-"maxim,max17044"? What do you think?
+Ok, so would it be better to check the level value in 
+"max17040_get_of_data" and return an error there if the input is wrong?
 
 Best Regards,
 Matheus Castello
