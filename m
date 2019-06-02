@@ -2,99 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E12F32341
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Jun 2019 14:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93903235C
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Jun 2019 15:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbfFBMYt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Jun 2019 08:24:49 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:36736 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbfFBMYs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jun 2019 08:24:48 -0400
-Received: by mail-lf1-f65.google.com with SMTP id q26so11431703lfc.3
-        for <linux-pm@vger.kernel.org>; Sun, 02 Jun 2019 05:24:47 -0700 (PDT)
+        id S1726270AbfFBNTU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Jun 2019 09:19:20 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41799 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726168AbfFBNTU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jun 2019 09:19:20 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q17so8999584pfq.8
+        for <linux-pm@vger.kernel.org>; Sun, 02 Jun 2019 06:19:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d9XL3Kdg/XwAAZpeQtzVh3EdhTNcfgE61MkHiEb6f6I=;
-        b=eIiL2pGuoT1uPZ6iXK+26kX3ON9RbP1IPb/stloJPcBPj9Zo94HojRPxXy/OkFOiPK
-         X9H9+xcdJRrG5OhcVzQf2kFWuTRAl5KXardR/13k2qRA9L3/8mMVGyJhfmvfa1CKQ5lZ
-         kXMSBhJU+EcziEfH4B1bkn1X38iaVN/7RnDp8=
+         :cc:content-transfer-encoding;
+        bh=0NcDVhmyLxXPhirMBnL/FRprQusnUULjnBfsPdj8Hiw=;
+        b=aKQ8JMV8ILuLR2NdUrv0x+VoeRWJ/8Y5T0VrTNkEuDxfeVeFSsEAjyMSRYzdnTKUFB
+         2PP901PNB4/g9Tbd5Fc86ksUbXinc/lMNrLpnih3WVgyqo9wLDKdxSkb/evZTnFuu9JM
+         8+O8u4PKNsj7nuijDf4N8F48BGpOz5UWymihYMft7VQMlfZs0V9GNnlqOP7lS/V6mO6E
+         gTxomGZXMbifSyejUINwi/LzOyg+jVVNWYDVA3bbL4K6iZzJZQdVgZlkQuE6EEANXhhw
+         g+0t3tjp1X2M8CI/K4VVS1ez0Sijq1L3TjtMQTEEJML07o2bahZXeeJ559VvYYzlkVb/
+         g3og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d9XL3Kdg/XwAAZpeQtzVh3EdhTNcfgE61MkHiEb6f6I=;
-        b=iToXmjKP4mUZ43Tnw98t/xJgI5k+DmASBbDZm/W1xJcf6FifVksEZ0KIA8bKrXWhYB
-         PCc8FRUipdBkWRd7GS+kKBJd7/O3gq9ii6up57xIJMRsvo8glfEZS8TyTMh9aBPZQEk1
-         zjoanDVaUkJB1PZytwqXuQxU7O0zJt8LTvREMXAMMutpZ7kYscicwTsapj5lAMRBm7lu
-         MU9dLQWjsZB6nwAFMGtzEzEjRtdrSpQRaXF/3M464GfAvKFEbvFCwObnybCBTUpoXHeZ
-         MgU8Nw0E0UBAFe7F/GJcGC9TWWgmHehgwE0of/9LQE7G2JwVJjZ2FLT1yLO5sfC2bZW8
-         QoJw==
-X-Gm-Message-State: APjAAAV0Pl7qzJYuZEEHI957OEJCcpNe8yJouW2Z9ifqryn2sgSdfg+q
-        OLZatLH77Dh4fVncwnQRWUB+sDigJhbverJTpoAiIQ==
-X-Google-Smtp-Source: APXvYqx4YBeHBoQTcjTH8I7UAKp3m6GHYEI6h8xOHmlpzR1QFhMBG6BANgkDDCynETKbf79fFNw+DGqbIxcWNN3SHnE=
-X-Received: by 2002:ac2:4544:: with SMTP id j4mr10902247lfm.176.1559478286535;
- Sun, 02 Jun 2019 05:24:46 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0NcDVhmyLxXPhirMBnL/FRprQusnUULjnBfsPdj8Hiw=;
+        b=FbdVSad4xPK/kh1R3DVz5sSp7ftWPLNObQ+950oT0gjQY6OCcOSuE6zritr2iAt1dY
+         3h4mQuBACUQW17jZ+QwdNTy+ORz+Yy12GW7k2SK5iK7Smwzl0+hPQ0W50jjuay+vnqop
+         /mYl0cTS024CRdZJcmD+jL5rTPYub2pr0rqE5nO2X+ukOFHLXyiHlpC3jg0DyiTPmlV0
+         H29bLBp276K+MMdJs5WHZnbKVaHriql97iVfeyKZJQ3nIaTG6N3/5B8FJorzi6wbICYj
+         5KK6eU2Bz8uiFBI4JAwvLk/DUSe9M14I2uxt2J3ATXFpeP1omAdtSoRKM2J2f6UmzAaa
+         e3AA==
+X-Gm-Message-State: APjAAAUnzVDq1vODFzHTr4yIDl9soq51UbQ6/38eku/KNgVaz/zT+0LD
+        0hTawHWsOw4ModcdP4PI8bNiyVq1WDYhmsyROXM=
+X-Google-Smtp-Source: APXvYqxQZklDdC7pDexcyGQHSlARf1CB5VfxXCV0PWJLeh+lLdSFyLR7tEaN5o6oGkCQsUq9DAdl4fyB9wm2ud571Go=
+X-Received: by 2002:a63:110c:: with SMTP id g12mr21293135pgl.18.1559481559894;
+ Sun, 02 Jun 2019 06:19:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190601222738.6856-1-joel@joelfernandes.org> <20190601222738.6856-3-joel@joelfernandes.org>
- <20190602070014.GA543@amd> <CAEXW_YT3t4Hb6wKsjXPGng+YbA5rhNRa7OSdZwdN4AKGfVkX3g@mail.gmail.com>
-In-Reply-To: <CAEXW_YT3t4Hb6wKsjXPGng+YbA5rhNRa7OSdZwdN4AKGfVkX3g@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 2 Jun 2019 08:24:35 -0400
-Message-ID: <CAEXW_YSM2wwah2Q7LKmUO1Dp7GG62ciQA1nZ7GLw3m6cyuXXTw@mail.gmail.com>
-Subject: Re: [RFC 2/6] ipv4: add lockdep condition to fix for_each_entry
-To:     Pavel Machek <pavel@denx.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Neil Brown <neilb@suse.com>, netdev <netdev@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Peter Zilstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu <rcu@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+References: <1558888143-5121-1-git-send-email-akinobu.mita@gmail.com>
+ <1558888143-5121-3-git-send-email-akinobu.mita@gmail.com> <20190601090238.GD6453@lst.de>
+In-Reply-To: <20190601090238.GD6453@lst.de>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Sun, 2 Jun 2019 22:19:08 +0900
+Message-ID: <CAC5umyiBmD6-3BNLfG7sNOe9jde8Ct16a9N_Ao3T_1_G1K_DDA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] nvme: add thermal zone devices
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Kenneth Heitke <kenneth.heitke@intel.com>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jun 2, 2019 at 8:20 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+2019=E5=B9=B46=E6=9C=881=E6=97=A5(=E5=9C=9F) 18:03 Christoph Hellwig <hch@l=
+st.de>:
 >
-> On Sun, Jun 2, 2019 at 3:00 AM Pavel Machek <pavel@denx.de> wrote:
+> On Mon, May 27, 2019 at 01:29:02AM +0900, Akinobu Mita wrote:
+> > The NVMe controller reports up to nine temperature values in the SMART =
+/
+> > Health log page (the composite temperature and temperature sensor 1 thr=
+ough
+> > temperature sensor 8).
 > >
-> > On Sat 2019-06-01 18:27:34, Joel Fernandes (Google) wrote:
-> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> >
-> > This really needs to be merged to previous patch, you can't break
-> > compilation in middle of series...
-> >
-> > Or probably you need hlist_for_each_entry_rcu_lockdep() macro with
-> > additional argument, and switch users to it.
+> > This provides these temperatures via thermal zone devices.
 >
-> Good point. I can also just add a temporary transition macro, and then
-> remove it in the last patch. That way no new macro is needed.
+> Can you explain a bit more why we'd do this?  I shows up some sysfs
+> files, but we could easily do that with nvme-cli, too.  Is there some
+> greater benefit of this integration?
 
-Actually, no. There is no compilation break so I did not follow what
-you mean. The fourth argument to the hlist_for_each_entry_rcu is
-optional. The only thing that happens is new lockdep warnings will
-arise which later parts of the series fix by passing in that fourth
-argument.
+As long as the user space thermal governor is used, there is nothing more
+than that from a functional perspective.  And I suppose that this is used
+with user_space governor (i.e. there is still some work to be able to bind
+actual thermal cooling device).
+
+The main purpose of this is to turn on a fan when overheated without
+polling the device that could prevent the lower power state transitions.
+But as you noted, we could do that with the existing AEN notifications
+through uevent.
+
+So frankly speaking, the benefit of this is providing generic thermal sysfs
+interface and the tools like tmon (linux/tools/thermal/tmon) can show the
+nvme temperatures.
