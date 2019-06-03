@@ -2,265 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 048AF329AF
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 09:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C71E132A54
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 10:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbfFCHc6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 03:32:58 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:8090 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725975AbfFCHc5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 3 Jun 2019 03:32:57 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 45HRbj0L33z9tyqk;
-        Mon,  3 Jun 2019 09:32:49 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=KCHA/+I2; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id f1ZXWwP5lEd5; Mon,  3 Jun 2019 09:32:48 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 45HRbh6GzZz9tyqD;
-        Mon,  3 Jun 2019 09:32:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1559547168; bh=mFSnLp9SecdoefqVAi+zrsx7gCUNrqDDhzeAm7hNfcA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KCHA/+I2NHjkZkiR233EwpdRJt5jFkb7BB5WvTUHNfzd/oweFVHs6D+raJnJ4JYpd
-         J+KQ8vTwYSp7XV7FCrl9nJmeWCQH+EPqi/mxK+DlAKOo2fjx8cf6H7S04ezRTgUM5E
-         wPjjz8mFCLKIrimihcCu7Fs69Nna3fpjCg3CfU9w=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 704308B7B1;
-        Mon,  3 Jun 2019 09:32:53 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id eaNrRzoQGBQV; Mon,  3 Jun 2019 09:32:53 +0200 (CEST)
-Received: from PO15451 (po15451.idsi0.si.c-s.fr [172.25.231.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1C9028B7A1;
-        Mon,  3 Jun 2019 09:32:53 +0200 (CEST)
-Subject: Re: [PATCH 09/22] docs: mark orphan documents as such
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     kvm@vger.kernel.org,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        dri-devel@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Airlie <airlied@linux.ie>,
-        Andrew Donnellan <ajd@linux.ibm.com>, linux-pm@vger.kernel.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Matan Ziv-Av <matan@svgalib.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Georgi Djakov <georgi.djakov@linaro.org>
-References: <cover.1559171394.git.mchehab+samsung@kernel.org>
- <e0bf4e767dd5de9189e5993fbec2f4b1bafd2064.1559171394.git.mchehab+samsung@kernel.org>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <2891a08c-50b1-db33-0e96-740d45c5235f@c-s.fr>
-Date:   Mon, 3 Jun 2019 09:32:54 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727579AbfFCIDh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 04:03:37 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:50138 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725856AbfFCIDg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 04:03:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=YGw/VDsnOloIaXgrEbA/FOCyBbJYxl2QNc1vAYVXNY0=; b=Kh81Fh/GkYy+PcGkyTuRLYqJr
+        5d3meB8Iu/apofeU9LBaVTbdU34exlCBZ6/cvkSTsWYbCITa+85dcFdl1TuwCCRcbBbbBHcmz79tU
+        YNA75f//Beu0qWv4xrOjE3yCBU/h7Wpdldb8AXCdnFyE/xt6GG7X5SHHOhvkwxY2EDPpuVJ40I8NT
+        ZcmLp7vu3BxxYFbsJSX2sSX4rHSTxLEQ0MZogDpDfR8tMLBVyzA2HGhhcxPa3RuWryoN7hsbltCid
+        ApVADLC1Be6a9Xztz6ysLp/Pg3F0N3np5vQaItnOalc4ycKqr7JKLLA3Zs069bXnA/w4o4wPQqclC
+        BYeGsVrnQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hXhuM-0001Ln-LU; Mon, 03 Jun 2019 08:01:31 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0FE772029F880; Mon,  3 Jun 2019 10:01:28 +0200 (CEST)
+Date:   Mon, 3 Jun 2019 10:01:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
+        kernel-hardening@lists.openwall.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [RFC 1/6] rcu: Add support for consolidated-RCU reader checking
+Message-ID: <20190603080128.GA3436@hirez.programming.kicks-ass.net>
+References: <20190601222738.6856-1-joel@joelfernandes.org>
+ <20190601222738.6856-2-joel@joelfernandes.org>
 MIME-Version: 1.0
-In-Reply-To: <e0bf4e767dd5de9189e5993fbec2f4b1bafd2064.1559171394.git.mchehab+samsung@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190601222738.6856-2-joel@joelfernandes.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sat, Jun 01, 2019 at 06:27:33PM -0400, Joel Fernandes (Google) wrote:
+> +#define list_for_each_entry_rcu(pos, head, member, cond...)		\
+> +	if (COUNT_VARGS(cond) != 0) {					\
+> +		__list_check_rcu_cond(0, ## cond);			\
+> +	} else {							\
+> +		__list_check_rcu();					\
+> +	}								\
+> +	for (pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
+> +		&pos->member != (head);					\
+>  		pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
+>  
+>  /**
+> @@ -621,7 +648,12 @@ static inline void hlist_add_behind_rcu(struct hlist_node *n,
+>   * the _rcu list-mutation primitives such as hlist_add_head_rcu()
+>   * as long as the traversal is guarded by rcu_read_lock().
+>   */
+> +#define hlist_for_each_entry_rcu(pos, head, member, cond...)		\
+> +	if (COUNT_VARGS(cond) != 0) {					\
+> +		__list_check_rcu_cond(0, ## cond);			\
+> +	} else {							\
+> +		__list_check_rcu();					\
+> +	}								\
+>  	for (pos = hlist_entry_safe (rcu_dereference_raw(hlist_first_rcu(head)),\
+>  			typeof(*(pos)), member);			\
+>  		pos;							\
 
 
-Le 30/05/2019 à 01:23, Mauro Carvalho Chehab a écrit :
-> Sphinx doesn't like orphan documents:
-> 
->      Documentation/accelerators/ocxl.rst: WARNING: document isn't included in any toctree
->      Documentation/arm/stm32/overview.rst: WARNING: document isn't included in any toctree
->      Documentation/arm/stm32/stm32f429-overview.rst: WARNING: document isn't included in any toctree
->      Documentation/arm/stm32/stm32f746-overview.rst: WARNING: document isn't included in any toctree
->      Documentation/arm/stm32/stm32f769-overview.rst: WARNING: document isn't included in any toctree
->      Documentation/arm/stm32/stm32h743-overview.rst: WARNING: document isn't included in any toctree
->      Documentation/arm/stm32/stm32mp157-overview.rst: WARNING: document isn't included in any toctree
->      Documentation/gpu/msm-crash-dump.rst: WARNING: document isn't included in any toctree
->      Documentation/interconnect/interconnect.rst: WARNING: document isn't included in any toctree
->      Documentation/laptops/lg-laptop.rst: WARNING: document isn't included in any toctree
->      Documentation/powerpc/isa-versions.rst: WARNING: document isn't included in any toctree
->      Documentation/virtual/kvm/amd-memory-encryption.rst: WARNING: document isn't included in any toctree
->      Documentation/virtual/kvm/vcpu-requests.rst: WARNING: document isn't included in any toctree
-> 
-> So, while they aren't on any toctree, add :orphan: to them, in order
-> to silent this warning.
+This breaks code like:
 
-Are those files really not meant to be included in a toctree ?
+	if (...)
+		list_for_each_entry_rcu(...);
 
-Shouldn't we include them in the relevant toctree instead of just 
-shutting up Sphinx warnings ?
-
-Christophe
-
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> ---
->   Documentation/accelerators/ocxl.rst                 | 2 ++
->   Documentation/arm/stm32/overview.rst                | 2 ++
->   Documentation/arm/stm32/stm32f429-overview.rst      | 2 ++
->   Documentation/arm/stm32/stm32f746-overview.rst      | 2 ++
->   Documentation/arm/stm32/stm32f769-overview.rst      | 2 ++
->   Documentation/arm/stm32/stm32h743-overview.rst      | 2 ++
->   Documentation/arm/stm32/stm32mp157-overview.rst     | 2 ++
->   Documentation/gpu/msm-crash-dump.rst                | 2 ++
->   Documentation/interconnect/interconnect.rst         | 2 ++
->   Documentation/laptops/lg-laptop.rst                 | 2 ++
->   Documentation/powerpc/isa-versions.rst              | 2 ++
->   Documentation/virtual/kvm/amd-memory-encryption.rst | 2 ++
->   Documentation/virtual/kvm/vcpu-requests.rst         | 2 ++
->   13 files changed, 26 insertions(+)
-> 
-> diff --git a/Documentation/accelerators/ocxl.rst b/Documentation/accelerators/ocxl.rst
-> index 14cefc020e2d..b1cea19a90f5 100644
-> --- a/Documentation/accelerators/ocxl.rst
-> +++ b/Documentation/accelerators/ocxl.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   ========================================================
->   OpenCAPI (Open Coherent Accelerator Processor Interface)
->   ========================================================
-> diff --git a/Documentation/arm/stm32/overview.rst b/Documentation/arm/stm32/overview.rst
-> index 85cfc8410798..f7e734153860 100644
-> --- a/Documentation/arm/stm32/overview.rst
-> +++ b/Documentation/arm/stm32/overview.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   ========================
->   STM32 ARM Linux Overview
->   ========================
-> diff --git a/Documentation/arm/stm32/stm32f429-overview.rst b/Documentation/arm/stm32/stm32f429-overview.rst
-> index 18feda97f483..65bbb1c3b423 100644
-> --- a/Documentation/arm/stm32/stm32f429-overview.rst
-> +++ b/Documentation/arm/stm32/stm32f429-overview.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   STM32F429 Overview
->   ==================
->   
-> diff --git a/Documentation/arm/stm32/stm32f746-overview.rst b/Documentation/arm/stm32/stm32f746-overview.rst
-> index b5f4b6ce7656..42d593085015 100644
-> --- a/Documentation/arm/stm32/stm32f746-overview.rst
-> +++ b/Documentation/arm/stm32/stm32f746-overview.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   STM32F746 Overview
->   ==================
->   
-> diff --git a/Documentation/arm/stm32/stm32f769-overview.rst b/Documentation/arm/stm32/stm32f769-overview.rst
-> index 228656ced2fe..f6adac862b17 100644
-> --- a/Documentation/arm/stm32/stm32f769-overview.rst
-> +++ b/Documentation/arm/stm32/stm32f769-overview.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   STM32F769 Overview
->   ==================
->   
-> diff --git a/Documentation/arm/stm32/stm32h743-overview.rst b/Documentation/arm/stm32/stm32h743-overview.rst
-> index 3458dc00095d..c525835e7473 100644
-> --- a/Documentation/arm/stm32/stm32h743-overview.rst
-> +++ b/Documentation/arm/stm32/stm32h743-overview.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   STM32H743 Overview
->   ==================
->   
-> diff --git a/Documentation/arm/stm32/stm32mp157-overview.rst b/Documentation/arm/stm32/stm32mp157-overview.rst
-> index 62e176d47ca7..2c52cd020601 100644
-> --- a/Documentation/arm/stm32/stm32mp157-overview.rst
-> +++ b/Documentation/arm/stm32/stm32mp157-overview.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   STM32MP157 Overview
->   ===================
->   
-> diff --git a/Documentation/gpu/msm-crash-dump.rst b/Documentation/gpu/msm-crash-dump.rst
-> index 757cd257e0d8..240ef200f76c 100644
-> --- a/Documentation/gpu/msm-crash-dump.rst
-> +++ b/Documentation/gpu/msm-crash-dump.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   =====================
->   MSM Crash Dump Format
->   =====================
-> diff --git a/Documentation/interconnect/interconnect.rst b/Documentation/interconnect/interconnect.rst
-> index c3e004893796..56e331dab70e 100644
-> --- a/Documentation/interconnect/interconnect.rst
-> +++ b/Documentation/interconnect/interconnect.rst
-> @@ -1,5 +1,7 @@
->   .. SPDX-License-Identifier: GPL-2.0
->   
-> +:orphan:
-> +
->   =====================================
->   GENERIC SYSTEM INTERCONNECT SUBSYSTEM
->   =====================================
-> diff --git a/Documentation/laptops/lg-laptop.rst b/Documentation/laptops/lg-laptop.rst
-> index aa503ee9b3bc..f2c2ffe31101 100644
-> --- a/Documentation/laptops/lg-laptop.rst
-> +++ b/Documentation/laptops/lg-laptop.rst
-> @@ -1,5 +1,7 @@
->   .. SPDX-License-Identifier: GPL-2.0+
->   
-> +:orphan:
-> +
->   LG Gram laptop extra features
->   =============================
->   
-> diff --git a/Documentation/powerpc/isa-versions.rst b/Documentation/powerpc/isa-versions.rst
-> index 812e20cc898c..66c24140ebf1 100644
-> --- a/Documentation/powerpc/isa-versions.rst
-> +++ b/Documentation/powerpc/isa-versions.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   CPU to ISA Version Mapping
->   ==========================
->   
-> diff --git a/Documentation/virtual/kvm/amd-memory-encryption.rst b/Documentation/virtual/kvm/amd-memory-encryption.rst
-> index 659bbc093b52..33d697ab8a58 100644
-> --- a/Documentation/virtual/kvm/amd-memory-encryption.rst
-> +++ b/Documentation/virtual/kvm/amd-memory-encryption.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   ======================================
->   Secure Encrypted Virtualization (SEV)
->   ======================================
-> diff --git a/Documentation/virtual/kvm/vcpu-requests.rst b/Documentation/virtual/kvm/vcpu-requests.rst
-> index 5feb3706a7ae..c1807a1b92e6 100644
-> --- a/Documentation/virtual/kvm/vcpu-requests.rst
-> +++ b/Documentation/virtual/kvm/vcpu-requests.rst
-> @@ -1,3 +1,5 @@
-> +:orphan:
-> +
->   =================
->   KVM VCPU Requests
->   =================
-> 
+as they are no longer a single statement. You'll have to frob it into
+the initializer part of the for statement.
