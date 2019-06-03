@@ -2,208 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC77A33932
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 21:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312F833958
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 21:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbfFCTmO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 15:42:14 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41945 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbfFCTmO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 15:42:14 -0400
-Received: by mail-pg1-f196.google.com with SMTP id 83so2040501pgg.8
-        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2019 12:42:14 -0700 (PDT)
+        id S1725876AbfFCTzT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 15:55:19 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:34457 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726163AbfFCTzT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 15:55:19 -0400
+Received: by mail-qt1-f195.google.com with SMTP id m29so5727009qtu.1
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2019 12:55:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=a+lhr9Q+24Qfza3c4uXpEdm8TyEjYoUavdn6rBgETA0=;
-        b=v57zkdukOzYOvhfiKNqk2b/GOjkFP1SHWP5I5eo7SiatQZoyLWIBR+84HSu7EA2L8f
-         /Txa/lSthx5I4+d0+ItNuTqwsJewXfi+56sABsg3JwRHrqq33I7sTzcN+0Twcbb6KpI7
-         +Pr2kvxYQLWF4bCfr03Db/6neBgFbrX8K2sXo=
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1KV1EL2zWlz4BNwMzZsPPlusL/bx0yMiXCoqZlXd458=;
+        b=f/VSrUxboXoGFGdWMMd2FDeP8+ypIq64epfnLR1+dKU5NMMKQvoEkLcb1gXkzsU7wz
+         Jn/pM2dph432cJm0hpfUrbOa2Iqat6S2Hn2aMVwbuIRid7V89u8IdB8eypsxoOh4PeC4
+         rCN8Cqwz/u6w2Yn0EgkhmvpUsMx+j0EiV1hm8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=a+lhr9Q+24Qfza3c4uXpEdm8TyEjYoUavdn6rBgETA0=;
-        b=tWjt3GifjFEh79RkEZWtvB21gv/iv/EUHawfWg3gP6bGnNR+gKUH87ghZ+iRf+BSkO
-         x7N5i48Ru1Tx4SCUfE+5/9c1Hu97KQbtDJq8iCO7h3NL/xczdyq+igiXUyD3T30s+bYM
-         6Y557b5IgDLVjeYoqwwgYvyirYA1Ex9imw4eUMcD6B9k71djHzVPtDDSOltBi4BrGJNs
-         rmk9oGVUObDETyepwaI21St9Rxgv+nS4phZOPLP4vY36ZgKH/bpTC0hbMegnc68Fi4Ze
-         JQSybqLi7WcU/hv32AqGW+nhTL+RyHBZkToQB/lQ23wmJHFLSdg3SafFkcwJJUAnQo8e
-         Ds8g==
-X-Gm-Message-State: APjAAAX9KOMHbf+S9oFKJclDsnFmhYs0/JuB4KlRlXbXJd17N7uVeI/N
-        IqZGKwdVvxBc1mwFQGj+ZmNFOA==
-X-Google-Smtp-Source: APXvYqxWMwntCJiOP/Rg6qilGaE0r4tvP3xYpgRSB5zm6o29WMIRTYv7JT5/hpFHq7FY7Jh/PBhQ6A==
-X-Received: by 2002:a63:e10d:: with SMTP id z13mr9626011pgh.116.1559590933600;
-        Mon, 03 Jun 2019 12:42:13 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id o2sm13442018pgm.51.2019.06.03.12.42.12
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 03 Jun 2019 12:42:12 -0700 (PDT)
-Date:   Mon, 3 Jun 2019 15:42:11 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
-        kernel-hardening@lists.openwall.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [RFC 1/6] rcu: Add support for consolidated-RCU reader checking
-Message-ID: <20190603194211.GA228607@google.com>
-References: <20190601222738.6856-1-joel@joelfernandes.org>
- <20190601222738.6856-2-joel@joelfernandes.org>
- <20190603080128.GA3436@hirez.programming.kicks-ass.net>
- <20190603141847.GA94186@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1KV1EL2zWlz4BNwMzZsPPlusL/bx0yMiXCoqZlXd458=;
+        b=KpFcFod6jkuoLucMr2P/98BLKVLG4Z+AlwEbYh4IERcPjJkb5LC5Sm9LuyfBEGQo1+
+         uM9KBMKLgAT7uWWrvHtAUK3Aj0UJk/O7oTHGm0ndxPfgzMOl19PYxzT2zwVE9s4XZswK
+         WzTxnV1OOW6GG/GLxIkorZUCE3MPPWywsRzkAXK7ZQ/YGQnNhEIhYYvCP41QtvXxr8Yi
+         eBIGGDrh0UjZfUYc9rMZ/qCDcMHuFwfiWtfvTLTzUSzuWf9VwZeM5qVCzFmTCFUc/WUC
+         TSoeI6qZblujQHrlJQOzRuO6BxwOVBP4JTzUj6LER73Qwvv21sePRjem2NHY6hl1uFLX
+         XUBg==
+X-Gm-Message-State: APjAAAVlHBbE0EEaj0E7Rkg3iXiqevCpkgTMScZaAmsvHv4EUAYoodrx
+        b9F89G+5P0osXVvXntcL/rfVRwsFCb+IGG4rVLSUqQ==
+X-Google-Smtp-Source: APXvYqw9CyjBN9zLt670R7s4Nqh+tF2Uw/nqdK92LwjcIbHrzECu2UzbVydDyKivYV7rqUCst1Zpy0CU03QqWZF+nkw=
+X-Received: by 2002:ac8:2906:: with SMTP id y6mr4604304qty.138.1559591717763;
+ Mon, 03 Jun 2019 12:55:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190603141847.GA94186@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190522184547.31791-1-f.fainelli@gmail.com> <3734641.73qX0VsHyn@kreacher>
+ <013ec7c0-0984-cfc9-ea3a-0180719f5ac4@gmail.com>
+In-Reply-To: <013ec7c0-0984-cfc9-ea3a-0180719f5ac4@gmail.com>
+From:   Markus Mayer <mmayer@broadcom.com>
+Date:   Mon, 3 Jun 2019 12:55:06 -0700
+Message-ID: <CAGt4E5tZ1YLbtCDJDXTTZrH5S4Jmw_BVOfz+i-KF=TUjA=yvkQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] cpufreq: brcmstb-avs-cpufreq: Couple fixes
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Markus Mayer <code@mmayer.net>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "maintainer:BROADCOM STB AVS CPUFREQ DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        "open list:BROADCOM STB AVS CPUFREQ DRIVER" 
+        <linux-pm@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 10:18:47AM -0400, Joel Fernandes wrote:
-> On Mon, Jun 03, 2019 at 10:01:28AM +0200, Peter Zijlstra wrote:
-> > On Sat, Jun 01, 2019 at 06:27:33PM -0400, Joel Fernandes (Google) wrote:
-> > > +#define list_for_each_entry_rcu(pos, head, member, cond...)		\
-> > > +	if (COUNT_VARGS(cond) != 0) {					\
-> > > +		__list_check_rcu_cond(0, ## cond);			\
-> > > +	} else {							\
-> > > +		__list_check_rcu();					\
-> > > +	}								\
-> > > +	for (pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
-> > > +		&pos->member != (head);					\
-> > >  		pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
-> > >  
-> > >  /**
-> > > @@ -621,7 +648,12 @@ static inline void hlist_add_behind_rcu(struct hlist_node *n,
-> > >   * the _rcu list-mutation primitives such as hlist_add_head_rcu()
-> > >   * as long as the traversal is guarded by rcu_read_lock().
-> > >   */
-> > > +#define hlist_for_each_entry_rcu(pos, head, member, cond...)		\
-> > > +	if (COUNT_VARGS(cond) != 0) {					\
-> > > +		__list_check_rcu_cond(0, ## cond);			\
-> > > +	} else {							\
-> > > +		__list_check_rcu();					\
-> > > +	}								\
-> > >  	for (pos = hlist_entry_safe (rcu_dereference_raw(hlist_first_rcu(head)),\
-> > >  			typeof(*(pos)), member);			\
-> > >  		pos;							\
-> > 
-> > 
-> > This breaks code like:
-> > 
-> > 	if (...)
-> > 		list_for_each_entry_rcu(...);
-> > 
-> > as they are no longer a single statement. You'll have to frob it into
-> > the initializer part of the for statement.
-> 
-> Thanks a lot for that. I fixed it as below (diff is on top of the patch):
-> 
-> If not for that '##' , I could have abstracted the whole if/else
-> expression into its own macro and called it from list_for_each_entry_rcu() to
-> keep it more clean.
+On Wed, 29 May 2019 at 10:02, Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 5/27/19 3:51 AM, Rafael J. Wysocki wrote:
+> > On Wednesday, May 22, 2019 8:45:45 PM CEST Florian Fainelli wrote:
+> >> Hi Rafael, Viresh,
+> >>
+> >> These patch series contains two minor fixes for the brcmstb-avs-cpufreq
+> >> driver.
+> >>
+> >> Florian Fainelli (2):
+> >>   cpufreq: brcmstb-avs-cpufreq: Fix initial command check
+> >>   cpufreq: brcmstb-avs-cpufreq: Fix types for voltage/frequency
 
-Actually was able to roll the if/else into its own macro as well, thus
-keeping it clean. thanks!
+To both of these
 
----8<-----------------------
+Acked-by: Markus Mayer <mmayer@broadcom.com>
 
-diff --git a/include/linux/rculist.h b/include/linux/rculist.h
-index b641fdd9f1a2..cc9c382b080c 100644
---- a/include/linux/rculist.h
-+++ b/include/linux/rculist.h
-@@ -43,7 +43,11 @@ static inline void INIT_LIST_HEAD_RCU(struct list_head *list)
- /*
-  * Check during list traversal that we are within an RCU reader
-  */
--#define __list_check_rcu()						\
-+
-+#define SIXTH_ARG(a1, a2, a3, a4, a5, a6, ...) a6
-+#define COUNT_VARGS(...) SIXTH_ARG(dummy, ## __VA_ARGS__, 4, 3, 2, 1, 0)
-+
-+#define __list_check_rcu_nocond()					\
- 	RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),			\
- 			 "RCU-list traversed in non-reader section!")
- 
-@@ -59,6 +63,16 @@ static inline void __list_check_rcu_cond(int dummy, ...)
- 	RCU_LOCKDEP_WARN(!cond && !rcu_read_lock_any_held(),
- 			 "RCU-list traversed in non-reader section!");
- }
-+
-+#define __list_check_rcu(cond...)				\
-+     ({								\
-+	if (COUNT_VARGS(cond) != 0) {				\
-+		__list_check_rcu_cond(0, ## cond);		\
-+	} else {						\
-+		__list_check_rcu_nocond();			\
-+	}							\
-+      })
-+
- /*
-  * Insert a new entry between two known consecutive entries.
-  *
-@@ -357,9 +371,6 @@ static inline void list_splice_tail_init_rcu(struct list_head *list,
- 						  member) : NULL; \
- })
- 
--#define SIXTH_ARG(a1, a2, a3, a4, a5, a6, ...) a6
--#define COUNT_VARGS(...) SIXTH_ARG(dummy, ## __VA_ARGS__, 4, 3, 2, 1, 0)
--
- /**
-  * list_for_each_entry_rcu	-	iterate over rcu list of given type
-  * @pos:	the type * to use as a loop cursor.
-@@ -371,12 +382,8 @@ static inline void list_splice_tail_init_rcu(struct list_head *list,
-  * as long as the traversal is guarded by rcu_read_lock().
-  */
- #define list_for_each_entry_rcu(pos, head, member, cond...)		\
--	if (COUNT_VARGS(cond) != 0) {					\
--		__list_check_rcu_cond(0, ## cond);			\
--	} else {							\
--		__list_check_rcu();					\
--	}								\
--	for (pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
-+	for (__list_check_rcu(cond),					\
-+	     pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
- 		&pos->member != (head);					\
- 		pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
- 
-@@ -649,12 +656,8 @@ static inline void hlist_add_behind_rcu(struct hlist_node *n,
-  * as long as the traversal is guarded by rcu_read_lock().
-  */
- #define hlist_for_each_entry_rcu(pos, head, member, cond...)		\
--	if (COUNT_VARGS(cond) != 0) {					\
--		__list_check_rcu_cond(0, ## cond);			\
--	} else {							\
--		__list_check_rcu();					\
--	}								\
--	for (pos = hlist_entry_safe (rcu_dereference_raw(hlist_first_rcu(head)),\
-+	for (__list_check_rcu(cond),					\
-+	     pos = hlist_entry_safe (rcu_dereference_raw(hlist_first_rcu(head)),\
- 			typeof(*(pos)), member);			\
- 		pos;							\
- 		pos = hlist_entry_safe(rcu_dereference_raw(hlist_next_rcu(\
--- 
-2.22.0.rc1.311.g5d7573a151-goog
+My apologies for the delay.
 
+> >>  drivers/cpufreq/brcmstb-avs-cpufreq.c | 12 ++++++------
+> >>  1 file changed, 6 insertions(+), 6 deletions(-)
+> >
+> > These look straightforward enough to me, but it would be good to get an ACK from the
+> > driver maintainer for them.
+>
+> Adding Markus' other email address.
+> --
+> Florian
