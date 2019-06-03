@@ -2,54 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F2933306
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 17:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5877C3335B
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 17:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729229AbfFCPD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 11:03:26 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38555 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729038AbfFCPD0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 11:03:26 -0400
-Received: by mail-pg1-f196.google.com with SMTP id v11so8442077pgl.5
-        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2019 08:03:26 -0700 (PDT)
+        id S1729211AbfFCPUb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 11:20:31 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41671 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729004AbfFCPUb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 11:20:31 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 83so1650678pgg.8
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2019 08:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=zfKPWs9DI0gj2Gee5+3PZiBBkJ3QPhZ/MlK8qG7t904=;
-        b=GQMXVW3eqZlFNIYcTpUyenkaeL/AqvKFQOclt3pDaDN2pdAcXOTNb3fhiradhdOZqM
-         Z7/oGl61kpdkBp9vsHuiSYPddsgWQeXQE2dN4IP5SzHSjw8Fdh8VQ6DwSLItukWHpH1z
-         xZ7yPWhOBODBZhkn5yf0igqNvhzaoTHI9XoI9D2oGJK5G4zXSaRfxiMkWfLKuuIiy+Wh
-         Q8SuKcz96844AxRKshNWiJrIO2YQBVYlFo12CPwjfkaX3J65G3OB4SrJE1iAGoY9GGYo
-         Fn9wQUqP53v6yC6HIKIkABJNYzNb/1+jbbv9LlNg5XNmhE9mrau6DNMfZbDipgpldwuj
-         GEJQ==
+        bh=V+s/wJ4ZBt8nmKn36qbF2lnyqicBE+YKaBbz8WxaNO8=;
+        b=aFzlHpYnvJXVA6d+n+VXppRnSf/l/VfQJFkaYbYS4jlPoamW+hLcQuGEW5JJ3oXN9p
+         nDrf5ArrqB1zooH3IMx7+QExhHMBJ5iE1BGsgoT7eV0Y20cFQ+6c5P14OjqdEHT4Ls75
+         fHm+cjH7a8KrmhxT7TEJEVmXi2XG4ru1hTy60aR4xv9WIe2hA9HQPIQgM6nozM8ayIdN
+         Hj8nJC3OwAuN0aqBvLZoS2YxMMYWb6sodvhMSDl0V/XKWcc2fNDpMVv68l0fFk9tcHmh
+         1S5J/KI0St9fzYwF/gs73CPtdbCuCM2rUnUZuj2ux3/6391hNd31Gt/LhWMQxT4jqgOU
+         BydQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zfKPWs9DI0gj2Gee5+3PZiBBkJ3QPhZ/MlK8qG7t904=;
-        b=jb7ynXtxzfN9lVw0ccmn7waetNkEC1nT+nz5J3Ddk0KiCS407qGV1E9b5oOIabJQAt
-         wqirhAloOwrpxp7B+r58sVzalf96SMvNGXRGqn1ydQNwaIbBeX7rEaa0c0UApWouRGFZ
-         ansZ1ycFdllAJ0sVts2SSrG9B3iODqmw3Cf7ckfdRe+iiEkk/JGvFa1w+q4GzihpBqOq
-         u2NL63ot7FTB0okfXRSyo+b5pTDcw4AVkqa6oZJlyXJT//osobJaZuF2+xvR7dLcOnQl
-         nBr3KJT1Muu1jnFKy5mp1dlWPc8tGIKHChaHE2/kPyCFEtq3OY6gNB1P6OKjsz46MwDX
-         LMcw==
-X-Gm-Message-State: APjAAAV2xhkpsfes1kXHlFiGOrpJIOkNr+4tlvi5Iqs+BuAgmhbgoEid
-        Me/56CTlKSWCLUZhsfNqTHU6Io+VzNILYUuh8ls=
-X-Google-Smtp-Source: APXvYqzS/9HGeFNjomQijw4zTeLo+dJcgruYgiXSm5a14L1rKgKFVhodIQ7rO36aJdp8vxPT82TkOd4pPhcIIzPWniY=
-X-Received: by 2002:aa7:8b4d:: with SMTP id i13mr32545860pfd.233.1559574205796;
- Mon, 03 Jun 2019 08:03:25 -0700 (PDT)
+        bh=V+s/wJ4ZBt8nmKn36qbF2lnyqicBE+YKaBbz8WxaNO8=;
+        b=b56t50rDVu895TKJLQWQhGOiqoJQa0qUyrCG2EZhjjpbho6W+E/s7LDSp/JRV0Jn65
+         siV3jBt/DTGPqy0arpWBQhYdDKHMp0tcObXXv0QKgddMNXfVs0bOltQRIcumTKN4BwNh
+         w3xaMbVB4l3jwW/X9ZeQnKcQthZgKLUNvJkQ+uRExCfomdf698l7TXnzwVwgrWd8mOYj
+         cTXS0Rz7lntG/SxfWXPBWpNhx1E5mTll5BPmtqVLEwCLGeMk6C8UNismPBAnLpOKPhOz
+         GiOleFEDjcpJJcKgpObjRjYQAeo5e53kDphbWEj/B0Moe5L59QdzxkSEJ+vSdAz1dPBB
+         W64Q==
+X-Gm-Message-State: APjAAAW3JoiFEz9UZJgEeDYCXRPViwu5/gYFVqEUwZpFtSWNzlRf7Pb3
+        8Dm2vsqhqhQXrE9WAroGQZGIrTHn37V/pR8tdHc=
+X-Google-Smtp-Source: APXvYqzQR9/udvAKSwXg54NOk2aqdam7tOLm6WksKtI2XctncK8mQbDCkCko4w+pVHJyo7Nk/aObxqzW0WPMNjVOcKc=
+X-Received: by 2002:a17:90a:fa07:: with SMTP id cm7mr9485973pjb.115.1559575230833;
+ Mon, 03 Jun 2019 08:20:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <1558454649-28783-1-git-send-email-akinobu.mita@gmail.com>
- <1558454649-28783-3-git-send-email-akinobu.mita@gmail.com>
- <20190524023520.GC1936@localhost.localdomain> <CAC5umyhCHJrzSSEy3NF38BhRQ9FSjVr8YfjChN-_3pVR5QwXsA@mail.gmail.com>
- <20190603021821.GA8354@localhost.localdomain>
-In-Reply-To: <20190603021821.GA8354@localhost.localdomain>
+References: <1558888143-5121-3-git-send-email-akinobu.mita@gmail.com> <20190603023617.GA8567@localhost.localdomain>
+In-Reply-To: <20190603023617.GA8567@localhost.localdomain>
 From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Tue, 4 Jun 2019 00:03:14 +0900
-Message-ID: <CAC5umygO0mKVJ5R4MhYTz44zVHvjkYSvrtT7=D1Rx2td-koeTQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] nvme: add thermal zone infrastructure
+Date:   Tue, 4 Jun 2019 00:20:19 +0900
+Message-ID: <CAC5umyj9V0sTD-ZsK6Q684wPdMpJGs434vDtZDm6a8gwoz3D7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] nvme: add thermal zone devices
 To:     Eduardo Valentin <edubezval@gmail.com>
 Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
         Zhang Rui <rui.zhang@intel.com>,
@@ -67,76 +64,259 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=E5=B9=B46=E6=9C=883=E6=97=A5(=E6=9C=88) 11:18 Eduardo Valentin <edubez=
+2019=E5=B9=B46=E6=9C=883=E6=97=A5(=E6=9C=88) 11:36 Eduardo Valentin <edubez=
 val@gmail.com>:
-
-> > > Do we have something more meaningful or descriptive here? A more
-> > > interesting type would be a string that could remind of the sensor
-> > > location. Unless nvme_temp0 is enough to understand where this
-> > > temperature is coming from, I would ask to get something more
-> > > descriptive.
-> >
-> > The SMART log page defines composite temperature and temperature sensor=
- 1
-> > through temperature sensor 8.  So I think nvme_temp1 to nvme_temp8 are
-> > descriptive.  And I personally prefer 'nvme_temp0' rather than
-> > 'nvme_composite_temp'.
 >
-> I was leaning towards something even more descriptive. nvme_temp0 means
-> what? Usually we want something more meaningful, Is this a co-processor?
-> Is this a disk? what exactly nvme_temp0 really represents?
-
-It's vendor specific. The NVMe spec only says a controller reports the
-composite temperature and temperature sensor 1 through 8.
-It doesn't define which part of the device (CPUs, DRAM, NAND, or else)
-should implement temperature sensors and how the composite temperature is
-calculated from implemented sensors.
-
-I have three NVMe devices from different vendors.
-
-The device A provides only composite temperature.
-
-The device B provides composite temperature and temperature sensor 1.
-Both temperatures are always same.
-
-The device C provides the composite temperature and temperature sensor 1,
-2, and 5.  For example, the smart log reports
-Composite temperature : 43 C
-Temperature Sensor 1  : 45 C
-Temperature Sensor 2  : 41 C
-Temperature Sensor 5  : 65 C
-
-> > BTW, if we have more than two controllers, we'll have same type names
-> > in the system.  So I'm going to append instance number after 'nvme'.
-> > (e.g. nvme0_temp0).
+> Hey Mita,
+>
+> On Mon, May 27, 2019 at 01:29:02AM +0900, Akinobu Mita wrote:
+> > The NVMe controller reports up to nine temperature values in the SMART =
+/
+> > Health log page (the composite temperature and temperature sensor 1 thr=
+ough
+> > temperature sensor 8).
 > >
-> > > > +     tzdev =3D thermal_zone_device_register(type, 1, 1, ctrl, &nvm=
-e_tz_ops,
-> > > > +                                          &nvme_tz_params, 0, 0);
-> > >
-> > > Have you considered if there is a use case for using of-thermal here?
+> > This provides these temperatures via thermal zone devices.
 > >
-> > Is it possible to specify the device node properties for the pci device=
-s?
-> > If so, of-thermal zone devices are very useful.
+> > Once the controller is identified, the thermal zone devices are created=
+ for
+> > all implemented temperature sensors including the composite temperature=
+.
+> >
+> > /sys/class/thermal/thermal_zone[0-*]:
+> >     |---type: 'nvme<instance>-temp<sensor>'
+> >     |---temp: Temperature
+> >     |---trip_point_0_temp: Over temperature threshold
+> >
+> > The thermal_zone[0-*] contains a 'device' symlink to the corresponding =
+nvme
+> > device.
+> >
+> > On the other hand, the following symlinks to the thermal zone devices a=
+re
+> > created in the nvme device sysfs directory.
+> >
+> > - temp0: Composite temperature
+> > - temp1: Temperature sensor 1
+> > ...
+> > - temp8: Temperature sensor 8
 > >
 >
-> Yeah, I guess that would depend on the PCI device node descriptor that
-> the sensor is going to be embedded, not of-thermal. But I would expect
-> that DT has already a good enough DT descriptors for PCI devices, can
-> you check that?
+> These questions on V2 are still unanswered:
+> a. Can we get a more descriptive string into tz->type?
 
-I can find the examples for ath9k and ath10k pcie wireless devices.
-(Documentation/devicetree/bindings/net/wireless/qca,ath9k.txt and
-qcom,ath10k.txt)
+As I said in the other thread, the NVMe spec only says a controller
+reports the composite temperature and temperature sensor 1 through 8.
+What temperature sensor N means is vendor specific.
 
-> > I think normal thermal zone devices and of-thermal zone devices can
-> > co-exist. (i.e. add 'tzdev_of[9]' in nvme_ctrl and the operations are
-> > almost same with the normal one)
+> b. Can these APIs support DT probing too?
+
+OK. I can try, but I don't have arm or arm64 boards with PCIe for
+testing with of-thermal.  So it'll be untested.
+
+> > +static struct thermal_zone_params nvme_tz_params =3D {
+> > +     .governor_name =3D "user_space",
 >
-> Right, that is usually the case for drivers that have a real need to
-> support both. Most of the drivers from embedded systems would prefer
-> to keep only DT probing. But if you have a use case to support non-DT
-> probing, yes, your driver would need to support both ways.
+> Also,
+>
+> Was there any particular reason why defaulting to user_space here?
 
-Distro kernels for x86 usually disables CONFIG_OF.  So we need both.
+I only tested with the user_space governor.  There is no cooling device
+to bind with this.
+
+> > +     .no_hwmon =3D true,
+> > +};
+> > +
+> > +static struct thermal_zone_device *
+> > +nvme_thermal_zone_register(struct nvme_ctrl *ctrl, unsigned int sensor=
+)
+> > +{
+> > +     struct thermal_zone_device *tzdev;
+> > +     char name[THERMAL_NAME_LENGTH];
+> > +     int ret;
+> > +
+> > +     snprintf(name, sizeof(name), "nvme%d_temp%u", ctrl->instance, sen=
+sor);
+> > +
+> > +     tzdev =3D thermal_zone_device_register(name, 1, 1, ctrl, &nvme_tz=
+_ops,
+> > +                                          &nvme_tz_params, 0, 0);
+> > +     if (IS_ERR(tzdev)) {
+> > +             dev_err(ctrl->device,
+> > +                     "Failed to register thermal zone device: %ld\n",
+> > +                     PTR_ERR(tzdev));
+> > +             return tzdev;
+> > +     }
+> > +
+> > +     snprintf(name, sizeof(name), "temp%d", sensor);
+> > +     ret =3D sysfs_create_link(&ctrl->ctrl_device.kobj, &tzdev->device=
+.kobj,
+> > +                             name);
+> > +     if (ret)
+> > +             goto device_unregister;
+> > +
+> > +     ret =3D sysfs_create_link(&tzdev->device.kobj,
+> > +                             &ctrl->ctrl_device.kobj, "device");
+> > +     if (ret)
+> > +             goto remove_link;
+> > +
+> > +     return tzdev;
+> > +
+> > +remove_link:
+> > +     sysfs_remove_link(&ctrl->ctrl_device.kobj, name);
+> > +device_unregister:
+> > +     thermal_zone_device_unregister(tzdev);
+> > +
+> > +     return ERR_PTR(ret);
+> > +}
+> > +
+> > +/**
+> > + * nvme_thermal_zones_register() - register nvme thermal zone devices
+> > + * @ctrl: controller instance
+> > + *
+> > + * This function creates up to nine thermal zone devices for all imple=
+mented
+> > + * temperature sensors including the composite temperature.
+> > + * Each thermal zone device provides a single trip point temperature t=
+hat is
+> > + * associated with an over temperature threshold.
+> > + */
+> > +static int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
+> > +{
+> > +     struct nvme_smart_log *log;
+> > +     int ret;
+> > +     int i;
+> > +
+> > +     log =3D kzalloc(sizeof(*log), GFP_KERNEL);
+> > +     if (!log)
+> > +             return 0; /* non-fatal error */
+>
+> I am not sure about this API design here. I would leave the error
+> handling and judging if this is fatal or not to the caller.
+> I mean, if I ask to register a nvme thermal zone and I get
+> a 0 as response, I would assume the thermal zone exists from
+> now on, right?
+
+This routine is designed to return error code only when we're unable to
+communicate with the device at all (i.e. nvme_submit_sync_cmd returns a
+negative value).
+
+We don't want to abandon device initialization just due to thermal zone
+failures.  Because thermal zone device isn't mandatory to manage the
+controllers, and the device like qemu doesn't provide smart log (according
+to Keith).
+
+> > +
+> > +     ret =3D nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
+> > +                        log, sizeof(*log), 0);
+> > +     if (ret) {
+> > +             dev_err(ctrl->device, "Failed to get SMART log: %d\n", re=
+t);
+> > +             /* If the device provided a response, then it's non-fatal=
+ */
+> > +             if (ret > 0)
+> > +                     ret =3D 0;
+> > +             goto free_log;
+>
+> Once again, hiding errors is never a strategy that scales..
+>
+> > +     }
+> > +
+> > +     for (i =3D 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
+> > +             struct thermal_zone_device *tzdev;
+> > +             int temp;
+> > +
+> > +             if (i)
+> > +                     temp =3D le16_to_cpu(log->temp_sensor[i - 1]);
+> > +             else
+> > +                     temp =3D get_unaligned_le16(log->temperature);
+> > +
+> > +             /*
+> > +              * All implemented temperature sensors report a non-zero =
+value
+> > +              * in temperature sensor fields in the smart log page.
+> > +              */
+> > +             if (!temp)
+> > +                     continue;
+> > +             if (ctrl->tzdev[i])
+> > +                     continue;
+> > +
+> > +             tzdev =3D nvme_thermal_zone_register(ctrl, i);
+> > +             if (!IS_ERR(tzdev))
+> > +                     ctrl->tzdev[i] =3D tzdev;
+>
+> Here again, I would not hide errors, the API should propagate errors
+> if something goes wrong.
+>
+> > +     }
+> > +
+> > +free_log:
+> > +     kfree(log);
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +/**
+> > + * nvme_thermal_zones_unregister() - unregister nvme thermal zone devi=
+ces
+> > + * @ctrl: controller instance
+> > + *
+> > + * This function removes the registered thermal zone devices and symli=
+nks.
+> > + */
+> > +static void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl)
+> > +{
+> > +     int i;
+> > +
+> > +     for (i =3D 0; i < ARRAY_SIZE(ctrl->tzdev); i++) {
+> > +             struct thermal_zone_device *tzdev =3D ctrl->tzdev[i];
+> > +             char name[20];
+> > +
+> > +             if (!tzdev)
+> > +                     continue;
+> > +
+> > +             sysfs_remove_link(&tzdev->device.kobj, "device");
+> > +
+> > +             snprintf(name, sizeof(name), "temp%d", i);
+> > +             sysfs_remove_link(&ctrl->ctrl_device.kobj, name);
+> > +
+> > +             thermal_zone_device_unregister(tzdev);
+> > +
+> > +             ctrl->tzdev[i] =3D NULL;
+> > +     }
+> > +}
+> > +
+> > +#else
+> > +
+> > +static inline int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +static inline void nvme_thermal_zones_unregister(struct nvme_ctrl *ctr=
+l)
+> > +{
+> > +}
+> > +
+> > +#endif /* CONFIG_THERMAL */
+> > +
+> >  struct nvme_core_quirk_entry {
+> >       /*
+> >        * NVMe model and firmware strings are padded with spaces.  For
+> > @@ -2754,6 +3037,10 @@ int nvme_init_identify(struct nvme_ctrl *ctrl)
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > +     ret =3D nvme_thermal_zones_register(ctrl);
+> > +     if (ret < 0)
+> > +             return ret;
+>
+>
+> I would definitely keep this code the way it is here in
+> nvme_init_identify(), but if I read this right, your
+> nvme_thermal_zones_register() will never return < 0, and therefore this
+> condition is never met.
+
+The nvme_get_log() can return a negative value.  Only in this case,
+nvme_thermal_zones_register() returns error and abandon the device
+initialization.
