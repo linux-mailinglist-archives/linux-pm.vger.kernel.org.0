@@ -2,105 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5AD633209
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 16:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F2933306
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 17:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbfFCOXc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 10:23:32 -0400
-Received: from mga17.intel.com ([192.55.52.151]:31791 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727429AbfFCOXc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 3 Jun 2019 10:23:32 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Jun 2019 07:23:32 -0700
-X-ExtLoop1: 1
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.36])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Jun 2019 07:23:31 -0700
-Date:   Mon, 3 Jun 2019 07:23:31 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Andy Lutomirski <luto@amacapital.net>
-Cc:     Jiri Kosina <jikos@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] x86/power: Fix 'nosmt' vs. hibernation triple fault
- during resume
-Message-ID: <20190603142330.GA13384@linux.intel.com>
-References: <20190531051456.fzkvn62qlkf6wqra@treble>
- <nycvar.YFH.7.76.1905311045240.1962@cbobk.fhfr.pm>
- <5564116.e9OFvgDRbB@kreacher>
- <CALCETrUpseta+NrhVwzzVFTe-BkBHtDUJBO22ci3mAsVR+XOog@mail.gmail.com>
- <nycvar.YFH.7.76.1905311628330.1962@cbobk.fhfr.pm>
- <B7AC83ED-3F11-42B9-8506-C842A5937B50@amacapital.net>
- <nycvar.YFH.7.76.1905311651450.1962@cbobk.fhfr.pm>
- <CALCETrUQzZTRnvmOS09UvRM9UCGEDvSdbJtkeeEa2foMf+hF2w@mail.gmail.com>
- <nycvar.YFH.7.76.1905312251350.1962@cbobk.fhfr.pm>
- <98E57C7E-24E2-4EB8-A14E-FCA80316F812@amacapital.net>
+        id S1729229AbfFCPD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 11:03:26 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:38555 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729038AbfFCPD0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 11:03:26 -0400
+Received: by mail-pg1-f196.google.com with SMTP id v11so8442077pgl.5
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2019 08:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zfKPWs9DI0gj2Gee5+3PZiBBkJ3QPhZ/MlK8qG7t904=;
+        b=GQMXVW3eqZlFNIYcTpUyenkaeL/AqvKFQOclt3pDaDN2pdAcXOTNb3fhiradhdOZqM
+         Z7/oGl61kpdkBp9vsHuiSYPddsgWQeXQE2dN4IP5SzHSjw8Fdh8VQ6DwSLItukWHpH1z
+         xZ7yPWhOBODBZhkn5yf0igqNvhzaoTHI9XoI9D2oGJK5G4zXSaRfxiMkWfLKuuIiy+Wh
+         Q8SuKcz96844AxRKshNWiJrIO2YQBVYlFo12CPwjfkaX3J65G3OB4SrJE1iAGoY9GGYo
+         Fn9wQUqP53v6yC6HIKIkABJNYzNb/1+jbbv9LlNg5XNmhE9mrau6DNMfZbDipgpldwuj
+         GEJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zfKPWs9DI0gj2Gee5+3PZiBBkJ3QPhZ/MlK8qG7t904=;
+        b=jb7ynXtxzfN9lVw0ccmn7waetNkEC1nT+nz5J3Ddk0KiCS407qGV1E9b5oOIabJQAt
+         wqirhAloOwrpxp7B+r58sVzalf96SMvNGXRGqn1ydQNwaIbBeX7rEaa0c0UApWouRGFZ
+         ansZ1ycFdllAJ0sVts2SSrG9B3iODqmw3Cf7ckfdRe+iiEkk/JGvFa1w+q4GzihpBqOq
+         u2NL63ot7FTB0okfXRSyo+b5pTDcw4AVkqa6oZJlyXJT//osobJaZuF2+xvR7dLcOnQl
+         nBr3KJT1Muu1jnFKy5mp1dlWPc8tGIKHChaHE2/kPyCFEtq3OY6gNB1P6OKjsz46MwDX
+         LMcw==
+X-Gm-Message-State: APjAAAV2xhkpsfes1kXHlFiGOrpJIOkNr+4tlvi5Iqs+BuAgmhbgoEid
+        Me/56CTlKSWCLUZhsfNqTHU6Io+VzNILYUuh8ls=
+X-Google-Smtp-Source: APXvYqzS/9HGeFNjomQijw4zTeLo+dJcgruYgiXSm5a14L1rKgKFVhodIQ7rO36aJdp8vxPT82TkOd4pPhcIIzPWniY=
+X-Received: by 2002:aa7:8b4d:: with SMTP id i13mr32545860pfd.233.1559574205796;
+ Mon, 03 Jun 2019 08:03:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <98E57C7E-24E2-4EB8-A14E-FCA80316F812@amacapital.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+References: <1558454649-28783-1-git-send-email-akinobu.mita@gmail.com>
+ <1558454649-28783-3-git-send-email-akinobu.mita@gmail.com>
+ <20190524023520.GC1936@localhost.localdomain> <CAC5umyhCHJrzSSEy3NF38BhRQ9FSjVr8YfjChN-_3pVR5QwXsA@mail.gmail.com>
+ <20190603021821.GA8354@localhost.localdomain>
+In-Reply-To: <20190603021821.GA8354@localhost.localdomain>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Tue, 4 Jun 2019 00:03:14 +0900
+Message-ID: <CAC5umygO0mKVJ5R4MhYTz44zVHvjkYSvrtT7=D1Rx2td-koeTQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] nvme: add thermal zone infrastructure
+To:     Eduardo Valentin <edubezval@gmail.com>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Kenneth Heitke <kenneth.heitke@intel.com>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 31, 2019 at 02:22:27PM -0700, Andy Lutomirski wrote:
-> 
-> > On May 31, 2019, at 2:05 PM, Jiri Kosina <jikos@kernel.org> wrote:
-> > 
-> >> On Fri, 31 May 2019, Andy Lutomirski wrote:
-> >> 
-> >> The Intel SDM Vol 3 34.10 says:
-> >> 
-> >> If the HLT instruction is restarted, the processor will generate a
-> >> memory access to fetch the HLT instruction (if it is
-> >> not in the internal cache), and execute a HLT bus transaction. This
-> >> behavior results in multiple HLT bus transactions
-> >> for the same HLT instruction.
-> > 
-> > Which basically means that both hibernation and kexec have been broken in 
-> > this respect for gazillions of years, and seems like noone noticed. Makes 
-> > one wonder what the reason for that might be.
-> > 
-> > Either SDM is not precise and the refetch actually never happens for real 
-> > (or is always in these cases satisfied from I$ perhaps?), or ... ?
-> > 
-> > So my patch basically puts things back where they have been for ages 
-> > (while mwait is obviously much worse, as that gets woken up by the write 
-> > to the monitored address, which inevitably does happen during resume), but 
-> > seems like SDM is suggesting that we've been in a grey zone wrt RSM at 
-> > least for all those ages.
-> > 
-> > So perhaps we really should ditch resume_play_dead() altogether 
-> > eventually, and replace it with sending INIT IPI around instead (and then 
-> > waking the CPUs properly via INIT INIT START). I'd still like to do that 
-> > for 5.3 though, as that'd be slightly bigger surgery, and conservatively 
-> > put things basically back to state they have been up to now for 5.2.
-> > 
-> 
-> 
-> Seems reasonable to me.  I would guess that it mostly works because SMI isn’t
-> all that common and the window where it matters is short.  Or maybe the SDM
-> is misleading.
+2019=E5=B9=B46=E6=9C=883=E6=97=A5(=E6=9C=88) 11:18 Eduardo Valentin <edubez=
+val@gmail.com>:
 
-For P6 and later, i.e. all modern CPUs, Intel processors go straight to
-halted state and don't fetch/decode the HLT instruction.
+> > > Do we have something more meaningful or descriptive here? A more
+> > > interesting type would be a string that could remind of the sensor
+> > > location. Unless nvme_temp0 is enough to understand where this
+> > > temperature is coming from, I would ask to get something more
+> > > descriptive.
+> >
+> > The SMART log page defines composite temperature and temperature sensor=
+ 1
+> > through temperature sensor 8.  So I think nvme_temp1 to nvme_temp8 are
+> > descriptive.  And I personally prefer 'nvme_temp0' rather than
+> > 'nvme_composite_temp'.
+>
+> I was leaning towards something even more descriptive. nvme_temp0 means
+> what? Usually we want something more meaningful, Is this a co-processor?
+> Is this a disk? what exactly nvme_temp0 really represents?
 
-P5 actually did a fetch, but from what I can tell that behavior wasn't
-carried forward to KNC, unlike other legacy interrupt crud from P5:
+It's vendor specific. The NVMe spec only says a controller reports the
+composite temperature and temperature sensor 1 through 8.
+It doesn't define which part of the device (CPUs, DRAM, NAND, or else)
+should implement temperature sensors and how the composite temperature is
+calculated from implemented sensors.
 
-[1] https://lkml.kernel.org/r/20190430004504.GH31379@linux.intel.com
+I have three NVMe devices from different vendors.
+
+The device A provides only composite temperature.
+
+The device B provides composite temperature and temperature sensor 1.
+Both temperatures are always same.
+
+The device C provides the composite temperature and temperature sensor 1,
+2, and 5.  For example, the smart log reports
+Composite temperature : 43 C
+Temperature Sensor 1  : 45 C
+Temperature Sensor 2  : 41 C
+Temperature Sensor 5  : 65 C
+
+> > BTW, if we have more than two controllers, we'll have same type names
+> > in the system.  So I'm going to append instance number after 'nvme'.
+> > (e.g. nvme0_temp0).
+> >
+> > > > +     tzdev =3D thermal_zone_device_register(type, 1, 1, ctrl, &nvm=
+e_tz_ops,
+> > > > +                                          &nvme_tz_params, 0, 0);
+> > >
+> > > Have you considered if there is a use case for using of-thermal here?
+> >
+> > Is it possible to specify the device node properties for the pci device=
+s?
+> > If so, of-thermal zone devices are very useful.
+> >
+>
+> Yeah, I guess that would depend on the PCI device node descriptor that
+> the sensor is going to be embedded, not of-thermal. But I would expect
+> that DT has already a good enough DT descriptors for PCI devices, can
+> you check that?
+
+I can find the examples for ath9k and ath10k pcie wireless devices.
+(Documentation/devicetree/bindings/net/wireless/qca,ath9k.txt and
+qcom,ath10k.txt)
+
+> > I think normal thermal zone devices and of-thermal zone devices can
+> > co-exist. (i.e. add 'tzdev_of[9]' in nvme_ctrl and the operations are
+> > almost same with the normal one)
+>
+> Right, that is usually the case for drivers that have a real need to
+> support both. Most of the drivers from embedded systems would prefer
+> to keep only DT probing. But if you have a use case to support non-DT
+> probing, yes, your driver would need to support both ways.
+
+Distro kernels for x86 usually disables CONFIG_OF.  So we need both.
