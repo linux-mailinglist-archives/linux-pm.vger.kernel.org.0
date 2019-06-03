@@ -2,111 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C08B3328AA
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 08:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BAE3290B
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 09:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727207AbfFCGmQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 02:42:16 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:53347 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727194AbfFCGmQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 02:42:16 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 72C3D80295; Mon,  3 Jun 2019 08:42:03 +0200 (CEST)
-Date:   Mon, 3 Jun 2019 08:42:12 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Pavel Machek <pavel@denx.de>, LKML <linux-kernel@vger.kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Neil Brown <neilb@suse.com>, netdev <netdev@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Peter Zilstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu <rcu@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [RFC 2/6] ipv4: add lockdep condition to fix for_each_entry
-Message-ID: <20190603064212.GA7400@amd>
-References: <20190601222738.6856-1-joel@joelfernandes.org>
- <20190601222738.6856-3-joel@joelfernandes.org>
- <20190602070014.GA543@amd>
- <CAEXW_YT3t4Hb6wKsjXPGng+YbA5rhNRa7OSdZwdN4AKGfVkX3g@mail.gmail.com>
- <CAEXW_YSM2wwah2Q7LKmUO1Dp7GG62ciQA1nZ7GLw3m6cyuXXTw@mail.gmail.com>
+        id S1726684AbfFCHBu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 03:01:50 -0400
+Received: from mail-eopbgr50069.outbound.protection.outlook.com ([40.107.5.69]:54410
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726383AbfFCHBu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 3 Jun 2019 03:01:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1cTcybyy/laTx8Fnxm++C1AasKL6tShPyWsyaIHDJjQ=;
+ b=XSTxrHG4x96GQCnVTfRDaJe/UErlcFKpM3UqeNGGVVzLHyATBAwBlDy2e6b/ul7misDNg9WkBkF+F08BMO+EJx7HYbko4H8EVZrGtvVqYsHfaBqXBA0UUe9tEorwEniY5CX6GrxVBqf0Vyu8dnT22234w733+3HNmm71+mVomN4=
+Received: from VI1PR04MB5055.eurprd04.prod.outlook.com (20.177.50.140) by
+ VI1PR04MB5934.eurprd04.prod.outlook.com (20.178.205.84) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.21; Mon, 3 Jun 2019 07:01:41 +0000
+Received: from VI1PR04MB5055.eurprd04.prod.outlook.com
+ ([fe80::9577:379c:2078:19a1]) by VI1PR04MB5055.eurprd04.prod.outlook.com
+ ([fe80::9577:379c:2078:19a1%7]) with mapi id 15.20.1943.018; Mon, 3 Jun 2019
+ 07:01:41 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Anson Huang <anson.huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 3/3] cpufreq: Switch imx7d to imx-cpufreq-dt for speed
+ grading
+Thread-Topic: [PATCH 3/3] cpufreq: Switch imx7d to imx-cpufreq-dt for speed
+ grading
+Thread-Index: AQHVFhaPrvUUJ34dakS8wduWS4Ia3Q==
+Date:   Mon, 3 Jun 2019 07:01:41 +0000
+Message-ID: <VI1PR04MB50551BDB2D0AA64D7192D98CEE140@VI1PR04MB5055.eurprd04.prod.outlook.com>
+References: <b6a9b9f80534af5c12db30a0bb699ec850f85be7.1559131365.git.leonard.crestez@nxp.com>
+ <8787934ff35e7e55837f2caabc0d5bf65828d971.1559131365.git.leonard.crestez@nxp.com>
+ <20190603053850.tkskdzcloir4k3kw@vireshk-i7>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [192.88.166.1]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 833eb814-1d3e-47ed-f24f-08d6e7f154de
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5934;
+x-ms-traffictypediagnostic: VI1PR04MB5934:
+x-microsoft-antispam-prvs: <VI1PR04MB5934AD7F403112BF93505CC8EE140@VI1PR04MB5934.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 0057EE387C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(396003)(366004)(136003)(346002)(39860400002)(199004)(189003)(6916009)(6116002)(53936002)(25786009)(476003)(68736007)(44832011)(102836004)(53546011)(446003)(5660300002)(486006)(76176011)(3846002)(6506007)(86362001)(7696005)(316002)(4326008)(66946007)(8936002)(81166006)(99286004)(26005)(64756008)(66556008)(66476007)(73956011)(66446008)(91956017)(76116006)(54906003)(7736002)(74316002)(8676002)(81156014)(2906002)(305945005)(186003)(14454004)(478600001)(52536014)(229853002)(66066001)(256004)(71200400001)(71190400001)(33656002)(6246003)(6436002)(9686003)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5934;H:VI1PR04MB5055.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: a6JFrAJb2Seq5vkcv0+KypBdjvTTuvafsNAOfrMHKyzJyHcscVxpkJZCjETdjkXnb+d4nPJf7o5MFwq6PyAs+3veL71pHn/5MrTnTUTTh1f/BMb/dJSbr+fwl0lqyBXyhFR7n0QUENebcAYnwcPcIYzXZKCR0qeMkM7tGyeixCkvTpwGCcQgSEBCvDBVA8IFRr8fZuQIt8jvTpm3zu1jSJ8LQ5M1KTDxa9Nt/8YD5pAyQIObRIp4PbeFj3HsHnE7bmwk0LyHYGRpz595WqkfC3eb6or7ELSkoT3TIizqwAZQkNZ5Z2KeMjfKmxLqhsHTrlszJP2HkForvr6BZ9cTwzMKfeLqG+8Zc/9T+nI28TS8sqtZ9zufjJoADy8xgjYbierbjJ01EKTXo+pAB2StF3r5u19Xh4d6MsCQBZgTatQ=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="SLDf9lqlvOQaIe6s"
-Content-Disposition: inline
-In-Reply-To: <CAEXW_YSM2wwah2Q7LKmUO1Dp7GG62ciQA1nZ7GLw3m6cyuXXTw@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 833eb814-1d3e-47ed-f24f-08d6e7f154de
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2019 07:01:41.5526
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: leonard.crestez@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5934
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---SLDf9lqlvOQaIe6s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun 2019-06-02 08:24:35, Joel Fernandes wrote:
-> On Sun, Jun 2, 2019 at 8:20 AM Joel Fernandes <joel@joelfernandes.org> wr=
-ote:
-> >
-> > On Sun, Jun 2, 2019 at 3:00 AM Pavel Machek <pavel@denx.de> wrote:
-> > >
-> > > On Sat 2019-06-01 18:27:34, Joel Fernandes (Google) wrote:
-> > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > >
-> > > This really needs to be merged to previous patch, you can't break
-> > > compilation in middle of series...
-> > >
-> > > Or probably you need hlist_for_each_entry_rcu_lockdep() macro with
-> > > additional argument, and switch users to it.
-> >
-> > Good point. I can also just add a temporary transition macro, and then
-> > remove it in the last patch. That way no new macro is needed.
->=20
-> Actually, no. There is no compilation break so I did not follow what
-> you mean. The fourth argument to the hlist_for_each_entry_rcu is
-> optional. The only thing that happens is new lockdep warnings will
-> arise which later parts of the series fix by passing in that fourth
-> argument.
-
-Sorry, I missed that subtlety. Might be worth it enabling the lockdep
-warning last in the series...
-
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---SLDf9lqlvOQaIe6s
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAlz0wUQACgkQMOfwapXb+vJZhACeMv6qy1KMl8fpAmSRbXsFU5yP
-LY8Ani5H9/TBihxu13cOJbn7mJJ9RWkQ
-=hotv
------END PGP SIGNATURE-----
-
---SLDf9lqlvOQaIe6s--
+On 6/3/2019 8:39 AM, Viresh Kumar wrote:=0A=
+> On 29-05-19, 12:03, Leonard Crestez wrote:=0A=
+>> This driver can handle speed grading bits on imx7d just like on imx8mq=
+=0A=
+>> and imx8mm.=0A=
+>>=0A=
+>> diff --git a/drivers/cpufreq/imx-cpufreq-dt.c b/drivers/cpufreq/imx-cpuf=
+req-dt.c=0A=
+>> index 5061503cb0a1..ce26ffc18ce6 100644=0A=
+>> --- a/drivers/cpufreq/imx-cpufreq-dt.c=0A=
+>> +++ b/drivers/cpufreq/imx-cpufreq-dt.c=0A=
+>> @@ -18,10 +18,11 @@=0A=
+>>   #define OCOTP_CFG3_SPEED_GRADE_MASK	(0x3 << 8)=0A=
+>>   #define OCOTP_CFG3_MKT_SEGMENT_SHIFT    6=0A=
+>>   #define OCOTP_CFG3_MKT_SEGMENT_MASK     (0x3 << 6)=0A=
+>>   =0A=
+>>   static const struct of_device_id imx_cpufreq_dt_match_list[] =3D {=0A=
+>> +	{ .compatible =3D "fsl,imx7d" },=0A=
+>>   	{ .compatible =3D "fsl,imx8mm" },=0A=
+>>   	{ .compatible =3D "fsl,imx8mq" }, >>   	{}=0A=
+>>   };=0A=
+> =0A=
+> What is the purpose of this array and can we get rid of it instead ? I am=
+ asking=0A=
+> as this driver gets probed only if the platform code has created the=0A=
+> imx-cpufreq-dt device and it shouldn't get created for other machines tha=
+n what=0A=
+> is supported.=0A=
+=0A=
+Maybe it will be useful in the future to add .data here if a chip starts =
+=0A=
+using 3 speed grading bits?=0A=
+=0A=
+It can be removed for now.=0A=
