@@ -2,88 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3721D32CD6
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 11:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9F832D68
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 12:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbfFCJ13 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 05:27:29 -0400
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:6481 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726684AbfFCJ13 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 05:27:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1559554048; x=1591090048;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=tyftZePYeklME2yiiktsV1Ph2NihOusiCYamtIRSu5o=;
-  b=Hd1aHQ/D/eyQwmlhYJbxNfAXrFG7g3htilvzIRSKazgvSsv86MlNuClF
-   gMXWI98fi9kqspmDCjVCPp+SnGBjMfsSFqRU4l8VMHIrjlUpjEKAkRDCh
-   UXO+edcfdgsMHhZxvCZW3peI7dBbGB5v/IdBIna6H9ynY4rmhKHi64UNT
-   s=;
-X-IronPort-AV: E=Sophos;i="5.60,546,1549929600"; 
-   d="scan'208";a="735800863"
-Received: from iad6-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-2a-119b4f96.us-west-2.amazon.com) ([10.124.125.2])
-  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 03 Jun 2019 09:27:25 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2a-119b4f96.us-west-2.amazon.com (Postfix) with ESMTPS id 293E31A2386;
-        Mon,  3 Jun 2019 09:27:25 +0000 (UTC)
-Received: from EX13D01EUB001.ant.amazon.com (10.43.166.194) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Mon, 3 Jun 2019 09:27:24 +0000
-Received: from [10.95.66.110] (10.43.162.203) by EX13D01EUB001.ant.amazon.com
- (10.43.166.194) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 3 Jun
- 2019 09:27:20 +0000
-Subject: Re: [PATCH -next] thermal: Fix platform_no_drv_owner.cocci warnings
-To:     YueHaibing <yuehaibing@huawei.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-References: <20190601032338.47195-1-yuehaibing@huawei.com>
-From:   "Shenhar, Talel" <talel@amazon.com>
-Message-ID: <ff61b7d5-5134-7179-6f0d-79f3bb3bcdc1@amazon.com>
-Date:   Mon, 3 Jun 2019 12:27:15 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1728057AbfFCKDw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 06:03:52 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:58714 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725974AbfFCKDw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 06:03:52 -0400
+Received: from 79.184.253.190.ipv4.supernova.orange.pl (79.184.253.190) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.213)
+ id 87ce1feb74287f01; Mon, 3 Jun 2019 12:03:49 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] x86/power: Fix 'nosmt' vs. hibernation triple fault during resume
+Date:   Mon, 03 Jun 2019 12:03:49 +0200
+Message-ID: <2718594.dmOzsuS6R2@kreacher>
+In-Reply-To: <20190531161952.dps3grwg4ytrpuqw@treble>
+References: <nycvar.YFH.7.76.1905282326360.1962@cbobk.fhfr.pm> <nycvar.YFH.7.76.1905311739510.1962@cbobk.fhfr.pm> <20190531161952.dps3grwg4ytrpuqw@treble>
 MIME-Version: 1.0
-In-Reply-To: <20190601032338.47195-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.43.162.203]
-X-ClientProxiedBy: EX13D14UWC001.ant.amazon.com (10.43.162.5) To
- EX13D01EUB001.ant.amazon.com (10.43.166.194)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks. This issue was already fixed by previous patch.
+On Friday, May 31, 2019 6:19:52 PM CEST Josh Poimboeuf wrote:
+> On Fri, May 31, 2019 at 05:41:18PM +0200, Jiri Kosina wrote:
+> > On Fri, 31 May 2019, Josh Poimboeuf wrote:
+> > 
+> > > The only question I'd have is if we have data on the power savings 
+> > > difference between hlt and mwait.  mwait seems to wake up on a lot of 
+> > > different conditions which might negate its deeper sleep state.
+> > 
+> > hlt wakes up on basically the same set of events, but has the 
+> > auto-restarting semantics on some of them (especially SMM). So the wakeup 
+> > frequency itself shouldn't really contribute to power consumption 
+> > difference; it's the C-state that mwait allows CPU to enter.
+> 
+> Ok.  I reluctantly surrender :-)  For your v4:
+> 
+>   Reviewed-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> 
+> It works as a short term fix, but it's fragile, and it does feel like
+> we're just adding more duct tape, as Andy said.
 
-On 6/1/2019 6:23 AM, YueHaibing wrote:
-> Remove .owner field if calls are used which set it automatically
-> Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
->
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->   drivers/thermal/thermal_mmio.c | 1 -
->   1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/thermal/thermal_mmio.c b/drivers/thermal/thermal_mmio.c
-> index de3cceea23bc..1dce9f00d45c 100644
-> --- a/drivers/thermal/thermal_mmio.c
-> +++ b/drivers/thermal/thermal_mmio.c
-> @@ -117,7 +117,6 @@ static struct platform_driver thermal_mmio_driver = {
->   	.probe = thermal_mmio_probe,
->   	.driver = {
->   		.name = "thermal-mmio",
-> -		.owner = THIS_MODULE,
->   		.of_match_table = of_match_ptr(thermal_mmio_id_table),
->   	},
->   };
->
->
->
->
->
+OK, the v4 queued up then, thanks!
+
+
+
