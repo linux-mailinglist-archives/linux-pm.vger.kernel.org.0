@@ -2,235 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD3832F90
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 14:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACB032F97
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 14:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726824AbfFCM1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 08:27:33 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:50128 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726794AbfFCM1d (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 3 Jun 2019 08:27:33 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1205B15A2;
-        Mon,  3 Jun 2019 05:27:33 -0700 (PDT)
-Received: from darkstar (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BE4A3F5AF;
-        Mon,  3 Jun 2019 05:27:28 -0700 (PDT)
-Date:   Mon, 3 Jun 2019 13:27:25 +0100
-From:   Patrick Bellasi <patrick.bellasi@arm.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH v9 12/16] sched/core: uclamp: Extend CPU's cgroup
- controller
-Message-ID: <20190603122725.GB19426@darkstar>
-References: <20190515094459.10317-1-patrick.bellasi@arm.com>
- <20190515094459.10317-13-patrick.bellasi@arm.com>
- <20190531153545.GE374014@devbig004.ftw2.facebook.com>
+        id S1726270AbfFCM2z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 08:28:55 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:38411 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727334AbfFCM2y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 08:28:54 -0400
+Received: by mail-lj1-f194.google.com with SMTP id o13so15988635lji.5
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2019 05:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WvqHOC4rVKX462WwE0yHSlmBZF1YO9aROqbvN/HfH6Y=;
+        b=PYGUZK+GV8eTc/sc1/LJV2/FRh6sJ3eQVXqtHpM1WdCHjxWxGcJHVX6no/5nw7UnO6
+         DV0yDj/ec3TxqyDkkmaBhVAS4R0g44dxp9/lCrwxqbNfRaWzZra8qYmAc+YZXjsgn2FX
+         UGutllvZNq/hEvDPh7uqahFLrpIWsFBdileHo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WvqHOC4rVKX462WwE0yHSlmBZF1YO9aROqbvN/HfH6Y=;
+        b=gEwXdvKBXntE8ov8nA0Z+5JrzC1zSFpGG1FRnvfxUqRYQQUeC56RorDZwgc6kZBb+B
+         VCSvXB3+4wW/WmAmVpnj0kXBx+yNhZcTkvnwPkJP1BQCYH9u7/FrmVoxLWnuaB1vjZQK
+         2s6w+KueJxOa9a6jltBsDUOCrQriP1ypuNP1SBP9ZpPu04AFr8unxFdn+A0HyDr8ekqG
+         mrX8nHdE4J6lpnA6zhpIwRSE4VYj2+yOvkM2oRphlW2TivS6SHw7Iw0Jl2dowOgJSqI6
+         UEViPwqHMJ3TLhrlwoXl6i5DJ95lx6ACNvWhdL8jpoZa+r7ZvkAURgYhngSTwZPyFuZS
+         hPJQ==
+X-Gm-Message-State: APjAAAXbhXDQ2x+K0bANBOBkewULBmBWAtj8YMZKEZ+j97VV55Qd8ZV3
+        Y5ar3sv3pAhSL8gXWhFOQ9KOX9NwPE8deEluvJjiTQ==
+X-Google-Smtp-Source: APXvYqzHzzga29JITONK+bAJt2s0MgC0PRTzbGVoOX6cnbI/p9OIDGMPiEXt3Q9ji63k1yr8CtUni9paU765sGDmFMs=
+X-Received: by 2002:a2e:9742:: with SMTP id f2mr13977662ljj.184.1559564932484;
+ Mon, 03 Jun 2019 05:28:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190531153545.GE374014@devbig004.ftw2.facebook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20190601222738.6856-1-joel@joelfernandes.org> <20190601222738.6856-3-joel@joelfernandes.org>
+ <20190602070014.GA543@amd> <CAEXW_YT3t4Hb6wKsjXPGng+YbA5rhNRa7OSdZwdN4AKGfVkX3g@mail.gmail.com>
+ <CAEXW_YSM2wwah2Q7LKmUO1Dp7GG62ciQA1nZ7GLw3m6cyuXXTw@mail.gmail.com> <20190603064212.GA7400@amd>
+In-Reply-To: <20190603064212.GA7400@amd>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 3 Jun 2019 08:28:41 -0400
+Message-ID: <CAEXW_YSz8SNQCTnJj_86uJvRX3LFEQ6xJX-UV07HGwwA7oLwvg@mail.gmail.com>
+Subject: Re: [RFC 2/6] ipv4: add lockdep condition to fix for_each_entry
+To:     Pavel Machek <pavel@denx.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Neil Brown <neilb@suse.com>, netdev <netdev@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Peter Zilstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu <rcu@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31-May 08:35, Tejun Heo wrote:
+On Mon, Jun 3, 2019 at 2:42 AM Pavel Machek <pavel@denx.de> wrote:
+>
+> On Sun 2019-06-02 08:24:35, Joel Fernandes wrote:
+> > On Sun, Jun 2, 2019 at 8:20 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+> > >
+> > > On Sun, Jun 2, 2019 at 3:00 AM Pavel Machek <pavel@denx.de> wrote:
+> > > >
+> > > > On Sat 2019-06-01 18:27:34, Joel Fernandes (Google) wrote:
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > >
+> > > > This really needs to be merged to previous patch, you can't break
+> > > > compilation in middle of series...
+> > > >
+> > > > Or probably you need hlist_for_each_entry_rcu_lockdep() macro with
+> > > > additional argument, and switch users to it.
+> > >
+> > > Good point. I can also just add a temporary transition macro, and then
+> > > remove it in the last patch. That way no new macro is needed.
+> >
+> > Actually, no. There is no compilation break so I did not follow what
+> > you mean. The fourth argument to the hlist_for_each_entry_rcu is
+> > optional. The only thing that happens is new lockdep warnings will
+> > arise which later parts of the series fix by passing in that fourth
+> > argument.
+>
+> Sorry, I missed that subtlety. Might be worth it enabling the lockdep
+> warning last in the series...
 
-[...]
-
-> > These attributes:
-> > 
-> > a) are available only for non-root nodes, both on default and legacy
-> >    hierarchies, while system wide clamps are defined by a generic
-> >    interface which does not depends on cgroups. This system wide
-> >    interface enforces constraints on tasks in the root node.
-> 
-> I'd much prefer if they weren't entangled this way.  The system wide
-> limits should work the same regardless of cgroup's existence.  cgroup
-> can put further restriction on top but mere creation of cgroups with
-> cpu controller enabled shouldn't take them out of the system-wide
-> limits.
-
-That's correct and what you describe matches, at least on its
-intents, the current implementation provided in:
-
-   [PATCH v9 14/16] sched/core: uclamp: Propagate system defaults to root group
-   https://lore.kernel.org/lkml/20190515094459.10317-15-patrick.bellasi@arm.com/
-
-System clamps always work the same way, independently from cgroups:
-they define the upper bound for both min and max clamps.
-
-When cgroups are not available, tasks specific clamps are always
-capped by system clamps.
-
-When cgroups are available, the root task group clamps are capped by
-the system clamps, which affects its "effective" clamps and propagate
-them down the hierarchy to child's "effective" clamps.
-That's done in:
-
-   [PATCH v9 13/16] sched/core: uclamp: Propagate parent clamps
-   https://lore.kernel.org/lkml/20190515094459.10317-14-patrick.bellasi@arm.com/
-
-
-Example 1
----------
-
-Here is an example of system and groups clamps aggregation:
-
-        	        min                        max
-system defaults         400                        600
-
-cg_name        	        min       min.effective	   max	     max.effective
- /uclamp               1024       400              500       500
- /uclamp/app              512       400	             512       500
- /uclamp/app/pid_smalls	    100	      100              200       200
- /uclamp/app/pid_bigs       500	      400              700       500
-
-
-The ".effective" clamps are used to define the actual clamp value to
-apply to tasks, according to the aggregation rules defined in:
-
-   [PATCH v9 15/16] sched/core: uclamp: Use TG's clamps to restrict TASK's clamps
-   https://lore.kernel.org/lkml/20190515094459.10317-16-patrick.bellasi@arm.com/
-
-All the above, to me it means that:
- - cgroups are always capped by system clamps
- - cgroups can further restrict system clamps
-
-Does that match with your view?
-
-> > b) enforce effective constraints at each level of the hierarchy which
-> >    are a restriction of the group requests considering its parent's
-> >    effective constraints. Root group effective constraints are defined
-> >    by the system wide interface.
-> >    This mechanism allows each (non-root) level of the hierarchy to:
-> >    - request whatever clamp values it would like to get
-> >    - effectively get only up to the maximum amount allowed by its parent
-> 
-> I'll come back to this later.
-> 
-> > c) have higher priority than task-specific clamps, defined via
-> >    sched_setattr(), thus allowing to control and restrict task requests
-> 
-> This sounds good.
-> 
-> > Add two new attributes to the cpu controller to collect "requested"
-> > clamp values. Allow that at each non-root level of the hierarchy.
-> > Validate local consistency by enforcing util.min < util.max.
-> > Keep it simple by do not caring now about "effective" values computation
-> > and propagation along the hierarchy.
-> 
-> So, the followings are what we're doing for hierarchical protection
-> and limit propgations.
-> 
-> * Limits (high / max) default to max.  Protections (low / min) 0.  A
->   new cgroup by default doesn't constrain itself further and doesn't
->   have any protection.
-
-Example 2
----------
-
-Let say we have:
-
-  /tg1:
-        util_min=200 (as a protection)
-        util_max=800 (as a limit)
-
-the moment we create a subgroup /tg1/tg11, in v9 it is initialized
-with the same limits _and protections_ of its father:
-
-  /tg1/tg11:
-        util_min=200 (protection inherited from /tg1)
-        util_max=800 (limit inherited from /tg1)
-
-Do you mean that we should have instead:
-
-  /tg1/tg11:
-        util_min=0   (no protection by default at creation time)
-        util_max=800 (limit inherited from /tg1)
-
-
-i.e. we need to reset the protection of a newly created subgroup?
-
-
-> * A limit defines the upper ceiling for the subtree.  If an ancestor
->   has a limit of X, none of its descendants can have more than X.
-
-That's correct, however we distinguish between "requested" and
-"effective" values.
-
-
-Example 3
----------
-
-We can have:
-
-cg_name        	        max       max.effective
- /uclamp/app            400                 400
- /uclamp/app/pid_bigs     500	              400
-
-
-Which means that a subgroup can "request" a limit (max=500) higher
-then its father (max=400), while still getting only up to what its
-father allows (max.effective = 400).
-
-
-Example 4
----------
-
-Tracking the actual requested limit (max=500) it's useful to enforce
-it once the father limit should be relaxed, for example we will have:
-
-cg_name        	        max       max.effective
- /uclamp/app            600                 600
- /uclamp/app/pid_bigs     500	              500
-
-where a subgroup gets not more than what it has been configured for.
-
-This is the logic implemented by cpu_util_update_eff() in:
-
-   [PATCH v9 13/16] sched/core: uclamp: Propagate parent clamps
-   https://lore.kernel.org/lkml/20190515094459.10317-14-patrick.bellasi@arm.com/
-
-
-> * A protection defines the upper ceiling of protections for the
->   subtree.  If an andester has a protection of X, none of its
->   descendants can have more protection than X.
-
-Right, that's the current behavior in v9.
-
-> Note that there's no way for an ancestor to enforce protection its
-> descendants.  It can only allow them to claim some.  This is
-> intentional as the other end of the spectrum is either descendants
-> losing the ability to further distribute protections as they see fit.
-
-Ok, that means I need to update in v10 the initialization of subgroups
-min clamps to be none by default as discussed in the above Example 2,
-right?
-
-[...]
-
-Cheers,
-Patrick
-
--- 
-#include <best/regards.h>
-
-Patrick Bellasi
+Good idea, will do! Thanks.
