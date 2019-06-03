@@ -2,86 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E8B32E78
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 13:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2022732F87
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 14:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727974AbfFCLTQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 07:19:16 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:49158 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726701AbfFCLTQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 3 Jun 2019 07:19:16 -0400
+        id S1726551AbfFCMYd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 08:24:33 -0400
+Received: from foss.arm.com ([217.140.101.70]:50090 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726137AbfFCMYd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 3 Jun 2019 08:24:33 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 090C5A78;
-        Mon,  3 Jun 2019 04:19:16 -0700 (PDT)
-Received: from queper01-lin (queper01-lin.cambridge.arm.com [10.1.195.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7A4CF3F5AF;
-        Mon,  3 Jun 2019 04:19:13 -0700 (PDT)
-Date:   Mon, 3 Jun 2019 12:19:11 +0100
-From:   Quentin Perret <quentin.perret@arm.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
-        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
-        will.deacon@arm.com, catalin.marinas@arm.com,
-        dietmar.eggemann@arm.com, ionela.voinescu@arm.com,
-        mka@chromium.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 3/3] thermal: cpu_cooling: Migrate to using the EM
- framework
-Message-ID: <20190603111909.ckrevvpkrhzecx6v@queper01-lin>
-References: <20190530092038.12020-1-quentin.perret@arm.com>
- <20190530092038.12020-4-quentin.perret@arm.com>
- <2d1d5cda-63c3-07a9-ae5f-abbc300ed1fc@linaro.org>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A38D115A2;
+        Mon,  3 Jun 2019 05:24:32 -0700 (PDT)
+Received: from darkstar (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67E793F5AF;
+        Mon,  3 Jun 2019 05:24:28 -0700 (PDT)
+Date:   Mon, 3 Jun 2019 13:24:22 +0100
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH v9 12/16] sched/core: uclamp: Extend CPU's cgroup
+ controller
+Message-ID: <20190603122422.GA19426@darkstar>
+References: <20190515094459.10317-1-patrick.bellasi@arm.com>
+ <20190515094459.10317-13-patrick.bellasi@arm.com>
+ <20190531153545.GE374014@devbig004.ftw2.facebook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d1d5cda-63c3-07a9-ae5f-abbc300ed1fc@linaro.org>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <20190531153545.GE374014@devbig004.ftw2.facebook.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Saturday 01 Jun 2019 at 12:37:06 (+0200), Daniel Lezcano wrote:
-> On 30/05/2019 11:20, Quentin Perret wrote:
-> > The newly introduced Energy Model framework manages power cost tables in
-> > a generic way. Moreover, it supports several types of models since the
-> > tables can come from DT or firmware (through SCMI) for example. On the
-> > other hand, the cpu_cooling subsystem manages its own power cost tables
-> > using only DT data.
+On 31-May 08:35, Tejun Heo wrote:
+> Hello, Patrick.
+
+Hi Tejun!
+
+> On Wed, May 15, 2019 at 10:44:55AM +0100, Patrick Bellasi wrote:
+> > Extend the CPU controller with a couple of new attributes util.{min,max}
+> > which allows to enforce utilization boosting and capping for all the
+> > tasks in a group. Specifically:
 > > 
-> > In order to avoid the duplication of data in the kernel, and in order to
-> > enable IPA with EMs coming from more than just DT, remove the private
-> > tables from cpu_cooling.c and migrate it to using the centralized EM
-> > framework. Doing so should have no visible functional impact for
-> > existing users of IPA since:
+> > - util.min: defines the minimum utilization which should be considered
+> > 	    i.e. the RUNNABLE tasks of this group will run at least at a
+> > 		 minimum frequency which corresponds to the util.min
+> > 		 utilization
 > > 
-> >  - recent extenstions to the the PM_OPP infrastructure enable the
-> >    registration of EMs in PM_EM using the DT property used by IPA;
-> > 
-> >  - the existing upstream cpufreq drivers marked with the
-> >    'CPUFREQ_IS_COOLING_DEV' flag all use the aforementioned PM_OPP
-> >    infrastructure, which means they all support PM_EM. The only two
-> >    exceptions are qoriq-cpufreq which doesn't in fact use an EM and
-> >    scmi-cpufreq which doesn't use DT for power costs.
-> > 
-> > For existing users of cpu_cooling, PM_EM tables will contain the exact
-> > same power values that IPA used to compute on its own until now. The
-> > only new dependency for them is to compile in CONFIG_ENERGY_MODEL.
-> > 
-> > The case where the thermal subsystem is used without an Energy Model
-> > (cpufreq_cooling_ops) is handled by looking directly at CPUFreq's
-> > frequency table which is already a dependency for cpu_cooling.c anyway.
-> > Since the thermal framework expects the cooling states in a particular
-> > order, bail out whenever the CPUFreq table is unsorted, since that is
-> > fairly uncommon in general, and there are currently no users of
-> > cpu_cooling for this use-case.
-> > 
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > Signed-off-by: Quentin Perret <quentin.perret@arm.com>
+> > - util.max: defines the maximum utilization which should be considered
+> > 	    i.e. the RUNNABLE tasks of this group will run up to a
+> > 		 maximum frequency which corresponds to the util.max
+> > 		 utilization
 > 
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Let's please use a prefix which is more specific.  It's clamping the
+> utilization estimates of the member tasks which in turn affect
+> scheduling / frequency decisions but cpu.util.max reads like it's
+> gonna limit the cpu utilization directly.  Maybe just use uclamp?
 
-Thanks for this one and the other one :-)
+Being too specific does not risk to expose implementation details?
 
-Quentin
+If that's not a problem and Peter likes:
+
+   cpu.uclamp.{min,max}
+
+that's ok with me.
+
+-- 
+#include <best/regards.h>
+
+Patrick Bellasi
