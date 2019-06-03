@@ -2,111 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE12D3282D
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 07:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08B3328AA
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 08:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbfFCF5G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 01:57:06 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41476 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726374AbfFCF5F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 01:57:05 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q17so9938861pfq.8
-        for <linux-pm@vger.kernel.org>; Sun, 02 Jun 2019 22:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zCVkve2M1JFNC36HFwV7VaJz6MYidoQvY09V4Dotmhs=;
-        b=V8jrh86cjCL32w4Tzw0n6Miqz2LZfT2LMhtp0fxasBP5KpPCc/baTt59nbUzabGM8+
-         TzqOBX7mqbuDRBjtLx++QnVVYWty947udQGmsF35jbOEYAPLrC6z1y+12hLBzJIl2My/
-         0wyCGR6Uc/W9DZGa/sky6cknZx6pExyufkFgCc2A2l7/HzYX9Zg++DFjXJDEzhVcBppG
-         XC6L6M9Kb9YIRryD7ybHJOt6DbM3tYXlmYI9x7RPRjFIroJKdLCJO8dl5LA5bx887B9q
-         h3fXAK8yy41keON/b2FtLa+IgXvkwl0LGNyyD1Pzl1iTekC42g1VsOF5xpmb9ZDsKsBO
-         WH+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zCVkve2M1JFNC36HFwV7VaJz6MYidoQvY09V4Dotmhs=;
-        b=V0Aa9pbzEnFShzTo7bCUWJ3BeXtT+czKblDKqLcgABRNQ1EQaYhiG1tT8YzRp54S1i
-         oft56v1L6nXwKsPdrHi9571k0UGrLe2xMGOxn6iNkWS22J8aaq9K1CzPjv1tgm0nWCyl
-         57VAqphZU0hLU6AwoqbEFakFHaeCZz9RODgcK4tJQUOptLU3/ombHluTTeaH4mQ/8klO
-         MFZ9vBU4x1Xb7PFtQdxrE83PrfDQDtIkO9mex7dEEBapPx+cyPsAGPoGkW+0EE/0yR1U
-         i8xpXnwb0ohWiWsMFsL19ArRTGbMIt/tMVYPd4+470JS7V8HbO30sricCGloOxO1g8ZJ
-         9wKw==
-X-Gm-Message-State: APjAAAVgpOOGYIRj0XB3QnUTekrAcMFcTgL6oS9Bt5fWswkJteHyyYS0
-        G1dObuF6aCgYTgfQpXxoAJ9bww==
-X-Google-Smtp-Source: APXvYqxpNVebNIRrfQYo00U/X6UMvFYJBMC94A84BEV3vcQFHqnhGlBex5c/vWJYgikWpd14iShJJA==
-X-Received: by 2002:a65:44c8:: with SMTP id g8mr26175730pgs.443.1559541425059;
-        Sun, 02 Jun 2019 22:57:05 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id j14sm13675062pfe.10.2019.06.02.22.57.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 02 Jun 2019 22:57:04 -0700 (PDT)
-Date:   Mon, 3 Jun 2019 11:27:02 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] cpufreq: armada-37xx: Remove set but not used
- variable 'freq'
-Message-ID: <20190603055702.thhlyazwqmekdvyd@vireshk-i7>
-References: <20190601074338.64187-1-yuehaibing@huawei.com>
+        id S1727207AbfFCGmQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 02:42:16 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:53347 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727194AbfFCGmQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 02:42:16 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 72C3D80295; Mon,  3 Jun 2019 08:42:03 +0200 (CEST)
+Date:   Mon, 3 Jun 2019 08:42:12 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Pavel Machek <pavel@denx.de>, LKML <linux-kernel@vger.kernel.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Neil Brown <neilb@suse.com>, netdev <netdev@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Peter Zilstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu <rcu@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [RFC 2/6] ipv4: add lockdep condition to fix for_each_entry
+Message-ID: <20190603064212.GA7400@amd>
+References: <20190601222738.6856-1-joel@joelfernandes.org>
+ <20190601222738.6856-3-joel@joelfernandes.org>
+ <20190602070014.GA543@amd>
+ <CAEXW_YT3t4Hb6wKsjXPGng+YbA5rhNRa7OSdZwdN4AKGfVkX3g@mail.gmail.com>
+ <CAEXW_YSM2wwah2Q7LKmUO1Dp7GG62ciQA1nZ7GLw3m6cyuXXTw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="SLDf9lqlvOQaIe6s"
 Content-Disposition: inline
-In-Reply-To: <20190601074338.64187-1-yuehaibing@huawei.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAEXW_YSM2wwah2Q7LKmUO1Dp7GG62ciQA1nZ7GLw3m6cyuXXTw@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-06-19, 07:43, YueHaibing wrote:
-> Fixes gcc '-Wunused-but-set-variable' warning:
-> 
-> drivers/cpufreq/armada-37xx-cpufreq.c: In function 'armada37xx_cpufreq_avs_setup':
-> drivers/cpufreq/armada-37xx-cpufreq.c:260:28: warning:
->  variable 'freq' set but not used [-Wunused-but-set-variable]
-> 
-> It's never used since introduction in commit 1c3528232f4b ("cpufreq:
-> armada-37xx: Add AVS support")
-> 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  drivers/cpufreq/armada-37xx-cpufreq.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
-> index 0df16eb1eb3c..aa0f06dec959 100644
-> --- a/drivers/cpufreq/armada-37xx-cpufreq.c
-> +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
-> @@ -257,7 +257,7 @@ static void __init armada37xx_cpufreq_avs_configure(struct regmap *base,
->  static void __init armada37xx_cpufreq_avs_setup(struct regmap *base,
->  						struct armada_37xx_dvfs *dvfs)
->  {
-> -	unsigned int avs_val = 0, freq;
-> +	unsigned int avs_val = 0;
->  	int load_level = 0;
->  
->  	if (base == NULL)
-> @@ -275,8 +275,6 @@ static void __init armada37xx_cpufreq_avs_setup(struct regmap *base,
->  
->  
->  	for (load_level = 1; load_level < LOAD_LEVEL_NR; load_level++) {
-> -		freq = dvfs->cpu_freq_max / dvfs->divider[load_level];
-> -
->  		avs_val = dvfs->avs[load_level];
->  		regmap_update_bits(base, ARMADA_37XX_AVS_VSET(load_level-1),
->  		    ARMADA_37XX_AVS_VDD_MASK << ARMADA_37XX_AVS_HIGH_VDD_LIMIT |
-> 
 
-Applied. Thanks.
+--SLDf9lqlvOQaIe6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-viresh
+On Sun 2019-06-02 08:24:35, Joel Fernandes wrote:
+> On Sun, Jun 2, 2019 at 8:20 AM Joel Fernandes <joel@joelfernandes.org> wr=
+ote:
+> >
+> > On Sun, Jun 2, 2019 at 3:00 AM Pavel Machek <pavel@denx.de> wrote:
+> > >
+> > > On Sat 2019-06-01 18:27:34, Joel Fernandes (Google) wrote:
+> > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > >
+> > > This really needs to be merged to previous patch, you can't break
+> > > compilation in middle of series...
+> > >
+> > > Or probably you need hlist_for_each_entry_rcu_lockdep() macro with
+> > > additional argument, and switch users to it.
+> >
+> > Good point. I can also just add a temporary transition macro, and then
+> > remove it in the last patch. That way no new macro is needed.
+>=20
+> Actually, no. There is no compilation break so I did not follow what
+> you mean. The fourth argument to the hlist_for_each_entry_rcu is
+> optional. The only thing that happens is new lockdep warnings will
+> arise which later parts of the series fix by passing in that fourth
+> argument.
+
+Sorry, I missed that subtlety. Might be worth it enabling the lockdep
+warning last in the series...
+
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--SLDf9lqlvOQaIe6s
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAlz0wUQACgkQMOfwapXb+vJZhACeMv6qy1KMl8fpAmSRbXsFU5yP
+LY8Ani5H9/TBihxu13cOJbn7mJJ9RWkQ
+=hotv
+-----END PGP SIGNATURE-----
+
+--SLDf9lqlvOQaIe6s--
