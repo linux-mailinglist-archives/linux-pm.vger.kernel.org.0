@@ -2,102 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C71E132A54
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 10:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3721D32CD6
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jun 2019 11:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727579AbfFCIDh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jun 2019 04:03:37 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:50138 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725856AbfFCIDg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 04:03:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=YGw/VDsnOloIaXgrEbA/FOCyBbJYxl2QNc1vAYVXNY0=; b=Kh81Fh/GkYy+PcGkyTuRLYqJr
-        5d3meB8Iu/apofeU9LBaVTbdU34exlCBZ6/cvkSTsWYbCITa+85dcFdl1TuwCCRcbBbbBHcmz79tU
-        YNA75f//Beu0qWv4xrOjE3yCBU/h7Wpdldb8AXCdnFyE/xt6GG7X5SHHOhvkwxY2EDPpuVJ40I8NT
-        ZcmLp7vu3BxxYFbsJSX2sSX4rHSTxLEQ0MZogDpDfR8tMLBVyzA2HGhhcxPa3RuWryoN7hsbltCid
-        ApVADLC1Be6a9Xztz6ysLp/Pg3F0N3np5vQaItnOalc4ycKqr7JKLLA3Zs069bXnA/w4o4wPQqclC
-        BYeGsVrnQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hXhuM-0001Ln-LU; Mon, 03 Jun 2019 08:01:31 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0FE772029F880; Mon,  3 Jun 2019 10:01:28 +0200 (CEST)
-Date:   Mon, 3 Jun 2019 10:01:28 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
-        kernel-hardening@lists.openwall.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [RFC 1/6] rcu: Add support for consolidated-RCU reader checking
-Message-ID: <20190603080128.GA3436@hirez.programming.kicks-ass.net>
-References: <20190601222738.6856-1-joel@joelfernandes.org>
- <20190601222738.6856-2-joel@joelfernandes.org>
+        id S1726843AbfFCJ13 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jun 2019 05:27:29 -0400
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:6481 "EHLO
+        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726684AbfFCJ13 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jun 2019 05:27:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1559554048; x=1591090048;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=tyftZePYeklME2yiiktsV1Ph2NihOusiCYamtIRSu5o=;
+  b=Hd1aHQ/D/eyQwmlhYJbxNfAXrFG7g3htilvzIRSKazgvSsv86MlNuClF
+   gMXWI98fi9kqspmDCjVCPp+SnGBjMfsSFqRU4l8VMHIrjlUpjEKAkRDCh
+   UXO+edcfdgsMHhZxvCZW3peI7dBbGB5v/IdBIna6H9ynY4rmhKHi64UNT
+   s=;
+X-IronPort-AV: E=Sophos;i="5.60,546,1549929600"; 
+   d="scan'208";a="735800863"
+Received: from iad6-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-2a-119b4f96.us-west-2.amazon.com) ([10.124.125.2])
+  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 03 Jun 2019 09:27:25 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2a-119b4f96.us-west-2.amazon.com (Postfix) with ESMTPS id 293E31A2386;
+        Mon,  3 Jun 2019 09:27:25 +0000 (UTC)
+Received: from EX13D01EUB001.ant.amazon.com (10.43.166.194) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Mon, 3 Jun 2019 09:27:24 +0000
+Received: from [10.95.66.110] (10.43.162.203) by EX13D01EUB001.ant.amazon.com
+ (10.43.166.194) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 3 Jun
+ 2019 09:27:20 +0000
+Subject: Re: [PATCH -next] thermal: Fix platform_no_drv_owner.cocci warnings
+To:     YueHaibing <yuehaibing@huawei.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+References: <20190601032338.47195-1-yuehaibing@huawei.com>
+From:   "Shenhar, Talel" <talel@amazon.com>
+Message-ID: <ff61b7d5-5134-7179-6f0d-79f3bb3bcdc1@amazon.com>
+Date:   Mon, 3 Jun 2019 12:27:15 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190601222738.6856-2-joel@joelfernandes.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190601032338.47195-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.43.162.203]
+X-ClientProxiedBy: EX13D14UWC001.ant.amazon.com (10.43.162.5) To
+ EX13D01EUB001.ant.amazon.com (10.43.166.194)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 01, 2019 at 06:27:33PM -0400, Joel Fernandes (Google) wrote:
-> +#define list_for_each_entry_rcu(pos, head, member, cond...)		\
-> +	if (COUNT_VARGS(cond) != 0) {					\
-> +		__list_check_rcu_cond(0, ## cond);			\
-> +	} else {							\
-> +		__list_check_rcu();					\
-> +	}								\
-> +	for (pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
-> +		&pos->member != (head);					\
->  		pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
->  
->  /**
-> @@ -621,7 +648,12 @@ static inline void hlist_add_behind_rcu(struct hlist_node *n,
->   * the _rcu list-mutation primitives such as hlist_add_head_rcu()
->   * as long as the traversal is guarded by rcu_read_lock().
->   */
-> +#define hlist_for_each_entry_rcu(pos, head, member, cond...)		\
-> +	if (COUNT_VARGS(cond) != 0) {					\
-> +		__list_check_rcu_cond(0, ## cond);			\
-> +	} else {							\
-> +		__list_check_rcu();					\
-> +	}								\
->  	for (pos = hlist_entry_safe (rcu_dereference_raw(hlist_first_rcu(head)),\
->  			typeof(*(pos)), member);			\
->  		pos;							\
+Thanks. This issue was already fixed by previous patch.
 
-
-This breaks code like:
-
-	if (...)
-		list_for_each_entry_rcu(...);
-
-as they are no longer a single statement. You'll have to frob it into
-the initializer part of the for statement.
+On 6/1/2019 6:23 AM, YueHaibing wrote:
+> Remove .owner field if calls are used which set it automatically
+> Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
+>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>   drivers/thermal/thermal_mmio.c | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/thermal/thermal_mmio.c b/drivers/thermal/thermal_mmio.c
+> index de3cceea23bc..1dce9f00d45c 100644
+> --- a/drivers/thermal/thermal_mmio.c
+> +++ b/drivers/thermal/thermal_mmio.c
+> @@ -117,7 +117,6 @@ static struct platform_driver thermal_mmio_driver = {
+>   	.probe = thermal_mmio_probe,
+>   	.driver = {
+>   		.name = "thermal-mmio",
+> -		.owner = THIS_MODULE,
+>   		.of_match_table = of_match_ptr(thermal_mmio_id_table),
+>   	},
+>   };
+>
+>
+>
+>
+>
