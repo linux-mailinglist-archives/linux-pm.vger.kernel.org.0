@@ -2,158 +2,318 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE77834214
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 10:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C3E343B9
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 12:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbfFDIoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 04:44:16 -0400
-Received: from mail-eopbgr150080.outbound.protection.outlook.com ([40.107.15.80]:57045
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726637AbfFDIoQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Jun 2019 04:44:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hdf20Bp34g9IXFpkFBSGXHHQUhMbYYT9z6xsjQmdrN0=;
- b=lE4xLS2UW+yb7q1PWncRU6G2r9fbUONZRMwG96pE/nJoKXUxOKbKW7KM+XDqd/39tKBkWcDq77VO32+u0R3GFvEdQwOGoojgf8/HVfscwtTF0S5ofc27z4O9zYp8vyYGHlHH2xDcnEV2pSWn5eiLA8+J42Imrro3+PG9uRBmYWg=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3690.eurprd04.prod.outlook.com (52.134.70.27) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Tue, 4 Jun 2019 08:44:10 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::5835:e874:bd94:fec]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::5835:e874:bd94:fec%5]) with mapi id 15.20.1943.018; Tue, 4 Jun 2019
- 08:44:10 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Jacky Bai <ping.bai@nxp.com>
-CC:     Michael Turquette <mturquette@baylibre.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Patrick Titiano <ptitiano@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Emilio Lopez <emilio@elopez.com.ar>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Zening Wang <zening.wang@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Carlo Caione <ccaione@baylibre.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: RE: [RFC PATCH 0/3] Add support of busfreq
-Thread-Topic: [RFC PATCH 0/3] Add support of busfreq
-Thread-Index: AQHVCowAYPsUDFKXNUq2eGEvBhKyoKaLTMDA
-Date:   Tue, 4 Jun 2019 08:44:10 +0000
-Message-ID: <DB3PR0402MB39167B9EAE9A741AB0F20E30F5150@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <20190313193408.23740-1-abailon@baylibre.com>
- <CAEG3pNA+U1tw4sWq9i2cTni6QKQkLyd3qyZXd2i8M7WFDF4ZsQ@mail.gmail.com>
- <8af96425-a6f5-0114-7abb-c2a67b952e1b@baylibre.com>
- <AM0PR04MB643434FB6A26B4D70F52F350EE080@AM0PR04MB6434.eurprd04.prod.outlook.com>
-In-Reply-To: <AM0PR04MB643434FB6A26B4D70F52F350EE080@AM0PR04MB6434.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0dd8d03e-0101-4d90-f1a1-08d6e8c8d036
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3690;
-x-ms-traffictypediagnostic: DB3PR0402MB3690:
-x-microsoft-antispam-prvs: <DB3PR0402MB3690247734C8A961D382B681F5150@DB3PR0402MB3690.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0058ABBBC7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(376002)(396003)(346002)(366004)(136003)(189003)(199004)(52084003)(13464003)(86362001)(52536014)(44832011)(102836004)(6506007)(53546011)(6436002)(186003)(99286004)(14444005)(256004)(5660300002)(446003)(26005)(6246003)(71200400001)(71190400001)(6116002)(316002)(7696005)(3846002)(6636002)(66066001)(53936002)(7736002)(2906002)(486006)(7416002)(9686003)(4326008)(8936002)(11346002)(25786009)(229853002)(76176011)(478600001)(8676002)(33656002)(81166006)(81156014)(68736007)(66556008)(66946007)(55016002)(476003)(64756008)(73956011)(110136005)(14454004)(305945005)(66446008)(76116006)(74316002)(54906003)(66476007);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3690;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: iXQ8Q4MN2EpslZZxeiJn2xN9jsYL+d5IF6dud5GKFf3ynbVRSQ+39RAm+lHQMSCpn0pYiJTSTsemGQjq8cXQ+AvJqmKQjVg2t3orwcyl7AeYDstvY0cIQGLvSFqniIACXTwhyxnWa6ufBHcAulQ9lpXMadwJ5pd45ANiL6dcCPUt0zabbKVCmMrF/UtTZsDlt1d5GjWYiVvY3qkV0Gy6admgJiOuwP/xtCc9iMhYbLQunJJYgLQdhjVc/PMedO68MhyoLtdLCK6SOIezEALudYVpmEQs59nP9YwVPv33kFrluD76o8Ghd4yTSALcSGWxDUf4ND4PihSSnJnqsXb5zyznphbCudhqoc16Nl0Chz8FvDt7GtV4qzecSXEOQVjKi8rdCmSm2eQfZDiYglUodSd3lTCshitYl0YP0f5H1Kk=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727061AbfFDKLF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 06:11:05 -0400
+Received: from casper.infradead.org ([85.118.1.10]:37588 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727027AbfFDKLF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 06:11:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RqlFiW8mqvn7VXsVgTdqn3QWI09o+fvsDMKwHHMYzmM=; b=d9cIWZCZ55BJMQwQks2BNYpnDx
+        FqYMGyyRB1/+xnBZRQfrn9L/vQOb3XFT6N2WpEBsZAYZoZbB/q7ZATyrLrNVWfSWI25HFL3inBEUU
+        vUdxdMhnNSspqMB6VC5iO2IIejt7RRQ3/VUlXkNtF+IYokbxbNlXoEDmre6nm5C0Aej2yZ/tky0mB
+        tEH7cJigZ0HyD2xXpUJZ1kcoRPkbjssCBOIh75l3gt6dOnBtH1yDtowQkM7ht2irwKoblXvOsRAQX
+        qyMsNFrrpG+tlA7Ihz3bC6PHmi8cqIpfcR2sloY0tI/zNa9b7flEVlJIBlvKL5taPWiCjXJ2TFzd4
+        KCADzMrQ==;
+Received: from [187.113.6.249] (helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hY6PB-0005Su-8Q; Tue, 04 Jun 2019 10:10:57 +0000
+Date:   Tue, 4 Jun 2019 07:10:48 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        kvm@vger.kernel.org,
+        Radim =?UTF-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Airlie <airlied@linux.ie>,
+        Andrew Donnellan <ajd@linux.ibm.com>, linux-pm@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Matan Ziv-Av <matan@svgalib.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Subject: Re: [PATCH 09/22] docs: mark orphan documents as such
+Message-ID: <20190604071048.4f226fff@coco.lan>
+In-Reply-To: <2891a08c-50b1-db33-0e96-740d45c5235f@c-s.fr>
+References: <cover.1559171394.git.mchehab+samsung@kernel.org>
+        <e0bf4e767dd5de9189e5993fbec2f4b1bafd2064.1559171394.git.mchehab+samsung@kernel.org>
+        <2891a08c-50b1-db33-0e96-740d45c5235f@c-s.fr>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0dd8d03e-0101-4d90-f1a1-08d6e8c8d036
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jun 2019 08:44:10.3059
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: anson.huang@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3690
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIEFsZXhhbmRyZQ0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IExl
-b25hcmQgQ3Jlc3Rleg0KPiBTZW50OiBXZWRuZXNkYXksIE1heSAxNSwgMjAxOSAzOjM0IEFNDQo+
-IFRvOiBBbGV4YW5kcmUgQmFpbG9uIDxhYmFpbG9uQGJheWxpYnJlLmNvbT47IEphY2t5IEJhaSA8
-cGluZy5iYWlAbnhwLmNvbT4NCj4gQ2M6IE1pY2hhZWwgVHVycXVldHRlIDxtdHVycXVldHRlQGJh
-eWxpYnJlLmNvbT47IExpbnV4IFBNIGxpc3QgPGxpbnV4LQ0KPiBwbUB2Z2VyLmtlcm5lbC5vcmc+
-OyBHZW9yZ2kgRGpha292IDxnZW9yZ2kuZGpha292QGxpbmFyby5vcmc+OyBQYXRyaWNrDQo+IFRp
-dGlhbm8gPHB0aXRpYW5vQGJheWxpYnJlLmNvbT47IExpbnV4IEtlcm5lbCBNYWlsaW5nIExpc3Qg
-PGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwub3JnPjsgU3RlcGhlbiBCb3lkIDxzYm95ZEBj
-b2RlYXVyb3JhLm9yZz47IEVtaWxpbw0KPiBMb3BleiA8ZW1pbGlvQGVsb3Blei5jb20uYXI+OyBI
-YW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQuY29tPjsNCj4gbGludXgtY2xrIDxsaW51eC1j
-bGtAdmdlci5rZXJuZWwub3JnPjsgbGludXgtYXJtLWtlcm5lbCA8bGludXgtYXJtLQ0KPiBrZXJu
-ZWxAbGlzdHMuaW5mcmFkZWFkLm9yZz47IFplbmluZyBXYW5nIDx6ZW5pbmcud2FuZ0BueHAuY29t
-PjsNCj4gQWlzaGVuZyBEb25nIDxhaXNoZW5nLmRvbmdAbnhwLmNvbT47IEtldmluIEhpbG1hbg0K
-PiA8a2hpbG1hbkBiYXlsaWJyZS5jb20+OyBDYXJsbyBDYWlvbmUgPGNjYWlvbmVAYmF5bGlicmUu
-Y29tPjsgZGwtbGludXgtDQo+IGlteCA8bGludXgtaW14QG54cC5jb20+OyBBbnNvbiBIdWFuZyA8
-YW5zb24uaHVhbmdAbnhwLmNvbT47IFZpcmVzaA0KPiBLdW1hciA8dmlyZXNoLmt1bWFyQGxpbmFy
-by5vcmc+DQo+IFN1YmplY3Q6IFJlOiBbUkZDIFBBVENIIDAvM10gQWRkIHN1cHBvcnQgb2YgYnVz
-ZnJlcQ0KPiANCj4gT24gMTUuMDMuMjAxOSAxODo1NSwgQWxleGFuZHJlIEJhaWxvbiB3cm90ZToN
-Cj4gPj4gT24gV2VkLCBNYXIgMTMsIDIwMTkgYXQgMTI6MzMgUE0gQWxleGFuZHJlIEJhaWxvbg0K
-PiA8YWJhaWxvbkBiYXlsaWJyZS5jb20+IHdyb3RlOg0KPiANCj4gPj4+IEFzIGV4ZW1wbGUsIHRo
-aXMgc2VyaWVzIGltcGxlbWVudHMgYnVzZnJlcSBmb3IgaS5NWDhNTSB3aG9zZQ0KPiA+Pj4gdXBz
-dHJlYW1pbmcgaXMgaW4gcHJvZ3Jlc3MuIEJlY2F1c2UgdGhpcyByZWxpZXMgb24gQVRGIHRvIGRv
-IHRoZQ0KPiA+Pj4gZnJlcXVlbmN5IHNjYWxpbmcsIGl0IHdvbid0IGJlIGhhcmQgbWFrZSBpdCB3
-b3JrLg0KDQpJIGhhdmUgc2ltaWxhciBxdWVzdGlvbiBhcyBwcmV2aW91cyByZXZpZXdlciwgaXMg
-dGhlcmUgYW55IGJyYW5jaCB0aGF0IHdlIGNhbiB0ZXN0DQp0aGlzIHNlcmllcz8gDQoNCkFuZCwg
-ZnJvbSB0aGUgcGF0Y2gsIGl0IGhhcyBtdWx0aXBsZSBsZXZlbHMgZGVzY3JpcHRpb24gb2YgZmFi
-cmljIGFyY2gsIHdoaWxlIHdlIE9OTFkNCmludGVuZCB0byBzY2FsZSAiYnVzIiBmcmVxdWVuY3kg
-cGVyIGRldmljZXMnIHJlcXVlc3QsIGhlcmUgImJ1cyIgaW5jbHVkZXMgRFJBTSwgTk9DIGFuZA0K
-QUhCLCBBWEksIHNob3VsZCB3ZSBtYWtlIGl0IG1vcmUgZmxhdHRlciwgc3VjaCBhcyBqdXN0IGEg
-dmlydHVhbCBmYWJyaWMgYXMgYSBzaW5nbGUgcHJvdmlkZXIsIGFuZCB0aGVuDQphbGwgb3RoZXIg
-ZGV2aWNlcyBhcyBub2RlcyB1bmRlciB0aGlzIHByb3ZpZGVyPw0KDQpBbnNvbg0KDQo+ID4+DQo+
-ID4+IEl0J3Mgbm90IGNsZWFyIHRvIG1lIHdoZXRoZXIgdGhpcyBzZXJpZXMgYWN0dWFsIHNjYWxl
-cyB0aGUgZHJhbQ0KPiA+PiBmcmVxdWVuY3kgYmFzZWQgb24gd2hhdCB5b3Ugc2FpZCBhYm92ZS4g
-SXMgaXQganVzdCB0aGVvcmV0aWNhbCBvciBkbw0KPiA+PiB5b3UgaGF2ZSBpdCB3b3JraW5nIHdp
-dGggYSBwaWxlIG9mIG91dC1vZi10cmVlIHBhdGNoZXM/IFdvdWxkIGJlIGdvb2QNCj4gPj4gdG8g
-aW5jbHVkZSB0aGF0IHBpbGUgb2YgcGF0Y2hlcyBpbiB5b3VyIGludGVncmF0aW9uIGJyYW5jaCB0
-aGF0IEkNCj4gPj4gc3VnZ2VzdGVkIGFib3ZlLg0KPiANCj4gPiBUaGUgY3VycmVudCBzZXJpZXMg
-b25seSBpbnRyb2R1Y2UgYnVzZnJlcSBnZW5lcmljIGRyaXZlciwgYW5kIHRoZQ0KPiA+IGJ1c2Zy
-ZXEgZHJpdmVyIGZvciB0aGUgaW14OG1tLg0KPiA+IEFzIGlzLCB0aGUgaW14OG1tIGRyaXZlciB3
-aWxsIGp1c3QgYmUgbG9hZGVkLCBidXQgZG8gbm90aGluZyBiZWNhdXNlDQo+ID4gbm9uZSBvZiB0
-aGUgZHJpdmVycyBoYXZlIGJlZW4gdXBkYXRlZCB0byByZXF1ZXN0IGJhbmR3aWR0aCB1c2luZyB0
-aGUNCj4gPiBpbnRlcmNvbm5lY3QgZnJhbWV3b3JrLg0KPiA+DQo+ID4gTXkgaW50ZW50IHdhcyB0
-byBzZW50IGEgZmlyc3QgZHJhZnQgbyBidXNmcmVxLCB0byBnZXQgc29tZSBmZWVkYmFjaywNCj4g
-PiBiZWZvcmUgdG8gc2VuZCBhIG1vcmUgY29tcGxldGUsIGFuZCBmdWxseSBmdW5jdGlvbmFsIHNl
-cmllcy4NCj4gDQo+IEl0J3MgYmVlbiBhIHdoaWxlIHNpbmNlIHRoaXMgd2FzIGZpcnN0IHBvc3Rl
-ZCBhbmQgaW14OG1tIG5vdyBib290cyBmaW5lIGluDQo+IGxpbnV4LW5leHQuIElzIHRoZXJlIGEg
-bW9yZSB1cC10by1kYXRlIFdJUCBicmFuY2ggc29tZXdoZXJlPw0KPiBPdGhlcndpc2UgSSBjYW4g
-dHJ5IHRvIGhhY2sgdGhpcyBzZXJpZXMgaW50byBhIGJvb3RhYmxlIGZvcm0uDQo+IA0KPiAgPiBJ
-biBhZGRpdGlvbiwgdGhlIGN1cnJlbnQgY2xvY2sgZHJpdmVyIG9mIGlteDhtbSBkb2Vzbid0IGFs
-bG93IGRyYW0gID4NCj4gZnJlcXVlbmN5IHNjYWxpbmcsIHNvIGlmIGJ1c2ZyZXEgZHJpdmVyIHRy
-aWVzLCBpdCB3aWxsIGZhaWwgKHNob3VsZCBiZSAgPiBoYXJtbGVzcw0KPiBiZWNhdXNlIGFueSBv
-dGhlciBjbG9ja3Mgc2hvdWxkIHJlc3RvcmVkIHRvIHRoZWlyIHByZXZpb3VzICA+IHJhdGUpLg0K
-PiANCj4gSSdtIGNvbmZ1c2VkIGFib3V0IHRoaXMuIEluIE5YUCB0cmVlIHRoZSBhY3R1YWwgRFJB
-TSBzd2l0Y2ggaXMgZG9uZSBpbnNpZGUNCj4gQVRGIHZpYSBTSVAgY2FsbHMgYW5kIGludm9sdmVz
-IGNvcnJhbGxpbmcgYWxsIENQVXMuIERvIHlvdSB3YW50IGFuICJkcmFtIiBjbGsNCj4gd2hpY2gg
-d3JhcHMgdGhlIFNJUCBjYWxscyByZXF1aXJlZCB0byBjaGFuZ2luZyBkcmFtIGZyZXF1ZW5jeSBh
-bmQgcm9vdA0KPiBzd2l0Y2hpbmcgZXRjPw0KPiANCj4gSSd2ZSBiZWVuIGxvb2tpbmcgYXQgdGhl
-IGJ1c2ZyZXEgaW1wbGVtZW50YXRpb24gaW4gdGhlIE5YUCB0cmVlIGFuZA0KPiByZWZhY3Rvcmlu
-ZyBqdXN0IHRoZSAiZHJhbSBmcmVxIHN3aXRjaCIgYmVoaW5kIGEgY2xrIG1pZ2h0IHdvcmsgbmlj
-ZWx5Lg0KPiANCj4gVGhpcyB3b3VsZCBiZSBzaW1pbGFyIHRvIHRoZSBpbXhfY3B1IGNsayB1c2Vk
-IGZvciBjcHVmcmVxLWR0IGFuZCBpdCBtaWdodA0KPiBldmVuIGJlIHBvc3NpYmxlIHRvIHVwc3Ry
-ZWFtIHRoaXMgc2VwYXJhdGVseSBmcm9tIHRoZSByZXN0IG9mIGJ1c2ZyZXEgbG9naWMNCj4gZGVh
-bGluZyB3aXRoIGRldmljZSByZXF1ZXN0cy4NCj4gDQo+IA0KPiBJIGhhdmVuJ3QgZG9uZSBhIHZl
-cnkgY2FyZWZ1bCByZXZpZXcgYnV0IEkgbm90aWNlZCB5b3UncmUgbm90IHVzaW5nIHRoZSBPUFAN
-Cj4gZnJhbWV3b3JrIGFuZCBpbnN0ZWFkIHJlZGVmaW5lZCBldmVyeXRoaW5nPyBJdCdzIG5vdCBj
-bGVhciB3aHkuDQo+IA0KPiAtLQ0KPiBSZWdhcmRzLA0KPiBMZW9uYXJkDQo=
+Em Mon, 3 Jun 2019 09:32:54 +0200
+Christophe Leroy <christophe.leroy@c-s.fr> escreveu:
+
+> Le 30/05/2019 =C3=A0 01:23, Mauro Carvalho Chehab a =C3=A9crit=C2=A0:
+> > Sphinx doesn't like orphan documents:
+> >=20
+> >      Documentation/accelerators/ocxl.rst: WARNING: document isn't inclu=
+ded in any toctree
+> >      Documentation/arm/stm32/overview.rst: WARNING: document isn't incl=
+uded in any toctree
+> >      Documentation/arm/stm32/stm32f429-overview.rst: WARNING: document =
+isn't included in any toctree
+> >      Documentation/arm/stm32/stm32f746-overview.rst: WARNING: document =
+isn't included in any toctree
+> >      Documentation/arm/stm32/stm32f769-overview.rst: WARNING: document =
+isn't included in any toctree
+> >      Documentation/arm/stm32/stm32h743-overview.rst: WARNING: document =
+isn't included in any toctree
+> >      Documentation/arm/stm32/stm32mp157-overview.rst: WARNING: document=
+ isn't included in any toctree
+> >      Documentation/gpu/msm-crash-dump.rst: WARNING: document isn't incl=
+uded in any toctree
+> >      Documentation/interconnect/interconnect.rst: WARNING: document isn=
+'t included in any toctree
+> >      Documentation/laptops/lg-laptop.rst: WARNING: document isn't inclu=
+ded in any toctree
+> >      Documentation/powerpc/isa-versions.rst: WARNING: document isn't in=
+cluded in any toctree
+> >      Documentation/virtual/kvm/amd-memory-encryption.rst: WARNING: docu=
+ment isn't included in any toctree
+> >      Documentation/virtual/kvm/vcpu-requests.rst: WARNING: document isn=
+'t included in any toctree
+> >=20
+> > So, while they aren't on any toctree, add :orphan: to them, in order
+> > to silent this warning. =20
+>=20
+> Are those files really not meant to be included in a toctree ?
+>=20
+> Shouldn't we include them in the relevant toctree instead of just=20
+> shutting up Sphinx warnings ?
+
+This is a good point. My understanding is that those orphaned docs
+are there for two reasons:
+
+1) someone created a new document as .rst but there's no index.rst file yet,
+as there are lots of other documents already there not converted. That's
+the case, for example, of the ones under Documentation/arm;
+
+2) They're part of an undergoing effort of converting stuff to ReST.
+One opted to keep it orphaned temporarily in order to avoid merge
+conflicts.
+
+That's said, I have myself a big (/86 patches and growing) series
+with do a huge step on txt->rst conversion (it covers a significant
+amount of documentation). On this series, I'm removing the orphaned
+tags for several files (including, for example, those at Documentation/arm).
+
+Yet, it is a lot easier to see if such series is not introducing
+warnings regressions if we first address those.
+
+It should be notice that discovering the orphaned files should be as
+simple as:
+
+	git grep -l ":orphan:" Documentation
+
+>=20
+> Christophe
+>=20
+> >=20
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> > ---
+> >   Documentation/accelerators/ocxl.rst                 | 2 ++
+> >   Documentation/arm/stm32/overview.rst                | 2 ++
+> >   Documentation/arm/stm32/stm32f429-overview.rst      | 2 ++
+> >   Documentation/arm/stm32/stm32f746-overview.rst      | 2 ++
+> >   Documentation/arm/stm32/stm32f769-overview.rst      | 2 ++
+> >   Documentation/arm/stm32/stm32h743-overview.rst      | 2 ++
+> >   Documentation/arm/stm32/stm32mp157-overview.rst     | 2 ++
+> >   Documentation/gpu/msm-crash-dump.rst                | 2 ++
+> >   Documentation/interconnect/interconnect.rst         | 2 ++
+> >   Documentation/laptops/lg-laptop.rst                 | 2 ++
+> >   Documentation/powerpc/isa-versions.rst              | 2 ++
+> >   Documentation/virtual/kvm/amd-memory-encryption.rst | 2 ++
+> >   Documentation/virtual/kvm/vcpu-requests.rst         | 2 ++
+> >   13 files changed, 26 insertions(+)
+> >=20
+> > diff --git a/Documentation/accelerators/ocxl.rst b/Documentation/accele=
+rators/ocxl.rst
+> > index 14cefc020e2d..b1cea19a90f5 100644
+> > --- a/Documentation/accelerators/ocxl.rst
+> > +++ b/Documentation/accelerators/ocxl.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+> >   OpenCAPI (Open Coherent Accelerator Processor Interface)
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+> > diff --git a/Documentation/arm/stm32/overview.rst b/Documentation/arm/s=
+tm32/overview.rst
+> > index 85cfc8410798..f7e734153860 100644
+> > --- a/Documentation/arm/stm32/overview.rst
+> > +++ b/Documentation/arm/stm32/overview.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> >   STM32 ARM Linux Overview
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> > diff --git a/Documentation/arm/stm32/stm32f429-overview.rst b/Documenta=
+tion/arm/stm32/stm32f429-overview.rst
+> > index 18feda97f483..65bbb1c3b423 100644
+> > --- a/Documentation/arm/stm32/stm32f429-overview.rst
+> > +++ b/Documentation/arm/stm32/stm32f429-overview.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   STM32F429 Overview
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >  =20
+> > diff --git a/Documentation/arm/stm32/stm32f746-overview.rst b/Documenta=
+tion/arm/stm32/stm32f746-overview.rst
+> > index b5f4b6ce7656..42d593085015 100644
+> > --- a/Documentation/arm/stm32/stm32f746-overview.rst
+> > +++ b/Documentation/arm/stm32/stm32f746-overview.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   STM32F746 Overview
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >  =20
+> > diff --git a/Documentation/arm/stm32/stm32f769-overview.rst b/Documenta=
+tion/arm/stm32/stm32f769-overview.rst
+> > index 228656ced2fe..f6adac862b17 100644
+> > --- a/Documentation/arm/stm32/stm32f769-overview.rst
+> > +++ b/Documentation/arm/stm32/stm32f769-overview.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   STM32F769 Overview
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >  =20
+> > diff --git a/Documentation/arm/stm32/stm32h743-overview.rst b/Documenta=
+tion/arm/stm32/stm32h743-overview.rst
+> > index 3458dc00095d..c525835e7473 100644
+> > --- a/Documentation/arm/stm32/stm32h743-overview.rst
+> > +++ b/Documentation/arm/stm32/stm32h743-overview.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   STM32H743 Overview
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >  =20
+> > diff --git a/Documentation/arm/stm32/stm32mp157-overview.rst b/Document=
+ation/arm/stm32/stm32mp157-overview.rst
+> > index 62e176d47ca7..2c52cd020601 100644
+> > --- a/Documentation/arm/stm32/stm32mp157-overview.rst
+> > +++ b/Documentation/arm/stm32/stm32mp157-overview.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   STM32MP157 Overview
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >  =20
+> > diff --git a/Documentation/gpu/msm-crash-dump.rst b/Documentation/gpu/m=
+sm-crash-dump.rst
+> > index 757cd257e0d8..240ef200f76c 100644
+> > --- a/Documentation/gpu/msm-crash-dump.rst
+> > +++ b/Documentation/gpu/msm-crash-dump.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >   MSM Crash Dump Format
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > diff --git a/Documentation/interconnect/interconnect.rst b/Documentatio=
+n/interconnect/interconnect.rst
+> > index c3e004893796..56e331dab70e 100644
+> > --- a/Documentation/interconnect/interconnect.rst
+> > +++ b/Documentation/interconnect/interconnect.rst
+> > @@ -1,5 +1,7 @@
+> >   .. SPDX-License-Identifier: GPL-2.0
+> >  =20
+> > +:orphan:
+> > +
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >   GENERIC SYSTEM INTERCONNECT SUBSYSTEM
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > diff --git a/Documentation/laptops/lg-laptop.rst b/Documentation/laptop=
+s/lg-laptop.rst
+> > index aa503ee9b3bc..f2c2ffe31101 100644
+> > --- a/Documentation/laptops/lg-laptop.rst
+> > +++ b/Documentation/laptops/lg-laptop.rst
+> > @@ -1,5 +1,7 @@
+> >   .. SPDX-License-Identifier: GPL-2.0+
+> >  =20
+> > +:orphan:
+> > +
+> >   LG Gram laptop extra features
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> >  =20
+> > diff --git a/Documentation/powerpc/isa-versions.rst b/Documentation/pow=
+erpc/isa-versions.rst
+> > index 812e20cc898c..66c24140ebf1 100644
+> > --- a/Documentation/powerpc/isa-versions.rst
+> > +++ b/Documentation/powerpc/isa-versions.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   CPU to ISA Version Mapping
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> >  =20
+> > diff --git a/Documentation/virtual/kvm/amd-memory-encryption.rst b/Docu=
+mentation/virtual/kvm/amd-memory-encryption.rst
+> > index 659bbc093b52..33d697ab8a58 100644
+> > --- a/Documentation/virtual/kvm/amd-memory-encryption.rst
+> > +++ b/Documentation/virtual/kvm/amd-memory-encryption.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >   Secure Encrypted Virtualization (SEV)
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > diff --git a/Documentation/virtual/kvm/vcpu-requests.rst b/Documentatio=
+n/virtual/kvm/vcpu-requests.rst
+> > index 5feb3706a7ae..c1807a1b92e6 100644
+> > --- a/Documentation/virtual/kvm/vcpu-requests.rst
+> > +++ b/Documentation/virtual/kvm/vcpu-requests.rst
+> > @@ -1,3 +1,5 @@
+> > +:orphan:
+> > +
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >   KVM VCPU Requests
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >  =20
+
+
+
+Thanks,
+Mauro
