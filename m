@@ -2,113 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1534133EA8
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 07:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8756D33EB7
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 08:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbfFDF4H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 01:56:07 -0400
-Received: from mail-eopbgr150040.outbound.protection.outlook.com ([40.107.15.40]:64398
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726136AbfFDF4G (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Jun 2019 01:56:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OLJR2noZj+wGG6nhOvygNVfsmoFck9iq4oUOu/BWka4=;
- b=h8vNoRaFa2SvKch5Dh/J5csll9XWZrbDuJgIXU+si+u20MQWpSKRfEAQ2ID+e1Ev2g5HXVYteQWOxdBjmvUlnDblJylXOXcTn02xM2exx9gnbK/shx4HX4B6xzo12ml6U9twVfKkxNR8c/vNwVX/rYMCpgH1AlXQsyEEUafenSE=
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (52.134.122.155) by
- VI1PR04MB4160.eurprd04.prod.outlook.com (52.133.15.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.21; Tue, 4 Jun 2019 05:56:02 +0000
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::497a:768:c7b1:34e0]) by VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::497a:768:c7b1:34e0%6]) with mapi id 15.20.1943.018; Tue, 4 Jun 2019
- 05:56:02 +0000
-From:   Andy Tang <andy.tang@nxp.com>
+        id S1726136AbfFDGEW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 02:04:22 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:35289 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726535AbfFDGEW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 02:04:22 -0400
+Received: by mail-wm1-f65.google.com with SMTP id c6so10385306wml.0
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jun 2019 23:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IMD2r3Yid/+jreP5E2/uS8uU5LMUjqGVrK/JC8BwSOo=;
+        b=PkJBe1ul3cBdhhUsXVEBS0x1SyMvDEvJ0aA7sZ8E61h88XUQQd3cC0xs1QGf82msPU
+         T6wOamZU7d4zwkErTTWS0Hea5Ltd3qg+D16pHyH5733Rp66h7GN5mej2ZWwBUhIopVvf
+         27ubFh2eHMxsdbvGjILiIwnyh3CCXqsdMm6OvlGTSWzkXELulYPx8OJMLgvuEMWw2am1
+         HFY71pkmGxRpqGwI01k0qBrvH5zjU+N9jLHJTR1oyWX+uBPNz3VJsW5uAoDQ8trIiYLi
+         XnCXE42XRDJeycNAWAccHr1vO/g0JkilesYqwXtHf27ZCT4fadY7b709G0ml/Pt2xb3/
+         PFzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=IMD2r3Yid/+jreP5E2/uS8uU5LMUjqGVrK/JC8BwSOo=;
+        b=OYkO0oZSre1L7hcDBQOnDCDYL/FkxZiR/GKHPM2lAOEFz86CVZKmnTcERhqPjErFiH
+         /sqFnwHyX0lipOTlkisgaPPj5GgLIZEd5cozarT43fXIqSYXOPVaWbt0VXJ+gDnbM30v
+         lrKYx3gZ8Uf7hdujINnedTPYvHugnVSoYJOjRUqztJUnPR6ziNQ5/eWFx8X25lv2bRLO
+         +wnDD7XyhlwGjOgHzQsXHsWYYH2FmkkUYaJG0/mHxnci1zvoCFlaB7FT912I9Q/0/QnE
+         ZTRNJByAM/jI0UjyTCMOnL3CFDGoUwRbNPY779TxvZRcm0nbYhLNN+IPE9j9Zq2Jn2f4
+         TBWQ==
+X-Gm-Message-State: APjAAAVfyfR781yt5SegNtQOvfrI2OIlhDG929LWGTihm/Uhu7avWKqS
+        Kcn/BoC6cT/9NNwWqNoXWqlRHE21I3k=
+X-Google-Smtp-Source: APXvYqzlkFwrgm6kkCegQ+I0rnr+62y4895ovFNqm2vxl8K6e2IoNzlkHPjkMBZ496Vz7COJfPF43w==
+X-Received: by 2002:a1c:dc45:: with SMTP id t66mr17313710wmg.63.1559628258737;
+        Mon, 03 Jun 2019 23:04:18 -0700 (PDT)
+Received: from [192.168.0.41] (sju31-1-78-210-255-2.fbx.proxad.net. [78.210.255.2])
+        by smtp.googlemail.com with ESMTPSA id v10sm15504262wml.27.2019.06.03.23.04.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 23:04:18 -0700 (PDT)
+Subject: Re: [PATCH] dt-bindings: thermal: Make cooling-maps property optional
 To:     Andy Tang <andy.tang@nxp.com>,
         "rui.zhang@intel.com" <rui.zhang@intel.com>,
         "edubezval@gmail.com" <edubezval@gmail.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] dt-bindings: thermal: Make cooling-maps property optional
-Thread-Topic: [PATCH] dt-bindings: thermal: Make cooling-maps property
- optional
-Thread-Index: AQHVCwLUH4zad13tsE2wQPY/IOtNWqaLHhGg
-Date:   Tue, 4 Jun 2019 05:56:02 +0000
-Message-ID: <VI1PR04MB43335AE882F7898F4DDD1A23F3150@VI1PR04MB4333.eurprd04.prod.outlook.com>
 References: <20190515093647.47656-1-andy.tang@nxp.com>
-In-Reply-To: <20190515093647.47656-1-andy.tang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=andy.tang@nxp.com; 
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 97805db3-16c1-44ec-5685-08d6e8b15386
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4160;
-x-ms-traffictypediagnostic: VI1PR04MB4160:
-x-microsoft-antispam-prvs: <VI1PR04MB416033AB65AB2A428F35904BF3150@VI1PR04MB4160.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 0058ABBBC7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(39860400002)(376002)(346002)(396003)(199004)(13464003)(189003)(53936002)(2201001)(26005)(486006)(44832011)(446003)(11346002)(76176011)(256004)(86362001)(68736007)(102836004)(6506007)(54906003)(229853002)(3846002)(71190400001)(53546011)(7696005)(33656002)(66066001)(110136005)(71200400001)(6116002)(99286004)(186003)(81156014)(8676002)(81166006)(9686003)(476003)(305945005)(2501003)(4326008)(14454004)(478600001)(55016002)(8936002)(316002)(7736002)(6436002)(73956011)(66946007)(2906002)(76116006)(25786009)(6246003)(66446008)(74316002)(66476007)(66556008)(64756008)(5660300002)(52536014);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4160;H:VI1PR04MB4333.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: LgC3BEr+Wm2cq0H0Cjm/RLqL3lRrglBWzUVqNjchEZ2jaKy56++nw8qnuSJ06hciJc/bAqwq2p8A7WKfzfY3NCG94fc9YppKLeT/0+sO5HGZJluBr6wkpwce/pwppqr6cAKP4qhdOINZ8YlKY6AZxSpQM6Qpn5MzgoQ9tf5yXaUpji1xiLv0xCCMtYAHp8FlvbeVS0tLPKSoRrvo/rc5kbthEDGY5wRDbPzvhgGNinG3V2V8tllRkrdQp6zpr8/zRDtdMRTsh1V/YTQ71lGrD4DGVVOQ7DFC2sQWLwo7+nAYKsc6PHjsRkENRkVWAVPPHl4fvVbVSW6W3uLbihdcZ1W4ohFuDwQd9/IWuDtzVcjpKeZ310pOg2HwncREwSdpxy7kMgVj0Z+1/Uhjbbuw9BNJHu7dB33qWe8I/2N7FHs=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+ <VI1PR04MB43335AE882F7898F4DDD1A23F3150@VI1PR04MB4333.eurprd04.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <f4675fc5-a7d1-1a6c-51ed-b6b6b599f5fe@linaro.org>
+Date:   Tue, 4 Jun 2019 08:04:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97805db3-16c1-44ec-5685-08d6e8b15386
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jun 2019 05:56:02.6312
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: andy.tang@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4160
+In-Reply-To: <VI1PR04MB43335AE882F7898F4DDD1A23F3150@VI1PR04MB4333.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=gbk
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgRWR1YmV6dmFsLCBSdWksDQoNCkFueSBmdXJ0aGVyIGNvbW1lbnRzPw0KDQpCUiwNCkFuZHkN
-Cg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBZdWFudGlhbiBUYW5nIDxh
-bmR5LnRhbmdAbnhwLmNvbT4NCj4gU2VudDogMjAxOcTqNdTCMTXI1SAxNzozNw0KPiBUbzogcnVp
-LnpoYW5nQGludGVsLmNvbTsgZWR1YmV6dmFsQGdtYWlsLmNvbQ0KPiBDYzogcm9iaCtkdEBrZXJu
-ZWwub3JnOyBkYW5pZWwubGV6Y2Fub0BsaW5hcm8ub3JnOyBtYXJrLnJ1dGxhbmRAYXJtLmNvbTsN
-Cj4gbGludXgtcG1Admdlci5rZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsN
-Cj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgQW5keSBUYW5nIDxhbmR5LnRhbmdAbnhw
-LmNvbT4NCj4gU3ViamVjdDogW1BBVENIXSBkdC1iaW5kaW5nczogdGhlcm1hbDogTWFrZSBjb29s
-aW5nLW1hcHMgcHJvcGVydHkgb3B0aW9uYWwNCj4gDQo+IFRoZXJlIG1heSBiZSBubyBjb29saW5n
-IGRldmljZSBvbiBzeXN0ZW0sIG9yIHRoZXJlIGFyZSBubyBlbm91Z2ggY29vbGluZw0KPiBkZXZp
-Y2VzIGZvciBlYWNoIHRoZXJtYWwgem9uZSBpbiBtdWx0aXBsZSB0aGVybWFsIHpvbmUgY2FzZXMg
-c2luY2UgY29vbGluZw0KPiBkZXZpY2VzIGNhbid0IGJlIHNoYXJlZC4NCj4gU28gbWFrZSB0aGlz
-IHByb3BlcnR5IG9wdGlvbmFsIHRvIHJlbW92ZSBzdWNoIGxpbWl0YXRpb25zLg0KPiANCj4gU2ln
-bmVkLW9mZi1ieTogWXVhbnRpYW4gVGFuZyA8YW5keS50YW5nQG54cC5jb20+DQo+IC0tLQ0KPiAg
-Li4uL2RldmljZXRyZWUvYmluZGluZ3MvdGhlcm1hbC90aGVybWFsLnR4dCAgICAgICAgfCAgICA0
-ICsrLS0NCj4gIDEgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygt
-KQ0KPiANCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy90
-aGVybWFsL3RoZXJtYWwudHh0DQo+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L3RoZXJtYWwvdGhlcm1hbC50eHQNCj4gaW5kZXggY2ExNGJhOS4uNjk0ZTgzNCAxMDA2NDQNCj4g
-LS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3RoZXJtYWwvdGhlcm1hbC50
-eHQNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3RoZXJtYWwvdGhl
-cm1hbC50eHQNCj4gQEAgLTE0MiwxMSArMTQyLDExIEBAIFJlcXVpcmVkIHByb3BlcnRpZXM6DQo+
-ICAtIHRyaXBzOgkJQSBzdWItbm9kZSB3aGljaCBpcyBhIGNvbnRhaW5lciBvZiBvbmx5IHRyaXAg
-cG9pbnQgbm9kZXMNCj4gICAgVHlwZTogc3ViLW5vZGUJcmVxdWlyZWQgdG8gZGVzY3JpYmUgdGhl
-IHRoZXJtYWwgem9uZS4NCj4gDQo+ICsNCj4gK09wdGlvbmFsIHByb3BlcnR5Og0KPiAgLSBjb29s
-aW5nLW1hcHM6CQlBIHN1Yi1ub2RlIHdoaWNoIGlzIGEgY29udGFpbmVyIG9mIG9ubHkgY29vbGlu
-ZyBkZXZpY2UNCj4gICAgVHlwZTogc3ViLW5vZGUJbWFwIG5vZGVzLCB1c2VkIHRvIGRlc2NyaWJl
-IHRoZSByZWxhdGlvbiBiZXR3ZWVuDQo+IHRyaXBzDQo+ICAJCQlhbmQgY29vbGluZyBkZXZpY2Vz
-Lg0KPiAtDQo+IC1PcHRpb25hbCBwcm9wZXJ0eToNCj4gIC0gY29lZmZpY2llbnRzOgkJQW4gYXJy
-YXkgb2YgaW50ZWdlcnMgKG9uZSBzaWduZWQgY2VsbCkgY29udGFpbmluZw0KPiAgICBUeXBlOiBh
-cnJheQkJY29lZmZpY2llbnRzIHRvIGNvbXBvc2UgYSBsaW5lYXIgcmVsYXRpb24gYmV0d2Vlbg0K
-PiAgICBFbGVtIHNpemU6IG9uZSBjZWxsCXRoZSBzZW5zb3JzIGxpc3RlZCBpbiB0aGUgdGhlcm1h
-bC1zZW5zb3JzIHByb3BlcnR5Lg0KPiAtLQ0KPiAxLjcuMQ0KDQo=
+On 04/06/2019 07:56, Andy Tang wrote:
+> Hi Edubezval, Rui,
+> 
+> Any further comments?
+
+From my POV, this patch makes sense. We may be interested to show up the
+thermal zones in sysfs and optionally mitigate them via an userspace
+governor.
+
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+>> -----Original Message-----
+>> From: Yuantian Tang <andy.tang@nxp.com>
+>> Sent: 2019Äê5ÔÂ15ÈÕ 17:37
+>> To: rui.zhang@intel.com; edubezval@gmail.com
+>> Cc: robh+dt@kernel.org; daniel.lezcano@linaro.org; mark.rutland@arm.com;
+>> linux-pm@vger.kernel.org; devicetree@vger.kernel.org;
+>> linux-kernel@vger.kernel.org; Andy Tang <andy.tang@nxp.com>
+>> Subject: [PATCH] dt-bindings: thermal: Make cooling-maps property optional
+>>
+>> There may be no cooling device on system, or there are no enough cooling
+>> devices for each thermal zone in multiple thermal zone cases since cooling
+>> devices can't be shared.
+>> So make this property optional to remove such limitations.
+>>
+>> Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+>> ---
+>>  .../devicetree/bindings/thermal/thermal.txt        |    4 ++--
+>>  1 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/thermal/thermal.txt
+>> b/Documentation/devicetree/bindings/thermal/thermal.txt
+>> index ca14ba9..694e834 100644
+>> --- a/Documentation/devicetree/bindings/thermal/thermal.txt
+>> +++ b/Documentation/devicetree/bindings/thermal/thermal.txt
+>> @@ -142,11 +142,11 @@ Required properties:
+>>  - trips:		A sub-node which is a container of only trip point nodes
+>>    Type: sub-node	required to describe the thermal zone.
+>>
+>> +
+>> +Optional property:
+>>  - cooling-maps:		A sub-node which is a container of only cooling device
+>>    Type: sub-node	map nodes, used to describe the relation between
+>> trips
+>>  			and cooling devices.
+>> -
+>> -Optional property:
+>>  - coefficients:		An array of integers (one signed cell) containing
+>>    Type: array		coefficients to compose a linear relation between
+>>    Elem size: one cell	the sensors listed in the thermal-sensors property.
+>> --
+>> 1.7.1
+> 
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org ©¦ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
