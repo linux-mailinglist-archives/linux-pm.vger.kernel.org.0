@@ -2,149 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1CA3515B
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 22:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500BC352DF
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 00:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726305AbfFDUwp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 16:52:45 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:33342 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726261AbfFDUwp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 16:52:45 -0400
-Received: by mail-wm1-f68.google.com with SMTP id v19so291854wmh.0
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jun 2019 13:52:44 -0700 (PDT)
+        id S1726416AbfFDWzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 18:55:11 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39920 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726399AbfFDWzK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 18:55:10 -0400
+Received: by mail-lj1-f194.google.com with SMTP id v18so196050ljh.6;
+        Tue, 04 Jun 2019 15:55:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HCHz30SDnTrnAv/weztZxXoYbAkSe2tsArruuDkoSAw=;
-        b=o95o2AtV3WDFGyw1md9OSwObrbp+2ZQKkNV6T0JhyFOOnZVCIONv7VMW3w2kRXmQrQ
-         Y1XC3qGKWVyhoR62ffMrKm80dj/uSTijSjWiIKa2mgSf1SrkeWTQYQIEXlCbeNcEWXKs
-         /k6m/rK93raHxP9W3lCee8kaKnDUlcuiWqj4+k6wG5YIJf35urPMB8GdwN28fg/SbR/v
-         DBTed768GKWrqbXE6cXIDf1ewEDRHu1nGJApaegknzDYL+UCwG7ptPm9hcLqH6pVAv0S
-         6C+1hT46h0GbPwjAqjv2gdjKRDBr5T94Wuz9u0HODtT0xlH00B0ZjRsXI7zY7MS2v7KU
-         4Pew==
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fePBt3r1OxgAuxOQl6GJ/UfKTptcITLj0x1ZlMv6DJs=;
+        b=OVBtu/FlF0G44Y21xdUsHsOmmnkrrGiuH6YzEU7dI9KthThMC+p2AHu8d1tkDCaqYP
+         xPRClOoWr/3JxwGpIFYpx4NPOPbO9xRTrKshJRqVWJC/v5oHku+GEjJxPULC4Nauun5f
+         SAT2/3X0dH6i7+fBNV2HwTFWjE59JDmKdDTXeq8TxrROJ717c8nkeNUVgHGtGZe3cRt0
+         soM4wAgr0GEjpr7uDR4wrRba6aDhE/32EcdtZ4bWpxxTpaF/jQN6axFwJW9lqcAi8MEF
+         OnEr3hvvO9Z3xsGnj+SP/QVHmZ7oBx7z2njSCMMp3NEIJGI4vJ12FskCWj9jC5QDhIRN
+         OmGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HCHz30SDnTrnAv/weztZxXoYbAkSe2tsArruuDkoSAw=;
-        b=hZHThkCSFb+01iruL/r2FIIg/4n7lr7nuQQ4NFuP2NLn44g8aqMslsro9+M3i4WaKo
-         ZU7e8aVk2MmoqiI5Nkf3AqARPyMEwCOMKPGpDqTxkzPgmjhKvuBB1Es82drhLOh+JtYP
-         BpEhp5FmVIud3AZ9ANdhrcCMehD2uOMNnFmBVEpDLHXKdAfVqNIyz7qlhQmp/nlXTYvb
-         AFn4/yv7pyEFhH4QyNScevYjSkmkge7+qm7k9Uwl76zh92t1ROvxVc+KVs1uh9m6vYia
-         5RZGZbM3YbYzxLrNmtOdWG36hS9J8w/yobLnSaVItCMd9AvAbc5kzB/14RN/ZUd7zm+K
-         hxtA==
-X-Gm-Message-State: APjAAAX3zLeGy4dtQoVNj2EMdZD+HndGZCxV240HL8XpBfLXY1HC7Cl0
-        AoWAlp4RiNOdBX4r5Tz72hyY/WWjMQ48THwNlz/F
-X-Google-Smtp-Source: APXvYqxnV0SOZU/4nmV4NDSQJrqHsnlSq+yDN6cgoSvSwJwPyNnfdu2T/8ZwVNxho0MnA27Ys385vKc1uhUJ75TsjKc=
-X-Received: by 2002:a1c:f507:: with SMTP id t7mr19658456wmh.149.1559681563071;
- Tue, 04 Jun 2019 13:52:43 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fePBt3r1OxgAuxOQl6GJ/UfKTptcITLj0x1ZlMv6DJs=;
+        b=H6TAI8xGhy+kFBxcsiCDAF/5djpUu80PVCA5VkzlaixrTgCvih/Qi1jmMh5AgiV2x+
+         MVjqQcBjPa+eEoitDxRzdqXg02tFPGSCgY+/wHTQq9Y5cdrG5mMxG1cWWzSdr6nVBIGv
+         Z27tGsTQ2rLWWaeiyzpG3E2UYGIgRx/Xybna88ZoF3Xs/OuHWarP37U/C0C7lbhTHQ86
+         +97lyvkpnjrwDSkyGgtehb5LefLRL+xH09tgNKB1N8ySP68sSiWWCZdgfrccNaZRjYcO
+         aBEs9XJY8tU2MvBLNRgHjFkXjeGE1EEyFey6fIY5Ri9wUmDpKhE2I577eAjkPshl1neZ
+         nZQg==
+X-Gm-Message-State: APjAAAX9TLVak8NQPuvTaodnVuXq3MC1SC0szlTJTD1GRQjkyE4jqGk2
+        XteW5oD/8o42Q3b+VX5bDU+Ws/Wc
+X-Google-Smtp-Source: APXvYqwvaU/UnvKRfaK79XRAdEBiQsJD7KsDgnP6BL/6BvHzdD+gmPeHxABHVMU4b8YEosJwRqi0PQ==
+X-Received: by 2002:a2e:9c4a:: with SMTP id t10mr12552333ljj.197.1559688907959;
+        Tue, 04 Jun 2019 15:55:07 -0700 (PDT)
+Received: from [192.168.2.145] ([94.29.35.141])
+        by smtp.googlemail.com with ESMTPSA id y2sm3933163lfc.35.2019.06.04.15.55.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 04 Jun 2019 15:55:06 -0700 (PDT)
+Subject: Re: [PATCH v4 07/16] PM / devfreq: tegra: Properly disable interrupts
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190501233815.32643-1-digetx@gmail.com>
+ <20190501233815.32643-8-digetx@gmail.com> <20190604110744.GG16519@ulmo>
+ <c2f2a8c8-1f30-34aa-9b95-a7a44e0ec96f@gmail.com>
+Message-ID: <2b09a162-a090-901b-01cf-46b116a87a7a@gmail.com>
+Date:   Wed, 5 Jun 2019 01:55:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <20190521130357.20803-1-miquel.raynal@bootlin.com>
- <20190521130357.20803-3-miquel.raynal@bootlin.com> <CAErSpo5i3y4CxZXV7E4tUR66uXaUa3B_-YT2+zfzZUGMmge7Ow@mail.gmail.com>
- <20190527154610.6d4d5eff@xps13>
-In-Reply-To: <20190527154610.6d4d5eff@xps13>
-From:   Bjorn Helgaas <bhelgaas@google.com>
-Date:   Tue, 4 Jun 2019 15:52:31 -0500
-Message-ID: <CAErSpo7fimH5QhHTLsF2ASyPqstkw7Zibe3CYB=KXTYBOh-4GQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] clk: mvebu: armada-37xx-periph: change
- suspend/resume time
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Antoine Tenart <antoine.tenart@bootlin.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Nadav Haklai <nadavh@marvell.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <c2f2a8c8-1f30-34aa-9b95-a7a44e0ec96f@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 27, 2019 at 8:46 AM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
->
-> Hi Bjorn,
->
-> Thanks for the feedback.
->
-> Bjorn Helgaas <bhelgaas@google.com> wrote on Tue, 21 May 2019 17:43:05
-> -0500:
->
-> > From: Miquel Raynal <miquel.raynal@bootlin.com>
-> > Date: Tue, May 21, 2019 at 8:04 AM
-> > To: Michael Turquette, Stephen Boyd, Rob Herring, Mark Rutland
-> > Cc: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>, Thomas
-> > Petazzoni, Antoine Tenart, Gregory Clement, Maxime Chevallier, Nadav
-> > Haklai, Bjorn Helgaas, Rafael J . Wysocki, <linux-pm@vger.kernel.org>,
-> > Miquel Raynal
-> >
-> > > Armada 3700 PCIe IP relies on the PCIe clock managed by this
-> > > driver. For reasons related to the PCI core's organization when
-> > > suspending/resuming, PCI host controller drivers must reconfigure
-> > > their register at suspend_noirq()/resume_noirq() which happens after
-> > > suspend()/suspend_late() and before resume_early()/resume().
-> >
-> > "For reasons related to the PCI core's organization" manages to
-> > suggest that this change wouldn't be needed if only the PCI core did
-> > something differently, without actually being specific about what it
-> > would need to do differently.
-> >
-> > Is there something the PCI core could do better to make this easier?
-> > Or is it just something like "the PCI core needs to access registers
-> > after suspend_late()"?  You mention the host controller, but of course
-> > that's not itself a PCI device, so the PCI core doesn't have much to
-> > do with it directly.
->
-> Actually, if I understand correctly the below commit [1] and the core
-> [2] & [3], PCI device fixups can happen at any time, including at the
-> _noirq phase where, obviously, the PCI controller must be already
-> setup.
->
-> I don't think changing this behavior is a viable solution and I would
-> not see it as a "PCI core could do better" alternative.
->
-> ---8<---
->
-> [1]
-> commit ab14d45ea58eae67c739e4ba01871cae7b6c4586
-> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Date:   Tue Mar 17 15:55:45 2015 +0100
->
->     PCI: mvebu: Add suspend/resume support
->
->     Add suspend/resume support for the mvebu PCIe host driver.  Without
->     this commit, the system will panic at resume time when PCIe devices
->     are connected.
->
->     Note that we have to use the ->suspend_noirq() and ->resume_noirq()
->     hooks, because at resume time, the PCI fixups are done at
->     ->resume_noirq() time, so the PCIe controller has to be ready at
->     this point.
->
->     Signed-off-by: Thomas Petazzoni
->     <thomas.petazzoni@free-electrons.com> Signed-off-by: Bjorn Helgaas
->     <bhelgaas@google.com> Acked-by: Jason Cooper <jason@lakedaemon.net>
->
-> [2] https://elixir.bootlin.com/linux/v5.2-rc1/source/drivers/pci/pci-driver.c#L1181
-> [3] https://elixir.bootlin.com/linux/v5.2-rc1/source/drivers/pci/pci-driver.c#L522
->
-> --->8---
->
-> >
-> > s/register/registers/ ?
->
-> Indeed. I would like to sort out the above technical point before
-> sending a v3 with this typo corrected.
+04.06.2019 16:40, Dmitry Osipenko пишет:
+> 04.06.2019 14:07, Thierry Reding пишет:
+>> On Thu, May 02, 2019 at 02:38:06AM +0300, Dmitry Osipenko wrote:
+>>> There is no guarantee that interrupt handling isn't running in parallel
+>>> with tegra_actmon_disable_interrupts(), hence it is necessary to protect
+>>> DEV_CTRL register accesses and clear IRQ status with ACTMON's IRQ being
+>>> disabled in the Interrupt Controller in order to ensure that device
+>>> interrupt is indeed being disabled.
+>>>
+>>> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>> ---
+>>>  drivers/devfreq/tegra-devfreq.c | 21 +++++++++++++++------
+>>>  1 file changed, 15 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
+>>> index b65313fe3c2e..ce1eb97a2090 100644
+>>> --- a/drivers/devfreq/tegra-devfreq.c
+>>> +++ b/drivers/devfreq/tegra-devfreq.c
+>>> @@ -171,6 +171,8 @@ struct tegra_devfreq {
+>>>  	struct notifier_block	rate_change_nb;
+>>>  
+>>>  	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs)];
+>>> +
+>>> +	int irq;
+>>
+>> Interrupts are typically unsigned int.
+>>
+>>>  };
+>>>  
+>>>  struct tegra_actmon_emc_ratio {
+>>> @@ -417,6 +419,8 @@ static void tegra_actmon_disable_interrupts(struct tegra_devfreq *tegra)
+>>>  	u32 val;
+>>>  	unsigned int i;
+>>>  
+>>> +	disable_irq(tegra->irq);
+>>> +
+>>>  	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++) {
+>>>  		dev = &tegra->devices[i];
+>>>  
+>>> @@ -427,9 +431,14 @@ static void tegra_actmon_disable_interrupts(struct tegra_devfreq *tegra)
+>>>  		val &= ~ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
+>>>  
+>>>  		device_writel(dev, val, ACTMON_DEV_CTRL);
+>>> +
+>>> +		device_writel(dev, ACTMON_INTR_STATUS_CLEAR,
+>>> +			      ACTMON_DEV_INTR_STATUS);
+>>>  	}
+>>>  
+>>>  	actmon_write_barrier(tegra);
+>>> +
+>>> +	enable_irq(tegra->irq);
+>>
+>> Why do we enable interrupts after this? Is there any use in having the
+>> top-level interrupt enabled if nothing's going to generate an interrupt
+>> anyway?
+> 
+> There is no real point in having the interrupt enabled other than to
+> keep the enable count balanced.
+> 
+> IIUC, we will need to disable IRQ at the driver's probe time (after
+> requesting the IRQ) if we want to avoid that (not really necessary)
+> balancing. This is probably something that could be improved in a
+> follow-up patches, if desired.
 
-I don't have anything more to contribute here; just wanted to make
-sure this wasn't working around a fixable problem in PCI.
+Nah, it's not worth the effort. It is quite problematic that we can't
+keep interrupt disabled during of devfreq_add_device() execution because
+it asks governor to enable the interrupt and the interrupt shall be
+disabled because we're using device's lock in the governor interrupt
+handler.. device is getting assigned only after completion of the
+devfreq_add_device() and hence ISR gets a NULL deref if it is fired
+before device is assigned. So I'll leave this part as-is.
 
-Bjorn
+Thierry, please answer to all of the remaining patches where you had
+some concerns. I'll send out another series on top of this, addressing
+yours comments and fixing another bug that I spotted today.
