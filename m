@@ -2,171 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EF5344CE
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 12:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C381344D3
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 12:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727291AbfFDKyL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 06:54:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727088AbfFDKyL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Jun 2019 06:54:11 -0400
-Received: from oasis.local.home (unknown [146.247.46.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5A53624986;
-        Tue,  4 Jun 2019 10:54:03 +0000 (UTC)
-Date:   Tue, 4 Jun 2019 06:53:58 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
-        kernel-hardening@lists.openwall.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [RFC 1/6] rcu: Add support for consolidated-RCU reader checking
-Message-ID: <20190604065358.73347ced@oasis.local.home>
-In-Reply-To: <20190603141847.GA94186@google.com>
-References: <20190601222738.6856-1-joel@joelfernandes.org>
-        <20190601222738.6856-2-joel@joelfernandes.org>
-        <20190603080128.GA3436@hirez.programming.kicks-ass.net>
-        <20190603141847.GA94186@google.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727157AbfFDKye (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 06:54:34 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:37280 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727107AbfFDKyd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 06:54:33 -0400
+Received: by mail-it1-f194.google.com with SMTP id s16so31564560ita.2
+        for <linux-pm@vger.kernel.org>; Tue, 04 Jun 2019 03:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=yj00L1DqZz3ramop68q8kGmlFHrJAtrMvkNasbTiMjg=;
+        b=mjuoUpcDX5t9brQrYRFEs66v9SLckgWVUJJdIfHmdNATTBOAI3HrE2f88+1RYmxj88
+         ZDTpFBeo9GnyK39uIhCuxWmDppYaccyxH9o+aewqxpGmgP2TTvM2st++fHmKzrWJqK/n
+         Xg6T32p8UBjfokunqooRGNZfL6vqlR5WvCJkB5g3gYcEAfRZQ3+CfqeD/S7JGDikHkCd
+         I/jZ+4ZUR2tweBnTYPsj22cMcGIj51aSSUJZ2ZSFQiRpvk/ZglJMacTQxLJISUY7UgQZ
+         OlD7iT+r84sm11dxe/C1l6TvyVHrDsGCMSqI05iiagt8PLuPxFC/4fIqX5Cl2LzhUKTd
+         Zu5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=yj00L1DqZz3ramop68q8kGmlFHrJAtrMvkNasbTiMjg=;
+        b=n6AN3diHVQmwxa0qVYzBpmH8FaclaZffwtdlhozfYae4qHlJxrjLC3m8p55gfVU1eW
+         WM/BIuCvmVtQv928jMUtU1V6W3d4lkI98l9UFkrzrfGe0Ezwhpqlf8e/k3al+r+XmQgU
+         9EvtKTLAbOesMn5MDFCuY94MFTOBJENy3etg9tldIqlzhi24NMlZ1MfkVEbhxDJLSEhK
+         HNL6m6CJ5mCpPWwHTI/btbBbumxFnGvv8a9FAzhuuj8WINv6BJzVqi1IxAsS4De/ZrRU
+         jEp8nwM6wos/kkCE3s6mQdv8TD/E1DmpI9cF6nobbrrSA9plXNThjn7kIWg24TZLyS8w
+         f7yA==
+X-Gm-Message-State: APjAAAUb0O/7NFU23yMO8PY6AhtZwYn7LZDE/h2P7Ga1Mwau0y1GjVD9
+        sfJMVDs8D+N38KvdrqJP6Ua0rHSmcgquUNPZCCc=
+X-Google-Smtp-Source: APXvYqzMP1Hzz8JXW8RZviQu0VnSxSaU4TQELeQI71/bOrXH8aa0A+DcVA8d+vGzP3POcmTwfYnH4FMX1Z4MKel/Az0=
+X-Received: by 2002:a24:3256:: with SMTP id j83mr14649645ita.17.1559645673184;
+ Tue, 04 Jun 2019 03:54:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a4f:9a42:0:0:0:0:0 with HTTP; Tue, 4 Jun 2019 03:54:32 -0700 (PDT)
+Reply-To: danielgnon60@gmail.com
+From:   Daniel Gnon <angelo7hopel@gmail.com>
+Date:   Tue, 4 Jun 2019 10:54:32 +0000
+Message-ID: <CAGyOvyB-40Y5DJYW5XPsKm6XpP-1Dx+Tp2mHN8tt7BasD2ngaQ@mail.gmail.com>
+Subject: Hello?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 3 Jun 2019 10:18:47 -0400
-Joel Fernandes <joel@joelfernandes.org> wrote:
+-- 
+Hello ?
 
-> On Mon, Jun 03, 2019 at 10:01:28AM +0200, Peter Zijlstra wrote:
-> > On Sat, Jun 01, 2019 at 06:27:33PM -0400, Joel Fernandes (Google) wrote:  
-> > > +#define list_for_each_entry_rcu(pos, head, member, cond...)		\
-> > > +	if (COUNT_VARGS(cond) != 0) {					\
-> > > +		__list_check_rcu_cond(0, ## cond);			\
-> > > +	} else {							\
-> > > +		__list_check_rcu();					\
-> > > +	}								\
-> > > +	for (pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
-> > > +		&pos->member != (head);					\
-> > >  		pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
-> > >  
-> > >  /**
-> > > @@ -621,7 +648,12 @@ static inline void hlist_add_behind_rcu(struct hlist_node *n,
-> > >   * the _rcu list-mutation primitives such as hlist_add_head_rcu()
-> > >   * as long as the traversal is guarded by rcu_read_lock().
-> > >   */
-> > > +#define hlist_for_each_entry_rcu(pos, head, member, cond...)		\
-> > > +	if (COUNT_VARGS(cond) != 0) {					\
-> > > +		__list_check_rcu_cond(0, ## cond);			\
-> > > +	} else {							\
-> > > +		__list_check_rcu();					\
-> > > +	}								\
-> > >  	for (pos = hlist_entry_safe (rcu_dereference_raw(hlist_first_rcu(head)),\
-> > >  			typeof(*(pos)), member);			\
-> > >  		pos;							\  
-> > 
-> > 
-> > This breaks code like:
-> > 
-> > 	if (...)
-> > 		list_for_each_entry_rcu(...);
-> > 
-> > as they are no longer a single statement. You'll have to frob it into
-> > the initializer part of the for statement.  
-> 
-> Thanks a lot for that. I fixed it as below (diff is on top of the patch):
-> 
-> If not for that '##' , I could have abstracted the whole if/else
-> expression into its own macro and called it from list_for_each_entry_rcu() to
-> keep it more clean.
-> 
-> ---8<-----------------------
-> 
-> diff --git a/include/linux/rculist.h b/include/linux/rculist.h
-> index b641fdd9f1a2..cc742d294bb0 100644
-> --- a/include/linux/rculist.h
-> +++ b/include/linux/rculist.h
-> @@ -371,12 +372,15 @@ static inline void list_splice_tail_init_rcu(struct list_head *list,
->   * as long as the traversal is guarded by rcu_read_lock().
->   */
->  #define list_for_each_entry_rcu(pos, head, member, cond...)		\
-> -	if (COUNT_VARGS(cond) != 0) {					\
-> -		__list_check_rcu_cond(0, ## cond);			\
-> -	} else {							\
-> -		__list_check_rcu();					\
-> -	}								\
-> -	for (pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
-> +	for (								\
-> +	     ({								\
-> +		if (COUNT_VARGS(cond) != 0) {				\
-> +			__list_check_rcu_cond(0, ## cond);		\
-> +		} else {						\
-> +			__list_check_rcu_nocond();			\
-> +		}							\
-> +	      }),							\
+My name is Daniel Gnon
 
-For easier to read I would do something like this:
-
-#define check_rcu_list(cond)						\
-	({								\
-		if (COUNT_VARGS(cond) != 0)				\
-			__list_check_rcu_cond(0, ## cond);		\
-		else							\
-			__list_check_rcu_nocond();			\
-	})
-
-#define list_for_each_entry_rcu(pos, head, member, cond...)		\
-	for (check_rcu_list(cond),					\
-
-
--- Steve
-
-> +	     pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
->  		&pos->member != (head);					\
->  		pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
->  
-> @@ -649,12 +653,15 @@ static inline void hlist_add_behind_rcu(struct hlist_node *n,
->   * as long as the traversal is guarded by rcu_read_lock().
->   */
->  #define hlist_for_each_entry_rcu(pos, head, member, cond...)		\
-> -	if (COUNT_VARGS(cond) != 0) {					\
-> -		__list_check_rcu_cond(0, ## cond);			\
-> -	} else {							\
-> -		__list_check_rcu();					\
-> -	}								\
-> -	for (pos = hlist_entry_safe (rcu_dereference_raw(hlist_first_rcu(head)),\
-> +	for (								\
-> +	     ({								\
-> +		if (COUNT_VARGS(cond) != 0) {				\
-> +			__list_check_rcu_cond(0, ## cond);		\
-> +		} else {						\
-> +			__list_check_rcu_nocond();			\
-> +		}							\
-> +	     }),							\
-> +	     pos = hlist_entry_safe (rcu_dereference_raw(hlist_first_rcu(head)),\
->  			typeof(*(pos)), member);			\
->  		pos;							\
->  		pos = hlist_entry_safe(rcu_dereference_raw(hlist_next_rcu(\
-
+I sent you this letter a month ago but I'm not sure if you have it, there
+is something I would like to discuss with you below is my personal email
+for more details
+Email  danielgnon60@gmail.com
