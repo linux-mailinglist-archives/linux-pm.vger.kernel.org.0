@@ -2,176 +2,243 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B848B349AB
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 16:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E92349BE
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 16:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727705AbfFDOBI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 10:01:08 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:33322 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727458AbfFDOBH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 10:01:07 -0400
-Received: by mail-lj1-f193.google.com with SMTP id v29so8514596ljv.0
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jun 2019 07:01:05 -0700 (PDT)
+        id S1727327AbfFDOGj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 10:06:39 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:37404 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727137AbfFDOGi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 10:06:38 -0400
+Received: by mail-wr1-f67.google.com with SMTP id h1so15991472wro.4;
+        Tue, 04 Jun 2019 07:06:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cCCcfuCqU/qdREtoEDzLnVLy4LPKMGX0jGv9c5Rh1B8=;
-        b=HJSNN4aGaVf75WsJzCiqd24YGmv+eZuyGZvznilJ1e+2a0cE9WH+E2w1582cVJHoki
-         7R15HFWDhBVWJe95YMNP8tx/FFttEqVFVHJwcCY7JKwNjDsvxC0GDd1Fsj1omDTbMOYV
-         9NMNrqjplqfUQr+pP71ijNH1O1RSDigcSsd0c=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5oG45nme3hdHX6i7eJJDdyXJn08RFQNe1Cw4gDr1kzo=;
+        b=l1kZXPTpG/h5SL2ppPG1oxH/50AMWod0fyK7H1k5L6XYNlLzOlWWk09nKzE7mZg1c3
+         0J47cOFkoaMVgS9KUREZp7nNVX0q2pOLkpWCNDUYlKEgxiNkh7Auci7Mn/w9kmWYPl3A
+         rWM+YqmOSnbvzwi4mzEhCFWWguAw9mN5Y+3eDhksTpluKc4tG62Wu3r3k+de78ak2mIX
+         ydKGBA0VDlIiH0SieVcggYd0IJDMH0tgSDeHaWj7MrUZrfi9v0Cuxe1Rq5YKS/dTJ4UL
+         l39suM+FMUxkEh9Yj8xEDTMXtwCWm7fGbMJ3tepMN3dL+nvtTWyyWoXpFOAV/EeQ+diu
+         04qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cCCcfuCqU/qdREtoEDzLnVLy4LPKMGX0jGv9c5Rh1B8=;
-        b=UlJOEVP0m66foGgYvOid0TKodidBKm2XA37iXBhTsP/cuCMHDnwn/KBY85/tMtjsNV
-         u48EsXBm7OgUjzbiRk3/y0e2BVsGMHoMuy5CNea30qEHaeBynCfDas+PzGgWmwDD5m2/
-         +ZRwqDFPMgu3pY+1mc0tGIbOOxpUbW6ihfYzq9TJXXlzRHgehJvW7E7+WEz9SMcMCkoh
-         dRPzMsJMXazNuwmIZlQmBtxv8cW2vBFpQDuILp88RfvfPHbVOXTJLQLzbT4Ay+Vu3IZZ
-         +iui93foTAWKIBprGus9+3rF9lwivNMECV0IQ2J7RjBapJQDmiof5pQAY9HjUW2J5WV4
-         htQQ==
-X-Gm-Message-State: APjAAAXfAzqQboeApt4d0WWe8ny+n8OJwGSMEBwWXwd94s7mj40h5/wf
-        +k4lJjIq/0gQ/0U4pHmYjvA5oQ==
-X-Google-Smtp-Source: APXvYqwG4oEZZFnE0bcH3TRJ/Wba3p5uDNigTPmrPwm+Ag78TvQVmitBkN+Um1v3cCkDe6yNMmLSRw==
-X-Received: by 2002:a2e:834f:: with SMTP id l15mr13058888ljh.56.1559656863956;
-        Tue, 04 Jun 2019 07:01:03 -0700 (PDT)
-Received: from [172.16.11.26] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id x27sm3831041ljm.52.2019.06.04.07.01.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jun 2019 07:01:03 -0700 (PDT)
-Subject: Re: [RFC 1/6] rcu: Add support for consolidated-RCU reader checking
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5oG45nme3hdHX6i7eJJDdyXJn08RFQNe1Cw4gDr1kzo=;
+        b=DyIWwEB/sv+t/laL3zXf1uZNiZLMPhgS75NVPvUgcxUzaTOcHz6fXOgqEFnAp7MOsx
+         VekEr3PUTjvPsgRvy6uzv7gb+AcZ8jvVqZf9hWi/S6J1Fg0f3d9of945pXyrZIKOgK98
+         d3SHTwFkgUf8PbJhtUebc0RKLBdfgWeLTwUT/TEHLaXpA2Sz2dzUv28AT+K/xGPlfIdi
+         Lsuh0oUQ+y4yYw+SsgSCJkRF24klEB+j46cI7Sqz32WDOlWWfw/dv2OJUWT+4P7v2ACC
+         I7LFajloR2uA+kG1VsTSh9plVLo4wzmnlRSfvpx9xVlgZmpwEqrza4Wtb7LlaCTCKVLz
+         yCig==
+X-Gm-Message-State: APjAAAXcGqxgZZM5WZ1MPOcTYimnYI4f2Jfb0skkZOW1GLeqiNL2uGgP
+        P9CCyR56pallef9xl8o+9SI=
+X-Google-Smtp-Source: APXvYqxhlCDI9+yb0eU9m/WoaaTM1EvdPdEoRaHkuWKwIv+ipPtNIqJMjpS48mhMWBPaZsqkR8UeMg==
+X-Received: by 2002:adf:fd09:: with SMTP id e9mr7283191wrr.292.1559657196193;
+        Tue, 04 Jun 2019 07:06:36 -0700 (PDT)
+Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
+        by smtp.gmail.com with ESMTPSA id k185sm2288618wma.3.2019.06.04.07.06.35
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 04 Jun 2019 07:06:35 -0700 (PDT)
+Date:   Tue, 4 Jun 2019 16:06:33 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
-        kernel-hardening@lists.openwall.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-References: <20190601222738.6856-1-joel@joelfernandes.org>
- <20190601222738.6856-2-joel@joelfernandes.org>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <0ff9e0e3-b9fb-8953-1f76-807102f785ee@rasmusvillemoes.dk>
-Date:   Tue, 4 Jun 2019 16:01:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+Subject: Re: [PATCH v4 07/16] PM / devfreq: tegra: Properly disable interrupts
+Message-ID: <20190604140633.GA397@ulmo>
+References: <20190501233815.32643-1-digetx@gmail.com>
+ <20190501233815.32643-8-digetx@gmail.com>
+ <20190604110744.GG16519@ulmo>
+ <c2f2a8c8-1f30-34aa-9b95-a7a44e0ec96f@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190601222738.6856-2-joel@joelfernandes.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="YZ5djTAD1cGYuMQK"
+Content-Disposition: inline
+In-Reply-To: <c2f2a8c8-1f30-34aa-9b95-a7a44e0ec96f@gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/06/2019 00.27, Joel Fernandes (Google) wrote:
-> This patch adds support for checking RCU reader sections in list
-> traversal macros. Optionally, if the list macro is called under SRCU or
-> other lock/mutex protection, then appropriate lockdep expressions can be
-> passed to make the checks pass.
-> 
-> Existing list_for_each_entry_rcu() invocations don't need to pass the
-> optional fourth argument (cond) unless they are under some non-RCU
-> protection and needs to make lockdep check pass.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  include/linux/rculist.h  | 40 ++++++++++++++++++++++++++++++++++++----
->  include/linux/rcupdate.h |  7 +++++++
->  kernel/rcu/update.c      | 26 ++++++++++++++++++++++++++
->  3 files changed, 69 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/rculist.h b/include/linux/rculist.h
-> index e91ec9ddcd30..b641fdd9f1a2 100644
-> --- a/include/linux/rculist.h
-> +++ b/include/linux/rculist.h
-> @@ -40,6 +40,25 @@ static inline void INIT_LIST_HEAD_RCU(struct list_head *list)
->   */
->  #define list_next_rcu(list)	(*((struct list_head __rcu **)(&(list)->next)))
->  
-> +/*
-> + * Check during list traversal that we are within an RCU reader
-> + */
-> +#define __list_check_rcu()						\
-> +	RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),			\
-> +			 "RCU-list traversed in non-reader section!")
-> +
-> +static inline void __list_check_rcu_cond(int dummy, ...)
-> +{
-> +	va_list ap;
-> +	int cond;
-> +
-> +	va_start(ap, dummy);
-> +	cond = va_arg(ap, int);
-> +	va_end(ap);
-> +
-> +	RCU_LOCKDEP_WARN(!cond && !rcu_read_lock_any_held(),
-> +			 "RCU-list traversed in non-reader section!");
-> +}
->  /*
->   * Insert a new entry between two known consecutive entries.
->   *
-> @@ -338,6 +357,9 @@ static inline void list_splice_tail_init_rcu(struct list_head *list,
->  						  member) : NULL; \
->  })
->  
-> +#define SIXTH_ARG(a1, a2, a3, a4, a5, a6, ...) a6
-> +#define COUNT_VARGS(...) SIXTH_ARG(dummy, ## __VA_ARGS__, 4, 3, 2, 1, 0)
-> +>  /**
->   * list_for_each_entry_rcu	-	iterate over rcu list of given type
->   * @pos:	the type * to use as a loop cursor.
-> @@ -348,9 +370,14 @@ static inline void list_splice_tail_init_rcu(struct list_head *list,
->   * the _rcu list-mutation primitives such as list_add_rcu()
->   * as long as the traversal is guarded by rcu_read_lock().
->   */
-> -#define list_for_each_entry_rcu(pos, head, member) \
-> -	for (pos = list_entry_rcu((head)->next, typeof(*pos), member); \
-> -		&pos->member != (head); \
-> +#define list_for_each_entry_rcu(pos, head, member, cond...)		\
-> +	if (COUNT_VARGS(cond) != 0) {					\
-> +		__list_check_rcu_cond(0, ## cond);			\
-> +	} else {							\
-> +		__list_check_rcu();					\
-> +	}								\
-> +	for (pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
-> +		&pos->member != (head);					\
->  		pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
 
-Wouldn't something as simple as
+--YZ5djTAD1cGYuMQK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-#define __list_check_rcu(dummy, cond, ...) \
-       RCU_LOCKDEP_WARN(!cond && !rcu_read_lock_any_held(), \
-			 "RCU-list traversed in non-reader section!");
+On Tue, Jun 04, 2019 at 04:40:18PM +0300, Dmitry Osipenko wrote:
+> 04.06.2019 14:07, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Thu, May 02, 2019 at 02:38:06AM +0300, Dmitry Osipenko wrote:
+> >> There is no guarantee that interrupt handling isn't running in parallel
+> >> with tegra_actmon_disable_interrupts(), hence it is necessary to prote=
+ct
+> >> DEV_CTRL register accesses and clear IRQ status with ACTMON's IRQ being
+> >> disabled in the Interrupt Controller in order to ensure that device
+> >> interrupt is indeed being disabled.
+> >>
+> >> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> >> ---
+> >>  drivers/devfreq/tegra-devfreq.c | 21 +++++++++++++++------
+> >>  1 file changed, 15 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-d=
+evfreq.c
+> >> index b65313fe3c2e..ce1eb97a2090 100644
+> >> --- a/drivers/devfreq/tegra-devfreq.c
+> >> +++ b/drivers/devfreq/tegra-devfreq.c
+> >> @@ -171,6 +171,8 @@ struct tegra_devfreq {
+> >>  	struct notifier_block	rate_change_nb;
+> >> =20
+> >>  	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs=
+)];
+> >> +
+> >> +	int irq;
+> >=20
+> > Interrupts are typically unsigned int.
+> >=20
+> >>  };
+> >> =20
+> >>  struct tegra_actmon_emc_ratio {
+> >> @@ -417,6 +419,8 @@ static void tegra_actmon_disable_interrupts(struct=
+ tegra_devfreq *tegra)
+> >>  	u32 val;
+> >>  	unsigned int i;
+> >> =20
+> >> +	disable_irq(tegra->irq);
+> >> +
+> >>  	for (i =3D 0; i < ARRAY_SIZE(tegra->devices); i++) {
+> >>  		dev =3D &tegra->devices[i];
+> >> =20
+> >> @@ -427,9 +431,14 @@ static void tegra_actmon_disable_interrupts(struc=
+t tegra_devfreq *tegra)
+> >>  		val &=3D ~ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
+> >> =20
+> >>  		device_writel(dev, val, ACTMON_DEV_CTRL);
+> >> +
+> >> +		device_writel(dev, ACTMON_INTR_STATUS_CLEAR,
+> >> +			      ACTMON_DEV_INTR_STATUS);
+> >>  	}
+> >> =20
+> >>  	actmon_write_barrier(tegra);
+> >> +
+> >> +	enable_irq(tegra->irq);
+> >=20
+> > Why do we enable interrupts after this? Is there any use in having the
+> > top-level interrupt enabled if nothing's going to generate an interrupt
+> > anyway?
+>=20
+> There is no real point in having the interrupt enabled other than to
+> keep the enable count balanced.
+>=20
+> IIUC, we will need to disable IRQ at the driver's probe time (after
+> requesting the IRQ) if we want to avoid that (not really necessary)
+> balancing. This is probably something that could be improved in a
+> follow-up patches, if desired.
+>=20
+> >>  }
+> >> =20
+> >>  static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
+> >> @@ -604,7 +613,6 @@ static int tegra_devfreq_probe(struct platform_dev=
+ice *pdev)
+> >>  	struct resource *res;
+> >>  	unsigned int i;
+> >>  	unsigned long rate;
+> >> -	int irq;
+> >>  	int err;
+> >> =20
+> >>  	tegra =3D devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
+> >> @@ -673,15 +681,16 @@ static int tegra_devfreq_probe(struct platform_d=
+evice *pdev)
+> >>  		dev_pm_opp_add(&pdev->dev, rate, 0);
+> >>  	}
+> >> =20
+> >> -	irq =3D platform_get_irq(pdev, 0);
+> >> -	if (irq < 0) {
+> >> -		dev_err(&pdev->dev, "Failed to get IRQ: %d\n", irq);
+> >> -		return irq;
+> >> +	tegra->irq =3D platform_get_irq(pdev, 0);
+> >> +	if (tegra->irq < 0) {
+> >> +		err =3D tegra->irq;
+> >> +		dev_err(&pdev->dev, "Failed to get IRQ: %d\n", err);
+> >> +		return err;
+> >>  	}
+> >=20
+> > This is very oddly written. tegra->irq should really be an unsigned int
+> > since that's the standard type for interrupt numbers. But since you need
+> > to be able to detect errors from platform_get_irq() it now becomes
+> > natural to write this as:
+> >=20
+> > 	err =3D platform_get_irq(pdev, 0);
+> > 	if (err < 0) {
+> > 		dev_err(...);
+> > 		return err;
+> > 	}
+> >=20
+> > 	tegra->irq =3D err;
+> >=20
+> > Two birds with one stone. I suppose this could be done in a follow-up
+> > patch since it isn't practically wrong in your version, so either way:
+> >=20
+> > Acked-by: Thierry Reding <treding@nvidia.com>
+> >=20
+>=20
+> Thank you for the ACK! Although, I disagree with yours suggestion, to me
+> that makes code a bit less straightforward and it's not really
+> worthwhile to bloat the code just because technically IRQ's are unsigned
+> numbers (we don't care about that). It also makes me a bit uncomfortable
+> to see "err" assigned to a variable, I don't think it's a good practice.
 
-for ( ({ __list_check_rcu(junk, ##cond, 0); }), pos = ... )
+Actually you should care that IRQs are unsigned. Implicit casting from
+a potentially negative value can hide bugs. That is, once you've passed
+that negative value into the IRQ API you loose the context that it could
+be an error code. Hence I think it makes sense to always store values in
+the native type, and only store them if they are actually valid.
 
-work just as well (i.e., no need for two list_check_rcu and
-list_check_rcu_cond variants)? If there's an optional cond, we use that,
-if not, we pick the trailing 0, so !cond disappears and it reduces to
-your __list_check_rcu(). Moreover, this ensures the RCU_LOCKDEP_WARN
-expansion actually picks up the __LINE__ and __FILE__ where the for loop
-is used, and not the __FILE__ and __LINE__ of the static inline function
-from the header file. It also makes it a bit more type safe/type generic
-(if the cond expression happened to have type long or u64 something
-rather odd could happen with the inline vararg function).
+In the above you have an error value in tegra->irq. In this particular
+case it's pretty harmless because you don't do anything with it, but if
+the circumstances were slightly different that could lead to problems
+down the road.
 
-Rasmus
+On the other hand what I was proposing makes it pretty clear from the
+context that err contains a valid interrupt number when it is assigned
+to tegra->irq. There's plenty of similar constructs in the kernel if you
+want to grep for it.
+
+Also, it's not bloating the code at all. It's the exact same number of
+lines of code as your variant.
+
+Thierry
+
+--YZ5djTAD1cGYuMQK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAlz2euUACgkQ3SOs138+
+s6E1xg//VEaIimnLjOPKS/SXwj53WZwYcCBxBw0rcz0hfLxvc2koOTQclwrAqcgw
+f2kMpXl/rpn95DMuWxu70KLEgHvS/My3LfgoodO89313avryMAu+1qET0GbXmu9P
+tiryS6CYPVMloA0NGrYWS1Lv44aQeAS1unn4tl3onioU+gnDJpSRRFQmManC4J0s
+ySISWYpVJrWPASFSOWWOyfEk9QbJpn+teL0jQZbmYYGgIxLLGWUsE4ORV8VY6jAj
+ayu/q+NyjWhMFXlvHWVfZ9BdnVTJhuJoxXDgc3OVrvSM2PKTYz/aqp+E2JDSVOwA
+0lr8vdqPkpiTGlTtkYC0//+gHvoIz9jNQGfsmaUwyrUgKvqnP/MqQVAiKK5wJC8R
++Mentjj58fYwHmGCBBHXajPuBIPokx1O0obvOS9GLexxbOEDo15w5oG5bey6/eK2
+WaFmo0UzeGXSB524cxHSyS+CbROwqAHE5INqjtvGRFXANRLiPWWTjh54p/Lz2mnk
+KupTm6oKm7kJbnKx0hdnXmoHwmlWa5agXpEQAAMckF7fYfoW/Qvlz7xqamEEl12M
+AvyYPGBElEwUFe0QzX3tNPXsZMMN+q6dtw8iQXKcCyaqLVgfPaKw0igyTIGQBGWX
+/wFdvaYipW9Bk/BZTdM+IQU8gsLduxMsAfxecamzHTxO3sm9uAQ=
+=TosC
+-----END PGP SIGNATURE-----
+
+--YZ5djTAD1cGYuMQK--
