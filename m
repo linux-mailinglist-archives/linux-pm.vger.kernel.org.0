@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED40F34A84
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 16:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A90234A9B
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 16:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727550AbfFDOff (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 10:35:35 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42305 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727470AbfFDOff (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 10:35:35 -0400
-Received: by mail-lj1-f194.google.com with SMTP id t28so8801002lje.9;
-        Tue, 04 Jun 2019 07:35:34 -0700 (PDT)
+        id S1727385AbfFDOl6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 10:41:58 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40785 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727182AbfFDOl6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 10:41:58 -0400
+Received: by mail-lj1-f196.google.com with SMTP id a21so4733772ljh.7;
+        Tue, 04 Jun 2019 07:41:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tqJBuqEPpW0/G/35TiXjjTPFxqh2poe5DD3UV/6cHjQ=;
-        b=A3TkCEZ1/wrrjxbM6ojxs2I7Y6JlyxMVz24B3dz7fTrWqFDyNE5coXTSPmLbda7n0V
-         hnA5dJeVw9fGH9kVPopJ+/imzouwPANdzmPrdXU4XbyiD9kMFEfuNviZhh01Ag6euVS5
-         d7oy0ZwVgilDk8KxpDiIFrEqFIkdeLaUHmiWK8tQ7/TrOBjKMkoJWscGKQYVstlLPD9e
-         TWpwop0muFEDS0yKqmxFdwv+KLAwoQEuKGDr/kvn8v+a1ck4K4B0iuc+6hdrItFZR5AA
-         HAsrXpJSqQY2SXCcWUVVbpUSlGLEIc1zsZulM6OkI9cpmoryD5vkFwYvwKWu5Ll6r1jB
-         o33Q==
+        bh=N8b0nbgILUFGl4UhABnT90OSTFViNxt/Voe8ebDAUhw=;
+        b=ghWNYbIhPC6NlWyE+BZpNLhuHwETwE7B0fWdhCiAG4IA4jsTtN61T517kBBgAtOLNG
+         z2jlVHxg2ZfIshZkWLpMfffA2xszE3IxepJXAjK9koyhen3nqCcLnHlRCDwGeZsiMIMA
+         PBdvovgf0UX1ZfP7I4dJcmTaXlf6TSEIQ0j5lSSAnTjk8BKCA0MYl6uzsT+B1m3V0NyT
+         RQEknCuvA0eAwG80q1OVcQ5HXrOVO3MliWV4rVUaJaki7j1XVdFbyIK5L7qKnQ4/ARps
+         rJ7PslclJDPTRvlaBFRkvZ4HHAXTK0uGlji+k5qrgEII4qOHVrP39z6v4X34yP7shTyD
+         meKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=tqJBuqEPpW0/G/35TiXjjTPFxqh2poe5DD3UV/6cHjQ=;
-        b=omy1l0v6pxLjDAAwhOed2XGf2x8fBhtq0ldjTK+BkhK3agaBspAQ2U2s/leM5FLM9u
-         dYznRK2nTVlx1LA4KlDLSqs8wAI9/u2epuptG6OQPrfaEb4WtQqQOPjzO7rg65udAouR
-         vXx57E+g1LtJFg9LWHBwpDLTHv81E++XVfu4fv6jczPslpL34HzpN4nmAMrsmQNLkuYP
-         1WNeMu9rDLfhj7pKIfGh+H4kzZEmtwwYcjYWUo7Yh/JDHMB11GFNNXTCauxxHJP3z7iE
-         HNoutS0jCQb8Qy84JUCqV7Kk357V4NMvPRU+ZfPf8MkDPzsLZPyUeDYtDBp4pVvNTn9f
-         z2mg==
-X-Gm-Message-State: APjAAAW+t29QPFy9s+YaPY6MLai9LYGXetsJ1nhmsFNpXz5+ZJTVxRDh
-        oli8o35e8MWWk/vl1FoLar0s06Pe
-X-Google-Smtp-Source: APXvYqxNnkAa+XVdvuRuE4JkklgBcKCEczDGSWjqykwVTZIbQnnwH8TF9WyZitk3FfAOh4H1CUDHjw==
-X-Received: by 2002:a2e:9a19:: with SMTP id o25mr4677921lji.63.1559658933190;
-        Tue, 04 Jun 2019 07:35:33 -0700 (PDT)
+        bh=N8b0nbgILUFGl4UhABnT90OSTFViNxt/Voe8ebDAUhw=;
+        b=j02gs/p7/kJArAkfgfjscPBldvQODmufDpKmlLQRHkKM/Bqq5V5/ukZ9aVVn6yQO8M
+         ukZGdQHAyQ8oELZJTgDo27hr3sPWM8M7xlD3ftelmur/XB37bY1lVpjPXlkqEUMwI6mF
+         sv4ERVRjxA0aEHGS5gAdQytVKwvIO4yBQIU4iD3In1HNb5/a2KHsIVIdOb39+5NIPoQP
+         +vtWiw+AWexoM9P8AGHwCdUZqs/ou4hWksbLxdPMZMl2kAVO+cktOfzrSeJ5G4gWxwOH
+         DdZ+Z1WnujcHvoaus2yYFk7kFzQa5/N8S+nxUsMjqWVPipSaHUCLmSFKQgJ0to9ORcZy
+         d6/w==
+X-Gm-Message-State: APjAAAU2LdrKoMYhEh2bkcRenH7htSwp5HcbhlJ+3Net+qbrMgaJsAHh
+        can5aeS9twQY8MyRisAyFKGstxKq
+X-Google-Smtp-Source: APXvYqy5vx2cwnCGez25xql+Ko8Oo9C3uT3MAcpdxH78GRK8I9rCzO2unYJGvdz7BOGi+xvrS34pHA==
+X-Received: by 2002:a2e:9a96:: with SMTP id p22mr86177lji.57.1559659315586;
+        Tue, 04 Jun 2019 07:41:55 -0700 (PDT)
 Received: from [192.168.2.145] ([94.29.35.141])
-        by smtp.googlemail.com with ESMTPSA id c4sm3190976ljj.22.2019.06.04.07.35.31
+        by smtp.googlemail.com with ESMTPSA id h10sm3223813lfj.10.2019.06.04.07.41.54
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jun 2019 07:35:32 -0700 (PDT)
-Subject: Re: [PATCH v4 15/16] PM / devfreq: tegra: Rename tegra-devfreq.c to
- tegra30-devfreq.c
+        Tue, 04 Jun 2019 07:41:54 -0700 (PDT)
+Subject: Re: [PATCH v4 14/16] PM / devfreq: tegra: Enable COMPILE_TEST for the
+ driver
 To:     Thierry Reding <thierry.reding@gmail.com>
 Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -56,14 +56,16 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20190501233815.32643-1-digetx@gmail.com>
- <20190501233815.32643-16-digetx@gmail.com> <20190604112323.GO16519@ulmo>
+ <20190501233815.32643-15-digetx@gmail.com> <20190604112026.GN16519@ulmo>
+ <ed2c502f-8f49-d89b-32c6-4b5415e1fa47@gmail.com> <20190604141031.GB397@ulmo>
+ <20190604141824.GC397@ulmo>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <f96a88fd-5d99-12e8-abbd-82c32d60fab8@gmail.com>
-Date:   Tue, 4 Jun 2019 17:35:31 +0300
+Message-ID: <02a6651f-17f3-2e79-7780-57657596ba23@gmail.com>
+Date:   Tue, 4 Jun 2019 17:41:53 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190604112323.GO16519@ulmo>
+In-Reply-To: <20190604141824.GC397@ulmo>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -72,47 +74,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-04.06.2019 14:23, Thierry Reding пишет:
-> On Thu, May 02, 2019 at 02:38:14AM +0300, Dmitry Osipenko wrote:
->> In order to reflect that driver serves NVIDIA Tegra30 and later SoC
->> generations, let's rename the driver's source file to "tegra30-devfreq.c".
->> This will make driver files to look more consistent after addition of a
->> driver for Tegra20.
+04.06.2019 17:18, Thierry Reding пишет:
+> On Tue, Jun 04, 2019 at 04:10:31PM +0200, Thierry Reding wrote:
+>> On Tue, Jun 04, 2019 at 04:53:17PM +0300, Dmitry Osipenko wrote:
+>>> 04.06.2019 14:20, Thierry Reding пишет:
+>>>> On Thu, May 02, 2019 at 02:38:13AM +0300, Dmitry Osipenko wrote:
+>>>>> The driver's compilation doesn't have any specific dependencies, hence
+>>>>> the COMPILE_TEST option can be supported in Kconfig.
+>>>>>
+>>>>> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+>>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>>>> ---
+>>>>>  drivers/devfreq/Kconfig | 2 +-
+>>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+>>>>> index 56db9dc05edb..a6bba6e1e7d9 100644
+>>>>> --- a/drivers/devfreq/Kconfig
+>>>>> +++ b/drivers/devfreq/Kconfig
+>>>>> @@ -93,7 +93,7 @@ config ARM_EXYNOS_BUS_DEVFREQ
+>>>>>  
+>>>>>  config ARM_TEGRA_DEVFREQ
+>>>>>  	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
+>>>>> -	depends on ARCH_TEGRA
+>>>>> +	depends on ARCH_TEGRA || COMPILE_TEST
+>>>>>  	select PM_OPP
+>>>>>  	help
+>>>>>  	  This adds the DEVFREQ driver for the Tegra family of SoCs.
+>>>>
+>>>> You need to be careful with these. You're using I/O register accessors,
+>>>> which are not supported on the UM architecture, for example.
+>>>>
+>>>> This may end up getting flagged during build testing.
+>>>
+>>> We have similar cases in other drivers and it doesn't cause any known
+>>> problems because (I think) build-bots are aware of this detail. Hence
 >>
->> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/devfreq/Makefile                               | 2 +-
->>  drivers/devfreq/{tegra-devfreq.c => tegra30-devfreq.c} | 0
->>  2 files changed, 1 insertion(+), 1 deletion(-)
->>  rename drivers/devfreq/{tegra-devfreq.c => tegra30-devfreq.c} (100%)
->>
->> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
->> index 32b8d4d3f12c..47e5aeeebfd1 100644
->> --- a/drivers/devfreq/Makefile
->> +++ b/drivers/devfreq/Makefile
->> @@ -10,7 +10,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
->>  # DEVFREQ Drivers
->>  obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
->>  obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
->> -obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra-devfreq.o
->> +obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
+>> I don't understand how the build-bots would be aware of this detail.
+>> Unless you explicitly state what the dependencies are, how would the
+>> build-bots know? Perhaps there's some logic built-in somewhere that I
+>> don't know about?
 > 
-> Technically this changes the name of the driver. Sometimes boot or other
-> scripts rely on those names. Perhaps a better way of keeping backwards-
-> compatibility would be to do:
+> So looks like COMPILE_TEST has a !UML dependency, so this might just
+> work.
 > 
-> 	obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra-devfreq.o
-> 	tegra-devfreq-y				+= tegra30-devfreq.o
+> Acked-by: Thierry Reding <treding@nvidia.com>
 > 
-> That way you can later on just add the tegra20-devfreq.o to that driver
-> as well and have them both ship in one .ko.
 
-Combining two drivers into a single kernel object certainly doesn't work
-("multiple definition of `init_module'" error, etc).
-
-Indeed, this changes the name of the driver. It should be fine as long
-as it doesn't hurt anybody, so what about to keep this change as-is for
-now and wait for complains? I promise to make a revert if this will
-cause real problems for anyone. Let's be realistic, there should be a
-very little chance that somebody will notice this change. ACK?
+Thank you very much for the clarification! Certainly that would caused
+problems already since there are such cases all over the kernel,
+including Tegra drivers.
