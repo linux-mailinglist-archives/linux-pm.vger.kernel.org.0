@@ -2,154 +2,217 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7B1349CE
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 16:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C3B34A06
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jun 2019 16:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727493AbfFDOKg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 10:10:36 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:37946 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727033AbfFDOKg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 10:10:36 -0400
-Received: by mail-wm1-f65.google.com with SMTP id t5so220412wmh.3;
-        Tue, 04 Jun 2019 07:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=MQWqnTPlMzq7RFdsPJKNaftIwxm2Lc34V6bRTX+Tfwo=;
-        b=atzLld6h4CKQyI/4lFPboJMv2pm8uRk7p6FD7sjdir1Th3+kWeM3IPGivKigl19Ev6
-         Yg1bdCDK3UMamefNtAfjc2oxK6BpDw4URX5BPhaGGTyqXsfOeliOLn4QIGGfoRpUed7+
-         9H+Ia0aaX52Cm8d3/1eZctHnuqV+zK3DdQQDG3cw0gPaVzas763IK0a+2Q4O04bwvWhh
-         AdeopgfwAwFltVeSNDtdqZ9p6fh3uLNW+EBQrqxwNf3mgOv43FvVZhjKQRQXdVDJOMUT
-         ljATMS9tS+nrLWjCvngi2o32M8qh4nuSt0/zrkJ5UsUt32qLAola+5Hvhhi0kSAsPpRC
-         LUkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MQWqnTPlMzq7RFdsPJKNaftIwxm2Lc34V6bRTX+Tfwo=;
-        b=cMLeXw7+HDYhMplrSeTCwSKDcSXTu9SEjK6y/rTXXkWWkvY4x8uf9W+yS2vc5nBeEf
-         9u+lPWIgkf+wxkATfKZrnmLCAykgdUChRcoinThGuwhnzKoORcrXmjJFqW3xrwnfWyLp
-         CI4wlQDE7H4b6neJPf7JrK3LPEU5L5rKykw4lPgnD1PB/+fLocH61GSy+0CYNAmyQpBT
-         HhzQV2KjYt3Z8zk33TLw7vjYj6n+osv1stzs08KD65Ai+ChCyD1LFH5GpeIfP4NG3ihS
-         124xh5cFKIJ4k0wLnNQKnlgyfKKtkCWuXMYSuzZwBNTunh3hj/fn5eXJN3z4owA8X+Gv
-         TmqA==
-X-Gm-Message-State: APjAAAU/pQZAKRbycdMBGKzxLymntYXHa5sMMzTGTY7+6cvftnHw8Lx1
-        HqJYZqEnIwXBLLeAxKWnSJ8=
-X-Google-Smtp-Source: APXvYqwSjpawjPwIm+UKAqYA7R7GBTeTSB6g2Oebf3dshW7QAiQVDwb9DUK+sLE7TJ9uv/c7BLw2bg==
-X-Received: by 2002:a1c:9c02:: with SMTP id f2mr18695262wme.8.1559657433513;
-        Tue, 04 Jun 2019 07:10:33 -0700 (PDT)
-Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id f197sm18574336wme.39.2019.06.04.07.10.32
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 04 Jun 2019 07:10:32 -0700 (PDT)
-Date:   Tue, 4 Jun 2019 16:10:31 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 14/16] PM / devfreq: tegra: Enable COMPILE_TEST for
- the driver
-Message-ID: <20190604141031.GB397@ulmo>
-References: <20190501233815.32643-1-digetx@gmail.com>
- <20190501233815.32643-15-digetx@gmail.com>
- <20190604112026.GN16519@ulmo>
- <ed2c502f-8f49-d89b-32c6-4b5415e1fa47@gmail.com>
+        id S1727783AbfFDOSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 10:18:04 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52618 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727732AbfFDOSD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 10:18:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dqaD3wghyI6IWFrArZRMjNM4vtEr+hqHLagvjFWdfkg=; b=Zs3KQXTOPjmcHFgUgxG5qH+gKO
+        o8BJz6y3IPantgcA/Voyx6kH/hrE9ccQ3FZi6STf8TVmNX3mkcfsoh0ZxT3ZI3w1tG56iFWPGuiay
+        fHK+QOmvCUpgAVnSPhpqFd56jlL0V6NoAZHlFCbPi8/Ejej/f3oBNuy1f6sslmGARdoNvQfDBV2Da
+        h+mmNSzuadqqucttR9O4Ayry8wEzO+MptxTN7giKFVJvtiAXHfibZ5j1TmziUWXZ5eJ0O3mTu3oE0
+        BcBjLpRasxpfI2PClkJKdwUgtAW+p0SZt3CqGsdTKTJzh139ngqBGbIlL6s77zCzADuP5DTAD5j8B
+        OoIbhHLQ==;
+Received: from [179.182.172.34] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hYAGH-0001Rw-UE; Tue, 04 Jun 2019 14:18:01 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hYAGE-0002kz-LE; Tue, 04 Jun 2019 11:17:58 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Matan Ziv-Av <matan@svgalib.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH v2 06/22] docs: mark orphan documents as such
+Date:   Tue,  4 Jun 2019 11:17:40 -0300
+Message-Id: <4afa83787acec906c383978dc01f286940e28616.1559656538.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1559656538.git.mchehab+samsung@kernel.org>
+References: <cover.1559656538.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="O5XBE6gyVG5Rl6Rj"
-Content-Disposition: inline
-In-Reply-To: <ed2c502f-8f49-d89b-32c6-4b5415e1fa47@gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Sphinx doesn't like orphan documents:
 
---O5XBE6gyVG5Rl6Rj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+    Documentation/accelerators/ocxl.rst: WARNING: document isn't included in any toctree
+    Documentation/arm/stm32/overview.rst: WARNING: document isn't included in any toctree
+    Documentation/arm/stm32/stm32f429-overview.rst: WARNING: document isn't included in any toctree
+    Documentation/arm/stm32/stm32f746-overview.rst: WARNING: document isn't included in any toctree
+    Documentation/arm/stm32/stm32f769-overview.rst: WARNING: document isn't included in any toctree
+    Documentation/arm/stm32/stm32h743-overview.rst: WARNING: document isn't included in any toctree
+    Documentation/arm/stm32/stm32mp157-overview.rst: WARNING: document isn't included in any toctree
+    Documentation/gpu/msm-crash-dump.rst: WARNING: document isn't included in any toctree
+    Documentation/interconnect/interconnect.rst: WARNING: document isn't included in any toctree
+    Documentation/laptops/lg-laptop.rst: WARNING: document isn't included in any toctree
+    Documentation/powerpc/isa-versions.rst: WARNING: document isn't included in any toctree
+    Documentation/virtual/kvm/amd-memory-encryption.rst: WARNING: document isn't included in any toctree
+    Documentation/virtual/kvm/vcpu-requests.rst: WARNING: document isn't included in any toctree
 
-On Tue, Jun 04, 2019 at 04:53:17PM +0300, Dmitry Osipenko wrote:
-> 04.06.2019 14:20, Thierry Reding =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Thu, May 02, 2019 at 02:38:13AM +0300, Dmitry Osipenko wrote:
-> >> The driver's compilation doesn't have any specific dependencies, hence
-> >> the COMPILE_TEST option can be supported in Kconfig.
-> >>
-> >> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >> ---
-> >>  drivers/devfreq/Kconfig | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> >> index 56db9dc05edb..a6bba6e1e7d9 100644
-> >> --- a/drivers/devfreq/Kconfig
-> >> +++ b/drivers/devfreq/Kconfig
-> >> @@ -93,7 +93,7 @@ config ARM_EXYNOS_BUS_DEVFREQ
-> >> =20
-> >>  config ARM_TEGRA_DEVFREQ
-> >>  	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
-> >> -	depends on ARCH_TEGRA
-> >> +	depends on ARCH_TEGRA || COMPILE_TEST
-> >>  	select PM_OPP
-> >>  	help
-> >>  	  This adds the DEVFREQ driver for the Tegra family of SoCs.
-> >=20
-> > You need to be careful with these. You're using I/O register accessors,
-> > which are not supported on the UM architecture, for example.
-> >=20
-> > This may end up getting flagged during build testing.
->=20
-> We have similar cases in other drivers and it doesn't cause any known
-> problems because (I think) build-bots are aware of this detail. Hence
+So, while they aren't on any toctree, add :orphan: to them, in order
+to silent this warning.
 
-I don't understand how the build-bots would be aware of this detail.
-Unless you explicitly state what the dependencies are, how would the
-build-bots know? Perhaps there's some logic built-in somewhere that I
-don't know about?
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ Documentation/accelerators/ocxl.rst             | 2 ++
+ Documentation/arm/stm32/overview.rst            | 2 ++
+ Documentation/arm/stm32/stm32f429-overview.rst  | 2 ++
+ Documentation/arm/stm32/stm32f746-overview.rst  | 2 ++
+ Documentation/arm/stm32/stm32f769-overview.rst  | 2 ++
+ Documentation/arm/stm32/stm32h743-overview.rst  | 2 ++
+ Documentation/arm/stm32/stm32mp157-overview.rst | 2 ++
+ Documentation/gpu/msm-crash-dump.rst            | 2 ++
+ Documentation/interconnect/interconnect.rst     | 2 ++
+ Documentation/laptops/lg-laptop.rst             | 2 ++
+ Documentation/powerpc/isa-versions.rst          | 2 ++
+ 11 files changed, 22 insertions(+)
 
-> there is no real need to be overreactive here and in this particular
-> case it's better to react to real problems once they show up (we already
-> did that by fixing build breakage caused by a CLK API problem found by
-> bot in v3). Does it sound like a good argument to you? ACK?
+diff --git a/Documentation/accelerators/ocxl.rst b/Documentation/accelerators/ocxl.rst
+index 14cefc020e2d..b1cea19a90f5 100644
+--- a/Documentation/accelerators/ocxl.rst
++++ b/Documentation/accelerators/ocxl.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ ========================================================
+ OpenCAPI (Open Coherent Accelerator Processor Interface)
+ ========================================================
+diff --git a/Documentation/arm/stm32/overview.rst b/Documentation/arm/stm32/overview.rst
+index 85cfc8410798..f7e734153860 100644
+--- a/Documentation/arm/stm32/overview.rst
++++ b/Documentation/arm/stm32/overview.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ ========================
+ STM32 ARM Linux Overview
+ ========================
+diff --git a/Documentation/arm/stm32/stm32f429-overview.rst b/Documentation/arm/stm32/stm32f429-overview.rst
+index 18feda97f483..65bbb1c3b423 100644
+--- a/Documentation/arm/stm32/stm32f429-overview.rst
++++ b/Documentation/arm/stm32/stm32f429-overview.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ STM32F429 Overview
+ ==================
+ 
+diff --git a/Documentation/arm/stm32/stm32f746-overview.rst b/Documentation/arm/stm32/stm32f746-overview.rst
+index b5f4b6ce7656..42d593085015 100644
+--- a/Documentation/arm/stm32/stm32f746-overview.rst
++++ b/Documentation/arm/stm32/stm32f746-overview.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ STM32F746 Overview
+ ==================
+ 
+diff --git a/Documentation/arm/stm32/stm32f769-overview.rst b/Documentation/arm/stm32/stm32f769-overview.rst
+index 228656ced2fe..f6adac862b17 100644
+--- a/Documentation/arm/stm32/stm32f769-overview.rst
++++ b/Documentation/arm/stm32/stm32f769-overview.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ STM32F769 Overview
+ ==================
+ 
+diff --git a/Documentation/arm/stm32/stm32h743-overview.rst b/Documentation/arm/stm32/stm32h743-overview.rst
+index 3458dc00095d..c525835e7473 100644
+--- a/Documentation/arm/stm32/stm32h743-overview.rst
++++ b/Documentation/arm/stm32/stm32h743-overview.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ STM32H743 Overview
+ ==================
+ 
+diff --git a/Documentation/arm/stm32/stm32mp157-overview.rst b/Documentation/arm/stm32/stm32mp157-overview.rst
+index 62e176d47ca7..2c52cd020601 100644
+--- a/Documentation/arm/stm32/stm32mp157-overview.rst
++++ b/Documentation/arm/stm32/stm32mp157-overview.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ STM32MP157 Overview
+ ===================
+ 
+diff --git a/Documentation/gpu/msm-crash-dump.rst b/Documentation/gpu/msm-crash-dump.rst
+index 757cd257e0d8..240ef200f76c 100644
+--- a/Documentation/gpu/msm-crash-dump.rst
++++ b/Documentation/gpu/msm-crash-dump.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ =====================
+ MSM Crash Dump Format
+ =====================
+diff --git a/Documentation/interconnect/interconnect.rst b/Documentation/interconnect/interconnect.rst
+index c3e004893796..56e331dab70e 100644
+--- a/Documentation/interconnect/interconnect.rst
++++ b/Documentation/interconnect/interconnect.rst
+@@ -1,5 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
++:orphan:
++
+ =====================================
+ GENERIC SYSTEM INTERCONNECT SUBSYSTEM
+ =====================================
+diff --git a/Documentation/laptops/lg-laptop.rst b/Documentation/laptops/lg-laptop.rst
+index aa503ee9b3bc..f2c2ffe31101 100644
+--- a/Documentation/laptops/lg-laptop.rst
++++ b/Documentation/laptops/lg-laptop.rst
+@@ -1,5 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0+
+ 
++:orphan:
++
+ LG Gram laptop extra features
+ =============================
+ 
+diff --git a/Documentation/powerpc/isa-versions.rst b/Documentation/powerpc/isa-versions.rst
+index 812e20cc898c..66c24140ebf1 100644
+--- a/Documentation/powerpc/isa-versions.rst
++++ b/Documentation/powerpc/isa-versions.rst
+@@ -1,3 +1,5 @@
++:orphan:
++
+ CPU to ISA Version Mapping
+ ==========================
+ 
+-- 
+2.21.0
 
-No. This strikes me as a strange argument. I'm pointing out a potential
-source of problems and you just brush it aside claiming that it's not
-true, or even if it was true that we'll see eventually and we can fix it
-up when there's an actual problem.
-
-Why would you want to have to fix things up if you can avoid breakage in
-the first place by being a little proactive?
-
-Thierry
-
---O5XBE6gyVG5Rl6Rj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAlz2e9cACgkQ3SOs138+
-s6E4kw/+I6WkfUA6GnWVtk4560uJsTWMw63natQl7Vz+UpCHky4vw7eUN+Pt7Erc
-eiN0fPVTsblMKeZ6LuweWk8ZtZ5iqNAaeBYu43DbiqJ60x+WxShfucYjgnLM+4F+
-G/fuIInBSMDbe3TzIMS1C/C7pIgWbkdrsadU+j0Z/PFp/WJ4JElXWgxG+aeOW3wo
-lIIgU7Wzz9aCVktOkVkz738FCzv84dE79zoeMpMPTSpjCha3d5NkXmFhzvcNTJ3z
-vOFt0MWiFwzLjzR2oxfWNUgleB4oGNeRslL7uEakleZEPcDquDS31fNyzlZ/1iPU
-ZC7EH5aWc9GCGXhUFLkQrMt30PJa+huwCIFL20fWwpLhoHdSzdBMOmEg2z4xIpoY
-1DsWC52KpF1soSoYN3EHhqd/9GKGMW9ZSGicsXuI+i0ZY5lW02O11pvC9ZgVUwKY
-xHIY6+9oDmnVAHNIxRN3VwrfaeEgu+snV4cngeBtv/Lmh0XHPVKelUSjgAlVJ3nB
-8x/r+tjq18K6XGOWSxHFggtxFMwdGRmJnfCBrNItemdOZsQ8vTRUvjM29bgLD7EU
-kVj1JQIDKDqnVIyYDBwo2OquIPyznVMXXNMhoP3M/QGp70OWnj9Y2sWod0vr1zSh
-2Pj6WiWBwhBcZXQQKv9McEbxgQBnE0Gca8u1BBKlin5Jc/V1Dl8=
-=uV5V
------END PGP SIGNATURE-----
-
---O5XBE6gyVG5Rl6Rj--
