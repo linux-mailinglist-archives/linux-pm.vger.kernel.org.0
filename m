@@ -2,178 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E223548F
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 01:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788D635497
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 02:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbfFDX5i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 19:57:38 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36285 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbfFDX5i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 19:57:38 -0400
-Received: by mail-pg1-f193.google.com with SMTP id a3so3904603pgb.3
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jun 2019 16:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1RoeYwTbHJ5uZrqzOkCL/eOap3xEJq8UUohxtmtls+0=;
-        b=Zj/4RsKSPEX80sxrowiW9yJRYHKyPgNTX80646pPhD24cF78L+/cbq0AbaGX9N2dlW
-         NbcaJdsi+uqQaXkEEuBCyBbDTXEvFRlnvVcH9GuGiMzwzkWU5HOPuyPDk8tLI4VkyyJv
-         /DfRIx8bv02qOCZ6ndDiCIPf3hcKSC8m4VzgQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1RoeYwTbHJ5uZrqzOkCL/eOap3xEJq8UUohxtmtls+0=;
-        b=NYUF3CzGIFGzXaVqV8KVKogGrN0ty9E2K3TEA4P/165DihuVnzEVrrgATJE/vcFl8a
-         /PaaMS1VBv1kmohkb4BThnrvB/NQwD7oZimYbjRBEepskaqGHc3mvHqqmJOOOX3Vve4u
-         MkgW9Ob19vF/oPgRXalRIkR7V3be4HDOxaFBQfJ0CdYQc6KlPwCiTIsD0k6Un90gePec
-         YzL6UWCzFZb4YrXRq4L5ajTw8JOuTQHqFAoiwjdlfzAjJkjlVKiM1ZHXtUNwqXYVpFar
-         KQUyf1IPIz4SHMsUyLkV+Y+q+R4kwHJHmfkSLpJSdYoXgo73S+pnAkZOF+v6B2RnwP6y
-         WE+g==
-X-Gm-Message-State: APjAAAU5wiVZaNaVA/yj4Ng9CcF43PDH363TRMjaarln5k8YuYmzUuRT
-        xRp3NyeV9XCVqNGcPm1Mke4lTQ==
-X-Google-Smtp-Source: APXvYqwkrc7X/bmQxCzpV30LpH7ErQ3xZfm3AlJzfVuoa5nXjkO6dIGfsOoh599VuAPN4rqorLCkOA==
-X-Received: by 2002:a17:90a:a790:: with SMTP id f16mr40544193pjq.27.1559692657614;
-        Tue, 04 Jun 2019 16:57:37 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id q13sm34687078pjc.1.2019.06.04.16.57.36
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Jun 2019 16:57:36 -0700 (PDT)
-Date:   Tue, 4 Jun 2019 19:57:35 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
-        kernel-hardening@lists.openwall.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [RFC 1/6] rcu: Add support for consolidated-RCU reader checking
-Message-ID: <20190604235735.GA254287@google.com>
-References: <20190601222738.6856-1-joel@joelfernandes.org>
- <20190601222738.6856-2-joel@joelfernandes.org>
- <0ff9e0e3-b9fb-8953-1f76-807102f785ee@rasmusvillemoes.dk>
+        id S1726519AbfFEAA4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 20:00:56 -0400
+Received: from anholt.net ([50.246.234.109]:50568 "EHLO anholt.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726427AbfFEAA4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 4 Jun 2019 20:00:56 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by anholt.net (Postfix) with ESMTP id 3FE4110A2DB7;
+        Tue,  4 Jun 2019 17:00:55 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at anholt.net
+Received: from anholt.net ([127.0.0.1])
+        by localhost (kingsolver.anholt.net [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id J5PPjNu5RML4; Tue,  4 Jun 2019 17:00:54 -0700 (PDT)
+Received: from eliezer.anholt.net (localhost [127.0.0.1])
+        by anholt.net (Postfix) with ESMTP id 0254810A1128;
+        Tue,  4 Jun 2019 17:00:53 -0700 (PDT)
+Received: by eliezer.anholt.net (Postfix, from userid 1000)
+        id 728A22FE3AAE; Tue,  4 Jun 2019 17:00:53 -0700 (PDT)
+From:   Eric Anholt <eric@anholt.net>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        stefan.wahren@i2se.com, Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        sboyd@kernel.org, ptesarik@suse.com,
+        linux-rpi-kernel@lists.infradead.org, ssuloev@orpaltech.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mturquette@baylibre.com, linux-pm@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] clk: bcm2835: register Raspberry Pi's firmware clk device
+In-Reply-To: <20190604173223.4229-4-nsaenzjulienne@suse.de>
+References: <20190604173223.4229-1-nsaenzjulienne@suse.de> <20190604173223.4229-4-nsaenzjulienne@suse.de>
+User-Agent: Notmuch/0.22.2+1~gb0bcfaa (http://notmuchmail.org) Emacs/26.1 (x86_64-pc-linux-gnu)
+Date:   Tue, 04 Jun 2019 17:00:51 -0700
+Message-ID: <87muiwzyrw.fsf@anholt.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0ff9e0e3-b9fb-8953-1f76-807102f785ee@rasmusvillemoes.dk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 04, 2019 at 04:01:00PM +0200, Rasmus Villemoes wrote:
-> On 02/06/2019 00.27, Joel Fernandes (Google) wrote:
-> > This patch adds support for checking RCU reader sections in list
-> > traversal macros. Optionally, if the list macro is called under SRCU or
-> > other lock/mutex protection, then appropriate lockdep expressions can be
-> > passed to make the checks pass.
-> > 
-> > Existing list_for_each_entry_rcu() invocations don't need to pass the
-> > optional fourth argument (cond) unless they are under some non-RCU
-> > protection and needs to make lockdep check pass.
-> > 
-> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > ---
-> >  include/linux/rculist.h  | 40 ++++++++++++++++++++++++++++++++++++----
-> >  include/linux/rcupdate.h |  7 +++++++
-> >  kernel/rcu/update.c      | 26 ++++++++++++++++++++++++++
-> >  3 files changed, 69 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/include/linux/rculist.h b/include/linux/rculist.h
-> > index e91ec9ddcd30..b641fdd9f1a2 100644
-> > --- a/include/linux/rculist.h
-> > +++ b/include/linux/rculist.h
-> > @@ -40,6 +40,25 @@ static inline void INIT_LIST_HEAD_RCU(struct list_head *list)
-> >   */
-> >  #define list_next_rcu(list)	(*((struct list_head __rcu **)(&(list)->next)))
-> >  
-> > +/*
-> > + * Check during list traversal that we are within an RCU reader
-> > + */
-> > +#define __list_check_rcu()						\
-> > +	RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),			\
-> > +			 "RCU-list traversed in non-reader section!")
-> > +
-> > +static inline void __list_check_rcu_cond(int dummy, ...)
-> > +{
-> > +	va_list ap;
-> > +	int cond;
-> > +
-> > +	va_start(ap, dummy);
-> > +	cond = va_arg(ap, int);
-> > +	va_end(ap);
-> > +
-> > +	RCU_LOCKDEP_WARN(!cond && !rcu_read_lock_any_held(),
-> > +			 "RCU-list traversed in non-reader section!");
-> > +}
-> >  /*
-> >   * Insert a new entry between two known consecutive entries.
-> >   *
-> > @@ -338,6 +357,9 @@ static inline void list_splice_tail_init_rcu(struct list_head *list,
-> >  						  member) : NULL; \
-> >  })
-> >  
-> > +#define SIXTH_ARG(a1, a2, a3, a4, a5, a6, ...) a6
-> > +#define COUNT_VARGS(...) SIXTH_ARG(dummy, ## __VA_ARGS__, 4, 3, 2, 1, 0)
-> > +>  /**
-> >   * list_for_each_entry_rcu	-	iterate over rcu list of given type
-> >   * @pos:	the type * to use as a loop cursor.
-> > @@ -348,9 +370,14 @@ static inline void list_splice_tail_init_rcu(struct list_head *list,
-> >   * the _rcu list-mutation primitives such as list_add_rcu()
-> >   * as long as the traversal is guarded by rcu_read_lock().
-> >   */
-> > -#define list_for_each_entry_rcu(pos, head, member) \
-> > -	for (pos = list_entry_rcu((head)->next, typeof(*pos), member); \
-> > -		&pos->member != (head); \
-> > +#define list_for_each_entry_rcu(pos, head, member, cond...)		\
-> > +	if (COUNT_VARGS(cond) != 0) {					\
-> > +		__list_check_rcu_cond(0, ## cond);			\
-> > +	} else {							\
-> > +		__list_check_rcu();					\
-> > +	}								\
-> > +	for (pos = list_entry_rcu((head)->next, typeof(*pos), member);	\
-> > +		&pos->member != (head);					\
-> >  		pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
-> 
-> Wouldn't something as simple as
-> 
-> #define __list_check_rcu(dummy, cond, ...) \
->        RCU_LOCKDEP_WARN(!cond && !rcu_read_lock_any_held(), \
-> 			 "RCU-list traversed in non-reader section!");
-> 
-> for ( ({ __list_check_rcu(junk, ##cond, 0); }), pos = ... )
-> 
-> work just as well (i.e., no need for two list_check_rcu and
-> list_check_rcu_cond variants)? If there's an optional cond, we use that,
-> if not, we pick the trailing 0, so !cond disappears and it reduces to
-> your __list_check_rcu(). Moreover, this ensures the RCU_LOCKDEP_WARN
-> expansion actually picks up the __LINE__ and __FILE__ where the for loop
-> is used, and not the __FILE__ and __LINE__ of the static inline function
-> from the header file. It also makes it a bit more type safe/type generic
-> (if the cond expression happened to have type long or u64 something
-> rather odd could happen with the inline vararg function).
+--=-=-=
+Content-Type: text/plain
 
-This is much better. I will do it this way. Thank you!
+Nicolas Saenz Julienne <nsaenzjulienne@suse.de> writes:
 
- - Joel
+> Registers clk-raspberrypi as a platform device as part of the driver's
+> probe sequence.
 
+Similar to how we have VCHI register platform devices for the services
+VCHI provides, shouldn't we have the firmware driver register the device
+for clk_raspberrypi?  Or put the clk provider in the fw driver instead
+of a separate driver (no opinion on my part).
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE/JuuFDWp9/ZkuCBXtdYpNtH8nugFAlz3BjMACgkQtdYpNtH8
+nugXZxAApCxDEcQNUZSA82dd4rtrlp/1uMz/j6cXVe9KKGi7a52dfc8MEIvoZDbq
+PAN/yjpvQVJosHh+JOUmXzKOEd9seFx9/gZwzdb3/8VKNnkYAy0ugfAzAN6K1XFW
+eAV1rSbBAkAtrvL/FUK1WxMN+4yf/yMcY9ZVmKSML2A9KcwkQHpNISOidbfdMy5c
+NkqMl9lTD3XoE+VZgUUsLg440KidEOO5kKix7VhP5zQiQ9OG2RInZvhUthTz0qRS
+9j+4XCyC7IPe8QpejvK9eocR0CW7sVbEaujUsScR1xSFLWGI11fPgCjnGDzBxzkN
+jzofDEUVgfM8hzX+sIJ/DXI7WNNf01H51c8h0H7fxII2U3nNw5WgsQvU8BdoyRS5
+WZdWPUAwFMkdlZNqRL7WdJL15in11f5lfiSZjT+Hxp95y77Jf/esA5Wfg3N5KD5I
+MWfTvdku3c6IBNi7Iy+l1knz+FjyoV1wYgYtYrzjrZtrGsIssySU+ZrzIrECo/8s
+k8B5kM2CHq5GM1d82sqj1haF0IsfChjQQVfIzkKja/FHmpC1IJBAnYjGUas7L+Z8
+LVbsHuYZX+yH6k5cMe6f7cljlmeyjaHLDerVVnqlKO7ByYFgbGZUMP8acuBIIrzd
+LyNFmfuctdyaiwCnR/0wEmMAWlzn+HvxM7G31vBGo4ihTnlPaS0=
+=dVrD
+-----END PGP SIGNATURE-----
+--=-=-=--
