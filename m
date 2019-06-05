@@ -2,88 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DB335A0E
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 12:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBC935A17
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 12:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbfFEKCA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jun 2019 06:02:00 -0400
-Received: from mout.gmx.net ([212.227.15.15]:53403 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726988AbfFEKCA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Jun 2019 06:02:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1559728900;
-        bh=UsET9Lll5M+CoTqv+pj38b2HWnBKUKBonnb58LGMBT4=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=bZD59ZmWY0Ntwhnge76QXnUAewp8/FaivB+KFTadt2z1WLIpRJTlz9brY9UOo3mDL
-         sVe8Cr8xZ1m5qfcG/T1YyyBqb40gGEvMxtqaTVdFrbXtguM54zJJ9pQiJUS5kckjVr
-         FzcaSXguUpZX0EjeNG0El4SLnzdH1AAj42k2nCt4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.1.162] ([37.4.249.160]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1fn0-1gb2dQ1uGm-0124AV; Wed, 05
- Jun 2019 12:01:40 +0200
-Subject: Re: [PATCH 3/4] clk: bcm2835: register Raspberry Pi's firmware clk
- device
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     linux-arm-kernel@lists.infradead.org, ptesarik@suse.com,
-        sboyd@kernel.org, viresh.kumar@linaro.org, mturquette@baylibre.com,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, mbrugger@suse.de, ssuloev@orpaltech.com
-References: <20190604173223.4229-1-nsaenzjulienne@suse.de>
- <20190604173223.4229-4-nsaenzjulienne@suse.de> <87muiwzyrw.fsf@anholt.net>
- <17ea99902e4329db735080d1a8fc04f5c06c9bf0.camel@suse.de>
-From:   Stefan Wahren <wahrenst@gmx.net>
-Message-ID: <d4e0e290-5fa7-899b-c26b-691bfc32e864@gmx.net>
-Date:   Wed, 5 Jun 2019 12:01:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727217AbfFEKD2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jun 2019 06:03:28 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:50280 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726690AbfFEKD1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 06:03:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=u3C13c87086hMiV9w85rPm7zIsQPWFDde0xcEZuXQO4=; b=dorjVI3a+BwPR4KW5H82UKRlg
+        Q9KqAanswJa5R2Wb689KlEmobdDfNHeCIoIrmt5I/PSgctZsHRi60Lg3gnFmHSNLPuQAliaq0R9s2
+        vaYe1Hr5IKUF5PPoEbYIxmcmqmsGkWm/Qs6VhqrIEdJ0/Z6P1uHRVEgDVNJ/doyVFZ37k=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hYSkO-0008Uv-UU; Wed, 05 Jun 2019 10:02:21 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id 7EA0A440046; Wed,  5 Jun 2019 11:02:20 +0100 (BST)
+Date:   Wed, 5 Jun 2019 11:02:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
+        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        alsa-devel@alsa-project.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-iio@vger.kernel.org,
+        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        linux-pm@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Evan Green <evgreen@chromium.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
+ mfd includes
+Message-ID: <20190605100220.GN2456@sirena.org.uk>
+References: <20190604152019.16100-1-enric.balletbo@collabora.com>
+ <20190604152019.16100-7-enric.balletbo@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <17ea99902e4329db735080d1a8fc04f5c06c9bf0.camel@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:9f2lQD4Z7CpbaiYWLkTMJigUa1MziLg6+z/wwaBIURmsxQgOUS5
- k2FYvw7vOfvcPi/PmfQ5fixRnOqThMuOv787Vl764hF59L8a6jmBs3NRYyoG5HAmJmv1b19
- +yvY6j7zCQUeWKyarSDtHkN+zou8bvDUL9jpBSvvfE2bD/YQ3lvm5FBWwjvJQYKdwvyBmXc
- V6NMtKpN71rZbBuSV6twg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:q4vxgRBg+Vk=:cSI8li99sc0SeLjZq6PBGa
- QZ6f42LRJFJJLcLD3cqQ8mY9OEKdD44MaT+Er+v3fQmuJoT1RMTdK/A6F4hvNqYD6DywuhSi3
- SaPRxALtUr+Jp8Fv3AkeUimHwzkgvjVgyZSMkef1mrCxUR1SF2WtZH5TX1wyITT77lYaQY/7b
- bj2m1VkzdVei2lLjOs5R7JOSgQM8rnWjSZBTBf3I9lVQxdo4DtJQVHJm+dMFaMagUTr7P16Wt
- EQRLvSSuISvwt0+t9lPSNz/WPyhNu9p+d/JPPEvNdTSWjLw3u54YIG2luGQkVwm68b6nSKUpj
- rejoSwSaq1rF1Wj6ofqdiTzytKDTf1n9MIjU4f36vJ0W6+KW6Ns61IoBDksQ6zuEI6yWCNTPx
- l/h0E8kgwSrVGvfEMVjCjtk384eYtQNYIwuLACSVtJ8r0JFcDcHNL1/mBPfhynGjTdvEKX4gw
- qYV14E7sCt3VgpUARbVj09YuuYBGVtum9phmcLP30a/2GUNA+FDnIaW7WmAle/QcuKyOC2ve1
- l7GEtohDJ9bYkv6HYiCbo8cde1FpaXWWcrLcdqnl8wg8jaWpbyhT5YZXRsPkiJIn4H0fIKuDt
- tpDash5HSLSInyq365xvLH7gwPG3oqGltwG/jGQ8+cfWFZ2UMJf0s065E4Zcnuvo3vRf8/3yb
- fM5KF4eLre3UJUebDgvSIz3PsguDzVEHxpc3kLrRAaR0YBXH1IO/ddwM1PZa88kZTAH62DOsi
- 3fYq4DY8NaCvPXGyEjQQlgqITKRqGCYE806FquBDfKpn7taRiIeY3QkuYwmKZ1f/EsbSwGvj+
- KzVe9aMC6XbYTzOpYpKTR2S/Ct6/Ll4KoaLySUJdExAdxfXJ85uFEkAvupGEamOJdryZE2IVy
- 2sJq5Qt9Y9Yp8uRN4iJa2bSAGUOrjOAIYEsd6A5rdVpaBMeoMFi5q/ChR4IOWnafHIpXKCpxp
- iYT9j/hHGM4FBvpD0s6Tuk7bFIsm1niuLu+E7jHnI2y7iRXyTdqdc
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RnxXMyWEPIZsopkG"
+Content-Disposition: inline
+In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
+X-Cookie: The other line moves faster.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am 05.06.19 um 11:11 schrieb Nicolas Saenz Julienne:
-> On Tue, 2019-06-04 at 17:00 -0700, Eric Anholt wrote:
->> Nicolas Saenz Julienne <nsaenzjulienne@suse.de> writes:
->>
->>> Registers clk-raspberrypi as a platform device as part of the driver's
->>> probe sequence.
->> Similar to how we have VCHI register platform devices for the services
->> VCHI provides, shouldn't we have the firmware driver register the device
->> for clk_raspberrypi?  Or put the clk provider in the fw driver instead
->> of a separate driver (no opinion on my part).
-> Makes sense to me, I'll move the platform driver registration into the firmware
-> driver.
-Fine. Please keep in mind that you might need to add a MODULE_ALIAS
-otherwise autoload won't work.
+
+--RnxXMyWEPIZsopkG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jun 04, 2019 at 05:20:15PM +0200, Enric Balletbo i Serra wrote:
+> There is a bit of mess between cros-ec mfd includes and platform
+> includes. For example, we have a linux/mfd/cros_ec.h include that
+> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
+
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--RnxXMyWEPIZsopkG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlz3kysACgkQJNaLcl1U
+h9BVMAf+I/I3bNW13EZ789wBAFxmn5KXFbH0t6CdJDgbILW9HMsGSKGbJXJRTRDG
+GGeIfMEYK0lv5boeQbArMfoX/kkuVYHVj/71aQVsgC53JIBFFxHS2zEfzrFzgN+R
+sNsvROQYmO1T5gOySrMN+AsqPwnu3CR2LgMPRqsvguCPduIfXzEM3afJQuRh2lAW
+a5Im4U6GQX5cez1MGDHB3/Mk8fH194coSUTUtH134gpeA5LWemALrlDCRsfdSbw2
+G2oeM++LQIDx2VcKfRKWfqvKhC1Ajp5FdiZw6Z7lo6+BXFHKSVupSjKAhtIdT4gj
+RVhPy7IzR78PM8sLvDnqD6CyTHtuXQ==
+=7p/R
+-----END PGP SIGNATURE-----
+
+--RnxXMyWEPIZsopkG--
