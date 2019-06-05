@@ -2,113 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED043606B
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 17:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE1F36076
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 17:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728446AbfFEPj6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jun 2019 11:39:58 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:44406 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728200AbfFEPj6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 11:39:58 -0400
-Received: by mail-qk1-f195.google.com with SMTP id w187so5392020qkb.11;
-        Wed, 05 Jun 2019 08:39:57 -0700 (PDT)
+        id S1728364AbfFEPmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jun 2019 11:42:46 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45677 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728228AbfFEPmp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 11:42:45 -0400
+Received: by mail-pl1-f194.google.com with SMTP id x7so8838953plr.12
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2019 08:42:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XkK3it9qwdZSq91s1rnyVYmUTgpHaE4AnNYryBYUdwM=;
-        b=Q3+HdRskeYHlYSkfrRZo6GdsYTy2c2e4x6g+bYwAUNzv6xgOoTQcCOPehF6viNil48
-         4IHiGOzALoqsk2Eaup9OOZ6HgMaVVqWI7u+vDZVURC3XS45f/4kLDNsUUUDibEzn4Wrb
-         uHDDDUsKHlORHU1T3qo/oUTHKDd++NZQl6n9iMyxhMmVIywxkHZ1rLMcynDbpqwZOyVB
-         Woyp8aClZcu+uN7X1uwHy3rq+YElWGDSq6VbedDRMSpXO1kVgMlhIm0Dw/9mdk2tAjTh
-         MuGEwDQaCjtq9SNt5evD8WWL/i9bs5dp67nZI2pkruEz2RSZHiSJEf0jGRXkPUDJfEjm
-         8E4w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HT8rs4hwGaWG5IuOFVaFlA5Z0E57AgaycUBt63djjCg=;
+        b=cn+itN2+p3FswXzcc3Qp9etSRe9Gj6W2oMDHJWFFreOh7hx99jpUUvWPutyY/jSRwM
+         eYJeHAr0OCROyY6Lq2xCDXICTig8fvcFF3hqQMFCa/Sb4TF5wAVJ1X/KyyPcpGB6n/u3
+         iJpiE1T9ipHjDioMANp3sTQQ6sISYLywriftPJMUF5aO6A4Gc8cOM3+w2W4A+SHN7qF1
+         mb8JS296BYik/VN0roz3o+OmqR+ioeZ8kKAkj4YxtaRAVOEK2xk4PV09NFaKKfhoh6dC
+         ESYeJlKc7ks/VF0Werc2K+JIyQKSO0cZPO+KeWfEAOSpOp/J9IbPADhhh+b1MNJCSLik
+         qC+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XkK3it9qwdZSq91s1rnyVYmUTgpHaE4AnNYryBYUdwM=;
-        b=gn3wPSdtzytMJsHoGO/TbS6QNwYuq+sUnVC8Rop19JgsZxKW4FJK9QftR+pK6eLeDq
-         aDk/6dltiMcTmp9oljW5Mgx9gMith+lKqWArEdlawKaKM9FE2514ZcX3aJGmUOwNqcaH
-         S5m3mTrzZa0i2o/xlRpbuBL3dEKXGTV6MQQ50m7tNBlEqcNDdkLsjTtFtPSVSilxWf7H
-         qehyPV4f34JvPq3DCtAqjGmfWqsNJFHbNYAu4jPquhkWWu+7bQhCjFfb/1j1LBLS3DYE
-         FOBrwDPPTJX07wznV7bmOD26G9cQ/DKTwj1PNacBBIHYlmj2r06juQQaicS2I+ab0bm3
-         HjsA==
-X-Gm-Message-State: APjAAAXvKXitnsrB/63cne+O1v6sCfK2iEh2+eeMiBDbGa1GtGTnvj2j
-        w2CZ7xEZcjiMLBWjP1DDr64=
-X-Google-Smtp-Source: APXvYqyhu0d8EGS06R2iyU5QKh0lTB3eo3EDTgwoUoiBmSFffglAxu+Rf169kev/+EK63ivSevRatA==
-X-Received: by 2002:a37:a413:: with SMTP id n19mr32240823qke.98.1559749197309;
-        Wed, 05 Jun 2019 08:39:57 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:500::1:c027])
-        by smtp.gmail.com with ESMTPSA id c5sm9544509qtj.27.2019.06.05.08.39.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 08:39:56 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 08:39:55 -0700
-From:   Tejun Heo <tj@kernel.org>
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH v9 12/16] sched/core: uclamp: Extend CPU's cgroup
- controller
-Message-ID: <20190605153955.GP374014@devbig004.ftw2.facebook.com>
-References: <20190515094459.10317-1-patrick.bellasi@arm.com>
- <20190515094459.10317-13-patrick.bellasi@arm.com>
- <20190531153545.GE374014@devbig004.ftw2.facebook.com>
- <20190603122725.GB19426@darkstar>
- <20190605140324.GL374014@devbig004.ftw2.facebook.com>
- <20190605143805.olk2ta5p2jnd4mjt@e110439-lin>
- <20190605144450.GN374014@devbig004.ftw2.facebook.com>
- <20190605153742.lusoiodrzxmpsrvd@e110439-lin>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HT8rs4hwGaWG5IuOFVaFlA5Z0E57AgaycUBt63djjCg=;
+        b=UaiSWG8JU68Ci6g1fdgihD1j3abceT9s8CQQdRVX7nfP5VNTsOtsjccYHlPsmRbW4p
+         lVU5WhL87gguvwWS1djjVRd4tZ4TyiMigcnApqQv1/xVEywQ0a11tamoVPLHG/maje8z
+         +TbkPHsORbvg+gEmDMr397f7gG67rfVJODPOltG1EFkh2lEQEt2CfjHgzmVeKPOhn6LH
+         N9qPs/9ee2LxlEHeuRP4OpkobOfkPg8jEbNMNDG3vFFmcq+/R9up5qB6yWgiFn7KA5MB
+         MRJb0SbKSwmYx+nFy892eEM3SBYm2M/8RbZg//ugovvQLvfO503eSBB0Hmi4Z3U8A73A
+         5zxA==
+X-Gm-Message-State: APjAAAU90d/NojE1kAt5qn8IDpfhUyium/T3dNXP2xrJDT3Owo34sm0f
+        EZGfAaOiyAO1scuTXANtx8AkRZ91mJ+5eBGzYAU=
+X-Google-Smtp-Source: APXvYqw5p6OZod0skAJniUBSTG08MFQgBJ0KoMKwplhFuH2z6vn85MjmNkcGf40iAL1LVV4c2EIWlJLW13wu1g4VqLA=
+X-Received: by 2002:a17:902:24c7:: with SMTP id l7mr45027535plg.192.1559749365079;
+ Wed, 05 Jun 2019 08:42:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190605153742.lusoiodrzxmpsrvd@e110439-lin>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <1558888143-5121-1-git-send-email-akinobu.mita@gmail.com>
+ <1558888143-5121-3-git-send-email-akinobu.mita@gmail.com> <20190601090238.GD6453@lst.de>
+ <CAC5umyiBmD6-3BNLfG7sNOe9jde8Ct16a9N_Ao3T_1_G1K_DDA@mail.gmail.com> <20190604073140.GH15680@lst.de>
+In-Reply-To: <20190604073140.GH15680@lst.de>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Thu, 6 Jun 2019 00:42:33 +0900
+Message-ID: <CAC5umyiN9TTi5rrYjsk-Gh-6aYLJRYjemm-U5F_BpF_+XMaJ_g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] nvme: add thermal zone devices
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Kenneth Heitke <kenneth.heitke@intel.com>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello, Patrick.
-
-On Wed, Jun 05, 2019 at 04:37:43PM +0100, Patrick Bellasi wrote:
-> > Everything sounds good to me.  Please note that cgroup interface files
-> > actually use literal "max" for limit/protection max settings so that 0
-> > and "max" mean the same things for all limit/protection knobs.
-> 
-> Lemme see if I've got it right, do you mean that we can:
-> 
->  1) write the _string_ "max" into a cgroup attribute to:
-> 
->     - set    0 for util_max, since it's a protection
->     - set 1024 for util_min, since it's a limit
+2019=E5=B9=B46=E6=9C=884=E6=97=A5(=E7=81=AB) 16:32 Christoph Hellwig <hch@l=
+st.de>:
 >
->  2) write the _string_ "0" into a cgroup attribute to:
-> 
->     - set 1024 for util_max, since it's a protection
->     - set    0 for util_min, since it's a limit
-> 
-> Is that correct or it's just me totally confused?
+> On Sun, Jun 02, 2019 at 10:19:08PM +0900, Akinobu Mita wrote:
+> > As long as the user space thermal governor is used, there is nothing mo=
+re
+> > than that from a functional perspective.  And I suppose that this is us=
+ed
+> > with user_space governor (i.e. there is still some work to be able to b=
+ind
+> > actual thermal cooling device).
+> >
+> > The main purpose of this is to turn on a fan when overheated without
+> > polling the device that could prevent the lower power state transitions=
+.
+> > But as you noted, we could do that with the existing AEN notifications
+> > through uevent.
+> >
+> > So frankly speaking, the benefit of this is providing generic thermal s=
+ysfs
+> > interface and the tools like tmon (linux/tools/thermal/tmon) can show t=
+he
+> > nvme temperatures.
+>
+> I'm just a little worried about bloating the nvme driver with features
+> that look kinda nifty but don't buy us much.  I'd rather keep at least
+> the core and PCIe drivers as minimal.  Now the thermal device support
+> is pretty small and except for the smart uevents I can't find anything
+> actually bad, but I'm not exactly excited either.
 
-Heh, sorry about not being clearer.  "max" just means numerically
-highest possible config for the config knob, so in your case, "max"
-would always map to 1024.
+I'll add thermal.c file in order to minimize the core driver changes and a
+module parameter to disable the thermal zone support.
 
-Thanks.
-
--- 
-tejun
+Device tree thermal zone will also be supported. It enables to use thermal
+governor other than user_space governor.
