@@ -2,72 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5E935A74
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 12:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3B135A88
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 12:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbfFEKcs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jun 2019 06:32:48 -0400
-Received: from mga07.intel.com ([134.134.136.100]:12403 "EHLO mga07.intel.com"
+        id S1727083AbfFEKhQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jun 2019 06:37:16 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:60636 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726502AbfFEKcr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Jun 2019 06:32:47 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jun 2019 03:32:46 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Jun 2019 03:32:42 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hYTDm-0001RK-5f; Wed, 05 Jun 2019 13:32:42 +0300
-Date:   Wed, 5 Jun 2019 13:32:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Bhardwaj, Rajneesh" <rajneesh.bhardwaj@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, bp@suse.de,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        platform-driver-x86@vger.kernel.org,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] x86/cpu: Add Icelake-NNPI to Intel family
-Message-ID: <20190605103242.GU9224@smile.fi.intel.com>
-References: <20190530123827.8218-1-rajneesh.bhardwaj@linux.intel.com>
- <20190604160914.GN9224@smile.fi.intel.com>
- <79e33a93-6180-5a58-0d8c-b34276e710f3@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79e33a93-6180-5a58-0d8c-b34276e710f3@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727171AbfFEKhQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 5 Jun 2019 06:37:16 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id F19A3200782;
+        Wed,  5 Jun 2019 12:37:12 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E4AF320077F;
+        Wed,  5 Jun 2019 12:37:12 +0200 (CEST)
+Received: from jana.ea.freescale.net (gw_auto.ea.freescale.net [10.171.94.100])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 642AD205FA;
+        Wed,  5 Jun 2019 12:37:12 +0200 (CEST)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Jacky Bai <ping.bai@nxp.com>, Anson Huang <Anson.Huang@nxp.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>, kernel@pengutronix.de,
+        linux-imx@nxp.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/5] Add imx7d speed grading and higher OPPs
+Date:   Wed,  5 Jun 2019 13:37:04 +0300
+Message-Id: <cover.1559730963.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 12:54:12AM +0530, Bhardwaj, Rajneesh wrote:
-> Hi Andy
-> 
-> On 04-Jun-19 9:39 PM, Andy Shevchenko wrote:
-> > On Thu, May 30, 2019 at 06:08:27PM +0530, Rajneesh Bhardwaj wrote:
-> > > Add the CPUID model number of Icelake Neural Network Processor for Deep
-> > I believe we spell "Ice Lake".
-> 
-> I referred to https://patchwork.kernel.org/patch/10812551/ , https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e394376ee89233508fa21d006546357f8efee31
-> and many others where it mentioned Icelake. I am fine to change it the way
-> you are suggesting, please confirm if its still needed and i will send a v2.
+Changes since v1:
+ * Remove the match list from imx-cpufreq-dt
+ * Split arch and cpufreq changes
+Link to v1: https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=124427
 
-I think the references have a mistake as well.
+Leonard Crestez (5):
+  cpufreq: imx-cpufreq-dt: Remove global platform match list
+  cpufreq: Switch imx7d to imx-cpufreq-dt for speed grading
+  ARM: imx: Switch imx7d to imx-cpufreq-dt for speed-grading
+  ARM: dts: imx7d: Update cpufreq OPP table
+  ARM: imx_v6_v7_defconfig: Enable CONFIG_ARM_IMX_CPUFREQ_DT
+
+ arch/arm/boot/dts/imx7d.dtsi         | 16 +++++++++++++---
+ arch/arm/boot/dts/imx7s.dtsi         |  4 ++++
+ arch/arm/configs/imx_v6_v7_defconfig |  1 +
+ arch/arm/mach-imx/mach-imx7d.c       |  7 +++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c |  2 +-
+ drivers/cpufreq/imx-cpufreq-dt.c     | 18 ++----------------
+ 6 files changed, 28 insertions(+), 20 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.7.4
 
