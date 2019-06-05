@@ -2,133 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB2A35F0C
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 16:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3DE35F22
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 16:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbfFEOUE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jun 2019 10:20:04 -0400
-Received: from sauhun.de ([88.99.104.3]:54932 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727893AbfFEOUE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Jun 2019 10:20:04 -0400
-Received: from localhost (p5486CB35.dip0.t-ipconnect.de [84.134.203.53])
-        by pokefinder.org (Postfix) with ESMTPSA id 291123E43B4;
-        Wed,  5 Jun 2019 16:20:01 +0200 (CEST)
-Date:   Wed, 5 Jun 2019 16:20:00 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
-        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        alsa-devel@alsa-project.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        linux-pm@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Evan Green <evgreen@chromium.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Mark Brown <broonie@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
- mfd includes
-Message-ID: <20190605142000.GC962@kunai>
-References: <20190604152019.16100-1-enric.balletbo@collabora.com>
- <20190604152019.16100-7-enric.balletbo@collabora.com>
+        id S1728270AbfFEOXQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jun 2019 10:23:16 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:35530 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728147AbfFEOXQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 10:23:16 -0400
+Received: by mail-wr1-f65.google.com with SMTP id m3so3857804wrv.2;
+        Wed, 05 Jun 2019 07:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wbOPhnIhf4nfTs1vXUxhyXev98Rz11boEidIV7ZETKk=;
+        b=EuEneBRAGkY2tXZgyGWpkYs3pssJaYscTtAV6fF+ZUopRxcgPkJfZKX0HopW6Lkm/B
+         v0O0oJk05l5BeYYV3/wScnTxlxrKSFKaW0n3OY4+sL26NZqwqXPfTXH6OuXcNMc3to6C
+         yB+4q/3CRhEoim7r7L2rNr+uao6W6rGkdQpQ1BG8uZQvPknZ1nwm1MCZV3kjTL/wdY7b
+         +/hbkq+i7KuStkxLx6hlLNVMphhNCy6wf+ePNC8XjiPAMdnVjuoOz9yhynbfwZX2E/oe
+         yMiTYc6btStoKYLTdudtbAG+geL466JIqTD5ww+WAFb4wskkxUKzpZAbglRkWOd6a+A0
+         tXnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wbOPhnIhf4nfTs1vXUxhyXev98Rz11boEidIV7ZETKk=;
+        b=b+jVJkFn5QPzD8CQMVtnbS33CRLb9rSg7yEibBBTLICyxON3iPCaQ/+612vi+yyjNt
+         jzGWflzz2wbQ0aRQ2szGD5s++nCXLMHBARCS3TDXvpWiNS2xON+wkQqFo8bU2ZoE/ry4
+         Yw1xIG8d+DTHNiG0DA1pPTSrtIZX7JDx3g3g40eUjBe4tw9nxZE2WtVdzRtxk8tPeIFp
+         rZc5R3hoixjgCcoPf916dyJvnjZrjIAjF5k2GkbmBUMGw8eW/el4QN0PqxlmkOGEPoW0
+         dI3jmkrg1iL+L82o7aEl92BOQUbaOsIOFRKxxXRBiwNgTeUJTUpmRRK6YkBUw1sp2Wle
+         uNSA==
+X-Gm-Message-State: APjAAAUpoZc7LiBxhHXu1bAu0sV9xIcvXUO/BEzySJ1jaxTkEhAkHGLv
+        +/xhRKHITx69ebSuQx4NjlM=
+X-Google-Smtp-Source: APXvYqzLt6ho0E63Grp+IikWcNCxLnkedoLM118ioYRsTDO89bPGBtcLhBRXsyeAz6UrVn2JD1cC1w==
+X-Received: by 2002:a5d:68d2:: with SMTP id p18mr4785213wrw.56.1559744593985;
+        Wed, 05 Jun 2019 07:23:13 -0700 (PDT)
+Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
+        by smtp.gmail.com with ESMTPSA id f10sm34787410wrg.24.2019.06.05.07.23.13
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 05 Jun 2019 07:23:13 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] driver: core: Allow subsystems to continue deferring probe
+Date:   Wed,  5 Jun 2019 16:23:12 +0200
+Message-Id: <20190605142312.6072-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Clx92ZfkiYIKRjnr"
-Content-Disposition: inline
-In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Thierry Reding <treding@nvidia.com>
 
---Clx92ZfkiYIKRjnr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Some subsystems, such as pinctrl, allow continuing to defer probe
+indefinitely. This is useful for devices that depend on resources
+provided by devices that are only probed after the init stage.
 
-On Tue, Jun 04, 2019 at 05:20:15PM +0200, Enric Balletbo i Serra wrote:
-> There is a bit of mess between cros-ec mfd includes and platform
-> includes. For example, we have a linux/mfd/cros_ec.h include that
-> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
-> we have a linux/mfd/cros_ec_commands.h file that is non related to the
-> multifunction device (in the sense that is not exporting any function of
-> the mfd device). This causes crossed includes between mfd and
-> platform/chrome subsystems and makes the code difficult to read, apart
-> from creating 'curious' situations where a platform/chrome driver includes
-> a linux/mfd/cros_ec.h file just to get the exported functions that are
-> implemented in another platform/chrome driver.
->=20
-> In order to have a better separation on what the cros-ec multifunction
-> driver does and what the cros-ec core provides move and rework the
-> affected includes doing:
->=20
->  - Move cros_ec_commands.h to include/linux/platform_data/cros_ec_command=
-s.h
->  - Get rid of the parts that are implemented in the platform/chrome/cros_=
-ec_proto.c
->    driver from include/linux/mfd/cros_ec.h to a new file
->    include/linux/platform_data/cros_ec_proto.h
->  - Update all the drivers with the new includes, so
->    - Drivers that only need to know about the protocol include
->      - linux/platform_data/cros_ec_proto.h
->      - linux/platform_data/cros_ec_commands.h
->    - Drivers that need to know about the cros-ec mfd device also include
->      - linux/mfd/cros_ec.h
->=20
-> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+One example of this can be seen on Tegra, where the DPAUX hardware
+contains pinmuxing controls for pins that it shares with an I2C
+controller. The I2C controller is typically used for communication
+with a monitor over HDMI (DDC). However, other instances of the I2C
+controller are used to access system critical components, such as a
+PMIC. The I2C controller driver will therefore usually be a builtin
+driver, whereas the DPAUX driver is part of the display driver that
+is loaded from a module to avoid bloating the kernel image with all
+of the DRM/KMS subsystem.
 
-Acked-by: Wolfram Sang <wsa@the-dreams.de> (for the I2C part)
+In this particular case the pins used by this I2C/DDC controller
+become accessible very late in the boot process. However, since the
+controller is only used in conjunction with display, that's not an
+issue.
 
+Unfortunately the driver core currently outputs a warning message
+when a device fails to get the pinctrl before the end of the init
+stage. That can be confusing for the user because it may sound like
+an unwanted error occurred, whereas it's really an expected and
+harmless situation.
 
---Clx92ZfkiYIKRjnr
-Content-Type: application/pgp-signature; name="signature.asc"
+In order to eliminate this warning, this patch allows callers of the
+driver_deferred_probe_check_state() helper to specify that they want
+to continue deferring probe, regardless of whether we're past the
+init stage or not. All of the callers of that function are updated
+for the new signature, but only the pinctrl subsystem passes a true
+value in the new persist parameter if appropriate.
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ drivers/base/dd.c            | 17 ++++++++++++-----
+ drivers/base/power/domain.c  |  2 +-
+ drivers/iommu/of_iommu.c     |  2 +-
+ drivers/pinctrl/devicetree.c | 10 ++++++----
+ include/linux/device.h       |  2 +-
+ 5 files changed, 21 insertions(+), 12 deletions(-)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz3z5AACgkQFA3kzBSg
-KbYuGA/9GcL4++C/ViixlrJ+2KnwVIZhutol9fcA8YKEeEpGQq42AkU9zJV8pX3y
-U6sLvo3bHeDjA98mwO+aWKCaZIp1W5vZrKdQNqUZ35xvEaIgjhZ2dATu2+ontUAI
-Yv9koHktSt4oTbZlAPmcIwV/vLrhmJgr0FA1B6pS4qFbccYh+ePsTKvYpsjaguox
-vwDsmzJkZJ6AjW51Nx0dvMGJuUX6RLnv14etbz6P1I47cPKG9lYyVOsDiUIHsOPG
-JmhUiCaertI9rrsjaYNQIGrzGbkAozoO0c5klJC5BlnfBvqEfwjgBh5+ccqH1HXL
-WuegitNsfkAX3Y5nSZUsGoC1wtg+pqmLWsNs2eTc1uQAxYOwlleFOiMKXuhUIG2U
-0BMFoJ6/AYCuMkvIPyDdl8UWMjXW8Odreu2Y0h1rF6SuJ+mmI8TfhgfbTG/s1uX7
-qs9bPWwmi1EOJ1AoNv3ouLrC2PT6ES7Kt5mnvi4byXFcwkdq8EKcTfLVpy0xz6l/
-tDTHCxNLCrku2WX32buEW+mHZfCpbNRfcU7/VlTNU8o9i4QYy4WeL/SgaGLDVZvM
-zDFRRhXw2U+mtxRI6yAI/bl0Tl8VJG7cqCHeGuKGeA30siz75gSi6b2n+rCTnkba
-dfCggQuvByFYBOqqO4mnuvTflAYInnad7IyBnbGhS7p7NEkPbgE=
-=Nrms
------END PGP SIGNATURE-----
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 0df9b4461766..25ffbadf4187 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -238,23 +238,30 @@ __setup("deferred_probe_timeout=", deferred_probe_timeout_setup);
+ /**
+  * driver_deferred_probe_check_state() - Check deferred probe state
+  * @dev: device to check
++ * @persist: Boolean flag indicating whether drivers should keep trying to
++ *   probe after built-in drivers have had a chance to probe. This is useful
++ *   for built-in drivers that rely on resources provided by modular drivers.
+  *
+  * Returns -ENODEV if init is done and all built-in drivers have had a chance
+- * to probe (i.e. initcalls are done), -ETIMEDOUT if deferred probe debug
+- * timeout has expired, or -EPROBE_DEFER if none of those conditions are met.
++ * to probe (i.e. initcalls are done) and unless persist is set, -ETIMEDOUT if
++ * deferred probe debug timeout has expired, or -EPROBE_DEFER if none of those
++ * conditions are met.
+  *
+  * Drivers or subsystems can opt-in to calling this function instead of directly
+  * returning -EPROBE_DEFER.
+  */
+-int driver_deferred_probe_check_state(struct device *dev)
++int driver_deferred_probe_check_state(struct device *dev, bool persist)
+ {
+ 	if (initcalls_done) {
+ 		if (!deferred_probe_timeout) {
+ 			dev_WARN(dev, "deferred probe timeout, ignoring dependency");
+ 			return -ETIMEDOUT;
+ 		}
+-		dev_warn(dev, "ignoring dependency for device, assuming no driver");
+-		return -ENODEV;
++
++		if (!persist) {
++			dev_warn(dev, "ignoring dependency for device, assuming no driver");
++			return -ENODEV;
++		}
+ 	}
+ 	return -EPROBE_DEFER;
+ }
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 33c30c1e6a30..effa5276a773 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2423,7 +2423,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 		mutex_unlock(&gpd_list_lock);
+ 		dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
+ 			__func__, PTR_ERR(pd));
+-		return driver_deferred_probe_check_state(base_dev);
++		return driver_deferred_probe_check_state(base_dev, false);
+ 	}
+ 
+ 	dev_dbg(dev, "adding to PM domain %s\n", pd->name);
+diff --git a/drivers/iommu/of_iommu.c b/drivers/iommu/of_iommu.c
+index f04a6df65eb8..70f3946b088a 100644
+--- a/drivers/iommu/of_iommu.c
++++ b/drivers/iommu/of_iommu.c
+@@ -117,7 +117,7 @@ static int of_iommu_xlate(struct device *dev,
+ 	 * a proper probe-ordering dependency mechanism in future.
+ 	 */
+ 	if (!ops)
+-		return driver_deferred_probe_check_state(dev);
++		return driver_deferred_probe_check_state(dev, false);
+ 
+ 	return ops->of_xlate(dev, iommu_spec);
+ }
+diff --git a/drivers/pinctrl/devicetree.c b/drivers/pinctrl/devicetree.c
+index f7e354f85518..c808bf567d24 100644
+--- a/drivers/pinctrl/devicetree.c
++++ b/drivers/pinctrl/devicetree.c
+@@ -111,13 +111,15 @@ static int dt_to_map_one_config(struct pinctrl *p,
+ 
+ 		np_pctldev = of_get_next_parent(np_pctldev);
+ 		if (!np_pctldev || of_node_is_root(np_pctldev)) {
++			bool persist = false;
++
+ 			of_node_put(np_pctldev);
+-			ret = driver_deferred_probe_check_state(p->dev);
+ 			/* keep deferring if modules are enabled unless we've timed out */
+-			if (IS_ENABLED(CONFIG_MODULES) && !allow_default && ret == -ENODEV)
+-				ret = -EPROBE_DEFER;
++			if (IS_ENABLED(CONFIG_MODULES) && !allow_default)
++				persist = true;
+ 
+-			return ret;
++			return driver_deferred_probe_check_state(p->dev,
++								 persist);
+ 		}
+ 		/* If we're creating a hog we can use the passed pctldev */
+ 		if (hog_pctldev && (np_pctldev == p->dev->of_node)) {
+diff --git a/include/linux/device.h b/include/linux/device.h
+index e0649f6adf2e..ecf59dfcbfb7 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -340,7 +340,7 @@ struct device *driver_find_device(struct device_driver *drv,
+ 				  int (*match)(struct device *dev, void *data));
+ 
+ void driver_deferred_probe_add(struct device *dev);
+-int driver_deferred_probe_check_state(struct device *dev);
++int driver_deferred_probe_check_state(struct device *dev, bool persist);
+ 
+ /**
+  * struct subsys_interface - interfaces to device functions
+-- 
+2.21.0
 
---Clx92ZfkiYIKRjnr--
