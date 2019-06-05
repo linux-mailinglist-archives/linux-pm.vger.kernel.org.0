@@ -2,102 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE1F36076
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 17:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5C5360E5
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 18:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbfFEPmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jun 2019 11:42:46 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:45677 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728228AbfFEPmp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 11:42:45 -0400
-Received: by mail-pl1-f194.google.com with SMTP id x7so8838953plr.12
-        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2019 08:42:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HT8rs4hwGaWG5IuOFVaFlA5Z0E57AgaycUBt63djjCg=;
-        b=cn+itN2+p3FswXzcc3Qp9etSRe9Gj6W2oMDHJWFFreOh7hx99jpUUvWPutyY/jSRwM
-         eYJeHAr0OCROyY6Lq2xCDXICTig8fvcFF3hqQMFCa/Sb4TF5wAVJ1X/KyyPcpGB6n/u3
-         iJpiE1T9ipHjDioMANp3sTQQ6sISYLywriftPJMUF5aO6A4Gc8cOM3+w2W4A+SHN7qF1
-         mb8JS296BYik/VN0roz3o+OmqR+ioeZ8kKAkj4YxtaRAVOEK2xk4PV09NFaKKfhoh6dC
-         ESYeJlKc7ks/VF0Werc2K+JIyQKSO0cZPO+KeWfEAOSpOp/J9IbPADhhh+b1MNJCSLik
-         qC+Q==
+        id S1728477AbfFEQMq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jun 2019 12:12:46 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:41097 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728421AbfFEQMq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 12:12:46 -0400
+Received: by mail-pg1-f195.google.com with SMTP id 83so5827508pgg.8
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2019 09:12:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HT8rs4hwGaWG5IuOFVaFlA5Z0E57AgaycUBt63djjCg=;
-        b=UaiSWG8JU68Ci6g1fdgihD1j3abceT9s8CQQdRVX7nfP5VNTsOtsjccYHlPsmRbW4p
-         lVU5WhL87gguvwWS1djjVRd4tZ4TyiMigcnApqQv1/xVEywQ0a11tamoVPLHG/maje8z
-         +TbkPHsORbvg+gEmDMr397f7gG67rfVJODPOltG1EFkh2lEQEt2CfjHgzmVeKPOhn6LH
-         N9qPs/9ee2LxlEHeuRP4OpkobOfkPg8jEbNMNDG3vFFmcq+/R9up5qB6yWgiFn7KA5MB
-         MRJb0SbKSwmYx+nFy892eEM3SBYm2M/8RbZg//ugovvQLvfO503eSBB0Hmi4Z3U8A73A
-         5zxA==
-X-Gm-Message-State: APjAAAU90d/NojE1kAt5qn8IDpfhUyium/T3dNXP2xrJDT3Owo34sm0f
-        EZGfAaOiyAO1scuTXANtx8AkRZ91mJ+5eBGzYAU=
-X-Google-Smtp-Source: APXvYqw5p6OZod0skAJniUBSTG08MFQgBJ0KoMKwplhFuH2z6vn85MjmNkcGf40iAL1LVV4c2EIWlJLW13wu1g4VqLA=
-X-Received: by 2002:a17:902:24c7:: with SMTP id l7mr45027535plg.192.1559749365079;
- Wed, 05 Jun 2019 08:42:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=79Sfm8YIr23xFkRcXWa+gOIRmNAKkSIQltISbwaioUI=;
+        b=Y4ShZqK26GCV232REGWYwErBw6zQmKJdJXheBta6oekYgy6+lMReQX2Fk5oKzzc5fR
+         rBpJYqmfAtKfooZzlx23m5SFSlpRB+5mFqRXF5oFM3/yrdOSfGE8RiOLgA0KaYUVsXPS
+         BU4YXxaUUQ2miAj5UpNpmyxmP1xYuxR2suat4nuj+fcfrkhRqL1FissAs78SPTpmeu5d
+         fSDIGUNHGrOFfwQOsfAU4pcP02JdT7/WRjH8Q1apJi9ugB94lYMJu/Nwi9SyOIW6TO1U
+         oHsrQIaPra7nwozgRBIvPV2i3nu1o7FBGmq4WnfocnsQYPdJGXI6A6YhaAWjOj2RkQJK
+         BeFA==
+X-Gm-Message-State: APjAAAVSFYGgcIvngI11WXxUuHOLkJYmnSwtSEIGDRZ5InD6bVYlC1Fb
+        LY3uOOAmd5PwQeWM6KoR4UHZBGa9TmI=
+X-Google-Smtp-Source: APXvYqxjkznisIoTau+XvZf/GLhvZndexplcbkYF6j2Xo/Y1lA4UJmkMw1XvHk4hQknJTvE34IGz3A==
+X-Received: by 2002:a65:490f:: with SMTP id p15mr5485988pgs.275.1559751165796;
+        Wed, 05 Jun 2019 09:12:45 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id 25sm22746617pfp.76.2019.06.05.09.12.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 09:12:44 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH] PM: Show how long dpm_suspend_start() and dpm_suspend_end() take
+Date:   Wed,  5 Jun 2019 09:12:37 -0700
+Message-Id: <20190605161237.176983-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.20.GIT
 MIME-Version: 1.0
-References: <1558888143-5121-1-git-send-email-akinobu.mita@gmail.com>
- <1558888143-5121-3-git-send-email-akinobu.mita@gmail.com> <20190601090238.GD6453@lst.de>
- <CAC5umyiBmD6-3BNLfG7sNOe9jde8Ct16a9N_Ao3T_1_G1K_DDA@mail.gmail.com> <20190604073140.GH15680@lst.de>
-In-Reply-To: <20190604073140.GH15680@lst.de>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Thu, 6 Jun 2019 00:42:33 +0900
-Message-ID: <CAC5umyiN9TTi5rrYjsk-Gh-6aYLJRYjemm-U5F_BpF_+XMaJ_g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] nvme: add thermal zone devices
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keith Busch <keith.busch@intel.com>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Minwoo Im <minwoo.im.dev@gmail.com>,
-        Kenneth Heitke <kenneth.heitke@intel.com>,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=E5=B9=B46=E6=9C=884=E6=97=A5(=E7=81=AB) 16:32 Christoph Hellwig <hch@l=
-st.de>:
->
-> On Sun, Jun 02, 2019 at 10:19:08PM +0900, Akinobu Mita wrote:
-> > As long as the user space thermal governor is used, there is nothing mo=
-re
-> > than that from a functional perspective.  And I suppose that this is us=
-ed
-> > with user_space governor (i.e. there is still some work to be able to b=
-ind
-> > actual thermal cooling device).
-> >
-> > The main purpose of this is to turn on a fan when overheated without
-> > polling the device that could prevent the lower power state transitions=
-.
-> > But as you noted, we could do that with the existing AEN notifications
-> > through uevent.
-> >
-> > So frankly speaking, the benefit of this is providing generic thermal s=
-ysfs
-> > interface and the tools like tmon (linux/tools/thermal/tmon) can show t=
-he
-> > nvme temperatures.
->
-> I'm just a little worried about bloating the nvme driver with features
-> that look kinda nifty but don't buy us much.  I'd rather keep at least
-> the core and PCIe drivers as minimal.  Now the thermal device support
-> is pretty small and except for the smart uevents I can't find anything
-> actually bad, but I'm not exactly excited either.
+When debugging device driver power management code it is convenient to
+know how much time is spent in the "suspend start" and "suspend end"
+phases. Hence log the time spent in these phases.
 
-I'll add thermal.c file in order to minimize the core driver changes and a
-module parameter to disable the thermal zone support.
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/base/power/main.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-Device tree thermal zone will also be supported. It enables to use thermal
-governor other than user_space governor.
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index dcfc0a36c8f7..1e84b8aa220f 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -1631,17 +1631,20 @@ int dpm_suspend_late(pm_message_t state)
+  */
+ int dpm_suspend_end(pm_message_t state)
+ {
+-	int error = dpm_suspend_late(state);
++	ktime_t starttime = ktime_get();
++	int error;
++
++	error = dpm_suspend_late(state);
+ 	if (error)
+-		return error;
++		goto out;
+ 
+ 	error = dpm_suspend_noirq(state);
+-	if (error) {
++	if (error)
+ 		dpm_resume_early(resume_event(state));
+-		return error;
+-	}
+ 
+-	return 0;
++out:
++	dpm_show_time(starttime, state, error, "end");
++	return error;
+ }
+ EXPORT_SYMBOL_GPL(dpm_suspend_end);
+ 
+@@ -2034,6 +2037,7 @@ int dpm_prepare(pm_message_t state)
+  */
+ int dpm_suspend_start(pm_message_t state)
+ {
++	ktime_t starttime = ktime_get();
+ 	int error;
+ 
+ 	error = dpm_prepare(state);
+@@ -2042,6 +2046,7 @@ int dpm_suspend_start(pm_message_t state)
+ 		dpm_save_failed_step(SUSPEND_PREPARE);
+ 	} else
+ 		error = dpm_suspend(state);
++	dpm_show_time(starttime, state, error, "start");
+ 	return error;
+ }
+ EXPORT_SYMBOL_GPL(dpm_suspend_start);
+-- 
+2.22.0.rc3
+
