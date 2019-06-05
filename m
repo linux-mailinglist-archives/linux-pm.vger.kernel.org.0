@@ -2,104 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E06357A2
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 09:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB72357F4
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 09:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbfFEHXq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jun 2019 03:23:46 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36275 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726642AbfFEHXq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 03:23:46 -0400
-Received: by mail-pl1-f196.google.com with SMTP id d21so9375646plr.3;
-        Wed, 05 Jun 2019 00:23:45 -0700 (PDT)
+        id S1726464AbfFEHie (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jun 2019 03:38:34 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:33444 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbfFEHie (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 03:38:34 -0400
+Received: by mail-io1-f68.google.com with SMTP id u13so19508483iop.0;
+        Wed, 05 Jun 2019 00:38:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OVAkmuBuntq/JiCcUISbfs7QbsWbr2uo4v+Qfkmx2xY=;
-        b=V2EcUY+pPN+AsSWDcKbzLCzcQ3jVbMc+L3l3HjJ1+Ij1smFlWcBW5+23Y3ZXxDkJS+
-         +WZ/nvfUeR1Ij4Kau9W3zazWnCjOnqCOzecKVlk4sMF1O8abzM1OJn+agRlDg7yO0/oL
-         JQtXkKFwbkii3+S/gkyiPF9W6AMZiLkfLEDIEINFuekdKTnUbejSMVoPsMLQ1mO/VWQv
-         z6miceTSx2WNKDD/jdIg6lvE8iBqlAMiaE/GgGH7EbhBEZ7lgg2bMvX7BbnLZg2vh5sZ
-         7LZtHe3qzuHPFjxdPDRZNkscf9K/J9pYd9QKFDqNlxfivbd8fLCW9wHIoxorftRxf7bD
-         LZVA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/VQJXEXeZftJ/nSSLIUzgwAXzoErEFStYQp2K666tO4=;
+        b=bVpUSzYf3kH3yxOP02XPck6E5JkgMxGaFKJbZRAJN8JQlp/GGgP23t6MnbG6WmlXlY
+         UG6W8Wvy7oXz/9Y88EODigdDizNrmupbrZcmEc7mxXI8bU+X7B1GYOTe8N9R/scIoeFt
+         xc/t+9wnWvkyQDabkoEyMBc+X1En2SLzFYxDohhqPrwrBNhNjeZOdz8wfoyPB1LtiIX5
+         QvyJxGcY18tdJnmnaAtVhOWtOBctihxhxCARe/8J4dvS376owQb7Iegxi7DV+UPv/NM8
+         A+/Gs3uw5QpyAkB+2hpnDdLUSnHU20rLM8NrfOW6rmGAXZugjyNaW2J499gsU9a+59b+
+         0J/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OVAkmuBuntq/JiCcUISbfs7QbsWbr2uo4v+Qfkmx2xY=;
-        b=jlXDoa0h62Rfz4l2KxRxUKVRDV2l3n5xc67473BpwipAUG2L0Q2/zvK9GgPtQ+Q/Ye
-         Xxs8sA9rVV48xypNMDIYdGnhmGZgvZU9gccsGD4vyxkPYWmhQa41eN0A/lp9Qc/Tljgq
-         a/i9nextQVCeUVNsmYj3B886Ucjg6kyUIUA2jxBaC3usae7m1t3D8gvY4uiKsXdk9ZrE
-         Mx6WnF5EIuhm2bCutPt2iRmZzwXvazSzUBpO7hbgtwcC52ZKDCu2bcH68/VjnpS9QTdZ
-         Vz+9Por5UYzHbxZIiyayJi09VnZQ9K4sxqdVMDiaH5mgb8+GugfQNRtZAyk9Gc9SuQl8
-         VyGA==
-X-Gm-Message-State: APjAAAWXukmKtJNfqgjcJOmwaAXb/mqCT4IcSxs/lRmbp8YedA8OP7+M
-        GAO+Z/NHuJPExGB1wUnI2fZDfN8RVls=
-X-Google-Smtp-Source: APXvYqy49aupErR7JqOZtS4PHu0Ci+0cTNR5ihIy6ieF5peFedl0FjVlpzXkXfZiOGOJVPAf+LuEgA==
-X-Received: by 2002:a17:902:29c8:: with SMTP id h66mr41798233plb.269.1559719424733;
-        Wed, 05 Jun 2019 00:23:44 -0700 (PDT)
-Received: from localhost.lan (c-24-22-235-96.hsd1.wa.comcast.net. [24.22.235.96])
-        by smtp.gmail.com with ESMTPSA id i4sm1027404pjd.31.2019.06.05.00.23.43
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Jun 2019 00:23:44 -0700 (PDT)
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chris Healy <cphealy@gmail.com>,
-        Cory Tusar <cory.tusar@zii.aero>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] power: supply: ucs1002: Add HWMON interface
-Date:   Wed,  5 Jun 2019 00:23:23 -0700
-Message-Id: <20190605072323.21990-3-andrew.smirnov@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190605072323.21990-1-andrew.smirnov@gmail.com>
-References: <20190605072323.21990-1-andrew.smirnov@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/VQJXEXeZftJ/nSSLIUzgwAXzoErEFStYQp2K666tO4=;
+        b=O2XvtDmVpYMO700gQ37muKmDbT7W8X2KNl7aX3qJRiV3kvatvJLsGrGh2Ldz9MtBUs
+         sYF93G/SSopQKqoMkWLfgb4g6orOF/yuAmx/KzSfZMFtHsECGn3nq85j8OPuX8OXJ3p5
+         jFMTiGw/L25ZuACcGMm1pnZdg+DCmZM+CvFwmHeJ8PhCplcyYVWKykDRM4zQyw53/8lM
+         nn6pZUoONMNsImUsmXHSJJvyxTu1Ssy7zcypIWSYavFaaR4Qfg9Xa5J4DAmyM3FOSu41
+         72XSP4G75o7rQ4BmPf5BZcl07sJSDLJLvwKDJnHw747jrrC38hC6+uSLORIdjaIq7vgJ
+         dLjw==
+X-Gm-Message-State: APjAAAUM1me1WIRYXNtByzjnj9l1/co54ZlejkrmKciGiR9a51vKPuVn
+        cd3OZ1yk0JK7GCmBlmdSObdK1RHejitN1H1ANbU=
+X-Google-Smtp-Source: APXvYqzfL0eD5Psq9k2rl87GuB7sKSYcuVKsdB22LjGSiBUii0V7gwCQo3Q4Utaci/w+oM7INEBVVUlMVztCiuxaZiU=
+X-Received: by 2002:a6b:b556:: with SMTP id e83mr16894432iof.94.1559720313500;
+ Wed, 05 Jun 2019 00:38:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190416172203.4679-1-daniel.lezcano@linaro.org>
+ <20190423154430.GA16014@localhost.localdomain> <bc10d520-4d15-74d6-0dc2-fd63df8d9a21@linaro.org>
+ <ff407865-8606-60c2-62d8-60ae96d1984d@linaro.org> <CAHQ1cqG-cb=1hyO8oeV4k-6Pq4q+aqhH8RPx04i2oPTNhAhiVg@mail.gmail.com>
+ <20190529030542.GA2654@localhost.localdomain>
+In-Reply-To: <20190529030542.GA2654@localhost.localdomain>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Wed, 5 Jun 2019 00:38:21 -0700
+Message-ID: <CAHQ1cqGZceVR7HRUKjFT8wieRnd0_bZLNNzKNMcq62P3fWcvAw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/of: Add a get_temp_id callback function
+To:     Eduardo Valentin <edubezval@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Chris Healy <cphealy@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Expose current sensors found on UCS1002 via HWMON.
+On Tue, May 28, 2019 at 8:05 PM Eduardo Valentin <edubezval@gmail.com> wrote:
+>
+> On Thu, May 23, 2019 at 07:48:56PM -0700, Andrey Smirnov wrote:
+> > On Mon, Apr 29, 2019 at 9:51 AM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> > >
+> > > On 24/04/2019 01:08, Daniel Lezcano wrote:
+> > > > On 23/04/2019 17:44, Eduardo Valentin wrote:
+> > > >> Hello,
+> > > >>
+> > > >> On Tue, Apr 16, 2019 at 07:22:03PM +0200, Daniel Lezcano wrote:
+> > > >>> Currently when we register a sensor, we specify the sensor id and a data
+> > > >>> pointer to be passed when the get_temp function is called. However the
+> > > >>> sensor_id is not passed to the get_temp callback forcing the driver to
+> > > >>> do extra allocation and adding back pointer to find out from the sensor
+> > > >>> information the driver data and then back to the sensor id.
+> > > >>>
+> > > >>> Add a new callback get_temp_id() which will be called if set. It will
+> > > >>> call the get_temp_id() with the sensor id.
+> > > >>>
+> > > >>> That will be more consistent with the registering function.
+> > > >>
+> > > >> I still do not understand why we need to have a get_id callback.
+> > > >> The use cases I have seen so far, which I have been intentionally rejecting, are
+> > > >> mainly solvable by creating other compatible entries. And really, if you
+> > > >> have, say a bandgap, chip that supports multiple sensors, but on
+> > > >> SoC version A it has 5 sensors, and on SoC version B it has only 4,
+> > > >> or on SoC version C, it has 5 but they are either logially located
+> > > >> in different places (gpu vs iva regions), these are all cases in which
+> > > >> you want a different compatible!
+> > > >>
+> > > >> Do you mind sharing why you need a get sensor id callback?
+> > > >
+> > > > It is not a get sensor id callback, it is a get_temp callback which pass
+> > > > the sensor id.
+> > > >
+> > > > See in the different drivers, it is a common pattern there is a
+> > > > structure for the driver, then a structure for the sensor. When the
+> > > > get_temp is called, the callback needs info from the sensor structure
+> > > > and from the driver structure, so a back pointer to the driver structure
+> > > > is added in the sensor structure.
+> > >
+>
+> Do you mind sending a patch showing how one could convert an existing
+> driver to use this new API?
+>
 
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Cc: Chris Healy <cphealy@gmail.com>
-Cc: Cory Tusar <cory.tusar@zii.aero>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Fabio Estevam <fabio.estevam@nxp.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Sebastian Reichel <sre@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
----
- drivers/power/supply/ucs1002_power.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+There's already a patch doing that for qoriq driver:
+https://lore.kernel.org/lkml/20190404080647.8173-2-daniel.lezcano@linaro.org/
 
-diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/ucs1002_power.c
-index 677f20a4d76f..a4b6b37549cf 100644
---- a/drivers/power/supply/ucs1002_power.c
-+++ b/drivers/power/supply/ucs1002_power.c
-@@ -571,6 +571,12 @@ static int ucs1002_probe(struct i2c_client *client,
- 		return ret;
- 	}
- 
-+	ret = devm_power_supply_add_hwmon_sysfs(info->charger);
-+	if (ret) {
-+		dev_err(dev, "Failed to add hmwon attributes: %d\n", ret);
-+		return ret;
-+	}
-+
- 	ret = regmap_read(info->regmap, UCS1002_REG_PIN_STATUS, &regval);
- 	if (ret) {
- 		dev_err(dev, "Failed to read pin status: %d\n", ret);
--- 
-2.21.0
+Here's what can be done with Armada sensor driver:
+https://gist.github.com/ndreys/d733228756a17e1dcb31ec8f9a0e9115
+(please note that I don't have Armada HW, so I haven't tested those
+changes, just made them as an example)
 
+> > > Hi Eduardo,
+> > >
+> > > does the explanation clarifies the purpose of this change?
+> > >
+> >
+> > Eduardo, did you ever have a chance to revisit this thread? I would
+> > really like to make some progress on this one to unblock my i.MX8MQ
+> > hwmon series.
+>
+> The problem I have with this patch is that it is an API which resides
+> only in of-thermal. Growing APIs on DT only diverges of-thermal from
+> thermal core and platform drivers.
+>
+
+I don't have a horse in this race and would be fine if this API isn't
+accepted, so this is up for you to decide. My main goal is to get my
+i.MX8MQ hwmon patches moving and accepted.
+
+> Besides, this patch needs to document the API in Documention/
+
+I'd like to get more of a commitment on this before I'd start
+investing time into improving this patch any further. If this patch is
+a go, then I'd be happy to add that documentation.
+
+Thanks,
+Andrey Smirnov
