@@ -2,106 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FB3363B0
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 21:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01A43644E
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 21:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726305AbfFETCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jun 2019 15:02:47 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51862 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725950AbfFETCq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 15:02:46 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id A4E54260D04
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc:     kernel@collabora.com, linux-pm@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 2/2] PM / devfreq: Sanitize prints
-Date:   Wed,  5 Jun 2019 16:00:53 -0300
-Message-Id: <20190605190053.19177-2-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190605190053.19177-1-ezequiel@collabora.com>
-References: <20190605190053.19177-1-ezequiel@collabora.com>
+        id S1726535AbfFETLN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jun 2019 15:11:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51156 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726477AbfFETLN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 5 Jun 2019 15:11:13 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 9FC83AF0C;
+        Wed,  5 Jun 2019 19:11:10 +0000 (UTC)
+Message-ID: <6f40f43ed32c5c519761879245423f7c371e4ae6.camel@suse.de>
+Subject: Re: [PATCH 0/4] cpufreq support for the Raspberry Pi
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Stefan Wahren <wahrenst@gmx.net>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     f.fainelli@gmail.com, ptesarik@suse.com, sboyd@kernel.org,
+        viresh.kumar@linaro.org, mturquette@baylibre.com,
+        rjw@rjwysocki.net, linux-kernel@vger.kernel.org, eric@anholt.net,
+        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
+        mbrugger@suse.de, ssuloev@orpaltech.com
+Date:   Wed, 05 Jun 2019 21:11:06 +0200
+In-Reply-To: <1c9708c9-a3c9-8a8f-4693-8f29d3e60634@gmx.net>
+References: <20190604173223.4229-1-nsaenzjulienne@suse.de>
+         <2ece3f20-ef8c-c39e-941c-76635ddbe185@gmx.net>
+         <1a86637dad1d2f33450950143a82016beb91bdb6.camel@suse.de>
+         <1c9708c9-a3c9-8a8f-4693-8f29d3e60634@gmx.net>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-PJNAuTBnger31MKfSUoC"
+User-Agent: Evolution 3.32.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This commit is a simple cosmetic cleanup, where pr_fmt is used to avoid
-the "DEVFREQ" prefix in some prints.
 
-Also, messages are changed to not start with a capital. This is just
-a cosmetic change, meant to sanitize all prints from this file.
+--=-PJNAuTBnger31MKfSUoC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- drivers/devfreq/devfreq.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+On Wed, 2019-06-05 at 13:34 +0200, Stefan Wahren wrote:
+> Hi,
+>=20
+> Am 05.06.19 um 13:00 schrieb Nicolas Saenz Julienne:
+> > Hi Stefan,
+> > thanks for the review, I took note of your code comments.
+> >=20
+> > On Wed, 2019-06-05 at 11:46 +0200, Stefan Wahren wrote:
+> > > Hi Nicolas,
+> > >=20
+> > > Am 04.06.19 um 19:32 schrieb Nicolas Saenz Julienne:
+> > > > Hi all,
+> > > > this series aims at adding cpufreq support to the Raspberry Pi fami=
+ly of
+> > > > boards.
+> > > >=20
+> > > > The previous revision can be found at:=20
+> > > > https://lkml.org/lkml/2019/5/20/431
+> > > >=20
+> > > > The series first factors out 'pllb' from clk-bcm2385 and creates a =
+new
+> > > > clk driver that operates it over RPi's firmware interface[1]. We ar=
+e
+> > > > forced to do so as the firmware 'owns' the pll and we're not allowe=
+d to
+> > > > change through the register interface directly as we might race wit=
+h the
+> > > > over-temperature and under-voltage protections provided by the firm=
+ware.
+> > > it would be nice to preserve such design decision in the driver as a
+> > > comment, because the cover letter usually get lost.
+> > > > Next it creates a minimal cpufreq driver that populates the CPU's o=
+pp
+> > > > table, and registers cpufreq-dt. Which is needed as the firmware
+> > > > controls the max and min frequencies available.
+> > > I tested your series on top of Linux 5.2-rc1 with multi_v7_defconfig =
+and
+> > > manually enable this drivers. During boot with Raspbian rootfs i'm
+> > > getting the following:
+> > >=20
+> > > [    1.177009] cpu cpu0: failed to get clock: -2
+> > > [    1.183643] cpufreq-dt: probe of cpufreq-dt failed with error -2
+> > This is surprising, who could be creating a platform_device for cpufreq=
+-dt
+> > apart from raspberrypi-cpufreq? Just to make things clear, you're using=
+ the
+> > device tree from v5.2-rc1 (as opposed to the Raspbian one)?
+>=20
+> sorry my fault, i thought it already has been replaced. The behavior in
+> this unexpected case is fine, since it doesn't crash.
+>=20
+> I replaced the the DTB with the mainline one, but now i'm getting this:
+>=20
+> [    4.566068] cpufreq: cpufreq_online: CPU0: Running at unlisted freq:
+> 600000 KHz
+> [    4.580690] cpu cpu0: dev_pm_opp_set_rate: Invalid target frequency 0
+> [    4.594391] cpufreq: __target_index: Failed to change cpu frequency: -=
+22
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 8868ad9472d2..44392fa1c570 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -10,6 +10,8 @@
-  * published by the Free Software Foundation.
-  */
- 
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
- #include <linux/kernel.h>
- #include <linux/kmod.h>
- #include <linux/sched.h>
-@@ -59,7 +61,7 @@ static struct devfreq *find_device_devfreq(struct device *dev)
- 	struct devfreq *tmp_devfreq;
- 
- 	if (IS_ERR_OR_NULL(dev)) {
--		pr_err("DEVFREQ: %s: Invalid parameters\n", __func__);
-+		pr_err("%s: invalid parameters\n", __func__);
- 		return ERR_PTR(-EINVAL);
- 	}
- 	WARN(!mutex_is_locked(&devfreq_list_lock),
-@@ -208,7 +210,7 @@ static struct devfreq_governor *find_devfreq_governor(const char *name)
- 	struct devfreq_governor *tmp_governor;
- 
- 	if (IS_ERR_OR_NULL(name)) {
--		pr_err("DEVFREQ: %s: Invalid parameters\n", __func__);
-+		pr_err("%s: invalid parameters\n", __func__);
- 		return ERR_PTR(-EINVAL);
- 	}
- 	WARN(!mutex_is_locked(&devfreq_list_lock),
-@@ -238,7 +240,7 @@ static struct devfreq_governor *try_then_request_governor(const char *name)
- 	struct devfreq_governor *governor;
- 
- 	if (IS_ERR_OR_NULL(name)) {
--		pr_err("DEVFREQ: %s: Invalid parameters\n", __func__);
-+		pr_err("%s: invalid parameters\n", __func__);
- 		return ERR_PTR(-EINVAL);
- 	}
- 	WARN(!mutex_is_locked(&devfreq_list_lock),
-@@ -1001,7 +1003,7 @@ int devfreq_add_governor(struct devfreq_governor *governor)
- 	int err = 0;
- 
- 	if (!governor) {
--		pr_err("%s: Invalid parameters.\n", __func__);
-+		pr_err("%s: invalid parameters.\n", __func__);
- 		return -EINVAL;
- 	}
- 
-@@ -1066,7 +1068,7 @@ int devfreq_remove_governor(struct devfreq_governor *governor)
- 	int err = 0;
- 
- 	if (!governor) {
--		pr_err("%s: Invalid parameters.\n", __func__);
-+		pr_err("%s: invalid parameters.\n", __func__);
- 		return -EINVAL;
- 	}
- 
--- 
-2.20.1
+For the record this fixes it:
+
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index aa51756fd4d6..edb71eefe9cf 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -1293,7 +1293,7 @@ static int clk_core_determine_round_nolock(struct clk=
+_core
+*core,
+        } else if (core->ops->round_rate) {
+                rate =3D core->ops->round_rate(core->hw, req->rate,
+                                             &req->best_parent_rate);
+-               if (rate < 0)
++               if (IS_ERR_VALUE(rate))
+                        return rate;
+
+                req->rate =3D rate;
+
+round_rate() returns a 'long' value, yet 'pllb' in rpi3b+ goes as high as
+2.8GHz, which only fits in an 'unsigned long'. This explains why I didn't s=
+ee
+this issue with RPI2b.
+
+I'll add the patch to the series.
+
+Regards,
+Nicolas
+
+
+--=-PJNAuTBnger31MKfSUoC
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAlz4E8oACgkQlfZmHno8
+x/65VAf/fn1es6te2vdGehlcnMHV8inkQwAi0BEftzdL8s5w+Yv3WsJH3lwZM3sD
+DPZNWwlL/U2nVcKb997HnAcZm6CkosH87jzzF8n41F2LlzJGAzVDOZyxcbTJlK5V
+XtGsBvTkcqww24j6tKopUZ+9lWTSDTy2Jt3o/yxliP1oMFDrOVDQ0H20Qcprx32O
+lgev+7L7raIhmw8Fzy4DLU0nLe8kqkxGOHdorK7cRELAhys0rCx4WEX5MjJGUHQe
+TE9hQOG8bbGjvTtfE0MN837iw+S0D4XIyvjY5REPut2RTEcyf7uTea52DyXMeX5v
+vAGHR2WLM77yT5igIMv746NEBYT2SA==
+=2JhT
+-----END PGP SIGNATURE-----
+
+--=-PJNAuTBnger31MKfSUoC--
 
