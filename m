@@ -2,73 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF955354B9
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 02:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7B9354F4
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 03:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbfFEAYK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jun 2019 20:24:10 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:37619 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbfFEAYK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 20:24:10 -0400
-Received: by mail-oi1-f175.google.com with SMTP id t76so1956052oih.4
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jun 2019 17:24:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=o0xL1QihkfMHo7DI3paUmZXWDl9oR7z1jLaaqluWzDw=;
-        b=T+oDmCZDsauvvPCjKbIbPC03KqzUMbRYyT3F6r6LUHsF54pMZp3TFADm5Swz6LBrWq
-         eyHFAHm8HRkYBnsydUJ9jHpmzxL19crbDuHitNp/UAwhWQeWW4Dbvs3jKx4etmz5klIC
-         tageCpAiolsNegMeIeyO+Fb+dz0ShU5Aeb5PPYZab4UOPAsmC0QkjqI0SYXeCQyzj0G/
-         RX6Mv+BKRCalFvuVatxAUdd2ROO/a66fgzRL9udTVQ7XExX2c4+XfEnBb38CRMLtddCS
-         b3eD4ekesWYwNueBnm1Hljs8dtIJLCaZWhfe4Ntti+AfN4LAN5m3OawuhJgk/EmyEKqz
-         31Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=o0xL1QihkfMHo7DI3paUmZXWDl9oR7z1jLaaqluWzDw=;
-        b=n+Oq1Bjs6s2hZks0yiyBlN4SgWqKXvbgO1XzkHHzA+XIxB1iFyoeZJWM8MVD8E5Ffm
-         k1vIG2F0qd2x2RMoSzbugPyQAXPSkpUHcyMWoH1A1nPWnEheCJ5HOpfubuHBs4A8FhX2
-         MR84rpsDrbuciY/GWAwEY95upX3mPY4gN4dOoemVPjPym4qASdU+iUe/CH5SrK/aIKQj
-         SQqv1W79VoQgqZJPXOtpB+3c+ZKQ/jqbyjptBm6bMl8RxmLXNkR/ZUC8uo7UVAW6yW1k
-         tZb+ZPJ8sbFAXurvHBf2NPYMVAoY/dY2z9UkmeaPAbKFJfh+bBUsnzKlrLQTxmRotbXz
-         BzRw==
-X-Gm-Message-State: APjAAAWfOKSY3o/tOww/H/Oc7+vxbQ1jobBES5IumXcjp7sgc6WJQcaR
-        aEbPgAaH9ZsS64Ilb3tBC82K0XNLcfVQo7g7Ki88SA==
-X-Google-Smtp-Source: APXvYqw5PkGU8gjbuk6q6kOEFTbo2O4p1uw4LtJ3fBgeRY3dRW0YramMydPE/oKPqCNqT4jnFaunG/GdPwYmQr/OkX4=
-X-Received: by 2002:aca:5f84:: with SMTP id t126mr4216913oib.18.1559694249371;
- Tue, 04 Jun 2019 17:24:09 -0700 (PDT)
+        id S1726463AbfFEB1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jun 2019 21:27:20 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:40922 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbfFEB1U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jun 2019 21:27:20 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x551Nx57016864;
+        Wed, 5 Jun 2019 01:24:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2018-07-02;
+ bh=/nrlh7aFLVEP2ZCzsH4xixg65UQfaz0w/Ld25LSQ+5M=;
+ b=d8pHV8b0MzIW0QpC7OGVMUbyJ6f9RYKEk7XaJt/sTQfGC18+eZC0CCriXiV0bngFicHe
+ Y8/ufwDJDmMOOx9htlx53GWPPC7t9AvFZWIQ5A4sA8Lj2YSYkqQxnGZ8R+1x46jVmr2c
+ xW8XsXgSBDDwTMWYP8GeBbTXDdU/JPdnkjHGONBc2f/tbmN+UfBJACK+Y+6RcniJsRoj
+ bsK/6asrz17eoWZ2jmLrKon7QVLDM+aHXYrXqyA9ZzUJSaKasuH9W4BHxX3t7zyF4ApJ
+ bUSIC+uBswNoV3vsWJsjRTezwHUl1iXaEVyodnEnqZpj1Xy3Qd/wZwAb2hp1XzbaJzMO dQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 2suevdge4k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 05 Jun 2019 01:24:48 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x551O3GH024720;
+        Wed, 5 Jun 2019 01:24:48 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 2swnghnejm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 05 Jun 2019 01:24:48 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x551OTI7002675;
+        Wed, 5 Jun 2019 01:24:29 GMT
+Received: from ca-dmjordan1.us.oracle.com (/10.211.9.48)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 04 Jun 2019 18:24:28 -0700
+Date:   Tue, 4 Jun 2019 21:24:29 -0400
+From:   Daniel Jordan <daniel.m.jordan@oracle.com>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
+        kernel-hardening@lists.openwall.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [RFC 4/6] workqueue: Convert for_each_wq to use built-in list
+ check
+Message-ID: <20190605012429.wmlvlgn4mb4jkvua@ca-dmjordan1.us.oracle.com>
+References: <20190601222738.6856-1-joel@joelfernandes.org>
+ <20190601222738.6856-5-joel@joelfernandes.org>
 MIME-Version: 1.0
-From:   Tri Vo <trong@android.com>
-Date:   Tue, 4 Jun 2019 17:23:58 -0700
-Message-ID: <CANA+-vCThdRivg7nrMK5QoFu8SGUzEVSvSyp0H2CPyy9==Tqog@mail.gmail.com>
-Subject: Alternatives to /sys/kernel/debug/wakeup_sources
-To:     rjw@rjwysocki.net
-Cc:     hridya@google.com, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190601222738.6856-5-joel@joelfernandes.org>
+User-Agent: NeoMutt/20180323-268-5a959c
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9278 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906050006
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9278 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906050006
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Rafael,
+On Sat, Jun 01, 2019 at 06:27:36PM -0400, Joel Fernandes (Google) wrote:
+> list_for_each_entry_rcu now has support to check for RCU reader sections
+> as well as lock. Just use the support in it, instead of explictly
+> checking in the caller.
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  kernel/workqueue.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 9657315405de..91ed7aca16e5 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -424,9 +424,8 @@ static void workqueue_sysfs_unregister(struct workqueue_struct *wq);
+>   * ignored.
+>   */
+>  #define for_each_pwq(pwq, wq)						\
+> -	list_for_each_entry_rcu((pwq), &(wq)->pwqs, pwqs_node)		\
+> -		if (({ assert_rcu_or_wq_mutex(wq); false; })) { }	\
+> -		else
+> +	list_for_each_entry_rcu((pwq), &(wq)->pwqs, pwqs_node,		\
+> +				 lock_is_held(&(wq->mutex).dep_map))
+>  
 
-Currently, Android reads wakeup sources statistics from
-/sys/kernel/debug/wakeup_sources in production environment. This
-information is used, for example, to report which wake lock prevents
-the device from suspending.
-
-Android userspace reading wakeup_sources is not ideal because:
-- Debugfs API is not stable, i.e. Android tools built on top of it are
-not guaranteed to be backward/forward compatible.
-- This file requires debugfs to be mounted, which itself is
-undesirable for security reasons.
-
-To address these problems, we want to contribute a way to expose these
-statistics that doesn't depend on debugfs.
-
-Some initial thoughts/questions: Should we expose the stats in sysfs?
-Or maybe implement eBPF-based solution? What do you think?
-
-Thanks,
-Tri
+I think the definition of assert_rcu_or_wq_mutex can also be deleted.
