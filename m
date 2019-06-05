@@ -2,226 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 418A435F33
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 16:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E0D35F6A
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jun 2019 16:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728127AbfFEO04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jun 2019 10:26:56 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:40227 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728321AbfFEO0z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jun 2019 10:26:55 -0400
-Received: by mail-wr1-f65.google.com with SMTP id p11so14858420wre.7
-        for <linux-pm@vger.kernel.org>; Wed, 05 Jun 2019 07:26:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:openpgp:autocrypt:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=Bs+tzef5D9LsAaEUKxOI16OSgzvoEEZ28efFCeNQDyg=;
-        b=AekuQ7TelbxpyxkUVaQL1mo/Jz3B3kFc6SB94xlJidg0qBETRYuoFvfTQbpddgiER9
-         BOkpUOD+pYfobI+oosehosQ+7HK7h0kM3LSe1VHM7M+zBBNCz1Q0ze0Kveo3mbCFAtGl
-         xcm/lCgWkWF+wnTx9hk0djex4IITvRoMQiA8/qnbiJSl4rE1Is1he/M6Yq2RR1tfB9nw
-         F8Ps7j/ErOyzxXaUK1q3y7t9EQruZkagN9LbFJ8JrmylDkqe+L1vuzvqySCxUkorKXdh
-         3eAKtmuwe4Vw0k0bVvgYDlPXWyUT7e5BcWD8xuKzFi0qZX5KBMgwCr0GGZxnx224Iieo
-         W/Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=Bs+tzef5D9LsAaEUKxOI16OSgzvoEEZ28efFCeNQDyg=;
-        b=Al6lPfouGxUM3/hNuswhlW6q+rFktuLf1cqx0CSfl9EbqxHMsGSsyw4jRy1FEB/O2S
-         6EjSzvoNDnjAMdWDGL5HpFlLu7bShoFZrv/715toXr2dU5e2KS1zR+D4P066XzACopfT
-         4D36aKCg3IM5bfeavYTtnbcXgRt3ITz3Mh3RWOhp0zEuSEx07VmVODfqPI8x9Qw9aoWh
-         Jh6O8vTUF7IWhf7qSw2fTBxhGi0BUeoUMZJfC6TzNiutWNrwmNx4aspA+So0DSeaN5S7
-         K9uaRiSQWq02D83I1jQB+dqyiswGlUVhho/4JkcRCYFKLeVF+rPdPbfXcBpJF6+vWrhX
-         NNkw==
-X-Gm-Message-State: APjAAAXIr7+OQHdo+ZcPPdGWXd3VuN+wNMf20O722k8iQk77cBmQszBB
-        eMdI512Ok/fuE58/YAQ7cWgoCw==
-X-Google-Smtp-Source: APXvYqwnNsmI8DAgrs9Y/2ugZHRMHhGYeAIvoMNeCngZoSw/6mAsAmnoYC8X1pd+TGthPq4tRXMHvA==
-X-Received: by 2002:a5d:610e:: with SMTP id v14mr26142418wrt.343.1559744812814;
-        Wed, 05 Jun 2019 07:26:52 -0700 (PDT)
-Received: from [10.1.2.12] (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id v63sm1961072wmb.30.2019.06.05.07.26.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 07:26:52 -0700 (PDT)
-Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
- mfd includes
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        linux-kernel@vger.kernel.org
-Cc:     gwendal@chromium.org, Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
-        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        alsa-devel@alsa-project.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        linux-pm@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Evan Green <evgreen@chromium.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jiri Kosina <jikos@kernel.org>
-References: <20190604152019.16100-1-enric.balletbo@collabora.com>
- <20190604152019.16100-7-enric.balletbo@collabora.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- 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
- ZaTUOEkgIor5losDrePdPgE=
-Organization: Baylibre
-Message-ID: <9054d7c4-883b-b9b5-4c94-02b8d627c337@baylibre.com>
-Date:   Wed, 5 Jun 2019 16:26:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1728353AbfFEOkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jun 2019 10:40:00 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:32884 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726442AbfFEOkA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 5 Jun 2019 10:40:00 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 796AA374;
+        Wed,  5 Jun 2019 07:39:59 -0700 (PDT)
+Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8515E3F246;
+        Wed,  5 Jun 2019 07:39:56 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 15:39:50 +0100
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH v9 12/16] sched/core: uclamp: Extend CPU's cgroup
+ controller
+Message-ID: <20190605143805.olk2ta5p2jnd4mjt@e110439-lin>
+References: <20190515094459.10317-1-patrick.bellasi@arm.com>
+ <20190515094459.10317-13-patrick.bellasi@arm.com>
+ <20190531153545.GE374014@devbig004.ftw2.facebook.com>
+ <20190603122725.GB19426@darkstar>
+ <20190605140324.GL374014@devbig004.ftw2.facebook.com>
 MIME-Version: 1.0
-In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190605140324.GL374014@devbig004.ftw2.facebook.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/06/2019 17:20, Enric Balletbo i Serra wrote:
-> There is a bit of mess between cros-ec mfd includes and platform
-> includes. For example, we have a linux/mfd/cros_ec.h include that
-> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
-> we have a linux/mfd/cros_ec_commands.h file that is non related to the
-> multifunction device (in the sense that is not exporting any function of
-> the mfd device). This causes crossed includes between mfd and
-> platform/chrome subsystems and makes the code difficult to read, apart
-> from creating 'curious' situations where a platform/chrome driver includes
-> a linux/mfd/cros_ec.h file just to get the exported functions that are
-> implemented in another platform/chrome driver.
-> 
-> In order to have a better separation on what the cros-ec multifunction
-> driver does and what the cros-ec core provides move and rework the
-> affected includes doing:
-> 
->  - Move cros_ec_commands.h to include/linux/platform_data/cros_ec_commands.h
->  - Get rid of the parts that are implemented in the platform/chrome/cros_ec_proto.c
->    driver from include/linux/mfd/cros_ec.h to a new file
->    include/linux/platform_data/cros_ec_proto.h
->  - Update all the drivers with the new includes, so
->    - Drivers that only need to know about the protocol include
->      - linux/platform_data/cros_ec_proto.h
->      - linux/platform_data/cros_ec_commands.h
->    - Drivers that need to know about the cros-ec mfd device also include
->      - linux/mfd/cros_ec.h
-> 
-> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> ---
-> 
->  drivers/extcon/extcon-usbc-cros-ec.c          |   3 +-
->  drivers/hid/hid-google-hammer.c               |   4 +-
->  drivers/i2c/busses/i2c-cros-ec-tunnel.c       |   4 +-
->  drivers/iio/accel/cros_ec_accel_legacy.c      |   3 +-
->  .../common/cros_ec_sensors/cros_ec_sensors.c  |   3 +-
->  .../cros_ec_sensors/cros_ec_sensors_core.c    |   3 +-
->  drivers/iio/light/cros_ec_light_prox.c        |   3 +-
->  drivers/iio/pressure/cros_ec_baro.c           |   3 +-
->  drivers/input/keyboard/cros_ec_keyb.c         |   4 +-
->  .../media/platform/cros-ec-cec/cros-ec-cec.c  |   4 +-
->  drivers/mfd/cros_ec_dev.c                     |   3 +-
->  drivers/platform/chrome/cros_ec.c             |   3 +-
->  drivers/platform/chrome/cros_ec_chardev.c     |   4 +-
->  drivers/platform/chrome/cros_ec_debugfs.c     |   3 +-
->  drivers/platform/chrome/cros_ec_i2c.c         |   4 +-
->  drivers/platform/chrome/cros_ec_lightbar.c    |   3 +-
->  drivers/platform/chrome/cros_ec_lpc.c         |   4 +-
->  drivers/platform/chrome/cros_ec_lpc_reg.c     |   4 +-
->  drivers/platform/chrome/cros_ec_proto.c       |   3 +-
->  drivers/platform/chrome/cros_ec_rpmsg.c       |   4 +-
->  drivers/platform/chrome/cros_ec_spi.c         |   4 +-
->  drivers/platform/chrome/cros_ec_sysfs.c       |   3 +-
->  drivers/platform/chrome/cros_ec_trace.c       |   2 +-
->  drivers/platform/chrome/cros_ec_trace.h       |   4 +-
->  drivers/platform/chrome/cros_ec_vbc.c         |   3 +-
->  drivers/platform/chrome/cros_usbpd_logger.c   |   5 +-
->  drivers/power/supply/cros_usbpd-charger.c     |   5 +-
->  drivers/pwm/pwm-cros-ec.c                     |   4 +-
->  drivers/rtc/rtc-cros-ec.c                     |   3 +-
->  .../linux/iio/common/cros_ec_sensors_core.h   |   3 +-
->  include/linux/mfd/cros_ec.h                   | 306 -----------------
->  .../{mfd => platform_data}/cros_ec_commands.h |   0
->  include/linux/platform_data/cros_ec_proto.h   | 315 ++++++++++++++++++
->  sound/soc/codecs/cros_ec_codec.c              |   4 +-
->  34 files changed, 379 insertions(+), 351 deletions(-)
->  rename include/linux/{mfd => platform_data}/cros_ec_commands.h (100%)
->  create mode 100644 include/linux/platform_data/cros_ec_proto.h
-> 
+On 05-Jun 07:03, Tejun Heo wrote:
+> Hello,
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com> # for the cros-ec-cec part
+Hi!
+
+> On Mon, Jun 03, 2019 at 01:27:25PM +0100, Patrick Bellasi wrote:
+> > All the above, to me it means that:
+> >  - cgroups are always capped by system clamps
+> >  - cgroups can further restrict system clamps
+> > 
+> > Does that match with your view?
+> 
+> Yeah, as long as what's defined at system level clamps everything in
+> the system whether they're in cgroups or not, it's all good.
+
+Right, then we are good with v9 on this point.
+
+> > > * Limits (high / max) default to max.  Protections (low / min) 0.  A
+> > >   new cgroup by default doesn't constrain itself further and doesn't
+> > >   have any protection.
+> > 
+> > Example 2
+> > ---------
+> > 
+> > Let say we have:
+> > 
+> >   /tg1:
+> >         util_min=200 (as a protection)
+> >         util_max=800 (as a limit)
+> > 
+> > the moment we create a subgroup /tg1/tg11, in v9 it is initialized
+> > with the same limits _and protections_ of its father:
+> > 
+> >   /tg1/tg11:
+> >         util_min=200 (protection inherited from /tg1)
+> >         util_max=800 (limit inherited from /tg1)
+> > 
+> > Do you mean that we should have instead:
+> > 
+> >   /tg1/tg11:
+> >         util_min=0   (no protection by default at creation time)
+> >         util_max=800 (limit inherited from /tg1)
+> > 
+> > 
+> > i.e. we need to reset the protection of a newly created subgroup?
+> 
+> The default value for limits should be max, protections 0.  Don't
+> inherit config values from the parent.  That gets confusing super fast
+> because when the parent config is set and each child is created plays
+> into the overall configuration.  Hierarchical confinements should
+> always be enforced and a new cgroup should always start afresh in
+> terms of its own configuration.
+
+Got it, so in the example above we will create:
+
+   /tg1/tg11:
+         util_min=0    (no requested protection by default at creation time)
+         util_max=1024 (no requests limit by default at creation time)
+
+That's it for the "requested" values side, while the "effective"
+values are enforced by the hierarchical confinement rules since
+creation time.
+Which means we will enforce the effective values as:
+
+   /tg1/tg11:
+
+         util_min.effective=0
+            i.e. keep the child protection since smaller than parent
+
+         util_max.effective=800
+            i.e. keep parent limit since stricter than child
+
+Please shout if I got it wrong, otherwise I'll update v10 to
+implement the above logic.
+
+> > > * A limit defines the upper ceiling for the subtree.  If an ancestor
+> > >   has a limit of X, none of its descendants can have more than X.
+> > 
+> > That's correct, however we distinguish between "requested" and
+> > "effective" values.
+> 
+> Sure, all property propagating controllers should.
+
+Right.
+
+> > > Note that there's no way for an ancestor to enforce protection its
+> > > descendants.  It can only allow them to claim some.  This is
+> > > intentional as the other end of the spectrum is either descendants
+> > > losing the ability to further distribute protections as they see fit.
+> > 
+> > Ok, that means I need to update in v10 the initialization of subgroups
+> > min clamps to be none by default as discussed in the above Example 2,
+> > right?
+> 
+> Yeah and max to max.
+
+Right, I've got it now.
+
+
+> Thanks.
+
+Cheers,
+Patrick
+
+-- 
+#include <best/regards.h>
+
+Patrick Bellasi
