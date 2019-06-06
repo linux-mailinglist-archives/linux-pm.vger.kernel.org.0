@@ -2,71 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0185437ADB
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2019 19:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8F837AEE
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jun 2019 19:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727122AbfFFRUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jun 2019 13:20:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52050 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727029AbfFFRUy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 6 Jun 2019 13:20:54 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C82E42083E;
-        Thu,  6 Jun 2019 17:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559841653;
-        bh=6YEYS2jdADr9Oq/g9NGffgzEuz06f2gVd4Lh8QYw1TU=;
-        h=In-Reply-To:References:To:Subject:From:Cc:Date:From;
-        b=VXzwjZh3p8VZPRX7PnXTwCco6S3FNWuYLO+sKtg5HELRMD6B9ePLckxb34uA2Cdf1
-         E4h9AF7o7xvUfaf15aGV0oFVFX1Jn2Y9f99Ts1r8xIDiC7zJ0rX+eQ7RRT4EEmnlQC
-         TLG6b1DoufRctlYPm6z9bbwhRwD2UcJiehne1uwM=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <2dd0a516bbfe6150112ec7dc5f7d4d85cbe3cd03.camel@suse.de>
-References: <20190606142255.29454-1-nsaenzjulienne@suse.de> <20190606142255.29454-6-nsaenzjulienne@suse.de> <20190606170505.39C5B20693@mail.kernel.org> <2dd0a516bbfe6150112ec7dc5f7d4d85cbe3cd03.camel@suse.de>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-kernel@vger.kernel.org, stefan.wahren@i2se.com
-Subject: Re: [PATCH v2 5/7] clk: raspberrypi: register platform device for raspberrypi-cpufreq
-From:   Stephen Boyd <sboyd@kernel.org>
+        id S1728637AbfFFRWl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jun 2019 13:22:41 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60608 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726092AbfFFRWl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 6 Jun 2019 13:22:41 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 1878AABD0;
+        Thu,  6 Jun 2019 17:22:40 +0000 (UTC)
+Message-ID: <eb72a26b55cf17c29df6a7fd3c5def08182e00af.camel@suse.de>
+Subject: Re: [PATCH v2 4/7] cpufreq: add driver for Raspbery Pi
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>, stefan.wahren@i2se.com
 Cc:     linux-arm-kernel@lists.infradead.org, f.fainelli@gmail.com,
-        ptesarik@suse.com, viresh.kumar@linaro.org,
-        mturquette@baylibre.com, linux-pm@vger.kernel.org,
-        rjw@rjwysocki.net, eric@anholt.net,
-        bcm-kernel-feedback-list@broadcom.com,
+        ptesarik@suse.com, mturquette@baylibre.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eric@anholt.net, bcm-kernel-feedback-list@broadcom.com,
         linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         mbrugger@suse.de, ssuloev@orpaltech.com
-User-Agent: alot/0.8.1
-Date:   Thu, 06 Jun 2019 10:20:52 -0700
-Message-Id: <20190606172053.C82E42083E@mail.kernel.org>
+Date:   Thu, 06 Jun 2019 19:22:16 +0200
+In-Reply-To: <20190606170949.4A46720652@mail.kernel.org>
+References: <20190606142255.29454-1-nsaenzjulienne@suse.de>
+         <20190606142255.29454-5-nsaenzjulienne@suse.de>
+         <20190606170949.4A46720652@mail.kernel.org>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-Pw8rcdAQwigEg8aqt+O7"
+User-Agent: Evolution 3.32.2 
+MIME-Version: 1.0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Nicolas Saenz Julienne (2019-06-06 10:16:56)
-> On Thu, 2019-06-06 at 10:05 -0700, Stephen Boyd wrote:
-> > Quoting Nicolas Saenz Julienne (2019-06-06 07:22:58)
-> > > diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-
-> > > raspberrypi.c
-> > > index b1365cf19f3a..052296b5fbe4 100644
-> > > --- a/drivers/clk/bcm/clk-raspberrypi.c
-> > > +++ b/drivers/clk/bcm/clk-raspberrypi.c
-> > > @@ -63,6 +63,8 @@ struct raspberrypi_firmware_prop {
-> > >         __le32 disable_turbo;
-> > >  } __packed;
-> > > =20
-> > > +static struct platform_device *rpi_cpufreq;
-> >=20
-> > Why can't this be stored in platform driver data?
->=20
-> It actually could, I just followed the same pattern as the code found in =
-patch
-> #3. I'll update it in the next version if you prefer it.=20
->=20
 
-Yes please. It reduces global state.
+--=-Pw8rcdAQwigEg8aqt+O7
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Stephen,
+Thanks for the review.
+
+On Thu, 2019-06-06 at 10:09 -0700, Stephen Boyd wrote:
+> Quoting Nicolas Saenz Julienne (2019-06-06 07:22:56)
+> > diff --git a/drivers/cpufreq/raspberrypi-cpufreq.c
+> > b/drivers/cpufreq/raspberrypi-cpufreq.c
+> > new file mode 100644
+> > index 000000000000..99b59d5a50aa
+> > --- /dev/null
+> > +++ b/drivers/cpufreq/raspberrypi-cpufreq.c
+> [...]
+> > +
+> > +/*
+> > + * Since the driver depends on clk-raspberrypi, which may return
+> > EPROBE_DEFER,
+> > + * all the activity is performed in the probe, which may be defered as
+> > well.
+> > + */
+> > +static struct platform_driver raspberrypi_cpufreq_driver =3D {
+> > +       .driver =3D {
+> > +               .name =3D "raspberrypi-cpufreq",
+> > +       },
+> > +       .probe          =3D raspberrypi_cpufreq_probe,
+> > +       .remove         =3D raspberrypi_cpufreq_remove,
+> > +};
+> > +module_platform_driver(raspberrypi_cpufreq_driver);
+>=20
+> How does this driver probe? Do you have a node in DT named
+> raspberrypi-cpufreq that matches and probes this? I would think this
+> would follow the drivers/cpufreq/cpufreq-dt-platdev.c design where it's
+> an initcall that probes the board compatible string.
+>
+> Or, if it depends on clk-raspberrypi probing, maybe it could create the
+> platform device in that drivers probe function.
+
+Well you just reviewed that patch :)
+
+> > +
+> > +MODULE_AUTHOR("Nicolas Saenz Julienne <nsaenzjulienne@suse.de");
+> > +MODULE_DESCRIPTION("Raspberry Pi cpufreq driver");
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_ALIAS("platform:raspberrypi-cpufreq");
+>=20
+> I don't think the module alias is needed anymore.
+
+That's surprising. I remember the driver not being loaded by udev without i=
+t.
+
+Regards,
+Nicolas
+
+
+--=-Pw8rcdAQwigEg8aqt+O7
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAlz5S8gACgkQlfZmHno8
+x/6ReQgAmTObVFlrCJjS+HsdqcP5Er91BEOTv2XnVOfYkRC/w/vFXhkOZIlokLgq
+kj+GwzHmUGEGzlwyGsb1cJCnOffS7QI5Y1P2pfqqF1z0+kCfNiS8RMVJh6lvazsr
+wxTIqZBjf6Qi6Hckl03htdGmFkHCP4ftoHTWP6SVjWRfm9tSzbfWSWczNMwsU2g0
+ICXOdZ1BzUiDU69Tq8yWuKFavbvp7JmHKTzGI5sV7hyiFikQZDwbivbUN8dERESJ
+aWlDO32Twc2v+W8z9ZJaWtfCcOtFA/Tkca2sZ+HHt8cxe67dPzcQIFC/BoPfTw/h
+TVzSQVZjVbG91S6E0W+ElFkMVnI8BQ==
+=zgC8
+-----END PGP SIGNATURE-----
+
+--=-Pw8rcdAQwigEg8aqt+O7--
 
