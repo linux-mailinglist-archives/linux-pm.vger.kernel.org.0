@@ -2,99 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F2D387DE
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 12:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CA3388CA
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 13:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727844AbfFGKZW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jun 2019 06:25:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50920 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727402AbfFGKZW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 7 Jun 2019 06:25:22 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DEFAEAE0C;
-        Fri,  7 Jun 2019 10:25:20 +0000 (UTC)
-Message-ID: <86849329e38cc30e6ea6c51bcd77da56012a0d26.camel@suse.de>
-Subject: Re: [PATCH v2 7/7] arm64: defconfig: enable cpufreq support for RPi3
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-kernel@vger.kernel.org
-Cc:     f.fainelli@gmail.com, ptesarik@suse.com, sboyd@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        mturquette@baylibre.com, linux-pm@vger.kernel.org,
-        rjw@rjwysocki.net, Will Deacon <will.deacon@arm.com>,
-        mbrugger@suse.de, eric@anholt.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org, viresh.kumar@linaro.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        ssuloev@orpaltech.com
-Date:   Fri, 07 Jun 2019 12:25:18 +0200
-In-Reply-To: <431a1f0c-8bc8-5c9b-7fa2-f293a2846ce3@i2se.com>
-References: <20190606142255.29454-1-nsaenzjulienne@suse.de>
-         <20190606142255.29454-8-nsaenzjulienne@suse.de>
-         <431a1f0c-8bc8-5c9b-7fa2-f293a2846ce3@i2se.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-TkNebld2DAQffR2+uUDI"
-User-Agent: Evolution 3.32.2 
+        id S1728243AbfFGLRm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jun 2019 07:17:42 -0400
+Received: from mga17.intel.com ([192.55.52.151]:36806 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728073AbfFGLRm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 7 Jun 2019 07:17:42 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jun 2019 04:17:42 -0700
+X-ExtLoop1: 1
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 07 Jun 2019 04:17:39 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 07 Jun 2019 14:17:39 +0300
+Date:   Fri, 7 Jun 2019 14:17:39 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] PCI: PM: Avoid resuming devices in D3hot during
+ system suspend
+Message-ID: <20190607111739.GT2781@lahna.fi.intel.com>
+References: <2958812.87Qy2A3tJo@kreacher>
+ <3078848.tiz3m2NLmW@kreacher>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3078848.tiz3m2NLmW@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Jun 07, 2019 at 12:30:58AM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> The current code resumes devices in D3hot during system suspend if
+> the target power state for them is D3cold, but that is not necessary
+> in general.  It only is necessary to do that if the platform firmware
+> requires the device to be resumed, but that should be covered by
+> the platform_pci_need_resume() check anyway, so rework
+> pci_dev_keep_suspended() to avoid returning 'false' for devices
+> in D3hot which need not be resumed due to platform firmware
+> requirements.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
---=-TkNebld2DAQffR2+uUDI
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, 2019-06-07 at 12:19 +0200, Stefan Wahren wrote:
-> Hi Nicolas,
->=20
-> Am 06.06.19 um 16:23 schrieb Nicolas Saenz Julienne:
-> > This enables both the new firmware clock driver and cpufreq driver
-> > available for the RPi3 family of boards.
-> >=20
-> > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> > ---
-> >  arch/arm64/configs/defconfig | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfi=
-g
-> > index 4d583514258c..3b7baffb3087 100644
-> > --- a/arch/arm64/configs/defconfig
-> > +++ b/arch/arm64/configs/defconfig
-> > @@ -82,6 +82,7 @@ CONFIG_CPUFREQ_DT=3Dy
-> >  CONFIG_ACPI_CPPC_CPUFREQ=3Dm
-> >  CONFIG_ARM_ARMADA_37XX_CPUFREQ=3Dy
-> >  CONFIG_ARM_SCPI_CPUFREQ=3Dy
-> > +CONFIG_ARM_RASPBERRYPI_CPUFREQ=3Dy
->=20
-> the arm64 kernel tends to get very big, so i suggested to build it as a
-> kernel module.
->=20
-> Any reason why you choose to make it builtin?
-
-Not really, I missed your suggestion. I'll fix in v3.
-
-
---=-TkNebld2DAQffR2+uUDI
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAlz6O44ACgkQlfZmHno8
-x/5xQAf/X/nfz6c1KdJtThHJ9SE8+XZyStaD20tWInaqg3MbPIpDHnG6/+6xiWYZ
-RG1Y5qAjwu8VpzgqJOEFUA4++ynaOP9fsteiRpCHjMjoHOdaUJl8reqpXXksqUEL
-n9Ej57VmhMvg1vlCO0gY59Lq9k6WIkbKHME/tBXozid0M3BYxDig+T8OBna+KHFV
-gXQxkAEagdd05kQbMzSrfQ5hhjtSEStzRWY7jl/qIP5f0fMkF0IoyHEPijLCSFNv
-qgwTGiYJiX/pFMFNP9nPfVt6JeeydWUK/H7Y0/Fh+CRTa1F7lNS8DvFV2lOrF1Ka
-LAnXECYSAwfeRJB8kIJHFw0urT42LQ==
-=teQM
------END PGP SIGNATURE-----
-
---=-TkNebld2DAQffR2+uUDI--
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
