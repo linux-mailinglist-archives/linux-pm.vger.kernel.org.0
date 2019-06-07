@@ -2,133 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1705D391FD
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 18:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441E23929B
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 18:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730465AbfFGQ2K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jun 2019 12:28:10 -0400
-Received: from mail-eopbgr770085.outbound.protection.outlook.com ([40.107.77.85]:8430
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729986AbfFGQ2J (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 7 Jun 2019 12:28:09 -0400
+        id S1729981AbfFGQ60 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jun 2019 12:58:26 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:42966 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729241AbfFGQ60 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jun 2019 12:58:26 -0400
+Received: by mail-lf1-f68.google.com with SMTP id y13so2135604lfh.9;
+        Fri, 07 Jun 2019 09:58:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s/s0x6pLNd9mZ7Ply+zCPVO3iyziLOBoPlJ4pp7WMFA=;
- b=Ebzijz9Ps2X8idVTHUWaaTntfQNBd7wf3hzn/7KojyhToGEXxLmXmgwFnFJ+4n6fgs4lQC3uiZ4yTk+kjb6OnGYfkkcplNSdg2s8auvrEu2hsvsO+UajQ+abDbVeFQtDiNXOTe14T9rosa5MYj0dwJS5WkN4DqkXod5a2nbtKtY=
-Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
- SN6PR12MB2765.namprd12.prod.outlook.com (52.135.107.33) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Fri, 7 Jun 2019 16:28:07 +0000
-Received: from SN6PR12MB2639.namprd12.prod.outlook.com
- ([fe80::69b5:19ac:b63d:2b82]) by SN6PR12MB2639.namprd12.prod.outlook.com
- ([fe80::69b5:19ac:b63d:2b82%3]) with mapi id 15.20.1965.011; Fri, 7 Jun 2019
- 16:28:07 +0000
-From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "len.brown@intel.com" <len.brown@intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: RE: [PATCH] tools/power turbostat: Make interval calculation per
- thread to reduce jitter
-Thread-Topic: [PATCH] tools/power turbostat: Make interval calculation per
- thread to reduce jitter
-Thread-Index: AQHU4zDAw6kMdRt2pEeSvDZqbzvAVaZKM7PQgEahSNA=
-Date:   Fri, 7 Jun 2019 16:28:07 +0000
-Message-ID: <SN6PR12MB2639ABA1421E220FF5813738F8100@SN6PR12MB2639.namprd12.prod.outlook.com>
-References: <20190325173232.216357-1-Yazen.Ghannam@amd.com>
- <SN6PR12MB26394D7FEE4582FD19860104F8230@SN6PR12MB2639.namprd12.prod.outlook.com>
-In-Reply-To: <SN6PR12MB26394D7FEE4582FD19860104F8230@SN6PR12MB2639.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Yazen.Ghannam@amd.com; 
-x-originating-ip: [165.204.84.11]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 20debb43-90c5-4df8-28fa-08d6eb651fa7
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR12MB2765;
-x-ms-traffictypediagnostic: SN6PR12MB2765:
-x-microsoft-antispam-prvs: <SN6PR12MB27657EE964778CCDB68EF7DAF8100@SN6PR12MB2765.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 0061C35778
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(366004)(136003)(376002)(39860400002)(189003)(199004)(13464003)(6116002)(76116006)(81166006)(8676002)(81156014)(66476007)(64756008)(66556008)(4326008)(2906002)(66446008)(6246003)(8936002)(9686003)(25786009)(66066001)(55016002)(86362001)(3846002)(53936002)(5660300002)(71200400001)(71190400001)(52536014)(229853002)(305945005)(2501003)(7736002)(486006)(76176011)(74316002)(256004)(68736007)(102836004)(66946007)(6506007)(54906003)(99286004)(110136005)(72206003)(33656002)(14444005)(73956011)(478600001)(316002)(26005)(476003)(186003)(7696005)(14454004)(446003)(11346002)(53546011)(6436002);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2765;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: eLg/fOW1lXODxHPmRaj7sYkdOJmcpHlhNDfkj1MM+AM86AUdopT2Vk0hmIbL5xGdYAWUTlWGzd/pHI9eQZCUZYDyKppdcYjw28jKzTIRbDKeKDE1cImQ/7Ao2nEUSbjsoOcF69IkuV94n9AsoWH6jbDvbki4nz5ghRgsnQks/p7B5afsth0IA8mp3t61PEc7rKLpHncPcwZ6KumkONFuoh8Bw2haJxkr/Hs01n0SoJTxquJDkxCAjR7roWyOebPXk4h3aszucJrlh+E6CfX7+N64boddhZDyMAqWsyKDsDdoxoXl1ZzldGYh2dqIZ1dKwcnabd2p2ToxgcOt6bAMVDrfe2x9i6oJYQjWLp4uMPtXNvPtnKSkwbYVbEun3SnRowPxThGUWVQCE9GIvifw743VkTS/3FuzeTh7gSPPn9Y=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sa5CPLr945oENhA42CHez0IG2yijXXEexO7nDRxrhcg=;
+        b=jT6H4PluKS7p0yHRpfnlgjRfXFf8iNnFbEGHVXe6ADiqaRNtyoXNohAd2PQwWJ1P4u
+         SvO9xYRp0xboi/J3TEaRdqXXmzfT1Ny4EP7ij/RSprlo7mvE6v3+BeEdqlFZoeyXNA3V
+         9LncR2gQb10OS5JLbGNDK3pdlyLmVl2gnu4SPMcWikz2dKxt2d0Gvl3bx6T+v2IxY5OG
+         6NaABP+J/Znm8Il0uOGuqrd5nYfJIBDKQWUbHBUFhNvrKCS7Mnafg1AtmqqP3vyNi1bn
+         +3rdrHWVp3/aoXY6ZZATP2PT/6I1I59Boc9WLrqWH0zC7N8qO4OacEFqKHAPNy4e+dW5
+         a2eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sa5CPLr945oENhA42CHez0IG2yijXXEexO7nDRxrhcg=;
+        b=t6nNOtXlOAnAXwCCwnftC1qgvq2+QpJjsiAWWQ9aXSMt7yZfkFo2SIQVNgsJygkm/N
+         EEdYypApFuxphsbKBpciKTCbE4xuxZ4q1vzuxo7NdRqKr8cuNf4SUjj+8eWyNuhFuGfq
+         LHl2v7NBAjpY+g6sHWDH7XGvZtNPjRi2X8Ulk7xsEGwWmHEhkQMFidQYk5hEgmT4771o
+         GOVzE3oLpvKJRg20Biy58A6UB1PGM3X8iEJrOyZsc/Y0JweZHg9aBHMHnEGPkW7+0Z8r
+         kipxFr3w66a/CwJ3+/4t4HqJAB8G9iGMG3BWMMw41ePy7ebdFVB59jeqegLIGxSV0BHr
+         CBQg==
+X-Gm-Message-State: APjAAAXHapQykGVtSCTVpC9wIslto1loGZtrpXxandXOCLb+PPynbJyF
+        Q0X/ONH2FK5VVt/QZgouAtyqQF66
+X-Google-Smtp-Source: APXvYqyTmsWuUCPMQn3oXC1I0d0ziInebRNTdYB2MXTJTjoM2go2TOjpG+F+/9OIc/fND+MzaW3J7Q==
+X-Received: by 2002:a05:6512:30a:: with SMTP id t10mr11839927lfp.22.1559926703037;
+        Fri, 07 Jun 2019 09:58:23 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-76-170-54.pppoe.mtu-net.ru. [91.76.170.54])
+        by smtp.googlemail.com with ESMTPSA id q22sm470197lje.75.2019.06.07.09.58.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 Jun 2019 09:58:21 -0700 (PDT)
+Subject: Re: [PATCH v4 07/16] PM / devfreq: tegra: Properly disable interrupts
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190501233815.32643-1-digetx@gmail.com>
+ <20190501233815.32643-8-digetx@gmail.com> <20190604110744.GG16519@ulmo>
+ <c2f2a8c8-1f30-34aa-9b95-a7a44e0ec96f@gmail.com>
+ <2b09a162-a090-901b-01cf-46b116a87a7a@gmail.com>
+Message-ID: <7be61b38-62c7-8536-a102-36f5ac6668e2@gmail.com>
+Date:   Fri, 7 Jun 2019 19:58:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20debb43-90c5-4df8-28fa-08d6eb651fa7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2019 16:28:07.2877
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yghannam@amd.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2765
+In-Reply-To: <2b09a162-a090-901b-01cf-46b116a87a7a@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> -----Original Message-----
-> From: Ghannam, Yazen <Yazen.Ghannam@amd.com>
-> Sent: Tuesday, April 23, 2019 12:53 PM
-> To: Ghannam, Yazen <Yazen.Ghannam@amd.com>; linux-pm@vger.kernel.org; len=
-.brown@intel.com
-> Cc: linux-kernel@vger.kernel.org; Len Brown <lenb@kernel.org>
-> Subject: RE: [PATCH] tools/power turbostat: Make interval calculation per=
- thread to reduce jitter
->=20
-> > -----Original Message-----
-> > From: linux-kernel-owner@vger.kernel.org <linux-kernel-owner@vger.kerne=
-l.org> On Behalf Of Ghannam, Yazen
-> > Sent: Monday, March 25, 2019 12:33 PM
-> > To: linux-pm@vger.kernel.org
-> > Cc: Ghannam, Yazen <Yazen.Ghannam@amd.com>; linux-kernel@vger.kernel.or=
-g; lenb@kernel.org
-> > Subject: [PATCH] tools/power turbostat: Make interval calculation per t=
-hread to reduce jitter
-> >
-> > From: Yazen Ghannam <yazen.ghannam@amd.com>
-> >
-> > Turbostat currently normalizes TSC and other values by dividing by an
-> > interval. This interval is the delta between the start of one global
-> > (all counters on all CPUs) sampling and the start of another. However,
-> > this introduces a lot of jitter into the data.
-> >
-> > In order to reduce jitter, the interval calculation should be based on
-> > timestamps taken per thread and close to the start of the thread's
-> > sampling.
-> >
-> > Define a per thread time value to hold the delta between samples taken
-> > on the thread.
-> >
-> > Use the timestamp taken at the beginning of sampling to calculate the
-> > delta.
-> >
-> > Move the thread's beginning timestamp to after the CPU migration to
-> > avoid jitter due to the migration.
-> >
-> > Use the global time delta for the average time delta.
-> >
-> > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> > ---
->=20
-> Hi Len,
->=20
-> Any comments on this patch?
->=20
+05.06.2019 1:55, Dmitry Osipenko пишет:
+> 04.06.2019 16:40, Dmitry Osipenko пишет:
+>> 04.06.2019 14:07, Thierry Reding пишет:
+>>> On Thu, May 02, 2019 at 02:38:06AM +0300, Dmitry Osipenko wrote:
+>>>> There is no guarantee that interrupt handling isn't running in parallel
+>>>> with tegra_actmon_disable_interrupts(), hence it is necessary to protect
+>>>> DEV_CTRL register accesses and clear IRQ status with ACTMON's IRQ being
+>>>> disabled in the Interrupt Controller in order to ensure that device
+>>>> interrupt is indeed being disabled.
+>>>>
+>>>> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>>> ---
+>>>>  drivers/devfreq/tegra-devfreq.c | 21 +++++++++++++++------
+>>>>  1 file changed, 15 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
+>>>> index b65313fe3c2e..ce1eb97a2090 100644
+>>>> --- a/drivers/devfreq/tegra-devfreq.c
+>>>> +++ b/drivers/devfreq/tegra-devfreq.c
+>>>> @@ -171,6 +171,8 @@ struct tegra_devfreq {
+>>>>  	struct notifier_block	rate_change_nb;
+>>>>  
+>>>>  	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs)];
+>>>> +
+>>>> +	int irq;
+>>>
+>>> Interrupts are typically unsigned int.
+>>>
+>>>>  };
+>>>>  
+>>>>  struct tegra_actmon_emc_ratio {
+>>>> @@ -417,6 +419,8 @@ static void tegra_actmon_disable_interrupts(struct tegra_devfreq *tegra)
+>>>>  	u32 val;
+>>>>  	unsigned int i;
+>>>>  
+>>>> +	disable_irq(tegra->irq);
+>>>> +
+>>>>  	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++) {
+>>>>  		dev = &tegra->devices[i];
+>>>>  
+>>>> @@ -427,9 +431,14 @@ static void tegra_actmon_disable_interrupts(struct tegra_devfreq *tegra)
+>>>>  		val &= ~ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
+>>>>  
+>>>>  		device_writel(dev, val, ACTMON_DEV_CTRL);
+>>>> +
+>>>> +		device_writel(dev, ACTMON_INTR_STATUS_CLEAR,
+>>>> +			      ACTMON_DEV_INTR_STATUS);
+>>>>  	}
+>>>>  
+>>>>  	actmon_write_barrier(tegra);
+>>>> +
+>>>> +	enable_irq(tegra->irq);
+>>>
+>>> Why do we enable interrupts after this? Is there any use in having the
+>>> top-level interrupt enabled if nothing's going to generate an interrupt
+>>> anyway?
+>>
+>> There is no real point in having the interrupt enabled other than to
+>> keep the enable count balanced.
+>>
+>> IIUC, we will need to disable IRQ at the driver's probe time (after
+>> requesting the IRQ) if we want to avoid that (not really necessary)
+>> balancing. This is probably something that could be improved in a
+>> follow-up patches, if desired.
+> 
+> Nah, it's not worth the effort. It is quite problematic that we can't
+> keep interrupt disabled during of devfreq_add_device() execution because
+> it asks governor to enable the interrupt and the interrupt shall be
+> disabled because we're using device's lock in the governor interrupt
+> handler.. device is getting assigned only after completion of the
+> devfreq_add_device() and hence ISR gets a NULL deref if it is fired
+> before device is assigned. So I'll leave this part as-is.
+> 
+> Thierry, please answer to all of the remaining patches where you had
+> some concerns. I'll send out another series on top of this, addressing
+> yours comments and fixing another bug that I spotted today.
+> 
 
-Hi Len,
+I looked at this once again and found that the interrupt could be kept
+disabled on request using the IRQ_NOAUTOEN flag and then the device
+could be assigned within the governor's event handler, so everything is
+resolved very nicely! :)
 
-Just wanted to check in. Do you have any comments on this patch?
-
-Thanks,
-Yazen
+I'll send patches addressing this comment and the rest after getting
+relies from you guys. Please try to not postpone the responses too much
+as more interactivity in a review/apply process usually help quite a
+lot, thanks in advance!
