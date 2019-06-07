@@ -2,162 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 441E23929B
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 18:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7CC392E3
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 19:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729981AbfFGQ60 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jun 2019 12:58:26 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:42966 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729241AbfFGQ60 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jun 2019 12:58:26 -0400
-Received: by mail-lf1-f68.google.com with SMTP id y13so2135604lfh.9;
-        Fri, 07 Jun 2019 09:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sa5CPLr945oENhA42CHez0IG2yijXXEexO7nDRxrhcg=;
-        b=jT6H4PluKS7p0yHRpfnlgjRfXFf8iNnFbEGHVXe6ADiqaRNtyoXNohAd2PQwWJ1P4u
-         SvO9xYRp0xboi/J3TEaRdqXXmzfT1Ny4EP7ij/RSprlo7mvE6v3+BeEdqlFZoeyXNA3V
-         9LncR2gQb10OS5JLbGNDK3pdlyLmVl2gnu4SPMcWikz2dKxt2d0Gvl3bx6T+v2IxY5OG
-         6NaABP+J/Znm8Il0uOGuqrd5nYfJIBDKQWUbHBUFhNvrKCS7Mnafg1AtmqqP3vyNi1bn
-         +3rdrHWVp3/aoXY6ZZATP2PT/6I1I59Boc9WLrqWH0zC7N8qO4OacEFqKHAPNy4e+dW5
-         a2eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sa5CPLr945oENhA42CHez0IG2yijXXEexO7nDRxrhcg=;
-        b=t6nNOtXlOAnAXwCCwnftC1qgvq2+QpJjsiAWWQ9aXSMt7yZfkFo2SIQVNgsJygkm/N
-         EEdYypApFuxphsbKBpciKTCbE4xuxZ4q1vzuxo7NdRqKr8cuNf4SUjj+8eWyNuhFuGfq
-         LHl2v7NBAjpY+g6sHWDH7XGvZtNPjRi2X8Ulk7xsEGwWmHEhkQMFidQYk5hEgmT4771o
-         GOVzE3oLpvKJRg20Biy58A6UB1PGM3X8iEJrOyZsc/Y0JweZHg9aBHMHnEGPkW7+0Z8r
-         kipxFr3w66a/CwJ3+/4t4HqJAB8G9iGMG3BWMMw41ePy7ebdFVB59jeqegLIGxSV0BHr
-         CBQg==
-X-Gm-Message-State: APjAAAXHapQykGVtSCTVpC9wIslto1loGZtrpXxandXOCLb+PPynbJyF
-        Q0X/ONH2FK5VVt/QZgouAtyqQF66
-X-Google-Smtp-Source: APXvYqyTmsWuUCPMQn3oXC1I0d0ziInebRNTdYB2MXTJTjoM2go2TOjpG+F+/9OIc/fND+MzaW3J7Q==
-X-Received: by 2002:a05:6512:30a:: with SMTP id t10mr11839927lfp.22.1559926703037;
-        Fri, 07 Jun 2019 09:58:23 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-76-170-54.pppoe.mtu-net.ru. [91.76.170.54])
-        by smtp.googlemail.com with ESMTPSA id q22sm470197lje.75.2019.06.07.09.58.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 07 Jun 2019 09:58:21 -0700 (PDT)
-Subject: Re: [PATCH v4 07/16] PM / devfreq: tegra: Properly disable interrupts
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190501233815.32643-1-digetx@gmail.com>
- <20190501233815.32643-8-digetx@gmail.com> <20190604110744.GG16519@ulmo>
- <c2f2a8c8-1f30-34aa-9b95-a7a44e0ec96f@gmail.com>
- <2b09a162-a090-901b-01cf-46b116a87a7a@gmail.com>
-Message-ID: <7be61b38-62c7-8536-a102-36f5ac6668e2@gmail.com>
-Date:   Fri, 7 Jun 2019 19:58:20 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1729632AbfFGRRa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jun 2019 13:17:30 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:40078 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728618AbfFGRR3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 7 Jun 2019 13:17:29 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id D4BF33003097;
+        Fri,  7 Jun 2019 17:17:21 +0000 (UTC)
+Received: from amt.cnet (ovpn-112-16.gru2.redhat.com [10.97.112.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0325D5F9DF;
+        Fri,  7 Jun 2019 17:17:16 +0000 (UTC)
+Received: from amt.cnet (localhost [127.0.0.1])
+        by amt.cnet (Postfix) with ESMTP id 42130105157;
+        Fri,  7 Jun 2019 14:16:57 -0300 (BRT)
+Received: (from marcelo@localhost)
+        by amt.cnet (8.14.7/8.14.7/Submit) id x57HGpax005218;
+        Fri, 7 Jun 2019 14:16:51 -0300
+Date:   Fri, 7 Jun 2019 14:16:47 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     kvm-devel <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?iso-8859-1?B?S3LEP23DocU/?= <rkrcmar@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Wanpeng Li <kernellwp@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Raslan KarimAllah <karahmed@amazon.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [patch 0/3] cpuidle-haltpoll driver (v2)
+Message-ID: <20190607171645.GA28275@amt.cnet>
+References: <20190603225242.289109849@amt.cnet>
+ <6c411948-9e32-9f41-351e-c9accd1facb0@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <2b09a162-a090-901b-01cf-46b116a87a7a@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <6c411948-9e32-9f41-351e-c9accd1facb0@intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Fri, 07 Jun 2019 17:17:29 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-05.06.2019 1:55, Dmitry Osipenko пишет:
-> 04.06.2019 16:40, Dmitry Osipenko пишет:
->> 04.06.2019 14:07, Thierry Reding пишет:
->>> On Thu, May 02, 2019 at 02:38:06AM +0300, Dmitry Osipenko wrote:
->>>> There is no guarantee that interrupt handling isn't running in parallel
->>>> with tegra_actmon_disable_interrupts(), hence it is necessary to protect
->>>> DEV_CTRL register accesses and clear IRQ status with ACTMON's IRQ being
->>>> disabled in the Interrupt Controller in order to ensure that device
->>>> interrupt is indeed being disabled.
->>>>
->>>> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
->>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>>> ---
->>>>  drivers/devfreq/tegra-devfreq.c | 21 +++++++++++++++------
->>>>  1 file changed, 15 insertions(+), 6 deletions(-)
->>>>
->>>> diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
->>>> index b65313fe3c2e..ce1eb97a2090 100644
->>>> --- a/drivers/devfreq/tegra-devfreq.c
->>>> +++ b/drivers/devfreq/tegra-devfreq.c
->>>> @@ -171,6 +171,8 @@ struct tegra_devfreq {
->>>>  	struct notifier_block	rate_change_nb;
->>>>  
->>>>  	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs)];
->>>> +
->>>> +	int irq;
->>>
->>> Interrupts are typically unsigned int.
->>>
->>>>  };
->>>>  
->>>>  struct tegra_actmon_emc_ratio {
->>>> @@ -417,6 +419,8 @@ static void tegra_actmon_disable_interrupts(struct tegra_devfreq *tegra)
->>>>  	u32 val;
->>>>  	unsigned int i;
->>>>  
->>>> +	disable_irq(tegra->irq);
->>>> +
->>>>  	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++) {
->>>>  		dev = &tegra->devices[i];
->>>>  
->>>> @@ -427,9 +431,14 @@ static void tegra_actmon_disable_interrupts(struct tegra_devfreq *tegra)
->>>>  		val &= ~ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
->>>>  
->>>>  		device_writel(dev, val, ACTMON_DEV_CTRL);
->>>> +
->>>> +		device_writel(dev, ACTMON_INTR_STATUS_CLEAR,
->>>> +			      ACTMON_DEV_INTR_STATUS);
->>>>  	}
->>>>  
->>>>  	actmon_write_barrier(tegra);
->>>> +
->>>> +	enable_irq(tegra->irq);
->>>
->>> Why do we enable interrupts after this? Is there any use in having the
->>> top-level interrupt enabled if nothing's going to generate an interrupt
->>> anyway?
->>
->> There is no real point in having the interrupt enabled other than to
->> keep the enable count balanced.
->>
->> IIUC, we will need to disable IRQ at the driver's probe time (after
->> requesting the IRQ) if we want to avoid that (not really necessary)
->> balancing. This is probably something that could be improved in a
->> follow-up patches, if desired.
-> 
-> Nah, it's not worth the effort. It is quite problematic that we can't
-> keep interrupt disabled during of devfreq_add_device() execution because
-> it asks governor to enable the interrupt and the interrupt shall be
-> disabled because we're using device's lock in the governor interrupt
-> handler.. device is getting assigned only after completion of the
-> devfreq_add_device() and hence ISR gets a NULL deref if it is fired
-> before device is assigned. So I'll leave this part as-is.
-> 
-> Thierry, please answer to all of the remaining patches where you had
-> some concerns. I'll send out another series on top of this, addressing
-> yours comments and fixing another bug that I spotted today.
-> 
+On Fri, Jun 07, 2019 at 11:49:51AM +0200, Rafael J. Wysocki wrote:
+> On 6/4/2019 12:52 AM, Marcelo Tosatti wrote:
+> >The cpuidle-haltpoll driver allows the guest vcpus to poll for a specified
+> >amount of time before halting. This provides the following benefits
+> >to host side polling:
+> >
+> >         1) The POLL flag is set while polling is performed, which allows
+> >            a remote vCPU to avoid sending an IPI (and the associated
+> >            cost of handling the IPI) when performing a wakeup.
+> >
+> >         2) The HLT VM-exit cost can be avoided.
+> >
+> >The downside of guest side polling is that polling is performed
+> >even with other runnable tasks in the host.
+> >
+> >Results comparing halt_poll_ns and server/client application
+> >where a small packet is ping-ponged:
+> >
+> >host                                        --> 31.33
+> >halt_poll_ns=300000 / no guest busy spin    --> 33.40   (93.8%)
+> >halt_poll_ns=0 / guest_halt_poll_ns=300000  --> 32.73   (95.7%)
+> >
+> >For the SAP HANA benchmarks (where idle_spin is a parameter
+> >of the previous version of the patch, results should be the
+> >same):
+> >
+> >hpns == halt_poll_ns
+> >
+> >                           idle_spin=0/   idle_spin=800/    idle_spin=0/
+> >                           hpns=200000    hpns=0            hpns=800000
+> >DeleteC06T03 (100 thread) 1.76           1.71 (-3%)        1.78   (+1%)
+> >InsertC16T02 (100 thread) 2.14           2.07 (-3%)        2.18   (+1.8%)
+> >DeleteC00T01 (1 thread)   1.34           1.28 (-4.5%)	   1.29   (-3.7%)
+> >UpdateC00T03 (1 thread)   4.72           4.18 (-12%)	   4.53   (-5%)
+> >
+> >V2:
+> >
+> >- Move from x86 to generic code (Paolo/Christian).
+> >- Add auto-tuning logic (Paolo).
+> >- Add MSR to disable host side polling (Paolo).
+> >
+> >
+> >
+> First of all, please CC power management patches (including cpuidle,
+> cpufreq etc) to linux-pm@vger.kernel.org (there are people on that
+> list who may want to see your changes before they go in) and CC
+> cpuidle material (in particular) to Peter Zijlstra.
 
-I looked at this once again and found that the interrupt could be kept
-disabled on request using the IRQ_NOAUTOEN flag and then the device
-could be assigned within the governor's event handler, so everything is
-resolved very nicely! :)
+Ok, Peter is CC'ed, will include linux-pm@vger in the next patches.
 
-I'll send patches addressing this comment and the rest after getting
-relies from you guys. Please try to not postpone the responses too much
-as more interactivity in a review/apply process usually help quite a
-lot, thanks in advance!
+> Second, I'm not a big fan of this approach to be honest, as it kind
+> of is a driver trying to play the role of a governor.
+
+Well, its not trying to choose which idle state to enter, because
+there is only one idle state to enter when virtualized (HLT).
+
+> We have a "polling state" already that could be used here in
+> principle so I wonder what would be wrong with that.� 
+
+There is no "target residency" concept in the virtualized use-case 
+(which is what poll_state.c uses to calculate the poll time).
+
+Moreover the cpuidle-haltpoll driver uses an adaptive logic to
+tune poll time (which appparently does not make sense for poll_state).
+
+The only thing they share is the main loop structure:
+
+"while (!need_resched()) {
+	cpu_relax();
+	now = ktime_get();
+}"
+
+> Also note that
+> there seems to be at least some code duplication between your code
+> and the "polling state" implementation, so maybe it would be
+> possible to do some things in a common way?
+
+Again, its just the main loop structure that is shared:
+there is no target residency in the virtualized case, 
+and we want an adaptive scheme.
+
+Lets think about deduplication: you would have a cpuidle driver,
+with a fake "target residency". 
+
+Now, it makes no sense to use a governor for the virtualized case
+(again, there is only one idle state: HLT, the host governor is
+used for the actual idle state decision in the host).
+
+So i fail to see how i would go about integrating these two 
+and what are the advantages of doing so ? 
+
+
