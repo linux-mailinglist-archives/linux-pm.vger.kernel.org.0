@@ -2,228 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBF3387B9
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 12:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9DF387CD
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 12:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727450AbfFGKOt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jun 2019 06:14:49 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:33009 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727321AbfFGKOt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jun 2019 06:14:49 -0400
-Received: by mail-vs1-f66.google.com with SMTP id m8so843692vsj.0
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2019 03:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=exv6uaKs/w9K/r+eTG/OXTm7v4+gG8Cb0PW6M8MWkjE=;
-        b=zbnOXGvFCxdKw4gEXDarNXkIo1ogtJ4OyMi+io8MTS+gt+f/ZFsoOxyzx1PwyXav02
-         jtyXcElR1DCj/ODjpeJ7o3Swd1u06WwUcHKYDbEvevMBGmv7jSS6CwUxuyy6H+4F0rg0
-         BLbMA3Gq44ERPyLBl8QNWyDboeqf7AmgIuLpatg0BB+YQXfzwwS8mmKQ4MzUL+tLQQ65
-         CyzKAQ6x+XThvbDg7p//1P+s5XXTLX5fIsz3vy7b4g2aeZzycvXgz9Arm30bcU4EoE5Z
-         k5L04Nw8AdGccpHjMhhlghE2YMcPxA2OiVWxJUWdkipapjX3/sU05o3OiSEdvRM1nmeH
-         Z88Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=exv6uaKs/w9K/r+eTG/OXTm7v4+gG8Cb0PW6M8MWkjE=;
-        b=UjfiIHGfoQ5gmryBuc23ppp41miriBXJYVGiJfuU+haGMcJd/flXpT+BNoAzGImOrz
-         CLPWrNNp5TamJsrUoXrTcot8yTg/nq7uAMrJgmx5fEbaTnGXQE2jFEv/7ck4sW9Atypl
-         ACyMsFKkVwoBMW4KdCOmBJLmPF3W+bPBA22Abkuw1xZ8iahcmoCWMgLr3Dyp8F3WFaWV
-         t69ueQRIv6emTUU1WDe2eSiRYWaCQPz1flMz7E63OYcNlzRD4O3/oH2uk6ZP4EUbBkhx
-         Ik57YtQILwmCBX2o6Ahxh7Gpj66e1fNj2dk6r745jrAHf73XewaY0RGcWifyAmyIO8Lz
-         D6GA==
-X-Gm-Message-State: APjAAAUWx8Ucj7jDj42QVTN090F4RefLUBJM1Ety2qY1c6jYDGrcmAS4
-        wijnp7EAeBE+zflI6GXWmKngJeRFkG7DJgMG5E8SXA==
-X-Google-Smtp-Source: APXvYqylZ2mMNJN0GZ+tkcBJFp0Pxsn2dMa8uZ/gDV/oYdZgfbZH5RPj7MB61Gch6nfJjl3vnl9u9pIocmgL15Up8nk=
-X-Received: by 2002:a67:ebc5:: with SMTP id y5mr16672869vso.34.1559902488004;
- Fri, 07 Jun 2019 03:14:48 -0700 (PDT)
+        id S1727143AbfFGKUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jun 2019 06:20:03 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:38017 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727121AbfFGKUC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jun 2019 06:20:02 -0400
+Received: from [192.168.1.162] ([37.4.249.160]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MBmDy-1hPFnq3Uia-00CC77; Fri, 07 Jun 2019 12:19:38 +0200
+Subject: Re: [PATCH v2 7/7] arm64: defconfig: enable cpufreq support for RPi3
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, f.fainelli@gmail.com,
+        Catalin Marinas <catalin.marinas@arm.com>, ptesarik@suse.com,
+        sboyd@kernel.org, viresh.kumar@linaro.org, mturquette@baylibre.com,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+        Will Deacon <will.deacon@arm.com>, eric@anholt.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        mbrugger@suse.de, ssuloev@orpaltech.com
+References: <20190606142255.29454-1-nsaenzjulienne@suse.de>
+ <20190606142255.29454-8-nsaenzjulienne@suse.de>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=stefan.wahren@i2se.com; keydata=
+ xsFNBFt6gBMBEACub/pBevHxbvJefyZG32JINmn2bsEPX25V6fejmyYwmCGKjFtL/DoUMEVH
+ DxCJ47BMXo344fHV1C3AnudgN1BehLoBtLHxmneCzgH3KcPtWW7ptj4GtJv9CQDZy27SKoEP
+ xyaI8CF0ygRxJc72M9I9wmsPZ5bUHsLuYWMqQ7JcRmPs6D8gBkk+8/yngEyNExwxJpR1ylj5
+ bjxWDHyYQvuJ5LzZKuO9LB3lXVsc4bqXEjc6VFuZFCCk/syio/Yhse8N+Qsx7MQagz4wKUkQ
+ QbfXg1VqkTnAivXs42VnIkmu5gzIw/0tRJv50FRhHhxpyKAI8B8nhN8Qvx7MVkPc5vDfd3uG
+ YW47JPhVQBcUwJwNk/49F9eAvg2mtMPFnFORkWURvP+G6FJfm6+CvOv7YfP1uewAi4ln+JO1
+ g+gjVIWl/WJpy0nTipdfeH9dHkgSifQunYcucisMyoRbF955tCgkEY9EMEdY1t8iGDiCgX6s
+ 50LHbi3k453uacpxfQXSaAwPksl8MkCOsv2eEr4INCHYQDyZiclBuuCg8ENbR6AGVtZSPcQb
+ enzSzKRZoO9CaqID+favLiB/dhzmHA+9bgIhmXfvXRLDZze8po1dyt3E1shXiddZPA8NuJVz
+ EIt2lmI6V8pZDpn221rfKjivRQiaos54TgZjjMYI7nnJ7e6xzwARAQABzSlTdGVmYW4gV2Fo
+ cmVuIDxzdGVmYW4ud2FocmVuQGluLXRlY2guY29tPsLBdwQTAQgAIQUCXIdehwIbAwULCQgH
+ AgYVCAkKCwIEFgIDAQIeAQIXgAAKCRCUgewPEZDy2yHTD/9UF7QlDkGxzQ7AaCI6N95iQf8/
+ 1oSUaDNu2Y6IK+DzQpb1TbTOr3VJwwY8a3OWz5NLSOLMWeVxt+osMmlQIGubD3ODZJ8izPlG
+ /JrNt5zSdmN5IA5f3esWWQVKvghZAgTDqdpv+ZHW2EmxnAJ1uLFXXeQd3UZcC5r3/g/vSaMo
+ 9xek3J5mNuDm71lEWsAs/BAcFc+ynLhxwBWBWwsvwR8bHtJ5DOMWvaKuDskpIGFUe/Kb2B+j
+ ravQ3Tn6s/HqJM0cexSHz5pe+0sGvP+t9J7234BFQweFExriey8UIxOr4XAbaabSryYnU/zV
+ H9U1i2AIQZMWJAevCvVgQ/U+NeRhXude9YUmDMDo2sB2VAFEAqiF2QUHPA2m8a7EO3yfL4rM
+ k0iHzLIKvh6/rH8QCY8i3XxTNL9iCLzBWu/NOnCAbS+zlvLZaiSMh5EfuxTtv4PlVdEjf62P
+ +ZHID16gUDwEmazLAMrx666jH5kuUCTVymbL0TvB+6L6ARl8ANyM4ADmkWkpyM22kCuISYAE
+ fQR3uWXZ9YgxaPMqbV+wBrhJg4HaN6C6xTqGv3r4B2aqb77/CVoRJ1Z9cpHCwiOzIaAmvyzP
+ U6MxCDXZ8FgYlT4v23G5imJP2zgX5s+F6ACUJ9UQPD0uTf+J9Da2r+skh/sWOnZ+ycoHNBQv
+ ocZENAHQf87BTQRbeoATARAA2Hd0fsDVK72RLSDHby0OhgDcDlVBM2M+hYYpO3fX1r++shiq
+ PKCHVAsQ5bxe7HmJimHa4KKYs2kv/mlt/CauCJ//pmcycBM7GvwnKzmuXzuAGmVTZC6WR5Lk
+ akFrtHOzVmsEGpNv5Rc9l6HYFpLkbSkVi5SPQZJy+EMgMCFgjrZfVF6yotwE1af7HNtMhNPa
+ LDN1oUKF5j+RyRg5iwJuCDknHjwBQV4pgw2/5vS8A7ZQv2MbW/TLEypKXif78IhgAzXtE2Xr
+ M1n/o6ZH71oRFFKOz42lFdzdrSX0YsqXgHCX5gItLfqzj1psMa9o1eiNTEm1dVQrTqnys0l1
+ 8oalRNswYlQmnYBwpwCkaTHLMHwKfGBbo5dLPEshtVowI6nsgqLTyQHmqHYqUZYIpigmmC3S
+ wBWY1V6ffUEmkqpAACEnL4/gUgn7yQ/5d0seqnAq2pSBHMUUoCcTzEQUWVkiDv3Rk7hTFmhT
+ sMq78xv2XRsXMR6yQhSTPFZCYDUExElEsSo9FWHWr6zHyYcc8qDLFvG9FPhmQuT2s9Blx6gI
+ 323GnEq1lwWPJVzP4jQkJKIAXwFpv+W8CWLqzDWOvdlrDaTaVMscFTeH5W6Uprl65jqFQGMp
+ cRGCs8GCUW13H0IyOtQtwWXA4ny+SL81pviAmaSXU8laKaRu91VOVaF9f4sAEQEAAcLBXwQY
+ AQIACQUCW3qAEwIbDAAKCRCUgewPEZDy2+oXD/9cHHRkBZOfkmSq14Svx062PtU0KV470TSn
+ p/jWoYJnKIw3G0mXIRgrtH2dPwpIgVjsYyRSVMKmSpt5ZrDf9NtTbNWgk8VoLeZzYEo+J3oP
+ qFrTMs3aYYv7e4+JK695YnmQ+mOD9nia915tr5AZj95UfSTlyUmyic1d8ovsf1fP7XCUVRFc
+ RjfNfDF1oL/pDgMP5GZ2OwaTejmyCuHjM8IR1CiavBpYDmBnTYk7Pthy6atWvYl0fy/CqajT
+ Ksx7+p9xziu8ZfVX+iKBCc+He+EDEdGIDhvNZ/IQHfOB2PUXWGS+s9FNTxr/A6nLGXnA9Y6w
+ 93iPdYIwxS7KXLoKJee10DjlzsYsRflFOW0ZOiSihICXiQV1uqM6tzFG9gtRcius5UAthWaO
+ 1OwUSCQmfCOm4fvMIJIA9rxtoS6OqRQciF3crmo0rJCtN2awZfgi8XEif7d6hjv0EKM9XZoi
+ AZYZD+/iLm5TaKWN6oGIti0VjJv8ZZOZOfCb6vqFIkJW+aOu4orTLFMz28aoU3QyWpNC8FFm
+ dYsVua8s6gN1NIa6y3qa/ZB8bA/iky59AEz4iDIRrgUzMEg8Ak7Tfm1KiYeiTtBDCo25BvXj
+ bqsyxkQD1nkRm6FAVzEuOPIe8JuqW2xD9ixGYvjU5hkRgJp3gP5b+cnG3LPqquQ2E6goKUML AQ==
+Message-ID: <431a1f0c-8bc8-5c9b-7fa2-f293a2846ce3@i2se.com>
+Date:   Fri, 7 Jun 2019 12:19:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20190605142312.6072-1-thierry.reding@gmail.com>
-In-Reply-To: <20190605142312.6072-1-thierry.reding@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 7 Jun 2019 12:14:11 +0200
-Message-ID: <CAPDyKFrK-65d3PJYOd=7GGABsmXs9C+y4o8Y7=KW225OjhaE8Q@mail.gmail.com>
-Subject: Re: [PATCH] driver: core: Allow subsystems to continue deferring probe
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <iommu@lists.linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190606142255.29454-8-nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:09PmIyPrq3oDWWfzzNFVNklZb0/fNgRWdtV+WDNiSybbPuWbl1S
+ gn5ZCLMtkTRonHU3RKBBT91U6MUg1U0BURu+WmhW0euSLUKls8EKDNHqAfve9nI7NMaUBp5
+ YkFjMYTc2og/a12gf4QjQb7WNK4H8SvQbE4SZZoXuHkHXkbZ59T9zJshhuMayxpsUsN3H44
+ 55bykqcVvTf8/wffQiP+Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lLfGaMPR4yI=:iCm6gyvGTcdNde4g/GNPsF
+ DOMOvdjf3rfYPFalaOgxIoNXRO6io92hou+dyFAn/AGtWong8yie/9AJ/xZnATTR4PTCBvZoh
+ oHKoRhhOUqVTwdxC8zKLcfUeoGN74Ir6ISFgmEkAJhT54Iq7wUHVlDP/owGjdv9PFgeUvvXKU
+ 4QJ/SmjPIJz0qlrIgkImdie0Jze3ymcpGIRcrm5TcOqu9LdhCvRM+mdHIz+Cv6EglQbvPuCc3
+ R1QvoWTF/gmfPfBJ6uSZ4k4wCDoJt2lsaggmZaW56vIJ0O2PPxR3gy9n/OVm36DZ1Muk5XoW1
+ Psld0DjyMCbvPqBBUxfyN6hbr3jGYAYxcnb2cTLUYsUk1UWy5pqvXTJLUdrucA7IXR0vGlOCE
+ lbQvwJ4WolnTl0i1/0fSS0xquo75n/KwdUCc/3CPq80B6lHRRU3Fx3dxVrY3UN7JRBbV7+FDY
+ O7WprUd64hoVA4m49xsj2QqENDHRtdeDkd5x7D8KBI57BBIKlUOG/CExPsg6YuJidXe0RAkPp
+ vKhOPNBo2oTGMlKVesAnIC9TVqD/0IqORQbclHtSL8rt51P8sw7Uct5E0H4RhNpeB1SCEfTRU
+ h/FFHxtY9GMMWMc40E96Susb4SxSF4M3Ry8g+YPHmiMY/hUNG5XxnoYrDTb3WECfv5xjS4Nk+
+ SJyPH+oPD3q9Ubotum4i5E6TJSFpKodugNSxH5SQijFlluIMk38aHKmcU7iKwfjf3cKNTrnWO
+ VMI3AjeIeJsPlr+hOfYzBnQJBo/XX5weW3CzRfXolB4AAmhe1ciDOxQBBqk=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+ Rob
+Hi Nicolas,
 
-On Wed, 5 Jun 2019 at 16:23, Thierry Reding <thierry.reding@gmail.com> wrote:
+Am 06.06.19 um 16:23 schrieb Nicolas Saenz Julienne:
+> This enables both the new firmware clock driver and cpufreq driver
+> available for the RPi3 family of boards.
 >
-> From: Thierry Reding <treding@nvidia.com>
->
-> Some subsystems, such as pinctrl, allow continuing to defer probe
-> indefinitely. This is useful for devices that depend on resources
-> provided by devices that are only probed after the init stage.
->
-> One example of this can be seen on Tegra, where the DPAUX hardware
-> contains pinmuxing controls for pins that it shares with an I2C
-> controller. The I2C controller is typically used for communication
-> with a monitor over HDMI (DDC). However, other instances of the I2C
-> controller are used to access system critical components, such as a
-> PMIC. The I2C controller driver will therefore usually be a builtin
-> driver, whereas the DPAUX driver is part of the display driver that
-> is loaded from a module to avoid bloating the kernel image with all
-> of the DRM/KMS subsystem.
->
-> In this particular case the pins used by this I2C/DDC controller
-> become accessible very late in the boot process. However, since the
-> controller is only used in conjunction with display, that's not an
-> issue.
->
-> Unfortunately the driver core currently outputs a warning message
-> when a device fails to get the pinctrl before the end of the init
-> stage. That can be confusing for the user because it may sound like
-> an unwanted error occurred, whereas it's really an expected and
-> harmless situation.
->
-> In order to eliminate this warning, this patch allows callers of the
-> driver_deferred_probe_check_state() helper to specify that they want
-> to continue deferring probe, regardless of whether we're past the
-> init stage or not. All of the callers of that function are updated
-> for the new signature, but only the pinctrl subsystem passes a true
-> value in the new persist parameter if appropriate.
->
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-
-Overall this looks good to me. I guess Greg prefers a separate
-function, which sets a flag for the device to switch to this new
-behavior. That seems like a reasonable change to make and avoids
-changing calls to driver_deferred_probe_check_state().
-
-Kind regards
-Uffe
-
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 > ---
->  drivers/base/dd.c            | 17 ++++++++++++-----
->  drivers/base/power/domain.c  |  2 +-
->  drivers/iommu/of_iommu.c     |  2 +-
->  drivers/pinctrl/devicetree.c | 10 ++++++----
->  include/linux/device.h       |  2 +-
->  5 files changed, 21 insertions(+), 12 deletions(-)
+>  arch/arm64/configs/defconfig | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 0df9b4461766..25ffbadf4187 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -238,23 +238,30 @@ __setup("deferred_probe_timeout=", deferred_probe_timeout_setup);
->  /**
->   * driver_deferred_probe_check_state() - Check deferred probe state
->   * @dev: device to check
-> + * @persist: Boolean flag indicating whether drivers should keep trying to
-> + *   probe after built-in drivers have had a chance to probe. This is useful
-> + *   for built-in drivers that rely on resources provided by modular drivers.
->   *
->   * Returns -ENODEV if init is done and all built-in drivers have had a chance
-> - * to probe (i.e. initcalls are done), -ETIMEDOUT if deferred probe debug
-> - * timeout has expired, or -EPROBE_DEFER if none of those conditions are met.
-> + * to probe (i.e. initcalls are done) and unless persist is set, -ETIMEDOUT if
-> + * deferred probe debug timeout has expired, or -EPROBE_DEFER if none of those
-> + * conditions are met.
->   *
->   * Drivers or subsystems can opt-in to calling this function instead of directly
->   * returning -EPROBE_DEFER.
->   */
-> -int driver_deferred_probe_check_state(struct device *dev)
-> +int driver_deferred_probe_check_state(struct device *dev, bool persist)
->  {
->         if (initcalls_done) {
->                 if (!deferred_probe_timeout) {
->                         dev_WARN(dev, "deferred probe timeout, ignoring dependency");
->                         return -ETIMEDOUT;
->                 }
-> -               dev_warn(dev, "ignoring dependency for device, assuming no driver");
-> -               return -ENODEV;
-> +
-> +               if (!persist) {
-> +                       dev_warn(dev, "ignoring dependency for device, assuming no driver");
-> +                       return -ENODEV;
-> +               }
->         }
->         return -EPROBE_DEFER;
->  }
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 33c30c1e6a30..effa5276a773 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2423,7 +2423,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                 mutex_unlock(&gpd_list_lock);
->                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
->                         __func__, PTR_ERR(pd));
-> -               return driver_deferred_probe_check_state(base_dev);
-> +               return driver_deferred_probe_check_state(base_dev, false);
->         }
->
->         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-> diff --git a/drivers/iommu/of_iommu.c b/drivers/iommu/of_iommu.c
-> index f04a6df65eb8..70f3946b088a 100644
-> --- a/drivers/iommu/of_iommu.c
-> +++ b/drivers/iommu/of_iommu.c
-> @@ -117,7 +117,7 @@ static int of_iommu_xlate(struct device *dev,
->          * a proper probe-ordering dependency mechanism in future.
->          */
->         if (!ops)
-> -               return driver_deferred_probe_check_state(dev);
-> +               return driver_deferred_probe_check_state(dev, false);
->
->         return ops->of_xlate(dev, iommu_spec);
->  }
-> diff --git a/drivers/pinctrl/devicetree.c b/drivers/pinctrl/devicetree.c
-> index f7e354f85518..c808bf567d24 100644
-> --- a/drivers/pinctrl/devicetree.c
-> +++ b/drivers/pinctrl/devicetree.c
-> @@ -111,13 +111,15 @@ static int dt_to_map_one_config(struct pinctrl *p,
->
->                 np_pctldev = of_get_next_parent(np_pctldev);
->                 if (!np_pctldev || of_node_is_root(np_pctldev)) {
-> +                       bool persist = false;
-> +
->                         of_node_put(np_pctldev);
-> -                       ret = driver_deferred_probe_check_state(p->dev);
->                         /* keep deferring if modules are enabled unless we've timed out */
-> -                       if (IS_ENABLED(CONFIG_MODULES) && !allow_default && ret == -ENODEV)
-> -                               ret = -EPROBE_DEFER;
-> +                       if (IS_ENABLED(CONFIG_MODULES) && !allow_default)
-> +                               persist = true;
->
-> -                       return ret;
-> +                       return driver_deferred_probe_check_state(p->dev,
-> +                                                                persist);
->                 }
->                 /* If we're creating a hog we can use the passed pctldev */
->                 if (hog_pctldev && (np_pctldev == p->dev->of_node)) {
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index e0649f6adf2e..ecf59dfcbfb7 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -340,7 +340,7 @@ struct device *driver_find_device(struct device_driver *drv,
->                                   int (*match)(struct device *dev, void *data));
->
->  void driver_deferred_probe_add(struct device *dev);
-> -int driver_deferred_probe_check_state(struct device *dev);
-> +int driver_deferred_probe_check_state(struct device *dev, bool persist);
->
->  /**
->   * struct subsys_interface - interfaces to device functions
-> --
-> 2.21.0
->
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 4d583514258c..3b7baffb3087 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -82,6 +82,7 @@ CONFIG_CPUFREQ_DT=y
+>  CONFIG_ACPI_CPPC_CPUFREQ=m
+>  CONFIG_ARM_ARMADA_37XX_CPUFREQ=y
+>  CONFIG_ARM_SCPI_CPUFREQ=y
+> +CONFIG_ARM_RASPBERRYPI_CPUFREQ=y
+
+the arm64 kernel tends to get very big, so i suggested to build it as a
+kernel module.
+
+Any reason why you choose to make it builtin?
+
+>  CONFIG_ARM_TEGRA186_CPUFREQ=y
+>  CONFIG_ARM_SCPI_PROTOCOL=y
+>  CONFIG_RASPBERRYPI_FIRMWARE=y
+> @@ -639,6 +640,7 @@ CONFIG_COMMON_CLK_CS2000_CP=y
+>  CONFIG_COMMON_CLK_S2MPS11=y
+>  CONFIG_CLK_QORIQ=y
+>  CONFIG_COMMON_CLK_PWM=y
+> +CONFIG_CLK_RASPBERRYPI=y
+>  CONFIG_CLK_IMX8MQ=y
+>  CONFIG_CLK_IMX8QXP=y
+>  CONFIG_TI_SCI_CLK=y
