@@ -2,662 +2,285 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3819538BF5
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 15:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704D338D5B
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jun 2019 16:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728211AbfFGNxH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jun 2019 09:53:07 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:52040 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727915AbfFGNxH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jun 2019 09:53:07 -0400
-Received: by mail-it1-f196.google.com with SMTP id m3so2807736itl.1;
-        Fri, 07 Jun 2019 06:53:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=9O3vJ6UFNZgJdpurkZJ1zf0TI7rxpOSfZyofdAeA3ZA=;
-        b=EgbjpWvAYhYXcfOBT3PihpNeG3+zydATGZtm+zKjWl0VVPMQwTQl8tG+ptB12j/oie
-         9kGPKwh45YwmBmQ2Kg7Pu5j/CQr7IxGLQQZFJym+ixrcFPKPh7EGOW1TK7qxITprosHy
-         wb+GzAHNXnH7E96wcvcL9Iu/4kmhMD8YjE9cpqm5/eNZ741luf0/EVnul0yQLOv/t4LS
-         vuBGrpi5GCNXP7Kw/Nd49wqTSWb3URTXFcgK9+qfxMZBo1gBWpSHc3swHxE1Jj/ypdV3
-         VycbXBCZJp6M1dtb7KPb/vI0K2WyBQuluato15UdaVDblHTocyOCDKGixkUcu2r+LvI3
-         mNnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=9O3vJ6UFNZgJdpurkZJ1zf0TI7rxpOSfZyofdAeA3ZA=;
-        b=UhmJ8a0VBZ1xJEyW8wA65XMACcTnLytu5HHvVYruSXyIiBOGJbbNN7s7JeGJUYjtxF
-         aNSHdSX59yCExSViIJAP4o93ixydCfq8c8XsrQWtRTFgizcUkh6tlHv33vevuztwGbXj
-         5RtgXfFDfbSH51b/21DLh2+8ZlxaPLFBO/pNW0yXCC5kT+VhKRDmzWQ99yDynBols/kU
-         aZsEX+JHg5EOJZv4MGYWimcThA7vdBUtx1LtSlQADO2M3KN9U7W0lGsMUPnqmnlNCikC
-         8M41cFJs4LEUAWJMRx8cYJr9Tuqatt4DDHBwjUQKLb8U+mICkk74hqMjhNVsu7NlzlV3
-         m86Q==
-X-Gm-Message-State: APjAAAXE3D7tAivN5H29GyQs3GoeVJHiSAxj/cKfj4cpUwBJraeNdOap
-        VzS3RLheaItdCsM9HeiUva+XlZDzAbFCQf21uWs=
-X-Google-Smtp-Source: APXvYqwi1A102ejKg4N8aXDBe7mxMxKCUX0ZtIeJU/DizGEH7wQxBMvamB2rUFyBed/qXV0tqAcv5vNYnRtU49WAlzY=
-X-Received: by 2002:a24:ee08:: with SMTP id b8mr4490939iti.174.1559915585720;
- Fri, 07 Jun 2019 06:53:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190525181329.18657-1-tiny.windzz@gmail.com> <20190525181329.18657-2-tiny.windzz@gmail.com>
- <20190527142544.skblqfcz5fqfzxgl@core.my.home> <CAEExFWvGOuiEMT8SGYUXtqCZh2ZQCavns++kWgXaAtcozBiDeQ@mail.gmail.com>
-In-Reply-To: <CAEExFWvGOuiEMT8SGYUXtqCZh2ZQCavns++kWgXaAtcozBiDeQ@mail.gmail.com>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Fri, 7 Jun 2019 21:52:54 +0800
-Message-ID: <CAEExFWvxNnwU_f7qRNZehUOs-THXk1RXTsofc+vgkT3OH-Gcdw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] thermal: sun8i: add thermal driver for h6
-To:     Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, robh+dt@kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        David Miller <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        paulmck@linux.ibm.com, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1729283AbfFGOf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jun 2019 10:35:29 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:50109 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729147AbfFGOf2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jun 2019 10:35:28 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190607143525euoutp01ce060950db0052b4f612eafc2a0a8e14~l8UVH7Pmd0114101141euoutp01r
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jun 2019 14:35:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190607143525euoutp01ce060950db0052b4f612eafc2a0a8e14~l8UVH7Pmd0114101141euoutp01r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1559918125;
+        bh=LfIzVpHvL6QUADSI2AZywhT+Vizxo3HFKvCNEc672TY=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=sxIV4KNux0twg31+a20iskFvwrG/B9GblIIGYUyKjvCU8dPwRpuJT+UG1f0d50vOG
+         vRp8sGM7ohOQBLuGkemAXhmwcnB7spdzA0ecZNfjGv2qklQ+5yspFdHHMhvFKyGpd6
+         ifTLfbFYeDNK1ko+u+NOsOJg4uyiCa5FPcRwkfnU=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190607143524eucas1p21c628de9975bf25a675e7c5ed9a4abe5~l8UUF_b072161821618eucas1p2N;
+        Fri,  7 Jun 2019 14:35:24 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 32.D0.04325.C267AFC5; Fri,  7
+        Jun 2019 15:35:24 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190607143523eucas1p1015a614a64ed22f4c65ace8b795dd6d0~l8UTOYbT_1212112121eucas1p1v;
+        Fri,  7 Jun 2019 14:35:23 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190607143523eusmtrp1b65ec071b994034d5999dc9bd1d61174~l8US_je-S1284512845eusmtrp1Q;
+        Fri,  7 Jun 2019 14:35:23 +0000 (GMT)
+X-AuditID: cbfec7f5-b75ff700000010e5-8a-5cfa762c6bb7
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id B2.C0.04140.B267AFC5; Fri,  7
+        Jun 2019 15:35:23 +0100 (BST)
+Received: from AMDC3778.DIGITAL.local (unknown [106.120.51.20]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190607143522eusmtip19de1cde106eb8ef250a153c0d882ce54~l8USE36Pm2644726447eusmtip1s;
+        Fri,  7 Jun 2019 14:35:22 +0000 (GMT)
+From:   Lukasz Luba <l.luba@partner.samsung.com>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        b.zolnierkie@samsung.com, krzk@kernel.org, kgene@kernel.org,
+        cw00.choi@samsung.com, kyungmin.park@samsung.com,
+        m.szyprowski@samsung.com, s.nawrocki@samsung.com,
+        myungjoo.ham@samsung.com, keescook@chromium.org, tony@atomide.com,
+        jroedel@suse.de, treding@nvidia.com, digetx@gmail.com,
+        gregkh@linuxfoundation.org, willy.mh.wolff.ml@gmail.com,
+        Lukasz Luba <l.luba@partner.samsung.com>
+Subject: [PATCH v9 00/13] Exynos5 Dynamic Memory Controller driver
+Date:   Fri,  7 Jun 2019 16:34:54 +0200
+Message-Id: <20190607143507.30286-1-l.luba@partner.samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WSfUzMcRzHfe93vwen4+dq7rskdsvkKRqzr3k27Kch5p+mxKXfKrqj++nk
+        Ye1kqHRXq61uPQwzqiuq0061ntwdUagWiZKHSsmJpNYDl87v8N/78/68Pvu899mHwiQtuDsV
+        oTzJqpTySBkhEpoejjUuX6YeD1pZ+ckVleiLcPTyRy+Orlqf4ahgsAugCzeKCJRWnyNAT64o
+        UHLXZww1NhaT6GmcjUSvNR5oMKkTRy0V2QQa0loB0jdWC9Bt6xsSNddvR+3n8whksV3Gkb21
+        RIhqnvuh9omZaOTRB7BZyowMpwqZr20XSSZL0yxkyjPfkIzRkEAwNTmFJKO9MEAw9wcqBYyu
+        1ACYuw1nmSGj594ZB0TrQ9nICDWrWrHxsCj8dbeOOFHBxLzX2oAGfFibCKZTkF4N7+gNZCIQ
+        URI6D8DuvByCL34A2BtXjfHFEIA3iyeFf0eMVQ8wh5bQuVNUfcy/iXjLpCARUBRB+8AyQ5SD
+        caP1AGb17XcwGH0Pg1/aO4CDcaW3QrNF6mCE9EJoGm/FHVpMb4LGzFsYv2s+LCiu/RMC0sMk
+        LCgdFPCNbTCr45sTcoX9daUkrz1gQ1qSMygHNdrrgNfnYFdyjpNZBy11zbgjA0YvhkUVK3h7
+        C0zvHvljQ3ombPsy22FjUzLVlIHxthjGX5LwtDcsTWpyhpkDcwvTSR5h4APtGf44B6Et9TOZ
+        Ajwz/6+6BoABSNloThHGcquU7CkfTq7gopVhPkeOK4xg6tUa7HXDZaD6Z4gZ0BSQuYgZcixI
+        gsvV3GmFGUAKk7mJ1U2jQRJxqPz0GVZ1/JAqOpLlzGAuJZRJxWenvQuU0GHyk+wxlj3Bqv52
+        BdR0dw0497EwOfBx7NjDyfK8zlc7XXbpdpPfrSHK/HVVdV6+Gbj/nrRFE56181LKQ/b1jQan
+        JNjag4e8e94zo/p8jDCJmnylHm5l/TH+dqNdmtGhswTEX/IzzerbcDRjgcuqX+ae1QMBEaHD
+        neFelUferYlq2ZErdl0a++jpC1322ygm8JlMyIXLfZdgKk7+G4m859ZmAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsVy+t/xu7raZb9iDCZ8k7bYOGM9q8X1L89Z
+        LeYfOcdqsfrjY0aL5sXr2Swmn5rLZHGmO9ei//FrZovz5zewW5xtesNucatBxuJjzz1Wi8u7
+        5rBZfO49wmgx4/w+Jou1R+6yW1w85Wpxu3EFm8XhN+2sFv+ubWSx2H/Fy+L2bz6LbyceMTqI
+        e3z7OonF4/2NVnaP2Q0XWTx2zrrL7rFpVSebx/65a9g9epvfsXkcfLeHyaNvyypGj82nqz0+
+        b5IL4I7SsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQ
+        y7j1pI+tYJdHxcPeN4wNjI8suxg5OSQETCQ27T3K3MXIxSEksJRR4sCTBSwQCTGJSfu2s0PY
+        whJ/rnWxQRR9YpRYt+sokMPBwSagJ7FjVSFIXERgDqPEz65tjCAOs8BZZondK94wgRQJCzhJ
+        HDosDjKIRUBVYtuva6wgNq+AvcSmWcuYIRbIS6zecIB5AiPPAkaGVYwiqaXFuem5xUZ6xYm5
+        xaV56XrJ+bmbGIFRte3Yzy07GLveBR9iFOBgVOLhncH0M0aINbGsuDL3EKMEB7OSCG/ZhR8x
+        QrwpiZVVqUX58UWlOanFhxhNgZZPZJYSTc4HRnxeSbyhqaG5haWhubG5sZmFkjhvh8DBGCGB
+        9MSS1OzU1ILUIpg+Jg5OqQZGrXuMbxc8KeTU/Xv09WuVdxXz6uxWPFBfrrLed2pq4cSvtX8b
+        GQXX5Uy/cj4tpoFlZTCHxUtp+aObPup8UCreFKq/j8Hgini2wptVN50tlogtPXrI8Xacz7FJ
+        u58qVRdZhv21NqqbxdBV8Xd5sHnVcsl/FiVl76IO3v4ZuMr7guMrr0vJFhodSizFGYmGWsxF
+        xYkAlM/eVsACAAA=
+X-CMS-MailID: 20190607143523eucas1p1015a614a64ed22f4c65ace8b795dd6d0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190607143523eucas1p1015a614a64ed22f4c65ace8b795dd6d0
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190607143523eucas1p1015a614a64ed22f4c65ace8b795dd6d0
+References: <CGME20190607143523eucas1p1015a614a64ed22f4c65ace8b795dd6d0@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 7, 2019 at 9:50 PM Frank Lee <tiny.windzz@gmail.com> wrote:
->
-> HI Ond=C5=99ej,
->
->
-> On Mon, May 27, 2019 at 10:25 PM Ond=C5=99ej Jirman <megous@megous.com> w=
-rote:
-> >
-> > Hi Yangtao,
-> >
-> > On Sat, May 25, 2019 at 02:13:27PM -0400, Yangtao Li wrote:
-> > > This patch adds the support for allwinner thermal sensor, within
-> > > allwinner SoC. It will register sensors for thermal framework
-> > > and use device tree to bind cooling device.
-> > >
-> > > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> > > ---
-> > >  MAINTAINERS                     |   7 +
-> > >  drivers/thermal/Kconfig         |  14 +
-> > >  drivers/thermal/Makefile        |   1 +
-> > >  drivers/thermal/sun8i_thermal.c | 437 ++++++++++++++++++++++++++++++=
-++
-> > >  4 files changed, 459 insertions(+)
-> > >  create mode 100644 drivers/thermal/sun8i_thermal.c
-> > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 2336dd26ece4..d312f9eecf0d 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -674,6 +674,13 @@ L:       linux-crypto@vger.kernel.org
-> > >  S:   Maintained
-> > >  F:   drivers/crypto/sunxi-ss/
-> > >
-> > > +ALLWINNER THERMAL DRIVER
-> > > +M:   Yangtao Li <tiny.windzz@gmail.com>
-> > > +L:   linux-pm@vger.kernel.org
-> > > +S:   Maintained
-> > > +F:   Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-> > > +F:   drivers/thermal/sun8i_thermal.c
-> > > +
-> > >  ALLWINNER VPU DRIVER
-> > >  M:   Maxime Ripard <maxime.ripard@bootlin.com>
-> > >  M:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> > > index 9966364a6deb..e5465053d66f 100644
-> > > --- a/drivers/thermal/Kconfig
-> > > +++ b/drivers/thermal/Kconfig
-> > > @@ -262,6 +262,20 @@ config SPEAR_THERMAL
-> > >         Enable this to plug the SPEAr thermal sensor driver into the =
-Linux
-> > >         thermal framework.
-> > >
-> > > +config SUN8I_THERMAL
-> > > +     tristate "Allwinner sun8i thermal driver"
-> > > +     depends on ARCH_SUNXI || COMPILE_TEST
-> > > +     depends on HAS_IOMEM
-> > > +     depends on NVMEM_SUNXI_SID
-> > > +     depends on OF
-> > > +     depends on RESET_CONTROLLER
-> > > +     help
-> > > +       Support for the sun8i thermal sensor driver into the Linux th=
-ermal
-> > > +       framework.
-> > > +
-> > > +       To compile this driver as a module, choose M here: the
-> > > +       module will be called sun8i-thermal.
-> > > +
-> > >  config ROCKCHIP_THERMAL
-> > >       tristate "Rockchip thermal driver"
-> > >       depends on ARCH_ROCKCHIP || COMPILE_TEST
-> > > diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> > > index 74a37c7f847a..fa6f8b206281 100644
-> > > --- a/drivers/thermal/Makefile
-> > > +++ b/drivers/thermal/Makefile
-> > > @@ -31,6 +31,7 @@ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) +=3D devfreq_=
-cooling.o
-> > >  obj-y                                +=3D broadcom/
-> > >  obj-$(CONFIG_THERMAL_MMIO)           +=3D thermal_mmio.o
-> > >  obj-$(CONFIG_SPEAR_THERMAL)  +=3D spear_thermal.o
-> > > +obj-$(CONFIG_SUN8I_THERMAL)     +=3D sun8i_thermal.o
-> > >  obj-$(CONFIG_ROCKCHIP_THERMAL)       +=3D rockchip_thermal.o
-> > >  obj-$(CONFIG_RCAR_THERMAL)   +=3D rcar_thermal.o
-> > >  obj-$(CONFIG_RCAR_GEN3_THERMAL)      +=3D rcar_gen3_thermal.o
-> > > diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_=
-thermal.c
-> > > new file mode 100644
-> > > index 000000000000..a9cc2197f4cb
-> > > --- /dev/null
-> > > +++ b/drivers/thermal/sun8i_thermal.c
-> > > @@ -0,0 +1,437 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Thermal sensor driver for Allwinner SOC
-> > > + * Copyright (C) 2019 Yangtao Li
-> > > + *
-> > > + * Based on the work of Icenowy Zheng <icenowy@aosc.io>
-> > > + * Based on the work of Ondrej Jirman <megous@megous.com>
-> > > + * Based on the work of Josef Gajdusek <atx@atx.name>
-> > > + */
-> > > +
-> > > +#include <linux/clk.h>
-> > > +#include <linux/device.h>
-> > > +#include <linux/interrupt.h>
-> > > +#include <linux/wait.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/nvmem-consumer.h>
-> > > +#include <linux/of_device.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/regmap.h>
-> > > +#include <linux/reset.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/thermal.h>
-> > > +
-> > > +#define MAX_SENSOR_NUM       4
-> > > +
-> > > +#define FT_TEMP_MASK                         GENMASK(11, 0)
-> > > +#define TEMP_CALIB_MASK                              GENMASK(11, 0)
-> > > +#define TEMP_TO_REG                          672
-> > > +#define CALIBRATE_DEFAULT                    0x800
-> > > +
-> > > +#define SUN50I_THS_CTRL0                     0x00
-> > > +#define SUN50I_H6_THS_ENABLE                 0x04
-> > > +#define SUN50I_H6_THS_PC                     0x08
-> > > +#define SUN50I_H6_THS_DIC                    0x10
-> > > +#define SUN50I_H6_THS_DIS                    0x20
-> > > +#define SUN50I_H6_THS_MFC                    0x30
-> > > +#define SUN50I_H6_THS_TEMP_CALIB             0xa0
-> > > +#define SUN50I_H6_THS_TEMP_DATA                      0xc0
-> > > +
-> > > +#define SUN50I_THS_CTRL0_T_ACQ(x)            ((GENMASK(15, 0) & (x))=
- << 16)
-> > > +#define SUN50I_THS_FILTER_EN                 BIT(2)
-> > > +#define SUN50I_THS_FILTER_TYPE(x)            (GENMASK(1, 0) & (x))
-> > > +#define SUN50I_H6_THS_PC_TEMP_PERIOD(x)              ((GENMASK(19, 0=
-) & (x)) << 12)
-> > > +#define SUN50I_H6_THS_DATA_IRQ_STS(x)                BIT(x)
-> > > +
-> > > +/* millidegree celsius */
-> > > +#define SUN50I_H6_FT_DEVIATION                       7000
-> > > +
-> > > +struct ths_device;
-> > > +
-> > > +struct tsensor {
-> > > +     struct ths_device               *tmdev;
-> > > +     struct thermal_zone_device      *tzd;
-> > > +     int                             id;
-> > > +     wait_queue_head_t               wait_queue;
-> > > +};
-> > > +
-> > > +struct ths_thermal_chip {
-> > > +     int             sensor_num;
-> > > +     int             offset;
-> > > +     int             scale;
-> > > +     int             ft_deviation;
-> > > +     int             temp_calib_base;
-> > > +     int             temp_data_base;
-> > > +     int             (*calibrate)(struct ths_device *tmdev);
-> > > +     int             (*init)(struct ths_device *tmdev);
-> > > +     irqreturn_t     (*irq_thread)(int irq, void *data);
-> > > +};
-> > > +
-> > > +struct ths_device {
-> > > +     const struct ths_thermal_chip           *chip;
-> > > +     struct device                           *dev;
-> > > +     struct regmap                           *regmap;
-> > > +     struct reset_control                    *reset;
-> > > +     struct clk                              *bus_clk;
-> > > +     struct tsensor                          sensor[MAX_SENSOR_NUM];
-> > > +     int                                     data_ready;
-> > > +};
-> > > +
-> > > +/* Temp Unit: millidegree Celsius */
-> > > +static int sun8i_ths_reg2temp(struct ths_device *tmdev,
-> > > +                           int reg)
-> > > +{
-> > > +     return (reg + tmdev->chip->offset) * tmdev->chip->scale;
-> > > +}
-> > > +
-> > > +static int sun8i_ths_get_temp(void *data, int *temp)
-> > > +{
-> > > +     struct tsensor *s =3D data;
-> > > +     struct ths_device *tmdev =3D s->tmdev;
-> > > +     int val;
-> > > +
-> > > +     wait_event(s->wait_queue, tmdev->data_ready & BIT(s->id));
-> > > +     tmdev->data_ready &=3D ~BIT(s->id);
-> >
-> > I've looked at thermal_core.c and it looks like that the proper way to =
-handle
-> > this situation is just returning -EAGAIN.
->
-> What we are doing now is to turn it into an interrupt-based program.
-> Every time we use temperature data, we need to wait until new data is col=
-lected.
->
-> >
-> > See update_temperature() function in thermal_core.c.
-> >
-> > That will suppress the warning about failure to read thermal zone. Also
-> > it's much simpler than this wait_queue stuff. No other thermal driver u=
-ses this
-> > either. Also get_temp is called under thermal_list_lock mutex and that =
-would
-> > block cooling device registrations and god knows what else.
->
-> Since there is no valid temperature data, it cannot be blocked.
+Hi all,
 
-Since there is no valid temperature data, why can't it be blocked?
+This is v9 which introduces minor changes. The patch set adds support of
+Dynamic Memory Controller for Exynos5422 SoC.
+The driver supports Dynamic Voltage and Frequency Scaling
+for the DMC and DRAM. It also provides needed timings for different
+speed operations of the DRAM memory.
+There is also new generic code in of_memory and headers which allows to parse
+LPDDR3 memories defined in device-tree.
 
->
-> MBR,
-> Yangtao
->
-> >
-> > Other than that, and what Maxime said, I don't see any more issues.
-> >
-> > thank you,
-> >         o.
-> >
-> > > +     regmap_read(tmdev->regmap, tmdev->chip->temp_data_base +
-> > > +                 0x4 * s->id, &val);
-> > > +
-> > > +     *temp =3D sun8i_ths_reg2temp(tmdev, val);
-> > > +     /*
-> > > +      * XX - According to the original sdk, there are some platforms=
-(rarely)
-> > > +      * that add a fixed offset value after calculating the temperat=
-ure
-> > > +      * value. We can't simply put it on the formula for calculating=
- the
-> > > +      * temperature above, because the formula for calculating the
-> > > +      * temperature above is also used when the sensor is calibrated=
-. If
-> > > +      * do this, the correct calibration formula is hard to know.
-> > > +      */
-> > > +     if (tmdev->chip->ft_deviation)
-> > > +             *temp +=3D tmdev->chip->ft_deviation;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static const struct thermal_zone_of_device_ops ths_ops =3D {
-> > > +     .get_temp =3D sun8i_ths_get_temp,
-> > > +};
-> > > +
-> > > +static const struct regmap_config config =3D {
-> > > +     .reg_bits =3D 32,
-> > > +     .val_bits =3D 32,
-> > > +     .reg_stride =3D 4,
-> > > +     .fast_io =3D true,
-> > > +};
-> > > +
-> > > +static irqreturn_t sun50i_h6_irq_thread(int irq, void *data)
-> > > +{
-> > > +     wait_queue_head_t *data_wait;
-> > > +     struct ths_device *tmdev =3D data;
-> > > +     int i, state;
-> > > +
-> > > +     regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
-> > > +
-> > > +     for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
-> > > +             data_wait =3D &tmdev->sensor[i].wait_queue;
-> > > +
-> > > +             if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
-> > > +                     /* clear data irq pending */
-> > > +                     regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS,
-> > > +                                  SUN50I_H6_THS_DATA_IRQ_STS(i));
-> > > +
-> > > +                     tmdev->data_ready |=3D BIT(i);
-> > > +                     wake_up(data_wait);
-> > > +             }
-> > > +     }
-> > > +
-> > > +     return IRQ_HANDLED;
-> > > +}
-> > > +
-> > > +static int sun8i_ths_resource_init(struct ths_device *tmdev)
-> > > +{
-> > > +     struct device *dev =3D tmdev->dev;
-> > > +     struct platform_device *pdev =3D to_platform_device(dev);
-> > > +     struct resource *mem;
-> > > +     void __iomem *base;
-> > > +     int ret, irq;
-> > > +
-> > > +     mem =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > > +     base =3D devm_ioremap_resource(dev, mem);
-> > > +     if (IS_ERR(base))
-> > > +             return PTR_ERR(base);
-> > > +
-> > > +     tmdev->regmap =3D devm_regmap_init_mmio(dev, base, &config);
-> > > +     if (IS_ERR(tmdev->regmap))
-> > > +             return PTR_ERR(tmdev->regmap);
-> > > +
-> > > +     tmdev->reset =3D devm_reset_control_get(dev, 0);
-> > > +     if (IS_ERR(tmdev->reset))
-> > > +             return PTR_ERR(tmdev->reset);
-> > > +
-> > > +     tmdev->bus_clk =3D devm_clk_get(&pdev->dev, "bus");
-> > > +     if (IS_ERR(tmdev->bus_clk))
-> > > +             return PTR_ERR(tmdev->bus_clk);
-> > > +
-> > > +     irq =3D platform_get_irq(pdev, 0);
-> > > +     if (irq < 0)
-> > > +             return irq;
-> > > +
-> > > +     ret =3D devm_request_threaded_irq(dev, irq, NULL,
-> > > +                                     tmdev->chip->irq_thread,
-> > > +                                     IRQF_ONESHOT, "ths", tmdev);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     ret =3D reset_control_deassert(tmdev->reset);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     ret =3D clk_prepare_enable(tmdev->bus_clk);
-> > > +     if (ret)
-> > > +             goto assert_reset;
-> > > +
-> > > +     ret =3D tmdev->chip->calibrate(tmdev);
-> > > +     if (ret)
-> > > +             goto bus_disable;
-> > > +
-> > > +     return 0;
-> > > +
-> > > +bus_disable:
-> > > +     clk_disable_unprepare(tmdev->bus_clk);
-> > > +assert_reset:
-> > > +     reset_control_assert(tmdev->reset);
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static int sun50i_ths_calibrate(struct ths_device *tmdev)
-> > > +{
-> > > +     struct nvmem_cell *calcell;
-> > > +     struct device *dev =3D tmdev->dev;
-> > > +     u16 *caldata;
-> > > +     size_t callen;
-> > > +     int ft_temp;
-> > > +     int i, ret =3D 0;
-> > > +
-> > > +     calcell =3D devm_nvmem_cell_get(dev, "calib");
-> > > +     if (IS_ERR(calcell)) {
-> > > +             if (PTR_ERR(calcell) =3D=3D -EPROBE_DEFER)
-> > > +                     return -EPROBE_DEFER;
-> > > +             /*
-> > > +              * Even if the external calibration data stored in sid =
-is
-> > > +              * not accessible, the THS hardware can still work, alt=
-hough
-> > > +              * the data won't be so accurate.
-> > > +              *
-> > > +              * The default value of calibration register is 0x800 f=
-or
-> > > +              * every sensor, and the calibration value is usually 0=
-x7xx
-> > > +              * or 0x8xx, so they won't be away from the default val=
-ue
-> > > +              * for a lot.
-> > > +              *
-> > > +              * So here we do not return error if the calibartion da=
-ta is
-> > > +              * not available, except the probe needs deferring.
-> > > +              */
-> > > +             goto out;
-> > > +     }
-> > > +
-> > > +     caldata =3D nvmem_cell_read(calcell, &callen);
-> > > +     if (IS_ERR(caldata)) {
-> > > +             ret =3D PTR_ERR(caldata);
-> > > +             goto out;
-> > > +     }
-> > > +
-> > > +     if (!caldata[0] || callen < 2 + 2 * tmdev->chip->sensor_num) {
-> > > +             ret =3D -EINVAL;
-> > > +             goto out_free;
-> > > +     }
-> > > +
-> > > +     /*
-> > > +      * efuse layout:
-> > > +      *
-> > > +      *      0   11  16       32
-> > > +      *      +-------+-------+-------+
-> > > +      *      |temp|  |sensor0|sensor1|
-> > > +      *      +-------+-------+-------+
-> > > +      *
-> > > +      * The calibration data on the H6 is the ambient temperature an=
-d
-> > > +      * sensor values that are filled during the factory test stage.
-> > > +      *
-> > > +      * The unit of stored FT temperature is 0.1 degreee celusis.
-> > > +      * Through the stored ambient temperature and the data read
-> > > +      * by the sensor, after a certain calculation, the calibration
-> > > +      * value to be compensated can be obtained.
-> > > +      */
-> > > +     ft_temp =3D caldata[0] & FT_TEMP_MASK;
-> > > +
-> > > +     for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
-> > > +             int reg =3D (int)caldata[i + 1];
-> > > +             int sensor_temp =3D sun8i_ths_reg2temp(tmdev, reg);
-> > > +             int delta, cdata, calib_offest;
-> > > +
-> > > +             /*
-> > > +              * To calculate the calibration value:
-> > > +              *
-> > > +              * X(in Celsius) =3D Ts - ft_temp
-> > > +              * delta =3D X * 10000 / TEMP_TO_REG
-> > > +              * cdata =3D CALIBRATE_DEFAULT - delta
-> > > +              *
-> > > +              * cdata: calibration value
-> > > +              */
-> > > +             delta =3D (sensor_temp - ft_temp * 100) * 10 / TEMP_TO_=
-REG;
-> > > +             cdata =3D CALIBRATE_DEFAULT - delta;
-> > > +             if (cdata & ~TEMP_CALIB_MASK) {
-> > > +                     /*
-> > > +                      * Calibration value more than 12-bit, but cali=
-bration
-> > > +                      * register is 12-bit. In this case, ths hardwa=
-re can
-> > > +                      * still work without calibration, although the=
- data
-> > > +                      * won't be so accurate.
-> > > +                      */
-> > > +                     dev_warn(dev, "sensor%d is not calibrated.\n", =
-i);
-> > > +
-> > > +                     continue;
-> > > +             }
-> > > +
-> > > +             calib_offest =3D tmdev->chip->temp_calib_base + (i / 2)=
- * 0x4;
-> > > +
-> > > +             if (i % 2) {
-> > > +                     int val;
-> > > +
-> > > +                     regmap_read(tmdev->regmap, calib_offest, &val);
-> > > +                     val =3D (val & TEMP_CALIB_MASK) | (cdata << 16)=
-;
-> > > +                     regmap_write(tmdev->regmap, calib_offest, val);
-> > > +             } else {
-> > > +                     regmap_write(tmdev->regmap, calib_offest, cdata=
-);
-> > > +             }
-> > > +     }
-> > > +
-> > > +out_free:
-> > > +     kfree(caldata);
-> > > +out:
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static int sun8i_ths_register(struct ths_device *tmdev)
-> > > +{
-> > > +     struct thermal_zone_device *tzd;
-> > > +     int i;
-> > > +
-> > > +     for (i =3D 0; i < tmdev->chip->sensor_num; i++) {
-> > > +             tmdev->sensor[i].tmdev =3D tmdev;
-> > > +             tmdev->sensor[i].id =3D i;
-> > > +             tmdev->sensor[i].tzd =3D
-> > > +                     devm_thermal_zone_of_sensor_register(tmdev->dev=
-,
-> > > +                                                          i,
-> > > +                                                          &tmdev->se=
-nsor[i],
-> > > +                                                          &ths_ops);
-> > > +             if (IS_ERR(tmdev->sensor[i].tzd))
-> > > +                     return PTR_ERR(tzd);
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int sun8i_ths_probe(struct platform_device *pdev)
-> > > +{
-> > > +     struct ths_device *tmdev;
-> > > +     struct device *dev =3D &pdev->dev;
-> > > +     int i, ret;
-> > > +
-> > > +     tmdev =3D devm_kzalloc(dev, sizeof(*tmdev), GFP_KERNEL);
-> > > +     if (!tmdev)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     tmdev->dev =3D dev;
-> > > +     tmdev->chip =3D of_device_get_match_data(&pdev->dev);
-> > > +     if (!tmdev->chip)
-> > > +             return -EINVAL;
-> > > +
-> > > +     /*
-> > > +      * Initialize wait_queue in advance, to avoid calling wake_up
-> > > +      * before ths is registered in isr.
-> > > +      */
-> > > +     for (i =3D 0; i < tmdev->chip->sensor_num; i++)
-> > > +             init_waitqueue_head(&tmdev->sensor[i].wait_queue);
-> > > +
-> > > +     platform_set_drvdata(pdev, tmdev);
-> > > +
-> > > +     ret =3D sun8i_ths_resource_init(tmdev);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     ret =3D tmdev->chip->init(tmdev);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     ret =3D sun8i_ths_register(tmdev);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     return ret;
-> > > +}
-> > > +
-> > > +static int sun8i_ths_remove(struct platform_device *pdev)
-> > > +{
-> > > +     struct ths_device *tmdev =3D platform_get_drvdata(pdev);
-> > > +
-> > > +     clk_disable_unprepare(tmdev->bus_clk);
-> > > +     reset_control_assert(tmdev->reset);
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int sun50i_thermal_init(struct ths_device *tmdev)
-> > > +{
-> > > +     int val;
-> > > +
-> > > +     /*
-> > > +      * clkin =3D 24MHz
-> > > +      * T acquire =3D clkin / (x + 1)
-> > > +      *           =3D 20us
-> > > +      */
-> > > +     regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
-> > > +                  SUN50I_THS_CTRL0_T_ACQ(479));
-> > > +     /* average over 4 samples */
-> > > +     regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
-> > > +                  SUN50I_THS_FILTER_EN |
-> > > +                  SUN50I_THS_FILTER_TYPE(1));
-> > > +     /* period =3D (x + 1) * 4096 / clkin; ~10ms */
-> > > +     regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
-> > > +                  SUN50I_H6_THS_PC_TEMP_PERIOD(58));
-> > > +     /* enable sensor */
-> > > +     val =3D GENMASK(tmdev->chip->sensor_num - 1, 0);
-> > > +     regmap_write(tmdev->regmap, SUN50I_H6_THS_ENABLE, val);
-> > > +     /* thermal data interrupt enable */
-> > > +     val =3D GENMASK(tmdev->chip->sensor_num - 1, 0);
-> > > +     regmap_write(tmdev->regmap, SUN50I_H6_THS_DIC, val);
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static const struct ths_thermal_chip sun50i_h6_ths =3D {
-> > > +     .sensor_num =3D 2,
-> > > +     .offset =3D -2794,
-> > > +     .scale =3D -67,
-> > > +     .ft_deviation =3D SUN50I_H6_FT_DEVIATION,
-> > > +     .temp_calib_base =3D SUN50I_H6_THS_TEMP_CALIB,
-> > > +     .temp_data_base =3D SUN50I_H6_THS_TEMP_DATA,
-> > > +     .calibrate =3D sun50i_ths_calibrate,
-> > > +     .init =3D sun50i_thermal_init,
-> > > +     .irq_thread =3D sun50i_h6_irq_thread,
-> > > +};
-> > > +
-> > > +static const struct of_device_id of_ths_match[] =3D {
-> > > +     { .compatible =3D "allwinner,sun50i-h6-ths", .data =3D &sun50i_=
-h6_ths },
-> > > +     { /* sentinel */ },
-> > > +};
-> > > +MODULE_DEVICE_TABLE(of, of_ths_match);
-> > > +
-> > > +static struct platform_driver ths_driver =3D {
-> > > +     .probe =3D sun8i_ths_probe,
-> > > +     .remove =3D sun8i_ths_remove,
-> > > +     .driver =3D {
-> > > +             .name =3D "sun8i-thermal",
-> > > +             .of_match_table =3D of_ths_match,
-> > > +     },
-> > > +};
-> > > +module_platform_driver(ths_driver);
-> > > +
-> > > +MODULE_DESCRIPTION("Thermal sensor driver for Allwinner SOC");
-> > > +MODULE_LICENSE("GPL v2");
-> > > --
-> > > 2.17.0
-> > >
-> > >
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+The patch set has been cut to land mainline quickly and the dependency
+on PPMU patches are removed (which was in v7). It implies that the debugging
+code which was presenting details about traffic on the AXI slots has been
+removed. It will be added when this driver got mainline and the PPMU code
+got mainline. Also DT dependency of PPMU header has been removed.
+
+changes:
+v9:
+- disable bpll instead of spll clocks in the remove path
+- safely disable 'bypass' clocks when error was captured
+- removed unused clocks and related code
+- changed code to make 'if' statement clean as Krzysztof sugested
+- removed cloks from dt-binding and DT
+- minor fix for clocks to read the state for DIV with NOCACHE
+- removed spaces in #define and put tabs
+- removed duplicated entry for OPPs phandle in dt-binding
+- collected ACKs
+- based on v5.2-rc3 tag
+v8 [3]:
+- removed chipID dependency, as Krzysztof suggested and drop the whole checking
+  code in the driver (which also Marek suggested offline) (it might be needed
+  in future when other configuration would be supported). It also avoids
+  a misunderstandings and simplifies the documentation.
+- reordered clock IDs in 1st patch to keep the old IDs and add the new clocks
+  at the end as Chanwoo suggested (added also his ACK there)
+- in patch 6 (dt-bindings) added explicit clocks and names in the right order
+  needed for the driver
+- added proper address for the memory node in the documentation and in the DT
+  (lpddr3-timings@0 -> @80000000)
+- fixed wrong reg offset for pause feature
+- removed debug code which shows AXI slots traffic and removed DT ppmu events
+- in the driver code usage of 'dev', 'pdev->dev' has been aligned
+- manipulating clocks has been aligned as Krzysztof suggested, now it enables
+  only two clocks (and disables) and enables/disables the 'bypass' clocks
+  on demand
+- added comments in the documentation why there is a need of clock registers
+  to be accessed via syscon regmap
+- added proper link to Documentation/devicetree/bindings/ddr/lpddr3.txt
+  in dt-bindings for memory controller doc
+- removed unneeded prints when there was a deferred probe or during remove
+- added 'syscon' also to exynos5420-clock node as Krzysztof suggested
+- from 2nd patch removed blank line and added Acked-by: Chanwoo Choi
+- collecting ACKs, which makes the clock related 3 patches
+  ready to be merged (4 ACKs),
+- patches 4,5 got 'Reviewed-by' from Rob
+- it is now based on v5.2-rc3 tag
+v7 [2]:
+- added using regmap in chipid registers and clock registers
+- in DT added "syscon" to compatible field in clock and chipid
+- added two addition clocks in clocks definition file which were there
+  in first implementation but now are grouped and commented properly
+  (CLK_DOUT_PCLK_DREX0, CLK_DOUT_PCLK_DREX1)
+- the BPLL ratio table now is set for Exynos 5422 and 5800 and not for 5420
+- in DMC driver, changed code macro which generates functions for setup events
+  into normal three functions as Krzysztof suggested
+- moved 'clock_prepare_enable()' calls into the same function where 'disable'
+  were called
+- changed 'timing_reg' static variables into static const
+- in DMC driver: the proper device_node *np_ddr is now put correctly
+- in DMC driver: removed code related to counters_enabled
+- mapped only 0x100 from DREX registers
+- in DT memory node there is now 'reg' as Rob suggested instead of 'max-freq'
+- in Documentation/devicetree/bindings/lpddr2 renamed into 'ddr' and the lpdd3*
+  files landed there.
+- cleaned the commit subject and message as Rob suggested for the patch 4/10 in v6
+- added doxygen comments to exported functions in of_memory file
+- cleaned minor issues like: missing space, 2 empty lines, in the doc JESD209-2 ->
+  JESD209-3C, removed 'status = "okay"' from the doc file, etc
+- based on v5.1 (+ PPMU patches from [1])
+v6:
+- driver code has been converted to use generic code which parses DT memory
+  definition in drivers/memory/of_memory.c
+- extended of_memory by LPDDR3 support (there was LPDDR2 made by TI)
+- extended jedec_lpddr.h by the needed structures for LPDDR3 (AC timings)
+- driver file moved to proper directory, where other memory controllers
+  live, which is in this case drivers/memory/samsung/
+- driver code now uses regmap_{read|write} to access registers for pausing
+  and changing timings set, as suggested by Chanwoo
+- DT contains simple definition of memory device, similar to LPDDR2 made by TI
+- driver code generates the needed timings for registered OPPs, based on
+  memory description in DT
+- patch 1 contains Rob's ACK,
+- simplified memory bandwidth calculation
+- added debug information files with timings, raw counters and statistics
+- updated dt-bindings files accordingly
+- based on v5.1-rc5 (+ PPMU patches from [1])
+v5:
+- removed unneeded wrapper functions i.e. for regulator_set_voltage
+- removed unused defines
+- removed direct access to clock register base and used CCF for
+  pause and timing set usage
+- switched to OPP comming from DT according to Chanowoo's comments
+- switched to timings comming from DT, added parsing function
+- extended dt-binding with description of OPPs and timings
+- according to Rob Herring comment, moved dt-binding file before driver code
+  in the patch set.
+- rebased on top of v5.0
+v4:
+- removed unneeded DPLL and G3D clocks IDs
+- changed names of parent clocks for mout_mx_mspll_ccore_phy_p
+  and added one more parent: mout_sclk_epll
+- removed 933Mhz and 138MHz from the BPLL ratio table
+v3:
+- in DTS align to proper indent the clocks and clock-names entries
+v2:
+- changed file name exynos5-dmc.c -> exynos5422-dmc.c
+  and related entries in other files
+- changed dt-binding file name
+- changed config entry to CONFIG_ARM_EXYNOS5422_DMC_DEVFREQ
+- removed sysfs and print info messages (print only one line)
+- removed function exynos5_read_chip_info and compact code
+- changed dt-binding patch and move it up in the patch set
+- new entries in MAINTAINERS are added with the driver c code
+- clean-up in DTS file: renamed nodes to 'ppmu' and 'memory-controller',
+  entries moved to suggested location (before nocp nodes or after),
+  moved according to alfabetical order, compacted clocks names with right indent.
+
+Regards,
+Lukasz Luba
+
+[1] https://lkml.org/lkml/2019/4/19/158
+[2] https://lkml.org/lkml/2019/5/6/829
+[3] https://lkml.org/lkml/2019/6/5/687
+
+
+Lukasz Luba (13):
+  clk: samsung: add needed IDs for DMC clocks in Exynos5420
+  clk: samsung: add new clocks for DMC for Exynos5422 SoC
+  clk: samsung: add BPLL rate table for Exynos 5422 SoC
+  dt-bindings: ddr: rename lpddr2 directory
+  dt-bindings: ddr: add LPDDR3 memories
+  drivers: memory: extend of_memory by LPDDR3 support
+  dt-bindings: memory-controllers: add Exynos5422 DMC device description
+  drivers: memory: add DMC driver for Exynos5422
+  drivers: devfreq: events: add Exynos PPMU new events
+  ARM: dts: exynos: add chipid label and syscon compatible
+  ARM: dts: exynos: add syscon to clock compatible
+  ARM: dts: exynos: add DMC device for exynos5422
+  ARM: exynos_defconfig: enable DMC driver
+
+ .../{lpddr2 => ddr}/lpddr2-timings.txt        |    0
+ .../bindings/{lpddr2 => ddr}/lpddr2.txt       |    2 +-
+ .../bindings/ddr/lpddr3-timings.txt           |   58 +
+ .../devicetree/bindings/ddr/lpddr3.txt        |   97 ++
+ .../memory-controllers/exynos5422-dmc.txt     |   75 +
+ MAINTAINERS                                   |    8 +
+ arch/arm/boot/dts/exynos5.dtsi                |    4 +-
+ arch/arm/boot/dts/exynos5420.dtsi             |   75 +-
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi |  116 ++
+ arch/arm/boot/dts/exynos5800.dtsi             |    2 +-
+ arch/arm/configs/exynos_defconfig             |    1 +
+ drivers/clk/samsung/clk-exynos5420.c          |   78 +-
+ drivers/devfreq/event/exynos-ppmu.c           |    6 +
+ drivers/memory/of_memory.c                    |  154 ++
+ drivers/memory/of_memory.h                    |   18 +
+ drivers/memory/samsung/Kconfig                |   17 +
+ drivers/memory/samsung/Makefile               |    1 +
+ drivers/memory/samsung/exynos5422-dmc.c       | 1261 +++++++++++++++++
+ include/dt-bindings/clock/exynos5420.h        |   18 +-
+ include/memory/jedec_ddr.h                    |   62 +
+ 20 files changed, 2040 insertions(+), 13 deletions(-)
+ rename Documentation/devicetree/bindings/{lpddr2 => ddr}/lpddr2-timings.txt (100%)
+ rename Documentation/devicetree/bindings/{lpddr2 => ddr}/lpddr2.txt (96%)
+ create mode 100644 Documentation/devicetree/bindings/ddr/lpddr3-timings.txt
+ create mode 100644 Documentation/devicetree/bindings/ddr/lpddr3.txt
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt
+ create mode 100644 drivers/memory/samsung/exynos5422-dmc.c
+
+-- 
+2.17.1
+
