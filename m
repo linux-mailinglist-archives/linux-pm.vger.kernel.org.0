@@ -2,211 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2D739B52
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2019 07:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0917B39C76
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2019 12:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727999AbfFHFq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 8 Jun 2019 01:46:27 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:43840 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727898AbfFHFq1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jun 2019 01:46:27 -0400
-Received: by mail-pg1-f193.google.com with SMTP id f25so2225228pgv.10
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2019 22:46:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GlixWvcFYVT2osuXuqp6jTW4HjMG+s+4U9TFHSTGDvM=;
-        b=D/h/ZJrVYwHg/tF2albH+nWZGTIGP8mgb5vZqEEbfXXFUfX33AxVnze8ASnaJQLV4X
-         laIgnr0wy/LMQTmXv09dRJl6EpPA3cstVq2diFihAoqQr6xqsV6qzWRUpuCTMUQ7rpHY
-         K/GGdjJcnRZXh/UrZ79eaCOSiPOFMXAilypyz123UORgpvVHaxO8H9sXqc9dz0g+kd4L
-         x9BLMbNBWSP8C9PwC3vyCb9o8PZ1C0jdr4MNNdoHIxDHSfqnWXxK7kqrjBWJdKeo7Jc/
-         LrfM5dIRm5RN/UlR8/PUBnOR5OkE4S2bmTwMQzc577wzJYfjcOh6QgINA/q2zhtWJMvw
-         kwsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GlixWvcFYVT2osuXuqp6jTW4HjMG+s+4U9TFHSTGDvM=;
-        b=luCoRe6eDjy2v6d0vY2fnF2xrcdKlqv17Pm5lhgtrrW5QzprLN8XWmvNEC4ojyXBXQ
-         okEhz200dE23uk85gVklxpmXSq/hNhXAAGk501iBQd96DKNGsE52tTcwD/JxTVl8SN4q
-         hivGiXlooIZG88jYOnAfKNZ4RKB6wyY0k694b5Eg0K/1ZhLyupbOGJfWVTByk3CjgXGO
-         i5vZ4C5dzPlEfpAQQcd8+x4iGGpoJZXaFaVwbGmU8B2dv4AxPq5aJEiqIPdYV6vJ8GZv
-         zZEeDmw6vvRTC4cvV6yKMLTwMRsQ7b+kLo7Ppr9xggS8BZgJv10NlLlZeaKr94l0Hh9W
-         2FPA==
-X-Gm-Message-State: APjAAAVNnELCkVlhF/0Hvh0ZZ55LL80yKztBh1MMjMAT+1wskvbVmMIB
-        3QPgpFOYijlGFFirSrn/1x+IzA==
-X-Google-Smtp-Source: APXvYqx46cEKrkm060Svem6vg7rJOO6SGeAlDGseD6x8321eEySq/IrkVQWtC7EaA4ZGrVcaKjF6vQ==
-X-Received: by 2002:a63:1a5e:: with SMTP id a30mr5985274pgm.433.1559972785979;
-        Fri, 07 Jun 2019 22:46:25 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id f3sm526309pjo.31.2019.06.07.22.46.24
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 07 Jun 2019 22:46:25 -0700 (PDT)
-Date:   Fri, 7 Jun 2019 22:47:11 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        seansw@qti.qualcomm.com, daidavid1@codeaurora.org,
-        evgreen@chromium.org, sibis@codeaurora.org,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/9] Introduce Bandwidth OPPs & interconnect devfreq
- driver
-Message-ID: <20190608054711.GZ22737@tuxbook-pro>
-References: <20190608044339.115026-1-saravanak@google.com>
+        id S1726817AbfFHKnu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 8 Jun 2019 06:43:50 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:41925 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726816AbfFHKnt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jun 2019 06:43:49 -0400
+Received: from [192.168.1.162] ([37.4.249.160]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N0X4c-1gfNnc3WUe-00wRCN; Sat, 08 Jun 2019 12:43:24 +0200
+Subject: Re: [PATCH v2 0/7] cpufreq support for Raspberry Pi
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        sboyd@kernel.org, eric@anholt.net, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, ptesarik@suse.com,
+        linux-rpi-kernel@lists.infradead.org, ssuloev@orpaltech.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mturquette@baylibre.com, linux-pm@vger.kernel.org
+References: <20190606142255.29454-1-nsaenzjulienne@suse.de>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=stefan.wahren@i2se.com; keydata=
+ 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 AQ==
+Message-ID: <7c51e65a-e84d-07fa-ac1e-0f34ecce887b@i2se.com>
+Date:   Sat, 8 Jun 2019 12:43:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190608044339.115026-1-saravanak@google.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190606142255.29454-1-nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:oANPBkQ2KsQjlx8cfiyIC9oczC/QXncykGstAQioDeCodefMUV9
+ bW4wXsBgSWz/OzPocIRGDHXyqOHpejs3iBLEfZ1ysMEMLG/0kaPE7/Khly0eedgHYIPTEZf
+ yAn4yAh5/U7XSgfKC5NsT3l8l9H6jk9lc+xGIH2b/WwOwnNvv5COr8VxqFRG/sH5DfMubph
+ 0ZClOfJpLTbgWsboaqzFw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:u2UOTKSuFLE=:GinJCXRdmjhbj7l20EMK4B
+ dfYA8BnBeUoi9dLijDSKMgCyb/lTAdw759WEYNfnavlB350IhLfmj3F3V17a7ZuuiX/F35Lx6
+ P02EzGJOHeXK65TfRc0/6BFjWR56+DhE2zumOZNV1XCx+hB4wzkx4OOhSxuP1jrCGEKU2IQ8x
+ Zojuj0ImWp8XP34p/VM7jQHd8ArGy0IgZCBHrUy02bYL6UYh33EHWEDPWhSrrHL6OlZuWBOmQ
+ Bi9O3Y9v2B+TvxW6NOvMsXEkxO1pN8ceNmAD2rotoOay1+MHP8cTsG0bdmtRBc/57vr+dJuEg
+ k5lHbXA8NLoUR8R1HTSgRE158PZ5lnmEnbEbZjIv18Qtf1EFrbExgyFWXlyFMoOP8fnJPw19W
+ HFfW3/kse0lEpZVXBqFWyvrEhW/oxFgJbxCxHJbW/BSoz8Bw9Q9HN/xPI6Bk+Gnkaxq4wzghw
+ STWRL05mGK/Y7vQTyxX0MHcvbq4MdCRs/xU0sl6v4loBQ3syG5raEVlF3YBuRfhy1tuJpYHQM
+ +/yw5cgyEtcPm9E3Z0D/zw7GN14zYKv6MHEyWfzzJJ7pGWgqq0vhCWNwRVJwJTLujwj5AuNgB
+ wx75WreotJLxxAGgcqzggvhfyTRaszjG0TUgcGT17V7nK9UCCYI3rLCpGEV+vAcbJ84ewHENp
+ XyHDRKpB4x6R/fF8wT3EyGrN4FdapZ4Jdm16tpnqxq0kHlNNzqWZ8ctsmnFCGY0sx3eczum+R
+ a029FBQe7UzrnnjK0mPF7UAPznnIPdJyRAhGvziGXmwPpa67pGZ2uWcWppY=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 07 Jun 21:43 PDT 2019, Saravana Kannan wrote:
+Am 06.06.19 um 16:22 schrieb Nicolas Saenz Julienne:
+> Hi all,
+> this aims at adding cpufreq support to the Raspberry Pi family of
+> boards.
+>
+> The series first factors out 'pllb' from clk-bcm2385 and creates a new
+> clk driver that operates it over RPi's firmware interface[1]. We are
+> forced to do so as the firmware 'owns' the pll and we're not allowed to
+> change through the register interface directly as we might race with the
+> over-temperature and under-voltage protections provided by the firmware.
+>
+> Next it creates a minimal cpufreq driver that populates the CPU's opp
+> table, and registers cpufreq-dt. Which is needed as the firmware
+> controls the max and min frequencies available.
 
-> I replied[1] to this patch series[2] and described how I think interconnect
-> bandwidth voting should be captured in DT and how it should work.
-> 
-> So sending out a patch series implementing that. This patch series does the
-> following:
-> - Adds Bandwidth OPP table support (this adds device freq to bandwidth
->   mapping for free)
-> - Adds a devfreq library for interconnect paths
-> 
+Here some figures from the Raspberry Pi 3 B+ as before/after comparison:
 
-Please provide a driver that uses this devfreq library, without it this
-its impossible to gauge the usefulness of your approach.
+Dhrystone Benchmark 2.1 A7 32 Bit
 
-> Interconnects and interconnect paths quantify they performance levels in
-> terms of bandwidth. So similar to how we have frequency based OPP tables
-> in DT and in the OPP framework, this patch series adds bandwidth OPP
-> table support in the OPP framework and in DT.
-> 
-> To simplify voting for interconnects, this patch series adds helper
-> functions to create devfreq devices out of interconnect paths. This
-> allows drivers to add a single line of code to add interconnect voting
-> capability.
-> 
-> To add devfreq device for the "gpu-mem" interconnect path:
-> icc_create_devfreq(dev, "gpu-mem");
-> 
-> With the future addition of a "passive_bandwidth" devfreq governor,
-> device frequency to interconnect bandwidth mapping would come for free.
-> 
-> If the feedback on this patch series is positive, I'll then add the
-> devfreq passive_bandwidth governor (or something similar) to v2 of this
-> patch series.
-> 
-> So with the DT bindings added in this patch series, the DT for a GPU
-> that does bandwidth voting from GPU to Cache and GPU to DDR would look
-> something like this:
-> 
-> gpu_cache_opp_table: gpu_cache_opp_table {
-> 	compatible = "operating-points-v2";
-> 
-> 	gpu_cache_3000: opp-3000 {
-> 		opp-peak-KBps = <3000>;
-> 		opp-avg-KBps = <1000>;
-> 	};
-> 	gpu_cache_6000: opp-6000 {
-> 		opp-peak-KBps = <6000>;
-> 		opp-avg-KBps = <2000>;
-> 	};
-> 	gpu_cache_9000: opp-9000 {
-> 		opp-peak-KBps = <9000>;
-> 		opp-avg-KBps = <9000>;
-> 	};
-> };
-> 
-> gpu_ddr_opp_table: gpu_ddr_opp_table {
-> 	compatible = "operating-points-v2";
-> 
-> 	gpu_ddr_1525: opp-1525 {
-> 		opp-peak-KBps = <1525>;
-> 		opp-avg-KBps = <452>;
-> 	};
-> 	gpu_ddr_3051: opp-3051 {
-> 		opp-peak-KBps = <3051>;
-> 		opp-avg-KBps = <915>;
-> 	};
-> 	gpu_ddr_7500: opp-7500 {
-> 		opp-peak-KBps = <7500>;
-> 		opp-avg-KBps = <3000>;
-> 	};
-> };
-> 
-> gpu_opp_table: gpu_opp_table {
-> 	compatible = "operating-points-v2";
-> 	opp-shared;
-> 
-> 	opp-200000000 {
-> 		opp-hz = /bits/ 64 <200000000>;
-> 		required-opps = <&gpu_cache_3000>, <&gpu_ddr_1525>;
+ 600 MHz, w/o Turbo (1): 1216.11 VAX MIPS
+1400 MHz, w/o Turbo (2): 2839.67 VAX MIPS
+1400 MHz, w   Turbo (3): 2839.45 VAX MIPS
 
-I still don't see the benefit of the indirection, over just spelling out
-the bandwidth values here.
+Whetstone Single Precision C Benchmark  vfpv4 32 Bit
 
-Regards,
-Bjorn
+ 600 MHz, w/o Turbo: 454.565 MWIPS
+1400 MHz, w/o Turbo: 1062.494 MWIPS
+1400 MHz, w   Turbo: 1061.723 MWIPS
 
-> 	};
-> 	opp-400000000 {
-> 		opp-hz = /bits/ 64 <400000000>;
-> 		required-opps = <&gpu_cache_6000>, <&gpu_ddr_3051>;
-> 	};
-> };
-> 
-> gpu@7864000 {
-> 	...
-> 	operating-points-v2 = <&gpu_opp_table>, <&gpu_cache_opp_table>, <&gpu_ddr_opp_table>;
-> 	interconnects = <&mmnoc MASTER_GPU_1 &bimc SLAVE_SYSTEL_CACHE>,
-> 			<&mmnoc MASTER_GPU_1 &bimc SLAVE_DDR>;
-> 	interconnect-names = "gpu-cache", "gpu-mem";
-> 	interconnect-opp-table = <&gpu_cache_opp_table>, <&gpu_ddr_opp_table>
-> };
-> 
-> Cheers,
-> Saravana
-> 
-> [1] - https://lore.kernel.org/lkml/20190601021228.210574-1-saravanak@google.com/
-> [2] - https://lore.kernel.org/lkml/20190423132823.7915-1-georgi.djakov@linaro.org/ 
-> 
-> Saravana Kannan (9):
->   dt-bindings: opp: Introduce opp-peak-KBps and opp-avg-KBps bindings
->   OPP: Add support for bandwidth OPP tables
->   OPP: Add helper function for bandwidth OPP tables
->   OPP: Add API to find an OPP table from its DT node
->   dt-bindings: interconnect: Add interconnect-opp-table property
->   interconnect: Add OPP table support for interconnects
->   OPP: Add function to look up required OPP's for a given OPP
->   OPP: Allow copying OPPs tables between devices
->   interconnect: Add devfreq support
-> 
->  .../bindings/interconnect/interconnect.txt    |   8 +
->  Documentation/devicetree/bindings/opp/opp.txt |  15 +-
->  drivers/interconnect/Makefile                 |   2 +-
->  drivers/interconnect/core.c                   |  27 +++-
->  drivers/interconnect/icc-devfreq.c            | 144 ++++++++++++++++++
->  drivers/opp/core.c                            | 109 +++++++++++++
->  drivers/opp/of.c                              |  75 +++++++--
->  drivers/opp/opp.h                             |   4 +-
->  include/linux/interconnect.h                  |  17 +++
->  include/linux/pm_opp.h                        |  41 +++++
->  10 files changed, 426 insertions(+), 16 deletions(-)
->  create mode 100644 drivers/interconnect/icc-devfreq.c
-> 
-> -- 
-> 2.22.0.rc2.383.gf4fbbf30c2-goog
-> 
+Power consumption (32 bit, without Ethernet) with load ( cat /dev/zero )
+
+ 600 MHz, w/o Turbo: 2.48 W
+1400 MHz, w/o Turbo: 3.2 W
+1400 MHz, w   Turbo: 3.15 W
+
+Note 1: This is the maximum performance before enabling any cpufreq driver.
+
+Note 2: This is the maximum performance after enabling V2 of the cpufreq
+driver
+http://lists.infradead.org/pipermail/linux-arm-kernel/2019-June/657768.html
+
+Note 3: This is the maximum performance after enabling the initial
+cpufreq driver
+http://lists.infradead.org/pipermail/linux-rpi-kernel/2019-April/008634.html
+
