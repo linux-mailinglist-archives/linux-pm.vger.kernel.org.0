@@ -2,51 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5B239B16
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2019 06:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E51E39B25
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jun 2019 06:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730458AbfFHEoH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 8 Jun 2019 00:44:07 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:44645 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730714AbfFHEoF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jun 2019 00:44:05 -0400
-Received: by mail-qt1-f202.google.com with SMTP id p15so3685626qti.11
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2019 21:44:05 -0700 (PDT)
+        id S1731142AbfFHEo2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 8 Jun 2019 00:44:28 -0400
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:54342 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730823AbfFHEoI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jun 2019 00:44:08 -0400
+Received: by mail-qt1-f201.google.com with SMTP id r57so3664761qtj.21
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jun 2019 21:44:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=qdT885hM1gH99LBPR29/QhPlOeEng+ZQVjJx3w/T2/A=;
-        b=u4I58YoPay1wIV0iUGWNilJCvSvIVXTL1/ci8b1Wjy1sm8vMfzaHLznZpwJzX//Rph
-         ttgkgbKpAFClv5uX/X/41cZzhnEUO/g/rlcKS9fYx+PTRXpRCP8TNbRaD1DvJrF/j/y3
-         tgmBde4zGp31x0CDivMs+UIvYHGUxOiEig9Fi7FlulgpoytiqiyJIEiVtvIe64im3Had
-         Yx//ZCG2LVsaWnL+r4lFVQhbV8d1aLk8a+YaEyJEDHDBJVQnw5HRHSuyjKHtMPDm0p3z
-         tVCiE/66D13o+CzXql9II+Xk/wQo1n2rezQTAgA1+3Up520E+RgpsscP7xPh9p4Gh7y8
-         WXYA==
+        bh=l7frD8AwQb/664vV6b+eE1fM0p32UKK11iOjCpsV3ZE=;
+        b=rCSnOT9kVTQ4zHlkjz/xjtzstPLwTuZJEpaaMJS61bIu3uWnlOAh8wLABGTIsTwBFg
+         xm7pMtTt0ypdAcPWZrlIfxGY0FfWBGVRMBwf3jrEwOWI1/JN/wTnSTlN5i1cd56sRXsm
+         KAWvWRqDo9/WfmsLrTKeS95TdKlXcGsZ07leJWoYaQiQ/2BftBUQW1pxZhCPELKiQmuO
+         2Fm7TvoK3DNvdkM7JRvRZ9dDxlFbZ47rMp3+MReBwsfI/rWbwYCOlkcPWCOuvJCY6fxw
+         l+4DTin711JaMkrgqfd0/DsaXe1oWQsh5t0rFqsbtM52XkGYDnq8DSzsuiSHApUJK/KB
+         C1iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=qdT885hM1gH99LBPR29/QhPlOeEng+ZQVjJx3w/T2/A=;
-        b=fWLeVShllA/pV9096+onFyEQipENgMuEUF87reAwP5H5p4w8kP2zGicTOF9McRdN5l
-         4V3fcofgFzzFGDc0leMmvfBCSY9andytzYCKbBrvph12qo8jDiWMkfbMS4vBFWYAc0TA
-         opiMBA+jhWOmjhNSUliOZW7lGFXYragBWaRESX7gOLmfWLqGPud/PasFvk8Oev7AZUlP
-         1RL5B5VjTYLy926rz4JdjcOihW4bd6LL9joh8rrxKLyooUgAamcnS3mm7L4CTGEY4jv2
-         rgfM/Tkh9a1Jqalsv7qHFgsAt59g57onWec+aMP+ReYs7JlOyMk1fyIsDFAByYmPO7ON
-         gz1Q==
-X-Gm-Message-State: APjAAAUa14Q6kxIXrwxC3tT5DSO1PgMo4e+aKXCsaEMIxaCxZ8tmxZ3v
-        ZJB2SIwrHoYFSac1r3noJXVf7+zpQYB1Lhc=
-X-Google-Smtp-Source: APXvYqwj1cOP4RzT//I83dw4bKyy7KpftJsqRPBOzjTNZla/XLUxIXycPdwubPfAFYw0aw/lx47k+naEi+2zJ1o=
-X-Received: by 2002:a37:bd42:: with SMTP id n63mr47852920qkf.262.1559969044588;
- Fri, 07 Jun 2019 21:44:04 -0700 (PDT)
-Date:   Fri,  7 Jun 2019 21:43:36 -0700
+        bh=l7frD8AwQb/664vV6b+eE1fM0p32UKK11iOjCpsV3ZE=;
+        b=qNEoHHs1Y8F9KID08y9ALD1k0us5vDdD7Hg6Yxizg44aIiilt3c+lFniCbf4TRXui7
+         pSSzICW1rx/gLZ23b2Q3BAYrsld+mKn1bUf/6WgN3QhUVJFjVok+S8GI9vxvnT9PZ0NC
+         ROaBzcbDchhlK0Znbwyd5ro2rAjnk9ZEPlYDdT6Rc1wqLhUiMmU9SBNRxY6wB3GzvPXT
+         aSQvUfDs2pMPr0aoayADNPgtWJNHGqjUBOrjBWTEI/lHO8V22wFGPN0zWnRrgz5OLVFH
+         XFScB/jlTyVDSmnqRw3KNMt1E5VQ6Oq24rQrvLNGpu2g343bI5vVFrsQHmHpXXX0vQz0
+         nO4w==
+X-Gm-Message-State: APjAAAWnkrmaI4tNuvpzatUj2Mbg0zjsLEVHKnBjnBRw9ZqimR/0X4Uo
+        S08gZgk5Y1NNjdE+u7vwlQ3LahXA6ICiXvE=
+X-Google-Smtp-Source: APXvYqwud8Aypv8gLILj91JHYUlSsreuVUJCq0h7diIstQL9qUtPn0pHHpuSFkdUqf0cnEy7NX6jcTlT8ggl5z8=
+X-Received: by 2002:ac8:7c7:: with SMTP id m7mr45776276qth.28.1559969047755;
+ Fri, 07 Jun 2019 21:44:07 -0700 (PDT)
+Date:   Fri,  7 Jun 2019 21:43:37 -0700
 In-Reply-To: <20190608044339.115026-1-saravanak@google.com>
-Message-Id: <20190608044339.115026-7-saravanak@google.com>
+Message-Id: <20190608044339.115026-8-saravanak@google.com>
 Mime-Version: 1.0
 References: <20190608044339.115026-1-saravanak@google.com>
 X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
-Subject: [PATCH v1 6/9] interconnect: Add OPP table support for interconnects
+Subject: [PATCH v1 7/9] OPP: Add function to look up required OPP's for a
+ given OPP
 From:   Saravana Kannan <saravanak@google.com>
 To:     Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -69,108 +70,105 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Interconnect paths can have different performance points. Now that OPP
-framework supports bandwidth OPP tables, add OPP table support for
-interconnects.
-
-Devices can use the interconnect-opp-table DT property to specify OPP
-tables for interconnect paths. And the driver can obtain the OPP table for
-an interconnect path by calling icc_get_opp_table().
+Add a function that allows looking up required OPPs given a source OPP
+table, destination OPP table and the source OPP.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/interconnect/core.c  | 27 ++++++++++++++++++++++++++-
- include/linux/interconnect.h |  7 +++++++
- 2 files changed, 33 insertions(+), 1 deletion(-)
+ drivers/opp/core.c     | 50 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/pm_opp.h | 11 ++++++++++
+ 2 files changed, 61 insertions(+)
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 871eb4bc4efc..881bac80bc1e 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -47,6 +47,7 @@ struct icc_req {
-  */
- struct icc_path {
- 	size_t num_nodes;
-+	struct opp_table *opp_table;
- 	struct icc_req reqs[];
- };
- 
-@@ -313,7 +314,7 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
- {
- 	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
- 	struct icc_node *src_node, *dst_node;
--	struct device_node *np = NULL;
-+	struct device_node *np = NULL, *opp_node;
- 	struct of_phandle_args src_args, dst_args;
- 	int idx = 0;
- 	int ret;
-@@ -381,10 +382,34 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
- 		dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
- 	mutex_unlock(&icc_lock);
- 
-+	opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
-+	if (opp_node) {
-+		path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
-+		of_node_put(opp_node);
-+	}
-+
-+
- 	return path;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 89a2ece88480..d96d5746eb47 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1881,6 +1881,56 @@ void dev_pm_opp_put_genpd_virt_dev(struct opp_table *opp_table,
+ 		dev_err(virt_dev, "Failed to find required device entry\n");
  }
- EXPORT_SYMBOL_GPL(of_icc_get);
  
 +/**
-+ * icc_get_opp_table() - Get the OPP table that corresponds to a path
-+ * @path: reference to the path returned by icc_get()
++ * dev_pm_opp_xlate_opp() - Find required OPP for src_table OPP.
++ * @src_table: OPP table which has dst_table as one of its required OPP table.
++ * @dst_table: Required OPP table of the src_table.
++ * @pstate: OPP of the src_table.
 + *
-+ * This function will return the OPP table that corresponds to a path handle.
-+ * If the interconnect API is disabled, NULL is returned and the consumer
-+ * drivers will still build. Drivers are free to handle this specifically, but
-+ * they don't have to.
++ * This function returns the OPP (present in @dst_table) pointed out by the
++ * "required-opps" property of the OPP (present in @src_table).
 + *
-+ * Return: opp_table pointer on success. NULL is returned when the API is
-+ * disabled or the OPP table is missing.
++ * Return: destination table OPP on success, otherwise NULL on errors.
 + */
-+struct opp_table *icc_get_opp_table(struct icc_path *path)
++struct dev_pm_opp *dev_pm_opp_xlate_opp(struct opp_table *src_table,
++					struct opp_table *dst_table,
++					struct dev_pm_opp *src_opp)
 +{
-+	return path->opp_table;
++	struct dev_pm_opp *opp, *dest_opp = NULL;
++	int i;
++
++	if (!src_table || !dst_table || !src_opp)
++		return NULL;
++
++	for (i = 0; i < src_table->required_opp_count; i++) {
++		if (src_table->required_opp_tables[i]->np == dst_table->np)
++			break;
++	}
++
++	if (unlikely(i == src_table->required_opp_count)) {
++		pr_err("%s: Couldn't find matching OPP table (%p: %p)\n",
++		       __func__, src_table, dst_table);
++		return NULL;
++	}
++
++	mutex_lock(&src_table->lock);
++
++	list_for_each_entry(opp, &src_table->opp_list, node) {
++		if (opp == src_opp) {
++			dest_opp = opp->required_opps[i];
++			goto unlock;
++		}
++	}
++
++	pr_err("%s: Couldn't find matching OPP (%p: %p)\n", __func__, src_table,
++	       dst_table);
++
++unlock:
++	mutex_unlock(&src_table->lock);
++
++	return dest_opp;
 +}
 +
  /**
-  * icc_set_bw() - set bandwidth constraints on an interconnect path
-  * @path: reference to the path returned by icc_get()
-diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
-index dc25864755ba..0c0bc55f0e89 100644
---- a/include/linux/interconnect.h
-+++ b/include/linux/interconnect.h
-@@ -9,6 +9,7 @@
- 
- #include <linux/mutex.h>
- #include <linux/types.h>
-+#include <linux/pm_opp.h>
- 
- /* macros for converting to icc units */
- #define Bps_to_icc(x)	((x) / 1000)
-@@ -28,6 +29,7 @@ struct device;
- struct icc_path *icc_get(struct device *dev, const int src_id,
- 			 const int dst_id);
- struct icc_path *of_icc_get(struct device *dev, const char *name);
-+struct opp_table *icc_get_opp_table(struct icc_path *path);
- void icc_put(struct icc_path *path);
- int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
- 
-@@ -49,6 +51,11 @@ static inline void icc_put(struct icc_path *path)
- {
+  * dev_pm_opp_xlate_performance_state() - Find required OPP's pstate for src_table.
+  * @src_table: OPP table which has dst_table as one of its required OPP table.
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 3f30ce55e8eb..13381dc3dd39 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -137,6 +137,9 @@ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
+ struct opp_table *dev_pm_opp_set_genpd_virt_dev(struct device *dev, struct device *virt_dev, int index);
+ void dev_pm_opp_put_genpd_virt_dev(struct opp_table *opp_table, struct device *virt_dev);
+ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
++struct dev_pm_opp *dev_pm_opp_xlate_opp(struct opp_table *src_table,
++					struct opp_table *dst_table,
++					struct dev_pm_opp *src_opp);
+ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
+ int dev_pm_opp_set_sharing_cpus(struct device *cpu_dev, const struct cpumask *cpumask);
+ int dev_pm_opp_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask);
+@@ -321,6 +324,14 @@ static inline int dev_pm_opp_xlate_performance_state(struct opp_table *src_table
+ 	return -ENOTSUPP;
  }
  
-+static inline struct opp_table *icc_get_opp_table(struct icc_path *path)
++static inline struct dev_pm_opp *dev_pm_opp_xlate_opp(
++						struct opp_table *src_table,
++						struct opp_table *dst_table,
++						struct dev_pm_opp *src_opp)
 +{
 +	return NULL;
 +}
 +
- static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ static inline int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
  {
- 	return 0;
+ 	return -ENOTSUPP;
 -- 
 2.22.0.rc2.383.gf4fbbf30c2-goog
 
