@@ -2,101 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B573A98B
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2019 19:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7083AC17
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Jun 2019 23:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730534AbfFIRCL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 9 Jun 2019 13:02:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39898 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388203AbfFIRCK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 9 Jun 2019 13:02:10 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 035F1204EC;
-        Sun,  9 Jun 2019 17:02:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560099729;
-        bh=JNOjyPgmgTSyte7PAbhbkFvqDoZLFEsnxxrNq7rCH/M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T0bHODP+ETbiacs0GPjmXjtNiRRL79IJqddFv9FzFr55sPsn0GawI97KO2hoNbIBv
-         TO1lSaMbtE08BQAwNC1LqP1TOZ5P+wZGkpkGg4+YvqqkpQ/pZgVgyVuGTgVovG5xkJ
-         UO5+m+xlp3h9zJfOwGJnjILn/voX0+ZUKisu5gNU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wen Yang <wen.yang99@zte.com.cn>,
+        id S1729301AbfFIVis (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 9 Jun 2019 17:38:48 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:44469 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728868AbfFIVir (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Jun 2019 17:38:47 -0400
+Received: by mail-oi1-f195.google.com with SMTP id e189so4901022oib.11;
+        Sun, 09 Jun 2019 14:38:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bw/EkCR2TlK1nmZVU4ZTbtb5+JKQzKPuQmhGULnT2cA=;
+        b=rr/eCpp4JEJXkIuwsyCnRKAN8qv6Wx3DYem62ealK3a+7kNNowuuCd95xeTmqCUQHL
+         nB55cFCLiIGBttVtF4TW1FcKgF1Oum1BGY3dudscT7xzjJxJOkSkUOd2z1UO1boWzeUn
+         HxQ1mGq+vKEepMUaryP081C+hpqUv6H6Vfr9+pxAY1JSROPNtpFFMS75WWAE1r0pRIZi
+         +T99h/Fxyf1gQpeAOqg6RI4kWNyMGQ1TcTCg0zXv5xVKNIqp5WwEFuOFPPY+V21nh5Nc
+         vrsYGH7Lltgkff2k1EbDQPtraT9QM64N8YOpPVCuRuShfO6UMwDO1V+fNYkGBYN+FevC
+         RPHw==
+X-Gm-Message-State: APjAAAU/RQxAc09GQa2u02z/FH4lVFhej8KY21XjGdXK2tUNag8wWQ5a
+        +jBQD1KyNI14Eponrr9b51EnJFRov+QbFvPHHY0=
+X-Google-Smtp-Source: APXvYqzc2Phm++Xv8yAEz1KCFci7W+jSRKe9ikWJXGEb7NExTarbKD0WJKEuH7H0h5ldcCINcZmdYzM94pBmvhQ/2DE=
+X-Received: by 2002:aca:5b43:: with SMTP id p64mr9811626oib.68.1560116326825;
+ Sun, 09 Jun 2019 14:38:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1560045490.git.mchehab+samsung@kernel.org> <e8cb6d826e691a34996b6812851461b6000442e8.1560045490.git.mchehab+samsung@kernel.org>
+In-Reply-To: <e8cb6d826e691a34996b6812851461b6000442e8.1560045490.git.mchehab+samsung@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 9 Jun 2019 23:38:32 +0200
+Message-ID: <CAJZ5v0jfObx72ZSKP+rrErkNTHH6Q1L5_gkHq1SRnHiAtYT1Og@mail.gmail.com>
+Subject: Re: [PATCH v3 07/33] docs: cpu-freq: convert docs to ReST and rename
+ to *.rst
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 146/241] cpufreq: pmac32: fix possible object reference leak
-Date:   Sun,  9 Jun 2019 18:41:28 +0200
-Message-Id: <20190609164151.995736751@linuxfoundation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190609164147.729157653@linuxfoundation.org>
-References: <20190609164147.729157653@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[ Upstream commit 8d10dc28a9ea6e8c02e825dab28699f3c72b02d9 ]
+On Sun, Jun 9, 2019 at 4:30 AM Mauro Carvalho Chehab
+<mchehab+samsung@kernel.org> wrote:
+>
+> The conversion is actually:
+>   - add blank lines and identation in order to identify paragraphs;
+>   - fix tables markups;
+>   - add some lists markups;
+>   - mark literal blocks;
+>   - adjust title markups.
+>
+> At its new index.rst, let's add a :orphan: while this is not linked to
+> the main index.rst file, in order to avoid build warnings.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-The call to of_find_node_by_name returns a node pointer with refcount
-incremented thus it must be explicitly decremented after the last
-usage.
+I have said "no" to this already twice.
 
-Detected by coccinelle with the following warnings:
-./drivers/cpufreq/pmac32-cpufreq.c:557:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 552, but without a corresponding object release within this function.
-./drivers/cpufreq/pmac32-cpufreq.c:569:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 552, but without a corresponding object release within this function.
-./drivers/cpufreq/pmac32-cpufreq.c:598:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 587, but without a corresponding object release within this function.
+How many times do I still need to repeat that?
 
-Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linux-pm@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/cpufreq/pmac32-cpufreq.c | 2 ++
- 1 file changed, 2 insertions(+)
+There already is some cpufreq documentation under admin-guide in the
+.rst format and the rest is obsolete.  It is going to be replaced with
+something new and more up to date.
 
-diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
-index 1f49d97a70ea1..14928e0dc3265 100644
---- a/drivers/cpufreq/pmac32-cpufreq.c
-+++ b/drivers/cpufreq/pmac32-cpufreq.c
-@@ -549,6 +549,7 @@ static int pmac_cpufreq_init_7447A(struct device_node *cpunode)
- 	volt_gpio_np = of_find_node_by_name(NULL, "cpu-vcore-select");
- 	if (volt_gpio_np)
- 		voltage_gpio = read_gpio(volt_gpio_np);
-+	of_node_put(volt_gpio_np);
- 	if (!voltage_gpio){
- 		printk(KERN_ERR "cpufreq: missing cpu-vcore-select gpio\n");
- 		return 1;
-@@ -585,6 +586,7 @@ static int pmac_cpufreq_init_750FX(struct device_node *cpunode)
- 	if (volt_gpio_np)
- 		voltage_gpio = read_gpio(volt_gpio_np);
- 
-+	of_node_put(volt_gpio_np);
- 	pvr = mfspr(SPRN_PVR);
- 	has_cpu_l2lve = !((pvr & 0xf00) == 0x100);
- 
--- 
-2.20.1
+The API docs need to go under driver-api and conversions like this
+don't help.  Indeed, they are counter-prodictive in my view.
 
-
-
+DIsappointed,
+Rafael
