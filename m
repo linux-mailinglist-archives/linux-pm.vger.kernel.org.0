@@ -2,90 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A009D3BEB1
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2019 23:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB903BF17
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 00:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390013AbfFJVct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jun 2019 17:32:49 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42127 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389193AbfFJVct (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jun 2019 17:32:49 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q10so6015514pff.9
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2019 14:32:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u65kJhZ2c0w54Nc/i9RYT+l58N6im9e9Q29G/YH/uuc=;
-        b=ijZRqYOHAJLGYs5vVBH7AyvxnX3poiS7Ze8fMa8xMMZFUFQkNHIHUJuCZa0E+HU7KK
-         ZEEdHPDvfDlVSbqAvrXP3rviz6pH3j9htRBPT5NIqJKjGJE+FjxllNFI8RlkWV1QA19g
-         aArbTyQM1D+rcblnoPAFTe/gzDozuxJ5mSkQw=
+        id S1728705AbfFJWDj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jun 2019 18:03:39 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38714 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728651AbfFJWDj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jun 2019 18:03:39 -0400
+Received: by mail-ot1-f66.google.com with SMTP id d17so9854332oth.5;
+        Mon, 10 Jun 2019 15:03:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u65kJhZ2c0w54Nc/i9RYT+l58N6im9e9Q29G/YH/uuc=;
-        b=V2KCjyy9FELRh5jxzpbwAtU/CtqF5E+PuP5XnDX6To6l7AhxzeEUFEyT3wQWyXZsf/
-         7GTg86M1jOFYDahFxkrPavpVtK1BhDw10V2tJqz/LeAWl7mY7PA8HYNrvm/G1HNMTJj9
-         OzZZ+kQfm6PHiZyB0hneUXAoK2D0tvPwIGfGtA8FgPu5mfaLxrsXukULff2e6s3iTmSW
-         qV0jHHSLGBTuKK4Tou5w/DDuZ8gRgdHKcAhu30Pe02Jv/fLw0rIQDc8aXNYYcwzWlx2G
-         iJsSs9VVBsufcgcNYe9DFAsLQ9sbwa8OEI0DGteLQL8jVwuZahqfc1KYwJdoCsV5zPLW
-         BupA==
-X-Gm-Message-State: APjAAAUxBppiCbXuKZQ0N8pzmM2EHmCscKYsG4QyLbrB212s5XlKLfq1
-        cFESkMWTl351j82Wxc2knDW2Sg==
-X-Google-Smtp-Source: APXvYqyQzwsz4g4vXj8Aq9NRG67WJeqq4COKYtOvIJxo3DWxXcQEhMnNrnrMg8J5OGqUXm+tPqrSlw==
-X-Received: by 2002:aa7:8145:: with SMTP id d5mr77831178pfn.11.1560202368916;
-        Mon, 10 Jun 2019 14:32:48 -0700 (PDT)
-Received: from www.outflux.net (173-164-112-133-Oregon.hfc.comcastbusiness.net. [173.164.112.133])
-        by smtp.gmail.com with ESMTPSA id q1sm18907954pfb.156.2019.06.10.14.32.47
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 10 Jun 2019 14:32:48 -0700 (PDT)
-Date:   Mon, 10 Jun 2019 14:32:47 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Garnier <thgarnie@chromium.org>
-Cc:     kernel-hardening@lists.openwall.com, kristen@linux.intel.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Alok Kataria <akataria@vmware.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Garnier <thgarnie@google.com>,
-        Nadav Amit <namit@vmware.com>, Jann Horn <jannh@google.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Maran Wilson <maran.wilson@oracle.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 00/12] x86: PIE support to extend KASLR randomization
-Message-ID: <201906101432.B642E297F@keescook>
-References: <20190520231948.49693-1-thgarnie@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=54gcKwSl4Wln6AHzMPwIpWwUWYaeFni8TiHUw2HOFcU=;
+        b=dskmdjNB0KGl7ADWUpBB+wipAamdew7TtO9sNutagF6s6VEn+qO4jwH2mjseCHdSb0
+         Zhk/+0L6Zre+dNJx6BSWF7kwtfpcxZGwnRloiIXwpZL2A1T0ySU/wd5wYnQEVOYyjWRO
+         b6poBIoJy9wF2thufAYUGepgzBOIwC2Nhvpahf7t1SO7GsTeH52RjLKPRM56kZrc8MkZ
+         u/uP2qzx9gPR3hoa43Qb+wXelwpIItpUnbtN7CfqAZQmSwC/7kz3rnhia/pjG5gVCKkS
+         NE7vdqDkjcPRAddlfATK2IIaLXhMqmxY/SE80vRc8c4xblp+bkujUhV+fQsCFS2EoBYf
+         0kUg==
+X-Gm-Message-State: APjAAAXSfANdMuhX0vieIhF3Z5Axq20pGc+GM7FfSDx3Ipv1rvhv+Q1c
+        OvgH9QmBeUj6XbDOWjMdcrFGgwMK9a6MjN2miqw=
+X-Google-Smtp-Source: APXvYqxLjX95H9H0dzlpmNatrvxeytb3maSU71Wt6NotvDHzkwP6AwWpHvV3R0dOXAUTJjfbcULqbwqZCVbY0L0rI2U=
+X-Received: by 2002:a9d:5f05:: with SMTP id f5mr26428688oti.167.1560204217931;
+ Mon, 10 Jun 2019 15:03:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190520231948.49693-1-thgarnie@chromium.org>
+References: <20190603225242.289109849@amt.cnet> <6c411948-9e32-9f41-351e-c9accd1facb0@intel.com>
+ <20190610145942.GA24553@amt.cnet>
+In-Reply-To: <20190610145942.GA24553@amt.cnet>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 11 Jun 2019 00:03:26 +0200
+Message-ID: <CAJZ5v0idYgETFg4scgvpJ-eGtFAx1Wi6hznXz7+XZAfKjiSAPA@mail.gmail.com>
+Subject: Re: [patch 0/3] cpuidle-haltpoll driver (v2)
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        kvm-devel <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LDhD9tw4PCocOFPw==?= <rkrcmar@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Wanpeng Li <kernellwp@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Raslan KarimAllah <karahmed@amazon.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 20, 2019 at 04:19:25PM -0700, Thomas Garnier wrote:
-> Splitting the previous serie in two. This part contains assembly code
-> changes required for PIE but without any direct dependencies with the
-> rest of the patchset.
+On Mon, Jun 10, 2019 at 5:00 PM Marcelo Tosatti <mtosatti@redhat.com> wrote:
+>
+> On Fri, Jun 07, 2019 at 11:49:51AM +0200, Rafael J. Wysocki wrote:
+> > On 6/4/2019 12:52 AM, Marcelo Tosatti wrote:
+> > >The cpuidle-haltpoll driver allows the guest vcpus to poll for a specified
+> > >amount of time before halting. This provides the following benefits
+> > >to host side polling:
+> > >
+> > >         1) The POLL flag is set while polling is performed, which allows
+> > >            a remote vCPU to avoid sending an IPI (and the associated
+> > >            cost of handling the IPI) when performing a wakeup.
+> > >
+> > >         2) The HLT VM-exit cost can be avoided.
+> > >
+> > >The downside of guest side polling is that polling is performed
+> > >even with other runnable tasks in the host.
+> > >
+> > >Results comparing halt_poll_ns and server/client application
+> > >where a small packet is ping-ponged:
+> > >
+> > >host                                        --> 31.33
+> > >halt_poll_ns=300000 / no guest busy spin    --> 33.40   (93.8%)
+> > >halt_poll_ns=0 / guest_halt_poll_ns=300000  --> 32.73   (95.7%)
+> > >
+> > >For the SAP HANA benchmarks (where idle_spin is a parameter
+> > >of the previous version of the patch, results should be the
+> > >same):
+> > >
+> > >hpns == halt_poll_ns
+> > >
+> > >                           idle_spin=0/   idle_spin=800/    idle_spin=0/
+> > >                           hpns=200000    hpns=0            hpns=800000
+> > >DeleteC06T03 (100 thread) 1.76           1.71 (-3%)        1.78   (+1%)
+> > >InsertC16T02 (100 thread) 2.14           2.07 (-3%)        2.18   (+1.8%)
+> > >DeleteC00T01 (1 thread)   1.34           1.28 (-4.5%)           1.29   (-3.7%)
+> > >UpdateC00T03 (1 thread)   4.72           4.18 (-12%)    4.53   (-5%)
+> > >
+> > >V2:
+> > >
+> > >- Move from x86 to generic code (Paolo/Christian).
+> > >- Add auto-tuning logic (Paolo).
+> > >- Add MSR to disable host side polling (Paolo).
+> > >
+> > >
+> > >
+> > First of all, please CC power management patches (including cpuidle,
+> > cpufreq etc) to linux-pm@vger.kernel.org (there are people on that
+> > list who may want to see your changes before they go in) and CC
+> > cpuidle material (in particular) to Peter Zijlstra.
+> >
+> > Second, I'm not a big fan of this approach to be honest, as it kind
+> > of is a driver trying to play the role of a governor.
+> >
+> > We have a "polling state" already that could be used here in
+> > principle so I wonder what would be wrong with that.  Also note that
+> > there seems to be at least some code duplication between your code
+> > and the "polling state" implementation, so maybe it would be
+> > possible to do some things in a common way?
+>
+> Hi Rafael,
+>
+> After modifying poll_state.c to use a generic "poll time" driver
+> callback [1] (since using a variable "target_residency" for that
+> looks really ugly), would need a governor which does:
+>
+> haltpoll_governor_select_next_state()
+>         if (prev_state was poll and evt happened on prev poll window) -> POLL.
+>         if (prev_state == HLT)  -> POLL
+>         otherwise               -> HLT
+>
+> And a "default_idle" cpuidle driver that:
+>
+> defaultidle_idle()
+>         if (current_clr_polling_and_test()) {
+>                 local_irq_enable();
+>                 return index;
+>         }
+>         default_idle();
+>         return
+>
+> Using such governor with any other cpuidle driver would
+> be pointless (since it would enter the first state only
+> and therefore not save power).
+>
+> Not certain about using the default_idle driver with
+> other governors: one would rather use a driver that
+> supports all states on a given machine.
+>
+> This combination of governor/driver pair, for the sake
+> of sharing the idle loop, seems awkward to me.
+> And fails the governor/driver separation: one will use the
+> pair in practice.
+>
+> But i have no problem with it, so i'll proceed with that.
+>
+> Let me know otherwise.
 
-Thanks for doing this! It should be easier to land the "little" fixes so
-there's less to review for the big PIE changes down the road.
+If my understanding of your argumentation is correct, it is only
+necessary to take the default_idle_call() branch of
+cpuidle_idle_call() in the VM case, so it should be sufficient to
+provide a suitable default_idle_call() which is what you seem to be
+trying to do.
 
--- 
-Kees Cook
+I might have been confused by the terminology used in the patch series
+if that's the case.
+
+Also, if that's the case, this is not cpuidle matter really.  It is a
+matter of providing a better default_idle_call() for the arch at hand.
+
+Thanks,
+Rafael
