@@ -2,140 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B8E3BC49
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2019 20:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A009D3BEB1
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2019 23:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388906AbfFJS5o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jun 2019 14:57:44 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:35527 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388778AbfFJS5o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jun 2019 14:57:44 -0400
-Received: by mail-vs1-f68.google.com with SMTP id u124so6178066vsu.2
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2019 11:57:43 -0700 (PDT)
+        id S2390013AbfFJVct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jun 2019 17:32:49 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42127 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389193AbfFJVct (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jun 2019 17:32:49 -0400
+Received: by mail-pf1-f194.google.com with SMTP id q10so6015514pff.9
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2019 14:32:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hev5OwEACcFPK6C/FK48RMoXOAu7262fSU4AViD4u8w=;
-        b=Kai5Z2EkT0zQjVLtISRnsn979fWob+Jsr+Kyg5eRj7CxJ7C+1El4hYerae8V2HnD10
-         Vr4/J7G71YpP58NVfVe+X4DYJx2Izsxl0vEeKRtW4ySmvYYI5LNYwJUX7UhV6DWJPQjH
-         mUMz6Ce5gPtIrO9yjGBJzdAJQWnFUjaqtBndYVPwHg9T7/wrirYFF33oBhoXNCWsQ0ly
-         KLJeIWIl7AB5Hauw6t+B6m/FwhNQB7siy27tLNScZnfT0W34zAk5zCjZUXKcR+ZUDtyf
-         nP3cEYZvjT/IvcQYnobXENvk1R8HugzTubIA/RSZDO0UaLZT8wV9gyrXBgrcgIRnElYH
-         7QnA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=u65kJhZ2c0w54Nc/i9RYT+l58N6im9e9Q29G/YH/uuc=;
+        b=ijZRqYOHAJLGYs5vVBH7AyvxnX3poiS7Ze8fMa8xMMZFUFQkNHIHUJuCZa0E+HU7KK
+         ZEEdHPDvfDlVSbqAvrXP3rviz6pH3j9htRBPT5NIqJKjGJE+FjxllNFI8RlkWV1QA19g
+         aArbTyQM1D+rcblnoPAFTe/gzDozuxJ5mSkQw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hev5OwEACcFPK6C/FK48RMoXOAu7262fSU4AViD4u8w=;
-        b=CK7XZ6v4b0gfxAne9fP9Ha3g1r7Ve+q0BHg+y8Rk3PNUFJdPOYh3Sa4tXQf1xmwAKk
-         j4TJcVE/LUhKQk2IwWOvdm8uHrjW/sB8C4Cywid5RvZKm6wWdDefiZx3ucl5n2KERpNa
-         CLFXPtuVExtz4TFXk18dE1lb+g2DZq2sBTwjY4ks2CZK3W9/xA4Kv21q4k94TiL5jPJ5
-         M0vmZWJPXBEDoG/txe44RBWElSrSRRuC0KcJewKFLXb8MEclPZEruDHzuxluaSZZGdIs
-         3Bvf2n3Zbm9V/QvN8qzRcWh28F3aAbjZLbfHKlY+j39nbWBfIEY9RCzUuZatALgQ0nWw
-         BUAg==
-X-Gm-Message-State: APjAAAVUdhWaTnWpC0XWTfkVqa9a3uhwFDRhgSrIHz29G8fRM1+tkRmq
-        IqR6jWWU9dXoFU7WL05FHx/SxMYoZ4DBEwjHvH9SRg==
-X-Google-Smtp-Source: APXvYqwm/ynTvjQ+f9xLC1Cl7wUK4nvhtVIJf0TZpVpspEnFtpsiTVdCmUl3c7IKVyU5GWmfDB+ArZ52XPhJqykZu18=
-X-Received: by 2002:a67:ebc5:: with SMTP id y5mr26971295vso.34.1560193063536;
- Mon, 10 Jun 2019 11:57:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=u65kJhZ2c0w54Nc/i9RYT+l58N6im9e9Q29G/YH/uuc=;
+        b=V2KCjyy9FELRh5jxzpbwAtU/CtqF5E+PuP5XnDX6To6l7AhxzeEUFEyT3wQWyXZsf/
+         7GTg86M1jOFYDahFxkrPavpVtK1BhDw10V2tJqz/LeAWl7mY7PA8HYNrvm/G1HNMTJj9
+         OzZZ+kQfm6PHiZyB0hneUXAoK2D0tvPwIGfGtA8FgPu5mfaLxrsXukULff2e6s3iTmSW
+         qV0jHHSLGBTuKK4Tou5w/DDuZ8gRgdHKcAhu30Pe02Jv/fLw0rIQDc8aXNYYcwzWlx2G
+         iJsSs9VVBsufcgcNYe9DFAsLQ9sbwa8OEI0DGteLQL8jVwuZahqfc1KYwJdoCsV5zPLW
+         BupA==
+X-Gm-Message-State: APjAAAUxBppiCbXuKZQ0N8pzmM2EHmCscKYsG4QyLbrB212s5XlKLfq1
+        cFESkMWTl351j82Wxc2knDW2Sg==
+X-Google-Smtp-Source: APXvYqyQzwsz4g4vXj8Aq9NRG67WJeqq4COKYtOvIJxo3DWxXcQEhMnNrnrMg8J5OGqUXm+tPqrSlw==
+X-Received: by 2002:aa7:8145:: with SMTP id d5mr77831178pfn.11.1560202368916;
+        Mon, 10 Jun 2019 14:32:48 -0700 (PDT)
+Received: from www.outflux.net (173-164-112-133-Oregon.hfc.comcastbusiness.net. [173.164.112.133])
+        by smtp.gmail.com with ESMTPSA id q1sm18907954pfb.156.2019.06.10.14.32.47
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 10 Jun 2019 14:32:48 -0700 (PDT)
+Date:   Mon, 10 Jun 2019 14:32:47 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Thomas Garnier <thgarnie@chromium.org>
+Cc:     kernel-hardening@lists.openwall.com, kristen@linux.intel.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Alok Kataria <akataria@vmware.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Garnier <thgarnie@google.com>,
+        Nadav Amit <namit@vmware.com>, Jann Horn <jannh@google.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Feng Tang <feng.tang@intel.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Maran Wilson <maran.wilson@oracle.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 00/12] x86: PIE support to extend KASLR randomization
+Message-ID: <201906101432.B642E297F@keescook>
+References: <20190520231948.49693-1-thgarnie@chromium.org>
 MIME-Version: 1.0
-References: <20190513192300.653-1-ulf.hansson@linaro.org> <CAJZ5v0gbK3AFCVC1b9LyXeMOM8fKR1=ECXZwaeSYRSqcK0UgYA@mail.gmail.com>
- <CAPDyKFpU3u248Gi+FnrVdY-EWXJQuu14uNV9d3Xs0W-K-EMEhg@mail.gmail.com>
- <20190607154210.GJ15577@e107155-lin> <20190607193407.GB24059@builder>
- <20190610103225.GA26602@e107155-lin> <CAPDyKFr31SwmHHAREbR3dWMQ55LzzUyTc4M5FZvNsqWfX7SE8Q@mail.gmail.com>
- <20190610171557.GA4560@redmoon>
-In-Reply-To: <20190610171557.GA4560@redmoon>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 10 Jun 2019 20:57:07 +0200
-Message-ID: <CAPDyKFqC8+Sv5WRhwOxqphAt8tb_PDisy13Miz5e-PajvwS1ew@mail.gmail.com>
-Subject: Re: [PATCH 00/18] ARM/ARM64: Support hierarchical CPU arrangement for PSCI
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Raju P . L . S . S . S . N" <rplsssn@codeaurora.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souvik Chakravarty <souvik.chakravarty@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190520231948.49693-1-thgarnie@chromium.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 10 Jun 2019 at 19:16, Lorenzo Pieralisi
-<lorenzo.pieralisi@arm.com> wrote:
->
-> On Mon, Jun 10, 2019 at 05:54:39PM +0200, Ulf Hansson wrote:
->
-> [...]
->
-> > My summary from the earlier ones, is that because the PSCI spec
-> > includes support for OSI, we should also support it in the kernel (and
-> > ATF). In a discussion offlist, Lorenzo agreed that it's okay to add,
-> > without an apple to apple comparison. Maybe Lorenzo can fill in and
-> > state this publicly, to save us all some time?
->
-> The comparison should have been made before even requesting PSCI OSI
-> mode changes to the specifications, so we have a chip on our shoulders
-> anyway.
->
-> We will enable PSCI OSI but that's not where the problem lies, enabling
-> PSCI OSI from a firmware perspective should take 10 lines of code,
-> not:
+On Mon, May 20, 2019 at 04:19:25PM -0700, Thomas Garnier wrote:
+> Splitting the previous serie in two. This part contains assembly code
+> changes required for PIE but without any direct dependencies with the
+> rest of the patchset.
 
-Thanks for confirming!
+Thanks for doing this! It should be easier to land the "little" fixes so
+there's less to review for the big PIE changes down the road.
 
->
->  drivers/firmware/psci/Makefile                |   2 +-
->  drivers/firmware/psci/psci.c                  | 219 ++++++++--
->  drivers/firmware/psci/psci.h                  |  29 ++
->  drivers/firmware/psci/psci_pm_domain.c        | 403 ++++++++++++++++++
->
-> I have some concerns about these changes that I will state in the
-> relevant patches.
-
-Most of the above changes isn't for solely for OSI, but to support a
-hierarchical topology described in the PSCI DT layout. This is for
-example needed when other resources shares the same power rail as the
-CPU cluster.
-
-In other words, the series is orthogonal to whether OSI or PC mode is
-used for PSCI, just to make that clear. BTW, this is what you
-requested me to change into, a while ago.
-
->
-> > My final point in regards to the OSI mode support, it's a minor part
-> > of the series. I don't see how that should hurt from a maintenance
-> > point of view, or perhaps I am wrong? In any case, I offer my help
-> > with review/maintenance in any form as you may see need/fit.
->
-> I will go through the series but most of this code should move
-> to core PM code, it has nothing to do with PSCI.
-
-I am looking forward to your review - and for sure, I am open to suggestions!
-
->
-> BTW, apologies for the delay, I was away.
->
-> Thanks,
-> Lorenzo
-
-Kind regards
-Uffe
+-- 
+Kees Cook
