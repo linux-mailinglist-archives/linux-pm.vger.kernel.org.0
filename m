@@ -2,169 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB903BF17
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 00:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81C33BF38
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 00:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728705AbfFJWDj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jun 2019 18:03:39 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:38714 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728651AbfFJWDj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jun 2019 18:03:39 -0400
-Received: by mail-ot1-f66.google.com with SMTP id d17so9854332oth.5;
-        Mon, 10 Jun 2019 15:03:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=54gcKwSl4Wln6AHzMPwIpWwUWYaeFni8TiHUw2HOFcU=;
-        b=dskmdjNB0KGl7ADWUpBB+wipAamdew7TtO9sNutagF6s6VEn+qO4jwH2mjseCHdSb0
-         Zhk/+0L6Zre+dNJx6BSWF7kwtfpcxZGwnRloiIXwpZL2A1T0ySU/wd5wYnQEVOYyjWRO
-         b6poBIoJy9wF2thufAYUGepgzBOIwC2Nhvpahf7t1SO7GsTeH52RjLKPRM56kZrc8MkZ
-         u/uP2qzx9gPR3hoa43Qb+wXelwpIItpUnbtN7CfqAZQmSwC/7kz3rnhia/pjG5gVCKkS
-         NE7vdqDkjcPRAddlfATK2IIaLXhMqmxY/SE80vRc8c4xblp+bkujUhV+fQsCFS2EoBYf
-         0kUg==
-X-Gm-Message-State: APjAAAXSfANdMuhX0vieIhF3Z5Axq20pGc+GM7FfSDx3Ipv1rvhv+Q1c
-        OvgH9QmBeUj6XbDOWjMdcrFGgwMK9a6MjN2miqw=
-X-Google-Smtp-Source: APXvYqxLjX95H9H0dzlpmNatrvxeytb3maSU71Wt6NotvDHzkwP6AwWpHvV3R0dOXAUTJjfbcULqbwqZCVbY0L0rI2U=
-X-Received: by 2002:a9d:5f05:: with SMTP id f5mr26428688oti.167.1560204217931;
- Mon, 10 Jun 2019 15:03:37 -0700 (PDT)
+        id S2389429AbfFJWKM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jun 2019 18:10:12 -0400
+Received: from mail-eopbgr130074.outbound.protection.outlook.com ([40.107.13.74]:55854
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388328AbfFJWKM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 10 Jun 2019 18:10:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pnUhM6lzbUUmwqBv1uRHu1Q1o2Qy1bISxKMAFr947kI=;
+ b=TNBC7xombinh6IAlKufSLIr8Oa/T6qvBF4IXxli/WDTq2PrxSLLk10bh1hLeSA5iQ5xh9GVgNsw60VxqLtnsETofvIUX0pbA1VFHJK4opJ7Avg5ixoxr47Szi07r2UbRqN3V/DuPFXQH+MJ+1AXv3B8IBfqnzpg3Hrpj24dXD3w=
+Received: from VI1PR04MB5055.eurprd04.prod.outlook.com (20.177.50.140) by
+ VI1PR04MB5903.eurprd04.prod.outlook.com (20.178.205.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.12; Mon, 10 Jun 2019 22:10:07 +0000
+Received: from VI1PR04MB5055.eurprd04.prod.outlook.com
+ ([fe80::9577:379c:2078:19a1]) by VI1PR04MB5055.eurprd04.prod.outlook.com
+ ([fe80::9577:379c:2078:19a1%7]) with mapi id 15.20.1965.017; Mon, 10 Jun 2019
+ 22:10:07 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Alexandre Bailon <abailon@baylibre.com>,
+        Anson Huang <anson.huang@nxp.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "georgi.djakov@linaro.org" <georgi.djakov@linaro.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "ptitiano@baylibre.com" <ptitiano@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "ccaione@baylibre.com" <ccaione@baylibre.com>,
+        Jacky Bai <ping.bai@nxp.com>, Abel Vesa <abel.vesa@nxp.com>
+Subject: Re: [RFC PATCH 1/3] drivers: interconnect: Add a driver for i.MX SoC
+Thread-Topic: [RFC PATCH 1/3] drivers: interconnect: Add a driver for i.MX SoC
+Thread-Index: AQHU2dPAGEvIM5gAt0ufevh4gpMf+A==
+Date:   Mon, 10 Jun 2019 22:10:07 +0000
+Message-ID: <VI1PR04MB5055980A24CAC07010E6192AEE130@VI1PR04MB5055.eurprd04.prod.outlook.com>
+References: <20190313193408.23740-1-abailon@baylibre.com>
+ <20190313193408.23740-2-abailon@baylibre.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [192.88.166.1]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0950b67e-8523-4625-5409-08d6edf0659d
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5903;
+x-ms-traffictypediagnostic: VI1PR04MB5903:
+x-microsoft-antispam-prvs: <VI1PR04MB590340E245DAD739AAEA3B08EE130@VI1PR04MB5903.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0064B3273C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(396003)(346002)(376002)(366004)(136003)(189003)(199004)(8676002)(73956011)(68736007)(66556008)(6506007)(53546011)(66066001)(102836004)(81166006)(66946007)(81156014)(229853002)(53936002)(99286004)(7696005)(66446008)(66476007)(76176011)(64756008)(33656002)(74316002)(6436002)(14454004)(54906003)(478600001)(71190400001)(6636002)(5024004)(71200400001)(256004)(14444005)(76116006)(91956017)(8936002)(110136005)(9686003)(55016002)(305945005)(3846002)(6116002)(186003)(25786009)(5660300002)(44832011)(86362001)(52536014)(26005)(6246003)(486006)(4326008)(446003)(316002)(2906002)(7736002)(476003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5903;H:VI1PR04MB5055.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: mj43Mubsto0+pYgjjiIHsx1bkGFIAxq7Aq+fazA4FwAuZNi4XZDbsbhtnwZcKtaKWnFt003Nmeda53VUfLF3D/uqt8k7xxYnLeRJATflUX6ZZag6X91TB6We+0LQvotK150jFylfYSBcBxfCGdBYug4mCXicxn672KsH2dbq/G8HNPrWyRPQeKffdVZ0o6xSgsDZQ1/G3zVx4R63j15dHOGsLf6zOCzObOZQc5HLXtGdH42bBf+r+8UZRcTlbRRMwgZH3afsIq0Yt25TZ5LWAINpsmbw+fMPbFPXzrCCBft+FFD4+vxLw9c2IQaEq3Y3bQrMxDihQ1vuF7EXsKbuQcdNMJu1JIdFsjvQgZmNmCrFZN4fKGJTiGdU8bL8hcz9K3zW29p7VtkSBxNfgazYkZ4noLJisOO/zLqDnb7w7ic=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20190603225242.289109849@amt.cnet> <6c411948-9e32-9f41-351e-c9accd1facb0@intel.com>
- <20190610145942.GA24553@amt.cnet>
-In-Reply-To: <20190610145942.GA24553@amt.cnet>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Jun 2019 00:03:26 +0200
-Message-ID: <CAJZ5v0idYgETFg4scgvpJ-eGtFAx1Wi6hznXz7+XZAfKjiSAPA@mail.gmail.com>
-Subject: Re: [patch 0/3] cpuidle-haltpoll driver (v2)
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        kvm-devel <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LDhD9tw4PCocOFPw==?= <rkrcmar@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Wanpeng Li <kernellwp@gmail.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Raslan KarimAllah <karahmed@amazon.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Ankur Arora <ankur.a.arora@oracle.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0950b67e-8523-4625-5409-08d6edf0659d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2019 22:10:07.0868
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: leonard.crestez@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5903
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 10, 2019 at 5:00 PM Marcelo Tosatti <mtosatti@redhat.com> wrote:
->
-> On Fri, Jun 07, 2019 at 11:49:51AM +0200, Rafael J. Wysocki wrote:
-> > On 6/4/2019 12:52 AM, Marcelo Tosatti wrote:
-> > >The cpuidle-haltpoll driver allows the guest vcpus to poll for a specified
-> > >amount of time before halting. This provides the following benefits
-> > >to host side polling:
-> > >
-> > >         1) The POLL flag is set while polling is performed, which allows
-> > >            a remote vCPU to avoid sending an IPI (and the associated
-> > >            cost of handling the IPI) when performing a wakeup.
-> > >
-> > >         2) The HLT VM-exit cost can be avoided.
-> > >
-> > >The downside of guest side polling is that polling is performed
-> > >even with other runnable tasks in the host.
-> > >
-> > >Results comparing halt_poll_ns and server/client application
-> > >where a small packet is ping-ponged:
-> > >
-> > >host                                        --> 31.33
-> > >halt_poll_ns=300000 / no guest busy spin    --> 33.40   (93.8%)
-> > >halt_poll_ns=0 / guest_halt_poll_ns=300000  --> 32.73   (95.7%)
-> > >
-> > >For the SAP HANA benchmarks (where idle_spin is a parameter
-> > >of the previous version of the patch, results should be the
-> > >same):
-> > >
-> > >hpns == halt_poll_ns
-> > >
-> > >                           idle_spin=0/   idle_spin=800/    idle_spin=0/
-> > >                           hpns=200000    hpns=0            hpns=800000
-> > >DeleteC06T03 (100 thread) 1.76           1.71 (-3%)        1.78   (+1%)
-> > >InsertC16T02 (100 thread) 2.14           2.07 (-3%)        2.18   (+1.8%)
-> > >DeleteC00T01 (1 thread)   1.34           1.28 (-4.5%)           1.29   (-3.7%)
-> > >UpdateC00T03 (1 thread)   4.72           4.18 (-12%)    4.53   (-5%)
-> > >
-> > >V2:
-> > >
-> > >- Move from x86 to generic code (Paolo/Christian).
-> > >- Add auto-tuning logic (Paolo).
-> > >- Add MSR to disable host side polling (Paolo).
-> > >
-> > >
-> > >
-> > First of all, please CC power management patches (including cpuidle,
-> > cpufreq etc) to linux-pm@vger.kernel.org (there are people on that
-> > list who may want to see your changes before they go in) and CC
-> > cpuidle material (in particular) to Peter Zijlstra.
-> >
-> > Second, I'm not a big fan of this approach to be honest, as it kind
-> > of is a driver trying to play the role of a governor.
-> >
-> > We have a "polling state" already that could be used here in
-> > principle so I wonder what would be wrong with that.  Also note that
-> > there seems to be at least some code duplication between your code
-> > and the "polling state" implementation, so maybe it would be
-> > possible to do some things in a common way?
->
-> Hi Rafael,
->
-> After modifying poll_state.c to use a generic "poll time" driver
-> callback [1] (since using a variable "target_residency" for that
-> looks really ugly), would need a governor which does:
->
-> haltpoll_governor_select_next_state()
->         if (prev_state was poll and evt happened on prev poll window) -> POLL.
->         if (prev_state == HLT)  -> POLL
->         otherwise               -> HLT
->
-> And a "default_idle" cpuidle driver that:
->
-> defaultidle_idle()
->         if (current_clr_polling_and_test()) {
->                 local_irq_enable();
->                 return index;
->         }
->         default_idle();
->         return
->
-> Using such governor with any other cpuidle driver would
-> be pointless (since it would enter the first state only
-> and therefore not save power).
->
-> Not certain about using the default_idle driver with
-> other governors: one would rather use a driver that
-> supports all states on a given machine.
->
-> This combination of governor/driver pair, for the sake
-> of sharing the idle loop, seems awkward to me.
-> And fails the governor/driver separation: one will use the
-> pair in practice.
->
-> But i have no problem with it, so i'll proceed with that.
->
-> Let me know otherwise.
-
-If my understanding of your argumentation is correct, it is only
-necessary to take the default_idle_call() branch of
-cpuidle_idle_call() in the VM case, so it should be sufficient to
-provide a suitable default_idle_call() which is what you seem to be
-trying to do.
-
-I might have been confused by the terminology used in the patch series
-if that's the case.
-
-Also, if that's the case, this is not cpuidle matter really.  It is a
-matter of providing a better default_idle_call() for the arch at hand.
-
-Thanks,
-Rafael
+On 3/13/2019 9:36 PM, Alexandre Bailon wrote:=0A=
+> =0A=
+> This adds support of i.MX SoC to interconnect framework.=0A=
+> This is based on busfreq, from NXP's tree.=0A=
+> This is is generic enough to be used to add support of interconnect=0A=
+> framework to any i.MX SoC, and, even, this could used for some other=0A=
+> SoC.=0A=
+=0A=
+> Thanks to interconnect framework, devices' driver request for=0A=
+> bandwidth which is use by busfreq to determine a performance level,=0A=
+> and then scale the frequency.=0A=
+=0A=
+This part is difficult for me to understand:=0A=
+=0A=
+> +static int busfreq_opp_bw_gt(struct busfreq_opp_node *opp_node,=0A=
+> +			      u32 avg_bw, u32 peak_bw)=0A=
+> +{=0A=
+> +	if (!opp_node)=0A=
+> +		return 0;=0A=
+> +	if (opp_node->min_avg_bw =3D=3D BUSFREQ_UNDEFINED_BW) {=0A=
+> +		if (avg_bw)=0A=
+> +			return 2;=0A=
+> +		else=0A=
+> +			return 1;=0A=
+> +	}=0A=
+> +	if (opp_node->min_peak_bw =3D=3D BUSFREQ_UNDEFINED_BW) {=0A=
+> +		if (peak_bw)=0A=
+> +			return 2;=0A=
+> +		else=0A=
+> +			return 1;=0A=
+> +	}=0A=
+> +	if (avg_bw >=3D opp_node->min_avg_bw)=0A=
+> +		return 1;=0A=
+> +	if (peak_bw >=3D opp_node->min_peak_bw)=0A=
+> +		return 1;=0A=
+> +	return 0;=0A=
+> +}=0A=
+> +=0A=
+> +static struct busfreq_opp *busfreq_cmp_bw_opp(struct busfreq_icc_desc *d=
+esc,=0A=
+> +					      struct busfreq_opp *opp1,=0A=
+> +					      struct busfreq_opp *opp2)=0A=
+> +{=0A=
+> +	int i;=0A=
+> +	int opp1_valid;=0A=
+> +	int opp2_valid;=0A=
+> +	int opp1_count =3D 0;=0A=
+> +	int opp2_count =3D 0;=0A=
+> +=0A=
+> +	if (!opp1 && !opp2)=0A=
+> +		return desc->current_opp;=0A=
+> +=0A=
+> +	if (!opp1)=0A=
+> +		return opp2;=0A=
+> +=0A=
+> +	if (!opp2)=0A=
+> +		return opp1;=0A=
+> +=0A=
+> +	if (opp1 =3D=3D opp2)=0A=
+> +		return opp1;=0A=
+> +=0A=
+> +	for (i =3D 0; i < opp1->nodes_count; i++) {=0A=
+> +		struct busfreq_opp_node *opp_node1, *opp_node2;=0A=
+> +		struct icc_node *icc_node;=0A=
+> +		u32 avg_bw;=0A=
+> +		u32 peak_bw;=0A=
+> +=0A=
+> +		opp_node1 =3D &opp1->nodes[i];=0A=
+> +		opp_node2 =3D &opp2->nodes[i];=0A=
+> +		icc_node =3D opp_node1->icc_node;=0A=
+> +		avg_bw =3D icc_node->avg_bw;=0A=
+> +		peak_bw =3D icc_node->peak_bw;=0A=
+> +=0A=
+> +		opp1_valid =3D busfreq_opp_bw_gt(opp_node1, avg_bw, peak_bw);=0A=
+> +		opp2_valid =3D busfreq_opp_bw_gt(opp_node2, avg_bw, peak_bw);=0A=
+> +=0A=
+> +		if (opp1_valid =3D=3D opp2_valid && opp1_valid =3D=3D 1) {=0A=
+> +			if (opp_node1->min_avg_bw > opp_node2->min_avg_bw &&=0A=
+> +				opp_node1->min_avg_bw !=3D BUSFREQ_UNDEFINED_BW)=0A=
+> +				opp1_valid++;=0A=
+> +			if (opp_node1->min_avg_bw < opp_node2->min_avg_bw &&=0A=
+> +				opp_node2->min_avg_bw !=3D BUSFREQ_UNDEFINED_BW)=0A=
+> +				opp2_valid++;=0A=
+> +		}=0A=
+> +=0A=
+> +		opp1_count +=3D opp1_valid;=0A=
+> +		opp2_count +=3D opp2_valid;=0A=
+> +	}=0A=
+> +=0A=
+> +	if (opp1_count > opp2_count)=0A=
+> +		return opp1;=0A=
+> +	if (opp1_count < opp2_count)=0A=
+> +		return opp2;=0A=
+> +	return opp1->perf_level >=3D opp2->perf_level ? opp2 : opp1;=0A=
+> +}=0A=
+> +=0A=
+> +static int busfreq_set_best_opp(struct busfreq_icc_desc *desc)=0A=
+> +{=0A=
+> +	struct busfreq_opp *opp, *best_opp =3D desc->current_opp;=0A=
+> +=0A=
+> +	list_for_each_entry(opp, &desc->opps, node)=0A=
+> +		best_opp =3D busfreq_cmp_bw_opp(desc, opp, best_opp);=0A=
+> +	return busfreq_set_opp(desc, best_opp);=0A=
+> +}=0A=
+=0A=
+The goal seems to be to find the smaller platform-level "busfreq_opp" =0A=
+which can meet all aggregated requests.=0A=
+=0A=
+But why implement this by comparing opps against each other? It would be =
+=0A=
+easier to just iterate OPPs from low to high and stop on the first one =0A=
+which meets all requirements.=0A=
+=0A=
+The sdm845 provider seems to take a different approach: there are BCMs =0A=
+("Bus Clock Managers") which are attached to some of the icc nodes and =0A=
+those are individually scaled in order to meet BW requirements. On imx8m =
+=0A=
+we can scale buses via clk so we could just attach clks to some of the =0A=
+nodes (NOC, DRAM, few PL301).=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
