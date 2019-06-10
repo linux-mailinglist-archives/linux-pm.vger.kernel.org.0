@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E43A73B30F
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2019 12:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 522BE3B313
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jun 2019 12:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389214AbfFJKVC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jun 2019 06:21:02 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:45693 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389349AbfFJKVC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jun 2019 06:21:02 -0400
-Received: by mail-vs1-f67.google.com with SMTP id n21so4947253vsp.12
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2019 03:21:02 -0700 (PDT)
+        id S2389361AbfFJKVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jun 2019 06:21:47 -0400
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:45999 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389135AbfFJKVr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jun 2019 06:21:47 -0400
+Received: by mail-vk1-f196.google.com with SMTP id r23so1523300vkd.12
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jun 2019 03:21:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SP4C91hkmfb8nf4pEfeOT8GgXw6uPbDXmSTuJCq/gGc=;
-        b=NnLT/vHjyOBGZwlrcg6VlzgOH161C3LeV8WVy/Vu8rFpi3c/FRWMWJAgX1juq3HdBx
-         L8SvJdLZ3DJYOGXVVqnaHEP5aYAPVqmD06tmeB37f8Zd2tJkwL3EEk9U+CyW/i2cGMDn
-         /qbzJ3ipIzTlfQIz/Ku+Z+csNl5SVYR0z0h06poDeKOV3bCxAQ4+UPlvkgzYF3sHr6PW
-         fNIwoN7cDHj1MRQI75Wh16WPHdavqxIdQxDViUCNbS748aaCS+CSALai5WJM95xeE+Le
-         5WlgNvBWmNkP0+IZOmesajCOvIc6FGL6UJrFm0O3ov8s+u1/KMEO8G01o2byn1gEeC98
-         E3dg==
+        bh=OJxNCKHBqEq8hxmgfzQAJLVDLncAAe7CM9ROe+/BeNA=;
+        b=ed47JMDehrtw98oo73hPrYOSdiClydVSZax5u/whwsvttI4jMeBg5r4kAaxNqyhRB5
+         BQFS+aUFK4fp9pg9m4ABxFL8f8WSLttgJ/crALrwhCsB3v1rjfIrckms9BqtJaYXtlqc
+         bzwWVino1iCNJq+uESFaHxZLWBnG33vgs3Qmd1+/6T3+zMmoiN7Dl812exIOVO1cl1F7
+         +J34mbVL1NKVBr2n6AaV5gn/vEQktUbl74lRvHydB7/VR5zEDH8WVmV5fmMUTqQq4oUo
+         jgFxnXWvvAWYApcTfNa6leYI+JjgeKGVBFkeuu7YRcJuNtctRfWgPTUPlWa5tSEu7aqi
+         JNnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SP4C91hkmfb8nf4pEfeOT8GgXw6uPbDXmSTuJCq/gGc=;
-        b=pWUofGJLwsBr/DMi0sRtt4QNeQpxit36OEG7kYTumCmduSVksXSVCXPwjacoBMsm9z
-         8FN16EtFxVzTUiDtB7JIZ4y2wGp9icZy1lApagFTPfc6e+N1eNRCtI2EJaGzLcIBQLs6
-         fZ3qf7ZSB4W/xtL1Sv2tivDZ1DQkQFSYMsyYHbshSoU5a0AfzaMddDz5mAugBM0//RMp
-         kfKoy9kHVTC00OBAy/T18qU3EjNf94eWanNLy2PUjaYnPG57PSS+mfbkn/Rs9C/Y4q4x
-         6tALpxAJd+id1D82HDZ2wCYeWxjrtXpMiZRe2N0mgp8NW032CoMnjysCLf0zsUboA5Hl
-         5NJg==
-X-Gm-Message-State: APjAAAVrOHN5rlLQWhFGGrsnaI4qmAo5jmKaREiX2pci5alVvHwlkzZZ
-        PUWscid/64DAJcFcF8Dvj93e7CsMsNL9E536UXyKBw==
-X-Google-Smtp-Source: APXvYqyEELW5eYybi8NTzXTq1BaVxGi1afLoOiDPwggiWfgN/Ej4B4ujdWWHnp+5MIZ0eyrZ5ciJlutJA2qYMY6qJQA=
-X-Received: by 2002:a67:706:: with SMTP id 6mr19148665vsh.200.1560162061544;
- Mon, 10 Jun 2019 03:21:01 -0700 (PDT)
+        bh=OJxNCKHBqEq8hxmgfzQAJLVDLncAAe7CM9ROe+/BeNA=;
+        b=lCZdgW/0lJ42I7JB4/ZTYEhgM0CQzG+wz3DcU8UvK5pZR4AoH38M0i1iwDNKv66MOL
+         8N+33rQh01Q9vcFc5REZbjWbVLNXl5D9sDt80r14h0Ss9z9/5W5J8HvU9YDN3HDatpqk
+         QsHmGJe0cjQD5lLvFtlrCH+yG2MpKvkEcX1DtsZJe7x0KdH3xbZbL4UuyR4ZWTqgv+ik
+         e/F2snJ6T9EZ8myzx6nBmYLjjBdJOwoZMoKF2qvYOhIgwSlesxpWcOLFX3q5nQpxPJI5
+         idJl7aXbBWpQVNMft247IZgP1F8vcR8hsiFGr2sMD/IEag8rdZ/Bsrf7xK1qcPHJHxNb
+         2HmQ==
+X-Gm-Message-State: APjAAAWW4+7AQVawJwO0UEmGz4lTOboNIhdFS+acZNdQAWV9Tg/jh5h7
+        qgTNA1+OYvKQGcxOiDwV6YsUGuc1ZXYHeFQl9Y+Lsg==
+X-Google-Smtp-Source: APXvYqw85yEyPCfVXgt5WHExarvGTTNSk7I/nOG6fWausDPOCC8pBQhB+ownP2Y9XmGBJmpJYjtZLrkebjzWM3KbGXc=
+X-Received: by 2002:a1f:12d5:: with SMTP id 204mr12861074vks.4.1560162106571;
+ Mon, 10 Jun 2019 03:21:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190513192300.653-1-ulf.hansson@linaro.org> <20190513192300.653-5-ulf.hansson@linaro.org>
- <20190607150052.GC15577@e107155-lin>
-In-Reply-To: <20190607150052.GC15577@e107155-lin>
+References: <20190513192300.653-1-ulf.hansson@linaro.org> <20190513192300.653-8-ulf.hansson@linaro.org>
+ <20190607151716.GF15577@e107155-lin>
+In-Reply-To: <20190607151716.GF15577@e107155-lin>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 10 Jun 2019 12:20:25 +0200
-Message-ID: <CAPDyKFqYZwQq_rDpfuV0K2-6_4N0frcFZ5iDab1OS8og+=zqPQ@mail.gmail.com>
-Subject: Re: [PATCH 04/18] ARM/ARM64: cpuidle: Let back-end init ops take the
- driver as input
+Date:   Mon, 10 Jun 2019 12:21:10 +0200
+Message-ID: <CAPDyKFoKNLqLzVx8uj_-iuWAHGCvty28mVKnipFVgjKD8oDNkQ@mail.gmail.com>
+Subject: Re: [PATCH 07/18] drivers: firmware: psci: Prepare to use OS
+ initiated suspend mode
 To:     Sudeep Holla <sudeep.holla@arm.com>
 Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -70,34 +70,57 @@ Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>
+        Lina Iyer <lina.iyer@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 7 Jun 2019 at 17:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Fri, 7 Jun 2019 at 17:17, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-> On Mon, May 13, 2019 at 09:22:46PM +0200, Ulf Hansson wrote:
-> > To allow arch back-end init ops to operate on the cpuidle driver for the
-> > corresponding CPU, let's pass along a pointer to the struct cpuidle_driver*
-> > and forward it the relevant layers of callbacks for ARM/ARM64.
+> On Mon, May 13, 2019 at 09:22:49PM +0200, Ulf Hansson wrote:
+> > The per CPU variable psci_power_state, contains an array of fixed values,
+> > which reflects the corresponding arm,psci-suspend-param parsed from DT, for
+> > each of the available CPU idle states.
+> >
+> > This isn't sufficient when using the hierarchical CPU topology in DT in
+> > combination with having PSCI OS initiated (OSI) mode enabled. More
+> > precisely, in OSI mode, Linux is responsible of telling the PSCI FW what
+> > idle state the cluster (a group of CPUs) should enter, while in PSCI
+> > Platform Coordinated (PC) mode, each CPU independently votes for an idle
+> > state of the cluster.
+> >
+> > For this reason, let's introduce an additional per CPU variable called
+> > domain_state and implement two helper functions to read/write its values.
+> > Following patches, which implements PM domain support for PSCI, will use
+> > the domain_state variable and set it to corresponding bits that represents
+> > the selected idle state for the cluster.
+> >
+> > Finally, in psci_cpu_suspend_enter() and psci_suspend_finisher(), let's
+> > take into account the values in the domain_state, as to get the complete
+> > suspend parameter.
 > >
 >
-> I may be wrong, but I see drv is just used to get state_count mostly.
-> It's also used in flattening part, but that should not be here either.
+> I understand it was split to ease review, but this patch also does
+> nothing as domain_state = 0 always. I was trying hard to find where it's
+> set, but I assume it will be done in later patches. Again may be this
+> can be squashed into the first caller of psci_set_domain_state
 
-Let me copy the note I added below the changelog for $subject patch,
-as hopefully that should clarify the reason to why this is needed.
+You have a point, but I am worried that it would look like this series
+is solely needed to support OSI mode. This is not the case. Let me
+explain.
 
-"- This patch is needed by the subsequent patch, but more importantly,
-also by "[PATCH 10/18] drivers: firmware: psci: Add hierarchical
-domain idle states converter"."
+Having $subject patch separate shows the specific changes needed to
+support OSI mode. The first caller of psci_set_domain_state() is added
+in patch9, however, patch9 is useful no matter of OSI or PC mode.
+
+Moreover, if I squash $subject patch with patch9, I would have to
+squash also the subsequent patch (patch8), as it depends on $subject
+patch.
+
+So, to conclude, are you happy with this as is or do you want me to
+squash the patches?
 
 Kind regards
 Uffe
