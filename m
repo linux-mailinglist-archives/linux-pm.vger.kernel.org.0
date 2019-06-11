@@ -2,123 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 084603D2B7
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 18:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDEB3D2FB
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 18:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405257AbfFKQmP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jun 2019 12:42:15 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:39330 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405698AbfFKQmP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 12:42:15 -0400
-Received: by mail-lf1-f68.google.com with SMTP id p24so9829081lfo.6
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jun 2019 09:42:14 -0700 (PDT)
+        id S2390565AbfFKQwQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jun 2019 12:52:16 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33402 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389757AbfFKQwQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 12:52:16 -0400
+Received: by mail-pg1-f195.google.com with SMTP id k187so6790889pga.0;
+        Tue, 11 Jun 2019 09:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=D9ZNAv59f40CG0/uv7rXh/uSMAgb1GDNS6rT6AHe4V0=;
-        b=MPBPbkqOsdx6Pgbk2vEFmxS5Pr880M9VCzpqIHdZhtmyBG/0cIrysoqL5qR3okl18m
-         Yewt/oQAkaKm9tdPLdgZShNqbf6GQw3NdF8b2KRS6lOnxvlHayU+ipYY+be+4ktyxrK+
-         84TKjJfHcoJBUwBhLhAhHVxHiq6UHoAkBJj9MByuCArn0WXBhxbHpBzeRjv9abYHIwIc
-         xSjPmIauD3/MkeS9lAcYpeCFVy4J/Z0cVkZqR5X0ZfH77F6PifP648MLw0cKq9vSYHD1
-         6FnoNTcmSnRHAkqM/0qe1TujvS5o9o1qs6syuDfI4Q/qQw3Awa9qUwalv2yRA3e0i4Xz
-         Sn/Q==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DQYk/P/AHz+84MHAfqs8A9FFft/ChbHJqGQaIDzi6ok=;
+        b=cjJRH/tiJROWu574Li6WdMn+vr3Phrkemo9e0MrIa7BjfXn2y19eO6hPYoPqTcaHm+
+         hm86n1rLG16xTwB/lLMEZ2SGn8PMjk7ag060+cgnFYiLM2inu1qWcunQBV1YSvwfqYTT
+         DgE717bOFNLWOZArTH/miO/fXl2dyCUiS6unF3rjzsK53ET9uPUrfDplIbVezPaE0owq
+         T40LrouoYo1Kjly8EJOlF7nZLhlPBw95nQfBGP3R4rCFndbjLuo5+P13eHpc0hbKjwSf
+         j1WcA8dmRUBq2QbCXlBPmirBES11keCDGZCylHH6F7HiSk1MO2DGiSF9oKgwoUiwsuzg
+         zNOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=D9ZNAv59f40CG0/uv7rXh/uSMAgb1GDNS6rT6AHe4V0=;
-        b=bEadgQY6eio7FBsBTyT83Wl/iyh/8v9IYAeZXq5HEhPwyAHXECYex9gBjINDDNHbA7
-         hNk0+QSx2kdfq41lBYhn2Aet8rHqZBtMtMRcQlKJdATtL9jx3nvpFwkb5xXAy2hefd9d
-         F+yE0+UShR/oLPo7lmdqAG1ecwzQiJvb2XFdObp/BJHLrBdc5FiAaLUPbVmuwsbb0SdX
-         jNeaHWCjXNlf78vuN+k2PheVUtNWDSu8QW0YaaCF4maC1jsfWxi26V/TIrwh84C5vQ0L
-         bhjRPBOKNz8J8+TbybFfQtqFMbsjrffpe7pTu0Y8MqZO8VvjLtqFjKejO0yTHA31qsX7
-         a1Gg==
-X-Gm-Message-State: APjAAAUR9+AbrngSh0txRsMQW715KBW+lzHAQOQmgMSB1R5YlcXauj8q
-        4ekJ9gOeEwhG9kIkehCw9iI4Sg==
-X-Google-Smtp-Source: APXvYqycwmxnoSVnWNq3Dg51LluxipGxNUXj8qojZFmb2wWWZLGvVF1+NYMNmjxgnVC8lZZnSVvJsQ==
-X-Received: by 2002:a19:f20d:: with SMTP id q13mr33978637lfh.65.1560271333633;
-        Tue, 11 Jun 2019 09:42:13 -0700 (PDT)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id r14sm2616772lff.44.2019.06.11.09.42.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 11 Jun 2019 09:42:13 -0700 (PDT)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     robh+dt@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
-        georgi.djakov@linaro.org
-Cc:     vkoul@kernel.org, evgreen@chromium.org, daidavid1@codeaurora.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH v3 5/5] arm64: dts: qcs404: Add interconnect provider DT nodes
-Date:   Tue, 11 Jun 2019 19:41:57 +0300
-Message-Id: <20190611164157.24656-6-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190611164157.24656-1-georgi.djakov@linaro.org>
-References: <20190611164157.24656-1-georgi.djakov@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DQYk/P/AHz+84MHAfqs8A9FFft/ChbHJqGQaIDzi6ok=;
+        b=iqTkIySDiqNDzZuV4y0c2byf6+eXAFZyRoqPHJsBuJeJGbRza2rJn4B4huz2qp5pwA
+         +bo2JJdE3vjoSto16A9rqXwjY/HSFnzT2XXILxOVnqj/kl+6pqxnb+yPJEAvwUcx6rJd
+         zViseNHp3adchZGr+f8SFThlUJdHcxvo/ZrOh9I0ohu0XTfaMCS/wIZxjb2vVqwPZhEi
+         BflQB7lUN2mklT4M5Q1NfdRy1WiLAEkt2YMqTu0qMfhWqNlk8xSoEzzBbGzUX9etyb1b
+         R+ZtVzhsuEBOJ3eieHqWhVihrN0O6sgzrOkoU2/T15KI8GnZTjjS862xhPHk3Z7l9YSi
+         F3lg==
+X-Gm-Message-State: APjAAAUm9IetSYhgxzvYlf3veKHU1nyoer10JqHG7vOmY/e/hq8mPCjQ
+        zWz9IkJeYfrVvqbxx8J93ZOE9disIgwSo2u7dg0=
+X-Google-Smtp-Source: APXvYqwIRgwZSvbJvIgasj06odVOLwqV4e1NGaONT67RAQJDqA/rR9sRiGkufN8AoUbyfd4Xe69TJ3rJVeHoEHiPbLI=
+X-Received: by 2002:a17:90b:8d2:: with SMTP id ds18mr3765976pjb.132.1560271935519;
+ Tue, 11 Jun 2019 09:52:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
+ <0bea1c7c4fc06c7edabbf3185c0cbbc6e85eafd0.1559933665.git.mchehab+samsung@kernel.org>
+In-Reply-To: <0bea1c7c4fc06c7edabbf3185c0cbbc6e85eafd0.1559933665.git.mchehab+samsung@kernel.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 11 Jun 2019 19:52:04 +0300
+Message-ID: <CAHp75VfTNJOGZx-PoUXLRvzghqf6bVUdJ+yFjE9hNtDLCQ1=UA@mail.gmail.com>
+Subject: Re: [PATCH v3 06/20] docs: mark orphan documents as such
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Matan Ziv-Av <matan@svgalib.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        dri-devel@lists.freedesktop.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the DT nodes for the network-on-chip interconnect buses found
-on qcs404-based platforms.
+On Fri, Jun 7, 2019 at 10:04 PM Mauro Carvalho Chehab
+<mchehab+samsung@kernel.org> wrote:
+> Sphinx doesn't like orphan documents:
 
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
+>     Documentation/laptops/lg-laptop.rst: WARNING: document isn't included in any toctree
 
-v3:
-- Updated according to the new binding: added reg property and moved under the
-  "soc" node.
+>  Documentation/laptops/lg-laptop.rst             | 2 ++
 
- arch/arm64/boot/dts/qcom/qcs404.dtsi | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+> diff --git a/Documentation/laptops/lg-laptop.rst b/Documentation/laptops/lg-laptop.rst
+> index aa503ee9b3bc..f2c2ffe31101 100644
+> --- a/Documentation/laptops/lg-laptop.rst
+> +++ b/Documentation/laptops/lg-laptop.rst
+> @@ -1,5 +1,7 @@
+>  .. SPDX-License-Identifier: GPL-2.0+
+>
+> +:orphan:
+> +
+>  LG Gram laptop extra features
+>  =============================
+>
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-index ffedf9640af7..07ff592233b6 100644
---- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2018, Linaro Limited
- 
-+#include <dt-bindings/interconnect/qcom,qcs404.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/qcom,gcc-qcs404.h>
- #include <dt-bindings/clock/qcom,rpmcc.h>
-@@ -411,6 +412,33 @@
- 			#interrupt-cells = <4>;
- 		};
- 
-+		bimc: interconnect@400000 {
-+			reg = <0x00400000 0x80000>;
-+			compatible = "qcom,qcs404-bimc";
-+			#interconnect-cells = <1>;
-+			clock-names = "bus_clk", "bus_a_clk";
-+			clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
-+				<&rpmcc RPM_SMD_BIMC_A_CLK>;
-+		};
-+
-+		pcnoc: interconnect@500000 {
-+			reg = <0x00500000 0x15080>;
-+			compatible = "qcom,qcs404-pcnoc";
-+			#interconnect-cells = <1>;
-+			clock-names = "bus_clk", "bus_a_clk";
-+			clocks = <&rpmcc RPM_SMD_PNOC_CLK>,
-+				<&rpmcc RPM_SMD_PNOC_A_CLK>;
-+		};
-+
-+		snoc: interconnect@580000 {
-+			reg = <0x00580000 0x23080>;
-+			compatible = "qcom,qcs404-snoc";
-+			#interconnect-cells = <1>;
-+			clock-names = "bus_clk", "bus_a_clk";
-+			clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
-+				<&rpmcc RPM_SMD_SNOC_A_CLK>;
-+		};
-+
- 		sdcc1: sdcc@7804000 {
- 			compatible = "qcom,sdhci-msm-v5";
- 			reg = <0x07804000 0x1000>, <0x7805000 0x1000>;
+Can we rather create a toc tree there?
+It was a first document in reST format in that folder.
+
+-- 
+With Best Regards,
+Andy Shevchenko
