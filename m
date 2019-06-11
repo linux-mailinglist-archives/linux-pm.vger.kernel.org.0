@@ -2,33 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B51813D4E8
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 20:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B253D4FE
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 20:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406763AbfFKSDq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jun 2019 14:03:46 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33046 "EHLO mx1.suse.de"
+        id S2406780AbfFKSGR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jun 2019 14:06:17 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33726 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2406724AbfFKSDq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Jun 2019 14:03:46 -0400
+        id S2406731AbfFKSGR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Jun 2019 14:06:17 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 72435AEF7;
-        Tue, 11 Jun 2019 18:03:44 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 05FE2AD51;
+        Tue, 11 Jun 2019 18:06:16 +0000 (UTC)
 From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     stefan.wahren@i2se.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     mbrugger@suse.de, sboyd@kernel.org, eric@anholt.net,
-        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        ptesarik@suse.com, linux-rpi-kernel@lists.infradead.org,
-        ssuloev@orpaltech.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, mturquette@baylibre.com,
-        linux-pm@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/7] cpufreq: add driver for Raspbery Pi
-Date:   Tue, 11 Jun 2019 19:58:40 +0200
-Message-Id: <20190611175839.28351-5-nsaenzjulienne@suse.de>
+To:     stefan.wahren@i2se.com, linux-kernel@vger.kernel.org
+Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        sboyd@kernel.org, eric@anholt.net, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, ptesarik@suse.com,
+        linux-rpi-kernel@lists.infradead.org, ssuloev@orpaltech.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mturquette@baylibre.com, linux-pm@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: [PATCH v3 5/7] clk: raspberrypi: register platform device for raspberrypi-cpufreq
+Date:   Tue, 11 Jun 2019 19:58:42 +0200
+Message-Id: <20190611175839.28351-6-nsaenzjulienne@suse.de>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190611175839.28351-1-nsaenzjulienne@suse.de>
 References: <20190611175839.28351-1-nsaenzjulienne@suse.de>
@@ -39,171 +37,68 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Raspberry Pi's firmware offers and interface though which update it's
-performance requirements. It allows us to request for specific runtime
-frequencies, which the firmware might or might not respect, depending on
-the firmware configuration and thermals.
-
-As the maximum and minimum frequencies are configurable in the firmware
-there is no way to know in advance their values. So the Raspberry Pi
-cpufreq driver queries them, builds an opp frequency table to then
-launch cpufreq-dt.
-
-Also, as the firmware interface might be configured as a module, making
-the cpu clock unavailable during init, this implements a full fledged
-driver, as opposed to most drivers registering cpufreq-dt, which only
-make use of an init routine.
+As 'clk-raspberrypi' depends on RPi's firmware interface, which might be
+configured as a module, the cpu clock might not be available for the
+cpufreq driver during it's init process. So we register the
+'raspberrypi-cpufreq' platform device after the probe sequence succeeds.
 
 Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 Acked-by: Eric Anholt <eric@anholt.net>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 ---
-  
-Changes since v1:
-  - Remove compatible checks
-  - Add module support, now full fledged driver
-  - Use NULL in clk_get()
 
- drivers/cpufreq/Kconfig.arm           |  8 +++
- drivers/cpufreq/Makefile              |  1 +
- drivers/cpufreq/raspberrypi-cpufreq.c | 97 +++++++++++++++++++++++++++
- 3 files changed, 106 insertions(+)
- create mode 100644 drivers/cpufreq/raspberrypi-cpufreq.c
+Changes since v2:
+  - Use raspberrypi_clk struct to store cpufreq platform_device
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 6f65b7f05496..56c31a78c692 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -142,6 +142,14 @@ config ARM_QCOM_CPUFREQ_HW
- 	  The driver implements the cpufreq interface for this HW engine.
- 	  Say Y if you want to support CPUFreq HW.
+ drivers/clk/bcm/clk-raspberrypi.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
+index 467933767106..7f9b001f8d70 100644
+--- a/drivers/clk/bcm/clk-raspberrypi.c
++++ b/drivers/clk/bcm/clk-raspberrypi.c
+@@ -34,6 +34,7 @@
+ struct raspberrypi_clk {
+ 	struct device *dev;
+ 	struct rpi_firmware *firmware;
++	struct platform_device *cpufreq;
  
-+config ARM_RASPBERRYPI_CPUFREQ
-+	tristate "Raspberry Pi cpufreq support"
-+	depends on CLK_RASPBERRYPI || COMPILE_TEST
-+	help
-+	  This adds the CPUFreq driver for Raspberry Pi
-+
-+	  If in doubt, say N.
-+
- config ARM_S3C_CPUFREQ
- 	bool
- 	help
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 7bcda2273d0c..5a6c70d26c98 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -65,6 +65,7 @@ obj-$(CONFIG_ARM_PXA2xx_CPUFREQ)	+= pxa2xx-cpufreq.o
- obj-$(CONFIG_PXA3xx)			+= pxa3xx-cpufreq.o
- obj-$(CONFIG_ARM_QCOM_CPUFREQ_HW)	+= qcom-cpufreq-hw.o
- obj-$(CONFIG_ARM_QCOM_CPUFREQ_KRYO)	+= qcom-cpufreq-kryo.o
-+obj-$(CONFIG_ARM_RASPBERRYPI_CPUFREQ) 	+= raspberrypi-cpufreq.o
- obj-$(CONFIG_ARM_S3C2410_CPUFREQ)	+= s3c2410-cpufreq.o
- obj-$(CONFIG_ARM_S3C2412_CPUFREQ)	+= s3c2412-cpufreq.o
- obj-$(CONFIG_ARM_S3C2416_CPUFREQ)	+= s3c2416-cpufreq.o
-diff --git a/drivers/cpufreq/raspberrypi-cpufreq.c b/drivers/cpufreq/raspberrypi-cpufreq.c
-new file mode 100644
-index 000000000000..2bc7d9734272
---- /dev/null
-+++ b/drivers/cpufreq/raspberrypi-cpufreq.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Raspberry Pi cpufreq driver
-+ *
-+ * Copyright (C) 2019, Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/cpu.h>
-+#include <linux/cpufreq.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
-+
-+#define RASPBERRYPI_FREQ_INTERVAL	100000000
-+
-+static struct platform_device *cpufreq_dt;
-+
-+static int raspberrypi_cpufreq_probe(struct platform_device *pdev)
-+{
-+	struct device *cpu_dev;
-+	unsigned long min, max;
-+	unsigned long rate;
-+	struct clk *clk;
-+	int ret;
-+
-+	cpu_dev = get_cpu_device(0);
-+	if (!cpu_dev) {
-+		pr_err("Cannot get CPU for cpufreq driver\n");
-+		return -ENODEV;
-+	}
-+
-+	clk = clk_get(cpu_dev, NULL);
-+	if (IS_ERR(clk)) {
-+		dev_err(cpu_dev, "Cannot get clock for CPU0\n");
-+		return PTR_ERR(clk);
-+	}
-+
-+	/*
-+	 * The max and min frequencies are configurable in the Raspberry Pi
-+	 * firmware, so we query them at runtime.
-+	 */
-+	min = roundup(clk_round_rate(clk, 0), RASPBERRYPI_FREQ_INTERVAL);
-+	max = roundup(clk_round_rate(clk, ULONG_MAX), RASPBERRYPI_FREQ_INTERVAL);
-+	clk_put(clk);
-+
-+	for (rate = min; rate <= max; rate += RASPBERRYPI_FREQ_INTERVAL) {
-+		ret = dev_pm_opp_add(cpu_dev, rate, 0);
-+		if (ret)
-+			goto remove_opp;
-+	}
-+
-+	cpufreq_dt = platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
-+	ret = PTR_ERR_OR_ZERO(cpufreq_dt);
-+	if (ret) {
-+		dev_err(cpu_dev, "Failed to create platform device, %d\n", ret);
-+		goto remove_opp;
-+	}
-+
-+	return 0;
-+
-+remove_opp:
-+	dev_pm_opp_remove_all_dynamic(cpu_dev);
-+
-+	return ret;
-+}
-+
-+static int raspberrypi_cpufreq_remove(struct platform_device *pdev)
-+{
-+	struct device *cpu_dev;
-+
-+	cpu_dev = get_cpu_device(0);
-+	if (cpu_dev)
-+		dev_pm_opp_remove_all_dynamic(cpu_dev);
-+
-+	platform_device_unregister(cpufreq_dt);
+ 	unsigned long min_rate;
+ 	unsigned long max_rate;
+@@ -272,6 +273,7 @@ static int raspberrypi_clk_probe(struct platform_device *pdev)
+ 
+ 	rpi->dev = dev;
+ 	rpi->firmware = firmware;
++	platform_set_drvdata(pdev, rpi);
+ 
+ 	ret = raspberrypi_register_pllb(rpi);
+ 	if (ret) {
+@@ -283,6 +285,18 @@ static int raspberrypi_clk_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	rpi->cpufreq = platform_device_register_data(dev, "raspberrypi-cpufreq",
++						     -1, NULL, 0);
 +
 +	return 0;
 +}
 +
-+/*
-+ * Since the driver depends on clk-raspberrypi, which may return EPROBE_DEFER,
-+ * all the activity is performed in the probe, which may be defered as well.
-+ */
-+static struct platform_driver raspberrypi_cpufreq_driver = {
-+	.driver = {
-+		.name = "raspberrypi-cpufreq",
-+	},
-+	.probe          = raspberrypi_cpufreq_probe,
-+	.remove		= raspberrypi_cpufreq_remove,
-+};
-+module_platform_driver(raspberrypi_cpufreq_driver);
++static int raspberrypi_clk_remove(struct platform_device *pdev)
++{
++	struct raspberrypi_clk *rpi = platform_get_drvdata(pdev);
 +
-+MODULE_AUTHOR("Nicolas Saenz Julienne <nsaenzjulienne@suse.de");
-+MODULE_DESCRIPTION("Raspberry Pi cpufreq driver");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:raspberrypi-cpufreq");
++	platform_device_unregister(rpi->cpufreq);
++
+ 	return 0;
+ }
+ 
+@@ -291,6 +305,7 @@ static struct platform_driver raspberrypi_clk_driver = {
+ 		.name = "raspberrypi-clk",
+ 	},
+ 	.probe          = raspberrypi_clk_probe,
++	.remove		= raspberrypi_clk_remove,
+ };
+ module_platform_driver(raspberrypi_clk_driver);
+ 
 -- 
 2.21.0
 
