@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD013D51D
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 20:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2FF3D51A
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 20:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406918AbfFKSIR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jun 2019 14:08:17 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:60308 "EHLO
+        id S2406902AbfFKSIU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jun 2019 14:08:20 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:60354 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406891AbfFKSIR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 14:08:17 -0400
+        with ESMTP id S2406922AbfFKSIT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 14:08:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1560276490; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1560276492; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jgjadQ8woauPoEbSwNwRZmihTgDSBNSW4pKaADLdN3c=;
-        b=jugfGK+VHtQGMgTit+9GiOkDLn4a4NqrlamYQ5keozanzGWqn0JjXo4aTyNQ5daaMI1eZA
-        v5fTyM8wVpHCL1LLnxcgO9Hyy+PPQUAldwFhq4WNrhX9CC0CEJ70ygRBX8hiScqowSuWkR
-        3lovWg1oskWKKNyb0+n7lzMZjdIK5z8=
+        bh=0viPHiuXiALagAuJTSTKg7DcwkXlKKizYTwevl9VkvY=;
+        b=OTwdAqC2vxPwXL7L28WXviP21bWFGV8y+cGYif32mwzSRT/BCSzKwjk+Q1ux7qa69HTLuA
+        NMsb+cpARFlcB6oDVxpRdkKf5ip8o5k64lSVX4AREDhS8/6/Lvkb5Mo2To3RRy5ez6iVzS
+        Xz7JVemZ00WM1JLCzB/0e01Vrd1ZMHs=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
@@ -29,9 +29,9 @@ To:     Ralf Baechle <ralf@linux-mips.org>,
 Cc:     od@zcrc.me, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 4/5] clk: ingenic: Remove unused functions
-Date:   Tue, 11 Jun 2019 20:07:56 +0200
-Message-Id: <20190611180757.32299-4-paul@crapouillou.net>
+Subject: [PATCH v2 5/5] MIPS: Remove dead code
+Date:   Tue, 11 Jun 2019 20:07:57 +0200
+Message-Id: <20190611180757.32299-5-paul@crapouillou.net>
 In-Reply-To: <20190611180757.32299-1-paul@crapouillou.net>
 References: <20190611180757.32299-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -41,8 +41,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-These functions are not called anywhere anymore, they can safely be
-removed.
+Remove the unused <asm/mach-jz4740/clock.h> include.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
@@ -50,97 +49,85 @@ Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Notes:
     v2: Rebase on v5.2-rc4
 
- drivers/clk/ingenic/jz4740-cgu.c | 73 --------------------------------
- 1 file changed, 73 deletions(-)
+ arch/mips/include/asm/mach-jz4740/clock.h | 22 ----------------------
+ arch/mips/jz4740/board-qi_lb60.c          |  2 --
+ arch/mips/jz4740/platform.c               |  2 --
+ arch/mips/jz4740/time.c                   |  3 ---
+ 4 files changed, 29 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-jz4740/clock.h
 
-diff --git a/drivers/clk/ingenic/jz4740-cgu.c b/drivers/clk/ingenic/jz4740-cgu.c
-index efa893ee1de9..a495d75d5133 100644
---- a/drivers/clk/ingenic/jz4740-cgu.c
-+++ b/drivers/clk/ingenic/jz4740-cgu.c
-@@ -10,7 +10,6 @@
- #include <linux/io.h>
- #include <linux/of.h>
- #include <dt-bindings/clock/jz4740-cgu.h>
--#include <asm/mach-jz4740/clock.h>
- #include "cgu.h"
- #include "pm.h"
+diff --git a/arch/mips/include/asm/mach-jz4740/clock.h b/arch/mips/include/asm/mach-jz4740/clock.h
+deleted file mode 100644
+index 600d5051691a..000000000000
+--- a/arch/mips/include/asm/mach-jz4740/clock.h
++++ /dev/null
+@@ -1,22 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
+- */
+-
+-#ifndef __ASM_JZ4740_CLOCK_H__
+-#define __ASM_JZ4740_CLOCK_H__
+-
+-enum jz4740_wait_mode {
+-	JZ4740_WAIT_MODE_IDLE,
+-	JZ4740_WAIT_MODE_SLEEP,
+-};
+-
+-void jz4740_clock_set_wait_mode(enum jz4740_wait_mode mode);
+-
+-void jz4740_clock_suspend(void);
+-void jz4740_clock_resume(void);
+-
+-void jz4740_clock_udc_enable_auto_suspend(void);
+-void jz4740_clock_udc_disable_auto_suspend(void);
+-
+-#endif
+diff --git a/arch/mips/jz4740/board-qi_lb60.c b/arch/mips/jz4740/board-qi_lb60.c
+index 071e9d94eea7..d07ee418e5b0 100644
+--- a/arch/mips/jz4740/board-qi_lb60.c
++++ b/arch/mips/jz4740/board-qi_lb60.c
+@@ -37,8 +37,6 @@
  
-@@ -223,75 +222,3 @@ static void __init jz4740_cgu_init(struct device_node *np)
- 	ingenic_cgu_register_syscore_ops(cgu);
- }
- CLK_OF_DECLARE(jz4740_cgu, "ingenic,jz4740-cgu", jz4740_cgu_init);
+ #include <asm/mach-jz4740/platform.h>
+ 
+-#include "clock.h"
 -
--void jz4740_clock_set_wait_mode(enum jz4740_wait_mode mode)
--{
--	uint32_t lcr = readl(cgu->base + CGU_REG_LCR);
+ /* GPIOs */
+ #define QI_LB60_GPIO_KEYOUT(x)		(JZ_GPIO_PORTC(10) + (x))
+ #define QI_LB60_GPIO_KEYIN(x)		(JZ_GPIO_PORTD(18) + (x))
+diff --git a/arch/mips/jz4740/platform.c b/arch/mips/jz4740/platform.c
+index 4b89abb17950..c74c99f5951d 100644
+--- a/arch/mips/jz4740/platform.c
++++ b/arch/mips/jz4740/platform.c
+@@ -21,8 +21,6 @@
+ #include <linux/serial_core.h>
+ #include <linux/serial_8250.h>
+ 
+-#include "clock.h"
 -
--	switch (mode) {
--	case JZ4740_WAIT_MODE_IDLE:
--		lcr &= ~LCR_SLEEP;
--		break;
+ /* USB Device Controller */
+ struct platform_device jz4740_udc_xceiv_device = {
+ 	.name = "usb_phy_generic",
+diff --git a/arch/mips/jz4740/time.c b/arch/mips/jz4740/time.c
+index a3260c754e65..cb768e560d8b 100644
+--- a/arch/mips/jz4740/time.c
++++ b/arch/mips/jz4740/time.c
+@@ -13,13 +13,10 @@
+ #include <linux/clockchips.h>
+ #include <linux/sched_clock.h>
+ 
+-#include <asm/mach-jz4740/clock.h>
+ #include <asm/mach-jz4740/irq.h>
+ #include <asm/mach-jz4740/timer.h>
+ #include <asm/time.h>
+ 
+-#include "clock.h"
 -
--	case JZ4740_WAIT_MODE_SLEEP:
--		lcr |= LCR_SLEEP;
--		break;
--	}
--
--	writel(lcr, cgu->base + CGU_REG_LCR);
--}
--
--void jz4740_clock_udc_disable_auto_suspend(void)
--{
--	uint32_t clkgr = readl(cgu->base + CGU_REG_CLKGR);
--
--	clkgr &= ~CLKGR_UDC;
--	writel(clkgr, cgu->base + CGU_REG_CLKGR);
--}
--EXPORT_SYMBOL_GPL(jz4740_clock_udc_disable_auto_suspend);
--
--void jz4740_clock_udc_enable_auto_suspend(void)
--{
--	uint32_t clkgr = readl(cgu->base + CGU_REG_CLKGR);
--
--	clkgr |= CLKGR_UDC;
--	writel(clkgr, cgu->base + CGU_REG_CLKGR);
--}
--EXPORT_SYMBOL_GPL(jz4740_clock_udc_enable_auto_suspend);
--
--#define JZ_CLOCK_GATE_UART0	BIT(0)
--#define JZ_CLOCK_GATE_TCU	BIT(1)
--#define JZ_CLOCK_GATE_DMAC	BIT(12)
--
--void jz4740_clock_suspend(void)
--{
--	uint32_t clkgr, cppcr;
--
--	clkgr = readl(cgu->base + CGU_REG_CLKGR);
--	clkgr |= JZ_CLOCK_GATE_TCU | JZ_CLOCK_GATE_DMAC | JZ_CLOCK_GATE_UART0;
--	writel(clkgr, cgu->base + CGU_REG_CLKGR);
--
--	cppcr = readl(cgu->base + CGU_REG_CPPCR);
--	cppcr &= ~BIT(jz4740_cgu_clocks[JZ4740_CLK_PLL].pll.enable_bit);
--	writel(cppcr, cgu->base + CGU_REG_CPPCR);
--}
--
--void jz4740_clock_resume(void)
--{
--	uint32_t clkgr, cppcr, stable;
--
--	cppcr = readl(cgu->base + CGU_REG_CPPCR);
--	cppcr |= BIT(jz4740_cgu_clocks[JZ4740_CLK_PLL].pll.enable_bit);
--	writel(cppcr, cgu->base + CGU_REG_CPPCR);
--
--	stable = BIT(jz4740_cgu_clocks[JZ4740_CLK_PLL].pll.stable_bit);
--	do {
--		cppcr = readl(cgu->base + CGU_REG_CPPCR);
--	} while (!(cppcr & stable));
--
--	clkgr = readl(cgu->base + CGU_REG_CLKGR);
--	clkgr &= ~JZ_CLOCK_GATE_TCU;
--	clkgr &= ~JZ_CLOCK_GATE_DMAC;
--	clkgr &= ~JZ_CLOCK_GATE_UART0;
--	writel(clkgr, cgu->base + CGU_REG_CLKGR);
--}
+ #define TIMER_CLOCKEVENT 0
+ #define TIMER_CLOCKSOURCE 1
+ 
 -- 
 2.21.0.593.g511ec345e18
 
