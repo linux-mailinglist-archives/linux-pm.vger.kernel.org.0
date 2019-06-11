@@ -2,208 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FFB416CE
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 23:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60326416EC
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 23:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389490AbfFKVYw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jun 2019 17:24:52 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:33657 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388693AbfFKVYw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 17:24:52 -0400
-Received: by mail-ot1-f68.google.com with SMTP id p4so10158541oti.0;
-        Tue, 11 Jun 2019 14:24:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uIRbwWRuO7/1ZwaraC6BCujZR3cVhI4nwmywSXcAgsE=;
-        b=WqLWH32JFh35blcEsrkkIXSNKbADGNW5dzqn0v7mN1FPPG5q3J7ccbB72+0v/e/1Ev
-         QbTsuroCf30YwfPy6v5+edvC7Fp/HE8ZTBIGklxIVANnybbLzgutyXaEOdLllwZ65WJg
-         mJ2rO1lMmsimq9gPNZYH96fyWioWFoCp01Kd7MtkcYPn5GOeIyFZtROEVId9uo1eyNgw
-         19Mt8jhSKoalZXHAvJXS0Pulru8XWoOGOZCbRMyCI2niCZdvm6anFMxZz4znofVhVmyp
-         2VkDxLSCMjGptNJgMO70UElxLpJ1a5lMqgWdniN5FI2T6qRz3svKH5iLgW/z1cx/Iakq
-         hNIQ==
-X-Gm-Message-State: APjAAAUoS1zHZykrAFMrweqGcFX0mUyNAdy+v/yFC3voRRtHoZFCU3g9
-        kWsgR3SPw7DGr7kTmNiF3upJLO2h1byMm2JXOx0=
-X-Google-Smtp-Source: APXvYqwiRbWgoGewJXZNzXGtJm32eKWRtswBFrQTNgXaJJDNmyM0R10HTRvq2SYoP6P/HZcl6x8hus9nwQVpkte5e7s=
-X-Received: by 2002:a9d:5e99:: with SMTP id f25mr7850901otl.262.1560288291573;
- Tue, 11 Jun 2019 14:24:51 -0700 (PDT)
+        id S2391775AbfFKVej (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jun 2019 17:34:39 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:56100 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387764AbfFKVej (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 17:34:39 -0400
+Received: from 79.184.253.190.ipv4.supernova.orange.pl (79.184.253.190) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id de0f10f62d208a7f; Tue, 11 Jun 2019 23:34:36 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH] PCI: PM: Avoid possible suspend-to-idle issue
+Date:   Tue, 11 Jun 2019 23:34:36 +0200
+Message-ID: <1583084.Q78GrOSehU@kreacher>
+In-Reply-To: <527F9B70-68AC-4CD4-A3C2-576EA09187DD@canonical.com>
+References: <2315917.ZGeXE6pBFC@kreacher> <10983642.dUqMSvAAlD@kreacher> <527F9B70-68AC-4CD4-A3C2-576EA09187DD@canonical.com>
 MIME-Version: 1.0
-References: <20190603225242.289109849@amt.cnet> <6c411948-9e32-9f41-351e-c9accd1facb0@intel.com>
- <20190610145942.GA24553@amt.cnet> <CAJZ5v0idYgETFg4scgvpJ-eGtFAx1Wi6hznXz7+XZAfKjiSAPA@mail.gmail.com>
- <20190611142627.GB4791@amt.cnet>
-In-Reply-To: <20190611142627.GB4791@amt.cnet>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Jun 2019 23:24:39 +0200
-Message-ID: <CAJZ5v0gPbSXB3r71XaT-4Q7LsiFO_UVymBwOmU8J1W5+COk_1g@mail.gmail.com>
-Subject: Re: [patch 0/3] cpuidle-haltpoll driver (v2)
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        kvm-devel <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LDhD9tw4PCocOFPw==?= <rkrcmar@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Wanpeng Li <kernellwp@gmail.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Raslan KarimAllah <karahmed@amazon.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Ankur Arora <ankur.a.arora@oracle.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 4:27 PM Marcelo Tosatti <mtosatti@redhat.com> wrote:
+On Tuesday, June 11, 2019 10:39:44 AM CEST Kai-Heng Feng wrote:
+> Hi Rafael,
+> 
+> at 19:02, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> 
+> > On Friday, May 17, 2019 11:08:50 AM CEST Rafael J. Wysocki wrote:
+> >> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>
+> >> If a PCI driver leaves the device handled by it in D0 and calls
+> >> pci_save_state() on the device in its ->suspend() or ->suspend_late()
+> >> callback, it can expect the device to stay in D0 over the whole
+> >> s2idle cycle.  However, that may not be the case if there is a
+> >> spurious wakeup while the system is suspended, because in that case
+> >> pci_pm_suspend_noirq() will run again after pci_pm_resume_noirq()
+> >> which calls pci_restore_state(), via pci_pm_default_resume_early(),
+> >> so state_saved is cleared and the second iteration of
+> >> pci_pm_suspend_noirq() will invoke pci_prepare_to_sleep() which
+> >> may change the power state of the device.
+> >>
+> >> To avoid that, add a new internal flag, skip_bus_pm, that will be set
+> >> by pci_pm_suspend_noirq() when it runs for the first time during the
+> >> given system suspend-resume cycle if the state of the device has
+> >> been saved already and the device is still in D0.  Setting that flag
+> >> will cause the next iterations of pci_pm_suspend_noirq() to set
+> >> state_saved for pci_pm_resume_noirq(), so that it always restores the
+> >> device state from the originally saved data, and avoid calling
+> >> pci_prepare_to_sleep() for the device.
+> >>
+> >> Fixes: 33e4f80ee69b ("ACPI / PM: Ignore spurious SCI wakeups from  
+> >> suspend-to-idle")
+> >> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> I just found out this patch has a chance to freeze or reboot the system  
+> during suspend cycles.
 >
-> On Tue, Jun 11, 2019 at 12:03:26AM +0200, Rafael J. Wysocki wrote:
-> > On Mon, Jun 10, 2019 at 5:00 PM Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> > >
-> > > On Fri, Jun 07, 2019 at 11:49:51AM +0200, Rafael J. Wysocki wrote:
-> > > > On 6/4/2019 12:52 AM, Marcelo Tosatti wrote:
-> > > > >The cpuidle-haltpoll driver allows the guest vcpus to poll for a specified
-> > > > >amount of time before halting. This provides the following benefits
-> > > > >to host side polling:
-> > > > >
-> > > > >         1) The POLL flag is set while polling is performed, which allows
-> > > > >            a remote vCPU to avoid sending an IPI (and the associated
-> > > > >            cost of handling the IPI) when performing a wakeup.
-> > > > >
-> > > > >         2) The HLT VM-exit cost can be avoided.
-> > > > >
-> > > > >The downside of guest side polling is that polling is performed
-> > > > >even with other runnable tasks in the host.
-> > > > >
-> > > > >Results comparing halt_poll_ns and server/client application
-> > > > >where a small packet is ping-ponged:
-> > > > >
-> > > > >host                                        --> 31.33
-> > > > >halt_poll_ns=300000 / no guest busy spin    --> 33.40   (93.8%)
-> > > > >halt_poll_ns=0 / guest_halt_poll_ns=300000  --> 32.73   (95.7%)
-> > > > >
-> > > > >For the SAP HANA benchmarks (where idle_spin is a parameter
-> > > > >of the previous version of the patch, results should be the
-> > > > >same):
-> > > > >
-> > > > >hpns == halt_poll_ns
-> > > > >
-> > > > >                           idle_spin=0/   idle_spin=800/    idle_spin=0/
-> > > > >                           hpns=200000    hpns=0            hpns=800000
-> > > > >DeleteC06T03 (100 thread) 1.76           1.71 (-3%)        1.78   (+1%)
-> > > > >InsertC16T02 (100 thread) 2.14           2.07 (-3%)        2.18   (+1.8%)
-> > > > >DeleteC00T01 (1 thread)   1.34           1.28 (-4.5%)           1.29   (-3.7%)
-> > > > >UpdateC00T03 (1 thread)   4.72           4.18 (-12%)    4.53   (-5%)
-> > > > >
-> > > > >V2:
-> > > > >
-> > > > >- Move from x86 to generic code (Paolo/Christian).
-> > > > >- Add auto-tuning logic (Paolo).
-> > > > >- Add MSR to disable host side polling (Paolo).
-> > > > >
-> > > > >
-> > > > >
-> > > > First of all, please CC power management patches (including cpuidle,
-> > > > cpufreq etc) to linux-pm@vger.kernel.org (there are people on that
-> > > > list who may want to see your changes before they go in) and CC
-> > > > cpuidle material (in particular) to Peter Zijlstra.
-> > > >
-> > > > Second, I'm not a big fan of this approach to be honest, as it kind
-> > > > of is a driver trying to play the role of a governor.
-> > > >
-> > > > We have a "polling state" already that could be used here in
-> > > > principle so I wonder what would be wrong with that.  Also note that
-> > > > there seems to be at least some code duplication between your code
-> > > > and the "polling state" implementation, so maybe it would be
-> > > > possible to do some things in a common way?
-> > >
-> > > Hi Rafael,
-> > >
-> > > After modifying poll_state.c to use a generic "poll time" driver
-> > > callback [1] (since using a variable "target_residency" for that
-> > > looks really ugly), would need a governor which does:
-> > >
-> > > haltpoll_governor_select_next_state()
-> > >         if (prev_state was poll and evt happened on prev poll window) -> POLL.
-> > >         if (prev_state == HLT)  -> POLL
-> > >         otherwise               -> HLT
-> > >
-> > > And a "default_idle" cpuidle driver that:
-> > >
-> > > defaultidle_idle()
-> > >         if (current_clr_polling_and_test()) {
-> > >                 local_irq_enable();
-> > >                 return index;
-> > >         }
-> > >         default_idle();
-> > >         return
-> > >
-> > > Using such governor with any other cpuidle driver would
-> > > be pointless (since it would enter the first state only
-> > > and therefore not save power).
-> > >
-> > > Not certain about using the default_idle driver with
-> > > other governors: one would rather use a driver that
-> > > supports all states on a given machine.
-> > >
-> > > This combination of governor/driver pair, for the sake
-> > > of sharing the idle loop, seems awkward to me.
-> > > And fails the governor/driver separation: one will use the
-> > > pair in practice.
-> > >
-> > > But i have no problem with it, so i'll proceed with that.
-> > >
-> > > Let me know otherwise.
-> >
-> > If my understanding of your argumentation is correct, it is only
-> > necessary to take the default_idle_call() branch of
-> > cpuidle_idle_call() in the VM case, so it should be sufficient to
-> > provide a suitable default_idle_call() which is what you seem to be
-> > trying to do.
->
-> In the VM case, we need to poll before actually halting (this is because
-> its tricky to implement MWAIT in guests, so polling for some amount
-> of time allows the IPI avoidance optimization,
-> see trace_sched_wake_idle_without_ipi, to take place).
->
-> The amount of time we poll is variable and adjusted (see adjust_haltpoll_ns
-> in the patchset).
->
-> > I might have been confused by the terminology used in the patch series
-> > if that's the case.
-> >
-> > Also, if that's the case, this is not cpuidle matter really.  It is a
-> > matter of providing a better default_idle_call() for the arch at hand.
->
-> Peter Zijlstra suggested a cpuidle driver for this.
+> What information do you need to debug?
 
-So I wonder what his rationale was.
+A few things are missing from your report, like which kernel you have tested
+and how exactly you have arrived at the conclusion that this particular commit
+is the source of the problem.
 
-> Also, other architectures will use the same "poll before exiting to VM"
-> logic (so we'd rather avoid duplicating this code): PPC, x86, S/390,
-> MIPS... So in my POV it makes sense to unify this.
+Care to provide some details on the above?
 
-The logic is fine IMO, but the implementation here is questionable.
+Anyway, there are a couple of things that can be done to improve the code
+on top of 5.2-rc4.  The appended patch is one of them, so can you please test
+it and let me know if it makes any difference?
 
-> So, back to your initial suggestion:
->
-> Q) "Can you unify code with poll_state.c?"
-> A) Yes, but it requires a new governor, which seems overkill and unfit
-> for the purpose.
->
-> Moreover, the logic in menu to decide whether its necessary or not
-> to stop sched tick is useful for us (so a default_idle_call is not
-> sufficient), because the cost of enabling/disabling the sched tick is
-> high on VMs.
+The rationale here is that firmware in some devices may be confused by attempts
+to put the device into D0 if it already is in that power state, so it is better to avoid
+doing so.
 
-So in fact you need a governor, but you really only need it to decide
-whether or not to stop the tick for you.
+---
+ drivers/pci/pci-driver.c |   20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-menu has a quite high overhead for that. :-)
+Index: linux-pm/drivers/pci/pci-driver.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -524,7 +524,6 @@ static void pci_pm_default_resume_early(
+ 	pci_power_up(pci_dev);
+ 	pci_restore_state(pci_dev);
+ 	pci_pme_restore(pci_dev);
+-	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+ }
+ 
+ /*
+@@ -844,14 +843,12 @@ static int pci_pm_suspend_noirq(struct d
+ 		/*
+ 		 * The function is running for the second time in a row without
+ 		 * going through full resume, which is possible only during
+-		 * suspend-to-idle in a spurious wakeup case.  Moreover, the
+-		 * device was originally left in D0, so its power state should
+-		 * not be changed here and the device register values saved
+-		 * originally should be restored on resume again.
++		 * suspend-to-idle in a spurious wakeup case.  The device should
++		 * be in D0 at this point.
+ 		 */
+-		pci_dev->state_saved = true;
++		;
+ 	} else if (pci_dev->state_saved) {
+-		if (pci_dev->current_state == PCI_D0)
++		if (pci_dev->current_state == PCI_D0 && !pm_suspend_via_firmware())
+ 			pci_dev->skip_bus_pm = true;
+ 	} else {
+ 		pci_save_state(pci_dev);
+@@ -862,6 +859,9 @@ static int pci_pm_suspend_noirq(struct d
+ 	dev_dbg(dev, "PCI PM: Suspend power state: %s\n",
+ 		pci_power_name(pci_dev->current_state));
+ 
++	if (pci_dev->skip_bus_pm)
++		goto Fixup;
++
+ 	pci_pm_set_unknown_state(pci_dev);
+ 
+ 	/*
+@@ -909,7 +909,10 @@ static int pci_pm_resume_noirq(struct de
+ 	if (dev_pm_smart_suspend_and_suspended(dev))
+ 		pm_runtime_set_active(dev);
+ 
+-	pci_pm_default_resume_early(pci_dev);
++	if (!pci_dev->skip_bus_pm)
++		pci_pm_default_resume_early(pci_dev);
++
++	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+ 
+ 	if (pci_has_legacy_pm_support(pci_dev))
+ 		return pci_legacy_resume_early(dev);
+@@ -1200,6 +1203,7 @@ static int pci_pm_restore_noirq(struct d
+ 	}
+ 
+ 	pci_pm_default_resume_early(pci_dev);
++	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+ 
+ 	if (pci_has_legacy_pm_support(pci_dev))
+ 		return pci_legacy_resume_early(dev);
 
-> So i'll fix the comments of the cpuidle driver (which everyone seems
-> to agree with, except your understandable distate for it) and repost.
+
+
