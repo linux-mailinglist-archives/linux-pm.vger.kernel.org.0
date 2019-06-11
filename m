@@ -2,99 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAFF4186A
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2019 00:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939A1418A3
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2019 01:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403762AbfFKWuh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jun 2019 18:50:37 -0400
-Received: from mail-eopbgr730126.outbound.protection.outlook.com ([40.107.73.126]:14512
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2391638AbfFKWug (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Jun 2019 18:50:36 -0400
+        id S2407928AbfFKXIX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jun 2019 19:08:23 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40298 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404124AbfFKXIW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 19:08:22 -0400
+Received: by mail-pf1-f193.google.com with SMTP id p184so5080714pfp.7
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jun 2019 16:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uyT2XrMU4bdbnRm2CT2ytKqdkRyAcSjYROHEyXXGKQ0=;
- b=hzo/7M2nh/X1jQiXQXYRv9jZuZFm1w7fJdaX5dPO/JAt341TlujQOCBX93l/am4oGTDuAHWE7b/d/oDo41i6QB4spR6THl8qkRPpB7lFZqTMBh/icpAizHgGjnMCtYOFRWLZrx3SRWAwch0tG4sakP8HUF3R0dAyOkx4voG/Fg8=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1373.namprd22.prod.outlook.com (10.174.162.140) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.15; Tue, 11 Jun 2019 22:50:16 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::6975:b632:c85b:9e40]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::6975:b632:c85b:9e40%2]) with mapi id 15.20.1987.010; Tue, 11 Jun 2019
- 22:50:16 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, "od@zcrc.me" <od@zcrc.me>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/5] MIPS: Remove dead code
-Thread-Topic: [PATCH v2 5/5] MIPS: Remove dead code
-Thread-Index: AQHVIICnCC0E6RPYlEOSw1p5P/LHgKaXDw4A
-Date:   Tue, 11 Jun 2019 22:50:15 +0000
-Message-ID: <20190611225013.bkqmxczedrbg3nlk@pburton-laptop>
-References: <20190611180757.32299-1-paul@crapouillou.net>
- <20190611180757.32299-5-paul@crapouillou.net>
-In-Reply-To: <20190611180757.32299-5-paul@crapouillou.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR03CA0027.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::40) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5fd418ed-ddff-412e-d2d5-08d6eebf2b6e
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1373;
-x-ms-traffictypediagnostic: MWHPR2201MB1373:
-x-microsoft-antispam-prvs: <MWHPR2201MB13730A7FCC2AEB989577EE31C1ED0@MWHPR2201MB1373.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2657;
-x-forefront-prvs: 006546F32A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(136003)(39840400004)(396003)(376002)(346002)(366004)(199004)(189003)(99286004)(76176011)(386003)(52116002)(6506007)(305945005)(8676002)(6512007)(9686003)(71200400001)(71190400001)(6486002)(81156014)(81166006)(1076003)(7736002)(229853002)(42882007)(6436002)(2906002)(3846002)(478600001)(186003)(102836004)(6916009)(11346002)(446003)(26005)(6116002)(14454004)(66476007)(64756008)(66946007)(476003)(6246003)(66446008)(73956011)(4326008)(44832011)(53936002)(66066001)(25786009)(486006)(58126008)(33716001)(68736007)(8936002)(7416002)(5660300002)(66556008)(256004)(54906003)(558084003)(316002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1373;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 8E7OdQeWsInO3p8XTAMKxDXMH/exr3E8NvZyDObbCa7Ire6CTSEZk0xxMVtbF6dLE+DPxUpgIudW4VskoUrHYWGUA7WAUSIVr5jrQpH7kbwDxg9t7JGvOA6RtiLj0tHj1qv3IRBfUTv9yE6yJsF36a+FWmclTJ3MxgW4UZARajmlt045Xb0rokqRFH4JF0NcUYi7sLNims8V2H9ZCyRPFakfP/5QnvWo1fqJAN7RVcg8Yh+6hz28bEldVLpzPhN5YasNvFWru4Radc5S+wmLqUnJma54pgsDDLKgZbbx/gdaXUIinKpCGByH7owlb5PkYCHkm+1zti5Njl169HRFiFsLHPmqM/WNvxatSqCAOV2n2O1/yETLbxyTo39mvtc4H5b+pg8ckBNvnYpg/Mt0nHgx/QecEkXxZaWEwLJuKdk=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1D8F45445836954CAB4CD679FBCC66DF@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vjl9Ns8qTRMKP0J+iO0hKqMC3min1EiwS3qQ6sVNS1c=;
+        b=YN/UgLNkyeTM1qoFucU0AJFUxeziYWrhUCibHWCA/qlMUN6spFPO8C0Kvv+zJFiWDC
+         zXLmuybO9JFifvUo0mmqfj9igpjzb8fqlzcAz4+Yx47Sy3EhpPa2HK9x8iDXoDHBOzRw
+         wBVo3r4//Gkv25xlprDkXizA7UxjgB+dzDQWPxtn0DwKTAGgkmLq2+RiOvUfT6vva2B1
+         WjN23HAl91P5GutP+gJ9ynAWNtTOWJm11MBQHdpYh4QY6CW5KrXtCKBLV1zqh2z6R21S
+         ++xN7LRProkA12fmgeIpexQ9SL27ncDFGksdFy/T+a3GvZ8I33Ej4FpjvxShMCxflUdd
+         7GpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vjl9Ns8qTRMKP0J+iO0hKqMC3min1EiwS3qQ6sVNS1c=;
+        b=pRDvWxCL8rewGSoOBok/Dm4g/iQ9VEXqXnazeJlW9jwLRUTbdw5CKfPhhj9o5NOJf6
+         DiUf/NaUmT5LmvX971vK7IWovSuuyTy/R/9rYeHqGj8RLfu8wzP3o2KFqSP2HYw6phPH
+         Xo6ILsDNWZK7f5uOF95ABz4ztxWIjzY+rGBX/XnbFlSviGyL+TuZzIVPJ0u/F9qEITbt
+         ZzJcfazglmaiv2sfMSprQayP8HGMoDdpIffv/M8F9eXzaSYlEkZSN5ftKDPxnoWzK5lV
+         3zwTZAesYAcd6GYyFn0I6hoaMSE2595jcd1HJlg1Uo3kHYjUt/ik/nQzcx3892Z8HPZ7
+         6qHA==
+X-Gm-Message-State: APjAAAXH4yEJ/Q9J4NWkOs7P1eHPYuKfWo3gFoI2lpXhW28r6rcAC2oS
+        REune6zjarGUB1+LnygIn8P3NQ==
+X-Google-Smtp-Source: APXvYqynsWTp0wdQaNa3lyxkx2tbF0tlUWrRe3v1z2Eum8yVKB/bjwEiZ8XB8FqYlwWcOT8gSLV1Jg==
+X-Received: by 2002:a17:90a:25e6:: with SMTP id k93mr8367124pje.100.1560294501786;
+        Tue, 11 Jun 2019 16:08:21 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id c129sm29717844pfa.106.2019.06.11.16.08.20
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 16:08:20 -0700 (PDT)
+Date:   Tue, 11 Jun 2019 16:08:18 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     robh+dt@kernel.org, agross@kernel.org, vkoul@kernel.org,
+        evgreen@chromium.org, daidavid1@codeaurora.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] dt-bindings: interconnect: Add Qualcomm QCS404 DT
+ bindings
+Message-ID: <20190611230818.GT4814@minitux>
+References: <20190611164157.24656-1-georgi.djakov@linaro.org>
+ <20190611164157.24656-2-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fd418ed-ddff-412e-d2d5-08d6eebf2b6e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 22:50:15.9425
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1373
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190611164157.24656-2-georgi.djakov@linaro.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Paul,
+On Tue 11 Jun 09:41 PDT 2019, Georgi Djakov wrote:
 
-On Tue, Jun 11, 2019 at 08:07:57PM +0200, Paul Cercueil wrote:
-> Remove the unused <asm/mach-jz4740/clock.h> include.
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> The Qualcomm QCS404 platform has several buses that could be controlled
+> and tuned according to the bandwidth demand.
+> 
 
-Presuming this goes via the clk tree:
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-    Acked-by: Paul Burton <paul.burton@mips.com>
-
-Thanks,
-    Paul
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+> 
+> v3:
+> - Add a reg property and move the interconnect nodes under the "soc" node.
+> 
+> v2:
+> - No changes.
+> 
+>  .../bindings/interconnect/qcom,qcs404.txt     | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
+> new file mode 100644
+> index 000000000000..14a827268dda
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
+> @@ -0,0 +1,46 @@
+> +Qualcomm QCS404 Network-On-Chip interconnect driver binding
+> +-----------------------------------------------------------
+> +
+> +Required properties :
+> +- compatible : shall contain only one of the following:
+> +			"qcom,qcs404-bimc"
+> +			"qcom,qcs404-pcnoc"
+> +			"qcom,qcs404-snoc"
+> +- #interconnect-cells : should contain 1
+> +
+> +Optional properties :
+> +reg : specifies the physical base address and size of registers
+> +clocks : list of phandles and specifiers to all interconnect bus clocks
+> +clock-names : clock names should include both "bus_clk" and "bus_a_clk"
+> +
+> +Example:
+> +
+> +soc {
+> +	...
+> +	bimc: interconnect@400000 {
+> +		reg = <0x00400000 0x80000>;
+> +		compatible = "qcom,qcs404-bimc";
+> +		#interconnect-cells = <1>;
+> +		clock-names = "bus_clk", "bus_a_clk";
+> +		clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
+> +			<&rpmcc RPM_SMD_BIMC_A_CLK>;
+> +	};
+> +
+> +	pnoc: interconnect@500000 {
+> +		reg = <0x00500000 0x15080>;
+> +		compatible = "qcom,qcs404-pcnoc";
+> +		#interconnect-cells = <1>;
+> +		clock-names = "bus_clk", "bus_a_clk";
+> +		clocks = <&rpmcc RPM_SMD_PNOC_CLK>,
+> +			<&rpmcc RPM_SMD_PNOC_A_CLK>;
+> +	};
+> +
+> +	snoc: interconnect@580000 {
+> +		reg = <0x00580000 0x23080>;
+> +		compatible = "qcom,qcs404-snoc";
+> +		#interconnect-cells = <1>;
+> +		clock-names = "bus_clk", "bus_a_clk";
+> +		clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
+> +			<&rpmcc RPM_SMD_SNOC_A_CLK>;
+> +	};
+> +};
