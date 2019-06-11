@@ -2,126 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFF73D4FB
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 20:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B970E3D50F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 20:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406806AbfFKSFu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jun 2019 14:05:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51534 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406751AbfFKSFu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Jun 2019 14:05:50 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4D8FF20874;
-        Tue, 11 Jun 2019 18:05:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560276349;
-        bh=pUQrrrTa5WLl5Wa6xrkyfgXRj0jTEMVmm2ENa77fXlc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QKVcW6wqE84DdHUQo3qpUtrgp9MmHCbzMN06jLmT+LAXNrXlCdM+aJ/bF1zROAz0A
-         942jP4y1tzj0XefryYanlDWNeQXkkEdqxx+0QWTOrpY9eceKQGDfcrCGGYM4w5cGwM
-         k2hUHzCej/95tpWuTPgcLn/1CbD5rpryzdToCT+8=
-Date:   Tue, 11 Jun 2019 20:05:47 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH] power: avs: smartreflex: no need to check return value of
- debugfs_create functions
-Message-ID: <20190611180547.GA13520@kroah.com>
+        id S2406859AbfFKSIJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jun 2019 14:08:09 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:60230 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406739AbfFKSIJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 14:08:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1560276483; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=F92Hgvhl4FW1kSKmvn0gmYzIQd65L6N4f7rKJUGKlLY=;
+        b=MFYmu7nMhGPBRi2lqewJHzgo4uCKPVKDPAJ2IbRdcv3xvqrH6HVC5rEoiygSPWVspfSDWg
+        dIY3wMpsk1tB4ZTywq5TD9PHRlqDMjkTlkR5OP8S7Tf9ECcXy6pdxGj7rArW+wplLhUASP
+        pJfiOFRo5tQAHHVP6aTXHB/XTHtZgAs=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     od@zcrc.me, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 1/5] clk: ingenic: Add missing header in cgu.h
+Date:   Tue, 11 Jun 2019 20:07:53 +0200
+Message-Id: <20190611180757.32299-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When calling debugfs functions, there is no need to ever check the
-return value.  The function can work or not, but the code logic should
-never do something different based on this.
+The cgu.h has structures that contain 'clk_onecell_data' and 'clk_hw'
+structures (no pointers), so the <linux/clk-provider.h> header should be
+included.
 
-And even when not checking the return value, no need to cast away the
-call to (void), as these functions were never a "must check" type of a
-function, so remove that odd cast.
-
-Cc: Kevin Hilman <khilman@kernel.org>
-Cc: Nishanth Menon <nm@ti.com>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/power/avs/smartreflex.c | 41 +++++++++------------------------
- 1 file changed, 11 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/power/avs/smartreflex.c b/drivers/power/avs/smartreflex.c
-index c96c01e09740..4684e7df833a 100644
---- a/drivers/power/avs/smartreflex.c
-+++ b/drivers/power/avs/smartreflex.c
-@@ -899,38 +899,19 @@ static int omap_sr_probe(struct platform_device *pdev)
- 	}
+Notes:
+    v2: Rebase on v5.2-rc4
+
+ drivers/clk/ingenic/cgu.h         | 1 +
+ drivers/clk/ingenic/jz4725b-cgu.c | 1 -
+ drivers/clk/ingenic/jz4740-cgu.c  | 1 -
+ drivers/clk/ingenic/jz4770-cgu.c  | 1 -
+ drivers/clk/ingenic/jz4780-cgu.c  | 1 -
+ 5 files changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
+index bfbcf6db437d..ef2db1e26e58 100644
+--- a/drivers/clk/ingenic/cgu.h
++++ b/drivers/clk/ingenic/cgu.h
+@@ -10,6 +10,7 @@
+ #define __DRIVERS_CLK_INGENIC_CGU_H__
  
- 	dev_info(&pdev->dev, "%s: SmartReflex driver initialized\n", __func__);
--	if (!sr_dbg_dir) {
-+	if (!sr_dbg_dir)
- 		sr_dbg_dir = debugfs_create_dir("smartreflex", NULL);
--		if (IS_ERR_OR_NULL(sr_dbg_dir)) {
--			ret = PTR_ERR(sr_dbg_dir);
--			pr_err("%s:sr debugfs dir creation failed(%d)\n",
--			       __func__, ret);
--			goto err_list_del;
--		}
--	}
+ #include <linux/bitops.h>
++#include <linux/clk-provider.h>
+ #include <linux/of.h>
+ #include <linux/spinlock.h>
  
- 	sr_info->dbg_dir = debugfs_create_dir(sr_info->name, sr_dbg_dir);
--	if (IS_ERR_OR_NULL(sr_info->dbg_dir)) {
--		dev_err(&pdev->dev, "%s: Unable to create debugfs directory\n",
--			__func__);
--		ret = PTR_ERR(sr_info->dbg_dir);
--		goto err_debugfs;
--	}
+diff --git a/drivers/clk/ingenic/jz4725b-cgu.c b/drivers/clk/ingenic/jz4725b-cgu.c
+index 8901ea0295b7..6e8bbf620c76 100644
+--- a/drivers/clk/ingenic/jz4725b-cgu.c
++++ b/drivers/clk/ingenic/jz4725b-cgu.c
+@@ -6,7 +6,6 @@
+  * Author: Paul Cercueil <paul@crapouillou.net>
+  */
  
--	(void) debugfs_create_file("autocomp", S_IRUGO | S_IWUSR,
--			sr_info->dbg_dir, (void *)sr_info, &pm_sr_fops);
--	(void) debugfs_create_x32("errweight", S_IRUGO, sr_info->dbg_dir,
--			&sr_info->err_weight);
--	(void) debugfs_create_x32("errmaxlimit", S_IRUGO, sr_info->dbg_dir,
--			&sr_info->err_maxlimit);
-+	debugfs_create_file("autocomp", S_IRUGO | S_IWUSR, sr_info->dbg_dir,
-+			    (void *)sr_info, &pm_sr_fops);
-+	debugfs_create_x32("errweight", S_IRUGO, sr_info->dbg_dir,
-+			   &sr_info->err_weight);
-+	debugfs_create_x32("errmaxlimit", S_IRUGO, sr_info->dbg_dir,
-+			   &sr_info->err_maxlimit);
+-#include <linux/clk-provider.h>
+ #include <linux/delay.h>
+ #include <linux/of.h>
+ #include <dt-bindings/clock/jz4725b-cgu.h>
+diff --git a/drivers/clk/ingenic/jz4740-cgu.c b/drivers/clk/ingenic/jz4740-cgu.c
+index c77f4e1506dc..2deac19a8d04 100644
+--- a/drivers/clk/ingenic/jz4740-cgu.c
++++ b/drivers/clk/ingenic/jz4740-cgu.c
+@@ -6,7 +6,6 @@
+  * Author: Paul Burton <paul.burton@mips.com>
+  */
  
- 	nvalue_dir = debugfs_create_dir("nvalue", sr_info->dbg_dir);
--	if (IS_ERR_OR_NULL(nvalue_dir)) {
--		dev_err(&pdev->dev, "%s: Unable to create debugfs directory for n-values\n",
--			__func__);
--		ret = PTR_ERR(nvalue_dir);
--		goto err_debugfs;
--	}
+-#include <linux/clk-provider.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+diff --git a/drivers/clk/ingenic/jz4770-cgu.c b/drivers/clk/ingenic/jz4770-cgu.c
+index dfce740c25a8..42b2ee121642 100644
+--- a/drivers/clk/ingenic/jz4770-cgu.c
++++ b/drivers/clk/ingenic/jz4770-cgu.c
+@@ -5,7 +5,6 @@
+  */
  
- 	if (sr_info->nvalue_count == 0 || !sr_info->nvalue_table) {
- 		dev_warn(&pdev->dev, "%s: %s: No Voltage table for the corresponding vdd. Cannot create debugfs entries for n-values\n",
-@@ -945,12 +926,12 @@ static int omap_sr_probe(struct platform_device *pdev)
+ #include <linux/bitops.h>
+-#include <linux/clk-provider.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+diff --git a/drivers/clk/ingenic/jz4780-cgu.c b/drivers/clk/ingenic/jz4780-cgu.c
+index 2464fc4032af..6d524e760180 100644
+--- a/drivers/clk/ingenic/jz4780-cgu.c
++++ b/drivers/clk/ingenic/jz4780-cgu.c
+@@ -6,7 +6,6 @@
+  * Author: Paul Burton <paul.burton@mips.com>
+  */
  
- 		snprintf(name, sizeof(name), "volt_%lu",
- 				sr_info->nvalue_table[i].volt_nominal);
--		(void) debugfs_create_x32(name, S_IRUGO | S_IWUSR, nvalue_dir,
--				&(sr_info->nvalue_table[i].nvalue));
-+		debugfs_create_x32(name, S_IRUGO | S_IWUSR, nvalue_dir,
-+				   &(sr_info->nvalue_table[i].nvalue));
- 		snprintf(name, sizeof(name), "errminlimit_%lu",
- 			 sr_info->nvalue_table[i].volt_nominal);
--		(void) debugfs_create_x32(name, S_IRUGO | S_IWUSR, nvalue_dir,
--				&(sr_info->nvalue_table[i].errminlimit));
-+		debugfs_create_x32(name, S_IRUGO | S_IWUSR, nvalue_dir,
-+				   &(sr_info->nvalue_table[i].errminlimit));
- 
- 	}
- 
+-#include <linux/clk-provider.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
 -- 
-2.22.0
+2.21.0.593.g511ec345e18
 
