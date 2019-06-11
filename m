@@ -2,145 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCF83C963
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 12:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133EE3C993
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jun 2019 13:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387982AbfFKKyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jun 2019 06:54:37 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46002 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387972AbfFKKyg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jun 2019 06:54:36 -0400
-Received: by mail-pf1-f195.google.com with SMTP id s11so7183436pfm.12
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jun 2019 03:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=IvQb/Ypyh9gRJDotT8x3V0sz3ecSdE5KFnzXB7OO8I8=;
-        b=JV9Xb4IMUkhC6FXUs6jMr31zgd5bbZUP53i9LQXtxqqKDsyOstCFNthzz9ysHVltrG
-         LQPzsJTYpuYoEjJUqF27NWTUxY00GzCfMVw2AwdBa/l+uVsVwIIfUvY/Na/9hqRyC4hm
-         qA8IVyqs6a3XSSW7Mbzi0CcMh3MoLKRWZYJ/M6fAEOrHH3ZNmuDxJz+TI/1yAMW9n4tL
-         g/utQBXLMp0f+tyzFpzt4ZdUlGRG6eDxQZo5tUvxsgYparDAbG+sfgL5NAnQWDFtiptC
-         +hcShtjhUExJXJrKOnj0jx3m/sCaDSZxE7ayO+ffbwGhcKmSTG2S7S3CsidSQ3kx0fQA
-         CJpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IvQb/Ypyh9gRJDotT8x3V0sz3ecSdE5KFnzXB7OO8I8=;
-        b=IZGxjcfug6H6PArvM2bDHoRle+Qq24XOK1NnlruYsUrq1XV+IT5P5nnUpCLSgYskAd
-         TOMmjmBbYX4abJoUNUH5VXg0obkal/inLrF5BYSEuD2MiIPiwywMGu8tXVaQIkcFz5LP
-         DFL7J/iZ4lvHGII9xlWPAnZE2OTnm0QfgzYmC1IVdlabV9mZpfw43k+9HkVSDr8BeVF4
-         UhRSEUstpJDMGCI4keWZ8axQFUaLQLVbEEYvGXJ08cJAupVFvFavwqYonetZf+KWj06y
-         9rIrQPkc3fxd4uGH6eewb18L/vnEGqoR4p2ZLqrKkxKzMyqIJ8N/InoRKmweonFppk+1
-         35Ng==
-X-Gm-Message-State: APjAAAXRUgjOQ13ssrzKqShSs4OaDdml0ryaS6oZt/YEiyak/1zCOPrV
-        J7NAvBIy/EbL7LFwbyW94weJHA==
-X-Google-Smtp-Source: APXvYqzpXvOcmG+jSmbuKUuB+pvnFdrAODCioPv9t90lRkGIWZkV0igtmbVR7Z0PzCmHelNYhJaqfA==
-X-Received: by 2002:a62:bd11:: with SMTP id a17mr5606101pff.126.1560250476041;
-        Tue, 11 Jun 2019 03:54:36 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id j72sm2231266pje.12.2019.06.11.03.54.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 03:54:34 -0700 (PDT)
-Date:   Tue, 11 Jun 2019 16:24:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     swboyd@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
-        dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
-Message-ID: <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-2-rnayak@codeaurora.org>
+        id S1729054AbfFKLAn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jun 2019 07:00:43 -0400
+Received: from mail-eopbgr00067.outbound.protection.outlook.com ([40.107.0.67]:53568
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727140AbfFKLAm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Jun 2019 07:00:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fT8pjQngHVRU6TLjykPGtJTaf00Z65BmSzEW9J+cJv4=;
+ b=bUPaNwIVxorzfdE7hMw+e2dHMy+ho4d7lTV6WjNuKE+Riu1z2O+suzqPoEvhMNxhndJV+1kcCFg3x80TH3gN7zRbXnDVt0Gn1AxWKYoSkgshYTjtZYREvZgJ4OKikEzdY9JWV8GglJRLEW2jxzMMYQcPl4Rdwkdf0uXsyfKnun4=
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com (52.134.92.158) by
+ AM0PR04MB5844.eurprd04.prod.outlook.com (20.178.118.217) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.14; Tue, 11 Jun 2019 11:00:38 +0000
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::11e1:3bb9:156b:a3e4]) by AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::11e1:3bb9:156b:a3e4%3]) with mapi id 15.20.1965.017; Tue, 11 Jun 2019
+ 11:00:38 +0000
+From:   Aisheng Dong <aisheng.dong@nxp.com>
+To:     Anson Huang <anson.huang@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will.deacon@arm.com" <will.deacon@arm.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "maxime.ripard@bootlin.com" <maxime.ripard@bootlin.com>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "jagan@amarulasolutions.com" <jagan@amarulasolutions.com>,
+        "horms+renesas@verge.net.au" <horms+renesas@verge.net.au>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V14 1/5] dt-bindings: fsl: scu: add thermal binding
+Thread-Topic: [PATCH V14 1/5] dt-bindings: fsl: scu: add thermal binding
+Thread-Index: AQHVHzds3B6qJhqXrUKDEg49ewd/b6aWSyaQ
+Date:   Tue, 11 Jun 2019 11:00:37 +0000
+Message-ID: <AM0PR04MB4211D325B1AE944F68EA7F5C80ED0@AM0PR04MB4211.eurprd04.prod.outlook.com>
+References: <20190610025254.23940-1-Anson.Huang@nxp.com>
+In-Reply-To: <20190610025254.23940-1-Anson.Huang@nxp.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=aisheng.dong@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a071d497-05c9-41e2-919a-08d6ee5c095d
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB5844;
+x-ms-traffictypediagnostic: AM0PR04MB5844:
+x-microsoft-antispam-prvs: <AM0PR04MB5844A069D21AF3FD3736F51080ED0@AM0PR04MB5844.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1417;
+x-forefront-prvs: 006546F32A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(346002)(39860400002)(396003)(366004)(376002)(199004)(189003)(4326008)(4744005)(8676002)(81156014)(81166006)(2906002)(7736002)(99286004)(73956011)(3846002)(44832011)(66446008)(64756008)(66556008)(66476007)(68736007)(25786009)(33656002)(476003)(66946007)(5660300002)(76116006)(52536014)(7416002)(8936002)(446003)(11346002)(486006)(6246003)(186003)(53936002)(6116002)(6506007)(229853002)(256004)(86362001)(6436002)(66066001)(55016002)(9686003)(14454004)(26005)(71190400001)(71200400001)(2201001)(7696005)(2501003)(305945005)(76176011)(316002)(110136005)(102836004)(478600001)(74316002)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5844;H:AM0PR04MB4211.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: w4uCYPxyenv3+SSwz73XSCi6fFAqEOUz9O+L8VniRLckLT12y7w6pL7Ot62gairj7O4BT750tU62M7vLbJs7L1i0zfpjtBSX7CaGFuvgefXVAxNop9jpt0Di1I78terKgmTcFaKBUAS8bnB6aaEY0F9Sihzf5NEx4niYBQm89H0kEjPyRPvei4iX6ScPygDwLbT6HnfTVM2XjGIQzZfewXf5+uvsVVpoVuZl+6ms/Vbiveb5BHMCKaAWzViDpsoMbpD5JoZkcrueFqdln0Vpc65THhqrl9ITXvi93d408b8rY9akBFYwnow3oPNfyNfD7Z4v4lHj3Hz8KJ7FwZTw1hJTYugFxho42auY1di0KRtt/3fiOp5PC873vQu1oKNrpTyJTpAkuFTM194OknqnqAoTDG0XzrNSJwwtzN7ewIo=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190320094918.20234-2-rnayak@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a071d497-05c9-41e2-919a-08d6ee5c095d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 11:00:37.9943
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aisheng.dong@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5844
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-03-19, 15:19, Rajendra Nayak wrote:
-> From: Stephen Boyd <swboyd@chromium.org>
-> 
-> Doing this allows us to call this API with any rate requested and have
-> it not need to match in the OPP table. Instead, we'll round the rate up
-> to the nearest OPP that we see so that we can get the voltage or level
-> that's required for that OPP. This supports users of OPP that want to
-> specify the 'fmax' tables of a device instead of every single frequency
-> that they need. And for devices that required the exact frequency, we
-> can rely on the clk framework to round the rate to the nearest supported
-> frequency instead of the OPP framework to do so.
-> 
-> Note that this may affect drivers that don't want the clk framework to
-> do rounding, but instead want the OPP table to do the rounding for them.
-> Do we have that case? Should we add some flag to the OPP table to
-> indicate this and then not have that flag set when there isn't an OPP
-> table for the device and also introduce a property like 'opp-use-clk' to
-> tell the table that it should use the clk APIs to round rates instead of
-> OPP?
-> 
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> ---
->  drivers/opp/core.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 0420f7e8ad5b..bc9a7762dd4c 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -703,7 +703,7 @@ static int _set_required_opps(struct device *dev,
->  int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
->  {
->  	struct opp_table *opp_table;
-> -	unsigned long freq, old_freq;
-> +	unsigned long freq, opp_freq, old_freq, old_opp_freq;
->  	struct dev_pm_opp *old_opp, *opp;
->  	struct clk *clk;
->  	int ret;
-> @@ -742,13 +742,15 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
->  		goto put_opp_table;
->  	}
->  
-> -	old_opp = _find_freq_ceil(opp_table, &old_freq);
-> +	old_opp_freq = old_freq;
-> +	old_opp = _find_freq_ceil(opp_table, &old_opp_freq);
->  	if (IS_ERR(old_opp)) {
->  		dev_err(dev, "%s: failed to find current OPP for freq %lu (%ld)\n",
->  			__func__, old_freq, PTR_ERR(old_opp));
->  	}
->  
-> -	opp = _find_freq_ceil(opp_table, &freq);
-> +	opp_freq = freq;
-> +	opp = _find_freq_ceil(opp_table, &opp_freq);
->  	if (IS_ERR(opp)) {
->  		ret = PTR_ERR(opp);
->  		dev_err(dev, "%s: failed to find OPP for freq %lu (%d)\n",
-
-I see a logical problem with this patch.
-
-Suppose the clock driver supports following frequencies: 500M, 800M,
-1G, 1.2G and the OPP table contains following list: 500M, 1G, 1.2G
-(i.e. missing 800M).
-
-Now 800M should never get programmed as it isn't part of the OPP
-table. But if you pass 600M to opp-set-rate, then it will end up
-selecting 800M as clock driver will round up to the closest value.
-
-Even if no one is doing this right now, it is a sensible usecase,
-specially during testing of patches and I don't think we should avoid
-it.
-
-What exactly is the use case for which we need this patch ? What kind
-of driver ? Some detail can be helpful to find another solution that
-fixes this problem.
-
--- 
-viresh
+PiBGcm9tOiBBbnNvbi5IdWFuZ0BueHAuY29tIFttYWlsdG86QW5zb24uSHVhbmdAbnhwLmNvbV0N
+Cj4gU2VudDogTW9uZGF5LCBKdW5lIDEwLCAyMDE5IDEwOjUzIEFNDQo+IA0KPiBOWFAgaS5NWDhR
+WFAgaXMgYW4gQVJNdjggU29DIHdpdGggYSBDb3J0ZXgtTTQgY29yZSBpbnNpZGUgYXMgc3lzdGVt
+DQo+IGNvbnRyb2xsZXIsIHRoZSBzeXN0ZW0gY29udHJvbGxlciBpcyBpbiBjaGFyZ2Ugb2Ygc3lz
+dGVtIHBvd2VyLCBjbG9jayBhbmQNCj4gdGhlcm1hbCBzZW5zb3JzIGV0Yy4gbWFuYWdlbWVudCwg
+TGludXgga2VybmVsIGhhcyB0byBjb21tdW5pY2F0ZSB3aXRoDQo+IHN5c3RlbSBjb250cm9sbGVy
+IHZpYSBNVSAobWVzc2FnZSB1bml0KSBJUEMgdG8gZ2V0IHRlbXBlcmF0dXJlIGZyb20gdGhlcm1h
+bA0KPiBzZW5zb3JzLCB0aGlzIHBhdGNoIGFkZHMgYmluZGluZyBkb2MgZm9yIGkuTVggc3lzdGVt
+IGNvbnRyb2xsZXIgdGhlcm1hbCBkcml2ZXIuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBBbnNvbiBI
+dWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxy
+b2JoQGtlcm5lbC5vcmc+DQoNClJldmlld2VkLWJ5OiBEb25nIEFpc2hlbmcgPGFpc2hlbmcuZG9u
+Z0BueHAuY29tPg0KDQpSZWdhcmRzDQpEb25nIEFpc2hlbmcNCg==
