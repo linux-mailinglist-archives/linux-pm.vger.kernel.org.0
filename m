@@ -2,72 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7BC42D27
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2019 19:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A4C42E81
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2019 20:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409469AbfFLRMU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jun 2019 13:12:20 -0400
-Received: from mga12.intel.com ([192.55.52.136]:14588 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409094AbfFLRMT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 Jun 2019 13:12:19 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 10:12:19 -0700
-X-ExtLoop1: 1
-Received: from rbhardw1-mobl.gar.corp.intel.com (HELO [10.252.82.121]) ([10.252.82.121])
-  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2019 10:12:14 -0700
-Subject: Re: [Patch v2] x86/cpu: Add Ice Lake NNPI to Intel family
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, bp@suse.de,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        platform-driver-x86@vger.kernel.org,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20190606012419.13250-1-rajneesh.bhardwaj@linux.intel.com>
- <20190612095233.GE9224@smile.fi.intel.com>
- <73eb1ba5-dc29-53ee-487d-d22700b874a1@intel.com>
- <20190612162918.GP9224@smile.fi.intel.com>
- <414a8fe8-4c85-f323-d71c-16b231823ffe@intel.com>
- <20190612170848.GQ9224@smile.fi.intel.com>
-From:   "Bhardwaj, Rajneesh" <rajneesh.bhardwaj@linux.intel.com>
-Message-ID: <1a59d0cc-32f5-c06b-c951-f05c64864f7f@linux.intel.com>
-Date:   Wed, 12 Jun 2019 22:42:13 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726116AbfFLSZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jun 2019 14:25:16 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35240 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725497AbfFLSZQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 12 Jun 2019 14:25:16 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id B9B2CAFFA;
+        Wed, 12 Jun 2019 18:25:14 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     stefan.wahren@i2se.com, linux-kernel@vger.kernel.org
+Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        sboyd@kernel.org, eric@anholt.net, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, ptesarik@suse.com,
+        linux-rpi-kernel@lists.infradead.org, ssuloev@orpaltech.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mturquette@baylibre.com, linux-pm@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: [PATCH v4 0/7] cpufreq support for Raspberry Pi
+Date:   Wed, 12 Jun 2019 20:24:52 +0200
+Message-Id: <20190612182500.4097-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <20190612170848.GQ9224@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi all,
+this aims at adding cpufreq support to the Raspberry Pi family of
+boards.
 
-On 12-Jun-19 10:38 PM, Andy Shevchenko wrote:
-> On Wed, Jun 12, 2019 at 09:33:30AM -0700, Dave Hansen wrote:
->> On 6/12/19 9:29 AM, Andy Shevchenko wrote:
->>> What I'm talking is a consistency among suffixes. If there is a real
->>> abbreviation (NNPI) which anybody can google,
->> There is and you can. :)
-> Good, I have no objections.
+The series first factors out 'pllb' from clk-bcm2385 and creates a new
+clk driver that operates it over RPi's firmware interface[1]. We are
+forced to do so as the firmware 'owns' the pll and we're not allowed to
+change through the register interface directly as we might race with the
+over-temperature and under-voltage protections provided by the firmware.
 
+Next it creates a minimal cpufreq driver that populates the CPU's opp
+table, and registers cpufreq-dt. Which is needed as the firmware
+controls the max and min frequencies available.
 
-Great, thanks Andy and Dave for your valuable comments. I see that 
-Thomas has accepted this one, thanks a lot, Thomas!
+This was tested on a RPi3b+ and RPI2b, both using multi_v7_defconfig and
+arm64's defconfig.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=61caa8621b9979a78b04e353ab2ee44a47ef7a62&anzwix=1 
+That's all,
+kind regards,
+Nicolas
 
+[1] https://github.com/raspberrypi/firmware/wiki/Mailbox-property-interface
 
->
+---
+
+Changes since v3:
+  - Fix sparse warnings in clk-raspberrypi.c
+  - Minor cleanups
+
+Changes since v2:
+  - Fixed configs to match Stefan's comments
+  - Round OPP frequencies
+  - Rebase onto linux-next
+  - Minor cleanups & checkpatch.pl
+
+Changes since v1:
+  - Enabled by default on the whole family of devices
+  - Added/Fixed module support
+  - clk device now registered by firmware driver
+  - raspberrypi-cpufreq device now registered by clk driver
+  - Reimplemented clk rounding unsing determine_rate()
+  - Enabled in configs for arm and arm64
+
+Changes since RFC:
+  - Move firmware clk device into own driver
+
+Nicolas Saenz Julienne (7):
+  clk: bcm2835: remove pllb
+  clk: bcm283x: add driver interfacing with Raspberry Pi's firmware
+  firmware: raspberrypi: register clk device
+  cpufreq: add driver for Raspberry Pi
+  clk: raspberrypi: register platform device for raspberrypi-cpufreq
+  ARM: defconfig: enable cpufreq driver for RPi
+  arm64: defconfig: enable cpufreq support for RPi3
+
+ arch/arm/configs/bcm2835_defconfig    |   9 +
+ arch/arm/configs/multi_v7_defconfig   |   2 +
+ arch/arm64/configs/defconfig          |   2 +
+ drivers/clk/bcm/Kconfig               |   7 +
+ drivers/clk/bcm/Makefile              |   1 +
+ drivers/clk/bcm/clk-bcm2835.c         |  28 +--
+ drivers/clk/bcm/clk-raspberrypi.c     | 315 ++++++++++++++++++++++++++
+ drivers/cpufreq/Kconfig.arm           |   8 +
+ drivers/cpufreq/Makefile              |   1 +
+ drivers/cpufreq/raspberrypi-cpufreq.c |  97 ++++++++
+ drivers/firmware/raspberrypi.c        |  10 +
+ 11 files changed, 456 insertions(+), 24 deletions(-)
+ create mode 100644 drivers/clk/bcm/clk-raspberrypi.c
+ create mode 100644 drivers/cpufreq/raspberrypi-cpufreq.c
+
+-- 
+2.21.0
+
