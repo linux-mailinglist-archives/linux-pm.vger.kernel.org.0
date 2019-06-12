@@ -2,78 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3669042CAA
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2019 18:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC45442D03
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2019 19:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408921AbfFLQuD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jun 2019 12:50:03 -0400
-Received: from mail-it1-f195.google.com ([209.85.166.195]:54819 "EHLO
-        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408886AbfFLQuC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 12:50:02 -0400
-Received: by mail-it1-f195.google.com with SMTP id m138so11919478ita.4;
-        Wed, 12 Jun 2019 09:50:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JO7k/ClhjVdqToWeoJoYGo3bEt8L7eZPdlH/fBFJuKE=;
-        b=TAKqqn0G/vV3fPY4tZ83gwm2Hw9HhcFNuTbZWx8ZEVBV+cWYI7notKlmymqifBVg2K
-         UxJ+8RwVo6Rfh1vtL1PeTyo1G2+CGMZtjWqMD3+uc4ptB6DaLirqv4mHTZ4+lTG8ZTJR
-         I5kiYgNFvY/BM5i0ScMOqJZcTYeHW0V8yED/t+ZjGMSx9UNTZv6ctv7hNJYwUQg3bNQk
-         xFy57BhPJk5djKA90xszJx6puysAkve14K0hmshn6HRpzXFiqydO4+tAAY8l3haT0TDc
-         +xNDCUiviVVzv02/Pry2QOdhYSk7jzMs/+76pAzdzeK7Lj8k47qc9C7EYRdlVPRjmzOx
-         jK7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JO7k/ClhjVdqToWeoJoYGo3bEt8L7eZPdlH/fBFJuKE=;
-        b=lhw3LogyZsZXSxwR4/amiRwSNSoW1/TMCapsF9Sgu5SuliIhGMLaTQiQleI63+77m3
-         tKo5Qlho4iuwvObeCQwhmk2jr8JPRVpFKB/9TR7CMocL8RtB9IsxLC3km3mZBS9eW7C/
-         bY3GnpMsVPuYY1WmimTQmWTv9jN/zfxlw6fa25mce8ZZUwun4oYCk1B6AdbaBHNiGH67
-         yrSGWY6xRdFU/d75cXtbyIX2lM4MdX65kl7xQkzERU0WbcVykauwtL/hXbM/tM8nCrrn
-         yTmjNSsWJA+G/3wD74UpHE4m+xpZfvITxP0jPtE6CYDyXZ3d8BoAT4nX8VAzTdY8Ekq1
-         7ZpA==
-X-Gm-Message-State: APjAAAW7PGv+6PcA/n/0G1ago6Ny1OiWF/7oorwBgGi4lolxthCCelki
-        rPSGnK3Ao2W6lDYPo8Qc0bB94VFzdXrjhX2t14ulnq5DfeA=
-X-Google-Smtp-Source: APXvYqzmcfhx2XovBMaT4tzSeJzeAp9gWzVe5Ka/LFGHFQ3luDfFcddrL85N1pCbOWHmvK/gBAL8MuEcLAeoFSfQ9EQ=
-X-Received: by 2002:a05:660c:8c5:: with SMTP id g5mr64709itl.40.1560358202002;
- Wed, 12 Jun 2019 09:50:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190525181329.18657-1-tiny.windzz@gmail.com> <20190525181329.18657-2-tiny.windzz@gmail.com>
- <CA+E=qVdh1E8Y7dZO0JSS4DJE2bo=98MuSKRt7nmeFg-td7Ua9Q@mail.gmail.com>
- <CAEExFWtjNridLsMXOnBe2mJOPhUOYJ6G3wGF3gx=0oQoQROOGg@mail.gmail.com> <CA+E=qVeOSw=_z4OiQ4++z8g-KN29UYVXGicNd3PtHobg4xaG+w@mail.gmail.com>
-In-Reply-To: <CA+E=qVeOSw=_z4OiQ4++z8g-KN29UYVXGicNd3PtHobg4xaG+w@mail.gmail.com>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Thu, 13 Jun 2019 00:49:50 +0800
-Message-ID: <CAEExFWs58UNcVcQNnwK3dk5cpmfQRnjdRWAmYs5M1t_ONr1Bpw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] thermal: sun8i: add thermal driver for h6
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     rui.zhang@intel.com, Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        paulmck@linux.ibm.com, devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        id S1731706AbfFLRIz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jun 2019 13:08:55 -0400
+Received: from mga07.intel.com ([134.134.136.100]:17836 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731468AbfFLRIz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 12 Jun 2019 13:08:55 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jun 2019 10:08:54 -0700
+X-ExtLoop1: 1
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by fmsmga006.fm.intel.com with ESMTP; 12 Jun 2019 10:08:50 -0700
+Received: from andy by smile with local (Exim 4.92)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hb6jw-00041X-WF; Wed, 12 Jun 2019 20:08:49 +0300
+Date:   Wed, 12 Jun 2019 20:08:48 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org, bp@suse.de,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [Patch v2] x86/cpu: Add Ice Lake NNPI to Intel family
+Message-ID: <20190612170848.GQ9224@smile.fi.intel.com>
+References: <20190606012419.13250-1-rajneesh.bhardwaj@linux.intel.com>
+ <20190612095233.GE9224@smile.fi.intel.com>
+ <73eb1ba5-dc29-53ee-487d-d22700b874a1@intel.com>
+ <20190612162918.GP9224@smile.fi.intel.com>
+ <414a8fe8-4c85-f323-d71c-16b231823ffe@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <414a8fe8-4c85-f323-d71c-16b231823ffe@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> If you have a git tree I'll be happy to contribute A64 support. IIRC
-> it was quite similar to H3.
+On Wed, Jun 12, 2019 at 09:33:30AM -0700, Dave Hansen wrote:
+> On 6/12/19 9:29 AM, Andy Shevchenko wrote:
+> > What I'm talking is a consistency among suffixes. If there is a real
+> > abbreviation (NNPI) which anybody can google, 
+> 
+> There is and you can. :)
 
-I built a ths branch and I will do some work later.
+Good, I have no objections.
 
-https://github.com/TinyWindzz/linux/tree/ths
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
