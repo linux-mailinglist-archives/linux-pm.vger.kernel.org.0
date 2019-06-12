@@ -2,101 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 305F141BED
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2019 08:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E7C41E0F
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jun 2019 09:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730806AbfFLGDd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jun 2019 02:03:33 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45668 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730866AbfFLGDc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 02:03:32 -0400
-Received: by mail-wr1-f65.google.com with SMTP id f9so15411974wre.12
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jun 2019 23:03:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=+13q810llW4ErXXIetgj/sg6McW6pFvv2Q8IXgzsfkA=;
-        b=kQgNEe7lU75z3OeBABAC6Q8trmmoqyeiGjh+GcqkEXYi72whxbc7gOEEHkeVhfjLhN
-         FU8ME53uN7CbcnKand3X6rJlYfGiD+5rRC+f/oCFUZmtLHbic1O7pMQlI9E3n0Z7uLtl
-         HqKADy95Q0V50tbehahY8zw/vnxoekQFiAQj6rg/4AwpzP410tAT4Dp5UC2K7d9UunNu
-         4L7jAh2jHoyUmhZzm90OIv/UXl1bZCLFjbZU8XKncBBv/I75Z86NRu71gLyMuFWB5uY3
-         zOYgwcDKZxQuPwetUB8A7f8OkJBhV4OugGkt76kHe7JTrlethDQpEDis/afWlkOOHl8J
-         56uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=+13q810llW4ErXXIetgj/sg6McW6pFvv2Q8IXgzsfkA=;
-        b=D/IjfDnYsH6lKnTESe8G6iRTt4QJhGYxM4Fn7VDa8mBB3kpTCBJSyiP7OGUchego15
-         Kho88MpWDu7I/R4lCAqU0XqWfo99ygO2xwiO2gM+yjfRffs4CqbJp7ihFf2NUcoTYXmg
-         x9k7A9gUCc0CpVxr6M83Ukpyi2/0X9hB195F7e7zZ0njpEOHVR6fHQmFlyn/tUltTAYb
-         +b4BK+m7bSaU18Yk2ZoJpzh5qj4IL+LLPEOMtpKumopeJfxNEIGkt2KeMDLdanWWqMqt
-         roR++1B5AM+vimcMekwtDhKIpvRCE6FWp0tkj/XTH3P8TF8MoFI+yyA65CAvocvpYPGt
-         PpNw==
-X-Gm-Message-State: APjAAAWJqf45zMrvrSQQ2vr7d9FCQlq+d9YEvnIHl45gyOKaBhvZyibi
-        jNJlNzghCn2JS4r3xG6Q/4xGwg==
-X-Google-Smtp-Source: APXvYqyxgC+MOxZ/tRXB4Hv5XucD8WakihBGUs4FQKs/N+4M4iopyF7/hlrp1gR87azKIfrbFj6+Bw==
-X-Received: by 2002:a5d:4703:: with SMTP id y3mr669507wrq.248.1560319410440;
-        Tue, 11 Jun 2019 23:03:30 -0700 (PDT)
-Received: from dell ([2.27.35.243])
-        by smtp.gmail.com with ESMTPSA id w6sm23656976wro.71.2019.06.11.23.03.29
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 11 Jun 2019 23:03:29 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 07:03:28 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     mazziesaccount@gmail.com, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v15 0/7] support ROHM BD70528 PMIC
-Message-ID: <20190612060328.GQ4797@dell>
-References: <cover.1559546139.git.matti.vaittinen@fi.rohmeurope.com>
- <20190611200043.eib3g3acc7ilawsx@earth.universe>
+        id S2407533AbfFLHnC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jun 2019 03:43:02 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:40284 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406728AbfFLHnB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 03:43:01 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id AB99660F3A; Wed, 12 Jun 2019 07:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1560325378;
+        bh=akNFareB34O+WoELW9a+vXLpK/S7e9w6RCo5AwPjb2A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=b6L0hfL3FpRwBcfm7DqTiSOJXV1qO+cKG6vdFUKA92yPW42Gg4GSTg7oWylS6l0CP
+         NT1Qa14L+91OHy3VP0yw1NC7oTgFa8WU/nEZ+rwAXpxqniua5APd1uwAV5WysKbNeq
+         U4zu3+X2m030hPWSus3HgHdDx30BlqWfec1xEzII=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.131.117.43] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F04D960CF1;
+        Wed, 12 Jun 2019 07:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1560325377;
+        bh=akNFareB34O+WoELW9a+vXLpK/S7e9w6RCo5AwPjb2A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=U/s1AWqwx7q0I8Ng/jLB1n8gUT0Mk/9P2K9ccSQ7OCjYnbfmz3j/qMd/2j7W+KCy8
+         E34Zus5a4XaR6M5L9kZwN0qpKgm6ECocxs25r9Fw3cev2eJHHhQZJNVk4z+w5ABMnd
+         ThX+4IziXS3BDPUulhM0GRvNTDLUqxX6Tbi1AUG4=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F04D960CF1
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
+To:     Viresh Kumar <viresh.kumar@linaro.org>, swboyd@chromium.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
+        dianders@chromium.org, rafael@kernel.org
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
+ <20190320094918.20234-2-rnayak@codeaurora.org>
+ <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
+Date:   Wed, 12 Jun 2019 13:12:51 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190611200043.eib3g3acc7ilawsx@earth.universe>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 11 Jun 2019, Sebastian Reichel wrote:
 
-> Hi,
+On 6/11/2019 4:24 PM, Viresh Kumar wrote:
+> On 20-03-19, 15:19, Rajendra Nayak wrote:
+>> From: Stephen Boyd <swboyd@chromium.org>
+>>
+>> Doing this allows us to call this API with any rate requested and have
+>> it not need to match in the OPP table. Instead, we'll round the rate up
+>> to the nearest OPP that we see so that we can get the voltage or level
+>> that's required for that OPP. This supports users of OPP that want to
+>> specify the 'fmax' tables of a device instead of every single frequency
+>> that they need. And for devices that required the exact frequency, we
+>> can rely on the clk framework to round the rate to the nearest supported
+>> frequency instead of the OPP framework to do so.
+>>
+>> Note that this may affect drivers that don't want the clk framework to
+>> do rounding, but instead want the OPP table to do the rounding for them.
+>> Do we have that case? Should we add some flag to the OPP table to
+>> indicate this and then not have that flag set when there isn't an OPP
+>> table for the device and also introduce a property like 'opp-use-clk' to
+>> tell the table that it should use the clk APIs to round rates instead of
+>> OPP?
+>>
+>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+>> ---
+
+[]...
+
 > 
-> On Mon, Jun 03, 2019 at 10:23:37AM +0300, Matti Vaittinen wrote:
-> > Patch series introducing support for ROHM BD70528 PMIC
-> > [...]
+> I see a logical problem with this patch.
 > 
-> I think all patches have been reviewed by the respective subsystem
-> maintainers. Lee, can you provide an immutable branch with the MFD
-> patches (1, 2, 4)? Looks like the other patches only depend on those
-> and can go through their respective subsystems.
+> Suppose the clock driver supports following frequencies: 500M, 800M,
+> 1G, 1.2G and the OPP table contains following list: 500M, 1G, 1.2G
+> (i.e. missing 800M).
+> 
+> Now 800M should never get programmed as it isn't part of the OPP
+> table. But if you pass 600M to opp-set-rate, then it will end up
+> selecting 800M as clock driver will round up to the closest value.
 
-Yes.  It's on my TODO list.
+correct
 
-Would you prefer this method over me just taking them all and sending
-out a PR?  The latter is my usual flow, but I'm happy with either.
+> 
+> Even if no one is doing this right now, it is a sensible usecase,
+> specially during testing of patches and I don't think we should avoid
+> it.
+> 
+> What exactly is the use case for which we need this patch ? 
+Like the changelog says 'This supports users of OPP that want to
+specify the 'fmax' tables of a device instead of every single frequency
+that they need'
+
+so the 'fmax' tables basically say what the max frequency the device can
+operate at for a given performance state/voltage level.
+
+so in your example it would be for instance
+
+500M, Perf state = 2
+1G, Perf state = 3
+1.2G, Perf state = 4
+
+Now when the device wants to operate at say 800Mhz, you need to set the
+Perf state to 3, so this patch basically avoids you having to put those additional
+OPPs in the table which would otherwise look something like this
+
+500M, Perf state = 2
+800M, Perf state = 3 <-- redundant OPP
+1G, Perf state = 3
+1.2G, Perf state = 4
+
+Your example had just 1 missing entry in the 'fmax' tables in reality its a lot more,
+atleast on all qualcomm platforms.
+
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
