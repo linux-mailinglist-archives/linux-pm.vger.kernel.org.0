@@ -2,78 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4F744941
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 19:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540C0448E8
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 19:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729403AbfFMRQE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 13:16:04 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:47002 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728698AbfFLVon (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 17:44:43 -0400
-Received: by mail-ot1-f67.google.com with SMTP id z23so16924778ote.13;
-        Wed, 12 Jun 2019 14:44:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6/4G9x4zsQuQK8+ToSt6QVbv5k7TYmTi2yAsofevHsY=;
-        b=YpKmT0+C2griVMmGw+n8I8gmxAGOjAW393yFX50SzCt8ExJDah1r2ImJwJOnIyxpHH
-         z/enpeUDMhm3A1q80aj1qAJ+A1zWd0Uj3ZRQ2ltJz6LWbgAW1H9VaeRmcpq2Y0RdJ9nt
-         xNyQTrv+ICjrVYBkrAdGvLuvRfeEowzaMV1EcNyrGSnvUyId+g+S2PUIf7JSMlWZnDur
-         YXKN6b1gD6vceR//bU9kH3tmJLPeOTewGz4q8J+LdwMSHyoiqrgx4Uoguwt0JyCvKW2b
-         ZriYTfGZNiCjft+toKKp7HkSd7IKKDEPrK8Uo8wGGuBZmU7LhTm7mFr3wKnGSUvV30Ik
-         OQRA==
-X-Gm-Message-State: APjAAAWMxxdwGKVK6aCOc8sa8MFXbfr3IPYTvFMA32cqOavCZ4yGB3qd
-        VEejyqgoHm77v6FlCoCSKFFCoHnT/vyBoUnde/8=
-X-Google-Smtp-Source: APXvYqxN1bHJmkJ+vh40QbfdXCtjCs4vHEb7WPek5QJRj8zdUZWlSjKRNzigkiS5uP3LHGJ4wWz6y073BK1+jYoNW44=
-X-Received: by 2002:a9d:6959:: with SMTP id p25mr18511958oto.118.1560375882780;
- Wed, 12 Jun 2019 14:44:42 -0700 (PDT)
+        id S1729686AbfFMRME (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 13:12:04 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:60540 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729076AbfFLWOG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 18:14:06 -0400
+Received: from 79.184.253.190.ipv4.supernova.orange.pl (79.184.253.190) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id 991125ee90f9fcfa; Thu, 13 Jun 2019 00:14:02 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH] PCI: PM: Skip devices in D0 for suspend-to-idle
+Date:   Thu, 13 Jun 2019 00:14:02 +0200
+Message-ID: <2513600.jR9RdVMSR0@kreacher>
 MIME-Version: 1.0
-References: <20190609111732.GA2885@amd> <007701d520c7$c397bda0$4ac738e0$@net>
-In-Reply-To: <007701d520c7$c397bda0$4ac738e0$@net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Jun 2019 23:44:30 +0200
-Message-ID: <CAJZ5v0j2pb2WxSA+S44Mr-6bpOx-P9A_T2-sDG3CiWSqLMg3sA@mail.gmail.com>
-Subject: Re: 5.2-rc2: low framerate in flightgear, cpu not running at full
- speed, thermal related?
-To:     Doug Smythies <dsmythies@telus.net>, Pavel Machek <pavel@ucw.cz>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 4:45 AM Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi,
->
-> So, currently there seems to be 3 issues in this thread
-> (and I am guessing a little, without definitive data):
->
-> 1.) On your system Kernel 5.4-rc2 (or 4) defaults to the intel_pstate CPU frequency
-> scaling driver and the powersave governor, but kernel 4.6 defaults to the
-> acpi-cpufreq CPU frequency scaling driver and the ondemand governor.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Which means that intel_pstate works in the active mode by default and
-so it uses its internal governor.
+Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+attempted to avoid a problem with devices whose drivers want them to
+stay in D0 over suspend-to-idle and resume, but it did not go as far
+as it should with that.
 
-That governor is more performance-oriented than ondemand and it very
-well may cause more power to be allocated for the processor - at the
-expense of the GPU.
+Namely, first of all, it is questionable to change the power state
+of a PCI bridge with a device in D0 under it, but that is not
+actively prevented from happening during system-wide PM transitions,
+so use the skip_bus_pm flag introduced by commit d491f2b75237 for
+that.
 
-The lower-than-expected frame rate may result from that, in principle.
+Second, the configuration of devices left in D0 (whatever the reason)
+during suspend-to-idle need not be changed and attempting to put them
+into D0 again by force may confuse some firmware, so explicitly avoid
+doing that.
 
-One way to mitigate that might be to use intel_pstate in the passive
-mode (pass intel_pstate=passive to the kernel in the command line)
-along with either ondemand or schedutil as the governor.
+Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+Tested on Dell XPS13 9360 with no issues.
+
+---
+ drivers/pci/pci-driver.c |   47 +++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 35 insertions(+), 12 deletions(-)
+
+Index: linux-pm/drivers/pci/pci-driver.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -524,7 +524,6 @@ static void pci_pm_default_resume_early(
+ 	pci_power_up(pci_dev);
+ 	pci_restore_state(pci_dev);
+ 	pci_pme_restore(pci_dev);
+-	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+ }
+ 
+ /*
+@@ -842,18 +841,16 @@ static int pci_pm_suspend_noirq(struct d
+ 
+ 	if (pci_dev->skip_bus_pm) {
+ 		/*
+-		 * The function is running for the second time in a row without
++		 * Either the device is a bridge with a child in D0 below it, or
++		 * the function is running for the second time in a row without
+ 		 * going through full resume, which is possible only during
+-		 * suspend-to-idle in a spurious wakeup case.  Moreover, the
+-		 * device was originally left in D0, so its power state should
+-		 * not be changed here and the device register values saved
+-		 * originally should be restored on resume again.
++		 * suspend-to-idle in a spurious wakeup case.  The device should
++		 * be in D0 at this point, but if it is a bridge, it may be
++		 * necessary to save its state.
+ 		 */
+-		pci_dev->state_saved = true;
+-	} else if (pci_dev->state_saved) {
+-		if (pci_dev->current_state == PCI_D0)
+-			pci_dev->skip_bus_pm = true;
+-	} else {
++		if (!pci_dev->state_saved)
++			pci_save_state(pci_dev);
++	} else if (!pci_dev->state_saved) {
+ 		pci_save_state(pci_dev);
+ 		if (pci_power_manageable(pci_dev))
+ 			pci_prepare_to_sleep(pci_dev);
+@@ -862,6 +859,22 @@ static int pci_pm_suspend_noirq(struct d
+ 	dev_dbg(dev, "PCI PM: Suspend power state: %s\n",
+ 		pci_power_name(pci_dev->current_state));
+ 
++	if (pci_dev->current_state == PCI_D0) {
++		pci_dev->skip_bus_pm = true;
++		/*
++		 * Changing the power state of a PCI bridge with a device in D0
++		 * below it is questionable, so avoid doing that by setting the
++		 * skip_bus_pm flag for the parent bridge.
++		 */
++		if (pci_dev->bus->self)
++			pci_dev->bus->self->skip_bus_pm = true;
++	}
++
++	if (pci_dev->skip_bus_pm && !pm_suspend_via_firmware()) {
++		dev_dbg(dev, "PCI PM: Skipped\n");
++		goto Fixup;
++	}
++
+ 	pci_pm_set_unknown_state(pci_dev);
+ 
+ 	/*
+@@ -909,7 +922,16 @@ static int pci_pm_resume_noirq(struct de
+ 	if (dev_pm_smart_suspend_and_suspended(dev))
+ 		pm_runtime_set_active(dev);
+ 
+-	pci_pm_default_resume_early(pci_dev);
++	/*
++	 * In the suspend-to-idle case, devices left in D0 during suspend will
++	 * stay in D0, so it is not necessary to restore or update their
++	 * configuration here and attempting to put them into D0 again may
++	 * confuse some firmware, so avoid doing that.
++	 */
++	if (!pci_dev->skip_bus_pm || pm_suspend_via_firmware())
++		pci_pm_default_resume_early(pci_dev);
++
++	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+ 
+ 	if (pci_has_legacy_pm_support(pci_dev))
+ 		return pci_legacy_resume_early(dev);
+@@ -1200,6 +1222,7 @@ static int pci_pm_restore_noirq(struct d
+ 	}
+ 
+ 	pci_pm_default_resume_early(pci_dev);
++	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+ 
+ 	if (pci_has_legacy_pm_support(pci_dev))
+ 		return pci_legacy_resume_early(dev);
+
+
+
