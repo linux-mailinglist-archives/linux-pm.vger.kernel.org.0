@@ -2,153 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 874DA44ED8
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 23:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE0844EF6
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 00:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728036AbfFMV7s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 17:59:48 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:49658 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728025AbfFMV7s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 17:59:48 -0400
-Received: from 79.184.253.190.ipv4.supernova.orange.pl (79.184.253.190) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id 0423c3e6485434c2; Thu, 13 Jun 2019 23:59:45 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v2] PCI: PM: Skip devices in D0 for suspend-to-idle
-Date:   Thu, 13 Jun 2019 23:59:45 +0200
-Message-ID: <1668247.RaJIPSxJUN@kreacher>
+        id S1726319AbfFMWHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 18:07:32 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:47094 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbfFMWHc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 18:07:32 -0400
+Received: by mail-qk1-f195.google.com with SMTP id x18so400393qkn.13;
+        Thu, 13 Jun 2019 15:07:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BhWdQ+n9lb5V8igkIdjlDGkO+bOshDClHntzHo4xkx4=;
+        b=pB8ZQhLWydN7xaJSbR0D7SlL/nA6gyRv96uz10UScA+WoCvpn7fjWrqtlEFr0yZVOA
+         2stJzMuVMJg+dWmZDFI+kw3yKZCKyjGza3X9ZSKfTe/0XoaHqEbQ4uG1GRgIXIXfcfk+
+         cZH781VT2lUFcGyFEAAAh/+XLJWO5E/dRnx8mLx+HTf8eSJSfqATq6d523izP75RROJ1
+         Da8gHmb/p/rfdxl1/y/QxTR3NXJMA4/Xgmjx4wHJ1NWD1SyFzzYQF0LkUjhDurgfL4q5
+         UETq1WCB1dgUDZ2IkceOjMcUJIl1RatDFA0hoEpmDGfsp8qQkZoubz37swFV6enAYvAh
+         v4hw==
+X-Gm-Message-State: APjAAAVF7fVuQSZgobzul++G9TT1Hrw8snyz/c3/KIcxfdvmWu3mYaLT
+        pRJAVAqR+NVp5AQ2ByMJjA==
+X-Google-Smtp-Source: APXvYqzlg3l0HADoNTIkv5SXk7nuuzVo6Jw7oSlbsAolVM+MxEBgZazQrw5oWThYP2sbSY8L9PzBsg==
+X-Received: by 2002:a37:6512:: with SMTP id z18mr73992402qkb.158.1560463650992;
+        Thu, 13 Jun 2019 15:07:30 -0700 (PDT)
+Received: from localhost ([64.188.179.243])
+        by smtp.gmail.com with ESMTPSA id t8sm708240qtc.80.2019.06.13.15.07.30
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 13 Jun 2019 15:07:30 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 16:07:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ran Wang <ran.wang_1@nxp.com>
+Cc:     Li Yang <leoyang.li@nxp.com>, Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ran Wang <ran.wang_1@nxp.com>
+Subject: Re: [PATCH 2/3] Documentation: dt: binding: fsl: Add 'little-endian'
+ and update Chassis define
+Message-ID: <20190613220729.GA29761@bogus>
+References: <20190517024748.15534-1-ran.wang_1@nxp.com>
+ <20190517024748.15534-2-ran.wang_1@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190517024748.15534-2-ran.wang_1@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, 17 May 2019 10:47:47 +0800, Ran Wang wrote:
+> By default, QorIQ SoC's RCPM register block is Big Endian. But
+> there are some exceptions, such as LS1088A and LS2088A, are Little
+> Endian. So add this optional property to help identify them.
+> 
+> Actually LS2021A and other Layerscapes won't totally follow Chassis
+> 2.1, so separate them from powerpc SoC.
+> 
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/soc/fsl/rcpm.txt |    8 +++++++-
+>  1 files changed, 7 insertions(+), 1 deletions(-)
+> 
 
-Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-attempted to avoid a problem with devices whose drivers want them to
-stay in D0 over suspend-to-idle and resume, but it did not go as far
-as it should with that.
-
-Namely, first of all, the power state of a PCI bridge with a
-downstream device in D0 must be D0 (based on the PCI PM spec r1.2,
-sec 6, table 6-1, if the bridge is not in D0, there can be no PCI
-transactions on its secondary bus), but that is not actively enforced
-during system-wide PM transitions, so use the skip_bus_pm flag
-introduced by commit d491f2b75237 for that.
-
-Second, the configuration of devices left in D0 (whatever the reason)
-during suspend-to-idle need not be changed and attempting to put them
-into D0 again by force is pointless, so explicitly avoid doing that.
-
-Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/pci/pci-driver.c |   47 +++++++++++++++++++++++++++++++++++------------
- 1 file changed, 35 insertions(+), 12 deletions(-)
-
-Index: linux-pm/drivers/pci/pci-driver.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-driver.c
-+++ linux-pm/drivers/pci/pci-driver.c
-@@ -524,7 +524,6 @@ static void pci_pm_default_resume_early(
- 	pci_power_up(pci_dev);
- 	pci_restore_state(pci_dev);
- 	pci_pme_restore(pci_dev);
--	pci_fixup_device(pci_fixup_resume_early, pci_dev);
- }
- 
- /*
-@@ -842,18 +841,16 @@ static int pci_pm_suspend_noirq(struct d
- 
- 	if (pci_dev->skip_bus_pm) {
- 		/*
--		 * The function is running for the second time in a row without
-+		 * Either the device is a bridge with a child in D0 below it, or
-+		 * the function is running for the second time in a row without
- 		 * going through full resume, which is possible only during
--		 * suspend-to-idle in a spurious wakeup case.  Moreover, the
--		 * device was originally left in D0, so its power state should
--		 * not be changed here and the device register values saved
--		 * originally should be restored on resume again.
-+		 * suspend-to-idle in a spurious wakeup case.  The device should
-+		 * be in D0 at this point, but if it is a bridge, it may be
-+		 * necessary to save its state.
- 		 */
--		pci_dev->state_saved = true;
--	} else if (pci_dev->state_saved) {
--		if (pci_dev->current_state == PCI_D0)
--			pci_dev->skip_bus_pm = true;
--	} else {
-+		if (!pci_dev->state_saved)
-+			pci_save_state(pci_dev);
-+	} else if (!pci_dev->state_saved) {
- 		pci_save_state(pci_dev);
- 		if (pci_power_manageable(pci_dev))
- 			pci_prepare_to_sleep(pci_dev);
-@@ -862,6 +859,22 @@ static int pci_pm_suspend_noirq(struct d
- 	dev_dbg(dev, "PCI PM: Suspend power state: %s\n",
- 		pci_power_name(pci_dev->current_state));
- 
-+	if (pci_dev->current_state == PCI_D0) {
-+		pci_dev->skip_bus_pm = true;
-+		/*
-+		 * Per PCI PM r1.2, table 6-1, a bridge must be in D0 if any
-+		 * downstream device is in D0, so avoid changing the power state
-+		 * of the parent bridge by setting the skip_bus_pm flag for it.
-+		 */
-+		if (pci_dev->bus->self)
-+			pci_dev->bus->self->skip_bus_pm = true;
-+	}
-+
-+	if (pci_dev->skip_bus_pm && !pm_suspend_via_firmware()) {
-+		dev_dbg(dev, "PCI PM: Skipped\n");
-+		goto Fixup;
-+	}
-+
- 	pci_pm_set_unknown_state(pci_dev);
- 
- 	/*
-@@ -909,7 +922,16 @@ static int pci_pm_resume_noirq(struct de
- 	if (dev_pm_smart_suspend_and_suspended(dev))
- 		pm_runtime_set_active(dev);
- 
--	pci_pm_default_resume_early(pci_dev);
-+	/*
-+	 * In the suspend-to-idle case, devices left in D0 during suspend will
-+	 * stay in D0, so it is not necessary to restore or update their
-+	 * configuration here and attempting to put them into D0 again may
-+	 * confuse some firmware, so avoid doing that.
-+	 */
-+	if (!pci_dev->skip_bus_pm || pm_suspend_via_firmware())
-+		pci_pm_default_resume_early(pci_dev);
-+
-+	pci_fixup_device(pci_fixup_resume_early, pci_dev);
- 
- 	if (pci_has_legacy_pm_support(pci_dev))
- 		return pci_legacy_resume_early(dev);
-@@ -1200,6 +1222,7 @@ static int pci_pm_restore_noirq(struct d
- 	}
- 
- 	pci_pm_default_resume_early(pci_dev);
-+	pci_fixup_device(pci_fixup_resume_early, pci_dev);
- 
- 	if (pci_has_legacy_pm_support(pci_dev))
- 		return pci_legacy_resume_early(dev);
-
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
