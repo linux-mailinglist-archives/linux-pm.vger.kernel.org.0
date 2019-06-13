@@ -2,122 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0706643C75
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9740F43D32
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726993AbfFMPgF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 11:36:05 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:34691 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731971AbfFMPf2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 11:35:28 -0400
-Received: by mail-io1-f68.google.com with SMTP id k8so17886380iot.1;
-        Thu, 13 Jun 2019 08:35:27 -0700 (PDT)
+        id S1728268AbfFMPkU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 11:40:20 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35062 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388639AbfFMPkF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 11:40:05 -0400
+Received: by mail-pg1-f196.google.com with SMTP id s27so11175909pgl.2
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 08:40:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aF7WfJBqic6Edz88lRv/0CL+oI9ZSIdnX+8VgBOn3LM=;
-        b=YFFG03ILxrBxA6EZc7HJyHTcZQG8lYtS0piFG6RoKFTL9WaRyzxFvfEfAYIJhj/ftv
-         9ExuTCWv50qCckQUHlJWT2UsUYTEATiFrwqXse8mop93NQaSCaMjFPtYLHL53CS1iBdu
-         FSSVPGtnBTxP4GW8ocS4dqqaF8GUvpBrzW2/4wt80dCCxcvClhxqJh5SbP92pc3pYdQl
-         jlJmooBJcmedVvhBjo+Q5iscUzsWXs4DECS3/+7zXE3IHqrut20IQRp4C0HcFKIYAcT7
-         4RLMs3kfUprhpOWBGSDxx6PuB5IH+dkxMni5cJQm3aX/POi0LH+cq45V7JYf6aWa4T1L
-         TnxQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=BtWWHY6GZ+irdemUSJWfYrXBvNRLu0hF7sjwfuTufnI=;
+        b=aNrHcY49yqaTJyE6Q+tcq+ByCZETc9h8PDkWq0+W++gEKy7j2NPlZU6hV1EbcwU5JD
+         syMpCXwkWs5TvSjhBj0dlJ8OXOaPSIsvf+OeD+GtfT3U268ILHAHQv/IX5IenGtrARRe
+         mw+Ixy3ns7L4JoriCdM9WDixKKSjBC1QwWOzr04uPPGdniZZ20O9mJrXgTFfJEgih5Gq
+         xsZhXhsh3x6OiapwDDjUOYQy93/jGkxq9tl2mVQ9P8CLhEp+jPdJrfN163CeRm/3rsoz
+         TFjq6hvlCZNEg2z5CsU7QsTd45nxBa2cAmJybVe9j+wsW1GqeFwLtlvc1VgptDh06dal
+         us+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aF7WfJBqic6Edz88lRv/0CL+oI9ZSIdnX+8VgBOn3LM=;
-        b=cwC3Bk0V8cUVTlb5qC7wk5kq7I3t9CVr4PqsCr8WSUiLGBZ/8WL/kMB4qdyIKVzRdH
-         buJk1mKOFiQE6rRZFCCqpaPDj3OvnID4rpzBnr8aQ/WhlTk7rAouXapnq0psqZVA3dI6
-         s69WzM4VGxKNAnjXKZBOrI3R1QjfFFdzhCc0zyFVrci/GhM0kWzCgai47baHISfAB5hu
-         C2MoXb5GmagXRFwL7t9WkcwxMrVuUFpv5UQmEHS+clEkEOVNTy8fgcl9Hr2EMdKeUR4p
-         F243oO+9HFJzBpmgeIBaowsoc8vsm5TIJb9+YfhiwuEWyw6dqtOsUOTHz4hRwnQ5icaL
-         sNNw==
-X-Gm-Message-State: APjAAAVljhOXp1qUwGhi/DMT7gFGRuHPtw4DlJ+98KZ/RWtwyTPuT8mk
-        6uLnARmf8hUPjByjS0T7cC9rr6wVLiMAECQhkNs=
-X-Google-Smtp-Source: APXvYqzEXd8Sr1aUseL+zTWDc5Ak4NVxezALw+LIg0QIm0xSXFjXqsm8USdWkhi9CiqHsaqRen64MfMyW8gnwFYF5X4=
-X-Received: by 2002:a5d:9047:: with SMTP id v7mr36860549ioq.18.1560440127125;
- Thu, 13 Jun 2019 08:35:27 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BtWWHY6GZ+irdemUSJWfYrXBvNRLu0hF7sjwfuTufnI=;
+        b=sCEr+PjtHNGkcsiB8OzbYGUvBrwkn0I/auIGeG4mXLx+i0P0AdRDi0yeQI64MHumc7
+         VqhsXY/RHXJLcEmr85PuSdykoxkk2gOLVsHQc71KdG+hHWCON4UVss2LmIaPGzjVX4T0
+         tz3mqESZ3SwkbhEd4lJMYDzuWaNTut84Z9ijQQLsmFfvCCqLR7jD9nTZolE+KGQ4afx9
+         Rs+S3XIp9mU59J0i76+4EWqHZtaG6eL8MZ7mRIPV2jOhePdkvVzKXYZw2nfgIKnaY3hH
+         ySU2w2boeYbvPltSE6+IIPsrS7hulxA6KMKHZBKPnl5+mmuuwCf7UWWqkOcSMyDq2lWw
+         mkNg==
+X-Gm-Message-State: APjAAAUD4Er7mpe4yLVq27XNddp34cB/NuVddujtEXw4jd2T8pZ+W6a7
+        tY1Xmzfa5yEKtm/nIJvZjULg0Q==
+X-Google-Smtp-Source: APXvYqxpwqyIFRk1hDuFYbqTrSYVOaA6be2OguON7QeZLUcNj0n7XkLaM6Wv3ud0JFfz6qT8pE7nUw==
+X-Received: by 2002:aa7:8083:: with SMTP id v3mr15241596pff.69.1560440405094;
+        Thu, 13 Jun 2019 08:40:05 -0700 (PDT)
+Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id u20sm54807pfm.145.2019.06.13.08.40.04
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 13 Jun 2019 08:40:04 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 08:40:02 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     robh+dt@kernel.org, agross@kernel.org, vkoul@kernel.org,
+        evgreen@chromium.org, daidavid1@codeaurora.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] soc: qcom: smd-rpm: Create RPM interconnect proxy
+ child device
+Message-ID: <20190613154002.GH6792@builder>
+References: <20190613151323.10850-1-georgi.djakov@linaro.org>
+ <20190613151323.10850-3-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-References: <20190525181329.18657-1-tiny.windzz@gmail.com> <20190525181329.18657-2-tiny.windzz@gmail.com>
- <20190527122752.uc7q6zkjti3zag4q@flea> <CAEExFWtxEB67Pv-8x4ry=tZcJjOD6Kxydq_YB73Gox25VmQn7A@mail.gmail.com>
- <20190612154325.m6z7xsxlpdq4wkxv@flea>
-In-Reply-To: <20190612154325.m6z7xsxlpdq4wkxv@flea>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Thu, 13 Jun 2019 23:35:15 +0800
-Message-ID: <CAEExFWskAsNquULKBLtBFUOosNpks8L6aUhw-+cF=oZ0aghAtQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] thermal: sun8i: add thermal driver for h6
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     rui.zhang@intel.com, Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        David Miller <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        paulmck@linux.ibm.com, Linux PM <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190613151323.10850-3-georgi.djakov@linaro.org>
+User-Agent: Mutt/1.10.0 (2018-05-17)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 9:26 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
->
-> On Fri, Jun 07, 2019 at 09:34:44PM +0800, Frank Lee wrote:
-> > On Mon, May 27, 2019 at 8:27 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
-> > > > +     ret = devm_request_threaded_irq(dev, irq, NULL,
-> > > > +                                     tmdev->chip->irq_thread,
-> > > > +                                     IRQF_ONESHOT, "ths", tmdev);
-> > > > +     if (ret)
-> > > > +             return ret;
-> > >
-> > > Is there any particular reason to use a threaded interrupt?
-> >
-> > Just to improve real-time.
->
-> What do you mean by real-time here? If anything, that will increase
-> the latency of the interrupts here.
->
-> And in preempt-rt, regular top-half interrupts will be forced into a
-> threaded interrupt anyway.
->
-> > > > +static int sun8i_ths_remove(struct platform_device *pdev)
-> > > > +{
-> > > > +     struct ths_device *tmdev = platform_get_drvdata(pdev);
-> > > > +
-> > > > +     clk_disable_unprepare(tmdev->bus_clk);
-> > >
-> > > I know that we discussed that already, but I'm not sure why you switch
-> > > back to a regular call to regmap_init_mmio, while regmap_init_mmio_clk
-> > > will take care of enabling and disabling the bus clock for you?
-> >
-> > It seems that regmap_init_mmio_clk just get clk and prepare clk
-> > but no enable.
->
-> At init time, yes. But it will enable it only when you access the
-> registers, which is what you want anyway.
+On Thu 13 Jun 08:13 PDT 2019, Georgi Djakov wrote:
 
-But after accessing the register, it turns the clock off, which
-affects the ad conversion and the occurrence of the interrupt.
+> Register a platform device to handle the communication of bus bandwidth
+> requests with the remote processor. The interconnect proxy device is part
+> of this remote processor (RPM) hardware. Let's create a icc-smd-rpm proxy
+> child device to represent the bus throughput functionality that is provided
+> by the RPM.
+> 
 
-In addition, when resuming from suspend, we need to enable
-the clock, so I think it is necessary to have a clock pointer.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Yangtao
-
->
-> Maxime
->
-> --
-> Maxime Ripard, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+> 
+> v4:
+> - Return error if platform_device_register_data() fails
+> - Remove platform_set_drvdata() on the child device.
+> 
+> v3:
+> - New patch.
+> 
+>  drivers/soc/qcom/smd-rpm.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/qcom/smd-rpm.c b/drivers/soc/qcom/smd-rpm.c
+> index fa9dd12b5e39..34cdd638a6c1 100644
+> --- a/drivers/soc/qcom/smd-rpm.c
+> +++ b/drivers/soc/qcom/smd-rpm.c
+> @@ -19,12 +19,14 @@
+>  /**
+>   * struct qcom_smd_rpm - state of the rpm device driver
+>   * @rpm_channel:	reference to the smd channel
+> + * @icc:		interconnect proxy device
+>   * @ack:		completion for acks
+>   * @lock:		mutual exclusion around the send/complete pair
+>   * @ack_status:		result of the rpm request
+>   */
+>  struct qcom_smd_rpm {
+>  	struct rpmsg_endpoint *rpm_channel;
+> +	struct platform_device *icc;
+>  	struct device *dev;
+>  
+>  	struct completion ack;
+> @@ -193,6 +195,7 @@ static int qcom_smd_rpm_callback(struct rpmsg_device *rpdev,
+>  static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+>  {
+>  	struct qcom_smd_rpm *rpm;
+> +	int ret;
+>  
+>  	rpm = devm_kzalloc(&rpdev->dev, sizeof(*rpm), GFP_KERNEL);
+>  	if (!rpm)
+> @@ -205,11 +208,23 @@ static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+>  	rpm->rpm_channel = rpdev->ept;
+>  	dev_set_drvdata(&rpdev->dev, rpm);
+>  
+> -	return of_platform_populate(rpdev->dev.of_node, NULL, NULL, &rpdev->dev);
+> +	rpm->icc = platform_device_register_data(&rpdev->dev, "icc_smd_rpm", -1,
+> +						 NULL, 0);
+> +	if (IS_ERR(rpm->icc))
+> +		return PTR_ERR(rpm->icc);
+> +
+> +	ret = of_platform_populate(rpdev->dev.of_node, NULL, NULL, &rpdev->dev);
+> +	if (ret)
+> +		platform_device_unregister(rpm->icc);
+> +
+> +	return ret;
+>  }
+>  
+>  static void qcom_smd_rpm_remove(struct rpmsg_device *rpdev)
+>  {
+> +	struct qcom_smd_rpm *rpm = dev_get_drvdata(&rpdev->dev);
+> +
+> +	platform_device_unregister(rpm->icc);
+>  	of_platform_depopulate(&rpdev->dev);
+>  }
+>  
