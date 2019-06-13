@@ -2,69 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CE943D37
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D504D43D20
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731876AbfFMPkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 11:40:00 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:40818 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731905AbfFMJxL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 05:53:11 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 0C6FA25AD8B;
-        Thu, 13 Jun 2019 19:53:09 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id 13CAA940483; Thu, 13 Jun 2019 11:53:07 +0200 (CEST)
-Date:   Thu, 13 Jun 2019 11:53:07 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 24/34] power: supply: sbs-manager: simplify getting the
- adapter of a client
-Message-ID: <20190613095306.buqsgqylp2vm7cbb@verge.net.au>
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
- <20190608105619.593-25-wsa+renesas@sang-engineering.com>
+        id S1728312AbfFMPjm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 11:39:42 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34969 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731910AbfFMJyY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 05:54:24 -0400
+Received: by mail-pf1-f195.google.com with SMTP id d126so11520278pfd.2
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 02:54:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hjw/27BiWyRsokNbznNmO94DEfRuOPMKzlIXgRI+H5k=;
+        b=WUhQgDpav09wCsvAut2BWW+R7sS7LtghDHpfI6v0bUGLZjzR+QUQRAULtuQ+dBOAS+
+         5B9NTVliKzqPVgFAQafRgRYnR51hBF4bFPqnp+SsVxb/s1dw527gW4ZdAD71YLZdwcQ0
+         kP0XOt6g2JH7P49I+eaVhp4nGWzzZa4kZC41fTHL4Dh4FeCF8y1xkbVGRNCVSFpZMYT1
+         seXbQTfhtWg/Y2ZFYMhZdfSkXlmqGNBTcy0L6z6YZU0v3YRzsY93irO3uxYz27fLorQY
+         xCaAv7PNE+Wc9gb1a0ZIBFgBoTFuvbNfAi4+vMKRTRmWIgoX9FjCYaWw5pHArsOCxWin
+         Y5wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hjw/27BiWyRsokNbznNmO94DEfRuOPMKzlIXgRI+H5k=;
+        b=Mh1zZEx992yVUTPNYUMCkjWGHNqEaHXjcwAIYp7RVcjAzAQv6a+geaECA/9WZ5IZLq
+         IKDHgQh5gxUInCkvt34LmVRO6YOaNUbhOiBo6Tt9g5KujOtZzTJ+yl5f3Wo21UUQv19m
+         YqBmCCgjY2A7f+6vVUh1rtOnThNB4hUw7/UmHi/vBovZhDdoLrk18MDIc0MVWO65zueY
+         puHpBFL7r+lfttG9RET1wQK3Z83kqSaz6ESbqU9oRe8QTC26gHOULNIZEep+jVZutJY2
+         ws5JELffib4z3Ok4UuudXMi/pQzzvq3GtevdIHtQM4gr9ezBf5mPzkW1YJlCefZ2/rix
+         y1Uw==
+X-Gm-Message-State: APjAAAWwEL/gVywIgqup2hMG+kqcGZ7g7zFoFRqHKncZz+LlrqadTdBe
+        SQARKjjSj6ucgzn1lQCePUz38A==
+X-Google-Smtp-Source: APXvYqyRW+yesk5LbA1w8QMeFbdIKEhSaWce+1/TtkgKa+kMImAbjDmOqy9rTc27doz8KV05Ir4xXQ==
+X-Received: by 2002:a17:90a:3225:: with SMTP id k34mr4393711pjb.31.1560419663353;
+        Thu, 13 Jun 2019 02:54:23 -0700 (PDT)
+Received: from localhost ([122.172.66.84])
+        by smtp.gmail.com with ESMTPSA id u97sm3965453pjb.26.2019.06.13.02.54.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Jun 2019 02:54:21 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 15:24:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     swboyd@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        vincent.guittot@linaro.org, mturquette@baylibre.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
+        dianders@chromium.org, rafael@kernel.org
+Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
+Message-ID: <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
+ <20190320094918.20234-2-rnayak@codeaurora.org>
+ <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+ <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
+ <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190608105619.593-25-wsa+renesas@sang-engineering.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 08, 2019 at 12:56:03PM +0200, Wolfram Sang wrote:
-> We have a dedicated pointer for that, so use it. Much easier to read and
-> less computation involved.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On 12-06-19, 13:55, Viresh Kumar wrote:
+> Okay, I have applied this patch (alone) to the OPP tree with minor
+> modifications in commit log and diff.
 
-Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
+And I have removed it now :)
 
-> ---
-> 
-> Please apply to your subsystem tree.
-> 
->  drivers/power/supply/sbs-manager.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/sbs-manager.c b/drivers/power/supply/sbs-manager.c
-> index cb6e8f66c7a2..4c29a89df968 100644
-> --- a/drivers/power/supply/sbs-manager.c
-> +++ b/drivers/power/supply/sbs-manager.c
-> @@ -317,7 +317,7 @@ static const struct power_supply_desc sbsm_default_psy_desc = {
->  static int sbsm_probe(struct i2c_client *client,
->  		      const struct i2c_device_id *id)
->  {
-> -	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
-> +	struct i2c_adapter *adapter = client->adapter;
->  	struct sbsm_data *data;
->  	struct device *dev = &client->dev;
->  	struct power_supply_desc *psy_desc;
-> -- 
-> 2.19.1
-> 
+I am confused as hell on what we should be doing and what we are doing
+right now. And if we should do better.
+
+Let me explain with an example.
+
+- The clock provider supports following frequencies: 500, 600, 700,
+  800, 900, 1000 MHz.
+
+- The OPP table contains/supports only a subset: 500, 700, 1000 MHz.
+
+Now, the request to change the frequency starts from cpufreq
+governors, like schedutil when they calls:
+
+__cpufreq_driver_target(policy, 599 MHz, CPUFREQ_RELATION_L);
+
+CPUFREQ_RELATION_L means: lowest frequency at or above target. And so
+I would expect the frequency to get set to 600MHz (if we look at clock
+driver) or 700MHz (if we look at OPP table). I think we should decide
+this thing from the OPP table only as that's what the platform guys
+want us to use. So, we should end up with 700 MHz.
+
+Then we land into dev_pm_opp_set_rate(), which does this (which is
+code copied from earlier version of cpufreq-dt driver):
+
+- clk_round_rate(clk, 599 MHz).
+
+  clk_round_rate() returns the highest frequency lower than target. So
+  it must return 500 MHz (I haven't tested this yet, all theoretical).
+
+- _find_freq_ceil(opp_table, 500 MHz).
+
+  This works like CPUFREQ_RELATION_L, so we find lowest frequency >=
+  target freq. And so we should get: 500 MHz itself as OPP table has
+  it.
+
+- clk_set_rate(clk, 500 MHz).
+
+  This must be doing round-rate again, but I think we will settle with
+  500 MHz eventually.
+
+
+Now the questionnaire:
+
+- Is this whole exercise correct ?
+- We shouldn't have landed on 500 MHz, right ?
+- Is there anything wrong with the above theory (I am going to test it soon though).
+- Why do we need to do the first clock_round_rate() ? Should we remove
+  it ?
+
+
+
+Now lets move to this patch, which makes it more confusing.
+
+The OPP tables for CPUs and GPUs should already be somewhat like fmax
+tables for particular voltage values and that's why both cpufreq and
+OPP core try to find a frequency higher than target so we choose the
+most optimum one power-efficiency wise.
+
+For cases where the OPP table is only a subset of the clk-providers
+table (almost always), if we let the clock provider to find the
+nearest frequency (which is lower) we will run the CPU/GPU at a
+not-so-optimal frequency. i.e. if 500, 600, 700 MHz all need voltage
+to be 1.2 V, we should be running at 700 always, while we may end up
+running at 500 MHz.
+
+This kind of behavior (introduced by this patch) is important for
+other devices which want to run at the nearest frequency to target
+one, but not for CPUs/GPUs. So, we need to tag these IO devices
+separately, maybe from DT ? So we select the closest match instead of
+most optimal one.
+
+But lets fix the existing issues first and then think about this
+patch.
+
+-- 
+viresh
