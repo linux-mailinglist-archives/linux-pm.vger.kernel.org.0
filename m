@@ -2,195 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D7044596
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 18:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9BC443DB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 18:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392720AbfFMQpG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 12:45:06 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39089 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730399AbfFMGNf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 02:13:35 -0400
-Received: from mail-pl1-f197.google.com ([209.85.214.197])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1hbIzN-0005Za-0K
-        for linux-pm@vger.kernel.org; Thu, 13 Jun 2019 06:13:33 +0000
-Received: by mail-pl1-f197.google.com with SMTP id q2so11286053plr.19
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jun 2019 23:13:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=xZMnfNxiIJQHgk6DTR2b96lSjKM+Cv557iMAiHl0otE=;
-        b=RumxGnO7aptO1ak3YNXi4NUHD/uoAxKxRKZq6eDFPTg/2H0JbeRJMTk9gr5N/MvVVS
-         NWDMDQ0eNxtFJ0sYD5kosTzhrwPdbbK4VSWvtT6XGnI5pOWOGdTl4EZpror8t+8d/8cq
-         fkaeW/PqXLpzj0DqPXIjT9K0qCE+mJljhnL+pIVfLSTJPt2uP3c/f7uejgGRgqVN/eg6
-         sdTpu3RELTGsVn6iLo/TavrxH69kWmWjjdCw9BOFp2X2/CIKVQNFsY2N1hf53WA2PuKP
-         YViYEZ6lRo6nI1BJINbNNjCPNTBK6kOdf/blEqbxTymEvXzfLR0FKMlbWOeuYVJlOHpF
-         xOOQ==
-X-Gm-Message-State: APjAAAVCtxe3K2dFJRH8+e90Ry1c3LWqWzfXm4saJ6Y6zkQE8ALI97S/
-        iRCZZm+qF1anLz/g7+UUtQZUPSQ7qIlwyGlGUtGt1HJwB3FykhW7c+qK0ghh87LTW5xeRaFzhkG
-        yD13NpbJYxFpzCBMo7T6U6PZej4/CEoHh9pOp
-X-Received: by 2002:aa7:9407:: with SMTP id x7mr48714682pfo.163.1560406411622;
-        Wed, 12 Jun 2019 23:13:31 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqy/M4KOk8anUvleYe4Z0kHfP1YyeHtJEQFqJQMyjw20cPWdlOiaKzI0TiyHxZ0ofVL/cTvhMw==
-X-Received: by 2002:aa7:9407:: with SMTP id x7mr48714652pfo.163.1560406411293;
-        Wed, 12 Jun 2019 23:13:31 -0700 (PDT)
-Received: from [172.20.10.4] (223-136-183-91.emome-ip.hinet.net. [223.136.183.91])
-        by smtp.gmail.com with ESMTPSA id u123sm1554074pfu.67.2019.06.12.23.13.29
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 Jun 2019 23:13:30 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii;
-        delsp=yes;
-        format=flowed
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH] PCI: PM: Skip devices in D0 for suspend-to-idle
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <2513600.jR9RdVMSR0@kreacher>
-Date:   Thu, 13 Jun 2019 14:13:26 +0800
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>
-Content-Transfer-Encoding: 7bit
-Message-Id: <A0D09537-12D3-4466-945A-7D7F889A5472@canonical.com>
-References: <2513600.jR9RdVMSR0@kreacher>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S1730838AbfFMQdG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 12:33:06 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:42736 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730836AbfFMIMC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 04:12:02 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 8539480343; Thu, 13 Jun 2019 10:11:48 +0200 (CEST)
+Date:   Thu, 13 Jun 2019 10:11:58 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        'kernel list' <linux-kernel@vger.kernel.org>,
+        'ACPI Devel Maling List' <linux-acpi@vger.kernel.org>,
+        "'Zhang, Rui'" <rui.zhang@intel.com>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        'Viresh Kumar' <viresh.kumar@linaro.org>,
+        'Linux PM' <linux-pm@vger.kernel.org>,
+        'Thomas Gleixner' <tglx@linutronix.de>,
+        'Ingo Molnar' <mingo@redhat.com>,
+        'Borislav Petkov' <bp@alien8.de>,
+        "'H. Peter Anvin'" <hpa@zytor.com>,
+        'the arch/x86 maintainers' <x86@kernel.org>
+Subject: Re: 5.2-rc2: low framerate in flightgear, cpu not running at full
+ speed, thermal related?
+Message-ID: <20190613081158.GA6853@amd>
+References: <20190609111732.GA2885@amd>
+ <007701d520c7$c397bda0$4ac738e0$@net>
+ <CAJZ5v0j2pb2WxSA+S44Mr-6bpOx-P9A_T2-sDG3CiWSqLMg3sA@mail.gmail.com>
+ <008f01d52178$07b3be70$171b3b50$@net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
+Content-Disposition: inline
+In-Reply-To: <008f01d52178$07b3be70$171b3b50$@net>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-at 06:14, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-> attempted to avoid a problem with devices whose drivers want them to
-> stay in D0 over suspend-to-idle and resume, but it did not go as far
-> as it should with that.
->
-> Namely, first of all, it is questionable to change the power state
-> of a PCI bridge with a device in D0 under it, but that is not
-> actively prevented from happening during system-wide PM transitions,
-> so use the skip_bus_pm flag introduced by commit d491f2b75237 for
-> that.
->
-> Second, the configuration of devices left in D0 (whatever the reason)
-> during suspend-to-idle need not be changed and attempting to put them
-> into D0 again by force may confuse some firmware, so explicitly avoid
-> doing that.
->
-> Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+--PNTmBPCT7hxwcZjr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks! This patch solves the issue I reported earlier.
+Hi!
 
-Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> On 2019.06.12 14:25 Rafael J. Wysocki wrote:
+> > On Wed, Jun 12, 2019 at 4:45 AM Doug Smythies <dsmythies@telus.net> wro=
+te:
+> >>
+> >> So, currently there seems to be 3 issues in this thread
+> >> (and I am guessing a little, without definitive data):
+> >>
+> >> 1.) On your system Kernel 5.4-rc2 (or 4) defaults to the intel_pstate =
+CPU frequency
+> >> scaling driver and the powersave governor, but kernel 4.6 defaults to =
+the
+> >> acpi-cpufreq CPU frequency scaling driver and the ondemand governor.
+> >
+> > Which means that intel_pstate works in the active mode by default and
+> > so it uses its internal governor.
+>=20
+> Note sure what you mean by "internal governor"?
+> If you meant HWP (Hardware P-state), Pavel's processor doesn't have it.
+> If you meant the active powersave governor code within the driver, then a=
+greed.
+>=20
+> > That governor is more performance-oriented than ondemand and it very
+> > well may cause more power to be allocated for the processor - at the
+> > expense of the GPU.
+>=20
+> O.K. I mainly use servers and so have no experience with possible GPU
+> verses CPU tradeoffs.
+>=20
+> However, I did re-do my tests measuring energy instead of CPU frequency
+> and found very little difference between the acpi-cpufreq/ondemand verses
+> intel_pstate/powersave as a function of single threaded load. Actually,
+> I did the test twice, one at 20 hertz work/sleep frequency and also
+> at 67 hertz work/sleep frequency. (Of course, Pavel's processor might
+> well have a different curve, but it is a similar vintage to mine
+> i5-2520M verses i7-2600K.) The worst difference was approximately
+> 1.1 extra processor package watts (an extra 5.5%) in the 80% to 85%
+> single threaded load range at 67 hertz work/sleep frequency for
+> the intel-pstate/powersave driver/governor.=20
+>=20
+> What am I saying? For a fixed amount of work to do per work/sleep cycle
+> (i.e. maybe per video frame related type work) while the CPU frequency Ve=
+rses load
+> curves might differ, the resulting processor energy curve differs much le=
+ss.
+> (i.e. the extra power for higher CPU frequency is for less time because i=
+t gets
+> the job done faster.) So, myself, I don't yet understand why only the one=
+ method
+> would have hit thermal throttling, but not the other (if indeed it
+> doesn't).
 
-> ---
->
-> Tested on Dell XPS13 9360 with no issues.
->
-> ---
->  drivers/pci/pci-driver.c |   47 +++++++++++++++++++++++++++++++++++------------
->  1 file changed, 35 insertions(+), 12 deletions(-)
->
-> Index: linux-pm/drivers/pci/pci-driver.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-driver.c
-> +++ linux-pm/drivers/pci/pci-driver.c
-> @@ -524,7 +524,6 @@ static void pci_pm_default_resume_early(
->  	pci_power_up(pci_dev);
->  	pci_restore_state(pci_dev);
->  	pci_pme_restore(pci_dev);
-> -	pci_fixup_device(pci_fixup_resume_early, pci_dev);
->  }
->
->  /*
-> @@ -842,18 +841,16 @@ static int pci_pm_suspend_noirq(struct d
->
->  	if (pci_dev->skip_bus_pm) {
->  		/*
-> -		 * The function is running for the second time in a row without
-> +		 * Either the device is a bridge with a child in D0 below it, or
-> +		 * the function is running for the second time in a row without
->  		 * going through full resume, which is possible only during
-> -		 * suspend-to-idle in a spurious wakeup case.  Moreover, the
-> -		 * device was originally left in D0, so its power state should
-> -		 * not be changed here and the device register values saved
-> -		 * originally should be restored on resume again.
-> +		 * suspend-to-idle in a spurious wakeup case.  The device should
-> +		 * be in D0 at this point, but if it is a bridge, it may be
-> +		 * necessary to save its state.
->  		 */
-> -		pci_dev->state_saved = true;
-> -	} else if (pci_dev->state_saved) {
-> -		if (pci_dev->current_state == PCI_D0)
-> -			pci_dev->skip_bus_pm = true;
-> -	} else {
-> +		if (!pci_dev->state_saved)
-> +			pci_save_state(pci_dev);
-> +	} else if (!pci_dev->state_saved) {
->  		pci_save_state(pci_dev);
->  		if (pci_power_manageable(pci_dev))
->  			pci_prepare_to_sleep(pci_dev);
-> @@ -862,6 +859,22 @@ static int pci_pm_suspend_noirq(struct d
->  	dev_dbg(dev, "PCI PM: Suspend power state: %s\n",
->  		pci_power_name(pci_dev->current_state));
->
-> +	if (pci_dev->current_state == PCI_D0) {
-> +		pci_dev->skip_bus_pm = true;
-> +		/*
-> +		 * Changing the power state of a PCI bridge with a device in D0
-> +		 * below it is questionable, so avoid doing that by setting the
-> +		 * skip_bus_pm flag for the parent bridge.
-> +		 */
-> +		if (pci_dev->bus->self)
-> +			pci_dev->bus->self->skip_bus_pm = true;
-> +	}
-> +
-> +	if (pci_dev->skip_bus_pm && !pm_suspend_via_firmware()) {
-> +		dev_dbg(dev, "PCI PM: Skipped\n");
-> +		goto Fixup;
-> +	}
-> +
->  	pci_pm_set_unknown_state(pci_dev);
->
->  	/*
-> @@ -909,7 +922,16 @@ static int pci_pm_resume_noirq(struct de
->  	if (dev_pm_smart_suspend_and_suspended(dev))
->  		pm_runtime_set_active(dev);
->
-> -	pci_pm_default_resume_early(pci_dev);
-> +	/*
-> +	 * In the suspend-to-idle case, devices left in D0 during suspend will
-> +	 * stay in D0, so it is not necessary to restore or update their
-> +	 * configuration here and attempting to put them into D0 again may
-> +	 * confuse some firmware, so avoid doing that.
-> +	 */
-> +	if (!pci_dev->skip_bus_pm || pm_suspend_via_firmware())
-> +		pci_pm_default_resume_early(pci_dev);
-> +
-> +	pci_fixup_device(pci_fixup_resume_early, pci_dev);
->
->  	if (pci_has_legacy_pm_support(pci_dev))
->  		return pci_legacy_resume_early(dev);
-> @@ -1200,6 +1222,7 @@ static int pci_pm_restore_noirq(struct d
->  	}
->
->  	pci_pm_default_resume_early(pci_dev);
-> +	pci_fixup_device(pci_fixup_resume_early, pci_dev);
->
->  	if (pci_has_legacy_pm_support(pci_dev))
->  		return pci_legacy_resume_early(dev);
+It seems there are serious differences in reporting :-(. How do I
+determine which frequency CPU really runs at, in 4.6 kernel?
 
+But it seems that your assumptions are incorrect for my workload.
 
+flightgear is single-threaded, and in my configuration saturates the
+CPU, because it would like to achieve higher framerate than my system
+is capable of.
+
+> Just for information: CPU frequency verses single threaded load curves
+> for the conservative governor is quite different between the two drivers.
+> (tests done in February, perhaps I should re-do and also look at energy
+> at the same time, or instead of CPU frequency.)
+
+So this might be my problem?
+
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--PNTmBPCT7hxwcZjr
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl0CBU4ACgkQMOfwapXb+vIA2ACgosp1TsX5OkrWOaRWttdwzNPP
+S8EAoI+okCL2bRqt3AKPFbSPngilmwwC
+=fxjZ
+-----END PGP SIGNATURE-----
+
+--PNTmBPCT7hxwcZjr--
