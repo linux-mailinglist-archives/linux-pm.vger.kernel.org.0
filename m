@@ -2,76 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9247644785
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 19:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3CF44762
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 18:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731763AbfFMRAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 13:00:10 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36079 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729782AbfFMAEp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 20:04:45 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r7so4720361pfl.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jun 2019 17:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=enyuAfwIUm7QZb/zhVy1/4Va6a5/NPi/JrG9djy3bF8=;
-        b=GQXJaktvgKtFOEDW1sUlsUsVwTuVAnIA8hh4WjxCiXsXvlvtfRzGg7etclRAdgKv4U
-         4ShkffdYG971cLxlYNt6mPgcxcVKbfFPcLkX7gZMRMy0uHwgTA+CLDAnKeuUPidLGO3I
-         bqwz3QvEooRJpl5P8hL/GSorok8hu1ktGl9+0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=enyuAfwIUm7QZb/zhVy1/4Va6a5/NPi/JrG9djy3bF8=;
-        b=cM6nOxmQEGWylFmhk1lbOcx8NpA+uR8TvQQWwxFwtEpP3kQVtnVN6h4a1P+G1o/KX8
-         HMFASg4au+XBrjMjRoiIdKYwXvaC2NNJMtx5+u5Q3dZrWSW8sviUfBIcs0qgNaMaO+EH
-         R/7Nb2ew28OO9AUauccUfF7SP5ZSqhWeJOjpYU559Z2s2jwF6YaZurK2A0YW87RclY+b
-         l23Gj3/nqbDe0DsrUCgqywT0pXDdR88xzkukqM86x4I+pul8A7Bjjm5W77zl6pdFaiW3
-         MDK4WYi/hEJHfYLINieQlHU+ImHBeWDQH3xGp6HfOopNrIlavHivnFitwsFSnczc8y8U
-         h+tg==
-X-Gm-Message-State: APjAAAW/yJjiUpCXtj9feHWGNHqNlc8y8Dk0NrKEgSJBhpmIpilV8VHZ
-        sHDG0EY/KKfNDYe4yflK+oTx4A==
-X-Google-Smtp-Source: APXvYqwO5UFiyckgdUgkZVSFQmP4vYWEFYVqaJ7SB58Em//0AXY36VhkhuJlG3u3XDCMdNZATgT/Wg==
-X-Received: by 2002:a17:90a:ba94:: with SMTP id t20mr1876181pjr.116.1560384284934;
-        Wed, 12 Jun 2019 17:04:44 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
-        by smtp.gmail.com with ESMTPSA id x66sm642436pfx.139.2019.06.12.17.04.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 Jun 2019 17:04:43 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 17:04:41 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Qais.Yousef@arm.com, juri.lelli@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 3/5] PM / QoS: Add support for MIN/MAX frequency
- constraints
-Message-ID: <20190613000441.GM137143@google.com>
-References: <cover.1560163748.git.viresh.kumar@linaro.org>
- <8c0ead9cc598f9eb7d15bd4878108b545368dd6e.1560163748.git.viresh.kumar@linaro.org>
+        id S1729857AbfFMQ7L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 12:59:11 -0400
+Received: from outgoing-stata.csail.mit.edu ([128.30.2.210]:53158 "EHLO
+        outgoing-stata.csail.mit.edu" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729848AbfFMAeY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 20:34:24 -0400
+X-Greylist: delayed 493 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Jun 2019 20:34:23 EDT
+Received: from [4.30.142.84] (helo=srivatsab-a01.vmware.com)
+        by outgoing-stata.csail.mit.edu with esmtpsa (TLS1.2:RSA_AES_128_CBC_SHA1:128)
+        (Exim 4.82)
+        (envelope-from <srivatsa@csail.mit.edu>)
+        id 1hbDYq-000Xfo-J5; Wed, 12 Jun 2019 20:25:48 -0400
+Subject: Re: [PATCH v4 18/28] docs: convert docs to ReST and rename to *.rst
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Harry Wei <harryxiyou@gmail.com>,
+        Alex Shi <alex.shi@linux.alibaba.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-pci@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <cover.1560361364.git.mchehab+samsung@kernel.org>
+ <fac44e1fbab5ea755a93601a4fdfa34fcc57ae9e.1560361364.git.mchehab+samsung@kernel.org>
+From:   "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
+Message-ID: <7dc94cb4-ebf1-22ab-29c9-fcb2b875a9ac@csail.mit.edu>
+Date:   Wed, 12 Jun 2019 17:25:39 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:60.0)
+ Gecko/20100101 Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <fac44e1fbab5ea755a93601a4fdfa34fcc57ae9e.1560361364.git.mchehab+samsung@kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8c0ead9cc598f9eb7d15bd4878108b545368dd6e.1560163748.git.viresh.kumar@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 10, 2019 at 04:21:34PM +0530, Viresh Kumar wrote:
-> This patch introduces the min-frequency and max-frequency device
-> constraints, which will be used by the cpufreq core to begin with.
+On 6/12/19 10:52 AM, Mauro Carvalho Chehab wrote:
+> Convert the PM documents to ReST, in order to allow them to
+> build with Sphinx.
 > 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> The conversion is actually:
+>   - add blank lines and identation in order to identify paragraphs;
+>   - fix tables markups;
+>   - add some lists markups;
+>   - mark literal blocks;
+>   - adjust title markups.
+> 
+> At its new index.rst, let's add a :orphan: while this is not linked to
+> the main index.rst file, in order to avoid build warnings.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> ---
 
-Again, I'm mostly ignorant about QoS, in the context of the
-existing code (particularly looking at DEV_PM_QOS_RESUME_LATENCY)
-this looks reasonable to me. FWIW:
+[...]
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> diff --git a/Documentation/power/suspend-and-cpuhotplug.txt b/Documentation/power/suspend-and-cpuhotplug.rst
+> similarity index 90%
+> rename from Documentation/power/suspend-and-cpuhotplug.txt
+> rename to Documentation/power/suspend-and-cpuhotplug.rst
+> index a8751b8df10e..9df664f5423a 100644
+> --- a/Documentation/power/suspend-and-cpuhotplug.txt
+> +++ b/Documentation/power/suspend-and-cpuhotplug.rst
+> @@ -1,10 +1,15 @@
+> +====================================================================
+>  Interaction of Suspend code (S3) with the CPU hotplug infrastructure
+> +====================================================================
+>  
+> -     (C) 2011 - 2014 Srivatsa S. Bhat <srivatsa.bhat@linux.vnet.ibm.com>
+> +(C) 2011 - 2014 Srivatsa S. Bhat <srivatsa.bhat@linux.vnet.ibm.com>
+>  
+>  
+> -I. How does the regular CPU hotplug code differ from how the Suspend-to-RAM
+> -   infrastructure uses it internally? And where do they share common code?
+> +I. Differences between CPU hotplug and Suspend-to-RAM
+> +======================================================
+> +
+> +How does the regular CPU hotplug code differ from how the Suspend-to-RAM
+> +infrastructure uses it internally? And where do they share common code?
+>  
+>  Well, a picture is worth a thousand words... So ASCII art follows :-)
+>  
+
+[...]
+
+> @@ -101,7 +108,7 @@ execution during resume):
+>  
+>  It is to be noted here that the system_transition_mutex lock is acquired at the very
+>  beginning, when we are just starting out to suspend, and then released only
+> -after the entire cycle is complete (i.e., suspend + resume).
+> +after the entire cycle is complete (i.e., suspend + resume)::
+>  
+
+I think that should be a period, not a colon, because it is clarifying
+the text above it (as opposed to referring to the example below it).
+
+Other than that, for suspend-and-cpuhotplug.txt:
+
+Acked-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
+ 
+Regards,
+Srivatsa
+VMware Photon OS
