@@ -2,39 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EB744AD1
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 20:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A3944AD2
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 20:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727254AbfFMSh4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 14:37:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34182 "EHLO mail.kernel.org"
+        id S1726705AbfFMSiN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 14:38:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34304 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725851AbfFMSh4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 13 Jun 2019 14:37:56 -0400
+        id S1726626AbfFMSiN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 13 Jun 2019 14:38:13 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B10D208CA;
-        Thu, 13 Jun 2019 18:37:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C061208CA;
+        Thu, 13 Jun 2019 18:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560451075;
-        bh=8mF4OgdcQJOXWHxpTOlqM/OAiNxFqn0FYkZbhjZW0hY=;
+        s=default; t=1560451092;
+        bh=mCeTL7k6bagP7YI+YzWTIBqj23rm7VuKVFZ3HMOfpZU=;
         h=Date:From:To:Cc:Subject:From;
-        b=t4A9/Rt0/sSVo8qm0FU82P4c0PUl3LvdKgbvtBpiORzYxBW3O8fXsPdMUvPCgODx+
-         hiBpcBlKGWSG8/AeTyvEBZCUPjreUiyHfcrOk4IkE/a9iUypjIKwy5fUf3vZ6Vgm+p
-         ouyi3UfKFCE9tDoxjGgQW1CY2MCVZHHwxPJrG96s=
-Date:   Thu, 13 Jun 2019 20:37:53 +0200
+        b=uREaLO0oEkfJtBwIh15u3Z2XsoMRSh2tWjKbYRz5hSRkYHSrreLsaFmCDrtGTrelh
+         jGHXkEVzYiS1TBi8LOZ7xaI/XlaLaTVqKs8yNB68HjDd2j6z6+TdzwTmQBJ0iz5qou
+         /WxL1Ln+bau2jZ1saixMaKQxG8H6Wt9bAeH/zwAw=
+Date:   Thu, 13 Jun 2019 20:38:10 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Wei Ni <wni@nvidia.com>, Yangtao Li <tiny.windzz@gmail.com>
+        Finn Thain <fthain@telegraphics.com.au>
 Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH] thermal: tegra: no need to check return value of
+Subject: [PATCH] thermal: intel_powerclamp: no need to check return value of
  debugfs_create functions
-Message-ID: <20190613183753.GB32085@kroah.com>
+Message-ID: <20190613183810.GC32085@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -51,46 +49,37 @@ never do something different based on this.
 Cc: Zhang Rui <rui.zhang@intel.com>
 Cc: Eduardo Valentin <edubezval@gmail.com>
 Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Wei Ni <wni@nvidia.com>
-Cc: Yangtao Li <tiny.windzz@gmail.com>
+Cc: Finn Thain <fthain@telegraphics.com.au>
 Cc: linux-pm@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thermal/tegra/soctherm.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+ drivers/thermal/intel/intel_powerclamp.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/thermal/tegra/soctherm.c b/drivers/thermal/tegra/soctherm.c
-index fcf70a3728b6..43941eb734eb 100644
---- a/drivers/thermal/tegra/soctherm.c
-+++ b/drivers/thermal/tegra/soctherm.c
-@@ -1485,23 +1485,13 @@ DEFINE_SHOW_ATTRIBUTE(regs);
- static void soctherm_debug_init(struct platform_device *pdev)
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index ac7256b5f020..39c6b589f2ed 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -713,17 +713,9 @@ DEFINE_SHOW_ATTRIBUTE(powerclamp_debug);
+ static inline void powerclamp_create_debug_files(void)
  {
- 	struct tegra_soctherm *tegra = platform_get_drvdata(pdev);
--	struct dentry *root, *file;
-+	struct dentry *root;
- 
- 	root = debugfs_create_dir("soctherm", NULL);
--	if (!root) {
--		dev_err(&pdev->dev, "failed to create debugfs directory\n");
+ 	debug_dir = debugfs_create_dir("intel_powerclamp", NULL);
+-	if (!debug_dir)
 -		return;
--	}
+-
+-	if (!debugfs_create_file("powerclamp_calib", S_IRUGO, debug_dir,
+-					cal_data, &powerclamp_debug_fops))
+-		goto file_error;
  
- 	tegra->debugfs_dir = root;
- 
--	file = debugfs_create_file("reg_contents", 0644, root,
--				   pdev, &regs_fops);
--	if (!file) {
--		dev_err(&pdev->dev, "failed to create debugfs file\n");
--		debugfs_remove_recursive(tegra->debugfs_dir);
--		tegra->debugfs_dir = NULL;
--	}
-+	debugfs_create_file("reg_contents", 0644, root, pdev, &regs_fops);
+-	return;
+-
+-file_error:
+-	debugfs_remove_recursive(debug_dir);
++	debugfs_create_file("powerclamp_calib", S_IRUGO, debug_dir, cal_data,
++			    &powerclamp_debug_fops);
  }
- #else
- static inline void soctherm_debug_init(struct platform_device *pdev) {}
+ 
+ static enum cpuhp_state hp_state;
 -- 
 2.22.0
 
