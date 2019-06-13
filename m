@@ -2,97 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E164436A
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 18:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417A543F25
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392480AbfFMQ3V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 12:29:21 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:37644 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730925AbfFMIfS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 04:35:18 -0400
-Received: by mail-vs1-f65.google.com with SMTP id v6so12118840vsq.4;
-        Thu, 13 Jun 2019 01:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M/j512S8iNawEe8Fwmcxi5za0FB/PptLS7JGUaidYWg=;
-        b=OxnRIln/sM87E9yAMKkBvxzTuS55PzqwilzIiUk16/vzQLB+YOVGxrkEOMI/1T0fef
-         Tjz9MlXar7WzM/oRrPg8KIGEA5YlpiPcjw/e2QqsyG5dYc2SqlOwKu3q5+itA54IALWn
-         i96hlCvrcOOhMadLxROp27+OUusTMbi4nQ115G/RCUC6eYXU8ff6zsvwdCqPbhqW0EgS
-         m7zoVLxR8BXVvsqTQF04zStHGjY9yKdLJQEaxG2TAM44GxQitJ+n+Dyw+5dYgvENw2u8
-         PiEQV5fuRzvkDr6D0I8omoYJl4DVMhg+0BqBmwJKtbxT/nznxzjNEtJil+Csn25bB3et
-         cbFw==
+        id S2388082AbfFMPzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 11:55:11 -0400
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:40395 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731561AbfFMIxL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 04:53:11 -0400
+Received: by mail-ot1-f44.google.com with SMTP id x24so18192548otp.7;
+        Thu, 13 Jun 2019 01:53:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M/j512S8iNawEe8Fwmcxi5za0FB/PptLS7JGUaidYWg=;
-        b=LSkFMlSIR2q7+qqD8Sx/v34wjavq/hJ6nu0QV6B9FuOdg8xlLEVq43iez72S58PTo5
-         XvVsaKlhYGomWO0OzyzzRbQCaOiHFoO1mCuUzE9+/MC7k5W8G3VTMTLyL9si90CIgtyQ
-         UdgEKH1lh2GM7AIfojwD+8wZnuXpEP5Fp6/lWlrvtseUDVIs0N7hkp3d/2L+yeVd2X2p
-         xlkDbfeQn0eByq6b5fijvNEATjGY4jVB4bF4cdGn4uX5SgeTwNhW2rSaapyf2/Z9rOjc
-         UQDyRe82kFx96qumUGUGYTolFLF/3hn3AXqGpKagO+lLDXsu3V7xEdR0yO/X3EtqS/yN
-         YFmw==
-X-Gm-Message-State: APjAAAWRmi7aEEHndzryzvc9ReAvx5KPlzokErywysDEHjEYSHilwSKi
-        jUrXLJP+i0EU77ELYlYCjj/UPsdbFQ4fd6gJ9RE=
-X-Google-Smtp-Source: APXvYqzXlBh2rBUbKHiKWqg1RIV3kUDnHNMsS0QRYDwTtb3AQTQI4zniACIqmZ18a8Q2qK+cPo7L2dtUQdc3qhiJdAo=
-X-Received: by 2002:a67:fb8d:: with SMTP id n13mr32198844vsr.46.1560414917499;
- Thu, 13 Jun 2019 01:35:17 -0700 (PDT)
+        bh=FxA2TuQ76TdBmK7s0p6DMBbnrU5zVRKKjjHLZHr3Nrw=;
+        b=Yxz1PrfEwG+xwQfQrX5q9OYleNmlcuAsJPTmLfQ7gVKEvAR+96Fjki1WJPeX8bRYQl
+         HuR4VQZkg7hv4n6r23V00pi6LnVo5kXHsecCxBP5tGF79PKKtJ+fXOELR7U9Xt4GRTcn
+         9CibEfBsWSxilq23lhLLpqkO/T/ruOYn0f5G8II2BuQmEbATtOJRLLYf/F3ffTRGHZ3+
+         gEw4dPeWEqb5pqH2RXLQrDSD+JsZVYpGJfwbV+UDkfo69J3moMWNSLxkrqg0Q69sAM0Q
+         kSLwi60ID8UTSnBe7YcyTgv6x11TvRIeUGBcEvFsTOyq2cknIxdlMJhByhe54Hz5xD7r
+         Zk4Q==
+X-Gm-Message-State: APjAAAUi4EVEc8cS8f5ENKqe7SrlOIXGcr+dWSzNLyj01OZXWkDFETFk
+        1V3VZUet3YydJfMKSltr+DlIrJWwrHJHi+RAnHjviQ==
+X-Google-Smtp-Source: APXvYqyI1lj+Z+cGNfdobQgfAVNEbIpL2r7FCl8K1bHleKh5pVvYkSHmP3FF0kCptnpXUK5RHTkVoifYko+1nXHyn24=
+X-Received: by 2002:a9d:5f05:: with SMTP id f5mr36455415oti.167.1560415990521;
+ Thu, 13 Jun 2019 01:53:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1559546139.git.matti.vaittinen@fi.rohmeurope.com>
- <20190611200043.eib3g3acc7ilawsx@earth.universe> <20190612060328.GQ4797@dell>
-In-Reply-To: <20190612060328.GQ4797@dell>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Date:   Thu, 13 Jun 2019 11:35:06 +0300
-Message-ID: <CANhJrGNM7fBXa8cY6ybF8WsaigwcREMvbGN0K4pdUVKck4POzw@mail.gmail.com>
-Subject: Re: [PATCH v15 0/7] support ROHM BD70528 PMIC
-To:     Lee Jones <lee.jones@linaro.org>,
-        "Vaittinen, Matti" <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-rtc@vger.kernel.org
+References: <20190609111732.GA2885@amd> <007701d520c7$c397bda0$4ac738e0$@net>
+ <CAJZ5v0j2pb2WxSA+S44Mr-6bpOx-P9A_T2-sDG3CiWSqLMg3sA@mail.gmail.com> <008f01d52178$07b3be70$171b3b50$@net>
+In-Reply-To: <008f01d52178$07b3be70$171b3b50$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 13 Jun 2019 10:52:57 +0200
+Message-ID: <CAJZ5v0gRaDe6Fajdx3wqaLz9LQr6Z6iD+2yrrZeXJV+3HiAOZg@mail.gmail.com>
+Subject: Re: 5.2-rc2: low framerate in flightgear, cpu not running at full
+ speed, thermal related?
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 9:03 AM Lee Jones <lee.jones@linaro.org> wrote:
+On Thu, Jun 13, 2019 at 1:40 AM Doug Smythies <dsmythies@telus.net> wrote:
 >
-> On Tue, 11 Jun 2019, Sebastian Reichel wrote:
->
-> > Hi,
+> On 2019.06.12 14:25 Rafael J. Wysocki wrote:
+> > On Wed, Jun 12, 2019 at 4:45 AM Doug Smythies <dsmythies@telus.net> wrote:
+> >>
+> >> So, currently there seems to be 3 issues in this thread
+> >> (and I am guessing a little, without definitive data):
+> >>
+> >> 1.) On your system Kernel 5.4-rc2 (or 4) defaults to the intel_pstate CPU frequency
+> >> scaling driver and the powersave governor, but kernel 4.6 defaults to the
+> >> acpi-cpufreq CPU frequency scaling driver and the ondemand governor.
 > >
-> > On Mon, Jun 03, 2019 at 10:23:37AM +0300, Matti Vaittinen wrote:
-> > > Patch series introducing support for ROHM BD70528 PMIC
-> > > [...]
-> >
-> > I think all patches have been reviewed by the respective subsystem
-> > maintainers. Lee, can you provide an immutable branch with the MFD
-> > patches (1, 2, 4)? Looks like the other patches only depend on those
-> > and can go through their respective subsystems.
+> > Which means that intel_pstate works in the active mode by default and
+> > so it uses its internal governor.
 >
-> Yes.  It's on my TODO list.
+> Note sure what you mean by "internal governor"?
+> If you meant HWP (Hardware P-state), Pavel's processor doesn't have it.
+> If you meant the active powersave governor code within the driver, then agreed.
+
+That's what I mean.
+
+> > That governor is more performance-oriented than ondemand and it very
+> > well may cause more power to be allocated for the processor - at the
+> > expense of the GPU.
 >
-> Would you prefer this method over me just taking them all and sending
-> out a PR?  The latter is my usual flow, but I'm happy with either.
+> O.K. I mainly use servers and so have no experience with possible GPU
+> verses CPU tradeoffs.
+>
+> However, I did re-do my tests measuring energy instead of CPU frequency
+> and found very little difference between the acpi-cpufreq/ondemand verses
+> intel_pstate/powersave as a function of single threaded load. Actually,
+> I did the test twice, one at 20 hertz work/sleep frequency and also
+> at 67 hertz work/sleep frequency. (Of course, Pavel's processor might
+> well have a different curve, but it is a similar vintage to mine
+> i5-2520M verses i7-2600K.) The worst difference was approximately
+> 1.1 extra processor package watts (an extra 5.5%) in the 80% to 85%
+> single threaded load range at 67 hertz work/sleep frequency for
+> the intel-pstate/powersave driver/governor.
 
-Thanks guys for taking care of this! :)
+I see.  Then this shouldn't matter.
 
---Matti
+> What am I saying? For a fixed amount of work to do per work/sleep cycle
+> (i.e. maybe per video frame related type work) while the CPU frequency Verses load
+> curves might differ, the resulting processor energy curve differs much less.
+> (i.e. the extra power for higher CPU frequency is for less time because it gets
+> the job done faster.) So, myself, I don't yet understand why only the one method
+> would have hit thermal throttling, but not the other (if indeed it doesn't).
+> Other differences between kernel 4.6 and 5.2-rc? might explain it.
+
+Right.
+
+I personally doubt that any thermal throttling is involved here.
+
+> I did all my tests on kernel 5.2-rc3, except that one example from kernel 4.4 on my
+> earlier reply, so that were not other variables than CPU scaling driver and
+> governor changes.
+>
+> > The lower-than-expected frame rate may result from that, in principle.
+>
+> > One way to mitigate that might be to use intel_pstate in the passive
+> > mode (pass intel_pstate=passive to the kernel in the command line)
+> > along with either ondemand or schedutil as the governor.
+>
+> The CPU frequency verses load curves for this those two governors are very similar
+> for both the acpi_cpufreq and intel_cpufreq (which is the intel_pstate driver
+> in passive mode) drivers.
+
+That's what I would expect.
+
+Cheers!
