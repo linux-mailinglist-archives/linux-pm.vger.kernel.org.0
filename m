@@ -2,75 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE0844EF6
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 00:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A29B44F95
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 00:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbfFMWHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 18:07:32 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:47094 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbfFMWHc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 18:07:32 -0400
-Received: by mail-qk1-f195.google.com with SMTP id x18so400393qkn.13;
-        Thu, 13 Jun 2019 15:07:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BhWdQ+n9lb5V8igkIdjlDGkO+bOshDClHntzHo4xkx4=;
-        b=pB8ZQhLWydN7xaJSbR0D7SlL/nA6gyRv96uz10UScA+WoCvpn7fjWrqtlEFr0yZVOA
-         2stJzMuVMJg+dWmZDFI+kw3yKZCKyjGza3X9ZSKfTe/0XoaHqEbQ4uG1GRgIXIXfcfk+
-         cZH781VT2lUFcGyFEAAAh/+XLJWO5E/dRnx8mLx+HTf8eSJSfqATq6d523izP75RROJ1
-         Da8gHmb/p/rfdxl1/y/QxTR3NXJMA4/Xgmjx4wHJ1NWD1SyFzzYQF0LkUjhDurgfL4q5
-         UETq1WCB1dgUDZ2IkceOjMcUJIl1RatDFA0hoEpmDGfsp8qQkZoubz37swFV6enAYvAh
-         v4hw==
-X-Gm-Message-State: APjAAAVF7fVuQSZgobzul++G9TT1Hrw8snyz/c3/KIcxfdvmWu3mYaLT
-        pRJAVAqR+NVp5AQ2ByMJjA==
-X-Google-Smtp-Source: APXvYqzlg3l0HADoNTIkv5SXk7nuuzVo6Jw7oSlbsAolVM+MxEBgZazQrw5oWThYP2sbSY8L9PzBsg==
-X-Received: by 2002:a37:6512:: with SMTP id z18mr73992402qkb.158.1560463650992;
-        Thu, 13 Jun 2019 15:07:30 -0700 (PDT)
-Received: from localhost ([64.188.179.243])
-        by smtp.gmail.com with ESMTPSA id t8sm708240qtc.80.2019.06.13.15.07.30
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 15:07:30 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 16:07:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ran Wang <ran.wang_1@nxp.com>
-Cc:     Li Yang <leoyang.li@nxp.com>, Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ran Wang <ran.wang_1@nxp.com>
-Subject: Re: [PATCH 2/3] Documentation: dt: binding: fsl: Add 'little-endian'
- and update Chassis define
-Message-ID: <20190613220729.GA29761@bogus>
-References: <20190517024748.15534-1-ran.wang_1@nxp.com>
- <20190517024748.15534-2-ran.wang_1@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190517024748.15534-2-ran.wang_1@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726442AbfFMWzK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 18:55:10 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:41120 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725837AbfFMWzK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 13 Jun 2019 18:55:10 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 417B785363;
+        Thu, 13 Jun 2019 22:55:10 +0000 (UTC)
+Received: from amt.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0C5526085B;
+        Thu, 13 Jun 2019 22:55:06 +0000 (UTC)
+Received: from amt.cnet (localhost [127.0.0.1])
+        by amt.cnet (Postfix) with ESMTP id 16506105181;
+        Thu, 13 Jun 2019 19:53:03 -0300 (BRT)
+Received: (from marcelo@localhost)
+        by amt.cnet (8.14.7/8.14.7/Submit) id x5DMqwSl025647;
+        Thu, 13 Jun 2019 19:52:58 -0300
+Message-ID: <20190613224532.949768676@redhat.com>
+User-Agent: quilt/0.66
+Date:   Thu, 13 Jun 2019 18:45:32 -0400
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     kvm-devel <kvm@vger.kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Radim Krcmar <rkrcmar@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Wanpeng Li <kernellwp@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Raslan KarimAllah <karahmed@amazon.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-pm@vger.kernel.org
+Subject: [patch 0/5] cpuidle haltpoll driver and governor (v4)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Thu, 13 Jun 2019 22:55:10 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 17 May 2019 10:47:47 +0800, Ran Wang wrote:
-> By default, QorIQ SoC's RCPM register block is Big Endian. But
-> there are some exceptions, such as LS1088A and LS2088A, are Little
-> Endian. So add this optional property to help identify them.
-> 
-> Actually LS2021A and other Layerscapes won't totally follow Chassis
-> 2.1, so separate them from powerpc SoC.
-> 
-> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> ---
->  Documentation/devicetree/bindings/soc/fsl/rcpm.txt |    8 +++++++-
->  1 files changed, 7 insertions(+), 1 deletions(-)
-> 
+The cpuidle-haltpoll driver with haltpoll governor allows the guest
+vcpus to poll for a specified amount of time before halting. 
+This provides the following benefits to host side polling:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+         1) The POLL flag is set while polling is performed, which allows
+            a remote vCPU to avoid sending an IPI (and the associated
+            cost of handling the IPI) when performing a wakeup.
+
+         2) The VM-exit cost can be avoided.
+
+The downside of guest side polling is that polling is performed
+even with other runnable tasks in the host.
+
+Results comparing halt_poll_ns and server/client application
+where a small packet is ping-ponged:
+
+host                                        --> 31.33
+halt_poll_ns=300000 / no guest busy spin    --> 33.40   (93.8%)
+halt_poll_ns=0 / guest_halt_poll_ns=300000  --> 32.73   (95.7%)
+
+For the SAP HANA benchmarks (where idle_spin is a parameter
+of the previous version of the patch, results should be the
+same):
+
+hpns == halt_poll_ns
+
+                           idle_spin=0/   idle_spin=800/    idle_spin=0/
+                           hpns=200000    hpns=0            hpns=800000
+DeleteC06T03 (100 thread) 1.76           1.71 (-3%)        1.78   (+1%)
+InsertC16T02 (100 thread) 2.14           2.07 (-3%)        2.18   (+1.8%)
+DeleteC00T01 (1 thread)   1.34           1.28 (-4.5%)      1.29   (-3.7%)
+UpdateC00T03 (1 thread)   4.72           4.18 (-12%)       4.53   (-5%)
+
+V2:
+
+- Move from x86 to generic code (Paolo/Christian)
+- Add auto-tuning logic (Paolo)
+- Add MSR to disable host side polling (Paolo)
+
+V3:
+
+- Do not be specific about HLT VM-exit in the documentation (Ankur Arora)
+- Mark tuning parameters static and __read_mostly (Andrea Arcangeli)
+- Add WARN_ON if host does not support poll control (Joao Martins)
+- Use sched_clock and cleanup haltpoll_enter_idle (Peter Zijlstra)
+- Mark certain functions in kvm.c as static (kernel test robot)
+- Remove tracepoints as they use RCU from extended quiescent state (kernel
+test robot)
+
+V4:
+- Use a haltpoll governor, use poll_state.c poll code (Rafael J. Wysocki)
+
+
+
