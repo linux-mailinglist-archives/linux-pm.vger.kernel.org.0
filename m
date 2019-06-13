@@ -2,93 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3861D44675
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 18:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECA14466F
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 18:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727643AbfFMQwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 12:52:00 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42059 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730135AbfFMD27 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 23:28:59 -0400
-Received: by mail-pg1-f193.google.com with SMTP id l19so7469860pgh.9
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jun 2019 20:28:58 -0700 (PDT)
+        id S1727298AbfFMQvr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 12:51:47 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36026 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730140AbfFMDbz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jun 2019 23:31:55 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d21so7479698plr.3;
+        Wed, 12 Jun 2019 20:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Y0RXF4gWpg6oRev0V7qX7zvfsm8kw/NN62sxjqPfMWk=;
-        b=WDkShjUqr7OdKx3xze67gTatNDPEQdHEKzUEZhf5VJRnMGTGr+0TodpBpsYi22fHXQ
-         yGX/7D1trCLjI/pOgYmz5EPF09mx/zBREXyL1gtGJdqmJK3XHEOQuIStQCknN/QZqo/j
-         Sk7x0EBYLCtp3BsdU6cuy+FGNu+spl6f+yLvhYv6T8SDHZ7agwTJeQ9W6jw/sWCbL+uQ
-         9BwjOFSDhTsTZ7Gpc7BHSibDsj5XrvD/jVwsjQQMU9fX5bUHY0tK9IebaADaeMUnOjBS
-         KVTizgjHB/l863d+4fw5SjiN6weba69/fRrdFPSu41y/vnn0i9+TZj3uetd+6VAADhGe
-         DP4w==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:openpgp:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nzGBiH9Q2cHj69v2s9SzWAcskIQxRVWhnxjtOISSfH0=;
+        b=P3+W71Z7wOq9r8J9vPu4J49YzWsvoiYpKSpycf1qS/PpM52rE88Oag+c2qaNi7/2f2
+         B2vFG4DCa0POM6uTUi0Zia+afz9c3sPd6I4KV5yof6kGAQs+wplvUjZPekYBSx5fGRfw
+         +RgrUpwADxnUhYoWW4zzACqtWio9HSLHDq2kPVjGwEgfIL8KvX4tj4qgL7zEFUmbBbLA
+         fAQqbaAXYmEZrxgMUCdtaTvmGUzPNRutOqnFkECRPCyp18KKI/5d5CCF2qMj488IJZb5
+         eqs1bvGTk80kDWb/pJhk8MxZWrTH65Zeuptnjgmpmnl0K8snjNv/+SmrSTJJAwpKMh+1
+         9A0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Y0RXF4gWpg6oRev0V7qX7zvfsm8kw/NN62sxjqPfMWk=;
-        b=ufzqZRdcp33l7NGcyIXd/GVzOH+4osNNmk3i54MoW1rObra4tpimY/5JIyfCD220+F
-         IUz5AHP3Ko+v1yAl011RjUMj5lM8p5tucnMuXHuVcvY3KKgnbfy598cyamznnWhZlO2D
-         XCjdDRjkOqP3F3hGKgtj4KWpX4qYYIbmoppGoVWI4S6JmQS1mgc1Cvhe+BL3Q45m7mXL
-         MYKMipCb9CIb9PXJYrENpoF8wFXS35Q6SL/Gw+jOYftAV9Ekk3JDsBVeWmbUfONMKqdn
-         8fQ4LMb7a3oqvbGDq3rU9YLj9Te3ckacE64XMlsPuKrMu0+BRkiHYXH1fkL0c/+/c2iI
-         /KkQ==
-X-Gm-Message-State: APjAAAVoUmgsmXuyeBCkeW9Cc3Vu0YBGbQj0Vtdz3A+UaYrY8iBliKQ+
-        2Ls9BnQmluMqgcjUnmmdk3y1jw==
-X-Google-Smtp-Source: APXvYqzeOaLF3t0SmMiR779Mvfmp+z/EooCVSQRsNsjXE6iUYXAx0qAfy9hRnNnJItYipyXKylLwlw==
-X-Received: by 2002:a17:90a:aa88:: with SMTP id l8mr2523399pjq.65.1560396538076;
-        Wed, 12 Jun 2019 20:28:58 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id f88sm818781pjg.5.2019.06.12.20.28.55
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nzGBiH9Q2cHj69v2s9SzWAcskIQxRVWhnxjtOISSfH0=;
+        b=L6Rh++OzU7tNRihLb7sEEh+hrmsbPkOp4SEq7wxe8o4t2zeHDfzQoyiNyP8sv41oQc
+         9pQJlY1LrKqG+DCf5Tl+tFhVX6tPAey7VS7Z/UQQEWiU3N29g1XSK4A+Jv3HEPz/8NH+
+         1924y7yx4BJXQNROdq1TJ7fPOAhtmIra0ki9JIp9djVcrrezN8HmwhPgJi3SF0CImB42
+         xV5N/3KCooVUPRa3n6nxIWzm8GkHMvA0f8GhJod/cpftWuyi/AJCxgl7jAZpgte5YETE
+         FckcSODYutKqIjfPWzmE5Xb0smDnhwmq6k1ZSnXtGDRLlY4Qss1rIrOIZpqPmXvCK0ss
+         8iXg==
+X-Gm-Message-State: APjAAAUTOe7xTpfil6hmfsBK1+hEHzzyPJH6CZiyE5lgQFkOYg6/Nnxu
+        rlejrYtYWRrXe1N8aRRQ5ghLekJp
+X-Google-Smtp-Source: APXvYqzWKE85pfVmqmvHVbcmT2pdlkwsEpSroa8BFRjBzzgBTWFi6CVwqLEqha4xH+IoiFuJd4jOMA==
+X-Received: by 2002:a17:902:b594:: with SMTP id a20mr5329327pls.259.1560396714089;
+        Wed, 12 Jun 2019 20:31:54 -0700 (PDT)
+Received: from [10.230.1.150] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id h6sm5445482pjs.2.2019.06.12.20.31.51
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 Jun 2019 20:28:56 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 08:58:54 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     stefan.wahren@i2se.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        mbrugger@suse.de, sboyd@kernel.org, eric@anholt.net,
-        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        ptesarik@suse.com, linux-rpi-kernel@lists.infradead.org,
-        ssuloev@orpaltech.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, mturquette@baylibre.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] cpufreq: add driver for Raspberry Pi
-Message-ID: <20190613032854.wz76t3mq5t2zqcup@vireshk-i7>
+        Wed, 12 Jun 2019 20:31:53 -0700 (PDT)
+Subject: Re: [PATCH v4 0/7] cpufreq support for Raspberry Pi
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        stefan.wahren@i2se.com, linux-kernel@vger.kernel.org
+Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        sboyd@kernel.org, eric@anholt.net,
+        bcm-kernel-feedback-list@broadcom.com, ptesarik@suse.com,
+        linux-rpi-kernel@lists.infradead.org, ssuloev@orpaltech.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mturquette@baylibre.com, linux-pm@vger.kernel.org
 References: <20190612182500.4097-1-nsaenzjulienne@suse.de>
- <20190612182500.4097-5-nsaenzjulienne@suse.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Openpgp: preference=signencrypt
+Message-ID: <6a9e1450-80ad-a13c-59d2-d0b39f25f67e@gmail.com>
+Date:   Wed, 12 Jun 2019 20:31:46 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190612182500.4097-5-nsaenzjulienne@suse.de>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20190612182500.4097-1-nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-06-19, 20:24, Nicolas Saenz Julienne wrote:
-> Raspberry Pi's firmware offers and interface though which update it's
-> performance requirements. It allows us to request for specific runtime
-> frequencies, which the firmware might or might not respect, depending on
-> the firmware configuration and thermals.
-> 
-> As the maximum and minimum frequencies are configurable in the firmware
-> there is no way to know in advance their values. So the Raspberry Pi
-> cpufreq driver queries them, builds an opp frequency table to then
-> launch cpufreq-dt.
-> 
-> Also, as the firmware interface might be configured as a module, making
-> the cpu clock unavailable during init, this implements a full fledged
-> driver, as opposed to most drivers registering cpufreq-dt, which only
-> make use of an init routine.
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Acked-by: Eric Anholt <eric@anholt.net>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
-Applied. Thanks.
+
+On 6/12/2019 11:24 AM, Nicolas Saenz Julienne wrote:
+> Hi all,
+> this aims at adding cpufreq support to the Raspberry Pi family of
+> boards.
+> 
+> The series first factors out 'pllb' from clk-bcm2385 and creates a new
+> clk driver that operates it over RPi's firmware interface[1]. We are
+> forced to do so as the firmware 'owns' the pll and we're not allowed to
+> change through the register interface directly as we might race with the
+> over-temperature and under-voltage protections provided by the firmware.
+> 
+> Next it creates a minimal cpufreq driver that populates the CPU's opp
+> table, and registers cpufreq-dt. Which is needed as the firmware
+> controls the max and min frequencies available.
+> 
+> This was tested on a RPi3b+ and RPI2b, both using multi_v7_defconfig and
+> arm64's defconfig.
+
+How do we go about merging this? Stefan, will you pick up patch 3, 6 and
+7 and submit them for 5.3/5.4? Viresh has already picked up patch 4.
+
+> 
+> That's all,
+> kind regards,
+> Nicolas
+> 
+> [1] https://github.com/raspberrypi/firmware/wiki/Mailbox-property-interface
+> 
+> ---
+> 
+> Changes since v3:
+>   - Fix sparse warnings in clk-raspberrypi.c
+>   - Minor cleanups
+> 
+> Changes since v2:
+>   - Fixed configs to match Stefan's comments
+>   - Round OPP frequencies
+>   - Rebase onto linux-next
+>   - Minor cleanups & checkpatch.pl
+> 
+> Changes since v1:
+>   - Enabled by default on the whole family of devices
+>   - Added/Fixed module support
+>   - clk device now registered by firmware driver
+>   - raspberrypi-cpufreq device now registered by clk driver
+>   - Reimplemented clk rounding unsing determine_rate()
+>   - Enabled in configs for arm and arm64
+> 
+> Changes since RFC:
+>   - Move firmware clk device into own driver
+> 
+> Nicolas Saenz Julienne (7):
+>   clk: bcm2835: remove pllb
+>   clk: bcm283x: add driver interfacing with Raspberry Pi's firmware
+>   firmware: raspberrypi: register clk device
+>   cpufreq: add driver for Raspberry Pi
+>   clk: raspberrypi: register platform device for raspberrypi-cpufreq
+>   ARM: defconfig: enable cpufreq driver for RPi
+>   arm64: defconfig: enable cpufreq support for RPi3
+> 
+>  arch/arm/configs/bcm2835_defconfig    |   9 +
+>  arch/arm/configs/multi_v7_defconfig   |   2 +
+>  arch/arm64/configs/defconfig          |   2 +
+>  drivers/clk/bcm/Kconfig               |   7 +
+>  drivers/clk/bcm/Makefile              |   1 +
+>  drivers/clk/bcm/clk-bcm2835.c         |  28 +--
+>  drivers/clk/bcm/clk-raspberrypi.c     | 315 ++++++++++++++++++++++++++
+>  drivers/cpufreq/Kconfig.arm           |   8 +
+>  drivers/cpufreq/Makefile              |   1 +
+>  drivers/cpufreq/raspberrypi-cpufreq.c |  97 ++++++++
+>  drivers/firmware/raspberrypi.c        |  10 +
+>  11 files changed, 456 insertions(+), 24 deletions(-)
+>  create mode 100644 drivers/clk/bcm/clk-raspberrypi.c
+>  create mode 100644 drivers/cpufreq/raspberrypi-cpufreq.c
+> 
 
 -- 
-viresh
+Florian
