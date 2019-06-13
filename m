@@ -2,166 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C099044B0F
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 20:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E14844B18
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 20:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbfFMStQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 14:49:16 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:53714 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbfFMStQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 14:49:16 -0400
-Received: from 79.184.253.190.ipv4.supernova.orange.pl (79.184.253.190) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id 53b4723736121aee; Thu, 13 Jun 2019 20:49:12 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH] PCI: PM: Skip devices in D0 for suspend-to-idle
-Date:   Thu, 13 Jun 2019 20:49:12 +0200
-Message-ID: <2649673.xutNDJ3zlI@kreacher>
-In-Reply-To: <2513600.jR9RdVMSR0@kreacher>
-References: <2513600.jR9RdVMSR0@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1726626AbfFMSuI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 14:50:08 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:37777 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726893AbfFMSuF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 14:50:05 -0400
+Received: by mail-qt1-f202.google.com with SMTP id g56so18287915qte.4
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 11:50:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=iJr+4ggl20eIHBVlJYsDbfpCyG/SofOdghTKFndlSZ8=;
+        b=ZNmrxIDGISYo8WckRqA+U9BeAMfdaZgYUeKcQK7fqG1we20mp4O5NLtseFdKS5ovVQ
+         mVvM7smCjfbZn21w0Dc+HJALtNy4FX71JUunI1r7qtidj3JlFGmMM4kN6LUGbQQfwqGu
+         l0BiTL2Tj/qD0qEMEIEdt8W1xjodgCc8PIPMCUDv1d5cG04G4lfrRFsp7Z2FtAjAwo4G
+         UYhbibGtJHebHm8ekp4H8FTx5qtAWgrXJlBzD88dHmBzkCB0eGIozvLcbvXPa6foCDaR
+         623GQqP2YExDAwSdh3ZxV6LtEhqOQMqin5MIjLf4Ryrx2qywPAItgttFSnoHpbWJQ5jT
+         5O2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=iJr+4ggl20eIHBVlJYsDbfpCyG/SofOdghTKFndlSZ8=;
+        b=MOi8XznKfcsd1aMP5B7NTavmSMHVlatyABNTjWK0DJcR+Is1VQBtZkQmIZUs/z7kgF
+         py3IXwNPRbD43LNCKCjAHxVvphb9gFEPjORb3oM8WO9NTZ/c4yAO+bcX5ozt/2XUwo1y
+         EXik3Ebav89cCkcCR7LO4pD55Ov9l8RL294U8qgf6cZUWoT4fd6HeL40/VIbBGfBW/Yz
+         U7SxSq411sOVn7hyxs3uFA0m3qSAPSIkXdFBABW9SLxsp/2yck1tZ3DtrWEpCdBcDJ2D
+         BkZTKxuzPu9+Gbhqpbz/E/aif2rIftzSF3HGtblBLi0xdiSufJLcGyIMymD/u/fXdTTn
+         sAUA==
+X-Gm-Message-State: APjAAAWtyZOUAJEqJhzy407Ge4UxvOy8mk7Hx8GTESBQo6I5hh2K5Tee
+        dOSK7dSlu3DcdWrwEuGoeRoL8TYAyw==
+X-Google-Smtp-Source: APXvYqwhjG00MYYwYwHHJbawQhq3fK3to0Ed8wqqChYuKXI3+Et4oxHXvuWz9NCupF34Rw4x45Pi6oYfAQ==
+X-Received: by 2002:ac8:2bd4:: with SMTP id n20mr67510092qtn.131.1560451804213;
+ Thu, 13 Jun 2019 11:50:04 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 11:49:23 -0700
+Message-Id: <20190613184923.245935-1-nhuck@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
+Subject: [PATCH] thermal: armada: Fix -Wshift-negative-value
+From:   Nathan Huckleberry <nhuck@google.com>
+To:     miquel.raynal@bootlin.com, rui.zhang@intel.com,
+        edubezval@gmail.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Huckleberry <nhuck@google.com>,
+        clang-built-linux@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, June 13, 2019 12:14:02 AM CEST Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-> attempted to avoid a problem with devices whose drivers want them to
-> stay in D0 over suspend-to-idle and resume, but it did not go as far
-> as it should with that.
-> 
-> Namely, first of all, it is questionable to change the power state
-> of a PCI bridge with a device in D0 under it, but that is not
-> actively prevented from happening during system-wide PM transitions,
-> so use the skip_bus_pm flag introduced by commit d491f2b75237 for
-> that.
-> 
-> Second, the configuration of devices left in D0 (whatever the reason)
-> during suspend-to-idle need not be changed and attempting to put them
-> into D0 again by force may confuse some firmware, so explicitly avoid
-> doing that.
-> 
-> Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> Tested on Dell XPS13 9360 with no issues.
-> 
-> ---
->  drivers/pci/pci-driver.c |   47 +++++++++++++++++++++++++++++++++++------------
->  1 file changed, 35 insertions(+), 12 deletions(-)
-> 
-> Index: linux-pm/drivers/pci/pci-driver.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-driver.c
-> +++ linux-pm/drivers/pci/pci-driver.c
-> @@ -524,7 +524,6 @@ static void pci_pm_default_resume_early(
->  	pci_power_up(pci_dev);
->  	pci_restore_state(pci_dev);
->  	pci_pme_restore(pci_dev);
-> -	pci_fixup_device(pci_fixup_resume_early, pci_dev);
->  }
->  
->  /*
-> @@ -842,18 +841,16 @@ static int pci_pm_suspend_noirq(struct d
->  
->  	if (pci_dev->skip_bus_pm) {
->  		/*
-> -		 * The function is running for the second time in a row without
-> +		 * Either the device is a bridge with a child in D0 below it, or
-> +		 * the function is running for the second time in a row without
->  		 * going through full resume, which is possible only during
-> -		 * suspend-to-idle in a spurious wakeup case.  Moreover, the
-> -		 * device was originally left in D0, so its power state should
-> -		 * not be changed here and the device register values saved
-> -		 * originally should be restored on resume again.
-> +		 * suspend-to-idle in a spurious wakeup case.  The device should
-> +		 * be in D0 at this point, but if it is a bridge, it may be
-> +		 * necessary to save its state.
->  		 */
-> -		pci_dev->state_saved = true;
-> -	} else if (pci_dev->state_saved) {
-> -		if (pci_dev->current_state == PCI_D0)
-> -			pci_dev->skip_bus_pm = true;
-> -	} else {
-> +		if (!pci_dev->state_saved)
-> +			pci_save_state(pci_dev);
-> +	} else if (!pci_dev->state_saved) {
->  		pci_save_state(pci_dev);
->  		if (pci_power_manageable(pci_dev))
->  			pci_prepare_to_sleep(pci_dev);
-> @@ -862,6 +859,22 @@ static int pci_pm_suspend_noirq(struct d
->  	dev_dbg(dev, "PCI PM: Suspend power state: %s\n",
->  		pci_power_name(pci_dev->current_state));
->  
-> +	if (pci_dev->current_state == PCI_D0) {
-> +		pci_dev->skip_bus_pm = true;
-> +		/*
-> +		 * Changing the power state of a PCI bridge with a device in D0
-> +		 * below it is questionable, so avoid doing that by setting the
-> +		 * skip_bus_pm flag for the parent bridge.
-> +		 */
-> +		if (pci_dev->bus->self)
-> +			pci_dev->bus->self->skip_bus_pm = true;
-> +	}
-> +
-> +	if (pci_dev->skip_bus_pm && !pm_suspend_via_firmware()) {
-> +		dev_dbg(dev, "PCI PM: Skipped\n");
-> +		goto Fixup;
-> +	}
-> +
->  	pci_pm_set_unknown_state(pci_dev);
->  
->  	/*
-> @@ -909,7 +922,16 @@ static int pci_pm_resume_noirq(struct de
->  	if (dev_pm_smart_suspend_and_suspended(dev))
->  		pm_runtime_set_active(dev);
->  
-> -	pci_pm_default_resume_early(pci_dev);
-> +	/*
-> +	 * In the suspend-to-idle case, devices left in D0 during suspend will
-> +	 * stay in D0, so it is not necessary to restore or update their
-> +	 * configuration here and attempting to put them into D0 again may
-> +	 * confuse some firmware, so avoid doing that.
-> +	 */
-> +	if (!pci_dev->skip_bus_pm || pm_suspend_via_firmware())
-> +		pci_pm_default_resume_early(pci_dev);
-> +
-> +	pci_fixup_device(pci_fixup_resume_early, pci_dev);
->  
->  	if (pci_has_legacy_pm_support(pci_dev))
->  		return pci_legacy_resume_early(dev);
-> @@ -1200,6 +1222,7 @@ static int pci_pm_restore_noirq(struct d
->  	}
->  
->  	pci_pm_default_resume_early(pci_dev);
-> +	pci_fixup_device(pci_fixup_resume_early, pci_dev);
->  
->  	if (pci_has_legacy_pm_support(pci_dev))
->  		return pci_legacy_resume_early(dev);
-> 
+Clang produces the following warning
 
-Bjorn, please let me know if you have any reservations here.
+drivers/thermal/armada_thermal.c:270:33: warning: shifting a negative
+signed value is undefined [-Wshift-negative-value]
+1 warning        reg &= ~CONTROL1_TSEN_AVG_MASK <<
+CONTROL1_TSEN_AVG_SHIFT; generated
+.
+               ~~~~~~~~~~~~~~~~~~~~~~~ ^
 
-Since this has been confirmed to fix a reported issue, I'm about to queue it up for 5.2-rc6.
+CONTROL1_TSEN_AVG_SHIFT is defined to be zero.
+Since shifting by zero does nothing this variable can be removed.
 
-Cheers,
-Rafael
+Cc: clang-built-linux@googlegroups.com
+Link: https://github.com/ClangBuiltLinux/linux/issues/532
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+---
+ drivers/thermal/armada_thermal.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-
+diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+index 8c07a393dc2e..709a22f455e9 100644
+--- a/drivers/thermal/armada_thermal.c
++++ b/drivers/thermal/armada_thermal.c
+@@ -53,7 +53,6 @@
+ #define CONTROL0_TSEN_MODE_EXTERNAL	0x2
+ #define CONTROL0_TSEN_MODE_MASK		0x3
+ 
+-#define CONTROL1_TSEN_AVG_SHIFT		0
+ #define CONTROL1_TSEN_AVG_MASK		0x7
+ #define CONTROL1_EXT_TSEN_SW_RESET	BIT(7)
+ #define CONTROL1_EXT_TSEN_HW_RESETn	BIT(8)
+@@ -267,8 +266,8 @@ static void armada_cp110_init(struct platform_device *pdev,
+ 
+ 	/* Average the output value over 2^1 = 2 samples */
+ 	regmap_read(priv->syscon, data->syscon_control1_off, &reg);
+-	reg &= ~CONTROL1_TSEN_AVG_MASK << CONTROL1_TSEN_AVG_SHIFT;
+-	reg |= 1 << CONTROL1_TSEN_AVG_SHIFT;
++	reg &= ~CONTROL1_TSEN_AVG_MASK;
++	reg |= 1;
+ 	regmap_write(priv->syscon, data->syscon_control1_off, reg);
+ }
+ 
+-- 
+2.22.0.rc2.383.gf4fbbf30c2-goog
 
