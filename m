@@ -2,111 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EECC743A1F
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2093E43980
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732323AbfFMPSj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 11:18:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38886 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732155AbfFMNFd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 13 Jun 2019 09:05:33 -0400
-Received: from earth.universe (dyndsl-095-033-011-189.ewe-ip-backbone.de [95.33.11.189])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67C3B205ED;
-        Thu, 13 Jun 2019 13:05:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560431132;
-        bh=9nw7s7Y1QRBTXFeeD1F8tOL9Kaizm2l7e3Ph/Xz+h50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wzRm/x10/pYWTJzw5naJiqba5efR9LYMIKMLRdFAtvkvh4JkXIQ56p6+ZjI0kXE0E
-         4jpE1a6LzXszIazL6ARJUwzldZdqylsrebyOpqTNJ5qL7VHd/4wQCvVTMNCCqflaAB
-         cl/R3NEOjn2v+4zgAZE6fn0tBF9DEiTradMT58MI=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 0F2303C0C77; Thu, 13 Jun 2019 15:05:30 +0200 (CEST)
-Date:   Thu, 13 Jun 2019 15:05:29 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     mazziesaccount@gmail.com, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v15 0/7] support ROHM BD70528 PMIC
-Message-ID: <20190613130529.kgswgbuszb24itxz@earth.universe>
-References: <cover.1559546139.git.matti.vaittinen@fi.rohmeurope.com>
- <20190611200043.eib3g3acc7ilawsx@earth.universe>
- <20190612060328.GQ4797@dell>
+        id S1732289AbfFMPOK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 11:14:10 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:42140 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732264AbfFMPN2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 11:13:28 -0400
+Received: by mail-lf1-f67.google.com with SMTP id y13so15363296lfh.9
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 08:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oy4WRzt4oy7DKEhEUsk8mM+TKtbIR/SxiJkzCANc2S0=;
+        b=jMyVNjAHR90qecUAhRrWQnYr3j5JfbQWsYrzQvWMbwWRPL0Z7nP94qt24V2i/E3l+a
+         ZIvy9FmxmrQ2duSB2wqLIJDUZtCMYd07SgfkxP/rrJsQY5NilBYJej4YfiPEshJT52Lw
+         mbC4J9qi3ZrY9C9o3nloY8heK6ApIxvZcz3KVAkBbGHPjnVjUCOdxZ+t3JVxn+dLbgDB
+         rZoDDcp1kQykVvuwSqmhTgqgMlqyntHU71iS6oJVCAUd6/QQvjkYi8VZu+O5LpEmeSE7
+         Jeoao2k+CmmIvF3A7/aq407OY7qRgIb9NEu2ypnge/Bou2ibNgLJNZ+0CNSmKd/W1/Ml
+         Q80w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oy4WRzt4oy7DKEhEUsk8mM+TKtbIR/SxiJkzCANc2S0=;
+        b=IlHIjKZROhmqU0IFJUw8w99zh7KeahZ8QS9d+U72+J9ecl2ERsap43jL/WFJxSCsVU
+         5jZUqQVy4TlhkgyPocETL25/3QqvsipMUMjqe/712yWkj+yJJkZMkbrBxyr3UT1sgjwF
+         Do20p0MEFpO4w36LpkCmZzTsh/9hMU6JAn1xGkY6lGg3ThKoMXKUCN2UY2Zu+F/1DqZV
+         Yg68+xuWdpWhuTjnXqjdL5O8VOHmdtk4EBAdLEHIlW3IT+3BtUeB5vbC1lctj77vQfYA
+         vWzA5OcOqNGexx9zuCxswId4m7UqcAGK6vkxCPMPt+zKuBUxADrRYRcsY0nwZBURW6Tx
+         XQeg==
+X-Gm-Message-State: APjAAAWSzf4mq4HAw35Zyr0HJohu52Fw4+2upJZc75HVRzNYG+UiKyVR
+        xpEbKLCxajh5Mt30wlYIdfQ0aA==
+X-Google-Smtp-Source: APXvYqw2pOxAB+cTtgkqIYSoU5XivAmb3YXGBRWP38d8Pc5gb206woR1gl2jQ2aHzJG36QtgigSvNQ==
+X-Received: by 2002:a19:e619:: with SMTP id d25mr1335729lfh.34.1560438806327;
+        Thu, 13 Jun 2019 08:13:26 -0700 (PDT)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id k4sm42923ljj.41.2019.06.13.08.13.24
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 13 Jun 2019 08:13:25 -0700 (PDT)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     robh+dt@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
+        georgi.djakov@linaro.org
+Cc:     vkoul@kernel.org, evgreen@chromium.org, daidavid1@codeaurora.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v4 0/5] Add QCS404 interconnect provider driver
+Date:   Thu, 13 Jun 2019 18:13:18 +0300
+Message-Id: <20190613151323.10850-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z7gwwmvwfgzls6v6"
-Content-Disposition: inline
-In-Reply-To: <20190612060328.GQ4797@dell>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add drivers to support scaling of the on-chip interconnects on QCS404-based
+platforms. Also add the necessary device-tree nodes, so that the driver for
+each NoC can probe and register as interconnect-provider.
 
---z7gwwmvwfgzls6v6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v4:
+- Move DT headers into the dt-bindings patch (Bjorn)
+- Pick Bjorn's r-b on some patches.
+- Return error if platform_device_register_data() fails (Bjorn)
+- Use platform_set_drvdata() only in the child device. (Bjorn)
+- Hide the smd-rpm proxy driver from config menu. (Bjorn)
+- Add remove() function to zero out the rpm handle. (Bjorn)
+- Move move the qcs404 driver patch later in the serie. (Bjorn)
+- Insert the DT nodes after rng to keep the list sorted by address. (Bjorn)
 
-Hi,
+v3: https://lore.kernel.org/lkml/20190611164157.24656-1-georgi.djakov@linaro.org/
+- Drop the patch introducing the qcom,qos DT property.
+- Add two new patches to create an interconnect proxy device. This device is
+  part of the RPM hardware and handles the communication of the bus bandwidth
+  requests.
+- Add a DT reg property and move the interconnect nodes under the "soc" node.
 
-On Wed, Jun 12, 2019 at 07:03:28AM +0100, Lee Jones wrote:
-> On Tue, 11 Jun 2019, Sebastian Reichel wrote:
-> > On Mon, Jun 03, 2019 at 10:23:37AM +0300, Matti Vaittinen wrote:
-> > > Patch series introducing support for ROHM BD70528 PMIC
-> > > [...]
-> >=20
-> > I think all patches have been reviewed by the respective subsystem
-> > maintainers. Lee, can you provide an immutable branch with the MFD
-> > patches (1, 2, 4)? Looks like the other patches only depend on those
-> > and can go through their respective subsystems.
->=20
-> Yes.  It's on my TODO list.
+v2: https://lore.kernel.org/lkml/20190415104357.5305-1-georgi.djakov@linaro.org/
+- Use the clk_bulk API. (Bjorn)
+- Move the port IDs into the provider file. (Bjorn)
+- Use ARRAY_SIZE in the macro to automagically count the num_links. (Bjorn)
+- Improve code readability. (Bjorn)
+- Add patch [4/4] introducing a qcom,qos DT property to represent the link to
+  the MMIO QoS registers HW block.
 
-Thanks.
+v1: https://lore.kernel.org/lkml/20190405035446.31886-1-georgi.djakov@linaro.org/
 
-> Would you prefer this method over me just taking them all and sending
-> out a PR?  The latter is my usual flow, but I'm happy with either.
+Bjorn Andersson (1):
+  interconnect: qcom: Add QCS404 interconnect provider driver
 
-Both methods are fine with me. I usually go with "my" method, since
-that results in less shared commits. It simplifies potential
-follow-up bug fixes, since there is only one tree to fix.
+Georgi Djakov (4):
+  dt-bindings: interconnect: Add Qualcomm QCS404 DT bindings
+  soc: qcom: smd-rpm: Create RPM interconnect proxy child device
+  interconnect: qcom: Add interconnect SMD over SMD driver
+  arm64: dts: qcs404: Add interconnect provider DT nodes
 
--- Sebastian
+ .../bindings/interconnect/qcom,qcs404.txt     |  46 ++
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  28 +
+ drivers/interconnect/qcom/Kconfig             |  12 +
+ drivers/interconnect/qcom/Makefile            |   4 +
+ drivers/interconnect/qcom/qcs404.c            | 539 ++++++++++++++++++
+ drivers/interconnect/qcom/smd-rpm.c           |  80 +++
+ drivers/interconnect/qcom/smd-rpm.h           |  15 +
+ drivers/soc/qcom/smd-rpm.c                    |  17 +-
+ .../dt-bindings/interconnect/qcom,qcs404.h    |  88 +++
+ 9 files changed, 828 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
+ create mode 100644 drivers/interconnect/qcom/qcs404.c
+ create mode 100644 drivers/interconnect/qcom/smd-rpm.c
+ create mode 100644 drivers/interconnect/qcom/smd-rpm.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,qcs404.h
 
---z7gwwmvwfgzls6v6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0CShYACgkQ2O7X88g7
-+pr+dQ//UKZYRSKZHKIkw81U/LPaGmkXOWyyYGwVfxHDYeMyeHur/klljg+mU4bW
-gMCGCns23SP/L4c9lOc3aY/Ovkjuq2gjonKtMFo66fY9slf6MdnC4L9FNXXUqsPK
-oa8Fir0ful7FdJ4HxsxLqkiTT1wWDNRgchMI/iNEhcjMt14rlzwIM7wyktT8O/Zr
-9Om2Cx282JEE5hGbl2D98VPrR67vqNRqOwIhZ+lQBNgXiOUgvlh2UDqpXziOjdwX
-vxgmoxUB1v72itnyz0qf46L+ayqnPmBH6MSEdTYs5vYz4l64c4jIXoyyJ/pPr+ck
-rb6eygO0LkADnW6zab11yWn1HH/CYJG1TUNMNOw8a4RFPpCyDW17U5ksICi55hhx
-HrG1YXCPgpiGV2d0MawLwLhEbv3FXIYDPPt6xEne0FXUHg53apOQjmyPoGP404RN
-M7jJJlpkGyHd5N2iskFU79NBES64aHkc/uvmEZw56xHUVg0SZ9e/V7zLKWwxMYeM
-C0kaTjsN86xnoNwsMoVx94RiIjk38xDz1anaAafOtpkUxdFb2xL9qpGWiUlwZKVJ
-ALa7k8jleI0Mzv/fOFHGBZzkGoPCdqURkANKyCLHBA8Pi++nGR4RHF2Om/goK/mb
-pLme4LVfDKswR8HYUbrfCBLsG/uBNX1GfoEH9/CQ2gNKSphUZ90=
-=ScGm
------END PGP SIGNATURE-----
-
---z7gwwmvwfgzls6v6--
