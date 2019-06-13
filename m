@@ -2,159 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F284543CFC
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE0443A50
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jun 2019 17:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729939AbfFMPic (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 11:38:32 -0400
-Received: from casper.infradead.org ([85.118.1.10]:33510 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731947AbfFMJ7G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 05:59:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=X6go1h+qBvd8UqStxDka25oSP1lwn219vXM1njzftqM=; b=st/cCkCW17JvfhPcMMlIiWlWs7
-        IjzbMHLeCgNGoALijV6IG+3mBu2hWh+zDF/ixgeztGRJFvKYWEb/k1hwDtOuJEM+LaN5VPyeL2Nyt
-        pUW3p7YE7JRXzR5AqF9H3+IiwxYWckQCRps/QFoMco8bS1sS+v518UWrrJXO7ml5NcscdFDSXeQVX
-        ZKduv2MoYrDVAMjIkypzrzv1fDu9De18EdqyKnVmVA/jtlt3lbqFtvB/kKq3/UdhRk448WORt2zGk
-        vyVeBQhaltTvjNhKaj4bDz1fJNL7g5eIVBQzyzZatNVk3zR46pfOQJ6fi4X1Ul2gzhVbF7Xgp5Fcx
-        8jdm6Tow==;
-Received: from 201.86.169.251.dynamic.adsl.gvt.net.br ([201.86.169.251] helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hbMVS-0000iN-9Z; Thu, 13 Jun 2019 09:58:54 +0000
-Date:   Thu, 13 Jun 2019 06:58:43 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Harry Wei <harryxiyou@gmail.com>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-pci@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v4 18/28] docs: convert docs to ReST and rename to *.rst
-Message-ID: <20190613065843.100f72dd@coco.lan>
-In-Reply-To: <7dc94cb4-ebf1-22ab-29c9-fcb2b875a9ac@csail.mit.edu>
-References: <cover.1560361364.git.mchehab+samsung@kernel.org>
-        <fac44e1fbab5ea755a93601a4fdfa34fcc57ae9e.1560361364.git.mchehab+samsung@kernel.org>
-        <7dc94cb4-ebf1-22ab-29c9-fcb2b875a9ac@csail.mit.edu>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2387611AbfFMPUB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 11:20:01 -0400
+Received: from mga07.intel.com ([134.134.136.100]:13916 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732117AbfFMM5X (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 13 Jun 2019 08:57:23 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jun 2019 05:57:22 -0700
+X-ExtLoop1: 1
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 13 Jun 2019 05:57:19 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 13 Jun 2019 15:57:18 +0300
+Date:   Thu, 13 Jun 2019 15:57:18 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH] PCI: PM: Skip devices in D0 for suspend-to-idle
+Message-ID: <20190613125718.GM2640@lahna.fi.intel.com>
+References: <2513600.jR9RdVMSR0@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2513600.jR9RdVMSR0@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Em Wed, 12 Jun 2019 17:25:39 -0700
-"Srivatsa S. Bhat" <srivatsa@csail.mit.edu> escreveu:
-
-> On 6/12/19 10:52 AM, Mauro Carvalho Chehab wrote:
-> > Convert the PM documents to ReST, in order to allow them to
-> > build with Sphinx.
-> > 
-> > The conversion is actually:
-> >   - add blank lines and identation in order to identify paragraphs;
-> >   - fix tables markups;
-> >   - add some lists markups;
-> >   - mark literal blocks;
-> >   - adjust title markups.
-> > 
-> > At its new index.rst, let's add a :orphan: while this is not linked to
-> > the main index.rst file, in order to avoid build warnings.
-> > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Acked-by: Mark Brown <broonie@kernel.org>
-> > ---  
+On Thu, Jun 13, 2019 at 12:14:02AM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> [...]
+> Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> attempted to avoid a problem with devices whose drivers want them to
+> stay in D0 over suspend-to-idle and resume, but it did not go as far
+> as it should with that.
 > 
-> > diff --git a/Documentation/power/suspend-and-cpuhotplug.txt b/Documentation/power/suspend-and-cpuhotplug.rst
-> > similarity index 90%
-> > rename from Documentation/power/suspend-and-cpuhotplug.txt
-> > rename to Documentation/power/suspend-and-cpuhotplug.rst
-> > index a8751b8df10e..9df664f5423a 100644
-> > --- a/Documentation/power/suspend-and-cpuhotplug.txt
-> > +++ b/Documentation/power/suspend-and-cpuhotplug.rst
-> > @@ -1,10 +1,15 @@
-> > +====================================================================
-> >  Interaction of Suspend code (S3) with the CPU hotplug infrastructure
-> > +====================================================================
-> >  
-> > -     (C) 2011 - 2014 Srivatsa S. Bhat <srivatsa.bhat@linux.vnet.ibm.com>
-> > +(C) 2011 - 2014 Srivatsa S. Bhat <srivatsa.bhat@linux.vnet.ibm.com>
-> >  
-> >  
-> > -I. How does the regular CPU hotplug code differ from how the Suspend-to-RAM
-> > -   infrastructure uses it internally? And where do they share common code?
-> > +I. Differences between CPU hotplug and Suspend-to-RAM
-> > +======================================================
-> > +
-> > +How does the regular CPU hotplug code differ from how the Suspend-to-RAM
-> > +infrastructure uses it internally? And where do they share common code?
-> >  
-> >  Well, a picture is worth a thousand words... So ASCII art follows :-)
-> >    
+> Namely, first of all, it is questionable to change the power state
+> of a PCI bridge with a device in D0 under it, but that is not
+> actively prevented from happening during system-wide PM transitions,
+> so use the skip_bus_pm flag introduced by commit d491f2b75237 for
+> that.
 > 
-> [...]
+> Second, the configuration of devices left in D0 (whatever the reason)
+> during suspend-to-idle need not be changed and attempting to put them
+> into D0 again by force may confuse some firmware, so explicitly avoid
+> doing that.
 > 
-> > @@ -101,7 +108,7 @@ execution during resume):
-> >  
-> >  It is to be noted here that the system_transition_mutex lock is acquired at the very
-> >  beginning, when we are just starting out to suspend, and then released only
-> > -after the entire cycle is complete (i.e., suspend + resume).
-> > +after the entire cycle is complete (i.e., suspend + resume)::
-> >    
-> 
-> I think that should be a period, not a colon, because it is clarifying
-> the text above it (as opposed to referring to the example below it).
-> 
-> Other than that, for suspend-and-cpuhotplug.txt:
-> 
-> Acked-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
+> Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Ah, ok. I'll change it to:
-
-	after the entire cycle is complete (i.e., suspend + resume).
-
-	::
-
-and add your acked-by.
-
->  
-> Regards,
-> Srivatsa
-> VMware Photon OS
-
-
-
-Thanks,
-Mauro
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
