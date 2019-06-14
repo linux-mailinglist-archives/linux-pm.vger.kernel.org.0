@@ -2,24 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE76346A1A
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 22:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C41C46B96
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 23:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728413AbfFNUgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 16:36:36 -0400
-Received: from ms.lwn.net ([45.79.88.28]:54110 "EHLO ms.lwn.net"
+        id S1726368AbfFNVOt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 17:14:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58562 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727091AbfFNUge (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Jun 2019 16:36:34 -0400
-Received: from lwn.net (localhost [127.0.0.1])
+        id S1726252AbfFNVOt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Jun 2019 17:14:49 -0400
+Received: from localhost (unknown [69.71.4.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 731B91427;
-        Fri, 14 Jun 2019 20:36:32 +0000 (UTC)
-Date:   Fri, 14 Jun 2019 14:36:31 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 7D0D921473;
+        Fri, 14 Jun 2019 21:14:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560546889;
+        bh=wQlzv9GXi+d6YxFDj5qp88AVZygc6aohbfVT4AQR70Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ks0AHcQ3CMMcp8lXmC5Q1q+mNRhg76nx20zz7WGQfrHmET+emzaWoOodcXQ82HPjk
+         /Q0wzICC14gHKtUH/c0hiVkAbFD6SklBQgeWeDifIfILXybbVlrUgOA2LE9404heew
+         9zZ4/WlS27thwm4E7UDC674PGe7hBqVr8gYg2J1U=
+Date:   Fri, 14 Jun 2019 16:14:47 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -40,7 +48,6 @@ Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
         Johannes Berg <johannes@sipsolutions.net>,
         "David S. Miller" <davem@davemloft.net>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -48,45 +55,48 @@ Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         linux-pci@vger.kernel.org, linux-wireless@vger.kernel.org,
         netdev@vger.kernel.org,
         "Srivatsa S . Bhat" <srivatsa@csail.mit.edu>
-Subject: Re: [PATCH v5] docs: power: convert docs to ReST and rename to
- *.rst
-Message-ID: <20190614143631.7c99719f@lwn.net>
-In-Reply-To: <72d1f8f360d395958dd0b49165fc51b58801f57e.1560420621.git.mchehab+samsung@kernel.org>
+Subject: Re: [PATCH v5] docs: power: convert docs to ReST and rename to *.rst
+Message-ID: <20190614211447.GU13533@google.com>
 References: <7dc94cb4-ebf1-22ab-29c9-fcb2b875a9ac@csail.mit.edu>
-        <72d1f8f360d395958dd0b49165fc51b58801f57e.1560420621.git.mchehab+samsung@kernel.org>
-Organization: LWN.net
+ <72d1f8f360d395958dd0b49165fc51b58801f57e.1560420621.git.mchehab+samsung@kernel.org>
+ <20190614143631.7c99719f@lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190614143631.7c99719f@lwn.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 13 Jun 2019 07:10:36 -0300
-Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
-
-> Convert the PM documents to ReST, in order to allow them to
-> build with Sphinx.
+On Fri, Jun 14, 2019 at 02:36:31PM -0600, Jonathan Corbet wrote:
+> On Thu, 13 Jun 2019 07:10:36 -0300
+> Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
 > 
-> The conversion is actually:
->   - add blank lines and identation in order to identify paragraphs;
->   - fix tables markups;
->   - add some lists markups;
->   - mark literal blocks;
->   - adjust title markups.
+> > Convert the PM documents to ReST, in order to allow them to
+> > build with Sphinx.
+> > 
+> > The conversion is actually:
+> >   - add blank lines and identation in order to identify paragraphs;
+> >   - fix tables markups;
+> >   - add some lists markups;
+> >   - mark literal blocks;
+> >   - adjust title markups.
+> > 
+> > At its new index.rst, let's add a :orphan: while this is not linked to
+> > the main index.rst file, in order to avoid build warnings.
+> > 
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> > Acked-by: Mark Brown <broonie@kernel.org>
+> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Acked-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
 > 
-> At its new index.rst, let's add a :orphan: while this is not linked to
-> the main index.rst file, in order to avoid build warnings.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> Acked-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
+> So I can't apply this one due to conflicts in include/linux/pci.h.  Bjorn,
+> perhaps the easiest thing is for you to take this one through your tree?
 
-So I can't apply this one due to conflicts in include/linux/pci.h.  Bjorn,
-perhaps the easiest thing is for you to take this one through your tree?
+OK, I applied this to pci/docs for v5.3.  I applied this entire patch,
+but if you would prefer that I only apply the PCI-related parts, let
+me know and I'll split those out.
 
-Thanks,
-
-jon
+Bjorn
