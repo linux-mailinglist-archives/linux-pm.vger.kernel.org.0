@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 725BD4534F
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 06:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EF34535A
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 06:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbfFNESK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1726448AbfFNESK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Fri, 14 Jun 2019 00:18:10 -0400
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:39247 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFNESH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 00:18:07 -0400
-Received: by mail-qt1-f201.google.com with SMTP id o16so1076415qtj.6
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 21:18:06 -0700 (PDT)
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:49878 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726432AbfFNESK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 00:18:10 -0400
+Received: by mail-qk1-f201.google.com with SMTP id c4so991737qkd.16
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 21:18:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=qdT885hM1gH99LBPR29/QhPlOeEng+ZQVjJx3w/T2/A=;
-        b=Dibo09Bp3kWBRUtDeP7IlyAc8I0wb5LIZgKw4P/3gbfzowHYQkp8KvALWATtiLifF/
-         OgCNRHwq7V+KkgVUnp2yHEc5qXgQOOZOU05XPJf5NBPt7CFtICrUUykTd+lcCKR2SeaH
-         K8ap0c9N6Jtz99rLRSHAmXzVlbK7jOXBUJEHtsxFtyGsBLyuM5VIeZva8JKgYA23JX/N
-         V86388Avy5hjadcoyqZyv0uUZa1C2g5SS1ewUTpb96wNgW5h0/gF+cwveNdnSk4KmXt2
-         AK0RwUJDKxDAAnSfec6Xw2aoL5IOX9brzOp4yMwqt66AqibDVqTYNc91iTNpUHDOSazs
-         wxZg==
+        bh=VA7s9ly0lqdagUAyh1uYpw4qgEasvgJFlK1lzvkukqY=;
+        b=TrEXlT8djNpXPJc0j8YuBg6jTcfItK6GjAaeUSewHjYjftr5gYxyJuqq3MGH1OUe1T
+         F3xdsaC3oKrSs+dlLVQW3XrlXYI+1M2VVTmgutAgeR/C8BeBT2yPpIVqmYf0mybVrYxo
+         wmtTS/hWV6UkMbpi0KH7Dgq3wWGTIZtkgefl5OGGmwKX/S5v6YwKVnVU3C1gpFDeO+2I
+         FBr4uMGQpUMsUfh59BM9jW4yJHzxtr2LArxfDQbupQodPwMohSfxjbPi3RMe0hpBN2iX
+         XKBIGUhfIgNitWDR3R/EHS75rmfuv6cnWhkdhva0AOGRbVQuo7nzNskKg+bmAYvCCtN7
+         zNcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=qdT885hM1gH99LBPR29/QhPlOeEng+ZQVjJx3w/T2/A=;
-        b=nGVSDUrvyrMi+et4r/B+4CcXNYpjH5bgrfSGeXPVK9/k9Y1KEO1B7QqFJ7gbR78uil
-         UbutBUDG8mcsJrIzwvHwT+gyn4upY8tKzSuB6XV6+uBvVKSvzXQeI9gceQ/LBR+yKvgW
-         ZDRZPlgXOiAL8oLja5juW/cTl/Na4Jnej/TLi4BQO/DNB/zoKPalLZEvjYMvsOjVC9n2
-         Szg+AI6rnwH3XZVYTxpDkkUVSjI/Ri2b6XXY434e2FzBvQmH8q0nEYX96Hnj3RzCW1iN
-         K3YTJKM/y/6qRkFqrDcrvOQjkVZpv5HaLkhiESOEpr+QTxfyQ+bKiLGlQ8NwjWlRdrZT
-         7u5Q==
-X-Gm-Message-State: APjAAAX25GY+Stl4nL9wQXK0B2V5PPokj7dI8Ng/ox9zpPbZQ4B+3VZz
-        8YWgUGZN4AHtoT8JrVerpE1m36zvKAQkNPU=
-X-Google-Smtp-Source: APXvYqyAWOehY93Rqe16/u7/vHBPBduhgTp81nR2/LNC3uUbwpe11mkeC0KZI8SICRtKOwtW6xRTN9Xb5zISKBc=
-X-Received: by 2002:ac8:4619:: with SMTP id p25mr46145520qtn.73.1560485886113;
- Thu, 13 Jun 2019 21:18:06 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 21:17:31 -0700
+        bh=VA7s9ly0lqdagUAyh1uYpw4qgEasvgJFlK1lzvkukqY=;
+        b=BkMUWPH24j6DGb8+YyPWlCOikB5HWjJu3QB0m42Z1zlte8zUQLDs/Fxmc3RDS7ZRce
+         +ftQZIWYpNvRGA3APkJ+e5iRUUtBi5UHVl1a7ft2Vv5V8Gzk6JhtP7uujPCColYrN2n0
+         Tsm6Wtr2D2ydN5RHwLvl5nRjz4kIpPoBKWxO82nxUuO/0y/MqtUuzM765xkLsR+H1HuB
+         fLPQczDgNmqC8Lpp5sXrntN+icTFNid9gBVWjXJzw03L+2145OUl6V0B6Ru03Rhpw6LC
+         y+g5jLqGl9FE1DQI8uhombF64mEC0rLy3N+KRyDXIqgv5+OyTIouXavKNh10zDnLNn+m
+         xbsA==
+X-Gm-Message-State: APjAAAUOqmWgfZF6bXsS7L6FzHoGr/2/1Onxv4XFA0yWfa8i2BPkZSS4
+        hgYjuu1MaGsBrW+YoR/UzDUsGAC5Kt8vU7E=
+X-Google-Smtp-Source: APXvYqzEU9fWluswZw2wyE1N4COxp8I6V3iABbyGVjD++OlIlQ99JPYxbbaQ1U5BqOb5o+DCUfLqGIKFA8Ys39Q=
+X-Received: by 2002:ac8:1794:: with SMTP id o20mr80687898qtj.239.1560485889196;
+ Thu, 13 Jun 2019 21:18:09 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 21:17:32 -0700
 In-Reply-To: <20190614041733.120807-1-saravanak@google.com>
-Message-Id: <20190614041733.120807-10-saravanak@google.com>
+Message-Id: <20190614041733.120807-11-saravanak@google.com>
 Mime-Version: 1.0
 References: <20190614041733.120807-1-saravanak@google.com>
 X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
-Subject: [PATCH v2 09/11] interconnect: Add OPP table support for interconnects
+Subject: [PATCH v2 10/11] OPP: Allow copying OPPs tables between devices
 From:   Saravana Kannan <saravanak@google.com>
 To:     Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -72,106 +72,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Interconnect paths can have different performance points. Now that OPP
-framework supports bandwidth OPP tables, add OPP table support for
-interconnects.
-
-Devices can use the interconnect-opp-table DT property to specify OPP
-tables for interconnect paths. And the driver can obtain the OPP table for
-an interconnect path by calling icc_get_opp_table().
+Some hardware devices might create multiple children devices to manage
+different components of the hardware. In these cases, it might be necessary
+for the original hardware device to copy specific OPP tables to a specific
+the new child device. Add dev_pm_opp_add_opp_table() to do that.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/interconnect/core.c  | 27 ++++++++++++++++++++++++++-
- include/linux/interconnect.h |  7 +++++++
- 2 files changed, 33 insertions(+), 1 deletion(-)
+ drivers/opp/core.c     | 8 ++++++++
+ include/linux/pm_opp.h | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 871eb4bc4efc..881bac80bc1e 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -47,6 +47,7 @@ struct icc_req {
-  */
- struct icc_path {
- 	size_t num_nodes;
-+	struct opp_table *opp_table;
- 	struct icc_req reqs[];
- };
- 
-@@ -313,7 +314,7 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
- {
- 	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
- 	struct icc_node *src_node, *dst_node;
--	struct device_node *np = NULL;
-+	struct device_node *np = NULL, *opp_node;
- 	struct of_phandle_args src_args, dst_args;
- 	int idx = 0;
- 	int ret;
-@@ -381,10 +382,34 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
- 		dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
- 	mutex_unlock(&icc_lock);
- 
-+	opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
-+	if (opp_node) {
-+		path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
-+		of_node_put(opp_node);
-+	}
-+
-+
- 	return path;
- }
- EXPORT_SYMBOL_GPL(of_icc_get);
- 
-+/**
-+ * icc_get_opp_table() - Get the OPP table that corresponds to a path
-+ * @path: reference to the path returned by icc_get()
-+ *
-+ * This function will return the OPP table that corresponds to a path handle.
-+ * If the interconnect API is disabled, NULL is returned and the consumer
-+ * drivers will still build. Drivers are free to handle this specifically, but
-+ * they don't have to.
-+ *
-+ * Return: opp_table pointer on success. NULL is returned when the API is
-+ * disabled or the OPP table is missing.
-+ */
-+struct opp_table *icc_get_opp_table(struct icc_path *path)
-+{
-+	return path->opp_table;
-+}
-+
- /**
-  * icc_set_bw() - set bandwidth constraints on an interconnect path
-  * @path: reference to the path returned by icc_get()
-diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
-index dc25864755ba..0c0bc55f0e89 100644
---- a/include/linux/interconnect.h
-+++ b/include/linux/interconnect.h
-@@ -9,6 +9,7 @@
- 
- #include <linux/mutex.h>
- #include <linux/types.h>
-+#include <linux/pm_opp.h>
- 
- /* macros for converting to icc units */
- #define Bps_to_icc(x)	((x) / 1000)
-@@ -28,6 +29,7 @@ struct device;
- struct icc_path *icc_get(struct device *dev, const int src_id,
- 			 const int dst_id);
- struct icc_path *of_icc_get(struct device *dev, const char *name);
-+struct opp_table *icc_get_opp_table(struct icc_path *path);
- void icc_put(struct icc_path *path);
- int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
- 
-@@ -49,6 +51,11 @@ static inline void icc_put(struct icc_path *path)
- {
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index c9914afd508a..668a377f59a5 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -943,6 +943,14 @@ struct opp_device *_add_opp_dev(const struct device *dev,
+ 	return opp_dev;
  }
  
-+static inline struct opp_table *icc_get_opp_table(struct icc_path *path)
++int dev_pm_opp_add_opp_table(struct device *dev, struct opp_table *opp_table)
 +{
-+	return NULL;
++	if (!dev || !opp_table)
++		return -EINVAL;
++
++	return _add_opp_dev(dev, opp_table) ? 0 : -ENOMEM;
 +}
 +
- static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ {
+ 	struct opp_table *opp_table;
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index d9156b62d966..3694d703817f 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -81,6 +81,7 @@ struct dev_pm_set_opp_data {
+ struct opp_table *dev_pm_opp_get_opp_table(struct device *dev);
+ struct opp_table *dev_pm_opp_get_opp_table_indexed(struct device *dev, int index);
+ void dev_pm_opp_put_opp_table(struct opp_table *opp_table);
++int dev_pm_opp_add_opp_table(struct device *dev, struct opp_table *opp_table);
+ 
+ unsigned long dev_pm_opp_get_voltage(struct dev_pm_opp *opp);
+ 
+@@ -158,6 +159,12 @@ static inline struct opp_table *dev_pm_opp_get_opp_table_indexed(struct device *
+ 
+ static inline void dev_pm_opp_put_opp_table(struct opp_table *opp_table) {}
+ 
++static int dev_pm_opp_add_opp_table(struct device *dev,
++				    struct opp_table *opp_table)
++{
++	return -ENOTSUPP;
++}
++
+ static inline unsigned long dev_pm_opp_get_voltage(struct dev_pm_opp *opp)
  {
  	return 0;
 -- 
