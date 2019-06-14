@@ -2,56 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE0245A14
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 12:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBFB45AEE
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 12:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727197AbfFNKLT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 06:11:19 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:35444 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726832AbfFNKLT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 06:11:19 -0400
-Received: by mail-wr1-f68.google.com with SMTP id m3so1916134wrv.2
-        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 03:11:17 -0700 (PDT)
+        id S1727089AbfFNKwW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 06:52:22 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33267 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbfFNKwW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 06:52:22 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n9so2057303wru.0
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 03:52:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=B/tkB20ylWNyw1nilfYnk9N1LCzLSH2zrTs9MU1T88k=;
-        b=yW18xG7TxVuvTBnJpPfo/2xW6i+1rpxZw4qdQg6pw/mMkfUxutcbeKggb4ybg3vg2K
-         92laJQK0MlDLnYbVMSAMsa4xSH94JoUc6BuAjOcTBK7sFXASMg+8KrKRHI+DWJLH3aO4
-         53qef+Yht1n1+w8nfZdd0vAiLvyyxjjeTkZELGKjx4W8zetvoA2lh/BiKtU2AYUim603
-         U3SyPL7vZ3UNeofNhWcn8G+fc5Vpn7w+Yim3F8XOaF7sDyGuZ3dfGw6GARLIpDgjxU5B
-         zzm28jh8I/1hck6H6kDDZgxp3MdkXbjx4hXl5aJkQwOrGP8pXfaxCIVEgyF5spQNjBhi
-         BNyA==
+        bh=+vwrk+AgrEhYlE80M3+MGdcU7iUcY3uN9bVr59vASP0=;
+        b=Viq4BvGdowF1J5eJcqGDhNe6hoIU2YzXZua720oX7YMhb83Dfr0dSktGPGVma6nIVa
+         rovFdaZM5CiklG3z0VpthS94btRCRUmi0KjvriE+vDi3DUWwRLvxZJ84qBlfXcHPNi/g
+         ipvaA864SZADzLVdyv9rD2Q2H+nkljmucwelQzb/6gHWvY8ssR3CkFDKoOtbLG5cf2ew
+         4yUbHAK69zumdcN5pxTujDZpRmm3skEucXr2ZP8xZdpTzcFHcZE66NVhXYH13lRKx7d8
+         qtLJeezSKeWL10JoCzqoPifvI/MhUtcb6wz2J+wK0XUaIBmzfxC/GmDMmEKPq71ux4Pr
+         wNOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=B/tkB20ylWNyw1nilfYnk9N1LCzLSH2zrTs9MU1T88k=;
-        b=ASmmLe9LYVjHDbYYCEds1TcJUnmLPAMWWVmniVtpH5lA9vMHEvFbdZqYBkI2UHovMl
-         /aMidsW2P48qicMEcMKVY/ZVLjPCk7fOcSn2wntn1ZB27It4VOl6fnsfphQz90OVVE4q
-         qTApzpcVsygJWMJoO9OUSVEg/cl6Z7Yq7zMN9OdTH/eJfD9753/r3DN3kac/UhdsfG60
-         poYGbpN1s4kzBW9PoQTJanLqAjH3c1FE8SGBmlPNLxqS+IV9DfJTkS7+yKD9DduPrtPD
-         8ay2bykXx6LLWNhvK0Vpan9UhTI+mbP1VEFPrzVgxQUK1Rr6HvxeY1MEkOpuTMauPp3j
-         /hpA==
-X-Gm-Message-State: APjAAAUw2suims6qVVs76VQ9uUmoG4nEiJFfgXKE7awIFYiouxs4ayGx
-        j/G6X4ydFUdr/FCizFNPd35Ifg==
-X-Google-Smtp-Source: APXvYqwv19e4d4lxWQmo7QtclH5oqbNcT+c1ADAd2krRgdo8CHHPqRWkgybI/fSIhv+ufSJhVESItA==
-X-Received: by 2002:a5d:4a90:: with SMTP id o16mr5333462wrq.13.1560507076258;
-        Fri, 14 Jun 2019 03:11:16 -0700 (PDT)
+        bh=+vwrk+AgrEhYlE80M3+MGdcU7iUcY3uN9bVr59vASP0=;
+        b=I7zOM9uWmbNKsvgU1UQKnVzH9vecrpX9c2e08JH7d6hm5r33IVbFNNuEYxFfPr0XTq
+         QX0ZH9k46agWjUdBUSCuMvDz65v9zPNEwyhG1TcY8yV2n6FNU1zgFsIQy9VkpYQNH7Qr
+         8ATvA+dXnazfgUAlzogHxHdR1EGX9z1iB0OiFApX1NdVz8t8YcWqnGwKxdA1R6JMpA0e
+         0dr17t3y5k5DZ0j/ZnkttTU4IpeH0oarnJNWmVLJNjMJ0kH9pQ12IaAM1KoceaxUM981
+         aq3pbNCK9fSpHda3s64nFNKRlVbcHWhAgN3ihknjL/J+wXVwEUTIE/NgH0jybido+mIq
+         dEMg==
+X-Gm-Message-State: APjAAAUT6tRrfR0HVlT4hHb7z0UBrMpZEzt9Vy7/GMOyY1AVfUk1Ajti
+        aN4h7Mnlln4Q6g4JH5pT5FTBNw==
+X-Google-Smtp-Source: APXvYqw1S3/O1d0sqNf14VVfEd1n0a/IXQOLeDdJXieMrTyT3NdvFieJMT/Pt7d/4PbCr7O6cb+8wA==
+X-Received: by 2002:adf:eb4e:: with SMTP id u14mr16811884wrn.168.1560509539430;
+        Fri, 14 Jun 2019 03:52:19 -0700 (PDT)
 Received: from [192.168.0.41] (sju31-1-78-210-255-2.fbx.proxad.net. [78.210.255.2])
-        by smtp.googlemail.com with ESMTPSA id s10sm3854343wmf.8.2019.06.14.03.11.14
+        by smtp.googlemail.com with ESMTPSA id r3sm4220947wrr.61.2019.06.14.03.52.18
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 14 Jun 2019 03:11:15 -0700 (PDT)
-Subject: Re: [PATCH] thermal: armada: Fix -Wshift-negative-value
-To:     Nathan Huckleberry <nhuck@google.com>, miquel.raynal@bootlin.com,
-        rui.zhang@intel.com, edubezval@gmail.com
+        Fri, 14 Jun 2019 03:52:18 -0700 (PDT)
+Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Fix Wshift-negative-value
+To:     Nathan Huckleberry <nhuck@google.com>, rui.zhang@intel.com,
+        edubezval@gmail.com
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-References: <20190613184923.245935-1-nhuck@google.com>
+        clang-built-linux@googlegroups.com,
+        Yoshihiro Kaneko <ykaneko0929@gmail.com>
+References: <20190613211228.34092-1-nhuck@google.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
@@ -114,12 +115,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  adkDXtr4MeL8BaB7Ij2oyRVjXUwhFQNKi5Z5Rve0a3zvGkkqw8Mz20BOksjSWjAF6g9byukl
  CUVjC03PdMSufNLK06x5hPc/c4tFR4J9cLrV+XxdCX7r0zGos9SzTPGNuIk1LK++S3EJhLFj
  4eoWtNhMWc1uiTf9ENza0ntqH9XBWEQ6IA1gubCniGG+Xg==
-Message-ID: <27428324-129e-ee37-304a-0da2ed3810a0@linaro.org>
-Date:   Fri, 14 Jun 2019 12:11:14 +0200
+Message-ID: <fd8b8a48-dfb7-1478-2d8d-0953acee39d3@linaro.org>
+Date:   Fri, 14 Jun 2019 12:52:17 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190613184923.245935-1-nhuck@google.com>
+In-Reply-To: <20190613211228.34092-1-nhuck@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -128,52 +129,90 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/06/2019 20:49, Nathan Huckleberry wrote:
+
+Hi Nathan,
+
+On 13/06/2019 23:12, Nathan Huckleberry wrote:
 > Clang produces the following warning
 > 
-> drivers/thermal/armada_thermal.c:270:33: warning: shifting a negative
-> signed value is undefined [-Wshift-negative-value]
-> 1 warning        reg &= ~CONTROL1_TSEN_AVG_MASK <<
-> CONTROL1_TSEN_AVG_SHIFT; generated
-> .
->                ~~~~~~~~~~~~~~~~~~~~~~~ ^
+> vers/thermal/rcar_gen3_thermal.c:147:33: warning: shifting a negative
+> signed value is undefined [-Wshift-negative-value] / (ptat[0] - ptat[2])) +
+> FIXPT_INT(TJ_3); ^~~~~~~~~~~~~~~ drivers/thermal/rcar_gen3_thermal.c:126:29
+> note: expanded from macro 'FIXPT_INT' #define FIXPT_INT(_x) ((_x) <<
+> FIXPT_SHIFT) ~~~~ ^ drivers/thermal/rcar_gen3_thermal.c:150:18: warning:
+> shifting a negative signed value is undefined [-Wshift-negative-value]
+> tsc->tj_t - FIXPT_INT(TJ_3)); ~~~~~~~~~~~~^~~~~~~~~~~~~~~~
 > 
-> CONTROL1_TSEN_AVG_SHIFT is defined to be zero.
-> Since shifting by zero does nothing this variable can be removed.
-> 
+> Upon further investigating it looks like there is no real reason for
+> TJ_3 to be -41. Usages subtract -41, code would be cleaner to just add.
+
+All the code seems broken regarding the negative value shifting as the
+macros pass an integer:
+
+eg.
+        tsc->coef.a2 = FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]),
+                                 tsc->tj_t - FIXPT_INT(ths_tj_1));
+
+thcode[1] is always < than thcode[0],
+
+thcode[1] - thcode[0] < 0
+
+FIXPT_INT(thcode[1] - thcode[0]) is undefined
+
+
+Is it done on purpose FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]) ?
+
+Try developing the macro with the coef.a2 computation ...
+
+The code quality of this driver could be better, it deserves a rework
+IMHO ...
+
+I suggest to revert:
+
+4eb39f79ef443fa566d36bd43f1f578d5c140305
+bdc4480a669d476814061b4da6bb006f7048c8e5
+6a310f8f97bb8bc2e2bb9db6f49a1b8678c8d144
+
+Rework the coefficient computation and re-introduce what was reverted in
+a nicer way.
+
+
+> Fixes: 4eb39f79ef44 ("thermal: rcar_gen3_thermal: Update value of Tj_1")
 > Cc: clang-built-linux@googlegroups.com
-> Link: https://github.com/ClangBuiltLinux/linux/issues/532
+> Link: https://github.com/ClangBuiltLinux/linux/issues/531
 > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-
-Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
 > ---
->  drivers/thermal/armada_thermal.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  drivers/thermal/rcar_gen3_thermal.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-> index 8c07a393dc2e..709a22f455e9 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -53,7 +53,6 @@
->  #define CONTROL0_TSEN_MODE_EXTERNAL	0x2
->  #define CONTROL0_TSEN_MODE_MASK		0x3
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index a56463308694..f4b4558c08e9 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -131,7 +131,7 @@ static inline void rcar_gen3_thermal_write(struct rcar_gen3_thermal_tsc *tsc,
+>  #define RCAR3_THERMAL_GRAN 500 /* mili Celsius */
 >  
-> -#define CONTROL1_TSEN_AVG_SHIFT		0
->  #define CONTROL1_TSEN_AVG_MASK		0x7
->  #define CONTROL1_EXT_TSEN_SW_RESET	BIT(7)
->  #define CONTROL1_EXT_TSEN_HW_RESETn	BIT(8)
-> @@ -267,8 +266,8 @@ static void armada_cp110_init(struct platform_device *pdev,
+>  /* no idea where these constants come from */
+> -#define TJ_3 -41
+> +#define TJ_3 41
 >  
->  	/* Average the output value over 2^1 = 2 samples */
->  	regmap_read(priv->syscon, data->syscon_control1_off, &reg);
-> -	reg &= ~CONTROL1_TSEN_AVG_MASK << CONTROL1_TSEN_AVG_SHIFT;
-> -	reg |= 1 << CONTROL1_TSEN_AVG_SHIFT;
-> +	reg &= ~CONTROL1_TSEN_AVG_MASK;
-> +	reg |= 1;
->  	regmap_write(priv->syscon, data->syscon_control1_off, reg);
->  }
+>  static void rcar_gen3_thermal_calc_coefs(struct rcar_gen3_thermal_tsc *tsc,
+>  					 int *ptat, const int *thcode,
+> @@ -144,11 +144,11 @@ static void rcar_gen3_thermal_calc_coefs(struct rcar_gen3_thermal_tsc *tsc,
+>  	 * the dividend (4095 * 4095 << 14 > INT_MAX) so keep it unscaled
+>  	 */
+>  	tsc->tj_t = (FIXPT_INT((ptat[1] - ptat[2]) * 157)
+> -		     / (ptat[0] - ptat[2])) + FIXPT_INT(TJ_3);
+> +		     / (ptat[0] - ptat[2])) - FIXPT_INT(TJ_3);
 >  
+>  	tsc->coef.a1 = FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[2]),
+> -				 tsc->tj_t - FIXPT_INT(TJ_3));
+> -	tsc->coef.b1 = FIXPT_INT(thcode[2]) - tsc->coef.a1 * TJ_3;
+> +				 tsc->tj_t + FIXPT_INT(TJ_3));
+> +	tsc->coef.b1 = FIXPT_INT(thcode[2]) + tsc->coef.a1 * TJ_3;
+>  
+>  	tsc->coef.a2 = FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]),
+>  				 tsc->tj_t - FIXPT_INT(ths_tj_1));
 > 
 
 
