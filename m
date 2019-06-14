@@ -2,58 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 863CA459ED
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 12:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AA1459FA
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 12:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727216AbfFNKHJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 06:07:09 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39675 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbfFNKHJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 06:07:09 -0400
-Received: by mail-wm1-f66.google.com with SMTP id z23so1696897wma.4
-        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 03:07:07 -0700 (PDT)
+        id S1727116AbfFNKIe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 06:08:34 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:50651 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726841AbfFNKIe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 06:08:34 -0400
+Received: by mail-wm1-f65.google.com with SMTP id c66so1730482wmf.0
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 03:08:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=GsTtAsCq4R5Z92oGsDOOrh6i3Sgqb8yVNynnSGvQ8Zk=;
-        b=tzBsJdgPSCo3wV60n/kZVWQkDFexrRdrZ7tpdRPaSClpJn/pstPq/2q2uMg80/Uxz/
-         H9uml+4jyi9DEMKyre9u9C8s2DkxmdQs9LhhSo93Erm4tdrnquNZ5q3sRKnqpwK8vq2b
-         voVhB+FlRkPxg3R0yeWatZazJH1vucgp4zi8wSaMI43/cR5naKqaQAEY5kMKqMAK3jE9
-         RCbNLMp6z5zy6/8p9f/eSoPrsE8zbVPwJD6+c6lcxKgu+yqNl33sZ3/L5pUnENB9l2vU
-         xmHD53Cn6da7qWDQnrfUeuqhlJSx+1k4W/NqxrgJFvumrFbLNK4DLQHap4OBaBOHmf2H
-         cDXg==
+        bh=ajImFQ5ZBtEjQYMg/vDNhqbgALoaDJ4DzJ7mwC/HFFA=;
+        b=jFYtd+Pb2ivczgl5zFnyF1h1jzN8MLRZfa89uDwmTnci3d/jf9G2y/yfhdjEBNU3QP
+         0eIVw9FljrPNGCeP7tGBkGABfFcP5cM9ui6WEXSOKOs8+gbMxYaSiJ8m0/v+AsUL+JrI
+         Sc/PzWjHPNIwG93GNoXEBzTX4TbNtEfSNc4Hgdzs5yCoYuVH+IRi8xP9NNGS4BKAocoe
+         KmYVBj1xIKzyFn+k6P66ReKPTQlaJiQRPtk5I4aEoDw0HrqlXanXRrt/Ljzcqa4nngdD
+         WAdNuVWqhUnIUbVg5BTDiOquSySt14p/iNxctIKIA2lUvHqbOrDVZA1UR6/roKt0x60l
+         xSuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=GsTtAsCq4R5Z92oGsDOOrh6i3Sgqb8yVNynnSGvQ8Zk=;
-        b=H6mguYcIC/+8q1VTLk3M8Bd1P7GcYs5Z9nZc9axN0om7iPdAehYuy7Acy//6SF+3yu
-         yoYPfYfB6ZuIRZcXfymodRQ34YXJh0znovne3QqKvLBF48bOScWBkffrWGC1IKShd8Us
-         JXndgoYDj6bhZi98jQlVjx3NRwUwUxkEr1WQXsT3FaIl8/ZtWD+AdUdaHiLmDhZ106Yj
-         fwUmjnvcdOVxS6LDY6PxznnMAK/gor029BuIrXzegi0ne7qB7JP4bqg3/FZzwdgH4pKa
-         dQGNUq9aCgmZP/6G/7xNBWzJTc2MfwClx99aJvlQE1qu1srgKvZ49z/x1x59qll5ymkN
-         FGZQ==
-X-Gm-Message-State: APjAAAWsKpA+aOj7sm3NbupHl89L2M1gPkW5nJOIBOlNRo//uAD25rGY
-        JbbOoKIG+wMNmba9XzSBwR5mOIZrd2s=
-X-Google-Smtp-Source: APXvYqzhkXcjIZzNAd2Q89oJnL6n5jOiusMTqIk4KH0e08Yfnr22YU27W4jZqTcTFIY0/7XhBnZNAg==
-X-Received: by 2002:a1c:9ecd:: with SMTP id h196mr2339251wme.98.1560506826832;
-        Fri, 14 Jun 2019 03:07:06 -0700 (PDT)
+        bh=ajImFQ5ZBtEjQYMg/vDNhqbgALoaDJ4DzJ7mwC/HFFA=;
+        b=RYlwbwejOTnfL4KaWvLdLFm/TnJRuITxYYpFQ1FATPfJY+g6v7GYIJ1aLGJS1Nj/YX
+         JB+Nhr14emEhBf9few3fOq35VPLW3foCH6mi+fco9Ol3tu+pWNgMCvyj82WiGezokZ9/
+         nSTDYfswI3+ehv5dCAEGC4bKQrd81UgfHS6WoUOWFhYGL5CHkRWxk//UKiCnePhsxKxv
+         GaG6+ZNXLakBMIPc2r3j727hL+Usej+7ZXq1XyS7PyQBhEvPDuz0k26fLO6iNHqLeB+S
+         XqJQ06m/oj2GHDPq5cu1cUGLp4XiOchukzhmTqlnF43ce65mgjopapjZCdU56IVr+K5B
+         pKYA==
+X-Gm-Message-State: APjAAAWWLmdYEV3dPKQJBcmnoiJW4VHph3Tbj3X1xaEeidpPJeEUcABh
+        h1NL/2UW9zhosrsprPc/QU295+e1DBU=
+X-Google-Smtp-Source: APXvYqxfO1Ytw6d6Ra5pUGNoNvtpokviSeuNruJxD2en18iZRjd/DWwoXP2lMB/hvljtTTi/YbGk+Q==
+X-Received: by 2002:a1c:f102:: with SMTP id p2mr6730457wmh.60.1560506911245;
+        Fri, 14 Jun 2019 03:08:31 -0700 (PDT)
 Received: from [192.168.0.41] (sju31-1-78-210-255-2.fbx.proxad.net. [78.210.255.2])
-        by smtp.googlemail.com with ESMTPSA id t140sm9099020wmt.0.2019.06.14.03.07.05
+        by smtp.googlemail.com with ESMTPSA id q20sm4379522wra.36.2019.06.14.03.08.30
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 14 Jun 2019 03:07:06 -0700 (PDT)
-Subject: Re: [PATCH] thermal: intel_powerclamp: no need to check return value
- of debugfs_create functions
+        Fri, 14 Jun 2019 03:08:30 -0700 (PDT)
+Subject: Re: [PATCH] thermal: intel: no need to check return value of
+ debugfs_create functions
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>
+        Eduardo Valentin <edubezval@gmail.com>
 Cc:     linux-pm@vger.kernel.org
-References: <20190613183810.GC32085@kroah.com>
+References: <20190613183830.GD32085@kroah.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
@@ -116,12 +115,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  adkDXtr4MeL8BaB7Ij2oyRVjXUwhFQNKi5Z5Rve0a3zvGkkqw8Mz20BOksjSWjAF6g9byukl
  CUVjC03PdMSufNLK06x5hPc/c4tFR4J9cLrV+XxdCX7r0zGos9SzTPGNuIk1LK++S3EJhLFj
  4eoWtNhMWc1uiTf9ENza0ntqH9XBWEQ6IA1gubCniGG+Xg==
-Message-ID: <9101a88b-9e11-772b-582c-f54017f5e6b7@linaro.org>
-Date:   Fri, 14 Jun 2019 12:07:05 +0200
+Message-ID: <71c4ed0f-45ee-fec5-1b02-9f14b410682d@linaro.org>
+Date:   Fri, 14 Jun 2019 12:08:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190613183810.GC32085@kroah.com>
+In-Reply-To: <20190613183830.GD32085@kroah.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -138,41 +137,54 @@ On 13/06/2019 20:38, Greg Kroah-Hartman wrote:
 > Cc: Zhang Rui <rui.zhang@intel.com>
 > Cc: Eduardo Valentin <edubezval@gmail.com>
 > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Finn Thain <fthain@telegraphics.com.au>
 > Cc: linux-pm@vger.kernel.org
 > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-
 > ---
->  drivers/thermal/intel/intel_powerclamp.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
+>  drivers/thermal/intel/x86_pkg_temp_thermal.c | 25 ++++----------------
+>  1 file changed, 5 insertions(+), 20 deletions(-)
 > 
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index ac7256b5f020..39c6b589f2ed 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -713,17 +713,9 @@ DEFINE_SHOW_ATTRIBUTE(powerclamp_debug);
->  static inline void powerclamp_create_debug_files(void)
->  {
->  	debug_dir = debugfs_create_dir("intel_powerclamp", NULL);
-> -	if (!debug_dir)
-> -		return;
-> -
-> -	if (!debugfs_create_file("powerclamp_calib", S_IRUGO, debug_dir,
-> -					cal_data, &powerclamp_debug_fops))
-> -		goto file_error;
+> diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> index 1ef937d799e4..f0441ac25555 100644
+> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> @@ -87,29 +87,14 @@ static struct dentry *debugfs;
+>  static unsigned int pkg_interrupt_cnt;
+>  static unsigned int pkg_work_cnt;
 >  
-> -	return;
+> -static int pkg_temp_debugfs_init(void)
+> +static void pkg_temp_debugfs_init(void)
+>  {
+> -	struct dentry *d;
 > -
-> -file_error:
-> -	debugfs_remove_recursive(debug_dir);
-> +	debugfs_create_file("powerclamp_calib", S_IRUGO, debug_dir, cal_data,
-> +			    &powerclamp_debug_fops);
+>  	debugfs = debugfs_create_dir("pkg_temp_thermal", NULL);
+> -	if (!debugfs)
+> -		return -ENOENT;
+> -
+> -	d = debugfs_create_u32("pkg_thres_interrupt", S_IRUGO, debugfs,
+> -			       &pkg_interrupt_cnt);
+> -	if (!d)
+> -		goto err_out;
+> -
+> -	d = debugfs_create_u32("pkg_thres_work", S_IRUGO, debugfs,
+> -			       &pkg_work_cnt);
+> -	if (!d)
+> -		goto err_out;
+>  
+> -	return 0;
+> -
+> -err_out:
+> -	debugfs_remove_recursive(debugfs);
+> -	return -ENOENT;
+> +	debugfs_create_u32("pkg_thres_interrupt", S_IRUGO, debugfs,
+> +			   &pkg_interrupt_cnt);
+> +	debugfs_create_u32("pkg_thres_work", S_IRUGO, debugfs,
+> +			   &pkg_work_cnt);
 >  }
 >  
->  static enum cpuhp_state hp_state;
+>  /*
 > 
 
 
