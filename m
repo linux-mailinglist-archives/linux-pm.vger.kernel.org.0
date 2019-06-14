@@ -2,101 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C41C46B96
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 23:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD0046CA1
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jun 2019 01:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbfFNVOt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 17:14:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58562 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726252AbfFNVOt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Jun 2019 17:14:49 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7D0D921473;
-        Fri, 14 Jun 2019 21:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560546889;
-        bh=wQlzv9GXi+d6YxFDj5qp88AVZygc6aohbfVT4AQR70Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ks0AHcQ3CMMcp8lXmC5Q1q+mNRhg76nx20zz7WGQfrHmET+emzaWoOodcXQ82HPjk
-         /Q0wzICC14gHKtUH/c0hiVkAbFD6SklBQgeWeDifIfILXybbVlrUgOA2LE9404heew
-         9zZ4/WlS27thwm4E7UDC674PGe7hBqVr8gYg2J1U=
-Date:   Fri, 14 Jun 2019 16:14:47 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Harry Wei <harryxiyou@gmail.com>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-pci@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org,
-        "Srivatsa S . Bhat" <srivatsa@csail.mit.edu>
-Subject: Re: [PATCH v5] docs: power: convert docs to ReST and rename to *.rst
-Message-ID: <20190614211447.GU13533@google.com>
-References: <7dc94cb4-ebf1-22ab-29c9-fcb2b875a9ac@csail.mit.edu>
- <72d1f8f360d395958dd0b49165fc51b58801f57e.1560420621.git.mchehab+samsung@kernel.org>
- <20190614143631.7c99719f@lwn.net>
+        id S1726419AbfFNXIC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 19:08:02 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:46429 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725993AbfFNXIC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 19:08:02 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 65so3096386oid.13;
+        Fri, 14 Jun 2019 16:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jbs5gzhwgZIg1gF5LjyrTrjnsR6guamGnNknrQ4qVAk=;
+        b=NWloPDLUh5GtKP0cuS/9WWyBMm8xtdPz+BFptPrE5sWLkV/PvP+EfVJG7YDdHXb3CK
+         Ko4E41KT54QVFCnJmwAIBq5+lRAlfKo/2aLqHYK1SxQ7W3fZBmMBTvYOx/C4z3ZIc8b4
+         v7CucK3frz1rTBiEUX65UtrBkarGsV66+Q6+lqvZF6qnciOYwQIV4XX+UbX++7CRZXVl
+         gqXLsO/Txz+RofTh6dtzUyfWVe5vtiMpMRbT/Uq8/eKQ40vSMcWWspANqD01F5o1CEsN
+         aTjgId6A6EtHivKIcbvYmvtz6pQM1IBhDPVZwQBOj4SY2xWcock67YW3esttnz/5BHOp
+         Nhow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jbs5gzhwgZIg1gF5LjyrTrjnsR6guamGnNknrQ4qVAk=;
+        b=kfAfRNh52JsTZUJOczGK41hmLhEd+FCfrwO55QABEYms/t8+BrAeIf3RAlZo1ymGJH
+         xtP9HoZZ/qDrUkzo1QMgVTMa3eoqTkvxKEzAmQ/MreP8IL+brhWcFSu87v6qD6Qrbl42
+         8guvqxXptjVtxHVrY0+fNhn41Dh2umh+ASmNVzJ/kHr75EvVOR5gKjXjmrbWB3uAfHvq
+         UQDwqaI1wh5FNwHgo/908LbuZW+o8hQhb8y7ng94V8WyZ4LjLANvliYQvGTOeRtp5J1/
+         fPNvf1sHTXIkgnlen0QNgdO4/eQSJWn+RoqZ7Ms5fP8XbPWk7+muvEGW5NKYMQRA0BuV
+         DdYA==
+X-Gm-Message-State: APjAAAUE3yUmOjYf6zIzhdPWuFoxvTPFThqN3S/4dnZObbvLY3byNsaW
+        QlfkdxO+BPSC6mN9geGSXdaWE8/ikjv5OklW9D4=
+X-Google-Smtp-Source: APXvYqyH9KgPHZJQaQQ2Ns83mm/RN5lHJA27CuwFAUocbtaCA5Vog7dH3CLQILg9/hDPeQHBcBx3UH3A9hbvupgCz7U=
+X-Received: by 2002:aca:e185:: with SMTP id y127mr3447788oig.98.1560553681382;
+ Fri, 14 Jun 2019 16:08:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190614143631.7c99719f@lwn.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190525181329.18657-1-tiny.windzz@gmail.com> <20190525181329.18657-2-tiny.windzz@gmail.com>
+ <CA+E=qVdh1E8Y7dZO0JSS4DJE2bo=98MuSKRt7nmeFg-td7Ua9Q@mail.gmail.com>
+ <CAEExFWtjNridLsMXOnBe2mJOPhUOYJ6G3wGF3gx=0oQoQROOGg@mail.gmail.com>
+ <CA+E=qVeOSw=_z4OiQ4++z8g-KN29UYVXGicNd3PtHobg4xaG+w@mail.gmail.com> <CAEExFWs58UNcVcQNnwK3dk5cpmfQRnjdRWAmYs5M1t_ONr1Bpw@mail.gmail.com>
+In-Reply-To: <CAEExFWs58UNcVcQNnwK3dk5cpmfQRnjdRWAmYs5M1t_ONr1Bpw@mail.gmail.com>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Fri, 14 Jun 2019 16:07:36 -0700
+Message-ID: <CA+E=qVf-_2DWbf55bCnjbkZH9N4a1_K16OxN9=o=NrZAV7GXPA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] thermal: sun8i: add thermal driver for h6
+To:     Frank Lee <tiny.windzz@gmail.com>
+Cc:     rui.zhang@intel.com, Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        paulmck@linux.ibm.com, devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 14, 2019 at 02:36:31PM -0600, Jonathan Corbet wrote:
-> On Thu, 13 Jun 2019 07:10:36 -0300
-> Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
-> 
-> > Convert the PM documents to ReST, in order to allow them to
-> > build with Sphinx.
-> > 
-> > The conversion is actually:
-> >   - add blank lines and identation in order to identify paragraphs;
-> >   - fix tables markups;
-> >   - add some lists markups;
-> >   - mark literal blocks;
-> >   - adjust title markups.
-> > 
-> > At its new index.rst, let's add a :orphan: while this is not linked to
-> > the main index.rst file, in order to avoid build warnings.
-> > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> > Acked-by: Mark Brown <broonie@kernel.org>
-> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Acked-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
-> 
-> So I can't apply this one due to conflicts in include/linux/pci.h.  Bjorn,
-> perhaps the easiest thing is for you to take this one through your tree?
+On Wed, Jun 12, 2019 at 9:50 AM Frank Lee <tiny.windzz@gmail.com> wrote:
+>
+> > If you have a git tree I'll be happy to contribute A64 support. IIRC
+> > it was quite similar to H3.
+>
+> I built a ths branch and I will do some work later.
+>
+> https://github.com/TinyWindzz/linux/tree/ths
 
-OK, I applied this to pci/docs for v5.3.  I applied this entire patch,
-but if you would prefer that I only apply the PCI-related parts, let
-me know and I'll split those out.
-
-Bjorn
+Looks like you forgot to add your patches to this branch.
