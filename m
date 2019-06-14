@@ -2,74 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D6F456C4
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 09:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DFE456E1
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 10:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725812AbfFNHty (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 03:49:54 -0400
-Received: from mga07.intel.com ([134.134.136.100]:12480 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725775AbfFNHtx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Jun 2019 03:49:53 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jun 2019 00:49:53 -0700
-X-ExtLoop1: 1
-Received: from rbhardw1-mobl.gar.corp.intel.com (HELO [10.252.89.98]) ([10.252.89.98])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Jun 2019 00:49:51 -0700
-Subject: Re: [PATCH 2/2] powercap/rapl: Add Ice Lake NNPI support to RAPL
- driver
-To:     rjw@rjwysocki.net, linux-kernel@vger.kernel.org
-Cc:     len.brown@intel.com, rafael.j.wysocki@intel.com,
-        linux-pm@vger.kernel.org
-References: <20190614073947.12270-1-rajneesh.bhardwaj@linux.intel.com>
- <20190614073947.12270-2-rajneesh.bhardwaj@linux.intel.com>
-From:   "Bhardwaj, Rajneesh" <rajneesh.bhardwaj@linux.intel.com>
-Message-ID: <2d097ac4-2533-42a1-3658-9b646d105a84@linux.intel.com>
-Date:   Fri, 14 Jun 2019 13:19:50 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1725985AbfFNICK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 04:02:10 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:46167 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725845AbfFNICK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 04:02:10 -0400
+X-Originating-IP: 90.88.23.150
+Received: from localhost (aaubervilliers-681-1-81-150.w90-88.abo.wanadoo.fr [90.88.23.150])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 33ACCE000E;
+        Fri, 14 Jun 2019 08:02:01 +0000 (UTC)
+Date:   Fri, 14 Jun 2019 10:02:00 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Frank Lee <tiny.windzz@gmail.com>
+Cc:     rui.zhang@intel.com, Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        David Miller <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        paulmck@linux.ibm.com, Linux PM <linux-pm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/3] thermal: sun8i: add thermal driver for h6
+Message-ID: <20190614080200.fc3mah5q3mmihxa5@flea>
+References: <20190525181329.18657-1-tiny.windzz@gmail.com>
+ <20190525181329.18657-2-tiny.windzz@gmail.com>
+ <20190527122752.uc7q6zkjti3zag4q@flea>
+ <CAEExFWtxEB67Pv-8x4ry=tZcJjOD6Kxydq_YB73Gox25VmQn7A@mail.gmail.com>
+ <20190612154325.m6z7xsxlpdq4wkxv@flea>
+ <CAEExFWskAsNquULKBLtBFUOosNpks8L6aUhw-+cF=oZ0aghAtQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190614073947.12270-2-rajneesh.bhardwaj@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dxk6xy5el3dsgg5j"
+Content-Disposition: inline
+In-Reply-To: <CAEExFWskAsNquULKBLtBFUOosNpks8L6aUhw-+cF=oZ0aghAtQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael
 
-On 14-Jun-19 1:09 PM, Rajneesh Bhardwaj wrote:
-> Enables support for ICL-NNPI, neural network processor for deep learning
-> inference. From RAPL point of view it is same as Ice Lake Mobile
-> processor.
+--dxk6xy5el3dsgg5j
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi,
+
+On Thu, Jun 13, 2019 at 11:35:15PM +0800, Frank Lee wrote:
+> On Thu, Jun 13, 2019 at 9:26 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+> >
+> > On Fri, Jun 07, 2019 at 09:34:44PM +0800, Frank Lee wrote:
+> > > On Mon, May 27, 2019 at 8:27 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+> > > > > +     ret = devm_request_threaded_irq(dev, irq, NULL,
+> > > > > +                                     tmdev->chip->irq_thread,
+> > > > > +                                     IRQF_ONESHOT, "ths", tmdev);
+> > > > > +     if (ret)
+> > > > > +             return ret;
+> > > >
+> > > > Is there any particular reason to use a threaded interrupt?
+> > >
+> > > Just to improve real-time.
+> >
+> > What do you mean by real-time here? If anything, that will increase
+> > the latency of the interrupts here.
+> >
+> > And in preempt-rt, regular top-half interrupts will be forced into a
+> > threaded interrupt anyway.
+> >
+> > > > > +static int sun8i_ths_remove(struct platform_device *pdev)
+> > > > > +{
+> > > > > +     struct ths_device *tmdev = platform_get_drvdata(pdev);
+> > > > > +
+> > > > > +     clk_disable_unprepare(tmdev->bus_clk);
+> > > >
+> > > > I know that we discussed that already, but I'm not sure why you switch
+> > > > back to a regular call to regmap_init_mmio, while regmap_init_mmio_clk
+> > > > will take care of enabling and disabling the bus clock for you?
+> > >
+> > > It seems that regmap_init_mmio_clk just get clk and prepare clk
+> > > but no enable.
+> >
+> > At init time, yes. But it will enable it only when you access the
+> > registers, which is what you want anyway.
 >
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: linux-pm@vger.kernel.org
-> Link: https://lkml.org/lkml/2019/6/5/1034
-> Signed-off-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
-> ---
->   drivers/powercap/intel_rapl.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
-> index 4347f15165f8..19d470c73b6e 100644
-> --- a/drivers/powercap/intel_rapl.c
-> +++ b/drivers/powercap/intel_rapl.c
-> @@ -1156,7 +1156,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
->   	INTEL_CPU_FAM6(KABYLAKE_MOBILE,		rapl_defaults_core),
->   	INTEL_CPU_FAM6(KABYLAKE_DESKTOP,	rapl_defaults_core),
->   	INTEL_CPU_FAM6(CANNONLAKE_MOBILE,	rapl_defaults_core),
-> -	INTEL_CPU_FAM6(ICELAKE_MOBILE,		rapl_defaults_core),
-> +	INTEL_CPU_FAM6(ICELAKE_NNPI,		rapl_defaults_core),
+> But after accessing the register, it turns the clock off, which
+> affects the ad conversion and the occurrence of the interrupt.
 
-Sorry, i sent the wrong patch, please ignore this one. I will send 
-another one.
+Ah, so that's how it works. Yeah, it makes sense then.
 
-Thanks.
+> In addition, when resuming from suspend, we need to enable
+> the clock, so I think it is necessary to have a clock pointer.
 
->   	INTEL_CPU_FAM6(ATOM_SILVERMONT,		rapl_defaults_byt),
->   	INTEL_CPU_FAM6(ATOM_AIRMONT,		rapl_defaults_cht),
+Yep, indeed.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--dxk6xy5el3dsgg5j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXQNUbwAKCRDj7w1vZxhR
+xTHXAQDbQy0XDEjBIuIG+GZONRc1Ot+viplVAkNIuNN7+kFqRQD/VS0rr3UB9Kuc
+LhxMlX6QWweIU+7DDpUsc+GtkieIvAY=
+=PMaQ
+-----END PGP SIGNATURE-----
+
+--dxk6xy5el3dsgg5j--
