@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D9B45C14
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 14:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F8D45C32
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 14:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727721AbfFNMEl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 08:04:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42934 "EHLO mail.kernel.org"
+        id S1727575AbfFNMKB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 08:10:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46508 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727488AbfFNMEl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Jun 2019 08:04:41 -0400
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+        id S1727217AbfFNMKB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Jun 2019 08:10:01 -0400
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7DCC52133D;
-        Fri, 14 Jun 2019 12:04:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22B7B21744;
+        Fri, 14 Jun 2019 12:10:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560513880;
-        bh=kGiv727/oSO2xcvvP5CUDpg/Ry7P4YoUM9FlJGN0arI=;
+        s=default; t=1560514200;
+        bh=8IHr1gLtD4hNqNX6dX49R4OHXx8RZC0mKA9co1k7r0Y=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pTpBBLV0MqxSpEyI9bzDDW8Zqjd6oothO2n0qrb6/E8VlRaIalUuyeuUZM01L/3z0
-         7eExfwj1sMwzt+XccavUioo0XBT8AJ0hKMzo8UAig8BRYPtnD8Bc4UjYgtS2tbdmI/
-         +XyoEVnqR9Q/ZYwGhl5X2kb3jNYxSxTTV3Uyj+n8=
-Received: by mail-lj1-f171.google.com with SMTP id p17so2160916ljg.1;
-        Fri, 14 Jun 2019 05:04:40 -0700 (PDT)
-X-Gm-Message-State: APjAAAXyD5gihRCAole+pn+LWUDnCTkXbmnBXsL7TCg+kAzb5F2sz0qJ
-        5SjCRuq7QGXGmzzrTjuF534lGdw5hjlnFhm9vtc=
-X-Google-Smtp-Source: APXvYqyRrG8KU2Nodtv4PV8elpWy8ybJND0YDPhJ4V+FfX6qkFAt8W4A+VZMXPQ3fDrV2pshGC4N9PtVAltpOyJFO3o=
-X-Received: by 2002:a2e:3008:: with SMTP id w8mr14024186ljw.13.1560513878828;
- Fri, 14 Jun 2019 05:04:38 -0700 (PDT)
+        b=GRFjtJqWs4Od0DofHFi5X08sv06mdK/RmdUQr3mBnKJYdS1uNW9H4VEWsGocmZl0v
+         v1vpqtasZs0f8s3yZu9IfMLakCLgDLMo69noidjS1RrEHnUd7pc5tH2LiItKAtlX7t
+         cf46L8Z+/cakYobSvceGWddDvqsGgClDTdNe5i3s=
+Received: by mail-lj1-f182.google.com with SMTP id a21so2149304ljh.7;
+        Fri, 14 Jun 2019 05:10:00 -0700 (PDT)
+X-Gm-Message-State: APjAAAXuRuf/qP/Ly5dy4rses5L3NEosCNqWhNi8vnn/9Bud/hmMuit+
+        xgY+CgcHnSeHQ8Z6atijndIqMUTVq76hkEM4xEI=
+X-Google-Smtp-Source: APXvYqwY1vJUmcClY7DiOhpKQac9810LonMaVqUAY+cbDTalTdSgVuGq1lXMJRDJ3zZvhaS6+/qwdx4Tw6yJNS0UFq0=
+X-Received: by 2002:a2e:94c9:: with SMTP id r9mr4914536ljh.210.1560514198446;
+ Fri, 14 Jun 2019 05:09:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190614095320eucas1p2919a6169c997bb81c80416e8a0ede538@eucas1p2.samsung.com>
- <20190614095309.24100-1-l.luba@partner.samsung.com> <20190614095309.24100-2-l.luba@partner.samsung.com>
-In-Reply-To: <20190614095309.24100-2-l.luba@partner.samsung.com>
+References: <CGME20190614095327eucas1p19b6e522efa15c8fd21c51f3900e376e9@eucas1p1.samsung.com>
+ <20190614095309.24100-1-l.luba@partner.samsung.com> <20190614095309.24100-9-l.luba@partner.samsung.com>
+In-Reply-To: <20190614095309.24100-9-l.luba@partner.samsung.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Fri, 14 Jun 2019 14:04:27 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPeeVhHS62jiUgwySf5EYzW2Rkvu=HxyA7NjpGZFp=fWYQ@mail.gmail.com>
-Message-ID: <CAJKOXPeeVhHS62jiUgwySf5EYzW2Rkvu=HxyA7NjpGZFp=fWYQ@mail.gmail.com>
-Subject: Re: [PATCH v10 01/13] clk: samsung: add needed IDs for DMC clocks in Exynos5420
-To:     Lukasz Luba <l.luba@partner.samsung.com>,
-        linux-clk@vger.kernel.org, s.nawrocki@samsung.com
+Date:   Fri, 14 Jun 2019 14:09:47 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPf=N28g850Q67z2sA5-KtkmqTuYLDcR0E_q1gSa17wWWw@mail.gmail.com>
+Message-ID: <CAJKOXPf=N28g850Q67z2sA5-KtkmqTuYLDcR0E_q1gSa17wWWw@mail.gmail.com>
+Subject: Re: [PATCH v10 08/13] drivers: memory: add DMC driver for Exynos5422
+To:     Lukasz Luba <l.luba@partner.samsung.com>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org,
         "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, mturquette@baylibre.com,
-        sboyd@kernel.org,
+        <linux-samsung-soc@vger.kernel.org>, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
         =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
         <b.zolnierkie@samsung.com>, kgene@kernel.org,
         Chanwoo Choi <cw00.choi@samsung.com>,
         kyungmin.park@samsung.com,
         Marek Szyprowski <m.szyprowski@samsung.com>,
-        myungjoo.ham@samsung.com, keescook@chromium.org, tony@atomide.com,
-        jroedel@suse.de, treding@nvidia.com, digetx@gmail.com,
-        gregkh@linuxfoundation.org, willy.mh.wolff.ml@gmail.com
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
+        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
+        treding@nvidia.com, digetx@gmail.com, gregkh@linuxfoundation.org,
+        willy.mh.wolff.ml@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -62,27 +62,26 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Fri, 14 Jun 2019 at 11:53, Lukasz Luba <l.luba@partner.samsung.com> wrote:
 >
-> Define new IDs for clocks used by Dynamic Memory Controller in
-> Exynos5422 SoC.
+> This patch adds driver for Exynos5422 Dynamic Memory Controller.
+> The driver provides support for dynamic frequency and voltage scaling for
+> DMC and DRAM. It supports changing timings of DRAM running with different
+> frequency. There is also an algorithm to calculate timigns based on
+> memory description provided in DT.
+> The patch also contains needed MAINTAINERS file update.
 >
-> Acked-by: Rob Herring <robh@kernel.org>
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 > Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
 > ---
->  include/dt-bindings/clock/exynos5420.h | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
+>  MAINTAINERS                             |    8 +
+>  drivers/memory/samsung/Kconfig          |   17 +
+>  drivers/memory/samsung/Makefile         |    1 +
+>  drivers/memory/samsung/exynos5422-dmc.c | 1262 +++++++++++++++++++++++
+>  4 files changed, 1288 insertions(+)
+>  create mode 100644 drivers/memory/samsung/exynos5422-dmc.c
 
-I do not quite understand why this patch is still being resent instead
-of have been applied some time ago. Are there any issues here? Or are
-there any issues with the entire patchset (except some review comments
-to be resolved)? If not, then this is a dependency which should go
-regardless of other patches. There is no point to keep it pending...
-All other changes, e.g. DTS will have to wait for more cycles till
-this gets in.
-
-Therefore either please apply this or please comment what is stopping
-dependencies from being applied.
+Looks good to me. I think there is no dedicated maintainer for
+drivers/memory subsystem so I can take it through samsung-soc tree
+(just like in case of drivers/memory/samsung/exynos-srom.c). Are
+everyone OK with it?
 
 Best regards,
 Krzysztof
