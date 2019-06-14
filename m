@@ -2,179 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A8C45848
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 11:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE2E45890
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 11:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725985AbfFNJLD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 05:11:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34154 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725907AbfFNJLD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Jun 2019 05:11:03 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D39B520851;
-        Fri, 14 Jun 2019 09:11:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560503461;
-        bh=9DKZ646a4J6ATQ//CaFVDnj6Wq0/JkbKY3qgoAIFXmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lO3D+aYTQvrsKpC3zOC9Lt5GXQnDhM5/Re9/ndXSd3LMTIT3CavcxmV/lv+1iYMmC
-         ITVhafnbM31AcJrFSw8coTLe8F66wch64DQ58gM+B7s0cJ+Uu3q+bDUfrophmZhTb/
-         HnrQDcSrRzh4Dl8plsWQqu8XRGKkEwFyjzDda4l4=
-Date:   Fri, 14 Jun 2019 11:10:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] driver: core: Allow subsystems to continue deferring
- probe
-Message-ID: <20190614091058.GA25912@kroah.com>
-References: <20190613170011.9647-1-thierry.reding@gmail.com>
+        id S1726693AbfFNJZw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 05:25:52 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55221 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726479AbfFNJZv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 05:25:51 -0400
+Received: by mail-wm1-f68.google.com with SMTP id g135so1567211wme.4
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 02:25:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pQycFeF8O/MCj3xXiN1geP8caLtxsTmz/1Q4H46qCII=;
+        b=AvTHUA0nvvIuleQ4btqdI4j6kKv0X41qA7riYO/sKzRvrpTAplVAHRoT+GpsRgy3c4
+         jrud0af8Jod367hqf82apN29+1wePA6JIXktb1YDuVNsU1Y+KVx3KKNSI29DE7QMhOPQ
+         Yme7RnYJuVcVzRQ3ecwU1OhrKj46lDTUzlurS0AU/U35cHCa3V2bqbUcUoMt3axLHbfx
+         wXS9Ku/YgdQkfZnojBucLJxIp0TdNvpZBihLPEljHeWfagsnCN+A5tpQMQPLijzDMMIN
+         ZMuX9UrUOcHi6XVGgKSZ1PTNchWzF4/k9Hq5LtTGal1IgGv6wVoxqGIEqSBjdnAkyCXU
+         KD+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pQycFeF8O/MCj3xXiN1geP8caLtxsTmz/1Q4H46qCII=;
+        b=V/BFzuCsh69VZYVcX3j0EbhsgL/E+rlAuAgfyrjWksQPTuSBL9E9utjv942/VpcLOj
+         LC4rGHr51hWJF2astusk2RNXN8kEDDRRJogME1/FKe4CV2KGU0ckS70WrrfZuweq6e7+
+         IovumHuQXQrPGySlA7MF0cRGJUuvg3ouMtMg6hGIIJvYDWN1rIzIno61OIAD/sHzaS7+
+         YH1MWiTDFjFyfX71arDwmd4nqpfh8VgYlVDzyFimOdKU9wLnyNAqs5ku/aiqfpSGFWSC
+         A0lDEapcmg2rOY9mP7zT1e3S99f3S2QNi2hiW29unvo6U6CnghioM0G18K8IKpWD+loe
+         sg4w==
+X-Gm-Message-State: APjAAAXkyClxn9dJCFercsud2igDav8xUitwe3rvigZU9QXq4ibSxf0Z
+        8YUigEioA6CfS/j04QMuHhk=
+X-Google-Smtp-Source: APXvYqyaytM8J6jQYVS0XhFw1X9mRvKOjAyKDZ/IVN5OX4u4srU7nQgzlE/xgqW5vu3uj/6U6rB6Gg==
+X-Received: by 2002:a1c:cb4d:: with SMTP id b74mr7388361wmg.43.1560504349583;
+        Fri, 14 Jun 2019 02:25:49 -0700 (PDT)
+Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
+        by smtp.gmail.com with ESMTPSA id m21sm2232694wmc.1.2019.06.14.02.25.48
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 14 Jun 2019 02:25:48 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 11:25:48 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Wei Ni <wni@nvidia.com>, Yangtao Li <tiny.windzz@gmail.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] thermal: tegra: no need to check return value of
+ debugfs_create functions
+Message-ID: <20190614092548.GB15526@ulmo>
+References: <20190613183753.GB32085@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="8P1HSweYDcXXzwPJ"
 Content-Disposition: inline
-In-Reply-To: <20190613170011.9647-1-thierry.reding@gmail.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190613183753.GB32085@kroah.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 07:00:11PM +0200, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> Some subsystems, such as pinctrl, allow continuing to defer probe
-> indefinitely. This is useful for devices that depend on resources
-> provided by devices that are only probed after the init stage.
-> 
-> One example of this can be seen on Tegra, where the DPAUX hardware
-> contains pinmuxing controls for pins that it shares with an I2C
-> controller. The I2C controller is typically used for communication
-> with a monitor over HDMI (DDC). However, other instances of the I2C
-> controller are used to access system critical components, such as a
-> PMIC. The I2C controller driver will therefore usually be a builtin
-> driver, whereas the DPAUX driver is part of the display driver that
-> is loaded from a module to avoid bloating the kernel image with all
-> of the DRM/KMS subsystem.
-> 
-> In this particular case the pins used by this I2C/DDC controller
-> become accessible very late in the boot process. However, since the
-> controller is only used in conjunction with display, that's not an
-> issue.
-> 
-> Unfortunately the driver core currently outputs a warning message
-> when a device fails to get the pinctrl before the end of the init
-> stage. That can be confusing for the user because it may sound like
-> an unwanted error occurred, whereas it's really an expected and
-> harmless situation.
-> 
-> In order to eliminate this warning, this patch allows callers of the
-> driver_deferred_probe_check_state() helper to specify that they want
-> to continue deferring probe, regardless of whether we're past the
-> init stage or not. All of the callers of that function are updated
-> for the new signature, but only the pinctrl subsystem passes a true
-> value in the new persist parameter if appropriate.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+
+--8P1HSweYDcXXzwPJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jun 13, 2019 at 08:37:53PM +0200, Greg Kroah-Hartman wrote:
+> When calling debugfs functions, there is no need to ever check the
+> return value.  The function can work or not, but the code logic should
+> never do something different based on this.
+>=20
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Eduardo Valentin <edubezval@gmail.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Wei Ni <wni@nvidia.com>
+> Cc: Yangtao Li <tiny.windzz@gmail.com>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
-> Changes in v2:
-> - pass persist flag via flags parameter to make the function call easier
->   to understand
-> 
->  drivers/base/dd.c            | 19 ++++++++++++++-----
->  drivers/base/power/domain.c  |  2 +-
->  drivers/iommu/of_iommu.c     |  2 +-
->  drivers/pinctrl/devicetree.c |  9 +++++----
->  include/linux/device.h       | 18 +++++++++++++++++-
->  5 files changed, 38 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 0df9b4461766..0399a6f6c479 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -238,23 +238,32 @@ __setup("deferred_probe_timeout=", deferred_probe_timeout_setup);
->  /**
->   * driver_deferred_probe_check_state() - Check deferred probe state
->   * @dev: device to check
-> + * @flags: Flags used to control the behavior of this function. Drivers can
-> + *   set the DRIVER_DEFER_PROBE_PERSIST flag to indicate that they want to
-> + *   keep trying to probe after built-in drivers have had a chance to probe.
-> + *   This is useful for built-in drivers that rely on resources provided by
-> + *   modular drivers.
->   *
->   * Returns -ENODEV if init is done and all built-in drivers have had a chance
-> - * to probe (i.e. initcalls are done), -ETIMEDOUT if deferred probe debug
-> - * timeout has expired, or -EPROBE_DEFER if none of those conditions are met.
-> + * to probe (i.e. initcalls are done) and unless the DRIVER_DEFER_PROBE_PERSIST
-> + * flag is set, -ETIMEDOUT if deferred probe debug timeout has expired, or
-> + * -EPROBE_DEFER if none of those conditions are met.
->   *
->   * Drivers or subsystems can opt-in to calling this function instead of directly
->   * returning -EPROBE_DEFER.
->   */
-> -int driver_deferred_probe_check_state(struct device *dev)
-> +int driver_deferred_probe_check_state(struct device *dev, unsigned long flags)
->  {
->  	if (initcalls_done) {
->  		if (!deferred_probe_timeout) {
->  			dev_WARN(dev, "deferred probe timeout, ignoring dependency");
->  			return -ETIMEDOUT;
->  		}
-> -		dev_warn(dev, "ignoring dependency for device, assuming no driver");
-> -		return -ENODEV;
-> +
-> +		if ((flags & DRIVER_DEFER_PROBE_PERSIST) == 0) {
-> +			dev_warn(dev, "ignoring dependency for device, assuming no driver");
-> +			return -ENODEV;
-> +		}
->  	}
->  	return -EPROBE_DEFER;
->  }
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 33c30c1e6a30..6198c6a30fe2 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2423,7 +2423,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->  		mutex_unlock(&gpd_list_lock);
->  		dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
->  			__func__, PTR_ERR(pd));
-> -		return driver_deferred_probe_check_state(base_dev);
-> +		return driver_deferred_probe_check_state(base_dev, 0);
+>  drivers/thermal/tegra/soctherm.c | 14 ++------------
+>  1 file changed, 2 insertions(+), 12 deletions(-)
 
-Again, I said no odd flags for functions, how is anyone supposed to know
-what "0" means here?
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-You just swapped a boolean for a bitmapped flag, right?  That did not
-make the api any easier to understand at all.
+--8P1HSweYDcXXzwPJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +/*
-> + * This can be use to continue to defer probe after the init stage and after
-> + * all the built-in drivers have had a chance to probe. This is useful if a
-> + * built-in driver requires resources provided by a modular driver.
-> + *
-> + * One such example is the pinctrl subsystem, where for example the DPAUX
-> + * hardware on Tegra provides pinmuxing controls for pins shared between DPAUX
-> + * and I2C controllers. Only a subset of I2C controllers need the DPAUX
-> + * pinmuxing, and some I2C controllers are used during early boot for critical
-> + * tasks (such as communicating with the system PMIC). The I2C controllers
-> + * that don't share pins with a DPAUX block will want to be driven by a built-
-> + * in driver to make sure they are available early on.
-> + */
-> +#define DRIVER_DEFER_PROBE_PERSIST (1 << 0)
+-----BEGIN PGP SIGNATURE-----
 
-In the future, please always use BIT() for stuff like this.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl0DaBsACgkQ3SOs138+
+s6HjuA/9F5n34GKRrGINO1OeVwwc/8qAg/kQdJLjR2Plc7J5qSoAtOkhyFPUSedU
+pg2hdp+Z8etsB04al11YBIAHX5F6fzOvYjzZq3gMPuy3bi0TGr7uiN5zraWFgFDJ
+8ki4ulReo2QVkMu82wCLiaf48UmHgB3tH2ndQdAAwmjsHrCigfeJeWFj9HbV26xk
+fJ7/Kfh3bd8mWDSa1jyt8yoyvOJeM11xfDwLOfV7HCqBuZEK+jrVIqxulQc9j2NY
+qHbAAYO1L5HaAXKkR1YVr9Xl3e0niVmck5y0XTYbEqVXFenSLOAdnOhAinLL1188
+DQ0yKLETF8WdFT6XKgfw4TURMYpbtHj65GIRmW6jWvjVUEskEYwPKfDsgaY1adVu
+wy8wgbEQsw/YUgRwaK8ZpEYebF8I5LvQUltQBvGE+kFEHaY/RjsXmC0R6m+mmyog
+JUwoKlX7grvSYt1p96+6+aEtdgLWcYCBwsetzpV1BrMAVXpvQ4RKBIPV3d1yqCPS
+S/X+cc9yAh64igrhDYYdvUlIAcX5GMTbBR3wlVQSyod1+eWwa3inLuEe1i3PJLjA
+XWXy8p+Umjnvg3BTwTJG+KPgjClLEd2dVjzMaqNp89G6HxPkPIWAnZsq2kHiI14Y
+PXMajNZn6cqyLJtZQtpMQxFc1o5ZgDnP3/dv23pXzqwtvm+T3eA=
+=4ImI
+-----END PGP SIGNATURE-----
 
-Anyway, this isn't ok, do it correctly please, like I asked for the
-first time...
-
-thanks,
-
-greg k-h
+--8P1HSweYDcXXzwPJ--
