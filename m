@@ -2,280 +2,290 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E0A458EA
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 11:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F8F459A6
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 11:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbfFNJjC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 05:39:02 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:51638 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727108AbfFNJjC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 05:39:02 -0400
-Received: by mail-wm1-f68.google.com with SMTP id 207so1628877wma.1;
-        Fri, 14 Jun 2019 02:38:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LqQdZbnfdndSGEKuXAyzbSvP0EJ1Sec6YVrk3FnRlEM=;
-        b=qgw0pIuu1rFL+i70K3kUIemzqa4SZ07PlSHmjoCjs/NUiOM0oqexSZP3DGhjH4PxXu
-         Bra017CVuMGsI5z61jNq5TbmvDQBLdpIXmcaYJrNiBMsUrz7845Pr7v1cNcnshpeQucJ
-         alKkxcSF3CByhVvejNkHeiPH8Jf8vDI/yA3KtGpt1Qj+EUOwoWDrVfcQUDaCTO6qu/JR
-         UguDP3DM73nEQBUokHbnvHHPQMZguSynixywMfPqrS/OWn0pH6ujRPJLB0kIljBrbSJk
-         r9/ur6TEq1lGa4vZTU+XJY6mEJQInfzLGrDaNxS58Jd0UyVjqmsn+YpiYc3ZzYi0BvX/
-         rEjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LqQdZbnfdndSGEKuXAyzbSvP0EJ1Sec6YVrk3FnRlEM=;
-        b=uKVwolsoF3TyhSa3EICJZuMsBw/ma+a3mqGd09R2JyBFKgJ246lfp/7Wdxr/RuJVw3
-         T6ZcxJbl4+YY77hfcnuTKHXQuQ2ElGuNGqM+GnIuGSv/1v1OPH1iO9pETuvz8rlJP1OR
-         xeXx6hfJWmfQDtXbFVZnA6ASeLHKrukkG9v0R+fPrTMQ7TYgfJ+jyPDhV/wN//xWmEO/
-         oiB7/1qyJUoJb97RM2dpbGyQhZdBJP5jnmexWzp7JBQ7rOhTwltAHHgH+YwAJwFYQg5C
-         OkrkrbyVBmJNCgEUf2cVd3PmZRv+tCSlwdjhVQ+8lS/cY5pyGgU8C3XKLx+Oek0xAMS8
-         rj2g==
-X-Gm-Message-State: APjAAAXqH8nN5vBrih9a8rsEOp7iUpH2e5AKmBltj/cFSqx8SPkoU7AM
-        zwufJ0k1aJQ0rkpfKn4Ioe8=
-X-Google-Smtp-Source: APXvYqwQUmFDbeYguJ3kCrrDZsY3WGAWRfX6ZldaahiBceRX5O8X86YZX1rWzTL5s2P9DyYnAzT5+A==
-X-Received: by 2002:a1c:b684:: with SMTP id g126mr7061480wmf.176.1560505138843;
-        Fri, 14 Jun 2019 02:38:58 -0700 (PDT)
-Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id v4sm1040149wmg.22.2019.06.14.02.38.57
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 14 Jun 2019 02:38:57 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 11:38:56 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] driver: core: Allow subsystems to continue deferring
- probe
-Message-ID: <20190614093856.GC15526@ulmo>
-References: <20190613170011.9647-1-thierry.reding@gmail.com>
- <20190614091058.GA25912@kroah.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UPT3ojh+0CqEDtpF"
-Content-Disposition: inline
-In-Reply-To: <20190614091058.GA25912@kroah.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+        id S1726900AbfFNJyf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 05:54:35 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:35829 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727168AbfFNJxY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 05:53:24 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190614095322euoutp018d0817b876018d5754d8f4edd94c8be8~oB-DggPmy0765507655euoutp01O
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 09:53:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190614095322euoutp018d0817b876018d5754d8f4edd94c8be8~oB-DggPmy0765507655euoutp01O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1560506002;
+        bh=EEMK9w78j87lqfuJPFFkSqyrL66eM2GM9eUBmO4lepk=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=dEOLBdoS18n708nGalFN3ghUZ11mTkSeWxqGOsCNkmAwAGoVgVgL5nFqilqPTjNOu
+         i6lDeEkwZxeLXGo670xmpJRF7u43E4oaCQOLCoJ5sQL/dSwBcHA1X7y655gTq9CSQb
+         bXCypuIl3e04hjChJxMrv6I8o8eqHe+PLaL+dzr8=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190614095320eucas1p2fea6165f3ed3de7aebde889109cf3918~oB-CiOaWC0479404794eucas1p2u;
+        Fri, 14 Jun 2019 09:53:20 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 93.A5.04298.09E630D5; Fri, 14
+        Jun 2019 10:53:20 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190614095319eucas1p2d47b6bd9179c7e4190972d6b22092ad7~oB-BlPv7b0478804788eucas1p2x;
+        Fri, 14 Jun 2019 09:53:19 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190614095319eusmtrp29bd6568298fc6558df18414be8ac76e7~oB-BkgF552148521485eusmtrp2u;
+        Fri, 14 Jun 2019 09:53:19 +0000 (GMT)
+X-AuditID: cbfec7f2-f2dff700000010ca-21-5d036e90ace9
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 4C.DA.04140.F8E630D5; Fri, 14
+        Jun 2019 10:53:19 +0100 (BST)
+Received: from AMDC3778.DIGITAL.local (unknown [106.120.51.20]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190614095318eusmtip26364febb82ab420463e490505771c7d1~oB-AlQsky2320823208eusmtip2M;
+        Fri, 14 Jun 2019 09:53:18 +0000 (GMT)
+From:   Lukasz Luba <l.luba@partner.samsung.com>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        b.zolnierkie@samsung.com, krzk@kernel.org, kgene@kernel.org,
+        cw00.choi@samsung.com, kyungmin.park@samsung.com,
+        m.szyprowski@samsung.com, s.nawrocki@samsung.com,
+        myungjoo.ham@samsung.com, keescook@chromium.org, tony@atomide.com,
+        jroedel@suse.de, treding@nvidia.com, digetx@gmail.com,
+        gregkh@linuxfoundation.org, willy.mh.wolff.ml@gmail.com,
+        Lukasz Luba <l.luba@partner.samsung.com>
+Subject: [PATCH v10 00/13] Exynos5 Dynamic Memory Controller driver
+Date:   Fri, 14 Jun 2019 11:52:56 +0200
+Message-Id: <20190614095309.24100-1-l.luba@partner.samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0VSWUwTQRh2uqdoyVqJjBdqE1FIOEx8mAjxJtnAAyT44lGx6gpGWrULAmKk
+        QlSsYA2oEK5qPCkgpRBUlIJQqAGl4q2gEJsgyH0aIBUpW/XtO+f7H4bGJB+IZfRRZQynUsqj
+        paQLXtk42eJzVYnJ/Bu7vFBZdimBPo79IJDO3EKgomEbQCm3S0mU2ZQvQi8vK5DW1oshq9VA
+        oVfJfRT6ol6BhtO+EehtVR6JRtPNAGVbTSJUYv5KodamINR27gGJ6vsuEuj3hzIc1bwLRm3T
+        rmjixXew1Z2dGM/A2cFP5yk2V92Ks09yvlKsUX+JZGvyiyk2PWWAZJ8PPBOxVyr0gC1vTmRH
+        jR5hC/a4BB7moo+e4lR+mw+4RHWZBkUntMHxRZpnuBpcD9CA+TRkNsJ7mkygAS60hHkAoKE/
+        kxLIGIDlhnZCIKMAGnOuif5WMsd7nJX7AA5MZIF/lV+6rllC0yTjCx/rTzoKbkw2gLnd4Y4M
+        xjzCYH9bO3AYi5kdcLy6kHJgnFkLr9msc1jMbIHl+oeksLYKFhlqMUcZMsMULC7vA4KxE5ZU
+        f8YEvBj+tFRQAl4BZ57onKfyUJ1+y5k/A23afGcmANZbWgnHoRjjBUur/AR5G7S/N83JkHGF
+        n/oXOWRsFmZUZmGCLIapFyRCej2sSHvtHFoC7xffcD7OwpreoTldwsjgxyE9eRV45PzfugmA
+        HrhzsbwikuM3KLk4X16u4GOVkb6HjiuMYPa3Nf+2jDwG428O1gGGBtKF4tpNIpmEkJ/iExR1
+        ANKY1E1cEIDJJOLD8oTTnOp4hCo2muPrwHIal7qLE+d17pUwkfIY7hjHneBUf10RPX+ZGqwJ
+        XxonQqYCuf+ObouqfcwnSZcTareyIUEt+yb276K6g/h6V9fVCQAPuZ46Ythd+NS7x7I9T+vZ
+        GXSuwb72btiRkItKlGQ/Y9fNNJsor8Cm6YjklVOe3T9LZr7dqY1PNdp8z67z0pIa8+S9mIY3
+        zzt6Qtebps0eUxsTdB1xZinOR8k3eGMqXv4HgC+7D2kDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHIsWRmVeSWpSXmKPExsVy+t/xe7r9ecyxBv9mGllsnLGe1eL6l+es
+        FvOPnGO1WP3xMaNF8+L1bBaTT81lsjjTnWvR//g1s8X58xvYLc42vWG3uNUgY/Gx5x6rxeVd
+        c9gsPvceYbSYcX4fk8XaI3fZLS6ecrW43biCzeLwm3ZWi3/XNrJY7L/iZXH7N5/FtxOPGB3E
+        Pb59ncTi8f5GK7vH7IaLLB47Z91l99i0qpPNY//cNewevc3v2DwOvtvD5NG3ZRWjx+bT1R6f
+        N8kFcEfp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXo
+        ZTzb956poN+rYnXXHpYGxqnWXYycHBICJhKTv75k7GLk4hASWMoosbb/HhtEQkxi0r7t7BC2
+        sMSfa11sEEWfGCU2b/zO1MXIwcEmoCexY1UhSFxEYA6jxM+ubWCTmAXOMkvsXvGGCaRbWMBZ
+        4uvelWCTWARUJaY8Pg9m8wrYS2xetQ5qm7zE6g0HmCcw8ixgZFjFKJJaWpybnltspFecmFtc
+        mpeul5yfu4kRGFfbjv3csoOx613wIUYBDkYlHt4DVkyxQqyJZcWVuYcYJTiYlUR451kzxwrx
+        piRWVqUW5ccXleakFh9iNAVaPpFZSjQ5HxjzeSXxhqaG5haWhubG5sZmFkrivB0CB2OEBNIT
+        S1KzU1MLUotg+pg4OKUaGPV2Je7boJmiUtIQ8CUupWOR37uNluLBHhp/Qg/Kyx95xTrj+9rT
+        yaI5y+8atU5TWNV1ocjbe2F0hnqny40/s+/knF7gd+lRgGfF41M5+eIFJtbvglMeblm90Hju
+        rDydd50dryNUc+o9nIxXLqy8Zi4qLC10yFtnS4luteMehq2dGfFC/bWzlViKMxINtZiLihMB
+        Z1fwpsECAAA=
+X-CMS-MailID: 20190614095319eucas1p2d47b6bd9179c7e4190972d6b22092ad7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190614095319eucas1p2d47b6bd9179c7e4190972d6b22092ad7
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190614095319eucas1p2d47b6bd9179c7e4190972d6b22092ad7
+References: <CGME20190614095319eucas1p2d47b6bd9179c7e4190972d6b22092ad7@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi all,
 
---UPT3ojh+0CqEDtpF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is v10 which introduces minor changes. The patch set adds support of
+Dynamic Memory Controller for Exynos5422 SoC.
+The driver supports Dynamic Voltage and Frequency Scaling
+for the DMC and DRAM. It also provides needed timings for different
+speed operations of the DRAM memory.
+There is also new generic code in of_memory and headers which allows to parse
+LPDDR3 memories defined in device-tree.
 
-On Fri, Jun 14, 2019 at 11:10:58AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Jun 13, 2019 at 07:00:11PM +0200, Thierry Reding wrote:
-> > From: Thierry Reding <treding@nvidia.com>
-> >=20
-> > Some subsystems, such as pinctrl, allow continuing to defer probe
-> > indefinitely. This is useful for devices that depend on resources
-> > provided by devices that are only probed after the init stage.
-> >=20
-> > One example of this can be seen on Tegra, where the DPAUX hardware
-> > contains pinmuxing controls for pins that it shares with an I2C
-> > controller. The I2C controller is typically used for communication
-> > with a monitor over HDMI (DDC). However, other instances of the I2C
-> > controller are used to access system critical components, such as a
-> > PMIC. The I2C controller driver will therefore usually be a builtin
-> > driver, whereas the DPAUX driver is part of the display driver that
-> > is loaded from a module to avoid bloating the kernel image with all
-> > of the DRM/KMS subsystem.
-> >=20
-> > In this particular case the pins used by this I2C/DDC controller
-> > become accessible very late in the boot process. However, since the
-> > controller is only used in conjunction with display, that's not an
-> > issue.
-> >=20
-> > Unfortunately the driver core currently outputs a warning message
-> > when a device fails to get the pinctrl before the end of the init
-> > stage. That can be confusing for the user because it may sound like
-> > an unwanted error occurred, whereas it's really an expected and
-> > harmless situation.
-> >=20
-> > In order to eliminate this warning, this patch allows callers of the
-> > driver_deferred_probe_check_state() helper to specify that they want
-> > to continue deferring probe, regardless of whether we're past the
-> > init stage or not. All of the callers of that function are updated
-> > for the new signature, but only the pinctrl subsystem passes a true
-> > value in the new persist parameter if appropriate.
-> >=20
-> > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> > ---
-> > Changes in v2:
-> > - pass persist flag via flags parameter to make the function call easier
-> >   to understand
-> >=20
-> >  drivers/base/dd.c            | 19 ++++++++++++++-----
-> >  drivers/base/power/domain.c  |  2 +-
-> >  drivers/iommu/of_iommu.c     |  2 +-
-> >  drivers/pinctrl/devicetree.c |  9 +++++----
-> >  include/linux/device.h       | 18 +++++++++++++++++-
-> >  5 files changed, 38 insertions(+), 12 deletions(-)
-> >=20
-> > diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> > index 0df9b4461766..0399a6f6c479 100644
-> > --- a/drivers/base/dd.c
-> > +++ b/drivers/base/dd.c
-> > @@ -238,23 +238,32 @@ __setup("deferred_probe_timeout=3D", deferred_pro=
-be_timeout_setup);
-> >  /**
-> >   * driver_deferred_probe_check_state() - Check deferred probe state
-> >   * @dev: device to check
-> > + * @flags: Flags used to control the behavior of this function. Driver=
-s can
-> > + *   set the DRIVER_DEFER_PROBE_PERSIST flag to indicate that they wan=
-t to
-> > + *   keep trying to probe after built-in drivers have had a chance to =
-probe.
-> > + *   This is useful for built-in drivers that rely on resources provid=
-ed by
-> > + *   modular drivers.
-> >   *
-> >   * Returns -ENODEV if init is done and all built-in drivers have had a=
- chance
-> > - * to probe (i.e. initcalls are done), -ETIMEDOUT if deferred probe de=
-bug
-> > - * timeout has expired, or -EPROBE_DEFER if none of those conditions a=
-re met.
-> > + * to probe (i.e. initcalls are done) and unless the DRIVER_DEFER_PROB=
-E_PERSIST
-> > + * flag is set, -ETIMEDOUT if deferred probe debug timeout has expired=
-, or
-> > + * -EPROBE_DEFER if none of those conditions are met.
-> >   *
-> >   * Drivers or subsystems can opt-in to calling this function instead o=
-f directly
-> >   * returning -EPROBE_DEFER.
-> >   */
-> > -int driver_deferred_probe_check_state(struct device *dev)
-> > +int driver_deferred_probe_check_state(struct device *dev, unsigned lon=
-g flags)
-> >  {
-> >  	if (initcalls_done) {
-> >  		if (!deferred_probe_timeout) {
-> >  			dev_WARN(dev, "deferred probe timeout, ignoring dependency");
-> >  			return -ETIMEDOUT;
-> >  		}
-> > -		dev_warn(dev, "ignoring dependency for device, assuming no driver");
-> > -		return -ENODEV;
-> > +
-> > +		if ((flags & DRIVER_DEFER_PROBE_PERSIST) =3D=3D 0) {
-> > +			dev_warn(dev, "ignoring dependency for device, assuming no driver");
-> > +			return -ENODEV;
-> > +		}
-> >  	}
-> >  	return -EPROBE_DEFER;
-> >  }
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 33c30c1e6a30..6198c6a30fe2 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -2423,7 +2423,7 @@ static int __genpd_dev_pm_attach(struct device *d=
-ev, struct device *base_dev,
-> >  		mutex_unlock(&gpd_list_lock);
-> >  		dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
-> >  			__func__, PTR_ERR(pd));
-> > -		return driver_deferred_probe_check_state(base_dev);
-> > +		return driver_deferred_probe_check_state(base_dev, 0);
->=20
-> Again, I said no odd flags for functions, how is anyone supposed to know
-> what "0" means here?
+The patch set has been cut to land mainline quickly and the dependency
+on PPMU patches are removed (which was in v7). It implies that the debugging
+code which was presenting details about traffic on the AXI slots has been
+removed. It will be added when this driver got mainline and the PPMU code
+got mainline. Also DT dependency of PPMU header has been removed.
 
-Technically you said "no boolean flags". And I think it's pretty common
-to have this type of flag bitmask to change the behavior of functions. 0
-is typically considered as the "run normally" case where you don't
-really have to care.
+changes:
+v10:
+- added disabling counters and cleaning clocks in probe when it fails
+- added Reviewed-by for dt-bindings: memory-controllers from Rob
+- based on v5.2-rc4 tag
+v9 [4]:
+- disable bpll instead of spll clocks in the remove path
+- safely disable 'bypass' clocks when error was captured
+- removed unused clocks and related code
+- changed code to make 'if' statement clean as Krzysztof sugested
+- removed cloks from dt-binding and DT
+- minor fix for clocks to read the state for DIV with NOCACHE
+- removed spaces in #define and put tabs
+- removed duplicated entry for OPPs phandle in dt-binding
+- collected ACKs
+- based on v5.2-rc3 tag
+v8 [3]:
+- removed chipID dependency, as Krzysztof suggested and drop the whole checking
+  code in the driver (which also Marek suggested offline) (it might be needed
+  in future when other configuration would be supported). It also avoids
+  a misunderstandings and simplifies the documentation.
+- reordered clock IDs in 1st patch to keep the old IDs and add the new clocks
+  at the end as Chanwoo suggested (added also his ACK there)
+- in patch 6 (dt-bindings) added explicit clocks and names in the right order
+  needed for the driver
+- added proper address for the memory node in the documentation and in the DT
+  (lpddr3-timings@0 -> @80000000)
+- fixed wrong reg offset for pause feature
+- removed debug code which shows AXI slots traffic and removed DT ppmu events
+- in the driver code usage of 'dev', 'pdev->dev' has been aligned
+- manipulating clocks has been aligned as Krzysztof suggested, now it enables
+  only two clocks (and disables) and enables/disables the 'bypass' clocks
+  on demand
+- added comments in the documentation why there is a need of clock registers
+  to be accessed via syscon regmap
+- added proper link to Documentation/devicetree/bindings/ddr/lpddr3.txt
+  in dt-bindings for memory controller doc
+- removed unneeded prints when there was a deferred probe or during remove
+- added 'syscon' also to exynos5420-clock node as Krzysztof suggested
+- from 2nd patch removed blank line and added Acked-by: Chanwoo Choi
+- collecting ACKs, which makes the clock related 3 patches
+  ready to be merged (4 ACKs),
+- patches 4,5 got 'Reviewed-by' from Rob
+- it is now based on v5.2-rc3 tag
+v7 [2]:
+- added using regmap in chipid registers and clock registers
+- in DT added "syscon" to compatible field in clock and chipid
+- added two addition clocks in clocks definition file which were there
+  in first implementation but now are grouped and commented properly
+  (CLK_DOUT_PCLK_DREX0, CLK_DOUT_PCLK_DREX1)
+- the BPLL ratio table now is set for Exynos 5422 and 5800 and not for 5420
+- in DMC driver, changed code macro which generates functions for setup events
+  into normal three functions as Krzysztof suggested
+- moved 'clock_prepare_enable()' calls into the same function where 'disable'
+  were called
+- changed 'timing_reg' static variables into static const
+- in DMC driver: the proper device_node *np_ddr is now put correctly
+- in DMC driver: removed code related to counters_enabled
+- mapped only 0x100 from DREX registers
+- in DT memory node there is now 'reg' as Rob suggested instead of 'max-freq'
+- in Documentation/devicetree/bindings/lpddr2 renamed into 'ddr' and the lpdd3*
+  files landed there.
+- cleaned the commit subject and message as Rob suggested for the patch 4/10 in v6
+- added doxygen comments to exported functions in of_memory file
+- cleaned minor issues like: missing space, 2 empty lines, in the doc JESD209-2 ->
+  JESD209-3C, removed 'status = "okay"' from the doc file, etc
+- based on v5.1 (+ PPMU patches from [1])
+v6:
+- driver code has been converted to use generic code which parses DT memory
+  definition in drivers/memory/of_memory.c
+- extended of_memory by LPDDR3 support (there was LPDDR2 made by TI)
+- extended jedec_lpddr.h by the needed structures for LPDDR3 (AC timings)
+- driver file moved to proper directory, where other memory controllers
+  live, which is in this case drivers/memory/samsung/
+- driver code now uses regmap_{read|write} to access registers for pausing
+  and changing timings set, as suggested by Chanwoo
+- DT contains simple definition of memory device, similar to LPDDR2 made by TI
+- driver code generates the needed timings for registered OPPs, based on
+  memory description in DT
+- patch 1 contains Rob's ACK,
+- simplified memory bandwidth calculation
+- added debug information files with timings, raw counters and statistics
+- updated dt-bindings files accordingly
+- based on v5.1-rc5 (+ PPMU patches from [1])
+v5:
+- removed unneeded wrapper functions i.e. for regulator_set_voltage
+- removed unused defines
+- removed direct access to clock register base and used CCF for
+  pause and timing set usage
+- switched to OPP comming from DT according to Chanowoo's comments
+- switched to timings comming from DT, added parsing function
+- extended dt-binding with description of OPPs and timings
+- according to Rob Herring comment, moved dt-binding file before driver code
+  in the patch set.
+- rebased on top of v5.0
+v4:
+- removed unneeded DPLL and G3D clocks IDs
+- changed names of parent clocks for mout_mx_mspll_ccore_phy_p
+  and added one more parent: mout_sclk_epll
+- removed 933Mhz and 138MHz from the BPLL ratio table
+v3:
+- in DTS align to proper indent the clocks and clock-names entries
+v2:
+- changed file name exynos5-dmc.c -> exynos5422-dmc.c
+  and related entries in other files
+- changed dt-binding file name
+- changed config entry to CONFIG_ARM_EXYNOS5422_DMC_DEVFREQ
+- removed sysfs and print info messages (print only one line)
+- removed function exynos5_read_chip_info and compact code
+- changed dt-binding patch and move it up in the patch set
+- new entries in MAINTAINERS are added with the driver c code
+- clean-up in DTS file: renamed nodes to 'ppmu' and 'memory-controller',
+  entries moved to suggested location (before nocp nodes or after),
+  moved according to alfabetical order, compacted clocks names with right indent.
 
-> You just swapped a boolean for a bitmapped flag, right?  That did not
-> make the api any easier to understand at all.
+Regards,
+Lukasz Luba
 
-Granted, the normal case isn't made any easier with "0" than with
-"false", but certainly the cases where we do pass one or more flags are
-now much easier to understand.
+[1] https://lkml.org/lkml/2019/4/19/158
+[2] https://lkml.org/lkml/2019/5/6/829
+[3] https://lkml.org/lkml/2019/6/5/687
+[4] https://lkml.org/lkml/2019/6/7/488
 
-> > +/*
-> > + * This can be use to continue to defer probe after the init stage and=
- after
-> > + * all the built-in drivers have had a chance to probe. This is useful=
- if a
-> > + * built-in driver requires resources provided by a modular driver.
-> > + *
-> > + * One such example is the pinctrl subsystem, where for example the DP=
-AUX
-> > + * hardware on Tegra provides pinmuxing controls for pins shared betwe=
-en DPAUX
-> > + * and I2C controllers. Only a subset of I2C controllers need the DPAUX
-> > + * pinmuxing, and some I2C controllers are used during early boot for =
-critical
-> > + * tasks (such as communicating with the system PMIC). The I2C control=
-lers
-> > + * that don't share pins with a DPAUX block will want to be driven by =
-a built-
-> > + * in driver to make sure they are available early on.
-> > + */
-> > +#define DRIVER_DEFER_PROBE_PERSIST (1 << 0)
->=20
-> In the future, please always use BIT() for stuff like this.
->=20
-> Anyway, this isn't ok, do it correctly please, like I asked for the
-> first time...
 
-To avoid further back and forth, what exactly is it that you would have
-me do? That is, what do you consider to be the correct way to do this?
+Lukasz Luba (13):
+  clk: samsung: add needed IDs for DMC clocks in Exynos5420
+  clk: samsung: add new clocks for DMC for Exynos5422 SoC
+  clk: samsung: add BPLL rate table for Exynos 5422 SoC
+  dt-bindings: ddr: rename lpddr2 directory
+  dt-bindings: ddr: add LPDDR3 memories
+  drivers: memory: extend of_memory by LPDDR3 support
+  dt-bindings: memory-controllers: add Exynos5422 DMC device description
+  drivers: memory: add DMC driver for Exynos5422
+  drivers: devfreq: events: add Exynos PPMU new events
+  ARM: dts: exynos: add chipid label and syscon compatible
+  ARM: dts: exynos: add syscon to clock compatible
+  ARM: dts: exynos: add DMC device for exynos5422
+  ARM: exynos_defconfig: enable DMC driver
 
-Would you prefer me to add another function with a different name that
-reimplements the functionality only with the exception? Something along
-the lines of:
+ .../{lpddr2 => ddr}/lpddr2-timings.txt        |    0
+ .../bindings/{lpddr2 => ddr}/lpddr2.txt       |    2 +-
+ .../bindings/ddr/lpddr3-timings.txt           |   58 +
+ .../devicetree/bindings/ddr/lpddr3.txt        |   97 ++
+ .../memory-controllers/exynos5422-dmc.txt     |   75 +
+ MAINTAINERS                                   |    8 +
+ arch/arm/boot/dts/exynos5.dtsi                |    4 +-
+ arch/arm/boot/dts/exynos5420.dtsi             |   75 +-
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi |  116 ++
+ arch/arm/boot/dts/exynos5800.dtsi             |    2 +-
+ arch/arm/configs/exynos_defconfig             |    1 +
+ drivers/clk/samsung/clk-exynos5420.c          |   78 +-
+ drivers/devfreq/event/exynos-ppmu.c           |    6 +
+ drivers/memory/of_memory.c                    |  154 ++
+ drivers/memory/of_memory.h                    |   18 +
+ drivers/memory/samsung/Kconfig                |   17 +
+ drivers/memory/samsung/Makefile               |    1 +
+ drivers/memory/samsung/exynos5422-dmc.c       | 1262 +++++++++++++++++
+ include/dt-bindings/clock/exynos5420.h        |   18 +-
+ include/memory/jedec_ddr.h                    |   62 +
+ 20 files changed, 2041 insertions(+), 13 deletions(-)
+ rename Documentation/devicetree/bindings/{lpddr2 => ddr}/lpddr2-timings.txt (100%)
+ rename Documentation/devicetree/bindings/{lpddr2 => ddr}/lpddr2.txt (96%)
+ create mode 100644 Documentation/devicetree/bindings/ddr/lpddr3-timings.txt
+ create mode 100644 Documentation/devicetree/bindings/ddr/lpddr3.txt
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/exynos5422-dmc.txt
+ create mode 100644 drivers/memory/samsung/exynos5422-dmc.c
 
-	int driver_deferred_probe_check_state_continue(struct device *dev)
-	{
-		int ret;
+-- 
+2.17.1
 
-		ret =3D driver_deferred_probe_check_state(dev);
-		if (ret =3D=3D -ENODEV)
-			return -EPROBE_DEFER;
-
-		return ret;
-	}
-
-? I'd need to split that up some more to avoid the warning that the
-inner function prints before returning -ENODEV, but that's a minor
-detail. Would that API be more to your liking?
-
-Thierry
-
---UPT3ojh+0CqEDtpF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl0Day0ACgkQ3SOs138+
-s6GxTg//b1dUH2eXBV3IJflbGCV5IMsAevzJqHxEBda0tczchU21K76IdajV8eYp
-T0wxXS5DfBzU+z305Pn4xZPm9m4TPyv62axrC1U91kitqsBzBLLK73uDSsW01zSu
-lSm6y3k2lwPvrS6EKgA1HQPqXZfUOWxEJk7S4bCN28ZfTY+Pg1NxDH2qTc8fDH8F
-tl6KRHLyboRllm0gN7nIyseVBhUr2AkpjyuQjiNNH7EN1sbTBaM0YjL7cqatVznm
-nc19CLf5OHib08cJwytOQV0s7Zvp9fn9KZTqEaFZMBXmWKpJOWECisOjWqFNTYud
-k6FwhphtspbzOjMdK2rnWt3YU3BHrTabmh5B6iTtAAK5ZO5xrcey5QIZOO/l/qqM
-/YVBvqsqmaaEwLfRNblz5IN55VALlGjfSEIbJ2yH1lReBLOc9bCLtpidU7eoBsPg
-7PGGY2y6hKzBJ+JZ8tNan1Qy26zhKKhVMQ4cT88XUrXwYhl6k34fAP4rio3IfbQK
-bZrq+LQasch/6a3Fro8GcGpq9TtoCX1mgxW5OXIQG9M55v3MONRL892Yp5uHq4ft
-txxqSrU8XfPXrBLw1IhtRAWSdsRi7cNT1l1ShjpXuuVWV1Th2yW5CVeC6H/EJMKY
-t5o6Cn8zAs4MGpa5+6DZWms8BJts4Rcg6MeY8AUmiIN2evZ9qV8=
-=ZyBI
------END PGP SIGNATURE-----
-
---UPT3ojh+0CqEDtpF--
