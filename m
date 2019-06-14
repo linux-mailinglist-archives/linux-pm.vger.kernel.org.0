@@ -2,391 +2,342 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C47A145783
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 10:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D5A457DC
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 10:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbfFNIaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 04:30:21 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40035 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726259AbfFNIaV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 04:30:21 -0400
-Received: by mail-oi1-f193.google.com with SMTP id w196so1368425oie.7;
-        Fri, 14 Jun 2019 01:30:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aBX5S6bgTctWckd9/P2tFIY6izVzBb7AzQ5sf+y29+s=;
-        b=Gyg1d0FpxDBC+CCyh543R9BGLPfy80rPIoRf/MsgcaS0uM1Im9H13jB4HsKCVDtBoB
-         St4bp4/+bsODBPB57uTmdZduDlYV5DVtAWzhhaAtQQ4dgaWeYorGO66Xiu9nxvfdF+cs
-         ojoUl7iQIcnVYpg2NN8Odte7eyBBM9/ip2j7Slt1k61d5k0FeshfQ1Sjx9s3Y3vUhZKF
-         kIkq9wS2Nj1d/JJ/pEMH2c4FGyeMiWgy33Do3osNZmrUpZ8Ridruk0oPYmd7oxzIRT5z
-         R2q68IDyV9aA9c30RtFl+mQpsStnAZVZ/rMZrjOQnyBdvcxnZKydJDkbzT6O1g4TbJVx
-         oY5w==
-X-Gm-Message-State: APjAAAUBEIsVToDoHGzZrr4AAprP+ra4iJYtNu3H1ZuJlya5U36abkOw
-        r1j1yYBIx2d1TTWn5dqpqvVffI4ErnT4/CvsVYk=
-X-Google-Smtp-Source: APXvYqx1omA4R75tw8TDas2oab9KcZIvx/qWC/wiBq28VqDt/zUvgcBSEWWYNiN8xHrBQ36Y0tGYodw0/oHg4FHPCEo=
-X-Received: by 2002:aca:3256:: with SMTP id y83mr1140955oiy.110.1560501020169;
- Fri, 14 Jun 2019 01:30:20 -0700 (PDT)
+        id S1726575AbfFNIu1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 04:50:27 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:42564 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725859AbfFNIu1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 04:50:27 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190614085023euoutp016e0eb883988a5c47565a842894ff5a21~oBIEhee-K0769207692euoutp01D
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 08:50:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190614085023euoutp016e0eb883988a5c47565a842894ff5a21~oBIEhee-K0769207692euoutp01D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1560502223;
+        bh=iw69xWGrEDzd6kQc72slduKlGfkg0GvEU2aINsokIJQ=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=NO5yUNM123Pav9iRsVsSKEraOyoEOFxXNezV/KMhGuYNwn/QPgwdus/DtErn/DRpl
+         oFCbzxqKu/zr5I1iKWSBItiNVv6R5LTKzbw0NB5eZYMnQX2VxgibxBjqJSZdOuShai
+         3pTnftbj3QY+/D42vF4hmxxD9WOJ5GrG0v827aEA=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190614085022eucas1p2f8426082971818ceae9b91cfc40c5b9b~oBIDlwqzf1418714187eucas1p28;
+        Fri, 14 Jun 2019 08:50:22 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 3A.F6.04377.ECF530D5; Fri, 14
+        Jun 2019 09:50:22 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190614085021eucas1p2ab5681c242a14f22e3bc7494a5884f75~oBICw_zlV2692926929eucas1p2H;
+        Fri, 14 Jun 2019 08:50:21 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190614085021eusmtrp29828bbdae6956daecb6f35f1e7b2fb34~oBIChGDRi1742017420eusmtrp2Y;
+        Fri, 14 Jun 2019 08:50:21 +0000 (GMT)
+X-AuditID: cbfec7f4-113ff70000001119-60-5d035fce040b
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 54.21.04140.DCF530D5; Fri, 14
+        Jun 2019 09:50:21 +0100 (BST)
+Received: from [106.120.51.20] (unknown [106.120.51.20]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190614085020eusmtip1fbf314d3e6b1e736d0c82b2803a6ce61~oBIBqRJkp1761917619eusmtip1I;
+        Fri, 14 Jun 2019 08:50:20 +0000 (GMT)
+Subject: Re: [PATCH v9 08/13] drivers: memory: add DMC driver for Exynos5422
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        =?UTF-8?Q?Bart=c5=82omiej_=c5=bbo=c5=82nierkiewicz?= 
+        <b.zolnierkie@samsung.com>, kgene@kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        kyungmin.park@samsung.com,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
+        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
+        treding@nvidia.com, digetx@gmail.com, gregkh@linuxfoundation.org,
+        willy.mh.wolff.ml@gmail.com
+From:   Lukasz Luba <l.luba@partner.samsung.com>
+Message-ID: <4a88b188-eee9-2a16-82cf-ead94a3c24da@partner.samsung.com>
+Date:   Fri, 14 Jun 2019 10:50:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <cover.1560477540.git.mchehab+samsung@kernel.org> <b908fc6555df8cae3e4c734b2d5f6284c46a5f14.1560477540.git.mchehab+samsung@kernel.org>
-In-Reply-To: <b908fc6555df8cae3e4c734b2d5f6284c46a5f14.1560477540.git.mchehab+samsung@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 14 Jun 2019 10:30:07 +0200
-Message-ID: <CAJZ5v0gYFCXfdPuuPMVU4ccyhPSdPJvEVJM309aQwAeTjSWeVQ@mail.gmail.com>
-Subject: Re: [PATCH 01/14] ABI: fix some syntax issues at the ABI database
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@s-opensource.com>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-iio@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAJKOXPdKGG25T46d+SmES7wyQ=kAMj2jdT3GCYa+z87wpYKNEQ@mail.gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTYRjG+3aujrZO87KXioJFokbrQsGXXejOSSrqjygysaUnjdyynbTs
+        QiuzMjNr3WxpSxSsZS0vmZuloday0imFllKU2l27uZTo6jxG/vfwPL/vfd8HPpZQpdAj2I2G
+        rYLRoIvT0HKy9O5394T6SCJiUknvMFyYaadws+cNha019RS+/KUd4eRcO41P3M+W4YdpepzR
+        /oHAbvc1Btft62TwlyPPKfzImUXj7vQahDPdFTJ8peYZgxvvL8Stey/SuLrzIIV/NxWSuPJx
+        GG79ocQ999rQnAC+55uZ5D89SWH4c6ZGkndYnjF8kS2V5iuzCxg+PfkjzR8tsSG++MFOvrto
+        9HL5GvnMaCFuY6JgnDh7nTzWYVHGH5i1vfhaIW1CdSGHkQ8L3FTIMucRh5GcVXEXEbSZDiFv
+        oOI8CMxNtBR0I0g+foX49yLzayolQfkIXE9jJagLwTtbA+0NfLklkFfazHi1HxcMzb96KS9E
+        cKcouNlb3wexLM1pocy2xcsouEWQUpDWP5TkxkHq3aekV/tzq8HjKEISMxxqz3b0+z7cCnA4
+        y/vnE5waWjqsMkmPgRtdWQOH3mah/rRe0gugp/KmTNK+8N5Vwkh6FPxxWAd8EUzpOUjSu6A9
+        I3uAmQHVrkbKezLR18XunCjZc+FVRQbptYFTwpOu4dIFSjCXniEkWwGHDqgkOghKjjQMLAqA
+        /ILTzDGksQzqZRnUxTKoi+X/3guItCG1kCDqYwRxikHYphV1ejHBEKON2qwvQn2f88Fvl6cM
+        OX+ur0IcizRDFbdDZREqSpcoJumrELCExk9xfgYRoVJE65J2CMbNkcaEOEGsQiNZUqNW7Bzy
+        IlzFxei2CpsEIV4w/ktlrM8IE9JOGJ+0b3y4JTB5rTHtpb0hAKnLl1Z82xM27k+8MsC42C90
+        oWXDu+7J21tiPK7Pi6zV2ulXrzuWhapPtqmU1lXzo9Aa+cOOU7ecfu6V/mN3mfYHx9cO4fa+
+        fx3WqX9rjmu6lJubGDJ3WuDu8I/RyqY7hW3Pc4IMduJgXeSJ8sR5l0UNKcbqJocQRlH3F5YJ
+        bSuYAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNKsWRmVeSWpSXmKPExsVy+t/xu7pn45ljDRbvFrHYOGM9q8X1L89Z
+        LeYfOcdqsfrjY0aL5sXr2Swmn5rLZHGmO9ei//FrZovz5zewW5xtesNu8bHnHqvF5V1z2Cw+
+        9x5htJhxfh+Txdojd9ktLp5ytbjduILN4vCbdlaLf9c2sljsv+Jlcfs3n8W3E48YHcQ8vn2d
+        xOLx/kYru8fshossHjtn3WX32LSqk81j/9w17B69ze/YPPq2rGL02Hy62uPzJrkArig9m6L8
+        0pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jJ2z+ArabCs2
+        b9jI1sB4VquLkZNDQsBEYsanTtYuRi4OIYGljBK73yxghkiISUzat50dwhaW+HOtiw2i6DWj
+        xKuXZ8GKhAV8JJZsuw5WJCKgKXH973ewScwCU1klJjw/DZYQEpjAJHHrLE8XIwcHm4CexI5V
+        hSBhXgE3idY13awgNouAqkTnsZssILaoQITE7F0NLBA1ghInZz4BszkFAiV27toNNpJZwExi
+        3uaHzBC2uMStJ/OZIGx5ie1v5zBPYBSahaR9FpKWWUhaZiFpWcDIsopRJLW0ODc9t9hIrzgx
+        t7g0L10vOT93EyMwYWw79nPLDsaud8GHGAU4GJV4eA9YMcUKsSaWFVfmHmKU4GBWEuGdZ80c
+        K8SbklhZlVqUH19UmpNafIjRFOi5icxSosn5wGSWVxJvaGpobmFpaG5sbmxmoSTO2yFwMEZI
+        ID2xJDU7NbUgtQimj4mDU6qBsXbCyY+9ex5GR39gLGB4Xzuhvp6Ll8nfZ9LtoP/9dxIlzUOD
+        X9rfSfvD7mOTu2CaQ4/ky0/dUdELuR2MFpmdjIlNqDpS7LdSLq9JyMVee/E/AU6LY+FObZNO
+        CE7x03sU5mDgpMmp+mRqQEBT6tHvTWeCnu5o1LmnprhWZlnHzJhqq38fao4rsRRnJBpqMRcV
+        JwIAnQ4s0y4DAAA=
+X-CMS-MailID: 20190614085021eucas1p2ab5681c242a14f22e3bc7494a5884f75
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190607143531eucas1p11f6b3a63068d529dae8be16abaa60ed0
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190607143531eucas1p11f6b3a63068d529dae8be16abaa60ed0
+References: <CGME20190607143531eucas1p11f6b3a63068d529dae8be16abaa60ed0@eucas1p1.samsung.com>
+        <20190607143507.30286-1-l.luba@partner.samsung.com>
+        <20190607143507.30286-9-l.luba@partner.samsung.com>
+        <CAJKOXPdKGG25T46d+SmES7wyQ=kAMj2jdT3GCYa+z87wpYKNEQ@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 14, 2019 at 4:04 AM Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> wrote:
->
-> From: Mauro Carvalho Chehab <mchehab@s-opensource.com>
->
-> On those three files, the ABI representation described at
-> README are violated.
->
-> - at sysfs-bus-iio-proximity-as3935:
->         a ':' character is missing after "What"
->
-> - at sysfs-class-devfreq:
->         there's a typo at Description
->
-> - at sysfs-class-cxl, it is using the ":" character at a
->         file preamble, causing it to be misinterpreted as a
->         tag.
->
-> - On the other files, instead of "What", they use "Where".
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Hi Krzysztof,
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 6/11/19 8:18 AM, Krzysztof Kozlowski wrote:
+> On Fri, 7 Jun 2019 at 16:35, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+>>
+>> This patch adds driver for Exynos5422 Dynamic Memory Controller.
+>> The driver provides support for dynamic frequency and voltage scaling for
+>> DMC and DRAM. It supports changing timings of DRAM running with different
+>> frequency. There is also an algorithm to calculate timigns based on
+>> memory description provided in DT.
+>> The patch also contains needed MAINTAINERS file update.
+>>
+>> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
+>> ---
+>>   MAINTAINERS                             |    8 +
+>>   drivers/memory/samsung/Kconfig          |   17 +
+>>   drivers/memory/samsung/Makefile         |    1 +
+>>   drivers/memory/samsung/exynos5422-dmc.c | 1261 +++++++++++++++++++++++
+>>   4 files changed, 1287 insertions(+)
+>>   create mode 100644 drivers/memory/samsung/exynos5422-dmc.c
+> 
+> (...)
+> 
+>> +
+>> +/**
+>> + * exynos5_performance_counters_init() - Initializes performance DMC's counters
+>> + * @dmc:       DMC for which it does the setup
+>> + *
+>> + * Initialization of performance counters in DMC for estimating usage.
+>> + * The counter's values are used for calculation of a memory bandwidth and based
+>> + * on that the governor changes the frequency.
+>> + * The counters are not used when the governor is GOVERNOR_USERSPACE.
+>> + */
+>> +static int exynos5_performance_counters_init(struct exynos5_dmc *dmc)
+>> +{
+>> +       int counters_size;
+>> +       int ret, i;
+>> +
+>> +       dmc->num_counters = devfreq_event_get_edev_count(dmc->dev);
+>> +       if (dmc->num_counters < 0) {
+>> +               dev_err(dmc->dev, "could not get devfreq-event counters\n");
+>> +               return dmc->num_counters;
+>> +       }
+>> +
+>> +       counters_size = sizeof(struct devfreq_event_dev) * dmc->num_counters;
+>> +       dmc->counter = devm_kzalloc(dmc->dev, counters_size, GFP_KERNEL);
+>> +       if (!dmc->counter)
+>> +               return -ENOMEM;
+>> +
+>> +       for (i = 0; i < dmc->num_counters; i++) {
+>> +               dmc->counter[i] =
+>> +                       devfreq_event_get_edev_by_phandle(dmc->dev, i);
+>> +               if (IS_ERR_OR_NULL(dmc->counter[i]))
+>> +                       return -EPROBE_DEFER;
+>> +       }
+>> +
+>> +       ret = exynos5_counters_enable_edev(dmc);
+>> +       if (ret < 0) {
+>> +               dev_err(dmc->dev, "could not enable event counter\n");
+>> +               return ret;
+>> +       }
+>> +
+>> +       ret = exynos5_counters_set_event(dmc);
+>> +       if (ret < 0) {
+>> +               dev_err(dmc->dev, "counld not set event counter\n");
+> 
+> Missing cleanup - edev counters disable.
+right
+> 
+>> +               return ret;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +/**
+>> + * exynos5_dmc_set_pause_on_switching() - Controls a pause feature in DMC
+>> + * @dmc:       device which is used for changing this feature
+>> + * @set:       a boolean state passing enable/disable request
+>> + *
+>> + * There is a need of pausing DREX DMC when divider or MUX in clock tree
+>> + * changes its configuration. In such situation access to the memory is blocked
+>> + * in DMC automatically. This feature is used when clock frequency change
+>> + * request appears and touches clock tree.
+>> + */
+>> +static inline int exynos5_dmc_set_pause_on_switching(struct exynos5_dmc *dmc)
+>> +{
+>> +       unsigned int val;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(dmc->clk_regmap, CDREX_PAUSE, &val);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       val |= 1UL;
+>> +       regmap_write(dmc->clk_regmap, CDREX_PAUSE, val);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +/**
+>> + * exynos5_dmc_probe() - Probe function for the DMC driver
+>> + * @pdev:      platform device for which the driver is going to be initialized
+>> + *
+>> + * Initialize basic components: clocks, regulators, performance counters, etc.
+>> + * Read out product version and based on the information setup
+>> + * internal structures for the controller (frequency and voltage) and for DRAM
+>> + * memory parameters: timings for each operating frequency.
+>> + * Register new devfreq device for controlling DVFS of the DMC.
+>> + */
+>> +static int exynos5_dmc_probe(struct platform_device *pdev)
+>> +{
+>> +       int ret = 0;
+>> +       struct device *dev = &pdev->dev;
+>> +       struct device_node *np = dev->of_node;
+>> +       struct exynos5_dmc *dmc;
+>> +       struct resource *res;
+>> +
+>> +       dmc = devm_kzalloc(dev, sizeof(*dmc), GFP_KERNEL);
+>> +       if (!dmc)
+>> +               return -ENOMEM;
+>> +
+>> +       mutex_init(&dmc->lock);
+>> +
+>> +       dmc->dev = dev;
+>> +       platform_set_drvdata(pdev, dmc);
+>> +
+>> +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +       dmc->base_drexi0 = devm_ioremap_resource(dev, res);
+>> +       if (IS_ERR(dmc->base_drexi0))
+>> +               return PTR_ERR(dmc->base_drexi0);
+>> +
+>> +       res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>> +       dmc->base_drexi1 = devm_ioremap_resource(dev, res);
+>> +       if (IS_ERR(dmc->base_drexi1))
+>> +               return PTR_ERR(dmc->base_drexi1);
+>> +
+>> +       dmc->clk_regmap = syscon_regmap_lookup_by_phandle(np,
+>> +                               "samsung,syscon-clk");
+>> +       if (IS_ERR(dmc->clk_regmap))
+>> +               return PTR_ERR(dmc->clk_regmap);
+>> +
+>> +       ret = exynos5_init_freq_table(dmc, &exynos5_dmc_df_profile);
+>> +       if (ret) {
+>> +               dev_warn(dev, "couldn't initialize frequency settings\n");
+>> +               return ret;
+>> +       }
+>> +
+>> +       dmc->vdd_mif = devm_regulator_get(dev, "vdd");
+>> +       if (IS_ERR(dmc->vdd_mif)) {
+>> +               ret = PTR_ERR(dmc->vdd_mif);
+>> +               return ret;
+>> +       }
+>> +
+>> +       ret = exynos5_dmc_init_clks(dmc);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       ret = of_get_dram_timings(dmc);
+>> +       if (ret) {
+>> +               dev_warn(dev, "couldn't initialize timings settings\n");
+> 
+> goto remove_clocks;
+OK
+> 
+>> +               return ret;
+>> +       }
+>> +
+>> +       ret = exynos5_performance_counters_init(dmc);
+>> +       if (ret) {
+>> +               dev_warn(dev, "couldn't probe performance counters\n");
+>> +               goto remove_clocks;
+>> +       }
+>> +
+>> +       ret = exynos5_dmc_set_pause_on_switching(dmc);
+>> +       if (ret) {
+>> +               dev_warn(dev, "couldn't get access to PAUSE register\n");
+>> +               goto remove_clocks;
+> 
+> goto err_devfreq_add;
+Agree.
 
-> ---
->  Documentation/ABI/testing/pstore              |  2 +-
->  .../sysfs-bus-event_source-devices-format     |  2 +-
->  .../ABI/testing/sysfs-bus-i2c-devices-hm6352  |  6 ++---
->  .../ABI/testing/sysfs-bus-iio-distance-srf08  |  4 ++--
->  .../testing/sysfs-bus-iio-proximity-as3935    |  4 ++--
->  .../ABI/testing/sysfs-bus-pci-devices-cciss   | 22 +++++++++----------
->  .../testing/sysfs-bus-usb-devices-usbsevseg   | 12 +++++-----
->  Documentation/ABI/testing/sysfs-class-cxl     |  6 ++---
->  Documentation/ABI/testing/sysfs-class-devfreq |  2 +-
->  .../ABI/testing/sysfs-class-powercap          |  2 +-
->  Documentation/ABI/testing/sysfs-kernel-fscaps |  2 +-
->  .../ABI/testing/sysfs-kernel-vmcoreinfo       |  2 +-
->  12 files changed, 33 insertions(+), 33 deletions(-)
->
-> diff --git a/Documentation/ABI/testing/pstore b/Documentation/ABI/testing/pstore
-> index 5fca9f5e10a3..8d6e48f4e8ef 100644
-> --- a/Documentation/ABI/testing/pstore
-> +++ b/Documentation/ABI/testing/pstore
-> @@ -1,4 +1,4 @@
-> -Where:         /sys/fs/pstore/... (or /dev/pstore/...)
-> +What:          /sys/fs/pstore/... (or /dev/pstore/...)
->  Date:          March 2011
->  Kernel Version: 2.6.39
->  Contact:       tony.luck@intel.com
-> diff --git a/Documentation/ABI/testing/sysfs-bus-event_source-devices-format b/Documentation/ABI/testing/sysfs-bus-event_source-devices-format
-> index 77f47ff5ee02..b6f8748e0200 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-event_source-devices-format
-> +++ b/Documentation/ABI/testing/sysfs-bus-event_source-devices-format
-> @@ -1,4 +1,4 @@
-> -Where:         /sys/bus/event_source/devices/<dev>/format
-> +What:          /sys/bus/event_source/devices/<dev>/format
->  Date:          January 2012
->  Kernel Version: 3.3
->  Contact:       Jiri Olsa <jolsa@redhat.com>
-> diff --git a/Documentation/ABI/testing/sysfs-bus-i2c-devices-hm6352 b/Documentation/ABI/testing/sysfs-bus-i2c-devices-hm6352
-> index feb2e4a87075..29bd447e50a0 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-i2c-devices-hm6352
-> +++ b/Documentation/ABI/testing/sysfs-bus-i2c-devices-hm6352
-> @@ -1,18 +1,18 @@
-> -Where:         /sys/bus/i2c/devices/.../heading0_input
-> +What:          /sys/bus/i2c/devices/.../heading0_input
->  Date:          April 2010
->  Kernel Version: 2.6.36?
->  Contact:       alan.cox@intel.com
->  Description:   Reports the current heading from the compass as a floating
->                 point value in degrees.
->
-> -Where:         /sys/bus/i2c/devices/.../power_state
-> +What:          /sys/bus/i2c/devices/.../power_state
->  Date:          April 2010
->  Kernel Version: 2.6.36?
->  Contact:       alan.cox@intel.com
->  Description:   Sets the power state of the device. 0 sets the device into
->                 sleep mode, 1 wakes it up.
->
-> -Where:         /sys/bus/i2c/devices/.../calibration
-> +What:          /sys/bus/i2c/devices/.../calibration
->  Date:          April 2010
->  Kernel Version: 2.6.36?
->  Contact:       alan.cox@intel.com
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-distance-srf08 b/Documentation/ABI/testing/sysfs-bus-iio-distance-srf08
-> index 0a1ca1487fa9..a133fd8d081a 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-iio-distance-srf08
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio-distance-srf08
-> @@ -1,4 +1,4 @@
-> -What           /sys/bus/iio/devices/iio:deviceX/sensor_sensitivity
-> +What:          /sys/bus/iio/devices/iio:deviceX/sensor_sensitivity
->  Date:          January 2017
->  KernelVersion: 4.11
->  Contact:       linux-iio@vger.kernel.org
-> @@ -6,7 +6,7 @@ Description:
->                 Show or set the gain boost of the amp, from 0-31 range.
->                 default 31
->
-> -What           /sys/bus/iio/devices/iio:deviceX/sensor_max_range
-> +What:          /sys/bus/iio/devices/iio:deviceX/sensor_max_range
->  Date:          January 2017
->  KernelVersion: 4.11
->  Contact:       linux-iio@vger.kernel.org
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-proximity-as3935 b/Documentation/ABI/testing/sysfs-bus-iio-proximity-as3935
-> index 9a17ab5036a4..c59d95346341 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-iio-proximity-as3935
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio-proximity-as3935
-> @@ -1,4 +1,4 @@
-> -What           /sys/bus/iio/devices/iio:deviceX/in_proximity_input
-> +What:          /sys/bus/iio/devices/iio:deviceX/in_proximity_input
->  Date:          March 2014
->  KernelVersion: 3.15
->  Contact:       Matt Ranostay <matt.ranostay@konsulko.com>
-> @@ -6,7 +6,7 @@ Description:
->                 Get the current distance in meters of storm (1km steps)
->                 1000-40000 = distance in meters
->
-> -What           /sys/bus/iio/devices/iio:deviceX/sensor_sensitivity
-> +What:          /sys/bus/iio/devices/iio:deviceX/sensor_sensitivity
->  Date:          March 2014
->  KernelVersion: 3.15
->  Contact:       Matt Ranostay <matt.ranostay@konsulko.com>
-> diff --git a/Documentation/ABI/testing/sysfs-bus-pci-devices-cciss b/Documentation/ABI/testing/sysfs-bus-pci-devices-cciss
-> index 53d99edd1d75..eb449169c30b 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-pci-devices-cciss
-> +++ b/Documentation/ABI/testing/sysfs-bus-pci-devices-cciss
-> @@ -1,66 +1,66 @@
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/cXdY/model
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/cXdY/model
->  Date:          March 2009
->  Kernel Version: 2.6.30
->  Contact:       iss_storagedev@hp.com
->  Description:   Displays the SCSI INQUIRY page 0 model for logical drive
->                 Y of controller X.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/cXdY/rev
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/cXdY/rev
->  Date:          March 2009
->  Kernel Version: 2.6.30
->  Contact:       iss_storagedev@hp.com
->  Description:   Displays the SCSI INQUIRY page 0 revision for logical
->                 drive Y of controller X.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/cXdY/unique_id
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/cXdY/unique_id
->  Date:          March 2009
->  Kernel Version: 2.6.30
->  Contact:       iss_storagedev@hp.com
->  Description:   Displays the SCSI INQUIRY page 83 serial number for logical
->                 drive Y of controller X.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/cXdY/vendor
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/cXdY/vendor
->  Date:          March 2009
->  Kernel Version: 2.6.30
->  Contact:       iss_storagedev@hp.com
->  Description:   Displays the SCSI INQUIRY page 0 vendor for logical drive
->                 Y of controller X.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/cXdY/block:cciss!cXdY
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/cXdY/block:cciss!cXdY
->  Date:          March 2009
->  Kernel Version: 2.6.30
->  Contact:       iss_storagedev@hp.com
->  Description:   A symbolic link to /sys/block/cciss!cXdY
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/rescan
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/rescan
->  Date:          August 2009
->  Kernel Version:        2.6.31
->  Contact:       iss_storagedev@hp.com
->  Description:   Kicks of a rescan of the controller to discover logical
->                 drive topology changes.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/cXdY/lunid
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/cXdY/lunid
->  Date:          August 2009
->  Kernel Version: 2.6.31
->  Contact:       iss_storagedev@hp.com
->  Description:   Displays the 8-byte LUN ID used to address logical
->                 drive Y of controller X.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/cXdY/raid_level
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/cXdY/raid_level
->  Date:          August 2009
->  Kernel Version: 2.6.31
->  Contact:       iss_storagedev@hp.com
->  Description:   Displays the RAID level of logical drive Y of
->                 controller X.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/cXdY/usage_count
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/cXdY/usage_count
->  Date:          August 2009
->  Kernel Version: 2.6.31
->  Contact:       iss_storagedev@hp.com
->  Description:   Displays the usage count (number of opens) of logical drive Y
->                 of controller X.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/resettable
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/resettable
->  Date:          February 2011
->  Kernel Version:        2.6.38
->  Contact:       iss_storagedev@hp.com
-> @@ -71,7 +71,7 @@ Description:  Value of 1 indicates the controller can honor the reset_devices
->                 a dump device, as kdump requires resetting the device in order
->                 to work reliably.
->
-> -Where:         /sys/bus/pci/devices/<dev>/ccissX/transport_mode
-> +What:          /sys/bus/pci/devices/<dev>/ccissX/transport_mode
->  Date:          July 2011
->  Kernel Version:        3.0
->  Contact:       iss_storagedev@hp.com
-> diff --git a/Documentation/ABI/testing/sysfs-bus-usb-devices-usbsevseg b/Documentation/ABI/testing/sysfs-bus-usb-devices-usbsevseg
-> index 70d00dfa443d..f6199b314196 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-usb-devices-usbsevseg
-> +++ b/Documentation/ABI/testing/sysfs-bus-usb-devices-usbsevseg
-> @@ -1,12 +1,12 @@
-> -Where:         /sys/bus/usb/.../powered
-> +What:          /sys/bus/usb/.../powered
->  Date:          August 2008
->  Kernel Version:        2.6.26
->  Contact:       Harrison Metzger <harrisonmetz@gmail.com>
->  Description:   Controls whether the device's display will powered.
->                 A value of 0 is off and a non-zero value is on.
->
-> -Where:         /sys/bus/usb/.../mode_msb
-> -Where:         /sys/bus/usb/.../mode_lsb
-> +What:          /sys/bus/usb/.../mode_msb
-> +What:          /sys/bus/usb/.../mode_lsb
->  Date:          August 2008
->  Kernel Version:        2.6.26
->  Contact:       Harrison Metzger <harrisonmetz@gmail.com>
-> @@ -16,7 +16,7 @@ Description:  Controls the devices display mode.
->                 for an 8 character display the values are
->                         MSB 0x08; LSB 0xFF.
->
-> -Where:         /sys/bus/usb/.../textmode
-> +What:          /sys/bus/usb/.../textmode
->  Date:          August 2008
->  Kernel Version:        2.6.26
->  Contact:       Harrison Metzger <harrisonmetz@gmail.com>
-> @@ -25,13 +25,13 @@ Description:        Controls the way the device interprets its text buffer.
->                 hex:    each character is between 0-15
->                 ascii:  each character is between '0'-'9' and 'A'-'F'.
->
-> -Where:         /sys/bus/usb/.../text
-> +What:          /sys/bus/usb/.../text
->  Date:          August 2008
->  Kernel Version:        2.6.26
->  Contact:       Harrison Metzger <harrisonmetz@gmail.com>
->  Description:   The text (or data) for the device to display
->
-> -Where:         /sys/bus/usb/.../decimals
-> +What:          /sys/bus/usb/.../decimals
->  Date:          August 2008
->  Kernel Version:        2.6.26
->  Contact:       Harrison Metzger <harrisonmetz@gmail.com>
-> diff --git a/Documentation/ABI/testing/sysfs-class-cxl b/Documentation/ABI/testing/sysfs-class-cxl
-> index bbbabffc682a..fc7c6f7c21b3 100644
-> --- a/Documentation/ABI/testing/sysfs-class-cxl
-> +++ b/Documentation/ABI/testing/sysfs-class-cxl
-> @@ -1,6 +1,6 @@
-> -Note: Attributes that are shared between devices are stored in the directory
-> -pointed to by the symlink device/.
-> -Example: The real path of the attribute /sys/class/cxl/afu0.0s/irqs_max is
-> +Please notice that attributes that are shared between devices are stored in
-> +the directory pointed to by the symlink device/.
-> +For example, the real path of the attribute /sys/class/cxl/afu0.0s/irqs_max is
->  /sys/class/cxl/afu0.0s/device/irqs_max, i.e. /sys/class/cxl/afu0.0/irqs_max.
->
->
-> diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
-> index ee39acacf6f8..01196e19afca 100644
-> --- a/Documentation/ABI/testing/sysfs-class-devfreq
-> +++ b/Documentation/ABI/testing/sysfs-class-devfreq
-> @@ -47,7 +47,7 @@ Description:
->  What:          /sys/class/devfreq/.../trans_stat
->  Date:          October 2012
->  Contact:       MyungJoo Ham <myungjoo.ham@samsung.com>
-> -Descrtiption:
-> +Description:
->                 This ABI shows the statistics of devfreq behavior on a
->                 specific device. It shows the time spent in each state and
->                 the number of transitions between states.
-> diff --git a/Documentation/ABI/testing/sysfs-class-powercap b/Documentation/ABI/testing/sysfs-class-powercap
-> index db3b3ff70d84..f333a0ccc29b 100644
-> --- a/Documentation/ABI/testing/sysfs-class-powercap
-> +++ b/Documentation/ABI/testing/sysfs-class-powercap
-> @@ -147,6 +147,6 @@ What:               /sys/class/powercap/.../<power zone>/enabled
->  Date:          September 2013
->  KernelVersion: 3.13
->  Contact:       linux-pm@vger.kernel.org
-> -Description
-> +Description:
->                 This allows to enable/disable power capping at power zone level.
->                 This applies to current power zone and its children.
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-fscaps b/Documentation/ABI/testing/sysfs-kernel-fscaps
-> index 50a3033b5e15..bcff34665192 100644
-> --- a/Documentation/ABI/testing/sysfs-kernel-fscaps
-> +++ b/Documentation/ABI/testing/sysfs-kernel-fscaps
-> @@ -2,7 +2,7 @@ What:           /sys/kernel/fscaps
->  Date:          February 2011
->  KernelVersion: 2.6.38
->  Contact:       Ludwig Nussel <ludwig.nussel@suse.de>
-> -Description
-> +Description:
->                 Shows whether file system capabilities are honored
->                 when executing a binary
->
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-vmcoreinfo b/Documentation/ABI/testing/sysfs-kernel-vmcoreinfo
-> index 7bd81168e063..1f1087a5f075 100644
-> --- a/Documentation/ABI/testing/sysfs-kernel-vmcoreinfo
-> +++ b/Documentation/ABI/testing/sysfs-kernel-vmcoreinfo
-> @@ -4,7 +4,7 @@ KernelVersion:  2.6.24
->  Contact:       Ken'ichi Ohmichi <oomichi@mxs.nes.nec.co.jp>
->                 Kexec Mailing List <kexec@lists.infradead.org>
->                 Vivek Goyal <vgoyal@redhat.com>
-> -Description
-> +Description:
->                 Shows physical address and size of vmcoreinfo ELF note.
->                 First value contains physical address of note in hex and
->                 second value contains the size of note in hex. This ELF
-> --
-> 2.21.0
->
+Thank you for the review.
+
+Regards,
+Lukasz
+
+> Best regards,
+> Krzysztof
+> 
+>> +       }
+>> +
+>> +       /*
+>> +        * Setup default thresholds for the devfreq governor.
+>> +        * The values are chosen based on experiments.
+>> +        */
+>> +       dmc->gov_data.upthreshold = 30;
+>> +       dmc->gov_data.downdifferential = 5;
+>> +
+>> +       dmc->df = devm_devfreq_add_device(dev, &exynos5_dmc_df_profile,
+>> +                                         DEVFREQ_GOV_USERSPACE,
+>> +                                         &dmc->gov_data);
+>> +
+>> +       if (IS_ERR(dmc->df)) {
+>> +               ret = PTR_ERR(dmc->df);
+>> +               goto err_devfreq_add;
+>> +       }
+>> +
+>> +       dev_info(dev, "DMC initialized\n");
+>> +
+>> +       return 0;
+>> +
+>> +err_devfreq_add:
+>> +       exynos5_counters_disable_edev(dmc);
+>> +remove_clocks:
+>> +       clk_disable_unprepare(dmc->mout_bpll);
+>> +       clk_disable_unprepare(dmc->fout_bpll);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>>
+> 
+> 
