@@ -2,116 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 841D446571
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 19:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7D14677A
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 20:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726071AbfFNROy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 13:14:54 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44285 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbfFNROy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 13:14:54 -0400
-Received: by mail-pf1-f193.google.com with SMTP id t16so1823914pfe.11
-        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 10:14:53 -0700 (PDT)
+        id S1725886AbfFNSXo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 14:23:44 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:43792 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725814AbfFNSXo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 14:23:44 -0400
+Received: by mail-qt1-f195.google.com with SMTP id z24so3540258qtj.10
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 11:23:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=r5tXhiANsxn6YQdl37418WiLHhdChm3AD299PfiCsoU=;
-        b=NbXyTVK3WaxmIeOt1OopzS29eKK5sL0zVVNJL08beb9YGBPHrdMbO43tYK1Gb99EyA
-         S9hkqIewhwbzU0RvY8QzoINoWW3/iA5SsDzApt/AWknhXmBJHBWWa0UksTvw7a3OpCOz
-         /eZiD50teroJQ2NCRVjKhypUDil5wslWZEWsY=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=JgsixOY7DseFYD9NVhuWLlq7gswhsAh5xxa+izOpaUs=;
+        b=WPnWyA9duJs6z2zS0gnnr9yCluFRiF9wvX43AUxtxoHAHE1f6Z0gGOh3cIe44zhPeR
+         iPlrHPLJUmlRAAVZV9OxdL5/p/dbkWYuhWrwW6plVsIYS1fkTN+0oa8FA1pXi+qw/iEY
+         WFzUSnjxJbiyjgrGE8IeXP9n50e2WK+Sm0D50=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=r5tXhiANsxn6YQdl37418WiLHhdChm3AD299PfiCsoU=;
-        b=k0MwkkUXb4MMeUs3mdlwrsTmmmlUynF2HYiT2ZUB9BJglRtWiWD0/L6AWKi23+Ocus
-         dVmpllCgsfkJh15iyBsYNw7n8W8mbrJWuBg4jojsY83aFR6A8rTKyYmsXhrK0doNDZu/
-         +OQlaa6qhBrhO1J8K+yDPY9u9J5CTDLIER95YxKhMqzpB8nVmjsRFoVfIcThCRqQ0a4y
-         B6cnwWfIfFQ0fMWMOAQbB5uBxG/1E7fGVp40pp+lf5EOdwW5MnjW7c4Z/ORnBRsBjOFT
-         69yn88QVrIrqrfB+MeKNxY4On0Ic4412vmUiDyCkrU9RYisfmUqdnTfq1zorRpJ9Udmd
-         B+Og==
-X-Gm-Message-State: APjAAAVaPISeVpZnGdR4+lVne7xeEWv8bvkPnUNu76ABp8x8p3Oogrq/
-        oJuAXABtb+1ce8ccv8srPRLpRxmmX3w=
-X-Google-Smtp-Source: APXvYqxsi04hmYAh6uAF7MpkalRo5RRTNCaD8ZvmYUW26pTiZVJfnw21mkvJkIZ5A+XCCpS6vgQHlQ==
-X-Received: by 2002:a17:90a:1b48:: with SMTP id q66mr11665697pjq.83.1560532493642;
-        Fri, 14 Jun 2019 10:14:53 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
-        by smtp.gmail.com with ESMTPSA id l44sm3870729pje.29.2019.06.14.10.14.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 14 Jun 2019 10:14:52 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 10:14:50 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Qais.Yousef@arm.com, juri.lelli@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 5/5] cpufreq: Add QoS requests for userspace
- constraints
-Message-ID: <20190614171450.GQ137143@google.com>
-References: <cover.1560163748.git.viresh.kumar@linaro.org>
- <d1a7585539ad2ced2bfcc9e232cf859b1ec9c71a.1560163748.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=JgsixOY7DseFYD9NVhuWLlq7gswhsAh5xxa+izOpaUs=;
+        b=YKr62nKDz9hGll2Ct3omWSxQZ1m2AULVwmSpLXQOuQXW9hloCwjRz+iJwYz4Dbo18G
+         TpYS3qwmvxXO3BfneaDXgIAJYJC8BQS4HN18QXUUROWZGavEfRjdAXzSAI+bAuxg/HIg
+         JZjeSJVpPE4b/FuuAJUCKVBb0zw99y+5aa8IPGAeOGN8GCwhDl+LGVimkAdt5uaOZsXx
+         oI3e/+BSFa186Lz2U3aeB1cM9rrC8cD8bpyT34EldcGf8edTa8Amm+yuSGwsDlmPf0UJ
+         dFfnbtN+lOODlXFy4nytWfALirXoA66hYrdBJ4aMlmJcwCtA7tFsgqGA0Y/5B02fTcEZ
+         PHtw==
+X-Gm-Message-State: APjAAAWqvP6/rxPt99CRP0W1Z0p3YGgA0lIQfQIYSvhIa5s1E47tWv1G
+        KquxhHbfqvZs83nlk8Ui6/oMkM4V4814+k4Z93Fb//Zd
+X-Google-Smtp-Source: APXvYqzE9Uq5Q9fvJC8Ss1UjPNECoEmT3u8p2KzuQNrXJCQrUgkAXIakzzG+4dvUplkr7sJZRtxsr0LLhkaKEzJOK+8=
+X-Received: by 2002:ac8:2f7b:: with SMTP id k56mr70825566qta.376.1560536622857;
+ Fri, 14 Jun 2019 11:23:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d1a7585539ad2ced2bfcc9e232cf859b1ec9c71a.1560163748.git.viresh.kumar@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190607003735.212291-1-ravisadineni@chromium.org>
+In-Reply-To: <20190607003735.212291-1-ravisadineni@chromium.org>
+From:   Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Date:   Fri, 14 Jun 2019 11:23:31 -0700
+Message-ID: <CAEZbON5oRSnOHQrzPcapd=XrK4_ngAY-7hTzxMOyO+=rWJB1bA@mail.gmail.com>
+Subject: Re: [PATCH] power: Do not clear events_check_enabled in pm_wakeup_pending()
+To:     len.brown@intel.com, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        linux-pm@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Todd Broch <tbroch@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Rajat Jain <rajatja@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+Hi,
 
-On Mon, Jun 10, 2019 at 04:21:36PM +0530, Viresh Kumar wrote:
-> This implements QoS requests to manage userspace configuration of min
-> and max frequency.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Just wanted to check if this o.k.
+
+Thanks,
+Ravi
+
+On Thu, Jun 6, 2019 at 5:37 PM Ravi Chandra Sadineni
+<ravisadineni@chromium.org> wrote:
+>
+> events_check_enabled bool is set when wakeup_count sysfs attribute
+> is written. User level daemon is expected to write this attribute
+> just before suspend.
+>
+> When this boolean is set, calls to pm_wakeup_event() will result in
+> increment of per device and global wakeup count that helps in
+> identifying the wake source. global wakeup count is also used by
+> pm_wakeup_pending() to identify if there are any pending events that
+> should result in an suspend abort.
+>
+> Currently calls to pm_wakeup_pending() also clears events_check_enabled.
+> This can be a problem when there are multiple wake events or when the
+> suspend is aborted due to an interrupt on a shared interrupt line.
+> For example an Mfd device can create several platform devices which
+> might fetch the state on resume in the driver resume method and increment
+> the wakeup count if needed. But if events_check_enabled is cleared before
+> resume methods get to execute, wakeup count will not be incremented. Thus
+> let us not reset the bool here.
+>
+> Note that events_check_enabled is also cleared in suspend.c/enter_state()
+> on every resume at the end.
+>
+> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
 > ---
->  drivers/cpufreq/cpufreq.c | 92 +++++++++++++++++++--------------------
->  include/linux/cpufreq.h   |  8 +---
->  2 files changed, 47 insertions(+), 53 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 547d221b2ff2..ff754981fcb4 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -720,23 +720,15 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
->  static ssize_t store_##file_name					\
->  (struct cpufreq_policy *policy, const char *buf, size_t count)		\
->  {									\
-> -	int ret, temp;							\
-> -	struct cpufreq_policy new_policy;				\
-> +	unsigned long val;						\
-> +	int ret;							\
->  									\
-> -	memcpy(&new_policy, policy, sizeof(*policy));			\
-> -	new_policy.min = policy->user_policy.min;			\
-> -	new_policy.max = policy->user_policy.max;			\
-> -									\
-> -	ret = sscanf(buf, "%u", &new_policy.object);			\
-> +	ret = sscanf(buf, "%lu", &val);					\
->  	if (ret != 1)							\
->  		return -EINVAL;						\
->  									\
-> -	temp = new_policy.object;					\
-> -	ret = cpufreq_set_policy(policy, &new_policy);		\
-> -	if (!ret)							\
-> -		policy->user_policy.object = temp;			\
-> -									\
-> -	return ret ? ret : count;					\
-> +	ret = dev_pm_qos_update_request(policy->object##_freq_req, val);\
-> +	return ret && ret != 1 ? ret : count;				\
-
-nit: I wonder if
-
-  return (ret >= 0) ? count : ret;
-
-would be clearer.
-
-Other than that:
-
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>  drivers/base/power/wakeup.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 5b2b6a05a4f3..88aade871589 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -838,7 +838,6 @@ bool pm_wakeup_pending(void)
+>
+>                 split_counters(&cnt, &inpr);
+>                 ret = (cnt != saved_count || inpr > 0);
+> -               events_check_enabled = !ret;
+>         }
+>         raw_spin_unlock_irqrestore(&events_lock, flags);
+>
+> --
+> 2.20.1
+>
