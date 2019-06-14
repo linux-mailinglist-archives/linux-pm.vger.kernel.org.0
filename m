@@ -2,73 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82227453C6
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 07:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1986453FC
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 07:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725775AbfFNFFv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 01:05:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55304 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725767AbfFNFFu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Jun 2019 01:05:50 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9BCBF2133D;
-        Fri, 14 Jun 2019 05:05:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560488750;
-        bh=HKI2x1EvSe9g2nK7b8GlmwzEiX3DR91aqIl+fHCH+0Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vecLTE6gLDgLhuWI5qzQ4e3cMX6MMqOIVY2h3uLZ4yxwmxbh+WXbfS8JYYI5RO//q
-         Loa2tXeEI8l9BNN1Cd+f5/X5UWfL+eRl6sWnPA8EPZZOgfqDJNespG+gWE5haEuYHj
-         IC0wF9STRQ+dS3MjAqfBBSuAvejMQ3AlazhpwWxU=
-Date:   Fri, 14 Jun 2019 07:05:47 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] thermal: bcm2835: no need to check return value of
- debugfs_create functions
-Message-ID: <20190614050547.GA8952@kroah.com>
-References: <20190613183729.GA32085@kroah.com>
- <b0e6c04d-143f-1b42-0536-028adc9a55a5@linaro.org>
+        id S1725834AbfFNF1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 01:27:38 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:46337 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725812AbfFNF1h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 01:27:37 -0400
+Received: by mail-pl1-f181.google.com with SMTP id e5so495570pls.13
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 22:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gpmRrAai2U/u8FOxmf1mMEHtb8C5DvBiK/78zCxWoN8=;
+        b=FdtBwKkGrvc8PbkOh7IgHRgb+bO406Z3RgusnYcYmsIkqRO8qW5ggLC/SPBKMfBsK2
+         PesYYhBmzjDv4oFUeFgNGNgrVn9OhG6mawN1KgvA5PRLbqEZ4r6b2BDd4mu+7LMJKEoC
+         v3zMw08i6e4xTK71w47QkprUWXzQQe3AMsDDNfZ10xd3gFDUKOzG9z8e+mmrzznd3gME
+         p8R3KCVWTAOEb0hwDzrOw0tpa2pEI7n7eVqcO+zZvOtCqlSoIh4M/i74FRgLRGoRwaMG
+         M8uzUA+O3fsjv2HRPPyu8ZZVN8th2KR+5YcNfF+x7GMwHxgW03ayzewUvHxZTgiEOzWR
+         b1GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gpmRrAai2U/u8FOxmf1mMEHtb8C5DvBiK/78zCxWoN8=;
+        b=U61JYEPlwy1zNiyotz1n47wXqj2VwzHdeu2NUffk1GFV8H8o2FGa4JNW+j8my8Iiyz
+         XUdfpeO+UgMLETHAosOeYknBF6km0zuP91gjFIE4Hjlo0o/5YbHFlch+Hy5fwLrw5n02
+         Ev8UjzIjLC04G6Cs8WB/qVhYe39oLmnAQCp/C/PNeLlYE1pWu2DCwMoBB01jkrad5NTw
+         JB0GOQLbHaLRCZTxA+5Mx4a98Qwc/+D18B6GJYaxafs5zQBWtCIR7z0p+kahLKS5z15Q
+         JPbETbRymMfRTPOINvd++mJguWloje/3THSaeIJYzb9SsOp4brdeS5XAGsr36RfMUufy
+         8dhg==
+X-Gm-Message-State: APjAAAX8NvylI1SOz1sXnSPT9E/+93Re/XvYrhwKjK8PsI6zcCPve/el
+        H7mhNkAQ1nT3oE0adQMxqs6bdQ==
+X-Google-Smtp-Source: APXvYqyzY+ZcDwS257e/DcRosvfsCUeYIQheDqeTIxEJrU3JUxKmTdM1JbGHllR8eOi2yEYOZ8KXFQ==
+X-Received: by 2002:a17:902:7c90:: with SMTP id y16mr1583679pll.238.1560490056827;
+        Thu, 13 Jun 2019 22:27:36 -0700 (PDT)
+Received: from localhost ([122.172.66.84])
+        by smtp.gmail.com with ESMTPSA id f88sm2289322pjg.5.2019.06.13.22.27.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Jun 2019 22:27:34 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 10:57:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     swboyd@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        vincent.guittot@linaro.org, mturquette@baylibre.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
+        dianders@chromium.org, rafael@kernel.org
+Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
+Message-ID: <20190614052732.4w6vvwwich2h4cgu@vireshk-i7>
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
+ <20190320094918.20234-2-rnayak@codeaurora.org>
+ <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+ <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
+ <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
+ <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b0e6c04d-143f-1b42-0536-028adc9a55a5@linaro.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 10:18:13PM +0200, Daniel Lezcano wrote:
-> On 13/06/2019 20:37, Greg Kroah-Hartman wrote:
-> > When calling debugfs functions, there is no need to ever check the
-> > return value.  The function can work or not, but the code logic should
-> > never do something different based on this.
+On 13-06-19, 15:24, Viresh Kumar wrote:
+> I am confused as hell on what we should be doing and what we are doing
+> right now. And if we should do better.
 > 
-> Sorry if I'm missing some context but does it mean we do no longer take
-> care of roll-backing anything?
+> Let me explain with an example.
+> 
+> - The clock provider supports following frequencies: 500, 600, 700,
+>   800, 900, 1000 MHz.
+> 
+> - The OPP table contains/supports only a subset: 500, 700, 1000 MHz.
+> 
+> Now, the request to change the frequency starts from cpufreq
+> governors, like schedutil when they calls:
+> 
+> __cpufreq_driver_target(policy, 599 MHz, CPUFREQ_RELATION_L);
+> 
+> CPUFREQ_RELATION_L means: lowest frequency at or above target. And so
+> I would expect the frequency to get set to 600MHz (if we look at clock
+> driver) or 700MHz (if we look at OPP table). I think we should decide
+> this thing from the OPP table only as that's what the platform guys
+> want us to use. So, we should end up with 700 MHz.
+> 
+> Then we land into dev_pm_opp_set_rate(), which does this (which is
+> code copied from earlier version of cpufreq-dt driver):
+> 
+> - clk_round_rate(clk, 599 MHz).
+> 
+>   clk_round_rate() returns the highest frequency lower than target. So
+>   it must return 500 MHz (I haven't tested this yet, all theoretical).
+> 
+> - _find_freq_ceil(opp_table, 500 MHz).
+> 
+>   This works like CPUFREQ_RELATION_L, so we find lowest frequency >=
+>   target freq. And so we should get: 500 MHz itself as OPP table has
+>   it.
+> 
+> - clk_set_rate(clk, 500 MHz).
+> 
+>   This must be doing round-rate again, but I think we will settle with
+>   500 MHz eventually.
+> 
+> 
+> Now the questionnaire:
+> 
+> - Is this whole exercise correct ?
 
-Yes, but how can that happen here?
+No, I missed the call to cpufreq_frequency_table_target() in
+__cpufreq_driver_target() which finds the exact frequency from cpufreq table
+(which was created using opp table) and so we never screw up here. Sorry for
+confusing everyone on this :(
 
-> It is acceptable to have half of the debugfs set for example?
+> Now lets move to this patch, which makes it more confusing.
+> 
+> The OPP tables for CPUs and GPUs should already be somewhat like fmax
+> tables for particular voltage values and that's why both cpufreq and
+> OPP core try to find a frequency higher than target so we choose the
+> most optimum one power-efficiency wise.
+> 
+> For cases where the OPP table is only a subset of the clk-providers
+> table (almost always), if we let the clock provider to find the
+> nearest frequency (which is lower) we will run the CPU/GPU at a
+> not-so-optimal frequency. i.e. if 500, 600, 700 MHz all need voltage
+> to be 1.2 V, we should be running at 700 always, while we may end up
+> running at 500 MHz.
 
-Yes, your code should never care about this.
+This won't happen for CPUs because of the reason I explained earlier. cpufreq
+core does the rounding before calling dev_pm_opp_set_rate(). And no other
+devices use dev_pm_opp_set_rate() right now apart from CPUs, so we are not going
+to break anything.
 
-> Or a parent failing to create and the children polluting the root
-> debugfs dir because the parent is NULL?
+> This kind of behavior (introduced by this patch) is important for
+> other devices which want to run at the nearest frequency to target
+> one, but not for CPUs/GPUs. So, we need to tag these IO devices
+> separately, maybe from DT ? So we select the closest match instead of
+> most optimal one.
 
-How can the parent be NULL?  Remember, debugfs_create_dir() can never
-return NULL, so that should not happen.  And even if it does, that's
-fine, who cares :)
+Hmm, so this patch won't break anything and I am inclined to apply it again :)
 
-thanks,
+Does anyone see any other issues with it, which I might be missing ?
 
-greg k-h
+-- 
+viresh
