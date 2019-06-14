@@ -2,97 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B9E44FDB
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 01:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2DA2451A1
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 04:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726429AbfFMXJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jun 2019 19:09:09 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:39088 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726603AbfFMXJJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 19:09:09 -0400
-Received: by mail-qk1-f194.google.com with SMTP id i125so513544qkd.6;
-        Thu, 13 Jun 2019 16:09:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=p5oxYtHy7Yr2XXQ3aO8PAJU4EwYdDFlGCwAcwBaO/FI=;
-        b=Eya0pyUgy4UTl64vT9rz/i+jwdo5Iu0PrCPtS6fxeI+ORDW2i7/H4pFGxTtXJN7RvO
-         Yb1dCMNrKs73eVPllQkJiig3tf/jg2MSJi/0/sta6TBDHdtfAytcRE4cgwcTlO/GqLv8
-         dyg7cYBj8I9g5zHzthEcSWzDVXcYsriWtf6/nCOODlk/fqgW7Lf8WMCJGriacXF57KSC
-         jnW2liG+Hxm7RGZtHG/Pa9M4GlTqXrGjKo8vktnUtKUKPkPXWkb15GiOzNLH5lAJpoM8
-         m3t9JhL8Hq0l8NkUvDn/Li1xSEOJvv5H9kfxeXArTAddF7bcL/+eJ+OWLyrK7hLmvwLr
-         OR7g==
-X-Gm-Message-State: APjAAAWvTz+/SyXfA807Lx0ti8p4bBM4HvUWMK8yrLlcJKOP0P1uto0W
-        8IbgKCk3VlO7ZIV7Zn8aUg==
-X-Google-Smtp-Source: APXvYqwGtrTXZRGSGbC4LGuyA5Vkav93477zUXLcKvlB+g549ZiRmZB+l2NOPgb9qqkyDxNSzFpsMA==
-X-Received: by 2002:ae9:df07:: with SMTP id t7mr72055835qkf.193.1560467348262;
-        Thu, 13 Jun 2019 16:09:08 -0700 (PDT)
-Received: from localhost ([64.188.179.243])
-        by smtp.gmail.com with ESMTPSA id m4sm395909qka.70.2019.06.13.16.09.07
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 16:09:07 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 17:09:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Angus Ainslie (Purism)" <angus@akkea.ca>
-Cc:     angus.ainslie@puri.sm, Sebastian Reichel <sre@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: power: supply: Add documentation for
- the VINDPM properties
-Message-ID: <20190613230906.GA10492@bogus>
-References: <20190520180712.32405-1-angus@akkea.ca>
- <20190520180712.32405-3-angus@akkea.ca>
+        id S1727281AbfFNCEe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jun 2019 22:04:34 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52986 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727264AbfFNCEe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jun 2019 22:04:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=aQUK413dBnPXJRbLUE6/RHV++edzrn3sivF8fzDWpGc=; b=hkvPTUNcFjmIKqVi/42DI9hcc
+        djs1/CZZ1gEi9/pkYp7JBfy+mzE4TN3vkpNxJQh+cxpMRjoZUQcYKThK+Lbc9vaeo/sl8COrkoihQ
+        2Nkm9p9a41yPkSk0oiQ+uqa9oaJuLpxhPzO87IqfhV1REBX6QdyTJk7Iexd5hgkPKXUb5IA07VKQe
+        XftuKi6beE3iXFUKmgQ526h4XS+dEAK09FLVKDxMSBZDMm71B91V+TcVb8eWcF/Dwv1toe1WcA/6A
+        XywndEaNPy/piJ98UTvHIdgHMyT3QFWskJPRUdKWRYklnTH2RNGvnLIL8zv28a+39Mv9Q16ozoVaQ
+        AKLPWGR4A==;
+Received: from 201.86.169.251.dynamic.adsl.gvt.net.br ([201.86.169.251] helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hbbZv-0000EJ-7a; Fri, 14 Jun 2019 02:04:31 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hbbZn-0002nV-M0; Thu, 13 Jun 2019 23:04:23 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linuxppc-dev@lists.ozlabs.org,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Anton Vorontsov <anton@enomsg.org>, linux-pm@vger.kernel.org,
+        Colin Cross <ccross@android.com>, linux-iio@vger.kernel.org,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Stefan Achatz <erazor_de@users.sourceforge.net>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 00/14] Add support to generate ABI documentation at admin-guide
+Date:   Thu, 13 Jun 2019 23:04:06 -0300
+Message-Id: <cover.1560477540.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190520180712.32405-3-angus@akkea.ca>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 20, 2019 at 11:07:12AM -0700, Angus Ainslie (Purism) wrote:
-> Add documentation on how to control VINDPM from the devicetree.
-> 
-> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
-> ---
->  .../devicetree/bindings/power/supply/bq25890.txt          | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.txt b/Documentation/devicetree/bindings/power/supply/bq25890.txt
-> index dc0568933359..fe8b709dd666 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25890.txt
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25890.txt
-> @@ -26,9 +26,15 @@ Optional properties:
->  - ti,use-ilim-pin: boolean, if present the ILIM resistor will be used and the
->      input current will be the lower between the resistor setting and the IINLIM
->      register setting;
-> +- ti,use-vinmin-threshold: boolean, if present the FORCE_VINDPM bit will be set
-> +    and the input voltage limit will be configured based on "ti,vinmin-threshold"
+Greg,
 
-Isn't presence of ti,vinmin-threshold enough to determine whether to set 
-FORCE_VINDPM or not? Just get rid of the default being 4.4V.
+As promised, I'm resending the patch series with adds the Kernel ABI to
+Documentation/admin-guide.
 
->  - ti,thermal-regulation-threshold: integer, temperature above which the charge
->      current is lowered, to avoid overheating (in degrees Celsius). If omitted,
->      the default setting will be used (120 degrees);
-> +- ti,vinmin-threshold: integer, lower absolute threshold for VINDPM. If the
-> +    voltage falls below this threshold the charge current is reduced until the
-> +    input voltage rises above the input voltage limit. If omitted, the default
-> +    setting will be used (4.4V);
->  
->  Example:
->  
-> @@ -46,4 +52,6 @@ bq25890 {
->  
->          ti,use-ilim-pin;
->          ti,thermal-regulation-threshold = <120>;
-> +        ti,use-vinmin-threshold;
-> +        ti,vinmin-threshold = <3900000>;
->  };
-> -- 
-> 2.17.1
-> 
+Those patches are basically the version 3 patchset I sent back in 2017,
+rebased on the top of linux-next (next-20190613), and with some fixes
+in order for it to work.
+
+- The 4 initial patches to fix some ABI descriptions that are violating 
+  the syntax described at Documentation/ABI/README;
+
+- The next 6 patches are the ones originally written in 2017 with a
+  script with parses the ABI files;
+
+- The 11th patch is a new one: it relaxes a little bit the parser in 
+  order to parse file headers that contains colons on it;
+
+- The 12th patch adds the new script to the documentation build
+  system, together with a new python Sphinx extension with calls it;
+
+- The 13th patch fixes the python script when running with newer
+  Sphinx versions (1.7 and upper);
+
+- The final patch fixes an UTF-8 trouble. I noticed it only with Sphinx
+  1.4, but it could affect other versions too. So, I ended by changing
+  the UTF-8 encoding logit to work version-independent, just like
+  what happens with kerneldoc.py extension.
+
+Mauro Carvalho Chehab (14):
+  ABI: fix some syntax issues at the ABI database
+  ABI: sysfs-driver-hid: the "What" field doesn't parse fine
+  ABI: sysfs-class-uwb_rc: remove a duplicated incomplete entry
+  ABI: better identificate tables
+  scripts: add an script to parse the ABI files
+  scripts/get_abi.pl: parse files with text at beginning
+  scripts/get_abi.pl: avoid use literal blocks when not needed
+  scripts/get_abi.pl: split label naming from xref logic
+  scripts/get_abi.pl: add support for searching for ABI symbols
+  scripts/get_abi.pl: represent what in tables
+  scripts/get_abi.pl: fix parse issues with some files
+  doc-rst: add ABI documentation to the admin-guide book
+  sphinx/kernel_abi.py: make it compatible with Sphinx 1.7+
+  docs: sphinx/kernel_abi.py: fix UTF-8 support
+
+ .../ABI/obsolete/sysfs-driver-hid-roccat-pyra |   2 +-
+ Documentation/ABI/testing/pstore              |   2 +-
+ .../sysfs-bus-event_source-devices-format     |   2 +-
+ .../ABI/testing/sysfs-bus-i2c-devices-hm6352  |   6 +-
+ .../ABI/testing/sysfs-bus-iio-distance-srf08  |   4 +-
+ .../testing/sysfs-bus-iio-proximity-as3935    |   4 +-
+ .../ABI/testing/sysfs-bus-pci-devices-cciss   |  22 +-
+ .../testing/sysfs-bus-usb-devices-usbsevseg   |  12 +-
+ .../sysfs-class-backlight-driver-lm3533       |   6 +-
+ Documentation/ABI/testing/sysfs-class-cxl     |   6 +-
+ Documentation/ABI/testing/sysfs-class-devfreq |   2 +-
+ .../ABI/testing/sysfs-class-led-driver-lm3533 |   8 +-
+ .../ABI/testing/sysfs-class-leds-gt683r       |   4 +-
+ .../ABI/testing/sysfs-class-powercap          |   2 +-
+ Documentation/ABI/testing/sysfs-class-uwb_rc  |   6 -
+ Documentation/ABI/testing/sysfs-driver-hid    |  12 +-
+ .../ABI/testing/sysfs-driver-hid-roccat-kone  |   2 +-
+ Documentation/ABI/testing/sysfs-kernel-fscaps |   2 +-
+ .../ABI/testing/sysfs-kernel-vmcoreinfo       |   2 +-
+ Documentation/admin-guide/abi-obsolete.rst    |  10 +
+ Documentation/admin-guide/abi-removed.rst     |   4 +
+ Documentation/admin-guide/abi-stable.rst      |  13 +
+ Documentation/admin-guide/abi-testing.rst     |  19 +
+ Documentation/admin-guide/abi.rst             |  11 +
+ Documentation/admin-guide/index.rst           |   1 +
+ Documentation/conf.py                         |   2 +-
+ Documentation/sphinx/kernel_abi.py            | 172 +++++++
+ scripts/get_abi.pl                            | 450 ++++++++++++++++++
+ 28 files changed, 731 insertions(+), 57 deletions(-)
+ create mode 100644 Documentation/admin-guide/abi-obsolete.rst
+ create mode 100644 Documentation/admin-guide/abi-removed.rst
+ create mode 100644 Documentation/admin-guide/abi-stable.rst
+ create mode 100644 Documentation/admin-guide/abi-testing.rst
+ create mode 100644 Documentation/admin-guide/abi.rst
+ create mode 100644 Documentation/sphinx/kernel_abi.py
+ create mode 100755 scripts/get_abi.pl
+
+-- 
+2.21.0
+
+
