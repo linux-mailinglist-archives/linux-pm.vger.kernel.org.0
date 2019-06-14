@@ -2,123 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E136F45454
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 07:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E168454BE
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 08:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbfFNFyi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 01:54:38 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:59714 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbfFNFyi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 01:54:38 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 782F860909; Fri, 14 Jun 2019 05:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1560491676;
-        bh=wd1M0evBIXLEcGJx9iw3rlVbAxOCmtJoFg2feFLTumI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=bOnuHxO8vepWrGxy5wP0hMkl/8iRkQ6gb+h6IQ12M7loZUuxZRddpRhAciAGH/8MA
-         P+k2GbzqrJRMRiTFRr/zTMtT2zr2AE7SArtWjGKwQx+UjmDMIPlCcxdqeSFAYgBsYn
-         OY3USkRnR3WlbVrgBCedBeGlRZJBMeTDyCd4v9PI=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.131.117.43] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 254356079C;
-        Fri, 14 Jun 2019 05:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1560491675;
-        bh=wd1M0evBIXLEcGJx9iw3rlVbAxOCmtJoFg2feFLTumI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Q1sGLGHqf3Og6g5QfKfG4218AP0shAWBRRrGCeuKdQJBYFYQQ/S/aPj6MOLclGqJ5
-         KfHv4VOLijzIkPbNk0r6sDct0BGaiOvf5sl9xTqTkwSFeVR26QSejf2TOJ6fKEGnok
-         sgNekPch6PEJN8RCCUSSNLedhogOCiYDnRe9dgoU=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 254356079C
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
-To:     Viresh Kumar <viresh.kumar@linaro.org>, swboyd@chromium.org,
-        vincent.guittot@linaro.org, mturquette@baylibre.com
+        id S1725859AbfFNGcO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 02:32:14 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39502 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725826AbfFNGcO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 02:32:14 -0400
+Received: by mail-pl1-f193.google.com with SMTP id b7so580164pls.6
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 23:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+B7qKXGJFcpQLr7qp/Npmcr+UB+pLON9p4u3OT4sydE=;
+        b=IteYjWMcdrUIqBhhG5AEnX6ufnl4qdQ94/AhbuAqyXzyusOiHbjueExr31Z/7k3vK1
+         8qxjudR4xriHfmMP9c6US25vQWx1jXjkH8k/Mu3slZvFI70Hc9fpA4PC3oQ3cfq1GnBz
+         DfiY/Ib8YY5gn+P1ODVqEgVHY/OCOLDh+1M7OSwV8m1AeZ5bgYJrZvSrMPc7hH111ZRA
+         oE5TmKKmdmW3InOVhB9xPk5eSBVIU7YqJ2GCgHUCJMKB/rJVw1WSQxmqP9gSfpKZ/htO
+         va49FUHCzSBqKq6qVHw9WUMQZMZWYPylyZmguBUq1jqSAbUvDs/rqipmfDendsqMUjtu
+         zJtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+B7qKXGJFcpQLr7qp/Npmcr+UB+pLON9p4u3OT4sydE=;
+        b=c94ViGuKg52snZQACUWSEJC8LVrJ3CCC/KLc+8/r+MI++hRo30nXq9U0nATrtULs4k
+         PuS7JRzPEDBEF3VjDAG68Z1gy1XRI+cO9Gm1fNPYLLLv765114P3CLqvIEYAUvZhJsWw
+         fove2hlPhFYQ1GdO17fKbrfOHVDJ0aZsiLvDt7MqzMgK8SBmfas/hFINp8nr5ACGB1L7
+         mAMOI5zEvjLHDgdYXc5wyKsCQ09gNqt7RZrLkx/ceIkuH1/ahBxHzyLc/fFeWwtmWk1/
+         OwQRU/ocbfeAz2T8hVVMnmOZG7uHxYcMBowrc+ZrTxx7AmvvElbUKKwyhMpoGnjjWDNS
+         R+rQ==
+X-Gm-Message-State: APjAAAXXetMGghH8fGFqSNWGTQbxSuFTuJoJ0aHhh/pDFG6Q7O9su/AK
+        yXAwomLHx/tsJminvVxRcI5L3A==
+X-Google-Smtp-Source: APXvYqwaUgWQWH6DKaYdF1Cdc9oLYapZi22Rqa6xAUqkllNSLwfCxqoVWtlD/qftHOdi36hhnvLW8A==
+X-Received: by 2002:a17:902:2ba9:: with SMTP id l38mr85574068plb.300.1560493933681;
+        Thu, 13 Jun 2019 23:32:13 -0700 (PDT)
+Received: from localhost ([122.172.66.84])
+        by smtp.gmail.com with ESMTPSA id x25sm1719091pfm.48.2019.06.13.23.32.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Jun 2019 23:32:12 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 12:02:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
-        dianders@chromium.org, rafael@kernel.org
+        linux-scsi@vger.kernel.org, swboyd@chromium.org,
+        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
+Subject: Re: [RFC v2 02/11] OPP: Make dev_pm_opp_set_rate() with freq=0 as
+ valid
+Message-ID: <20190614063210.lfsquoycronah3fe@vireshk-i7>
 References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-2-rnayak@codeaurora.org>
- <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
- <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
- <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
- <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <b29c1754-d719-4d7b-806f-9ea25a8b528f@codeaurora.org>
-Date:   Fri, 14 Jun 2019 11:24:28 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ <20190320094918.20234-3-rnayak@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190320094918.20234-3-rnayak@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-> Now, the request to change the frequency starts from cpufreq
-> governors, like schedutil when they calls:
+On 20-03-19, 15:19, Rajendra Nayak wrote:
+> For devices with performance state, we use dev_pm_opp_set_rate()
+> to set the appropriate clk rate and the performance state.
+> We do need a way to *remove* the performance state vote when
+> we idle the device and turn the clocks off. Use dev_pm_opp_set_rate()
+> with freq=0 to achieve this.
 > 
-> __cpufreq_driver_target(policy, 599 MHz, CPUFREQ_RELATION_L);
-> 
-> CPUFREQ_RELATION_L means: lowest frequency at or above target. And so
-> I would expect the frequency to get set to 600MHz (if we look at clock
-> driver) or 700MHz (if we look at OPP table). I think we should decide
-> this thing from the OPP table only as that's what the platform guys
-> want us to use. So, we should end up with 700 MHz.
-> 
-> Then we land into dev_pm_opp_set_rate(), which does this (which is
-> code copied from earlier version of cpufreq-dt driver):
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/opp/core.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
 
-so before we land into dev_pm_opp_set_rate() from a __cpufreq_driver_target()
-I guess we do have a cpufreq driver callback that gets called in between?
-which is either .target_index or .target
+What about this instead ?
 
-In case of .target_index, the cpufreq core looks for a OPP index
-and we would land up with 700Mhz i guess, so we are good.
-
-In case of .target though the 'relation' CPUFREQ_RELATION_L does get passed over
-to the cpufreq driver which I am guessing is expected to handle it in some way to
-make sure the target frequency set is not less than whats requested? instead of
-simply passing the requested frequency over to dev_pm_opp_set_rate()?
-
-Looking at all the existing cpufreq drivers upstream, while most support .target_index
-the 3 which do support .target seem to completely ignore this 'relation' input that's
-passed to them.
-
-drivers/cpufreq/cppc_cpufreq.c:	.target = cppc_cpufreq_set_target,
-drivers/cpufreq/cpufreq-nforce2.c:	.target = nforce2_target,
-drivers/cpufreq/pcc-cpufreq.c:	.target = pcc_cpufreq_target,
-
-> This kind of behavior (introduced by this patch) is important for
-> other devices which want to run at the nearest frequency to target
-> one, but not for CPUs/GPUs. So, we need to tag these IO devices
-> separately, maybe from DT ? So we select the closest match instead of
-> most optimal one.
-
-yes we do need some way to distinguish between CPU/GPU devices and other
-IO devices. CPU/GPU can always run at fmax for a given voltage, that's not true
-for IO devices and I don't see how we can satisfy both cases without
-clearly knowing if we are serving a processor or an IO device, unless the
-higher layers (cpufreq/devfreq) are able to handle this somehow without
-expecting the OPP layer to handle the differences.
-
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 2fe96c2363a3..9accf8bb6afc 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -711,7 +711,7 @@ static int _set_required_opps(struct device *dev,
+ 
+        /* Single genpd case */
+        if (!genpd_virt_devs) {
+-               pstate = opp->required_opps[0]->pstate;
++               pstate = likely(opp) ? opp->required_opps[0]->pstate : 0;
+                ret = dev_pm_genpd_set_performance_state(dev, pstate);
+                if (ret) {
+                        dev_err(dev, "Failed to set performance state of %s: %d (%d)\n",
+@@ -729,7 +729,7 @@ static int _set_required_opps(struct device *dev,
+        mutex_lock(&opp_table->genpd_virt_dev_lock);
+ 
+        for (i = 0; i < opp_table->required_opp_count; i++) {
+-               pstate = opp->required_opps[i]->pstate;
++               pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
+ 
+                if (!genpd_virt_devs[i])
+                        continue;
+@@ -770,14 +770,13 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 
+        if (unlikely(!target_freq)) {
+                if (opp_table->required_opp_tables) {
+-                       /* drop the performance state vote */
+-                       dev_pm_genpd_set_performance_state(dev, 0);
+-                       return 0;
++                       ret = _set_required_opps(dev, opp_table, NULL);
+                } else {
+-                       dev_err(dev, "%s: Invalid target frequency %lu\n", __func__,
+-                               target_freq);
+-                       return -EINVAL;
++                       dev_err(dev, "target frequency can't be 0\n");
++                       ret = -EINVAL;
+                }
++
++               goto put_opp_table;
+        }
+ 
+        clk = opp_table->clk;
