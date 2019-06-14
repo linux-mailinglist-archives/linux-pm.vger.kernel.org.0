@@ -2,116 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE2E45890
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 11:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA82458AB
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 11:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbfFNJZw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 05:25:52 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:55221 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726479AbfFNJZv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 05:25:51 -0400
-Received: by mail-wm1-f68.google.com with SMTP id g135so1567211wme.4
-        for <linux-pm@vger.kernel.org>; Fri, 14 Jun 2019 02:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pQycFeF8O/MCj3xXiN1geP8caLtxsTmz/1Q4H46qCII=;
-        b=AvTHUA0nvvIuleQ4btqdI4j6kKv0X41qA7riYO/sKzRvrpTAplVAHRoT+GpsRgy3c4
-         jrud0af8Jod367hqf82apN29+1wePA6JIXktb1YDuVNsU1Y+KVx3KKNSI29DE7QMhOPQ
-         Yme7RnYJuVcVzRQ3ecwU1OhrKj46lDTUzlurS0AU/U35cHCa3V2bqbUcUoMt3axLHbfx
-         wXS9Ku/YgdQkfZnojBucLJxIp0TdNvpZBihLPEljHeWfagsnCN+A5tpQMQPLijzDMMIN
-         ZMuX9UrUOcHi6XVGgKSZ1PTNchWzF4/k9Hq5LtTGal1IgGv6wVoxqGIEqSBjdnAkyCXU
-         KD+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pQycFeF8O/MCj3xXiN1geP8caLtxsTmz/1Q4H46qCII=;
-        b=V/BFzuCsh69VZYVcX3j0EbhsgL/E+rlAuAgfyrjWksQPTuSBL9E9utjv942/VpcLOj
-         LC4rGHr51hWJF2astusk2RNXN8kEDDRRJogME1/FKe4CV2KGU0ckS70WrrfZuweq6e7+
-         IovumHuQXQrPGySlA7MF0cRGJUuvg3ouMtMg6hGIIJvYDWN1rIzIno61OIAD/sHzaS7+
-         YH1MWiTDFjFyfX71arDwmd4nqpfh8VgYlVDzyFimOdKU9wLnyNAqs5ku/aiqfpSGFWSC
-         A0lDEapcmg2rOY9mP7zT1e3S99f3S2QNi2hiW29unvo6U6CnghioM0G18K8IKpWD+loe
-         sg4w==
-X-Gm-Message-State: APjAAAXkyClxn9dJCFercsud2igDav8xUitwe3rvigZU9QXq4ibSxf0Z
-        8YUigEioA6CfS/j04QMuHhk=
-X-Google-Smtp-Source: APXvYqyaytM8J6jQYVS0XhFw1X9mRvKOjAyKDZ/IVN5OX4u4srU7nQgzlE/xgqW5vu3uj/6U6rB6Gg==
-X-Received: by 2002:a1c:cb4d:: with SMTP id b74mr7388361wmg.43.1560504349583;
-        Fri, 14 Jun 2019 02:25:49 -0700 (PDT)
-Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id m21sm2232694wmc.1.2019.06.14.02.25.48
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 14 Jun 2019 02:25:48 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 11:25:48 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Wei Ni <wni@nvidia.com>, Yangtao Li <tiny.windzz@gmail.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] thermal: tegra: no need to check return value of
- debugfs_create functions
-Message-ID: <20190614092548.GB15526@ulmo>
-References: <20190613183753.GB32085@kroah.com>
+        id S1726719AbfFNJak (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 05:30:40 -0400
+Received: from terminus.zytor.com ([198.137.202.136]:40427 "EHLO
+        terminus.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726686AbfFNJak (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 05:30:40 -0400
+Received: from terminus.zytor.com (localhost [127.0.0.1])
+        by terminus.zytor.com (8.15.2/8.15.2) with ESMTPS id x5E9SDmZ1626959
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 14 Jun 2019 02:28:13 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 terminus.zytor.com x5E9SDmZ1626959
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2019051801; t=1560504494;
+        bh=8ovtBRuZ0q8GIqCVFE0Skn79qdS+yqXGPq1xONZOsDw=;
+        h=Date:From:Cc:Reply-To:In-Reply-To:References:To:Subject:From;
+        b=uLnFCratGXjhc7DxN/+6K+HriiKU8DO2JkCt+8Ylz1udjr4vbHqPo7jSPe+qOlFv+
+         XZ+s/9pRawXJmV8iST+m7AgYz5j8K1gdpR6Hz0qARVE3/yMUEp2RoFEf3jo8Vfl3yY
+         eAqaeoMPcL0ON3NkuwatnhITWjb3Z1r+QtMz1QEcd1VOOnysJpL/h8V5CIMlVHyIHS
+         L51DDoZ+plQtFAFqyT2MrDUp1ZPanF3NlNZoYkiJsXqogWrSUycoppm2Q1IHWnn5Hi
+         vDLXNR3DmyQOhM4b6dlFfqAogn418gYmvpYSc3u0lCCcO5PrZRNdSRZ7hJjmZjKTTa
+         HiPSxD4ZjdlUw==
+Received: (from tipbot@localhost)
+        by terminus.zytor.com (8.15.2/8.15.2/Submit) id x5E9SD5k1626956;
+        Fri, 14 Jun 2019 02:28:13 -0700
+Date:   Fri, 14 Jun 2019 02:28:13 -0700
+X-Authentication-Warning: terminus.zytor.com: tipbot set sender to tipbot@zytor.com using -f
+From:   tip-bot for Rajneesh Bhardwaj <tipbot@zytor.com>
+Message-ID: <tip-e32d045cd4ba06b59878323e434bad010e78e658@git.kernel.org>
+Cc:     peterz@infradead.org, rajneesh.bhardwaj@linux.intel.com,
+        linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
+        linux-pm@vger.kernel.org, mingo@kernel.org,
+        kan.liang@linux.intel.com, qiuxu.zhuo@intel.com,
+        andriy.shevchenko@linux.intel.com, bp@alien8.de,
+        srinivas.pandruvada@linux.intel.com, tglx@linutronix.de,
+        hpa@zytor.com, lenb@kernel.org
+Reply-To: rajneesh.bhardwaj@linux.intel.com, peterz@infradead.org,
+          linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
+          linux-pm@vger.kernel.org, mingo@kernel.org,
+          kan.liang@linux.intel.com, qiuxu.zhuo@intel.com,
+          andriy.shevchenko@linux.intel.com, bp@alien8.de,
+          srinivas.pandruvada@linux.intel.com, tglx@linutronix.de,
+          hpa@zytor.com, lenb@kernel.org
+In-Reply-To: <20190606012419.13250-1-rajneesh.bhardwaj@linux.intel.com>
+References: <20190606012419.13250-1-rajneesh.bhardwaj@linux.intel.com>
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip:x86/cpu] x86/cpu: Add Ice Lake NNPI to Intel family
+Git-Commit-ID: e32d045cd4ba06b59878323e434bad010e78e658
+X-Mailer: tip-git-log-daemon
+Robot-ID: <tip-bot.git.kernel.org>
+Robot-Unsubscribe: Contact <mailto:hpa@kernel.org> to get blacklisted from
+ these emails
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8P1HSweYDcXXzwPJ"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
 Content-Disposition: inline
-In-Reply-To: <20190613183753.GB32085@kroah.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+X-Spam-Status: No, score=-3.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        T_DATE_IN_FUTURE_96_Q autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on terminus.zytor.com
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Commit-ID:  e32d045cd4ba06b59878323e434bad010e78e658
+Gitweb:     https://git.kernel.org/tip/e32d045cd4ba06b59878323e434bad010e78e658
+Author:     Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
+AuthorDate: Thu, 6 Jun 2019 06:54:19 +0530
+Committer:  Thomas Gleixner <tglx@linutronix.de>
+CommitDate: Thu, 13 Jun 2019 19:37:42 +0200
 
---8P1HSweYDcXXzwPJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+x86/cpu: Add Ice Lake NNPI to Intel family
 
-On Thu, Jun 13, 2019 at 08:37:53PM +0200, Greg Kroah-Hartman wrote:
-> When calling debugfs functions, there is no need to ever check the
-> return value.  The function can work or not, but the code logic should
-> never do something different based on this.
->=20
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Eduardo Valentin <edubezval@gmail.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Wei Ni <wni@nvidia.com>
-> Cc: Yangtao Li <tiny.windzz@gmail.com>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/thermal/tegra/soctherm.c | 14 ++------------
->  1 file changed, 2 insertions(+), 12 deletions(-)
+Add the CPUID model number of Ice Lake Neural Network Processor for Deep
+Learning Inference (ICL-NNPI) to the Intel family list. Ice Lake NNPI uses
+model number 0x9D and this will be documented in a future version of Intel
+Software Development Manual.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: bp@suse.de
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: platform-driver-x86@vger.kernel.org
+Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+Link: https://lkml.kernel.org/r/20190606012419.13250-1-rajneesh.bhardwaj@linux.intel.com
 
---8P1HSweYDcXXzwPJ
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+ arch/x86/include/asm/intel-family.h | 1 +
+ 1 file changed, 1 insertion(+)
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl0DaBsACgkQ3SOs138+
-s6HjuA/9F5n34GKRrGINO1OeVwwc/8qAg/kQdJLjR2Plc7J5qSoAtOkhyFPUSedU
-pg2hdp+Z8etsB04al11YBIAHX5F6fzOvYjzZq3gMPuy3bi0TGr7uiN5zraWFgFDJ
-8ki4ulReo2QVkMu82wCLiaf48UmHgB3tH2ndQdAAwmjsHrCigfeJeWFj9HbV26xk
-fJ7/Kfh3bd8mWDSa1jyt8yoyvOJeM11xfDwLOfV7HCqBuZEK+jrVIqxulQc9j2NY
-qHbAAYO1L5HaAXKkR1YVr9Xl3e0niVmck5y0XTYbEqVXFenSLOAdnOhAinLL1188
-DQ0yKLETF8WdFT6XKgfw4TURMYpbtHj65GIRmW6jWvjVUEskEYwPKfDsgaY1adVu
-wy8wgbEQsw/YUgRwaK8ZpEYebF8I5LvQUltQBvGE+kFEHaY/RjsXmC0R6m+mmyog
-JUwoKlX7grvSYt1p96+6+aEtdgLWcYCBwsetzpV1BrMAVXpvQ4RKBIPV3d1yqCPS
-S/X+cc9yAh64igrhDYYdvUlIAcX5GMTbBR3wlVQSyod1+eWwa3inLuEe1i3PJLjA
-XWXy8p+Umjnvg3BTwTJG+KPgjClLEd2dVjzMaqNp89G6HxPkPIWAnZsq2kHiI14Y
-PXMajNZn6cqyLJtZQtpMQxFc1o5ZgDnP3/dv23pXzqwtvm+T3eA=
-=4ImI
------END PGP SIGNATURE-----
-
---8P1HSweYDcXXzwPJ--
+diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
+index 9f15384c504a..087de5d3b93a 100644
+--- a/arch/x86/include/asm/intel-family.h
++++ b/arch/x86/include/asm/intel-family.h
+@@ -53,6 +53,7 @@
+ #define INTEL_FAM6_CANNONLAKE_MOBILE	0x66
+ 
+ #define INTEL_FAM6_ICELAKE_MOBILE	0x7E
++#define INTEL_FAM6_ICELAKE_NNPI		0x9D
+ 
+ /* "Small Core" Processors (Atom) */
+ 
