@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B00D645343
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 06:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFEF45360
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jun 2019 06:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725908AbfFNERm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jun 2019 00:17:42 -0400
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:51119 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfFNERm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 00:17:42 -0400
-Received: by mail-qt1-f201.google.com with SMTP id g30so1044582qtm.17
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 21:17:42 -0700 (PDT)
+        id S1726046AbfFNERp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jun 2019 00:17:45 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:52862 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbfFNERp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jun 2019 00:17:45 -0400
+Received: by mail-pf1-f202.google.com with SMTP id i123so831278pfb.19
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jun 2019 21:17:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=nT/RN++hgSEY1oFXDZU2+2vA7A3kNiWfnEI7MgbZhNk=;
-        b=n5yi/fsSkLPZsXmOhD6VaVWd4K75Sp6QVYZWyYN4AtitTODNfEvka82I6ouh9pIllG
-         dByhWETJ+8aEVnytSO/6g5UZ468kBNbvHIY8phwEkAWG2tZrVyIT0IsUTnuJQzR3aN5e
-         XLV3Bp8RtbiNIhG4M2j+89d4S8rQhOaXxXhPxrP4R3GuFvA3KrIT2TCwKcbf5jWgDRdY
-         hXKGsyRZDlYUqE42uRR1Cxv/vlIoapqsipres07YeHegPtQ6LxBQwOSWtvBOezOpgD3I
-         Qu28AYiZTS3TgBTeUizjfUrhu0yM3b2DuiIp11SST0LVUveEP+ZUo3ggXGNYrpastq/N
-         2/jA==
+        bh=aquWBLmVdfTsfPmb1EWD0BsWvbkQBS182ArgyBvCIFk=;
+        b=SALd+e5WH1k6h9KcX/9goKx7DKFiD/tzpEIBpi1VyWU7XvDu2xfmpkkCjFagLgLKso
+         k1F40bZQT27d7k8eZ/rO9FhFjh+RR+wKxJlzQBp9VaLE8hPlY104nQTZUPgpBNn2mBPT
+         ++1C4AFj9N2cFkqt3XQBxF6i5xX1XSSOJtAeBM2KoD1aCwZr+WpBiJTtGYSyIu8/SEA6
+         Ev3DN/C/EBTdnmu7GB6Qeihyh1trdVho2bgPh4i+MQk6bPv0Y3nBGorTJMx2a7I+qcye
+         +Q96sesGXGqkm4m66kbYNy19Ae8APrRe2uRpJPw13DLMOyKylYFGNOgNFe/yzbhVkTk9
+         c4EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=nT/RN++hgSEY1oFXDZU2+2vA7A3kNiWfnEI7MgbZhNk=;
-        b=JHeFzjd/sjCZST7lZ3ZVMaPP3XNOIxZyQeyugdzqikBOqhF93lITQ6+Hitov2dl8Gh
-         IhUBZEMLsDcBkG4v9lNQXBSKLW9TWA4JipUc2vnq1x9g8KY/Qe4BrdFfA70+KPsr1ZAo
-         yGMoDMYYrSvRuW4zHE+DWJOWZ0urEnSW50pXKyJyWmA2SKqI2qknIyV92GR+vBUchOHo
-         4Q0DOqggd1EiSX+TrUYV5EH6GNmH42wFoJcH49FTMiX0jXhwCo+1SaL1CWpTvJcV7wx3
-         qLgnhrUCKx1FEJ1FJ7REfc/ip24uTywo3ewgspYF9dSjVB1uhmwku7Tr0vNN1EqHuQaE
-         l15Q==
-X-Gm-Message-State: APjAAAXlTuMoV+71FwZm18NLSXRBp1foz+nnFuxJyKJefwIwg8Jb5Y/i
-        CYr0MeYk3zZy4WLDaQ8Dy/aX+RWbcqt61wM=
-X-Google-Smtp-Source: APXvYqyNMF63uMGGdRuluuVrT4/Cbxxxf47Mr3fg6agQhouB8jIcIqFEqN0r4I8WQRbVaepWXMQu0HlCnhutkjM=
-X-Received: by 2002:ac8:1a9d:: with SMTP id x29mr79446143qtj.128.1560485861512;
- Thu, 13 Jun 2019 21:17:41 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 21:17:23 -0700
+        bh=aquWBLmVdfTsfPmb1EWD0BsWvbkQBS182ArgyBvCIFk=;
+        b=BxhKIgNId7aemUccDOlPSf9+Iibzy4tJjY1exGKSoW5QJ9tA6dV6hVYG/pOIvla0U+
+         lzCkjUezZ5N9mzeSDALeqZpRvI07xb5GhuWHMFDHCu8p+Q/3j5gcjbEQoSmjcgU/beDW
+         Bgk6+WK2rfMsM+rJVwrK0ABV7uO8UvAFJoeo5Q8CY5os3w05V7Y35/9Vwnft0POe5WTt
+         mP3szaW+xC6j4Aeiv9a7ze7/RZCJ7lXxquznNFRnvqnXIrBc0jrWawknzzlxjhulJHyn
+         jX3sMTBWiriyA980pokkIoH5budC5XgnCWnG9pKzUxaqm8puMmhYGV5f9DZBGfwQcObb
+         Jv2A==
+X-Gm-Message-State: APjAAAVtToBzxFIDqNERNF2PnUyxQCQRp970iqJpsJhPZE3Dda6yoTh2
+        1yrrYZ9DY20SXrlLXAzrc5t4iTnBlrCYDWg=
+X-Google-Smtp-Source: APXvYqym9Smv41BgCCmiAxP4QJzXUTCJZc6yClVmbeev+9UXzl8/lbDcRgOPKtGKnbxQirgLhVl4xHH9dmQ7rSQ=
+X-Received: by 2002:a63:de0e:: with SMTP id f14mr14823969pgg.348.1560485864345;
+ Thu, 13 Jun 2019 21:17:44 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 21:17:24 -0700
 In-Reply-To: <20190614041733.120807-1-saravanak@google.com>
-Message-Id: <20190614041733.120807-2-saravanak@google.com>
+Message-Id: <20190614041733.120807-3-saravanak@google.com>
 Mime-Version: 1.0
 References: <20190614041733.120807-1-saravanak@google.com>
 X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
-Subject: [PATCH v2 01/11] OPP: Allow required-opps even if the device doesn't
- have power-domains
+Subject: [PATCH v2 02/11] OPP: Add function to look up required OPP's for a
+ given OPP
 From:   Saravana Kannan <saravanak@google.com>
 To:     Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -73,66 +73,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A Device-A can have a (minimum) performance requirement on another
-Device-B to be able to function correctly. This performance requirement
-on Device-B can also change based on the current performance level of
-Device-A.
-
-The existing required-opps feature fits well to describe this need. So,
-instead of limiting required-opps to point to only PM-domain devices,
-allow it to point to any device.
+Add a function that allows looking up required OPPs given a source OPP
+table, destination OPP table and the source OPP.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/opp/core.c |  2 +-
- drivers/opp/of.c   | 14 --------------
- 2 files changed, 1 insertion(+), 15 deletions(-)
+ drivers/opp/core.c     | 54 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/pm_opp.h | 11 +++++++++
+ 2 files changed, 65 insertions(+)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 0e7703fe733f..74c7bdc6f463 100644
+index 74c7bdc6f463..4f7870bffbf8 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -710,7 +710,7 @@ static int _set_required_opps(struct device *dev,
- 		return 0;
+@@ -1830,6 +1830,60 @@ void dev_pm_opp_put_genpd_virt_dev(struct opp_table *opp_table,
+ 		dev_err(virt_dev, "Failed to find required device entry\n");
+ }
  
- 	/* Single genpd case */
--	if (!genpd_virt_devs) {
-+	if (!genpd_virt_devs && required_opp_tables[0]->is_genpd) {
- 		pstate = opp->required_opps[0]->pstate;
- 		ret = dev_pm_genpd_set_performance_state(dev, pstate);
- 		if (ret) {
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index c10c782d15aa..7c8336e94aff 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -195,9 +195,6 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
- 	 */
- 	count_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
- 					      "#power-domain-cells");
--	if (!count_pd)
--		goto put_np;
--
- 	if (count_pd > 1) {
- 		genpd_virt_devs = kcalloc(count, sizeof(*genpd_virt_devs),
- 					GFP_KERNEL);
-@@ -226,17 +223,6 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
++/**
++ * dev_pm_opp_xlate_opp() - Find required OPP for src_table OPP.
++ * @src_table: OPP table which has dst_table as one of its required OPP table.
++ * @dst_table: Required OPP table of the src_table.
++ * @pstate: OPP of the src_table.
++ *
++ * This function returns the OPP (present in @dst_table) pointed out by the
++ * "required-opps" property of the OPP (present in @src_table).
++ *
++ * The callers are required to call dev_pm_opp_put() for the returned OPP after
++ * use.
++ *
++ * Return: destination table OPP on success, otherwise NULL on errors.
++ */
++struct dev_pm_opp *dev_pm_opp_xlate_opp(struct opp_table *src_table,
++					struct opp_table *dst_table,
++					struct dev_pm_opp *src_opp)
++{
++	struct dev_pm_opp *opp, *dest_opp = NULL;
++	int i;
++
++	if (!src_table || !dst_table || !src_opp)
++		return NULL;
++
++	for (i = 0; i < src_table->required_opp_count; i++) {
++		if (src_table->required_opp_tables[i]->np == dst_table->np)
++			break;
++	}
++
++	if (unlikely(i == src_table->required_opp_count)) {
++		pr_err("%s: Couldn't find matching OPP table (%p: %p)\n",
++		       __func__, src_table, dst_table);
++		return NULL;
++	}
++
++	mutex_lock(&src_table->lock);
++
++	list_for_each_entry(opp, &src_table->opp_list, node) {
++		if (opp == src_opp) {
++			dest_opp = opp->required_opps[i];
++			dev_pm_opp_get(dest_opp);
++			goto unlock;
++		}
++	}
++
++	pr_err("%s: Couldn't find matching OPP (%p: %p)\n", __func__, src_table,
++	       dst_table);
++
++unlock:
++	mutex_unlock(&src_table->lock);
++
++	return dest_opp;
++}
++
+ /**
+  * dev_pm_opp_xlate_performance_state() - Find required OPP's pstate for src_table.
+  * @src_table: OPP table which has dst_table as one of its required OPP table.
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index b150fe97ce5a..bc5c68bdfc8d 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -134,6 +134,9 @@ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
+ struct opp_table *dev_pm_opp_set_genpd_virt_dev(struct device *dev, struct device *virt_dev, int index);
+ void dev_pm_opp_put_genpd_virt_dev(struct opp_table *opp_table, struct device *virt_dev);
+ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
++struct dev_pm_opp *dev_pm_opp_xlate_opp(struct opp_table *src_table,
++					struct opp_table *dst_table,
++					struct dev_pm_opp *src_opp);
+ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
+ int dev_pm_opp_set_sharing_cpus(struct device *cpu_dev, const struct cpumask *cpumask);
+ int dev_pm_opp_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask);
+@@ -307,6 +310,14 @@ static inline int dev_pm_opp_xlate_performance_state(struct opp_table *src_table
+ 	return -ENOTSUPP;
+ }
  
- 		if (IS_ERR(required_opp_tables[i]))
- 			goto free_required_tables;
--
--		/*
--		 * We only support genpd's OPPs in the "required-opps" for now,
--		 * as we don't know how much about other cases. Error out if the
--		 * required OPP doesn't belong to a genpd.
--		 */
--		if (!required_opp_tables[i]->is_genpd) {
--			dev_err(dev, "required-opp doesn't belong to genpd: %pOF\n",
--				required_np);
--			goto free_required_tables;
--		}
- 	}
- 
- 	goto put_np;
++static inline struct dev_pm_opp *dev_pm_opp_xlate_opp(
++						struct opp_table *src_table,
++						struct opp_table *dst_table,
++						struct dev_pm_opp *src_opp)
++{
++	return NULL;
++}
++
+ static inline int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ {
+ 	return -ENOTSUPP;
 -- 
 2.22.0.rc2.383.gf4fbbf30c2-goog
 
