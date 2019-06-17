@@ -2,139 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53694482F7
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 14:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 550AD48409
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 15:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbfFQMuM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 17 Jun 2019 08:50:12 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:41657 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbfFQMuM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 08:50:12 -0400
-X-Originating-IP: 90.88.23.150
-Received: from xps13 (aaubervilliers-681-1-81-150.w90-88.abo.wanadoo.fr [90.88.23.150])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 7F0EC40005;
-        Mon, 17 Jun 2019 12:50:05 +0000 (UTC)
-Date:   Mon, 17 Jun 2019 14:50:04 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Antoine Tenart <antoine.tenart@bootlin.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Nadav Haklai <nadavh@marvell.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] clk: mvebu: armada-37xx-periph: change
- suspend/resume time
-Message-ID: <20190617145004.7b11988f@xps13>
-In-Reply-To: <CAErSpo7fimH5QhHTLsF2ASyPqstkw7Zibe3CYB=KXTYBOh-4GQ@mail.gmail.com>
-References: <20190521130357.20803-1-miquel.raynal@bootlin.com>
-        <20190521130357.20803-3-miquel.raynal@bootlin.com>
-        <CAErSpo5i3y4CxZXV7E4tUR66uXaUa3B_-YT2+zfzZUGMmge7Ow@mail.gmail.com>
-        <20190527154610.6d4d5eff@xps13>
-        <CAErSpo7fimH5QhHTLsF2ASyPqstkw7Zibe3CYB=KXTYBOh-4GQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+        id S1727864AbfFQNdU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 09:33:20 -0400
+Received: from mga17.intel.com ([192.55.52.151]:5446 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726248AbfFQNdU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 17 Jun 2019 09:33:20 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jun 2019 06:33:20 -0700
+X-ExtLoop1: 1
+Received: from unknown (HELO rzhang-dell-9360.ccr.corp.intel.com) ([10.255.29.180])
+  by orsmga002.jf.intel.com with ESMTP; 17 Jun 2019 06:33:18 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     rjw@rjwysocki.net
+Cc:     linux-pm@vger.kernel.org
+Subject: [PATCH 0/3] powercap/intel_rapl: add support for more Icelake platforms
+Date:   Mon, 17 Jun 2019 21:33:12 +0800
+Message-Id: <1560778395-15088-1-git-send-email-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Bjorn,
+This patch series add intel_rapl support for more IceLake platforms including
+ICX, ICX-D and ICL desktop.
 
-Bjorn Helgaas <bhelgaas@google.com> wrote on Tue, 4 Jun 2019 15:52:31
--0500:
+Note that all the patches depend on commit e35faeb64146
+("x86/CPU: Add more Icelake model numbers") which is just merged in 5.2-rc5.
 
-> On Mon, May 27, 2019 at 8:46 AM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> >
-> > Hi Bjorn,
-> >
-> > Thanks for the feedback.
-> >
-> > Bjorn Helgaas <bhelgaas@google.com> wrote on Tue, 21 May 2019 17:43:05
-> > -0500:
-> >  
-> > > From: Miquel Raynal <miquel.raynal@bootlin.com>
-> > > Date: Tue, May 21, 2019 at 8:04 AM
-> > > To: Michael Turquette, Stephen Boyd, Rob Herring, Mark Rutland
-> > > Cc: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>, Thomas
-> > > Petazzoni, Antoine Tenart, Gregory Clement, Maxime Chevallier, Nadav
-> > > Haklai, Bjorn Helgaas, Rafael J . Wysocki, <linux-pm@vger.kernel.org>,
-> > > Miquel Raynal
-> > >  
-> > > > Armada 3700 PCIe IP relies on the PCIe clock managed by this
-> > > > driver. For reasons related to the PCI core's organization when
-> > > > suspending/resuming, PCI host controller drivers must reconfigure
-> > > > their register at suspend_noirq()/resume_noirq() which happens after
-> > > > suspend()/suspend_late() and before resume_early()/resume().  
-> > >
-> > > "For reasons related to the PCI core's organization" manages to
-> > > suggest that this change wouldn't be needed if only the PCI core did
-> > > something differently, without actually being specific about what it
-> > > would need to do differently.
-> > >
-> > > Is there something the PCI core could do better to make this easier?
-> > > Or is it just something like "the PCI core needs to access registers
-> > > after suspend_late()"?  You mention the host controller, but of course
-> > > that's not itself a PCI device, so the PCI core doesn't have much to
-> > > do with it directly.  
-> >
-> > Actually, if I understand correctly the below commit [1] and the core
-> > [2] & [3], PCI device fixups can happen at any time, including at the
-> > _noirq phase where, obviously, the PCI controller must be already
-> > setup.
-> >
-> > I don't think changing this behavior is a viable solution and I would
-> > not see it as a "PCI core could do better" alternative.
-> >
-> > ---8<---
-> >
-> > [1]
-> > commit ab14d45ea58eae67c739e4ba01871cae7b6c4586
-> > Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Date:   Tue Mar 17 15:55:45 2015 +0100
-> >
-> >     PCI: mvebu: Add suspend/resume support
-> >
-> >     Add suspend/resume support for the mvebu PCIe host driver.  Without
-> >     this commit, the system will panic at resume time when PCIe devices
-> >     are connected.
-> >
-> >     Note that we have to use the ->suspend_noirq() and ->resume_noirq()
-> >     hooks, because at resume time, the PCI fixups are done at  
-> >     ->resume_noirq() time, so the PCIe controller has to be ready at  
-> >     this point.
-> >
-> >     Signed-off-by: Thomas Petazzoni
-> >     <thomas.petazzoni@free-electrons.com> Signed-off-by: Bjorn Helgaas
-> >     <bhelgaas@google.com> Acked-by: Jason Cooper <jason@lakedaemon.net>
-> >
-> > [2] https://elixir.bootlin.com/linux/v5.2-rc1/source/drivers/pci/pci-driver.c#L1181
-> > [3] https://elixir.bootlin.com/linux/v5.2-rc1/source/drivers/pci/pci-driver.c#L522
-> >  
-> > --->8---  
-> >  
-> > >
-> > > s/register/registers/ ?  
-> >
-> > Indeed. I would like to sort out the above technical point before
-> > sending a v3 with this typo corrected.  
-> 
-> I don't have anything more to contribute here; just wanted to make
-> sure this wasn't working around a fixable problem in PCI.
+thanks,
+rui
 
-Great! Would you mind adding a A-b/R-b tag then?
-
-
-Thanks,
-Miquèl
