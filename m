@@ -2,335 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B0048672
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 17:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02B9487AF
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 17:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728308AbfFQPBq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 11:01:46 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54740 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728315AbfFQPBq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 11:01:46 -0400
-Received: by mail-wm1-f65.google.com with SMTP id g135so9625044wme.4
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2019 08:01:43 -0700 (PDT)
+        id S1728208AbfFQPoA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 11:44:00 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44624 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725863AbfFQPoA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 11:44:00 -0400
+Received: by mail-lj1-f196.google.com with SMTP id k18so9725035ljc.11
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2019 08:43:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=Wqsnkrqxuzj4H7GgqM3V2IbbAn/b8Sl0ywChnZlDzVw=;
-        b=rMdY7twpWhnHa4cxiVRG0sqvzqelh8jEW8qKBC9Mh3yio6324k7HmjwwEtXpTvNr2R
-         +DFsBk4LHWIuDOoZoyzJCTgdyTygIsC4sdUVAV0qxgi4AMRXiwo8weMPCwLqGJkFVlku
-         yaMKp1gJiqKlRPFlNh2gaKeFazEqU/fYwAiafOz36gao+DsYGbEBLFN2p4+AgxOKgoe3
-         N+sOGCF4y0CdIDfvSGtFSLeS7kNh2falxhVU2bpft01H2HZWnxsVkgJGhmKQkgihIlOK
-         J4vPnksJJNIvaVrpeMy4oNDLffgqqHt+4ikCveP52pi7iuEQQgKmInwtNKyJJANIrgbc
-         t6wg==
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=L9pexUx8v40cn3RT1WuAop7eXvaLnA6ED/N54cOLZwY=;
+        b=z7RBZ6J3n9S8zlm4ObgIEKRIsbBkblxeG9PWthCEz6DdyWSidka8qI1//XXCQ7QFEi
+         xI01BloQu3oDqWE1GnbOQkl8H1SycNIPKjRtMB7ymOF1jxprMawdvh1rLF9hUXF+AVDI
+         QIrRglTMcNPcQizZKPQdH4hvnZK89VA8il1O5nYD2Yon1MN5Osdw1wSE/mPEdcSQ6Uru
+         uQEkMDmYv7Rd2DwAxIKawRNDg17s4IiUT/WR1XaG2/+wJlzMxv87Y6NqdSb0JbFqGLFG
+         1MNPWxVmVfOH3S5jagRoO0SgJoBQnx/gsm1ImKVoDjrFUT+bsNR+16d49m89fHJqmGNH
+         w6qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Wqsnkrqxuzj4H7GgqM3V2IbbAn/b8Sl0ywChnZlDzVw=;
-        b=De5uzp6F0LxonTGgEBWTsGcH4PTzdE3YZRHzVFpImckAA+DG5nIfDxc0uGpl7ZJPD+
-         8lvhHYNF/knFfIYAZZKL7ExGq4Xl4csPTcvF45tpKoSeR3A4J9UEgXqh8fcwoelpBHrL
-         uQb/yWIvdyiqxamml394H8bJ15/dyeOTZv+feIoBGgYPYhJG+mkzUi8n9xUzVk5baDRi
-         RS4caQdyv/ZKznFzGCZTEl8gU5Xy66Bx2T6bBCpBuO8G+cPgW2ycRcwnIRvh5H75jFfw
-         Re0rdnrDW6dxQH3k8FxtWVhKoe6YC1AmRRenYNJlF1j2QK1VkmfP36oeB9svWosHOMc7
-         Bajg==
-X-Gm-Message-State: APjAAAUHNKxjhpIkhd/KkKNGSPv3Ul6OgYl4YTgNLpGFVyVZLyal9BmS
-        yOAWqIKzvfOifQ1lEh/+v50HPNYxFJ8=
-X-Google-Smtp-Source: APXvYqx0Vpq43qQXCS96ZNcRfKpgn1FVlYwTD2lRr7UkryQBhX1Ha0iT13M9dJRgn/4mVsxYWYK73A==
-X-Received: by 2002:a1c:407:: with SMTP id 7mr20501193wme.113.1560783702741;
-        Mon, 17 Jun 2019 08:01:42 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:f:6020:100d:4d23:a79e:7684])
-        by smtp.gmail.com with ESMTPSA id v24sm9045185wmj.26.2019.06.17.08.01.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 17 Jun 2019 08:01:42 -0700 (PDT)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org
-Cc:     quentin.perret@arm.com,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH] sched/topology: remove unused sd param from arch_scale_cpu_capacity()
-Date:   Mon, 17 Jun 2019 17:00:17 +0200
-Message-Id: <1560783617-5827-1-git-send-email-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=L9pexUx8v40cn3RT1WuAop7eXvaLnA6ED/N54cOLZwY=;
+        b=qWRcN41R8Uczpp7ZWPjGmfKspozfVuXLTkLkeEDNICppjdPteUa5i8ZJHZ87o4AhDl
+         gAIo07BUcnIFXgm8e6zPh7Nx60DKnukZi4Si2oukgBcXIulnw4F9j9hPN2oXffVn9K2q
+         6KY7ukTgqXiMq0ta5n+QjjE/Yc1cpHq6bppokRk0CCTsk6a5mp+ZyHiGPRpPe52d9W1H
+         AJnL5ZoY+2xJd7yHG4WvyNpuFhthheCFAipN/9XsNuseuhMv213C5ToCnRNA9rNsgapM
+         jCXc+B4hQC3ttyVn6icZd/JfXVWw8rjkrdRUuW9Uhu4qSCtOI5WJk9PcFZSIaeaIz9GG
+         xYqw==
+X-Gm-Message-State: APjAAAXU5n+Vy5GpjAwlDULK6GjYvF/IgduWrbCwtLToescJgmmUXuRb
+        tPRXyzPNMsk0RYWZjjYLkszVpRS1DVM=
+X-Google-Smtp-Source: APXvYqwKI3nFIfpvWvYQEq7R49poqDmbq05vS950sLEwhy1xcJ8odcCqz078n+n0cpor24UmTvef1A==
+X-Received: by 2002:a2e:4b12:: with SMTP id y18mr12672169lja.238.1560786237241;
+        Mon, 17 Jun 2019 08:43:57 -0700 (PDT)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id y6sm2155991ljj.20.2019.06.17.08.43.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Jun 2019 08:43:56 -0700 (PDT)
+Subject: Re: [PATCH v2 11/11] interconnect: Add devfreq support
+To:     Saravana Kannan <saravanak@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        vincent.guittot@linaro.org, bjorn.andersson@linaro.org,
+        amit.kucheria@linaro.org, seansw@qti.qualcomm.com,
+        daidavid1@codeaurora.org, evgreen@chromium.org,
+        sibis@codeaurora.org, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190614041733.120807-1-saravanak@google.com>
+ <20190614041733.120807-12-saravanak@google.com>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <5dc6c820-ead8-d0dc-44de-4d13f86df042@linaro.org>
+Date:   Mon, 17 Jun 2019 18:43:53 +0300
+MIME-Version: 1.0
+In-Reply-To: <20190614041733.120807-12-saravanak@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-struct sched_domain *sd parameter is not used anymore in
-arch_scale_cpu_capacity() so we can remove it.
+Hi Saravana,
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- arch/arm/kernel/topology.c       |  2 +-
- drivers/base/arch_topology.c     |  6 +++---
- include/linux/arch_topology.h    |  2 +-
- include/linux/energy_model.h     |  2 +-
- include/linux/sched/topology.h   | 14 +++-----------
- kernel/power/energy_model.c      |  2 +-
- kernel/sched/cpufreq_schedutil.c |  2 +-
- kernel/sched/deadline.c          |  2 +-
- kernel/sched/fair.c              |  6 +++---
- kernel/sched/pelt.c              |  2 +-
- kernel/sched/pelt.h              |  2 +-
- kernel/sched/sched.h             |  2 +-
- kernel/sched/topology.c          |  8 ++++----
- 13 files changed, 22 insertions(+), 30 deletions(-)
+On 6/14/19 07:17, Saravana Kannan wrote:
+> Add a icc_create_devfreq() and icc_remove_devfreq() to create and remove
+> devfreq devices for interconnect paths. A driver can create/remove devfreq
+> devices for the interconnects needed for its device by calling these APIs.
+> This would allow various devfreq governors to work with interconnect paths
+> and the device driver itself doesn't have to actively manage the bandwidth
+> votes for the interconnects.
 
-diff --git a/arch/arm/kernel/topology.c b/arch/arm/kernel/topology.c
-index 60e375c..d17cb1e 100644
---- a/arch/arm/kernel/topology.c
-+++ b/arch/arm/kernel/topology.c
-@@ -169,7 +169,7 @@ static void update_cpu_capacity(unsigned int cpu)
- 	topology_set_cpu_scale(cpu, cpu_capacity(cpu) / middle_capacity);
- 
- 	pr_info("CPU%u: update cpu_capacity %lu\n",
--		cpu, topology_get_cpu_scale(NULL, cpu));
-+		cpu, topology_get_cpu_scale(cpu));
- }
- 
- #else
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 1739d7e..9b09e31 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -43,7 +43,7 @@ static ssize_t cpu_capacity_show(struct device *dev,
- {
- 	struct cpu *cpu = container_of(dev, struct cpu, dev);
- 
--	return sprintf(buf, "%lu\n", topology_get_cpu_scale(NULL, cpu->dev.id));
-+	return sprintf(buf, "%lu\n", topology_get_cpu_scale(cpu->dev.id));
- }
- 
- static void update_topology_flags_workfn(struct work_struct *work);
-@@ -116,7 +116,7 @@ void topology_normalize_cpu_scale(void)
- 			/ capacity_scale;
- 		topology_set_cpu_scale(cpu, capacity);
- 		pr_debug("cpu_capacity: CPU%d cpu_capacity=%lu\n",
--			cpu, topology_get_cpu_scale(NULL, cpu));
-+			cpu, topology_get_cpu_scale(cpu));
- 	}
- }
- 
-@@ -185,7 +185,7 @@ init_cpu_capacity_callback(struct notifier_block *nb,
- 	cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
- 
- 	for_each_cpu(cpu, policy->related_cpus) {
--		raw_capacity[cpu] = topology_get_cpu_scale(NULL, cpu) *
-+		raw_capacity[cpu] = topology_get_cpu_scale(cpu) *
- 				    policy->cpuinfo.max_freq / 1000UL;
- 		capacity_scale = max(raw_capacity[cpu], capacity_scale);
- 	}
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index d9bdc1a..1cfe05e 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -18,7 +18,7 @@ DECLARE_PER_CPU(unsigned long, cpu_scale);
- 
- struct sched_domain;
- static inline
--unsigned long topology_get_cpu_scale(struct sched_domain *sd, int cpu)
-+unsigned long topology_get_cpu_scale(int cpu)
- {
- 	return per_cpu(cpu_scale, cpu);
- }
-diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index aa027f7..73f8c3c 100644
---- a/include/linux/energy_model.h
-+++ b/include/linux/energy_model.h
-@@ -89,7 +89,7 @@ static inline unsigned long em_pd_energy(struct em_perf_domain *pd,
- 	 * like schedutil.
- 	 */
- 	cpu = cpumask_first(to_cpumask(pd->cpus));
--	scale_cpu = arch_scale_cpu_capacity(NULL, cpu);
-+	scale_cpu = arch_scale_cpu_capacity(cpu);
- 	cs = &pd->table[pd->nr_cap_states - 1];
- 	freq = map_util_freq(max_util, cs->frequency, scale_cpu);
- 
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index 53afbe0..e445d37 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -196,14 +196,6 @@ extern void set_sched_topology(struct sched_domain_topology_level *tl);
- # define SD_INIT_NAME(type)
- #endif
- 
--#ifndef arch_scale_cpu_capacity
--static __always_inline
--unsigned long arch_scale_cpu_capacity(struct sched_domain *sd, int cpu)
--{
--	return SCHED_CAPACITY_SCALE;
--}
--#endif
--
- #else /* CONFIG_SMP */
- 
- struct sched_domain_attr;
-@@ -219,16 +211,16 @@ static inline bool cpus_share_cache(int this_cpu, int that_cpu)
- 	return true;
- }
- 
-+#endif	/* !CONFIG_SMP */
-+
- #ifndef arch_scale_cpu_capacity
- static __always_inline
--unsigned long arch_scale_cpu_capacity(void __always_unused *sd, int cpu)
-+unsigned long arch_scale_cpu_capacity(int cpu)
- {
- 	return SCHED_CAPACITY_SCALE;
- }
- #endif
- 
--#endif	/* !CONFIG_SMP */
--
- static inline int task_node(const struct task_struct *p)
- {
- 	return cpu_to_node(task_cpu(p));
-diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index 7d66ee6..0a9326f 100644
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -223,7 +223,7 @@ int em_register_perf_domain(cpumask_t *span, unsigned int nr_states,
- 		 * All CPUs of a domain must have the same micro-architecture
- 		 * since they all share the same table.
- 		 */
--		cap = arch_scale_cpu_capacity(NULL, cpu);
-+		cap = arch_scale_cpu_capacity(cpu);
- 		if (prev_cap && prev_cap != cap) {
- 			pr_err("CPUs of %*pbl must have the same capacity\n",
- 							cpumask_pr_args(span));
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 962cf343..7c4ce69 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -276,7 +276,7 @@ static unsigned long sugov_get_util(struct sugov_cpu *sg_cpu)
- {
- 	struct rq *rq = cpu_rq(sg_cpu->cpu);
- 	unsigned long util = cpu_util_cfs(rq);
--	unsigned long max = arch_scale_cpu_capacity(NULL, sg_cpu->cpu);
-+	unsigned long max = arch_scale_cpu_capacity(sg_cpu->cpu);
- 
- 	sg_cpu->max = max;
- 	sg_cpu->bw_dl = cpu_bw_dl(rq);
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index c1ef308..8b5bb2a 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1195,7 +1195,7 @@ static void update_curr_dl(struct rq *rq)
- 						 &curr->dl);
- 	} else {
- 		unsigned long scale_freq = arch_scale_freq_capacity(cpu);
--		unsigned long scale_cpu = arch_scale_cpu_capacity(NULL, cpu);
-+		unsigned long scale_cpu = arch_scale_cpu_capacity(cpu);
- 
- 		scaled_delta_exec = cap_scale(delta_exec, scale_freq);
- 		scaled_delta_exec = cap_scale(scaled_delta_exec, scale_cpu);
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 7f8d477..1c151a7 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -764,7 +764,7 @@ void post_init_entity_util_avg(struct task_struct *p)
- 	struct sched_entity *se = &p->se;
- 	struct cfs_rq *cfs_rq = cfs_rq_of(se);
- 	struct sched_avg *sa = &se->avg;
--	long cpu_scale = arch_scale_cpu_capacity(NULL, cpu_of(rq_of(cfs_rq)));
-+	long cpu_scale = arch_scale_cpu_capacity(cpu_of(rq_of(cfs_rq)));
- 	long cap = (long)(cpu_scale - cfs_rq->avg.util_avg) / 2;
- 
- 	if (cap > 0) {
-@@ -7633,7 +7633,7 @@ static inline void init_sd_lb_stats(struct sd_lb_stats *sds)
- static unsigned long scale_rt_capacity(struct sched_domain *sd, int cpu)
- {
- 	struct rq *rq = cpu_rq(cpu);
--	unsigned long max = arch_scale_cpu_capacity(sd, cpu);
-+	unsigned long max = arch_scale_cpu_capacity(cpu);
- 	unsigned long used, free;
- 	unsigned long irq;
- 
-@@ -7658,7 +7658,7 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
- 	unsigned long capacity = scale_rt_capacity(sd, cpu);
- 	struct sched_group *sdg = sd->groups;
- 
--	cpu_rq(cpu)->cpu_capacity_orig = arch_scale_cpu_capacity(sd, cpu);
-+	cpu_rq(cpu)->cpu_capacity_orig = arch_scale_cpu_capacity(cpu);
- 
- 	if (!capacity)
- 		capacity = 1;
-diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-index befce29..42ea66b 100644
---- a/kernel/sched/pelt.c
-+++ b/kernel/sched/pelt.c
-@@ -366,7 +366,7 @@ int update_irq_load_avg(struct rq *rq, u64 running)
- 	 * reflect the real amount of computation
- 	 */
- 	running = cap_scale(running, arch_scale_freq_capacity(cpu_of(rq)));
--	running = cap_scale(running, arch_scale_cpu_capacity(NULL, cpu_of(rq)));
-+	running = cap_scale(running, arch_scale_cpu_capacity(cpu_of(rq)));
- 
- 	/*
- 	 * We know the time that has been used by interrupt since last update
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index 7489d5f..afff644 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -79,7 +79,7 @@ static inline void update_rq_clock_pelt(struct rq *rq, s64 delta)
- 	 * Scale the elapsed time to reflect the real amount of
- 	 * computation
- 	 */
--	delta = cap_scale(delta, arch_scale_cpu_capacity(NULL, cpu_of(rq)));
-+	delta = cap_scale(delta, arch_scale_cpu_capacity(cpu_of(rq)));
- 	delta = cap_scale(delta, arch_scale_freq_capacity(cpu_of(rq)));
- 
- 	rq->clock_pelt += delta;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 607859a..7a50391 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2248,7 +2248,7 @@ unsigned long schedutil_freq_util(int cpu, unsigned long util_cfs,
- 
- static inline unsigned long schedutil_energy_util(int cpu, unsigned long cfs)
- {
--	unsigned long max = arch_scale_cpu_capacity(NULL, cpu);
-+	unsigned long max = arch_scale_cpu_capacity(cpu);
- 
- 	return schedutil_freq_util(cpu, cfs, max, ENERGY_UTIL);
- }
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 63184cf..f751ce0 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1874,10 +1874,10 @@ static struct sched_domain_topology_level
- 	unsigned long cap;
- 
- 	/* Is there any asymmetry? */
--	cap = arch_scale_cpu_capacity(NULL, cpumask_first(cpu_map));
-+	cap = arch_scale_cpu_capacity(cpumask_first(cpu_map));
- 
- 	for_each_cpu(i, cpu_map) {
--		if (arch_scale_cpu_capacity(NULL, i) != cap) {
-+		if (arch_scale_cpu_capacity(i) != cap) {
- 			asym = true;
- 			break;
- 		}
-@@ -1892,7 +1892,7 @@ static struct sched_domain_topology_level
- 	 * to everyone.
- 	 */
- 	for_each_cpu(i, cpu_map) {
--		unsigned long max_capacity = arch_scale_cpu_capacity(NULL, i);
-+		unsigned long max_capacity = arch_scale_cpu_capacity(i);
- 		int tl_id = 0;
- 
- 		for_each_sd_topology(tl) {
-@@ -1902,7 +1902,7 @@ static struct sched_domain_topology_level
- 			for_each_cpu_and(j, tl->mask(i), cpu_map) {
- 				unsigned long capacity;
- 
--				capacity = arch_scale_cpu_capacity(NULL, j);
-+				capacity = arch_scale_cpu_capacity(j);
- 
- 				if (capacity <= max_capacity)
- 					continue;
--- 
-2.7.4
+Thanks for the patches, but creating devfreq devices for each interconnect path
+seems odd to me - at least for consumers that already use a governor. So for DDR
+scaling for example, are you suggesting that we add a devfreq device from the
+cpufreq driver in order to scale the interconnect between CPU<->DDR? Also if the
+GPU is already using devfreq, should we add a devfreq per each interconnect
+path? What would be the benefit in this case - using different governors for
+bandwidth scaling maybe?
 
+Thanks,
+Georgi
