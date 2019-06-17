@@ -2,40 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 550AD48409
+	by mail.lfdr.de (Postfix) with ESMTP id C43E74840A
 	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 15:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727864AbfFQNdU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 09:33:20 -0400
+        id S1727888AbfFQNdV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 09:33:21 -0400
 Received: from mga17.intel.com ([192.55.52.151]:5446 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726248AbfFQNdU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 17 Jun 2019 09:33:20 -0400
+        id S1726248AbfFQNdV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 17 Jun 2019 09:33:21 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jun 2019 06:33:20 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jun 2019 06:33:21 -0700
 X-ExtLoop1: 1
 Received: from unknown (HELO rzhang-dell-9360.ccr.corp.intel.com) ([10.255.29.180])
-  by orsmga002.jf.intel.com with ESMTP; 17 Jun 2019 06:33:18 -0700
+  by orsmga002.jf.intel.com with ESMTP; 17 Jun 2019 06:33:20 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     rjw@rjwysocki.net
 Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH 0/3] powercap/intel_rapl: add support for more Icelake platforms
-Date:   Mon, 17 Jun 2019 21:33:12 +0800
-Message-Id: <1560778395-15088-1-git-send-email-rui.zhang@intel.com>
+Subject: [PATCH 1/3] powercap/intel_rapl: add support for IceLake desktop
+Date:   Mon, 17 Jun 2019 21:33:13 +0800
+Message-Id: <1560778395-15088-2-git-send-email-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1560778395-15088-1-git-send-email-rui.zhang@intel.com>
+References: <1560778395-15088-1-git-send-email-rui.zhang@intel.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch series add intel_rapl support for more IceLake platforms including
-ICX, ICX-D and ICL desktop.
+Add IceLake desktop support in intel_rapl driver
 
-Note that all the patches depend on commit e35faeb64146
-("x86/CPU: Add more Icelake model numbers") which is just merged in 5.2-rc5.
+Signed-off-by: Gayatri Kammela <gayatri.kammela@intel.com>
+Signed-off-by: Joe Konno <joe.konno@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/powercap/intel_rapl.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-thanks,
-rui
+diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
+index f888117..8450dc5 100644
+--- a/drivers/powercap/intel_rapl.c
++++ b/drivers/powercap/intel_rapl.c
+@@ -1145,6 +1145,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 	INTEL_CPU_FAM6(KABYLAKE_DESKTOP,	rapl_defaults_core),
+ 	INTEL_CPU_FAM6(CANNONLAKE_MOBILE,	rapl_defaults_core),
+ 	INTEL_CPU_FAM6(ICELAKE_MOBILE,		rapl_defaults_core),
++	INTEL_CPU_FAM6(ICELAKE_DESKTOP,		rapl_defaults_core),
+ 
+ 	INTEL_CPU_FAM6(ATOM_SILVERMONT,		rapl_defaults_byt),
+ 	INTEL_CPU_FAM6(ATOM_AIRMONT,		rapl_defaults_cht),
+-- 
+2.7.4
 
