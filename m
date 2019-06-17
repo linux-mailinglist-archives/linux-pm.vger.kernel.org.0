@@ -2,163 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F9C47F07
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 12:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459CB47FAF
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 12:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727998AbfFQKAv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 06:00:51 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52296 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727518AbfFQKAu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 06:00:50 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5H9xjmT027721
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2019 06:00:49 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2t66nbn3cj-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2019 06:00:47 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
-        Mon, 17 Jun 2019 11:00:45 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 17 Jun 2019 11:00:40 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5HA0dQj54853752
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 17 Jun 2019 10:00:39 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE041A406B;
-        Mon, 17 Jun 2019 10:00:39 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3EABBA4051;
-        Mon, 17 Jun 2019 10:00:38 +0000 (GMT)
-Received: from boston16h.aus.stglabs.ibm.com (unknown [9.3.23.78])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 17 Jun 2019 10:00:38 +0000 (GMT)
-From:   Abhishek Goel <huntbag@linux.vnet.ibm.com>
-To:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-pm@vger.kernel.org
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, mpe@ellerman.id.au,
-        dja@axtens.net, npiggin@gmail.com, ego@linux.vnet.ibm.com,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>
-Subject: [PATCH v2 1/1] cpuidle-powernv : forced wakeup for stop states
-Date:   Mon, 17 Jun 2019 04:56:48 -0500
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190617095648.18847-1-huntbag@linux.vnet.ibm.com>
-References: <20190617095648.18847-1-huntbag@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19061710-4275-0000-0000-00000342FDA9
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061710-4276-0000-0000-000038531FEB
-Message-Id: <20190617095648.18847-2-huntbag@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-17_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906170093
+        id S1727541AbfFQKbS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 06:31:18 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:38394 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfFQKbS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 06:31:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=TSyEikwRmMeCR1bDMoxiHnUHKSbz82o6XWDHp751sE8=; b=V0bCupC+fPPlIT6U9yltJLPOm
+        3m2GY3ZyZB8EzOkTf2juEOeWdQnkcC1qO276A140mr7s3g6n6wKcZjQn1b8dU+HF5+ML21PBO8Ar0
+        pF6bVAIAHmsdaUqWaWgWnj9VoChqZxrPKQxNY84eykDQiRbUR47VU/CIGh7Ss94nC3/Qo=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1hcout-0001Ms-Qe; Mon, 17 Jun 2019 10:31:11 +0000
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+        id 311C2440046; Mon, 17 Jun 2019 11:31:11 +0100 (BST)
+Date:   Mon, 17 Jun 2019 11:31:11 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     tony@atomide.com, lgirdwood@gmail.com, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        sboyd@kernel.org, nm@ti.com, vireshk@kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH] regulator: twl: mark vdd1/2 as continuous on twl4030
+Message-ID: <20190617103111.GM5316@sirena.org.uk>
+Mail-Followup-To: Andreas Kemnade <andreas@kemnade.info>, tony@atomide.com,
+        lgirdwood@gmail.com, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        sboyd@kernel.org, nm@ti.com, vireshk@kernel.org,
+        letux-kernel@openphoenux.org
+References: <20190615163314.28173-1-andreas@kemnade.info>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bNLLTo5eXWXFd6av"
+Content-Disposition: inline
+In-Reply-To: <20190615163314.28173-1-andreas@kemnade.info>
+X-Cookie: Editing is a rewording activity.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently, the cpuidle governors determine what idle state a idling CPU
-should enter into based on heuristics that depend on the idle history on
-that CPU. Given that no predictive heuristic is perfect, there are cases
-where the governor predicts a shallow idle state, hoping that the CPU will
-be busy soon. However, if no new workload is scheduled on that CPU in the
-near future, the CPU may end up in the shallow state.
 
-This is problematic, when the predicted state in the aforementioned
-scenario is a shallow stop state on a tickless system. As we might get
-stuck into shallow states for hours, in absence of ticks or interrupts.
+--bNLLTo5eXWXFd6av
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-To address this, We forcefully wakeup the cpu by setting the
-decrementer. The decrementer is set to a value that corresponds with the
-residency of the next available state. Thus firing up a timer that will
-forcefully wakeup the cpu. Few such iterations will essentially train the
-governor to select a deeper state for that cpu, as the timer here
-corresponds to the next available cpuidle state residency. Thus, cpu will
-eventually end up in the deepest possible state.
+On Sat, Jun 15, 2019 at 06:33:14PM +0200, Andreas Kemnade wrote:
 
-Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
----
+> The VDD1/VDD2 regulators on twl4030 are neither defined with
+> voltage lists nor with the continuous flag set, so
+> regulator_is_supported_voltage() returns false and an error
+> before above mentioned commit (which was considered success)
+> The result is that after the above mentioned commit cpufreq
+> does not work properly e.g. dm3730.
 
-Auto-promotion
- v1 : started as auto promotion logic for cpuidle states in generic
-driver
- v2 : Removed timeout_needed and rebased the code to upstream kernel
-Forced-wakeup
- v1 : New patch with name of forced wakeup started
- v2 : Extending the forced wakeup logic for all states. Setting the
-decrementer instead of queuing up a hrtimer to implement the logic.
+Why is this a good fix and not defining the supported voltages?  These
+look like fairly standard linear range regulators.
 
- drivers/cpuidle/cpuidle-powernv.c | 38 +++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+--bNLLTo5eXWXFd6av
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
-index 84b1ebe212b3..bc9ca18ae7e3 100644
---- a/drivers/cpuidle/cpuidle-powernv.c
-+++ b/drivers/cpuidle/cpuidle-powernv.c
-@@ -46,6 +46,26 @@ static struct stop_psscr_table stop_psscr_table[CPUIDLE_STATE_MAX] __read_mostly
- static u64 default_snooze_timeout __read_mostly;
- static bool snooze_timeout_en __read_mostly;
- 
-+static u64 forced_wakeup_timeout(struct cpuidle_device *dev,
-+				 struct cpuidle_driver *drv,
-+				 int index)
-+{
-+	int i;
-+
-+	for (i = index + 1; i < drv->state_count; i++) {
-+		struct cpuidle_state *s = &drv->states[i];
-+		struct cpuidle_state_usage *su = &dev->states_usage[i];
-+
-+		if (s->disabled || su->disable)
-+			continue;
-+
-+		return (s->target_residency + 2 * s->exit_latency) *
-+			tb_ticks_per_usec;
-+	}
-+
-+	return 0;
-+}
-+
- static u64 get_snooze_timeout(struct cpuidle_device *dev,
- 			      struct cpuidle_driver *drv,
- 			      int index)
-@@ -144,8 +164,26 @@ static int stop_loop(struct cpuidle_device *dev,
- 		     struct cpuidle_driver *drv,
- 		     int index)
- {
-+	u64 dec_expiry_tb, dec, timeout_tb, forced_wakeup;
-+
-+	dec = mfspr(SPRN_DEC);
-+	timeout_tb = forced_wakeup_timeout(dev, drv, index);
-+	forced_wakeup = 0;
-+
-+	if (timeout_tb && timeout_tb < dec) {
-+		forced_wakeup = 1;
-+		dec_expiry_tb = mftb() + dec;
-+	}
-+
-+	if (forced_wakeup)
-+		mtspr(SPRN_DEC, timeout_tb);
-+
- 	power9_idle_type(stop_psscr_table[index].val,
- 			 stop_psscr_table[index].mask);
-+
-+	if (forced_wakeup)
-+		mtspr(SPRN_DEC, dec_expiry_tb - mftb());
-+
- 	return index;
- }
- 
--- 
-2.17.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0Ha+sACgkQJNaLcl1U
+h9CySgf/QMQ2EqpD1L/XFhmLo/ZBQ0MxTTbrhP3mxCoktiXaHq/8rC1GKin90FQ+
+63Z79sD50NvjwOao024deSYu+7MVpCoojPdVwdizjH/B2meplYkB5fw3yhHKvsKc
++r1BYXVYODtZC590X8RcFCT4nO91acJoSbkA9dbHhp16+qnyjy/7sr9OmtDwTYkw
+qVjma1T5nDgWfw1G9bQ6WAdQHSdZtuo7LYmPbrvpPXNAaTv2Va2YssbniIOWNgsW
+sC/YRIuwWUztdeRwfhWIbyt3elAP0kUmoRVD1O3WzQx4STBpn97C++fDwjDwgn7H
+F99QnvGMDroMdwasCwHr5TcSfoWAKQ==
+=Awof
+-----END PGP SIGNATURE-----
+
+--bNLLTo5eXWXFd6av--
