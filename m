@@ -2,98 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 888A94810B
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 13:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53694482F7
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 14:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725827AbfFQLk4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 07:40:56 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:42378 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbfFQLkz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 07:40:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=TGS1jJo4f0gqZ+d4CFQwjoWxEngjb1gvJrhJoe43XXw=; b=ZBwbG3Gn/ueMgLs/6/3z0n1QM
-        507hzQfk0t9Zw1uJnlZeDzAPWNYDhAeo/UV94aOVTVW/5AywlPRBL02pEaEpoEFyUUdrxrGJh99mn
-        Nrzcw971o/sV50QDOkFF03USVvyeXz4z1PhCPhdiQ1rV4M9BBGW0dKByZQECxSQ73jPf8=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hcq0H-0001VF-Pe; Mon, 17 Jun 2019 11:40:49 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 0FA79440046; Mon, 17 Jun 2019 12:40:49 +0100 (BST)
-Date:   Mon, 17 Jun 2019 12:40:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     tony@atomide.com, lgirdwood@gmail.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        sboyd@kernel.org, nm@ti.com, vireshk@kernel.org,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH] regulator: twl: mark vdd1/2 as continuous on twl4030
-Message-ID: <20190617114048.GN5316@sirena.org.uk>
-Mail-Followup-To: Andreas Kemnade <andreas@kemnade.info>, tony@atomide.com,
-        lgirdwood@gmail.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        sboyd@kernel.org, nm@ti.com, vireshk@kernel.org,
-        letux-kernel@openphoenux.org
-References: <20190615163314.28173-1-andreas@kemnade.info>
- <20190617103111.GM5316@sirena.org.uk>
- <20190617130357.41204ff7@kemnade.info>
+        id S1726065AbfFQMuM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 17 Jun 2019 08:50:12 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:41657 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725973AbfFQMuM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 08:50:12 -0400
+X-Originating-IP: 90.88.23.150
+Received: from xps13 (aaubervilliers-681-1-81-150.w90-88.abo.wanadoo.fr [90.88.23.150])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 7F0EC40005;
+        Mon, 17 Jun 2019 12:50:05 +0000 (UTC)
+Date:   Mon, 17 Jun 2019 14:50:04 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Antoine Tenart <antoine.tenart@bootlin.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Nadav Haklai <nadavh@marvell.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] clk: mvebu: armada-37xx-periph: change
+ suspend/resume time
+Message-ID: <20190617145004.7b11988f@xps13>
+In-Reply-To: <CAErSpo7fimH5QhHTLsF2ASyPqstkw7Zibe3CYB=KXTYBOh-4GQ@mail.gmail.com>
+References: <20190521130357.20803-1-miquel.raynal@bootlin.com>
+        <20190521130357.20803-3-miquel.raynal@bootlin.com>
+        <CAErSpo5i3y4CxZXV7E4tUR66uXaUa3B_-YT2+zfzZUGMmge7Ow@mail.gmail.com>
+        <20190527154610.6d4d5eff@xps13>
+        <CAErSpo7fimH5QhHTLsF2ASyPqstkw7Zibe3CYB=KXTYBOh-4GQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ukZ3tWq1IjZw6zEx"
-Content-Disposition: inline
-In-Reply-To: <20190617130357.41204ff7@kemnade.info>
-X-Cookie: Editing is a rewording activity.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Bjorn,
 
---ukZ3tWq1IjZw6zEx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Bjorn Helgaas <bhelgaas@google.com> wrote on Tue, 4 Jun 2019 15:52:31
+-0500:
 
-On Mon, Jun 17, 2019 at 01:03:57PM +0200, Andreas Kemnade wrote:
-> Mark Brown <broonie@kernel.org> wrote:
-> > On Sat, Jun 15, 2019 at 06:33:14PM +0200, Andreas Kemnade wrote:
+> On Mon, May 27, 2019 at 8:46 AM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> >
+> > Hi Bjorn,
+> >
+> > Thanks for the feedback.
+> >
+> > Bjorn Helgaas <bhelgaas@google.com> wrote on Tue, 21 May 2019 17:43:05
+> > -0500:
+> >  
+> > > From: Miquel Raynal <miquel.raynal@bootlin.com>
+> > > Date: Tue, May 21, 2019 at 8:04 AM
+> > > To: Michael Turquette, Stephen Boyd, Rob Herring, Mark Rutland
+> > > Cc: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>, Thomas
+> > > Petazzoni, Antoine Tenart, Gregory Clement, Maxime Chevallier, Nadav
+> > > Haklai, Bjorn Helgaas, Rafael J . Wysocki, <linux-pm@vger.kernel.org>,
+> > > Miquel Raynal
+> > >  
+> > > > Armada 3700 PCIe IP relies on the PCIe clock managed by this
+> > > > driver. For reasons related to the PCI core's organization when
+> > > > suspending/resuming, PCI host controller drivers must reconfigure
+> > > > their register at suspend_noirq()/resume_noirq() which happens after
+> > > > suspend()/suspend_late() and before resume_early()/resume().  
+> > >
+> > > "For reasons related to the PCI core's organization" manages to
+> > > suggest that this change wouldn't be needed if only the PCI core did
+> > > something differently, without actually being specific about what it
+> > > would need to do differently.
+> > >
+> > > Is there something the PCI core could do better to make this easier?
+> > > Or is it just something like "the PCI core needs to access registers
+> > > after suspend_late()"?  You mention the host controller, but of course
+> > > that's not itself a PCI device, so the PCI core doesn't have much to
+> > > do with it directly.  
+> >
+> > Actually, if I understand correctly the below commit [1] and the core
+> > [2] & [3], PCI device fixups can happen at any time, including at the
+> > _noirq phase where, obviously, the PCI controller must be already
+> > setup.
+> >
+> > I don't think changing this behavior is a viable solution and I would
+> > not see it as a "PCI core could do better" alternative.
+> >
+> > ---8<---
+> >
+> > [1]
+> > commit ab14d45ea58eae67c739e4ba01871cae7b6c4586
+> > Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Date:   Tue Mar 17 15:55:45 2015 +0100
+> >
+> >     PCI: mvebu: Add suspend/resume support
+> >
+> >     Add suspend/resume support for the mvebu PCIe host driver.  Without
+> >     this commit, the system will panic at resume time when PCIe devices
+> >     are connected.
+> >
+> >     Note that we have to use the ->suspend_noirq() and ->resume_noirq()
+> >     hooks, because at resume time, the PCI fixups are done at  
+> >     ->resume_noirq() time, so the PCIe controller has to be ready at  
+> >     this point.
+> >
+> >     Signed-off-by: Thomas Petazzoni
+> >     <thomas.petazzoni@free-electrons.com> Signed-off-by: Bjorn Helgaas
+> >     <bhelgaas@google.com> Acked-by: Jason Cooper <jason@lakedaemon.net>
+> >
+> > [2] https://elixir.bootlin.com/linux/v5.2-rc1/source/drivers/pci/pci-driver.c#L1181
+> > [3] https://elixir.bootlin.com/linux/v5.2-rc1/source/drivers/pci/pci-driver.c#L522
+> >  
+> > --->8---  
+> >  
+> > >
+> > > s/register/registers/ ?  
+> >
+> > Indeed. I would like to sort out the above technical point before
+> > sending a v3 with this typo corrected.  
+> 
+> I don't have anything more to contribute here; just wanted to make
+> sure this wasn't working around a fixable problem in PCI.
 
-> > Why is this a good fix and not defining the supported voltages?  These
-> > look like fairly standard linear range regulators.
+Great! Would you mind adding a A-b/R-b tag then?
 
-> I am fixing the definition of the two regulators in the patch.
-> I am defining them as continuous.=20
-> Voltage ranges are defined in
-> arch/arm/boot/dts/twl4030.dtsi
-> Only the continuous flag is missing.
 
-> Is there anything else do you want to be defined?
-
-These regulators are not continuous regulators as far as I can see, they
-are normal linear range regulators and so should have their voltages
-enumerable like any other linear range regulator.
-
---ukZ3tWq1IjZw6zEx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl0HfEAACgkQJNaLcl1U
-h9C9fgf/demCydc2jv+vdSyZVH8mb+/coXKQUhsJXvaspY3plQYlF5HnzQrABgHC
-nFoahPYWwqbuRl4WzotNHAnblTLZz54cPzr+W89TPLVlfRLxKuF44I3807SJYW4f
-+eh/7+cyOcyiA+eJba+PAG72l5oIkJszxNywvIDZENBjIc7exIxo5I8ee4zfTSoI
-2uv7ZzaeVVrI/1j7SIuC2KlBhQ6j3qOPew1r0kpl66Q7zPNFf4AWzl2LbhjIuUVk
-3BxJcetz+zA7NbCR2QIEr5o7vCnOuOLQQN8Dk1LNI4QxItF7MD0PXkSA33GCu8rD
-uYW9FLSQK0YzKaeddERgm1nLLKkKYg==
-=U7Iy
------END PGP SIGNATURE-----
-
---ukZ3tWq1IjZw6zEx--
+Thanks,
+Miquèl
