@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AC6488A5
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 18:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21257488A2
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 18:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728332AbfFQQPK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 12:15:10 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45367 "EHLO
+        id S1728304AbfFQQPL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 12:15:11 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42096 "EHLO
         mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728304AbfFQQPJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 12:15:09 -0400
-Received: by mail-pg1-f193.google.com with SMTP id s21so6063892pga.12;
-        Mon, 17 Jun 2019 09:15:09 -0700 (PDT)
+        with ESMTP id S1728409AbfFQQPL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 12:15:11 -0400
+Received: by mail-pg1-f193.google.com with SMTP id l19so6071600pgh.9;
+        Mon, 17 Jun 2019 09:15:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=b/Aa9vwcoAMXBLeFkFUyEGUfoQF1uTYSZwVAiF+3Oqc=;
-        b=GlT2ug/HSjv4GGon437P/ehTwiRLbxG6v5lCkV5vMKCNl0qO+mvmfX7iEM9KIooYdt
-         KGXYW2jaN3sITlepnDl5qKIrHTF+C2gn6jutz4WgIvAWHjXTy3hknf5Owo4jiIQECcuf
-         nTer61WeBlfYOSzGsMiZ646Dn2OfFLfHO6doVlvgT3Z5tikR7QWHbpTYSnUlUBvp2CDT
-         Jce2VIWwhSv7aq4HiEJGiJqPt5jlka8t+NoOqFKdNeJ67SfdqMkrbfuOBeXV4gKn4DuP
-         4QhKbVQT1aV0uq8ZRrGNYOjWJtkgtes1OvvNl2wbU7rUG/ccsYSnj0R0iqFAZzW0Jmwh
-         ysaw==
+        bh=bRKPAiBDdS7Afghqz/SOxRPJ6FPjN+ps+2ffOIEw7VU=;
+        b=sW9fpUjdaRZWsNdxItpc/ms/cp9fd/mjIEjj/kdPJbqJ/hFrjrOBoxqs82IG5xzNFl
+         AywCgH5XOFyNqIzhyakCRmeHDLn1bfa6/F45xG8Zyj0wb5rXgfV0+yGm1b1yD8bRkh8I
+         yHqH/vXwbPmcClg/wG2roE2+MPFh2lPuUeRVBMtMgF5zrCeTOSLIVZR3LrmL6h9iqkf2
+         sebAVQEY9vXA2RwqCOMZT7V4nX5vIDvgPGAGBKvZVk7PVtAwWkdiKHwToSWqorC4EASn
+         YpegTKhNbS1I5DwQ5TCxXNfk5Q3QotEVVK7FZarP74Y/ubYXA+MTLP57flgePfW1wR8H
+         WS8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=b/Aa9vwcoAMXBLeFkFUyEGUfoQF1uTYSZwVAiF+3Oqc=;
-        b=DZkYPQf3H3LUOOUfBKZeSO/6JcxQH72kXRRKrMoih32yevAJKR4WlNIAvahvT4vRMH
-         gZ5sUMyz3v5nWbyxhHB95dUVpDxA/l+OszHLKIMHZFuke6S+CTA+5AsrRDMYso3Qdrd6
-         1IqfQokN/h9+XqZ7LMLltp4EvsAS/RA9h//HgZKOPR32JzhBZlH7+T8LgsW1SO+OXD5a
-         zWMPwcpdQrULVYHNyaxmT0yWhnwR/a+zI0HNSViDw2WMMO5twIzKwslPyb/6/GWAnho6
-         ch9u88b5beQXEXPJyTPTlTB5sZ1PmsWA2jqu6Jc7OEyq5oWU6F2R+YkXN3BpjkRsFQLh
-         qhNA==
-X-Gm-Message-State: APjAAAUfdRDYo6Duill+lZZWXQ8l4NjgmlFYS/WmQytfODi1a/BVPADX
-        X/aEjjwRDJR5ANO7uAFPMSuy0VAY79U=
-X-Google-Smtp-Source: APXvYqyBLDInGrf+gDcwc8xUoXlwkGbgBzs80bwXB54WWnxwZECvnFj7lUaXPwumdRxpgpIC4R8DAQ==
-X-Received: by 2002:a17:90a:fa07:: with SMTP id cm7mr27367435pjb.115.1560788108703;
-        Mon, 17 Jun 2019 09:15:08 -0700 (PDT)
+        bh=bRKPAiBDdS7Afghqz/SOxRPJ6FPjN+ps+2ffOIEw7VU=;
+        b=Do3XEZi+l7C2pAOvoMPsbZ2XixARdkRkE2Qu/lvnUm2QyHZ4OHSyPigl/7fxPzzjPj
+         JPxcLpqlsuzH6dWkmSbvD/2DJnz8hBwzfWChr6+LC2iFfSa9sbqBled/7B6FOURB1Dx5
+         e8XxQKbPNbPsz3uORd0UhUJwMJk8a/R/yS1VST4FqzsxVu0EA3sHXOR3NKDA4R58W30Z
+         GNqlKT9YlohdktkSebFU0OpIZBFY38HH0UauOo5MP04pF617F1ctd0uoLQJfPUrEO2rJ
+         F5rXMnjPfGhEG5lEzGP4n9mXSjjP0ys4XeEXuI+zTcOsf9EUUGSuS7L3MuIV5WKDO6/w
+         jIDw==
+X-Gm-Message-State: APjAAAXHULpmOtXS4w1cLXBfqfZwPy2+kQOfyktbg72AU/WT0MVtSkJb
+        E1d0H2FzRQpWimGvmRXKOTJ4avrbiVU=
+X-Google-Smtp-Source: APXvYqxS7N66AVrCeD0fXY+6DE1zAFMbrOtSpmOzGTkbkfVwSrV+lsK3t24TPALJtrLzRMn3OTfk8w==
+X-Received: by 2002:a17:90a:cf0d:: with SMTP id h13mr26157865pju.63.1560788110218;
+        Mon, 17 Jun 2019 09:15:10 -0700 (PDT)
 Received: from localhost.lan (c-24-22-235-96.hsd1.wa.comcast.net. [24.22.235.96])
-        by smtp.gmail.com with ESMTPSA id c9sm14791953pfn.3.2019.06.17.09.15.07
+        by smtp.gmail.com with ESMTPSA id c9sm14791953pfn.3.2019.06.17.09.15.08
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 17 Jun 2019 09:15:08 -0700 (PDT)
+        Mon, 17 Jun 2019 09:15:09 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-pm@vger.kernel.org
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -53,9 +53,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Angus Ainslie <angus@akkea.ca>, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 01/12] thermal: qoriq: Add local struct device pointer
-Date:   Mon, 17 Jun 2019 09:14:47 -0700
-Message-Id: <20190617161458.3754-2-andrew.smirnov@gmail.com>
+Subject: [PATCH v6 02/12] thermal: qoriq: Don't store struct thermal_zone_device reference
+Date:   Mon, 17 Jun 2019 09:14:48 -0700
+Message-Id: <20190617161458.3754-3-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190617161458.3754-1-andrew.smirnov@gmail.com>
 References: <20190617161458.3754-1-andrew.smirnov@gmail.com>
@@ -66,8 +66,8 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use a local "struct device *dev" for brevity. No functional change
-intended.
+Struct thermal_zone_device reference stored as sensor's private data
+isn't really used anywhere in the code. Drop it.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
@@ -81,42 +81,51 @@ Cc: linux-imx@nxp.com
 Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/thermal/qoriq_thermal.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/thermal/qoriq_thermal.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-index 7b364933bfb1..91f9f49d2776 100644
+index 91f9f49d2776..6d40b9788266 100644
 --- a/drivers/thermal/qoriq_thermal.c
 +++ b/drivers/thermal/qoriq_thermal.c
-@@ -192,8 +192,9 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
- 	int ret;
- 	struct qoriq_tmu_data *data;
- 	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
+@@ -65,7 +65,6 @@ struct qoriq_tmu_data;
+  * Thermal zone data
+  */
+ struct qoriq_sensor {
+-	struct thermal_zone_device	*tzd;
+ 	struct qoriq_tmu_data		*qdata;
+ 	int				id;
+ };
+@@ -114,6 +113,8 @@ static int qoriq_tmu_register_tmu_zone(struct platform_device *pdev)
+ 	int id, sites = 0;
  
--	data = devm_kzalloc(&pdev->dev, sizeof(struct qoriq_tmu_data),
-+	data = devm_kzalloc(dev, sizeof(struct qoriq_tmu_data),
- 			    GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
-@@ -204,7 +205,7 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+ 	for (id = 0; id < SITES_MAX; id++) {
++		struct thermal_zone_device *tzd;
++
+ 		qdata->sensor[id] = devm_kzalloc(&pdev->dev,
+ 				sizeof(struct qoriq_sensor), GFP_KERNEL);
+ 		if (!qdata->sensor[id])
+@@ -121,13 +122,15 @@ static int qoriq_tmu_register_tmu_zone(struct platform_device *pdev)
  
- 	data->regs = of_iomap(np, 0);
- 	if (!data->regs) {
--		dev_err(&pdev->dev, "Failed to get memory region\n");
-+		dev_err(dev, "Failed to get memory region\n");
- 		ret = -ENODEV;
- 		goto err_iomap;
- 	}
-@@ -217,7 +218,7 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+ 		qdata->sensor[id]->id = id;
+ 		qdata->sensor[id]->qdata = qdata;
+-		qdata->sensor[id]->tzd = devm_thermal_zone_of_sensor_register(
+-				&pdev->dev, id, qdata->sensor[id], &tmu_tz_ops);
+-		if (IS_ERR(qdata->sensor[id]->tzd)) {
+-			if (PTR_ERR(qdata->sensor[id]->tzd) == -ENODEV)
++
++		tzd = devm_thermal_zone_of_sensor_register(&pdev->dev, id,
++							   qdata->sensor[id],
++							   &tmu_tz_ops);
++		if (IS_ERR(tzd)) {
++			if (PTR_ERR(tzd) == -ENODEV)
+ 				continue;
+ 			else
+-				return PTR_ERR(qdata->sensor[id]->tzd);
++				return PTR_ERR(tzd);
+ 		}
  
- 	ret = qoriq_tmu_register_tmu_zone(pdev);
- 	if (ret < 0) {
--		dev_err(&pdev->dev, "Failed to register sensors\n");
-+		dev_err(dev, "Failed to register sensors\n");
- 		ret = -ENODEV;
- 		goto err_iomap;
- 	}
+ 		sites |= 0x1 << (15 - id);
 -- 
 2.21.0
 
