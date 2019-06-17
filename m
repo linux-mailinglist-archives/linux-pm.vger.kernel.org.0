@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFF6495D6
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 01:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FBD495FF
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 01:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbfFQX0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 19:26:14 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:51083 "EHLO
+        id S1728784AbfFQXhJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 19:37:09 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:63973 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbfFQX0O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 19:26:14 -0400
+        with ESMTP id S1728773AbfFQXhI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 19:37:08 -0400
 Received: from 79.184.254.20.ipv4.supernova.orange.pl (79.184.254.20) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id 4799003df4c07b9e; Tue, 18 Jun 2019 01:26:12 +0200
+ id dadcab13fd6a5801; Tue, 18 Jun 2019 01:37:06 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     linux-pm@vger.kernel.org,
@@ -21,8 +21,8 @@ Cc:     linux-pm@vger.kernel.org,
         Qais.Yousef@arm.com, mka@chromium.org, juri.lelli@gmail.com,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH V3 4/5] cpufreq: Register notifiers with the PM QoS framework
-Date:   Tue, 18 Jun 2019 01:26:11 +0200
-Message-ID: <3504053.Rmt1Mul0J4@kreacher>
+Date:   Tue, 18 Jun 2019 01:37:06 +0200
+Message-ID: <1794396.RVx65QvVqq@kreacher>
 In-Reply-To: <a275fdd9325f1b2cba046c79930ad59653674455.1560163748.git.viresh.kumar@linaro.org>
 References: <cover.1560163748.git.viresh.kumar@linaro.org> <a275fdd9325f1b2cba046c79930ad59653674455.1560163748.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
@@ -104,12 +104,86 @@ On Monday, June 10, 2019 12:51:35 PM CEST Viresh Kumar wrote:
 > +
 > +	return cpufreq_update_freq(policy);
 > +}
+> +
+> +static void cpufreq_policy_put_kobj(struct cpufreq_policy *policy)
+> +{
+> +	struct kobject *kobj;
+> +	struct completion *cmp;
+> +
+> +	down_write(&policy->rwsem);
+> +	cpufreq_stats_free_table(policy);
+> +	kobj = &policy->kobj;
+> +	cmp = &policy->kobj_unregister;
+> +	up_write(&policy->rwsem);
+> +	kobject_put(kobj);
+> +
+> +	/*
+> +	 * We need to make sure that the underlying kobj is
+> +	 * actually not referenced anymore by anybody before we
+> +	 * proceed with unloading.
+> +	 */
+> +	pr_debug("waiting for dropping of refcount\n");
+> +	wait_for_completion(cmp);
+> +	pr_debug("wait complete\n");
+> +}
+> +
+>  static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+>  {
+>  	struct cpufreq_policy *policy;
+> +	struct device *dev = get_cpu_device(cpu);
+>  	int ret;
+>  
+> +	if (!dev)
+> +		return NULL;
+> +
+>  	policy = kzalloc(sizeof(*policy), GFP_KERNEL);
+>  	if (!policy)
+>  		return NULL;
+> @@ -1147,7 +1214,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+>  	ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
+>  				   cpufreq_global_kobject, "policy%u", cpu);
+>  	if (ret) {
+> -		pr_err("%s: failed to init policy->kobj: %d\n", __func__, ret);
+> +		dev_err(dev, "%s: failed to init policy->kobj: %d\n", __func__, ret);
+>  		/*
+>  		 * The entire policy object will be freed below, but the extra
+>  		 * memory allocated for the kobject name needs to be freed by
+> @@ -1157,16 +1224,41 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+>  		goto err_free_real_cpus;
+>  	}
+>  
+> +	policy->nb_min.notifier_call = cpufreq_notifier_min;
+> +	policy->nb_max.notifier_call = cpufreq_notifier_max;
+> +
+> +	ret = dev_pm_qos_add_notifier(dev, &policy->nb_min,
+> +				      DEV_PM_QOS_MIN_FREQUENCY);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register MIN QoS notifier: %d (%*pbl)\n",
+> +			ret, cpumask_pr_args(policy->cpus));
+> +		goto err_kobj_remove;
+> +	}
+> +
+> +	ret = dev_pm_qos_add_notifier(dev, &policy->nb_max,
+> +				      DEV_PM_QOS_MAX_FREQUENCY);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register MAX QoS notifier: %d (%*pbl)\n",
+> +			ret, cpumask_pr_args(policy->cpus));
+> +		goto err_min_qos_notifier;
+> +	}
+> +
+>  	INIT_LIST_HEAD(&policy->policy_list);
+>  	init_rwsem(&policy->rwsem);
+>  	spin_lock_init(&policy->transition_lock);
+>  	init_waitqueue_head(&policy->transition_wait);
+>  	init_completion(&policy->kobj_unregister);
+>  	INIT_WORK(&policy->update, handle_update);
+> +	INIT_WORK(&policy->req_work, cpufreq_update_freq_work);
 
-This is a bit convoluted.
+One more thing.
 
-Two different notifiers are registered basically for the same thing.
+handle_update() is very similar to cpufreq_update_freq_work().
 
-Any chance to use just one?
+Why are both of them needed?
 
 
 
