@@ -2,33 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA96495BB
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 01:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFF6495D6
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 01:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbfFQXOS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 19:14:18 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:64487 "EHLO
+        id S1726808AbfFQX0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 19:26:14 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:51083 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726685AbfFQXOS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 19:14:18 -0400
+        with ESMTP id S1726121AbfFQX0O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 19:26:14 -0400
 Received: from 79.184.254.20.ipv4.supernova.orange.pl (79.184.254.20) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id a2a8451e21f77331; Tue, 18 Jun 2019 01:14:15 +0200
+ id 4799003df4c07b9e; Tue, 18 Jun 2019 01:26:12 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org,
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Qais.Yousef@arm.com, mka@chromium.org, juri.lelli@gmail.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 2/5] PM / QOS: Pass request type to dev_pm_qos_read_value()
-Date:   Tue, 18 Jun 2019 01:14:15 +0200
-Message-ID: <6646229.IQO0cWAbFE@kreacher>
-In-Reply-To: <b414d788faf4c6f87d01086248db4d2e86635180.1560163748.git.viresh.kumar@linaro.org>
-References: <cover.1560163748.git.viresh.kumar@linaro.org> <b414d788faf4c6f87d01086248db4d2e86635180.1560163748.git.viresh.kumar@linaro.org>
+Subject: Re: [PATCH V3 4/5] cpufreq: Register notifiers with the PM QoS framework
+Date:   Tue, 18 Jun 2019 01:26:11 +0200
+Message-ID: <3504053.Rmt1Mul0J4@kreacher>
+In-Reply-To: <a275fdd9325f1b2cba046c79930ad59653674455.1560163748.git.viresh.kumar@linaro.org>
+References: <cover.1560163748.git.viresh.kumar@linaro.org> <a275fdd9325f1b2cba046c79930ad59653674455.1560163748.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -37,28 +33,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, June 10, 2019 12:51:33 PM CEST Viresh Kumar wrote:
-> In order to use dev_pm_qos_read_value(), and other internal routines to
-> it, to read values for different QoS requests, pass request type as a
-> parameter to these routines.
+On Monday, June 10, 2019 12:51:35 PM CEST Viresh Kumar wrote:
+> This registers the notifiers for min/max frequency constraints with the
+> PM QoS framework. The constraints are also taken into consideration in
+> cpufreq_set_policy().
 > 
-> For now, it only supports resume-latency request type.
+> This also relocates cpufreq_policy_put_kobj() as it is required to be
+> called from cpufreq_policy_alloc() now.
+> 
+> No constraints are added until now though.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 139 +++++++++++++++++++++++++++++++-------
+>  include/linux/cpufreq.h   |   4 ++
+>  2 files changed, 120 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 85ff958e01f1..547d221b2ff2 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/kernel_stat.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+> +#include <linux/pm_qos.h>
+>  #include <linux/slab.h>
+>  #include <linux/suspend.h>
+>  #include <linux/syscore_ops.h>
+> @@ -1126,11 +1127,77 @@ static void handle_update(struct work_struct *work)
+>  	cpufreq_update_policy(cpu);
+>  }
+>  
+> +static void cpufreq_update_freq_work(struct work_struct *work)
+> +{
+> +	struct cpufreq_policy *policy =
+> +		container_of(work, struct cpufreq_policy, req_work);
+> +	struct cpufreq_policy new_policy = *policy;
+> +
+> +	/* We should read constraint values from QoS layer */
+> +	new_policy.min = 0;
+> +	new_policy.max = UINT_MAX;
+> +
+> +	down_write(&policy->rwsem);
+> +
+> +	if (!policy_is_inactive(policy))
+> +		cpufreq_set_policy(policy, &new_policy);
+> +
+> +	up_write(&policy->rwsem);
+> +}
+> +
+> +static int cpufreq_update_freq(struct cpufreq_policy *policy)
+> +{
+> +	schedule_work(&policy->req_work);
+> +	return 0;
+> +}
+> +
+> +static int cpufreq_notifier_min(struct notifier_block *nb, unsigned long freq,
+> +				void *data)
+> +{
+> +	struct cpufreq_policy *policy = container_of(nb, struct cpufreq_policy, nb_min);
+> +
+> +	return cpufreq_update_freq(policy);
+> +}
+> +
+> +static int cpufreq_notifier_max(struct notifier_block *nb, unsigned long freq,
+> +				void *data)
+> +{
+> +	struct cpufreq_policy *policy = container_of(nb, struct cpufreq_policy, nb_max);
+> +
+> +	return cpufreq_update_freq(policy);
+> +}
 
-I don't quite like the structure by which the type arg is passed through the
-entire call chain until the switch in dep_pm_qos_raw_read_value().
+This is a bit convoluted.
 
-There is only one direct user of dev_pm_qos_raw_read_value() AFAICS which
-is cpuidle. It shouldn't need to suffer the general case overhead, so I would
-rename that function to dev_pm_qos_raw_resume_latency() and update cpuidle
-accordingly.
+Two different notifiers are registered basically for the same thing.
 
-Moreover, the callers of __dev_pm_qos_read_value() are interested in the
-resume latency value too, so it might make sense to rename this as
-__dev_pm_qos_resume_latency(), update its callers and put the switch
-into dev_pm_qos_read_value().
-
-Plus the changelog should explain the broader rationale of this change like
-for the first patch IMO.
+Any chance to use just one?
 
 
 
