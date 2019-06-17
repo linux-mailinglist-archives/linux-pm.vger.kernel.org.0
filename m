@@ -2,95 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFC647957
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 06:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEBC47AF2
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 09:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725813AbfFQE05 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 00:26:57 -0400
-Received: from mail-pg1-f175.google.com ([209.85.215.175]:45447 "EHLO
-        mail-pg1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725863AbfFQE05 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 00:26:57 -0400
-Received: by mail-pg1-f175.google.com with SMTP id s21so5006779pga.12
-        for <linux-pm@vger.kernel.org>; Sun, 16 Jun 2019 21:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PmqFguwW3dYc7xJhH5/ZTk/3G85fwsIEI5IZBeTVbMI=;
-        b=T1bv07G606y22acLgdMZkhaLJx08RUHyZBX7NdaHMzsC4fMzVPcJ02aU7u5IykZhqg
-         SlAfQR0uFoGC+bPxUEGOXI6tFFYfoZLFmk1py+M7f9MftwDzqJCzY/6BvQ/k10SbjYt1
-         Sg1ky4ojNLm9kyNOa+3B56ibkdrvgeDgx55vLLfg6TT86hDy2fCvMyIViyZ5nFPI/4lW
-         8RDCU91bKDgJHKygUFl6M+7lyW6y3JosmhS2sCekPqqmfPvshQ/fh9FJsbXHh/LF1BcH
-         bCzZn5g4twxBZ7Rsn0H8SegEmRp47yDF57icq13SQvZfGTFfOwW9xlLbgilfbDOsQkQI
-         LETQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PmqFguwW3dYc7xJhH5/ZTk/3G85fwsIEI5IZBeTVbMI=;
-        b=Rlrhnczk3/dF6dchZUWcuS6yRzSICSLKjHBrlAlqnLXwjY0Fh4hlMfBI5g8CcykrAc
-         BAaR2aXCVAHRNXyAszXnJ91NcX4z023wUJ29dU5SxZMOqzj2ZnkxiNIUFitb7U9DKvM1
-         dMQl4c0fv9ofcDtZ9GJmZ6syCGeoRqZbRpakwHLvUKeiB+WqKCag8/5IYP+jxb3WBJ88
-         CYQ7+2eQyUzbpT73NBWPUKxZJ5FMKOHfgIaxuM+bgTxyY/mrbqmcr85CI6VLAxJ2hZNg
-         +U0/nsI15ESrJH88SzpnHh1P6VaKxWNpMMPLZxqt6MdCsCWoT1zlAOso1ksx+CDfLOCF
-         FBxg==
-X-Gm-Message-State: APjAAAW4a7YiKyUi+VeBvuRJoLhlM9MFeAXc+cExPc0Tpdx8/OCRZDC8
-        bERcEeKt7Atle6WQs3CcZ/RsrQ==
-X-Google-Smtp-Source: APXvYqzqf2rvVzZQ9jtplmCuuCEzv3tRRPzxsJ+P8Z5XBfMDeAYsYxpXV5gZplXN6I0Z9Bp2k24iCA==
-X-Received: by 2002:a63:246:: with SMTP id 67mr48365918pgc.145.1560745616533;
-        Sun, 16 Jun 2019 21:26:56 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id s64sm10266562pfb.160.2019.06.16.21.26.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 16 Jun 2019 21:26:55 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 09:56:54 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, swboyd@chromium.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 00/11] DVFS in the OPP core
-Message-ID: <20190617042654.xdqx5naxo3lq7kv6@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
+        id S1726781AbfFQH2w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 03:28:52 -0400
+Received: from slot0.nejknio.cf ([89.32.41.233]:48156 "EHLO slot0.nejknio.cf"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726653AbfFQH2v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 17 Jun 2019 03:28:51 -0400
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=nejknio.cf;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=trade1@nejknio.cf;
+ bh=73Xs4LxjK+lP+h5mKCyFyWTpkoQ=;
+ b=PqW4EJjZ0AZMxqzxLtv4fRdKesvBO7A5MNUyQ7ukVy2l7DFRtvMiAd2lsRbFHpSsqW8FSuT72Epe
+   R3qqCvMWwvTcsJLJeHyzvBguVJhZG9aLufi3zA7M6DJeU/idH1ptigy38mKwybhcXVfMuKx8kfvj
+   5EfvNQVBdSZujYtetkrVj/2rYQpK35OUnHM1CWkzDcLQltAcBT21vuTNy7XABpxWabGD3Fuik6kq
+   RPNYsKhGV8GU7RPfhi/F6B9htEwdxqNRNQRFRguHK/S1jYkKuH6+FyNDqtrc0GjB722M3etVZ1Bv
+   i0ueuZoxmy3QCzL1Zqj23k7bUfKoewL9sSGixA==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=nejknio.cf;
+ b=amqdS58f8H/Vd+SOGKdHg+Dr53oOKHkh1P/TVK2imqTbhh7w2uoyWkFDviZxMYIEL9YNFUq37U0j
+   5HeVGpwTaOAd3ksA1E5KlOWy6PgHX+A9rGnfE326sYarKi+XGkONiDg+pGIufPRpNyRLDP8r7BHn
+   lu31r34YmLUPAXaKvwwOTIdNY+kr2Uy06bItD+WCaZfWyxn/7Fru2N1znhhPH5nvd3tJANv8pB85
+   tghovxuekoffD6sHl8e3Ci7l0kldHcmCotw2oJjnFhwBuDcRb/1pKJs8G8ECDW4t5LJbvjir9XTf
+   K9fEa/7gTKaOaJidWREnOcbcCYFLSLOTGXId1A==;
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190320094918.20234-1-rnayak@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: PRODUCT INQUIRY FOR EXPORT SHIPMENT
+To:     Recipients <trade1@nejknio.cf>
+From:   "Mark Maths" <trade1@nejknio.cf>
+Date:   Mon, 17 Jun 2019 10:08:47 +0300
+Reply-To: purchase_m.maths@aol.com
+Message-ID: <0.0.1.D7F.1D524DB76B3043C.0@slot0.nejknio.cf>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-03-19, 15:19, Rajendra Nayak wrote:
-> This is a v2 of the RFC posted earlier by Stephen Boyd [1]
-> 
-> As part of v2 I still follow the same approach of dev_pm_opp_set_rate()
-> API using clk framework to round the frequency passed and making it
-> accept 0 as a valid frequency indicating the frequency isn't required
-> anymore. It just has a few more drivers converted to use this approach
-> like dsi/dpu and ufs.
-> ufs demonstrates the case of having to handle multiple power domains, one
-> of which is scalable.
-> 
-> The patches are based on 5.1-rc1 and depend on some ufs fixes I posted
-> earlier [2] and a DT patch to include the rpmpd header [3]
-> 
-> [1] https://lkml.org/lkml/2019/1/28/2086
-> [2] https://lkml.org/lkml/2019/3/8/70
-> [3] https://lkml.org/lkml/2019/3/20/120
-> 
-> Rajendra Nayak (10):
->   OPP: Make dev_pm_opp_set_rate() with freq=0 as valid
-> 
-> Stephen Boyd (1):
->   OPP: Don't overwrite rounded clk rate
+Dear Sales team,
+ =
 
-I have applied modified version of these two patches to the OPP tree now.
-Thanks.
+In furtherance to our market research, we have reviewed all your products t=
+ypes and we have finally interested in your product for our market here in =
 
--- 
-viresh
+
+United State for your production. We introduce ourselves as Emilxa Tram SRL=
+, A general group of company located in the United State. =
+
+
+We are sourcing for new suppliers from your location =
+
+
+Kindly advice us if you accept new purchase orders, I will forward our PO f=
+or urgent order.
+
+Waiting for your response to send order. Reply to ( purchase_m.maths@aol.co=
+m)
+
+Best regards.
+Mark Maths
+Company Address:
+Emilxa Tram SRL Company Limited
+P.O. Box 978
+Road Town
+Tortola
+British Virgin Islands
+Contact information:
+Tel: +1 (284) 493 7235
+Email: purchase_m.maths@aol.com
+https://meridianbvi.com/contact-us/
