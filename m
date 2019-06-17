@@ -2,294 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D928C47E45
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 11:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D302147F04
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jun 2019 12:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728160AbfFQJYV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 05:24:21 -0400
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:38737 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728028AbfFQJYU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 05:24:20 -0400
-Received: by mail-ua1-f67.google.com with SMTP id j2so3231424uaq.5
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2019 02:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+AM+KOWeFltnnRueiRy/+l6fymiJZdeBE+NuUPvKIVU=;
-        b=BR/nFUxTrcMHHb9UDx9SzjPfmk83/tZZ4qT2sETqignmcd4AkJSo0sx4hU/fslFPbz
-         Vc2/vil9hqspOIiRDul2H/EupvMKILg+uB4ymSyD8liSHX0HsHqsq27xobqJlyqEkV6h
-         o+5SnAIoMv7/+lK7BDZP2iSuy8/p1nGm+rFezSYNrE/JYvZBFHkMuCOZGT7TivuNF1cr
-         l9jW/xyj+6YU8YbPWx4r/EZw3GHB8Xmm82hkQA+fG1HHp7T//PFvMYo6TRxfrI2dL2uD
-         qpyR+xCVn9V8zp9e6qQtLwbTenAwb52DLkjbiJm8yrktCXgPA8440PBWr+n38H7r5+t7
-         V+OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+AM+KOWeFltnnRueiRy/+l6fymiJZdeBE+NuUPvKIVU=;
-        b=b5W2IF1oFFowas9UgJNh8rZL8m07dGNF13YUK96jg4TTesPnXeXECfnzn9qzQdvKTF
-         CGpBeYDTgg5cMi9jY6+Ogs3Y8U0BtP/2dce2mXlOxSDdGroCY+Du0kN1Bujx9Mctl+lm
-         tJOz+kWIZ4MSffS6qdAS6QHOikr0zT+vlCJJ2bS7PtU14+AqzixSIdNLRiFKKMHXNUXf
-         5gxE75h9LhF5YjbfPT8QGYoIKoNaBMbTQL4vFbOdRiXxFdkBtDcJ90Y3sed+15tFVVF2
-         xdR+SnEVgdAgk8PcC5ifXm9JEcD45Fua24GTfE8CiJmbfKVsjYD0/CQua1U/GTE6eKLt
-         0jmA==
-X-Gm-Message-State: APjAAAW3b2RwcPM/HNLxcu9kdqs4Pn2i9dq8h/Ubu1l0lpO+Ai6qscw1
-        7PvzcapQV5DeJ88ABOJHeWaAgAccGvgMLkXVh8AcmaCT
-X-Google-Smtp-Source: APXvYqxwcNF/oeZC91WxRKfDDTW2Ss/mjjCGgSDIuSJxecIBdVa/wFSvP7EtiL4xqYNzGcoFhkDA2f0myMmJ9YeZdro=
-X-Received: by 2002:ab0:60ad:: with SMTP id f13mr8481190uam.129.1560763459385;
- Mon, 17 Jun 2019 02:24:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1560163748.git.viresh.kumar@linaro.org> <d1a7585539ad2ced2bfcc9e232cf859b1ec9c71a.1560163748.git.viresh.kumar@linaro.org>
-In-Reply-To: <d1a7585539ad2ced2bfcc9e232cf859b1ec9c71a.1560163748.git.viresh.kumar@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 17 Jun 2019 11:23:43 +0200
-Message-ID: <CAPDyKFpy52d+iCkqN8AVjagXtjf4yKW6vuW17TN+84q_e6Vdzw@mail.gmail.com>
-Subject: Re: [PATCH V3 5/5] cpufreq: Add QoS requests for userspace constraints
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Qais.Yousef@arm.com, Matthias Kaehlcke <mka@chromium.org>,
-        juri.lelli@gmail.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727646AbfFQKAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jun 2019 06:00:32 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37238 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727545AbfFQKAc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jun 2019 06:00:32 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5H9xdmF056996
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2019 06:00:31 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2t671tc5ty-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2019 06:00:30 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
+        Mon, 17 Jun 2019 11:00:28 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 17 Jun 2019 11:00:24 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5HA0Nq642401928
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 17 Jun 2019 10:00:23 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 963AEA405D;
+        Mon, 17 Jun 2019 10:00:23 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 27194A404D;
+        Mon, 17 Jun 2019 10:00:22 +0000 (GMT)
+Received: from boston16h.aus.stglabs.ibm.com (unknown [9.3.23.78])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 17 Jun 2019 10:00:21 +0000 (GMT)
+From:   Abhishek Goel <huntbag@linux.vnet.ibm.com>
+To:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-pm@vger.kernel.org
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, mpe@ellerman.id.au,
+        dja@axtens.net, npiggin@gmail.com, ego@linux.vnet.ibm.com,
+        Abhishek Goel <huntbag@linux.vnet.ibm.com>
+Subject: [PATCH v2 0/1] Forced-wakeup for stop states on Powernv
+Date:   Mon, 17 Jun 2019 04:56:47 -0500
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 19061710-0012-0000-0000-00000329CB13
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19061710-0013-0000-0000-00002162E1DC
+Message-Id: <20190617095648.18847-1-huntbag@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-17_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=823 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906170093
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 10 Jun 2019 at 12:52, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> This implements QoS requests to manage userspace configuration of min
-> and max frequency.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Currently, the cpuidle governors determine what idle state a idling CPU
+should enter into based on heuristics that depend on the idle history on
+that CPU. Given that no predictive heuristic is perfect, there are cases
+where the governor predicts a shallow idle state, hoping that the CPU will
+be busy soon. However, if no new workload is scheduled on that CPU in the
+near future, the CPU will end up in the shallow state.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Motivation
+----------
+In case of POWER, this is problematic, when the predicted state in the
+aforementioned scenario is a shallow stop state on a tickless system. As
+we might get stuck into shallow states even for hours, in absence of ticks
+or interrupts.
 
-Kind regards
-Uffe
+To address this, We forcefully wakeup the cpu by setting the decrementer.
+The decrementer is set to a value that corresponds with the residency of
+the next available state. Thus firing up a timer that will forcefully
+wakeup the cpu. Few such iterations will essentially train the governor to
+select a deeper state for that cpu, as the timer here corresponds to the
+next available cpuidle state residency. Thus, cpu will eventually end up
+in the deepest possible state and we won't get stuck in a shallow state
+for long duration.
+
+Experiment
+----------
+For earlier versions when this feature was meat to be only for shallow lite
+states, I performed experiments for three scenarios to collect some data.
+
+case 1 :
+Without this patch and without tick retained, i.e. in a upstream kernel,
+It would spend more than even a second to get out of stop0_lite.
+
+case 2 : With tick retained in a upstream kernel -
+
+Generally, we have a sched tick at 4ms(CONF_HZ = 250). Ideally I expected
+it to take 8 sched tick to get out of stop0_lite. Experimentally,
+observation was
+
+=========================================================
+sample          min            max           99percentile
+20              4ms            12ms          4ms
+=========================================================
+
+It would take atleast one sched tick to get out of stop0_lite.
+
+case 2 :  With this patch (not stopping tick, but explicitly queuing a
+          timer)
+
+============================================================
+sample          min             max             99percentile
+============================================================
+20              144us           192us           144us
+============================================================
 
 
-> ---
->  drivers/cpufreq/cpufreq.c | 92 +++++++++++++++++++--------------------
->  include/linux/cpufreq.h   |  8 +---
->  2 files changed, 47 insertions(+), 53 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 547d221b2ff2..ff754981fcb4 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -720,23 +720,15 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
->  static ssize_t store_##file_name                                       \
->  (struct cpufreq_policy *policy, const char *buf, size_t count)         \
->  {                                                                      \
-> -       int ret, temp;                                                  \
-> -       struct cpufreq_policy new_policy;                               \
-> +       unsigned long val;                                              \
-> +       int ret;                                                        \
->                                                                         \
-> -       memcpy(&new_policy, policy, sizeof(*policy));                   \
-> -       new_policy.min = policy->user_policy.min;                       \
-> -       new_policy.max = policy->user_policy.max;                       \
-> -                                                                       \
-> -       ret = sscanf(buf, "%u", &new_policy.object);                    \
-> +       ret = sscanf(buf, "%lu", &val);                                 \
->         if (ret != 1)                                                   \
->                 return -EINVAL;                                         \
->                                                                         \
-> -       temp = new_policy.object;                                       \
-> -       ret = cpufreq_set_policy(policy, &new_policy);          \
-> -       if (!ret)                                                       \
-> -               policy->user_policy.object = temp;                      \
-> -                                                                       \
-> -       return ret ? ret : count;                                       \
-> +       ret = dev_pm_qos_update_request(policy->object##_freq_req, val);\
-> +       return ret && ret != 1 ? ret : count;                           \
->  }
->
->  store_one(scaling_min_freq, min);
-> @@ -1133,10 +1125,6 @@ static void cpufreq_update_freq_work(struct work_struct *work)
->                 container_of(work, struct cpufreq_policy, req_work);
->         struct cpufreq_policy new_policy = *policy;
->
-> -       /* We should read constraint values from QoS layer */
-> -       new_policy.min = 0;
-> -       new_policy.max = UINT_MAX;
-> -
->         down_write(&policy->rwsem);
->
->         if (!policy_is_inactive(policy))
-> @@ -1243,6 +1231,12 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
->                 goto err_min_qos_notifier;
->         }
->
-> +       policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
-> +                                      GFP_KERNEL);
-> +       if (!policy->min_freq_req)
-> +               goto err_max_qos_notifier;
-> +
-> +       policy->max_freq_req = policy->min_freq_req + 1;
->         INIT_LIST_HEAD(&policy->policy_list);
->         init_rwsem(&policy->rwsem);
->         spin_lock_init(&policy->transition_lock);
-> @@ -1254,6 +1248,9 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
->         policy->cpu = cpu;
->         return policy;
->
-> +err_max_qos_notifier:
-> +       dev_pm_qos_remove_notifier(dev, &policy->nb_max,
-> +                                  DEV_PM_QOS_MAX_FREQUENCY);
->  err_min_qos_notifier:
->         dev_pm_qos_remove_notifier(dev, &policy->nb_min,
->                                    DEV_PM_QOS_MIN_FREQUENCY);
-> @@ -1289,6 +1286,10 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
->                                    DEV_PM_QOS_MAX_FREQUENCY);
->         dev_pm_qos_remove_notifier(dev, &policy->nb_min,
->                                    DEV_PM_QOS_MIN_FREQUENCY);
-> +       dev_pm_qos_remove_request(policy->max_freq_req);
-> +       dev_pm_qos_remove_request(policy->min_freq_req);
-> +       kfree(policy->min_freq_req);
-> +
->         cpufreq_policy_put_kobj(policy);
->         free_cpumask_var(policy->real_cpus);
->         free_cpumask_var(policy->related_cpus);
-> @@ -1366,16 +1367,30 @@ static int cpufreq_online(unsigned int cpu)
->         cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
->
->         if (new_policy) {
-> -               policy->user_policy.min = policy->min;
-> -               policy->user_policy.max = policy->max;
-> +               struct device *dev = get_cpu_device(cpu);
->
->                 for_each_cpu(j, policy->related_cpus) {
->                         per_cpu(cpufreq_cpu_data, j) = policy;
->                         add_cpu_dev_symlink(policy, j);
->                 }
-> -       } else {
-> -               policy->min = policy->user_policy.min;
-> -               policy->max = policy->user_policy.max;
-> +
-> +               ret = dev_pm_qos_add_request(dev, policy->min_freq_req,
-> +                                            DEV_PM_QOS_MIN_FREQUENCY,
-> +                                            policy->min);
-> +               if (ret < 0) {
-> +                       dev_err(dev, "Failed to add min-freq constraint (%d)\n",
-> +                               ret);
-> +                       goto out_destroy_policy;
-> +               }
-> +
-> +               ret = dev_pm_qos_add_request(dev, policy->max_freq_req,
-> +                                            DEV_PM_QOS_MAX_FREQUENCY,
-> +                                            policy->max);
-> +               if (ret < 0) {
-> +                       dev_err(dev, "Failed to add max-freq constraint (%d)\n",
-> +                               ret);
-> +                       goto out_destroy_policy;
-> +               }
->         }
->
->         if (cpufreq_driver->get && !cpufreq_driver->setpolicy) {
-> @@ -2366,7 +2381,6 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
->  {
->         struct cpufreq_governor *old_gov;
->         struct device *cpu_dev = get_cpu_device(policy->cpu);
-> -       unsigned long min, max;
->         int ret;
->
->         pr_debug("setting new policy for CPU %u: %u - %u kHz\n",
-> @@ -2374,24 +2388,12 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
->
->         memcpy(&new_policy->cpuinfo, &policy->cpuinfo, sizeof(policy->cpuinfo));
->
-> -       /*
-> -       * This check works well when we store new min/max freq attributes,
-> -       * because new_policy is a copy of policy with one field updated.
-> -       */
-> -       if (new_policy->min > new_policy->max)
-> -               return -EINVAL;
-> -
->         /*
->          * PM QoS framework collects all the requests from users and provide us
->          * the final aggregated value here.
->          */
-> -       min = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MIN_FREQUENCY);
-> -       max = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MAX_FREQUENCY);
-> -
-> -       if (min > new_policy->min)
-> -               new_policy->min = min;
-> -       if (max < new_policy->max)
-> -               new_policy->max = max;
-> +       new_policy->min = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MIN_FREQUENCY);
-> +       new_policy->max = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MAX_FREQUENCY);
->
->         /* verify the cpu speed can be set within this limit */
->         ret = cpufreq_driver->verify(new_policy);
-> @@ -2480,10 +2482,9 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
->   * @cpu: CPU to re-evaluate the policy for.
->   *
->   * Update the current frequency for the cpufreq policy of @cpu and use
-> - * cpufreq_set_policy() to re-apply the min and max limits saved in the
-> - * user_policy sub-structure of that policy, which triggers the evaluation
-> - * of policy notifiers and the cpufreq driver's ->verify() callback for the
-> - * policy in question, among other things.
-> + * cpufreq_set_policy() to re-apply the min and max limits, which triggers the
-> + * evaluation of policy notifiers and the cpufreq driver's ->verify() callback
-> + * for the policy in question, among other things.
->   */
->  void cpufreq_update_policy(unsigned int cpu)
->  {
-> @@ -2503,8 +2504,6 @@ void cpufreq_update_policy(unsigned int cpu)
->
->         pr_debug("updating policy for CPU %u\n", cpu);
->         memcpy(&new_policy, policy, sizeof(*policy));
-> -       new_policy.min = policy->user_policy.min;
-> -       new_policy.max = policy->user_policy.max;
->
->         cpufreq_set_policy(policy, &new_policy);
->
-> @@ -2549,10 +2548,9 @@ static int cpufreq_boost_set_sw(int state)
->                         break;
->                 }
->
-> -               down_write(&policy->rwsem);
-> -               policy->user_policy.max = policy->max;
-> -               cpufreq_governor_limits(policy);
-> -               up_write(&policy->rwsem);
-> +               ret = dev_pm_qos_update_request(policy->max_freq_req, policy->max);
-> +               if (ret)
-> +                       break;
->         }
->
->         return ret;
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 0fe7678da9c2..6bbed9af4fd2 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -50,11 +50,6 @@ struct cpufreq_cpuinfo {
->         unsigned int            transition_latency;
->  };
->
-> -struct cpufreq_user_policy {
-> -       unsigned int            min;    /* in kHz */
-> -       unsigned int            max;    /* in kHz */
-> -};
-> -
->  struct cpufreq_policy {
->         /* CPUs sharing clock, require sw coordination */
->         cpumask_var_t           cpus;   /* Online CPUs only */
-> @@ -85,7 +80,8 @@ struct cpufreq_policy {
->                                          * called, but you're in IRQ context */
->         struct work_struct      req_work;
->
-> -       struct cpufreq_user_policy user_policy;
-> +       struct dev_pm_qos_request *min_freq_req;
-> +       struct dev_pm_qos_request *max_freq_req;
->         struct cpufreq_frequency_table  *freq_table;
->         enum cpufreq_table_sorting freq_table_sorted;
->
-> --
-> 2.21.0.rc0.269.g1a574e7a288b
->
+Description of current implementation
+-------------------------------------
+
+We calculate timeout for the current idle state as the residency value
+of the next available idle state. If the decrementer is set to be
+greater than this timeout, we update the decrementer value with the
+residency of next available idle state. Thus, essentially training the
+governor to select the next available deeper state until we reach the
+deepest state. Hence, we won't get stuck unnecessarily in shallow states
+for longer duration.
+
+--------------------------------
+v1 of auto-promotion : https://lkml.org/lkml/2019/3/22/58 This patch was
+implemented only for shallow lite state in generic cpuidle driver.
+
+v2 of auto-promotion : Removed timeout_needed and rebased to current
+upstream kernel
+
+Then, 
+v1 of forced-wakeup : Moved the code to cpuidle powernv driver and started
+as forced wakeup instead of auto-promotion
+
+v2 of forced-wakeup : Extended the forced wakeup logic for all states.
+Setting the decrementer instead of queuing up a hrtimer to implement the
+logic.
+
+Abhishek Goel (1):
+  cpuidle-powernv : forced wakeup for stop states
+
+ drivers/cpuidle/cpuidle-powernv.c | 38 +++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+-- 
+2.17.1
+
