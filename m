@@ -2,141 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 743BC49FE6
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 13:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF234A0DE
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 14:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbfFRL4u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jun 2019 07:56:50 -0400
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:35184 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726238AbfFRL4u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jun 2019 07:56:50 -0400
-Received: by mail-ua1-f65.google.com with SMTP id j21so7701uap.2
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2019 04:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=piRTAebFx2FsROFm2zYcU51EDgaGKwKW/nF1spIt1sI=;
-        b=mo7//ZZm5CR0ywBO0NeDMxPL71X9bJ2kFFt6G1IOlFmJ9ImsK53ikh7RHrkrW1cWy9
-         16iNhl4WpSQJUkAAbTw5KSaMvEgibjhRAeDdK923fBEpZYNAE20PQW/MvuGIVYjvr3Ly
-         PGlsFZh24pJnk4p97S+BlQxGQ5YXakodnK0IFr1Bs6JN3UMFSZC7746dzX1JbDjIEtFl
-         5D7+lIshQcZUkRwA2eOa9jcmCy7QsLu2FCDfbDU8EzbL7pWXZADfQcDYZH0I6ds16AwR
-         BbQa3geAipWWpwweByap68mRGunqBK9j3PxpS3+GHbGeM8wXH2f7fbKEAVQS0ldqg9eV
-         IXAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=piRTAebFx2FsROFm2zYcU51EDgaGKwKW/nF1spIt1sI=;
-        b=oJlyP5RBmehbpnBFKf58Y+DhQZ3HpFUOq5eet/dlrI7JrEKEBjaZe/qby5noeETzcf
-         3NDiP3jj5TcVhIZTLWzp8xpOZ/O1cn/rkv/9EI+rlUJfLd4PiX0zLJAsPgRU93ubJ7KB
-         KHYnFQCswHTmzs6rwmMHJd55wTlAjCmScje0qJl2zlsRN2ACDWvSvuFXuePGs1xNm6BL
-         6gvyrV+mSlx92vwue7LLurqa//zhJLf28PzRQHHPpLbJVmPlvu7uDZfLOPgoqD8glXI9
-         U21PJB4BGIwXYaLb2NAiEPCzvP8WGYbPzuYzRuwq0FBYfG68kFQwvOWDEA7dnBADOxjI
-         JU/A==
-X-Gm-Message-State: APjAAAXqyIeGnRN1N66zJA1hiKBpUkjDH26nlx71/vgpBWZI6ORSmilu
-        x/lhc9NMBfot5kPYMXJwq+0+9botimbd26wom1dVDQ==
-X-Google-Smtp-Source: APXvYqxWE7NU+QUzDoR4u6I5eIyinKhKJ2E54DPFNLSdMDWyWFZV8l2G2R1evmkcZ1mRW3Z8CNDF2/bizF6JGRucbC8=
-X-Received: by 2002:a67:3254:: with SMTP id y81mr24197966vsy.34.1560859009184;
- Tue, 18 Jun 2019 04:56:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190513192300.653-1-ulf.hansson@linaro.org> <CAJZ5v0gbK3AFCVC1b9LyXeMOM8fKR1=ECXZwaeSYRSqcK0UgYA@mail.gmail.com>
- <CAPDyKFpU3u248Gi+FnrVdY-EWXJQuu14uNV9d3Xs0W-K-EMEhg@mail.gmail.com>
- <20190607154210.GJ15577@e107155-lin> <20190607193407.GB24059@builder>
- <20190610103225.GA26602@e107155-lin> <CAPDyKFr31SwmHHAREbR3dWMQ55LzzUyTc4M5FZvNsqWfX7SE8Q@mail.gmail.com>
- <20190610171557.GA4560@redmoon> <CAPDyKFqC8+Sv5WRhwOxqphAt8tb_PDisy13Miz5e-PajvwS1ew@mail.gmail.com>
-In-Reply-To: <CAPDyKFqC8+Sv5WRhwOxqphAt8tb_PDisy13Miz5e-PajvwS1ew@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 18 Jun 2019 13:56:13 +0200
-Message-ID: <CAPDyKFpo8pJroOq=YkkNkt6+xyOdu3tTovEbsEp2ry0OJUu7JQ@mail.gmail.com>
-Subject: Re: [PATCH 00/18] ARM/ARM64: Support hierarchical CPU arrangement for PSCI
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Raju P . L . S . S . S . N" <rplsssn@codeaurora.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souvik Chakravarty <souvik.chakravarty@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1726047AbfFRMdM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jun 2019 08:33:12 -0400
+Received: from s3.sipsolutions.net ([144.76.43.62]:39112 "EHLO
+        sipsolutions.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725919AbfFRMdL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jun 2019 08:33:11 -0400
+Received: by sipsolutions.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1hdDIL-0005tO-An; Tue, 18 Jun 2019 14:33:01 +0200
+Message-ID: <9c0fb01f0dc6a193265297eaa100a35ff25413e7.camel@sipsolutions.net>
+Subject: Re: [PATCH V4 22/28] PCI: tegra: Access endpoint config only if
+ PCIe link is up
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Manikanta Maddireddy <mmaddireddy@nvidia.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        robh+dt@kernel.org, mark.rutland@arm.com, jonathanh@nvidia.com,
+        vidyas@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-wireless@vger.kernel.org
+Date:   Tue, 18 Jun 2019 14:32:59 +0200
+In-Reply-To: <20190618104918.GA28892@ulmo> (sfid-20190618_124921_930194_6A075FC5)
+References: <20190516055307.25737-23-mmaddireddy@nvidia.com>
+         <20190604131436.GS16519@ulmo>
+         <09bcc121-eaca-3866-d0ef-7806503e883f@nvidia.com>
+         <ca34eb24-8696-576f-26bc-8d6141f81a41@nvidia.com>
+         <20190613143946.GA30445@e121166-lin.cambridge.arm.com>
+         <20190613154250.GA32713@ulmo>
+         <a523a19c-fdfa-01f7-6f6d-2ca367a10a50@nvidia.com>
+         <20190617114745.GL508@ulmo> <20190617193024.GC13533@google.com>
+         <a7e0472d-f4a7-ed63-836a-b5e8b1360645@nvidia.com>
+         <20190618104918.GA28892@ulmo> (sfid-20190618_124921_930194_6A075FC5)
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-2.fc28) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 10 Jun 2019 at 20:57, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Mon, 10 Jun 2019 at 19:16, Lorenzo Pieralisi
-> <lorenzo.pieralisi@arm.com> wrote:
-> >
-> > On Mon, Jun 10, 2019 at 05:54:39PM +0200, Ulf Hansson wrote:
-> >
-> > [...]
-> >
-> > > My summary from the earlier ones, is that because the PSCI spec
-> > > includes support for OSI, we should also support it in the kernel (and
-> > > ATF). In a discussion offlist, Lorenzo agreed that it's okay to add,
-> > > without an apple to apple comparison. Maybe Lorenzo can fill in and
-> > > state this publicly, to save us all some time?
-> >
-> > The comparison should have been made before even requesting PSCI OSI
-> > mode changes to the specifications, so we have a chip on our shoulders
-> > anyway.
-> >
-> > We will enable PSCI OSI but that's not where the problem lies, enabling
-> > PSCI OSI from a firmware perspective should take 10 lines of code,
-> > not:
->
-> Thanks for confirming!
->
-> >
-> >  drivers/firmware/psci/Makefile                |   2 +-
-> >  drivers/firmware/psci/psci.c                  | 219 ++++++++--
-> >  drivers/firmware/psci/psci.h                  |  29 ++
-> >  drivers/firmware/psci/psci_pm_domain.c        | 403 ++++++++++++++++++
-> >
-> > I have some concerns about these changes that I will state in the
-> > relevant patches.
->
-> Most of the above changes isn't for solely for OSI, but to support a
-> hierarchical topology described in the PSCI DT layout. This is for
-> example needed when other resources shares the same power rail as the
-> CPU cluster.
->
-> In other words, the series is orthogonal to whether OSI or PC mode is
-> used for PSCI, just to make that clear. BTW, this is what you
-> requested me to change into, a while ago.
->
-> >
-> > > My final point in regards to the OSI mode support, it's a minor part
-> > > of the series. I don't see how that should hurt from a maintenance
-> > > point of view, or perhaps I am wrong? In any case, I offer my help
-> > > with review/maintenance in any form as you may see need/fit.
-> >
-> > I will go through the series but most of this code should move
-> > to core PM code, it has nothing to do with PSCI.
->
-> I am looking forward to your review - and for sure, I am open to suggestions!
->
-> >
-> > BTW, apologies for the delay, I was away.
+I got to this thread really late I guess :-)
 
-Lorenzo, a gentle ping.
+On Tue, 2019-06-18 at 12:49 +0200, Thierry Reding wrote:
 
-Kind regards
-Uffe
+> > > > > > > > > 1. WiFi devices provides power-off feature for power saving
+> > > > > > > > > in mobiles.  When WiFi is turned off we shouldn't power on
+> > > > > > > > > the HW back without user turning it back on.
+
+But why would you disconnect the PCIe device just to power it down?!
+
+> > > > > > The problem that Manikanta is trying to solve here occurs in
+> > > > > > this situation (Manikanta, correct me if I've got this wrong):
+> > > > > > on some setups, a WiFi module connected over PCI will toggle a
+> > > > > > power GPIO as part of runtime suspend. This effectively causes
+> > > > > > the module to disappear from the PCI bus (i.e. it can no longer
+> > > > > > be accessed until the power GPIO is toggled again).
+> > > > > 
+> > > > > GPIO is toggled as part of WiFi on/off, can be triggered from
+> > > > > network manager UI.
+
+That's kinda icky, IMHO.
+
+> > > > > Correct, rfkill switch should handle the GPIO.
+> > > > > Sequence will be,
+> > > > >  - WiFi ON
+> > > > >    - rfkill switch enables the WiFi GPIO
+> > > > >    - Tegra PCIe receives hot plug event
+> > > > >    - Tegra PCIe hot plug driver rescans PCI bus and enumerates the device
+> > > > >    - PCI client driver is probed, which will create network interface
+> > > > >  - WiFi OFF
+> > > > >    - rfkill switch disables the WiFi GPIO
+> > > > >    - Tegra PCIe receives hot unplug event
+> > > > >    - Tegra PCIe hot plug driver removes PCI devices under the bus
+> > > > >    - PCI client driver remove is executed, which will remove
+> > > > >      network interface
+> > > > > We don't need current patch in this case because PCI device is not
+> > > > > present in the PCI hierarchy, so there cannot be EP config access
+> > > > > with link down.  However Tegra doesn't support hot plug and unplug
+> > > > > events. I am not sure if we have any software based hot plug event
+> > > > > trigger.
+
+Looks reasonable to me.
+
+I guess if you absolutely know in software when the device is present or
+not, you don't need "real" PCIe hotplug, just need to tickle the
+software right?
+
+> > > How does rfkill work?  It sounds like it completely removes power from
+> > > the wifi device, putting it in D3cold.  Is there any software
+> > > notification other than the "Slot present pin change" (which looks
+> > > like a Tegra-specific thing)?
+
+Well, they said above it's a GPIO that controls it, so the software
+already knows and doesn't really need an event?
+
+> > The rfkill subsystem provides a generic interface for disabling any radio
+> > transmitter in the system. WiFi M.2 form factor cards provide W_DISABLE
+> > GPIO to control the radio transmitter
+
+But it depends on the hardware how this is handled, Intel NICs for
+example just trigger an IRQ to the host and don't turn off much, for
+them the W_DISABLE pin is just a GPIO in input mode, with edge triggered
+interrupt to the driver.
+
+> > and I have seen some cards provide
+> > control to turn off complete chip through this GPIO. 
+
+I never heard of this. Which NICs are we talking about?
+
+> Perhaps what we need here is some sort of mechanism to make rfkill and
+> the PCI host controller interoperate? I could imagine for example that
+> the PCI host controller would get a new "rfkill" property in device
+> tree that points at the rfkill device via phandle.
+
+But you don't know which the rfkill device is, do you?
+
+I mean, fundamentally, you just have a GPIO that turns on and off the
+W_DISABLE pin. NICs will not generally disappear from the bus when
+that's turned on, so you need a NIC driver integration.
+
+I guess you also have an rfkill-gpio driver assigned to this GPIO, which
+gets assigned there via DT/platform code?
+
+Ah, but then I guess you could have a phandle in the DT or so that ties
+the W_DISABLE-GPIO with the PCIe slot that it controls.
+
+> The driver could then get a reference to it using something like:
+> 
+> 	rfkill = rfkill_get(dev);
+> 	if (IS_ERR(rfkill)) {
+> 		...
+> 	}
+> 
+> and register for notification:
+> 
+> 	err = rfkill_subscribe(rfkill, callback);
+> 	if (err < 0) {
+> 		...
+> 	}
+> 
+> rfkill_unsubscribe() and rfkill_put() would then be used upon driver
+> unload to detach from the rfkill.
+
+This I don't understand.
+
+> I noticed that there's an rfkill-gpio driver (net/rfkill/rfkill-gpio.c)
+> that already does pretty much everything that we need, except that it
+> doesn't support DT yet, but I suspect that that's pretty easy to add.
+
+Oh, good point, no DT support here - so how *do* you actually
+instantiate the rfkill today??
+
+> Johannes, any thoughts on this. In a nutshell what we're trying to solve
+> here is devices that get removed from/added to PCI based on an rfkill-
+> type of device. The difference to other implementations is that we have
+> no way of detecting when the device has gone away (PCI hotplug does not
+> work). So we'd need some software-triggered mechanism to let the PCI
+> host controller know when the device is presumably going away or being
+> added back, so that the PCI bus can be rescanned and the PCI device
+> removed or added at that point).
+
+Right.
+
+So, I'm not even sure we need the *driver* to do anything other than say
+"I know the device will drop off the bus when rfkill is enabled", right?
+
+
+But do we actually need rfkill to be involved here?
+
+I mean, let's say first we make rfkill-gpio DT-aware, rather than just
+ACPI. This should be simple. Then it drives a GPIO (it can actually
+drive two and a clock, not sure I know why).
+
+Now, next we need something that says that the device should be treated
+as hotplug/unplug. We could make this in the driver somehow like you
+suggested, but that seems like a lot of effort?
+
+Couldn't we put this into the *GPIO* subsystem instead?
+
+I mean - conceivably there could be GPIOs that just power down a device
+for example. Not even through something like W_DISABLE, but just having
+a GPIO hooked up to a transistor on the voltage pin of the device. That
+would have very similar semantics?
+
+So why not just attach the PCIe device/port to the GPIO, and have the
+GPIO implementation here call the detach/attach (or detach/rescan?) when
+they are toggled?
+
+Not that I'd mind having it in rfkill! But it seems like a special case
+to have it there, when you can do so much more with GPIOs.
+
+johannes
+
