@@ -2,82 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CED4ADE4
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 00:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809DA4ADFE
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 00:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730196AbfFRWgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jun 2019 18:36:25 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41092 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729982AbfFRWgY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jun 2019 18:36:24 -0400
-Received: by mail-lf1-f68.google.com with SMTP id 136so10490041lfa.8;
-        Tue, 18 Jun 2019 15:36:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OmWI+jPSOU4GzXhhmiJ7IENEOWtdm0c+3gyyHlOWvqc=;
-        b=TJJzmgJQH+0YaqHqaI05h6/a2QNcYpFEiPf6fCr5DHyjHjD87HNUx0mM6HRZvRQ6Ep
-         2KByAdsdHykeh/tziTXUTYbDmQMl1FetXi26liIbFSIxyvTaQbIth6VBGO6xOFpOkD4w
-         VlVZJ05a44+437c0F54r+p41O3ZbN+nAwtscWZmoiB0mLLYxZ3kbOYHaxZBX8MG5T9A1
-         zxji+DAiD6z8Sc4VIrIBPARiMX57KVZhkaNsTqoVnIh2tagwf3F0jZvBuo5pa09zhKoC
-         S4l0xSRwVpiFy0Wmkktg2hlmM7CS4xwDZ3QHszcbrYbgjOds1LH/waP2nNAwq5LvnoXt
-         wLMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OmWI+jPSOU4GzXhhmiJ7IENEOWtdm0c+3gyyHlOWvqc=;
-        b=b5/3gGj+2QYgoOpAg/Lm3w3Tv8wdqDMYgYZRcFqA69wAK4wCGxrb79w2WOvRIm0oL9
-         O/OQvWs53GslrnL5AJlDqxlvlgSy+e4Lhm+S8LrvBBHLmenHwP/hoc28ODsmst96B8CV
-         8h/SScA2gKdQRBRNUKg+MVMl7rHtjRXvaUvm53kPLTltPtvJone8toVuTYqsdyw0Bn/D
-         Dgs5y96zhdf3Rg1t38evursek7qRl4MyP0hnWs2pMnFsIpBL979NO01MM9usWdHCp3S7
-         GrphJXaSs9Wrg3WHUZUUwE+R8gOlxN2kvsLeDmOm9cRI8gIxKWrZTVOmTwpdkgeRR+4z
-         voTQ==
-X-Gm-Message-State: APjAAAX+LEwhYgv9qUUOTpJcfrZPC6l/dAP/sQvZ8PLQ+fBptmnygV/k
-        eHRcCC6qzWemXjtv3R744Ng9PkPyWeZKcit1e6Y=
-X-Google-Smtp-Source: APXvYqxVxnco4ZxfcINkyM3EPMHdvT8k36eLksXyP8cjLk9NtCWF+uLO5jPWzi8akJxZwabtOTCJPRUNMtGyyO+qJQU=
-X-Received: by 2002:a19:5044:: with SMTP id z4mr57625740lfj.80.1560897382598;
- Tue, 18 Jun 2019 15:36:22 -0700 (PDT)
+        id S1730532AbfFRWos (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jun 2019 18:44:48 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:57310 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730176AbfFRWos (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jun 2019 18:44:48 -0400
+Received: from 79.184.254.20.ipv4.supernova.orange.pl (79.184.254.20) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id a04ace6452f9df28; Wed, 19 Jun 2019 00:44:44 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Ran Wang <ran.wang_1@nxp.com>
+Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] PM: wakeup: Add routine to help fetch wakeup source object.
+Date:   Wed, 19 Jun 2019 00:44:44 +0200
+Message-ID: <3448272.3g8bHhgBA9@kreacher>
+In-Reply-To: <20190520095238.29210-1-ran.wang_1@nxp.com>
+References: <20190520095238.29210-1-ran.wang_1@nxp.com>
 MIME-Version: 1.0
-References: <20190614074140.15276-1-andrew.smirnov@gmail.com>
-In-Reply-To: <20190614074140.15276-1-andrew.smirnov@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 18 Jun 2019 19:36:34 -0300
-Message-ID: <CAOMZO5ALbjLu8+QBL2Z3dEg7Qkb6jcfHLW_CPzVyyifhDasFLQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: imx: skip registering legacy cooling on i.MX7
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     Chris Healy <cphealy@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Andrey,
+On Monday, May 20, 2019 11:52:36 AM CEST Ran Wang wrote:
+> Some user might want to go through all registered wakeup sources
+> and doing things accordingly. For example, SoC PM driver might need to
+> do HW programming to prevent powering down specific IP which wakeup
+> source depending on. And is user's responsibility to identify if this
+> wakeup source he is interested in.
 
-On Fri, Jun 14, 2019 at 4:41 AM Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
->
-> i.MX7 doesn't have a mainline cpufreq driver, so
+I guess the idea here is that you need to walk wakeup devices and you noticed
+that there was a wakeup source object for each of them and those wakeup
+source objects were on a list, so you could walk wakeup devices by walking
+the list of wakeup source objects.
 
-i.MX7 uses the generic cpufreq-dt driver since commit:
+That is fair enough, but the changelog above doesn't even talk about that.
+ 
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> ---
+> Change in v4:
+> 	- None.
+> 
+> Change in v3:
+> 	- Adjust indentation of *attached_dev;.
+> 
+> Change in v2:
+> 	- None.
+> 
+>  drivers/base/power/wakeup.c |   18 ++++++++++++++++++
+>  include/linux/pm_wakeup.h   |    3 +++
+>  2 files changed, 21 insertions(+), 0 deletions(-)
+> 
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 5b2b6a0..6904485 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/suspend.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/debugfs.h>
+> +#include <linux/of_device.h>
+>  #include <linux/pm_wakeirq.h>
+>  #include <trace/events/power.h>
+>  
+> @@ -226,6 +227,22 @@ void wakeup_source_unregister(struct wakeup_source *ws)
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(wakeup_source_unregister);
+> +/**
+> + * wakeup_source_get_next - Get next wakeup source from the list
+> + * @ws: Previous wakeup source object, null means caller want first one.
+> + */
+> +struct wakeup_source *wakeup_source_get_next(struct wakeup_source *ws)
+> +{
+> +	struct list_head *ws_head = &wakeup_sources;
+> +
+> +	if (ws)
+> +		return list_next_or_null_rcu(ws_head, &ws->entry,
+> +				struct wakeup_source, entry);
+> +	else
+> +		return list_entry_rcu(ws_head->next,
+> +				struct wakeup_source, entry);
+> +}
+> +EXPORT_SYMBOL_GPL(wakeup_source_get_next);
 
-commit e3526f004a35e5f324b1c835bca056f4df05bff0
-Author: Bai Ping <b51503@freescale.com>
-Date:   Tue Nov 24 18:25:16 2015 +0800
+This needs to be arranged along the lines of wakeup_sources_stats_seq_start/next/stop()
+because of the SRCU protection of the list.
 
-    ARM: imx: enable cpufreq device on i.mx7d
+>  
+>  /**
+>   * device_wakeup_attach - Attach a wakeup source object to a device object.
+> @@ -242,6 +259,7 @@ static int device_wakeup_attach(struct device *dev, struct wakeup_source *ws)
+>  		return -EEXIST;
+>  	}
+>  	dev->power.wakeup = ws;
+> +	ws->attached_dev = dev;
+>  	if (dev->power.wakeirq)
+>  		device_wakeup_attach_irq(dev, dev->power.wakeirq);
+>  	spin_unlock_irq(&dev->power.lock);
+> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> index 0ff134d..913b2fb 100644
+> --- a/include/linux/pm_wakeup.h
+> +++ b/include/linux/pm_wakeup.h
+> @@ -50,6 +50,7 @@
+>   * @wakeup_count: Number of times the wakeup source might abort suspend.
+>   * @active: Status of the wakeup source.
+>   * @has_timeout: The wakeup source has been activated with a timeout.
+> + * @attached_dev: The device it attached to
+>   */
+>  struct wakeup_source {
+>  	const char 		*name;
+> @@ -70,6 +71,7 @@ struct wakeup_source {
+>  	unsigned long		wakeup_count;
+>  	bool			active:1;
+>  	bool			autosleep_enabled:1;
+> +	struct device		*attached_dev;
 
-    Add a cpufreq-dt device on i.MX7D, using the
-    generic cpufreq-dt for CPU frequency scaling.
+Please (a) call it just dev and (b) move it up (before wakeirq, say).
 
-    Signed-off-by: Bai Ping <b51503@freescale.com>
-    Acked-by: Lucas Stach <l.stach@pengutronix.de>
-    Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+>  };
+>  
+>  #ifdef CONFIG_PM_SLEEP
+> @@ -101,6 +103,7 @@ static inline void device_set_wakeup_path(struct device *dev)
+>  extern void wakeup_source_remove(struct wakeup_source *ws);
+>  extern struct wakeup_source *wakeup_source_register(const char *name);
+>  extern void wakeup_source_unregister(struct wakeup_source *ws);
+> +extern struct wakeup_source *wakeup_source_get_next(struct wakeup_source *ws);
+>  extern int device_wakeup_enable(struct device *dev);
+>  extern int device_wakeup_disable(struct device *dev);
+>  extern void device_set_wakeup_capable(struct device *dev, bool capable);
+> 
+
+
+
+
