@@ -2,77 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EC4499B0
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 09:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D6C499B9
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 09:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbfFRHBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jun 2019 03:01:53 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45076 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725829AbfFRHBx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 18 Jun 2019 03:01:53 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id C7B4FB040;
-        Tue, 18 Jun 2019 07:01:51 +0000 (UTC)
-Message-ID: <1560841301.21660.9.camel@suse.com>
-Subject: Re: [IMX] [DRM]: suspend/resume support
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Pintu Agarwal <pintu.ping@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        linux-pm@vger.kernel.org
-Date:   Tue, 18 Jun 2019 09:01:41 +0200
-In-Reply-To: <CAOuPNLiBA9VjEoG_D2y2O5mKiqsDNW1VZXOk1eWXpGY+h86acg@mail.gmail.com>
-References: <CAOuPNLiBA9VjEoG_D2y2O5mKiqsDNW1VZXOk1eWXpGY+h86acg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726095AbfFRHDM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jun 2019 03:03:12 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:41474 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726037AbfFRHDM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jun 2019 03:03:12 -0400
+X-UUID: e9ff0065f9b342c9b5853322474eb434-20190618
+X-UUID: e9ff0065f9b342c9b5853322474eb434-20190618
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 2080643755; Tue, 18 Jun 2019 15:03:03 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 18 Jun 2019 15:03:02 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 18 Jun 2019 15:03:02 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: PM / AVS: SVS: Introduce SVS engine
+Date:   Tue, 18 Jun 2019 15:02:56 +0800
+Message-ID: <20190618070258.11520-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Montag, den 17.06.2019, 19:19 +0530 schrieb Pintu Agarwal:
+SVS driver use OPP adjust event in [1] to update
+OPP table voltage part.
 
-> Currently, I am trying to understand what needs to be taken care
-> during suspend/resume.
+[1] https://patchwork.kernel.org/patch/10946069/
 
-You need to take care of
+changes since v1:
+- Add svs subnodes description in binding documents
+- Set svs_cpu_little & svs_cci vmin to 0x18 to meet cpufreq
+and cci software architecture.
 
-* wakeup sources
-* not requiring services of devices higher up in the tree.
+Roger Lu (2):
+  dt-bindings: soc: add mtk svs dt-bindings
+  PM / AVS: SVS: Introduce SVS engine
 
-> With some reference, I figured out that hdmi power off/on needs to be
-> done during suspend/resume.
+ .../devicetree/bindings/power/mtk-svs.txt     |   88 +
+ drivers/power/avs/Kconfig                     |   10 +
+ drivers/power/avs/Makefile                    |    1 +
+ drivers/power/avs/mtk_svs.c                   | 2086 +++++++++++++++++
+ include/linux/power/mtk_svs.h                 |   23 +
+ 5 files changed, 2208 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/mtk-svs.txt
+ create mode 100644 drivers/power/avs/mtk_svs.c
+ create mode 100644 include/linux/power/mtk_svs.h
 
-That would make sense.
-
-First of all you need to understand that the generic model is, well,
-generic. Now this may look like a tautology, so let me explain.
-A generic model cannot tell you how to save power on a specific
-hardware. It exists to model dependencies among subsystems and
-to help you.
-
-The suspend() call is a notification which tells you that the rest
-of the system will not require your services until resume() is
-called().
-That means that after resume() your driver must be functional again.
-
-And it means that between suspend() and resume() you cannot touch
-your device because what is above you in the tree need not be
-functional.
-
-> But after resume, system is hanging.
-> It seems like vblank events are not getting triggered after the resume.
-> May be irq remains disabled after resume, I need to figure out some
-> way to enable the all the irqs again.
-
-In your case it looks like parts of dw_hdmi_imx_bind() need to be
-redone in resume().
-
-	HTH
-		Oliver
 
