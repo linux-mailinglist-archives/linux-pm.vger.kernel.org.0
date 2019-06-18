@@ -2,123 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E4449768
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 04:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58385497F2
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jun 2019 06:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728633AbfFRCRL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jun 2019 22:17:11 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:38112 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728101AbfFRCRJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 17 Jun 2019 22:17:09 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id EF2E01A02EC;
-        Tue, 18 Jun 2019 04:17:06 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2A58C1A0DC1;
-        Tue, 18 Jun 2019 04:16:51 +0200 (CEST)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 63B36402F2;
-        Tue, 18 Jun 2019 10:16:37 +0800 (SGT)
-From:   Anson.Huang@nxp.com
-To:     robh+dt@kernel.org, mark.rutland@arm.com, corbet@lwn.net,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, catalin.marinas@arm.com, will.deacon@arm.com,
-        rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, aisheng.dong@nxp.com,
-        ulf.hansson@linaro.org, peng.fan@nxp.com,
-        mchehab+samsung@kernel.org, linux@roeck-us.net,
-        daniel.baluta@nxp.com, maxime.ripard@bootlin.com,
-        horms+renesas@verge.net.au, olof@lixom.net,
-        jagan@amarulasolutions.com, bjorn.andersson@linaro.org,
-        leonard.crestez@nxp.com, dinguyen@kernel.org,
-        enric.balletbo@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH V15 5/5] arm64: dts: imx: add i.MX8QXP thermal support
-Date:   Tue, 18 Jun 2019 10:18:20 +0800
-Message-Id: <20190618021820.14885-5-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190618021820.14885-1-Anson.Huang@nxp.com>
-References: <20190618021820.14885-1-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726095AbfFREOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jun 2019 00:14:51 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40300 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725826AbfFREOv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jun 2019 00:14:51 -0400
+Received: by mail-pf1-f196.google.com with SMTP id p184so6841033pfp.7
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jun 2019 21:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jcFyPwPNKq29ytAFd305q8rwNyzYsZ7B9zTaK8mx6W4=;
+        b=k5ib5yz5jpa3Ba1wvKnJflDfqnsh3w7oWfVsHcIR29wlU3SHF2pEifWYxqhLA97FMe
+         7xvOKFA9uwpxaZqS+FNvKvWuh9RiMfbc52D7g62n13fFs3PXWb0iNZ91gU7ikLXDDxcY
+         H4K8xc9rKyACph6YvMZ5WoQzAKvhs/sKx3KlQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jcFyPwPNKq29ytAFd305q8rwNyzYsZ7B9zTaK8mx6W4=;
+        b=X1l0JmkZ6uN0yRUGGoDRHPR/zQ+VNTpt10XzV2OeRViHZSeGrfU5uZXgM7XYpkO/+R
+         kI6edtSSJySBIDRQoTJoVVF2M8IZ7eNSVQW9x8FnIJPisWfwbRsTi4nyswVxrdA2SsqV
+         0/FJdguWmA9D59lugiFWDUjRx3aS8T+jA34gbzLaXnyvNnUWGf0A5YysRxmWGTIqQwi1
+         jC4WowiWG3ZVr0NDi1Uv0Y2GuBvJYkY9g8QcGqa162zhn6qwJWDN0imrov8oIPexS7jR
+         EIT9IOdUS1tj1Ve5fpPPa/JCVF2D4Lz3dHQamTWinCyZGZp23VVvUfMX4FIhtElaYYeQ
+         /Aaw==
+X-Gm-Message-State: APjAAAWldsv865b3VaqrzE9Ns6nijqP7NIABKB8sqOv/X6vLQY3AmQAK
+        E1fjusRXruEYSgsYVZ4L9I/K8Q==
+X-Google-Smtp-Source: APXvYqxGfG3zg+MvrVoA7HRSbr/Kl/ngYm8xn6JzKxClD9kGWk3bbE+WQ/dp1ZzdPxo78Q5ajjWSWg==
+X-Received: by 2002:a17:90a:2562:: with SMTP id j89mr2781411pje.123.1560831290393;
+        Mon, 17 Jun 2019 21:14:50 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:b852:bd51:9305:4261])
+        by smtp.gmail.com with ESMTPSA id 25sm13590685pfp.76.2019.06.17.21.14.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 17 Jun 2019 21:14:49 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Saravana Kannan <skannan@codeaurora.org>,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Subject: [PATCH RFC 0/2] Use cpufreq-map governor for MT8183 CCI
+Date:   Tue, 18 Jun 2019 12:14:32 +0800
+Message-Id: <20190618041433.245629-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Anson Huang <Anson.Huang@nxp.com>
+From: Hsin-Yi Wang <hsinyi@chromium.org>
 
-Add i.MX8QXP CPU thermal zone support.
+This series uses cpufreq-map governor for mt8183-cci to improve performance.
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
-No change.
----
- arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 37 ++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+Hsin-Yi Wang (1):
+  devfreq: mt8183-cci: using cpufreq-map governor in cci dvfs driver
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-index b2cb818..12044be 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-@@ -10,6 +10,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/pinctrl/pads-imx8qxp.h>
-+#include <dt-bindings/thermal/thermal.h>
- 
- / {
- 	interrupt-parent = <&gic>;
-@@ -168,6 +169,11 @@
- 			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
- 			timeout-sec = <60>;
- 		};
-+
-+		tsens: thermal-sensor {
-+			compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
-+			#thermal-sensor-cells = <1>;
-+		};
- 	};
- 
- 	timer {
-@@ -536,4 +542,35 @@
- 			power-domains = <&pd IMX_SC_R_GPIO_7>;
- 		};
- 	};
-+
-+	thermal_zones: thermal-zones {
-+		cpu-thermal0 {
-+			polling-delay-passive = <250>;
-+			polling-delay = <2000>;
-+			thermal-sensors = <&tsens IMX_SC_R_SYSTEM>;
-+			trips {
-+				cpu_alert0: trip0 {
-+					temperature = <107000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+				cpu_crit0: trip1 {
-+					temperature = <127000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu_alert0>;
-+					cooling-device =
-+						<&A35_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A35_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A35_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A35_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+
-+				};
-+			};
-+		};
-+	};
- };
+Saravana Kannan (1):
+  PM / devfreq: Generic CPU frequency to device frequency mapping
+    governor
+
+ .../bindings/devfreq/devfreq-cpufreq-map.txt  |  53 ++
+ drivers/devfreq/Kconfig                       |   8 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/governor_cpufreq_map.c        | 583 ++++++++++++++++++
+ drivers/devfreq/mt8183-cci-devfreq.c          | 194 +-----
+ 5 files changed, 649 insertions(+), 190 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/devfreq-cpufreq-map.txt
+ create mode 100644 drivers/devfreq/governor_cpufreq_map.c
+
 -- 
-2.7.4
+2.20.1
 
