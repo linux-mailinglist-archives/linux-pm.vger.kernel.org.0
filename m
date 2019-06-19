@@ -2,214 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D014B4AB
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 11:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB11C4B4C0
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 11:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731405AbfFSJIX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 05:08:23 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39928 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726865AbfFSJIW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 05:08:22 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5J97ZLE146323
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 05:08:21 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2t7hgkt2mu-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 05:08:21 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
-        Wed, 19 Jun 2019 10:08:19 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 19 Jun 2019 10:08:16 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5J987US38142230
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jun 2019 09:08:07 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B27A4203F;
-        Wed, 19 Jun 2019 09:08:15 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B6BB342047;
-        Wed, 19 Jun 2019 09:08:13 +0000 (GMT)
-Received: from oc0383214508.ibm.com (unknown [9.124.35.103])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 19 Jun 2019 09:08:13 +0000 (GMT)
-Subject: Re: [PATCH v2 1/1] cpuidle-powernv : forced wakeup for stop states
-To:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
-        mpe@ellerman.id.au, rjw@rjwysocki.net
-References: <20190617095648.18847-1-huntbag@linux.vnet.ibm.com>
- <20190617095648.18847-2-huntbag@linux.vnet.ibm.com>
- <1560917320.mk5nn6r8jw.astroid@bobo.none>
-From:   Abhishek <huntbag@linux.vnet.ibm.com>
-Date:   Wed, 19 Jun 2019 14:38:13 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1731393AbfFSJPr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 05:15:47 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:41335 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726971AbfFSJPr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 05:15:47 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 43so1434229otf.8;
+        Wed, 19 Jun 2019 02:15:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+djdJ0egkgp6daDlovvAzvZS5tBfJ50BkTgrjF5MG50=;
+        b=tSz+xBA9URqjEy0hb+UpfCO4+63MTnqCTEOauC6AOnZe/7Kcskf3sQ9kwhRSJB2llL
+         dUjX43sBXsKQ3lUnoGSnJ8I4w2DlA3aIx/lUpdwHOmecd3BIhjHb31tqxx1/7JfnzMQ6
+         IgTz5GLzempig2XK8hdeu2gc0kj11W6ZkzilA3ZUki+E+loPoQS8TNyK8Oeve/8NpH22
+         oYnubDpnX/qcIK2jv6NFcIfIDTTI92beSVnB4xm8O7AYOqLy0OqUl3WRycQCOHHpjtCT
+         tCH9P014oOJq9juhckrv5j+ITCyZJakB6T1yAZsbBVnemq2stqkSOg7KtWFE2H7hLE64
+         awXQ==
+X-Gm-Message-State: APjAAAWFcIAEeMtpggPN+hM723ngAVp3V5thgMkw4UdjIwgTRQgcjafX
+        7mq+cbbi+f4e+ncWVzsmdDnhaAx4SHphVhGGlJchHLub
+X-Google-Smtp-Source: APXvYqyVD2KuSejZtlg/XEAm9PCGlvwBLICR9kvCnZPa63+Breo2sFYqy95rmxMZm0PQLT0u/ljT+ZnNJvEBN+q9MFU=
+X-Received: by 2002:a9d:6959:: with SMTP id p25mr44684736oto.118.1560935746471;
+ Wed, 19 Jun 2019 02:15:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1560917320.mk5nn6r8jw.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19061909-0016-0000-0000-0000028A66E6
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19061909-0017-0000-0000-000032E7BC79
-Message-Id: <689a52a7-7bfc-7225-e563-ac07f7357e75@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-19_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906190075
+References: <cover.1560163748.git.viresh.kumar@linaro.org> <3504053.Rmt1Mul0J4@kreacher>
+ <20190618112522.4odrysf7wmxgjlb2@vireshk-i7> <3176289.QFhGQadiPc@kreacher> <20190619063947.nj2awibmalrdccn2@vireshk-i7>
+In-Reply-To: <20190619063947.nj2awibmalrdccn2@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 19 Jun 2019 11:15:35 +0200
+Message-ID: <CAJZ5v0gXbDvSSfjpog=ycdTjSo8WVDyDXfD_zsW1SGP4gmS_eA@mail.gmail.com>
+Subject: Re: [PATCH V3 4/5] cpufreq: Register notifiers with the PM QoS framework
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Qais.Yousef@arm.com, Matthias Kaehlcke <mka@chromium.org>,
+        Juri Lelli <juri.lelli@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Nick,
+On Wed, Jun 19, 2019 at 8:39 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 19-06-19, 00:23, Rafael J. Wysocki wrote:
+> > In patch [3/5] you could point notifiers for both min and max freq to the same
+> > notifier head.   Both of your notifiers end up calling cpufreq_update_policy()
+> > anyway.
+>
+> I tried it and the changes in qos.c file look fine. But I don't like at all how
+> cpufreq.c looks now. We only register for min-freq notifier now and that takes
+> care of max as well. What could have been better is if we could have registered
+> a freq-notifier instead of min/max, which isn't possible as well because of how
+> qos framework works.
+>
+> Honestly, the cpufreq changes look hacky to me :(
+>
+> What do you say.
 
-Thanks for the review. Some replies below.
+OK, leave it as is.  That's not a big deal.
 
-On 06/19/2019 09:53 AM, Nicholas Piggin wrote:
-> Abhishek Goel's on June 17, 2019 7:56 pm:
->> Currently, the cpuidle governors determine what idle state a idling CPU
->> should enter into based on heuristics that depend on the idle history on
->> that CPU. Given that no predictive heuristic is perfect, there are cases
->> where the governor predicts a shallow idle state, hoping that the CPU will
->> be busy soon. However, if no new workload is scheduled on that CPU in the
->> near future, the CPU may end up in the shallow state.
->>
->> This is problematic, when the predicted state in the aforementioned
->> scenario is a shallow stop state on a tickless system. As we might get
->> stuck into shallow states for hours, in absence of ticks or interrupts.
->>
->> To address this, We forcefully wakeup the cpu by setting the
->> decrementer. The decrementer is set to a value that corresponds with the
->> residency of the next available state. Thus firing up a timer that will
->> forcefully wakeup the cpu. Few such iterations will essentially train the
->> governor to select a deeper state for that cpu, as the timer here
->> corresponds to the next available cpuidle state residency. Thus, cpu will
->> eventually end up in the deepest possible state.
->>
->> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
->> ---
->>
->> Auto-promotion
->>   v1 : started as auto promotion logic for cpuidle states in generic
->> driver
->>   v2 : Removed timeout_needed and rebased the code to upstream kernel
->> Forced-wakeup
->>   v1 : New patch with name of forced wakeup started
->>   v2 : Extending the forced wakeup logic for all states. Setting the
->> decrementer instead of queuing up a hrtimer to implement the logic.
->>
->>   drivers/cpuidle/cpuidle-powernv.c | 38 +++++++++++++++++++++++++++++++
->>   1 file changed, 38 insertions(+)
->>
->> diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
->> index 84b1ebe212b3..bc9ca18ae7e3 100644
->> --- a/drivers/cpuidle/cpuidle-powernv.c
->> +++ b/drivers/cpuidle/cpuidle-powernv.c
->> @@ -46,6 +46,26 @@ static struct stop_psscr_table stop_psscr_table[CPUIDLE_STATE_MAX] __read_mostly
->>   static u64 default_snooze_timeout __read_mostly;
->>   static bool snooze_timeout_en __read_mostly;
->>   
->> +static u64 forced_wakeup_timeout(struct cpuidle_device *dev,
->> +				 struct cpuidle_driver *drv,
->> +				 int index)
->> +{
->> +	int i;
->> +
->> +	for (i = index + 1; i < drv->state_count; i++) {
->> +		struct cpuidle_state *s = &drv->states[i];
->> +		struct cpuidle_state_usage *su = &dev->states_usage[i];
->> +
->> +		if (s->disabled || su->disable)
->> +			continue;
->> +
->> +		return (s->target_residency + 2 * s->exit_latency) *
->> +			tb_ticks_per_usec;
->> +	}
->> +
->> +	return 0;
->> +}
-> It would be nice to not have this kind of loop iteration in the
-> idle fast path. Can we add a flag or something to the idle state?
-Currently, we do not have any callback notification or some feedback that
-notifies the driver everytime some state is enabled/disabled. So we have
-to parse everytime to get the next enabled state. Are you suggesting to
-add something like next_enabled_state in cpuidle state structure itself
-which will be updated when a state is enabled or disabled?
->> +
->>   static u64 get_snooze_timeout(struct cpuidle_device *dev,
->>   			      struct cpuidle_driver *drv,
->>   			      int index)
->> @@ -144,8 +164,26 @@ static int stop_loop(struct cpuidle_device *dev,
->>   		     struct cpuidle_driver *drv,
->>   		     int index)
->>   {
->> +	u64 dec_expiry_tb, dec, timeout_tb, forced_wakeup;
->> +
->> +	dec = mfspr(SPRN_DEC);
->> +	timeout_tb = forced_wakeup_timeout(dev, drv, index);
->> +	forced_wakeup = 0;
->> +
->> +	if (timeout_tb && timeout_tb < dec) {
->> +		forced_wakeup = 1;
->> +		dec_expiry_tb = mftb() + dec;
->> +	}
-> The compiler probably can't optimise away the SPR manipulations so try
-> to avoid them if possible.
-Are you suggesting something like set_dec_before_idle?(in line with
-what you have suggested to do after idle, reset_dec_after_idle)
->
->> +
->> +	if (forced_wakeup)
->> +		mtspr(SPRN_DEC, timeout_tb);
-> This should just be put in the above 'if'.
-Fair point.
->
->> +
->>   	power9_idle_type(stop_psscr_table[index].val,
->>   			 stop_psscr_table[index].mask);
->> +
->> +	if (forced_wakeup)
->> +		mtspr(SPRN_DEC, dec_expiry_tb - mftb());
-> This will sometimes go negative and result in another timer interrupt.
->
-> It also breaks irq work (which can be set here by machine check I
-> believe.
->
-> May need to implement some timer code to do this for you.
->
-> static void reset_dec_after_idle(void)
-> {
-> 	u64 now;
->          u64 *next_tb;
->
-> 	if (test_irq_work_pending())
-> 		return;
-> 	now = mftb;
-> 	next_tb = this_cpu_ptr(&decrementers_next_tb);
->
-> 	if (now >= *next_tb)
-> 		return;
-> 	set_dec(*next_tb - now);
-> 	if (test_irq_work_pending())
-> 		set_dec(1);
-> }
->
-> Something vaguely like that. See timer_interrupt().
-Ah, Okay. Will go through timer_interrupt().
-> Thanks,
-> Nick
-Thanks,
-Abhishek
-
+It is slightly awkward, but oh well.
