@@ -2,199 +2,246 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E6B4B0D8
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 06:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F424B235
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 08:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725854AbfFSE2L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 00:28:11 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46484 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbfFSE2L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 00:28:11 -0400
-Received: by mail-pf1-f195.google.com with SMTP id 81so8926955pfy.13;
-        Tue, 18 Jun 2019 21:28:10 -0700 (PDT)
+        id S1725892AbfFSGjx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 02:39:53 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40589 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbfFSGjx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 02:39:53 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w10so4427907pgj.7
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jun 2019 23:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :user-agent:message-id:content-transfer-encoding;
-        bh=DGRb75yIjtPnzydCGSmKGs8fdmo+cuZrHDcr1XkPuQM=;
-        b=q9XM9tOobAlpop+hLOk+0kNdRTkTayvyMR9QQzblOS+NwyEr82jcMdUh72VpnoJSw2
-         X5E2bfbR2ppPXcbNEHgwwsH9BtwqTN5/4Hd/y+e+HMdaBIOLdkA4rApPVFogpsj7KxQq
-         ghm+j1vEdjn/nskYmniuPfFv6DwBU0zMBZC9nPNKNY7vg3Gk5UciFW6aeAV4kk8ILFjV
-         EjfKAnvrExeiy9OO/Nx3HZxDedk48F2mCdKXYG/lKYpbjNObnc2Hkc4C/ywWVBMEDY20
-         8go3l8PZBT7AKo438sROdhGvYBKBXOq9pLp9H+JHpNICEv0J8LpMcTFdVRSp/SPW21+z
-         cWQQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KAXBjc7glk0c+HE4Clw27sMJtcWTAp7e/EA0t3BWvYc=;
+        b=Y4pgHIKKYczvlutIQ9hWKHWk76TCFrTf2sFR9+JDlKvgQag2KOrOw9jsJLaWmGpe22
+         omOC94n1VDzJKMIdbecVWKg4WS+Bo1+/acMIt+SWCVThBs4GlQY4oXmzLbs8KmP296Hq
+         l3rYNiEzYeKL3sg0Gs4CFSicW3LHm2WptH+yVisRGADuehe79n03ZPEkQna64CVHzinI
+         geMSKYfPWE8zuRpqnP93bk4EX/kaKB/BQ9pg2XUlz+Xm6t9Rtlzc5GX+ueHyNGYtsQt8
+         KBO4dEIMkPP42fZHwckWCudp2eZkU3PwpQFmH3tYcqbHzs8oWlW4qh7RUx22phsH4cPv
+         AnnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:user-agent:message-id:content-transfer-encoding;
-        bh=DGRb75yIjtPnzydCGSmKGs8fdmo+cuZrHDcr1XkPuQM=;
-        b=ga85AmDm3bJTygnCOUIYTlgv+Ojw6gikrngaDGslKMI7VkRp9XDAcBrNWxANrTZuE9
-         upz6GM/SJwdfGf0+0x7JDWcl+CvOUVh8mpX5vd14yloiUWMLfnE10t7B2QLzylhyG1QC
-         U793SJ6A59g/Zy3Z1/KYl5ixq18NW2igk6AT6RuZjbfpnjyvlrH5KZnVxP3A8titVg+C
-         ye6NYiv4npDTDDnl+iqqMSYvhAyp0KxFjrWeI3sCdxkCUuaLGSTPcxg4TgWy/7NRjDZ+
-         /ZU9M9yu9L9KJl+Fdy3mAPJH/HRq5je21V7y8580fjFyeuffkxky31R5wly1PJWGqF8P
-         pgNQ==
-X-Gm-Message-State: APjAAAXtDxgzF8FTn/wvOx3QlKWs/Q0ezUAivgTUhRMLKKSSAo0WvuOq
-        XA70whn438B21IdqRPTrvpg=
-X-Google-Smtp-Source: APXvYqyPQRgQfyEQQsCe5fedY34G1dLdn4PVJf15gt4z1w2xvO+JpWBC0RAdTsK+BDq6JqldiDwhrQ==
-X-Received: by 2002:a63:18c:: with SMTP id 134mr1359993pgb.432.1560918490535;
-        Tue, 18 Jun 2019 21:28:10 -0700 (PDT)
-Received: from localhost (193-116-92-108.tpgi.com.au. [193.116.92.108])
-        by smtp.gmail.com with ESMTPSA id r15sm21539691pfc.162.2019.06.18.21.28.09
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 21:28:09 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 14:23:03 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 1/1] cpuidle-powernv : forced wakeup for stop states
-To:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
-        mpe@ellerman.id.au, rjw@rjwysocki.net
-References: <20190617095648.18847-1-huntbag@linux.vnet.ibm.com>
-        <20190617095648.18847-2-huntbag@linux.vnet.ibm.com>
-In-Reply-To: <20190617095648.18847-2-huntbag@linux.vnet.ibm.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KAXBjc7glk0c+HE4Clw27sMJtcWTAp7e/EA0t3BWvYc=;
+        b=QsIWu6Q7qvj5KdU+EcX5t4VoRB2LEKaoC70qR2zdoCyC7OIm7t9Vy4ybRig56Y+TLR
+         FsFZgu3QhgWTFwJ5Eskod0UfHM9api5/i3qj17Y0MiD4vZpCnrkVP2aa6A1hZr2oEGqs
+         b0MG8U2PqGw4NAg7xQbGv7nMLQHuC+LnKKHE0gPAIrVdR7x8cJEvhF98V7VYMQMbAKFM
+         +1bM68xGahnMknICIhKG1yRQNGyCn9e9RSZH93dfFR7/1abZykQkOEO1CfSsH4zk1yNd
+         HmlQ8pBes/afmMrA9FH1Cofo2gMRk0wpIYyY2N+W/6MHr59CiYvt68RY04CuhifLjDey
+         vmTg==
+X-Gm-Message-State: APjAAAXHDdYJgmrLwPgV31/sKiFJcbxKZpGFhc1PBpOo09gqGpOf/Uf5
+        lllt1We3YjMPHH975EppnJUtdQ==
+X-Google-Smtp-Source: APXvYqwC7LNxJSthdvpM1tbhqqTP1fYjEdwZ6Lyb8i1z6leoDylAGsZ/teBkos+7J4MQTY9pKLsLCA==
+X-Received: by 2002:a17:90a:b387:: with SMTP id e7mr9743345pjr.113.1560926392084;
+        Tue, 18 Jun 2019 23:39:52 -0700 (PDT)
+Received: from localhost ([122.172.66.84])
+        by smtp.gmail.com with ESMTPSA id t7sm664336pjq.20.2019.06.18.23.39.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 18 Jun 2019 23:39:49 -0700 (PDT)
+Date:   Wed, 19 Jun 2019 12:09:47 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Qais.Yousef@arm.com, mka@chromium.org, juri.lelli@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 4/5] cpufreq: Register notifiers with the PM QoS
+ framework
+Message-ID: <20190619063947.nj2awibmalrdccn2@vireshk-i7>
+References: <cover.1560163748.git.viresh.kumar@linaro.org>
+ <3504053.Rmt1Mul0J4@kreacher>
+ <20190618112522.4odrysf7wmxgjlb2@vireshk-i7>
+ <3176289.QFhGQadiPc@kreacher>
 MIME-Version: 1.0
-User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1560917320.mk5nn6r8jw.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3176289.QFhGQadiPc@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Abhishek Goel's on June 17, 2019 7:56 pm:
-> Currently, the cpuidle governors determine what idle state a idling CPU
-> should enter into based on heuristics that depend on the idle history on
-> that CPU. Given that no predictive heuristic is perfect, there are cases
-> where the governor predicts a shallow idle state, hoping that the CPU wil=
-l
-> be busy soon. However, if no new workload is scheduled on that CPU in the
-> near future, the CPU may end up in the shallow state.
->=20
-> This is problematic, when the predicted state in the aforementioned
-> scenario is a shallow stop state on a tickless system. As we might get
-> stuck into shallow states for hours, in absence of ticks or interrupts.
->=20
-> To address this, We forcefully wakeup the cpu by setting the
-> decrementer. The decrementer is set to a value that corresponds with the
-> residency of the next available state. Thus firing up a timer that will
-> forcefully wakeup the cpu. Few such iterations will essentially train the
-> governor to select a deeper state for that cpu, as the timer here
-> corresponds to the next available cpuidle state residency. Thus, cpu will
-> eventually end up in the deepest possible state.
->=20
-> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
-> ---
->=20
-> Auto-promotion
->  v1 : started as auto promotion logic for cpuidle states in generic
-> driver
->  v2 : Removed timeout_needed and rebased the code to upstream kernel
-> Forced-wakeup
->  v1 : New patch with name of forced wakeup started
->  v2 : Extending the forced wakeup logic for all states. Setting the
-> decrementer instead of queuing up a hrtimer to implement the logic.
->=20
->  drivers/cpuidle/cpuidle-powernv.c | 38 +++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->=20
-> diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-=
-powernv.c
-> index 84b1ebe212b3..bc9ca18ae7e3 100644
-> --- a/drivers/cpuidle/cpuidle-powernv.c
-> +++ b/drivers/cpuidle/cpuidle-powernv.c
-> @@ -46,6 +46,26 @@ static struct stop_psscr_table stop_psscr_table[CPUIDL=
-E_STATE_MAX] __read_mostly
->  static u64 default_snooze_timeout __read_mostly;
->  static bool snooze_timeout_en __read_mostly;
-> =20
-> +static u64 forced_wakeup_timeout(struct cpuidle_device *dev,
-> +				 struct cpuidle_driver *drv,
-> +				 int index)
-> +{
-> +	int i;
-> +
-> +	for (i =3D index + 1; i < drv->state_count; i++) {
-> +		struct cpuidle_state *s =3D &drv->states[i];
-> +		struct cpuidle_state_usage *su =3D &dev->states_usage[i];
-> +
-> +		if (s->disabled || su->disable)
-> +			continue;
-> +
-> +		return (s->target_residency + 2 * s->exit_latency) *
-> +			tb_ticks_per_usec;
-> +	}
-> +
-> +	return 0;
-> +}
+On 19-06-19, 00:23, Rafael J. Wysocki wrote:
+> In patch [3/5] you could point notifiers for both min and max freq to the same
+> notifier head.   Both of your notifiers end up calling cpufreq_update_policy()
+> anyway.
 
-It would be nice to not have this kind of loop iteration in the
-idle fast path. Can we add a flag or something to the idle state?
+I tried it and the changes in qos.c file look fine. But I don't like at all how
+cpufreq.c looks now. We only register for min-freq notifier now and that takes
+care of max as well. What could have been better is if we could have registered
+a freq-notifier instead of min/max, which isn't possible as well because of how
+qos framework works.
 
-> +
->  static u64 get_snooze_timeout(struct cpuidle_device *dev,
->  			      struct cpuidle_driver *drv,
->  			      int index)
-> @@ -144,8 +164,26 @@ static int stop_loop(struct cpuidle_device *dev,
->  		     struct cpuidle_driver *drv,
->  		     int index)
->  {
-> +	u64 dec_expiry_tb, dec, timeout_tb, forced_wakeup;
-> +
-> +	dec =3D mfspr(SPRN_DEC);
-> +	timeout_tb =3D forced_wakeup_timeout(dev, drv, index);
-> +	forced_wakeup =3D 0;
-> +
-> +	if (timeout_tb && timeout_tb < dec) {
-> +		forced_wakeup =3D 1;
-> +		dec_expiry_tb =3D mftb() + dec;
-> +	}
+Honestly, the cpufreq changes look hacky to me :(
 
-The compiler probably can't optimise away the SPR manipulations so try
-to avoid them if possible.
+What do you say.
 
-> +
-> +	if (forced_wakeup)
-> +		mtspr(SPRN_DEC, timeout_tb);
+-- 
+viresh
 
-This should just be put in the above 'if'.
+---
+ drivers/base/power/qos.c  | 15 ++++++++-------
+ drivers/cpufreq/cpufreq.c | 38 ++++++++------------------------------
+ include/linux/cpufreq.h   |  3 +--
+ 3 files changed, 17 insertions(+), 39 deletions(-)
 
-> +
->  	power9_idle_type(stop_psscr_table[index].val,
->  			 stop_psscr_table[index].mask);
-> +
-> +	if (forced_wakeup)
-> +		mtspr(SPRN_DEC, dec_expiry_tb - mftb());
-
-This will sometimes go negative and result in another timer interrupt.
-
-It also breaks irq work (which can be set here by machine check I
-believe.
-
-May need to implement some timer code to do this for you.
-
-static void reset_dec_after_idle(void)
-{
-	u64 now;
-        u64 *next_tb;
-
-	if (test_irq_work_pending())
-		return;
-	now =3D mftb;
-	next_tb =3D this_cpu_ptr(&decrementers_next_tb);
-
-	if (now >=3D *next_tb)
-		return;
-	set_dec(*next_tb - now);
-	if (test_irq_work_pending())
-		set_dec(1);
-}
-
-Something vaguely like that. See timer_interrupt().
-
-Thanks,
-Nick
-=
+diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
+index cde2692b97f9..9bbf2d2a3376 100644
+--- a/drivers/base/power/qos.c
++++ b/drivers/base/power/qos.c
+@@ -202,20 +202,20 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
+ 	if (!qos)
+ 		return -ENOMEM;
+ 
+-	n = kzalloc(3 * sizeof(*n), GFP_KERNEL);
++	n = kzalloc(2 * sizeof(*n), GFP_KERNEL);
+ 	if (!n) {
+ 		kfree(qos);
+ 		return -ENOMEM;
+ 	}
+ 
++	BLOCKING_INIT_NOTIFIER_HEAD(n);
+ 	c = &qos->resume_latency;
+ 	plist_head_init(&c->list);
+ 	c->target_value = PM_QOS_RESUME_LATENCY_DEFAULT_VALUE;
+ 	c->default_value = PM_QOS_RESUME_LATENCY_DEFAULT_VALUE;
+ 	c->no_constraint_value = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
+ 	c->type = PM_QOS_MIN;
+-	c->notifiers = n;
+-	BLOCKING_INIT_NOTIFIER_HEAD(n);
++	c->notifiers = n++;
+ 
+ 	c = &qos->latency_tolerance;
+ 	plist_head_init(&c->list);
+@@ -224,14 +224,16 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
+ 	c->no_constraint_value = PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT;
+ 	c->type = PM_QOS_MIN;
+ 
++	/* Same notifier head is used for both min/max frequency */
++	BLOCKING_INIT_NOTIFIER_HEAD(n);
++
+ 	c = &qos->min_frequency;
+ 	plist_head_init(&c->list);
+ 	c->target_value = PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
+ 	c->default_value = PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
+ 	c->no_constraint_value = PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
+ 	c->type = PM_QOS_MAX;
+-	c->notifiers = ++n;
+-	BLOCKING_INIT_NOTIFIER_HEAD(n);
++	c->notifiers = n;
+ 
+ 	c = &qos->max_frequency;
+ 	plist_head_init(&c->list);
+@@ -239,8 +241,7 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
+ 	c->default_value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
+ 	c->no_constraint_value = PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
+ 	c->type = PM_QOS_MIN;
+-	c->notifiers = ++n;
+-	BLOCKING_INIT_NOTIFIER_HEAD(n);
++	c->notifiers = n;
+ 
+ 	INIT_LIST_HEAD(&qos->flags.list);
+ 
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 1344e1b1307f..1605dba1327e 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1139,19 +1139,10 @@ static int cpufreq_update_freq(struct cpufreq_policy *policy)
+ 	return 0;
+ }
+ 
+-static int cpufreq_notifier_min(struct notifier_block *nb, unsigned long freq,
++static int cpufreq_notifier_qos(struct notifier_block *nb, unsigned long freq,
+ 				void *data)
+ {
+-	struct cpufreq_policy *policy = container_of(nb, struct cpufreq_policy, nb_min);
+-
+-	return cpufreq_update_freq(policy);
+-}
+-
+-static int cpufreq_notifier_max(struct notifier_block *nb, unsigned long freq,
+-				void *data)
+-{
+-	struct cpufreq_policy *policy = container_of(nb, struct cpufreq_policy, nb_max);
++	struct cpufreq_policy *policy = container_of(nb, struct cpufreq_policy, nb_qos);
+ 
+ 	return cpufreq_update_freq(policy);
+@@ -1214,10 +1205,10 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+ 		goto err_free_real_cpus;
+ 	}
+ 
+-	policy->nb_min.notifier_call = cpufreq_notifier_min;
+-	policy->nb_max.notifier_call = cpufreq_notifier_max;
++	policy->nb_qos.notifier_call = cpufreq_notifier_qos;
+ 
+-	ret = dev_pm_qos_add_notifier(dev, &policy->nb_min,
++	/* Notifier for min frequency also takes care of max frequency notifier */
++	ret = dev_pm_qos_add_notifier(dev, &policy->nb_qos,
+ 				      DEV_PM_QOS_MIN_FREQUENCY);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register MIN QoS notifier: %d (%*pbl)\n",
+@@ -1225,18 +1216,10 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+ 		goto err_kobj_remove;
+ 	}
+ 
+-	ret = dev_pm_qos_add_notifier(dev, &policy->nb_max,
+-				      DEV_PM_QOS_MAX_FREQUENCY);
+-	if (ret) {
+-		dev_err(dev, "Failed to register MAX QoS notifier: %d (%*pbl)\n",
+-			ret, cpumask_pr_args(policy->cpus));
+-		goto err_min_qos_notifier;
+-	}
+-
+ 	policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
+ 				       GFP_KERNEL);
+ 	if (!policy->min_freq_req)
+-		goto err_max_qos_notifier;
++		goto err_min_qos_notifier;
+ 
+ 	policy->max_freq_req = policy->min_freq_req + 1;
+ 	INIT_LIST_HEAD(&policy->policy_list);
+@@ -1250,11 +1233,8 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+ 	policy->cpu = cpu;
+ 	return policy;
+ 
+-err_max_qos_notifier:
+-	dev_pm_qos_remove_notifier(dev, &policy->nb_max,
+-				   DEV_PM_QOS_MAX_FREQUENCY);
+ err_min_qos_notifier:
+-	dev_pm_qos_remove_notifier(dev, &policy->nb_min,
++	dev_pm_qos_remove_notifier(dev, &policy->nb_qos,
+ 				   DEV_PM_QOS_MIN_FREQUENCY);
+ err_kobj_remove:
+ 	cpufreq_policy_put_kobj(policy);
+@@ -1284,9 +1264,7 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+ 		per_cpu(cpufreq_cpu_data, cpu) = NULL;
+ 	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
+ 
+-	dev_pm_qos_remove_notifier(dev, &policy->nb_max,
+-				   DEV_PM_QOS_MAX_FREQUENCY);
+-	dev_pm_qos_remove_notifier(dev, &policy->nb_min,
++	dev_pm_qos_remove_notifier(dev, &policy->nb_qos,
+ 				   DEV_PM_QOS_MIN_FREQUENCY);
+ 	cancel_work_sync(&policy->req_work);
+ 	dev_pm_qos_remove_request(policy->max_freq_req);
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 6bbed9af4fd2..2080d6490ed1 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -145,8 +145,7 @@ struct cpufreq_policy {
+ 	/* Pointer to the cooling device if used for thermal mitigation */
+ 	struct thermal_cooling_device *cdev;
+ 
+-	struct notifier_block nb_min;
+-	struct notifier_block nb_max;
++	struct notifier_block nb_qos;
+ };
+ 
+ struct cpufreq_freqs {
