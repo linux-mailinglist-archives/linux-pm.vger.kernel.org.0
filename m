@@ -2,235 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C14AD4B603
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 12:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181244B63D
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 12:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbfFSKOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 06:14:51 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45826 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726826AbfFSKOu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 06:14:50 -0400
-Received: by mail-pg1-f195.google.com with SMTP id s21so9375682pga.12;
-        Wed, 19 Jun 2019 03:14:50 -0700 (PDT)
+        id S1731560AbfFSKd0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 06:33:26 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:40942 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731134AbfFSKd0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 06:33:26 -0400
+Received: by mail-qt1-f194.google.com with SMTP id a15so19189094qtn.7
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 03:33:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :user-agent:message-id:content-transfer-encoding;
-        bh=6i/GeqDjrWmWov4kQahlGNOB5ZKJs7UV4GwUkEvu3yE=;
-        b=FUDCIHmFiUaivC6kaQ3sYLdpKaBpcxhLQ9X2o5L+O94uzKtvv9zvu60l2fomkBKnV/
-         9QPowqfeNME5ed0XLxG3s3/PQjhBJflMH9euC8V69JQCPWUq5/Rq+LFzBKwjPlfyXifz
-         XMM7uqD1JdmNFPCw6NWSRyGdZGdVFGUkj9JeIKG6xmWy1XDD7L0YQpj4L3R/snt1oquS
-         zmhDk2R2Qh/xU0Nob8jwT+HG667MtRGcui31L613/u7+O2Xc6/IyKQ/u57oAkTKWxExh
-         B6BwwQEeXQfdkV1CiJNXdRtEIKJuLSYKH6hFQN49zdHXaExlalQ/brt1zRyLDPOZ1DMh
-         wtyg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A5r+fNs6piiH+aGROj+Wzs8FJ/AgXElJ3JaEl+QTwIo=;
+        b=p0Sz0EF57FLawqG1VabOdKC+Bzkx1UdG2TqBFuTGofHL6o9iG0MRLdNfctgnNozh2f
+         6F8Mh9THCLq2XpLwTG7HOAWojfnYHMZN+2/aDw5bnfkdIYYrFBfaz9aLdcjqWmSfu8ZE
+         VlQbGTn3du33tcn4jSQVpNBG+tHNQ5Bhoi156ScFhodZXXbrqwCrcAH3v1e3JUdcn9XX
+         U7CGA6FdOtRrPimU4yrSNENfugRzIwMbgpGbn/TNF/NZLkviGFU2QXWBNV5e/Sa9CIJ4
+         QuxvwO4lDynAaiy9HaOwaLl3ut7ueE36ejJI53EkALbw+xzhHFg20VPeoriGxgaYIp2Y
+         Xctw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:user-agent:message-id:content-transfer-encoding;
-        bh=6i/GeqDjrWmWov4kQahlGNOB5ZKJs7UV4GwUkEvu3yE=;
-        b=A+b27+7GdO11tyNUEC5icmdnOCeAp/QowcS1wYWmuAuxQx+SUqWd6WgO3B7ZoSd1Aq
-         Hmcooq0HGvyrt9rwXxcO6McQoMJe3+XN9P0grn1qkXbr5JN0ScgKibC3nHnxhOrdkxKD
-         82u5XyvTzkGVC4DI2l4Bsnk3Gskr0ThqzcJNWioPkXhevkfRnKiyy8ZptgTa4laZWsPB
-         O6rk73FTbVFm8/Cq+ZsHhhZD6aAqM8G8dtLClO87KjPPvGGqUlu37UGhQ4pVyiGk00lc
-         /hErhdKKdKSMIwoFvB+fzOHi5Usprdcu6Gh9zxSZdjWBMcb8H6c+Cd8UTzo6AvW9N9eg
-         cy7g==
-X-Gm-Message-State: APjAAAXMe/u6Ca2xVhQ/2iF5G9HHX9fZzIiSQIz0tS8UBesCOMT1B3p3
-        WJh66kDYdvbclXP/ETCtzfQ=
-X-Google-Smtp-Source: APXvYqwwcbJwmLM8R4kXz9EDK8fOmfB/NTHOIXIR8Nghol24uNK6j1dHGi22a8Jur1GfGfSK0OwCDg==
-X-Received: by 2002:aa7:82cd:: with SMTP id f13mr129011930pfn.203.1560939289993;
-        Wed, 19 Jun 2019 03:14:49 -0700 (PDT)
-Received: from localhost (193-116-92-108.tpgi.com.au. [193.116.92.108])
-        by smtp.gmail.com with ESMTPSA id r1sm14141972pfq.100.2019.06.19.03.14.48
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 19 Jun 2019 03:14:49 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 20:09:32 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 1/1] cpuidle-powernv : forced wakeup for stop states
-To:     Abhishek <huntbag@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
-        mpe@ellerman.id.au, rjw@rjwysocki.net
-References: <20190617095648.18847-1-huntbag@linux.vnet.ibm.com>
-        <20190617095648.18847-2-huntbag@linux.vnet.ibm.com>
-        <1560917320.mk5nn6r8jw.astroid@bobo.none>
-        <689a52a7-7bfc-7225-e563-ac07f7357e75@linux.vnet.ibm.com>
-In-Reply-To: <689a52a7-7bfc-7225-e563-ac07f7357e75@linux.vnet.ibm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A5r+fNs6piiH+aGROj+Wzs8FJ/AgXElJ3JaEl+QTwIo=;
+        b=F3YX1AFUPv25aZbwlUgpXLrUB41SK79kn+2HW5vKI5oSCBNhWR0Nu2CCiBC2EuyLv9
+         1TcqNH/YZPZgqd8n0LZAJcbWsO4Bnl/d7H7QF4LgBI9xcdrS0bjBs+BKKOBb6eQ+Jkea
+         RNJLOwC1uJbIjtNrAR4iRbUJDLLlbtALR2hZRtZHAhWN8HH/8+So7JEmLKUiAXgxh/Tr
+         eu8kEg1T0IWvm2OuAA9RxTM1j9jnlWyT1Sk2Wh+RolOu8PhKhG2D5/wjJHVzqs73WzF4
+         7NCnOj6s/1G2ueY9qXX4IwrCAXMc8EHVsvPFbDdWCh8LwOBKtgkwb6et84KfcWfW6sUg
+         OWyg==
+X-Gm-Message-State: APjAAAWioivAy2e29k/ABAF3KARsl5rNjdG1bZu/hIivQnZLH3Fr7w7h
+        7X8MVqeR+OsTYhGQIE8AploXo930PoOZXmbTK1XvNw==
+X-Google-Smtp-Source: APXvYqzsT65B1Q6a584qTVdugWKlIu1yIZmyVh6lrG95htoJMyCqQWISMHXkLYv5iX+GmxabuYhjkdpTL/3YmtcKZeU=
+X-Received: by 2002:a0c:b999:: with SMTP id v25mr20736885qvf.36.1560940404444;
+ Wed, 19 Jun 2019 03:33:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1560938644.5ukemauqsy.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <CANA+-vCThdRivg7nrMK5QoFu8SGUzEVSvSyp0H2CPyy9==Tqog@mail.gmail.com>
+ <CANA+-vARQ9Ao=W1oEArrAQ0sqh757orq=-=kytdVPhstm-3E9w@mail.gmail.com>
+ <20190618182502.GC203031@google.com> <4587569.x9DSL43cXO@kreacher>
+ <CANA+-vCMK6u1n9gXf2+v5dFn_tGfr1PT8d7W4d2BCzw+B-HvYw@mail.gmail.com>
+ <CAJWu+oo7kwmEyMXQN0yfswV2=J-Fa9QybhAUx-SOGG_ipsBErQ@mail.gmail.com> <CAJZ5v0gvzCx-7qS9qkxB=sGKjQJKMR7yCc21f=_vqrbZxMSWNg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gvzCx-7qS9qkxB=sGKjQJKMR7yCc21f=_vqrbZxMSWNg@mail.gmail.com>
+From:   Joel Fernandes <joelaf@google.com>
+Date:   Wed, 19 Jun 2019 06:33:12 -0400
+Message-ID: <CAJWu+orvX7fVGPL1J4mg1s8R0q36O4kdxDuscL5Y+M8wkFJ0Tw@mail.gmail.com>
+Subject: Re: Alternatives to /sys/kernel/debug/wakeup_sources
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Tri Vo <trong@android.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sandeep Patil <sspatil@android.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Abhishek's on June 19, 2019 7:08 pm:
-> Hi Nick,
->=20
-> Thanks for the review. Some replies below.
->=20
-> On 06/19/2019 09:53 AM, Nicholas Piggin wrote:
->> Abhishek Goel's on June 17, 2019 7:56 pm:
->>> Currently, the cpuidle governors determine what idle state a idling CPU
->>> should enter into based on heuristics that depend on the idle history o=
-n
->>> that CPU. Given that no predictive heuristic is perfect, there are case=
-s
->>> where the governor predicts a shallow idle state, hoping that the CPU w=
-ill
->>> be busy soon. However, if no new workload is scheduled on that CPU in t=
-he
->>> near future, the CPU may end up in the shallow state.
->>>
->>> This is problematic, when the predicted state in the aforementioned
->>> scenario is a shallow stop state on a tickless system. As we might get
->>> stuck into shallow states for hours, in absence of ticks or interrupts.
->>>
->>> To address this, We forcefully wakeup the cpu by setting the
->>> decrementer. The decrementer is set to a value that corresponds with th=
-e
->>> residency of the next available state. Thus firing up a timer that will
->>> forcefully wakeup the cpu. Few such iterations will essentially train t=
-he
->>> governor to select a deeper state for that cpu, as the timer here
->>> corresponds to the next available cpuidle state residency. Thus, cpu wi=
-ll
->>> eventually end up in the deepest possible state.
->>>
->>> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
->>> ---
->>>
->>> Auto-promotion
->>>   v1 : started as auto promotion logic for cpuidle states in generic
->>> driver
->>>   v2 : Removed timeout_needed and rebased the code to upstream kernel
->>> Forced-wakeup
->>>   v1 : New patch with name of forced wakeup started
->>>   v2 : Extending the forced wakeup logic for all states. Setting the
->>> decrementer instead of queuing up a hrtimer to implement the logic.
->>>
->>>   drivers/cpuidle/cpuidle-powernv.c | 38 ++++++++++++++++++++++++++++++=
-+
->>>   1 file changed, 38 insertions(+)
->>>
->>> diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidl=
-e-powernv.c
->>> index 84b1ebe212b3..bc9ca18ae7e3 100644
->>> --- a/drivers/cpuidle/cpuidle-powernv.c
->>> +++ b/drivers/cpuidle/cpuidle-powernv.c
->>> @@ -46,6 +46,26 @@ static struct stop_psscr_table stop_psscr_table[CPUI=
-DLE_STATE_MAX] __read_mostly
->>>   static u64 default_snooze_timeout __read_mostly;
->>>   static bool snooze_timeout_en __read_mostly;
->>>  =20
->>> +static u64 forced_wakeup_timeout(struct cpuidle_device *dev,
->>> +				 struct cpuidle_driver *drv,
->>> +				 int index)
->>> +{
->>> +	int i;
->>> +
->>> +	for (i =3D index + 1; i < drv->state_count; i++) {
->>> +		struct cpuidle_state *s =3D &drv->states[i];
->>> +		struct cpuidle_state_usage *su =3D &dev->states_usage[i];
->>> +
->>> +		if (s->disabled || su->disable)
->>> +			continue;
->>> +
->>> +		return (s->target_residency + 2 * s->exit_latency) *
->>> +			tb_ticks_per_usec;
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->> It would be nice to not have this kind of loop iteration in the
->> idle fast path. Can we add a flag or something to the idle state?
-> Currently, we do not have any callback notification or some feedback that
-> notifies the driver everytime some state is enabled/disabled. So we have
-> to parse everytime to get the next enabled state.
+On Wed, Jun 19, 2019 at 4:35 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Jun 19, 2019 at 1:52 AM Joel Fernandes <joelaf@google.com> wrote:
+> >
+> > On Tue, Jun 18, 2019 at 7:15 PM Tri Vo <trong@android.com> wrote:
+> > [snip]
+> > > > > > >
+> > > > > > > Android userspace reading wakeup_sources is not ideal because:
+> > > > > > > - Debugfs API is not stable, i.e. Android tools built on top of it are
+> > > > > > > not guaranteed to be backward/forward compatible.
+> > > > > > > - This file requires debugfs to be mounted, which itself is
+> > > > > > > undesirable for security reasons.
+> > > > > > >
+> > > > > > > To address these problems, we want to contribute a way to expose these
+> > > > > > > statistics that doesn't depend on debugfs.
+> > > > > > >
+> > > > > > > Some initial thoughts/questions: Should we expose the stats in sysfs?
+> > > > > > > Or maybe implement eBPF-based solution? What do you think?
+> > > > >
+> > > > > We are going through Android's out-of-tree kernel dependencies along with
+> > > > > userspace APIs that are not necessarily considered "stable and forever
+> > > > > supported" upstream. The debugfs dependencies showed up on our radar as a
+> > > > > result and so we are wondering if we should worry about changes in debugfs
+> > > > > interface and hence the question(s) below.
+> > > > >
+> > > > > So, can we rely on /d/wakeup_sources to be considered a userspace API and
+> > > > > hence maintained stable as we do for other /proc and /sys entries?
+> > > > >
+> > > > > If yes, then we will go ahead and add tests for this in LTP or
+> > > > > somewhere else suitable.
+> > > >
+> > > > No, debugfs is not ABI.
+> > > >
+> > > > > If no, then we would love to hear suggestions for any changes that need to be
+> > > > > made or we simply just move the debugfs entry into somewhere like
+> > > > > /sys/power/ ?
+> > > >
+> > > > No, moving that entire file from debugfs into sysfs is not an option either.
+> > > >
+> > > > The statistics for the wakeup sources associated with devices are already there
+> > > > under /sys/devices/.../power/ , but I guess you want all wakeup sources?
+> > > >
+> > > > That would require adding a kobject to struct wakeup_source and exposing
+> > > > all of the statistics as separate attributes under it.  In which case it would be
+> > > > good to replace the existing wakeup statistics under /sys/devices/.../power/
+> > > > with symbolic links to the attributes under the wakeup_source kobject.
+> > >
+> > > Thanks for your input, Rafael! Your suggestion makes sense. I'll work
+> > > on a patch for this.
+> >
+> > Does that entail making each wake up source, a new sysfs node under a
+> > particular device, and then adding stats under that new node?
+>
+> Not under a device, because there are wakeup source objects without
+> associated devices.
+>
+> It is conceivable to have a "wakeup_sources" directory under
+> /sys/power/ and sysfs nodes for all wakeup sources in there.
+>
+> Then, instead of exposing wakeup statistics directly under
+> /sys/devices/.../power/, there can be symbolic links from there to the
+> new wakeup source nodes under "wakeup_sources" (so as to avoid
+> exposing the same data in two different places in sysfs, which may be
+> confusing).
 
-Ahh, that's why you're doing that.
+Makes sense to me, thanks!
 
-> Are you suggesting to
-> add something like next_enabled_state in cpuidle state structure itself
-> which will be updated when a state is enabled or disabled?
-
-Hmm, I guess it normally should not iterate over more than one state
-unless some idle states are disabled.
-
-What would have been nice is each state just have its own timeout
-field with ticks already calculated, if that could be updated when
-a state is enabled or disabled. How hard is that to add to the
-cpuidle core?
-
->>> +
->>>   static u64 get_snooze_timeout(struct cpuidle_device *dev,
->>>   			      struct cpuidle_driver *drv,
->>>   			      int index)
->>> @@ -144,8 +164,26 @@ static int stop_loop(struct cpuidle_device *dev,
->>>   		     struct cpuidle_driver *drv,
->>>   		     int index)
->>>   {
->>> +	u64 dec_expiry_tb, dec, timeout_tb, forced_wakeup;
->>> +
->>> +	dec =3D mfspr(SPRN_DEC);
->>> +	timeout_tb =3D forced_wakeup_timeout(dev, drv, index);
->>> +	forced_wakeup =3D 0;
->>> +
->>> +	if (timeout_tb && timeout_tb < dec) {
->>> +		forced_wakeup =3D 1;
->>> +		dec_expiry_tb =3D mftb() + dec;
->>> +	}
->> The compiler probably can't optimise away the SPR manipulations so try
->> to avoid them if possible.
-> Are you suggesting something like set_dec_before_idle?(in line with
-> what you have suggested to do after idle, reset_dec_after_idle)
-
-I should have been clear, I meant don't mfspr(SPRN_DEC) until you
-have tested timeout_tb.
-
->>> +
->>> +	if (forced_wakeup)
->>> +		mtspr(SPRN_DEC, timeout_tb);
->> This should just be put in the above 'if'.
-> Fair point.
->>
->>> +
->>>   	power9_idle_type(stop_psscr_table[index].val,
->>>   			 stop_psscr_table[index].mask);
->>> +
->>> +	if (forced_wakeup)
->>> +		mtspr(SPRN_DEC, dec_expiry_tb - mftb());
->> This will sometimes go negative and result in another timer interrupt.
->>
->> It also breaks irq work (which can be set here by machine check I
->> believe.
->>
->> May need to implement some timer code to do this for you.
->>
->> static void reset_dec_after_idle(void)
->> {
->> 	u64 now;
->>          u64 *next_tb;
->>
->> 	if (test_irq_work_pending())
->> 		return;
->> 	now =3D mftb;
->> 	next_tb =3D this_cpu_ptr(&decrementers_next_tb);
->>
->> 	if (now >=3D *next_tb)
->> 		return;
->> 	set_dec(*next_tb - now);
->> 	if (test_irq_work_pending())
->> 		set_dec(1);
->> }
->>
->> Something vaguely like that. See timer_interrupt().
-> Ah, Okay. Will go through timer_interrupt().
-
-Thanks,
-Nick
-
-=
+ - Joel
