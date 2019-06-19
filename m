@@ -2,138 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 480784B730
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 13:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB02E4B809
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 14:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731746AbfFSLgG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 07:36:06 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35957 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731730AbfFSLgF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 07:36:05 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r7so9591491pfl.3
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 04:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=e2RYmyEcM16uV8QAfPAD1VnbVzdNHH04eTPp0y1GpdE=;
-        b=zVOW+9TLBbgrCy2ayvjj309DIcUy8Isl/jbni4YWmZwpa+P5KsEELYytIxnt+FC7lN
-         dDsV4tWAtwZiyVyrcwibduuryY73DML3oL+dlnFKX+O2yiB7+uKgJUHzq7RV4o0MSLL+
-         cfFGac3xplbC+SP8kybt1kOHadOCK3YHUuu26GtorIEgRQzgGrHiZrYimgKcRu26O9M5
-         JykjfOtKMz31ughKph5Z5CLOp9fCVHt0gr2FUa7kaYmTFh9vXWEPmVWbuSJBE34GL15q
-         d+YVPOmbAUrZM1jmDKiRuYvMxBgj2M/M72J/cSgtofN7h7Y2x0W6Lj35CdJcRtqjdOwV
-         kBew==
+        id S1727591AbfFSMUb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 08:20:31 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:35811 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727076AbfFSMUa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 08:20:30 -0400
+Received: by mail-ot1-f65.google.com with SMTP id j19so19065814otq.2;
+        Wed, 19 Jun 2019 05:20:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=e2RYmyEcM16uV8QAfPAD1VnbVzdNHH04eTPp0y1GpdE=;
-        b=bpOX81fwFPNU/XYxLfn5bWQkzc4aAbNmuNzQ9kfCt1v2LrC9mIy9u7k3lbkKJib45r
-         PyMmbymB0O6cllXUC8wHuLu3abkeCEPfGKnGroYGBV0DRRfzDt634SBoKg7Rq/pmoR5w
-         mxwaE/pjBtTO9k8HdetLCQJwH+R5ElcFyuaJ70ULbITJXcftEVwRM/btH2OzIgHNjCjA
-         GqNX2xixd4ZI3fPjt7vYQ6tE3yaFB03QsaeYbgyE4X5Esb+1W957gIB0ErFWQkW3lMfp
-         Wh7q1iUdgZrZrJSR7yGdxS9xWDAOJgNjIPxSE9jUJpFbYr/dDkYxuMV20jBdqdr6mQjl
-         3ciw==
-X-Gm-Message-State: APjAAAWeWqJyVtVN/pG7edk5mqGqtxD+lj5Omqx+ClhAx9+LaqIWHxYH
-        m33uKsLsmE8wn5yWFHJ9xKb1zg==
-X-Google-Smtp-Source: APXvYqwMIZ2ELJdp1VAUQ1NsO+BtVwoWBK4MUjp3PHIw9C71RCmnjQGDll3rM61XQaeXGD57fwci0Q==
-X-Received: by 2002:a63:1459:: with SMTP id 25mr7319713pgu.201.1560944164850;
-        Wed, 19 Jun 2019 04:36:04 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id y22sm17954119pfm.70.2019.06.19.04.36.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Jun 2019 04:36:04 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] cpufreq: Avoid calling cpufreq_verify_current_freq() from handle_update()
-Date:   Wed, 19 Jun 2019 17:05:42 +0530
-Message-Id: <5068dd1b268d5beb1c074ca97a3e031dbd560999.1560944014.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
-In-Reply-To: <cover.1560944014.git.viresh.kumar@linaro.org>
-References: <cover.1560944014.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=11N2FHKz5axww920Vj/09PmaE8usnGFHqN7+I0skSBM=;
+        b=SQ3QPDxBYRS9wibNzOuyW1hCWzRYlF0tRrdB8y9MoiLo52fNbprB75FmvZ5Sgb8yNU
+         JcOL/aQ9zc2/uvbaYtCuJAGtXU9GCfEcJOY5NFIGuQPVv7izA/BYDfwDWOC+Ek5YCi+8
+         t20okbpV0ee59Pk6qf8OWYlY5sXox0GsVXx+aHy46t9+rgzntHhQamdQjO81zB8fObRe
+         ZENUEwAQmWLSA5/gpj3oPcYDVBp30+bFd+x7W5CTaKLgRQphgofX7pQ5LzcL2V0pC7kP
+         c1plEWCPyQe4C+QbDo33GsLMQ0C3WrF/8/b5Jl+b/PSxpScYSB09Z5DOJShB4JCV7ael
+         T5mA==
+X-Gm-Message-State: APjAAAVqOw7mI2gAQglWNj9eeOWQVj704Z2vD9ertPjnio4KVAHjY1ae
+        mkw+xZEvXQQLBnWpnAUv0o1UU+EA722acWlMBNG8moh8
+X-Google-Smtp-Source: APXvYqzibyJQU6vCsaCq5ik9iC3Ck2M8DmeFFXiQIMjcIiCKyU8IuWtRcMSJC3MuoPKBPlihMP0ib07yX9DwXndLP5o=
+X-Received: by 2002:a9d:6959:: with SMTP id p25mr45196743oto.118.1560946829999;
+ Wed, 19 Jun 2019 05:20:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1560944014.git.viresh.kumar@linaro.org> <0660b023a0d80c63ec7a1f7fcb692de9a9f4d604.1560944014.git.viresh.kumar@linaro.org>
+In-Reply-To: <0660b023a0d80c63ec7a1f7fcb692de9a9f4d604.1560944014.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 19 Jun 2019 14:20:18 +0200
+Message-ID: <CAJZ5v0g1avBwjezWpMimGbs1NHOchib9pmTKoxaixKtpw_CGJw@mail.gmail.com>
+Subject: Re: [PATCH 2/6] cpufreq: Replace few CPUFREQ_CONST_LOOPS checks with has_target()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On some occasions cpufreq_verify_current_freq() schedules a work whose
-callback is handle_update(), which further calls cpufreq_update_policy()
-which may end up calling cpufreq_verify_current_freq() again.
+On Wed, Jun 19, 2019 at 1:36 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> CPUFREQ_CONST_LOOPS was introduced in a very old commit from pre-2.6
+> kernel release commit 6a4a93f9c0d5 ("[CPUFREQ] Fix 'out of sync'
+> issue").
+>
+> Probably the initial idea was to just avoid these checks for set_policy
+> type drivers and then things got changed over the years. And it is very
+> unclear why these checks are there at all.
+>
+> Replace the CPUFREQ_CONST_LOOPS check with has_target(), which makes
+> more sense now.
+>
+> Also remove () around freq comparison statement as they aren't required
+> and checkpatch also warns for them.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 13 +++++--------
+>  1 file changed, 5 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 54befd775bd6..e59194c2c613 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -359,12 +359,10 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
+>                  * which is not equal to what the cpufreq core thinks is
+>                  * "old frequency".
+>                  */
+> -               if (!(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
+> -                       if (policy->cur && (policy->cur != freqs->old)) {
+> -                               pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
+> -                                        freqs->old, policy->cur);
+> -                               freqs->old = policy->cur;
+> -                       }
+> +               if (has_target() && policy->cur && policy->cur != freqs->old) {
+> +                       pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
+> +                                freqs->old, policy->cur);
+> +                       freqs->old = policy->cur;
 
-On the other hand, when cpufreq_update_policy() is called from
-handle_update(), the pointer to the cpufreq policy is already available
-but we still call cpufreq_cpu_acquire() to get it in
-cpufreq_update_policy(), which should be avoided as well.
+Is cpufreq_notify_transition() ever called if ->setpolicy drivers are in use?
 
-Fix both the issues by creating another helper
-reeval_frequency_limits().
-
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 4556a53fc764..0a73de7aae54 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1115,13 +1115,25 @@ static int cpufreq_add_policy_cpu(struct cpufreq_policy *policy, unsigned int cp
- 	return ret;
- }
- 
-+static void reeval_frequency_limits(struct cpufreq_policy *policy)
-+{
-+	struct cpufreq_policy new_policy = *policy;
-+
-+	pr_debug("updating policy for CPU %u\n", policy->cpu);
-+
-+	new_policy.min = policy->user_policy.min;
-+	new_policy.max = policy->user_policy.max;
-+
-+	cpufreq_set_policy(policy, &new_policy);
-+}
-+
- static void handle_update(struct work_struct *work)
- {
- 	struct cpufreq_policy *policy =
- 		container_of(work, struct cpufreq_policy, update);
--	unsigned int cpu = policy->cpu;
--	pr_debug("handle_update for cpu %u called\n", cpu);
--	cpufreq_update_policy(cpu);
-+
-+	pr_debug("handle_update for cpu %u called\n", policy->cpu);
-+	reeval_frequency_limits(policy);
- }
- 
- static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
-@@ -2378,7 +2390,6 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
- void cpufreq_update_policy(unsigned int cpu)
- {
- 	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpu);
--	struct cpufreq_policy new_policy;
- 
- 	if (!policy)
- 		return;
-@@ -2391,12 +2402,7 @@ void cpufreq_update_policy(unsigned int cpu)
- 	    (cpufreq_suspended || WARN_ON(!cpufreq_verify_current_freq(policy, false))))
- 		goto unlock;
- 
--	pr_debug("updating policy for CPU %u\n", cpu);
--	memcpy(&new_policy, policy, sizeof(*policy));
--	new_policy.min = policy->user_policy.min;
--	new_policy.max = policy->user_policy.max;
--
--	cpufreq_set_policy(policy, &new_policy);
-+	reeval_frequency_limits(policy);
- 
- unlock:
- 	cpufreq_cpu_release(policy);
--- 
-2.21.0.rc0.269.g1a574e7a288b
-
+>                 }
+>
+>                 srcu_notifier_call_chain(&cpufreq_transition_notifier_list,
+> @@ -1618,8 +1616,7 @@ static unsigned int __cpufreq_get(struct cpufreq_policy *policy)
+>         if (policy->fast_switch_enabled)
+>                 return ret_freq;
+>
+> -       if (ret_freq && policy->cur &&
+> -               !(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
+> +       if (has_target() && ret_freq && policy->cur) {
+>                 /* verify no discrepancy between actual and
+>                                         saved value exists */
+>                 if (unlikely(ret_freq != policy->cur)) {
+> --
+> 2.21.0.rc0.269.g1a574e7a288b
+>
