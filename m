@@ -2,121 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D47684BE06
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 18:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777ED4BEF6
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 18:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbfFSQ05 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 12:26:57 -0400
-Received: from outbound.smtp.vt.edu ([198.82.183.121]:35036 "EHLO
-        omr1.cc.vt.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726143AbfFSQ05 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 12:26:57 -0400
-Received: from mr6.cc.vt.edu (mr6.cc.vt.edu [IPv6:2607:b400:92:8500:0:af:2d00:4488])
-        by omr1.cc.vt.edu (8.14.4/8.14.4) with ESMTP id x5JGQtWY006784
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 12:26:55 -0400
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-        by mr6.cc.vt.edu (8.14.7/8.14.7) with ESMTP id x5JGQoG7005046
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 12:26:55 -0400
-Received: by mail-qk1-f200.google.com with SMTP id v4so16185455qkj.10
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 09:26:55 -0700 (PDT)
+        id S1727124AbfFSQv2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 12:51:28 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:43654 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726839AbfFSQv2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 12:51:28 -0400
+Received: by mail-pl1-f194.google.com with SMTP id cl9so40488plb.10
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 09:51:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=CSjfI0FdDG+opCSifX1YJn6xlbBS3iUU167wnFEoRhM=;
+        b=na7Ua03UGckZdukIKV1RvIdd+/eBWPhu2Xv1M5Iz4VOhj/xZXPCeybNKDOwEFHQqaJ
+         4Qni8MMipPwexSAx6NTSD4WeH19YYHLHhPr6jeYGXnaX/3yDoaEUBIW7AWW7RUu4hSxr
+         JPKJckpitjG72BV7SVUaCiYfbwG7B6m0/FqvJ59UbnfmYAjIQR2uuEKvjnJyUY8vfpvy
+         gRg4xK2bg96grfS8/3J8aZa5excfjaXGVvxH9jKnyjfcJjp8UCErPo+RO4Iqo8kUxQTJ
+         1mMFIJ/DzMt/JKRmHeOzrPPoDBEIagP8eAzq79opI1jMbjTT7zujH5n4QDsjTuB/VE4/
+         oxRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :mime-version:content-transfer-encoding:date:message-id;
-        bh=zf8D4/iHtP2cQ9qCWTeKz8g4gkGxClanrDvSj3UhfAg=;
-        b=rj0H8B/yMTGGFS7sJMAxy4XFu0RSCLnxAu0RwIU8TiJZBeenU1pkNcHR97Cl9pvCwh
-         QsKU3SGnUi6XKi9mP662hdQiJxfvQY6gX6oGIuFcSp2Behs8DO94pLvRLOKy8C2EShji
-         ZtRcND8y2JlYEBxF/mhopYy6zMYag9tH1ZjBzxekxaya35s55TrqA2hnnPsb6zi7rItH
-         J5lvwya/xSEGLVmE0AmFGdAeXOv+aAll8I2RQM6HuEKPkduY2XsBxG84HFAHZAbRv2+A
-         WNn3X+aV/PK47eZJt3DYJWPQWyWiOPDVf+2nLwb+jtFPmeIRxcMhmiQrSh4MeZ2tYV5y
-         JqjQ==
-X-Gm-Message-State: APjAAAWm+Fx097B4jBsJ7El2l+yllevM0yv7M9wR941tcHykt0KOILwu
-        /NDJz4QEAZGtm5P6Ooz0RNJT8x41gs/ydv6/9eq5bymCWdqBfg9g7HQ5X/Ar3wXenmFP5oUcqMu
-        U/YBwWNZHRNkc+iLFcIyWhJ8BQn97lg==
-X-Received: by 2002:a37:90c2:: with SMTP id s185mr51576941qkd.161.1560961610488;
-        Wed, 19 Jun 2019 09:26:50 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxH3bOZGy53aUzHFJaZeZ0VPGLDh7ReM6TxRcU6oSO7jcWufcggfBfs/wqUKe//XAKCkkKV1w==
-X-Received: by 2002:a37:90c2:: with SMTP id s185mr51576904qkd.161.1560961610129;
-        Wed, 19 Jun 2019 09:26:50 -0700 (PDT)
-Received: from turing-police ([2601:5c0:c001:4341::359])
-        by smtp.gmail.com with ESMTPSA id z126sm11285820qkb.7.2019.06.19.09.26.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CSjfI0FdDG+opCSifX1YJn6xlbBS3iUU167wnFEoRhM=;
+        b=hGlBVe1Sc9iyUJNoCiqucpUMucFzne7x854XT/Re61pO6ms2JvIV8uMv4s0oxuwcF/
+         T4fpkksuzI9U6AhAA38YS3LnfiSo1hGARDQMx1mmsjCjLhKYqIdprDt2crlqdAifof30
+         gVd/AiqTG5F86BVkvEv57xbeJvF7c3xLX4yXacqG86TdBDUTQtvxri1ilrZgGQnYvMlJ
+         imQnL2+xSH/wiGdsIt46mvlY4EJH9Fbiq0ikqjPCVFjda67t9ntlidtbdDXqKHy0YHSz
+         +4z3H8i7tBrn3/wQ7dSCTf3e9nfi00x9ELr4zOceCvw1tAkU5rjoQ2V+Aq1IiFKQj5aT
+         WGrg==
+X-Gm-Message-State: APjAAAU27JW/MlzOf6oxm2yEEuumWu9DubblTr4OO8M6mPRXHmr1x8g9
+        w92xsVMBTo3m/3DHTp3YC3mMzg==
+X-Google-Smtp-Source: APXvYqyJ+dq1/NnuO/k64sEc5k3XnyKIxTdXLg77GYOL/k7t3tSTvPC1sYxudnn8YKgzFOs+CHh89w==
+X-Received: by 2002:a17:902:6b07:: with SMTP id o7mr97652906plk.180.1560963087287;
+        Wed, 19 Jun 2019 09:51:27 -0700 (PDT)
+Received: from localhost ([2620:0:1000:1601:3fed:2d30:9d40:70a3])
+        by smtp.gmail.com with ESMTPSA id z4sm18902897pfa.142.2019.06.19.09.51.26
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 19 Jun 2019 09:26:48 -0700 (PDT)
-From:   "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <valdis.kletnieks@vt.edu>
-X-Google-Original-From: "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <Valdis.Kletnieks@vt.edu>
-X-Mailer: exmh version 2.9.0 11/07/2018 with nmh-1.7+dev
-To:     Pintu Agarwal <pintu.ping@gmail.com>
-Cc:     Greg KH <greg@kroah.com>, Fabio Estevam <festevam@gmail.com>,
-        linux-pm@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Kernelnewbies <kernelnewbies@kernelnewbies.org>
-Subject: Re: [IMX] [DRM]: suspend/resume support
-In-Reply-To: <CAOuPNLgYN3FDvNsaWqom45h7aFz=HczDdL-QoHOc_Sreqf8T2g@mail.gmail.com>
-References: <CAOuPNLiBA9VjEoG_D2y2O5mKiqsDNW1VZXOk1eWXpGY+h86acg@mail.gmail.com> <CAOMZO5BcLaS0gXUPi6oN6vjqagS5yf+rHh+EUjmi-Wi1OX7vqQ@mail.gmail.com> <CAOuPNLgEEfDca4aeT1+q8GfUfGzbJ4x6JwGf-ROB1pgpXUBHSw@mail.gmail.com> <CAOMZO5BY8JcLNMCRCC_d=emy8HR6kE=dB9f5qfZ=ci_c+Jak0w@mail.gmail.com> <CAOuPNLjYhkP_kL+q-ZpiDZMMpOHrU88BFBc2agtnCzXt8dihOg@mail.gmail.com> <20190619150406.GB19346@kroah.com>
- <CAOuPNLgYN3FDvNsaWqom45h7aFz=HczDdL-QoHOc_Sreqf8T2g@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: multipart/signed; boundary="==_Exmh_1560961607_1605P";
-         micalg=pgp-sha1; protocol="application/pgp-signature"
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 19 Jun 2019 12:26:47 -0400
-Message-ID: <22247.1560961607@turing-police>
+        Wed, 19 Jun 2019 09:51:26 -0700 (PDT)
+Date:   Wed, 19 Jun 2019 09:51:25 -0700
+From:   Sandeep Patil <sspatil@android.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Joel Fernandes <joelaf@google.com>, Tri Vo <trong@android.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Alternatives to /sys/kernel/debug/wakeup_sources
+Message-ID: <20190619165125.GG203031@google.com>
+References: <CANA+-vCThdRivg7nrMK5QoFu8SGUzEVSvSyp0H2CPyy9==Tqog@mail.gmail.com>
+ <CANA+-vARQ9Ao=W1oEArrAQ0sqh757orq=-=kytdVPhstm-3E9w@mail.gmail.com>
+ <20190618182502.GC203031@google.com>
+ <4587569.x9DSL43cXO@kreacher>
+ <CANA+-vCMK6u1n9gXf2+v5dFn_tGfr1PT8d7W4d2BCzw+B-HvYw@mail.gmail.com>
+ <CAJWu+oo7kwmEyMXQN0yfswV2=J-Fa9QybhAUx-SOGG_ipsBErQ@mail.gmail.com>
+ <CAJZ5v0gvzCx-7qS9qkxB=sGKjQJKMR7yCc21f=_vqrbZxMSWNg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gvzCx-7qS9qkxB=sGKjQJKMR7yCc21f=_vqrbZxMSWNg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---==_Exmh_1560961607_1605P
-Content-Type: text/plain; charset=us-ascii
+On Wed, Jun 19, 2019 at 10:35:17AM +0200, Rafael J. Wysocki wrote:
+> On Wed, Jun 19, 2019 at 1:52 AM Joel Fernandes <joelaf@google.com> wrote:
+> >
+> > On Tue, Jun 18, 2019 at 7:15 PM Tri Vo <trong@android.com> wrote:
+> > [snip]
+> > > > > > >
+> > > > > > > Android userspace reading wakeup_sources is not ideal because:
+> > > > > > > - Debugfs API is not stable, i.e. Android tools built on top of it are
+> > > > > > > not guaranteed to be backward/forward compatible.
+> > > > > > > - This file requires debugfs to be mounted, which itself is
+> > > > > > > undesirable for security reasons.
+> > > > > > >
+> > > > > > > To address these problems, we want to contribute a way to expose these
+> > > > > > > statistics that doesn't depend on debugfs.
+> > > > > > >
+> > > > > > > Some initial thoughts/questions: Should we expose the stats in sysfs?
+> > > > > > > Or maybe implement eBPF-based solution? What do you think?
+> > > > >
+> > > > > We are going through Android's out-of-tree kernel dependencies along with
+> > > > > userspace APIs that are not necessarily considered "stable and forever
+> > > > > supported" upstream. The debugfs dependencies showed up on our radar as a
+> > > > > result and so we are wondering if we should worry about changes in debugfs
+> > > > > interface and hence the question(s) below.
+> > > > >
+> > > > > So, can we rely on /d/wakeup_sources to be considered a userspace API and
+> > > > > hence maintained stable as we do for other /proc and /sys entries?
+> > > > >
+> > > > > If yes, then we will go ahead and add tests for this in LTP or
+> > > > > somewhere else suitable.
+> > > >
+> > > > No, debugfs is not ABI.
+> > > >
+> > > > > If no, then we would love to hear suggestions for any changes that need to be
+> > > > > made or we simply just move the debugfs entry into somewhere like
+> > > > > /sys/power/ ?
+> > > >
+> > > > No, moving that entire file from debugfs into sysfs is not an option either.
+> > > >
+> > > > The statistics for the wakeup sources associated with devices are already there
+> > > > under /sys/devices/.../power/ , but I guess you want all wakeup sources?
+> > > >
+> > > > That would require adding a kobject to struct wakeup_source and exposing
+> > > > all of the statistics as separate attributes under it.  In which case it would be
+> > > > good to replace the existing wakeup statistics under /sys/devices/.../power/
+> > > > with symbolic links to the attributes under the wakeup_source kobject.
+> > >
+> > > Thanks for your input, Rafael! Your suggestion makes sense. I'll work
+> > > on a patch for this.
+> >
+> > Does that entail making each wake up source, a new sysfs node under a
+> > particular device, and then adding stats under that new node?
+> 
+> Not under a device, because there are wakeup source objects without
+> associated devices.
+> 
+> It is conceivable to have a "wakeup_sources" directory under
+> /sys/power/ and sysfs nodes for all wakeup sources in there.
 
-On Wed, 19 Jun 2019 20:47:34 +0530, Pintu Agarwal said:
 
-> No I mean to say, there are lots of features and customization already
-> done on this version and stabilized.
-> Upgrading again may require months of effort.
+This is what I understood from your initial reply and I think it makes sense.
+Thanks again, Rafael.
 
-This is what happens when you don't upstream your local changes.
+- ssp
 
-And no, saying "But we're a small company and nobody cares" isn't an
-excuse - Linux carried the entire Voyager architecture around for several years
-for 2 machines. Not two models, 2 physical machines, the last 2 operational
-systems of the product line.
-
-(Not the Xubuntu-based Voyage distribution either - the Voyager was a mid-80s
-SMP fault-tolerant system from NCR with up to 32 486/586 cores and 4G of
-memory, which was a honking big system for the day...)
-
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/rzhang/linux/+/v2.6.20-rc1/Documentation/voyager.txt
-
-The architecture was finally dropped in 2009 when enough hardware failures
-had happened that James Bottomley was unable to create a bootable
-system from the parts from both...
-
-So if your production run is several thousand systems, that's *plenty* big
-enough for patches and drivers (especially since drivers for hardware you
-included in your several-thousand system run are also likely applicable to
-a half dozen other vendors who made several thousand systems using the
-same chipset....
-
---==_Exmh_1560961607_1605P
-Content-Type: application/pgp-signature
-
------BEGIN PGP SIGNATURE-----
-Comment: Exmh version 2.9.0 11/07/2018
-
-iQIVAwUBXQpiRgdmEQWDXROgAQLgiQ//UFBElVIVrz2j6hgbDsxrSxbNiWZ78XOp
-zPJi/jWSZmMEt4QpNByA1Ll6udI5h7c3MprYyiFm3YCToErjrV24+LgkCNqGzV3g
-23AY8/bqTjLnA10eT87df7SOdHkfw5CKH89LCEeq1RqK7UYIAN2CMT0MRaPQriD2
-NwoJipNt5YamEDZcZEiVqLWtw2mmLTLEt+kZRg57m9scTrSF96Rg10VFzvA9yi2J
-4RUBNmnGNTh/2qXjkIWa126v/jaYrcktuoaMYgUuVQnvZxb8K8VzkawE0yvyVhsV
-Xn0B3WpNmg61Z9C23hmjSTw/XCn9a0vVXckDeoWYEI1fQgT1okgMQegHvtcUAniN
-Bilmu9+FxVCdus0s4SnjH2jE7dIUXj328ys4imgMidBXxsSMpA6Iht+50/vgxKLV
-XOkdffMF7aw3IWiLvsKagEybyq/1VYGnbmAU+h4GrJphs5Qs55J1CDLTGDcrUKqj
-QSlr48Bs4fGgqiPYs9G5U7e1KXRJdcn8zhmx2HxvDudAqnXVKonxj9cvFqdxHs83
-wWB4Bvp+DCksNVefEXpSXbZddKqmiU51F2lH8WMZ5dxhA/WN+r/oiMRh28gzS0yR
-0xVbWJWDnca0Mn+hp0RioICxIljGiEvQTiWK9IrDj8zJpQNPCntCuqmYQ82bj8yB
-8YAja57nMkE=
-=641k
------END PGP SIGNATURE-----
-
---==_Exmh_1560961607_1605P--
+> 
+> Then, instead of exposing wakeup statistics directly under
+> /sys/devices/.../power/, there can be symbolic links from there to the
+> new wakeup source nodes under "wakeup_sources" (so as to avoid
+> exposing the same data in two different places in sysfs, which may be
+> confusing).
+> 
+> Cheers!
