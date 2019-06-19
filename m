@@ -2,59 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CBD4B425
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 10:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D014B4AB
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 11:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731263AbfFSIfq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 04:35:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:55812 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730783AbfFSIfq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 Jun 2019 04:35:46 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED6B9CFC;
-        Wed, 19 Jun 2019 01:35:45 -0700 (PDT)
-Received: from queper01-lin (queper01-lin.cambridge.arm.com [10.1.195.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 105993F246;
-        Wed, 19 Jun 2019 01:35:43 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 09:35:42 +0100
-From:   Quentin Perret <quentin.perret@arm.com>
-To:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
-        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
-        will.deacon@arm.com, catalin.marinas@arm.com,
-        daniel.lezcano@linaro.org, dietmar.eggemann@arm.com,
-        ionela.voinescu@arm.com, mka@chromium.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 0/3] Make IPA use PM_EM
-Message-ID: <20190619083539.mveyly5celgs5pmg@queper01-lin>
-References: <20190530092038.12020-1-quentin.perret@arm.com>
+        id S1731405AbfFSJIX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 05:08:23 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39928 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726865AbfFSJIW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 05:08:22 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5J97ZLE146323
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 05:08:21 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2t7hgkt2mu-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 05:08:21 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
+        Wed, 19 Jun 2019 10:08:19 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 19 Jun 2019 10:08:16 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5J987US38142230
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jun 2019 09:08:07 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B27A4203F;
+        Wed, 19 Jun 2019 09:08:15 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6BB342047;
+        Wed, 19 Jun 2019 09:08:13 +0000 (GMT)
+Received: from oc0383214508.ibm.com (unknown [9.124.35.103])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 19 Jun 2019 09:08:13 +0000 (GMT)
+Subject: Re: [PATCH v2 1/1] cpuidle-powernv : forced wakeup for stop states
+To:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
+        mpe@ellerman.id.au, rjw@rjwysocki.net
+References: <20190617095648.18847-1-huntbag@linux.vnet.ibm.com>
+ <20190617095648.18847-2-huntbag@linux.vnet.ibm.com>
+ <1560917320.mk5nn6r8jw.astroid@bobo.none>
+From:   Abhishek <huntbag@linux.vnet.ibm.com>
+Date:   Wed, 19 Jun 2019 14:38:13 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190530092038.12020-1-quentin.perret@arm.com>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <1560917320.mk5nn6r8jw.astroid@bobo.none>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+x-cbid: 19061909-0016-0000-0000-0000028A66E6
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19061909-0017-0000-0000-000032E7BC79
+Message-Id: <689a52a7-7bfc-7225-e563-ac07f7357e75@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-19_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906190075
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday 30 May 2019 at 10:20:35 (+0100), Quentin Perret wrote:
-> Quentin Perret (3):
->   arm64: defconfig: Enable CONFIG_ENERGY_MODEL
->   thermal: cpu_cooling: Make the power-related code depend on IPA
->   thermal: cpu_cooling: Migrate to using the EM framework
-> 
->  arch/arm64/configs/defconfig  |   1 +
->  drivers/thermal/Kconfig       |   1 +
->  drivers/thermal/cpu_cooling.c | 428 ++++++++++++++--------------------
->  3 files changed, 178 insertions(+), 252 deletions(-)
+Hi Nick,
 
-Gentle ping on this :-)
+Thanks for the review. Some replies below.
 
-Is there any chance for the series to make it in 5.3 ? Or is it too late
-already ? In any case do let me know if there is anything I can do about
-it.
+On 06/19/2019 09:53 AM, Nicholas Piggin wrote:
+> Abhishek Goel's on June 17, 2019 7:56 pm:
+>> Currently, the cpuidle governors determine what idle state a idling CPU
+>> should enter into based on heuristics that depend on the idle history on
+>> that CPU. Given that no predictive heuristic is perfect, there are cases
+>> where the governor predicts a shallow idle state, hoping that the CPU will
+>> be busy soon. However, if no new workload is scheduled on that CPU in the
+>> near future, the CPU may end up in the shallow state.
+>>
+>> This is problematic, when the predicted state in the aforementioned
+>> scenario is a shallow stop state on a tickless system. As we might get
+>> stuck into shallow states for hours, in absence of ticks or interrupts.
+>>
+>> To address this, We forcefully wakeup the cpu by setting the
+>> decrementer. The decrementer is set to a value that corresponds with the
+>> residency of the next available state. Thus firing up a timer that will
+>> forcefully wakeup the cpu. Few such iterations will essentially train the
+>> governor to select a deeper state for that cpu, as the timer here
+>> corresponds to the next available cpuidle state residency. Thus, cpu will
+>> eventually end up in the deepest possible state.
+>>
+>> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
+>> ---
+>>
+>> Auto-promotion
+>>   v1 : started as auto promotion logic for cpuidle states in generic
+>> driver
+>>   v2 : Removed timeout_needed and rebased the code to upstream kernel
+>> Forced-wakeup
+>>   v1 : New patch with name of forced wakeup started
+>>   v2 : Extending the forced wakeup logic for all states. Setting the
+>> decrementer instead of queuing up a hrtimer to implement the logic.
+>>
+>>   drivers/cpuidle/cpuidle-powernv.c | 38 +++++++++++++++++++++++++++++++
+>>   1 file changed, 38 insertions(+)
+>>
+>> diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
+>> index 84b1ebe212b3..bc9ca18ae7e3 100644
+>> --- a/drivers/cpuidle/cpuidle-powernv.c
+>> +++ b/drivers/cpuidle/cpuidle-powernv.c
+>> @@ -46,6 +46,26 @@ static struct stop_psscr_table stop_psscr_table[CPUIDLE_STATE_MAX] __read_mostly
+>>   static u64 default_snooze_timeout __read_mostly;
+>>   static bool snooze_timeout_en __read_mostly;
+>>   
+>> +static u64 forced_wakeup_timeout(struct cpuidle_device *dev,
+>> +				 struct cpuidle_driver *drv,
+>> +				 int index)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = index + 1; i < drv->state_count; i++) {
+>> +		struct cpuidle_state *s = &drv->states[i];
+>> +		struct cpuidle_state_usage *su = &dev->states_usage[i];
+>> +
+>> +		if (s->disabled || su->disable)
+>> +			continue;
+>> +
+>> +		return (s->target_residency + 2 * s->exit_latency) *
+>> +			tb_ticks_per_usec;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+> It would be nice to not have this kind of loop iteration in the
+> idle fast path. Can we add a flag or something to the idle state?
+Currently, we do not have any callback notification or some feedback that
+notifies the driver everytime some state is enabled/disabled. So we have
+to parse everytime to get the next enabled state. Are you suggesting to
+add something like next_enabled_state in cpuidle state structure itself
+which will be updated when a state is enabled or disabled?
+>> +
+>>   static u64 get_snooze_timeout(struct cpuidle_device *dev,
+>>   			      struct cpuidle_driver *drv,
+>>   			      int index)
+>> @@ -144,8 +164,26 @@ static int stop_loop(struct cpuidle_device *dev,
+>>   		     struct cpuidle_driver *drv,
+>>   		     int index)
+>>   {
+>> +	u64 dec_expiry_tb, dec, timeout_tb, forced_wakeup;
+>> +
+>> +	dec = mfspr(SPRN_DEC);
+>> +	timeout_tb = forced_wakeup_timeout(dev, drv, index);
+>> +	forced_wakeup = 0;
+>> +
+>> +	if (timeout_tb && timeout_tb < dec) {
+>> +		forced_wakeup = 1;
+>> +		dec_expiry_tb = mftb() + dec;
+>> +	}
+> The compiler probably can't optimise away the SPR manipulations so try
+> to avoid them if possible.
+Are you suggesting something like set_dec_before_idle?(in line with
+what you have suggested to do after idle, reset_dec_after_idle)
+>
+>> +
+>> +	if (forced_wakeup)
+>> +		mtspr(SPRN_DEC, timeout_tb);
+> This should just be put in the above 'if'.
+Fair point.
+>
+>> +
+>>   	power9_idle_type(stop_psscr_table[index].val,
+>>   			 stop_psscr_table[index].mask);
+>> +
+>> +	if (forced_wakeup)
+>> +		mtspr(SPRN_DEC, dec_expiry_tb - mftb());
+> This will sometimes go negative and result in another timer interrupt.
+>
+> It also breaks irq work (which can be set here by machine check I
+> believe.
+>
+> May need to implement some timer code to do this for you.
+>
+> static void reset_dec_after_idle(void)
+> {
+> 	u64 now;
+>          u64 *next_tb;
+>
+> 	if (test_irq_work_pending())
+> 		return;
+> 	now = mftb;
+> 	next_tb = this_cpu_ptr(&decrementers_next_tb);
+>
+> 	if (now >= *next_tb)
+> 		return;
+> 	set_dec(*next_tb - now);
+> 	if (test_irq_work_pending())
+> 		set_dec(1);
+> }
+>
+> Something vaguely like that. See timer_interrupt().
+Ah, Okay. Will go through timer_interrupt().
+> Thanks,
+> Nick
+Thanks,
+Abhishek
 
-Many thanks,
-Quentin
