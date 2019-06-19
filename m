@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F364B828
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 14:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867454B838
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 14:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbfFSMZ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 08:25:56 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:45918 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726246AbfFSMZ4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 08:25:56 -0400
-Received: by mail-ot1-f65.google.com with SMTP id x21so19024328otq.12;
-        Wed, 19 Jun 2019 05:25:55 -0700 (PDT)
+        id S1727129AbfFSM2U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 08:28:20 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:39020 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727068AbfFSM2U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 08:28:20 -0400
+Received: by mail-ot1-f68.google.com with SMTP id r21so16177965otq.6;
+        Wed, 19 Jun 2019 05:28:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=t636JR0WhKBOeLD0UwHYBIKxLtvPrJCBGRwoWUBCtFY=;
-        b=fizbzBOfmYcQZQGreojAqxPK2D3h0RYGNlD6HW4e+a+0+cQzIQY2swEWzrymtXxqrW
-         v2q4wTkUmpPjqgeV95riS488ty6kYdNZVpPHA5GOfbbBlnr+9Ao9kUeDQlvu9yJ4OhYf
-         lq6R5Vox0iAFY3NmqWz5XgNymj/2+pTqs1h4sdjk9wfH5PAv/6QzLhTYroaNAEBsjc0N
-         FEDtoSjwTY28rHeHItDDAoz/B3kNPiKm16jG7lQTCN0wQHHfRmAqI3lQwLGDZSlH88Fi
-         xm52lKb0l3whfr07to+yA+JY4I5iszxq80j+jinfXWcgim2CxBZL1o9bY5WCO6BCpAM5
-         w0Mg==
-X-Gm-Message-State: APjAAAX4pWJSkrelwkFUq5CTfmusGXMpxRQieF3LR5ONmAjs/hqv4B59
-        uFTv6wi/Jx3eQtf5gTAi+bSeCVtYJ4RInqpVI6k=
-X-Google-Smtp-Source: APXvYqy02yoWKMqt5h/YXcJjrxDjMFc91cJ/bUD9qVVWG6Usl1FN1ytOlSfXptOi2wc94asLYWkrKF21cp3FkaNK5GI=
-X-Received: by 2002:a9d:6959:: with SMTP id p25mr45214408oto.118.1560947155377;
- Wed, 19 Jun 2019 05:25:55 -0700 (PDT)
+        bh=JkqxDQxaoP4bZHVemNak1GsJ+YOnJiiFXfkLhDNKRc4=;
+        b=gvcBmI66xXrBP5+Jk2zO1D4++wI2WogAy0xLZ/5M3StlaNV0SXnn3WoLOeTaCRIRUl
+         NXUNrkkTKgLYFvK5bEC8L2D9MIGWoEwo0PuKI5QiFPYLdgIQAgTTs20pa4lx6Yo227Ck
+         84rTK+pyGTP9heEoykx6pqElgVKehn5wScrOS/ippBzsMeOmbSwOgmfKSxJixZox149q
+         e7e2HIttBhSvxh9yWG7QpkjUrP3ysKrYipWVnRDuqPCSGLiQx5n2ym3blofQ/ywuKqHs
+         2Lt76L79JD8Up8FCQcDmkhINpLVN5+ORlhb++cOKBuO7mnF9WzRQ6dsdKCHAVbvZN9O6
+         0nsA==
+X-Gm-Message-State: APjAAAXnkJzW4O4027/ynpS525eAWNoBFl5ni0nSn00jaWFCjN4u+7nS
+        Wqwyb1dqNJaoO1B5wBshi/1kn54L7LH5WL4g5xUbAQ==
+X-Google-Smtp-Source: APXvYqzYviKAQmZCcYPk9Ok0Mn8ppwliIjXjrV1wp/5C+WyaMBH2nWvDpbWKL7Cl2P3JwZUmGxNEO6o8V1ISO/3A3KM=
+X-Received: by 2002:a05:6830:8a:: with SMTP id a10mr5443795oto.167.1560947299668;
+ Wed, 19 Jun 2019 05:28:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1560944014.git.viresh.kumar@linaro.org> <4008d21f166accfb28180eb804cb8ebda6da4f4d.1560944014.git.viresh.kumar@linaro.org>
-In-Reply-To: <4008d21f166accfb28180eb804cb8ebda6da4f4d.1560944014.git.viresh.kumar@linaro.org>
+References: <cover.1560944014.git.viresh.kumar@linaro.org> <8c563c8f3515ceefd88875160302b6fd472c3dac.1560944014.git.viresh.kumar@linaro.org>
+In-Reply-To: <8c563c8f3515ceefd88875160302b6fd472c3dac.1560944014.git.viresh.kumar@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 19 Jun 2019 14:25:44 +0200
-Message-ID: <CAJZ5v0iR8oBZ2mM2vdHzTBNcjsHa6QtJmN+Q17Q8ZD-ny3qy3w@mail.gmail.com>
-Subject: Re: [PATCH 3/6] cpufreq: Remove the has_target() check from notifier handler
+Date:   Wed, 19 Jun 2019 14:28:08 +0200
+Message-ID: <CAJZ5v0gmkAS-A2eT5VUyuBMD9+FfsM0HL-HPeUYUV24_oMTvVw@mail.gmail.com>
+Subject: Re: [PATCH 4/6] cpufreq: Use has_target() instead of !setpolicy
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
@@ -47,36 +47,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 19, 2019 at 1:35 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Wed, Jun 19, 2019 at 1:36 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> cpufreq_notify_transition() is only called for has_target() type driver
-> and not for set_policy type, and the check is simply redundant. Remove
-> it.
+> For code consistency, use has_target() instead of !setpolicy everywhere,
+> as it is already done at several places.
 
-Ah, OK
+That's OK
 
-So this patch removes a check introduced by the previous one. :-)
+> Maybe we should also use !has_target() for setpolicy case to use only one expression
+> for this differentiation.
 
-Please merge them together.
-
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index e59194c2c613..41ac701e324f 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -359,7 +359,7 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
->                  * which is not equal to what the cpufreq core thinks is
->                  * "old frequency".
->                  */
-> -               if (has_target() && policy->cur && policy->cur != freqs->old) {
-> +               if (policy->cur && policy->cur != freqs->old) {
->                         pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
->                                  freqs->old, policy->cur);
->                         freqs->old = policy->cur;
-> --
-> 2.21.0.rc0.269.g1a574e7a288b
->
+But I'm not sure what you mean here?
