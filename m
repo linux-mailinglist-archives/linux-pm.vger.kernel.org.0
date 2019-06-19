@@ -2,96 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 168324BA40
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 15:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF92B4BA5C
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jun 2019 15:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbfFSNlD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 09:41:03 -0400
-Received: from s3.sipsolutions.net ([144.76.43.62]:36406 "EHLO
-        sipsolutions.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726479AbfFSNlD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 09:41:03 -0400
-Received: by sipsolutions.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1hdapd-0001rq-9z; Wed, 19 Jun 2019 15:40:57 +0200
-Message-ID: <634be6de5fd29064bd41540a5d93d1756c06a980.camel@sipsolutions.net>
-Subject: Re: [PATCH V4 22/28] PCI: tegra: Access endpoint config only if
- PCIe link is up
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Manikanta Maddireddy <mmaddireddy@nvidia.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        robh+dt@kernel.org, mark.rutland@arm.com, jonathanh@nvidia.com,
-        vidyas@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-wireless@vger.kernel.org
-Date:   Wed, 19 Jun 2019 15:40:54 +0200
-In-Reply-To: <20190619133817.GA143205@google.com>
-References: <09bcc121-eaca-3866-d0ef-7806503e883f@nvidia.com>
-         <ca34eb24-8696-576f-26bc-8d6141f81a41@nvidia.com>
-         <20190613143946.GA30445@e121166-lin.cambridge.arm.com>
-         <20190613154250.GA32713@ulmo>
-         <a523a19c-fdfa-01f7-6f6d-2ca367a10a50@nvidia.com>
-         <20190617114745.GL508@ulmo> <20190617193024.GC13533@google.com>
-         <a7e0472d-f4a7-ed63-836a-b5e8b1360645@nvidia.com>
-         <20190618104918.GA28892@ulmo>
-         <9c0fb01f0dc6a193265297eaa100a35ff25413e7.camel@sipsolutions.net>
-         <20190619133817.GA143205@google.com>
+        id S1726109AbfFSNoV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 09:44:21 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43389 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726047AbfFSNoU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 09:44:20 -0400
+Received: by mail-lf1-f65.google.com with SMTP id j29so12158816lfk.10;
+        Wed, 19 Jun 2019 06:44:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sh/qIBw1XKDUdQ0Wxpr8WG15MJA13mpU4YtnzOpaKLE=;
+        b=OIdFgOcig0sQN7irVtXlKzuUYnNpdV1QiD1wZV9NUpIz3rzt9QrMhB2vZdMgO0dDZ5
+         N05RhZia6MmkDuZ9lReuExcnttV/eCkIHQgXv/bZyL0H2+jP84zT/qvY96zXDf4iJop7
+         UQyt7pn+TmFRgSRFTdk2qnP0JvNi5N6WNQWx0sWNnI/PczhgPk4YRwlkPDEM98kTV7wX
+         Ei2qA5i40HrzUql+JbtY/4oYdMRtBrcpkVpmBHsd1GrLZcDURYD1zf2IPuovqT1PZ3jA
+         NeBkY8lEZtzL6WQs4D644wb00nPn5IdFpZssFJDs5AGV5X4+jfZu2clZjaHYEiJUIIji
+         Vokg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sh/qIBw1XKDUdQ0Wxpr8WG15MJA13mpU4YtnzOpaKLE=;
+        b=s3wPYw1fGvCo5/eGhk7T2Ytkub/vVuqcBPZqRZAITHzxfUAhCaI/k+TOBmbKJy7C+C
+         ENwhoJi6Wv8zxnSkao+WHc4hXW5x9772k67IHIo91PElNvEl4fuNtfFf5uIZwmFF8lcR
+         Hxn2oOW4FQR2W2l0ipWrB5qwurGbHBY87bNXlUgjfNsw/RfOv52iLEeOE00/WaD29EOj
+         hvbkpZw0FPtD2Yicz5mpLqPWbuWcsP4oPWwkbPuFiUz9/O+yENLRpTpuu1oevniacxNy
+         CNYlk1aEe+mW2OgqTUaQupIjwNiAOf1ZMWIXPi1nZeC7z/w293L8oXtpIrjlAXmHvsFa
+         5T0w==
+X-Gm-Message-State: APjAAAUWANhfHEOHB5uIvCGsRvbZYCrVdP1E9bqA2sTUnwt1bXZXkR3J
+        8LY+daKT0KnpNiX+aVzEUbnm/1JAdf9SnrLR0Ks=
+X-Google-Smtp-Source: APXvYqzIHC2qwwy1WwyVkFuivPy0ti/t0LmJDTX/uQQG/dGgpZBVy8Yf6Ax2JhyVKa5qoMS4Z7Nr8uBXW6Fx5oQqAF8=
+X-Received: by 2002:a05:6512:29a:: with SMTP id j26mr28443954lfp.44.1560951858594;
+ Wed, 19 Jun 2019 06:44:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAOuPNLiBA9VjEoG_D2y2O5mKiqsDNW1VZXOk1eWXpGY+h86acg@mail.gmail.com>
+ <CAOMZO5BcLaS0gXUPi6oN6vjqagS5yf+rHh+EUjmi-Wi1OX7vqQ@mail.gmail.com>
+ <CAOuPNLgEEfDca4aeT1+q8GfUfGzbJ4x6JwGf-ROB1pgpXUBHSw@mail.gmail.com>
+ <CAOMZO5BY8JcLNMCRCC_d=emy8HR6kE=dB9f5qfZ=ci_c+Jak0w@mail.gmail.com> <CAOuPNLjYhkP_kL+q-ZpiDZMMpOHrU88BFBc2agtnCzXt8dihOg@mail.gmail.com>
+In-Reply-To: <CAOuPNLjYhkP_kL+q-ZpiDZMMpOHrU88BFBc2agtnCzXt8dihOg@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 19 Jun 2019 10:44:31 -0300
+Message-ID: <CAOMZO5ADK1L5UMM9XZetHvmjTvmvUg99G7VPdeXitgpctGLCkw@mail.gmail.com>
+Subject: Re: [IMX] [DRM]: suspend/resume support
+To:     Pintu Agarwal <pintu.ping@gmail.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Kernelnewbies <kernelnewbies@kernelnewbies.org>,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-2.fc28) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2019-06-19 at 08:38 -0500, Bjorn Helgaas wrote:
+On Wed, Jun 19, 2019 at 10:33 AM Pintu Agarwal <pintu.ping@gmail.com> wrote:
 
-> > > > > How does rfkill work?  It sounds like it completely removes
-> > > > > power from the wifi device, putting it in D3cold.  Is there
-> > > > > any software notification other than the "Slot present pin
-> > > > > change" (which looks like a Tegra-specific thing)?
-> > 
-> > Well, they said above it's a GPIO that controls it, so the software
-> > already knows and doesn't really need an event?
-> 
-> Forgive my ignorance about rfkill.  At least in this Tegra case, it
-> sounds like rfkill basically controls a power switch for the entire
-> device, i.e., it doesn't merely turn off the radio portion of the
-> device; it puts the entire PCI device in D3cold.
+> You can think that the version I am using right now is almost 4.9 itself.
 
-Sort of. The actual (hardware) implementation seems a bit more
-complicated than a "power switch", but yes, that's the effect of it.
+"almost 4.9" does not help, sorry.
 
-> Is rfkill integrated with the power management subsystem?  E.g., when
-> lspci or X tries to read config space via pci_read_config(), does the
-> pci_config_pm_runtime_get() in that path wake up the device?
+> Upgrading again to higher kernel version is again difficult, also
+> customer does not want it.
 
-No, that's the problem at hand AFAICT.
+dw-hdmi is well supported on i.MX6 with mainline, so you could simply try that.
 
-> IMO, if the struct pci_dev exists, we should be able to rely on the
-> device actually being accessible (possibly after bringing it back to
-> D0).  If rfkill only turns off the radio, leaving the PCI interface
-> active, that would be fine -- in that case generic PCI things like
-> lspci would work normally and it would be up to the driver to manage
-> network-related things.
-> 
-> But if rfkill turns off PCI interface and the power management
-> subsystem can't wake it up, I think we should unbind the driver and
-> remove the pci_dev, so it wouldn't appear in lspci at all.
+Try booting 5.1.11 on your custom board with a very minimal dts with
+HDMI support.
 
-Right. That's being suggested here, but since the platform has no actual
-hardware hotplug, that needs to be implemented in software.
+Then you can test suspend/resume and see if HDMI hangs or not.
 
-The question at hand is *how* to actually achieve that.
+> Another approach I tried is, installing hdmi {dw-hdmi.ko,
+> dw_hdmi-imx.ko} as a module, just after the resume.
+> With this also system hangs during installation of dw_hdmi-imx.ko at
+> below location:
+>
+> imx_drm_driver_load(..)
+> |
+> |--> component_bind_all(...)
+>      |
+>      |-> component_bind(ipu)
+>          |
+>          |
+>          ipu_drm_bind(..)
+>          |
+>          |-> ipu_crtc_init(..)
+>              |
+>              |-> ipu_plane_irq(..)
+>              |
+>              | ----> << __HANGS HERE__ >>
 
-I'm kind of arguing that it's not rfkill that achieves it, but the
-underlying GPIO that toggles the device, since that GPIO could also be
-bound to something other than an rfkill-gpio instance.
+I am not able to reproduce this hang. As I mentioned yesterday
+suspend/resume is working just fine.
 
-johannes
-
+We would be glad to help fixing the hang if you could reproduce it
+with a mainline kernel.
