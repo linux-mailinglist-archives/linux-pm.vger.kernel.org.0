@@ -2,56 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C714C5AB
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2019 05:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2334C5AD
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2019 05:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731363AbfFTDG2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jun 2019 23:06:28 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:40184 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbfFTDG1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 23:06:27 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w10so757264pgj.7
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 20:06:27 -0700 (PDT)
+        id S1731433AbfFTDGb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jun 2019 23:06:31 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43179 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731428AbfFTDGa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jun 2019 23:06:30 -0400
+Received: by mail-pf1-f194.google.com with SMTP id i189so780560pfg.10
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jun 2019 20:06:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=p8q7duu3NM5D7B0/JJEPNRH7AiTiNoUPeRHE8XCCFpc=;
-        b=pi9g95KXO8T2J62vjV8PPB7VJfoSs9c6QwY71RXsD9brl+T2e/1eGRO3sjle2j1XQ+
-         79PG7kurlPGO8rSAzq+FCPPsyvxIXduSBxqvxKch5MjoumOWdYsue+oY+ontfPUIRE1d
-         td/3JGqWefy6RUFofSUzIWdRy2ez/S2fkFPNcADiit7knMzt6PmgtaoNaaXHswygLFh3
-         xCOw1TPLwojNrUEmXwXhclxKxHVYcEaKfCm9aynndRo6HjwdInS2IDrK/FIcUaYaY67J
-         I04Cyu4DqdjbMZI1OZHzFjYUY00KZPKff4relP1bI6YkZ+bB1pnDUaljewOnVXX5gZ7Z
-         gJAQ==
+        bh=V98tUwwV6g6TL0oXF4qejJSzRWuC3JVirQic0+jf+LQ=;
+        b=mlHwhEeSUqJF17X4t3Ni9g83PNe8Y5jIUjeDUaIW+0wc1+yy+t6cg8koZ2zwd8tSlT
+         V3vDuVK0+Rn83OifBrN6paB0Z4AurjNPXWFMaYP+FfqotIVynyr6uy6p0HEUMOcB9cyq
+         K/4geXzoVLMdjzwsCaiAngcZZ/71nwDJSpVMmWqYFS5Bd+B69GlNrYkn+zjR4WJ+2n9R
+         l3k8DvZTKsdTL6fjpLP8Vvr2XLwVNr8oaL8KwqeAl8miWVfiMD/YclntsbDo7Cu4A3J0
+         jQ5y+QTSTjL/RI5SCRBfBj6U6+lNxH2l9kOXB2eSw4SCkIYrnQdMH2hQh/y9bomIaTZ6
+         sQsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=p8q7duu3NM5D7B0/JJEPNRH7AiTiNoUPeRHE8XCCFpc=;
-        b=bUj6C1FihLIZs+kjzJrjlRjuzPPzpNOJTl576c1ciT4CwgHyl1Ytqo/vdTLcRBTP/W
-         k5X7RKnuZM6UrajSFxi2oa5MWUZ7yDOEJUBrcRl8n7d6lwnJe7JfiJgkcl5AEsUYjDid
-         eV1QHM2Dwo94T5VZOXgci0M4Si1G7F1J1niUm9IVIYFazI33F+D69z6gwTiv2OGUNfRP
-         QbevJeSKwglK8gXJ0bqaeHV/x/pQlVQVDeuFw3Z0FuzVkAPbAysZI42WbOQYyQZQVBrB
-         2lMTE8CcnqgqipLMdVgdDrXr4hJ3JnWZ3bLVZSeLWsTsmfVkRF2y9aW+M38cRCSk/jMb
-         1Q8A==
-X-Gm-Message-State: APjAAAWe2st3OguR36CNzb79dRPgPNrJJ10BwWNreEFHsI/dVem/cGkd
-        lzF1WQx7lxxQOZZDvyTCKOJjPg==
-X-Google-Smtp-Source: APXvYqxFAhFFPNFzp204E1IW8iP5ZxzaHvAie5ju+82McHT0juXkxxe5Mzqm7beuZ+WBswCm00XCxg==
-X-Received: by 2002:a62:82c2:: with SMTP id w185mr109064201pfd.202.1560999986860;
-        Wed, 19 Jun 2019 20:06:26 -0700 (PDT)
+        bh=V98tUwwV6g6TL0oXF4qejJSzRWuC3JVirQic0+jf+LQ=;
+        b=e7o5zzMMCH6ZUWRKj9uWpsqsn0IHBr1DcOmFxuzb+fcNh+NbaNvMwcqJt9LdaZm5zb
+         gvghdkIBYid1+lhY0+e5Wdz2D1tem3MB+OWmCku0EQvGAwJ3X57sjb0c4ovTBLeqjMdc
+         CDsH64qCJTo58ECmH5pKEfp0ZACPaHcfqHcfBFzlpo+dpc2WI4X6cxwatam7dVvbKEx/
+         2R1IHe4HkJHnIyPreXzhfCNaThcVTi6AIci0n6bDh3L1OCT4Elb/caxckrtRxCRaI+kG
+         OT4jRhI4bYpMosExcmBgHbKpX7iHWRzz5PLRLkdc3SagkhPqPBG3Uj+PjG9hZTgO3InM
+         YI4A==
+X-Gm-Message-State: APjAAAVq5lPNsdAPz/7Obnrmug6b3RvMdRK8x3IaQRyX3DRubESyk3C9
+        noA4LK+ndtsnJFUzGV3uWSxw4A==
+X-Google-Smtp-Source: APXvYqyFe2XxI+QiBEDINmZXWdMAk2I0sa9y7G/GFHsXNqjmdZo6NTSGyBO8qHHU6VvwmqkIisH2KA==
+X-Received: by 2002:a17:90a:3210:: with SMTP id k16mr593435pjb.13.1560999989797;
+        Wed, 19 Jun 2019 20:06:29 -0700 (PDT)
 Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id g8sm19236053pfi.8.2019.06.19.20.06.25
+        by smtp.gmail.com with ESMTPSA id d6sm18066742pgv.4.2019.06.19.20.06.28
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Jun 2019 20:06:26 -0700 (PDT)
+        Wed, 19 Jun 2019 20:06:29 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 2/5] cpufreq: Replace few CPUFREQ_CONST_LOOPS checks with has_target()
-Date:   Thu, 20 Jun 2019 08:35:47 +0530
-Message-Id: <88da7cfabad5e19a361fe2843e5ef547d50fd221.1560999838.git.viresh.kumar@linaro.org>
+Subject: [PATCH V2 3/5] cpufreq: Use has_target() instead of !setpolicy
+Date:   Thu, 20 Jun 2019 08:35:48 +0530
+Message-Id: <56d8e01d8febb81917aded319249145fdc73daec.1560999838.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
 In-Reply-To: <cover.1560999838.git.viresh.kumar@linaro.org>
 References: <cover.1560999838.git.viresh.kumar@linaro.org>
@@ -62,60 +62,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CPUFREQ_CONST_LOOPS was introduced in a very old commit from pre-2.6
-kernel release commit 6a4a93f9c0d5 ("[CPUFREQ] Fix 'out of sync'
-issue").
-
-Probably the initial idea was to just avoid these checks for set_policy
-type drivers and then things got changed over the years. And it is very
-unclear why these checks are there at all.
-
-Replace the CPUFREQ_CONST_LOOPS check with has_target(), which makes
-more sense now.
-
-cpufreq_notify_transition() is only called for has_target() type driver
-and not for set_policy type, and the check is simply redundant. Remove
-it as well.
-
-Also remove () around freq comparison statement as they aren't required
-and checkpatch also warns for them.
+For code consistency, use has_target() instead of !setpolicy everywhere,
+as it is already done at several places. Maybe we should also use
+"!has_target()" instead of "cpufreq_driver->setpolicy" where we need to
+check if the driver supports setpolicy, so to use only one expression
+for this kind of differentiation.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/cpufreq.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/cpufreq/cpufreq.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 54befd775bd6..41ac701e324f 100644
+index 41ac701e324f..5f5c7a516c74 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
-@@ -359,12 +359,10 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
- 		 * which is not equal to what the cpufreq core thinks is
- 		 * "old frequency".
- 		 */
--		if (!(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
--			if (policy->cur && (policy->cur != freqs->old)) {
--				pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
--					 freqs->old, policy->cur);
--				freqs->old = policy->cur;
--			}
-+		if (policy->cur && policy->cur != freqs->old) {
-+			pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
-+				 freqs->old, policy->cur);
-+			freqs->old = policy->cur;
- 		}
+@@ -632,7 +632,7 @@ static int cpufreq_parse_policy(char *str_governor,
+ }
  
- 		srcu_notifier_call_chain(&cpufreq_transition_notifier_list,
-@@ -1618,8 +1616,7 @@ static unsigned int __cpufreq_get(struct cpufreq_policy *policy)
- 	if (policy->fast_switch_enabled)
- 		return ret_freq;
+ /**
+- * cpufreq_parse_governor - parse a governor string only for !setpolicy
++ * cpufreq_parse_governor - parse a governor string only for has_target()
+  */
+ static int cpufreq_parse_governor(char *str_governor,
+ 				  struct cpufreq_policy *policy)
+@@ -1301,7 +1301,7 @@ static int cpufreq_online(unsigned int cpu)
+ 		policy->max = policy->user_policy.max;
+ 	}
  
--	if (ret_freq && policy->cur &&
--		!(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
-+	if (has_target() && ret_freq && policy->cur) {
- 		/* verify no discrepancy between actual and
- 					saved value exists */
- 		if (unlikely(ret_freq != policy->cur)) {
+-	if (cpufreq_driver->get && !cpufreq_driver->setpolicy) {
++	if (cpufreq_driver->get && has_target()) {
+ 		policy->cur = cpufreq_driver->get(policy->cpu);
+ 		if (!policy->cur) {
+ 			pr_err("%s: ->get() failed\n", __func__);
+@@ -2401,7 +2401,7 @@ void cpufreq_update_policy(unsigned int cpu)
+ 	 * BIOS might change freq behind our back
+ 	 * -> ask driver for current freq and notify governors about a change
+ 	 */
+-	if (cpufreq_driver->get && !cpufreq_driver->setpolicy &&
++	if (cpufreq_driver->get && has_target() &&
+ 	    (cpufreq_suspended || WARN_ON(!cpufreq_update_current_freq(policy))))
+ 		goto unlock;
+ 
 -- 
 2.21.0.rc0.269.g1a574e7a288b
 
