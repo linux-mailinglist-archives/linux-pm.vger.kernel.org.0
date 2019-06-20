@@ -2,104 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC7E4D22F
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2019 17:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CFB4DD69
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 00:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbfFTPb3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jun 2019 11:31:29 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50102 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726562AbfFTPb2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 11:31:28 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 6E34E280970
-Message-ID: <dc66892331fdff463080db1fa9caa3a70da08f42.camel@collabora.com>
-Subject: Re: [PATCH 1/2] PM / devfreq: Fix governor module load failure
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc:     kernel@collabora.com, linux-pm@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Date:   Thu, 20 Jun 2019 12:31:19 -0300
-In-Reply-To: <52870c3e-cbf1-d627-8e93-8e1fb8c31d48@samsung.com>
-References: <CGME20190605190147epcas1p3e74fba524dfcfc87f7ce3c9569ffaa3f@epcas1p3.samsung.com>
-         <20190605190053.19177-1-ezequiel@collabora.com>
-         <7320aa6c-4a49-aae2-4db5-5c1f0d6ce76e@samsung.com>
-         <52870c3e-cbf1-d627-8e93-8e1fb8c31d48@samsung.com>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
+        id S1726135AbfFTWZw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jun 2019 18:25:52 -0400
+Received: from mail4.protonmail.ch ([185.70.40.27]:33879 "EHLO
+        mail4.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726215AbfFTWZw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 18:25:52 -0400
+X-Greylist: delayed 444 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Jun 2019 18:25:51 EDT
+Date:   Thu, 20 Jun 2019 22:18:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=philipmolloy.com;
+        s=protonmail; t=1561069106;
+        bh=o+PFeJ5YEwKfmogZjjcfo2VWfzgLtuAT/POmeapFTnw=;
+        h=Date:To:From:Reply-To:Subject:Feedback-ID:From;
+        b=kNnMy1fnOqYqlNXKrGioJmQ36eVuG0JlMHMuzA5waH5MWtE+kEPLr5toca5s2hwG3
+         6PxkjypU2Sbe9eomSnlcrmzOYXyna8ONvC910JgDTBNWU/GswO5OYVOyvxGoDEdYGX
+         vVr1bcCI6zdM+rEricy4PDe47LtSV4zfXQe+MWbg=
+To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+From:   Philip Molloy <philip@philipmolloy.com>
+Reply-To: Philip Molloy <philip@philipmolloy.com>
+Subject: Power domain configuration for a i2c module
+Message-ID: <LBvyayNVX8_SOsSXpNSqiBACOGjM2Bu-Fz-D_gW850M9ZJQVEk6WVxzipUn9O4n15435v4yHSIVYp0HgKUcSkTt_hTIEA3XZ0FZLSyEKipY=@philipmolloy.com>
+Feedback-ID: GJt-tMfvxqs0QQBY3TE43pQhGJvmgUyYcaVNLwpOk7zQA3Z8eEn7lfwmGEZNv6-1MJvpWrQYi2j-a_XpfopQjA==:Ext:ProtonMail
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF autolearn=ham
+        autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.protonmail.ch
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2019-06-20 at 17:04 +0900, Chanwoo Choi wrote:
-> On 19. 6. 20. 오후 4:59, Chanwoo Choi wrote:
-> > Hi,
-> > 
-> > On 19. 6. 6. 오전 4:00, Ezequiel Garcia wrote:
-> > > A bit unexpectedly (but still documented), request_module may
-> > > return a positive value, in case of a modprobe error.
-> > > This is currently causing issues in the devfreq framework.
-> > > 
-> > > When a request_module exits with a positive value, we currently
-> > > return that via ERR_PTR. However, because the value is positive,
-> > > it's not a ERR_VALUE proper, and is therefore treated as a
-> > > valid struct devfreq_governor pointer, leading to a kernel oops.
-> > > 
-> > > The right way to fix this is hinted in __request_module documentation:
-> > > 
-> > > """
-> > > [snip] The function returns
-> > > zero on success or a negative errno code or positive exit code from
-> > > "modprobe" on failure. Note that a successful module load does not mean
-> > > the module did not then unload and exit on an error of its own. Callers
-> > > must check that the service they requested is now available not blindly
-> > > invoke it.
-> > > """
-> > > 
-> > > Therefore, drop the return value check, which is not useful, and instead
-> > > just re-try to find the (hopefully now loaded) governor.
-> > > 
-> > > Fixes: 23c7b54ca1cd1 ("PM / devfreq: Fix devfreq_add_device() when drivers are built as modules.")
-> > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > > ---
-> > >  drivers/devfreq/devfreq.c | 8 ++------
-> > >  1 file changed, 2 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> > > index 6b6991f0e873..8868ad9472d2 100644
-> > > --- a/drivers/devfreq/devfreq.c
-> > > +++ b/drivers/devfreq/devfreq.c
-> > > @@ -236,7 +236,6 @@ static struct devfreq_governor *find_devfreq_governor(const char *name)
-> > >  static struct devfreq_governor *try_then_request_governor(const char *name)
-> > >  {
-> > >  	struct devfreq_governor *governor;
-> > > -	int err = 0;
-> > >  
-> > >  	if (IS_ERR_OR_NULL(name)) {
-> > >  		pr_err("DEVFREQ: %s: Invalid parameters\n", __func__);
-> > > @@ -251,13 +250,10 @@ static struct devfreq_governor *try_then_request_governor(const char *name)
-> > >  
-> > >  		if (!strncmp(name, DEVFREQ_GOV_SIMPLE_ONDEMAND,
-> > >  			     DEVFREQ_NAME_LEN))
-> > > -			err = request_module("governor_%s", "simpleondemand");
-> > > +			request_module("governor_%s", "simpleondemand");
-> > 
-> > I don't agree to remove the exception handling. Even if request_module()
-> > returns positive value, 
-> 
-> Sorry, I wrote the wrong comment. It have to handle the positive return value
-> for exception handling.
-> 
+Hi,
 
-OK, let me give this a new try.
+I could use a little help understanding how to set up a power domain for a =
+i2c module. I have corresponding drivers for each i2c device on the module.=
+ The i2c devices are all behind a i2c-mux-gpio and a physical i2c mux due t=
+o some interesting hardware design choices. I have written a module power d=
+river that hooks up a power GPIO pin to the runtime power management subsys=
+tem by implementing dev_pm_ops, calling pm_runtime_enable(), etc.
 
-Thanks,
-Ezequiel
+In the device tree node corresponding to the module power driver I have add=
+ed `#power-domain-cells =3D <0>;` to configure it as a provider. And for ea=
+ch i2c device on the module I've added `power-domains` and `power-domains-n=
+ames` to configure them as consumers.
 
+I'm stuck on what I need to implement to hook this all up. I've done a fair=
+ amount of reading, debugging and looking for examples, but it still isn't =
+evident to me what is done automatically and what I need to implement. For =
+example, i2c-mux-gpio is a platform driver and dev_pm_domain_attach(dev, tr=
+ue) is called from platform_drv_probe() so I thought the domain might just =
+power on when i2c-mux-gpio is probed, but that's not what I experienced. No=
+te, my module power driver is also a platform driver.
+
+Any help would be greatly appreciated.
+
+Best,
+Philip
