@@ -2,103 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5695C4CE26
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2019 15:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D22959310
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 06:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbfFTNEp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jun 2019 09:04:45 -0400
-Received: from foss.arm.com ([217.140.110.172]:36626 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726569AbfFTNEp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 20 Jun 2019 09:04:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E87A360;
-        Thu, 20 Jun 2019 06:04:42 -0700 (PDT)
-Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 690673F718;
-        Thu, 20 Jun 2019 06:04:41 -0700 (PDT)
-Date:   Thu, 20 Jun 2019 14:04:39 +0100
-From:   Patrick Bellasi <patrick.bellasi@arm.com>
-To:     Douglas Raillard <douglas.raillard@arm.com>
-Cc:     Quentin Perret <quentin.perret@arm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com
-Subject: Re: [RFC PATCH 1/7] PM: Introduce em_pd_get_higher_freq()
-Message-ID: <20190620130439.c3tk7osezd37pfmj@e110439-lin>
-References: <20190508174301.4828-1-douglas.raillard@arm.com>
- <20190508174301.4828-2-douglas.raillard@arm.com>
- <20190516124200.opxczohjelhvrzmo@e110439-lin>
- <20190516130148.uhq55ptut47usnae@queper01-lin>
- <20190516132250.hedtianse7rnk3wq@e110439-lin>
- <11976c37-65d3-e0c6-034d-cfec9ebb5b49@arm.com>
+        id S1726660AbfF1Ex5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 00:53:57 -0400
+Received: from mail-pf1-f231.google.com ([209.85.210.231]:39142 "EHLO
+        mail-pf1-f231.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726657AbfF1Ex5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 00:53:57 -0400
+Received: by mail-pf1-f231.google.com with SMTP id j2so2327643pfe.6
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2019 21:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ctcd-edu.20150623.gappssmtp.com; s=20150623;
+        h=from:subject:thread-topic:thread-index:date:message-id
+         :accept-language:content-language:content-transfer-encoding
+         :mime-version;
+        bh=uja0RKLj8/ZClYB7/xee4WJU8BS3tEVS8HkeIEY1v6o=;
+        b=Pp6ugwMblAVk8EdSg2uZmnwCkjDnAeUEtYkyl/2pd63LjuHbk2LC1q+xge5CQIC/GH
+         pNJGwVNnOYcmjYXoYf2oan/rFHg6jNqjzfTJF61crDfC7ANiGAwRM8eGWxPOMRhAUQyg
+         lvdfAI0FfcjnvflgOXPvcA6EYs2cbKrmPfHb1o4wQKeSph2+crg4HdF4tb7L54XcZta/
+         /fnDZjiJQb5VzkHj3lI0XB3f129ALqpevx0mKDb5YpjTfAqrLwH+19+2nC7YgxGKaPst
+         vrV+q9eb+0yRY8GkmSrqDs/6aTIyTKO1scCH0BR7nb5KP/AyjnoZR+d5eS80Idxrzoet
+         bK/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:thread-topic:thread-index:date
+         :message-id:accept-language:content-language
+         :content-transfer-encoding:mime-version;
+        bh=uja0RKLj8/ZClYB7/xee4WJU8BS3tEVS8HkeIEY1v6o=;
+        b=bfi0HRyOP1tjcqq9yK6qZQ1HH1C1VzQ01Ueg12L7izYs3Ep420gxXh/WXDqAI+ONEr
+         HfqYEJY5B0hIysPJCA44lLwjDTufW59v/6/Mmyz9IbyJkhvcsEe1GygpQAU/stlmb9iJ
+         sqR9kAA5UyzBcjv9ynQz6Sh6uuMo3U+X5p53akQ6TMjUkidRfXd3GbydLuT2dwSBJaQ5
+         vp/H2+nVGuV+ZKpXmMNbhhLp3B6ZDBoBshNvppXO/Q+rF3x5IH86+K1zOcCgSCZ5LcME
+         fMGTfv5joPcLV9dsUb/SM29DoXEtJZ6NeK1tbiTMWxj6hPcYb/6BNlHs/3NC/uiB9e7u
+         X4eQ==
+X-Gm-Message-State: APjAAAW9vvnHuwfyRHXOE3EejvUyXQ+z5ObzymYRsQgxLxJYQbH1YR9z
+        rJc6cw1oPNEtHmhYJ2Mhmb5gZFISBVrVboLnPKAE2/Cj2chymg==
+X-Google-Smtp-Source: APXvYqyDOfZDdbFJ4o/JaxBjQfLRRMqZEDtH+CcFi8WIpV2AIUfzPQ1HX/vVf+o0DsKm/s5gVaROJ/mA9eje
+X-Received: by 2002:a17:90a:cb18:: with SMTP id z24mr10369284pjt.108.1561697634618;
+        Thu, 27 Jun 2019 21:53:54 -0700 (PDT)
+Received: from mail.ctcd.edu (rrcs-67-79-90-89.sw.biz.rr.com. [67.79.90.89])
+        by smtp-relay.gmail.com with ESMTPS id n69sm110753pjb.9.2019.06.27.21.53.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 27 Jun 2019 21:53:54 -0700 (PDT)
+X-Relaying-Domain: ctcd.edu
+Received: from CTCEmail02.campus.ctcd.org (172.17.139.89) by
+ CTCEmail01.campus.ctcd.org (172.17.139.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.845.34; Thu, 20 Jun 2019 09:18:40 -0500
+Received: from CTCEmail02.campus.ctcd.org ([fe80::a0bb:ad1f:8c21:8800]) by
+ CTCEmail02.campus.ctcd.org ([fe80::a0bb:ad1f:8c21:8800%2]) with mapi id
+ 15.01.0845.034; Thu, 20 Jun 2019 09:18:40 -0500
+From:   "Chambers, Marcine" <MChambers@ctcd.edu>
+Subject: GOOD DAY
+Thread-Topic: GOOD DAY
+Thread-Index: AQHVJ3MOz3fw4vybV0CezupQuoA3uw==
+Date:   Thu, 20 Jun 2019 14:18:40 +0000
+Message-ID: <6406a540a0c54cb4900afa0f5889c847@ctcd.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.17.139.254]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11976c37-65d3-e0c6-034d-cfec9ebb5b49@arm.com>
-User-Agent: NeoMutt/20180716
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-Jun 17:08, Douglas Raillard wrote:
-> Hi Patrick,
-> 
-> On 5/16/19 2:22 PM, Patrick Bellasi wrote:
-> > On 16-May 14:01, Quentin Perret wrote:
-> > > On Thursday 16 May 2019 at 13:42:00 (+0100), Patrick Bellasi wrote:
-> > > > > +static inline unsigned long em_pd_get_higher_freq(struct em_perf_domain *pd,
-> > > > > +	unsigned long min_freq, unsigned long cost_margin)
-> > > > > +{
-> > > > > +	unsigned long max_cost = 0;
-> > > > > +	struct em_cap_state *cs;
-> > > > > +	int i;
-> > > > > +
-> > > > > +	if (!pd)
-> > > > > +		return min_freq;
-> > > > > +
-> > > > > +	/* Compute the maximum allowed cost */
-> > > > > +	for (i = 0; i < pd->nr_cap_states; i++) {
-> > > > > +		cs = &pd->table[i];
-> > > > > +		if (cs->frequency >= min_freq) {
-> > > > > +			max_cost = cs->cost + (cs->cost * cost_margin) / 1024;
-> > > >                                                                           ^^^^
-> > > > ... end here we should probably better use SCHED_CAPACITY_SCALE
-> > > > instead of hard-coding in values, isn't it?
-> > > 
-> > > I'm not sure to agree. This isn't part of the scheduler per se, and the
-> > > cost thing isn't in units of capacity, but in units of power, so I don't
-> > > think SCHED_CAPACITY_SCALE is correct here.
-> > 
-> > Right, I get the units do not match and it would not be elegant to use
-> > it here...
-> > 
-> > > But I agree these hard coded values (that one, and the 512 in one of the
-> > > following patches) could use some motivation :-)
-> > 
-> > ... ultimately SCHED_CAPACITY_SCALE is just SCHED_FIXEDPOINT_SCALE,
-> > which is adimensional. Perhaps we should use that or yet another alias
-> > for the same.
-> 
-> Would it be a good idea to use SCHED_FIXEDPOINT_SCALE in energy.c ?
-> Since it's not part of the scheduler, maybe there is a scale covering a wider scope,
-> or we can introduce a similar ENERGY_FIXEDPOINT_SCALE in energy_model.h.
+I am Vice Chairman of Hang Seng Bank, I have Important Matter to Discuss wi=
+th you concerning my late client, Died without a NEXT OF KIN. Send me your =
+private email for full details information. email me at (chienkraymond@outl=
+ook.com)
 
-Well, in energy_model.c we have references to "capacity" and
-"utilization" which are all SCHED_FIXEDPOINT_SCALE range values.
-That symbol is defined in <linux/sched.h> and we already pull
-in other <linux/sched/*> headers.
+Mail:infocarfer@aim.com
 
-So, to me it seems it's not unreasonable to say that we use scheduler
-related concepts and it makes more sense than introducing yet another
-scaling factor.
+Regards
+Dr.Raymond Chien Kuo Fung
 
-But that's just my two cents ;)
-
-Best,
-Patrick
-
--- 
-#include <best/regards.h>
-
-Patrick Bellasi
