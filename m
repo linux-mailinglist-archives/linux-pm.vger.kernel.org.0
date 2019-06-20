@@ -2,279 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FE54C881
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2019 09:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8F84C8BC
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jun 2019 09:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730848AbfFTHgC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jun 2019 03:36:02 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:42480 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730561AbfFTHf7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 03:35:59 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l19so1106961pgh.9
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2019 00:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3L+AYr9wx391racengGEmm+lT+bdqXhQKRHKGNTBvxQ=;
-        b=zu1fg8kg7hEc8Jjw0MVXRCmifTHxWow3WTVmw9QFiG8FO9FDwNLSi8vWXr2ClfwSm6
-         SUCsYlWTCLjYXePNm8WIq3U2fVNeotMHnimkHdqbnmjLMT3iHWU836r3URFDCQnz6xgy
-         0XAy1bYWI/WZdjuz0pOACjj2qRRUHgmbCDs4ObCSIsqLAq298Q+jfZyaM9wiMoE2O28l
-         Ae1vwwarnxTn0njvqBT54dUJmJZN5xzkUvVhH6KfThkU6f8zRSzeVOEWe7MFCQAYmJEB
-         PUr1z9lQpmhj19vNO3nAYHodWIXVUekO5fS20t0S01enlqzEMqs1uiJoXo5h8i8gFHrv
-         1WGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3L+AYr9wx391racengGEmm+lT+bdqXhQKRHKGNTBvxQ=;
-        b=Eyc1lZoN7mGyvblYd0C+v5pL9k5S+g+5VYVAPWLtGdD8bmfhfwf7c9Gq9v2z18UVCM
-         BI7mTYGDpZpHsoOIrpe7n0IYiojw46WcdU40mcEZPnTeSf0QIbRL/Bz7zdGi0UwjX7ap
-         7cGhDUsAtF8lJunknTGUcB7aGXZC+SXi52EkcY4tuUpH3DYWUgk5FZij0Nb50oeHg2lT
-         FcvGDgrhMLiCd6q4zn8QL0UB3Y411w8lykdHgxwBGh8KQRqAdsBdPQktjnJpnMphCiPu
-         z/Uxiz0pyCCCizrZSkWy15+Zo5rv9lRBAvyGfCbgW0isZtGvhDPhKyJbJXmz+65QHHKA
-         yeTg==
-X-Gm-Message-State: APjAAAUOPlnJO8E6WvD418xWAplWxRDeQk4isX9hedPI9SqO+w+BHeEK
-        Lh4kMI0Qf3f+IsSkHt4OFh23Jg==
-X-Google-Smtp-Source: APXvYqwHWkItS8WIWIf5vrxa/Bbl0bseVaB2leZ9dbBF88nPtfj20y95cwh7nXsy+p0nXKVmUqrwBg==
-X-Received: by 2002:a17:90a:21cc:: with SMTP id q70mr1719543pjc.56.1561016158823;
-        Thu, 20 Jun 2019 00:35:58 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id p67sm10475789pfg.124.2019.06.20.00.35.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Jun 2019 00:35:58 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Qais.Yousef@arm.com, mka@chromium.org, juri.lelli@gmail.com,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V4 6/6] cpufreq: Add QoS requests for userspace constraints
-Date:   Thu, 20 Jun 2019 13:05:29 +0530
-Message-Id: <9495cc2133740450884c9c79a89a3b9fd5ae6969.1561014965.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
-In-Reply-To: <cover.1561014965.git.viresh.kumar@linaro.org>
-References: <cover.1561014965.git.viresh.kumar@linaro.org>
+        id S1725912AbfFTH53 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jun 2019 03:57:29 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:43621 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725877AbfFTH53 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 03:57:29 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190620075724epoutp04e327e89c6fa0f7b6382eb26f60d06289~p2Rhyg7j40850708507epoutp040
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2019 07:57:24 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190620075724epoutp04e327e89c6fa0f7b6382eb26f60d06289~p2Rhyg7j40850708507epoutp040
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1561017444;
+        bh=dT369zs5ebt7Kyv1+tgYLEciD3HJB/5DKDdaLoYzZkM=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=nZlQ8/Im0TSiZJHkcbGDNTsK8uzWyerQgm/kqTcrVxO4vKnQnQQSTfXK4A932tPd3
+         GW1I/yTue4+m5BwHArFLWGGeDsqHNV4wnv/ZwiaY4YqWAQmhvmK1izphZ1fDdtyKab
+         fKI6TEgBmGMMZVxedrbFqJYcYKvIXE3BNfIj7gMs=
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.156]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190620075722epcas1p116261fe361ce2d2268508b1a454a28f1~p2Rfio4oh0456904569epcas1p1-;
+        Thu, 20 Jun 2019 07:57:22 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        34.65.04143.16C3B0D5; Thu, 20 Jun 2019 16:57:21 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190620075721epcas1p1840eedd5b8de12668c011e4eb6afbc57~p2ReLYcRU0241602416epcas1p1-;
+        Thu, 20 Jun 2019 07:57:21 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190620075720epsmtrp258a487f55b4cd0248c53840c1347048a~p2ReKpRB42058820588epsmtrp2D;
+        Thu, 20 Jun 2019 07:57:20 +0000 (GMT)
+X-AuditID: b6c32a37-f19ff7000000102f-6f-5d0b3c6106de
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E9.36.03662.06C3B0D5; Thu, 20 Jun 2019 16:57:20 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190620075720epsmtip1eebbc02681cd3d3b53b0b3bd46e23123~p2Rd-UNoh2365723657epsmtip1P;
+        Thu, 20 Jun 2019 07:57:20 +0000 (GMT)
+Subject: Re: [PATCH 1/2] PM / devfreq: Fix governor module load failure
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     kernel@collabora.com, linux-pm@vger.kernel.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <7320aa6c-4a49-aae2-4db5-5c1f0d6ce76e@samsung.com>
+Date:   Thu, 20 Jun 2019 16:59:51 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <20190605190053.19177-1-ezequiel@collabora.com>
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SWUwTURSGvZ12OizFa0E5VqM46AONLGOtVAXUiNpETBBfjAHrBEbArum0
+        BsQHwEQWK9EoEguiBlQEEwmgAQ02onELIGpcETfQEENwKSoJuHQYiLx955z/3P+cey9FKE+Q
+        Kirb4uDsFtZEk/7Sq7cioiLZuIC0mDuFq3WXejuQrq1xRK5r7nbJdF2FQ3Kd9/BtpOstqCPX
+        kvrWvlqkL2upR3pv04JkYocxLotjMzh7GGdJt2ZkWzLj6c3bDOsN2hUxTCSzUhdLh1lYMxdP
+        JyYlR27MNvl86bC9rMnpSyWzPE9HJ8TZrU4HF5Zl5R3xNGfLMNlW2qJ41sw7LZlR6VbzKiYm
+        ZpnWJ9xlzKr7eoawVc7JcQ8PEPloeFYp8qMAL4eChoeSUuRPKXErgod1XkIMviNovzYoF4Of
+        CN6VlxNTLTU9x6VioR1Bf0//pOoLguujnTJBFYw3QW1VvUwohOBCBENDDRMFAhuh6m61XGAS
+        q8Ez+IIUeCZeBE9H+1EpoigFToBbN7VCWoqXQPeJzgnn2Xg7jLQ1IYEVeBbcPzkgFdgPx8Gf
+        4guEeHwovBo4LRF5IRy4Ujk59VsSHt1QiZwIZb2v5SIHw+e7LZOsAu9wOylyHly8f5sU5gdc
+        jKDF0yMTCxrwnDsmEeYkcARcvhYtphdB29gpJPoGwfAPl0yQAFZA8UGlKAmHJ+/6JCLPhZqi
+        EvIIot3TtnFP28A9bQP3f7MzSFqP5nA23pzJ8YxNM/21m9DEn1THtqLG7qQOhClEByruqf3T
+        lDJ2L59r7kBAEXSI4iMKSFMqMtjcfZzdarA7TRzfgbS+yz5KqGanW30/3OIwMNplGo1Gt5xZ
+        oWUYOlRhCHiZqsSZrIMzcpyNs0/1SSg/VT7SZ5vLE2Unox+keoITPpie9Hs/Be3evD9h2/xf
+        nhnPBpOSI77sdK4K/J3z8406r2lLkbUm8Ffe1gpXa/imlvFq8/OCUGODO+RVV++G1HX551/+
+        zdcvTVkztge5xmv3V+K16TcPHcUpx065WFdu++LuvrH3VovybEX142/zTv+OjWwuoaV8Fsuo
+        CTvP/gPudj9/qQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42LZdlhJTjfBhjvW4Ngcc4s1tw8xWuzc8IXd
+        YvO5HlaLs01v2C0+9x5htLjduILNgc1jx90ljB59W1YxenzeJBfAHMVlk5Kak1mWWqRvl8CV
+        seLDAuaC2WIVs949YW5gfCfYxcjJISFgIrH4whSWLkYuDiGB3YwSd5s/MEEkJCWmXTzK3MXI
+        AWQLSxw+XAxR85ZR4snvHhaQGmEBd4klc1axgiREBFoYJR6fmskGkmAWyJZ4vnUtE0RHP6PE
+        w2c72UESbAJaEvtf3AAr4hdQlLj64zEjyAZeATuJwwdNQcIsAqoS56adYQaxRQUiJGbvagBb
+        xisgKHFy5hMwm1PARuJfx3JmiF3qEn/mXYKyxSVuPZnPBGHLSzRvnc08gVF4FpL2WUhaZiFp
+        mYWkZQEjyypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k/NxNjOCI0dLawXjiRPwhRgEORiUe
+        3hNaXLFCrIllxZW5hxglOJiVRHifMnLHCvGmJFZWpRblxxeV5qQWH2KU5mBREueVzz8WKSSQ
+        nliSmp2aWpBaBJNl4uCUamCMeH9f8p/ne53FTnvTznyfXRcUzHva0GppRuSBlEmn2yI0w/61
+        xit2HVXjM2cR2rz+g6Idq+Eh296ny/7sevgjXK137+PDOme2/eaYfaWSkamm1NVg8uFn+y64
+        MX756F97x6LVOq666iHHoRdrzry2v1jqYVd5SH1xt4XLFrecql7bOctvLpBWYinOSDTUYi4q
+        TgQAAl5PG5QCAAA=
+X-CMS-MailID: 20190620075721epcas1p1840eedd5b8de12668c011e4eb6afbc57
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190605190147epcas1p3e74fba524dfcfc87f7ce3c9569ffaa3f
+References: <CGME20190605190147epcas1p3e74fba524dfcfc87f7ce3c9569ffaa3f@epcas1p3.samsung.com>
+        <20190605190053.19177-1-ezequiel@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This implements QoS requests to manage userspace configuration of min
-and max frequency.
+Hi,
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c | 87 ++++++++++++++++++++-------------------
- include/linux/cpufreq.h   |  8 +---
- 2 files changed, 46 insertions(+), 49 deletions(-)
+On 19. 6. 6. 오전 4:00, Ezequiel Garcia wrote:
+> A bit unexpectedly (but still documented), request_module may
+> return a positive value, in case of a modprobe error.
+> This is currently causing issues in the devfreq framework.
+> 
+> When a request_module exits with a positive value, we currently
+> return that via ERR_PTR. However, because the value is positive,
+> it's not a ERR_VALUE proper, and is therefore treated as a
+> valid struct devfreq_governor pointer, leading to a kernel oops.
+> 
+> The right way to fix this is hinted in __request_module documentation:
+> 
+> """
+> [snip] The function returns
+> zero on success or a negative errno code or positive exit code from
+> "modprobe" on failure. Note that a successful module load does not mean
+> the module did not then unload and exit on an error of its own. Callers
+> must check that the service they requested is now available not blindly
+> invoke it.
+> """
+> 
+> Therefore, drop the return value check, which is not useful, and instead
+> just re-try to find the (hopefully now loaded) governor.
+> 
+> Fixes: 23c7b54ca1cd1 ("PM / devfreq: Fix devfreq_add_device() when drivers are built as modules.")
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+>  drivers/devfreq/devfreq.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 6b6991f0e873..8868ad9472d2 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -236,7 +236,6 @@ static struct devfreq_governor *find_devfreq_governor(const char *name)
+>  static struct devfreq_governor *try_then_request_governor(const char *name)
+>  {
+>  	struct devfreq_governor *governor;
+> -	int err = 0;
+>  
+>  	if (IS_ERR_OR_NULL(name)) {
+>  		pr_err("DEVFREQ: %s: Invalid parameters\n", __func__);
+> @@ -251,13 +250,10 @@ static struct devfreq_governor *try_then_request_governor(const char *name)
+>  
+>  		if (!strncmp(name, DEVFREQ_GOV_SIMPLE_ONDEMAND,
+>  			     DEVFREQ_NAME_LEN))
+> -			err = request_module("governor_%s", "simpleondemand");
+> +			request_module("governor_%s", "simpleondemand");
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index b47a6c094171..5d050b4a3806 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -718,23 +718,15 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
- static ssize_t store_##file_name					\
- (struct cpufreq_policy *policy, const char *buf, size_t count)		\
- {									\
--	int ret, temp;							\
--	struct cpufreq_policy new_policy;				\
-+	unsigned long val;						\
-+	int ret;							\
- 									\
--	memcpy(&new_policy, policy, sizeof(*policy));			\
--	new_policy.min = policy->user_policy.min;			\
--	new_policy.max = policy->user_policy.max;			\
--									\
--	ret = sscanf(buf, "%u", &new_policy.object);			\
-+	ret = sscanf(buf, "%lu", &val);					\
- 	if (ret != 1)							\
- 		return -EINVAL;						\
- 									\
--	temp = new_policy.object;					\
--	ret = cpufreq_set_policy(policy, &new_policy);		\
--	if (!ret)							\
--		policy->user_policy.object = temp;			\
--									\
--	return ret ? ret : count;					\
-+	ret = dev_pm_qos_update_request(policy->object##_freq_req, val);\
-+	return ret >= 0 ? count : ret;					\
- }
- 
- store_one(scaling_min_freq, min);
-@@ -1126,8 +1118,6 @@ static void reeval_frequency_limits(struct cpufreq_policy *policy)
- 		new_policy = *policy;
- 		pr_debug("updating policy for CPU %u\n", policy->cpu);
- 
--		new_policy.min = policy->user_policy.min;
--		new_policy.max = policy->user_policy.max;
- 		cpufreq_set_policy(policy, &new_policy);
- 	}
- 
-@@ -1237,6 +1227,12 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
- 		goto err_min_qos_notifier;
- 	}
- 
-+	policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
-+				       GFP_KERNEL);
-+	if (!policy->min_freq_req)
-+		goto err_max_qos_notifier;
-+
-+	policy->max_freq_req = policy->min_freq_req + 1;
- 	INIT_LIST_HEAD(&policy->policy_list);
- 	init_rwsem(&policy->rwsem);
- 	spin_lock_init(&policy->transition_lock);
-@@ -1247,6 +1243,9 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
- 	policy->cpu = cpu;
- 	return policy;
- 
-+err_max_qos_notifier:
-+	dev_pm_qos_remove_notifier(dev, &policy->nb_max,
-+				   DEV_PM_QOS_MAX_FREQUENCY);
- err_min_qos_notifier:
- 	dev_pm_qos_remove_notifier(dev, &policy->nb_min,
- 				   DEV_PM_QOS_MIN_FREQUENCY);
-@@ -1282,6 +1281,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
- 				   DEV_PM_QOS_MAX_FREQUENCY);
- 	dev_pm_qos_remove_notifier(dev, &policy->nb_min,
- 				   DEV_PM_QOS_MIN_FREQUENCY);
-+	dev_pm_qos_remove_request(policy->max_freq_req);
-+	dev_pm_qos_remove_request(policy->min_freq_req);
-+	kfree(policy->min_freq_req);
- 
- 	cpufreq_policy_put_kobj(policy);
- 	free_cpumask_var(policy->real_cpus);
-@@ -1360,16 +1362,30 @@ static int cpufreq_online(unsigned int cpu)
- 	cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
- 
- 	if (new_policy) {
--		policy->user_policy.min = policy->min;
--		policy->user_policy.max = policy->max;
-+		struct device *dev = get_cpu_device(cpu);
- 
- 		for_each_cpu(j, policy->related_cpus) {
- 			per_cpu(cpufreq_cpu_data, j) = policy;
- 			add_cpu_dev_symlink(policy, j);
- 		}
--	} else {
--		policy->min = policy->user_policy.min;
--		policy->max = policy->user_policy.max;
-+
-+		ret = dev_pm_qos_add_request(dev, policy->min_freq_req,
-+					     DEV_PM_QOS_MIN_FREQUENCY,
-+					     policy->min);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to add min-freq constraint (%d)\n",
-+				ret);
-+			goto out_destroy_policy;
-+		}
-+
-+		ret = dev_pm_qos_add_request(dev, policy->max_freq_req,
-+					     DEV_PM_QOS_MAX_FREQUENCY,
-+					     policy->max);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to add max-freq constraint (%d)\n",
-+				ret);
-+			goto out_destroy_policy;
-+		}
- 	}
- 
- 	if (cpufreq_driver->get && has_target()) {
-@@ -2345,7 +2361,6 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
- {
- 	struct cpufreq_governor *old_gov;
- 	struct device *cpu_dev = get_cpu_device(policy->cpu);
--	unsigned long min, max;
- 	int ret;
- 
- 	pr_debug("setting new policy for CPU %u: %u - %u kHz\n",
-@@ -2353,24 +2368,12 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
- 
- 	memcpy(&new_policy->cpuinfo, &policy->cpuinfo, sizeof(policy->cpuinfo));
- 
--	/*
--	* This check works well when we store new min/max freq attributes,
--	* because new_policy is a copy of policy with one field updated.
--	*/
--	if (new_policy->min > new_policy->max)
--		return -EINVAL;
--
- 	/*
- 	 * PM QoS framework collects all the requests from users and provide us
- 	 * the final aggregated value here.
- 	 */
--	min = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MIN_FREQUENCY);
--	max = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MAX_FREQUENCY);
--
--	if (min > new_policy->min)
--		new_policy->min = min;
--	if (max < new_policy->max)
--		new_policy->max = max;
-+	new_policy->min = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MIN_FREQUENCY);
-+	new_policy->max = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MAX_FREQUENCY);
- 
- 	/* verify the cpu speed can be set within this limit */
- 	ret = cpufreq_driver->verify(new_policy);
-@@ -2459,10 +2462,9 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
-  * @cpu: CPU to re-evaluate the policy for.
-  *
-  * Update the current frequency for the cpufreq policy of @cpu and use
-- * cpufreq_set_policy() to re-apply the min and max limits saved in the
-- * user_policy sub-structure of that policy, which triggers the evaluation
-- * of policy notifiers and the cpufreq driver's ->verify() callback for the
-- * policy in question, among other things.
-+ * cpufreq_set_policy() to re-apply the min and max limits, which triggers the
-+ * evaluation of policy notifiers and the cpufreq driver's ->verify() callback
-+ * for the policy in question, among other things.
-  */
- void cpufreq_update_policy(unsigned int cpu)
- {
-@@ -2522,10 +2524,9 @@ static int cpufreq_boost_set_sw(int state)
- 			break;
- 		}
- 
--		down_write(&policy->rwsem);
--		policy->user_policy.max = policy->max;
--		cpufreq_governor_limits(policy);
--		up_write(&policy->rwsem);
-+		ret = dev_pm_qos_update_request(policy->max_freq_req, policy->max);
-+		if (ret)
-+			break;
- 	}
- 
- 	return ret;
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index d8622cf3f46c..b6245f512a26 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -50,11 +50,6 @@ struct cpufreq_cpuinfo {
- 	unsigned int		transition_latency;
- };
- 
--struct cpufreq_user_policy {
--	unsigned int		min;    /* in kHz */
--	unsigned int		max;    /* in kHz */
--};
--
- struct cpufreq_policy {
- 	/* CPUs sharing clock, require sw coordination */
- 	cpumask_var_t		cpus;	/* Online CPUs only */
-@@ -84,7 +79,8 @@ struct cpufreq_policy {
- 	struct work_struct	update; /* if update_policy() needs to be
- 					 * called, but you're in IRQ context */
- 
--	struct cpufreq_user_policy user_policy;
-+	struct dev_pm_qos_request *min_freq_req;
-+	struct dev_pm_qos_request *max_freq_req;
- 	struct cpufreq_frequency_table	*freq_table;
- 	enum cpufreq_table_sorting freq_table_sorted;
- 
+I don't agree to remove the exception handling. Even if request_module()
+returns positive value, it have to be handled the negative code for error case.
+
+>  		else
+> -			err = request_module("governor_%s", name);
+> -		/* Restore previous state before return */
+> +			request_module("governor_%s", name);
+
+ditto.
+
+>  		mutex_lock(&devfreq_list_lock);
+> -		if (err)> -			return ERR_PTR(err);
+
+You better to modify it as following:
+
+if (err < 0)
+	return ERR_PTR(err);
+else if (err > 0)
+	return ERR_PTR(-EINVAL);
+
+
+>  
+>  		governor = find_devfreq_governor(name);
+>  	}
+> 
+
+
 -- 
-2.21.0.rc0.269.g1a574e7a288b
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
