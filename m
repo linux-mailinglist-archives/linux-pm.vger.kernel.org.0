@@ -2,136 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3474E23D
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 10:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257F74E245
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 10:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbfFUInR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jun 2019 04:43:17 -0400
-Received: from foss.arm.com ([217.140.110.172]:51126 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726755AbfFUInQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 21 Jun 2019 04:43:16 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A09915A2;
-        Fri, 21 Jun 2019 01:43:16 -0700 (PDT)
-Received: from e110439-lin.cambridge.arm.com (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id BAECA3F246;
-        Fri, 21 Jun 2019 01:43:13 -0700 (PDT)
-From:   Patrick Bellasi <patrick.bellasi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alessio Balsini <balsini@android.com>
-Subject: [PATCH v10 16/16] sched/core: uclamp: Update CPU's refcount on TG's clamp changes
-Date:   Fri, 21 Jun 2019 09:42:17 +0100
-Message-Id: <20190621084217.8167-17-patrick.bellasi@arm.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190621084217.8167-1-patrick.bellasi@arm.com>
-References: <20190621084217.8167-1-patrick.bellasi@arm.com>
+        id S1726353AbfFUIoF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jun 2019 04:44:05 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55830 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726260AbfFUIoE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jun 2019 04:44:04 -0400
+X-UUID: 9b79d7030ee94a63b31ea7d234ef86ba-20190621
+X-UUID: 9b79d7030ee94a63b31ea7d234ef86ba-20190621
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 434556469; Fri, 21 Jun 2019 16:43:57 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 21 Jun 2019 16:43:56 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 21 Jun 2019 16:43:56 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v3 0/2] PM / AVS: SVS: Introduce SVS engine
+Date:   Fri, 21 Jun 2019 16:43:46 +0800
+Message-ID: <20190621084348.16834-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On updates of task group (TG) clamp values, ensure that these new values
-are enforced on all RUNNABLE tasks of the task group, i.e. all RUNNABLE
-tasks are immediately boosted and/or clamped as requested.
+SVS driver use OPP adjust event in [1] to update
+OPP table voltage part.
 
-Do that by slightly refactoring uclamp_bucket_inc(). An additional
-parameter *cgroup_subsys_state (css) is used to walk the list of tasks
-in the TGs and update the RUNNABLE ones. Do that by taking the rq
-lock for each task, the same mechanism used for cpu affinity masks
-updates.
+[1] https://patchwork.kernel.org/patch/10946069/
 
-Signed-off-by: Patrick Bellasi <patrick.bellasi@arm.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Tejun Heo <tj@kernel.org>
----
- kernel/sched/core.c | 48 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+changes since v2:
+- Improve SVS driver: For power saving point of view,
+disable SVS main clk when probe fail.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 8070e11cafa0..1ddc37320f3d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1032,6 +1032,51 @@ static inline void uclamp_rq_dec(struct rq *rq, struct task_struct *p)
- 		uclamp_rq_dec_id(rq, p, clamp_id);
- }
- 
-+static inline void
-+uclamp_update_active(struct task_struct *p, unsigned int clamp_id)
-+{
-+	struct rq_flags rf;
-+	struct rq *rq;
-+
-+	/*
-+	 * Lock the task and the rq where the task is (or was) queued.
-+	 *
-+	 * We might lock the (previous) rq of a !RUNNABLE task, but that's the
-+	 * price to pay to safely serialize util_{min,max} updates with
-+	 * enqueues, dequeues and migration operations.
-+	 * This is the same locking schema used by __set_cpus_allowed_ptr().
-+	 */
-+	rq = task_rq_lock(p, &rf);
-+
-+	/*
-+	 * Setting the clamp bucket is serialized by task_rq_lock().
-+	 * If the task is not yet RUNNABLE and its task_struct is not
-+	 * affecting a valid clamp bucket, the next time it's enqueued,
-+	 * it will already see the updated clamp bucket value.
-+	 */
-+	if (!p->uclamp[clamp_id].active)
-+		goto done;
-+
-+	uclamp_rq_dec_id(rq, p, clamp_id);
-+	uclamp_rq_inc_id(rq, p, clamp_id);
-+
-+done:
-+
-+	task_rq_unlock(rq, p, &rf);
-+}
-+
-+static inline void
-+uclamp_update_active_tasks(struct cgroup_subsys_state *css, int clamp_id)
-+{
-+	struct css_task_iter it;
-+	struct task_struct *p;
-+
-+	css_task_iter_start(css, 0, &it);
-+	while ((p = css_task_iter_next(&it)))
-+		uclamp_update_active(p, clamp_id);
-+	css_task_iter_end(&it);
-+}
-+
- #ifdef CONFIG_UCLAMP_TASK_GROUP
- static void cpu_util_update_eff(struct cgroup_subsys_state *css,
- 				unsigned int clamp_id);
-@@ -7064,6 +7109,9 @@ static void cpu_util_update_eff(struct cgroup_subsys_state *css,
- 
- 		uc_se->value = value;
- 		uc_se->bucket_id = uclamp_bucket_id(value);
-+
-+		/* Immediately update descendants RUNNABLE tasks */
-+		uclamp_update_active_tasks(css, clamp_id);
- 	}
- }
- 
--- 
-2.21.0
+Roger Lu (2):
+  dt-bindings: soc: add mtk svs dt-bindings
+  PM / AVS: SVS: Introduce SVS engine
+
+ .../devicetree/bindings/power/mtk-svs.txt     |   88 +
+ drivers/power/avs/Kconfig                     |   10 +
+ drivers/power/avs/Makefile                    |    1 +
+ drivers/power/avs/mtk_svs.c                   | 2093 +++++++++++++++++
+ include/linux/power/mtk_svs.h                 |   23 +
+ 5 files changed, 2215 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/mtk-svs.txt
+ create mode 100644 drivers/power/avs/mtk_svs.c
+ create mode 100644 include/linux/power/mtk_svs.h
+
 
