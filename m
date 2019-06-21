@@ -2,101 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE844DE6F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 03:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C1F4DF35
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 04:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbfFUBUQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jun 2019 21:20:16 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:50430 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726556AbfFUBUQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 21:20:16 -0400
-Received: by mail-pf1-f202.google.com with SMTP id h27so3234503pfq.17
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2019 18:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=JqSAbEGn1HiZP7c6GcuMsV6mwVA+ao3NtmgYDy/YB50=;
-        b=uAl+pb5UgR8qbNWvTqgNyUdGrjYg0S8BfztU1IaK3wSoovw9zlPCjs+fxR/Zldidjt
-         wn9jEjHX6zhp2cY/ATrv0Ui2iFYIO/84hN6Y9U0zSrxpdUGNw4l6ofnhy4DW6H1w1REh
-         e7xaSuXohECGbWYKz7+urb02nPjB4dMxHHraE2pgWMJeOrKlP6Brq6ZYzgnti8M6knOD
-         M5dofE5spcg4W1bE+A2c24KQml7+KGHeAK64yt51wq5qc77KvrpFdOMYA4aIUfufBhW/
-         VF40DkSCXitcpI+sAdK9CQdmQyjHL8QEx8o56v+XmnMnicC0CjNjNkw0OspKK1lBtU/2
-         MRZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=JqSAbEGn1HiZP7c6GcuMsV6mwVA+ao3NtmgYDy/YB50=;
-        b=OYdhGdr2xsN/dfjStGRM60NXfhhusGlgL7ytxPTx0O/sM1J02PY6j3juR9abbYoe0T
-         Pawnq+4enuoVZ4ntfG7p+jzDqE+k7tL8Ox8xiq2r8ZJsQqMOM5HBpTWrJ11zpMT8YMmp
-         50XAghSzTLNOPFevup1yrHsHZda2lRS0NycTvl9EoYTxG4BVPjoW8XEx2aECfhIGTuV/
-         1yEmqDvdfT8AG500M9fSrQggduMf0HHRwkVxSJ5Cm6Q7DepCWqFgQwuKImP1EcTM+RQu
-         nTZxyCWURWgMachypHdZ7NAKtyzAh1aqT3w/S+8nNoeHk8qurQpj1BpJ8sNnpKCl9PfX
-         PxRA==
-X-Gm-Message-State: APjAAAUq2TggtdpBh+Zv602ia1XUk2KFCmb4H8fb750W0hyj1AV7PBYn
-        j3jEF+gATW6nfN37RmO4CvMKz8OjSJuA+eIaWAKLvQ==
-X-Google-Smtp-Source: APXvYqwT26wVJK6nFrq7e+H8nLKZxTkGEC6Cm+2MlyXrmHTpSaeB1v4qyUV96R/qlEsGT6gqXZ46YMXwlQeXlC7AVr9xzw==
-X-Received: by 2002:a65:5006:: with SMTP id f6mr10257389pgo.402.1561080015411;
- Thu, 20 Jun 2019 18:20:15 -0700 (PDT)
-Date:   Thu, 20 Jun 2019 18:19:22 -0700
-In-Reply-To: <20190621011941.186255-1-matthewgarrett@google.com>
-Message-Id: <20190621011941.186255-12-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190621011941.186255-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH V33 11/30] uswsusp: Disable when the kernel is locked down
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, Matthew Garrett <mjg59@srcf.ucam.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>, linux-pm@vger.kernel.org,
-        pavel@ucw.cz, rjw@rjwysocki.net
-Content-Type: text/plain; charset="UTF-8"
+        id S1725911AbfFUCvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jun 2019 22:51:19 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:12498 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725906AbfFUCvT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 22:51:19 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190621025116epoutp035935c286b8f6fca3084a98e7de139167~qFvhLeE4W3071230712epoutp03m
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2019 02:51:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190621025116epoutp035935c286b8f6fca3084a98e7de139167~qFvhLeE4W3071230712epoutp03m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1561085476;
+        bh=Vs8IOVDH/ICARp40T4SJapoAoFYLuMTrtpm/gZVtr4M=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=KZ21sZDF7kO4fLiBpbziMe5Nvegm2lCkUCDgFHX+qW/xyjqrCcy2dMbTP+OYRd1uO
+         OJI70x28dE570eUswVLAYOIXqQEQhOjpRBno2FGPk/155D+qDqVkKyuUdDG/mxIjMK
+         A8ef9PJkQmKasFAVg2oMaxxXRvuSJNmpAShXNICA=
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.157]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190621025112epcas1p358a16e840e927ebeafea22edd5b9eb06~qFvdZPbMl2107121071epcas1p3E;
+        Fri, 21 Jun 2019 02:51:12 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2E.6A.04142.E164C0D5; Fri, 21 Jun 2019 11:51:10 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190621025109epcas1p36f2e431e786ff333c4b885dc9ee91d94~qFva3Nvbg3157631576epcas1p3T;
+        Fri, 21 Jun 2019 02:51:09 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190621025109epsmtrp26690da66d78a6409ea254949ea22a6b2~qFva2BjZH3207232072epsmtrp2d;
+        Fri, 21 Jun 2019 02:51:09 +0000 (GMT)
+X-AuditID: b6c32a36-ce1ff7000000102e-f3-5d0c461e2d24
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.B3.03662.D164C0D5; Fri, 21 Jun 2019 11:51:09 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190621025109epsmtip2782a4bbbaa64c3d4d75d1cc717899bbb~qFvauzoue1068610686epsmtip2P;
+        Fri, 21 Jun 2019 02:51:09 +0000 (GMT)
+Subject: Re: [PATCH 2/2] PM / devfreq: Sanitize prints
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     kernel@collabora.com, linux-pm@vger.kernel.org,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <8b6d523e-7bb3-c705-7393-64d9b5fde900@samsung.com>
+Date:   Fri, 21 Jun 2019 11:53:39 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <c6bc6c42a29d9cf996dc82880ee01b806b0705c2.camel@collabora.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGJsWRmVeSWpSXmKPExsWy7bCmga6cG0+swfJJrBZrbh9itNi54Qu7
+        xeZzPawWZ5vesFt87j3CaHG7cQWbA5vHjrtLGD36tqxi9Pi8SS6AOSrbJiM1MSW1SCE1Lzk/
+        JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwdor5JCWWJOKVAoILG4WEnfzqYo
+        v7QkVSEjv7jEVim1ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAhO2PxlT1sBX9ZK1a17mFr
+        YLzM0sXIySEhYCJxd/lt9i5GLg4hgR2MEgs+XGQDSQgJfGKU6NjIBZH4xihx9+5UZpiOt/Ng
+        OvYySjTcn88M4bxnlJjw9BUTSJWwgJnElystLCAJEYEmRok3b1azgiSYBbIl5hyfxw5iswlo
+        Sex/cQNsH7+AosTVH48ZQWxeATuJryeXgh3IIqAqsaNhLpgtKhAh8WXnJqgaQYmTM5+AxTkF
+        vCVeT3/PDjFfXOLWk/lMELa8RPPW2VBnX2eTODNfHsJ2kbi6ei0bhC0s8er4FnYIW0ri87u9
+        UPFqiZUnj7CBPCAh0MEosWX/BVaIhLHE/qWTgRZwAC3QlFi/Sx8irCix8/dcRoi9fBLvvvaw
+        gpRICPBKdLQJQZQoS1x+cJcJwpaUWNzeyTaBUWkWkm9mIflgFpIPZiEsW8DIsopRLLWgODc9
+        tdiwwAg5tjcxgtOkltkOxkXnfA4xCnAwKvHwHpjFHSvEmlhWXJl7iFGCg1lJhPcpI1CINyWx
+        siq1KD++qDQntfgQoykwsCcyS4km5wNTeF5JvKGpkbGxsYWJoZmpoaGSOG88980YIYH0xJLU
+        7NTUgtQimD4mDk6pBsZTyUlu4sqCpisl5NpdTSyCGU8sqwx+/T3zkK/0/74q30uSFyeeeMSa
+        4PD/e+NiSxG7zwcD+n+Y5Wkkzc9duLqm+fTkhzcnLBVgeqeZr3Jjaxpf5Tf74PyNfyaF/J35
+        0ugJd3euuvTEkIPzN1+sCH4QzWTy5kGE15/pBnIrvGuu6Ns6Rz/6ulyJpTgj0VCLuag4EQB4
+        5wIRqQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42LZdlhJXlfWjSfWoHmvpsWa24cYLXZu+MJu
+        sflcD6vF2aY37Bafe48wWtxuXMHmwOax4+4SRo++LasYPT5vkgtgjuKySUnNySxLLdK3S+DK
+        WHxlD1vBX9aKVa172BoYL7N0MXJySAiYSLydd5sdxBYS2M0o8fx3NkRcUmLaxaPMXYwcQLaw
+        xOHDxV2MXEAlbxklvh37AFYvLGAm8eVKCwtIQkSghVHi8amZbCAJZoFsiedb1zJBdGxnkrh8
+        +jnYNjYBLYn9L26AFfELKEpc/fGYEcTmFbCT+HpyKVgNi4CqxI6GuWC2qECExOxdDSwQNYIS
+        J2c+AbM5BbwlXk9/zw6xTF3iz7xLzBC2uMStJ/OZIGx5ieats5knMArPQtI+C0nLLCQts5C0
+        LGBkWcUomVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERwxWlo7GE+ciD/EKMDBqMTDe2AW
+        d6wQa2JZcWXuIUYJDmYlEd6njEAh3pTEyqrUovz4otKc1OJDjNIcLErivPL5xyKFBNITS1Kz
+        U1MLUotgskwcnFINjKFOkTUPcg4r77IQjRa/m+nSzrpNpamk5fUj8d+ajDuuqvyNbJhyYUV5
+        74F7z386d8r8E7ZzSEtZkC5daSBU8ejIq+UW7HxPGpO4jab+EWKL6fyttGeH5Mbs2ynJiWVb
+        06uP/bjFKs0tvWRi6+WDqdOnhi0qPMwccvybxNO0HzmfVWJfuq6aoMRSnJFoqMVcVJwIACwC
+        D56UAgAA
+X-CMS-MailID: 20190621025109epcas1p36f2e431e786ff333c4b885dc9ee91d94
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190605190249epcas3p4c5e474328413c4a3944a1ae7cbd54c29
+References: <20190605190053.19177-1-ezequiel@collabora.com>
+        <CGME20190605190249epcas3p4c5e474328413c4a3944a1ae7cbd54c29@epcas3p4.samsung.com>
+        <20190605190053.19177-2-ezequiel@collabora.com>
+        <c053eea7-7c7f-a03a-0f09-83cd006a6a3a@samsung.com>
+        <c6bc6c42a29d9cf996dc82880ee01b806b0705c2.camel@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Matthew Garrett <mjg59@srcf.ucam.org>
+Hi,
 
-uswsusp allows a user process to dump and then restore kernel state, which
-makes it possible to modify the running kernel.  Disable this if the kernel
-is locked down.
+On 19. 6. 20. 오후 11:41, Ezequiel Garcia wrote:
+> On Thu, 2019-06-20 at 16:23 +0900, Chanwoo Choi wrote:
+>> Hi,
+>>
+>> Frankly, I don't like the existing 'DEVFREQ: ' prefix 
+>> because it is not used on all error log and it is not necessary.
+>>
+>> Instead of this patch, I just prefer to delete the 'DEVFREQ: ' prefix
+>>
+> 
+> Hm, I have to disagree. Having naked pr_{} with just the __func__
+> reducess logging consistency.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-cc: linux-pm@vger.kernel.org
-Cc: pavel@ucw.cz
-Cc: rjw@rjwysocki.net
----
- kernel/power/user.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Actually, it is minor clean-up and there are no any benefits.
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 2d8b60a3c86b..8a8d7f1c8fbb 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -24,6 +24,7 @@
- #include <linux/console.h>
- #include <linux/cpu.h>
- #include <linux/freezer.h>
-+#include <linux/security.h>
- 
- #include <linux/uaccess.h>
- 
-@@ -52,6 +53,9 @@ static int snapshot_open(struct inode *inode, struct file *filp)
- 	if (!hibernation_available())
- 		return -EPERM;
- 
-+	if (security_is_locked_down(LOCKDOWN_HIBERNATION))
-+		return -EPERM;
-+
- 	lock_system_sleep();
- 
- 	if (!atomic_add_unless(&snapshot_device_available, -1, 0)) {
+As I said, 'DEVFREQ: ' prefix was not used on all devfreq log.
+If you don't agree to remove 'DEVFREQ: ', no problem.
+IMO, just better to keep the current style without
+any addition changes.
+
+
 -- 
-2.22.0.410.gd8fdbe21b5-goog
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
