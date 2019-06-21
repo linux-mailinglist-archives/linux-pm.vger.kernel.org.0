@@ -2,37 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CFB4DD69
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 00:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46F04DE15
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 02:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbfFTWZw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jun 2019 18:25:52 -0400
-Received: from mail4.protonmail.ch ([185.70.40.27]:33879 "EHLO
-        mail4.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726215AbfFTWZw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 18:25:52 -0400
-X-Greylist: delayed 444 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Jun 2019 18:25:51 EDT
-Date:   Thu, 20 Jun 2019 22:18:18 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=philipmolloy.com;
-        s=protonmail; t=1561069106;
-        bh=o+PFeJ5YEwKfmogZjjcfo2VWfzgLtuAT/POmeapFTnw=;
-        h=Date:To:From:Reply-To:Subject:Feedback-ID:From;
-        b=kNnMy1fnOqYqlNXKrGioJmQ36eVuG0JlMHMuzA5waH5MWtE+kEPLr5toca5s2hwG3
-         6PxkjypU2Sbe9eomSnlcrmzOYXyna8ONvC910JgDTBNWU/GswO5OYVOyvxGoDEdYGX
-         vVr1bcCI6zdM+rEricy4PDe47LtSV4zfXQe+MWbg=
-To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-From:   Philip Molloy <philip@philipmolloy.com>
-Reply-To: Philip Molloy <philip@philipmolloy.com>
-Subject: Power domain configuration for a i2c module
-Message-ID: <LBvyayNVX8_SOsSXpNSqiBACOGjM2Bu-Fz-D_gW850M9ZJQVEk6WVxzipUn9O4n15435v4yHSIVYp0HgKUcSkTt_hTIEA3XZ0FZLSyEKipY=@philipmolloy.com>
-Feedback-ID: GJt-tMfvxqs0QQBY3TE43pQhGJvmgUyYcaVNLwpOk7zQA3Z8eEn7lfwmGEZNv6-1MJvpWrQYi2j-a_XpfopQjA==:Ext:ProtonMail
+        id S1725911AbfFUAex (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jun 2019 20:34:53 -0400
+Received: from cmta17.telus.net ([209.171.16.90]:41909 "EHLO cmta17.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725869AbfFUAex (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 20 Jun 2019 20:34:53 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id e7VvhxIxrzEP4e7VwhkFhQ; Thu, 20 Jun 2019 18:34:52 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1561077292; bh=urU0428ZFEGLWgzuNZY1P09IlsyrjE5qQ6gxZy1X1Bc=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=7GIAaQuOjzmNXnsQ0ZD9AB1nqZtvqeZCR82ADD1sDk/Df2xWyvS6mh0Y/wm7wT/ct
+         22ckRJZQN2PQTOLmzbmEw/F+E+zhdHIO+6yAIwmcUXLLl089X5ga40X9M9A0tyTqdD
+         dlWR6HTUpY48w35MXSo261g9DdXYvHzUV+KYSK8DoeiTurRKuyN/5e5GwQw5Ul0aT7
+         NbjtUauu7aMRGAjHGzfxQd98LRxA3lJDCuhU6wMNMYYHi5a7u5Kwn2gYCpecgMWo4F
+         pb0Ns9w6ox8kumsY6xS/veHHTKLONmCHIgJBUSHWa3yzQ8BZlm7rMUdJJmQRlMeW5d
+         bS6s90TOLTojA==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=cYmsUULM c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=kj9zAlcOel0A:10 a=5RwkHVgcu25qzxWHrfAA:9 a=CjuIK1q_8ugA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Marcelo Tosatti'" <mtosatti@redhat.com>
+Cc:     "'Paolo Bonzini'" <pbonzini@redhat.com>,
+        "'Radim Krcmar'" <rkrcmar@redhat.com>,
+        "'Andrea Arcangeli'" <aarcange@redhat.com>,
+        "'Rafael J. Wysocki'" <rafael.j.wysocki@intel.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Wanpeng Li'" <kernellwp@gmail.com>,
+        "'Konrad Rzeszutek Wilk'" <konrad.wilk@oracle.com>,
+        "'Raslan KarimAllah'" <karahmed@amazon.de>,
+        "'Boris Ostrovsky'" <boris.ostrovsky@oracle.com>,
+        "'Ankur Arora'" <ankur.a.arora@oracle.com>,
+        "'Christian Borntraeger'" <borntraeger@de.ibm.com>,
+        <linux-pm@vger.kernel.org>, "'kvm-devel'" <kvm@vger.kernel.org>
+References: <20190613224532.949768676@redhat.com> <20190613225023.011025297@redhat.com>
+In-Reply-To: <20190613225023.011025297@redhat.com>
+Subject: RE: [patch 3/5] cpuidle: add haltpoll governor
+Date:   Thu, 20 Jun 2019 17:34:46 -0700
+Message-ID: <002e01d527c9$23be6e10$6b3b4a30$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF autolearn=ham
-        autolearn_force=no version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.protonmail.ch
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdUiOxeAsWfAsrU3S6OogxwSC2p7RgFjChIQ
+X-CMAE-Envelope: MS4wfGMFGMbra82X56Zpq6ar+KffH0WljB7vnHIQBngvBIW04413e/RgxdNEDutTVsRSxdl8FnLIHuUspQYTWDS9TZV8/SiPHoeENxLhRTIG0IA8PQ5eg92q
+ xiYOszYfBw6JeRkBuGTZduP9w++B16cuJvdGnZf0Fxkd3lw6CDCCvMgpBMO5rKdu131CjC7uBoH7K7SALy0mSDusWJEB5v6zbSMi9wEu0nvhW2mp8QNk3ntF
+ 0dPbnroZXPmD6zq09wzGXGfeE2C6ZQmDDzirg3OYlbu1F3P0ZmIbVbQpMcBEjVA9obm6TPbDl4isTO1UmNb0JcfJiiZy8kq4RC0naQgjJwRVmt9yCmmaElG6
+ IkId6qvs+dtpEjKYDjsonVpdzLXLEjJS89Z27GYga9dcTlLFGQCdtM8E7leseeA1VlrZcym6Hc6rI7T6XUp1VGxG1iVkKZ9Gx3yKzqc1I2FFs3bhwuG6G+aM
+ 9GB9e9h9DfG2H7Tm380RXAP+InTF3gzipMK+RuHN+A32kRcQotGo4tKX6ODsvcNqSS/c6wzZuoALQpa2EIUhMD5FokA7EBOyNuhklBaIkUB6api0gL8IergR
+ vcY=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -40,27 +67,39 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-I could use a little help understanding how to set up a power domain for a =
-i2c module. I have corresponding drivers for each i2c device on the module.=
- The i2c devices are all behind a i2c-mux-gpio and a physical i2c mux due t=
-o some interesting hardware design choices. I have written a module power d=
-river that hooks up a power GPIO pin to the runtime power management subsys=
-tem by implementing dev_pm_ops, calling pm_runtime_enable(), etc.
+I tried your patch set, but only to check
+that they didn't cause any regression for situations
+where idle state 0 (Poll) is used a lot (teo governor).
 
-In the device tree node corresponding to the module power driver I have add=
-ed `#power-domain-cells =3D <0>;` to configure it as a provider. And for ea=
-ch i2c device on the module I've added `power-domains` and `power-domains-n=
-ames` to configure them as consumers.
+They didn't (my testing was not thorough).
 
-I'm stuck on what I need to implement to hook this all up. I've done a fair=
- amount of reading, debugging and looking for examples, but it still isn't =
-evident to me what is done automatically and what I need to implement. For =
-example, i2c-mux-gpio is a platform driver and dev_pm_domain_attach(dev, tr=
-ue) is called from platform_drv_probe() so I thought the domain might just =
-power on when i2c-mux-gpio is probed, but that's not what I experienced. No=
-te, my module power driver is also a platform driver.
+I do not know if the below matters or not.
 
-Any help would be greatly appreciated.
+On 2019.06.13 15:46 Marcelo Tosatti wrote:
 
-Best,
-Philip
+... [snip] ...
+
+> Index: linux-2.6.git/Documentation/virtual/guest-halt-polling.txt
+> ===================================================================
+> --- /dev/null	1970-01-01 00:00:00.000000000 +0000
+> +++ linux-2.6.git/Documentation/virtual/guest-halt-polling.txt	2019-06-13 18:16:22.414262777 -0400
+> @@ -0,0 +1,79 @@
+> +Guest halt polling
+> +==================
+> +
+> +The cpuidle_haltpoll driver, with the haltpoll governor, allows
+> +the guest vcpus to poll for a specified amount of time before
+> +halting.
+> +This provides the following benefits to host side polling:
+> +
+> +	1) The POLL flag is set while polling is performed, which allows
+> +	   a remote vCPU to avoid sending an IPI (and the associated
+> + 	   cost of handling the IPI) when performing a wakeup.
+   ^
+   |_ While applying the patches, git complains about this space character before the TAB.
+
+It also complains about a few patches with a blank line before EOF.
+
+... Doug
+
+
