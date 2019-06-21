@@ -2,104 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C46F04DE15
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 02:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D89D4DE86
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 03:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbfFUAex (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jun 2019 20:34:53 -0400
-Received: from cmta17.telus.net ([209.171.16.90]:41909 "EHLO cmta17.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725869AbfFUAex (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 20 Jun 2019 20:34:53 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id e7VvhxIxrzEP4e7VwhkFhQ; Thu, 20 Jun 2019 18:34:52 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1561077292; bh=urU0428ZFEGLWgzuNZY1P09IlsyrjE5qQ6gxZy1X1Bc=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=7GIAaQuOjzmNXnsQ0ZD9AB1nqZtvqeZCR82ADD1sDk/Df2xWyvS6mh0Y/wm7wT/ct
-         22ckRJZQN2PQTOLmzbmEw/F+E+zhdHIO+6yAIwmcUXLLl089X5ga40X9M9A0tyTqdD
-         dlWR6HTUpY48w35MXSo261g9DdXYvHzUV+KYSK8DoeiTurRKuyN/5e5GwQw5Ul0aT7
-         NbjtUauu7aMRGAjHGzfxQd98LRxA3lJDCuhU6wMNMYYHi5a7u5Kwn2gYCpecgMWo4F
-         pb0Ns9w6ox8kumsY6xS/veHHTKLONmCHIgJBUSHWa3yzQ8BZlm7rMUdJJmQRlMeW5d
-         bS6s90TOLTojA==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=cYmsUULM c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=5RwkHVgcu25qzxWHrfAA:9 a=CjuIK1q_8ugA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Marcelo Tosatti'" <mtosatti@redhat.com>
-Cc:     "'Paolo Bonzini'" <pbonzini@redhat.com>,
-        "'Radim Krcmar'" <rkrcmar@redhat.com>,
-        "'Andrea Arcangeli'" <aarcange@redhat.com>,
-        "'Rafael J. Wysocki'" <rafael.j.wysocki@intel.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Wanpeng Li'" <kernellwp@gmail.com>,
-        "'Konrad Rzeszutek Wilk'" <konrad.wilk@oracle.com>,
-        "'Raslan KarimAllah'" <karahmed@amazon.de>,
-        "'Boris Ostrovsky'" <boris.ostrovsky@oracle.com>,
-        "'Ankur Arora'" <ankur.a.arora@oracle.com>,
-        "'Christian Borntraeger'" <borntraeger@de.ibm.com>,
-        <linux-pm@vger.kernel.org>, "'kvm-devel'" <kvm@vger.kernel.org>
-References: <20190613224532.949768676@redhat.com> <20190613225023.011025297@redhat.com>
-In-Reply-To: <20190613225023.011025297@redhat.com>
-Subject: RE: [patch 3/5] cpuidle: add haltpoll governor
-Date:   Thu, 20 Jun 2019 17:34:46 -0700
-Message-ID: <002e01d527c9$23be6e10$6b3b4a30$@net>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdUiOxeAsWfAsrU3S6OogxwSC2p7RgFjChIQ
-X-CMAE-Envelope: MS4wfGMFGMbra82X56Zpq6ar+KffH0WljB7vnHIQBngvBIW04413e/RgxdNEDutTVsRSxdl8FnLIHuUspQYTWDS9TZV8/SiPHoeENxLhRTIG0IA8PQ5eg92q
- xiYOszYfBw6JeRkBuGTZduP9w++B16cuJvdGnZf0Fxkd3lw6CDCCvMgpBMO5rKdu131CjC7uBoH7K7SALy0mSDusWJEB5v6zbSMi9wEu0nvhW2mp8QNk3ntF
- 0dPbnroZXPmD6zq09wzGXGfeE2C6ZQmDDzirg3OYlbu1F3P0ZmIbVbQpMcBEjVA9obm6TPbDl4isTO1UmNb0JcfJiiZy8kq4RC0naQgjJwRVmt9yCmmaElG6
- IkId6qvs+dtpEjKYDjsonVpdzLXLEjJS89Z27GYga9dcTlLFGQCdtM8E7leseeA1VlrZcym6Hc6rI7T6XUp1VGxG1iVkKZ9Gx3yKzqc1I2FFs3bhwuG6G+aM
- 9GB9e9h9DfG2H7Tm380RXAP+InTF3gzipMK+RuHN+A32kRcQotGo4tKX6ODsvcNqSS/c6wzZuoALQpa2EIUhMD5FokA7EBOyNuhklBaIkUB6api0gL8IergR
- vcY=
+        id S1726566AbfFUBUO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jun 2019 21:20:14 -0400
+Received: from mail-vk1-f201.google.com ([209.85.221.201]:36560 "EHLO
+        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726557AbfFUBUO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 21:20:14 -0400
+Received: by mail-vk1-f201.google.com with SMTP id r197so1939074vkf.3
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2019 18:20:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=sZPDagH2N6OInO/tFeMg9JGeODlstxnUOt5waxS+/Vg=;
+        b=pHH18yoAvnmfW2qvCxuOEiD2FV/+42fWKCvrpZZu8PPhOc9gYupxE7PK6VpLmLQXUU
+         fve//NFkOKVWipooUBEnA3UcVzYHXWHFA03vNawm1eIL/hRriG8rI4pyD1VJdMiEJqZ8
+         80BEkDl7fWc5uJnNPpj/k+AzYjq/FMeNUF2Z5fTF7XHJdfi2rOzjvKpjlcQFPRd/3wr2
+         QirOfocXpfj5d2J3a+xkXF0J8R5o3pIsDbCwMiw5l1FgVBqeBAZ7mzDeR2s80FZYb/CK
+         wHA8vGJZMP21IqcWXFBAXYdudMiW7M/o0z+aQXYnQOjnTbV8Ev4KFD8GEpSTuHMRcwT0
+         mINA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=sZPDagH2N6OInO/tFeMg9JGeODlstxnUOt5waxS+/Vg=;
+        b=AjIvvHWhtXUExCFsD9BMUkvPF4gciyLlFp01n1R4VM1hfRYst8oSZgP/7xrltnimS6
+         h73EYLrh/J8yZrNYFP7eS87qnfYdbck2rrDZqZVGvvrY+mGAFSXQjpNUkVyjgo0qer4f
+         +vmdJQzp5A1QtCWy+3lt7Nbnh9fZRLdxpOJPo7/hnyBrxE0Mluq4DnQVmWn+BdAO4wk5
+         H9K0ucZbxzt3HyUkRSF/XjsWc0enjL6Jpwf11XGq0HXXFksJ6omWk05NkXPY7F8CNjea
+         vlleMdpJ7nXE2PwbGvE5/tWJ1uSVhw+YdEeDudCQQaim8vW9ve5x+SAEB/kBB7zUsrhL
+         kymg==
+X-Gm-Message-State: APjAAAX+Degp0qtPur50kcW78T5H0Vyh5FiJZ3WV+RSAqyD5uYjV8LG4
+        Dr/bEIl0o83VdXFTO2FzbHbiivCxSjqQMcQWD6Ytzg==
+X-Google-Smtp-Source: APXvYqxckCwmVhY53ts462jqSAK1H90HXXRRUJIVr6hr3RrpbKSlGb9nn3biH5pst2z8ewo9K52wgg7v3ry/ZnfMXaIzJg==
+X-Received: by 2002:a1f:23d6:: with SMTP id j205mr8388245vkj.52.1561080012958;
+ Thu, 20 Jun 2019 18:20:12 -0700 (PDT)
+Date:   Thu, 20 Jun 2019 18:19:21 -0700
+In-Reply-To: <20190621011941.186255-1-matthewgarrett@google.com>
+Message-Id: <20190621011941.186255-11-matthewgarrett@google.com>
+Mime-Version: 1.0
+References: <20190621011941.186255-1-matthewgarrett@google.com>
+X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+Subject: [PATCH V33 10/30] hibernate: Disable when the kernel is locked down
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     jmorris@namei.org
+Cc:     linux-security@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, Josh Boyer <jwboyer@fedoraproject.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Garrett <mjg59@google.com>, rjw@rjwysocki.net,
+        pavel@ucw.cz, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+From: Josh Boyer <jwboyer@fedoraproject.org>
 
-I tried your patch set, but only to check
-that they didn't cause any regression for situations
-where idle state 0 (Poll) is used a lot (teo governor).
+There is currently no way to verify the resume image when returning
+from hibernate.  This might compromise the signed modules trust model,
+so until we can work with signed hibernate images we disable it when the
+kernel is locked down.
 
-They didn't (my testing was not thorough).
+Signed-off-by: Josh Boyer <jwboyer@fedoraproject.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Cc: rjw@rjwysocki.net
+Cc: pavel@ucw.cz
+cc: linux-pm@vger.kernel.org
+---
+ include/linux/security.h     | 1 +
+ kernel/power/hibernate.c     | 4 +++-
+ security/lockdown/lockdown.c | 1 +
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-I do not know if the below matters or not.
-
-On 2019.06.13 15:46 Marcelo Tosatti wrote:
-
-... [snip] ...
-
-> Index: linux-2.6.git/Documentation/virtual/guest-halt-polling.txt
-> ===================================================================
-> --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-> +++ linux-2.6.git/Documentation/virtual/guest-halt-polling.txt	2019-06-13 18:16:22.414262777 -0400
-> @@ -0,0 +1,79 @@
-> +Guest halt polling
-> +==================
-> +
-> +The cpuidle_haltpoll driver, with the haltpoll governor, allows
-> +the guest vcpus to poll for a specified amount of time before
-> +halting.
-> +This provides the following benefits to host side polling:
-> +
-> +	1) The POLL flag is set while polling is performed, which allows
-> +	   a remote vCPU to avoid sending an IPI (and the associated
-> + 	   cost of handling the IPI) when performing a wakeup.
-   ^
-   |_ While applying the patches, git complains about this space character before the TAB.
-
-It also complains about a few patches with a blank line before EOF.
-
-... Doug
-
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 2d3c69b9fd04..deac722f0d86 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -85,6 +85,7 @@ enum lockdown_reason {
+ 	LOCKDOWN_MODULE_SIGNATURE,
+ 	LOCKDOWN_DEV_MEM,
+ 	LOCKDOWN_KEXEC,
++	LOCKDOWN_HIBERNATION,
+ 	LOCKDOWN_INTEGRITY_MAX,
+ 	LOCKDOWN_CONFIDENTIALITY_MAX,
+ };
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index abef759de7c8..5804ffeb8622 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -32,6 +32,7 @@
+ #include <linux/ctype.h>
+ #include <linux/genhd.h>
+ #include <linux/ktime.h>
++#include <linux/security.h>
+ #include <trace/events/power.h>
+ 
+ #include "power.h"
+@@ -70,7 +71,8 @@ static const struct platform_hibernation_ops *hibernation_ops;
+ 
+ bool hibernation_available(void)
+ {
+-	return (nohibernate == 0);
++	return nohibernate == 0 &&
++		!security_is_locked_down(LOCKDOWN_HIBERNATION);
+ }
+ 
+ /**
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index 94af1c3583d8..42b7bc467ef6 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -21,6 +21,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+ 	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
+ 	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
+ 	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
++	[LOCKDOWN_HIBERNATION] = "hibernation",
+ 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
+ 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+ };
+-- 
+2.22.0.410.gd8fdbe21b5-goog
 
