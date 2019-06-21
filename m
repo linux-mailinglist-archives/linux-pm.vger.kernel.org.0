@@ -2,129 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D89D4DE86
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 03:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE844DE6F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 03:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726566AbfFUBUO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jun 2019 21:20:14 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:36560 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726557AbfFUBUO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 21:20:14 -0400
-Received: by mail-vk1-f201.google.com with SMTP id r197so1939074vkf.3
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2019 18:20:13 -0700 (PDT)
+        id S1726617AbfFUBUQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jun 2019 21:20:16 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:50430 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726556AbfFUBUQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 21:20:16 -0400
+Received: by mail-pf1-f202.google.com with SMTP id h27so3234503pfq.17
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jun 2019 18:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=sZPDagH2N6OInO/tFeMg9JGeODlstxnUOt5waxS+/Vg=;
-        b=pHH18yoAvnmfW2qvCxuOEiD2FV/+42fWKCvrpZZu8PPhOc9gYupxE7PK6VpLmLQXUU
-         fve//NFkOKVWipooUBEnA3UcVzYHXWHFA03vNawm1eIL/hRriG8rI4pyD1VJdMiEJqZ8
-         80BEkDl7fWc5uJnNPpj/k+AzYjq/FMeNUF2Z5fTF7XHJdfi2rOzjvKpjlcQFPRd/3wr2
-         QirOfocXpfj5d2J3a+xkXF0J8R5o3pIsDbCwMiw5l1FgVBqeBAZ7mzDeR2s80FZYb/CK
-         wHA8vGJZMP21IqcWXFBAXYdudMiW7M/o0z+aQXYnQOjnTbV8Ev4KFD8GEpSTuHMRcwT0
-         mINA==
+        bh=JqSAbEGn1HiZP7c6GcuMsV6mwVA+ao3NtmgYDy/YB50=;
+        b=uAl+pb5UgR8qbNWvTqgNyUdGrjYg0S8BfztU1IaK3wSoovw9zlPCjs+fxR/Zldidjt
+         wn9jEjHX6zhp2cY/ATrv0Ui2iFYIO/84hN6Y9U0zSrxpdUGNw4l6ofnhy4DW6H1w1REh
+         e7xaSuXohECGbWYKz7+urb02nPjB4dMxHHraE2pgWMJeOrKlP6Brq6ZYzgnti8M6knOD
+         M5dofE5spcg4W1bE+A2c24KQml7+KGHeAK64yt51wq5qc77KvrpFdOMYA4aIUfufBhW/
+         VF40DkSCXitcpI+sAdK9CQdmQyjHL8QEx8o56v+XmnMnicC0CjNjNkw0OspKK1lBtU/2
+         MRZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=sZPDagH2N6OInO/tFeMg9JGeODlstxnUOt5waxS+/Vg=;
-        b=AjIvvHWhtXUExCFsD9BMUkvPF4gciyLlFp01n1R4VM1hfRYst8oSZgP/7xrltnimS6
-         h73EYLrh/J8yZrNYFP7eS87qnfYdbck2rrDZqZVGvvrY+mGAFSXQjpNUkVyjgo0qer4f
-         +vmdJQzp5A1QtCWy+3lt7Nbnh9fZRLdxpOJPo7/hnyBrxE0Mluq4DnQVmWn+BdAO4wk5
-         H9K0ucZbxzt3HyUkRSF/XjsWc0enjL6Jpwf11XGq0HXXFksJ6omWk05NkXPY7F8CNjea
-         vlleMdpJ7nXE2PwbGvE5/tWJ1uSVhw+YdEeDudCQQaim8vW9ve5x+SAEB/kBB7zUsrhL
-         kymg==
-X-Gm-Message-State: APjAAAX+Degp0qtPur50kcW78T5H0Vyh5FiJZ3WV+RSAqyD5uYjV8LG4
-        Dr/bEIl0o83VdXFTO2FzbHbiivCxSjqQMcQWD6Ytzg==
-X-Google-Smtp-Source: APXvYqxckCwmVhY53ts462jqSAK1H90HXXRRUJIVr6hr3RrpbKSlGb9nn3biH5pst2z8ewo9K52wgg7v3ry/ZnfMXaIzJg==
-X-Received: by 2002:a1f:23d6:: with SMTP id j205mr8388245vkj.52.1561080012958;
- Thu, 20 Jun 2019 18:20:12 -0700 (PDT)
-Date:   Thu, 20 Jun 2019 18:19:21 -0700
+        bh=JqSAbEGn1HiZP7c6GcuMsV6mwVA+ao3NtmgYDy/YB50=;
+        b=OYdhGdr2xsN/dfjStGRM60NXfhhusGlgL7ytxPTx0O/sM1J02PY6j3juR9abbYoe0T
+         Pawnq+4enuoVZ4ntfG7p+jzDqE+k7tL8Ox8xiq2r8ZJsQqMOM5HBpTWrJ11zpMT8YMmp
+         50XAghSzTLNOPFevup1yrHsHZda2lRS0NycTvl9EoYTxG4BVPjoW8XEx2aECfhIGTuV/
+         1yEmqDvdfT8AG500M9fSrQggduMf0HHRwkVxSJ5Cm6Q7DepCWqFgQwuKImP1EcTM+RQu
+         nTZxyCWURWgMachypHdZ7NAKtyzAh1aqT3w/S+8nNoeHk8qurQpj1BpJ8sNnpKCl9PfX
+         PxRA==
+X-Gm-Message-State: APjAAAUq2TggtdpBh+Zv602ia1XUk2KFCmb4H8fb750W0hyj1AV7PBYn
+        j3jEF+gATW6nfN37RmO4CvMKz8OjSJuA+eIaWAKLvQ==
+X-Google-Smtp-Source: APXvYqwT26wVJK6nFrq7e+H8nLKZxTkGEC6Cm+2MlyXrmHTpSaeB1v4qyUV96R/qlEsGT6gqXZ46YMXwlQeXlC7AVr9xzw==
+X-Received: by 2002:a65:5006:: with SMTP id f6mr10257389pgo.402.1561080015411;
+ Thu, 20 Jun 2019 18:20:15 -0700 (PDT)
+Date:   Thu, 20 Jun 2019 18:19:22 -0700
 In-Reply-To: <20190621011941.186255-1-matthewgarrett@google.com>
-Message-Id: <20190621011941.186255-11-matthewgarrett@google.com>
+Message-Id: <20190621011941.186255-12-matthewgarrett@google.com>
 Mime-Version: 1.0
 References: <20190621011941.186255-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH V33 10/30] hibernate: Disable when the kernel is locked down
+Subject: [PATCH V33 11/30] uswsusp: Disable when the kernel is locked down
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     jmorris@namei.org
 Cc:     linux-security@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, Josh Boyer <jwboyer@fedoraproject.org>,
+        linux-api@vger.kernel.org, Matthew Garrett <mjg59@srcf.ucam.org>,
         David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>, rjw@rjwysocki.net,
-        pavel@ucw.cz, linux-pm@vger.kernel.org
+        Matthew Garrett <mjg59@google.com>, linux-pm@vger.kernel.org,
+        pavel@ucw.cz, rjw@rjwysocki.net
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Josh Boyer <jwboyer@fedoraproject.org>
+From: Matthew Garrett <mjg59@srcf.ucam.org>
 
-There is currently no way to verify the resume image when returning
-from hibernate.  This might compromise the signed modules trust model,
-so until we can work with signed hibernate images we disable it when the
-kernel is locked down.
+uswsusp allows a user process to dump and then restore kernel state, which
+makes it possible to modify the running kernel.  Disable this if the kernel
+is locked down.
 
-Signed-off-by: Josh Boyer <jwboyer@fedoraproject.org>
 Signed-off-by: David Howells <dhowells@redhat.com>
 Signed-off-by: Matthew Garrett <mjg59@google.com>
-Cc: rjw@rjwysocki.net
-Cc: pavel@ucw.cz
 cc: linux-pm@vger.kernel.org
+Cc: pavel@ucw.cz
+Cc: rjw@rjwysocki.net
 ---
- include/linux/security.h     | 1 +
- kernel/power/hibernate.c     | 4 +++-
- security/lockdown/lockdown.c | 1 +
- 3 files changed, 5 insertions(+), 1 deletion(-)
+ kernel/power/user.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 2d3c69b9fd04..deac722f0d86 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -85,6 +85,7 @@ enum lockdown_reason {
- 	LOCKDOWN_MODULE_SIGNATURE,
- 	LOCKDOWN_DEV_MEM,
- 	LOCKDOWN_KEXEC,
-+	LOCKDOWN_HIBERNATION,
- 	LOCKDOWN_INTEGRITY_MAX,
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
- };
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index abef759de7c8..5804ffeb8622 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -32,6 +32,7 @@
- #include <linux/ctype.h>
- #include <linux/genhd.h>
- #include <linux/ktime.h>
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index 2d8b60a3c86b..8a8d7f1c8fbb 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -24,6 +24,7 @@
+ #include <linux/console.h>
+ #include <linux/cpu.h>
+ #include <linux/freezer.h>
 +#include <linux/security.h>
- #include <trace/events/power.h>
  
- #include "power.h"
-@@ -70,7 +71,8 @@ static const struct platform_hibernation_ops *hibernation_ops;
+ #include <linux/uaccess.h>
  
- bool hibernation_available(void)
- {
--	return (nohibernate == 0);
-+	return nohibernate == 0 &&
-+		!security_is_locked_down(LOCKDOWN_HIBERNATION);
- }
+@@ -52,6 +53,9 @@ static int snapshot_open(struct inode *inode, struct file *filp)
+ 	if (!hibernation_available())
+ 		return -EPERM;
  
- /**
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 94af1c3583d8..42b7bc467ef6 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -21,6 +21,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
- 	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
- 	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
- 	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
-+	[LOCKDOWN_HIBERNATION] = "hibernation",
- 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
- 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
- };
++	if (security_is_locked_down(LOCKDOWN_HIBERNATION))
++		return -EPERM;
++
+ 	lock_system_sleep();
+ 
+ 	if (!atomic_add_unless(&snapshot_device_available, -1, 0)) {
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
