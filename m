@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E0F4E23B
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 10:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9054E23F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 10:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbfFUInO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jun 2019 04:43:14 -0400
-Received: from foss.arm.com ([217.140.110.172]:51092 "EHLO foss.arm.com"
+        id S1726381AbfFUInW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jun 2019 04:43:22 -0400
+Received: from foss.arm.com ([217.140.110.172]:51108 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726755AbfFUInL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 21 Jun 2019 04:43:11 -0400
+        id S1726740AbfFUInO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 21 Jun 2019 04:43:14 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EFAEF1597;
-        Fri, 21 Jun 2019 01:43:10 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8493D1595;
+        Fri, 21 Jun 2019 01:43:13 -0700 (PDT)
 Received: from e110439-lin.cambridge.arm.com (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9CE983F246;
-        Fri, 21 Jun 2019 01:43:08 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 31D673F246;
+        Fri, 21 Jun 2019 01:43:11 -0700 (PDT)
 From:   Patrick Bellasi <patrick.bellasi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     Ingo Molnar <mingo@redhat.com>,
@@ -35,9 +35,9 @@ Cc:     Ingo Molnar <mingo@redhat.com>,
         Steve Muckle <smuckle@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Alessio Balsini <balsini@android.com>
-Subject: [PATCH v10 14/16] sched/core: uclamp: Propagate system defaults to root group
-Date:   Fri, 21 Jun 2019 09:42:15 +0100
-Message-Id: <20190621084217.8167-15-patrick.bellasi@arm.com>
+Subject: [PATCH v10 15/16] sched/core: uclamp: Use TG's clamps to restrict TASK's clamps
+Date:   Fri, 21 Jun 2019 09:42:16 +0100
+Message-Id: <20190621084217.8167-16-patrick.bellasi@arm.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190621084217.8167-1-patrick.bellasi@arm.com>
 References: <20190621084217.8167-1-patrick.bellasi@arm.com>
@@ -48,69 +48,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The clamp values are not tunable at the level of the root task group.
-That's for two main reasons:
+When a task specific clamp value is configured via sched_setattr(2),
+this value is accounted in the corresponding clamp bucket every time the
+task is {en,de}qeued. However, when cgroups are also in use, the task
+specific clamp values could be restricted by the task_group (TG)
+clamp values.
 
- - the root group represents "system resources" which are always
-   entirely available from the cgroup standpoint.
+Update uclamp_cpu_inc() to aggregate task and TG clamp values. Every
+time a task is enqueued, it's accounted in the clamp_bucket defining the
+smaller clamp between the task specific value and its TG effective
+value. This allows to:
 
- - when tuning/restricting "system resources" makes sense, tuning must
-   be done using a system wide API which should also be available when
-   control groups are not.
+1. ensure cgroup clamps are always used to restrict task specific
+   requests, i.e. boosted only up to the effective granted value or
+   clamped at least to a certain value
 
-When a system wide restriction is available, cgroups should be aware of
-its value in order to know exactly how much "system resources" are
-available for the subgroups.
+2. implement a "nice-like" policy, where tasks are still allowed to
+   request less then what enforced by their current TG
 
-Utilization clamping supports already the concepts of:
+This mimics what already happens for a task's CPU affinity mask when the
+task is also in a cpuset, i.e. cgroup attributes are always used to
+restrict per-task attributes.
 
- - system defaults: which define the maximum possible clamp values
-   usable by tasks.
+Do this by exploiting the concept of "effective" clamp, which is already
+used by a TG to track parent enforced restrictions.
 
- - effective clamps: which allows a parent cgroup to constraint (maybe
-   temporarily) its descendants without losing the information related
-   to the values "requested" from them.
-
-Exploit these two concepts and bind them together in such a way that,
-whenever system default are tuned, the new values are propagated to
-(possibly) restrict or relax the "effective" value of nested cgroups.
+Apply task group clamp restrictions only to tasks belonging to a child
+group. While, for tasks in the root group or in an autogroup, only
+system defaults are enforced.
 
 Signed-off-by: Patrick Bellasi <patrick.bellasi@arm.com>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Tejun Heo <tj@kernel.org>
 ---
- kernel/sched/core.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ kernel/sched/core.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 2b4d0b9bd6b9..f09712f65017 100644
+index f09712f65017..8070e11cafa0 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -1006,6 +1006,13 @@ static inline void uclamp_rq_dec(struct rq *rq, struct task_struct *p)
- 		uclamp_rq_dec_id(rq, p, clamp_id);
+@@ -862,16 +862,42 @@ unsigned int uclamp_rq_max_value(struct rq *rq, unsigned int clamp_id,
+ 	return uclamp_idle_value(rq, clamp_id, clamp_value);
  }
  
++static inline struct uclamp_se
++uclamp_tg_restrict(struct task_struct *p, unsigned int clamp_id)
++{
++	struct uclamp_se uc_req = p->uclamp_req[clamp_id];
 +#ifdef CONFIG_UCLAMP_TASK_GROUP
-+static void cpu_util_update_eff(struct cgroup_subsys_state *css,
-+				unsigned int clamp_id);
-+#else
-+#define cpu_util_update_eff(...)
++	struct uclamp_se uc_max;
++
++	/*
++	 * Tasks in autogroups or root task group will be
++	 * restricted by system defaults.
++	 */
++	if (task_group_is_autogroup(task_group(p)))
++		return uc_req;
++	if (task_group(p) == &root_task_group)
++		return uc_req;
++
++	uc_max = task_group(p)->uclamp[clamp_id];
++	if (uc_req.value > uc_max.value || !uc_req.user_defined)
++		return uc_max;
 +#endif
 +
- int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
- 				void __user *buffer, size_t *lenp,
- 				loff_t *ppos)
-@@ -1039,6 +1046,9 @@ int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
- 			      sysctl_sched_uclamp_util_max, false);
- 	}
- 
-+	cpu_util_update_eff(&root_task_group.css, UCLAMP_MIN);
-+	cpu_util_update_eff(&root_task_group.css, UCLAMP_MAX);
++	return uc_req;
++}
 +
- 	/*
- 	 * Updating all the RUNNABLE task is expensive, keep it simple and do
- 	 * just a lazy update at each next enqueue time.
+ /*
+  * The effective clamp bucket index of a task depends on, by increasing
+  * priority:
+  * - the task specific clamp value, when explicitly requested from userspace
++ * - the task group effective clamp value, for tasks not either in the root
++ *   group or in an autogroup
+  * - the system default clamp value, defined by the sysadmin
+  */
+ static inline struct uclamp_se
+ uclamp_eff_get(struct task_struct *p, unsigned int clamp_id)
+ {
+-	struct uclamp_se uc_req = p->uclamp_req[clamp_id];
++	struct uclamp_se uc_req = uclamp_tg_restrict(p, clamp_id);
+ 	struct uclamp_se uc_max = uclamp_default[clamp_id];
+ 
+ 	/* System default restrictions always apply */
 -- 
 2.21.0
 
