@@ -2,135 +2,237 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C1F4DF35
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 04:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8404E213
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 10:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbfFUCvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jun 2019 22:51:19 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:12498 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfFUCvT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jun 2019 22:51:19 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190621025116epoutp035935c286b8f6fca3084a98e7de139167~qFvhLeE4W3071230712epoutp03m
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jun 2019 02:51:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190621025116epoutp035935c286b8f6fca3084a98e7de139167~qFvhLeE4W3071230712epoutp03m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561085476;
-        bh=Vs8IOVDH/ICARp40T4SJapoAoFYLuMTrtpm/gZVtr4M=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=KZ21sZDF7kO4fLiBpbziMe5Nvegm2lCkUCDgFHX+qW/xyjqrCcy2dMbTP+OYRd1uO
-         OJI70x28dE570eUswVLAYOIXqQEQhOjpRBno2FGPk/155D+qDqVkKyuUdDG/mxIjMK
-         A8ef9PJkQmKasFAVg2oMaxxXRvuSJNmpAShXNICA=
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.157]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20190621025112epcas1p358a16e840e927ebeafea22edd5b9eb06~qFvdZPbMl2107121071epcas1p3E;
-        Fri, 21 Jun 2019 02:51:12 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2E.6A.04142.E164C0D5; Fri, 21 Jun 2019 11:51:10 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20190621025109epcas1p36f2e431e786ff333c4b885dc9ee91d94~qFva3Nvbg3157631576epcas1p3T;
-        Fri, 21 Jun 2019 02:51:09 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190621025109epsmtrp26690da66d78a6409ea254949ea22a6b2~qFva2BjZH3207232072epsmtrp2d;
-        Fri, 21 Jun 2019 02:51:09 +0000 (GMT)
-X-AuditID: b6c32a36-ce1ff7000000102e-f3-5d0c461e2d24
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        96.B3.03662.D164C0D5; Fri, 21 Jun 2019 11:51:09 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190621025109epsmtip2782a4bbbaa64c3d4d75d1cc717899bbb~qFvauzoue1068610686epsmtip2P;
-        Fri, 21 Jun 2019 02:51:09 +0000 (GMT)
-Subject: Re: [PATCH 2/2] PM / devfreq: Sanitize prints
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc:     kernel@collabora.com, linux-pm@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <8b6d523e-7bb3-c705-7393-64d9b5fde900@samsung.com>
-Date:   Fri, 21 Jun 2019 11:53:39 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.0
+        id S1726074AbfFUImg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jun 2019 04:42:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:50846 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726057AbfFUImg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 21 Jun 2019 04:42:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDB8F360;
+        Fri, 21 Jun 2019 01:42:34 -0700 (PDT)
+Received: from e110439-lin.cambridge.arm.com (e110439-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 95FD73F246;
+        Fri, 21 Jun 2019 01:42:32 -0700 (PDT)
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alessio Balsini <balsini@android.com>
+Subject: [PATCH v10 00/16] Add utilization clamping support
+Date:   Fri, 21 Jun 2019 09:42:01 +0100
+Message-Id: <20190621084217.8167-1-patrick.bellasi@arm.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <c6bc6c42a29d9cf996dc82880ee01b806b0705c2.camel@collabora.com>
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGJsWRmVeSWpSXmKPExsWy7bCmga6cG0+swfJJrBZrbh9itNi54Qu7
-        xeZzPawWZ5vesFt87j3CaHG7cQWbA5vHjrtLGD36tqxi9Pi8SS6AOSrbJiM1MSW1SCE1Lzk/
-        JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwdor5JCWWJOKVAoILG4WEnfzqYo
-        v7QkVSEjv7jEVim1ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAhO2PxlT1sBX9ZK1a17mFr
-        YLzM0sXIySEhYCJxd/lt9i5GLg4hgR2MEgs+XGQDSQgJfGKU6NjIBZH4xihx9+5UZpiOt/Ng
-        OvYySjTcn88M4bxnlJjw9BUTSJWwgJnElystLCAJEYEmRok3b1azgiSYBbIl5hyfxw5iswlo
-        Sex/cQNsH7+AosTVH48ZQWxeATuJryeXgh3IIqAqsaNhLpgtKhAh8WXnJqgaQYmTM5+AxTkF
-        vCVeT3/PDjFfXOLWk/lMELa8RPPW2VBnX2eTODNfHsJ2kbi6ei0bhC0s8er4FnYIW0ri87u9
-        UPFqiZUnj7CBPCAh0MEosWX/BVaIhLHE/qWTgRZwAC3QlFi/Sx8irCix8/dcRoi9fBLvvvaw
-        gpRICPBKdLQJQZQoS1x+cJcJwpaUWNzeyTaBUWkWkm9mIflgFpIPZiEsW8DIsopRLLWgODc9
-        tdiwwAg5tjcxgtOkltkOxkXnfA4xCnAwKvHwHpjFHSvEmlhWXJl7iFGCg1lJhPcpI1CINyWx
-        siq1KD++qDQntfgQoykwsCcyS4km5wNTeF5JvKGpkbGxsYWJoZmpoaGSOG88980YIYH0xJLU
-        7NTUgtQimD4mDk6pBsZTyUlu4sqCpisl5NpdTSyCGU8sqwx+/T3zkK/0/74q30uSFyeeeMSa
-        4PD/e+NiSxG7zwcD+n+Y5Wkkzc9duLqm+fTkhzcnLBVgeqeZr3Jjaxpf5Tf74PyNfyaF/J35
-        0ugJd3euuvTEkIPzN1+sCH4QzWTy5kGE15/pBnIrvGuu6Ns6Rz/6ulyJpTgj0VCLuag4EQB4
-        5wIRqQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42LZdlhJXlfWjSfWoHmvpsWa24cYLXZu+MJu
-        sflcD6vF2aY37Bafe48wWtxuXMHmwOax4+4SRo++LasYPT5vkgtgjuKySUnNySxLLdK3S+DK
-        WHxlD1vBX9aKVa172BoYL7N0MXJySAiYSLydd5sdxBYS2M0o8fx3NkRcUmLaxaPMXYwcQLaw
-        xOHDxV2MXEAlbxklvh37AFYvLGAm8eVKCwtIQkSghVHi8amZbCAJZoFsiedb1zJBdGxnkrh8
-        +jnYNjYBLYn9L26AFfELKEpc/fGYEcTmFbCT+HpyKVgNi4CqxI6GuWC2qECExOxdDSwQNYIS
-        J2c+AbM5BbwlXk9/zw6xTF3iz7xLzBC2uMStJ/OZIGx5ieats5knMArPQtI+C0nLLCQts5C0
-        LGBkWcUomVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERwxWlo7GE+ciD/EKMDBqMTDe2AW
-        d6wQa2JZcWXuIUYJDmYlEd6njEAh3pTEyqrUovz4otKc1OJDjNIcLErivPL5xyKFBNITS1Kz
-        U1MLUotgskwcnFINjKFOkTUPcg4r77IQjRa/m+nSzrpNpamk5fUj8d+ajDuuqvyNbJhyYUV5
-        74F7z386d8r8E7ZzSEtZkC5daSBU8ejIq+UW7HxPGpO4jab+EWKL6fyttGeH5Mbs2ynJiWVb
-        06uP/bjFKs0tvWRi6+WDqdOnhi0qPMwccvybxNO0HzmfVWJfuq6aoMRSnJFoqMVcVJwIACwC
-        D56UAgAA
-X-CMS-MailID: 20190621025109epcas1p36f2e431e786ff333c4b885dc9ee91d94
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190605190249epcas3p4c5e474328413c4a3944a1ae7cbd54c29
-References: <20190605190053.19177-1-ezequiel@collabora.com>
-        <CGME20190605190249epcas3p4c5e474328413c4a3944a1ae7cbd54c29@epcas3p4.samsung.com>
-        <20190605190053.19177-2-ezequiel@collabora.com>
-        <c053eea7-7c7f-a03a-0f09-83cd006a6a3a@samsung.com>
-        <c6bc6c42a29d9cf996dc82880ee01b806b0705c2.camel@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi all, this is a respin of:
 
-On 19. 6. 20. 오후 11:41, Ezequiel Garcia wrote:
-> On Thu, 2019-06-20 at 16:23 +0900, Chanwoo Choi wrote:
->> Hi,
->>
->> Frankly, I don't like the existing 'DEVFREQ: ' prefix 
->> because it is not used on all error log and it is not necessary.
->>
->> Instead of this patch, I just prefer to delete the 'DEVFREQ: ' prefix
->>
-> 
-> Hm, I have to disagree. Having naked pr_{} with just the __func__
-> reducess logging consistency.
+  https://lore.kernel.org/lkml/20190515094459.10317-1-patrick.bellasi@arm.com/
 
-Actually, it is minor clean-up and there are no any benefits.
+which addresses all Tejun's concerns:
 
-As I said, 'DEVFREQ: ' prefix was not used on all devfreq log.
-If you don't agree to remove 'DEVFREQ: ', no problem.
-IMO, just better to keep the current style without
-any addition changes.
+ - rename cgroup attributes to be cpu.uclamp.{min,max}
+ - update initialization of subgroups clamps to be "no clamps" by default
+ - use percentage rational numbers for clamp attributes, e.g. "12.34" for 12.34%.
 
+by introducing modifications impacting only patches:
+
+ [PATCH v10 12/16] sched/core: uclamp: Extend CPU's cgroup controller
+ [PATCH v10 13/16] sched/core: uclamp: Propagate parent clamps
+
+The rest of the patches are the same as per in v9, they have been just rebased
+on top of:
+
+   tj/cgroup.git	for-5.3
+   tip/tip.git		sched/core
+
+AFAIU, all the first 11 patches have been code reviewed and should be at a
+"ready to merge" quality level. Please let me know if I'm wrong and there
+is something else I need/can to do on those patches.
+
+Otherwise, now that we should have settled all the behavioral aspects, I'm
+looking forward for a code review on the last set of patches of this series.
+
+Cheers,
+Patrick
+
+
+Series Organization
+===================
+
+The series is organized into these main sections:
+
+ - Patches [01-07]: Per task (primary) API
+ - Patches [08-09]: Schedutil integration for FAIR and RT tasks
+ - Patches [10-11]: Integration with EAS's energy_compute()
+ - Patches [12-16]: Per task group (secondary) API
+
+It is based on today's tj/cgroup/for-5.3 and tip/sched/core and the full tree
+is available here:
+
+   git://linux-arm.org/linux-pb.git   lkml/utilclamp_v10
+   http://www.linux-arm.org/git?p=linux-pb.git;a=shortlog;h=refs/heads/lkml/utilclamp_v10
+
+
+Newcomer's Short Abstract
+=========================
+
+The Linux scheduler tracks a "utilization" signal for each scheduling entity
+(SE), e.g. tasks, to know how much CPU time they use. This signal allows the
+scheduler to know how "big" a task is and, in principle, it can support
+advanced task placement strategies by selecting the best CPU to run a task.
+Some of these strategies are represented by the Energy Aware Scheduler [3].
+
+When the schedutil cpufreq governor is in use, the utilization signal allows
+the Linux scheduler to also drive frequency selection. The CPU utilization
+signal, which represents the aggregated utilization of tasks scheduled on that
+CPU, is used to select the frequency which best fits the workload generated by
+the tasks.
+
+The current translation of utilization values into a frequency selection is
+simple: we go to max for RT tasks or to the minimum frequency which can
+accommodate the utilization of DL+FAIR tasks.
+However, utilization values by themselves cannot convey the desired
+power/performance behaviors of each task as intended by user-space.
+As such they are not ideally suited for task placement decisions.
+
+Task placement and frequency selection policies in the kernel can be improved
+by taking into consideration hints coming from authorized user-space elements,
+like for example the Android middleware or more generally any "System
+Management Software" (SMS) framework.
+
+Utilization clamping is a mechanism which allows to "clamp" (i.e. filter) the
+utilization generated by RT and FAIR tasks within a range defined by user-space.
+The clamped utilization value can then be used, for example, to enforce a
+minimum and/or maximum frequency depending on which tasks are active on a CPU.
+
+The main use-cases for utilization clamping are:
+
+ - boosting: better interactive response for small tasks which
+   are affecting the user experience.
+
+   Consider for example the case of a small control thread for an external
+   accelerator (e.g. GPU, DSP, other devices). Here, from the task utilization
+   the scheduler does not have a complete view of what the task's requirements
+   are and, if it's a small utilization task, it keeps selecting a more energy
+   efficient CPU, with smaller capacity and lower frequency, thus negatively
+   impacting the overall time required to complete task activations.
+
+ - capping: increase energy efficiency for background tasks not affecting the
+   user experience.
+
+   Since running on a lower capacity CPU at a lower frequency is more energy
+   efficient, when the completion time is not a main goal, then capping the
+   utilization considered for certain (maybe big) tasks can have positive
+   effects, both on energy consumption and thermal headroom.
+   This feature allows also to make RT tasks more energy friendly on mobile
+   systems where running them on high capacity CPUs and at the maximum
+   frequency is not required.
+
+From these two use-cases, it's worth noticing that frequency selection
+biasing, introduced by patches 9 and 10 of this series, is just one possible
+usage of utilization clamping. Another compelling extension of utilization
+clamping is in helping the scheduler in making tasks placement decisions.
+
+Utilization is (also) a task specific property the scheduler uses to know
+how much CPU bandwidth a task requires, at least as long as there is idle time.
+Thus, the utilization clamp values, defined either per-task or per-task_group,
+can represent tasks to the scheduler as being bigger (or smaller) than what
+they actually are.
+
+Utilization clamping thus enables interesting additional optimizations, for
+example on asymmetric capacity systems like Arm big.LITTLE and DynamIQ CPUs,
+where:
+
+ - boosting: try to run small/foreground tasks on higher-capacity CPUs to
+   complete them faster despite being less energy efficient.
+
+ - capping: try to run big/background tasks on low-capacity CPUs to save power
+   and thermal headroom for more important tasks
+
+This series does not present this additional usage of utilization clamping but
+it's an integral part of the EAS feature set, where [4] is one of its main
+components.
+
+Android kernels use SchedTune, a solution similar to utilization clamping, to
+bias both 'frequency selection' and 'task placement'. This series provides the
+foundation to add similar features to mainline while focusing, for the
+time being, just on schedutil integration.
+
+
+References
+==========
+
+[1] Message-ID: <20190509130215.GV2623@hirez.programming.kicks-ass.net>
+    https://lore.kernel.org/lkml/20190509130215.GV2623@hirez.programming.kicks-ass.net/
+
+[2] Message-ID: <20180911162827.GJ1100574@devbig004.ftw2.facebook.com>
+    https://lore.kernel.org/lkml/20180911162827.GJ1100574@devbig004.ftw2.facebook.com/
+
+[3] Energy Aware Scheduling
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/scheduler/sched-energy.txt?h=v5.1
+
+[4] Expressing per-task/per-cgroup performance hints
+    Linux Plumbers Conference 2018
+    https://linuxplumbersconf.org/event/2/contributions/128/
+
+
+Patrick Bellasi (16):
+  sched/core: uclamp: Add CPU's clamp buckets refcounting
+  sched/core: uclamp: Add bucket local max tracking
+  sched/core: uclamp: Enforce last task's UCLAMP_MAX
+  sched/core: uclamp: Add system default clamps
+  sched/core: Allow sched_setattr() to use the current policy
+  sched/core: uclamp: Extend sched_setattr() to support utilization
+    clamping
+  sched/core: uclamp: Reset uclamp values on RESET_ON_FORK
+  sched/core: uclamp: Set default clamps for RT tasks
+  sched/cpufreq: uclamp: Add clamps for FAIR and RT tasks
+  sched/core: uclamp: Add uclamp_util_with()
+  sched/fair: uclamp: Add uclamp support to energy_compute()
+  sched/core: uclamp: Extend CPU's cgroup controller
+  sched/core: uclamp: Propagate parent clamps
+  sched/core: uclamp: Propagate system defaults to root group
+  sched/core: uclamp: Use TG's clamps to restrict TASK's clamps
+  sched/core: uclamp: Update CPU's refcount on TG's clamp changes
+
+ Documentation/admin-guide/cgroup-v2.rst |  50 ++
+ include/linux/log2.h                    |  34 +
+ include/linux/sched.h                   |  58 ++
+ include/linux/sched/sysctl.h            |  11 +
+ include/linux/sched/topology.h          |   6 -
+ include/uapi/linux/sched.h              |  14 +-
+ include/uapi/linux/sched/types.h        |  66 +-
+ init/Kconfig                            |  75 +++
+ kernel/sched/core.c                     | 797 +++++++++++++++++++++++-
+ kernel/sched/cpufreq_schedutil.c        |  22 +-
+ kernel/sched/fair.c                     |  44 +-
+ kernel/sched/rt.c                       |   4 +
+ kernel/sched/sched.h                    | 123 +++-
+ kernel/sysctl.c                         |  16 +
+ 14 files changed, 1276 insertions(+), 44 deletions(-)
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+2.21.0
+
