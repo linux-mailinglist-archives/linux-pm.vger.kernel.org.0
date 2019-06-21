@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD834E21E
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 10:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA4D4E221
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jun 2019 10:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbfFUIml (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jun 2019 04:42:41 -0400
-Received: from foss.arm.com ([217.140.110.172]:50884 "EHLO foss.arm.com"
+        id S1726328AbfFUImo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jun 2019 04:42:44 -0400
+Received: from foss.arm.com ([217.140.110.172]:50904 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726390AbfFUImk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 21 Jun 2019 04:42:40 -0400
+        id S1726282AbfFUImn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 21 Jun 2019 04:42:43 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30A12147A;
-        Fri, 21 Jun 2019 01:42:40 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B98B914F6;
+        Fri, 21 Jun 2019 01:42:42 -0700 (PDT)
 Received: from e110439-lin.cambridge.arm.com (e110439-lin.cambridge.arm.com [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D1EB23F246;
-        Fri, 21 Jun 2019 01:42:37 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 66B893F246;
+        Fri, 21 Jun 2019 01:42:40 -0700 (PDT)
 From:   Patrick Bellasi <patrick.bellasi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     Ingo Molnar <mingo@redhat.com>,
@@ -35,9 +35,9 @@ Cc:     Ingo Molnar <mingo@redhat.com>,
         Steve Muckle <smuckle@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Alessio Balsini <balsini@android.com>
-Subject: [PATCH v10 02/16] sched/core: uclamp: Add bucket local max tracking
-Date:   Fri, 21 Jun 2019 09:42:03 +0100
-Message-Id: <20190621084217.8167-3-patrick.bellasi@arm.com>
+Subject: [PATCH v10 03/16] sched/core: uclamp: Enforce last task's UCLAMP_MAX
+Date:   Fri, 21 Jun 2019 09:42:04 +0100
+Message-Id: <20190621084217.8167-4-patrick.bellasi@arm.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190621084217.8167-1-patrick.bellasi@arm.com>
 References: <20190621084217.8167-1-patrick.bellasi@arm.com>
@@ -48,127 +48,149 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Because of bucketization, different task-specific clamp values are
-tracked in the same bucket.  For example, with 20% bucket size and
-assuming to have:
-  Task1: util_min=25%
-  Task2: util_min=35%
-both tasks will be refcounted in the [20..39]% bucket and always boosted
-only up to 20% thus implementing a simple floor aggregation normally
-used in histograms.
+When a task sleeps it removes its max utilization clamp from its CPU.
+However, the blocked utilization on that CPU can be higher than the max
+clamp value enforced while the task was running. This allows undesired
+CPU frequency increases while a CPU is idle, for example, when another
+CPU on the same frequency domain triggers a frequency update, since
+schedutil can now see the full not clamped blocked utilization of the
+idle CPU.
 
-In systems with only few and well-defined clamp values, it would be
-useful to track the exact clamp value required by a task whenever
-possible. For example, if a system requires only 23% and 47% boost
-values then it's possible to track the exact boost required by each
-task using only 3 buckets of ~33% size each.
+Fix this by using
+  uclamp_rq_dec_id(p, rq, UCLAMP_MAX)
+    uclamp_rq_max_value(rq, UCLAMP_MAX, clamp_value)
+to detect when a CPU has no more RUNNABLE clamped tasks and to flag this
+condition.
 
-Introduce a mechanism to max aggregate the requested clamp values of
-RUNNABLE tasks in the same bucket. Keep it simple by resetting the
-bucket value to its base value only when a bucket becomes inactive.
-Allow a limited and controlled overboosting margin for tasks recounted
-in the same bucket.
-
-In systems where the boost values are not known in advance, it is still
-possible to control the maximum acceptable overboosting margin by tuning
-the number of clamp groups. For example, 20 groups ensure a 5% maximum
-overboost.
-
-Remove the rq bucket initialization code since a correct bucket value
-is now computed when a task is refcounted into a CPU's rq.
+Don't track any minimum utilization clamps since an idle CPU never
+requires a minimum frequency. The decay of the blocked utilization is
+good enough to reduce the CPU frequency.
 
 Signed-off-by: Patrick Bellasi <patrick.bellasi@arm.com>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- kernel/sched/core.c | 43 +++++++++++++++++++++++++------------------
- 1 file changed, 25 insertions(+), 18 deletions(-)
+ kernel/sched/core.c  | 49 +++++++++++++++++++++++++++++++++++++++-----
+ kernel/sched/sched.h |  2 ++
+ 2 files changed, 46 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index bc0389d3e77d..9c805b83cb36 100644
+index 9c805b83cb36..b230a3d37263 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -774,6 +774,11 @@ static inline unsigned int uclamp_bucket_id(unsigned int clamp_value)
- 	return clamp_value / UCLAMP_BUCKET_DELTA;
+@@ -792,8 +792,36 @@ static inline void uclamp_se_set(struct uclamp_se *uc_se, unsigned int value)
+ 	uc_se->bucket_id = uclamp_bucket_id(value);
  }
  
-+static inline unsigned int uclamp_bucket_base_value(unsigned int clamp_value)
++static inline unsigned int
++uclamp_idle_value(struct rq *rq, unsigned int clamp_id,
++		  unsigned int clamp_value)
 +{
-+	return UCLAMP_BUCKET_DELTA * uclamp_bucket_id(clamp_value);
++	/*
++	 * Avoid blocked utilization pushing up the frequency when we go
++	 * idle (which drops the max-clamp) by retaining the last known
++	 * max-clamp.
++	 */
++	if (clamp_id == UCLAMP_MAX) {
++		rq->uclamp_flags |= UCLAMP_FLAG_IDLE;
++		return clamp_value;
++	}
++
++	return uclamp_none(UCLAMP_MIN);
 +}
 +
- static inline unsigned int uclamp_none(int clamp_id)
- {
- 	if (clamp_id == UCLAMP_MIN)
-@@ -811,6 +816,11 @@ unsigned int uclamp_rq_max_value(struct rq *rq, unsigned int clamp_id)
-  * When a task is enqueued on a rq, the clamp bucket currently defined by the
-  * task's uclamp::bucket_id is refcounted on that rq. This also immediately
-  * updates the rq's clamp value if required.
-+ *
-+ * Tasks can have a task-specific value requested from user-space, track
-+ * within each bucket the maximum value for tasks refcounted in it.
-+ * This "local max aggregation" allows to track the exact "requested" value
-+ * for each bucket when all its RUNNABLE tasks require the same clamp.
-  */
- static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
- 				    unsigned int clamp_id)
-@@ -824,8 +834,15 @@ static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
- 	bucket = &uc_rq->bucket[uc_se->bucket_id];
- 	bucket->tasks++;
- 
-+	/*
-+	 * Local max aggregation: rq buckets always track the max
-+	 * "requested" clamp value of its RUNNABLE tasks.
-+	 */
-+	if (bucket->tasks == 1 || uc_se->value > bucket->value)
-+		bucket->value = uc_se->value;
++static inline void uclamp_idle_reset(struct rq *rq, unsigned int clamp_id,
++				     unsigned int clamp_value)
++{
++	/* Reset max-clamp retention only on idle exit */
++	if (!(rq->uclamp_flags & UCLAMP_FLAG_IDLE))
++		return;
 +
- 	if (uc_se->value > READ_ONCE(uc_rq->value))
--		WRITE_ONCE(uc_rq->value, bucket->value);
-+		WRITE_ONCE(uc_rq->value, uc_se->value);
++	WRITE_ONCE(rq->uclamp[clamp_id].value, clamp_value);
++}
++
+ static inline
+-unsigned int uclamp_rq_max_value(struct rq *rq, unsigned int clamp_id)
++unsigned int uclamp_rq_max_value(struct rq *rq, unsigned int clamp_id,
++				 unsigned int clamp_value)
+ {
+ 	struct uclamp_bucket *bucket = rq->uclamp[clamp_id].bucket;
+ 	int bucket_id = UCLAMP_BUCKETS - 1;
+@@ -809,7 +837,7 @@ unsigned int uclamp_rq_max_value(struct rq *rq, unsigned int clamp_id)
+ 	}
+ 
+ 	/* No tasks -- default clamp values */
+-	return uclamp_none(clamp_id);
++	return uclamp_idle_value(rq, clamp_id, clamp_value);
  }
  
  /*
-@@ -852,6 +869,12 @@ static inline void uclamp_rq_dec_id(struct rq *rq, struct task_struct *p,
- 	if (likely(bucket->tasks))
- 		bucket->tasks--;
+@@ -834,6 +862,8 @@ static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
+ 	bucket = &uc_rq->bucket[uc_se->bucket_id];
+ 	bucket->tasks++;
  
-+	/*
-+	 * Keep "local max aggregation" simple and accept to (possibly)
-+	 * overboost some RUNNABLE tasks in the same bucket.
-+	 * The rq clamp bucket value is reset to its base value whenever
-+	 * there are no more RUNNABLE tasks refcounting it.
-+	 */
- 	if (likely(bucket->tasks))
- 		return;
++	uclamp_idle_reset(rq, clamp_id, uc_se->value);
++
+ 	/*
+ 	 * Local max aggregation: rq buckets always track the max
+ 	 * "requested" clamp value of its RUNNABLE tasks.
+@@ -860,6 +890,7 @@ static inline void uclamp_rq_dec_id(struct rq *rq, struct task_struct *p,
+ 	struct uclamp_rq *uc_rq = &rq->uclamp[clamp_id];
+ 	struct uclamp_se *uc_se = &p->uclamp[clamp_id];
+ 	struct uclamp_bucket *bucket;
++	unsigned int bkt_clamp;
+ 	unsigned int rq_clamp;
  
-@@ -892,25 +915,9 @@ static void __init init_uclamp(void)
+ 	lockdep_assert_held(&rq->lock);
+@@ -884,8 +915,10 @@ static inline void uclamp_rq_dec_id(struct rq *rq, struct task_struct *p,
+ 	 * e.g. due to future modification, warn and fixup the expected value.
+ 	 */
+ 	SCHED_WARN_ON(bucket->value > rq_clamp);
+-	if (bucket->value >= rq_clamp)
+-		WRITE_ONCE(uc_rq->value, uclamp_rq_max_value(rq, clamp_id));
++	if (bucket->value >= rq_clamp) {
++		bkt_clamp = uclamp_rq_max_value(rq, clamp_id, uc_se->value);
++		WRITE_ONCE(uc_rq->value, bkt_clamp);
++	}
+ }
+ 
+ static inline void uclamp_rq_inc(struct rq *rq, struct task_struct *p)
+@@ -897,6 +930,10 @@ static inline void uclamp_rq_inc(struct rq *rq, struct task_struct *p)
+ 
+ 	for_each_clamp_id(clamp_id)
+ 		uclamp_rq_inc_id(rq, p, clamp_id);
++
++	/* Reset clamp idle holding when there is one RUNNABLE task */
++	if (rq->uclamp_flags & UCLAMP_FLAG_IDLE)
++		rq->uclamp_flags &= ~UCLAMP_FLAG_IDLE;
+ }
+ 
+ static inline void uclamp_rq_dec(struct rq *rq, struct task_struct *p)
+@@ -915,8 +952,10 @@ static void __init init_uclamp(void)
  	unsigned int clamp_id;
  	int cpu;
  
--	for_each_possible_cpu(cpu) {
--		struct uclamp_bucket *bucket;
--		struct uclamp_rq *uc_rq;
--		unsigned int bucket_id;
--
-+	for_each_possible_cpu(cpu)
+-	for_each_possible_cpu(cpu)
++	for_each_possible_cpu(cpu) {
  		memset(&cpu_rq(cpu)->uclamp, 0, sizeof(struct uclamp_rq));
++		cpu_rq(cpu)->uclamp_flags = 0;
++	}
  
--		for_each_clamp_id(clamp_id) {
--			uc_rq = &cpu_rq(cpu)->uclamp[clamp_id];
--
--			bucket_id = 1;
--			while (bucket_id < UCLAMP_BUCKETS) {
--				bucket = &uc_rq->bucket[bucket_id];
--				bucket->value = bucket_id * UCLAMP_BUCKET_DELTA;
--				++bucket_id;
--			}
--		}
--	}
--
  	for_each_clamp_id(clamp_id) {
  		uclamp_se_set(&init_task.uclamp[clamp_id],
- 			      uclamp_none(clamp_id));
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 9149d90b8b7c..cd36002436fc 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -870,6 +870,8 @@ struct rq {
+ #ifdef CONFIG_UCLAMP_TASK
+ 	/* Utilization clamp values based on CPU's RUNNABLE tasks */
+ 	struct uclamp_rq	uclamp[UCLAMP_CNT] ____cacheline_aligned;
++	unsigned int		uclamp_flags;
++#define UCLAMP_FLAG_IDLE 0x01
+ #endif
+ 
+ 	struct cfs_rq		cfs;
 -- 
 2.21.0
 
