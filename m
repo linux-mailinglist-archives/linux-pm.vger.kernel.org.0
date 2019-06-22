@@ -2,100 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B32F44F667
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2019 17:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123524F713
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2019 18:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbfFVPHy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jun 2019 11:07:54 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:42549 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726276AbfFVPHx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 11:07:53 -0400
-Received: by mail-qt1-f195.google.com with SMTP id s15so10000696qtk.9;
-        Sat, 22 Jun 2019 08:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=sbUv5Ghr2QUEpwlMJyUaWOcmUJZ/i8veZoTP8QCCKKo=;
-        b=bux3eERfT9v0n1r99AC5YnwdZOoOPt9Gf8McdzxCGPLnXp6BM2TFYr0P207lgK7bNW
-         R1LqhDKLEjzoFCnCni90/Vf8HVHL0FewydXa2g5SxNe9zhtP7jdjGwnw15T8Zb3hc4BL
-         0Zf4C/sSjsTC2iVqBGwRBGHMt0ig/QuDrOnUmDiM4yhcFnqzinMNtsaFLyHaDMju4sTk
-         1v8Vk2KFZnBZq1O+6jLcjU+hBiVfVNlUrxlzhYBEzugiqbNWRA1hsMJwDqa4xCVPc+Vb
-         Hr0ahmxEoKWx+t9OnqIADxuh2DHYOtcZA7dmS7m2bwkhTXB5RkfajZnhxzWvgJUziWVQ
-         4tTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sbUv5Ghr2QUEpwlMJyUaWOcmUJZ/i8veZoTP8QCCKKo=;
-        b=OmQwheiqZGUsd11QHxw30kWK2srx2BJscZJvSjPHJVtn2G9HxCjQqXst6Bfc3Vwo50
-         tMknF2O2ixdDetUYXcBIsLiI5HEgCk6xrRDpEom4WQsMg51biW3XUky5exJemYQVR7OR
-         hiPue1ethFCKouzHV/gK+uoXOYbCw+PyGogZ67xvv2RB+a7996u0Jv5WjFDtjE6jC6mB
-         86qKOiWGToWjdrnxOs8+y0bNSbN90xoJpulzF4tdAQ19jRjhk/v76ldQ9NUra6IvUtqi
-         XUeJ/4yXoZyXkICkibgedKsWsRHzPu3ty3fmuDTUTCNnBR62LshL3bPA6t/Up6Ncrpbv
-         xQTQ==
-X-Gm-Message-State: APjAAAUrYDBUoBFh0tNPYart4g7/muJBODPrC2OHubCHlkoW1irzz4Jy
-        OclBjL0RuW6AJITG63a/fW0=
-X-Google-Smtp-Source: APXvYqwU73SsA/hFAtFReQpivN5lJdBJfNcjqquwiaZFBP5h7ofbtO0CeqIzxtNOKXqZEkhn19EPlg==
-X-Received: by 2002:a0c:b12b:: with SMTP id q40mr20280998qvc.0.1561216072644;
-        Sat, 22 Jun 2019 08:07:52 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::e3ca])
-        by smtp.gmail.com with ESMTPSA id x24sm2245761qkf.27.2019.06.22.08.07.51
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 22 Jun 2019 08:07:52 -0700 (PDT)
-Date:   Sat, 22 Jun 2019 08:07:50 -0700
-From:   Tejun Heo <tj@kernel.org>
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alessio Balsini <balsini@android.com>
-Subject: Re: [PATCH v10 13/16] sched/core: uclamp: Propagate parent clamps
-Message-ID: <20190622150750.GN657710@devbig004.ftw2.facebook.com>
-References: <20190621084217.8167-1-patrick.bellasi@arm.com>
- <20190621084217.8167-14-patrick.bellasi@arm.com>
+        id S1726483AbfFVQ3S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jun 2019 12:29:18 -0400
+Received: from sonic316-11.consmr.mail.bf2.yahoo.com ([74.6.130.121]:33422
+        "EHLO sonic316-11.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726462AbfFVQ3J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 12:29:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220948; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=Sqmma7rQCC9csXbuiUU3W2/3JNoNH7S8264Vtax3p6vjP/GOy3xpD3wbU2PRR9kt9Hpkf+FIWW9PMCnOCaw1O79buHof/+e4XCSgtAjG8InDhCml6NU6QqPjKJ3zDc6ntgnpVqWtJnbhtjoUqIbv1W6GU8NTi8qVdCcmhrTc1IZ6aiOxpvBar7FQmN3jAwZcqruMWVYBgbk1LAoNqGvQ8jjOiTjNhCDJjpcLi94EE60gk+qIfYgu1AQDdd9wVo7X6i3XlVR9KCYw0l7ikZmlDSVkcSrrmJBlognD3+QlW4wko0RiyOGAXy+sEMAa8UXhFfxEEhf+A0WfqKBKwkVQbg==
+X-YMail-OSG: 3TA6aNEVM1mHk4tfSNROwYxIcekGBuzt5YSl8uAf.0_HHQ2LGDBhX2FGT2.Do_z
+ _0DV280q.YGRxDLoRDSJM82e2d5hsgoPZVcKxWsle6Z3oHX8Omo6hY9bu5QjJLY68zQNKFXygJQb
+ l1z62dHRy69xOFvl6tq.81EbMsOh1_cirrcCk2fMX_Jmwx0sebG__1rhE6wzzo_NDP9VbvIqZ9bR
+ 2icQk1E4jS_eT.9i5S8Sf0xsdShl9dMibpAXRU93yOYuHTQIa_P77tZTcStgCsIVxKiDvC3a0NxY
+ 8gZtRhwFdS641nFzLb368UTov.mB4xMHIDhTJv9NazaTg1j8sw18ET29s.TqlBmXHg8vLU94qBpd
+ 5PlUttniCcoNFEJpnLF3UUydECDiL8Z11cc18YJXwsIeDfFkYqHGX5XdA4jNj054mfKUIhoNEakn
+ WUKps59xvPMOhDCVBujS9v_vJClG4fXrBtjl.W_LQqwsSCutxIcdvaqHEtURhc6MkAEPdp4bTGI.
+ srA9smb.rYGHYAQmfGBYSrMpzCORaFwD3sLBOdwCdBjEVVdu.sBEOGddWsx2T8AZRYYy5nvR9Foz
+ bPsz41tE4__SqGjxrktEJ2_s2wIQAUza2deZFDGXc6T62eXwgZpA4Pp2nGTmGbFQ6h4nAMd51HJh
+ T3GzQn8s4GOn.0BKRwZDpwf7w10rv6JPk5nAgLZOaX7LfFs2yeq7fnFrg4OCOiG9MCMxrUNq6gf7
+ VomHdE0MTMCDmL3Ebk4K0YUhXaCTht27MRDaoJusaRVRGavzgn0vj3Z4n7xxu27l7AAqrNZTRmUI
+ n_b8fWLMzkIFoI7ZcmL_O5d2bYctv7x0WqIS4U6onMjRr4HtPSPFTejqwRtmzChG01EgeDt1Xu9J
+ 3fp8ciCxthupmhAtFqCrukMze7VttucN.DpeM8bKmVw1EDgn.s_L.L9fVdDwg2umGkLNazDxoP0_
+ dzbgtjASRdO1.JaxkowN5gRT6rna4oVoAmbHsjQ4rLTjBWSWz8ZqQDlV43apY.buigbJvn4Qmvf1
+ GxhsPAlHlnnGfjZ9pr3BSAVXKd_Qs83vYaBOYxWdXDlwxBl9.1.bnCTqFBLXCTND1BZASE2pli5W
+ fu842ttK3BMCdw5COU_fvmE4HTFnTUQ5tN2a6KHryWZiInkZpWdo8I9xFucw8IlPI3qY2rDSegZk
+ LLEiGCawsrUj04Yg3uv6LVIzJaVvTytAzboyOeQVTgoj.0EfkvEtgpXm3
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:29:08 +0000
+Date:   Sat, 22 Jun 2019 16:29:03 +0000 (UTC)
+From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
+Reply-To: miss.fmayusuf11@gmail.com
+Message-ID: <1743094696.311303.1561220943310@mail.yahoo.com>
+Subject: From:Miss: Fatima Yusuf.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190621084217.8167-14-patrick.bellasi@arm.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
 
-On Fri, Jun 21, 2019 at 09:42:14AM +0100, Patrick Bellasi wrote:
-> Since it can be interesting for userspace, e.g. system management
-> software, to know exactly what the currently propagated/enforced
-> configuration is, the effective clamp values are exposed to user-space
-> by means of a new pair of read-only attributes
-> cpu.util.{min,max}.effective.
 
-Can we not add the effective interface file for now?  I don't think
-it's a bad idea but would like to think more about it.  For cpuset, it
-was needed because configuration was so interwoven with the effective
-masks, but we don't generally do this for other min/max or weight
-knobs, all of which have effective hierarchical values and I'm not
-quite sure about adding .effective for all of them.  It could be that
-that's what we end up doing eventually but I'd like to think a bit
-more about it.
+From:Miss: Fatima Yusuf.
 
-Thanks.
+For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
 
--- 
-tejun
+I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
+
+Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
+
+I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
+
+I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
+
+My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
+
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
