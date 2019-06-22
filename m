@@ -2,53 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E52A44F58B
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2019 13:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436F74F593
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2019 14:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726311AbfFVLuj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jun 2019 07:50:39 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:44301 "EHLO
+        id S1726276AbfFVMBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jun 2019 08:01:38 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36713 "EHLO
         mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbfFVLui (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 07:50:38 -0400
-Received: by mail-lj1-f195.google.com with SMTP id k18so8275771ljc.11;
-        Sat, 22 Jun 2019 04:50:36 -0700 (PDT)
+        with ESMTP id S1726138AbfFVMBh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 08:01:37 -0400
+Received: by mail-lj1-f195.google.com with SMTP id i21so8317368ljj.3;
+        Sat, 22 Jun 2019 05:01:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc:content-transfer-encoding;
-        bh=iNYX1eIR5m+yLL18gPgDNNyxPpPG7BFo26Nr+JmNscw=;
-        b=FV4ftO1pfUvNlMpsH2sh1SK0iWMhaHK2SU+5VOS0YxyWiNZ70Tx1g8SCp/dtoI+oZA
-         3z+JoNm8DJPWR/o07/Kd30GNGAwjXerSDUz7abmn86f3A27eLhMysYt4RXQG7LaAkBn4
-         QrIV2jZs1zfrzZ5iJJ/23ulPaMAjSUMCIruH+l5eCsllZxSuLtanFE2Np+9SrNaqNlaZ
-         Sd4rwUpGqEnjNx36AC6nMaB8r8sqwdadB0pJ9XWsDMmJrs1WmEm02z9ZIErLz+Qpi0VH
-         GhxRHeDoblmkn0ZFIYo98GfX2M7Ca0842peXapnMFM9aQT2czs2ksilEBQdYsYGUmjAy
-         D00Q==
+        bh=53y8LXMm2nLzyv6UyleKaRsR+DbMLmYCyuAdvnitVr4=;
+        b=pAf9lBlHGUoYX1J6Ly9ZXlHQS28Skf7Nu98zzHChFBmr0DToLcv+r6y0nPx21plOpD
+         MjujOlJF21bztFyaPBGCGdT8LT81I1YaOw42Kr2GMwHRTt1XAIVWfpBA73ZXUSNtcSuI
+         EXWOLRQ8p1jWpJbhqnihaxQ+uj68iMmVlOVA32o3WNqX23ceAXkGHcDUHOfDXaz3rfTp
+         njX/GY2mYXOgq/aILIX6epFWHkIZgeYnleiGxoDV4L2ksqcsOKvZBJdGexgABgxJbTiV
+         wE+mXnYEjAxE+naTvB6mRjzvPYSfBP8K5i4ezjVhxLB2meduchCmsxWYNGWy88R/gpSh
+         5u+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=iNYX1eIR5m+yLL18gPgDNNyxPpPG7BFo26Nr+JmNscw=;
-        b=NcCUw8j4Zs9/Ei/ww/9wDPsQ2SEFNYepxDJ98MkBwdRxzWyDajcRmo+1INdtbqTlM7
-         9PnxhmXiq1lpF1gmWu5yP7It1bv06L2s6ifz1QRthIzrSZ4V2kMm1L7cH4aDVyn7fHyw
-         0UPGCSYX7M5Ymmhvd79qo0zkf2hgiyEx/i4p3hWSfe8z1Jxj/xvzDTgWNpfj60RqzUlx
-         M+3tb0VZc5Sg61OTpJ6ib8bk1wdA7dxwbpondYpagD1i+CL5AkKaKxp84RSvxw7x2Syb
-         jSIYnpnVAFpKp3bM1XhJBYsX37KoeNjebctjNUUDIuEnUcNuYx2eBx+qG8Elk+FH6SIp
-         ueGg==
-X-Gm-Message-State: APjAAAUp2nypeFblYDaCXNhPfGhcLVbdUEeosF0uyRQwkGAqlZWTDwTy
-        kfu006ThCOKUcQTVa/vo3CvxzTuuZEOJfSRrpoY=
-X-Google-Smtp-Source: APXvYqyrU2tMldAVtXb0sta7z06ngrSEsWKZOUOF6rybBfWi+li5n48iifNHhaxeT8Tnx19UGDfiNu0tPoxtfzYJqXo=
-X-Received: by 2002:a2e:3008:: with SMTP id w8mr39505617ljw.13.1561204235917;
- Sat, 22 Jun 2019 04:50:35 -0700 (PDT)
+        bh=53y8LXMm2nLzyv6UyleKaRsR+DbMLmYCyuAdvnitVr4=;
+        b=PoIkMrWVdLPhmvb3QLmXDhuyjU0NCBH/uzT3pg3EGxAbVtuoQBmWtotl+AiGFrQcVO
+         +SshiOY6E1xSCq4jfErFpwMX35AuSR5js4jqv7l4UAaGcBDXySeYl/3FiM5fjTIWxvw8
+         v/IQyApvD6pQGpPO3raEHhpYPwwq5UWze0aa58KS4Tr8WMnw7M7x3CF31Za6UUiQVzZe
+         dR4C6+4mcLImBODNOBnVNA/e/KrOK7HKwWOXxyVcpW3bC6yUESbi4Rd+KHT7RiOQFpG5
+         mebGhVR0M/ozTQ3lAEMvaF4wBw8ld//oxFgvru35L8i9i1doUwKVH55L/DufsENRc14i
+         qM5A==
+X-Gm-Message-State: APjAAAUMnUDO9HVBeBMtKIfwvZ7lGRW6uC+UmJbDV38kQ+XYCBYnL1Fi
+        QJ2eRslT5Ox7B1nmk3TPDz6tZ+c6GMai2QPBBBs=
+X-Google-Smtp-Source: APXvYqxqUYANN6f4iJmNqf/ZAES/avQ+3kucHEinYt4pD5hH1mhCNLLoUOy4Cj7vZ9zTLKB4wJD80d14HQbWg48ePeA=
+X-Received: by 2002:a2e:8945:: with SMTP id b5mr35029280ljk.93.1561204895480;
+ Sat, 22 Jun 2019 05:01:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190622003449.33707-1-saravanak@google.com> <20190622003449.33707-3-saravanak@google.com>
-In-Reply-To: <20190622003449.33707-3-saravanak@google.com>
+References: <20190622003449.33707-1-saravanak@google.com> <20190622003449.33707-4-saravanak@google.com>
+In-Reply-To: <20190622003449.33707-4-saravanak@google.com>
 Reply-To: cwchoi00@gmail.com
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Sat, 22 Jun 2019 20:49:59 +0900
-Message-ID: <CAGTfZH18SQXj_2TpUf7iQPzWrZ5RP8-OCb_t6fp7qhuutGWz5A@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] OPP: Add function to look up required OPP's for a
- given OPP
+Date:   Sat, 22 Jun 2019 21:00:59 +0900
+Message-ID: <CAGTfZH1COWzhDBr63S18md44ypKixstHHsX7cm5LnAhXXbfecA@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] PM / devfreq: Add required OPPs support to passive governor
 To:     Saravana Kannan <saravanak@google.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -67,178 +66,110 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-Absolutely, I like this approach. I think that it is necessary to make
-the connection
-between frequencies of devices. But, I have a question on below.
+Absolutely, I agree this approach.
+But, I add some comments on below. please check them.
 
-2019=EB=85=84 6=EC=9B=94 22=EC=9D=BC (=ED=86=A0) =EC=98=A4=EC=A0=84 9:35, S=
+2019=EB=85=84 6=EC=9B=94 22=EC=9D=BC (=ED=86=A0) =EC=98=A4=EC=A0=84 9:36, S=
 aravana Kannan <saravanak@google.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
 >
-> Add a function that allows looking up required OPPs given a source OPP
-> table, destination OPP table and the source OPP.
+> Look at the required OPPs of the "parent" device to determine the OPP tha=
+t
+> is required from the slave device managed by the passive governor. This
+> allows having mappings between a parent device and a slave device even wh=
+en
+> they don't have the same number of OPPs.
 >
 > Signed-off-by: Saravana Kannan <saravanak@google.com>
 > ---
->  drivers/opp/core.c     | 54 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/pm_opp.h | 11 +++++++++
->  2 files changed, 65 insertions(+)
+>  drivers/devfreq/governor_passive.c | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 74c7bdc6f463..4f7870bffbf8 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1830,6 +1830,60 @@ void dev_pm_opp_put_genpd_virt_dev(struct opp_tabl=
-e *opp_table,
->                 dev_err(virt_dev, "Failed to find required device entry\n=
-");
+> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governo=
+r_passive.c
+> index 3bc29acbd54e..bd4a98bb15b1 100644
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -21,8 +21,9 @@ static int devfreq_passive_get_target_freq(struct devfr=
+eq *devfreq,
+>         struct devfreq_passive_data *p_data
+>                         =3D (struct devfreq_passive_data *)devfreq->data;
+>         struct devfreq *parent_devfreq =3D (struct devfreq *)p_data->pare=
+nt;
+> +       struct opp_table *opp_table =3D NULL, *c_opp_table =3D NULL;
+
+In this function, the base device is passive devfreq device.
+So, I think that better to define the 'parent_opp_table' instead of 'opp_ta=
+ble'
+indicating the OPP table of parent devfreq device. And better to define
+just 'opp_table' instead of 'c_opp_table' indicating the passive devfreq de=
+vice.
+- opp_table -> parent_opp_table
+- c_opp_table -> opp_table
+
+>         unsigned long child_freq =3D ULONG_MAX;
+> -       struct dev_pm_opp *opp;
+> +       struct dev_pm_opp *opp =3D NULL, *c_opp =3D NULL;
+
+Ditto. I think that better to define the variables as following:
+- opp -> parent_opp
+- c_cpp -> opp
+
+>         int i, count, ret =3D 0;
+>
+>         /*
+> @@ -65,7 +66,20 @@ static int devfreq_passive_get_target_freq(struct devf=
+req *devfreq,
+>                 goto out;
+>         }
+>
+> -       dev_pm_opp_put(opp);
+> +       opp_table =3D dev_pm_opp_get_opp_table(parent_devfreq->dev.parent=
+);
+
+devfreq_passive_get_target_freq() is called frequently for DVFS support.
+I think that you have to add 'struct opp_table *opp_table' instance to
+'struct devfreq'
+and then get 'opp_table' instance in the devfreq_add_device().
+
+devfreq_add_device() already get the OPP information by using
+dev_pm_opp_get_suspend_opp_freq().
+You can add following code nearby dev_pm_opp_get_suspend_opp_freq() in
+devfreq_add_device().
+- devfreq->opp_table =3D dev_pm_opp_get_opp_table(dev);
+
+
+> +       if (IS_ERR_OR_NULL(opp_table)) {
+> +               ret =3D PTR_ERR(opp_table);
+> +               goto out;
+> +       }
+> +
+> +       c_opp_table =3D dev_pm_opp_get_opp_table(devfreq->dev.parent);
+> +       if (!IS_ERR_OR_NULL(c_opp_table))
+> +               c_opp =3D dev_pm_opp_xlate_opp(opp_table, c_opp_table, op=
+p);
+> +       if (c_opp) {
+> +               *freq =3D dev_pm_opp_get_freq(c_opp);
+> +               dev_pm_opp_put(c_opp);
+> +               goto out;
+> +       }
+>
+>         /*
+>          * Get the OPP table's index of decided freqeuncy by governor
+> @@ -92,6 +106,13 @@ static int devfreq_passive_get_target_freq(struct dev=
+freq *devfreq,
+>         *freq =3D child_freq;
+>
+>  out:
+> +       if (!IS_ERR_OR_NULL(opp_table))
+> +               dev_pm_opp_put_opp_table(opp_table);
+> +       if (!IS_ERR_OR_NULL(c_opp_table))
+> +               dev_pm_opp_put_opp_table(c_opp_table);
+> +       if (!IS_ERR_OR_NULL(opp))
+> +               dev_pm_opp_put(opp);
+> +
+>         return ret;
 >  }
 >
-> +/**
-> + * dev_pm_opp_xlate_opp() - Find required OPP for src_table OPP.
-> + * @src_table: OPP table which has dst_table as one of its required OPP =
-table.
-> + * @dst_table: Required OPP table of the src_table.
-> + * @pstate: OPP of the src_table.
-> + *
-> + * This function returns the OPP (present in @dst_table) pointed out by =
-the
-> + * "required-opps" property of the OPP (present in @src_table).
-> + *
-> + * The callers are required to call dev_pm_opp_put() for the returned OP=
-P after
-> + * use.
-> + *
-> + * Return: destination table OPP on success, otherwise NULL on errors.
-> + */
-> +struct dev_pm_opp *dev_pm_opp_xlate_opp(struct opp_table *src_table,
-> +                                       struct opp_table *dst_table,
-> +                                       struct dev_pm_opp *src_opp)
-> +{
-> +       struct dev_pm_opp *opp, *dest_opp =3D NULL;
-> +       int i;
-> +
-> +       if (!src_table || !dst_table || !src_opp)
-> +               return NULL;
-> +
-> +       for (i =3D 0; i < src_table->required_opp_count; i++) {
-> +               if (src_table->required_opp_tables[i]->np =3D=3D dst_tabl=
-e->np)
-> +                       break;
-> +       }
-> +
-> +       if (unlikely(i =3D=3D src_table->required_opp_count)) {
-> +               pr_err("%s: Couldn't find matching OPP table (%p: %p)\n",
-> +                      __func__, src_table, dst_table);
-> +               return NULL;
-> +       }
-> +
-> +       mutex_lock(&src_table->lock);
-> +
-> +       list_for_each_entry(opp, &src_table->opp_list, node) {
-> +               if (opp =3D=3D src_opp) {
-> +                       dest_opp =3D opp->required_opps[i];
-
-Correct me if I am wrong. This patch assume that 'i' index is same on betwe=
-en
-[1] and [2]. But in order to guarantee this assumption, all OPP entries
-in the same opp_table have to have the same number of 'required-opps' prope=
-rties
-and keep the sequence among 'required-opps' entries.
-
-[1] src_table->required_opp_tables[i]->np
-[2] opp->required_opps[I];
-
-For example, three OPP entries in the 'parent_bus_opp'
-have the different sequence of 'required-opps' and the different
-number of 'required-opps'. Is it no problem?
-
-parent_bus_opp: opp_table {
-    compatible =3D "operating-points-v2";
-
-    opp2 {
-        opp-hz =3D /bits/ 64 <200000>;
-        required-opps =3D <&child_bus_a_opp2>, <&child_bus_b_opp2>,
-<&child_bus_c_opp2>;
-    };
-
-    opp1 {
-        opp-hz =3D /bits/ 64 <200000>;
-        // change the sequence between child_bus_b_opp2  and child_bus_c_op=
-p2
-        required-opps =3D <&child_bus_a_opp2>, <&child_bus_c_opp2>,
-<&child_bus_b_opp2>
-    };
-
-    opp0 {
-        opp-hz =3D /bits/ 64 <200000>;
-        // missing 'child_bus_a_opp2'
-        required-opps =3D <&child_bus_c_opp2>, <&child_bus_b_opp2>
-    };
-
-}
-
-
-
-> +                       dev_pm_opp_get(dest_opp);
-> +                       goto unlock;
-> +               }
-> +       }
-> +
-> +       pr_err("%s: Couldn't find matching OPP (%p: %p)\n", __func__, src=
-_table,
-> +              dst_table);
-> +
-> +unlock:
-> +       mutex_unlock(&src_table->lock);
-> +
-> +       return dest_opp;
-> +}
-> +
->  /**
->   * dev_pm_opp_xlate_performance_state() - Find required OPP's pstate for=
- src_table.
->   * @src_table: OPP table which has dst_table as one of its required OPP =
-table.
-> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-> index b150fe97ce5a..bc5c68bdfc8d 100644
-> --- a/include/linux/pm_opp.h
-> +++ b/include/linux/pm_opp.h
-> @@ -134,6 +134,9 @@ void dev_pm_opp_unregister_set_opp_helper(struct opp_=
-table *opp_table);
->  struct opp_table *dev_pm_opp_set_genpd_virt_dev(struct device *dev, stru=
-ct device *virt_dev, int index);
->  void dev_pm_opp_put_genpd_virt_dev(struct opp_table *opp_table, struct d=
-evice *virt_dev);
->  int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, stru=
-ct opp_table *dst_table, unsigned int pstate);
-> +struct dev_pm_opp *dev_pm_opp_xlate_opp(struct opp_table *src_table,
-> +                                       struct opp_table *dst_table,
-> +                                       struct dev_pm_opp *src_opp);
->  int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
->  int dev_pm_opp_set_sharing_cpus(struct device *cpu_dev, const struct cpu=
-mask *cpumask);
->  int dev_pm_opp_get_sharing_cpus(struct device *cpu_dev, struct cpumask *=
-cpumask);
-> @@ -307,6 +310,14 @@ static inline int dev_pm_opp_xlate_performance_state=
-(struct opp_table *src_table
->         return -ENOTSUPP;
->  }
->
-> +static inline struct dev_pm_opp *dev_pm_opp_xlate_opp(
-> +                                               struct opp_table *src_tab=
-le,
-> +                                               struct opp_table *dst_tab=
-le,
-> +                                               struct dev_pm_opp *src_op=
-p)
-> +{
-> +       return NULL;
-> +}
-> +
->  static inline int dev_pm_opp_set_rate(struct device *dev, unsigned long =
-target_freq)
->  {
->         return -ENOTSUPP;
 > --
 > 2.22.0.410.gd8fdbe21b5-goog
 >
