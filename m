@@ -2,61 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 436F74F593
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2019 14:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A4C4F5D6
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2019 15:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbfFVMBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jun 2019 08:01:38 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:36713 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbfFVMBh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 08:01:37 -0400
-Received: by mail-lj1-f195.google.com with SMTP id i21so8317368ljj.3;
-        Sat, 22 Jun 2019 05:01:36 -0700 (PDT)
+        id S1726304AbfFVNKs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jun 2019 09:10:48 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44396 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726286AbfFVNKr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 09:10:47 -0400
+Received: by mail-lj1-f196.google.com with SMTP id k18so8390894ljc.11;
+        Sat, 22 Jun 2019 06:10:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc:content-transfer-encoding;
-        bh=53y8LXMm2nLzyv6UyleKaRsR+DbMLmYCyuAdvnitVr4=;
-        b=pAf9lBlHGUoYX1J6Ly9ZXlHQS28Skf7Nu98zzHChFBmr0DToLcv+r6y0nPx21plOpD
-         MjujOlJF21bztFyaPBGCGdT8LT81I1YaOw42Kr2GMwHRTt1XAIVWfpBA73ZXUSNtcSuI
-         EXWOLRQ8p1jWpJbhqnihaxQ+uj68iMmVlOVA32o3WNqX23ceAXkGHcDUHOfDXaz3rfTp
-         njX/GY2mYXOgq/aILIX6epFWHkIZgeYnleiGxoDV4L2ksqcsOKvZBJdGexgABgxJbTiV
-         wE+mXnYEjAxE+naTvB6mRjzvPYSfBP8K5i4ezjVhxLB2meduchCmsxWYNGWy88R/gpSh
-         5u+Q==
+        bh=JKJ7NdLuEooMFWo6LA3qa+n1zarZyBvo2gr/w64oEhU=;
+        b=cqTqJkmkzCJZgmZraBOEPTF4KFzVDxCz/wKOmehscUGO3xmmVvpoNvDfAFfDtJgdhd
+         6afLLU5VEDA0WzPYHeGc4SvNbWt3fkZewR/vK/epUG5aLa2FgLUtBnVfgEVhS/NTRHxI
+         UEoOyERmH5DWxyHzaKLt3jEMin17d7R3511BrX9Eqn0nmV5iwOQF9H05uRovkUpYp+iq
+         A3bmmp9lvnD3+eLNnWbGwR2/OHfhFpTGaaLu1yqWgZWJDaiGzIwpoQFs6x+itvhLI5hd
+         dR3x0ahsaq2djScI0cbXG0kavaXkRXWyd0AwH6eeQ5plXpsjrdy0lzTyF9Li3tVTTXOh
+         42/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=53y8LXMm2nLzyv6UyleKaRsR+DbMLmYCyuAdvnitVr4=;
-        b=PoIkMrWVdLPhmvb3QLmXDhuyjU0NCBH/uzT3pg3EGxAbVtuoQBmWtotl+AiGFrQcVO
-         +SshiOY6E1xSCq4jfErFpwMX35AuSR5js4jqv7l4UAaGcBDXySeYl/3FiM5fjTIWxvw8
-         v/IQyApvD6pQGpPO3raEHhpYPwwq5UWze0aa58KS4Tr8WMnw7M7x3CF31Za6UUiQVzZe
-         dR4C6+4mcLImBODNOBnVNA/e/KrOK7HKwWOXxyVcpW3bC6yUESbi4Rd+KHT7RiOQFpG5
-         mebGhVR0M/ozTQ3lAEMvaF4wBw8ld//oxFgvru35L8i9i1doUwKVH55L/DufsENRc14i
-         qM5A==
-X-Gm-Message-State: APjAAAUMnUDO9HVBeBMtKIfwvZ7lGRW6uC+UmJbDV38kQ+XYCBYnL1Fi
-        QJ2eRslT5Ox7B1nmk3TPDz6tZ+c6GMai2QPBBBs=
-X-Google-Smtp-Source: APXvYqxqUYANN6f4iJmNqf/ZAES/avQ+3kucHEinYt4pD5hH1mhCNLLoUOy4Cj7vZ9zTLKB4wJD80d14HQbWg48ePeA=
-X-Received: by 2002:a2e:8945:: with SMTP id b5mr35029280ljk.93.1561204895480;
- Sat, 22 Jun 2019 05:01:35 -0700 (PDT)
+        bh=JKJ7NdLuEooMFWo6LA3qa+n1zarZyBvo2gr/w64oEhU=;
+        b=kSCJJ1YzA70yUS4pE2YIgn7JA0GVaXE52yLcDjDapqT/Kf4TacENQm551egLUqnT6W
+         Li1CDuTwY73jorFbQ1qpND5HazITD7ici9ZfZ6eizzXie1FSwkxP0wPzJaMPxx7z3ekR
+         vFgxyco9PPz+pWHnuxrfU5/bWx1vB/u/X8p5dUmlOLCEnOQqPKC9jDCypWLS5FbqHCL7
+         dKPFBCQI6BYwMsSxe9Q7v2qGSX96e89KVQ92uqwHGM2N6spsTAzv1qSVCxZZMDtV4QpI
+         rw9SjNM18i/3PWoTxruREbyVpKfTDrlqKbAso+tx22GaAnJkV0mIgeW4Anu4s0ts58wu
+         OOPA==
+X-Gm-Message-State: APjAAAUVeshEkWuR29o6XVQ7pfKBIp84k9hy7hyr9qhyJXO5JJ9bEb/F
+        6jvi7dOBuf71Iit7CWNjqyv32n6wCtnmQi5wFgk=
+X-Google-Smtp-Source: APXvYqynjFLmTvY2JnFGiymi/s20MlB0RGAJBCuFJ20xD8lz5r0YsMLTewzKzTDqvog/w8S1ySij9keN4DPpz60sff4=
+X-Received: by 2002:a2e:8945:: with SMTP id b5mr35153457ljk.93.1561209044837;
+ Sat, 22 Jun 2019 06:10:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190622003449.33707-1-saravanak@google.com> <20190622003449.33707-4-saravanak@google.com>
-In-Reply-To: <20190622003449.33707-4-saravanak@google.com>
+References: <CGME20190614095328eucas1p24009b3a07322fd12e49eabb7a08baf50@eucas1p2.samsung.com>
+ <20190614095309.24100-1-l.luba@partner.samsung.com> <20190614095309.24100-10-l.luba@partner.samsung.com>
+In-Reply-To: <20190614095309.24100-10-l.luba@partner.samsung.com>
 Reply-To: cwchoi00@gmail.com
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Sat, 22 Jun 2019 21:00:59 +0900
-Message-ID: <CAGTfZH1COWzhDBr63S18md44ypKixstHHsX7cm5LnAhXXbfecA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] PM / devfreq: Add required OPPs support to passive governor
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kernel-team@android.com,
+Date:   Sat, 22 Jun 2019 22:10:08 +0900
+Message-ID: <CAGTfZH35X0zE2LhGWJJp2xZNNk1ew7zNMoMqL+eZ5rcBFcPvew@mail.gmail.com>
+Subject: Re: [PATCH v10 09/13] drivers: devfreq: events: add Exynos PPMU new events
+To:     Lukasz Luba <l.luba@partner.samsung.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>, keescook@chromium.org,
+        Tony Lindgren <tony@atomide.com>, jroedel@suse.de,
+        treding@nvidia.com, digetx@gmail.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        willy.mh.wolff.ml@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
@@ -66,114 +78,42 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-Absolutely, I agree this approach.
-But, I add some comments on below. please check them.
-
-2019=EB=85=84 6=EC=9B=94 22=EC=9D=BC (=ED=86=A0) =EC=98=A4=EC=A0=84 9:36, S=
-aravana Kannan <saravanak@google.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+2019=EB=85=84 6=EC=9B=94 14=EC=9D=BC (=EA=B8=88) =EC=98=A4=ED=9B=84 6:54, L=
+ukasz Luba <l.luba@partner.samsung.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
+=B1:
 >
-> Look at the required OPPs of the "parent" device to determine the OPP tha=
-t
-> is required from the slave device managed by the passive governor. This
-> allows having mappings between a parent device and a slave device even wh=
-en
-> they don't have the same number of OPPs.
+> Define new performance events supported by Exynos5422 SoC counters.
+> The counters are built-in in Dynamic Memory Controller and provide
+> information regarding memory utilization.
 >
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
 > ---
->  drivers/devfreq/governor_passive.c | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
+>  drivers/devfreq/event/exynos-ppmu.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governo=
-r_passive.c
-> index 3bc29acbd54e..bd4a98bb15b1 100644
-> --- a/drivers/devfreq/governor_passive.c
-> +++ b/drivers/devfreq/governor_passive.c
-> @@ -21,8 +21,9 @@ static int devfreq_passive_get_target_freq(struct devfr=
-eq *devfreq,
->         struct devfreq_passive_data *p_data
->                         =3D (struct devfreq_passive_data *)devfreq->data;
->         struct devfreq *parent_devfreq =3D (struct devfreq *)p_data->pare=
-nt;
-> +       struct opp_table *opp_table =3D NULL, *c_opp_table =3D NULL;
-
-In this function, the base device is passive devfreq device.
-So, I think that better to define the 'parent_opp_table' instead of 'opp_ta=
-ble'
-indicating the OPP table of parent devfreq device. And better to define
-just 'opp_table' instead of 'c_opp_table' indicating the passive devfreq de=
-vice.
-- opp_table -> parent_opp_table
-- c_opp_table -> opp_table
-
->         unsigned long child_freq =3D ULONG_MAX;
-> -       struct dev_pm_opp *opp;
-> +       struct dev_pm_opp *opp =3D NULL, *c_opp =3D NULL;
-
-Ditto. I think that better to define the variables as following:
-- opp -> parent_opp
-- c_cpp -> opp
-
->         int i, count, ret =3D 0;
->
->         /*
-> @@ -65,7 +66,20 @@ static int devfreq_passive_get_target_freq(struct devf=
-req *devfreq,
->                 goto out;
->         }
->
-> -       dev_pm_opp_put(opp);
-> +       opp_table =3D dev_pm_opp_get_opp_table(parent_devfreq->dev.parent=
-);
-
-devfreq_passive_get_target_freq() is called frequently for DVFS support.
-I think that you have to add 'struct opp_table *opp_table' instance to
-'struct devfreq'
-and then get 'opp_table' instance in the devfreq_add_device().
-
-devfreq_add_device() already get the OPP information by using
-dev_pm_opp_get_suspend_opp_freq().
-You can add following code nearby dev_pm_opp_get_suspend_opp_freq() in
-devfreq_add_device().
-- devfreq->opp_table =3D dev_pm_opp_get_opp_table(dev);
-
-
-> +       if (IS_ERR_OR_NULL(opp_table)) {
-> +               ret =3D PTR_ERR(opp_table);
-> +               goto out;
-> +       }
+> diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/=
+exynos-ppmu.c
+> index c2ea94957501..ce658c262c27 100644
+> --- a/drivers/devfreq/event/exynos-ppmu.c
+> +++ b/drivers/devfreq/event/exynos-ppmu.c
+> @@ -89,6 +89,12 @@ static struct __exynos_ppmu_events {
+>         PPMU_EVENT(d1-cpu),
+>         PPMU_EVENT(d1-general),
+>         PPMU_EVENT(d1-rt),
 > +
-> +       c_opp_table =3D dev_pm_opp_get_opp_table(devfreq->dev.parent);
-> +       if (!IS_ERR_OR_NULL(c_opp_table))
-> +               c_opp =3D dev_pm_opp_xlate_opp(opp_table, c_opp_table, op=
-p);
-> +       if (c_opp) {
-> +               *freq =3D dev_pm_opp_get_freq(c_opp);
-> +               dev_pm_opp_put(c_opp);
-> +               goto out;
-> +       }
+> +       /* For Exynos5422 SoC */
+> +       PPMU_EVENT(dmc0_0),
+> +       PPMU_EVENT(dmc0_1),
+> +       PPMU_EVENT(dmc1_0),
+> +       PPMU_EVENT(dmc1_1),
+>  };
 >
->         /*
->          * Get the OPP table's index of decided freqeuncy by governor
-> @@ -92,6 +106,13 @@ static int devfreq_passive_get_target_freq(struct dev=
-freq *devfreq,
->         *freq =3D child_freq;
->
->  out:
-> +       if (!IS_ERR_OR_NULL(opp_table))
-> +               dev_pm_opp_put_opp_table(opp_table);
-> +       if (!IS_ERR_OR_NULL(c_opp_table))
-> +               dev_pm_opp_put_opp_table(c_opp_table);
-> +       if (!IS_ERR_OR_NULL(opp))
-> +               dev_pm_opp_put(opp);
-> +
->         return ret;
->  }
->
+>  static int exynos_ppmu_find_ppmu_id(struct devfreq_event_dev *edev)
 > --
-> 2.22.0.410.gd8fdbe21b5-goog
+> 2.17.1
 >
 
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
 --=20
 Best Regards,
