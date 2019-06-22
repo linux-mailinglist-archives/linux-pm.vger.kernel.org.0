@@ -2,104 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AEB4F445
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2019 10:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBA94F49D
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jun 2019 11:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbfFVINO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jun 2019 04:13:14 -0400
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:39290 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfFVINO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 04:13:14 -0400
-Received: by mail-vk1-f196.google.com with SMTP id o19so1786995vkb.6;
-        Sat, 22 Jun 2019 01:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ymA/9yBKawIC9AWwAvSD2s34Dx6xSFjTiT44S3SfquU=;
-        b=b339sLmQAe+unMpoelxrVE0PlDrsmwAKLlJc2aWO9uZTL2X0z/UpMf1LAKKp7+GyNI
-         axZOaAOocD9iRmLSjKCgTgHgRCBaqYWedcQCliN9LQCKGO0iyy+rJTwPvoXoJ7ElPwrj
-         R2Yd6Ub1lEV60kYZYMzIvKlzc5J2PS9h9C2t0Zyh3OBlo759tL37p/u98HCUITSlCX6Z
-         k5AVjx1pgmWAyEAUbgLzuFqdC8XUVaP4ZjrBCybLZbyR6U+PcwsPE5uPzKiBSm5NzSng
-         1wLFyGbAhIstMM5W70Gedpyvd4ZCXp/HA0XAxuw21Aq8CN5dmfHicpH+GeVjcbXs62GJ
-         5ZyA==
+        id S1726272AbfFVJM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jun 2019 05:12:58 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:35027 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbfFVJM5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 05:12:57 -0400
+Received: by mail-ot1-f66.google.com with SMTP id j19so8723925otq.2;
+        Sat, 22 Jun 2019 02:12:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ymA/9yBKawIC9AWwAvSD2s34Dx6xSFjTiT44S3SfquU=;
-        b=R/GINlDgmBUqma4m/OBp1d6Jzk0AK1NUK0yIAtDE9VirTyRtCQOTk/+RPx2BHpx+DM
-         8kKbYhp3bXGWLiOHiNa6RHy30G7qBcTq4DOgbgWrBJbqepSYvnenTQTxgJjiklPWPNA/
-         jM50oUJ1qDB8WXgjTvohrn664NoahWOVCkZfsQrw9RdRZycxP4EM2hENvMV+1bRIaS6G
-         ae79oALQscACupBt9gxr5Tg0kDsv9qE6rHxVrrDeBg0qFz1ENkG9MQRnGM1n1DJx1RBY
-         YsIDmp27g2dyuV/RtudfIlqwIrV7+uKIcIfyRgKUmV4GmOJZbM/K9D60slHIlOQmb98B
-         7jMQ==
-X-Gm-Message-State: APjAAAUWWmbQnW02PBTiLb8BRRSfHi5d/gG8hobgvEXgFZz+H57JOLZh
-        vNDa36/qhJfx5Fa9DVTj5SmzT4j/CU3eU67U3/LW0A==
-X-Google-Smtp-Source: APXvYqwbJJHwrbXk97wpkvnicdIyvUw9qn195B4TTuwW4r9kqbrQvG/gO16g9Jlf+GYXz6b6OO9aKuK1D3XFvAFaT0k=
-X-Received: by 2002:a1f:1b0a:: with SMTP id b10mr11176492vkb.19.1561191192828;
- Sat, 22 Jun 2019 01:13:12 -0700 (PDT)
+        bh=za5DjWecnxQo5WhKu7I+X5Hk3iA1uY1rMAIDn+XLDII=;
+        b=YoG4ncd8373zFg6HZwCcpzB9zw+pEF6pAtAOISfTBhubdC5D+3+WLsgGAhZZfP/fz0
+         zCRARpIpRFYNi2xjYvgt8HceNP0TLEhVhKxwoDM4+t0TQiIPb3/Bo/JL59Rqbg08sYYK
+         mrBkrrNGCOiHCpSnVa42MsDP/Y01FdKkWO5iMV3VFKaXYwp7B4mH8MeC/H1U7mJ9b00R
+         vIFy/nEv/hAcp26GHM8vzjJXStS4ko7NZ1itlA5G3dt+btkA4K/bGRjdqQaBhjpNbYtj
+         91dt6JOP9eJftgfBcc8cAOtN+QJ3SlUtx3ri22Di2Vu6vPtM4Dmk/WxdDrLV7HEOO9re
+         S97w==
+X-Gm-Message-State: APjAAAVPFY2YE5dwSInzyF+YJUr+YQJ5xRqWnIMAdoUwcuLku/Somju3
+        DM/jYxY/xOGhVw7jSzZZDoZGbRlZmR3n/o0QnbM=
+X-Google-Smtp-Source: APXvYqy79d/NCRv3FRk7cUoFWpn4u0tK3EJ2qKGeyjzmJz8YDBEpJ1Pun+fgOt8pSnglb/ICBLDyOrBxFfzzVgXc+6g=
+X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr16209366otp.189.1561194777137;
+ Sat, 22 Jun 2019 02:12:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAOuPNLiBA9VjEoG_D2y2O5mKiqsDNW1VZXOk1eWXpGY+h86acg@mail.gmail.com>
- <CAOMZO5BcLaS0gXUPi6oN6vjqagS5yf+rHh+EUjmi-Wi1OX7vqQ@mail.gmail.com>
- <CAOuPNLgEEfDca4aeT1+q8GfUfGzbJ4x6JwGf-ROB1pgpXUBHSw@mail.gmail.com>
- <CAOMZO5BY8JcLNMCRCC_d=emy8HR6kE=dB9f5qfZ=ci_c+Jak0w@mail.gmail.com>
- <CAOuPNLjYhkP_kL+q-ZpiDZMMpOHrU88BFBc2agtnCzXt8dihOg@mail.gmail.com>
- <CAOMZO5ADK1L5UMM9XZetHvmjTvmvUg99G7VPdeXitgpctGLCkw@mail.gmail.com>
- <CAOuPNLhZhgN26rquLQq9zHBct1QxK-7hXAza0xk-0QooPGYLNw@mail.gmail.com>
- <CAOMZO5BsJWTw0nCeUboam4kuKyCO3N_Ch5ZW8k5Y9KFtQBanhQ@mail.gmail.com>
- <CAOuPNLjrAU_C_TUKFMs1d0eGsw=AxuG6d6FhNHtHFwVhfYZGgA@mail.gmail.com>
- <CAOuPNLhstoCjxijrnKNmV1iKWjAXvSZ38Z13tfd5bvGbYSqPAA@mail.gmail.com> <CAOMZO5CD-QQaZwNfiX6mOLAup4J8dBiqEb_V_6jz_z5jXZ5cEw@mail.gmail.com>
-In-Reply-To: <CAOMZO5CD-QQaZwNfiX6mOLAup4J8dBiqEb_V_6jz_z5jXZ5cEw@mail.gmail.com>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Sat, 22 Jun 2019 13:43:01 +0530
-Message-ID: <CAOuPNLj=L_3RoC=9ws4yn1Q7QLoS3OEZ8FLRrF04HRQtQvc0Jg@mail.gmail.com>
-Subject: Re: [IMX] [DRM]: suspend/resume support
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        linux-pm@vger.kernel.org
+References: <20190621132302.30414-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20190621132302.30414-1-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 22 Jun 2019 11:12:46 +0200
+Message-ID: <CAJZ5v0j0q+Z+FRpVuj39ML_c5ijo-veMMMSANdoDz1ZxAK3RgQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] cpufreq: Use existing stub functions instead of
+ IS_ENABLED macro
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 9:09 PM Fabio Estevam <festevam@gmail.com> wrote:
+On Fri, Jun 21, 2019 at 3:23 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Fri, Jun 21, 2019 at 12:13 PM Pintu Agarwal <pintu.ping@gmail.com> wrote:
+> The functions stub already exist for the condition the IS_ENABLED
+> is trying to avoid.
 >
-> > Okay there is some update on the 2nd part.
-> > Now I am able to successfully install all imx modules after the resume
-> > (no hang).
-> > But, I got some errors after install finish:
-> > [drm] disabling vblank on crtc 1
-> > [IMX]: imx_drm_disable_vblank - called
-> > [drm:drm_atomic_helper_commit_cleanup_done] *ERROR* [CRTC:24:crtc-0]
-> > flip_done timed out
-> >
-> > Also I am able to start the weston successfully.
-> > But I see LCD/HDMI display is not working (only some backlight is visible).
-> >
-> > And, I noticed, weston also reports the following errors:
-> > imx-ipuv3 2400000.ipu: DC stop timeout after 50 ms
-> > [IMX]: drm_crtc_vblank_off - called
-> > [IMX]: imx_drm_disable_vblank - called
-> > INFO: rcu_preempt detected stalls on CPUs/tasks: { 1} (detected by 0,
-> > t=6002 jiffies, g=289, c=288, q=8)
-> > Task dump for CPU 1:
-> > weston          R running      0   306      1 0x00000000
-> > [<c05282d8>] (__schedule) from [<00080193>] (0x80193)
-> >
-> > Do you have any clue about these errors ?
->
-> Which kernel version is this?
+> Remove the IS_ENABLED macros as they are pointless.
 
-Please let me know in which version this issue is fixed.
-I will try that.
-I think I saw some commit that mentions about it, but I forgot.
-Anyways, I am checking again.
-Thanks!
+AFAICS, the IS_ENABLED checks are an optimization to avoid generating
+pointless code (including a branch) in case CONFIG_CPU_THERMAL is not
+set.
+
+Why do you think that it is not useful?
+
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 85ff958e01f1..7c72f7d3509c 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1378,8 +1378,7 @@ static int cpufreq_online(unsigned int cpu)
+>         if (cpufreq_driver->ready)
+>                 cpufreq_driver->ready(policy);
+>
+> -       if (IS_ENABLED(CONFIG_CPU_THERMAL) &&
+> -           cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV)
+> +       if (cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV)
+>                 policy->cdev = of_cpufreq_cooling_register(policy);
+>
+>         pr_debug("initialization complete\n");
+> @@ -1469,8 +1468,7 @@ static int cpufreq_offline(unsigned int cpu)
+>                 goto unlock;
+>         }
+>
+> -       if (IS_ENABLED(CONFIG_CPU_THERMAL) &&
+> -           cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV) {
+> +       if (cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV) {
+>                 cpufreq_cooling_unregister(policy->cdev);
+>                 policy->cdev = NULL;
+>         }
+> --
+> 2.17.1
+>
