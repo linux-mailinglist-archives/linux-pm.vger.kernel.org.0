@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 165635001F
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 05:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E0D5000E
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 05:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbfFXDRE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jun 2019 23:17:04 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45665 "EHLO
+        id S1727285AbfFXDJo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jun 2019 23:09:44 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:33550 "EHLO
         mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbfFXDRE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 23:17:04 -0400
-Received: by mail-lj1-f196.google.com with SMTP id m23so11009176lje.12;
-        Sun, 23 Jun 2019 20:17:02 -0700 (PDT)
+        with ESMTP id S1726307AbfFXDJo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 23:09:44 -0400
+Received: by mail-lj1-f196.google.com with SMTP id h10so11079593ljg.0;
+        Sun, 23 Jun 2019 20:09:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KuK/HJBB+sabov/uStjAYnZLIz/87lFFGThs8FI3mQo=;
-        b=ADKaGoys8uZe39G6vzOfMQxp52ANy6A8hq08yILdHzRwsJVTh+iQef/bZ0c7nOSR2g
-         AGya6G9fkSdH5RxY+V2hNNkAWm6Wz7mQSGtpYlh6K6DcKTipdnO24viU0h37W5p/GZoo
-         G+Xa3l7M30vhz8jLJBsgDfLfXZ1Vd74dhbSODGuaEYXX/XYe0ZyQ8fe96Mj8XozKbzL9
-         brIlGizU9frPWEfQ6XONvPJ5UFx8t0dOJ9sp/QktoVRpc9M1P5gghU45p1kAplBoUxng
-         48iancZgoiCC2wH8EBvGh5ln1UnY1Ld4ynmRtCFmmF4bpddAsss6Pn8dZ5VeakjnnKXY
-         aFeQ==
+        bh=Y381zs7JqUeO4ZbV4kzg6cbvTaILm3gppCIZ9QaFOsw=;
+        b=KLKEEFV7vyQEtxZ0uYEFUUY5ay9LG072nBkWBGisDQoh237JAJ6TnNhz4qsxgAGK22
+         YNFSxBL5c+kfsqSm+FEwy4tdVxBIPEC5Dz/4fbi4gx0NTUoGuGOnHdKG6AvZ8gAuLLBT
+         FthFg8LiYixseIyfokMbAhKy0/fG2R5y40iC7A9pvKuE2dCAzxOGEoADpz1/gnKHdmgA
+         Mlexq03Pe5YwnT9xH0yosgCWaP2TDN3CAM1SCK9kHzDCYkBmtiKgYbUgjyurURDmPqDe
+         To/wh7jkGuUiJIIAU3QuGjUiiyRenvhT9dc+Jh0yg89XDyTXt3HIsMBxhcneBn3SzVk6
+         dBww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KuK/HJBB+sabov/uStjAYnZLIz/87lFFGThs8FI3mQo=;
-        b=QX/X5Y6hAf4mNd+OAT9F5NFxcQH1bdwgEr35Rwnqcmx+dKbE6SapsPvyFXiLzR/6IP
-         RSZDvKUncIRK3MQKqoc7ABeX4vleUtW9vgDh3kMe9oE9Oci66gCIm5T460gX3dquVEUC
-         pNxFOXOp0dIGo9beU2qJnkq29YamrEBWuTwazT8pCP7EGwj19BCdrHkZYMkjYWff5rlw
-         l9gxawyBfXz/buInfe8sF35xcCuww4KwQvYPJcfjD1vu+Won/yip09AdKVnWCzkLseNn
-         V7p5RvM8UdcOr5P2N+Q8SpTyQUNjTRYm0OBAU95DVHc8SsDs2J8RYmrAYuV7leW6HQoU
-         v+zg==
-X-Gm-Message-State: APjAAAUUqmXpIl0s4JDyN7AkVCjLgvezuRZwY530mIsWcN/8Ot1GNRfY
-        FwQ8TP6VUwpwKGgn39gahw/tyXBa
-X-Google-Smtp-Source: APXvYqy5wejoCrg2EumLvR8/AjNLGElfUZlXldTgYEiYg4AcGai9CAXpJIsQcoAxhNsF+F1yekcT7w==
-X-Received: by 2002:a2e:959a:: with SMTP id w26mr33411080ljh.150.1561326522191;
-        Sun, 23 Jun 2019 14:48:42 -0700 (PDT)
+        bh=Y381zs7JqUeO4ZbV4kzg6cbvTaILm3gppCIZ9QaFOsw=;
+        b=llfoXSjqqAZsiV5PQLMguB7WTLH4i1UbRg+pH3Iasghf9h0JHGIHoXtb9OjzUGpBIW
+         AU5tp5W7/xe0y6Dk+WH2fLntCaKksry2ehN+jhdnKaI9M9hA/BvUjvl7uwWciLFY0f+o
+         G92Eg1kHWdhrkvTPreHDKxFdMTt4K0GcPk951mBPqV0VCHL/XEsQGm5hTdIZLJVKwBfP
+         0UVrhjqXtPh0Foc9RjwrGD22dUHvhX087pqvl7UT9rplOpA60+nrS91p6ahrcBQC75zU
+         IORlUHJgP6d46cmyxoXelohEYuMpjnJ+dyk4RrUb2hucT+4yFS0UFgC/HHxdiTUlFrpf
+         qn2w==
+X-Gm-Message-State: APjAAAWvf2V95Z44T0VZCrVa0BILC3HZDDKd3lU22gz1PF+VQwI0cvoC
+        TUSQkphZ6bhdyxYY/djZ3GL21IwX
+X-Google-Smtp-Source: APXvYqwMtcEyUBqTG0OrMlZmNbYr3qFE2ieb5bqL32t92m479TGx4QU6qZIPGEn0PHf+rKxTEBwdpA==
+X-Received: by 2002:a2e:b1c1:: with SMTP id e1mr14060925lja.228.1561326523122;
+        Sun, 23 Jun 2019 14:48:43 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id m17sm1460029lfb.9.2019.06.23.14.48.40
+        by smtp.gmail.com with ESMTPSA id m17sm1460029lfb.9.2019.06.23.14.48.42
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 14:48:41 -0700 (PDT)
+        Sun, 23 Jun 2019 14:48:42 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 07/11] PM / devfreq: tegra30: Reset boosting if clock rate changed
-Date:   Mon, 24 Jun 2019 00:46:54 +0300
-Message-Id: <20190623214658.11680-8-digetx@gmail.com>
+Subject: [PATCH v1 08/11] PM / devfreq: tegra30: Stop de-boosting once it's finished
+Date:   Mon, 24 Jun 2019 00:46:55 +0300
+Message-Id: <20190623214658.11680-9-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190623214658.11680-1-digetx@gmail.com>
 References: <20190623214658.11680-1-digetx@gmail.com>
@@ -66,64 +66,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a situation when memory activity is going up, hence boosting up
-starts to happen, and then governor ramps memory clock rate up. In this
-case consecutive events may be stopped if new "COUNT" is within watermarks
-range, meanwhile old boosting value remains, which is plainly wrong and
-results in unneeded "go down" events after ramping up. In a result of this
-change unnecessary interrupts activity goes even lower.
+Once boosting value is 0, then further consecutive-down events won't do
+anything useful since the only purpose of those consecutive events to
+boost the freq and de-boosting is over in the case of 0. Note that upper
+watermark is infinitely high in a case of frequency max out and thus the
+upper events are stopping by themselves. In a result of this change all
+parasite interrupts are fixed now and interrupts activity is nearly
+non-existent now!
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/devfreq/tegra30-devfreq.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index fc278f2f1b62..6fb3ca125438 100644
+index 6fb3ca125438..81449cc1392b 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -631,6 +631,24 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
- 		tegra_actmon_stop_device(&tegra->devices[i]);
- }
+@@ -424,6 +424,8 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
+ 					     dev->config->boost_up_coeff);
+ 		dev->boost_freq += ACTMON_BOOST_FREQ_STEP;
  
-+static void tegra_actmon_stop_boosting(struct tegra_devfreq *tegra)
-+{
-+	struct tegra_devfreq_device *dev = tegra->devices;
-+	unsigned int i;
-+	u32 dev_ctrl;
++		dev_ctrl |= ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
 +
-+	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++, dev++) {
-+		if (!dev->boost_freq)
-+			continue;
-+
-+		dev_ctrl = device_readl(dev, ACTMON_DEV_CTRL);
+ 		if (dev->boost_freq >= tegra->max_freq && !low_activity)
+ 			dev->boost_freq = tegra->max_freq;
+ 
+@@ -442,6 +444,10 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
+ 		tegra_devfreq_update_wmark(tegra, dev);
+ 	}
+ 
++	/* no boosting => no need for consecutive-down interrupt */
++	if (dev->boost_freq == 0)
 +		dev_ctrl &= ~ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
-+		device_writel(dev, dev_ctrl, ACTMON_DEV_CTRL);
 +
-+		dev->boost_freq = 0;
-+	}
-+}
-+
- static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
- 				u32 flags)
- {
-@@ -656,6 +674,16 @@ static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
- 	if (err)
- 		goto restore_min_rate;
+ 	device_writel(dev, dev_ctrl, ACTMON_DEV_CTRL);
  
-+	/*
-+	 * Hence boosting-up could be active at the moment of the rate-change
-+	 * and in this case boosting should be reset because it doesn't relate
-+	 * to the new state. If average won't follow shortly in a case of going
-+	 * UP, then clock rate will drop back on next update due to the missed
-+	 * boosting.
-+	 */
-+	if (rate != devfreq->previous_freq)
-+		tegra_actmon_stop_boosting(tegra);
-+
- 	return 0;
- 
- restore_min_rate:
+ 	device_writel(dev, ACTMON_INTR_STATUS_CLEAR, ACTMON_DEV_INTR_STATUS);
 -- 
 2.22.0
 
