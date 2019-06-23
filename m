@@ -2,200 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3665A4FCD7
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2019 18:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395194FD47
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2019 19:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbfFWQmf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jun 2019 12:42:35 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34780 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727051AbfFWQmf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 12:42:35 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c85so6126389pfc.1;
-        Sun, 23 Jun 2019 09:42:34 -0700 (PDT)
+        id S1726483AbfFWRR5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jun 2019 13:17:57 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:36100 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726399AbfFWRR5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 13:17:57 -0400
+Received: by mail-qk1-f195.google.com with SMTP id g18so8121186qkl.3;
+        Sun, 23 Jun 2019 10:17:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Wt7RMWJEU5nf2APAW5wITney1vGRi8ExyzwA2ly5tbM=;
-        b=DO56xL8GNC3pRjMbczek/js2aH+Jr00XhhADU2CusMADs20FUQ6om0QfFNRcH7bIok
-         utY8iKwz2gs/7WHR18tlrl+XRM9KtdS9MZyCglgz5ZWErisPeGVp+BPEcw81Ezw1KyjP
-         +I7gFX+cYEvLyjmwJRHb04L6mRZ4LjmdVX+GURXCGE4Ky2HFiZkXGwRma8nQVRg7xzb1
-         OpjjtLiiCN+Zc/sg6Vk26H04UbcX2a5L9ZDyAyFJkne9LJuc3SjKpjccxQ4NfVaSg62X
-         sX8QGDvadx5+1F6N6uKmqbh/oIFj9SbUUmdqZyIvf9VMIoiCKn8bIS68Io+mfdDuE05u
-         4YKQ==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oTQJHiQOFJX9TMuzD6eUCrwJJpcVrl2yW+goXQfQCj8=;
+        b=YagS2PXc8FqOqNX+u/fWdMCITgu5lEhgaubB8vuu7uzFL0gXqZagiKIZKs075Bf/xm
+         UHpjfEf41FZ8dknsiecZ79jJeMoFBiROnJHZYhKwdUoh1iVHiwxiZU2QgyWmNTCw4BB+
+         AgzsP/ZA8K3p9NnzDJtG0nCHUxj9YdooaiInEB3skusuIqQV+tDcLsY/pU97SeAFFM/q
+         MscnELUrEvzYMnj4gkr3gSTqr+jUwjE1dwAxknAEmnAyvmQgR+UD+e/eLzPmFieM/uJr
+         gQVWp86juxDTV78xq7Seil+VANoXj2A4vXNtra5tasImp5I+qJQL0JXco9ozFZCbkvPw
+         wISw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Wt7RMWJEU5nf2APAW5wITney1vGRi8ExyzwA2ly5tbM=;
-        b=fuO5jCXvT1vmpjRvtSuaDIkIg7S+7itQPALdSigBTo1jNPKqr0yf8Dx0+lljpn5ZnE
-         Y7wx43I3jTcF/jLWNG1xsZM66eosR8ZukLbd/Q+vP+Eqt6sDCHdHnoc4kKBLckAcVmlO
-         rL9tlvuPW1tqKyBSTzGw54rDqlo3IxTDbfw6knFH0TcctocewGuudeEaJGsmTzYMAHzG
-         /6ZCmCUPKrH+a81RT767/E5rhZjxLQ1kUBM2+hhtc1wQ010ndZc+xCFPtVeLfqnl1xab
-         Rx1pVE+YxKHMNHgkwfUN8qrAS4+/jbZj8vg3ul/3tO0m/1q0wJA1+xnqDUqtfkm48kiC
-         vZxA==
-X-Gm-Message-State: APjAAAVQHO5c5sns6gO7YkZPIOAX/sTt94K5OVx3W4YGnTByMEZPPGZ2
-        JmsewR9rTpyCUo6IqmFaZN0=
-X-Google-Smtp-Source: APXvYqyPdz3cE/WXdIcDs7kmAR8F/niCfqMamQH54dQcogysOpQv1BP/blKrSSByCMUg+zO2djgwVA==
-X-Received: by 2002:a17:90a:7f02:: with SMTP id k2mr19642846pjl.78.1561308154262;
-        Sun, 23 Jun 2019 09:42:34 -0700 (PDT)
-Received: from localhost (68.168.130.77.16clouds.com. [68.168.130.77])
-        by smtp.gmail.com with ESMTPSA id y17sm4923619pfe.148.2019.06.23.09.42.33
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 23 Jun 2019 09:42:33 -0700 (PDT)
-From:   Yangtao Li <tiny.windzz@gmail.com>
-To:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        mchehab+samsung@kernel.org, linus.walleij@linaro.org,
-        nicolas.ferre@microchip.com, paulmck@linux.ibm.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH v4 11/11] thermal: sun8i: add thermal driver for h3
-Date:   Sun, 23 Jun 2019 12:42:06 -0400
-Message-Id: <20190623164206.7467-12-tiny.windzz@gmail.com>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20190623164206.7467-1-tiny.windzz@gmail.com>
-References: <20190623164206.7467-1-tiny.windzz@gmail.com>
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oTQJHiQOFJX9TMuzD6eUCrwJJpcVrl2yW+goXQfQCj8=;
+        b=p165nftV5SLY3PwwV5Nb2gQOgEu+O5kRoG6hbiioqdckIY3hc+Wne93q9aFyfQ+GEp
+         GjbsfdBrukx/Ef204nsaAxzSss00vqKuLRrVlnjVwNQBxgSf6A1jYYNFCnrVrsqn+d//
+         g5zqDdhpYhPb0eGFEIvXdRsMWAsSKinMAQf+Ia+/jtIDAqYThs/+hb65wiQgAVGXssS5
+         xGh5lHfWl82ITvzGS9UXKfR/uoN28axv2W6nWL8P0RzAruFJOucifHE7nq/LDISd839Z
+         fA/wwF9ou45Mo2l7G/dJ5CwAGkK+0Wbd2S2zkK7okNP25kv0IDwLeXasm3yOn2slqLj+
+         55JA==
+X-Gm-Message-State: APjAAAWCygLvcdOa1yLDiCsFViQelmnHZ9IYV+ziOIO4Ascy75il1o8R
+        tzN9HrqTbq06MFigrHdStYzOOaru
+X-Google-Smtp-Source: APXvYqyJTClxclnIYTcifSFy9E8UhzxwdPcRWT3uKf1e8+ma/aVZZm2fuvEjrIt4gaiVaAwmgwk2Cw==
+X-Received: by 2002:a37:4e8f:: with SMTP id c137mr82739150qkb.127.1561310276502;
+        Sun, 23 Jun 2019 10:17:56 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
+        by smtp.googlemail.com with ESMTPSA id g5sm5631799qta.77.2019.06.23.10.17.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 23 Jun 2019 10:17:55 -0700 (PDT)
+Subject: Re: [PATCH v4 00/16] NVIDIA Tegra devfreq improvements and Tegra20/30
+ support
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <CGME20190501234148epcas5p1cc9a8dafa9ee6d8d046d1292b8270727@epcas5p1.samsung.com>
+ <20190501233815.32643-1-digetx@gmail.com>
+ <60ef6e47-e61b-3a92-e90d-90debedfcfc4@samsung.com>
+ <fa061a65-f108-6c5e-1f87-950a9a8caafc@gmail.com>
+ <0fb50eb1-a173-1756-6889-2526a10ac707@gmail.com>
+ <683b343a-e64f-8345-ac44-10f5c00521bd@samsung.com>
+ <5c2a7c32-a98c-3930-14ae-beb0241908d0@gmail.com>
+Message-ID: <389cc71d-8f0b-fa39-1325-433d27c75dc8@gmail.com>
+Date:   Sun, 23 Jun 2019 20:17:53 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
+MIME-Version: 1.0
+In-Reply-To: <5c2a7c32-a98c-3930-14ae-beb0241908d0@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds the support for allwinner h3 thermal sensor.
+05.06.2019 2:09, Dmitry Osipenko пишет:
+> 04.06.2019 3:49, Chanwoo Choi пишет:
+>> On 19. 6. 4. 오전 1:52, Dmitry Osipenko wrote:
+>>> 03.05.2019 3:52, Dmitry Osipenko пишет:
+>>>> 03.05.2019 3:31, Chanwoo Choi пишет:
+>>>>> Hi Dmitry,
+>>>>>
+>>>>> On 19. 5. 2. 오전 8:37, Dmitry Osipenko wrote:
+>>>>>> Changelog:
+>>>>>>
+>>>>>> v4: Addressed all review comments that were made by Chanwoo Choi to v3:
+>>>>>>
+>>>>>>     - changed the driver removal order to match the probe exactly
+>>>>>>     - added clarifying comment for 1/8 ratio to the Tegra20 driver
+>>>>>>
+>>>>>>     Chanwoo, please also note that the clk patch that should fix
+>>>>>>     compilation problem that was reported the kbuild-test-robot is already
+>>>>>>     applied and available in the recent linux-next.
+>>>>>
+>>>>> I knew that Stephen picked up your path about clock.
+>>>>
+>>>> Hi Chanwoo,
+>>>>
+>>>> Okay, good. Thank you very much for reviewing this series! I assume it's
+>>>> too late now for v5.2, but it should be good to go for v5.3.
+>>>>
+>>>
+>>> Hello Chanwoo,
+>>>
+>>> Will be nice to see the patches in the linux-next before they'll hit mainline. We have tested that
+>>> everything works fine on a selective devices, but won't hurt to get some extra testing beforehand.
+>>> AFAIK, at least NVIDIA people are regularly testing -next on theirs dev boards. Please note that
+>>> this not very important, so don't bother if there is some hurdle with pushing to the tracking branch
+>>> for now. Also please let me know if you're expecting to see some ACK's on the patches, I'm sure
+>>> we'll be able to work out that with Thierry and Jon if necessary.
+>>>
+>>>
+>>
+>> Hi Dmitry,
+>> I think that it is enough for applying to mainline branch.
+>> The devfreq.git is maintained by Myungjoo. He will be merged or
+>> reviewed if there are th remained review point.
+> 
+> Thank you very much!
+> 
+>>
+>> Hi Myungjoo,
+>> I reviewed the Dmitry's patches from v1 to v4 patches.
+>> And then I tested them on my testing branch[1] for catching
+>> the build warning and error. In result, it is clean.
+>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
+>>
+>> Please review or apply these patches for v5.3.
+>>
+> 
+> Hello Myungjoo,
+> 
+> I think this patchset should be completed now. Thierry has some extra
+> comments to the patches, but seems nothing critical so far and all the
+> concerns could be addressed in a follow-up series. Please let me know if
+> you're fine with this, I can re-spin v5 as well if necessary.
+> 
 
-Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
----
- drivers/thermal/sun8i_thermal.c | 72 +++++++++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+Hello Chanwoo,
 
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index 260b24340f5b..c8ee291f3b17 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -27,6 +27,14 @@
- #define TEMP_TO_REG				672
- #define CALIBRATE_DEFAULT			0x800
- 
-+#define SUN8I_THS_CTRL0				0x00
-+#define SUN8I_THS_CTRL2				0x40
-+#define SUN8I_THS_IC				0x44
-+#define SUN8I_THS_IS				0x48
-+#define SUN8I_THS_MFC				0x70
-+#define SUN8I_THS_TEMP_CALIB			0x74
-+#define SUN8I_THS_TEMP_DATA			0x80
-+
- #define SUN50I_THS_CTRL0			0x00
- #define SUN50I_H6_THS_ENABLE			0x04
- #define SUN50I_H6_THS_PC			0x08
-@@ -36,6 +44,9 @@
- #define SUN50I_H6_THS_TEMP_CALIB		0xa0
- #define SUN50I_H6_THS_TEMP_DATA			0xc0
- 
-+#define SUN8I_THS_CTRL0_T_ACQ0(x)		(GENMASK(15, 0) & (x))
-+#define SUN8I_THS_CTRL2_T_ACQ1(x)		((GENMASK(15, 0) & (x)) << 16)
-+
- #define SUN50I_THS_CTRL0_T_ACQ(x)		((GENMASK(15, 0) & (x)) << 16)
- #define SUN50I_THS_FILTER_EN			BIT(2)
- #define SUN50I_THS_FILTER_TYPE(x)		(GENMASK(1, 0) & (x))
-@@ -121,6 +132,21 @@ static const struct regmap_config config = {
- 	.fast_io = true,
- };
- 
-+static int sun8i_h3_irq_ack(struct ths_device *tmdev)
-+{
-+	int state, ret = 0;
-+
-+	regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
-+
-+	if (state & BIT(8)) {
-+		regmap_write(tmdev->regmap, SUN8I_THS_IS,
-+			     BIT(8));
-+		ret |= BIT(1);
-+	}
-+
-+	return ret;
-+}
-+
- static int sun50i_h6_irq_ack(struct ths_device *tmdev)
- {
- 	int i, state, ret = 0;
-@@ -154,6 +180,14 @@ static irqreturn_t sun8i_irq_thread(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
-+static int sun8i_h3_ths_calibrate(struct ths_device *tmdev,
-+			       u16 *caldata, int callen)
-+{
-+	regmap_write(tmdev->regmap, SUN8I_THS_TEMP_CALIB, *caldata);
-+
-+	return 0;
-+}
-+
- static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
- 				   u16 *caldata, int callen)
- {
-@@ -325,6 +359,32 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
- 	return ret;
- }
- 
-+static int sun8i_h3_thermal_init(struct ths_device *tmdev)
-+{
-+	/* average over 4 samples */
-+	regmap_write(tmdev->regmap, SUN8I_THS_MFC,
-+		     SUN50I_THS_FILTER_EN |
-+		     SUN50I_THS_FILTER_TYPE(1));
-+	/*
-+	 * period = (x + 1) * 4096 / clkin; ~10ms
-+	 * enable data interrupt
-+	 */
-+	regmap_write(tmdev->regmap, SUN8I_THS_IC,
-+		     SUN50I_H6_THS_PC_TEMP_PERIOD(58) | BIT(8));
-+	/*
-+	 * clkin = 24MHz
-+	 * T acquire = clkin / (x + 1)
-+	 *           = 20us
-+	 * enable sensor
-+	 */
-+	regmap_write(tmdev->regmap, SUN8I_THS_CTRL0,
-+		     SUN8I_THS_CTRL0_T_ACQ0(479));
-+	regmap_write(tmdev->regmap, SUN8I_THS_CTRL2,
-+		     SUN8I_THS_CTRL2_T_ACQ1(479) | BIT(0));
-+
-+	return 0;
-+}
-+
- static int sun50i_thermal_init(struct ths_device *tmdev)
- {
- 	int val;
-@@ -431,6 +491,17 @@ static int sun8i_ths_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct ths_thermal_chip sun8i_h3_ths = {
-+	.sensor_num = 1,
-+	.offset = -1794,
-+	.scale = -121,
-+	.has_ahb_clk = true,
-+	.temp_data_base = SUN8I_THS_TEMP_DATA,
-+	.calibrate = sun8i_h3_ths_calibrate,
-+	.init = sun8i_h3_thermal_init,
-+	.irq_ack = sun8i_h3_irq_ack,
-+};
-+
- static const struct ths_thermal_chip sun50i_h6_ths = {
- 	.sensor_num = 2,
- 	.offset = -2794,
-@@ -443,6 +514,7 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
- };
- 
- static const struct of_device_id of_ths_match[] = {
-+	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
- 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
- 	{ /* sentinel */ },
- };
--- 
-2.17.1
+It looks like Myungjoo is inactive at the moment. Do you know if he'll
+be back to the time of the merge window opening or you'll be curating
+the pull request for 5.3 this time?
 
+Secondly, I'll send a few more patches on top of this series, addressing
+Thierry's comments and making more improvements. Please let me know if
+this causes any problems and I should re-spin the whole series.
