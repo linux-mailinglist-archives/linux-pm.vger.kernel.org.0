@@ -2,150 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 395194FD47
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2019 19:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2264FD69
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2019 19:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbfFWRR5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jun 2019 13:17:57 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:36100 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726399AbfFWRR5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 13:17:57 -0400
-Received: by mail-qk1-f195.google.com with SMTP id g18so8121186qkl.3;
-        Sun, 23 Jun 2019 10:17:57 -0700 (PDT)
+        id S1726674AbfFWRvm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jun 2019 13:51:42 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:44039 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726417AbfFWRvm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 13:51:42 -0400
+Received: by mail-lj1-f193.google.com with SMTP id k18so10349132ljc.11;
+        Sun, 23 Jun 2019 10:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oTQJHiQOFJX9TMuzD6eUCrwJJpcVrl2yW+goXQfQCj8=;
-        b=YagS2PXc8FqOqNX+u/fWdMCITgu5lEhgaubB8vuu7uzFL0gXqZagiKIZKs075Bf/xm
-         UHpjfEf41FZ8dknsiecZ79jJeMoFBiROnJHZYhKwdUoh1iVHiwxiZU2QgyWmNTCw4BB+
-         AgzsP/ZA8K3p9NnzDJtG0nCHUxj9YdooaiInEB3skusuIqQV+tDcLsY/pU97SeAFFM/q
-         MscnELUrEvzYMnj4gkr3gSTqr+jUwjE1dwAxknAEmnAyvmQgR+UD+e/eLzPmFieM/uJr
-         gQVWp86juxDTV78xq7Seil+VANoXj2A4vXNtra5tasImp5I+qJQL0JXco9ozFZCbkvPw
-         wISw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I2qjKuaK2bAC6HwMuzdrbSEtzdln2IR0U/1QHxDJnig=;
+        b=vHKP5U/b4Y5fe87aMnMbnhNneSbOQNKMAR/ogmA9aVTaiHiFbM+029R6fUcnbgjHTa
+         rpsPci6nFQkCrzcD1S7nbwStAzGhBy6e0GcsNjuu9Rrg8Zf/LYljujokdwUmIKgQfQVu
+         1tkmlX/ekPOkTzeb/akWGuQv3DNBqO5G7A43N7wlcIgk+/lOYiJ5tJpO79wa69pcsWhz
+         zhTcPOeJE83pQGuDmDFGqTnzPkBZrb8F4tKIgO9L6kkkZpYE8pxsEqEdWTsqc/3h0VD2
+         6Tvs/fpZSgsRjtbkOyDrnw78bz3+IKTiC32jkXLc9ZVsIwRPbYaQRspyubYi7CPQg6kw
+         pVBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=oTQJHiQOFJX9TMuzD6eUCrwJJpcVrl2yW+goXQfQCj8=;
-        b=p165nftV5SLY3PwwV5Nb2gQOgEu+O5kRoG6hbiioqdckIY3hc+Wne93q9aFyfQ+GEp
-         GjbsfdBrukx/Ef204nsaAxzSss00vqKuLRrVlnjVwNQBxgSf6A1jYYNFCnrVrsqn+d//
-         g5zqDdhpYhPb0eGFEIvXdRsMWAsSKinMAQf+Ia+/jtIDAqYThs/+hb65wiQgAVGXssS5
-         xGh5lHfWl82ITvzGS9UXKfR/uoN28axv2W6nWL8P0RzAruFJOucifHE7nq/LDISd839Z
-         fA/wwF9ou45Mo2l7G/dJ5CwAGkK+0Wbd2S2zkK7okNP25kv0IDwLeXasm3yOn2slqLj+
-         55JA==
-X-Gm-Message-State: APjAAAWCygLvcdOa1yLDiCsFViQelmnHZ9IYV+ziOIO4Ascy75il1o8R
-        tzN9HrqTbq06MFigrHdStYzOOaru
-X-Google-Smtp-Source: APXvYqyJTClxclnIYTcifSFy9E8UhzxwdPcRWT3uKf1e8+ma/aVZZm2fuvEjrIt4gaiVaAwmgwk2Cw==
-X-Received: by 2002:a37:4e8f:: with SMTP id c137mr82739150qkb.127.1561310276502;
-        Sun, 23 Jun 2019 10:17:56 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.googlemail.com with ESMTPSA id g5sm5631799qta.77.2019.06.23.10.17.54
+        bh=I2qjKuaK2bAC6HwMuzdrbSEtzdln2IR0U/1QHxDJnig=;
+        b=uHvuTnAK5bVPG3BY2oUb7jOqpM2xdjRpYp1cyCdWO8dYXwJusBFNJvsoGX2KGWuAaD
+         MTK2SIm3rRTy12B1prv+CVAN5v07o8QEMFozfY2DbANiVmT/IAvDtf3F43KpEEQauknr
+         VLP2TZnC5ohmyfiMkkwVOgZjcLczGjNtNt7ex4rH2nR7j8+syQ2KG9dJ9jX4FOmz/RZc
+         zTLW58Cb3KSxmWz7BJeCQ4jrFCtB26iONMVQ4BSiO03r65kPuQ+2CeQQLkxQgKaC6tiV
+         Gm6LuqkswutHz4luCmuRqDYlpYNQ3YcpFje5GeknpGv29hakkkEpMMr/W5lIITDat9R0
+         8FhQ==
+X-Gm-Message-State: APjAAAWclCo5Y8ysRHCEK7TjMm967ua9Vk/wjpbTsdSFswPmcQeZcmaf
+        O9MyrPVLfhqpKllJfOZn9yS2nYbP
+X-Google-Smtp-Source: APXvYqwN3ULDWGn/ez52l0K+WbE83Ki8B/PRvoeJM9DvUa1T3I9jvVc6qVJCf6amPevExY5hdKuStw==
+X-Received: by 2002:a2e:3013:: with SMTP id w19mr66938891ljw.73.1561312300308;
+        Sun, 23 Jun 2019 10:51:40 -0700 (PDT)
+Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
+        by smtp.gmail.com with ESMTPSA id l22sm417693ljc.4.2019.06.23.10.51.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 10:17:55 -0700 (PDT)
-Subject: Re: [PATCH v4 00/16] NVIDIA Tegra devfreq improvements and Tegra20/30
- support
+        Sun, 23 Jun 2019 10:51:39 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Marc Dietrich <marvin24@gmx.de>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <CGME20190501234148epcas5p1cc9a8dafa9ee6d8d046d1292b8270727@epcas5p1.samsung.com>
- <20190501233815.32643-1-digetx@gmail.com>
- <60ef6e47-e61b-3a92-e90d-90debedfcfc4@samsung.com>
- <fa061a65-f108-6c5e-1f87-950a9a8caafc@gmail.com>
- <0fb50eb1-a173-1756-6889-2526a10ac707@gmail.com>
- <683b343a-e64f-8345-ac44-10f5c00521bd@samsung.com>
- <5c2a7c32-a98c-3930-14ae-beb0241908d0@gmail.com>
-Message-ID: <389cc71d-8f0b-fa39-1325-433d27c75dc8@gmail.com>
-Date:   Sun, 23 Jun 2019 20:17:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+Subject: [PATCH v1] OPP: Fix crashing when current OPP has unsupportable voltage
+Date:   Sun, 23 Jun 2019 20:50:53 +0300
+Message-Id: <20190623175053.26167-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-In-Reply-To: <5c2a7c32-a98c-3930-14ae-beb0241908d0@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-05.06.2019 2:09, Dmitry Osipenko пишет:
-> 04.06.2019 3:49, Chanwoo Choi пишет:
->> On 19. 6. 4. 오전 1:52, Dmitry Osipenko wrote:
->>> 03.05.2019 3:52, Dmitry Osipenko пишет:
->>>> 03.05.2019 3:31, Chanwoo Choi пишет:
->>>>> Hi Dmitry,
->>>>>
->>>>> On 19. 5. 2. 오전 8:37, Dmitry Osipenko wrote:
->>>>>> Changelog:
->>>>>>
->>>>>> v4: Addressed all review comments that were made by Chanwoo Choi to v3:
->>>>>>
->>>>>>     - changed the driver removal order to match the probe exactly
->>>>>>     - added clarifying comment for 1/8 ratio to the Tegra20 driver
->>>>>>
->>>>>>     Chanwoo, please also note that the clk patch that should fix
->>>>>>     compilation problem that was reported the kbuild-test-robot is already
->>>>>>     applied and available in the recent linux-next.
->>>>>
->>>>> I knew that Stephen picked up your path about clock.
->>>>
->>>> Hi Chanwoo,
->>>>
->>>> Okay, good. Thank you very much for reviewing this series! I assume it's
->>>> too late now for v5.2, but it should be good to go for v5.3.
->>>>
->>>
->>> Hello Chanwoo,
->>>
->>> Will be nice to see the patches in the linux-next before they'll hit mainline. We have tested that
->>> everything works fine on a selective devices, but won't hurt to get some extra testing beforehand.
->>> AFAIK, at least NVIDIA people are regularly testing -next on theirs dev boards. Please note that
->>> this not very important, so don't bother if there is some hurdle with pushing to the tracking branch
->>> for now. Also please let me know if you're expecting to see some ACK's on the patches, I'm sure
->>> we'll be able to work out that with Thierry and Jon if necessary.
->>>
->>>
->>
->> Hi Dmitry,
->> I think that it is enough for applying to mainline branch.
->> The devfreq.git is maintained by Myungjoo. He will be merged or
->> reviewed if there are th remained review point.
-> 
-> Thank you very much!
-> 
->>
->> Hi Myungjoo,
->> I reviewed the Dmitry's patches from v1 to v4 patches.
->> And then I tested them on my testing branch[1] for catching
->> the build warning and error. In result, it is clean.
->> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
->>
->> Please review or apply these patches for v5.3.
->>
-> 
-> Hello Myungjoo,
-> 
-> I think this patchset should be completed now. Thierry has some extra
-> comments to the patches, but seems nothing critical so far and all the
-> concerns could be addressed in a follow-up series. Please let me know if
-> you're fine with this, I can re-spin v5 as well if necessary.
-> 
+Fix NULL dereference caused by a typo in the code. In particular it
+happens when CPU is running on a frequency which has unsupportable voltage
+(by regulator) defined in the OPP table and a custom set_opp() callback is
+being used. The problem was spotted during of testing of upcoming update
+for the NVIDIA Tegra CPUFreq driver.
 
-Hello Chanwoo,
+Cc: stable <stable@vger.kernel.org>
+Fixes: 7e535993fa4f ("OPP: Separate out custom OPP handler specific code")
+Reported-by: Marc Dietrich <marvin24@gmx.de>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/opp/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It looks like Myungjoo is inactive at the moment. Do you know if he'll
-be back to the time of the merge window opening or you'll be curating
-the pull request for 5.3 this time?
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 9fda9a0ec016..89ec6aa220cf 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -685,7 +685,7 @@ static int _set_opp_custom(const struct opp_table *opp_table,
+ 
+ 	data->old_opp.rate = old_freq;
+ 	size = sizeof(*old_supply) * opp_table->regulator_count;
+-	if (IS_ERR(old_supply))
++	if (!old_supply)
+ 		memset(data->old_opp.supplies, 0, size);
+ 	else
+ 		memcpy(data->old_opp.supplies, old_supply, size);
+-- 
+2.22.0
 
-Secondly, I'll send a few more patches on top of this series, addressing
-Thierry's comments and making more improvements. Please let me know if
-this causes any problems and I should re-spin the whole series.
