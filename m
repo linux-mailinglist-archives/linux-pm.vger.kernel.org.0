@@ -2,141 +2,245 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF014F91D
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2019 01:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB104F9DD
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2019 06:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbfFVXzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jun 2019 19:55:02 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38132 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725844AbfFVXzC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jun 2019 19:55:02 -0400
-Received: by mail-pf1-f194.google.com with SMTP id y15so786150pfn.5
-        for <linux-pm@vger.kernel.org>; Sat, 22 Jun 2019 16:55:02 -0700 (PDT)
+        id S1725294AbfFWE2f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jun 2019 00:28:35 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39957 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbfFWE2f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 00:28:35 -0400
+Received: by mail-lj1-f196.google.com with SMTP id a21so9419422ljh.7;
+        Sat, 22 Jun 2019 21:28:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SjQZBQwyRup4ZgjZsTGkIfrR8oSEkQFDWOMWBVdqA8o=;
-        b=b4yIyei7kCqChIwyxRMK9L2ScXhNbiV5AdZTg09Edgu8KuQbWRTRVCYFKjoNewPdOz
-         GGrNefQqTdQpIn4q+uEzPYYYwByaxqq37l9rrIWGR3STOs0jz+fmlDhNVpuLvmt3ZV8I
-         JZAFPjyK43uqRTd+i/Z+dKZdF9+DE9UOgi7WM=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=Oo9cNc82J3NB8Wf3wFWueRKXEdY5g8r6dw07fnu/otY=;
+        b=VjEcrtZADQrkDe4car+3l/WpE1pNXOzWsdS09GNpkkT9K6tPPsdgi10MVkSKUluMHC
+         xkNBUDeg+KHRQI6QI5HPAx9JY1CLbqFp66QDbyZwU2+BYeJd9rnsMU/KzFo+nJ7G5WEv
+         65NrbEkIU5b1uz7mEwG6RQlEzac88NnaKfkFoa+xXI4CYVuFpm4L4lWj5eBl91lwSm+f
+         OK1clB0O+DNo1Yb9YAnOlxWLgoXktfqX3YhFfIQWXFQaHvC+CXZt8MdHQJG399V/NYz5
+         6ibUJ3yDNd8EjmHDQv9xL5fcwUWQPiTKBiV1oafGo/qK8k9DJ/sPu5sx5/eVv5VR2wyT
+         0l3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SjQZBQwyRup4ZgjZsTGkIfrR8oSEkQFDWOMWBVdqA8o=;
-        b=qjpEfqgAzaaF8sYWcTRz4lcGftUJjfwAjlsMgIHqHb1g0ZJe9FNMPGDsq6xwiW7u1k
-         uVaIICAgwqr5B3lOcdbFUs/yRXs9M0VtBvBuDaS8NAKLINVvW3lhywBXLpONP96JJ9pl
-         R/JntzKz5aWKD/Ej5B1BVNYH58lTqX+cbWZ8v24afSN+kXHAaA6FswJDSt9thJXBLKrK
-         4wuAlOtqgDZdLfWmGUOOsemRV8YlklF7ngjXDoTbPo4CExGHSBx7Ifd9fEAfQwBfFDAd
-         fnGk17HyrzCufIICCzwxGCemC/ubaEoAg2Fh+oaxrSWMTr4ofLBAJd5O7WWiN4hYMHRV
-         FaxA==
-X-Gm-Message-State: APjAAAWqL1vIDdR1N/ieqAnjuemMS6n0z8m6dOEJSwvakLswF8KTxeKB
-        QN4Kq3sbdrFjVxcB7MEi3cYFsQ==
-X-Google-Smtp-Source: APXvYqwCftLX0UgaC1rEy9spKbtRqZLuHoR6VhCBTygFCd8hIqS2ssNtG3ogQusKUf+bck5JAubdiA==
-X-Received: by 2002:a63:5a02:: with SMTP id o2mr24581635pgb.93.1561247701888;
-        Sat, 22 Jun 2019 16:55:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a12sm14146254pjh.1.2019.06.22.16.55.00
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 22 Jun 2019 16:55:01 -0700 (PDT)
-Date:   Sat, 22 Jun 2019 16:55:00 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     jmorris@namei.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Josh Boyer <jwboyer@fedoraproject.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>, rjw@rjwysocki.net,
-        pavel@ucw.cz, linux-pm@vger.kernel.org
-Subject: Re: [PATCH V34 10/29] hibernate: Disable when the kernel is locked
- down
-Message-ID: <201906221654.99E7598@keescook>
-References: <20190622000358.19895-1-matthewgarrett@google.com>
- <20190622000358.19895-11-matthewgarrett@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=Oo9cNc82J3NB8Wf3wFWueRKXEdY5g8r6dw07fnu/otY=;
+        b=RfNFIo2CfEOLk6EKkII1W8sYMB5nZBD58tgpBsBu+5911JTXTkNl9PzuwDTnZs/Zxf
+         ZuRGN1QaxeQj/TGMQnpzrf6oNYMxhvRmZphwrfsMJNePO/Lp4WU1gF8LleLwSDB5rBZs
+         CrWINeOC1vGadfaJw8lH4z1Pg080ojHpqFffLzBlLjoiF7LC7lTIJpDh5R7x4xsqBUr2
+         zlpwOgG2xYaf20vPykd8mOP2c0dclz/azZEITyHefeTdKCGvVAy/HNFUAC46Qu46Xtbp
+         K9S5oZWzu/QYyHpS+t27yFgzi2MOjTXK+gIr5pmbIgcCIkrSnwL/rnmDwMRNjoYRpoJu
+         nlTg==
+X-Gm-Message-State: APjAAAURKDI6seE5BuZ3BMh0MA5TVlB61oN2t1Bc7ES3/2k2p9cnO6fe
+        iatYCjPUJl/yxLeNbLwmzXhizbn2tzoLv3QkUaw=
+X-Google-Smtp-Source: APXvYqwRLGAAMnEfA3C7vLeOjvTiCm9F8jL0MsiSN61Vn76PvA4CY8WaoHwVFSVKRxlGi9PYOwY7wK8/zhh3E6KekaI=
+X-Received: by 2002:a2e:9198:: with SMTP id f24mr31667083ljg.221.1561264112772;
+ Sat, 22 Jun 2019 21:28:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190622000358.19895-11-matthewgarrett@google.com>
+References: <20190622003449.33707-1-saravanak@google.com> <20190622003449.33707-3-saravanak@google.com>
+ <CAGTfZH18SQXj_2TpUf7iQPzWrZ5RP8-OCb_t6fp7qhuutGWz5A@mail.gmail.com> <CAGETcx9Gi24bng_PCqc6=9S584va4hRc4HHZtBLevKHgYGSNDA@mail.gmail.com>
+In-Reply-To: <CAGETcx9Gi24bng_PCqc6=9S584va4hRc4HHZtBLevKHgYGSNDA@mail.gmail.com>
+Reply-To: cwchoi00@gmail.com
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Date:   Sun, 23 Jun 2019 13:27:56 +0900
+Message-ID: <CAGTfZH2jK8s=5d_R7=kbUsPwE6s3fmz2_srZVyr32EU5qcB07Q@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] OPP: Add function to look up required OPP's for a
+ given OPP
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 05:03:39PM -0700, Matthew Garrett wrote:
-> From: Josh Boyer <jwboyer@fedoraproject.org>
-> 
-> There is currently no way to verify the resume image when returning
-> from hibernate.  This might compromise the signed modules trust model,
-> so until we can work with signed hibernate images we disable it when the
-> kernel is locked down.
-> 
-> Signed-off-by: Josh Boyer <jwboyer@fedoraproject.org>
+Hi,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+2019=EB=85=84 6=EC=9B=94 23=EC=9D=BC (=EC=9D=BC) =EC=98=A4=EC=A0=84 6:42, S=
+aravana Kannan <saravanak@google.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On Sat, Jun 22, 2019 at 4:50 AM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+> >
+> > Hi,
+> >
+> > Absolutely, I like this approach. I think that it is necessary to make
+> > the connection
+> > between frequencies of devices.
+>
+> Happy to hear that.
+>
+> > But, I have a question on below.
+> >
+> > 2019=EB=85=84 6=EC=9B=94 22=EC=9D=BC (=ED=86=A0) =EC=98=A4=EC=A0=84 9:3=
+5, Saravana Kannan <saravanak@google.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=
+=B1:
+> > >
+> > > Add a function that allows looking up required OPPs given a source OP=
+P
+> > > table, destination OPP table and the source OPP.
+> > >
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > ---
+> > >  drivers/opp/core.c     | 54 ++++++++++++++++++++++++++++++++++++++++=
+++
+> > >  include/linux/pm_opp.h | 11 +++++++++
+> > >  2 files changed, 65 insertions(+)
+> > >
+> > > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > > index 74c7bdc6f463..4f7870bffbf8 100644
+> > > --- a/drivers/opp/core.c
+> > > +++ b/drivers/opp/core.c
+> > > @@ -1830,6 +1830,60 @@ void dev_pm_opp_put_genpd_virt_dev(struct opp_=
+table *opp_table,
+> > >                 dev_err(virt_dev, "Failed to find required device ent=
+ry\n");
+> > >  }
+> > >
+> > > +/**
+> > > + * dev_pm_opp_xlate_opp() - Find required OPP for src_table OPP.
+> > > + * @src_table: OPP table which has dst_table as one of its required =
+OPP table.
+> > > + * @dst_table: Required OPP table of the src_table.
+> > > + * @pstate: OPP of the src_table.
+> > > + *
+> > > + * This function returns the OPP (present in @dst_table) pointed out=
+ by the
+> > > + * "required-opps" property of the OPP (present in @src_table).
+> > > + *
+> > > + * The callers are required to call dev_pm_opp_put() for the returne=
+d OPP after
+> > > + * use.
+> > > + *
+> > > + * Return: destination table OPP on success, otherwise NULL on error=
+s.
+> > > + */
+> > > +struct dev_pm_opp *dev_pm_opp_xlate_opp(struct opp_table *src_table,
+> > > +                                       struct opp_table *dst_table,
+> > > +                                       struct dev_pm_opp *src_opp)
+> > > +{
+> > > +       struct dev_pm_opp *opp, *dest_opp =3D NULL;
+> > > +       int i;
+> > > +
+> > > +       if (!src_table || !dst_table || !src_opp)
+> > > +               return NULL;
+> > > +
+> > > +       for (i =3D 0; i < src_table->required_opp_count; i++) {
+> > > +               if (src_table->required_opp_tables[i]->np =3D=3D dst_=
+table->np)
+> > > +                       break;
+> > > +       }
+> > > +
+> > > +       if (unlikely(i =3D=3D src_table->required_opp_count)) {
+> > > +               pr_err("%s: Couldn't find matching OPP table (%p: %p)=
+\n",
+> > > +                      __func__, src_table, dst_table);
+> > > +               return NULL;
+> > > +       }
+> > > +
+> > > +       mutex_lock(&src_table->lock);
+> > > +
+> > > +       list_for_each_entry(opp, &src_table->opp_list, node) {
+> > > +               if (opp =3D=3D src_opp) {
+> > > +                       dest_opp =3D opp->required_opps[i];
+> >
+> > Correct me if I am wrong. This patch assume that 'i' index is same on b=
+etween
+> > [1] and [2]. But in order to guarantee this assumption, all OPP entries
+> > in the same opp_table have to have the same number of 'required-opps' p=
+roperties
+> > and keep the sequence among 'required-opps' entries.
+> >
+> > [1] src_table->required_opp_tables[i]->np
+> > [2] opp->required_opps[I];
+> >
+> > For example, three OPP entries in the 'parent_bus_opp'
+> > have the different sequence of 'required-opps' and the different
+> > number of 'required-opps'. Is it no problem?
+> >
+> > parent_bus_opp: opp_table {
+> >     compatible =3D "operating-points-v2";
+> >
+> >     opp2 {
+> >         opp-hz =3D /bits/ 64 <200000>;
+> >         required-opps =3D <&child_bus_a_opp2>, <&child_bus_b_opp2>,
+> > <&child_bus_c_opp2>;
+> >     };
+> >
+> >     opp1 {
+> >         opp-hz =3D /bits/ 64 <200000>;
+> >         // change the sequence between child_bus_b_opp2  and child_bus_=
+c_opp2
+> >         required-opps =3D <&child_bus_a_opp2>, <&child_bus_c_opp2>,
+> > <&child_bus_b_opp2>
+> >     };
+> >
+> >     opp0 {
+> >         opp-hz =3D /bits/ 64 <200000>;
+> >         // missing 'child_bus_a_opp2'
+> >         required-opps =3D <&child_bus_c_opp2>, <&child_bus_b_opp2>
+> >     };
+> >
+> > }
+> >
+>
+> I get your question. If I'm not mistaken the OPP framework DT parsing
+> code makes the assumption that the required-opps list has the phandles
+> in the same order for each "row" in the OPP table. It actually only
+> looks at the first OPP entry to figure out the list of required OPP
+> tables.
 
--Kees
+Thanks for description. It is the limitation of 'required-opps' until now.
 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> Cc: rjw@rjwysocki.net
-> Cc: pavel@ucw.cz
-> cc: linux-pm@vger.kernel.org
-> ---
->  include/linux/security.h     | 1 +
->  kernel/power/hibernate.c     | 3 ++-
->  security/lockdown/lockdown.c | 1 +
->  3 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 00a31ab2e5ba..a051f21a1144 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -85,6 +85,7 @@ enum lockdown_reason {
->  	LOCKDOWN_MODULE_SIGNATURE,
->  	LOCKDOWN_DEV_MEM,
->  	LOCKDOWN_KEXEC,
-> +	LOCKDOWN_HIBERNATION,
->  	LOCKDOWN_INTEGRITY_MAX,
->  	LOCKDOWN_CONFIDENTIALITY_MAX,
->  };
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index abef759de7c8..3a9cb2d3da4a 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -32,6 +32,7 @@
->  #include <linux/ctype.h>
->  #include <linux/genhd.h>
->  #include <linux/ktime.h>
-> +#include <linux/security.h>
->  #include <trace/events/power.h>
->  
->  #include "power.h"
-> @@ -70,7 +71,7 @@ static const struct platform_hibernation_ops *hibernation_ops;
->  
->  bool hibernation_available(void)
->  {
-> -	return (nohibernate == 0);
-> +	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
->  }
->  
->  /**
-> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-> index 08fcd8116db3..ce5b3da9bd09 100644
-> --- a/security/lockdown/lockdown.c
-> +++ b/security/lockdown/lockdown.c
-> @@ -21,6 +21,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
->  	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
->  	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
->  	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
-> +	[LOCKDOWN_HIBERNATION] = "hibernation",
->  	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
->  	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
->  };
-> -- 
-> 2.22.0.410.gd8fdbe21b5-goog
-> 
+>
+> Technically one can write code to deal with random order of the
+> required-opp list, but doesn't seem like that's worth it because
+> there's no need to have that order all mixed up in DT. And even if
+> someone wants to add support for that, I don't think improving the DT
+> parsing to handle random order would be part of this patch series.
 
--- 
-Kees Cook
+I understand the existing ' required-opps' only consider the same sequence
+of entries which are included in the same OPP table.
+
+One more thing, 'required-opps' properties doesn't support
+the other OPP enters of the different OPP table. Is it right of 'required-o=
+pps'?
+
+Except for the random order, just each OPP might will requires
+the different 'required-opps' of different OPP table. Even if it is
+not related to random order, I think that this approach cannot
+support them.
+
+For example as following:
+- opp2 used the OPP entries of 'child_bus_A' and 'child_bus_B' opp-table.
+- opp1 used the OPP entries of 'child_bus_C' and 'child_bus_D' opp-table.
+
+parent_bus_opp: opp_table {
+    compatible =3D "operating-points-v2";
+
+     opp2 {
+         opp-hz =3D /bits/ 64 <200000>;
+         required-opps =3D <&child_bus_A_opp2>, <&child_bus_B_opp2>;
+    };
+
+   opp1 {
+         opp-hz =3D /bits/ 64 <200000>;
+         required-opps =3D <&child_bus_C_opp0>, <&child_bus_D_opp0>;
+    };
+};
+
+--=20
+Best Regards,
+Chanwoo Choi
