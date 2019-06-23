@@ -2,57 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2264FD69
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jun 2019 19:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE424FE87
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 03:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbfFWRvm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jun 2019 13:51:42 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:44039 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726417AbfFWRvm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 13:51:42 -0400
-Received: by mail-lj1-f193.google.com with SMTP id k18so10349132ljc.11;
-        Sun, 23 Jun 2019 10:51:40 -0700 (PDT)
+        id S1727082AbfFXBmn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jun 2019 21:42:43 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:39699 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727063AbfFXBmm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 21:42:42 -0400
+Received: by mail-lf1-f65.google.com with SMTP id p24so8753082lfo.6;
+        Sun, 23 Jun 2019 18:42:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=I2qjKuaK2bAC6HwMuzdrbSEtzdln2IR0U/1QHxDJnig=;
-        b=vHKP5U/b4Y5fe87aMnMbnhNneSbOQNKMAR/ogmA9aVTaiHiFbM+029R6fUcnbgjHTa
-         rpsPci6nFQkCrzcD1S7nbwStAzGhBy6e0GcsNjuu9Rrg8Zf/LYljujokdwUmIKgQfQVu
-         1tkmlX/ekPOkTzeb/akWGuQv3DNBqO5G7A43N7wlcIgk+/lOYiJ5tJpO79wa69pcsWhz
-         zhTcPOeJE83pQGuDmDFGqTnzPkBZrb8F4tKIgO9L6kkkZpYE8pxsEqEdWTsqc/3h0VD2
-         6Tvs/fpZSgsRjtbkOyDrnw78bz3+IKTiC32jkXLc9ZVsIwRPbYaQRspyubYi7CPQg6kw
-         pVBA==
+        bh=JAaIEeaw8b+tY17bCMux1o12jOT0tbHuJNxXmYk7btg=;
+        b=EMmpJ10h7+wKElBzLrjlEBB/rQw2Nl+GeGTINx61aCAEC0ZpoFg+705EZD1WZjIYHu
+         zNfXrXk+PLTkGVrTBb0SVWD/ssoh+QE1UwLznGToNGHFzfv5wLRUiEpny+K2+xUgpVgf
+         ZvzusBsUn6MM0zIY0c96JtsgF9JaqdXJ2oAJYvt6UDIdYOY+dBcC7XYnfDgkjGlerV0A
+         nR1lFMtGu+b5CdWMVsGG2397JN3NF1Djea2Ra/pA+rdgF1TZzO9fQBjAhlEjJ9TZCbg9
+         4pnEGJM8SbOKZgzg4mFwEeh7XTEBP9fKLFp6Blu/xDeqcp09AAVjMV72hIxmZP79mvWw
+         eqzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=I2qjKuaK2bAC6HwMuzdrbSEtzdln2IR0U/1QHxDJnig=;
-        b=uHvuTnAK5bVPG3BY2oUb7jOqpM2xdjRpYp1cyCdWO8dYXwJusBFNJvsoGX2KGWuAaD
-         MTK2SIm3rRTy12B1prv+CVAN5v07o8QEMFozfY2DbANiVmT/IAvDtf3F43KpEEQauknr
-         VLP2TZnC5ohmyfiMkkwVOgZjcLczGjNtNt7ex4rH2nR7j8+syQ2KG9dJ9jX4FOmz/RZc
-         zTLW58Cb3KSxmWz7BJeCQ4jrFCtB26iONMVQ4BSiO03r65kPuQ+2CeQQLkxQgKaC6tiV
-         Gm6LuqkswutHz4luCmuRqDYlpYNQ3YcpFje5GeknpGv29hakkkEpMMr/W5lIITDat9R0
-         8FhQ==
-X-Gm-Message-State: APjAAAWclCo5Y8ysRHCEK7TjMm967ua9Vk/wjpbTsdSFswPmcQeZcmaf
-        O9MyrPVLfhqpKllJfOZn9yS2nYbP
-X-Google-Smtp-Source: APXvYqwN3ULDWGn/ez52l0K+WbE83Ki8B/PRvoeJM9DvUa1T3I9jvVc6qVJCf6amPevExY5hdKuStw==
-X-Received: by 2002:a2e:3013:: with SMTP id w19mr66938891ljw.73.1561312300308;
-        Sun, 23 Jun 2019 10:51:40 -0700 (PDT)
+        bh=JAaIEeaw8b+tY17bCMux1o12jOT0tbHuJNxXmYk7btg=;
+        b=jciRtljG1kqscdh1U4A0FZu32h9ja2KsHtKeOGA/chQHtagqZyIxTEPlG29pXhZ4e7
+         TvOhAgUGbdknQsnBbAF8DV0rMx0PmQmiHeA++JyVwhbig9hLx5VYe6pDTF4vqgijOLB/
+         67wtCE6MyfJMOjXCuxjHCUuOgRUKnKqN2EmPlzoejOGpthX3gmPc9JnJsplJh4qGPYgg
+         cMVzNde9PPjFDs+gU67+0LAU25r8jdO1Fo0J5YUOmUtX5BaKwDXIKawR2yDuZ8H2O4gB
+         ckU0Iw1cgN5fBu8bNO3pAfXh3wHDHI9BmkB7ilzf0/iARUcQf04itxzVk7UCA9JJPfZ3
+         gJaQ==
+X-Gm-Message-State: APjAAAUdCGJ0dUG8vqdngvo1pU28cNixETAw8XQ08IxvMf0Nhs1z/jkw
+        ugGDhSCR7T2AJtIYg+Ayl3Twkmgv
+X-Google-Smtp-Source: APXvYqx7UhsnviQCljugSLWiGQv8kuKLpTeqI0FJYxjd4xmBH3rA38rb5eTdQDvEU/jYvRxlH9cS4w==
+X-Received: by 2002:ac2:5636:: with SMTP id b22mr44686440lff.2.1561326515040;
+        Sun, 23 Jun 2019 14:48:35 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id l22sm417693ljc.4.2019.06.23.10.51.39
+        by smtp.gmail.com with ESMTPSA id m17sm1460029lfb.9.2019.06.23.14.48.34
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 10:51:39 -0700 (PDT)
+        Sun, 23 Jun 2019 14:48:34 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Marc Dietrich <marvin24@gmx.de>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1] OPP: Fix crashing when current OPP has unsupportable voltage
-Date:   Sun, 23 Jun 2019 20:50:53 +0300
-Message-Id: <20190623175053.26167-1-digetx@gmail.com>
+Subject: [PATCH v1 00/11] More improvements for Tegra30 devfreq driver
+Date:   Mon, 24 Jun 2019 00:46:47 +0300
+Message-Id: <20190623214658.11680-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -61,33 +64,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix NULL dereference caused by a typo in the code. In particular it
-happens when CPU is running on a frequency which has unsupportable voltage
-(by regulator) defined in the OPP table and a custom set_opp() callback is
-being used. The problem was spotted during of testing of upcoming update
-for the NVIDIA Tegra CPUFreq driver.
+Hello,
 
-Cc: stable <stable@vger.kernel.org>
-Fixes: 7e535993fa4f ("OPP: Separate out custom OPP handler specific code")
-Reported-by: Marc Dietrich <marvin24@gmx.de>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/opp/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series is a followup to [1] which addresses some additional review
+comments that were made by Thierry Reding to [1] and makes several
+important changes to the driver, fixing excessive interrupts activity.
+In the end I'm proposing myself as a maintainer for the driver.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 9fda9a0ec016..89ec6aa220cf 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -685,7 +685,7 @@ static int _set_opp_custom(const struct opp_table *opp_table,
- 
- 	data->old_opp.rate = old_freq;
- 	size = sizeof(*old_supply) * opp_table->regulator_count;
--	if (IS_ERR(old_supply))
-+	if (!old_supply)
- 		memset(data->old_opp.supplies, 0, size);
- 	else
- 		memcpy(data->old_opp.supplies, old_supply, size);
+[1] https://lore.kernel.org/lkml/0fb50eb1-a173-1756-6889-2526a10ac707@gmail.com/T/
+
+Dmitry Osipenko (11):
+  PM / devfreq: tegra30: Change irq type to unsigned int
+  PM / devfreq: tegra30: Keep interrupt disabled while governor is
+    stopped
+  PM / devfreq: tegra30: Handle possible round-rate error
+  PM / devfreq: tegra30: Drop write-barrier
+  PM / devfreq: tegra30: Rework frequency management logic
+  PM / devfreq: tegra30: Reset boosting on startup
+  PM / devfreq: tegra30: Reset boosting if clock rate changed
+  PM / devfreq: tegra30: Stop de-boosting once it's finished
+  PM / devfreq: tegra30: Don't enable consecutive-down interrupt on
+    startup
+  PM / devfreq: tegra30: Add debug messages
+  PM / devfreq: tegra30: Add Dmitry as maintainer
+
+ MAINTAINERS                       |   8 +
+ drivers/devfreq/tegra30-devfreq.c | 542 ++++++++++++++++++++++--------
+ 2 files changed, 409 insertions(+), 141 deletions(-)
+
 -- 
 2.22.0
 
