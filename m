@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E0D5000E
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 05:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DD44FF12
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 04:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727285AbfFXDJo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jun 2019 23:09:44 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:33550 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbfFXDJo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 23:09:44 -0400
-Received: by mail-lj1-f196.google.com with SMTP id h10so11079593ljg.0;
-        Sun, 23 Jun 2019 20:09:42 -0700 (PDT)
+        id S1726663AbfFXCHg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jun 2019 22:07:36 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:39240 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726360AbfFXCHg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jun 2019 22:07:36 -0400
+Received: by mail-lj1-f193.google.com with SMTP id v18so10929677ljh.6;
+        Sun, 23 Jun 2019 19:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Y381zs7JqUeO4ZbV4kzg6cbvTaILm3gppCIZ9QaFOsw=;
-        b=KLKEEFV7vyQEtxZ0uYEFUUY5ay9LG072nBkWBGisDQoh237JAJ6TnNhz4qsxgAGK22
-         YNFSxBL5c+kfsqSm+FEwy4tdVxBIPEC5Dz/4fbi4gx0NTUoGuGOnHdKG6AvZ8gAuLLBT
-         FthFg8LiYixseIyfokMbAhKy0/fG2R5y40iC7A9pvKuE2dCAzxOGEoADpz1/gnKHdmgA
-         Mlexq03Pe5YwnT9xH0yosgCWaP2TDN3CAM1SCK9kHzDCYkBmtiKgYbUgjyurURDmPqDe
-         To/wh7jkGuUiJIIAU3QuGjUiiyRenvhT9dc+Jh0yg89XDyTXt3HIsMBxhcneBn3SzVk6
-         dBww==
+        bh=YUoP/TwInzxAmI5FyuGeNL3uUUuvUmrAozelA40npDc=;
+        b=dt+IpZnL/XkzkPQ85iZLZb0U4PuL4OW2ARGM6x5a/ce/Z9BAiTRuRC791zCzc7ohtC
+         hfBSDLl0bFhdPH9bYXaIMBNZp9+qd9XYbK8ewIEO22/NanxYiIxnSoNmDHEXL+UFNyoP
+         ROPtppJ+CYqYfoJ/GVNBD1JoE68W8lpaEFqaqxzTR94N/tLJVk8o2JKrQU0MnRm/Bs9N
+         NIJOn10u61/rk6jDxcbcvTF3gbPgXIhgokbjjzZdARjOGum0ubklpt1AjLFO1wyYA8vS
+         jh0Hyg3ti5uGjKL0YfnMFhM0+kEE6JktQ2cXEgDAi2mOtkULLqJtKUyjaOAGcWVfQ6zv
+         ebRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Y381zs7JqUeO4ZbV4kzg6cbvTaILm3gppCIZ9QaFOsw=;
-        b=llfoXSjqqAZsiV5PQLMguB7WTLH4i1UbRg+pH3Iasghf9h0JHGIHoXtb9OjzUGpBIW
-         AU5tp5W7/xe0y6Dk+WH2fLntCaKksry2ehN+jhdnKaI9M9hA/BvUjvl7uwWciLFY0f+o
-         G92Eg1kHWdhrkvTPreHDKxFdMTt4K0GcPk951mBPqV0VCHL/XEsQGm5hTdIZLJVKwBfP
-         0UVrhjqXtPh0Foc9RjwrGD22dUHvhX087pqvl7UT9rplOpA60+nrS91p6ahrcBQC75zU
-         IORlUHJgP6d46cmyxoXelohEYuMpjnJ+dyk4RrUb2hucT+4yFS0UFgC/HHxdiTUlFrpf
-         qn2w==
-X-Gm-Message-State: APjAAAWvf2V95Z44T0VZCrVa0BILC3HZDDKd3lU22gz1PF+VQwI0cvoC
-        TUSQkphZ6bhdyxYY/djZ3GL21IwX
-X-Google-Smtp-Source: APXvYqwMtcEyUBqTG0OrMlZmNbYr3qFE2ieb5bqL32t92m479TGx4QU6qZIPGEn0PHf+rKxTEBwdpA==
-X-Received: by 2002:a2e:b1c1:: with SMTP id e1mr14060925lja.228.1561326523122;
-        Sun, 23 Jun 2019 14:48:43 -0700 (PDT)
+        bh=YUoP/TwInzxAmI5FyuGeNL3uUUuvUmrAozelA40npDc=;
+        b=mAbtexs2GWvjJuT2VkEY9uEILOCy9UCSYFqxmRXtPYlHwXY36hK1pS/xxbD6RvvY0R
+         c6tDeTcIZGQYD8/teuauUnEC4m6Y9C95GYFLw2ZvrQ8ienZGQuZ8SqMLmZyDi4aJ2CJe
+         /x0CYP7R2W27ij2Ob/Skdxn286L7DyRHvCX8JuikzaJWRBqzQHR6ZTbjAYOn/u4iSb+M
+         Ji0ki4Z37LHI+b4yNLjSOUc6K8blUOw1tVrwI9M5ABNp7ELekdzeP28ezkks/otsFaSp
+         8zKNkesHvnjywd82Y/HF2b7pWS5QVZXQVLB4/4V8cAR33/dGVXCi4VI+Z/aJ167+FWhB
+         UE2A==
+X-Gm-Message-State: APjAAAUuRgOrNubbfcVSvqZQ5OQLuoXdgofW7eAmO0OkN96AHRNAtMmq
+        4msEnLtySqcyb6DeLnKIZqsYtN/B
+X-Google-Smtp-Source: APXvYqxFy4zg5sP10Iafd/jsNiR3o5hlxirUmF1MYJHuLe2fXY8cSySzySVjvsOXYv6vKN52CUHDUg==
+X-Received: by 2002:a2e:8793:: with SMTP id n19mr37244573lji.174.1561326524110;
+        Sun, 23 Jun 2019 14:48:44 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id m17sm1460029lfb.9.2019.06.23.14.48.42
+        by smtp.gmail.com with ESMTPSA id m17sm1460029lfb.9.2019.06.23.14.48.43
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 14:48:42 -0700 (PDT)
+        Sun, 23 Jun 2019 14:48:43 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 08/11] PM / devfreq: tegra30: Stop de-boosting once it's finished
-Date:   Mon, 24 Jun 2019 00:46:55 +0300
-Message-Id: <20190623214658.11680-9-digetx@gmail.com>
+Subject: [PATCH v1 09/11] PM / devfreq: tegra30: Don't enable consecutive-down interrupt on startup
+Date:   Mon, 24 Jun 2019 00:46:56 +0300
+Message-Id: <20190623214658.11680-10-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190623214658.11680-1-digetx@gmail.com>
 References: <20190623214658.11680-1-digetx@gmail.com>
@@ -66,43 +66,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Once boosting value is 0, then further consecutive-down events won't do
-anything useful since the only purpose of those consecutive events to
-boost the freq and de-boosting is over in the case of 0. Note that upper
-watermark is infinitely high in a case of frequency max out and thus the
-upper events are stopping by themselves. In a result of this change all
-parasite interrupts are fixed now and interrupts activity is nearly
-non-existent now!
+The consecutive-down event tells that we should perform frequency
+de-boosting, but boosting is in a reset state on start and hence the
+event won't do anything useful for us and it will be just a dummy
+interrupt request.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/devfreq/tegra30-devfreq.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 6fb3ca125438..81449cc1392b 100644
+index 81449cc1392b..168bfe78e525 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -424,6 +424,8 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
- 					     dev->config->boost_up_coeff);
- 		dev->boost_freq += ACTMON_BOOST_FREQ_STEP;
+@@ -572,7 +572,6 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
+ 		<< ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_NUM_SHIFT;
+ 	val |= ACTMON_DEV_CTRL_AVG_ABOVE_WMARK_EN;
+ 	val |= ACTMON_DEV_CTRL_AVG_BELOW_WMARK_EN;
+-	val |= ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
+ 	val |= ACTMON_DEV_CTRL_CONSECUTIVE_ABOVE_WMARK_EN;
+ 	val |= ACTMON_DEV_CTRL_ENB;
  
-+		dev_ctrl |= ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
-+
- 		if (dev->boost_freq >= tegra->max_freq && !low_activity)
- 			dev->boost_freq = tegra->max_freq;
- 
-@@ -442,6 +444,10 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
- 		tegra_devfreq_update_wmark(tegra, dev);
- 	}
- 
-+	/* no boosting => no need for consecutive-down interrupt */
-+	if (dev->boost_freq == 0)
-+		dev_ctrl &= ~ACTMON_DEV_CTRL_CONSECUTIVE_BELOW_WMARK_EN;
-+
- 	device_writel(dev, dev_ctrl, ACTMON_DEV_CTRL);
- 
- 	device_writel(dev, ACTMON_INTR_STATUS_CLEAR, ACTMON_DEV_INTR_STATUS);
 -- 
 2.22.0
 
