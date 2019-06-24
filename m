@@ -2,147 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A46A50AA8
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 14:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A3050B03
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 14:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728357AbfFXM1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 08:27:34 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:37985 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726700AbfFXM1e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 08:27:34 -0400
-Received: by mail-qt1-f195.google.com with SMTP id n11so2960663qtl.5
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 05:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8pxgU2+2zAe7XjIsxn6dDw49AVrZSbjiR8p9fg9h61c=;
-        b=izv8/ISAHD8c9UNVkM0cWQvNgJp3wRoXCluQG17yMRfV2pDdp1/uWG9IXPpDE/XYKH
-         CQELaE70QgG60CSIem6+F6R2WvEQaZnzaFC1s3chbLxM9lxC2EBLHJWA9yMJ1J5AHz3P
-         7Zpy0MkZGWg/jnMkdoP+RjTjqsNzWfhxRh/xufz46CJ8Bi0bpWfwAGQ9z4+84AQcvFFV
-         7NSNuj1D+TU3msKRtqeLsf8HA47QG7I/FJcR/P/ZoG073n9/Vgaj78HN3O0I2bM28Q3P
-         qcnLqv41V8hfaMJFwessbe/ky89XOtoWX4bZ9dD7wVAZ6zUgQjHis6jvi1iyT9uLt35P
-         zlgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8pxgU2+2zAe7XjIsxn6dDw49AVrZSbjiR8p9fg9h61c=;
-        b=tH7AbfxvrbXOFUnBQSO0TfUCNzMZshgdD5C0P1vxXeFn2y+7A/W0w/5kfNiRvrSPYw
-         z73herjtSmKWwPLAo/W5judhnJPnAPHwXM+kPJdyHqAbmWe9gnAIvm0+A2PIkvbq30LM
-         o0gnijJ2wyO7QS+BfMFpqrPYUi9AhMBEUdU1hR3pZFjxnJaP9Dt3GAO9xlYjY6tMsnB2
-         re1ebx1v+FBAkY2nAkATN+T5YNcHnKOvolLoV8h3HnqjPgsrnlRFzHNR5ffJrwwdCybt
-         Tj3LV9odby02iATuyAw1P2v/VwIoA1NvSvhYqDSYMY4xsW5gNJ74OGarAen5GVGHa7le
-         1gcg==
-X-Gm-Message-State: APjAAAX8TGfgSRopH0JJXBJmMX7If425hrGJ+8H9caPYz+Y4F+OBJthG
-        xVPlzZKxYOf17a+zlrtxNwFVGY7ZB7+ncjCLSY3hxw==
-X-Google-Smtp-Source: APXvYqyM38rDzwG+qvoXoDo5ZWVVUOEgmwuEYbjLvKWiYs9mNZH/qiES9AHddHYSmG8/Wpvavwglr3tx6kusJaGPdL0=
-X-Received: by 2002:aed:21f0:: with SMTP id m45mr114648286qtc.391.1561379252759;
- Mon, 24 Jun 2019 05:27:32 -0700 (PDT)
+        id S1727875AbfFXMnT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 08:43:19 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:17937 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725916AbfFXMnT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 08:43:19 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d10c5660000>; Mon, 24 Jun 2019 05:43:18 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 24 Jun 2019 05:43:16 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 24 Jun 2019 05:43:16 -0700
+Received: from [10.21.132.148] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 24 Jun
+ 2019 12:43:13 +0000
+Subject: Re: [PATCH v2] PCI: PM: Skip devices in D0 for suspend-to-idle
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+CC:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <1668247.RaJIPSxJUN@kreacher>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <9906d02b-8c77-f2c8-7168-93ea444b950e@nvidia.com>
+Date:   Mon, 24 Jun 2019 13:43:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-References: <CANA+-vCThdRivg7nrMK5QoFu8SGUzEVSvSyp0H2CPyy9==Tqog@mail.gmail.com>
- <CANA+-vARQ9Ao=W1oEArrAQ0sqh757orq=-=kytdVPhstm-3E9w@mail.gmail.com>
- <20190618182502.GC203031@google.com> <4587569.x9DSL43cXO@kreacher>
- <CANA+-vCMK6u1n9gXf2+v5dFn_tGfr1PT8d7W4d2BCzw+B-HvYw@mail.gmail.com>
- <CAJWu+oo7kwmEyMXQN0yfswV2=J-Fa9QybhAUx-SOGG_ipsBErQ@mail.gmail.com>
- <CAJZ5v0gvzCx-7qS9qkxB=sGKjQJKMR7yCc21f=_vqrbZxMSWNg@mail.gmail.com>
- <CANA+-vCBW=P=dpJGfcKTt7SoNKzWcpP5pwZHSDMU6MkwBKoC9A@mail.gmail.com> <20190624073659.GA13957@kroah.com>
-In-Reply-To: <20190624073659.GA13957@kroah.com>
-From:   Joel Fernandes <joelaf@google.com>
-Date:   Mon, 24 Jun 2019 08:27:21 -0400
-Message-ID: <CAJWu+orGgYwnC+ya13+KtdNrH7ZjvmKL8625m=msVZd0==dq9A@mail.gmail.com>
-Subject: Re: Alternatives to /sys/kernel/debug/wakeup_sources
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Tri Vo <trong@android.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sandeep Patil <sspatil@android.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1668247.RaJIPSxJUN@kreacher>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL103.nvidia.com (172.20.187.11) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1561380198; bh=72hRzQ5M8WqLC8S6DA2yTe1zPRLknqSL8+/TVaDaFhE=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Z1z+yCpiXNVynehrsas1bZqY3T9qdWUeAhzPU6f/JOfbw9VUrS9U0MdoK8mOtnQNb
+         JtvRSp5T/ZiBCpI7nRsCi3EfSssXicJjE2SCCX3XGsyK7+kw2WjUHto0fqMVO2Vvop
+         FPq5mMXOrTDWnif8COXExigBmxhiLdzX7We8Csyj8jIfeR0LbOYaMNIGir/DFWlF5E
+         ivh41Y+Qf1T2+P71jrdfUEBJfc9OCLOUgoRf0cXga69SFV37wD9AMBem8cqEOvWsyD
+         BcLXG66oXzCNoBiK9mAdHAZ3Hjw2dFw/vYJwtzXEH9GKg53lmbPeeiOkIOWKSQzNFi
+         ina+6lDzPELsA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 3:37 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sun, Jun 23, 2019 at 06:48:43PM -0700, Tri Vo wrote:
-> > On Wed, Jun 19, 2019 at 1:35 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Wed, Jun 19, 2019 at 1:52 AM Joel Fernandes <joelaf@google.com> wrote:
-> > > >
-> > > > On Tue, Jun 18, 2019 at 7:15 PM Tri Vo <trong@android.com> wrote:
-> > > > [snip]
-> > > > > > > > >
-> > > > > > > > > Android userspace reading wakeup_sources is not ideal because:
-> > > > > > > > > - Debugfs API is not stable, i.e. Android tools built on top of it are
-> > > > > > > > > not guaranteed to be backward/forward compatible.
-> > > > > > > > > - This file requires debugfs to be mounted, which itself is
-> > > > > > > > > undesirable for security reasons.
-> > > > > > > > >
-> > > > > > > > > To address these problems, we want to contribute a way to expose these
-> > > > > > > > > statistics that doesn't depend on debugfs.
-> > > > > > > > >
-> > > > > > > > > Some initial thoughts/questions: Should we expose the stats in sysfs?
-> > > > > > > > > Or maybe implement eBPF-based solution? What do you think?
-> > > > > > >
-> > > > > > > We are going through Android's out-of-tree kernel dependencies along with
-> > > > > > > userspace APIs that are not necessarily considered "stable and forever
-> > > > > > > supported" upstream. The debugfs dependencies showed up on our radar as a
-> > > > > > > result and so we are wondering if we should worry about changes in debugfs
-> > > > > > > interface and hence the question(s) below.
-> > > > > > >
-> > > > > > > So, can we rely on /d/wakeup_sources to be considered a userspace API and
-> > > > > > > hence maintained stable as we do for other /proc and /sys entries?
-> > > > > > >
-> > > > > > > If yes, then we will go ahead and add tests for this in LTP or
-> > > > > > > somewhere else suitable.
-> > > > > >
-> > > > > > No, debugfs is not ABI.
-> > > > > >
-> > > > > > > If no, then we would love to hear suggestions for any changes that need to be
-> > > > > > > made or we simply just move the debugfs entry into somewhere like
-> > > > > > > /sys/power/ ?
-> > > > > >
-> > > > > > No, moving that entire file from debugfs into sysfs is not an option either.
-> > > > > >
-> > > > > > The statistics for the wakeup sources associated with devices are already there
-> > > > > > under /sys/devices/.../power/ , but I guess you want all wakeup sources?
-> > > > > >
-> > > > > > That would require adding a kobject to struct wakeup_source and exposing
-> > > > > > all of the statistics as separate attributes under it.  In which case it would be
-> > > > > > good to replace the existing wakeup statistics under /sys/devices/.../power/
-> > > > > > with symbolic links to the attributes under the wakeup_source kobject.
-> > > > >
-> > > > > Thanks for your input, Rafael! Your suggestion makes sense. I'll work
-> > > > > on a patch for this.
-> > > >
-> > > > Does that entail making each wake up source, a new sysfs node under a
-> > > > particular device, and then adding stats under that new node?
-> > >
-> > > Not under a device, because there are wakeup source objects without
-> > > associated devices.
-> > >
-> > > It is conceivable to have a "wakeup_sources" directory under
-> > > /sys/power/ and sysfs nodes for all wakeup sources in there.
-> > >
-> > > Then, instead of exposing wakeup statistics directly under
-> > > /sys/devices/.../power/, there can be symbolic links from there to the
-> > > new wakeup source nodes under "wakeup_sources" (so as to avoid
-> > > exposing the same data in two different places in sysfs, which may be
-> > > confusing).
-> >
-> > This may be a dumb question. Is it appropriate to make symbolic links
-> > in sysfs from one attribute to another attribute? For example,
-> > /sys/devices/.../power/wakeup_count ->
-> > /sys/power/wakeup_sources/.../wakeup_count.
->
-> Why? would you want that?
+Hi Rafael,
 
-This sounds like what Rafael suggested (quoted above), right?
+On 13/06/2019 22:59, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> attempted to avoid a problem with devices whose drivers want them to
+> stay in D0 over suspend-to-idle and resume, but it did not go as far
+> as it should with that.
+> 
+> Namely, first of all, the power state of a PCI bridge with a
+> downstream device in D0 must be D0 (based on the PCI PM spec r1.2,
+> sec 6, table 6-1, if the bridge is not in D0, there can be no PCI
+> transactions on its secondary bus), but that is not actively enforced
+> during system-wide PM transitions, so use the skip_bus_pm flag
+> introduced by commit d491f2b75237 for that.
+> 
+> Second, the configuration of devices left in D0 (whatever the reason)
+> during suspend-to-idle need not be changed and attempting to put them
+> into D0 again by force is pointless, so explicitly avoid doing that.
+> 
+> Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+I have noticed a regression in both the mainline and -next branches on
+one of our boards when testing suspend. The bisect is point to this
+commit and reverting on top of mainline does fix the problem. So far I
+have not looked at this in close detail but kernel log is showing ...
+
+[   52.775138] PM: suspend entry (deep)
+[   52.779040] Filesystems sync: 0.000 seconds
+[   52.783476] Freezing user space processes ... (elapsed 0.001 seconds) done.
+[   52.791891] OOM killer disabled.
+[   52.795174] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+[   52.803752] printk: Suspending console(s) (use no_console_suspend to debug)
+[   52.823750] r8169 0000:01:00.0 eth0: Link is Down
+[   52.823908] pci_generic_config_write32: 22 callbacks suppressed
+[   52.823914] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0x9c may corrupt adjacent RW1C bits
+[   53.045383] Disabling non-boot CPUs ...
+[   53.048481] Entering suspend state LP1
+[   53.048508] Enabling non-boot CPUs ...
+[   53.049402] CPU1 is up
+[   53.050182] CPU2 is up
+[   53.051017] CPU3 is up
+[   53.051613] tegra-pcie 1003000.pcie: probing port 1, using 1 lanes
+[   53.069689] pcieport 0000:00:02.0: nv_msi_ht_cap_quirk didn't locate host bridge
+[   53.093751] r8169 0000:01:00.0: Refused to change power state, currently in D3
+[   53.156586] tegra-pcie 1003000.pcie: Slot present pin change, signature: 00000004
+[   53.156593] tegra-pcie 1003000.pcie: Response decoding error, signature: 10010045
+[   53.156596] tegra-pcie 1003000.pcie:   FPCI address: fe10010044
+[   53.156711] tegra-pcie 1003000.pcie: Response decoding error, signature: 2000000c
+[   53.156714] tegra-pcie 1003000.pcie:   FPCI address:   2000000c
+[   53.156719] tegra-pcie 1003000.pcie: Response decoding error, signature: 20000001
+[   53.156722] tegra-pcie 1003000.pcie:   FPCI address:   20000000
+[   53.177372] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0x88 may corrupt adjacent RW1C bits
+[   53.177379] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0x90 may corrupt adjacent RW1C bits
+[   53.177384] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0x98 may corrupt adjacent RW1C bits
+[   53.177389] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0x9c may corrupt adjacent RW1C bits
+[   53.177394] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0xa8 may corrupt adjacent RW1C bits
+[   53.177399] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0xb0 may corrupt adjacent RW1C bits
+[   53.177451] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0x52 may corrupt adjacent RW1C bits
+[   53.177461] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0x52 may corrupt adjacent RW1C bits
+[   53.177470] pci_bus 0000:00: 2-byte config write to 0000:00:02.0 offset 0x5c may corrupt adjacent RW1C bits
+[   53.187746] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   53.188030] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.224105] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.224394] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.224679] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.224966] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.225247] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.225528] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.225813] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.226089] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.226372] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.226654] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.226934] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.227213] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.227495] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.227773] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.228050] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.228326] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.228609] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.228896] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   53.229181] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   54.064108] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   54.064429] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   54.064713] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   54.064996] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   54.065013] Generic Realtek PHY r8169-100:00: Master/Slave resolution failed, maybe conflicting manual settings?
+[   54.065016] ------------[ cut here ]------------
+[   54.065025] WARNING: CPU: 1 PID: 617 at /home/jonathanh/workdir/tegra/mlt-linux_torvalds/kernel/drivers/net/phy/phy.c:735 phy_error+0x1c/0x54
+[   54.065028] Modules linked in: ttm
+[   54.065039] CPU: 1 PID: 617 Comm: kworker/1:2 Not tainted 5.2.0-rc6 #1
+[   54.065041] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+[   54.065049] Workqueue: events_power_efficient phy_state_machine
+[   54.065068] [<c0112244>] (unwind_backtrace) from [<c010cad8>] (show_stack+0x10/0x14)
+[   54.065075] [<c010cad8>] (show_stack) from [<c0a60624>] (dump_stack+0xb4/0xc8)
+[   54.065082] [<c0a60624>] (dump_stack) from [<c0123cbc>] (__warn+0xe0/0xf8)
+[   54.065090] [<c0123cbc>] (__warn) from [<c0123dec>] (warn_slowpath_null+0x40/0x48)
+[   54.065095] [<c0123dec>] (warn_slowpath_null) from [<c06173f8>] (phy_error+0x1c/0x54)
+[   54.065101] [<c06173f8>] (phy_error) from [<c06184ec>] (phy_state_machine+0x64/0x1c0)
+[   54.065112] [<c06184ec>] (phy_state_machine) from [<c013e744>] (process_one_work+0x204/0x578)
+[   54.065119] [<c013e744>] (process_one_work) from [<c013f444>] (worker_thread+0x44/0x584)
+[   54.065123] [<c013f444>] (worker_thread) from [<c01445d4>] (kthread+0x148/0x150)
+[   54.065128] [<c01445d4>] (kthread) from [<c01010e8>] (ret_from_fork+0x14/0x2c)
+[   54.065131] Exception stack(0xe91b3fb0 to 0xe91b3ff8)
+[   54.065134] 3fa0:                                     00000000 00000000 00000000 00000000
+[   54.065138] 3fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[   54.065141] 3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[   54.065145] ---[ end trace f59188238fc6fed4 ]---
+[   54.065168] r8169 0000:01:00.0 eth0: Link is Down
+[   54.075411] r8169 0000:01:00.0 eth0: rtl_chipcmd_cond == 1 (loop: 100, delay: 100).
+[   54.085652] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.095833] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.106017] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.116214] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.126419] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.136613] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.146829] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.157030] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.167223] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.177433] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.187635] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.197840] r8169 0000:01:00.0 eth0: rtl_eriar_cond == 1 (loop: 100, delay: 100).
+[   54.199008] r8169 0000:01:00.0 eth0: rtl_ephyar_cond == 1 (loop: 100, delay: 10).
+[   54.200173] r8169 0000:01:00.0 eth0: rtl_ephyar_cond == 1 (loop: 100, delay: 10).
+[   54.201336] r8169 0000:01:00.0 eth0: rtl_ephyar_cond == 1 (loop: 100, delay: 10).
+[   54.202502] r8169 0000:01:00.0 eth0: rtl_ephyar_cond == 1 (loop: 100, delay: 10).
+[   54.203018] r8169 0000:01:00.0 eth0: rtl_ocp_gphy_cond == 1 (loop: 10, delay: 25).
+[   54.546178] ata1: SATA link down (SStatus 0 SControl 300)
+[   56.810813] OOM killer enabled.
+[   56.813953] Restarting tasks ... done.
+[   56.819622] PM: suspend exit
+[   72.504381] nfs: server 192.168.99.1 not responding, still trying
+[   78.104369] nfs: server 192.168.99.1 not responding, still trying
+
+Let me know if you have any thoughts.
+
+Cheers
+Jon
+
+-- 
+nvpublic
