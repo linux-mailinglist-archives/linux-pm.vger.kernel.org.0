@@ -2,75 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D77E350362
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 09:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEEA50384
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 09:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbfFXHaG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 03:30:06 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55110 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726375AbfFXHaG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 03:30:06 -0400
-Received: by mail-wm1-f65.google.com with SMTP id g135so11684950wme.4
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 00:30:03 -0700 (PDT)
+        id S1727987AbfFXHck (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 03:32:40 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:40422 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727910AbfFXHck (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 03:32:40 -0400
+Received: by mail-wm1-f66.google.com with SMTP id v19so12159728wmj.5
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 00:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+        h=subject:from:to:cc:references:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=LocBImSZmptFdXRaZ5AdtQJn9KgVIzUS2C1+aQJ3ImI=;
-        b=kHN/6/HqM6W4XaTWtsZAmdTarcyTa99rx+qxOyJ4ikzat7VFMmYjPGI2zebtraCbvj
-         2CqlkbfWVmZdwPI82QohYod1qib98+0rMZwbAUAOH7GcRysB1ErG2dSoSEw4K4S4gFYY
-         3IjzQxFq6XmtU/7QF/B3XfR5hZ+3iadEn+uWud3HuhiHdZqTPXODII8JS0EBON91c4s/
-         GafDxaD5GRYCz74onOeFigRLEINVyp3ZUWe/3xJSMayZw/FV9Of2LrS1OgwcVMHyWpN/
-         M397uj4+Lk4zP5j52phtqQv3P3FiSWgj8MPrrDTi3TYO7qgj9/F2qTtK4rxgx1oyl8pQ
-         yClg==
+        bh=Y/EXU6AwRJP0n1LaS/yKUlaYNvW90JaF8T9m6cjuSG8=;
+        b=tmBQsQkrq4F3azqnKnsJfWo2+JxOAeWxxdSOxsII6rCOv16Oi/eMzy5Vhp7SFG0W+X
+         WWbiIXuU9qr+t+Lewh+NsY3kOJLU8Wf36FtqBolVhNGbhVuTY99/evObVW8kE5g3lbtd
+         Pygp35E6hGGJYHuPLaVW5tibVqb/cJhSx1KYdr0UXXR0ulwPcwTbhqZ/Oq09sBFNOUbj
+         1ixqED0LoCja5smGVizz+53LwwQlD8jhWF6xcZdJHKMUviRnBY58VEYFSFu+NhQgUWmL
+         3GCs6b3MYxlt/tm8q+vMYkB/UkhmEfH1Q7SHWY77MnIlPp5Lwg1CcoCbO+yf9WDMhTkF
+         VHVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+        h=x-gm-message-state:subject:from:to:cc:references:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=LocBImSZmptFdXRaZ5AdtQJn9KgVIzUS2C1+aQJ3ImI=;
-        b=TMfCQb2KS2E463pxcEj3yNV3iEkKiLJtPycRbhqOW9NLwhVQ9SLLRDws3vB5ym9G2X
-         Ybv8oPEiLrGuIa4miRTgm2d5qf8v3UZQQfgG7ADJQYnMAhiwyqHxcYbB++mSAl5mZ4vv
-         7Rq+yG+/tgoS2GIjjGmbmRzeRmp/CyNO7gQ5NXa3kKDxKk5C1EYKliiyrrUUi7nkTFXa
-         9UZwGtCaRRwpnyXXqkkxsAiWhJ7Ibb88SJHEbGt3kuu1PIY6IxKJfezu3LfCUaypURYZ
-         9/DvOj+VQ2YiVWr6Mf5WUoXUNxySEzTOONHfR6FXOAHr5+RTi0MPN2y8OQebYLaO1fud
-         hCog==
-X-Gm-Message-State: APjAAAXN9rrArpdbxNgqramh6JZisyOJwKfFwcz2h3yTS6rH4yFk1y+Z
-        380FmrQjlwsZ5M7UNzDBBYFknQ==
-X-Google-Smtp-Source: APXvYqxuqcMirZskPad67aLaa8QZ6sb0bEZUvrxYAOEmXrPz0s6L6fGCJzTKgFFabnjaJKnXz1sIwQ==
-X-Received: by 2002:a1c:cfc3:: with SMTP id f186mr13394363wmg.134.1561361402590;
-        Mon, 24 Jun 2019 00:30:02 -0700 (PDT)
+        bh=Y/EXU6AwRJP0n1LaS/yKUlaYNvW90JaF8T9m6cjuSG8=;
+        b=W0xH5i4Jn7O0OHn/XZkgnm7qOpwvmAuSaFsLJnSfalEqns4ip5wdEl2Zl0SwEGA0uG
+         9X5WIbdQUIg98g4mEipzSqXPkIUrHqR/7WYeqOWaVjpauYutSgeX4msJADlChzsMtV6r
+         GVrXYZoCZ18/4K/l/mqmQF1jpIfp9AFNIiGbRJJ5AucQT9cGelRnG9TalvfTc8SNZf5B
+         s38M69QNp/gwwoTEm61E9/Krwre7qfk+A6EbReS+2b5Fym9T6VC9XaEUYAXWAZ/ENuXI
+         ZspG9N+Van0NxAFXcygkcCYu7KNLoHAC+SvZoAxE7BGxyPQVsj8pIOg5EWsKHV/MaZIT
+         CehA==
+X-Gm-Message-State: APjAAAWCnbndhHFkaPK5d/UVNbLe/23lmCCouSeZ+hE5j0LZH64LyOoa
+        30nVRgycvz5jlT5Tn0Q2VT/iPLJzRaM=
+X-Google-Smtp-Source: APXvYqy+mEstbPBJN3llwkM51k/MEKXW3mve2uxIMp3nsPGj9QQ/8J+sKiHLdtVxmmdTo+aoUYEnQQ==
+X-Received: by 2002:a05:600c:230c:: with SMTP id 12mr13971937wmo.166.1561361557867;
+        Mon, 24 Jun 2019 00:32:37 -0700 (PDT)
 Received: from [192.168.0.41] (209.94.129.77.rev.sfr.net. [77.129.94.209])
-        by smtp.googlemail.com with ESMTPSA id j4sm8260327wrx.57.2019.06.24.00.30.00
+        by smtp.googlemail.com with ESMTPSA id v67sm13778236wme.24.2019.06.24.00.32.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jun 2019 00:30:01 -0700 (PDT)
-Subject: Re: [PATCH 2/6] thermal/drivers/cpu_cooling: Unregister with the
- policy
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     edubezval@gmail.com, linux-kernel@vger.kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "open list:CPU FREQUENCY DRIVERS - ARM BIG LITTLE" 
-        <linux-pm@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>
-References: <20190621132302.30414-1-daniel.lezcano@linaro.org>
- <20190621132302.30414-2-daniel.lezcano@linaro.org>
- <20190624060334.kak2mjuou4napi4x@vireshk-i7>
+        Mon, 24 Jun 2019 00:32:37 -0700 (PDT)
+Subject: Re: [PATCH 1/2] thermal/drivers/core: Add init section table for
+ self-encapsulation
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rui.zhang@intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        amit.kucheria@linaro.org
+References: <20190612201325.1150-1-daniel.lezcano@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  mQINBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -132,12 +114,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  adkDXtr4MeL8BaB7Ij2oyRVjXUwhFQNKi5Z5Rve0a3zvGkkqw8Mz20BOksjSWjAF6g9byukl
  CUVjC03PdMSufNLK06x5hPc/c4tFR4J9cLrV+XxdCX7r0zGos9SzTPGNuIk1LK++S3EJhLFj
  4eoWtNhMWc1uiTf9ENza0ntqH9XBWEQ6IA1gubCniGG+Xg==
-Message-ID: <3f324189-aa1e-ae78-1d69-61e00c5d033a@linaro.org>
-Date:   Mon, 24 Jun 2019 09:30:00 +0200
+Message-ID: <b6bbd5f4-a86a-d649-e3c0-2156f7975291@linaro.org>
+Date:   Mon, 24 Jun 2019 09:32:36 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190624060334.kak2mjuou4napi4x@vireshk-i7>
+In-Reply-To: <20190612201325.1150-1-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -146,32 +128,85 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/06/2019 08:03, Viresh Kumar wrote:
-> On 21-06-19, 15:22, Daniel Lezcano wrote:
->> Currently the function cpufreq_cooling_register() returns a cooling
->> device pointer which is used back as a pointer to call the function
->> cpufreq_cooling_unregister(). Even if it is correct, it would make
->> sense to not leak the structure inside a cpufreq driver and keep the
->> code thermal code self-encapsulate. Moreover, that forces to add an
->> extra variable in each driver using this function.
->>
->> Instead of passing the cooling device to unregister, pass the policy.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>  drivers/cpufreq/arm_big_little.c               |  2 +-
->>  drivers/cpufreq/cpufreq.c                      |  2 +-
->>  drivers/thermal/cpu_cooling.c                  | 18 ++++++++++--------
->>  drivers/thermal/imx_thermal.c                  |  4 ++--
->>  .../thermal/ti-soc-thermal/ti-thermal-common.c |  2 +-
->>  include/linux/cpu_cooling.h                    |  6 +++---
->>  6 files changed, 18 insertions(+), 16 deletions(-)
-> 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Just a side note, does it make sense to have the function called from
-imx_thermal.c and ti-thermal-common.c? Sounds like also a leakage from
-cpufreq to thermal drivers, no?
+Any chance this patch gets merged for v5.4?
+
+Thanks
+  -- Daniel
+
+On 12/06/2019 22:13, Daniel Lezcano wrote:
+> Currently the governors are declared in their respective files but they
+> export their [un]register functions which in turn call the [un]register
+> governors core's functions. That implies a cyclic dependency which is
+> not desirable. There is a way to self-encapsulate the governors by letting
+> them to declare themselves in a __init section table.
+> 
+> Define the table in the asm generic linker description like the other
+> tables and provide the specific macros to deal with.
+> 
+> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/thermal_core.h    | 15 +++++++++++++++
+>  include/asm-generic/vmlinux.lds.h | 11 +++++++++++
+>  2 files changed, 26 insertions(+)
+> 
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+> index 0df190ed82a7..be901e84aa65 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -15,6 +15,21 @@
+>  /* Initial state of a cooling device during binding */
+>  #define THERMAL_NO_TARGET -1UL
+>  
+> +/* Init section thermal table */
+> +extern struct thermal_governor *__governor_thermal_table[];
+> +extern struct thermal_governor *__governor_thermal_table_end[];
+> +
+> +#define THERMAL_TABLE_ENTRY(table, name)			\
+> +	(static typeof(name) *__thermal_table_entry_##name	\
+> +	__used __section(__##table##_thermal_table) = &name)
+> +
+> +#define THERMAL_GOVERNOR_DECLARE(name)	THERMAL_TABLE_ENTRY(governor, name)
+> +
+> +#define for_each_governor_table(__governor)		\
+> +	for (__governor = __governor_thermal_table;	\
+> +	     __governor < __governor_thermal_table_end;	\
+> +	     __governor++)
+> +
+>  /*
+>   * This structure is used to describe the behavior of
+>   * a certain cooling device on a certain trip point
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index f8f6f04c4453..8312fdc2b2fa 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -239,6 +239,16 @@
+>  #define ACPI_PROBE_TABLE(name)
+>  #endif
+>  
+> +#ifdef CONFIG_THERMAL
+> +#define THERMAL_TABLE(name)						\
+> +	. = ALIGN(8);							\
+> +	__##name##_thermal_table = .;					\
+> +	KEEP(*(__##name##_thermal_table))				\
+> +	__##name##_thermal_table_end = .;
+> +#else
+> +#define THERMAL_TABLE(name)
+> +#endif
+> +
+>  #define KERNEL_DTB()							\
+>  	STRUCT_ALIGN();							\
+>  	__dtb_start = .;						\
+> @@ -609,6 +619,7 @@
+>  	IRQCHIP_OF_MATCH_TABLE()					\
+>  	ACPI_PROBE_TABLE(irqchip)					\
+>  	ACPI_PROBE_TABLE(timer)						\
+> +	THERMAL_TABLE(governor)						\
+>  	EARLYCON_TABLE()						\
+>  	LSM_TABLE()
+>  
+> 
 
 
 -- 
