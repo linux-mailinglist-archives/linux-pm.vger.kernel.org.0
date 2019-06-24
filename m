@@ -2,193 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E0851EF0
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 01:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E6651F1B
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 01:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728048AbfFXXJl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 19:09:41 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:58549 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728045AbfFXXJl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 19:09:41 -0400
-Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id d4c091cf0ca37d7c; Tue, 25 Jun 2019 01:09:37 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v2] PCI: PM: Skip devices in D0 for suspend-to-idle
-Date:   Tue, 25 Jun 2019 01:09:36 +0200
-Message-ID: <2287147.DxjcvLeq6l@kreacher>
-In-Reply-To: <CAJZ5v0gGdXmgc_9r2rbiadq4e31hngpjYQ40QoC6C0z19da_hQ@mail.gmail.com>
-References: <1668247.RaJIPSxJUN@kreacher> <CAJZ5v0hdtXqoK84DpYtyMSCnkR9zOHFiUPAzWZDtkFmEjyWD1g@mail.gmail.com> <CAJZ5v0gGdXmgc_9r2rbiadq4e31hngpjYQ40QoC6C0z19da_hQ@mail.gmail.com>
+        id S1727967AbfFXXZY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 19:25:24 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:32799 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727451AbfFXXZY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 19:25:24 -0400
+Received: by mail-qk1-f195.google.com with SMTP id r6so11176669qkc.0
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 16:25:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=0K4AayEvyC8tuCGamcfvuz4SEF7qHpfHWbMwtIK1ew8=;
+        b=f+Aol/jhJxqWROn5hqlq8RfXeWDsFcZsHuHyt/f0ovQScbmkgV87LzypsaJ/bCsUep
+         a7rWko5WL0RF/N0QGAAnq8I2CCm2bzHNj8R2MUS7HUwV99mya1ijH4Vb7P7RkasT/Fe4
+         pQeSdvsYiuAJ91Tgj9FUFzi/YTM2RDrwoLeds=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=0K4AayEvyC8tuCGamcfvuz4SEF7qHpfHWbMwtIK1ew8=;
+        b=AOfU1Eim8nVgaVlpdjLC/c0f6weHhAl8YlAo8BfPiqYqBNJKifHkodm6Z2+mV2Zb91
+         ezZ7wAO/iQsvJwpiLWgG+kzRW9yIvoWzUK8es4cRylfnbZFrdYyZz/9H1WF3w6mnqs8D
+         g9c0JviQ0J3mMYbxoxAOF/xNY2Oa1MzCD76X8Mba/DFKGie4DrXvBOZE3MUz0R+lXBXC
+         /eJjgJ78pMMAGkSeugybKONzFOn+wYeBAYM3eY0urUBKLLq/rVKtXSHEwAW0Cjv60uIi
+         MRlctMA1wm5+fZ18xwoKeyN3x+8UTwZ4YiMQzChFJcVUaPH9HTnjpRUKK1pqth74fjcm
+         PbnA==
+X-Gm-Message-State: APjAAAX2Bz1TiNzWdj0emLvbI+Xg0Mxx49j7PHB1bdGx9WpnLIh1stiy
+        iYyupsYkusFHe60ss0aQNRCme3/oBFgsB7SW9uNh8A==
+X-Google-Smtp-Source: APXvYqygGP9QddTsQ0SFt8FpF9IKYbLSjITz3B58ECyT4vbLUFXLY9PLq33WblBJcqEp7qon9vDoHmgOFMfGw4gMijY=
+X-Received: by 2002:a37:9307:: with SMTP id v7mr19255465qkd.495.1561418722995;
+ Mon, 24 Jun 2019 16:25:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20190619175142.237794-1-ravisadineni@chromium.org>
+In-Reply-To: <20190619175142.237794-1-ravisadineni@chromium.org>
+From:   Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Date:   Mon, 24 Jun 2019 16:25:12 -0700
+Message-ID: <CAEZbON4e1=w6G4KEqq2qP0nTD4z00fcqHErWTBVGFGb17f=+1Q@mail.gmail.com>
+Subject: Re: [PATCH] power: Do not clear events_check_enabled in pm_wakeup_pending()
+To:     rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Todd Broch <tbroch@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Rajat Jain <rajatja@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, June 25, 2019 12:20:26 AM CEST Rafael J. Wysocki wrote:
-> On Mon, Jun 24, 2019 at 11:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Mon, Jun 24, 2019 at 2:43 PM Jon Hunter <jonathanh@nvidia.com> wrote:
-> > >
-> > > Hi Rafael,
-> > >
-> > > On 13/06/2019 22:59, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-> > > > attempted to avoid a problem with devices whose drivers want them to
-> > > > stay in D0 over suspend-to-idle and resume, but it did not go as far
-> > > > as it should with that.
-> > > >
-> > > > Namely, first of all, the power state of a PCI bridge with a
-> > > > downstream device in D0 must be D0 (based on the PCI PM spec r1.2,
-> > > > sec 6, table 6-1, if the bridge is not in D0, there can be no PCI
-> > > > transactions on its secondary bus), but that is not actively enforced
-> > > > during system-wide PM transitions, so use the skip_bus_pm flag
-> > > > introduced by commit d491f2b75237 for that.
-> > > >
-> > > > Second, the configuration of devices left in D0 (whatever the reason)
-> > > > during suspend-to-idle need not be changed and attempting to put them
-> > > > into D0 again by force is pointless, so explicitly avoid doing that.
-> > > >
-> > > > Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-> > > > Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > > Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > >
-> > > I have noticed a regression in both the mainline and -next branches on
-> > > one of our boards when testing suspend. The bisect is point to this
-> > > commit and reverting on top of mainline does fix the problem. So far I
-> > > have not looked at this in close detail but kernel log is showing ...
-> >
-> > Can you please collect a log like that, but with dynamic debug in
-> > pci-driver.c enabled?
-> >
-> > Note that reverting this commit is rather out of the question, so we
-> > need to get to the bottom of the failure.
-> 
-> I suspect that there is a problem with the pm_suspend_via_firmware()
-> check which returns 'false' on the affected board, but the platform
-> actually removes power from devices left in D0 during suspend.
-> 
-> I guess it would be more appropriate to check something like
-> pm_suspend_no_platform() which would return 'true' in the
-> suspend-to-idle patch w/ ACPI.
+Hi,
 
-So I wonder if the patch below makes any difference?
+Just wanted to check if this is o.k.
 
----
- drivers/pci/pci-driver.c |    8 ++++----
- include/linux/suspend.h  |   26 ++++++++++++++++++++++++--
- kernel/power/suspend.c   |    3 +++
- 3 files changed, 31 insertions(+), 6 deletions(-)
+Thanks,
+Ravi
 
-Index: linux-pm/include/linux/suspend.h
-===================================================================
---- linux-pm.orig/include/linux/suspend.h
-+++ linux-pm/include/linux/suspend.h
-@@ -209,8 +209,9 @@ extern int suspend_valid_only_mem(suspen
- 
- extern unsigned int pm_suspend_global_flags;
- 
--#define PM_SUSPEND_FLAG_FW_SUSPEND	(1 << 0)
--#define PM_SUSPEND_FLAG_FW_RESUME	(1 << 1)
-+#define PM_SUSPEND_FLAG_FW_SUSPEND	BIT(0)
-+#define PM_SUSPEND_FLAG_FW_RESUME	BIT(1)
-+#define PM_SUSPEND_FLAG_NO_PLATFORM	BIT(2)
- 
- static inline void pm_suspend_clear_flags(void)
- {
-@@ -227,6 +228,11 @@ static inline void pm_set_resume_via_fir
- 	pm_suspend_global_flags |= PM_SUSPEND_FLAG_FW_RESUME;
- }
- 
-+static inline void pm_set_suspend_no_platform(void)
-+{
-+	pm_suspend_global_flags |= PM_SUSPEND_FLAG_NO_PLATFORM;
-+}
-+
- /**
-  * pm_suspend_via_firmware - Check if platform firmware will suspend the system.
-  *
-@@ -268,6 +274,22 @@ static inline bool pm_resume_via_firmwar
- 	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_FW_RESUME);
- }
- 
-+/**
-+ * pm_suspend_no_platform - Check if platform may change device power states.
-+ *
-+ * To be called during system-wide power management transitions to sleep states
-+ * or during the subsequent system-wide transitions back to the working state.
-+ *
-+ * Return 'true' if the power states of devices remain under full control of the
-+ * kernel throughout the system-wide suspend and resume cycle in progress (that
-+ * is, if a device is put into a certain power state during suspend, it can be
-+ * expected to remain in that state during resume).
-+ */
-+static inline bool pm_suspend_no_platform(void)
-+{
-+	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_NO_PLATFORM);
-+}
-+
- /* Suspend-to-idle state machnine. */
- enum s2idle_states {
- 	S2IDLE_STATE_NONE,      /* Not suspended/suspending. */
-Index: linux-pm/kernel/power/suspend.c
-===================================================================
---- linux-pm.orig/kernel/power/suspend.c
-+++ linux-pm/kernel/power/suspend.c
-@@ -493,6 +493,9 @@ int suspend_devices_and_enter(suspend_st
- 
- 	pm_suspend_target_state = state;
- 
-+	if (state == PM_SUSPEND_TO_IDLE)
-+		pm_set_suspend_no_platform();
-+
- 	error = platform_suspend_begin(state);
- 	if (error)
- 		goto Close;
-Index: linux-pm/drivers/pci/pci-driver.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-driver.c
-+++ linux-pm/drivers/pci/pci-driver.c
-@@ -870,7 +870,7 @@ static int pci_pm_suspend_noirq(struct d
- 			pci_dev->bus->self->skip_bus_pm = true;
- 	}
- 
--	if (pci_dev->skip_bus_pm && !pm_suspend_via_firmware()) {
-+	if (pci_dev->skip_bus_pm && pm_suspend_no_platform()) {
- 		dev_dbg(dev, "PCI PM: Skipped\n");
- 		goto Fixup;
- 	}
-@@ -925,10 +925,10 @@ static int pci_pm_resume_noirq(struct de
- 	/*
- 	 * In the suspend-to-idle case, devices left in D0 during suspend will
- 	 * stay in D0, so it is not necessary to restore or update their
--	 * configuration here and attempting to put them into D0 again may
--	 * confuse some firmware, so avoid doing that.
-+	 * configuration here and attempting to put them into D0 again is
-+	 * pointless, so avoid doing that.
- 	 */
--	if (!pci_dev->skip_bus_pm || pm_suspend_via_firmware())
-+	if (!(pci_dev->skip_bus_pm && pm_suspend_no_platform()))
- 		pci_pm_default_resume_early(pci_dev);
- 
- 	pci_fixup_device(pci_fixup_resume_early, pci_dev);
-
-
-
+On Wed, Jun 19, 2019 at 10:52 AM Ravi Chandra Sadineni
+<ravisadineni@chromium.org> wrote:
+>
+> events_check_enabled bool is set when wakeup_count sysfs attribute
+> is written. User level daemon is expected to write this attribute
+> just before suspend.
+>
+> When this boolean is set, calls to pm_wakeup_event() will result in
+> increment of per device and global wakeup count that helps in
+> identifying the wake source. global wakeup count is also used by
+> pm_wakeup_pending() to identify if there are any pending events that
+> should result in an suspend abort.
+>
+> Currently calls to pm_wakeup_pending() also clears events_check_enabled.
+> This can be a problem when there are multiple wake events or when the
+> suspend is aborted due to an interrupt on a shared interrupt line.
+> For example an Mfd device can create several platform devices which
+> might fetch the state on resume in the driver resume method and increment
+> the wakeup count if needed. But if events_check_enabled is cleared before
+> resume methods get to execute, wakeup count will not be incremented. Thus
+> let us not reset the bool here.
+>
+> Note that events_check_enabled is also cleared in suspend.c/enter_state()
+> on every resume at the end.
+>
+> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> ---
+>  drivers/base/power/wakeup.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 5b2b6a05a4f3..88aade871589 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -838,7 +838,6 @@ bool pm_wakeup_pending(void)
+>
+>                 split_counters(&cnt, &inpr);
+>                 ret = (cnt != saved_count || inpr > 0);
+> -               events_check_enabled = !ret;
+>         }
+>         raw_spin_unlock_irqrestore(&events_lock, flags);
+>
+> --
+> 2.20.1
+>
