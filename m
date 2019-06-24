@@ -2,83 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D40751A70
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 20:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E44E51D2E
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 23:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727732AbfFXSXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 14:23:45 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:47681 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727174AbfFXSXp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 14:23:45 -0400
-X-Originating-IP: 90.89.68.76
-Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 2B0DC1C0005;
-        Mon, 24 Jun 2019 18:23:34 +0000 (UTC)
-Date:   Mon, 24 Jun 2019 20:23:33 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, wens@csie.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, mchehab+samsung@kernel.org,
-        linus.walleij@linaro.org, nicolas.ferre@microchip.com,
-        paulmck@linux.ibm.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 08/11] thermal: sun8i: support ahb clocks
-Message-ID: <20190624182333.di7avywtdvzwukms@flea>
-References: <20190623164206.7467-1-tiny.windzz@gmail.com>
- <20190623164206.7467-9-tiny.windzz@gmail.com>
+        id S1729075AbfFXVhm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 17:37:42 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38147 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728952AbfFXVhm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 17:37:42 -0400
+Received: by mail-ot1-f66.google.com with SMTP id d17so15108612oth.5;
+        Mon, 24 Jun 2019 14:37:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4xCtwElI364QfKnvdzlikQ/i499dYfxJ/Sd4Q5QDxdU=;
+        b=Dfo8gtevVSgYatIgNihgM55byAc8Kx/LYOIKR3zR6wqR97K2koVR5lMqFEu0nVX62j
+         VpA9NyTtnr+jZoHmY5g6SsSrMmqG7Emvv9RFoVQ7HVPIyC7Y654WBbL/IAvqPHyRSYPX
+         6qkJA3jyg/KjiBM26RnUCNmSdFwFJ7F2KTKFDz5AC6P1quF64OcimBPCd8q9i8h/ML3m
+         WvdGbpR3KOynoHJ9IxsQ/5K/th56QEWZb8lTPpYVcH/et8M8lvM5vGITg97C/iFIAxIx
+         RsQs9tBpLWhSpHSipQXesoemjFW/rUOkOTxBxQPksN/Avd+1JF/pY3Ew4KDN795P5YaQ
+         J4iQ==
+X-Gm-Message-State: APjAAAXRJ9UwGrwBYVPCHrbLawqtVvak3D6pbyBb8aQdAfQUsqgTxZWV
+        FXzKfGmbP+Kb7pxdfEYY47LuSb6QhljEWLbCMTg=
+X-Google-Smtp-Source: APXvYqznIEskFZ/msbmZ5zgcdAacqjQRCqt0+T6G2DQyg5VVAEKPzXzDGsXHatUOQbKr/LPm9qYgtfMQFo7mD7oVqhA=
+X-Received: by 2002:a05:6830:8a:: with SMTP id a10mr2331359oto.167.1561412261402;
+ Mon, 24 Jun 2019 14:37:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190623164206.7467-9-tiny.windzz@gmail.com>
-User-Agent: NeoMutt/20180716
+References: <1668247.RaJIPSxJUN@kreacher> <9906d02b-8c77-f2c8-7168-93ea444b950e@nvidia.com>
+In-Reply-To: <9906d02b-8c77-f2c8-7168-93ea444b950e@nvidia.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 24 Jun 2019 23:37:29 +0200
+Message-ID: <CAJZ5v0hdtXqoK84DpYtyMSCnkR9zOHFiUPAzWZDtkFmEjyWD1g@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: PM: Skip devices in D0 for suspend-to-idle
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jun 23, 2019 at 12:42:03PM -0400, Yangtao Li wrote:
-> H3 has extra clock, so introduce something in ths_thermal_chip/ths_device
-> and adds the process of the clock.
+On Mon, Jun 24, 2019 at 2:43 PM Jon Hunter <jonathanh@nvidia.com> wrote:
 >
-> This is pre-work for supprt it.
+> Hi Rafael,
 >
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> ---
->  drivers/thermal/sun8i_thermal.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
+> On 13/06/2019 22:59, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> > attempted to avoid a problem with devices whose drivers want them to
+> > stay in D0 over suspend-to-idle and resume, but it did not go as far
+> > as it should with that.
+> >
+> > Namely, first of all, the power state of a PCI bridge with a
+> > downstream device in D0 must be D0 (based on the PCI PM spec r1.2,
+> > sec 6, table 6-1, if the bridge is not in D0, there can be no PCI
+> > transactions on its secondary bus), but that is not actively enforced
+> > during system-wide PM transitions, so use the skip_bus_pm flag
+> > introduced by commit d491f2b75237 for that.
+> >
+> > Second, the configuration of devices left in D0 (whatever the reason)
+> > during suspend-to-idle need not be changed and attempting to put them
+> > into D0 again by force is pointless, so explicitly avoid doing that.
+> >
+> > Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> > Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 >
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-> index ed1c19bb27cf..04f53ffb6a14 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -54,6 +54,7 @@ struct tsensor {
->  };
->
->  struct ths_thermal_chip {
-> +	bool            has_ahb_clk;
->  	int		sensor_num;
->  	int		offset;
->  	int		scale;
-> @@ -69,6 +70,7 @@ struct ths_device {
->  	struct regmap				*regmap;
->  	struct reset_control			*reset;
->  	struct clk				*bus_clk;
-> +	struct clk                              *ahb_clk;
+> I have noticed a regression in both the mainline and -next branches on
+> one of our boards when testing suspend. The bisect is point to this
+> commit and reverting on top of mainline does fix the problem. So far I
+> have not looked at this in close detail but kernel log is showing ...
 
-Hmm, thinking a bit about this, the name of those two clocks doesn't
-make sense. AHB is the bus being used to access that device, so the
-bus clock is the AHB clock.
+Can you please collect a log like that, but with dynamic debug in
+pci-driver.c enabled?
 
-What is that clock being used for?
-
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Note that reverting this commit is rather out of the question, so we
+need to get to the bottom of the failure.
