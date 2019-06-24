@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F32E504D2
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 10:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66879504DD
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 10:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727345AbfFXIrt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 04:47:49 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:55339 "EHLO
+        id S1726807AbfFXIuz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 04:50:55 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:48951 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726632AbfFXIrt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 04:47:49 -0400
+        with ESMTP id S1725916AbfFXIuz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 04:50:55 -0400
 X-Originating-IP: 90.88.16.156
 Received: from localhost (aaubervilliers-681-1-41-156.w90-88.abo.wanadoo.fr [90.88.16.156])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id CC5071C0002;
-        Mon, 24 Jun 2019 08:47:37 +0000 (UTC)
-Date:   Mon, 24 Jun 2019 10:47:37 +0200
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 853A11C0007;
+        Mon, 24 Jun 2019 08:50:50 +0000 (UTC)
+Date:   Mon, 24 Jun 2019 10:50:50 +0200
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Yangtao Li <tiny.windzz@gmail.com>
 Cc:     rui.zhang@intel.com, edubezval@gmail.com,
@@ -27,16 +27,16 @@ Cc:     rui.zhang@intel.com, edubezval@gmail.com,
         paulmck@linux.ibm.com, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 02/11] dt-bindings: thermal: add binding document for
- h6 thermal controller
-Message-ID: <20190624084737.k5stgmqi2kx2p52o@flea>
+Subject: Re: [PATCH v4 10/11] dt-bindings: thermal: add binding document for
+ h3 thermal controller
+Message-ID: <20190624085050.horyiz4wp24kzjui@flea>
 References: <20190623164206.7467-1-tiny.windzz@gmail.com>
- <20190623164206.7467-3-tiny.windzz@gmail.com>
+ <20190623164206.7467-11-tiny.windzz@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ivprrpimudesnwlt"
+        protocol="application/pgp-signature"; boundary="ytcr75eegmcwn5yh"
 Content-Disposition: inline
-In-Reply-To: <20190623164206.7467-3-tiny.windzz@gmail.com>
+In-Reply-To: <20190623164206.7467-11-tiny.windzz@gmail.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -44,94 +44,97 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ivprrpimudesnwlt
+--ytcr75eegmcwn5yh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi,
-
-On Sun, Jun 23, 2019 at 12:41:57PM -0400, Yangtao Li wrote:
-> This patch adds binding document for allwinner h6 thermal controller.
+On Sun, Jun 23, 2019 at 12:42:05PM -0400, Yangtao Li wrote:
+> This patch adds binding document for allwinner h3 thermal controller.
 >
 > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 > ---
->  .../bindings/thermal/sun8i-thermal.yaml       | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
+>  .../bindings/thermal/sun8i-thermal.yaml       | 29 +++++++++++++++++--
+>  1 file changed, 26 insertions(+), 3 deletions(-)
 >
 > diff --git a/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml b/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-> new file mode 100644
-> index 000000000000..2c5acc61ed03
-> --- /dev/null
+> index 2c5acc61ed03..1eaf68b5dd5a 100644
+> --- a/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
 > +++ b/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sun8i-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner SUN8I Thermal Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Yangtao Li <tiny.windzz@gmail.com>
-> +
-> +description: |-
-> +  This describes the device tree binding for the Allwinner thermal
-> +  controller which measures the on-SoC temperatures.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - allwinner,sun50i-h6-ths
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 1
-
-You can drop the minItems there
-
-> +  nvmem-cells:
+> @@ -16,6 +16,7 @@ description: |-
+>  properties:
+>    compatible:
+>      enum:
+> +      - allwinner,sun8i-h3-ths
+>        - allwinner,sun50i-h6-ths
+>
+>    reg:
+> @@ -29,13 +30,22 @@ properties:
+>
+>    clocks:
+>      minItems: 1
+> -    maxItems: 1
+> +    maxItems: 2
+>
+>    clock-names:
+> -    const: bus
 > +    items:
-> +      - description: ths calibrate data
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: calib
+> +      - const: bus
+> +      - const: ahb
 
-And for these two, you don't need the items either, it can be directly
-const: calib (and the description for the first one).
+You need a min/maxItems here as well. Otherwise, on the H6, you will
+have a warning since you asked for an array of two items, bus and ahb,
+while you only have a single one.
 
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reset
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +  - '#thermal-sensor-cells'
+>    '#thermal-sensor-cells':
+> -    const: 1
+> +    enum: [ 0, 1 ]
+> +    description: |
+> +      Definition depends on soc version:
 > +
-> +examples:
+> +      For "allwinner,sun8i-h3-ths",
+> +      value must be 0.
+> +      For "allwinner,sun50i-h6-ths",
+> +      value must be 1.
+
+This must be checked using a conditional.
+
+Something like:
+
+if:
+  properties:
+    compatible:
+      const: allwinner,sun8i-h3-ths
+
+then:
+  properties:
+    "#thermal-sensor-cells":
+      const: 0
+
+else:
+  properties:
+    "#thermal-sensor-cells":
+      const: 1
+
+>    nvmem-cells:
+>      items:
+> @@ -55,6 +65,19 @@ required:
+>    - '#thermal-sensor-cells'
+>
+>  examples:
 > +  - |
-> +    ths: ths@5070400 {
-> +         compatible = "allwinner,sun50i-h6-ths";
-> +         reg = <0x05070400 0x100>;
-> +         clocks = <&ccu CLK_BUS_THS>;
-> +         clock-names = "bus";
+> +    ths: ths@1c25000 {
+> +         compatible = "allwinner,sun8i-h3-ths";
+> +         reg = <0x01c25000 0x400>;
+> +         clocks = <&ccu CLK_BUS_THS>, <&ccu CLK_THS>;
+> +         clock-names = "bus", "ahb";
 > +         resets = <&ccu RST_BUS_THS>;
-> +         interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+> +         interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+> +         nvmem-cells = <&tsen_calib>;
+> +         nvmem-cell-names = "calib";
+> +         #thermal-sensor-cells = <0>;
+> +    };
 
-Did you try to run make dtbs_check? That one will probably not
-compile.
+Same remark here, it won't compile
 
 Maxime
 
@@ -140,15 +143,15 @@ Maxime Ripard, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
 
---ivprrpimudesnwlt
+--ytcr75eegmcwn5yh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXRCOKQAKCRDj7w1vZxhR
-xdBPAQDsYR1iG7lP4B3btdotbt4B3Mnzh74qRV6goFe8yPrtVQEAqTZEFyHblHwJ
-MP/jYXkzBszWwvzwTaG37gmvGqItzQg=
-=EY/h
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXRCO6gAKCRDj7w1vZxhR
+xT5JAP9EnWnCbO23gVZGh5xK3A73eXeJMaPcwVSRyTcxDaC75wEA5lbrfaOfqwX9
+AZ4QA27PC8pe3lFJDh+4y7Q+DPT+7wI=
+=s6LE
 -----END PGP SIGNATURE-----
 
---ivprrpimudesnwlt--
+--ytcr75eegmcwn5yh--
