@@ -2,78 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA65501C8
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 08:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C150C501DA
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 08:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbfFXGDj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 02:03:39 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33773 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726312AbfFXGDi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 02:03:38 -0400
-Received: by mail-pg1-f196.google.com with SMTP id m4so5903810pgk.0
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jun 2019 23:03:38 -0700 (PDT)
+        id S1727085AbfFXGE2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 02:04:28 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:45541 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfFXGE1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 02:04:27 -0400
+Received: by mail-pg1-f195.google.com with SMTP id z19so3553980pgl.12
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jun 2019 23:04:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=dNs4bFTn0f/H2512covQPvgW7xHEQrBSIemzlMYE1WU=;
-        b=F6gYtTDouoTcZyvItCkzcdGIm2GiI5ij2KNmjl/uLGOHVF2Mgm3DYbvhBuN+5OjeHL
-         gp6gGnmh2wXuboNfODnOsROpHwsUB9Ah54gRqCRbwzS+v36jwN8cRN7coJoZm1T8h5m9
-         Lc/SvxQO+ojDltrR1frfHPAqHVEaQ4rZzvi2puGHraCUF6e74PXvr3xPErsg6EpQr4yj
-         hLAjMEOKC+z12zOExSiI2StSVfgVkC8OuGmJS5f3b0R6Gbjp6VKG5Z39CCOrbIkpccjh
-         mSAPWAu7IbIkiDA0ajpEjHQorirY8MFMy+N2aZyiyn/PgVaFliemA83jUL/+xt4Y6rB7
-         zeew==
+        bh=mX2mC8vR4MVGCj0f3KlHUzitC7aHIxcPUHbsxDHUB/U=;
+        b=bWNNEk+FN730bhGq/W/Z0iCR4lL/ehzz7iw7Y2dr/25mYU8VD/anjnPEkwtbGAuqC6
+         lhmjHKrm662EDaBuIqodnTtVM7HJmY0oeN8/mrPSj/yTypFKXAqMP2W3fRGx6CsTn7zG
+         Ux5P+1wCagAhIoyBMSDFxlpHbodIAST292ZQ09vZxDhZiqrCr8N0+wgqmaiwqEz+oVw3
+         dtxNHnfO4tTFLQn9Is3uEUUApElevC1IABF1BIPheTDRswGJAISBBvrKrWjINd9wVHJq
+         kEb97/qc11xcyEtBM9ZnNWB5GIPbSLrpQ/SJ1jqmZAipyVcL+BFlWRL56IYbUQFqyy9u
+         nWiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dNs4bFTn0f/H2512covQPvgW7xHEQrBSIemzlMYE1WU=;
-        b=pnmFz8uOAcHKBhqegySeWFClhQvMzZVpm1kJC0MCtFNjUqa16D2ee8KFRNC1nyTIsJ
-         8HCBp3I2dv3B7EZbiwaaMRbgYzvazFpN40bpl55ybk7DAu2+EtAHg8eqhN+66JOT+aGD
-         /0nukMsgxRtyGh5TEowZ2tU9y+oEGJLPc/GwtqECuPB+FpymIq2u0kbmokeUSaWnznRh
-         htE8fpFfqBeC1HDcusevN8biCt3XEwBCHBtikB4ErsuFnQsYzR/DKLZKRrl5S5+BotCr
-         v0YoJQbMZqr+HicHBuvZ3Kwsie05klRD98UDg9y9OQ+k6T1YOdMWpJlyH53e+mdMvsFc
-         Uuww==
-X-Gm-Message-State: APjAAAX9SJ/Bs2HS69K/qcXegv7QMT+xM0I2zi54u70RW6bzwi8DuFEe
-        l9SMF2L3C2gJUve0uNjtUBJaoA==
-X-Google-Smtp-Source: APXvYqy9bO/usfvdFvRCWkxVVdZwwaK8oMRu4R8n9ullXNpcFe0FPzC2a9IPf+ONlr+KOyOJ5GZlLw==
-X-Received: by 2002:a63:dd53:: with SMTP id g19mr30047290pgj.3.1561356218023;
-        Sun, 23 Jun 2019 23:03:38 -0700 (PDT)
+        bh=mX2mC8vR4MVGCj0f3KlHUzitC7aHIxcPUHbsxDHUB/U=;
+        b=HECtxjLi/YjSOaaVgZ/cohg/4gB3J/MwXVItiMBquKIUBESAM+LMf6TNGdqLq5r0jx
+         25YsYkAcsw/+c2hl8m3EkKLDDktdTxtRmGGKFz4sIm7XSOFKr2N69VnZj30G2WaIxfkk
+         YZva59Yq1XKPgE3JvR2olCwgBFup8D1DosecavC/Bds0aa4xVGBOW0QK8pvXktIazOv/
+         PzlYqOg0/eAtdEkooy98JogkrH/O8vhJcZKcpBf+SsCgQjc27WtAsYPYI7Y3Z7mibpiD
+         ZDK3UJxZr8dw2FOX4NDX3ew9kCnAl3yMdznidYNg7IuZV4HzVPGBKDhMnXBLM5wOwX1b
+         rMTQ==
+X-Gm-Message-State: APjAAAW2RqhZV0voBVSZwIu4srpCaH3w8qutMWLhzmbIjSZHZ2sqDxNu
+        +oHq1widS9EiiP5WF6mJh8iBpA==
+X-Google-Smtp-Source: APXvYqyByWj1QSvQ1y/tGUOCTlOb+AV8V6tBWWXP/lvL+SrvuP3dFmcApefIFQbWdDWQbDF5gZf+Bg==
+X-Received: by 2002:a65:460b:: with SMTP id v11mr1364683pgq.304.1561356267170;
+        Sun, 23 Jun 2019 23:04:27 -0700 (PDT)
 Received: from localhost ([122.172.211.128])
-        by smtp.gmail.com with ESMTPSA id bo20sm10925850pjb.23.2019.06.23.23.03.36
+        by smtp.gmail.com with ESMTPSA id f14sm11169671pfn.53.2019.06.23.23.04.26
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 23:03:36 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 11:33:34 +0530
+        Sun, 23 Jun 2019 23:04:26 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 11:34:24 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     edubezval@gmail.com, linux-kernel@vger.kernel.org,
         Sudeep Holla <sudeep.holla@arm.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Keerthy <j-keerthy@ti.com>,
         "open list:CPU FREQUENCY DRIVERS - ARM BIG LITTLE" 
-        <linux-pm@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH 2/6] thermal/drivers/cpu_cooling: Unregister with the
- policy
-Message-ID: <20190624060334.kak2mjuou4napi4x@vireshk-i7>
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 3/6] cpufreq/drivers/arm_big_little: Remove cooling
+ device usage
+Message-ID: <20190624060424.t44zxjyopioewgga@vireshk-i7>
 References: <20190621132302.30414-1-daniel.lezcano@linaro.org>
- <20190621132302.30414-2-daniel.lezcano@linaro.org>
+ <20190621132302.30414-3-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190621132302.30414-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20190621132302.30414-3-daniel.lezcano@linaro.org>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -81,24 +68,52 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 21-06-19, 15:22, Daniel Lezcano wrote:
-> Currently the function cpufreq_cooling_register() returns a cooling
-> device pointer which is used back as a pointer to call the function
-> cpufreq_cooling_unregister(). Even if it is correct, it would make
-> sense to not leak the structure inside a cpufreq driver and keep the
-> code thermal code self-encapsulate. Moreover, that forces to add an
-> extra variable in each driver using this function.
+> The cpufreq_cooling_unregister() function uses now the policy to
+> unregister itself. The only purpose of the cooling device pointer is
+> to unregister the cpu cooling device.
 > 
-> Instead of passing the cooling device to unregister, pass the policy.
+> As there is no more need of this pointer, remove it.
 > 
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  drivers/cpufreq/arm_big_little.c               |  2 +-
->  drivers/cpufreq/cpufreq.c                      |  2 +-
->  drivers/thermal/cpu_cooling.c                  | 18 ++++++++++--------
->  drivers/thermal/imx_thermal.c                  |  4 ++--
->  .../thermal/ti-soc-thermal/ti-thermal-common.c |  2 +-
->  include/linux/cpu_cooling.h                    |  6 +++---
->  6 files changed, 18 insertions(+), 16 deletions(-)
+>  drivers/cpufreq/arm_big_little.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/arm_big_little.c b/drivers/cpufreq/arm_big_little.c
+> index 6b243202caa9..718c63231e66 100644
+> --- a/drivers/cpufreq/arm_big_little.c
+> +++ b/drivers/cpufreq/arm_big_little.c
+> @@ -56,7 +56,6 @@ static bool bL_switching_enabled;
+>  #define ACTUAL_FREQ(cluster, freq)  ((cluster == A7_CLUSTER) ? freq << 1 : freq)
+>  #define VIRT_FREQ(cluster, freq)    ((cluster == A7_CLUSTER) ? freq >> 1 : freq)
+>  
+> -static struct thermal_cooling_device *cdev[MAX_CLUSTERS];
+>  static const struct cpufreq_arm_bL_ops *arm_bL_ops;
+>  static struct clk *clk[MAX_CLUSTERS];
+>  static struct cpufreq_frequency_table *freq_table[MAX_CLUSTERS + 1];
+> @@ -501,10 +500,8 @@ static int bL_cpufreq_exit(struct cpufreq_policy *policy)
+>  	struct device *cpu_dev;
+>  	int cur_cluster = cpu_to_cluster(policy->cpu);
+>  
+> -	if (cur_cluster < MAX_CLUSTERS) {
+> +	if (cur_cluster < MAX_CLUSTERS)
+>  		cpufreq_cooling_unregister(policy);
+> -		cdev[cur_cluster] = NULL;
+> -	}
+>  
+>  	cpu_dev = get_cpu_device(policy->cpu);
+>  	if (!cpu_dev) {
+> @@ -527,7 +524,7 @@ static void bL_cpufreq_ready(struct cpufreq_policy *policy)
+>  	if (cur_cluster >= MAX_CLUSTERS)
+>  		return;
+>  
+> -	cdev[cur_cluster] = of_cpufreq_cooling_register(policy);
+> +	of_cpufreq_cooling_register(policy);
+>  }
+>  
+>  static struct cpufreq_driver bL_cpufreq_driver = {
+
+I will merge it with the previous commit if I were you.
 
 Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
