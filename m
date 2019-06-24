@@ -2,122 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D68A3509B4
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 13:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AE850A53
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 14:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729746AbfFXLYU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 07:24:20 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:35196 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729477AbfFXLYU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 07:24:20 -0400
-Received: by mail-lj1-f196.google.com with SMTP id x25so12265343ljh.2;
-        Mon, 24 Jun 2019 04:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8gvk5GASPNCFWbApHpT04KBTfKEWcp0twApXx08UPkI=;
-        b=ACXES/EFhB7Ih+WhhqABVOb0QduIc2PoED54Mb7dYfi6+j+CrruI8UBaIhc7JLjOv9
-         Wq9vT/sPfsFWvm1Pg+Exrq/cCEbCyB3SqyN4ivOvJ6oTtqbU9oZEXn4gB4rvFj3zc5dA
-         S0OFuam3sMUk+pVbh0SaDc/ATZjoeZ/V5ILqYCYbRB7ckCtDcPOW3lES/tMuCQraf7UB
-         DNdBt/xgW4O223gofyhmfHgjVaJvFWWIPuYR47pqVRvPpCjRW1z2J/oEcXY6v8abmcTP
-         BNpb9Fn0vHSs0Y2xe5AJa6xYjy4DbxtcvwNioBhPpSKKWt+YtWUj+6qr6AFhwopoi9tr
-         aPbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8gvk5GASPNCFWbApHpT04KBTfKEWcp0twApXx08UPkI=;
-        b=Cz+gn6lrUBlOsKI5dBC8MT3YPU/Ujy3UsTyYKtwl+RWniNInng8YqXKwZE6lHe4mJA
-         BzEXhgbl/i9ZtwZB3wI50MXN+zPd3CZIHbuh5kP3F9csvKu4IHp3HVyqTHycpc++H8B0
-         glVdkSOSG0NaObl84qXzPN/Kkjy6HNXSTxIiCYkjwVUPMjH4JllGWdvW9B2+ZjSI3yzI
-         CFQ078MRQ6rBnrpEY8VyelyAmFt2T2zPLqBZgZoIIbrUiTZsY9Vaoy2ocHjDtRq5kRIA
-         x48pB/qTnMKk7m1HZBgu2EDdkd9C1BQX/udgh39Pk4k1O2vyK8nv5UfWzw/gCc19/KNB
-         zbEQ==
-X-Gm-Message-State: APjAAAUi0ojxah1CoWTbkXzp0+IWVWenKzJ+QkAJ/rb/QW9A24Dg4rRt
-        ibn/wqoA3OvRlKDn/WLNVy4=
-X-Google-Smtp-Source: APXvYqy/7ZQc8jeydT38n1bqGoa/x+R4Uqit0gUF/G9MnVl5l4eo+qFmEQ+Hhix8WVAr09HpbTQktw==
-X-Received: by 2002:a2e:9c43:: with SMTP id t3mr16672742ljj.157.1561375458294;
-        Mon, 24 Jun 2019 04:24:18 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.googlemail.com with ESMTPSA id v139sm1530806lfa.69.2019.06.24.04.24.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jun 2019 04:24:17 -0700 (PDT)
-Subject: Re: [PATCH v4 13/16] PM / devfreq: tegra: Support Tegra30
-To:     myungjoo.ham@samsung.com
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
-References: <37db00bc-3a22-d1c2-7bdc-e27af42cd5c7@gmail.com>
- <20190624065919epcms1p1a366de5f455f5138c438d1da8151c12f@epcms1p1>
- <20190624073414epcms1p87b6dc13758b6bd401d275cfba583314a@epcms1p8>
- <CGME20190624065919epcms1p1a366de5f455f5138c438d1da8151c12f@epcms1p3>
- <20190624111134epcms1p361aed3c72edd6eebc95408331c8d9739@epcms1p3>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <7561edbc-c17c-101a-b339-fc7f9968a470@gmail.com>
-Date:   Mon, 24 Jun 2019 14:24:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1727727AbfFXMFk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 08:05:40 -0400
+Received: from vps.xff.cz ([195.181.215.36]:47542 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726923AbfFXMFk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Jun 2019 08:05:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1561377938; bh=T4BXa4VwDBoEc4A4HcwS0Dl0bssMv2ECXblVliRU+Rc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mziuWN5kTFFpcq304OoQGK6gxdzqSCt3c4v+QPAJAN2Xr/rjVgJt8bguMb+m+Bs0+
+         vDVZ1NmuEY1NyjB18a9F+pwxlCIMHxTyDOcZCQvhN8Zz//HRyQr+mAtuE+Xl8Kl2Lr
+         IWjXiq/GG8qikZgtD4XyWJPxehxIBwPjI1F10fGA=
+Date:   Mon, 24 Jun 2019 14:05:37 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Yangtao Li <tiny.windzz@gmail.com>
+Cc:     rui.zhang@intel.com, edubezval@gmail.com,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        mchehab+samsung@kernel.org, linus.walleij@linaro.org,
+        nicolas.ferre@microchip.com, paulmck@linux.ibm.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 11/11] thermal: sun8i: add thermal driver for h3
+Message-ID: <20190624120537.sxdm4y3jec3ksr4u@core.my.home>
+Mail-Followup-To: Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
+        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        mchehab+samsung@kernel.org, linus.walleij@linaro.org,
+        nicolas.ferre@microchip.com, paulmck@linux.ibm.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20190623164206.7467-1-tiny.windzz@gmail.com>
+ <20190623164206.7467-12-tiny.windzz@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190624111134epcms1p361aed3c72edd6eebc95408331c8d9739@epcms1p3>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190623164206.7467-12-tiny.windzz@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-24.06.2019 14:11, MyungJoo Ham пишет:
->>
->> --------- Original Message ---------
->> Sender : Dmitry Osipenko <digetx@gmail.com>
->>
->> 24.06.2019 10:34, MyungJoo Ham пишет:
->>>>
->>>> A question:
->>>>
->>>> Does this driver support Tegra20 as well?
->>>> I'm asking this because ARCH_TEGRA includes ARCH_TEGRA_2x_SOC
->>>> according to /drivers/soc/tegra/Kconfig.
->>>>
->>>
->>> For this matter, how about updating your 13/16 patch as follows?
->>>
-> []
->>
->> Good call! I'll update this patch following yours suggestion, thanks.
+Hello Yangtao,
+
+On Sun, Jun 23, 2019 at 12:42:06PM -0400, Yangtao Li wrote:
+> This patch adds the support for allwinner h3 thermal sensor.
 > 
-> Or, you may approve the modified commits here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git/log/?h=for-next
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> ---
+>  drivers/thermal/sun8i_thermal.c | 72 +++++++++++++++++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> index 260b24340f5b..c8ee291f3b17 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -27,6 +27,14 @@
+>  #define TEMP_TO_REG				672
+>  #define CALIBRATE_DEFAULT			0x800
+>  
+> +#define SUN8I_THS_CTRL0				0x00
+> +#define SUN8I_THS_CTRL2				0x40
+> +#define SUN8I_THS_IC				0x44
+> +#define SUN8I_THS_IS				0x48
+> +#define SUN8I_THS_MFC				0x70
+> +#define SUN8I_THS_TEMP_CALIB			0x74
+> +#define SUN8I_THS_TEMP_DATA			0x80
+> +
+>  #define SUN50I_THS_CTRL0			0x00
+>  #define SUN50I_H6_THS_ENABLE			0x04
+>  #define SUN50I_H6_THS_PC			0x08
+> @@ -36,6 +44,9 @@
+>  #define SUN50I_H6_THS_TEMP_CALIB		0xa0
+>  #define SUN50I_H6_THS_TEMP_DATA			0xc0
+>  
+> +#define SUN8I_THS_CTRL0_T_ACQ0(x)		(GENMASK(15, 0) & (x))
+> +#define SUN8I_THS_CTRL2_T_ACQ1(x)		((GENMASK(15, 0) & (x)) << 16)
+> +
+>  #define SUN50I_THS_CTRL0_T_ACQ(x)		((GENMASK(15, 0) & (x)) << 16)
+>  #define SUN50I_THS_FILTER_EN			BIT(2)
+>  #define SUN50I_THS_FILTER_TYPE(x)		(GENMASK(1, 0) & (x))
+> @@ -121,6 +132,21 @@ static const struct regmap_config config = {
+>  	.fast_io = true,
+>  };
+>  
+> +static int sun8i_h3_irq_ack(struct ths_device *tmdev)
+> +{
+> +	int state, ret = 0;
+> +
+> +	regmap_read(tmdev->regmap, SUN8I_THS_IS, &state);
+> +
+> +	if (state & BIT(8)) {
+> +		regmap_write(tmdev->regmap, SUN8I_THS_IS,
+> +			     BIT(8));
+> +		ret |= BIT(1);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static int sun50i_h6_irq_ack(struct ths_device *tmdev)
+>  {
+>  	int i, state, ret = 0;
+> @@ -154,6 +180,14 @@ static irqreturn_t sun8i_irq_thread(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +static int sun8i_h3_ths_calibrate(struct ths_device *tmdev,
+> +			       u16 *caldata, int callen)
+> +{
+> +	regmap_write(tmdev->regmap, SUN8I_THS_TEMP_CALIB, *caldata);
 
-Looks almost good to me!
+You're missing a sanity check for callen here.
 
-I just recalled that there is also a 64bit variant of Tegra124, the Tegra132. Hence
-the Tegra30+ Kconfig entry should look like this (it's also worthy to break the lines
-for readability):
+regards,
+	o.
 
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index ccb1a68c4b51..bd2efbc27725 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -94,7 +94,10 @@ config ARM_EXYNOS_BUS_DEVFREQ
-
- config ARM_TEGRA_DEVFREQ
-        tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
--       depends on ARCH_TEGRA || COMPILE_TEST
-+       depends on ARCH_TEGRA_3x_SOC  || ARCH_TEGRA_114_SOC || \
-+                  ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
-+                  ARCH_TEGRA_210_SOC || \
-+                  COMPILE_TEST
-        select PM_OPP
-        help
-          This adds the DEVFREQ driver for the Tegra family of SoCs.
-
-Could you please adjust the patches like I'm suggesting? I'll approve yours change
-then and won't re-spin the first batch of the patches.
+> +	return 0;
+> +}
+> +
+>  static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
+>  				   u16 *caldata, int callen)
+>  {
+> @@ -325,6 +359,32 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+>  	return ret;
+>  }
+>  
+> +static int sun8i_h3_thermal_init(struct ths_device *tmdev)
+> +{
+> +	/* average over 4 samples */
+> +	regmap_write(tmdev->regmap, SUN8I_THS_MFC,
+> +		     SUN50I_THS_FILTER_EN |
+> +		     SUN50I_THS_FILTER_TYPE(1));
+> +	/*
+> +	 * period = (x + 1) * 4096 / clkin; ~10ms
+> +	 * enable data interrupt
+> +	 */
+> +	regmap_write(tmdev->regmap, SUN8I_THS_IC,
+> +		     SUN50I_H6_THS_PC_TEMP_PERIOD(58) | BIT(8));
+> +	/*
+> +	 * clkin = 24MHz
+> +	 * T acquire = clkin / (x + 1)
+> +	 *           = 20us
+> +	 * enable sensor
+> +	 */
+> +	regmap_write(tmdev->regmap, SUN8I_THS_CTRL0,
+> +		     SUN8I_THS_CTRL0_T_ACQ0(479));
+> +	regmap_write(tmdev->regmap, SUN8I_THS_CTRL2,
+> +		     SUN8I_THS_CTRL2_T_ACQ1(479) | BIT(0));
+> +
+> +	return 0;
+> +}
+> +
+>  static int sun50i_thermal_init(struct ths_device *tmdev)
+>  {
+>  	int val;
+> @@ -431,6 +491,17 @@ static int sun8i_ths_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct ths_thermal_chip sun8i_h3_ths = {
+> +	.sensor_num = 1,
+> +	.offset = -1794,
+> +	.scale = -121,
+> +	.has_ahb_clk = true,
+> +	.temp_data_base = SUN8I_THS_TEMP_DATA,
+> +	.calibrate = sun8i_h3_ths_calibrate,
+> +	.init = sun8i_h3_thermal_init,
+> +	.irq_ack = sun8i_h3_irq_ack,
+> +};
+> +
+>  static const struct ths_thermal_chip sun50i_h6_ths = {
+>  	.sensor_num = 2,
+>  	.offset = -2794,
+> @@ -443,6 +514,7 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
+>  };
+>  
+>  static const struct of_device_id of_ths_match[] = {
+> +	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
+>  	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
+>  	{ /* sentinel */ },
+>  };
+> -- 
+> 2.17.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
