@@ -2,103 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FC851E1A
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 00:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C3D51E22
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 00:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726899AbfFXWUj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 18:20:39 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33134 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbfFXWUi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 18:20:38 -0400
-Received: by mail-oi1-f195.google.com with SMTP id f80so11024202oib.0;
-        Mon, 24 Jun 2019 15:20:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X2mdj71OojvPofZElDA3A0qbxcCan0Gcd6RJ7oQb2rg=;
-        b=LgDpIeDj2w9bJ1yoOEsam4nLZOGjutw/qb6JzKt+Artj50DG+px7jEyjkLj7BOX5Ua
-         NHPrDdr4HAQqdX+d1ufA2N0I0kRxKfsWI1ULlUXzYkzgmYmmEX8dheNgo+uodJK/zlQ9
-         DShe0xXP2O68QhF1oL2sLYYDTsDQEcPCnCu7dFeiiYAOcjJBvjfG3sVz7uyST6LgRMrg
-         u1IX2fngxb4Zsic/8ep5Wzp/hBqL3tUGOLnJGlIRIN2n+rsFGCEKBD/bXuguQJweQJjh
-         GyqUUc+9fyubnFukEoZri5HykTSWA2gZrK2quECdK94KMjGbErQR7eGWHuSF9uEuHfMJ
-         YAFg==
-X-Gm-Message-State: APjAAAWgMRMAuQbuZLoDCwUDJ+LmWJpT1zuUVndQJFfG80CIkuM0yQJZ
-        8hIrlhvHek1R5nWGRdO0dEnm+t0ekW/prPTDHNKNEVog
-X-Google-Smtp-Source: APXvYqxnYN3S5xvkVR/2yGjsDmezNKCQ49nSrTtq5aqk54tjvTYd48k6PRBqiDqHPJTyJ2mrqkZT9zdO/Q1vaEKLqqQ=
-X-Received: by 2002:aca:edc8:: with SMTP id l191mr12597021oih.103.1561414837894;
- Mon, 24 Jun 2019 15:20:37 -0700 (PDT)
+        id S1726678AbfFXWV2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 18:21:28 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:52396 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726441AbfFXWV2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Jun 2019 18:21:28 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 36C45C0546D3;
+        Mon, 24 Jun 2019 22:21:16 +0000 (UTC)
+Received: from treble (ovpn-126-66.rdu2.redhat.com [10.10.126.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E553F5D71A;
+        Mon, 24 Jun 2019 22:21:09 +0000 (UTC)
+Date:   Mon, 24 Jun 2019 17:21:07 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, ast@kernel.org,
+        daniel@iogearbox.net, akpm@linux-foundation.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/3] notifier: Fix broken error handling pattern
+Message-ID: <20190624222107.wrmtww6b2be26wwl@treble>
+References: <20190624091843.859714294@infradead.org>
+ <20190624092109.745446564@infradead.org>
 MIME-Version: 1.0
-References: <1668247.RaJIPSxJUN@kreacher> <9906d02b-8c77-f2c8-7168-93ea444b950e@nvidia.com>
- <CAJZ5v0hdtXqoK84DpYtyMSCnkR9zOHFiUPAzWZDtkFmEjyWD1g@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hdtXqoK84DpYtyMSCnkR9zOHFiUPAzWZDtkFmEjyWD1g@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jun 2019 00:20:26 +0200
-Message-ID: <CAJZ5v0gGdXmgc_9r2rbiadq4e31hngpjYQ40QoC6C0z19da_hQ@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: PM: Skip devices in D0 for suspend-to-idle
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190624092109.745446564@infradead.org>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Mon, 24 Jun 2019 22:21:27 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 11:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Jun 24, 2019 at 2:43 PM Jon Hunter <jonathanh@nvidia.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On 13/06/2019 22:59, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-> > > attempted to avoid a problem with devices whose drivers want them to
-> > > stay in D0 over suspend-to-idle and resume, but it did not go as far
-> > > as it should with that.
-> > >
-> > > Namely, first of all, the power state of a PCI bridge with a
-> > > downstream device in D0 must be D0 (based on the PCI PM spec r1.2,
-> > > sec 6, table 6-1, if the bridge is not in D0, there can be no PCI
-> > > transactions on its secondary bus), but that is not actively enforced
-> > > during system-wide PM transitions, so use the skip_bus_pm flag
-> > > introduced by commit d491f2b75237 for that.
-> > >
-> > > Second, the configuration of devices left in D0 (whatever the reason)
-> > > during suspend-to-idle need not be changed and attempting to put them
-> > > into D0 again by force is pointless, so explicitly avoid doing that.
-> > >
-> > > Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
-> > > Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> >
-> > I have noticed a regression in both the mainline and -next branches on
-> > one of our boards when testing suspend. The bisect is point to this
-> > commit and reverting on top of mainline does fix the problem. So far I
-> > have not looked at this in close detail but kernel log is showing ...
->
-> Can you please collect a log like that, but with dynamic debug in
-> pci-driver.c enabled?
->
-> Note that reverting this commit is rather out of the question, so we
-> need to get to the bottom of the failure.
+On Mon, Jun 24, 2019 at 11:18:44AM +0200, Peter Zijlstra wrote:
+> The current notifiers have the following error handling pattern all
+> over the place:
+> 
+> 	int nr;
+> 
+> 	ret = __foo_notifier_call_chain(&chain, val_up, v, -1, &nr);
+> 	if (err & NOTIFIER_STOP_MASK)
 
-I suspect that there is a problem with the pm_suspend_via_firmware()
-check which returns 'false' on the affected board, but the platform
-actually removes power from devices left in D0 during suspend.
+s/err/ret/
 
-I guess it would be more appropriate to check something like
-pm_suspend_no_platform() which would return 'true' in the
-suspend-to-idle patch w/ ACPI.
+> 		__foo_notifier_call_chain(&chain, val_down, v, nr-1, NULL)
+> 
+> And aside from the endless repetition thereof, it is broken. Consider
+> blocking notifiers; both calls take and drop the rwsem, this means
+> that the notifier list can change in between the two calls, making @nr
+> meaningless.
+> 
+> Fix this by replacing all the __foo_notifier_call_chain() functions
+> with foo_notifier_call_chain_error() that embeds the above patter, but
+> ensures it is inside a single lock region.
+
+The name "notifier_call_chain_error()" seems confusing, it almost sounds
+like it's notifying an error code.  Then again, I can't really think of
+a more reasonably succinct name.
+
+> @@ -25,8 +25,23 @@ static int cpu_pm_notify(enum cpu_pm_eve
+>  	 * RCU know this.
+>  	 */
+>  	rcu_irq_enter_irqson();
+> -	ret = __atomic_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL,
+> -		nr_to_call, nr_calls);
+> +	ret = atomic_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL);
+> +	rcu_irq_exit_irqson();
+> +
+> +	return notifier_to_errno(ret);
+> +}
+> +
+> +static int cpu_pm_notify_error(enum cpu_pm_event event_up, enum cpu_pm_event event_down)
+> +{
+> +	int ret;
+> +
+> +	/*
+> +	 * __atomic_notifier_call_chain has a RCU read critical section, which
+
+__atomic_notifier_call_chain() no longer exists.
+
+> +	 * could be disfunctional in cpu idle. Copy RCU_NONIDLE code to let
+
+"dysfunctional"
+
+> @@ -156,43 +169,30 @@ int atomic_notifier_chain_unregister(str
+>  }
+>  EXPORT_SYMBOL_GPL(atomic_notifier_chain_unregister);
+>  
+> -/**
+> - *	__atomic_notifier_call_chain - Call functions in an atomic notifier chain
+> - *	@nh: Pointer to head of the atomic notifier chain
+> - *	@val: Value passed unmodified to notifier function
+> - *	@v: Pointer passed unmodified to notifier function
+> - *	@nr_to_call: See the comment for notifier_call_chain.
+> - *	@nr_calls: See the comment for notifier_call_chain.
+> - *
+> - *	Calls each function in a notifier chain in turn.  The functions
+> - *	run in an atomic context, so they must not block.
+> - *	This routine uses RCU to synchronize with changes to the chain.
+> - *
+> - *	If the return value of the notifier can be and'ed
+> - *	with %NOTIFY_STOP_MASK then atomic_notifier_call_chain()
+> - *	will return immediately, with the return value of
+> - *	the notifier function which halted execution.
+> - *	Otherwise the return value is the return value
+> - *	of the last notifier function called.
+> - */
+
+Why remove the useful comment?
+
+Ditto for the blocking, raw, srcu, comments.
+
+-- 
+Josh
