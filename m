@@ -2,119 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED73501E7
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 08:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058A7502A6
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 09:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726819AbfFXGGT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 02:06:19 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33835 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726542AbfFXGGS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 02:06:18 -0400
-Received: by mail-pl1-f195.google.com with SMTP id i2so6263557plt.1
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jun 2019 23:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aGcIyULDIj+/YCJKjZCul6zq9ZyFOh+SAi/ktfFmdnA=;
-        b=ojCRx10N1FWdtoFOzUCjMACQhavDUeLMd4dGW8VDGyit16iBmkUSKO2IAFGfq1Wmbt
-         0uRGTWOvvWsodOBMsw/OvECQDLwMM4B6HhJzGcLD5UbCSu6BmYUm4NczknhOIEj/IuRH
-         XtVJmMowfw5pB397ZN7ISh5oyHyDK3TU/4KAVg12oICmXL0IvNisLpwzbM9LGfjKCFV3
-         AmU2e1hmuxFrZhIYxwhYSIr3p0Qs66yiYKY2I7doKsqcZkBsgcCpRJmL61o9GJg/fFVT
-         BozhLSVASWxIsc0UwIXqdwjvHNQBC68j0zce2ZR7wOxuVHs4cqp5LPKI9Nda+PynZ5Ip
-         2xrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aGcIyULDIj+/YCJKjZCul6zq9ZyFOh+SAi/ktfFmdnA=;
-        b=QLxfP6tD3ow+UM4hBQlP24bpevqbQdbjWu6DJQvYGR0Yp96YR2jfR+fctOu97wwbd/
-         ubrcCk+m2zq0a02dRSOsTz67LtB4YBYSp82JVFfarjlFFiBGugXMBjkaO9AVCJ30GOA5
-         JnnH1xDjx419U3GNxW7MuxQRS77dT7DcLmqEkWoBRLKkL1zx3yceTEsVfG9ZD1aNF1mo
-         Gw13GIhQytkfGM7QW1ssa4FyzYxVKKbbMQzD+LEdUZswsUtGBz2hAcKJq40caKfeXxGe
-         8i0ALx+tyEBsu3qnxVegad8m8wc8kDN40J4QlCHGqCeT3RC5gbeSJ1+D/s7UYDWL/6dS
-         Ze4g==
-X-Gm-Message-State: APjAAAUk2cW0IE93cwgry2t2m77DuFmYHoA9XC+eGY6tmr58EIbLd7Fu
-        QY/9nRGGo1aqDQDc0PC3wU6DaXpykM4=
-X-Google-Smtp-Source: APXvYqwthf8PxT+L5Pi9Ju4TgVKwn2daZ1Xa+6cWzh6FDJ19THDBLX7OB8cN2dmP9iHMiWNEWVZ3Qw==
-X-Received: by 2002:a17:902:7787:: with SMTP id o7mr458356pll.120.1561356378089;
-        Sun, 23 Jun 2019 23:06:18 -0700 (PDT)
-Received: from localhost ([122.172.211.128])
-        by smtp.gmail.com with ESMTPSA id e10sm6598616pfi.153.2019.06.23.23.06.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 23:06:17 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 11:36:15 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     edubezval@gmail.com, linux-kernel@vger.kernel.org,
-        Keerthy <j-keerthy@ti.com>, Zhang Rui <rui.zhang@intel.com>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" <linux-pm@vger.kernel.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH 6/6] thermal/drivers/ti: Remove cooling device usage
-Message-ID: <20190624060615.ptdeejny75x44wue@vireshk-i7>
-References: <20190621132302.30414-1-daniel.lezcano@linaro.org>
- <20190621132302.30414-6-daniel.lezcano@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190621132302.30414-6-daniel.lezcano@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1727096AbfFXHAZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 03:00:25 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:12858 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727282AbfFXHAZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 03:00:25 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190624070022epoutp02aeabe11809c5c27408819f7c43132b17~rEE3c496Q3140131401epoutp02Q
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 07:00:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190624070022epoutp02aeabe11809c5c27408819f7c43132b17~rEE3c496Q3140131401epoutp02Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1561359622;
+        bh=gjOb94pyYvpO/imGBEoJBVAesPbCsDcNH0NJiUfAVno=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=gBTyaRm7fkRfIvlXNMvcOdrC5EoUcrG6XFX+qrnIJ2J1cK8E+8FzSjQKzxdWEYoIZ
+         wZWnwHieo4RkEtTaPtsSpRiDsunUY2wx9uePnG9G+GMywE4yRmwZ+WHPJdAdkO/RSj
+         LKLoB/ORsu3BHcpywVXwFHChJdf2wuA5CydbS9CE=
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.158]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190624070011epcas1p21937d6d1c96c66e4c069cf5d2a85770a~rEEttDfw01292512925epcas1p2l;
+        Mon, 24 Jun 2019 07:00:11 +0000 (GMT)
+X-AuditID: b6c32a36-ce1ff7000000102e-74-5d1074c7993a
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        67.CD.04142.7C4701D5; Mon, 24 Jun 2019 15:59:19 +0900 (KST)
+Mime-Version: 1.0
+Subject: Re: [PATCH v4 13/16] PM / devfreq: tegra: Support Tegra30
+Reply-To: myungjoo.ham@samsung.com
+From:   MyungJoo Ham <myungjoo.ham@samsung.com>
+To:     "digetx@gmail.com" <digetx@gmail.com>,
+        "janathanh@nvidia.com" <janathanh@nvidia.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20190624065919epcms1p1a366de5f455f5138c438d1da8151c12f@epcms1p1>
+Date:   Mon, 24 Jun 2019 15:59:19 +0900
+X-CMS-MailID: 20190624065919epcms1p1a366de5f455f5138c438d1da8151c12f
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjk+LIzCtJLcpLzFFi42LZdlhTV/d4iUCswbwD8hYvD2laXP/ynNVi
+        9cfHjBYzpv9hsri8aw6bxefeI4wWnV9msTmwe+ycdZfdo7f5HZtH35ZVjB6fN8kFsERl22Sk
+        JqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAHaCkUJaYUwoU
+        CkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKbAs0CtOzC0uzUvXS87PtTI0MDAyBSpMyM6YcGcl
+        Y8FTzorTX1ayNDA+Ye9i5OSQEDCROPRrEyuILSSwg1HiwFH1LkYODl4BQYm/O4RBwsICThLN
+        Py6yQZQoSTTc3McMEdeX6HiwjRHEZhPQldi64S4LiC0i0MAosX2mQxcjFwezwE5GiXdb7kPt
+        4pWY0f6UBcKWlti+fCsjhC0qcXP1W3YY+/2x+VBxEYnWe2eZIWxBiQc/dzPC9M6Y8h9qTrXE
+        temL2UGWSQi0MEr0rp4CVaQvcWbuSbCreQV8JaZ2/gFrYBFQlfj47THUMheJ/c/ugtUzC8hL
+        bH87hxnkeWYBTYn1u/QhShQldv6eywhzf8PG3+zobGYBPol3X3tYYeI75j1hgrDVJA7tXgJV
+        LyNxevpCqF88JF6c2Mc6gVFxFiKoZyE5YhbCEQsYmVcxiqUWFOempxYbFhghR+4mRnBa1DLb
+        wbjonM8hRgEORiUeXoEN/LFCrIllxZW5hxglOJiVRHiXJgrECvGmJFZWpRblxxeV5qQWH2I0
+        BYbFRGYp0eR8YMrOK4k3NDUyNja2MDE0MzU0VBLnjee+GSMkkJ5YkpqdmlqQWgTTx8TBKdXA
+        eDxr9sVini0/jlbFZGe9W8Bu9S/HR8j25c2zyudsLH6Kh05Tf/ElovbOFyWryY5aH312Rba1
+        bz0gL/DjpFHH3Vam2H71hMWHj86f6PJrfY4Cx3Szr0ELhcNZStUMvP9yljy+/LlWuspLk5cr
+        9Hr/kny9pIeXLuy+/1CFq4W94M+X0DU7jr0xVmIpzkg01GIuKk4EAIGly8ShAwAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190624065919epcms1p1a366de5f455f5138c438d1da8151c12f
+References: <CGME20190624065919epcms1p1a366de5f455f5138c438d1da8151c12f@epcms1p1>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-06-19, 15:23, Daniel Lezcano wrote:
-> The cpufreq_cooling_unregister() function uses now the policy to
-> unregister itself. The only purpose of the cooling device pointer is
-> to unregister the cpu cooling device.
+> On Thu, May 02, 2019 at 02:38:12AM +0300, Dmitry Osipenko wrote:
+> > The devfreq driver can be used on Tegra30 without any code change and
+> > it works perfectly fine, the default Tegra124 parameters are good enough
+> > for Tegra30.
+> > 
+> > Reviewed-by: Chanwoo Choi 
+> > Signed-off-by: Dmitry Osipenko 
+> > ---
+> >  drivers/devfreq/Kconfig         | 4 ++--
+> >  drivers/devfreq/tegra-devfreq.c | 1 +
+> >  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> As there is no more need of this pointer, remove it.
+> Acked-by: Thierry Reding 
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> index 217b1aae8b4f..170b70b6ec61 100644
-> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> @@ -41,7 +41,6 @@ struct ti_thermal_data {
->  	struct cpufreq_policy *policy;
->  	struct thermal_zone_device *ti_thermal;
->  	struct thermal_zone_device *pcb_tz;
-> -	struct thermal_cooling_device *cool_dev;
->  	struct ti_bandgap *bgp;
->  	enum thermal_device_mode mode;
->  	struct work_struct thermal_wq;
-> @@ -233,6 +232,7 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
->  {
->  	struct ti_thermal_data *data;
->  	struct device_node *np = bgp->dev->of_node;
-> +	struct thermal_cooling_device *cdev;
+> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> index 7dd46d4..b291803 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -93,8 +93,8 @@ config ARM_EXYNOS_BUS_DEVFREQ
+>  	  This does not yet operate with optimal voltages.
 >  
->  	/*
->  	 * We are assuming here that if one deploys the zone
-> @@ -256,9 +256,9 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
->  	}
->  
->  	/* Register cooling device */
-> -	data->cool_dev = cpufreq_cooling_register(data->policy);
-> -	if (IS_ERR(data->cool_dev)) {
-> -		int ret = PTR_ERR(data->cool_dev);
-> +	cdev = cpufreq_cooling_register(data->policy);
-> +	if (IS_ERR(cdev)) {
-> +		int ret = PTR_ERR(cdev);
->  		dev_err(bgp->dev, "Failed to register cpu cooling device %d\n",
->  			ret);
->  		cpufreq_cpu_put(data->policy);
+>  config ARM_TEGRA_DEVFREQ
+> -	tristate "Tegra DEVFREQ Driver"
+> -	depends on ARCH_TEGRA_124_SOC
+> +	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
+> +	depends on ARCH_TEGRA
+>  	select PM_OPP
+>  	help
+>  	  This adds the DEVFREQ driver for the Tegra family of SoCs.
 
-And this too..
+A question:
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Does this driver support Tegra20 as well?
+I'm asking this because ARCH_TEGRA includes ARCH_TEGRA_2x_SOC
+according to /drivers/soc/tegra/Kconfig.
 
--- 
-viresh
+Cheers,
+MyungJoo.
+
