@@ -2,133 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C3D51E22
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 00:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E0851EF0
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 01:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726678AbfFXWV2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 18:21:28 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:52396 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726441AbfFXWV2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Jun 2019 18:21:28 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 36C45C0546D3;
-        Mon, 24 Jun 2019 22:21:16 +0000 (UTC)
-Received: from treble (ovpn-126-66.rdu2.redhat.com [10.10.126.66])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E553F5D71A;
-        Mon, 24 Jun 2019 22:21:09 +0000 (UTC)
-Date:   Mon, 24 Jun 2019 17:21:07 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, ast@kernel.org,
-        daniel@iogearbox.net, akpm@linux-foundation.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Todd Brandt <todd.e.brandt@linux.intel.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/3] notifier: Fix broken error handling pattern
-Message-ID: <20190624222107.wrmtww6b2be26wwl@treble>
-References: <20190624091843.859714294@infradead.org>
- <20190624092109.745446564@infradead.org>
+        id S1728048AbfFXXJl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 19:09:41 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:58549 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728045AbfFXXJl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 19:09:41 -0400
+Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id d4c091cf0ca37d7c; Tue, 25 Jun 2019 01:09:37 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v2] PCI: PM: Skip devices in D0 for suspend-to-idle
+Date:   Tue, 25 Jun 2019 01:09:36 +0200
+Message-ID: <2287147.DxjcvLeq6l@kreacher>
+In-Reply-To: <CAJZ5v0gGdXmgc_9r2rbiadq4e31hngpjYQ40QoC6C0z19da_hQ@mail.gmail.com>
+References: <1668247.RaJIPSxJUN@kreacher> <CAJZ5v0hdtXqoK84DpYtyMSCnkR9zOHFiUPAzWZDtkFmEjyWD1g@mail.gmail.com> <CAJZ5v0gGdXmgc_9r2rbiadq4e31hngpjYQ40QoC6C0z19da_hQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190624092109.745446564@infradead.org>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Mon, 24 Jun 2019 22:21:27 +0000 (UTC)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 11:18:44AM +0200, Peter Zijlstra wrote:
-> The current notifiers have the following error handling pattern all
-> over the place:
+On Tuesday, June 25, 2019 12:20:26 AM CEST Rafael J. Wysocki wrote:
+> On Mon, Jun 24, 2019 at 11:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Mon, Jun 24, 2019 at 2:43 PM Jon Hunter <jonathanh@nvidia.com> wrote:
+> > >
+> > > Hi Rafael,
+> > >
+> > > On 13/06/2019 22:59, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> > > > attempted to avoid a problem with devices whose drivers want them to
+> > > > stay in D0 over suspend-to-idle and resume, but it did not go as far
+> > > > as it should with that.
+> > > >
+> > > > Namely, first of all, the power state of a PCI bridge with a
+> > > > downstream device in D0 must be D0 (based on the PCI PM spec r1.2,
+> > > > sec 6, table 6-1, if the bridge is not in D0, there can be no PCI
+> > > > transactions on its secondary bus), but that is not actively enforced
+> > > > during system-wide PM transitions, so use the skip_bus_pm flag
+> > > > introduced by commit d491f2b75237 for that.
+> > > >
+> > > > Second, the configuration of devices left in D0 (whatever the reason)
+> > > > during suspend-to-idle need not be changed and attempting to put them
+> > > > into D0 again by force is pointless, so explicitly avoid doing that.
+> > > >
+> > > > Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> > > > Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > > Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > >
+> > > I have noticed a regression in both the mainline and -next branches on
+> > > one of our boards when testing suspend. The bisect is point to this
+> > > commit and reverting on top of mainline does fix the problem. So far I
+> > > have not looked at this in close detail but kernel log is showing ...
+> >
+> > Can you please collect a log like that, but with dynamic debug in
+> > pci-driver.c enabled?
+> >
+> > Note that reverting this commit is rather out of the question, so we
+> > need to get to the bottom of the failure.
 > 
-> 	int nr;
+> I suspect that there is a problem with the pm_suspend_via_firmware()
+> check which returns 'false' on the affected board, but the platform
+> actually removes power from devices left in D0 during suspend.
 > 
-> 	ret = __foo_notifier_call_chain(&chain, val_up, v, -1, &nr);
-> 	if (err & NOTIFIER_STOP_MASK)
+> I guess it would be more appropriate to check something like
+> pm_suspend_no_platform() which would return 'true' in the
+> suspend-to-idle patch w/ ACPI.
 
-s/err/ret/
+So I wonder if the patch below makes any difference?
 
-> 		__foo_notifier_call_chain(&chain, val_down, v, nr-1, NULL)
-> 
-> And aside from the endless repetition thereof, it is broken. Consider
-> blocking notifiers; both calls take and drop the rwsem, this means
-> that the notifier list can change in between the two calls, making @nr
-> meaningless.
-> 
-> Fix this by replacing all the __foo_notifier_call_chain() functions
-> with foo_notifier_call_chain_error() that embeds the above patter, but
-> ensures it is inside a single lock region.
+---
+ drivers/pci/pci-driver.c |    8 ++++----
+ include/linux/suspend.h  |   26 ++++++++++++++++++++++++--
+ kernel/power/suspend.c   |    3 +++
+ 3 files changed, 31 insertions(+), 6 deletions(-)
 
-The name "notifier_call_chain_error()" seems confusing, it almost sounds
-like it's notifying an error code.  Then again, I can't really think of
-a more reasonably succinct name.
+Index: linux-pm/include/linux/suspend.h
+===================================================================
+--- linux-pm.orig/include/linux/suspend.h
++++ linux-pm/include/linux/suspend.h
+@@ -209,8 +209,9 @@ extern int suspend_valid_only_mem(suspen
+ 
+ extern unsigned int pm_suspend_global_flags;
+ 
+-#define PM_SUSPEND_FLAG_FW_SUSPEND	(1 << 0)
+-#define PM_SUSPEND_FLAG_FW_RESUME	(1 << 1)
++#define PM_SUSPEND_FLAG_FW_SUSPEND	BIT(0)
++#define PM_SUSPEND_FLAG_FW_RESUME	BIT(1)
++#define PM_SUSPEND_FLAG_NO_PLATFORM	BIT(2)
+ 
+ static inline void pm_suspend_clear_flags(void)
+ {
+@@ -227,6 +228,11 @@ static inline void pm_set_resume_via_fir
+ 	pm_suspend_global_flags |= PM_SUSPEND_FLAG_FW_RESUME;
+ }
+ 
++static inline void pm_set_suspend_no_platform(void)
++{
++	pm_suspend_global_flags |= PM_SUSPEND_FLAG_NO_PLATFORM;
++}
++
+ /**
+  * pm_suspend_via_firmware - Check if platform firmware will suspend the system.
+  *
+@@ -268,6 +274,22 @@ static inline bool pm_resume_via_firmwar
+ 	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_FW_RESUME);
+ }
+ 
++/**
++ * pm_suspend_no_platform - Check if platform may change device power states.
++ *
++ * To be called during system-wide power management transitions to sleep states
++ * or during the subsequent system-wide transitions back to the working state.
++ *
++ * Return 'true' if the power states of devices remain under full control of the
++ * kernel throughout the system-wide suspend and resume cycle in progress (that
++ * is, if a device is put into a certain power state during suspend, it can be
++ * expected to remain in that state during resume).
++ */
++static inline bool pm_suspend_no_platform(void)
++{
++	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_NO_PLATFORM);
++}
++
+ /* Suspend-to-idle state machnine. */
+ enum s2idle_states {
+ 	S2IDLE_STATE_NONE,      /* Not suspended/suspending. */
+Index: linux-pm/kernel/power/suspend.c
+===================================================================
+--- linux-pm.orig/kernel/power/suspend.c
++++ linux-pm/kernel/power/suspend.c
+@@ -493,6 +493,9 @@ int suspend_devices_and_enter(suspend_st
+ 
+ 	pm_suspend_target_state = state;
+ 
++	if (state == PM_SUSPEND_TO_IDLE)
++		pm_set_suspend_no_platform();
++
+ 	error = platform_suspend_begin(state);
+ 	if (error)
+ 		goto Close;
+Index: linux-pm/drivers/pci/pci-driver.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -870,7 +870,7 @@ static int pci_pm_suspend_noirq(struct d
+ 			pci_dev->bus->self->skip_bus_pm = true;
+ 	}
+ 
+-	if (pci_dev->skip_bus_pm && !pm_suspend_via_firmware()) {
++	if (pci_dev->skip_bus_pm && pm_suspend_no_platform()) {
+ 		dev_dbg(dev, "PCI PM: Skipped\n");
+ 		goto Fixup;
+ 	}
+@@ -925,10 +925,10 @@ static int pci_pm_resume_noirq(struct de
+ 	/*
+ 	 * In the suspend-to-idle case, devices left in D0 during suspend will
+ 	 * stay in D0, so it is not necessary to restore or update their
+-	 * configuration here and attempting to put them into D0 again may
+-	 * confuse some firmware, so avoid doing that.
++	 * configuration here and attempting to put them into D0 again is
++	 * pointless, so avoid doing that.
+ 	 */
+-	if (!pci_dev->skip_bus_pm || pm_suspend_via_firmware())
++	if (!(pci_dev->skip_bus_pm && pm_suspend_no_platform()))
+ 		pci_pm_default_resume_early(pci_dev);
+ 
+ 	pci_fixup_device(pci_fixup_resume_early, pci_dev);
 
-> @@ -25,8 +25,23 @@ static int cpu_pm_notify(enum cpu_pm_eve
->  	 * RCU know this.
->  	 */
->  	rcu_irq_enter_irqson();
-> -	ret = __atomic_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL,
-> -		nr_to_call, nr_calls);
-> +	ret = atomic_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL);
-> +	rcu_irq_exit_irqson();
-> +
-> +	return notifier_to_errno(ret);
-> +}
-> +
-> +static int cpu_pm_notify_error(enum cpu_pm_event event_up, enum cpu_pm_event event_down)
-> +{
-> +	int ret;
-> +
-> +	/*
-> +	 * __atomic_notifier_call_chain has a RCU read critical section, which
 
-__atomic_notifier_call_chain() no longer exists.
 
-> +	 * could be disfunctional in cpu idle. Copy RCU_NONIDLE code to let
-
-"dysfunctional"
-
-> @@ -156,43 +169,30 @@ int atomic_notifier_chain_unregister(str
->  }
->  EXPORT_SYMBOL_GPL(atomic_notifier_chain_unregister);
->  
-> -/**
-> - *	__atomic_notifier_call_chain - Call functions in an atomic notifier chain
-> - *	@nh: Pointer to head of the atomic notifier chain
-> - *	@val: Value passed unmodified to notifier function
-> - *	@v: Pointer passed unmodified to notifier function
-> - *	@nr_to_call: See the comment for notifier_call_chain.
-> - *	@nr_calls: See the comment for notifier_call_chain.
-> - *
-> - *	Calls each function in a notifier chain in turn.  The functions
-> - *	run in an atomic context, so they must not block.
-> - *	This routine uses RCU to synchronize with changes to the chain.
-> - *
-> - *	If the return value of the notifier can be and'ed
-> - *	with %NOTIFY_STOP_MASK then atomic_notifier_call_chain()
-> - *	will return immediately, with the return value of
-> - *	the notifier function which halted execution.
-> - *	Otherwise the return value is the return value
-> - *	of the last notifier function called.
-> - */
-
-Why remove the useful comment?
-
-Ditto for the blocking, raw, srcu, comments.
-
--- 
-Josh
