@@ -2,85 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A2E500DD
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 06:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA65501C8
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 08:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbfFXE5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 00:57:30 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36309 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726657AbfFXE5a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 00:57:30 -0400
-Received: by mail-pl1-f195.google.com with SMTP id k8so6186451plt.3
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jun 2019 21:57:29 -0700 (PDT)
+        id S1726483AbfFXGDj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 02:03:39 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33773 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726312AbfFXGDi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 02:03:38 -0400
+Received: by mail-pg1-f196.google.com with SMTP id m4so5903810pgk.0
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jun 2019 23:03:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=LzcRJpigxT5MGuTpMW9ctxhMBXABXFzOsOqSmkIMVZs=;
-        b=aBXS7Cm1olXy+laKPXiQxa30hxieGkALh5+gO8nLnUI5lyVhz/oD2UTscaPgIbqFbp
-         Y7Ffvd1JPoITsXzJqRKAFI9deCx9SlqjJH+MgVXINt0u76Dnpkk3bIR4gVcUYRMeqfpw
-         g03GE6AV2zMpAZB+sHIwbfg4fiqUHiOUgjOLrox+NP9N/MiP75LS0ZCpbFopzYWhYRvH
-         MfTajMnZITjGnwnXVe0GYFcym5RV7BZQ30gdEnWlwi+CZDHw7YrnieGZifKQ/QjA4z8v
-         6x4EfX9eX8E9HjA4hWkNEj+hEZxEXuxc8U4m+mx8ObPMA3OcHmiML+w2tLH6csDuTE25
-         qpVg==
+         :content-disposition:in-reply-to:user-agent;
+        bh=dNs4bFTn0f/H2512covQPvgW7xHEQrBSIemzlMYE1WU=;
+        b=F6gYtTDouoTcZyvItCkzcdGIm2GiI5ij2KNmjl/uLGOHVF2Mgm3DYbvhBuN+5OjeHL
+         gp6gGnmh2wXuboNfODnOsROpHwsUB9Ah54gRqCRbwzS+v36jwN8cRN7coJoZm1T8h5m9
+         Lc/SvxQO+ojDltrR1frfHPAqHVEaQ4rZzvi2puGHraCUF6e74PXvr3xPErsg6EpQr4yj
+         hLAjMEOKC+z12zOExSiI2StSVfgVkC8OuGmJS5f3b0R6Gbjp6VKG5Z39CCOrbIkpccjh
+         mSAPWAu7IbIkiDA0ajpEjHQorirY8MFMy+N2aZyiyn/PgVaFliemA83jUL/+xt4Y6rB7
+         zeew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=LzcRJpigxT5MGuTpMW9ctxhMBXABXFzOsOqSmkIMVZs=;
-        b=qEhfUbzzPuDik93h4P7WfXsq//TduJA7UX+fhNJAUlRAdGRG34kqoiWawJyqKYjkYs
-         KGHWzrqMeuHGknmkVMH0ETQZ5cV8sQzIqkkx5A1a2E33WlvLxmCorc/hkhtyWNhWIwN5
-         ijaVvrfgSG558UHiT0EKgTyZDmdsSy7mH1E4DJffbExjaTXmIOAgmAI/676SHdnoLr88
-         9TWILshZBWTadsQmzs0JcpG/Q/vDs2UTgFLb4rEQ0fJKD2a0vP5tifBDtURK6v66Aliu
-         QP6W9/ch+MkMfOrtpDGt7NkV/tpGUAvE9pXuOwF1sM/eLCPhucNuKRB+oC4DfCm4jilp
-         n6ow==
-X-Gm-Message-State: APjAAAXwvTHkyR5xKr9enaYqKJL48bjx4WtXNMMkFm5gMVLc42v11AiV
-        73t0BdpmgZpMdoXtTJ2UVe5CEw==
-X-Google-Smtp-Source: APXvYqwpkNtle9sTLmOxKKkYez6T2CQpCkhZX9e/+Shu8srXtG6COfcrFldWGtjRJbLpIz5bAo1G8g==
-X-Received: by 2002:a17:902:e287:: with SMTP id cf7mr54710956plb.32.1561352249158;
-        Sun, 23 Jun 2019 21:57:29 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dNs4bFTn0f/H2512covQPvgW7xHEQrBSIemzlMYE1WU=;
+        b=pnmFz8uOAcHKBhqegySeWFClhQvMzZVpm1kJC0MCtFNjUqa16D2ee8KFRNC1nyTIsJ
+         8HCBp3I2dv3B7EZbiwaaMRbgYzvazFpN40bpl55ybk7DAu2+EtAHg8eqhN+66JOT+aGD
+         /0nukMsgxRtyGh5TEowZ2tU9y+oEGJLPc/GwtqECuPB+FpymIq2u0kbmokeUSaWnznRh
+         htE8fpFfqBeC1HDcusevN8biCt3XEwBCHBtikB4ErsuFnQsYzR/DKLZKRrl5S5+BotCr
+         v0YoJQbMZqr+HicHBuvZ3Kwsie05klRD98UDg9y9OQ+k6T1YOdMWpJlyH53e+mdMvsFc
+         Uuww==
+X-Gm-Message-State: APjAAAX9SJ/Bs2HS69K/qcXegv7QMT+xM0I2zi54u70RW6bzwi8DuFEe
+        l9SMF2L3C2gJUve0uNjtUBJaoA==
+X-Google-Smtp-Source: APXvYqy9bO/usfvdFvRCWkxVVdZwwaK8oMRu4R8n9ullXNpcFe0FPzC2a9IPf+ONlr+KOyOJ5GZlLw==
+X-Received: by 2002:a63:dd53:: with SMTP id g19mr30047290pgj.3.1561356218023;
+        Sun, 23 Jun 2019 23:03:38 -0700 (PDT)
 Received: from localhost ([122.172.211.128])
-        by smtp.gmail.com with ESMTPSA id q4sm10420766pjq.27.2019.06.23.21.57.27
+        by smtp.gmail.com with ESMTPSA id bo20sm10925850pjb.23.2019.06.23.23.03.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 21:57:27 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 10:27:25 +0530
+        Sun, 23 Jun 2019 23:03:36 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 11:33:34 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>
-Cc:     kgene@kernel.org, krzk@kernel.org, rjw@rjwysocki.net,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RESEND,v2] cpufreq: s5pv210: Don't flood kernel log after
- cpufreq change
-Message-ID: <20190624045725.mckcpb5kvkug33p6@vireshk-i7>
-References: <20190621101043.10549-1-pawel.mikolaj.chmiel@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     edubezval@gmail.com, linux-kernel@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Keerthy <j-keerthy@ti.com>,
+        "open list:CPU FREQUENCY DRIVERS - ARM BIG LITTLE" 
+        <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>
+Subject: Re: [PATCH 2/6] thermal/drivers/cpu_cooling: Unregister with the
+ policy
+Message-ID: <20190624060334.kak2mjuou4napi4x@vireshk-i7>
+References: <20190621132302.30414-1-daniel.lezcano@linaro.org>
+ <20190621132302.30414-2-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190621101043.10549-1-pawel.mikolaj.chmiel@gmail.com>
+In-Reply-To: <20190621132302.30414-2-daniel.lezcano@linaro.org>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21-06-19, 12:10, Paweł Chmiel wrote:
-> This commit replaces printk with pr_debug, so we don't flood kernel log.
+On 21-06-19, 15:22, Daniel Lezcano wrote:
+> Currently the function cpufreq_cooling_register() returns a cooling
+> device pointer which is used back as a pointer to call the function
+> cpufreq_cooling_unregister(). Even if it is correct, it would make
+> sense to not leak the structure inside a cpufreq driver and keep the
+> code thermal code self-encapsulate. Moreover, that forces to add an
+> extra variable in each driver using this function.
 > 
-> Signed-off-by: Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Instead of passing the cooling device to unregister, pass the policy.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
-> Changes from v1:
->   - Added Acked-by
-> ---
->  drivers/cpufreq/s5pv210-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpufreq/arm_big_little.c               |  2 +-
+>  drivers/cpufreq/cpufreq.c                      |  2 +-
+>  drivers/thermal/cpu_cooling.c                  | 18 ++++++++++--------
+>  drivers/thermal/imx_thermal.c                  |  4 ++--
+>  .../thermal/ti-soc-thermal/ti-thermal-common.c |  2 +-
+>  include/linux/cpu_cooling.h                    |  6 +++---
+>  6 files changed, 18 insertions(+), 16 deletions(-)
 
-Applied. Thanks.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
