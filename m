@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F055B519E8
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 19:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556A051A0F
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 19:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727236AbfFXRqL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 13:46:11 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:34265 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726453AbfFXRqL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 13:46:11 -0400
-Received: by mail-qk1-f196.google.com with SMTP id t8so10438896qkt.1;
-        Mon, 24 Jun 2019 10:46:10 -0700 (PDT)
+        id S1732644AbfFXRwT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 13:52:19 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46136 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732637AbfFXRwT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 13:52:19 -0400
+Received: by mail-qt1-f195.google.com with SMTP id h21so15376380qtn.13;
+        Mon, 24 Jun 2019 10:52:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=zqvhv4+HocZvAFgQ886MQBeV76Way/6y27/WtDFCSes=;
-        b=vHR3m7Cw0aO++OPfO86qU7byPS7zK+S7TvkfG3a2HodsI2oq3SB6b6zb73f0m4wAM1
-         stii6+Wq5k+1gW2y52IOuohS6Ma3ZEvGxcMFkK5DFZDVcug8n4nRFmAAAGOw/t/W1Lvq
-         etn4ME0A2n6n2MdOFmak5Sr+NwCWDGyC9UATjJzWsYTC8xPRGn6m4gx4JdttXNzknnBP
-         UL/fbcMFmDgGWjk7f/C0WO38e8F4fQ2f21W2yNk3NYnYTeclq78/l3O38DXQpFcYaSAt
-         YLpa0kjKCNAz21XYCRhpIzGjGqVqYnH5YF31CmdQ/6Xpw8NHOTwbbCwpELMicNNS9+9o
-         cDPQ==
+        bh=DUehOKaKbmwsiJTMRsk7x0Iv9OZWXYb75DfFdFGEUAQ=;
+        b=X1FrshOAnVb06slfQ6Uzg7JUl3fP3SFdxfmUtnqk0qEHtZKlecuHFxCg1SPSo34/Ei
+         yp378qNJRQteKzkLgIHCqjGn80L3FI+XnK3jlQLLtSI+EndS9zrEOeBCEgs1RlXoTuzd
+         85dY+wOGPUW0di+v7Nmi25nW79KrIw3XBhNLR4fsWtc72C8tjlmUN3HNaOpjccRHfkIB
+         E3O4PQxSmh93ciC5ka0yYMT+3YlbL3NP8BjOTdkJSnmWn8MrKWgiz2w5taw16sS6yk9v
+         CAgo45v28go2LzKwArDaNyCa71NxZu9cwxheOY2vGgXvfk8MlLOYCG8+bTpzm6vk96xO
+         SMcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zqvhv4+HocZvAFgQ886MQBeV76Way/6y27/WtDFCSes=;
-        b=sfgFVk6HxbVuW4r58laowJNUn0iVbsh2SXkzZx4uCU6CNWT1qhsmUn+EGA6D08w7Hb
-         pdyLlTfZy6HLs8eOv04/5CIyeWxHrhxKY+a4hnfUGnb0ITgIxg3skMJycu8Nd25TKoZU
-         bW9SlxK/93xsv0E8UGdxctJRFTiHmItq2oXFOAWUX1gHTS37/n9zru2kkC3JFRoXxNYR
-         18xhcWcRWC+1UvvTK06Wq8Wm6Tgz2Cilb7aBe1fQT+uK9GAQlb7tp6jKpV61YcuC/8Q6
-         YPwRlLRrFQ21Dreb+ZZM2yseNcmih5Qr02oQJCl/CgRKy82qr71b/BXUkOEcY80wc4Ll
-         y71w==
-X-Gm-Message-State: APjAAAVHOkjtixWIHIt7DGkqC5xQx6Fchqns6BqWUN81ANMkQQFQJpet
-        3ARn6l8WNOK97sRp4XM4Yrkq+7Sp
-X-Google-Smtp-Source: APXvYqxX0bKL1ZZp233OQnZs7tJk5Ha00oreIjI+nAb4bDv2XkvCQ630hdwQSisX+Y/ep+WSTHRs+Q==
-X-Received: by 2002:a37:9c16:: with SMTP id f22mr121696273qke.261.1561398369951;
-        Mon, 24 Jun 2019 10:46:09 -0700 (PDT)
+        bh=DUehOKaKbmwsiJTMRsk7x0Iv9OZWXYb75DfFdFGEUAQ=;
+        b=qHIIIcgQaimm8wyIFWbvINGlZNx/vX1Ju1Prmd6wyYNbkRfLH1IhmOs9PIwuAoHIUD
+         s/T8G8HhwOrQBcwvcHiDDRBSM220KNyZB3V1KqlTYCLomV4Gs0FaUfbJoMNbTwBTQtba
+         /bWHVb+88Q/IcJNbM/uY3C44nVkYbNsd3GtXdsIaEAKwGNo1d01PXsNswyZXG9q/43B1
+         Y7aFIpOzF77zI1gW/rlpx9l5GdFtUviphCKm9IF5hwMF7LlnhUSMLiCZrJL7FH3WZ3n+
+         UKbN2W3xyxBt+dXkicUFFyD4+DoOBeM9pa59NPvi/S1ns0Hwy5LUYDrFzye1PQqtMS6V
+         9NZw==
+X-Gm-Message-State: APjAAAW/hkxQnzVRSmU84Rz1DXYmI6NUwS12sMcyquWOQjDRYwmB7XPe
+        uBdh7/xhT0qfcCSIJJyq1MQ=
+X-Google-Smtp-Source: APXvYqzjCnUylz9GQtg/dNMrIvqiSPb+C4zRkESgjrcIohNLwXW1smZFNd7A9eXuk9ZgS2LyYvrDnw==
+X-Received: by 2002:ac8:520e:: with SMTP id r14mr1661289qtn.50.1561398737711;
+        Mon, 24 Jun 2019 10:52:17 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:480::2c48])
-        by smtp.gmail.com with ESMTPSA id j79sm6894214qke.112.2019.06.24.10.46.08
+        by smtp.gmail.com with ESMTPSA id x1sm5660776qkj.22.2019.06.24.10.52.16
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jun 2019 10:46:08 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 10:46:07 -0700
+        Mon, 24 Jun 2019 10:52:16 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 10:52:15 -0700
 From:   Tejun Heo <tj@kernel.org>
 To:     Patrick Bellasi <patrick.bellasi@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -63,59 +63,95 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Steve Muckle <smuckle@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Alessio Balsini <balsini@android.com>
-Subject: Re: [PATCH v10 13/16] sched/core: uclamp: Propagate parent clamps
-Message-ID: <20190624174607.GQ657710@devbig004.ftw2.facebook.com>
+Subject: Re: [PATCH v10 12/16] sched/core: uclamp: Extend CPU's cgroup
+ controller
+Message-ID: <20190624175215.GR657710@devbig004.ftw2.facebook.com>
 References: <20190621084217.8167-1-patrick.bellasi@arm.com>
- <20190621084217.8167-14-patrick.bellasi@arm.com>
- <20190622150750.GN657710@devbig004.ftw2.facebook.com>
- <20190624173405.enrxqalaqinbgsut@e110439-lin>
+ <20190621084217.8167-13-patrick.bellasi@arm.com>
+ <20190622150332.GM657710@devbig004.ftw2.facebook.com>
+ <20190624172906.3d3w6352ji4izjgo@e110439-lin>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190624173405.enrxqalaqinbgsut@e110439-lin>
+In-Reply-To: <20190624172906.3d3w6352ji4izjgo@e110439-lin>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello, Patrick.
+Hey, Patrick.
 
-On Mon, Jun 24, 2019 at 06:34:05PM +0100, Patrick Bellasi wrote:
-> > On Fri, Jun 21, 2019 at 09:42:14AM +0100, Patrick Bellasi wrote:
-> > > Since it can be interesting for userspace, e.g. system management
-> > > software, to know exactly what the currently propagated/enforced
-> > > configuration is, the effective clamp values are exposed to user-space
-> > > by means of a new pair of read-only attributes
-> > > cpu.util.{min,max}.effective.
+On Mon, Jun 24, 2019 at 06:29:06PM +0100, Patrick Bellasi wrote:
+> > I kinda wonder whether the term bandwidth is a bit confusing because
+> > it's also used for cpu.max/min.  Would just calling it frequency be
+> > clearer?
+> 
+> Maybe I should find a better way to express the concept above.
+> 
+> I agree that bandwidth is already used by cpu.{max,min}, what I want
+> to call out is that clamps allows to enrich that concept.
+> 
+> By hinting the scheduler on min/max required utilization we can better
+> defined the amount of actual CPU cycles required/allowed.
+> That's a bit more precise bandwidth control compared to just rely on
+> temporal runnable/period limits.
+
+I see.  I wonder whether it's overloading the same term too subtly
+tho.  It's great to document how they interact but it *might* be
+easier for readers if a different term is used even if the meaning is
+essentially the same.  Anyways, it's a nitpick.  Please feel free to
+ignore.
+
+> > > +	tg = css_tg(of_css(of));
+> > > +	if (tg == &root_task_group) {
+> > > +		ret = -EINVAL;
+> > > +		goto out;
+> > > +	}
 > > 
-> > Can we not add the effective interface file for now?
+> > I don't think you need the above check.
 > 
-> You mean just the (read-only) user-space API right?
+> Don't we want to forbid attributes tuning from the root group?
 
-Yeah.
+Yeah, that's enforced by NOT_ON_ROOT flag, right?
 
-> I found it quite convenient, even just for debugging.
-> Moreover it allows a container to know what it's exactly getting...
-
-I fully agree.
-
-> > I don't think it's a bad idea but would like to think more about it.
-> > For cpuset, it was needed because configuration was so interwoven
-> > with the effective masks, but we don't generally do this for other
-> > min/max or weight knobs, all of which have effective hierarchical
-> > values and I'm not quite sure about adding .effective for all of
-> > them.
-> > It could be that that's what we end up doing eventually but
-> > I'd like to think a bit more about it.
+> > So, uclamp.max limits the maximum freq% can get and uclamp.min limits
+> > hte maximum freq% protection can get in the subtree.  Let's say
+> > uclamp.max is 50% and uclamp.min is 100%.
 > 
-> ... but I see your point and, since it's not strictly required, I
-> think we can drop it in v11. Will check better if it's of any use
-> apart from debugging/testing support.
+> That's not possible, in the current implementation we always enforce
+> the limit (uclamp.max) to be _not smaller_ then the protection
+> (uclamp.min).
+> 
+> Indeed, in principle, it does not make sense to ask for a minimum
+> utilization (i.e. frequency boosting) which is higher then the
+> maximum allowed utilization (i.e. frequency capping).
 
-Yeah, I just wanna figure out a plan which works for other controllers
-too.  It could be that the right thing to do is just adding .effective
-to everything but idk I need to think more about it.
+Yeah, I'm trying to explain actually it does.
+
+> > It means that protection is not limited but the actual freq% is
+> > limited upto 50%, which isn't necessarily invalid.
+> > For a simple example, a user might be saying
+> > that they want to get whatever protection they can get from its parent
+> > but wanna limit eventual freq at 50% and it isn't too difficult to
+> > imagine cases where the two knobs are configured separately especially
+> > configuration is being managed hierarchically / automatically.
+> 
+> That's not my understanding, in v10 by default when we create a
+> subgroup we assign it uclamp.min=0%, meaning that we don't boost
+> frequencies.
+> 
+> It seems instead that you are asking to set uclamp.min=100% by
+> default, so that the effective value will give us whatever the father
+> allow. Is that correct?
+
+No, the defaults are fine.  I'm trying to say that min/max
+configurations don't need to be coupled like this and there are valid
+use cases where the configured min is higher than max when
+configurations are nested and managed automatically.
+
+Limits always trump protection in effect of course but please don't
+limit what can be configured.
 
 Thanks.
 
