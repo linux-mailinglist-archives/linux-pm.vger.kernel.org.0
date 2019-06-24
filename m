@@ -2,669 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F745059A
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 11:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380EC50592
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 11:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727678AbfFXJZA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 05:25:00 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:42246 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727537AbfFXJZA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 05:25:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=t+NWcpIq2t5tFitqwb+rHdm0mFL7PHUZ9sOhyagF8Hg=; b=WilsIw38sU+nqN0OsUPFG/VRm7
-        XRWDCL1SXw+gm6eytlyaHL2NcPnuN0kK80vz7If4P/ZrYoVZbW2oE5LsV6+TqFN2/MqBFMBm3t8jN
-        s37KJa7K8f7Jg5VJeGXh0ab4cUcR2Q0XS5x0KlujHtnf2zrgauCYQavTKWmcANSYYSqMuVmRXVS45
-        RWv2a0zUM1k6SYbnO2+O/9OnjhmWY3lNmBZbbKq7Vw5CBm5OAcDFOL6Mt7FCN+RM12MmeKkRiSAp6
-        EZHjA9jgbCwCQO/Q+FlCUG83vF3rXkrSNm2kAajw8MbSrFRrnFHyhtS5JrIC7ECU/ajR5Ofd9sods
-        v9nuFoDw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hfLCm-0006uy-Lu; Mon, 24 Jun 2019 09:24:04 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 52F9F203C05DA; Mon, 24 Jun 2019 11:24:02 +0200 (CEST)
-Message-Id: <20190624092109.745446564@infradead.org>
-User-Agent: quilt/0.65
-Date:   Mon, 24 Jun 2019 11:18:44 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        pmladek@suse.com, ast@kernel.org, daniel@iogearbox.net,
-        akpm@linux-foundation.org, peterz@infradead.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Todd Brandt <todd.e.brandt@linux.intel.com>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 1/3] notifier: Fix broken error handling pattern
-References: <20190624091843.859714294@infradead.org>
+        id S1726399AbfFXJWZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 05:22:25 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:36914 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726438AbfFXJWY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 05:22:24 -0400
+Received: by mail-wm1-f68.google.com with SMTP id f17so12574881wme.2
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 02:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=upqzr++4pV0epbK1I6skVVAXoVBerrxAHXkeSCHSU9w=;
+        b=GJmL+vFGee+lkPIC2bbNXfeXklIi3mC/CvwiZgviSE/jfuo1elMGXt9a8Nd0pplcGu
+         2kd1BjHkITqAgGueRvMbIAdOALRYm5OvqgPScckiKF6BBmxG331Pczafjq9u/jF4X+J+
+         VrZdzT/BotQ+0PZIPBfDQlDqRRtpVJsRmLMQK0AkrDIa+nW/8FSvzjw2SyU1InQmDBH0
+         FVH3Ouxn7UAzeZHr59zkM3FgC06MEk1v0jSSt1G+C+JvykClKfTs4p1e7TS00AOmmisV
+         +fXU2TTzo2Xv0vpJIrOEvsy23ZzWs9grfBPsshygl4N/4AhuYngKQfc4X7dMISD1I+E9
+         rg/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=upqzr++4pV0epbK1I6skVVAXoVBerrxAHXkeSCHSU9w=;
+        b=eWlFgUxlIyvPaV4GmfcnTYIHoPCZZ1enX3d8c0LSexUvVCR/20e9aRkRXe5B9wV1pS
+         yrNQodpjZ+7T+eZn7r/ot0U/FAdsYUNR2Lbz+67xVX2QGodYwonHmUFmL5NhSA9CidvV
+         w2Md16/kRTulCEoz1wcpuzZj+m7LBrcINAcuIwxl4lNWtkHLEAMcjr4nUyjAJ+BJUeEE
+         mLHjkUPtXeve/08qJ01ds3h/yXHjNJkkkNjVoc/CwJnweFa81kQ8HJCg/TSeNxWD4kks
+         xXQPS1D/xrckm7RlYG10l1tZa7MhHy953oS4BnqcnRaAQpQVu22qWDV7gXlg1qrig3gO
+         i07Q==
+X-Gm-Message-State: APjAAAV2lEUysz6Fa3XGMfVI7Rho+nGw16xIs400ORH0l7cjPmsZAgYY
+        lXmdCAPZHwQXJB8jVOyZB4ewF5bTec0=
+X-Google-Smtp-Source: APXvYqzPk6wI//2JEwZ14jSW4qb4i313SmSv78OwX3nlzuwRYTZ5VHLzs8+bUskbNhtF3GklLtMzSQ==
+X-Received: by 2002:a1c:a709:: with SMTP id q9mr14502909wme.22.1561368141007;
+        Mon, 24 Jun 2019 02:22:21 -0700 (PDT)
+Received: from [192.168.0.41] (209.94.129.77.rev.sfr.net. [77.129.94.209])
+        by smtp.googlemail.com with ESMTPSA id t1sm12868020wra.74.2019.06.24.02.22.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Jun 2019 02:22:20 -0700 (PDT)
+Subject: Re: [PATCH 1/6] cpufreq: Use existing stub functions instead of
+ IS_ENABLED macro
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>
+References: <20190621132302.30414-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0j0q+Z+FRpVuj39ML_c5ijo-veMMMSANdoDz1ZxAK3RgQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <b817a599-6564-b3d0-9c91-59c3fd5b5eb1@linaro.org>
+Date:   Mon, 24 Jun 2019 11:22:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CAJZ5v0j0q+Z+FRpVuj39ML_c5ijo-veMMMSANdoDz1ZxAK3RgQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The current notifiers have the following error handling pattern all
-over the place:
+On 22/06/2019 11:12, Rafael J. Wysocki wrote:
+> On Fri, Jun 21, 2019 at 3:23 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> The functions stub already exist for the condition the IS_ENABLED
+>> is trying to avoid.
+>>
+>> Remove the IS_ENABLED macros as they are pointless.
+> 
+> AFAICS, the IS_ENABLED checks are an optimization to avoid generating
+> pointless code (including a branch) in case CONFIG_CPU_THERMAL is not
+> set.
+> 
+> Why do you think that it is not useful?
 
-	int nr;
+I agree but I'm not a big fan of IS_ENABLED macros in the code when it
+is possible to avoid them.
 
-	ret = __foo_notifier_call_chain(&chain, val_up, v, -1, &nr);
-	if (err & NOTIFIER_STOP_MASK)
-		__foo_notifier_call_chain(&chain, val_down, v, nr-1, NULL)
+What about adding a stub for that like:
 
-And aside from the endless repetition thereof, it is broken. Consider
-blocking notifiers; both calls take and drop the rwsem, this means
-that the notifier list can change in between the two calls, making @nr
-meaningless.
+#ifdef CPU_THERMAL
+static inline int cpufreq_is_cooling_dev(struct cpufreq_driver *drv)
+{
+	return drv->flags & CPUFREQ_IS_COOLING_DEV;
+}
+#else
+static inline int cpufreq_is_cooling_dev(struct cpufreq_driver *drv)
+{
+	return 0;
+}
+#endif
 
-Fix this by replacing all the __foo_notifier_call_chain() functions
-with foo_notifier_call_chain_error() that embeds the above patter, but
-ensures it is inside a single lock region.
+?
 
-XXX: It is probably still broken for the RCU (atomic, src) users
-(cpu_pm_notifier).
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>  drivers/cpufreq/cpufreq.c | 6 ++----
+>>  1 file changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index 85ff958e01f1..7c72f7d3509c 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -1378,8 +1378,7 @@ static int cpufreq_online(unsigned int cpu)
+>>         if (cpufreq_driver->ready)
+>>                 cpufreq_driver->ready(policy);
+>>
+>> -       if (IS_ENABLED(CONFIG_CPU_THERMAL) &&
+>> -           cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV)
+>> +       if (cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV)
+>>                 policy->cdev = of_cpufreq_cooling_register(policy);
+>>
+>>         pr_debug("initialization complete\n");
+>> @@ -1469,8 +1468,7 @@ static int cpufreq_offline(unsigned int cpu)
+>>                 goto unlock;
+>>         }
+>>
+>> -       if (IS_ENABLED(CONFIG_CPU_THERMAL) &&
+>> -           cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV) {
+>> +       if (cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV) {
+>>                 cpufreq_cooling_unregister(policy->cdev);
+>>                 policy->cdev = NULL;
+>>         }
+>> --
+>> 2.17.1
+>>
 
-Note: software_resume() error handling was broken afaict.
 
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Sam Protsenko <semen.protsenko@linaro.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alexios Zavras <alexios.zavras@intel.com>
-Cc: Allison Randal <allison@lohutok.net>
-Cc: Vasily Averin <vvs@virtuozzo.com>
-Cc: Todd Brandt <todd.e.brandt@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- include/linux/notifier.h           |   17 ++-
- kernel/cpu_pm.c                    |   51 +++++------
- kernel/notifier.c                  |  159 +++++++++++++------------------------
- kernel/power/hibernate.c           |   26 ++----
- kernel/power/main.c                |    8 -
- kernel/power/power.h               |    3 
- kernel/power/suspend.c             |   14 +--
- kernel/power/user.c                |   14 ---
- tools/power/pm-graph/sleepgraph.py |    2 
- 9 files changed, 118 insertions(+), 176 deletions(-)
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
---- a/include/linux/notifier.h
-+++ b/include/linux/notifier.h
-@@ -165,20 +165,21 @@ extern int srcu_notifier_chain_unregiste
- 
- extern int atomic_notifier_call_chain(struct atomic_notifier_head *nh,
- 		unsigned long val, void *v);
--extern int __atomic_notifier_call_chain(struct atomic_notifier_head *nh,
--	unsigned long val, void *v, int nr_to_call, int *nr_calls);
- extern int blocking_notifier_call_chain(struct blocking_notifier_head *nh,
- 		unsigned long val, void *v);
--extern int __blocking_notifier_call_chain(struct blocking_notifier_head *nh,
--	unsigned long val, void *v, int nr_to_call, int *nr_calls);
- extern int raw_notifier_call_chain(struct raw_notifier_head *nh,
- 		unsigned long val, void *v);
--extern int __raw_notifier_call_chain(struct raw_notifier_head *nh,
--	unsigned long val, void *v, int nr_to_call, int *nr_calls);
- extern int srcu_notifier_call_chain(struct srcu_notifier_head *nh,
- 		unsigned long val, void *v);
--extern int __srcu_notifier_call_chain(struct srcu_notifier_head *nh,
--	unsigned long val, void *v, int nr_to_call, int *nr_calls);
-+
-+extern int atomic_notifier_call_chain_error(struct atomic_notifier_head *nh,
-+		unsigned long val_up, unsigned long val_down, void *v);
-+extern int blocking_notifier_call_chain_error(struct blocking_notifier_head *nh,
-+		unsigned long val_up, unsigned long val_down, void *v);
-+extern int raw_notifier_call_chain_error(struct raw_notifier_head *nh,
-+		unsigned long val_up, unsigned long val_down, void *v);
-+extern int srcu_notifier_call_chain_error(struct srcu_notifier_head *nh,
-+		unsigned long val_up, unsigned long val_down, void *v);
- 
- #define NOTIFY_DONE		0x0000		/* Don't care */
- #define NOTIFY_OK		0x0001		/* Suits me */
---- a/kernel/cpu_pm.c
-+++ b/kernel/cpu_pm.c
-@@ -15,7 +15,7 @@
- 
- static ATOMIC_NOTIFIER_HEAD(cpu_pm_notifier_chain);
- 
--static int cpu_pm_notify(enum cpu_pm_event event, int nr_to_call, int *nr_calls)
-+static int cpu_pm_notify(enum cpu_pm_event event)
- {
- 	int ret;
- 
-@@ -25,8 +25,23 @@ static int cpu_pm_notify(enum cpu_pm_eve
- 	 * RCU know this.
- 	 */
- 	rcu_irq_enter_irqson();
--	ret = __atomic_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL,
--		nr_to_call, nr_calls);
-+	ret = atomic_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL);
-+	rcu_irq_exit_irqson();
-+
-+	return notifier_to_errno(ret);
-+}
-+
-+static int cpu_pm_notify_error(enum cpu_pm_event event_up, enum cpu_pm_event event_down)
-+{
-+	int ret;
-+
-+	/*
-+	 * __atomic_notifier_call_chain has a RCU read critical section, which
-+	 * could be disfunctional in cpu idle. Copy RCU_NONIDLE code to let
-+	 * RCU know this.
-+	 */
-+	rcu_irq_enter_irqson();
-+	ret = atomic_notifier_call_chain_error(&cpu_pm_notifier_chain, event_up, event_down, NULL);
- 	rcu_irq_exit_irqson();
- 
- 	return notifier_to_errno(ret);
-@@ -80,18 +95,7 @@ EXPORT_SYMBOL_GPL(cpu_pm_unregister_noti
-  */
- int cpu_pm_enter(void)
- {
--	int nr_calls;
--	int ret = 0;
--
--	ret = cpu_pm_notify(CPU_PM_ENTER, -1, &nr_calls);
--	if (ret)
--		/*
--		 * Inform listeners (nr_calls - 1) about failure of CPU PM
--		 * PM entry who are notified earlier to prepare for it.
--		 */
--		cpu_pm_notify(CPU_PM_ENTER_FAILED, nr_calls - 1, NULL);
--
--	return ret;
-+	return cpu_pm_notify_error(CPU_PM_ENTER, CPU_PM_ENTER_FAILED);
- }
- EXPORT_SYMBOL_GPL(cpu_pm_enter);
- 
-@@ -109,7 +113,7 @@ EXPORT_SYMBOL_GPL(cpu_pm_enter);
-  */
- int cpu_pm_exit(void)
- {
--	return cpu_pm_notify(CPU_PM_EXIT, -1, NULL);
-+	return cpu_pm_notify(CPU_PM_EXIT);
- }
- EXPORT_SYMBOL_GPL(cpu_pm_exit);
- 
-@@ -131,18 +135,7 @@ EXPORT_SYMBOL_GPL(cpu_pm_exit);
-  */
- int cpu_cluster_pm_enter(void)
- {
--	int nr_calls;
--	int ret = 0;
--
--	ret = cpu_pm_notify(CPU_CLUSTER_PM_ENTER, -1, &nr_calls);
--	if (ret)
--		/*
--		 * Inform listeners (nr_calls - 1) about failure of CPU cluster
--		 * PM entry who are notified earlier to prepare for it.
--		 */
--		cpu_pm_notify(CPU_CLUSTER_PM_ENTER_FAILED, nr_calls - 1, NULL);
--
--	return ret;
-+	return cpu_pm_notify_enter(CPU_CLUSTER_PM_ENTER, CPU_CLUSTER_ENTER_FAILED);
- }
- EXPORT_SYMBOL_GPL(cpu_cluster_pm_enter);
- 
-@@ -163,7 +156,7 @@ EXPORT_SYMBOL_GPL(cpu_cluster_pm_enter);
-  */
- int cpu_cluster_pm_exit(void)
- {
--	return cpu_pm_notify(CPU_CLUSTER_PM_EXIT, -1, NULL);
-+	return cpu_pm_notify(CPU_CLUSTER_PM_EXIT);
- }
- EXPORT_SYMBOL_GPL(cpu_cluster_pm_exit);
- 
---- a/kernel/notifier.c
-+++ b/kernel/notifier.c
-@@ -106,6 +106,19 @@ static int notifier_call_chain(struct no
- }
- NOKPROBE_SYMBOL(notifier_call_chain);
- 
-+static int notifier_call_chain_error(struct notifier_block **nl,
-+				     unsigned long val_up, unsigned long val_down,
-+				     void *v)
-+{
-+	int ret, nr = 0;
-+
-+	ret = notifier_call_chain(nl, val_up, v, -1, &nr);
-+	if (ret & NOTIFY_STOP_MASK)
-+		notifier_call_chain(nl, val_down, v, nr-1, NULL);
-+
-+	return ret;
-+}
-+
- /*
-  *	Atomic notifier chain routines.  Registration and unregistration
-  *	use a spinlock, and call_chain is synchronized by RCU (no locks).
-@@ -156,43 +169,30 @@ int atomic_notifier_chain_unregister(str
- }
- EXPORT_SYMBOL_GPL(atomic_notifier_chain_unregister);
- 
--/**
-- *	__atomic_notifier_call_chain - Call functions in an atomic notifier chain
-- *	@nh: Pointer to head of the atomic notifier chain
-- *	@val: Value passed unmodified to notifier function
-- *	@v: Pointer passed unmodified to notifier function
-- *	@nr_to_call: See the comment for notifier_call_chain.
-- *	@nr_calls: See the comment for notifier_call_chain.
-- *
-- *	Calls each function in a notifier chain in turn.  The functions
-- *	run in an atomic context, so they must not block.
-- *	This routine uses RCU to synchronize with changes to the chain.
-- *
-- *	If the return value of the notifier can be and'ed
-- *	with %NOTIFY_STOP_MASK then atomic_notifier_call_chain()
-- *	will return immediately, with the return value of
-- *	the notifier function which halted execution.
-- *	Otherwise the return value is the return value
-- *	of the last notifier function called.
-- */
--int __atomic_notifier_call_chain(struct atomic_notifier_head *nh,
--				 unsigned long val, void *v,
--				 int nr_to_call, int *nr_calls)
-+int atomic_notifier_call_chain_error(struct atomic_notifier_head *nh,
-+		unsigned long val_up, unsigned long val_down, void *v)
- {
- 	int ret;
- 
- 	rcu_read_lock();
--	ret = notifier_call_chain(&nh->head, val, v, nr_to_call, nr_calls);
-+	ret = notifier_call_chain_error(&nh->head, val_up, val_down, v);
- 	rcu_read_unlock();
-+
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(__atomic_notifier_call_chain);
--NOKPROBE_SYMBOL(__atomic_notifier_call_chain);
-+EXPORT_SYMBOL_GPL(atomic_notifier_call_chain_error);
-+NOKPROBE_SYMBOL(atomic_notifier_call_chain_error);
- 
- int atomic_notifier_call_chain(struct atomic_notifier_head *nh,
- 			       unsigned long val, void *v)
- {
--	return __atomic_notifier_call_chain(nh, val, v, -1, NULL);
-+	int ret;
-+
-+	rcu_read_lock();
-+	ret = notifier_call_chain(&nh->head, val, v, -1, NULL);
-+	rcu_read_unlock();
-+
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(atomic_notifier_call_chain);
- NOKPROBE_SYMBOL(atomic_notifier_call_chain);
-@@ -285,27 +285,8 @@ int blocking_notifier_chain_unregister(s
- }
- EXPORT_SYMBOL_GPL(blocking_notifier_chain_unregister);
- 
--/**
-- *	__blocking_notifier_call_chain - Call functions in a blocking notifier chain
-- *	@nh: Pointer to head of the blocking notifier chain
-- *	@val: Value passed unmodified to notifier function
-- *	@v: Pointer passed unmodified to notifier function
-- *	@nr_to_call: See comment for notifier_call_chain.
-- *	@nr_calls: See comment for notifier_call_chain.
-- *
-- *	Calls each function in a notifier chain in turn.  The functions
-- *	run in a process context, so they are allowed to block.
-- *
-- *	If the return value of the notifier can be and'ed
-- *	with %NOTIFY_STOP_MASK then blocking_notifier_call_chain()
-- *	will return immediately, with the return value of
-- *	the notifier function which halted execution.
-- *	Otherwise the return value is the return value
-- *	of the last notifier function called.
-- */
--int __blocking_notifier_call_chain(struct blocking_notifier_head *nh,
--				   unsigned long val, void *v,
--				   int nr_to_call, int *nr_calls)
-+int blocking_notifier_call_chain_error(struct blocking_notifier_head *nh,
-+		unsigned long val_up, unsigned long val_down, void *v)
- {
- 	int ret = NOTIFY_DONE;
- 
-@@ -316,18 +297,29 @@ int __blocking_notifier_call_chain(struc
- 	 */
- 	if (rcu_access_pointer(nh->head)) {
- 		down_read(&nh->rwsem);
--		ret = notifier_call_chain(&nh->head, val, v, nr_to_call,
--					nr_calls);
-+		ret = notifier_call_chain_error(&nh->head, val_up, val_down, v);
- 		up_read(&nh->rwsem);
- 	}
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(__blocking_notifier_call_chain);
-+EXPORT_SYMBOL_GPL(blocking_notifier_call_chain_error);
- 
- int blocking_notifier_call_chain(struct blocking_notifier_head *nh,
- 		unsigned long val, void *v)
- {
--	return __blocking_notifier_call_chain(nh, val, v, -1, NULL);
-+	int ret = NOTIFY_DONE;
-+
-+	/*
-+	 * We check the head outside the lock, but if this access is
-+	 * racy then it does not matter what the result of the test
-+	 * is, we re-check the list after having taken the lock anyway:
-+	 */
-+	if (rcu_access_pointer(nh->head)) {
-+		down_read(&nh->rwsem);
-+		ret = notifier_call_chain(&nh->head, val, v, -1, NULL);
-+		up_read(&nh->rwsem);
-+	}
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(blocking_notifier_call_chain);
- 
-@@ -370,37 +362,17 @@ int raw_notifier_chain_unregister(struct
- }
- EXPORT_SYMBOL_GPL(raw_notifier_chain_unregister);
- 
--/**
-- *	__raw_notifier_call_chain - Call functions in a raw notifier chain
-- *	@nh: Pointer to head of the raw notifier chain
-- *	@val: Value passed unmodified to notifier function
-- *	@v: Pointer passed unmodified to notifier function
-- *	@nr_to_call: See comment for notifier_call_chain.
-- *	@nr_calls: See comment for notifier_call_chain
-- *
-- *	Calls each function in a notifier chain in turn.  The functions
-- *	run in an undefined context.
-- *	All locking must be provided by the caller.
-- *
-- *	If the return value of the notifier can be and'ed
-- *	with %NOTIFY_STOP_MASK then raw_notifier_call_chain()
-- *	will return immediately, with the return value of
-- *	the notifier function which halted execution.
-- *	Otherwise the return value is the return value
-- *	of the last notifier function called.
-- */
--int __raw_notifier_call_chain(struct raw_notifier_head *nh,
--			      unsigned long val, void *v,
--			      int nr_to_call, int *nr_calls)
-+int raw_notifier_call_chain_error(struct raw_notifier_head *nh,
-+		unsigned long val_up, unsigned long val_down, void *v)
- {
--	return notifier_call_chain(&nh->head, val, v, nr_to_call, nr_calls);
-+	return notifier_call_chain_error(&nh->head, val_up, val_down, v);
- }
--EXPORT_SYMBOL_GPL(__raw_notifier_call_chain);
-+EXPORT_SYMBOL_GPL(raw_notifier_call_chain_error);
- 
- int raw_notifier_call_chain(struct raw_notifier_head *nh,
- 		unsigned long val, void *v)
- {
--	return __raw_notifier_call_chain(nh, val, v, -1, NULL);
-+	return notifier_call_chain(&nh->head, val, v, -1, NULL);
- }
- EXPORT_SYMBOL_GPL(raw_notifier_call_chain);
- 
-@@ -471,42 +443,29 @@ int srcu_notifier_chain_unregister(struc
- }
- EXPORT_SYMBOL_GPL(srcu_notifier_chain_unregister);
- 
--/**
-- *	__srcu_notifier_call_chain - Call functions in an SRCU notifier chain
-- *	@nh: Pointer to head of the SRCU notifier chain
-- *	@val: Value passed unmodified to notifier function
-- *	@v: Pointer passed unmodified to notifier function
-- *	@nr_to_call: See comment for notifier_call_chain.
-- *	@nr_calls: See comment for notifier_call_chain
-- *
-- *	Calls each function in a notifier chain in turn.  The functions
-- *	run in a process context, so they are allowed to block.
-- *
-- *	If the return value of the notifier can be and'ed
-- *	with %NOTIFY_STOP_MASK then srcu_notifier_call_chain()
-- *	will return immediately, with the return value of
-- *	the notifier function which halted execution.
-- *	Otherwise the return value is the return value
-- *	of the last notifier function called.
-- */
--int __srcu_notifier_call_chain(struct srcu_notifier_head *nh,
--			       unsigned long val, void *v,
--			       int nr_to_call, int *nr_calls)
-+int srcu_notifier_call_chain_error(struct srcu_notifier_head *nh,
-+		unsigned long val_up, unsigned long val_down, void *v)
- {
- 	int ret;
- 	int idx;
- 
- 	idx = srcu_read_lock(&nh->srcu);
--	ret = notifier_call_chain(&nh->head, val, v, nr_to_call, nr_calls);
-+	ret = notifier_call_chain_error(&nh->head, val_up, val_down, v);
- 	srcu_read_unlock(&nh->srcu, idx);
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(__srcu_notifier_call_chain);
-+EXPORT_SYMBOL_GPL(srcu_notifier_call_chain_error);
- 
- int srcu_notifier_call_chain(struct srcu_notifier_head *nh,
- 		unsigned long val, void *v)
- {
--	return __srcu_notifier_call_chain(nh, val, v, -1, NULL);
-+	int ret;
-+	int idx;
-+
-+	idx = srcu_read_lock(&nh->srcu);
-+	ret = notifier_call_chain(&nh->head, val, v, -1, NULL);
-+	srcu_read_unlock(&nh->srcu, idx);
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(srcu_notifier_call_chain);
- 
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -693,8 +693,8 @@ static int load_image_and_restore(void)
-  */
- int hibernate(void)
- {
--	int error, nr_calls = 0;
- 	bool snapshot_test = false;
-+	int error;
- 
- 	if (!hibernation_available()) {
- 		pm_pr_dbg("Hibernation not available.\n");
-@@ -710,11 +710,9 @@ int hibernate(void)
- 
- 	pr_info("hibernation entry\n");
- 	pm_prepare_console();
--	error = __pm_notifier_call_chain(PM_HIBERNATION_PREPARE, -1, &nr_calls);
--	if (error) {
--		nr_calls--;
--		goto Exit;
--	}
-+	error = pm_notifier_call_chain_error(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
-+	if (error)
-+		goto Restore;
- 
- 	ksys_sync_helper();
- 
-@@ -772,7 +770,8 @@ int hibernate(void)
- 	/* Don't bother checking whether freezer_test_done is true */
- 	freezer_test_done = false;
-  Exit:
--	__pm_notifier_call_chain(PM_POST_HIBERNATION, nr_calls, NULL);
-+	pm_notifier_call_chain(PM_POST_HIBERNATION);
-+ Restore:
- 	pm_restore_console();
- 	atomic_inc(&snapshot_device_available);
-  Unlock:
-@@ -800,7 +799,7 @@ int hibernate(void)
-  */
- static int software_resume(void)
- {
--	int error, nr_calls = 0;
-+	int error;
- 
- 	/*
- 	 * If the user said "noresume".. bail out early.
-@@ -887,11 +886,9 @@ static int software_resume(void)
- 
- 	pr_info("resume from hibernation\n");
- 	pm_prepare_console();
--	error = __pm_notifier_call_chain(PM_RESTORE_PREPARE, -1, &nr_calls);
--	if (error) {
--		nr_calls--;
--		goto Close_Finish;
--	}
-+	error = pm_notifier_call_chain_error(PM_RESTORE_PREPARE, PM_POST_RESTORE);
-+	if (error)
-+		goto Restore;
- 
- 	pm_pr_dbg("Preparing processes for restore.\n");
- 	error = freeze_processes();
-@@ -900,7 +897,8 @@ static int software_resume(void)
- 	error = load_image_and_restore();
- 	thaw_processes();
-  Finish:
--	__pm_notifier_call_chain(PM_POST_RESTORE, nr_calls, NULL);
-+	pm_notifier_call_chain(PM_POST_RESTORE);
-+ Restore:
- 	pm_restore_console();
- 	pr_info("resume from hibernation failed (%d)\n", error);
- 	atomic_inc(&snapshot_device_available);
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -79,18 +79,18 @@ int unregister_pm_notifier(struct notifi
- }
- EXPORT_SYMBOL_GPL(unregister_pm_notifier);
- 
--int __pm_notifier_call_chain(unsigned long val, int nr_to_call, int *nr_calls)
-+int pm_notifier_call_chain_error(unsigned long val_up, unsigned long val_down)
- {
- 	int ret;
- 
--	ret = __blocking_notifier_call_chain(&pm_chain_head, val, NULL,
--						nr_to_call, nr_calls);
-+	ret = blocking_notifier_call_chain_error(&pm_chain_head, val_up, val_down, NULL);
- 
- 	return notifier_to_errno(ret);
- }
-+
- int pm_notifier_call_chain(unsigned long val)
- {
--	return __pm_notifier_call_chain(val, -1, NULL);
-+	return blocking_notifier_call_chain(&pm_chain_head, val, NULL);
- }
- 
- /* If set, devices may be suspended and resumed asynchronously. */
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -212,8 +212,7 @@ static inline void suspend_test_finish(c
- 
- #ifdef CONFIG_PM_SLEEP
- /* kernel/power/main.c */
--extern int __pm_notifier_call_chain(unsigned long val, int nr_to_call,
--				    int *nr_calls);
-+extern int pm_notifier_call_chain_error(unsigned long val_up, unsigned long val_down);
- extern int pm_notifier_call_chain(unsigned long val);
- #endif
- 
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -352,18 +352,16 @@ static int suspend_test(int level)
-  */
- static int suspend_prepare(suspend_state_t state)
- {
--	int error, nr_calls = 0;
-+	int error;
- 
- 	if (!sleep_state_supported(state))
- 		return -EPERM;
- 
- 	pm_prepare_console();
- 
--	error = __pm_notifier_call_chain(PM_SUSPEND_PREPARE, -1, &nr_calls);
--	if (error) {
--		nr_calls--;
--		goto Finish;
--	}
-+	error = pm_notifier_call_chain_error(PM_SUSPEND_PREPARE, PM_POST_SUSPEND);
-+	if (error)
-+		goto Restore;
- 
- 	trace_suspend_resume(TPS("freeze_processes"), 0, true);
- 	error = suspend_freeze_processes();
-@@ -373,8 +371,8 @@ static int suspend_prepare(suspend_state
- 
- 	suspend_stats.failed_freeze++;
- 	dpm_save_failed_step(SUSPEND_FREEZE);
-- Finish:
--	__pm_notifier_call_chain(PM_POST_SUSPEND, nr_calls, NULL);
-+	pm_notifier_call_chain(PM_POST_SUSPEND);
-+ Restore:
- 	pm_restore_console();
- 	return error;
- }
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -44,7 +44,7 @@ atomic_t snapshot_device_available = ATO
- static int snapshot_open(struct inode *inode, struct file *filp)
- {
- 	struct snapshot_data *data;
--	int error, nr_calls = 0;
-+	int error;
- 
- 	if (!hibernation_available())
- 		return -EPERM;
-@@ -71,9 +71,7 @@ static int snapshot_open(struct inode *i
- 			swap_type_of(swsusp_resume_device, 0, NULL) : -1;
- 		data->mode = O_RDONLY;
- 		data->free_bitmaps = false;
--		error = __pm_notifier_call_chain(PM_HIBERNATION_PREPARE, -1, &nr_calls);
--		if (error)
--			__pm_notifier_call_chain(PM_POST_HIBERNATION, --nr_calls, NULL);
-+		error = pm_notifier_call_chain_error(PM_HIBERNATION_PREPARE, PM_POST_HIBERNATION);
- 	} else {
- 		/*
- 		 * Resuming.  We may need to wait for the image device to
-@@ -83,15 +81,11 @@ static int snapshot_open(struct inode *i
- 
- 		data->swap = -1;
- 		data->mode = O_WRONLY;
--		error = __pm_notifier_call_chain(PM_RESTORE_PREPARE, -1, &nr_calls);
-+		error = pm_notifier_call_chain_error(PM_RESTORE_PREPARE, PM_POST_RESTORE);
- 		if (!error) {
- 			error = create_basic_memory_bitmaps();
- 			data->free_bitmaps = !error;
--		} else
--			nr_calls--;
--
--		if (error)
--			__pm_notifier_call_chain(PM_POST_RESTORE, nr_calls, NULL);
-+		}
- 	}
- 	if (error)
- 		atomic_inc(&snapshot_device_available);
---- a/tools/power/pm-graph/sleepgraph.py
-+++ b/tools/power/pm-graph/sleepgraph.py
-@@ -146,7 +146,7 @@ from subprocess import call, Popen, PIPE
- 	tracefuncs = {
- 		'sys_sync': {},
- 		'ksys_sync': {},
--		'__pm_notifier_call_chain': {},
-+		'pm_notifier_call_chain_error': {},
- 		'pm_prepare_console': {},
- 		'pm_notifier_call_chain': {},
- 		'freeze_processes': {},
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
