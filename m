@@ -2,168 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8032951E13
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 00:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FC851E1A
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 00:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726375AbfFXWRp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 18:17:45 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46820 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726301AbfFXWRp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 18:17:45 -0400
-Received: by mail-oi1-f196.google.com with SMTP id 65so10965411oid.13
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 15:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DyZtJbcLWTPh/r2aMOqaTZJx82vxwJ/WY4Wjw83iZpY=;
-        b=shTVoSS2XF2z+5OjiXnPdpQNeCEMWeGPtAs7//zeOzORNDFb9q5ViyY1xp6ezKCq0W
-         XwwqyCJ2zfHsHrYOFIlsV9OqWweSRHXF1mvq+OhyWhgzeKr71SD/Rc/h/1XqeT4EKTKj
-         /4SPpaXk7yzD9NVyU+4qg9iEFXFbHeaJw6mbAzXlhDK6emEJOaeBl81kHCCJ2Wx6wuEQ
-         t/gUxhtFVfDk4P+bdfARYQ/MfxwnZZifmXnwNtG3ZsYYtKR7m7vKNAt5K0Bm3OGYVx5L
-         7lmRiM6g2OTicSiZr98RUXrRaLq58K3rh9nloQNLCr6NkApaHrb5su8T7eLqOTHperBT
-         qVkg==
+        id S1726899AbfFXWUj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 18:20:39 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:33134 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbfFXWUi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 18:20:38 -0400
+Received: by mail-oi1-f195.google.com with SMTP id f80so11024202oib.0;
+        Mon, 24 Jun 2019 15:20:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DyZtJbcLWTPh/r2aMOqaTZJx82vxwJ/WY4Wjw83iZpY=;
-        b=Fnz+sld64hJCk8PdD6Jaa4tIlioxB0+1LjigTr+m/z8cJ5V4KHx6acGNJsMZXYMZuB
-         UmF944gptmb7pvTSC3dLXWMSmw9iahrvdWEs8ZbPcShzk01mResnoP7KsPJOt/zNZLBI
-         Ag12scIgFyOFElYKhcwNR1Z2+HcVlZbyXK9P1UFrWhwUTlJSGN5/7KXuHq1KHi6vcs9x
-         LwFNR8DgqqQ6Yt4kZJreKmChxc70MI2UkT+fFvVfcGgAF5Vvo+EJwcdjbLPU0DaJ1vrH
-         zwN3a0cP46fcppEb9+9jkA48027j4Fh47LBU99WoXtrHfbE7WtgpHzE/CGZC/XDM4yXP
-         k3Og==
-X-Gm-Message-State: APjAAAX2WrhGfGTZkUq8GrJcB/M4SxIGZ9jkXbDshQW6GWYXkxhBaX2O
-        Vhl9aypgJwytLEZTXpHRLS5g1BZIC7PoWEiopLGXAA==
-X-Google-Smtp-Source: APXvYqzNRa1SDtLuepKsEqIVimP3WUsxe43gNIRcxXWSJxVlgx1+CG0a2uP3Ow4kd/dieKuxWRi6HY1aLU+xIacMwzk=
-X-Received: by 2002:aca:e641:: with SMTP id d62mr12090301oih.24.1561414664083;
- Mon, 24 Jun 2019 15:17:44 -0700 (PDT)
+        bh=X2mdj71OojvPofZElDA3A0qbxcCan0Gcd6RJ7oQb2rg=;
+        b=LgDpIeDj2w9bJ1yoOEsam4nLZOGjutw/qb6JzKt+Artj50DG+px7jEyjkLj7BOX5Ua
+         NHPrDdr4HAQqdX+d1ufA2N0I0kRxKfsWI1ULlUXzYkzgmYmmEX8dheNgo+uodJK/zlQ9
+         DShe0xXP2O68QhF1oL2sLYYDTsDQEcPCnCu7dFeiiYAOcjJBvjfG3sVz7uyST6LgRMrg
+         u1IX2fngxb4Zsic/8ep5Wzp/hBqL3tUGOLnJGlIRIN2n+rsFGCEKBD/bXuguQJweQJjh
+         GyqUUc+9fyubnFukEoZri5HykTSWA2gZrK2quECdK94KMjGbErQR7eGWHuSF9uEuHfMJ
+         YAFg==
+X-Gm-Message-State: APjAAAWgMRMAuQbuZLoDCwUDJ+LmWJpT1zuUVndQJFfG80CIkuM0yQJZ
+        8hIrlhvHek1R5nWGRdO0dEnm+t0ekW/prPTDHNKNEVog
+X-Google-Smtp-Source: APXvYqxnYN3S5xvkVR/2yGjsDmezNKCQ49nSrTtq5aqk54tjvTYd48k6PRBqiDqHPJTyJ2mrqkZT9zdO/Q1vaEKLqqQ=
+X-Received: by 2002:aca:edc8:: with SMTP id l191mr12597021oih.103.1561414837894;
+ Mon, 24 Jun 2019 15:20:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190622003449.33707-1-saravanak@google.com> <20190624094349.rtjb7nuv6g7zmsf2@vireshk-i7>
-In-Reply-To: <20190624094349.rtjb7nuv6g7zmsf2@vireshk-i7>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 24 Jun 2019 15:17:08 -0700
-Message-ID: <CAGETcx_ggG8oDnAVaSfuHfip1ozjQpFiGs15cz8nLQnzjTiSTg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] Add required-opps support to devfreq passive gov
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Android Kernel Team <kernel-team@android.com>,
+References: <1668247.RaJIPSxJUN@kreacher> <9906d02b-8c77-f2c8-7168-93ea444b950e@nvidia.com>
+ <CAJZ5v0hdtXqoK84DpYtyMSCnkR9zOHFiUPAzWZDtkFmEjyWD1g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hdtXqoK84DpYtyMSCnkR9zOHFiUPAzWZDtkFmEjyWD1g@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Jun 2019 00:20:26 +0200
+Message-ID: <CAJZ5v0gGdXmgc_9r2rbiadq4e31hngpjYQ40QoC6C0z19da_hQ@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: PM: Skip devices in D0 for suspend-to-idle
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 2:43 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Mon, Jun 24, 2019 at 11:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> On 21-06-19, 17:34, Saravana Kannan wrote:
-> > The devfreq passive governor scales the frequency of a "child" device
-> > based on the current frequency of a "parent" device (not parent/child in
-> > the sense of device hierarchy). As of today, the passive governor
-> > requires one of the following to work correctly:
-> > 1. The parent and child device have the same number of frequencies
-> > 2. The child device driver passes a mapping function to translate from
-> >    parent frequency to child frequency.
+> On Mon, Jun 24, 2019 at 2:43 PM Jon Hunter <jonathanh@nvidia.com> wrote:
 > >
-> > When (1) is not true, (2) is the only option right now. But often times,
-> > all that is required is a simple mapping from parent's frequency to
-> > child's frequency.
+> > Hi Rafael,
 > >
-> > Since OPPs already support pointing to other "required-opps", add
-> > support for using that to map from parent device frequency to child
-> > device frequency. That way, every child device driver doesn't have to
-> > implement a separate mapping function anytime (1) isn't true.
+> > On 13/06/2019 22:59, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> > > attempted to avoid a problem with devices whose drivers want them to
+> > > stay in D0 over suspend-to-idle and resume, but it did not go as far
+> > > as it should with that.
+> > >
+> > > Namely, first of all, the power state of a PCI bridge with a
+> > > downstream device in D0 must be D0 (based on the PCI PM spec r1.2,
+> > > sec 6, table 6-1, if the bridge is not in D0, there can be no PCI
+> > > transactions on its secondary bus), but that is not actively enforced
+> > > during system-wide PM transitions, so use the skip_bus_pm flag
+> > > introduced by commit d491f2b75237 for that.
+> > >
+> > > Second, the configuration of devices left in D0 (whatever the reason)
+> > > during suspend-to-idle need not be changed and attempting to put them
+> > > into D0 again by force is pointless, so explicitly avoid doing that.
+> > >
+> > > Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
+> > > Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> >
+> > I have noticed a regression in both the mainline and -next branches on
+> > one of our boards when testing suspend. The bisect is point to this
+> > commit and reverting on top of mainline does fix the problem. So far I
+> > have not looked at this in close detail but kernel log is showing ...
 >
-> Can you please provide a real world example with DT code here so I
-> can understand it better ?
+> Can you please collect a log like that, but with dynamic debug in
+> pci-driver.c enabled?
 >
+> Note that reverting this commit is rather out of the question, so we
+> need to get to the bottom of the failure.
 
-Here's an example. This can't be done today, but can be done with this change.
+I suspect that there is a problem with the pm_suspend_via_firmware()
+check which returns 'false' on the affected board, but the platform
+actually removes power from devices left in D0 during suspend.
 
-In arch/arm64/boot/dts/exynos/exynos5433-bus.dtsi you have something
-like this with the following changes:
-
-        bus_g2d_400: bus0 {
-                compatible = "samsung,exynos-bus";
-                clocks = <&cmu_top CLK_ACLK_G2D_400>;
-                clock-names = "bus";
-                operating-points-v2 = <&bus_g2d_400_opp_table>;
-                status = "disabled";
-        };
-
-        bus_noc2: bus9 {
-                compatible = "samsung,exynos-bus";
-                clocks = <&cmu_mif CLK_ACLK_BUS2_400>;
-                clock-names = "bus";
-                operating-points-v2 = <&bus_noc2_opp_table>;
-                status = "disabled";
-        };
-
-        bus_g2d_400_opp_table: opp_table2 {
-                compatible = "operating-points-v2";
-                opp-shared;
-
-                opp-400000000 {
-                        opp-hz = /bits/ 64 <400000000>;
-                        opp-microvolt = <1075000>;
-+                       required-opps = <&noc2_400>;
-                };
-                opp-267000000 {
-                        opp-hz = /bits/ 64 <267000000>;
-                        opp-microvolt = <1000000>;
-+                       required-opps = <&noc2_200>;
-                };
-                opp-200000000 {
-                        opp-hz = /bits/ 64 <200000000>;
-                        opp-microvolt = <975000>;
-+                       required-opps = <&noc2_200>;
-                };
-                opp-160000000 {
-                        opp-hz = /bits/ 64 <160000000>;
-                        opp-microvolt = <962500>;
-+                       required-opps = <&noc2_134>;
-                };
-                opp-134000000 {
-                        opp-hz = /bits/ 64 <134000000>;
-                        opp-microvolt = <950000>;
-+                       required-opps = <&noc2_134>;
-                };
-                opp-100000000 {
-                        opp-hz = /bits/ 64 <100000000>;
-                        opp-microvolt = <937500>;
-+                       required-opps = <&noc2_100>;
-                };
-        };
-
-        bus_noc2_opp_table: opp_table6 {
-                compatible = "operating-points-v2";
-
--               opp-400000000 {
-+               noc2_400: opp-400000000 {
-                        opp-hz = /bits/ 64 <400000000>;
-                };
--               opp-200000000 {
-+               noc2_200: opp-200000000 {
-                        opp-hz = /bits/ 64 <200000000>;
-                };
--               opp-134000000 {
-+               noc2_134: opp-134000000 {
-                        opp-hz = /bits/ 64 <134000000>;
-                };
--               opp-100000000 {
-+               noc2_100: opp-100000000 {
-                        opp-hz = /bits/ 64 <100000000>;
-                };
-        };
-
-Thanks,
-Saravana
+I guess it would be more appropriate to check something like
+pm_suspend_no_platform() which would return 'true' in the
+suspend-to-idle patch w/ ACPI.
