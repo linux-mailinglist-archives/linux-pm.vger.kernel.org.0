@@ -2,123 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E975033E
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 09:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77E350362
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jun 2019 09:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbfFXHYv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jun 2019 03:24:51 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:53533 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726833AbfFXHYi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 03:24:38 -0400
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190624072436epoutp04e853d5724a76043cb66e030bfe7b90c7~rEaBRVaNY2379523795epoutp04v
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 07:24:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190624072436epoutp04e853d5724a76043cb66e030bfe7b90c7~rEaBRVaNY2379523795epoutp04v
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561361076;
-        bh=sfJqtBX9G/sO3fhboGEG/nUCWVvQPDLwTtj0etWtVMs=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=RMr0F9U3JacSzMwWNMhlP8fP2vOiuMfDy3yKnHYYpAy9Cny09EvewA3UYMk4y/oQ0
-         53VvZM9cPZhes6Jsr/TeEIHjdOOXk+ELt6LMOfiuz9nzAurEIahfcK9w3subInSnIE
-         lOxI6Hqt7f7B5+Spq3nvG3et/7v05IU1fNYvLATs=
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.155]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190624072432epcas1p20c3fab8908c892aae51ec1040def99b6~rEZ9fFLWk1982319823epcas1p2X;
-        Mon, 24 Jun 2019 07:24:32 +0000 (GMT)
-X-AuditID: b6c32a36-14a859c00000102e-63-5d107aaf7c8f
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EE.37.04142.FAA701D5; Mon, 24 Jun 2019 16:24:31 +0900 (KST)
-Mime-Version: 1.0
-Subject: Re: [PATCH v4 16/16] PM / devfreq: Introduce driver for NVIDIA
- Tegra20
-Reply-To: myungjoo.ham@samsung.com
-From:   MyungJoo Ham <myungjoo.ham@samsung.com>
-To:     "digetx@gmail.com" <digetx@gmail.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20190624072431epcms1p3bdfd41545e7daecb1f6472c1e6f9dcfc@epcms1p3>
-Date:   Mon, 24 Jun 2019 16:24:31 +0900
-X-CMS-MailID: 20190624072431epcms1p3bdfd41545e7daecb1f6472c1e6f9dcfc
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA12Se0hTYRjG+XaOZ0dt9Tkvfc2l61TCDJ1HnR4jI8hipJEh/hOuedDDtF3Z
-        2aILwSC7iY4iQZtp3iJIygte1oWgFZGVGVGJkCZdmaUWq0iky64o/ffj4Xnf93nf7yMxsYOQ
-        kNVGK2cxsnqKiMKH7snT03qOQHXGrCOT8bjlzPj3TxFM97d3gKlxduCMt/4+YM58dxLMws1W
-        fJtQdcM5KVTVH58jVI6Bq0Dl7U8qxvfptlRxbCVnkXHGClNltVGbTxWWaLZrlDkZdBqdx+RS
-        MiNr4PKpgqLitJ3Vel8ASnaQ1dt8UjHL85Ri6xaLyWblZFUm3ppPceZKvTnPnM6zBt5m1KZX
-        mAyb6YyMTKXPWK6rqhn/KzB/iTr0yjlJ2MFLshZEkghmo5+Nz/FaEEWKoQsgT4dDWAtIUgRj
-        0G9XrN8TC/eioddTuJ/FkEL2iTtYUFeg09NDwM8ETEODvZOBPnGwT4Caxt4QwQEi1HTqAx7k
-        RDR8ZRAEOR5NdM8Kwzz/4FJIj0MnpkaxIMeg6YVbIFzb1PA31OcoetXYKfQPQ7AGoPruhpBJ
-        gZ60jAQGi+Bu5HA9E/gZhxtR+9jPwGIIFqDnUwE7BpPR8OxFzC9jUI56biqCXdahG4stIBzf
-        3rco/J8xuBLN/aiLCOuu1veCIKcg962ukF+KHje2h1ZRoR8LM0TwhnuRc+QidhbInEuXdi4L
-        5FwK1AawqyCBM/MGLcfT5szlj9sPAn8xNccFOp4WuQEkAbVCBHtXqcUR7EH+sMENEIlRcaLL
-        LFSLRZXs4SOcxaSx2PQc7wZK31nOYZL4CpPvZxutGlqZmZWVxWTTOUqaplaLNNETZWKoZa2c
-        juPMnCVcJyAjJXZQWp4w2hlhKNyUuqOUirWWvv8q6tK1DRdEvd0loUcUZZ49t+uK1ssj+98Z
-        75Rcf7ihOPpjQ9LQtWhvXUuJJzuXS5SWzaiT+TOPmtfb/+woHP/864L4bIp30VUild6+u1bz
-        YuHA/Jprm9aQ+1Xnm4dfdw40efYf8+QS3qIa+uTIRymF81UsnYpZePYf2TOFPKEDAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190624072431epcms1p3bdfd41545e7daecb1f6472c1e6f9dcfc
-References: <CGME20190624072431epcms1p3bdfd41545e7daecb1f6472c1e6f9dcfc@epcms1p3>
+        id S1726548AbfFXHaG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jun 2019 03:30:06 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:55110 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726375AbfFXHaG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jun 2019 03:30:06 -0400
+Received: by mail-wm1-f65.google.com with SMTP id g135so11684950wme.4
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 00:30:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LocBImSZmptFdXRaZ5AdtQJn9KgVIzUS2C1+aQJ3ImI=;
+        b=kHN/6/HqM6W4XaTWtsZAmdTarcyTa99rx+qxOyJ4ikzat7VFMmYjPGI2zebtraCbvj
+         2CqlkbfWVmZdwPI82QohYod1qib98+0rMZwbAUAOH7GcRysB1ErG2dSoSEw4K4S4gFYY
+         3IjzQxFq6XmtU/7QF/B3XfR5hZ+3iadEn+uWud3HuhiHdZqTPXODII8JS0EBON91c4s/
+         GafDxaD5GRYCz74onOeFigRLEINVyp3ZUWe/3xJSMayZw/FV9Of2LrS1OgwcVMHyWpN/
+         M397uj4+Lk4zP5j52phtqQv3P3FiSWgj8MPrrDTi3TYO7qgj9/F2qTtK4rxgx1oyl8pQ
+         yClg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=LocBImSZmptFdXRaZ5AdtQJn9KgVIzUS2C1+aQJ3ImI=;
+        b=TMfCQb2KS2E463pxcEj3yNV3iEkKiLJtPycRbhqOW9NLwhVQ9SLLRDws3vB5ym9G2X
+         Ybv8oPEiLrGuIa4miRTgm2d5qf8v3UZQQfgG7ADJQYnMAhiwyqHxcYbB++mSAl5mZ4vv
+         7Rq+yG+/tgoS2GIjjGmbmRzeRmp/CyNO7gQ5NXa3kKDxKk5C1EYKliiyrrUUi7nkTFXa
+         9UZwGtCaRRwpnyXXqkkxsAiWhJ7Ibb88SJHEbGt3kuu1PIY6IxKJfezu3LfCUaypURYZ
+         9/DvOj+VQ2YiVWr6Mf5WUoXUNxySEzTOONHfR6FXOAHr5+RTi0MPN2y8OQebYLaO1fud
+         hCog==
+X-Gm-Message-State: APjAAAXN9rrArpdbxNgqramh6JZisyOJwKfFwcz2h3yTS6rH4yFk1y+Z
+        380FmrQjlwsZ5M7UNzDBBYFknQ==
+X-Google-Smtp-Source: APXvYqxuqcMirZskPad67aLaa8QZ6sb0bEZUvrxYAOEmXrPz0s6L6fGCJzTKgFFabnjaJKnXz1sIwQ==
+X-Received: by 2002:a1c:cfc3:: with SMTP id f186mr13394363wmg.134.1561361402590;
+        Mon, 24 Jun 2019 00:30:02 -0700 (PDT)
+Received: from [192.168.0.41] (209.94.129.77.rev.sfr.net. [77.129.94.209])
+        by smtp.googlemail.com with ESMTPSA id j4sm8260327wrx.57.2019.06.24.00.30.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Jun 2019 00:30:01 -0700 (PDT)
+Subject: Re: [PATCH 2/6] thermal/drivers/cpu_cooling: Unregister with the
+ policy
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     edubezval@gmail.com, linux-kernel@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Keerthy <j-keerthy@ti.com>,
+        "open list:CPU FREQUENCY DRIVERS - ARM BIG LITTLE" 
+        <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>
+References: <20190621132302.30414-1-daniel.lezcano@linaro.org>
+ <20190621132302.30414-2-daniel.lezcano@linaro.org>
+ <20190624060334.kak2mjuou4napi4x@vireshk-i7>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <3f324189-aa1e-ae78-1d69-61e00c5d033a@linaro.org>
+Date:   Mon, 24 Jun 2019 09:30:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <20190624060334.kak2mjuou4napi4x@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> Add devfreq driver for NVIDIA Tegra20 SoC's. The driver periodically
-> reads out Memory Controller counters and adjusts memory frequency based
-> on the memory clients activity.
+On 24/06/2019 08:03, Viresh Kumar wrote:
+> On 21-06-19, 15:22, Daniel Lezcano wrote:
+>> Currently the function cpufreq_cooling_register() returns a cooling
+>> device pointer which is used back as a pointer to call the function
+>> cpufreq_cooling_unregister(). Even if it is correct, it would make
+>> sense to not leak the structure inside a cpufreq driver and keep the
+>> code thermal code self-encapsulate. Moreover, that forces to add an
+>> extra variable in each driver using this function.
+>>
+>> Instead of passing the cooling device to unregister, pass the policy.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>  drivers/cpufreq/arm_big_little.c               |  2 +-
+>>  drivers/cpufreq/cpufreq.c                      |  2 +-
+>>  drivers/thermal/cpu_cooling.c                  | 18 ++++++++++--------
+>>  drivers/thermal/imx_thermal.c                  |  4 ++--
+>>  .../thermal/ti-soc-thermal/ti-thermal-common.c |  2 +-
+>>  include/linux/cpu_cooling.h                    |  6 +++---
+>>  6 files changed, 18 insertions(+), 16 deletions(-)
 > 
-> Reviewed-by: Chanwoo Choi 
-> Signed-off-by: Dmitry Osipenko 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Could you please send a separate commit for MAINTAINERS?
+Just a side note, does it make sense to have the function called from
+imx_thermal.c and ti-thermal-common.c? Sounds like also a leakage from
+cpufreq to thermal drivers, no?
 
-I can add Ack to it, but I don't feel comfortable with sending
-a pull-request with MAINTAINERS entry updates.
 
-Cheers,
-MyungJoo
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> ---
->  MAINTAINERS                       |   8 ++
->  drivers/devfreq/Kconfig           |  10 ++
->  drivers/devfreq/Makefile          |   1 +
->  drivers/devfreq/tegra20-devfreq.c | 212 ++++++++++++++++++++++++++++++
->  4 files changed, 231 insertions(+)
->  create mode 100644 drivers/devfreq/tegra20-devfreq.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 98edc38bfd7b..e7e434f74038 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10098,6 +10098,14 @@ F:	include/linux/memblock.h
->  F:	mm/memblock.c
->  F:	Documentation/core-api/boot-time-mm.rst
->  
-> +MEMORY FREQUENCY SCALING DRIVER FOR NVIDIA TEGRA20
-> +M:	Dmitry Osipenko 
-> +L:	linux-pm@vger.kernel.org
-> +L:	linux-tegra@vger.kernel.org
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git
-> +S:	Maintained
-> +F:	drivers/devfreq/tegra20-devfreq.c
-> +
->  MEMORY MANAGEMENT
->  L:	linux-mm@kvack.org
->  W:	http://www.linux-mm.org
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
