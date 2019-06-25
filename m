@@ -2,291 +2,607 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1481D552B0
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 17:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C73F6552C9
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 17:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730878AbfFYPAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 11:00:10 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37357 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730928AbfFYPAK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 11:00:10 -0400
-Received: by mail-lj1-f196.google.com with SMTP id 131so16607128ljf.4
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2019 08:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hxzjHuG9f6eUk/5rGX6/OuDQOCaB5EwP2dw41LeV6K8=;
-        b=AyBJ/0k4t0R+ZNhuo6Cj3euoENM7e+ETH+ppQ8P/g8a8iOGDQ9i3KYqZPNlgRwhdYa
-         HNgCuF9aOGMC4pif11HKSdH7nLXFwZCaAwFYXIy8pDMaxul/tzcooc7K3hPb0APvqbRc
-         yO2MIWjaUbxu/jo3Xn6tLmThmhdU/7XO3KYICtqF8fXp3rD/zuc4bm1OPTNeS+jxUqFI
-         i9yXwovchx6i/kc4A1Jwny9Y892R+1xFmZxjboJ5MCLi3udZG6VDL2mRPAodbY1Y8+z9
-         Ok1W9+o7dv0EXzbj6zd4MZfE6BE2g/9iRXWvYo1FBnb0jYfv2lY0isDmbrISV5x04cB1
-         86DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hxzjHuG9f6eUk/5rGX6/OuDQOCaB5EwP2dw41LeV6K8=;
-        b=THl9QRf0V+0Vx7pp0TbivcaD/6vLVTCXBkCiLMXg6jHHYu/E693BZSL7HPhQSW3Bqs
-         V3RjjqiGt/wQaaQt1Rc793w6r/T85MxG+/Qiygwv07hGcvGlbIpipB6YusMsuh0fCXuB
-         tWFmBr3jxbMy8vPwx3t0mRgbzOyV4C6T1bV//z88XpT/aU3GhCmrgD3TkgK2AmPvrGY9
-         5SLQRsQMKRpoWa1l65uLlrGoYwG6jxCIXnj4a6Fz0LJgVvfFEqsVSer5e7npBDiitSFl
-         GbheDMmGGXRtXLX9gZLPGqmjQAKKV904j3T3q43ZpcDAN6ey1ofm/vqKVDotHF14kaGo
-         PWKA==
-X-Gm-Message-State: APjAAAU/XKy9kdOp6HN68ZcC/7qS/HXa6qKy96QxXi045YzOPqOc8k2t
-        X4iCJwZR5M5pp/2FFUEqK4Q1sQ==
-X-Google-Smtp-Source: APXvYqzUsCIjayB8S/ee9C8qDkFsJ5Ca3H2eUQarQho9CCtEp8Es+VmFR6AU8AXHS1eCzMLtKq83cA==
-X-Received: by 2002:a2e:968e:: with SMTP id q14mr41485988lji.195.1561474807414;
-        Tue, 25 Jun 2019 08:00:07 -0700 (PDT)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id j11sm1991092lfm.29.2019.06.25.08.00.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 08:00:06 -0700 (PDT)
-Subject: Re: [PATCH v4 1/5] dt-bindings: interconnect: Add Qualcomm QCS404 DT
- bindings
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org, vkoul@kernel.org,
-        evgreen@chromium.org, daidavid1@codeaurora.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20190613151323.10850-1-georgi.djakov@linaro.org>
- <20190613151323.10850-2-georgi.djakov@linaro.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Message-ID: <c99c052d-40e7-1bff-34f9-3b48a821a175@linaro.org>
-Date:   Tue, 25 Jun 2019 18:00:05 +0300
-MIME-Version: 1.0
-In-Reply-To: <20190613151323.10850-2-georgi.djakov@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1730925AbfFYPDa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 11:03:30 -0400
+Received: from mga02.intel.com ([134.134.136.20]:42429 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730607AbfFYPDa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Jun 2019 11:03:30 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jun 2019 08:03:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,416,1557212400"; 
+   d="scan'208";a="166702364"
+Received: from syhu-mobl.ccr.corp.intel.com ([10.249.173.95])
+  by orsmga006.jf.intel.com with ESMTP; 25 Jun 2019 08:03:25 -0700
+Message-ID: <1561474998.19713.13.camel@intel.com>
+Subject: Re: [PATCH v4 2/3] nvme: add thermal zone devices
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Akinobu Mita <akinobu.mita@gmail.com>,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Kenneth Heitke <kenneth.heitke@intel.com>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+Date:   Tue, 25 Jun 2019 23:03:18 +0800
+In-Reply-To: <1560439238-4054-3-git-send-email-akinobu.mita@gmail.com>
+References: <1560439238-4054-1-git-send-email-akinobu.mita@gmail.com>
+         <1560439238-4054-3-git-send-email-akinobu.mita@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rob,
-
-On 6/13/19 18:13, Georgi Djakov wrote:
-> The Qualcomm QCS404 platform has several buses that could be controlled
-> and tuned according to the bandwidth demand.
+On 五, 2019-06-14 at 00:20 +0900, Akinobu Mita wrote:
+> The NVMe controller reports up to nine temperature values in the
+> SMART /
+> Health log page (the composite temperature and temperature sensor 1
+> through
+> temperature sensor 8).
 > 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> This provides these temperatures via thermal zone devices.
+> 
+> Once the controller is identified, the thermal zone devices are
+> created for
+> all implemented temperature sensors including the composite
+> temperature.
+> 
+> /sys/class/thermal/thermal_zone[0-*]:
+>     |---type: 'nvme<instance>-temp<sensor>'
+>     |---temp: Temperature
+>     |---trip_point_0_temp: Over temperature threshold
+> 
+> The thermal_zone[0-*] contains a 'device' symlink to the
+> corresponding nvme
+> device.
+> 
+> On the other hand, the following symlinks to the thermal zone devices
+> are
+> created in the nvme device sysfs directory.
+> 
+> - temp0: Composite temperature
+> - temp1: Temperature sensor 1
+> ...
+> - temp8: Temperature sensor 8
+> 
+> In addition to the standard thermal zone device, this also adds
+> support for
+> registering the DT thermal zone device.
+> 
+I don't see standard thermal zone device and DT thermal zone device are
+registered at the same time very often, especially if they represent
+the same sensor.
+
+Eduardo, any comments?
+
+thanks,
+rui
+
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Eduardo Valentin <edubezval@gmail.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Keith Busch <kbusch@kernel.org>
+> Cc: Jens Axboe <axboe@fb.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Sagi Grimberg <sagi@grimberg.me>
+> Cc: Minwoo Im <minwoo.im.dev@gmail.com>
+> Cc: Kenneth Heitke <kenneth.heitke@intel.com>
+> Cc: Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 > ---
+> * v4
+> - add thermal.c to hold thermal zone related code
+> - add 'use_thermal_zone' module parameter
+> - add CONFIG_THERMAL_WRITABLE_TRIPS dependency
+> - add comment about the return value of nvme_thermal_zones_register()
+> - support DT thermal zone device.
+> - use bitmap to iterate over implemented sensors
 > 
-> v4:
-> - Add the DT header into this patch.
-> - Pick Bjorn's r-b.
+>  drivers/nvme/host/Kconfig   |   1 +
+>  drivers/nvme/host/Makefile  |   1 +
+>  drivers/nvme/host/core.c    |   5 +
+>  drivers/nvme/host/nvme.h    |  35 +++++
+>  drivers/nvme/host/thermal.c | 311
+> ++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/nvme.h        |   5 +
+>  6 files changed, 358 insertions(+)
+>  create mode 100644 drivers/nvme/host/thermal.c
 > 
-> v3:
-> - Add a reg property and move the interconnect nodes under the "soc" node.
-> 
-> v2:
-> - No changes.
-> 
->  .../bindings/interconnect/qcom,qcs404.txt     | 46 ++++++++++
->  .../dt-bindings/interconnect/qcom,qcs404.h    | 88 +++++++++++++++++++
->  2 files changed, 134 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
->  create mode 100644 include/dt-bindings/interconnect/qcom,qcs404.h
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
-> new file mode 100644
-> index 000000000000..14a827268dda
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
-> @@ -0,0 +1,46 @@
-> +Qualcomm QCS404 Network-On-Chip interconnect driver binding
-> +-----------------------------------------------------------
+> diff --git a/drivers/nvme/host/Kconfig b/drivers/nvme/host/Kconfig
+> index ec43ac9..90429f8 100644
+> --- a/drivers/nvme/host/Kconfig
+> +++ b/drivers/nvme/host/Kconfig
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config NVME_CORE
+>  	tristate
+> +	select THERMAL_WRITABLE_TRIPS if THERMAL
+>  
+>  config BLK_DEV_NVME
+>  	tristate "NVM Express block device"
+> diff --git a/drivers/nvme/host/Makefile b/drivers/nvme/host/Makefile
+> index 8a4b671..6018668 100644
+> --- a/drivers/nvme/host/Makefile
+> +++ b/drivers/nvme/host/Makefile
+> @@ -14,6 +14,7 @@ nvme-core-$(CONFIG_TRACING)		+=
+> trace.o
+>  nvme-core-$(CONFIG_NVME_MULTIPATH)	+= multipath.o
+>  nvme-core-$(CONFIG_NVM)			+= lightnvm.o
+>  nvme-core-$(CONFIG_FAULT_INJECTION_DEBUG_FS)	+=
+> fault_inject.o
+> +nvme-core-$(CONFIG_THERMAL)		+= thermal.o
+>  
+>  nvme-y					+= pci.o
+>  
+> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+> index 7e3c786..4be339b 100644
+> --- a/drivers/nvme/host/core.c
+> +++ b/drivers/nvme/host/core.c
+> @@ -2696,6 +2696,10 @@ int nvme_init_identify(struct nvme_ctrl *ctrl)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	ret = nvme_thermal_zones_register(ctrl);
+> +	if (ret)
+> +		return ret;
 > +
-> +Required properties :
-> +- compatible : shall contain only one of the following:
-> +			"qcom,qcs404-bimc"
-> +			"qcom,qcs404-pcnoc"
-> +			"qcom,qcs404-snoc"
-> +- #interconnect-cells : should contain 1
-> +
-> +Optional properties :
-> +reg : specifies the physical base address and size of registers
-> +clocks : list of phandles and specifiers to all interconnect bus clocks
-> +clock-names : clock names should include both "bus_clk" and "bus_a_clk"
-> +
-> +Example:
-> +
-> +soc {
-> +	...
-> +	bimc: interconnect@400000 {
-> +		reg = <0x00400000 0x80000>;
-> +		compatible = "qcom,qcs404-bimc";
-> +		#interconnect-cells = <1>;
-> +		clock-names = "bus_clk", "bus_a_clk";
-> +		clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
-> +			<&rpmcc RPM_SMD_BIMC_A_CLK>;
-> +	};
-> +
-> +	pnoc: interconnect@500000 {
-> +		reg = <0x00500000 0x15080>;
-> +		compatible = "qcom,qcs404-pcnoc";
-> +		#interconnect-cells = <1>;
-> +		clock-names = "bus_clk", "bus_a_clk";
-> +		clocks = <&rpmcc RPM_SMD_PNOC_CLK>,
-> +			<&rpmcc RPM_SMD_PNOC_A_CLK>;
-> +	};
-> +
-> +	snoc: interconnect@580000 {
-> +		reg = <0x00580000 0x23080>;
-> +		compatible = "qcom,qcs404-snoc";
-> +		#interconnect-cells = <1>;
-> +		clock-names = "bus_clk", "bus_a_clk";
-> +		clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
-> +			<&rpmcc RPM_SMD_SNOC_A_CLK>;
-> +	};
+>  	ctrl->identified = true;
+>  
+>  	return 0;
+> @@ -3699,6 +3703,7 @@ void nvme_stop_ctrl(struct nvme_ctrl *ctrl)
+>  {
+>  	nvme_mpath_stop(ctrl);
+>  	nvme_stop_keep_alive(ctrl);
+> +	nvme_thermal_zones_unregister(ctrl);
+>  	flush_work(&ctrl->async_event_work);
+>  	cancel_work_sync(&ctrl->fw_act_work);
+>  }
+> diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+> index 038b893..a9c63ea 100644
+> --- a/drivers/nvme/host/nvme.h
+> +++ b/drivers/nvme/host/nvme.h
+> @@ -15,6 +15,7 @@
+>  #include <linux/sed-opal.h>
+>  #include <linux/fault-inject.h>
+>  #include <linux/rcupdate.h>
+> +#include <linux/thermal.h>
+>  
+>  extern unsigned int nvme_io_timeout;
+>  #define NVME_IO_TIMEOUT	(nvme_io_timeout * HZ)
+> @@ -146,6 +147,13 @@ enum nvme_ctrl_state {
+>  	NVME_CTRL_DEAD,
+>  };
+>  
+> +struct nvme_tz {
+> +	struct thermal_zone_params params;
+> +	struct thermal_zone_device *dev;
+> +	struct thermal_zone_device *of_dev;
+> +	unsigned int sensor;
 > +};
-
-Does this look ok from DT perspective?
-
-Thanks,
-Georgi
-
-> diff --git a/include/dt-bindings/interconnect/qcom,qcs404.h b/include/dt-bindings/interconnect/qcom,qcs404.h
-> new file mode 100644
-> index 000000000000..960f6e39c5f2
-> --- /dev/null
-> +++ b/include/dt-bindings/interconnect/qcom,qcs404.h
-> @@ -0,0 +1,88 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Qualcomm interconnect IDs
-> + *
-> + * Copyright (c) 2019, Linaro Ltd.
-> + * Author: Georgi Djakov <georgi.djakov@linaro.org>
-> + */
 > +
-> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_QCS404_H
-> +#define __DT_BINDINGS_INTERCONNECT_QCOM_QCS404_H
+>  struct nvme_ctrl {
+>  	bool comp_seen;
+>  	enum nvme_ctrl_state state;
+> @@ -247,6 +255,15 @@ struct nvme_ctrl {
+>  
+>  	struct page *discard_page;
+>  	unsigned long discard_page_busy;
 > +
-> +#define MASTER_AMPSS_M0			0
-> +#define MASTER_OXILI			1
-> +#define MASTER_MDP_PORT0		2
-> +#define MASTER_SNOC_BIMC_1		3
-> +#define MASTER_TCU_0			4
-> +#define SLAVE_EBI_CH0			5
-> +#define SLAVE_BIMC_SNOC			6
-> +
-> +#define MASTER_SPDM			0
-> +#define MASTER_BLSP_1			1
-> +#define MASTER_BLSP_2			2
-> +#define MASTER_XI_USB_HS1		3
-> +#define MASTER_CRYPT0			4
-> +#define MASTER_SDCC_1			5
-> +#define MASTER_SDCC_2			6
-> +#define MASTER_SNOC_PCNOC		7
-> +#define MASTER_QPIC			8
-> +#define PCNOC_INT_0			9
-> +#define PCNOC_INT_2			10
-> +#define PCNOC_INT_3			11
-> +#define PCNOC_S_0			12
-> +#define PCNOC_S_1			13
-> +#define PCNOC_S_2			14
-> +#define PCNOC_S_3			15
-> +#define PCNOC_S_4			16
-> +#define PCNOC_S_6			17
-> +#define PCNOC_S_7			18
-> +#define PCNOC_S_8			19
-> +#define PCNOC_S_9			20
-> +#define PCNOC_S_10			21
-> +#define PCNOC_S_11			22
-> +#define SLAVE_SPDM			23
-> +#define SLAVE_PDM			24
-> +#define SLAVE_PRNG			25
-> +#define SLAVE_TCSR			26
-> +#define SLAVE_SNOC_CFG			27
-> +#define SLAVE_MESSAGE_RAM		28
-> +#define SLAVE_DISP_SS_CFG		29
-> +#define SLAVE_GPU_CFG			30
-> +#define SLAVE_BLSP_1			31
-> +#define SLAVE_BLSP_2			32
-> +#define SLAVE_TLMM_NORTH		33
-> +#define SLAVE_PCIE			34
-> +#define SLAVE_ETHERNET			35
-> +#define SLAVE_TLMM_EAST			36
-> +#define SLAVE_TCU			37
-> +#define SLAVE_PMIC_ARB			38
-> +#define SLAVE_SDCC_1			39
-> +#define SLAVE_SDCC_2			40
-> +#define SLAVE_TLMM_SOUTH		41
-> +#define SLAVE_USB_HS			42
-> +#define SLAVE_USB3			43
-> +#define SLAVE_CRYPTO_0_CFG		44
-> +#define SLAVE_PCNOC_SNOC		45
-> +
-> +#define MASTER_QDSS_BAM			0
-> +#define MASTER_BIMC_SNOC		1
-> +#define MASTER_PCNOC_SNOC		2
-> +#define MASTER_QDSS_ETR			3
-> +#define MASTER_EMAC			4
-> +#define MASTER_PCIE			5
-> +#define MASTER_USB3			6
-> +#define QDSS_INT			7
-> +#define SNOC_INT_0			8
-> +#define SNOC_INT_1			9
-> +#define SNOC_INT_2			10
-> +#define SLAVE_KPSS_AHB			11
-> +#define SLAVE_WCSS			12
-> +#define SLAVE_SNOC_BIMC_1		13
-> +#define SLAVE_IMEM			14
-> +#define SLAVE_SNOC_PCNOC		15
-> +#define SLAVE_QDSS_STM			16
-> +#define SLAVE_CATS_0			17
-> +#define SLAVE_CATS_1			18
-> +#define SLAVE_LPASS			19
-> +
+> +#ifdef CONFIG_THERMAL
+> +	/*
+> +	 * tz[0]: composite temperature
+> +	 * tz[1-8]: temperature sensor 1 through 8
+> +	 */
+> +	struct nvme_tz tz[9];
+> +	DECLARE_BITMAP(tz_enabled, 9);
 > +#endif
-> 
+>  };
+>  
+>  enum nvme_iopolicy {
+> @@ -584,4 +601,22 @@ static inline struct nvme_ns
+> *nvme_get_ns_from_dev(struct device *dev)
+>  	return dev_to_disk(dev)->private_data;
+>  }
+>  
+> +#ifdef CONFIG_THERMAL
+> +
+> +int nvme_thermal_zones_register(struct nvme_ctrl *ctrl);
+> +void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl);
+> +
+> +#else
+> +
+> +static inline int nvme_thermal_zones_register(struct nvme_ctrl
+> *ctrl)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void nvme_thermal_zones_unregister(struct nvme_ctrl
+> *ctrl)
+> +{
+> +}
+> +
+> +#endif /* CONFIG_THERMAL */
+> +
+>  #endif /* _NVME_H */
+> diff --git a/drivers/nvme/host/thermal.c
+> b/drivers/nvme/host/thermal.c
+> new file mode 100644
+> index 0000000..18d0e4c
+> --- /dev/null
+> +++ b/drivers/nvme/host/thermal.c
+> @@ -0,0 +1,311 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/moduleparam.h>
+> +#include <asm/unaligned.h>
+> +
+> +#include "nvme.h"
+> +
+> +static bool use_thermal_zone = true;
+> +module_param(use_thermal_zone, bool, 0444);
+> +MODULE_PARM_DESC(use_thermal_zone,
+> +	"Export nvme temperature via generic thermal interface");
+> +
+> +static int nvme_get_temp(struct nvme_ctrl *ctrl, unsigned int
+> sensor, int *temp)
+> +{
+> +	struct nvme_smart_log *log;
+> +	int ret;
+> +
+> +	BUILD_BUG_ON(ARRAY_SIZE(log->temp_sensor) + 1 !=
+> ARRAY_SIZE(ctrl->tz));
+> +
+> +	if (WARN_ON_ONCE(sensor > ARRAY_SIZE(log->temp_sensor)))
+> +		return -EINVAL;
+> +
+> +	log = kzalloc(sizeof(*log), GFP_KERNEL);
+> +	if (!log)
+> +		return -ENOMEM;
+> +
+> +	ret = nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
+> log,
+> +			   sizeof(*log), 0);
+> +	if (ret) {
+> +		ret = ret > 0 ? -EINVAL : ret;
+> +		goto free_log;
+> +	}
+> +
+> +	if (sensor)
+> +		*temp = le16_to_cpu(log->temp_sensor[sensor - 1]);
+> +	else
+> +		*temp = get_unaligned_le16(log->temperature);
+> +
+> +free_log:
+> +	kfree(log);
+> +
+> +	return ret;
+> +}
+> +
+> +#define KELVIN_TO_MILLICELSIUS(t) DECI_KELVIN_TO_MILLICELSIUS((t) *
+> 10)
+> +#define MILLICELSIUS_TO_KELVIN(t) ((MILLICELSIUS_TO_DECI_KELVIN(t) +
+> 5) / 10)
+> +
+> +static int nvme_tz_of_get_temp(void *data, int *temp)
+> +{
+> +	struct nvme_tz *tz = data;
+> +	unsigned int sensor = tz->sensor;
+> +	struct nvme_ctrl *ctrl = container_of(tz, struct nvme_ctrl,
+> tz[sensor]);
+> +	int ret;
+> +
+> +	ret = nvme_get_temp(ctrl, sensor, temp);
+> +	if (!ret)
+> +		*temp = KELVIN_TO_MILLICELSIUS(*temp);
+> +
+> +	return ret;
+> +}
+> +
+> +static int nvme_tz_get_temp(struct thermal_zone_device *tzdev, int
+> *temp)
+> +{
+> +	return nvme_tz_of_get_temp(tzdev->devdata, temp);
+> +}
+> +
+> +static int nvme_tz_get_trip_type(struct thermal_zone_device *tzdev,
+> +				 int trip, enum thermal_trip_type
+> *type)
+> +{
+> +	*type = THERMAL_TRIP_ACTIVE;
+> +
+> +	return 0;
+> +}
+> +
+> +static int nvme_get_over_temp_thresh(struct nvme_ctrl *ctrl,
+> +				     unsigned int sensor, int *temp)
+> +{
+> +	unsigned int threshold = sensor <<
+> NVME_TEMP_THRESH_SELECT_SHIFT;
+> +	int status;
+> +	int ret;
+> +
+> +	if (WARN_ON_ONCE(sensor >= ARRAY_SIZE(ctrl->tz)))
+> +		return -EINVAL;
+> +
+> +	ret = nvme_get_features(ctrl, NVME_FEAT_TEMP_THRESH,
+> threshold, NULL, 0,
+> +				&status);
+> +	if (!ret)
+> +		*temp = status & NVME_TEMP_THRESH_MASK;
+> +
+> +	return ret > 0 ? -EINVAL : ret;
+> +}
+> +
+> +static int nvme_set_over_temp_thresh(struct nvme_ctrl *ctrl,
+> +				     unsigned int sensor, int temp)
+> +{
+> +	unsigned int threshold = sensor <<
+> NVME_TEMP_THRESH_SELECT_SHIFT;
+> +	int ret;
+> +
+> +	if (WARN_ON_ONCE(sensor >= ARRAY_SIZE(ctrl->tz)))
+> +		return -EINVAL;
+> +
+> +	if (temp > NVME_TEMP_THRESH_MASK)
+> +		return -EINVAL;
+> +
+> +	threshold |= temp & NVME_TEMP_THRESH_MASK;
+> +
+> +	ret = nvme_set_features(ctrl, NVME_FEAT_TEMP_THRESH,
+> threshold, NULL, 0,
+> +				NULL);
+> +
+> +	return ret > 0 ? -EINVAL : ret;
+> +}
+> +
+> +static int nvme_tz_get_trip_temp(struct thermal_zone_device *tzdev,
+> +				 int trip, int *temp)
+> +{
+> +	struct nvme_tz *tz = tzdev->devdata;
+> +	unsigned int sensor = tz->sensor;
+> +	struct nvme_ctrl *ctrl = container_of(tz, struct nvme_ctrl,
+> tz[sensor]);
+> +	int ret;
+> +
+> +	ret = nvme_get_over_temp_thresh(ctrl, sensor, temp);
+> +	if (!ret)
+> +		*temp = KELVIN_TO_MILLICELSIUS(*temp);
+> +
+> +	return ret;
+> +}
+> +
+> +static int nvme_tz_of_set_trip_temp(void *data, int trip, int temp)
+> +{
+> +	struct nvme_tz *tz = data;
+> +	unsigned int sensor = tz->sensor;
+> +	struct nvme_ctrl *ctrl = container_of(tz, struct nvme_ctrl,
+> tz[sensor]);
+> +
+> +	temp = MILLICELSIUS_TO_KELVIN(temp);
+> +
+> +	return nvme_set_over_temp_thresh(ctrl, sensor, temp);
+> +}
+> +
+> +static int nvme_tz_set_trip_temp(struct thermal_zone_device *tzdev,
+> +				 int trip, int temp)
+> +{
+> +	return nvme_tz_of_set_trip_temp(tzdev->devdata, trip, temp);
+> +}
+> +
+> +static struct thermal_zone_device_ops nvme_tz_ops = {
+> +	.get_temp = nvme_tz_get_temp,
+> +	.get_trip_type = nvme_tz_get_trip_type,
+> +	.get_trip_temp = nvme_tz_get_trip_temp,
+> +	.set_trip_temp = nvme_tz_set_trip_temp,
+> +};
+> +
+> +static struct thermal_zone_of_device_ops nvme_tz_of_ops = {
+> +	.get_temp = nvme_tz_of_get_temp,
+> +	.set_trip_temp = nvme_tz_of_set_trip_temp,
+> +};
+> +
+> +static const struct thermal_zone_params nvme_tz_params = {
+> +	.governor_name = "user_space",
+> +	.no_hwmon = true,
+> +};
+> +
+> +static int nvme_thermal_zone_register(struct nvme_ctrl *ctrl,
+> +				      unsigned int sensor)
+> +{
+> +	struct thermal_zone_device *tzdev;
+> +	struct nvme_tz *tz = &ctrl->tz[sensor];
+> +	char name[THERMAL_NAME_LENGTH];
+> +	int ret;
+> +
+> +	tz->params = nvme_tz_params;
+> +	tz->sensor = sensor;
+> +	snprintf(name, sizeof(name), "nvme%d_temp%u", ctrl-
+> >instance, sensor);
+> +
+> +	tzdev = thermal_zone_device_register(name, 1, 1, tz,
+> &nvme_tz_ops,
+> +					     &tz->params, 0, 0);
+> +	if (IS_ERR(tzdev)) {
+> +		dev_err(ctrl->device,
+> +			"Failed to register thermal zone device:
+> %ld\n",
+> +			PTR_ERR(tzdev));
+> +		return PTR_ERR(tzdev);
+> +	}
+> +
+> +	tz->dev = tzdev;
+> +
+> +	snprintf(name, sizeof(name), "temp%d", sensor);
+> +	ret = sysfs_create_link(&ctrl->ctrl_device.kobj, &tz->dev-
+> >device.kobj,
+> +				name);
+> +	if (ret)
+> +		goto device_unregister;
+> +
+> +	ret = sysfs_create_link(&tz->dev->device.kobj,
+> +				&ctrl->ctrl_device.kobj, "device");
+> +	if (ret)
+> +		goto remove_sensor_link;
+> +
+> +	tzdev = thermal_zone_of_sensor_register(ctrl->dev, sensor,
+> tz,
+> +						&nvme_tz_of_ops);
+> +	if (!IS_ERR(tzdev)) {
+> +		tz->of_dev = tzdev;
+> +	} else if (PTR_ERR(tzdev) != -ENODEV) {
+> +		ret = PTR_ERR(tzdev);
+> +		dev_err(ctrl->device,
+> +			"Failed to register thermal zone of sensor:
+> %d\n", ret);
+> +		goto remove_device_link;
+> +	}
+> +
+> +	return 0;
+> +
+> +remove_device_link:
+> +	sysfs_remove_link(&tz->dev->device.kobj, "device");
+> +remove_sensor_link:
+> +	sysfs_remove_link(&ctrl->ctrl_device.kobj, name);
+> +device_unregister:
+> +	thermal_zone_device_unregister(tz->dev);
+> +	tz->dev = NULL;
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * nvme_thermal_zones_register() - register nvme thermal zone
+> devices
+> + * @ctrl: controller instance
+> + *
+> + * This function creates up to nine thermal zone devices for all
+> implemented
+> + * temperature sensors including the composite temperature.
+> + * Each thermal zone device provides a single trip point temperature
+> that is
+> + * associated with an over temperature threshold.
+> + * A negative value is returned when the device doesn't respond to
+> the host
+> + * and won't be able to continue initialization.
+> + */
+> +int nvme_thermal_zones_register(struct nvme_ctrl *ctrl)
+> +{
+> +	struct nvme_smart_log *log;
+> +	int ret = 0;
+> +	int err;
+> +	int i;
+> +
+> +	if (!use_thermal_zone)
+> +		return 0;
+> +
+> +	log = kzalloc(sizeof(*log), GFP_KERNEL);
+> +	if (!log)
+> +		return 0;
+> +
+> +	err = nvme_get_log(ctrl, NVME_NSID_ALL, NVME_LOG_SMART, 0,
+> log,
+> +			   sizeof(*log), 0);
+> +	if (err) {
+> +		dev_err(ctrl->device, "Failed to get SMART log:
+> %d\n", err);
+> +		/* If the device provided a response, then it's non-
+> fatal */
+> +		ret = (err > 0) ? 0 : err;
+> +		goto out;
+> +	}
+> +
+> +	for_each_clear_bit(i, ctrl->tz_enabled, ARRAY_SIZE(ctrl-
+> >tz)) {
+> +		int temp;
+> +
+> +		if (i)
+> +			temp = le16_to_cpu(log->temp_sensor[i - 1]);
+> +		else
+> +			temp = get_unaligned_le16(log->temperature);
+> +
+> +		/*
+> +		 * All implemented temperature sensors report a non-
+> zero value
+> +		 * in temperature sensor fields in the smart log
+> page.
+> +		 */
+> +		if (!temp)
+> +			continue;
+> +
+> +		err = nvme_thermal_zone_register(ctrl, i);
+> +		if (err)
+> +			goto out;
+> +
+> +		__set_bit(i, ctrl->tz_enabled);
+> +	}
+> +out:
+> +	if (err)
+> +		nvme_thermal_zones_unregister(ctrl);
+> +
+> +	kfree(log);
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * nvme_thermal_zones_unregister() - unregister nvme thermal zone
+> devices
+> + * @ctrl: controller instance
+> + *
+> + * This function removes the registered thermal zone devices and
+> symlinks.
+> + */
+> +void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl)
+> +{
+> +	int i;
+> +
+> +	for_each_set_bit(i, ctrl->tz_enabled, ARRAY_SIZE(ctrl->tz))
+> {
+> +		struct nvme_tz *tz = &ctrl->tz[i];
+> +		char name[20];
+> +
+> +		thermal_zone_of_sensor_unregister(ctrl->dev, tz-
+> >of_dev);
+> +		tz->of_dev = NULL;
+> +
+> +		sysfs_remove_link(&tz->dev->device.kobj, "device");
+> +
+> +		snprintf(name, sizeof(name), "temp%d", i);
+> +		sysfs_remove_link(&ctrl->ctrl_device.kobj, name);
+> +
+> +		thermal_zone_device_unregister(tz->dev);
+> +		tz->dev = NULL;
+> +
+> +		__clear_bit(i, ctrl->tz_enabled);
+> +	}
+> +}
+> diff --git a/include/linux/nvme.h b/include/linux/nvme.h
+> index 8028ada..f29728b 100644
+> --- a/include/linux/nvme.h
+> +++ b/include/linux/nvme.h
+> @@ -749,6 +749,11 @@ struct nvme_write_zeroes_cmd {
+>  
+>  /* Features */
+>  
+> +enum {
+> +	NVME_TEMP_THRESH_MASK		= 0xffff,
+> +	NVME_TEMP_THRESH_SELECT_SHIFT	= 16,
+> +};
+> +
+>  struct nvme_feat_auto_pst {
+>  	__le64 entries[32];
+>  };
