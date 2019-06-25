@@ -2,63 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C781F55AE9
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 00:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DEF55AF5
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 00:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbfFYWRh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 18:17:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58180 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725914AbfFYWRh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 25 Jun 2019 18:17:37 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 853892086D;
-        Tue, 25 Jun 2019 22:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561501056;
-        bh=HQ27fxr0ZnCr/zXy05lhsA8/iiTCNB/xaDEjAfuRrro=;
-        h=In-Reply-To:References:To:Cc:Subject:From:Date:From;
-        b=n79BUbixZSY08kOmfpVsAsuUWP2HiIMOwm0Y5SZEZqQH3cJsb0dMSLNOCJh1KNvCV
-         OzxzQ7LRTkwFiSb8TeZkzAAk1foGrXfAoLmmTdtGKSDYkJXnBgqfwKVERoJ1pC53u1
-         J6dzbYKJH1bCIMHEBXTOdDMbK0BdWB9HV5+XUJC0=
-Content-Type: text/plain; charset="utf-8"
+        id S1725914AbfFYWU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 18:20:26 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:60207 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfFYWU0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 18:20:26 -0400
+Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id 31d07203676d00d2; Wed, 26 Jun 2019 00:20:23 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH] PCI: PM: Avoid skipping bus-level PM on platforms without ACPI
+Date:   Wed, 26 Jun 2019 00:20:23 +0200
+Message-ID: <14605632.7Eqku7tdey@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190611180757.32299-1-paul@crapouillou.net>
-References: <20190611180757.32299-1-paul@crapouillou.net>
-To:     James Hogan <jhogan@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ralf Baechle <ralf@linux-mips.org>
-Cc:     od@zcrc.me, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 1/5] clk: ingenic: Add missing header in cgu.h
-From:   Stephen Boyd <sboyd@kernel.org>
-User-Agent: alot/0.8.1
-Date:   Tue, 25 Jun 2019 15:17:35 -0700
-Message-Id: <20190625221736.853892086D@mail.kernel.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Paul Cercueil (2019-06-11 11:07:53)
-> The cgu.h has structures that contain 'clk_onecell_data' and 'clk_hw'
-> structures (no pointers), so the <linux/clk-provider.h> header should be
-> included.
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->=20
-> Notes:
->     v2: Rebase on v5.2-rc4
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-You seemed to miss my review comments on patch set #1.
+There are platforms that do not call pm_set_suspend_via_firmware(),
+so pm_suspend_via_firmware() returns 'false' on them, but the power
+states of PCI devices (PCIe ports in particular) are changed as a
+result of powering down core platform components during system-wide
+suspend.  Thus the pm_suspend_via_firmware() checks in
+pci_pm_suspend_noirq() and pci_pm_resume_noirq() introduced by
+commit 3e26c5feed2a ("PCI: PM: Skip devices in D0 for suspend-to-
+idle") are not sufficient to determine that devices left in D0
+during suspend will remain in D0 during resume and so the bus-level
+power management can be skipped for them.
 
-https://lkml.kernel.org/r/155726035790.14659.7321778387595703949@swboyd.mtv=
-.corp.google.com
+For this reason, introduce a new global suspend flag,
+PM_SUSPEND_FLAG_NO_PLATFORM, set it for suspend-to-idle only
+and replace the pm_suspend_via_firmware() checks mentioned above
+with checks against this flag.
+
+Fixes: 3e26c5feed2a ("PCI: PM: Skip devices in D0 for suspend-to-idle")
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/pci-driver.c |    8 ++++----
+ include/linux/suspend.h  |   26 ++++++++++++++++++++++++--
+ kernel/power/suspend.c   |    3 +++
+ 3 files changed, 31 insertions(+), 6 deletions(-)
+
+Index: linux-pm/include/linux/suspend.h
+===================================================================
+--- linux-pm.orig/include/linux/suspend.h
++++ linux-pm/include/linux/suspend.h
+@@ -209,8 +209,9 @@ extern int suspend_valid_only_mem(suspen
+ 
+ extern unsigned int pm_suspend_global_flags;
+ 
+-#define PM_SUSPEND_FLAG_FW_SUSPEND	(1 << 0)
+-#define PM_SUSPEND_FLAG_FW_RESUME	(1 << 1)
++#define PM_SUSPEND_FLAG_FW_SUSPEND	BIT(0)
++#define PM_SUSPEND_FLAG_FW_RESUME	BIT(1)
++#define PM_SUSPEND_FLAG_NO_PLATFORM	BIT(2)
+ 
+ static inline void pm_suspend_clear_flags(void)
+ {
+@@ -227,6 +228,11 @@ static inline void pm_set_resume_via_fir
+ 	pm_suspend_global_flags |= PM_SUSPEND_FLAG_FW_RESUME;
+ }
+ 
++static inline void pm_set_suspend_no_platform(void)
++{
++	pm_suspend_global_flags |= PM_SUSPEND_FLAG_NO_PLATFORM;
++}
++
+ /**
+  * pm_suspend_via_firmware - Check if platform firmware will suspend the system.
+  *
+@@ -268,6 +274,22 @@ static inline bool pm_resume_via_firmwar
+ 	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_FW_RESUME);
+ }
+ 
++/**
++ * pm_suspend_no_platform - Check if platform may change device power states.
++ *
++ * To be called during system-wide power management transitions to sleep states
++ * or during the subsequent system-wide transitions back to the working state.
++ *
++ * Return 'true' if the power states of devices remain under full control of the
++ * kernel throughout the system-wide suspend and resume cycle in progress (that
++ * is, if a device is put into a certain power state during suspend, it can be
++ * expected to remain in that state during resume).
++ */
++static inline bool pm_suspend_no_platform(void)
++{
++	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_NO_PLATFORM);
++}
++
+ /* Suspend-to-idle state machnine. */
+ enum s2idle_states {
+ 	S2IDLE_STATE_NONE,      /* Not suspended/suspending. */
+Index: linux-pm/kernel/power/suspend.c
+===================================================================
+--- linux-pm.orig/kernel/power/suspend.c
++++ linux-pm/kernel/power/suspend.c
+@@ -493,6 +493,9 @@ int suspend_devices_and_enter(suspend_st
+ 
+ 	pm_suspend_target_state = state;
+ 
++	if (state == PM_SUSPEND_TO_IDLE)
++		pm_set_suspend_no_platform();
++
+ 	error = platform_suspend_begin(state);
+ 	if (error)
+ 		goto Close;
+Index: linux-pm/drivers/pci/pci-driver.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -877,7 +877,7 @@ static int pci_pm_suspend_noirq(struct d
+ 			pci_dev->bus->self->skip_bus_pm = true;
+ 	}
+ 
+-	if (pci_dev->skip_bus_pm && !pm_suspend_via_firmware()) {
++	if (pci_dev->skip_bus_pm && pm_suspend_no_platform()) {
+ 		dev_dbg(dev, "PCI PM: Skipped\n");
+ 		goto Fixup;
+ 	}
+@@ -932,10 +932,10 @@ static int pci_pm_resume_noirq(struct de
+ 	/*
+ 	 * In the suspend-to-idle case, devices left in D0 during suspend will
+ 	 * stay in D0, so it is not necessary to restore or update their
+-	 * configuration here and attempting to put them into D0 again may
+-	 * confuse some firmware, so avoid doing that.
++	 * configuration here and attempting to put them into D0 again is
++	 * pointless, so avoid doing that.
+ 	 */
+-	if (!pci_dev->skip_bus_pm || pm_suspend_via_firmware())
++	if (!(pci_dev->skip_bus_pm && pm_suspend_no_platform()))
+ 		pci_pm_default_resume_early(pci_dev);
+ 
+ 	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+
+
 
