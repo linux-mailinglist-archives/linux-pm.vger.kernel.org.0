@@ -2,121 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D618B5267A
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 10:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3AC52820
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 11:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729920AbfFYIZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 04:25:17 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:45845 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726702AbfFYIZQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 04:25:16 -0400
-X-Originating-IP: 90.88.16.156
-Received: from localhost (aaubervilliers-681-1-41-156.w90-88.abo.wanadoo.fr [90.88.16.156])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 84BD740008;
-        Tue, 25 Jun 2019 08:25:07 +0000 (UTC)
-Date:   Tue, 25 Jun 2019 10:25:07 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        gregkh@linuxfoundation.org, linus.walleij@linaro.org,
-        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
-        edubezval@gmail.com, wens@csie.org, robh+dt@kernel.org,
-        mchehab+samsung@kernel.org, rui.zhang@intel.com,
-        paulmck@linux.ibm.com, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 08/11] thermal: sun8i: support ahb clocks
-Message-ID: <20190625082507.mgycs6rzlxpvgqgu@flea>
-References: <20190623164206.7467-1-tiny.windzz@gmail.com>
- <20190623164206.7467-9-tiny.windzz@gmail.com>
- <20190624182333.di7avywtdvzwukms@flea>
- <20190625003416.pxve36mrxmotg2bq@core.my.home>
+        id S1731346AbfFYJbt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 05:31:49 -0400
+Received: from foss.arm.com ([217.140.110.172]:36740 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728506AbfFYJbt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Jun 2019 05:31:49 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B040360;
+        Tue, 25 Jun 2019 02:31:49 -0700 (PDT)
+Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D7C2C3F71E;
+        Tue, 25 Jun 2019 02:31:46 -0700 (PDT)
+Date:   Tue, 25 Jun 2019 10:31:44 +0100
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alessio Balsini <balsini@android.com>
+Subject: Re: [PATCH v10 12/16] sched/core: uclamp: Extend CPU's cgroup
+ controller
+Message-ID: <20190625093144.g6forddrdql5lotv@e110439-lin>
+References: <20190621084217.8167-1-patrick.bellasi@arm.com>
+ <20190621084217.8167-13-patrick.bellasi@arm.com>
+ <20190622150332.GM657710@devbig004.ftw2.facebook.com>
+ <20190624172906.3d3w6352ji4izjgo@e110439-lin>
+ <20190624175215.GR657710@devbig004.ftw2.facebook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ry5qotdx34xj2snb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190625003416.pxve36mrxmotg2bq@core.my.home>
+In-Reply-To: <20190624175215.GR657710@devbig004.ftw2.facebook.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 24-Jun 10:52, Tejun Heo wrote:
 
---ry5qotdx34xj2snb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hey, Patrick.
 
-On Tue, Jun 25, 2019 at 02:34:16AM +0200, Ond=C5=99ej Jirman wrote:
-> On Mon, Jun 24, 2019 at 08:23:33PM +0200, Maxime Ripard wrote:
-> > On Sun, Jun 23, 2019 at 12:42:03PM -0400, Yangtao Li wrote:
-> > > H3 has extra clock, so introduce something in ths_thermal_chip/ths_de=
-vice
-> > > and adds the process of the clock.
-> > >
-> > > This is pre-work for supprt it.
-> > >
-> > > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> > > ---
-> > >  drivers/thermal/sun8i_thermal.c | 17 ++++++++++++++++-
-> > >  1 file changed, 16 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_=
-thermal.c
-> > > index ed1c19bb27cf..04f53ffb6a14 100644
-> > > --- a/drivers/thermal/sun8i_thermal.c
-> > > +++ b/drivers/thermal/sun8i_thermal.c
-> > > @@ -54,6 +54,7 @@ struct tsensor {
-> > >  };
-> > >
-> > >  struct ths_thermal_chip {
-> > > +	bool            has_ahb_clk;
-> > >  	int		sensor_num;
-> > >  	int		offset;
-> > >  	int		scale;
-> > > @@ -69,6 +70,7 @@ struct ths_device {
-> > >  	struct regmap				*regmap;
-> > >  	struct reset_control			*reset;
-> > >  	struct clk				*bus_clk;
-> > > +	struct clk                              *ahb_clk;
-> >
-> > Hmm, thinking a bit about this, the name of those two clocks doesn't
-> > make sense. AHB is the bus being used to access that device, so the
-> > bus clock is the AHB clock.
-> >
-> > What is that clock being used for?
->
-> To control the A/D and sample averaging logic, I suppose. It's controlled=
- by the
-> THS_CLK_REG (THS Clock Register) in H3 user manual.
->
-> bus_clk controls THS_GATING in BUS_CLK_GATING_REG2 (THS module is connect=
-ed to
-> APB bus).
->
-> I'd call it ths_clk and bus_clk.
+Hi,
 
-Thanks. We've tried to make clock names a bit more generic and
-consistent, so let's use mod instead.
+> On Mon, Jun 24, 2019 at 06:29:06PM +0100, Patrick Bellasi wrote:
+> > > I kinda wonder whether the term bandwidth is a bit confusing because
+> > > it's also used for cpu.max/min.  Would just calling it frequency be
+> > > clearer?
+> > 
+> > Maybe I should find a better way to express the concept above.
+> > 
+> > I agree that bandwidth is already used by cpu.{max,min}, what I want
+> > to call out is that clamps allows to enrich that concept.
+> > 
+> > By hinting the scheduler on min/max required utilization we can better
+> > defined the amount of actual CPU cycles required/allowed.
+> > That's a bit more precise bandwidth control compared to just rely on
+> > temporal runnable/period limits.
+> 
+> I see.  I wonder whether it's overloading the same term too subtly
+> tho.  It's great to document how they interact but it *might* be
+> easier for readers if a different term is used even if the meaning is
+> essentially the same.  Anyways, it's a nitpick.  Please feel free to
+> ignore.
 
-Maxime
+Got it, will try come up with a better description in the v11 to avoid
+confusion and better explain the "improvements" without polluting too
+much the original concept.
 
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> > > > +	tg = css_tg(of_css(of));
+> > > > +	if (tg == &root_task_group) {
+> > > > +		ret = -EINVAL;
+> > > > +		goto out;
+> > > > +	}
+> > > 
+> > > I don't think you need the above check.
+> > 
+> > Don't we want to forbid attributes tuning from the root group?
+> 
+> Yeah, that's enforced by NOT_ON_ROOT flag, right?
 
---ry5qotdx34xj2snb
-Content-Type: application/pgp-signature; name="signature.asc"
+Oh right, since we don't show them we can't write them :)
 
------BEGIN PGP SIGNATURE-----
+> > > So, uclamp.max limits the maximum freq% can get and uclamp.min limits
+> > > hte maximum freq% protection can get in the subtree.  Let's say
+> > > uclamp.max is 50% and uclamp.min is 100%.
+> > 
+> > That's not possible, in the current implementation we always enforce
+> > the limit (uclamp.max) to be _not smaller_ then the protection
+> > (uclamp.min).
+> > 
+> > Indeed, in principle, it does not make sense to ask for a minimum
+> > utilization (i.e. frequency boosting) which is higher then the
+> > maximum allowed utilization (i.e. frequency capping).
+> 
+> Yeah, I'm trying to explain actually it does.
+> 
+> > > It means that protection is not limited but the actual freq% is
+> > > limited upto 50%, which isn't necessarily invalid.
+> > > For a simple example, a user might be saying
+> > > that they want to get whatever protection they can get from its parent
+> > > but wanna limit eventual freq at 50% and it isn't too difficult to
+> > > imagine cases where the two knobs are configured separately especially
+> > > configuration is being managed hierarchically / automatically.
+> > 
+> > That's not my understanding, in v10 by default when we create a
+> > subgroup we assign it uclamp.min=0%, meaning that we don't boost
+> > frequencies.
+> > 
+> > It seems instead that you are asking to set uclamp.min=100% by
+> > default, so that the effective value will give us whatever the father
+> > allow. Is that correct?
+> 
+> No, the defaults are fine.  I'm trying to say that min/max
+> configurations don't need to be coupled like this and there are valid
+> use cases where the configured min is higher than max when
+> configurations are nested and managed automatically.
+> 
+> Limits always trump protection in effect of course but please don't
+> limit what can be configured.
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXRHaYwAKCRDj7w1vZxhR
-xQrlAP9wwKwsQ2PbVvHGyuOJSFjRJZ9ASA22w83xIaKJDErjhgEAsmUAcw4APZyi
-BhQMziRi3MAIeW70nBIvZFtQhI4YBwI=
-=YZIB
------END PGP SIGNATURE-----
+Got it, thanks!
 
---ry5qotdx34xj2snb--
+Will fix it in v11.
+
+> Thanks.
+> 
+> --
+> tejun
+
+Cheers,
+Patrick
+
+-- 
+#include <best/regards.h>
+
+Patrick Bellasi
