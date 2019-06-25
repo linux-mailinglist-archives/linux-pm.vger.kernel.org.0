@@ -2,130 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E2954D9E
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 13:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7591754DAB
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 13:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730239AbfFYLaF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 07:30:05 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38122 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728940AbfFYLaF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 07:30:05 -0400
-Received: by mail-lj1-f196.google.com with SMTP id r9so15866508ljg.5;
-        Tue, 25 Jun 2019 04:30:03 -0700 (PDT)
+        id S1730609AbfFYLdB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 07:33:01 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40684 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730546AbfFYLdB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 07:33:01 -0400
+Received: by mail-wr1-f66.google.com with SMTP id p11so17439941wre.7
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2019 04:33:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GrSlqTrfjDTebmzfMhekFIQ03hJAaaEIvyasOyrgdGQ=;
-        b=VaU2CpSwoLaCkJA70KwSxJ0Y4hBQSzr6GCIF3d/2vKmYsnAJ98uUD67CX7ROoIVEu9
-         AD2XU24rdlnNwSB3jqVxtlzPq0P4Cra9qaARXbnLQ5QLShlQoyksaAaFdlmmsIzccaT+
-         wwkFvo0CrRwksJtYB9/N0k+rgv47x71+z+9Ix0pF81+ds58SkQ5Tx4IGHn+FxWAndmku
-         oAVvCWJejcqecSIwT3RetqOfOJXDeixvMQthTULy6IznXWAmqBMQEhbWi9P42d52gj5n
-         wigZExHZbvBRGrQZex6hM//uuK/RNvNX3WKf1lx0NXZVQt6F6kNHxPmrv/7bgkAW4Bun
-         0A5Q==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=Jb+mp+rDj9DLSvOVTi217/rhPZn5ckg46P7fvQWw8bI=;
+        b=b8O+q8+prWiPegbdgjjfIFOuD5BkeaA7JfC1MHz+Tc9x43b1tRTTjSTLnGoMlFQ6ul
+         6aPkd4to4AnqNt1LUjRofjOUM3WGxDCGW6r/LDUCpIt71dR8i78wdpcep75jh7hjCjlI
+         NOB//JopuNBp6KX8Nakjz+38eK4WMv6pIjMIUqWF8hSPUTD1zl9rREM4NNJ/IxniZN94
+         n/GrA2nFH/lMlM8bACKhMEzqvlJT2YsaQ4Vog3WehS2DK6a/hp8sBQEf6hVbGRFkKtFd
+         Ogqz5CUtiy2m8PfP5NtZ5/BgFkvchuk8P0m9F8fe/MyuaH58/HbhixDhKiZf83g5NjSJ
+         4SXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GrSlqTrfjDTebmzfMhekFIQ03hJAaaEIvyasOyrgdGQ=;
-        b=EY9HGvZxIGxUA2J8PcCwkiatUhCdxjvbS+qw0XSPRZM23lF/GHkDtYxteoM2rd4fzX
-         9M4muHRlENL7/RoyRnLx9yATylrJ1akUYieSVuXnXt7hn/3Wctzho8nRQH3zU/Qg2Vu6
-         Pu3O1OlY4hx9f0zu8dO/7K1T3ftGYq2GDr9qizrlb0X1R328eP0BDTy1OahIu01DQNdE
-         spoBcpZE2p9NCLdshEqF9WtzJaCngFDRZQsb/UFOs8c3SFnBBj47Y3nu36I/XScZlV6x
-         zq+1iT6TBzqOTo3QHgDsi5VnTeSrE0/oHmFn3SMcalIFiPkO1OaJvtukUdfmtza0HtKc
-         NWyg==
-X-Gm-Message-State: APjAAAWszUIHnl+X630hbkUXCKpiLlZGfdFVBMJFPF6HI5iRfWpqM/v0
-        6Ro1zwxo3IhKM1SoxmNE3cc=
-X-Google-Smtp-Source: APXvYqzWn4IVRrzmk2mj1JPP+8NJ6RlFFd8d53q/lJpzHV8OxKKuKphNXquiy/1j5sApPGrFtkE6Xg==
-X-Received: by 2002:a2e:3c1a:: with SMTP id j26mr38705844lja.230.1561462203119;
-        Tue, 25 Jun 2019 04:30:03 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.googlemail.com with ESMTPSA id t4sm1020232ljh.9.2019.06.25.04.30.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Jb+mp+rDj9DLSvOVTi217/rhPZn5ckg46P7fvQWw8bI=;
+        b=Brko5TZzasCi/NvxZDl0pOjK0QYyYLJ3KaUNO4mKKUd8j+/wYrzHfoRtWlTAa8Gh/S
+         2V+FL9nl7RJSs7jwRNSzuDKy913Dc8SPMi8YEPXCjz6eBfL4bea4SzbpQhwiPYllvaug
+         t5IYJJGE5yJP6FYrpyxG11C2UYaCYV1p8aCZhJg/UCJFWM6G1nNDc8Lvb5KIauSmT9iq
+         gnXUvWzT7iVOaN7tTHPJFUUnyegnlE6TbfppltS7OK1iHbfLcgrfQ4BDoSjLJrh3HLFw
+         Zk3CsSC+1uXtXmSyhW9J3pXwgLSdNDHb4HFgnthMarbXrsHOgbxmC10wYACZngsIOEor
+         lfPA==
+X-Gm-Message-State: APjAAAVSAZgQevH8cZaVPs2vIcqeSNoaX69+j78bdvTYIlcefB5s6sNF
+        jhQR1IMYlt60hcPjvk29ognzxQ==
+X-Google-Smtp-Source: APXvYqyDTRsg9JgGOVVsxssqrY+oHBPFPg8nvRzQM0sR5MIPPyTAr34aqUlQ3cxCDkSStjDs+UDDug==
+X-Received: by 2002:adf:b78c:: with SMTP id s12mr49273824wre.264.1561462379160;
+        Tue, 25 Jun 2019 04:32:59 -0700 (PDT)
+Received: from clegane.local (191.184.66.86.rev.sfr.net. [86.66.184.191])
+        by smtp.gmail.com with ESMTPSA id j7sm19254284wru.54.2019.06.25.04.32.57
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 04:30:02 -0700 (PDT)
-Subject: Re: [PATCH v4 13/16] PM / devfreq: tegra: Support Tegra30
-To:     myungjoo.ham@samsung.com
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
-References: <7561edbc-c17c-101a-b339-fc7f9968a470@gmail.com>
- <37db00bc-3a22-d1c2-7bdc-e27af42cd5c7@gmail.com>
- <20190624065919epcms1p1a366de5f455f5138c438d1da8151c12f@epcms1p1>
- <20190624073414epcms1p87b6dc13758b6bd401d275cfba583314a@epcms1p8>
- <20190624111134epcms1p361aed3c72edd6eebc95408331c8d9739@epcms1p3>
- <CGME20190624065919epcms1p1a366de5f455f5138c438d1da8151c12f@epcms1p1>
- <20190625014214epcms1p1b8f2d76cd8cfdf3fdf517be08a92ccdf@epcms1p1>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <7488653b-e8ec-27e6-0390-5e23481857e9@gmail.com>
-Date:   Tue, 25 Jun 2019 14:30:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <20190625014214epcms1p1b8f2d76cd8cfdf3fdf517be08a92ccdf@epcms1p1>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Tue, 25 Jun 2019 04:32:58 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     viresh.kumar@linaro.org
+Cc:     rjw@rjwysocki.net, edubezval@gmail.com,
+        linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK)
+Subject: [PATCH V3 1/3] cpufreq: Move the IS_ENABLED(CPU_THERMAL) macro in a stub
+Date:   Tue, 25 Jun 2019 13:32:41 +0200
+Message-Id: <20190625113244.18146-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-25.06.2019 4:42, MyungJoo Ham пишет:
-> Sender : Dmitry Osipenko <digetx@gmail.com>
->> 24.06.2019 14:11, MyungJoo Ham пишет:
->>>>
->>>> --------- Original Message ---------
->>>> Sender : Dmitry Osipenko <digetx@gmail.com>
->>>>
->>>> 24.06.2019 10:34, MyungJoo Ham пишет:
->>>>>>
->>>>>> A question:
->>>>>>
->>>>>> Does this driver support Tegra20 as well?
->>>>>> I'm asking this because ARCH_TEGRA includes ARCH_TEGRA_2x_SOC
->>>>>> according to /drivers/soc/tegra/Kconfig.
->>>>>>
->>>>>
->>>>> For this matter, how about updating your 13/16 patch as follows?
->>>>>
->>> []
->>>>
->>>> Good call! I'll update this patch following yours suggestion, thanks.
->>>
->>> Or, you may approve the modified commits here:
->>> https://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git/log/?h=for-next
->>
->> Looks almost good to me!
->>
->> I just recalled that there is also a 64bit variant of Tegra124, the Tegra132. Hence
->> the Tegra30+ Kconfig entry should look like this (it's also worthy to break the lines
->> for readability):
->>
->> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
->> index ccb1a68c4b51..bd2efbc27725 100644
->> --- a/drivers/devfreq/Kconfig
->> +++ b/drivers/devfreq/Kconfig
->> @@ -94,7 +94,10 @@ config ARM_EXYNOS_BUS_DEVFREQ
->>
->> config ARM_TEGRA_DEVFREQ
->>        tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
->> -       depends on ARCH_TEGRA || COMPILE_TEST
->> +       depends on ARCH_TEGRA_3x_SOC  || ARCH_TEGRA_114_SOC || \
->> +                  ARCH_TEGRA_132_SOC || ARCH_TEGRA_124_SOC || \
->> +                  ARCH_TEGRA_210_SOC || \
->> +                  COMPILE_TEST
->>        select PM_OPP
->>        help
->>          This adds the DEVFREQ driver for the Tegra family of SoCs.
->>
->> Could you please adjust the patches like I'm suggesting? I'll approve yours change
->> then and won't re-spin the first batch of the patches.
-> 
-> I've adjusted as you suggested. It's pushed to the git repo as well.
+The cpufreq_online and the cpufreq_offline [un]register the driver as
+a cooling device. This is done if the driver is flagged as a cooling
+device in addition with a IS_ENABLED macro to compile out the branching
+code.
 
-Thank you very much, looking good now!
+Group this test in a stub function added in the cpufreq header instead
+of having the IS_ENABLED in the code path.
+
+Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cpufreq.c | 6 ++----
+ include/linux/cpufreq.h   | 6 ++++++
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 85ff958e01f1..aee024e42618 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1378,8 +1378,7 @@ static int cpufreq_online(unsigned int cpu)
+ 	if (cpufreq_driver->ready)
+ 		cpufreq_driver->ready(policy);
+ 
+-	if (IS_ENABLED(CONFIG_CPU_THERMAL) &&
+-	    cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV)
++	if (cpufreq_thermal_control_enabled(cpufreq_driver))
+ 		policy->cdev = of_cpufreq_cooling_register(policy);
+ 
+ 	pr_debug("initialization complete\n");
+@@ -1469,8 +1468,7 @@ static int cpufreq_offline(unsigned int cpu)
+ 		goto unlock;
+ 	}
+ 
+-	if (IS_ENABLED(CONFIG_CPU_THERMAL) &&
+-	    cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV) {
++	if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
+ 		cpufreq_cooling_unregister(policy->cdev);
+ 		policy->cdev = NULL;
+ 	}
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index d01a74fbc4db..a1467aa7f58b 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -409,6 +409,12 @@ int cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
+ const char *cpufreq_get_current_driver(void);
+ void *cpufreq_get_driver_data(void);
+ 
++static inline int cpufreq_thermal_control_enabled(struct cpufreq_driver *drv)
++{
++	return IS_ENABLED(CONFIG_CPU_THERMAL) &&
++		(drv->flags & CPUFREQ_IS_COOLING_DEV);
++}
++
+ static inline void cpufreq_verify_within_limits(struct cpufreq_policy *policy,
+ 		unsigned int min, unsigned int max)
+ {
+-- 
+2.17.1
+
