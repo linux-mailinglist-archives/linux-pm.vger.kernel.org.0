@@ -2,157 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DEF55AF5
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 00:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C92B55B51
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 00:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725914AbfFYWU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 18:20:26 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:60207 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbfFYWU0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 18:20:26 -0400
-Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id 31d07203676d00d2; Wed, 26 Jun 2019 00:20:23 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH] PCI: PM: Avoid skipping bus-level PM on platforms without ACPI
-Date:   Wed, 26 Jun 2019 00:20:23 +0200
-Message-ID: <14605632.7Eqku7tdey@kreacher>
+        id S1726293AbfFYWfl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 18:35:41 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:59902 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfFYWfl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 18:35:41 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id E0BD7260A4C
+Received: by earth.universe (Postfix, from userid 1000)
+        id C0DCE3C08D5; Wed, 26 Jun 2019 00:35:37 +0200 (CEST)
+Date:   Wed, 26 Jun 2019 00:35:37 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com, yj.chiang@mediatek.com,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] test_power: Add CURRENT and CHARGE_COUNTER properties
+Message-ID: <20190625223537.6dlcooifqfs2rv2b@earth.universe>
+References: <1557828298-16591-1-git-send-email-lecopzer.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="i4lf3yrmw6f6ubgm"
+Content-Disposition: inline
+In-Reply-To: <1557828298-16591-1-git-send-email-lecopzer.chen@mediatek.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-There are platforms that do not call pm_set_suspend_via_firmware(),
-so pm_suspend_via_firmware() returns 'false' on them, but the power
-states of PCI devices (PCIe ports in particular) are changed as a
-result of powering down core platform components during system-wide
-suspend.  Thus the pm_suspend_via_firmware() checks in
-pci_pm_suspend_noirq() and pci_pm_resume_noirq() introduced by
-commit 3e26c5feed2a ("PCI: PM: Skip devices in D0 for suspend-to-
-idle") are not sufficient to determine that devices left in D0
-during suspend will remain in D0 during resume and so the bus-level
-power management can be skipped for them.
+--i4lf3yrmw6f6ubgm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For this reason, introduce a new global suspend flag,
-PM_SUSPEND_FLAG_NO_PLATFORM, set it for suspend-to-idle only
-and replace the pm_suspend_via_firmware() checks mentioned above
-with checks against this flag.
+Hi,
 
-Fixes: 3e26c5feed2a ("PCI: PM: Skip devices in D0 for suspend-to-idle")
-Reported-by: Jon Hunter <jonathanh@nvidia.com>
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/pci/pci-driver.c |    8 ++++----
- include/linux/suspend.h  |   26 ++++++++++++++++++++++++--
- kernel/power/suspend.c   |    3 +++
- 3 files changed, 31 insertions(+), 6 deletions(-)
+On Tue, May 14, 2019 at 06:04:58PM +0800, Lecopzer Chen wrote:
+> From: "Lecopzer Chen" <lecopzer.chen@mediatek.com>
+>=20
+> Emulate battery current (variable) and battery CHARGE_COUNTER
+> (same as battery_capacity) properties.
+>=20
+> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+> Cc: YJ Chiang <yj.chiang@mediatek.com>
 
-Index: linux-pm/include/linux/suspend.h
-===================================================================
---- linux-pm.orig/include/linux/suspend.h
-+++ linux-pm/include/linux/suspend.h
-@@ -209,8 +209,9 @@ extern int suspend_valid_only_mem(suspen
- 
- extern unsigned int pm_suspend_global_flags;
- 
--#define PM_SUSPEND_FLAG_FW_SUSPEND	(1 << 0)
--#define PM_SUSPEND_FLAG_FW_RESUME	(1 << 1)
-+#define PM_SUSPEND_FLAG_FW_SUSPEND	BIT(0)
-+#define PM_SUSPEND_FLAG_FW_RESUME	BIT(1)
-+#define PM_SUSPEND_FLAG_NO_PLATFORM	BIT(2)
- 
- static inline void pm_suspend_clear_flags(void)
- {
-@@ -227,6 +228,11 @@ static inline void pm_set_resume_via_fir
- 	pm_suspend_global_flags |= PM_SUSPEND_FLAG_FW_RESUME;
- }
- 
-+static inline void pm_set_suspend_no_platform(void)
-+{
-+	pm_suspend_global_flags |= PM_SUSPEND_FLAG_NO_PLATFORM;
-+}
-+
- /**
-  * pm_suspend_via_firmware - Check if platform firmware will suspend the system.
-  *
-@@ -268,6 +274,22 @@ static inline bool pm_resume_via_firmwar
- 	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_FW_RESUME);
- }
- 
-+/**
-+ * pm_suspend_no_platform - Check if platform may change device power states.
-+ *
-+ * To be called during system-wide power management transitions to sleep states
-+ * or during the subsequent system-wide transitions back to the working state.
-+ *
-+ * Return 'true' if the power states of devices remain under full control of the
-+ * kernel throughout the system-wide suspend and resume cycle in progress (that
-+ * is, if a device is put into a certain power state during suspend, it can be
-+ * expected to remain in that state during resume).
-+ */
-+static inline bool pm_suspend_no_platform(void)
-+{
-+	return !!(pm_suspend_global_flags & PM_SUSPEND_FLAG_NO_PLATFORM);
-+}
-+
- /* Suspend-to-idle state machnine. */
- enum s2idle_states {
- 	S2IDLE_STATE_NONE,      /* Not suspended/suspending. */
-Index: linux-pm/kernel/power/suspend.c
-===================================================================
---- linux-pm.orig/kernel/power/suspend.c
-+++ linux-pm/kernel/power/suspend.c
-@@ -493,6 +493,9 @@ int suspend_devices_and_enter(suspend_st
- 
- 	pm_suspend_target_state = state;
- 
-+	if (state == PM_SUSPEND_TO_IDLE)
-+		pm_set_suspend_no_platform();
-+
- 	error = platform_suspend_begin(state);
- 	if (error)
- 		goto Close;
-Index: linux-pm/drivers/pci/pci-driver.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-driver.c
-+++ linux-pm/drivers/pci/pci-driver.c
-@@ -877,7 +877,7 @@ static int pci_pm_suspend_noirq(struct d
- 			pci_dev->bus->self->skip_bus_pm = true;
- 	}
- 
--	if (pci_dev->skip_bus_pm && !pm_suspend_via_firmware()) {
-+	if (pci_dev->skip_bus_pm && pm_suspend_no_platform()) {
- 		dev_dbg(dev, "PCI PM: Skipped\n");
- 		goto Fixup;
- 	}
-@@ -932,10 +932,10 @@ static int pci_pm_resume_noirq(struct de
- 	/*
- 	 * In the suspend-to-idle case, devices left in D0 during suspend will
- 	 * stay in D0, so it is not necessary to restore or update their
--	 * configuration here and attempting to put them into D0 again may
--	 * confuse some firmware, so avoid doing that.
-+	 * configuration here and attempting to put them into D0 again is
-+	 * pointless, so avoid doing that.
- 	 */
--	if (!pci_dev->skip_bus_pm || pm_suspend_via_firmware())
-+	if (!(pci_dev->skip_bus_pm && pm_suspend_no_platform()))
- 		pci_pm_default_resume_early(pci_dev);
- 
- 	pci_fixup_device(pci_fixup_resume_early, pci_dev);
+Thanks for the patch and thanks for taking care of testing infrastructure.
+I don't think it's a good idea to use CHARGE_CAPACITY/CHARGE_NOW also for
+CHARGE_COUNTER. CHARGE_COUNTER may be negative, but capacity should not be
+negative. Also the patch should be splitted (one for the current feature and
+one for the charge counter feature). Last but not least I don't see any
+conversion from mA to =B5A. The userspace sysfs ABI should always
+return =B5A.
 
+-- Sebastian
 
+> ---
+>  drivers/power/supply/test_power.c | 33 +++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/tes=
+t_power.c
+> index 57246cdbd042..9f85060c84de 100644
+> --- a/drivers/power/supply/test_power.c
+> +++ b/drivers/power/supply/test_power.c
+> @@ -36,6 +36,7 @@ static int battery_present		=3D 1; /* true */
+>  static int battery_technology		=3D POWER_SUPPLY_TECHNOLOGY_LION;
+>  static int battery_capacity		=3D 50;
+>  static int battery_voltage		=3D 3300;
+> +static int battery_current		=3D 1600;
+> =20
+>  static bool module_initialized;
+> =20
+> @@ -101,6 +102,7 @@ static int test_power_get_battery_property(struct pow=
+er_supply *psy,
+>  		break;
+>  	case POWER_SUPPLY_PROP_CAPACITY:
+>  	case POWER_SUPPLY_PROP_CHARGE_NOW:
+> +	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
+>  		val->intval =3D battery_capacity;
+>  		break;
+>  	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> @@ -117,6 +119,10 @@ static int test_power_get_battery_property(struct po=
+wer_supply *psy,
+>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+>  		val->intval =3D battery_voltage;
+>  		break;
+> +	case POWER_SUPPLY_PROP_CURRENT_AVG:
+> +	case POWER_SUPPLY_PROP_CURRENT_NOW:
+> +		val->intval =3D battery_current;
+> +		break;
+>  	default:
+>  		pr_info("%s: some properties deliberately report errors.\n",
+>  			__func__);
+> @@ -138,6 +144,7 @@ static enum power_supply_property test_power_battery_=
+props[] =3D {
+>  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+>  	POWER_SUPPLY_PROP_CHARGE_FULL,
+>  	POWER_SUPPLY_PROP_CHARGE_NOW,
+> +	POWER_SUPPLY_PROP_CHARGE_COUNTER,
+>  	POWER_SUPPLY_PROP_CAPACITY,
+>  	POWER_SUPPLY_PROP_CAPACITY_LEVEL,
+>  	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
+> @@ -147,6 +154,8 @@ static enum power_supply_property test_power_battery_=
+props[] =3D {
+>  	POWER_SUPPLY_PROP_SERIAL_NUMBER,
+>  	POWER_SUPPLY_PROP_TEMP,
+>  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> +	POWER_SUPPLY_PROP_CURRENT_AVG,
+> +	POWER_SUPPLY_PROP_CURRENT_NOW,
+>  };
+> =20
+>  static char *test_power_ac_supplied_to[] =3D {
+> @@ -450,6 +459,21 @@ static int param_set_battery_voltage(const char *key,
+> =20
+>  #define param_get_battery_voltage param_get_int
+> =20
+> +static int param_set_battery_current(const char *key,
+> +					const struct kernel_param *kp)
+> +{
+> +	int tmp;
+> +
+> +	if (1 !=3D sscanf(key, "%d", &tmp))
+> +		return -EINVAL;
+> +
+> +	battery_current =3D tmp;
+> +	signal_power_supply_changed(test_power_supplies[TEST_BATTERY]);
+> +	return 0;
+> +}
+> +
+> +#define param_get_battery_current param_get_int
+> +
+>  static const struct kernel_param_ops param_ops_ac_online =3D {
+>  	.set =3D param_set_ac_online,
+>  	.get =3D param_get_ac_online,
+> @@ -490,6 +514,11 @@ static const struct kernel_param_ops param_ops_batte=
+ry_voltage =3D {
+>  	.get =3D param_get_battery_voltage,
+>  };
+> =20
+> +static const struct kernel_param_ops param_ops_battery_current =3D {
+> +	.set =3D param_set_battery_current,
+> +	.get =3D param_get_battery_current,
+> +};
+> +
+>  #define param_check_ac_online(name, p) __param_check(name, p, void);
+>  #define param_check_usb_online(name, p) __param_check(name, p, void);
+>  #define param_check_battery_status(name, p) __param_check(name, p, void);
+> @@ -498,6 +527,7 @@ static const struct kernel_param_ops param_ops_batter=
+y_voltage =3D {
+>  #define param_check_battery_health(name, p) __param_check(name, p, void);
+>  #define param_check_battery_capacity(name, p) __param_check(name, p, voi=
+d);
+>  #define param_check_battery_voltage(name, p) __param_check(name, p, void=
+);
+> +#define param_check_battery_current(name, p) __param_check(name, p, void=
+);
+> =20
+> =20
+>  module_param(ac_online, ac_online, 0644);
+> @@ -528,6 +558,9 @@ MODULE_PARM_DESC(battery_capacity, "battery capacity =
+(percentage)");
+>  module_param(battery_voltage, battery_voltage, 0644);
+>  MODULE_PARM_DESC(battery_voltage, "battery voltage (millivolts)");
+> =20
+> +module_param(battery_current, battery_current, 0644);
+> +MODULE_PARM_DESC(battery_current, "battery current (milliampere)");
+> +
+>  MODULE_DESCRIPTION("Power supply driver for testing");
+>  MODULE_AUTHOR("Anton Vorontsov <cbouatmailru@gmail.com>");
+>  MODULE_LICENSE("GPL");
+> --=20
+> 2.18.0
+>=20
 
+--i4lf3yrmw6f6ubgm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0SobYACgkQ2O7X88g7
++ppFxg/+KogtQlbL0EWEB9FBygjBTSsXfwoCrx39eIEIqGF9f/CIdn1k/2hI7OKk
+2yAYtdIhTJhUgwsjrjscsa7MJ5DnUHVHtzzG+yFGsTx2/86lEBryZ2eiTmCWIgj1
+Re12yKd6RN5eUouaqqnIZbilmTWbGQhvEAadB+rygUSfW3bI4f9tvZej1CONx0WV
+TSGfLD/XXcNBZgusXWsH6bslKGeV3YkRLZlc3tZAcW+mNhtMDfJbSJhZB1J5kKT1
+UZspF6sYr3PMaN7A10bqr0mFeFqd4V/RpFXReQoFO4+EPbS43KyPOFM63LdCeKXV
+YgdrGCndTraSbObv1RMQYpe5z3z2CBM9Uxok9zSNNMdxl+o6OAbHbKUTBRdWkCIV
+xo6frnnuFCH+Lj0KgXmcePwNaFC5svn8c6/uVv7hMs6g0afICw+ojOne/yf+jsTr
+iMfsEwLoR4+hwROrdzqId5LhgPY6INdpQXxNLIy8aAx4e73xSoct5DchamGtCaDl
+MVsCVbntiXjJfNgEI6rpVJrsRsHGBh0Ls0xHJhiT/pZpI3ci3D5eDGKLLKOshBGt
+k3BKxOkJc4frIf2iBgvy4XkP1ITvI1hiuX9WA6JYMSO0BE+tl1Feu8MFJPH4Hmbt
+jA6XHIS8Sw8G+PeO7rX5+CHuzUfCehxKc/rppLZck5eGl5Q6WnY=
+=0+K2
+-----END PGP SIGNATURE-----
+
+--i4lf3yrmw6f6ubgm--
