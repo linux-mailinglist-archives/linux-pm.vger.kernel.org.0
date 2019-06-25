@@ -2,129 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F9B54F2D
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 14:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A17B55029
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 15:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731685AbfFYMqq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 08:46:46 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:13420 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727217AbfFYMqq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 08:46:46 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d1217b30000>; Tue, 25 Jun 2019 05:46:43 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 25 Jun 2019 05:46:45 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 25 Jun 2019 05:46:45 -0700
-Received: from [10.21.132.148] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 25 Jun
- 2019 12:46:42 +0000
-Subject: Re: [PATCH v2] PCI: PM: Skip devices in D0 for suspend-to-idle
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC:     Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <1668247.RaJIPSxJUN@kreacher>
- <CAJZ5v0hdtXqoK84DpYtyMSCnkR9zOHFiUPAzWZDtkFmEjyWD1g@mail.gmail.com>
- <CAJZ5v0gGdXmgc_9r2rbiadq4e31hngpjYQ40QoC6C0z19da_hQ@mail.gmail.com>
- <2287147.DxjcvLeq6l@kreacher>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <f233d8fe-9525-05de-858d-e7456a17bd4b@nvidia.com>
-Date:   Tue, 25 Jun 2019 13:46:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1727275AbfFYNXi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 09:23:38 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:41984 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726707AbfFYNXi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 09:23:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Er+C2PKvEl/nJrxXCEOSipOUJk0fmvDq2EsmH4+cGk8=; b=j+KwMRPnq4dUxOOUVuJm3vBLp
+        Yr7hRnORtM5T8FZXNeYrnzja8t5wKGncmIO+vAeotY2az3jEqz2tCz07Q/U7C9dI1dL6sWmIWoOc6
+        41GmUMQjkrdfNZtjs/v/L1Gh1DhrICTQkiIhL42sZ4w8hBnDsyfdimP/vLvX72Sbx/j0nkveics04
+        +QwIFZhyR6j+7iarhWArXGc50cKiAscltQIlBXfJoykuEhGISPZ7Fyn765WPx7VsSHlbywYkRoOzR
+        ZZ7NGm3K4nFSfQtE8KvgzrchXvPbbnuokJM10Cn/+HMNe5VmQITEfKzxhw3+yiLLLX8FowxBeSThA
+        qn/bzaw0w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hflPW-0006D5-Nn; Tue, 25 Jun 2019 13:22:58 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ABAC5209FCA10; Tue, 25 Jun 2019 15:22:56 +0200 (CEST)
+Date:   Tue, 25 Jun 2019 15:22:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, ast@kernel.org,
+        daniel@iogearbox.net, akpm@linux-foundation.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/3] notifier: Fix broken error handling pattern
+Message-ID: <20190625132256.GY3419@hirez.programming.kicks-ass.net>
+References: <20190624091843.859714294@infradead.org>
+ <20190624092109.745446564@infradead.org>
+ <20190624222107.wrmtww6b2be26wwl@treble>
+ <20190625073821.GQ3436@hirez.programming.kicks-ass.net>
+ <20190625121334.x3dyvhwsuryxevrz@treble>
 MIME-Version: 1.0
-In-Reply-To: <2287147.DxjcvLeq6l@kreacher>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1561466803; bh=d78HqQ20KZYrh16yH9/J+FHIlCtyikzMQuzoMFGmiZ8=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=l6Hj3sj1CPlhmy+nhIdEC99hzmnMz5t9L7LDhKbLJrRoADGMrkeKX1Ancf8uVfE2y
-         i2I5e/QuH3FvPzdYHjvHq/MILicIhcKLJJS/hmuB3v7zZkc9nSrTlKTjK8vcDqKgQ2
-         eLLwBFgEUMsICRW0f2Qf1x/V6PFYIgQtzfEGr78eZCEu4OUbtgQSzhIOskynqqzan6
-         c4KJbKi8ARv2Ul9EY6ifldM2+oN5dMi0Dd07jdrHwMSIYCDt9JrdxYOe0UF7V3LaJ7
-         0rhK0ZUab5ZNeHQeZYYEYQ8yv0BiE7Yp9OdswcR7quJ0CffG5CheNVp6aymky1SR91
-         vDS/gOpbJmfUQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190625121334.x3dyvhwsuryxevrz@treble>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 25/06/2019 00:09, Rafael J. Wysocki wrote:
-> On Tuesday, June 25, 2019 12:20:26 AM CEST Rafael J. Wysocki wrote:
->> On Mon, Jun 24, 2019 at 11:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>>
->>> On Mon, Jun 24, 2019 at 2:43 PM Jon Hunter <jonathanh@nvidia.com> wrote:
->>>>
->>>> Hi Rafael,
->>>>
->>>> On 13/06/2019 22:59, Rafael J. Wysocki wrote:
->>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>>
->>>>> Commit d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
->>>>> attempted to avoid a problem with devices whose drivers want them to
->>>>> stay in D0 over suspend-to-idle and resume, but it did not go as far
->>>>> as it should with that.
->>>>>
->>>>> Namely, first of all, the power state of a PCI bridge with a
->>>>> downstream device in D0 must be D0 (based on the PCI PM spec r1.2,
->>>>> sec 6, table 6-1, if the bridge is not in D0, there can be no PCI
->>>>> transactions on its secondary bus), but that is not actively enforced
->>>>> during system-wide PM transitions, so use the skip_bus_pm flag
->>>>> introduced by commit d491f2b75237 for that.
->>>>>
->>>>> Second, the configuration of devices left in D0 (whatever the reason)
->>>>> during suspend-to-idle need not be changed and attempting to put them
->>>>> into D0 again by force is pointless, so explicitly avoid doing that.
->>>>>
->>>>> Fixes: d491f2b75237 ("PCI: PM: Avoid possible suspend-to-idle issue")
->>>>> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
->>>>> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>>>
->>>> I have noticed a regression in both the mainline and -next branches on
->>>> one of our boards when testing suspend. The bisect is point to this
->>>> commit and reverting on top of mainline does fix the problem. So far I
->>>> have not looked at this in close detail but kernel log is showing ...
->>>
->>> Can you please collect a log like that, but with dynamic debug in
->>> pci-driver.c enabled?
->>>
->>> Note that reverting this commit is rather out of the question, so we
->>> need to get to the bottom of the failure.
->>
->> I suspect that there is a problem with the pm_suspend_via_firmware()
->> check which returns 'false' on the affected board, but the platform
->> actually removes power from devices left in D0 during suspend.
->>
->> I guess it would be more appropriate to check something like
->> pm_suspend_no_platform() which would return 'true' in the
->> suspend-to-idle patch w/ ACPI.
+On Tue, Jun 25, 2019 at 07:13:34AM -0500, Josh Poimboeuf wrote:
+> On Tue, Jun 25, 2019 at 09:38:21AM +0200, Peter Zijlstra wrote:
+> > > > @@ -156,43 +169,30 @@ int atomic_notifier_chain_unregister(str
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(atomic_notifier_chain_unregister);
+> > > >  
+> > > > -/**
+> > > > - *	__atomic_notifier_call_chain - Call functions in an atomic notifier chain
+> > > > - *	@nh: Pointer to head of the atomic notifier chain
+> > > > - *	@val: Value passed unmodified to notifier function
+> > > > - *	@v: Pointer passed unmodified to notifier function
+> > > > - *	@nr_to_call: See the comment for notifier_call_chain.
+> > > > - *	@nr_calls: See the comment for notifier_call_chain.
+> > > > - *
+> > > > - *	Calls each function in a notifier chain in turn.  The functions
+> > > > - *	run in an atomic context, so they must not block.
+> > > > - *	This routine uses RCU to synchronize with changes to the chain.
+> > > > - *
+> > > > - *	If the return value of the notifier can be and'ed
+> > > > - *	with %NOTIFY_STOP_MASK then atomic_notifier_call_chain()
+> > > > - *	will return immediately, with the return value of
+> > > > - *	the notifier function which halted execution.
+> > > > - *	Otherwise the return value is the return value
+> > > > - *	of the last notifier function called.
+> > > > - */
+> > > 
+> > > Why remove the useful comment?
+> > 
+> > Because I delete the whole function ?
 > 
-> So I wonder if the patch below makes any difference?
+> I viewed it as more of a rename... Regardless would the comment not
+> still be useful for the non-double-underscore version of the function?
 
-Thanks. I will try this now and let you know.
-
-Cheers!
-Jon
-
--- 
-nvpublic
+I never got that far, I just deleted the whole thing without reading it.
+But yes, with a few tweaks it should apply to the normal function.
