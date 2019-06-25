@@ -2,114 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDF752225
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 06:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8B052264
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jun 2019 07:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727103AbfFYEhs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 00:37:48 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43044 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726697AbfFYEhs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 00:37:48 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5P4X9AU108709
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2019 00:37:46 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tb9pye3ds-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Tue, 25 Jun 2019 00:37:46 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Tue, 25 Jun 2019 05:37:44 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 25 Jun 2019 05:37:41 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5P4beIQ42205414
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jun 2019 04:37:40 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C203C11C058;
-        Tue, 25 Jun 2019 04:37:40 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 90A8711C04C;
-        Tue, 25 Jun 2019 04:37:39 +0000 (GMT)
-Received: from localhost.in.ibm.com (unknown [9.124.35.87])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jun 2019 04:37:39 +0000 (GMT)
-From:   Parth Shah <parth@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
-        patrick.bellasi@arm.com
-Subject: [RFCv3 8/8] powerpc: Set turbo domain to NUMA node for task packing
-Date:   Tue, 25 Jun 2019 10:07:26 +0530
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190625043726.21490-1-parth@linux.ibm.com>
-References: <20190625043726.21490-1-parth@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19062504-0016-0000-0000-0000028C1181
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062504-0017-0000-0000-000032E98142
-Message-Id: <20190625043726.21490-9-parth@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-25_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=919 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906250036
+        id S1727590AbfFYFBO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 01:01:14 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:47053 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727457AbfFYFBO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 01:01:14 -0400
+Received: by mail-ot1-f68.google.com with SMTP id z23so15893905ote.13
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jun 2019 22:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FiWZ2EDD0rw2uVwTPcPpwKCRYVAB2YpkUcFt/RoDHFg=;
+        b=h2ZnK3LznJI6S7SAeuxH3gYSOm3Q46IkEfZYnlMHDHJSgb/D+29DRJEThb0zn697Nv
+         J40HS+8xvni6r+ocl+LFtkRncQ2gYWpw59kctMX/um3yfQd6HkO4SwOSZ8sPeOMAw2Gl
+         tQ8xtOV4AZMux6pVG3FEdW8lwJV7eYRAiNZGVLKEbTzfVS3UMMdzdR9rSJ3UohOdoL8F
+         odRlV7D9njg28Pc766RWsvrmZXsY8oLzbeh9Z7ZXrbUFoCZ+6WasWt8fxBi9bC+6/Veu
+         GuacCyrxmrLA9z6AXu2T2zIhdjT02wNCsT2N9WdaEJPyA+NgvGpOhgck4dQNol96ULhW
+         QfyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FiWZ2EDD0rw2uVwTPcPpwKCRYVAB2YpkUcFt/RoDHFg=;
+        b=mFs3QomRvbdlWhWVRVscXaNoNui8pu+dI3koq4HQL16f0BES/8+2XDuRcMMmvMoy9z
+         jqPE6D/gDqEZiw+BqBTR94jVaxs0xLOonVnzV2m8Wiju1OOjjqePbHiw+ufy/qhaLPt5
+         a8ynxXOLdeQGi7tS6GFH7wZlqgrvprmsn9dBcmvB4mZMWOvr1MZQuYpwXaFymXIUx8MU
+         1Q6pAN/lnkLDmDGs+wFJXZiy7OI49m/GjyH8WBhmPpEkjoMFuYisvwlM/QBUe8/oTdjf
+         8Vy3cH6UvzqFeRdi174wt4Qa5Ifb+EYiWkUHLjxhxATzbc4eZRMlMZ+sXlYDMa5BjwIS
+         db5A==
+X-Gm-Message-State: APjAAAXK78ux/QZs86R2pgPJ2x5hUdbyhyw49km2BHteo7eMBWdCWuti
+        lCNb4X49v+TGp4eiEOuqqL/NuxkNRxPiFNdZMxWw5A==
+X-Google-Smtp-Source: APXvYqzgdBU5Y2VM+8537LWcXwQZRNMQz9DeoMH9K9VV1vHeAJUteDxgyA7Rt5xS+P+0QXiO8vWQ6WDn6Vf8TD07OG4=
+X-Received: by 2002:a9d:1909:: with SMTP id j9mr1453244ota.139.1561438872815;
+ Mon, 24 Jun 2019 22:01:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190622003449.33707-1-saravanak@google.com> <20190624094349.rtjb7nuv6g7zmsf2@vireshk-i7>
+ <CAGETcx_ggG8oDnAVaSfuHfip1ozjQpFiGs15cz8nLQnzjTiSTg@mail.gmail.com> <20190625041054.2ceuvnuuebc6hsr5@vireshk-i7>
+In-Reply-To: <20190625041054.2ceuvnuuebc6hsr5@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 24 Jun 2019 22:00:37 -0700
+Message-ID: <CAGETcx8MuXkQyD5qZBC948-hOu=kWd4hPk2Qiu-zWOcHBCc=FA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] Add required-opps support to devfreq passive gov
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch provides an powerpc architecture specific implementation for
-defining the turbo domain to make searching of the core to be bound within
-the NUMA.  This provides a way to decrease the searching time for specific
-architectures.
+On Mon, Jun 24, 2019 at 9:11 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 24-06-19, 15:17, Saravana Kannan wrote:
+> > Here's an example. This can't be done today, but can be done with this change.
+> >
+> > In arch/arm64/boot/dts/exynos/exynos5433-bus.dtsi you have something
+> > like this with the following changes:
+> >
+> >         bus_g2d_400: bus0 {
+> >                 compatible = "samsung,exynos-bus";
+> >                 clocks = <&cmu_top CLK_ACLK_G2D_400>;
+> >                 clock-names = "bus";
+> >                 operating-points-v2 = <&bus_g2d_400_opp_table>;
+> >                 status = "disabled";
+> >         };
+> >
+> >         bus_noc2: bus9 {
+> >                 compatible = "samsung,exynos-bus";
+> >                 clocks = <&cmu_mif CLK_ACLK_BUS2_400>;
+> >                 clock-names = "bus";
+> >                 operating-points-v2 = <&bus_noc2_opp_table>;
+> >                 status = "disabled";
+> >         };
+>
+> And what is the relation between these two busses ?
 
-Signed-off-by: Parth Shah <parth@linux.ibm.com>
----
- arch/powerpc/include/asm/topology.h | 3 +++
- arch/powerpc/kernel/smp.c           | 5 +++++
- 2 files changed, 8 insertions(+)
+I can't speak for the Exynos hardware. Maybe Chanwoo knows.
 
-diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
-index 1c777ee67180..410b94c9e1a2 100644
---- a/arch/powerpc/include/asm/topology.h
-+++ b/arch/powerpc/include/asm/topology.h
-@@ -133,10 +133,13 @@ static inline void shared_proc_topology_init(void) {}
- #define topology_core_cpumask(cpu)	(per_cpu(cpu_core_map, cpu))
- #define topology_core_id(cpu)		(cpu_to_core_id(cpu))
- #define arch_scale_core_capacity	powerpc_scale_core_capacity
-+#define arch_turbo_domain		powerpc_turbo_domain
- 
- unsigned long powerpc_scale_core_capacity(int first_smt,
- 					  unsigned long smt_cap);
- 
-+struct cpumask *powerpc_turbo_domain(int cpu);
-+
- int dlpar_cpu_readd(int cpu);
- #endif
- #endif
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index 149a3fbf8ed3..856f7233190e 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1200,6 +1200,11 @@ unsigned long powerpc_scale_core_capacity(int first_cpu,
- 	/* Scale core capacity based on smt mode */
- 	return smt_mode == 1 ? cap : ((cap * smt_mode) >> 3) + cap;
- }
-+
-+inline struct cpumask *powerpc_turbo_domain(int cpu)
-+{
-+	return cpumask_of_node(cpu_to_node(cpu));
-+}
- #endif
- 
- static inline void add_cpu_to_smallcore_masks(int cpu)
--- 
-2.17.1
+But a couple of common reasons to do this between devices are:
+1. These were the combination of frequencies that were
+validated/screen during the manufacturing process.
+2. These are the sensible performance combinations between two devices
+interacting with each other. So that when one runs fast the other
+doesn't become the bottleneck.
+3. Hardware bugs requiring some kind of frequency ratio between devices.
 
+All of the cases above are some real world scenarios I've come across.
+CPU and L2/L3 on ARM systems are a good example of (2) but the passive
+governor doesn't work with CPUs yet. But I plan to work on that later
+as that's not related to this patch series.
+
+-Saravana
+
+> >         bus_g2d_400_opp_table: opp_table2 {
+> >                 compatible = "operating-points-v2";
+> >                 opp-shared;
+> >
+> >                 opp-400000000 {
+> >                         opp-hz = /bits/ 64 <400000000>;
+> >                         opp-microvolt = <1075000>;
+> > +                       required-opps = <&noc2_400>;
+> >                 };
+> >                 opp-267000000 {
+> >                         opp-hz = /bits/ 64 <267000000>;
+> >                         opp-microvolt = <1000000>;
+> > +                       required-opps = <&noc2_200>;
+> >                 };
+> >                 opp-200000000 {
+> >                         opp-hz = /bits/ 64 <200000000>;
+> >                         opp-microvolt = <975000>;
+> > +                       required-opps = <&noc2_200>;
+> >                 };
+> >                 opp-160000000 {
+> >                         opp-hz = /bits/ 64 <160000000>;
+> >                         opp-microvolt = <962500>;
+> > +                       required-opps = <&noc2_134>;
+> >                 };
+> >                 opp-134000000 {
+> >                         opp-hz = /bits/ 64 <134000000>;
+> >                         opp-microvolt = <950000>;
+> > +                       required-opps = <&noc2_134>;
+> >                 };
+> >                 opp-100000000 {
+> >                         opp-hz = /bits/ 64 <100000000>;
+> >                         opp-microvolt = <937500>;
+> > +                       required-opps = <&noc2_100>;
+> >                 };
+> >         };
+> >
+> >         bus_noc2_opp_table: opp_table6 {
+> >                 compatible = "operating-points-v2";
+> >
+> > -               opp-400000000 {
+> > +               noc2_400: opp-400000000 {
+> >                         opp-hz = /bits/ 64 <400000000>;
+> >                 };
+> > -               opp-200000000 {
+> > +               noc2_200: opp-200000000 {
+> >                         opp-hz = /bits/ 64 <200000000>;
+> >                 };
+> > -               opp-134000000 {
+> > +               noc2_134: opp-134000000 {
+> >                         opp-hz = /bits/ 64 <134000000>;
+> >                 };
+> > -               opp-100000000 {
+> > +               noc2_100: opp-100000000 {
+> >                         opp-hz = /bits/ 64 <100000000>;
+> >                 };
+> >         };
+> >
+> > Thanks,
+> > Saravana
+>
+> --
+> viresh
