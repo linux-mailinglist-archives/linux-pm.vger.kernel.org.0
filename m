@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C281655DB1
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 03:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB44C55DB3
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 03:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726223AbfFZBe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 21:34:59 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40233 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfFZBe7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 21:34:59 -0400
-Received: by mail-lf1-f68.google.com with SMTP id a9so358796lff.7;
-        Tue, 25 Jun 2019 18:34:57 -0700 (PDT)
+        id S1726508AbfFZBfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 21:35:01 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:41954 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbfFZBfA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 21:35:00 -0400
+Received: by mail-lf1-f66.google.com with SMTP id 136so353131lfa.8;
+        Tue, 25 Jun 2019 18:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HJ2vim5KZIApK8x3ewXLTeNdS/0vU4ME8rbQ/SI9AvY=;
-        b=nWEUztQtFeiRmi6ulmabtFA6qwg+mF9tIoEySdAet7Ac+qrU7fZRQLxTngA/zUte1O
-         XxffWdH8G+hHyfOXQ/zATYw31RGkA62NCazDi+TqsLL3H7XXnUuY+WeTkhBUKQJBMLlB
-         Z3zs9kOR6esRFPgMQ4uOsB3NAj8FYhK8/5mUoJq7eg4QcyHuWnZ8jIW+pe5Hj3iecmCq
-         6ZV0fWcp2ukcFxZULBnSAm8o7i+A7p8mkzXKYrgkHNwIy51o46m4geg/qaK6wU0q3Rs+
-         4xDwe5a8PdWZOb48arVLUHHAcVnvHLZhmSCNPLGumElB6Fb/25G7JPeArnnWg0XzmmFg
-         vBSw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1GRslL4EnHGZP4FEUc01VEaloEpJ+EJtnU0AoEc0Vkg=;
+        b=MxKfXKnPT5mUDPoqglh5+YiohAZpvcCzyzIufEJPnla0muTv3ly39mxL5xkdwZ28zh
+         sAnpH48Qu2jYcLaiMxQ/g0GAy+POkFl7vGZFEWd0+ejhJM7YgMrmMNMU7Lg4UG1gmPzW
+         sQWsIfrKZ+SpFU6g8ODMs+LkoSEHYCoQ+Nv31OpEAk87957B+DpDChUJAA24O5QnhWFd
+         T6JbsavoIi6e/HfTV81nKTSFMMKLSWLg3lkh4bSiO9rcNqdM41uZffUM79WLcdW78kBD
+         hzwrPWUAXhm6A4n+zsF0uGyThYYqlOGriOtq3zsWvhUSFhncUIshrcVgowCgySNlfmit
+         IoVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HJ2vim5KZIApK8x3ewXLTeNdS/0vU4ME8rbQ/SI9AvY=;
-        b=t9n9JMvbG2X949tmzGBzqudoCRl61Odb7qHkwIR/eK01Kp4TnGzNGZOKBMm0714owI
-         SjiU5RxUNDLRgCeZqBNcv9v2VLHXLK3gUG5w7qcoXElxepVNC+Nb38IyH6K+Fx1/CzJT
-         a0hkkqME1dhxK0OXJGbcNaeWjGYScaYCsVj481FTiwpVh3O/GH3Ki0YTRuA9KAdj2rXv
-         zg9a6aLYevqVL0UwPKPPrcPglypfeWzmORKVa1EvQhx72e4iz9q7tEHMiVWTatpsOM9m
-         z04KOtqB0+294TydYH7vuL3k49GVw7GotAZjIaH2ly4oTTO6nYwJlYRzdLgpUOE7Pvv4
-         bCpg==
-X-Gm-Message-State: APjAAAU464u6j/X5zMb5XsQw3ASzI8qixWaq7yqkaRVzalWNY700hcyg
-        PnC7AUIdl/jF932+Us25GJU=
-X-Google-Smtp-Source: APXvYqzO3fEmmWcJPm56uMETxyIiZAVvFVgQYiK4xpd1n+RBoFRBQ36hLCCmQpLjPWFmtypqPCiucg==
-X-Received: by 2002:a19:6a07:: with SMTP id u7mr1004503lfu.74.1561512896931;
-        Tue, 25 Jun 2019 18:34:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1GRslL4EnHGZP4FEUc01VEaloEpJ+EJtnU0AoEc0Vkg=;
+        b=f7mzOq+cly+UZxwz2MqFEghFhtqb9JBxkP2eLBuZxm6B8XCA1Na4uy6LAFM9RqUrQy
+         pn5D+3/FDo00+2vug6MLco5042zgm1Y+ov+5eKMD8SUkS4Hrueq6ZYc96hEtYtY94RYI
+         B935M2Y13SwKhqRWKT2dXM1wFasweyvg4cgI+Vhqrdmw8HGtgBuhr7zNtP4Qx4O3IYAk
+         X9ZqooiXz7PrEUvsEhxu4U/DLgzu3yG8vLM+1IknbLksbfee1x7LB7W809jWwHdTdmo+
+         xszajNJjPx4g2J4sklZOW2YVDW6tp1s7iO7oFf+XgiAvj1HFzggYj3jincgZnaHMbMzn
+         /w2Q==
+X-Gm-Message-State: APjAAAWXqaj69YYxMyVq4spOyRf44aIOSQbFfyTvFp6nfONjzT4qzJ6E
+        6B8f6x7GY29QItN3SUUgmks=
+X-Google-Smtp-Source: APXvYqwAYLR5E9BD2lpKo/RSk2pbuwUzj90QG0Wyb23ZecxQAZBkqRtrgFTtPsw63j9o7CBQ/Nhu5Q==
+X-Received: by 2002:ac2:484f:: with SMTP id 15mr928166lfy.51.1561512897944;
+        Tue, 25 Jun 2019 18:34:57 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id 199sm2549581ljf.44.2019.06.25.18.34.55
+        by smtp.gmail.com with ESMTPSA id 199sm2549581ljf.44.2019.06.25.18.34.56
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 18:34:55 -0700 (PDT)
+        Tue, 25 Jun 2019 18:34:57 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,10 +53,12 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 00/17] More improvements for Tegra30 devfreq driver
-Date:   Wed, 26 Jun 2019 04:32:34 +0300
-Message-Id: <20190626013252.30470-1-digetx@gmail.com>
+Subject: [PATCH v2 01/17] PM / devfreq: tegra30: Change irq type to unsigned int
+Date:   Wed, 26 Jun 2019 04:32:35 +0300
+Message-Id: <20190626013252.30470-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190626013252.30470-1-digetx@gmail.com>
+References: <20190626013252.30470-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -64,55 +66,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+IRQ numbers are always positive, hence the corresponding variable should
+be unsigned to keep types consistent. This is a minor change that cleans
+up code a tad more.
 
-This series addresses some additional review comments that were made by
-Thierry Reding to [1] and makes several important changes to the driver,
-fixing excessive interrupts activity. In the end I'm proposing myself as
-a maintainer for the Tegra devfreq drivers.
+Suggested-by: Thierry Reding <thierry.reding@gmail.com>
+Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/devfreq/tegra30-devfreq.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-[1] https://lore.kernel.org/lkml/0fb50eb1-a173-1756-6889-2526a10ac707@gmail.com/T/
-
-Changelog:
-
-v2:  Added more patches that are cleaning driver's code further and
-     squashing another kHz conversion bug.
-
-     The patch "Rework frequency management logic" of the v1 series is now
-     converted to "Set up watermarks properly" because I found some problems
-     in the original patch and then realized that there is no need to change
-     the logic much. So the logic mostly preserved and only got improvements.
-
-     The series is based on the today's linux-next (25 Jun) and takes into
-     account minor changes that MyungJoo Ham made to the already queued
-     patches from the first batch [1].
-
-Dmitry Osipenko (17):
-  PM / devfreq: tegra30: Change irq type to unsigned int
-  PM / devfreq: tegra30: Keep interrupt disabled while governor is
-    stopped
-  PM / devfreq: tegra30: Handle possible round-rate error
-  PM / devfreq: tegra30: Drop write-barrier
-  PM / devfreq: tegra30: Set up watermarks properly
-  PM / devfreq: tegra30: Tuneup boosting thresholds
-  PM / devfreq: tegra30: Use CPUFreq notifier
-  PM / devfreq: tegra30: Move clk-notifier's registration to governor's
-    start
-  PM / devfreq: tegra30: Reset boosting on startup
-  PM / devfreq: tegra30: Don't enable consecutive-down interrupt on
-    startup
-  PM / devfreq: tegra30: Add debug messages
-  PM / devfreq: tegra30: Inline all one-line functions
-  PM / devfreq: tegra30: Constify structs
-  PM / devfreq: tegra30: Ensure that target freq won't overflow
-  PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
-  PM / devfreq: tegra30: Use kHz units uniformly in the code
-  PM / devfreq: tegra20/30: Add Dmitry as a maintainer
-
- MAINTAINERS                       |   9 +
- drivers/devfreq/tegra30-devfreq.c | 562 +++++++++++++++++++++---------
- 2 files changed, 413 insertions(+), 158 deletions(-)
-
+diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+index a6ba75f4106d..a27300f40b0b 100644
+--- a/drivers/devfreq/tegra30-devfreq.c
++++ b/drivers/devfreq/tegra30-devfreq.c
+@@ -160,7 +160,7 @@ struct tegra_devfreq {
+ 
+ 	struct tegra_devfreq_device devices[ARRAY_SIZE(actmon_device_configs)];
+ 
+-	int irq;
++	unsigned int		irq;
+ };
+ 
+ struct tegra_actmon_emc_ratio {
+@@ -618,12 +618,12 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 		return PTR_ERR(tegra->emc_clock);
+ 	}
+ 
+-	tegra->irq = platform_get_irq(pdev, 0);
+-	if (tegra->irq < 0) {
+-		err = tegra->irq;
++	err = platform_get_irq(pdev, 0);
++	if (err < 0) {
+ 		dev_err(&pdev->dev, "Failed to get IRQ: %d\n", err);
+ 		return err;
+ 	}
++	tegra->irq = err;
+ 
+ 	reset_control_assert(tegra->reset);
+ 
 -- 
 2.22.0
 
