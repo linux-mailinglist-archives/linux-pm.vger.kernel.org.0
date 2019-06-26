@@ -2,150 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C46569F9
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 15:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753A056B64
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 15:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbfFZNG3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jun 2019 09:06:29 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:36793 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726462AbfFZNG3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jun 2019 09:06:29 -0400
-Received: by mail-wm1-f65.google.com with SMTP id u8so2045659wmm.1
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 06:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=jasW8iOP/d7sV94RnAWZopvnxi1Y0wq0BsXNBk9SRx0=;
-        b=az3YMGn6W5/V0lTRT7btk/EvmdAaHV3zlj7lFfCrrDaPgWeW+GkaDdCLu5Ti3YcHJh
-         Fx7JihhubV9v9A08WOjo1XrhxT5tKrFosChP6JevXIKk+A8kTQvG6fox4JmIB7y1V+N8
-         JgMotdeT1jmFxqF2uEzKkknQCaPmv8DrNqEplpZpBan+ElZb4oW2suYIwNnMqCjoLSiH
-         hmjt/pQiYxutG3NxKvZZ/LO+LJ6es5KMaEVmgjmCWx+Vclj2PZHQZyE0xferHxhTR8ww
-         TF01LNoctOqtERCc0HaXPpKvxcKGAr2WArzXblymP/ju5pIv6V9uj1zcHczpyK2IQC1E
-         T2Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=jasW8iOP/d7sV94RnAWZopvnxi1Y0wq0BsXNBk9SRx0=;
-        b=kwkrpLU80FEEVtR89QmxZAlUouRSiogML94OWcHbx/ckETXydN+r7vZ7FJlSTfpYIY
-         KI8EWVGGScHNY8TTzWRq0U8gZotPO7nKs1HhpYMsOgiYB2To2ZJukDTFXuGgtxncZtCs
-         rcXjbZdyWBs8mNGDnTR832yvHUIdAd1yGXU2sHfhl5VifAXb1g5DksD9rffRph4WyZDv
-         gtTFddHNqQC7g9S227DwZNlQVIvhRdG+FUMtu0mNN5OMhuheicNe8Frkb4b2X4bvnhx4
-         fr6crcW/3YtnU4hMF4DvxH66fhO97LwoHI1iKoE2tyP7qr8AMRkqqUqQTfX+CINbHYrn
-         TfIA==
-X-Gm-Message-State: APjAAAWXYx3hjZWZSP+bchomCX6PaU2OhgxncxToBnADoW6dO+2cNAcb
-        dyINPiE8+4pYaj0BgvuSLlf5nw==
-X-Google-Smtp-Source: APXvYqy7eXiwnfpfAmsno9wnKxOy/4jY/0GIhWf/bt1xBsOxMhdmhWTPBButZn+09ZxaqLFX7HZJOQ==
-X-Received: by 2002:a1c:c6:: with SMTP id 189mr2743811wma.112.1561554387914;
-        Wed, 26 Jun 2019 06:06:27 -0700 (PDT)
-Received: from dell ([2.27.35.164])
-        by smtp.gmail.com with ESMTPSA id d1sm15782413wru.41.2019.06.26.06.06.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 26 Jun 2019 06:06:26 -0700 (PDT)
-Date:   Wed, 26 Jun 2019 14:06:24 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>
-Cc:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] dt-bindings: mfd: max8998: Add charger subnode
- binding
-Message-ID: <20190626130624.GT21119@dell>
-References: <20190621115602.17559-1-pawel.mikolaj.chmiel@gmail.com>
- <20190621115602.17559-3-pawel.mikolaj.chmiel@gmail.com>
+        id S1727700AbfFZN64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jun 2019 09:58:56 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:43122 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725958AbfFZN6z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jun 2019 09:58:55 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190626135852euoutp0124eb222c38b1e5e36ea7461d0a0ccecc~rxE10a8MQ2337523375euoutp01O
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 13:58:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190626135852euoutp0124eb222c38b1e5e36ea7461d0a0ccecc~rxE10a8MQ2337523375euoutp01O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1561557532;
+        bh=BT3zIcGmvUV+ueH1TilZMhs4g/vfOTc1I+ZwJJdTOdI=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=P9Eghto3c5GHdQbSZgR9ytQs7pme55qEmeJAKtmXwNgYcF2wQqa0Wt+ZeDDifpIn/
+         PMnj2zWFzkM9zgas7G07f/EN/6CyF3fW8ZSoqpQe6pm5hJ1ZXjZsKF1po7AKXw5zZ8
+         Inj9Ti1Iv8Lvo/O2mxF1eybn0wNYhMWDGt4YbUsA=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190626135851eucas1p16099d70110d216a9de1c227f02331451~rxE04uHpe0568305683eucas1p1S;
+        Wed, 26 Jun 2019 13:58:51 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id E9.95.04298.B1A731D5; Wed, 26
+        Jun 2019 14:58:51 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190626135850eucas1p11ee7d7e5e2ae50e8245e2f6366d365eb~rxEz7Lnl-0630806308eucas1p1K;
+        Wed, 26 Jun 2019 13:58:50 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190626135850eusmtrp145647492546fa5341906e8062e54e818~rxEzs0GTO0282502825eusmtrp1U;
+        Wed, 26 Jun 2019 13:58:50 +0000 (GMT)
+X-AuditID: cbfec7f2-f2dff700000010ca-cf-5d137a1bb4a6
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 2A.11.04140.A1A731D5; Wed, 26
+        Jun 2019 14:58:50 +0100 (BST)
+Received: from [106.120.51.20] (unknown [106.120.51.20]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190626135849eusmtip228f6bdc30e55bd68f74a4eccc4642b46~rxEzAIVz31436614366eusmtip2c;
+        Wed, 26 Jun 2019 13:58:49 +0000 (GMT)
+Subject: Re: [PATCH v4 4/5] Documentation: devicetree: add PPMU events
+ description
+To:     cwchoi00@gmail.com
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, b.zolnierkie@samsung.com,
+        krzk@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        cw00.choi@samsung.com, kyungmin.park@samsung.com,
+        m.szyprowski@samsung.com, s.nawrocki@samsung.com,
+        myungjoo.ham@samsung.com, kgene@kernel.org,
+        willy.mh.wolff.ml@gmail.com
+From:   Lukasz Luba <l.luba@partner.samsung.com>
+Message-ID: <7498059d-95f7-e154-cf49-bcbc8ee6fdb9@partner.samsung.com>
+Date:   Wed, 26 Jun 2019 15:58:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <CAGTfZH2kTNWtx=Jp1UJaLN50Qxbq+Q9ThV4vhQ240QbOy1TRMQ@mail.gmail.com>
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190621115602.17559-3-pawel.mikolaj.chmiel@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SeUhUURjFu/OWeUpj1xnTLw2NifbStj8utlBSMlS0WFAUam/yoaKONi8r
+        LVDbTNHMCq1pUaN1chknLbUMHS0T0bGC9sUaKTI1cSyyRXLmGfnf77vfOfeeA5ejlK8Zby5a
+        t0vQ6/hYNetK33owaJ3jk6wKnXsl35uUny5jyLOBTwz5eH8WKWhsY0iO7QtFrFaTnLQe6JYT
+        s+0pQ57UnGOJPbsRkdPWezJS0vhGTi4/eyQjr9KuseRwbaOcNHSnM+T7ww9ombum+EIx0lQb
+        3sg1ZmMGq7l5KUVzrMKINHaz73p2q+viCCE2eregD1i63TWq50+dLGGA3Ztbb5KnojtMJnLh
+        AC+EoUOHqEzkyinxNQT9v0tZx0KJBxDcaF8lsR2BqXLuP0PH3c+MZLiK4E7HIC0NPQj6Svtk
+        DpUKb4Ihs8XJHtgTbud1IoeIws0UtPZahgeOY7E/VBl3OjQKHAynKrNpB9N4Chiyjji94/EW
+        GKg2I0njDs1nOp0aF7wBrCU2Z1IKe8HLzgKZxH5wsPKssw7gNA7qGq6zUuwVUGgvG2EVdDVV
+        yCWeCC0ns2iJRUjNLkIS7wdbzvkRzSJoaHrEODJTeAaU1QQ4EPByaL44TkI3eN7jLiVwgxO3
+        8inpWAFHjyilO6ZDRVa7TGJPuFqcJz+O1IZRvQyjuhhGdTH8f7YQ0UbkJSSKcZGCOE8n7PEX
+        +TgxURfpvyM+zoyG/1zLUFN/Ffr2WGtBmEPqsYpUP2WokuF3i0lxFgQcpfZQXOZxqFIRwScl
+        C/r4cH1irCBakA9Hq70U+8Z0bFPiSH6XECMICYL+31bGuXinosDt8zMrMtJKs2bnvzVqTJ1r
+        UP66fb6DVU+ntq7cr4oJ1MVmBM7qnRT0YvI227gfubJLN4vLN4fgr7kxpv4qe1iKtvadqpv8
+        pMu/1acH9/yZkHmuYP3q81AUNmYa3xX/vrXLeLessDvCnhK+MehXSV/C2gXaqUtCErTJ2rbk
+        tjAcrqbFKH7eTEov8n8BL6Fkn28DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEIsWRmVeSWpSXmKPExsVy+t/xe7pSVcKxBg9eSFpsnLGe1eL6l+es
+        Fs+OalvMP3KO1aL/8Wtmi/PnN7BbnG16w26x6fE1VovLu+awWXzuPcJoMeP8PiaLtUfuslss
+        vX6RyeJ24wo2i9a9R9gtDr9pZ7X4duIRo4Ogx5p5axg9ds66y+6xaVUnm8fmJfUefVtWMXp8
+        3iQXwBalZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OSmpNZllqkb5eg
+        l/H27wGmgi9sFRMPbmBvYNzN2sXIySEhYCLxYM9LMFtIYCmjxK93ARBxMYlJ+7azQ9jCEn+u
+        dbF1MXIB1bxmlLi6fzcbSEJYIETi36ZDTCC2CFDD9mlPGEGKmAVOMktc2nKdEaJjApPE3T2v
+        gBwODjYBPYkdqwpBGngF3CSmbO1lAbFZBFQlZvW0gQ0SFYiQmL2rgQWiRlDi5MwnYDanQKDE
+        +bWPwRYzC5hJzNv8kBnCFpe49WQ+E4QtL9G8dTbzBEahWUjaZyFpmYWkZRaSlgWMLKsYRVJL
+        i3PTc4uN9IoTc4tL89L1kvNzNzEC43vbsZ9bdjB2vQs+xCjAwajEw9sgLxQrxJpYVlyZe4hR
+        goNZSYR3aaJArBBvSmJlVWpRfnxRaU5q8SFGU6DnJjJLiSbnA1NPXkm8oamhuYWlobmxubGZ
+        hZI4b4fAwRghgfTEktTs1NSC1CKYPiYOTqkGxk1nDFxeB1o/narb89rXXuR9yaboM88Zskw4
+        rK4su7yzgntiO/sKs6dL9q5V/PHt1MXU2vuerlmXxec6LDtv9/t1Z5LqXd3UaQkXN7CfEFay
+        ncTu5a5/3bjxdPH8r6m/cs4yTvGZ1S+9f+mhCAFfSd4i09SLhy+9YAyIb3mfUuj46QKLys/l
+        HUosxRmJhlrMRcWJAKM4h7sFAwAA
+X-CMS-MailID: 20190626135850eucas1p11ee7d7e5e2ae50e8245e2f6366d365eb
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5
+References: <CGME20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5@eucas1p2.samsung.com>
+        <20190605091236.24263-1-l.luba@partner.samsung.com>
+        <20190605091236.24263-5-l.luba@partner.samsung.com>
+        <CAGTfZH2kTNWtx=Jp1UJaLN50Qxbq+Q9ThV4vhQ240QbOy1TRMQ@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 21 Jun 2019, Paweł Chmiel wrote:
+Hi Chanwoo,
 
-> This patch adds devicetree bindings documentation for
-> battery charging controller as the subnode of MAX8998 PMIC.
-
-It makes sense to place this in:
-
- Documentation/devicetree/bindings/power/supply/
-
-And link to it from this file using the following syntax:
-
- See: ../power/supply/<file>.txt
-
-> Signed-off-by: Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
-> ---
-> Changes from v3:
->   - Property prefix should be maxim, not max8998
->   - Describe what End of Charge in percent means
+On 6/26/19 10:23 AM, Chanwoo Choi wrote:
+> Hi Lukasz,
 > 
-> Changes from v2:
->   - Make charge-restart-level-microvolt optional.
->   - Make charge-timeout-hours optional.
+> 2019년 6월 5일 (수) 18:14, Lukasz Luba <l.luba@partner.samsung.com 
+> <mailto:l.luba@partner.samsung.com>>님이 작성:
 > 
-> Changes from v1:
->   - Removed unneeded Fixes tag
->   - Correct description of all charger values
->   - Added missing property unit
-> ---
->  .../devicetree/bindings/mfd/max8998.txt       | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>     Extend the documenation by events description with new 'event-data-type'
+>     field. Add example how the event might be defined in DT.
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/max8998.txt b/Documentation/devicetree/bindings/mfd/max8998.txt
-> index 5f2f07c09c90..368f787d6079 100644
-> --- a/Documentation/devicetree/bindings/mfd/max8998.txt
-> +++ b/Documentation/devicetree/bindings/mfd/max8998.txt
-> @@ -48,6 +48,25 @@ Additional properties required if max8998,pmic-buck2-dvs-gpio is defined:
->  - max8998,pmic-buck2-dvs-voltage: An array of 2 voltage values in microvolts
->    for buck2 regulator that can be selected using dvs gpio.
->  
-> +Charger: Configuration for battery charging controller should be added
-> +inside a child node named 'charger'.
-> +  Required properties:
-> +  - maxim,end-of-charge-percentage: End of Charge in percent.
-> +    When the charge current in constant-voltage phase drops below
-> +    end-of-charge-percentage of it's start value, charging is terminated.
-> +    If value equals 0, leave it unchanged. Otherwise it should be value
-> +    from 10 to 45 by 5 step.
-> +
-> +  Optional properties:
-> +  - maxim,charge-restart-threshold: Charge restart threshold in millivolts.
-> +    If property is not present, this will be disabled.
-> +    Valid values are: 0, 100, 150, 200. If the value equals 0, leave it
-> +    unchanged.
-> +
-> +  - maxim,charge-timeout: Charge timeout in hours. If property is not
-> +    present, this will be disabled. Valid values are: 0, 5, 6, 7.
-> +    If the value equals 0, leave it unchanged.
-> +
->  Regulators: All the regulators of MAX8998 to be instantiated shall be
->  listed in a child node named 'regulators'. Each regulator is represented
->  by a child node of the 'regulators' node.
-> @@ -97,6 +116,13 @@ Example:
->  		max8998,pmic-buck2-dvs-gpio = <&gpx0 0 3 0 0>; /* SET3 */
->  		max8998,pmic-buck2-dvs-voltage = <1350000>, <1300000>;
->  
-> +		/* Charger configuration */
-> +		charger {
-> +			maxim,end-of-charge-percentage = <20>;
-> +			maxim,charge-restart-threshold = <100>;
-> +			maxim,charge-timeout = <7>;
-> +		};
-> +
->  		/* Regulators to instantiate */
->  		regulators {
->  			ldo2_reg: LDO2 {
+>     Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com
+>     <mailto:l.luba@partner.samsung.com>>
+>     Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com
+>     <mailto:cw00.choi@samsung.com>>
+>     ---
+>       .../bindings/devfreq/event/exynos-ppmu.txt    | 26 +++++++++++++++++--
+>       1 file changed, 24 insertions(+), 2 deletions(-)
+> 
+> 
+> 
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com 
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thank you for the ACKs for this a 2/5 patch.
+Do you think the v4 could be merged now?
+
+Regards,
+Lukasz
