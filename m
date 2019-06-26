@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3481955DFF
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 03:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADB255E02
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 03:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbfFZByw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 21:54:52 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:42376 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfFZByw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 21:54:52 -0400
+        id S1726223AbfFZB4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 21:56:46 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:23583 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbfFZB4q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 21:56:46 -0400
 Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190626015448epoutp04bd2ebe8fdcbf7b73d9acc460ee7cb0eb~rnMpYfjif1526415264epoutp04L
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 01:54:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190626015448epoutp04bd2ebe8fdcbf7b73d9acc460ee7cb0eb~rnMpYfjif1526415264epoutp04L
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190626015644epoutp02595d8f62b91fc17e90dab5112234f026~rnOVgXPmt1451814518epoutp02U
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 01:56:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190626015644epoutp02595d8f62b91fc17e90dab5112234f026~rnOVgXPmt1451814518epoutp02U
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561514088;
-        bh=DbLjquqRyBJxKS+PH6N4RxTqs3FfkmN7ydT/qtcxP5g=;
+        s=mail20170921; t=1561514204;
+        bh=mN9kJgJwyv+yfF/Ayvk4CmbAGn6ClKZLiHRHhBm3400=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=hd5FMraMbu/KBse4uRlSgog/KKm7n293lgzb63K30APjkOEHgYFMtPG82f8TNke1i
-         rw5eDgU8XSLgGysucmpqiXLcx3JN4UnbuQaMwpD2csxo9EpGfaAvvS5sUdtwqZ2deM
-         uxj0eDZ+IcY/E/D3KaCHbk0ZKQZr/fXDF6he7Tks=
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.158]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20190626015446epcas1p35ba7f4670093f47bb9afb2c48e87b89e~rnMm4pF3E0859108591epcas1p3r;
-        Wed, 26 Jun 2019 01:54:46 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DF.90.04143.D50D21D5; Wed, 26 Jun 2019 10:54:37 +0900 (KST)
+        b=k0x50vqfMwbKZ/DdwhwRuWXGuGFerWcoplCkMQn0sYc0fRroNYXrDwBJ6OnzZ1W8n
+         CdEzJPpvmqiFKOl1lROz4mSRkDMTnRDmKm7zKVc0Hx4JNO4dWN87hXGAmMBdN3Zcig
+         CkXnPNzArrNiqHZjbq4OYKfGOmf2cnV9MQgMeTMQ=
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.157]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20190626015641epcas1p4980e32a22fb7b31874cb666d4caf20be~rnOSGDgMl1952119521epcas1p4r;
+        Wed, 26 Jun 2019 01:56:41 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D8.73.04139.6D0D21D5; Wed, 26 Jun 2019 10:56:38 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20190626015437epcas1p3ee6dbb704dd18fd6d8aebf3fb0aeea59~rnMe4I6kl0859108591epcas1p3f;
-        Wed, 26 Jun 2019 01:54:37 +0000 (GMT)
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20190626015638epcas1p451164dd88ad5e8ceda798c221547592c~rnOP4zHcu1633116331epcas1p4n;
+        Wed, 26 Jun 2019 01:56:38 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190626015437epsmtrp1051fced0cfab79cd06b6e2e1d11263f1~rnMe3RKCS1591315913epsmtrp1A;
-        Wed, 26 Jun 2019 01:54:37 +0000 (GMT)
-X-AuditID: b6c32a37-f19ff7000000102f-6c-5d12d05dc943
+        20190626015638epsmtrp1451ad5925cdf4a2b2483d7343b948c0e~rnOP3fGsE1653516535epsmtrp1J;
+        Wed, 26 Jun 2019 01:56:38 +0000 (GMT)
+X-AuditID: b6c32a35-98bff7000000102b-7e-5d12d0d63819
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        37.72.03692.D50D21D5; Wed, 26 Jun 2019 10:54:37 +0900 (KST)
+        62.92.03692.6D0D21D5; Wed, 26 Jun 2019 10:56:38 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190626015436epsmtip25beeccd4586f1506bc99bf27bbf532f4~rnMefBHf02334423344epsmtip2W;
-        Wed, 26 Jun 2019 01:54:36 +0000 (GMT)
-Subject: Re: [PATCH v2 3/4] PM / devfreq: Cache OPP table reference in
- devfreq
+        20190626015638epsmtip27467b9bd9650a2cf8de35fe870824d0e~rnOPsVDLw2886328863epsmtip2O;
+        Wed, 26 Jun 2019 01:56:38 +0000 (GMT)
+Subject: Re: [PATCH v2 4/4] PM / devfreq: Add required OPPs support to
+ passive governor
 To:     Saravana Kannan <saravanak@google.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -58,43 +58,43 @@ Cc:     kernel-team@android.com, linux-pm@vger.kernel.org,
         "cpgs (cpgs@samsung.com)" <cpgs@samsung.com>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <64a376ac-7e79-6b1c-6ca7-f555eaa64238@samsung.com>
-Date:   Wed, 26 Jun 2019 10:57:14 +0900
+Message-ID: <0d552b60-8ef1-5d66-d8bf-c192c15c325f@samsung.com>
+Date:   Wed, 26 Jun 2019 10:59:16 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <20190625213337.157525-4-saravanak@google.com>
+In-Reply-To: <20190625213337.157525-5-saravanak@google.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEJsWRmVeSWpSXmKPExsWy7bCmvm7sBaFYg72PTSxeHtK02LFdxOJs
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEJsWRmVeSWpSXmKPExsWy7bCmru61C0KxBs2LbSxeHtK02LFdxOJs
         0xt2i8u75rBZfO49wmhxu3EFm8WbH2eZLM6cvsRq0XXoL5vFv2sbWSw2PzjG5sDtsW33NlaP
         BZtKPTat6mTz2HK1ncWjb8sqRo/jN7YzeXzeJBfAHpVtk5GamJJapJCal5yfkpmXbqvkHRzv
         HG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0oZJCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jE
-        Vim1ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAhO2PepUVsBXf5KhZfPsbSwDiHp4uRk0NC
-        wESic9ZN1i5GLg4hgR2MEt8bJ7BBOJ8YJT50HWMFqRIS+MYo8XCuLEzHwasroDr2Mkrs7D3N
-        AuG8Z5Q4u+EaG0iVsECAxMnfZ9lBEiICvUwSV0+9BZvLLNAMNOrJbEaQKjYBLYn9L26AdfAL
-        KEpc/fEYLM4rYCdx7cITJhCbRUBV4uSi4ywgtqhAhMTlLbugagQlTs58AhbnFLCWOPnvHVg9
-        s4C4xK0n86FseYnmrbOZQRZLCExnlzi1chYTxBMuEh8WzmSFsIUlXh3fwg5hS0m87G+Dsqsl
-        Vp48wgbR3MEosWX/BagGY4n9SycDDeIA2qApsX6XPkRYUWLn77mMEDavRMPG3+wQR/BJvPva
-        wwpSDhLvaBOCKFGWuPzgLtMERuVZSN6ZheSFWUhemIWwbAEjyypGsdSC4tz01GLDAmPk+N7E
-        CE6/WuY7GDec8znEKMDBqMTD2yAvFCvEmlhWXJl7iFGCg1lJhHdpokCsEG9KYmVValF+fFFp
-        TmrxIUZTYGhPZJYSTc4H5oa8knhDUyNjY2MLE0MzU0NDJXHeeO6bMUIC6YklqdmpqQWpRTB9
-        TBycUg2MRcY27ddeO0uk8Ude6pt99H1c+N5gN//Xb69tyXZJKnuyW+1Wr8J9v7YTdx7N/ttz
-        pmxDre6cmxd/n/tsFTUlrUuPO2rXN8F5bkVLppYunTpBoTx05x3emhiH65ucdS7MnSeW8P7f
-        4+sbJaP81vy9+mtbzaPkQsdC/XCZBYcSDjTb9jyx6pjpr8RSnJFoqMVcVJwIAAec9G3VAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsWy7bCSvG7sBaFYg4mbhCxeHtK02LFdxOJs
-        0xt2i8u75rBZfO49wmhxu3EFm8WbH2eZLM6cvsRq0XXoL5vFv2sbWSw2PzjG5sDtsW33NlaP
-        BZtKPTat6mTz2HK1ncWjb8sqRo/jN7YzeXzeJBfAHsVlk5Kak1mWWqRvl8CVMe/SIraCu3wV
-        iy8fY2lgnMPTxcjJISFgInHw6grWLkYuDiGB3YwSu9u2M0IkJCWmXTzK3MXIAWQLSxw+XAxR
-        85ZRovXXQ2aQGmEBP4mTfyaygNgiAv1MEj+aJEBsZoFmRon77wogGvYzSny8vgisgU1AS2L/
-        ixtsIDa/gKLE1R+PwZbxCthJXLvwhAnEZhFQlTi56DjYUFGBCIm+ttlsEDWCEidnPgGLcwpY
-        S5z8944JYpm6xJ95l5ghbHGJW0/mQ8XlJZq3zmaewCg8C0n7LCQts5C0zELSsoCRZRWjZGpB
-        cW56brFhgWFearlecWJucWleul5yfu4mRnAUamnuYLy8JP4QowAHoxIPb4O8UKwQa2JZcWXu
-        IUYJDmYlEd6liQKxQrwpiZVVqUX58UWlOanFhxilOViUxHmf5h2LFBJITyxJzU5NLUgtgsky
-        cXBKNTAmPP2crXjjwqnCnMt+P2ftq5k9YZ3/RA8u/WVxW1P4MiQNFxrI5qutVP+3k+OOc/G+
-        C9vYXzf25VbemGldJTCjR33753Wrpr0Tm/cnZeUak5kl22Ov/NdYYrr99DKO1BWn9vP/ZP21
-        393ni6zX9Gk8D7ncFpx8u77t9fl1fla3d4nPPXDv6/6LOkosxRmJhlrMRcWJAFz8ZiG+AgAA
-X-CMS-MailID: 20190626015437epcas1p3ee6dbb704dd18fd6d8aebf3fb0aeea59
+        Vim1ICWnwLJArzgxt7g0L10vOT/XytDAwMgUqDAhO+PJhTcsBeeEKpb3NTM2MH7l62Lk5JAQ
+        MJGYtOIkUxcjF4eQwA5Gia9XnrJAOJ8YJU72nmSHcL4xSqxaeZ4RpqXj1F9miMReRomLf3ax
+        gySEBN4zSjx+xgRiCwtEStxYfxFsrohAL5PE1VNv2UAcZoFmRomHT2aDjWIT0JLY/+IGG4jN
+        L6AocfXHY7A4r4CdxIGz28CmsgioSvx61g42VVQgQuLyll1QNYISJ2c+YQGxOQWsJTau/QhW
+        zywgLnHryXwmCFteonnrbLBTJQSms0v0d8xhhfjBReLk5A9MELawxKvjW9ghbCmJl/1tUHa1
+        xMqTR9ggmjsYJbbsvwDVbCyxf+lkoGYOoA2aEut36UOEFSV2/p4LDSNeiYaNv6EO4pN497WH
+        FaQcJN7RJgRRoixx+cFdpgmMyrOQvDMLyQuzkLwwC2HZAkaWVYxiqQXFuempxYYFhsjxvYkR
+        nH61THcwTjnnc4hRgINRiYe3QV4oVog1say4MvcQowQHs5II79JEgVgh3pTEyqrUovz4otKc
+        1OJDjKbA0J7ILCWanA/MDXkl8YamRsbGxhYmhmamhoZK4rzx3DdjhATSE0tSs1NTC1KLYPqY
+        ODilGhg1JnQ3nbz0dP8yuZf6F4VZc+N6Pdhy8+y70pkKrz5ll9C+m3d5im7sShEft+ddR5fX
+        yDEdyUnTc7+nZHvLoWIFq8ojp5M5xS6bt9zbumVyeMgX/wfsR6WWmAVkuq8Rd6llm7nL4vBh
+        ncOSMTu9TkmV1352z9wTmDN/Zf2vkgDRGo7AooAWayWW4oxEQy3mouJEAAaxGOTVAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsWy7bCSvO61C0KxBu8ealq8PKRpsWO7iMXZ
+        pjfsFpd3zWGz+Nx7hNHiduMKNos3P84yWZw5fYnVouvQXzaLf9c2slhsfnCMzYHbY9vubawe
+        CzaVemxa1cnmseVqO4tH35ZVjB7Hb2xn8vi8SS6APYrLJiU1J7MstUjfLoEr48mFNywF54Qq
+        lvc1MzYwfuXrYuTkkBAwkeg49Ze5i5GLQ0hgN6PEkk9nmCASkhLTLh4FSnAA2cIShw8XQ9S8
+        ZZR4trCfEaRGWCBSYvri2awgtohAP5PEjyYJEJtZoJlR4v67AoiG/YwSr16eBhvKJqAlsf/F
+        DTYQm19AUeLqj8dgg3gF7CQOnN3GDmKzCKhK/HrWDlYvKhAh0dc2mw2iRlDi5MwnLCA2p4C1
+        xMa1H9khlqlL/Jl3iRnCFpe49WQ+E4QtL9G8dTbzBEbhWUjaZyFpmYWkZRaSlgWMLKsYJVML
+        inPTc4sNCwzzUsv1ihNzi0vz0vWS83M3MYKjUEtzB+PlJfGHGAU4GJV4eBvkhWKFWBPLiitz
+        DzFKcDArifAuTRSIFeJNSaysSi3Kjy8qzUktPsQozcGiJM77NO9YpJBAemJJanZqakFqEUyW
+        iYNTqoGxx5b74kyvcxpHeu66MstXR343EOA41dcdMzMnMmHvYtF56r7cbYk39YTubJu5+5K8
+        dNumA+VmCU0b/LNj6hdpKnHUTHt6oKVbQnGxqmLYlt2nlxf5dq6f/r3PdIr/MbN5Ty73sib5
+        HDdxf5Yi+GPajPfrzUvtCq4/0zZxW7936vYfjD28IdZKLMUZiYZazEXFiQBu3CDcvgIAAA==
+X-CMS-MailID: 20190626015638epcas1p451164dd88ad5e8ceda798c221547592c
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
@@ -102,10 +102,10 @@ X-CPGSPASS: Y
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190625213402epcas4p1959f1fa0603e5121c9b82c0aa216c6fc
+X-CMS-RootMailID: 20190625213400epcas5p417a68ce8bc5e097e4363fd61bd0a667f
 References: <20190625213337.157525-1-saravanak@google.com>
-        <CGME20190625213402epcas4p1959f1fa0603e5121c9b82c0aa216c6fc@epcas4p1.samsung.com>
-        <20190625213337.157525-4-saravanak@google.com>
+        <CGME20190625213400epcas5p417a68ce8bc5e097e4363fd61bd0a667f@epcas5p4.samsung.com>
+        <20190625213337.157525-5-saravanak@google.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -114,55 +114,69 @@ X-Mailing-List: linux-pm@vger.kernel.org
 Hi Saravana,
 
 On 19. 6. 26. 오전 6:33, Saravana Kannan wrote:
-> The OPP table can be used often in devfreq. Trying to get it each time can
-> be expensive, so cache it in the devfreq struct.
+> Look at the required OPPs of the "parent" device to determine the OPP that
+> is required from the slave device managed by the passive governor. This
+> allows having mappings between a parent device and a slave device even when
+> they don't have the same number of OPPs.
 > 
 > Signed-off-by: Saravana Kannan <saravanak@google.com>
 > ---
->  drivers/devfreq/devfreq.c | 6 ++++++
->  include/linux/devfreq.h   | 1 +
->  2 files changed, 7 insertions(+)
+>  drivers/devfreq/governor_passive.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 6b6991f0e873..ac62b78dc035 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -597,6 +597,8 @@ static void devfreq_dev_release(struct device *dev)
->  	if (devfreq->profile->exit)
->  		devfreq->profile->exit(devfreq->dev.parent);
+> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> index 3bc29acbd54e..f6de03de7a64 100644
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -22,7 +22,7 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+>  			= (struct devfreq_passive_data *)devfreq->data;
+>  	struct devfreq *parent_devfreq = (struct devfreq *)p_data->parent;
+>  	unsigned long child_freq = ULONG_MAX;
+> -	struct dev_pm_opp *opp;
+> +	struct dev_pm_opp *opp = NULL, *p_opp = NULL;
+>  	int i, count, ret = 0;
 >  
-> +	if (devfreq->opp_table)
-> +		dev_pm_opp_put_opp_table(devfreq->opp_table);
->  	mutex_destroy(&devfreq->lock);
->  	kfree(devfreq);
->  }
-> @@ -677,6 +679,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  	devfreq->max_freq = devfreq->scaling_max_freq;
+>  	/*
+> @@ -59,13 +59,20 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+>  	 * list of parent device. Because in this case, *freq is temporary
+>  	 * value which is decided by ondemand governor.
+>  	 */
+> -	opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
+> -	if (IS_ERR(opp)) {
+> -		ret = PTR_ERR(opp);
+> +	p_opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
+> +	if (IS_ERR(p_opp)) {
+> +		ret = PTR_ERR(p_opp);
+>  		goto out;
+>  	}
 >  
->  	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
-> +	devfreq->opp_table = dev_pm_opp_get_opp_table(dev);
-> +	if (IS_ERR(devfreq->opp_table))
-> +		devfreq->opp_table = NULL;
+> -	dev_pm_opp_put(opp);
+> +	if (devfreq->opp_table && parent_devfreq->opp_table)
+> +		opp = dev_pm_opp_xlate_opp(parent_devfreq->opp_table,
+> +					   devfreq->opp_table, p_opp);
+> +	if (opp) {
+> +		*freq = dev_pm_opp_get_freq(opp);
+> +		dev_pm_opp_put(opp);
+> +		goto out;
+> +	}
+>  
+>  	/*
+>  	 * Get the OPP table's index of decided freqeuncy by governor
+> @@ -92,6 +99,9 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
+>  	*freq = child_freq;
+>  
+>  out:
+> +	if (!IS_ERR_OR_NULL(opp))
+> +		dev_pm_opp_put(p_opp);
 > +
->  	atomic_set(&devfreq->suspend_count, 0);
->  
->  	dev_set_name(&devfreq->dev, "devfreq%d",
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index fbffa74bfc1b..0d877c9513d7 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -156,6 +156,7 @@ struct devfreq {
->  	struct devfreq_dev_profile *profile;
->  	const struct devfreq_governor *governor;
->  	char governor_name[DEVFREQ_NAME_LEN];
-> +	struct opp_table *opp_table;
->  	struct notifier_block nb;
->  	struct delayed_work work;
+>  	return ret;
+>  }
 >  
 > 
 
-Looks good to me.
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+I agree this approach. It is necessary.
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+
 
 -- 
 Best Regards,
