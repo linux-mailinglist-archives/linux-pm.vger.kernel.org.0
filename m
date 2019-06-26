@@ -2,237 +2,253 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7137456557
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 11:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6609E56682
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 12:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbfFZJJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jun 2019 05:09:36 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38828 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726247AbfFZJJf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jun 2019 05:09:35 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5Q98lnG084739
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 05:09:35 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tc3c1e2mr-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 05:09:34 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
-        Wed, 26 Jun 2019 10:09:32 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 26 Jun 2019 10:09:30 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5Q99J8p30802320
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jun 2019 09:09:19 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9497D5204F;
-        Wed, 26 Jun 2019 09:09:28 +0000 (GMT)
-Received: from oc0383214508.ibm.com (unknown [9.124.35.188])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 079BC52067;
-        Wed, 26 Jun 2019 09:09:26 +0000 (GMT)
-Subject: Re: [PATCH v2 1/1] cpuidle-powernv : forced wakeup for stop states
-To:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
-        mpe@ellerman.id.au, rjw@rjwysocki.net
-References: <20190617095648.18847-1-huntbag@linux.vnet.ibm.com>
- <20190617095648.18847-2-huntbag@linux.vnet.ibm.com>
- <1560917320.mk5nn6r8jw.astroid@bobo.none>
- <689a52a7-7bfc-7225-e563-ac07f7357e75@linux.vnet.ibm.com>
- <1560938644.5ukemauqsy.astroid@bobo.none>
-From:   Abhishek <huntbag@linux.vnet.ibm.com>
-Date:   Wed, 26 Jun 2019 14:39:26 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726131AbfFZKT7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jun 2019 06:19:59 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:36408 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbfFZKT7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jun 2019 06:19:59 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n4so2078176wrs.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 03:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eqxkIQ2gfMcOm07YboB3YuAHE5CN9FSjgEDC065L9w8=;
+        b=yWOsM+MSG8NdZuS36JBR36QqIAZvkBe6jRhiyfiNgSabYUqFu/ZNfLfyWd3Z0ssrtq
+         FJpL86FVWiyzL//PBzairlqt6II+o+HLZtOJZnPh7MMYamDTocbHhRLnjhIeN1UUk+zk
+         nxt7YP6D6ONacBhyT5JvbyUym0NJveh/Ef7hkne90kHhbeMkYwdtlqzXi/U97NHtNC9Z
+         3R2RFTbz5mXhvXKXsf5pjJRPD2RrL+sJtMZFqCDS/c67Qhj64a0ksscFF8ilYLG5H09V
+         GRDjpHXqhTrX/O6SqEb4so/BwTkZo1hBhupzg2KlLz2nxC2szlYyfVLSo+DojEt21X3x
+         Dpiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=eqxkIQ2gfMcOm07YboB3YuAHE5CN9FSjgEDC065L9w8=;
+        b=eVHWeT7zrxe3KxSsKtBBtLejVrSGgNn+bvRh24UDTm2LCzN3UdsqPwTzdIJr++qUmQ
+         WGSkf0r7vh/8wdMlLd4HMB+aLfSyWSZ94xBKQBlDKaycbj+fCwyAAP6C5WU9vMtcb3OB
+         +tD2p8PzOVFj6nXuKHLMIl3zNdIArO7e3RxQQMWKZdKssr/QBySfHd63xCWiDkW9y9Zo
+         2C+YnwcbqQ/NoWk1k9eFDpoVuZGDsRXoqjlQ2D5PwG6FecF2ZaV6l4h7E+CCgts6H+x4
+         AeUVVOelWu/3/2r9fGEN/ylCPgrN8F+Uy9k7BgufWkCMXdbIMWXZXfCD8UWai7aATEia
+         JOQg==
+X-Gm-Message-State: APjAAAUAIoEfZgO/ZSLFAZerj47Un05DvT6fG7XFSh+OtJAmE9x+YN5Y
+        3K1G90Z7ZJ/5P6rVxrOk0bJzuA==
+X-Google-Smtp-Source: APXvYqxpWeMZ/gJp+P/UTpQaRu2M8uCUV3artFaU6oXQMLT+W+CvNDNq8EhcvKj7XzxMzLztdcHWjA==
+X-Received: by 2002:a5d:518c:: with SMTP id k12mr3074586wrv.322.1561544395865;
+        Wed, 26 Jun 2019 03:19:55 -0700 (PDT)
+Received: from [192.168.0.41] (26.92.130.77.rev.sfr.net. [77.130.92.26])
+        by smtp.googlemail.com with ESMTPSA id o6sm2210047wmc.46.2019.06.26.03.19.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Jun 2019 03:19:55 -0700 (PDT)
+Subject: Re: [PATCH V3 2/3] thermal/drivers/cpu_cooling: Unregister with the
+ policy
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Keerthy <j-keerthy@ti.com>,
+        "open list:CPU FREQUENCY DRIVERS - ARM BIG LITTLE" 
+        <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>
+References: <20190625113244.18146-1-daniel.lezcano@linaro.org>
+ <20190625113244.18146-2-daniel.lezcano@linaro.org>
+ <20190626025831.jmyzyypxr6ezpbtu@vireshk-i7>
+ <da1d2603-e30a-d877-54c3-1fad218f9d57@linaro.org>
+ <20190626063716.cechnzsb75q5lclr@vireshk-i7>
+ <CAJZ5v0jFXmJ3ikEPQUp-cLv3+ZSnp1kP8CxdkZVofV1BS3+UwQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <8a9b7bd0-9b21-1ce1-6176-cffff4b8d739@linaro.org>
+Date:   Wed, 26 Jun 2019 12:19:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <1560938644.5ukemauqsy.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jFXmJ3ikEPQUp-cLv3+ZSnp1kP8CxdkZVofV1BS3+UwQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19062609-0020-0000-0000-0000034D7EEA
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062609-0021-0000-0000-000021A0F2FD
-Message-Id: <003ea53f-1c11-96cf-5949-3d7bf6fc4b31@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-26_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906260111
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Nick,
-
-
-On 06/19/2019 03:39 PM, Nicholas Piggin wrote:
-> Abhishek's on June 19, 2019 7:08 pm:
->> Hi Nick,
+On 26/06/2019 11:06, Rafael J. Wysocki wrote:
+> On Wed, Jun 26, 2019 at 8:37 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >>
->> Thanks for the review. Some replies below.
+>> On 26-06-19, 08:02, Daniel Lezcano wrote:
+>>> On 26/06/2019 04:58, Viresh Kumar wrote:
+>>>> On 25-06-19, 13:32, Daniel Lezcano wrote:
+>>>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>>>>> index aee024e42618..f07454249fbc 100644
+>>>>> --- a/drivers/cpufreq/cpufreq.c
+>>>>> +++ b/drivers/cpufreq/cpufreq.c
+>>>>> @@ -1379,8 +1379,8 @@ static int cpufreq_online(unsigned int cpu)
+>>>>>            cpufreq_driver->ready(policy);
+>>>>>
+>>>>>    if (cpufreq_thermal_control_enabled(cpufreq_driver))
+>>>>> -          policy->cdev = of_cpufreq_cooling_register(policy);
+>>>>> -
+>>>>> +          of_cpufreq_cooling_register(policy);
+>>>>> +
+>>>>
+>>>> We don't need any error checking here anymore ?
+>>>
+>>> There was no error checking initially. This comment and the others below
+>>> are for an additional patch IMO, not a change in this one.
 >>
->> On 06/19/2019 09:53 AM, Nicholas Piggin wrote:
->>> Abhishek Goel's on June 17, 2019 7:56 pm:
->>>> Currently, the cpuidle governors determine what idle state a idling CPU
->>>> should enter into based on heuristics that depend on the idle history on
->>>> that CPU. Given that no predictive heuristic is perfect, there are cases
->>>> where the governor predicts a shallow idle state, hoping that the CPU will
->>>> be busy soon. However, if no new workload is scheduled on that CPU in the
->>>> near future, the CPU may end up in the shallow state.
->>>>
->>>> This is problematic, when the predicted state in the aforementioned
->>>> scenario is a shallow stop state on a tickless system. As we might get
->>>> stuck into shallow states for hours, in absence of ticks or interrupts.
->>>>
->>>> To address this, We forcefully wakeup the cpu by setting the
->>>> decrementer. The decrementer is set to a value that corresponds with the
->>>> residency of the next available state. Thus firing up a timer that will
->>>> forcefully wakeup the cpu. Few such iterations will essentially train the
->>>> governor to select a deeper state for that cpu, as the timer here
->>>> corresponds to the next available cpuidle state residency. Thus, cpu will
->>>> eventually end up in the deepest possible state.
->>>>
->>>> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
->>>> ---
->>>>
->>>> Auto-promotion
->>>>    v1 : started as auto promotion logic for cpuidle states in generic
->>>> driver
->>>>    v2 : Removed timeout_needed and rebased the code to upstream kernel
->>>> Forced-wakeup
->>>>    v1 : New patch with name of forced wakeup started
->>>>    v2 : Extending the forced wakeup logic for all states. Setting the
->>>> decrementer instead of queuing up a hrtimer to implement the logic.
->>>>
->>>>    drivers/cpuidle/cpuidle-powernv.c | 38 +++++++++++++++++++++++++++++++
->>>>    1 file changed, 38 insertions(+)
->>>>
->>>> diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
->>>> index 84b1ebe212b3..bc9ca18ae7e3 100644
->>>> --- a/drivers/cpuidle/cpuidle-powernv.c
->>>> +++ b/drivers/cpuidle/cpuidle-powernv.c
->>>> @@ -46,6 +46,26 @@ static struct stop_psscr_table stop_psscr_table[CPUIDLE_STATE_MAX] __read_mostly
->>>>    static u64 default_snooze_timeout __read_mostly;
->>>>    static bool snooze_timeout_en __read_mostly;
->>>>    
->>>> +static u64 forced_wakeup_timeout(struct cpuidle_device *dev,
->>>> +				 struct cpuidle_driver *drv,
->>>> +				 int index)
->>>> +{
->>>> +	int i;
->>>> +
->>>> +	for (i = index + 1; i < drv->state_count; i++) {
->>>> +		struct cpuidle_state *s = &drv->states[i];
->>>> +		struct cpuidle_state_usage *su = &dev->states_usage[i];
->>>> +
->>>> +		if (s->disabled || su->disable)
->>>> +			continue;
->>>> +
->>>> +		return (s->target_residency + 2 * s->exit_latency) *
->>>> +			tb_ticks_per_usec;
->>>> +	}
->>>> +
->>>> +	return 0;
->>>> +}
->>> It would be nice to not have this kind of loop iteration in the
->>> idle fast path. Can we add a flag or something to the idle state?
->> Currently, we do not have any callback notification or some feedback that
->> notifies the driver everytime some state is enabled/disabled. So we have
->> to parse everytime to get the next enabled state.
-> Ahh, that's why you're doing that.
->
->> Are you suggesting to
->> add something like next_enabled_state in cpuidle state structure itself
->> which will be updated when a state is enabled or disabled?
-> Hmm, I guess it normally should not iterate over more than one state
-> unless some idle states are disabled.
->
-> What would have been nice is each state just have its own timeout
-> field with ticks already calculated, if that could be updated when
-> a state is enabled or disabled. How hard is that to add to the
-> cpuidle core?
+>> right, but ...
+>>
+>>>>> -void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>>>>> +void cpufreq_cooling_unregister(struct cpufreq_policy *policy)
+>>>>>  {
+>>>>>    struct cpufreq_cooling_device *cpufreq_cdev;
+>>>>>    bool last;
+>>>>>
+>>>>> -  if (!cdev)
+>>>>> -          return;
+>>
+>> we used to return without any errors from here. Now we will have
+>> problems if regsitering fails for some reason.
+> 
+> Specifically, the last cpufreq_cdev in the list will be unregistered
+> AFAICS, and without removing it from the list for that matter, which
+> isn't what the caller wants.
 
-I have implemented a prototype which does what you have asked for. Added
-a  disable_callback which will update timeout whenever a state is 
-enabled or
-disabled. But It would mean adding some code to cpuidle.h and 
-cpuidle/sysfs.c.
-If that is not an issue, should I go ahead and post it?
->>>> +
->>>>    static u64 get_snooze_timeout(struct cpuidle_device *dev,
->>>>    			      struct cpuidle_driver *drv,
->>>>    			      int index)
->>>> @@ -144,8 +164,26 @@ static int stop_loop(struct cpuidle_device *dev,
->>>>    		     struct cpuidle_driver *drv,
->>>>    		     int index)
->>>>    {
->>>> +	u64 dec_expiry_tb, dec, timeout_tb, forced_wakeup;
->>>> +
->>>> +	dec = mfspr(SPRN_DEC);
->>>> +	timeout_tb = forced_wakeup_timeout(dev, drv, index);
->>>> +	forced_wakeup = 0;
->>>> +
->>>> +	if (timeout_tb && timeout_tb < dec) {
->>>> +		forced_wakeup = 1;
->>>> +		dec_expiry_tb = mftb() + dec;
->>>> +	}
->>> The compiler probably can't optimise away the SPR manipulations so try
->>> to avoid them if possible.
->> Are you suggesting something like set_dec_before_idle?(in line with
->> what you have suggested to do after idle, reset_dec_after_idle)
-> I should have been clear, I meant don't mfspr(SPRN_DEC) until you
-> have tested timeout_tb.
->
->>>> +
->>>> +	if (forced_wakeup)
->>>> +		mtspr(SPRN_DEC, timeout_tb);
->>> This should just be put in the above 'if'.
->> Fair point.
->>>> +
->>>>    	power9_idle_type(stop_psscr_table[index].val,
->>>>    			 stop_psscr_table[index].mask);
->>>> +
->>>> +	if (forced_wakeup)
->>>> +		mtspr(SPRN_DEC, dec_expiry_tb - mftb());
->>> This will sometimes go negative and result in another timer interrupt.
->>>
->>> It also breaks irq work (which can be set here by machine check I
->>> believe.
->>>
->>> May need to implement some timer code to do this for you.
->>>
->>> static void reset_dec_after_idle(void)
->>> {
->>> 	u64 now;
->>>           u64 *next_tb;
->>>
->>> 	if (test_irq_work_pending())
->>> 		return;
->>> 	now = mftb;
->>> 	next_tb = this_cpu_ptr(&decrementers_next_tb);
->>>
->>> 	if (now >= *next_tb)
->>> 		return;
->>> 	set_dec(*next_tb - now);
->>> 	if (test_irq_work_pending())
->>> 		set_dec(1);
->>> }
->>>
->>> Something vaguely like that. See timer_interrupt().
->> Ah, Okay. Will go through timer_interrupt().
-> Thanks,
-> Nick
+Indeed,
 
-Thanks,
-Abhishek
+What about the resulting code above:
+
+void __cpufreq_cooling_unregister(struct cpufreq_cooling_device
+*cpufreq_cdev, int last)
+{
+        /* Unregister the notifier for the last cpufreq cooling device */
+        if (last)
+                cpufreq_unregister_notifier(&thermal_cpufreq_notifier_block,
+                                            CPUFREQ_POLICY_NOTIFIER);
+
+        thermal_cooling_device_unregister(cpufreq_cdev->cdev);
+        ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
+        kfree(cpufreq_cdev->idle_time);
+        kfree(cpufreq_cdev);
+}
+
+/**
+
+ * cpufreq_cooling_unregister - function to remove cpufreq cooling
+device.
+ * @cdev: thermal cooling device pointer.
+
+ *
+
+ * This interface function unregisters the "thermal-cpufreq-%x" cooling
+device.
+ */
+void cpufreq_cooling_unregister(struct cpufreq_policy *policy)
+{
+        struct cpufreq_cooling_device *cpufreq_cdev;
+        bool last;
+
+        mutex_lock(&cooling_list_lock);
+        list_for_each_entry(cpufreq_cdev, &cpufreq_cdev_list, node) {
+                if (cpufreq_cdev->policy == policy) {
+                        list_del(&cpufreq_cdev->node);
+                        last = list_empty(&cpufreq_cdev_list);
+                        break;
+                }
+        }
+        mutex_unlock(&cooling_list_lock);
+
+        if (cpufreq_cdev->policy == policy)
+                __cpufreq_cooling_unregister(cpufreq_cdev, last);
+}
+EXPORT_SYMBOL_GPL(cpufreq_cooling_unregister);
+
+
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
