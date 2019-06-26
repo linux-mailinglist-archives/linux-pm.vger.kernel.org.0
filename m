@@ -2,104 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C01E55D7C
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 03:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C281655DB1
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 03:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbfFZBbZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 21:31:25 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:63529 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfFZBbZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 21:31:25 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190626013122epoutp02449455ea271d9fc0d054242778814633~rm4MA4Ydq2340623406epoutp02e
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 01:31:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190626013122epoutp02449455ea271d9fc0d054242778814633~rm4MA4Ydq2340623406epoutp02e
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561512682;
-        bh=Il1LdZLD5oiDYRYYiHJZH9tmhj0oCguKH8iBAMUtDsw=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=HaforL3OyyziafSE3AAtuohzicPbMPvhX3ryMAR6mirWtN5K/PEXErW2EwHBj++rs
-         pbtTm3JSausyrsmmQaK+J933xUHYLf7zn5RsmsIPf1/G/rIj/taFp2y85szyRHlkzL
-         qC/SkGCWbu/OFhQNjtSEf2nNeBPoHarr8EzKHJD0=
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.157]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190626013120epcas1p156adfe77f254edb4f6509c5c7c5937f9~rm4JyOLXn0228102281epcas1p13;
-        Wed, 26 Jun 2019 01:31:20 +0000 (GMT)
-X-AuditID: b6c32a35-973ff7000000102b-58-5d12cae21491
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4F.C9.04139.2EAC21D5; Wed, 26 Jun 2019 10:31:14 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH v2 4/4] PM / devfreq: Add required OPPs support to
- passive governor
-Reply-To: myungjoo.ham@samsung.com
-From:   MyungJoo Ham <myungjoo.ham@samsung.com>
-To:     Kyungmin Park <kyungmin.park@samsung.com>,
+        id S1726223AbfFZBe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 21:34:59 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:40233 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726037AbfFZBe7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 21:34:59 -0400
+Received: by mail-lf1-f68.google.com with SMTP id a9so358796lff.7;
+        Tue, 25 Jun 2019 18:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HJ2vim5KZIApK8x3ewXLTeNdS/0vU4ME8rbQ/SI9AvY=;
+        b=nWEUztQtFeiRmi6ulmabtFA6qwg+mF9tIoEySdAet7Ac+qrU7fZRQLxTngA/zUte1O
+         XxffWdH8G+hHyfOXQ/zATYw31RGkA62NCazDi+TqsLL3H7XXnUuY+WeTkhBUKQJBMLlB
+         Z3zs9kOR6esRFPgMQ4uOsB3NAj8FYhK8/5mUoJq7eg4QcyHuWnZ8jIW+pe5Hj3iecmCq
+         6ZV0fWcp2ukcFxZULBnSAm8o7i+A7p8mkzXKYrgkHNwIy51o46m4geg/qaK6wU0q3Rs+
+         4xDwe5a8PdWZOb48arVLUHHAcVnvHLZhmSCNPLGumElB6Fb/25G7JPeArnnWg0XzmmFg
+         vBSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HJ2vim5KZIApK8x3ewXLTeNdS/0vU4ME8rbQ/SI9AvY=;
+        b=t9n9JMvbG2X949tmzGBzqudoCRl61Odb7qHkwIR/eK01Kp4TnGzNGZOKBMm0714owI
+         SjiU5RxUNDLRgCeZqBNcv9v2VLHXLK3gUG5w7qcoXElxepVNC+Nb38IyH6K+Fx1/CzJT
+         a0hkkqME1dhxK0OXJGbcNaeWjGYScaYCsVj481FTiwpVh3O/GH3Ki0YTRuA9KAdj2rXv
+         zg9a6aLYevqVL0UwPKPPrcPglypfeWzmORKVa1EvQhx72e4iz9q7tEHMiVWTatpsOM9m
+         z04KOtqB0+294TydYH7vuL3k49GVw7GotAZjIaH2ly4oTTO6nYwJlYRzdLgpUOE7Pvv4
+         bCpg==
+X-Gm-Message-State: APjAAAU464u6j/X5zMb5XsQw3ASzI8qixWaq7yqkaRVzalWNY700hcyg
+        PnC7AUIdl/jF932+Us25GJU=
+X-Google-Smtp-Source: APXvYqzO3fEmmWcJPm56uMETxyIiZAVvFVgQYiK4xpd1n+RBoFRBQ36hLCCmQpLjPWFmtypqPCiucg==
+X-Received: by 2002:a19:6a07:: with SMTP id u7mr1004503lfu.74.1561512896931;
+        Tue, 25 Jun 2019 18:34:56 -0700 (PDT)
+Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
+        by smtp.gmail.com with ESMTPSA id 199sm2549581ljf.44.2019.06.25.18.34.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Jun 2019 18:34:55 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC:     Saravana Kannan <saravanak@google.com>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20190625213337.157525-5-saravanak@google.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20190626013114epcms1p16c69c10cd3af6265a9efa2f9db8a2b3b@epcms1p1>
-Date:   Wed, 26 Jun 2019 10:31:14 +0900
-X-CMS-MailID: 20190626013114epcms1p16c69c10cd3af6265a9efa2f9db8a2b3b
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA12SbVBMYRTHPXvv3r3J8liLR4zNNYzMbHVldaMwwuxMoZk+ZWRddafSvtm7
-        2whjdpC0ZKLIpDcjasJoN3Y3DR9WSW3rQ4iGmjTRmLHeivEyXnbbjca333Pmf87/nPMcEpNY
-        iTAyR2vkDFpWTRFTcfu9CLl8qEuSHt3atYx544pgno6NCBmnQ8p4Dr8VMY9uVxLMaHEbYN5+
-        9QiYbnePkLG4fhLMr14rzjQP3ifWhyrtrXahstZmUtoaiwjlzSeFuPLUzUag7HjmEChHbQtT
-        RNtz47M5NpMzhHPaDF1mjjYrgUpKVSWqFKuiaTkdx8RS4VpWwyVQG5NT5Jtz1L4OqfA8Vm3y
-        hVJYnqei1sYbdCYjF56t440JFKfPVOvj9JE8q+FN2qzIDJ1mNR0dvULhE+7KzX50oQHXl+L7
-        PpSewczAgVlACIngSuRtb8YtYCopgU6A6quqRRZAkmI4E/10zvJrZsE0VGIbxv0sgRQy993F
-        AvEodHzQDvxMQDm61dQ/XkcKhwCy148R/gcGnwPU8rtIGHATo/OFr/AAz0eO+lvj2SFwDbJe
-        /ygKxGejvqvev/z+fg0IsBQVDHiCXc9Eg99awUSd82W/gzUPoN7ySyK/MYJHASq+WhYURaHu
-        qk7Cz2K4Bbkt3vGGcLgEORuuBc02ok/tTwV+xqAMObyVmH8TGIxAN25HBSSLUMuPKjAxi9n6
-        Q/Q/Y3A6evf55N95ndXDggAvRa7WuqB+AXKXX8RKAFXxb9cVk4wr/hnXAqwRzOH0vCaL42k9
-        Pfl7bWD8XJcrnKDsYbILQBJQ08RmmSRdImTz+HyNCyASo6TiyyxMl4gz2fz9nEGnMpjUHO8C
-        Ct/8p7Gw2Rk63/FrjSpasSImJoZZSa9S0DQ1V6wK7dshgVmskcvlOD1nmMgTkCFhZrDzYHNb
-        t+XKpukyz7SWQs/A2kPnnuS6v3bfpTpjmx7o4oe/WG/sKoq7NwIGOvobjh1GHbLV1jcnei7X
-        PG9qI+cltYtH+ns33EmqUyx7vPXAPPLlq0szug5FLp5St+3ite97rHXE6xO93oGhfJF6cWqB
-        tLpZths7cnav271uc1ri4IsxCuezWXo5ZuDZP66QIeDEAwAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190625213358epcas4p2391bcf70b54646880cbb60eae8b73acf
-References: <20190625213337.157525-5-saravanak@google.com>
-        <20190625213337.157525-1-saravanak@google.com>
-        <CGME20190625213358epcas4p2391bcf70b54646880cbb60eae8b73acf@epcms1p1>
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/17] More improvements for Tegra30 devfreq driver
+Date:   Wed, 26 Jun 2019 04:32:34 +0300
+Message-Id: <20190626013252.30470-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.22.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
->Look at the required OPPs of the "parent" device to determine the OPP that
->is required from the slave device managed by the passive governor. This
->allows having mappings between a parent device and a slave device even when
->they don't have the same number of OPPs.
->
->Signed-off-by: Saravana Kannan <saravanak@google.com>
->---
-> drivers/devfreq/governor_passive.c | 20 +++++++++++++++-----
-> 1 file changed, 15 insertions(+), 5 deletions(-)
+Hello,
 
-Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+This series addresses some additional review comments that were made by
+Thierry Reding to [1] and makes several important changes to the driver,
+fixing excessive interrupts activity. In the end I'm proposing myself as
+a maintainer for the Tegra devfreq drivers.
 
-Cheers,
-MyungJoo
+[1] https://lore.kernel.org/lkml/0fb50eb1-a173-1756-6889-2526a10ac707@gmail.com/T/
 
+Changelog:
+
+v2:  Added more patches that are cleaning driver's code further and
+     squashing another kHz conversion bug.
+
+     The patch "Rework frequency management logic" of the v1 series is now
+     converted to "Set up watermarks properly" because I found some problems
+     in the original patch and then realized that there is no need to change
+     the logic much. So the logic mostly preserved and only got improvements.
+
+     The series is based on the today's linux-next (25 Jun) and takes into
+     account minor changes that MyungJoo Ham made to the already queued
+     patches from the first batch [1].
+
+Dmitry Osipenko (17):
+  PM / devfreq: tegra30: Change irq type to unsigned int
+  PM / devfreq: tegra30: Keep interrupt disabled while governor is
+    stopped
+  PM / devfreq: tegra30: Handle possible round-rate error
+  PM / devfreq: tegra30: Drop write-barrier
+  PM / devfreq: tegra30: Set up watermarks properly
+  PM / devfreq: tegra30: Tuneup boosting thresholds
+  PM / devfreq: tegra30: Use CPUFreq notifier
+  PM / devfreq: tegra30: Move clk-notifier's registration to governor's
+    start
+  PM / devfreq: tegra30: Reset boosting on startup
+  PM / devfreq: tegra30: Don't enable consecutive-down interrupt on
+    startup
+  PM / devfreq: tegra30: Add debug messages
+  PM / devfreq: tegra30: Inline all one-line functions
+  PM / devfreq: tegra30: Constify structs
+  PM / devfreq: tegra30: Ensure that target freq won't overflow
+  PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
+  PM / devfreq: tegra30: Use kHz units uniformly in the code
+  PM / devfreq: tegra20/30: Add Dmitry as a maintainer
+
+ MAINTAINERS                       |   9 +
+ drivers/devfreq/tegra30-devfreq.c | 562 +++++++++++++++++++++---------
+ 2 files changed, 413 insertions(+), 158 deletions(-)
+
+-- 
+2.22.0
 
