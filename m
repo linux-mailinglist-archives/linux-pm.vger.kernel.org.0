@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFAA55D90
+	by mail.lfdr.de (Postfix) with ESMTP id 8891D55D91
 	for <lists+linux-pm@lfdr.de>; Wed, 26 Jun 2019 03:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbfFZBfM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jun 2019 21:35:12 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46916 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726359AbfFZBfM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 21:35:12 -0400
-Received: by mail-lj1-f195.google.com with SMTP id v24so387810ljg.13;
-        Tue, 25 Jun 2019 18:35:10 -0700 (PDT)
+        id S1726652AbfFZBfN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jun 2019 21:35:13 -0400
+Received: from mail-lj1-f176.google.com ([209.85.208.176]:40520 "EHLO
+        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726628AbfFZBfN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jun 2019 21:35:13 -0400
+Received: by mail-lj1-f176.google.com with SMTP id a21so410086ljh.7;
+        Tue, 25 Jun 2019 18:35:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HXsLv96t3D/DFNftwnjnuD35+3kXf4vWE9UyrvgtOGg=;
-        b=dChPvA+SqxAA1Z6Tp9WqN92ZKuIPyYQxRX437Mgt338KGoHrgEIjQIapPDN9u02vBS
-         oJv36SGhjv4dzpfVlVgX2IYlVtT2Kf1UqznKQeRnl4lQ12Nw7rs4skmPvqArAxz/vlzu
-         ilOv5CtaQ/7gT3ZpufDEW4eEArXoK7Fha9EQuf8zoVPkiqtKL+NEIXh6nbRHgt24zILT
-         lMe3zk88UisrhyUXHSiVUY/HWzgLBQEgzTi+NFgQiCqfXfnsA26oXUC3yWLycq2BkHV4
-         R2Nv8boNWf+ldT2woWKLUrBY5M3+mJjXKRoIsUDmXlTwFFuTHH5csaoDJPP47duMZqZ2
-         GU9w==
+        bh=CGZLSAOSCX2ukpdIKr7yrA/D7uj3ejgsDhB+FZTC0rs=;
+        b=HfD0P73KYrHLhypYu5if3iQFfdcXKuHHkiEZHCj8FNZCtZQceBrpfyVcIzDb1c8PXX
+         C6InukuET6MfAZ34bcU+BTNXdEho+OgmcK9I/GDX4j39KIOAhrhcw8TR09Snd7iJBFqW
+         Z5uYk1clVTbfCwq3QiFCjR4vZQ+k9815r6xDqyb8h0EJysjO8h34qLUJYSfTLQ6pKKPt
+         KCa9IckTGpvE8bZMJNOcA42zHh3hov6h5CNCpki4mqIOCCL3zM7HzoxBTYWrNZWN1weL
+         Fb9mgLbDdJMl7562fzqtZRoD6w9k+uCRkNwQhmmJEeTfKXO5FyXDZj9LzyqRX5TjiUPz
+         PIxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HXsLv96t3D/DFNftwnjnuD35+3kXf4vWE9UyrvgtOGg=;
-        b=klcpbdKyLbWzlnLfAzLO4tLkwQRUl2JScnKVjQo4R62Yd8HcarzIvx3ppfRvmrPLtS
-         gBttHqVCPGdV/WVwjMUVahzjKb3fwvT5M/NDFtlLOFxWMgzzGT7pQ+mmoVubCBSMRPTL
-         f2gbKIRlrd7iu5WnhV/tMxPXzc/slJ/w+LQC4R516+8cpm2rV8IQiH1Ub16bCfsEus8o
-         uUyIrB2OF3M50+1tJqMWWC/2A5O3es6Ooxib+bpNYqIZB9xZrnlDvDwTVFBMHG2lbnDF
-         NSEjKyvuJkHQmhylsdP/T2VrMpfGpZJBMgf7AsmMt4mBG8LYzc7IpY1zFyXlNk3xCn6N
-         gbqg==
-X-Gm-Message-State: APjAAAXO7HFLhLYiDkvbd3P0Wpo1/KQ6R3f+bPhD0XV7qIlc9rHogjtr
-        ye07Nm8n8vnhvCqQkwKixLk=
-X-Google-Smtp-Source: APXvYqz4ycpcGN8e89gCt9mh7l8m+0WO7cxqOqZhEqw+B21a91lcC1O3TpfY/narbhUKSHMOKLwp4A==
-X-Received: by 2002:a2e:3a05:: with SMTP id h5mr922887lja.114.1561512909584;
-        Tue, 25 Jun 2019 18:35:09 -0700 (PDT)
+        bh=CGZLSAOSCX2ukpdIKr7yrA/D7uj3ejgsDhB+FZTC0rs=;
+        b=bPXRCDynsd1RNIk+Urhdkn+LhQ2oQr1CNbJXbHvzUo7tOl0+JLOlxSMO44E1VCaEa+
+         6E+dVo49DeJmgao3wtrtrXUkwxDcyaEk0OvOOwzh4vFqyYBrHv9xqkktRqcimHuibxKG
+         tLNXjAB24eHjjf/GfSmJf/mC23mCVmjtGWkmtQHm9Li5dOTrKRVsgAOD2ywdFvBRuJLN
+         1b0fGXaaE7IYgtdTyz3FsuXqNbb1l/zAxWtHd6RZFTk9kthziWOv1qn12vHh7OM3Yyp3
+         84Mp829jMVHHQw1vnDDUuRJq7eXUWcfdXa/FHK/HgA8vADdirLqNYWm05Li625cxhPpQ
+         vbHw==
+X-Gm-Message-State: APjAAAUjqLxdAdzbK1RAIhgsgjXfz2Vm9lEG+EyKhhW+TGvSoxLzb2zC
+        scGoIwryHQ8k63Jf91VOZ6s=
+X-Google-Smtp-Source: APXvYqxyQMkkvB0wQdu53o/X1w6Hh7JnOzM8e2r3q1Heim80uTnr8wdNnu8b8q/BDoiFrgm5VscYdQ==
+X-Received: by 2002:a2e:81c4:: with SMTP id s4mr879268ljg.182.1561512910494;
+        Tue, 25 Jun 2019 18:35:10 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id 199sm2549581ljf.44.2019.06.25.18.35.08
+        by smtp.gmail.com with ESMTPSA id 199sm2549581ljf.44.2019.06.25.18.35.09
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 18:35:09 -0700 (PDT)
+        Tue, 25 Jun 2019 18:35:10 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 13/17] PM / devfreq: tegra30: Constify structs
-Date:   Wed, 26 Jun 2019 04:32:47 +0300
-Message-Id: <20190626013252.30470-14-digetx@gmail.com>
+Subject: [PATCH v2 14/17] PM / devfreq: tegra30: Ensure that target freq won't overflow
+Date:   Wed, 26 Jun 2019 04:32:48 +0300
+Message-Id: <20190626013252.30470-15-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190626013252.30470-1-digetx@gmail.com>
 References: <20190626013252.30470-1-digetx@gmail.com>
@@ -66,44 +66,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Constify unmodifiable structs for consistency.
+Potentially very high boosting could cause an integer overflow for a
+highly clocked memory after conversion to MHz.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 8630dca99905..d85de0e3dce0 100644
+index d85de0e3dce0..1dcc2d2fa9e0 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -106,7 +106,7 @@ enum tegra_actmon_device {
- 	MCCPU,
- };
+@@ -458,6 +458,7 @@ static unsigned long actmon_update_target(struct tegra_devfreq *tegra,
+ {	unsigned long target_freq;
  
--static struct tegra_devfreq_device_config actmon_device_configs[] = {
-+static const struct tegra_devfreq_device_config actmon_device_configs[] = {
- 	{
- 		/* MCALL: All memory accesses (including from the CPUs) */
- 		.offset = 0x1c0,
-@@ -171,7 +171,7 @@ struct tegra_actmon_emc_ratio {
- 	unsigned long emc_freq;
- };
+ 	target_freq = dev->avg_count / ACTMON_SAMPLING_PERIOD + dev->boost_freq;
++	target_freq = min(target_freq, ULONG_MAX / KHZ);
+ 	target_freq = tegra_actmon_account_cpu_freq(tegra, dev, target_freq);
  
--static struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
-+static const struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
- 	{ 1400000, ULONG_MAX },
- 	{ 1200000,    750000 },
- 	{ 1100000,    600000 },
-@@ -210,7 +210,7 @@ static inline unsigned long do_percent(unsigned long val, unsigned int pct)
- 
- static unsigned long actmon_cpu_to_emc_rate(struct tegra_devfreq *tegra)
- {
--	struct tegra_actmon_emc_ratio *ratio = actmon_emc_ratios;
-+	const struct tegra_actmon_emc_ratio *ratio = actmon_emc_ratios;
- 	unsigned int cpu_freq = cpufreq_get(0);
- 	unsigned int i;
- 
+ 	return target_freq;
 -- 
 2.22.0
 
