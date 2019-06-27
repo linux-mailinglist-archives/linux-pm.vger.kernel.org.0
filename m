@@ -2,162 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B8857FAD
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 11:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66C15806A
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 12:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfF0JwQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 05:52:16 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:37319 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726292AbfF0JwQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 05:52:16 -0400
-Received: by mail-ot1-f68.google.com with SMTP id s20so1650278otp.4;
-        Thu, 27 Jun 2019 02:52:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2n+Gc7hO2AU1TLtw3/ye/KC5SAeP8IrV7BHFI2StPVA=;
-        b=c7oFQ+8ELBrNPFwm1GudVMEILV0mFOd4LE5mcu6GZxbKp4WMRkCrrJzCUNyUqcvNiW
-         p+p7HzWc7hUmWId06eqNKhohX5Sr7LIeBXptiqs4IYEPut4wfeib6kGNd5dhLpclYs29
-         FBxpDQnrEpfIjW+nPE6gHMQ3NIB0gBe8gAeFUN7yDU2Ajcbpu09VZkXOMfVdmRE/Ep2M
-         Rr+chyHn2chlYrjE8MdNo/QVshZluu5wPFn7hgzuQEYjn11tV6M4M56wv2xfEc+VTTTN
-         EVdgvH5bZNO/oTqX5uK/Wpj8twuxy9mhehPNwN1Jq+qi4bAer0aEZfMHZyz+KcuiRmGa
-         qU3A==
-X-Gm-Message-State: APjAAAVDzp9scz6GLPjKvIl+MRnTxOovMpIUL+D/hON214Og9TbBaHwE
-        jwlCK5cnCknQmzXunpxExcm4+uRBt/yjXSf8w4Fvrf8j
-X-Google-Smtp-Source: APXvYqy5p1QYnxFFUJg6W1UKJdijrVQj91QwgDho/fzE0+8B24BvA7cQyBBIVhv4+JU26how5rfKiJHKnJZWbftrkFQ=
-X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr2512472otp.189.1561629135333;
- Thu, 27 Jun 2019 02:52:15 -0700 (PDT)
+        id S1726437AbfF0KbP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 06:31:15 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:38245 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbfF0KbO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 06:31:14 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190627103113euoutp02a7004a65c061a895bfbacde516d730db~sB40NFjRa3142931429euoutp024
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2019 10:31:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190627103113euoutp02a7004a65c061a895bfbacde516d730db~sB40NFjRa3142931429euoutp024
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1561631473;
+        bh=9qMksaSn2o1RzY5tC5OZ+NxmFvebkX7TJu1+xGfBCiw=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=ccL1ZDEHKxyJ2Fn81kIcR92zG9FOs3MjLjrzdmi8mKJrr0zbqMsPS7DztwbH5+1j4
+         AqAJok66BCDtV2v74jPvbCC/Ax5zDl2AO9m6QL6UFE0QKKyuwQ9iobhBTUnJ+DG+vs
+         O2hGtr5ZbiRd7QpBkP8fnaA/qNaArNu+2nFGrUpQ=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190627103112eucas1p1ae22251d569889712181490145817bea~sB4zUOgNn3171631716eucas1p1V;
+        Thu, 27 Jun 2019 10:31:12 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 91.F0.04298.FEA941D5; Thu, 27
+        Jun 2019 11:31:11 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190627103111eucas1p204450a032db835ba18a70d12939384e9~sB4yiP0K41122111221eucas1p2Y;
+        Thu, 27 Jun 2019 10:31:11 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190627103111eusmtrp25aa2911c568498975452e64c9e863a35~sB4yUDhim0413004130eusmtrp2H;
+        Thu, 27 Jun 2019 10:31:11 +0000 (GMT)
+X-AuditID: cbfec7f2-f13ff700000010ca-71-5d149aef4419
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 04.30.04140.FEA941D5; Thu, 27
+        Jun 2019 11:31:11 +0100 (BST)
+Received: from [106.120.51.20] (unknown [106.120.51.20]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190627103110eusmtip2f3f2e980cd4c4b326eada11fb687fe3e~sB4xhqKXS1415414154eusmtip2e;
+        Thu, 27 Jun 2019 10:31:10 +0000 (GMT)
+Subject: Re: [PATCH v4 4/5] Documentation: devicetree: add PPMU events
+ description
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>, cwchoi00@gmail.com
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?Q?Bart=c5=82omiej_=c5=bbo=c5=82nierkiewicz?= 
+        <b.zolnierkie@samsung.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, kyungmin.park@samsung.com,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com, kgene@kernel.org,
+        willy.mh.wolff.ml@gmail.com
+From:   Lukasz Luba <l.luba@partner.samsung.com>
+Message-ID: <3fdba210-2ca1-9fe3-c886-25d1d13bb133@partner.samsung.com>
+Date:   Thu, 27 Jun 2019 12:31:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <cover.1560999838.git.viresh.kumar@linaro.org> <88da7cfabad5e19a361fe2843e5ef547d50fd221.1560999838.git.viresh.kumar@linaro.org>
- <20190627050048.b44kitdfuenxnzfi@vireshk-i7>
-In-Reply-To: <20190627050048.b44kitdfuenxnzfi@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 27 Jun 2019 11:52:04 +0200
-Message-ID: <CAJZ5v0h+1eZGsxgJ5G5OfJiWcyd2GEqxbiU6v4yy9uMvzoAOvw@mail.gmail.com>
-Subject: Re: [PATCH V2 2/5] cpufreq: Replace few CPUFREQ_CONST_LOOPS checks
- with has_target()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <99a47066-3713-77fa-4afb-6f2f17a2721a@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0zNYRjHe3/3mpO306HHZdhpuTWFyd4wl2ntZGwNWZOWQ79VqhPnJ1Qu
+        uSvdpFyOJJHSaumoVijdFItSTbXMZsplKaxTDBN+/TL9932e5/Ncvu9egVZ3s1OFEMNe0WjQ
+        h2k5G6as4Xvzgs8mjf/C0kZ3UnypiCWdQ+9Z8u6RM7lW38yS5J6PNGlpucOTZ8f6eWLu6WBJ
+        +70MjlgS6xG51FJFkcL6VzzJ6WylyMujeRw5WVnPk7r+0yz5+vgNWm2nK8gsQLoK0yteZ86P
+        43R3bx7RJZXkI53FPMOb22qzIlAMC9knGl1XbrcJTmlOYnefwAeGf3rHor4J8chaALwE0s7W
+        0PHIRlDjPATF2Sc5JRhC0FDdwMuUGlsQpOfOiEfCaEfVF43C5CLoGMyglGAAwdMPPxi5wR5v
+        hhFzLSVrDRbhx/AvJEM0Tmfga00cJ0/isAuU5++RGRX2hG+WaiSnGewEZ/I85PQk7AtDFWak
+        IHbw5HLv6HhrvAqy497SsqaxA3T3XqMUPROOl14ZdQP4Fw9l7amMYtMDylpfIEXbQ19jCa/o
+        6fC7QmkGLEFs4vUx5iD0JF8dY5ZDXWMrK99G43lQdM9VeYc18CR7oiJtoWvATrnAFlLLLtJK
+        WgVnTqmVGXOhJOH52J7JkFtwgU9BWtM4X6ZxXkzjvJj+r81CTD5yECOl8CBRWmQQ97tI+nAp
+        0hDksjMi3Iz+/rimkcbBcjTctqMWYQFpJ6isHtj7q1n9PikqvBaBQGs1qogtGn+1KlAfFS0a
+        IwKMkWGiVIumCYzWQRVj9dpPjYP0e8VQUdwtGv9VKcF6aixau76yz+H2yI1grzSnUEc358z7
+        mRvfuW2bXpzsXHm46UBdT5vVtHVHfZ3Wfeo4Ty0+F+2YonKNNjSs9EuetTZpChMWumzX5g32
+        I8W9Pjnpltm3LqZbLvRTQ68PPTvi+bkz4fQXn/KIwj0xXnPWdMUeX2r0oPyXBVgy0jic8DCV
+        cXPP2qRlpGD9ovm0UdL/AQkFqAttAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPIsWRmVeSWpSXmKPExsVy+t/xe7rvZ4nEGmx5w2yxccZ6VovrX56z
+        Wjw7qm0x/8g5Vov+x6+ZLc6f38BucbbpDbvFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y26x
+        9PpFJovbjSvYLFr3HmG3OPymndXi24lHjA6CHmvmrWH02DnrLrvHplWdbB6bl9R79G1Zxejx
+        eZNcAFuUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5mWWqRvl2C
+        XsaEc32sBS0CFV9/BzQwvuLpYuTgkBAwkdj3QaSLkYtDSGApo8S/ntXMXYycQHExiUn7trND
+        2MISf651sUEUvWaUuHDwK1hCWCBE4t+mQ0wgtohAqsSTZWvBmpkFprJILPlfCNHQxiLxYdtx
+        ZpBtbAJ6EjtWFYLU8Aq4SXz/fIARJMwioCrRscIFJCwqECExe1cDC0SJoMTJmU/AbE4Be4lF
+        nU+hxptJzNv8EMoWl7j1ZD4ThC0v0bx1NvMERqFZSNpnIWmZhaRlFpKWBYwsqxhFUkuLc9Nz
+        i430ihNzi0vz0vWS83M3MQIje9uxn1t2MHa9Cz7EKMDBqMTDu2KncKwQa2JZcWXuIUYJDmYl
+        Ed78MJFYId6UxMqq1KL8+KLSnNTiQ4ymQL9NZJYSTc4HJp28knhDU0NzC0tDc2NzYzMLJXHe
+        DoGDMUIC6YklqdmpqQWpRTB9TBycUg2MW1M1iutcAo8XndyssdDzg0fPg6iYdR08q7Tj+TNO
+        GejtiPuzpv1uwXrPeXvPrmPkiDTL+bV9EfO6XXddJ7P0Wz+rerdr29srV6dO27e4VDY7eceE
+        hwsresrLkv9I3Tc21f5w5Aev1Kl2nbOZax5c6P+9aL4AW7itjRJjXGftdPNf6kuYGX1ylFiK
+        MxINtZiLihMB4iU3qQIDAAA=
+X-CMS-MailID: 20190627103111eucas1p204450a032db835ba18a70d12939384e9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5
+References: <CGME20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5@eucas1p2.samsung.com>
+        <20190605091236.24263-1-l.luba@partner.samsung.com>
+        <20190605091236.24263-5-l.luba@partner.samsung.com>
+        <CAGTfZH2kTNWtx=Jp1UJaLN50Qxbq+Q9ThV4vhQ240QbOy1TRMQ@mail.gmail.com>
+        <7498059d-95f7-e154-cf49-bcbc8ee6fdb9@partner.samsung.com>
+        <CAJKOXPc6304D=HNQnrvhBH6qKxhkf=VQ2Gg6Q2FMP2hYOTYSDQ@mail.gmail.com>
+        <776f58c2-a05c-8fa8-c7f5-458dc17926f6@partner.samsung.com>
+        <99a47066-3713-77fa-4afb-6f2f17a2721a@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 7:00 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 20-06-19, 08:35, Viresh Kumar wrote:
-> > > CPUFREQ_CONST_LOOPS was introduced in a very old commit from pre-2.6
-> > > kernel release commit 6a4a93f9c0d5 ("[CPUFREQ] Fix 'out of sync'
-> > > issue").
-> > >
-> > > Probably the initial idea was to just avoid these checks for set_policy
-> > > type drivers and then things got changed over the years. And it is very
-> > > unclear why these checks are there at all.
-> > >
-> > > Replace the CPUFREQ_CONST_LOOPS check with has_target(), which makes
-> > > more sense now.
-> > >
-> > > cpufreq_notify_transition() is only called for has_target() type driver
-> > > and not for set_policy type, and the check is simply redundant. Remove
-> > > it as well.
-> > >
-> > > Also remove () around freq comparison statement as they aren't required
-> > > and checkpatch also warns for them.
-> > >
-> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > ---
-> > >  drivers/cpufreq/cpufreq.c | 13 +++++--------
-> > >  1 file changed, 5 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > index 54befd775bd6..41ac701e324f 100644
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -359,12 +359,10 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
-> > >              * which is not equal to what the cpufreq core thinks is
-> > >              * "old frequency".
-> > >              */
-> > > -           if (!(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
-> > > -                   if (policy->cur && (policy->cur != freqs->old)) {
-> > > -                           pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
-> > > -                                    freqs->old, policy->cur);
-> > > -                           freqs->old = policy->cur;
-> > > -                   }
-> > > +           if (policy->cur && policy->cur != freqs->old) {
-> > > +                   pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
-> > > +                            freqs->old, policy->cur);
-> > > +                   freqs->old = policy->cur;
-> > >             }
-> > >
-> > >             srcu_notifier_call_chain(&cpufreq_transition_notifier_list,
-> > > @@ -1618,8 +1616,7 @@ static unsigned int __cpufreq_get(struct cpufreq_policy *policy)
-> > >     if (policy->fast_switch_enabled)
-> > >             return ret_freq;
-> > >
-> > > -   if (ret_freq && policy->cur &&
-> > > -           !(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
-> > > +   if (has_target() && ret_freq && policy->cur) {
-> > >             /* verify no discrepancy between actual and
-> > >                                     saved value exists */
-> > >             if (unlikely(ret_freq != policy->cur)) {
->
-> @Rafael: Here are your comments from the IRC exchange we had
-> yesterday:
->
-> > <rafael>:
-> >
-> > so the problem is that, because of the CPUFREQ_CONST_LOOPS check in
-> > __cpufreq_get(), it almost never does the cpufreq_out_of_sync() thing
-> > now. Because many drivers set CPUFREQ_CONST_LOOPS most of the time,
-> > some of them even unconditionally. This patch changes the code that
-> > runs very rarely into code that runs relatively often.
->
-> Right, we will do the frequency verification on has_target() platforms
-> with CPUFREQ_CONST_LOOPS set after this patch. But why is it the wrong
-> thing to do ?
+Hi Chanwoo,
 
-Well, my point was exactly what I said.
-
-The patch pretended to be a cleanup and changed the code in a
-meaningful way (at least for some drivers).
-
-> What we do here is that we verify that the cached value of current
-> frequency is same as the real frequency the hardware is running at. It
-> makes sense to not do this check for setpolicy type drivers as the
-> cpufreq core isn't always aware of what the driver will end up doing
-> with the frequency and so no verification.
->
-> But for has_target() type drivers, cpufreq core caches the value with
-> it and it should check it to make sure everything is fine. I don't see
-> a correlation with CPUFREQ_CONST_LOOPS flag here, that's it. Either we
-> do this verification or we don't, but there is no reason (as per my
-> understanding) of skipping it using this flag.
->
-> So if you look at the commit I pointed in the history git [1], it does
-> two things:
-> - It adds the verification code (which is quite similar today as
->   well).
-> - And it sets the CPUFREQ_CONST_LOOPS flag only for setpolicy drivers,
->   rightly so.
->
-> The problem happened when we started to use CPUFREQ_CONST_LOOPS for
-> constant loops-per-jiffy thing as well and many has_target() drivers
-> started using the same flag and unknowingly skipped the verification
-> of frequency.
->
-> So, I think the current code is doing the wrong thing by skipping the
-> verification using CPUFREQ_CONST_LOOPS flag.
-
-All right then, thanks for explaining it here.
-
-The patch is a bug fix, not a cleanup, and it fixes the changes that
-caused CPUFREQ_CONST_LOOPS to be used for a different purpose without
-adjusting the original code accordingly.
-
-I can agree with this rationale, but please fix the changelog.
+On 6/27/19 3:11 AM, Chanwoo Choi wrote:
+> Hi Lukasz,
+> 
+> On 19. 6. 26. 오후 11:17, Lukasz Luba wrote:
+>> Hi Krzysztof,
+>>
+>> On 6/26/19 4:03 PM, Krzysztof Kozlowski wrote:
+>>> On Wed, 26 Jun 2019 at 15:58, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+>>>>
+>>>> Hi Chanwoo,
+>>>>
+>>>> On 6/26/19 10:23 AM, Chanwoo Choi wrote:
+>>>>> Hi Lukasz,
+>>>>>
+>>>>> 2019년 6월 5일 (수) 18:14, Lukasz Luba <l.luba@partner.samsung.com
+>>>>> <mailto:l.luba@partner.samsung.com>>님이 작성:
+>>>>>
+>>>>>       Extend the documenation by events description with new 'event-data-type'
+>>>>>       field. Add example how the event might be defined in DT.
+>>>>>
+>>>>>       Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com
+>>>>>       <mailto:l.luba@partner.samsung.com>>
+>>>>>       Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com
+>>>>>       <mailto:cw00.choi@samsung.com>>
+>>>>>       ---
+>>>>>         .../bindings/devfreq/event/exynos-ppmu.txt    | 26 +++++++++++++++++--
+>>>>>         1 file changed, 24 insertions(+), 2 deletions(-)
+>>>>>
+>>>>>
+>>>>>
+>>>>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com
+>>>>
+>>>> Thank you for the ACKs for this a 2/5 patch.
+>>>> Do you think the v4 could be merged now?
+>>>
+>>> I think you have all necessary acks. I can take the DTS patch (5/5)
+>>> although probably for next merge window as I just sent one.
+>> There was one patch 3/5
+>> https://protect2.fireeye.com/url?k=82dd0d0cbe2abd04.82dc8643-d13ecd7e5f989b8d&u=https://lkml.org/lkml/2019/6/5/215
+>> which was waiting ACK or I missed the email somehow.
+> 
+> When I was in vacation, your patches are removed on my email account
+> because of the email expiration. So, I replied with my Ack through
+> gmail account on mobile phone. But, there are some problem. My reply
+> didn't arrive the mailing list.
+> 
+> I have no any way to reply about this at company. After leaving one's
+> office, I'll reply with Ack again at home.
+> 
+OK, no worries, it is not an emergency issue.
+Regards,
+Lukasz
