@@ -2,107 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3771A58CE0
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 23:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95FD58D0E
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 23:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbfF0VOy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 17:14:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51460 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726441AbfF0VOy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 Jun 2019 17:14:54 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 37FF4208CB;
-        Thu, 27 Jun 2019 21:14:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561670093;
-        bh=aF18PB9ndCbQ/0tO043NbIEQd0ErKNrDAli6X2roWq0=;
-        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
-        b=CNMciDmGkyUYWNkDg4WtU6vSG5PpIaJeyI1Upn0mozqwrcBTJRUhBZhl8YEV0+/Zv
-         WN4ik+trQwPg6qycA+od0fYc9/pkYm3PLK6t//UKhFyPMmNX0+GkThhgWqnArchKwB
-         PXUS29YhxcVR4eRS9/ga35BFDW8O+jwqMn5mUEJo=
-Content-Type: text/plain; charset="utf-8"
+        id S1726511AbfF0VbU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 17:31:20 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:46695 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726472AbfF0VbU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 17:31:20 -0400
+Received: by mail-ot1-f65.google.com with SMTP id z23so3791643ote.13;
+        Thu, 27 Jun 2019 14:31:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x1SnWA9DFUhRdoSwMwoAjC3R75VohWjZ3wyZhwcVI0I=;
+        b=qCWKmcCJ7XpqNs2XNTW+pyy0WVpkom8KogxcCBVUpRzRP0EeD7wUD4qklLsFCX31Vq
+         GqqzlqY2gHJq6fof1PnY7CWBe3On4Q7mFyZwx35ev4BpYFnjT7gkp/ptkKqSIYmDe7j/
+         0wS0gHBCX0yTudc24etxkmIsh3I4QtFdFGgyXgNcEHLO/ED0STnsa2781jRKhhoV9oqu
+         GQtSmqS27cldxgkhQLet2lcmLxlk4sYdIP6EJyYxhpX8Vgy7Pf5zf0GvCEfUBU1asRcx
+         5aB5ipAKuHPHLuCvfo5Ax3Av7oLpKeP556TTOkRLikW2CefqDRJhB/jpoM+Kx7kfV0CZ
+         gQ/g==
+X-Gm-Message-State: APjAAAW+bKet4RlshBMr2BQq2Kfl+0QI0+f0EnJDRFGOVZ/KROXIUWqN
+        y1LceFA7+s0cJTWNZcLr5ri59plbidGD95Vtq/0=
+X-Google-Smtp-Source: APXvYqwRxpD1ZnhLRVEKbWRFwO4WTEF0OSE2DyA8cuCq4FlsfIbinxoruHvh8I0Or1KnwcZmWQAdShb2BVZGGbnG15k=
+X-Received: by 2002:a9d:6959:: with SMTP id p25mr5062269oto.118.1561671079104;
+ Thu, 27 Jun 2019 14:31:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <475e0250b1e77a660c095749e78427fde318d5f6.1559200405.git.leonard.crestez@nxp.com>
-References: <475e0250b1e77a660c095749e78427fde318d5f6.1559200405.git.leonard.crestez@nxp.com>
-To:     Alexandre Bailon <abailon@baylibre.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC] clk: imx8mm: Add dram freq switch support
+References: <20190627210209.32600-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20190627210209.32600-1-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 27 Jun 2019 23:31:08 +0200
+Message-ID: <CAJZ5v0gA0sgpkaPCJwe1J7zqRynnwttGT-hcknfCF_LwBw5oHw@mail.gmail.com>
+Subject: Re: [PATCH V4 1/3] cpufreq: Move the IS_ENABLED(CPU_THERMAL) macro in
+ a stub
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Anson Huang <anson.huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Cedric Neveux <cedric.neveux@nxp.com>,
-        Silvano Di Ninno <silvano.dininno@nxp.com>,
-        Nitin Garg <nitin.garg@nxp.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-User-Agent: alot/0.8.1
-Date:   Thu, 27 Jun 2019 14:14:52 -0700
-Message-Id: <20190627211453.37FF4208CB@mail.kernel.org>
+        Eduardo Valentin <edubezval@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Leonard Crestez (2019-05-30 00:13:51)
-> Add a wrapper clock encapsulating dram frequency switch support for
-> imx8m chips. This allows higher-level DVFS code to manipulate dram
-> frequency using standard clock framework APIs.
->=20
-> Linux-side implementation is similar in principle to imx_clk_cpu or a
-> composite clock. Only some preparation is done inside the kernel, the
-> actual freq switch is performed from TF-A code which runs from an SRAM
-> area. Cores other than the one performing the switch are also made to
-> spin inside TF-A by sending each an IRQ.
->=20
-> This is an early proof-of-concept which only support low/high mode on
-> imx8mm but NXP has secure-world dram freq switching implementations for
-> multiple other chips and this approach can be extended.
->=20
-> This was tested using a large pile of NXP out-of-tree patches. Code for
-> the "busfreq core" from last release can be seen here:
-> https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/soc/imx=
-/busfreq-imx8mq.c?h=3Dimx_4.14.98_2.0.0_ga
->=20
-> It can be likely made to work with interconnect RFC:
-> https://patchwork.kernel.org/cover/10851705/
->=20
-> This RFC effectively refactors a common part between them.
->=20
-> Among the possible cleanups:
->  * Handle errors in low/high busfreq code and back off
->  * Move irq to secure world
->  * Try to use fewer clk parameters
->  * More chips and frequencies
->=20
-> Many platforms handle this kind of stuff externally but cpufreq is quite
-> insistent that actual rates are set by clk code and that new platforms
-> use cpufreq-dt.
->=20
-> Let me know if there are objections to handling dram freq via clk.
+On Thu, Jun 27, 2019 at 11:02 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The cpufreq_online and the cpufreq_offline [un]register the driver as
+> a cooling device. This is done if the driver is flagged as a cooling
+> device in addition with a IS_ENABLED macro to compile out the branching
+> code.
+>
+> Group this test in a stub function added in the cpufreq header instead
+> of having the IS_ENABLED in the code path.
+>
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Can it be an interconnect driver instead? I don't see how this is a clk
-driver. It looks more like a driver that itself manages a collection of
-clks, and you've put the coordination of those clks behind the clk_ops
-interface. We don't want to have clk_ops calling clk consumer APIs in
-general, so the whole approach doesn't seem correct. Hopefully this can
-work out as some other sort of driver that is used directly from devfreq
-or interconnect core instead and then have a different consumer driver
-of devfreq or interconnect core that knows how to drive the clk tree.
+This one has been queued up for 5.3 already, no need to resend.
 
+Thanks!
+
+> ---
+>  drivers/cpufreq/cpufreq.c | 6 ++----
+>  include/linux/cpufreq.h   | 6 ++++++
+>  2 files changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 85ff958e01f1..aee024e42618 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1378,8 +1378,7 @@ static int cpufreq_online(unsigned int cpu)
+>         if (cpufreq_driver->ready)
+>                 cpufreq_driver->ready(policy);
+>
+> -       if (IS_ENABLED(CONFIG_CPU_THERMAL) &&
+> -           cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV)
+> +       if (cpufreq_thermal_control_enabled(cpufreq_driver))
+>                 policy->cdev = of_cpufreq_cooling_register(policy);
+>
+>         pr_debug("initialization complete\n");
+> @@ -1469,8 +1468,7 @@ static int cpufreq_offline(unsigned int cpu)
+>                 goto unlock;
+>         }
+>
+> -       if (IS_ENABLED(CONFIG_CPU_THERMAL) &&
+> -           cpufreq_driver->flags & CPUFREQ_IS_COOLING_DEV) {
+> +       if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
+>                 cpufreq_cooling_unregister(policy->cdev);
+>                 policy->cdev = NULL;
+>         }
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index d01a74fbc4db..a1467aa7f58b 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -409,6 +409,12 @@ int cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
+>  const char *cpufreq_get_current_driver(void);
+>  void *cpufreq_get_driver_data(void);
+>
+> +static inline int cpufreq_thermal_control_enabled(struct cpufreq_driver *drv)
+> +{
+> +       return IS_ENABLED(CONFIG_CPU_THERMAL) &&
+> +               (drv->flags & CPUFREQ_IS_COOLING_DEV);
+> +}
+> +
+>  static inline void cpufreq_verify_within_limits(struct cpufreq_policy *policy,
+>                 unsigned int min, unsigned int max)
+>  {
+> --
+> 2.17.1
+>
