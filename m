@@ -2,168 +2,219 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B54557AE3
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 07:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F9C57BAA
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 07:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbfF0FAw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 01:00:52 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43638 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725385AbfF0FAw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 01:00:52 -0400
-Received: by mail-pf1-f196.google.com with SMTP id i189so569043pfg.10
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jun 2019 22:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/YjRapXiVHHJp2UfW5/xuwSZmx9+J8gT/Qvl98/+zOk=;
-        b=pwz41HoH3S7t9IvWdHoKb3JfmUrrKJTNzAE3mIQi9SgJ8h2HJSf3339kEoGdRGW98i
-         X91H+THErz7El9JRT1atJY2mQjYWqAPWvndezjrnd4EeWZWlJu6ZF8YXJHYox2A/k4Bx
-         xrkKJpMdOns3Nmt/gLyMAk7Q3UG8f0MX8ROYTWetoP2j/uO4v3bvIbaxc61arpC35KwD
-         iPVXuW1rJOj5KH7b8e1RcM/HYbu7/m3goZfoqDEwGz0vM9nwkYaBAthEmTZIolU2BITH
-         V4Kc8kBB8ZxZO3216cixtL50gfVHSNSJK8coV8x9cYj1Ahz37gi24yfzVwqJfYLQ3bc9
-         mu4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/YjRapXiVHHJp2UfW5/xuwSZmx9+J8gT/Qvl98/+zOk=;
-        b=Js/3FoIu5iNtVtSJe8aD1bpC7NzkNY+K7m5hZu17nI9SDHt+OkTL2wgsXPmViXCqmD
-         PrUGi9ECiSDwzIKpTco50+UWsVnbrbyrQr9WB9/eWynVQ/RxKFDPBQBPEbyQatdySrHv
-         q/wOpNftbwo0V0ufcnRNnH0mIK7s1b+eH+lVt2pRzbzAg+hXFR9WmnJHEWZtMEiHhBUI
-         N/BBcBhX9OBTC7oCIW2uCUUswiVQIh3VFfJft5b9D2zGetq+IOr3G3qnMpQM2yp6sYtY
-         EwzEmAO+zklP2QQwcSl6cMDByhdB2a0LVvf9oARPxtuoc0qWttGUdaoOkdA1OcGI3wg7
-         Twow==
-X-Gm-Message-State: APjAAAXASj0AS0dcE53Vgfrweq7P2fR+9f2DCHpkiCmIIV8LLI4bAcfZ
-        /Cv36Aah6He598dt3lECdVfacg==
-X-Google-Smtp-Source: APXvYqxKya2Xp2l4I1LR1Zo9cVHMJTXxBCv2Ds6UGBNzJtFoI/Sz7EBki9dV2EzzswIGEs0EvnAdnQ==
-X-Received: by 2002:a63:d944:: with SMTP id e4mr1780477pgj.261.1561611651374;
-        Wed, 26 Jun 2019 22:00:51 -0700 (PDT)
-Received: from localhost ([122.172.211.128])
-        by smtp.gmail.com with ESMTPSA id m100sm4159761pje.12.2019.06.26.22.00.50
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Jun 2019 22:00:50 -0700 (PDT)
-Date:   Thu, 27 Jun 2019 10:30:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/5] cpufreq: Replace few CPUFREQ_CONST_LOOPS checks
- with has_target()
-Message-ID: <20190627050048.b44kitdfuenxnzfi@vireshk-i7>
-References: <cover.1560999838.git.viresh.kumar@linaro.org>
- <88da7cfabad5e19a361fe2843e5ef547d50fd221.1560999838.git.viresh.kumar@linaro.org>
+        id S1726420AbfF0F4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 01:56:11 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:45018 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725385AbfF0F4L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 01:56:11 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id D59BA6019D; Thu, 27 Jun 2019 05:56:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561614969;
+        bh=NQmFaOvOVJfUDh5Dl+DU341nQ5fC4vPdyjSO6MXe63c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ITVHzzgh2L0K1yzwIy89XgnF7z73DhjoKe2/J5HVswHKBHxKP7Gi7brrxe2XUaWvb
+         vnBl2VT5BfAGwNMWhbCOyPqoz5CYSKgSiUBBY2C9htTHbUmgtYiErqvD9R48w3HbhM
+         uYutOKXhIPFyTKCOjo+MXnHcHXyaOy8p4zANVRdI=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED autolearn=no autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.codeaurora.org (Postfix) with ESMTP id 54D706019D;
+        Thu, 27 Jun 2019 05:56:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561614968;
+        bh=NQmFaOvOVJfUDh5Dl+DU341nQ5fC4vPdyjSO6MXe63c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=f7jJhVo5WGvo+YvXasBsVAJl09bTSQ8O9ZdgEONJBZ6+MQj5oSCU8DMhPq/UfBetJ
+         FVMxTWqXkEo089NWutkXKkO0imULf09xHJprNL3nYa13i2n2Nm/E8dUinUlXfrlA3l
+         Fvxq7ZVaX5yayyMvasKVt3OnKJburFJxynpHrRaU=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88da7cfabad5e19a361fe2843e5ef547d50fd221.1560999838.git.viresh.kumar@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 27 Jun 2019 11:26:08 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>, vireshk@kernel.org,
+        sboyd@kernel.org, nm@ti.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, rjw@rjwysocki.net
+Cc:     jcrouse@codeaurora.org, vincent.guittot@linaro.org,
+        bjorn.andersson@linaro.org, amit.kucheria@linaro.org,
+        seansw@qti.qualcomm.com, daidavid1@codeaurora.org,
+        evgreen@chromium.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel-owner@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] interconnect: Add of_icc_get_by_index() helper
+ function
+In-Reply-To: <e6469e3b-3653-d20b-b27d-242547a777df@codeaurora.org>
+References: <20190423132823.7915-1-georgi.djakov@linaro.org>
+ <20190423132823.7915-3-georgi.djakov@linaro.org>
+ <e6469e3b-3653-d20b-b27d-242547a777df@codeaurora.org>
+Message-ID: <199da2ca8a21b179e3e153623c69e8a0@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.2.5
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-06-19, 08:35, Viresh Kumar wrote:
-> > CPUFREQ_CONST_LOOPS was introduced in a very old commit from pre-2.6
-> > kernel release commit 6a4a93f9c0d5 ("[CPUFREQ] Fix 'out of sync'
-> > issue").
-> > 
-> > Probably the initial idea was to just avoid these checks for set_policy
-> > type drivers and then things got changed over the years. And it is very
-> > unclear why these checks are there at all.
-> > 
-> > Replace the CPUFREQ_CONST_LOOPS check with has_target(), which makes
-> > more sense now.
-> > 
-> > cpufreq_notify_transition() is only called for has_target() type driver
-> > and not for set_policy type, and the check is simply redundant. Remove
-> > it as well.
-> > 
-> > Also remove () around freq comparison statement as they aren't required
-> > and checkpatch also warns for them.
-> > 
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 13 +++++--------
-> >  1 file changed, 5 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 54befd775bd6..41ac701e324f 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -359,12 +359,10 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
-> >  		 * which is not equal to what the cpufreq core thinks is
-> >  		 * "old frequency".
-> >  		 */
-> > -		if (!(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
-> > -			if (policy->cur && (policy->cur != freqs->old)) {
-> > -				pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
-> > -					 freqs->old, policy->cur);
-> > -				freqs->old = policy->cur;
-> > -			}
-> > +		if (policy->cur && policy->cur != freqs->old) {
-> > +			pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
-> > +				 freqs->old, policy->cur);
-> > +			freqs->old = policy->cur;
-> >  		}
-> >  
-> >  		srcu_notifier_call_chain(&cpufreq_transition_notifier_list,
-> > @@ -1618,8 +1616,7 @@ static unsigned int __cpufreq_get(struct cpufreq_policy *policy)
-> >  	if (policy->fast_switch_enabled)
-> >  		return ret_freq;
-> >  
-> > -	if (ret_freq && policy->cur &&
-> > -		!(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
-> > +	if (has_target() && ret_freq && policy->cur) {
-> >  		/* verify no discrepancy between actual and
-> >  					saved value exists */
-> >  		if (unlikely(ret_freq != policy->cur)) {
+Hey Georgi,
 
-@Rafael: Here are your comments from the IRC exchange we had
-yesterday:
+I heard there is a follow up discussion
+planned to finalize on the which approach
+to follow. If we do end up with your series,
+I found some fixes that you might want to
+use when you re-post.
 
-> <rafael>:
+On 2019-05-07 17:29, Sibi Sankar wrote:
+> Hey Georgi,
 > 
-> so the problem is that, because of the CPUFREQ_CONST_LOOPS check in
-> __cpufreq_get(), it almost never does the cpufreq_out_of_sync() thing
-> now. Because many drivers set CPUFREQ_CONST_LOOPS most of the time,
-> some of them even unconditionally. This patch changes the code that
-> runs very rarely into code that runs relatively often.
+> On 4/23/19 6:58 PM, Georgi Djakov wrote:
+>> This is the same as the traditional of_icc_get() function, but the
+>> difference is that it takes index as an argument, instead of name.
+>> 
+>> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+>> ---
+>>   drivers/interconnect/core.c  | 45 
+>> ++++++++++++++++++++++++++++--------
+>>   include/linux/interconnect.h |  6 +++++
+>>   2 files changed, 41 insertions(+), 10 deletions(-)
+>> 
+>> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+>> index 871eb4bc4efc..a7c3c262c974 100644
+>> --- a/drivers/interconnect/core.c
+>> +++ b/drivers/interconnect/core.c
+>> @@ -295,9 +295,9 @@ static struct icc_node 
+>> *of_icc_get_from_provider(struct of_phandle_args *spec)
+>>   }
+>>     /**
+>> - * of_icc_get() - get a path handle from a DT node based on name
+>> + * of_icc_get_by_index() - get a path handle from a DT node based on 
+>> index
+>>    * @dev: device pointer for the consumer device
+>> - * @name: interconnect path name
+>> + * @idx: interconnect path index
+>>    *
+>>    * This function will search for a path between two endpoints and 
+>> return an
+>>    * icc_path handle on success. Use icc_put() to release constraints 
+>> when they
+>> @@ -309,13 +309,12 @@ static struct icc_node 
+>> *of_icc_get_from_provider(struct of_phandle_args *spec)
+>>    * Return: icc_path pointer on success or ERR_PTR() on error. NULL 
+>> is returned
+>>    * when the API is disabled or the "interconnects" DT property is 
+>> missing.
+>>    */
+>> -struct icc_path *of_icc_get(struct device *dev, const char *name)
+>> +struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
+>>   {
+>>   	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+>>   	struct icc_node *src_node, *dst_node;
+>>   	struct device_node *np = NULL;
+>>   	struct of_phandle_args src_args, dst_args;
+>> -	int idx = 0;
+>>   	int ret;
+>>     	if (!dev || !dev->of_node)
+>> @@ -335,12 +334,6 @@ struct icc_path *of_icc_get(struct device *dev, 
+>> const char *name)
+>>   	 * lets support only global ids and extend this in the future if 
+>> needed
+>>   	 * without breaking DT compatibility.
+>>   	 */
+>> -	if (name) {
+>> -		idx = of_property_match_string(np, "interconnect-names", name);
+>> -		if (idx < 0)
+>> -			return ERR_PTR(idx);
+>> -	}
+>> -
+>>   	ret = of_parse_phandle_with_args(np, "interconnects",
+>>   					 "#interconnect-cells", idx * 2,
+>>   					 &src_args);
+>> @@ -383,6 +376,38 @@ struct icc_path *of_icc_get(struct device *dev, 
+>> const char *name)
+>>     	return path;
+>>   }
+>> +
+>> +/**
+>> + * of_icc_get() - get a path handle from a DT node based on name
+>> + * @dev: device pointer for the consumer device
+>> + * @name: interconnect path name
+>> + *
+>> + * This function will search for a path between two endpoints and 
+>> return an
+>> + * icc_path handle on success. Use icc_put() to release constraints 
+>> when they
+>> + * are not needed anymore.
+>> + * If the interconnect API is disabled, NULL is returned and the 
+>> consumer
+>> + * drivers will still build. Drivers are free to handle this 
+>> specifically,
+>> + * but they don't have to.
+>> + *
+>> + * Return: icc_path pointer on success or ERR_PTR() on error. NULL is 
+>> returned
+>> + * when the API is disabled or the "interconnects" DT property is 
+>> missing.
+>> + */
 
-Right, we will do the frequency verification on has_target() platforms
-with CPUFREQ_CONST_LOOPS set after this patch. But why is it the wrong
-thing to do ?
+please change the description since it does not
+return NULL when the property is missing.
 
-What we do here is that we verify that the cached value of current
-frequency is same as the real frequency the hardware is running at. It
-makes sense to not do this check for setpolicy type drivers as the
-cpufreq core isn't always aware of what the driver will end up doing
-with the frequency and so no verification.
-
-But for has_target() type drivers, cpufreq core caches the value with
-it and it should check it to make sure everything is fine. I don't see
-a correlation with CPUFREQ_CONST_LOOPS flag here, that's it. Either we
-do this verification or we don't, but there is no reason (as per my
-understanding) of skipping it using this flag.
-
-So if you look at the commit I pointed in the history git [1], it does
-two things:
-- It adds the verification code (which is quite similar today as
-  well).
-- And it sets the CPUFREQ_CONST_LOOPS flag only for setpolicy drivers,
-  rightly so.
-
-The problem happened when we started to use CPUFREQ_CONST_LOOPS for
-constant loops-per-jiffy thing as well and many has_target() drivers
-started using the same flag and unknowingly skipped the verification
-of frequency.
-
-So, I think the current code is doing the wrong thing by skipping the
-verification using CPUFREQ_CONST_LOOPS flag.
+>> +struct icc_path *of_icc_get(struct device *dev, const char *name)
+>> +{
+>> +	int idx = 0;
+>> +
+>> +	if (!dev || !dev->of_node)
+>> +		return ERR_PTR(-ENODEV);
+>> +
+>> +	if (name) {
+>> +		idx = of_property_match_string(dev->of_node,
+>> +					       "interconnect-names", name);
+>> +		if (idx < 0)
+>> +			return ERR_PTR(idx);
+>> +	}
+>> +
+>> +	return of_icc_get_by_index(dev, idx);
+>> +}
+>>   EXPORT_SYMBOL_GPL(of_icc_get);
+>>     /**
+>> diff --git a/include/linux/interconnect.h 
+>> b/include/linux/interconnect.h
+>> index dc25864755ba..0e430b3b6519 100644
+>> --- a/include/linux/interconnect.h
+>> +++ b/include/linux/interconnect.h
+>> @@ -28,6 +28,7 @@ struct device;
+>>   struct icc_path *icc_get(struct device *dev, const int src_id,
+>>   			 const int dst_id);
+>>   struct icc_path *of_icc_get(struct device *dev, const char *name);
+>> +struct icc_path *of_icc_get_by_index(struct device *dev, int idx);
+>>   void icc_put(struct icc_path *path);
+>>   int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+>>   @@ -45,6 +46,11 @@ static inline struct icc_path *of_icc_get(struct 
+>> device *dev,
+>>   	return NULL;
+>>   }
+>>   +struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
+> 
+> This should be static inline instead
+> 
+>> +{
+>> +	return NULL;
+>> +}
+>> +
+>>   static inline void icc_put(struct icc_path *path)
+>>   {
+>>   }
+>> 
 
 -- 
-viresh
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=6a4a93f9c0d51b5f4ac1bd3efab53e43584330dd
+-- Sibi Sankar --
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
