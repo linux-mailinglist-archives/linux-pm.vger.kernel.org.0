@@ -2,98 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E304858C9E
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 23:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3771A58CE0
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 23:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbfF0VM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 17:12:56 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33641 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726834AbfF0VMs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 17:12:48 -0400
-Received: by mail-lj1-f195.google.com with SMTP id h10so3824779ljg.0;
-        Thu, 27 Jun 2019 14:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CeMarD4hqNHq1WSuy0GaGBvM3DFC+UAsO/kYojepr1Q=;
-        b=N4VR9SXJX36Bsaa75+t9O+PVV5XextD3p/eZpf/U5TdKAc4UXmA2nrMgyxzHakpGIA
-         mVQEiX7CseqV4Hk6uSTBbQbDz+7RxLY6Jstfxfcd6XqFyC9cEKI40gb9Mu43PWkHJsMO
-         3B7Cdzn5GQ64F184oOqVhh+ZjMhzxcgPAwoMhTIa+jxgcSD2OI72w7qvLFQh9NJsRBwX
-         5Av71S9SIXucdBr5HpGP98cxVRjsO/QLorn335qR11+K497FARh4R5Ur10pbWu4eNQup
-         pFxXfx7LFVxeOnKBXp/n0+oulhzbuJA2uKAyTzsiPb/n4LqutzJhtLHOYYm7x8PJwN2D
-         XLOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CeMarD4hqNHq1WSuy0GaGBvM3DFC+UAsO/kYojepr1Q=;
-        b=Dm8cF0jifkr/AiS/O36uPXSJZJyH96OHr/XEAjE+2NfNSZ6LNEyKOEtZjaaG2enfQP
-         DL+lPRXP7nffBB25XcUdpFmGi67B3LA7V78i5hxUCjzEhc7Al2l4NGxlnWlH0hXKaL4O
-         mqhqzqzo1lZkYeW5dD9DYcjsZiFjRx89OHltDtWKB9edFn2RsM3EYTKTggRFeJ4FXkAv
-         h/6EoQhSVexo71+KTaDB/Ym7r838QJvjNLlibyj6OfzEM3THcfUviLcZPO5SswMwQwT9
-         IiY9ZVj0Wvj73I5b/4FMkqVNCJM+FVfbU0L3jMdPw5WCMlPTiRYNoaUMH7pfe0cUPh3w
-         cFKg==
-X-Gm-Message-State: APjAAAVF26Hv73WxC74OAMQ+u4lkf4Dbi6/7oDCBmUhhmc2ojNByMRe/
-        DYo3HzqTk8qwzEdbOq0ff9U=
-X-Google-Smtp-Source: APXvYqwZU55S5p6XQUjCDvNUW2lo50OoD6/zee/XTUPeERX6OE5/oMefK56F31LjG+l3+uANh3DkQw==
-X-Received: by 2002:a2e:870f:: with SMTP id m15mr3867623lji.223.1561669966292;
-        Thu, 27 Jun 2019 14:12:46 -0700 (PDT)
-Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id p29sm30485ljp.87.2019.06.27.14.12.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 14:12:45 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 22/22] PM / devfreq: tegra20/30: Add Dmitry as a maintainer
-Date:   Fri, 28 Jun 2019 00:11:15 +0300
-Message-Id: <20190627211115.21138-23-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190627211115.21138-1-digetx@gmail.com>
-References: <20190627211115.21138-1-digetx@gmail.com>
+        id S1726465AbfF0VOy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 17:14:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51460 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726441AbfF0VOy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 Jun 2019 17:14:54 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 37FF4208CB;
+        Thu, 27 Jun 2019 21:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561670093;
+        bh=aF18PB9ndCbQ/0tO043NbIEQd0ErKNrDAli6X2roWq0=;
+        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
+        b=CNMciDmGkyUYWNkDg4WtU6vSG5PpIaJeyI1Upn0mozqwrcBTJRUhBZhl8YEV0+/Zv
+         WN4ik+trQwPg6qycA+od0fYc9/pkYm3PLK6t//UKhFyPMmNX0+GkThhgWqnArchKwB
+         PXUS29YhxcVR4eRS9/ga35BFDW8O+jwqMn5mUEJo=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <475e0250b1e77a660c095749e78427fde318d5f6.1559200405.git.leonard.crestez@nxp.com>
+References: <475e0250b1e77a660c095749e78427fde318d5f6.1559200405.git.leonard.crestez@nxp.com>
+To:     Alexandre Bailon <abailon@baylibre.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC] clk: imx8mm: Add dram freq switch support
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Anson Huang <anson.huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Cedric Neveux <cedric.neveux@nxp.com>,
+        Silvano Di Ninno <silvano.dininno@nxp.com>,
+        Nitin Garg <nitin.garg@nxp.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 27 Jun 2019 14:14:52 -0700
+Message-Id: <20190627211453.37FF4208CB@mail.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I was contributing to the NVIDIA Tegra20+ devfreq drivers recently and
-want to help keep them working and evolving in the future.
+Quoting Leonard Crestez (2019-05-30 00:13:51)
+> Add a wrapper clock encapsulating dram frequency switch support for
+> imx8m chips. This allows higher-level DVFS code to manipulate dram
+> frequency using standard clock framework APIs.
+>=20
+> Linux-side implementation is similar in principle to imx_clk_cpu or a
+> composite clock. Only some preparation is done inside the kernel, the
+> actual freq switch is performed from TF-A code which runs from an SRAM
+> area. Cores other than the one performing the switch are also made to
+> spin inside TF-A by sending each an IRQ.
+>=20
+> This is an early proof-of-concept which only support low/high mode on
+> imx8mm but NXP has secure-world dram freq switching implementations for
+> multiple other chips and this approach can be extended.
+>=20
+> This was tested using a large pile of NXP out-of-tree patches. Code for
+> the "busfreq core" from last release can be seen here:
+> https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/soc/imx=
+/busfreq-imx8mq.c?h=3Dimx_4.14.98_2.0.0_ga
+>=20
+> It can be likely made to work with interconnect RFC:
+> https://patchwork.kernel.org/cover/10851705/
+>=20
+> This RFC effectively refactors a common part between them.
+>=20
+> Among the possible cleanups:
+>  * Handle errors in low/high busfreq code and back off
+>  * Move irq to secure world
+>  * Try to use fewer clk parameters
+>  * More chips and frequencies
+>=20
+> Many platforms handle this kind of stuff externally but cpufreq is quite
+> insistent that actual rates are set by clk code and that new platforms
+> use cpufreq-dt.
+>=20
+> Let me know if there are objections to handling dram freq via clk.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 792d2d927712..bfd827417a27 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10250,6 +10250,15 @@ F:	include/linux/memblock.h
- F:	mm/memblock.c
- F:	Documentation/core-api/boot-time-mm.rst
- 
-+MEMORY FREQUENCY SCALING DRIVERS FOR NVIDIA TEGRA
-+M:	Dmitry Osipenko <digetx@gmail.com>
-+L:	linux-pm@vger.kernel.org
-+L:	linux-tegra@vger.kernel.org
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git
-+S:	Maintained
-+F:	drivers/devfreq/tegra20-devfreq.c
-+F:	drivers/devfreq/tegra30-devfreq.c
-+
- MEMORY MANAGEMENT
- L:	linux-mm@kvack.org
- W:	http://www.linux-mm.org
--- 
-2.22.0
+Can it be an interconnect driver instead? I don't see how this is a clk
+driver. It looks more like a driver that itself manages a collection of
+clks, and you've put the coordination of those clks behind the clk_ops
+interface. We don't want to have clk_ops calling clk consumer APIs in
+general, so the whole approach doesn't seem correct. Hopefully this can
+work out as some other sort of driver that is used directly from devfreq
+or interconnect core instead and then have a different consumer driver
+of devfreq or interconnect core that knows how to drive the clk tree.
 
