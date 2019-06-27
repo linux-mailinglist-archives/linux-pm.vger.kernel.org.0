@@ -2,45 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0097658A0B
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 20:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB1058A0E
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 20:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726576AbfF0Sdd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 14:33:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60536 "EHLO mail.kernel.org"
+        id S1726542AbfF0SeA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 14:34:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60890 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726384AbfF0Sdd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 Jun 2019 14:33:33 -0400
+        id S1726384AbfF0SeA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 Jun 2019 14:34:00 -0400
 Received: from earth.universe (unknown [185.62.205.103])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F6C820644;
-        Thu, 27 Jun 2019 18:33:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4098220644;
+        Thu, 27 Jun 2019 18:33:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561660412;
-        bh=x8Yj6zbtV5AdouyL8wA6d+fGrA1EuOigCtZuHz9sTi0=;
+        s=default; t=1561660439;
+        bh=nmQab553/dTaDhSgEXjIu9AW2OO9QI34AgKmLhJRW18=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j/bpIG868+e4sdRL9DMHjm+fOumUDfzWu6dptYgxK9gceUPjdCqWNhwX82s7U1Qvv
-         Rx8Qv5OJwROl1i6QuNLOg7iKho5zj51P48n5bkkAge1T9tap4uU4eIUMvc0CtCJbnF
-         USc7cnoDRkD+r8poYwvcwLVQqaTC4uPEMprLncfY=
+        b=V7yNSLjRy/+fWNRHO15xzs7In7iS66SKdxhH8SPbm2BcCI/w3iFluqjM/BLSha5X0
+         r78nOmfaQt+CEJiNdPlGg4czpxcD89kn6g4Iuy+u1lqMaUgR2gcvIV0cUiR+b+zIiw
+         q4qeZrwst5j7NPrrwbRb2rEpTiTdDQQQpAiFE0TA=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 3FA8C3C08D5; Thu, 27 Jun 2019 20:33:30 +0200 (CEST)
-Date:   Thu, 27 Jun 2019 20:33:30 +0200
+        id 0AE303C08D5; Thu, 27 Jun 2019 20:33:57 +0200 (CEST)
+Date:   Thu, 27 Jun 2019 20:33:57 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Han Nandor <nandor.han@vaisala.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 0/2] Use NVMEM as reboot-mode write interface
-Message-ID: <20190627183330.aole6zumw3l2vyet@earth.universe>
-References: <20190515104658.25535-1-nandor.han@vaisala.com>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>, kbuild-all@01.org,
+        Enric Balletbo Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: fix semicolon.cocci warnings
+Message-ID: <20190627183356.f7qb32tctllhw7vj@earth.universe>
+References: <201905110244.kMA51f4E%lkp@intel.com>
+ <20190510180347.GA130528@lkp-kbuild21>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oelnsnnwwn2ytluu"
+        protocol="application/pgp-signature"; boundary="yn5gaog2qp4yenbi"
 Content-Disposition: inline
-In-Reply-To: <20190515104658.25535-1-nandor.han@vaisala.com>
+In-Reply-To: <20190510180347.GA130528@lkp-kbuild21>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -48,101 +48,71 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---oelnsnnwwn2ytluu
+--yn5gaog2qp4yenbi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, May 15, 2019 at 10:47:14AM +0000, Han Nandor wrote:
-> Description
-> -----------
-> Extend the reboot mode driver to use a NVMEM cell as writing interface.
+On Sat, May 11, 2019 at 02:03:47AM +0800, kbuild test robot wrote:
+> From: kbuild test robot <lkp@intel.com>
 >=20
-> Testing
-> -------
-> The testing is done by configuring DT from a custom board.
-> The NVMEM cell is configured in an RTC non-volatile memory.
-> Kernel: 4.14.60 (the patchset was rebased on kernel master)
+> drivers/power/supply/ucs1002_power.c:339:2-3: Unneeded semicolon
 >=20
-> DT configurations:
-> `
-> ...
-> reboot-mode-nvmem@0 {
->     compatible =3D "simple-mfd";
->     reboot-mode {
->         compatible =3D "nvmem-reboot-mode";
->         nvmem-cells =3D <&reboot_mode>;
->         nvmem-cell-names =3D "reboot-mode";
 >=20
->         mode-test       =3D <0x21969147>;
->     };
-> };
-> ...
-> reboot_mode: nvmem_reboot_mode@0 {
->         reg =3D <0x00 0x4>;
-> };
-> ...
-> `
+>  Remove unneeded semicolon.
 >=20
-> 1. Reboot the system using the command `reboot test`
->=20
-> 2. Verify that kernel logs show that reboot was done in mode `test`:
-> PASS
-> `[  413.957172] reboot: Restarting system with command 'test' `
->=20
-> 3. Stop in U-Boot and verify that mode `test` magic value is present
-> in RTCs non-volatile memory: PASS
->=20
-> Kernel: 5.1.0-rc3
->=20
-> 1. Configure `arch/arm/configs/imx_v6_v7_defconfig` to contain=20
-> `CONFIG_NVMEM_REBOOT_MODE=3Dy`
-> 2. Verify that Kernel compiles successful: PASS
-> `
-> make ARCH=3Darm CROSS_COMPILE=3Darm-linux-gnu- imx_v6_v7_defconfig zImage
-> ...
-> CC      drivers/power/reset/nvmem-reboot-mode.o
-> ...
-> Kernel: arch/arm/boot/zImage is ready
-> `
-> Changes since v1:
-> -----------------
->  - split the documentation on a separate patch
->  - add a missing header
->=20
-> Changes since v2:
-> ----------------
->  - change the module license to GPL since GPL v2 is deprecated
->=20
-> Changes since v3:
-> ----------------
->  - documentation updated according to the comments
+> Generated by: scripts/coccinelle/misc/semicolon.cocci
 
-Thanks, queued. Please fix your git/mail setup, I had to fix the
-line endings (\r\n -> \n) to apply this.
+Thanks, queued.
 
 -- Sebastian
 
---oelnsnnwwn2ytluu
+> Fixes: 9a2688e42638 ("power: supply: Add driver for Microchip UCS1002")
+> CC: Andrey Smirnov <andrew.smirnov@gmail.com>
+> Signed-off-by: kbuild test robot <lkp@intel.com>
+> ---
+>=20
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-s=
+upply.git for-next
+> head:   c8f3c9fe83cafc94679007b9c0083ee25d5735e0
+> commit: 9a2688e42638f2e057dbdfce82e221b38bfba0a7 [42/44] power: supply: A=
+dd driver for Microchip UCS1002
+>=20
+>  ucs1002_power.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> --- a/drivers/power/supply/ucs1002_power.c
+> +++ b/drivers/power/supply/ucs1002_power.c
+> @@ -336,7 +336,7 @@ static int ucs1002_get_usb_type(struct u
+>  	case F_ACTIVE_MODE_BC12_CDP:
+>  		type =3D POWER_SUPPLY_USB_TYPE_CDP;
+>  		break;
+> -	};
+> +	}
+> =20
+>  	val->intval =3D type;
+> =20
+
+--yn5gaog2qp4yenbi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0VC/oACgkQ2O7X88g7
-+poTJRAAk2T33ox4H9f695WRdSpVuZjgdJfRsyNVYrMVpd0NwDgt5CfSFtpQ7Lub
-c5BDpY/LMnOH6HbcQipgW343roX4QpYhz6kwbbk2XSdfam8uuchgMtNDQqwDFNY3
-zQ9PMWNKK0eECbnJqa6E825/KQPrvXHQsu0D5irtD5DtPXBizr43yfhRv2EEACBa
-fnMU1XSOVVgvhWk/jpFD+mbfmVGct9YYG40yxj6migvNd9Im9soIXP6bjhQieuue
-5heq3SNkCSJzAV0yw0JHHDqQq/6zChB4gqv6B1yQ9mRKY6s3Ejnkug29HCXipuZI
-r1RO+U9p56PD36JW43JbECAGyz7zqnb13mcNXFBULDkjgURDOXuOWZVA1Ot2HDq2
-qva4h5F/hhYc5D9o/nJ220+D+jxDXu7P9qVg1IUEXweojoWSZEJu62nnEjgVQYnE
-r/AIsvZE7z3o8DfgnLpM1vq5rQKasOPN58rJOCB7yC993eIZob8IPl3c/D7llkSj
-JIGb4Kg/vP7NtCHES7x87p37RTsih7pCBrfOvPt8369s7BkqRcmLTH8a5vm4TREa
-y2jztX0f+n/qaGz1GkCqZ4+s1hOLOjyhX+f6ViFSNQUvkTuy9kgVZDeIn2hCbNA4
-qlJI30TEH2cu+Hk8Bxc0vegYjCLtdB+C4l+MmUy+wRDx3SEryiU=
-=8+eb
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0VDBQACgkQ2O7X88g7
++pr0TxAAovOuUoTuBV1hn82FDgD1WHExqBX19iNItQxMQ75k9bMfNSVSx5VG98p+
+e1hl7d9Nk3iBo7fULpNc0g/VZwOVU3J4t8xG9hQPhDmFGsG1pnorWixWn52tXCUt
+yC5Cci44xzB+//HOndrPcN14nP4L8akCeKzFwJNY0PkFEM3042RD2RLaSkv87pw5
+tAvqWWAprygIMmHBTISAOotOpEulPdRh6n8ZvcT8MRdR7/LHqQ+ZNTg4L4nbk0Nx
+fF0gmUArOSGYu3y2IQPqhmJGcx66lF4Ms94Qj2nM8ql0bfx/GAZyH2IG9N/f8Wh0
+gvjOcDIlpMkxhMd0P9x8FYhLNb8YjcR8ckIoi8LJY8QDucWQB9btu6FH/NqFUuOo
+wOMq3MU1+id7opjpJYMyY4v0mrh6YSMz1axp9doHrHdNzM7cDPg3gcTChw8dFizH
+aRryQjyKYsdWOqqPsGpNOg6WWdZlSnXc/MD5Bwi7UeVdtTA5ihYm0R6TtGVAPSzB
+tpNxkb6p7dFOOpHt+Af65fqDBXbirrehD+JxUU7y8UNqY8r7Y9TgTeaFfEpFbnhS
+cH0228DTdcBE7zqE1BJhph86UmUSeLo3pRN7x3f/ACe/Xv1nkiiS+TYat7IJBoVF
+ssmW1StcowE6m7LDgdonzdCRoQEs5UM0osZNnrZwuywMe94l+z0=
+=WRlm
 -----END PGP SIGNATURE-----
 
---oelnsnnwwn2ytluu--
+--yn5gaog2qp4yenbi--
