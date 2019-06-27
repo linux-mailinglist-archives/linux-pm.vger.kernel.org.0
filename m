@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83465583A9
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 15:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3B2583A7
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 15:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726997AbfF0Ne4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 09:34:56 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:37908 "EHLO
+        id S1727064AbfF0Ne7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 09:34:59 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:38326 "EHLO
         smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726786AbfF0New (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 09:34:52 -0400
+        with ESMTP id S1727050AbfF0Ne7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 09:34:59 -0400
 Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 674B860FEB; Thu, 27 Jun 2019 13:34:51 +0000 (UTC)
+        id C014C6118F; Thu, 27 Jun 2019 13:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561642491;
-        bh=nWwJLPAFZ1ykQ1iUEzDdqV8CSpbXtkeN5Bu8ViCR6ik=;
+        s=default; t=1561642497;
+        bh=60ZB9lT8VSmydyESwe8vp6KrAr7oGXZH3CwQcSsZB6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Oldj2kUNcGadt+wDYx0CQwqfeY2/VAiiY07rZrJ6Hfpuz3hCL/O6NxDO8WLOBc6Bu
-         9dBcoiVD/m/iCLXa5/1xr+qo5n4vVPhfc3urnMm88SlXBHxemO0/fuwpk6HXqtxPLS
-         cOES1suSsABMLA5xX0Ls/lIhunJ7/DyHwJwd9fuY=
+        b=EFqK89KmU/c4naFu51JQQDlHJ5WLWP01bYFelA5JRtJF/iyTkhBU7oGt57v+X/+bT
+         4W6/RyfUGCQy+QiU7McUcV4nLZ2OETqancOJl8vI382KA22aGlVEwIBKDafcVp0yvz
+         lgW8/JBJka1g9AIuwHhyiKe7Gn+eUBoaaWx4vHRc=
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         pdx-caf-mail.web.codeaurora.org
 X-Spam-Level: 
@@ -30,16 +30,16 @@ Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_globalnat_allzones-outs
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: sibis@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2A8A360E59;
-        Thu, 27 Jun 2019 13:34:45 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 77E4C60EA5;
+        Thu, 27 Jun 2019 13:34:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561642489;
-        bh=nWwJLPAFZ1ykQ1iUEzDdqV8CSpbXtkeN5Bu8ViCR6ik=;
+        s=default; t=1561642494;
+        bh=60ZB9lT8VSmydyESwe8vp6KrAr7oGXZH3CwQcSsZB6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MfL9qh11hclbeBBKYns3z3SqVR3XNzITO9pvnOCCGEDndlK8hK/jgS3C4I2jRjRkG
-         DSSp3qCdkw3Nxr3wJFo5zq6OGS4+iMjV2oj4LCADnLkwK0W2R54RAdnMqgmq5XUv9e
-         eFLluiIi2XK4Ei/VrxhNwHoLiADobc44JGWM1EVA=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2A8A360E59
+        b=ZJhm+hKy6ChT//kN36FUZ+mFH1jDLXgrwXZBDl3AlFZJd+sSPRQ6KP5C0Gyt0yjSV
+         fAMwiKKxAmmdzyfVoA9Olj4RdE96oWaufhqNofxv2D4omkwmbGsFvY1o7/ZqU9exxJ
+         +7vVdr9eXg/87U2PuxAyZjHpVWVaKT7Gr9UHV0yc=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 77E4C60EA5
 Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
 From:   Sibi Sankar <sibis@codeaurora.org>
@@ -50,9 +50,9 @@ Cc:     agross@kernel.org, david.brown@linaro.org, robh+dt@kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         saravanak@google.com, Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH RFC 3/4] cpufreq: qcom: Update the bandwidth levels on frequency change
-Date:   Thu, 27 Jun 2019 19:04:23 +0530
-Message-Id: <20190627133424.4980-4-sibis@codeaurora.org>
+Subject: [PATCH RFC 4/4] arm64: dts: qcom: sdm845: Add cpu OPP tables
+Date:   Thu, 27 Jun 2019 19:04:24 +0530
+Message-Id: <20190627133424.4980-5-sibis@codeaurora.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190627133424.4980-1-sibis@codeaurora.org>
 References: <20190627133424.4980-1-sibis@codeaurora.org>
@@ -63,180 +63,423 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support to parse and update optional OPP tables attached to the
-cpu nodes when the OPP bandwidth values are populated to enable
-scaling of DDR/L3 bandwidth levels with frequency change.
+Add OPP tables for the cpu nodes.
 
 Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 77 ++++++++++++++++++++++++++++++-
- 1 file changed, 75 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 343 +++++++++++++++++++++++++++
+ 1 file changed, 343 insertions(+)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 4b0b50403901b..eacc75fac9b00 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -6,6 +6,7 @@
- #include <linux/bitfield.h>
- #include <linux/cpufreq.h>
- #include <linux/init.h>
-+#include <linux/interconnect.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
-@@ -30,13 +31,41 @@
- static unsigned long cpu_hw_rate, xo_rate;
- static struct platform_device *global_pdev;
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 471cbb7d9bc39..8cabbb274d3e7 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -197,6 +197,10 @@
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_0>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			/* path between CPU and DDR memory and CPU and L3 */
++			interconnects = <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_EBI1>,
++					<&rsc_hlos MASTER_APPSS_PROC &osm_l3 SLAVE_OSM_L3>;
+ 			L2_0: l2-cache {
+ 				compatible = "cache";
+ 				next-level-cache = <&L3_0>;
+@@ -218,6 +222,10 @@
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_100>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			/* path between CPU and DDR memory and CPU and L3 */
++			interconnects = <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_EBI1>,
++					<&rsc_hlos MASTER_APPSS_PROC &osm_l3 SLAVE_OSM_L3>;
+ 			L2_100: l2-cache {
+ 				compatible = "cache";
+ 				next-level-cache = <&L3_0>;
+@@ -236,6 +244,10 @@
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_200>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			/* path between CPU and DDR memory and CPU and L3 */
++			interconnects = <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_EBI1>,
++					<&rsc_hlos MASTER_APPSS_PROC &osm_l3 SLAVE_OSM_L3>;
+ 			L2_200: l2-cache {
+ 				compatible = "cache";
+ 				next-level-cache = <&L3_0>;
+@@ -254,6 +266,10 @@
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_300>;
++			operating-points-v2 = <&cpu0_opp_table>;
++			/* path between CPU and DDR memory and CPU and L3 */
++			interconnects = <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_EBI1>,
++					<&rsc_hlos MASTER_APPSS_PROC &osm_l3 SLAVE_OSM_L3>;
+ 			L2_300: l2-cache {
+ 				compatible = "cache";
+ 				next-level-cache = <&L3_0>;
+@@ -272,6 +288,10 @@
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_400>;
++			operating-points-v2 = <&cpu4_opp_table>;
++			/* path between CPU and DDR memory and CPU and L3 */
++			interconnects = <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_EBI1>,
++					<&rsc_hlos MASTER_APPSS_PROC &osm_l3 SLAVE_OSM_L3>;
+ 			L2_400: l2-cache {
+ 				compatible = "cache";
+ 				next-level-cache = <&L3_0>;
+@@ -290,6 +310,10 @@
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_500>;
++			operating-points-v2 = <&cpu4_opp_table>;
++			/* path between CPU and DDR memory and CPU and L3 */
++			interconnects = <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_EBI1>,
++					<&rsc_hlos MASTER_APPSS_PROC &osm_l3 SLAVE_OSM_L3>;
+ 			L2_500: l2-cache {
+ 				compatible = "cache";
+ 				next-level-cache = <&L3_0>;
+@@ -308,6 +332,10 @@
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_600>;
++			operating-points-v2 = <&cpu4_opp_table>;
++			/* path between CPU and DDR memory and CPU and L3 */
++			interconnects = <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_EBI1>,
++					<&rsc_hlos MASTER_APPSS_PROC &osm_l3 SLAVE_OSM_L3>;
+ 			L2_600: l2-cache {
+ 				compatible = "cache";
+ 				next-level-cache = <&L3_0>;
+@@ -326,6 +354,10 @@
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_700>;
++			operating-points-v2 = <&cpu4_opp_table>;
++			/* path between CPU and DDR memory and CPU and L3 */
++			interconnects = <&rsc_hlos MASTER_APPSS_PROC &rsc_hlos SLAVE_EBI1>,
++					<&rsc_hlos MASTER_APPSS_PROC &osm_l3 SLAVE_OSM_L3>;
+ 			L2_700: l2-cache {
+ 				compatible = "cache";
+ 				next-level-cache = <&L3_0>;
+@@ -423,6 +455,317 @@
+ 		};
+ 	};
  
-+static int qcom_cpufreq_set_bw(struct cpufreq_policy *policy,
-+			       unsigned long freq_khz)
-+{
-+	struct device *dev;
++	cpu0_opp_table: cpu0_opp_table {
++		compatible = "operating-points-v2";
++		opp-shared;
 +
-+	dev = get_cpu_device(policy->cpu);
-+	if (!dev)
-+		return -ENODEV;
++		cpu0_opp1: opp-300000000 {
++			opp-hz = /bits/ 64 <300000000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 762 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 4577 MB/s peak */
++			bandwidth-MBps = <0 762>, <0 4577>;
++		};
 +
-+	return dev_pm_opp_set_bw(dev, freq_khz * 1000);
-+}
++		cpu0_opp2: opp-403200000 {
++			opp-hz = /bits/ 64 <403200000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 762 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 4577 MB/s peak */
++			bandwidth-MBps = <0 762>, <0 4577>;
++		};
 +
-+static int qcom_cpufreq_update_opp(struct device *cpu_dev,
-+				   unsigned long freq_khz,
-+				   unsigned long volt)
-+{
-+	unsigned long freq_hz = freq_khz * 1000;
++		cpu0_opp3: opp-480000000 {
++			opp-hz = /bits/ 64 <480000000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 762 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 6152 MB/s peak */
++			bandwidth-MBps = <0 762>, <0 6152>;
++		};
 +
-+	if (dev_pm_opp_update_voltage(cpu_dev, freq_hz, volt))
-+		return dev_pm_opp_add(cpu_dev, freq_hz, volt);
++		cpu0_opp4: opp-576000000 {
++			opp-hz = /bits/ 64 <576000000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 762 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 6152 MB/s peak */
++			bandwidth-MBps = <0 762>, <0 6152>;
++		};
 +
-+	/* Enable the opp after voltage update*/
-+	return dev_pm_opp_enable(cpu_dev, freq_hz);
-+}
++		cpu0_opp5: opp-652800000 {
++			opp-hz = /bits/ 64 <652800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 762 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 7324 MB/s peak */
++			bandwidth-MBps = <0 762>, <0 7324>;
++		};
 +
- static int qcom_cpufreq_hw_target_index(struct cpufreq_policy *policy,
- 					unsigned int index)
- {
- 	void __iomem *perf_state_reg = policy->driver_data;
-+	u32 freq = policy->freq_table[index].frequency;
- 
- 	writel_relaxed(index, perf_state_reg);
- 
-+	qcom_cpufreq_set_bw(policy, freq);
++		cpu0_opp6: opp-748800000 {
++			opp-hz = /bits/ 64 <748800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 1720 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 8789 MB/s peak */
++			bandwidth-MBps = <0 1720>, <0 8789>;
++		};
 +
- 	return 0;
- }
- 
-@@ -79,13 +108,29 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- {
- 	u32 data, src, lval, i, core_count, prev_cc = 0, prev_freq = 0, freq;
- 	u32 volt;
-+	u64 rate;
- 	unsigned int max_cores = cpumask_weight(policy->cpus);
- 	struct cpufreq_frequency_table	*table;
-+	struct device_node *opp_table_np, *np;
-+	int ret;
- 
- 	table = kcalloc(LUT_MAX_ENTRIES + 1, sizeof(*table), GFP_KERNEL);
- 	if (!table)
- 		return -ENOMEM;
- 
-+	ret = dev_pm_opp_of_add_table(cpu_dev);
-+	if (!ret) {
-+		/* Disable all opps and cross-validate against LUT */
-+		opp_table_np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
-+		for_each_available_child_of_node(opp_table_np, np) {
-+			ret = of_property_read_u64(np, "opp-hz", &rate);
-+			dev_pm_opp_disable(cpu_dev, rate);
-+		}
-+		of_node_put(opp_table_np);
-+	} else {
-+		dev_err(cpu_dev, "Couldn't add OPP table from dt\n");
-+	}
++		cpu0_opp7: opp-825600000 {
++			opp-hz = /bits/ 64 <825600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 1720 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 8789 MB/s peak */
++			bandwidth-MBps = <0 1720>, <0 8789>;
++		};
 +
- 	for (i = 0; i < LUT_MAX_ENTRIES; i++) {
- 		data = readl_relaxed(base + REG_FREQ_LUT +
- 				      i * LUT_ROW_SIZE);
-@@ -104,7 +149,7 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 
- 		if (freq != prev_freq && core_count == max_cores) {
- 			table[i].frequency = freq;
--			dev_pm_opp_add(cpu_dev, freq * 1000, volt);
-+			qcom_cpufreq_update_opp(cpu_dev, freq, volt);
- 			dev_dbg(cpu_dev, "index=%d freq=%d, core_count %d\n", i,
- 				freq, core_count);
- 		} else {
-@@ -125,7 +170,8 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 			if (prev_cc != max_cores) {
- 				prev->frequency = prev_freq;
- 				prev->flags = CPUFREQ_BOOST_FREQ;
--				dev_pm_opp_add(cpu_dev,	prev_freq * 1000, volt);
-+				qcom_cpufreq_update_opp(cpu_dev, prev_freq,
-+							volt);
- 			}
- 
- 			break;
-@@ -168,6 +214,7 @@ static void qcom_get_related_cpus(int index, struct cpumask *m)
- static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- {
- 	struct device *dev = &global_pdev->dev;
-+	struct opp_table *opp_table = NULL;
- 	struct of_phandle_args args;
- 	struct device_node *cpu_np;
- 	struct device *cpu_dev;
-@@ -202,6 +249,8 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 	if (!base)
- 		return -ENOMEM;
- 
-+	opp_table = dev_pm_opp_set_paths(cpu_dev);
++		cpu0_opp8: opp-902400000 {
++			opp-hz = /bits/ 64 <902400000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 1720 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 9960 MB/s peak */
++			bandwidth-MBps = <0 1720>, <0 9960>;
++		};
 +
- 	/* HW should be in enabled state to proceed */
- 	if (!(readl_relaxed(base + REG_ENABLE) & 0x1)) {
- 		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
-@@ -237,6 +286,8 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 
- 	return 0;
- error:
-+	if (opp_table)
-+		dev_pm_opp_put_paths(opp_table);
- 	devm_iounmap(dev, base);
- 	return ret;
- }
-@@ -275,6 +326,8 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
- 
- static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- {
-+	struct opp_table *opp_table = NULL;
-+	struct device *cpu_dev;
- 	struct clk *clk;
- 	int ret;
- 
-@@ -294,6 +347,26 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 
- 	global_pdev = pdev;
- 
-+	/* Check for optional interconnect paths on CPU0 */
-+	cpu_dev = get_cpu_device(0);
-+	if (!cpu_dev) {
-+		dev_err(&pdev->dev, "failed to get cpu0 device\n");
-+		return -ENODEV;
-+	}
++		cpu0_opp9: opp-979200000 {
++			opp-hz = /bits/ 64 <979200000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 1720 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 11425 MB/s peak */
++			bandwidth-MBps = <0 1720>, <0 11425>;
++		};
 +
-+	opp_table = dev_pm_opp_set_paths(cpu_dev);
-+	if (IS_ERR(opp_table)) {
-+		ret = PTR_ERR(opp_table);
-+		if (ret == -EPROBE_DEFER) {
-+			dev_dbg(&pdev->dev, "defer icc set paths: %d\n", ret);
-+			return ret;
-+		}
-+		dev_err(&pdev->dev, "set paths failed ddr/l3 scaling off: %d\n",
-+			ret);
-+	} else {
-+		dev_pm_opp_put_paths(opp_table);
-+	}
++		cpu0_opp10: opp-1056000000 {
++			opp-hz = /bits/ 64 <1056000000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 1720 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 11425 MB/s peak */
++			bandwidth-MBps = <0 1720>, <0 11425>;
++		};
 +
- 	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
- 	if (ret)
- 		dev_err(&pdev->dev, "CPUFreq HW driver failed to register\n");
++		cpu0_opp11: opp-1132800000 {
++			opp-hz = /bits/ 64 <1132800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 2086 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 12890 MB/s peak */
++			bandwidth-MBps = <0 2086>, <0 12890>;
++		};
++
++		cpu0_opp12: opp-1228800000 {
++			opp-hz = /bits/ 64 <1228800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 2086 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 14355 MB/s peak */
++			bandwidth-MBps = <0 2086>, <0 14355>;
++		};
++
++		cpu0_opp13: opp-1324800000 {
++			opp-hz = /bits/ 64 <1324800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 2086 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 15820 MB/s peak */
++			bandwidth-MBps = <0 2086>, <0 15820>;
++		};
++
++		cpu0_opp14: opp-1420800000 {
++			opp-hz = /bits/ 64 <1420800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 2086 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 17285 MB/s peak */
++			bandwidth-MBps = <0 2086>, <0 17285>;
++		};
++
++		cpu0_opp15: opp-1516800000 {
++			opp-hz = /bits/ 64 <1516800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 2597 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 18457 MB/s peak */
++			bandwidth-MBps = <0 2597>, <0 18457>;
++		};
++
++		cpu0_opp16: opp-1612800000 {
++			opp-hz = /bits/ 64 <1612800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 3879 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 18457 MB/s peak */
++			bandwidth-MBps = <0 3879>, <0 18457>;
++		};
++
++		cpu0_opp17: opp-1689600000 {
++			opp-hz = /bits/ 64 <1689600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 3879 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 19921 MB/s peak */
++			bandwidth-MBps = <0 3879>, <0 19921>;
++		};
++
++		cpu0_opp18: opp-1766400000 {
++			opp-hz = /bits/ 64 <1766400000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 3879 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 21386 MB/s peak */
++			bandwidth-MBps = <0 3879>, <0 21386>;
++		};
++	};
++
++	cpu4_opp_table: cpu4_opp_table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		cpu4_opp1: opp-825600000 {
++			opp-hz = /bits/ 64 <825600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 1144 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 8789 MB/s peak */
++			bandwidth-MBps = <0 1144>, <0 8789>;
++		};
++
++		cpu4_opp2: opp-902400000 {
++			opp-hz = /bits/ 64 <902400000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 1144 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 8789 MB/s peak */
++			bandwidth-MBps = <0 1144>, <0 8789>;
++		};
++
++		cpu4_opp3: opp-979200000 {
++			opp-hz = /bits/ 64 <979200000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 1144 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 8789 MB/s peak */
++			bandwidth-MBps = <0 1144>, <0 8789>;
++		};
++
++		cpu4_opp4: opp-1056000000 {
++			opp-hz = /bits/ 64 <1056000000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 2929 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 11425 MB/s peak */
++			bandwidth-MBps = <0 2929>, <0 11425>;
++		};
++
++		cpu4_opp5: opp-1209600000 {
++			opp-hz = /bits/ 64 <1209600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 3879 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 11425 MB/s peak */
++			bandwidth-MBps = <0 3879>, <0 11425>;
++		};
++
++		cpu4_opp6: opp-1286400000 {
++			opp-hz = /bits/ 64 <1286400000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 3879 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 11425 MB/s peak */
++			bandwidth-MBps = <0 3879>, <0 11425>;
++		};
++
++		cpu4_opp7: opp-1363200000 {
++			opp-hz = /bits/ 64 <1363200000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 3879 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 14355 MB/s peak */
++			bandwidth-MBps = <0 3879>, <0 14355>;
++		};
++
++		cpu4_opp8: opp-1459200000 {
++			opp-hz = /bits/ 64 <1459200000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 3879 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 14355 MB/s peak */
++			bandwidth-MBps = <0 3879>, <0 14355>;
++		};
++
++		cpu4_opp9: opp-1536000000 {
++			opp-hz = /bits/ 64 <1536000000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 3879 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 14355 MB/s peak */
++			bandwidth-MBps = <0 3879>, <0 14355>;
++		};
++
++		cpu4_opp10: opp-1612800000 {
++			opp-hz = /bits/ 64 <1612800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 4943 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 14355 MB/s peak */
++			bandwidth-MBps = <0 4943>, <0 14355>;
++		};
++
++		cpu4_opp11: opp-1689600000 {
++			opp-hz = /bits/ 64 <1689600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 4943 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 18457 MB/s peak */
++			bandwidth-MBps = <0 4943>, <0 18457>;
++		};
++
++		cpu4_opp12: opp-1766400000 {
++			opp-hz = /bits/ 64 <1766400000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 5931 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 18457 MB/s peak */
++			bandwidth-MBps = <0 5931>, <0 18457>;
++		};
++
++		cpu4_opp13: opp-1843200000 {
++			opp-hz = /bits/ 64 <1843200000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 5931 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 18457 MB/s peak */
++			bandwidth-MBps = <0 5931>, <0 18457>;
++		};
++
++		cpu4_opp14: opp-1920000000 {
++			opp-hz = /bits/ 64 <1920000000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 5931 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 18457 MB/s peak */
++			bandwidth-MBps = <0 5931>, <0 18457>;
++		};
++
++		cpu4_opp15: opp-1996800000 {
++			opp-hz = /bits/ 64 <1996800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 19921 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 19921>;
++		};
++
++		cpu4_opp16: opp-2092800000 {
++			opp-hz = /bits/ 64 <2092800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 19921 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 19921>;
++		};
++
++		cpu4_opp17: opp-2169600000 {
++			opp-hz = /bits/ 64 <2169600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 19921 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 19921>;
++		};
++
++		cpu4_opp18: opp-2246400000 {
++			opp-hz = /bits/ 64 <2246400000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 19921 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 19921>;
++		};
++
++		cpu4_opp19: opp-2323200000 {
++			opp-hz = /bits/ 64 <2323200000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 19921 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 19921>;
++		};
++
++		cpu4_opp20: opp-2400000000 {
++			opp-hz = /bits/ 64 <2400000000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 21386 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 21386>;
++		};
++
++		cpu4_opp21: opp-2476800000 {
++			opp-hz = /bits/ 64 <2476800000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 21386 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 21386>;
++		};
++
++		cpu4_opp22: opp-2553600000 {
++			opp-hz = /bits/ 64 <2553600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 21386 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 21386>;
++		};
++
++		cpu4_opp23: opp-2649600000 {
++			opp-hz = /bits/ 64 <2649600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 21386 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 21386>;
++		};
++
++		cpu4_opp24: opp-2745600000 {
++			opp-hz = /bits/ 64 <2745600000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 22558 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 22558>;
++		};
++
++		cpu4_opp25: opp-2803200000 {
++			opp-hz = /bits/ 64 <2803200000>;
++			/* CPU<->DDR bandwidth: 0 MB/s average, 6881 MB/s peak */
++			/* CPU<->L3 bandwidth: 0 MB/s average, 22558 MB/s peak */
++			bandwidth-MBps = <0 6881>, <0 22558>;
++		};
++	};
++
+ 	pmu {
+ 		compatible = "arm,armv8-pmuv3";
+ 		interrupts = <GIC_PPI 5 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 a Linux Foundation Collaborative Project
