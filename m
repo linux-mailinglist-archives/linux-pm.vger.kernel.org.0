@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A66158826
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 19:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EAC58825
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 19:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbfF0RQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 13:16:21 -0400
-Received: from foss.arm.com ([217.140.110.172]:59226 "EHLO foss.arm.com"
+        id S1726645AbfF0RQX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 13:16:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:59240 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726561AbfF0RQV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 Jun 2019 13:16:21 -0400
+        id S1726619AbfF0RQX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 Jun 2019 13:16:23 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0194142F;
-        Thu, 27 Jun 2019 10:16:20 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 857E01477;
+        Thu, 27 Jun 2019 10:16:22 -0700 (PDT)
 Received: from e107049-lin.arm.com (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9AFBA3F718;
-        Thu, 27 Jun 2019 10:16:19 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2EFFD3F718;
+        Thu, 27 Jun 2019 10:16:21 -0700 (PDT)
 From:   Douglas RAILLARD <douglas.raillard@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-pm@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
         rjw@rjwysocki.net, viresh.kumar@linaro.org, quentin.perret@arm.com,
         douglas.raillard@arm.com, patrick.bellasi@arm.com,
         dietmar.eggemann@arm.com
-Subject: [RFC PATCH v2 2/5] sched/cpufreq: Attach perf domain to sugov policy
-Date:   Thu, 27 Jun 2019 18:16:00 +0100
-Message-Id: <20190627171603.14767-3-douglas.raillard@arm.com>
+Subject: [RFC PATCH v2 3/5] sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()
+Date:   Thu, 27 Jun 2019 18:16:01 +0100
+Message-Id: <20190627171603.14767-4-douglas.raillard@arm.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190627171603.14767-1-douglas.raillard@arm.com>
 References: <20190627171603.14767-1-douglas.raillard@arm.com>
@@ -36,77 +36,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Attach an Energy Model perf_domain to each sugov_policy to prepare the
-ground for energy-aware schedutil.
+Choose the highest OPP for a given energy cost, allowing to skip lower
+frequencies that would not be cheaper in terms of consumed power. These
+frequencies can still be interesting to keep in the energy model to give
+more freedom to thermal throttling, but should not be selected under
+normal circumstances.
+
+This also prepares the ground for energy-aware frequency boosting.
 
 Signed-off-by: Douglas RAILLARD <douglas.raillard@arm.com>
 ---
- kernel/sched/cpufreq_schedutil.c | 39 ++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ kernel/sched/cpufreq_schedutil.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 9c0419087260..0a3ccc20adeb 100644
+index 0a3ccc20adeb..7ffc6fe3b670 100644
 --- a/kernel/sched/cpufreq_schedutil.c
 +++ b/kernel/sched/cpufreq_schedutil.c
-@@ -41,6 +41,10 @@ struct sugov_policy {
- 	bool			work_in_progress;
+@@ -10,6 +10,7 @@
  
- 	bool			need_freq_update;
-+
-+#ifdef CONFIG_ENERGY_MODEL
-+	struct em_perf_domain *pd;
-+#endif
- };
+ #include "sched.h"
  
- struct sugov_cpu {
-@@ -65,6 +69,38 @@ static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
++#include <linux/energy_model.h>
+ #include <linux/sched/cpufreq.h>
+ #include <trace/events/power.h>
  
- /************************ Governor internals ***********************/
+@@ -201,9 +202,16 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+ 	struct cpufreq_policy *policy = sg_policy->policy;
+ 	unsigned int freq = arch_scale_freq_invariant() ?
+ 				policy->cpuinfo.max_freq : policy->cur;
++	struct em_perf_domain *pd = sugov_policy_get_pd(sg_policy);
  
-+#ifdef CONFIG_ENERGY_MODEL
-+static void sugov_policy_attach_pd(struct sugov_policy *sg_policy)
-+{
-+	struct em_perf_domain *pd;
-+	struct cpufreq_policy *policy = sg_policy->policy;
+ 	freq = map_util_freq(util, freq, max);
+ 
++	/*
++	 * Try to get a higher frequency if one is available, given the extra
++	 * power we are ready to spend.
++	 */
++	freq = em_pd_get_higher_freq(pd, freq, 0);
 +
-+	sg_policy->pd = NULL;
-+	pd = em_cpu_get(policy->cpu);
-+	if (!pd)
-+		return;
-+
-+	if (cpumask_equal(policy->related_cpus, to_cpumask(pd->cpus)))
-+		sg_policy->pd = pd;
-+	else
-+		pr_warn("%s: Not all CPUs in schedutil policy %u share the same perf domain, no perf domain for that policy will be registered\n",
-+			__func__, policy->cpu);
-+}
-+
-+static struct em_perf_domain *sugov_policy_get_pd(
-+						struct sugov_policy *sg_policy)
-+{
-+	return sg_policy->pd;
-+}
-+#else /* CONFIG_ENERGY_MODEL */
-+static void sugov_policy_attach_pd(struct sugov_policy *sg_policy) {}
-+static struct em_perf_domain *sugov_policy_get_pd(
-+						struct sugov_policy *sg_policy)
-+{
-+	return NULL;
-+}
-+#endif /* CONFIG_ENERGY_MODEL */
-+
- static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
- {
- 	s64 delta_ns;
-@@ -850,6 +886,9 @@ static int sugov_start(struct cpufreq_policy *policy)
- 							sugov_update_shared :
- 							sugov_update_single);
- 	}
-+
-+	sugov_policy_attach_pd(sg_policy);
-+
- 	return 0;
- }
+ 	if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
+ 		return sg_policy->next_freq;
  
 -- 
 2.22.0
