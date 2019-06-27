@@ -2,174 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E66C15806A
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 12:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7590858120
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 13:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbfF0KbP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 06:31:15 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:38245 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfF0KbO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 06:31:14 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190627103113euoutp02a7004a65c061a895bfbacde516d730db~sB40NFjRa3142931429euoutp024
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2019 10:31:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190627103113euoutp02a7004a65c061a895bfbacde516d730db~sB40NFjRa3142931429euoutp024
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561631473;
-        bh=9qMksaSn2o1RzY5tC5OZ+NxmFvebkX7TJu1+xGfBCiw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=ccL1ZDEHKxyJ2Fn81kIcR92zG9FOs3MjLjrzdmi8mKJrr0zbqMsPS7DztwbH5+1j4
-         AqAJok66BCDtV2v74jPvbCC/Ax5zDl2AO9m6QL6UFE0QKKyuwQ9iobhBTUnJ+DG+vs
-         O2hGtr5ZbiRd7QpBkP8fnaA/qNaArNu+2nFGrUpQ=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190627103112eucas1p1ae22251d569889712181490145817bea~sB4zUOgNn3171631716eucas1p1V;
-        Thu, 27 Jun 2019 10:31:12 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 91.F0.04298.FEA941D5; Thu, 27
-        Jun 2019 11:31:11 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190627103111eucas1p204450a032db835ba18a70d12939384e9~sB4yiP0K41122111221eucas1p2Y;
-        Thu, 27 Jun 2019 10:31:11 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190627103111eusmtrp25aa2911c568498975452e64c9e863a35~sB4yUDhim0413004130eusmtrp2H;
-        Thu, 27 Jun 2019 10:31:11 +0000 (GMT)
-X-AuditID: cbfec7f2-f13ff700000010ca-71-5d149aef4419
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 04.30.04140.FEA941D5; Thu, 27
-        Jun 2019 11:31:11 +0100 (BST)
-Received: from [106.120.51.20] (unknown [106.120.51.20]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190627103110eusmtip2f3f2e980cd4c4b326eada11fb687fe3e~sB4xhqKXS1415414154eusmtip2e;
-        Thu, 27 Jun 2019 10:31:10 +0000 (GMT)
-Subject: Re: [PATCH v4 4/5] Documentation: devicetree: add PPMU events
- description
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>, cwchoi00@gmail.com
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        =?UTF-8?Q?Bart=c5=82omiej_=c5=bbo=c5=82nierkiewicz?= 
-        <b.zolnierkie@samsung.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, kyungmin.park@samsung.com,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com, kgene@kernel.org,
-        willy.mh.wolff.ml@gmail.com
-From:   Lukasz Luba <l.luba@partner.samsung.com>
-Message-ID: <3fdba210-2ca1-9fe3-c886-25d1d13bb133@partner.samsung.com>
-Date:   Thu, 27 Jun 2019 12:31:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.0
+        id S1726422AbfF0LG1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 07:06:27 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:44567 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbfF0LG1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 07:06:27 -0400
+Received: by mail-lf1-f65.google.com with SMTP id r15so1245959lfm.11;
+        Thu, 27 Jun 2019 04:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+qJi21Mo6g58zYgo8fMUz9qXi6d+nO3bcsbXvUW104g=;
+        b=XK/30NKiJYh2h9LUIAo/MBxvj5zxprRjltaTwQ22pfwkEbGNCm7pRuNVo5Of/DANRH
+         TfHmPGQis9MzOUJlG9BW4EsshBCIwY5XA+rr0UGuAigw6aKDoR4ITQmOhXckQDZ/F2n3
+         4MfJ6e7E3d3B5rhEXswaUdsU+hiUR7IYWBHaB5xoQLoWkcQLBVqed3TxAtaDQFUt3tHN
+         39zaoiDDeXY9QpsAFcowczybtZs6Wc72VcLDgYdFC5qbr2fQulzA6Cwlpr/dtUqOY3b6
+         YVkf6V0yiWAWMyLOMa1YxLSXT3JM4kIcXmX+pHaOncjUC/d9sseqZ2hiYmXbDyZELnD+
+         Zo6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+qJi21Mo6g58zYgo8fMUz9qXi6d+nO3bcsbXvUW104g=;
+        b=XbPVlALF9+MYYhkaB9G/blk1Q3GrzzhdpV0VIbjwLBKDknpj1liPifU9mupvZGrLCl
+         kaqPkZxtxPkSRYVnEDZJDVlh0mBgqwhvIJ2pKS64vYNLAY9on2WmRI9Js+mAkpmIeEJz
+         mSZYSmRbcNTH+yOMeZPB9N+jWAhJeqVZr6tdLY3nS1S3YhwIMTJ/7SIghC6fkZokfFL7
+         NIXvm2iUFdIYAHpJJWrEfxrNFzF9dmy8ASLUAjkuqRPYnHPrhbZHZ806m+h+aiCIruAB
+         fv4DaLHCVmr80gqGMWyEgGQYGe8lHbFueskPvaBS6v4mMUCcnd9C1Stu2BLr0Nl7+6/T
+         mI1Q==
+X-Gm-Message-State: APjAAAVvg2h/wv9hau51nsyH0uI7nkoTfEanShOi6880rgo/0Q8Cbl7Q
+        DmJqeAibGZlEtd4aWh6/XdhgHJoMk2yoFw==
+X-Google-Smtp-Source: APXvYqzNAadmMThX24V2oaV8mMFiQMR9FNgpLeEjXYuFgWEVfIkps5h6NCvCqVLRUWWxbDgqmfXREQ==
+X-Received: by 2002:a19:2247:: with SMTP id i68mr1742031lfi.174.1561633585377;
+        Thu, 27 Jun 2019 04:06:25 -0700 (PDT)
+Received: from localhost ([89.207.88.249])
+        by smtp.gmail.com with ESMTPSA id p12sm364476lja.23.2019.06.27.04.06.24
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 27 Jun 2019 04:06:24 -0700 (PDT)
+Date:   Thu, 27 Jun 2019 14:06:24 +0300
+From:   Alexander Fomichev <fomichev.ru@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>, linux@yadro.com,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>
+Subject: Re: [PATCH RESEND] PCI: disable runtime PM for PLX switches
+Message-ID: <20190627110624.nxwloyphithj4rmt@yadro.com>
+References: <20190415135903.wiyw34faiezdnbbs@yadro.com>
+ <20190415141554.GL126710@google.com>
+ <20190423215340.GH14616@google.com>
+ <20190424100102.iyxogbsa4l7dyusb@yadro.com>
+ <20190424141148.GA244134@google.com>
+ <20190424145819.GL2654@lahna.fi.intel.com>
+ <20190424172151.GB244134@google.com>
+ <CAJZ5v0gZhgMy+oQMpEGM8bsU_57w7i3iCP1nb9PcOHxENfnwAw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <99a47066-3713-77fa-4afb-6f2f17a2721a@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0zNYRjHe3/3mpO306HHZdhpuTWFyd4wl2ntZGwNWZOWQ79VqhPnJ1Qu
-        uSvdpFyOJJHSaumoVijdFItSTbXMZsplKaxTDBN+/TL9932e5/Ncvu9egVZ3s1OFEMNe0WjQ
-        h2k5G6as4Xvzgs8mjf/C0kZ3UnypiCWdQ+9Z8u6RM7lW38yS5J6PNGlpucOTZ8f6eWLu6WBJ
-        +70MjlgS6xG51FJFkcL6VzzJ6WylyMujeRw5WVnPk7r+0yz5+vgNWm2nK8gsQLoK0yteZ86P
-        43R3bx7RJZXkI53FPMOb22qzIlAMC9knGl1XbrcJTmlOYnefwAeGf3rHor4J8chaALwE0s7W
-        0PHIRlDjPATF2Sc5JRhC0FDdwMuUGlsQpOfOiEfCaEfVF43C5CLoGMyglGAAwdMPPxi5wR5v
-        hhFzLSVrDRbhx/AvJEM0Tmfga00cJ0/isAuU5++RGRX2hG+WaiSnGewEZ/I85PQk7AtDFWak
-        IHbw5HLv6HhrvAqy497SsqaxA3T3XqMUPROOl14ZdQP4Fw9l7amMYtMDylpfIEXbQ19jCa/o
-        6fC7QmkGLEFs4vUx5iD0JF8dY5ZDXWMrK99G43lQdM9VeYc18CR7oiJtoWvATrnAFlLLLtJK
-        WgVnTqmVGXOhJOH52J7JkFtwgU9BWtM4X6ZxXkzjvJj+r81CTD5yECOl8CBRWmQQ97tI+nAp
-        0hDksjMi3Iz+/rimkcbBcjTctqMWYQFpJ6isHtj7q1n9PikqvBaBQGs1qogtGn+1KlAfFS0a
-        IwKMkWGiVIumCYzWQRVj9dpPjYP0e8VQUdwtGv9VKcF6aixau76yz+H2yI1grzSnUEc358z7
-        mRvfuW2bXpzsXHm46UBdT5vVtHVHfZ3Wfeo4Ty0+F+2YonKNNjSs9EuetTZpChMWumzX5g32
-        I8W9Pjnpltm3LqZbLvRTQ68PPTvi+bkz4fQXn/KIwj0xXnPWdMUeX2r0oPyXBVgy0jic8DCV
-        cXPP2qRlpGD9ovm0UdL/AQkFqAttAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPIsWRmVeSWpSXmKPExsVy+t/xe7rvZ4nEGmx5w2yxccZ6VovrX56z
-        Wjw7qm0x/8g5Vov+x6+ZLc6f38BucbbpDbvFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y26x
-        9PpFJovbjSvYLFr3HmG3OPymndXi24lHjA6CHmvmrWH02DnrLrvHplWdbB6bl9R79G1Zxejx
-        eZNcAFuUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5mWWqRvl2C
-        XsaEc32sBS0CFV9/BzQwvuLpYuTgkBAwkdj3QaSLkYtDSGApo8S/ntXMXYycQHExiUn7trND
-        2MISf651sUEUvWaUuHDwK1hCWCBE4t+mQ0wgtohAqsSTZWvBmpkFprJILPlfCNHQxiLxYdtx
-        ZpBtbAJ6EjtWFYLU8Aq4SXz/fIARJMwioCrRscIFJCwqECExe1cDC0SJoMTJmU/AbE4Be4lF
-        nU+hxptJzNv8EMoWl7j1ZD4ThC0v0bx1NvMERqFZSNpnIWmZhaRlFpKWBYwsqxhFUkuLc9Nz
-        i430ihNzi0vz0vWS83M3MQIje9uxn1t2MHa9Cz7EKMDBqMTDu2KncKwQa2JZcWXuIUYJDmYl
-        Ed78MJFYId6UxMqq1KL8+KLSnNTiQ4ymQL9NZJYSTc4HJp28knhDU0NzC0tDc2NzYzMLJXHe
-        DoGDMUIC6YklqdmpqQWpRTB9TBycUg2MW1M1iutcAo8XndyssdDzg0fPg6iYdR08q7Tj+TNO
-        GejtiPuzpv1uwXrPeXvPrmPkiDTL+bV9EfO6XXddJ7P0Wz+rerdr29srV6dO27e4VDY7eceE
-        hwsresrLkv9I3Tc21f5w5Aev1Kl2nbOZax5c6P+9aL4AW7itjRJjXGftdPNf6kuYGX1ylFiK
-        MxINtZiLihMB4iU3qQIDAAA=
-X-CMS-MailID: 20190627103111eucas1p204450a032db835ba18a70d12939384e9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5
-References: <CGME20190605091304eucas1p21e0717cafa17a14de569f1773cc7abe5@eucas1p2.samsung.com>
-        <20190605091236.24263-1-l.luba@partner.samsung.com>
-        <20190605091236.24263-5-l.luba@partner.samsung.com>
-        <CAGTfZH2kTNWtx=Jp1UJaLN50Qxbq+Q9ThV4vhQ240QbOy1TRMQ@mail.gmail.com>
-        <7498059d-95f7-e154-cf49-bcbc8ee6fdb9@partner.samsung.com>
-        <CAJKOXPc6304D=HNQnrvhBH6qKxhkf=VQ2Gg6Q2FMP2hYOTYSDQ@mail.gmail.com>
-        <776f58c2-a05c-8fa8-c7f5-458dc17926f6@partner.samsung.com>
-        <99a47066-3713-77fa-4afb-6f2f17a2721a@samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gZhgMy+oQMpEGM8bsU_57w7i3iCP1nb9PcOHxENfnwAw@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
+Hi.
 
-On 6/27/19 3:11 AM, Chanwoo Choi wrote:
-> Hi Lukasz,
+On Wed, Apr 24, 2019 at 11:09:52PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Apr 24, 2019 at 8:01 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > On Wed, Apr 24, 2019 at 05:58:19PM +0300, Mika Westerberg wrote:
+> > > On Wed, Apr 24, 2019 at 09:11:48AM -0500, Bjorn Helgaas wrote:
+> > > >   - Maybe the PCI sysfs accessors (pci_mmap_resource(), etc) should
+> > > >     turn off runtime PM?  If we allow mmap of a BAR and then put the
+> > > >     device in D3hot, that seems like a bug that could affect lots of
+> > > >     things.  But maybe that's already done magically elsewhere?
+> > >
+> > > IIRC there is no PM magic happening for MMIO userspace accesses.
+> > >
+> > > What you suggest above sounds like a good way to fix it. We already do
+> > > similar for config space access from userspace (if the device is in
+> > > D3cold) so definitely makes sense to do the same for MMIO. However, I
+> > > don't think we need to disable runtime PM - it should be enough to
+> > > increase the reference count (pm_runtime_get_sync() and friends) during
+> > > the time the MMIO resource is mmapped.
+> >
+> > OK, so if I understand correctly this would be basically adding
+> > pm_runtime_get_sync(dev) in pci_mmap_resource().  I don't know what
+> > the unmap path is, but there would have to be a matching
+> > pm_runtime_put() somewhere.
 > 
-> On 19. 6. 26. 오후 11:17, Lukasz Luba wrote:
->> Hi Krzysztof,
->>
->> On 6/26/19 4:03 PM, Krzysztof Kozlowski wrote:
->>> On Wed, 26 Jun 2019 at 15:58, Lukasz Luba <l.luba@partner.samsung.com> wrote:
->>>>
->>>> Hi Chanwoo,
->>>>
->>>> On 6/26/19 10:23 AM, Chanwoo Choi wrote:
->>>>> Hi Lukasz,
->>>>>
->>>>> 2019년 6월 5일 (수) 18:14, Lukasz Luba <l.luba@partner.samsung.com
->>>>> <mailto:l.luba@partner.samsung.com>>님이 작성:
->>>>>
->>>>>       Extend the documenation by events description with new 'event-data-type'
->>>>>       field. Add example how the event might be defined in DT.
->>>>>
->>>>>       Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com
->>>>>       <mailto:l.luba@partner.samsung.com>>
->>>>>       Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com
->>>>>       <mailto:cw00.choi@samsung.com>>
->>>>>       ---
->>>>>         .../bindings/devfreq/event/exynos-ppmu.txt    | 26 +++++++++++++++++--
->>>>>         1 file changed, 24 insertions(+), 2 deletions(-)
->>>>>
->>>>>
->>>>>
->>>>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com
->>>>
->>>> Thank you for the ACKs for this a 2/5 patch.
->>>> Do you think the v4 could be merged now?
->>>
->>> I think you have all necessary acks. I can take the DTS patch (5/5)
->>> although probably for next merge window as I just sent one.
->> There was one patch 3/5
->> https://protect2.fireeye.com/url?k=82dd0d0cbe2abd04.82dc8643-d13ecd7e5f989b8d&u=https://lkml.org/lkml/2019/6/5/215
->> which was waiting ACK or I missed the email somehow.
+> Right.
 > 
-> When I was in vacation, your patches are removed on my email account
-> because of the email expiration. So, I replied with my Ack through
-> gmail account on mobile phone. But, there are some problem. My reply
-> didn't arrive the mailing list.
+> > And a similar change in the read/write path for /sys/.../resource<N>;
+> > I think this must be related to the sysfs_create_bin_file() call in
+> > pci_create_attr(), but I don't see the path where the actual
+> > read/write to the device is done.
+> >
+> > And probably something similar should be done in pci_resource_io(),
+> > pci_map_rom(), and pci_unmap_rom().
 > 
-> I have no any way to reply about this at company. After leaving one's
-> office, I'll reply with Ack again at home.
+> In general, every path in which there is a memory or IO address space
+> access requires pm_runtime_get_sync()/pm_runtime_put() around it as
+> these accesses are only guaranteed to work in D0.
 > 
-OK, no worries, it is not an emergency issue.
+
+Tested a solution based on proposals by Logan, Bjorn, Mika, Rafael (thanks all
+of you, guys), I managed to fix the problem inside the PLX driver code. So no
+additional quirks or other modifications in Linux kernel needed. I think
+my patch can be easily rejected.
+
+Thanks for help.
+
+-- 
 Regards,
-Lukasz
+  Alexander
