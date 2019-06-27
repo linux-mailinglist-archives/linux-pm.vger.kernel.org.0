@@ -2,48 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C267589F5
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 20:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0097658A0B
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 20:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbfF0S2V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 14:28:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56674 "EHLO mail.kernel.org"
+        id S1726576AbfF0Sdd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jun 2019 14:33:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60536 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726384AbfF0S2V (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 Jun 2019 14:28:21 -0400
+        id S1726384AbfF0Sdd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 Jun 2019 14:33:33 -0400
 Received: from earth.universe (unknown [185.62.205.103])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D92F205F4;
-        Thu, 27 Jun 2019 18:28:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F6C820644;
+        Thu, 27 Jun 2019 18:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561660100;
-        bh=taqyQ1APEgX+EVCAzATmMcA2vqF2xWfz1x10hWSRsgI=;
+        s=default; t=1561660412;
+        bh=x8Yj6zbtV5AdouyL8wA6d+fGrA1EuOigCtZuHz9sTi0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hR15WHn5VGnYjJBJF3P3KfFz2mIU6gWMdyBW1J9JfNrAe3Wkox4nvnMreFyFc8Oga
-         gHHKlRxzScRITQpZl1lYB4jheGTy3CTkrWujVUNozMy3/DQtRu1+16z5GQ7OQZL9gE
-         dfQ26EIv4VN+fxjVF3qFiQDlpLL05BiHlURmYc7g=
+        b=j/bpIG868+e4sdRL9DMHjm+fOumUDfzWu6dptYgxK9gceUPjdCqWNhwX82s7U1Qvv
+         Rx8Qv5OJwROl1i6QuNLOg7iKho5zj51P48n5bkkAge1T9tap4uU4eIUMvc0CtCJbnF
+         USc7cnoDRkD+r8poYwvcwLVQqaTC4uPEMprLncfY=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 66ADF3C08D5; Thu, 27 Jun 2019 20:28:17 +0200 (CEST)
-Date:   Thu, 27 Jun 2019 20:28:17 +0200
+        id 3FA8C3C08D5; Thu, 27 Jun 2019 20:33:30 +0200 (CEST)
+Date:   Thu, 27 Jun 2019 20:33:30 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devel@driverdev.osuosl.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/34] treewide: simplify getting the adapter of an I2C
- client
-Message-ID: <20190627182817.5vrfmuzn7kanvtwu@earth.universe>
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
+To:     Han Nandor <nandor.han@vaisala.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4 0/2] Use NVMEM as reboot-mode write interface
+Message-ID: <20190627183330.aole6zumw3l2vyet@earth.universe>
+References: <20190515104658.25535-1-nandor.han@vaisala.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dtrjmbi6re7vojrt"
+        protocol="application/pgp-signature"; boundary="oelnsnnwwn2ytluu"
 Content-Disposition: inline
-In-Reply-To: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20190515104658.25535-1-nandor.han@vaisala.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -51,154 +48,101 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---dtrjmbi6re7vojrt
+--oelnsnnwwn2ytluu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Jun 08, 2019 at 12:55:39PM +0200, Wolfram Sang wrote:
-> While preparing a refactoring series, I noticed that some drivers use a
-> complicated way of determining the adapter of a client. The easy way is
-> to use the intended pointer: client->adapter
+On Wed, May 15, 2019 at 10:47:14AM +0000, Han Nandor wrote:
+> Description
+> -----------
+> Extend the reboot mode driver to use a NVMEM cell as writing interface.
 >=20
-> These drivers do:
-> 	to_i2c_adapter(client->dev.parent);
+> Testing
+> -------
+> The testing is done by configuring DT from a custom board.
+> The NVMEM cell is configured in an RTC non-volatile memory.
+> Kernel: 4.14.60 (the patchset was rebased on kernel master)
 >=20
-> The I2C core populates the parent pointer as:
-> 	client->dev.parent =3D &client->adapter->dev;
+> DT configurations:
+> `
+> ...
+> reboot-mode-nvmem@0 {
+>     compatible =3D "simple-mfd";
+>     reboot-mode {
+>         compatible =3D "nvmem-reboot-mode";
+>         nvmem-cells =3D <&reboot_mode>;
+>         nvmem-cell-names =3D "reboot-mode";
 >=20
-> Now take into consideration that
-> 	to_i2c_adapter(&adapter->dev);
+>         mode-test       =3D <0x21969147>;
+>     };
+> };
+> ...
+> reboot_mode: nvmem_reboot_mode@0 {
+>         reg =3D <0x00 0x4>;
+> };
+> ...
+> `
 >=20
-> is a complicated way of saying 'adapter', then we can even formally
-> prove that the complicated expression can be simplified by using
-> client->adapter.
+> 1. Reboot the system using the command `reboot test`
 >=20
-> The conversion was done using a coccinelle script with some manual
-> indentation fixes applied on top.
+> 2. Verify that kernel logs show that reboot was done in mode `test`:
+> PASS
+> `[  413.957172] reboot: Restarting system with command 'test' `
 >=20
-> To avoid a brown paper bag mistake, I double checked this on a Renesas
-> Salvator-XS board (R-Car M3N) and verified both expression result in the
-> same pointer. Other than that, the series is only build tested.
+> 3. Stop in U-Boot and verify that mode `test` magic value is present
+> in RTCs non-volatile memory: PASS
 >=20
-> A branch can be found here:
+> Kernel: 5.1.0-rc3
 >=20
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/no_to_ada=
-pter
+> 1. Configure `arch/arm/configs/imx_v6_v7_defconfig` to contain=20
+> `CONFIG_NVMEM_REBOOT_MODE=3Dy`
+> 2. Verify that Kernel compiles successful: PASS
+> `
+> make ARCH=3Darm CROSS_COMPILE=3Darm-linux-gnu- imx_v6_v7_defconfig zImage
+> ...
+> CC      drivers/power/reset/nvmem-reboot-mode.o
+> ...
+> Kernel: arch/arm/boot/zImage is ready
+> `
+> Changes since v1:
+> -----------------
+>  - split the documentation on a separate patch
+>  - add a missing header
 >=20
-> Please apply the patches to the individual subsystem trees. There are no
-> dependencies.
+> Changes since v2:
+> ----------------
+>  - change the module license to GPL since GPL v2 is deprecated
 >=20
-> Thanks and kind regards,
->=20
->    Wolfram
+> Changes since v3:
+> ----------------
+>  - documentation updated according to the comments
 
-Thanks, I queued the patches prefixed with "power: supply: [...]".
+Thanks, queued. Please fix your git/mail setup, I had to fix the
+line endings (\r\n -> \n) to apply this.
 
 -- Sebastian
 
-> Wolfram Sang (34):
->   clk: clk-cdce706: simplify getting the adapter of a client
->   gpu: drm: bridge: sii9234: simplify getting the adapter of a client
->   iio: light: bh1780: simplify getting the adapter of a client
->   leds: leds-pca955x: simplify getting the adapter of a client
->   leds: leds-tca6507: simplify getting the adapter of a client
->   media: i2c: ak881x: simplify getting the adapter of a client
->   media: i2c: mt9m001: simplify getting the adapter of a client
->   media: i2c: mt9m111: simplify getting the adapter of a client
->   media: i2c: mt9p031: simplify getting the adapter of a client
->   media: i2c: ov2640: simplify getting the adapter of a client
->   media: i2c: tw9910: simplify getting the adapter of a client
->   misc: fsa9480: simplify getting the adapter of a client
->   misc: isl29003: simplify getting the adapter of a client
->   misc: tsl2550: simplify getting the adapter of a client
->   mtd: maps: pismo: simplify getting the adapter of a client
->   power: supply: bq24190_charger: simplify getting the adapter of a client
->   power: supply: bq24257_charger: simplify getting the adapter of a client
->   power: supply: bq25890_charger: simplify getting the adapter of a client
->   power: supply: max14656_charger_detector: simplify getting the adapter
->     of a client
->   power: supply: max17040_battery: simplify getting the adapter of a clie=
-nt
->   power: supply: max17042_battery: simplify getting the adapter of a clie=
-nt
->   power: supply: rt5033_battery: simplify getting the adapter of a client
->   power: supply: rt9455_charger: simplify getting the adapter of a client
->   power: supply: sbs-manager: simplify getting the adapter of a client
->   regulator: max8952: simplify getting the adapter of a client
->   rtc: fm3130: simplify getting the adapter of a client
->   rtc: m41t80: simplify getting the adapter of a client
->   rtc: rv8803: simplify getting the adapter of a client
->   rtc: rx8010: simplify getting the adapter of a client
->   rtc: rx8025: simplify getting the adapter of a client
->   staging: media: soc_camera: imx074: simplify getting the adapter of a c=
-lient
->   staging: media: soc_camera: mt9t031: simplify getting the adapter of a =
-client
->   staging: media: soc_camera: soc_mt9v022: simplify getting the adapter
->     of a client
->   usb: typec: tcpm: fusb302: simplify getting the adapter of a client
->=20
->  drivers/clk/clk-cdce706.c                        | 2 +-
->  drivers/gpu/drm/bridge/sii9234.c                 | 4 ++--
->  drivers/iio/light/bh1780.c                       | 2 +-
->  drivers/leds/leds-pca955x.c                      | 2 +-
->  drivers/leds/leds-tca6507.c                      | 2 +-
->  drivers/media/i2c/ak881x.c                       | 2 +-
->  drivers/media/i2c/mt9m001.c                      | 2 +-
->  drivers/media/i2c/mt9m111.c                      | 2 +-
->  drivers/media/i2c/mt9p031.c                      | 2 +-
->  drivers/media/i2c/ov2640.c                       | 2 +-
->  drivers/media/i2c/tw9910.c                       | 3 +--
->  drivers/misc/fsa9480.c                           | 2 +-
->  drivers/misc/isl29003.c                          | 2 +-
->  drivers/misc/tsl2550.c                           | 2 +-
->  drivers/mtd/maps/pismo.c                         | 2 +-
->  drivers/power/supply/bq24190_charger.c           | 2 +-
->  drivers/power/supply/bq24257_charger.c           | 2 +-
->  drivers/power/supply/bq25890_charger.c           | 2 +-
->  drivers/power/supply/max14656_charger_detector.c | 2 +-
->  drivers/power/supply/max17040_battery.c          | 2 +-
->  drivers/power/supply/max17042_battery.c          | 2 +-
->  drivers/power/supply/rt5033_battery.c            | 2 +-
->  drivers/power/supply/rt9455_charger.c            | 2 +-
->  drivers/power/supply/sbs-manager.c               | 2 +-
->  drivers/regulator/max8952.c                      | 2 +-
->  drivers/rtc/rtc-fm3130.c                         | 8 +++-----
->  drivers/rtc/rtc-m41t80.c                         | 2 +-
->  drivers/rtc/rtc-rv8803.c                         | 2 +-
->  drivers/rtc/rtc-rx8010.c                         | 2 +-
->  drivers/rtc/rtc-rx8025.c                         | 2 +-
->  drivers/staging/media/soc_camera/imx074.c        | 2 +-
->  drivers/staging/media/soc_camera/mt9t031.c       | 2 +-
->  drivers/staging/media/soc_camera/soc_mt9v022.c   | 2 +-
->  drivers/usb/typec/tcpm/fusb302.c                 | 3 +--
->  34 files changed, 37 insertions(+), 41 deletions(-)
->=20
-> --=20
-> 2.19.1
->=20
-
---dtrjmbi6re7vojrt
+--oelnsnnwwn2ytluu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0VCsEACgkQ2O7X88g7
-+poEpxAAm77/GZ4czva5lDqclyAk1YfbiV55qi+jow32xQwZ17FXo8Ch9G11Qrwl
-famQPiB/pD3r3m2TfihhFAcFjOGiwl9GxQJ+4at64Atab2w5BWh9zwDQWdtT80jF
-3ytFncogbL36MVBgIv5YQUZQiqIiZlUei6lTOnnyfv3PLtvNVbIodxSVYp5qJWMy
-M+qrdy6tAVsuK6yqAwPRhfjBzlmlLZVudUZqbAWKMbK1YBt0rkkSNw9xpF1pLrv6
-zLbGdmBngoivDyNJldn+5bhMiwsDyxf/8E7eblcAMkO/D1oPrb51zV92FFX7qyzT
-eI5KRHwY88XkUuIK25aDnO1bR3eDn3RDcxtW8MMMeRihWX3gNSL+hKZ24XGxOgz5
-L3tL9nm6X6sHg867+V5voAxNACnbgFT/Mrzhal4HGbN8adctDoaSEuiMPAQlAkEG
-PbW3c2B0n+Bav3XksRT4h19t7drSk4a3aR04I/GHc3l9jDQicnDr4DwiVaPpd1UF
-gpPhBXgO4NSZr5yUEzoVOSOsW6WS2k5SFV+sQjU1C5R+oXBH59J9oIMlOOaNKo0w
-rTXxOtxQ38vqyMiQZBLwoTh1remxiOBp+5lwmYWGWYpBDVcr9HB+kzNJPFxDVk5A
-YgiEzXje0LsgjUBgpmiq5YPAmsNIntDezydWTc20Otk1+Vgotgo=
-=CJhg
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0VC/oACgkQ2O7X88g7
++poTJRAAk2T33ox4H9f695WRdSpVuZjgdJfRsyNVYrMVpd0NwDgt5CfSFtpQ7Lub
+c5BDpY/LMnOH6HbcQipgW343roX4QpYhz6kwbbk2XSdfam8uuchgMtNDQqwDFNY3
+zQ9PMWNKK0eECbnJqa6E825/KQPrvXHQsu0D5irtD5DtPXBizr43yfhRv2EEACBa
+fnMU1XSOVVgvhWk/jpFD+mbfmVGct9YYG40yxj6migvNd9Im9soIXP6bjhQieuue
+5heq3SNkCSJzAV0yw0JHHDqQq/6zChB4gqv6B1yQ9mRKY6s3Ejnkug29HCXipuZI
+r1RO+U9p56PD36JW43JbECAGyz7zqnb13mcNXFBULDkjgURDOXuOWZVA1Ot2HDq2
+qva4h5F/hhYc5D9o/nJ220+D+jxDXu7P9qVg1IUEXweojoWSZEJu62nnEjgVQYnE
+r/AIsvZE7z3o8DfgnLpM1vq5rQKasOPN58rJOCB7yC993eIZob8IPl3c/D7llkSj
+JIGb4Kg/vP7NtCHES7x87p37RTsih7pCBrfOvPt8369s7BkqRcmLTH8a5vm4TREa
+y2jztX0f+n/qaGz1GkCqZ4+s1hOLOjyhX+f6ViFSNQUvkTuy9kgVZDeIn2hCbNA4
+qlJI30TEH2cu+Hk8Bxc0vegYjCLtdB+C4l+MmUy+wRDx3SEryiU=
+=8+eb
 -----END PGP SIGNATURE-----
 
---dtrjmbi6re7vojrt--
+--oelnsnnwwn2ytluu--
