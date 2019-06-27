@@ -2,81 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A57D58948
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jun 2019 19:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C9459AB0
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 14:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbfF0Rtv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jun 2019 13:49:51 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:41283 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726540AbfF0Rtv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jun 2019 13:49:51 -0400
-Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id 6e6e2abbf5608c5b; Thu, 27 Jun 2019 19:49:48 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Cc:     len.brown@intel.com, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tbroch@google.com, rajatja@google.com
-Subject: Re: [PATCH] power: Do not clear events_check_enabled in pm_wakeup_pending()
-Date:   Thu, 27 Jun 2019 19:49:48 +0200
-Message-ID: <6609527.OrdeQrBG9Y@kreacher>
-In-Reply-To: <20190619175142.237794-1-ravisadineni@chromium.org>
-References: <20190619175142.237794-1-ravisadineni@chromium.org>
+        id S1726852AbfF1MW3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 08:22:29 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:45218 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727265AbfF1MW1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 Jun 2019 08:22:27 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 9DBB7811A9;
+        Fri, 28 Jun 2019 12:22:22 +0000 (UTC)
+Received: from amt.cnet (ovpn-112-9.gru2.redhat.com [10.97.112.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C6F95D9CA;
+        Fri, 28 Jun 2019 12:22:22 +0000 (UTC)
+Received: from amt.cnet (localhost [127.0.0.1])
+        by amt.cnet (Postfix) with ESMTP id 7998610517E;
+        Thu, 27 Jun 2019 15:09:08 -0300 (BRT)
+Received: (from marcelo@localhost)
+        by amt.cnet (8.14.7/8.14.7/Submit) id x5RI94SM027978;
+        Thu, 27 Jun 2019 15:09:04 -0300
+Date:   Thu, 27 Jun 2019 15:08:59 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "'Paolo Bonzini'" <pbonzini@redhat.com>,
+        "'Radim Krcmar'" <rkrcmar@redhat.com>,
+        "'Andrea Arcangeli'" <aarcange@redhat.com>,
+        "'Rafael J. Wysocki'" <rafael.j.wysocki@intel.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Wanpeng Li'" <kernellwp@gmail.com>,
+        "'Konrad Rzeszutek Wilk'" <konrad.wilk@oracle.com>,
+        "'Raslan KarimAllah'" <karahmed@amazon.de>,
+        "'Boris Ostrovsky'" <boris.ostrovsky@oracle.com>,
+        "'Ankur Arora'" <ankur.a.arora@oracle.com>,
+        "'Christian Borntraeger'" <borntraeger@de.ibm.com>,
+        linux-pm@vger.kernel.org, "'kvm-devel'" <kvm@vger.kernel.org>
+Subject: Re: [patch 3/5] cpuidle: add haltpoll governor
+Message-ID: <20190627180856.GA27865@amt.cnet>
+References: <20190613224532.949768676@redhat.com>
+ <20190613225023.011025297@redhat.com>
+ <002e01d527c9$23be6e10$6b3b4a30$@net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <002e01d527c9$23be6e10$6b3b4a30$@net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.27]); Fri, 28 Jun 2019 12:22:27 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, June 19, 2019 7:51:42 PM CEST Ravi Chandra Sadineni wrote:
-> events_check_enabled bool is set when wakeup_count sysfs attribute
-> is written. User level daemon is expected to write this attribute
-> just before suspend.
+On Thu, Jun 20, 2019 at 05:34:46PM -0700, Doug Smythies wrote:
+> Hi,
 > 
-> When this boolean is set, calls to pm_wakeup_event() will result in
-> increment of per device and global wakeup count that helps in
-> identifying the wake source. global wakeup count is also used by
-> pm_wakeup_pending() to identify if there are any pending events that
-> should result in an suspend abort.
+> I tried your patch set, but only to check
+> that they didn't cause any regression for situations
+> where idle state 0 (Poll) is used a lot (teo governor).
 > 
-> Currently calls to pm_wakeup_pending() also clears events_check_enabled.
-> This can be a problem when there are multiple wake events or when the
-> suspend is aborted due to an interrupt on a shared interrupt line.
-> For example an Mfd device can create several platform devices which
-> might fetch the state on resume in the driver resume method and increment
-> the wakeup count if needed. But if events_check_enabled is cleared before
-> resume methods get to execute, wakeup count will not be incremented. Thus
-> let us not reset the bool here.
+> They didn't (my testing was not thorough).
 > 
-> Note that events_check_enabled is also cleared in suspend.c/enter_state()
-> on every resume at the end.
+> I do not know if the below matters or not.
 > 
-> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-> ---
->  drivers/base/power/wakeup.c | 1 -
->  1 file changed, 1 deletion(-)
+> On 2019.06.13 15:46 Marcelo Tosatti wrote:
 > 
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 5b2b6a05a4f3..88aade871589 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -838,7 +838,6 @@ bool pm_wakeup_pending(void)
->  
->  		split_counters(&cnt, &inpr);
->  		ret = (cnt != saved_count || inpr > 0);
-> -		events_check_enabled = !ret;
+> ... [snip] ...
+> 
+> > Index: linux-2.6.git/Documentation/virtual/guest-halt-polling.txt
+> > ===================================================================
+> > --- /dev/null	1970-01-01 00:00:00.000000000 +0000
+> > +++ linux-2.6.git/Documentation/virtual/guest-halt-polling.txt	2019-06-13 18:16:22.414262777 -0400
+> > @@ -0,0 +1,79 @@
+> > +Guest halt polling
+> > +==================
+> > +
+> > +The cpuidle_haltpoll driver, with the haltpoll governor, allows
+> > +the guest vcpus to poll for a specified amount of time before
+> > +halting.
+> > +This provides the following benefits to host side polling:
+> > +
+> > +	1) The POLL flag is set while polling is performed, which allows
+> > +	   a remote vCPU to avoid sending an IPI (and the associated
+> > + 	   cost of handling the IPI) when performing a wakeup.
+>    ^
+>    |_ While applying the patches, git complains about this space character before the TAB.
+> 
+> It also complains about a few patches with a blank line before EOF.
+> 
+> ... Doug
 
-This effectively changes the meaning of the wakeup_count metric. so it cannot be applied.
+Hi Doug,
 
->  	}
->  	raw_spin_unlock_irqrestore(&events_lock, flags);
->  
-> 
-
-
-
+Will fix those, thanks.
 
