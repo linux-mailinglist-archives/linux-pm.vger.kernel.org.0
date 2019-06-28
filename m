@@ -2,220 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBBC5A132
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 18:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14055A5E0
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 22:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726931AbfF1Qma (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jun 2019 12:42:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53298 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726667AbfF1Qma (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 12:42:30 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5SGfxYW009954
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2019 12:42:27 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tdkvuevg2-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2019 12:42:26 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <parth@linux.ibm.com>;
-        Fri, 28 Jun 2019 17:42:24 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 28 Jun 2019 17:42:20 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5SGgJLF32899302
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Jun 2019 16:42:19 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3804A405B;
-        Fri, 28 Jun 2019 16:42:19 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 016B6A4051;
-        Fri, 28 Jun 2019 16:42:18 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.199.62.39])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Jun 2019 16:42:17 +0000 (GMT)
-From:   Parth Shah <parth@linux.ibm.com>
-Subject: Re: [RFCv3 0/8] TurboSched: A scheduler for sustaining Turbo
- Frequencies for longer durations
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com
-References: <20190625043726.21490-1-parth@linux.ibm.com>
- <20190628131430.qmbfocgujeyi3dbt@e110439-lin>
-Date:   Fri, 28 Jun 2019 22:12:16 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.0
+        id S1727136AbfF1U13 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 16:27:29 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:42635 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727133AbfF1U12 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 16:27:28 -0400
+Received: by mail-oi1-f193.google.com with SMTP id s184so5195741oie.9
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2019 13:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MJxxU5eMhwo3VZWTrdkvehzAVfUQqIy+FVome+yCZpk=;
+        b=TrDjgm902GBQ7SLGtRyk7kqrNab91w4S3i9uJLHQSPDChQ876R/hOWVFA2rwKVXSIg
+         6dqOowwoCOakpED4Hb0305tW37AcA9l86yUhMi3mgsJZb1+PFhb0LQwEJvT3iuzSeJjL
+         Oi31ci7GKfoeFQl5PJIp6M8xtTrkSi0wXWVtx2wHeZ2LySQeOEyDtc0lqaeKPzRErsI5
+         X+Br+iqn2fgdt+fX9NxKnRroaH2DruSnpPLJuVZnZU966ESXb08WOL2FU5TtM/C7Ujhc
+         +tdIZZcVqIdpVTzGxCmu7iy0bbgBnU8IYguEKRvmyFlw2HB4L4SzNgaUMZHLd9TiViZ/
+         uTXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MJxxU5eMhwo3VZWTrdkvehzAVfUQqIy+FVome+yCZpk=;
+        b=QhblatI2w9TDxDGZCToE6ihgfOgCBjiOyELRs1mwh+6ZTnkqhF0PWFNZZGAtfqGkzY
+         TguesQM3uoWMWTAddO7LMSI9PRMBUrCBa79D7JqVKkPqk6bKYjWcZpDX1GoZXWYR1ssb
+         cleG3Y6FYEmphvv/hgop7C5bViJ3L1YFjQYwAVTK7+MGunkKzWC1Qg+9MI5m37GajEla
+         ANDYg0Xhn/kYdAE3trQbBQ6wplM9+4kSW+gquHr0xFl0agg2qiIMlyCsldjpwwPmH7BI
+         qvLriHXAuB8HLy5Etg04TCokWI6ET4y/JvFgZqWEanZO1hYwvqCc/0QXJYuYxzyZDp6u
+         WA/A==
+X-Gm-Message-State: APjAAAXIQ0VmNTR2y/Xc/obP5TAtisQemlyIBuzStdSjKS3dXdnRko+A
+        nwLyK1gp7HjOFxm0NQUB3aVeVFnkb4mMEJHdqUlrVw==
+X-Google-Smtp-Source: APXvYqySsI7Xb15gkYGunoBCIEuhX6v9oH0RCn8TprrHYNQCsltQCpgnG3rwtwqgnhyXcxxCqgJaoNnvwTJJMVEv2pw=
+X-Received: by 2002:aca:6104:: with SMTP id v4mr2873567oib.172.1561753647557;
+ Fri, 28 Jun 2019 13:27:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190628131430.qmbfocgujeyi3dbt@e110439-lin>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19062816-0012-0000-0000-0000032D73CB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062816-0013-0000-0000-00002166B72D
-Message-Id: <95d58f4e-4429-d3d6-0962-bb33a9aa4b75@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-28_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906280191
+References: <20190622003449.33707-1-saravanak@google.com> <20190624094349.rtjb7nuv6g7zmsf2@vireshk-i7>
+ <CAGETcx_ggG8oDnAVaSfuHfip1ozjQpFiGs15cz8nLQnzjTiSTg@mail.gmail.com>
+ <20190625041054.2ceuvnuuebc6hsr5@vireshk-i7> <CAGETcx8MuXkQyD5qZBC948-hOu=kWd4hPk2Qiu-zWOcHBCc=FA@mail.gmail.com>
+ <20190625052227.3v74l6xtrkydzx6w@vireshk-i7> <CAGETcx_v05PfscMi2qiYwHRMLryyA_494+h+kmJ3mD+GOjjeLA@mail.gmail.com>
+ <20190626063240.kgdiy7xsz4mahrdr@vireshk-i7> <CAGETcx_KH6pqgqZFKddWmgiUX3n+XBU6BoFXkVvPdA4vMDHWsw@mail.gmail.com>
+ <20190628064914.4nu6ql7f7h7o4iul@vireshk-i7>
+In-Reply-To: <20190628064914.4nu6ql7f7h7o4iul@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 28 Jun 2019 13:26:51 -0700
+Message-ID: <CAGETcx-gSQLtbM+7WgqNvhCypmwoMNjkAkGDqRnK=PUGUOxjkQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] Add required-opps support to devfreq passive gov
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Patrick,
-
-Thank you for taking interest at the patch set.
-
-
-On 6/28/19 6:44 PM, Patrick Bellasi wrote:
-> On 25-Jun 10:07, Parth Shah wrote:
-> 
-> [...]
-> 
->> Implementation
->> ==============
->>
->> These patches uses UCLAMP mechanism[2] used to clamp utilization from the
->> userspace, which can be used to classify the jitter tasks. The task wakeup
->> logic uses this information to pack such tasks onto cores which are already
->> running busy with CPU intensive tasks. The task packing is done at
->> `select_task_rq_fair` only so that in case of wrong decision load balancer
->> may pull the classified jitter tasks for maximizing performance.
->>
->> Any tasks clamped with cpu.util.max=1 (with sched_setattr syscall) are
->> classified as jitter tasks.
-> 
-> I don't like this approach, it's overloading the meaning of clamps and
-> it also brings in un-wanted side effects, like running jitter tasks at
-> the minimum OPP.
-> 
-> Do you have any expected minimum frequency for those jitter tasks ?
-> I expect those to be relatively small tasks but still perhaps it makes
-> sense to run them on higher then minimal OPP.
+On Thu, Jun 27, 2019 at 11:49 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
+> On 26-06-19, 11:10, Saravana Kannan wrote:
+> > On Tue, Jun 25, 2019 at 11:32 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> > > So, when a CPU changes frequency, we must change the performance state
+> > > of PM domain and change frequency/bw of the cache synchronously.
+> >
+> > I mean, it's going to be changed when we get the CPUfreq transition
+> > notifiers. From a correctness point of view, setting it inside the OPP
+> > framework is not any better than doing it when we get the notifiers.
+>
+> That's what the problem is. All maintainers now a days ask people to
+> stay away from notifiers and we are making that base of another new
+> thing we are starting.
 
-I absolutely agree with you as it may overload the meaning of clamps.
-AFAIK, the only way to detect jitters is by looking at its utilization,
-where low util tasks are possibly jitters unless they are important tasks. If
-userspace tells if the task is clamped to least OPP, then it is an indication of
-low utilization or unimportant tasks, which we say a jitter.
+In that case we can just add direct calls in cpufreq.c to let devfreq
+know about the frequency changes. But then again, CPU is just one
+example for this use case. I'm just using that because people are more
+familiar with that.
 
-Also, as we discussed in OSPM as well, if all the jitters are given a dedicated
-core by the scheduler, then UCLAMP ensures least OPP for such tasks which can help
-saving power a further bit, which can be channeled to busier core thus allowing
-them to sustain or boost turbo frequencies.
+> Over that, with many cpufreq drivers we have fast switching enabled
+> and notifiers disabled. How will they make these things work ? We
+> still want to scale L3 in those cases as well.
 
-I agree that it may have side-effects but I'm just putting idea out here.
-Also, I understand that task packing and frequency are not co-related but for
-this specific purpose of Turbo sustaining problem, jitters should be given least
-power so that others can have extra one, hence jitters should be given less
-frequency.
+Nothing is preventing them from using the xlate OPP API I added to
+figure out all the CPU to L3 frequency mapping and then set the L3
+frequency directly from the CPUfreq driver.
 
-> Why not just adding a new dedicated per-task scheduling attribute,
-> e.g. SCHED_FLAG_LATENCY_TOLERANT, and manage it via
-> sched_{set,get}attr() ?
-> 
-> I guess such a concept could work well on defining a generic
-> spread-vs-pack wakeup policy which is something Android also could
-> benefit from.
-> 
+Also, whether we use OPP framework or devfreq to set the L3 frequency,
+it's going to block fast switching because both these frameworks have
+APIs that can sleep.
 
-I have made attempts to use per-task attributes for task classification in first
-series of TurboSched and it works fine.
-https://lwn.net/ml/linux-pm/20190322060621.27021-3-parth015@linux.vnet.ibm.com/
+But really, most mobile use cases don't want to permanently tie L3
+freq to CPU freq. Having it go through devfreq and being able to
+switch governors is a very important need for mobile products.
 
-Then from inputs from Dietmar, I thought of giving a try to UCLAMP for this purpose.
-But, now I guess having one more task attribute is useful as it can serve multiple
-purpose including android and task packing. I will add it v4 then.
+Keep in mind that nothing in this series does any of the cpufreq stuff
+yet. That'll need a few more changes. I was just using CPUfreq as an
+example.
 
-> However, what we will still be missing is a proper cgroups support.
-> Not always is possible and/or convenient to explicitly set per-task
-> attributes. But at the same time, AFAIK using cgroups to define
-> task properties which do not represent a "resource repartition" is
-> something very difficult to get accepted mainline.
-> 
+> > I see this as "required for good performance". So I don't see it as
+> > redefining required-opps. If someone wants good performance/power
+> > balance they follow the "required-opps". Technically even the PM
+> > pstates are required for good power. Otherwise, the system could leave
+> > the voltage at max and stuff would still work.
+> >
+> > Also, the slave device might need to get input from multiple master
+> > devices and aggregate the request before setting the slave device
+> > frequency. So I don't think OPP  framework would be the right place to
+> > deal with those things. For example, L3 might (will) have different
+> > mappings for big vs little cores. So that needs to be aggregated and
+> > set properly by the slave device driver. Also, GPU might have a
+> > mapping for L3 too. In which case the L3 slave driver needs to take
+> > input from even more masters before it decides its frequency. But most
+> > importantly, we still need the ability to change governors for L3.
+> > Again these are just examples with L3 and it can get more complicated
+> > based on the situation.
+> >
+> > Most importantly, instead of always going by mapping, one might decide
+> > to scale the L3 based on some other governor (that looks at some HW
+> > counter). Or just set it to performance governor for a use case for
+> > which performance is more important. All of this comes for free with
+> > devfreq and if we always set it from OPP framework we don't give this
+> > required control to userspace.
+> >
+> > I think going through devfreq is the right approach for this. And we
+> > can always rewrite the software if we find problems in the future. But
+> > as it stands today, this will help cases like exynos without the need
+> > for a lot of changes. Hope I've convinced you.
+>
+> I understand the aggregation thing and fully support that the
+> aggregation can't happen in OPP core and must be done somewhere else.
+> But the input can go from OPP core while the frequency is changing,
+> isn't it ?
 
-Yeah, I faced that problem in v2.
-https://lkml.org/lkml/2019/5/15/1395
+I'm not opposed to OPP sending input to devfreq to let it know that a
+master device frequency change is happening. But I think this is kinda
+orthogonal to this patch series.
 
-> In the past, back in 2011, there was an attempt to introduce a timer
-> slack controller, but apparently it was not very well received:
-> 
->    Message-ID: <1300111524-5666-1-git-send-email-kirill@shutemov.name>
->    https://lore.kernel.org/lkml/20110314164652.5b44fb9e.akpm@linux-foundation.org/
-> 
-> But perhaps now the times are more mature and we can try to come up
-> with compelling cases from both the server and the mobile world.
-> 
+Today the passive governor looks at the master device's devfreq
+frequency changes to trigger the frequency change of the slave
+devfreq. It neither supports tracking OPP frequency change nor CPUfreq
+frequency change. If that's something we want to add, we can look into
+that separately as passive governor (or a new governor) changes.
 
-The pointed patch series seems appealing and I will have a look at it. 
+But then not all devices (CPUfreq or otherwise) use OPP to set the
+frequencies. So it's beneficial to have all of these frameworks as
+inputs for devfreq passive (like) governor. CPUfreq is actually a bit
+more tricky because we'll also have to track hotplug, etc. So direct
+calls from CPUfreq to devfreq (similar to cpufreq stats tracking)
+would be good.
 
->> We define a core to be non-idle if it is over 12.5% utilized of its
->> capacity;
-> 
-> This looks like a random number, can you elaborate on that?
-
-It is an experimental value to define whether a "core" should be considered to be
-idle or not. This is because, even-though core is running few bunch of tasks summing
-upto around 10% of utilization in a core, it maybe going to shallower idle-states
-periodically which is kind of power-saving; placing new tasks on such core should
-be avoided as far as possible.
-
-I have just tested this on SMT-4/8 systems and it works as expected but at the end it
-is still an experimental value.
-
-> 
->> the jitters are packed over these cores using First-fit
->> approach.
->>
->> To demonstrate/benchmark, one can use a synthetic workload generator
->> `turbo_bench.c`[1] available at
->> https://github.com/parthsl/tools/blob/master/benchmarks/turbo_bench.c
->>
->> Following snippet demonstrates the use of TurboSched feature:
->> ```
->> i=8; ./turbo_bench -t 30 -h $i -n $((i*2)) -j
->> ```
->>
->> Current implementation uses only jitter classified tasks to be packed on
->> the first busy cores, but can be further optimized by getting userspace
->> input of important tasks and keeping track of such tasks.
->> This leads to optimized searching of non idle cores and also more
->> accurate as userspace hints are safer than auto classified busy
->> cores/tasks.
-> 
-> Hints from user-space looks like an interesting concept, could you
-> better elaborate what you are thinking about in this sense?
-> 
-
-Currently, we are just tagging tasks as jitters and packing it on already busier
-cores (>12.5% core utilization). Packing strategy is a simple first-fit algorithm
-looking for first core in a DIE where the waking-up jitter task can be accommodated.
-This is a lot of work in fast-path but can be optimized out. If user can also tag
-CPU intensive and/or important tasks then we can keep track of the cores occupying
-such tasks which can be used for task packing reducing the effort of finding non-idle.
-Again, this can be set with UCLAMP by cpu.util-min=SCHED_CAPACITY_SCALE.
-
-Infact, v1 does this but then I thought of breaking down problem into steps and this
-optimization can be introduced later.
-https://lwn.net/ml/linux-pm/20190322060621.27021-6-parth015@linux.vnet.ibm.com/
-
-So we can have some task attributes like task_type or similar which hints scheduler on
-several features like packing, spreading, or giving dedicated core where siblings will
-not be scheduled or even core scheduling, which in certain ways affect scheduling
-decisions.
-
-
-Thanks
-Parth
-
+-Saravana
