@@ -2,119 +2,400 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 951EA5969A
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 10:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BA259709
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 11:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbfF1I4j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jun 2019 04:56:39 -0400
-Received: from mail-eopbgr30083.outbound.protection.outlook.com ([40.107.3.83]:29508
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725873AbfF1I4j (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 28 Jun 2019 04:56:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yh6ZDgkmlXiASlzlGNuzTF2gRBpcrNdE7OKbE2xNDMQ=;
- b=pPij8F0zhyZ0XooiAfXqlNmNvDxDtuLuP5Sh8OKZo3/iVAkY9sZcsNumHMJd0RluFjBw48pcbNvhIpV9vPyHY56U+66xpyqZcsxJNHJY482D02vNsqiiNXwZQdbhvnv/WdWcmJU81YGOCS48xGGE/VCtsufx9KIpc4VssRqb3H0=
-Received: from VI1PR04MB5055.eurprd04.prod.outlook.com (20.177.50.140) by
- VI1PR04MB5904.eurprd04.prod.outlook.com (20.178.205.78) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2032.18; Fri, 28 Jun 2019 08:56:36 +0000
-Received: from VI1PR04MB5055.eurprd04.prod.outlook.com
- ([fe80::d83:14c4:dedb:213b]) by VI1PR04MB5055.eurprd04.prod.outlook.com
- ([fe80::d83:14c4:dedb:213b%5]) with mapi id 15.20.2008.014; Fri, 28 Jun 2019
- 08:56:36 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Abel Vesa <abel.vesa@nxp.com>
-CC:     Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [RFCv2 2/8] clk: imx8m-composite: Switch to determine_rate
-Thread-Topic: [RFCv2 2/8] clk: imx8m-composite: Switch to determine_rate
-Thread-Index: AQHVLYSz7P3EKbmmJkGmgseyFA+2Lg==
-Date:   Fri, 28 Jun 2019 08:56:35 +0000
-Message-ID: <VI1PR04MB50552AC6EAB0C145D638E618EEFC0@VI1PR04MB5055.eurprd04.prod.outlook.com>
-References: <cover.1561707104.git.leonard.crestez@nxp.com>
- <5d62b31309e6402bd9fa608730518b39af823fb3.1561707104.git.leonard.crestez@nxp.com>
- <20190628084521.d64d5g54zvxlsxsl@fsr-ub1664-175>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fba8cb19-8627-479b-a388-08d6fba6868f
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5904;
-x-ms-traffictypediagnostic: VI1PR04MB5904:
-x-microsoft-antispam-prvs: <VI1PR04MB590424E23F540734F4D98106EEFC0@VI1PR04MB5904.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-forefront-prvs: 00826B6158
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(376002)(136003)(346002)(396003)(199004)(189003)(316002)(5660300002)(6246003)(66946007)(73956011)(54906003)(66446008)(76116006)(66476007)(66556008)(64756008)(74316002)(6636002)(3846002)(6116002)(8936002)(52536014)(305945005)(8676002)(81166006)(81156014)(7736002)(86362001)(2906002)(25786009)(4326008)(71200400001)(71190400001)(6862004)(256004)(14444005)(446003)(7416002)(476003)(486006)(44832011)(26005)(14454004)(33656002)(478600001)(66066001)(68736007)(76176011)(7696005)(229853002)(6506007)(53546011)(6436002)(55016002)(102836004)(186003)(99286004)(4744005)(9686003)(53936002)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5904;H:VI1PR04MB5055.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: BYjYEax1jrqNb1U9U2ga45r1I7Ccj/wZ6TWsIqKDptIrLLr4UTV6d+E0trW4fh2HWCEj5XUITfhYAa12HiDTYj6beNNLwd3WsojUggUmZJnToWZ/iRDe01slEgnFMkYM1mCzcqAOU5v8EokzJDf/v6bZiCZj/a8WKEX/U3kgI8wuscxqVbgdMVGrpWMixelxEMP1uEWLzqcPFckS7yObracp3bRffWWJWASsigh8fQJRMyh3rrdH3CBo/xrFZf724u9NdewpRU4eDaAk0TkqcjO4AVW+W55BcXeqAaX0paorapmJ4QLbCQ61biqf/4VKHolXrzCkuRcKFQfh8IdmLnQU+JWhkO4dqxI1sFuTBvOMtcPaP4Y8O5tV7ZdxsCes7NGqbFw9LpEDdo8hbu7oopXcYB/Eht8ZUI1ti1WhzGo=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726832AbfF1JNJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 05:13:09 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39621 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726671AbfF1JNJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 05:13:09 -0400
+Received: by mail-ot1-f65.google.com with SMTP id r21so4614981otq.6;
+        Fri, 28 Jun 2019 02:13:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WtAbjyzvlTxl5Wt1+2olUFeCZXxxXREPTPYalo6sLwI=;
+        b=gnL1a5v/rq6hllKTmiS/0JltoLc6yv2Pp7D+b3VlWNXIvdY5gsyK3nO29+Kp/PXYuD
+         GVoorEU2znaMB9I6GjbUd6Usy6gq+XSfjTe1wqa8TmeRh4Mb5bbQXBreAT+7QmxYP/qI
+         rftFaOM++G3HjWKearDmFpOm87BKyvMRjrf/mEi7wfWhAt95mlyff/ZZovU3zOA1Z+Az
+         3HxwDs+36mJESEFLk8S4GlkvXgAmnAAIuk5wKEDZX9vIf0zGWCpjNLSTFui0zBJPzjJ4
+         GLBTyaNmWu48egbSvp0sNARJ/WfpI9g+B7X1t3HOGu/L7B4jjnGonAy4HoNQsIQeN7l3
+         TC/w==
+X-Gm-Message-State: APjAAAUh6zYH3kLMcKjl8TiBfzTpeDoXA2vuBGs3lGnbJPNcoKWBVTrT
+        aS1FyNzJDwJ3n0zSf5StPhGsEo/PySVZbemo2Tc=
+X-Google-Smtp-Source: APXvYqwSG9i1P5sR8zcpSaKfCYuoC1OkUtWI5/0pY7WWcbzod1j3f1+dkTvp5OmqGtJlgFOZ3u9KJsLzGXXqLesPHR8=
+X-Received: by 2002:a9d:6959:: with SMTP id p25mr6927906oto.118.1561713188389;
+ Fri, 28 Jun 2019 02:13:08 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fba8cb19-8627-479b-a388-08d6fba6868f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2019 08:56:35.8798
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: leonard.crestez@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5904
+References: <20190627210209.32600-1-daniel.lezcano@linaro.org> <20190627210209.32600-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20190627210209.32600-2-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 28 Jun 2019 11:12:56 +0200
+Message-ID: <CAJZ5v0jJzCGfQFqi-S3vqs74D73MaE4f7WYF_NVnDKawNV4Wzw@mail.gmail.com>
+Subject: Re: [PATCH V4 2/3] thermal/drivers/cpu_cooling: Unregister with the policy
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Keerthy <j-keerthy@ti.com>,
+        "open list:CPU FREQUENCY DRIVERS - ARM BIG LITTLE" 
+        <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28.06.2019 11:45, Abel Vesa wrote:=0A=
-> On 19-06-28 10:39:50, Leonard Crestez wrote:=0A=
-=0A=
->> This allows consumers to use min_rate max_rate.=0A=
->>=0A=
->> @@ -45,10 +45,12 @@ static unsigned long imx8m_clk_composite_divider_rec=
-alc_rate(struct clk_hw *hw,=0A=
->>   				   divider->flags, PCG_DIV_WIDTH);=0A=
->>   }=0A=
->>   =0A=
->>   static int imx8m_clk_composite_compute_dividers(unsigned long rate,=0A=
->>   						unsigned long parent_rate,=0A=
->> +						unsigned long min_rate,=0A=
->> +						unsigned long max_rate,=0A=
-> =0A=
-> You should pass on the req instead of min_rate and max_rate here.=0A=
-=0A=
-Then I'd have to switch imx8m_clk_composite_divider_set_rate to allocate =
-=0A=
-a dummy struct clk_rate_request on the stack. It's clearer if I just =0A=
-pass the minimum parameters required.=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+On Thu, Jun 27, 2019 at 11:02 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Currently the function cpufreq_cooling_register() returns a cooling
+> device pointer which is used back as a pointer to call the function
+> cpufreq_cooling_unregister(). Even if it is correct, it would make
+> sense to not leak the structure inside a cpufreq driver and keep the
+> code thermal code self-encapsulate. Moreover, that forces to add an
+> extra variable in each driver using this function.
+>
+> Instead of passing the cooling device to unregister, pass the policy.
+>
+> Because the cpufreq_cooling_unregister() function uses the policy to
+> unregister itself. The only purpose of the cooling device pointer is
+> to unregister the cpu cooling device.
+>
+> As there is no more need of this pointer, remove it.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+This doesn't apply for me.
+
+Care to rebase it on top of the Linus' tree?
+
+Also see below.
+
+> ---
+>  drivers/cpufreq/arm_big_little.c              |  9 ++--
+>  drivers/cpufreq/cpufreq.c                     |  8 ++--
+>  drivers/thermal/cpu_cooling.c                 | 42 +++++++++++--------
+>  drivers/thermal/imx_thermal.c                 | 12 +++---
+>  .../ti-soc-thermal/ti-thermal-common.c        | 10 ++---
+>  include/linux/cpu_cooling.h                   |  6 +--
+>  include/linux/cpufreq.h                       |  3 --
+>  7 files changed, 45 insertions(+), 45 deletions(-)
+>
+> diff --git a/drivers/cpufreq/arm_big_little.c b/drivers/cpufreq/arm_big_little.c
+> index 7fe52fcddcf1..718c63231e66 100644
+> --- a/drivers/cpufreq/arm_big_little.c
+> +++ b/drivers/cpufreq/arm_big_little.c
+> @@ -56,7 +56,6 @@ static bool bL_switching_enabled;
+>  #define ACTUAL_FREQ(cluster, freq)  ((cluster == A7_CLUSTER) ? freq << 1 : freq)
+>  #define VIRT_FREQ(cluster, freq)    ((cluster == A7_CLUSTER) ? freq >> 1 : freq)
+>
+> -static struct thermal_cooling_device *cdev[MAX_CLUSTERS];
+>  static const struct cpufreq_arm_bL_ops *arm_bL_ops;
+>  static struct clk *clk[MAX_CLUSTERS];
+>  static struct cpufreq_frequency_table *freq_table[MAX_CLUSTERS + 1];
+> @@ -501,10 +500,8 @@ static int bL_cpufreq_exit(struct cpufreq_policy *policy)
+>         struct device *cpu_dev;
+>         int cur_cluster = cpu_to_cluster(policy->cpu);
+>
+> -       if (cur_cluster < MAX_CLUSTERS) {
+> -               cpufreq_cooling_unregister(cdev[cur_cluster]);
+> -               cdev[cur_cluster] = NULL;
+> -       }
+> +       if (cur_cluster < MAX_CLUSTERS)
+> +               cpufreq_cooling_unregister(policy);
+>
+>         cpu_dev = get_cpu_device(policy->cpu);
+>         if (!cpu_dev) {
+> @@ -527,7 +524,7 @@ static void bL_cpufreq_ready(struct cpufreq_policy *policy)
+>         if (cur_cluster >= MAX_CLUSTERS)
+>                 return;
+>
+> -       cdev[cur_cluster] = of_cpufreq_cooling_register(policy);
+> +       of_cpufreq_cooling_register(policy);
+>  }
+>
+>  static struct cpufreq_driver bL_cpufreq_driver = {
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index aee024e42618..1663a5601811 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1379,7 +1379,7 @@ static int cpufreq_online(unsigned int cpu)
+>                 cpufreq_driver->ready(policy);
+>
+>         if (cpufreq_thermal_control_enabled(cpufreq_driver))
+> -               policy->cdev = of_cpufreq_cooling_register(policy);
+> +               of_cpufreq_cooling_register(policy);
+>
+>         pr_debug("initialization complete\n");
+>
+> @@ -1468,10 +1468,8 @@ static int cpufreq_offline(unsigned int cpu)
+>                 goto unlock;
+>         }
+>
+> -       if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
+> -               cpufreq_cooling_unregister(policy->cdev);
+> -               policy->cdev = NULL;
+> -       }
+> +       if (cpufreq_thermal_control_enabled(cpufreq_driver))
+> +               cpufreq_cooling_unregister(policy);
+>
+>         if (cpufreq_driver->stop_cpu)
+>                 cpufreq_driver->stop_cpu(policy);
+> diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
+> index 83486775e593..be01546a656f 100644
+> --- a/drivers/thermal/cpu_cooling.c
+> +++ b/drivers/thermal/cpu_cooling.c
+> @@ -78,6 +78,7 @@ struct cpufreq_cooling_device {
+>         struct cpufreq_policy *policy;
+>         struct list_head node;
+>         struct time_in_idle *idle_time;
+> +       struct thermal_cooling_device *cdev;
+>  };
+>
+>  static DEFINE_IDA(cpufreq_ida);
+> @@ -606,6 +607,7 @@ __cpufreq_cooling_register(struct device_node *np,
+>                 goto remove_ida;
+>
+>         cpufreq_cdev->clipped_freq = get_state_freq(cpufreq_cdev, 0);
+> +       cpufreq_cdev->cdev = cdev;
+>
+>         mutex_lock(&cooling_list_lock);
+>         /* Register the notifier for first cpufreq cooling device */
+> @@ -693,35 +695,41 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
+>  }
+>  EXPORT_SYMBOL_GPL(of_cpufreq_cooling_register);
+>
+> +void __cpufreq_cooling_unregister(struct cpufreq_cooling_device *cpufreq_cdev, int last)
+> +{
+> +       /* Unregister the notifier for the last cpufreq cooling device */
+> +       if (last)
+> +               cpufreq_unregister_notifier(&thermal_cpufreq_notifier_block,
+> +                                           CPUFREQ_POLICY_NOTIFIER);
+> +
+> +       thermal_cooling_device_unregister(cpufreq_cdev->cdev);
+> +       ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
+> +       kfree(cpufreq_cdev->idle_time);
+> +       kfree(cpufreq_cdev);
+> +}
+> +
+>  /**
+>   * cpufreq_cooling_unregister - function to remove cpufreq cooling device.
+>   * @cdev: thermal cooling device pointer.
+>   *
+>   * This interface function unregisters the "thermal-cpufreq-%x" cooling device.
+>   */
+> -void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
+> +void cpufreq_cooling_unregister(struct cpufreq_policy *policy)
+>  {
+>         struct cpufreq_cooling_device *cpufreq_cdev;
+
+I would do
+
+        struct cpufreq_cooling_device *ccd, *cpufreq_cdev = NULL;
+
+and then ->
+
+>         bool last;
+>
+> -       if (!cdev)
+> -               return;
+> -
+> -       cpufreq_cdev = cdev->devdata;
+> -
+>         mutex_lock(&cooling_list_lock);
+> -       list_del(&cpufreq_cdev->node);
+> -       /* Unregister the notifier for the last cpufreq cooling device */
+> -       last = list_empty(&cpufreq_cdev_list);
+> +       list_for_each_entry(cpufreq_cdev, &cpufreq_cdev_list, node) {
+
+-> list_for_each_entry(ccd, &cpufreq_cdev_list, node) {
+                if (ccd->policy == policy) {
+
+> +               if (cpufreq_cdev->policy == policy) {
+
+                           cpufreq_cdev = ccd;
+
+> +                       list_del(&cpufreq_cdev->node);
+> +                       last = list_empty(&cpufreq_cdev_list);
+> +                       break;
+> +               }
+> +       }
+>         mutex_unlock(&cooling_list_lock);
+
+And here
+
+if (!cpufreq_cdev)
+        return;
+
+And that's it.  No new functions needed.
+
+> -       if (last)
+> -               cpufreq_unregister_notifier(&thermal_cpufreq_notifier_block,
+> -                                           CPUFREQ_POLICY_NOTIFIER);
+> -
+
+And I don't that the above needs to be changed at all in any case.
+
+
+> -       thermal_cooling_device_unregister(cdev);
+> -       ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
+> -       kfree(cpufreq_cdev->idle_time);
+> -       kfree(cpufreq_cdev);
+> +       if (cpufreq_cdev->policy == policy)
+> +               __cpufreq_cooling_unregister(cpufreq_cdev, last);
+>  }
+>  EXPORT_SYMBOL_GPL(cpufreq_cooling_unregister);
+> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> index bb6754a5342c..021c0948b740 100644
+> --- a/drivers/thermal/imx_thermal.c
+> +++ b/drivers/thermal/imx_thermal.c
+> @@ -203,7 +203,6 @@ static struct thermal_soc_data thermal_imx7d_data = {
+>  struct imx_thermal_data {
+>         struct cpufreq_policy *policy;
+>         struct thermal_zone_device *tz;
+> -       struct thermal_cooling_device *cdev;
+>         enum thermal_device_mode mode;
+>         struct regmap *tempmon;
+>         u32 c1, c2; /* See formula in imx_init_calib() */
+> @@ -656,6 +655,7 @@ MODULE_DEVICE_TABLE(of, of_imx_thermal_match);
+>  static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
+>  {
+>         struct device_node *np;
+> +       struct thermal_cooling_device *cdev;
+>         int ret;
+>
+>         data->policy = cpufreq_cpu_get(0);
+> @@ -667,9 +667,9 @@ static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
+>         np = of_get_cpu_node(data->policy->cpu, NULL);
+>
+>         if (!np || !of_find_property(np, "#cooling-cells", NULL)) {
+> -               data->cdev = cpufreq_cooling_register(data->policy);
+> -               if (IS_ERR(data->cdev)) {
+> -                       ret = PTR_ERR(data->cdev);
+> +               cdev = cpufreq_cooling_register(data->policy);
+> +               if (IS_ERR(cdev)) {
+> +                       ret = PTR_ERR(cdev);
+>                         cpufreq_cpu_put(data->policy);
+>                         return ret;
+>                 }
+> @@ -680,7 +680,7 @@ static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
+>
+>  static void imx_thermal_unregister_legacy_cooling(struct imx_thermal_data *data)
+>  {
+> -       cpufreq_cooling_unregister(data->cdev);
+> +       cpufreq_cooling_unregister(data->policy);
+>         cpufreq_cpu_put(data->policy);
+>  }
+>
+> @@ -872,7 +872,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
+>                 clk_disable_unprepare(data->thermal_clk);
+>
+>         thermal_zone_device_unregister(data->tz);
+> -       cpufreq_cooling_unregister(data->cdev);
+> +       cpufreq_cooling_unregister(data->policy);
+>         cpufreq_cpu_put(data->policy);
+>
+>         return 0;
+> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> index b4f981daeaf2..170b70b6ec61 100644
+> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> @@ -41,7 +41,6 @@ struct ti_thermal_data {
+>         struct cpufreq_policy *policy;
+>         struct thermal_zone_device *ti_thermal;
+>         struct thermal_zone_device *pcb_tz;
+> -       struct thermal_cooling_device *cool_dev;
+>         struct ti_bandgap *bgp;
+>         enum thermal_device_mode mode;
+>         struct work_struct thermal_wq;
+> @@ -233,6 +232,7 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
+>  {
+>         struct ti_thermal_data *data;
+>         struct device_node *np = bgp->dev->of_node;
+> +       struct thermal_cooling_device *cdev;
+>
+>         /*
+>          * We are assuming here that if one deploys the zone
+> @@ -256,9 +256,9 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
+>         }
+>
+>         /* Register cooling device */
+> -       data->cool_dev = cpufreq_cooling_register(data->policy);
+> -       if (IS_ERR(data->cool_dev)) {
+> -               int ret = PTR_ERR(data->cool_dev);
+> +       cdev = cpufreq_cooling_register(data->policy);
+> +       if (IS_ERR(cdev)) {
+> +               int ret = PTR_ERR(cdev);
+>                 dev_err(bgp->dev, "Failed to register cpu cooling device %d\n",
+>                         ret);
+>                 cpufreq_cpu_put(data->policy);
+> @@ -277,7 +277,7 @@ int ti_thermal_unregister_cpu_cooling(struct ti_bandgap *bgp, int id)
+>         data = ti_bandgap_get_sensor_data(bgp, id);
+>
+>         if (data) {
+> -               cpufreq_cooling_unregister(data->cool_dev);
+> +               cpufreq_cooling_unregister(data->policy);
+>                 if (data->policy)
+>                         cpufreq_cpu_put(data->policy);
+>         }
+> diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
+> index bae54bb7c048..89f469ee4be4 100644
+> --- a/include/linux/cpu_cooling.h
+> +++ b/include/linux/cpu_cooling.h
+> @@ -29,9 +29,9 @@ cpufreq_cooling_register(struct cpufreq_policy *policy);
+>
+>  /**
+>   * cpufreq_cooling_unregister - function to remove cpufreq cooling device.
+> - * @cdev: thermal cooling device pointer.
+> + * @policy: cpufreq policy
+>   */
+> -void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev);
+> +void cpufreq_cooling_unregister(struct cpufreq_policy *policy);
+>
+>  #else /* !CONFIG_CPU_THERMAL */
+>  static inline struct thermal_cooling_device *
+> @@ -41,7 +41,7 @@ cpufreq_cooling_register(struct cpufreq_policy *policy)
+>  }
+>
+>  static inline
+> -void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
+> +void cpufreq_cooling_unregister(struct cpufreq_policy *policy)
+>  {
+>         return;
+>  }
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index a1467aa7f58b..ce13204df972 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -144,9 +144,6 @@ struct cpufreq_policy {
+>
+>         /* For cpufreq driver's internal use */
+>         void                    *driver_data;
+> -
+> -       /* Pointer to the cooling device if used for thermal mitigation */
+> -       struct thermal_cooling_device *cdev;
+>  };
+>
+>  struct cpufreq_freqs {
+> --
+> 2.17.1
+>
