@@ -2,187 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCF2595F3
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 10:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABE7595F6
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 10:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbfF1IVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jun 2019 04:21:13 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:38094 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbfF1IVN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 04:21:13 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 843B260A97; Fri, 28 Jun 2019 08:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561710071;
-        bh=DUTnoso3ufA4MhkXdernXX1YENEFNFy5QNH6KtLrySk=;
-        h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
-        b=E19EzpEiPbCL0t/uq/p8dSMIe2WMRwZtyxsXvtf0dRo6e6DY3JFK2HKDQ1Huwupkd
-         DWC7T1Z+femCUCWXr4xrII3jbQrDLNLdrgT7LgMCssVLxTxtune38scVw/Gnj4Fes/
-         WACCpTvgECtrH4gkF+BYl857A3AfwLVus5Vyt2E4=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.0.105] (unknown [106.51.23.115])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B63516070D;
-        Fri, 28 Jun 2019 08:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561710070;
-        bh=DUTnoso3ufA4MhkXdernXX1YENEFNFy5QNH6KtLrySk=;
-        h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
-        b=YaCExwjq7MnUI2jcch7FOrh58awaSB0cTm9dLpwUpCm+Pg7uloRzVPneVgXv9+AqP
-         hWme1R8+xoErirY22CDZ+zxssG+unwx9Qica+8hmrEsfFnqLvm12UiG0AaXVt51P4C
-         vMkDShRc1QF9hm46mkvTHOuWZ/5VPEVoeuxw7Egk=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B63516070D
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Subject: Re: [PATCH RFC 1/4] OPP: Add and export helper to update voltage
-To:     Sibi Sankar <sibis@codeaurora.org>, viresh.kumar@linaro.org,
-        nm@ti.com, sboyd@kernel.org, georgi.djakov@linaro.org
-Cc:     agross@kernel.org, david.brown@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        saravanak@google.com
-References: <20190627133424.4980-1-sibis@codeaurora.org>
- <20190627133424.4980-2-sibis@codeaurora.org>
-Message-ID: <a4e6bc37-9b45-16a6-f2d1-05df498f18b8@codeaurora.org>
-Date:   Fri, 28 Jun 2019 13:50:45 +0530
+        id S1726508AbfF1IVp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 04:21:45 -0400
+Received: from mga03.intel.com ([134.134.136.65]:5861 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726463AbfF1IVp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 Jun 2019 04:21:45 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Jun 2019 01:21:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,427,1557212400"; 
+   d="scan'208";a="164596648"
+Received: from rbhardw1-mobl.gar.corp.intel.com (HELO [10.66.75.132]) ([10.66.75.132])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Jun 2019 01:21:39 -0700
+Subject: Re: [PATCH 2/2] powercap/rapl: Add Ice Lake NNPI support to RAPL
+ driver
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-kernel@vger.kernel.org, len.brown@intel.com,
+        rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org
+References: <20190614080523.13464-1-rajneesh.bhardwaj@linux.intel.com>
+ <2359736.lHFMKXy7DL@kreacher>
+From:   "Bhardwaj, Rajneesh" <rajneesh.bhardwaj@linux.intel.com>
+Message-ID: <52eaefed-8f94-8cb0-0cfa-c0c16a34bd0b@linux.intel.com>
+Date:   Fri, 28 Jun 2019 13:51:41 +0530
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190627133424.4980-2-sibis@codeaurora.org>
+In-Reply-To: <2359736.lHFMKXy7DL@kreacher>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+On 28-Jun-19 3:32 AM, Rafael J. Wysocki wrote:
+> On Friday, June 14, 2019 10:05:23 AM CEST Rajneesh Bhardwaj wrote:
+>> Enables support for ICL-NNPI, which is a neural network processor for deep
+>> learning inference. From RAPL point of view it is same as Ice Lake Mobile
+>> processor.
+>>
+>> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+>> Cc: linux-pm@vger.kernel.org
+>> Link: https://lkml.org/lkml/2019/6/5/1034
+>> Signed-off-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
+>> ---
+>>   drivers/powercap/intel_rapl.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
+>> index 4347f15165f8..431c8c8bdf07 100644
+>> --- a/drivers/powercap/intel_rapl.c
+>> +++ b/drivers/powercap/intel_rapl.c
+>> @@ -1157,6 +1157,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+>>   	INTEL_CPU_FAM6(KABYLAKE_DESKTOP,	rapl_defaults_core),
+>>   	INTEL_CPU_FAM6(CANNONLAKE_MOBILE,	rapl_defaults_core),
+>>   	INTEL_CPU_FAM6(ICELAKE_MOBILE,		rapl_defaults_core),
+>> +	INTEL_CPU_FAM6(ICELAKE_NNPI,		rapl_defaults_core),
+>>   
+>>   	INTEL_CPU_FAM6(ATOM_SILVERMONT,		rapl_defaults_byt),
+>>   	INTEL_CPU_FAM6(ATOM_AIRMONT,		rapl_defaults_cht),
+>>
+> It is in my queue, but I get build errors when I try to apply it.
+>
+> I guess the definition of ICELAKE_NNPI is not there in the Linus' tree yet.
 
-On 6/27/2019 7:04 PM, Sibi Sankar wrote:
-> Add and export 'dev_pm_opp_update_voltage' to find and update voltage
-> of an opp for a given frequency. This will be useful to update the opps
-> with voltages read back from firmware.
-> 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> ---
->   drivers/opp/core.c     | 52 ++++++++++++++++++++++++++++++++++++++++++
->   include/linux/pm_opp.h | 10 ++++++++
->   2 files changed, 62 insertions(+)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 68551d6366e6b..c85c04dc2c7de 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2197,6 +2197,58 @@ int dev_pm_opp_disable(struct device *dev, unsigned long freq)
->   }
->   EXPORT_SYMBOL_GPL(dev_pm_opp_disable);
->   
-> +/**
-> + * dev_pm_opp_update_voltage() - Find and update voltage
-> + * @dev:	device for which we do this operation
-> + * @freq:	OPP frequency to update voltage
-> + * @u_volt:	voltage requested for this opp
-> + *
-> + * Find and update voltage of a disabled opp corresponding to the given
-> + * frequency. This is useful only for devices with single power supply.
-> + *
-> + * Return: 0 if no modification was done OR modification was
-> + * successful or a negative error value.
-> + */
-> +int dev_pm_opp_update_voltage(struct device *dev, unsigned long freq,
-> +			      unsigned long u_volt)
-> +{
-> +	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
-> +	struct opp_table *opp_table;
-> +	unsigned long tol;
-> +	int ret = 0;
-> +
-> +	opp = dev_pm_opp_find_freq_exact(dev, freq, false);
-> +	if (IS_ERR(opp))
-> +		return PTR_ERR(opp);
-> +
-> +	/* Find the opp_table */
-> +	opp_table = _find_opp_table(dev);
+Yes, though 
+https://www.spinics.net/lists/linux-tip-commits/msg48978.html is 
+accepted by Thomas already.
 
-maybe you should look for the opp_table first and then the
-opp? otherwise this check seems pretty redundant given the
-above call would have failed if the opp table did not exist.
 
-> +	if (IS_ERR(opp_table)) {
-> +		ret = PTR_ERR(opp_table);
-> +		dev_err(dev, "%s: OPP table not found (%d)\n", __func__, ret);
-> +		goto put_opp;
-> +	}
-> +
-> +	mutex_lock(&opp_table->lock);
-> +
-> +	/* update only if the opp is disabled */
-> +	if (opp->available)
-> +		goto unlock;
-
-should this throw a warning/error to indicate someone tried to
-update this at a wrong time? and perhaps return an error instead of
-success.
-
-> +
-> +	tol = u_volt * opp_table->voltage_tolerance_v1 / 100;
-> +	opp->supplies[0].u_volt_min = u_volt - tol;
-> +	opp->supplies[0].u_volt = u_volt;
-> +	opp->supplies[0].u_volt_min = u_volt + tol;
-> +
-> +unlock:
-> +	mutex_unlock(&opp_table->lock);
-> +	dev_pm_opp_put_opp_table(opp_table);
-> +put_opp:
-> +	dev_pm_opp_put(opp);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_opp_update_voltage);
-> +
->   /**
->    * dev_pm_opp_register_notifier() - Register OPP notifier for the device
->    * @dev:	Device for which notifier needs to be registered
-> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-> index 87fa09d93d8c2..a17c462974851 100644
-> --- a/include/linux/pm_opp.h
-> +++ b/include/linux/pm_opp.h
-> @@ -130,6 +130,9 @@ int dev_pm_opp_enable(struct device *dev, unsigned long freq);
->   
->   int dev_pm_opp_disable(struct device *dev, unsigned long freq);
->   
-> +int dev_pm_opp_update_voltage(struct device *dev, unsigned long freq,
-> +			      unsigned long u_volt);
-> +
->   int dev_pm_opp_register_notifier(struct device *dev, struct notifier_block *nb);
->   int dev_pm_opp_unregister_notifier(struct device *dev, struct notifier_block *nb);
->   
-> @@ -261,6 +264,13 @@ static inline int dev_pm_opp_disable(struct device *dev, unsigned long freq)
->   	return 0;
->   }
->   
-> +static inline int dev_pm_opp_update_voltage(struct device *dev,
-> +					    unsigned long freq,
-> +					    unsigned long u_volt)
-> +{
-> +	return 0;
-> +}
-> +
->   static inline int dev_pm_opp_register_notifier(struct device *dev, struct notifier_block *nb)
->   {
->   	return -ENOTSUPP;
-> 
-
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+>
+>
+>
