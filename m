@@ -2,113 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F077B5949F
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 09:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE2459524
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 09:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbfF1HMe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jun 2019 03:12:34 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:43656 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726574AbfF1HMd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 03:12:33 -0400
-Received: by mail-lj1-f196.google.com with SMTP id 16so4887475ljv.10;
-        Fri, 28 Jun 2019 00:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/Cnt58VZhnbwSwijmz21auc9Yvj4p4PpT3m36ds3sv8=;
-        b=RrGS2HZmYNW9Ve83uiayxQophGE2uHC1aW4PDfa9c5x47p2qEWlqVH6UxPRCJpS/ne
-         6KcEizG2I2gHxL7QqRM6H9yvQF2/blA0KZ5aO70FtU27Zun5S3ilMHk70QMpqbLpI/ly
-         uUbq54hToRVCcgo6vY1P4Ubv6J5n5pUhsAC1R9AIMTReADwYhf7nWMqLuTtV5JIxEz1K
-         QdCfKSggPQoB135iMe/d2DPhvVMm7rH6U17BQndqPplv9grygtm11YYftN/0P0JARFSs
-         hMbKFPHQ3woMemiMs6cM958UNgTR2VsgnxM7R6jd58aQOpxEqx2X3rC8jNgVy6898kEl
-         uN+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/Cnt58VZhnbwSwijmz21auc9Yvj4p4PpT3m36ds3sv8=;
-        b=TPccTSZOavxue/ShZ5Y/DOjYu3cQlLCD1TcP32KW1l/Z/rDNIsYFQZK6WJk9X7GHHK
-         1tG6bbg9vhz6SGqtuOO9pVAO8AxyYr1E8jUF5tAIgypUxxmQSanvqneGKCN6yj3JfWjI
-         6BTWps0Q6Gzf++NWsW+fPC5G36yzvrGKzrdJchmQpNk0SHDGT018jvVAgZ8QFePmny3C
-         rnAsDgvEs6RBZDNE4SlYQf6D/0xyzHvHtdiGcVRYzMdozRVI1MNwjUAlyV/Yz1ECMWsz
-         h01dgfvMMH2bLEefwd31pWH8J+wEv6/DPzLSqjYR2t5b8uNakVDnrUdHgbu/48hnvejK
-         Mxug==
-X-Gm-Message-State: APjAAAWXCTmJhKhtmtevKzbbCZ9Cht0NDOR+nWC2NSk6EjDs+c58zJaN
-        b94F5u3tEVp+maaZsVPbac7TAwuh
-X-Google-Smtp-Source: APXvYqx1jBOeBmJ+grvlgQb5D6Tzkz3PENoKFpwqzfzsIWiNEJlLF/GnRT+yY6B8gpiIAqVHv+OQ8w==
-X-Received: by 2002:a2e:2c07:: with SMTP id s7mr5210551ljs.44.1561705951312;
-        Fri, 28 Jun 2019 00:12:31 -0700 (PDT)
-Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.googlemail.com with ESMTPSA id v7sm459505ljj.3.2019.06.28.00.12.29
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 28 Jun 2019 00:12:30 -0700 (PDT)
-Subject: Re: [PATCH v3 02/22] PM / devfreq: tegra30: Keep interrupt disabled
- while governor is stopped
-To:     myungjoo.ham@samsung.com,
-        Thierry Reding <thierry.reding@gmail.com>,
+        id S1726540AbfF1HkD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 03:40:03 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:54520 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726385AbfF1HkD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 Jun 2019 03:40:03 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id D542E1A0DB5;
+        Fri, 28 Jun 2019 09:40:00 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B8FD71A033F;
+        Fri, 28 Jun 2019 09:40:00 +0200 (CEST)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id CC6BC205D5;
+        Fri, 28 Jun 2019 09:39:59 +0200 (CEST)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20190627211115.21138-3-digetx@gmail.com>
- <20190627211115.21138-1-digetx@gmail.com>
- <CGME20190627211230epcas5p2504c225e67a823a586768a2749248b72@epcms1p3>
- <20190628064842epcms1p37e66e5fa52885ef7461b439bd336e60f@epcms1p3>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <17fe0599-b36e-31bc-4964-4b7cb77e1d64@gmail.com>
-Date:   Fri, 28 Jun 2019 10:12:29 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <20190628064842epcms1p37e66e5fa52885ef7461b439bd336e60f@epcms1p3>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Saravana Kannan <saravanak@google.com>, kernel@pengutronix.de,
+        linux-imx@nxp.com, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [RFCv2 0/8] Add imx8mm bus frequency switching
+Date:   Fri, 28 Jun 2019 10:39:48 +0300
+Message-Id: <cover.1561707104.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-28.06.2019 9:48, MyungJoo Ham пишет:
->> There is no real need to keep interrupt always-enabled, will be nicer
->> to keep it disabled while governor is inactive.
->>
->> Suggested-by: Thierry Reding <thierry.reding@gmail.com>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->> drivers/devfreq/tegra30-devfreq.c | 43 ++++++++++++++++---------------
->> 1 file changed, 22 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
->> index a27300f40b0b..5e2b133babdd 100644
->> --- a/drivers/devfreq/tegra30-devfreq.c
->> +++ b/drivers/devfreq/tegra30-devfreq.c
-> []
->> @@ -416,8 +417,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
->> {
->> 	unsigned int i;
->>
->> -	disable_irq(tegra->irq);
->> -
->> 	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
->> 		      ACTMON_GLB_PERIOD_CTRL);
->>
-> 
-> I think this has nothing to do with
-> "keep it disabled while governor is inactive."
-> 
-> And this looks dangerous because it disables the safety measure
-> of disabling interrupt while you touch some looking-critical registers.
-> Anyway, as I do not know the internals of Tegra SoC, I cannot sure.
+This series attempts to add upstream DVFS support for imx8mm, covering dynamic
+scaling of internal buses and dram. It uses the interconnect framework for
+proactive scaling (in response to explicit bandwidth requests from devices) and
+devfreq in order expose the buses and eventually implement reactive scaling (in
+response to measuredtraffic).
 
-Sorry, I'm not sure what do you mean .. Before this patch we were disabling the
-interrupt on a start of programming hardware configuration, now we don't needed to
-disable the interrupt because it is already in the disabled state at that moment
-since we're now requesting interrupt in the *disabled* state during of the driver's
-probe using IRQ_NOAUTOEN flag.
+Actual scaling is performed through the clk framework: The NOC and main NICs
+are driven by composite clks and a new 'imx8m-dram' clk is included for
+scaling dram using firmware calls.
+
+The interconnect and devfreq parts do not communicate explicitly: they both
+just call clk_set_min_rate and the clk core picks the minimum value that can
+satisfy both. They are thus completely independent.
+
+This is easily extensible to more members of the imx8m family, some of which
+expose more detailed controls over interconnect fabric frequencies.
+
+TODO:
+* Clarify DT bindings
+* Clarify interconnect OPP picking logic
+* Implement devfreq_event for imx8m ddrc
+* Expose more dram frequencies
+
+The clk_set_min_rate approach does not mesh very well with the OPP framework.
+Some of interconnect nodes on imx8m can run at different voltages: OPP can
+handle this well but not in response to a clk_set_min_rate from an unrelated
+subsystem. Maybe set voltage on a clk notifier?
+
+Vendor tree does not support voltage switching, independent freqs for
+different parts of the fabric or any reactive scaling. I think it's important
+to pick an upstreaming approach which can support as much as possible.
+
+Feedback welcome.
+
+Some objections were apparently raised to doing DRAM switch inside CLK:
+perhaps ICC should make min_freq requests to devfreq instead?
+
+Link to v1 (multiple chunks):
+ * https://patchwork.kernel.org/patch/10976897/
+ * https://patchwork.kernel.org/patch/10968303/
+ * https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=91251
+
+Also as a github branch (with few other changes):
+    https://github.com/cdleonard/linux/tree/next_imx8mm_busfreq
+
+Alexandre Bailon (2):
+  interconnect: Add generic driver for imx
+  interconnect: imx: Add platform driver for imx8mm
+
+Leonard Crestez (6):
+  clk: imx8mm: Add dram freq switch support
+  clk: imx8m-composite: Switch to determine_rate
+  arm64: dts: imx8mm: Add dram dvfs irqs to ccm node
+  devfreq: Add imx-devfreq driver
+  arm64: dts: imx8mm: Add interconnect node
+  arm64: dts: imx8mm: Add devfreq-imx nodes
+
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi |  73 +++
+ drivers/clk/imx/Makefile                  |   1 +
+ drivers/clk/imx/clk-composite-8m.c        |  34 +-
+ drivers/clk/imx/clk-imx8m-dram.c          | 357 ++++++++++++
+ drivers/clk/imx/clk-imx8mm.c              |  12 +
+ drivers/clk/imx/clk.h                     |  13 +
+ drivers/devfreq/Kconfig                   |  10 +
+ drivers/devfreq/Makefile                  |   1 +
+ drivers/devfreq/imx-devfreq.c             | 142 +++++
+ drivers/interconnect/Kconfig              |   1 +
+ drivers/interconnect/Makefile             |   1 +
+ drivers/interconnect/imx/Kconfig          |  17 +
+ drivers/interconnect/imx/Makefile         |   2 +
+ drivers/interconnect/imx/busfreq-imx8mm.c | 151 ++++++
+ drivers/interconnect/imx/busfreq.c        | 628 ++++++++++++++++++++++
+ drivers/interconnect/imx/busfreq.h        | 123 +++++
+ include/dt-bindings/clock/imx8mm-clock.h  |   4 +-
+ include/dt-bindings/interconnect/imx8mm.h |  49 ++
+ 18 files changed, 1606 insertions(+), 13 deletions(-)
+ create mode 100644 drivers/clk/imx/clk-imx8m-dram.c
+ create mode 100644 drivers/devfreq/imx-devfreq.c
+ create mode 100644 drivers/interconnect/imx/Kconfig
+ create mode 100644 drivers/interconnect/imx/Makefile
+ create mode 100644 drivers/interconnect/imx/busfreq-imx8mm.c
+ create mode 100644 drivers/interconnect/imx/busfreq.c
+ create mode 100644 drivers/interconnect/imx/busfreq.h
+ create mode 100644 include/dt-bindings/interconnect/imx8mm.h
+
+-- 
+2.17.1
+
