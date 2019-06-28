@@ -2,41 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BA259709
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 11:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6115B59803
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 11:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbfF1JNJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jun 2019 05:13:09 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39621 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726671AbfF1JNJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 05:13:09 -0400
-Received: by mail-ot1-f65.google.com with SMTP id r21so4614981otq.6;
-        Fri, 28 Jun 2019 02:13:08 -0700 (PDT)
+        id S1726531AbfF1J6G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 05:58:06 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:45769 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbfF1J6D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 05:58:03 -0400
+Received: by mail-wr1-f67.google.com with SMTP id f9so5580621wre.12
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2019 02:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9FytKW5ZjvNKGBlx80HLRMHHuvwX3z8TegfRsrrxVnM=;
+        b=iMrVG+/opOcU7iiyyeN00AOelhoQC+Q8nOGZn+dVzF+oxKCHtX6lGuitukcUVUg/EJ
+         GC8j5mPl6bJUTE8ELFs+RWTWMXinx0bsFqbegK3UdBA3qNyRvZY4OSTDCURF94OyaGGg
+         Y151e8nwdbe3bthz4H4N+CH695Mhxpdg1JNOt0VfIXtsfelCJUxyTdiESwEdF422zyik
+         5AbArr6Mru+IPHyT4KsnV2hIgf03DBm9B0SzBmkdkIS4dIDZGzRPPwXPzACDJFirubZS
+         j4rLJpHHL7at4OPCkOdgak69AXOJC9bwUzRx1loqYa+ZaqZs1ZHLO5CxGuU9KfS/KeBR
+         ZKVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WtAbjyzvlTxl5Wt1+2olUFeCZXxxXREPTPYalo6sLwI=;
-        b=gnL1a5v/rq6hllKTmiS/0JltoLc6yv2Pp7D+b3VlWNXIvdY5gsyK3nO29+Kp/PXYuD
-         GVoorEU2znaMB9I6GjbUd6Usy6gq+XSfjTe1wqa8TmeRh4Mb5bbQXBreAT+7QmxYP/qI
-         rftFaOM++G3HjWKearDmFpOm87BKyvMRjrf/mEi7wfWhAt95mlyff/ZZovU3zOA1Z+Az
-         3HxwDs+36mJESEFLk8S4GlkvXgAmnAAIuk5wKEDZX9vIf0zGWCpjNLSTFui0zBJPzjJ4
-         GLBTyaNmWu48egbSvp0sNARJ/WfpI9g+B7X1t3HOGu/L7B4jjnGonAy4HoNQsIQeN7l3
-         TC/w==
-X-Gm-Message-State: APjAAAUh6zYH3kLMcKjl8TiBfzTpeDoXA2vuBGs3lGnbJPNcoKWBVTrT
-        aS1FyNzJDwJ3n0zSf5StPhGsEo/PySVZbemo2Tc=
-X-Google-Smtp-Source: APXvYqwSG9i1P5sR8zcpSaKfCYuoC1OkUtWI5/0pY7WWcbzod1j3f1+dkTvp5OmqGtJlgFOZ3u9KJsLzGXXqLesPHR8=
-X-Received: by 2002:a9d:6959:: with SMTP id p25mr6927906oto.118.1561713188389;
- Fri, 28 Jun 2019 02:13:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190627210209.32600-1-daniel.lezcano@linaro.org> <20190627210209.32600-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20190627210209.32600-2-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Jun 2019 11:12:56 +0200
-Message-ID: <CAJZ5v0jJzCGfQFqi-S3vqs74D73MaE4f7WYF_NVnDKawNV4Wzw@mail.gmail.com>
-Subject: Re: [PATCH V4 2/3] thermal/drivers/cpu_cooling: Unregister with the policy
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=9FytKW5ZjvNKGBlx80HLRMHHuvwX3z8TegfRsrrxVnM=;
+        b=dWHJ0gLlyGZ5cV4xyiE+sPzkh3OMBJI9F/W45jkjtXNKm768j/7nB6OzzjAVtiiFz8
+         nbHE1ORXdvw5J4sMzQZ65Wwjy4uQX/UrHb0kv1lx+34k+O9NMtaGR0DSIuiP1CaM1g0r
+         Ezidu95JcY4/sH9QDYIGjj8RK06+WAlGa1yTysFG7U/gTjhpJf38yKZXdL7w71gIYTsM
+         D1zjk5yC8SFSR183tQo5fQoMdV56hs4vsL9j+IeGkFIMP8+sOV6FWb/Cy1aCBGCzIq8K
+         yMMRwB5EZ6vAi3N3a9IeRD8xtQYdnUaT8DoewISIApLhwHwvLhfAn5xund2nCt5BohNQ
+         tLIw==
+X-Gm-Message-State: APjAAAUnqdlUoRlEliIg1N2UEraQljRAxuLjRPu8CsdDORDKAoSDvrte
+        IblcJNkIT/hvkhn5bT0lY3+JHw==
+X-Google-Smtp-Source: APXvYqyRZNwnVgrjVHQJVNRqLQi40MC0P3A2IQKj1rTZO3nY7yq61Es2GWwenW/DEpGhlFKGJK1nAg==
+X-Received: by 2002:adf:e2c7:: with SMTP id d7mr6974648wrj.272.1561715880211;
+        Fri, 28 Jun 2019 02:58:00 -0700 (PDT)
+Received: from [192.168.0.41] (11.117.130.77.rev.sfr.net. [77.130.117.11])
+        by smtp.googlemail.com with ESMTPSA id r5sm3228894wrg.10.2019.06.28.02.57.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jun 2019 02:57:59 -0700 (PDT)
+Subject: Re: [PATCH V4 2/3] thermal/drivers/cpu_cooling: Unregister with the
+ policy
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Eduardo Valentin <edubezval@gmail.com>,
@@ -57,345 +69,122 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         <linux-arm-kernel@lists.infradead.org>,
         "open list:TI BANDGAP AND THERMAL DRIVER" 
         <linux-omap@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20190627210209.32600-1-daniel.lezcano@linaro.org>
+ <20190627210209.32600-2-daniel.lezcano@linaro.org>
+ <CAJZ5v0jJzCGfQFqi-S3vqs74D73MaE4f7WYF_NVnDKawNV4Wzw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <cd79ffe3-4749-9135-27c4-deb4f259d702@linaro.org>
+Date:   Fri, 28 Jun 2019 11:57:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0jJzCGfQFqi-S3vqs74D73MaE4f7WYF_NVnDKawNV4Wzw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 11:02 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Currently the function cpufreq_cooling_register() returns a cooling
-> device pointer which is used back as a pointer to call the function
-> cpufreq_cooling_unregister(). Even if it is correct, it would make
-> sense to not leak the structure inside a cpufreq driver and keep the
-> code thermal code self-encapsulate. Moreover, that forces to add an
-> extra variable in each driver using this function.
->
-> Instead of passing the cooling device to unregister, pass the policy.
->
-> Because the cpufreq_cooling_unregister() function uses the policy to
-> unregister itself. The only purpose of the cooling device pointer is
-> to unregister the cpu cooling device.
->
-> As there is no more need of this pointer, remove it.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-This doesn't apply for me.
+On 28/06/2019 11:12, Rafael J. Wysocki wrote:
+> On Thu, Jun 27, 2019 at 11:02 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> Currently the function cpufreq_cooling_register() returns a cooling
+>> device pointer which is used back as a pointer to call the function
+>> cpufreq_cooling_unregister(). Even if it is correct, it would make
+>> sense to not leak the structure inside a cpufreq driver and keep the
+>> code thermal code self-encapsulate. Moreover, that forces to add an
+>> extra variable in each driver using this function.
+>>
+>> Instead of passing the cooling device to unregister, pass the policy.
+>>
+>> Because the cpufreq_cooling_unregister() function uses the policy to
+>> unregister itself. The only purpose of the cooling device pointer is
+>> to unregister the cpu cooling device.
+>>
+>> As there is no more need of this pointer, remove it.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
+> This doesn't apply for me.
+> 
+> Care to rebase it on top of the Linus' tree?
 
-Care to rebase it on top of the Linus' tree?
-
-Also see below.
-
-> ---
->  drivers/cpufreq/arm_big_little.c              |  9 ++--
->  drivers/cpufreq/cpufreq.c                     |  8 ++--
->  drivers/thermal/cpu_cooling.c                 | 42 +++++++++++--------
->  drivers/thermal/imx_thermal.c                 | 12 +++---
->  .../ti-soc-thermal/ti-thermal-common.c        | 10 ++---
->  include/linux/cpu_cooling.h                   |  6 +--
->  include/linux/cpufreq.h                       |  3 --
->  7 files changed, 45 insertions(+), 45 deletions(-)
->
-> diff --git a/drivers/cpufreq/arm_big_little.c b/drivers/cpufreq/arm_big_little.c
-> index 7fe52fcddcf1..718c63231e66 100644
-> --- a/drivers/cpufreq/arm_big_little.c
-> +++ b/drivers/cpufreq/arm_big_little.c
-> @@ -56,7 +56,6 @@ static bool bL_switching_enabled;
->  #define ACTUAL_FREQ(cluster, freq)  ((cluster == A7_CLUSTER) ? freq << 1 : freq)
->  #define VIRT_FREQ(cluster, freq)    ((cluster == A7_CLUSTER) ? freq >> 1 : freq)
->
-> -static struct thermal_cooling_device *cdev[MAX_CLUSTERS];
->  static const struct cpufreq_arm_bL_ops *arm_bL_ops;
->  static struct clk *clk[MAX_CLUSTERS];
->  static struct cpufreq_frequency_table *freq_table[MAX_CLUSTERS + 1];
-> @@ -501,10 +500,8 @@ static int bL_cpufreq_exit(struct cpufreq_policy *policy)
->         struct device *cpu_dev;
->         int cur_cluster = cpu_to_cluster(policy->cpu);
->
-> -       if (cur_cluster < MAX_CLUSTERS) {
-> -               cpufreq_cooling_unregister(cdev[cur_cluster]);
-> -               cdev[cur_cluster] = NULL;
-> -       }
-> +       if (cur_cluster < MAX_CLUSTERS)
-> +               cpufreq_cooling_unregister(policy);
->
->         cpu_dev = get_cpu_device(policy->cpu);
->         if (!cpu_dev) {
-> @@ -527,7 +524,7 @@ static void bL_cpufreq_ready(struct cpufreq_policy *policy)
->         if (cur_cluster >= MAX_CLUSTERS)
->                 return;
->
-> -       cdev[cur_cluster] = of_cpufreq_cooling_register(policy);
-> +       of_cpufreq_cooling_register(policy);
->  }
->
->  static struct cpufreq_driver bL_cpufreq_driver = {
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index aee024e42618..1663a5601811 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1379,7 +1379,7 @@ static int cpufreq_online(unsigned int cpu)
->                 cpufreq_driver->ready(policy);
->
->         if (cpufreq_thermal_control_enabled(cpufreq_driver))
-> -               policy->cdev = of_cpufreq_cooling_register(policy);
-> +               of_cpufreq_cooling_register(policy);
->
->         pr_debug("initialization complete\n");
->
-> @@ -1468,10 +1468,8 @@ static int cpufreq_offline(unsigned int cpu)
->                 goto unlock;
->         }
->
-> -       if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
-> -               cpufreq_cooling_unregister(policy->cdev);
-> -               policy->cdev = NULL;
-> -       }
-> +       if (cpufreq_thermal_control_enabled(cpufreq_driver))
-> +               cpufreq_cooling_unregister(policy);
->
->         if (cpufreq_driver->stop_cpu)
->                 cpufreq_driver->stop_cpu(policy);
-> diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
-> index 83486775e593..be01546a656f 100644
-> --- a/drivers/thermal/cpu_cooling.c
-> +++ b/drivers/thermal/cpu_cooling.c
-> @@ -78,6 +78,7 @@ struct cpufreq_cooling_device {
->         struct cpufreq_policy *policy;
->         struct list_head node;
->         struct time_in_idle *idle_time;
-> +       struct thermal_cooling_device *cdev;
->  };
->
->  static DEFINE_IDA(cpufreq_ida);
-> @@ -606,6 +607,7 @@ __cpufreq_cooling_register(struct device_node *np,
->                 goto remove_ida;
->
->         cpufreq_cdev->clipped_freq = get_state_freq(cpufreq_cdev, 0);
-> +       cpufreq_cdev->cdev = cdev;
->
->         mutex_lock(&cooling_list_lock);
->         /* Register the notifier for first cpufreq cooling device */
-> @@ -693,35 +695,41 @@ of_cpufreq_cooling_register(struct cpufreq_policy *policy)
->  }
->  EXPORT_SYMBOL_GPL(of_cpufreq_cooling_register);
->
-> +void __cpufreq_cooling_unregister(struct cpufreq_cooling_device *cpufreq_cdev, int last)
-> +{
-> +       /* Unregister the notifier for the last cpufreq cooling device */
-> +       if (last)
-> +               cpufreq_unregister_notifier(&thermal_cpufreq_notifier_block,
-> +                                           CPUFREQ_POLICY_NOTIFIER);
-> +
-> +       thermal_cooling_device_unregister(cpufreq_cdev->cdev);
-> +       ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
-> +       kfree(cpufreq_cdev->idle_time);
-> +       kfree(cpufreq_cdev);
-> +}
-> +
->  /**
->   * cpufreq_cooling_unregister - function to remove cpufreq cooling device.
->   * @cdev: thermal cooling device pointer.
->   *
->   * This interface function unregisters the "thermal-cpufreq-%x" cooling device.
->   */
-> -void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
-> +void cpufreq_cooling_unregister(struct cpufreq_policy *policy)
->  {
->         struct cpufreq_cooling_device *cpufreq_cdev;
-
-I would do
-
-        struct cpufreq_cooling_device *ccd, *cpufreq_cdev = NULL;
-
-and then ->
-
->         bool last;
->
-> -       if (!cdev)
-> -               return;
-> -
-> -       cpufreq_cdev = cdev->devdata;
-> -
->         mutex_lock(&cooling_list_lock);
-> -       list_del(&cpufreq_cdev->node);
-> -       /* Unregister the notifier for the last cpufreq cooling device */
-> -       last = list_empty(&cpufreq_cdev_list);
-> +       list_for_each_entry(cpufreq_cdev, &cpufreq_cdev_list, node) {
-
--> list_for_each_entry(ccd, &cpufreq_cdev_list, node) {
-                if (ccd->policy == policy) {
-
-> +               if (cpufreq_cdev->policy == policy) {
-
-                           cpufreq_cdev = ccd;
-
-> +                       list_del(&cpufreq_cdev->node);
-> +                       last = list_empty(&cpufreq_cdev_list);
-> +                       break;
-> +               }
-> +       }
->         mutex_unlock(&cooling_list_lock);
-
-And here
-
-if (!cpufreq_cdev)
-        return;
-
-And that's it.  No new functions needed.
-
-> -       if (last)
-> -               cpufreq_unregister_notifier(&thermal_cpufreq_notifier_block,
-> -                                           CPUFREQ_POLICY_NOTIFIER);
-> -
-
-And I don't that the above needs to be changed at all in any case.
+Sure but the patch depends on 1/3 which is in bleeding edge. Shall I
+rebase the 3 patches on v5.2-rc6 and resend ?
 
 
-> -       thermal_cooling_device_unregister(cdev);
-> -       ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
-> -       kfree(cpufreq_cdev->idle_time);
-> -       kfree(cpufreq_cdev);
-> +       if (cpufreq_cdev->policy == policy)
-> +               __cpufreq_cooling_unregister(cpufreq_cdev, last);
->  }
->  EXPORT_SYMBOL_GPL(cpufreq_cooling_unregister);
-> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> index bb6754a5342c..021c0948b740 100644
-> --- a/drivers/thermal/imx_thermal.c
-> +++ b/drivers/thermal/imx_thermal.c
-> @@ -203,7 +203,6 @@ static struct thermal_soc_data thermal_imx7d_data = {
->  struct imx_thermal_data {
->         struct cpufreq_policy *policy;
->         struct thermal_zone_device *tz;
-> -       struct thermal_cooling_device *cdev;
->         enum thermal_device_mode mode;
->         struct regmap *tempmon;
->         u32 c1, c2; /* See formula in imx_init_calib() */
-> @@ -656,6 +655,7 @@ MODULE_DEVICE_TABLE(of, of_imx_thermal_match);
->  static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
->  {
->         struct device_node *np;
-> +       struct thermal_cooling_device *cdev;
->         int ret;
->
->         data->policy = cpufreq_cpu_get(0);
-> @@ -667,9 +667,9 @@ static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
->         np = of_get_cpu_node(data->policy->cpu, NULL);
->
->         if (!np || !of_find_property(np, "#cooling-cells", NULL)) {
-> -               data->cdev = cpufreq_cooling_register(data->policy);
-> -               if (IS_ERR(data->cdev)) {
-> -                       ret = PTR_ERR(data->cdev);
-> +               cdev = cpufreq_cooling_register(data->policy);
-> +               if (IS_ERR(cdev)) {
-> +                       ret = PTR_ERR(cdev);
->                         cpufreq_cpu_put(data->policy);
->                         return ret;
->                 }
-> @@ -680,7 +680,7 @@ static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
->
->  static void imx_thermal_unregister_legacy_cooling(struct imx_thermal_data *data)
->  {
-> -       cpufreq_cooling_unregister(data->cdev);
-> +       cpufreq_cooling_unregister(data->policy);
->         cpufreq_cpu_put(data->policy);
->  }
->
-> @@ -872,7 +872,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
->                 clk_disable_unprepare(data->thermal_clk);
->
->         thermal_zone_device_unregister(data->tz);
-> -       cpufreq_cooling_unregister(data->cdev);
-> +       cpufreq_cooling_unregister(data->policy);
->         cpufreq_cpu_put(data->policy);
->
->         return 0;
-> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> index b4f981daeaf2..170b70b6ec61 100644
-> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> @@ -41,7 +41,6 @@ struct ti_thermal_data {
->         struct cpufreq_policy *policy;
->         struct thermal_zone_device *ti_thermal;
->         struct thermal_zone_device *pcb_tz;
-> -       struct thermal_cooling_device *cool_dev;
->         struct ti_bandgap *bgp;
->         enum thermal_device_mode mode;
->         struct work_struct thermal_wq;
-> @@ -233,6 +232,7 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
->  {
->         struct ti_thermal_data *data;
->         struct device_node *np = bgp->dev->of_node;
-> +       struct thermal_cooling_device *cdev;
->
->         /*
->          * We are assuming here that if one deploys the zone
-> @@ -256,9 +256,9 @@ int ti_thermal_register_cpu_cooling(struct ti_bandgap *bgp, int id)
->         }
->
->         /* Register cooling device */
-> -       data->cool_dev = cpufreq_cooling_register(data->policy);
-> -       if (IS_ERR(data->cool_dev)) {
-> -               int ret = PTR_ERR(data->cool_dev);
-> +       cdev = cpufreq_cooling_register(data->policy);
-> +       if (IS_ERR(cdev)) {
-> +               int ret = PTR_ERR(cdev);
->                 dev_err(bgp->dev, "Failed to register cpu cooling device %d\n",
->                         ret);
->                 cpufreq_cpu_put(data->policy);
-> @@ -277,7 +277,7 @@ int ti_thermal_unregister_cpu_cooling(struct ti_bandgap *bgp, int id)
->         data = ti_bandgap_get_sensor_data(bgp, id);
->
->         if (data) {
-> -               cpufreq_cooling_unregister(data->cool_dev);
-> +               cpufreq_cooling_unregister(data->policy);
->                 if (data->policy)
->                         cpufreq_cpu_put(data->policy);
->         }
-> diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
-> index bae54bb7c048..89f469ee4be4 100644
-> --- a/include/linux/cpu_cooling.h
-> +++ b/include/linux/cpu_cooling.h
-> @@ -29,9 +29,9 @@ cpufreq_cooling_register(struct cpufreq_policy *policy);
->
->  /**
->   * cpufreq_cooling_unregister - function to remove cpufreq cooling device.
-> - * @cdev: thermal cooling device pointer.
-> + * @policy: cpufreq policy
->   */
-> -void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev);
-> +void cpufreq_cooling_unregister(struct cpufreq_policy *policy);
->
->  #else /* !CONFIG_CPU_THERMAL */
->  static inline struct thermal_cooling_device *
-> @@ -41,7 +41,7 @@ cpufreq_cooling_register(struct cpufreq_policy *policy)
->  }
->
->  static inline
-> -void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
-> +void cpufreq_cooling_unregister(struct cpufreq_policy *policy)
->  {
->         return;
->  }
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index a1467aa7f58b..ce13204df972 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -144,9 +144,6 @@ struct cpufreq_policy {
->
->         /* For cpufreq driver's internal use */
->         void                    *driver_data;
-> -
-> -       /* Pointer to the cooling device if used for thermal mitigation */
-> -       struct thermal_cooling_device *cdev;
->  };
->
->  struct cpufreq_freqs {
-> --
-> 2.17.1
->
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
