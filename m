@@ -2,105 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA34593F6
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 08:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A41959462
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 08:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbfF1GBn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jun 2019 02:01:43 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41274 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726574AbfF1GBn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 02:01:43 -0400
-Received: by mail-pl1-f193.google.com with SMTP id m7so2606570pls.8
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2019 23:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=yPRaQJzmFQwYi8hosJXjNAPxaw+qeTsDk1d+L2uAT1Q=;
-        b=vvNL9fbJcjLCGE94UWKp38ok8N+6iZufXNYCef+hRYEt93VhjGYVeKaRdM9GFD0kq5
-         /fTAzVWftSGRxWLvIiQf0tEwg7U4Mg2PAXVQyVIBmnSB2eO0Mvl3jq1wg7cvLF844thv
-         cwA/XYaRACYItx2RywEjMnWdNCJV8fMJSSIgsjnTiZWsICUaHkFztJsRNVxtTvyJn5fq
-         EkQxIQ7yqinxpgFe9RfhZkChUKYaAQyXeCMDcPD0hZ0uSWkb2unPMoaeDDbKx33qhn4m
-         3sitMlJ2o/JTlsEHUBVmNpqoNA6tt79R8WgiXArCix4nvxu+S9XZVtdQ6gxEJWAenFg8
-         zpkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yPRaQJzmFQwYi8hosJXjNAPxaw+qeTsDk1d+L2uAT1Q=;
-        b=ddKA2uRXopmef1/IlJ8dJ7J+dlNKjDwnhJG5uwc9QT7gxgmTBF3Qgi2NFaJt2WueUz
-         mdY/ZaL5QHRYdbU3y8OzkfWbTJF7E3Wj6JwDKO7cmEAKpiXZdCySJNI4bMK5H4/Pa789
-         DUp3RpgsaPq6AQFuT9UFvtmO5ld7xFcrCzA/cUu4LfEgEdKrgOXBKGU4SR0fVI+aqg63
-         DOcWuiK+Hy0u+E9ZtrdLFTOd7PkCYMi28LP1mzYZ2dtppshqUbN5JQuUhsisFUEHQAtF
-         zI6Kh5n7lLVFVqCZhW3exRCN0z87V1UHLwDL234kizil5WFcAJZ1k+4YKO+RgoCWJv2i
-         OeEA==
-X-Gm-Message-State: APjAAAXmw21i06qlQYhldHJiwTYhte7KoS+kftBeZREjLgsN0PD4YmCa
-        rPHz99lEevPgir+/YfhMVQ+3WQ==
-X-Google-Smtp-Source: APXvYqzbAhcap8BbHfMDCoOkrOvthmGqMacGqdcSZfyzVyXrEL6joFCpneO3Qz+XBoTszEuWTC1xEA==
-X-Received: by 2002:a17:902:8490:: with SMTP id c16mr9620055plo.1.1561701702042;
-        Thu, 27 Jun 2019 23:01:42 -0700 (PDT)
-Received: from localhost ([122.172.211.128])
-        by smtp.gmail.com with ESMTPSA id c9sm975912pfn.3.2019.06.27.23.01.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 23:01:41 -0700 (PDT)
-Date:   Fri, 28 Jun 2019 11:31:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, edubezval@gmail.com,
-        linux-kernel@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "open list:THERMAL/CPU_COOLING" <linux-pm@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:TI BANDGAP AND THERMAL DRIVER" 
-        <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH V4 3/3] thermal/drivers/cpu_cooling:
- cpufreq_cooling_register returns an int
-Message-ID: <20190628060139.czridjqrblu2ufjj@vireshk-i7>
-References: <20190627210209.32600-1-daniel.lezcano@linaro.org>
- <20190627210209.32600-3-daniel.lezcano@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190627210209.32600-3-daniel.lezcano@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1726572AbfF1Gst (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 02:48:49 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:55725 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726648AbfF1Gss (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 02:48:48 -0400
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190628064845epoutp04369fe66d390bd51caaf5db2f7be5d75a~sSf3jBMjk0793007930epoutp04V
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jun 2019 06:48:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190628064845epoutp04369fe66d390bd51caaf5db2f7be5d75a~sSf3jBMjk0793007930epoutp04V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1561704525;
+        bh=vNzSpyCeiJD8tnYdLvYVnJzOtUmTDCs0azG1DiRFc54=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=N9FmcEUfMCCZUPPme6SNazaV8BEEvOrV7QCJsuY3Jo7oVebnE7hye7EN59A9YLKKQ
+         sGbzsNWE6YhWvXr3+7EtoEP1W2i0xyLwB+k20lCfqnTttR96KzOGjklzX+ivrOqUx1
+         9ZOdpN+5lrhXAHtGaAx2bhXSpeoOONElwiY/PQg8=
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.158]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190628064842epcas1p36f9028705a15def52fd754ed95356758~sSf05fDJ82626126261epcas1p3y;
+        Fri, 28 Jun 2019 06:48:42 +0000 (GMT)
+X-AuditID: b6c32a37-f31ff7000000102f-8f-5d15b84aba39
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E1.4A.04143.A48B51D5; Fri, 28 Jun 2019 15:48:42 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [PATCH v3 02/22] PM / devfreq: tegra30: Keep interrupt disabled
+ while governor is stopped
+Reply-To: myungjoo.ham@samsung.com
+From:   MyungJoo Ham <myungjoo.ham@samsung.com>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20190627211115.21138-3-digetx@gmail.com>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20190628064842epcms1p37e66e5fa52885ef7461b439bd336e60f@epcms1p3>
+Date:   Fri, 28 Jun 2019 15:48:42 +0900
+X-CMS-MailID: 20190628064842epcms1p37e66e5fa52885ef7461b439bd336e60f
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMJsWRmVeSWpSXmKPExsWy7bCmnq7XDtFYg54GTYuXhzQtrn95zmqx
+        +uNjRouWWYtYLM42vWG3uLxrDpvF594jjBadX2axWfzcNY/Fom/tJTYHLo8dd5cweuycdZfd
+        o7f5HZtH35ZVjB6fN8kFsEZl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl
+        5qbaKrn4BOi6ZeYAHaWkUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKbAs0CtOzC0u
+        zUvXS87PtTI0MDAyBSpMyM748vACe8EPjoqp3++wNDDuZ+9i5OCQEDCRODibrYuRi0NIYAej
+        xKl9TWBxXgFBib87hLsYOTmEBTIk7v+9zAxiCwkoSTTc3McMEdeX6HiwjRHEZhPQldi64S4L
+        yBwRgd+MEnt3PmYFcZgFdjJKvNtynx2kSkKAV2JG+1MWCFtaYvvyrWDdnAJmEnfOXGGCiItK
+        3Fz9lh3Gfn9sPiOELSLReu8sM4QtKPHg525GmDkzpvyHmlktcW36YnaQxRICLYwSvaunQBXp
+        S5yZe5INxOYV8JWYcnY12DIWAVWJC/s2s0HUuEh8bv0GFmcWkJfY/nYOMygkmAU0Jdbv0oco
+        UZTY+XsuI8wvDRt/s6OzmQX4JN597WGFie+Y9wTqLzWJQ7uXQNXLSJyevpB5AqPSLERYz0Ky
+        eBbC4gWMzKsYxVILinPTU4sNC4yRY3cTIziBapnvYNxwzucQowAHoxIPr8JOkVgh1sSy4src
+        Q4wSHMxKIryS54BCvCmJlVWpRfnxRaU5qcWHGE2B/p/ILCWanA9M7nkl8YamRsbGxhYmhmam
+        hoZK4rzx3DdjhATSE0tSs1NTC1KLYPqYODilGhjjY36E6kjyTeL1EnyYxrdaQm8mR31Dyb1j
+        cSeOOIjscVBxYv0yu2HHl1c3dy14bvSXgX1pz53GWWKOvReeumS+muUkl+D+57Cm0Yv4Rx+d
+        +hedd3Yu25i5Kda61eHrtp6aAwnv2NbHaFu3LNitHL/13TfBxdXLlfJ5A69u7/lWsGv38o47
+        fR1KLMUZiYZazEXFiQAgylkstgMAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190627211230epcas5p2504c225e67a823a586768a2749248b72
+References: <20190627211115.21138-3-digetx@gmail.com>
+        <20190627211115.21138-1-digetx@gmail.com>
+        <CGME20190627211230epcas5p2504c225e67a823a586768a2749248b72@epcms1p3>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-06-19, 23:02, Daniel Lezcano wrote:
-> It looks like after the changes in the patch the only reason for
-> returning (struct thermal_cooling_device *) from
-> cpufreq_cooling_register() is error checking, but it would be much
-> more straightforward to return int for this purpose.
+>There is no real need to keep interrupt always-enabled, will be nicer
+>to keep it disabled while governor is inactive.
+>
+>Suggested-by: Thierry Reding <thierry.reding@gmail.com>
+>Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>---
+> drivers/devfreq/tegra30-devfreq.c | 43 ++++++++++++++++---------------
+> 1 file changed, 22 insertions(+), 21 deletions(-)
+>
+>diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+>index a27300f40b0b..5e2b133babdd 100644
+>--- a/drivers/devfreq/tegra30-devfreq.c
+>+++ b/drivers/devfreq/tegra30-devfreq.c
+[]
+>@@ -416,8 +417,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
+> {
+> 	unsigned int i;
 > 
-> Moreover, that would prevent the callers of it from doing incorrect
-> things with the returned pointers (like using it to unregister the
-> cooling device).
+>-	disable_irq(tegra->irq);
+>-
+> 	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
+> 		      ACTMON_GLB_PERIOD_CTRL);
 > 
-> Replace the returned value an integer instead of a pointer to a
-> thermal cooling device structure.
-> 
-> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/cpu_cooling.c                 | 63 +++++++++----------
->  drivers/thermal/imx_thermal.c                 |  6 +-
->  .../ti-soc-thermal/ti-thermal-common.c        |  7 +--
->  include/linux/cpu_cooling.h                   | 16 ++---
->  4 files changed, 40 insertions(+), 52 deletions(-)
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+I think this has nothing to do with
+"keep it disabled while governor is inactive."
 
--- 
-viresh
+And this looks dangerous because it disables the safety measure
+of disabling interrupt while you touch some looking-critical registers.
+Anyway, as I do not know the internals of Tegra SoC, I cannot sure.
+
+Cheers,
+MyungJoo
+
+
