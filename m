@@ -2,287 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE2E59B2A
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 14:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093A759C0B
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 14:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727271AbfF1Mb3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jun 2019 08:31:29 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:39646 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727128AbfF1Maq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 08:30:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=V/HBcP10AaKg9f7QXCB/xlHhS75hL4oliVjFK2WwiWw=; b=DJ/WCxxkcrYW8G3KYkrHJnkf2P
-        jVRL0+UHsVSIf8VtGu+GJ+NK1gVs4f5L9BvDhdSkrkObRcuIcNwh2ckXwuFieia/rKgL36WvMuY9Z
-        nT6Huh3yl0ut6x0Rf6Y6sz2cdaYXiy4rO0wROl5LruZdy9aIj8Om8dOt6vWBqldhQ8ZRGOC88ma64
-        OFQp1WxYj3pk+dzTAvSUbFUgAbYZl7CWLsPeAzeYBMiW0VyvKiQQYnT4iHs9pYsGgFzLfwMG6XVwm
-        MePcBZkCo2f+oz0eiS7lY82L4KICcgRa9NnZD/K3rytV4FuomrWxv11teHb5arzgZjfDBfeN8hU6i
-        gjFHMc4Q==;
-Received: from [186.213.242.156] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hgq1W-00054w-6k; Fri, 28 Jun 2019 12:30:38 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hgq1S-0005Tu-Ta; Fri, 28 Jun 2019 09:30:34 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, live-patching@vger.kernel.org,
-        netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH 37/39] docs: adds some directories to the main documentation index
-Date:   Fri, 28 Jun 2019 09:30:30 -0300
-Message-Id: <b26fc645cb2c81fe88ab13616c65664d2c3cead5.1561724493.git.mchehab+samsung@kernel.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1561724493.git.mchehab+samsung@kernel.org>
-References: <cover.1561724493.git.mchehab+samsung@kernel.org>
+        id S1726754AbfF1MyK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 08:54:10 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:33476 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726688AbfF1MyJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 08:54:09 -0400
+Received: by mail-lf1-f66.google.com with SMTP id y17so3931782lfe.0;
+        Fri, 28 Jun 2019 05:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2C3SFyETFeJmIRgSvmqt0/YbNtQXVxGJZ2Zoeef4sgo=;
+        b=jrj6ELNQzTB2q0mnLeQreHBhUjyGx97Y6dIEMeJUjYJNh4a5z9QakHuXn3s2QLx5t1
+         zfZDhqQaLZzdcfPmJOKQjT2Jyaq16KizriyJII30RS/yUw8eogniEegfKWliwApcl2yB
+         iLJYmCT+MIkkoXmrbw2n8eazEPJPp6kzaliu+yplCW0WeiTpzx6TQPYgo1K0Xt1V50yx
+         B8lXVLHykKEC4SzQEBzoQteKdchG0T7cv78OQ7w1KY+FiFV1dmZngdG2SphPK7Q96EYs
+         gzi26aBU7fJM7OV7Rubn1lbsaRww/y1jBvKBcRIfX+cvJnbdlu/yfEFhpF2fZeMLAVrN
+         juRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2C3SFyETFeJmIRgSvmqt0/YbNtQXVxGJZ2Zoeef4sgo=;
+        b=M/O4vdbVa0Hs/lfS6QAgQLS8h37YUUAWZbb0qJDPvG3FyGZdPPkDDamoPqibgcZCEg
+         iIughcWrD34a2LXuAgzgnIjFa6gxkStLUbfBXHse5TQ1sNMk1N5+IzteQXKfIhqI6d9u
+         jhme910M7cxk7uuVajtU6lkojEICf04Eka0oy3mfTdheDNXjDtZNNc6mglbJfPzA1lNr
+         YZ/lV54fGyMfjToVUu7eOM3vxfBa7GrV8DqnZ/RAPpVsYFX5Y7M6qNLrrjV/p6JaGa34
+         m7LHVXKr1ROKi356Su/I83v2qd57w+p+Wgth69uj0xWT1h3lW3q/duOuiig7f+WKWXTY
+         zK7g==
+X-Gm-Message-State: APjAAAUQcRPGE3wNe4c6tB5GTOjvdVTjZ+/LEY4wLCzMafl8UTLH33ZD
+        V5/C9iGNMQCFGPnG5XDMzxyRY7Pm
+X-Google-Smtp-Source: APXvYqxck52xwjYdM9gKuitN3RJvvrlS63LBPAkC09wsqhfNM2JdIHkCn+6bJQ/blS6hQStU0Ogfdw==
+X-Received: by 2002:ac2:46ef:: with SMTP id q15mr5043207lfo.63.1561726447221;
+        Fri, 28 Jun 2019 05:54:07 -0700 (PDT)
+Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
+        by smtp.googlemail.com with ESMTPSA id t4sm799359ljh.9.2019.06.28.05.54.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jun 2019 05:54:06 -0700 (PDT)
+Subject: Re: [PATCH] devfreq: tegra20: add COMMON_CLK dependency
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20190628103232.2467959-1-arnd@arndb.de>
+ <c2701295-0fd6-c5ec-59d4-6e6b3b3bdb8e@gmail.com>
+ <cbf6cff3-f5f5-66ea-9cca-86eb93f23c50@gmail.com>
+ <CAK8P3a1HOOk48G+-wZGWrM_fg5cn3ytH66qaEU6c7e0BjW+SNw@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <5301c593-97e1-db4e-067b-0522537b55d9@gmail.com>
+Date:   Fri, 28 Jun 2019 15:54:05 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
+In-Reply-To: <CAK8P3a1HOOk48G+-wZGWrM_fg5cn3ytH66qaEU6c7e0BjW+SNw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The contents of those directories were orphaned at the documentation
-body.
+28.06.2019 15:27, Arnd Bergmann пишет:
+> On Fri, Jun 28, 2019 at 1:05 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>> 28.06.2019 14:00, Dmitry Osipenko пишет:
+> 
+>>>
+>>> How is it possible to happen? There is a stub for clk_set_min_rate() when COMMON_CLK
+>>> is disabled .. Could you please show the kernel's config that causes the problem?
+>>>
+>>> Moreover that was me who added the missing stub for clk_set_min_rate() in [1] to fix [2].
+>>>
+>>> [1]
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/include/linux/clk.h?id=b88c9f4129dcec941e5a26508e991c08051ed1ac
+>>>
+>>> [2] https://lists.01.org/pipermail/kbuild-all/2019-April/060292.html
+>>>
+>>> So this patch looks wrong to me because apparently it fixes a non-existent problem.
+>>>
+>>
+>> Oh, wait. That was "implicit declaration" and this one is "undefined reference"!
+>> Still looks like something else need to be fixed..
+> 
+> The stub takes care of the case where there is no CLK support at all, i.e.
+> CONFIG_HAVE_CLK is disabled. However, some older ARM platforms
+> still have a custom implementation of the API and lack clk_set_min_rate().
+> 
+> $ git grep -l 'EXPORT_SYMBOL.*\<clk_set_rate\>'  | xargs grep -L
+> clk_set_min_rate
+> arch/arm/mach-ep93xx/clock.c
+> arch/arm/mach-mmp/clock.c
+> arch/arm/mach-omap1/clock.c
+> arch/arm/mach-sa1100/clock.c
+> arch/arm/mach-w90x900/clock.c
+> arch/c6x/platforms/pll.c
+> arch/m68k/coldfire/clk.c
+> arch/mips/ar7/clock.c
+> arch/mips/bcm63xx/clk.c
+> arch/mips/lantiq/clk.c
+> arch/mips/loongson64/lemote-2f/clock.c
+> arch/mips/ralink/clk.c
+> arch/unicore32/kernel/clock.c
+> drivers/sh/clk/core.c
+> 
+> We could in theory convert all of those to COMMON_CLK, or simply add
+> a dummy clk_set_min_rate() for each one, but since there is only one user,
+> my fix was simpler.
 
-While those directories could likely be moved to be inside some guide,
-I'm opting to just adding their indexes to the main one, removing the
-:orphan: and adding the SPDX header.
+Okay, thank you for the clarification. Looks like "Tegra30 DEVFREQ" should cause the
+same trouble for you as well then.
 
-For the drivers, the rationale is that the documentation contains
-a mix of Kernelspace, uAPI and admin-guide. So, better to keep them on
-separate directories, as we've be doing with similar subsystem-specific
-docs that were not split yet.
-
-For the others, well... I'm too lazy to do the move. Also, it
-seems to make sense to keep at least some of those at the main
-dir (like kbuild, for example). In any case, a latter patch
-could do the move.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
----
- Documentation/cdrom/index.rst           |  2 +-
- Documentation/fault-injection/index.rst |  2 +-
- Documentation/fb/index.rst              |  2 +-
- Documentation/fpga/index.rst            |  2 +-
- Documentation/ide/index.rst             |  2 +-
- Documentation/index.rst                 | 14 ++++++++++++++
- Documentation/kbuild/index.rst          |  2 +-
- Documentation/livepatch/index.rst       |  2 +-
- Documentation/netlabel/index.rst        |  2 +-
- Documentation/pcmcia/index.rst          |  2 +-
- Documentation/power/index.rst           |  2 +-
- Documentation/target/index.rst          |  2 +-
- Documentation/timers/index.rst          |  2 +-
- Documentation/watchdog/index.rst        |  2 +-
- 14 files changed, 27 insertions(+), 13 deletions(-)
-
-diff --git a/Documentation/cdrom/index.rst b/Documentation/cdrom/index.rst
-index efbd5d111825..338ad5f94e7c 100644
---- a/Documentation/cdrom/index.rst
-+++ b/Documentation/cdrom/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- =====
- cdrom
-diff --git a/Documentation/fault-injection/index.rst b/Documentation/fault-injection/index.rst
-index 92b5639ed07a..8408a8a91b34 100644
---- a/Documentation/fault-injection/index.rst
-+++ b/Documentation/fault-injection/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ===============
- fault-injection
-diff --git a/Documentation/fb/index.rst b/Documentation/fb/index.rst
-index d47313714635..baf02393d8ee 100644
---- a/Documentation/fb/index.rst
-+++ b/Documentation/fb/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ============
- Frame Buffer
-diff --git a/Documentation/fpga/index.rst b/Documentation/fpga/index.rst
-index 2c87d1ea084f..f80f95667ca2 100644
---- a/Documentation/fpga/index.rst
-+++ b/Documentation/fpga/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ====
- fpga
-diff --git a/Documentation/ide/index.rst b/Documentation/ide/index.rst
-index 45bc12d3957f..813dfe611a31 100644
---- a/Documentation/ide/index.rst
-+++ b/Documentation/ide/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ==================================
- Integrated Drive Electronics (IDE)
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index e69d2fde7735..075c732501a2 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -35,6 +35,7 @@ trying to get it to work optimally on a given system.
-    :maxdepth: 2
- 
-    admin-guide/index
-+   kbuild/index
- 
- Firmware-related documentation
- ------------------------------
-@@ -77,6 +78,9 @@ merged much easier.
-    kernel-hacking/index
-    trace/index
-    maintainer/index
-+   fault-injection/index
-+   livepatch/index
-+
- 
- Kernel API documentation
- ------------------------
-@@ -94,12 +98,22 @@ needed).
-    core-api/index
-    accounting/index
-    block/index
-+   cdrom/index
-+   ide/index
-+   fb/index
-+   fpga/index
-    hid/index
-    iio/index
-    infiniband/index
-    leds/index
-    media/index
-+   netlabel/index
-    networking/index
-+   pcmcia/index
-+   power/index
-+   target/index
-+   timers/index
-+   watchdog/index
-    input/index
-    hwmon/index
-    gpu/index
-diff --git a/Documentation/kbuild/index.rst b/Documentation/kbuild/index.rst
-index 42d4cbe4460c..e323a3f2cc81 100644
---- a/Documentation/kbuild/index.rst
-+++ b/Documentation/kbuild/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ===================
- Kernel Build System
-diff --git a/Documentation/livepatch/index.rst b/Documentation/livepatch/index.rst
-index edd291d51847..17674a9e21b2 100644
---- a/Documentation/livepatch/index.rst
-+++ b/Documentation/livepatch/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ===================
- Kernel Livepatching
-diff --git a/Documentation/netlabel/index.rst b/Documentation/netlabel/index.rst
-index 47f1e0e5acd1..984e1b191b12 100644
---- a/Documentation/netlabel/index.rst
-+++ b/Documentation/netlabel/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ========
- NetLabel
-diff --git a/Documentation/pcmcia/index.rst b/Documentation/pcmcia/index.rst
-index 779c8527109e..7ae1f62fca14 100644
---- a/Documentation/pcmcia/index.rst
-+++ b/Documentation/pcmcia/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ======
- pcmcia
-diff --git a/Documentation/power/index.rst b/Documentation/power/index.rst
-index 20415f21e48a..002e42745263 100644
---- a/Documentation/power/index.rst
-+++ b/Documentation/power/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ================
- Power Management
-diff --git a/Documentation/target/index.rst b/Documentation/target/index.rst
-index b68f48982392..4b24f81f747e 100644
---- a/Documentation/target/index.rst
-+++ b/Documentation/target/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ==================
- TCM Virtual Device
-diff --git a/Documentation/timers/index.rst b/Documentation/timers/index.rst
-index 91f6f8263c48..df510ad0c989 100644
---- a/Documentation/timers/index.rst
-+++ b/Documentation/timers/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ======
- timers
-diff --git a/Documentation/watchdog/index.rst b/Documentation/watchdog/index.rst
-index 33a0de631e84..c177645081d8 100644
---- a/Documentation/watchdog/index.rst
-+++ b/Documentation/watchdog/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ======================
- Linux Watchdog Support
--- 
-2.21.0
-
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
