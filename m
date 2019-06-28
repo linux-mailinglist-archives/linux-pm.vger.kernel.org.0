@@ -2,133 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB0F59464
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 08:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F077B5949F
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jun 2019 09:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727195AbfF1GtS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jun 2019 02:49:18 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39403 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726648AbfF1GtR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 02:49:17 -0400
-Received: by mail-pl1-f195.google.com with SMTP id b7so2689359pls.6
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jun 2019 23:49:17 -0700 (PDT)
+        id S1726830AbfF1HMe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jun 2019 03:12:34 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:43656 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbfF1HMd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jun 2019 03:12:33 -0400
+Received: by mail-lj1-f196.google.com with SMTP id 16so4887475ljv.10;
+        Fri, 28 Jun 2019 00:12:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vPhgOlnnCB9ywYOBqb6XWPEQoBI2y0wpZimTNVlxq94=;
-        b=xlQEkY8FiSYP5T8Sr+fiSBjHesc/PjqUa14hg77RnJh0y29/YUP67po1FtaWYwrHM6
-         A62F01aq9JawXlETdcaGGw0NdKmU19nBDaw3yEa68LMQMRv+B+4yAq1I90Nio+xQ6sEt
-         o/0d8Rlt+SS0ROHur5wxPvffwvasNpbObHNsnG4dFNCoLygibKECrxmkqhvImDEUDQnp
-         Wc/V4es3nOA9lNVxFB5HEQKA5Y5O0B+LEDIfk2XXHuJG7Pr1KcY7dli+FjHxkNgyHNpE
-         nwLrkUmsr2SKdemi+zTyitOdMnjSCIYLog3E6PFg4vDnDoZTT0btNePuX+fMVzDFvBix
-         P0Kw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/Cnt58VZhnbwSwijmz21auc9Yvj4p4PpT3m36ds3sv8=;
+        b=RrGS2HZmYNW9Ve83uiayxQophGE2uHC1aW4PDfa9c5x47p2qEWlqVH6UxPRCJpS/ne
+         6KcEizG2I2gHxL7QqRM6H9yvQF2/blA0KZ5aO70FtU27Zun5S3ilMHk70QMpqbLpI/ly
+         uUbq54hToRVCcgo6vY1P4Ubv6J5n5pUhsAC1R9AIMTReADwYhf7nWMqLuTtV5JIxEz1K
+         QdCfKSggPQoB135iMe/d2DPhvVMm7rH6U17BQndqPplv9grygtm11YYftN/0P0JARFSs
+         hMbKFPHQ3woMemiMs6cM958UNgTR2VsgnxM7R6jd58aQOpxEqx2X3rC8jNgVy6898kEl
+         uN+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vPhgOlnnCB9ywYOBqb6XWPEQoBI2y0wpZimTNVlxq94=;
-        b=lmBVhehhdlj2M6sV2Ezjhenb455rqQnzpg/Qac6SoIih/3pJK/sh4M9UAHSOD4aQrw
-         mDm3alUIFUKIbUPS4MAoJM1C1iAZdKTogozjtnmOlkSPhW5yjJiF7uWNMc7/MuH0YE9e
-         TWTdb5yHHRCARGnM5kQSi4/3+v8mFXfTpQmUlHYwMydOT2Tbnoq5SIHjMs/PeXBJ7Epu
-         utM6gHmISEjNIZKLH4yTVGgANVAJkG9TkxPMeKnjOO11qNMBa2kYbfk9h8RAn80tYdeU
-         LXIk++32aZPLH3L6ng+UaDAO7UDpsgZSwHETQL2sf7yR/k8R9F9jqkkSYaGQLUkpfxN6
-         d1/Q==
-X-Gm-Message-State: APjAAAWrWVzITZ4OXjNxxK/q1LlnfRI3ff3pzOCytHEQMYfxxYH6G9IA
-        I2XqP/dP+UO31bIGLzJk3wfeNA==
-X-Google-Smtp-Source: APXvYqyNvvDrhAXq/jq9bYxrggpCt4lHHPhkqneujqN2UIMLKeg9OegNN6US7peiZQLxZLxm2WqDnw==
-X-Received: by 2002:a17:902:6a88:: with SMTP id n8mr9651454plk.70.1561704557101;
-        Thu, 27 Jun 2019 23:49:17 -0700 (PDT)
-Received: from localhost ([122.172.211.128])
-        by smtp.gmail.com with ESMTPSA id j5sm1223710pfi.104.2019.06.27.23.49.15
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/Cnt58VZhnbwSwijmz21auc9Yvj4p4PpT3m36ds3sv8=;
+        b=TPccTSZOavxue/ShZ5Y/DOjYu3cQlLCD1TcP32KW1l/Z/rDNIsYFQZK6WJk9X7GHHK
+         1tG6bbg9vhz6SGqtuOO9pVAO8AxyYr1E8jUF5tAIgypUxxmQSanvqneGKCN6yj3JfWjI
+         6BTWps0Q6Gzf++NWsW+fPC5G36yzvrGKzrdJchmQpNk0SHDGT018jvVAgZ8QFePmny3C
+         rnAsDgvEs6RBZDNE4SlYQf6D/0xyzHvHtdiGcVRYzMdozRVI1MNwjUAlyV/Yz1ECMWsz
+         h01dgfvMMH2bLEefwd31pWH8J+wEv6/DPzLSqjYR2t5b8uNakVDnrUdHgbu/48hnvejK
+         Mxug==
+X-Gm-Message-State: APjAAAWXCTmJhKhtmtevKzbbCZ9Cht0NDOR+nWC2NSk6EjDs+c58zJaN
+        b94F5u3tEVp+maaZsVPbac7TAwuh
+X-Google-Smtp-Source: APXvYqx1jBOeBmJ+grvlgQb5D6Tzkz3PENoKFpwqzfzsIWiNEJlLF/GnRT+yY6B8gpiIAqVHv+OQ8w==
+X-Received: by 2002:a2e:2c07:: with SMTP id s7mr5210551ljs.44.1561705951312;
+        Fri, 28 Jun 2019 00:12:31 -0700 (PDT)
+Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
+        by smtp.googlemail.com with ESMTPSA id v7sm459505ljj.3.2019.06.28.00.12.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 23:49:16 -0700 (PDT)
-Date:   Fri, 28 Jun 2019 12:19:14 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Fri, 28 Jun 2019 00:12:30 -0700 (PDT)
+Subject: Re: [PATCH v3 02/22] PM / devfreq: tegra30: Keep interrupt disabled
+ while governor is stopped
+To:     myungjoo.ham@samsung.com,
+        Thierry Reding <thierry.reding@gmail.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 0/3] Add required-opps support to devfreq passive gov
-Message-ID: <20190628064914.4nu6ql7f7h7o4iul@vireshk-i7>
-References: <20190622003449.33707-1-saravanak@google.com>
- <20190624094349.rtjb7nuv6g7zmsf2@vireshk-i7>
- <CAGETcx_ggG8oDnAVaSfuHfip1ozjQpFiGs15cz8nLQnzjTiSTg@mail.gmail.com>
- <20190625041054.2ceuvnuuebc6hsr5@vireshk-i7>
- <CAGETcx8MuXkQyD5qZBC948-hOu=kWd4hPk2Qiu-zWOcHBCc=FA@mail.gmail.com>
- <20190625052227.3v74l6xtrkydzx6w@vireshk-i7>
- <CAGETcx_v05PfscMi2qiYwHRMLryyA_494+h+kmJ3mD+GOjjeLA@mail.gmail.com>
- <20190626063240.kgdiy7xsz4mahrdr@vireshk-i7>
- <CAGETcx_KH6pqgqZFKddWmgiUX3n+XBU6BoFXkVvPdA4vMDHWsw@mail.gmail.com>
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20190627211115.21138-3-digetx@gmail.com>
+ <20190627211115.21138-1-digetx@gmail.com>
+ <CGME20190627211230epcas5p2504c225e67a823a586768a2749248b72@epcms1p3>
+ <20190628064842epcms1p37e66e5fa52885ef7461b439bd336e60f@epcms1p3>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <17fe0599-b36e-31bc-4964-4b7cb77e1d64@gmail.com>
+Date:   Fri, 28 Jun 2019 10:12:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx_KH6pqgqZFKddWmgiUX3n+XBU6BoFXkVvPdA4vMDHWsw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20190628064842epcms1p37e66e5fa52885ef7461b439bd336e60f@epcms1p3>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-06-19, 11:10, Saravana Kannan wrote:
-> On Tue, Jun 25, 2019 at 11:32 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-
-> > So, when a CPU changes frequency, we must change the performance state
-> > of PM domain and change frequency/bw of the cache synchronously.
+28.06.2019 9:48, MyungJoo Ham пишет:
+>> There is no real need to keep interrupt always-enabled, will be nicer
+>> to keep it disabled while governor is inactive.
+>>
+>> Suggested-by: Thierry Reding <thierry.reding@gmail.com>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>> drivers/devfreq/tegra30-devfreq.c | 43 ++++++++++++++++---------------
+>> 1 file changed, 22 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+>> index a27300f40b0b..5e2b133babdd 100644
+>> --- a/drivers/devfreq/tegra30-devfreq.c
+>> +++ b/drivers/devfreq/tegra30-devfreq.c
+> []
+>> @@ -416,8 +417,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
+>> {
+>> 	unsigned int i;
+>>
+>> -	disable_irq(tegra->irq);
+>> -
+>> 	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
+>> 		      ACTMON_GLB_PERIOD_CTRL);
+>>
 > 
-> I mean, it's going to be changed when we get the CPUfreq transition
-> notifiers. From a correctness point of view, setting it inside the OPP
-> framework is not any better than doing it when we get the notifiers.
-
-That's what the problem is. All maintainers now a days ask people to
-stay away from notifiers and we are making that base of another new
-thing we are starting.
-
-Over that, with many cpufreq drivers we have fast switching enabled
-and notifiers disabled. How will they make these things work ? We
-still want to scale L3 in those cases as well.
-
-> I see this as "required for good performance". So I don't see it as
-> redefining required-opps. If someone wants good performance/power
-> balance they follow the "required-opps". Technically even the PM
-> pstates are required for good power. Otherwise, the system could leave
-> the voltage at max and stuff would still work.
+> I think this has nothing to do with
+> "keep it disabled while governor is inactive."
 > 
-> Also, the slave device might need to get input from multiple master
-> devices and aggregate the request before setting the slave device
-> frequency. So I don't think OPP  framework would be the right place to
-> deal with those things. For example, L3 might (will) have different
-> mappings for big vs little cores. So that needs to be aggregated and
-> set properly by the slave device driver. Also, GPU might have a
-> mapping for L3 too. In which case the L3 slave driver needs to take
-> input from even more masters before it decides its frequency. But most
-> importantly, we still need the ability to change governors for L3.
-> Again these are just examples with L3 and it can get more complicated
-> based on the situation.
-> 
-> Most importantly, instead of always going by mapping, one might decide
-> to scale the L3 based on some other governor (that looks at some HW
-> counter). Or just set it to performance governor for a use case for
-> which performance is more important. All of this comes for free with
-> devfreq and if we always set it from OPP framework we don't give this
-> required control to userspace.
-> 
-> I think going through devfreq is the right approach for this. And we
-> can always rewrite the software if we find problems in the future. But
-> as it stands today, this will help cases like exynos without the need
-> for a lot of changes. Hope I've convinced you.
+> And this looks dangerous because it disables the safety measure
+> of disabling interrupt while you touch some looking-critical registers.
+> Anyway, as I do not know the internals of Tegra SoC, I cannot sure.
 
-I understand the aggregation thing and fully support that the
-aggregation can't happen in OPP core and must be done somewhere else.
-But the input can go from OPP core while the frequency is changing,
-isn't it ?
-
--- 
-viresh
+Sorry, I'm not sure what do you mean .. Before this patch we were disabling the
+interrupt on a start of programming hardware configuration, now we don't needed to
+disable the interrupt because it is already in the disabled state at that moment
+since we're now requesting interrupt in the *disabled* state during of the driver's
+probe using IRQ_NOAUTOEN flag.
