@@ -2,67 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6113B5B047
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jun 2019 17:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1645F5B04C
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jun 2019 17:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726738AbfF3PDM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jun 2019 11:03:12 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:39723 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726500AbfF3PDM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jun 2019 11:03:12 -0400
-Received: by mail-qk1-f196.google.com with SMTP id i125so9034928qkd.6;
-        Sun, 30 Jun 2019 08:03:11 -0700 (PDT)
+        id S1726798AbfF3PDQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jun 2019 11:03:16 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:33918 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726500AbfF3PDQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jun 2019 11:03:16 -0400
+Received: by mail-qt1-f193.google.com with SMTP id m29so11928229qtu.1;
+        Sun, 30 Jun 2019 08:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UtkecUl94WZUWVyLIbg41zPL4XOnGr9FinN/AjQ9do0=;
-        b=bgoeXIm2Szb7H23F1xIuOV/OvrFFy4Z/4Z0LEr6zIOkjv9PUlSVyyIiIVoUnNQaW8Q
-         cafpxW5/ZXUIYGeRvkXt4qZICIMaH2o+0zNqueBWKrkmrXfN57tKIlDyT1Yh+y1ay5v2
-         zvN5vBXY57R5bCr/DfN5c62hyqHT+WV8C0cAxaZEoxbOCjKjvFomRHB7qf47grSh6HTs
-         tZo179xphOFk9zBbCEgXJ+L4BIgMwmEVwGIaExH+6eE4DCHzqTWCQuhd33+N9n/PrQwj
-         PmNmj0Fi1fdqzDqg7RjZXUXshd5SMg+oEeyEwBG5SnPiettac8xLsBb1dFjL8YMVyQEx
-         y2ng==
+        bh=RWe1N3LG/0qF/4OtUPg5KudfEZRgRNv8F1jllSBzO58=;
+        b=ffrROOTrYan4x30i16kRzeRZh0cNY1tR6zoQHYUxePgn0RD9arBQo0wHXqQS24AEO6
+         z/yAVqI8q8G78Fg6d+1EUBN8UmExk2L1ugT6WNCVJALHVq01478i2+l1I2OsTqluOTvA
+         hnUGXEUyh87ggaQ3r/9ItW5b4I1Kwg9/BxMmb+QqZfOz9+FOqBAvZwzWf6ScwuaMYKAo
+         FQHpWCWZ8a8g/vHHXP38B6zewBop6StVjcS7RpIqxbEZlvtQHBQp0LLU8yWS7KWrdxue
+         /Be2CIgOEwZ7ZYds7RkxeMFKCKVGQlqgebZ+v8Fs5+o6G3Ci8sa/+d+uWVzXQkc8J1nt
+         D3Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UtkecUl94WZUWVyLIbg41zPL4XOnGr9FinN/AjQ9do0=;
-        b=ptY7dF8vOvYC6HBuMtdDnrZROM0/nYF19Jc3VUdT/SE7r1Sm+EbUZgLtThzMYoZnEI
-         yY55ATYdgqGfIS7rMH29WvE4Qihu0MZfTKWjKAUSw4QefqSw55CKCsKW0X7q89RtQQwc
-         JqwnNZjUrovf5Jeiklsr7WJOg1BHJyzn3R6glB3xnp0FgaVRG9i8MLmN2CtGOaosjb6e
-         mvkOWqrJ4BsK7Q2S5VqZ/8rNnV+qZIlxc9tYlTa2KQAoF5Zv8uWSeHDh8Ze2ZUs+r05q
-         znBmDIdxkKQC4hpPptU/N8uUxfWCTk4twgK+8cSgp4SlbmvjwDu/BKfmoHpXb2dPP11E
-         nXcA==
-X-Gm-Message-State: APjAAAXSsPtl1FWjHZ8UUh3KAgHMCJhBhUQXi8yGFh75daMyRFGQ9NjD
-        abSPZBPo8yJI1foI3Bb93nQ=
-X-Google-Smtp-Source: APXvYqzb7VEqdJN3zMk22jED6mEzBTBoZp0mQsZB6WSr/6mKWnavlfT0+rulViFI0nHFDxdAaJYyMA==
-X-Received: by 2002:a37:9506:: with SMTP id x6mr17139922qkd.107.1561906990902;
-        Sun, 30 Jun 2019 08:03:10 -0700 (PDT)
+        bh=RWe1N3LG/0qF/4OtUPg5KudfEZRgRNv8F1jllSBzO58=;
+        b=C9fIaLsLPzbfWfK5B6MQY1WGvN2/N+OJcz/M5CGlikRXWXU3xHP1N/g2LDX1xdkj9O
+         7gcYBZiaGTAwK/wcIeQ6DGuV65EYCOUzG5mWYnpkr7yyxIM1o2GUcMM8uHUFyWodyw6I
+         E645DS+u/R5onaCi7n7vlEBfW6nJIZE6Dq3boIwr1+HzvtCCGvvJNCfX5A0+UDx5/9DZ
+         WwtBFnXk84rpjTtWaQdcQF8CsgobiGC6vEJzSMCdkpVlDt3pMCUmARhu1Fj8iAPbUR43
+         kU2otdPRs8iKETzxFdOOghRY74qN6iiW5PB9xgkX/XDY+Ju9zr+7tv28wFsMAKUf/DVn
+         GZlg==
+X-Gm-Message-State: APjAAAVLxdlcDVA47XlUiTXgg43NzN4ZuiQ/wtKXkzmnr2Kp3ftP7O3B
+        TZoEsaJqfiFSFFc47fd54L8=
+X-Google-Smtp-Source: APXvYqw+jlFz4lc9QWDni/7uD8aWjy+oIsfuvaIWeBwdqBoQFL00TSoQqCRML6G+VV/wap1Zdd6izw==
+X-Received: by 2002:ac8:2b51:: with SMTP id 17mr16313957qtv.206.1561906994849;
+        Sun, 30 Jun 2019 08:03:14 -0700 (PDT)
 Received: from localhost ([2601:184:4780:7861:5010:5849:d76d:b714])
-        by smtp.gmail.com with ESMTPSA id j25sm3431572qkk.53.2019.06.30.08.03.10
+        by smtp.gmail.com with ESMTPSA id l40sm4242251qtc.51.2019.06.30.08.03.14
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 30 Jun 2019 08:03:10 -0700 (PDT)
+        Sun, 30 Jun 2019 08:03:14 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
 Cc:     freedreno@lists.freedesktop.org, aarch64-laptops@lists.linaro.org,
         linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
         Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
         David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Mamta Shukla <mamtashukla555@gmail.com>,
-        Chandan Uddaraju <chandanu@codeaurora.org>,
-        Archit Taneja <architt@codeaurora.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] drm/msm/dsi: get the clocks into OFF state at init
-Date:   Sun, 30 Jun 2019 08:01:42 -0700
-Message-Id: <20190630150230.7878-5-robdclark@gmail.com>
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+Subject: [PATCH 5/5] drm/bridge: ti-sn65dsi86: support booloader enabled display
+Date:   Sun, 30 Jun 2019 08:01:43 -0700
+Message-Id: <20190630150230.7878-6-robdclark@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190630150230.7878-1-robdclark@gmail.com>
 References: <20190630150230.7878-1-robdclark@gmail.com>
@@ -75,97 +68,58 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Do an extra enable/disable cycle at init, to get the clks into disabled
-state in case bootloader left them enabled.
+Request the enable gpio ASIS to avoid disabling bridge during probe, if
+already enabled.  And if already enabled, defer enabling runpm until
+attach to avoid cutting off the power to the bridge.
 
-In case they were already enabled, the clk_prepare_enable() has no real
-effect, other than getting the enable_count/prepare_count into the right
-state so that we can disable clocks in the correct order.  This way we
-avoid having stuck clocks when we later want to do a modeset and set the
-clock rates.
+Once we get to attach, we know panel and drm driver are probed
+successfully, so at this point it i s safe to enable runpm and reset the
+bridge.  If we do it earlier, we kill efifb (in the case that panel or
+drm driver do not probe successfully, giving the user no way to see what
+is going on.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/msm/dsi/dsi_host.c         | 18 +++++++++++++++---
- drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c |  1 +
- 2 files changed, 16 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 87119d0afb91..d6e81f330db4 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -215,8 +215,6 @@ static const struct msm_dsi_cfg_handler *dsi_get_config(
- 		goto put_gdsc;
- 	}
+diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+index 7a046bcdd81b..8bdc33576992 100644
+--- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
++++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+@@ -257,6 +257,12 @@ static int ti_sn_bridge_attach(struct drm_bridge *bridge)
+ 						   .node = NULL,
+ 						 };
  
--	pm_runtime_get_sync(dev);
--
- 	ret = regulator_enable(gdsc_reg);
- 	if (ret) {
- 		pr_err("%s: unable to enable gdsc\n", __func__);
-@@ -243,7 +241,6 @@ static const struct msm_dsi_cfg_handler *dsi_get_config(
- 	clk_disable_unprepare(ahb_clk);
- disable_gdsc:
- 	regulator_disable(gdsc_reg);
--	pm_runtime_put_sync(dev);
- put_gdsc:
- 	regulator_put(gdsc_reg);
- exit:
-@@ -390,6 +387,8 @@ static int dsi_clk_init(struct msm_dsi_host *msm_host)
- 				__func__, cfg->bus_clk_names[i], ret);
- 			goto exit;
- 		}
++	if (gpiod_get_value(pdata->enable_gpio)) {
++		pm_runtime_enable(pdata->dev);
++		ti_sn_bridge_resume(pdata->dev);
++		ti_sn_bridge_suspend(pdata->dev);
++	}
 +
-+		clk_prepare_enable(msm_host->bus_clks[i]);
- 	}
+ 	ret = drm_connector_init(bridge->dev, &pdata->connector,
+ 				 &ti_sn_bridge_connector_funcs,
+ 				 DRM_MODE_CONNECTOR_eDP);
+@@ -813,7 +819,7 @@ static int ti_sn_bridge_probe(struct i2c_client *client,
+ 	dev_set_drvdata(&client->dev, pdata);
  
- 	/* get link and source clocks */
-@@ -436,6 +435,16 @@ static int dsi_clk_init(struct msm_dsi_host *msm_host)
+ 	pdata->enable_gpio = devm_gpiod_get(pdata->dev, "enable",
+-					    GPIOD_OUT_LOW);
++					    GPIOD_ASIS);
+ 	if (IS_ERR(pdata->enable_gpio)) {
+ 		DRM_ERROR("failed to get enable gpio from DT\n");
+ 		ret = PTR_ERR(pdata->enable_gpio);
+@@ -843,7 +849,9 @@ static int ti_sn_bridge_probe(struct i2c_client *client,
+ 	if (ret)
+ 		return ret;
  
- 	if (cfg_hnd->ops->clk_init_ver)
- 		ret = cfg_hnd->ops->clk_init_ver(msm_host);
-+
-+	/*
-+	 * Do an extra enable/disable sequence initially to ensure the
-+	 * clocks are actually off, if left enabled by bootloader..
-+	 */
-+	ret = cfg_hnd->ops->link_clk_enable(msm_host);
-+	if (!ret)
-+		cfg_hnd->ops->link_clk_disable(msm_host);
-+	ret = 0;
-+
- exit:
- 	return ret;
- }
-@@ -1855,6 +1864,7 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
- 	}
+-	pm_runtime_enable(pdata->dev);
++	if (!gpiod_get_value(pdata->enable_gpio)) {
++		pm_runtime_enable(pdata->dev);
++	}
  
- 	pm_runtime_enable(&pdev->dev);
-+	pm_runtime_get_sync(&pdev->dev);
+ 	i2c_set_clientdata(client, pdata);
  
- 	msm_host->cfg_hnd = dsi_get_config(msm_host);
- 	if (!msm_host->cfg_hnd) {
-@@ -1885,6 +1895,8 @@ int msm_dsi_host_init(struct msm_dsi *msm_dsi)
- 		goto fail;
- 	}
- 
-+	pm_runtime_put_sync(&pdev->dev);
-+
- 	msm_host->rx_buf = devm_kzalloc(&pdev->dev, SZ_4K, GFP_KERNEL);
- 	if (!msm_host->rx_buf) {
- 		ret = -ENOMEM;
-diff --git a/drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c b/drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c
-index aabab6311043..d0172d8db882 100644
---- a/drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c
-+++ b/drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c
-@@ -354,6 +354,7 @@ static int dsi_pll_10nm_lock_status(struct dsi_pll_10nm *pll)
- 	if (rc)
- 		pr_err("DSI PLL(%d) lock failed, status=0x%08x\n",
- 		       pll->id, status);
-+rc = 0; // HACK, this will fail if PLL already running..
- 
- 	return rc;
- }
 -- 
 2.20.1
 
