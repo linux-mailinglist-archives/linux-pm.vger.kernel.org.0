@@ -2,90 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 765E45C325
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 20:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B5D5C34A
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 20:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726927AbfGASjx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 14:39:53 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:52586 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726316AbfGASjx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 14:39:53 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 8C0E36028D; Mon,  1 Jul 2019 18:39:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1562006392;
-        bh=ecZCP0Nl2MvYdNc2PJ+G+AX8dhZHCBiv1DZ4bQurLhc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=K/7usMnyAV2CIYxBNfXpgHdLeUMcCsknMVpBP35DHG2V+UP+hO6D8curADy8aiAft
-         Biu1fmmU9WljiNeyT/cLwG5iLPqK5kqaB/H4nusUnygVqhPI3PtNMPrIK7+/N5IFZW
-         jRWgCBNuydCHB+iRf1NFKq/nLZBES/g5zvsrkysw=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.226.58.28] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726652AbfGAS53 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 14:57:29 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:33666 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726576AbfGAS53 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 1 Jul 2019 14:57:29 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: jhugo@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 940AD6028D;
-        Mon,  1 Jul 2019 18:39:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1562006391;
-        bh=ecZCP0Nl2MvYdNc2PJ+G+AX8dhZHCBiv1DZ4bQurLhc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=OlYrV+PUD/QozjpxBy2p/EieCA4QwtgFpf13ybP2lZ1OJzn7NTcA4yuynVe5574ii
-         Iqwo5W9FnzbP1OnSrgw4D0AjS7DcxVksD6f56ry8riJziBcSajIse6WrviiA8RxFn9
-         sBdm4CuecGHdplapbI7tQsVpd006yMuIWj0OknR0=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 940AD6028D
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jhugo@codeaurora.org
-Subject: Re: [PATCH 5/5] drm/bridge: ti-sn65dsi86: support booloader enabled
- display
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     freedreno@lists.freedesktop.org, aarch64-laptops@lists.linaro.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-References: <20190630150230.7878-1-robdclark@gmail.com>
- <20190630150230.7878-6-robdclark@gmail.com>
-From:   Jeffrey Hugo <jhugo@codeaurora.org>
-Message-ID: <a40e7406-892b-f3be-f309-8857085ff3c5@codeaurora.org>
-Date:   Mon, 1 Jul 2019 12:39:49 -0600
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20190630150230.7878-6-robdclark@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        by mx1.redhat.com (Postfix) with ESMTPS id C40178112C;
+        Mon,  1 Jul 2019 18:57:27 +0000 (UTC)
+Received: from amt.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 717C417108;
+        Mon,  1 Jul 2019 18:57:27 +0000 (UTC)
+Received: from amt.cnet (localhost [127.0.0.1])
+        by amt.cnet (Postfix) with ESMTP id A363E105141;
+        Mon,  1 Jul 2019 15:56:49 -0300 (BRT)
+Received: (from marcelo@localhost)
+        by amt.cnet (8.14.7/8.14.7/Submit) id x61Iuf3Q028547;
+        Mon, 1 Jul 2019 15:56:41 -0300
+Message-ID: <20190701185310.540706841@asus.localdomain>
+User-Agent: quilt/0.66
+Date:   Mon, 01 Jul 2019 15:53:10 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     kvm@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Radim Krcmar <rkrcmar@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Wanpeng Li <kernellwp@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Raslan KarimAllah <karahmed@amazon.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: [patch 0/5] cpuidle haltpoll driver and governor (v5)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Mon, 01 Jul 2019 18:57:29 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/30/2019 9:01 AM, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Request the enable gpio ASIS to avoid disabling bridge during probe, if
-> already enabled.  And if already enabled, defer enabling runpm until
-> attach to avoid cutting off the power to the bridge.
-> 
-> Once we get to attach, we know panel and drm driver are probed
-> successfully, so at this point it i s safe to enable runpm and reset the
+The cpuidle-haltpoll driver with haltpoll governor allows the guest
+vcpus to poll for a specified amount of time before halting.
+This provides the following benefits to host side polling:
 
-is?
+         1) The POLL flag is set while polling is performed, which allows
+            a remote vCPU to avoid sending an IPI (and the associated
+            cost of handling the IPI) when performing a wakeup.
 
-> bridge.  If we do it earlier, we kill efifb (in the case that panel or
-> drm driver do not probe successfully, giving the user no way to see what
-> is going on.
+         2) The VM-exit cost can be avoided.
 
-Where should the missing ")" be?
+The downside of guest side polling is that polling is performed
+even with other runnable tasks in the host.
+
+Results comparing halt_poll_ns and server/client application
+where a small packet is ping-ponged:
+
+host                                        --> 31.33
+halt_poll_ns=300000 / no guest busy spin    --> 33.40   (93.8%)
+halt_poll_ns=0 / guest_halt_poll_ns=300000  --> 32.73   (95.7%)
+
+For the SAP HANA benchmarks (where idle_spin is a parameter
+of the previous version of the patch, results should be the
+same):
+
+hpns == halt_poll_ns
+
+                           idle_spin=0/   idle_spin=800/    idle_spin=0/
+                           hpns=200000    hpns=0            hpns=800000
+DeleteC06T03 (100 thread) 1.76           1.71 (-3%)        1.78   (+1%)
+InsertC16T02 (100 thread) 2.14           2.07 (-3%)        2.18   (+1.8%)
+DeleteC00T01 (1 thread)   1.34           1.28 (-4.5%)	   1.29   (-3.7%)
+UpdateC00T03 (1 thread)   4.72           4.18 (-12%)	   4.53   (-5%)
+
+V2:
+
+- Move from x86 to generic code (Paolo/Christian)
+- Add auto-tuning logic (Paolo)
+- Add MSR to disable host side polling (Paolo)
+
+V3:
+
+- Do not be specific about HLT VM-exit in the documentation (Ankur Arora)
+- Mark tuning parameters static and __read_mostly (Andrea Arcangeli)
+- Add WARN_ON if host does not support poll control (Joao Martins)
+- Use sched_clock and cleanup haltpoll_enter_idle (Peter Zijlstra)
+- Mark certain functions in kvm.c as static (kernel test robot)
+- Remove tracepoints as they use RCU from extended quiescent state (kernel
+test robot)
+
+V4:
+- Use a haltpoll governor, use poll_state.c poll code (Rafael J. Wysocki)
+
+V5:
+- Take latency requirement into consideration (Rafael J. Wysocki)
+- Set target_residency/exit_latency to 1 (Rafael J. Wysocki)
+- Do not load cpuidle driver if not virtualized (Rafael J. Wysocki)
 
 
