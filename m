@@ -2,216 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C09175BDC9
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 16:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904A85BE2D
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 16:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729443AbfGAONQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 10:13:16 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37934 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbfGAONQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 10:13:16 -0400
-Received: by mail-pg1-f194.google.com with SMTP id z75so6131491pgz.5;
-        Mon, 01 Jul 2019 07:13:16 -0700 (PDT)
+        id S1729612AbfGAOZw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 10:25:52 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:38831 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729532AbfGAOZw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 10:25:52 -0400
+Received: by mail-vs1-f68.google.com with SMTP id k9so9021339vso.5;
+        Mon, 01 Jul 2019 07:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=scZ5GnTV8I7bOvJ6lzl+PSHZYfBr3KBNNf2b3zoQP2M=;
-        b=IEW5Alr41ArZ5PfR+ZqGq0LtqjgRi1vEzrncCFpZ2J2dKJ8NTr8sdMEgJt0IO7HSYM
-         4nEtEY8karNOZGxFWHFngFBMgxNTzEkzn9ZZkIC78JCn98lI+WHi1lBYNpMKFd5lvLgE
-         6NvF06MwOlVup0WmvGqPcbV434RTmQtkILrHGbX6NYvZSINpIAlnBRLuSJhEty/5G5TH
-         DQWzLZZh5yuYPOIYedNXa+PwfksTl0OJpbYVRh87WS5sheBfiDo5B2G4nLiz8rZ+VX0m
-         kVssbS4cP845QmDUGproNkaz3TGQgaNSl1s4QWJp1yGl5swG419QPAH5K7XLUNma6Pbj
-         xJ0w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=prX1E0RG7UeUBzCLq0Q5Oi12RHYXNZyfW5bTMLlL8JI=;
+        b=arAwgdST9DjY9vxXrFWg7C4mcvo7W/JT82sW+gnGtZsku0jghjgd5ceLmlW/DD9MeW
+         SXkWG25P0KqPSmuIRtC+91B/URngWnXzXO8GJCmxhhbMGJQqlEiWIiugydsHUWvn4xMP
+         fLUMKKSyPDRVGraoestBcMoB/SGklheTHS1bG1NorskLUwMXCHe8BQZPTckzxHVWrkH0
+         dSgyjWmIUs2c0Togy+4bsvPsYEpRzGGfMHrKl0nRw4vnMSAFdwJFAi62yo8VoJYFgkFK
+         k+mbzCq1HV6m3HieHAh0vw3OvFpjQBSH70WCR/VZt+fI0mNEPME9QrW2RFWol/gfdiYe
+         BMAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=scZ5GnTV8I7bOvJ6lzl+PSHZYfBr3KBNNf2b3zoQP2M=;
-        b=pbCAyk9kQl9CxtH8wjlq1YPPFaW6c0owXvHEa6NzWlrVCF6MWYtCAsEbr1zBgQhObS
-         H3InNH30aY7RvhG5nwxmr15qFu9jdMn1FjKdatqm4bouGpPsMKKvtYhkZ34uEGeSLS9y
-         X2EwN8oz51HzIbXvTFKcnwkH4TRZIySCLbVc3vKGWLfUAC0bBtphJJo1mOVOINCoEoBb
-         5iO7wawOPXDCqE+YUBOQNE46Svs2wRYwgP1d3kws/5NfsziznX4ZkXhCGaXVfTudB5wb
-         czbatoj9uzIBXRgJKFLK//T4RXnDqJteURogp8BG/ykVDkGBGT5k3T8hHnZT1tHIq8bl
-         MCjQ==
-X-Gm-Message-State: APjAAAV748iJpSVpgrrsjdKuunvJPbWtYKArZVYtpxEeETF0nLNvwg5Q
-        bu9VF2cRi+7hLkgwd55/o9c=
-X-Google-Smtp-Source: APXvYqxsYoEGGmCNHNAQBQFZgb/0R2hySZHxPiAq5C8OpABF8vxdTvdpQEcQZU6xSh5uHEVKOcaetQ==
-X-Received: by 2002:a17:90a:a116:: with SMTP id s22mr12570537pjp.47.1561990395984;
-        Mon, 01 Jul 2019 07:13:15 -0700 (PDT)
-Received: from mita-MS-7A45.lan ([240f:34:212d:1:368e:e048:68f1:84e7])
-        by smtp.gmail.com with ESMTPSA id n19sm11383871pfa.11.2019.07.01.07.13.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 01 Jul 2019 07:13:15 -0700 (PDT)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Rob Herring <robh@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Minwoo Im <minwoo.im.dev@gmail.com>,
-        Kenneth Heitke <kenneth.heitke@intel.com>,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
-Subject: [PATCH v5 4/4] nvme: notify thermal framework when temperature threshold events occur
-Date:   Mon,  1 Jul 2019 23:12:34 +0900
-Message-Id: <1561990354-4084-5-git-send-email-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1561990354-4084-1-git-send-email-akinobu.mita@gmail.com>
-References: <1561990354-4084-1-git-send-email-akinobu.mita@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=prX1E0RG7UeUBzCLq0Q5Oi12RHYXNZyfW5bTMLlL8JI=;
+        b=fWcH1c2e2BWsgAVqJBzDq1uO+5UTSeiEbml5rmhhoubanbWfTubZtiL3jkVVYSaMNB
+         FjoSUcYxXhhGiYrwLEsZjRKmr5tv/T3oNXnpXr/BY91NEXkFI3okG2oRrr41oMpElMHw
+         Lhe/Oo0MpEj10dS5lL3EN/WCVgz4LVLXDTFYoVQGQpGewst0JX/0OJh2Dp/zXeGB4f84
+         ht3c0LWh6YsBAk3RSfqM4bnWWSKvY3MjFhbZLIPGpLvE0zxzZvq899mSJQyDmVSAUZx/
+         Ymag80MuDT7k9NWyiAM1SS8+rXGGJkJoDZ4ynFCzMectXmauiizmseYMbstShiwwTCh7
+         i9+Q==
+X-Gm-Message-State: APjAAAVBVg5PzvajzcbhHHbD8uK6k+A8clL/MMEIjsyomqGVQuMILCU0
+        wmIOO2Inm3alzqRMl8Yaj98cwcgz9epZ1yYtGtI=
+X-Google-Smtp-Source: APXvYqzWTG5NkVuWmj3+DO56fz33iIrbZisyvuVAbbQwtuyydaLXGbJH3yLGRx0Z49Q2eGRBQaNkmTqk5JK8s6+zHXM=
+X-Received: by 2002:a67:3195:: with SMTP id x143mr15188071vsx.144.1561991151262;
+ Mon, 01 Jul 2019 07:25:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAOuPNLiBA9VjEoG_D2y2O5mKiqsDNW1VZXOk1eWXpGY+h86acg@mail.gmail.com>
+ <CAOMZO5BcLaS0gXUPi6oN6vjqagS5yf+rHh+EUjmi-Wi1OX7vqQ@mail.gmail.com>
+ <CAOuPNLgEEfDca4aeT1+q8GfUfGzbJ4x6JwGf-ROB1pgpXUBHSw@mail.gmail.com>
+ <CAOMZO5BY8JcLNMCRCC_d=emy8HR6kE=dB9f5qfZ=ci_c+Jak0w@mail.gmail.com>
+ <CAOuPNLjYhkP_kL+q-ZpiDZMMpOHrU88BFBc2agtnCzXt8dihOg@mail.gmail.com>
+ <CAOMZO5ADK1L5UMM9XZetHvmjTvmvUg99G7VPdeXitgpctGLCkw@mail.gmail.com>
+ <CAOuPNLhZhgN26rquLQq9zHBct1QxK-7hXAza0xk-0QooPGYLNw@mail.gmail.com>
+ <CAOMZO5BsJWTw0nCeUboam4kuKyCO3N_Ch5ZW8k5Y9KFtQBanhQ@mail.gmail.com>
+ <CAOuPNLjrAU_C_TUKFMs1d0eGsw=AxuG6d6FhNHtHFwVhfYZGgA@mail.gmail.com>
+ <CAOuPNLhstoCjxijrnKNmV1iKWjAXvSZ38Z13tfd5bvGbYSqPAA@mail.gmail.com>
+ <CAOMZO5CD-QQaZwNfiX6mOLAup4J8dBiqEb_V_6jz_z5jXZ5cEw@mail.gmail.com> <CAOuPNLj=L_3RoC=9ws4yn1Q7QLoS3OEZ8FLRrF04HRQtQvc0Jg@mail.gmail.com>
+In-Reply-To: <CAOuPNLj=L_3RoC=9ws4yn1Q7QLoS3OEZ8FLRrF04HRQtQvc0Jg@mail.gmail.com>
+From:   Pintu Agarwal <pintu.ping@gmail.com>
+Date:   Mon, 1 Jul 2019 19:55:39 +0530
+Message-ID: <CAOuPNLg5A1bB-Tmndm4PvsJ40tj0yn-bJ2mfifEpjAF-t84wiQ@mail.gmail.com>
+Subject: Re: [IMX] [DRM]: suspend/resume support
+To:     Fabio Estevam <festevam@gmail.com>, s.hauer@pengutronix.de,
+        p.zabel@pengutronix.de
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Kernelnewbies <kernelnewbies@kernelnewbies.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The NVMe controller supports the temperature threshold feature (Feature
-Identifier 04h) that enables to configure the asynchronous event request
-command to complete when the temperature is crossed its corresponding
-temperature threshold.
+On Sat, Jun 22, 2019 at 1:43 PM Pintu Agarwal <pintu.ping@gmail.com> wrote:
+>
+> On Fri, Jun 21, 2019 at 9:09 PM Fabio Estevam <festevam@gmail.com> wrote:
+> >
+> > On Fri, Jun 21, 2019 at 12:13 PM Pintu Agarwal <pintu.ping@gmail.com> wrote:
+> >
+> > > Okay there is some update on the 2nd part.
+> > > Now I am able to successfully install all imx modules after the resume
+> > > (no hang).
+> > > But, I got some errors after install finish:
+> > > [drm] disabling vblank on crtc 1
+> > > [IMX]: imx_drm_disable_vblank - called
+> > > [drm:drm_atomic_helper_commit_cleanup_done] *ERROR* [CRTC:24:crtc-0]
+> > > flip_done timed out
+> > >
+> > > Also I am able to start the weston successfully.
+> > > But I see LCD/HDMI display is not working (only some backlight is visible).
+> > >
+> > > And, I noticed, weston also reports the following errors:
+> > > imx-ipuv3 2400000.ipu: DC stop timeout after 50 ms
+> > > [IMX]: drm_crtc_vblank_off - called
+> > > [IMX]: imx_drm_disable_vblank - called
+> > > INFO: rcu_preempt detected stalls on CPUs/tasks: { 1} (detected by 0,
+> > > t=6002 jiffies, g=289, c=288, q=8)
+> > > Task dump for CPU 1:
+> > > weston          R running      0   306      1 0x00000000
+> > > [<c05282d8>] (__schedule) from [<00080193>] (0x80193)
+> > >
+> > > Do you have any clue about these errors ?
+> >
+> > Which kernel version is this?
+>
 
-This enables the reporting of asynchronous events from the controller when
-the temperature reached or exceeded a temperature threshold.
-In the case of the temperature threshold conditions, this notifies the
-thermal framework.
+Now, I am using Kernel 4.9 (custom) with some internal changes.
+After the hibernate-resume, I am trying to install the modules in
+following order:
+insmod imxdrm.ko
+insmod parallel-display.ko
+insmod dw-hdmi.ko
+insmod dw_hdmi-imx.ko
+insmod imx-ipu-v3.ko
+insmod imx-ipuv3-crtc.ko
+insmod imx-ldb.ko
 
-The main purpose of this is to turn on a fan when overheated without
-polling the device for the smart log that could prevent the lower power
-state transitions.
+I noticed that if I don't install the "crtc" or "ldb" module at last,
+then system will hang.
+Otherwise, the modules are installed successfully.
 
-Cc: Rob Herring <robh@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Eduardo Valentin <edubezval@gmail.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Keith Busch <kbusch@kernel.org>
-Cc: Jens Axboe <axboe@fb.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Sagi Grimberg <sagi@grimberg.me>
-Cc: Minwoo Im <minwoo.im.dev@gmail.com>
-Cc: Kenneth Heitke <kenneth.heitke@intel.com>
-Cc: Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
-* v5
-- use thermal_zone_device_update() instead of thermal_notify_framework()
+But, I get following errors:
+[drm:drm_atomic_helper_wait_for_flip_done] *ERROR* [CRTC:24:crtc-0]
+flip_done timed out
+[drm:drm_atomic_helper_commit_cleanup_done] *ERROR* [CRTC:24:crtc-0]
+flip_done timed out
 
- drivers/nvme/host/core.c    | 14 ++++++++++++++
- drivers/nvme/host/nvme.h    |  5 +++++
- drivers/nvme/host/thermal.c | 14 ++++++++++++++
- include/linux/nvme.h        |  7 +++++++
- 4 files changed, 40 insertions(+)
+But, hdmi could be detected from the logs:
+dwhdmi-imx 120000.hdmi: Detected HDMI controller 0x13:0x1a:0xa0:0xc1
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 1d84685..80403c3 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -1186,6 +1186,9 @@ static void nvme_enable_aen(struct nvme_ctrl *ctrl)
- 	u32 result, supported_aens = ctrl->oaes & NVME_AEN_SUPPORTED;
- 	int status;
- 
-+	if (IS_ENABLED(CONFIG_THERMAL))
-+		supported_aens |= NVME_SMART_CRIT_TEMPERATURE;
-+
- 	if (!supported_aens)
- 		return;
- 
-@@ -3561,6 +3564,16 @@ void nvme_remove_namespaces(struct nvme_ctrl *ctrl)
- }
- EXPORT_SYMBOL_GPL(nvme_remove_namespaces);
- 
-+static void nvme_handle_aen_smart(struct nvme_ctrl *ctrl, u32 result)
-+{
-+	u32 aer_type = result & NVME_AER_TYPE_MASK;
-+	u32 aer_info = (result >> NVME_AER_INFO_SHIFT) & NVME_AER_INFO_MASK;
-+
-+	if (aer_type == NVME_AER_SMART &&
-+	    aer_info == NVME_AER_SMART_TEMP_THRESH)
-+		nvme_thermal_zones_update(ctrl);
-+}
-+
- static void nvme_aen_uevent(struct nvme_ctrl *ctrl)
- {
- 	char *envp[2] = { NULL, NULL };
-@@ -3582,6 +3595,7 @@ static void nvme_async_event_work(struct work_struct *work)
- 	struct nvme_ctrl *ctrl =
- 		container_of(work, struct nvme_ctrl, async_event_work);
- 
-+	nvme_handle_aen_smart(ctrl, ctrl->aen_result);
- 	nvme_aen_uevent(ctrl);
- 	ctrl->ops->submit_async_event(ctrl);
- }
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index d501567..f29bc77 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -611,6 +611,7 @@ static inline struct nvme_ns *nvme_get_ns_from_dev(struct device *dev)
- 
- int nvme_thermal_zones_register(struct nvme_ctrl *ctrl);
- void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl);
-+void nvme_thermal_zones_update(struct nvme_ctrl *ctrl);
- 
- #else
- 
-@@ -623,6 +624,10 @@ static inline void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl)
- {
- }
- 
-+static inline void nvme_thermal_zones_update(struct nvme_ctrl *ctrl)
-+{
-+}
-+
- #endif /* CONFIG_THERMAL */
- 
- #endif /* _NVME_H */
-diff --git a/drivers/nvme/host/thermal.c b/drivers/nvme/host/thermal.c
-index 431aeb4..9dcc1dc 100644
---- a/drivers/nvme/host/thermal.c
-+++ b/drivers/nvme/host/thermal.c
-@@ -327,3 +327,17 @@ void nvme_thermal_zones_unregister(struct nvme_ctrl *ctrl)
- 		__clear_bit(i, ctrl->tz_enabled);
- 	}
- }
-+
-+void nvme_thermal_zones_update(struct nvme_ctrl *ctrl)
-+{
-+	int i;
-+
-+	for_each_set_bit(i, ctrl->tz_enabled, ARRAY_SIZE(ctrl->tz)) {
-+		if (ctrl->tz[i].dev)
-+			thermal_zone_device_update(ctrl->tz[i].dev,
-+						   THERMAL_EVENT_UNSPECIFIED);
-+		if (ctrl->tz[i].of_dev)
-+			thermal_zone_device_update(ctrl->tz[i].of_dev,
-+						   THERMAL_EVENT_UNSPECIFIED);
-+	}
-+}
-diff --git a/include/linux/nvme.h b/include/linux/nvme.h
-index f29728b..069b962 100644
---- a/include/linux/nvme.h
-+++ b/include/linux/nvme.h
-@@ -476,6 +476,7 @@ enum {
- };
- 
- enum {
-+	NVME_AER_TYPE_MASK		= 0x7,
- 	NVME_AER_ERROR			= 0,
- 	NVME_AER_SMART			= 1,
- 	NVME_AER_NOTICE			= 2,
-@@ -484,6 +485,12 @@ enum {
- };
- 
- enum {
-+	NVME_AER_INFO_SHIFT		= 8,
-+	NVME_AER_INFO_MASK		= 0xff,
-+	NVME_AER_SMART_TEMP_THRESH	= 0x01,
-+};
-+
-+enum {
- 	NVME_AER_NOTICE_NS_CHANGED	= 0x00,
- 	NVME_AER_NOTICE_FW_ACT_STARTING = 0x01,
- 	NVME_AER_NOTICE_ANA		= 0x03,
--- 
-2.7.4
+However, after I start weston, there is no display in LCD and HDMI.
+I can only see the backlight.
 
+One more thing, I observed that, there was a huge delay after
+component_bind_all():
+[IMX]: imx_drm_driver_load - component_bind_all - DONE
+<-------------- delay --------------->
+Then we get flip_done timeout.
+
+So, my question is:
+1) If we have to test hibernation on iMX6/7 then which is the suitable way?
+2) Is it possible to support this feature by performing module
+installation after resume?
+3) If yes, then which modules should be chosen as loadable, and which
+can be in-built?
+    (So, we don't have to implement suspend/resume for each module)
+
+4) I also compared clock_summary in normal boot and after resume (with
+module installed).
+    I found below difference in clock frequency (pll5, pll4)
+    Example:
+-    pll5                        1           1            1188000007
++    pll5                        1           1            1040000015
+
+what does this indicates? Is there any issue?
