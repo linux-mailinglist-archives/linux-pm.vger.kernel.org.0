@@ -2,137 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 660C75C3B0
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 21:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC735C3D1
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 21:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfGATeo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 15:34:44 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:38146 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbfGATeo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 15:34:44 -0400
-Received: by mail-ed1-f67.google.com with SMTP id r12so24912371edo.5;
-        Mon, 01 Jul 2019 12:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dH5otBSqw0uMng1APE66eD1anh4AuRLCKS7/pcECOGs=;
-        b=u7jbcH+p2X/tuzpDREWK/E3T+1TETi5H4y9z15tTyth0yWW8unULF7SDv5GKf3DXu/
-         iKw7O+9OOt+LVWTreNgtYn6G1fnh0saB/4NfUK3j5hdjCeNYneqIY75sSwgyrvjasHg6
-         h2cei3CapWFLk5ZciJnKCkVHXP9xry8BglnSjQiB2VZBFVX1C/0BPsSp9wgQsuI4ZnYi
-         pU2qxJByqB0lSFIV+06rZQIsmOCfK9NORvwIUQeB06OihVkVQ/HAsH5ljUoUczHA3QJr
-         vHqtyckhkailRVUQCShN2cEVVY1zOQ5fC4mk2zqIMVv0ZpmH27vwVTt/T+LlrtykT4s4
-         ZV7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dH5otBSqw0uMng1APE66eD1anh4AuRLCKS7/pcECOGs=;
-        b=fZO5KOQvI1cVcuOqg3E2B6Q456Fd9xaoG9NwJPt86bJeTGA4IFEzyoXeKsANih+/uq
-         4xBoBGBK3/zTVEggXQlf8biCrKeFF0S3yoC7xBAFZ915+Ly7Xgquqd0FpG94oGIxduiI
-         mqHBNdXoY4u69fBHJJKPjyc4vBq9vVLvBvbBC0xP2CfVSaTUx3+8Vvrn+0CqBLFYyOfG
-         oaC2ORsSZPHkSqGTyYGygweVlifkLwjaejzuzuxN72Gq19xaqVpRLqwqNCu4YIB6pi8r
-         8ss/3WvMEEtFMxk8vmm48uC3O3K2lrTmmNstUIxkFYAvk8m0U8b/TmcbF8yVUvX9Fa0A
-         6zBg==
-X-Gm-Message-State: APjAAAWzplExREbVdm60zxgeAE/IPoKRlA8YG4IfJ8HiYTRB+4TrBdtT
-        BCx9e+hKIiFBUKL1SQzb/tMJB222RKos1SiKgzg=
-X-Google-Smtp-Source: APXvYqysxgbCV5yDkdPFITNx3D9f1KGE0bjCekTf0dCIujzKvdxbtbeNQl49lrfoNKh2HZcftMIfUkLE0X4i8q1MDys=
-X-Received: by 2002:a50:9203:: with SMTP id i3mr31774148eda.302.1562009681812;
- Mon, 01 Jul 2019 12:34:41 -0700 (PDT)
+        id S1726642AbfGATur (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 15:50:47 -0400
+Received: from mout.web.de ([217.72.192.78]:45633 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726586AbfGATur (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 1 Jul 2019 15:50:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1562010633;
+        bh=4QSkFMvtVelSfBqUzhSoXEZ0KM6revxybhU7eliZjqc=;
+        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
+        b=F/ECTlVtbppni1kvMpAqv/rhRj32WneKFFbI4Xuvts0wZzFygPiTuJaBgdQ6Sucri
+         P8zHOMcBMg2iZ2Oxg8V0/cp8zIhWIGstN2RcwHsWOFKukreGrHv726JYU7wTHy/7wU
+         2IUcCWy2L0tX9/kKp+2rvXGZLdNoo63wo54XBIBA=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([93.131.131.202]) by smtp.web.de (mrweb102
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MeBDG-1htXb52ELW-00PsrE; Mon, 01
+ Jul 2019 21:50:33 +0200
+To:     linux-pm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+From:   Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] PM / Domains: Use seq_puts() in genpd_summary_one()
+Openpgp: preference=signencrypt
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
+ +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
+ mpVJgXGKkNJ1ey+QOXouzlErVvE2fRh+KXXN1Q7fSmTJlAW9XJYHS3BDHb0uRpymRSX3O+E2
+ lA87C7R8qAigPDZi6Z7UmwIA83ZMKXQ5stA0lhPyYgQcM7fh7V4ZYhnR0I5/qkUoxKpqaYLp
+ YHBczVP+Zx/zHOM0KQphOMbU7X3c1pmMruoe6ti9uZzqZSLsF+NKXFEPBS665tQr66HJvZvY
+ GMDlntZFAZ6xQvCC1r3MGoxEC1tuEa24vPCC9RZ9wk2sY5Csbva0WwYv3WKRZZBv8eIhGMxs
+ rcpeGShRFyZ/0BYO53wZAPV1pEhGLLxd8eLN/nEWjJE0ejakPC1H/mt5F+yQBJAzz9JzbToU
+ 5jKLu0SugNI18MspJut8AiA1M44CIWrNHXvWsQ+nnBKHDHHYZu7MoXlOmB32ndsfPthR3GSv
+ jN7YD4Ad724H8fhRijmC1+RpuSce7w2JLj5cYj4MlccmNb8YUxsE8brY2WkXQYS8Ivse39MX
+ BE66MQN0r5DQ6oqgoJ4gHIVBUv/ZwgcmUNS5gQkNCFA0dWXznQARAQABtCZNYXJrdXMgRWxm
+ cmluZyA8TWFya3VzLkVsZnJpbmdAd2ViLmRlPokCVAQTAQgAPhYhBHDP0hzibeXjwQ/ITuU9
+ Figxg9azBQJYNvsQAhsjBQkJZgGABQsJCAcCBhUICQoLAgQWAgMBAh4BAheAAAoJEOU9Figx
+ g9azcyMP/iVihZkZ4VyH3/wlV3nRiXvSreqg+pGPI3c8J6DjP9zvz7QHN35zWM++1yNek7Ar
+ OVXwuKBo18ASlYzZPTFJZwQQdkZSV+atwIzG3US50ZZ4p7VyUuDuQQVVqFlaf6qZOkwHSnk+
+ CeGxlDz1POSHY17VbJG2CzPuqMfgBtqIU1dODFLpFq4oIAwEOG6fxRa59qbsTLXxyw+PzRaR
+ LIjVOit28raM83Efk07JKow8URb4u1n7k9RGAcnsM5/WMLRbDYjWTx0lJ2WO9zYwPgRykhn2
+ sOyJVXk9xVESGTwEPbTtfHM+4x0n0gC6GzfTMvwvZ9G6xoM0S4/+lgbaaa9t5tT/PrsvJiob
+ kfqDrPbmSwr2G5mHnSM9M7B+w8odjmQFOwAjfcxoVIHxC4Cl/GAAKsX3KNKTspCHR0Yag78w
+ i8duH/eEd4tB8twcqCi3aCgWoIrhjNS0myusmuA89kAWFFW5z26qNCOefovCx8drdMXQfMYv
+ g5lRk821ZCNBosfRUvcMXoY6lTwHLIDrEfkJQtjxfdTlWQdwr0mM5ye7vd83AManSQwutgpI
+ q+wE8CNY2VN9xAlE7OhcmWXlnAw3MJLW863SXdGlnkA3N+U4BoKQSIToGuXARQ14IMNvfeKX
+ NphLPpUUnUNdfxAHu/S3tPTc/E/oePbHo794dnEm57LuuQINBFg2+xABEADZg/T+4o5qj4cw
+ nd0G5pFy7ACxk28mSrLuva9tyzqPgRZ2bdPiwNXJUvBg1es2u81urekeUvGvnERB/TKekp25
+ 4wU3I2lEhIXj5NVdLc6eU5czZQs4YEZbu1U5iqhhZmKhlLrhLlZv2whLOXRlLwi4jAzXIZAu
+ 76mT813jbczl2dwxFxcT8XRzk9+dwzNTdOg75683uinMgskiiul+dzd6sumdOhRZR7YBT+xC
+ wzfykOgBKnzfFscMwKR0iuHNB+VdEnZw80XGZi4N1ku81DHxmo2HG3icg7CwO1ih2jx8ik0r
+ riIyMhJrTXgR1hF6kQnX7p2mXe6K0s8tQFK0ZZmYpZuGYYsV05OvU8yqrRVL/GYvy4Xgplm3
+ DuMuC7/A9/BfmxZVEPAS1gW6QQ8vSO4zf60zREKoSNYeiv+tURM2KOEj8tCMZN3k3sNASfoG
+ fMvTvOjT0yzMbJsI1jwLwy5uA2JVdSLoWzBD8awZ2X/eCU9YDZeGuWmxzIHvkuMj8FfX8cK/
+ 2m437UA877eqmcgiEy/3B7XeHUipOL83gjfq4ETzVmxVswkVvZvR6j2blQVr+MhCZPq83Ota
+ xNB7QptPxJuNRZ49gtT6uQkyGI+2daXqkj/Mot5tKxNKtM1Vbr/3b+AEMA7qLz7QjhgGJcie
+ qp4b0gELjY1Oe9dBAXMiDwARAQABiQI8BBgBCAAmFiEEcM/SHOJt5ePBD8hO5T0WKDGD1rMF
+ Alg2+xACGwwFCQlmAYAACgkQ5T0WKDGD1rOYSw/+P6fYSZjTJDAl9XNfXRjRRyJSfaw6N1pA
+ Ahuu0MIa3djFRuFCrAHUaaFZf5V2iW5xhGnrhDwE1Ksf7tlstSne/G0a+Ef7vhUyeTn6U/0m
+ +/BrsCsBUXhqeNuraGUtaleatQijXfuemUwgB+mE3B0SobE601XLo6MYIhPh8MG32MKO5kOY
+ hB5jzyor7WoN3ETVNQoGgMzPVWIRElwpcXr+yGoTLAOpG7nkAUBBj9n9TPpSdt/npfok9ZfL
+ /Q+ranrxb2Cy4tvOPxeVfR58XveX85ICrW9VHPVq9sJf/a24bMm6+qEg1V/G7u/AM3fM8U2m
+ tdrTqOrfxklZ7beppGKzC1/WLrcr072vrdiN0icyOHQlfWmaPv0pUnW3AwtiMYngT96BevfA
+ qlwaymjPTvH+cTXScnbydfOQW8220JQwykUe+sHRZfAF5TS2YCkQvsyf7vIpSqo/ttDk4+xc
+ Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
+ x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
+ pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
+Message-ID: <7a79ee59-884a-b769-5e07-37db57687f83@web.de>
+Date:   Mon, 1 Jul 2019 21:50:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20190630150230.7878-1-robdclark@gmail.com> <20190630150230.7878-5-robdclark@gmail.com>
- <75a2921d-bf1a-c4c1-6d9a-122474eface4@codeaurora.org> <CAF6AEGufiSU_sFZFdLH=KT5iCQGwccszURqAQCHd=dhuZafvZg@mail.gmail.com>
- <9fbf9226-578a-90aa-693d-9ea4fcda8281@codeaurora.org>
-In-Reply-To: <9fbf9226-578a-90aa-693d-9ea4fcda8281@codeaurora.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 1 Jul 2019 12:34:25 -0700
-Message-ID: <CAF6AEGtcyvhpAwsD+ykn5HYhBeHtW2kSgE6OA+d142O9AKx+CQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] drm/msm/dsi: get the clocks into OFF state at init
-To:     Jeffrey Hugo <jhugo@codeaurora.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        aarch64-laptops@lists.linaro.org,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Mamta Shukla <mamtashukla555@gmail.com>,
-        Chandan Uddaraju <chandanu@codeaurora.org>,
-        Archit Taneja <architt@codeaurora.org>,
-        Rajesh Yadav <ryadav@codeaurora.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:XXG6CWxFT52mlzSGyOr1ZOLJUo8+dWEn69Gh+S6vA13q5ooK7xJ
+ f3+BFUkhH68SGyXTWKlWA9hAc1qoYYp0PsKARUUNucwl5OzHDkzRtLn7GijMkWWdjwa2csg
+ FG3YmooIb0YE5qq/hzxEEiyphTZrpYhrTqR+JoK4fh9AliEl4pZ3iwDGsOC5bUAqzw6J8vk
+ Exy6b7irkTlFWEm5Px+wA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wDiAp800HvQ=:6FszKHqdpABplG9tPlcWL0
+ 7oQH7CTQo7AxKe4hcelLYProbEUjr4DWW6+xS2jlG97FH/Pb+Gev7msrc//vH23DTrS1jAGT2
+ vSL9ENdWhjSSgTDbsP0akHj3Yo4kE5h3M14jqViJCqkLpaN9OrTHV8ysS9jP5nTHau8wDRldD
+ ZqGKCbMvp8d8n070wes71VM8jSvBOEJfqmvHYku36gKgSWPnENEA2kabcywkICkAzT6nnC7f0
+ 6bHEGCTXTD/JMvhOqm0GPwZKFtyVXTLRoK77u3Ofl+i5NQ+glJVleNocftlxJ3Ey0dAuQzcU/
+ qyuImtUrGRrZliosL4O3W/LSwuii4A5ZTakslsESi3k52almtyO4tr6VAcIbiKkaGB8egdgvN
+ pDbEndwFwqN20E0hPeEF5Jjgm7qOD7/KSQ8GVsIQjojOUVhF8p8seSbQFucLCuclM1TM6kaYX
+ Jh9ZuMy+c/nlf9ftW4B2E799HTx6dXQgJPFOkW4HBG9Yux2Hvfs55djAMPj1GBVk/i11U0Xce
+ DYfTBp4PZJjHv4ts8o6usfchwDOVqiIXxJ+/mmgEwPfEhS93BSG2JhvYJSoOL4U8M0j15YGmm
+ fkbAbGuhjxQXmUQ9vPPHicEJf0WCqQ8I8PKiDeI5qW+/j5e6lwdGwmVav4ZI2bl8AVyhXlwKk
+ x6xxGloS0Q2i/87aMUxdmGcQ5C6fEJOgL4Vlqm3i1GGG0AToxl43tsV7ExAydyRT7FHmVovu7
+ zvfwGCxsNMf3oyafVKnWmU6DaW+lfhIi2hR1zVF7tgndgFHaAkB8oaFAAA+K+voUBbMiOurEI
+ UejYHXEehG1Y7j3I4p13RL9QrcuZKtXjTMrvnCHfEjNH767uHADl8S6SwEQy0T3FUw6Bpixc3
+ uU08Cpzr6wRMU1zYjx6vV6ahBBEq0V0VK7QS1CllCi1sLImtpFhGDpyfcHk0iP+CjT1lA0vC/
+ LCQ3eS8sTbByAE1gpo9h1WqmxJxrL7RH7bSJXChgJ/E8S4gsCpaglw+j7jDhZZxkNQw2YoJoH
+ iNexcOmybC6+85XyoI3PqLh9lazHwCFnObdJ+VYI65DNFxjlD6jbwl0mbnAEaL8IeleAF5f4F
+ 66R7EnqCZIol+u6gMA/L0/uQctV95VR5ycO
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 1, 2019 at 12:07 PM Jeffrey Hugo <jhugo@codeaurora.org> wrote:
->
-> On 7/1/2019 12:58 PM, Rob Clark wrote:
-> > On Mon, Jul 1, 2019 at 11:37 AM Jeffrey Hugo <jhugo@codeaurora.org> wrote:
-> >>
-> >> On 6/30/2019 9:01 AM, Rob Clark wrote:
-> >>> From: Rob Clark <robdclark@chromium.org>
-> >>>
-> >>> Do an extra enable/disable cycle at init, to get the clks into disabled
-> >>> state in case bootloader left them enabled.
-> >>>
-> >>> In case they were already enabled, the clk_prepare_enable() has no real
-> >>> effect, other than getting the enable_count/prepare_count into the right
-> >>> state so that we can disable clocks in the correct order.  This way we
-> >>> avoid having stuck clocks when we later want to do a modeset and set the
-> >>> clock rates.
-> >>>
-> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> >>> ---
-> >>>    drivers/gpu/drm/msm/dsi/dsi_host.c         | 18 +++++++++++++++---
-> >>>    drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c |  1 +
-> >>>    2 files changed, 16 insertions(+), 3 deletions(-)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c b/drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c
-> >>> index aabab6311043..d0172d8db882 100644
-> >>> --- a/drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c
-> >>> +++ b/drivers/gpu/drm/msm/dsi/pll/dsi_pll_10nm.c
-> >>> @@ -354,6 +354,7 @@ static int dsi_pll_10nm_lock_status(struct dsi_pll_10nm *pll)
-> >>>        if (rc)
-> >>>                pr_err("DSI PLL(%d) lock failed, status=0x%08x\n",
-> >>>                       pll->id, status);
-> >>> +rc = 0; // HACK, this will fail if PLL already running..
-> >>
-> >> Umm, why?  Is this intentional?
-> >>
-> >
-> > I need to sort out a proper solution for this.. but PLL lock will fail
-> > if the clk is already running (which, in that case, is fine since it
-> > is already running and locked), which will cause the clk_enable to
-> > fail..
-> >
-> > I guess there is some way that I can check that clk is already running
-> > and skip this check..
->
->
-> I'm sorry, but this makes no sense to me.  What clock are we talking
-> about here?
->
-> If the pll is locked, the the lock check should just drop through.  If
-> the pll cannot lock, you have an issue.  I'm confused as to how any of
-> the downstream clocks can actually be running if the pll isn't locked.
->
-> I feel like we are not yet on the same page about what situation you
-> seem to be in.  Can you describe in exacting detail?
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Mon, 1 Jul 2019 21:42:31 +0200
 
-yeah, I'd expect the lock bit to still be set (since the display is
-obviously running at that point)..  but I didn't really debug it yet,
-I just hacked that in so the clk_enable didn't fail, so that we could
-get correct enable/prepare_counts in order to do the
-clk_disable_unprepare()..
+A string which did not contain a data format specification should be put
+into a sequence. Thus use the corresponding function =E2=80=9Cseq_puts=E2=
+=80=9D.
 
-BR,
--R
+This issue was detected by using the Coccinelle software.
+
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/base/power/domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 33c30c1e6a30..7dd433fab7ec 100644
+=2D-- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2796,7 +2796,7 @@ static int genpd_summary_one(struct seq_file *s,
+ 	 * Also genpd->name is immutable.
+ 	 */
+ 	list_for_each_entry(link, &genpd->master_links, master_node) {
+-		seq_printf(s, "%s", link->slave->name);
++		seq_puts(s, link->slave->name);
+ 		if (!list_is_last(&link->master_node, &genpd->master_links))
+ 			seq_puts(s, ", ");
+ 	}
+=2D-
+2.22.0
+
