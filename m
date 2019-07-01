@@ -2,149 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9A45B2CC
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 03:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC8B5B80C
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 11:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727287AbfGABq4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jun 2019 21:46:56 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:16431 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727265AbfGABq4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jun 2019 21:46:56 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190701014653epoutp019b9a36263dc6e1d6836aa97b7de331e1~tJUKLLRw52864028640epoutp01F
-        for <linux-pm@vger.kernel.org>; Mon,  1 Jul 2019 01:46:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190701014653epoutp019b9a36263dc6e1d6836aa97b7de331e1~tJUKLLRw52864028640epoutp01F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561945613;
-        bh=m+eqQbrZSo3RuVkRuZSW5PciV5T0jFZBN5eKTO8g78w=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=uY0r6/jeUFZ8oyxuOV5MWGuGpiIaCyJ/CPDZOPjUyAuFD4GQpt6axfxq/i/F9uInF
-         YNmC1qplxMVs5ERB7BDWnGLLW+EdpsZUF5KDR5X8y+Xtmj0UxHhToSsAdHFZFCgGi2
-         ukMRNT2AjE5P9EhxZZP1UPV4HqPQZ12d08sV1xn0=
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.153]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190701014650epcas1p205b2e10822aa586ed41da46e00186d32~tJUH0gaa10786807868epcas1p2z;
-        Mon,  1 Jul 2019 01:46:50 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        39.EE.04142.406691D5; Mon,  1 Jul 2019 10:46:44 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20190701014643epcas1p35762284cf05bfb0796cddf271faf1e00~tJUBPV5-Q1319013190epcas1p39;
-        Mon,  1 Jul 2019 01:46:43 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190701014643epsmtrp22add956dc07b0f6e466080cbd030acc2~tJUBOe7iJ1483114831epsmtrp2L;
-        Mon,  1 Jul 2019 01:46:43 +0000 (GMT)
-X-AuditID: b6c32a36-cf9ff7000000102e-5a-5d196604b896
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        44.E8.03662.306691D5; Mon,  1 Jul 2019 10:46:43 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190701014643epsmtip2d6ab49c6c09dd3c6c55c15c7bb9c9b23~tJUBF2iuE3067230672epsmtip2W;
-        Mon,  1 Jul 2019 01:46:43 +0000 (GMT)
-Subject: Re: [PATCH] devfreq: tegra20: add COMMON_CLK dependency
-To:     Arnd Bergmann <arnd@arndb.de>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <87564032-015a-323f-6d15-0abc67f6cc60@samsung.com>
-Date:   Mon, 1 Jul 2019 10:49:29 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.1
+        id S1728454AbfGAJ3z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 05:29:55 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:40930 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728366AbfGAJ3z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 05:29:55 -0400
+Received: by mail-pl1-f194.google.com with SMTP id a93so7057791pla.7
+        for <linux-pm@vger.kernel.org>; Mon, 01 Jul 2019 02:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wTpybW3v/xSeIVUOgP3xPSGBMKgC2isVToS27b1nrP0=;
+        b=Hrifr9KCPcs9MJqBNytC0e17vIcaOZwYLT0urhPweI/rFb5d03mJHFiFkNSM2nDw0y
+         HwFr53coaLGoVhvJk6G5fbnqIJWNWEqrOzC1rRfNtC6K0+9fQW4SDItKGnb7jUCp/QDx
+         vXFoWE7/6gn1siLyZyE5TjRDGfBfbzJt5G8TKNksKFzzEUkFm+3WzB27NGBcvCpJJclW
+         FRa9ClkXxzYNHq/m+Ycijy1n2cMx8H+oEs9uu8r7rfBmDaYXWn+uRLgTDRgCHyuxyNTU
+         6Niu+GY8uPemFkLgYmaugqnqYQl+8GVm90YmuGSw8nyg6D/HOtDoJyQx2QRVQL+n6YGG
+         9KoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wTpybW3v/xSeIVUOgP3xPSGBMKgC2isVToS27b1nrP0=;
+        b=Qr572co0k7EAKGMHe77fndz/a2EctzVq/o10hpPtfZryqiVzHhGToQj4cbFltY8cOm
+         jop7vACJVdXHEXA9uxB78Xnrllc6Mf04xpKPa3Vj2GtWnMGyqdKyZMX106RAmUvoVEZW
+         aGnQRvXS7fz7Q8ZlGk25pR4qi4b++Ru+Dqq5QxoEJ8vBWAStRi2o/4ZvGUHp5hzWmUU3
+         fhtooKSK5XMR2mSWO+Bs2euHh3ubGbxmDYLZarrdWLWP2GJBfTz/a/77cuPCgQOnw6KO
+         cgFNXzVL4SXgABeiD0gl6NIBJRfgYorrTAZJVl+f7K/yY+xxf4WxzJ+SyPVqjPwjXo4w
+         YoVg==
+X-Gm-Message-State: APjAAAUaAZH96kGC0giF6PqJYXQEX3+ZL2vY1hOSnwdUxY0CKbI2hZnJ
+        TMUdcyAf6krg5OtGBQL1Gd1G/Q==
+X-Google-Smtp-Source: APXvYqwSOfR6QHR0UL7PgnA+YTmHps/hUxB+aNpzGmjf2aDbrrgUmI4XIBC48UKymMy56brsDy0qmA==
+X-Received: by 2002:a17:902:7247:: with SMTP id c7mr27711408pll.202.1561973394285;
+        Mon, 01 Jul 2019 02:29:54 -0700 (PDT)
+Received: from localhost ([122.172.21.205])
+        by smtp.gmail.com with ESMTPSA id d123sm10786486pfc.144.2019.07.01.02.29.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Jul 2019 02:29:52 -0700 (PDT)
+Date:   Mon, 1 Jul 2019 14:59:49 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     nm@ti.com, sboyd@kernel.org, georgi.djakov@linaro.org,
+        agross@kernel.org, david.brown@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, rjw@rjwysocki.net,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        saravanak@google.com
+Subject: Re: [PATCH RFC 0/4] DDR/L3 Scaling support on SDM845 SoCs
+Message-ID: <20190701092949.afenn2et2qexostt@vireshk-i7>
+References: <20190627133424.4980-1-sibis@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <20190628103232.2467959-1-arnd@arndb.de>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBJsWRmVeSWpSXmKPExsWy7bCmgS5LmmSsQedvIYu/k46xW6z++JjR
-        4mzTG3aLy7vmsFl87j3CaHG7cQWbA5vH71+TGD12zrrL7tG3ZRWjx+dNcgEsUdk2GamJKalF
-        Cql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUDLlRTKEnNKgUIBicXF
-        Svp2NkX5pSWpChn5xSW2SqkFKTkFlgV6xYm5xaV56XrJ+blWhgYGRqZAhQnZGY37ZjMVzOKu
-        eLPxD2MD42rOLkZODgkBE4m3Vy4zdzFycQgJ7GCU6H/VwAbhfGKUOHVkIZTzjVGi5cpdRriW
-        LxvZIRJ7GSVO/77AAuG8Z5SY2vAbKMPBISzgIHHonDJIg4hAucTH32tZQcLMAgkS65rCQMJs
-        AloS+1/cYAOx+QUUJa7+eAw2n1fATmLZnyawOIuAisTRh5/AbFGBCInLW3ZB1QhKnJz5hAVk
-        JKeAqcTMOakgYWYBcYlbT+YzQdjyEs1bZzNDnPyYTeLtvUoI20Xi9v+DTBC2sMSr41vYIWwp
-        ic/v9rJB2NUSK08eAftdQqCDUWLL/gusEAljif1LJzNBvKIpsX6XPkRYUWLn77mMEHv5JN59
-        7QH7VkKAV6KjTQiiRFni8oO7UGslJRa3d7JNYFSaheSZWUg+mIXkg1kIyxYwsqxiFEstKM5N
-        Ty02LDBCjupNjOBUqWW2g3HROZ9DjAIcjEo8vA13JGKFWBPLiitzDzFKcDArifDOPQwU4k1J
-        rKxKLcqPLyrNSS0+xGgKDOuJzFKiyfnANJ5XEm9oamRsbGxhYmhmamioJM4bz30zRkggPbEk
-        NTs1tSC1CKaPiYNTqoHRSYZnofjcDh9ljk2LNG5cV3v0J7z+1b+bD6SOTmHcp/e8KeZnUN2C
-        TaUyrqv4Wt72NW462P67dOvZA8xRK1TenHVfuy+0Yo5o1IzIkz8/3VDKytj3cLp2kLn4Jf77
-        fdVKrPNUvn8uzPRa8KDKhsvD4cIO5bLJD1SLV/Nsd4u88KqkuaDuzXFTJZbijERDLeai4kQA
-        jYuA0KsDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmkeLIzCtJLcpLzFFi42LZdlhJXpc5TTLWYOV2Y4u/k46xW6z++JjR
-        4mzTG3aLy7vmsFl87j3CaHG7cQWbA5vH71+TGD12zrrL7tG3ZRWjx+dNcgEsUVw2Kak5mWWp
-        Rfp2CVwZjftmMxXM4q54s/EPYwPjas4uRk4OCQETibdfNrJ3MXJxCAnsZpR4MnMuM0RCUmLa
-        xaNANgeQLSxx+HAxRM1bRonJa+ezgcSFBRwkDp1TBikXESiXmHa1kQkkzCyQIPHyWxVEeQej
-        xPZ3LawgNWwCWhL7X9xgA7H5BRQlrv54zAhi8wrYSSz70wQWZxFQkTj68BOYLSoQIdHXNpsN
-        okZQ4uTMJywg8zkFTCVmzkkFCTMLqEv8mXeJGcIWl7j1ZD4ThC0v0bx1NvMERuFZSLpnIWmZ
-        haRlFpKWBYwsqxglUwuKc9Nziw0LjPJSy/WKE3OLS/PS9ZLzczcxgqNGS2sH44kT8YcYBTgY
-        lXh4NW5JxAqxJpYVV+YeYpTgYFYS4Z17GCjEm5JYWZValB9fVJqTWnyIUZqDRUmcVz7/WKSQ
-        QHpiSWp2ampBahFMlomDU6qB0cOj82jdrGtCyz+/WcPSrGxzV3d1XMn7kKD0HTZby+beuJa3
-        Yupfhxn6uU5zje6wdAuoXZzwaLVRtdaFreXdv2cGH9j1bcvlBwf9H0z4sGz7yjX/P+jsrK6e
-        W14v0DPl9sldTU4W2de3KHmUFTioHqzsEru6fFGE4Jkkdumnn/ZdfuOQpWVTPl2JpTgj0VCL
-        uag4EQBsZt+ElgIAAA==
-X-CMS-MailID: 20190701014643epcas1p35762284cf05bfb0796cddf271faf1e00
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190628103243epcas4p133102dfa6709970b1dd49296f82425b2
-References: <CGME20190628103243epcas4p133102dfa6709970b1dd49296f82425b2@epcas4p1.samsung.com>
-        <20190628103232.2467959-1-arnd@arndb.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190627133424.4980-1-sibis@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Arnd,
-
-Thanks for fixup.
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-
-
-
-Hi Myungjoo,
-This patch have to be merged for linux 5.3 before sending pull-request
-because it fixed the build error of merged patch[1] on devfreq.git.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git/commit/?h=for-next&id=028b3793284fa1bb4db73a90608d7cb24664480c
-
-Best Regards,
-Chanwoo Choi
-
-On 19. 6. 28. 오후 7:32, Arnd Bergmann wrote:
-> Compile-testing the new driver on platforms without CONFIG_COMMON_CLK
-> leads to a link error:
+On 27-06-19, 19:04, Sibi Sankar wrote:
+> This RFC series aims to extend cpu based scaling support to L3/DDR on
+> SDM845 SoCs. The patch series depends on "Introduce OPP bandwidth bindings"
+> series (https://patchwork.kernel.org/cover/10912993/). A part of the
+> series will still be applicable if we decide to go ahead with the proposal
+> from Saravana as well so I decided to post this out.
 > 
-> drivers/devfreq/tegra20-devfreq.o: In function `tegra_devfreq_target':
-> tegra20-devfreq.c:(.text+0x288): undefined reference to `clk_set_min_rate'
-> 
-> Add a dependency on COMMON_CLK to avoid this.
-> 
-> Fixes: 1d39ee8dad6d ("PM / devfreq: Introduce driver for NVIDIA Tegra20")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/devfreq/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index f3b242987fd9..defe1d438710 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -107,6 +107,7 @@ config ARM_TEGRA_DEVFREQ
->  config ARM_TEGRA20_DEVFREQ
->  	tristate "NVIDIA Tegra20 DEVFREQ Driver"
->  	depends on (TEGRA_MC && TEGRA20_EMC) || COMPILE_TEST
-> +	depends on COMMON_CLK
->  	select DEVFREQ_GOV_SIMPLE_ONDEMAND
->  	select PM_OPP
->  	help
-> 
+> v2:
+> * Incorporated Viresh's comments from:
+> [1]https://lore.kernel.org/lkml/20190410102429.r6j6brm5kspmqxc3@vireshk-i7/
+> [2]https://lore.kernel.org/lkml/20190410112516.gnh77jcwawvld6et@vireshk-i7/
+
+Did you get a chance to look at this ?
+
+lore.kernel.org/lkml/20190622003449.33707-1-saravanak@google.com
+
+-- 
+viresh
