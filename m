@@ -2,60 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC1E5C28E
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 20:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5D45C2A4
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 20:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbfGASDE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 14:03:04 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:35315 "EHLO
+        id S1727113AbfGASIt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 14:08:49 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:45051 "EHLO
         mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbfGASDD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 14:03:03 -0400
-Received: by mail-io1-f67.google.com with SMTP id m24so30905452ioo.2;
-        Mon, 01 Jul 2019 11:03:03 -0700 (PDT)
+        with ESMTP id S1727109AbfGASIt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 14:08:49 -0400
+Received: by mail-io1-f67.google.com with SMTP id s7so30813262iob.11;
+        Mon, 01 Jul 2019 11:08:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=K2tpItKwuKZOogitEmK5udMyyQM1691xM5APcPto608=;
-        b=Wfo6MybS7hH5DKgNXldkNyj/G7ZcAkedgRpXC1z/5iSm+HK5Xk1PMACgeewleePYHB
-         MUxt71ZWh+8eRyEcTP5BZGIilgCuE5rPk/k6+4dUbg9Ob/3iTbU0/wnOsu7an/o1gSsK
-         DrvnCo3rOf8Sua0uIWAlO2+0FLa0Mjd/F3LoyD5yZpsal9sso2OMfFoPyFNBLIE1ZdmS
-         9Y4V7SpcZMDLudhphdChqGcObQvCtDqvkWvqtK4UkMGbO0EF29Bdf68FvhqRa/Hz2a/5
-         xR4qAZvsrEQFIt16yYWSXChJ4kLjyVUkf6kd0eSNBhf+Qq68hpHGQGx/N9hSlHbdMDi6
-         YRvw==
+        bh=Uy3GzDC/3O8U5MnHDFB01vcThhGk4+LpUii33EoT0mU=;
+        b=CpRQXslQJ4GcU66JWYXcgsogIOovk4Oj5BbQvT1mVf4Dt4EhIA8xkGp8g5r/aT6MwC
+         2veX2Qf67yFZ9At1kXc2JXytLmodk0droxpumi42GNd8fRqrcbQ/bLLUWXO9GzyqUMMy
+         iyw5xGUu/UeKDlul40NjhRVv2XG3/+FL2LW3Qo6YEooqmR5W7AClmwrQ/FgyHGoBL0Yx
+         PCL7voVxS3VCUx0ml2exh075XNYbgTY1e8lKa/wm4SfSeV4yb2otxX66LMcgBzbH2bV8
+         hyPnoAjhw3rljtZIgVgulRBpu/b+CeiJLRVSEXJbt+EcT0CMZVhv4Xmh9I7IzoBgvQrV
+         je1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=K2tpItKwuKZOogitEmK5udMyyQM1691xM5APcPto608=;
-        b=fHvo4ydlyBV+MIUkhqAltG0rFEPhzEXZNbsmyXRN1ndBUDxYyHkPpiXSJgPyCn3FL9
-         nqf0olVVPMEnexnKlG6rjJjgNFaDz4e4DFvn3q6ZNby3045CfhIgyYopBFsuFiEHE0gG
-         QTNs6NCVGW0BKXd4oWH4vVlwMmGKqpjIxJbXv5OztHIvA3sq6SDlNH9rDpocLbRL/NRL
-         +6WRc7fJe5mVGL/5+D0elCxq58v4sAkmB9yGZuQKLCW/oJ5o1XinMDt7OBFHMsbjCJFl
-         sg6xsPKWqF4DdhbK3kFvgFGfYPmyL1l5/Brt6nGrBjfgFELqCtx9NnVoUWvK6ybJqpmV
-         hwzQ==
-X-Gm-Message-State: APjAAAX3ohTcZo7T6413+l0MeTg5bmDVjWN5NiEuXR8MuJGmN7FSQAsv
-        93ICWwsEODu5CJEoHZ45GeVQi4iXMLuzyL0IZ/c=
-X-Google-Smtp-Source: APXvYqwzMbEiuqzBEGi8Ma814/2Wm8+1QLsd2TC+xpIY9gX5+hw7VVWydloLi3QoDkPpFr8OY2VVgWK6VjVIqQicj+g=
-X-Received: by 2002:a6b:f607:: with SMTP id n7mr548056ioh.263.1562004182900;
- Mon, 01 Jul 2019 11:03:02 -0700 (PDT)
+        bh=Uy3GzDC/3O8U5MnHDFB01vcThhGk4+LpUii33EoT0mU=;
+        b=bckOwN4uUa80O5561+ZceR7eYtif609Ig8K9MTx8RIsrPH+DrGXPLdiCciuX7YceeV
+         YUbfj0UpNwSIU7Ig6dk2m6HBBNDU+rzuXr5rpCgd8WU5tN6kwECpc0Ka+5yCRKYOBU/0
+         A/0JQB9wMMc90LBy7YT7D6ZaiPwJFJBJls3JDinNF0eO0Bp4EGZscFq1vvZaTgj3z14B
+         JVmb1xW4Kd287wG73wTjRBEy9U4Of9BAjXdRPIqHss5bsM61PD5X/kZ6u90SvhORk/qP
+         G4lfTn45H97IibkvIBxsNOxYTT0gs25vgLqHcFkEPUb2102CR6T4LR+XIVV0GvSVNSia
+         Z1wQ==
+X-Gm-Message-State: APjAAAUmleflRW6nsi8NJTcjJ1YF0KYJODFjFHFHGbcTMmEhIb9efqjw
+        Hzaf+sRCZKzvldNwJpdvQ3sNoOcTM/qS0ibWN/c=
+X-Google-Smtp-Source: APXvYqxgBnVoTGZWK95i22k6Cou8FFFimKn7TGZnM12vGsyAr9w5HBXwXBtcghJbIHbdMWpoLX5nmxpLrurw/H/MjRc=
+X-Received: by 2002:a6b:3b89:: with SMTP id i131mr16212349ioa.33.1562004528091;
+ Mon, 01 Jul 2019 11:08:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190630150230.7878-1-robdclark@gmail.com> <20190630150230.7878-2-robdclark@gmail.com>
-In-Reply-To: <20190630150230.7878-2-robdclark@gmail.com>
+References: <20190630150230.7878-1-robdclark@gmail.com> <20190630150230.7878-3-robdclark@gmail.com>
+In-Reply-To: <20190630150230.7878-3-robdclark@gmail.com>
 From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Date:   Mon, 1 Jul 2019 12:02:52 -0600
-Message-ID: <CAOCk7Np7jjdzbhX2qUf4h-JyLrqSwthX+=7Hd3vQETBtQDp9DQ@mail.gmail.com>
-Subject: Re: [Freedreno] [PATCH 1/5] clk: inherit clocks enabled by bootloader
+Date:   Mon, 1 Jul 2019 12:08:38 -0600
+Message-ID: <CAOCk7NpOK60ipDzD1Sn+VT_eO3jFikVJ0kCO4T18UBZOGcCFaA@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH 2/5] genpd/gdsc: inherit display powerdomain
+ from bootloader
 To:     Rob Clark <robdclark@gmail.com>
 Cc:     "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
         MSM <linux-arm-msm@vger.kernel.org>,
         Rob Clark <robdclark@chromium.org>,
-        aarch64-laptops@lists.linaro.org, linux-pm@vger.kernel.org,
+        aarch64-laptops@lists.linaro.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
         Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Michael Turquette <mturquette@baylibre.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         lkml <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
+        Andy Gross <agross@kernel.org>, Pavel Machek <pavel@ucw.cz>,
         freedreno <freedreno@lists.freedesktop.org>,
         linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -68,22 +74,13 @@ On Sun, Jun 30, 2019 at 9:02 AM Rob Clark <robdclark@gmail.com> wrote:
 >
 > From: Rob Clark <robdclark@chromium.org>
 >
-> The goal here is to support inheriting a display setup by bootloader,
-> although there may also be some non-display related use-cases.
+> Mark power domains that may be enabled by bootloader, and which should
+> not be disabled until a driver takes them over.
 >
-> Rough idea is to add a flag for clks and power domains that might
-> already be enabled when kernel starts, and which should not be
-> disabled at late_initcall if the kernel thinks they are "unused".
->
-> If bootloader is enabling display, and kernel is using efifb before
-> real display driver is loaded (potentially from kernel module after
-> userspace starts, in a typical distro kernel), we don't want to kill
-> the clocks and power domains that are used by the display before
-> userspace starts.
+> This keeps efifb alive until the real driver can be probed.  In a distro
+> kernel, the driver will most likely built as a module, and not probed
+> until we get to userspace (after late_initcall)
 >
 > Signed-off-by: Rob Clark <robdclark@chromium.org>
-
-Seems sane to me.  I'm curious what Stephen Boyd thinks.
-I'll try to give it a spin on one of the 835 laptops.
 
 Reviewed-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
