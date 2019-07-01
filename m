@@ -2,93 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0AF5BFE3
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 17:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE1E5BFE8
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 17:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729303AbfGAPcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 11:32:19 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:52792 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbfGAPcT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 11:32:19 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 80CE36087F; Mon,  1 Jul 2019 15:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561995138;
-        bh=FoV2coVDXy5ivyKrTBUVcDFYj8JMXwYeCYY1wHzBNqM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hcB5s7w/YylEBdd3fgb1QxbRHIR/9sv8E4zr8AeDj9iSrKYl6WTpmrUBH5qknIHLG
-         qpxMt9dJWMUvi55fR9CS4hqotkejgOGnK8pSwH3Yid81UWTiY82z+eOXVIkAougWBD
-         DuZdj6cJR+yoXY46OKP45Pv06MoAM/3+grVpVQxg=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 03EC6607DF;
-        Mon,  1 Jul 2019 15:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561995137;
-        bh=FoV2coVDXy5ivyKrTBUVcDFYj8JMXwYeCYY1wHzBNqM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GefpQLdNw9i+ssCyYSXd1UxNOlipWaRVR42ei50Ifykd2UisMaw1MNg/aAc0ibe6Z
-         qiZn9pDGh4cqzmfdmm2qGPRTP8XwiNgSAPCiwS1CroVb1sKYqdgd/R25IDcFdp1s7n
-         6TNPQ25UpNosJYInAYULjrnVXeimwvKWCWgbs6ag=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 03EC6607DF
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     andy.gross@linaro.org, bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, swboyd@chromium.org,
-        dianders@chromium.org, mkshah@codeaurora.org,
-        Lina Iyer <ilina@codeaurora.org>
-Subject: [PATCH 2/2] drivers: qcom: rpmh-rsc: fix read back of trigger register
-Date:   Mon,  1 Jul 2019 09:29:07 -0600
-Message-Id: <20190701152907.16407-2-ilina@codeaurora.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190701152907.16407-1-ilina@codeaurora.org>
-References: <20190701152907.16407-1-ilina@codeaurora.org>
+        id S1728145AbfGAPd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 11:33:56 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41340 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728065AbfGAPd4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 11:33:56 -0400
+Received: by mail-wr1-f67.google.com with SMTP id c2so14362364wrm.8;
+        Mon, 01 Jul 2019 08:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=wpaGBMR0ZnPZyn/D/Sm+4RGXSfbYpu+boXZvyCO/ODI=;
+        b=A72xlDkgu71h7IfQmWnshd+7BB2J0hu16RQ587WNfdDxAg/KZJsP+9WO6hoRAWLfal
+         xv4KcYpzmwCkzAqAAGXd0ZRSBMEYkJb50Y+zbjlXDrHjuyr/zDY65UHADADQG3HSzLtD
+         qiNJlX9302oGNp3j1OihV+UPWXC1jTirZDG0zbTf6lrfRofA/z9rNZ6lM4o5J+gAuB9W
+         Aj3V+7vHD9wdCFyNHgIrWdf6u0CrH7rEQ64b0q16QoihxNoY2dtgNrLc/a0ih8CraDPM
+         k0Sx+d2dAPPcV2jjxRgVtiwzyT1srA4gRYHAsgpzfErdmtR0xzkl+VDLCowS1vya/ohS
+         F2kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=wpaGBMR0ZnPZyn/D/Sm+4RGXSfbYpu+boXZvyCO/ODI=;
+        b=qmYSFMaMwpw6Pa2JYUJ4nHfZYGuDtk5Wy+Iz6e5tYz426DqMCbSo+JoKjGK9Len+IJ
+         UzlpdZGIKQEUaTzn1X1QhHi7ePGY56p1pG0CfY1d/pV/gjdMpM4VellBizRcXQGyrSbO
+         K35bl4v1WGlgqOSLlcozi72Ix0n6/xCA5/On7Fd5a+/aCUvr1qLXu1M5tGdjBNZFZtSo
+         rN1wbWj1fJtCNKRylJr0meqbawXQGzHu2+MffCOxZpW8gIumloDCzeF5rNPRo/TE/0UB
+         2DHlIegUe2ZCQf0Z1xpvG4StKekfisxy5fGzc86qWdSG/pt5ChFanAopdi2sdDTBPYNI
+         cKxA==
+X-Gm-Message-State: APjAAAXITVgrLFsDIJCPvdoXIlqsDwnC0QBljHLwBo1bUkgbjVyccqKf
+        0mASQsCv9FI+5bxAFcaRmEjJyEtV
+X-Google-Smtp-Source: APXvYqyuVuGCiK73ZnHWiEMsO7p5DGBpwkr+3ofW91YbXyDRrqVTPsSOz+oahhoYIvkBgMIrZvEaXA==
+X-Received: by 2002:adf:da47:: with SMTP id r7mr3707425wrl.56.1561995233880;
+        Mon, 01 Jul 2019 08:33:53 -0700 (PDT)
+Received: from [172.16.1.192] (host-89-243-246-11.as13285.net. [89.243.246.11])
+        by smtp.gmail.com with ESMTPSA id t14sm9268449wrr.33.2019.07.01.08.33.52
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Jul 2019 08:33:52 -0700 (PDT)
+From:   Alan Jenkins <alan.christopher.jenkins@gmail.com>
+Subject: NO_HZ_IDLE causes consistently low cpu "iowait" time (and higher cpu
+ "idle" time)
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <2ff025f1-9a3e-3eae-452b-ef84824009b4@gmail.com>
+Date:   Mon, 1 Jul 2019 16:33:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When triggering a TCS to send its contents, reading back the trigger
-value may return an incorrect value. That is because, writing the
-trigger may raise an interrupt which could be handled immediately and
-the trigger value could be reset in the interrupt handler. By doing a
-read back we may end up spinning waiting for the value we wrote.
+Hi
 
-Fixes: 658628 ("drivers: qcom: rpmh-rsc: add RPMH controller for QCOM
-SoCs")
-Signed-off-by: Lina Iyer <ilina@codeaurora.org>
----
- drivers/soc/qcom/rpmh-rsc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I tried running a simple test:
 
-diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-index 92461311aef3..2fc2fa879480 100644
---- a/drivers/soc/qcom/rpmh-rsc.c
-+++ b/drivers/soc/qcom/rpmh-rsc.c
-@@ -300,7 +300,7 @@ static void __tcs_trigger(struct rsc_drv *drv, int tcs_id)
- 	enable = TCS_AMC_MODE_ENABLE;
- 	write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
- 	enable |= TCS_AMC_MODE_TRIGGER;
--	write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
-+	write_tcs_reg(drv, RSC_DRV_CONTROL, tcs_id, enable);
- }
- 
- static int check_for_req_inflight(struct rsc_drv *drv, struct tcs_group *tcs,
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+     dd if=testfile iflag=direct bs=1M of=/dev/null
 
+With my default settings, `vmstat 10` shows something like 85% idle time 
+to 15% iowait time. I have 4 CPUs, so this is much less than one CPU 
+worth of iowait time.
+
+If I boot with "nohz=off", I see idle time fall to 75% or below, and 
+iowait rise to about 25%, equivalent to one CPU.  That is what I had 
+originally expected.
+
+(I can also see my expected numbers, if I disable *all* C-states and 
+force polling using `pm_qos_resume_latency_us` in sysfs).
+
+The numbers above are from a kernel somewhere around v5.2-rc5.  I saw 
+the "wrong" results on some previous kernels as well.  I just now 
+realized the link to NO_HZ_IDLE.[1]
+
+[1] 
+https://unix.stackexchange.com/questions/517757/my-basic-assumption-about-system-iowait-does-not-hold/527836#527836
+
+I did not find any information about this high level of inaccuracy. Can 
+anyone explain, is this behaviour expected?
+
+I found several patches that mentioned "iowait" and NO_HZ_IDLE. But if 
+they described this problem, it was not clear to me.
+
+I thought this might also be affecting the "IO pressure" values from the 
+new "pressure stall information"... but I am too confused already, so I 
+am only asking about iowait at the moment :-).[2]
+
+[2] 
+https://unix.stackexchange.com/questions/527342/why-does-the-new-linux-pressure-stall-information-for-io-not-show-as-100/527347#527347
+
+I have seen the disclaimers for iowait in 
+Documentation/filesystems/proc.txt, and the derived man page. 
+Technically, the third disclaimer might cover anything.  But I was 
+optimistic; I hoped it was talking about relatively small glitches :-).  
+I didn't think it would mean a large systematic undercounting, which 
+applied to the vast majority of current systems (which are not tuned for 
+realtime use).
+
+|
+
+> - iowait: In a word, iowait stands for waiting for I/O to complete. But there
+>  are several problems:
+>  1. Cpu will not wait for I/O to complete, iowait is the time that a task is
+>     waiting for I/O to complete. When cpu goes into idle state for
+>     outstanding task io, another task will be scheduled on this CPU.
+>  2. In a multi-core CPU, the task waiting for I/O to complete is not running
+>     on any CPU, so the iowait of each CPU is difficult to calculate.
+>  3. The value of iowait field in /proc/stat will decrease in certain
+>     conditions|
+
+
+Thanks for all the power-saving code
+Alan
