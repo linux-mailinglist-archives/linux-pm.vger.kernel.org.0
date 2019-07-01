@@ -2,92 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C2E5C2DE
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 20:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BACC5C30E
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 20:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfGASZl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 14:25:41 -0400
-Received: from anholt.net ([50.246.234.109]:55472 "EHLO anholt.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726247AbfGASZl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 1 Jul 2019 14:25:41 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by anholt.net (Postfix) with ESMTP id 1BD8A10A1260;
-        Mon,  1 Jul 2019 11:25:40 -0700 (PDT)
-X-Virus-Scanned: Debian amavisd-new at anholt.net
-Received: from anholt.net ([127.0.0.1])
-        by localhost (kingsolver.anholt.net [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id vMEmiYf2-qnV; Mon,  1 Jul 2019 11:25:38 -0700 (PDT)
-Received: from eliezer.anholt.net (localhost [127.0.0.1])
-        by anholt.net (Postfix) with ESMTP id C7B8610A0431;
-        Mon,  1 Jul 2019 11:25:38 -0700 (PDT)
-Received: by eliezer.anholt.net (Postfix, from userid 1000)
-        id 566E62FE21CE; Mon,  1 Jul 2019 11:25:38 -0700 (PDT)
-From:   Eric Anholt <eric@anholt.net>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        aarch64-laptops@lists.linaro.org, linux-pm@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        freedreno@lists.freedesktop.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 1/5] clk: inherit clocks enabled by bootloader
-In-Reply-To: <20190630150230.7878-2-robdclark@gmail.com>
-References: <20190630150230.7878-1-robdclark@gmail.com> <20190630150230.7878-2-robdclark@gmail.com>
-User-Agent: Notmuch/0.22.2+1~gb0bcfaa (http://notmuchmail.org) Emacs/26.1 (x86_64-pc-linux-gnu)
-Date:   Mon, 01 Jul 2019 11:25:36 -0700
-Message-ID: <8736jpzk67.fsf@anholt.net>
+        id S1726781AbfGASc5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 14:32:57 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:38058 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725853AbfGASc5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 14:32:57 -0400
+Received: by mail-io1-f67.google.com with SMTP id j6so31070570ioa.5;
+        Mon, 01 Jul 2019 11:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5XH2Sgqd3f1qItnFcP6aNN21WN2gIql8Aj/n31a7/ks=;
+        b=qSJb48epcJ44fqai80lK1au6m1JjSIdQZrDhYdZlBLTLfvHPyVP6yCEJzlYUU8rsl8
+         DetRS296GhrTsYU1MdFOJ9PkVvw1oLqwmw5bOm5ArkivRkbE0kwsCW3UtF4LCkI5BNYr
+         n7UQIk++RH6FRVFQlcIVkhtnrg2bYzpdPz8s61m5626G1S4JcyFm4aauzopw6/rM8kcG
+         ThDIFcnEHeQhOPlN5bRtwmkgZgkeLkhamFfl9nkspVNRdTeDvAqMTsscfKrkWjbf+vWQ
+         A8wtFx7ny8j6KeimI7tdOHKFhhZSqmhyPpdLhpWDXGXO4Ab4iAlQHbS5RoyCEhv152Uu
+         dpaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5XH2Sgqd3f1qItnFcP6aNN21WN2gIql8Aj/n31a7/ks=;
+        b=MnOCldSXSN8LTBV9F2GEVVBd49L7AJOZR+Di4GNSaWJvLkG0bIsgbUqZSV4KfXBBZs
+         du53P8Crq8E2YECwSNKCvykES/EAtB4cPCSjhXXlTNA7GcCilWVhdSrslIMq91FAngYN
+         ex0ypNhM2QExcRWUF0jim0WgBauR9gC82gxEKe54Y2v28s6/RhNl1kM5Halb73XnV+nE
+         nHrY2rVgSMPqYGh78IyiOjZ89+yhxNIE2/+gSi0N9wkwPCLKmbDF7BV7d4wH7WBF7Sh9
+         hXsGOmSH+zQMMCLvhzkjGk3UGgJxuBYdmSmJpijxHuCGgl+rJETfKu2QYgNtpWlhE4VI
+         cqaA==
+X-Gm-Message-State: APjAAAWBgfMmX3VF/4TWZzQFmTDDaxfKf5RLZqN2gZrmlVY22Bipv8iM
+        meypgYJkFDMs1kbE28R2+CdeOHqNOwksah/uh40=
+X-Google-Smtp-Source: APXvYqyNjLQuWt7u4TbYn6Fr5VCbbvpJLZC25VDlMbo81qPC93k/t2OonplTOmmtRgVMNBB6dy+vXcl1rFN2GtPGtaY=
+X-Received: by 2002:a6b:b987:: with SMTP id j129mr25537368iof.166.1562005976714;
+ Mon, 01 Jul 2019 11:32:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
+References: <20190630150230.7878-1-robdclark@gmail.com> <20190630150230.7878-4-robdclark@gmail.com>
+In-Reply-To: <20190630150230.7878-4-robdclark@gmail.com>
+From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Date:   Mon, 1 Jul 2019 12:32:46 -0600
+Message-ID: <CAOCk7NqS+0Z8JOaeCX+f+t8aKno14bi++N8EX4-1XA0AKd2rZg@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH 3/5] drm/msm/dsi: split clk rate setting and enable
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        aarch64-laptops@lists.linaro.org,
+        Archit Taneja <architt@codeaurora.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-pm@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Sean Paul <sean@poorly.run>,
+        Allison Randal <allison@lohutok.net>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-clk@vger.kernel.org,
+        Chandan Uddaraju <chandanu@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-
-Rob Clark <robdclark@gmail.com> writes:
-
+On Sun, Jun 30, 2019 at 9:03 AM Rob Clark <robdclark@gmail.com> wrote:
+>
 > From: Rob Clark <robdclark@chromium.org>
 >
-> The goal here is to support inheriting a display setup by bootloader,
-> although there may also be some non-display related use-cases.
->
-> Rough idea is to add a flag for clks and power domains that might
-> already be enabled when kernel starts, and which should not be
-> disabled at late_initcall if the kernel thinks they are "unused".
->
-> If bootloader is enabling display, and kernel is using efifb before
-> real display driver is loaded (potentially from kernel module after
-> userspace starts, in a typical distro kernel), we don't want to kill
-> the clocks and power domains that are used by the display before
-> userspace starts.
+> Prep work for the following patch.
 >
 > Signed-off-by: Rob Clark <robdclark@chromium.org>
 
-Raspberry Pi is carrying downstream hacks to do similar stuff, and it
-would be great to see CCF finally support this.
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE/JuuFDWp9/ZkuCBXtdYpNtH8nugFAl0aUCAACgkQtdYpNtH8
-nui9RBAAnmVfgiACM7S2QSkoxsuAb+2zUIY7QTEdS6E25ZqZzNmGPmMTISp/XxAA
-NLGeI6XUfygjG9EKv0VFXWqqYEmZakub2aySsyMeMen+ERcERfS48CJN5gt6iMdK
-GgOmuPB7ZzmNJBYtFtDi8gLluTJeN4IyPMSEro8rBE0PQbaQ58DBWHjFlpENnfP3
-H3UiaafiPLs3FlkHoqat22EFkaykUwcuDHzrDhvHBeef8AQ/daG2wUJxqeMG09y7
-f7w+vnehZUJD05TbUhGp27SspqL9zGv9+ZxMDnkT80TOjECCP9pux7uH/To3XF9u
-E/3Frxf4vRYWIMpdp291UCWqbxmeUojDqbKijBMOlrdWEmXAZZhgfGfJfJ+yBsmI
-Jo1lmr8/H3HU86e73OxYvMk1xMu3MJJIcaY60MNJ1TTKYMoEjMoOxGJC3GzzePzp
-77f2Rj5qoyLXDhFIYjtAGHUoxsGbqTCZAVl3blEUUKxZ7NXcwkGnEdxamFcNGfR9
-IEInM+oyCsjq1XebE0Oq/Rgst/w15nRblNpQyJFU7iQhMGo44wb1G4baTQ3Y+Zh0
-YXHwx/goMr8Y3CufPNWSsVGRVQpKu187uSBQ99zlcF/cpceXvGPJqMQQGE7G34lV
-2CMtjR2tL0dlpjYMTfYMRo7i/MevZYi2GyVWrzEJTeqmMVWthuc=
-=gR9l
------END PGP SIGNATURE-----
---=-=-=--
+Reviewed-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
