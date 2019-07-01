@@ -2,98 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9F75C0B1
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 17:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5285C0F8
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 18:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729618AbfGAPxw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 11:53:52 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:39546 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727589AbfGAPxw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 11:53:52 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id D3D83607B9; Mon,  1 Jul 2019 15:53:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561996430;
-        bh=ZHFRcUfkmA8gyffOLFCQIwfLpo0nfmJ6jPhQbS4fLaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KvGvhaCnraYanqxrjT2yQxDTXekQzXoGCmt4ugzgSHdiQFodZjHAsgiG/cqL5zenC
-         rvNhfOdFep0zCV4tR/KuZ+r8R4m56FN8dZdPXgNj9yVMpz/4Ess2WOP+HY/mvb1f/D
-         U3K78oJldlovACDp03FrHsCl6FrIPdb4bzuoSTcM=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0D3C9602F8;
-        Mon,  1 Jul 2019 15:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561996430;
-        bh=ZHFRcUfkmA8gyffOLFCQIwfLpo0nfmJ6jPhQbS4fLaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KvGvhaCnraYanqxrjT2yQxDTXekQzXoGCmt4ugzgSHdiQFodZjHAsgiG/cqL5zenC
-         rvNhfOdFep0zCV4tR/KuZ+r8R4m56FN8dZdPXgNj9yVMpz/4Ess2WOP+HY/mvb1f/D
-         U3K78oJldlovACDp03FrHsCl6FrIPdb4bzuoSTcM=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0D3C9602F8
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Mon, 1 Jul 2019 09:53:49 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, swboyd@chromium.org,
-        dianders@chromium.org, mkshah@codeaurora.org
-Subject: Re: [PATCH 2/2] drivers: qcom: rpmh-rsc: fix read back of trigger
- register
-Message-ID: <20190701155349.GD24030@codeaurora.org>
-References: <20190701152907.16407-1-ilina@codeaurora.org>
- <20190701152907.16407-2-ilina@codeaurora.org>
+        id S1728238AbfGAQP4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 12:15:56 -0400
+Received: from mga06.intel.com ([134.134.136.31]:41527 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726863AbfGAQP4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 1 Jul 2019 12:15:56 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Jul 2019 09:15:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,440,1557212400"; 
+   d="scan'208";a="184279656"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 01 Jul 2019 09:15:50 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 01 Jul 2019 19:15:50 +0300
+Date:   Mon, 1 Jul 2019 19:15:50 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans De Goede <hdegoede@redhat.com>,
+        "Robert R. Howell" <RHowell@uwyo.edu>
+Subject: Re: [PATCH v2 1/5] PM: ACPI/PCI: Resume all devices during
+ hibernation
+Message-ID: <20190701161550.GA2640@lahna.fi.intel.com>
+References: <4976412.ihyb9sT5jY@kreacher>
+ <6191578.xJk2HsE5MX@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190701152907.16407-2-ilina@codeaurora.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <6191578.xJk2HsE5MX@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Switching Andy's email address.
+On Mon, Jul 01, 2019 at 12:44:25PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Both the PCI bus type and the ACPI PM domain avoid resuming
+> runtime-suspended devices with DPM_FLAG_SMART_SUSPEND set during
+> hibernation (before creating the snapshot image of system memory),
+> but that turns out to be a mistake.  It leads to functional issues
+> and adds complexity that's hard to justify.
+> 
+> For this reason, resume all runtime-suspended PCI devices and all
+> devices in the ACPI PM domains before creating a snapshot image of
+> system memory during hibernation.
+> 
+> Fixes: 05087360fd7a (ACPI / PM: Take SMART_SUSPEND driver flag into account)
+> Fixes: c4b65157aeef (PCI / PM: Take SMART_SUSPEND driver flag into account)
+> Link: https://lore.kernel.org/linux-acpi/917d4399-2e22-67b1-9d54-808561f9083f@uwyo.edu/T/#maf065fe6e4974f2a9d79f332ab99dfaba635f64c
+> Reported-by: Robert R. Howell <RHowell@uwyo.edu>
+> Tested-by: Robert R. Howell <RHowell@uwyo.edu>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> -> v2: No changes.
+> 
+> ---
+>  drivers/acpi/device_pm.c |   13 +++++++------
+>  drivers/pci/pci-driver.c |   16 ++++++++--------
+>  2 files changed, 15 insertions(+), 14 deletions(-)
+> 
+> Index: linux-pm/drivers/acpi/device_pm.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/device_pm.c
+> +++ linux-pm/drivers/acpi/device_pm.c
+> @@ -1155,13 +1155,14 @@ EXPORT_SYMBOL_GPL(acpi_subsys_resume_ear
+>  int acpi_subsys_freeze(struct device *dev)
+>  {
+>  	/*
+> -	 * This used to be done in acpi_subsys_prepare() for all devices and
+> -	 * some drivers may depend on it, so do it here.  Ideally, however,
+> -	 * runtime-suspended devices should not be touched during freeze/thaw
+> -	 * transitions.
+> +	 * Resume all runtime-suspended devices before creating a snapshot
+> +	 * image of system memory, because the restore kernel generally cannot
+> +	 * be expected to always handle them consistently and they need to be
+> +	 * put into the runtime-active metastate during system resume anyway,
+> +	 * so it is better to ensure that the state saved in the image will be
+> +	 * alwyas consistent with that.
 
-On Mon, Jul 01 2019 at 09:32 -0600, Lina Iyer wrote:
->When triggering a TCS to send its contents, reading back the trigger
->value may return an incorrect value. That is because, writing the
->trigger may raise an interrupt which could be handled immediately and
->the trigger value could be reset in the interrupt handler. By doing a
->read back we may end up spinning waiting for the value we wrote.
->
->Fixes: 658628 ("drivers: qcom: rpmh-rsc: add RPMH controller for QCOM
->SoCs")
->Signed-off-by: Lina Iyer <ilina@codeaurora.org>
->---
-> drivers/soc/qcom/rpmh-rsc.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
->index 92461311aef3..2fc2fa879480 100644
->--- a/drivers/soc/qcom/rpmh-rsc.c
->+++ b/drivers/soc/qcom/rpmh-rsc.c
->@@ -300,7 +300,7 @@ static void __tcs_trigger(struct rsc_drv *drv, int tcs_id)
-> 	enable = TCS_AMC_MODE_ENABLE;
-> 	write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
-> 	enable |= TCS_AMC_MODE_TRIGGER;
->-	write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
->+	write_tcs_reg(drv, RSC_DRV_CONTROL, tcs_id, enable);
-> }
->
-> static int check_for_req_inflight(struct rsc_drv *drv, struct tcs_group *tcs,
->--
->The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->a Linux Foundation Collaborative Project
->
+alwyas -> always
+
+>  	 */
+> -	if (!dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND))
+> -		pm_runtime_resume(dev);
+> +	pm_runtime_resume(dev);
+>  
+>  	return pm_generic_freeze(dev);
+>  }
+> Index: linux-pm/drivers/pci/pci-driver.c
+> ===================================================================
+> --- linux-pm.orig/drivers/pci/pci-driver.c
+> +++ linux-pm/drivers/pci/pci-driver.c
+> @@ -1012,15 +1012,15 @@ static int pci_pm_freeze(struct device *
+>  	}
+>  
+>  	/*
+> -	 * This used to be done in pci_pm_prepare() for all devices and some
+> -	 * drivers may depend on it, so do it here.  Ideally, runtime-suspended
+> -	 * devices should not be touched during freeze/thaw transitions,
+> -	 * however.
+> +	 * Resume all runtime-suspended devices before creating a snapshot
+> +	 * image of system memory, because the restore kernel generally cannot
+> +	 * be expected to always handle them consistently and they need to be
+> +	 * put into the runtime-active metastate during system resume anyway,
+> +	 * so it is better to ensure that the state saved in the image will be
+> +	 * alwyas consistent with that.
+
+ditto
+
+>  	 */
+> -	if (!dev_pm_smart_suspend_and_suspended(dev)) {
+> -		pm_runtime_resume(dev);
+> -		pci_dev->state_saved = false;
+> -	}
+> +	pm_runtime_resume(dev);
+> +	pci_dev->state_saved = false;
+>  
+>  	if (pm->freeze) {
+>  		int error;
+> 
+> 
+> 
