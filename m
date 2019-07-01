@@ -2,122 +2,326 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE1E5BFE8
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 17:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117BE5C0AF
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 17:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728145AbfGAPd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 11:33:56 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:41340 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728065AbfGAPd4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 11:33:56 -0400
-Received: by mail-wr1-f67.google.com with SMTP id c2so14362364wrm.8;
-        Mon, 01 Jul 2019 08:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=wpaGBMR0ZnPZyn/D/Sm+4RGXSfbYpu+boXZvyCO/ODI=;
-        b=A72xlDkgu71h7IfQmWnshd+7BB2J0hu16RQ587WNfdDxAg/KZJsP+9WO6hoRAWLfal
-         xv4KcYpzmwCkzAqAAGXd0ZRSBMEYkJb50Y+zbjlXDrHjuyr/zDY65UHADADQG3HSzLtD
-         qiNJlX9302oGNp3j1OihV+UPWXC1jTirZDG0zbTf6lrfRofA/z9rNZ6lM4o5J+gAuB9W
-         Aj3V+7vHD9wdCFyNHgIrWdf6u0CrH7rEQ64b0q16QoihxNoY2dtgNrLc/a0ih8CraDPM
-         k0Sx+d2dAPPcV2jjxRgVtiwzyT1srA4gRYHAsgpzfErdmtR0xzkl+VDLCowS1vya/ohS
-         F2kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=wpaGBMR0ZnPZyn/D/Sm+4RGXSfbYpu+boXZvyCO/ODI=;
-        b=qmYSFMaMwpw6Pa2JYUJ4nHfZYGuDtk5Wy+Iz6e5tYz426DqMCbSo+JoKjGK9Len+IJ
-         UzlpdZGIKQEUaTzn1X1QhHi7ePGY56p1pG0CfY1d/pV/gjdMpM4VellBizRcXQGyrSbO
-         K35bl4v1WGlgqOSLlcozi72Ix0n6/xCA5/On7Fd5a+/aCUvr1qLXu1M5tGdjBNZFZtSo
-         rN1wbWj1fJtCNKRylJr0meqbawXQGzHu2+MffCOxZpW8gIumloDCzeF5rNPRo/TE/0UB
-         2DHlIegUe2ZCQf0Z1xpvG4StKekfisxy5fGzc86qWdSG/pt5ChFanAopdi2sdDTBPYNI
-         cKxA==
-X-Gm-Message-State: APjAAAXITVgrLFsDIJCPvdoXIlqsDwnC0QBljHLwBo1bUkgbjVyccqKf
-        0mASQsCv9FI+5bxAFcaRmEjJyEtV
-X-Google-Smtp-Source: APXvYqyuVuGCiK73ZnHWiEMsO7p5DGBpwkr+3ofW91YbXyDRrqVTPsSOz+oahhoYIvkBgMIrZvEaXA==
-X-Received: by 2002:adf:da47:: with SMTP id r7mr3707425wrl.56.1561995233880;
-        Mon, 01 Jul 2019 08:33:53 -0700 (PDT)
-Received: from [172.16.1.192] (host-89-243-246-11.as13285.net. [89.243.246.11])
-        by smtp.gmail.com with ESMTPSA id t14sm9268449wrr.33.2019.07.01.08.33.52
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Jul 2019 08:33:52 -0700 (PDT)
-From:   Alan Jenkins <alan.christopher.jenkins@gmail.com>
-Subject: NO_HZ_IDLE causes consistently low cpu "iowait" time (and higher cpu
- "idle" time)
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <2ff025f1-9a3e-3eae-452b-ef84824009b4@gmail.com>
-Date:   Mon, 1 Jul 2019 16:33:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727905AbfGAPw6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jul 2019 11:52:58 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:39046 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727702AbfGAPw6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jul 2019 11:52:58 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 5EAE1602F8; Mon,  1 Jul 2019 15:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561996377;
+        bh=NWDtiNweA0CkNIej7/fSB2y/+W0hjSrP7uxYhyOM4DM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XHFmui+6MeWLOQ/T85e9m2lYZ+cFlBBf0UpuVHACafbnz1WYHCLwEsHL5GXHV70En
+         O+OSaBDFfdO3zUvtZSJp8fHko8+ciI6mZHptDH7vsDvR6TPaPCOSX/esJ8hvSbinpb
+         9br2c7uQNyLqBWKWE8Z29hjgW4XmXxGGoh2o49jo=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F404B6038E;
+        Mon,  1 Jul 2019 15:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1561996376;
+        bh=NWDtiNweA0CkNIej7/fSB2y/+W0hjSrP7uxYhyOM4DM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J6C2RKKmCceTMf67CK1c2XVbkNn+TbqZyTQ1mpRc0KWqXeYKpXc6fsJqWj0fWv5ou
+         LlytgxT517tzc/9hXFRiTdBtR6KNlonMbhi/98F4Ue8w49s+sr+um/++tkAwv2SMTC
+         vEXM3IRbWqYLMaFLNY4bC+2Y65+ur2sEE9cbMLGo=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F404B6038E
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
+Date:   Mon, 1 Jul 2019 09:52:55 -0600
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, swboyd@chromium.org,
+        dianders@chromium.org, mkshah@codeaurora.org,
+        "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
+Subject: Re: [PATCH 1/2] drivers: qcom: rpmh-rsc: simplify TCS locking
+Message-ID: <20190701155255.GC24030@codeaurora.org>
+References: <20190701152907.16407-1-ilina@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190701152907.16407-1-ilina@codeaurora.org>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi
+Switching Andy's email address.
 
-I tried running a simple test:
-
-     dd if=testfile iflag=direct bs=1M of=/dev/null
-
-With my default settings, `vmstat 10` shows something like 85% idle time 
-to 15% iowait time. I have 4 CPUs, so this is much less than one CPU 
-worth of iowait time.
-
-If I boot with "nohz=off", I see idle time fall to 75% or below, and 
-iowait rise to about 25%, equivalent to one CPU.  That is what I had 
-originally expected.
-
-(I can also see my expected numbers, if I disable *all* C-states and 
-force polling using `pm_qos_resume_latency_us` in sysfs).
-
-The numbers above are from a kernel somewhere around v5.2-rc5.  I saw 
-the "wrong" results on some previous kernels as well.  I just now 
-realized the link to NO_HZ_IDLE.[1]
-
-[1] 
-https://unix.stackexchange.com/questions/517757/my-basic-assumption-about-system-iowait-does-not-hold/527836#527836
-
-I did not find any information about this high level of inaccuracy. Can 
-anyone explain, is this behaviour expected?
-
-I found several patches that mentioned "iowait" and NO_HZ_IDLE. But if 
-they described this problem, it was not clear to me.
-
-I thought this might also be affecting the "IO pressure" values from the 
-new "pressure stall information"... but I am too confused already, so I 
-am only asking about iowait at the moment :-).[2]
-
-[2] 
-https://unix.stackexchange.com/questions/527342/why-does-the-new-linux-pressure-stall-information-for-io-not-show-as-100/527347#527347
-
-I have seen the disclaimers for iowait in 
-Documentation/filesystems/proc.txt, and the derived man page. 
-Technically, the third disclaimer might cover anything.  But I was 
-optimistic; I hoped it was talking about relatively small glitches :-).  
-I didn't think it would mean a large systematic undercounting, which 
-applied to the vast majority of current systems (which are not tuned for 
-realtime use).
-
-|
-
-> - iowait: In a word, iowait stands for waiting for I/O to complete. But there
->  are several problems:
->  1. Cpu will not wait for I/O to complete, iowait is the time that a task is
->     waiting for I/O to complete. When cpu goes into idle state for
->     outstanding task io, another task will be scheduled on this CPU.
->  2. In a multi-core CPU, the task waiting for I/O to complete is not running
->     on any CPU, so the iowait of each CPU is difficult to calculate.
->  3. The value of iowait field in /proc/stat will decrease in certain
->     conditions|
-
-
-Thanks for all the power-saving code
-Alan
+On Mon, Jul 01 2019 at 09:32 -0600, Lina Iyer wrote:
+>From: "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
+>
+>tcs->lock was introduced to serialize access with in TCS group. But
+>even without tcs->lock, drv->lock is serving the same purpose. So
+>use a single drv->lock.
+>
+>Other optimizations include -
+> - Remove locking around clear_bit() in IRQ handler. clear_bit() is
+>   atomic.
+> - Remove redundant read of TCS registers.
+> - Use spin_lock instead of _irq variants as the locks are not held
+>   in interrupt context.
+>
+>Fixes: 658628 ("drivers: qcom: rpmh-rsc: add RPMH controller for QCOM
+>SoCs")
+>Signed-off-by: Raju P.L.S.S.S.N <rplsssn@codeaurora.org>
+>Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+>---
+> drivers/soc/qcom/rpmh-internal.h |  2 --
+> drivers/soc/qcom/rpmh-rsc.c      | 37 +++++++++++---------------------
+> drivers/soc/qcom/rpmh.c          | 20 +++++++----------
+> 3 files changed, 21 insertions(+), 38 deletions(-)
+>
+>diff --git a/drivers/soc/qcom/rpmh-internal.h b/drivers/soc/qcom/rpmh-internal.h
+>index a7bbbb67991c..969d5030860e 100644
+>--- a/drivers/soc/qcom/rpmh-internal.h
+>+++ b/drivers/soc/qcom/rpmh-internal.h
+>@@ -28,7 +28,6 @@ struct rsc_drv;
+>  * @offset:    start of the TCS group relative to the TCSes in the RSC
+>  * @num_tcs:   number of TCSes in this type
+>  * @ncpt:      number of commands in each TCS
+>- * @lock:      lock for synchronizing this TCS writes
+>  * @req:       requests that are sent from the TCS
+>  * @cmd_cache: flattened cache of cmds in sleep/wake TCS
+>  * @slots:     indicates which of @cmd_addr are occupied
+>@@ -40,7 +39,6 @@ struct tcs_group {
+> 	u32 offset;
+> 	int num_tcs;
+> 	int ncpt;
+>-	spinlock_t lock;
+> 	const struct tcs_request *req[MAX_TCS_PER_TYPE];
+> 	u32 *cmd_cache;
+> 	DECLARE_BITMAP(slots, MAX_TCS_SLOTS);
+>diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+>index e278fc11fe5c..92461311aef3 100644
+>--- a/drivers/soc/qcom/rpmh-rsc.c
+>+++ b/drivers/soc/qcom/rpmh-rsc.c
+>@@ -93,8 +93,7 @@ static void write_tcs_reg_sync(struct rsc_drv *drv, int reg, int tcs_id,
+>
+> static bool tcs_is_free(struct rsc_drv *drv, int tcs_id)
+> {
+>-	return !test_bit(tcs_id, drv->tcs_in_use) &&
+>-	       read_tcs_reg(drv, RSC_DRV_STATUS, tcs_id, 0);
+>+	return !test_bit(tcs_id, drv->tcs_in_use);
+> }
+>
+> static struct tcs_group *get_tcs_of_type(struct rsc_drv *drv, int type)
+>@@ -104,29 +103,28 @@ static struct tcs_group *get_tcs_of_type(struct rsc_drv *drv, int type)
+>
+> static int tcs_invalidate(struct rsc_drv *drv, int type)
+> {
+>-	int m;
+>+	int m, ret = 0;
+> 	struct tcs_group *tcs;
+>
+> 	tcs = get_tcs_of_type(drv, type);
+>
+>-	spin_lock(&tcs->lock);
+>-	if (bitmap_empty(tcs->slots, MAX_TCS_SLOTS)) {
+>-		spin_unlock(&tcs->lock);
+>-		return 0;
+>-	}
+>+	spin_lock(&drv->lock);
+>+	if (bitmap_empty(tcs->slots, MAX_TCS_SLOTS))
+>+		goto done;
+>
+> 	for (m = tcs->offset; m < tcs->offset + tcs->num_tcs; m++) {
+> 		if (!tcs_is_free(drv, m)) {
+>-			spin_unlock(&tcs->lock);
+>-			return -EAGAIN;
+>+			ret = -EAGAIN;
+>+			goto done;
+> 		}
+> 		write_tcs_reg_sync(drv, RSC_DRV_CMD_ENABLE, m, 0);
+> 		write_tcs_reg_sync(drv, RSC_DRV_CMD_WAIT_FOR_CMPL, m, 0);
+> 	}
+> 	bitmap_zero(tcs->slots, MAX_TCS_SLOTS);
+>-	spin_unlock(&tcs->lock);
+>
+>-	return 0;
+>+done:
+>+	spin_unlock(&drv->lock);
+>+	return ret;
+> }
+>
+> /**
+>@@ -242,9 +240,7 @@ static irqreturn_t tcs_tx_done(int irq, void *p)
+> 		write_tcs_reg(drv, RSC_DRV_CMD_ENABLE, i, 0);
+> 		write_tcs_reg(drv, RSC_DRV_CMD_WAIT_FOR_CMPL, i, 0);
+> 		write_tcs_reg(drv, RSC_DRV_IRQ_CLEAR, 0, BIT(i));
+>-		spin_lock(&drv->lock);
+> 		clear_bit(i, drv->tcs_in_use);
+>-		spin_unlock(&drv->lock);
+> 		if (req)
+> 			rpmh_tx_done(req, err);
+> 	}
+>@@ -349,14 +345,12 @@ static int tcs_write(struct rsc_drv *drv, const struct tcs_request *msg)
+> {
+> 	struct tcs_group *tcs;
+> 	int tcs_id;
+>-	unsigned long flags;
+> 	int ret;
+>
+> 	tcs = get_tcs_for_msg(drv, msg);
+> 	if (IS_ERR(tcs))
+> 		return PTR_ERR(tcs);
+>
+>-	spin_lock_irqsave(&tcs->lock, flags);
+> 	spin_lock(&drv->lock);
+> 	/*
+> 	 * The h/w does not like if we send a request to the same address,
+>@@ -364,26 +358,23 @@ static int tcs_write(struct rsc_drv *drv, const struct tcs_request *msg)
+> 	 */
+> 	ret = check_for_req_inflight(drv, tcs, msg);
+> 	if (ret) {
+>-		spin_unlock(&drv->lock);
+> 		goto done_write;
+> 	}
+>
+> 	tcs_id = find_free_tcs(tcs);
+> 	if (tcs_id < 0) {
+> 		ret = tcs_id;
+>-		spin_unlock(&drv->lock);
+> 		goto done_write;
+> 	}
+>
+> 	tcs->req[tcs_id - tcs->offset] = msg;
+> 	set_bit(tcs_id, drv->tcs_in_use);
+>-	spin_unlock(&drv->lock);
+>
+> 	__tcs_buffer_write(drv, tcs_id, 0, msg);
+> 	__tcs_trigger(drv, tcs_id);
+>
+> done_write:
+>-	spin_unlock_irqrestore(&tcs->lock, flags);
+>+	spin_unlock(&drv->lock);
+> 	return ret;
+> }
+>
+>@@ -481,19 +472,18 @@ static int tcs_ctrl_write(struct rsc_drv *drv, const struct tcs_request *msg)
+> {
+> 	struct tcs_group *tcs;
+> 	int tcs_id = 0, cmd_id = 0;
+>-	unsigned long flags;
+> 	int ret;
+>
+> 	tcs = get_tcs_for_msg(drv, msg);
+> 	if (IS_ERR(tcs))
+> 		return PTR_ERR(tcs);
+>
+>-	spin_lock_irqsave(&tcs->lock, flags);
+>+	spin_lock(&drv->lock);
+> 	/* find the TCS id and the command in the TCS to write to */
+> 	ret = find_slots(tcs, msg, &tcs_id, &cmd_id);
+> 	if (!ret)
+> 		__tcs_buffer_write(drv, tcs_id, cmd_id, msg);
+>-	spin_unlock_irqrestore(&tcs->lock, flags);
+>+	spin_unlock(&drv->lock);
+>
+> 	return ret;
+> }
+>@@ -584,7 +574,6 @@ static int rpmh_probe_tcs_config(struct platform_device *pdev,
+> 		tcs->type = tcs_cfg[i].type;
+> 		tcs->num_tcs = tcs_cfg[i].n;
+> 		tcs->ncpt = ncpt;
+>-		spin_lock_init(&tcs->lock);
+>
+> 		if (!tcs->num_tcs || tcs->type == CONTROL_TCS)
+> 			continue;
+>diff --git a/drivers/soc/qcom/rpmh.c b/drivers/soc/qcom/rpmh.c
+>index 035091fd44b8..12f830610b94 100644
+>--- a/drivers/soc/qcom/rpmh.c
+>+++ b/drivers/soc/qcom/rpmh.c
+>@@ -118,9 +118,8 @@ static struct cache_req *cache_rpm_request(struct rpmh_ctrlr *ctrlr,
+> 					   struct tcs_cmd *cmd)
+> {
+> 	struct cache_req *req;
+>-	unsigned long flags;
+>
+>-	spin_lock_irqsave(&ctrlr->cache_lock, flags);
+>+	spin_lock(&ctrlr->cache_lock);
+> 	req = __find_req(ctrlr, cmd->addr);
+> 	if (req)
+> 		goto existing;
+>@@ -154,7 +153,7 @@ static struct cache_req *cache_rpm_request(struct rpmh_ctrlr *ctrlr,
+>
+> 	ctrlr->dirty = true;
+> unlock:
+>-	spin_unlock_irqrestore(&ctrlr->cache_lock, flags);
+>+	spin_unlock(&ctrlr->cache_lock);
+>
+> 	return req;
+> }
+>@@ -283,23 +282,21 @@ EXPORT_SYMBOL(rpmh_write);
+>
+> static void cache_batch(struct rpmh_ctrlr *ctrlr, struct batch_cache_req *req)
+> {
+>-	unsigned long flags;
+>
+>-	spin_lock_irqsave(&ctrlr->cache_lock, flags);
+>+	spin_lock(&ctrlr->cache_lock);
+> 	list_add_tail(&req->list, &ctrlr->batch_cache);
+>-	spin_unlock_irqrestore(&ctrlr->cache_lock, flags);
+>+	spin_unlock(&ctrlr->cache_lock);
+> }
+>
+> static int flush_batch(struct rpmh_ctrlr *ctrlr)
+> {
+> 	struct batch_cache_req *req;
+> 	const struct rpmh_request *rpm_msg;
+>-	unsigned long flags;
+> 	int ret = 0;
+> 	int i;
+>
+> 	/* Send Sleep/Wake requests to the controller, expect no response */
+>-	spin_lock_irqsave(&ctrlr->cache_lock, flags);
+>+	spin_lock(&ctrlr->cache_lock);
+> 	list_for_each_entry(req, &ctrlr->batch_cache, list) {
+> 		for (i = 0; i < req->count; i++) {
+> 			rpm_msg = req->rpm_msgs + i;
+>@@ -309,7 +306,7 @@ static int flush_batch(struct rpmh_ctrlr *ctrlr)
+> 				break;
+> 		}
+> 	}
+>-	spin_unlock_irqrestore(&ctrlr->cache_lock, flags);
+>+	spin_unlock(&ctrlr->cache_lock);
+>
+> 	return ret;
+> }
+>@@ -317,13 +314,12 @@ static int flush_batch(struct rpmh_ctrlr *ctrlr)
+> static void invalidate_batch(struct rpmh_ctrlr *ctrlr)
+> {
+> 	struct batch_cache_req *req, *tmp;
+>-	unsigned long flags;
+>
+>-	spin_lock_irqsave(&ctrlr->cache_lock, flags);
+>+	spin_lock(&ctrlr->cache_lock);
+> 	list_for_each_entry_safe(req, tmp, &ctrlr->batch_cache, list)
+> 		kfree(req);
+> 	INIT_LIST_HEAD(&ctrlr->batch_cache);
+>-	spin_unlock_irqrestore(&ctrlr->cache_lock, flags);
+>+	spin_unlock(&ctrlr->cache_lock);
+> }
+>
+> /**
+>--
+>The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>a Linux Foundation Collaborative Project
+>
