@@ -2,142 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC735C3D1
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jul 2019 21:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 683FF5C81F
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2019 06:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbfGATur (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jul 2019 15:50:47 -0400
-Received: from mout.web.de ([217.72.192.78]:45633 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726586AbfGATur (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 1 Jul 2019 15:50:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1562010633;
-        bh=4QSkFMvtVelSfBqUzhSoXEZ0KM6revxybhU7eliZjqc=;
-        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
-        b=F/ECTlVtbppni1kvMpAqv/rhRj32WneKFFbI4Xuvts0wZzFygPiTuJaBgdQ6Sucri
-         P8zHOMcBMg2iZ2Oxg8V0/cp8zIhWIGstN2RcwHsWOFKukreGrHv726JYU7wTHy/7wU
-         2IUcCWy2L0tX9/kKp+2rvXGZLdNoo63wo54XBIBA=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.131.131.202]) by smtp.web.de (mrweb102
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MeBDG-1htXb52ELW-00PsrE; Mon, 01
- Jul 2019 21:50:33 +0200
-To:     linux-pm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] PM / Domains: Use seq_puts() in genpd_summary_one()
-Openpgp: preference=signencrypt
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <7a79ee59-884a-b769-5e07-37db57687f83@web.de>
-Date:   Mon, 1 Jul 2019 21:50:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1725809AbfGBEYF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jul 2019 00:24:05 -0400
+Received: from mail-eopbgr690103.outbound.protection.outlook.com ([40.107.69.103]:55173
+        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725780AbfGBEYF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 2 Jul 2019 00:24:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uwy.onmicrosoft.com;
+ s=selector1-uwy-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UVT8WKMN/8PWHEJUuwx9PWGzRmzZ3bUEOc+u1nThTgQ=;
+ b=D6EglCVJtRGIovvYrWscNeuX5K8f4e4hln92bZCsycPB/NZv7wF5VbkKjwGEG8sEw5NLJ1Ut45DGKd7AI/ckox2DYwyDSxG231l3JWqjgqz61ZpZFrjIhJIkHsMFyj6p+L0vHUPJ95LYgJju7OLKlz2iwnvdVmDyYDBIob3FDN4=
+Received: from DM6PR05MB5259.namprd05.prod.outlook.com (20.177.223.223) by
+ DM6PR05MB6346.namprd05.prod.outlook.com (20.178.224.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2052.14; Tue, 2 Jul 2019 04:24:01 +0000
+Received: from DM6PR05MB5259.namprd05.prod.outlook.com
+ ([fe80::95c9:c4b0:38da:1d83]) by DM6PR05MB5259.namprd05.prod.outlook.com
+ ([fe80::95c9:c4b0:38da:1d83%3]) with mapi id 15.20.2052.010; Tue, 2 Jul 2019
+ 04:24:01 +0000
+From:   "Robert R. Howell" <RHowell@uwyo.edu>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+CC:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans De Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v2 1/5] PM: ACPI/PCI: Resume all devices during
+ hibernation
+Thread-Topic: [PATCH v2 1/5] PM: ACPI/PCI: Resume all devices during
+ hibernation
+Thread-Index: AQHVL/v28vh16XJ3m0qx4puqb8Ydeqa2vBmA
+Date:   Tue, 2 Jul 2019 04:24:01 +0000
+Message-ID: <848e9c1b-7775-58bf-ac12-a8618b526876@uwyo.edu>
+References: <4976412.ihyb9sT5jY@kreacher> <6191578.xJk2HsE5MX@kreacher>
+In-Reply-To: <6191578.xJk2HsE5MX@kreacher>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XXG6CWxFT52mlzSGyOr1ZOLJUo8+dWEn69Gh+S6vA13q5ooK7xJ
- f3+BFUkhH68SGyXTWKlWA9hAc1qoYYp0PsKARUUNucwl5OzHDkzRtLn7GijMkWWdjwa2csg
- FG3YmooIb0YE5qq/hzxEEiyphTZrpYhrTqR+JoK4fh9AliEl4pZ3iwDGsOC5bUAqzw6J8vk
- Exy6b7irkTlFWEm5Px+wA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wDiAp800HvQ=:6FszKHqdpABplG9tPlcWL0
- 7oQH7CTQo7AxKe4hcelLYProbEUjr4DWW6+xS2jlG97FH/Pb+Gev7msrc//vH23DTrS1jAGT2
- vSL9ENdWhjSSgTDbsP0akHj3Yo4kE5h3M14jqViJCqkLpaN9OrTHV8ysS9jP5nTHau8wDRldD
- ZqGKCbMvp8d8n070wes71VM8jSvBOEJfqmvHYku36gKgSWPnENEA2kabcywkICkAzT6nnC7f0
- 6bHEGCTXTD/JMvhOqm0GPwZKFtyVXTLRoK77u3Ofl+i5NQ+glJVleNocftlxJ3Ey0dAuQzcU/
- qyuImtUrGRrZliosL4O3W/LSwuii4A5ZTakslsESi3k52almtyO4tr6VAcIbiKkaGB8egdgvN
- pDbEndwFwqN20E0hPeEF5Jjgm7qOD7/KSQ8GVsIQjojOUVhF8p8seSbQFucLCuclM1TM6kaYX
- Jh9ZuMy+c/nlf9ftW4B2E799HTx6dXQgJPFOkW4HBG9Yux2Hvfs55djAMPj1GBVk/i11U0Xce
- DYfTBp4PZJjHv4ts8o6usfchwDOVqiIXxJ+/mmgEwPfEhS93BSG2JhvYJSoOL4U8M0j15YGmm
- fkbAbGuhjxQXmUQ9vPPHicEJf0WCqQ8I8PKiDeI5qW+/j5e6lwdGwmVav4ZI2bl8AVyhXlwKk
- x6xxGloS0Q2i/87aMUxdmGcQ5C6fEJOgL4Vlqm3i1GGG0AToxl43tsV7ExAydyRT7FHmVovu7
- zvfwGCxsNMf3oyafVKnWmU6DaW+lfhIi2hR1zVF7tgndgFHaAkB8oaFAAA+K+voUBbMiOurEI
- UejYHXEehG1Y7j3I4p13RL9QrcuZKtXjTMrvnCHfEjNH767uHADl8S6SwEQy0T3FUw6Bpixc3
- uU08Cpzr6wRMU1zYjx6vV6ahBBEq0V0VK7QS1CllCi1sLImtpFhGDpyfcHk0iP+CjT1lA0vC/
- LCQ3eS8sTbByAE1gpo9h1WqmxJxrL7RH7bSJXChgJ/E8S4gsCpaglw+j7jDhZZxkNQw2YoJoH
- iNexcOmybC6+85XyoI3PqLh9lazHwCFnObdJ+VYI65DNFxjlD6jbwl0mbnAEaL8IeleAF5f4F
- 66R7EnqCZIol+u6gMA/L0/uQctV95VR5ycO
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+x-originating-ip: [208.45.12.32]
+x-clientproxiedby: SN4PR0401CA0033.namprd04.prod.outlook.com
+ (2603:10b6:803:2a::19) To DM6PR05MB5259.namprd05.prod.outlook.com
+ (2603:10b6:5:7f::31)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=RHowell@uwyo.edu; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6339e9d4-8340-449a-8a62-08d6fea51bf8
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DM6PR05MB6346;
+x-ms-traffictypediagnostic: DM6PR05MB6346:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <DM6PR05MB634642DB878CCD13E132E995D3F80@DM6PR05MB6346.namprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-forefront-prvs: 008663486A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(136003)(366004)(39850400004)(346002)(376002)(396003)(189003)(199004)(7736002)(99286004)(386003)(68736007)(71190400001)(71200400001)(6506007)(6116002)(64756008)(66556008)(14454004)(66476007)(8936002)(478600001)(305945005)(52116002)(4326008)(81166006)(76176011)(64126003)(3846002)(186003)(66446008)(36756003)(102836004)(786003)(75432002)(66946007)(966005)(26005)(58126008)(31696002)(6486002)(31686004)(486006)(54906003)(81156014)(110136005)(6436002)(229853002)(6306002)(256004)(476003)(6246003)(2616005)(53936002)(25786009)(53546011)(86362001)(66066001)(65806001)(14444005)(6512007)(65956001)(72206003)(5660300002)(65826007)(80792005)(88552002)(316002)(73956011)(8676002)(446003)(2906002)(11346002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM6PR05MB6346;H:DM6PR05MB5259.namprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: uwyo.edu does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 67W75RFvffcHoimGd+1janQ59zcxekVGIllxUnHBcEJVwdEgx6TfzQKziWpPvYrGIAG3Aj/XK9dnkyt8znWnECOzm0956F5+CVPuXIfiuCy96GaeNWiN+U0OW+buRDBL+/ZtDeMHK+APv9fD2QbTEtxDFKFE4M+KwlHm7iJiC2NbLURv2IZPC778XniVsbSlihKBEwTNJfG/784y+XB+x0AdsgVEMTVIgsR8RlaNuke63cvHgMenD7bBq4g1m8+6HCZxk48VLIYWrBL5m664mseCp3kpYIsOQ9w6UuINn2VfYjStZ6ZPEn0hZJXbKeIHcqZ3f72nIIkhs9409MTGFRLWG/7ane2cxquwxyiRPkuGq5mBzFOdMtWsWa9wPczeUQq1B1kw0Tp7aF2236XnpDwdzvT7MXYX5TqELelkvSA=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <88B73A52E40DD64FA4630658FA6B968E@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: uwyo.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6339e9d4-8340-449a-8a62-08d6fea51bf8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2019 04:24:01.3734
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f9cdd7ad-825d-4601-8e9c-a325e02d52da
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RHowell@uwyo.edu
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR05MB6346
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Mon, 1 Jul 2019 21:42:31 +0200
-
-A string which did not contain a data format specification should be put
-into a sequence. Thus use the corresponding function =E2=80=9Cseq_puts=E2=
-=80=9D.
-
-This issue was detected by using the Coccinelle software.
-
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/base/power/domain.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 33c30c1e6a30..7dd433fab7ec 100644
-=2D-- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2796,7 +2796,7 @@ static int genpd_summary_one(struct seq_file *s,
- 	 * Also genpd->name is immutable.
- 	 */
- 	list_for_each_entry(link, &genpd->master_links, master_node) {
--		seq_printf(s, "%s", link->slave->name);
-+		seq_puts(s, link->slave->name);
- 		if (!list_is_last(&link->master_node, &genpd->master_links))
- 			seq_puts(s, ", ");
- 	}
-=2D-
-2.22.0
-
+T24gNy8xLzE5IDQ6NDQgQU0sIFJhZmFlbCBKLiBXeXNvY2tpIHdyb3RlOg0KPiBGcm9tOiBSYWZh
+ZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+DQo+IA0KPiBCb3RoIHRo
+ZSBQQ0kgYnVzIHR5cGUgYW5kIHRoZSBBQ1BJIFBNIGRvbWFpbiBhdm9pZCByZXN1bWluZw0KPiBy
+dW50aW1lLXN1c3BlbmRlZCBkZXZpY2VzIHdpdGggRFBNX0ZMQUdfU01BUlRfU1VTUEVORCBzZXQg
+ZHVyaW5nDQo+IGhpYmVybmF0aW9uIChiZWZvcmUgY3JlYXRpbmcgdGhlIHNuYXBzaG90IGltYWdl
+IG9mIHN5c3RlbSBtZW1vcnkpLA0KPiBidXQgdGhhdCB0dXJucyBvdXQgdG8gYmUgYSBtaXN0YWtl
+LiAgSXQgbGVhZHMgdG8gZnVuY3Rpb25hbCBpc3N1ZXMNCj4gYW5kIGFkZHMgY29tcGxleGl0eSB0
+aGF0J3MgaGFyZCB0byBqdXN0aWZ5Lg0KPiANCj4gRm9yIHRoaXMgcmVhc29uLCByZXN1bWUgYWxs
+IHJ1bnRpbWUtc3VzcGVuZGVkIFBDSSBkZXZpY2VzIGFuZCBhbGwNCj4gZGV2aWNlcyBpbiB0aGUg
+QUNQSSBQTSBkb21haW5zIGJlZm9yZSBjcmVhdGluZyBhIHNuYXBzaG90IGltYWdlIG9mDQo+IHN5
+c3RlbSBtZW1vcnkgZHVyaW5nIGhpYmVybmF0aW9uLg0KPiANCj4gRml4ZXM6IDA1MDg3MzYwZmQ3
+YSAoQUNQSSAvIFBNOiBUYWtlIFNNQVJUX1NVU1BFTkQgZHJpdmVyIGZsYWcgaW50byBhY2NvdW50
+KQ0KPiBGaXhlczogYzRiNjUxNTdhZWVmIChQQ0kgLyBQTTogVGFrZSBTTUFSVF9TVVNQRU5EIGRy
+aXZlciBmbGFnIGludG8gYWNjb3VudCkNCj4gTGluazogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
+bGludXgtYWNwaS85MTdkNDM5OS0yZTIyLTY3YjEtOWQ1NC04MDg1NjFmOTA4M2ZAdXd5by5lZHUv
+VC8jbWFmMDY1ZmU2ZTQ5NzRmMmE5ZDc5ZjMzMmFiOTlkZmFiYTYzNWY2NGMNCj4gUmVwb3J0ZWQt
+Ynk6IFJvYmVydCBSLiBIb3dlbGwgPFJIb3dlbGxAdXd5by5lZHU+DQo+IFRlc3RlZC1ieTogUm9i
+ZXJ0IFIuIEhvd2VsbCA8Ukhvd2VsbEB1d3lvLmVkdT4NCj4gU2lnbmVkLW9mZi1ieTogUmFmYWVs
+IEouIFd5c29ja2kgPHJhZmFlbC5qLnd5c29ja2lAaW50ZWwuY29tPg0KPiAtLS0NCj4gDQo+IC0+
+IHYyOiBObyBjaGFuZ2VzLg0KDQpJJ3ZlIHRlc3RlZCB5b3VyIHYyIHBhdGNoIHNldCBvbiBteSBB
+U1VTIFQxMDBUQSwgYXBwbHlpbmcganVzdCB0aG9zZSA1IHBhdGNoZXMgdG8gdGhlIA0KNS4yLXJj
+NyBrZXJuZWwsIGFuZCB0aGV5IGRvIGZpeCB0aGUgaGliZXJuYXRpb24gcHJvYmxlbS4gIFRoZSBp
+MmNfZGVzaWdud2FyZSANCnRpbWVvdXQgZXJyb3JzIGFyZSBub3cgZ29uZSBhbmQgc291bmQgZG9l
+cyBub3cgd29yayBhZnRlciByZXN1bWUgZnJvbSBib3RoIA0Kc3VzcGVuZCBhbmQgaGliZXJuYXRl
+LiAgDQoNCkFzIGJlZm9yZSBJIHN0aWxsIHNlZSB0aGUgImkyY19kZXNpZ253YXJlIDgwODYwRjQx
+OjAwOiBUcmFuc2ZlciB3aGlsZSBzdXNwZW5kZWQiIGVycm9yIA0Kb24gdGhlIGZpcnN0IHJlc3Vt
+ZSBmcm9tIGVpdGhlciBzdXNwZW5kIG9yIGhpYmVybmF0ZSwgYnV0IGFsc28gYXMgYmVmb3JlIHRo
+YXQgDQpwYXJ0aWN1bGFyIGVycm9yIGRvZXNuJ3Qgc2VlbSB0byBjYXVzZSBhIHBlcnNpc3RlbnQg
+cHJvYmxlbSBhbmQgdGhlIHN5c3RlbSB3b3JrcyANCm5vcm1hbGx5IGFmdGVyIHRoZSByZXN1bWUu
+DQoNCkJvYiBIb3dlbGwNCg==
