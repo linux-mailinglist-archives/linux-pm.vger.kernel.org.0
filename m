@@ -2,158 +2,298 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E455D5BA
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2019 19:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2495D8DD
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 02:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726779AbfGBRyO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Jul 2019 13:54:14 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:44307 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbfGBRyN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jul 2019 13:54:13 -0400
-Received: by mail-ot1-f67.google.com with SMTP id b7so18051284otl.11;
-        Tue, 02 Jul 2019 10:54:13 -0700 (PDT)
+        id S1727337AbfGCAaT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jul 2019 20:30:19 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36825 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727210AbfGCAaT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jul 2019 20:30:19 -0400
+Received: by mail-ot1-f66.google.com with SMTP id r6so482027oti.3
+        for <linux-pm@vger.kernel.org>; Tue, 02 Jul 2019 17:30:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+oP0RH9kwH9LwfnhKPKaz5YexisejvCGK50RlpX1ljc=;
-        b=sljMwGXSqp3kbMx6t6jLO2w18e/4j+Q942qsy7RkSXJPiMIvAE5TczY3I+aQy5pmbe
-         +9cTUFzvMclGSd7quVdHaKaQGbGeKya/tkuxU7/1ReukSTVs7l5ZwogVOffXRLsiiZrF
-         C6EcZoqr43HoTaRKh1b6qWehszk3UGWyrCsVeHZY2wZlL2ZKu5frpTCWgOJooUrUrtcp
-         Ej/pngDWNCmxZ7E2zLwC+1/nELvW+skk1ZGuIG5va8k1lgwefoB/Y00GS6iSaOP11r+o
-         XnmbIV51EKNEssXPKGTy44n6zHE441VTYTVUa/4ss/dELFjtOjDx/OXPkMx9pWIxSXyf
-         nqiQ==
-X-Gm-Message-State: APjAAAX645URg+BZVFx/xwUy02bjlNSuPfUkyPMvg0BoSo19qF2zWURf
-        RG/yf1eCSzF8o3qGTKBDfb9CAIlFo2j8HSAcb/6/PA==
-X-Google-Smtp-Source: APXvYqzJUxyIrdJenoWjzxhItkZ4yvQWo+kbEG93MBNXTEnn+B7KldNdKnGkUL7c1jzrrHM4FV8smCzg4LfaCvUi+dQ=
-X-Received: by 2002:a9d:6b96:: with SMTP id b22mr10392785otq.262.1562090052447;
- Tue, 02 Jul 2019 10:54:12 -0700 (PDT)
+        bh=HSmdlx0BcLkwVvJMMcbiNqSwmfTBqTBKyoQRyhSM4Mk=;
+        b=ZdCcRR9p8bDWsjMxFXXm6S4558zaXMfy+8D3arULI0lDP2PxqCYjzJIxE4Sx1aQkEb
+         l6EoI8/UhYVVTI/u2zJ0zrCtXkr9ul+anIcIZ7ocBYmI7GQXYLOcPLt9CQE8duqfnpWg
+         XSdHOVs1SjeAU5Ik7kq/iEDiiZParEqzuRnS2p6xCS3s5qaiMkUYmOllnkcaotIWBqBX
+         ICruuD8tLM7UwPesYwye2iOPprTVcSmc7D1QVcrbDi1SHCkuJbBL4PjePDOhE7puohH+
+         yCxKwi26DGln4k5kYWfAlybW/1GbtiiJrpjRqQCx2TQmBdbn+yWcD7jS2KIkLEHgsUHw
+         QRjg==
+X-Gm-Message-State: APjAAAX67TMeuGF+FJkwtIcH6oxyrQ0e3Oq5ddmvZkLk+FUpiI78XgXT
+        vWjeklXhGEX2rt5v8Wgz8QH4OsJ/qHrn4ETHl9UmOQ==
+X-Google-Smtp-Source: APXvYqz0CuFqzsYfwwipw8sThz3e17ZBEIFy/oxQ9CiOZR67gLLd893aarpAZSHOPovPtRSMUcMo/8KhliEKTHJ2Eu8=
+X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr6057621otp.189.1562103855745;
+ Tue, 02 Jul 2019 14:44:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190702163715.12649-1-smuchun@gmail.com>
-In-Reply-To: <20190702163715.12649-1-smuchun@gmail.com>
+References: <1561701029-3415-1-git-send-email-rui.zhang@intel.com> <1561701029-3415-5-git-send-email-rui.zhang@intel.com>
+In-Reply-To: <1561701029-3415-5-git-send-email-rui.zhang@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 2 Jul 2019 19:54:01 +0200
-Message-ID: <CAJZ5v0jzVG5X8idR7Fy8g6=UPMpZ7eK6A_Uhqrer1aJFY1hX1w@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: Move disabling/enabling runtime PM to
- suspend/resume noirq
-To:     Muchun Song <smuchun@gmail.com>
+Date:   Tue, 2 Jul 2019 23:44:04 +0200
+Message-ID: <CAJZ5v0he3Qs_nZmTN9fcgVAnurwXOb+Dj+NnTvUqT8TCH3oNHQ@mail.gmail.com>
+Subject: Re: [PATCH 04/13] intel_rapl: introduce struct rapl_private
+To:     Zhang Rui <rui.zhang@intel.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 2, 2019 at 6:37 PM Muchun Song <smuchun@gmail.com> wrote:
+On Fri, Jun 28, 2019 at 7:50 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> Currently, the PM core disables runtime PM for all devices right after
-> executing subsystem/driver .suspend_late() callbacks for them and
-> re-enables it right before executing subsystem/driver .resume_early()
-> callbacks for them. This may lead to problems when there are two devices
-> such that the irq handler thread function executed for one of them
-> depends on runtime PM working for the other. E.g. There are two devices,
-> one is i2c slave device depends on another device which can be the i2c
-> adapter device. The slave device can generate system wakeup signals and
-> is enabled to wake up the system(via call enable_irq_wake()). So, the irq
-> of slave device is enabled. If a wakeup signal generate after executing
-> subsystem/driver .suspend_late() callbacks. Then, the irq handler thread
-> function will be called(The irq is requested via request_threaded_irq())
-> and the slave device reads data via i2c adapter device(via i2c_transfer()).
-> In that case, it may be failed to read data because of the runtime PM
-> disabled.
->
-> It is also analogously for resume. If a wakeup signal generate when the
-> system is in the sleep state. The irq handler thread function may be
-> called before executing subsystem/driver .resume_early(). In that case,
-> it also may be failed to read data because of the runtime PM disabled.
->
-> To make those issues go away, make the PM core disable runtime PM for
-> devices right before executing subsystem/driver .suspend_noirq() callbacks
-> for them and enable runtime PM for them right after executing subsystem/
-> driver .resume_noirq() callbacks for them.
->
-> Signed-off-by: Muchun Song <smuchun@gmail.com>
+> Introduce a new structure, rapl_private, to save the private data
+> for different RAPL Interface.
 
-This has been discussed for a number of times, documented and no, I'm
-not going to apply this patch.
+The new structure is called rapl_priv in the patch.
 
-PM-runtime cannot be relied on during the "noirq" stages of suspend
-and resume, which is why it is disabled by the core in the "late" and
-"early" stages, respectively.
+Besides, I would call it rapl_if_priv to indicate that this related to
+an interface.
 
+Also, IMO there should be a kerneldoc comment for it.
+
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
+>  drivers/powercap/intel_rapl.c | 58 +++++++++++++++++++++----------------------
+>  include/linux/intel_rapl.h    |  7 ++++++
+>  2 files changed, 35 insertions(+), 30 deletions(-)
 >
-> Change in v2:
->        Update subject from:
->            "PM: Move disabling/enabling runtime PM to noirq suspend/early resume"
->        to:
->            "PM: Move disabling/enabling runtime PM to suspend/resume noirq"
+> diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
+> index adb35ec..a804370 100644
+> --- a/drivers/powercap/intel_rapl.c
+> +++ b/drivers/powercap/intel_rapl.c
+> @@ -75,6 +75,8 @@ enum unit_type {
+>         TIME_UNIT,
+>  };
 >
->  Documentation/power/runtime_pm.txt | 4 ++--
->  drivers/base/power/main.c          | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> +static struct rapl_priv rapl_msr_priv;
+
+Please add a comment describing this variable and its role.
+
+BTW, I'd rather call it rapl_if_msr.
+
+> +
+>  /* per domain data, some are optional */
+>  #define NR_RAW_PRIMITIVES (NR_RAPL_PRIMITIVES - 2)
 >
-> diff --git a/Documentation/power/runtime_pm.txt b/Documentation/power/runtime_pm.txt
-> index 937e33c46211..8cca4df3adc4 100644
-> --- a/Documentation/power/runtime_pm.txt
-> +++ b/Documentation/power/runtime_pm.txt
-> @@ -691,11 +691,11 @@ out the following operations:
->      pm_runtime_barrier() is called for every device right before executing the
->      subsystem-level .suspend() callback for it.  In addition to that the PM core
->      calls  __pm_runtime_disable() with 'false' as the second argument for every
-> -    device right before executing the subsystem-level .suspend_late() callback
-> +    device right before executing the subsystem-level .suspend_noirq() callback
->      for it.
+> @@ -155,17 +157,14 @@ static const char * const rapl_domain_names[] = {
+>         "psys",
+>  };
 >
->    * During system resume pm_runtime_enable() and pm_runtime_put() are called for
-> -    every device right after executing the subsystem-level .resume_early()
-> +    every device right after executing the subsystem-level .resume_noirq()
->      callback and right after executing the subsystem-level .complete() callback
->      for it, respectively.
+> -static struct powercap_control_type *control_type; /* PowerCap Controller */
+> -static struct rapl_domain *platform_rapl_domain; /* Platform (PSys) domain */
+
+Why do these things need to go into rapl_priv?
+
+> -
+>  /* caller to ensure CPU hotplug lock is held */
+> -static struct rapl_package *rapl_find_package_domain(int cpu)
+> +static struct rapl_package *rapl_find_package_domain(int cpu, struct rapl_priv *priv)
+>  {
+>         int id = topology_logical_die_id(cpu);
+>         struct rapl_package *rp;
 >
-> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> index dcfc0a36c8f7..ad0282d637ae 100644
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -693,6 +693,7 @@ static int device_resume_noirq(struct device *dev, pm_message_t state, bool asyn
+>         list_for_each_entry(rp, &rapl_packages, plist) {
+> -               if (rp->id == id)
+> +               if (rp->id == id && rp->priv->control_type == priv->control_type)
+>                         return rp;
 >         }
 >
->  Out:
-> +       pm_runtime_enable(dev);
->         complete_all(&dev->power.completion);
->         TRACE_RESUME(error);
->         return error;
-> @@ -860,7 +861,6 @@ static int device_resume_early(struct device *dev, pm_message_t state, bool asyn
->   Out:
->         TRACE_RESUME(error);
+> @@ -1090,12 +1089,12 @@ static void rapl_update_domain_data(struct rapl_package *rp)
 >
-> -       pm_runtime_enable(dev);
->         complete_all(&dev->power.completion);
->         return error;
+>  static void rapl_unregister_powercap(void)
+>  {
+> -       if (platform_rapl_domain) {
+> -               powercap_unregister_zone(control_type,
+> -                                        &platform_rapl_domain->power_zone);
+> -               kfree(platform_rapl_domain);
+> +       if (&rapl_msr_priv.platform_rapl_domain) {
+> +               powercap_unregister_zone(rapl_msr_priv.control_type,
+> +                                        &rapl_msr_priv.platform_rapl_domain->power_zone);
+> +               kfree(rapl_msr_priv.platform_rapl_domain);
+>         }
+> -       powercap_unregister_control_type(control_type);
+> +       powercap_unregister_control_type(rapl_msr_priv.control_type);
 >  }
-> @@ -1299,6 +1299,8 @@ static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool a
->         TRACE_DEVICE(dev);
->         TRACE_SUSPEND(0);
 >
-> +       __pm_runtime_disable(dev, false);
-> +
->         dpm_wait_for_subordinate(dev, async);
+>  static int rapl_package_register_powercap(struct rapl_package *rp)
+> @@ -1113,7 +1112,7 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
+>                         nr_pl = find_nr_power_limit(rd);
+>                         pr_debug("register package domain %s\n", rp->name);
+>                         power_zone = powercap_register_zone(&rd->power_zone,
+> -                                                       control_type,
+> +                                                       rp->priv->control_type,
+>                                                         rp->name, NULL,
+>                                                         &zone_ops[rd->id],
+>                                                         nr_pl,
+> @@ -1140,7 +1139,7 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
+>                 /* number of power limits per domain varies */
+>                 nr_pl = find_nr_power_limit(rd);
+>                 power_zone = powercap_register_zone(&rd->power_zone,
+> -                                               control_type, rd->name,
+> +                                               rp->priv->control_type, rd->name,
+>                                                 rp->power_zone,
+>                                                 &zone_ops[rd->id], nr_pl,
+>                                                 &constraint_ops);
+> @@ -1161,7 +1160,7 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
+>          */
+>         while (--rd >= rp->domains) {
+>                 pr_debug("unregister %s domain %s\n", rp->name, rd->name);
+> -               powercap_unregister_zone(control_type, &rd->power_zone);
+> +               powercap_unregister_zone(rp->priv->control_type, &rd->power_zone);
+>         }
 >
->         if (async_error)
-> @@ -1508,8 +1510,6 @@ static int __device_suspend_late(struct device *dev, pm_message_t state, bool as
->         TRACE_DEVICE(dev);
->         TRACE_SUSPEND(0);
+>         return ret;
+> @@ -1191,9 +1190,9 @@ static int __init rapl_register_psys(void)
+>         rd->rpl[0].name = pl1_name;
+>         rd->rpl[1].prim_id = PL2_ENABLE;
+>         rd->rpl[1].name = pl2_name;
+> -       rd->rp = rapl_find_package_domain(0);
+> +       rd->rp = rapl_find_package_domain(0, &rapl_msr_priv);
 >
-> -       __pm_runtime_disable(dev, false);
+> -       power_zone = powercap_register_zone(&rd->power_zone, control_type,
+> +       power_zone = powercap_register_zone(&rd->power_zone, rapl_msr_priv.control_type,
+>                                             "psys", NULL,
+>                                             &zone_ops[RAPL_DOMAIN_PLATFORM],
+>                                             2, &constraint_ops);
+> @@ -1203,17 +1202,17 @@ static int __init rapl_register_psys(void)
+>                 return PTR_ERR(power_zone);
+>         }
+>
+> -       platform_rapl_domain = rd;
+> +       rapl_msr_priv.platform_rapl_domain = rd;
+>
+>         return 0;
+>  }
+>
+>  static int __init rapl_register_powercap(void)
+>  {
+> -       control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
+> -       if (IS_ERR(control_type)) {
+> +       rapl_msr_priv.control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
+> +       if (IS_ERR(rapl_msr_priv.control_type)) {
+>                 pr_debug("failed to register powercap control_type.\n");
+> -               return PTR_ERR(control_type);
+> +               return PTR_ERR(rapl_msr_priv.control_type);
+>         }
+>         return 0;
+>  }
+> @@ -1338,16 +1337,16 @@ static void rapl_remove_package(struct rapl_package *rp)
+>                 }
+>                 pr_debug("remove package, undo power limit on %s: %s\n",
+>                          rp->name, rd->name);
+> -               powercap_unregister_zone(control_type, &rd->power_zone);
+> +               powercap_unregister_zone(rp->priv->control_type, &rd->power_zone);
+>         }
+>         /* do parent zone last */
+> -       powercap_unregister_zone(control_type, &rd_package->power_zone);
+> +       powercap_unregister_zone(rp->priv->control_type, &rd_package->power_zone);
+>         list_del(&rp->plist);
+>         kfree(rp);
+>  }
+>
+>  /* called from CPU hotplug notifier, hotplug lock held */
+> -static struct rapl_package *rapl_add_package(int cpu)
+> +static struct rapl_package *rapl_add_package(int cpu, struct rapl_priv *priv)
+>  {
+>         int id = topology_logical_die_id(cpu);
+>         struct rapl_package *rp;
+> @@ -1361,6 +1360,7 @@ static struct rapl_package *rapl_add_package(int cpu)
+>         /* add the new package to the list */
+>         rp->id = id;
+>         rp->lead_cpu = cpu;
+> +       rp->priv = priv;
+>
+>         if (topology_max_die_per_package() > 1)
+>                 snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH,
+> @@ -1399,9 +1399,9 @@ static int rapl_cpu_online(unsigned int cpu)
+>  {
+>         struct rapl_package *rp;
+>
+> -       rp = rapl_find_package_domain(cpu);
+> +       rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
+>         if (!rp) {
+> -               rp = rapl_add_package(cpu);
+> +               rp = rapl_add_package(cpu, &rapl_msr_priv);
+>                 if (IS_ERR(rp))
+>                         return PTR_ERR(rp);
+>         }
+> @@ -1414,7 +1414,7 @@ static int rapl_cpu_down_prep(unsigned int cpu)
+>         struct rapl_package *rp;
+>         int lead_cpu;
+>
+> -       rp = rapl_find_package_domain(cpu);
+> +       rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
+>         if (!rp)
+>                 return 0;
+>
+> @@ -1427,8 +1427,6 @@ static int rapl_cpu_down_prep(unsigned int cpu)
+>         return 0;
+>  }
+>
+> -static enum cpuhp_state pcap_rapl_online;
 > -
->         dpm_wait_for_subordinate(dev, async);
+>  static void power_limit_state_save(void)
+>  {
+>         struct rapl_package *rp;
+> @@ -1538,7 +1536,7 @@ static int __init rapl_init(void)
+>                                 rapl_cpu_online, rapl_cpu_down_prep);
+>         if (ret < 0)
+>                 goto err_unreg;
+> -       pcap_rapl_online = ret;
+> +       rapl_msr_priv.pcap_rapl_online = ret;
 >
->         if (async_error)
+>         /* Don't bail out if PSys is not supported */
+>         rapl_register_psys();
+> @@ -1550,7 +1548,7 @@ static int __init rapl_init(void)
+>         return 0;
+>
+>  err_unreg_all:
+> -       cpuhp_remove_state(pcap_rapl_online);
+> +       cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
+>
+>  err_unreg:
+>         rapl_unregister_powercap();
+> @@ -1560,7 +1558,7 @@ static int __init rapl_init(void)
+>  static void __exit rapl_exit(void)
+>  {
+>         unregister_pm_notifier(&rapl_pm_notifier);
+> -       cpuhp_remove_state(pcap_rapl_online);
+> +       cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
+>         rapl_unregister_powercap();
+>  }
+>
+> diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
+> index 9471603..d6a8547 100644
+> --- a/include/linux/intel_rapl.h
+> +++ b/include/linux/intel_rapl.h
+> @@ -88,6 +88,12 @@ struct rapl_domain {
+>         struct rapl_package *rp;
+>  };
+>
+> +struct rapl_priv {
+> +       struct powercap_control_type *control_type;
+> +       struct rapl_domain *platform_rapl_domain;
+> +       enum cpuhp_state pcap_rapl_online;
+> +};
+> +
+>  /* maximum rapl package domain name: package-%d-die-%d */
+>  #define PACKAGE_DOMAIN_NAME_LENGTH 30
+>
+> @@ -108,6 +114,7 @@ struct rapl_package {
+>         /* Track active cpus */
+>         struct cpumask cpumask;
+>         char name[PACKAGE_DOMAIN_NAME_LENGTH];
+> +       struct rapl_priv *priv;
+>  };
+>
+>  #endif /* __INTEL_RAPL_H__ */
 > --
-> 2.17.1
+> 2.7.4
 >
