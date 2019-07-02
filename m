@@ -2,85 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 546865D381
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2019 17:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA075D3BF
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jul 2019 17:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbfGBPvW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Jul 2019 11:51:22 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:50020 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbfGBPvV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jul 2019 11:51:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=KLwUF+icpY+NvjPg4hCU2tdrBb0AljHtBhiYk13AZqw=; b=CUJnZ9HI9SeWFonIC7HtQq1TH
-        r/+EJ0czLxUhbo1zSc6SyubnA2lnVcxBrH/Na7K8zabPBwzM7MLvqT5xmIolyX5Xhjem7C5no90Ze
-        mEu+eBvH/JxsV4E6nhzO/ZunGmGY6gx0ybQOZjL+Rney6LOhL5j3zu7Ce5c7JbGneVozT0kNJ1Agk
-        sr5MqZEEpgJ7gy54PvuRHzdIdQBP+a02Itwda7W1+ZPtIe3JZ8AXY9YGDANy6SRVetoOhLwulyQiw
-        uoBYP6L54Igt22rOLYPvUgOaaX62fT1gHZVlu6mlcUjTPBpzNz7PGMjX32dWuhsso1Z/sU7t4u96F
-        lRhPQ6cDQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hiL3t-0003Zu-Dg; Tue, 02 Jul 2019 15:51:17 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D1199203C694A; Tue,  2 Jul 2019 17:51:15 +0200 (CEST)
-Date:   Tue, 2 Jul 2019 17:51:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Douglas RAILLARD <douglas.raillard@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        quentin.perret@arm.com, patrick.bellasi@arm.com,
-        dietmar.eggemann@arm.com
-Subject: Re: [RFC PATCH v2 0/5] sched/cpufreq: Make schedutil energy aware
-Message-ID: <20190702155115.GW3436@hirez.programming.kicks-ass.net>
-References: <20190627171603.14767-1-douglas.raillard@arm.com>
+        id S1726358AbfGBP7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jul 2019 11:59:41 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34775 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726103AbfGBP7l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jul 2019 11:59:41 -0400
+Received: by mail-ot1-f65.google.com with SMTP id n5so17705094otk.1;
+        Tue, 02 Jul 2019 08:59:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UX+GvBFC0v6ijIy6UhW+3XcFJ/I0DX5uZsKBeKdYKQc=;
+        b=OLmqipUAeVHIpuQFTB8VgsRX5Ha6Oy+oXGWCJrVilHz7RDL4O4zPBINBHEGrd/xrWE
+         FDaUue7qCRJtcrGzPT4hWPXIgXhZWXsQu7TGOQpu5CZMxQqlCSD9BwMk0j9PVCyhYoSB
+         nSqjPNKGQdPSiRDVrV+HPz8Lps7gbWiU/WthNSCdA2+U0utUIK/2U8DvxS1mlYsN22Nt
+         Olbldxq0HbV786/7DtaKkea5V3RiZy2AtC3SKnfjLA98M4w0teu0UpRX6W/KOSK646sX
+         6s4FYrR1EnuVGMcTs5M6WRiQuFqDe8yUVzSQP5CcagFhVZ0yiwTGRfqE3klB/d2o8KuY
+         YYAg==
+X-Gm-Message-State: APjAAAWnTsqvzc5lSUou49T+AOx17T8E8qrspfFTQivuUCECGFewJnTF
+        M8Q2FbGu59h7Daj6P+Uzz4sp/Lt3691vE8ITdlo=
+X-Google-Smtp-Source: APXvYqw4NQyJ1uqX49Lix6ogL4V0KiZ/E2CFkNB0/ag0NAxhGfpEwvIazSLKKxNwP6jmm7UeeALEJLepAhvErmYL6yE=
+X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr4803148otp.189.1562083180116;
+ Tue, 02 Jul 2019 08:59:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190627171603.14767-1-douglas.raillard@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <4976412.ihyb9sT5jY@kreacher> <6191578.xJk2HsE5MX@kreacher> <20190701161550.GA2640@lahna.fi.intel.com>
+In-Reply-To: <20190701161550.GA2640@lahna.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 2 Jul 2019 17:59:28 +0200
+Message-ID: <CAJZ5v0iJ4bELn+LSLgnOaUz6d31FeCV84t=VxKYHA1hLUnQ-ZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] PM: ACPI/PCI: Resume all devices during hibernation
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans De Goede <hdegoede@redhat.com>,
+        "Robert R. Howell" <RHowell@uwyo.edu>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 06:15:58PM +0100, Douglas RAILLARD wrote:
-> Make schedutil cpufreq governor energy-aware.
-> 
-> - patch 4 adds sugov_cpu_ramp_boost() function.
-> - patch 5 updates sugov_update_(single|shared)() to make use of
->   sugov_cpu_ramp_boost().
-> 
-> The benefits of using the EM in schedutil are twofold:
+On Mon, Jul 1, 2019 at 6:15 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Mon, Jul 01, 2019 at 12:44:25PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Both the PCI bus type and the ACPI PM domain avoid resuming
+> > runtime-suspended devices with DPM_FLAG_SMART_SUSPEND set during
+> > hibernation (before creating the snapshot image of system memory),
+> > but that turns out to be a mistake.  It leads to functional issues
+> > and adds complexity that's hard to justify.
+> >
+> > For this reason, resume all runtime-suspended PCI devices and all
+> > devices in the ACPI PM domains before creating a snapshot image of
+> > system memory during hibernation.
+> >
+> > Fixes: 05087360fd7a (ACPI / PM: Take SMART_SUSPEND driver flag into account)
+> > Fixes: c4b65157aeef (PCI / PM: Take SMART_SUSPEND driver flag into account)
+> > Link: https://lore.kernel.org/linux-acpi/917d4399-2e22-67b1-9d54-808561f9083f@uwyo.edu/T/#maf065fe6e4974f2a9d79f332ab99dfaba635f64c
+> > Reported-by: Robert R. Howell <RHowell@uwyo.edu>
+> > Tested-by: Robert R. Howell <RHowell@uwyo.edu>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > -> v2: No changes.
+> >
+> > ---
+> >  drivers/acpi/device_pm.c |   13 +++++++------
+> >  drivers/pci/pci-driver.c |   16 ++++++++--------
+> >  2 files changed, 15 insertions(+), 14 deletions(-)
+> >
+> > Index: linux-pm/drivers/acpi/device_pm.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/acpi/device_pm.c
+> > +++ linux-pm/drivers/acpi/device_pm.c
+> > @@ -1155,13 +1155,14 @@ EXPORT_SYMBOL_GPL(acpi_subsys_resume_ear
+> >  int acpi_subsys_freeze(struct device *dev)
+> >  {
+> >       /*
+> > -      * This used to be done in acpi_subsys_prepare() for all devices and
+> > -      * some drivers may depend on it, so do it here.  Ideally, however,
+> > -      * runtime-suspended devices should not be touched during freeze/thaw
+> > -      * transitions.
+> > +      * Resume all runtime-suspended devices before creating a snapshot
+> > +      * image of system memory, because the restore kernel generally cannot
+> > +      * be expected to always handle them consistently and they need to be
+> > +      * put into the runtime-active metastate during system resume anyway,
+> > +      * so it is better to ensure that the state saved in the image will be
+> > +      * alwyas consistent with that.
+>
+> alwyas -> always
+>
+> >        */
+> > -     if (!dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND))
+> > -             pm_runtime_resume(dev);
+> > +     pm_runtime_resume(dev);
+> >
+> >       return pm_generic_freeze(dev);
+> >  }
+> > Index: linux-pm/drivers/pci/pci-driver.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/pci/pci-driver.c
+> > +++ linux-pm/drivers/pci/pci-driver.c
+> > @@ -1012,15 +1012,15 @@ static int pci_pm_freeze(struct device *
+> >       }
+> >
+> >       /*
+> > -      * This used to be done in pci_pm_prepare() for all devices and some
+> > -      * drivers may depend on it, so do it here.  Ideally, runtime-suspended
+> > -      * devices should not be touched during freeze/thaw transitions,
+> > -      * however.
+> > +      * Resume all runtime-suspended devices before creating a snapshot
+> > +      * image of system memory, because the restore kernel generally cannot
+> > +      * be expected to always handle them consistently and they need to be
+> > +      * put into the runtime-active metastate during system resume anyway,
+> > +      * so it is better to ensure that the state saved in the image will be
+> > +      * alwyas consistent with that.
+>
+> ditto
 
-> 2) Driving the frequency selection with power in mind, in addition to
->    maximizing the utilization of the non-idle CPUs in the system.
-
-> Point 2) is enabled in
-> "sched/cpufreq: Boost schedutil frequency ramp up". It allows using
-> higher frequencies when it is known that the true utilization of
-> currently running tasks is exceeding their previous stable point.
-> The benefits are:
-> 
-> * Boosting the frequency when the behavior of a runnable task changes,
->   leading to an increase in utilization. That shortens the frequency
->   ramp up duration, which in turns allows the utilization signal to
->   reach stable values quicker.  Since the allowed frequency boost is
->   bounded in energy, it will behave consistently across platforms,
->   regardless of the OPP cost range.
-> 
-> * The boost is only transient, and should not impact a lot the energy
->   consumed of workloads with very stable utilization signals.
-
-So you're allowing a higher pick when the EWMA exceeds the enqueue
-thing.
-
-This then obviously has relation to Patrick's patch that makes the EWMA
-asymmetric, but I'm thinking that the interaction is mostly favourable?
-
-I'm not immediately seeing how it is transient; that is, PELT has a
-wobble in it's steady state, is that accounted for?
+Thanks, I'll fix these up when applying the patch.
