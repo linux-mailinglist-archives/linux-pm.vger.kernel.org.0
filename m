@@ -2,52 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E035DA74
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 03:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88EF85DA65
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 03:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727400AbfGCBK3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Jul 2019 21:10:29 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:44685 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727355AbfGCBK2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jul 2019 21:10:28 -0400
-Received: by mail-pf1-f201.google.com with SMTP id j22so394298pfe.11
-        for <linux-pm@vger.kernel.org>; Tue, 02 Jul 2019 18:10:28 -0700 (PDT)
+        id S1727436AbfGCBKc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jul 2019 21:10:32 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:52151 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727395AbfGCBKb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jul 2019 21:10:31 -0400
+Received: by mail-pg1-f202.google.com with SMTP id o16so490197pgk.18
+        for <linux-pm@vger.kernel.org>; Tue, 02 Jul 2019 18:10:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=e9kTi24uB4qma1DS6GLfEd66OjyUuGvajWKOikD47Aw=;
-        b=Gke0wMis6E54EMbeMX51d1b4DLg3NQl068tRf9JRRwoyEiiec/5boft2FQO/E182cW
-         uoGbqSDHrEW0BfxIj4OxChLfIrwGIcJ/IziKnOHCXvLp36E4FOuiR10Gfrexqp83BIBG
-         k2KWFMwUE5pztZQsHB5U1kpLIQ636P5rYZ+iSo+I1q4LGS+u8VlCzht1pOUpr28+RacL
-         3bsNezsZYmq9SdcXbeVtcyMwZ6w5XuvSEam+c0LGKZUBTAfwag33F2ozP7CmvpZoAa3l
-         8v6gShBaUpRw04xZAmgd8KpxH8XqQ+yC9ZD31FLirq2K0FjF661IsWc8zLppc9P5nWsx
-         zIfw==
+        bh=Dy7IdBEhW7jfMC6O06J1yeWm8DJoUAt+P2F38lOHIKQ=;
+        b=C+5g3BYbxc2d5v4pLP/1xtwd+gYW5qoY5iVHn3hvWw7WT8h7YVWVxHxfRmoJZQ+3s6
+         hffBFFZ4zf6A+TQkyNDSMed/hkUv/4u1jzgsPMyyvLb8hk0B2xE21Z86qEbY9tJHH5oR
+         GfYN6NWShZj/4lMx+s+3v/qGTLx+NmsrdLLR6Cdq1pKbrTdMgKnwRQDBVMM48asgS0+R
+         /AYTF6Nm7JTPNsl33trsxoyKPIqWP9Y2TgHdjTQKk54a5F0nlHR49OKuBTRcQ7BXh/+q
+         hSR7Y5Che5UPvZGgOcNebRoL4ySDoTiY3d1LLbAWX5xLnPfcS16Q2qDmzcKnrBnPNlKo
+         fcVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=e9kTi24uB4qma1DS6GLfEd66OjyUuGvajWKOikD47Aw=;
-        b=PO5+dNbjk/1v4DpFQuNDEbxAU24RLhB4SreLgwPfTFHeDbhuzkWtQjHhx64SnMX8BQ
-         GjkUtrIveecF+qrd5FcRc/w9aD5HZJhpPEEhJtjAkF/+HN8of5sqp92fDVz1J244kzX3
-         dCXQEBToNgjSvtPNJMQ5sJagPrk4t/qbrtCrZhzC9TpeCDkgH15MPppQVlT3cN3Qh36S
-         LcnUoC14Z9MOCkHytFX816RdVyvY5WNsABN7mCW/ZdUv5f4vVhvVt7bmMBQ8P6tTSV2Y
-         EwGh+bJ8iYFzn2R4Acakxc7eBgo0iyFq3/5bBmk6Y4oC6tnKnKksUrmr780V8W2sIv/I
-         vBKQ==
-X-Gm-Message-State: APjAAAXfRS7yRmSEbHiF1efiiSTY4yM6zlX7d2fW7yW46kD+UGNan29r
-        pmL/DYrxX5Spr7RDGSBMf3EIuRmI9Cx0Uas=
-X-Google-Smtp-Source: APXvYqyhZ6ewKAXFIwQJJhA1AgdyM3RtUJbdz/u8xIi1sWGVsqHDJ1zCwj5Y4C/wLIAnD3LEbng6V6B5cGYzL9Y=
-X-Received: by 2002:a63:6ec4:: with SMTP id j187mr15725095pgc.420.1562116227470;
- Tue, 02 Jul 2019 18:10:27 -0700 (PDT)
-Date:   Tue,  2 Jul 2019 18:10:15 -0700
+        bh=Dy7IdBEhW7jfMC6O06J1yeWm8DJoUAt+P2F38lOHIKQ=;
+        b=X7ZThSHNi3JISAQ13CimtFZdBGFfRE5U+B7Z9cMOe6gnUH0nrWU4Or0hErOLOJN2xJ
+         Ve/mMUpJLQ6lXT6OdROW6QFBEZzJn41Wxd9eDs9xmp9p13RjzDRurxTwUlQ91VooUomn
+         qteHx7NFvaf3ddTxvRG5Bj3an7QssKzsgC1J0vDUnisiKW/gllZHrpJKkZ8lGb1qkVRv
+         ik5+azD4z8lW8AwNX3qhO8/nUK75+JIQsxxhEpev93lZBs2bfobnTOzfe3mfjiSXcP7k
+         eXAA9WYU4DmGs3K0tyP47dtzhmM+hU/YtQiH5iARQNrzcQoy0vz/dL51d7eYzxXz6awo
+         aCWQ==
+X-Gm-Message-State: APjAAAXF/s0B59aXJylai/B3q4jXuYDzJO9ebGdMy0fey2B9YaDgwVN0
+        T/TH8ebDE92iS7GP1Kj5V53k8m48I97ks+o=
+X-Google-Smtp-Source: APXvYqyZ5SvXkZiJtN4AUVK0TG4NbXUnITz/8Rd9BjbL8Dw8vo+ZHuPMPIdAlkE6UzLY/jK4QL5YPQ5Wylc+8rU=
+X-Received: by 2002:a65:4786:: with SMTP id e6mr25216266pgs.448.1562116230898;
+ Tue, 02 Jul 2019 18:10:30 -0700 (PDT)
+Date:   Tue,  2 Jul 2019 18:10:16 -0700
 In-Reply-To: <20190703011020.151615-1-saravanak@google.com>
-Message-Id: <20190703011020.151615-2-saravanak@google.com>
+Message-Id: <20190703011020.151615-3-saravanak@google.com>
 Mime-Version: 1.0
 References: <20190703011020.151615-1-saravanak@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v3 1/6] dt-bindings: opp: Introduce opp-peak-KBps and
- opp-avg-KBps bindings
+Subject: [PATCH v3 2/6] OPP: Add support for bandwidth OPP tables
 From:   Saravana Kannan <saravanak@google.com>
 To:     Georgi Djakov <georgi.djakov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -67,54 +66,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Interconnects often quantify their performance points in terms of
-bandwidth. So, add opp-peak-KBps (required) and opp-avg-KBps (optional) to
-allow specifying Bandwidth OPP tables in DT.
-
-opp-peak-KBps is a required property that replace opp-hz for Bandwidth OPP
-tables.
-
-opp-avg-KBps is an optional property that can be used in Bandwidth OPP
-tables.
+Not all devices quantify their performance points in terms of frequency.
+Devices like interconnects quantify their performance points in terms of
+bandwidth. We need a way to represent these bandwidth levels in OPP. So,
+add support for parsing bandwidth OPPs from DT.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- Documentation/devicetree/bindings/opp/opp.txt | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/opp/of.c  | 34 ++++++++++++++++++++++++++++++++--
+ drivers/opp/opp.h |  4 +++-
+ 2 files changed, 35 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
-index 76b6c79604a5..c869e87caa2a 100644
---- a/Documentation/devicetree/bindings/opp/opp.txt
-+++ b/Documentation/devicetree/bindings/opp/opp.txt
-@@ -83,9 +83,14 @@ properties.
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index c10c782d15aa..54fa70ed2adc 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -552,6 +552,35 @@ void dev_pm_opp_of_remove_table(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
  
- Required properties:
- - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
--  required property for all device nodes but devices like power domains. The
--  power domain nodes must have another (implementation dependent) property which
--  uniquely identifies the OPP nodes.
-+  required property for all device nodes but for devices like power domains or
-+  bandwidth opp tables. The power domain nodes must have another (implementation
-+  dependent) property which uniquely identifies the OPP nodes. The interconnect
-+  opps are required to have the opp-peak-bw property.
++static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np)
++{
++	int ret;
++	u64 rate;
++	u32 bw;
 +
-+- opp-peak-KBps: Peak bandwidth in kilobytes per second, expressed as a 32-bit
-+  big-endian integer. This is a required property for all devices that don't
-+  have opp-hz. For example, bandwidth OPP tables for interconnect paths.
- 
- Optional properties:
- - opp-microvolt: voltage in micro Volts.
-@@ -132,6 +137,10 @@ Optional properties:
- - opp-level: A value representing the performance level of the device,
-   expressed as a 32-bit integer.
- 
-+- opp-avg-KBps: Average bandwidth in kilobytes per second, expressed as a
-+  32-bit big-endian integer. This property is only meaningful in OPP tables
-+  where opp-peak-KBps is present.
++	ret = of_property_read_u64(np, "opp-hz", &rate);
++	if (!ret) {
++		/*
++		 * Rate is defined as an unsigned long in clk API, and so
++		 * casting explicitly to its type. Must be fixed once rate is 64
++		 * bit guaranteed in clk API.
++		 */
++		new_opp->rate = (unsigned long)rate;
++		return 0;
++	}
 +
- - clock-latency-ns: Specifies the maximum possible transition latency (in
-   nanoseconds) for switching to this OPP from any other OPP.
++	ret = of_property_read_u32(np, "opp-peak-KBps", &bw);
++	if (ret)
++		return ret;
++	new_opp->rate = (unsigned long) &bw;
++
++	ret = of_property_read_u32(np, "opp-avg-KBps", &bw);
++	if (!ret)
++		new_opp->avg_bw = (unsigned long) &bw;
++
++	return 0;
++}
++
+ /**
+  * _opp_add_static_v2() - Allocate static OPPs (As per 'v2' DT bindings)
+  * @opp_table:	OPP table
+@@ -589,11 +618,12 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
+ 	if (!new_opp)
+ 		return ERR_PTR(-ENOMEM);
  
+-	ret = of_property_read_u64(np, "opp-hz", &rate);
++	ret = _read_opp_key(new_opp, np);
+ 	if (ret < 0) {
+ 		/* "opp-hz" is optional for devices like power domains. */
+ 		if (!opp_table->is_genpd) {
+-			dev_err(dev, "%s: opp-hz not found\n", __func__);
++			dev_err(dev, "%s: opp-hz or opp-peak-bw not found\n",
++				__func__);
+ 			goto free_opp;
+ 		}
+ 
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 569b3525aa67..ead2cdafe957 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -59,7 +59,8 @@ extern struct list_head opp_tables;
+  * @turbo:	true if turbo (boost) OPP
+  * @suspend:	true if suspend OPP
+  * @pstate: Device's power domain's performance state.
+- * @rate:	Frequency in hertz
++ * @rate:	Frequency in hertz OR Peak bandwidth in kilobytes per second
++ * @avg_bw:	Average bandwidth in kilobytes per second
+  * @level:	Performance level
+  * @supplies:	Power supplies voltage/current values
+  * @clock_latency_ns: Latency (in nanoseconds) of switching to this OPP's
+@@ -81,6 +82,7 @@ struct dev_pm_opp {
+ 	bool suspend;
+ 	unsigned int pstate;
+ 	unsigned long rate;
++	unsigned long avg_bw;
+ 	unsigned int level;
+ 
+ 	struct dev_pm_opp_supply *supplies;
 -- 
 2.22.0.410.gd8fdbe21b5-goog
 
