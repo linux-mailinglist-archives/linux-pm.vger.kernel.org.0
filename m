@@ -2,265 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E125EE99
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 23:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304115EF1B
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 00:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727076AbfGCVdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 17:33:53 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:37040 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726550AbfGCVdx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 17:33:53 -0400
-Received: by mail-ot1-f66.google.com with SMTP id s20so3934697otp.4
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2019 14:33:52 -0700 (PDT)
+        id S1727100AbfGCWUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 18:20:24 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:32768 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726988AbfGCWUY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 18:20:24 -0400
+Received: by mail-oi1-f196.google.com with SMTP id u15so3414990oiv.0
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2019 15:20:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=R3V0xyfQtgszg7VMyFhoH7Ys4L42MA+hGNQOZN+rSSg=;
-        b=V+QyETMzR+c11xzxqJ7CvOBHlFJ127q7f+YbE3ve0bt+n8nmvGJw6KhSwYIyLfQD7O
-         OgMEUrtgN9cuhypLuelAH+bqQONAnfkT7FzbKcnQHMw3Wi5H046OUJO+6eo+SchXmhcI
-         qipRfKc2xU6/hnEdK4uw9QSVq/lVH1C939if8ZZciMjWkmsc5MmLq/TA2JR+XzBf9c50
-         21aPpuiNTNU5DpKzfH8l5kZjmFALMRkAG6GPl/MgjH1cF8s2ymT/vjnZ3OHqFlElm+v/
-         5hrqxmXJJAgAwyg1J6PpfG7U8dUa8YeKf8HHPUnk8LEDiDsdZnyBvmyp4SYLLrEfcgqr
-         HeuA==
+        bh=O7/9B62uc/L5qzEpOlYgng1H+GtGyObr1QSwY1wY924=;
+        b=LgzayCaK4/bJPs+LnptjE/uYgOn0AYy9YP8QsFOXetvhFp6PktTBIYpERPnEMccqw/
+         F1fxlXEJal/rlaLngJpSEAH+OPk57egaRsUomkOujZB63fQgtbEVPjg1obnFPg5OmZkc
+         koYNaezbHytFC004biKiJPO7tmp6xlo+d6yf/TV3yivkVwAyWokHrYL0sWtFJI0UV1ma
+         2U2OXd7oY5NPFmqb2kDsGByO6gTTJuYdIKrYEFY1UuBLTppQ/7mpOvqrrP6KXyhaTJQS
+         itfNBIRCPl7CrxuBzPdbi/g05aoK7NqGLVSnyd/doGaAa1Xylr3e008FKvnyFP7ZVrAH
+         o7xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=R3V0xyfQtgszg7VMyFhoH7Ys4L42MA+hGNQOZN+rSSg=;
-        b=sRyZfKj3t8Pmt2CaXGsRB6p8xvPmeAH1AI+DdpIAEYMnr5db9vRApfbs3Bbn9Kp3i+
-         qThrMFA+7xkKowyPkLUIcfeSqhiDzrrsdhoSG2WuTftajrBi+/tnWnwyM1IC4uJNLD5s
-         +6qeerFFYaFnnQF4MX3W9+zC8/L/cNi8lJ6TAugQC6mzuwuJag28AWM+bVrBgiRCIfxO
-         jyJf9+FZAms4WgQ/jojzvv8H0H0tW9Z7H0/1Jm2HmOoyRbkUeVCu/IHBzGsY/AM2Pz8R
-         RJfj/PnnGCZ2c1SX9QhLoD080RvK8k6EykDjLI4bXFW1gyR+r4iR/tS/lCavfi8j6Ou1
-         QEuA==
-X-Gm-Message-State: APjAAAVMwIUkq97cTghdLuTrVWpiGWNrAeg7SlqnqGMM9Bnmg7Gu0PHs
-        zAz5khEyfdpHDZe2Rrbn66FZARASKsCreFYB6YVqYw==
-X-Google-Smtp-Source: APXvYqxktUBobLHri/+RpGQ9t5HW3WC7Y8fP/5luLqnatxKPkw8Nz7g7awliOBFQip7Os9RGiYdDHakvVgO3HZ8oNQg=
-X-Received: by 2002:a05:6830:160c:: with SMTP id g12mr33086605otr.231.1562189631932;
- Wed, 03 Jul 2019 14:33:51 -0700 (PDT)
+        bh=O7/9B62uc/L5qzEpOlYgng1H+GtGyObr1QSwY1wY924=;
+        b=QBY0StnXhxi2wo6w6J9SOgUKk1e5W23WuzMg7K/Q6ZI+T1DQRjipfrMTbXh19ifmn9
+         D1bD4VccrvIuG5B3DArr13yvtO0/MjabxIs6vFnQeta4fVZ9jTD4VQy3I2+Kzw/9PSL2
+         p1cIN24TdkSkwhQm2NfYvm+Hwy1ifS5E+/LP6TNnhlqhFWXU3LPbW0FH+tL8UTjZr09f
+         48qnxqlxe4cWlfO4Hbx52n8wH28lQJ/2Fc4lih4bmF9XblObm/0BWxHrzoiSyeU9AVhn
+         +U4Ht4yTxT5LbJ3HeokYXeVOoj+t38xFEyJoMB6v/0m+cq710My8VVrfIAf+RM/gsoAA
+         NApA==
+X-Gm-Message-State: APjAAAVZ+31c4LG3ptJiw81uGb4tXYyGAbfi6s0hRuKwuYcZQLpXomjB
+        c6wCS42MwAIPi2Fp9rVDdui3Nq0d/J2ookIAA5gjYA==
+X-Google-Smtp-Source: APXvYqwtqi+7I3cUQZdtfk+VvNqZfrr4viWaCwyTmLtX0L7p8OC6XQF6CN592Tn8e3dkroxZHwBppYTQgEEUreRy63g=
+X-Received: by 2002:aca:6104:: with SMTP id v4mr499588oib.172.1562192423027;
+ Wed, 03 Jul 2019 15:20:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-7-saravanak@google.com>
- <CAKfTPtCJFaEfvu3Dnp9WSxQEwSfY=VS+xsoQ+4P+vg7_WL0BAQ@mail.gmail.com>
-In-Reply-To: <CAKfTPtCJFaEfvu3Dnp9WSxQEwSfY=VS+xsoQ+4P+vg7_WL0BAQ@mail.gmail.com>
+References: <cover.1561707104.git.leonard.crestez@nxp.com>
+In-Reply-To: <cover.1561707104.git.leonard.crestez@nxp.com>
 From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 3 Jul 2019 14:33:15 -0700
-Message-ID: <CAGETcx_5gu84FOVmELPnK5uJTE0NEhxYKtdFigoXGyFtjehQvw@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] interconnect: Add OPP table support for interconnects
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+Date:   Wed, 3 Jul 2019 15:19:46 -0700
+Message-ID: <CAGETcx_63KnP75qySbhX_P_=o4=ox9J8AsBqKsFHeQRjCpSeJA@mail.gmail.com>
+Subject: Re: [RFCv2 0/8] Add imx8mm bus frequency switching
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
-        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        sibis@codeaurora.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        Michael Turquette <mturquette@baylibre.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
+        linux-imx@nxp.com, Linux PM <linux-pm@vger.kernel.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 2, 2019 at 11:45 PM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
+Hi Leonard,
+
+On Fri, Jun 28, 2019 at 12:40 AM Leonard Crestez
+<leonard.crestez@nxp.com> wrote:
 >
-> On Wed, 3 Jul 2019 at 03:10, Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > Interconnect paths can have different performance points. Now that OPP
-> > framework supports bandwidth OPP tables, add OPP table support for
-> > interconnects.
-> >
-> > Devices can use the interconnect-opp-table DT property to specify OPP
-> > tables for interconnect paths. And the driver can obtain the OPP table for
-> > an interconnect path by calling icc_get_opp_table().
+> This series attempts to add upstream DVFS support for imx8mm, covering dynamic
+> scaling of internal buses and dram. It uses the interconnect framework for
+> proactive scaling (in response to explicit bandwidth requests from devices) and
+> devfreq in order expose the buses and eventually implement reactive scaling (in
+> response to measuredtraffic).
+
+I'm assuming you took a glance at my patch series [1] adding BW OPP
+tables and adding devfreq support for scaling interconnect paths.
+
+Based on looking at your patch series, I think [1] would allow you to
+use ICC framework for both proactive and reactive scaling. Proactive
+scaling would use the ICC framework directly. Reactive scaling would
+go through devfreq (so that you can use various governors/adjust
+policy) before it goes to ICC framework.
+
+> Actual scaling is performed through the clk framework: The NOC and main NICs
+> are driven by composite clks and a new 'imx8m-dram' clk is included for
+> scaling dram using firmware calls.
+
+Seems reasonable. All hardware block in the end run using a clock.
+
+> The interconnect and devfreq parts do not communicate explicitly: they both
+> just call clk_set_min_rate and the clk core picks the minimum value that can
+> satisfy both. They are thus completely independent.
+
+Two different parts not talking to each other and just setting min
+rate can cause problems for some concurrency use cases. ICC framework
+is explicitly designed to handle cases like this and aggregate the
+needs correctly. You might want to look into that more closely.
+
+> This is easily extensible to more members of the imx8m family, some of which
+> expose more detailed controls over interconnect fabric frequencies.
 >
-> The opp table of a path must come from the aggregation of OPP tables
-> of the interconnect providers.
-
-The aggregation of OPP tables of the providers is certainly the
-superset of what a path can achieve, but to say that OPPs for
-interconnect path should match that superset is an oversimplification
-of the reality in hardware.
-
-There are lots of reasons an interconnect path might not want to use
-all the available bandwidth options across all the interconnects in
-the route.
-
-1. That particular path might not have been validated or verified
-   during the HW design process for some of the frequencies/bandwidth
-   combinations of the providers.
-
-2. Similarly during parts screening in the factory, some of the
-   combinations might not have been screened and can't be guaranteed
-   to work.
-
-3. Only a certain set of bandwidth levels might make sense to use from
-   a power/performance balance given the device using it. For example:
-   - The big CPU might not want to use some of the lower bandwidths
-     but the little CPU might want to.
-   - The big CPU might not want to use some intermediate bandwidth
-     points if they don't save a lot of power compared to a higher
-     bandwidth levels, but the little CPU might want to.
-   - The little CPU might never want to use the higher set of
-     bandwidth levels since they won't be power efficient for the use
-     cases that might run on it.
-
-4. It might not make sense from a system level power perspective.
-Let's take an example of a path S (source) -> A -> B -> C -> D
-(destination).
-   - A supports only 2, 5, 7 and 10 GB/s. B supports 1, 2 ... 10 GB/s.
-     C supports 5 and 10 GB/s
-   - If you combine and list the superset of bandwidth levels
-     supported in that path, that'd be 1, 2, 3, ... 10 GB/s.
-   - Which set of bandwidth levels make sense will depend on the
-     hardware characteristics of the interconnects.
-   - If B is the biggest power sink, then you might want to use all 10
-     levels.
-   - If A is the biggest power sink, then you might want to use all 2,
-     5 and 10 GB/s of the levels.
-   - If C is the biggest power sink then you might only want to use 5
-     and 10 GB/s
-   - The more hops and paths you get the more convoluted this gets.
-
-5. The design of the interconnects themselves might have an impact on
-which bandwidth levels are used.
-   - For example, the FIFO depth between two specific interconnects
-     might affect the valid bandwidth levels for a specific path.
-   - Say S1 -> A -> B -> D1, S2 -> C -> B -> D1 and S2 -> C -> D2 are
-     three paths.
-   - If C <-> B FIFO depth is small, then there might be a requirement
-     that C and B be closely performance matched to avoid system level
-     congestion due to back pressure.
-   - So S2 -> D1 path can't use all the bandwidth levels supported by
-     C-B combination.
-   - But S2 -> D2 can use all the bandwidth levels supported by C.
-   - And S1 -> D1 can use all the levels supported by A-B combination.
-
-These are just some of the reasons I could recollect in a few minutes.
-These are all real world cases I had to deal with in the past several
-years of dealing with scaling interconnects. I'm sure vendors and SoCs
-I'm not familiar with have other good reasons I'm not aware of.
-
-Trying to figure this all out by aggregating OPP tables of
-interconnect providers just isn't feasible nor is it efficient. The
-OPP tables for an interconnect path is describing the valid BW levels
-supported by that path and verified in hardware and makes a lot of
-sense to capture it clearly in DT.
-
-> So such kind of OPP table should be at
-> provider level but not at path level.
-
-They can also use it if they want to, but they'll probably want to use
-a frequency OPP table.
-
-
--Saravana
-
+> TODO:
+> * Clarify DT bindings
+> * Clarify interconnect OPP picking logic
+> * Implement devfreq_event for imx8m ddrc
+> * Expose more dram frequencies
 >
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> >  drivers/interconnect/core.c  | 27 ++++++++++++++++++++++++++-
-> >  include/linux/interconnect.h |  7 +++++++
-> >  2 files changed, 33 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> > index 871eb4bc4efc..881bac80bc1e 100644
-> > --- a/drivers/interconnect/core.c
-> > +++ b/drivers/interconnect/core.c
-> > @@ -47,6 +47,7 @@ struct icc_req {
-> >   */
-> >  struct icc_path {
-> >         size_t num_nodes;
-> > +       struct opp_table *opp_table;
-> >         struct icc_req reqs[];
-> >  };
-> >
-> > @@ -313,7 +314,7 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
-> >  {
-> >         struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
-> >         struct icc_node *src_node, *dst_node;
-> > -       struct device_node *np = NULL;
-> > +       struct device_node *np = NULL, *opp_node;
-> >         struct of_phandle_args src_args, dst_args;
-> >         int idx = 0;
-> >         int ret;
-> > @@ -381,10 +382,34 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
-> >                 dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
-> >         mutex_unlock(&icc_lock);
-> >
-> > +       opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
-> > +       if (opp_node) {
-> > +               path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
-> > +               of_node_put(opp_node);
-> > +       }
-> > +
-> > +
-> >         return path;
-> >  }
-> >  EXPORT_SYMBOL_GPL(of_icc_get);
-> >
-> > +/**
-> > + * icc_get_opp_table() - Get the OPP table that corresponds to a path
-> > + * @path: reference to the path returned by icc_get()
-> > + *
-> > + * This function will return the OPP table that corresponds to a path handle.
-> > + * If the interconnect API is disabled, NULL is returned and the consumer
-> > + * drivers will still build. Drivers are free to handle this specifically, but
-> > + * they don't have to.
-> > + *
-> > + * Return: opp_table pointer on success. NULL is returned when the API is
-> > + * disabled or the OPP table is missing.
-> > + */
-> > +struct opp_table *icc_get_opp_table(struct icc_path *path)
-> > +{
-> > +       return path->opp_table;
-> > +}
-> > +
-> >  /**
-> >   * icc_set_bw() - set bandwidth constraints on an interconnect path
-> >   * @path: reference to the path returned by icc_get()
-> > diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
-> > index dc25864755ba..0c0bc55f0e89 100644
-> > --- a/include/linux/interconnect.h
-> > +++ b/include/linux/interconnect.h
-> > @@ -9,6 +9,7 @@
-> >
-> >  #include <linux/mutex.h>
-> >  #include <linux/types.h>
-> > +#include <linux/pm_opp.h>
-> >
-> >  /* macros for converting to icc units */
-> >  #define Bps_to_icc(x)  ((x) / 1000)
-> > @@ -28,6 +29,7 @@ struct device;
-> >  struct icc_path *icc_get(struct device *dev, const int src_id,
-> >                          const int dst_id);
-> >  struct icc_path *of_icc_get(struct device *dev, const char *name);
-> > +struct opp_table *icc_get_opp_table(struct icc_path *path);
-> >  void icc_put(struct icc_path *path);
-> >  int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
-> >
-> > @@ -49,6 +51,11 @@ static inline void icc_put(struct icc_path *path)
-> >  {
-> >  }
-> >
-> > +static inline struct opp_table *icc_get_opp_table(struct icc_path *path)
-> > +{
-> > +       return NULL;
-> > +}
-> > +
-> >  static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
-> >  {
-> >         return 0;
-> > --
-> > 2.22.0.410.gd8fdbe21b5-goog
-> >
+> The clk_set_min_rate approach does not mesh very well with the OPP framework.
+> Some of interconnect nodes on imx8m can run at different voltages: OPP can
+> handle this well but not in response to a clk_set_min_rate from an unrelated
+> subsystem. Maybe set voltage on a clk notifier?
+
+I think if you design it something like below, it might make your life
+a whole lot easier.
+Hopefully the formatting looks okay on your end. The arrow going up is
+just connecting devfreq to ICC.
+
+                        Proactive -> ICC -> clk/OPP API to set freq/volt
+                                      ^
+                                      |
+HW measure -> governor -> devfreq ----+
+
+That way, all voltage/frequency requirements are managed cleanly by
+clk/OPP frameworks. The ICC deals with aggregating all the
+requirements and devfreq lets you handle reactive scaling and policy.
+
+And in the beginning, while you get a governor going, you can use
+"performance" governor for the "reactive scaling" users. That way,
+your reactive paths will continue to have good performance while the
+rest of the "proactive" clients change to use ICC APIs.
+
+> Vendor tree does not support voltage switching, independent freqs for
+> different parts of the fabric or any reactive scaling. I think it's important
+> to pick an upstreaming approach which can support as much as possible.
+>
+> Feedback welcome.
+
+If all of this makes sense, please take a look at [2] and provide your
+thoughts. I've dropped a few patches from [1] to avoid confusion (too
+much going on at once). I think BW OPP tables and having OPP tables
+for interconnect paths will be something you'll need (if not now,
+eventually) and something you can build on top of nicely.
+
+Thanks,
+Saravana
+
+[1] - https://lore.kernel.org/lkml/20190614041733.120807-1-saravanak@google.com/
+[2] - https://lore.kernel.org/lkml/20190703011020.151615-1-saravanak@google.com/
+
+
+
+> Some objections were apparently raised to doing DRAM switch inside CLK:
+> perhaps ICC should make min_freq requests to devfreq instead?
+>
+> Link to v1 (multiple chunks):
+>  * https://patchwork.kernel.org/patch/10976897/
+>  * https://patchwork.kernel.org/patch/10968303/
+>  * https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=91251
+>
+> Also as a github branch (with few other changes):
+>     https://github.com/cdleonard/linux/tree/next_imx8mm_busfreq
+>
+> Alexandre Bailon (2):
+>   interconnect: Add generic driver for imx
+>   interconnect: imx: Add platform driver for imx8mm
+>
+> Leonard Crestez (6):
+>   clk: imx8mm: Add dram freq switch support
+>   clk: imx8m-composite: Switch to determine_rate
+>   arm64: dts: imx8mm: Add dram dvfs irqs to ccm node
+>   devfreq: Add imx-devfreq driver
+>   arm64: dts: imx8mm: Add interconnect node
+>   arm64: dts: imx8mm: Add devfreq-imx nodes
+>
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi |  73 +++
+>  drivers/clk/imx/Makefile                  |   1 +
+>  drivers/clk/imx/clk-composite-8m.c        |  34 +-
+>  drivers/clk/imx/clk-imx8m-dram.c          | 357 ++++++++++++
+>  drivers/clk/imx/clk-imx8mm.c              |  12 +
+>  drivers/clk/imx/clk.h                     |  13 +
+>  drivers/devfreq/Kconfig                   |  10 +
+>  drivers/devfreq/Makefile                  |   1 +
+>  drivers/devfreq/imx-devfreq.c             | 142 +++++
+>  drivers/interconnect/Kconfig              |   1 +
+>  drivers/interconnect/Makefile             |   1 +
+>  drivers/interconnect/imx/Kconfig          |  17 +
+>  drivers/interconnect/imx/Makefile         |   2 +
+>  drivers/interconnect/imx/busfreq-imx8mm.c | 151 ++++++
+>  drivers/interconnect/imx/busfreq.c        | 628 ++++++++++++++++++++++
+>  drivers/interconnect/imx/busfreq.h        | 123 +++++
+>  include/dt-bindings/clock/imx8mm-clock.h  |   4 +-
+>  include/dt-bindings/interconnect/imx8mm.h |  49 ++
+>  18 files changed, 1606 insertions(+), 13 deletions(-)
+>  create mode 100644 drivers/clk/imx/clk-imx8m-dram.c
+>  create mode 100644 drivers/devfreq/imx-devfreq.c
+>  create mode 100644 drivers/interconnect/imx/Kconfig
+>  create mode 100644 drivers/interconnect/imx/Makefile
+>  create mode 100644 drivers/interconnect/imx/busfreq-imx8mm.c
+>  create mode 100644 drivers/interconnect/imx/busfreq.c
+>  create mode 100644 drivers/interconnect/imx/busfreq.h
+>  create mode 100644 include/dt-bindings/interconnect/imx8mm.h
+>
+> --
+> 2.17.1
+>
