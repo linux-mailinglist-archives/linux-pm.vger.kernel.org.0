@@ -2,96 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C895EDB3
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 22:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2255EDC7
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 22:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727004AbfGCUg0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 16:36:26 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:34088 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726955AbfGCUgW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 16:36:22 -0400
-Received: by mail-ot1-f66.google.com with SMTP id n5so3803318otk.1
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2019 13:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XPXq+pIJPDQwSLT19cfFmw2Vcvo0FzOgU0YAUNu6RQk=;
-        b=wJEJ8tMd3xtbZ2ihovoIGxTsU9YvYQTD507F06G8Qqxby/Sqvh3E1rTKa7dCWbAXsL
-         h/isW/5dGZoENf01Ua1CCOvp4kgRYyzqLT7O6zHgJ8l7uoiYTsWdVJ21RHWF19PzlLAR
-         9xr3ISuA4c2/xdscQyncXx03C+DMq5YRqIsnH9jeBCTGsOE+ieL9MGoSO8GfuWheduzo
-         OQw5O8PpiOM9bedjbV9vjq+7W/dh1hZDoISE5FWjVv2qvKldf5IhSZUYIA0Ab1JM77l2
-         6+vk3f1AQPzkm62ZK5lTASVX297bodhM/abR59OSn82RuuK+7lPzRMTZinSktvd1c4EB
-         DFnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XPXq+pIJPDQwSLT19cfFmw2Vcvo0FzOgU0YAUNu6RQk=;
-        b=HmH+A4plHghGkjboxPpzNxp3nZicEJ8oMStm4D0I2cvob7VshJJbFsjotNjeNEIJwT
-         TobA33qJXsdlFw2ejseYatNvWRk0i5mdAilPtLGdnviIkvW21eLndUtnRs+S+ExwIfSb
-         zTg7Ws23g8jLQ1tPnZURJbrvH+pn+/CHYaIK7xhz/TPuKoim10S5oaSUo6/TPyqkdDBH
-         vbaRQH3BoPqTBR6jqZkmXL/WTljoG6xf6ax9m0JupMC+zHKwfrdiCQoXZib7EhIYuMCE
-         4B8K2EgmJH7Icm6gtt5duKGSooNe9ux1k+hcLe3FBsTR1d6CoKl58k016IGALXgu4Cb7
-         ZulQ==
-X-Gm-Message-State: APjAAAU6ATlpqBNgQbQB8SGarncBmdssbbNFi/MQdiwmhyNAsEr7RFgw
-        z+iiF8DiEXGP8tzUL3NJ5aiCJE+qj+wr+QZrmZQpzA==
-X-Google-Smtp-Source: APXvYqy900opobQMpHjkJXGmlkfMTJ/Fz3xLTchhFyxqL4NA93DGafUbOsl0BNsl2aa50mubporMqRqSONHDjBDYRfU=
-X-Received: by 2002:a9d:1909:: with SMTP id j9mr14152896ota.139.1562186181028;
- Wed, 03 Jul 2019 13:36:21 -0700 (PDT)
+        id S1726902AbfGCUp4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 16:45:56 -0400
+Received: from mga04.intel.com ([192.55.52.120]:61753 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726739AbfGCUp4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 3 Jul 2019 16:45:56 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Jul 2019 13:45:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,448,1557212400"; 
+   d="p7s'?scan'208";a="158091772"
+Received: from orsmsx105.amr.corp.intel.com ([10.22.225.132])
+  by orsmga008.jf.intel.com with ESMTP; 03 Jul 2019 13:45:55 -0700
+Received: from orsmsx109.amr.corp.intel.com ([169.254.11.17]) by
+ ORSMSX105.amr.corp.intel.com ([169.254.2.207]) with mapi id 14.03.0439.000;
+ Wed, 3 Jul 2019 13:45:54 -0700
+From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
+To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "amit.kucheria@linaro.org" <amit.kucheria@linaro.org>
+CC:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+Subject: Re: Thermal microconference proposal @ LPC
+Thread-Topic: Thermal microconference proposal @ LPC
+Thread-Index: AQHVMeBO0uydloMs3EKoLil3NaMA4A==
+Date:   Wed, 3 Jul 2019 20:45:54 +0000
+Message-ID: <8d4b31d46c5a3ee1f79eb65cbe03bc2065ce8696.camel@intel.com>
+References: <f1efad22-66a6-a094-1ebe-43e794aff6d0@linaro.org>
+         <CAP245DVGekWAS1O6ZbNi52K5LyQw8vqVXM6DSBvOieAT3v1fpQ@mail.gmail.com>
+In-Reply-To: <CAP245DVGekWAS1O6ZbNi52K5LyQw8vqVXM6DSBvOieAT3v1fpQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.252.137.68]
+Content-Type: multipart/signed; micalg=sha-1;
+        protocol="application/x-pkcs7-signature"; boundary="=-yBMAxz+iSOiZJdADkXz/"
 MIME-Version: 1.0
-References: <20190703011020.151615-1-saravanak@google.com> <20190703063632.hl2lipcoeehplyxq@vireshk-i7>
-In-Reply-To: <20190703063632.hl2lipcoeehplyxq@vireshk-i7>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 3 Jul 2019 13:35:44 -0700
-Message-ID: <CAGETcx9Dhzt9-Ys-8hLtoZ9RYWMWa59H5yismUJDWmJ3Kq-smQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Introduce Bandwidth OPPs for interconnect paths
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        seansw@qti.qualcomm.com, daidavid1@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>, sibis@codeaurora.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        evgreen@chromium.org,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 2, 2019 at 11:36 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 02-07-19, 18:10, Saravana Kannan wrote:
-> > Interconnects and interconnect paths quantify their performance levels in
-> > terms of bandwidth and not in terms of frequency. So similar to how we have
-> > frequency based OPP tables in DT and in the OPP framework, we need
-> > bandwidth OPP table support in the OPP framework and in DT. Since there can
-> > be more than one interconnect path used by a device, we also need a way to
-> > assign a bandwidth OPP table to an interconnect path.
-> >
-> > This patch series:
-> > - Adds opp-peak-KBps and opp-avg-KBps properties to OPP DT bindings
-> > - Adds interconnect-opp-table property to interconnect DT bindings
-> > - Adds OPP helper functions for bandwidth OPP tables
-> > - Adds icc_get_opp_table() to get the OPP table for an interconnect path
-> >
-> > So with the DT bindings added in this patch series, the DT for a GPU
-> > that does bandwidth voting from GPU to Cache and GPU to DDR would look
-> > something like this:
->
-> And what changed since V2 ?
+--=-yBMAxz+iSOiZJdADkXz/
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, forgot to put that in. I just dropped a lot of patches that
-weren't relevant to the idea of BW OPPs and tying them to
-interconnects.
+Hi Amit,
+On Mon, 2019-06-24 at 19:22 +0530, Amit Kucheria wrote:
+> Hi all,
+>=20
+> We've proposed a thermal microconf at LPC again this year. I've
+> bcc'ed
+> a few people who were interested last year. We already have the
+> following topics listed for the proposal but could certainly use more
+> topics especially from the non-mobile Linux community.
+>=20
 
--Saravana
+
+Thermal/Power mitigation on high powered laptops
+
+Some of the high powered laptops released with KabyLake and later
+generations of processors can reach more than 50W with some busy
+workloads like kernel compilation. This results in CPU temperature to
+quickly reach close to the critical temperature. To avoid this OEM=E2=80=99=
+s
+have used a very conservative power limits  by default. But this
+results in a bad performance on Linux laptops compared to other
+operating systems. We have implemented a solution for Linux to mitigate
+this. This quick presentation will show the approach Linux users
+particularly kernel developers can use to get a very high performance
+from these laptops.
+
+This should be a quick 5-10 min talk.
+
+Thanks,
+Srinivas
+
+> - Samsung: Thermal aware scheduling (Lukasz Luba)
+> - Linaro: Combining idle and freq change for cpu cooling (Daniel
+> Lezcano)
+> - ARM: Discriminating thermal throttling (Volker Eckert)
+> - IBM: Sustain turbo mode (Parth Shah)
+> - QCOM/Linaro: Make thermal framework easier to use in products (Amit
+> Kucheria)
+>=20
+> Please help bring this to the attention of those who might be
+> interested in talking about thermal-related problems at the
+> conference.
+>=20
+> Thanks.
+>=20
+> Regards,
+> Amit Kucheria & Daniel Lezcano
+
+--=-yBMAxz+iSOiZJdADkXz/
+Content-Type: application/x-pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+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
+n4IJlKBiiK7B8oFPhD7KEZOWboHrE2uHLEkIXpp852sG0oFkLLstEDK9Z46WS4Ni1yfGRE6jY79A
+DJOEZIX9AgMBAAGjggI9MIICOTAdBgNVHQ4EFgQUZ2w0kbL1uZEoQTmAiMqoAXL81L8wHwYDVR0j
+BBgwFoAU2kEjnFqPca9Xgz4g0+Nl2wzLC9swZQYDVR0fBF4wXDBaoFigVoZUaHR0cDovL3d3dy5p
+bnRlbC5jb20vcmVwb3NpdG9yeS9DUkwvSW50ZWwlMjBFeHRlcm5hbCUyMEJhc2ljJTIwSXNzdWlu
+ZyUyMENBJTIwNEIuY3JsMIGfBggrBgEFBQcBAQSBkjCBjzAiBggrBgEFBQcwAYYWaHR0cDovL29j
+c3AuaW50ZWwuY29tLzBpBggrBgEFBQcwAoZdaHR0cDovL3d3dy5pbnRlbC5jb20vcmVwb3NpdG9y
+eS9jZXJ0aWZpY2F0ZXMvSW50ZWwlMjBFeHRlcm5hbCUyMEJhc2ljJTIwSXNzdWluZyUyMENBJTIw
+NEIuY3J0MAsGA1UdDwQEAwIHgDA8BgkrBgEEAYI3FQcELzAtBiUrBgEEAYI3FQiGw4x1hJnlUYP9
+gSiFjp9TgpHACWeB3r05lfBDAgFkAgEJMB8GA1UdJQQYMBYGCCsGAQUFBwMEBgorBgEEAYI3CgMM
+MCkGCSsGAQQBgjcVCgQcMBowCgYIKwYBBQUHAwQwDAYKKwYBBAGCNwoDDDBXBgNVHREEUDBOoC0G
+CisGAQQBgjcUAgOgHwwdc3Jpbml2YXMucGFuZHJ1dmFkYUBpbnRlbC5jb22BHXNyaW5pdmFzLnBh
+bmRydXZhZGFAaW50ZWwuY29tMA0GCSqGSIb3DQEBBQUAA4IBAQAXirNmyawI/PJRnjPoqNcgSr8N
+8VXBvv8kwQidSNWKswBqo8ul8u+pkG7v8YjZUy1OJQUFXPvihht10Tb5O2xZ9hpIo4WFcRX2eg2Z
+t6koRJUB9ZDjEETG2j4EpcGmWIBrDBNZLZTLIYG5JzsS6mGCq42AKspSAJD00vwfL0KlCc4BVUvC
+64+q7etbf6c90n05KjfLfoUXBqwWLJCe3KPD20d/kbvesTzs2PVQxI7K1eL9n2rBoqBpcRY0ppkz
+FKjiTQ8IcwhyWQbzLfVIy5tNuyinhNBRv3COOMGoayaljijEPcEHLE63tA2OIao2Hz6GLRYzg0mT
+hCtsB4xSboPZMYICFzCCAhMCAQEwgZAweTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRQwEgYD
+VQQHEwtTYW50YSBDbGFyYTEaMBgGA1UEChMRSW50ZWwgQ29ycG9yYXRpb24xKzApBgNVBAMTIklu
+dGVsIEV4dGVybmFsIEJhc2ljIElzc3VpbmcgQ0EgNEICEzMAAGknngjvas7THxUAAAAAaScwCQYF
+Kw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE5MDcw
+MzIwNDU1M1owIwYJKoZIhvcNAQkEMRYEFC1rH/4770/YAnWbppyAKFbaRgVqMA0GCSqGSIb3DQEB
+AQUABIIBABWfD3bNkA4Jqbb08V9jIiybjwdCUkSwqU65pwFmADElvb6IKdpBr8mUeOzvneTbnIv+
+eQNt22moWoZsHNS7/IqQ9tvmnd1Rn6IoWXBFhlbivN/8xoUGyDrQ0sNxerZy+Zb817PxQsq2phVf
+0sTzu5P/N/pSgerREj6s9q4xA9NembcaYh3VGzgXoce+15GL9bgqNeaXtLCrDAwOXqPqtIEoGB4o
+nOwKLQp8r8yghKLQEJvyGU1tvZVC5I/6PINZLeqVOYvRD3ninoLCejeVMVEgNC15a9TW1obKLR01
+0FoaIm45O8cGV9eBnuuDZYLMKlIdIR5QKR8GqsHwO7S/j+EAAAAAAAA=
+
+
+--=-yBMAxz+iSOiZJdADkXz/--
