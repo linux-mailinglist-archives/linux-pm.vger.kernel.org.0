@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0AF5E15F
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 11:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 444F95E175
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 11:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727034AbfGCJuP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 05:50:15 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39886 "EHLO
+        id S1726305AbfGCJyy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 05:54:54 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34197 "EHLO
         mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbfGCJuP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 05:50:15 -0400
-Received: by mail-ot1-f65.google.com with SMTP id r21so1242145otq.6;
-        Wed, 03 Jul 2019 02:50:14 -0700 (PDT)
+        with ESMTP id S1725820AbfGCJyy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 05:54:54 -0400
+Received: by mail-ot1-f65.google.com with SMTP id n5so1739164otk.1;
+        Wed, 03 Jul 2019 02:54:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eVDpZqNVKfDH81FMIhW5D5AvZcKedRrg5UD+AQd2js4=;
-        b=n0iwR7qQKCZQOXFT1su42mWvFa0xvs6cJoM4B0gIs77H753iO6Jyp2guypCsvCBhpx
-         9cKNCM1GYFdbOuEpeVB6oa0CwE0OjCv79YKFtR18Il6YyKR8lHjXFOC3bzZ3T8EvM/1I
-         iB3DTxUamyyvDZ3C2QHNI/YYAox4faZXJJaxH2SIATTVwumlOitISWZcZFdWK3G2OPHW
-         2UPsV3H1J1P+cdWPpXKO4SIQmmTu6ftktyCFXFxjqFWpMgvIaZUQVtw27oBVFCLr7vNv
-         XZ1Y8dM/TLq9/3rmgawxlTXt1N/Gp2Ohaz22Y50cczQ8FapRk5Mbrts7+XMuCzuIibTz
-         9DrA==
-X-Gm-Message-State: APjAAAVjcQ55hk5BBSItXp1jyWrFV4Q+JbM9uXITirxvB/ctj1ygnAhP
-        haQV+3oUhIwIKTaOWNSjVCKsuktQzuy6TR+bOyQ=
-X-Google-Smtp-Source: APXvYqxc0AuWra/GtSKsZAsOnVyRRHpZMhfhRYbQ4kKlbG/fZZNfGz2iEM31aB897pMUJbc4ahWriMkAX7n0J4ADoKA=
-X-Received: by 2002:a9d:6a4b:: with SMTP id h11mr13574308otn.266.1562147414257;
- Wed, 03 Jul 2019 02:50:14 -0700 (PDT)
+        bh=VaTxAIN0pDHUzuzL+NSP80OSIfX+XiV7VjvWB84HnSM=;
+        b=d1DrVrKmy8NZUd31P7C4cEv/l7shpXlV4s3l1LIdV3rBH/V3vEZXpts6FUKnEBQr+o
+         K71z9Nl8pIypwBYxy8Uq/b9+Ev9FKG3yMcoYTiL24Co3cu31fUnVFJYBtwAG87wIWYYy
+         pHNEKi5kX12NYnuWm4XbTurxVmivsLWugVP5JQxQawVXT7tCnGjWhJxRAwHgtSLSjvK/
+         +I9q1VpVLiWk0rjH20SJQXjB6T3DufMwgf6FGBUcUEyQum0m2LJF0J/MCUjH//X4DBfF
+         PfWS//uI4UYgdYurPEROy/06t8QD/btzpJ2hzbffwdzcNCzb91z+GMo7B7dVsSkH7buB
+         d1Qw==
+X-Gm-Message-State: APjAAAXlTwk3DZfFtPmdfvsqPhx7gygzQHfKwPAFmrpsha4hX98spXVe
+        OlVQQJzsTI7PLSxXuuIHmBRkb1cYudHZwXnVDMk=
+X-Google-Smtp-Source: APXvYqxSMGBc9GvsapfI+f6+YWH7rqqjRbHUNO8qO6Fmw0BKpBQ0N7qVphlZ8aT04uFN9XSO+AV67jip+4faOjM7EgE=
+X-Received: by 2002:a05:6830:8a:: with SMTP id a10mr10589100oto.167.1562147693136;
+ Wed, 03 Jul 2019 02:54:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190701185310.540706841@asus.localdomain> <20190701185528.115106953@asus.localdomain>
-In-Reply-To: <20190701185528.115106953@asus.localdomain>
+References: <20190701185310.540706841@asus.localdomain> <20190701185528.078114514@asus.localdomain>
+In-Reply-To: <20190701185528.078114514@asus.localdomain>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 3 Jul 2019 11:50:03 +0200
-Message-ID: <CAJZ5v0gAKpFZRFB2HNZwshpk8jW-EO2uTNo5fk69vRZbm_Bv-A@mail.gmail.com>
-Subject: Re: [patch 2/5] cpuidle: add get_poll_time callback
+Date:   Wed, 3 Jul 2019 11:54:42 +0200
+Message-ID: <CAJZ5v0h30V5pvZoUHuC8Ct7RNLGV8u-CEFSgwfa0_A3kqsRC_A@mail.gmail.com>
+Subject: Re: [patch 1/5] add cpuidle-haltpoll driver
 To:     Marcelo Tosatti <mtosatti@redhat.com>
 Cc:     kvm-devel <kvm@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
@@ -58,150 +58,140 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Mon, Jul 1, 2019 at 8:57 PM Marcelo Tosatti <mtosatti@redhat.com> wrote:
 >
-> Add a "get_poll_time" callback to the cpuidle_governor structure,
-> and change poll state to poll for that amount of time.
+> Add a cpuidle driver that calls the architecture default_idle routine.
 >
-> Provide a default method for it, while allowing individual governors
-> to override it.
+> To be used in conjunction with the haltpoll governor.
 >
 > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
-I had ACKed this before, but then it occurred to me that it would be
-less intrusive to use a new field, say poll_limit_ns (equal to 0 by
-default), in struct cpuidle_device.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 >
 > ---
->  drivers/cpuidle/cpuidle.c    |   40 ++++++++++++++++++++++++++++++++++++++++
->  drivers/cpuidle/poll_state.c |   11 ++---------
->  include/linux/cpuidle.h      |    8 ++++++++
->  3 files changed, 50 insertions(+), 9 deletions(-)
+>  arch/x86/kernel/process.c          |    2 -
+>  drivers/cpuidle/Kconfig            |    9 +++++
+>  drivers/cpuidle/Makefile           |    1
+>  drivers/cpuidle/cpuidle-haltpoll.c |   65 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 76 insertions(+), 1 deletion(-)
 >
-> Index: linux-2.6-newcpuidle.git/drivers/cpuidle/cpuidle.c
+> Index: linux-2.6-newcpuidle.git/arch/x86/kernel/process.c
 > ===================================================================
-> --- linux-2.6-newcpuidle.git.orig/drivers/cpuidle/cpuidle.c
-> +++ linux-2.6-newcpuidle.git/drivers/cpuidle/cpuidle.c
-> @@ -362,6 +362,46 @@ void cpuidle_reflect(struct cpuidle_devi
+> --- linux-2.6-newcpuidle.git.orig/arch/x86/kernel/process.c
+> +++ linux-2.6-newcpuidle.git/arch/x86/kernel/process.c
+> @@ -580,7 +580,7 @@ void __cpuidle default_idle(void)
+>         safe_halt();
+>         trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, smp_processor_id());
 >  }
+> -#ifdef CONFIG_APM_MODULE
+> +#if defined(CONFIG_APM_MODULE) || defined(CONFIG_HALTPOLL_CPUIDLE_MODULE)
+>  EXPORT_SYMBOL(default_idle);
+>  #endif
 >
->  /**
-> + * cpuidle_default_poll_time - default routine used to return poll time
-> + * governors can override it if necessary
+> Index: linux-2.6-newcpuidle.git/drivers/cpuidle/Kconfig
+> ===================================================================
+> --- linux-2.6-newcpuidle.git.orig/drivers/cpuidle/Kconfig
+> +++ linux-2.6-newcpuidle.git/drivers/cpuidle/Kconfig
+> @@ -51,6 +51,15 @@ depends on PPC
+>  source "drivers/cpuidle/Kconfig.powerpc"
+>  endmenu
+>
+> +config HALTPOLL_CPUIDLE
+> +       tristate "Halt poll cpuidle driver"
+> +       depends on X86 && KVM_GUEST
+> +       default y
+> +       help
+> +         This option enables halt poll cpuidle driver, which allows to poll
+> +         before halting in the guest (more efficient than polling in the
+> +         host via halt_poll_ns for some scenarios).
+> +
+>  endif
+>
+>  config ARCH_NEEDS_CPU_IDLE_COUPLED
+> Index: linux-2.6-newcpuidle.git/drivers/cpuidle/Makefile
+> ===================================================================
+> --- linux-2.6-newcpuidle.git.orig/drivers/cpuidle/Makefile
+> +++ linux-2.6-newcpuidle.git/drivers/cpuidle/Makefile
+> @@ -7,6 +7,7 @@ obj-y += cpuidle.o driver.o governor.o s
+>  obj-$(CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED) += coupled.o
+>  obj-$(CONFIG_DT_IDLE_STATES)             += dt_idle_states.o
+>  obj-$(CONFIG_ARCH_HAS_CPU_RELAX)         += poll_state.o
+> +obj-$(CONFIG_HALTPOLL_CPUIDLE)           += cpuidle-haltpoll.o
+>
+>  ##################################################################################
+>  # ARM SoC drivers
+> Index: linux-2.6-newcpuidle.git/drivers/cpuidle/cpuidle-haltpoll.c
+> ===================================================================
+> --- /dev/null
+> +++ linux-2.6-newcpuidle.git/drivers/cpuidle/cpuidle-haltpoll.c
+> @@ -0,0 +1,69 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * cpuidle driver for haltpoll governor.
 > + *
-> + * @drv:   the cpuidle driver tied with the cpu
-> + * @dev:   the cpuidle device
+> + * Copyright 2019 Red Hat, Inc. and/or its affiliates.
 > + *
+> + * This work is licensed under the terms of the GNU GPL, version 2.  See
+> + * the COPYING file in the top-level directory.
+> + *
+> + * Authors: Marcelo Tosatti <mtosatti@redhat.com>
 > + */
-> +static u64 cpuidle_default_poll_time(struct cpuidle_driver *drv,
-> +                                    struct cpuidle_device *dev)
-
-With this new field in place this could be called cpuidle_poll_time() and ->
-
+> +
+> +#include <linux/init.h>
+> +#include <linux/cpuidle.h>
+> +#include <linux/module.h>
+> +#include <linux/sched/idle.h>
+> +#include <linux/kvm_para.h>
+> +
+> +static int default_enter_idle(struct cpuidle_device *dev,
+> +                             struct cpuidle_driver *drv, int index)
 > +{
-> +       int i;
-
--> do something like this here:
-
-if (dev->poll_limit_ns)
-        return dev->poll_limit_ns;
-
-and the governor changes below wouldn't be necessary any more.
-
-Then, the governor could update poll_limit_ns if it wanted to override
-the default.
-
-It also would be possible to use poll_limit_ns as a sort of poll limit
-cache to store the last value in it and clear it on state
-disable/enable to avoid the search through the states every time even
-without haltpoll.
-
-> +
-> +       for (i = 1; i < drv->state_count; i++) {
-> +               if (drv->states[i].disabled || dev->states_usage[i].disable)
-> +                       continue;
-> +
-> +               return (u64)drv->states[i].target_residency * NSEC_PER_USEC;
+> +       if (current_clr_polling_and_test()) {
+> +               local_irq_enable();
+> +               return index;
 > +       }
-> +
-> +       return TICK_NSEC;
+> +       default_idle();
+> +       return index;
 > +}
 > +
-> +/**
-> + * cpuidle_get_poll_time - tell the polling driver how much time to poll,
-> + *                        in nanoseconds.
-> + *
-> + * @drv: the cpuidle driver tied with the cpu
-> + * @dev: the cpuidle device
-> + *
-> + */
-> +u64 cpuidle_get_poll_time(struct cpuidle_driver *drv,
-> +                         struct cpuidle_device *dev)
+> +static struct cpuidle_driver haltpoll_driver = {
+> +       .name = "haltpoll",
+> +       .owner = THIS_MODULE,
+> +       .states = {
+> +               { /* entry 0 is for polling */ },
+> +               {
+> +                       .enter                  = default_enter_idle,
+> +                       .exit_latency           = 1,
+> +                       .target_residency       = 1,
+> +                       .power_usage            = -1,
+> +                       .name                   = "haltpoll idle",
+> +                       .desc                   = "default architecture idle",
+> +               },
+> +       },
+> +       .safe_state_index = 0,
+> +       .state_count = 2,
+> +};
+> +
+> +static int __init haltpoll_init(void)
 > +{
-> +       if (cpuidle_curr_governor->get_poll_time)
-> +               return cpuidle_curr_governor->get_poll_time(drv, dev);
+> +       struct cpuidle_driver *drv = &haltpoll_driver;
 > +
-> +       return cpuidle_default_poll_time(drv, dev);
+> +       cpuidle_poll_state_init(drv);
+> +
+> +       if (!kvm_para_available())
+> +               return 0;
+> +
+> +       return cpuidle_register(&haltpoll_driver, NULL);
 > +}
 > +
-> +/**
->   * cpuidle_install_idle_handler - installs the cpuidle idle loop handler
->   */
->  void cpuidle_install_idle_handler(void)
-> Index: linux-2.6-newcpuidle.git/drivers/cpuidle/poll_state.c
-> ===================================================================
-> --- linux-2.6-newcpuidle.git.orig/drivers/cpuidle/poll_state.c
-> +++ linux-2.6-newcpuidle.git/drivers/cpuidle/poll_state.c
-> @@ -20,16 +20,9 @@ static int __cpuidle poll_idle(struct cp
->         local_irq_enable();
->         if (!current_set_polling_and_test()) {
->                 unsigned int loop_count = 0;
-> -               u64 limit = TICK_NSEC;
-> -               int i;
-> +               u64 limit;
->
-> -               for (i = 1; i < drv->state_count; i++) {
-> -                       if (drv->states[i].disabled || dev->states_usage[i].disable)
-> -                               continue;
-> -
-> -                       limit = (u64)drv->states[i].target_residency * NSEC_PER_USEC;
-> -                       break;
-> -               }
-> +               limit = cpuidle_get_poll_time(drv, dev);
->
->                 while (!need_resched()) {
->                         cpu_relax();
-> Index: linux-2.6-newcpuidle.git/include/linux/cpuidle.h
-> ===================================================================
-> --- linux-2.6-newcpuidle.git.orig/include/linux/cpuidle.h
-> +++ linux-2.6-newcpuidle.git/include/linux/cpuidle.h
-> @@ -132,6 +132,8 @@ extern int cpuidle_select(struct cpuidle
->  extern int cpuidle_enter(struct cpuidle_driver *drv,
->                          struct cpuidle_device *dev, int index);
->  extern void cpuidle_reflect(struct cpuidle_device *dev, int index);
-> +extern u64 cpuidle_get_poll_time(struct cpuidle_driver *drv,
-> +                                struct cpuidle_device *dev);
->
->  extern int cpuidle_register_driver(struct cpuidle_driver *drv);
->  extern struct cpuidle_driver *cpuidle_get_driver(void);
-> @@ -166,6 +168,9 @@ static inline int cpuidle_enter(struct c
->                                 struct cpuidle_device *dev, int index)
->  {return -ENODEV; }
->  static inline void cpuidle_reflect(struct cpuidle_device *dev, int index) { }
-> +extern u64 cpuidle_get_poll_time(struct cpuidle_driver *drv,
-> +                                struct cpuidle_device *dev)
-> +{return 0; }
->  static inline int cpuidle_register_driver(struct cpuidle_driver *drv)
->  {return -ENODEV; }
->  static inline struct cpuidle_driver *cpuidle_get_driver(void) {return NULL; }
-> @@ -246,6 +251,9 @@ struct cpuidle_governor {
->                                         struct cpuidle_device *dev,
->                                         bool *stop_tick);
->         void (*reflect)         (struct cpuidle_device *dev, int index);
+> +static void __exit haltpoll_exit(void)
+> +{
+> +       cpuidle_unregister(&haltpoll_driver);
+> +}
 > +
-> +       u64 (*get_poll_time)    (struct cpuidle_driver *drv,
-> +                                struct cpuidle_device *dev);
->  };
->
->  #ifdef CONFIG_CPU_IDLE
+> +module_init(haltpoll_init);
+> +module_exit(haltpoll_exit);
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Marcelo Tosatti <mtosatti@redhat.com>");
+> +
 >
 >
