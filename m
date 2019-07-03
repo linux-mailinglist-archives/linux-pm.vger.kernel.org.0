@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1FB5E9A6
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 18:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC245E98C
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 18:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727148AbfGCQtm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 12:49:42 -0400
-Received: from mout.gmx.net ([212.227.15.18]:60141 "EHLO mout.gmx.net"
+        id S1727168AbfGCQtn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 12:49:43 -0400
+Received: from mout.gmx.net ([212.227.15.15]:48097 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727121AbfGCQtl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1727117AbfGCQtl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Wed, 3 Jul 2019 12:49:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1562172512;
-        bh=0w7nyu9wSyUNFugecpftxoveFd04MwndiFhERzCcH4U=;
+        s=badeba3b8450; t=1562172514;
+        bh=/9xBDfa8MmyCEGy9lts4eV0fUCDWP2vWjFBrUMAHZIw=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=PYCf/wvNcQPJqzK+6TrPDe4U1s3nWPkcTSLDXO7gGiKpTIDfc7nv5PJV3SbxXc7Xw
-         LeRsR1//wn5WyWNxELldcMXnjAt1fNkanjNfcJEqmb3szfmhO4k6naSQFo58U5pvew
-         8jpdomMfHcgQrEMVZu4sW6iJ4sPXLyv8kVwZWCXM=
+        b=NJL6u9vCVUAcj0aiV9JL+ahQq/Z3X+rRu6afSaN6dMYm+Evbul46DCtz365/Naq2f
+         RSTEGdTVeueXpiveIakMux/69G0mtdqLpPiDN3f+KIueDJAgt0jB0lZ8ej6mdwiwDD
+         9bB2mbSEgwKIQ4a0M/fu/pfntvqwrENfhrz9JTj4=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([217.61.158.204]) by mail.gmx.com
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M1Ygz-1hhKrD2Xhj-0032k6; Wed, 03 Jul 2019 18:48:32 +0200
+ 1M42jK-1hiiQr3zXc-0001fV; Wed, 03 Jul 2019 18:48:34 +0200
 From:   Frank Wunderlich <frank-w@public-files.de>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -46,34 +46,34 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         "Paul E . McKenney" <paulmck@linux.ibm.com>
 Cc:     Josef Friedl <josef.friedl@speed.at>,
         Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v2 1/7] docs: dt-bindings: add poweroff
-Date:   Wed,  3 Jul 2019 18:48:16 +0200
-Message-Id: <20190703164822.17924-2-frank-w@public-files.de>
+Subject: [PATCH v2 2/7] rtc: mt6397: move some common definitions into rtc.h
+Date:   Wed,  3 Jul 2019 18:48:17 +0200
+Message-Id: <20190703164822.17924-3-frank-w@public-files.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190703164822.17924-1-frank-w@public-files.de>
 References: <20190703164822.17924-1-frank-w@public-files.de>
-X-Provags-ID: V03:K1:RaJfCMIYAXb0FRWR7atb1Wt8tqSDqFVstf8i87J53HmZBA/WEAg
- 8LprSsryrnuZeOepH5JTe1QAJSgeVotvVYsGLs6vhRAbo862eWgtojUHsuKT0EBbNS2dWBO
- R2U9uzKnD1fziJD6yy+RdFdfe+Y+MnXjt3uOOKFlS3d3DJT8Pxz92w9+sjvWeX5O/0dxnWB
- hHc3AvQQ7ORjbRBCJsiZg==
+X-Provags-ID: V03:K1:eNTAGak/khtebF18hP1o00uJHTFlKw0xrt738upulxWk1z31acU
+ PoB2U9jBsL3a67ozQdB+gG5Tq5CJQPDRj0dNh3mKEH1ReCjxe96SLWjYx9mEeCzDeIYs1eE
+ BYo7WMGYd5CUSfhSLvOqR02xzohVYND0/oRHlhR7xCxaVLxuHJxze47sRzK2taMUN5K6QHZ
+ IPFfX9BTpN8nR4lpP3t7A==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oBlJwgH7f+s=:2iLFypLybMqQHCt22s/EyG
- x/20PnTJLrdGQlkGUdh9j0riLTLu2nMd5NUZz9uOPQM1Eo2HgEXn4iRzawBB48Fpq98G3hZ29
- FcXFiawcFAzKY627wuPidJIFlb6Ns+E5HAA2QRD8Xre7CZxccu+vN5tjRFfGhgctJ+UyAnW/4
- iDL49WQVQJqLBYW4P9OZo+WMsAMR0ndfCGOz+kqlvwI1e5FNRwPaqdA1fcpPVL5p7AEnAJWlu
- 8nmqjEc1Mq2zvcZfcCiWJMY+uTSP4cukJRSAePUfEzcvLCNOYBn+JlSFUj9w9UcpTcjZgdV+t
- hRS+k6NeinQsPm+m6aARwt8SXs2FvEiOo+AfvGmbNtEsIYsgoJyRRbAaoaWI4u3wgFcvr432y
- mffmWynHBa+y5Ut23hnLVk/8ejGBnQTUnxX0oxyhWXs/dydC0bUmYweEJv3bmE2lX+BgynxL/
- pAwKC/jafmUTzWRiny3J07UE2iCQrMYZnrSzRLxZCjK2ghGZkEgYo91qXy4/+8zOklM5aGbyN
- cqLsZEx8g0yk1Q3YJIlBiWLb1+xUHThlAUio8ojQnKyo3rL9pkyzICsIY7by6wmF6PBgjVcER
- 2rUlWEzvQ0UxAgWgq0VtZWkKj/Pt79S28sLeF2dQAvTDseqF0Llfj/N8+9JqrR12Q1q7n2PvD
- zCUp2DGTQGfSUkwJs3bud9nbQQCN6SgUu2J860SHdWfyyKFzYYRk65u64b7/dgYgYvd1v5ejd
- XPlWw1Mmuzt5tQgLSjHIlIHaKE4oIUP1+PA+G+CLS1SkPMuOpjGkmZ2Jc7+bZ8TRY6pA9wK0/
- PfwxgcTGS6pw7I6XxwAYfCpilHHLSCgoQN3zSuyF0V93vtwZ+i1gflaL7x1RS/jT3JiY+47f3
- 8S9Aac+8+j3eZADuylaS1We8B0u4Jrd5J3fAzThPBnf4iz6FezyGv0QSW/wQBKGiIfLbmFEF4
- O/9DqpcoSuWHudGVKJ04WTA/RmLb6a9jxNR/LEhS7cEtjjnapyg4D3zXy+aBN/DoLH8x9k/Y8
- dr6wRWdiqKoEp7nV0v+UBliPBigRdTjSwnipfxpSr0CpBGuV1IPOG/Z/9jISlQP4O6PpxdqyU
- sxej10Kq0vp0m0=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hrXaNRx2yJU=:n8xY8hWfUEOQNncyM2MDfb
+ hgyC4lTVSopY06MROwkDrLATI7KOf4BREy8UbjkvevcUbP4bo5sS3X0ccBpwv+LSxbLvv2bT6
+ ttpL9s26RLDTYq8XPNI+DfEz7fk1JIYwyXVfjrahDo9t1gymXebc8+AL1yiURT7SSPQkPa6Om
+ 8jweZxjKExbRyKfcakJOQvSXiI2DzhVePFsHbb0NpOEaLjVHCHnUvoghqrbAhc5TBDMYk507J
+ 3aT6AJSgAJYTEbLRUCmEWBoyZ7bG5BCi1UBDegmje2IxGOOLPndIrZ2M1qioBdm2K5RU1v1Ta
+ II8QrtGmItpLyoOIciLHCgn+6gZ0r7zBAM94DjgmIFZRPvOq2uxzUNJ0+JPlN65XF0wkSRbKm
+ wStGGr9H6EF7GdUlejbBJ28BX0apwmU/ZlH0kR2nGczm4sp08ZQgEV7dv8d9N4kDu9J2+r6xv
+ PZaqWYe32TkeI+lAoQqVhDKzr8i5lKPWTgFcn94Rnr3FaoiNE6VPHupq7vpXHGhef5CwwHVK9
+ j+uBjgyExZ1pBjLO6X9rx3KW5j1FiCE6GHSKtZt7wz5feqYEV8pd5ohXSqiBanx+hbVH7byQG
+ ua39EHS9jirtv1JtXBFl1QW8JO5Ui4KxuMElsaYCeHwdV00Mt/D1wj0aXg6zocC+zwerw5uJ5
+ djRwYqlIyr91G7i1qRFAP2KDvPX42lK1LWpXXICoyT3onns0k302e1vFS+PxlDzC9VMn2kLci
+ aASSswHtFmYPuFBbGQE417bNLH8vXTPQR+nlCzqING608uUxya3ZCRlZKY53FI2jjC6tI/oiD
+ 0UGtZyTCaK5x5ftWGdUWavLNF8rB8RnJDxVTm3jyne4C7mNDJ+AyDIb1orvJw0Bbb8aZUopFo
+ 2MTz+ca155ddzmrY6Tt9lOqy3xNc23yrzbBEt4ERl1lodvnfJgNTmhhi3dgD6XspcD9fZEpNA
+ RHRxfcrtVMGMXiuVkzDwhND9BsB2vtj5EoX3YcG0k3vlg0iL66fApiWnXBIkKFyKWUr/pciph
+ ayZcEgOAUcqfyrLmvtHT2OotSl4rfNSzdwjgu0Zs7bk+R6tPNt3kCSrSF2z9UmgHLM/l9r6p2
+ vYvFnzLNIXh0Nc=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -82,127 +82,159 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Josef Friedl <josef.friedl@speed.at>
 
-add documentation for pmic, rtc and power/reset devicetree bindings
-
 Suggested-by: Frank Wunderlich <frank-w@public-files.de>
 Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 =2D--
- .../devicetree/bindings/mfd/mt6397.txt        | 10 ++++++-
- .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++
- .../devicetree/bindings/rtc/rtc-mt6397.txt    | 29 +++++++++++++++++++
- 3 files changed, 58 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-p=
-oweroff.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+ drivers/rtc/rtc-mt6397.c       | 55 +-------------------------
+ include/linux/mfd/mt6397/rtc.h | 71 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+), 54 deletions(-)
+ create mode 100644 include/linux/mfd/mt6397/rtc.h
 
-diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentat=
-ion/devicetree/bindings/mfd/mt6397.txt
-index 0ebd08af777d..44acb9827716 100644
-=2D-- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-+++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-@@ -8,6 +8,7 @@ MT6397/MT6323 is a multifunction device with the following=
- sub modules:
- - Clock
- - LED
- - Keys
-+- Power controller
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index b46ed4dc7015..c08ee5edf865 100644
+=2D-- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -9,60 +9,7 @@
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+ #include <linux/rtc.h>
+-#include <linux/irqdomain.h>
+-#include <linux/platform_device.h>
+-#include <linux/of_address.h>
+-#include <linux/of_irq.h>
+-#include <linux/io.h>
+-#include <linux/mfd/mt6397/core.h>
+-
+-#define RTC_BBPU		0x0000
+-#define RTC_BBPU_CBUSY		BIT(6)
+-
+-#define RTC_WRTGR		0x003c
+-
+-#define RTC_IRQ_STA		0x0002
+-#define RTC_IRQ_STA_AL		BIT(0)
+-#define RTC_IRQ_STA_LP		BIT(3)
+-
+-#define RTC_IRQ_EN		0x0004
+-#define RTC_IRQ_EN_AL		BIT(0)
+-#define RTC_IRQ_EN_ONESHOT	BIT(2)
+-#define RTC_IRQ_EN_LP		BIT(3)
+-#define RTC_IRQ_EN_ONESHOT_AL	(RTC_IRQ_EN_ONESHOT | RTC_IRQ_EN_AL)
+-
+-#define RTC_AL_MASK		0x0008
+-#define RTC_AL_MASK_DOW		BIT(4)
+-
+-#define RTC_TC_SEC		0x000a
+-/* Min, Hour, Dom... register offset to RTC_TC_SEC */
+-#define RTC_OFFSET_SEC		0
+-#define RTC_OFFSET_MIN		1
+-#define RTC_OFFSET_HOUR		2
+-#define RTC_OFFSET_DOM		3
+-#define RTC_OFFSET_DOW		4
+-#define RTC_OFFSET_MTH		5
+-#define RTC_OFFSET_YEAR		6
+-#define RTC_OFFSET_COUNT	7
+-
+-#define RTC_AL_SEC		0x0018
+-
+-#define RTC_PDN2		0x002e
+-#define RTC_PDN2_PWRON_ALARM	BIT(4)
+-
+-#define RTC_MIN_YEAR		1968
+-#define RTC_BASE_YEAR		1900
+-#define RTC_NUM_YEARS		128
+-#define RTC_MIN_YEAR_OFFSET	(RTC_MIN_YEAR - RTC_BASE_YEAR)
+-
+-struct mt6397_rtc {
+-	struct device		*dev;
+-	struct rtc_device	*rtc_dev;
+-	struct mutex		lock;
+-	struct regmap		*regmap;
+-	int			irq;
+-	u32			addr_base;
+-};
++#include <linux/mfd/mt6397/rtc.h>
 
- It is interfaced to host controller using SPI interface by a proprietary =
-hardware
- called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwra=
-p.
-@@ -22,8 +23,10 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
- Optional subnodes:
-
- - rtc
--	Required properties:
-+	Required properties: Should be one of follows
-+		- compatible: "mediatek,mt6323-rtc"
- 		- compatible: "mediatek,mt6397-rtc"
-+	For details, see Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
- - regulators
- 	Required properties:
- 		- compatible: "mediatek,mt6397-regulator"
-@@ -46,6 +49,11 @@ Optional subnodes:
- 		- compatible: "mediatek,mt6397-keys" or "mediatek,mt6323-keys"
- 	see Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
-
-+- power-controller
-+	Required properties:
-+		- compatible: "mediatek,mt6323-pwrc"
-+	For details, see Documentation/devicetree/bindings/power/reset/mt6323-po=
-weroff.txt
-+
- Example:
- 	pwrap: pwrap@1000f000 {
- 		compatible =3D "mediatek,mt8135-pwrap";
-diff --git a/Documentation/devicetree/bindings/power/reset/mt6323-poweroff=
-.txt b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+ static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
+ {
+diff --git a/include/linux/mfd/mt6397/rtc.h b/include/linux/mfd/mt6397/rtc=
+.h
 new file mode 100644
-index 000000000000..933f0c48e887
+index 000000000000..b702c29e8c74
 =2D-- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
-@@ -0,0 +1,20 @@
-+Device Tree Bindings for Power Controller on MediaTek PMIC
++++ b/include/linux/mfd/mt6397/rtc.h
+@@ -0,0 +1,71 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2014-2018 MediaTek Inc.
++ *
++ * Author: Tianping.Fang <tianping.fang@mediatek.com>
++ *        Sean Wang <sean.wang@mediatek.com>
++ */
 +
-+The power controller which could be found on PMIC is responsible for exte=
-rnally
-+powering off or on the remote MediaTek SoC through the circuit BBPU.
++#ifndef _LINUX_MFD_MT6397_RTC_H_
++#define _LINUX_MFD_MT6397_RTC_H_
 +
-+Required properties:
-+- compatible: Should be one of follows
-+       "mediatek,mt6323-pwrc": for MT6323 PMIC
++#include <linux/jiffies.h>
++#include <linux/mutex.h>
++#include <linux/regmap.h>
++#include <linux/rtc.h>
 +
-+Example:
++#define RTC_BBPU               0x0000
++#define RTC_BBPU_CBUSY         BIT(6)
++#define RTC_BBPU_KEY            (0x43 << 8)
 +
-+       pmic {
-+               compatible =3D "mediatek,mt6323";
++#define RTC_WRTGR              0x003c
 +
-+               ...
++#define RTC_IRQ_STA            0x0002
++#define RTC_IRQ_STA_AL         BIT(0)
++#define RTC_IRQ_STA_LP         BIT(3)
 +
-+               power-controller {
-+                       compatible =3D "mediatek,mt6323-pwrc";
-+               };
-+       }
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt b/Docume=
-ntation/devicetree/bindings/rtc/rtc-mt6397.txt
-new file mode 100644
-index 000000000000..ebd1cf80dcc8
-=2D-- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
-@@ -0,0 +1,29 @@
-+Device-Tree bindings for MediaTek PMIC based RTC
++#define RTC_IRQ_EN             0x0004
++#define RTC_IRQ_EN_AL          BIT(0)
++#define RTC_IRQ_EN_ONESHOT     BIT(2)
++#define RTC_IRQ_EN_LP          BIT(3)
++#define RTC_IRQ_EN_ONESHOT_AL  (RTC_IRQ_EN_ONESHOT | RTC_IRQ_EN_AL)
 +
-+MediaTek PMIC based RTC is an independent function of MediaTek PMIC that =
-works
-+as a type of multi-function device (MFD). The RTC can be configured and s=
-et up
-+with PMIC wrapper bus which is a common resource shared with the other
-+functions found on the same PMIC.
++#define RTC_AL_MASK            0x0008
++#define RTC_AL_MASK_DOW                BIT(4)
 +
-+For MediaTek PMIC MFD bindings, see:
-+Documentation/devicetree/bindings/mfd/mt6397.txt
++#define RTC_TC_SEC             0x000a
++/* Min, Hour, Dom... register offset to RTC_TC_SEC */
++#define RTC_OFFSET_SEC         0
++#define RTC_OFFSET_MIN         1
++#define RTC_OFFSET_HOUR                2
++#define RTC_OFFSET_DOM         3
++#define RTC_OFFSET_DOW         4
++#define RTC_OFFSET_MTH         5
++#define RTC_OFFSET_YEAR                6
++#define RTC_OFFSET_COUNT       7
 +
-+For MediaTek PMIC wrapper bus bindings, see:
-+Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
++#define RTC_AL_SEC             0x0018
 +
-+Required properties:
-+- compatible: Should be one of follows
-+       "mediatek,mt6323-rtc": for MT6323 PMIC
-+       "mediatek,mt6397-rtc": for MT6397 PMIC
++#define RTC_PDN2               0x002e
++#define RTC_PDN2_PWRON_ALARM   BIT(4)
 +
-+Example:
++#define RTC_MIN_YEAR           1968
++#define RTC_BASE_YEAR          1900
++#define RTC_NUM_YEARS          128
++#define RTC_MIN_YEAR_OFFSET    (RTC_MIN_YEAR - RTC_BASE_YEAR)
 +
-+       pmic {
-+               compatible =3D "mediatek,mt6323";
++#define MTK_RTC_POLL_DELAY_US  10
++#define MTK_RTC_POLL_TIMEOUT   (jiffies_to_usecs(HZ))
 +
-+               ...
++struct mt6397_rtc {
++	struct device           *dev;
++	struct rtc_device       *rtc_dev;
 +
-+               rtc {
-+                       compatible =3D "mediatek,mt6323-rtc";
-+               };
-+       };
++	/* Protect register access from multiple tasks */
++	struct mutex            lock;
++	struct regmap           *regmap;
++	int                     irq;
++	u32                     addr_base;
++};
++
++#endif /* _LINUX_MFD_MT6397_RTC_H_ */
 =2D-
 2.17.1
 
