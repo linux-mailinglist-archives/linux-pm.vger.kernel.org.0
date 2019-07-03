@@ -2,141 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6D85E86A
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 18:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB085E944
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 18:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726490AbfGCQJM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 12:09:12 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34212 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726473AbfGCQJM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 12:09:12 -0400
-Received: by mail-wr1-f65.google.com with SMTP id u18so3493746wru.1;
-        Wed, 03 Jul 2019 09:09:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=FghGomYaaEJOMCmNbnyvpr8Ipx9auLq3wlZaxaVMAxg=;
-        b=A8hNKHTdRT+S1Z+ArIQZl+P0QBH2pZBM5nT6461O4WtQOE3aIOSUOWQmI64JzssluR
-         D6mcK7vwjqoKi1FABzme9tdkrIeTYfhpT79cnu7qtJn/JfySEdeKoxf7Su8DaMHDPMrL
-         fUvq1tqgHUFcPd++8wWKr4M0xqpjwzQ22Ao5OOXSwSkUezQcr3vfViN9PXpvrB9i5nEH
-         O+vcQ8GYXMGzfBO0/bz8eLLcSLAiDap3n3/ZSudsg8wEGqZShpXL1zh3jonTM8zYYekv
-         WfTP+4PmKtkJ6m5uFyzhw5kB0BFqSYFt7ezUhiWaYhXhU20bXh0v9qBLnrqzqEc28Gpr
-         Ye0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=FghGomYaaEJOMCmNbnyvpr8Ipx9auLq3wlZaxaVMAxg=;
-        b=LytxGLUTJI26PPTjNTIDmAopCunCoRl+QK99fs28hnGyzfqDbooePMUiUWwNAvz4rs
-         cOywUFi+P67Qdj7+ewQ/p+SweYwAjYW/+oejDddD1Lh5FAeYh0UbYwtWw1iReO4+abYf
-         GWCEduoSlRVH2or3GT0CCBYXTWSyQv4nUCskKHVOYS2EWtYxTYgZ/HMQrLYPsr+E/aMF
-         /q7R9j9m2rP5GxcCCK6lQqtyPs4OHM6xoZDTxctVZkX+ses6c7WFznco6DS7CdK9Vzf4
-         22phYjRFXWXSWyjLx+fM3ay/kI0XhxOJozn3IimaPksDNbJn9j9p/ERCNQRSGocIEXxx
-         99Vw==
-X-Gm-Message-State: APjAAAUMCaGYhXIXfzKAWZx4/zn0rYHipbSXrMdiIllA12E/wjb7JDZS
-        vBs1V9fwTSzo9e91lvzIhEmFp6zy
-X-Google-Smtp-Source: APXvYqzsrCBUZKOblr1ULtQrO8CRaQzDzKrCIpwXueEUhjCPmNLEZ8ckT1gXdDnrelmJLmCO9O9A0Q==
-X-Received: by 2002:a5d:4941:: with SMTP id r1mr28533919wrs.225.1562170149695;
-        Wed, 03 Jul 2019 09:09:09 -0700 (PDT)
-Received: from [172.16.1.192] (host-89-243-246-11.as13285.net. [89.243.246.11])
-        by smtp.gmail.com with ESMTPSA id o6sm4567679wra.27.2019.07.03.09.09.08
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Jul 2019 09:09:08 -0700 (PDT)
-From:   Alan Jenkins <alan.christopher.jenkins@gmail.com>
-Subject: Re: NO_HZ_IDLE causes consistently low cpu "iowait" time (and higher
- cpu "idle" time)
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <2ff025f1-9a3e-3eae-452b-ef84824009b4@gmail.com>
- <000001d531a8$8931b2a0$9b9517e0$@net>
-Message-ID: <bc2f8d97-9462-125f-9fa2-49044c244479@gmail.com>
-Date:   Wed, 3 Jul 2019 17:09:07 +0100
+        id S1726924AbfGCQgR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 12:36:17 -0400
+Received: from foss.arm.com ([217.140.110.172]:52414 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726823AbfGCQgR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 3 Jul 2019 12:36:17 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8189A1478;
+        Wed,  3 Jul 2019 09:36:16 -0700 (PDT)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D7C03F740;
+        Wed,  3 Jul 2019 09:36:15 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 0/5] sched/cpufreq: Make schedutil energy aware
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        quentin.perret@arm.com, patrick.bellasi@arm.com,
+        dietmar.eggemann@arm.com
+References: <20190627171603.14767-1-douglas.raillard@arm.com>
+ <20190702155115.GW3436@hirez.programming.kicks-ass.net>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <5198292b-1874-9ff4-6a9f-826a5ea00466@arm.com>
+Date:   Wed, 3 Jul 2019 17:36:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <000001d531a8$8931b2a0$9b9517e0$@net>
+In-Reply-To: <20190702155115.GW3436@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB-large
 Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/07/2019 15:06, Doug Smythies wrote:
-> On 2019.07.01 08:34 Alan Jenkins wrote:
->
->> Hi
-> Hi,
->
->> I tried running a simple test:
+On 7/2/19 4:51 PM, Peter Zijlstra wrote:
+> On Thu, Jun 27, 2019 at 06:15:58PM +0100, Douglas RAILLARD wrote:
+>> Make schedutil cpufreq governor energy-aware.
 >>
->>      dd if=testfile iflag=direct bs=1M of=/dev/null
+>> - patch 4 adds sugov_cpu_ramp_boost() function.
+>> - patch 5 updates sugov_update_(single|shared)() to make use of
+>>    sugov_cpu_ramp_boost().
 >>
->> With my default settings, `vmstat 10` shows something like 85% idle time
->> to 15% iowait time. I have 4 CPUs, so this is much less than one CPU
->> worth of iowait time.
+>> The benefits of using the EM in schedutil are twofold:
+> 
+>> 2) Driving the frequency selection with power in mind, in addition to
+>>     maximizing the utilization of the non-idle CPUs in the system.
+> 
+>> Point 2) is enabled in
+>> "sched/cpufreq: Boost schedutil frequency ramp up". It allows using
+>> higher frequencies when it is known that the true utilization of
+>> currently running tasks is exceeding their previous stable point.
+>> The benefits are:
 >>
->> If I boot with "nohz=off", I see idle time fall to 75% or below, and
->> iowait rise to about 25%, equivalent to one CPU.  That is what I had
->> originally expected.
+>> * Boosting the frequency when the behavior of a runnable task changes,
+>>    leading to an increase in utilization. That shortens the frequency
+>>    ramp up duration, which in turns allows the utilization signal to
+>>    reach stable values quicker.  Since the allowed frequency boost is
+>>    bounded in energy, it will behave consistently across platforms,
+>>    regardless of the OPP cost range.
 >>
->> (I can also see my expected numbers, if I disable *all* C-states and
->> force polling using `pm_qos_resume_latency_us` in sysfs).
->>
->> The numbers above are from a kernel somewhere around v5.2-rc5.  I saw
->> the "wrong" results on some previous kernels as well.  I just now
->> realized the link to NO_HZ_IDLE.[1]
->>
->> [1]
->> https://unix.stackexchange.com/questions/517757/my-basic-assumption-about-system-iowait-does-not-hold/527836#527836
->>
->> I did not find any information about this high level of inaccuracy. Can
->> anyone explain, is this behaviour expected?
-> I'm not commenting on expected behaviour or not, just that it is
-> inconsistent.
->
->> I found several patches that mentioned "iowait" and NO_HZ_IDLE. But if
->> they described this problem, it was not clear to me.
->>
->> I thought this might also be affecting the "IO pressure" values from the
->> new "pressure stall information"... but I am too confused already, so I
->> am only asking about iowait at the moment :-).
-> Using your workload, I confirm inconsistent behaviour for /proc/stat
-> (which vmstat uses) between kernels 4.15, 4.16, and 4.17:
-> 4.15 does what you expect, no matter idle states enabled or disabled.
-> 4.16 doesn't do what you expect regardless. (although a little erratic.)
->> = 4.17 does what you expect with only idle state 0 enabled, and doesn't otherwise.
-> Actual test data vmstat (/proc/stat) (8 CPUs, 12.5% = 1 CPU)):
-> Kernel	idle/iowait %	Idle states >= 1
-> 4.15		88/12			enabled
-> 4.15		88/12			disabled
-> 4.16		99/1			enabled
-> 4.16		99/1			disabled
-> 4.17		98/2			enabled
-> 4.17		88/12			disabled
->
-> Note 1: I never booted with "nohz=off" because the tick never turns off for
-> idle state 0, which is good enough for testing.
->
-> Note 2: Myself, I don't use /proc/stat for idle time statistics. I use:
-> /sys/devices/system/cpu/cpu*/cpuidle/state*/time
-> And they seem to always be consistent at the higher idle percentage number.
->
-> Unless someone has some insight, the next step is kernel bisection,
-> once for between kernel 4.15 and 4.16, then again between 4.16 and 4.17.
-> The second bisection might go faster with knowledge gained from the first.
-> Alan: Can you do kernel bisection? I can only do it starting maybe Friday.
->
-> ... Doug
+>> * The boost is only transient, and should not impact a lot the energy
+>>    consumed of workloads with very stable utilization signals.
+> 
 
-Thanks for your help Doug!
+[reordered original comments]
 
-I wish I had a faster CPU :-), but I'm familiar with bisection. I have 
-started and I'm down to about 8 minute builds, so I can probably be done 
-before Friday.
+> This then obviously has relation to Patrick's patch that makes the EWMA
+> asymmetric, but I'm thinking that the interaction is mostly favourable?
 
-Alan
+Making task_ue.ewma larger makes cpu_ue.enqueued larger, so Patrick's patch
+helps increasing the utilisation as seen by schedutil in that transient time.
+(see discussion on schedutil signals at the bottom). That goes in the same
+direction as this series.
+
+> So you're allowing a higher pick when the EWMA exceeds the enqueue
+> thing.
+
+TLDR: Schedutil ramp boost works on CPU rq signals, for which util est EWMA
+is not defined, but the idea is the same (replace util est EWMA by util_avg).
+
+The important point here is that when util_avg for the task becomes higher
+than task_ue.enqueued, it means the knowledge of the actual needs of the task
+is turned into a lower bound (=task_ue.enqueued) rather than an exact value.
+This means that selecting a higher frequency than that is:
+a) necessary, the task needs more computational power to do its job.
+b) a shot in the dark, as it's impossible to predict exactly how much it will
+    need without a crystal ball.
+
+When adding ramp boost, the bill is split: part of the "shot in the dark" comes from
+the growing CPU's util_avg (see schedutil_u definition at the bottom), and part of it
+comes from the ramp boost. We don't want to make the boost too costly either since
+it's a shot in the dark. Therefore, we make the boost proportional to a battery life
+cost rather than some guessed utilisation.
+
+Now that I think about it, it may make sense to let this ramp-boost completely
+handle this "future util prediction" case, as it's not better or worse than
+util_avg at that (since it's based on it), but allows better control on
+the cost of a (mis)prediction.
+
+> 
+> I'm not immediately seeing how it is transient; that is, PELT has a
+> wobble in it's steady state, is that accounted for?
+> 
+
+The transient-ness of the ramp boost I'm introducing comes from the fact that for a
+periodic task at steady state, task_ue.enqueued <= task_u when the task is executing.
+That is because task_ue.enqueued is sampled at dequeue time, precisely at the moment
+at which task_u is reaching its max for that task. Since we only take into account
+positive boosts, ramp boost will only have an impact in the "increase transients".
+
+
+About signals schedutil is based on
+===================================
+
+Here is the state of signals used by schedutil to my knowledge to compute
+the final "chosen_freq":
+
+# let's define short names to talk about
+task_ue = se.avg.util_est
+task_u = se.avg.util_avg
+
+cpu_ue = cfs_rq->avg.util_est
+cpu_u = cfs_rq->avg.util_avg
+
+
+# How things are defined
+task_u ~= LOW_PASS_FILTER(task_activations)
+task_ue.enqueued = SAMPLE_AT_DEQUEUE_AND_HOLD(task_u)
+task_ue.ewma = LOW_PASS_FILTER(task_ue.enqueued)
+
+# Patrick's patch amends task_ue.ewma definition this way:
+task_ue.ewma =
+	| task_ue.enqueued > task_ue.ewma: task_ue.enqueued
+	| otherwise			 : LOW_PASS_FILTER(task_ue.enqueued)
+
+
+cpu_ue.enqueued = SUM[MAX(task_ue.ewma, task_ue.enqueued) forall task_ue in enqueued_tasks]
+cpu_u = SUM[task_u forall task_ue in enqueued_tasks]
+
+# What schedutil considers when taking freq decisions
+
+non_cfs_u = util of deadline + rt + irq
+schedutil_u = non_cfs_u + APPLY_UCLAMP(MAX(cpu_ue.enqueued, cpu_u)) + iowait_boost
+schedutil_base_freq = MAP_UTIL_FREQ(schedutil_u)
+
+STABLE(signal) =
+	| signal equal to the last time it was sampled by caller: True
+	| otherwise				      		: False
+# A diff between two util signals is converted to a EM_COST_MARGIN_SCALE value.
+# They are different units, but the conversion factor is 1 in practice.
+ramp_boost =
+	| cpu_ue.enqueued > cpu_u && STABLE(cpu_ue.enqueued):
+		(cpu_ue.enqueued - cpu_u) * (EM_COST_MARGIN_SCALE/SCHED_CAPACITY_SCALE)
+	| otherwise: 0
+
+APPLY_RAMP_BOOST(boost, base_freq) = boosted_freq
+	with
+		acceptable_cost = ENERGY_MODEL_COST(base_freq) * (EM_COST_MARGIN_SCALE + boost)
+		boosted_freq = MAX[freq forall freqs if ENERGY_MODEL_COST(freq) < acceptable_cost]
+
+# ramp-boost is applied on a freq instead of a util (unlike iowait_boost), since
+# the function ENERGY_MODEL_COST(freq) is provided by the EM, and an equivalent
+# ENERGY_MODEL_COST(util) would need extra calls to MAP_UTIL_FREQ().
+schedutil_freq = APPLY_RAMP_BOOST(ramp_boost, schedutil_base_freq)
+
+REAL_FREQ(ideal_freq) = MIN[freq forall freqs if freq >= ideal_freq]
+POLICY_CLAMP(freq) =
+	| freq < policy_min_freq: policy_min_freq
+	| freq > policy_max_freq: policy_max_freq
+	| otherwise		: freq
+# Frequency finally used for the policy
+chosen_freq = POLICY_CLAMP(REAL_FREQ(schedutil_freq))
+
+
+Thanks,
+Douglas
