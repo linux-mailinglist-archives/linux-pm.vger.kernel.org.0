@@ -2,127 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFBFA5EC8C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 21:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C895EDB3
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 22:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbfGCTMJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 15:12:09 -0400
-Received: from cmta17.telus.net ([209.171.16.90]:55970 "EHLO cmta17.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726721AbfGCTMJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Jul 2019 15:12:09 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id ikfkhVmzwzEP4ikflhol97; Wed, 03 Jul 2019 13:12:07 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1562181127; bh=duuBS6rinMa0pwtOKOVf/BFNNO4Ic1/CAz5zHoIh6XA=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=qtI1TSvtcp1usB7XvPwIbPFB+xJblM1BUnwhmuMsmTZqt070RQ3+dwZGMYtjr39oQ
-         E4fGlhXQ/bWaYXCQ3aQAyOIkweLECJTWzUPIC952erLEdO0ZBSyMTfJVF0jl0Y/Ag1
-         e0N97hTYpcwQ9Me+/yqIUE3ZBrlFd9aJ6dy8inAMT4RaRF1t+2ODzjrcaOnIzOGHdn
-         cAudzu7E/Btps+bJnZKPAeXiYaT/NBZK5B/S9Tjhn6Q66N5xS+Aprgj5QL8Be8STc8
-         W5HwHEbZO82E4atCv6j5+QPNxLU9yk7mZ7nPvZufcF2jkbV6BAlqmTC8ijMY15k6U/
-         ZhLqiJFl1nmzw==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=cYmsUULM c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=IkcTkHD0fZMA:10 a=FGbulvE0AAAA:8 a=kWJDoAjU50K2MEyS90sA:9 a=QEXdDO2ut3YA:10
- a=svzTaB3SJmTkU8mK-ULk:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Daniel Lezcano'" <daniel.lezcano@linaro.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Thomas Gleixner'" <tglx@linutronix.de>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        "'open list:CPU IDLE TIME MANAGEMENT FRAMEWORK'" 
-        <linux-pm@vger.kernel.org>, <rafael@kernel.org>
-References: <20190620115826.4897-1-daniel.lezcano@linaro.org> <000101d531aa$e00987e0$a01c97a0$@net> <6589a058-c538-fbf3-7761-d43ab8434654@linaro.org>
-In-Reply-To: <6589a058-c538-fbf3-7761-d43ab8434654@linaro.org>
-Subject: RE: [PATCH] cpuidle/drivers/mobile: Add new governor for mobile/embedded systems
-Date:   Wed, 3 Jul 2019 12:12:03 -0700
-Message-ID: <000a01d531d3$3471a060$9d54e120$@net>
+        id S1727004AbfGCUg0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 16:36:26 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34088 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726955AbfGCUgW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 16:36:22 -0400
+Received: by mail-ot1-f66.google.com with SMTP id n5so3803318otk.1
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2019 13:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XPXq+pIJPDQwSLT19cfFmw2Vcvo0FzOgU0YAUNu6RQk=;
+        b=wJEJ8tMd3xtbZ2ihovoIGxTsU9YvYQTD507F06G8Qqxby/Sqvh3E1rTKa7dCWbAXsL
+         h/isW/5dGZoENf01Ua1CCOvp4kgRYyzqLT7O6zHgJ8l7uoiYTsWdVJ21RHWF19PzlLAR
+         9xr3ISuA4c2/xdscQyncXx03C+DMq5YRqIsnH9jeBCTGsOE+ieL9MGoSO8GfuWheduzo
+         OQw5O8PpiOM9bedjbV9vjq+7W/dh1hZDoISE5FWjVv2qvKldf5IhSZUYIA0Ab1JM77l2
+         6+vk3f1AQPzkm62ZK5lTASVX297bodhM/abR59OSn82RuuK+7lPzRMTZinSktvd1c4EB
+         DFnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XPXq+pIJPDQwSLT19cfFmw2Vcvo0FzOgU0YAUNu6RQk=;
+        b=HmH+A4plHghGkjboxPpzNxp3nZicEJ8oMStm4D0I2cvob7VshJJbFsjotNjeNEIJwT
+         TobA33qJXsdlFw2ejseYatNvWRk0i5mdAilPtLGdnviIkvW21eLndUtnRs+S+ExwIfSb
+         zTg7Ws23g8jLQ1tPnZURJbrvH+pn+/CHYaIK7xhz/TPuKoim10S5oaSUo6/TPyqkdDBH
+         vbaRQH3BoPqTBR6jqZkmXL/WTljoG6xf6ax9m0JupMC+zHKwfrdiCQoXZib7EhIYuMCE
+         4B8K2EgmJH7Icm6gtt5duKGSooNe9ux1k+hcLe3FBsTR1d6CoKl58k016IGALXgu4Cb7
+         ZulQ==
+X-Gm-Message-State: APjAAAU6ATlpqBNgQbQB8SGarncBmdssbbNFi/MQdiwmhyNAsEr7RFgw
+        z+iiF8DiEXGP8tzUL3NJ5aiCJE+qj+wr+QZrmZQpzA==
+X-Google-Smtp-Source: APXvYqy900opobQMpHjkJXGmlkfMTJ/Fz3xLTchhFyxqL4NA93DGafUbOsl0BNsl2aa50mubporMqRqSONHDjBDYRfU=
+X-Received: by 2002:a9d:1909:: with SMTP id j9mr14152896ota.139.1562186181028;
+ Wed, 03 Jul 2019 13:36:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdUxskNHh9ahYXCXQ82aPBZqjRxmngAFv0oA
-X-CMAE-Envelope: MS4wfF7v91g2X7U5hcjl4wllzOJpv6pIkupad2wCk1AC5zpzSc7M92u9y433Q/ErjieDGGPRW9k70rjyMAS3l85uTGBUfzWaT2FHG0xnnYj2zJzSYVcmwTm0
- DAtxBGAb3Dy5Yb4rdiLuyABzbPlfD/imUJy7UlDVcQvkF6uCQQ95vsJbqxey1NqDmpa9XGPvTqEQrvEOJ99ik9aHSr4R9DQZ3A6pkYuo2mgHwyQ8p4LbjXkS
- +UmQk8SJ4Yw2I8UKkeFxTm/odEeZNYSd1B1B21gA39axctRmlNW9Iwl0t8Swp9EN3Ovts22kc6OHFHKgh3qYX8iC3FmcsQAeCcn3QdNPjv39IrLsSUMnxmWH
- y2lmf9yX9IbjwuVFIZ2+zN8DN6yduw==
+References: <20190703011020.151615-1-saravanak@google.com> <20190703063632.hl2lipcoeehplyxq@vireshk-i7>
+In-Reply-To: <20190703063632.hl2lipcoeehplyxq@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 3 Jul 2019 13:35:44 -0700
+Message-ID: <CAGETcx9Dhzt9-Ys-8hLtoZ9RYWMWa59H5yismUJDWmJ3Kq-smQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Introduce Bandwidth OPPs for interconnect paths
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        seansw@qti.qualcomm.com, daidavid1@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>, sibis@codeaurora.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        evgreen@chromium.org,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019.07.03 08:16 Daniel Lezcano wrote:
-> On 03/07/2019 16:23, Doug Smythies wrote:
->> On 2019.06.20 04:58 Daniel Lezcano wrote:
-
-...
->> Anyway, I did a bunch of tests and such, but have deleted
->> most from this e-mail, because it's just noise. I'll
->> include just one set:
->> 
->> For a work load that would normally result in a lot of use
->> of shallow idle states (single core pipe-test * 2 cores).
+On Tue, Jul 2, 2019 at 11:36 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Can you share the tests and the command lines?
-
-Yes, give me a few days to repeat the tests and write
-it up properly. I am leaving town in an hour and for a day.
-
-It'll be similar to this:
-http://www.smythies.com/~doug/linux/idle/teo8/pipe/index.html
-parent page (which I will do a better version):
-http://www.smythies.com/~doug/linux/idle/teo8/index.html
-...
-
->> I got (all kernel 5.2-rc5 + this patch):
->> 
->> Idle governor, teo; CPU frequency scaling: intel-cpufreq/ondemand;
->> Processor package power: 40.4 watts; 4.9 uSec/loop
->> 
->> Idle governor, teo; CPU frequency scaling: intel-cpufreq/ondemand;
->> Processor package power: 34 watts; 5.2 uSec/loop
->> 
->> Idle governor, mobile; CPU frequency scaling: intel-cpufreq/ondemand;
->> Processor package power: 25.9 watts; 11.1 uSec/loop
->> 
->> Idle governor, menu; CPU frequency scaling: intel-cpufreq/ondemand;
->> Processor package power: 34.2 watts; 5.23 uSec/loop
->> 
->> Idle governor, teo; CPU frequency scaling: intel-cpufreq/ondemand;
->> Maximum CPU frequency limited to 73% to match mobile energy.
->> Processor package power: 25.4 watts; 6.4 uSec/loop
+> On 02-07-19, 18:10, Saravana Kannan wrote:
+> > Interconnects and interconnect paths quantify their performance levels in
+> > terms of bandwidth and not in terms of frequency. So similar to how we have
+> > frequency based OPP tables in DT and in the OPP framework, we need
+> > bandwidth OPP table support in the OPP framework and in DT. Since there can
+> > be more than one interconnect path used by a device, we also need a way to
+> > assign a bandwidth OPP table to an interconnect path.
+> >
+> > This patch series:
+> > - Adds opp-peak-KBps and opp-avg-KBps properties to OPP DT bindings
+> > - Adds interconnect-opp-table property to interconnect DT bindings
+> > - Adds OPP helper functions for bandwidth OPP tables
+> > - Adds icc_get_opp_table() to get the OPP table for an interconnect path
+> >
+> > So with the DT bindings added in this patch series, the DT for a GPU
+> > that does bandwidth voting from GPU to Cache and GPU to DDR would look
+> > something like this:
 >
-> Ok that's interesting. Thanks for the values.
->
-> The governor can be better by selecting the shallow states, the
-> scheduler has to interact with the governor to give clues about the
-> load, that is identified and will be the next step.
->
-> Is it possible to check with the schedutil governor instead?
+> And what changed since V2 ?
 
-Oh, I already have some data, just didn't include it before:
+Sorry, forgot to put that in. I just dropped a lot of patches that
+weren't relevant to the idea of BW OPPs and tying them to
+interconnects.
 
-Idle governor, teo; CPU frequency scaling: intel-cpufreq/schedutil;
-Processor package power: 40.4 watts; 4.9 uSec/loop
-
-Idle governor, mobile; CPU frequency scaling: intel-cpufreq/schedutil;
-Processor package power: 12.7 watts; 19.7 uSec/loop
-
-Idle governor, teo; CPU frequency scaling: intel-cpufreq/schedutil;
-Idle states 0-3 disabled (note: Idle state 4 is the deepest on my system)
-Processor package power: 36.9 watts; 8.3 uSec/loop
-In my notes I wrote: "Huh?? I do not understand this result, as I had
-expected more similar to the mobile governor". But I did not investigate.
-
-Anyway, the schedutil test is the one I'll repeat and write up better.
-
-... Doug
-
-
+-Saravana
