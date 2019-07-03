@@ -2,26 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B0E5EF67
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 01:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743105EF80
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 01:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727451AbfGCXCx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 19:02:53 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61215 "EHLO
+        id S1727455AbfGCXFk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 19:05:40 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:60801 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727377AbfGCXCx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 19:02:53 -0400
+        with ESMTP id S1726988AbfGCXFk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 19:05:40 -0400
 Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id 8010e3fd10758b8f; Thu, 4 Jul 2019 01:02:49 +0200
+ id 3f159dca3fbf52f1; Thu, 4 Jul 2019 01:05:38 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] ACPI: PM: Unexport acpi_device_get_power()
-Date:   Thu, 04 Jul 2019 01:02:49 +0200
-Message-ID: <1970901.ZntFDt4DbR@kreacher>
+Subject: [PATCH] PM: sleep: Drop dev_pm_skip_next_resume_phases()
+Date:   Thu, 04 Jul 2019 01:05:38 +0200
+Message-ID: <2100414.Plmip0uhM5@kreacher>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -32,78 +31,79 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Using acpi_device_get_power() outside of ACPI device initialization
-and ACPI sysfs is problematic due to the way in which power resources
-are handled by it, so unexport it and add a paragraph explaining the
-pitfalls to its kerneldoc comment.
+After recent hibernation-related changes, there are no more callers
+of dev_pm_skip_next_resume_phases() except for the PM core itself
+in which it is more straightforward to run the statements from
+that function directly, so do that and drop it.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-On top of the linux-next branch in the linux-pm.git tree.
+On top of the patch series at:
+
+https://lore.kernel.org/linux-acpi/20190701162017.GB2640@lahna.fi.intel.com/T/#madf00de2d5a9b67e3c7bf51e882bd66ed7efc7ea
 
 ---
- drivers/acpi/device_pm.c |    6 +++++-
- drivers/acpi/internal.h  |    7 +++++++
- include/acpi/acpi_bus.h  |    1 -
- 3 files changed, 12 insertions(+), 2 deletions(-)
+ drivers/base/power/main.c |   19 +++----------------
+ include/linux/pm.h        |    1 -
+ 2 files changed, 3 insertions(+), 17 deletions(-)
 
-Index: linux-pm/drivers/acpi/device_pm.c
+Index: linux-pm/drivers/base/power/main.c
 ===================================================================
---- linux-pm.orig/drivers/acpi/device_pm.c
-+++ linux-pm/drivers/acpi/device_pm.c
-@@ -66,6 +66,11 @@ static int acpi_dev_pm_explicit_get(stru
-  * This function does not update the device's power.state field, but it may
-  * update its parent's power.state field (when the parent's power state is
-  * unknown and the device's power state turns out to be D0).
-+ *
-+ * Also, it does not update power resource reference counters to ensure that
-+ * the power state returned by it will be persistent and it may return a power
-+ * state shallower than previously set by acpi_device_set_power() for @device
-+ * (if that power state depends on any power resources).
+--- linux-pm.orig/drivers/base/power/main.c
++++ linux-pm/drivers/base/power/main.c
+@@ -530,21 +530,6 @@ static void dpm_watchdog_clear(struct dp
+ /*------------------------- Resume routines -------------------------*/
+ 
+ /**
+- * dev_pm_skip_next_resume_phases - Skip next system resume phases for device.
+- * @dev: Target device.
+- *
+- * Make the core skip the "early resume" and "resume" phases for @dev.
+- *
+- * This function can be called by middle-layer code during the "noirq" phase of
+- * system resume if necessary, but not by device drivers.
+- */
+-void dev_pm_skip_next_resume_phases(struct device *dev)
+-{
+-	dev->power.is_late_suspended = false;
+-	dev->power.is_suspended = false;
+-}
+-
+-/**
+  * suspend_event - Return a "suspend" message for given "resume" one.
+  * @resume_msg: PM message representing a system-wide resume transition.
   */
- int acpi_device_get_power(struct acpi_device *device, int *state)
- {
-@@ -130,7 +135,6 @@ int acpi_device_get_power(struct acpi_de
+@@ -681,6 +666,9 @@ Skip:
+ 	dev->power.is_noirq_suspended = false;
  
- 	return 0;
- }
--EXPORT_SYMBOL(acpi_device_get_power);
+ 	if (skip_resume) {
++		/* Make the next phases of resume skip the device. */
++		dev->power.is_late_suspended = false;
++		dev->power.is_suspended = false;
+ 		/*
+ 		 * The device is going to be left in suspend, but it might not
+ 		 * have been in runtime suspend before the system suspended, so
+@@ -689,7 +677,6 @@ Skip:
+ 		 * device again.
+ 		 */
+ 		pm_runtime_set_suspended(dev);
+-		dev_pm_skip_next_resume_phases(dev);
+ 	}
  
- static int acpi_dev_pm_explicit_set(struct acpi_device *adev, int state)
- {
-Index: linux-pm/include/acpi/acpi_bus.h
+ Out:
+Index: linux-pm/include/linux/pm.h
 ===================================================================
---- linux-pm.orig/include/acpi/acpi_bus.h
-+++ linux-pm/include/acpi/acpi_bus.h
-@@ -506,7 +506,6 @@ int acpi_bus_get_status(struct acpi_devi
+--- linux-pm.orig/include/linux/pm.h
++++ linux-pm/include/linux/pm.h
+@@ -760,7 +760,6 @@ extern int pm_generic_poweroff_late(stru
+ extern int pm_generic_poweroff(struct device *dev);
+ extern void pm_generic_complete(struct device *dev);
  
- int acpi_bus_set_power(acpi_handle handle, int state);
- const char *acpi_power_state_string(int state);
--int acpi_device_get_power(struct acpi_device *device, int *state);
- int acpi_device_set_power(struct acpi_device *device, int state);
- int acpi_bus_init_power(struct acpi_device *device);
- int acpi_device_fix_up_power(struct acpi_device *device);
-Index: linux-pm/drivers/acpi/internal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -139,8 +139,15 @@ int acpi_power_get_inferred_state(struct
- int acpi_power_on_resources(struct acpi_device *device, int state);
- int acpi_power_transition(struct acpi_device *device, int state);
+-extern void dev_pm_skip_next_resume_phases(struct device *dev);
+ extern bool dev_pm_may_skip_resume(struct device *dev);
+ extern bool dev_pm_smart_suspend_and_suspended(struct device *dev);
  
-+/* --------------------------------------------------------------------------
-+                              Device Power Management
-+   -------------------------------------------------------------------------- */
-+int acpi_device_get_power(struct acpi_device *device, int *state);
- int acpi_wakeup_device_init(void);
- 
-+/* --------------------------------------------------------------------------
-+                                  Processor
-+   -------------------------------------------------------------------------- */
- #ifdef CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC
- void acpi_early_processor_set_pdc(void);
- #else
 
 
 
