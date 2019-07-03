@@ -2,215 +2,343 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 304115EF1B
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 00:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29F95EF25
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 00:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbfGCWUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 18:20:24 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:32768 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726988AbfGCWUY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 18:20:24 -0400
-Received: by mail-oi1-f196.google.com with SMTP id u15so3414990oiv.0
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2019 15:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O7/9B62uc/L5qzEpOlYgng1H+GtGyObr1QSwY1wY924=;
-        b=LgzayCaK4/bJPs+LnptjE/uYgOn0AYy9YP8QsFOXetvhFp6PktTBIYpERPnEMccqw/
-         F1fxlXEJal/rlaLngJpSEAH+OPk57egaRsUomkOujZB63fQgtbEVPjg1obnFPg5OmZkc
-         koYNaezbHytFC004biKiJPO7tmp6xlo+d6yf/TV3yivkVwAyWokHrYL0sWtFJI0UV1ma
-         2U2OXd7oY5NPFmqb2kDsGByO6gTTJuYdIKrYEFY1UuBLTppQ/7mpOvqrrP6KXyhaTJQS
-         itfNBIRCPl7CrxuBzPdbi/g05aoK7NqGLVSnyd/doGaAa1Xylr3e008FKvnyFP7ZVrAH
-         o7xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O7/9B62uc/L5qzEpOlYgng1H+GtGyObr1QSwY1wY924=;
-        b=QBY0StnXhxi2wo6w6J9SOgUKk1e5W23WuzMg7K/Q6ZI+T1DQRjipfrMTbXh19ifmn9
-         D1bD4VccrvIuG5B3DArr13yvtO0/MjabxIs6vFnQeta4fVZ9jTD4VQy3I2+Kzw/9PSL2
-         p1cIN24TdkSkwhQm2NfYvm+Hwy1ifS5E+/LP6TNnhlqhFWXU3LPbW0FH+tL8UTjZr09f
-         48qnxqlxe4cWlfO4Hbx52n8wH28lQJ/2Fc4lih4bmF9XblObm/0BWxHrzoiSyeU9AVhn
-         +U4Ht4yTxT5LbJ3HeokYXeVOoj+t38xFEyJoMB6v/0m+cq710My8VVrfIAf+RM/gsoAA
-         NApA==
-X-Gm-Message-State: APjAAAVZ+31c4LG3ptJiw81uGb4tXYyGAbfi6s0hRuKwuYcZQLpXomjB
-        c6wCS42MwAIPi2Fp9rVDdui3Nq0d/J2ookIAA5gjYA==
-X-Google-Smtp-Source: APXvYqwtqi+7I3cUQZdtfk+VvNqZfrr4viWaCwyTmLtX0L7p8OC6XQF6CN592Tn8e3dkroxZHwBppYTQgEEUreRy63g=
-X-Received: by 2002:aca:6104:: with SMTP id v4mr499588oib.172.1562192423027;
- Wed, 03 Jul 2019 15:20:23 -0700 (PDT)
+        id S1727021AbfGCW1b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 18:27:31 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:35892 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726988AbfGCW1a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 18:27:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=dR8rT6j2M0ly/hhLtGGd/Pl7BP9JO2M9xU7J236aZE4=; b=Q0btV7qNug0FYaQRyhqhr3dpC
+        Sqdvr01db6up1aYCvpUM0mEeFGvu7Q43A1wGQikv/32GhPh1rKMyGTbpPVsOMxaaquHhGZS4q45zI
+        UpUSf7s2/PQ11MaRou3a73NzowXN90P1kX7jgVveuux8Juh4RR85mj/9LUYGyd5tLsOZexziLlsK5
+        YJ0TOvaWT8obuO2nzr0SAGa6O2pIDfgjKQx+dgU8Uy+I/4NdHbMD7TT1UkkpOhWbwtiisulQ6AcKk
+        G+URVE9JSUfbi2yyu1uIgowBU/HKsNENLTZX5OXA4Qv56yOMgtichI7l+b5+LhvpxZt3jt9ne2+tU
+        JnD8U641w==;
+Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=dragon.dunlab)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hinin-0003Lf-Lg; Wed, 03 Jul 2019 22:27:25 +0000
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] kernel/cpu: hotplug; fix non-SYSFS build errors in
+ arch/x86/power/
+Message-ID: <9906a70d-7a4a-03a1-f555-07231570364d@infradead.org>
+Date:   Wed, 3 Jul 2019 15:27:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <cover.1561707104.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1561707104.git.leonard.crestez@nxp.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 3 Jul 2019 15:19:46 -0700
-Message-ID: <CAGETcx_63KnP75qySbhX_P_=o4=ox9J8AsBqKsFHeQRjCpSeJA@mail.gmail.com>
-Subject: Re: [RFCv2 0/8] Add imx8mm bus frequency switching
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
-        linux-imx@nxp.com, Linux PM <linux-pm@vger.kernel.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Leonard,
+From: Randy Dunlap <rdunlap@infradead.org>
 
-On Fri, Jun 28, 2019 at 12:40 AM Leonard Crestez
-<leonard.crestez@nxp.com> wrote:
->
-> This series attempts to add upstream DVFS support for imx8mm, covering dynamic
-> scaling of internal buses and dram. It uses the interconnect framework for
-> proactive scaling (in response to explicit bandwidth requests from devices) and
-> devfreq in order expose the buses and eventually implement reactive scaling (in
-> response to measuredtraffic).
+Fix link errors when building almost-allmodconfig but CONFIG_SYSFS
+is not set/enabled.
 
-I'm assuming you took a glance at my patch series [1] adding BW OPP
-tables and adding devfreq support for scaling interconnect paths.
+The missing functions should not be inside #if CONFIG_SYSFS/#endif.
 
-Based on looking at your patch series, I think [1] would allow you to
-use ICC framework for both proactive and reactive scaling. Proactive
-scaling would use the ICC framework directly. Reactive scaling would
-go through devfreq (so that you can use various governors/adjust
-policy) before it goes to ICC framework.
+The non-SYSFS stub for __store_smt_control() is no longer needed.
 
-> Actual scaling is performed through the clk framework: The NOC and main NICs
-> are driven by composite clks and a new 'imx8m-dram' clk is included for
-> scaling dram using firmware calls.
+This is almost all code movement and a little ifdef-fery changes.
 
-Seems reasonable. All hardware block in the end run using a clock.
+Fixes these build errors:
 
-> The interconnect and devfreq parts do not communicate explicitly: they both
-> just call clk_set_min_rate and the clk core picks the minimum value that can
-> satisfy both. They are thus completely independent.
+ld: arch/x86/power/cpu.o: in function `hibernate_resume_nonboot_cpu_disable':
+cpu.c:(.text+0x9f4): undefined reference to `cpuhp_smt_enable'
+ld: arch/x86/power/hibernate.o: in function `arch_resume_nosmt':
+hibernate.c:(.text+0x7f7): undefined reference to `cpuhp_smt_enable'
+ld: hibernate.c:(.text+0x809): undefined reference to `cpuhp_smt_disable'
 
-Two different parts not talking to each other and just setting min
-rate can cause problems for some concurrency use cases. ICC framework
-is explicitly designed to handle cases like this and aggregate the
-needs correctly. You might want to look into that more closely.
+Fixes: 98f8cdce1db5 ("cpu/hotplug: Add sysfs state interface")
 
-> This is easily extensible to more members of the imx8m family, some of which
-> expose more detailed controls over interconnect fabric frequencies.
->
-> TODO:
-> * Clarify DT bindings
-> * Clarify interconnect OPP picking logic
-> * Implement devfreq_event for imx8m ddrc
-> * Expose more dram frequencies
->
-> The clk_set_min_rate approach does not mesh very well with the OPP framework.
-> Some of interconnect nodes on imx8m can run at different voltages: OPP can
-> handle this well but not in response to a clk_set_min_rate from an unrelated
-> subsystem. Maybe set voltage on a clk notifier?
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-pm@vger.kernel.org
+---
+ kernel/cpu.c |  242 +++++++++++++++++++++++--------------------------
+ 1 file changed, 118 insertions(+), 124 deletions(-)
 
-I think if you design it something like below, it might make your life
-a whole lot easier.
-Hopefully the formatting looks okay on your end. The arrow going up is
-just connecting devfreq to ICC.
+--- lnx-52-rc7.orig/kernel/cpu.c
++++ lnx-52-rc7/kernel/cpu.c
+@@ -376,7 +376,7 @@ static void lockdep_release_cpus_lock(vo
+ {
+ }
+ 
+-#endif	/* CONFIG_HOTPLUG_CPU */
++#endif /* CONFIG_HOTPLUG_CPU */
+ 
+ /*
+  * Architectures that need SMT-specific errata handling during SMT hotplug
+@@ -1892,6 +1892,123 @@ void __cpuhp_remove_state(enum cpuhp_sta
+ }
+ EXPORT_SYMBOL(__cpuhp_remove_state);
+ 
++#ifdef CONFIG_HOTPLUG_CPU
++
++static void cpuhp_offline_cpu_device(unsigned int cpu)
++{
++	struct device *dev = get_cpu_device(cpu);
++
++	dev->offline = true;
++	/* Tell user space about the state change */
++	kobject_uevent(&dev->kobj, KOBJ_OFFLINE);
++}
++
++static void cpuhp_online_cpu_device(unsigned int cpu)
++{
++	struct device *dev = get_cpu_device(cpu);
++
++	dev->offline = false;
++	/* Tell user space about the state change */
++	kobject_uevent(&dev->kobj, KOBJ_ONLINE);
++}
++
++int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval)
++{
++	int cpu, ret = 0;
++
++	cpu_maps_update_begin();
++	for_each_online_cpu(cpu) {
++		if (topology_is_primary_thread(cpu))
++			continue;
++		ret = cpu_down_maps_locked(cpu, CPUHP_OFFLINE);
++		if (ret)
++			break;
++		/*
++		 * As this needs to hold the cpu maps lock it's impossible
++		 * to call device_offline() because that ends up calling
++		 * cpu_down() which takes cpu maps lock. cpu maps lock
++		 * needs to be held as this might race against in kernel
++		 * abusers of the hotplug machinery (thermal management).
++		 *
++		 * So nothing would update device:offline state. That would
++		 * leave the sysfs entry stale and prevent onlining after
++		 * smt control has been changed to 'off' again. This is
++		 * called under the sysfs hotplug lock, so it is properly
++		 * serialized against the regular offline usage.
++		 */
++		cpuhp_offline_cpu_device(cpu);
++	}
++	if (!ret)
++		cpu_smt_control = ctrlval;
++	cpu_maps_update_done();
++	return ret;
++}
++
++int cpuhp_smt_enable(void)
++{
++	int cpu, ret = 0;
++
++	cpu_maps_update_begin();
++	cpu_smt_control = CPU_SMT_ENABLED;
++	for_each_present_cpu(cpu) {
++		/* Skip online CPUs and CPUs on offline nodes */
++		if (cpu_online(cpu) || !node_online(cpu_to_node(cpu)))
++			continue;
++		ret = _cpu_up(cpu, 0, CPUHP_ONLINE);
++		if (ret)
++			break;
++		/* See comment in cpuhp_smt_disable() */
++		cpuhp_online_cpu_device(cpu);
++	}
++	cpu_maps_update_done();
++	return ret;
++}
++
++#if defined(CONFIG_HOTPLUG_SMT) && defined(CONFIG_SYSFS)
++static ssize_t
++__store_smt_control(struct device *dev, struct device_attribute *attr,
++		    const char *buf, size_t count)
++{
++	int ctrlval, ret;
++
++	if (sysfs_streq(buf, "on"))
++		ctrlval = CPU_SMT_ENABLED;
++	else if (sysfs_streq(buf, "off"))
++		ctrlval = CPU_SMT_DISABLED;
++	else if (sysfs_streq(buf, "forceoff"))
++		ctrlval = CPU_SMT_FORCE_DISABLED;
++	else
++		return -EINVAL;
++
++	if (cpu_smt_control == CPU_SMT_FORCE_DISABLED)
++		return -EPERM;
++
++	if (cpu_smt_control == CPU_SMT_NOT_SUPPORTED)
++		return -ENODEV;
++
++	ret = lock_device_hotplug_sysfs();
++	if (ret)
++		return ret;
++
++	if (ctrlval != cpu_smt_control) {
++		switch (ctrlval) {
++		case CPU_SMT_ENABLED:
++			ret = cpuhp_smt_enable();
++			break;
++		case CPU_SMT_DISABLED:
++		case CPU_SMT_FORCE_DISABLED:
++			ret = cpuhp_smt_disable(ctrlval);
++			break;
++		}
++	}
++
++	unlock_device_hotplug();
++	return ret ? ret : count;
++}
++#endif /* CONFIG_HOTPLUG_SMT && CONFIG_SYSFS */
++
++#endif /* CONFIG_HOTPLUG_CPU */
++
+ #if defined(CONFIG_SYSFS) && defined(CONFIG_HOTPLUG_CPU)
+ static ssize_t show_cpuhp_state(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+@@ -2044,129 +2161,6 @@ static const struct attribute_group cpuh
+ 	NULL
+ };
+ 
+-#ifdef CONFIG_HOTPLUG_SMT
+-
+-static void cpuhp_offline_cpu_device(unsigned int cpu)
+-{
+-	struct device *dev = get_cpu_device(cpu);
+-
+-	dev->offline = true;
+-	/* Tell user space about the state change */
+-	kobject_uevent(&dev->kobj, KOBJ_OFFLINE);
+-}
+-
+-static void cpuhp_online_cpu_device(unsigned int cpu)
+-{
+-	struct device *dev = get_cpu_device(cpu);
+-
+-	dev->offline = false;
+-	/* Tell user space about the state change */
+-	kobject_uevent(&dev->kobj, KOBJ_ONLINE);
+-}
+-
+-int cpuhp_smt_disable(enum cpuhp_smt_control ctrlval)
+-{
+-	int cpu, ret = 0;
+-
+-	cpu_maps_update_begin();
+-	for_each_online_cpu(cpu) {
+-		if (topology_is_primary_thread(cpu))
+-			continue;
+-		ret = cpu_down_maps_locked(cpu, CPUHP_OFFLINE);
+-		if (ret)
+-			break;
+-		/*
+-		 * As this needs to hold the cpu maps lock it's impossible
+-		 * to call device_offline() because that ends up calling
+-		 * cpu_down() which takes cpu maps lock. cpu maps lock
+-		 * needs to be held as this might race against in kernel
+-		 * abusers of the hotplug machinery (thermal management).
+-		 *
+-		 * So nothing would update device:offline state. That would
+-		 * leave the sysfs entry stale and prevent onlining after
+-		 * smt control has been changed to 'off' again. This is
+-		 * called under the sysfs hotplug lock, so it is properly
+-		 * serialized against the regular offline usage.
+-		 */
+-		cpuhp_offline_cpu_device(cpu);
+-	}
+-	if (!ret)
+-		cpu_smt_control = ctrlval;
+-	cpu_maps_update_done();
+-	return ret;
+-}
+-
+-int cpuhp_smt_enable(void)
+-{
+-	int cpu, ret = 0;
+-
+-	cpu_maps_update_begin();
+-	cpu_smt_control = CPU_SMT_ENABLED;
+-	for_each_present_cpu(cpu) {
+-		/* Skip online CPUs and CPUs on offline nodes */
+-		if (cpu_online(cpu) || !node_online(cpu_to_node(cpu)))
+-			continue;
+-		ret = _cpu_up(cpu, 0, CPUHP_ONLINE);
+-		if (ret)
+-			break;
+-		/* See comment in cpuhp_smt_disable() */
+-		cpuhp_online_cpu_device(cpu);
+-	}
+-	cpu_maps_update_done();
+-	return ret;
+-}
+-
+-
+-static ssize_t
+-__store_smt_control(struct device *dev, struct device_attribute *attr,
+-		    const char *buf, size_t count)
+-{
+-	int ctrlval, ret;
+-
+-	if (sysfs_streq(buf, "on"))
+-		ctrlval = CPU_SMT_ENABLED;
+-	else if (sysfs_streq(buf, "off"))
+-		ctrlval = CPU_SMT_DISABLED;
+-	else if (sysfs_streq(buf, "forceoff"))
+-		ctrlval = CPU_SMT_FORCE_DISABLED;
+-	else
+-		return -EINVAL;
+-
+-	if (cpu_smt_control == CPU_SMT_FORCE_DISABLED)
+-		return -EPERM;
+-
+-	if (cpu_smt_control == CPU_SMT_NOT_SUPPORTED)
+-		return -ENODEV;
+-
+-	ret = lock_device_hotplug_sysfs();
+-	if (ret)
+-		return ret;
+-
+-	if (ctrlval != cpu_smt_control) {
+-		switch (ctrlval) {
+-		case CPU_SMT_ENABLED:
+-			ret = cpuhp_smt_enable();
+-			break;
+-		case CPU_SMT_DISABLED:
+-		case CPU_SMT_FORCE_DISABLED:
+-			ret = cpuhp_smt_disable(ctrlval);
+-			break;
+-		}
+-	}
+-
+-	unlock_device_hotplug();
+-	return ret ? ret : count;
+-}
+-
+-#else /* !CONFIG_HOTPLUG_SMT */
+-static ssize_t
+-__store_smt_control(struct device *dev, struct device_attribute *attr,
+-		    const char *buf, size_t count)
+-{
+-	return -ENODEV;
+-}
+-#endif /* CONFIG_HOTPLUG_SMT */
+-
+ static const char *smt_states[] = {
+ 	[CPU_SMT_ENABLED]		= "on",
+ 	[CPU_SMT_DISABLED]		= "off",
 
-                        Proactive -> ICC -> clk/OPP API to set freq/volt
-                                      ^
-                                      |
-HW measure -> governor -> devfreq ----+
 
-That way, all voltage/frequency requirements are managed cleanly by
-clk/OPP frameworks. The ICC deals with aggregating all the
-requirements and devfreq lets you handle reactive scaling and policy.
-
-And in the beginning, while you get a governor going, you can use
-"performance" governor for the "reactive scaling" users. That way,
-your reactive paths will continue to have good performance while the
-rest of the "proactive" clients change to use ICC APIs.
-
-> Vendor tree does not support voltage switching, independent freqs for
-> different parts of the fabric or any reactive scaling. I think it's important
-> to pick an upstreaming approach which can support as much as possible.
->
-> Feedback welcome.
-
-If all of this makes sense, please take a look at [2] and provide your
-thoughts. I've dropped a few patches from [1] to avoid confusion (too
-much going on at once). I think BW OPP tables and having OPP tables
-for interconnect paths will be something you'll need (if not now,
-eventually) and something you can build on top of nicely.
-
-Thanks,
-Saravana
-
-[1] - https://lore.kernel.org/lkml/20190614041733.120807-1-saravanak@google.com/
-[2] - https://lore.kernel.org/lkml/20190703011020.151615-1-saravanak@google.com/
-
-
-
-> Some objections were apparently raised to doing DRAM switch inside CLK:
-> perhaps ICC should make min_freq requests to devfreq instead?
->
-> Link to v1 (multiple chunks):
->  * https://patchwork.kernel.org/patch/10976897/
->  * https://patchwork.kernel.org/patch/10968303/
->  * https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=91251
->
-> Also as a github branch (with few other changes):
->     https://github.com/cdleonard/linux/tree/next_imx8mm_busfreq
->
-> Alexandre Bailon (2):
->   interconnect: Add generic driver for imx
->   interconnect: imx: Add platform driver for imx8mm
->
-> Leonard Crestez (6):
->   clk: imx8mm: Add dram freq switch support
->   clk: imx8m-composite: Switch to determine_rate
->   arm64: dts: imx8mm: Add dram dvfs irqs to ccm node
->   devfreq: Add imx-devfreq driver
->   arm64: dts: imx8mm: Add interconnect node
->   arm64: dts: imx8mm: Add devfreq-imx nodes
->
->  arch/arm64/boot/dts/freescale/imx8mm.dtsi |  73 +++
->  drivers/clk/imx/Makefile                  |   1 +
->  drivers/clk/imx/clk-composite-8m.c        |  34 +-
->  drivers/clk/imx/clk-imx8m-dram.c          | 357 ++++++++++++
->  drivers/clk/imx/clk-imx8mm.c              |  12 +
->  drivers/clk/imx/clk.h                     |  13 +
->  drivers/devfreq/Kconfig                   |  10 +
->  drivers/devfreq/Makefile                  |   1 +
->  drivers/devfreq/imx-devfreq.c             | 142 +++++
->  drivers/interconnect/Kconfig              |   1 +
->  drivers/interconnect/Makefile             |   1 +
->  drivers/interconnect/imx/Kconfig          |  17 +
->  drivers/interconnect/imx/Makefile         |   2 +
->  drivers/interconnect/imx/busfreq-imx8mm.c | 151 ++++++
->  drivers/interconnect/imx/busfreq.c        | 628 ++++++++++++++++++++++
->  drivers/interconnect/imx/busfreq.h        | 123 +++++
->  include/dt-bindings/clock/imx8mm-clock.h  |   4 +-
->  include/dt-bindings/interconnect/imx8mm.h |  49 ++
->  18 files changed, 1606 insertions(+), 13 deletions(-)
->  create mode 100644 drivers/clk/imx/clk-imx8m-dram.c
->  create mode 100644 drivers/devfreq/imx-devfreq.c
->  create mode 100644 drivers/interconnect/imx/Kconfig
->  create mode 100644 drivers/interconnect/imx/Makefile
->  create mode 100644 drivers/interconnect/imx/busfreq-imx8mm.c
->  create mode 100644 drivers/interconnect/imx/busfreq.c
->  create mode 100644 drivers/interconnect/imx/busfreq.h
->  create mode 100644 include/dt-bindings/interconnect/imx8mm.h
->
-> --
-> 2.17.1
->
