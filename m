@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FB25E98A
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 18:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B343B5E99D
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 18:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbfGCQtj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 12:49:39 -0400
-Received: from mout.gmx.net ([212.227.15.15]:48639 "EHLO mout.gmx.net"
+        id S1727177AbfGCQtn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 12:49:43 -0400
+Received: from mout.gmx.net ([212.227.15.19]:57979 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726430AbfGCQtj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Jul 2019 12:49:39 -0400
+        id S1727119AbfGCQtl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 3 Jul 2019 12:49:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1562172515;
-        bh=Q4SNzBfUgmUaXEsp2/EkbHDrGPVnZzLCOAAZMoTbLHU=;
+        s=badeba3b8450; t=1562172516;
+        bh=M6PWi+AqvzIHnI2kv34DphxxV8F7xx3ycFGzciNTHis=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=dUAq2zu8k0rxZvBIT5mcoE2t0sC3jCT+ju9g6JRkYtSp4RB6PavjpCfVuJ3uQRRag
-         PtBvoecXZuNbglZNIfhDtks5YMtnk0+OSSOMgQzm+6QDyPXudrub7GdWqXzZqIxp28
-         vaAJLRKY6+Bm2vyaA7kTXQhbVzwli2iBr3QLmayg=
+        b=bTC6pznWnKuM2Q7ikYhEDEtVB6XrMQF7C4D3fmIQN5OPnhNjXYqhISarRoFWzzyJr
+         nEO4RH6SMtjdWb90eSUniAUT6Qeagsf/SPn8grFddGBfDgaXgriQOZrTPjf9Hw4bno
+         SHQ16P83037cSeXYO0ANMgqtI/zfdFvKIAs3c42I=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([217.61.158.204]) by mail.gmx.com
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MbirE-1iF1363taI-00dD2d; Wed, 03 Jul 2019 18:48:35 +0200
+ 1N9MpS-1iccR545rg-015Lm9; Wed, 03 Jul 2019 18:48:36 +0200
 From:   Frank Wunderlich <frank-w@public-files.de>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -46,34 +46,34 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         "Paul E . McKenney" <paulmck@linux.ibm.com>
 Cc:     Josef Friedl <josef.friedl@speed.at>,
         Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
-Date:   Wed,  3 Jul 2019 18:48:18 +0200
-Message-Id: <20190703164822.17924-4-frank-w@public-files.de>
+Subject: [PATCH v2 4/7] mfd: mt6323: some improvements of mt6397-core
+Date:   Wed,  3 Jul 2019 18:48:19 +0200
+Message-Id: <20190703164822.17924-5-frank-w@public-files.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190703164822.17924-1-frank-w@public-files.de>
 References: <20190703164822.17924-1-frank-w@public-files.de>
-X-Provags-ID: V03:K1:Doz5m2szHD54xebFCDZtFG1jkMhZkLcvMGXvCyriCBWcdSKa3Po
- 9pNHVGegXnLoqrAeDO7HXgCEhNeUReGWchhh3UVvXcsL6dD65KFzYJ1tAzs8YKkI2gMYAJW
- LC9Evz9eFQO1eF3akk3EL0bT7PfbiTi5oaw4VaP8f9vPXewf09C2JHPqAcdg9iEdYErjHpu
- 1VcNABzfFOtmGkWQ3WBeA==
+X-Provags-ID: V03:K1:kuKrBJnTtq4b2/NjZPE2sfV/tuwmiaGxoDx1uz7jDmUZFdXJVqu
+ E4J9a9ArB0XhOnjqVPn9Cu6pWThn9Rc4Ycy9O/xTrDtTUbdjiP6n3jveMUnYXxd/LZoUaHC
+ icVc9kVck5MVdwiejAlltqlLU4JXl/0y71LTFKNGIBY6HUo8mbA+IAYxC0dnEYrwYWuCT0G
+ jeD99AauMluP8+kc1Xv8Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XzjbtNDDVBI=:6fPDOhc3ib1mIDPeODXkCM
- sGi1yA24Th45Cti4r6Y/VVlK7UWP/BLhd4poItsbr+IxQhAowvs6NNYsbHW3GH455oJZvioNF
- Iz9au5ndpJA27wKgIKRuGvhb+0p59VDjdfiVFTfduF+yiu4c+G+S7rrqVatiaGL1nAucT4yel
- 1JiS4o0cD/oOP58flHAPTxmJkMw0e93hr94qBZRn9BCNdG69zTFZkd7xpHZsp5uNOq7L3uKIU
- yHj60ZWItxffMb4qH/X7ERxbLhEQwIY02T+NQtnZg4v2259rR5do7Upvh1RRUcolMeM7vGTYH
- mgCAy2IOu53hldt6Q3fRSXGaI3OqMbu3WeoBN/RK1DPRzEDEdIYwAYr9BOdAr5VoUSQhzOjvj
- qSjwMlr4ryLFhTrnOEqtJ6X0Xop8NoGrWRlf1jnVB9CTiqe3716CRqhlsNdaEVhghXX3dQjol
- CGpdKc6iw9xvxM0zJz9l6x7g7GxkistvOnle7SMPISNaZwZER8Rza8QR9K1ZEfCGrSgVwihbE
- e9Czk22vy05sRHcKC5Ke8nYPvGyskoGRZREhurmrTgSJBvVVymfKkSVH+FRux18hLEN25W0zA
- 47AKfruN7OYXdawFTDu43VqZgGSe9KllIEO3TbTgAS3Idocr9sBaBWxDj7Hh9ALIi0qpMnjIR
- o48+7naGWINRsknUz/s/qsc7S3ZEObFHqWKMKE8PHSCCOWLskDGq9tnr111598PVD7bldVS4F
- mAAuPrrA+wagXuvlmZ5ZlYv13TTbALqZkA7i6sn+Pd1AMWo+FJfdpIUs9LUWBhnn9Lhp0uDI9
- zodNRadZvE4BtssJmsUzNk3dfiD9vJssjxxPSrRx9P3DYOxchAu6Q1MbvuSSuFRES+fw2bgrn
- 7wzeLS0IVG4/PofxgGy6FXVLzjjhnWUXj32h+vCPDiLKKMz/xZKW8CpWawz/b61VF+RAmqcRg
- MsZPvcSJ4LR/1YfWdlAh7cX9Gwv6OzpVyFO3ZpiPobgO76SIKO4GKVKkiqEywfTOsnfZ+TOhc
- ICjiGClrvXeiYyaHpfKONdnWyaH04Bbd0pCM/LW68c68SC8JSKo/kekPE6uBRNiLMkzjrYJyS
- sfAoazhD4roxRs=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4y2AIBRbDu8=:pkbnQbe2JaaQmEjD1zX2hU
+ +fISZlmmLjLuHjAe/k+og7KqE72m4C11dZwxNHNmzlNQChXlOsWgmhEcJfdJFKKb9+Zef4PMs
+ fIQ1wa9Ce7miKBDE+8SzGAI9G+IrLDItZsihBUu0RfbNFk93kb98az9yvjL1gpX4gt0EoGueI
+ SptkfiDCO4mc9UF9YMFnckzibtyDEU5/Z+V2T2vck3duPxHx23YIzet6ms/zeFSbE4VcrkwIF
+ zwfwIlmfE5TJzlQYIxNGfgqnruP//rXCJUiMKWwra92M9+2RBjkHCU/E10MhSuGIjustYcPR2
+ 8f7t5Wr8CGA93gDSp55ZawCLT1/fHLqfCrPuHQcNZ+Izzs9A7gN7T663ATT1ZSJuZA9FdYxjv
+ 8uD7JWovO9+Tp76rNqhoEmXeHIugmcdy2j+Vbm/6sIwfIeXxtEyqi+NRNOLLuGtZnsloyesGd
+ bEqyYtf89JOccjcwYvU/5MqY4rDTq3YvrZ4ZJBLMb7vCd/SujVPMR2AedI6WFXwgO7HiLyv4b
+ 6Gb2TM8DOBZ6TK5ctswVnukVAzc8ZUe86QZ8a+vu702qsoceLahkTvnE28ETw0ZzIfYdJgtiO
+ 4Q5zQdzGZgekbKsF7LCBwrLrzsOt3Vod+NeQiK1f1L/nbdjZ8WQFIpPBXJ4nGJfR8E4w7K3Rv
+ /JjRf8ZsH4ef1iptYd5agp1zQO6uQZK6DP+0TGZLpRN/JvO1Lg3okL2ShQQtJFHw1Nk1GCTgu
+ 02NeYOJOZb3xhZn3KeSN4p2VbZrrnWj0s9TQon0C6wJywiTYCDtO9MXp5nFVwFeNIeho+k5WL
+ LioKrfN+Suic2pv3IN6TMqcM2r5iVjcC468O7wmv/aV/bKeqNYO5T4FspIcLlZ1tYHQlLiSAU
+ iOJkbPLUhGeiq7JoCdiVHxLq548UdL9MVl0ICMunu89tc2oPm0mjwCzrkxVOO9oGheruWFJr7
+ O5t3EaJR1WwF/+PMPtjIaMsHcx9TdjcE58OcRxGrnv+jRwmroHSI1cME9wDv/kweyIseNK8v3
+ XXhSPUus/34aUQRfIqnyrsUERQdU9Mm3g8ttDbgeJSdm20NHgT0FzXuZ6Qi5sPqikl0L6hVga
+ FEsTdQsGIxFBs0=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -82,136 +82,100 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Josef Friedl <josef.friedl@speed.at>
 
-- use regmap_read_poll_timeout to drop while-loop
-- use devm-api to drop remove-callback
-- add new compatible for mt6323
+- simplyfications (resource definitions my DEFINE_RES_* macros)
+- add mt6323 rtc+pwrc
 
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 =2D--
- drivers/rtc/rtc-mt6397.c | 55 ++++++++++++++++------------------------
- 1 file changed, 22 insertions(+), 33 deletions(-)
+ drivers/mfd/mt6397-core.c | 40 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 29 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-index c08ee5edf865..e5ddf0d0b6f1 100644
-=2D-- a/drivers/rtc/rtc-mt6397.c
-+++ b/drivers/rtc/rtc-mt6397.c
-@@ -4,16 +4,19 @@
- * Author: Tianping.Fang <tianping.fang@mediatek.com>
- */
+diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
+index 337bcccdb914..a4abce00f156 100644
+=2D-- a/drivers/mfd/mt6397-core.c
++++ b/drivers/mfd/mt6397-core.c
+@@ -1,10 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Copyright (c) 2014 MediaTek Inc.
++ * Copyright (c) 2014-2018 MediaTek Inc.
+  * Author: Flora Fu, MediaTek
+  */
 
--#include <linux/delay.h>
--#include <linux/init.h>
-+#include <linux/err.h>
-+#include <linux/interrupt.h>
-+#include <linux/mfd/mt6397/core.h>
+ #include <linux/interrupt.h>
++#include <linux/ioport.h>
  #include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/rtc.h>
- #include <linux/mfd/mt6397/rtc.h>
-+#include <linux/mod_devicetable.h>
+ #include <linux/of_device.h>
+ #include <linux/of_irq.h>
+@@ -15,24 +16,27 @@
+ #include <linux/mfd/mt6397/registers.h>
+ #include <linux/mfd/mt6323/registers.h>
 
- static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
- {
--	unsigned long timeout =3D jiffies + HZ;
- 	int ret;
- 	u32 data;
-
-@@ -21,19 +24,13 @@ static int mtk_rtc_write_trigger(struct mt6397_rtc *rt=
-c)
- 	if (ret < 0)
- 		return ret;
-
--	while (1) {
--		ret =3D regmap_read(rtc->regmap, rtc->addr_base + RTC_BBPU,
--				  &data);
--		if (ret < 0)
--			break;
--		if (!(data & RTC_BBPU_CBUSY))
--			break;
--		if (time_after(jiffies, timeout)) {
--			ret =3D -ETIMEDOUT;
--			break;
--		}
--		cpu_relax();
--	}
-+	ret =3D regmap_read_poll_timeout(rtc->regmap,
-+					rtc->addr_base + RTC_BBPU, data,
-+					!(data & RTC_BBPU_CBUSY),
-+					MTK_RTC_POLL_DELAY_US,
-+					MTK_RTC_POLL_TIMEOUT);
-+	if (ret < 0)
-+		dev_err(rtc->dev, "failed to write WRTGE: %d\n", ret);
-
- 	return ret;
- }
-@@ -271,14 +268,11 @@ static int mtk_rtc_probe(struct platform_device *pde=
-v)
-
- 	platform_set_drvdata(pdev, rtc);
-
--	rtc->rtc_dev =3D devm_rtc_allocate_device(rtc->dev);
--	if (IS_ERR(rtc->rtc_dev))
--		return PTR_ERR(rtc->rtc_dev);
-+	ret =3D devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
-+					mtk_rtc_irq_handler_thread,
-+					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-+					"mt6397-rtc", rtc);
-
--	ret =3D request_threaded_irq(rtc->irq, NULL,
--				   mtk_rtc_irq_handler_thread,
--				   IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
--				   "mt6397-rtc", rtc);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
- 			rtc->irq, ret);
-@@ -287,6 +281,10 @@ static int mtk_rtc_probe(struct platform_device *pdev=
-)
-
- 	device_init_wakeup(&pdev->dev, 1);
-
-+	rtc->rtc_dev =3D devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(rtc->rtc_dev))
-+		return PTR_ERR(rtc->rtc_dev);
++#define MT6323_RTC_BASE		0x8000
++#define MT6323_RTC_SIZE		0x40
 +
- 	rtc->rtc_dev->ops =3D &mtk_rtc_ops;
+ #define MT6397_RTC_BASE		0xe000
+ #define MT6397_RTC_SIZE		0x3e
 
- 	ret =3D rtc_register_device(rtc->rtc_dev);
-@@ -302,15 +300,6 @@ static int mtk_rtc_probe(struct platform_device *pdev=
-)
- 	return ret;
- }
++#define MT6323_PWRC_BASE	0x8000
++#define MT6323_PWRC_SIZE	0x40
++
+ #define MT6323_CID_CODE		0x23
+ #define MT6391_CID_CODE		0x91
+ #define MT6397_CID_CODE		0x97
 
--static int mtk_rtc_remove(struct platform_device *pdev)
--{
--	struct mt6397_rtc *rtc =3D platform_get_drvdata(pdev);
--
--	free_irq(rtc->irq, rtc);
--
--	return 0;
--}
--
- #ifdef CONFIG_PM_SLEEP
- static int mt6397_rtc_suspend(struct device *dev)
- {
-@@ -337,6 +326,7 @@ static SIMPLE_DEV_PM_OPS(mt6397_pm_ops, mt6397_rtc_sus=
-pend,
- 			mt6397_rtc_resume);
-
- static const struct of_device_id mt6397_rtc_of_match[] =3D {
-+	{ .compatible =3D "mediatek,mt6323-rtc", },
- 	{ .compatible =3D "mediatek,mt6397-rtc", },
- 	{ }
++static const struct resource mt6323_rtc_resources[] =3D {
++	DEFINE_RES_MEM(MT6323_RTC_BASE, MT6323_RTC_SIZE),
++	DEFINE_RES_IRQ(MT6323_IRQ_STATUS_RTC),
++};
++
+ static const struct resource mt6397_rtc_resources[] =3D {
+-	{
+-		.start =3D MT6397_RTC_BASE,
+-		.end   =3D MT6397_RTC_BASE + MT6397_RTC_SIZE,
+-		.flags =3D IORESOURCE_MEM,
+-	},
+-	{
+-		.start =3D MT6397_IRQ_RTC,
+-		.end   =3D MT6397_IRQ_RTC,
+-		.flags =3D IORESOURCE_IRQ,
+-	},
++	DEFINE_RES_MEM(MT6397_RTC_BASE, MT6397_RTC_SIZE),
++	DEFINE_RES_IRQ(MT6397_IRQ_RTC),
  };
-@@ -349,7 +339,6 @@ static struct platform_driver mtk_rtc_driver =3D {
- 		.pm =3D &mt6397_pm_ops,
+
+ static const struct resource mt6323_keys_resources[] =3D {
+@@ -45,8 +49,17 @@ static const struct resource mt6397_keys_resources[] =
+=3D {
+ 	DEFINE_RES_IRQ(MT6397_IRQ_HOMEKEY),
+ };
+
++static const struct resource mt6323_pwrc_resources[] =3D {
++	DEFINE_RES_MEM(MT6323_PWRC_BASE, MT6323_PWRC_SIZE),
++};
++
+ static const struct mfd_cell mt6323_devs[] =3D {
+ 	{
++		.name =3D "mt6323-rtc",
++		.num_resources =3D ARRAY_SIZE(mt6323_rtc_resources),
++		.resources =3D mt6323_rtc_resources,
++		.of_compatible =3D "mediatek,mt6323-rtc",
++	}, {
+ 		.name =3D "mt6323-regulator",
+ 		.of_compatible =3D "mediatek,mt6323-regulator"
+ 	}, {
+@@ -57,6 +70,11 @@ static const struct mfd_cell mt6323_devs[] =3D {
+ 		.num_resources =3D ARRAY_SIZE(mt6323_keys_resources),
+ 		.resources =3D mt6323_keys_resources,
+ 		.of_compatible =3D "mediatek,mt6323-keys"
++	}, {
++		.name =3D "mt6323-pwrc",
++		.num_resources =3D ARRAY_SIZE(mt6323_pwrc_resources),
++		.resources =3D mt6323_pwrc_resources,
++		.of_compatible =3D "mediatek,mt6323-pwrc"
  	},
- 	.probe	=3D mtk_rtc_probe,
--	.remove =3D mtk_rtc_remove,
  };
 
- module_platform_driver(mtk_rtc_driver);
 =2D-
 2.17.1
 
