@@ -2,170 +2,265 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2255EDC7
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 22:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E125EE99
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jul 2019 23:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726902AbfGCUp4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jul 2019 16:45:56 -0400
-Received: from mga04.intel.com ([192.55.52.120]:61753 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726739AbfGCUp4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Jul 2019 16:45:56 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Jul 2019 13:45:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,448,1557212400"; 
-   d="p7s'?scan'208";a="158091772"
-Received: from orsmsx105.amr.corp.intel.com ([10.22.225.132])
-  by orsmga008.jf.intel.com with ESMTP; 03 Jul 2019 13:45:55 -0700
-Received: from orsmsx109.amr.corp.intel.com ([169.254.11.17]) by
- ORSMSX105.amr.corp.intel.com ([169.254.2.207]) with mapi id 14.03.0439.000;
- Wed, 3 Jul 2019 13:45:54 -0700
-From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "amit.kucheria@linaro.org" <amit.kucheria@linaro.org>
-CC:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "edubezval@gmail.com" <edubezval@gmail.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Subject: Re: Thermal microconference proposal @ LPC
-Thread-Topic: Thermal microconference proposal @ LPC
-Thread-Index: AQHVMeBO0uydloMs3EKoLil3NaMA4A==
-Date:   Wed, 3 Jul 2019 20:45:54 +0000
-Message-ID: <8d4b31d46c5a3ee1f79eb65cbe03bc2065ce8696.camel@intel.com>
-References: <f1efad22-66a6-a094-1ebe-43e794aff6d0@linaro.org>
-         <CAP245DVGekWAS1O6ZbNi52K5LyQw8vqVXM6DSBvOieAT3v1fpQ@mail.gmail.com>
-In-Reply-To: <CAP245DVGekWAS1O6ZbNi52K5LyQw8vqVXM6DSBvOieAT3v1fpQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.252.137.68]
-Content-Type: multipart/signed; micalg=sha-1;
-        protocol="application/x-pkcs7-signature"; boundary="=-yBMAxz+iSOiZJdADkXz/"
+        id S1727076AbfGCVdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jul 2019 17:33:53 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37040 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726550AbfGCVdx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jul 2019 17:33:53 -0400
+Received: by mail-ot1-f66.google.com with SMTP id s20so3934697otp.4
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jul 2019 14:33:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R3V0xyfQtgszg7VMyFhoH7Ys4L42MA+hGNQOZN+rSSg=;
+        b=V+QyETMzR+c11xzxqJ7CvOBHlFJ127q7f+YbE3ve0bt+n8nmvGJw6KhSwYIyLfQD7O
+         OgMEUrtgN9cuhypLuelAH+bqQONAnfkT7FzbKcnQHMw3Wi5H046OUJO+6eo+SchXmhcI
+         qipRfKc2xU6/hnEdK4uw9QSVq/lVH1C939if8ZZciMjWkmsc5MmLq/TA2JR+XzBf9c50
+         21aPpuiNTNU5DpKzfH8l5kZjmFALMRkAG6GPl/MgjH1cF8s2ymT/vjnZ3OHqFlElm+v/
+         5hrqxmXJJAgAwyg1J6PpfG7U8dUa8YeKf8HHPUnk8LEDiDsdZnyBvmyp4SYLLrEfcgqr
+         HeuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R3V0xyfQtgszg7VMyFhoH7Ys4L42MA+hGNQOZN+rSSg=;
+        b=sRyZfKj3t8Pmt2CaXGsRB6p8xvPmeAH1AI+DdpIAEYMnr5db9vRApfbs3Bbn9Kp3i+
+         qThrMFA+7xkKowyPkLUIcfeSqhiDzrrsdhoSG2WuTftajrBi+/tnWnwyM1IC4uJNLD5s
+         +6qeerFFYaFnnQF4MX3W9+zC8/L/cNi8lJ6TAugQC6mzuwuJag28AWM+bVrBgiRCIfxO
+         jyJf9+FZAms4WgQ/jojzvv8H0H0tW9Z7H0/1Jm2HmOoyRbkUeVCu/IHBzGsY/AM2Pz8R
+         RJfj/PnnGCZ2c1SX9QhLoD080RvK8k6EykDjLI4bXFW1gyR+r4iR/tS/lCavfi8j6Ou1
+         QEuA==
+X-Gm-Message-State: APjAAAVMwIUkq97cTghdLuTrVWpiGWNrAeg7SlqnqGMM9Bnmg7Gu0PHs
+        zAz5khEyfdpHDZe2Rrbn66FZARASKsCreFYB6YVqYw==
+X-Google-Smtp-Source: APXvYqxktUBobLHri/+RpGQ9t5HW3WC7Y8fP/5luLqnatxKPkw8Nz7g7awliOBFQip7Os9RGiYdDHakvVgO3HZ8oNQg=
+X-Received: by 2002:a05:6830:160c:: with SMTP id g12mr33086605otr.231.1562189631932;
+ Wed, 03 Jul 2019 14:33:51 -0700 (PDT)
 MIME-Version: 1.0
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-7-saravanak@google.com>
+ <CAKfTPtCJFaEfvu3Dnp9WSxQEwSfY=VS+xsoQ+4P+vg7_WL0BAQ@mail.gmail.com>
+In-Reply-To: <CAKfTPtCJFaEfvu3Dnp9WSxQEwSfY=VS+xsoQ+4P+vg7_WL0BAQ@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 3 Jul 2019 14:33:15 -0700
+Message-ID: <CAGETcx_5gu84FOVmELPnK5uJTE0NEhxYKtdFigoXGyFtjehQvw@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] interconnect: Add OPP table support for interconnects
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        sibis@codeaurora.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---=-yBMAxz+iSOiZJdADkXz/
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 2, 2019 at 11:45 PM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+>
+> On Wed, 3 Jul 2019 at 03:10, Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > Interconnect paths can have different performance points. Now that OPP
+> > framework supports bandwidth OPP tables, add OPP table support for
+> > interconnects.
+> >
+> > Devices can use the interconnect-opp-table DT property to specify OPP
+> > tables for interconnect paths. And the driver can obtain the OPP table for
+> > an interconnect path by calling icc_get_opp_table().
+>
+> The opp table of a path must come from the aggregation of OPP tables
+> of the interconnect providers.
 
-Hi Amit,
-On Mon, 2019-06-24 at 19:22 +0530, Amit Kucheria wrote:
-> Hi all,
->=20
-> We've proposed a thermal microconf at LPC again this year. I've
-> bcc'ed
-> a few people who were interested last year. We already have the
-> following topics listed for the proposal but could certainly use more
-> topics especially from the non-mobile Linux community.
->=20
+The aggregation of OPP tables of the providers is certainly the
+superset of what a path can achieve, but to say that OPPs for
+interconnect path should match that superset is an oversimplification
+of the reality in hardware.
 
+There are lots of reasons an interconnect path might not want to use
+all the available bandwidth options across all the interconnects in
+the route.
 
-Thermal/Power mitigation on high powered laptops
+1. That particular path might not have been validated or verified
+   during the HW design process for some of the frequencies/bandwidth
+   combinations of the providers.
 
-Some of the high powered laptops released with KabyLake and later
-generations of processors can reach more than 50W with some busy
-workloads like kernel compilation. This results in CPU temperature to
-quickly reach close to the critical temperature. To avoid this OEM=E2=80=99=
-s
-have used a very conservative power limits  by default. But this
-results in a bad performance on Linux laptops compared to other
-operating systems. We have implemented a solution for Linux to mitigate
-this. This quick presentation will show the approach Linux users
-particularly kernel developers can use to get a very high performance
-from these laptops.
+2. Similarly during parts screening in the factory, some of the
+   combinations might not have been screened and can't be guaranteed
+   to work.
 
-This should be a quick 5-10 min talk.
+3. Only a certain set of bandwidth levels might make sense to use from
+   a power/performance balance given the device using it. For example:
+   - The big CPU might not want to use some of the lower bandwidths
+     but the little CPU might want to.
+   - The big CPU might not want to use some intermediate bandwidth
+     points if they don't save a lot of power compared to a higher
+     bandwidth levels, but the little CPU might want to.
+   - The little CPU might never want to use the higher set of
+     bandwidth levels since they won't be power efficient for the use
+     cases that might run on it.
 
-Thanks,
-Srinivas
+4. It might not make sense from a system level power perspective.
+Let's take an example of a path S (source) -> A -> B -> C -> D
+(destination).
+   - A supports only 2, 5, 7 and 10 GB/s. B supports 1, 2 ... 10 GB/s.
+     C supports 5 and 10 GB/s
+   - If you combine and list the superset of bandwidth levels
+     supported in that path, that'd be 1, 2, 3, ... 10 GB/s.
+   - Which set of bandwidth levels make sense will depend on the
+     hardware characteristics of the interconnects.
+   - If B is the biggest power sink, then you might want to use all 10
+     levels.
+   - If A is the biggest power sink, then you might want to use all 2,
+     5 and 10 GB/s of the levels.
+   - If C is the biggest power sink then you might only want to use 5
+     and 10 GB/s
+   - The more hops and paths you get the more convoluted this gets.
 
-> - Samsung: Thermal aware scheduling (Lukasz Luba)
-> - Linaro: Combining idle and freq change for cpu cooling (Daniel
-> Lezcano)
-> - ARM: Discriminating thermal throttling (Volker Eckert)
-> - IBM: Sustain turbo mode (Parth Shah)
-> - QCOM/Linaro: Make thermal framework easier to use in products (Amit
-> Kucheria)
->=20
-> Please help bring this to the attention of those who might be
-> interested in talking about thermal-related problems at the
-> conference.
->=20
-> Thanks.
->=20
-> Regards,
-> Amit Kucheria & Daniel Lezcano
+5. The design of the interconnects themselves might have an impact on
+which bandwidth levels are used.
+   - For example, the FIFO depth between two specific interconnects
+     might affect the valid bandwidth levels for a specific path.
+   - Say S1 -> A -> B -> D1, S2 -> C -> B -> D1 and S2 -> C -> D2 are
+     three paths.
+   - If C <-> B FIFO depth is small, then there might be a requirement
+     that C and B be closely performance matched to avoid system level
+     congestion due to back pressure.
+   - So S2 -> D1 path can't use all the bandwidth levels supported by
+     C-B combination.
+   - But S2 -> D2 can use all the bandwidth levels supported by C.
+   - And S1 -> D1 can use all the levels supported by A-B combination.
 
---=-yBMAxz+iSOiZJdADkXz/
-Content-Type: application/x-pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+These are just some of the reasons I could recollect in a few minutes.
+These are all real world cases I had to deal with in the past several
+years of dealing with scaling interconnects. I'm sure vendors and SoCs
+I'm not familiar with have other good reasons I'm not aware of.
 
-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
-n4IJlKBiiK7B8oFPhD7KEZOWboHrE2uHLEkIXpp852sG0oFkLLstEDK9Z46WS4Ni1yfGRE6jY79A
-DJOEZIX9AgMBAAGjggI9MIICOTAdBgNVHQ4EFgQUZ2w0kbL1uZEoQTmAiMqoAXL81L8wHwYDVR0j
-BBgwFoAU2kEjnFqPca9Xgz4g0+Nl2wzLC9swZQYDVR0fBF4wXDBaoFigVoZUaHR0cDovL3d3dy5p
-bnRlbC5jb20vcmVwb3NpdG9yeS9DUkwvSW50ZWwlMjBFeHRlcm5hbCUyMEJhc2ljJTIwSXNzdWlu
-ZyUyMENBJTIwNEIuY3JsMIGfBggrBgEFBQcBAQSBkjCBjzAiBggrBgEFBQcwAYYWaHR0cDovL29j
-c3AuaW50ZWwuY29tLzBpBggrBgEFBQcwAoZdaHR0cDovL3d3dy5pbnRlbC5jb20vcmVwb3NpdG9y
-eS9jZXJ0aWZpY2F0ZXMvSW50ZWwlMjBFeHRlcm5hbCUyMEJhc2ljJTIwSXNzdWluZyUyMENBJTIw
-NEIuY3J0MAsGA1UdDwQEAwIHgDA8BgkrBgEEAYI3FQcELzAtBiUrBgEEAYI3FQiGw4x1hJnlUYP9
-gSiFjp9TgpHACWeB3r05lfBDAgFkAgEJMB8GA1UdJQQYMBYGCCsGAQUFBwMEBgorBgEEAYI3CgMM
-MCkGCSsGAQQBgjcVCgQcMBowCgYIKwYBBQUHAwQwDAYKKwYBBAGCNwoDDDBXBgNVHREEUDBOoC0G
-CisGAQQBgjcUAgOgHwwdc3Jpbml2YXMucGFuZHJ1dmFkYUBpbnRlbC5jb22BHXNyaW5pdmFzLnBh
-bmRydXZhZGFAaW50ZWwuY29tMA0GCSqGSIb3DQEBBQUAA4IBAQAXirNmyawI/PJRnjPoqNcgSr8N
-8VXBvv8kwQidSNWKswBqo8ul8u+pkG7v8YjZUy1OJQUFXPvihht10Tb5O2xZ9hpIo4WFcRX2eg2Z
-t6koRJUB9ZDjEETG2j4EpcGmWIBrDBNZLZTLIYG5JzsS6mGCq42AKspSAJD00vwfL0KlCc4BVUvC
-64+q7etbf6c90n05KjfLfoUXBqwWLJCe3KPD20d/kbvesTzs2PVQxI7K1eL9n2rBoqBpcRY0ppkz
-FKjiTQ8IcwhyWQbzLfVIy5tNuyinhNBRv3COOMGoayaljijEPcEHLE63tA2OIao2Hz6GLRYzg0mT
-hCtsB4xSboPZMYICFzCCAhMCAQEwgZAweTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRQwEgYD
-VQQHEwtTYW50YSBDbGFyYTEaMBgGA1UEChMRSW50ZWwgQ29ycG9yYXRpb24xKzApBgNVBAMTIklu
-dGVsIEV4dGVybmFsIEJhc2ljIElzc3VpbmcgQ0EgNEICEzMAAGknngjvas7THxUAAAAAaScwCQYF
-Kw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE5MDcw
-MzIwNDU1M1owIwYJKoZIhvcNAQkEMRYEFC1rH/4770/YAnWbppyAKFbaRgVqMA0GCSqGSIb3DQEB
-AQUABIIBABWfD3bNkA4Jqbb08V9jIiybjwdCUkSwqU65pwFmADElvb6IKdpBr8mUeOzvneTbnIv+
-eQNt22moWoZsHNS7/IqQ9tvmnd1Rn6IoWXBFhlbivN/8xoUGyDrQ0sNxerZy+Zb817PxQsq2phVf
-0sTzu5P/N/pSgerREj6s9q4xA9NembcaYh3VGzgXoce+15GL9bgqNeaXtLCrDAwOXqPqtIEoGB4o
-nOwKLQp8r8yghKLQEJvyGU1tvZVC5I/6PINZLeqVOYvRD3ninoLCejeVMVEgNC15a9TW1obKLR01
-0FoaIm45O8cGV9eBnuuDZYLMKlIdIR5QKR8GqsHwO7S/j+EAAAAAAAA=
+Trying to figure this all out by aggregating OPP tables of
+interconnect providers just isn't feasible nor is it efficient. The
+OPP tables for an interconnect path is describing the valid BW levels
+supported by that path and verified in hardware and makes a lot of
+sense to capture it clearly in DT.
+
+> So such kind of OPP table should be at
+> provider level but not at path level.
+
+They can also use it if they want to, but they'll probably want to use
+a frequency OPP table.
 
 
---=-yBMAxz+iSOiZJdADkXz/--
+-Saravana
+
+>
+> >
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > ---
+> >  drivers/interconnect/core.c  | 27 ++++++++++++++++++++++++++-
+> >  include/linux/interconnect.h |  7 +++++++
+> >  2 files changed, 33 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> > index 871eb4bc4efc..881bac80bc1e 100644
+> > --- a/drivers/interconnect/core.c
+> > +++ b/drivers/interconnect/core.c
+> > @@ -47,6 +47,7 @@ struct icc_req {
+> >   */
+> >  struct icc_path {
+> >         size_t num_nodes;
+> > +       struct opp_table *opp_table;
+> >         struct icc_req reqs[];
+> >  };
+> >
+> > @@ -313,7 +314,7 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+> >  {
+> >         struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+> >         struct icc_node *src_node, *dst_node;
+> > -       struct device_node *np = NULL;
+> > +       struct device_node *np = NULL, *opp_node;
+> >         struct of_phandle_args src_args, dst_args;
+> >         int idx = 0;
+> >         int ret;
+> > @@ -381,10 +382,34 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+> >                 dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+> >         mutex_unlock(&icc_lock);
+> >
+> > +       opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
+> > +       if (opp_node) {
+> > +               path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
+> > +               of_node_put(opp_node);
+> > +       }
+> > +
+> > +
+> >         return path;
+> >  }
+> >  EXPORT_SYMBOL_GPL(of_icc_get);
+> >
+> > +/**
+> > + * icc_get_opp_table() - Get the OPP table that corresponds to a path
+> > + * @path: reference to the path returned by icc_get()
+> > + *
+> > + * This function will return the OPP table that corresponds to a path handle.
+> > + * If the interconnect API is disabled, NULL is returned and the consumer
+> > + * drivers will still build. Drivers are free to handle this specifically, but
+> > + * they don't have to.
+> > + *
+> > + * Return: opp_table pointer on success. NULL is returned when the API is
+> > + * disabled or the OPP table is missing.
+> > + */
+> > +struct opp_table *icc_get_opp_table(struct icc_path *path)
+> > +{
+> > +       return path->opp_table;
+> > +}
+> > +
+> >  /**
+> >   * icc_set_bw() - set bandwidth constraints on an interconnect path
+> >   * @path: reference to the path returned by icc_get()
+> > diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+> > index dc25864755ba..0c0bc55f0e89 100644
+> > --- a/include/linux/interconnect.h
+> > +++ b/include/linux/interconnect.h
+> > @@ -9,6 +9,7 @@
+> >
+> >  #include <linux/mutex.h>
+> >  #include <linux/types.h>
+> > +#include <linux/pm_opp.h>
+> >
+> >  /* macros for converting to icc units */
+> >  #define Bps_to_icc(x)  ((x) / 1000)
+> > @@ -28,6 +29,7 @@ struct device;
+> >  struct icc_path *icc_get(struct device *dev, const int src_id,
+> >                          const int dst_id);
+> >  struct icc_path *of_icc_get(struct device *dev, const char *name);
+> > +struct opp_table *icc_get_opp_table(struct icc_path *path);
+> >  void icc_put(struct icc_path *path);
+> >  int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+> >
+> > @@ -49,6 +51,11 @@ static inline void icc_put(struct icc_path *path)
+> >  {
+> >  }
+> >
+> > +static inline struct opp_table *icc_get_opp_table(struct icc_path *path)
+> > +{
+> > +       return NULL;
+> > +}
+> > +
+> >  static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+> >  {
+> >         return 0;
+> > --
+> > 2.22.0.410.gd8fdbe21b5-goog
+> >
