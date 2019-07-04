@@ -2,189 +2,242 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 858FF5F56C
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 11:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56A15F640
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 12:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbfGDJVJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jul 2019 05:21:09 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18496 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727211AbfGDJVI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 05:21:08 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x649HMbG070817
-        for <linux-pm@vger.kernel.org>; Thu, 4 Jul 2019 05:21:07 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2thcgcd2e7-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Thu, 04 Jul 2019 05:21:07 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
-        Thu, 4 Jul 2019 10:21:06 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 4 Jul 2019 10:21:02 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x649L19l46792912
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 4 Jul 2019 09:21:01 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 456094C04E;
-        Thu,  4 Jul 2019 09:21:01 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B86F14C052;
-        Thu,  4 Jul 2019 09:20:59 +0000 (GMT)
-Received: from boston16h.aus.stglabs.ibm.com (unknown [9.3.23.78])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  4 Jul 2019 09:20:59 +0000 (GMT)
-From:   Abhishek Goel <huntbag@linux.vnet.ibm.com>
-To:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-pm@vger.kernel.org
-Cc:     npiggin@gmail.com, rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        mpe@ellerman.id.au, ego@linux.vnet.ibm.com, dja@axtens.net,
-        Abhishek Goel <huntbag@linux.vnet.ibm.com>
-Subject: [RFC v3 3/3] cpuidle-powernv : Recompute the idle-state timeouts when state usage is enabled/disabled
-Date:   Thu,  4 Jul 2019 04:18:27 -0500
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190704091827.19555-1-huntbag@linux.vnet.ibm.com>
-References: <20190704091827.19555-1-huntbag@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19070409-0008-0000-0000-000002F9CFF9
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070409-0009-0000-0000-000022672115
-Message-Id: <20190704091827.19555-4-huntbag@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-04_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907040122
+        id S1727559AbfGDKDg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jul 2019 06:03:36 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:10679 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727385AbfGDKDc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 06:03:32 -0400
+X-UUID: e1d4251ec8204cbf9f1ee152e63b0ed9-20190704
+X-UUID: e1d4251ec8204cbf9f1ee152e63b0ed9-20190704
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
+        (envelope-from <ran.bi@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 924325187; Thu, 04 Jul 2019 18:03:17 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs08n2.mediatek.inc
+ (172.21.101.56) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 4 Jul
+ 2019 18:03:12 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 4 Jul 2019 18:03:09 +0800
+Message-ID: <1562234589.19751.16.camel@mhfsdcap03>
+Subject: Re: [PATCH v2 5/7] power: reset: add driver for mt6323 poweroff
+From:   Ran Bi <ran.bi@mediatek.com>
+To:     Frank Wunderlich <frank-w@public-files.de>
+CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        Allison Randal <allison@lohutok.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "Paul E . McKenney" <paulmck@linux.ibm.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Ran Bi <ran.bi@mediatek.com>
+Date:   Thu, 4 Jul 2019 18:03:09 +0800
+In-Reply-To: <20190703164822.17924-6-frank-w@public-files.de>
+References: <20190703164822.17924-1-frank-w@public-files.de>
+         <20190703164822.17924-6-frank-w@public-files.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 5DE4835C1875B5950092AA7126EE354752A756CA69AC4641991F64CEFDA4E85A2000:8
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The disable callback can be used to compute timeout for other states
-whenever a state is enabled or disabled. We store the computed timeout
-in "timeout" defined in cpuidle state strucure. So, we compute timeout
-only when some state is enabled or disabled and not every time in the
-fast idle path.
-We also use the computed timeout to get timeout for snooze, thus getting
-rid of get_snooze_timeout for snooze loop.
+On Wed, 2019-07-03 at 18:48 +0200, Frank Wunderlich wrote:
+> From: Josef Friedl <josef.friedl@speed.at>
+> 
+> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  drivers/power/reset/Kconfig           | 10 +++
+>  drivers/power/reset/Makefile          |  1 +
+>  drivers/power/reset/mt6323-poweroff.c | 97 +++++++++++++++++++++++++++
+>  include/linux/mfd/mt6397/core.h       |  2 +
+>  4 files changed, 110 insertions(+)
+>  create mode 100644 drivers/power/reset/mt6323-poweroff.c
+> 
+> --
+> 2.17.1
+> 
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index 980951dff834..492678e22088 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -140,6 +140,16 @@ config POWER_RESET_LTC2952
+>  	  This driver supports an external powerdown trigger and board power
+>  	  down via the LTC2952. Bindings are made in the device tree.
+> 
+> +config POWER_RESET_MT6323
+> +       bool "MediaTek MT6323 power-off driver"
+> +       depends on MFD_MT6397
+> +       help
+> +         The power-off driver is responsible for externally shutdown down
+> +         the power of a remote MediaTek SoC MT6323 is connected to through
+> +         controlling a tiny circuit BBPU inside MT6323 RTC.
+> +
+> +         Say Y if you have a board where MT6323 could be found.
+> +
+>  config POWER_RESET_QNAP
+>  	bool "QNAP power-off driver"
+>  	depends on OF_GPIO && PLAT_ORION
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index 0aebee954ac1..94eaceb01d66 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -11,6 +11,7 @@ obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
+>  obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
+>  obj-$(CONFIG_POWER_RESET_MSM) += msm-poweroff.o
+> +obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+>  obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
+>  obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
+> diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/mt6323-poweroff.c
+> new file mode 100644
+> index 000000000000..1caf43d9e46d
+> --- /dev/null
+> +++ b/drivers/power/reset/mt6323-poweroff.c
+> @@ -0,0 +1,97 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Power off through MediaTek PMIC
+> + *
+> + * Copyright (C) 2018 MediaTek Inc.
+> + *
+> + * Author: Sean Wang <sean.wang@mediatek.com>
+> + *
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/mfd/mt6397/core.h>
+> +#include <linux/mfd/mt6397/rtc.h>
+> +
+> +struct mt6323_pwrc {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +	u32 base;
+> +};
+> +
+> +static struct mt6323_pwrc *mt_pwrc;
+> +
+> +static void mt6323_do_pwroff(void)
+> +{
+> +	struct mt6323_pwrc *pwrc = mt_pwrc;
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	regmap_write(pwrc->regmap, pwrc->base + RTC_BBPU, RTC_BBPU_KEY);
+> +	regmap_write(pwrc->regmap, pwrc->base + RTC_WRTGR, 1);
+> +
+> +	ret = regmap_read_poll_timeout(pwrc->regmap,
+> +					pwrc->base + RTC_BBPU, val,
+> +					!(val & RTC_BBPU_CBUSY),
+> +					MTK_RTC_POLL_DELAY_US,
+> +					MTK_RTC_POLL_TIMEOUT);
+> +	if (ret)
+> +		dev_err(pwrc->dev, "failed to write BBPU: %d\n", ret);
+> +
+> +	/* Wait some time until system down, otherwise, notice with a warn */
+> +	mdelay(1000);
+> +
+> +	WARN_ONCE(1, "Unable to power off system\n");
+> +}
+> +
+> +static int mt6323_pwrc_probe(struct platform_device *pdev)
+> +{
+> +	struct mt6397_chip *mt6397_chip = dev_get_drvdata(pdev->dev.parent);
+> +	struct mt6323_pwrc *pwrc;
+> +	struct resource *res;
+> +
+> +	pwrc = devm_kzalloc(&pdev->dev, sizeof(*pwrc), GFP_KERNEL);
+> +	if (!pwrc)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	pwrc->base = res->start;
+> +	pwrc->regmap = mt6397_chip->regmap;
+> +	pwrc->dev = &pdev->dev;
+> +	mt_pwrc = pwrc;
+> +
+> +	pm_power_off = &mt6323_do_pwroff;
 
-Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
----
- drivers/cpuidle/cpuidle-powernv.c | 35 +++++++++++--------------------
- include/linux/cpuidle.h           |  1 +
- 2 files changed, 13 insertions(+), 23 deletions(-)
+We had implement MT8173 poweroff function in arm-trusted-firmware's PSCI
+plat_system_off() function. MT8173 SoC is using PMIC MT6397. (Ref:
+https://github.com/ARM-software/arm-trusted-firmware/blob/master/plat/mediatek/mt8173/plat_pm.c and https://github.com/ARM-software/arm-trusted-firmware/blob/master/plat/mediatek/mt8173/drivers/rtc) Do you think it's better to implement poweroff function into arm-trusted-firmware compared to hijack pm_poweroff() function in Kernel? Right now, we are doing the upstream of other PMIC chip like MT6358's poweroff function in arm-trusted-firmware too.
 
-diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
-index f51478460..7350f404a 100644
---- a/drivers/cpuidle/cpuidle-powernv.c
-+++ b/drivers/cpuidle/cpuidle-powernv.c
-@@ -45,7 +45,6 @@ struct stop_psscr_table {
- static struct stop_psscr_table stop_psscr_table[CPUIDLE_STATE_MAX] __read_mostly;
- 
- static u64 default_snooze_timeout __read_mostly;
--static bool snooze_timeout_en __read_mostly;
- 
- static u64 forced_wakeup_timeout(struct cpuidle_device *dev,
- 				 struct cpuidle_driver *drv,
-@@ -67,26 +66,13 @@ static u64 forced_wakeup_timeout(struct cpuidle_device *dev,
- 	return 0;
- }
- 
--static u64 get_snooze_timeout(struct cpuidle_device *dev,
--			      struct cpuidle_driver *drv,
--			      int index)
-+static void pnv_disable_callback(struct cpuidle_device *dev,
-+				 struct cpuidle_driver *drv)
- {
- 	int i;
- 
--	if (unlikely(!snooze_timeout_en))
--		return default_snooze_timeout;
--
--	for (i = index + 1; i < drv->state_count; i++) {
--		struct cpuidle_state *s = &drv->states[i];
--		struct cpuidle_state_usage *su = &dev->states_usage[i];
--
--		if (s->disabled || su->disable)
--			continue;
--
--		return s->target_residency * tb_ticks_per_usec;
--	}
--
--	return default_snooze_timeout;
-+	for (i = 0; i < drv->state_count; i++)
-+		drv->states[i].timeout = forced_wakeup_timeout(dev, drv, i);
- }
- 
- static int snooze_loop(struct cpuidle_device *dev,
-@@ -94,16 +80,20 @@ static int snooze_loop(struct cpuidle_device *dev,
- 			int index)
- {
- 	u64 snooze_exit_time;
-+	u64 snooze_timeout = drv->states[index].timeout;
-+
-+	if (!snooze_timeout)
-+		snooze_timeout = default_snooze_timeout;
- 
- 	set_thread_flag(TIF_POLLING_NRFLAG);
- 
- 	local_irq_enable();
- 
--	snooze_exit_time = get_tb() + get_snooze_timeout(dev, drv, index);
-+	snooze_exit_time = get_tb() + snooze_timeout;
- 	ppc64_runlatch_off();
- 	HMT_very_low();
- 	while (!need_resched()) {
--		if (likely(snooze_timeout_en) && get_tb() > snooze_exit_time) {
-+		if (get_tb() > snooze_exit_time) {
- 			/*
- 			 * Task has not woken up but we are exiting the polling
- 			 * loop anyway. Require a barrier after polling is
-@@ -168,7 +158,7 @@ static int stop_loop(struct cpuidle_device *dev,
- 	u64 timeout_tb;
- 	int forced_wakeup = 0;
- 
--	timeout_tb = forced_wakeup_timeout(dev, drv, index);
-+	timeout_tb = drv->states[index].timeout;
- 	if (timeout_tb)
- 		forced_wakeup = set_dec_before_idle(timeout_tb);
- 
-@@ -255,6 +245,7 @@ static int powernv_cpuidle_driver_init(void)
- 	 */
- 
- 	drv->cpumask = (struct cpumask *)cpu_present_mask;
-+	drv->disable_callback = pnv_disable_callback;
- 
- 	return 0;
- }
-@@ -414,8 +405,6 @@ static int powernv_idle_probe(void)
- 		/* Device tree can indicate more idle states */
- 		max_idle_state = powernv_add_idle_states();
- 		default_snooze_timeout = TICK_USEC * tb_ticks_per_usec;
--		if (max_idle_state > 1)
--			snooze_timeout_en = true;
-  	} else
-  		return -ENODEV;
- 
-diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-index 8a0e54bd0..31662b657 100644
---- a/include/linux/cpuidle.h
-+++ b/include/linux/cpuidle.h
-@@ -50,6 +50,7 @@ struct cpuidle_state {
- 	int		power_usage; /* in mW */
- 	unsigned int	target_residency; /* in US */
- 	bool		disabled; /* disabled on all CPUs */
-+	unsigned long long timeout; /* timeout for exiting out of a state */
- 
- 	int (*enter)	(struct cpuidle_device *dev,
- 			struct cpuidle_driver *drv,
--- 
-2.17.1
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6323_pwrc_remove(struct platform_device *pdev)
+> +{
+> +	if (pm_power_off == &mt6323_do_pwroff)
+> +		pm_power_off = NULL;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mt6323_pwrc_dt_match[] = {
+> +	{ .compatible = "mediatek,mt6323-pwrc" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mt6323_pwrc_dt_match);
+> +
+> +static struct platform_driver mt6323_pwrc_driver = {
+> +	.probe          = mt6323_pwrc_probe,
+> +	.remove         = mt6323_pwrc_remove,
+> +	.driver         = {
+> +		.name   = "mt6323-pwrc",
+> +		.of_match_table = mt6323_pwrc_dt_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(mt6323_pwrc_driver);
+> +
+> +MODULE_DESCRIPTION("Poweroff driver for MT6323 PMIC");
+> +MODULE_AUTHOR("Sean Wang <sean.wang@mediatek.com>");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/mfd/mt6397/core.h b/include/linux/mfd/mt6397/core.h
+> index 25a95e72179b..652da61e3711 100644
+> --- a/include/linux/mfd/mt6397/core.h
+> +++ b/include/linux/mfd/mt6397/core.h
+> @@ -7,6 +7,8 @@
+>  #ifndef __MFD_MT6397_CORE_H__
+>  #define __MFD_MT6397_CORE_H__
+> 
+> +#include <linux/mutex.h>
+> +
+>  enum mt6397_irq_numbers {
+>  	MT6397_IRQ_SPKL_AB = 0,
+
 
