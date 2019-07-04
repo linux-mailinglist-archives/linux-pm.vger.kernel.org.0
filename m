@@ -2,315 +2,293 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1A85F2C7
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 08:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCD75F34C
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 09:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbfGDGZd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jul 2019 02:25:33 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:38060 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbfGDGZc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 02:25:32 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id D913F60388; Thu,  4 Jul 2019 06:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1562221530;
-        bh=xkAUg2OUHV+GwWXOlO7P+klLeg44/63IPVz6IQV2vxc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=X1M1C9iK4LEittuCZfRIY7XqMpo9bvyua4Iu21+zxoxNQXY5k6hk8G0obMuRcbWuE
-         GIZkSZeejHBbKGUa81lYZLXS9qF0pwQu67pL4swF96F6qKHMj67l0KqMVB9LOlOrPb
-         S9rZ+zvSCugJOkzcQRQzIgzJKqwtIUQ2UDe7RGek=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.79.43.141] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E6F4B602EE;
-        Thu,  4 Jul 2019 06:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1562221529;
-        bh=xkAUg2OUHV+GwWXOlO7P+klLeg44/63IPVz6IQV2vxc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=G1OKQrTeKjebKqnrs2/KkC1KkIpWeitaKP2GSiQhBiGQzqPIysFaIcM1YE0d3wDPC
-         srC+82/jcqIFtmUVBgL8CpSodcTCOVJ6fNSr+PFN+IMV62L6FlI548hzuCdSXpCYS6
-         zdkeFWBzZdk54UR1OM0ZhYcVsz70PPg5O1BOhy70=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E6F4B602EE
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH 1/2] opp: Attach genpds to devices from within OPP core
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>, niklas.cassel@linaro.org,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <1bc9053f5c41a10832b58a2a81decbad7f1aded9.1557742920.git.viresh.kumar@linaro.org>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <aee8dc78-e292-a671-3dc5-ca962c0eec6b@codeaurora.org>
-Date:   Thu, 4 Jul 2019 11:55:24 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727328AbfGDHMR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jul 2019 03:12:17 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44890 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727294AbfGDHMR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 03:12:17 -0400
+Received: by mail-lj1-f194.google.com with SMTP id k18so5056012ljc.11
+        for <linux-pm@vger.kernel.org>; Thu, 04 Jul 2019 00:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MPlvvUElEXQQu57oN9739PFcLcrOAH/jcIa/9zZOQ5E=;
+        b=j0rz+JrDLOJi0Q0Z0w4IeLNlOEQ7nyvFp6SQxzfm7MxEiZuBnCeT6+F84UxYhrvol7
+         e4nPwBoJcqtaWuhdkXxkoImONLRRb72JHXS2eLazfwoJxRWTVjaOirRJXIQ0N6FSLFq+
+         7+AQqYbmUzYxqMoU6ljktJwgAzbsU6y4T/wsPG1nYBwrnBJP5wp88EJqxIM0MRQH3YxN
+         UFEF45YdqkwOlRXtwXrb3eNk4/rPW0NG0K25kVxPrM25MTqMaP7Ob3tebvrCB2+s+e6x
+         tsK1u1vfHzbXpv5Hh5wzT1Ee6PN0eTdG6mHFb9ZyOI9F2Cn3xrrgHJXnzickLoMfnPSp
+         Fy5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MPlvvUElEXQQu57oN9739PFcLcrOAH/jcIa/9zZOQ5E=;
+        b=H43x6X09xDdqBQG3D9nqsCcMp3rgkyrkHNtxTw4PAW7UTvd76ZugQERSnxy1lbbZCO
+         YAMYWl3O1IolXiVOIDvE9hjz4hvaNVl1H99VVFQWIS6SZ3WnUCG/GVOAyNNPVp0uuohe
+         vYGlIwacinoK9URdCWV8fHnnKPvigLopAvufj5uqJzksrfhz5zzJFdZDIe/tPS/cca4L
+         0VizENzQrydDsCz8l0D6WZhjN6koq1qqPY+j1XKt2JFycTxctdhN76UeLclgHPwuDpH2
+         e1MzSuI73XWIU9mvWe4crYJ+ihDiIi9IUFyVX54Jk2na+12daBEQA4po9CYEdgLIZH6v
+         RJ4g==
+X-Gm-Message-State: APjAAAURH2NRhYq2HVpo/RGh0gt8RKPQrKJ6Mj0PkzSWPcjxEjAasNHP
+        HLK6sFDi2VpPl2NClQeRwkoujTeH+kxt75bP2gTNuA==
+X-Google-Smtp-Source: APXvYqzulk5cerVVUukpdsVnaaNxRqncA8d7C/1kL9UHnjVGNJ9dDR7aISpMsndl6Vuh6+isVdCQlCFAROPp+SlgJYE=
+X-Received: by 2002:a2e:1290:: with SMTP id 16mr22813195ljs.88.1562224334465;
+ Thu, 04 Jul 2019 00:12:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1bc9053f5c41a10832b58a2a81decbad7f1aded9.1557742920.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-7-saravanak@google.com>
+ <CAKfTPtCJFaEfvu3Dnp9WSxQEwSfY=VS+xsoQ+4P+vg7_WL0BAQ@mail.gmail.com> <CAGETcx_5gu84FOVmELPnK5uJTE0NEhxYKtdFigoXGyFtjehQvw@mail.gmail.com>
+In-Reply-To: <CAGETcx_5gu84FOVmELPnK5uJTE0NEhxYKtdFigoXGyFtjehQvw@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 4 Jul 2019 09:12:03 +0200
+Message-ID: <CAKfTPtBHrXG1QZzcaStWCtL3nx+vE_-WKtOhjiHbjFQiw9Yk8w@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] interconnect: Add OPP table support for interconnects
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        sibis@codeaurora.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, 3 Jul 2019 at 23:33, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Tue, Jul 2, 2019 at 11:45 PM Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+> >
+> > On Wed, 3 Jul 2019 at 03:10, Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > Interconnect paths can have different performance points. Now that OPP
+> > > framework supports bandwidth OPP tables, add OPP table support for
+> > > interconnects.
+> > >
+> > > Devices can use the interconnect-opp-table DT property to specify OPP
+> > > tables for interconnect paths. And the driver can obtain the OPP table for
+> > > an interconnect path by calling icc_get_opp_table().
+> >
+> > The opp table of a path must come from the aggregation of OPP tables
+> > of the interconnect providers.
+>
+> The aggregation of OPP tables of the providers is certainly the
+> superset of what a path can achieve, but to say that OPPs for
+> interconnect path should match that superset is an oversimplification
+> of the reality in hardware.
+>
+> There are lots of reasons an interconnect path might not want to use
+> all the available bandwidth options across all the interconnects in
+> the route.
+>
+> 1. That particular path might not have been validated or verified
+>    during the HW design process for some of the frequencies/bandwidth
+>    combinations of the providers.
 
-On 5/13/2019 3:54 PM, Viresh Kumar wrote:
-> The OPP core requires the virtual device pointers to set performance
-> state on behalf of the device, for the multiple power domain case. The
-> genpd API (dev_pm_domain_attach_by_name()) has evolved now to support
-> even the single power domain case and that lets us add common code for
-> handling both the cases more efficiently.
-> 
-> The virtual device structure returned by dev_pm_domain_attach_by_name()
-> isn't normally used by the cpufreq drivers as they don't manage power
-> on/off of the domains and so is only useful for the OPP core.
+All these constraint are provider's constraints and not consumer's one
 
-This might be true for CPUs but not necessarily so for IO devices which might
-want to set up device links so the devices runtime pm calls can trigger the
-on/off of the power domain. Is there a way to handle that case now?
+The consumer asks for a bandwidth according to its needs and then the
+providers select the optimal bandwidth of each interconnect after
+aggregating all the request and according to what OPP have been
+validated
 
-> 
-> This patch moves all the complexity into the OPP core to make the end
-> drivers simple. The earlier APIs dev_pm_opp_{set|put}_genpd_virt_dev()
-> are reworked into dev_pm_opp_{attach|detach}_genpd(). The new helper
-> dev_pm_opp_attach_genpd() accepts a NULL terminated array of strings
-> which contains names of all the genpd's to attach. It then attaches all
-> the domains and saves the pointers to the virtual devices. The other
-> helper undo the work done by this helper.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> @Niklas: Can you please try these patches and confirm they solve the
-> issues you were facing ?
-> 
->   drivers/opp/core.c     | 128 ++++++++++++++++++++++++++---------------
->   include/linux/pm_opp.h |   8 +--
->   2 files changed, 86 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 0e7703fe733f..67d6b0caeab1 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1744,91 +1744,127 @@ void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table)
->   }
->   EXPORT_SYMBOL_GPL(dev_pm_opp_unregister_set_opp_helper);
->   
-> +static void _opp_detach_genpd(struct opp_table *opp_table)
-> +{
-> +	int index;
-> +
-> +	for (index = 0; index < opp_table->required_opp_count; index++) {
-> +		if (!opp_table->genpd_virt_devs[index])
-> +			continue;
-> +
-> +		dev_pm_domain_detach(opp_table->genpd_virt_devs[index], false);
-> +		opp_table->genpd_virt_devs[index] = NULL;
-> +	}
-> +}
-> +
->   /**
-> - * dev_pm_opp_set_genpd_virt_dev - Set virtual genpd device for an index
-> - * @dev: Consumer device for which the genpd device is getting set.
-> - * @virt_dev: virtual genpd device.
-> - * @index: index.
-> + * dev_pm_opp_attach_genpd - Attach genpd(s) for the device and save virtual device pointer
-> + * @dev: Consumer device for which the genpd is getting attached.
-> + * @names: Null terminated array of pointers containing names of genpd to attach.
->    *
->    * Multiple generic power domains for a device are supported with the help of
->    * virtual genpd devices, which are created for each consumer device - genpd
->    * pair. These are the device structures which are attached to the power domain
->    * and are required by the OPP core to set the performance state of the genpd.
-> + * The same API also works for the case where single genpd is available and so
-> + * we don't need to support that separately.
->    *
->    * This helper will normally be called by the consumer driver of the device
-> - * "dev", as only that has details of the genpd devices.
-> + * "dev", as only that has details of the genpd names.
->    *
-> - * This helper needs to be called once for each of those virtual devices, but
-> - * only if multiple domains are available for a device. Otherwise the original
-> - * device structure will be used instead by the OPP core.
-> + * This helper needs to be called once with a list of all genpd to attach.
-> + * Otherwise the original device structure will be used instead by the OPP core.
->    */
-> -struct opp_table *dev_pm_opp_set_genpd_virt_dev(struct device *dev,
-> -						struct device *virt_dev,
-> -						int index)
-> +struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names)
->   {
->   	struct opp_table *opp_table;
-> +	struct device *virt_dev;
-> +	int index, ret = -EINVAL;
-> +	const char **name = names;
->   
->   	opp_table = dev_pm_opp_get_opp_table(dev);
->   	if (!opp_table)
->   		return ERR_PTR(-ENOMEM);
->   
-> +	/*
-> +	 * If the genpd's OPP table isn't already initialized, parsing of the
-> +	 * required-opps fail for dev. We should retry this after genpd's OPP
-> +	 * table is added.
-> +	 */
-> +	if (!opp_table->required_opp_count) {
-> +		ret = -EPROBE_DEFER;
-> +		goto put_table;
-> +	}
-> +
->   	mutex_lock(&opp_table->genpd_virt_dev_lock);
->   
-> -	if (unlikely(!opp_table->genpd_virt_devs ||
-> -		     index >= opp_table->required_opp_count ||
-> -		     opp_table->genpd_virt_devs[index])) {
-> +	while (*name) {
-> +		index = of_property_match_string(dev->of_node,
-> +						 "power-domain-names", *name);
-> +		if (index < 0) {
-> +			dev_err(dev, "Failed to find power domain: %s (%d)\n",
-> +				*name, index);
-> +			goto err;
-> +		}
->   
-> -		dev_err(dev, "Invalid request to set required device\n");
-> -		dev_pm_opp_put_opp_table(opp_table);
-> -		mutex_unlock(&opp_table->genpd_virt_dev_lock);
-> +		if (index >= opp_table->required_opp_count) {
-> +			dev_err(dev, "Index can't be greater than required-opp-count - 1, %s (%d : %d)\n",
-> +				*name, opp_table->required_opp_count, index);
-> +			goto err;
-> +		}
->   
-> -		return ERR_PTR(-EINVAL);
-> +		if (opp_table->genpd_virt_devs[index]) {
-> +			dev_err(dev, "Genpd virtual device already set %s\n",
-> +				*name);
-> +			goto err;
-> +		}
-> +
-> +		virt_dev = dev_pm_domain_attach_by_name(dev, *name);
-> +		if (IS_ERR(virt_dev)) {
-> +			ret = PTR_ERR(virt_dev);
-> +			dev_err(dev, "Couldn't attach to pm_domain: %d\n", ret);
-> +			goto err;
-> +		}
-> +
-> +		opp_table->genpd_virt_devs[index] = virt_dev;
-> +		name++;
->   	}
->   
-> -	opp_table->genpd_virt_devs[index] = virt_dev;
->   	mutex_unlock(&opp_table->genpd_virt_dev_lock);
->   
->   	return opp_table;
-> +
-> +err:
-> +	_opp_detach_genpd(opp_table);
-> +	mutex_unlock(&opp_table->genpd_virt_dev_lock);
-> +
-> +put_table:
-> +	dev_pm_opp_put_opp_table(opp_table);
-> +
-> +	return ERR_PTR(ret);
->   }
-> +EXPORT_SYMBOL_GPL(dev_pm_opp_attach_genpd);
->   
->   /**
-> - * dev_pm_opp_put_genpd_virt_dev() - Releases resources blocked for genpd device.
-> - * @opp_table: OPP table returned by dev_pm_opp_set_genpd_virt_dev().
-> - * @virt_dev: virtual genpd device.
-> - *
-> - * This releases the resource previously acquired with a call to
-> - * dev_pm_opp_set_genpd_virt_dev(). The consumer driver shall call this helper
-> - * if it doesn't want OPP core to update performance state of a power domain
-> - * anymore.
-> + * dev_pm_opp_detach_genpd() - Detach genpd(s) from the device.
-> + * @opp_table: OPP table returned by dev_pm_opp_attach_genpd().
-> + *
-> + * This detaches the genpd(s), resets the virtual device pointers, and puts the
-> + * OPP table.
->    */
-> -void dev_pm_opp_put_genpd_virt_dev(struct opp_table *opp_table,
-> -				   struct device *virt_dev)
-> +void dev_pm_opp_detach_genpd(struct opp_table *opp_table)
->   {
-> -	int i;
-> -
->   	/*
->   	 * Acquire genpd_virt_dev_lock to make sure virt_dev isn't getting
->   	 * used in parallel.
->   	 */
->   	mutex_lock(&opp_table->genpd_virt_dev_lock);
-> -
-> -	for (i = 0; i < opp_table->required_opp_count; i++) {
-> -		if (opp_table->genpd_virt_devs[i] != virt_dev)
-> -			continue;
-> -
-> -		opp_table->genpd_virt_devs[i] = NULL;
-> -		dev_pm_opp_put_opp_table(opp_table);
-> -
-> -		/* Drop the vote */
-> -		dev_pm_genpd_set_performance_state(virt_dev, 0);
-> -		break;
-> -	}
-> -
-> +	_opp_detach_genpd(opp_table);
->   	mutex_unlock(&opp_table->genpd_virt_dev_lock);
->   
-> -	if (unlikely(i == opp_table->required_opp_count))
-> -		dev_err(virt_dev, "Failed to find required device entry\n");
-> +	dev_pm_opp_put_opp_table(opp_table);
->   }
-> +EXPORT_SYMBOL_GPL(dev_pm_opp_detach_genpd);
->   
->   /**
->    * dev_pm_opp_xlate_performance_state() - Find required OPP's pstate for src_table.
-> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-> index b150fe97ce5a..be570761b77a 100644
-> --- a/include/linux/pm_opp.h
-> +++ b/include/linux/pm_opp.h
-> @@ -131,8 +131,8 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char * name);
->   void dev_pm_opp_put_clkname(struct opp_table *opp_table);
->   struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
->   void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
-> -struct opp_table *dev_pm_opp_set_genpd_virt_dev(struct device *dev, struct device *virt_dev, int index);
-> -void dev_pm_opp_put_genpd_virt_dev(struct opp_table *opp_table, struct device *virt_dev);
-> +struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names);
-> +void dev_pm_opp_detach_genpd(struct opp_table *opp_table);
->   int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
->   int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
->   int dev_pm_opp_set_sharing_cpus(struct device *cpu_dev, const struct cpumask *cpumask);
-> @@ -295,12 +295,12 @@ static inline struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const
->   
->   static inline void dev_pm_opp_put_clkname(struct opp_table *opp_table) {}
->   
-> -static inline struct opp_table *dev_pm_opp_set_genpd_virt_dev(struct device *dev, struct device *virt_dev, int index)
-> +static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names)
->   {
->   	return ERR_PTR(-ENOTSUPP);
->   }
->   
-> -static inline void dev_pm_opp_put_genpd_virt_dev(struct opp_table *opp_table, struct device *virt_dev) {}
-> +static inline void dev_pm_opp_detach_genpd(struct opp_table *opp_table) {}
->   
->   static inline int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate)
->   {
-> 
+>
+> 2. Similarly during parts screening in the factory, some of the
+>    combinations might not have been screened and can't be guaranteed
+>    to work.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+As above, it's the provider's job to select the final bandwidth
+according to its constraint
+
+>
+> 3. Only a certain set of bandwidth levels might make sense to use from
+>    a power/performance balance given the device using it. For example:
+>    - The big CPU might not want to use some of the lower bandwidths
+>      but the little CPU might want to.
+>    - The big CPU might not want to use some intermediate bandwidth
+>      points if they don't save a lot of power compared to a higher
+>      bandwidth levels, but the little CPU might want to.
+>    - The little CPU might never want to use the higher set of
+>      bandwidth levels since they won't be power efficient for the use
+>      cases that might run on it.
+
+These example are quite vague about the reasons why little might never
+want to use higher bandwidth.
+But then, if little doesn't ask high bandwidth it will not use them.
+
+>
+> 4. It might not make sense from a system level power perspective.
+> Let's take an example of a path S (source) -> A -> B -> C -> D
+> (destination).
+>    - A supports only 2, 5, 7 and 10 GB/s. B supports 1, 2 ... 10 GB/s.
+>      C supports 5 and 10 GB/s
+>    - If you combine and list the superset of bandwidth levels
+>      supported in that path, that'd be 1, 2, 3, ... 10 GB/s.
+>    - Which set of bandwidth levels make sense will depend on the
+>      hardware characteristics of the interconnects.
+>    - If B is the biggest power sink, then you might want to use all 10
+>      levels.
+>    - If A is the biggest power sink, then you might want to use all 2,
+>      5 and 10 GB/s of the levels.
+>    - If C is the biggest power sink then you might only want to use 5
+>      and 10 GB/s
+>    - The more hops and paths you get the more convoluted this gets.
+>
+> 5. The design of the interconnects themselves might have an impact on
+> which bandwidth levels are used.
+>    - For example, the FIFO depth between two specific interconnects
+>      might affect the valid bandwidth levels for a specific path.
+>    - Say S1 -> A -> B -> D1, S2 -> C -> B -> D1 and S2 -> C -> D2 are
+>      three paths.
+>    - If C <-> B FIFO depth is small, then there might be a requirement
+>      that C and B be closely performance matched to avoid system level
+>      congestion due to back pressure.
+>    - So S2 -> D1 path can't use all the bandwidth levels supported by
+>      C-B combination.
+>    - But S2 -> D2 can use all the bandwidth levels supported by C.
+>    - And S1 -> D1 can use all the levels supported by A-B combination.
+>
+
+All the examples above makes sense but have to be handle by the
+provider not the consumer. The consumer asks for a bandwidth according
+to its constraints. Then the provider which is the driver that manages
+the interconnect IP, should manage all this hardware and platform
+specific stuff related to the interconnect IP in order to set the
+optimal bandwidth that fit both consumer constraint and platform
+specific configuration.
+
+> These are just some of the reasons I could recollect in a few minutes.
+> These are all real world cases I had to deal with in the past several
+> years of dealing with scaling interconnects. I'm sure vendors and SoCs
+> I'm not familiar with have other good reasons I'm not aware of.
+>
+> Trying to figure this all out by aggregating OPP tables of
+> interconnect providers just isn't feasible nor is it efficient. The
+> OPP tables for an interconnect path is describing the valid BW levels
+> supported by that path and verified in hardware and makes a lot of
+> sense to capture it clearly in DT.
+>
+> > So such kind of OPP table should be at
+> > provider level but not at path level.
+>
+> They can also use it if they want to, but they'll probably want to use
+> a frequency OPP table.
+>
+>
+> -Saravana
+>
+> >
+> > >
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > ---
+> > >  drivers/interconnect/core.c  | 27 ++++++++++++++++++++++++++-
+> > >  include/linux/interconnect.h |  7 +++++++
+> > >  2 files changed, 33 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> > > index 871eb4bc4efc..881bac80bc1e 100644
+> > > --- a/drivers/interconnect/core.c
+> > > +++ b/drivers/interconnect/core.c
+> > > @@ -47,6 +47,7 @@ struct icc_req {
+> > >   */
+> > >  struct icc_path {
+> > >         size_t num_nodes;
+> > > +       struct opp_table *opp_table;
+> > >         struct icc_req reqs[];
+> > >  };
+> > >
+> > > @@ -313,7 +314,7 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+> > >  {
+> > >         struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+> > >         struct icc_node *src_node, *dst_node;
+> > > -       struct device_node *np = NULL;
+> > > +       struct device_node *np = NULL, *opp_node;
+> > >         struct of_phandle_args src_args, dst_args;
+> > >         int idx = 0;
+> > >         int ret;
+> > > @@ -381,10 +382,34 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+> > >                 dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+> > >         mutex_unlock(&icc_lock);
+> > >
+> > > +       opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
+> > > +       if (opp_node) {
+> > > +               path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
+> > > +               of_node_put(opp_node);
+> > > +       }
+> > > +
+> > > +
+> > >         return path;
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(of_icc_get);
+> > >
+> > > +/**
+> > > + * icc_get_opp_table() - Get the OPP table that corresponds to a path
+> > > + * @path: reference to the path returned by icc_get()
+> > > + *
+> > > + * This function will return the OPP table that corresponds to a path handle.
+> > > + * If the interconnect API is disabled, NULL is returned and the consumer
+> > > + * drivers will still build. Drivers are free to handle this specifically, but
+> > > + * they don't have to.
+> > > + *
+> > > + * Return: opp_table pointer on success. NULL is returned when the API is
+> > > + * disabled or the OPP table is missing.
+> > > + */
+> > > +struct opp_table *icc_get_opp_table(struct icc_path *path)
+> > > +{
+> > > +       return path->opp_table;
+> > > +}
+> > > +
+> > >  /**
+> > >   * icc_set_bw() - set bandwidth constraints on an interconnect path
+> > >   * @path: reference to the path returned by icc_get()
+> > > diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+> > > index dc25864755ba..0c0bc55f0e89 100644
+> > > --- a/include/linux/interconnect.h
+> > > +++ b/include/linux/interconnect.h
+> > > @@ -9,6 +9,7 @@
+> > >
+> > >  #include <linux/mutex.h>
+> > >  #include <linux/types.h>
+> > > +#include <linux/pm_opp.h>
+> > >
+> > >  /* macros for converting to icc units */
+> > >  #define Bps_to_icc(x)  ((x) / 1000)
+> > > @@ -28,6 +29,7 @@ struct device;
+> > >  struct icc_path *icc_get(struct device *dev, const int src_id,
+> > >                          const int dst_id);
+> > >  struct icc_path *of_icc_get(struct device *dev, const char *name);
+> > > +struct opp_table *icc_get_opp_table(struct icc_path *path);
+> > >  void icc_put(struct icc_path *path);
+> > >  int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+> > >
+> > > @@ -49,6 +51,11 @@ static inline void icc_put(struct icc_path *path)
+> > >  {
+> > >  }
+> > >
+> > > +static inline struct opp_table *icc_get_opp_table(struct icc_path *path)
+> > > +{
+> > > +       return NULL;
+> > > +}
+> > > +
+> > >  static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+> > >  {
+> > >         return 0;
+> > > --
+> > > 2.22.0.410.gd8fdbe21b5-goog
+> > >
