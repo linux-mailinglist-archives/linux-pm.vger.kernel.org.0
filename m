@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A83095F540
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 11:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4932D5F54A
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 11:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbfGDJN5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jul 2019 05:13:57 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:33351 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726993AbfGDJN5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 05:13:57 -0400
-Received: by mail-ed1-f67.google.com with SMTP id i11so4761795edq.0;
-        Thu, 04 Jul 2019 02:13:55 -0700 (PDT)
+        id S1727247AbfGDJPw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jul 2019 05:15:52 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:45063 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727225AbfGDJPv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 05:15:51 -0400
+Received: by mail-ed1-f66.google.com with SMTP id a14so4727735edv.12;
+        Thu, 04 Jul 2019 02:15:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=c7ee4EzpqvBBOD97Gue2pS9SUFXP5n2zFCHJywZAxT8=;
-        b=FqFaVodLiLp4J2FtMlqeGMhJhqBITVh3ygcJyKAysJUQUyUokLURSC3l/LueFGxjUP
-         LmjZyUzwIgxYxPGwUIOWFu3QpBuS0meh9m88eTwr+EQIn1cL2HZlUgAnsLN+qMFDJfps
-         Sbtj3W183v1J8y0hDuMF5iChitciI5Bs3/jfNahmk08TP+yurOdiIiOWMd6yov4/ty+R
-         Tx7GQA2MbsSHgRl2bJtAal2vA7IbLw/Ah7Y95+jwqujXSa1G+JujFJ5O7rdWsLEWIjz0
-         /4KE6/+oXPCc6m/wn3jKoj3JVuE8wdvEYdDUIOU2rQuIJPfYM4Zi8WPLm+fzh+CBhtnz
-         EWXQ==
+        bh=HYh8uIsv5SY3upo+7MXL8T7kCOGTod8uAtZ1But3kW8=;
+        b=OY8QOJDOrhMyQ5dDb6kKTo4d6AQsIFgtYQlMTIVeick9XEDxS+U3Ycj3KcieRs9kB7
+         VQL48xQY7SV+/Xj7jnl0PYWzC2/ME8qD9SP17GQN+iBykJXI/pspXSkO1ec3XB0WGOhx
+         OhbfHAKTUEvm/G8HtmCZKGkxf4EyVsXR1HaJ6YWA/toL5oC6DYZAQc+a+X99UUtcLbm1
+         SzpsQcj8czCDhxclPriUuRcvkBERQKaiGq0X4x/iZVzkpksRkWpkPIQq5q8n57v/x4wn
+         6Bd0wd9nBgp/NBF9dlsVufvKRXuDKwzi40G3r+8CgWS36AdnWXGwQiBqj49h159Tkwqw
+         pFLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=c7ee4EzpqvBBOD97Gue2pS9SUFXP5n2zFCHJywZAxT8=;
-        b=ecSOFl9xdhOLydZg8wll2oiaaczW66YT3ihoP5/4xVSYwigzgXGz9bAy5KqsqEeUaa
-         4tryb0VZQqBvt1cleBENNIIwJ22YU2p7UR9JmN6DFSvSzl6W3V1OJ1bWLGUveUvSNF2v
-         TmtUQO+oiSY79dvbN7Dnpe3fjiVXc4BuFlO8RUjshGokfMu7JGoqNsJiPb/N42JO8/8K
-         Iy8lx+b0HwzRhyfjJhrsRHL+ptuV1htnIL64h1gKaowglylc85UGyvZ+SQi2eP69udB5
-         b7niJ/hX+V9vHryOAL3elCtt0r2pUyhc5WQwLok3/3CqQx+EcWdTZ9kcLJ2sM2yNzUXJ
-         pXkQ==
-X-Gm-Message-State: APjAAAWa1bRRH5go1MZF4xPRQWJgPldK3jxxf/Ee9UGZRZbxlJVgxUPp
-        CjrcM51Q4vZzHP1IZqrKbc4VUaWBJUk=
-X-Google-Smtp-Source: APXvYqz3tv9O9odSgz+mz43n9dqAmWCiKrEJStGGHRYX37If9pKfT/my/9ubNfMao/owx0aiXr7bJQ==
-X-Received: by 2002:aa7:c509:: with SMTP id o9mr46478318edq.164.1562231634296;
-        Thu, 04 Jul 2019 02:13:54 -0700 (PDT)
+        bh=HYh8uIsv5SY3upo+7MXL8T7kCOGTod8uAtZ1But3kW8=;
+        b=mdAEUw46SW4vc2UhOMTy36QHlMhkZA4A/Oaf6MBbA62c+8IjeIIvFkzys50IHiI4Tk
+         12u4bsIplFP3BvtrcRpT5tVMSpP7cnNbGMxw/elRsuY4dFcXtmZ3VYts5LIJkTA5TRBR
+         PKwVrovVzoyRUjcnMiiazojeW1pu++Nj+bC1aat+/Uptp4sjZAAxnjxS6EGTs9CENwZa
+         HWTO/5QaG0YQVYx+N4ZeFx1Zm6qZvHzHx9Iuu+0DpkKw23h2z77Ir3Z4s4Y31t9coXSQ
+         E7hpWdZAxChIqVh5H7ET1wYmYhokFUtCOiHF4CIYp272YsstfIC6W/7kRQokt2uBF1yp
+         2LsQ==
+X-Gm-Message-State: APjAAAXbJAxJ3ySAleZyXfWiSHtUkpSZhyrbz5ZfeKQhIHjtbFMwYRj4
+        C0poom9KdvwjvF4OD/S0jAU=
+X-Google-Smtp-Source: APXvYqwSed+Z6lgrrgoqKwEoCliO+eHU8uiNycKmvDZMK+ib0MoCExlkCL7yM8bCeirQJD1QBSi20A==
+X-Received: by 2002:a05:6402:397:: with SMTP id o23mr48488412edv.68.1562231749382;
+        Thu, 04 Jul 2019 02:15:49 -0700 (PDT)
 Received: from ziggy.stardust ([37.223.141.54])
-        by smtp.gmail.com with ESMTPSA id h10sm1495224ede.93.2019.07.04.02.13.52
+        by smtp.gmail.com with ESMTPSA id v47sm1495559edc.80.2019.07.04.02.15.47
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Jul 2019 02:13:53 -0700 (PDT)
-Subject: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
+        Thu, 04 Jul 2019 02:15:48 -0700 (PDT)
+Subject: Re: [PATCH v2 5/7] power: reset: add driver for mt6323 poweroff
 To:     Frank Wunderlich <frank-w@public-files.de>,
         Lee Jones <lee.jones@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -71,7 +71,7 @@ To:     Frank Wunderlich <frank-w@public-files.de>,
         "Paul E . McKenney" <paulmck@linux.ibm.com>
 Cc:     Josef Friedl <josef.friedl@speed.at>
 References: <20190703164822.17924-1-frank-w@public-files.de>
- <20190703164822.17924-4-frank-w@public-files.de>
+ <20190703164822.17924-6-frank-w@public-files.de>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
@@ -167,12 +167,12 @@ Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
  pac005PuhxCWkKTJz3gCmznnoat4GCnL5gy/m0Qk45l4PFqwWXVLo9AQg2Kp3mlIFZ6fsEKI
  AN5hxlbNvNb9V2Zo5bFZjPWPFTxOteM0omUAS+QopwU0yPLLGJVf2iCmItHcUXI+r2JwH1CJ
  jrHWeQEI2ucSKsNa8FllDmG/fQ==
-Message-ID: <24975910-cb06-7faf-998f-def23ca0891f@gmail.com>
-Date:   Thu, 4 Jul 2019 11:13:51 +0200
+Message-ID: <d162c95d-773e-f364-0e06-07f67c5b0cbc@gmail.com>
+Date:   Thu, 4 Jul 2019 11:15:47 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190703164822.17924-4-frank-w@public-files.de>
+In-Reply-To: <20190703164822.17924-6-frank-w@public-files.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -186,26 +186,7 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 03/07/2019 18:48, Frank Wunderlich wrote:
 > From: Josef Friedl <josef.friedl@speed.at>
 > 
-> - use regmap_read_poll_timeout to drop while-loop
-> - use devm-api to drop remove-callback
-> - add new compatible for mt6323
->
+> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 
-It's up to the maintainer but I don't like patches doing clean-ups together with
-adding support for new HW, although it's a trivial one here.
-
-
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> =2D--
->  drivers/rtc/rtc-mt6397.c | 55 ++++++++++++++++------------------------
->  1 file changed, 22 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-> index c08ee5edf865..e5ddf0d0b6f1 100644
-> =2D-- a/drivers/rtc/rtc-mt6397.c
-> +++ b/drivers/rtc/rtc-mt6397.c
-> @@ -4,16 +4,19 @@
->  * Author: Tianping.Fang <tianping.fang@mediatek.com>
-
-Missing in the CC list.
-
+Why is there a Signed-off-by from Josef for this patch but not for the others?
