@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9565F3E9
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 09:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1D05F3ED
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 09:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727548AbfGDHgu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jul 2019 03:36:50 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:43914 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727528AbfGDHgs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 03:36:48 -0400
-Received: by mail-pg1-f196.google.com with SMTP id f25so2493225pgv.10
-        for <linux-pm@vger.kernel.org>; Thu, 04 Jul 2019 00:36:48 -0700 (PDT)
+        id S1727262AbfGDHg4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jul 2019 03:36:56 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39358 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727557AbfGDHgw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 03:36:52 -0400
+Received: by mail-pf1-f196.google.com with SMTP id j2so2531060pfe.6
+        for <linux-pm@vger.kernel.org>; Thu, 04 Jul 2019 00:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TxHtLXc14HRc+q+EFuMAl2ixyKPfQQHRTF5mh6/bpEU=;
-        b=IQT7MrQxceoW2i6DY1x54dzHxcQi4hu0k1Vm4r8RLMVDMIPYHzWdczor/7fo2jJ3Tx
-         XRmbkYtpnWpqCx89MVVgU+ew0PmZZFLGzSfJVar1i2+5uXREv6Ty3D4/aItVDZ0NpMAm
-         a0iNpxKioP+JcNoutryTVaWaP8EuFx3cyiWDvr742vz90dyY298fqT8QNDpW9NgcqNX6
-         kU0iBVrBYL88ifOm8R1pPNuAkJIjuK7oqBNDxByqF2vSKwUWdQmQ3NMcWNu4JukZbeC2
-         urQmq39fn4u+FU8RfVRTYnQvCp7ZqtR7brCH4Mro+mLrTD8/nwsZHDEAOsBnkSJa59j3
-         eNJg==
+        bh=47nu70zu7IH4O5mYfwvkO2JIEeyQhRCLZhm8kmN821M=;
+        b=had28dnXoGd0QBJsiA7AXZG88tv+5KTH+WuLgm5O/7W526+9jgnNoUDdVTleis8Rvu
+         T+NTaFgZD+mpuVqcvmXQ+cNULNPw27bFwc/CrYRoey1CJ9QqG08JEOkz5e78KJ1zaROX
+         0kQXORIFuS5Cn112TwBdqoyYr6+CdQwY9Cx8UEy6K98Gl7Qzkqjc7Du4xP7m6YuFYuBm
+         EwdUHIjDPRZVvUW5fmxvkelU3YySPfDACg4IOy1+3f3w3/ppTSL1b2Y5fA1JkHDhXghT
+         HCgecjYAnvvp/QpQwMgxkmcybvbd5kKa2M5MW+iF3vUZfi+qhlYlcKSyEBGMzoJG7XTr
+         xdjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TxHtLXc14HRc+q+EFuMAl2ixyKPfQQHRTF5mh6/bpEU=;
-        b=GMWenxxrjgywVx09Pmw70pT3xOTCneHYWce1v9s+UY9ZKj0XnVkHVhveGkT6ZpxYTC
-         JZk7mUgzsDC7EVJLB6jGWVzdmOZy2JZLd2OwqJLlmGbE5gGDX///OZRoned+OgIsrkAo
-         Z3yRG5OYU/8cw+A2hPeycOmo48t9RDRa0qhuX/A1IsFKTgbLRaKkflW3V5MaMozz2vhC
-         p+8QZZ3Z9Fl1g+DFKC93BKYGInaUWQCcDsSPhuEVbXPZY6duk0h7jP6IguMd/Z50K7OG
-         Pj38oS2bOk/FETsU7dSHi9cdB2ZNVmedy5tNf9kV0T3hHGWq8t/JnP4Q/iQRLy+XBTWI
-         j8tg==
-X-Gm-Message-State: APjAAAWE2XV3s/wVaxMEQxypt/BU/JibATGgT/G0MZb85ItsOs/s2Kbv
-        CQ9qfZeICh/wyHMT6REwNAH3mdgqC2A=
-X-Google-Smtp-Source: APXvYqwkmQ/EgJ72Z8r4ELy4G/Od0hZ/PUmuyn00NnFPK2Dro5ouYEK4n6QoV1blMw9HxTQ55TFLTw==
-X-Received: by 2002:a17:90b:d8b:: with SMTP id bg11mr18097327pjb.30.1562225807852;
-        Thu, 04 Jul 2019 00:36:47 -0700 (PDT)
+        bh=47nu70zu7IH4O5mYfwvkO2JIEeyQhRCLZhm8kmN821M=;
+        b=q9ijl42krn86d0bX5PQ7kpSWsVNqoEuBh0BpPrLNHmaMJuIfdrTLSDOp/SYnipN6DU
+         M03Nam0nENBIAhAdeTogUZC3ob5wRsTdX4Dw9eU2VuJTjbqM1XIw7ZJEyyBKVaVAzRYx
+         g6Ld4wIxpIBNLcoKN5mD01AVro28FtGYNCEHEdglrAJqrgMoz4Qjo0bQsLgLC+BO2+09
+         Fmrf39ODv8bLGwi8thE0WsYKz13sLx7jwRo2hJGf0tc20sZyuSldH9KmeNrBU6fx79us
+         +Q/hZ3aLt1oM2ukzIJ6nmrarhquiBif+yZzCeva1dAJgSqxX7Gs64jGfcHhexbGAF4rY
+         lOVg==
+X-Gm-Message-State: APjAAAUrV7iRJ4hMn5UPowuNx1hBK5wEAPQXG79EbOLuF0VsRAwzc3jG
+        XlC/Bnfw/wNyUmHKTfrbS9NowNXbHgk=
+X-Google-Smtp-Source: APXvYqy7ryvZMkxWXws4IaU9EKIUPuVzRjKvdzcm3NVjNnQmOZN34r/k/Eb4LpWcfemrfqasNG8fHw==
+X-Received: by 2002:a63:de50:: with SMTP id y16mr42148903pgi.431.1562225810570;
+        Thu, 04 Jul 2019 00:36:50 -0700 (PDT)
 Received: from localhost ([122.172.21.205])
-        by smtp.gmail.com with ESMTPSA id d12sm4515059pfd.96.2019.07.04.00.36.46
+        by smtp.gmail.com with ESMTPSA id f7sm6167329pfd.43.2019.07.04.00.36.49
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Jul 2019 00:36:47 -0700 (PDT)
+        Thu, 04 Jul 2019 00:36:50 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V6 6/7] cpufreq: intel_pstate: Reuse refresh_frequency_limits()
-Date:   Thu,  4 Jul 2019 13:06:22 +0530
-Message-Id: <c588d6e72ba6516191129fb89a7972b30280992b.1562210705.git.viresh.kumar@linaro.org>
+Subject: [PATCH V6 7/7] cpufreq: Add QoS requests for userspace constraints
+Date:   Thu,  4 Jul 2019 13:06:23 +0530
+Message-Id: <0d4c2a013b32bf18d45817011b028918220580f5.1562210705.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
 In-Reply-To: <cover.1562210705.git.viresh.kumar@linaro.org>
 References: <cover.1562210705.git.viresh.kumar@linaro.org>
@@ -65,81 +65,218 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The implementation of intel_pstate_update_max_freq() is quite similar to
-refresh_frequency_limits(), lets reuse it.
+This implements QoS requests to manage userspace configuration of min
+and max frequency.
 
-Finding minimum of policy->user_policy.max and policy->cpuinfo.max_freq
-in intel_pstate_update_max_freq() is redundant as cpufreq_set_policy()
-will call the ->verify() callback of intel-pstate driver, which will do
-this comparison anyway and so dropping it from
-intel_pstate_update_max_freq() doesn't harm.
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpufreq/cpufreq.c      | 3 ++-
- drivers/cpufreq/intel_pstate.c | 7 +------
- include/linux/cpufreq.h        | 1 +
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ drivers/cpufreq/cpufreq.c | 87 ++++++++++++++++++++-------------------
+ include/linux/cpufreq.h   |  8 +---
+ 2 files changed, 46 insertions(+), 49 deletions(-)
 
 diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 81117e4d43cc..091789e868ee 100644
+index 091789e868ee..13c2f119cc0c 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
-@@ -1116,7 +1116,7 @@ static int cpufreq_add_policy_cpu(struct cpufreq_policy *policy, unsigned int cp
- 	return ret;
+@@ -718,23 +718,15 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+ static ssize_t store_##file_name					\
+ (struct cpufreq_policy *policy, const char *buf, size_t count)		\
+ {									\
+-	int ret, temp;							\
+-	struct cpufreq_policy new_policy;				\
++	unsigned long val;						\
++	int ret;							\
+ 									\
+-	memcpy(&new_policy, policy, sizeof(*policy));			\
+-	new_policy.min = policy->user_policy.min;			\
+-	new_policy.max = policy->user_policy.max;			\
+-									\
+-	ret = sscanf(buf, "%u", &new_policy.object);			\
++	ret = sscanf(buf, "%lu", &val);					\
+ 	if (ret != 1)							\
+ 		return -EINVAL;						\
+ 									\
+-	temp = new_policy.object;					\
+-	ret = cpufreq_set_policy(policy, &new_policy);		\
+-	if (!ret)							\
+-		policy->user_policy.object = temp;			\
+-									\
+-	return ret ? ret : count;					\
++	ret = dev_pm_qos_update_request(policy->object##_freq_req, val);\
++	return ret >= 0 ? count : ret;					\
  }
  
--static void refresh_frequency_limits(struct cpufreq_policy *policy)
-+void refresh_frequency_limits(struct cpufreq_policy *policy)
+ store_one(scaling_min_freq, min);
+@@ -1126,8 +1118,6 @@ void refresh_frequency_limits(struct cpufreq_policy *policy)
+ 		new_policy = *policy;
+ 		pr_debug("updating policy for CPU %u\n", policy->cpu);
+ 
+-		new_policy.min = policy->user_policy.min;
+-		new_policy.max = policy->user_policy.max;
+ 		cpufreq_set_policy(policy, &new_policy);
+ 	}
+ 
+@@ -1238,6 +1228,12 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+ 		goto err_min_qos_notifier;
+ 	}
+ 
++	policy->min_freq_req = kzalloc(2 * sizeof(*policy->min_freq_req),
++				       GFP_KERNEL);
++	if (!policy->min_freq_req)
++		goto err_max_qos_notifier;
++
++	policy->max_freq_req = policy->min_freq_req + 1;
+ 	INIT_LIST_HEAD(&policy->policy_list);
+ 	init_rwsem(&policy->rwsem);
+ 	spin_lock_init(&policy->transition_lock);
+@@ -1248,6 +1244,9 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+ 	policy->cpu = cpu;
+ 	return policy;
+ 
++err_max_qos_notifier:
++	dev_pm_qos_remove_notifier(dev, &policy->nb_max,
++				   DEV_PM_QOS_MAX_FREQUENCY);
+ err_min_qos_notifier:
+ 	dev_pm_qos_remove_notifier(dev, &policy->nb_min,
+ 				   DEV_PM_QOS_MIN_FREQUENCY);
+@@ -1283,6 +1282,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+ 				   DEV_PM_QOS_MAX_FREQUENCY);
+ 	dev_pm_qos_remove_notifier(dev, &policy->nb_min,
+ 				   DEV_PM_QOS_MIN_FREQUENCY);
++	dev_pm_qos_remove_request(policy->max_freq_req);
++	dev_pm_qos_remove_request(policy->min_freq_req);
++	kfree(policy->min_freq_req);
+ 
+ 	cpufreq_policy_put_kobj(policy);
+ 	free_cpumask_var(policy->real_cpus);
+@@ -1361,16 +1363,30 @@ static int cpufreq_online(unsigned int cpu)
+ 	cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
+ 
+ 	if (new_policy) {
+-		policy->user_policy.min = policy->min;
+-		policy->user_policy.max = policy->max;
++		struct device *dev = get_cpu_device(cpu);
+ 
+ 		for_each_cpu(j, policy->related_cpus) {
+ 			per_cpu(cpufreq_cpu_data, j) = policy;
+ 			add_cpu_dev_symlink(policy, j);
+ 		}
+-	} else {
+-		policy->min = policy->user_policy.min;
+-		policy->max = policy->user_policy.max;
++
++		ret = dev_pm_qos_add_request(dev, policy->min_freq_req,
++					     DEV_PM_QOS_MIN_FREQUENCY,
++					     policy->min);
++		if (ret < 0) {
++			dev_err(dev, "Failed to add min-freq constraint (%d)\n",
++				ret);
++			goto out_destroy_policy;
++		}
++
++		ret = dev_pm_qos_add_request(dev, policy->max_freq_req,
++					     DEV_PM_QOS_MAX_FREQUENCY,
++					     policy->max);
++		if (ret < 0) {
++			dev_err(dev, "Failed to add max-freq constraint (%d)\n",
++				ret);
++			goto out_destroy_policy;
++		}
+ 	}
+ 
+ 	if (cpufreq_driver->get && has_target()) {
+@@ -2344,7 +2360,6 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
  {
- 	struct cpufreq_policy new_policy;
+ 	struct cpufreq_governor *old_gov;
+ 	struct device *cpu_dev = get_cpu_device(policy->cpu);
+-	unsigned long min, max;
+ 	int ret;
  
-@@ -1133,6 +1133,7 @@ static void refresh_frequency_limits(struct cpufreq_policy *policy)
+ 	pr_debug("setting new policy for CPU %u: %u - %u kHz\n",
+@@ -2352,24 +2367,12 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
  
- 	up_write(&policy->rwsem);
- }
-+EXPORT_SYMBOL(refresh_frequency_limits);
+ 	memcpy(&new_policy->cpuinfo, &policy->cpuinfo, sizeof(policy->cpuinfo));
  
- static void handle_update(struct work_struct *work)
- {
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index f2ff5de988c1..cc27d4c59dca 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -898,7 +898,6 @@ static void intel_pstate_update_policies(void)
- static void intel_pstate_update_max_freq(unsigned int cpu)
- {
- 	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpu);
--	struct cpufreq_policy new_policy;
- 	struct cpudata *cpudata;
- 
- 	if (!policy)
-@@ -908,11 +907,7 @@ static void intel_pstate_update_max_freq(unsigned int cpu)
- 	policy->cpuinfo.max_freq = global.turbo_disabled_mf ?
- 			cpudata->pstate.max_freq : cpudata->pstate.turbo_freq;
- 
--	memcpy(&new_policy, policy, sizeof(*policy));
--	new_policy.max = min(policy->user_policy.max, policy->cpuinfo.max_freq);
--	new_policy.min = min(policy->user_policy.min, new_policy.max);
+-	/*
+-	* This check works well when we store new min/max freq attributes,
+-	* because new_policy is a copy of policy with one field updated.
+-	*/
+-	if (new_policy->min > new_policy->max)
+-		return -EINVAL;
 -
--	cpufreq_set_policy(policy, &new_policy);
-+	refresh_frequency_limits(policy);
+ 	/*
+ 	 * PM QoS framework collects all the requests from users and provide us
+ 	 * the final aggregated value here.
+ 	 */
+-	min = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MIN_FREQUENCY);
+-	max = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MAX_FREQUENCY);
+-
+-	if (min > new_policy->min)
+-		new_policy->min = min;
+-	if (max < new_policy->max)
+-		new_policy->max = max;
++	new_policy->min = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MIN_FREQUENCY);
++	new_policy->max = dev_pm_qos_read_value(cpu_dev, DEV_PM_QOS_MAX_FREQUENCY);
  
- 	cpufreq_cpu_release(policy);
- }
+ 	/* verify the cpu speed can be set within this limit */
+ 	ret = cpufreq_driver->verify(new_policy);
+@@ -2458,10 +2461,9 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
+  * @cpu: CPU to re-evaluate the policy for.
+  *
+  * Update the current frequency for the cpufreq policy of @cpu and use
+- * cpufreq_set_policy() to re-apply the min and max limits saved in the
+- * user_policy sub-structure of that policy, which triggers the evaluation
+- * of policy notifiers and the cpufreq driver's ->verify() callback for the
+- * policy in question, among other things.
++ * cpufreq_set_policy() to re-apply the min and max limits, which triggers the
++ * evaluation of policy notifiers and the cpufreq driver's ->verify() callback
++ * for the policy in question, among other things.
+  */
+ void cpufreq_update_policy(unsigned int cpu)
+ {
+@@ -2521,10 +2523,9 @@ static int cpufreq_boost_set_sw(int state)
+ 			break;
+ 		}
+ 
+-		down_write(&policy->rwsem);
+-		policy->user_policy.max = policy->max;
+-		cpufreq_governor_limits(policy);
+-		up_write(&policy->rwsem);
++		ret = dev_pm_qos_update_request(policy->max_freq_req, policy->max);
++		if (ret)
++			break;
+ 	}
+ 
+ 	return ret;
 diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 95425941f46d..1fa37b675a80 100644
+index 1fa37b675a80..afc683021ac5 100644
 --- a/include/linux/cpufreq.h
 +++ b/include/linux/cpufreq.h
-@@ -207,6 +207,7 @@ void cpufreq_cpu_release(struct cpufreq_policy *policy);
- int cpufreq_get_policy(struct cpufreq_policy *policy, unsigned int cpu);
- int cpufreq_set_policy(struct cpufreq_policy *policy,
- 		       struct cpufreq_policy *new_policy);
-+void refresh_frequency_limits(struct cpufreq_policy *policy);
- void cpufreq_update_policy(unsigned int cpu);
- void cpufreq_update_limits(unsigned int cpu);
- bool have_governor_per_policy(void);
+@@ -50,11 +50,6 @@ struct cpufreq_cpuinfo {
+ 	unsigned int		transition_latency;
+ };
+ 
+-struct cpufreq_user_policy {
+-	unsigned int		min;    /* in kHz */
+-	unsigned int		max;    /* in kHz */
+-};
+-
+ struct cpufreq_policy {
+ 	/* CPUs sharing clock, require sw coordination */
+ 	cpumask_var_t		cpus;	/* Online CPUs only */
+@@ -84,7 +79,8 @@ struct cpufreq_policy {
+ 	struct work_struct	update; /* if update_policy() needs to be
+ 					 * called, but you're in IRQ context */
+ 
+-	struct cpufreq_user_policy user_policy;
++	struct dev_pm_qos_request *min_freq_req;
++	struct dev_pm_qos_request *max_freq_req;
+ 	struct cpufreq_frequency_table	*freq_table;
+ 	enum cpufreq_table_sorting freq_table_sorted;
+ 
 -- 
 2.21.0.rc0.269.g1a574e7a288b
 
