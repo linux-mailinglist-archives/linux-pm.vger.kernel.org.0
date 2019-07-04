@@ -2,242 +2,342 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B56A15F640
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 12:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2665F668
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 12:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727559AbfGDKDg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jul 2019 06:03:36 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:10679 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727385AbfGDKDc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 06:03:32 -0400
-X-UUID: e1d4251ec8204cbf9f1ee152e63b0ed9-20190704
-X-UUID: e1d4251ec8204cbf9f1ee152e63b0ed9-20190704
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
-        (envelope-from <ran.bi@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 924325187; Thu, 04 Jul 2019 18:03:17 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs08n2.mediatek.inc
- (172.21.101.56) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 4 Jul
- 2019 18:03:12 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 4 Jul 2019 18:03:09 +0800
-Message-ID: <1562234589.19751.16.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 5/7] power: reset: add driver for mt6323 poweroff
-From:   Ran Bi <ran.bi@mediatek.com>
-To:     Frank Wunderlich <frank-w@public-files.de>
-CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Richard Fontana <rfontana@redhat.com>,
-        Allison Randal <allison@lohutok.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        id S1727303AbfGDKOH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jul 2019 06:14:07 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:59358 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727249AbfGDKOH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 06:14:07 -0400
+Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id daa413db94795919; Thu, 4 Jul 2019 12:14:05 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "Paul E . McKenney" <paulmck@linux.ibm.com>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Ran Bi <ran.bi@mediatek.com>
-Date:   Thu, 4 Jul 2019 18:03:09 +0800
-In-Reply-To: <20190703164822.17924-6-frank-w@public-files.de>
-References: <20190703164822.17924-1-frank-w@public-files.de>
-         <20190703164822.17924-6-frank-w@public-files.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        "open list:CPU IDLE TIME MANAGEMENT FRAMEWORK" 
+        <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] cpuidle/drivers/mobile: Add new governor for mobile/embedded systems
+Date:   Thu, 04 Jul 2019 12:14:05 +0200
+Message-ID: <8334994.XHaO1tGd4f@kreacher>
+In-Reply-To: <20190620115826.4897-1-daniel.lezcano@linaro.org>
+References: <20190620115826.4897-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: 5DE4835C1875B5950092AA7126EE354752A756CA69AC4641991F64CEFDA4E85A2000:8
-X-MTK:  N
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2019-07-03 at 18:48 +0200, Frank Wunderlich wrote:
-> From: Josef Friedl <josef.friedl@speed.at>
+On Thursday, June 20, 2019 1:58:08 PM CEST Daniel Lezcano wrote:
+> The objective is the same for all the governors: save energy, but at
+> the end the governors menu, ladder and teo aim to improve the
+> performances with an acceptable energy drop for some workloads which
+> are identified for servers and desktops (with the help of a firmware).
 > 
-> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
-> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> The ladder governor is designed for server with a periodic tick
+> configuration.
+> 
+> The menu governor does not behave nicely with the mobile platform and
+> the energy saving for the multimedia workloads is worst than picking
+> up randomly an idle state.
+> 
+> The teo governor acts efficiently, it promotes shallower state for
+> performances which is perfect for the servers / desktop but inadequate
+> for mobile because the energy consumed is too high.
+> 
+> It is very difficult to do changes in these governors for embedded
+> systems without impacting performances on servers/desktops or ruin the
+> optimizations for the workloads on these platforms.
+> 
+> The mobile governor is a new governor targeting embedded systems
+> running on battery where the energy saving has a higher priority than
+> servers or desktops. This governor aims to save energy as much as
+> possible but with a performance degradation tolerance.
+> 
+> In this way, we can optimize the governor for specific mobile workload
+> and more generally embedded systems without impacting other platforms.
+> 
+> The mobile governor is built on top of the paradigm 'separate the wake
+> up sources signals and analyze them'. Three categories of wake up
+> signals are identified:
+>  - deterministic : timers
+>  - predictable : most of the devices interrupt
+>  - unpredictable : IPI rescheduling, random signals
+> 
+> The latter needs an iterative approach and the help of the scheduler
+> to give more input to the governor.
+> 
+> The governor uses the irq timings where we predict the next interrupt
+> occurrences on the current CPU and the next timer. It is well suited
+> for mobile and more generally embedded systems where the interrupts
+> are usually pinned on one CPU and where the power is more important
+> than the performances.
+> 
+> The multimedia applications on the embedded system spawn multiple
+> threads which are migrated across the different CPUs and waking
+> between them up. In order to catch this situation we have also to
+> track the idle task rescheduling duration with a relative degree of
+> confidence as the scheduler is involved in the task migrations. The
+> resched information is in the scope of the governor via the reflect
+> callback.
+> 
+> The governor begins with a clean foundation basing the prediction on
+> the irq behavior returned by the irq timings, the timers and the idle
+> task rescheduling. The advantage of the approach is we have a full
+> view of the wakeup sources as we identify them separately and then we
+> can control the situation without relying on biased heuristics.
+> 
+> This first iteration provides a basic prediction but improves on some
+> mobile platforms better energy for better performance for multimedia
+> workloads.
+> 
+> The scheduling aspect will be optimized iteratively with non
+> regression testing for previous identified workloads on an Android
+> reference platform.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+Note that there are build issues reported by 0-day that need to be fixed.
+
+Also, IMO this really should be documented better in the tree, not just in the changelog.
+At least the use case to be covered by this governor should be clearly documented and
+it would be good to describe the algorithm.
+
 > ---
->  drivers/power/reset/Kconfig           | 10 +++
->  drivers/power/reset/Makefile          |  1 +
->  drivers/power/reset/mt6323-poweroff.c | 97 +++++++++++++++++++++++++++
->  include/linux/mfd/mt6397/core.h       |  2 +
->  4 files changed, 110 insertions(+)
->  create mode 100644 drivers/power/reset/mt6323-poweroff.c
+>  drivers/cpuidle/Kconfig            |  11 ++-
+>  drivers/cpuidle/governors/Makefile |   1 +
+>  drivers/cpuidle/governors/mobile.c | 151 +++++++++++++++++++++++++++++
+>  3 files changed, 162 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/cpuidle/governors/mobile.c
 > 
-> --
-> 2.17.1
-> 
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 980951dff834..492678e22088 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -140,6 +140,16 @@ config POWER_RESET_LTC2952
->  	  This driver supports an external powerdown trigger and board power
->  	  down via the LTC2952. Bindings are made in the device tree.
-> 
-> +config POWER_RESET_MT6323
-> +       bool "MediaTek MT6323 power-off driver"
-> +       depends on MFD_MT6397
-> +       help
-> +         The power-off driver is responsible for externally shutdown down
-> +         the power of a remote MediaTek SoC MT6323 is connected to through
-> +         controlling a tiny circuit BBPU inside MT6323 RTC.
+> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
+> index a4ac31e4a58c..e2376d85e288 100644
+> --- a/drivers/cpuidle/Kconfig
+> +++ b/drivers/cpuidle/Kconfig
+> @@ -5,7 +5,7 @@ config CPU_IDLE
+>  	bool "CPU idle PM support"
+>  	default y if ACPI || PPC_PSERIES
+>  	select CPU_IDLE_GOV_LADDER if (!NO_HZ && !NO_HZ_IDLE)
+> -	select CPU_IDLE_GOV_MENU if (NO_HZ || NO_HZ_IDLE) && !CPU_IDLE_GOV_TEO
+> +	select CPU_IDLE_GOV_MENU if (NO_HZ || NO_HZ_IDLE) && !CPU_IDLE_GOV_TEO && !CPU_IDLE_GOV_MOBILE
+>  	help
+>  	  CPU idle is a generic framework for supporting software-controlled
+>  	  idle processor power management.  It includes modular cross-platform
+> @@ -33,6 +33,15 @@ config CPU_IDLE_GOV_TEO
+>  	  Some workloads benefit from using it and it generally should be safe
+>  	  to use.  Say Y here if you are not happy with the alternatives.
+>  
+> +config CPU_IDLE_GOV_MOBILE
+> +	bool "Mobile governor"
+> +	select IRQ_TIMINGS
+> +	help
+> +	  The mobile governor is based on irq timings measurements and
+> +	  pattern research combined with the next timer. This governor
+> +	  suits very well on embedded systems where the interrupts are
+> +	  grouped on a single core and the power is the priority.
 > +
-> +         Say Y if you have a board where MT6323 could be found.
-> +
->  config POWER_RESET_QNAP
->  	bool "QNAP power-off driver"
->  	depends on OF_GPIO && PLAT_ORION
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index 0aebee954ac1..94eaceb01d66 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -11,6 +11,7 @@ obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
->  obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
->  obj-$(CONFIG_POWER_RESET_MSM) += msm-poweroff.o
-> +obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
->  obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
->  obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
->  obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
-> diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/mt6323-poweroff.c
+>  config DT_IDLE_STATES
+>  	bool
+>  
+> diff --git a/drivers/cpuidle/governors/Makefile b/drivers/cpuidle/governors/Makefile
+> index 42f44cc610dd..f09da7178670 100644
+> --- a/drivers/cpuidle/governors/Makefile
+> +++ b/drivers/cpuidle/governors/Makefile
+> @@ -6,3 +6,4 @@
+>  obj-$(CONFIG_CPU_IDLE_GOV_LADDER) += ladder.o
+>  obj-$(CONFIG_CPU_IDLE_GOV_MENU) += menu.o
+>  obj-$(CONFIG_CPU_IDLE_GOV_TEO) += teo.o
+> +obj-$(CONFIG_CPU_IDLE_GOV_MOBILE) += mobile.o
+> diff --git a/drivers/cpuidle/governors/mobile.c b/drivers/cpuidle/governors/mobile.c
 > new file mode 100644
-> index 000000000000..1caf43d9e46d
+> index 000000000000..8fda0f9b960b
 > --- /dev/null
-> +++ b/drivers/power/reset/mt6323-poweroff.c
-> @@ -0,0 +1,97 @@
+> +++ b/drivers/cpuidle/governors/mobile.c
+> @@ -0,0 +1,151 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Power off through MediaTek PMIC
-> + *
-> + * Copyright (C) 2018 MediaTek Inc.
-> + *
-> + * Author: Sean Wang <sean.wang@mediatek.com>
-> + *
+> + * Copyright (C) 2019, Linaro Ltd
+> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
 > + */
+> +#include <linux/cpuidle.h>
+> +#include <linux/kernel.h>
+> +#include <linux/sched.h>
+> +#include <linux/slab.h>
+> +#include <linux/tick.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/sched/clock.h>
 > +
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/mfd/mt6397/core.h>
-> +#include <linux/mfd/mt6397/rtc.h>
-> +
-> +struct mt6323_pwrc {
-> +	struct device *dev;
-> +	struct regmap *regmap;
-> +	u32 base;
+> +struct mobile_device {
+> +	u64 idle_ema_avg;
+> +	u64 idle_total;
+> +	unsigned long last_jiffies;
 > +};
 > +
-> +static struct mt6323_pwrc *mt_pwrc;
+> +#define EMA_ALPHA_VAL		64
+> +#define EMA_ALPHA_SHIFT		7
+> +#define MAX_RESCHED_INTERVAL_MS	100
 > +
-> +static void mt6323_do_pwroff(void)
+> +static DEFINE_PER_CPU(struct mobile_device, mobile_devices);
+> +
+> +static int mobile_ema_new(s64 value, s64 ema_old)
 > +{
-> +	struct mt6323_pwrc *pwrc = mt_pwrc;
-> +	unsigned int val;
-> +	int ret;
-> +
-> +	regmap_write(pwrc->regmap, pwrc->base + RTC_BBPU, RTC_BBPU_KEY);
-> +	regmap_write(pwrc->regmap, pwrc->base + RTC_WRTGR, 1);
-> +
-> +	ret = regmap_read_poll_timeout(pwrc->regmap,
-> +					pwrc->base + RTC_BBPU, val,
-> +					!(val & RTC_BBPU_CBUSY),
-> +					MTK_RTC_POLL_DELAY_US,
-> +					MTK_RTC_POLL_TIMEOUT);
-> +	if (ret)
-> +		dev_err(pwrc->dev, "failed to write BBPU: %d\n", ret);
-> +
-> +	/* Wait some time until system down, otherwise, notice with a warn */
-> +	mdelay(1000);
-> +
-> +	WARN_ONCE(1, "Unable to power off system\n");
+> +	if (likely(ema_old))
+> +		return ema_old + (((value - ema_old) * EMA_ALPHA_VAL) >>
+> +				  EMA_ALPHA_SHIFT);
+> +	return value;
 > +}
 > +
-> +static int mt6323_pwrc_probe(struct platform_device *pdev)
+> +static void mobile_reflect(struct cpuidle_device *dev, int index)
 > +{
-> +	struct mt6397_chip *mt6397_chip = dev_get_drvdata(pdev->dev.parent);
-> +	struct mt6323_pwrc *pwrc;
-> +	struct resource *res;
+> +        struct mobile_device *mobile_dev = this_cpu_ptr(&mobile_devices);
+> +	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
+> +	struct cpuidle_state *s = &drv->states[index];
+> +	int residency;
 > +
-> +	pwrc = devm_kzalloc(&pdev->dev, sizeof(*pwrc), GFP_KERNEL);
-> +	if (!pwrc)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	pwrc->base = res->start;
-> +	pwrc->regmap = mt6397_chip->regmap;
-> +	pwrc->dev = &pdev->dev;
-> +	mt_pwrc = pwrc;
-> +
-> +	pm_power_off = &mt6323_do_pwroff;
+> +	/*
+> +	 * The idle task was not rescheduled since
+> +	 * MAX_RESCHED_INTERVAL_MS, let's consider the duration is
+> +	 * long enough to clear our stats.
+> +	 */
+> +	if (time_after(jiffies, mobile_dev->last_jiffies +
+> +		       msecs_to_jiffies(MAX_RESCHED_INTERVAL_MS)))
+> +		mobile_dev->idle_ema_avg = 0;
 
-We had implement MT8173 poweroff function in arm-trusted-firmware's PSCI
-plat_system_off() function. MT8173 SoC is using PMIC MT6397. (Ref:
-https://github.com/ARM-software/arm-trusted-firmware/blob/master/plat/mediatek/mt8173/plat_pm.c and https://github.com/ARM-software/arm-trusted-firmware/blob/master/plat/mediatek/mt8173/drivers/rtc) Do you think it's better to implement poweroff function into arm-trusted-firmware compared to hijack pm_poweroff() function in Kernel? Right now, we are doing the upstream of other PMIC chip like MT6358's poweroff function in arm-trusted-firmware too.
+Why jiffies?  Any particular reason?
 
 > +
-> +	return 0;
+> +	/*
+> +	 * Sum all the residencies in order to compute the total
+> +	 * duration of the idle task.
+> +	 */
+> +	residency = dev->last_residency - s->exit_latency;
+> +	if (residency > 0)
+> +		mobile_dev->idle_total += residency;
+> +
+> +	/*
+> +	 * We exited the idle state with the need_resched() flag, the
+> +	 * idle task will be rescheduled, so store the duration the
+> +	 * idle task was scheduled in an exponential moving average and
+> +	 * reset the total of the idle duration.
+> +	 */
+> +	if (need_resched()) {
+> +		mobile_dev->idle_ema_avg = mobile_ema_new(mobile_dev->idle_total,
+> +						      mobile_dev->idle_ema_avg);
+> +		mobile_dev->idle_total = 0;
+> +		mobile_dev->last_jiffies = jiffies;
+> +	}
 > +}
 > +
-> +static int mt6323_pwrc_remove(struct platform_device *pdev)
+> +static int mobile_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+> +		       bool *stop_tick)
 > +{
-> +	if (pm_power_off == &mt6323_do_pwroff)
-> +		pm_power_off = NULL;
+> +	struct mobile_device *mobile_dev = this_cpu_ptr(&mobile_devices);
+> +	int latency_req = cpuidle_governor_latency_req(dev->cpu);
+> +	int i, index = 0;
+> +	ktime_t delta_next;
+> +	u64 now, irq_length, timer_length;
+> +	u64 idle_duration_us;
 > +
-> +	return 0;
+> +	/*
+> +	 * Get the present time as reference for the next steps
+> +	 */
+> +	now = local_clock();
+> +
+> +	/*
+> +	 * Get the next interrupt event giving the 'now' as a
+> +	 * reference, if the next event appears to have already
+> +	 * expired then we get the 'now' returned which ends up with a
+> +	 * zero duration.
+> +	 */
+> +	irq_length = irq_timings_next_event(now) - now;
+> +
+> +	/*
+> +	 * Get the timer duration before expiration.
+> +	 */
+
+This comment is rather redundant and the one below too. :-)
+
+> +	timer_length = ktime_to_ns(tick_nohz_get_sleep_length(&delta_next));
+> +
+> +	/*
+> +	 * Get the smallest duration between the timer and the irq next event.
+> +	 */
+> +	idle_duration_us = min_t(u64, irq_length, timer_length) / NSEC_PER_USEC;
+> +
+> +	/*
+> +	 * Get the idle task duration average if the information is
+> +	 * available.
+
+IMO it would be good to explain this step in more detail, especially the purpose of it.
+
+> +	 */
+> +	if (mobile_dev->idle_ema_avg)
+> +		idle_duration_us = min_t(u64, idle_duration_us,
+> +					 mobile_dev->idle_ema_avg);
+> +
+> +	for (i = 0; i < drv->state_count; i++) {
+> +		struct cpuidle_state *s = &drv->states[i];
+> +		struct cpuidle_state_usage *su = &dev->states_usage[i];
+> +
+> +		if (s->disabled || su->disable)
+> +			continue;
+> +
+> +		if (s->exit_latency > latency_req)
+> +			break;
+> +
+> +		if (idle_duration_us > s->exit_latency)
+> +			idle_duration_us = idle_duration_us - s->exit_latency;
+
+Why do you want this?
+
+It only causes you to miss an opportunity to select a deeper state sometimes,
+so what's the reason?
+
+Moreover, I don't think you should update idle_duration_us here, as the updated
+value will go to the next step if the check below doesn't trigger.
+
+> +
+> +		if (s->target_residency > idle_duration_us)
+> +			break;
+> +
+> +		index = i;
+> +	}
+> +
+> +	if (!index)
+> +		*stop_tick = false;
+
+Well, this means that the tick is stopped for all idle states deeper than state 0.
+
+If there are any states between state 0 and the deepest one and they are below
+the tick boundary, you may very well suffer the "powernightmares" problem
+because of this.
+
+> +
+> +	return index;
 > +}
 > +
-> +static const struct of_device_id mt6323_pwrc_dt_match[] = {
-> +	{ .compatible = "mediatek,mt6323-pwrc" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, mt6323_pwrc_dt_match);
-> +
-> +static struct platform_driver mt6323_pwrc_driver = {
-> +	.probe          = mt6323_pwrc_probe,
-> +	.remove         = mt6323_pwrc_remove,
-> +	.driver         = {
-> +		.name   = "mt6323-pwrc",
-> +		.of_match_table = mt6323_pwrc_dt_match,
-> +	},
+> +static struct cpuidle_governor mobile_governor = {
+> +	.name =		"mobile",
+> +	.rating =	20,
+> +	.select =	mobile_select,
+> +	.reflect =	mobile_reflect,
 > +};
 > +
-> +module_platform_driver(mt6323_pwrc_driver);
+> +static int __init init_governor(void)
+> +{
+> +	irq_timings_enable();
+> +	return cpuidle_register_governor(&mobile_governor);
+> +}
 > +
-> +MODULE_DESCRIPTION("Poweroff driver for MT6323 PMIC");
-> +MODULE_AUTHOR("Sean Wang <sean.wang@mediatek.com>");
-> +MODULE_LICENSE("GPL v2");
-> diff --git a/include/linux/mfd/mt6397/core.h b/include/linux/mfd/mt6397/core.h
-> index 25a95e72179b..652da61e3711 100644
-> --- a/include/linux/mfd/mt6397/core.h
-> +++ b/include/linux/mfd/mt6397/core.h
-> @@ -7,6 +7,8 @@
->  #ifndef __MFD_MT6397_CORE_H__
->  #define __MFD_MT6397_CORE_H__
+> +postcore_initcall(init_governor);
 > 
-> +#include <linux/mutex.h>
-> +
->  enum mt6397_irq_numbers {
->  	MT6397_IRQ_SPKL_AB = 0,
+
+
 
 
