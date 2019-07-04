@@ -2,129 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF295F722
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 13:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B031D5F777
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 13:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727499AbfGDLOR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jul 2019 07:14:17 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:45160 "EHLO mx1.redhat.com"
+        id S1727566AbfGDLuT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jul 2019 07:50:19 -0400
+Received: from mout.gmx.net ([212.227.15.19]:44393 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727436AbfGDLOR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 4 Jul 2019 07:14:17 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6AAF9C057F3B;
-        Thu,  4 Jul 2019 11:14:10 +0000 (UTC)
-Received: from amt.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 288AB1001B16;
-        Thu,  4 Jul 2019 11:14:08 +0000 (UTC)
-Received: from amt.cnet (localhost [127.0.0.1])
-        by amt.cnet (Postfix) with ESMTP id 363A110516E;
-        Thu,  4 Jul 2019 08:13:46 -0300 (BRT)
-Received: (from marcelo@localhost)
-        by amt.cnet (8.14.7/8.14.7/Submit) id x64BDfL3001599;
-        Thu, 4 Jul 2019 08:13:41 -0300
-Date:   Thu, 4 Jul 2019 08:13:41 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Joao Martins <joao.m.martins@oracle.com>
-Cc:     kvm-devel <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim Krcmar <rkrcmar@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Wanpeng Li <kernellwp@gmail.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Raslan KarimAllah <karahmed@amazon.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Ankur Arora <ankur.a.arora@oracle.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [patch 1/5] add cpuidle-haltpoll driver
-Message-ID: <20190704111341.GA1249@amt.cnet>
-References: <20190703235124.783034907@amt.cnet>
- <20190703235828.340866829@amt.cnet>
- <db95f834-0307-813a-323c-c5e23c90e3f5@oracle.com>
+        id S1727548AbfGDLuT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 4 Jul 2019 07:50:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1562240946;
+        bh=3XgfK29g7vLa/3fkH4yqnV5cnFE1yxc49nWYpw/CAjE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=knmHJll2oZI2vMmwAv/1ME4hVpqS0PWrF9Ii8PkJp7W5/sqfcY/qrsUAkKjVViwQn
+         3CxBSzc/FCwAmnBG2/JJ/9Qcs9UnGrsKgur1158+rpQ4xA/L8ZOOZucSZQ+H3zoH/H
+         r8/kl+3pUg6RVhZL4FTDAvNzcrsZD9G5hCVre2hI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.145.121] ([217.61.145.121]) by web-mail.gmx.net
+ (3c-app-gmx-bs27.server.lan [172.19.170.79]) (via HTTP); Thu, 4 Jul 2019
+ 13:49:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <db95f834-0307-813a-323c-c5e23c90e3f5@oracle.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Thu, 04 Jul 2019 11:14:17 +0000 (UTC)
+Message-ID: <trinity-cc209a43-af34-4788-8b7a-8495052c8ca6-1562240946454@3c-app-gmx-bs27>
+From:   "Frank Wunderlich" <frank-w@public-files.de>
+To:     "Matthias Brugger" <matthias.bgg@gmail.com>
+Cc:     "Lee Jones" <lee.jones@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Sean Wang" <sean.wang@mediatek.com>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        "Eddie Huang" <eddie.huang@mediatek.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Richard Fontana" <rfontana@redhat.com>,
+        "Allison Randal" <allison@lohutok.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Mauro Carvalho Chehab" <mchehab+samsung@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Rob Herring" <robh@kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Paul E . McKenney" <paulmck@linux.ibm.com>,
+        "Josef Friedl" <josef.friedl@speed.at>
+Subject: Aw: Re: [PATCH v2 2/7] rtc: mt6397: move some common definitions
+ into rtc.h
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 4 Jul 2019 13:49:06 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <62a4c4ce-7ab3-2f9d-a85e-be92340724a9@gmail.com>
+References: <20190703164822.17924-1-frank-w@public-files.de>
+ <20190703164822.17924-3-frank-w@public-files.de>
+ <62a4c4ce-7ab3-2f9d-a85e-be92340724a9@gmail.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:7WCJDoI4ExT7kJKMPI6fq7FNUW7pRNwLc1tUO/5cmP72zZnoBU2v1Y8uix/fw2i48d5FF
+ Wd8wvTQJl1I2afIhS99OdBd4Iyh67OTcrpdbEQzhKKf6oNe+8evBVlNA3mdt3sLZ9EfauHTySxHm
+ DPZWCXm6h5c0Phecn2JIbp8F6eSFLCyZzdI2+ijkEM1IUpZ0cT5dqCmnk8hPwd9Sd1EJDKwLDMdM
+ fnT5RJ/tuLvBBpxa3bA56T8T1C/9SuiwHF1TDpcf69rvk2/9SvDHsBp3GT6hMIlCS4ZRbzcYD2dP
+ 58=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mW1rCx44iLA=:/Gajeu7to3A6Ht4fEOGmOM
+ VrVkYrIOaOWFbVz0dUB19QotgPqpUaNZ9s5JK+j8PjaEBomafj/raSFiwvRW1i7F+V8c1yXi3
+ 7UJr7dAlUe5CK5xzgHEMiBNl7adKcmNKYRE/o0poTjKZAwuMVnHV9J+fkUdRrQDVrVkNZQDtY
+ LHvQnas9brIhuezksYFzH9Pol+hd3YXpTP1J/k9Tep1e6ppE6zX3awixfJVVyPXj09b9iFFPP
+ nPpETdXzqQspp2OaySgm9TbPNosj+TI6fbPcuIA9018AH3QcfASNas9uoobDSzUAKc7u2CYCl
+ SmsdGV0F41hBk0LaPWMD5JmQE14GDfYBjsG1BP29GHify4oGtvVCBqrZwZKRCtbUz3G7i9KQG
+ IknEjSp92+qsc71cN9DiVh3WD72v2MeCIqH32Vt5HLNfOb2hbBvkYRepx+55v6D+PY0s0xKDY
+ ld9U5E2roDTiHXZ+GymN4caVOKAi3lsJT8kr9E3JCAEFOuqkGsPN8VrnmnDmvFOlxOumyBJki
+ NqU8IwX2kaZfTf99CDBU5Ortk+6ZMl98egmxvVuWkpX9nml7w1lACPqpLuB1FFc0rFvC1MzXB
+ wDNcELXrKOYz9pdcvEr6jUKFQoA9gQsQbd6KNaUd8V3CtnvF7ZGL1GdRH8I4RJ7AKDsyEeUsy
+ Ekr8=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 04, 2019 at 10:16:47AM +0100, Joao Martins wrote:
-> On 7/4/19 12:51 AM, Marcelo Tosatti wrote:
-> > +++ linux-2.6-newcpuidle.git/drivers/cpuidle/cpuidle-haltpoll.c
-> > @@ -0,0 +1,69 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * cpuidle driver for haltpoll governor.
-> > + *
-> > + * Copyright 2019 Red Hat, Inc. and/or its affiliates.
-> > + *
-> > + * This work is licensed under the terms of the GNU GPL, version 2.  See
-> > + * the COPYING file in the top-level directory.
-> > + *
-> > + * Authors: Marcelo Tosatti <mtosatti@redhat.com>
-> > + */
-> > +
-> > +#include <linux/init.h>
-> > +#include <linux/cpuidle.h>
-> > +#include <linux/module.h>
-> > +#include <linux/sched/idle.h>
-> > +#include <linux/kvm_para.h>
-> > +
-> > +static int default_enter_idle(struct cpuidle_device *dev,
-> > +			      struct cpuidle_driver *drv, int index)
-> > +{
-> > +	if (current_clr_polling_and_test()) {
-> > +		local_irq_enable();
-> > +		return index;
-> > +	}
-> > +	default_idle();
-> > +	return index;
-> > +}
-> > +
-> > +static struct cpuidle_driver haltpoll_driver = {
-> > +	.name = "haltpoll",
-> > +	.owner = THIS_MODULE,
-> > +	.states = {
-> > +		{ /* entry 0 is for polling */ },
-> > +		{
-> > +			.enter			= default_enter_idle,
-> > +			.exit_latency		= 1,
-> > +			.target_residency	= 1,
-> > +			.power_usage		= -1,
-> > +			.name			= "haltpoll idle",
-> > +			.desc			= "default architecture idle",
-> > +		},
-> > +	},
-> > +	.safe_state_index = 0,
-> > +	.state_count = 2,
-> > +};
-> > +
-> > +static int __init haltpoll_init(void)
-> > +{
-> > +	struct cpuidle_driver *drv = &haltpoll_driver;
-> > +
-> > +	cpuidle_poll_state_init(drv);
-> > +
-> > +	if (!kvm_para_available())
-> > +		return 0;
-> > +
-> 
-> Isn't this meant to return -ENODEV value if the module is meant to not load?
+> Still missing commit message. Describe here why you need to do that.
 
-Well, the cpuidle drivers return an error only if registration fails.
+ok, added note that headers are reused in power-off-driver
 
-> Also this check should probably be placed before initializing the poll state,
-> provided poll state isn't used anyways if you're not a kvm guest.
+https://github.com/frank-w/BPI-R2-4.14/commits/5.2-poweroff-mainline
 
-Poll state init is only local variable initialization, it does not
-have any external effect.
+> Please check your email setting as discussed offline. Otherwise your pat=
+ches
+> won't get accepted.
+
+tested with webmailer where it looks good :(
+
+seems the problem is only shown when imported to patchwork
+
+using only git sendemail in ubuntu 18.4 without any mta (have sendmail not=
+ installed) and no changes made to git sendemail except authentication.
+
+i see that (except cover-letter which is quoted-printable) all is send wit=
+h
+Content-Type: text/plain; charset=3D"us-ascii"
+Content-Transfer-Encoding: 7bit
+
+so i have forced git sendemail now to
+sendemail.composeencoding UTF-8
+
+if this does not work i can try instead
+sendemail.transferEncoding 8bit
+
+regards Frank
