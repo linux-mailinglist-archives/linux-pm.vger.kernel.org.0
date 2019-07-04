@@ -2,90 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 967E05F6A5
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 12:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681C85F703
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 13:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727563AbfGDKb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jul 2019 06:31:28 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:47330 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727303AbfGDKb1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jul 2019 06:31:27 -0400
-Received: from 79.184.254.216.ipv4.supernova.orange.pl (79.184.254.216) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id 8f56e755e5c9ce7d; Thu, 4 Jul 2019 12:31:25 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Tri Vo <trong@android.com>, viresh.kumar@linaro.org,
-        rafael@kernel.org, hridya@google.com, sspatil@google.com,
-        kaleshsingh@google.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v2] PM / wakeup: show wakeup sources stats in sysfs
-Date:   Thu, 04 Jul 2019 12:31:24 +0200
-Message-ID: <3451189.hAX5mKGt1u@kreacher>
-In-Reply-To: <20190628151040.GA14074@kroah.com>
-References: <20190627000412.GA527@kroah.com> <20190627225335.72107-1-trong@android.com> <20190628151040.GA14074@kroah.com>
+        id S1727563AbfGDLH4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jul 2019 07:07:56 -0400
+Received: from mout.gmx.net ([212.227.17.20]:34095 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727436AbfGDLH4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 4 Jul 2019 07:07:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1562238391;
+        bh=3Q3Rn9eFMwtoWE9WbsG5M7mh69YDe97bVxTE0e3XikI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=hF7KV0b0k9MO0eCa11hhB84VgY38o1UgfP9XoXh9W0FL20Pofm4zFCT+ZBNzePkav
+         14Wt3RXb6wCMRiuMJ24xQlcrCZVQDz+mjRj8Ls1W25xaUORUNpEHb2tJE65L+DPPpf
+         gCK+VbLSQCBQKt73QByyxit3P0OMtOjDVZfn1nW0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.145.121] ([217.61.145.121]) by web-mail.gmx.net
+ (3c-app-gmx-bs27.server.lan [172.19.170.79]) (via HTTP); Thu, 4 Jul 2019
+ 13:06:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Message-ID: <trinity-03acdbbe-a94a-439c-a65c-88c9e23a0ae7-1562238391586@3c-app-gmx-bs27>
+From:   "Frank Wunderlich" <frank-w@public-files.de>
+To:     "Ran Bi" <ran.bi@mediatek.com>
+Cc:     "Lee Jones" <lee.jones@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "Sean Wang" <sean.wang@mediatek.com>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        "Eddie Huang" <eddie.huang@mediatek.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Richard Fontana" <rfontana@redhat.com>,
+        "Allison Randal" <allison@lohutok.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Mauro Carvalho Chehab" <mchehab+samsung@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Rob Herring" <robh@kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Paul E . McKenney" <paulmck@linux.ibm.com>,
+        "Josef Friedl" <josef.friedl@speed.at>,
+        "Yingjoe Chen" <yingjoe.chen@mediatek.com>,
+        "Ran Bi" <ran.bi@mediatek.com>
+Subject: Aw: Re: [PATCH v2 5/7] power: reset: add driver for mt6323 poweroff
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 4 Jul 2019 13:06:31 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <1562234589.19751.16.camel@mhfsdcap03>
+References: <20190703164822.17924-1-frank-w@public-files.de>
+ <20190703164822.17924-6-frank-w@public-files.de>
+ <1562234589.19751.16.camel@mhfsdcap03>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:vPbFhCphLzdAJgG78YBNH1wPbJh7oFoo8LA+oV36bAGkph3x/3EaLOXvOGXWjLu6ZuoCY
+ 1t9EybQy+LCu4aSmT+yUJo5gl8Ju4T8aDhD1DRZWAGO5rrBCojV17nj8QNVUS3FgBZoOB/x6EwMk
+ drLnkkrdyxKyi0C5iFsbPEHAByrho90e2xWkGlSORq0gv/lot3Er0z+JFebfzw+jvTVy58qZ59vU
+ OFGS3kjwGbj7yDISAqTouFNs/1tWYdh6AP0tfHE4RmZGo+FyPEmVTEt2HM39l5xlJ28M1vX2l6/i
+ L8=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Gra07zN8xw8=:anb8VcMZFxuoE4PI1k2EsZ
+ 6A2Z2hjgSFeZ7jGOE6KrcZK9v+yo52ZoN0tlYxZOOKbHINVzp3poRWA+Y0klQCe/MtWS5Sz2t
+ FFrWeA4bTFLT8Zh6YLDzz5McFFj06uC+BEhCk6+POvVdM+A1ivnLXs/zM9fEMzSu2Z1lOZFfP
+ 1g62Mmp+NcWh0pvZ3D1UHVuzeuIv2xmoaa6L5ycCXevI0/qtt9O4xdnayCMKVBGAV8XG/1/AP
+ BSlGo6q9rPqvrLx9k8amtNjnzy+pULHb1guitUl/L36xWlRE6Mp/ONToGDNeLdisQoBlaPZhf
+ EuJYuDwHhvZLwTEM17u5zqCuS4QUsUNyMHpjUqvel0YjuIKOA0iig4JPhQtaaxQdWn9gmTYWH
+ zA5ssDqM8LoXMhR+PNKPCJshNNESr4i8h/kiMhApmBrrHRXKWAUwGcQ/A45734/Xq+dgU4RNP
+ x3nB/e/z0rFDHVtQ9sfqqjpdC7aJ5VM6bGwJorkB+GmVpDHUuVpYot3U/ea9UBjQ6Y6WDb2dX
+ doR+ISW3W5uQOZAvSnp4+1LbLmot8XyCaz8SSZj6/DgUIbT4Uhnu+i08F7zytFRlChd3TnWX1
+ I3xq2GFqJbKREe56K8fPrPB2wqLCee/USnbdDcbyd6yAiWSR/DF3DlCZOKebkqIICZ4wF8Tv6
+ YxN8=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, June 28, 2019 5:10:40 PM CEST Greg KH wrote:
-> On Thu, Jun 27, 2019 at 03:53:35PM -0700, Tri Vo wrote:
-> > Userspace can use wakeup_sources debugfs node to plot history of suspend
-> > blocking wakeup sources over device's boot cycle. This information can
-> > then be used (1) for power-specific bug reporting and (2) towards
-> > attributing battery consumption to specific processes over a period of
-> > time.
-> > 
-> > However, debugfs doesn't have stable ABI. For this reason, expose wakeup
-> > sources statistics in sysfs under /sys/power/wakeup_sources/<name>/
-> > 
-> > Embedding a struct kobject into struct wakeup_source changes lifetime
-> > requirements on the latter. To that end, change deallocation of struct
-> > wakeup_source using kfree to kobject_put().
-> > 
-> > Change struct wakelock's wakeup_source member to a pointer to decouple
-> > lifetimes of struct wakelock and struct wakeup_source for above reason.
-> > 
-> > Introduce CONFIG_PM_SLEEP_STATS that enables/disables showing wakeup
-> > source statistics in sysfs.
-> > 
-> > Signed-off-by: Tri Vo <trong@android.com>
-> 
-> Ok, this looks much better, but I don't like the use of a "raw" kobject
-> here.  It is much simpler, and less code, to use 'struct device'
-> instead.
-> 
-> As proof, I reworked the patch to do just that, and it saves over 50
-> lines of .c code, which is always nice :)
+> Gesendet: Donnerstag, 04. Juli 2019 um 12:03 Uhr
+> Von: "Ran Bi" <ran.bi@mediatek.com>
 
-Thanks for taking the time to do that!
+> We had implement MT8173 poweroff function in arm-trusted-firmware's PSCI
+> plat_system_off() function. MT8173 SoC is using PMIC MT6397. (Ref:
+> https://github.com/ARM-software/arm-trusted-firmware/blob/master/plat/mediatek/mt8173/plat_pm.c and https://github.com/ARM-software/arm-trusted-firmware/blob/master/plat/mediatek/mt8173/drivers/rtc) Do you think it's better to implement poweroff function into arm-trusted-firmware compared to hijack pm_poweroff() function in Kernel? Right now, we are doing the upstream of other PMIC chip like MT6358's poweroff function in arm-trusted-firmware too.
 
-> Attached below is the reworked code, along with the updated
-> documentation file.  It creates devices in a virtual class, and you can
-> easily iterate over them all by looking in /sys/class/wakeup/.
+ATF imho only used for arm64, my board is 32bit armv7 and i (currently) do not boot up with ATF
 
-That actually is nice - no need to add anything under /sys/power/.
-
-> Note, I'm note quite sure you need all of the changes you made in
-> kernel/power/wakelock.c when you make the structure contain a pointer to
-> the wakeup source and not the structure itself, but I just went with it
-> and got it all to build properly.
-
-I'm not really sure about it either.
-
-> Also note, I've not actually tested this at all, only built it, so I
-> _strongly_ suggest that you test this to make sure it really works :)
-> 
-> What do you think?
-
-I agree with the direction. :-)
-
-Cheers!
-
-
-
+regards Frank
