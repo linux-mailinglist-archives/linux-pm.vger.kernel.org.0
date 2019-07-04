@@ -2,31 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEAE5FBDE
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 18:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72915FBE3
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jul 2019 18:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727407AbfGDQe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jul 2019 12:34:58 -0400
+        id S1725865AbfGDQfH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jul 2019 12:35:07 -0400
 Received: from mga17.intel.com ([192.55.52.151]:33035 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727597AbfGDQe6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 4 Jul 2019 12:34:58 -0400
+        id S1727617AbfGDQe7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 4 Jul 2019 12:34:59 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jul 2019 09:34:57 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jul 2019 09:34:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,451,1557212400"; 
-   d="scan'208";a="169480495"
+   d="scan'208";a="169480505"
 Received: from conghuic-mobl.ccr.corp.intel.com (HELO rzhang-dell-9360.ccr.corp.intel.com) ([10.249.172.41])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jul 2019 09:34:56 -0700
+  by orsmga006.jf.intel.com with ESMTP; 04 Jul 2019 09:34:57 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     rjw@rjwysocki.net
 Cc:     linux-pm@vger.kernel.org, srinivas.pandruvada@intel.com,
         rui.zhang@intel.com
-Subject: [PATCH V2 06/13] intel_rapl: abstract register access operations
-Date:   Fri,  5 Jul 2019 00:34:38 +0800
-Message-Id: <1562258085-3165-7-git-send-email-rui.zhang@intel.com>
+Subject: [PATCH V2 07/13] intel_rapl: cleanup some functions
+Date:   Fri,  5 Jul 2019 00:34:39 +0800
+Message-Id: <1562258085-3165-8-git-send-email-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1562258085-3165-1-git-send-email-rui.zhang@intel.com>
 References: <1562258085-3165-1-git-send-email-rui.zhang@intel.com>
@@ -35,238 +35,167 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-MSR and MMIO RAPL interfaces have different ways to access the registers,
-thus in order to abstract the register access operations, two callbacks,
-.read_raw()/.write_raw() are introduced, and they should be implemented by
-MSR RAPL and MMIO RAPL interface driver respectly.
+Previously, there are three functions:
+rapl_register_psys(), which registers platform rapl domain.
+rapl_register_powercap(), which registers powercap control type.
+rapl_unregsiter_powercap(), which unregisters platform rapl domain and
+powercap control type.
 
-This patch implements them for the MSR I/F only.
+This is confusing as the function name does not describe what it does
+clearly.
+
+With this patch, the three functions are removed, and two new functions
+rapl_register_platform_domain()/rapl_unregister_platform_domain() are
+introduced instead, and they do exactly what their function name describes.
+
+Plus, as part of the common code, hardcoded MSR accesses in these functions
+are converted to follow the abstracted register access.
 
 Reviewed-and-tested-by: Pandruvada, Srinivas <srinivas.pandruvada@intel.com>
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- drivers/powercap/intel_rapl.c | 110 ++++++++++++++++++++++--------------------
- include/linux/intel_rapl.h    |  13 +++++
- 2 files changed, 70 insertions(+), 53 deletions(-)
+ drivers/powercap/intel_rapl.c | 62 +++++++++++++++++++++----------------------
+ 1 file changed, 31 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
-index 9f22aed..d3b9d1c 100644
+index d3b9d1c..7a97d33 100644
 --- a/drivers/powercap/intel_rapl.c
 +++ b/drivers/powercap/intel_rapl.c
-@@ -93,13 +93,6 @@ static struct rapl_if_priv rapl_msr_priv = {
- /* per domain data, some are optional */
- #define NR_RAW_PRIMITIVES (NR_RAPL_PRIMITIVES - 2)
+@@ -1052,16 +1052,6 @@ static void rapl_update_domain_data(struct rapl_package *rp)
  
--struct msrl_action {
--	u32 msr_no;
--	u64 clear_mask;
--	u64 set_mask;
--	int err;
--};
+ }
+ 
+-static void rapl_unregister_powercap(void)
+-{
+-	if (&rapl_msr_priv.platform_rapl_domain) {
+-		powercap_unregister_zone(rapl_msr_priv.control_type,
+-					 &rapl_msr_priv.platform_rapl_domain->power_zone);
+-		kfree(rapl_msr_priv.platform_rapl_domain);
+-	}
+-	powercap_unregister_control_type(rapl_msr_priv.control_type);
+-}
 -
- #define	DOMAIN_STATE_INACTIVE           BIT(0)
- #define	DOMAIN_STATE_POWER_LIMIT_SET    BIT(1)
- #define DOMAIN_STATE_BIOS_LOCKED        BIT(2)
-@@ -692,16 +685,16 @@ static int rapl_read_data_raw(struct rapl_domain *rd,
- 			enum rapl_primitives prim,
- 			bool xlate, u64 *data)
+ static int rapl_package_register_powercap(struct rapl_package *rp)
  {
--	u64 value, final;
--	u32 msr;
-+	u64 value;
- 	struct rapl_primitive_info *rp = &rpi[prim];
+ 	struct rapl_domain *rd;
+@@ -1131,16 +1121,23 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
+ 	return ret;
+ }
+ 
+-static int __init rapl_register_psys(void)
++static int __init rapl_add_platform_domain(struct rapl_if_priv *priv)
+ {
+ 	struct rapl_domain *rd;
+ 	struct powercap_zone *power_zone;
+-	u64 val;
 +	struct reg_action ra;
- 	int cpu;
++	int ret;
  
- 	if (!rp->name || rp->flag & RAPL_PRIMITIVE_DUMMY)
- 		return -EINVAL;
+-	if (rdmsrl_safe_on_cpu(0, rapl_msr_priv.regs[RAPL_DOMAIN_PLATFORM][RAPL_DOMAIN_REG_STATUS], &val) || !val)
++	ra.reg = priv->regs[RAPL_DOMAIN_PLATFORM][RAPL_DOMAIN_REG_STATUS];
++	ra.mask = ~0;
++	ret = priv->read_raw(0, &ra);
++	if (ret || !ra.value)
+ 		return -ENODEV;
  
--	msr = rd->regs[rp->id];
--	if (!msr)
-+	ra.reg = rd->regs[rp->id];
-+	if (!ra.reg)
- 		return -EINVAL;
+-	if (rdmsrl_safe_on_cpu(0, rapl_msr_priv.regs[RAPL_DOMAIN_PLATFORM][RAPL_DOMAIN_REG_LIMIT], &val) || !val)
++	ra.reg = priv->regs[RAPL_DOMAIN_PLATFORM][RAPL_DOMAIN_REG_LIMIT];
++	ra.mask = ~0;
++	ret = priv->read_raw(0, &ra);
++	if (ret || !ra.value)
+ 		return -ENODEV;
  
- 	cpu = rd->rp->lead_cpu;
-@@ -717,47 +710,23 @@ static int rapl_read_data_raw(struct rapl_domain *rd,
- 		return 0;
+ 	rd = kzalloc(sizeof(*rd), GFP_KERNEL);
+@@ -1149,15 +1146,15 @@ static int __init rapl_register_psys(void)
+ 
+ 	rd->name = rapl_domain_names[RAPL_DOMAIN_PLATFORM];
+ 	rd->id = RAPL_DOMAIN_PLATFORM;
+-	rd->regs[RAPL_DOMAIN_REG_LIMIT] = rapl_msr_priv.regs[RAPL_DOMAIN_PLATFORM][RAPL_DOMAIN_REG_LIMIT];
+-	rd->regs[RAPL_DOMAIN_REG_STATUS] = rapl_msr_priv.regs[RAPL_DOMAIN_PLATFORM][RAPL_DOMAIN_REG_STATUS];
++	rd->regs[RAPL_DOMAIN_REG_LIMIT] = priv->regs[RAPL_DOMAIN_PLATFORM][RAPL_DOMAIN_REG_LIMIT];
++	rd->regs[RAPL_DOMAIN_REG_STATUS] = priv->regs[RAPL_DOMAIN_PLATFORM][RAPL_DOMAIN_REG_STATUS];
+ 	rd->rpl[0].prim_id = PL1_ENABLE;
+ 	rd->rpl[0].name = pl1_name;
+ 	rd->rpl[1].prim_id = PL2_ENABLE;
+ 	rd->rpl[1].name = pl2_name;
+-	rd->rp = rapl_find_package_domain(0, &rapl_msr_priv);
++	rd->rp = rapl_find_package_domain(0, priv);
+ 
+-	power_zone = powercap_register_zone(&rd->power_zone, rapl_msr_priv.control_type,
++	power_zone = powercap_register_zone(&rd->power_zone, priv->control_type,
+ 					    "psys", NULL,
+ 					    &zone_ops[RAPL_DOMAIN_PLATFORM],
+ 					    2, &constraint_ops);
+@@ -1167,19 +1164,18 @@ static int __init rapl_register_psys(void)
+ 		return PTR_ERR(power_zone);
  	}
  
--	if (rdmsrl_safe_on_cpu(cpu, msr, &value)) {
--		pr_debug("failed to read msr 0x%x on cpu %d\n", msr, cpu);
-+	ra.mask = rp->mask;
-+
-+	if (rd->rp->priv->read_raw(cpu, &ra)) {
-+		pr_debug("failed to read reg 0x%x on cpu %d\n", ra.reg, cpu);
- 		return -EIO;
- 	}
- 
--	final = value & rp->mask;
--	final = final >> rp->shift;
-+	value = ra.value >> rp->shift;
-+
- 	if (xlate)
--		*data = rapl_unit_xlate(rd, rp->unit, final, 0);
-+		*data = rapl_unit_xlate(rd, rp->unit, value, 0);
- 	else
--		*data = final;
-+		*data = value;
+-	rapl_msr_priv.platform_rapl_domain = rd;
++	priv->platform_rapl_domain = rd;
  
  	return 0;
  }
  
--
--static int msrl_update_safe(u32 msr_no, u64 clear_mask, u64 set_mask)
--{
--	int err;
--	u64 val;
--
--	err = rdmsrl_safe(msr_no, &val);
--	if (err)
--		goto out;
--
--	val &= ~clear_mask;
--	val |= set_mask;
--
--	err = wrmsrl_safe(msr_no, val);
--
--out:
--	return err;
--}
--
--static void msrl_update_func(void *info)
--{
--	struct msrl_action *ma = info;
--
--	ma->err = msrl_update_safe(ma->msr_no, ma->clear_mask, ma->set_mask);
--}
--
- /* Similar use of primitive info in the read counterpart */
- static int rapl_write_data_raw(struct rapl_domain *rd,
- 			enum rapl_primitives prim,
-@@ -766,7 +735,7 @@ static int rapl_write_data_raw(struct rapl_domain *rd,
- 	struct rapl_primitive_info *rp = &rpi[prim];
- 	int cpu;
- 	u64 bits;
--	struct msrl_action ma;
-+	struct reg_action ra;
- 	int ret;
+-static int __init rapl_register_powercap(void)
++static void rapl_remove_platform_domain(struct rapl_if_priv *priv)
+ {
+-	rapl_msr_priv.control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
+-	if (IS_ERR(rapl_msr_priv.control_type)) {
+-		pr_debug("failed to register powercap control_type.\n");
+-		return PTR_ERR(rapl_msr_priv.control_type);
++	if (priv->platform_rapl_domain) {
++		powercap_unregister_zone(priv->control_type,
++			&priv->platform_rapl_domain->power_zone);
++		kfree(priv->platform_rapl_domain);
+ 	}
+-	return 0;
+ }
  
- 	cpu = rd->rp->lead_cpu;
-@@ -774,17 +743,13 @@ static int rapl_write_data_raw(struct rapl_domain *rd,
- 	bits <<= rp->shift;
- 	bits &= rp->mask;
+ static int rapl_check_domain(int cpu, int domain, struct rapl_package *rp)
+@@ -1526,9 +1522,12 @@ static int __init rapl_init(void)
  
--	memset(&ma, 0, sizeof(ma));
-+	memset(&ra, 0, sizeof(ra));
- 
--	ma.msr_no = rd->regs[rp->id];
--	ma.clear_mask = rp->mask;
--	ma.set_mask = bits;
-+	ra.reg = rd->regs[rp->id];
-+	ra.mask = rp->mask;
-+	ra.value = bits;
- 
--	ret = smp_call_function_single(cpu, msrl_update_func, &ma, 1);
+ 	rapl_msr_priv.read_raw = rapl_msr_read_raw;
+ 	rapl_msr_priv.write_raw = rapl_msr_write_raw;
+-	ret = rapl_register_powercap();
 -	if (ret)
--		WARN_ON_ONCE(ret);
--	else
--		ret = ma.err;
-+	ret = rd->rp->priv->write_raw(cpu, &ra);
+-		return ret;
++
++	rapl_msr_priv.control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
++	if (IS_ERR(rapl_msr_priv.control_type)) {
++		pr_debug("failed to register powercap control_type.\n");
++		return PTR_ERR(rapl_msr_priv.control_type);
++	}
  
+ 	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "powercap/rapl:online",
+ 				rapl_cpu_online, rapl_cpu_down_prep);
+@@ -1537,7 +1536,7 @@ static int __init rapl_init(void)
+ 	rapl_msr_priv.pcap_rapl_online = ret;
+ 
+ 	/* Don't bail out if PSys is not supported */
+-	rapl_register_psys();
++	rapl_add_platform_domain(&rapl_msr_priv);
+ 
+ 	ret = register_pm_notifier(&rapl_pm_notifier);
+ 	if (ret)
+@@ -1549,7 +1548,7 @@ static int __init rapl_init(void)
+ 	cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
+ 
+ err_unreg:
+-	rapl_unregister_powercap();
++	powercap_unregister_control_type(rapl_msr_priv.control_type);
  	return ret;
  }
-@@ -1507,6 +1472,43 @@ static struct notifier_block rapl_pm_notifier = {
- 	.notifier_call = rapl_pm_callback,
- };
  
-+static int rapl_msr_read_raw(int cpu, struct reg_action *ra)
-+{
-+	if (rdmsrl_safe_on_cpu(cpu, ra->reg, &ra->value)) {
-+		pr_debug("failed to read msr 0x%x on cpu %d\n", ra->reg, cpu);
-+		return -EIO;
-+	}
-+	ra->value &= ra->mask;
-+	return 0;
-+}
-+
-+static void rapl_msr_update_func(void *info)
-+{
-+	struct reg_action *ra = info;
-+	u64 val;
-+
-+	ra->err = rdmsrl_safe(ra->reg, &val);
-+	if (ra->err)
-+		return;
-+
-+	val &= ~ra->mask;
-+	val |= ra->value;
-+
-+	ra->err = wrmsrl_safe(ra->reg, val);
-+}
-+
-+
-+static int rapl_msr_write_raw(int cpu, struct reg_action *ra)
-+{
-+	int ret;
-+
-+	ret = smp_call_function_single(cpu, rapl_msr_update_func, ra, 1);
-+	if (WARN_ON_ONCE(ret))
-+		return ret;
-+
-+	return ra->err;
-+}
-+
- static int __init rapl_init(void)
+@@ -1557,7 +1556,8 @@ static void __exit rapl_exit(void)
  {
- 	const struct x86_cpu_id *id;
-@@ -1522,6 +1524,8 @@ static int __init rapl_init(void)
+ 	unregister_pm_notifier(&rapl_pm_notifier);
+ 	cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
+-	rapl_unregister_powercap();
++	rapl_remove_platform_domain(&rapl_msr_priv);
++	powercap_unregister_control_type(rapl_msr_priv.control_type);
+ }
  
- 	rapl_defaults = (struct rapl_defaults *)id->driver_data;
- 
-+	rapl_msr_priv.read_raw = rapl_msr_read_raw;
-+	rapl_msr_priv.write_raw = rapl_msr_write_raw;
- 	ret = rapl_register_powercap();
- 	if (ret)
- 		return ret;
-diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
-index ec2c9e8..ff215d6 100644
---- a/include/linux/intel_rapl.h
-+++ b/include/linux/intel_rapl.h
-@@ -88,6 +88,13 @@ struct rapl_domain {
- 	struct rapl_package *rp;
- };
- 
-+struct reg_action {
-+	u32 reg;
-+	u64 mask;
-+	u64 value;
-+	int err;
-+};
-+
- /**
-  * struct rapl_if_priv: private data for different RAPL interfaces
-  * @control_type:		Each RAPL interface must have its own powercap
-@@ -97,6 +104,10 @@ struct rapl_domain {
-  * @pcap_rapl_online:		CPU hotplug state for each RAPL interface.
-  * @reg_unit:			Register for getting energy/power/time unit.
-  * @regs:			Register sets for different RAPL Domains.
-+ * @read_raw:			Callback for reading RAPL interface specific
-+ *				registers.
-+ * @write_raw:			Callback for writing RAPL interface specific
-+ *				registers.
-  */
- struct rapl_if_priv {
- 	struct powercap_control_type *control_type;
-@@ -104,6 +115,8 @@ struct rapl_if_priv {
- 	enum cpuhp_state pcap_rapl_online;
- 	u32 reg_unit;
- 	u32 regs[RAPL_DOMAIN_MAX][RAPL_DOMAIN_REG_MAX];
-+	int (*read_raw)(int cpu, struct reg_action *ra);
-+	int (*write_raw)(int cpu, struct reg_action *ra);
- };
- 
- /* maximum rapl package domain name: package-%d-die-%d */
+ module_init(rapl_init);
 -- 
 2.7.4
 
