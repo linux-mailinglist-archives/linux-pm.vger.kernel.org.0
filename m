@@ -2,133 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 990416096B
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2019 17:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFE960AFE
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2019 19:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726585AbfGEPhQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jul 2019 11:37:16 -0400
-Received: from mout.gmx.net ([212.227.15.19]:56819 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725497AbfGEPhP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Jul 2019 11:37:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1562340946;
-        bh=+xG973BWcEz2x94VZcUAPePu5GwCe5fwDn2xc5iFqo0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=N0/iBvJc6HtX2nJ4b7IPEhJQHze0yGnFVfDsrmD7ZCrkY1o/NEmt/GfIh0sEBoPZk
-         pUwgP+xFM6zSWbqJykxww7GN6eLJ2skqyA7owjZiCfEOBg042cwWIgn7mjUyrBCEpv
-         jE/dN7C0LP0estl9Ivtpd/Id2IV8oTVe4Tp9sxUo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [185.53.41.182] ([185.53.41.182]) by web-mail.gmx.net
- (3c-app-gmx-bs68.server.lan [172.19.170.213]) (via HTTP); Fri, 5 Jul 2019
- 17:35:46 +0200
+        id S1727074AbfGERWj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jul 2019 13:22:39 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:35123 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726069AbfGERWj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jul 2019 13:22:39 -0400
+Received: by mail-lj1-f193.google.com with SMTP id x25so3192186ljh.2;
+        Fri, 05 Jul 2019 10:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=lT49eBtmE30QT+N0LpenHBVtCzyNDyCGeA0xIY9l0tk=;
+        b=TH1cOfk7h7XdTuH/U8jqosVLTVKqq3nVANlSKgBsXnDb19Bj07zotkkXWGko5UjXte
+         +GAE7pWx4g3csHgt9q7+ze2QC4u2QUhVH03dxA2PWhq4Rm2I17tWoAlW9dUZNxBAp3Dg
+         aciXgHWRHP/FT+SZK1BZpT7vPLoH1r+ySJ5K8tobYqWGnu0Ezcel/H4+fnu7nQyKdQt8
+         sxtTWcpGYMG9SsumQf4ZdsVRZepSjvTPzuRR9hP5BPiJm6WvhexuJB3Eyp1UgGFCmAQf
+         pDkT6cxe0YjzUkrktUep0A2WIkhwZkLLG9bSEQdUYg9noOhDcwJvGiMJ17KoMKs4xcAz
+         9yAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=lT49eBtmE30QT+N0LpenHBVtCzyNDyCGeA0xIY9l0tk=;
+        b=gSOZ4SKZVwm2EmZ5bbnVbEQZP3xDmsMYhcYankbqZbDpN/X22BAczuxEpDfc6Ro8Lw
+         Cl73yl5Zwl4V1k5v/F8S0jFx/1dWos5qO3z+ttma6/rjOsCVByZNYIo6X+fxUlLFDeNU
+         q7CU6B83erITBdnYAo/eMYy3zYIvwfa0vOH7+ZbzGuY5l7NFtG7G9AKb/YL7zrbiQ0/1
+         BkzfV1PSipwkx7CRuQ4rAqhQOiPmBzQNVuBFNMlEOjQGCvfpDnyYX3Cry+4nxMYUb45h
+         tz1uhNAD7UFKeFWLwjaFdZ2UKu1IgJJK7RSSreEUYjuxiOeRhbuL+iDY7Y6JAY19yjrA
+         Cb2g==
+X-Gm-Message-State: APjAAAVez9SiKX/+Z/DJM5+c7TOUBW9CJq5Ewzul/UiOQiQKVet90uk4
+        kKeOYLF3HRponhfRtaDjUzZQ9trQ
+X-Google-Smtp-Source: APXvYqw7Qm+qEYpk3A3RJry+Amj8SF4cm9oidAvxOjWwZNzOcNeOFGY1EtmC8fT+i6z9xursIIRYLg==
+X-Received: by 2002:a2e:25a:: with SMTP id 87mr2830557ljc.183.1562347356709;
+        Fri, 05 Jul 2019 10:22:36 -0700 (PDT)
+Received: from [84.217.171.228] (c-74afd954.51034-0-757473696b74.bbcust.telenor.se. [84.217.171.228])
+        by smtp.gmail.com with ESMTPSA id 27sm1852775ljw.97.2019.07.05.10.22.35
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Jul 2019 10:22:36 -0700 (PDT)
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+From:   Thomas Lindroth <thomas.lindroth@gmail.com>
+Subject: The tick is active on idle adaptive-tick CPUs when
+ /dev/cpu_dma_latency is used
+Message-ID: <79b247b3-e056-610e-9a07-e685dfdaa6c9@gmail.com>
+Date:   Fri, 5 Jul 2019 19:22:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Message-ID: <trinity-7b1977bd-252b-4482-b708-cf704a9d3da1-1562340946396@3c-app-gmx-bs68>
-From:   "Frank Wunderlich" <frank-w@public-files.de>
-To:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-Cc:     "Lee Jones" <lee.jones@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "Sean Wang" <sean.wang@mediatek.com>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        "Eddie Huang" <eddie.huang@mediatek.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Richard Fontana" <rfontana@redhat.com>,
-        "Allison Randal" <allison@lohutok.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Mauro Carvalho Chehab" <mchehab+samsung@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Rob Herring" <robh@kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "Paul E . McKenney" <paulmck@linux.ibm.com>,
-        "Josef Friedl" <josef.friedl@speed.at>
-Subject: Aw: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 5 Jul 2019 17:35:46 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20190704204336.GJ3692@piout.net>
-References: <20190703164822.17924-1-frank-w@public-files.de>
- <20190703164822.17924-4-frank-w@public-files.de>
- <20190704204336.GJ3692@piout.net>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:3DQjnrcP0qQkneq0N2KGXDypFxKC70Y6B/6Wz6gG83c+zzU8tPfyJ7R1HE1HqAXh3hB2I
- tgJSbOVBlcwfm2+5WrNhSjWxrIe4AmFQkfXZmEFAprfzxqChBFn9HnyAR9YWrNvCPuG17yU7Op4d
- ugpFGrIo4Tf+JcmINzOK23uQEhN2f8orMVc5A246lEDzSCXmCflOxlZ6PHU1xgJelMk9hVPkR8fZ
- DhVDomXvArd2HR4UT+Ec00/BFdO1KKd8+sxf1crLqLghjGrqQGEuEjQemQPPAcQJzokFsPSPjEgJ
- Ok=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:U5UYnBEkf+0=:lL1CL6XEoZrqJz8T2zwkL5
- 4VYvmDYvZ5WzNABcDNBejMTkwRG1c67XpMAnjTSAn1VKRZ87YyW8Fes8PHzncewehLQUqaLue
- LVS2SFGPFzRxC0khTzvlus1KUr5oZY7QijfOK9hocquUSx+iHzpI9TDlAnmWe4UaoMF/42CDH
- WGqzSesYNDhJ7QrAjfxtUFBYbMU6YGR/80HNhJeKizPb9hMhw1PNX2FTuEKhB9AhTNWDwj9jf
- iz2TYEYzFWXqIjVYcbNyIpCk5fhnRvSvMFgGnv8nXdIrk/aesBOoI1tMC5dY47eKVhwcxbF3G
- D+sXhAC/j9gEmrB19oC5cSMkvSvUHyXuG49+ftF/sz8bwRecT//qfKlBN/CWfLF+KTKQ0W48R
- xrcCxWA4aVF7JhOIHm0iuSzma7jniESyMdd9UufoYSt+hBWPgp+BB9+EF6Ufu4+PeO1WxdTxr
- CO5FuMMppqZq0zy35n31R7Y7AqTSK4X0aeIIY0rtWO4BOnrtCnxD4Kxjj93N0FpJ/y3CWdPFE
- r2AHMveJE7FwuKD4IPTmai0ubwLDHQJximoqtKtj7ibjV+W5K1jLBN8QCGyFm+7WaavnB4il9
- jtB6YIWXJrrwvYpdopClbcSNQtobLh8iTwP4OAZnwlQXtwCqyeKBff4O3dDbmq/Ihzy05qfUB
- Zrmc=
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Alexander,
+On recent kernels the tick remains active on idle adaptive-tick CPUs when a small value is written to /dev/cpu_dma_latency to restrict the highest C-state. Before the idle loop redesign in 4.17 idle CPUs had the tick disabled even when C-state were restricted. Is this change intentional or a regression?
 
-thank you for the Review
+I use an x86_64 system built with CONFIG_NO_HZ_FULL that I recently upgraded to the 4.19 series from the 4.14 series. I noticed that adaptive-tick CPUs (nohz_full=1-7) still fire timer interrupts about 1000 times/s (CONFIG_HZ_1000=y) even when they are mostly idle. Some debugging showed that this only happens when a program is writing to /dev/cpu_dma_latency to restrict C-states. The old 4.14 kernel only have around 10 timer interrupts per second on idle adaptive-tick CPU even when C-states are restricted that way.
 
-> Gesendet: Donnerstag, 04. Juli 2019 um 22:43 Uhr
-> Von: "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-> > -	rtc->rtc_dev =3D devm_rtc_allocate_device(rtc->dev);
-> > -	if (IS_ERR(rtc->rtc_dev))
-> > -		return PTR_ERR(rtc->rtc_dev);
-> > +	ret =3D devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
-> > +					mtk_rtc_irq_handler_thread,
-> > +					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> > +					"mt6397-rtc", rtc);
-> >
->
-> This change may lead to a crash and the allocation was intentionally
-> placed before the irq request.
+I would expect an adaptive-tick CPU to turn off the tick when it has 0 or 1 processes to run and enable the tick for >2 processes. Kernels after 4.17 instead have the tick on when 0 or >2 processes are running and the tick off in the 1 process case. Since the tick is off when a single process is running that workload isn't directly harmed by the change but if the CPU use hyperthreading the constant wakeups on an idle HT sibling will reduce performance on the other sibling.
 
-i got no crash till now, but i will try to move the allocation before irq-=
-request
+They way I look for timer interrupts is by comparing the LOC line in /proc/interrupts or using the hrtimer_expire_entry tracepoint when function=tick_sched_timer. Both methods seem to give the same results.
 
-> > -	ret =3D request_threaded_irq(rtc->irq, NULL,
-> > -				   mtk_rtc_irq_handler_thread,
-> > -				   IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> > -				   "mt6397-rtc", rtc);
-> >  	if (ret) {
-> >  		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
-> >  			rtc->irq, ret);
-> > @@ -287,6 +281,10 @@ static int mtk_rtc_probe(struct platform_device *=
-pdev)
-> >
-> >  	device_init_wakeup(&pdev->dev, 1);
-> >
-> > +	rtc->rtc_dev =3D devm_rtc_allocate_device(&pdev->dev);
-> > +	if (IS_ERR(rtc->rtc_dev))
-> > +		return PTR_ERR(rtc->rtc_dev);
-> > +
-> >  	rtc->rtc_dev->ops =3D &mtk_rtc_ops;
+I can reproduce the problem using an i7-4790K CPU with /sys/devices/system/cpu/cpuidle/current_driver:intel_idle. I can also reproduce the problem on an old core2duo laptop with current_driver:acpi_idle but I can't reproduce the problem in a virtual machine where current_driver:none. I also can't reproduce the problem if C-states are restricted using the intel_idle.max_cstate=1 kernel argument instead of /dev/cpu_dma_latency.
 
-
-> >  static const struct of_device_id mt6397_rtc_of_match[] =3D {
-> > +	{ .compatible =3D "mediatek,mt6323-rtc", },
->
-> Unrelated change, this is not an improvement and must be accompanied by
-> a documentation change.
-
-documentation is changed in 1/7 defining this compatible. i called it impr=
-ovement because existing driver now supports another chip
-
-regards Frank
+The commit that introduced the change is 554c8aa8ec "sched: idle: Select idle state before stopping the tick" in v4.17 and the problem exists at least up to kernel 5.1 using the menu cpuidle governor.
