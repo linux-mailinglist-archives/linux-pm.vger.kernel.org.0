@@ -2,116 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DB760551
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2019 13:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017DD6054F
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2019 13:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728744AbfGELi3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jul 2019 07:38:29 -0400
-Received: from node.akkea.ca ([192.155.83.177]:41794 "EHLO node.akkea.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728741AbfGELi3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Jul 2019 07:38:29 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by node.akkea.ca (Postfix) with ESMTP id 2131E4E2051;
-        Fri,  5 Jul 2019 11:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1562326708; bh=18P+AMytcx3lv76RTtEolvqR25huJYtRlXkpaF9f5yE=;
-        h=From:To:Cc:Subject:Date;
-        b=mfJTkIGivYuAi4DCALqY13+hqDe09cDBGciyJM5EwsH+Ha/iNCKEXUAOwO9FAUjzM
-         cLaRPELssKRLCF+LyPFzeDWOl3ALnaXYkmmXxKxPxtwPVh9cpJCvy+mBs4B2ULabj1
-         TCmIwW+Jvj6bCxv/esdptNJMXrl4H1tlQ/AVsaNU=
-X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
-Received: from node.akkea.ca ([127.0.0.1])
-        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 68gWECsqC91D; Fri,  5 Jul 2019 11:38:27 +0000 (UTC)
-Received: from media.hitronhub.home (S0106ac202e1e3ee3.cg.shawcable.net [96.51.227.121])
-        by node.akkea.ca (Postfix) with ESMTPSA id 7A70A4E204E;
-        Fri,  5 Jul 2019 11:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1562326707; bh=18P+AMytcx3lv76RTtEolvqR25huJYtRlXkpaF9f5yE=;
-        h=From:To:Cc:Subject:Date;
-        b=GQ/H+cQREUeTwBG7+qcyZMDRjUAVUI9784QoRD/mDpJuss9+bmJqLcMwveXscH9WL
-         2pTQcWnuMiDW+JjPkkKqXABLoqcpkDuZZPzKk7oFG+IXTVd4iBVXNKox68i5ObGyT2
-         h1J4frsHlDpoyCGRBZt70Gbhyp6lwxESagY4BPAY=
-From:   "Angus Ainslie (Purism)" <angus@akkea.ca>
-To:     angus.ainslie@puri.sm
-Cc:     krzk@kernel.org, Sebastian Reichel <sre@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Angus Ainslie (Purism)" <angus@akkea.ca>
-Subject: [PATCH] power: supply: bq25890_charger: Add the BQ25895 part
-Date:   Fri,  5 Jul 2019 05:37:51 -0600
-Message-Id: <20190705113751.18116-1-angus@akkea.ca>
-X-Mailer: git-send-email 2.17.1
+        id S1726523AbfGELiW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jul 2019 07:38:22 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:33974 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbfGELiV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jul 2019 07:38:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=lB8z0jtulGzmPbIejumDh4AviELPAnIF6LFnZL8rAIQ=; b=jYcoqeXkjry3ASEOSiR/KLv9c/
+        qbgnuhLFKF2sUZQWtKNsrdmb8jFYgrwGoUzK7RYSnRCaqZORA1qHd7+0a/yrerz5Aa5paxOMd+NIc
+        ypvBZQnUd5/37xnDbiBvuGz7IjWHmys92gukvnU2sOqd4jtR0M69af+vtSEg5hgLnXbP6VfeLYZ6y
+        WfjL2NJszrBsXOyIPg+D69Ae1tOn4Z+Eh5A+YLcW2DymOzH3N3bqe7sI8kpeNtbM1BJyad3RXASY9
+        CTMF9FwLVhEg4+JLFhKA75OqHeKbelQP7inVyAk6LccZHnMc/Z37WXSb1zGHcQiMWoybpiJlli32T
+        oZYSlF3g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hjMXZ-0001O7-45; Fri, 05 Jul 2019 11:38:09 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8018F2026E806; Fri,  5 Jul 2019 13:38:06 +0200 (CEST)
+Date:   Fri, 5 Jul 2019 13:38:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alan Jenkins <alan.christopher.jenkins@gmail.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        Doug Smythies <dsmythies@telus.net>, linux-pm@vger.kernel.org
+Subject: Re: iowait v.s. idle accounting is "inconsistent" - iowait is too low
+Message-ID: <20190705113806.GP3402@hirez.programming.kicks-ass.net>
+References: <2ff025f1-9a3e-3eae-452b-ef84824009b4@gmail.com>
+ <000001d531a8$8931b2a0$9b9517e0$@net>
+ <e82b9d7c-81e5-dd80-b9c0-f5f065344e2f@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e82b9d7c-81e5-dd80-b9c0-f5f065344e2f@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The BQ25895 is almost identical to the BQ25890.
+On Fri, Jul 05, 2019 at 12:25:46PM +0100, Alan Jenkins wrote:
+> Hi, scheduler experts!
+> 
+> My cpu "iowait" time appears to be reported incorrectly.  Do you know why
+> this could happen?
 
-Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
----
- drivers/power/supply/bq25890_charger.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Because iowait is a magic random number that has no sane meaning.
+Personally I'd prefer to just delete the whole thing, except ABI :/
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index d333f2b321b9..9d1ec8d677de 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -22,6 +22,7 @@
- #define BQ25890_IRQ_PIN			"bq25890_irq"
- 
- #define BQ25890_ID			3
-+#define BQ25895_ID			7
- #define BQ25896_ID			0
- 
- enum bq25890_fields {
-@@ -171,7 +172,7 @@ static const struct reg_field bq25890_reg_fields[] = {
- 	[F_WD]			= REG_FIELD(0x07, 4, 5),
- 	[F_TMR_EN]		= REG_FIELD(0x07, 3, 3),
- 	[F_CHG_TMR]		= REG_FIELD(0x07, 1, 2),
--	[F_JEITA_ISET]		= REG_FIELD(0x07, 0, 0),
-+	[F_JEITA_ISET]		= REG_FIELD(0x07, 0, 0), // reserved on BQ25895
- 	/* REG08 */
- 	[F_BATCMP]		= REG_FIELD(0x08, 5, 7),
- 	[F_VCLAMP]		= REG_FIELD(0x08, 2, 4),
-@@ -180,7 +181,7 @@ static const struct reg_field bq25890_reg_fields[] = {
- 	[F_FORCE_ICO]		= REG_FIELD(0x09, 7, 7),
- 	[F_TMR2X_EN]		= REG_FIELD(0x09, 6, 6),
- 	[F_BATFET_DIS]		= REG_FIELD(0x09, 5, 5),
--	[F_JEITA_VSET]		= REG_FIELD(0x09, 4, 4),
-+	[F_JEITA_VSET]		= REG_FIELD(0x09, 4, 4), // reserved on BQ25895
- 	[F_BATFET_DLY]		= REG_FIELD(0x09, 3, 3),
- 	[F_BATFET_RST_EN]	= REG_FIELD(0x09, 2, 2),
- 	[F_PUMPX_UP]		= REG_FIELD(0x09, 1, 1),
-@@ -188,7 +189,7 @@ static const struct reg_field bq25890_reg_fields[] = {
- 	/* REG0A */
- 	[F_BOOSTV]		= REG_FIELD(0x0A, 4, 7),
- 	/* PFM_OTG_DIS 3 on BQ25896 */
--	[F_BOOSTI]		= REG_FIELD(0x0A, 0, 2),
-+	[F_BOOSTI]		= REG_FIELD(0x0A, 0, 2), // reserved on BQ25895
- 	/* REG0B */
- 	[F_VBUS_STAT]		= REG_FIELD(0x0B, 5, 7),
- 	[F_CHG_STAT]		= REG_FIELD(0x0B, 3, 4),
-@@ -392,6 +393,8 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_MODEL_NAME:
- 		if (bq->chip_id == BQ25890_ID)
- 			val->strval = "BQ25890";
-+		else if (bq->chip_id == BQ25895_ID)
-+			val->strval = "BQ25895";
- 		else if (bq->chip_id == BQ25896_ID)
- 			val->strval = "BQ25896";
- 		else
-@@ -862,7 +865,8 @@ static int bq25890_probe(struct i2c_client *client,
- 		return bq->chip_id;
- 	}
- 
--	if ((bq->chip_id != BQ25890_ID) && (bq->chip_id != BQ25896_ID)) {
-+	if ((bq->chip_id != BQ25890_ID) && (bq->chip_id != BQ25895_ID)
-+			&& (bq->chip_id != BQ25896_ID)) {
- 		dev_err(dev, "Chip with ID=%d, not supported!\n", bq->chip_id);
- 		return -ENODEV;
- 	}
--- 
-2.17.1
+Also see the comment near nr_iowait():
+
+/*
+ * IO-wait accounting, and how its mostly bollocks (on SMP).
+ *
+ * The idea behind IO-wait account is to account the idle time that we could
+ * have spend running if it were not for IO. That is, if we were to improve the
+ * storage performance, we'd have a proportional reduction in IO-wait time.
+ *
+ * This all works nicely on UP, where, when a task blocks on IO, we account
+ * idle time as IO-wait, because if the storage were faster, it could've been
+ * running and we'd not be idle.
+ *
+ * This has been extended to SMP, by doing the same for each CPU. This however
+ * is broken.
+ *
+ * Imagine for instance the case where two tasks block on one CPU, only the one
+ * CPU will have IO-wait accounted, while the other has regular idle. Even
+ * though, if the storage were faster, both could've ran at the same time,
+ * utilising both CPUs.
+ *
+ * This means, that when looking globally, the current IO-wait accounting on
+ * SMP is a lower bound, by reason of under accounting.
+ *
+ * Worse, since the numbers are provided per CPU, they are sometimes
+ * interpreted per CPU, and that is nonsensical. A blocked task isn't strictly
+ * associated with any one particular CPU, it can wake to another CPU than it
+ * blocked on. This means the per CPU IO-wait number is meaningless.
+ *
+ * Task CPU affinities can make all that even more 'interesting'.
+ */
+
 
