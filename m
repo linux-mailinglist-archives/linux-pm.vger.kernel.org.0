@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC5A60060
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2019 07:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DF860064
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2019 07:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbfGEFFk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jul 2019 01:05:40 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:51412 "EHLO inva021.nxp.com"
+        id S1727271AbfGEFFn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jul 2019 01:05:43 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:58262 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727022AbfGEFFj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Jul 2019 01:05:39 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B19042002AA;
-        Fri,  5 Jul 2019 07:05:37 +0200 (CEST)
+        id S1726824AbfGEFFl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Jul 2019 01:05:41 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 604BB1A0E89;
+        Fri,  5 Jul 2019 07:05:39 +0200 (CEST)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 340CF20018A;
-        Fri,  5 Jul 2019 07:05:25 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 459BC1A006E;
+        Fri,  5 Jul 2019 07:05:27 +0200 (CEST)
 Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id CBCAC402C0;
-        Fri,  5 Jul 2019 13:05:11 +0800 (SGT)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E7391402DF;
+        Fri,  5 Jul 2019 13:05:13 +0800 (SGT)
 From:   Anson.Huang@nxp.com
 To:     rui.zhang@intel.com, edubezval@gmail.com,
         daniel.lezcano@linaro.org, robh+dt@kernel.org,
@@ -31,9 +31,9 @@ To:     rui.zhang@intel.com, edubezval@gmail.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
 Cc:     Linux-imx@nxp.com
-Subject: [PATCH 3/6] dt-bindings: thermal: qoriq: Add optional clocks property
-Date:   Fri,  5 Jul 2019 12:56:09 +0800
-Message-Id: <20190705045612.27665-3-Anson.Huang@nxp.com>
+Subject: [PATCH 4/6] thermal: qoriq: Add clock operations
+Date:   Fri,  5 Jul 2019 12:56:10 +0800
+Message-Id: <20190705045612.27665-4-Anson.Huang@nxp.com>
 X-Mailer: git-send-email 2.14.1
 In-Reply-To: <20190705045612.27665-1-Anson.Huang@nxp.com>
 References: <20190705045612.27665-1-Anson.Huang@nxp.com>
@@ -45,26 +45,86 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Anson Huang <Anson.Huang@nxp.com>
 
-Some platforms have clock control for TMU, add optional
-clocks property to the binding doc.
+Some platforms like i.MX8MQ has clock control for this module,
+need to add clock operations to make sure the driver is working
+properly.
 
 Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 ---
- Documentation/devicetree/bindings/thermal/qoriq-thermal.txt | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/qoriq_thermal.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt b/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
-index 04cbb90..28f2cba 100644
---- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
-+++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
-@@ -23,6 +23,7 @@ Required properties:
- Optional property:
- - little-endian : If present, the TMU registers are little endian. If absent,
- 	the default is big endian.
-+- clocks : the clock for clocking the TMU silicon.
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index 2b2f79b..0813c1b 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -2,6 +2,7 @@
+ //
+ // Copyright 2016 Freescale Semiconductor, Inc.
  
- Example:
++#include <linux/clk.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/err.h>
+@@ -72,6 +73,7 @@ struct qoriq_sensor {
  
+ struct qoriq_tmu_data {
+ 	struct qoriq_tmu_regs __iomem *regs;
++	struct clk *clk;
+ 	bool little_endian;
+ 	struct qoriq_sensor	*sensor[SITES_MAX];
+ };
+@@ -208,6 +210,19 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+ 		return PTR_ERR(data->regs);
+ 	}
+ 
++	data->clk = devm_clk_get(&pdev->dev, NULL);
++	if (IS_ERR(data->clk)) {
++		if (PTR_ERR(data->clk) == -EPROBE_DEFER)
++			return -EPROBE_DEFER;
++		data->clk = NULL;
++	}
++
++	ret = clk_prepare_enable(data->clk);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to enable clock\n");
++		return ret;
++	}
++
+ 	qoriq_tmu_init_device(data);	/* TMU initialization */
+ 
+ 	ret = qoriq_tmu_calibration(pdev);	/* TMU calibration */
+@@ -235,6 +250,8 @@ static int qoriq_tmu_remove(struct platform_device *pdev)
+ 	/* Disable monitoring */
+ 	tmu_write(data, TMR_DISABLE, &data->regs->tmr);
+ 
++	clk_disable_unprepare(data->clk);
++
+ 	platform_set_drvdata(pdev, NULL);
+ 
+ 	return 0;
+@@ -250,14 +267,21 @@ static int __maybe_unused qoriq_tmu_suspend(struct device *dev)
+ 	tmr &= ~TMR_ME;
+ 	tmu_write(data, tmr, &data->regs->tmr);
+ 
++	clk_disable_unprepare(data->clk);
++
+ 	return 0;
+ }
+ 
+ static int __maybe_unused qoriq_tmu_resume(struct device *dev)
+ {
+ 	u32 tmr;
++	int ret;
+ 	struct qoriq_tmu_data *data = dev_get_drvdata(dev);
+ 
++	ret = clk_prepare_enable(data->clk);
++	if (ret)
++		return ret;
++
+ 	/* Enable monitoring */
+ 	tmr = tmu_read(data, &data->regs->tmr);
+ 	tmr |= TMR_ME;
 -- 
 2.7.4
 
