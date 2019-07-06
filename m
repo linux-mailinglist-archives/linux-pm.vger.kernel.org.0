@@ -2,73 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B75660F6E
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2019 10:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B5960F70
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2019 10:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725934AbfGFIR1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sat, 6 Jul 2019 04:17:27 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40286 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725900AbfGFIR1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Jul 2019 04:17:27 -0400
-Received: by mail-ot1-f65.google.com with SMTP id e8so11214106otl.7;
-        Sat, 06 Jul 2019 01:17:26 -0700 (PDT)
+        id S1725945AbfGFITo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Jul 2019 04:19:44 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46099 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725934AbfGFITo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Jul 2019 04:19:44 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 65so8749815oid.13
+        for <linux-pm@vger.kernel.org>; Sat, 06 Jul 2019 01:19:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BmjS73XlAr/xExYyGQ/UHQ+KTYtukJa8bAxRUnVmDcg=;
-        b=hr4kZONchUsldLXs4gsKEpLO43E+E2ZQ5ZWfVEKAhnA00j8JjAANZ3Lmhqp3Pbv3ZO
-         6MP/XY91biXb+/DIAgXGKNRNI7vrOj+R7LbcvSakusBroLzoPGGpxWW6cG/e+Ey24PH9
-         yQk2o+MMy2JVS64jDAerbmjYs9xYJjMTDk8j7N/Ak5aDHNmEQ7iOV+uRUui8fLNKuOd1
-         c6npUbiDurafKwM6bmE7HwX9Xa56ZNVfgkY/bZsR4JHmSWSr4WGFkrOW7EC01gOoheIY
-         VH/6i/sHIQYTVTgUnrB46WxgB3pJKqqVBoaKw3j/y6TUDZcnng5Ubl3ZGshFz46owNqs
-         geeQ==
-X-Gm-Message-State: APjAAAUH0M+pq1IF15jFbTqXH5lSYlPX7ISR8TyL2PScTXZlsxLwNRpg
-        PvVcZlplZBzEB+4meTaZ0JUsQ6E2NlVhJatAwg0=
-X-Google-Smtp-Source: APXvYqwpaq0rDzPcnpj3pFXRl4h+ABXahe/kTwqQ4V/E9YVuoErUBySOPi3W44AsrLPO0L5ONQSP22LLfEke6J2swjs=
-X-Received: by 2002:a9d:6a4b:: with SMTP id h11mr4036175otn.266.1562401046081;
- Sat, 06 Jul 2019 01:17:26 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=IOzWOlAD7N+TCby0rEh2L1c/ULAXkz+iyUutVoup1wQ=;
+        b=j+CYfkCetw1GqRwwBcSrlU6tUTvxOgCY6+fo2qA2xdZxn6chZZIbPEnfvmw8nVjxDM
+         loo5xKRb0dchksrynbWXpwVR7onOnwLb+XnsBn8wcbwhHrRa3Vzk4ltR/L/zRNA/6V5Y
+         MResKWcSorQlqVHh74MsIE3SOyflbnY8sT/5TmR2NwfVh6JJvtE+R5dVeq5j9v8dTBuY
+         EH+eLjIQQyuigKW+JJjerKwdVLK1q/H9xsa4sOyUWIdISxGa6QBBP7GwY5qtlyWgD+vy
+         JH4Cc7kOMfEQWkF5jV3nAPNinps37Sen/urMSWaWXhYM0+pQXgE+h1SGX7lP0D5dKrm8
+         3gPw==
+X-Gm-Message-State: APjAAAX9gTNCqj5NZ6VQ7JAOvfOuuJzGE2aRac+EktoO75Boql8mK+dB
+        mQEYFcCsNmVCrNe+P11UWocF17gHU3fgzlTOhPU=
+X-Google-Smtp-Source: APXvYqwjY2UTwERA9JC28rG2RrgWnEu3RLbvtM6aNZ0pHW2gO68orSM1x/dmpDTyWNMeHJurxncPGdTjn6r6KDjq36k=
+X-Received: by 2002:aca:d907:: with SMTP id q7mr4038686oig.68.1562401183515;
+ Sat, 06 Jul 2019 01:19:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <79b247b3-e056-610e-9a07-e685dfdaa6c9@gmail.com>
-In-Reply-To: <79b247b3-e056-610e-9a07-e685dfdaa6c9@gmail.com>
+References: <1562258085-3165-1-git-send-email-rui.zhang@intel.com>
+ <CAJZ5v0jZEcSpGqeccZwOw6a_QMXKdcx4K2GBeC8P0Vn-9E6vyQ@mail.gmail.com> <97215b43ce11766f83847531b05def8d94f645f0.camel@intel.com>
+In-Reply-To: <97215b43ce11766f83847531b05def8d94f645f0.camel@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 6 Jul 2019 10:17:15 +0200
-Message-ID: <CAJZ5v0grOas+Wh0h09fKZmUnOJ3PRX2Fc=2fv7=zCFJiZ09-Bg@mail.gmail.com>
-Subject: Re: The tick is active on idle adaptive-tick CPUs when
- /dev/cpu_dma_latency is used
-To:     Thomas Lindroth <thomas.lindroth@gmail.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>
+Date:   Sat, 6 Jul 2019 10:19:32 +0200
+Message-ID: <CAJZ5v0ixFF-_5yYZhWBJLUaE6oreaGY1BELGTsYfqYw3M9sDcQ@mail.gmail.com>
+Subject: Re: [PATCH V2 00/13] intel_rapl: RAPL abstraction and MMIO RAPL support
+To:     "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 5, 2019 at 7:22 PM Thomas Lindroth
-<thomas.lindroth@gmail.com> wrote:
+On Fri, Jul 5, 2019 at 4:59 PM Pandruvada, Srinivas
+<srinivas.pandruvada@intel.com> wrote:
 >
-> On recent kernels the tick remains active on idle adaptive-tick CPUs when a small value is written to /dev/cpu_dma_latency to restrict the highest C-state. Before the idle loop redesign in 4.17 idle CPUs had the tick disabled even when C-state were restricted. Is this change intentional or a regression?
+> On Fri, 2019-07-05 at 10:57 +0200, Rafael J. Wysocki wrote:
+> > On Thu, Jul 4, 2019 at 6:34 PM Zhang Rui <rui.zhang@intel.com> wrote:
+> > >
+> > > Besideis MSR interface, RAPL can also be controlled via the MMIO
+> > > interface,
+> > > by accessing the MCHBar registers exposed by the processor thermal
+> > > device.
+> > >
+> > > Currently, we only have RAPL MSR interface in Linux kernel, this
+> > > brings
+> > > problems on some platforms that BIOS performs a low power limits
+> > > via the
+> > > MMIO interface by default. This results in poor system performance,
+> > > and there is no way for us to change the MMIO MSR setting in Linux.
+> > >
+> > > To fix this, RAPL MMIO interface support is introduced in this
+> > > patch set.
+> > >
+> > > Patch 1/13 to patch 11/13 abstract the RAPL code, and move all the
+> > > shared
+> > > code into a separate file, intel_rapl_common.c, so that it can be
+> > > used
+> > > by both MSR and MMIO interfaces.
+> > > Patch 12/13 introduced RAPL support via MMIO registers, exposed by
+> > > the
+> > > processor thermal devices.
+> > > Patch 13/13 fixes a module autoloading issue found later.
+> > >
+> > > The patch series has been tested on Dell XPS 9360, a SKL platform.
+> > >
+> > > Note that this patch series are based on the -tip tree, which
+> > > contains the
+> > > latest RAPL changes for multi-die support.
+> > >
+> > > Changes in V2:
+> > >    - add kerneldoc for struct rapl_if_priv.
+> > >    - use intel_rapl_msr.c for RAPL MSR I/F driver, instead of
+> > > intel_rapl.c.
+> > >    - changelog and coding style update.
+> >
+> > What tree is the series against?
+> >
+> > It doesn't apply either on top of my powercap branch or on top of
+> > 5.2-rc7 for me.
+> This needs linux tip tree. There are some package/die changes in tip
+> tree, which this patch depends on.
 
-It was intentional, but this kind of is a gray area.
+OK, so the changes in -tip need to go in first.
 
-At least for the menu governor you may argue that the decision on
-whether or not to stop the tick should be based on the predicted idle
-duration.
-
-> I use an x86_64 system built with CONFIG_NO_HZ_FULL that I recently upgraded to the 4.19 series from the 4.14 series. I noticed that adaptive-tick CPUs (nohz_full=1-7) still fire timer interrupts about 1000 times/s (CONFIG_HZ_1000=y) even when they are mostly idle. Some debugging showed that this only happens when a program is writing to /dev/cpu_dma_latency to restrict C-states. The old 4.14 kernel only have around 10 timer interrupts per second on idle adaptive-tick CPU even when C-states are restricted that way.
->
-> I would expect an adaptive-tick CPU to turn off the tick when it has 0 or 1 processes to run and enable the tick for >2 processes. Kernels after 4.17 instead have the tick on when 0 or >2 processes are running and the tick off in the 1 process case. Since the tick is off when a single process is running that workload isn't directly harmed by the change but if the CPU use hyperthreading the constant wakeups on an idle HT sibling will reduce performance on the other sibling.
->
-> They way I look for timer interrupts is by comparing the LOC line in /proc/interrupts or using the hrtimer_expire_entry tracepoint when function=tick_sched_timer. Both methods seem to give the same results.
->
-> I can reproduce the problem using an i7-4790K CPU with /sys/devices/system/cpu/cpuidle/current_driver:intel_idle. I can also reproduce the problem on an old core2duo laptop with current_driver:acpi_idle but I can't reproduce the problem in a virtual machine where current_driver:none. I also can't reproduce the problem if C-states are restricted using the intel_idle.max_cstate=1 kernel argument instead of /dev/cpu_dma_latency.
->
-> The commit that introduced the change is 554c8aa8ec "sched: idle: Select idle state before stopping the tick" in v4.17 and the problem exists at least up to kernel 5.1 using the menu cpuidle governor.
-
-Restoring the previous behavior in this case should be relatively
-straightforward.  I'll send you a patch to do that later.
+Thanks!
