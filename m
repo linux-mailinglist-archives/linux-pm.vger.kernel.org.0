@@ -2,99 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5374D612DC
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2019 21:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB02E612E3
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2019 22:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbfGFT4Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Jul 2019 15:56:16 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36583 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbfGFT4P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Jul 2019 15:56:15 -0400
-Received: by mail-pf1-f193.google.com with SMTP id r7so5692558pfl.3;
-        Sat, 06 Jul 2019 12:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rdIXRuC7NtBV4U1/w6LEafkVG7RzW7TEmbreVlueNKA=;
-        b=Cqvb9HBEcixv91n56a2YxAnRpUeggG7y5cXiyagiVu7Vs9OM71q1RhrTZ4Jk4DBqLC
-         oR10n5MBlJbouu5999P3lWVOZG/WzqqmFtlqhJ7q4gvoGDUP2d09sJGsREXFpNUzssRV
-         jIaRwKRoHGEdOUOcXFoLkvwkvmRy4eTw40Ivuo5x5mkJyg7uKxURLwRakU12vMEuTMrP
-         GiD2zv8+3zC0UC8LohxaoYBVDp3BodkhtoZKSbbUDQcEq7z71AS5bKcHVqBw7YEJTUFQ
-         BbwwBi7SwN7pp5U24GtPzRVlitkOhHqf0fTYKNq6xKa7wtnyzZzRsHB8Xd+3zbZlZVi5
-         osPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rdIXRuC7NtBV4U1/w6LEafkVG7RzW7TEmbreVlueNKA=;
-        b=KQfnerXf8qdHY84t4fqx2PGdmIZZawfCKmZZnP4gZAuRBTFZmE+EAjgk0xiIh19kzl
-         Duo7nRVaG/q4/FtYU5Gi9Z3oyfw8zHKyaaO8GP5jJL6obQrxsQ4t15WG5BoMRV3Aolok
-         we3HhMwZYqmYeLGPEal+Eu5IQEoOUgJFLPgLbTJcwUmJ2xFIxIXwHxBv+Oc29NB6fGhW
-         Qrr2Qx0uyK3NESPBrhlR5GVcvQQn+DJu3omg/f2r0Hif8S5Asy3MepbFLxOY5nFunWQR
-         xIA+SeeL3EkdmY5lABX0wNpQw2NAET4lqYPzkpQUA9rA2Pfrw32hMwLsf7GBg2JxJsJM
-         EaoA==
-X-Gm-Message-State: APjAAAUzQYuV+lyXkDwoGAawbJUEELfcrBJgMNJIt1I1QNESSrcuHa1V
-        IvlTM8kG04H2ay3qXbE4kBk=
-X-Google-Smtp-Source: APXvYqxL2fcdJMRm7Zr4rY9qTpSt3wgEXavqeaaNwMzlyQE7DqTdBwn62soMZFefr4wMjd/ZDjwUmw==
-X-Received: by 2002:a17:90a:cb97:: with SMTP id a23mr13025330pju.67.1562442974920;
-        Sat, 06 Jul 2019 12:56:14 -0700 (PDT)
-Received: from Shreeya-Patel ([49.34.71.227])
-        by smtp.googlemail.com with ESMTPSA id y11sm18657887pfb.119.2019.07.06.12.56.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 06 Jul 2019 12:56:14 -0700 (PDT)
-Message-ID: <dcbc0088f31f26f80ab05e51787099df9b70262f.camel@gmail.com>
-Subject: Re: [PATCH] Documentation: cpu-freq: Convert core.txt file to ReST
- format
-From:   Shreeya Patel <shreeya.patel23498@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     skhan@linuxfoundation.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Date:   Sun, 07 Jul 2019 01:26:07 +0530
-In-Reply-To: <CAJZ5v0hovK+BY0kozGvkyCgR5CFHpZUu71BZRjUUdCYV8fM5Hg@mail.gmail.com>
-References: <20190705210428.8039-1-shreeya.patel23498@gmail.com>
-         <CAJZ5v0hovK+BY0kozGvkyCgR5CFHpZUu71BZRjUUdCYV8fM5Hg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726843AbfGFUEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Jul 2019 16:04:30 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:40343 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726307AbfGFUEa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Jul 2019 16:04:30 -0400
+X-Originating-IP: 90.65.161.137
+Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 4B50AE0003;
+        Sat,  6 Jul 2019 20:04:20 +0000 (UTC)
+Date:   Sat, 6 Jul 2019 22:04:20 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        Allison Randal <allison@lohutok.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "Paul E . McKenney" <paulmck@linux.ibm.com>,
+        Josef Friedl <josef.friedl@speed.at>
+Subject: Re: Re: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
+Message-ID: <20190706200420.GE12409@piout.net>
+References: <20190703164822.17924-1-frank-w@public-files.de>
+ <20190703164822.17924-4-frank-w@public-files.de>
+ <20190704204336.GJ3692@piout.net>
+ <trinity-7b1977bd-252b-4482-b708-cf704a9d3da1-1562340946396@3c-app-gmx-bs68>
+ <20190705212448.GB12409@piout.net>
+ <trinity-a4e5f99f-00bc-4e90-9a48-64dbc6ba9c08-1562429720701@3c-app-gmx-bs42>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <trinity-a4e5f99f-00bc-4e90-9a48-64dbc6ba9c08-1562429720701@3c-app-gmx-bs42>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 2019-07-06 at 09:58 +0200, Rafael J. Wysocki wrote:
-> On Fri, Jul 5, 2019 at 11:04 PM Shreeya Patel
-> <shreeya.patel23498@gmail.com> wrote:
-> > 
-> > Convert core file to ReST format, in order to allow it to
-> > be parsed by Sphinx. Make a minor change of correcting the wrong
-> > function name cpufreq_put_cpu to cpufreq_cpu_put.
-> > Also create an index.rst file in cpu-freq and add it's entry
-> > in the main Documentation/index.rst file.
-> > 
-> > Signed-off-by: Shreeya Patel <shreeya.patel23498@gmail.com>
+On 06/07/2019 18:15:20+0200, Frank Wunderlich wrote:
+> > Gesendet: Freitag, 05. Juli 2019 um 23:24 Uhr
+> > Von: "Alexandre Belloni" <alexandre.belloni@bootlin.com>
 > 
-> I've said "no" no three previous attempts and this one is not
-> different.
+> > Let's say the RTC has been used to start your platform, then the irq
+> > handler will be called as soon as the irq is requested, leading to a
+> > null pointer dereference.
 > 
-Sorry, I was not knowing about it.
-
-> I don't want to have anything .rst in Documentation/cpu-freq/.
+> i cannot test this with my platform, but i have changed it in my repo
 > 
-> There is a *new* admin-guide doc for cpufreq already and what is
-> missing is a *new* driver-api one.
+> https://github.com/frank-w/BPI-R2-4.14/commits/5.2-poweroff-mainline
 > 
-Yes I saw that but it didn't include all the details given in
-Documentation/cpu-freq hence I thought of sending this initial patch.
+> > Yes and IIRC, I did comment that the rtc change also had to be separated
+> > from 1/7.
+> 
+> also this is put in separate commit, can you take a look before i post v3?
+> 
+> > Also, I really doubt this new compatible is necessary at all as you
+> > could simply directly use mediatek,mt6397-rtc.
+> 
+> imho this can confuse because the wrong chip-name is used in dts
+> 
 
-Thanks
+This is not true, we do that all the time and the immediate benefit of
+using the mt6397 compatible is that then there is no need to
+synchronize between subsystems. If you want to be absolutely
+conservative, you could use
 
-> Thanks!
+compatible = "mediatek,mt6323-rtc", "mediatek,mt6397-rtc";
 
+in your DT.
+
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
