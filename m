@@ -2,120 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B23560D20
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jul 2019 23:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9FA60F65
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2019 09:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbfGEVZB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jul 2019 17:25:01 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:58063 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726061AbfGEVZB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jul 2019 17:25:01 -0400
-X-Originating-IP: 90.65.161.137
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 5B1981C0003;
-        Fri,  5 Jul 2019 21:24:48 +0000 (UTC)
-Date:   Fri, 5 Jul 2019 23:24:48 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Fontana <rfontana@redhat.com>,
-        Allison Randal <allison@lohutok.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "Paul E . McKenney" <paulmck@linux.ibm.com>,
-        Josef Friedl <josef.friedl@speed.at>
-Subject: Re: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
-Message-ID: <20190705212448.GB12409@piout.net>
-References: <20190703164822.17924-1-frank-w@public-files.de>
- <20190703164822.17924-4-frank-w@public-files.de>
- <20190704204336.GJ3692@piout.net>
- <trinity-7b1977bd-252b-4482-b708-cf704a9d3da1-1562340946396@3c-app-gmx-bs68>
+        id S1725962AbfGFH6y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Jul 2019 03:58:54 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38346 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725900AbfGFH6y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Jul 2019 03:58:54 -0400
+Received: by mail-ot1-f68.google.com with SMTP id d17so11213785oth.5;
+        Sat, 06 Jul 2019 00:58:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6COQkh4U3VVQoN9CAk4HX81w+sKnxIMS3dtGDN2ojSg=;
+        b=HAm/hdwGGTZVcxch7AvFGw/12QWng1eb8dg7DWpzgXzbCgLHdNXi0FDTD1HTQK8Pmx
+         3crSy4c7sIDakBtQ9J77KOyb+JToPTJoTTm4SZi0Bp7Tw5dHN3AgOPFOrrJOo0FDxKmq
+         bBmatNDbZUBUHE7kwel43de3PbNY2w40CfdG6tTNp7UVKw4NyMoh6CjmUjvdu8oXQKJO
+         m7Evjj3Wk/4I0RxHJevPpkErvqAmFusVlzcp940IzUficF8hkF9aZ7RcJ7egJFZZE+iz
+         anxsFTXZwenTgzvO6nFfTWlJ59b0pqnCbCq+WS5bDzuWUfcKZrFomojJlnGCF244iF+Z
+         lOLg==
+X-Gm-Message-State: APjAAAWBoh5fCIfJBl04ou55wUEn11PTST4cZn5l8Z8bmNdOBkIwwczJ
+        4vuPAgzLaiAxXjNgOkyMlbqP5mBZiLhTPVuY+nc=
+X-Google-Smtp-Source: APXvYqxs3fkYFf33MB5x0z6dgHzIdnZjiX1d3PHTwjm1UPH9bFhoAYVt7Ku/aN9dAKvbh4TU03F/cBhIR4URNsMsFXw=
+X-Received: by 2002:a9d:6a4b:: with SMTP id h11mr3991551otn.266.1562399933246;
+ Sat, 06 Jul 2019 00:58:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-7b1977bd-252b-4482-b708-cf704a9d3da1-1562340946396@3c-app-gmx-bs68>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+References: <20190705210428.8039-1-shreeya.patel23498@gmail.com>
+In-Reply-To: <20190705210428.8039-1-shreeya.patel23498@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 6 Jul 2019 09:58:40 +0200
+Message-ID: <CAJZ5v0hovK+BY0kozGvkyCgR5CFHpZUu71BZRjUUdCYV8fM5Hg@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: cpu-freq: Convert core.txt file to ReST format
+To:     Shreeya Patel <shreeya.patel23498@gmail.com>
+Cc:     skhan@linuxfoundation.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/07/2019 17:35:46+0200, Frank Wunderlich wrote:
-> Hi Alexander,
-> 
-> thank you for the Review
-> 
-> > Gesendet: Donnerstag, 04. Juli 2019 um 22:43 Uhr
-> > Von: "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-> > > -	rtc->rtc_dev = devm_rtc_allocate_device(rtc->dev);
-> > > -	if (IS_ERR(rtc->rtc_dev))
-> > > -		return PTR_ERR(rtc->rtc_dev);
-> > > +	ret = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
-> > > +					mtk_rtc_irq_handler_thread,
-> > > +					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> > > +					"mt6397-rtc", rtc);
-> > >
-> >
-> > This change may lead to a crash and the allocation was intentionally
-> > placed before the irq request.
-> 
-> i got no crash till now, but i will try to move the allocation before irq-request
-> 
+On Fri, Jul 5, 2019 at 11:04 PM Shreeya Patel
+<shreeya.patel23498@gmail.com> wrote:
+>
+> Convert core file to ReST format, in order to allow it to
+> be parsed by Sphinx. Make a minor change of correcting the wrong
+> function name cpufreq_put_cpu to cpufreq_cpu_put.
+> Also create an index.rst file in cpu-freq and add it's entry
+> in the main Documentation/index.rst file.
+>
+> Signed-off-by: Shreeya Patel <shreeya.patel23498@gmail.com>
 
-Let's say the RTC has been used to start your platform, then the irq
-handler will be called as soon as the irq is requested, leading to a
-null pointer dereference.
+I've said "no" no three previous attempts and this one is not different.
 
-> > > -	ret = request_threaded_irq(rtc->irq, NULL,
-> > > -				   mtk_rtc_irq_handler_thread,
-> > > -				   IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
-> > > -				   "mt6397-rtc", rtc);
-> > >  	if (ret) {
-> > >  		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
-> > >  			rtc->irq, ret);
-> > > @@ -287,6 +281,10 @@ static int mtk_rtc_probe(struct platform_device *pdev)
-> > >
-> > >  	device_init_wakeup(&pdev->dev, 1);
-> > >
-> > > +	rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
-> > > +	if (IS_ERR(rtc->rtc_dev))
-> > > +		return PTR_ERR(rtc->rtc_dev);
-> > > +
-> > >  	rtc->rtc_dev->ops = &mtk_rtc_ops;
-> 
-> 
-> > >  static const struct of_device_id mt6397_rtc_of_match[] = {
-> > > +	{ .compatible = "mediatek,mt6323-rtc", },
-> >
-> > Unrelated change, this is not an improvement and must be accompanied by
-> > a documentation change.
-> 
-> documentation is changed in 1/7 defining this compatible. i called it improvement because existing driver now supports another chip
-> 
+I don't want to have anything .rst in Documentation/cpu-freq/.
 
-Yes and IIRC, I did comment that the rtc change also had to be separated
-from 1/7.
+There is a *new* admin-guide doc for cpufreq already and what is
+missing is a *new* driver-api one.
 
-Also, I really doubt this new compatible is necessary at all as you
-could simply directly use mediatek,mt6397-rtc.
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks!
