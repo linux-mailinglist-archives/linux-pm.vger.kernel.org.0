@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CB1617F1
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 00:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0136617F4
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 00:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728449AbfGGWfs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Jul 2019 18:35:48 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:45707 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728394AbfGGWfr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Jul 2019 18:35:47 -0400
-Received: by mail-qt1-f196.google.com with SMTP id j19so16215821qtr.12;
-        Sun, 07 Jul 2019 15:35:46 -0700 (PDT)
+        id S1728480AbfGGWfv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Jul 2019 18:35:51 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:36429 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728454AbfGGWft (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Jul 2019 18:35:49 -0400
+Received: by mail-qt1-f194.google.com with SMTP id z4so12806877qtc.3;
+        Sun, 07 Jul 2019 15:35:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1TkF2WBU9NElZA01Xp4NJYKijXcI19FpfWCfadJruP0=;
-        b=dAdBPg8uSV1nSvl9Ay0t7M1zJ3AS/akSVQuSlTERVy5FbM5LKCloAxaVCadl5IatuU
-         xF4tzI/aOqVIdRXq+XsgfOecAaU28JX96vnmrtu4dvr94m9jv9P/Os9XQJ5X7nz4ahpC
-         gh5vgwiOepjIvql9Eav8BBL9kytVdHotLD9bZjeCWsTIRi4mYkPQux0VaHAn8gU5qoq0
-         Jv+9xxFHU1lE7jOy4yDTLxunIFpLpjJj6ZaSLmV/sjbXRh7lqMSYUpa7lyhSIDNIKnSW
-         GotEV0ciDVr1gzMWTPKBBDMaIiBpXL9g1jdcf3zQ+m0h8YwDcjdVMcJZElhIQlQlxjRb
-         clIg==
+        bh=p+2r/O+E4fvVLMNxUO8qZK4WdlrN268i+UKH01Ji1MI=;
+        b=X8uspIoSYM48jLCv6CptdUc+JDEoF4OvijWUkQ9RMcZgIzZe+aeJgHcLzSzTz/8Fdf
+         2CcSRJA6E8DVtlvf7TdYkVlM/aaHN7y5YbfAjsDMmzq3punQ0GVA1PpzdDLNepttcjXc
+         MBcljxrBHuI61no6qQjHRFsaaI3udS/PYU2Nuxpw3R3dpmBC4OY02Rmdg1ilHk7tT5Gq
+         3DpipdiiV7AC+Fqfwlg6Bgjm1/rgekeU8yedIUNM+Bxf/fUgObZx84qJ1JpTC5v715tA
+         gOkXfgRbDXgJzV6fAKXlQ1SxKL+1d3okZBjmV0W2Er4D2S5eHqz8wfwGFzQBxPAhqMj+
+         GBbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1TkF2WBU9NElZA01Xp4NJYKijXcI19FpfWCfadJruP0=;
-        b=s123CJGbSR53WOaOXHMv1XUbqB4cIzK2g17AH7DbJ2AYMVAn9hmuwxgjI9s/FYkWGu
-         uZrn9g5yYuewvS88pnxjej0+z1XDtSYFMeZ51n1rTWFVCLWUZojtcn9bMsN2l3bFxJLb
-         aec+jl6PBJYw0jxsMjXNX2aKQnzEba/7NT+5q62IApQkLwh6njawC4I5kSEW+v0l4y0z
-         d9dHwGMmrjJPdvKv6bVGhBqClCCPlMqh/HwAA2H2cZ9YpNjUgLj1QHJtISzFHb0xDLwC
-         L1sHA8fPrb+nPph8R2eY3pOxB9cM59IG9yk39iF+sXHZWcoWpTxoih2/YmnbHCEZfWOT
-         PiDQ==
-X-Gm-Message-State: APjAAAWdXSIxBmRa345h+/uUpcOjRx/laRt4/G2A0PACjZnnuxo/X8Of
-        phZG19ySnE18nTP/OADkf+Y=
-X-Google-Smtp-Source: APXvYqyEazblWH42R+qns0bFF0ma7PATFp/OANgMzFGSv3TmFVXaWRNS9OVYxu6JtR4xLJjqz66MNw==
-X-Received: by 2002:a0c:c3c7:: with SMTP id p7mr12151212qvi.125.1562538946496;
-        Sun, 07 Jul 2019 15:35:46 -0700 (PDT)
+        bh=p+2r/O+E4fvVLMNxUO8qZK4WdlrN268i+UKH01Ji1MI=;
+        b=rWsukh0c18Ba6Fj95AIgkPROo+56uiuvGI28tVPRG6bilrNL6xwjRhk8se1CIWa1kW
+         hC7gIJjP45bbJDUsIAw9BoB/vQxBJ0+oiyXoBdvm3Kmolz+Uz2DmdlBvylbVInde2A/y
+         Al4H6kAHqFvkEzO/OWjubUegwBHu9BCUT3CcQ1MjUNXZSfka4scUER/v0PYN/ibkk7Ti
+         Rbd59s5c2xQqxLBboZOAQe9N+GyX9bizn7FrTqbKUw0gurhtef5m7w9MxxqFlhqsOtUM
+         EuYDm+oAar1FPInl/LtPHtkATmfaA+6k8uGno2vlTBjiHSIQNhd8en2K8vM7JymDnKii
+         Fviw==
+X-Gm-Message-State: APjAAAX1P8gJ08cNhq87zFOl/zADNcKfqUZLErfscXC3C/3YXPyiiTt3
+        F4NTys9EZFhJHY0TlCJagwA=
+X-Google-Smtp-Source: APXvYqwkzBBxiZBWgjovlFz21cgelqs9FVXG4UTIF9SQUitStZ0cvbkQVcf47vrFK16eq5ZsTw/hHw==
+X-Received: by 2002:a05:6214:3a5:: with SMTP id m5mr12364645qvy.7.1562538948728;
+        Sun, 07 Jul 2019 15:35:48 -0700 (PDT)
 Received: from localhost.localdomain (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.gmail.com with ESMTPSA id p4sm6998453qkb.84.2019.07.07.15.35.44
+        by smtp.gmail.com with ESMTPSA id p4sm6998453qkb.84.2019.07.07.15.35.46
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 07 Jul 2019 15:35:46 -0700 (PDT)
+        Sun, 07 Jul 2019 15:35:48 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 20/24] PM / devfreq: tegra30: Optimize upper average watermark selection
-Date:   Mon,  8 Jul 2019 01:32:59 +0300
-Message-Id: <20190707223303.6755-21-digetx@gmail.com>
+Subject: [PATCH v4 21/24] PM / devfreq: tegra30: Synchronize average count on target's update
+Date:   Mon,  8 Jul 2019 01:33:00 +0300
+Message-Id: <20190707223303.6755-22-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190707223303.6755-1-digetx@gmail.com>
 References: <20190707223303.6755-1-digetx@gmail.com>
@@ -66,85 +66,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I noticed that CPU may be crossing the dependency threshold very
-frequently for some workloads and this results in a lot of interrupts
-which could be avoided if MCALL client is keeping actual EMC frequency
-at a higher rate.
+The average count may get out of sync if interrupt was disabled / avoided
+for a long time due to upper watermark optimization, hence it should be
+re-synced on each target's update to ensure that watermarks are set up
+correctly on EMC rate-change notification and that a correct frequency
+is selected for device.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index c3cf87231d25..4d582809acb6 100644
+index 4d582809acb6..8a674fad26be 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -314,7 +314,8 @@ static void tegra_actmon_get_lower_upper(struct tegra_devfreq *tegra,
+@@ -466,11 +466,41 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
+ 			      dev->boost_freq, cpufreq_get(0));
  }
  
- static void tegra_devfreq_update_avg_wmark(struct tegra_devfreq *tegra,
--					   struct tegra_devfreq_device *dev)
-+					   struct tegra_devfreq_device *dev,
-+					   unsigned long freq)
++static void tegra_devfreq_sync_avg_count(struct tegra_devfreq *tegra,
++					 struct tegra_devfreq_device *dev)
++{
++	u32 avg_count, avg_freq, old_upper, new_upper;
++
++	avg_count = device_readl(dev, ACTMON_DEV_AVG_COUNT);
++	avg_freq = avg_count / ACTMON_SAMPLING_PERIOD;
++
++	old_upper = tegra_actmon_upper_freq(tegra, dev->avg_freq);
++	new_upper = tegra_actmon_upper_freq(tegra, avg_freq);
++
++	/* similar to ISR, see comments in actmon_isr_device() */
++	if (old_upper != new_upper) {
++		dev->avg_freq = avg_freq;
++		dev->boost_freq = 0;
++	}
++}
++
+ static unsigned long actmon_update_target(struct tegra_devfreq *tegra,
+ 					  struct tegra_devfreq_device *dev)
  {
- 	unsigned long avg_threshold, lower, upper;
- 
-@@ -323,6 +324,15 @@ static void tegra_devfreq_update_avg_wmark(struct tegra_devfreq *tegra,
- 	avg_threshold = dev->config->avg_dependency_threshold;
- 	avg_threshold = avg_threshold * ACTMON_SAMPLING_PERIOD;
+ 	unsigned long target_freq;
  
 +	/*
-+	 * If cumulative EMC frequency selection is higher than the
-+	 * device's, then there is no need to set upper watermark to
-+	 * a lower value because it will result in unnecessary upper
-+	 * interrupts.
++	 * The avg_count / avg_freq is getting snapshoted on device's
++	 * interrupt, but there are cases where actual value need to
++	 * be utilized on target's update, like CPUFreq boosting and
++	 * overriding the min freq via /sys/class/devfreq/devfreq0/min_freq
++	 * because we're optimizing the upper watermark based on the
++	 * actual EMC frequency. This means that interrupt may be
++	 * inactive for a long time and thus making snapshoted value
++	 * outdated.
 +	 */
-+	if (freq * ACTMON_SAMPLING_PERIOD > upper)
-+		upper = freq * ACTMON_SAMPLING_PERIOD;
++	tegra_devfreq_sync_avg_count(tegra, dev);
 +
- 	/*
- 	 * We want to get interrupts when MCCPU client crosses the
- 	 * dependency threshold in order to take into / out of account
-@@ -392,6 +402,7 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
- 			      struct tegra_devfreq_device *dev)
- {
- 	u32 intr_status, dev_ctrl, avg_intr_mask, avg_count;
-+	unsigned long freq;
+ 	target_freq = min(dev->avg_freq + dev->boost_freq, KHZ_MAX);
+ 	target_freq = tegra_actmon_account_cpu_freq(tegra, dev, target_freq);
  
- 	trace_device_isr_enter(tegra->regs, dev->config->offset,
- 			       dev->boost_freq, cpufreq_get(0));
-@@ -405,8 +416,10 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
- 	avg_intr_mask = ACTMON_DEV_INTR_AVG_BELOW_WMARK |
- 			ACTMON_DEV_INTR_AVG_ABOVE_WMARK;
- 
--	if (intr_status & avg_intr_mask)
--		tegra_devfreq_update_avg_wmark(tegra, dev);
-+	if (intr_status & avg_intr_mask) {
-+		freq = clk_get_rate(tegra->emc_clock) / KHZ;
-+		tegra_devfreq_update_avg_wmark(tegra, dev, freq);
-+	}
- 
- 	if (intr_status & ACTMON_DEV_INTR_CONSECUTIVE_UPPER) {
- 		/*
-@@ -525,7 +538,7 @@ static int tegra_actmon_clk_notify_cb(struct notifier_block *nb,
- 	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++) {
- 		dev = &tegra->devices[i];
- 
--		tegra_devfreq_update_avg_wmark(tegra, dev);
-+		tegra_devfreq_update_avg_wmark(tegra, dev, freq);
- 		tegra_devfreq_update_wmark(tegra, dev, freq);
- 	}
- 
-@@ -630,7 +643,7 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
- 	device_writel(dev, dev->avg_freq * ACTMON_SAMPLING_PERIOD,
- 		      ACTMON_DEV_INIT_AVG);
- 
--	tegra_devfreq_update_avg_wmark(tegra, dev);
-+	tegra_devfreq_update_avg_wmark(tegra, dev, dev->avg_freq);
- 	tegra_devfreq_update_wmark(tegra, dev, dev->avg_freq);
- 
- 	device_writel(dev, ACTMON_COUNT_WEIGHT, ACTMON_DEV_COUNT_WEIGHT);
 -- 
 2.22.0
 
