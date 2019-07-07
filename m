@@ -2,128 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77495612EE
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jul 2019 22:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725F4614A3
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Jul 2019 12:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbfGFUag (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Jul 2019 16:30:36 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:47804 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbfGFUag (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Jul 2019 16:30:36 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id D7FB180476; Sat,  6 Jul 2019 22:30:21 +0200 (CEST)
-Date:   Sat, 6 Jul 2019 22:30:32 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org,
-        mka@chromium.org, ulf.hansson@linaro.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: cpufreq notifiers break suspend -- Re: suspend broken in
- next-20190704 on Thinkpad X60
-Message-ID: <20190706203032.GA26828@amd>
-References: <20190704192020.GA3771@amd>
- <CAJZ5v0gn7FWpqW+WmCzj1=K-pjY=SjRNuEsMR3bRTSO8FzFG=Q@mail.gmail.com>
- <20190705185001.GA4068@amd>
- <CAJZ5v0irbn-Xd47KExw=h7On7KShCm6rThCo0q4-zn=o_x6_HQ@mail.gmail.com>
+        id S1727259AbfGGKO4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Jul 2019 06:14:56 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34386 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727125AbfGGKO4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Jul 2019 06:14:56 -0400
+Received: by mail-pg1-f194.google.com with SMTP id p10so6196197pgn.1;
+        Sun, 07 Jul 2019 03:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :user-agent:message-id:content-transfer-encoding;
+        bh=9b1EGXOx4NeF4JTA7eM5HskbqythmMpkxkl1a4JGzA0=;
+        b=UUVurbNoPqHqrmeUuvp4JhwWnf7tIMiogR4wNFWQy2Yg9s0VDKYMOBYp0alcm7xqmy
+         prWWl/SDvlnKeuMa3qIGX7xJhsnZD5ZGIl+UlAOi160yk/UEHKohpIEmKZ3npBPCrX+O
+         ChPr9CSJ3Wbe89Qg2S2hpHTW7IF1PzJiilIeJaqgAQDCB2LJulNX7jAVvnMa6t/1LiAI
+         iM1IFlpvK+lxOvAKnW1POkq5CLL5gNZGa3UPh59xMtXfATagAZIu0Nlw5nTGCUAoSV4B
+         9hrJ2bI5CAbD7NOn8VQJEvw6TgykLcOf8/OryLjdATYGQCEEPLduB8OwesvLFxmnoFOV
+         3Jjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:user-agent:message-id:content-transfer-encoding;
+        bh=9b1EGXOx4NeF4JTA7eM5HskbqythmMpkxkl1a4JGzA0=;
+        b=L95hDnkTKWoiv0u9sl0/FlGqTdpZk8OrGl36bobVikrPvk2xkm4+wIVHW028bFcYSC
+         BU9cgYnDIl9hRLj4vPj5aGO+k0Y5DyKnBss8R4ET/sTE6ywjy1pe7+ZuAIb619Lqow8l
+         BbK0AnNX/E+OSpjUslm1nLXYEG74U6ZKzvshVwITWAhCNio4JdO5AlsYww5lrhvTRBWV
+         ud/wdsXRt0htdkNHlkLnd+zbrAQA+p1pGrLq9gNUUmnnP43vAmk8M1aR1LHBkP5k7MY3
+         4DSXXmyO+ThWFPx2VPPdXKdVeYTqhhqgG++NjpNboP/QuEid0LS73Qvp0WZYfeaDgnPN
+         zGfg==
+X-Gm-Message-State: APjAAAX4udIoO8vsz9bqIO70XY7pMnGyEF3+s7tJ/HoO5BFnHNNSaXYn
+        Fw/Sb5zxxZj4p8fRPGGSouKid/jd
+X-Google-Smtp-Source: APXvYqw7+g7XXTJSX6Asjijq/vU5Vo5FyhGnvQSw6y6Wxkp4QA/7+N00beHz2HuLJBcfPMN/BdiKhw==
+X-Received: by 2002:a17:90a:290b:: with SMTP id g11mr16776527pjd.122.1562494495653;
+        Sun, 07 Jul 2019 03:14:55 -0700 (PDT)
+Received: from localhost ([203.111.179.197])
+        by smtp.gmail.com with ESMTPSA id u137sm14324745pgc.91.2019.07.07.03.14.53
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 07 Jul 2019 03:14:54 -0700 (PDT)
+Date:   Sun, 07 Jul 2019 20:13:16 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v3 1/3] cpuidle-powernv : forced wakeup for stop states
+To:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
+        mpe@ellerman.id.au, rjw@rjwysocki.net
+References: <20190704091827.19555-1-huntbag@linux.vnet.ibm.com>
+        <20190704091827.19555-2-huntbag@linux.vnet.ibm.com>
+In-Reply-To: <20190704091827.19555-2-huntbag@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="Dxnq1zWXvFF0Q93v"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0irbn-Xd47KExw=h7On7KShCm6rThCo0q4-zn=o_x6_HQ@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
+Message-Id: <1562493994.wseoth6w1s.astroid@bobo.none>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---Dxnq1zWXvFF0Q93v
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-
-> Anyway, if 5.2-rc7 is OK, something in this branch causes the problem
-> to happen for you.
+Abhishek Goel's on July 4, 2019 7:18 pm:
+> Currently, the cpuidle governors determine what idle state a idling CPU
+> should enter into based on heuristics that depend on the idle history on
+> that CPU. Given that no predictive heuristic is perfect, there are cases
+> where the governor predicts a shallow idle state, hoping that the CPU wil=
+l
+> be busy soon. However, if no new workload is scheduled on that CPU in the
+> near future, the CPU may end up in the shallow state.
 >=20
-> I would try
+> This is problematic, when the predicted state in the aforementioned
+> scenario is a shallow stop state on a tickless system. As we might get
+> stuck into shallow states for hours, in absence of ticks or interrupts.
 >=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commi=
-t/?h=3Dlinux-next&id=3Df012a132824fc870b90980540f727c76fc72e244
+> To address this, We forcefully wakeup the cpu by setting the
+> decrementer. The decrementer is set to a value that corresponds with the
+> residency of the next available state. Thus firing up a timer that will
+> forcefully wakeup the cpu. Few such iterations will essentially train the
+> governor to select a deeper state for that cpu, as the timer here
+> corresponds to the next available cpuidle state residency. Thus, cpu will
+> eventually end up in the deepest possible state.
 >=20
-> to narrow down the scope somewhat.
+> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
+> ---
+>=20
+> Auto-promotion
+>  v1 : started as auto promotion logic for cpuidle states in generic
+> driver
+>  v2 : Removed timeout_needed and rebased the code to upstream kernel
+> Forced-wakeup
+>  v1 : New patch with name of forced wakeup started
+>  v2 : Extending the forced wakeup logic for all states. Setting the
+> decrementer instead of queuing up a hrtimer to implement the logic.
+>  v3 : Cleanly handle setting/resetting of decrementer so as to not break
+> irq work=20
+>=20
+>  arch/powerpc/include/asm/time.h   |  2 ++
+>  arch/powerpc/kernel/time.c        | 40 +++++++++++++++++++++++++++++++
+>  drivers/cpuidle/cpuidle-powernv.c | 32 +++++++++++++++++++++++++
+>  3 files changed, 74 insertions(+)
+>=20
+> diff --git a/arch/powerpc/include/asm/time.h b/arch/powerpc/include/asm/t=
+ime.h
+> index 54f4ec1f9..a3bd4f3c0 100644
+> --- a/arch/powerpc/include/asm/time.h
+> +++ b/arch/powerpc/include/asm/time.h
+> @@ -188,6 +188,8 @@ static inline unsigned long tb_ticks_since(unsigned l=
+ong tstamp)
+>  extern u64 mulhdu(u64, u64);
+>  #endif
+> =20
+> +extern int set_dec_before_idle(u64 timeout);
+> +extern void reset_dec_after_idle(void);
+>  extern void div128_by_32(u64 dividend_high, u64 dividend_low,
+>  			 unsigned divisor, struct div_result *dr);
+> =20
+> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
+> index 694522308..814de3469 100644
+> --- a/arch/powerpc/kernel/time.c
+> +++ b/arch/powerpc/kernel/time.c
+> @@ -576,6 +576,46 @@ void arch_irq_work_raise(void)
+> =20
+>  #endif /* CONFIG_IRQ_WORK */
+> =20
+> +/*
+> + * Returns 1 if we have reprogrammed the decrementer for idle.
+> + * Returns 0 if the decrementer is unchanged.
+> + */
+> +int set_dec_before_idle(u64 timeout)
+> +{
+> +	u64 *next_tb =3D this_cpu_ptr(&decrementers_next_tb);
+> +	u64 now =3D get_tb_or_rtc();
+> +
+> +	/*
+> +	 * Ensure that the timeout is at least one microsecond
+> +	 * before the current decrement value. Else, we will
+> +	 * unnecesarily wakeup again within a microsecond.
+> +	 */
+> +	if (now + timeout + 512 > *next_tb)
 
-Bisect says:
+I would pass this 512 in as a parameter and put the comment in the
+idle code. Timer code does not know/care.
 
-572542c81dec533b7dd3778ea9f5949a00595f68 is the first bad commit
-Author: Viresh Kumar <viresh.kumar@linaro.org>
+Maybe return bool and call it try_set_dec_before_idle.
 
-    cpufreq: Register notifiers with the PM QoS framework
+> +		return 0;
+> +
+> +	set_dec(timeout);
 
-    This registers the notifiers for min/max frequency constraints
-    with the
+This needs to have
 
- Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
- Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
- Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+  if (test_irq_work_pending())
+      set_dec(1);
 
-Unfortunately, it does not revert cleanly:
+here AFAIKS
 
-pavel@duo:/data/l/linux-next-32$ git show
-572542c81dec533b7dd3778ea9f5949a00595f68 | patch -REsp1
-6 out of 11 hunks FAILED -- saving rejects to file
-drivers/cpufreq/cpufreq.c.rej
+> +
+> +	return 1;
+> +}
+> +
+> +void reset_dec_after_idle(void)
+> +{
+> +	u64 now;
+> +	u64 *next_tb;
+> +
+> +	if (test_irq_work_pending())
+> +		return;
+> +
+> +	now =3D get_tb_or_rtc();
+> +	next_tb =3D this_cpu_ptr(&decrementers_next_tb);
+> +	if (now >=3D *next_tb)
+> +		return;
 
+Are you sure it's okay to escape early in this case?
 
-pavel@duo:/data/l/linux-next-32$  git bisect log
-# bad: [1e2a4c9019eb53f62790fadf86c14a54f4cf4888] Merge branch
-'pm-cpufreq-new' into linux-next
-# good: [f012a132824fc870b90980540f727c76fc72e244] Merge branches
-'acpica', 'acpi-osl', 'acpi-tables', 'acpi-misc' and 'acpi-tools' into
-linux-next
-git bisect start '1e2a4c9019eb53f62790fadf86c14a54f4cf4888'
-'f012a132824fc870b90980540f727c76fc72e244'
-# good: [48a8a5f9a326d1c1a5505d51fb98086e5003f37e] Add linux-next
-specific files for 20190701
-git bisect good 48a8a5f9a326d1c1a5505d51fb98086e5003f37e
-# good: [96021e491dbf30bd1c5c1a753992838c8d8d00cb] Merge branches
-'acpi-apei', 'acpi-doc', 'acpi-soc' and 'acpi-pmic' into linux-next
-git bisect good 96021e491dbf30bd1c5c1a753992838c8d8d00cb
-# bad: [141467868c1f7bf1c4e8394a39d47d4db38cd2f1] cpufreq:
-intel_pstate: Reuse refresh_frequency_limits()
-git bisect bad 141467868c1f7bf1c4e8394a39d47d4db38cd2f1
-# good: [2a79ea5ec53973c8711b54d33ace5c77659dc8f8] PM / QOS: Pass
-request type to dev_pm_qos_read_value()
-git bisect good 2a79ea5ec53973c8711b54d33ace5c77659dc8f8
-# bad: [572542c81dec533b7dd3778ea9f5949a00595f68] cpufreq: Register
-notifiers with the PM QoS framework
-git bisect bad 572542c81dec533b7dd3778ea9f5949a00595f68
-# good: [208637b37824c8956fe28d277835a403ee35fa84] PM / QoS: Add
-support for MIN/MAX frequency constraints
-git bisect good 208637b37824c8956fe28d277835a403ee35fa84
-# first bad commit: [572542c81dec533b7dd3778ea9f5949a00595f68]
-cpufreq: Register notifiers with the PM QoS framework
-
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---Dxnq1zWXvFF0Q93v
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl0hBOgACgkQMOfwapXb+vK1xQCeK5YNPvOJMTUEZAlO3pq6sQi/
-VeAAn2eTZuWwiYd17VkY2A0aOxlpZH/p
-=rJBJ
------END PGP SIGNATURE-----
-
---Dxnq1zWXvFF0Q93v--
+Thanks,
+Nick
+=
