@@ -2,183 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 725F4614A3
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Jul 2019 12:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D866159E
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Jul 2019 19:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbfGGKO4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Jul 2019 06:14:56 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:34386 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727125AbfGGKO4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Jul 2019 06:14:56 -0400
-Received: by mail-pg1-f194.google.com with SMTP id p10so6196197pgn.1;
-        Sun, 07 Jul 2019 03:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :user-agent:message-id:content-transfer-encoding;
-        bh=9b1EGXOx4NeF4JTA7eM5HskbqythmMpkxkl1a4JGzA0=;
-        b=UUVurbNoPqHqrmeUuvp4JhwWnf7tIMiogR4wNFWQy2Yg9s0VDKYMOBYp0alcm7xqmy
-         prWWl/SDvlnKeuMa3qIGX7xJhsnZD5ZGIl+UlAOi160yk/UEHKohpIEmKZ3npBPCrX+O
-         ChPr9CSJ3Wbe89Qg2S2hpHTW7IF1PzJiilIeJaqgAQDCB2LJulNX7jAVvnMa6t/1LiAI
-         iM1IFlpvK+lxOvAKnW1POkq5CLL5gNZGa3UPh59xMtXfATagAZIu0Nlw5nTGCUAoSV4B
-         9hrJ2bI5CAbD7NOn8VQJEvw6TgykLcOf8/OryLjdATYGQCEEPLduB8OwesvLFxmnoFOV
-         3Jjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:user-agent:message-id:content-transfer-encoding;
-        bh=9b1EGXOx4NeF4JTA7eM5HskbqythmMpkxkl1a4JGzA0=;
-        b=L95hDnkTKWoiv0u9sl0/FlGqTdpZk8OrGl36bobVikrPvk2xkm4+wIVHW028bFcYSC
-         BU9cgYnDIl9hRLj4vPj5aGO+k0Y5DyKnBss8R4ET/sTE6ywjy1pe7+ZuAIb619Lqow8l
-         BbK0AnNX/E+OSpjUslm1nLXYEG74U6ZKzvshVwITWAhCNio4JdO5AlsYww5lrhvTRBWV
-         ud/wdsXRt0htdkNHlkLnd+zbrAQA+p1pGrLq9gNUUmnnP43vAmk8M1aR1LHBkP5k7MY3
-         4DSXXmyO+ThWFPx2VPPdXKdVeYTqhhqgG++NjpNboP/QuEid0LS73Qvp0WZYfeaDgnPN
-         zGfg==
-X-Gm-Message-State: APjAAAX4udIoO8vsz9bqIO70XY7pMnGyEF3+s7tJ/HoO5BFnHNNSaXYn
-        Fw/Sb5zxxZj4p8fRPGGSouKid/jd
-X-Google-Smtp-Source: APXvYqw7+g7XXTJSX6Asjijq/vU5Vo5FyhGnvQSw6y6Wxkp4QA/7+N00beHz2HuLJBcfPMN/BdiKhw==
-X-Received: by 2002:a17:90a:290b:: with SMTP id g11mr16776527pjd.122.1562494495653;
-        Sun, 07 Jul 2019 03:14:55 -0700 (PDT)
-Received: from localhost ([203.111.179.197])
-        by smtp.gmail.com with ESMTPSA id u137sm14324745pgc.91.2019.07.07.03.14.53
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 07 Jul 2019 03:14:54 -0700 (PDT)
-Date:   Sun, 07 Jul 2019 20:13:16 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v3 1/3] cpuidle-powernv : forced wakeup for stop states
-To:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
-        mpe@ellerman.id.au, rjw@rjwysocki.net
-References: <20190704091827.19555-1-huntbag@linux.vnet.ibm.com>
-        <20190704091827.19555-2-huntbag@linux.vnet.ibm.com>
-In-Reply-To: <20190704091827.19555-2-huntbag@linux.vnet.ibm.com>
+        id S1727027AbfGGRCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Jul 2019 13:02:36 -0400
+Received: from cmta17.telus.net ([209.171.16.90]:42398 "EHLO cmta17.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726984AbfGGRCg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 7 Jul 2019 13:02:36 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id kAYZh0BnhzEP4kAYah9Sy0; Sun, 07 Jul 2019 11:02:34 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1562518954; bh=ziWafZ+lt82+u/sMNbjV3tTwr8KJUQ1KoqPEgByOp6U=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=t6UDm7RdjsSssvvszNixRcYGgB21LloNxniDCAJvZLyl+cWqujMkZq3Reb77nS21y
+         tf6liq5dlAYpZLlE1Qx42EBdW7NgmCA8HMojTOOYK3vR6hOkETKJa4v4vX8WgidfXn
+         2MVH+9VtZG3aTPZKhZwaZU2Lfy+3wQ6PzxHRXj/pNb74rAxCL7RwbihDqwD904Ji9F
+         kSFVd8fH7FxVvB38p8xGVWq/7c7qy/pCuvxDT069JtI3MSnEsOvgArbuaIGaVWjknq
+         DehN1/DhmFk/68AyB0dwdVxDD8g/RLoDpap5qmnLyMo7JVqXsBYi44ZrMhPoGnhbbx
+         OPCI6N4dqQowg==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=cYmsUULM c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=IkcTkHD0fZMA:10 a=FGbulvE0AAAA:8 a=yPBhtU7W74RIm9p7gY0A:9 a=QEXdDO2ut3YA:10
+ a=svzTaB3SJmTkU8mK-ULk:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Daniel Lezcano'" <daniel.lezcano@linaro.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        "'open list:CPU IDLE TIME MANAGEMENT FRAMEWORK'" 
+        <linux-pm@vger.kernel.org>, <rafael@kernel.org>
+References: <20190620115826.4897-1-daniel.lezcano@linaro.org> <000101d531aa$e00987e0$a01c97a0$@net> <6589a058-c538-fbf3-7761-d43ab8434654@linaro.org> <000a01d531d3$3471a060$9d54e120$@net>
+In-Reply-To: <000a01d531d3$3471a060$9d54e120$@net>
+Subject: RE: [PATCH] cpuidle/drivers/mobile: Add new governor for mobile/embedded systems
+Date:   Sun, 7 Jul 2019 10:02:29 -0700
+Message-ID: <000301d534e5$c43217b0$4c964710$@net>
 MIME-Version: 1.0
-User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1562493994.wseoth6w1s.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdUxskNHh9ahYXCXQ82aPBZqjRxmngAFv0oAAMatxrA=
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfPQTbe6Gr2O5xhM0q1Z47ItKI19CjQruPFMEXY/ZK8zCYL9nTAbzQINCZXOPsHxonJBlwO1sjzDAMXvQN9RO0lYddhBGIfPUti5VRPVZTdXUUIyrf3gh
+ 2fvTl5zUQOxv+CMeCm+Tt4SotVPBiOwjLy2jLTKOT/NRUEHnVNHUHASXzsi0aqe6fOM5Tc/XbmWeEDazZu9Bs7kTeOkIaJrzPexm/GMCQ9YV3VTExX5dCwT+
+ HWpLWJRsB11gcGx49aYpDw7h/7cmT9uPxxKXy6LmV4nz7DejEkXuqrKaQoXpvycgTlce35ER1W26gW5hzQ7u2ZfcAtUoR0PNbQLQUQbEEbpQvqDowHD0bTN6
+ Z/K5NdpjtHeIlObESaTAgguEXX6UtA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Abhishek Goel's on July 4, 2019 7:18 pm:
-> Currently, the cpuidle governors determine what idle state a idling CPU
-> should enter into based on heuristics that depend on the idle history on
-> that CPU. Given that no predictive heuristic is perfect, there are cases
-> where the governor predicts a shallow idle state, hoping that the CPU wil=
-l
-> be busy soon. However, if no new workload is scheduled on that CPU in the
-> near future, the CPU may end up in the shallow state.
->=20
-> This is problematic, when the predicted state in the aforementioned
-> scenario is a shallow stop state on a tickless system. As we might get
-> stuck into shallow states for hours, in absence of ticks or interrupts.
->=20
-> To address this, We forcefully wakeup the cpu by setting the
-> decrementer. The decrementer is set to a value that corresponds with the
-> residency of the next available state. Thus firing up a timer that will
-> forcefully wakeup the cpu. Few such iterations will essentially train the
-> governor to select a deeper state for that cpu, as the timer here
-> corresponds to the next available cpuidle state residency. Thus, cpu will
-> eventually end up in the deepest possible state.
->=20
-> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
-> ---
->=20
-> Auto-promotion
->  v1 : started as auto promotion logic for cpuidle states in generic
-> driver
->  v2 : Removed timeout_needed and rebased the code to upstream kernel
-> Forced-wakeup
->  v1 : New patch with name of forced wakeup started
->  v2 : Extending the forced wakeup logic for all states. Setting the
-> decrementer instead of queuing up a hrtimer to implement the logic.
->  v3 : Cleanly handle setting/resetting of decrementer so as to not break
-> irq work=20
->=20
->  arch/powerpc/include/asm/time.h   |  2 ++
->  arch/powerpc/kernel/time.c        | 40 +++++++++++++++++++++++++++++++
->  drivers/cpuidle/cpuidle-powernv.c | 32 +++++++++++++++++++++++++
->  3 files changed, 74 insertions(+)
->=20
-> diff --git a/arch/powerpc/include/asm/time.h b/arch/powerpc/include/asm/t=
-ime.h
-> index 54f4ec1f9..a3bd4f3c0 100644
-> --- a/arch/powerpc/include/asm/time.h
-> +++ b/arch/powerpc/include/asm/time.h
-> @@ -188,6 +188,8 @@ static inline unsigned long tb_ticks_since(unsigned l=
-ong tstamp)
->  extern u64 mulhdu(u64, u64);
->  #endif
-> =20
-> +extern int set_dec_before_idle(u64 timeout);
-> +extern void reset_dec_after_idle(void);
->  extern void div128_by_32(u64 dividend_high, u64 dividend_low,
->  			 unsigned divisor, struct div_result *dr);
-> =20
-> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
-> index 694522308..814de3469 100644
-> --- a/arch/powerpc/kernel/time.c
-> +++ b/arch/powerpc/kernel/time.c
-> @@ -576,6 +576,46 @@ void arch_irq_work_raise(void)
-> =20
->  #endif /* CONFIG_IRQ_WORK */
-> =20
-> +/*
-> + * Returns 1 if we have reprogrammed the decrementer for idle.
-> + * Returns 0 if the decrementer is unchanged.
-> + */
-> +int set_dec_before_idle(u64 timeout)
-> +{
-> +	u64 *next_tb =3D this_cpu_ptr(&decrementers_next_tb);
-> +	u64 now =3D get_tb_or_rtc();
-> +
-> +	/*
-> +	 * Ensure that the timeout is at least one microsecond
-> +	 * before the current decrement value. Else, we will
-> +	 * unnecesarily wakeup again within a microsecond.
-> +	 */
-> +	if (now + timeout + 512 > *next_tb)
+On 2019.07.03 12:12 Doug Smythies wrote:
+> On 2019.07.03 08:16 Daniel Lezcano wrote:
+>> On 03/07/2019 16:23, Doug Smythies wrote:
+>>> On 2019.06.20 04:58 Daniel Lezcano wrote:
 
-I would pass this 512 in as a parameter and put the comment in the
-idle code. Timer code does not know/care.
+> ...
+>>> Anyway, I did a bunch of tests and such, but have deleted
+>>> most from this e-mail, because it's just noise. I'll
+>>> include just one set:
+>>> 
+>>> For a work load that would normally result in a lot of use
+>>> of shallow idle states (single core pipe-test * 2 cores).
+>>
+>> Can you share the tests and the command lines?
+>
+> Yes, give me a few days to repeat the tests and write
+> it up properly. I am leaving town in an hour and for a day.
 
-Maybe return bool and call it try_set_dec_before_idle.
+O.K. I re-did the tests and made a new web page with, I think,
+everything I used.
 
-> +		return 0;
-> +
-> +	set_dec(timeout);
+...
 
-This needs to have
+>> The governor can be better by selecting the shallow states, the
+>> scheduler has to interact with the governor to give clues about the
+>> load, that is identified and will be the next step.
+>>
+>> Is it possible to check with the schedutil governor instead?
+>
+> Oh, I already have some data, just didn't include it before:
+>
+> Idle governor, teo; CPU frequency scaling: intel-cpufreq/schedutil;
+> Processor package power: 40.4 watts; 4.9 uSec/loop
+>
+> Idle governor, mobile; CPU frequency scaling: intel-cpufreq/schedutil;
+> Processor package power: 12.7 watts; 19.7 uSec/loop
+>
+> Idle governor, teo; CPU frequency scaling: intel-cpufreq/schedutil;
+> Idle states 0-3 disabled (note: Idle state 4 is the deepest on my system)
+> Processor package power: 36.9 watts; 8.3 uSec/loop
+> In my notes I wrote: "Huh?? I do not understand this result, as I had
+> expected more similar to the mobile governor". But I did not investigate.
 
-  if (test_irq_work_pending())
-      set_dec(1);
+The reason for the big difference was/is that with the "mobile"
+governor the CPU frequency never scales up for this test. It can be
+sluggish to scale up with the teo and the menu governors, but always
+eventually does. I also tried the acpi-cpufreq driver with similar results.
 
-here AFAIKS
+> Anyway, the schedutil test is the one I'll repeat and write up better.
 
-> +
-> +	return 1;
-> +}
-> +
-> +void reset_dec_after_idle(void)
-> +{
-> +	u64 now;
-> +	u64 *next_tb;
-> +
-> +	if (test_irq_work_pending())
-> +		return;
-> +
-> +	now =3D get_tb_or_rtc();
-> +	next_tb =3D this_cpu_ptr(&decrementers_next_tb);
-> +	if (now >=3D *next_tb)
-> +		return;
+New summary (similar to old):
 
-Are you sure it's okay to escape early in this case?
+governor 		usec/loop	watts
+mobile		19.8		12.67
+teo			4.87		40.28
+menu			4.85		40.25
+teo-idle-0-3-dis	8.30		36.85
 
-Thanks,
-Nick
-=
+Graphs, details and source codes:
+http://www.smythies.com/~doug/linux/idle/mobile/index.html
+
+... Doug
+
+
