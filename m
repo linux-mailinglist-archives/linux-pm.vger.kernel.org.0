@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5697617F2
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 00:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8633C617F7
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 00:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728404AbfGGWfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Jul 2019 18:35:43 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:39038 "EHLO
+        id S1727244AbfGGWgN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Jul 2019 18:36:13 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:42228 "EHLO
         mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728394AbfGGWfn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Jul 2019 18:35:43 -0400
-Received: by mail-qk1-f196.google.com with SMTP id i125so11861877qkd.6;
-        Sun, 07 Jul 2019 15:35:42 -0700 (PDT)
+        with ESMTP id S1728412AbfGGWfp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Jul 2019 18:35:45 -0400
+Received: by mail-qk1-f196.google.com with SMTP id 201so9737148qkm.9;
+        Sun, 07 Jul 2019 15:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gFvx8CkYt0ydsdQnkr7yH87wB5npz5lZgrQg0UbQ1HE=;
-        b=Q4nnIVvSiuBoeWdsQQUTIVNdW3u93vplqqsH8qgbLqVJ4G+Z+AK/sJUm7XUopEwyBj
-         44BqnTRgYF8RZHD2GsJcCU54+hHqwvsVUaYM38bU/gs+cqPOBdSFRAxcclsFpYzpUmYy
-         716pf35drLvbzBM8EcS+T+fOswFxX5GflbxF2LQcqTCLfQB66r6gZig8LXcDKrpYqV1C
-         6nwzrQOWtUta9H5fkvlwmNvSlzq6ipMqkVlVy6Kboa9RMWMqvwejid0pj8KOXJ5jjkpu
-         Z6TP67YrUc8NXZD2+jco3THamR+kiIofsLmwXnUN7co9HdO/cLWmrKQ0HPPl3AjB2WB+
-         1wWQ==
+        bh=w2SkU/kiQlK9KjmJW3W/jPsk8xR5ZQI/E8W0Q3/C+/Q=;
+        b=tm/R7LVy2UWjQUmsKzQOkeAsefDhWe13WEriO+dhNltE0hsjZfwC0q0Cr/nnF3ze6N
+         qTaWSLB9ox9xPuFwG+6QCtIvZpegDsRY2OkcFVm0I6xZ0zyJqum72oKjKeHfyo1OTKmW
+         TzJ/CdspGqNJ/7ZiWxA1pZ3pFvfRw6F7TtWXQxSIlJ59f7zKDi+BSLFqXJ9/6n4NGHk3
+         Tikhg14cwr0L53m1hbkWl+R/aidFH+XoNUVXYgXKLUbIYfIUkUNQ94Q86WfArKdQQMP8
+         Br2u6oEpyIMmCJmicCn/oKPE9i9uBWqVSTLYzT+rq6TAsQOJi/UYVuxcNnosFgeyW7Ew
+         20dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gFvx8CkYt0ydsdQnkr7yH87wB5npz5lZgrQg0UbQ1HE=;
-        b=dNwYMXQ72u6czUXdNGu3phdewWS38QVPUlQ8wwri8xpmEDCpmqgnv8BU/zCC/DFcV7
-         BqF9An8ftf3z3C31tR2V2DKvkis5rAP6OvKhpFR1merZugDe8s+mWGbdD8yBWxafKEZq
-         39AcS78qZHO9wQZOpYeUOGITJsfdUo0IN3lWjYuOCzZCJv8Jv+VEHHhZX+q91MovnFEk
-         eIZgdg3Z6vwyXjW4yuiWzz28AKOVD6L8vkmYyaynJD6zEHTacZxFTDLX8PyKs4kWiOTw
-         UYWZl/mhsu7taCdQ/eHhAwYYk3hWnYjZNz5Fi9X/9EwBIGjBB94fG5hrx/qosBPOH/vf
-         JgRA==
-X-Gm-Message-State: APjAAAUol83KD+aF7b4979bm6NrLwdmvr8Y4v6mrWesvOM/If9CtrG2q
-        LwvTZ3RinPZcsPQAP23i918=
-X-Google-Smtp-Source: APXvYqybKG7bffLAkgIjC5y3sOJ7d7cZq2hkspavk5Bh//mx/BWy7ZskvA7aPMFI/xpUO8mPg4KaIw==
-X-Received: by 2002:a37:5f45:: with SMTP id t66mr11847231qkb.286.1562538942186;
-        Sun, 07 Jul 2019 15:35:42 -0700 (PDT)
+        bh=w2SkU/kiQlK9KjmJW3W/jPsk8xR5ZQI/E8W0Q3/C+/Q=;
+        b=V03uWmPjNn/izwEw4lk9DGCCAGaqhYPX17hzPPfO+x9XPjGu0cfhUucKG3gkEIkF7U
+         0GURZYzFXFag5mxHXwU+B775PKw6AZjIfNoZpZc8rsjr4e355SS4WN6q0G6/b5WHW1ed
+         D1iQGlUzOuX+CoCl0+ssymoQnfpeSkgI5bnRz/c68GdgEfgzoocNgDr0kVaRq2AirbBv
+         hU4yjJyP6Ap6yXCvodA22dF4UvD+OKH1j7ImdieXjN1I/P6EcDxruoEyDsw8oTqRyC1n
+         uz/yoUjn0EIXneCFqMISUnVvsoLj+YnWVxAb1ai6VTGj+tG9BjEmT53OdJ6l9+5xTEQM
+         lJmw==
+X-Gm-Message-State: APjAAAU2ARCqTvYTNsn/7KGCMGdB6Jktomdy7A1yvD2Pz9PzDY0mFjY9
+        3G1Tp6KyBJqyQPA7JkEt1f8=
+X-Google-Smtp-Source: APXvYqxYNebNG6DjAMT41lHdG2cJwlHjljpvSPLiJDNrcCLKHLLeIB+yKckfxTYNJLQDdPs1wpg/lg==
+X-Received: by 2002:ae9:ddc3:: with SMTP id r186mr11968892qkf.497.1562538944342;
+        Sun, 07 Jul 2019 15:35:44 -0700 (PDT)
 Received: from localhost.localdomain (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.gmail.com with ESMTPSA id p4sm6998453qkb.84.2019.07.07.15.35.40
+        by smtp.gmail.com with ESMTPSA id p4sm6998453qkb.84.2019.07.07.15.35.42
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 07 Jul 2019 15:35:41 -0700 (PDT)
+        Sun, 07 Jul 2019 15:35:43 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 18/24] PM / devfreq: tegra30: Optimize CPUFreq notifier
-Date:   Mon,  8 Jul 2019 01:32:57 +0300
-Message-Id: <20190707223303.6755-19-digetx@gmail.com>
+Subject: [PATCH v4 19/24] PM / devfreq: tegra30: Optimize upper consecutive watermark selection
+Date:   Mon,  8 Jul 2019 01:32:58 +0300
+Message-Id: <20190707223303.6755-20-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190707223303.6755-1-digetx@gmail.com>
 References: <20190707223303.6755-1-digetx@gmail.com>
@@ -66,128 +66,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When CPU's memory activity is low or memory activity is high such that
-CPU's frequency contribution to the boosting is not taken into account,
-then there is no need to schedule devfreq's update. This eliminates
-unnecessary CPU activity during of idling caused by the scheduled work.
+The memory activity counter may get a bit higher than a watermark which
+is selected based on OPP that corresponds to a highest EMC rate, in this
+case watermark is lower than the actual memory activity is and thus
+results in unwanted "upper" interrupts.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 73 +++++++++++++++++++++++++++----
- 1 file changed, 64 insertions(+), 9 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 43c9c5fbfe91..8d6bf6e9f1ae 100644
+index 8d6bf6e9f1ae..c3cf87231d25 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -216,10 +216,10 @@ static inline unsigned long do_percent(unsigned long val, unsigned int pct)
- 	return val * pct / 100;
- }
+@@ -363,7 +363,18 @@ static void tegra_devfreq_update_wmark(struct tegra_devfreq *tegra,
+ 	tegra_actmon_get_lower_upper(tegra, dev, freq - 1, &lower, &upper);
  
--static unsigned long actmon_cpu_to_emc_rate(struct tegra_devfreq *tegra)
-+static unsigned long actmon_cpu_to_emc_rate(struct tegra_devfreq *tegra,
-+					    unsigned int cpu_freq)
- {
- 	const struct tegra_actmon_emc_ratio *ratio = actmon_emc_ratios;
--	unsigned int cpu_freq = cpufreq_get(0);
- 	unsigned int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(actmon_emc_ratios); i++, ratio++) {
-@@ -239,15 +239,15 @@ tegra_actmon_account_cpu_freq(struct tegra_devfreq *tegra,
- 			      struct tegra_devfreq_device *dev,
- 			      unsigned long target_freq)
- {
--	unsigned long static_cpu_emc_freq;
-+	unsigned long cpu_emc_freq = 0;
- 
--	if (dev->config->avg_dependency_threshold &&
--	    dev->config->avg_dependency_threshold < dev->avg_freq) {
--		static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra);
--		target_freq = max(target_freq, static_cpu_emc_freq);
--	}
-+	if (!dev->config->avg_dependency_threshold)
-+		return target_freq;
- 
--	return target_freq;
-+	if (dev->avg_freq > dev->config->avg_dependency_threshold)
-+		cpu_emc_freq = actmon_cpu_to_emc_rate(tegra, cpufreq_get(0));
+ 	delta = do_percent(upper - lower, dev->config->boost_up_threshold);
+-	device_writel(dev, lower + delta, ACTMON_DEV_UPPER_WMARK);
 +
-+	return max(target_freq, cpu_emc_freq);
- }
- 
- static unsigned long tegra_actmon_lower_freq(struct tegra_devfreq *tegra,
-@@ -531,16 +531,71 @@ static void tegra_actmon_delayed_update(struct work_struct *work)
- 	mutex_unlock(&tegra->devfreq->lock);
- }
- 
-+static unsigned long
-+tegra_actmon_cpufreq_contribution(struct tegra_devfreq *tegra,
-+				  unsigned int cpu_freq)
-+{
-+	unsigned long freq, static_cpu_emc_freq;
-+
-+	/* check whether CPU's freq is taken into account at all */
-+	if (tegra->devices[MCCPU].avg_freq <=
-+	    tegra->devices[MCCPU].config->avg_dependency_threshold)
-+		return 0;
-+
-+	static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra, cpu_freq);
-+
-+	/* compare static CPU-EMC freq with MCALL */
-+	freq = tegra->devices[MCALL].avg_freq +
-+	       tegra->devices[MCALL].boost_freq;
-+
-+	freq = tegra_actmon_upper_freq(tegra, freq);
-+
-+	if (freq == tegra->max_freq || freq >= static_cpu_emc_freq)
-+		return 0;
-+
-+	/* compare static CPU-EMC freq with MCCPU */
-+	freq = tegra->devices[MCCPU].avg_freq +
-+	       tegra->devices[MCCPU].boost_freq;
-+
-+	freq = tegra_actmon_upper_freq(tegra, freq);
-+
-+	if (freq == tegra->max_freq || freq >= static_cpu_emc_freq)
-+		return 0;
-+
-+	return static_cpu_emc_freq;
-+}
-+
- static int tegra_actmon_cpu_notify_cb(struct notifier_block *nb,
- 				      unsigned long action, void *ptr)
- {
-+	struct cpufreq_freqs *freqs = ptr;
- 	struct tegra_devfreq *tegra;
-+	unsigned long old, new;
- 
- 	if (action != CPUFREQ_POSTCHANGE)
- 		return NOTIFY_OK;
- 
- 	tegra = container_of(nb, struct tegra_devfreq, cpu_rate_change_nb);
- 
 +	/*
-+	 * Quickly check whether CPU frequency should be taken into account
-+	 * at all, without blocking CPUFreq's core.
++	 * The memory events count could go a bit higher than the maximum
++	 * defined by the OPPs, hence make the upper watermark infinitely
++	 * high to avoid unnecessary upper interrupts in that case.
 +	 */
-+	if (mutex_trylock(&tegra->devfreq->lock)) {
-+		old = tegra_actmon_cpufreq_contribution(tegra, freqs->old);
-+		new = tegra_actmon_cpufreq_contribution(tegra, freqs->new);
-+		mutex_unlock(&tegra->devfreq->lock);
++	if (freq == tegra->max_freq)
++		upper = ULONG_MAX;
++	else
++		upper = lower + delta;
 +
-+		/*
-+		 * If CPU's frequency shouldn't be taken into account at
-+		 * the moment, then there is no need to update the devfreq's
-+		 * state because ISR will re-check CPU's frequency on the
-+		 * next interrupt.
-+		 */
-+		if (old == new)
-+			return NOTIFY_OK;
-+	}
-+
++	device_writel(dev, upper, ACTMON_DEV_UPPER_WMARK);
+ 
  	/*
- 	 * CPUFreq driver should support CPUFREQ_ASYNC_NOTIFICATION in order
- 	 * to allow asynchronous notifications. This means we can't block
+ 	 * Meanwhile the lower mark is based on the average value
 -- 
 2.22.0
 
