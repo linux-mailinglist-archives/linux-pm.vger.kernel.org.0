@@ -2,137 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DADFA61A7A
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 08:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A686E61A81
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 08:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727908AbfGHGAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jul 2019 02:00:20 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33417 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727406AbfGHGAU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jul 2019 02:00:20 -0400
-Received: by mail-pl1-f196.google.com with SMTP id c14so7660696plo.0
-        for <linux-pm@vger.kernel.org>; Sun, 07 Jul 2019 23:00:19 -0700 (PDT)
+        id S1729008AbfGHGBl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jul 2019 02:01:41 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41032 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727408AbfGHGBl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jul 2019 02:01:41 -0400
+Received: by mail-pf1-f193.google.com with SMTP id m30so7030482pff.8
+        for <linux-pm@vger.kernel.org>; Sun, 07 Jul 2019 23:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6q22eQDDCUZWlcpujovTPxDLV/PDTFZTJgjMkPGNMDU=;
-        b=qCFcjFeCt5a05VcS5Cjwgn22CsE/7DQLunpoWaYJxF06aSHKpcocF0SZYql/0vvOYP
-         gPHsR+rNQ8P0MLJcpgJMZv56u/hBqdpZ+4ywoAGXcYG7ooS3XQGOlYkBql1rIr38HYqu
-         zXO/ZmzprkLvQ+rKetYp4s1jyIcpCCyb5Yum+pq78zZQC78pLqdUN+WUEssnXexeUcl2
-         6r7akeSW1kIBwVhljmpM32CmF2uqDXRZRx1l3pUy2HmHEpgzOjQvbhy6q8r+XK8pAmUJ
-         0nOeDi2SQsTmFSpK+2c+gl8zE08CvsvEj+Ys1POjFUK/eul15t4sQnwNGka0hZ+Hicpr
-         VmWg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=peXRtMB4l6/FU5tZ5pa+2prKmpjjO6KyHe/s1NBwntA=;
+        b=qYpXTTdC+57Hi5zh0A4h3c0ri+hVuuOJYcg0Ag+6G3hwW370kXqV6DpyH1I4wcRSVU
+         ff05mKcnVZv75ZdywlAJJGuRaSYf+i2D2qhMFZrl86LKvVQ1kUCljAPXI+S3JR+FJUkT
+         gBQpUc2bYkVDTvxUs0R3c/33xUIGEdqsapp6DkI6gBX1z/XX2jC1qZcTWevZ2SWOSs8o
+         oDgV1wTfUwhk6v4rHcpdVDlGy7YT0bgG43vOyavNj9/m9s1f18B+8wYKMbdvr1x3sRg4
+         cgecUwFe/B0k3IyD8lOInpIn7iiqDnw/qhQpZSYXqG1hMvKFvtIecDN79OaTvEWc/WqP
+         myrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6q22eQDDCUZWlcpujovTPxDLV/PDTFZTJgjMkPGNMDU=;
-        b=RcO0wO306MndHxB7nlIfbFD9Q6i8F9WAU9ezeOQe5Tq/FWwARG/350FgS2GKzJfd7S
-         3lkaFVm205ICgLevbZMKCCYYHckTO4BypP19guwljyAdTWJXhKJqihqnliBcpzmE7XTY
-         sF89E96+GzAvcT2Fp+KWeEwcrP+OK8rP1CTsTjpR0XkndN46+j5Aa5grjOUKoJ8TMWx1
-         SWpOL2MwgkyJXRzMT4tps+d/7te0BUePCXd+bDq+3r8Mu6JtylnbNp7haT68OA0v58zp
-         xl5mpMEg3KmPWdhM1t6FPjCqzAzCM6kckHYNKAon7S1gInpezatNwjI6KV7F4Y9aN+Nh
-         cKzw==
-X-Gm-Message-State: APjAAAV/3WnNgnYRo0MjlpqGaPVfYXFlrb/WAjOGGdGykmQWJTqDdVJe
-        wzly+dGA1eAcWpWkJpzDhMTnFA==
-X-Google-Smtp-Source: APXvYqzCH6JkIGIMDnIOEIFv7dTqbgSevQnLuknmocRwHgxJb1MtM345JVgkwrUtGfT2CEe7k8z8kg==
-X-Received: by 2002:a17:902:1e7:: with SMTP id b94mr22716751plb.333.1562565619188;
-        Sun, 07 Jul 2019 23:00:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=peXRtMB4l6/FU5tZ5pa+2prKmpjjO6KyHe/s1NBwntA=;
+        b=hpQFLl3uwCq8R9f9SejiF/tzYobiqTokh9D/a7f3aGok0KeAQVT5xYFLg3pdorsp6a
+         Snu0QdG7jrDrcCc5KjmulfniEYo5/Vvgb1kp+NETwzpfx5+NpF4kiFKlb0Oo4jxhLoGf
+         wkPZj+DwslS4Zi2s8N9mVTXs+yBP22kVkMDFTC76PqJARu/PmLNUqsEMUoCTMYB2aGLc
+         fdlsce3IvNNXxepPrQJAao3MZh6XfOLqMHx4+yzh2qy3N9WKWeLcar6dW1Jgaq4vzNJE
+         WtaDeYyAVxs/CWYOAJ0ceKwLrk2eJvBuYdx0NkJ1QWNMHgsLDyaQdrMvfkr4o88yDy8Y
+         PQkA==
+X-Gm-Message-State: APjAAAXGwzQCI+BZhCe1dNNgbvaa+k1MzwbH3BJPqoxm/ls739kMOTR8
+        XfRAevu1T+BmA3BZzp1OYn2HzA==
+X-Google-Smtp-Source: APXvYqxvVIaEeh282d+Px+8Oq6IL6RS+zn2W2vd8R+iyk699sGYBj9Cr6pFpfRenH5l+igaTy8z2ow==
+X-Received: by 2002:a17:90a:5207:: with SMTP id v7mr22102909pjh.127.1562565700727;
+        Sun, 07 Jul 2019 23:01:40 -0700 (PDT)
 Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id f15sm21479445pje.17.2019.07.07.23.00.17
+        by smtp.gmail.com with ESMTPSA id 125sm19424002pfg.23.2019.07.07.23.01.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 07 Jul 2019 23:00:18 -0700 (PDT)
+        Sun, 07 Jul 2019 23:01:40 -0700 (PDT)
+Date:   Mon, 8 Jul 2019 11:31:38 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>, niklas.cassel@linaro.org,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Return genpd virtual devices from dev_pm_opp_attach_genpd()
-Date:   Mon,  8 Jul 2019 11:30:11 +0530
-Message-Id: <027985ce35873cd218298302a1408da06d48458b.1562565567.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
+Subject: Re: [PATCH 1/2] opp: Attach genpds to devices from within OPP core
+Message-ID: <20190708060138.7mmdbusfnimzg7er@vireshk-i7>
+References: <1bc9053f5c41a10832b58a2a81decbad7f1aded9.1557742920.git.viresh.kumar@linaro.org>
+ <aee8dc78-e292-a671-3dc5-ca962c0eec6b@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aee8dc78-e292-a671-3dc5-ca962c0eec6b@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpufreq drivers don't need to do runtime PM operations on the
-virtual devices returned by dev_pm_domain_attach_by_name() and so the
-virtual devices weren't shared with the callers of
-dev_pm_opp_attach_genpd() earlier.
+On 04-07-19, 11:55, Rajendra Nayak wrote:
+> 
+> On 5/13/2019 3:54 PM, Viresh Kumar wrote:
+> > The OPP core requires the virtual device pointers to set performance
+> > state on behalf of the device, for the multiple power domain case. The
+> > genpd API (dev_pm_domain_attach_by_name()) has evolved now to support
+> > even the single power domain case and that lets us add common code for
+> > handling both the cases more efficiently.
+> > 
+> > The virtual device structure returned by dev_pm_domain_attach_by_name()
+> > isn't normally used by the cpufreq drivers as they don't manage power
+> > on/off of the domains and so is only useful for the OPP core.
+> 
+> This might be true for CPUs but not necessarily so for IO devices which might
+> want to set up device links so the devices runtime pm calls can trigger the
+> on/off of the power domain. Is there a way to handle that case now?
 
-But the IO device drivers would want to do that. This patch updates the
-prototype of dev_pm_opp_attach_genpd() to accept another argument to
-return the pointer to the array of genpd virtual devices.
+https://lore.kernel.org/lkml/027985ce35873cd218298302a1408da06d48458b.1562565567.git.viresh.kumar@linaro.org
 
-Reported-by: Rajendra Nayak <rnayak@codeaurora.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-@Rajendra: Can you please test this one ? I have only compile tested it.
-
- drivers/opp/core.c     | 5 ++++-
- include/linux/pm_opp.h | 4 ++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 2958cc7bbb58..07b6f1187b3b 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1775,6 +1775,7 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
-  * dev_pm_opp_attach_genpd - Attach genpd(s) for the device and save virtual device pointer
-  * @dev: Consumer device for which the genpd is getting attached.
-  * @names: Null terminated array of pointers containing names of genpd to attach.
-+ * @virt_devs: Pointer to return the array of virtual devices.
-  *
-  * Multiple generic power domains for a device are supported with the help of
-  * virtual genpd devices, which are created for each consumer device - genpd
-@@ -1789,7 +1790,8 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
-  * This helper needs to be called once with a list of all genpd to attach.
-  * Otherwise the original device structure will be used instead by the OPP core.
-  */
--struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names)
-+struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
-+		const char **names, struct device ***virt_devs)
- {
- 	struct opp_table *opp_table;
- 	struct device *virt_dev;
-@@ -1850,6 +1852,7 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names
- 		name++;
- 	}
- 
-+	*virt_devs = opp_table->genpd_virt_devs;
- 	mutex_unlock(&opp_table->genpd_virt_dev_lock);
- 
- 	return opp_table;
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index be570761b77a..7c2fe2952f40 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -131,7 +131,7 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char * name);
- void dev_pm_opp_put_clkname(struct opp_table *opp_table);
- struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
- void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
--struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names);
-+struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
- void dev_pm_opp_detach_genpd(struct opp_table *opp_table);
- int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
- int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
-@@ -295,7 +295,7 @@ static inline struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const
- 
- static inline void dev_pm_opp_put_clkname(struct opp_table *opp_table) {}
- 
--static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names)
-+static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs)
- {
- 	return ERR_PTR(-ENOTSUPP);
- }
 -- 
-2.21.0.rc0.269.g1a574e7a288b
-
+viresh
