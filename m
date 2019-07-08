@@ -2,76 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDD061D3C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 12:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F4861D3D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 12:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729372AbfGHKrf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jul 2019 06:47:35 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2178 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729370AbfGHKrf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Jul 2019 06:47:35 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 26D2D761AC978FF7A392;
-        Mon,  8 Jul 2019 18:47:33 +0800 (CST)
-Received: from [127.0.0.1] (10.184.189.120) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.439.0; Mon, 8 Jul 2019
- 18:47:31 +0800
-Subject: Re: [PATCH] cpufreq: schedutil: Fix covert rate_limit_us to
- freq_update_delay_ns overflow
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rjw@rjwysocki.net>, <mingo@redhat.com>, <peterz@infradead.org>,
-        <linux-pm@vger.kernel.org>
-References: <1562575583-99575-1-git-send-email-zhangxiaoxu5@huawei.com>
- <20190708093740.pbcnl7ytjmmpy3bz@vireshk-i7>
-From:   "zhangxiaoxu (A)" <zhangxiaoxu5@huawei.com>
-Message-ID: <c7617270-3659-8320-a605-1c2dc3ffdf1f@huawei.com>
-Date:   Mon, 8 Jul 2019 18:47:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1730166AbfGHKsH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jul 2019 06:48:07 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34750 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729370AbfGHKsG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jul 2019 06:48:06 -0400
+Received: by mail-ot1-f66.google.com with SMTP id n5so15742963otk.1;
+        Mon, 08 Jul 2019 03:48:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZxlZywmK8T9tIPU2IKXMhQPp/KiZ2NrHs16HgI1BxC4=;
+        b=QhVgifHrJJEUGLAWKKbaKPFlqr96hv5MQqUE83ll4opaMzdrWaBoKci4FQS60yaf9E
+         cqieYGAghPOTUa3q1wGso3LNckY7ryDpO/1uXIa8MBun4iNy8mDktKvWzHqmCrvaIRoZ
+         W5bn0QR5RKgaEdYRtJIZtGwjoSvdqUvLyEeVVHk9FIKCkhhON/HYFv0JlXUK6nYwWJ5z
+         wsnfHsSO6NuqAIWXlGxrfDDIjvIUMliOYduYYBlQQEYLJ1pn+5TA/JKTwRgXNLVt+d5X
+         yXJv8J9UoDlOS+Xs3jntV5kw3FZ4VYt7uNCTJshNZLSufjSyoocd6Yp7DYZmmpPseUgu
+         6Q+A==
+X-Gm-Message-State: APjAAAWBDkoGn/Oovbh0kPEU4lLW/eC6MELvc2BCAs5R01h5uFmc+ceo
+        0mgB75tBvW1CqYIYdUmk0/GeI9lc9Z7Bc3xXO/8=
+X-Google-Smtp-Source: APXvYqwwV0/BDF5hnTYnjD6dVM9yPpn6aDXVZFKyRIiAAfmsiHUk1TGMqlQAAUZ3IpCdRe/TDXiFCZLrONwUYQfrKVU=
+X-Received: by 2002:a9d:6959:: with SMTP id p25mr13156165oto.118.1562582885715;
+ Mon, 08 Jul 2019 03:48:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190708093740.pbcnl7ytjmmpy3bz@vireshk-i7>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.184.189.120]
-X-CFilter-Loop: Reflected
+References: <20190704192020.GA3771@amd> <CAJZ5v0gn7FWpqW+WmCzj1=K-pjY=SjRNuEsMR3bRTSO8FzFG=Q@mail.gmail.com>
+ <20190705185001.GA4068@amd> <CAJZ5v0irbn-Xd47KExw=h7On7KShCm6rThCo0q4-zn=o_x6_HQ@mail.gmail.com>
+ <20190706203032.GA26828@amd> <20190708030505.kvrg6sh6bd4xzzwa@vireshk-i7>
+ <CAJZ5v0hTXtjkatT4wVftPac-LgL1GSAbwLZ0mMDSpFn=8k9Ssg@mail.gmail.com> <20190708092840.ynibtrntval6krc4@vireshk-i7>
+In-Reply-To: <20190708092840.ynibtrntval6krc4@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 8 Jul 2019 12:47:54 +0200
+Message-ID: <CAJZ5v0gHNNkcYk5bV-oHDyxmrP=c7G_-bPZd5KXwHTo2oTDHnA@mail.gmail.com>
+Subject: Re: cpufreq notifiers break suspend -- Re: suspend broken in
+ next-20190704 on Thinkpad X60
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Jul 8, 2019 at 11:28 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 08-07-19, 10:28, Rafael J. Wysocki wrote:
+> > Pavel has tested the latest version of the patch series AFAICS.
+> >
+> > The locking added by the commit in question to
+> > refresh_frequency_limits() requires an update of
+> > cpufreq_update_policy(), or it will deadlock in there because of the
+> > lock acquired by cpufreq_cpu_get() if I haven't missed anything.
+>
+> Ah, looks quite straight forward.
+>
+> @Pavel: Can you please try this diff ?
+>
+> -------------------------8<-------------------------
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 9f68d0f306b8..4d6043ee7834 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1109,16 +1109,12 @@ void refresh_frequency_limits(struct cpufreq_policy *policy)
+>  {
+>         struct cpufreq_policy new_policy;
+>
+> -       down_write(&policy->rwsem);
+> -
+>         if (!policy_is_inactive(policy)) {
+>                 new_policy = *policy;
+>                 pr_debug("updating policy for CPU %u\n", policy->cpu);
+>
+>                 cpufreq_set_policy(policy, &new_policy);
+>         }
+> -
+> -       up_write(&policy->rwsem);
+>  }
+>  EXPORT_SYMBOL(refresh_frequency_limits);
+>
+> @@ -1128,7 +1124,9 @@ static void handle_update(struct work_struct *work)
+>                 container_of(work, struct cpufreq_policy, update);
+>
+>         pr_debug("handle_update for cpu %u called\n", policy->cpu);
+> +       down_write(&policy->rwsem);
+>         refresh_frequency_limits(policy);
+> +       up_write(&policy->rwsem);
+>  }
+>
+> -------------------------8<-------------------------
+>
+> Though it makes me wonder why I didn't hit this thing. I was using the
+> cpu_cooling device the other day, which calls cpufreq_update_policy()
+> very frequently on heat-up. And I had a hair dryer blowing over my
+> board to heat it up. Lemme check that again :)
+>
+> @Rafael: You want me to send a new diff patch with Fixes tag this time
+> if this works out fine ?
 
-
-ÔÚ 2019/7/8 17:37, Viresh Kumar Ð´µÀ:
-> On 08-07-19, 16:46, ZhangXiaoxu wrote:
->> When covert rate_limit_us to freq_update_delay_ns, it maybe overflow
->> and lead an undefined behavior.
-> 
-> freq_update_delay_ns is s64, still overflow can happen ?
-It will not happened. sorry for my misunderstander :(
-> 
->> So, limit the rate_limit_us to UINT_MAX / NSEC_PER_USEC.
->>
->> Signed-off-by: ZhangXiaoxu <zhangxiaoxu5@huawei.com>
->> ---
->>   kernel/sched/cpufreq_schedutil.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
->> index 962cf34..01e05f3 100644
->> --- a/kernel/sched/cpufreq_schedutil.c
->> +++ b/kernel/sched/cpufreq_schedutil.c
->> @@ -590,6 +590,9 @@ rate_limit_us_store(struct gov_attr_set *attr_set, const char *buf, size_t count
->>   	if (kstrtouint(buf, 10, &rate_limit_us))
->>   		return -EINVAL;
->>   
->> +	if (rate_limit_us > UINT_MAX / NSEC_PER_USEC)
->> +		return -EINVAL;
->> +
->>   	tunables->rate_limit_us = rate_limit_us;
->>   
->>   	list_for_each_entry(sg_policy, &attr_set->policy_list, tunables_hook)
->> -- 
->> 2.7.4
-> 
-
+I would prefer the original patch to be updated to avoid possible
+bisection woes in the future.
