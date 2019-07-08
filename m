@@ -2,79 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C50161EBD
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 14:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E299461ED2
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 14:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728419AbfGHMsC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jul 2019 08:48:02 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:35573 "EHLO
+        id S1729278AbfGHMxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jul 2019 08:53:01 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:60851 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727667AbfGHMsC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jul 2019 08:48:02 -0400
+        with ESMTP id S1728615AbfGHMxA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jul 2019 08:53:00 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MOV26-1i9GEl2RX4-00PwCX; Mon, 08 Jul 2019 14:47:49 +0200
+ (mreue107 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1MHFwM-1hg19V14PQ-00DGIK; Mon, 08 Jul 2019 14:52:49 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers: thermal: processor_thermal: mark pm function __maybe_unused
-Date:   Mon,  8 Jul 2019 14:47:20 +0200
-Message-Id: <20190708124743.3585020-1-arnd@arndb.de>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Nandor Han <nandor.han@vaisala.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: reset: nvmem-reboot-mode: add CONFIG_OF dependency
+Date:   Mon,  8 Jul 2019 14:52:39 +0200
+Message-Id: <20190708125247.3769080-1-arnd@arndb.de>
 X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:jY8CsqninBJpp72LoWm3o2SSyMZUEEdi4Q2VjdlrSS7nCJ5qWnp
- J32z7Feh6adkH6Nc7yWZOASWH+fdm4qJyfe6CvlAwXH4PttOnAING/xy9G4RcFkdisxVWVU
- y/qmLnw/oO8KFQJ+4Gc2dfVxnmuxc6/bdkWN63voVw4WWQNEr09JaMbqMLDlNdKLE5w122D
- tCSS6FFSk7OliH1Tt23bw==
+X-Provags-ID: V03:K1:6SS/gq7IcyGSOSLVilP5dnwencoI/sgZf1Q7EHXRRfw4T53FImx
+ fllqWL3XPVyjpEn+CJQB6vqES0JOQaHwOOCQd7bC/VI8gBI3QS/jyYGT3O4FoV52w4p3OJi
+ wAKwyvDEQ2CNRU5O70xpuWAb/LXovIVRo+2+t1MbY8o0ha1LeLXJg1KQMWpM8inpG9KhNa9
+ tET+QfjwwoYGBFkCyt1Nw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2j81dPrWY9o=:8gBKlza1wKZkyDVk8DRBc+
- ejlgGPfmLCeLyzLHCcraEgn4/WheSxAb8Quyjp5JLrGNSfsfnB6Q5oEVYZQetrB0Cm8gEYEmF
- cNbNi21YmC9QcSDN1e4O0C01v96CzUlAH0+D5F0o4p8sCg1ReV/B5Kz0vJ5J6Se3LjpnlnuVs
- 4vHRx3URNOKPVYb2uvOW7sJgWufVIOKnUedj/G29nXc3CJmDIeDLCbVObftkHc6yGGlpctbiI
- rRhedgaVb3QBfgiCDIYR3Y9zh30ieqlgNYHDegDA8I4u3pgHLl46pgx+nOh7dKkW+WZ9KRHzU
- Q7qG+ttFAdWdRuRUDdIszSyuNe0olLxT5CDO7Oc/drcvYPoBTj1fVjNFDWkmvCN+yQJpMS4jA
- lJtaCtJ/f6nZrZZx4g6ADel2HdBz/KTIAbUpZ6eChWJlWx23muYkimM02HOVxqllnPNoHaFe3
- TgiAG75ZJThZ4/rJcXQt9Lp7Mp903IdXq6Crvx0dB+Qgv7tDSyelsY8qQtSD6LFVV2pwoa2cD
- 8/SBEMq3+Y2VGHYPQkLBPNIJwjKM/zel/YegrBjTIovw4mf9NeRKFkAlqETK199l5vj+iCUfn
- bP7RBMQHXnwQ3SnsSAv2SAcZWmaKFXTpRKQM5+cBJ2xbttOqNIkrHE80OMM5s7KQDsPWG3SNp
- ZexqwDKDDZQyZcEJSdP4huCZiBhOraSyQxp854/yn/dmeHJiCvZ1PvMQaoD9r26aCXrARirtr
- sLMWEJ/hbvF8HFlxx3GoMTKhSxn9rmcstvIP5Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VtOFB+BMYi0=:hzt+AkclHU2thQ/96Q3iF5
+ HeNLWY8WERSwAqx61XqJVJtDQ5b533C1HEYdMNT8KnO4n4Xipe7/FnHuGvm7RoW4lwMyH6BEc
+ 3q8d3ZJQitOlsodPxVmKtSgkYGWWrurHWUcRbwdLqI8XXIazH0KUt5Mh4xzL7I/pgienngNy1
+ u+W+Mr5prj7jMZNAYX9U87VGIcKCXj+oRmSOTvxSpugmH69fUuZX4jYT6QWDjHPhcJOqHXPFd
+ JtlbTRC4YG5K5l6AShTVbohH5p6GZmrQCG4/U5OT4pKHEfR6ZNvFxldAXWnJk0R3DhfDLUHlW
+ JZsNhYVVYaHem05rcuwSDxvHizcbRlR3Wd7qIDrfUciwpy796Qy5e8Mx/XPn2hOPFCCBABWFE
+ pF92c1gBDs9SAFqeItuCkxl9FRXkbEtOKVIRNhT5LJ3eJN+OrfPCPbW0vEY5BZt6tUlXEeFqn
+ LdcUwAfN5RDlIJSzDEgw/TP46LOwJsDa3bE0+t0lZMmWPFaBMcuda/6BxDQSRMdlgq2MqvbJP
+ 1cbn8vVec1kjiuN0vqPFdq8wKqHPdKFf/kbLXXPAMTFsU545Gpj1Td/zLvY815q2Ol1a7yu2I
+ xxb/25n7ghWxWOb9mgXVdniAjItBQz8EQBOaFfs/9RjSRFHqavEfvOKzJ9kGKNcf7lJnKdJM+
+ n8I6P2IuyfZIr3b5Zld8UEeQdtTzyRWseGWnWkFoipUOYIM4iKinOUhCjsgbtgxKUKWFmXEPV
+ 0JMZ9P5rcBQKI514HvRjY9VjcY6fnZDCPxAH1g==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Without CONFIG_PM, we get a harmless warning:
+Without CONFIG_OF, we get a build failure in the reboot-mode
+implementation:
 
-drivers/thermal/intel/int340x_thermal/processor_thermal_device.c:446:12: error: 'proc_thermal_resume' defined but not used [-Werror=unused-function]
- static int proc_thermal_resume(struct device *dev)
+drivers/power/reset/reboot-mode.c: In function 'reboot_mode_register':
+drivers/power/reset/reboot-mode.c:72:2: error: implicit declaration of function 'for_each_property_of_node'; did you mean 'for_each_child_of_node'? [-Werror=implicit-function-declaration]
+  for_each_property_of_node(np, prop) {
 
-Mark it __maybe_unused to shut up the warning.
+Add a Kconfig dependency like we have for the other users of
+CONFIG_REBOOT_MODE.
 
-Fixes: aaba9791fbb4 ("drivers: thermal: processor_thermal: Read PPCC on resume")
+Fixes: 7a78a7f7695b ("power: reset: nvmem-reboot-mode: use NVMEM as reboot mode write interface")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- .../thermal/intel/int340x_thermal/processor_thermal_device.c    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/power/reset/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-index a3210f09f366..5ce639a99330 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-@@ -443,7 +443,7 @@ static void  proc_thermal_pci_remove(struct pci_dev *pdev)
- 	pci_disable_device(pdev);
- }
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 8dfb105db391..a564237278ff 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -248,6 +248,7 @@ config POWER_RESET_SC27XX
  
--static int proc_thermal_resume(struct device *dev)
-+static int __maybe_unused proc_thermal_resume(struct device *dev)
- {
- 	struct proc_thermal_device *proc_dev;
- 
+ config NVMEM_REBOOT_MODE
+ 	tristate "Generic NVMEM reboot mode driver"
++	depends on OF
+ 	select REBOOT_MODE
+ 	help
+ 	  Say y here will enable reboot mode driver. This will
 -- 
 2.20.0
 
