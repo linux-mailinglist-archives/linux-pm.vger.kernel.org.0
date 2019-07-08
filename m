@@ -2,87 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E0C61E7D
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 14:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C50161EBD
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 14:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729546AbfGHMeQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jul 2019 08:34:16 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36979 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727544AbfGHMeQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jul 2019 08:34:16 -0400
-Received: by mail-pg1-f196.google.com with SMTP id g15so7624730pgi.4;
-        Mon, 08 Jul 2019 05:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=NjnqLo3iz545x+S/KElhJPXTzOJzfZJMgeETAvhK2LU=;
-        b=ZOSKOH9ptz42APtzNxr/4fxHNtLoWbGY1peNF/bZjQqe6lKg5MN560m0wpvTf/9EJx
-         B+TG/tCXqG7H4/QoHftgxuWTZshzZVclaaR6T+yfQeRx4F6ZIR30GzHeEBrclcl53PJX
-         bKwEwHg/H6JrvHZ2gu3Sb8zxI8wyuorntaxWeQ42Q2vAYIRSTt+f38PoKJTz5bNJ4Fx5
-         B2/Yze+0Q3nVnZxnS2ewedrjHHpn68RPTWghoQFznhqkA6GlZEQCIyYha0Xj0HdpNfQz
-         rS6dIDFHNCVWU7gNeg9xu9GauI/5bXhQ4nef7sfUVTEvgeozM07QBiauuKiDmtDj6Uot
-         WHAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=NjnqLo3iz545x+S/KElhJPXTzOJzfZJMgeETAvhK2LU=;
-        b=XqwD8Q89fSwlVEcQVYeC9SQHWQ7AAC1ltZR3Hz+v5wV/2QNjx3njTgrAX7Cw+YI8+q
-         rkxGKKysDNFYNyMGM9BlO0d7T+HeczFEWKX5yUd1aTfYTyI6qdcL1M3ZeyIHQKUsl9GX
-         fDp7V5kmMwx8JtZh0TbqFK5JU0R/fF/gSx2HAFw06B8BW3xdxoUVtxkD7UiUvYjRB7eB
-         5eNRszlldEaZs9B5+esTuTEQG5eHuf4PRZe2rNQ/3aiY2/MuGR46VCQAarXYmtXjenbz
-         c/Em1ehsHvYTrL4WOa9x5665GQJ1W5OsS7hbEMXF79SlaTcnpmibhjq8o8PD9VtjcI4M
-         2lqg==
-X-Gm-Message-State: APjAAAWBUaX1uItqvSly8KAepvFzBWOliufq9IoPFjHypTvepX57Kqiq
-        zgfvaCUGSsRtvUpL5wcsMgGUK9mZgL4=
-X-Google-Smtp-Source: APXvYqwptuU442FRVbw38exDDtoo5AIEoLjyAxxfOmUHmqr8wOOLnRnMFNTXHshFtLuvManYWC/0ug==
-X-Received: by 2002:a63:6f8f:: with SMTP id k137mr23414666pgc.90.1562589255980;
-        Mon, 08 Jul 2019 05:34:15 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id br18sm14785970pjb.20.2019.07.08.05.34.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Jul 2019 05:34:15 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH 13/14] thermal: rcar_gen3_thermal: Replace devm_add_action() followed by failure action with devm_add_action_or_reset()
-Date:   Mon,  8 Jul 2019 20:34:09 +0800
-Message-Id: <20190708123409.12219-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1728419AbfGHMsC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jul 2019 08:48:02 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:35573 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727667AbfGHMsC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jul 2019 08:48:02 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MOV26-1i9GEl2RX4-00PwCX; Mon, 08 Jul 2019 14:47:49 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: thermal: processor_thermal: mark pm function __maybe_unused
+Date:   Mon,  8 Jul 2019 14:47:20 +0200
+Message-Id: <20190708124743.3585020-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:jY8CsqninBJpp72LoWm3o2SSyMZUEEdi4Q2VjdlrSS7nCJ5qWnp
+ J32z7Feh6adkH6Nc7yWZOASWH+fdm4qJyfe6CvlAwXH4PttOnAING/xy9G4RcFkdisxVWVU
+ y/qmLnw/oO8KFQJ+4Gc2dfVxnmuxc6/bdkWN63voVw4WWQNEr09JaMbqMLDlNdKLE5w122D
+ tCSS6FFSk7OliH1Tt23bw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2j81dPrWY9o=:8gBKlza1wKZkyDVk8DRBc+
+ ejlgGPfmLCeLyzLHCcraEgn4/WheSxAb8Quyjp5JLrGNSfsfnB6Q5oEVYZQetrB0Cm8gEYEmF
+ cNbNi21YmC9QcSDN1e4O0C01v96CzUlAH0+D5F0o4p8sCg1ReV/B5Kz0vJ5J6Se3LjpnlnuVs
+ 4vHRx3URNOKPVYb2uvOW7sJgWufVIOKnUedj/G29nXc3CJmDIeDLCbVObftkHc6yGGlpctbiI
+ rRhedgaVb3QBfgiCDIYR3Y9zh30ieqlgNYHDegDA8I4u3pgHLl46pgx+nOh7dKkW+WZ9KRHzU
+ Q7qG+ttFAdWdRuRUDdIszSyuNe0olLxT5CDO7Oc/drcvYPoBTj1fVjNFDWkmvCN+yQJpMS4jA
+ lJtaCtJ/f6nZrZZx4g6ADel2HdBz/KTIAbUpZ6eChWJlWx23muYkimM02HOVxqllnPNoHaFe3
+ TgiAG75ZJThZ4/rJcXQt9Lp7Mp903IdXq6Crvx0dB+Qgv7tDSyelsY8qQtSD6LFVV2pwoa2cD
+ 8/SBEMq3+Y2VGHYPQkLBPNIJwjKM/zel/YegrBjTIovw4mf9NeRKFkAlqETK199l5vj+iCUfn
+ bP7RBMQHXnwQ3SnsSAv2SAcZWmaKFXTpRKQM5+cBJ2xbttOqNIkrHE80OMM5s7KQDsPWG3SNp
+ ZexqwDKDDZQyZcEJSdP4huCZiBhOraSyQxp854/yn/dmeHJiCvZ1PvMQaoD9r26aCXrARirtr
+ sLMWEJ/hbvF8HFlxx3GoMTKhSxn9rmcstvIP5Q==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-devm_add_action_or_reset() is introduced as a helper function which 
-internally calls devm_add_action(). If devm_add_action() fails 
-then it will execute the action mentioned and return the error code.
-This reduce source code size (avoid writing the action twice) 
-and reduce the likelyhood of bugs.
+Without CONFIG_PM, we get a harmless warning:
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+drivers/thermal/intel/int340x_thermal/processor_thermal_device.c:446:12: error: 'proc_thermal_resume' defined but not used [-Werror=unused-function]
+ static int proc_thermal_resume(struct device *dev)
+
+Mark it __maybe_unused to shut up the warning.
+
+Fixes: aaba9791fbb4 ("drivers: thermal: processor_thermal: Read PPCC on resume")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/thermal/rcar_gen3_thermal.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../thermal/intel/int340x_thermal/processor_thermal_device.c    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index a56463308694..755d2b5bd2c2 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -443,9 +443,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 		if (ret)
- 			goto error_unregister;
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index a3210f09f366..5ce639a99330 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -443,7 +443,7 @@ static void  proc_thermal_pci_remove(struct pci_dev *pdev)
+ 	pci_disable_device(pdev);
+ }
  
--		ret = devm_add_action(dev, rcar_gen3_hwmon_action, zone);
-+		ret = devm_add_action_or_reset(dev, rcar_gen3_hwmon_action, zone);
- 		if (ret) {
--			rcar_gen3_hwmon_action(zone);
- 			goto error_unregister;
- 		}
+-static int proc_thermal_resume(struct device *dev)
++static int __maybe_unused proc_thermal_resume(struct device *dev)
+ {
+ 	struct proc_thermal_device *proc_dev;
  
 -- 
-2.11.0
+2.20.0
 
