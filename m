@@ -2,81 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E299461ED2
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 14:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF3C61FBD
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jul 2019 15:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729278AbfGHMxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jul 2019 08:53:01 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:60851 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728615AbfGHMxA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jul 2019 08:53:00 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MHFwM-1hg19V14PQ-00DGIK; Mon, 08 Jul 2019 14:52:49 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Nandor Han <nandor.han@vaisala.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] power: reset: nvmem-reboot-mode: add CONFIG_OF dependency
-Date:   Mon,  8 Jul 2019 14:52:39 +0200
-Message-Id: <20190708125247.3769080-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
+        id S1729814AbfGHNqL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jul 2019 09:46:11 -0400
+Received: from foss.arm.com ([217.140.110.172]:48350 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729756AbfGHNqK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Jul 2019 09:46:10 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D36DE2B;
+        Mon,  8 Jul 2019 06:46:09 -0700 (PDT)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EA783F738;
+        Mon,  8 Jul 2019 06:46:08 -0700 (PDT)
+Subject: Re: [RFC PATCH v2 0/5] sched/cpufreq: Make schedutil energy aware
+To:     Patrick Bellasi <patrick.bellasi@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        mingo@redhat.com, rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        quentin.perret@arm.com, dietmar.eggemann@arm.com
+References: <20190627171603.14767-1-douglas.raillard@arm.com>
+ <20190702155115.GW3436@hirez.programming.kicks-ass.net>
+ <5198292b-1874-9ff4-6a9f-826a5ea00466@arm.com>
+ <20190708110904.ecrlr4p77n4r6qzk@e110439-lin>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <b35c2281-4d91-2164-65f9-9ef3a28c35d0@arm.com>
+Date:   Mon, 8 Jul 2019 14:46:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:6SS/gq7IcyGSOSLVilP5dnwencoI/sgZf1Q7EHXRRfw4T53FImx
- fllqWL3XPVyjpEn+CJQB6vqES0JOQaHwOOCQd7bC/VI8gBI3QS/jyYGT3O4FoV52w4p3OJi
- wAKwyvDEQ2CNRU5O70xpuWAb/LXovIVRo+2+t1MbY8o0ha1LeLXJg1KQMWpM8inpG9KhNa9
- tET+QfjwwoYGBFkCyt1Nw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VtOFB+BMYi0=:hzt+AkclHU2thQ/96Q3iF5
- HeNLWY8WERSwAqx61XqJVJtDQ5b533C1HEYdMNT8KnO4n4Xipe7/FnHuGvm7RoW4lwMyH6BEc
- 3q8d3ZJQitOlsodPxVmKtSgkYGWWrurHWUcRbwdLqI8XXIazH0KUt5Mh4xzL7I/pgienngNy1
- u+W+Mr5prj7jMZNAYX9U87VGIcKCXj+oRmSOTvxSpugmH69fUuZX4jYT6QWDjHPhcJOqHXPFd
- JtlbTRC4YG5K5l6AShTVbohH5p6GZmrQCG4/U5OT4pKHEfR6ZNvFxldAXWnJk0R3DhfDLUHlW
- JZsNhYVVYaHem05rcuwSDxvHizcbRlR3Wd7qIDrfUciwpy796Qy5e8Mx/XPn2hOPFCCBABWFE
- pF92c1gBDs9SAFqeItuCkxl9FRXkbEtOKVIRNhT5LJ3eJN+OrfPCPbW0vEY5BZt6tUlXEeFqn
- LdcUwAfN5RDlIJSzDEgw/TP46LOwJsDa3bE0+t0lZMmWPFaBMcuda/6BxDQSRMdlgq2MqvbJP
- 1cbn8vVec1kjiuN0vqPFdq8wKqHPdKFf/kbLXXPAMTFsU545Gpj1Td/zLvY815q2Ol1a7yu2I
- xxb/25n7ghWxWOb9mgXVdniAjItBQz8EQBOaFfs/9RjSRFHqavEfvOKzJ9kGKNcf7lJnKdJM+
- n8I6P2IuyfZIr3b5Zld8UEeQdtTzyRWseGWnWkFoipUOYIM4iKinOUhCjsgbtgxKUKWFmXEPV
- 0JMZ9P5rcBQKI514HvRjY9VjcY6fnZDCPxAH1g==
+In-Reply-To: <20190708110904.ecrlr4p77n4r6qzk@e110439-lin>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Without CONFIG_OF, we get a build failure in the reboot-mode
-implementation:
+Hi Patrick,
 
-drivers/power/reset/reboot-mode.c: In function 'reboot_mode_register':
-drivers/power/reset/reboot-mode.c:72:2: error: implicit declaration of function 'for_each_property_of_node'; did you mean 'for_each_child_of_node'? [-Werror=implicit-function-declaration]
-  for_each_property_of_node(np, prop) {
+On 7/8/19 12:09 PM, Patrick Bellasi wrote:
+> On 03-Jul 17:36, Douglas Raillard wrote:
+>> On 7/2/19 4:51 PM, Peter Zijlstra wrote:
+>>> On Thu, Jun 27, 2019 at 06:15:58PM +0100, Douglas RAILLARD wrote:
+> 
+> [...]
+> 
+>>> I'm not immediately seeing how it is transient; that is, PELT has a
+>>> wobble in it's steady state, is that accounted for?
+>>>
+>>
+>> The transient-ness of the ramp boost I'm introducing comes from the fact that for a
+>> periodic task at steady state, task_ue.enqueued <= task_u when the task is executing.
+>                  ^^^^^^^^^^^^^^^
+> 
+> I find your above "at steady state" a bit confusing.
+> 
+> The condition "task_ue.enqueue <= task_u" is true only for the first
+> task's big activation after a series of small activations, e.g. a task
+> switching from 20% to 70%.
 
-Add a Kconfig dependency like we have for the other users of
-CONFIG_REBOOT_MODE.
+I actually made a typo and meant "task_u <= task_ue.enqueue". The rest of the paragraph
+is aligned with that condition, sorry for the confusion.
 
-Fixes: 7a78a7f7695b ("power: reset: nvmem-reboot-mode: use NVMEM as reboot mode write interface")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/power/reset/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 8dfb105db391..a564237278ff 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -248,6 +248,7 @@ config POWER_RESET_SC27XX
- 
- config NVMEM_REBOOT_MODE
- 	tristate "Generic NVMEM reboot mode driver"
-+	depends on OF
- 	select REBOOT_MODE
- 	help
- 	  Say y here will enable reboot mode driver. This will
--- 
-2.20.0
+> That's the transient stat you refer to, isn't it?
+> 
+>> That is because task_ue.enqueued is sampled at dequeue time, precisely at the moment
+>> at which task_u is reaching its max for that task.
+> 
+> Right, so in the example above we will have enqueued=20% while task_u
+> is going above to converge towards 70%
+> 
+>> Since we only take into account positive boosts, ramp boost will
+>> only have an impact in the "increase transients".
+> 
+> Right.
+> 
+> I think Peter was referring to the smallish wobbles we see when the
+> task already converged to 70%. If that's the case I would say they are
+> already fully covered also by the current util_est.
 
+Yes, that's covered by the "task_u <= task_ue.enqueue" condition, with task_ue.enqueued
+not having any of these "mid freq" content that we call wobble here.
+
+Util est enqueued acts as an adaptive filter that kills frequencies higher than 1/task_period,
+task_period being the delta between the two previous "enqueue events". All what's (mostly) remaining
+after that is util variation of larger periods, with a positive shift that increases with
+the task period (mean(enqueued) = mean(util_avg) + f(task_period)).
+
+
+> You are also correct in pointing out that in the steady state
+> ramp_boost will not be triggered in that steady state.
+> 
+> IMU, that's for two main reasons:
+>   a) it's very likely that enqueued <= util_avg
+>   b) even in case enqueued should turn out to be _slightly_ bigger then
+>      util_avg, the corresponding (proportional) ramp_boost would be so
+>      tiny to not have any noticeable effect on OPP selection.
+> 
+> Am I correct on point b) above?
+
+Assuming you meant "util_avg slightly bigger than enqueued" (which is when boosting triggers),
+then yes since ramp_boost effect is proportional to "task_ue.enqueue - task_u". It makes it robust
+against that.
+
+> 
+> Could you maybe come up with some experimental numbers related to that
+> case specifically?
+
+With:
+* an rt-app task ramping up from 5% to 75% util in one big step. The whole cycle is 0.6s long
+  (0.3s at 5% followed by 0.3s at 75%). This cycle is repeated 20 times and the average of
+  boosting is taken.
+
+* a hikey 960 (this impact the frequency at which the test runs at the beginning of 75% phase,
+   which impacts the number of missed activations before the util ramped up).
+
+* assuming an OPP exists for each util value (i.e. 1024 OPPs, so the effect
+   of boost on consumption is not impacted by OPP capacities granularity)
+
+Then the boosting feature would increase the average power consumption by 3.1%, out of which 0.12% can
+be considered "spurious boosting" due to the util taking some time to really converge to its
+steady state value. In practice, the impact of small boosts will be even lower since they will less likely
+trigger the selection of a high OPP due to OPP capacity granularity > 1 util unit.
+
+> 
+> Best,
+> Patrick
+> 
+
+Best regards,
+Douglas
