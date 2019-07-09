@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E092F6301E
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 07:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95FB763021
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 07:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725856AbfGIFoj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jul 2019 01:44:39 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:35737 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725818AbfGIFoj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 01:44:39 -0400
-Received: by mail-ot1-f68.google.com with SMTP id j19so212132otq.2
-        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2019 22:44:39 -0700 (PDT)
+        id S1727077AbfGIFpF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jul 2019 01:45:05 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:39035 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726002AbfGIFpF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 01:45:05 -0400
+Received: by mail-ot1-f67.google.com with SMTP id r21so3240086otq.6
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2019 22:45:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=EqaZJyYgM0Os8ebMGdlkWjjcPY48Zl3Ke8JX40ALnsw=;
-        b=jnbG1dpqI0K+YHq/9S1CeaYEP7TPEOBIvVGhWbP/GwvHf0hUw0j7jJmO2BrWnkkr0q
-         rTzbdUNc641u+BMwgQEzAAC35Xy0R1R3oHIE0W4okbM3zaEsBFkdzLQiSTh+JmMzpGGi
-         umUsPNbjX7wYWsnzhnSuiCvm9txeL5ajrc6XT8gRo9J4Vj3KBidkZ6AWBzszzmDvfUnb
-         0I7u4pCq6i5Nz3vCPZmBuNpeOAGJO/w0ST+jsHQs/i0W7A5thVxLvEpW6KPXYYhxadVY
-         OFFDEFCWqMgujbWTVHrfsNxLcwYXRgZaO/4dZNIyI39rQ1GpQYlBsuHMJknNLH58Cs3l
-         pSBg==
+        bh=P212O3pD6J1OHFbkKOo30mb6JIIMTTuJiFwciEcoMBI=;
+        b=XAl2MDBM1SqnFzOMbq9qOjKyVUmi6eASeOwZqhW4/RSgqSMKiwgIoXCZzXefE/Tv6o
+         xsyfIgJgsYWkEXNA/DcJMaXO9CvxreOkZqvDPD2cKcOQFOVrdZCf0yp8VC6ntO/kK2GE
+         Ib6o+dYeMWoeAx7R2t9enaqt9XioShu3aUhWtB/1DbvL2dD8miEOSmHeS9BxU563H6+P
+         r6HJ+ScsU0jvKZS0xaO1ie3zyJQ0yWVpgtSFaMdrWkFVNrdK20MUWRLW62kh7Sg85Fik
+         Kf1TZ0kwjrYH2RwyScIVwvE1De5SEeTDqah423zA2jhXwAxxkU81dDCI2OV/cfGv82fG
+         QGtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EqaZJyYgM0Os8ebMGdlkWjjcPY48Zl3Ke8JX40ALnsw=;
-        b=svSjSmB7QQjCQHNQmW5NRICmu2tEqTkMSx7224PpNMhD2xloYCo61wwWqfCUGRtUCl
-         qp+5YYwIdNFbLjTJzXIqT9NEnQp8D7aeld/Y1khxwux/rdnDCFxAMGERcNtcFI2AEaLg
-         jLcJBYncUO2sHR2Jqc/xS08Jm8ftAJx13Tp8olyxLEPPfLBTmT3w14X7GJ9mbgO7Qddx
-         SpQALLC+QSq5flfdi0bUDc0FSSE9lBlmtsDuzs01g+XJ1AYAF7b6coevR53mN9kPcBcJ
-         x/pGu6n8wztxWZJjR+S3I5DKrYBCxtmpemQWzWyEA2T/191x8NjW1PkPUBYf4Y3/PA8r
-         nw7w==
-X-Gm-Message-State: APjAAAXW7qjBmWKZgqTC25QZR/GjAmuH15fgM/Q3D591fGepvi21dzwi
-        6/bdvADc7mbsPVvtNelJSwFuRrXCiQ5CBatCswNU4sTgVAs=
-X-Google-Smtp-Source: APXvYqxrhFRqVKYyJq1ZhsiBjelse+AtAmo3grTsG7ZGewv362i4vAyCgqz/v7JpkkyAnIm3AsGpr09SzdI4qPyUoVc=
-X-Received: by 2002:a05:6830:13c2:: with SMTP id e2mr15699382otq.123.1562651079043;
- Mon, 08 Jul 2019 22:44:39 -0700 (PDT)
+        bh=P212O3pD6J1OHFbkKOo30mb6JIIMTTuJiFwciEcoMBI=;
+        b=PNOzC1gVbd5V0WZgEFXmHM76TISEl+6E8oYuHWfyq0CDyVXPneILdROuMbqAXGzNEG
+         86cD1DThuAHTCgrl8z912tceHqTH3qexZm6wpAqpxGJeMU9iVC4GgLOgpdSqmaV81HDK
+         wdGos92HXQBIQeAQrZJ9X3r4AK5ZfgXheSijKowwfuY2DQtiN1tmHeamW00y/5RhU62r
+         h/eOk8+qykbPUzmhR6LG4ga5KQz7qX3oqYNkgO9kxjGPI76b91JbgykJv5OKt3KpLH9m
+         wrAJfg40qi4ahBb2GEbe6IepUqMyAwl29Jgh7YG1MOHOxx9ONKCaAtvzv6V9va+qC40i
+         NjwQ==
+X-Gm-Message-State: APjAAAXsfg6uO8bp6SPGluCPhJzxuVAybPY/IS5s9ChUKQ7W/RVYx6wc
+        Im/4eeEViCyx9k40fzGL2+MtjYJCre+z8pGW5elm7Q==
+X-Google-Smtp-Source: APXvYqw6oUZkKhaG1Q540oYRSkHVIx1Akfrd0ty6pGytUdVf3Ue+NeqdRc2ryNHhrFzl0/ATHqOmJUR42rC/yZojFUg=
+X-Received: by 2002:a9d:529:: with SMTP id 38mr17765884otw.145.1562651104246;
+ Mon, 08 Jul 2019 22:45:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190708123259.11805-1-huangfq.daxian@gmail.com>
-In-Reply-To: <20190708123259.11805-1-huangfq.daxian@gmail.com>
+References: <20190708123251.11759-1-huangfq.daxian@gmail.com>
+In-Reply-To: <20190708123251.11759-1-huangfq.daxian@gmail.com>
 From:   Baolin Wang <baolin.wang@linaro.org>
-Date:   Tue, 9 Jul 2019 13:44:27 +0800
-Message-ID: <CAMz4kuK6FOw2bxPzyrg0014zrU57k1KhUymyTfFYV6pVfw1vdQ@mail.gmail.com>
-Subject: Re: [PATCH 04/14] power: supply: sc27xx: Replace devm_add_action()
- followed by failure action with devm_add_action_or_reset()
+Date:   Tue, 9 Jul 2019 13:44:52 +0800
+Message-ID: <CAMz4kuJvnops5ecjP9PFwLW=WBPo4do9eawCX3cFTOL45qLgVQ@mail.gmail.com>
+Subject: Re: [PATCH 03/14] power: supply: sc27xx: Introduce local variable
+ 'struct device *dev'
 To:     Fuqian Huang <huangfq.daxian@gmail.com>
 Cc:     Sebastian Reichel <sre@kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
@@ -58,15 +58,10 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Fuqian,
-
 On Mon, 8 Jul 2019 at 20:33, Fuqian Huang <huangfq.daxian@gmail.com> wrote:
 >
-> devm_add_action_or_reset() is introduced as a helper function which
-> internally calls devm_add_action(). If devm_add_action() fails
-> then it will execute the action mentioned and return the error code.
-> This reduce source code size (avoid writing the action twice)
-> and reduce the likelyhood of bugs.
+> Introduce local variable 'struct device *dev' and use it instead of
+> dereferencing it repeatly.
 >
 > Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
 
@@ -74,24 +69,137 @@ Looks good to me. Thanks.
 Reviewed-by: Baolin Wang <baolin.wang@linaro.org>
 
 > ---
->  drivers/power/supply/sc27xx_fuel_gauge.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/power/supply/sc27xx_fuel_gauge.c | 47 ++++++++++++++++----------------
+>  1 file changed, 24 insertions(+), 23 deletions(-)
 >
 > diff --git a/drivers/power/supply/sc27xx_fuel_gauge.c b/drivers/power/supply/sc27xx_fuel_gauge.c
-> index 9c184d80088b..58b2970cd359 100644
+> index 24895cc3b41e..9c184d80088b 100644
 > --- a/drivers/power/supply/sc27xx_fuel_gauge.c
 > +++ b/drivers/power/supply/sc27xx_fuel_gauge.c
-> @@ -1023,9 +1023,8 @@ static int sc27xx_fgu_probe(struct platform_device *pdev)
+> @@ -957,81 +957,82 @@ static int sc27xx_fgu_hw_init(struct sc27xx_fgu_data *data)
+>
+>  static int sc27xx_fgu_probe(struct platform_device *pdev)
+>  {
+> -       struct device_node *np = pdev->dev.of_node;
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *np = dev->of_node;
+>         struct power_supply_config fgu_cfg = { };
+>         struct sc27xx_fgu_data *data;
+>         int ret, irq;
+>
+> -       data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +       data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>         if (!data)
+>                 return -ENOMEM;
+>
+> -       data->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +       data->regmap = dev_get_regmap(dev->parent, NULL);
+>         if (!data->regmap) {
+> -               dev_err(&pdev->dev, "failed to get regmap\n");
+> +               dev_err(dev, "failed to get regmap\n");
+>                 return -ENODEV;
+>         }
+>
+> -       ret = device_property_read_u32(&pdev->dev, "reg", &data->base);
+> +       ret = device_property_read_u32(dev, "reg", &data->base);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "failed to get fgu address\n");
+> +               dev_err(dev, "failed to get fgu address\n");
 >                 return ret;
 >         }
 >
-> -       ret = devm_add_action(dev, sc27xx_fgu_disable, data);
-> +       ret = devm_add_action_or_reset(dev, sc27xx_fgu_disable, data);
->         if (ret) {
-> -               sc27xx_fgu_disable(data);
->                 dev_err(dev, "failed to add fgu disable action\n");
+> -       data->channel = devm_iio_channel_get(&pdev->dev, "bat-temp");
+> +       data->channel = devm_iio_channel_get(dev, "bat-temp");
+>         if (IS_ERR(data->channel)) {
+> -               dev_err(&pdev->dev, "failed to get IIO channel\n");
+> +               dev_err(dev, "failed to get IIO channel\n");
+>                 return PTR_ERR(data->channel);
+>         }
+>
+> -       data->charge_chan = devm_iio_channel_get(&pdev->dev, "charge-vol");
+> +       data->charge_chan = devm_iio_channel_get(dev, "charge-vol");
+>         if (IS_ERR(data->charge_chan)) {
+> -               dev_err(&pdev->dev, "failed to get charge IIO channel\n");
+> +               dev_err(dev, "failed to get charge IIO channel\n");
+>                 return PTR_ERR(data->charge_chan);
+>         }
+>
+> -       data->gpiod = devm_gpiod_get(&pdev->dev, "bat-detect", GPIOD_IN);
+> +       data->gpiod = devm_gpiod_get(dev, "bat-detect", GPIOD_IN);
+>         if (IS_ERR(data->gpiod)) {
+> -               dev_err(&pdev->dev, "failed to get battery detection GPIO\n");
+> +               dev_err(dev, "failed to get battery detection GPIO\n");
+>                 return PTR_ERR(data->gpiod);
+>         }
+>
+>         ret = gpiod_get_value_cansleep(data->gpiod);
+>         if (ret < 0) {
+> -               dev_err(&pdev->dev, "failed to get gpio state\n");
+> +               dev_err(dev, "failed to get gpio state\n");
 >                 return ret;
 >         }
+>
+>         data->bat_present = !!ret;
+>         mutex_init(&data->lock);
+> -       data->dev = &pdev->dev;
+> +       data->dev = dev;
+>         platform_set_drvdata(pdev, data);
+>
+>         fgu_cfg.drv_data = data;
+>         fgu_cfg.of_node = np;
+> -       data->battery = devm_power_supply_register(&pdev->dev, &sc27xx_fgu_desc,
+> +       data->battery = devm_power_supply_register(dev, &sc27xx_fgu_desc,
+>                                                    &fgu_cfg);
+>         if (IS_ERR(data->battery)) {
+> -               dev_err(&pdev->dev, "failed to register power supply\n");
+> +               dev_err(dev, "failed to register power supply\n");
+>                 return PTR_ERR(data->battery);
+>         }
+>
+>         ret = sc27xx_fgu_hw_init(data);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "failed to initialize fgu hardware\n");
+> +               dev_err(dev, "failed to initialize fgu hardware\n");
+>                 return ret;
+>         }
+>
+> -       ret = devm_add_action(&pdev->dev, sc27xx_fgu_disable, data);
+> +       ret = devm_add_action(dev, sc27xx_fgu_disable, data);
+>         if (ret) {
+>                 sc27xx_fgu_disable(data);
+> -               dev_err(&pdev->dev, "failed to add fgu disable action\n");
+> +               dev_err(dev, "failed to add fgu disable action\n");
+>                 return ret;
+>         }
+>
+>         irq = platform_get_irq(pdev, 0);
+>         if (irq < 0) {
+> -               dev_err(&pdev->dev, "no irq resource specified\n");
+> +               dev_err(dev, "no irq resource specified\n");
+>                 return irq;
+>         }
+>
+> @@ -1046,17 +1047,17 @@ static int sc27xx_fgu_probe(struct platform_device *pdev)
+>
+>         irq = gpiod_to_irq(data->gpiod);
+>         if (irq < 0) {
+> -               dev_err(&pdev->dev, "failed to translate GPIO to IRQ\n");
+> +               dev_err(dev, "failed to translate GPIO to IRQ\n");
+>                 return irq;
+>         }
+>
+> -       ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +       ret = devm_request_threaded_irq(dev, irq, NULL,
+>                                         sc27xx_fgu_bat_detection,
+>                                         IRQF_ONESHOT | IRQF_TRIGGER_RISING |
+>                                         IRQF_TRIGGER_FALLING,
+>                                         pdev->name, data);
+>         if (ret) {
+> -               dev_err(&pdev->dev, "failed to request IRQ\n");
+> +               dev_err(dev, "failed to request IRQ\n");
+>                 return ret;
+>         }
+>
 > --
 > 2.11.0
 >
