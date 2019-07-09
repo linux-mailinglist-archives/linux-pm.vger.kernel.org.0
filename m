@@ -2,181 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E919863D7E
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 23:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF3263DAB
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 23:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729630AbfGIVrP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jul 2019 17:47:15 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:35338 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729552AbfGIVrO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 17:47:14 -0400
-Received: by mail-io1-f68.google.com with SMTP id m24so287749ioo.2;
-        Tue, 09 Jul 2019 14:47:14 -0700 (PDT)
+        id S1726851AbfGIV6O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jul 2019 17:58:14 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:44702 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726462AbfGIV6N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 17:58:13 -0400
+Received: by mail-io1-f66.google.com with SMTP id s7so234894iob.11;
+        Tue, 09 Jul 2019 14:58:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fp2QaEC9w/eoPJPJ2uirJ4Jgi05QvJmCljUYdY+Ygew=;
-        b=maBlaT8+ENM4B2a5I89CDK1zediAFBpd5HPEc3ypdmyw0fiUHAT7NPrDTUGKdN9Qnm
-         TYFbfyNquvfSvuu9x0VW8G+sC7m9pZd7tf7u8cOL7YqWM/5yTDWTxaS/ytdQrbs3fuKS
-         TyjgOc2f3FBo3wpqjWXOxedVRP89L2OqZm6wqsfbT+NnwKesOGfiseAE67bz/qfT7Jlo
-         xR6dZQhllJ4ojc+nNJjYb/mFeGAGPVDJo3XgY2yUcp3Uj2YM07zeThWt1lacNOMk0O9p
-         bKO1l2OptJ0wltYjL5m9bEP8rCFvUbuBiAx9zHDunkmEitcJoxp/qMHOrmTcJ4gYCY1i
-         yBUA==
-X-Gm-Message-State: APjAAAV06ZZrspmVDiDiLJnsBH0hZiVhMn6o1M8gIhBdTw/nTloIVcdt
-        U7G+evAW6M4UX0QVVnqgmQ==
-X-Google-Smtp-Source: APXvYqwDAnjg5Tt3ibEL5NhcurpWnU/VEvZ9JKJRUwfsH2vEvBMPUMqe1ezOcu/WXvYDK3d5LwKUTQ==
-X-Received: by 2002:a6b:d81a:: with SMTP id y26mr594024iob.126.1562708833703;
-        Tue, 09 Jul 2019 14:47:13 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=Ey61egmeTzlJzdnS3KXDPWo7KaDWydr+b+uOUD/PhiM=;
+        b=dGy6QPfFr0GGfn2v93VPxlUrS+5pK+zHvIe+iSUVvUgt53VxHWunGpJC6N9Hd/IfUi
+         BFLVQaRYukKyDoaVIct6TNZgZsgl+P5RNNhkx/Ie2hA6+smDyI7ilD6ewgU22LQEHXhI
+         CUZCfiuLVyhq5FWbOYGJK26I/rGEBsVIZPhuXHR1DNvfXsQiEPT9BVroU+LRtp+cJvVr
+         7jEm70/kZuFRkFDVQe/lsoqJrqYmOIrP5V7gRrm9LChqJqEBrMNKUaVvAPrNbCuJg/79
+         GmPinNXqX3r9KjlOSuvcorEOuKlEc7VDd6Jnd7zI5Z28a9vaSoZIw8asjct/jxIp5WMH
+         8xCQ==
+X-Gm-Message-State: APjAAAXoVtJz01e6xru2Ch7rPzOywAnCaLMqjX7f6+XtYiHHi6K0rV04
+        u8J6OeLcfLvItgOsiM5/9A==
+X-Google-Smtp-Source: APXvYqw5juZHQchjp5SSeEn+D8SjtVO4k6VtZq4TP772vPqxBVFTwIGj7pgz0nnUSAKu0HaFyjkq1Q==
+X-Received: by 2002:a5d:87d6:: with SMTP id q22mr7694894ios.2.1562709492517;
+        Tue, 09 Jul 2019 14:58:12 -0700 (PDT)
 Received: from localhost ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id r7sm20183111ioa.71.2019.07.09.14.47.12
+        by smtp.gmail.com with ESMTPSA id p3sm58971iom.7.2019.07.09.14.58.11
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 09 Jul 2019 14:47:12 -0700 (PDT)
-Date:   Tue, 9 Jul 2019 15:47:11 -0600
+        Tue, 09 Jul 2019 14:58:11 -0700 (PDT)
+Date:   Tue, 9 Jul 2019 15:58:10 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: soc: add mtk svs dt-bindings
-Message-ID: <20190709214711.GA9818@bogus>
-References: <20190621084348.16834-1-roger.lu@mediatek.com>
- <20190621084348.16834-2-roger.lu@mediatek.com>
+To:     =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>
+Cc:     sre@kernel.org, lee.jones@linaro.org, mark.rutland@arm.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] dt-bindings: mfd: max8998: Add charger subnode
+ binding
+Message-ID: <20190709215810.GB26049@bogus>
+References: <20190621115602.17559-1-pawel.mikolaj.chmiel@gmail.com>
+ <20190621115602.17559-3-pawel.mikolaj.chmiel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190621084348.16834-2-roger.lu@mediatek.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190621115602.17559-3-pawel.mikolaj.chmiel@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 04:43:47PM +0800, Roger Lu wrote:
-> Document the binding for enabling mtk svs on MediaTek SoC.
+On Fri, Jun 21, 2019 at 01:56:02PM +0200, Paweł Chmiel wrote:
+> This patch adds devicetree bindings documentation for
+> battery charging controller as the subnode of MAX8998 PMIC.
 > 
-> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> Signed-off-by: Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
 > ---
->  .../devicetree/bindings/power/mtk-svs.txt     | 88 +++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/mtk-svs.txt
+> Changes from v3:
+>   - Property prefix should be maxim, not max8998
+>   - Describe what End of Charge in percent means
 > 
-> diff --git a/Documentation/devicetree/bindings/power/mtk-svs.txt b/Documentation/devicetree/bindings/power/mtk-svs.txt
-> new file mode 100644
-> index 000000000000..6a71992ef162
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/mtk-svs.txt
-> @@ -0,0 +1,88 @@
-> +* Mediatek Smart Voltage Scaling (MTK SVS)
+> Changes from v2:
+>   - Make charge-restart-level-microvolt optional.
+>   - Make charge-timeout-hours optional.
+> 
+> Changes from v1:
+>   - Removed unneeded Fixes tag
+>   - Correct description of all charger values
+>   - Added missing property unit
+> ---
+>  .../devicetree/bindings/mfd/max8998.txt       | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/max8998.txt b/Documentation/devicetree/bindings/mfd/max8998.txt
+> index 5f2f07c09c90..368f787d6079 100644
+> --- a/Documentation/devicetree/bindings/mfd/max8998.txt
+> +++ b/Documentation/devicetree/bindings/mfd/max8998.txt
+> @@ -48,6 +48,25 @@ Additional properties required if max8998,pmic-buck2-dvs-gpio is defined:
+>  - max8998,pmic-buck2-dvs-voltage: An array of 2 voltage values in microvolts
+>    for buck2 regulator that can be selected using dvs gpio.
+>  
+> +Charger: Configuration for battery charging controller should be added
+> +inside a child node named 'charger'.
+> +  Required properties:
+> +  - maxim,end-of-charge-percentage: End of Charge in percent.
+> +    When the charge current in constant-voltage phase drops below
+> +    end-of-charge-percentage of it's start value, charging is terminated.
+> +    If value equals 0, leave it unchanged. Otherwise it should be value
+> +    from 10 to 45 by 5 step.
 > +
-> +This describes the device tree binding for the MTK SVS controller (bank)
-> +which helps provide the optimized CPU/GPU/CCI voltages. This device also
-> +needs thermal data to calculate thermal slope for accurately compensate
-> +the voltages when temperature change.
-> +
-> +Required properties:
-> +- compatible:
-> +  - "mediatek,mt8183-svs" : For MT8183 family of SoCs
-> +- reg: Address range of the MTK SVS controller.
-> +- interrupts: IRQ for the MTK SVS controller.
-> +- clocks, clock-names: Clocks needed for the svs controller. required
-> +                       clocks are:
-> +		       "main_clk": Main clock needed for register access
+> +  Optional properties:
+> +  - maxim,charge-restart-threshold: Charge restart threshold in millivolts.
+> +    If property is not present, this will be disabled.
+> +    Valid values are: 0, 100, 150, 200. If the value equals 0, leave it
+> +    unchanged.
 
-'_clk' is redundant and can be dropped.
-
-> +- nvmem-cells: Phandle to the calibration data provided by a nvmem device.
-> +- nvmem-cell-names: Should be "svs-calibration-data" and "calibration-data"
-> +
-> +Subnodes:
-> +- svs_cpu_little: SVS bank device node of little CPU
-> +  compatible: "mediatek,mt8183-svs-cpu-little"
-> +  operating-points-v2: OPP table hooked by SVS little CPU bank.
-> +		       SVS will optimze this OPP table voltage part.
-> +  vcpu-little-supply: PMIC buck of little CPU
-> +- svs_cpu_big: SVS bank device node of big CPU
-> +  compatible: "mediatek,mt8183-svs-cpu-big"
-> +  operating-points-v2: OPP table hooked by SVS big CPU bank.
-> +		       SVS will optimze this OPP table voltage part.
-> +  vcpu-big-supply: PMIC buck of big CPU
-> +- svs_cci: SVS bank device node of CCI
-> +  compatible: "mediatek,mt8183-svs-cci"
-> +  operating-points-v2: OPP table hooked by SVS CCI bank.
-> +		       SVS will optimze this OPP table voltage part.
-> +  vcci-supply: PMIC buck of CCI
-> +- svs_gpu: SVS bank device node of GPU
-> +  compatible: "mediatek,mt8183-svs-gpu"
-> +  operating-points-v2: OPP table hooked by SVS GPU bank.
-> +		       SVS will optimze this OPP table voltage part.
-> +  vgpu-spply: PMIC buck of GPU
-
-typo
+Needs a unit suffix as defined in property-units.txt.
 
 > +
-> +Example:
+> +  - maxim,charge-timeout: Charge timeout in hours. If property is not
+> +    present, this will be disabled. Valid values are: 0, 5, 6, 7.
+> +    If the value equals 0, leave it unchanged.
+
+Needs a unit suffix as defined in property-units.txt.
+
 > +
-> +	svs: svs@1100b000 {
-> +		compatible = "mediatek,mt8183-svs";
-> +		reg = <0 0x1100b000 0 0x1000>;
-> +		interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW 0>;
-> +		clocks = <&infracfg CLK_INFRA_THERM>;
-> +		clock-names = "main_clk";
-> +		nvmem-cells = <&svs_calibration>, <&thermal_calibration>;
-> +		nvmem-cell-names = "svs-calibration-data", "calibration-data";
-> +
-> +		svs_cpu_little: svs_cpu_little {
-> +			compatible = "mediatek,mt8183-svs-cpu-little";
-> +			operating-points-v2 = <&cluster0_opp>;
+>  Regulators: All the regulators of MAX8998 to be instantiated shall be
+>  listed in a child node named 'regulators'. Each regulator is represented
+>  by a child node of the 'regulators' node.
+> @@ -97,6 +116,13 @@ Example:
+>  		max8998,pmic-buck2-dvs-gpio = <&gpx0 0 3 0 0>; /* SET3 */
+>  		max8998,pmic-buck2-dvs-voltage = <1350000>, <1300000>;
+>  
+> +		/* Charger configuration */
+> +		charger {
+> +			maxim,end-of-charge-percentage = <20>;
+> +			maxim,charge-restart-threshold = <100>;
+> +			maxim,charge-timeout = <7>;
 > +		};
 > +
-> +		svs_cpu_big: svs_cpu_big {
-> +			compatible = "mediatek,mt8183-svs-cpu-big";
-> +			operating-points-v2 = <&cluster1_opp>;
-> +		};
-> +
-> +		svs_cci: svs_cci {
-> +			compatible = "mediatek,mt8183-svs-cci";
-> +			operating-points-v2 = <&cci_opp>;
-> +		};
-> +
-> +		svs_gpu: svs_gpu {
-> +			compatible = "mediatek,mt8183-svs-gpu";
-> +			power-domains = <&scpsys MT8183_POWER_DOMAIN_MFG_2D>;
-> +			operating-points-v2 = <&gpu_opp_table>;
-> +		};
-
-This all looks like redundant data which can be found in the cpu, gpu, 
-etc. nodes. Can't you parse those nodes to get the information?
-
-> +	};
-> +
-> +	&svs_cpu_little {
-> +		vcpu-little-supply = <&mt6358_vproc12_reg>;
-
-Don't split examples like this. Just should one flat example.
-
-> +	};
-> +
-> +	&svs_cpu_big {
-> +		vcpu-big-supply = <&mt6358_vproc11_reg>;
-> +	};
-> +
-> +	&svs_cci {
-> +		vcci-supply = <&mt6358_vproc12_reg>;
-> +	};
-> +
-> +	&svs_gpu {
-> +		vgpu-spply = <&mt6358_vgpu_reg>;
-> +	};
+>  		/* Regulators to instantiate */
+>  		regulators {
+>  			ldo2_reg: LDO2 {
 > -- 
-> 2.18.0
+> 2.17.1
 > 
