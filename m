@@ -2,91 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A47D6320C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 09:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9061863263
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 09:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbfGIH1x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jul 2019 03:27:53 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:32891 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbfGIH1x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 03:27:53 -0400
-Received: by mail-io1-f66.google.com with SMTP id z3so26078819iog.0;
-        Tue, 09 Jul 2019 00:27:52 -0700 (PDT)
+        id S1726211AbfGIHvc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jul 2019 03:51:32 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:38833 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725992AbfGIHvb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 03:51:31 -0400
+Received: by mail-pl1-f195.google.com with SMTP id az7so2192636plb.5
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2019 00:51:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7/bxfJbKg+kMsUtUJhrLaoqxMmi1kx1J4E3T3lScoo0=;
-        b=GOakA4Zoww6s4joBky8YC/xK0UEazAQk7KPL3KUJHoncRjeImmYNYvubz8ATIdzq5I
-         NeTohecnwX5lJ1K5hOuADTnz184NCDeD6VIMzwoBGv6g/mXwIucINPxF75m3wpqRExJk
-         burx/YVxHJZOK3KJDTZ7sNumyf9oZpv5Qrlkv3vDIoq41sP9LKvKtMEpmtCsCK/MdhUk
-         EzFnDhRXfy4OAQsQYxzvigY7RjNGgZDl9+KFlt9CiWLd/+BucKQdD8pbq44DfuZor2KC
-         QM4NcKPFMLXONQkiweyokGUuR+vtbJty1OFY8CgxFXPYes/jlUvfm3y35dXGyqhTX08n
-         3PPw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Smrq/vDbxcQl6KW/Rh/T3b+nDUYxB6msX/ZOzbcRi2U=;
+        b=fNEDVX0HL7EI/I6m5GdoAodJt4iCk6yzm4tuOh8ajweaBLKmh9prOUVmdOdhKNPrl/
+         dF3nyni3L1tkHubOOl5yp+pZHwYmI6cZ1c3rOLgyQyUyMlHl/uO3Y8rQUElrUmbk4b/E
+         s3cRHEU3henZjAe+fTlvzeiQrrhtUSUBrqQ9jp67liLLgUB7XiuawxR83WCDpO5YTeIt
+         JTLzoOs1VfiHTiiaVAcLZKR7PrE9gOkt7Y0/jN1HQSKYAeTxJ2E1przF39kV1CKPCCFm
+         rFc04TDY3RgryFc0c4/s+B1NzXD/tC82rN9nwc7Bpq3ybzaqCUVXRn1lzKeWeLOVbX7i
+         xT6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7/bxfJbKg+kMsUtUJhrLaoqxMmi1kx1J4E3T3lScoo0=;
-        b=qOOdXLuXsbWyRwv7FUpRgujp1sxgAUsyPVx+s+UrAVl67ILAvhl86cX3DwBpRn9NAT
-         kRqE/6GnI47CdqAHnHm/JQ9itw1Qu5/FofssZRGjW54oN93gqQNVGr+GbqZN4rekGnZd
-         /Uz4yIitvV0nbhCO3rqYOdTM5R36RUJT3bt0hz87u4abkFiE3D70f1jep7yWXf0OFTYm
-         0bexQDT2pNWwm3dzMj62OqeehTJ1kcEv/5hJA1xsTmwFLM01DV9cD2v3ctE/Rm5H8gmI
-         ftAHBu0KShpBPkvcT3dZHK2rOetvAOd0C7hYFlddJ85mqlEDwqo7WncB/DH8OPvb+Isd
-         cHTA==
-X-Gm-Message-State: APjAAAU529URz6wlJQhsaD1OAvb1oau6qAy2IeyFWR6Y+pgx8AZRTVni
-        C+YT1mFz9TA3q1Yt6kj8OTZpEf2z/OjtgHvsaLI=
-X-Google-Smtp-Source: APXvYqymf605RlFVgls389To06orbitjyxSr6FY3GWzmKwkMbskOqhw9Qo1dfillgnlJvmOkHD/nwtDbTGtHqyxnK6s=
-X-Received: by 2002:a6b:b556:: with SMTP id e83mr22963512iof.94.1562657271913;
- Tue, 09 Jul 2019 00:27:51 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Smrq/vDbxcQl6KW/Rh/T3b+nDUYxB6msX/ZOzbcRi2U=;
+        b=jOToIeJG1zlbyqh6PqXg6FNU9IwqGK4kPfPiQ0Fb8MYx31Rb5heJuNWqUaY+Q9FVph
+         W+NYVVaomAYNZ4fLdvWxAc27FH2mQG9pMoZCSoeY3qIlprmbs9WcS1eVI3bKfu5jWkY0
+         HCGryd9G02AV8j2P5h/OmdLvzLURNAhu24bmhMX0xl7PqvfyTt8Nkx1f8qlH+Vxk2OX0
+         xhXYkH7ZmtzLFfymi9eKkbBLJDHMXKnXyWbVkrVA++gf4g2gOgOPbITATqdYKkI2mZVw
+         DB9YkyNOMECiubpkHHn/nIFE2J5wsnJHCPFQr+RaeSvc+wAe2kxrVRJgVfjJhuFkU6yq
+         m5Qg==
+X-Gm-Message-State: APjAAAWshxVeCXOl8trAhvFBXD4E2FZJ/H7G8ef+dd7D/Ac1Rkf7ojiR
+        OrwhpAxlfZvqJtGe8WUEEzIS0Q==
+X-Google-Smtp-Source: APXvYqwdU6F7Yn1VJPjF6KItVXdlcrtq2LV7yj+CbXHG4RpzQKgCu+AE6ystgZtAN6RbIoZ7toO/rA==
+X-Received: by 2002:a17:902:9041:: with SMTP id w1mr30857440plz.132.1562658691215;
+        Tue, 09 Jul 2019 00:51:31 -0700 (PDT)
+Received: from localhost ([122.172.28.117])
+        by smtp.gmail.com with ESMTPSA id p68sm32770294pfb.80.2019.07.09.00.51.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Jul 2019 00:51:21 -0700 (PDT)
+Date:   Tue, 9 Jul 2019 13:21:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Anson.Huang@nxp.com
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        leonard.crestez@nxp.com, aisheng.dong@nxp.com,
+        daniel.baluta@nxp.com, ping.bai@nxp.com, l.stach@pengutronix.de,
+        abel.vesa@nxp.com, ccaione@baylibre.com, angus@akkea.ca,
+        andrew.smirnov@gmail.com, agx@sigxcpu.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH 1/3] opp: of: Support multiple suspend OPPs defined in DT
+Message-ID: <20190709075119.rg6ktsg7nwdadsmd@vireshk-i7>
+References: <20190709071056.26361-1-Anson.Huang@nxp.com>
 MIME-Version: 1.0
-References: <20190612084404.21685-1-andrew.smirnov@gmail.com>
- <20190612084404.21685-2-andrew.smirnov@gmail.com> <20190627182725.v3mgmy35fxoogofe@earth.universe>
-In-Reply-To: <20190627182725.v3mgmy35fxoogofe@earth.universe>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Tue, 9 Jul 2019 00:27:40 -0700
-Message-ID: <CAHQ1cqEWpczFb4B2UOfx0qSJd2Nh9HkTfAvkiLVeRT1hpxBPmw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] power: supply: Add HWMON compatibility layer
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chris Healy <cphealy@gmail.com>,
-        Cory Tusar <cory.tusar@zii.aero>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190709071056.26361-1-Anson.Huang@nxp.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 11:27 AM Sebastian Reichel <sre@kernel.org> wrote:
->
-> Hi,
->
-> On Wed, Jun 12, 2019 at 01:44:04AM -0700, Andrey Smirnov wrote:
-> > Add code implementing HWMON adapter/compatibility layer to allow
-> > expositing various sensors present on power supply devices via HWMON
-> > subsystem. This is done in order to allow userspace to use single
-> > ABI/library(libsensors) to access/manipulate all of the sensors of the
-> > system.
-> >
-> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > Tested-by: Chris Healy <cphealy@gmail.com>
-> > ---
->
-> Thanks, queued.
->
+On 09-07-19, 15:10, Anson.Huang@nxp.com wrote:
+> From: Anson Huang <Anson.Huang@nxp.com>
+> 
+> With property "opp-supported-hw" introduced, the OPP table
+> in DT could be a large OPP table and ONLY a subset of OPPs
+> are available, based on the version of the hardware running
+> on. That introduces restriction of using "opp-suspend"
+> property to define the suspend OPP, as we are NOT sure if the
+> OPP containing "opp-suspend" property is available for the
+> hardware running on, and the of opp core does NOT allow multiple
+> suspend OPPs defined in DT OPP table.
+> 
+> To eliminate this restrition, make of opp core allow multiple
+> suspend OPPs defined in DT, and pick the OPP with highest rate
+> and with "opp-suspend" property present to be suspend OPP, it
+> can speed up the suspend/resume process.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+>  drivers/opp/of.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 
-Hmm, I just realized that power supply exposing POWER_SUPPLY_PROP_TEMP
-will have a thermal zone created for it by default, which will expose
-said reading via thermal/HWMON integration layer. Do we want to do
-anything about this duplication of functionality? Maybe hide it here
-if desc->no_thermal is true? Or just drop reporting temperature from
-this patch?
+Please update the DT bindings first.
 
-Thanks,
-Andrey Smirnov
+FWIW, all three patches look fine otherwise.
+
+-- 
+viresh
