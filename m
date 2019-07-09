@@ -2,209 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95FB763021
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 07:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48766302D
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 07:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727077AbfGIFpF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jul 2019 01:45:05 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:39035 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbfGIFpF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 01:45:05 -0400
-Received: by mail-ot1-f67.google.com with SMTP id r21so3240086otq.6
-        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2019 22:45:04 -0700 (PDT)
+        id S1726055AbfGIFtm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jul 2019 01:49:42 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:39342 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbfGIFtm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 01:49:42 -0400
+Received: by mail-qk1-f196.google.com with SMTP id w190so2644975qkc.6;
+        Mon, 08 Jul 2019 22:49:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P212O3pD6J1OHFbkKOo30mb6JIIMTTuJiFwciEcoMBI=;
-        b=XAl2MDBM1SqnFzOMbq9qOjKyVUmi6eASeOwZqhW4/RSgqSMKiwgIoXCZzXefE/Tv6o
-         xsyfIgJgsYWkEXNA/DcJMaXO9CvxreOkZqvDPD2cKcOQFOVrdZCf0yp8VC6ntO/kK2GE
-         Ib6o+dYeMWoeAx7R2t9enaqt9XioShu3aUhWtB/1DbvL2dD8miEOSmHeS9BxU563H6+P
-         r6HJ+ScsU0jvKZS0xaO1ie3zyJQ0yWVpgtSFaMdrWkFVNrdK20MUWRLW62kh7Sg85Fik
-         Kf1TZ0kwjrYH2RwyScIVwvE1De5SEeTDqah423zA2jhXwAxxkU81dDCI2OV/cfGv82fG
-         QGtw==
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=G8bFHO9ERI+gTpLxJGdPs7eJ2Lvsv0iXpU1CdINSs20=;
+        b=r6N4iEKIb1M6dPZmH5V0NwJGABKPMEHOathvp1R8fTfznxz++n/GX8mNBIOggA3e2Y
+         WBBlwxVccGxFlSjUqXcLQaShyi1te9HsBgamOA6z6vC+p+ETZ51Z4RItVzSMumPg2F4N
+         wM8vHvIDn0AyIQcRxIIrFvPz00HExwnDWn2EgeiChsi99XmorHxOqtKZsjVrnnrM9Rv5
+         95EnD+VN3iJ+LLBKOLrGWtK157/Y3cP419UoY1aKtU/NG/5nL+Owb0wjNjWz3vH+KgZX
+         YP/Q3A5SuMDVJxD7yXx6KN9x0jAJco/Voaqax0wgObGxEgrjDFwGa918CN3BTgI5MR1U
+         JIxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P212O3pD6J1OHFbkKOo30mb6JIIMTTuJiFwciEcoMBI=;
-        b=PNOzC1gVbd5V0WZgEFXmHM76TISEl+6E8oYuHWfyq0CDyVXPneILdROuMbqAXGzNEG
-         86cD1DThuAHTCgrl8z912tceHqTH3qexZm6wpAqpxGJeMU9iVC4GgLOgpdSqmaV81HDK
-         wdGos92HXQBIQeAQrZJ9X3r4AK5ZfgXheSijKowwfuY2DQtiN1tmHeamW00y/5RhU62r
-         h/eOk8+qykbPUzmhR6LG4ga5KQz7qX3oqYNkgO9kxjGPI76b91JbgykJv5OKt3KpLH9m
-         wrAJfg40qi4ahBb2GEbe6IepUqMyAwl29Jgh7YG1MOHOxx9ONKCaAtvzv6V9va+qC40i
-         NjwQ==
-X-Gm-Message-State: APjAAAXsfg6uO8bp6SPGluCPhJzxuVAybPY/IS5s9ChUKQ7W/RVYx6wc
-        Im/4eeEViCyx9k40fzGL2+MtjYJCre+z8pGW5elm7Q==
-X-Google-Smtp-Source: APXvYqw6oUZkKhaG1Q540oYRSkHVIx1Akfrd0ty6pGytUdVf3Ue+NeqdRc2ryNHhrFzl0/ATHqOmJUR42rC/yZojFUg=
-X-Received: by 2002:a9d:529:: with SMTP id 38mr17765884otw.145.1562651104246;
- Mon, 08 Jul 2019 22:45:04 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=G8bFHO9ERI+gTpLxJGdPs7eJ2Lvsv0iXpU1CdINSs20=;
+        b=T88CtsnSAZlIfskmhDeQXgqItQZkXsU/UeEzi9cvX1k3+UQYbq3hs8OoNWiTPX7YFY
+         x6RYZ3YSPw6kieTo9UGhlRiupg8UIzDeC5YvUCnfT8pn7/GgfgIgazArv01VeajOyfbU
+         P+N9rSDiN5DjFNkQn8GWGhmnx8y0v7UDPK4P9g1jAkwfYpFi/OZ4My3/23C+O/KUb5rb
+         2pRa6KTcDaOXKXkvCaJ9gJp20ByX+76KHmuBacv4KCyR8A22OpGJPti0UUkbVObAPUeP
+         ceUu/BUpMt1+7bJV9gsozTwRKTJKIKy7QgLs/r97rUVFRxzweFFvnDxF4/hTHvdTQnYr
+         ltDQ==
+X-Gm-Message-State: APjAAAUR4qSOWHp74HH3G3obFlu5J0VIiXrOrwTM8044P91+0ArcaQqF
+        bNGMwekEs5fKIes1z3NPnhVpmeun
+X-Google-Smtp-Source: APXvYqzHjOCe75idq3CFtuKGhVKAD514DDOOkm7xCpEwzs4U/kSkhhnH751s3KxvK1sZpmT08Pw0vQ==
+X-Received: by 2002:ae9:ed4b:: with SMTP id c72mr17179650qkg.400.1562651381058;
+        Mon, 08 Jul 2019 22:49:41 -0700 (PDT)
+Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
+        by smtp.googlemail.com with ESMTPSA id i23sm5592434qtm.17.2019.07.08.22.49.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Jul 2019 22:49:40 -0700 (PDT)
+Subject: Re: [PATCH v1 6/6] cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP
+ from all states
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190707233809.14400-1-digetx@gmail.com>
+ <20190707233809.14400-7-digetx@gmail.com>
+Message-ID: <89baad3d-36f3-a2ac-3794-e174fbeb953a@gmail.com>
+Date:   Tue, 9 Jul 2019 08:49:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20190708123251.11759-1-huangfq.daxian@gmail.com>
-In-Reply-To: <20190708123251.11759-1-huangfq.daxian@gmail.com>
-From:   Baolin Wang <baolin.wang@linaro.org>
-Date:   Tue, 9 Jul 2019 13:44:52 +0800
-Message-ID: <CAMz4kuJvnops5ecjP9PFwLW=WBPo4do9eawCX3cFTOL45qLgVQ@mail.gmail.com>
-Subject: Re: [PATCH 03/14] power: supply: sc27xx: Introduce local variable
- 'struct device *dev'
-To:     Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190707233809.14400-7-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 8 Jul 2019 at 20:33, Fuqian Huang <huangfq.daxian@gmail.com> wrote:
->
-> Introduce local variable 'struct device *dev' and use it instead of
-> dereferencing it repeatly.
->
-> Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
-
-Looks good to me. Thanks.
-Reviewed-by: Baolin Wang <baolin.wang@linaro.org>
-
+08.07.2019 2:38, Dmitry Osipenko пишет:
+> The Tegra's clocksource driver got some rework recently and now the
+> internal/local CPU timers usage is discouraged on Tegra20/30 SoCs in
+> a favor of the platform-specific timers that are assigned as per-CPU
+> clocksources because they do not suffer from the CPU-freq changes and
+> are always-ON during of CPU-idling. That happened in the commit
+> f6d50ec5f85c ("clocksource/drivers/tegra: Support per-CPU timers on all
+> Tegra's"). The Tegra's clocksource driver is the essential arch-driver
+> that is guaranteed to always present on all Tegra SoCs up to Tegra124.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/power/supply/sc27xx_fuel_gauge.c | 47 ++++++++++++++++----------------
->  1 file changed, 24 insertions(+), 23 deletions(-)
->
-> diff --git a/drivers/power/supply/sc27xx_fuel_gauge.c b/drivers/power/supply/sc27xx_fuel_gauge.c
-> index 24895cc3b41e..9c184d80088b 100644
-> --- a/drivers/power/supply/sc27xx_fuel_gauge.c
-> +++ b/drivers/power/supply/sc27xx_fuel_gauge.c
-> @@ -957,81 +957,82 @@ static int sc27xx_fgu_hw_init(struct sc27xx_fgu_data *data)
->
->  static int sc27xx_fgu_probe(struct platform_device *pdev)
->  {
-> -       struct device_node *np = pdev->dev.of_node;
-> +       struct device *dev = &pdev->dev;
-> +       struct device_node *np = dev->of_node;
->         struct power_supply_config fgu_cfg = { };
->         struct sc27xx_fgu_data *data;
->         int ret, irq;
->
-> -       data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +       data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->         if (!data)
->                 return -ENOMEM;
->
-> -       data->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +       data->regmap = dev_get_regmap(dev->parent, NULL);
->         if (!data->regmap) {
-> -               dev_err(&pdev->dev, "failed to get regmap\n");
-> +               dev_err(dev, "failed to get regmap\n");
->                 return -ENODEV;
->         }
->
-> -       ret = device_property_read_u32(&pdev->dev, "reg", &data->base);
-> +       ret = device_property_read_u32(dev, "reg", &data->base);
->         if (ret) {
-> -               dev_err(&pdev->dev, "failed to get fgu address\n");
-> +               dev_err(dev, "failed to get fgu address\n");
->                 return ret;
->         }
->
-> -       data->channel = devm_iio_channel_get(&pdev->dev, "bat-temp");
-> +       data->channel = devm_iio_channel_get(dev, "bat-temp");
->         if (IS_ERR(data->channel)) {
-> -               dev_err(&pdev->dev, "failed to get IIO channel\n");
-> +               dev_err(dev, "failed to get IIO channel\n");
->                 return PTR_ERR(data->channel);
->         }
->
-> -       data->charge_chan = devm_iio_channel_get(&pdev->dev, "charge-vol");
-> +       data->charge_chan = devm_iio_channel_get(dev, "charge-vol");
->         if (IS_ERR(data->charge_chan)) {
-> -               dev_err(&pdev->dev, "failed to get charge IIO channel\n");
-> +               dev_err(dev, "failed to get charge IIO channel\n");
->                 return PTR_ERR(data->charge_chan);
->         }
->
-> -       data->gpiod = devm_gpiod_get(&pdev->dev, "bat-detect", GPIOD_IN);
-> +       data->gpiod = devm_gpiod_get(dev, "bat-detect", GPIOD_IN);
->         if (IS_ERR(data->gpiod)) {
-> -               dev_err(&pdev->dev, "failed to get battery detection GPIO\n");
-> +               dev_err(dev, "failed to get battery detection GPIO\n");
->                 return PTR_ERR(data->gpiod);
->         }
->
->         ret = gpiod_get_value_cansleep(data->gpiod);
->         if (ret < 0) {
-> -               dev_err(&pdev->dev, "failed to get gpio state\n");
-> +               dev_err(dev, "failed to get gpio state\n");
->                 return ret;
->         }
->
->         data->bat_present = !!ret;
->         mutex_init(&data->lock);
-> -       data->dev = &pdev->dev;
-> +       data->dev = dev;
->         platform_set_drvdata(pdev, data);
->
->         fgu_cfg.drv_data = data;
->         fgu_cfg.of_node = np;
-> -       data->battery = devm_power_supply_register(&pdev->dev, &sc27xx_fgu_desc,
-> +       data->battery = devm_power_supply_register(dev, &sc27xx_fgu_desc,
->                                                    &fgu_cfg);
->         if (IS_ERR(data->battery)) {
-> -               dev_err(&pdev->dev, "failed to register power supply\n");
-> +               dev_err(dev, "failed to register power supply\n");
->                 return PTR_ERR(data->battery);
->         }
->
->         ret = sc27xx_fgu_hw_init(data);
->         if (ret) {
-> -               dev_err(&pdev->dev, "failed to initialize fgu hardware\n");
-> +               dev_err(dev, "failed to initialize fgu hardware\n");
->                 return ret;
->         }
->
-> -       ret = devm_add_action(&pdev->dev, sc27xx_fgu_disable, data);
-> +       ret = devm_add_action(dev, sc27xx_fgu_disable, data);
->         if (ret) {
->                 sc27xx_fgu_disable(data);
-> -               dev_err(&pdev->dev, "failed to add fgu disable action\n");
-> +               dev_err(dev, "failed to add fgu disable action\n");
->                 return ret;
->         }
->
->         irq = platform_get_irq(pdev, 0);
->         if (irq < 0) {
-> -               dev_err(&pdev->dev, "no irq resource specified\n");
-> +               dev_err(dev, "no irq resource specified\n");
->                 return irq;
->         }
->
-> @@ -1046,17 +1047,17 @@ static int sc27xx_fgu_probe(struct platform_device *pdev)
->
->         irq = gpiod_to_irq(data->gpiod);
->         if (irq < 0) {
-> -               dev_err(&pdev->dev, "failed to translate GPIO to IRQ\n");
-> +               dev_err(dev, "failed to translate GPIO to IRQ\n");
->                 return irq;
->         }
->
-> -       ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> +       ret = devm_request_threaded_irq(dev, irq, NULL,
->                                         sc27xx_fgu_bat_detection,
->                                         IRQF_ONESHOT | IRQF_TRIGGER_RISING |
->                                         IRQF_TRIGGER_FALLING,
->                                         pdev->name, data);
->         if (ret) {
-> -               dev_err(&pdev->dev, "failed to request IRQ\n");
-> +               dev_err(dev, "failed to request IRQ\n");
->                 return ret;
->         }
->
-> --
-> 2.11.0
->
+>  drivers/cpuidle/cpuidle-tegra.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
+> index 464b2376905a..e2aa46231c05 100644
+> --- a/drivers/cpuidle/cpuidle-tegra.c
+> +++ b/drivers/cpuidle/cpuidle-tegra.c
+> @@ -143,7 +143,6 @@ static struct cpuidle_driver tegra_idle_driver = {
+>  			.exit_latency		= 2000,
+>  			.target_residency	= 2200,
+>  			.power_usage		= 0,
+> -			.flags			= CPUIDLE_FLAG_TIMER_STOP,
+>  			.name			= "powered-down",
+>  			.desc			= "CPU core powered-off",
+>  		},
+> @@ -152,8 +151,7 @@ static struct cpuidle_driver tegra_idle_driver = {
+>  			.exit_latency		= 5000,
+>  			.target_residency	= 10000,
+>  			.power_usage		= 0,
+> -			.flags			= CPUIDLE_FLAG_COUPLED |
+> -						  CPUIDLE_FLAG_TIMER_STOP,
+> +			.flags			= CPUIDLE_FLAG_COUPLED,
+>  			.name			= "powered-down",
+>  			.desc			= "CPU cluster powered-off",
+>  		},
+> 
 
-
--- 
-Baolin Wang
-Best Regards
+Actually, it should be fine to keep this flag because I found that
+tick_broadcast_oneshot_control() checks for the C3STOP flag and thus
+CPUIDLE_FLAG_TIMER_STOP has no effect in that case. Will drop this patch in the next revision.
