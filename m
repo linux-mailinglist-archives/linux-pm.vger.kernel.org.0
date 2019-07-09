@@ -2,201 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE74263006
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 07:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4B163014
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jul 2019 07:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbfGIFdG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jul 2019 01:33:06 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50300 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725906AbfGIFdG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 01:33:06 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x695W35k144530
-        for <linux-pm@vger.kernel.org>; Tue, 9 Jul 2019 01:33:05 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tmg54g709-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2019 01:33:04 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <huntbag@linux.vnet.ibm.com>;
-        Tue, 9 Jul 2019 06:33:03 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 9 Jul 2019 06:32:59 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x695WwWw57212984
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 9 Jul 2019 05:32:58 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 478B34C040;
-        Tue,  9 Jul 2019 05:32:58 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 138C04C044;
-        Tue,  9 Jul 2019 05:32:53 +0000 (GMT)
-Received: from oc0383214508.ibm.com (unknown [9.102.2.29])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  9 Jul 2019 05:32:52 +0000 (GMT)
-Subject: Re: [PATCH v3 1/3] cpuidle-powernv : forced wakeup for stop states
-To:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     daniel.lezcano@linaro.org, dja@axtens.net, ego@linux.vnet.ibm.com,
-        mpe@ellerman.id.au, rjw@rjwysocki.net
-References: <20190704091827.19555-1-huntbag@linux.vnet.ibm.com>
- <20190704091827.19555-2-huntbag@linux.vnet.ibm.com>
- <1562493994.wseoth6w1s.astroid@bobo.none>
-From:   Abhishek <huntbag@linux.vnet.ibm.com>
-Date:   Tue, 9 Jul 2019 11:02:50 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726002AbfGIFkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jul 2019 01:40:24 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36239 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726358AbfGIFkS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jul 2019 01:40:18 -0400
+Received: by mail-pl1-f194.google.com with SMTP id k8so9491960plt.3
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jul 2019 22:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=oNfoBSAVs4HwlcfNYsclg/dP1n0XavIgjkMDpD1mPiY=;
+        b=qj/En8SAcjlo3abd1feAIjM0u/Mro4Llh0ow4E5dJPGEUYTgknUTKxU1/i+J3jWMBN
+         p25OPQsFgd7UEZdsGY6Ix40FcQTMNKciT4LNWrGbY+OeyG9jIxEI2RBpPnmpn5e8ORa4
+         k0mt57EeQt3A48ZZOsXkdS5epjRbA1SLO1Ka2SyShqNIbp0lVHJWqYVmsT6VR8FFtQsK
+         DFhDLtC7yfbeY27Br1XDph3bkoPnKvgG1iMFUaOUBpyUvVBo8OUPEIO6Xvo+5OHjrrUe
+         qRGZfmT4Bcz6Y4Fkj1e6/gkz2Y8JL8TLEthi+V2VYj2DUGcr0fiiOU+Jeg2nsd4X3lBK
+         Jjyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oNfoBSAVs4HwlcfNYsclg/dP1n0XavIgjkMDpD1mPiY=;
+        b=NSXe85e7AOUex8yqFlFZKaUMZN7E1F08SSeA/FVxRGqQMt1nxshFTUeldr+vZYCASI
+         n3dESYQsjDdTcX3A9NaL+XlUdx9tDj1LCyBaToqUws6HAVQvaQ13lQ9X3LbV/7X+K0Zi
+         M3GBeSekRm3KjSRbVWzi0CjOAmY3EbYwcUdC2aRby5eVcO30hij4XSZAmzZrZ02icuPM
+         U7g098vNvXPBM87/4BdOVzXObiJSP8ps645XJz2EjsPwo9eDrAACvkOY/uqxtqumBut6
+         +sE1k9saVSH0Bw9ORZgrHN9E9VGqwi/1f3UswlkJ3M3odCR1N5nkhJqBUEY6Ach0AM+2
+         Sd5w==
+X-Gm-Message-State: APjAAAXAQLn5KkJqf+ofs/rsFGy96kIghmTUndyEQkgcToU+eFAnGLay
+        nyJVpN7x9PPHOpkLdAlaXx/i8A==
+X-Google-Smtp-Source: APXvYqyV89mc4OQKczZ8sRKuZ6VoDj+GFu/P2sqMf45IqdFh8iCwtAvZ5SJ+Cb5vmTNA4cnNYsunBw==
+X-Received: by 2002:a17:902:b20c:: with SMTP id t12mr29930984plr.285.1562650818025;
+        Mon, 08 Jul 2019 22:40:18 -0700 (PDT)
+Received: from localhost ([122.172.28.117])
+        by smtp.gmail.com with ESMTPSA id l31sm41547789pgm.63.2019.07.08.22.40.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Jul 2019 22:40:16 -0700 (PDT)
+Date:   Tue, 9 Jul 2019 11:10:14 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     k.konieczny@partner.samsung.com
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 1/3] opp: core: add regulators enable and disable
+Message-ID: <20190709054014.o3g4e6gbovrq3vvn@vireshk-i7>
+References: <20190708141140.24379-1-k.konieczny@partner.samsung.com>
+ <CGME20190708141159eucas1p1751506975ff96a436e14940916623722@eucas1p1.samsung.com>
+ <20190708141140.24379-2-k.konieczny@partner.samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <1562493994.wseoth6w1s.astroid@bobo.none>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19070905-4275-0000-0000-0000034A6987
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070905-4276-0000-0000-0000385A9281
-Message-Id: <bf598a94-cf36-3a5d-6b7f-0de8fa43ff74@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-09_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907090067
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190708141140.24379-2-k.konieczny@partner.samsung.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Nick,
+On 08-07-19, 16:11, k.konieczny@partner.samsung.com wrote:
+> From: Kamil Konieczny <k.konieczny@partner.samsung.com>
+> 
+> Add enable regulators to dev_pm_opp_set_regulators() and disable
+> regulators to dev_pm_opp_put_regulators(). This prepares for
+> converting exynos-bus devfreq driver to use dev_pm_opp_set_rate().
+> 
+> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
+> ---
+>  drivers/opp/core.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 0e7703fe733f..947cac452854 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1580,8 +1580,19 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+>  	if (ret)
+>  		goto free_regulators;
+>  
+> +	for (i = 0; i < opp_table->regulator_count; i++) {
+> +		ret = regulator_enable(opp_table->regulators[i]);
+> +		if (ret < 0)
+> +			goto disable;
+> +	}
 
-Will post next version with the changes you have suggested.
-There is a comment below.
+I am wondering on why is this really required as this isn't done for
+any other platform, probably because the regulators are enabled by
+bootloader and are always on.
 
-On 07/07/2019 03:43 PM, Nicholas Piggin wrote:
-> Abhishek Goel's on July 4, 2019 7:18 pm:
->> Currently, the cpuidle governors determine what idle state a idling CPU
->> should enter into based on heuristics that depend on the idle history on
->> that CPU. Given that no predictive heuristic is perfect, there are cases
->> where the governor predicts a shallow idle state, hoping that the CPU will
->> be busy soon. However, if no new workload is scheduled on that CPU in the
->> near future, the CPU may end up in the shallow state.
->>
->> This is problematic, when the predicted state in the aforementioned
->> scenario is a shallow stop state on a tickless system. As we might get
->> stuck into shallow states for hours, in absence of ticks or interrupts.
->>
->> To address this, We forcefully wakeup the cpu by setting the
->> decrementer. The decrementer is set to a value that corresponds with the
->> residency of the next available state. Thus firing up a timer that will
->> forcefully wakeup the cpu. Few such iterations will essentially train the
->> governor to select a deeper state for that cpu, as the timer here
->> corresponds to the next available cpuidle state residency. Thus, cpu will
->> eventually end up in the deepest possible state.
->>
->> Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
->> ---
->>
->> Auto-promotion
->>   v1 : started as auto promotion logic for cpuidle states in generic
->> driver
->>   v2 : Removed timeout_needed and rebased the code to upstream kernel
->> Forced-wakeup
->>   v1 : New patch with name of forced wakeup started
->>   v2 : Extending the forced wakeup logic for all states. Setting the
->> decrementer instead of queuing up a hrtimer to implement the logic.
->>   v3 : Cleanly handle setting/resetting of decrementer so as to not break
->> irq work
->>
->>   arch/powerpc/include/asm/time.h   |  2 ++
->>   arch/powerpc/kernel/time.c        | 40 +++++++++++++++++++++++++++++++
->>   drivers/cpuidle/cpuidle-powernv.c | 32 +++++++++++++++++++++++++
->>   3 files changed, 74 insertions(+)
->>
->> diff --git a/arch/powerpc/include/asm/time.h b/arch/powerpc/include/asm/time.h
->> index 54f4ec1f9..a3bd4f3c0 100644
->> --- a/arch/powerpc/include/asm/time.h
->> +++ b/arch/powerpc/include/asm/time.h
->> @@ -188,6 +188,8 @@ static inline unsigned long tb_ticks_since(unsigned long tstamp)
->>   extern u64 mulhdu(u64, u64);
->>   #endif
->>   
->> +extern int set_dec_before_idle(u64 timeout);
->> +extern void reset_dec_after_idle(void);
->>   extern void div128_by_32(u64 dividend_high, u64 dividend_low,
->>   			 unsigned divisor, struct div_result *dr);
->>   
->> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
->> index 694522308..814de3469 100644
->> --- a/arch/powerpc/kernel/time.c
->> +++ b/arch/powerpc/kernel/time.c
->> @@ -576,6 +576,46 @@ void arch_irq_work_raise(void)
->>   
->>   #endif /* CONFIG_IRQ_WORK */
->>   
->> +/*
->> + * Returns 1 if we have reprogrammed the decrementer for idle.
->> + * Returns 0 if the decrementer is unchanged.
->> + */
->> +int set_dec_before_idle(u64 timeout)
->> +{
->> +	u64 *next_tb = this_cpu_ptr(&decrementers_next_tb);
->> +	u64 now = get_tb_or_rtc();
->> +
->> +	/*
->> +	 * Ensure that the timeout is at least one microsecond
->> +	 * before the current decrement value. Else, we will
->> +	 * unnecesarily wakeup again within a microsecond.
->> +	 */
->> +	if (now + timeout + 512 > *next_tb)
-> I would pass this 512 in as a parameter and put the comment in the
-> idle code. Timer code does not know/care.
->
-> Maybe return bool and call it try_set_dec_before_idle.
->> +		return 0;
->> +
->> +	set_dec(timeout);
-> This needs to have
->
->    if (test_irq_work_pending())
->        set_dec(1);
->
-> here AFAIKS
->
->> +
->> +	return 1;
->> +}
->> +
->> +void reset_dec_after_idle(void)
->> +{
->> +	u64 now;
->> +	u64 *next_tb;
->> +
->> +	if (test_irq_work_pending())
->> +		return;
->> +
->> +	now = get_tb_or_rtc();
->> +	next_tb = this_cpu_ptr(&decrementers_next_tb);
->> +	if (now >= *next_tb)
->> +		return;
-> Are you sure it's okay to escape early in this case?
-
-Yeah, It looks safe. In power9_idle_type, we call irq_set_pending_from_srr1
-which sets the irq_happened. If reason is IRQ_DEC, in __check_irq_replay,
-decrementer_check_overflow will be called which will set dec to a positive
-valid value.
-Also, we typically disable MSR EE before entering stop. And if a decrementer
-wakes us up, before we enable EE, check for pending interrupt will be done.
-And we finally reset dec to a positive value before we set EE=1.
-> Thanks,
-> Nick
->
-
-Thanks,
-Abhishek
-
+-- 
+viresh
