@@ -2,31 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D0864754
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 15:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5E764758
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 15:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727717AbfGJNor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 09:44:47 -0400
+        id S1727389AbfGJNox (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 09:44:53 -0400
 Received: from mga06.intel.com ([134.134.136.31]:8319 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727389AbfGJNor (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Jul 2019 09:44:47 -0400
+        id S1727718AbfGJNot (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Jul 2019 09:44:49 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jul 2019 06:44:46 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jul 2019 06:44:48 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.63,474,1557212400"; 
-   d="scan'208";a="170923281"
+   d="scan'208";a="170923285"
 Received: from ygao39-mobl1.ccr.corp.intel.com (HELO rzhang-dell-9360.ccr.corp.intel.com) ([10.255.30.205])
-  by orsmga006.jf.intel.com with ESMTP; 10 Jul 2019 06:44:44 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Jul 2019 06:44:47 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     rjw@rjwysocki.net
 Cc:     linux-pm@vger.kernel.org, srinivas.pandruvada@intel.com,
         rui.zhang@intel.com
-Subject: [PATCH V3 03/17] intel_rapl: introduce intel_rapl.h
-Date:   Wed, 10 Jul 2019 21:44:24 +0800
-Message-Id: <1562766278-7099-4-git-send-email-rui.zhang@intel.com>
+Subject: [PATCH V3 04/17] intel_rapl: introduce struct rapl_if_private
+Date:   Wed, 10 Jul 2019 21:44:25 +0800
+Message-Id: <1562766278-7099-5-git-send-email-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1562766278-7099-1-git-send-email-rui.zhang@intel.com>
 References: <1562766278-7099-1-git-send-email-rui.zhang@intel.com>
@@ -35,285 +35,247 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Create a new header file for the common definitions that might be used
-by different RAPL Interface.
+Introduce a new structure, rapl_if_private, to save the private data
+for different RAPL Interface.
 
 Reviewed-and-tested-by: Pandruvada, Srinivas <srinivas.pandruvada@intel.com>
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- MAINTAINERS                   |   1 +
- drivers/powercap/intel_rapl.c | 101 +------------------------------------
- include/linux/intel_rapl.h    | 113 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 116 insertions(+), 99 deletions(-)
- create mode 100644 include/linux/intel_rapl.h
+ drivers/powercap/intel_rapl.c | 59 +++++++++++++++++++++----------------------
+ include/linux/intel_rapl.h    | 15 +++++++++++
+ 2 files changed, 44 insertions(+), 30 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 558acf2..a334feb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12638,6 +12638,7 @@ F:	drivers/base/power/
- F:	include/linux/pm.h
- F:	include/linux/pm_*
- F:	include/linux/powercap.h
-+F:	include/linux/intel_rapl.h
- F:	drivers/powercap/
- F:	kernel/configs/nopm.config
- 
 diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
-index 9be9f20..adb35ec 100644
+index adb35ec..e05d92d 100644
 --- a/drivers/powercap/intel_rapl.c
 +++ b/drivers/powercap/intel_rapl.c
-@@ -18,8 +18,9 @@
- #include <linux/cpu.h>
- #include <linux/powercap.h>
- #include <linux/suspend.h>
--#include <asm/iosf_mbi.h>
-+#include <linux/intel_rapl.h>
- 
-+#include <asm/iosf_mbi.h>
- #include <asm/processor.h>
- #include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
-@@ -74,59 +75,9 @@ enum unit_type {
+@@ -75,6 +75,9 @@ enum unit_type {
  	TIME_UNIT,
  };
  
--enum rapl_domain_type {
--	RAPL_DOMAIN_PACKAGE, /* entire package/socket */
--	RAPL_DOMAIN_PP0, /* core power plane */
--	RAPL_DOMAIN_PP1, /* graphics uncore */
--	RAPL_DOMAIN_DRAM,/* DRAM control_type */
--	RAPL_DOMAIN_PLATFORM, /* PSys control_type */
--	RAPL_DOMAIN_MAX,
--};
--
--enum rapl_domain_reg_id {
--	RAPL_DOMAIN_REG_LIMIT,
--	RAPL_DOMAIN_REG_STATUS,
--	RAPL_DOMAIN_REG_PERF,
--	RAPL_DOMAIN_REG_POLICY,
--	RAPL_DOMAIN_REG_INFO,
--	RAPL_DOMAIN_REG_MAX,
--};
--
++/* private data for RAPL MSR Interface */
++static struct rapl_if_priv rapl_msr_priv;
++
  /* per domain data, some are optional */
--enum rapl_primitives {
--	ENERGY_COUNTER,
--	POWER_LIMIT1,
--	POWER_LIMIT2,
--	FW_LOCK,
--
--	PL1_ENABLE,  /* power limit 1, aka long term */
--	PL1_CLAMP,   /* allow frequency to go below OS request */
--	PL2_ENABLE,  /* power limit 2, aka short term, instantaneous */
--	PL2_CLAMP,
--
--	TIME_WINDOW1, /* long term */
--	TIME_WINDOW2, /* short term */
--	THERMAL_SPEC_POWER,
--	MAX_POWER,
--
--	MIN_POWER,
--	MAX_TIME_WINDOW,
--	THROTTLED_TIME,
--	PRIORITY_LEVEL,
--
--	/* below are not raw primitive data */
--	AVERAGE_POWER,
--	NR_RAPL_PRIMITIVES,
--};
--
  #define NR_RAW_PRIMITIVES (NR_RAPL_PRIMITIVES - 2)
  
--/* Can be expanded to include events, etc.*/
--struct rapl_domain_data {
--	u64 primitives[NR_RAPL_PRIMITIVES];
--	unsigned long timestamp;
--};
--
- struct msrl_action {
- 	u32 msr_no;
- 	u64 clear_mask;
-@@ -138,60 +89,12 @@ struct msrl_action {
- #define	DOMAIN_STATE_POWER_LIMIT_SET    BIT(1)
- #define DOMAIN_STATE_BIOS_LOCKED        BIT(2)
+@@ -155,17 +158,14 @@ static const char * const rapl_domain_names[] = {
+ 	"psys",
+ };
  
--#define NR_POWER_LIMITS (2)
--struct rapl_power_limit {
--	struct powercap_zone_constraint *constraint;
--	int prim_id; /* primitive ID used to enable */
--	struct rapl_domain *domain;
--	const char *name;
--	u64 last_power_limit;
--};
+-static struct powercap_control_type *control_type; /* PowerCap Controller */
+-static struct rapl_domain *platform_rapl_domain; /* Platform (PSys) domain */
 -
- static const char pl1_name[] = "long_term";
- static const char pl2_name[] = "short_term";
+ /* caller to ensure CPU hotplug lock is held */
+-static struct rapl_package *rapl_find_package_domain(int cpu)
++static struct rapl_package *rapl_find_package_domain(int cpu, struct rapl_if_priv *priv)
+ {
+ 	int id = topology_logical_die_id(cpu);
+ 	struct rapl_package *rp;
  
--struct rapl_package;
--struct rapl_domain {
--	const char *name;
--	enum rapl_domain_type id;
--	int regs[RAPL_DOMAIN_REG_MAX];
--	struct powercap_zone power_zone;
--	struct rapl_domain_data rdd;
--	struct rapl_power_limit rpl[NR_POWER_LIMITS];
--	u64 attr_map; /* track capabilities */
--	unsigned int state;
--	unsigned int domain_energy_unit;
--	struct rapl_package *rp;
--};
- #define power_zone_to_rapl_domain(_zone) \
- 	container_of(_zone, struct rapl_domain, power_zone)
+ 	list_for_each_entry(rp, &rapl_packages, plist) {
+-		if (rp->id == id)
++		if (rp->id == id && rp->priv->control_type == priv->control_type)
+ 			return rp;
+ 	}
  
--/* maximum rapl package domain name: package-%d-die-%d */
--#define PACKAGE_DOMAIN_NAME_LENGTH 30
+@@ -1090,12 +1090,12 @@ static void rapl_update_domain_data(struct rapl_package *rp)
+ 
+ static void rapl_unregister_powercap(void)
+ {
+-	if (platform_rapl_domain) {
+-		powercap_unregister_zone(control_type,
+-					 &platform_rapl_domain->power_zone);
+-		kfree(platform_rapl_domain);
++	if (&rapl_msr_priv.platform_rapl_domain) {
++		powercap_unregister_zone(rapl_msr_priv.control_type,
++					 &rapl_msr_priv.platform_rapl_domain->power_zone);
++		kfree(rapl_msr_priv.platform_rapl_domain);
+ 	}
+-	powercap_unregister_control_type(control_type);
++	powercap_unregister_control_type(rapl_msr_priv.control_type);
+ }
+ 
+ static int rapl_package_register_powercap(struct rapl_package *rp)
+@@ -1113,7 +1113,7 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
+ 			nr_pl = find_nr_power_limit(rd);
+ 			pr_debug("register package domain %s\n", rp->name);
+ 			power_zone = powercap_register_zone(&rd->power_zone,
+-							control_type,
++							rp->priv->control_type,
+ 							rp->name, NULL,
+ 							&zone_ops[rd->id],
+ 							nr_pl,
+@@ -1140,7 +1140,7 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
+ 		/* number of power limits per domain varies */
+ 		nr_pl = find_nr_power_limit(rd);
+ 		power_zone = powercap_register_zone(&rd->power_zone,
+-						control_type, rd->name,
++						rp->priv->control_type, rd->name,
+ 						rp->power_zone,
+ 						&zone_ops[rd->id], nr_pl,
+ 						&constraint_ops);
+@@ -1161,7 +1161,7 @@ static int rapl_package_register_powercap(struct rapl_package *rp)
+ 	 */
+ 	while (--rd >= rp->domains) {
+ 		pr_debug("unregister %s domain %s\n", rp->name, rd->name);
+-		powercap_unregister_zone(control_type, &rd->power_zone);
++		powercap_unregister_zone(rp->priv->control_type, &rd->power_zone);
+ 	}
+ 
+ 	return ret;
+@@ -1191,9 +1191,9 @@ static int __init rapl_register_psys(void)
+ 	rd->rpl[0].name = pl1_name;
+ 	rd->rpl[1].prim_id = PL2_ENABLE;
+ 	rd->rpl[1].name = pl2_name;
+-	rd->rp = rapl_find_package_domain(0);
++	rd->rp = rapl_find_package_domain(0, &rapl_msr_priv);
+ 
+-	power_zone = powercap_register_zone(&rd->power_zone, control_type,
++	power_zone = powercap_register_zone(&rd->power_zone, rapl_msr_priv.control_type,
+ 					    "psys", NULL,
+ 					    &zone_ops[RAPL_DOMAIN_PLATFORM],
+ 					    2, &constraint_ops);
+@@ -1203,17 +1203,17 @@ static int __init rapl_register_psys(void)
+ 		return PTR_ERR(power_zone);
+ 	}
+ 
+-	platform_rapl_domain = rd;
++	rapl_msr_priv.platform_rapl_domain = rd;
+ 
+ 	return 0;
+ }
+ 
+ static int __init rapl_register_powercap(void)
+ {
+-	control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
+-	if (IS_ERR(control_type)) {
++	rapl_msr_priv.control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
++	if (IS_ERR(rapl_msr_priv.control_type)) {
+ 		pr_debug("failed to register powercap control_type.\n");
+-		return PTR_ERR(control_type);
++		return PTR_ERR(rapl_msr_priv.control_type);
+ 	}
+ 	return 0;
+ }
+@@ -1338,16 +1338,16 @@ static void rapl_remove_package(struct rapl_package *rp)
+ 		}
+ 		pr_debug("remove package, undo power limit on %s: %s\n",
+ 			 rp->name, rd->name);
+-		powercap_unregister_zone(control_type, &rd->power_zone);
++		powercap_unregister_zone(rp->priv->control_type, &rd->power_zone);
+ 	}
+ 	/* do parent zone last */
+-	powercap_unregister_zone(control_type, &rd_package->power_zone);
++	powercap_unregister_zone(rp->priv->control_type, &rd_package->power_zone);
+ 	list_del(&rp->plist);
+ 	kfree(rp);
+ }
+ 
+ /* called from CPU hotplug notifier, hotplug lock held */
+-static struct rapl_package *rapl_add_package(int cpu)
++static struct rapl_package *rapl_add_package(int cpu, struct rapl_if_priv *priv)
+ {
+ 	int id = topology_logical_die_id(cpu);
+ 	struct rapl_package *rp;
+@@ -1361,6 +1361,7 @@ static struct rapl_package *rapl_add_package(int cpu)
+ 	/* add the new package to the list */
+ 	rp->id = id;
+ 	rp->lead_cpu = cpu;
++	rp->priv = priv;
+ 
+ 	if (topology_max_die_per_package() > 1)
+ 		snprintf(rp->name, PACKAGE_DOMAIN_NAME_LENGTH,
+@@ -1399,9 +1400,9 @@ static int rapl_cpu_online(unsigned int cpu)
+ {
+ 	struct rapl_package *rp;
+ 
+-	rp = rapl_find_package_domain(cpu);
++	rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
+ 	if (!rp) {
+-		rp = rapl_add_package(cpu);
++		rp = rapl_add_package(cpu, &rapl_msr_priv);
+ 		if (IS_ERR(rp))
+ 			return PTR_ERR(rp);
+ 	}
+@@ -1414,7 +1415,7 @@ static int rapl_cpu_down_prep(unsigned int cpu)
+ 	struct rapl_package *rp;
+ 	int lead_cpu;
+ 
+-	rp = rapl_find_package_domain(cpu);
++	rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
+ 	if (!rp)
+ 		return 0;
+ 
+@@ -1427,8 +1428,6 @@ static int rapl_cpu_down_prep(unsigned int cpu)
+ 	return 0;
+ }
+ 
+-static enum cpuhp_state pcap_rapl_online;
 -
--
--/* Each rapl package contains multiple domains, these are the common
-- * data across RAPL domains within a package.
-- */
--struct rapl_package {
--	unsigned int id; /* logical die id, equals physical 1-die systems */
--	unsigned int nr_domains;
--	unsigned long domain_map; /* bit map of active domains */
--	unsigned int power_unit;
--	unsigned int energy_unit;
--	unsigned int time_unit;
--	struct rapl_domain *domains; /* array of domains, sized at runtime */
--	struct powercap_zone *power_zone; /* keep track of parent zone */
--	unsigned long power_limit_irq; /* keep track of package power limit
--					* notify interrupt enable status.
--					*/
--	struct list_head plist;
--	int lead_cpu; /* one active cpu per package for access */
--	/* Track active cpus */
--	struct cpumask cpumask;
--	char name[PACKAGE_DOMAIN_NAME_LENGTH];
--};
--
- struct rapl_defaults {
- 	u8 floor_freq_reg_addr;
- 	int (*check_unit)(struct rapl_package *rp, int cpu);
+ static void power_limit_state_save(void)
+ {
+ 	struct rapl_package *rp;
+@@ -1538,7 +1537,7 @@ static int __init rapl_init(void)
+ 				rapl_cpu_online, rapl_cpu_down_prep);
+ 	if (ret < 0)
+ 		goto err_unreg;
+-	pcap_rapl_online = ret;
++	rapl_msr_priv.pcap_rapl_online = ret;
+ 
+ 	/* Don't bail out if PSys is not supported */
+ 	rapl_register_psys();
+@@ -1550,7 +1549,7 @@ static int __init rapl_init(void)
+ 	return 0;
+ 
+ err_unreg_all:
+-	cpuhp_remove_state(pcap_rapl_online);
++	cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
+ 
+ err_unreg:
+ 	rapl_unregister_powercap();
+@@ -1560,7 +1559,7 @@ static int __init rapl_init(void)
+ static void __exit rapl_exit(void)
+ {
+ 	unregister_pm_notifier(&rapl_pm_notifier);
+-	cpuhp_remove_state(pcap_rapl_online);
++	cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
+ 	rapl_unregister_powercap();
+ }
+ 
 diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
-new file mode 100644
-index 0000000..9471603
---- /dev/null
+index 9471603..7bf1683e4 100644
+--- a/include/linux/intel_rapl.h
 +++ b/include/linux/intel_rapl.h
-@@ -0,0 +1,113 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ *  Data types and headers for RAPL support
-+ *
-+ *  Copyright (C) 2019  Intel Corporation.
-+ *
-+ *  Author: Zhang Rui <rui.zhang@intel.com>
+@@ -88,6 +88,20 @@ struct rapl_domain {
+ 	struct rapl_package *rp;
+ };
+ 
++/**
++ * struct rapl_if_priv: private data for different RAPL interfaces
++ * @control_type:		Each RAPL interface must have its own powercap
++ *				control type.
++ * @platform_rapl_domain:	Optional. Some RAPL interface may have platform
++ *				level RAPL control.
++ * @pcap_rapl_online:		CPU hotplug state for each RAPL interface.
 + */
-+
-+#ifndef __INTEL_RAPL_H__
-+#define __INTEL_RAPL_H__
-+
-+#include <linux/types.h>
-+#include <linux/powercap.h>
-+
-+enum rapl_domain_type {
-+	RAPL_DOMAIN_PACKAGE,	/* entire package/socket */
-+	RAPL_DOMAIN_PP0,	/* core power plane */
-+	RAPL_DOMAIN_PP1,	/* graphics uncore */
-+	RAPL_DOMAIN_DRAM,	/* DRAM control_type */
-+	RAPL_DOMAIN_PLATFORM,	/* PSys control_type */
-+	RAPL_DOMAIN_MAX,
++struct rapl_if_priv {
++	struct powercap_control_type *control_type;
++	struct rapl_domain *platform_rapl_domain;
++	enum cpuhp_state pcap_rapl_online;
 +};
 +
-+enum rapl_domain_reg_id {
-+	RAPL_DOMAIN_REG_LIMIT,
-+	RAPL_DOMAIN_REG_STATUS,
-+	RAPL_DOMAIN_REG_PERF,
-+	RAPL_DOMAIN_REG_POLICY,
-+	RAPL_DOMAIN_REG_INFO,
-+	RAPL_DOMAIN_REG_MAX,
-+};
-+
-+struct rapl_package;
-+
-+enum rapl_primitives {
-+	ENERGY_COUNTER,
-+	POWER_LIMIT1,
-+	POWER_LIMIT2,
-+	FW_LOCK,
-+
-+	PL1_ENABLE,		/* power limit 1, aka long term */
-+	PL1_CLAMP,		/* allow frequency to go below OS request */
-+	PL2_ENABLE,		/* power limit 2, aka short term, instantaneous */
-+	PL2_CLAMP,
-+
-+	TIME_WINDOW1,		/* long term */
-+	TIME_WINDOW2,		/* short term */
-+	THERMAL_SPEC_POWER,
-+	MAX_POWER,
-+
-+	MIN_POWER,
-+	MAX_TIME_WINDOW,
-+	THROTTLED_TIME,
-+	PRIORITY_LEVEL,
-+
-+	/* below are not raw primitive data */
-+	AVERAGE_POWER,
-+	NR_RAPL_PRIMITIVES,
-+};
-+
-+struct rapl_domain_data {
-+	u64 primitives[NR_RAPL_PRIMITIVES];
-+	unsigned long timestamp;
-+};
-+
-+#define NR_POWER_LIMITS (2)
-+struct rapl_power_limit {
-+	struct powercap_zone_constraint *constraint;
-+	int prim_id;		/* primitive ID used to enable */
-+	struct rapl_domain *domain;
-+	const char *name;
-+	u64 last_power_limit;
-+};
-+
-+struct rapl_package;
-+
-+struct rapl_domain {
-+	const char *name;
-+	enum rapl_domain_type id;
-+	int regs[RAPL_DOMAIN_REG_MAX];
-+	struct powercap_zone power_zone;
-+	struct rapl_domain_data rdd;
-+	struct rapl_power_limit rpl[NR_POWER_LIMITS];
-+	u64 attr_map;		/* track capabilities */
-+	unsigned int state;
-+	unsigned int domain_energy_unit;
-+	struct rapl_package *rp;
-+};
-+
-+/* maximum rapl package domain name: package-%d-die-%d */
-+#define PACKAGE_DOMAIN_NAME_LENGTH 30
-+
-+struct rapl_package {
-+	unsigned int id;	/* logical die id, equals physical 1-die systems */
-+	unsigned int nr_domains;
-+	unsigned long domain_map;	/* bit map of active domains */
-+	unsigned int power_unit;
-+	unsigned int energy_unit;
-+	unsigned int time_unit;
-+	struct rapl_domain *domains;	/* array of domains, sized at runtime */
-+	struct powercap_zone *power_zone;	/* keep track of parent zone */
-+	unsigned long power_limit_irq;	/* keep track of package power limit
-+					 * notify interrupt enable status.
-+					 */
-+	struct list_head plist;
-+	int lead_cpu;		/* one active cpu per package for access */
-+	/* Track active cpus */
-+	struct cpumask cpumask;
-+	char name[PACKAGE_DOMAIN_NAME_LENGTH];
-+};
-+
-+#endif /* __INTEL_RAPL_H__ */
+ /* maximum rapl package domain name: package-%d-die-%d */
+ #define PACKAGE_DOMAIN_NAME_LENGTH 30
+ 
+@@ -108,6 +122,7 @@ struct rapl_package {
+ 	/* Track active cpus */
+ 	struct cpumask cpumask;
+ 	char name[PACKAGE_DOMAIN_NAME_LENGTH];
++	struct rapl_if_priv *priv;
+ };
+ 
+ #endif /* __INTEL_RAPL_H__ */
 -- 
 2.7.4
 
