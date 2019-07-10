@@ -2,394 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA0D64C38
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 20:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83BA64DDB
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 22:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728355AbfGJSh1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 14:37:27 -0400
-Received: from mail-eopbgr730083.outbound.protection.outlook.com ([40.107.73.83]:45272
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728341AbfGJSh1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Jul 2019 14:37:27 -0400
+        id S1727093AbfGJUyJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 16:54:09 -0400
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:36902 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbfGJUyJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 16:54:09 -0400
+Received: by mail-wr1-f48.google.com with SMTP id n9so3895869wrr.4
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2019 13:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KzqTVqGv71g2DtZWBEu+CjQ3CTOwcVMwGyPCs3sQM/I=;
- b=P1V2N4btIAGr5ePlQTTa3YdicJN/7yy14QUADOwu70P4sJxVXLazGoUs5tvPfJN2zXPFEk7eeuyJcCb7SUvB9n6MlniQudWGtER9S5nX91N1nIHrdPDmBMvXSxNYy3trBA2cYo+B1S5HnpsTAv4M1aDJAIykxWUSdTgilDWTaYY=
-Received: from SN6PR12MB2736.namprd12.prod.outlook.com (52.135.107.27) by
- SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.19; Wed, 10 Jul 2019 18:37:21 +0000
-Received: from SN6PR12MB2736.namprd12.prod.outlook.com
- ([fe80::a475:e612:8e1e:ed28]) by SN6PR12MB2736.namprd12.prod.outlook.com
- ([fe80::a475:e612:8e1e:ed28%3]) with mapi id 15.20.2052.020; Wed, 10 Jul 2019
- 18:37:21 +0000
-From:   "Natarajan, Janakarajan" <Janakarajan.Natarajan@amd.com>
-To:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>
-CC:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Schmauss <erik.schmauss@intel.com>,
-        "Ghannam, Yazen" <Yazen.Ghannam@amd.com>,
-        "Natarajan, Janakarajan" <Janakarajan.Natarajan@amd.com>
-Subject: [PATCHv3 6/6] drivers/cpufreq: Add a CPUFreq driver for AMD
- processors (Fam17h and later)
-Thread-Topic: [PATCHv3 6/6] drivers/cpufreq: Add a CPUFreq driver for AMD
- processors (Fam17h and later)
-Thread-Index: AQHVN06AuI3rG5PgEkGK1o9FtbMXtQ==
-Date:   Wed, 10 Jul 2019 18:37:18 +0000
-Message-ID: <e48c6b836f996a16472c777612f1e3343c542077.1562781484.git.Janakarajan.Natarajan@amd.com>
-References: <cover.1562781484.git.Janakarajan.Natarajan@amd.com>
-In-Reply-To: <cover.1562781484.git.Janakarajan.Natarajan@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: SN4PR0201CA0064.namprd02.prod.outlook.com
- (2603:10b6:803:20::26) To SN6PR12MB2736.namprd12.prod.outlook.com
- (2603:10b6:805:77::27)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Janakarajan.Natarajan@amd.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.17.1
-x-originating-ip: [165.204.78.2]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: eb687ae8-0adf-46f9-e3a8-08d70565a2f2
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR12MB2639;
-x-ms-traffictypediagnostic: SN6PR12MB2639:
-x-microsoft-antispam-prvs: <SN6PR12MB263919F101BA3BC41618CA19E7F00@SN6PR12MB2639.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0094E3478A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(189003)(199004)(11346002)(446003)(99286004)(3846002)(6436002)(6116002)(2501003)(6666004)(66066001)(71200400001)(71190400001)(316002)(476003)(25786009)(2616005)(6506007)(386003)(76176011)(486006)(36756003)(14454004)(66946007)(305945005)(6486002)(64756008)(66446008)(66476007)(8936002)(66556008)(81156014)(81166006)(54906003)(53936002)(186003)(2201001)(8676002)(26005)(4326008)(50226002)(118296001)(52116002)(102836004)(68736007)(86362001)(6512007)(5660300002)(2906002)(256004)(14444005)(110136005)(7736002)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2639;H:SN6PR12MB2736.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: PZtyf9U8T0BLfvcrdIyhtTmd6AyTWWCc4m1S+ANTibJneEYOfLLPipa7iM0taupgi/b0UOZg4jHM1RIFsYO7to2GuZ2dFqmwGi2qQnM2L3MCjbbckHqtq71tv4usmzrzqDojJlp/DpML1rOD2RAtHbd/O3r4taDm32Q6XUI8A4jVWOOO/D9aIzu/G69joE0SDI3k8HrLH8RvYeVx2220o3mUoZQ2MdNWK+sZQSSo2qWEcDuKK7jOuls4J09R9S2KSpOkDhM6+gB/qW8haRG27E5fHJzYQAZSvlYVA0lerK0RkxdR9usToQ+PSXqeQTRkqDH3Ca8mP+VWWwXPu6Ep5Zkty8VqYtvdP6iB9PidS+ZCdjywlqpRZan2eETBKkMfS64MqKB6DfB4NnHNr/IXlp3+uinu6kE4ZtDCUOtVDvo=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=Ps4kQfzGq5gpWNZxk/C1CFE6R6ZOY8VylpxaBfWoytU=;
+        b=QJUKXbVp0jU72Yc403EAJF2UhwXD8aqYcaIhJAeZkDfgOZZYySAlgl4Ow44xbSgOQ3
+         WmUJdY1iuhyMIBXA4pyNC6oAJL1AagdQQeFol2G95Nbeh8Zu//oOIXUlPFDgqzHBS13l
+         5bZHSQiTNlBns9g8TNlfZzKtmydeL4Sc3Xi4w1RbHedFRXOS385pXsFvBxLclbVUGlT0
+         U+ZxX9nEU/OtcbOtfFplrAaONSCMZg6PG979cSEFB4dHCC1zNH279TZ4F7MepZZehg0F
+         GkYhO/UKiNgxzuddyioC+PtRcIPUphKbHicO+jtFFxnt3viIimMQl8t9qC0C23pN9u6X
+         034A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=Ps4kQfzGq5gpWNZxk/C1CFE6R6ZOY8VylpxaBfWoytU=;
+        b=PIAJuCZRQZynbZR+OlHF7XnzZ0IWE0tBKs80cRd/2yWAdlv7CvAe8P7H1vZAwXrp0w
+         EvEf0zKZVba+FuZA+5knpXq1K3L0YXQEWWY5Q84wpKtp1pssEjiQ/TZQaluW+tSVCbiY
+         pQX4THjC3+P8JESfYwxDMR/I6sdsOZxDTS+kOf3W3Qi1G+4cQnuP61IxXylDjTaIvrIS
+         9IFNNdFDT7pgcTXrQpXqS5wG1R0h74qb1cTUGqHgXCRfdajLcUQTChfN9tPVrfgq57wF
+         GrNJkgKQjSLyhGbsSXRWfWjRMRltv+YeWd02neuSJNqU59380R5QY6xgNizVLyyeDCTk
+         zmNw==
+X-Gm-Message-State: APjAAAWZNhhlCYziIXP2p40pY/4TdL5OrV6/wOQeVCoNQWUedLZwHfpU
+        Mz+KCoxowCv5726N/nNrZMsn4aqL
+X-Google-Smtp-Source: APXvYqxMqI8jmXX/j1f8n+oXy1gdXAhoeW2W3+alUeM2wKz65LyGboP6V4Y2Iy3GIwbszXdzpptqlQ==
+X-Received: by 2002:adf:8bd1:: with SMTP id w17mr12872490wra.50.1562792045692;
+        Wed, 10 Jul 2019 13:54:05 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8bd6:c00:54ae:9c17:4aac:c628? (p200300EA8BD60C0054AE9C174AACC628.dip0.t-ipconnect.de. [2003:ea:8bd6:c00:54ae:9c17:4aac:c628])
+        by smtp.googlemail.com with ESMTPSA id y12sm1924189wrm.79.2019.07.10.13.54.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Jul 2019 13:54:04 -0700 (PDT)
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: cpufreq-related deadlock warning on recent linux-next
+Message-ID: <6addb70f-6b21-4f09-e1a0-21476b55df14@gmail.com>
+Date:   Wed, 10 Jul 2019 22:53:55 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb687ae8-0adf-46f9-e3a8-08d70565a2f2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2019 18:37:18.4644
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jnataraj@amd.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2639
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a new CPUFreq driver which exposes sysfs entries to control the
-platform. To make use of this driver use a kernel commandline option.
+I just got the following when manually suspending the system with
+"systemctl suspend" and waking it up with the power button.
 
-Ex: amd_cpufreq=3Denable	- Enable AMD CPUFreq driver for Fam17h and later
 
-Also, place amd-cpufreq before acpi-cpufreq in the Makefile to give it
-higher priority.
+[  380.203172] Restarting tasks ... done.
 
-Signed-off-by: Janakarajan Natarajan <Janakarajan.Natarajan@amd.com>
----
- drivers/cpufreq/Kconfig.x86   |  14 ++
- drivers/cpufreq/Makefile      |   4 +-
- drivers/cpufreq/amd-cpufreq.c | 233 ++++++++++++++++++++++++++++++++++
- 3 files changed, 250 insertions(+), 1 deletion(-)
- create mode 100644 drivers/cpufreq/amd-cpufreq.c
+[  380.211714] ============================================
+[  380.211719] WARNING: possible recursive locking detected
+[  380.211726] 5.2.0-rc7-next-20190704+ #2 Not tainted
+[  380.211731] --------------------------------------------
+[  380.211737] systemd-sleep/2367 is trying to acquire lock:
+[  380.211745] 0000000043cf69ce (&policy->rwsem){+.+.}, at: refresh_frequency_limits+0x36/0x90
+[  380.211761]
+               but task is already holding lock:
+[  380.211767] 0000000043cf69ce (&policy->rwsem){+.+.}, at: cpufreq_cpu_acquire+0x25/0x50
+[  380.211777]
+               other info that might help us debug this:
+[  380.211783]  Possible unsafe locking scenario:
 
-diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-index dfa6457deaf6..01c7c5b5486a 100644
---- a/drivers/cpufreq/Kconfig.x86
-+++ b/drivers/cpufreq/Kconfig.x86
-@@ -32,6 +32,20 @@ config X86_PCC_CPUFREQ
-=20
- 	  If in doubt, say N.
-=20
-+config X86_AMD_CPUFREQ
-+	tristate "AMD CPUFreq driver"
-+	depends on ACPI_PROCESSOR
-+	select ACPI_CPPC_LIB
-+	help
-+	  This adds a CPUFreq driver which uses CPPC methods
-+	  as described in the ACPI v6.1 spec for newer (>=3D Fam17h)
-+	  AMD processors.
-+
-+	  When this driver is enabled it will become preferred to
-+	  the acpi-cpufreq driver.
-+
-+	  If in doubt, say N.
-+
- config X86_ACPI_CPUFREQ
- 	tristate "ACPI Processor P-States driver"
- 	depends on ACPI_PROCESSOR
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 689b26c6f949..b2837ed9aff2 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -22,8 +22,10 @@ obj-$(CONFIG_CPUFREQ_DT_PLATDEV)	+=3D cpufreq-dt-platdev=
-.o
- # Link order matters. K8 is preferred to ACPI because of firmware bugs in =
-early
- # K8 systems. This is still the case but acpi-cpufreq errors out so that
- # powernow-k8 can load then. ACPI is preferred to all other hardware-speci=
-fic drivers.
--# speedstep-* is preferred over p4-clockmod.
-+# speedstep-* is preferred over p4-clockmod. amd-cpufreq is preferred to a=
-cpi-cpufreq
-+# for Fam17h or newer AMD processors. For others, acpi-cpufreq will be use=
-d.
-=20
-+obj-$(CONFIG_X86_AMD_CPUFREQ)		+=3D amd-cpufreq.o
- obj-$(CONFIG_X86_ACPI_CPUFREQ)		+=3D acpi-cpufreq.o
- obj-$(CONFIG_X86_POWERNOW_K8)		+=3D powernow-k8.o
- obj-$(CONFIG_X86_PCC_CPUFREQ)		+=3D pcc-cpufreq.o
-diff --git a/drivers/cpufreq/amd-cpufreq.c b/drivers/cpufreq/amd-cpufreq.c
-new file mode 100644
-index 000000000000..262c8de3be2e
---- /dev/null
-+++ b/drivers/cpufreq/amd-cpufreq.c
-@@ -0,0 +1,233 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * AMD CPUFREQ driver for Family 17h or greater AMD processors.
-+ *
-+ * Copyright (C) 2019 Advanced Micro Devices, Inc.
-+ *
-+ * Author: Janakarajan Natarajan <janakarajan.natarajan@amd.com>
-+ */
-+#define pr_fmt(fmt)	"AMD Cpufreq: " fmt
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/cpu.h>
-+#include <linux/vmalloc.h>
-+#include <linux/cpufreq.h>
-+#include <linux/acpi.h>
-+#include <linux/delay.h>
-+
-+#include <asm/unaligned.h>
-+
-+#include <acpi/cppc_acpi.h>
-+
-+struct amd_desc {
-+	int cpu_id;
-+	struct cppc_ctrls ctrls;
-+	struct kobject kobj;
-+};
-+
-+struct amd_desc **all_cpu_data;
-+
-+static unsigned int cppc_enable;
-+module_param(cppc_enable, uint, 0644);
-+MODULE_PARM_DESC(cppc_enable,
-+		 "1 - enable AMD CpuFreq, create CPPC sysfs entries.");
-+
-+#define to_amd_desc(a) container_of(a, struct amd_desc, kobj)
-+
-+#define show_func(access_fn, struct_name, member_name)			\
-+	static ssize_t show_##member_name(struct kobject *kobj,		\
-+					  struct kobj_attribute *attr,	\
-+					  char *buf)			\
-+	{								\
-+		struct amd_desc *desc =3D to_amd_desc(kobj);		\
-+		struct struct_name st_name =3D {0};			\
-+		int ret;						\
-+									\
-+		ret =3D access_fn(desc->cpu_id, &st_name);		\
-+		if (ret)						\
-+			return ret;					\
-+									\
-+		return scnprintf(buf, PAGE_SIZE, "%llu\n",		\
-+				 (u64)st_name.member_name);		\
-+	}								\
-+
-+#define store_func(struct_name, member_name, reg_idx)			\
-+	static ssize_t store_##member_name(struct kobject *kobj,	\
-+					   struct kobj_attribute *attr,	\
-+					   const char *buf, size_t count)\
-+	{								\
-+		struct amd_desc *desc =3D to_amd_desc(kobj);		\
-+		struct struct_name st_name =3D {0};			\
-+		u32 val;						\
-+		int ret;						\
-+									\
-+		ret =3D kstrtou32(buf, 0, &val);				\
-+		if (ret)						\
-+			return ret;					\
-+									\
-+		st_name.member_name =3D val;				\
-+									\
-+		ret =3D cppc_set_reg(desc->cpu_id, &st_name, reg_idx);	\
-+		if (ret)						\
-+			return ret;					\
-+									\
-+		return count;						\
-+	}								\
-+
-+#define define_one_rw(struct_name, access_fn, member_name, reg_idx)	\
-+	show_func(access_fn, struct_name, member_name)			\
-+	store_func(struct_name, member_name, reg_idx)			\
-+	define_one_global_rw(member_name)
-+
-+define_one_rw(cppc_ctrls, cppc_get_ctrls, enable, ENABLE);
-+define_one_rw(cppc_ctrls, cppc_get_ctrls, max_perf, MAX_PERF);
-+define_one_rw(cppc_ctrls, cppc_get_ctrls, min_perf, MIN_PERF);
-+define_one_rw(cppc_ctrls, cppc_get_ctrls, desired_perf, DESIRED_PERF);
-+define_one_rw(cppc_ctrls, cppc_get_ctrls, auto_sel_enable, AUTO_SEL_ENABLE=
-);
-+
-+static struct attribute *amd_cpufreq_attributes[] =3D {
-+	&enable.attr,
-+	&max_perf.attr,
-+	&min_perf.attr,
-+	&desired_perf.attr,
-+	&auto_sel_enable.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group amd_cpufreq_attr_group =3D {
-+	.attrs =3D amd_cpufreq_attributes,
-+};
-+
-+static struct kobj_type amd_cpufreq_type =3D {
-+	.sysfs_ops =3D &kobj_sysfs_ops,
-+	.default_attrs =3D amd_cpufreq_attributes,
-+};
-+
-+static int amd_cpufreq_cpu_init(struct cpufreq_policy *policy)
-+{
-+	return 0;
-+}
-+
-+static int amd_cpufreq_cpu_exit(struct cpufreq_policy *policy)
-+{
-+	return 0;
-+}
-+
-+static int amd_cpufreq_cpu_verify(struct cpufreq_policy *policy)
-+{
-+	return 0;
-+}
-+
-+static int amd_cpufreq_cpu_target_index(struct cpufreq_policy *policy,
-+					unsigned int index)
-+{
-+	return 0;
-+}
-+
-+static struct cpufreq_driver amd_cpufreq_driver =3D {
-+	.name =3D "amd_cpufreq",
-+	.init =3D amd_cpufreq_cpu_init,
-+	.exit =3D amd_cpufreq_cpu_exit,
-+	.verify =3D amd_cpufreq_cpu_verify,
-+	.target_index =3D amd_cpufreq_cpu_target_index,
-+};
-+
-+static void amd_cpufreq_sysfs_delete_params(void)
-+{
-+	int i;
-+
-+	for_each_possible_cpu(i) {
-+		if (all_cpu_data[i]) {
-+			kobject_del(&all_cpu_data[i]->kobj);
-+			kfree(all_cpu_data[i]);
-+		}
-+	}
-+
-+	kfree(all_cpu_data);
-+}
-+
-+static int __init amd_cpufreq_sysfs_expose_params(void)
-+{
-+	struct device *cpu_dev;
-+	int i, ret;
-+
-+	all_cpu_data =3D kcalloc(num_possible_cpus(), sizeof(void *),
-+			       GFP_KERNEL);
-+
-+	if (!all_cpu_data)
-+		return -ENOMEM;
-+
-+	for_each_possible_cpu(i) {
-+		all_cpu_data[i] =3D kzalloc(sizeof(struct amd_desc), GFP_KERNEL);
-+		if (!all_cpu_data[i]) {
-+			ret =3D -ENOMEM;
-+			goto free;
-+		}
-+
-+		all_cpu_data[i]->cpu_id =3D i;
-+		cpu_dev =3D get_cpu_device(i);
-+		ret =3D kobject_init_and_add(&all_cpu_data[i]->kobj, &amd_cpufreq_type,
-+					   &cpu_dev->kobj, "amd_cpufreq");
-+		if (ret)
-+			goto free;
-+	}
-+
-+	return 0;
-+free:
-+	amd_cpufreq_sysfs_delete_params();
-+	return ret;
-+}
-+
-+static int __init amd_cpufreq_init(void)
-+{
-+	int ret =3D 0;
-+
-+	/*
-+	 * Use only if:
-+	 * - AMD,
-+	 * - Family 17h (or) newer and,
-+	 * - Explicitly enabled
-+	 */
-+	if (boot_cpu_data.x86_vendor !=3D X86_VENDOR_AMD ||
-+	    boot_cpu_data.x86 < 0x17 || !cppc_enable)
-+		return -ENODEV;
-+
-+	ret =3D cpufreq_register_driver(&amd_cpufreq_driver);
-+	if (ret) {
-+		pr_info("Failed to register driver\n");
-+		goto out;
-+	}
-+
-+	ret =3D amd_cpufreq_sysfs_expose_params();
-+	if (ret) {
-+		pr_info("Could not create sysfs entries\n");
-+		cpufreq_unregister_driver(&amd_cpufreq_driver);
-+		goto out;
-+	}
-+
-+	pr_info("Using amd-cpufreq driver\n");
-+	return ret;
-+
-+out:
-+	return ret;
-+}
-+
-+static void __exit amd_cpufreq_exit(void)
-+{
-+	amd_cpufreq_sysfs_delete_params();
-+	cpufreq_unregister_driver(&amd_cpufreq_driver);
-+}
-+
-+static const struct acpi_device_id amd_acpi_ids[] __used =3D {
-+	{ACPI_PROCESSOR_DEVICE_HID, },
-+	{}
-+};
-+
-+device_initcall(amd_cpufreq_init);
-+module_exit(amd_cpufreq_exit);
-+MODULE_DEVICE_TABLE(acpi, amd_acpi_ids);
-+
-+MODULE_AUTHOR("Janakarajan Natarajan");
-+MODULE_DESCRIPTION("AMD CPUFreq driver based on ACPI CPPC v6.1 spec");
-+MODULE_LICENSE("GPL");
---=20
-2.17.1
+[  380.211789]        CPU0
+[  380.211792]        ----
+[  380.211795]   lock(&policy->rwsem);
+[  380.211800]   lock(&policy->rwsem);
+[  380.211805]
+                *** DEADLOCK ***
 
+[  380.211811]  May be due to missing lock nesting notation
+
+[  380.211818] 8 locks held by systemd-sleep/2367:
+[  380.211823]  #0: 000000000e253e21 (sb_writers#5){.+.+}, at: vfs_write+0x16b/0x1d0
+[  380.211835]  #1: 00000000d0140159 (&of->mutex){+.+.}, at: kernfs_fop_write+0xfd/0x1c0
+[  380.211846]  #2: 00000000383c283a (kn->count#155){.+.+}, at: kernfs_fop_write+0x105/0x1c0
+[  380.211857]  #3: 000000007e6f342b (system_transition_mutex){+.+.}, at: pm_suspend.cold+0xd0/0x36a
+[  380.211869]  #4: 000000002ee59360 ((pm_chain_head).rwsem){++++}, at: __blocking_notifier_call_chain+0x46/0x80
+[  380.211883]  #5: 000000003972eb2e (&tz->lock){+.+.}, at: step_wise_throttle+0x3f/0x90
+[  380.211893]  #6: 0000000007747f02 (&cdev->lock){+.+.}, at: thermal_cdev_update+0x1e/0x16c
+[  380.211904]  #7: 0000000043cf69ce (&policy->rwsem){+.+.}, at: cpufreq_cpu_acquire+0x25/0x50
+[  380.211914]
+               stack backtrace:
+[  380.211921] CPU: 1 PID: 2367 Comm: systemd-sleep Not tainted 5.2.0-rc7-next-20190704+ #2
+[  380.211929] Hardware name: NA ZBOX-CI327NANO-GS-01/ZBOX-CI327NANO-GS-01, BIOS 5.12 04/26/2018
+[  380.211937] Call Trace:
+[  380.211944]  dump_stack+0x70/0xa0
+[  380.211950]  __lock_acquire.cold+0xc0/0x206
+[  380.211957]  lock_acquire+0x90/0x190
+[  380.211963]  ? refresh_frequency_limits+0x36/0x90
+[  380.211970]  down_write+0x38/0x80
+[  380.211975]  ? refresh_frequency_limits+0x36/0x90
+[  380.211981]  refresh_frequency_limits+0x36/0x90
+[  380.211987]  ? cpufreq_cpu_get+0x60/0x70
+[  380.211993]  ? cpufreq_get_policy+0x5e/0x70
+[  380.212000]  ? __module_text_address+0x10/0x60
+[  380.212006]  ? is_module_text_address+0x18/0x29
+[  380.212013]  ? kernel_text_address+0x3e/0x90
+[  380.212019]  ? __kernel_text_address+0x10/0x40
+[  380.212026]  ? unwind_get_return_address+0x1c/0x30
+[  380.212034]  ? __thaw_task+0x50/0x50
+[  380.212040]  ? arch_stack_walk+0xa2/0xf0
+[  380.212046]  ? stack_trace_save+0x55/0x80
+[  380.212052]  ? alloc_list_entry+0x15/0x60
+[  380.212058]  ? __lock_acquire+0x1067/0x1940
+[  380.212064]  ? cpufreq_cpu_acquire+0x25/0x50
+[  380.212071]  ? down_write+0x38/0x80
+[  380.212076]  ? cpufreq_cpu_acquire+0x25/0x50
+[  380.212082]  cpufreq_update_policy+0x51/0x70
+[  380.212089]  cpufreq_set_cur_state.part.0+0x82/0xa0
+[  380.212096]  processor_set_cur_state+0xa1/0x110
+[  380.212102]  thermal_cdev_update+0x86/0x16c
+[  380.212108]  step_wise_throttle+0x58/0x90
+[  380.212114]  handle_thermal_trip+0x80/0x240
+[  380.212120]  thermal_zone_device_update.part.0+0x68/0x1a0
+[  380.212127]  thermal_pm_notify+0x10f/0x130
+[  380.212133]  notifier_call_chain+0x53/0x80
+[  380.212139]  __blocking_notifier_call_chain+0x5f/0x80
+[  380.212146]  pm_notifier_call_chain+0x22/0x40
+[  380.212151]  pm_suspend.cold+0x341/0x36a
+[  380.212157]  state_store+0x7d/0xe0
+[  380.212162]  kobj_attr_store+0x33/0x50
+[  380.212168]  sysfs_kf_write+0x46/0x60
+[  380.212174]  kernfs_fop_write+0x134/0x1c0
+[  380.212181]  __vfs_write+0x37/0x70
+[  380.212186]  vfs_write+0xdc/0x1d0
+[  380.212191]  ksys_write+0x6e/0xf0
+[  380.212196]  __x64_sys_write+0x19/0x20
+[  380.212202]  do_syscall_64+0x50/0x1a0
+[  380.212209]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+[  380.212216] RIP: 0033:0x7f0fd7e801f8
+[  380.212223] Code: 89 02 48 c7 c0 ff ff ff ff eb bb 0f 1f 80 00 00 00 00 f3 0f 1e fa 48 8d 05 25 50 0d 00 8b 00 85 c0 75 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 60 c3 0f 1f 80 00 00 00 00 48 83 ec 28 48 89
+[  380.212238] RSP: 002b:00007ffc3d20f288 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[  380.212247] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f0fd7e801f8
+[  380.212253] RDX: 0000000000000004 RSI: 00007ffc3d20f370 RDI: 0000000000000004
+[  380.212260] RBP: 00007ffc3d20f370 R08: 00007f0fd66a6840 R09: 0000561ed5a28e50
+[  380.212267] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
+[  380.212273] R13: 0000561ed5a27290 R14: 0000000000000004 R15: 00007f0fd7f507c0
+[  382.995704] r8169 0000:03:00.0 enp3s0: Link is Up - 1Gbps/Full - flow control rx/tx
