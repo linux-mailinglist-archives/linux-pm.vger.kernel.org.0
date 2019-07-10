@@ -2,156 +2,516 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0454C64512
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 12:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17A664518
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 12:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbfGJKQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 06:16:48 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:50456 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbfGJKQs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 06:16:48 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190710101646euoutp028706d7ccf7206a531c04e461d4d7149e~wBE6ahcA_2479424794euoutp02X
-        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2019 10:16:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190710101646euoutp028706d7ccf7206a531c04e461d4d7149e~wBE6ahcA_2479424794euoutp02X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1562753806;
-        bh=B4VI75DzOb0316kWv6RhO/oBUVPr+GEuotYGBS3iEu8=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=TBSJbzMy5kqkW110RVHSPaEdP6o8zk9m8wEDOWDXkanDLxKLNxFilvHPw+mwccGQv
-         ccIDgcLh67rMo+bUDOQx8pKmFIkQLqiPlLM7emn8LQf2iC/6lrjGSUAOviXSDM8kty
-         OPQbu+Msv+H85J6iEUWTuiOJjV83tCygvCNultjY=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190710101645eucas1p2ff4a8f09e430b473ccf8fc703071dbfc~wBE5r1Wad2938829388eucas1p2N;
-        Wed, 10 Jul 2019 10:16:45 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id A3.30.04377.D0BB52D5; Wed, 10
-        Jul 2019 11:16:45 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190710101644eucas1p1b45f7baae6aee103a8ee4d0cad6f6c3c~wBE4zZ6Pm1160611606eucas1p1m;
-        Wed, 10 Jul 2019 10:16:44 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190710101644eusmtrp2baf5f104ff72c4e3214f48392dbab250~wBE4lHnOs2639226392eusmtrp2a;
-        Wed, 10 Jul 2019 10:16:44 +0000 (GMT)
-X-AuditID: cbfec7f4-113ff70000001119-8f-5d25bb0db73b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id BD.E0.04146.C0BB52D5; Wed, 10
-        Jul 2019 11:16:44 +0100 (BST)
-Received: from [106.120.51.18] (unknown [106.120.51.18]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190710101643eusmtip110f0bb0893c859850ea2c09b582ad2cf~wBE3punTa1539415394eusmtip1R;
-        Wed, 10 Jul 2019 10:16:43 +0000 (GMT)
-Subject: Re: [PATCH 1/3] opp: core: add regulators enable and disable
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-From:   Kamil Konieczny <k.konieczny@partner.samsung.com>
-Message-ID: <3d6eacb8-ed8d-d4ac-1c36-6224ab88a5dc@partner.samsung.com>
-Date:   Wed, 10 Jul 2019 12:16:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.2
+        id S1726198AbfGJKTx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 06:19:53 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61704 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726097AbfGJKTx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 06:19:53 -0400
+Received: from 79.184.253.121.ipv4.supernova.orange.pl (79.184.253.121) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id a91cc22cfc827cf2; Wed, 10 Jul 2019 12:19:47 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCH] driver core: Remove device link creation limitation
+Date:   Wed, 10 Jul 2019 12:19:47 +0200
+Message-ID: <3121545.4lOhFoIcdQ@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <20190709054014.o3g4e6gbovrq3vvn@vireshk-i7>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUzMcRzH+/6eu7n2dWV9xGSntmSlML7GDBOXh41hjIWj38pch/uVPMyc
-        PPVAyda6a+2u0Gq30F0p8pybUx5OQ4VsTarpCSvGQvz8Mv33+nw+7/c+n/f2EWhNNxsk7DQm
-        iyaj3qDlVEz1g+/eCPWN0LionCw1cVqusKR5sIsldvdTluS099DE663gyZO0Xp642ptY8ry2
-        kCMDZ9yIWLy3KXLJ/ZYnJc2NFHlztIwjvd+eUOTELTdPfjU5GeL8oiOVbQ+4hRpdua0c6VyO
-        DE7X2nST01VePKLLrnIgnaelhtINuCat5jep5seLhp37RNP0BdtUiVcteewer2p/Z2UaZUbv
-        hEzkKwCeBWWnq6lMpBI0uAxBc/vQSDGIoMOWg5RiAEHL5Vb6n6X76seRQSmCzvpPI0Ufgof5
-        R5Gs8scx8NJe+schCAE4HD68EmUNjb8zUPHcycsaDs+BdzWPKZnVeClkna9kZWZwKLRmpnEy
-        j8MbocFtYxTNWKi3vv/Lvngu9Gd9/auncSC8fm+nFA6Gmr5CWl4GOFcAl7Vo5Owl0F/SiBT2
-        h25PFa/wRBi+rpgBp0JHcTavmI8jaDv1mVEG8+C+p5GV09B4Klypna60F0F7xn1KbgP2g5a+
-        scoNfnCuOp9W2mpIP6lR1BFgG37MKjwBMocvs2eRtmBUsoJRaQpGpSn4v7cIMQ4UKKZISQmi
-        NMMopkZK+iQpxZgQuWN3kgv9+cBHvzyD11Dtj+11CAtIO0YNx0PiNKx+n3QgqQ6BQGsD1LeX
-        TYnTqOP1Bw6Kpt1bTSkGUapDEwRGG6g+5NO2WYMT9MniLlHcI5r+TSnBN8iMotLi+Jiu9aUr
-        8+PbDId7hjxrlt/JY7jtL7JTwxokp6NhxtdvNm9XpFbliC2KCvphPRJdbJ+cYDYnr0g/1jDx
-        zcx+VwzqMi955jP0yT47wCfRutDSe+GZIcceFjH+wuK10xw9JXfDrSEQG5xitDhW5VbtDb7X
-        uiX4y0/Rto7UbNAyUqI+Opw2SfrfhNBzEH0DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLIsWRmVeSWpSXmKPExsVy+t/xu7o8u1VjDW5MYrPYOGM9q8X1L89Z
-        LeYfOcdq0f/4NbPF+fMb2C3ONr1ht9j0+BqrxeVdc9gsPvceYbSYcX4fk8XaI3fZLZZev8hk
-        cbtxBZvFmx9nmSxa9x5ht/h3bSOLxcavHhabHxxjcxDyWDNvDaPHplWdbB53ru1h89i8pN6j
-        b8sqRo/jN7YzeXzeJBfAHqVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
-        k5Kak1mWWqRvl6CXsXXGVNaC81wVzzY3MTUwPuLoYuTkkBAwkXi19T1jFyMXh5DAUkaJb5/b
-        2SAS0hKNp1czQdjCEn+udbFBFL1mlDgx+xQzSEJYwFXi6vzlQDYHh4iAlsTLm6kgNcwCv1kk
-        9i88D9XQxCSx+9hBsKlsAuYSj7afAZvKK+Am0b1oMyuIzSKgKnGnqwmsRlQgQmLStZ0sEDWC
-        EidnPgGzOQUsJd51fwOrZxZQl/gz7xIzhC0ucevJfCYIW15i+9s5zBMYhWYhaZ+FpGUWkpZZ
-        SFoWMLKsYhRJLS3OTc8tNtQrTswtLs1L10vOz93ECIz6bcd+bt7BeGlj8CFGAQ5GJR5eiRaV
-        WCHWxLLiytxDjBIczEoivPvclWOFeFMSK6tSi/Lji0pzUosPMZoCPTeRWUo0OR+YkPJK4g1N
-        Dc0tLA3Njc2NzSyUxHk7BA7GCAmkJ5akZqemFqQWwfQxcXBKNTCWrRO4P1/+VVINJ4/Xjalc
-        ZVzTPr/pWnV0lZCGzkFXlX9VLbPVjBbqno/eW2zv/DNsT1tz+uvFLLanM1cs3H5xpmfprJ2z
-        1A8UVkRyh7cw3z9mtJF1UQtDa61z1ZsjHzy+dS9R6Qvaf+l5yW6FmO0n+Wd/NLjCV2xwp3Kl
-        TY5k7lTnTC91F2MlluKMREMt5qLiRADyK6LrEAMAAA==
-X-CMS-MailID: 20190710101644eucas1p1b45f7baae6aee103a8ee4d0cad6f6c3c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190708141159eucas1p1751506975ff96a436e14940916623722
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190708141159eucas1p1751506975ff96a436e14940916623722
-References: <20190708141140.24379-1-k.konieczny@partner.samsung.com>
-        <CGME20190708141159eucas1p1751506975ff96a436e14940916623722@eucas1p1.samsung.com>
-        <20190708141140.24379-2-k.konieczny@partner.samsung.com>
-        <20190709054014.o3g4e6gbovrq3vvn@vireshk-i7>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+If device_link_add() is called for a consumer/supplier pair with an
+existing device link between them and the existing link's type is
+not in agreement with the flags passed to that function by its
+caller, NULL will be returned.  That is seriously inconvenient,
+because it forces the callers of device_link_add() to worry about
+what others may or may not do even if that is not relevant to them
+for any other reasons.
+
+It turns out, however, that this limitation can be made go away
+relatively easily.
+
+The underlying observation is that if DL_FLAG_STATELESS has been
+passed to device_link_add() in flags for the given consumer/supplier
+pair at least once, calling either device_link_del() or
+device_link_remove() to release the link returned by it should work,
+but there are no other requirements associated with that flag.  In
+turn, if at least one of the callers of device_link_add() for the
+given consumer/supplier pair has not passed DL_FLAG_STATELESS to it
+in flags, the driver core should track the status of the link and act
+on it as appropriate (ie. the link should be treated as "managed").
+This means that DL_FLAG_STATELESS needs to be set for managed device
+links and it should be valid to call device_link_del() or
+device_link_remove() to drop references to them in certain
+sutiations.
+
+To allow that to happen, introduce a new (internal) device link flag
+called DL_FLAG_MANAGED and make device_link_add() set it automatically
+whenever DL_FLAG_STATELESS is not passed to it.  Also make it take
+additional references to existing device links that were previously
+stateless (that is, with DL_FLAG_STATELESS set and DL_FLAG_MANAGED
+unset) and will need to be managed going forward and initialize
+their status (which has been DL_STATE_NONE so far).
+
+Accordingly, when a managed device link is dropped automatically
+by the driver core, make it clear DL_FLAG_MANAGED, reset the link's
+status back to DL_STATE_NONE and drop the reference to it associated
+with DL_FLAG_MANAGED instead of just deleting it right away (to
+allow it to stay around in case it still needs to be released
+explicitly by someone).
+
+With that, since setting DL_FLAG_STATELESS doesn't mean that the
+device link in question is not managed any more, replace all of the
+status-tracking checks against DL_FLAG_STATELESS with analogous
+checks against DL_FLAG_MANAGED and update the documentation to
+reflect these changes.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ Documentation/driver-api/device_link.rst |    4 
+ drivers/base/core.c                      |  169 +++++++++++++++++--------------
+ drivers/base/power/runtime.c             |    4 
+ include/linux/device.h                   |    4 
+ 4 files changed, 102 insertions(+), 79 deletions(-)
+
+Index: linux-pm/drivers/base/core.c
+===================================================================
+--- linux-pm.orig/drivers/base/core.c
++++ linux-pm/drivers/base/core.c
+@@ -124,6 +124,50 @@ static int device_is_dependent(struct de
+ 	return ret;
+ }
+ 
++static void device_link_init_status(struct device_link *link,
++				    struct device *consumer,
++				    struct device *supplier)
++{
++	switch (supplier->links.status) {
++	case DL_DEV_PROBING:
++		switch (consumer->links.status) {
++		case DL_DEV_PROBING:
++			/*
++			 * A consumer driver can create a link to a supplier
++			 * that has not completed its probing yet as long as it
++			 * knows that the supplier is already functional (for
++			 * example, it has just acquired some resources from the
++			 * supplier).
++			 */
++			link->status = DL_STATE_CONSUMER_PROBE;
++			break;
++		default:
++			link->status = DL_STATE_DORMANT;
++			break;
++		}
++		break;
++	case DL_DEV_DRIVER_BOUND:
++		switch (consumer->links.status) {
++		case DL_DEV_PROBING:
++			link->status = DL_STATE_CONSUMER_PROBE;
++			break;
++		case DL_DEV_DRIVER_BOUND:
++			link->status = DL_STATE_ACTIVE;
++			break;
++		default:
++			link->status = DL_STATE_AVAILABLE;
++			break;
++		}
++		break;
++	case DL_DEV_UNBINDING:
++		link->status = DL_STATE_SUPPLIER_UNBIND;
++		break;
++	default:
++		link->status = DL_STATE_DORMANT;
++		break;
++	}
++}
++
+ static int device_reorder_to_tail(struct device *dev, void *not_used)
+ {
+ 	struct device_link *link;
+@@ -179,9 +223,9 @@ void device_pm_move_to_tail(struct devic
+  * of the link.  If DL_FLAG_PM_RUNTIME is not set, DL_FLAG_RPM_ACTIVE will be
+  * ignored.
+  *
+- * If DL_FLAG_STATELESS is set in @flags, the link is not going to be managed by
+- * the driver core and, in particular, the caller of this function is expected
+- * to drop the reference to the link acquired by it directly.
++ * If DL_FLAG_STATELESS is set in @flags, the caller of this function is
++ * expected to release the link returned by it directly with the help of either
++ * device_link_del() or device_link_remove().
+  *
+  * If that flag is not set, however, the caller of this function is handing the
+  * management of the link over to the driver core entirely and its return value
+@@ -201,9 +245,16 @@ void device_pm_move_to_tail(struct devic
+  * be used to request the driver core to automaticall probe for a consmer
+  * driver after successfully binding a driver to the supplier device.
+  *
+- * The combination of DL_FLAG_STATELESS and either DL_FLAG_AUTOREMOVE_CONSUMER
+- * or DL_FLAG_AUTOREMOVE_SUPPLIER set in @flags at the same time is invalid and
+- * will cause NULL to be returned upfront.
++ * The combination of DL_FLAG_STATELESS and one of DL_FLAG_AUTOREMOVE_CONSUMER,
++ * DL_FLAG_AUTOREMOVE_SUPPLIER, or DL_FLAG_AUTOPROBE_CONSUMER set in @flags at
++ * the same time is invalid and will cause NULL to be returned upfront.
++ * However, if a device link between the given @consumer and @supplier pair
++ * exists already when this function is called for them, the existing link will
++ * be returned regardless of its current type and status (the link's flags may
++ * be modified then).  The caller of this function is then expected to treat
++ * the link as though it has just been created, so (in particular) if
++ * DL_FLAG_STATELESS was passed in @flags, the link needs to be released
++ * explicitly when not needed any more (as stated above).
+  *
+  * A side effect of the link creation is re-ordering of dpm_list and the
+  * devices_kset list by moving the consumer device and all devices depending
+@@ -223,7 +274,8 @@ struct device_link *device_link_add(stru
+ 	    (flags & DL_FLAG_STATELESS &&
+ 	     flags & (DL_FLAG_AUTOREMOVE_CONSUMER |
+ 		      DL_FLAG_AUTOREMOVE_SUPPLIER |
+-		      DL_FLAG_AUTOPROBE_CONSUMER)) ||
++		      DL_FLAG_AUTOPROBE_CONSUMER |
++		      DL_FLAG_MANAGED)) ||
+ 	    (flags & DL_FLAG_AUTOPROBE_CONSUMER &&
+ 	     flags & (DL_FLAG_AUTOREMOVE_CONSUMER |
+ 		      DL_FLAG_AUTOREMOVE_SUPPLIER)))
+@@ -236,6 +288,9 @@ struct device_link *device_link_add(stru
+ 		}
+ 	}
+ 
++	if (!(flags & DL_FLAG_STATELESS))
++		flags |= DL_FLAG_MANAGED;
++
+ 	device_links_write_lock();
+ 	device_pm_lock();
+ 
+@@ -262,15 +317,6 @@ struct device_link *device_link_add(stru
+ 		if (link->consumer != consumer)
+ 			continue;
+ 
+-		/*
+-		 * Don't return a stateless link if the caller wants a stateful
+-		 * one and vice versa.
+-		 */
+-		if (WARN_ON((flags & DL_FLAG_STATELESS) != (link->flags & DL_FLAG_STATELESS))) {
+-			link = NULL;
+-			goto out;
+-		}
+-
+ 		if (flags & DL_FLAG_PM_RUNTIME) {
+ 			if (!(link->flags & DL_FLAG_PM_RUNTIME)) {
+ 				pm_runtime_new_link(consumer);
+@@ -281,6 +327,7 @@ struct device_link *device_link_add(stru
+ 		}
+ 
+ 		if (flags & DL_FLAG_STATELESS) {
++			link->flags |= DL_FLAG_STATELESS;
+ 			kref_get(&link->kref);
+ 			goto out;
+ 		}
+@@ -299,6 +346,11 @@ struct device_link *device_link_add(stru
+ 			link->flags &= ~(DL_FLAG_AUTOREMOVE_CONSUMER |
+ 					 DL_FLAG_AUTOREMOVE_SUPPLIER);
+ 		}
++		if (!(link->flags & DL_FLAG_MANAGED)) {
++			kref_get(&link->kref);
++			link->flags |= DL_FLAG_MANAGED;
++			device_link_init_status(link, consumer, supplier);
++		}
+ 		goto out;
+ 	}
+ 
+@@ -325,48 +377,10 @@ struct device_link *device_link_add(stru
+ 	kref_init(&link->kref);
+ 
+ 	/* Determine the initial link state. */
+-	if (flags & DL_FLAG_STATELESS) {
++	if (flags & DL_FLAG_STATELESS)
+ 		link->status = DL_STATE_NONE;
+-	} else {
+-		switch (supplier->links.status) {
+-		case DL_DEV_PROBING:
+-			switch (consumer->links.status) {
+-			case DL_DEV_PROBING:
+-				/*
+-				 * A consumer driver can create a link to a
+-				 * supplier that has not completed its probing
+-				 * yet as long as it knows that the supplier is
+-				 * already functional (for example, it has just
+-				 * acquired some resources from the supplier).
+-				 */
+-				link->status = DL_STATE_CONSUMER_PROBE;
+-				break;
+-			default:
+-				link->status = DL_STATE_DORMANT;
+-				break;
+-			}
+-			break;
+-		case DL_DEV_DRIVER_BOUND:
+-			switch (consumer->links.status) {
+-			case DL_DEV_PROBING:
+-				link->status = DL_STATE_CONSUMER_PROBE;
+-				break;
+-			case DL_DEV_DRIVER_BOUND:
+-				link->status = DL_STATE_ACTIVE;
+-				break;
+-			default:
+-				link->status = DL_STATE_AVAILABLE;
+-				break;
+-			}
+-			break;
+-		case DL_DEV_UNBINDING:
+-			link->status = DL_STATE_SUPPLIER_UNBIND;
+-			break;
+-		default:
+-			link->status = DL_STATE_DORMANT;
+-			break;
+-		}
+-	}
++	else
++		device_link_init_status(link, consumer, supplier);
+ 
+ 	/*
+ 	 * Some callers expect the link creation during consumer driver probe to
+@@ -528,7 +542,7 @@ static void device_links_missing_supplie
+  * mark the link as "consumer probe in progress" to make the supplier removal
+  * wait for us to complete (or bad things may happen).
+  *
+- * Links with the DL_FLAG_STATELESS flag set are ignored.
++ * Links with the DL_FLAG_MANAGED flag unset are ignored.
+  */
+ int device_links_check_suppliers(struct device *dev)
+ {
+@@ -538,7 +552,7 @@ int device_links_check_suppliers(struct
+ 	device_links_write_lock();
+ 
+ 	list_for_each_entry(link, &dev->links.suppliers, c_node) {
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		if (link->status != DL_STATE_AVAILABLE) {
+@@ -563,7 +577,7 @@ int device_links_check_suppliers(struct
+  *
+  * Also change the status of @dev's links to suppliers to "active".
+  *
+- * Links with the DL_FLAG_STATELESS flag set are ignored.
++ * Links with the DL_FLAG_MANAGED flag unset are ignored.
+  */
+ void device_links_driver_bound(struct device *dev)
+ {
+@@ -572,7 +586,7 @@ void device_links_driver_bound(struct de
+ 	device_links_write_lock();
+ 
+ 	list_for_each_entry(link, &dev->links.consumers, s_node) {
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		/*
+@@ -593,7 +607,7 @@ void device_links_driver_bound(struct de
+ 	}
+ 
+ 	list_for_each_entry(link, &dev->links.suppliers, c_node) {
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		WARN_ON(link->status != DL_STATE_CONSUMER_PROBE);
+@@ -605,6 +619,13 @@ void device_links_driver_bound(struct de
+ 	device_links_write_unlock();
+ }
+ 
++static void device_link_drop_managed(struct device_link *link)
++{
++	link->flags &= ~DL_FLAG_MANAGED;
++	WRITE_ONCE(link->status, DL_STATE_NONE);
++	kref_put(&link->kref, __device_link_del);
++}
++
+ /**
+  * __device_links_no_driver - Update links of a device without a driver.
+  * @dev: Device without a drvier.
+@@ -615,18 +636,18 @@ void device_links_driver_bound(struct de
+  * unless they already are in the "supplier unbind in progress" state in which
+  * case they need not be updated.
+  *
+- * Links with the DL_FLAG_STATELESS flag set are ignored.
++ * Links with the DL_FLAG_MANAGED flag unset are ignored.
+  */
+ static void __device_links_no_driver(struct device *dev)
+ {
+ 	struct device_link *link, *ln;
+ 
+ 	list_for_each_entry_safe_reverse(link, ln, &dev->links.suppliers, c_node) {
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		if (link->flags & DL_FLAG_AUTOREMOVE_CONSUMER)
+-			__device_link_del(&link->kref);
++			device_link_drop_managed(link);
+ 		else if (link->status == DL_STATE_CONSUMER_PROBE ||
+ 			 link->status == DL_STATE_ACTIVE)
+ 			WRITE_ONCE(link->status, DL_STATE_AVAILABLE);
+@@ -643,7 +664,7 @@ static void __device_links_no_driver(str
+  * %__device_links_no_driver() to update links to suppliers for it as
+  * appropriate.
+  *
+- * Links with the DL_FLAG_STATELESS flag set are ignored.
++ * Links with the DL_FLAG_MANAGED flag unset are ignored.
+  */
+ void device_links_no_driver(struct device *dev)
+ {
+@@ -652,7 +673,7 @@ void device_links_no_driver(struct devic
+ 	device_links_write_lock();
+ 
+ 	list_for_each_entry(link, &dev->links.consumers, s_node) {
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		/*
+@@ -680,7 +701,7 @@ void device_links_no_driver(struct devic
+  * invoke %__device_links_no_driver() to update links to suppliers for it as
+  * appropriate.
+  *
+- * Links with the DL_FLAG_STATELESS flag set are ignored.
++ * Links with the DL_FLAG_MANAGED flag unset are ignored.
+  */
+ void device_links_driver_cleanup(struct device *dev)
+ {
+@@ -689,7 +710,7 @@ void device_links_driver_cleanup(struct
+ 	device_links_write_lock();
+ 
+ 	list_for_each_entry_safe(link, ln, &dev->links.consumers, s_node) {
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		WARN_ON(link->flags & DL_FLAG_AUTOREMOVE_CONSUMER);
+@@ -702,7 +723,7 @@ void device_links_driver_cleanup(struct
+ 		 */
+ 		if (link->status == DL_STATE_SUPPLIER_UNBIND &&
+ 		    link->flags & DL_FLAG_AUTOREMOVE_SUPPLIER)
+-			__device_link_del(&link->kref);
++			device_link_drop_managed(link);
+ 
+ 		WRITE_ONCE(link->status, DL_STATE_DORMANT);
+ 	}
+@@ -724,7 +745,7 @@ void device_links_driver_cleanup(struct
+  *
+  * Return 'false' if there are no probing or active consumers.
+  *
+- * Links with the DL_FLAG_STATELESS flag set are ignored.
++ * Links with the DL_FLAG_MANAGED flag unset are ignored.
+  */
+ bool device_links_busy(struct device *dev)
+ {
+@@ -734,7 +755,7 @@ bool device_links_busy(struct device *de
+ 	device_links_write_lock();
+ 
+ 	list_for_each_entry(link, &dev->links.consumers, s_node) {
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		if (link->status == DL_STATE_CONSUMER_PROBE
+@@ -764,7 +785,7 @@ bool device_links_busy(struct device *de
+  * driver to unbind and start over (the consumer will not re-probe as we have
+  * changed the state of the link already).
+  *
+- * Links with the DL_FLAG_STATELESS flag set are ignored.
++ * Links with the DL_FLAG_MANAGED flag unset are ignored.
+  */
+ void device_links_unbind_consumers(struct device *dev)
+ {
+@@ -776,7 +797,7 @@ void device_links_unbind_consumers(struc
+ 	list_for_each_entry(link, &dev->links.consumers, s_node) {
+ 		enum device_link_state status;
+ 
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		status = link->status;
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -1624,7 +1624,7 @@ void pm_runtime_remove(struct device *de
+  * runtime PM references to the device, drop the usage counter of the device
+  * (as many times as needed).
+  *
+- * Links with the DL_FLAG_STATELESS flag set are ignored.
++ * Links with the DL_FLAG_MANAGED flag unset are ignored.
+  *
+  * Since the device is guaranteed to be runtime-active at the point this is
+  * called, nothing else needs to be done here.
+@@ -1641,7 +1641,7 @@ void pm_runtime_clean_up_links(struct de
+ 	idx = device_links_read_lock();
+ 
+ 	list_for_each_entry_rcu(link, &dev->links.consumers, s_node) {
+-		if (link->flags & DL_FLAG_STATELESS)
++		if (!(link->flags & DL_FLAG_MANAGED))
+ 			continue;
+ 
+ 		while (refcount_dec_not_one(&link->rpm_active))
+Index: linux-pm/include/linux/device.h
+===================================================================
+--- linux-pm.orig/include/linux/device.h
++++ linux-pm/include/linux/device.h
+@@ -829,12 +829,13 @@ enum device_link_state {
+ /*
+  * Device link flags.
+  *
+- * STATELESS: The core won't track the presence of supplier/consumer drivers.
++ * STATELESS: The core will not remove this link automatically.
+  * AUTOREMOVE_CONSUMER: Remove the link automatically on consumer driver unbind.
+  * PM_RUNTIME: If set, the runtime PM framework will use this link.
+  * RPM_ACTIVE: Run pm_runtime_get_sync() on the supplier during link creation.
+  * AUTOREMOVE_SUPPLIER: Remove the link automatically on supplier driver unbind.
+  * AUTOPROBE_CONSUMER: Probe consumer driver automatically after supplier binds.
++ * MANAGED: The core tracks presence of supplier/consumer drivers (internal).
+  */
+ #define DL_FLAG_STATELESS		BIT(0)
+ #define DL_FLAG_AUTOREMOVE_CONSUMER	BIT(1)
+@@ -842,6 +843,7 @@ enum device_link_state {
+ #define DL_FLAG_RPM_ACTIVE		BIT(3)
+ #define DL_FLAG_AUTOREMOVE_SUPPLIER	BIT(4)
+ #define DL_FLAG_AUTOPROBE_CONSUMER	BIT(5)
++#define DL_FLAG_MANAGED			BIT(6)
+ 
+ /**
+  * struct device_link - Device link representation.
+Index: linux-pm/Documentation/driver-api/device_link.rst
+===================================================================
+--- linux-pm.orig/Documentation/driver-api/device_link.rst
++++ linux-pm/Documentation/driver-api/device_link.rst
+@@ -78,8 +78,8 @@ typically deleted in its ``->remove`` ca
+ driver is compiled as a module, the device link is added on module load and
+ orderly deleted on unload.  The same restrictions that apply to device link
+ addition (e.g. exclusion of a parallel suspend/resume transition) apply equally
+-to deletion.  Device links with ``DL_FLAG_STATELESS`` unset (i.e. managed
+-device links) are deleted automatically by the driver core.
++to deletion.  Device links managed by the driver core are deleted automatically
++by it.
+ 
+ Several flags may be specified on device link addition, two of which
+ have already been mentioned above:  ``DL_FLAG_STATELESS`` to express that no
 
 
-On 09.07.2019 07:40, Viresh Kumar wrote:
-> On 08-07-19, 16:11, k.konieczny@partner.samsung.com wrote:
->> From: Kamil Konieczny <k.konieczny@partner.samsung.com>
->>
->> Add enable regulators to dev_pm_opp_set_regulators() and disable
->> regulators to dev_pm_opp_put_regulators(). This prepares for
->> converting exynos-bus devfreq driver to use dev_pm_opp_set_rate().
->>
->> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
->> ---
->>  drivers/opp/core.c | 13 +++++++++++++
->>  1 file changed, 13 insertions(+)
->>
->> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
->> index 0e7703fe733f..947cac452854 100644
->> --- a/drivers/opp/core.c
->> +++ b/drivers/opp/core.c
->> @@ -1580,8 +1580,19 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
->>  	if (ret)
->>  		goto free_regulators;
->>  
->> +	for (i = 0; i < opp_table->regulator_count; i++) {
->> +		ret = regulator_enable(opp_table->regulators[i]);
->> +		if (ret < 0)
->> +			goto disable;
->> +	}
-> 
-> I am wondering on why is this really required as this isn't done for
-> any other platform, probably because the regulators are enabled by
-> bootloader and are always on.
-
-It was not enabled for historical reasons, from design point regualtors
-should be enabled before use.
-
--- 
-Best regards,
-Kamil Konieczny
-Samsung R&D Institute Poland
 
