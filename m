@@ -2,90 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFB86461D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 14:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C40E6470F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 15:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbfGJMVY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 08:21:24 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:37314 "EHLO mx1.redhat.com"
+        id S1726458AbfGJNe1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 09:34:27 -0400
+Received: from mga11.intel.com ([192.55.52.93]:16272 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726411AbfGJMVY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Jul 2019 08:21:24 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 508677573D;
-        Wed, 10 Jul 2019 12:21:24 +0000 (UTC)
-Received: from prarit.bos.redhat.com (prarit-guest.khw1.lab.eng.bos.redhat.com [10.16.200.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D57571713F;
-        Wed, 10 Jul 2019 12:21:23 +0000 (UTC)
-Subject: Re: [PATCH v2] tools/power/x86/intel-speed-select: Add .gitignore
- file
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Arcari <darcari@redhat.com>
-References: <20190708231725.11353-1-prarit@redhat.com>
- <CAHp75VeyUK_ohxPwTg988gXugRh=y5QxT1zhSCmKoG5-CutRnQ@mail.gmail.com>
-From:   Prarit Bhargava <prarit@redhat.com>
-Message-ID: <b0d763a8-7f07-db47-3a99-6bb21db3bb0b@redhat.com>
-Date:   Wed, 10 Jul 2019 08:21:23 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <CAHp75VeyUK_ohxPwTg988gXugRh=y5QxT1zhSCmKoG5-CutRnQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Wed, 10 Jul 2019 12:21:24 +0000 (UTC)
+        id S1725994AbfGJNe1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Jul 2019 09:34:27 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jul 2019 06:34:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,474,1557212400"; 
+   d="scan'208";a="166071632"
+Received: from ygao39-mobl1.ccr.corp.intel.com ([10.255.30.205])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Jul 2019 06:34:23 -0700
+Message-ID: <1562765663.2597.16.camel@intel.com>
+Subject: Re: [PATCH] drivers: thermal: processor_thermal: mark pm function
+ __maybe_unused
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Eduardo Valentin <edubezval@gmail.com>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 10 Jul 2019 21:34:23 +0800
+In-Reply-To: <20190708124743.3585020-1-arnd@arndb.de>
+References: <20190708124743.3585020-1-arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi, Arnd,
 
+thanks for the report.
 
-On 7/9/19 12:39 PM, Andy Shevchenko wrote:
-> On Tue, Jul 9, 2019 at 2:17 AM Prarit Bhargava <prarit@redhat.com> wrote:
->>
->> Add a .gitignore file for build include/ and final binary.
->>
+On 一, 2019-07-08 at 14:47 +0200, Arnd Bergmann wrote:
+> Without CONFIG_PM, we get a harmless warning:
 > 
-> It has improper Cc list (No PDx86, no its maintainers, no LKML, which
-> is also requirement to send patches to PDx86).
-> Please, gather the tags you got and send v2 with properly formed Cc list.
+> drivers/thermal/intel/int340x_thermal/processor_thermal_device.c:446:
+> 12: error: 'proc_thermal_resume' defined but not used [-
+> Werror=unused-function]
+>  static int proc_thermal_resume(struct device *dev)
 > 
-
-The problem is that get_maintainer.pl is throwing an error when I run it on this
-patch so I had to make a guess at the cc list.
-
-ie) Bad divisor in main::vcs_assign: 0
-
-I'll backup a couple of versions of get_maintainer.pl and see if that works.  If
-not, should I just copy the cc list from Srinivas' original patchset?
-
-P.
-
->> Signed-off-by: Prarit Bhargava <prarit@redhat.com>
->> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
->> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
->> Cc: David Arcari <darcari@redhat.com>
->> ---
->>  tools/power/x86/intel-speed-select/.gitignore | 2 ++
->>  1 file changed, 2 insertions(+)
->>  create mode 100644 tools/power/x86/intel-speed-select/.gitignore
->>
->> diff --git a/tools/power/x86/intel-speed-select/.gitignore b/tools/power/x86/intel-speed-select/.gitignore
->> new file mode 100644
->> index 000000000000..f61145925ce9
->> --- /dev/null
->> +++ b/tools/power/x86/intel-speed-select/.gitignore
->> @@ -0,0 +1,2 @@
->> +include/
->> +intel-speed-select
->> --
->> 2.21.0
->>
+> Mark it __maybe_unused to shut up the warning.
 > 
+> Fixes: aaba9791fbb4 ("drivers: thermal: processor_thermal: Read PPCC
+> on resume")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  .../thermal/intel/int340x_thermal/processor_thermal_device.c    | 2
+> +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> index a3210f09f366..5ce639a99330 100644
+> ---
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -443,7 +443,7 @@ static void  proc_thermal_pci_remove(struct
+> pci_dev *pdev)
+>  	pci_disable_device(pdev);
+>  }
+>  
+> -static int proc_thermal_resume(struct device *dev)
+> +static int __maybe_unused proc_thermal_resume(struct device *dev)
+>  {
+>  	struct proc_thermal_device *proc_dev;
+>  
+I'd rather prefer to add #ifdef CONFIG_PM_SLEEP for
+proc_thermal_resume().
+Just like the patch below, what do you think?
+
+thanks,
+rui
+
+From 6c395f66e98c895cf3ebf87c0b2fc63b6a57a196 Mon Sep 17 00:00:00 2001
+From: Zhang Rui <rui.zhang@intel.com>
+Date: Tue, 9 Jul 2019 21:19:12 +0800
+Subject: [PATCH] drivers: thermal: processor_thermal_device: Fix build warning
+
+As a system sleep callback, proc_thermal_resume() should be defined only
+if CONFIG_PM_SLEEP is set.
+
+This fixes a build warning when CONFIG_PM_SLEEP is not set,
+drivers/thermal/intel/int340x_thermal/processor_thermal_device.c:446:12: error: 'proc_thermal_resume' defined but not used [-Werror=unused-function]
+ static int proc_thermal_resume(struct device *dev)
+
+Fixes: aaba9791fbb4 ("drivers: thermal: processor_thermal: Read PPCC on resume")
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/thermal/intel/int340x_thermal/processor_thermal_device.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index a3210f0..77dae1e 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -443,6 +443,7 @@ static void  proc_thermal_pci_remove(struct pci_dev *pdev)
+ 	pci_disable_device(pdev);
+ }
+ 
++#ifdef CONFIG_PM_SLEEP
+ static int proc_thermal_resume(struct device *dev)
+ {
+ 	struct proc_thermal_device *proc_dev;
+@@ -452,6 +453,9 @@ static int proc_thermal_resume(struct device *dev)
+ 
+ 	return 0;
+ }
++#else
++#define proc_thermal_resume NULL
++#endif
+ 
+ static SIMPLE_DEV_PM_OPS(proc_thermal_pm, NULL, proc_thermal_resume);
+ 
+-- 
+2.7.4
+
