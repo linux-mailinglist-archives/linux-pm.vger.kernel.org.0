@@ -2,98 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D25664506
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 12:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DCF6450A
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 12:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfGJKPG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 06:15:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56028 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726281AbfGJKPG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Jul 2019 06:15:06 -0400
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AAADD20861;
-        Wed, 10 Jul 2019 10:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562753705;
-        bh=FKpiA/emhKXUOAPvuAJ5oh3C3NX2rCFMH+btriqrd4E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=xWsc9WLv9uXi+kTm/sQBJC6Gcxs5SxUhmTBPZGMtgW6lJzrVfAdyorhbft7xaFAbL
-         AgdDhUNdVXew3QRvl0mZO1y3DthJZ0L/AoSun2BGegLwZrrGgnFcZE4XKtjQvSZ5+r
-         T6LfnYa6wKz0ZydjRFYLeFVNiPuGW48f18Uj8N0Q=
-Received: by mail-lj1-f181.google.com with SMTP id h10so1520713ljg.0;
-        Wed, 10 Jul 2019 03:15:04 -0700 (PDT)
-X-Gm-Message-State: APjAAAVQxdRoZYVnURzSBtDbJZqcuArvSrrEXadiK6eckkQPUAKeF7YV
-        3Ie/qN/2qe4CeMaty2bfG9Ybju3IP5N0zvxBeOE=
-X-Google-Smtp-Source: APXvYqzFBP1tdwwgtZ/3RtfqPPV8drCmzRWKuK+JH6Dw5x+7dbZyN+IaqrSobdz3ZdFMyRjarSxqkEs4HDySwe+JxPc=
-X-Received: by 2002:a2e:7818:: with SMTP id t24mr13443634ljc.210.1562753702877;
- Wed, 10 Jul 2019 03:15:02 -0700 (PDT)
+        id S1727294AbfGJKPU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 06:15:20 -0400
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:52425 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727290AbfGJKPU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 06:15:20 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 63671220CF;
+        Wed, 10 Jul 2019 06:15:19 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 10 Jul 2019 06:15:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=nW+C5pL8jnkUnl7RK
+        EAE7WuKZMkZkLjK79SntKeVd0I=; b=g02Q3VmNDooAi+iFjWRURSP9VDw+LI770
+        v8Ka11hzFtKMNjWU+aXrkXLyfSfp0CIgXbXygry6d0PnVKnWgqn3ILvwyTF3xKs0
+        //YiEyZuaW5qHE8vTlus5KgVzQwOEuiFYn9IpiNl8ylDqGZfqoVYu6ERZcnn3wRS
+        Dy46aLnVMSqdMSHpnlDldhJD0WQ2s0rE7QDeMeWoyxXPAKgq38T/Oqc26593doxR
+        OJnukOR48JRtE5O8kg3kEqxldbaC5IfTJTjL8hlD60Gwhduk8VnPJrF6AZaOWssd
+        GOG1+d92uyuHR4/4l6K5aRp4XE0WSZlmI3KMYcZD6YB8E3EKJjpKA==
+X-ME-Sender: <xms:trolXcIVWkKtJ5SgZMujMYPrQCRTI4KqHYQe3oSpBm-0gGdRe9Pilg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrgeeigddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghh
+    rdhorhhgqeenucfkphepudelfedrgeejrdduieehrddvhedunecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhgnecuvehluhhsthgvrhfuihii
+    vgeptd
+X-ME-Proxy: <xmx:trolXbsmZxrbti-wNBqoQc1m3ueognm2N_WRhVx0SJoSDR2QkShHSg>
+    <xmx:trolXTLQm3inJuyZ02ge9T7-9XDnB9mlLOFcYRIrET2hlTesF9-QXg>
+    <xmx:trolXY9fSCPQMTrRkwBeCASfW-o7SlVlnx4ER8UPhkSzfI6cDgvQ8w>
+    <xmx:t7olXY7zKKo1DE_y3eNVjR14k_nzlJ6OD_29h0z6Hw8SEKNAyyU3HA>
+Received: from splinter.mtl.com (unknown [193.47.165.251])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 4F1CB380074;
+        Wed, 10 Jul 2019 06:15:17 -0400 (EDT)
+From:   Ido Schimmel <idosch@idosch.org>
+To:     linux-pm@vger.kernel.org
+Cc:     rui.zhang@intel.com, edubezval@gmail.com,
+        daniel.lezcano@linaro.org, jiri@mellanox.com, vadimp@mellanox.com,
+        mlxsw@mellanox.com, Ido Schimmel <idosch@mellanox.com>
+Subject: [PATCH] thermal: Fix use-after-free when unregistering thermal zone device
+Date:   Wed, 10 Jul 2019 13:14:52 +0300
+Message-Id: <20190710101452.32748-1-idosch@idosch.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <CGME20190708141158eucas1p17d4b50978dbe1e5c876ce6d8f433cc95@eucas1p1.samsung.com>
- <20190708141140.24379-1-k.konieczny@partner.samsung.com> <CAJKOXPd+UZ2MdrTVfBv5UYzK5LgKNQHUFzRbRNeq271EaDSchg@mail.gmail.com>
- <91f65527-3440-90fd-4096-5824fba1df78@partner.samsung.com>
-In-Reply-To: <91f65527-3440-90fd-4096-5824fba1df78@partner.samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 10 Jul 2019 12:14:51 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPc1rOyFujyWk4HwmQb6YEXd=CEHKwN8AH_pKxk-6CA08w@mail.gmail.com>
-Message-ID: <CAJKOXPc1rOyFujyWk4HwmQb6YEXd=CEHKwN8AH_pKxk-6CA08w@mail.gmail.com>
-Subject: Re: [PATCH 0/3] add coupled regulators for Exynos5422/5800
-To:     Kamil Konieczny <k.konieczny@partner.samsung.com>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 10 Jul 2019 at 12:03, Kamil Konieczny
-<k.konieczny@partner.samsung.com> wrote:
->
-> On 10.07.2019 11:00, Krzysztof Kozlowski wrote:
-> > On Mon, 8 Jul 2019 at 16:12, <k.konieczny@partner.samsung.com> wrote:
-> >>
-> >> From: Kamil Konieczny <k.konieczny@partner.samsung.com>
-> >>
-> >> Hi,
-> >>
-> >> The main purpose of this patch series is to add coupled regulators for
-> >> Exynos5422/5800 to keep constrain on voltage difference between vdd_arm
-> >> and vdd_int to be at most 300mV. In exynos-bus instead of using
-> >> regulator_set_voltage_tol() with default voltage tolerance it should be
-> >> used regulator_set_voltage_triplet() with volatege range, and this is
-> >> already present in opp/core.c code, so it can be reused. While at this,
-> >> move setting regulators into opp/core.
-> >>
-> >> This patchset was tested on Odroid XU3.
-> >>
-> >> The last patch depends on two previous.
-> >
-> > So you break the ABI... I assume that patchset maintains
-> > bisectability. However there is no explanation why ABI break is needed
-> > so this does not look good...
->
-> Patchset is bisectable, first one is simple and do not depends on others,
-> second depends on first, last depends on first and second.
->
-> What do you mean by breaking ABI ?
+From: Ido Schimmel <idosch@mellanox.com>
 
-I mean, that Linux kernel stops working with existing DTBs... or am I
-mistaken and there is no problem? Maybe I confused the order...
+thermal_zone_device_unregister() cancels the delayed work that polls the
+thermal zone, but it does not wait for it to finish. This is racy with
+respect to the freeing of the thermal zone device, which can result in a
+use-after-free [1].
 
-Best regards,
-Krzysztof
+Fix this by waiting for the delayed work to finish before freeing the
+thermal zone device. Note that thermal_zone_device_set_polling() is
+never invoked from an atomic context, so it is safe to call
+cancel_delayed_work_sync() that can block.
+
+[1]
+[  +0.002221] ==================================================================
+[  +0.000064] BUG: KASAN: use-after-free in __mutex_lock+0x1076/0x11c0
+[  +0.000016] Read of size 8 at addr ffff8881e48e0450 by task kworker/1:0/17
+
+[  +0.000023] CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.2.0-rc6-custom-02495-g8e73ca3be4af #1701
+[  +0.000010] Hardware name: Mellanox Technologies Ltd. MSN2100-CB2FO/SA001017, BIOS 5.6.5 06/07/2016
+[  +0.000016] Workqueue: events_freezable_power_ thermal_zone_device_check
+[  +0.000012] Call Trace:
+[  +0.000021]  dump_stack+0xa9/0x10e
+[  +0.000020]  print_address_description.cold.2+0x9/0x25e
+[  +0.000018]  __kasan_report.cold.3+0x78/0x9d
+[  +0.000016]  kasan_report+0xe/0x20
+[  +0.000016]  __mutex_lock+0x1076/0x11c0
+[  +0.000014]  step_wise_throttle+0x72/0x150
+[  +0.000018]  handle_thermal_trip+0x167/0x760
+[  +0.000019]  thermal_zone_device_update+0x19e/0x5f0
+[  +0.000019]  process_one_work+0x969/0x16f0
+[  +0.000017]  worker_thread+0x91/0xc40
+[  +0.000014]  kthread+0x33d/0x400
+[  +0.000015]  ret_from_fork+0x3a/0x50
+
+[  +0.000020] Allocated by task 1:
+[  +0.000015]  save_stack+0x19/0x80
+[  +0.000015]  __kasan_kmalloc.constprop.4+0xc1/0xd0
+[  +0.000014]  kmem_cache_alloc_trace+0x152/0x320
+[  +0.000015]  thermal_zone_device_register+0x1b4/0x13a0
+[  +0.000015]  mlxsw_thermal_init+0xc92/0x23d0
+[  +0.000014]  __mlxsw_core_bus_device_register+0x659/0x11b0
+[  +0.000013]  mlxsw_core_bus_device_register+0x3d/0x90
+[  +0.000013]  mlxsw_pci_probe+0x355/0x4b0
+[  +0.000014]  local_pci_probe+0xc3/0x150
+[  +0.000013]  pci_device_probe+0x280/0x410
+[  +0.000013]  really_probe+0x26a/0xbb0
+[  +0.000013]  driver_probe_device+0x208/0x2e0
+[  +0.000013]  device_driver_attach+0xfe/0x140
+[  +0.000013]  __driver_attach+0x110/0x310
+[  +0.000013]  bus_for_each_dev+0x14b/0x1d0
+[  +0.000013]  driver_register+0x1c0/0x400
+[  +0.000015]  mlxsw_sp_module_init+0x5d/0xd3
+[  +0.000014]  do_one_initcall+0x239/0x4dd
+[  +0.000013]  kernel_init_freeable+0x42b/0x4e8
+[  +0.000012]  kernel_init+0x11/0x18b
+[  +0.000013]  ret_from_fork+0x3a/0x50
+
+[  +0.000015] Freed by task 581:
+[  +0.000013]  save_stack+0x19/0x80
+[  +0.000014]  __kasan_slab_free+0x125/0x170
+[  +0.000013]  kfree+0xf3/0x310
+[  +0.000013]  thermal_release+0xc7/0xf0
+[  +0.000014]  device_release+0x77/0x200
+[  +0.000014]  kobject_put+0x1a8/0x4c0
+[  +0.000014]  device_unregister+0x38/0xc0
+[  +0.000014]  thermal_zone_device_unregister+0x54e/0x6a0
+[  +0.000014]  mlxsw_thermal_fini+0x184/0x35a
+[  +0.000014]  mlxsw_core_bus_device_unregister+0x10a/0x640
+[  +0.000013]  mlxsw_devlink_core_bus_device_reload+0x92/0x210
+[  +0.000015]  devlink_nl_cmd_reload+0x113/0x1f0
+[  +0.000014]  genl_family_rcv_msg+0x700/0xee0
+[  +0.000013]  genl_rcv_msg+0xca/0x170
+[  +0.000013]  netlink_rcv_skb+0x137/0x3a0
+[  +0.000012]  genl_rcv+0x29/0x40
+[  +0.000013]  netlink_unicast+0x49b/0x660
+[  +0.000013]  netlink_sendmsg+0x755/0xc90
+[  +0.000013]  __sys_sendto+0x3de/0x430
+[  +0.000013]  __x64_sys_sendto+0xe2/0x1b0
+[  +0.000013]  do_syscall_64+0xa4/0x4d0
+[  +0.000013]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+[  +0.000017] The buggy address belongs to the object at ffff8881e48e0008
+               which belongs to the cache kmalloc-2k of size 2048
+[  +0.000012] The buggy address is located 1096 bytes inside of
+               2048-byte region [ffff8881e48e0008, ffff8881e48e0808)
+[  +0.000007] The buggy address belongs to the page:
+[  +0.000012] page:ffffea0007923800 refcount:1 mapcount:0 mapping:ffff88823680d0c0 index:0x0 compound_mapcount: 0
+[  +0.000020] flags: 0x200000000010200(slab|head)
+[  +0.000019] raw: 0200000000010200 ffffea0007682008 ffffea00076ab808 ffff88823680d0c0
+[  +0.000016] raw: 0000000000000000 00000000000d000d 00000001ffffffff 0000000000000000
+[  +0.000007] page dumped because: kasan: bad access detected
+
+[  +0.000012] Memory state around the buggy address:
+[  +0.000012]  ffff8881e48e0300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[  +0.000012]  ffff8881e48e0380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[  +0.000012] >ffff8881e48e0400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[  +0.000008]                                                  ^
+[  +0.000012]  ffff8881e48e0480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[  +0.000012]  ffff8881e48e0500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[  +0.000007] ==================================================================
+
+Fixes: b1569e99c795 ("ACPI: move thermal trip handling to generic thermal layer")
+Reported-by: Jiri Pirko <jiri@mellanox.com>
+Signed-off-by: Ido Schimmel <idosch@mellanox.com>
+Acked-by: Jiri Pirko <jiri@mellanox.com>
+---
+ drivers/thermal/thermal_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 46cfb7de4eb2..f87f462c60c1 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -298,7 +298,7 @@ static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
+ 				 &tz->poll_queue,
+ 				 msecs_to_jiffies(delay));
+ 	else
+-		cancel_delayed_work(&tz->poll_queue);
++		cancel_delayed_work_sync(&tz->poll_queue);
+ }
+ 
+ static void monitor_thermal_zone(struct thermal_zone_device *tz)
+-- 
+2.20.1
+
