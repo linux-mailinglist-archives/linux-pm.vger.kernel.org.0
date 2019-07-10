@@ -2,108 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6273364160
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 08:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42D664338
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 10:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbfGJGa3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 02:30:29 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:37560 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726192AbfGJGa3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 02:30:29 -0400
-Received: by mail-pl1-f194.google.com with SMTP id b3so691628plr.4
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jul 2019 23:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=L2UuFu7XqMvM2r1vOn9PSk+syiHes80VSZWRI0KeN7o=;
-        b=csvKeo3AFSwF0zvXaa7Nb84I6Hp1Rnfm2HabCf4Q/r/5wo6bjIb9wsBIb5ooDOBTIK
-         diX/esesvK4hjIMo90u1BW6YAVin333lMooqSuIgDYkAzIrMou7LtcJiWK2phGIYvDwL
-         TR1Yyge867FIL67j2G34XWWRJ7rxO5zUk6ZTnPvQYe2XttLceLcHwn5RuK7W3HMzAlfs
-         aScdN/JD0V6vAHfy5681hhYzhVbZx8mfR0eePYuhL+xHfeMgosR7nc9DRa1blCrJSz43
-         Mu7zXf1IIGpdVvnrRWjHHiLja5rNXPJ2wXkhDRoyfSArqQq1Pe7TNZ1FHlmzsBPbA0he
-         nQPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=L2UuFu7XqMvM2r1vOn9PSk+syiHes80VSZWRI0KeN7o=;
-        b=NZ3ZI8wo/84pHDA4jOVEdgpVNZTwSjQabbxwqqVc5NrxpKWHFU9iuBSmJTlrZFFgvs
-         bjLnM3aj262d2HzU4bB7GxINSTgznv9TKVEATaSwXxCUVUnkJjk35CyNH1CVqJG65gHR
-         MC8mHU0FJmCvGHrjFOZAbX8QWl93iFVpDkxMhVHWX5UYReVVh+3KkWsioUc6/6HqNsUx
-         2RcGsFAYn+xzXfx9qOrAUoXB0Q6NU5GlF9cyzWFthC6t4mpLyt4p63kuvzOA+k14G2RF
-         /UvyVwJ5OmqvKp6Gs/2icCOl4GuEmsq+bdH9SLRsds24/jVRR0ZhLRXYbqxOR7MTyCrh
-         LJ4Q==
-X-Gm-Message-State: APjAAAXF9oQMk2xj07CHlt0XfJhHz0NeqG5nFZRQyUFQKV9EvXYZ4GUG
-        KhPkFhu67UQVoks7NBPxVsROAw==
-X-Google-Smtp-Source: APXvYqykauyIqhVaUB25f/INL57OtdOvUb7VF5uzrbYjjTM0qNLZZF8nHJGHW0OIfH2Lpbu3ikeBTg==
-X-Received: by 2002:a17:902:b949:: with SMTP id h9mr28473553pls.120.1562740228543;
-        Tue, 09 Jul 2019 23:30:28 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id p68sm1979337pfb.80.2019.07.09.23.30.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Jul 2019 23:30:27 -0700 (PDT)
-Date:   Wed, 10 Jul 2019 12:00:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        id S1727310AbfGJIBy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 04:01:54 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:34472 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727263AbfGJIBx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 04:01:53 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 61F2660A0A; Wed, 10 Jul 2019 08:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1562745712;
+        bh=rIznZf2yt/Ju/WZoNOrCPJnbSsTN0CABeMRKJ/LlwMs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=g6Msjmv2auj6CvjJeRycXXuGhTA9FVtG+NrOhe0O3C2CHr1GjjpbmSzb/nMrlbH0W
+         5VvyCDBOOBDS9QwoV6X1Ym/QVhU2b5Q67cxQLEqxNlgJh+LZcNXzPGeE7u1bXsAJqU
+         vkcnRDHZaU823rbMVz+75K/KAeXw1+fy9i5CNoE4=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.79.43.230] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 531596049C;
+        Wed, 10 Jul 2019 08:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1562745711;
+        bh=rIznZf2yt/Ju/WZoNOrCPJnbSsTN0CABeMRKJ/LlwMs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=O7c4ziHXlTo+KkiE96l2mLv/AOzWVeXqtnza4PsbFMSXJjNvtnH++gOoZ9yVdK53n
+         r9weiq21+0i9pPMh4cy5cHh0IxiTIgxxCJbDh6WQD8jyxQWYvHgFWgpasf36EQcWF4
+         Z/F9LCcKwNfllm0bxjzcOieFh6wt/ZXh7jnrFwbo=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 531596049C
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+Subject: Re: [PATCH RFC 2/9] OPP: Export a number of helpers to prevent code
+ duplication
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, andy.gross@linaro.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-msm@vger.kernel.org, jorge.ramirez-ortiz@linaro.org,
-        sboyd@kernel.org, vireshk@kernel.org, bjorn.andersson@linaro.org,
-        ulf.hansson@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/13] cpufreq: qcom: Refactor the driver to make it
- easier to extend
-Message-ID: <20190710063026.7yyoxjsqp2ck3z6n@vireshk-i7>
-References: <20190705095726.21433-1-niklas.cassel@linaro.org>
- <20190705095726.21433-5-niklas.cassel@linaro.org>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
+        david.brown@linaro.org, Mark Rutland <mark.rutland@arm.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-msm-owner@vger.kernel.org, devicetree@vger.kernel.org,
+        rnayak@codeaurora.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-pm@vger.kernel.org, evgreen@chromium.org,
+        daidavid1@codeaurora.org, dianders@chromium.org
+References: <20190328152822.532-1-sibis@codeaurora.org>
+ <20190328152822.532-3-sibis@codeaurora.org>
+ <CAJMQK-gcBC=ZyscuHzOe4t6xQzviTYo9W9_DSsppoaTZuiEOcw@mail.gmail.com>
+From:   Sibi Sankar <sibis@codeaurora.org>
+Message-ID: <474d4dba-581c-c57b-f510-dca5ba7fdce2@codeaurora.org>
+Date:   Wed, 10 Jul 2019 13:31:24 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190705095726.21433-5-niklas.cassel@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAJMQK-gcBC=ZyscuHzOe4t6xQzviTYo9W9_DSsppoaTZuiEOcw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-07-19, 11:57, Niklas Cassel wrote:
-> +	drv->opp_tables = kcalloc(num_possible_cpus(), sizeof(*drv->opp_tables),
-> +				  GFP_KERNEL);
-> +	if (!drv->opp_tables) {
-> +		ret = -ENOMEM;
-> +		goto free_drv;
-> +	}
->  
->  	for_each_possible_cpu(cpu) {
->  		cpu_dev = get_cpu_device(cpu);
-> @@ -166,19 +195,23 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
->  			goto free_opp;
->  		}
->  
-> -		opp_tables[cpu] = dev_pm_opp_set_supported_hw(cpu_dev,
-> -							      &versions, 1);
-> -		if (IS_ERR(opp_tables[cpu])) {
-> -			ret = PTR_ERR(opp_tables[cpu]);
-> -			dev_err(cpu_dev, "Failed to set supported hardware\n");
-> -			goto free_opp;
-> +		if (drv->data->get_version) {
+Hi Hsin-Yi,
 
-Why depend on get_version here ? The OPP table is already allocated
-unconditionally.
+I'll get this addressed in the next re-spin which I plan to post by
+end of this week.
 
-> +			drv->opp_tables[cpu] =
-> +				dev_pm_opp_set_supported_hw(cpu_dev,
-> +							    &drv->versions, 1);
-> +			if (IS_ERR(drv->opp_tables[cpu])) {
-> +				ret = PTR_ERR(drv->opp_tables[cpu]);
-> +				dev_err(cpu_dev,
-> +					"Failed to set supported hardware\n");
-> +				goto free_opp;
-> +			}
->  		}
->  	}
+On 7/8/19 8:58 AM, Hsin-Yi Wang wrote:
+> On Thu, Mar 28, 2019 at 3:28 PM Sibi Sankar <sibis@codeaurora.org> wrote:
+> 
+>> +
+>> +/* The caller must call dev_pm_opp_put() after the OPP is used */
+>> +struct dev_pm_opp *dev_pm_opp_find_opp_of_np(struct opp_table *opp_table,
+>> +                                            struct device_node *opp_np)
+>> +{
+>> +       return _find_opp_of_np(opp_table, opp_np);
+>> +}
+> Hi Sibi,
+> 
+> Though this is not the latest version, we've seen following issue:
+> 
+> We would get lockdep warnings on this:
+> [   79.068957] Call trace:
+> [   79.071396]  _find_opp_of_np+0xa0/0xa8
+> [   79.075136]  dev_pm_opp_find_opp_of_np+0x24/0x30
+> [   79.079744]  devfreq_passive_event_handler+0x304/0x51c
+> [   79.084872]  devfreq_add_device+0x368/0x434
+> [   79.089046]  devm_devfreq_add_device+0x68/0xb0
+> [   79.093480]  mtk_cci_devfreq_probe+0x108/0x158
+> [   79.097915]  platform_drv_probe+0x80/0xb0
+> [   79.101915]  really_probe+0x1b4/0x28c
+> [   79.105568]  driver_probe_device+0x64/0xfc
+> [   79.109655]  __driver_attach+0x94/0xcc
+> [   79.113395]  bus_for_each_dev+0x84/0xcc
+> [   79.117221]  driver_attach+0x2c/0x38
+> [   79.120788]  bus_add_driver+0x120/0x1f4
+> [   79.124614]  driver_register+0x64/0xf8
+> [   79.128355]  __platform_driver_register+0x4c/0x58
+> [   79.133049]  mtk_cci_devfreq_init+0x1c/0x24
+> [   79.137224]  do_one_initcall+0x1c0/0x3e0
+> [   79.141138]  do_initcall_level+0x1f4/0x224
+> [   79.145225]  do_basic_setup+0x34/0x4c
+> [   79.148878]  kernel_init_freeable+0x10c/0x194
+> [   79.153225]  kernel_init+0x14/0x100
+> [   79.156705]  ret_from_fork+0x10/0x18
+> [   79.160270] irq event stamp: 238006
+> [   79.163750] hardirqs last  enabled at (238005):
+> [<ffffffa71fdea0a4>] _raw_spin_unlock_irqrestore+0x40/0x84
+> [   79.173391] hardirqs last disabled at (238006):
+> [<ffffffa71f480e78>] do_debug_exception+0x70/0x198
+> [   79.182337] softirqs last  enabled at (237998):
+> [<ffffffa71f48165c>] __do_softirq+0x45c/0x4a4
+> [   79.190850] softirqs last disabled at (237987):
+> [<ffffffa71f4bc0d4>] irq_exit+0xd8/0xf8
+> [   79.198842] ---[ end trace 0e66a55077a0abab ]---
+> 
+> In _find_opp_of_np()[1], there's
+> lockdep_assert_held(&opp_table_lock);
+> 
+> [1] https://elixir.bootlin.com/linux/latest/source/drivers/opp/of.c#L75
+> 
+> But in governor passive.c#cpufreq_passive_register(), it call
+> dev_pm_opp_find_opp_of_np() directly, so it wouldn't access
+> opp_table_lock lock.
+> 
+> Another similar place is in dev_pm_opp_of_add_table(), most devfreq
+> would call this to get opp table.
+> dev_pm_opp_of_add_table
+>   -->   _opp_add_static_v2
+>      -->    _of_opp_alloc_required_opps  // would goes here if opp
+> table contains "required-opps" property.
+>          -->    _find_opp_of_np
+> cpufreq-map governor needs devfreq to have "required-opps" property.
+> So it would also trigger above lockdep warning.
+> 
+> 
+> The question is: Is lockdep_assert_held(&opp_table_lock); needed in
+> above use cases? Since they don't need to modify device and opp lists.
+> 
+> Thanks
+> 
+> 
+> 
 
 -- 
-viresh
+Qualcomm Innovation Center, Inc.
+Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
