@@ -2,61 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9029F643CB
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 10:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE85E64409
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 11:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727254AbfGJItS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 04:49:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38916 "EHLO mail.kernel.org"
+        id S1727709AbfGJJBI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 05:01:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726097AbfGJItS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Jul 2019 04:49:18 -0400
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+        id S1727663AbfGJJBH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Jul 2019 05:01:07 -0400
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 581A820838;
-        Wed, 10 Jul 2019 08:49:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29592208C4;
+        Wed, 10 Jul 2019 09:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562748557;
-        bh=/GarYdrcMxeM5bHOVXb/82Dx6rrGHST40qsOH/JO7dI=;
+        s=default; t=1562749266;
+        bh=wJ4UybqhWF4GHysL0HzNpEbCXWrP9PdCHa4n5QXVa+k=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VpAqo77AKMV0bnMMupSDKh4Js/m9xbV225DTbux5MdPaWX4bZwypgap2jTzMX11Di
-         z3krr4QOcAiW3/wVookdooY/x2bEdTj15IXoGZ8X6IRc7Tt1KiNy6/8w19RQfn1zcy
-         A3t0NOUr9U1xidVw0Yi2ARyZ2dvhDc0d/EOq8ZdU=
-Received: by mail-lj1-f177.google.com with SMTP id m23so1219029lje.12;
-        Wed, 10 Jul 2019 01:49:17 -0700 (PDT)
-X-Gm-Message-State: APjAAAUTfmrXDcSwdOZWZgY0MzR4bOmnCHr3/ijSKLb8Rzkzk3aBIh9N
-        e8uabibf50BcLHb6cd1VJii1aXA+LX0NRbrzYKk=
-X-Google-Smtp-Source: APXvYqwyTVlsHSdLLpsPEWVoFz6SokmQ/rj1S3g7ZqViyJPN5NS/AHb07zJ/Ca73uhgL0PCvE621dnCe4KDXi6u+k/M=
-X-Received: by 2002:a2e:3008:: with SMTP id w8mr17317554ljw.13.1562748555575;
- Wed, 10 Jul 2019 01:49:15 -0700 (PDT)
+        b=iw+A8s5irXEma3Z1l7JBvR7lj9Z4gfTmGjpyXPgCDIRUztCLU1SSaxwjc7MFjyLDV
+         pdcoYxskBQ0VQ1hd6Ttl0HP5tscMckWqQuwCSUfwE5YNKCV+tTCvP5Rr0lqPHSQnb7
+         LAH9dCfPgkFRLpqC5Ja379xIVqunhX3veJB1GPvQ=
+Received: by mail-lj1-f175.google.com with SMTP id k18so1262342ljc.11;
+        Wed, 10 Jul 2019 02:01:06 -0700 (PDT)
+X-Gm-Message-State: APjAAAWhTp/gfefqiYVGeV6LDljaYA9GjVOns7+DvZ94QEr4hFropKqQ
+        Mwfb0hteC4qIIc1zMeSjcV4vZlJ3Zo/K/QM453w=
+X-Google-Smtp-Source: APXvYqySTqN+a0Pd632KuRg+HHS06nuFlFkBnJ+6eD7MYISsnc9zgvNILpGXeTB3FUo87vj9BNr4HWlVIikw8EUIrzQ=
+X-Received: by 2002:a2e:980a:: with SMTP id a10mr14216019ljj.40.1562749264412;
+ Wed, 10 Jul 2019 02:01:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190705113751.18116-1-angus@akkea.ca>
-In-Reply-To: <20190705113751.18116-1-angus@akkea.ca>
+References: <CGME20190708141158eucas1p17d4b50978dbe1e5c876ce6d8f433cc95@eucas1p1.samsung.com>
+ <20190708141140.24379-1-k.konieczny@partner.samsung.com>
+In-Reply-To: <20190708141140.24379-1-k.konieczny@partner.samsung.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 10 Jul 2019 10:49:04 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfWdUuidxSFhRptXaDEH=zkJOcY8FrLjR-nYOpF1eYPbg@mail.gmail.com>
-Message-ID: <CAJKOXPfWdUuidxSFhRptXaDEH=zkJOcY8FrLjR-nYOpF1eYPbg@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: bq25890_charger: Add the BQ25895 part
-To:     "Angus Ainslie (Purism)" <angus@akkea.ca>
-Cc:     angus.ainslie@puri.sm, Sebastian Reichel <sre@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 10 Jul 2019 11:00:53 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPd+UZ2MdrTVfBv5UYzK5LgKNQHUFzRbRNeq271EaDSchg@mail.gmail.com>
+Message-ID: <CAJKOXPd+UZ2MdrTVfBv5UYzK5LgKNQHUFzRbRNeq271EaDSchg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] add coupled regulators for Exynos5422/5800
+To:     k.konieczny@partner.samsung.com
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 5 Jul 2019 at 13:38, Angus Ainslie (Purism) <angus@akkea.ca> wrote:
+On Mon, 8 Jul 2019 at 16:12, <k.konieczny@partner.samsung.com> wrote:
 >
-> The BQ25895 is almost identical to the BQ25890.
+> From: Kamil Konieczny <k.konieczny@partner.samsung.com>
 >
-> Signed-off-by: Angus Ainslie (Purism) <angus@akkea.ca>
-> ---
->  drivers/power/supply/bq25890_charger.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+> Hi,
+>
+> The main purpose of this patch series is to add coupled regulators for
+> Exynos5422/5800 to keep constrain on voltage difference between vdd_arm
+> and vdd_int to be at most 300mV. In exynos-bus instead of using
+> regulator_set_voltage_tol() with default voltage tolerance it should be
+> used regulator_set_voltage_triplet() with volatege range, and this is
+> already present in opp/core.c code, so it can be reused. While at this,
+> move setting regulators into opp/core.
+>
+> This patchset was tested on Odroid XU3.
+>
+> The last patch depends on two previous.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+So you break the ABI... I assume that patchset maintains
+bisectability. However there is no explanation why ABI break is needed
+so this does not look good...
 
 Best regards,
 Krzysztof
+
+>
+> Regards,
+> Kamil
+>
+> Kamil Konieczny (2):
+>   opp: core: add regulators enable and disable
+>   devfreq: exynos-bus: convert to use dev_pm_opp_set_rate()
+>
+> Marek Szyprowski (1):
+>   ARM: dts: exynos: add initial data for coupled regulators for
+>     Exynos5422/5800
+>
+>  arch/arm/boot/dts/exynos5420.dtsi             |  34 ++--
+>  arch/arm/boot/dts/exynos5422-odroid-core.dtsi |   4 +
+>  arch/arm/boot/dts/exynos5800-peach-pi.dts     |   4 +
+>  arch/arm/boot/dts/exynos5800.dtsi             |  32 ++--
+>  drivers/devfreq/exynos-bus.c                  | 172 +++++++-----------
+>  drivers/opp/core.c                            |  13 ++
+>  6 files changed, 120 insertions(+), 139 deletions(-)
+>
+> --
+> 2.22.0
+>
