@@ -2,85 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD30F64412
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 11:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB0564436
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 11:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727626AbfGJJC1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 05:02:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46824 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727624AbfGJJC1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Jul 2019 05:02:27 -0400
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78C0D2084B;
-        Wed, 10 Jul 2019 09:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562749346;
-        bh=grJo9qA0dVCvVT51OK6PLtYRTvoyCGPyB+MacpINhxM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VY/CJTr0YtoB7QyD/0SL+E4YfwX770XgrKkTWfc5FB/PhxVYHVdUYQ31Q5dXtwoGC
-         g9FIGr5uPL4kSxt4grGkGSry9UUUsW4hWOyjl30yu6u1TsXdAug9GICmHEACvlEtJO
-         6XHenRQPf22/7kwmHJJ2CFrHG0WFvQ+mqSfuFhEM=
-Received: by mail-lj1-f175.google.com with SMTP id m8so1284614lji.7;
-        Wed, 10 Jul 2019 02:02:26 -0700 (PDT)
-X-Gm-Message-State: APjAAAWIDUntnWq92yaC/qO13RuBzJ02bJd7k33Kth7OTVuhXaQ9y9UA
-        rPlJSQ1icD9Ves6zP8KNQ4kcGNmbkvAAEiYeqv0=
-X-Google-Smtp-Source: APXvYqzMx4eMmr2iBEqLzt/lJp+fw4LN2JFxzaOjxmxUajPpp5qPQbRZZ2FHahr78e8oGOQvAGBAnOPvhsKRPbwqrBw=
-X-Received: by 2002:a2e:7818:: with SMTP id t24mr13258968ljc.210.1562749344748;
- Wed, 10 Jul 2019 02:02:24 -0700 (PDT)
+        id S1727562AbfGJJPq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 05:15:46 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33207 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727600AbfGJJPq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 05:15:46 -0400
+Received: by mail-pl1-f194.google.com with SMTP id c14so924444plo.0
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2019 02:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rs5UUXtAqT5R1zFPxyCMoObdvjFrpKQLMGjYPWWR+M4=;
+        b=xuDFEEprPQrx+CqmzvYG12VzfgLPfkFe3i9dDO9PYcL0P6GlYTHeg9CvVU75INDcfo
+         /B1HQzUaYBWgrSQr4QqLDllN0ySewu+Aucrj6f3rYqEBvPfKYmVNRP1VtkFAgR4Dnnwy
+         wYK2HDv8BW4cYA9i/YOEeHB71zoM56WjB5FZ3hXxzmZPy9bJzNvQoO/LSjPqNJY6AuEs
+         HWjsDnM8bx+F1bAhlBhUe+v3UezS0KGgbT9g5qtl1N77SC8yRCWJCMX7840BuAklPao/
+         IpNwuqYKXD16xdMURhUJ5FuGtedK5vsNiT/iKtpo1WWCo82zqV15hKbbCfwOv35Xraho
+         ACWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rs5UUXtAqT5R1zFPxyCMoObdvjFrpKQLMGjYPWWR+M4=;
+        b=pA2KHVzByuBfqDOrh/Vxjxnh71HSSaVB1YnnIvfJPlMDX5xhfcQVrFBRTPcpLDR4Ma
+         uvdvxvFRgx5fAb+yPyBOarrCKD7TokOgKfLMM6FG+ZawbcwsZ6EdYmudNYoG7bVBb9tF
+         v6IMHqUFdQz7z2awK8uEIMpxQ8Qply9M/bVZ5bY/298kUo+eGZmtkryzNms1VUXQQ8/x
+         4c3gd5/AaTUUQwIK2ZeAPvFbDK4/pgnvmPEJV+RZ4k6eH2kqVNaMnRzUpzHmKpm2ATKb
+         nLWc2mqjMwPWv759Jn25RJ4cfTcXhV6oo9CCHazZEPiAEmPqhWGSAF43iRR2CwLqv0nB
+         iCVw==
+X-Gm-Message-State: APjAAAUubHtDLxbsySZcuaivmDsSMnJ7kJXDJfW+3E8TJxvGMzqrep/C
+        7JOUHgzyHjIonLYyXizgka9zKw==
+X-Google-Smtp-Source: APXvYqzWzbSazZ8noBpanqTTfe68a2rHVdItZzY1mNR00meLwg0PgqjSVl0my2iNIShhy2iItWQJMw==
+X-Received: by 2002:a17:902:b43:: with SMTP id 61mr38449888plq.322.1562750145655;
+        Wed, 10 Jul 2019 02:15:45 -0700 (PDT)
+Received: from localhost ([122.172.28.117])
+        by smtp.gmail.com with ESMTPSA id z20sm3555377pfk.72.2019.07.10.02.15.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Jul 2019 02:15:45 -0700 (PDT)
+Date:   Wed, 10 Jul 2019 14:45:43 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yangtao Li <tiny.windzz@gmail.com>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        robh+dt@kernel.org, mark.rutland@arm.com,
+        maxime.ripard@bootlin.com, wens@csie.org, rjw@rjwysocki.net,
+        davem@davemloft.net, mchehab+samsung@kernel.org,
+        gregkh@linuxfoundation.org, linus.walleij@linaro.org,
+        nicolas.ferre@microchip.com, paulmck@linux.ibm.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND, PATCH v4 0/2] cpufreq: Add sunxi nvmem based CPU
+ scaling driver
+Message-ID: <20190710091543.yqcthfgzmxvku5ws@vireshk-i7>
+References: <20190612162816.31713-1-tiny.windzz@gmail.com>
 MIME-Version: 1.0
-References: <CGME20190708141200eucas1p12bf901a2589efe92b133b357d2cbc57e@eucas1p1.samsung.com>
- <20190708141140.24379-1-k.konieczny@partner.samsung.com> <20190708141140.24379-4-k.konieczny@partner.samsung.com>
-In-Reply-To: <20190708141140.24379-4-k.konieczny@partner.samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 10 Jul 2019 11:02:13 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPd+KKG4kT6OeE4EZkwdhe3i_XoorJm4B+f7OUi09VOUyg@mail.gmail.com>
-Message-ID: <CAJKOXPd+KKG4kT6OeE4EZkwdhe3i_XoorJm4B+f7OUi09VOUyg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ARM: dts: exynos: add initial data for coupled
- regulators for Exynos5422/5800
-To:     k.konieczny@partner.samsung.com
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190612162816.31713-1-tiny.windzz@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 8 Jul 2019 at 16:12, <k.konieczny@partner.samsung.com> wrote:
->
-> From: Marek Szyprowski <m.szyprowski@samsung.com>
->
-> Declare Exynos5422/5800 voltage ranges for opp points for big cpu core and
-> bus wcore and couple their voltage supllies as vdd_arm and vdd_int should
-> be in 300mV range.
->
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
+On 12-06-19, 12:28, Yangtao Li wrote:
+> Add sunxi nvmem based CPU scaling driver, refers to qcom-cpufreq-kryo.
+> 
+> Yangtao Li (2):
+>   cpufreq: Add sun50i nvmem based CPU scaling driver
+>   dt-bindings: cpufreq: Document allwinner,sun50i-h6-operating-points
+> 
+>  .../bindings/opp/sun50i-nvmem-cpufreq.txt     | 167 +++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  drivers/cpufreq/Kconfig.arm                   |  12 +
+>  drivers/cpufreq/Makefile                      |   1 +
+>  drivers/cpufreq/cpufreq-dt-platdev.c          |   2 +
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c        | 226 ++++++++++++++++++
+>  6 files changed, 415 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/opp/sun50i-nvmem-cpufreq.txt
+>  create mode 100644 drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> 
 > ---
->  arch/arm/boot/dts/exynos5420.dtsi             | 34 +++++++++----------
->  arch/arm/boot/dts/exynos5422-odroid-core.dtsi |  4 +++
->  arch/arm/boot/dts/exynos5800-peach-pi.dts     |  4 +++
->  arch/arm/boot/dts/exynos5800.dtsi             | 32 ++++++++---------
->  4 files changed, 41 insertions(+), 33 deletions(-)
+> v4:
+> -Remove sunxi_cpufreq_soc_data structure for now.
+> -Convert to less generic name.
+> -Update soc_bin xlate.
 
-Looks good, I assume bisectability is not affected, because of
-dependency on the driver changes I will take it for next next release
-(v5.5). Assuming that driver change goes into v5.4.
+Applied. Thanks.
 
-Best regards,
-Krzysztof
+I will push it only after 5.3-rc1 is released.
+
+-- 
+viresh
