@@ -2,46 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB1B64B14
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 19:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D5164B20
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jul 2019 19:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbfGJRBQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 13:01:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41144 "EHLO mail.kernel.org"
+        id S1727454AbfGJRCG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 13:02:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41770 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725956AbfGJRBQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 10 Jul 2019 13:01:16 -0400
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+        id S1725832AbfGJRCG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 10 Jul 2019 13:02:06 -0400
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 324EE214AF;
-        Wed, 10 Jul 2019 17:01:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9B41421530;
+        Wed, 10 Jul 2019 17:02:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562778075;
-        bh=TxbpTbFTB6tcLStSvP+aZxI9Q0R2lb9U8jlmNMNQU/k=;
+        s=default; t=1562778124;
+        bh=0A6ZTzIyBGFAfbsBGr87hqddBcLIH2KmFnUom+mbnfo=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=U//DVdj8YeqqMqoEDtUVuLtXzsBFDbK43r7r+8WEjfC1VRimpCIv2wgciP4TBN/1i
-         J5jJLff9enx6GJSi0qmcn2fHltBH8KhSQR0qMHQ+By8LbYiJ+S6vw1yXceuxXgquR4
-         s/H+wScP71uIDBVJapDktsBgEARQrR4kG7GwHgdk=
-Received: by mail-lf1-f51.google.com with SMTP id c9so2115694lfh.4;
-        Wed, 10 Jul 2019 10:01:15 -0700 (PDT)
-X-Gm-Message-State: APjAAAUbiZMC6q38omAa10AuY0h6+6LlHSdDc25ibITfGMHVEIgyfHwf
-        Qs0EIr3P3aLcQH9UpO2e7cmh69r/Jvsdh33m1F0=
-X-Google-Smtp-Source: APXvYqxUw6gRJ6UeOU32AlyJP63sp59JGRy6Bmn26fDc8R5P8j2rXUGuDLf2Ue/ajr7oZwhSM/V1T6YgEMGuHxdFzX0=
-X-Received: by 2002:ac2:4d1c:: with SMTP id r28mr14953327lfi.159.1562778073455;
- Wed, 10 Jul 2019 10:01:13 -0700 (PDT)
+        b=ncRNCFkT6ApV3yScc8XizT9TAOlzHY6AFXesiDEKdFwFYWV/1uFC9l+cI57EMhTTm
+         s/6w+5Uqe14zOlEZ82f5B3CdBj31fd59ATeF0AOKRyIE1Kfa4xGCABJ1rPECrWmXAg
+         5RVVOkut49aSxv6P2kQW5AgijYQYX0WaFLpmJX3I=
+Received: by mail-lj1-f170.google.com with SMTP id p17so2839449ljg.1;
+        Wed, 10 Jul 2019 10:02:04 -0700 (PDT)
+X-Gm-Message-State: APjAAAVEWTWY6lxqcdVOdCa6i08oN2OHSwviAtmIVwSWLIdTVaw/MD3r
+        OGdA7zvqTWw7kaMfiVtQrHdJ4nePwl7x5jBv5kg=
+X-Google-Smtp-Source: APXvYqyWb8b/hmxoFrfvlDWU3IPgcVGPZ13o1DOOgNtiaOiFrg6Fmx//C+LLQngzv8et5vCS3ozwNOYtKG9OjsA1/0k=
+X-Received: by 2002:a2e:8155:: with SMTP id t21mr17900333ljg.80.1562778122981;
+ Wed, 10 Jul 2019 10:02:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190708141158eucas1p17d4b50978dbe1e5c876ce6d8f433cc95@eucas1p1.samsung.com>
- <20190708141140.24379-1-k.konieczny@partner.samsung.com> <CAJKOXPd+UZ2MdrTVfBv5UYzK5LgKNQHUFzRbRNeq271EaDSchg@mail.gmail.com>
- <91f65527-3440-90fd-4096-5824fba1df78@partner.samsung.com>
- <CAJKOXPc1rOyFujyWk4HwmQb6YEXd=CEHKwN8AH_pKxk-6CA08w@mail.gmail.com> <631ffd68-7aab-2483-8799-2019bf3bb444@partner.samsung.com>
-In-Reply-To: <631ffd68-7aab-2483-8799-2019bf3bb444@partner.samsung.com>
+References: <CGME20190708141159eucas1p1751506975ff96a436e14940916623722@eucas1p1.samsung.com>
+ <20190708141140.24379-1-k.konieczny@partner.samsung.com> <20190708141140.24379-2-k.konieczny@partner.samsung.com>
+In-Reply-To: <20190708141140.24379-2-k.konieczny@partner.samsung.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 10 Jul 2019 19:01:02 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcX9vzoK-w16P4LiWjYMwXLUjSvNxdjp6nUXDjAK0rEcw@mail.gmail.com>
-Message-ID: <CAJKOXPcX9vzoK-w16P4LiWjYMwXLUjSvNxdjp6nUXDjAK0rEcw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] add coupled regulators for Exynos5422/5800
-To:     Kamil Konieczny <k.konieczny@partner.samsung.com>
+Date:   Wed, 10 Jul 2019 19:01:51 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPfJ57RBYg_drzALChNqHD_ueVfNc-tAhOdLYdY2A4G2Tg@mail.gmail.com>
+Message-ID: <CAJKOXPfJ57RBYg_drzALChNqHD_ueVfNc-tAhOdLYdY2A4G2Tg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] opp: core: add regulators enable and disable
+To:     k.konieczny@partner.samsung.com
 Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
@@ -62,47 +60,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 10 Jul 2019 at 15:51, Kamil Konieczny
-<k.konieczny@partner.samsung.com> wrote:
+On Mon, 8 Jul 2019 at 16:12, <k.konieczny@partner.samsung.com> wrote:
 >
-> On 10.07.2019 12:14, Krzysztof Kozlowski wrote:
-> > On Wed, 10 Jul 2019 at 12:03, Kamil Konieczny
-> > <k.konieczny@partner.samsung.com> wrote:
-> >>
-> >> On 10.07.2019 11:00, Krzysztof Kozlowski wrote:
-> >>> On Mon, 8 Jul 2019 at 16:12, <k.konieczny@partner.samsung.com> wrote:
-> >>>>
-> >>>> From: Kamil Konieczny <k.konieczny@partner.samsung.com>
-> >>>>
-> >>>> Hi,
-> >>>>
-> >>>> The main purpose of this patch series is to add coupled regulators for
-> >>>> Exynos5422/5800 to keep constrain on voltage difference between vdd_arm
-> >>>> and vdd_int to be at most 300mV. In exynos-bus instead of using
-> >>>> regulator_set_voltage_tol() with default voltage tolerance it should be
-> >>>> used regulator_set_voltage_triplet() with volatege range, and this is
-> >>>> already present in opp/core.c code, so it can be reused. While at this,
-> >>>> move setting regulators into opp/core.
-> >>>>
-> >>>> This patchset was tested on Odroid XU3.
-> >>>>
-> >>>> The last patch depends on two previous.
-> >>>
-> >>> So you break the ABI... I assume that patchset maintains
-> >>> bisectability. However there is no explanation why ABI break is needed
-> >>> so this does not look good...
-> >>
-> >> Patchset is bisectable, first one is simple and do not depends on others,
-> >> second depends on first, last depends on first and second.
-> >>
-> >> What do you mean by breaking ABI ?
-> >
-> > I mean, that Linux kernel stops working with existing DTBs... or am I
-> > mistaken and there is no problem? Maybe I confused the order...
+> From: Kamil Konieczny <k.konieczny@partner.samsung.com>
 >
-> It is not ABI break, it should work with existing DTBs
+> Add enable regulators to dev_pm_opp_set_regulators() and disable
+> regulators to dev_pm_opp_put_regulators(). This prepares for
+> converting exynos-bus devfreq driver to use dev_pm_opp_set_rate().
+>
+> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
+> ---
+>  drivers/opp/core.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 
-Ah, thanks. My misunderstanding then. Looks good.
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
 Best regards,
 Krzysztof
