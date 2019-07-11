@@ -2,227 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35936658B0
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 16:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009176592A
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 16:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728484AbfGKOVb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jul 2019 10:21:31 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:35529 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728429AbfGKOVb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 10:21:31 -0400
-Received: by mail-pg1-f194.google.com with SMTP id s27so3035161pgl.2
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 07:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Awpujz9r/neB3EOz35gTs3qfspG2l2LEyx+qOFwQWtc=;
-        b=itMw7Ebpfg3uMHx+Cp6KsA/Jzruj3ROpTQpU9KFExu0AV2HoMbkQ4B5z08DRqTZ4LZ
-         kd2MMKFWuwP4QkUSsyb7fRuNAYfFPwlgP9KidEUMzEO8/HNsW+pUHEiZnagno2r1/1uW
-         Bjo8poHGBtyy3cYaA0ViTzf9RPiXyGmVyMOfuwdibIqkoHOjOdcL4c1LYOAKWFYuSXjH
-         GdkkY22AYUXcV9hRqzXd4wVDoHHdaYxxndjmYX1x1OiSq+BN/rZYViGkXGyLq6XwRR4O
-         HsgqkdvgeflDjPyOPM07rlJTP8EkWvCrhlJfx3i8B2kKgtrQK4muI0eWSOdKkCHnawZj
-         a5Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Awpujz9r/neB3EOz35gTs3qfspG2l2LEyx+qOFwQWtc=;
-        b=keCYOTAtmolpZpKji1/tsnc/6+GgFp53L+IxZR0r3/qWpuAU9MrOhVP7+aQwRol4b/
-         +2e+JY2O0TpnyI2dHKzI5b27XW2lKYAii24ei4EgMDlkgALAbuowUZNmUKQQhEf/faZC
-         /t22VIVkL56cIpuYyCzdJqhohnOM7JbnTX4GJrT2W+PCjIim0olYvUHB0bhxyJwy2xLN
-         C8vRHPmQTuxvht5mwSRwPqR7GKg7EJ2O15wuGTTIiGiLyXxGCu+pu7xsk9rUkQzkQPVa
-         MSAJ398DB1iPNLXnqpscCQ53EsWN+8qEMPhYMX5Cgg4zAhLuwDUGm9aFUP19DOtb2cZk
-         sP+w==
-X-Gm-Message-State: APjAAAXXSYK7s+a22j1BeSUy3rnZe9fozyhmlIDXId7xXC1qJUyIoMoz
-        Hr+lstJhoZkwCFTrUJzWhcwR2Q==
-X-Google-Smtp-Source: APXvYqwXCzJ0oJtitLVGfwHJo2XK58B5/l/357wPbMNsJfi7bE/SM5jnO449QeEKT1JYb29a4ctIEA==
-X-Received: by 2002:a63:5d54:: with SMTP id o20mr4769342pgm.413.1562854889992;
-        Thu, 11 Jul 2019 07:21:29 -0700 (PDT)
-Received: from localhost ([49.248.58.252])
-        by smtp.gmail.com with ESMTPSA id q4sm5408674pjq.27.2019.07.11.07.21.28
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Jul 2019 07:21:29 -0700 (PDT)
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH v2] PM: QoS: Get rid of unused flags
-Date:   Thu, 11 Jul 2019 19:51:25 +0530
-Message-Id: <e9e7bc3be3b51e68ae1a0f934c3724bd86f5f9af.1562854650.git.amit.kucheria@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1562854650.git.amit.kucheria@linaro.org>
-References: <cover.1562854650.git.amit.kucheria@linaro.org>
+        id S1728553AbfGKOlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jul 2019 10:41:12 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44706 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728340AbfGKOlM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 10:41:12 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6BEWtnW005678
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 10:41:11 -0400
+Received: from e32.co.us.ibm.com (e32.co.us.ibm.com [32.97.110.150])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tp5tec41q-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 10:41:10 -0400
+Received: from localhost
+        by e32.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-pm@vger.kernel.org> from <tyreld@linux.vnet.ibm.com>;
+        Thu, 11 Jul 2019 15:41:10 +0100
+Received: from b03cxnp08028.gho.boulder.ibm.com (9.17.130.20)
+        by e32.co.us.ibm.com (192.168.1.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 11 Jul 2019 15:41:06 +0100
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6BEf5nC64684456
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 Jul 2019 14:41:05 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 251406A054;
+        Thu, 11 Jul 2019 14:41:05 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 83C096A051;
+        Thu, 11 Jul 2019 14:41:02 +0000 (GMT)
+Received: from oc6857751186.ibm.com (unknown [9.80.233.139])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 11 Jul 2019 14:41:02 +0000 (GMT)
+Subject: Re: Coccinelle: Checking of_node_put() calls with SmPL
+To:     wen.yang99@zte.com.cn, Markus.Elfring@web.de, julia.lawall@lip6.fr
+Cc:     wang.yi59@zte.com.cn, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oss@buserror.net, paulus@samba.org,
+        xue.zhihong@zte.com.cn, linuxppc-dev@lists.ozlabs.org,
+        cheng.shengyu@zte.com.cn
+References: <201907111435459627761@zte.com.cn>
+From:   Tyrel Datwyler <tyreld@linux.vnet.ibm.com>
+Date:   Thu, 11 Jul 2019 07:41:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
+MIME-Version: 1.0
+In-Reply-To: <201907111435459627761@zte.com.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19071114-0004-0000-0000-000015268C22
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011408; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01230664; UDB=6.00648235; IPR=6.01011939;
+ MB=3.00027680; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-11 14:41:09
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19071114-0005-0000-0000-00008C69C428
+Message-Id: <23e06fc0-b969-44e9-a44d-f11b19dfdeca@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-11_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907110164
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The network_latency and network_throughput flags for PM-QoS have not
-found much use in drivers or in userspace since they were introduced.
+On 07/10/2019 11:35 PM, wen.yang99@zte.com.cn wrote:
+>>> we developed a coccinelle script to detect such problems.
+>>
+>> Would you find the implementation of the function “dt_init_idle_driver”
+>> suspicious according to discussed source code search patterns?
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/cpuidle/dt_idle_states.c?id=e9a83bd2322035ed9d7dcf35753d3f984d76c6a5#n208
+>> https://elixir.bootlin.com/linux/v5.2/source/drivers/cpuidle/dt_idle_states.c#L208
+>>
+>>
+>>> This script is still being improved.
+>>
+>> Will corresponding software development challenges become more interesting?
+> 
+> Hello Markus,
+> This is the simplified code pattern for it:
+> 
+> 172         for (i = 0; ; i++) {
 
-Commit 4a733ef1bea7 ("mac80211: remove PM-QoS listener") removed the
-only user PM_QOS_NETWORK_LATENCY in the kernel a while ago and there
-don't seem to be any userspace tools using the character device files
-either.
+This loop can only be exited on a break.
 
-PM_QOS_MEMORY_BANDWIDTH was never even added to the trace events.
+> 173                 state_node = of_parse_phandle(...);     ---> Obtain here
+> ...
+> 177                 match_id = of_match_node(matches, state_node);
+> 178                 if (!match_id) {
+> 179                         err = -ENODEV;                              
+> 180                         break;                         --->  Jump out of the loop without releasing it
+> 181                 }
+> 182 
+> 183                 if (!of_device_is_available(state_node)) {
+> 184                         of_node_put(state_node);
+> 185                         continue;                    --->  Release the object references within a loop
+> 186                 }
+> ...
+> 208                 of_node_put(state_node);  -->  Release the object references within a loop
 
-Remove all the flags except cpu_dma_latency.
+This is required at the end of every loop or continue to free the reference.
+Only a break will exit the loop where we hit the below of_node_put().
 
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
----
-Changes from v1:
-- Rebased on linux-next to deal with .rst conversion of docs
+> 209         }
+> 210 
+> 211         of_node_put(state_node);       -->    There may be double free here.
 
-I've looked around for use of /dev/network_throughput and
-/dev/network_bandwidth) and not found any userspace programs that seem to
-use this currently. So this shouldn't be breaking our ABI contract with
-userspace.
+None of the break conditions call of_node_put(), so it needs to be called here.
 
+-Tyrel
 
- Documentation/power/pm_qos_interface.rst |  5 +--
- include/linux/pm_qos.h                   |  6 ---
- include/trace/events/power.h             |  8 +---
- kernel/power/qos.c                       | 48 ------------------------
- 4 files changed, 4 insertions(+), 63 deletions(-)
-
-diff --git a/Documentation/power/pm_qos_interface.rst b/Documentation/power/pm_qos_interface.rst
-index 945fc6d760c9..a00d607107ec 100644
---- a/Documentation/power/pm_qos_interface.rst
-+++ b/Documentation/power/pm_qos_interface.rst
-@@ -7,8 +7,7 @@ performance expectations by drivers, subsystems and user space applications on
- one of the parameters.
- 
- Two different PM QoS frameworks are available:
--1. PM QoS classes for cpu_dma_latency, network_latency, network_throughput,
--memory_bandwidth.
-+1. PM QoS classes for cpu_dma_latency
- 2. the per-device PM QoS framework provides the API to manage the per-device latency
- constraints and PM QoS flags.
- 
-@@ -79,7 +78,7 @@ cleanup of a process, the interface requires the process to register its
- parameter requests in the following way:
- 
- To register the default pm_qos target for the specific parameter, the process
--must open one of /dev/[cpu_dma_latency, network_latency, network_throughput]
-+must open /dev/cpu_dma_latency
- 
- As long as the device node is held open that process has a registered
- request on the parameter.
-diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-index 6ea1ae373d77..2a3c237b1910 100644
---- a/include/linux/pm_qos.h
-+++ b/include/linux/pm_qos.h
-@@ -13,9 +13,6 @@
- enum {
- 	PM_QOS_RESERVED = 0,
- 	PM_QOS_CPU_DMA_LATENCY,
--	PM_QOS_NETWORK_LATENCY,
--	PM_QOS_NETWORK_THROUGHPUT,
--	PM_QOS_MEMORY_BANDWIDTH,
- 
- 	/* insert new class ID */
- 	PM_QOS_NUM_CLASSES,
-@@ -33,9 +30,6 @@ enum pm_qos_flags_status {
- #define PM_QOS_LATENCY_ANY_NS	((s64)PM_QOS_LATENCY_ANY * NSEC_PER_USEC)
- 
- #define PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
--#define PM_QOS_NETWORK_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
--#define PM_QOS_NETWORK_THROUGHPUT_DEFAULT_VALUE	0
--#define PM_QOS_MEMORY_BANDWIDTH_DEFAULT_VALUE	0
- #define PM_QOS_RESUME_LATENCY_DEFAULT_VALUE	PM_QOS_LATENCY_ANY
- #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT	PM_QOS_LATENCY_ANY
- #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS	PM_QOS_LATENCY_ANY_NS
-diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-index f7aece721aed..7457e238e1b7 100644
---- a/include/trace/events/power.h
-+++ b/include/trace/events/power.h
-@@ -379,9 +379,7 @@ DECLARE_EVENT_CLASS(pm_qos_request,
- 
- 	TP_printk("pm_qos_class=%s value=%d",
- 		  __print_symbolic(__entry->pm_qos_class,
--			{ PM_QOS_CPU_DMA_LATENCY,	"CPU_DMA_LATENCY" },
--			{ PM_QOS_NETWORK_LATENCY,	"NETWORK_LATENCY" },
--			{ PM_QOS_NETWORK_THROUGHPUT,	"NETWORK_THROUGHPUT" }),
-+			{ PM_QOS_CPU_DMA_LATENCY,	"CPU_DMA_LATENCY" }),
- 		  __entry->value)
- );
- 
-@@ -426,9 +424,7 @@ TRACE_EVENT(pm_qos_update_request_timeout,
- 
- 	TP_printk("pm_qos_class=%s value=%d, timeout_us=%ld",
- 		  __print_symbolic(__entry->pm_qos_class,
--			{ PM_QOS_CPU_DMA_LATENCY,	"CPU_DMA_LATENCY" },
--			{ PM_QOS_NETWORK_LATENCY,	"NETWORK_LATENCY" },
--			{ PM_QOS_NETWORK_THROUGHPUT,	"NETWORK_THROUGHPUT" }),
-+			{ PM_QOS_CPU_DMA_LATENCY,	"CPU_DMA_LATENCY" }),
- 		  __entry->value, __entry->timeout_us)
- );
- 
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index 33e3febaba53..9568a2fe7c11 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -78,57 +78,9 @@ static struct pm_qos_object cpu_dma_pm_qos = {
- 	.name = "cpu_dma_latency",
- };
- 
--static BLOCKING_NOTIFIER_HEAD(network_lat_notifier);
--static struct pm_qos_constraints network_lat_constraints = {
--	.list = PLIST_HEAD_INIT(network_lat_constraints.list),
--	.target_value = PM_QOS_NETWORK_LAT_DEFAULT_VALUE,
--	.default_value = PM_QOS_NETWORK_LAT_DEFAULT_VALUE,
--	.no_constraint_value = PM_QOS_NETWORK_LAT_DEFAULT_VALUE,
--	.type = PM_QOS_MIN,
--	.notifiers = &network_lat_notifier,
--};
--static struct pm_qos_object network_lat_pm_qos = {
--	.constraints = &network_lat_constraints,
--	.name = "network_latency",
--};
--
--
--static BLOCKING_NOTIFIER_HEAD(network_throughput_notifier);
--static struct pm_qos_constraints network_tput_constraints = {
--	.list = PLIST_HEAD_INIT(network_tput_constraints.list),
--	.target_value = PM_QOS_NETWORK_THROUGHPUT_DEFAULT_VALUE,
--	.default_value = PM_QOS_NETWORK_THROUGHPUT_DEFAULT_VALUE,
--	.no_constraint_value = PM_QOS_NETWORK_THROUGHPUT_DEFAULT_VALUE,
--	.type = PM_QOS_MAX,
--	.notifiers = &network_throughput_notifier,
--};
--static struct pm_qos_object network_throughput_pm_qos = {
--	.constraints = &network_tput_constraints,
--	.name = "network_throughput",
--};
--
--
--static BLOCKING_NOTIFIER_HEAD(memory_bandwidth_notifier);
--static struct pm_qos_constraints memory_bw_constraints = {
--	.list = PLIST_HEAD_INIT(memory_bw_constraints.list),
--	.target_value = PM_QOS_MEMORY_BANDWIDTH_DEFAULT_VALUE,
--	.default_value = PM_QOS_MEMORY_BANDWIDTH_DEFAULT_VALUE,
--	.no_constraint_value = PM_QOS_MEMORY_BANDWIDTH_DEFAULT_VALUE,
--	.type = PM_QOS_SUM,
--	.notifiers = &memory_bandwidth_notifier,
--};
--static struct pm_qos_object memory_bandwidth_pm_qos = {
--	.constraints = &memory_bw_constraints,
--	.name = "memory_bandwidth",
--};
--
--
- static struct pm_qos_object *pm_qos_array[] = {
- 	&null_pm_qos,
- 	&cpu_dma_pm_qos,
--	&network_lat_pm_qos,
--	&network_throughput_pm_qos,
--	&memory_bandwidth_pm_qos,
- };
- 
- static ssize_t pm_qos_power_write(struct file *filp, const char __user *buf,
--- 
-2.17.1
+> 
+> This code pattern is very interesting and the coccinelle software should also recognize this pattern.
+> 
+> Regards,
+> Wen
+> 
 
