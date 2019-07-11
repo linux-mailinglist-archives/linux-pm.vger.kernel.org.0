@@ -2,89 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E2565084
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 05:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06ADE650BA
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 06:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728049AbfGKDNo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 23:13:44 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:35771 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbfGKDNn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 23:13:43 -0400
-Received: by mail-lj1-f195.google.com with SMTP id x25so4209558ljh.2;
-        Wed, 10 Jul 2019 20:13:41 -0700 (PDT)
+        id S1726048AbfGKELx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jul 2019 00:11:53 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:43384 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725963AbfGKELw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 00:11:52 -0400
+Received: by mail-pl1-f196.google.com with SMTP id cl9so2288439plb.10;
+        Wed, 10 Jul 2019 21:11:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9sbsaF7E0TrDeiv6pReKgq+pMBX4p8SmM9uYJr655g4=;
-        b=aGB/SVa7WbWVgBBhBM6vgu7gzzlo+d7rfMzVsbKQmdZWNq/r+dT3/N90zCR2S4c7pr
-         vjsI4+fHMkxdw5mw6P6W0BmGQyh6b7CgkqGs/UYiZThpRxq7msqe5cOrzJX0u1bsq7yr
-         NQmNBsyB8MGGyvXzDlEcXYRZG4MPg1LBgKxUuBUdwtquUT3e0I7lpRQPCUQ5B2A21Ird
-         3hzJQ36qBJryKrjSktP0eCNh01PAUCWbtE4+jysmRLrSkjYPD/BbVV/U0EJ95vfFj4q4
-         P0VSYLvafwjnDO395Sy/yiK+OS/EHP8CmGRWj9GYPmVYkRts/2a4Iu4pXjFNtbHJoUTz
-         OrtQ==
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bSqx5lRhnvQ+7sTCSs3xCfsXxcwdrD2eEqRPLZvVrbA=;
+        b=HQipN+bsvIBMHH7pXW047PoLn1gb24JU6O6094dySrF2kg2I9dihkWzrRRvEW5lmbx
+         1WmRCHYsgMmVisomKYe2R9zHJVAGjer/+fC5cNecSCiC9ZOFF88hNsN8Bgc+8fFyZmBk
+         pUnaMkAQL/N/+YyY12cO9ELzj3E7V5kOk18t/MYMKhvmpITlJVpl6YNlaTZ7p84fv+Q3
+         dNMGD77wMSl+tMmXnHw0QccYZfTcT27l2F0ZmVBkiorsIagbeZx//DAzWP/AI9R9kgMV
+         9RaUX0IuYTR0iL9W5nPOIGx73j+/VWjmf46iWkV3/kbhK7tEFEeWpcc+YkymY9Oc6szH
+         ClEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9sbsaF7E0TrDeiv6pReKgq+pMBX4p8SmM9uYJr655g4=;
-        b=o9VGGZaC0P4G/dHj/2dYuhHCXvUf6dF30J75Ab8oSVt+0ExNd+/glSugpXOwhS30St
-         5ud2/GzvQNmG6n7xv+VFeOMiRPp58Yzt5bEUiZxqtq5GzSJn9xN9/33eglnuJkX/qV3h
-         gHTDMUUue1N6DoCBUlUri02QlGEUXcMCaX/7vVcj4aDpzUliN1wSy8h+a/ShEtdkcLYz
-         Y4Gvh/wOQHAXPHd2b/fGfMZXDvU346b2Ymxzqc1xIpnxZIYYa5hthWPc6hvxSoU/m3sr
-         PK2X9I+oBR6XON8JRYcmWav6HipkeLqVBDSVXOJw/bYsIjgoi3BJFXLDsgZIw+6k8dN5
-         M4GQ==
-X-Gm-Message-State: APjAAAXyQxpvTjdUQe9IiPFuhiPtyGMyddTiPxQAc2fcnAXSZU9ZBcCO
-        mEOcoCQnGrMUynjjprd1Z9eGuxFZ
-X-Google-Smtp-Source: APXvYqyMqIcyVX6+e7hHIYbQpeLQ/U8rBaUVrLDaRq102Byqy/BB1OiBE3ibqp6e0uVdyiIN+5Gwsw==
-X-Received: by 2002:a2e:b009:: with SMTP id y9mr864326ljk.152.1562814821269;
-        Wed, 10 Jul 2019 20:13:41 -0700 (PDT)
-Received: from localhost.localdomain (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.gmail.com with ESMTPSA id h84sm753915ljf.42.2019.07.10.20.13.40
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bSqx5lRhnvQ+7sTCSs3xCfsXxcwdrD2eEqRPLZvVrbA=;
+        b=Ak27Wgk8I6t4u26yZB0FyFeYNGCAfl99mBjcrmMnJnxW+Wh1jDqHR/3aXBcOb+0+dX
+         SOye7VvLTUpcw5XCAD7WWEyfXLuVKxxIe4ZMWtVV40MTpkUsqHnw4XNiu2ySgWOuGeGl
+         ADOwsDGdFHqMKJPXYgzCvUjFgHgT3SIp+P9PtL47dzCb7WWI41cRmns/Fr14D35/GB2k
+         sALdKcAfko4VoqmgrY/i6sWJRqOQJQWpOR9MQLbslBNauNZXiG7x3sFT5PojOsIH0VWe
+         w9W1G9h5x0/Yy8ZvvYBF+KNdfkrt5qFy5UEg7WHg1rLORWtNxauJ2J14HGMNz58SMs1P
+         OGnQ==
+X-Gm-Message-State: APjAAAUaAiStmKGCw8J6P4GndXnoCJudtiJ/tRzAMHvt13q6VGyj6ptA
+        bKrHEYx8JZBZ+CQNDXT3sH8=
+X-Google-Smtp-Source: APXvYqz7t7+RwovcwFBuTIN5fXo1cdhnlVpoV9TKSdDMLz0WqLr7TyJkJsDJ2xPHxhsibEhdPdupFQ==
+X-Received: by 2002:a17:902:42d:: with SMTP id 42mr2105475ple.228.1562818312183;
+        Wed, 10 Jul 2019 21:11:52 -0700 (PDT)
+Received: from linux-l9pv.suse ([202.47.205.198])
+        by smtp.gmail.com with ESMTPSA id 12sm3586433pfi.60.2019.07.10.21.11.48
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Jul 2019 20:13:40 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
-Date:   Thu, 11 Jul 2019 06:13:12 +0300
-Message-Id: <20190711031312.10038-7-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190711031312.10038-1-digetx@gmail.com>
-References: <20190711031312.10038-1-digetx@gmail.com>
+        Wed, 10 Jul 2019 21:11:51 -0700 (PDT)
+From:   joeyli <joeyli.kernel@gmail.com>
+X-Google-Original-From: joeyli <jlee@suse.com>
+Date:   Thu, 11 Jul 2019 12:11:45 +0800
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Matthew Garrett <matthewgarrett@google.com>, jmorris@namei.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Garrett <mjg59@google.com>, rjw@rjwysocki.net,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH V34 10/29] hibernate: Disable when the kernel is locked
+ down
+Message-ID: <20190711041145.GA28145@linux-l9pv.suse>
+References: <20190622000358.19895-1-matthewgarrett@google.com>
+ <20190622000358.19895-11-matthewgarrett@google.com>
+ <20190622175208.GB30317@amd>
+ <nycvar.YFH.7.76.1906241520500.27227@cbobk.fhfr.pm>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <nycvar.YFH.7.76.1906241520500.27227@cbobk.fhfr.pm>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Tegra CPU Idle driver was moved out into driver/cpuidle/ directory and
-it is now a proper platform driver.
+Hi experts,
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/configs/tegra_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Jun 24, 2019 at 03:21:23PM +0200, Jiri Kosina wrote:
+> On Sat, 22 Jun 2019, Pavel Machek wrote:
+> 
+> > > There is currently no way to verify the resume image when returning
+> > > from hibernate.  This might compromise the signed modules trust model,
+> > > so until we can work with signed hibernate images we disable it when the
+> > > kernel is locked down.
+> > 
+> > I keep getting these...
+> > 
+> > IIRC suse has patches to verify the images.
+> 
+> Yeah, Joey Lee is taking care of those. CCing.
+>
 
-diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
-index 8f5c6a5b444c..9a2f11a780a8 100644
---- a/arch/arm/configs/tegra_defconfig
-+++ b/arch/arm/configs/tegra_defconfig
-@@ -25,6 +25,7 @@ CONFIG_CPU_FREQ=y
- CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
- CONFIG_CPUFREQ_DT=y
- CONFIG_CPU_IDLE=y
-+CONFIG_ARM_TEGRA_CPUIDLE=y
- CONFIG_VFP=y
- CONFIG_NEON=y
- CONFIG_TRUSTED_FOUNDATIONS=y
--- 
-2.22.0
+The last time that I sent for hibernation encryption and authentication is
+here:
+    https://lkml.org/lkml/2019/1/3/281
 
+It needs some big changes after review:
+ - Simplify the design: remove keyring dependency and trampoline.
+ - Encrypted whole snapshot image instead of only data pages.
+ - Using TPM:
+        - Direct use TPM API in hibernation instead of keyring
+        - Localities (suggested by James Bottomley)
+
+I am still finding enough time to implement those changes, especial TPM
+parts.
+
+Thanks
+Joey Lee
