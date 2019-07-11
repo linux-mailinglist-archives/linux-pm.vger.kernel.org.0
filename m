@@ -2,118 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5D965E1D
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 19:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBE865E28
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 19:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728694AbfGKRD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jul 2019 13:03:26 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45980 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726213AbfGKRD0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 13:03:26 -0400
-Received: by mail-lj1-f194.google.com with SMTP id m23so6487496lje.12;
-        Thu, 11 Jul 2019 10:03:25 -0700 (PDT)
+        id S1728582AbfGKRGq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jul 2019 13:06:46 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:42690 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728555AbfGKRGq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 13:06:46 -0400
+Received: by mail-lf1-f65.google.com with SMTP id s19so4550441lfb.9
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 10:06:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=poZMR+/iqhG3v4xOfyiATFmovw9vtsgxY+271Xi/Cog=;
-        b=BuuDg3G9UWeoBZfqsugcEKWYp/PJ8BC9sfdgtT3jAaN6afHGwxq7NkJky6nBxlHB3F
-         2D8S+jhp8NNjLxS5WXAZZUf0p+ytrEFiMB+BQY8VCxB3jH/37dPmG7Zg737wGW/9Mjxg
-         KbRJL3n8xwxPoQRisTnHY5lY1oOUS+LWTc7z23mptLbXhGbso7i53JJZXx6xJby78/WU
-         ssM25MxbIRLpvMEejsd+to+AQRuWGqhmDuvbMyoCFkV9IYgO6m8CEGZuqCfCDEofNlJE
-         Z9/efZ/efuimPX7mafjPtkh+dEGuwaF4NdccOOYmrZDSv6DkaNEvxNFT/lY7HUQy7+ZJ
-         IfGA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5j7z1tlACT61nuFnKG/Eec995GLAXwXEnm5NfF1n5nI=;
+        b=U9sxa8fSXSruS90asSicj9t1oMJy9v72igCT9Qbcik/hA2dpzv/9CUHo6btpjcTrSD
+         gIE4ApjaO9/tQ754+nqPWc101+0P0JsvUDPMdMxiR0PybRR3o1Q2vBtMpkFcY9U8ArJJ
+         sO5KOKBFMbHuR+7UAixtCB9tDnCSusoxMLLTY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=poZMR+/iqhG3v4xOfyiATFmovw9vtsgxY+271Xi/Cog=;
-        b=kI+nKsCE1rTB+nf2iQFleJp4nFIuU+PC2CmdGiRP++g3S6WkViNnFfKBlHgKJGHrF1
-         FDOCcXC+l8du1JMwjE5ZAkWP/qobLmh+oDLKFIycLCe6O2pmMZ1cbcJj5D2nYN14B/qn
-         LovhC1dpHvbn7ObLiVZlW1lQRG8MUqbq8K/JN+kDeu+a3faWNvRAGbynMUTS1xE2sfRc
-         19Jr4IP6bLmY4c66YTy+YtbZD4d5b5HEnmJVPDymj6GkjgMLY0s9XjNajByS8A82giMF
-         /L3Jlvj5TahEUZi/EW48RlRbtJze3ZiloATs87ZPlZ7td6N76E3pC08PqT0+9HnkvC6N
-         ihnQ==
-X-Gm-Message-State: APjAAAU+RfyDBwH+5mIHs4Jd0RReVvQmZhUdbtACdh5oWu68ouDwExcu
-        CmiHOEftp51wdDftVFqBgYKUPRgm
-X-Google-Smtp-Source: APXvYqzEw0D1L1Jf1yGuRGjXpk3Wr2+dEw8JPyoRdvwkR4c5Pb4ONMol/nsDmFw3szvS+rm9TpntNg==
-X-Received: by 2002:a2e:3013:: with SMTP id w19mr3187304ljw.73.1562864604445;
-        Thu, 11 Jul 2019 10:03:24 -0700 (PDT)
-Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.googlemail.com with ESMTPSA id d21sm808224lfc.73.2019.07.11.10.03.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Jul 2019 10:03:23 -0700 (PDT)
-Subject: Re: [PATCH v2 1/6] ARM: tegra: Remove cpuidle drivers
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20190711031312.10038-1-digetx@gmail.com>
- <20190711031312.10038-2-digetx@gmail.com>
- <c087a5cb-2ffa-1cf6-f0bf-631234759a22@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a6e4b43e-369c-c501-6d2e-69d5b940ff9c@gmail.com>
-Date:   Thu, 11 Jul 2019 20:03:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5j7z1tlACT61nuFnKG/Eec995GLAXwXEnm5NfF1n5nI=;
+        b=jXOLAUWumwToRmsaSHSTgkIWJubQ7WLOKw8GVvKSokVT4iUuPYuJKrlGPbVfxHcLNr
+         R1FBJWf7h4EWoE7oNhKyQigAW3Olm/hkk+cVsp/dmYgb6GKe7y6CEWGZ1zLEetLw4thd
+         42QSisTAnnGyuCP7WI9d2mrd8MWDR/82o0vCPsJPn5QvcMZr1j1pxe7+nmoEw5GXH6Mx
+         fSj85gaTXHQ9z1Cu6I7VNZcuCOGw20GNkuv7Ye5uWrO1UzJ/phoO2KXmda4xNlPtR2JX
+         E3NxO7d5UqUPhfUqGLDb6Xy3ZwfhytDQUmAvDfMbtgaim2UCN+4/KkakgbdAi2xkCKTm
+         yx0w==
+X-Gm-Message-State: APjAAAWu5x0gd/P6VgLRi4amwV+kCUTvNYew8kcwb5lnIKdDzOrkpB6Y
+        SZ/4fAyEqPpnOm+4iwA/xgA5CSgMgmY=
+X-Google-Smtp-Source: APXvYqzNFUsiDPZObfqDS7AnaDE96xl46NhK2rdfizqRCyrdVW6+23KsBpOE9dDoAZXtMpAQIsAcvQ==
+X-Received: by 2002:ac2:495e:: with SMTP id o30mr2430318lfi.140.1562864803376;
+        Thu, 11 Jul 2019 10:06:43 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id n1sm813294lfk.19.2019.07.11.10.06.41
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Jul 2019 10:06:41 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id r15so4546168lfm.11
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 10:06:41 -0700 (PDT)
+X-Received: by 2002:ac2:4839:: with SMTP id 25mr2410156lft.79.1562864800872;
+ Thu, 11 Jul 2019 10:06:40 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <c087a5cb-2ffa-1cf6-f0bf-631234759a22@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190618091724.28232-1-georgi.djakov@linaro.org> <20190618091724.28232-2-georgi.djakov@linaro.org>
+In-Reply-To: <20190618091724.28232-2-georgi.djakov@linaro.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Thu, 11 Jul 2019 10:06:04 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6=5txOBNEyrzqPEgaZc8ehd4sm5CmDBYOaV+o3-vCNWw@mail.gmail.com>
+Message-ID: <CAE=gft6=5txOBNEyrzqPEgaZc8ehd4sm5CmDBYOaV+o3-vCNWw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] interconnect: Add support for path tags
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, David Dai <daidavid1@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        amit.kucheria@linaro.org, Doug Anderson <dianders@chromium.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-11.07.2019 12:26, Jon Hunter пишет:
-> 
-> On 11/07/2019 04:13, Dmitry Osipenko wrote:
->> Remove the old drivers to replace them cleanly with a new one later on.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  arch/arm/mach-tegra/Makefile           |  13 --
->>  arch/arm/mach-tegra/cpuidle-tegra114.c |  89 -----------
->>  arch/arm/mach-tegra/cpuidle-tegra20.c  | 212 -------------------------
->>  arch/arm/mach-tegra/cpuidle-tegra30.c  | 132 ---------------
->>  arch/arm/mach-tegra/cpuidle.c          |  50 ------
->>  arch/arm/mach-tegra/cpuidle.h          |  21 ---
->>  arch/arm/mach-tegra/irq.c              |  18 ---
->>  arch/arm/mach-tegra/irq.h              |  11 --
->>  arch/arm/mach-tegra/pm.c               |   7 -
->>  arch/arm/mach-tegra/pm.h               |   1 -
->>  arch/arm/mach-tegra/reset-handler.S    |  11 --
->>  arch/arm/mach-tegra/reset.h            |   9 +-
->>  arch/arm/mach-tegra/sleep-tegra20.S    | 190 +---------------------
->>  arch/arm/mach-tegra/sleep.h            |  12 --
->>  arch/arm/mach-tegra/tegra.c            |   3 -
->>  drivers/soc/tegra/Kconfig              |   1 -
->>  include/soc/tegra/cpuidle.h            |   4 -
->>  17 files changed, 5 insertions(+), 779 deletions(-)
->>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra114.c
->>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra20.c
->>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra30.c
->>  delete mode 100644 arch/arm/mach-tegra/cpuidle.c
->>  delete mode 100644 arch/arm/mach-tegra/cpuidle.h
->>  delete mode 100644 arch/arm/mach-tegra/irq.h
-> 
-> By removing all the above, it is really hard to review the diff. Is
-> there any way you could first consolidate the cpuidle drivers into say
-> the existing arch/arm/mach-tegra/cpuidle-tegra20.c and then move to
-> drivers/cpuidle?
+Hi Georgi and David,
 
-I'm afraid that it will make reviewing even more difficult because
-everything that is removed here is not returned in the further patches.
-The new driver is based on the older ones, but I wrote it from scratch
-and it's not only looks different, but also works a bit different as you
-may see.
+On Tue, Jun 18, 2019 at 2:17 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
+>
+> Consumers may have use cases with different bandwidth requirements based
+> on the system or driver state. The consumer driver can append a specific
+> tag to the path and pass this information to the interconnect platform
+> driver to do the aggregation based on this state.
+>
+> Introduce icc_set_tag() function that will allow the consumers to append
+> an optional tag to each path. The aggregation of these tagged paths is
+> platform specific.
+>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+>  drivers/interconnect/core.c           | 24 +++++++++++++++++++++++-
+>  drivers/interconnect/qcom/sdm845.c    |  2 +-
+>  include/linux/interconnect-provider.h |  4 ++--
+>  include/linux/interconnect.h          |  5 +++++
+>  4 files changed, 31 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 871eb4bc4efc..251354bb7fdc 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -29,6 +29,7 @@ static struct dentry *icc_debugfs_dir;
+>   * @req_node: entry in list of requests for the particular @node
+>   * @node: the interconnect node to which this constraint applies
+>   * @dev: reference to the device that sets the constraints
+> + * @tag: path tag (optional)
+>   * @avg_bw: an integer describing the average bandwidth in kBps
+>   * @peak_bw: an integer describing the peak bandwidth in kBps
+>   */
+> @@ -36,6 +37,7 @@ struct icc_req {
+>         struct hlist_node req_node;
+>         struct icc_node *node;
+>         struct device *dev;
+> +       u32 tag;
+>         u32 avg_bw;
+>         u32 peak_bw;
+>  };
+> @@ -204,7 +206,7 @@ static int aggregate_requests(struct icc_node *node)
+>         node->peak_bw = 0;
+>
+>         hlist_for_each_entry(r, &node->req_list, req_node)
+> -               p->aggregate(node, r->avg_bw, r->peak_bw,
+> +               p->aggregate(node, r->tag, r->avg_bw, r->peak_bw,
+>                              &node->avg_bw, &node->peak_bw);
+>
+>         return 0;
+> @@ -385,6 +387,26 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+>  }
+>  EXPORT_SYMBOL_GPL(of_icc_get);
+>
+> +/**
+> + * icc_set_tag() - set an optional tag on a path
+> + * @path: the path we want to tag
+> + * @tag: the tag value
+> + *
+> + * This function allows consumers to append a tag to the requests associated
+> + * with a path, so that a different aggregation could be done based on this tag.
+> + */
+> +void icc_set_tag(struct icc_path *path, u32 tag)
+> +{
+> +       int i;
+> +
+> +       if (!path)
+> +               return;
+> +
+> +       for (i = 0; i < path->num_nodes; i++)
+> +               path->reqs[i].tag = tag;
 
-Could you please clarify what exactly makes it hard to review? The diff
-looks pretty clean to me, while squashing everything into existing
-driver should be quite a mess.
+It's a little unfortunate to have this tag sprayed across all the
+request nodes in the path, even though it's really a single value. If
+we thought there were likely to be more attributes common to a path
+that a provider might want access to, we could add a pointer to the
+path in icc_req, then stick the tag in the path. But if the tag ends
+up being the only thing worth looking at, then I guess what you have
+now is slightly better.
