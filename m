@@ -2,138 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA49651D0
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 08:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D55651F5
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 08:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbfGKGWa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jul 2019 02:22:30 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:40659 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727968AbfGKGWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 02:22:30 -0400
-Received: by mail-pl1-f195.google.com with SMTP id a93so2465607pla.7
-        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2019 23:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2/izmyLx3zgLly59CRyGw1zLBbtbQty91ZENtAWD4Vk=;
-        b=bCJUZdgFXSL1JPheXWrE2SvDktcgz7ZRvLp8UkZ09vb/Prg3mHtmdw0CdPu+kNUcGI
-         a+TMxXx6wNfmwQtEtIXMhXKR2VzbJQGJVBT4Jcr78m07BpKzdxphTgR8GXJ75FNnpqAB
-         FNgXp0c4Bq/bsz0u8wFe6FU1NqqZn1sx5kV5TnReJTFWuqsfXI0nlrO3bGvOpcXDoF9E
-         kH2fUTOxrcxqE6WyOVzMskdFpKOYyKgmdeY68u0Bz7QfklwW+Yz9KVGimSXOF4E3tW+I
-         Ndk3OY2HRkZ2wOYaljBN7Ygo+45k9VGREMHudaTh1IrRGsaLJbxdRM0v/ZdSiMQ7S5FG
-         78xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2/izmyLx3zgLly59CRyGw1zLBbtbQty91ZENtAWD4Vk=;
-        b=Aro0thfvIIGEGNHm5ssrdQkAQDQk5b4RW9asEpr3a/Bb8K2Siik8KiizB6RGOM7CaR
-         SEx8Zo6WuGr+ldhYwIVNjqh5AlRBTdkImzMdoCEFjBEE+2QkUeBp9ZUFXH5ORt9Awic+
-         VATOteqPewMZCChiZsyqRLtd7+5KrfYNhBNnf34YKa6TPGvtCMA7j8ZiJJjVvzj83C0h
-         Go3NsZ1NQWKzagu+xOV775H4Yoiax2XjjkpIum79VOAeoq86/UAuoFebORxWoXeti5c1
-         xAOz58IJCsg5oKZdfNATQv9CwZcOmEh5eLg/GemY16Wa4yXam47cAS5EJNmLSbD077mB
-         pecw==
-X-Gm-Message-State: APjAAAWZOmlvA0e6HKeebR8/nP9hy13D/wMJvauLaSNagtq0y0rzJWqi
-        1CXVK/OifTgxlbSPzAf72XBKdQ==
-X-Google-Smtp-Source: APXvYqzBa57SST8CdNhPOntlhzTG7OeoEa6rXNRY1hYntSU2vCbtVOJveAMlqx/1mMk4cJDBYNLgNw==
-X-Received: by 2002:a17:902:da4:: with SMTP id 33mr2477954plv.209.1562826149501;
-        Wed, 10 Jul 2019 23:22:29 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id j19sm1516594pgn.19.2019.07.10.23.22.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Jul 2019 23:22:28 -0700 (PDT)
-Date:   Thu, 11 Jul 2019 11:52:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     k.konieczny@partner.samsung.com
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 1/3] opp: core: add regulators enable and disable
-Message-ID: <20190711062226.4i4bvbsyczshdlyr@vireshk-i7>
-References: <20190708141140.24379-1-k.konieczny@partner.samsung.com>
- <CGME20190708141159eucas1p1751506975ff96a436e14940916623722@eucas1p1.samsung.com>
- <20190708141140.24379-2-k.konieczny@partner.samsung.com>
+        id S1727996AbfGKGrR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jul 2019 02:47:17 -0400
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:10111
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725963AbfGKGrR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 02:47:17 -0400
+X-IronPort-AV: E=Sophos;i="5.63,476,1557180000"; 
+   d="scan'208";a="313140146"
+Received: from vaio-julia.rsr.lip6.fr ([132.227.76.33])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Jul 2019 08:47:00 +0200
+Date:   Thu, 11 Jul 2019 08:46:56 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@lip6.fr>
+X-X-Sender: jll@hadrien
+To:     wen.yang99@zte.com.cn
+cc:     Markus.Elfring@web.de, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, benh@kernel.crashing.org,
+        cheng.shengyu@zte.com.cn, galak@kernel.crashing.org,
+        mpe@ellerman.id.au, paulus@samba.org, oss@buserror.net,
+        xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: Coccinelle: Checking of_node_put() calls with SmPL
+In-Reply-To: <201907111435459627761@zte.com.cn>
+Message-ID: <alpine.DEB.2.20.1907110845551.3626@hadrien>
+References: 201907101533443009168@zte.com.cn,9d515026-5b74-cf0c-0c64-4fe242d4104e@web.de <201907111435459627761@zte.com.cn>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190708141140.24379-2-k.konieczny@partner.samsung.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: multipart/mixed; boundary="=====_001_next====="
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-07-19, 16:11, k.konieczny@partner.samsung.com wrote:
-> From: Kamil Konieczny <k.konieczny@partner.samsung.com>
-> 
-> Add enable regulators to dev_pm_opp_set_regulators() and disable
-> regulators to dev_pm_opp_put_regulators(). This prepares for
-> converting exynos-bus devfreq driver to use dev_pm_opp_set_rate().
-> 
-> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
-> ---
->  drivers/opp/core.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 0e7703fe733f..947cac452854 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1580,8 +1580,19 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
->  	if (ret)
->  		goto free_regulators;
->  
-> +	for (i = 0; i < opp_table->regulator_count; i++) {
-> +		ret = regulator_enable(opp_table->regulators[i]);
-> +		if (ret < 0)
-> +			goto disable;
-> +	}
+--=====_001_next=====
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-What about doing this in the same loop of regulator_get_optional() ?
 
-> +
->  	return opp_table;
->  
-> +disable:
-> +	while (i != 0)
-> +		regulator_disable(opp_table->regulators[--i]);
-> +
-> +	i = opp_table->regulator_count;
 
-You also need to call _free_set_opp_data() here.
+On Thu, 11 Jul 2019, wen.yang99@zte.com.cn wrote:
 
->  free_regulators:
->  	while (i != 0)
->  		regulator_put(opp_table->regulators[--i]);
-> @@ -1609,6 +1620,8 @@ void dev_pm_opp_put_regulators(struct opp_table *opp_table)
->  
->  	/* Make sure there are no concurrent readers while updating opp_table */
->  	WARN_ON(!list_empty(&opp_table->opp_list));
+> > > we developed a coccinelle script to detect such problems.
+> >
+> > Would you find the implementation of the function “dt_init_idle_driver”
+> > suspicious according to discussed source code search patterns?
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/cpuidle/dt_idle_states.c?id=e9a83bd2322035ed9d7dcf35753d3f984d76c6a5#n208
+> > https://elixir.bootlin.com/linux/v5.2/source/drivers/cpuidle/dt_idle_states.c#L208
+> >
+> >
+> > > This script is still being improved.
+> >
+> > Will corresponding software development challenges become more interesting?
+>
+> Hello Markus,
+> This is the simplified code pattern for it:
+>
+> 172         for (i = 0; ; i++) {
+> 173                 state_node = of_parse_phandle(...);     ---> Obtain here
+> ...
+> 177                 match_id = of_match_node(matches, state_node);
+> 178                 if (!match_id) {
+> 179                         err = -ENODEV;
+> 180                         break;                         --->  Jump out of the loop without releasing it
+> 181                 }
+> 182
+> 183                 if (!of_device_is_available(state_node)) {
+> 184                         of_node_put(state_node);
+> 185                         continue;                    --->  Release the object references within a loop
+> 186                 }
+> ...
+> 208                 of_node_put(state_node);  -->  Release the object references within a loop
+> 209         }
+> 210
+> 211         of_node_put(state_node);       -->    There may be double free here.
+>
+> This code pattern is very interesting and the coccinelle software should also recognize this pattern.
 
-Preserve the blank line here.
+In my experience, when you start looking at these of_node_put things, all
+sorts of strange things appear...
 
-> +	for (i = opp_table->regulator_count - 1; i >= 0; i--)
-> +		regulator_disable(opp_table->regulators[i]);
->  
->  	for (i = opp_table->regulator_count - 1; i >= 0; i--)
->  		regulator_put(opp_table->regulators[i]);
-
-Only single loop should be sufficient for this.
-
-> -- 
-> 2.22.0
-
--- 
-viresh
+julia
+--=====_001_next=====--
