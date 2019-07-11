@@ -2,128 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5B5653DF
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 11:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53AF653F3
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 11:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728083AbfGKJeL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jul 2019 05:34:11 -0400
-Received: from mout.web.de ([212.227.15.3]:54415 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726088AbfGKJeK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 11 Jul 2019 05:34:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1562837617;
-        bh=QMVNj5fg+/7lPtHz1QND/Mzp+oXxlM2TSpezOk+oacA=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=BIrf/49kJehFww3FgmPUBhIlupe6E8wfnMm0rP93UdTfgan+9nAz3Do+9bixtk9pN
-         k/NJkynyNymuUy5z59p06M3+rXd+YrTwNcpx0qvZIsLOr6+tIcN/pwoxKEXqnilWpq
-         c/UdopFZvdnIiX6zz0LXGfeE/cduiE0nxOXpvW5o=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.132.182.165]) by smtp.web.de (mrweb003
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0MT8cQ-1hslEN1gFa-00S8yH; Thu, 11
- Jul 2019 11:33:37 +0200
-Subject: Re: Coccinelle: Checking of_node_put() calls with SmPL
-To:     Julia Lawall <julia.lawall@lip6.fr>,
-        Wen Yang <wen.yang99@zte.com.cn>,
-        kernel-janitors@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Cheng Shengyu <cheng.shengyu@zte.com.cn>,
-        Kumar Gala <galak@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Scott Wood <oss@buserror.net>,
-        Xue Zhihong <xue.zhihong@zte.com.cn>,
-        Yi Wang <wang.yi59@zte.com.cn>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-pm@vger.kernel.org
-References: <201907111435459627761@zte.com.cn>
- <alpine.DEB.2.20.1907110845551.3626@hadrien>
-From:   Markus Elfring <Markus.Elfring@web.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <e0e19253-afbc-3576-fcc3-22deea4db674@web.de>
-Date:   Thu, 11 Jul 2019 11:33:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728190AbfGKJkG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jul 2019 05:40:06 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:55176 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726088AbfGKJkG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 05:40:06 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id ACBC960159; Thu, 11 Jul 2019 09:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1562838004;
+        bh=0ssG2GNR8L/+/10jXcM2XYnH8GTmRCIhHCfYEyrmC/k=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=EIiddrbXCHEs/KMWWFvs3Rn7jxtmZW0YCwgZ1sNths5dqmNLuEM2UgniiotNdE6qJ
+         OSthxSlePOoiEjm9i2Gd9NlpIvr2EQVhTf/HMW8UZaC9MgSiP9CF01JmIrEJCaQX2+
+         eIuNTlGnCAcQatuYRUPy3kdfWAew8D9r7raUiBxU=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.79.43.141] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5AA8060159;
+        Thu, 11 Jul 2019 09:39:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1562838003;
+        bh=0ssG2GNR8L/+/10jXcM2XYnH8GTmRCIhHCfYEyrmC/k=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Zu0TjO2NTVBlKFtxKpxwS3EHPfiDH1CyM/Z/AQ/N8KJoe6XxRg6o3y3E+bTYaXOcL
+         MKHEiEXpIGm3xyECqSUcpxgEk9WT1xdSHpG0Ku9u055z2ylCI4YVCvjS3BMSVfms4b
+         ryChf+200QeX18UmQRIRcj3qMReo3JqYG4wArnIQ=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5AA8060159
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH] opp: Return genpd virtual devices from
+ dev_pm_opp_attach_genpd()
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <027985ce35873cd218298302a1408da06d48458b.1562565567.git.viresh.kumar@linaro.org>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <2ed7993d-523b-270a-2be9-83ad2426e946@codeaurora.org>
+Date:   Thu, 11 Jul 2019 15:09:57 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.20.1907110845551.3626@hadrien>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <027985ce35873cd218298302a1408da06d48458b.1562565567.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-Provags-ID: V03:K1:vF7Ayn7m0WSIGgJ8Iz9/UhW4AwGPyUxCenUfU3dLIOT0/YlM2tW
- TfiTE33m7hhXEzvlTZjY+0WbZCPqk2LVjXiX8ZvhzrOReIBnAAHee9bmNwL823cApnuMiis
- 5suxy/KPx4ULhHsul/FMH6/QRTp9A8zmLPOXBEBRW3gcERlnf3lwVjVfRtShRvv7k/l8kZk
- MNe4pFPkBA7oyeq61s6vw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CKzj7shNjl0=:ik0J8kqkgDqG/J3jlfZIgV
- +DymDWKBDTwr4BlrQQ3jYCmOYQsx4dN9HZBuAXWbaCkroRiepiNB+/AQu264uYs2hAQNPwhSf
- 0RfIa5YzUzhppN/OhuwFPL/1ezyFc0JnF1xSa1ezp0Oy/4k/4y5FEczxdHL+uVFpjgzrGBIGW
- gxhvcV4+OGF2svvnFl5ZJKRetHfJ0ObAAFTUjF7m0IQDDbL0NrgFWbU/QWe4VmNlrBwJOhsg9
- nmGSca7QZITK5/K191rI6KLYwijy0e8vezEEOlxXhYqA5bn4jgwlk2V0TPm3QrMZRzcw41RXc
- CrTyybBWctNLDRINNQE4GemryLPzB4zqnBFyEbuRlmqp1AVQn7U0CjL85Hf6XWzGflW4gk2Ww
- su0/erP3NfY1slyp+kNlXfPUYhrwb2zr/QIqsBXCSoGcadu3sYTEM+dUBUibtuw/s7dVo06s7
- EEZft3bm99ZWRwwAqOuVtWuvDSG7kewNGkud3aC+clYD5zXSQ3fWK5kSrg3NEwtWIvZwTos5e
- qXGinA4IetcSVdb9FVLZXXwIU6GatEhkr8EgWtt6MK3eUw4ctao2J/zObZISbURwh+9TWpCp0
- xo3uuTIWJM+9/lyv4NQUikRKgKuzfXthRrmlKkPubJBYdkuhk7l/GjV9liIqM87jrufSjSLOQ
- weXCvZQ8jBPYN5T56+3yRE2zy7gqhT8jqObX6v907lwWfi2uTFzuCl1JE2+Vo9bwhb7vX2dZK
- TW9sjgMnhAD6wKf21CDPv6QvlpdqYd6KEX28v4brYVafJNdN5aQ92vsvQ/HtL2VsoCQEn5GNU
- fDV1alc4m67crVqRtO8H209OfoY0YImHrBhs6PxeyJColvOIRpw5y7LZTQ19EPMw/hKoseXNY
- dOBHuYKOJH3UIlc4wVt961g1yKDoSkoCISlXTMC6fSBQhzvq7NjShBkTbf9cZaNa5wauj2c8p
- /o/D5CcClilZsuA92J2FgvjILErCMtHLxIMnOi3Atee4FYAvRj0uPMptnApyq8OHvkKR6g2z2
- HJCu80cCQhR1wzQQ/iydeRz091QrH6dCv0CcKWMwP8TiOov04tHWoPflxpqiJa9Mqlu0r3L+G
- RoMvQirUhdrHzsl/6CELsgyjXEWuLYM2tQq
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> In my experience, when you start looking at these of_node_put things,
-> all sorts of strange things appear...
 
-How much will this situation influence the achievement of further improvements
-also for your software?
+On 7/8/2019 11:30 AM, Viresh Kumar wrote:
+> The cpufreq drivers don't need to do runtime PM operations on the
+> virtual devices returned by dev_pm_domain_attach_by_name() and so the
+> virtual devices weren't shared with the callers of
+> dev_pm_opp_attach_genpd() earlier.
+> 
+> But the IO device drivers would want to do that. This patch updates the
+> prototype of dev_pm_opp_attach_genpd() to accept another argument to
+> return the pointer to the array of genpd virtual devices.
+> 
+> Reported-by: Rajendra Nayak <rnayak@codeaurora.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> @Rajendra: Can you please test this one ? I have only compile tested it.
 
-Regards,
-Markus
+Sorry for the delay, I seem to have completely missed this patch.
+I just gave this a try and here are some observations,
+
+I have a case where I have one device with 2 power domains, one of them
+is scale-able (supports perf state) and the other one supports only being
+turned on and off.
+
+1. In the driver I now need to use dev_pm_domain_attach_by_name/id to attach the
+power domain which supports only on/off and then use dev_pm_opp_attach_genpd()
+for the one which supports perf states.
+
+2. My OPP table has only 1 required_opps, so the required_opp_count for the OPP table is 1.
+Now if my device tree has my scale-able powerdomain at index 1 (it works if its at index 0)
+then I end up with this error
+
+[    2.858628] ufshcd-qcom 1d84000.ufshc: Index can't be greater than required-opp-count - 1, rpmh_pd (1 : 1)
+
+so it looks like a lot of the OPP core today just assumes that if a device has multiple power domains,
+all of them are scale-able which isn't necessarily true.
+
+> 
+>   drivers/opp/core.c     | 5 ++++-
+>   include/linux/pm_opp.h | 4 ++--
+>   2 files changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 2958cc7bbb58..07b6f1187b3b 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1775,6 +1775,7 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
+>    * dev_pm_opp_attach_genpd - Attach genpd(s) for the device and save virtual device pointer
+>    * @dev: Consumer device for which the genpd is getting attached.
+>    * @names: Null terminated array of pointers containing names of genpd to attach.
+> + * @virt_devs: Pointer to return the array of virtual devices.
+>    *
+>    * Multiple generic power domains for a device are supported with the help of
+>    * virtual genpd devices, which are created for each consumer device - genpd
+> @@ -1789,7 +1790,8 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
+>    * This helper needs to be called once with a list of all genpd to attach.
+>    * Otherwise the original device structure will be used instead by the OPP core.
+>    */
+> -struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names)
+> +struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+> +		const char **names, struct device ***virt_devs)
+>   {
+>   	struct opp_table *opp_table;
+>   	struct device *virt_dev;
+> @@ -1850,6 +1852,7 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names
+>   		name++;
+>   	}
+>   
+> +	*virt_devs = opp_table->genpd_virt_devs;
+>   	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+>   
+>   	return opp_table;
+> diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+> index be570761b77a..7c2fe2952f40 100644
+> --- a/include/linux/pm_opp.h
+> +++ b/include/linux/pm_opp.h
+> @@ -131,7 +131,7 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char * name);
+>   void dev_pm_opp_put_clkname(struct opp_table *opp_table);
+>   struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
+>   void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
+> -struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names);
+> +struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
+>   void dev_pm_opp_detach_genpd(struct opp_table *opp_table);
+>   int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
+>   int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
+> @@ -295,7 +295,7 @@ static inline struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const
+>   
+>   static inline void dev_pm_opp_put_clkname(struct opp_table *opp_table) {}
+>   
+> -static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names)
+> +static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs)
+>   {
+>   	return ERR_PTR(-ENOTSUPP);
+>   }
+> 
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
