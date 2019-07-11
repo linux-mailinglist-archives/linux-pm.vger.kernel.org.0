@@ -2,107 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2108B65023
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 04:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AC36504B
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 04:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727767AbfGKC2S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jul 2019 22:28:18 -0400
-Received: from mail-pf1-f174.google.com ([209.85.210.174]:34402 "EHLO
-        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727463AbfGKC2S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 22:28:18 -0400
-Received: by mail-pf1-f174.google.com with SMTP id b13so1998703pfo.1
-        for <linux-pm@vger.kernel.org>; Wed, 10 Jul 2019 19:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JJZ8zY88d2N4tkkHZDwEOtu2EiuE98IVyV4C3BjNEcI=;
-        b=ulM0cYU4SBNaA9msJWEJPT6/RN01q8tAkQ6gpe8+b8bZrMncxfH60xJ6s54nXB5YJc
-         +nm0lEZOliPbD4MxZBuvCll9Z+lN+C4AHe/fOAhbg9VgBg/ADNu7qDja73lRYMDP+sPs
-         rLqAWY3TkbaX+d1NhieE+gUyFOn98hWl1E2yUJE9TQpSCdwzUP1IY+h1/eNl61gGwSQ4
-         v0vB3ldlpAPiWZ/kakC6iP28fB4LHkO0z8WsiDYsbYT7wavTKEUmrSJj8ehXse0xqoZF
-         Oyi5QRIFhhDmJpxS5uYTgK3HlQWJW6VdFGfm7tx9/LpZXZQ7xD76D9aE5GClw6VGltPg
-         xfXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JJZ8zY88d2N4tkkHZDwEOtu2EiuE98IVyV4C3BjNEcI=;
-        b=Ll4aSR405P2IyTuDbOoV0hipv7y4fAAeygttiCZI9hXD8YAtOdxBP1Yvc3hXsWA0BA
-         WdWhJl+yP01FTDILM4kulAqrVeEswxt5tlzQ7tExheQVXqfiEU5QKn7jVxQDxWcdQORn
-         u+gV5yV3UZZ7Li/A0ID79nyF8PjEjjxku+kEXZ+IprDtNuMTtj6DruWaSsuk2OyzS7da
-         eEfykWm/3IHWFOqHADEVLXvF19PetNj+ZlcXbvWGfLWQ0giR/TDzJ6A7KEs/pUfwQTOG
-         FPRZS6izALaH37R0EZGhao/C3zr9midt7GUgldNpw9++xdnGZir82/1ZGQb7RdqppuTr
-         7HGA==
-X-Gm-Message-State: APjAAAUEyA03gaRzlcjqn67GsrrAN0Bau4mqnKDjtusoihUwazpgSXBU
-        zfjmcdZ1E6mW83IcwJmZ8zJSXQ==
-X-Google-Smtp-Source: APXvYqwBNcW4gZeuTQR+3ladTRBgmEeF2WVujRAcPc/I7iuuqQ4q27rhPpTJrvYZoYrGF7j+ViKBbQ==
-X-Received: by 2002:a65:4346:: with SMTP id k6mr1725401pgq.208.1562812097097;
-        Wed, 10 Jul 2019 19:28:17 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id 1sm3788253pfe.102.2019.07.10.19.28.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Jul 2019 19:28:16 -0700 (PDT)
-Date:   Thu, 11 Jul 2019 07:58:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: cpufreq-related deadlock warning on recent linux-next
-Message-ID: <20190711022813.zfroyk3drfarvpwj@vireshk-i7>
-References: <6addb70f-6b21-4f09-e1a0-21476b55df14@gmail.com>
+        id S1726030AbfGKCrF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jul 2019 22:47:05 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:36651 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727889AbfGKCrF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jul 2019 22:47:05 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190711024701epoutp012fc4f95f3ff7681316400484f05ac26a~wOlhL34SP1715117151epoutp01k
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 02:47:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190711024701epoutp012fc4f95f3ff7681316400484f05ac26a~wOlhL34SP1715117151epoutp01k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1562813221;
+        bh=1wGcXvZOX+6VVvBcfB3TBbo5h+k9SWIncQbkwIsXMfE=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=CIXfPm04yQLnavK6BZypaP377R6pLVHlcrz14rxu/kZeR5mkDmEWdpSFax68LiuyJ
+         2WoCOpzMudy2E7Nrqey62jp3cZaADoTrwA3IcHSQ3vpshXOKwiCRFw7ibqpDad3Aix
+         y1TwjSShFK52i2qjJ55fokv56B52eOBPoW9vIBhE=
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.156]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190711024658epcas1p3a52cfed6c3111461fe5689f661dcb24b~wOlelY57M3244632446epcas1p3T;
+        Thu, 11 Jul 2019 02:46:58 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9D.8F.04143.223A62D5; Thu, 11 Jul 2019 11:46:58 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190711024657epcas1p228c9ed5db4a37970fe95511019d860d4~wOldtElr82016620166epcas1p2p;
+        Thu, 11 Jul 2019 02:46:57 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190711024657epsmtrp196202ce3efc9b1b7e7ae58f7bacc860c~wOldsO6zs2470024700epsmtrp15;
+        Thu, 11 Jul 2019 02:46:57 +0000 (GMT)
+X-AuditID: b6c32a37-f31ff7000000102f-37-5d26a322f923
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        67.FF.03692.123A62D5; Thu, 11 Jul 2019 11:46:57 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190711024657epsmtip2b91dd300dca37759574381c784813ac7~wOldfcx5E1722817228epsmtip2W;
+        Thu, 11 Jul 2019 02:46:57 +0000 (GMT)
+Subject: Re: [PATCH v2] PM / devfreq: Fix kernel oops on governor module
+ load
+To:     Ezequiel Garcia <ezequiel@collabora.com>, cwchoi00@gmail.com
+Cc:     Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>, kernel@collabora.com,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <16d08fb2-da04-8920-93d0-43f479d2bbe0@samsung.com>
+Date:   Thu, 11 Jul 2019 11:49:57 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6addb70f-6b21-4f09-e1a0-21476b55df14@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <85fb2cb764961845a32b8af51e8c6ccebf60c703.camel@collabora.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjm8+xsR2n1NTPfBGudMtSw7ThXp9ISilooufBPCcsOenKyKztb
+        ZQVdJFOz+49qUhkVphTllU3UxdKkmyRqdEHIstLsQqUZhdC2Y+S/53uf5+F5n+/7KEJRJY2h
+        Cq1O3mHlzLQ0QtJ8L0GVRF9dYlC31qjY951L2Zuv/Ij13hmTsQ3dFST75PAnGfvjeAdiXx26
+        IU2X6TwD15DO6x6Q6U401iLdj/r5ekmOKdXIc/m8Q8lb82z5hdaCNDojO3ddrna5mkliVrIr
+        aKWVs/Bp9PpMfdKGQnNgAVq5izO7AiM9Jwi0ak2qw+Zy8kqjTXCm0bw932xfaV8mcBbBZS1Y
+        lmezrGLU6mRtQLjDZOx2+2X2hqg9k1dKyIPoAy5H4RTgFDhX3BJWjiIoBfYgGHSfI4KEAn9H
+        UPc8ViR+IvA8rpb8c0yOjUw52hC0XRknxcNXBL9OFcuCqkicBRX9DdIgnoPT4fatIVlQROBe
+        BG/KhskgIcWJ4Bt+HhLNwguh/9dbFMRyvAb+9HSH5hIcB/UTnaGdovBWeNhxSSJqZsODC0Mh
+        HI4zwFd8LKQncDS8HLocJuIFUNxUSQSDAY9K4dnIFyR2WA91R/um+kTCx65GmYhjYORkyRTe
+        BzUPOqSiuRRBo+8pKRIa8F0/G0igAgkJcLtFJY4XgvfPRSQGz4Qv4xVkUAJYDqUlClGyCHpf
+        D4SJeB5cPVomPYVo97Q67mkV3NMquP+HVSFJLZrL2wVLAS8wds30565Hod+ZuMKD7nRn+hGm
+        ED1Drh+MMyhIbpdQZPEjoAh6jrx94yKDQp7PFe3lHbZch8vMC36kDdz2aSImKs8W+OtWZy6j
+        TdZoNGwKs1zLMHS03DgYa1DgAs7Jm3jezjv++cKo8JiDaLf+m6617gC1Ja151Nd+pETd7vF6
+        KoXhos/kzljD2rnbTZ6okeOunB05Q4YtHZ0LsltN4zdnzkri3rlaXkZu7jnSs//kZNbYi75N
+        8XGP0k1Ni8vwiYnrvsj+tk33J5Tk5rzy2urzxJn4hLve0uTRQ9tWj3elGvsyf3fp0qv7z6hW
+        0xLByDGJhEPg/gJzfCFwswMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmkeLIzCtJLcpLzFFi42LZdlhJXldxsVqswY+FuhbPjmpbrLl9iNFi
+        54Yv7Babz/WwWpxtesNu8bn3CKPF7cYVbA7sHjvuLmH02DnrLrtH35ZVjB6fN8kFsERx2aSk
+        5mSWpRbp2yVwZZybdYi9YLNoxd+FbawNjM8Fuhg5OSQETCT+fnnJ1MXIxSEksJtRovnrf2aI
+        hKTEtItHgWwOIFtY4vDhYoiat4wS32buYASpERbwlbj7uZsNxBYRcJBYv/YJO0gRs8BlRomN
+        dycwQnRMZ5LYfWkTK0gVm4CWxP4XN8A6+AUUJa7+eAw2iVfATuL3xXNgcRYBVYlN34+CXSEq
+        ECEx6dpOFogaQYmTM5+A2ZwC3hL7myE2MwuoS/yZd4kZwhaXuPVkPhOELS/RvHU28wRG4VlI
+        2mchaZmFpGUWkpYFjCyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGCo0hLcwfj5SXx
+        hxgFOBiVeHgDHqrGCrEmlhVX5h5ilOBgVhLh3eeuHCvEm5JYWZValB9fVJqTWnyIUZqDRUmc
+        92nesUghgfTEktTs1NSC1CKYLBMHp1QDo9ndjlfbzpf+Df+V3VZwkP//aVejx8rOa4p/HckU
+        1TK5G8BdU2f3d/3C6MP7DuxyvxO6cXbRhzPXfXcrnFR99FaJ9/u6z1Nef3I32liufWrix4u3
+        nA46xk9/tNRmypSy76ev7Fy9+F+X9jStlfPEpGfMm3phK8eaW0vKL/b0+qp4hR/S0ptifUpa
+        iaU4I9FQi7moOBEA88uFP54CAAA=
+X-CMS-MailID: 20190711024657epcas1p228c9ed5db4a37970fe95511019d860d4
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190710183033epcas5p4845af2f6704e7e8e9b9c17fc651afe34
+References: <20190621213949.27018-1-ezequiel@collabora.com>
+        <CAGTfZH3WenT=t6bFWy7sZCKhcPaMBrzTs=00DeSFU-0Sm-qS=A@mail.gmail.com>
+        <CGME20190710183033epcas5p4845af2f6704e7e8e9b9c17fc651afe34@epcas5p4.samsung.com>
+        <85fb2cb764961845a32b8af51e8c6ccebf60c703.camel@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-07-19, 22:53, Heiner Kallweit wrote:
-> I just got the following when manually suspending the system with
-> "systemctl suspend" and waking it up with the power button.
-> 
-> 
-> [  380.203172] Restarting tasks ... done.
-> 
-> [  380.211714] ============================================
-> [  380.211719] WARNING: possible recursive locking detected
-> [  380.211726] 5.2.0-rc7-next-20190704+ #2 Not tainted
-> [  380.211731] --------------------------------------------
-> [  380.211737] systemd-sleep/2367 is trying to acquire lock:
-> [  380.211745] 0000000043cf69ce (&policy->rwsem){+.+.}, at: refresh_frequency_limits+0x36/0x90
-> [  380.211761]
->                but task is already holding lock:
-> [  380.211767] 0000000043cf69ce (&policy->rwsem){+.+.}, at: cpufreq_cpu_acquire+0x25/0x50
-> [  380.211777]
->                other info that might help us debug this:
-> [  380.211783]  Possible unsafe locking scenario:
-> 
-> [  380.211789]        CPU0
-> [  380.211792]        ----
-> [  380.211795]   lock(&policy->rwsem);
-> [  380.211800]   lock(&policy->rwsem);
-> [  380.211805]
->                 *** DEADLOCK ***
-> 
-> [  380.211811]  May be due to missing lock nesting notation
-> 
-> [  380.211818] 8 locks held by systemd-sleep/2367:
-> [  380.211823]  #0: 000000000e253e21 (sb_writers#5){.+.+}, at: vfs_write+0x16b/0x1d0
-> [  380.211835]  #1: 00000000d0140159 (&of->mutex){+.+.}, at: kernfs_fop_write+0xfd/0x1c0
-> [  380.211846]  #2: 00000000383c283a (kn->count#155){.+.+}, at: kernfs_fop_write+0x105/0x1c0
-> [  380.211857]  #3: 000000007e6f342b (system_transition_mutex){+.+.}, at: pm_suspend.cold+0xd0/0x36a
-> [  380.211869]  #4: 000000002ee59360 ((pm_chain_head).rwsem){++++}, at: __blocking_notifier_call_chain+0x46/0x80
-> [  380.211883]  #5: 000000003972eb2e (&tz->lock){+.+.}, at: step_wise_throttle+0x3f/0x90
-> [  380.211893]  #6: 0000000007747f02 (&cdev->lock){+.+.}, at: thermal_cdev_update+0x1e/0x16c
-> [  380.211904]  #7: 0000000043cf69ce (&policy->rwsem){+.+.}, at: cpufreq_cpu_acquire+0x25/0x50
+Hi,
 
-This is already fixed in linux-next few days back. Can you try the
-latest stuff again ?
+On 19. 7. 11. 오전 3:30, Ezequiel Garcia wrote:
+> Hello Chanwoo,
+> 
+> On Sat, 2019-06-22 at 19:46 +0900, Chanwoo Choi wrote:
+>> Hi,
+>>
+>> 2019년 6월 22일 (토) 오전 6:42, Ezequiel Garcia <ezequiel@collabora.com>님이 작성:
+>>> A bit unexpectedly (but still documented), request_module may
+>>> return a positive value, in case of a modprobe error.
+>>> This is currently causing issues in the devfreq framework.
+>>>
+>>> When a request_module exits with a positive value, we currently
+>>> return that via ERR_PTR. However, because the value is positive,
+>>> it's not a ERR_VALUE proper, and is therefore treated as a
+>>> valid struct devfreq_governor pointer, leading to a kernel oops.
+>>>
+>>> Fix this by returning -EINVAL if request_module returns a positive
+>>> value.
+>>>
+>>> Fixes: b53b0128052ff ("PM / devfreq: Fix static checker warning in try_then_request_governor")
+>>> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+>>> ---
+>>> Changes from v1:
+>>> * Rework the fix as suggested by Enric and Chanwoo,
+>>>   handling the return vaue.
+>>> ---
+>>>  drivers/devfreq/devfreq.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>>> index 6b6991f0e873..258f70c1e48f 100644
+>>> --- a/drivers/devfreq/devfreq.c
+>>> +++ b/drivers/devfreq/devfreq.c
+>>> @@ -257,7 +257,7 @@ static struct devfreq_governor *try_then_request_governor(const char *name)
+>>>                 /* Restore previous state before return */
+>>>                 mutex_lock(&devfreq_list_lock);
+>>>                 if (err)
+>>> -                       return ERR_PTR(err);
+>>> +                       return (err < 0) ? ERR_PTR(err) : ERR_PTR(-EINVAL);
+>>>
+>>>                 governor = find_devfreq_governor(name);
+>>>         }
+>>
+>> Thanks you for fix-up.
+>> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+>>
+>> But, you are missing the stable mailing list. In order to apply this
+>> fix-up patch,\
+>> you have to send it to stable mailing list. Please send it.
+>>
+>>
+> 
+> If I understand correctly, you or any of the devfreq maintainer
+> can simply add a Cc: stable@vger.kernel.org tag.
+
+Originally, the author have to send the stable mailing list
+with the required style. You can do it.
+
+> 
+> This is documented as Option 1 in stable-kernel-rules.rst.
+> 
+> The Acked-by and Reviewed-by tags need to be collected anyway :-)
+
+This patch[1] was picked to devfreq.git.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git/commit/?h=for-next&id=4f065f69ebc2bdf1fbe224816a3c471babd370dd
+
+> 
+> Thanks!
+> Eze
+> 
+> 
+> 
+
 
 -- 
-viresh
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
