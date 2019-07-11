@@ -2,331 +2,264 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD34C65E2F
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 19:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029EA65E6E
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 19:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728662AbfGKRHO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jul 2019 13:07:14 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:45323 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728737AbfGKRHN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 13:07:13 -0400
-Received: by mail-lj1-f193.google.com with SMTP id m23so6499426lje.12
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 10:07:11 -0700 (PDT)
+        id S1728681AbfGKRZb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jul 2019 13:25:31 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:34197 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbfGKRZa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 13:25:30 -0400
+Received: by mail-lf1-f68.google.com with SMTP id b29so4621864lfq.1;
+        Thu, 11 Jul 2019 10:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kfBRiimj25YsoO7nzYueeiO+Hpjn+NuB2lsdFOn8ASY=;
-        b=MnIXCj5RYWPm7eMWoapgUjGxVvFXMmywFQ2kQMOnRLX3V+487ibLxbLv78ywuQq+ZQ
-         Bb0TFNwAZbH9dHpkdU/nMzrzRm7xDa9RvnJ0I8bALa3JJ5OTqxluOmph+56gJift2hpb
-         9gKUCFcOglW5bTH4n5VpxnMh2uET1mnARQRcM=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2YMfHUBjXHpo+j06pyniNllvZMRnbJcOo4hnaLC71sE=;
+        b=ApmKnjpVGrYMZYw9nmXLaN19GMQAPjPv7W7548PsMxVOiIztXhPoNpajU9makN5x2H
+         OU0g1aGH+1kMbq6R3KOSnFMvkR8XhQ2jFY2cP+EMCN/4OFxDNNoOwETRn6/Xy+NtZtX4
+         YKd4yvHwa1C/idpQfxRbeKHt3PemDXwQi4pah8oRvYDoaKqVfPRMzg0UDVwEfg5k4mUN
+         mDTv06DQjk2qoQ+t7NqHgN5e1oupNpskmuphiTmuBMeSlkwl8o6yFHkJAk5PuqFp0gHM
+         aTgj3TNmg6D7mj6G4ID7Ezg4KvEfhTp/OlYXv/nFMYo3JEp4+AtKyQmtxC3zmv1PZApN
+         IqIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kfBRiimj25YsoO7nzYueeiO+Hpjn+NuB2lsdFOn8ASY=;
-        b=JwEtz/BEJ/hyyKeOhvJy+SelB+XS52ObfTr1TU2qr0k7wCC8cUcatdDmtBgFkjmB5J
-         zvUQH3GwMcZ4maIuxo6FgDLkubsnAf43QbwtZDPDyko8ilUljn4erh2g8aoqVAcBVmgj
-         zqmpp5uAhl3oip15Bw6wJ77i2k6Yc439fM7OQMXhvs+oq4AXSGRE0fCFMsVr+0Sa0py6
-         osmrwuJQkDgtuRmUsRGJVU/dHddk8XaWFB1/p63w09VmHzpG3Gnvj98Aju80DihoJTy9
-         HOmG8dZuwzPrVHp2s32OQ4SQHTnepnpF5LNuGIjy1eCV7FmxAVaUv/TyglqhSrKfre7a
-         e8xg==
-X-Gm-Message-State: APjAAAWtlZyRAEmPm3tT7fhJJ7GB6250rsrqxDQ3Gtx8IBgVXcycycBb
-        BVQBxLl5OuRTyKDsmAv6of6Rz8wPghI=
-X-Google-Smtp-Source: APXvYqym2TPJCz9zLHDs1HMPRCDENQf/bsu3LmxFqWi+BX0t0Swr6ToIRsuvEXM3cHC93Ds9spX4jA==
-X-Received: by 2002:a2e:87d0:: with SMTP id v16mr3252615ljj.24.1562864830716;
-        Thu, 11 Jul 2019 10:07:10 -0700 (PDT)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id g5sm1078149ljj.69.2019.07.11.10.07.09
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Jul 2019 10:07:09 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id t28so6534980lje.9
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 10:07:09 -0700 (PDT)
-X-Received: by 2002:a2e:970d:: with SMTP id r13mr3220679lji.126.1562864828672;
- Thu, 11 Jul 2019 10:07:08 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2YMfHUBjXHpo+j06pyniNllvZMRnbJcOo4hnaLC71sE=;
+        b=luE1FzP7fw951kVwYtvGw391QaIPfWDy6yMp5SznCzF8GaGtUDHD5M+BH0Uhbi9WAI
+         IZzo8KYEX/0lJKUOKnJrKsI8HC4LAI99wqCSorLGNn6kv1xsU2z0exhQndJ8gr6eMPCs
+         DDmd/mLT3z6I1I0CxArymII0UblBRnOoYg2spXFni8QbQC6aZu+Ah/w6GwZ+SRSVf/NK
+         A7cfS6AgT+KNlb3/GadnhseUiQZmPC8S2gZoSQjl58LRjHLy5QASMvJ/ANCCUJw9k/Z2
+         DIFf+3oZR58oFCMDmnIEiqV+UfDHeAlOIvbYYjSet6Exbkujf/Wu5PmDfCkUY0G/fnz9
+         l0iQ==
+X-Gm-Message-State: APjAAAUBI6g4wTozkiQscO5gs9rqK41juFEEnxWH1MG/+xWPdxkS3jfS
+        b9WQYCD0V5ng9+qJw+kFgLLBBPmo
+X-Google-Smtp-Source: APXvYqzfDDUhalkCcqE0q9tb+NTPSe5zxtMtKXFg82as9QK71ou16O9M+55H/j8aZ6Ikhc++VBbZ9A==
+X-Received: by 2002:ac2:52b7:: with SMTP id r23mr2490854lfm.120.1562865927145;
+        Thu, 11 Jul 2019 10:25:27 -0700 (PDT)
+Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
+        by smtp.googlemail.com with ESMTPSA id b1sm1084553ljj.26.2019.07.11.10.25.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Jul 2019 10:25:26 -0700 (PDT)
+Subject: Re: [PATCH v2 2/6] ARM: tegra: Expose functions required for cpuidle
+ driver
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20190711031312.10038-1-digetx@gmail.com>
+ <20190711031312.10038-3-digetx@gmail.com>
+ <bc6e96be-91ee-5d94-cbc2-46d2e2f25bce@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <514c1cd6-2180-b55f-dacc-f0e08d9a366f@gmail.com>
+Date:   Thu, 11 Jul 2019 20:25:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20190618091724.28232-1-georgi.djakov@linaro.org> <20190618091724.28232-3-georgi.djakov@linaro.org>
-In-Reply-To: <20190618091724.28232-3-georgi.djakov@linaro.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Thu, 11 Jul 2019 10:06:32 -0700
-X-Gmail-Original-Message-ID: <CAE=gft7=ZbK3ARtWyv8n_hWJ4kuXRs0UA0QsE420pqL8R1quUQ@mail.gmail.com>
-Message-ID: <CAE=gft7=ZbK3ARtWyv8n_hWJ4kuXRs0UA0QsE420pqL8R1quUQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add tagging and wake/sleep
- support for sdm845
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     linux-pm@vger.kernel.org, David Dai <daidavid1@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        amit.kucheria@linaro.org, Doug Anderson <dianders@chromium.org>,
-        Sean Sweeney <seansw@qti.qualcomm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <bc6e96be-91ee-5d94-cbc2-46d2e2f25bce@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Georgi and David,
+11.07.2019 15:42, Jon Hunter пишет:
+> 
+> On 11/07/2019 04:13, Dmitry Osipenko wrote:
+>> The upcoming unified CPUIDLE driver will be added to the drivers/cpuidle/
+>> directory and it will require all these Tegra PM-core functions.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  arch/arm/mach-tegra/Makefile  |  2 +-
+>>  arch/arm/mach-tegra/platsmp.c |  2 --
+>>  arch/arm/mach-tegra/pm.c      | 16 +++++++---------
+>>  arch/arm/mach-tegra/pm.h      |  3 ---
+>>  arch/arm/mach-tegra/sleep.h   |  1 -
+>>  include/linux/clk/tegra.h     | 13 +++++++++++++
+>>  include/soc/tegra/pm.h        | 28 ++++++++++++++++++++++++++++
+>>  7 files changed, 49 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/arch/arm/mach-tegra/Makefile b/arch/arm/mach-tegra/Makefile
+>> index 5d93a0b36866..27bd5d9865e3 100644
+>> --- a/arch/arm/mach-tegra/Makefile
+>> +++ b/arch/arm/mach-tegra/Makefile
+>> @@ -13,7 +13,7 @@ obj-$(CONFIG_ARCH_TEGRA_2x_SOC)		+= pm-tegra20.o
+>>  obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= sleep-tegra30.o
+>>  obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= pm-tegra30.o
+>>  obj-$(CONFIG_SMP)			+= platsmp.o
+>> -obj-$(CONFIG_HOTPLUG_CPU)               += hotplug.o
+>> +obj-y					+= hotplug.o
+>>  
+>>  obj-$(CONFIG_ARCH_TEGRA_114_SOC)	+= sleep-tegra30.o
+>>  obj-$(CONFIG_ARCH_TEGRA_114_SOC)	+= pm-tegra30.o
+>> diff --git a/arch/arm/mach-tegra/platsmp.c b/arch/arm/mach-tegra/platsmp.c
+>> index e6911a14c096..c8a63719a143 100644
+>> --- a/arch/arm/mach-tegra/platsmp.c
+>> +++ b/arch/arm/mach-tegra/platsmp.c
+>> @@ -183,8 +183,6 @@ const struct smp_operations tegra_smp_ops __initconst = {
+>>  	.smp_prepare_cpus	= tegra_smp_prepare_cpus,
+>>  	.smp_secondary_init	= tegra_secondary_init,
+>>  	.smp_boot_secondary	= tegra_boot_secondary,
+>> -#ifdef CONFIG_HOTPLUG_CPU
+>>  	.cpu_kill		= tegra_cpu_kill,
+>>  	.cpu_die		= tegra_cpu_die,
+>> -#endif
+>>  };
+>> diff --git a/arch/arm/mach-tegra/pm.c b/arch/arm/mach-tegra/pm.c
+>> index 6aaacb5757e1..f9c9bce9e15d 100644
+>> --- a/arch/arm/mach-tegra/pm.c
+>> +++ b/arch/arm/mach-tegra/pm.c
+>> @@ -123,11 +123,9 @@ void tegra_clear_cpu_in_lp2(void)
+>>  	spin_unlock(&tegra_lp2_lock);
+>>  }
+>>  
+>> -bool tegra_set_cpu_in_lp2(void)
+>> +void tegra_set_cpu_in_lp2(void)
+>>  {
+>>  	int phy_cpu_id = cpu_logical_map(smp_processor_id());
+>> -	bool last_cpu = false;
+>> -	cpumask_t *cpu_lp2_mask = tegra_cpu_lp2_mask;
+>>  	u32 *cpu_in_lp2 = tegra_cpu_lp2_mask;
+>>  
+>>  	spin_lock(&tegra_lp2_lock);
+>> @@ -135,11 +133,7 @@ bool tegra_set_cpu_in_lp2(void)
+>>  	BUG_ON((*cpu_in_lp2 & BIT(phy_cpu_id)));
+>>  	*cpu_in_lp2 |= BIT(phy_cpu_id);
+>>  
+>> -	if ((phy_cpu_id == 0) && cpumask_equal(cpu_lp2_mask, cpu_online_mask))
+>> -		last_cpu = true;
+>> -
+>>  	spin_unlock(&tegra_lp2_lock);
+>> -	return last_cpu;
+>>  }
+> 
+> I think that the commit message should describe what is going on here or
+> this should be a separate change.
 
-On Tue, Jun 18, 2019 at 2:17 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
->
-> From: David Dai <daidavid1@codeaurora.org>
->
-> Add support for wake and sleep commands by using a tag to indicate
-> whether or not the aggregate and set requests fall into execution
-> state specific bucket.
->
-> Signed-off-by: David Dai <daidavid1@codeaurora.org>
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> ---
->  drivers/interconnect/qcom/sdm845.c | 129 ++++++++++++++++++++++-------
->  1 file changed, 98 insertions(+), 31 deletions(-)
->
-> diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
-> index fb526004c82e..c100aab39415 100644
-> --- a/drivers/interconnect/qcom/sdm845.c
-> +++ b/drivers/interconnect/qcom/sdm845.c
-> @@ -66,6 +66,17 @@ struct bcm_db {
->  #define SDM845_MAX_BCM_PER_NODE        2
->  #define SDM845_MAX_VCD         10
->
-> +#define QCOM_ICC_BUCKET_AMC            0
+Indeed, it could be not very obvious what's going on here without a
+thorough review. I'll factor out all these minor changes into separate
+commits.
 
-What is AMC again? Is it the "right now" bucket? Maybe a comment on
-the meaning of this bucket would be helpful.
+In particular there is no need to know whether CPU is the "last_cpu" for
+the new driver because CPU0 is always the "last" since it awaits for the
+secondaries in the coupled state.
 
-> +#define QCOM_ICC_BUCKET_WAKE           1
-> +#define QCOM_ICC_BUCKET_SLEEP          2
-> +#define QCOM_ICC_NUM_BUCKETS           3
-> +#define QCOM_ICC_TAG_AMC               BIT(QCOM_ICC_BUCKET_AMC)
-> +#define QCOM_ICC_TAG_WAKE              BIT(QCOM_ICC_BUCKET_WAKE)
-> +#define QCOM_ICC_TAG_SLEEP             BIT(QCOM_ICC_BUCKET_SLEEP)
-> +#define QCOM_ICC_TAG_ACTIVE_ONLY       (QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE)
-> +#define QCOM_ICC_TAG_ALWAYS            (QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
-> +                                        QCOM_ICC_TAG_SLEEP)
-> +
->  /**
->   * struct qcom_icc_node - Qualcomm specific interconnect nodes
->   * @name: the node name used in debugfs
-> @@ -75,7 +86,9 @@ struct bcm_db {
->   * @channels: num of channels at this node
->   * @buswidth: width of the interconnect between a node and the bus
->   * @sum_avg: current sum aggregate value of all avg bw requests
-> + * @sum_avg_cached: previous sum aggregate value of all avg bw requests
->   * @max_peak: current max aggregate value of all peak bw requests
-> + * @max_peak_cached: previous max aggregate value of all peak bw requests
->   * @bcms: list of bcms associated with this logical node
->   * @num_bcms: num of @bcms
->   */
-> @@ -86,8 +99,10 @@ struct qcom_icc_node {
->         u16 num_links;
->         u16 channels;
->         u16 buswidth;
-> -       u64 sum_avg;
-> -       u64 max_peak;
-> +       u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
-> +       u64 sum_avg_cached[QCOM_ICC_NUM_BUCKETS];
-> +       u64 max_peak[QCOM_ICC_NUM_BUCKETS];
-> +       u64 max_peak_cached[QCOM_ICC_NUM_BUCKETS];
->         struct qcom_icc_bcm *bcms[SDM845_MAX_BCM_PER_NODE];
->         size_t num_bcms;
->  };
-> @@ -112,8 +127,8 @@ struct qcom_icc_bcm {
->         const char *name;
->         u32 type;
->         u32 addr;
-> -       u64 vote_x;
-> -       u64 vote_y;
-> +       u64 vote_x[QCOM_ICC_NUM_BUCKETS];
-> +       u64 vote_y[QCOM_ICC_NUM_BUCKETS];
->         bool dirty;
->         bool keepalive;
->         struct bcm_db aux_data;
-> @@ -555,7 +570,7 @@ inline void tcs_cmd_gen(struct tcs_cmd *cmd, u64 vote_x, u64 vote_y,
->                 cmd->wait = true;
->  }
->
-> -static void tcs_list_gen(struct list_head *bcm_list,
-> +static void tcs_list_gen(struct list_head *bcm_list, int bucket,
->                          struct tcs_cmd tcs_list[SDM845_MAX_VCD],
->                          int n[SDM845_MAX_VCD])
->  {
-> @@ -573,8 +588,8 @@ static void tcs_list_gen(struct list_head *bcm_list,
->                         commit = true;
->                         cur_vcd_size = 0;
->                 }
-> -               tcs_cmd_gen(&tcs_list[idx], bcm->vote_x, bcm->vote_y,
-> -                           bcm->addr, commit);
-> +               tcs_cmd_gen(&tcs_list[idx], bcm->vote_x[bucket],
-> +                           bcm->vote_y[bucket], bcm->addr, commit);
->                 idx++;
->                 n[batch]++;
->                 /*
-> @@ -595,32 +610,39 @@ static void tcs_list_gen(struct list_head *bcm_list,
->
->  static void bcm_aggregate(struct qcom_icc_bcm *bcm)
->  {
-> -       size_t i;
-> -       u64 agg_avg = 0;
-> -       u64 agg_peak = 0;
-> +       size_t i, bucket;
-> +       u64 agg_avg[QCOM_ICC_NUM_BUCKETS] = {0};
-> +       u64 agg_peak[QCOM_ICC_NUM_BUCKETS] = {0};
->         u64 temp;
->
-> -       for (i = 0; i < bcm->num_nodes; i++) {
-> -               temp = bcm->nodes[i]->sum_avg * bcm->aux_data.width;
-> -               do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
-> -               agg_avg = max(agg_avg, temp);
-> +       for (bucket = 0; bucket < QCOM_ICC_NUM_BUCKETS; bucket++) {
-> +               for (i = 0; i < bcm->num_nodes; i++) {
-> +                       temp = bcm->nodes[i]->sum_avg_cached[bucket] * bcm->aux_data.width;
-> +                       do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
-> +                       agg_avg[bucket] = max(agg_avg[bucket], temp);
->
-> -               temp = bcm->nodes[i]->max_peak * bcm->aux_data.width;
-> -               do_div(temp, bcm->nodes[i]->buswidth);
+>>  static int tegra_sleep_cpu(unsigned long v2p)
+>> @@ -195,14 +189,16 @@ static void tegra_pm_set(enum tegra_suspend_mode mode)
+>>  	tegra_pmc_enter_suspend_mode(mode);
+>>  }
+>>  
+>> -void tegra_idle_lp2_last(void)
+>> +int tegra_idle_lp2_last(void)
+>>  {
+>> +	int err;
+>> +
+>>  	tegra_pm_set(TEGRA_SUSPEND_LP2);
+>>  
+>>  	cpu_cluster_pm_enter();
+>>  	suspend_cpu_complex();
+>>  
+>> -	cpu_suspend(PHYS_OFFSET - PAGE_OFFSET, &tegra_sleep_cpu);
+>> +	err = cpu_suspend(PHYS_OFFSET - PAGE_OFFSET, &tegra_sleep_cpu);
+>>  
+>>  	/*
+>>  	 * Resume L2 cache if it wasn't re-enabled early during resume,
+>> @@ -214,6 +210,8 @@ void tegra_idle_lp2_last(void)
+>>  
+>>  	restore_cpu_complex();
+>>  	cpu_cluster_pm_exit();
+>> +
+>> +	return err;
+>>  }
+>>  
+>>  enum tegra_suspend_mode tegra_pm_validate_suspend_mode(
+>> diff --git a/arch/arm/mach-tegra/pm.h b/arch/arm/mach-tegra/pm.h
+>> index 1e51a9b636eb..81525f5f4a44 100644
+>> --- a/arch/arm/mach-tegra/pm.h
+>> +++ b/arch/arm/mach-tegra/pm.h
+>> @@ -23,9 +23,6 @@ void tegra20_sleep_core_init(void);
+>>  void tegra30_lp1_iram_hook(void);
+>>  void tegra30_sleep_core_init(void);
+>>  
+>> -void tegra_clear_cpu_in_lp2(void);
+>> -bool tegra_set_cpu_in_lp2(void);
+>> -void tegra_idle_lp2_last(void);
+>>  extern void (*tegra_tear_down_cpu)(void);
+>>  
+>>  #ifdef CONFIG_PM_SLEEP
+>> diff --git a/arch/arm/mach-tegra/sleep.h b/arch/arm/mach-tegra/sleep.h
+>> index d219872b7546..0d9956e9a8ea 100644
+>> --- a/arch/arm/mach-tegra/sleep.h
+>> +++ b/arch/arm/mach-tegra/sleep.h
+>> @@ -124,7 +124,6 @@ void tegra30_hotplug_shutdown(void);
+>>  #endif
+>>  
+>>  void tegra20_tear_down_cpu(void);
+>> -int tegra30_sleep_cpu_secondary_finish(unsigned long);
+>>  void tegra30_tear_down_cpu(void);
+>>  
+>>  #endif
+>> diff --git a/include/linux/clk/tegra.h b/include/linux/clk/tegra.h
+>> index b8aef62cc3f5..cf0f2cb5e109 100644
+>> --- a/include/linux/clk/tegra.h
+>> +++ b/include/linux/clk/tegra.h
+>> @@ -108,6 +108,19 @@ static inline void tegra_cpu_clock_resume(void)
+>>  
+>>  	tegra_cpu_car_ops->resume();
+>>  }
+>> +#else
+>> +static inline bool tegra_cpu_rail_off_ready(void)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>> +static inline void tegra_cpu_clock_suspend(void)
+>> +{
+>> +}
+>> +
+>> +static inline void tegra_cpu_clock_resume(void)
+>> +{
+>> +}
+>>  #endif
+>>  
+>>  extern void tegra210_xusb_pll_hw_control_enable(void);
+>> diff --git a/include/soc/tegra/pm.h b/include/soc/tegra/pm.h
+>> index 951fcd738d55..fa18c2df5028 100644
+>> --- a/include/soc/tegra/pm.h
+>> +++ b/include/soc/tegra/pm.h
+>> @@ -20,6 +20,12 @@ tegra_pm_validate_suspend_mode(enum tegra_suspend_mode mode);
+>>  
+>>  /* low-level resume entry point */
+>>  void tegra_resume(void);
+>> +
+>> +int tegra30_sleep_cpu_secondary_finish(unsigned long arg);
+>> +void tegra_clear_cpu_in_lp2(void);
+>> +void tegra_set_cpu_in_lp2(void);
+>> +int tegra_idle_lp2_last(void);
+>> +void tegra_cpu_die(unsigned int cpu);
+>>  #else
+>>  static inline enum tegra_suspend_mode
+>>  tegra_pm_validate_suspend_mode(enum tegra_suspend_mode mode)
+>> @@ -30,6 +36,28 @@ tegra_pm_validate_suspend_mode(enum tegra_suspend_mode mode)
+>>  static inline void tegra_resume(void)
+>>  {
+>>  }
+>> +
+>> +static inline int tegra30_sleep_cpu_secondary_finish(unsigned long arg)
+>> +{
+>> +	return -1;
+>> +}
+> 
+> -ENOTSUPP?
 
-Why is it that this one doesn't have the multiply by
-bcm->nodes[i]->channels again? I can't recall if there was a reason.
-If it's correct maybe it deserves a comment.
-
-> -               agg_peak = max(agg_peak, temp);
-> -       }
-> +                       temp = bcm->nodes[i]->max_peak_cached[bucket] * bcm->aux_data.width;
-> +                       do_div(temp, bcm->nodes[i]->buswidth);
-> +                       agg_peak[bucket] = max(agg_peak[bucket], temp);
->
-> -       temp = agg_avg * 1000ULL;
-> -       do_div(temp, bcm->aux_data.unit);
-> -       bcm->vote_x = temp;
-> +                       bcm->nodes[i]->sum_avg[bucket] = 0;
-> +                       bcm->nodes[i]->max_peak[bucket] = 0;
-
-I don't understand the sum_avg vs sum_avg_cached. Here's what I understand:
-1. qcom_icc_aggregate() does the math from the incoming values on
-sum_avg, and then clobbers sum_avg_cached with those values.
-2. bcm_aggregate() uses sum_avg_cached in its calculations, then clears sum_avg.
-
-But I don't get why that's needed. Why not just have sum_avg? Wouldn't
-it work the same? Ok, it wouldn't if you ended up calling
-bcm_aggregate() multiple times on the same bcm. But you have a dirty
-flag that prevents this from happening. So I think it's safe to remove
-the cached arrays, and just clear out the sum_avg when you aggregate.
-
-> +               }
->
-> -       temp = agg_peak * 1000ULL;
-> -       do_div(temp, bcm->aux_data.unit);
-> -       bcm->vote_y = temp;
-> +               temp = agg_avg[bucket] * 1000ULL;
-> +               do_div(temp, bcm->aux_data.unit);
-> +               bcm->vote_x[bucket] = temp;
->
-> -       if (bcm->keepalive && bcm->vote_x == 0 && bcm->vote_y == 0) {
-> -               bcm->vote_x = 1;
-> -               bcm->vote_y = 1;
-> +               temp = agg_peak[bucket] * 1000ULL;
-> +               do_div(temp, bcm->aux_data.unit);
-> +               bcm->vote_y[bucket] = temp;
-> +       }
-> +
-> +       if (bcm->keepalive && bcm->vote_x[0] == 0 && bcm->vote_y[0] == 0) {
-> +               bcm->vote_x[QCOM_ICC_BUCKET_AMC] = 1;
-> +               bcm->vote_x[QCOM_ICC_BUCKET_WAKE] = 1;
-> +               bcm->vote_y[QCOM_ICC_BUCKET_AMC] = 1;
-> +               bcm->vote_y[QCOM_ICC_BUCKET_WAKE] = 1;
->         }
->
->         bcm->dirty = false;
-> @@ -631,15 +653,25 @@ static int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->  {
->         size_t i;
->         struct qcom_icc_node *qn;
-> +       unsigned long tag_word = (unsigned long)tag;
->
->         qn = node->data;
->
-> +       if (!tag)
-> +               tag_word = QCOM_ICC_TAG_ALWAYS;
-> +
-> +       for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-> +               if (test_bit(i, &tag_word)) {
-
-I guess all this extra business with tag_word and casting is so that
-you can use test_bit, which is presumably a tiny bit faster? Does this
-actually make a measurable difference? Maybe in the name of simplicity
-we just do if (tag & BIT(i)), and then optimize if we find that
-conditional to be a hotspot?
-
-> +                       qn->sum_avg[i] += avg_bw;
-> +                       qn->max_peak[i] = max_t(u32, qn->max_peak[i], peak_bw);
-> +                       qn->sum_avg_cached[i] = qn->sum_avg[i];
-> +                       qn->max_peak_cached[i] = qn->max_peak[i];
-> +               }
-> +       }
-> +
->         *agg_avg += avg_bw;
->         *agg_peak = max_t(u32, *agg_peak, peak_bw);
->
-> -       qn->sum_avg = *agg_avg;
-> -       qn->max_peak = *agg_peak;
-> -
->         for (i = 0; i < qn->num_bcms; i++)
->                 qn->bcms[i]->dirty = true;
->
-> @@ -675,7 +707,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->          * Construct the command list based on a pre ordered list of BCMs
->          * based on VCD.
->          */
-> -       tcs_list_gen(&commit_list, cmds, commit_idx);
-> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_AMC, cmds, commit_idx);
->
->         if (!commit_idx[0])
->                 return ret;
-> @@ -693,6 +725,41 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->                 return ret;
->         }
->
-> +       INIT_LIST_HEAD(&commit_list);
-> +
-> +       for (i = 0; i < qp->num_bcms; i++) {
-> +               /*
-> +                * Only generate WAKE and SLEEP commands if a resource's
-> +                * requirements change as the execution environment transitions
-> +                * between different power states.
-> +                */
-> +               if (qp->bcms[i]->vote_x[QCOM_ICC_BUCKET_WAKE] !=
-> +                   qp->bcms[i]->vote_x[QCOM_ICC_BUCKET_SLEEP] ||
-> +                   qp->bcms[i]->vote_y[QCOM_ICC_BUCKET_WAKE] !=
-> +                   qp->bcms[i]->vote_y[QCOM_ICC_BUCKET_SLEEP]) {
-> +                       list_add_tail(&qp->bcms[i]->list, &commit_list);
-> +               }
-> +       }
-> +
-> +       if (list_empty(&commit_list))
-> +               return ret;
-> +
-> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_WAKE, cmds, commit_idx);
-> +
-> +       ret = rpmh_write_batch(qp->dev, RPMH_WAKE_ONLY_STATE, cmds, commit_idx);
-> +       if (ret) {
-> +               pr_err("Error sending WAKE RPMH requests (%d)\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_SLEEP, cmds, commit_idx);
-> +
-> +       ret = rpmh_write_batch(qp->dev, RPMH_SLEEP_STATE, cmds, commit_idx);
-> +       if (ret) {
-> +               pr_err("Error sending SLEEP RPMH requests (%d)\n", ret);
-> +               return ret;
-> +       }
-> +
->         return ret;
->  }
->
+Good point, thanks!
