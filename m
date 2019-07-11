@@ -2,99 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B508A65A7C
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 17:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C6865B70
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 18:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728717AbfGKPaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jul 2019 11:30:07 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:42908 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728594AbfGKPaG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 11:30:06 -0400
-Received: by mail-vs1-f68.google.com with SMTP id 190so4485210vsf.9;
-        Thu, 11 Jul 2019 08:30:06 -0700 (PDT)
+        id S1728682AbfGKQYY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jul 2019 12:24:24 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43518 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728557AbfGKQYY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 12:24:24 -0400
+Received: by mail-lj1-f193.google.com with SMTP id 16so6387039ljv.10;
+        Thu, 11 Jul 2019 09:24:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NKwh0BaKc7HdLVY/44p+/9uGqJilXs/pFH756+9dwa4=;
-        b=pWNqSiF0wI+NAhKUO9jeUT5ddMPc4IWrwifKWWXllUwVCKeE7nkFPXKD/OTuDl+7zE
-         r5YMnOFNfrvWr3wNDsqvEtjxgi43PgnPfifLNFD0znDVYw3QjzufMDUOxPj7jM7Kx2zG
-         dMB90OfJ7gdvM3hVMVoITiVJO+y2/x1NAfphjoOcE1sc2u55FCTGkL8m4NR9zpOy52Zs
-         U+8l+AAaYyDoDiC4V1daq19Ag8wP59d+QTQmV1YFziXr9qldRdiS2U/xHMPtCh140S88
-         V9hJ7AYrOymLb5WnV96LZoEvmt6gKwMm2vYtzFmxitS1wPtZj8LwfPYM0p+Ucd3OVPNs
-         u2iA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YaiSKf6jDXBQ+iwpdhNZ3NvL5ZW2kQBel0XIiJfpy58=;
+        b=raL9/O8actXIAtr2ISPnJSkPiSZ24FqLHsxKSGBjJMPSeBoFnAs/baQyy1DVgxmknl
+         ifISmJiMRyMQ99voC+Fz1TxMPJc9HqgpCcTWNwAWHcgO4LBJKPKKPJmGEQ9ShLHE3c0L
+         eY8Znu+S/K3pU7BOy8qaBQx663dlnb2IGauVsDI7svc85KoeQz9BnL9UWqfpBTCfaHL+
+         7DM6IMuxqjio4oXFo5g55JU/bj+HnfUMs4PeYObDr4J1PqjBKNiyv2Di8yjGlZexu0OV
+         J8N1EQ31Dcw9EKBSQvylBnv3/Ye5PFyjutcbnmzccbnhuK0cJ/+1p4Fc1r6Dt/pef2fI
+         6Vlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NKwh0BaKc7HdLVY/44p+/9uGqJilXs/pFH756+9dwa4=;
-        b=t41VuBiemAJnqueBQBYT4y+ynH2AO7tvfDrlAboeCuNHP9EudRK9WHnLfCLk/wIXhy
-         O7jmvpkwhH3GoVcNxYz0WnT9oGu0vg6f7gFKrZunnDsle/ducYhQ/ynCl6D9/gBnPuRC
-         9q2BwSPloPjVhuNzPf7yZGZyxuyCRiXLoBZaqLRTPEwZdaF00+Y16PJ9Rpbx0Kl48fvS
-         F1jLcWRMIATIZL/3+5f4oYnVB07Ou6scslIvOkIMHMB0aIADH/R3Km4Y9kzeOyFFLHyF
-         2rlYP1o8CfKnUBVtdNy09/HpzcFkeW/FPIddsDe8S5Er15/3bs2JHd3OtgWHJARxrgd/
-         I/VQ==
-X-Gm-Message-State: APjAAAWiBTuUuZ4MvSpYTN8ub/SlgQLnLBCaPIOflZLCozqPajzJBM7c
-        /HnYafdTBQqkNTz0q9BdtTjwEEJTO5zQ+7goLbNhGa1N828=
-X-Google-Smtp-Source: APXvYqyD0lSKwc7ImB95W3u/TfjlUbYrn4b/hJuAi+NA5A4U1ZHu5NVT6j14kb0e1Cw62+NTPEJ+C5zvLalN1NjiCws=
-X-Received: by 2002:a67:fc19:: with SMTP id o25mr5269898vsq.106.1562859005683;
- Thu, 11 Jul 2019 08:30:05 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YaiSKf6jDXBQ+iwpdhNZ3NvL5ZW2kQBel0XIiJfpy58=;
+        b=Z3W9JMyrd7ntYZVZ/JmiStiycmZPC+9qaM2rJKI9TqllPfEc2DFIaFX/UjV2CNkU+C
+         SWe1aZOVf2zNd84BlaDzw1ppQXfHugAj7kN/l1uC9UtQthmRmiHsnNgRWUSySLwTqIzk
+         cdD9oCEWvJC7pzfetqXlB0SZE2Z/iSfkAzUp8mcEr9HTP0o1eYTKxh/KldGSGj9evfut
+         q6Xz5Hr+2J6B0bvrJBV5h1uQ9jaTghZqrLkAA6Isoq6zl63heVscCzzzcfKBnacZjK7E
+         LLBptZtaDqAmGwYygkroebdS8yM+nQsDLMBACnRoDFOYR3XZQ9MG+3NE5LQzMLdpokPe
+         9qpA==
+X-Gm-Message-State: APjAAAXl/LjpJHGMi4SN6Hlmz/ySYoeEh/uFPEGnl/oDeGHmyDB9d82T
+        qQv0x6gBYzgbCaD97U+BGQ1w79j04rE=
+X-Google-Smtp-Source: APXvYqzUqVs+CdvzaNdAMH6CNbgc5EGXRl/6Kuv1ha+1OnFCJ0qeWtpPDdULOmV8HgckbES7e2W5Lw==
+X-Received: by 2002:a2e:8816:: with SMTP id x22mr3159361ljh.131.1562862262079;
+        Thu, 11 Jul 2019 09:24:22 -0700 (PDT)
+Received: from [84.217.172.154] (c-74afd954.51034-0-757473696b74.bbcust.telenor.se. [84.217.172.154])
+        by smtp.gmail.com with ESMTPSA id o8sm266932lfi.15.2019.07.11.09.24.21
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Jul 2019 09:24:21 -0700 (PDT)
+Subject: Re: The tick is active on idle adaptive-tick CPUs when
+ /dev/cpu_dma_latency is used
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+References: <79b247b3-e056-610e-9a07-e685dfdaa6c9@gmail.com>
+ <7332404.L1nL2KBT3s@kreacher>
+ <6ef6b96e-1772-6e80-60cf-eb57af618e99@gmail.com>
+ <312565511.gEFFlSTcEG@kreacher>
+From:   Thomas Lindroth <thomas.lindroth@gmail.com>
+Message-ID: <2828f202-ae04-7069-c75f-328f52a8d938@gmail.com>
+Date:   Thu, 11 Jul 2019 18:24:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <CAOuPNLiBA9VjEoG_D2y2O5mKiqsDNW1VZXOk1eWXpGY+h86acg@mail.gmail.com>
- <CAOMZO5BcLaS0gXUPi6oN6vjqagS5yf+rHh+EUjmi-Wi1OX7vqQ@mail.gmail.com>
- <CAOuPNLgEEfDca4aeT1+q8GfUfGzbJ4x6JwGf-ROB1pgpXUBHSw@mail.gmail.com>
- <CAOMZO5BY8JcLNMCRCC_d=emy8HR6kE=dB9f5qfZ=ci_c+Jak0w@mail.gmail.com>
- <CAOuPNLjYhkP_kL+q-ZpiDZMMpOHrU88BFBc2agtnCzXt8dihOg@mail.gmail.com>
- <CAOMZO5ADK1L5UMM9XZetHvmjTvmvUg99G7VPdeXitgpctGLCkw@mail.gmail.com>
- <CAOuPNLhZhgN26rquLQq9zHBct1QxK-7hXAza0xk-0QooPGYLNw@mail.gmail.com>
- <CAOMZO5BsJWTw0nCeUboam4kuKyCO3N_Ch5ZW8k5Y9KFtQBanhQ@mail.gmail.com>
- <CAOuPNLjrAU_C_TUKFMs1d0eGsw=AxuG6d6FhNHtHFwVhfYZGgA@mail.gmail.com>
- <CAOuPNLhstoCjxijrnKNmV1iKWjAXvSZ38Z13tfd5bvGbYSqPAA@mail.gmail.com>
- <CAOMZO5CD-QQaZwNfiX6mOLAup4J8dBiqEb_V_6jz_z5jXZ5cEw@mail.gmail.com>
- <CAOuPNLj=L_3RoC=9ws4yn1Q7QLoS3OEZ8FLRrF04HRQtQvc0Jg@mail.gmail.com> <CAOuPNLg5A1bB-Tmndm4PvsJ40tj0yn-bJ2mfifEpjAF-t84wiQ@mail.gmail.com>
-In-Reply-To: <CAOuPNLg5A1bB-Tmndm4PvsJ40tj0yn-bJ2mfifEpjAF-t84wiQ@mail.gmail.com>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Thu, 11 Jul 2019 20:59:54 +0530
-Message-ID: <CAOuPNLjdSh+pw196PAcBO9B-OgRb=f7sKcMFyGJPW3PNFwEyZA@mail.gmail.com>
-Subject: Re: [IMX] [DRM]: help in analyzing clock_summary rate difference
-To:     Fabio Estevam <festevam@gmail.com>, s.hauer@pengutronix.de,
-        p.zabel@pengutronix.de
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <312565511.gEFFlSTcEG@kreacher>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 7/10/19 12:22 PM, Rafael J. Wysocki wrote:
+> On Saturday, July 6, 2019 3:02:11 PM CEST Thomas Lindroth wrote:
+>> On 7/6/19 1:06 PM, Rafael J. Wysocki wrote:
+>>> The patch is below, but note that it adds the tick stopping overhead to the idle loop
+>>> for CPUs that are not adaptive-tick and when PM QoS latency constraints are used
+>>> which is not desirable in general.
+>>>
+>>> Please test it, but as I said above, the real solution appears to be to treat adaptive-tick
+>>> CPUs in a special way in the idle loop.
+>>>
+>>> ---
+>>>    drivers/cpuidle/governors/menu.c |   16 +++++-----------
+>>>    1 file changed, 5 insertions(+), 11 deletions(-)
+>>>
+>>> Index: linux-pm/drivers/cpuidle/governors/menu.c
+>>> ===================================================================
+>>> --- linux-pm.orig/drivers/cpuidle/governors/menu.c
+>>> +++ linux-pm/drivers/cpuidle/governors/menu.c
+>>> @@ -302,9 +302,10 @@ static int menu_select(struct cpuidle_dr
+>>>    	     !drv->states[0].disabled && !dev->states_usage[0].disable)) {
+>>>    		/*
+>>>    		 * In this case state[0] will be used no matter what, so return
+>>> -		 * it right away and keep the tick running.
+>>> +		 * it right away and keep the tick running if state[0] is a
+>>> +		 * polling one.
+>>>    		 */
+>>> -		*stop_tick = false;
+>>> +		*stop_tick = !!(drv->states[0].flags & CPUIDLE_FLAG_POLLING);
+>>>    		return 0;
+>>>    	}
+>>>    
+>>> @@ -395,16 +396,9 @@ static int menu_select(struct cpuidle_dr
+>>>    
+>>>    			return idx;
+>>>    		}
+>>> -		if (s->exit_latency > latency_req) {
+>>> -			/*
+>>> -			 * If we break out of the loop for latency reasons, use
+>>> -			 * the target residency of the selected state as the
+>>> -			 * expected idle duration so that the tick is retained
+>>> -			 * as long as that target residency is low enough.
+>>> -			 */
+>>> -			predicted_us = drv->states[idx].target_residency;
+>>> +		if (s->exit_latency > latency_req)
+>>>    			break;
+>>> -		}
+>>> +
+>>>    		idx = i;
+>>>    	}
+>>
+>> I tested the patch and it appears to work. Idle CPUs now have ticks disabled even
+>> when /dev/cpu_dma_latency is used.
+> 
+> OK, thanks, but as I said previously, you'd see the problem again with the PM QoS
+> latency constraint set to 0, which is somewhat inconsistent.  Also, this fix is
+> specific to the menu governor and the behavior should not depend on the
+> governor here IMO, so I have another patch to try (appended).
+> 
+> Please test it (instead of the previous one) and report back.
+> 
+> ---
+>   kernel/sched/idle.c |    3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> Index: linux-pm/kernel/sched/idle.c
+> ===================================================================
+> --- linux-pm.orig/kernel/sched/idle.c
+> +++ linux-pm/kernel/sched/idle.c
+> @@ -191,7 +191,8 @@ static void cpuidle_idle_call(void)
+>   		 */
+>   		next_state = cpuidle_select(drv, dev, &stop_tick);
+>   
+> -		if (stop_tick || tick_nohz_tick_stopped())
+> +		if (stop_tick || tick_nohz_tick_stopped() ||
+> +		    !housekeeping_cpu(dev->cpu, HK_FLAG_TICK))
+>   			tick_nohz_idle_stop_tick();
+>   		else
+>   			tick_nohz_idle_retain_tick();
+> 
 
-I need one general help in analyzing difference in clock_summary rate
-before and after the system resume.
-
-I am using custom IMX7 board with 4.9 Kernel.
-With this I am trying to support some functionality during suspend/resume.
-I am trying to analyze clk_summary from:
-# cat /sys/kernel/debug/clk/clk_summary
-
-I observed that there are difference in "clock rate" after system
-resume and module install. However the enable/prepare count remains
-the same.
-
-Since I am not much familiar with clock framework, I am looking for
-some help to analyze this issue. It's an internal issue.
-
-May be someone which is familiar with clock analysis or fixed the
-similar issue earlier can give me some guidance.
-What does the difference in clock rate indicates?
-What analysis can be done to narrow down the root cause?
-Any example of reference could be helpful to understand.
-
-
-Thank You!
-Regards,
-Pintu
+I tested this patch and it seems to work fine using the menu governor
+and PM QoS latency constraints matching each C-state including 0.
+I didn't test the TEO governor.
