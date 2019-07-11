@@ -2,131 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 009176592A
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 16:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B508A65A7C
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jul 2019 17:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728553AbfGKOlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jul 2019 10:41:12 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44706 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728340AbfGKOlM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 10:41:12 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6BEWtnW005678
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 10:41:11 -0400
-Received: from e32.co.us.ibm.com (e32.co.us.ibm.com [32.97.110.150])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tp5tec41q-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 10:41:10 -0400
-Received: from localhost
-        by e32.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <tyreld@linux.vnet.ibm.com>;
-        Thu, 11 Jul 2019 15:41:10 +0100
-Received: from b03cxnp08028.gho.boulder.ibm.com (9.17.130.20)
-        by e32.co.us.ibm.com (192.168.1.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 11 Jul 2019 15:41:06 +0100
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6BEf5nC64684456
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Jul 2019 14:41:05 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 251406A054;
-        Thu, 11 Jul 2019 14:41:05 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83C096A051;
-        Thu, 11 Jul 2019 14:41:02 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.80.233.139])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 11 Jul 2019 14:41:02 +0000 (GMT)
-Subject: Re: Coccinelle: Checking of_node_put() calls with SmPL
-To:     wen.yang99@zte.com.cn, Markus.Elfring@web.de, julia.lawall@lip6.fr
-Cc:     wang.yi59@zte.com.cn, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
-        daniel.lezcano@linaro.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oss@buserror.net, paulus@samba.org,
-        xue.zhihong@zte.com.cn, linuxppc-dev@lists.ozlabs.org,
-        cheng.shengyu@zte.com.cn
-References: <201907111435459627761@zte.com.cn>
-From:   Tyrel Datwyler <tyreld@linux.vnet.ibm.com>
-Date:   Thu, 11 Jul 2019 07:41:01 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1728717AbfGKPaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jul 2019 11:30:07 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:42908 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728594AbfGKPaG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 11:30:06 -0400
+Received: by mail-vs1-f68.google.com with SMTP id 190so4485210vsf.9;
+        Thu, 11 Jul 2019 08:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NKwh0BaKc7HdLVY/44p+/9uGqJilXs/pFH756+9dwa4=;
+        b=pWNqSiF0wI+NAhKUO9jeUT5ddMPc4IWrwifKWWXllUwVCKeE7nkFPXKD/OTuDl+7zE
+         r5YMnOFNfrvWr3wNDsqvEtjxgi43PgnPfifLNFD0znDVYw3QjzufMDUOxPj7jM7Kx2zG
+         dMB90OfJ7gdvM3hVMVoITiVJO+y2/x1NAfphjoOcE1sc2u55FCTGkL8m4NR9zpOy52Zs
+         U+8l+AAaYyDoDiC4V1daq19Ag8wP59d+QTQmV1YFziXr9qldRdiS2U/xHMPtCh140S88
+         V9hJ7AYrOymLb5WnV96LZoEvmt6gKwMm2vYtzFmxitS1wPtZj8LwfPYM0p+Ucd3OVPNs
+         u2iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NKwh0BaKc7HdLVY/44p+/9uGqJilXs/pFH756+9dwa4=;
+        b=t41VuBiemAJnqueBQBYT4y+ynH2AO7tvfDrlAboeCuNHP9EudRK9WHnLfCLk/wIXhy
+         O7jmvpkwhH3GoVcNxYz0WnT9oGu0vg6f7gFKrZunnDsle/ducYhQ/ynCl6D9/gBnPuRC
+         9q2BwSPloPjVhuNzPf7yZGZyxuyCRiXLoBZaqLRTPEwZdaF00+Y16PJ9Rpbx0Kl48fvS
+         F1jLcWRMIATIZL/3+5f4oYnVB07Ou6scslIvOkIMHMB0aIADH/R3Km4Y9kzeOyFFLHyF
+         2rlYP1o8CfKnUBVtdNy09/HpzcFkeW/FPIddsDe8S5Er15/3bs2JHd3OtgWHJARxrgd/
+         I/VQ==
+X-Gm-Message-State: APjAAAWiBTuUuZ4MvSpYTN8ub/SlgQLnLBCaPIOflZLCozqPajzJBM7c
+        /HnYafdTBQqkNTz0q9BdtTjwEEJTO5zQ+7goLbNhGa1N828=
+X-Google-Smtp-Source: APXvYqyD0lSKwc7ImB95W3u/TfjlUbYrn4b/hJuAi+NA5A4U1ZHu5NVT6j14kb0e1Cw62+NTPEJ+C5zvLalN1NjiCws=
+X-Received: by 2002:a67:fc19:: with SMTP id o25mr5269898vsq.106.1562859005683;
+ Thu, 11 Jul 2019 08:30:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <201907111435459627761@zte.com.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19071114-0004-0000-0000-000015268C22
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011408; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01230664; UDB=6.00648235; IPR=6.01011939;
- MB=3.00027680; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-11 14:41:09
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19071114-0005-0000-0000-00008C69C428
-Message-Id: <23e06fc0-b969-44e9-a44d-f11b19dfdeca@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-11_03:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907110164
+References: <CAOuPNLiBA9VjEoG_D2y2O5mKiqsDNW1VZXOk1eWXpGY+h86acg@mail.gmail.com>
+ <CAOMZO5BcLaS0gXUPi6oN6vjqagS5yf+rHh+EUjmi-Wi1OX7vqQ@mail.gmail.com>
+ <CAOuPNLgEEfDca4aeT1+q8GfUfGzbJ4x6JwGf-ROB1pgpXUBHSw@mail.gmail.com>
+ <CAOMZO5BY8JcLNMCRCC_d=emy8HR6kE=dB9f5qfZ=ci_c+Jak0w@mail.gmail.com>
+ <CAOuPNLjYhkP_kL+q-ZpiDZMMpOHrU88BFBc2agtnCzXt8dihOg@mail.gmail.com>
+ <CAOMZO5ADK1L5UMM9XZetHvmjTvmvUg99G7VPdeXitgpctGLCkw@mail.gmail.com>
+ <CAOuPNLhZhgN26rquLQq9zHBct1QxK-7hXAza0xk-0QooPGYLNw@mail.gmail.com>
+ <CAOMZO5BsJWTw0nCeUboam4kuKyCO3N_Ch5ZW8k5Y9KFtQBanhQ@mail.gmail.com>
+ <CAOuPNLjrAU_C_TUKFMs1d0eGsw=AxuG6d6FhNHtHFwVhfYZGgA@mail.gmail.com>
+ <CAOuPNLhstoCjxijrnKNmV1iKWjAXvSZ38Z13tfd5bvGbYSqPAA@mail.gmail.com>
+ <CAOMZO5CD-QQaZwNfiX6mOLAup4J8dBiqEb_V_6jz_z5jXZ5cEw@mail.gmail.com>
+ <CAOuPNLj=L_3RoC=9ws4yn1Q7QLoS3OEZ8FLRrF04HRQtQvc0Jg@mail.gmail.com> <CAOuPNLg5A1bB-Tmndm4PvsJ40tj0yn-bJ2mfifEpjAF-t84wiQ@mail.gmail.com>
+In-Reply-To: <CAOuPNLg5A1bB-Tmndm4PvsJ40tj0yn-bJ2mfifEpjAF-t84wiQ@mail.gmail.com>
+From:   Pintu Agarwal <pintu.ping@gmail.com>
+Date:   Thu, 11 Jul 2019 20:59:54 +0530
+Message-ID: <CAOuPNLjdSh+pw196PAcBO9B-OgRb=f7sKcMFyGJPW3PNFwEyZA@mail.gmail.com>
+Subject: Re: [IMX] [DRM]: help in analyzing clock_summary rate difference
+To:     Fabio Estevam <festevam@gmail.com>, s.hauer@pengutronix.de,
+        p.zabel@pengutronix.de
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Kernelnewbies <kernelnewbies@kernelnewbies.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/10/2019 11:35 PM, wen.yang99@zte.com.cn wrote:
->>> we developed a coccinelle script to detect such problems.
->>
->> Would you find the implementation of the function “dt_init_idle_driver”
->> suspicious according to discussed source code search patterns?
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/cpuidle/dt_idle_states.c?id=e9a83bd2322035ed9d7dcf35753d3f984d76c6a5#n208
->> https://elixir.bootlin.com/linux/v5.2/source/drivers/cpuidle/dt_idle_states.c#L208
->>
->>
->>> This script is still being improved.
->>
->> Will corresponding software development challenges become more interesting?
-> 
-> Hello Markus,
-> This is the simplified code pattern for it:
-> 
-> 172         for (i = 0; ; i++) {
+Hi,
 
-This loop can only be exited on a break.
+I need one general help in analyzing difference in clock_summary rate
+before and after the system resume.
 
-> 173                 state_node = of_parse_phandle(...);     ---> Obtain here
-> ...
-> 177                 match_id = of_match_node(matches, state_node);
-> 178                 if (!match_id) {
-> 179                         err = -ENODEV;                              
-> 180                         break;                         --->  Jump out of the loop without releasing it
-> 181                 }
-> 182 
-> 183                 if (!of_device_is_available(state_node)) {
-> 184                         of_node_put(state_node);
-> 185                         continue;                    --->  Release the object references within a loop
-> 186                 }
-> ...
-> 208                 of_node_put(state_node);  -->  Release the object references within a loop
+I am using custom IMX7 board with 4.9 Kernel.
+With this I am trying to support some functionality during suspend/resume.
+I am trying to analyze clk_summary from:
+# cat /sys/kernel/debug/clk/clk_summary
 
-This is required at the end of every loop or continue to free the reference.
-Only a break will exit the loop where we hit the below of_node_put().
+I observed that there are difference in "clock rate" after system
+resume and module install. However the enable/prepare count remains
+the same.
 
-> 209         }
-> 210 
-> 211         of_node_put(state_node);       -->    There may be double free here.
+Since I am not much familiar with clock framework, I am looking for
+some help to analyze this issue. It's an internal issue.
 
-None of the break conditions call of_node_put(), so it needs to be called here.
+May be someone which is familiar with clock analysis or fixed the
+similar issue earlier can give me some guidance.
+What does the difference in clock rate indicates?
+What analysis can be done to narrow down the root cause?
+Any example of reference could be helpful to understand.
 
--Tyrel
 
-> 
-> This code pattern is very interesting and the coccinelle software should also recognize this pattern.
-> 
-> Regards,
-> Wen
-> 
-
+Thank You!
+Regards,
+Pintu
