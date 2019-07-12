@@ -2,156 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2AA6652B
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2019 05:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44ACE665EB
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2019 06:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729398AbfGLDoN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jul 2019 23:44:13 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:43065 "EHLO
+        id S1728265AbfGLEty (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Jul 2019 00:49:54 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40345 "EHLO
         mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729457AbfGLDoN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jul 2019 23:44:13 -0400
-Received: by mail-pg1-f194.google.com with SMTP id f25so3882518pgv.10
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 20:44:12 -0700 (PDT)
+        with ESMTP id S1726372AbfGLEty (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Jul 2019 00:49:54 -0400
+Received: by mail-pg1-f194.google.com with SMTP id w10so3957636pgj.7
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jul 2019 21:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=joelfernandes.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=FJEg1PSZtBDvEUaB1tANRkyXMe9y2BhABHvlVqK15CM=;
-        b=om4dUHnrAVTcB6VZSX3QaRGG8cW4pe28ysXcQAfegtJ9471WnmQy48pbF/6w4twSkP
-         g9C0CVRJtW+e4mKQ9V6wimOpulHkGb76sMC5DttiDZD22y2T60DwP/IUSYghEFaRj5ZM
-         gLtjjXwnDsEdq4Qtn44XjgYZPKez0Z3HjMw8mbzgaZ8WDnLepMfeX/+tVUp8ehaxdI2q
-         Du90ZLjjAGk//30F6fGpSGHt3jsHLnNtKHLwSgw50p019+YT7qel+pJid5MwWqap7MfP
-         VrCNXES1a3iO02buE5VDyxiA3wv7mC6iAeYra06n4kss0+U81cJ7sGedf7kn6BhBM8cQ
-         ZDRg==
+        bh=sZaWxx8XHNIJMce0La5YzhGUKfsnDTNKcipBsPeCHZ0=;
+        b=yOt7w/DexKthec8S9bla5Nx+r59GqFfAOL7iCfVyMvvo12JVGSvX3T81WoloMImi33
+         kqYLvYFnbIzGBh0eyfsd9A0LnYst3mMT6/NJY4r3NhPNnt7TTUTpl2mOkUwjTOfy2DNL
+         VOBKxv4cXPqq2gZ1bBRS4yYBmuTei0KY5yRss=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FJEg1PSZtBDvEUaB1tANRkyXMe9y2BhABHvlVqK15CM=;
-        b=Suh1yHelmR+D5EjGUald48v+YfSt0JwQD6MhzeaMhO912t6B8cJv8uWEGn4QLlDbV8
-         UEExM92d2Sg0Yq5Yd4FKiT8Cix0A7PXRqiaMZukHzBMJVvPgKsZ0cPjKkW3wDKPj35JM
-         gaz3B0Ua3jT9I7XxCUPR7sCGI3cxkOFfTgC1DT+LEFWl0o+XywF81CbsYPzuPO9yUpcb
-         vti8SgMHnE7e5w9yR8L1zjdXspBbvzgTCZGv0b3UN02lEO84z3rwhgNT0cJMs0n0mDMT
-         AE4ilh42awffSdXMJ8V5+oBuAIcdfxwBgceOJLFK6xZSsbFeG7moqFt0NauhoNm2nden
-         CgyQ==
-X-Gm-Message-State: APjAAAWUykAWSJ5COL0YsCC3bTR691C0toRP+jR7/tqgPFrSC3SdwbNN
-        Ioc1ZH0gzDQWDH2IcYZBN38C8Q==
-X-Google-Smtp-Source: APXvYqy9857Wgh/Qw5sD0c6p/uGpEMX3EoZjvjany601DZQGRDvfT7z/hTLtd+HWVqwjoJjgYV9amw==
-X-Received: by 2002:a63:c342:: with SMTP id e2mr8105277pgd.79.1562903052070;
-        Thu, 11 Jul 2019 20:44:12 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id 201sm9836656pfz.24.2019.07.11.20.44.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Jul 2019 20:44:11 -0700 (PDT)
-Date:   Fri, 12 Jul 2019 09:14:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Wen Yang <wen.yang99@zte.com.cn>
-Cc:     rjw@rjwysocki.net, linuxppc-dev@lists.ozlabs.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
-        cheng.shengyu@zte.com.cn, Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v6] cpufreq/pasemi: fix an use-after-free in
- pas_cpufreq_cpu_init()
-Message-ID: <20190712034409.zyl6sskrr6ra5nd3@vireshk-i7>
-References: <1562899461-24045-1-git-send-email-wen.yang99@zte.com.cn>
+        bh=sZaWxx8XHNIJMce0La5YzhGUKfsnDTNKcipBsPeCHZ0=;
+        b=D9vcBshJpyxYMOZLEGytsrJOqQUXxgoI2RrPRmtE7eGMK+4UCh9fgui1a8j+xMj4g3
+         zZFLJB9XY4Kz/jVWMSQbCkbhHqNcytr0jH5Dh6ZfcB9njsQJ5Hlx+tvrfMYj9Yrb3zS1
+         S3ZIX7A8xlPdIvYmeDkE6Dt8M5NDEJhLHYIu6xH/iYNZVAkIwDfpM4cNGMk8M7jqhrgO
+         29hYro0uifCTouwu/z7DV+sSxuty+6lB2OToqQJkA/QzoU9/y2B1gLjARVhAd7B5LHoJ
+         PTYW0SkrB6Xt24G8K9VyYCxfts1NVjput2anCz+Py4PCWl4Wq06PLAZTa+bU0/+7ehr/
+         3f9w==
+X-Gm-Message-State: APjAAAX5GS9AAIbYtF/NtByR6PXmTOsQLnEs/jJlLA8TaISe1+Sdo/xL
+        9HEYV4CHsIz3hj+4pHoyEDU=
+X-Google-Smtp-Source: APXvYqyKxfcbGoEQQr7C4E09kxjnHkhwtlg8G7zy1O2IKxrdHeSAKsj8iztsw+e5BFthlE80M3kf8A==
+X-Received: by 2002:a63:c008:: with SMTP id h8mr4417616pgg.427.1562906993264;
+        Thu, 11 Jul 2019 21:49:53 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id d14sm9667480pfo.154.2019.07.11.21.49.52
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 11 Jul 2019 21:49:52 -0700 (PDT)
+Date:   Fri, 12 Jul 2019 00:49:51 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>, c0d1n61at3@gmail.com,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
+        kernel-hardening@lists.openwall.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [PATCH v1 1/6] rcu: Add support for consolidated-RCU reader
+ checking
+Message-ID: <20190712044951.GA92297@google.com>
+References: <20190711234401.220336-1-joel@joelfernandes.org>
+ <20190711234401.220336-2-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1562899461-24045-1-git-send-email-wen.yang99@zte.com.cn>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20190711234401.220336-2-joel@joelfernandes.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-07-19, 10:44, Wen Yang wrote:
-> The cpu variable is still being used in the of_get_property() call
-> after the of_node_put() call, which may result in use-after-free.
+On Thu, Jul 11, 2019 at 07:43:56PM -0400, Joel Fernandes (Google) wrote:
+> This patch adds support for checking RCU reader sections in list
+> traversal macros. Optionally, if the list macro is called under SRCU or
+> other lock/mutex protection, then appropriate lockdep expressions can be
+> passed to make the checks pass.
 > 
-> Fixes: a9acc26b75f6 ("cpufreq/pasemi: fix possible object reference leak")
-> Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> Existing list_for_each_entry_rcu() invocations don't need to pass the
+> optional fourth argument (cond) unless they are under some non-RCU
+> protection and needs to make lockdep check pass.
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 > ---
-> v6: keep the blank line and fix warning: label 'out_unmap_sdcpwr' defined but not used.
-> v5: put together the code to get, use, and release cpu device_node.
-> v4: restore the blank line.
-> v3: fix a leaked reference.
-> v2: clean up the code according to the advice of viresh.
+>  include/linux/rculist.h  | 29 ++++++++++++++++++++++++-----
+>  include/linux/rcupdate.h |  7 +++++++
+>  kernel/rcu/Kconfig.debug | 11 +++++++++++
+>  kernel/rcu/update.c      | 26 ++++++++++++++++++++++++++
+>  4 files changed, 68 insertions(+), 5 deletions(-)
 > 
->  drivers/cpufreq/pasemi-cpufreq.c | 26 ++++++++++++++------------
->  1 file changed, 14 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
-> index 6b1e4ab..7d557f9 100644
-> --- a/drivers/cpufreq/pasemi-cpufreq.c
-> +++ b/drivers/cpufreq/pasemi-cpufreq.c
-> @@ -131,10 +131,18 @@ static int pas_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  	int err = -ENODEV;
+> diff --git a/include/linux/rculist.h b/include/linux/rculist.h
+> index e91ec9ddcd30..78c15ec6b2c9 100644
+> --- a/include/linux/rculist.h
+> +++ b/include/linux/rculist.h
+> @@ -40,6 +40,23 @@ static inline void INIT_LIST_HEAD_RCU(struct list_head *list)
+>   */
+>  #define list_next_rcu(list)	(*((struct list_head __rcu **)(&(list)->next)))
 >  
->  	cpu = of_get_cpu_node(policy->cpu, NULL);
-> +	if (!cpu)
-> +		goto out;
->  
-> +	max_freqp = of_get_property(cpu, "clock-frequency", NULL);
->  	of_node_put(cpu);
-> -	if (!cpu)
-> +	if (!max_freqp) {
-> +		err = -EINVAL;
->  		goto out;
-> +	}
+> +/*
+> + * Check during list traversal that we are within an RCU reader
+> + */
 > +
-> +	/* we need the freq in kHz */
-> +	max_freq = *max_freqp / 1000;
->  
->  	dn = of_find_compatible_node(NULL, NULL, "1682m-sdc");
->  	if (!dn)
-> @@ -171,16 +179,6 @@ static int pas_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  	}
->  
->  	pr_debug("init cpufreq on CPU %d\n", policy->cpu);
-> -
-> -	max_freqp = of_get_property(cpu, "clock-frequency", NULL);
-> -	if (!max_freqp) {
-> -		err = -EINVAL;
-> -		goto out_unmap_sdcpwr;
-> -	}
-> -
-> -	/* we need the freq in kHz */
-> -	max_freq = *max_freqp / 1000;
-> -
->  	pr_debug("max clock-frequency is at %u kHz\n", max_freq);
->  	pr_debug("initializing frequency table\n");
->  
-> @@ -196,7 +194,11 @@ static int pas_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  	policy->cur = pas_freqs[cur_astate].frequency;
->  	ppc_proc_freq = policy->cur * 1000ul;
->  
-> -	return cpufreq_generic_init(policy, pas_freqs, get_gizmo_latency());
-> +	err = cpufreq_generic_init(policy, pas_freqs, get_gizmo_latency());
+> +#define SIXTH_ARG(a1, a2, a3, a4, a5, a6, ...) a6
+> +#define COUNT_VARGS(...) SIXTH_ARG(dummy, ## __VA_ARGS__, 4, 3, 2, 1, 0)
 
-So you are trying to fix an earlier issue here with this. Should have
-been a separate patch. Over that I have just sent a patch now to make
-this routine return void.
+Fyi, I made a cosmetic change by deleting the above 2 unused macros.
 
-https://lore.kernel.org/lkml/ee8cf5fb4b4a01fdf9199037ff6d835b935cfd13.1562902877.git.viresh.kumar@linaro.org/
+- Joel
 
-So all you need to do is to remove the label out_unmap_sdcpwr instead.
-
-> +	if (err)
-> +		goto out_unmap_sdcpwr;
-> +
-> +	return 0;
->  
->  out_unmap_sdcpwr:
->  	iounmap(sdcpwr_mapbase);
-> -- 
-> 2.9.5
-
--- 
-viresh
