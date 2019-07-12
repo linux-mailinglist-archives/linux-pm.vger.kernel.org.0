@@ -2,128 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD53266A16
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2019 11:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D39F66B4E
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2019 13:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbfGLJjw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Jul 2019 05:39:52 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:5678 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbfGLJjw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Jul 2019 05:39:52 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d2855610000>; Fri, 12 Jul 2019 02:39:45 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 12 Jul 2019 02:39:50 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 12 Jul 2019 02:39:50 -0700
-Received: from [10.26.11.231] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 12 Jul
- 2019 09:39:48 +0000
-Subject: Re: [PATCH v2 1/6] ARM: tegra: Remove cpuidle drivers
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        id S1726250AbfGLLDK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Jul 2019 07:03:10 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:53308 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbfGLLDJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Jul 2019 07:03:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=PD94wZRNXHIjHblu3nIrY4xxlHZYXkLegGZyayPXJPA=; b=LdoVKmUIYMMAH0RwU1/sb66Wt
+        PDIews2/h6sozwC0zDIT4qd9SogFPE8J/64yxNOntCL5i28uDH3ABs3F9LZSk85qfeMr/Kt5nyaA0
+        Cquj6eo1chq4GUCT+inbwuTEOZh4AnYQaFsOhi8FkO0DtOhKIzr0rtXPOKgkX6CORU7N63f/cN0uw
+        RjxLEuZUDL5JKAbluFeI8rfg2CtCfW/UhC0HK1DmeRDhd5H/GtQxVwWuSOT7jSZQcaa0WwNsGbKui
+        Rv7WZunOPBMTk/6IuVd+sc9fV0N25106/kjObkCTCppnjgcs0hF8Cp2YAaEfufGieuJllqDsFPGMV
+        wcgMqYSaA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hltJA-0000LI-PF; Fri, 12 Jul 2019 11:01:44 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1B88C2080B963; Fri, 12 Jul 2019 13:01:42 +0200 (CEST)
+Date:   Fri, 12 Jul 2019 13:01:42 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>, c0d1n61at3@gmail.com,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
+        kernel-hardening@lists.openwall.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Pavel Machek <pavel@ucw.cz>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20190711031312.10038-1-digetx@gmail.com>
- <20190711031312.10038-2-digetx@gmail.com>
- <c087a5cb-2ffa-1cf6-f0bf-631234759a22@nvidia.com>
- <a6e4b43e-369c-c501-6d2e-69d5b940ff9c@gmail.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <73781434-d25a-b17b-aacb-95ace5ac5f95@nvidia.com>
-Date:   Fri, 12 Jul 2019 10:39:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [PATCH v1 1/6] rcu: Add support for consolidated-RCU reader
+ checking
+Message-ID: <20190712110142.GS3402@hirez.programming.kicks-ass.net>
+References: <20190711234401.220336-1-joel@joelfernandes.org>
+ <20190711234401.220336-2-joel@joelfernandes.org>
 MIME-Version: 1.0
-In-Reply-To: <a6e4b43e-369c-c501-6d2e-69d5b940ff9c@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1562924385; bh=BjEEnlO9O+zgudZW6w3hxaxX8/FGppOMM/Qa3Jlnws0=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=p8V9Fe27cbTQDdxy6BaYPu1UaWNdHPFxaBAXSh3B1eFXjKn9t1rFMWge+n48VM1jx
-         sAyEzqcX2d+5dRWWMaoUjfTegYfTtOZexWga1qzERUVFWsPtCvYgRq5Tkw84niUv9r
-         L7jvU+fM/uKU70UxnhEgLMMDymy/j4Ikxivsyo/+iH39a1/lGeAIpTY/IrpUz4jTeA
-         rFy1ZDxrbIkjVX3HMwQMtHmYi/S9cTseqW33SZQK5E/WDPMFSekeO5UGYyxHgCzA5U
-         F8WhlXjZtrjk6007ZMoVZCSOT+OxHa7KUsp9MLsjpUQaZlKmTEnUzjl4bw3q5N0uvd
-         ffDfg49DVV1Ow==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190711234401.220336-2-joel@joelfernandes.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Jul 11, 2019 at 07:43:56PM -0400, Joel Fernandes (Google) wrote:
+> This patch adds support for checking RCU reader sections in list
+> traversal macros. Optionally, if the list macro is called under SRCU or
+> other lock/mutex protection, then appropriate lockdep expressions can be
+> passed to make the checks pass.
+> 
+> Existing list_for_each_entry_rcu() invocations don't need to pass the
+> optional fourth argument (cond) unless they are under some non-RCU
+> protection and needs to make lockdep check pass.
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  include/linux/rculist.h  | 29 ++++++++++++++++++++++++-----
+>  include/linux/rcupdate.h |  7 +++++++
+>  kernel/rcu/Kconfig.debug | 11 +++++++++++
+>  kernel/rcu/update.c      | 26 ++++++++++++++++++++++++++
+>  4 files changed, 68 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/rculist.h b/include/linux/rculist.h
+> index e91ec9ddcd30..78c15ec6b2c9 100644
+> --- a/include/linux/rculist.h
+> +++ b/include/linux/rculist.h
+> @@ -40,6 +40,23 @@ static inline void INIT_LIST_HEAD_RCU(struct list_head *list)
+>   */
+>  #define list_next_rcu(list)	(*((struct list_head __rcu **)(&(list)->next)))
+>  
+> +/*
+> + * Check during list traversal that we are within an RCU reader
+> + */
+> +
+> +#define SIXTH_ARG(a1, a2, a3, a4, a5, a6, ...) a6
+> +#define COUNT_VARGS(...) SIXTH_ARG(dummy, ## __VA_ARGS__, 4, 3, 2, 1, 0)
 
-On 11/07/2019 18:03, Dmitry Osipenko wrote:
-> 11.07.2019 12:26, Jon Hunter =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>
->> On 11/07/2019 04:13, Dmitry Osipenko wrote:
->>> Remove the old drivers to replace them cleanly with a new one later on.
->>>
->>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>> ---
->>>  arch/arm/mach-tegra/Makefile           |  13 --
->>>  arch/arm/mach-tegra/cpuidle-tegra114.c |  89 -----------
->>>  arch/arm/mach-tegra/cpuidle-tegra20.c  | 212 -------------------------
->>>  arch/arm/mach-tegra/cpuidle-tegra30.c  | 132 ---------------
->>>  arch/arm/mach-tegra/cpuidle.c          |  50 ------
->>>  arch/arm/mach-tegra/cpuidle.h          |  21 ---
->>>  arch/arm/mach-tegra/irq.c              |  18 ---
->>>  arch/arm/mach-tegra/irq.h              |  11 --
->>>  arch/arm/mach-tegra/pm.c               |   7 -
->>>  arch/arm/mach-tegra/pm.h               |   1 -
->>>  arch/arm/mach-tegra/reset-handler.S    |  11 --
->>>  arch/arm/mach-tegra/reset.h            |   9 +-
->>>  arch/arm/mach-tegra/sleep-tegra20.S    | 190 +---------------------
->>>  arch/arm/mach-tegra/sleep.h            |  12 --
->>>  arch/arm/mach-tegra/tegra.c            |   3 -
->>>  drivers/soc/tegra/Kconfig              |   1 -
->>>  include/soc/tegra/cpuidle.h            |   4 -
->>>  17 files changed, 5 insertions(+), 779 deletions(-)
->>>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra114.c
->>>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra20.c
->>>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra30.c
->>>  delete mode 100644 arch/arm/mach-tegra/cpuidle.c
->>>  delete mode 100644 arch/arm/mach-tegra/cpuidle.h
->>>  delete mode 100644 arch/arm/mach-tegra/irq.h
->>
->> By removing all the above, it is really hard to review the diff. Is
->> there any way you could first consolidate the cpuidle drivers into say
->> the existing arch/arm/mach-tegra/cpuidle-tegra20.c and then move to
->> drivers/cpuidle?
->=20
-> I'm afraid that it will make reviewing even more difficult because
-> everything that is removed here is not returned in the further patches.
-> The new driver is based on the older ones, but I wrote it from scratch
-> and it's not only looks different, but also works a bit different as you
-> may see.
->=20
-> Could you please clarify what exactly makes it hard to review? The diff
-> looks pretty clean to me, while squashing everything into existing
-> driver should be quite a mess.
-
-Ideally a patch should standalone and can be reviewed by itself.
-However, to review this, we need to review patches 1, 2 and 3 at the
-same time. So IMO it is not that convenient from a reviewers
-perspective. Furthermore, patches 1 and 3 are large and so easy to miss
-something.
-
-Is there really no way to have a patch to combined the existing drivers,
-then a patch to convert them into the newer rewritten version you have
-implemented, then move the driver?
-
-Jon
-
---=20
-nvpublic
+You don't seem to actually use it in this patch; also linux/kernel.h has
+COUNT_ARGS().
