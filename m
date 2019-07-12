@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99073670AA
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2019 15:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F56671A5
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jul 2019 16:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727064AbfGLN4d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Jul 2019 09:56:33 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42597 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727294AbfGLN4d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Jul 2019 09:56:33 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q10so4341623pff.9
-        for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2019 06:56:32 -0700 (PDT)
+        id S1727012AbfGLOt1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Jul 2019 10:49:27 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44596 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbfGLOt1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 12 Jul 2019 10:49:27 -0400
+Received: by mail-pg1-f196.google.com with SMTP id i18so4634245pgl.11
+        for <linux-pm@vger.kernel.org>; Fri, 12 Jul 2019 07:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=WDiv0t+R3uRl5W7qmXtAoSiEHEHdxKx4ml5mjXWh+Pg=;
-        b=QYqkLEGFA1/hJ7msrSJEUejaFTfoP3QzQQ0XbAHmT9Csl4VlQGRIXmlO2ywQXQvND+
-         Hrz0eSA/du87KWMiWhvfsSxGBDZW8Y6Afvn5Q1TceLQvp9r9CvlEbDnZIeTmNrviry7U
-         wYHovwF3+TslYJyFDr+Shjrc4RZtnIq4XuqVI=
+        bh=jBnw+bj5T3Oj46YKg63m75/M9E4pXCF4gtk0jQxRSXU=;
+        b=KOp/FTLlbPVrmtrESx26ciK+CMNvbkeSL4QP0Lj6JLKzSMGH7LcPtUDIBGFMz4xNBR
+         HjyGCYh4oX95P+F+GW4vHbwJmHhtIANe/76JHUmqTCLEJnEQqDVcsDR2QKmjjip7dp/y
+         Fs5wmHPUnwEv4E5Xcjpll4PYPsaq5Jw19jQ5s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WDiv0t+R3uRl5W7qmXtAoSiEHEHdxKx4ml5mjXWh+Pg=;
-        b=dAMJ0cVMLk2XOjHKlIB2YgUEQ7XZoVSZ6QsNoI+ZccE8rzr3k23J8ejVj4JgwlLHC2
-         e/t+JvWh9bygzCcFh0PbAoxJkol152MxgI06/HBXbYmLZGaUvam6yN1yAP/GUI7pPvFN
-         iteTk8Shi45ajHTC9WXrmI/Q9MaWaMl5tmfZOZNG304AJ0g+gxlfPHcnxnntGNdVArOO
-         mZOJ5Wm2ZSdkoVAnJNfibh8mS+wGlWvW2YQ0vfhEqa9ocSPu+I3GdaGCj2qredPWbYaO
-         HS7PKXiL+dXFBu/pc1e5f586hnDLk8UPdayZXG/kYs4bQdPPdJREdj/kGDnIJQKLHd8b
-         8PLw==
-X-Gm-Message-State: APjAAAVRldNHrtm3/8q5RRFGoziHmqMXso515qRCPgVCte9qOKTekQnY
-        Fha1G+M3FZ3NkDqzkyuNUO8=
-X-Google-Smtp-Source: APXvYqzJEhVDBzSiRVeb97C/BOIrGCC92lhrBy1TO8FxsLTYA0YSdLtl7eAeD1UPch8SID4lyw/Qag==
-X-Received: by 2002:a63:b1d:: with SMTP id 29mr11024618pgl.103.1562939792240;
-        Fri, 12 Jul 2019 06:56:32 -0700 (PDT)
+        bh=jBnw+bj5T3Oj46YKg63m75/M9E4pXCF4gtk0jQxRSXU=;
+        b=tGYKeKGHTsXXkuVq2/P1yQ9WeHKuyTcl/LRTfo3HmrrlniYoJVlsxMBMyHCxvdYDt2
+         MQZ4eepRJJExRy2Sw10k55QKgSQHhjYYDGxdGTdX7LgYzHCOGnvZd0S185jTviLII573
+         hZhYBKTEGOF1gY2jaAFuJElzDKYkVN3PrZmPJVUGp7X3+VP41WMv4jYt9YwWWQfZ9phB
+         QvdJP69ROlWbkW59kJeszwNb0frGVBbF+0EzsLeWmGz+e5Z85Rt/ASjhw0zrIF5Aq/6s
+         N9bXarnToG68HyLFSVpp7GgDu+HVq/vWbUTvsLqLujsle5TbtPCynbHXw+3DEcy0mWS6
+         EmfQ==
+X-Gm-Message-State: APjAAAU/WUI2daQ0JgnVcn3TQdjCzE4DDtsFIJ/D8NN/UZ0Secrbh7YU
+        fGKoZlk1/4GW5r5ALt6CMyw=
+X-Google-Smtp-Source: APXvYqy6jBLSnDZta2GtS/zN+m3PUtaVacX1IRd1BaAhWjyV06geRNBslZ66J2GoeWCO1s2L6yvsyA==
+X-Received: by 2002:a17:90a:1904:: with SMTP id 4mr12585583pjg.116.1562942966736;
+        Fri, 12 Jul 2019 07:49:26 -0700 (PDT)
 Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id h16sm9673070pfo.34.2019.07.12.06.56.30
+        by smtp.gmail.com with ESMTPSA id r1sm7928157pgv.70.2019.07.12.07.49.25
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 12 Jul 2019 06:56:31 -0700 (PDT)
-Date:   Fri, 12 Jul 2019 09:56:29 -0400
+        Fri, 12 Jul 2019 07:49:25 -0700 (PDT)
+Date:   Fri, 12 Jul 2019 10:49:24 -0400
 From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -58,9 +58,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        neilb@suse.com, netdev@vger.kernel.org,
+        neilb@suse.com, netdev@vger.kernel.org, oleg@redhat.com,
         "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
+        Pavel Machek <pavel@ucw.cz>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
         rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
@@ -69,27 +69,63 @@ Cc:     linux-kernel@vger.kernel.org,
         "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
 Subject: Re: [PATCH v1 1/6] rcu: Add support for consolidated-RCU reader
  checking
-Message-ID: <20190712135629.GH92297@google.com>
+Message-ID: <20190712144924.GA235410@google.com>
 References: <20190711234401.220336-1-joel@joelfernandes.org>
  <20190711234401.220336-2-joel@joelfernandes.org>
- <20190712121200.GC21989@redhat.com>
+ <20190712110142.GS3402@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190712121200.GC21989@redhat.com>
+In-Reply-To: <20190712110142.GS3402@hirez.programming.kicks-ass.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 12, 2019 at 02:12:00PM +0200, Oleg Nesterov wrote:
-> On 07/11, Joel Fernandes (Google) wrote:
-> >
-> > +int rcu_read_lock_any_held(void)
+On Fri, Jul 12, 2019 at 01:01:42PM +0200, Peter Zijlstra wrote:
+> On Thu, Jul 11, 2019 at 07:43:56PM -0400, Joel Fernandes (Google) wrote:
+> > This patch adds support for checking RCU reader sections in list
+> > traversal macros. Optionally, if the list macro is called under SRCU or
+> > other lock/mutex protection, then appropriate lockdep expressions can be
+> > passed to make the checks pass.
+> > 
+> > Existing list_for_each_entry_rcu() invocations don't need to pass the
+> > optional fourth argument (cond) unless they are under some non-RCU
+> > protection and needs to make lockdep check pass.
+> > 
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> >  include/linux/rculist.h  | 29 ++++++++++++++++++++++++-----
+> >  include/linux/rcupdate.h |  7 +++++++
+> >  kernel/rcu/Kconfig.debug | 11 +++++++++++
+> >  kernel/rcu/update.c      | 26 ++++++++++++++++++++++++++
+> >  4 files changed, 68 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/include/linux/rculist.h b/include/linux/rculist.h
+> > index e91ec9ddcd30..78c15ec6b2c9 100644
+> > --- a/include/linux/rculist.h
+> > +++ b/include/linux/rculist.h
+> > @@ -40,6 +40,23 @@ static inline void INIT_LIST_HEAD_RCU(struct list_head *list)
+> >   */
+> >  #define list_next_rcu(list)	(*((struct list_head __rcu **)(&(list)->next)))
+> >  
+> > +/*
+> > + * Check during list traversal that we are within an RCU reader
+> > + */
+> > +
+> > +#define SIXTH_ARG(a1, a2, a3, a4, a5, a6, ...) a6
+> > +#define COUNT_VARGS(...) SIXTH_ARG(dummy, ## __VA_ARGS__, 4, 3, 2, 1, 0)
 > 
-> rcu_sync_is_idle() wants it. You have my ack in advance ;)
+> You don't seem to actually use it in this patch; also linux/kernel.h has
+> COUNT_ARGS().
 
-Cool, thanks ;)
+Yes, I replied after sending patches that I fixed this. I will remove them.
 
-- Joel
+
+thanks,
+
+ - Joel
+
+
+
