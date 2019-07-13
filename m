@@ -2,113 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9002A679F2
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jul 2019 13:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A42967A46
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Jul 2019 15:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726755AbfGMLYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Jul 2019 07:24:38 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:33575 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726474AbfGMLYi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jul 2019 07:24:38 -0400
-Received: by mail-wm1-f66.google.com with SMTP id h19so10905166wme.0
-        for <linux-pm@vger.kernel.org>; Sat, 13 Jul 2019 04:24:37 -0700 (PDT)
+        id S1727751AbfGMNax (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Jul 2019 09:30:53 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:35589 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727678AbfGMNax (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jul 2019 09:30:53 -0400
+Received: by mail-pg1-f195.google.com with SMTP id s27so5768192pgl.2
+        for <linux-pm@vger.kernel.org>; Sat, 13 Jul 2019 06:30:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8xkSC0VROCxML4cXy2uTReuWmPLKOSWduXGHO9Bgs64=;
-        b=o2vB/8v2mYJvmbd0dFDIcvZfOK+aXgOrF7lc5CNEzhMehHvDVCx5u5A7HEo8UNf8VX
-         J599zNvU/GlRU34Sq6/cil4R4ha4XpwPITiKKoOmLaHzkN93PmsIJS6hyePI7vmiiQNg
-         fKZf2wqfwl04F1Hv6g0KEnLJfza9fntgjQpgzOdlAp9n5iMzsOdCuoHlVnhiJt/ZWFYn
-         sWgsVad0Rs44fEna0nc6Sx2mG7gDzJHWaon5mmz66s1P045sGltYsx86un2Ns+EEBcuq
-         72mF5f52JcZFal/oLXb+fIycrhYAq36B+kMRs4EVDXfQBAACziZMqb9CyKYMA2E7WFcB
-         wuSQ==
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8Efni7GzakeBOsv72KKL/k3VXvcmb6CAQIn29trk+Ms=;
+        b=vi4Pm0Vp88ZDcBEmNwgK3ndXTrJqUqLLpFVAsRazuQbe6ItioWXAxH8x2ZNcDzhCJQ
+         pEUZaylwGZeoiyJm9xMYvAgjqjY4VrGjZY6uMPOzgi+wI0vRlfF6k5ZYvoB3BUkZjDoT
+         Kc4HA9nGtVNNW/KARl3nDBwGz83fybXtLdz+Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8xkSC0VROCxML4cXy2uTReuWmPLKOSWduXGHO9Bgs64=;
-        b=HQfatCMy7C47YqN08/gfUp90yBMP7QoZ9xy6YyQVM37Y/XwkRfYxdvz6Ti4f4dikDk
-         cFWhj/lUCVmu5p0yolqEvEmz8A0UcEJKN6LSUeCDhRTf1mpqoOWRW+SJZQHkzlQP9tyC
-         9STpl31j4GjItipjzqvYZU6KuKumqyuqZ6NF17YThvAnlQWywyx+mKmOOWfA9Bk97srV
-         oG95/MK+ZSl9F3Ik7Tdy72gSuzBSJ4CNG+lK7vJa/ik05tmn5x+YfcLvpjOeXPsMChip
-         bLrJAQr+yqRZCFVTK/3Fo0ht6P9xJZvskhONKe8Xwvj43A2rr951OAyxJZz2NU2xFgdk
-         FoJw==
-X-Gm-Message-State: APjAAAXhcZgNpKiC4liahO3zy4RuTqfKmuoI6Kzf1KRRZ6t4t7Ac9/a6
-        5/SXQutNx5KnBtrZJhypo4tZwlIA
-X-Google-Smtp-Source: APXvYqymNILwwCpN7TVaimAjj3WlNkAuXTzdaUXfpzhIqkbHOU5/ubJheNO7PKwX1dK4318VF540+g==
-X-Received: by 2002:a05:600c:2182:: with SMTP id e2mr14484940wme.104.1563017076079;
-        Sat, 13 Jul 2019 04:24:36 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8bd6:c00:9c47:80d8:6d49:f2a9? (p200300EA8BD60C009C4780D86D49F2A9.dip0.t-ipconnect.de. [2003:ea:8bd6:c00:9c47:80d8:6d49:f2a9])
-        by smtp.googlemail.com with ESMTPSA id j33sm23818003wre.42.2019.07.13.04.24.35
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 13 Jul 2019 04:24:35 -0700 (PDT)
-Subject: Re: cpufreq-related deadlock warning on recent linux-next
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <6addb70f-6b21-4f09-e1a0-21476b55df14@gmail.com>
- <20190711022813.zfroyk3drfarvpwj@vireshk-i7>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <edd74314-869c-e4e3-76bf-35962165153e@gmail.com>
-Date:   Sat, 13 Jul 2019 13:24:28 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8Efni7GzakeBOsv72KKL/k3VXvcmb6CAQIn29trk+Ms=;
+        b=WxT69OqNg1ooGe9RR5IjwB7nHgMHAlyNlHbkgwDDligx+Xf2Ni9VcM9HpgIyZpKA43
+         qFWJW3kEIipAjnk2lyOFBRYy1ytBrwjZHVTivXMYqC0/SdUrhaWblrAxsw902io3yAjb
+         Tpn9cReENbQmdDjZ+kM3MeW/3OlqSpwS4MS+GDzdNqbVj9rrvAn347kyWXAE0I3vaYgj
+         CyDMlyaHp7aNsMSgwmORTToVLRBU0/Kqc+laTrLFdsmrYBo2Z9HyQoCn6glIzTWx5oCK
+         ZMmVdj560P3729hhwsce9pUSn6IpsK5z21c2oQPICAoA+wejSQD+nQM/EtuFye3ksqZ0
+         icuw==
+X-Gm-Message-State: APjAAAVupdsK6kjyJCEsRmps4M8HEIAz4s7SH1z+N8KuD52jJmJhEd32
+        ZAjX2nwshfUXCz+4wZ8l1Yc=
+X-Google-Smtp-Source: APXvYqxHqqPqIhZ4yAdKHwlf4joWWp7xZcECA5a6L7ZeujtpEnTWlNmypQkxkaimiE7EaAdPcs4Tnw==
+X-Received: by 2002:a17:90a:1b4a:: with SMTP id q68mr18260364pjq.61.1563024652349;
+        Sat, 13 Jul 2019 06:30:52 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id o14sm10021697pjp.19.2019.07.13.06.30.50
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sat, 13 Jul 2019 06:30:51 -0700 (PDT)
+Date:   Sat, 13 Jul 2019 09:30:49 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>, c0d1n61at3@gmail.com,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
+        kernel-hardening@lists.openwall.com, kernel-team@android.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        neilb@suse.com, netdev@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [PATCH v2 3/9] rcu/sync: Remove custom check for reader-section
+Message-ID: <20190713133049.GA133650@google.com>
+References: <20190712170024.111093-1-joel@joelfernandes.org>
+ <20190712170024.111093-4-joel@joelfernandes.org>
+ <20190712213559.GA175138@google.com>
+ <20190712233206.GZ26519@linux.ibm.com>
+ <20190713030150.GA246587@google.com>
+ <20190713031008.GA248225@google.com>
+ <20190713082114.GA26519@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20190711022813.zfroyk3drfarvpwj@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190713082114.GA26519@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11.07.2019 04:28, Viresh Kumar wrote:
-> On 10-07-19, 22:53, Heiner Kallweit wrote:
->> I just got the following when manually suspending the system with
->> "systemctl suspend" and waking it up with the power button.
->>
->>
->> [  380.203172] Restarting tasks ... done.
->>
->> [  380.211714] ============================================
->> [  380.211719] WARNING: possible recursive locking detected
->> [  380.211726] 5.2.0-rc7-next-20190704+ #2 Not tainted
->> [  380.211731] --------------------------------------------
->> [  380.211737] systemd-sleep/2367 is trying to acquire lock:
->> [  380.211745] 0000000043cf69ce (&policy->rwsem){+.+.}, at: refresh_frequency_limits+0x36/0x90
->> [  380.211761]
->>                but task is already holding lock:
->> [  380.211767] 0000000043cf69ce (&policy->rwsem){+.+.}, at: cpufreq_cpu_acquire+0x25/0x50
->> [  380.211777]
->>                other info that might help us debug this:
->> [  380.211783]  Possible unsafe locking scenario:
->>
->> [  380.211789]        CPU0
->> [  380.211792]        ----
->> [  380.211795]   lock(&policy->rwsem);
->> [  380.211800]   lock(&policy->rwsem);
->> [  380.211805]
->>                 *** DEADLOCK ***
->>
->> [  380.211811]  May be due to missing lock nesting notation
->>
->> [  380.211818] 8 locks held by systemd-sleep/2367:
->> [  380.211823]  #0: 000000000e253e21 (sb_writers#5){.+.+}, at: vfs_write+0x16b/0x1d0
->> [  380.211835]  #1: 00000000d0140159 (&of->mutex){+.+.}, at: kernfs_fop_write+0xfd/0x1c0
->> [  380.211846]  #2: 00000000383c283a (kn->count#155){.+.+}, at: kernfs_fop_write+0x105/0x1c0
->> [  380.211857]  #3: 000000007e6f342b (system_transition_mutex){+.+.}, at: pm_suspend.cold+0xd0/0x36a
->> [  380.211869]  #4: 000000002ee59360 ((pm_chain_head).rwsem){++++}, at: __blocking_notifier_call_chain+0x46/0x80
->> [  380.211883]  #5: 000000003972eb2e (&tz->lock){+.+.}, at: step_wise_throttle+0x3f/0x90
->> [  380.211893]  #6: 0000000007747f02 (&cdev->lock){+.+.}, at: thermal_cdev_update+0x1e/0x16c
->> [  380.211904]  #7: 0000000043cf69ce (&policy->rwsem){+.+.}, at: cpufreq_cpu_acquire+0x25/0x50
+On Sat, Jul 13, 2019 at 01:21:14AM -0700, Paul E. McKenney wrote:
+> On Fri, Jul 12, 2019 at 11:10:08PM -0400, Joel Fernandes wrote:
+> > On Fri, Jul 12, 2019 at 11:01:50PM -0400, Joel Fernandes wrote:
+> > > On Fri, Jul 12, 2019 at 04:32:06PM -0700, Paul E. McKenney wrote:
+> > > > On Fri, Jul 12, 2019 at 05:35:59PM -0400, Joel Fernandes wrote:
+> > > > > On Fri, Jul 12, 2019 at 01:00:18PM -0400, Joel Fernandes (Google) wrote:
+> > > > > > The rcu/sync code was doing its own check whether we are in a reader
+> > > > > > section. With RCU consolidating flavors and the generic helper added in
+> > > > > > this series, this is no longer need. We can just use the generic helper
+> > > > > > and it results in a nice cleanup.
+> > > > > > 
+> > > > > > Cc: Oleg Nesterov <oleg@redhat.com>
+> > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > 
+> > > > > Hi Oleg,
+> > > > > Slightly unrelated to the patch,
+> > > > > I tried hard to understand this comment below in percpu_down_read() but no dice.
+> > > > > 
+> > > > > I do understand how rcu sync and percpu rwsem works, however the comment
+> > > > > below didn't make much sense to me. For one, there's no readers_fast anymore
+> > > > > so I did not follow what readers_fast means. Could the comment be updated to
+> > > > > reflect latest changes?
+> > > > > Also could you help understand how is a writer not able to change
+> > > > > sem->state and count the per-cpu read counters at the same time as the
+> > > > > comment tries to say?
+> > > > > 
+> > > > > 	/*
+> > > > > 	 * We are in an RCU-sched read-side critical section, so the writer
+> > > > > 	 * cannot both change sem->state from readers_fast and start checking
+> > > > > 	 * counters while we are here. So if we see !sem->state, we know that
+> > > > > 	 * the writer won't be checking until we're past the preempt_enable()
+> > > > > 	 * and that once the synchronize_rcu() is done, the writer will see
+> > > > > 	 * anything we did within this RCU-sched read-size critical section.
+> > > > > 	 */
+> > > > > 
+> > > > > Also,
+> > > > > I guess we could get rid of all of the gp_ops struct stuff now that since all
+> > > > > the callbacks are the same now. I will post that as a follow-up patch to this
+> > > > > series.
+> > > > 
+> > > > Hello, Joel,
+> > > > 
+> > > > Oleg has a set of patches updating this code that just hit mainline
+> > > > this week.  These patches get rid of the code that previously handled
+> > > > RCU's multiple flavors.  Or are you looking at current mainline and
+> > > > me just missing your point?
+> > > > 
+> > > 
+> > > Hi Paul,
+> > > You are right on point. I have a bad habit of not rebasing my trees. In this
+> > > case the feature branch of mine in concern was based on v5.1. Needless to
+> > > say, I need to rebase my tree.
+> > > 
+> > > Yes, this sync clean up patch does conflict when I rebase, but other patches
+> > > rebase just fine.
+> > > 
+> > > The 2 options I see are:
+> > > 1. Let us drop this patch for now and I resend it later.
+> > > 2. I resend all patches based on Linus's master branch.
+> > 
+> > Below is the updated patch based on Linus master branch:
+> > 
+> > ---8<-----------------------
+> > 
+> > >From 5f40c9a07fcf3d6dafc2189599d0ba9443097d0f Mon Sep 17 00:00:00 2001
+> > From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> > Date: Fri, 12 Jul 2019 12:13:27 -0400
+> > Subject: [PATCH v2.1 3/9] rcu/sync: Remove custom check for reader-section
+> > 
+> > The rcu/sync code was doing its own check whether we are in a reader
+> > section. With RCU consolidating flavors and the generic helper added in
+> > this series, this is no longer need. We can just use the generic helper
+> > and it results in a nice cleanup.
+> > 
+> > Cc: Oleg Nesterov <oleg@redhat.com>
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> >  include/linux/rcu_sync.h | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/rcu_sync.h b/include/linux/rcu_sync.h
+> > index 9b83865d24f9..0027d4c8087c 100644
+> > --- a/include/linux/rcu_sync.h
+> > +++ b/include/linux/rcu_sync.h
+> > @@ -31,9 +31,7 @@ struct rcu_sync {
+> >   */
+> >  static inline bool rcu_sync_is_idle(struct rcu_sync *rsp)
+> >  {
+> > -	RCU_LOCKDEP_WARN(!rcu_read_lock_held() &&
+> > -			 !rcu_read_lock_bh_held() &&
+> > -			 !rcu_read_lock_sched_held(),
+> > +	RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),
 > 
-> This is already fixed in linux-next few days back. Can you try the
-> latest stuff again ?
-> 
-linux-next from Jul 12th is fine.
+> I believe that replacing rcu_read_lock_sched_held() with preemptible()
+> in a CONFIG_PREEMPT=n kernel will give you false-positive splats here.
+> If you have not already done so, could you please give it a try?
 
-Thanks, Heiner
+Hi Paul,
+I don't think it will cause splats for !CONFIG_PREEMPT.
+
+Currently, rcu_read_lock_any_held() introduced in this patch returns true if
+!preemptible(). This means that:
+
+The following expression above:
+RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),...)
+
+Becomes:
+RCU_LOCKDEP_WARN(preemptible(), ...)
+
+For, CONFIG_PREEMPT=n kernels, this means:
+RCU_LOCKDEP_WARN(0, ...)
+
+Which would mean no splats. Or, did I miss the point?
+
+thanks,
+
+ - Joel
+
