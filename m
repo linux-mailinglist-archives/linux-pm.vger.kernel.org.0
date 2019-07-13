@@ -2,59 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D7E67976
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jul 2019 11:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A7D67973
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Jul 2019 11:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbfGMJOF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sat, 13 Jul 2019 05:14:05 -0400
-Received: from mail.iara.government.bg ([95.43.208.99]:59214 "EHLO
-        iara.government.bg" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726448AbfGMJOE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jul 2019 05:14:04 -0400
-X-Greylist: delayed 7993 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Jul 2019 05:14:03 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by iara.government.bg (Postfix) with ESMTP id CABC234F147;
-        Sat, 13 Jul 2019 08:41:35 +0300 (EEST)
-Received: from iara.government.bg ([127.0.0.1])
-        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id W782TpGpR0l7; Sat, 13 Jul 2019 08:41:35 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by iara.government.bg (Postfix) with ESMTP id DB0FC32DBBD;
-        Sat, 13 Jul 2019 02:22:39 +0300 (EEST)
-X-Virus-Scanned: amavisd-new at iara.government.bg
-Received: from iara.government.bg ([127.0.0.1])
-        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VlKlpSJkwYt9; Sat, 13 Jul 2019 02:22:39 +0300 (EEST)
-Received: from [10.108.11.57] (unknown [105.12.6.226])
-        by iara.government.bg (Postfix) with ESMTPSA id CCD6D328D69;
-        Fri, 12 Jul 2019 23:58:16 +0300 (EEST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726626AbfGMJK6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Jul 2019 05:10:58 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:48902 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbfGMJK6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jul 2019 05:10:58 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 724B680556; Sat, 13 Jul 2019 11:10:44 +0200 (CEST)
+Date:   Sat, 13 Jul 2019 11:10:55 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] PM: QoS: Get rid of unused flags
+Message-ID: <20190713091054.GA19902@amd>
+References: <cover.1562854650.git.amit.kucheria@linaro.org>
+ <e9e7bc3be3b51e68ae1a0f934c3724bd86f5f9af.1562854650.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?b?RndkOiBSZTog4oKsIDIsMDAwLDAwMC4wMCBFdXJv?=
-To:     Recipients <silistra@iara.government.bg>
-From:   silistra@iara.government.bg
-Date:   Fri, 12 Jul 2019 13:58:00 -0700
-Reply-To: carfleon@gmail.com
-Message-Id: <20190712205816.CCD6D328D69@iara.government.bg>
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="SLDf9lqlvOQaIe6s"
+Content-Disposition: inline
+In-Reply-To: <e9e7bc3be3b51e68ae1a0f934c3724bd86f5f9af.1562854650.git.amit.kucheria@linaro.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Lieber Freund,
 
-Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jackpot spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt. Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwillig dazu entschieden, Ihnen den Betrag von € 2.000.000,00 zu spenden eine der ausgewählten 5, um meine Gewinne zu überprüfen, finden Sie auf meiner You Tube Seite unten.
+--SLDf9lqlvOQaIe6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-UHR MICH HIER: https://www.youtube.com/watch?v=tne02ExNDrw
+On Thu 2019-07-11 19:51:25, Amit Kucheria wrote:
+> The network_latency and network_throughput flags for PM-QoS have not
+> found much use in drivers or in userspace since they were introduced.
+>=20
+> Commit 4a733ef1bea7 ("mac80211: remove PM-QoS listener") removed the
+> only user PM_QOS_NETWORK_LATENCY in the kernel a while ago and there
+> don't seem to be any userspace tools using the character device files
+> either.
+>=20
+> PM_QOS_MEMORY_BANDWIDTH was never even added to the trace events.
+>=20
+> Remove all the flags except cpu_dma_latency.
+>=20
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-Das ist dein Spendencode: [DF00430342018]
+Acked-by: Pavel Machek <pavel@ucw.cz>
 
-Antworten Sie mit dem Spendencode auf diese E-Mail: liezlnatashavanessa@gmail.com
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
 
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+--SLDf9lqlvOQaIe6s
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-Grüße
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-Herr Richard Wahl
+iEYEARECAAYFAl0poB4ACgkQMOfwapXb+vLG7wCgnztvYft+BcWanbamBuUSENlO
+abMAoKnVi80Q5RSiavr2GBO/deSZEWRH
+=RkWH
+-----END PGP SIGNATURE-----
+
+--SLDf9lqlvOQaIe6s--
