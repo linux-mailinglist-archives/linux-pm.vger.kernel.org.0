@@ -2,126 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E06F679BE
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jul 2019 12:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9002A679F2
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Jul 2019 13:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727513AbfGMKqp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Jul 2019 06:46:45 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:38696 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbfGMKqo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jul 2019 06:46:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=qA92BokuQwIpfUgsOngEYZTp77wWyZRJldi5ki7ucGw=; b=roABZ5It4KusJQ35a/CptUJMq
-        J2ybOivTMeJO3f3eHAcguMk4nkFtL4X1EM2LEXev+K9U+wnPf5Kx8/pY7BZWG+ZqllmmJL6jIHJJ+
-        QQWGDKGipwLqOktHGfYoga1l5tGTMam7yPN22WZuOTEY3apy8dMV2zw6pu91eeNCdVu5gqI8QyiJL
-        qIB+9nCLap8IbQQlzktu4IC9Gxutj5BZfru9tFr88w+qczynnzCx4ncQ58omSyy9y6bdZEjN7E8i4
-        txdV62ktTQXFNKomgQ0To/CRQ9fB01Fy1g4Yg3ZXGkg1P2YzyH0lQX9hzDL0wCJ2pOAVwW/gIWPE1
-        DSmvkZBow==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hmFXq-00063x-1v; Sat, 13 Jul 2019 10:46:22 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5999B20B51DA5; Sat, 13 Jul 2019 12:46:19 +0200 (CEST)
-Date:   Sat, 13 Jul 2019 12:46:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Natarajan, Janakarajan" <Janakarajan.Natarajan@amd.com>
-Cc:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Schmauss <erik.schmauss@intel.com>,
-        "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-Subject: Re: [PATCHv3 0/6] CPPC optional registers AMD support
-Message-ID: <20190713104619.GA3496@hirez.programming.kicks-ass.net>
-References: <cover.1562781484.git.Janakarajan.Natarajan@amd.com>
+        id S1726755AbfGMLYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Jul 2019 07:24:38 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:33575 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726474AbfGMLYi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jul 2019 07:24:38 -0400
+Received: by mail-wm1-f66.google.com with SMTP id h19so10905166wme.0
+        for <linux-pm@vger.kernel.org>; Sat, 13 Jul 2019 04:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8xkSC0VROCxML4cXy2uTReuWmPLKOSWduXGHO9Bgs64=;
+        b=o2vB/8v2mYJvmbd0dFDIcvZfOK+aXgOrF7lc5CNEzhMehHvDVCx5u5A7HEo8UNf8VX
+         J599zNvU/GlRU34Sq6/cil4R4ha4XpwPITiKKoOmLaHzkN93PmsIJS6hyePI7vmiiQNg
+         fKZf2wqfwl04F1Hv6g0KEnLJfza9fntgjQpgzOdlAp9n5iMzsOdCuoHlVnhiJt/ZWFYn
+         sWgsVad0Rs44fEna0nc6Sx2mG7gDzJHWaon5mmz66s1P045sGltYsx86un2Ns+EEBcuq
+         72mF5f52JcZFal/oLXb+fIycrhYAq36B+kMRs4EVDXfQBAACziZMqb9CyKYMA2E7WFcB
+         wuSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8xkSC0VROCxML4cXy2uTReuWmPLKOSWduXGHO9Bgs64=;
+        b=HQfatCMy7C47YqN08/gfUp90yBMP7QoZ9xy6YyQVM37Y/XwkRfYxdvz6Ti4f4dikDk
+         cFWhj/lUCVmu5p0yolqEvEmz8A0UcEJKN6LSUeCDhRTf1mpqoOWRW+SJZQHkzlQP9tyC
+         9STpl31j4GjItipjzqvYZU6KuKumqyuqZ6NF17YThvAnlQWywyx+mKmOOWfA9Bk97srV
+         oG95/MK+ZSl9F3Ik7Tdy72gSuzBSJ4CNG+lK7vJa/ik05tmn5x+YfcLvpjOeXPsMChip
+         bLrJAQr+yqRZCFVTK/3Fo0ht6P9xJZvskhONKe8Xwvj43A2rr951OAyxJZz2NU2xFgdk
+         FoJw==
+X-Gm-Message-State: APjAAAXhcZgNpKiC4liahO3zy4RuTqfKmuoI6Kzf1KRRZ6t4t7Ac9/a6
+        5/SXQutNx5KnBtrZJhypo4tZwlIA
+X-Google-Smtp-Source: APXvYqymNILwwCpN7TVaimAjj3WlNkAuXTzdaUXfpzhIqkbHOU5/ubJheNO7PKwX1dK4318VF540+g==
+X-Received: by 2002:a05:600c:2182:: with SMTP id e2mr14484940wme.104.1563017076079;
+        Sat, 13 Jul 2019 04:24:36 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8bd6:c00:9c47:80d8:6d49:f2a9? (p200300EA8BD60C009C4780D86D49F2A9.dip0.t-ipconnect.de. [2003:ea:8bd6:c00:9c47:80d8:6d49:f2a9])
+        by smtp.googlemail.com with ESMTPSA id j33sm23818003wre.42.2019.07.13.04.24.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 13 Jul 2019 04:24:35 -0700 (PDT)
+Subject: Re: cpufreq-related deadlock warning on recent linux-next
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <6addb70f-6b21-4f09-e1a0-21476b55df14@gmail.com>
+ <20190711022813.zfroyk3drfarvpwj@vireshk-i7>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Message-ID: <edd74314-869c-e4e3-76bf-35962165153e@gmail.com>
+Date:   Sat, 13 Jul 2019 13:24:28 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1562781484.git.Janakarajan.Natarajan@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190711022813.zfroyk3drfarvpwj@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 10, 2019 at 06:37:09PM +0000, Natarajan, Janakarajan wrote:
-> CPPC (Collaborative Processor Performance Control) offers optional
-> registers which can be used to tune the system based on energy and/or
-> performance requirements.
+On 11.07.2019 04:28, Viresh Kumar wrote:
+> On 10-07-19, 22:53, Heiner Kallweit wrote:
+>> I just got the following when manually suspending the system with
+>> "systemctl suspend" and waking it up with the power button.
+>>
+>>
+>> [  380.203172] Restarting tasks ... done.
+>>
+>> [  380.211714] ============================================
+>> [  380.211719] WARNING: possible recursive locking detected
+>> [  380.211726] 5.2.0-rc7-next-20190704+ #2 Not tainted
+>> [  380.211731] --------------------------------------------
+>> [  380.211737] systemd-sleep/2367 is trying to acquire lock:
+>> [  380.211745] 0000000043cf69ce (&policy->rwsem){+.+.}, at: refresh_frequency_limits+0x36/0x90
+>> [  380.211761]
+>>                but task is already holding lock:
+>> [  380.211767] 0000000043cf69ce (&policy->rwsem){+.+.}, at: cpufreq_cpu_acquire+0x25/0x50
+>> [  380.211777]
+>>                other info that might help us debug this:
+>> [  380.211783]  Possible unsafe locking scenario:
+>>
+>> [  380.211789]        CPU0
+>> [  380.211792]        ----
+>> [  380.211795]   lock(&policy->rwsem);
+>> [  380.211800]   lock(&policy->rwsem);
+>> [  380.211805]
+>>                 *** DEADLOCK ***
+>>
+>> [  380.211811]  May be due to missing lock nesting notation
+>>
+>> [  380.211818] 8 locks held by systemd-sleep/2367:
+>> [  380.211823]  #0: 000000000e253e21 (sb_writers#5){.+.+}, at: vfs_write+0x16b/0x1d0
+>> [  380.211835]  #1: 00000000d0140159 (&of->mutex){+.+.}, at: kernfs_fop_write+0xfd/0x1c0
+>> [  380.211846]  #2: 00000000383c283a (kn->count#155){.+.+}, at: kernfs_fop_write+0x105/0x1c0
+>> [  380.211857]  #3: 000000007e6f342b (system_transition_mutex){+.+.}, at: pm_suspend.cold+0xd0/0x36a
+>> [  380.211869]  #4: 000000002ee59360 ((pm_chain_head).rwsem){++++}, at: __blocking_notifier_call_chain+0x46/0x80
+>> [  380.211883]  #5: 000000003972eb2e (&tz->lock){+.+.}, at: step_wise_throttle+0x3f/0x90
+>> [  380.211893]  #6: 0000000007747f02 (&cdev->lock){+.+.}, at: thermal_cdev_update+0x1e/0x16c
+>> [  380.211904]  #7: 0000000043cf69ce (&policy->rwsem){+.+.}, at: cpufreq_cpu_acquire+0x25/0x50
 > 
-> Newer AMD processors (>= Family 17h) add support for a subset of these
-> optional CPPC registers, based on ACPI v6.1.
+> This is already fixed in linux-next few days back. Can you try the
+> latest stuff again ?
 > 
-> The following are the supported CPPC registers for which sysfs entries
-> are created:
-> * enable                (NEW)
-> * max_perf              (NEW)
-> * min_perf              (NEW)
-> * energy_perf
-> * lowest_perf
-> * nominal_perf
-> * desired_perf          (NEW)
-> * feedback_ctrs
-> * auto_sel_enable       (NEW)
-> * lowest_nonlinear_perf
-> 
-> First, update cppc_acpi to create sysfs entries only when the optional
-> registers are known to be supported.
-> 
-> Next, a new CPUFreq driver is introduced to enable the OSPM and the userspace
-> to access the newly supported registers through sysfs entries found in
-> /sys/devices/system/cpu/cpu<num>/amd_cpufreq/.
-> 
-> This new CPUFreq driver can only be used by providing a module parameter,
-> amd_cpufreq.cppc_enable=1.
-> 
-> The purpose of exposing the registers via the amd-cpufreq sysfs entries is to
-> allow the userspace to:
-> * Tweak the values to fit its workload.
-> * Apply a profile from AMD's optimization guides.
+linux-next from Jul 12th is fine.
 
-So in general I think it is a huge mistake to expose all that to
-userspace. Before you know it, there's tools that actually rely on it,
-and then inhibit the kernel from doing anything sane with it.
-
-> Profiles will be documented in the performance/optimization guides.
-
-I don't think userspace can really do anything sane with this; it lacks
-much if not all useful information.
-
-> Note:
-> * AMD systems will not have a policy applied in the kernel at this time.
-
-And why the heck not? We're trying to move all cpufreq into the
-scheduler and have only a single governor, namely schedutil -- yes,
-we're still stuck with legacy, and we're still working on performance
-parity in some cases, but I really hope to get rid of all other cpufreq
-governors eventually.
-
-And if you look at schedutil (schedutil_cpu_util in specific) then
-you'll see it is already prepared for CPPC and currently only held back
-by the generic cpufreq interface.
-
-It currently only sets desired freq, it has information for
-min/guaranteed, and once we get thermal intergrated we might have
-sensible data for max freq too.
-
-> TODO:
-> * Create a linux userspace tool that will help users generate a CPPC profile
->   for their target workload.
-
-Basically a big fat NAK for this approach to cpufreq.
-
-> * Create a general CPPC policy in the kernel.
-
-We already have that, sorta.
+Thanks, Heiner
