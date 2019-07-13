@@ -2,123 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6CE67B98
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jul 2019 20:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCD767C1F
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Jul 2019 23:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727834AbfGMSC0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Jul 2019 14:02:26 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:41166 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727766AbfGMSC0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jul 2019 14:02:26 -0400
-Received: by mail-ot1-f67.google.com with SMTP id o101so12680989ota.8;
-        Sat, 13 Jul 2019 11:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6ZP/voUQ+Ch7jvDhff/3yc73Q7YGKXw7YDhL153Ao2E=;
-        b=b8/xfNKHuNqMcqJ4EyGHcHDYmM+zN6nVT7x//oevUF4FbXx91wi9j00N6ceIa8Rl/b
-         EWTldZb8VXxoLMGdQ/jX9GhU9FkvuZVvXYMStADoUM56a6Ao8VljLH9YGj4om4qyZlHK
-         guTTMvmbnMRk8fXgVct4OjpXOGLeqKYUwdzSwAWLaJyJkOj5qUUBWPo/w3tPJUJ6nDNN
-         QyCrKo0KX9LlpnLy3HJMroREcBHtTpd/1FRymXULMs0ImnZYirfGH8QSwhLGK2VZpODY
-         0oH0K3X6QcMqg9JS7+QwoIzt5VGsca4BUNCU45R/r+xmzf8tVoXlupCWcfN8h88MaV/o
-         WjHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6ZP/voUQ+Ch7jvDhff/3yc73Q7YGKXw7YDhL153Ao2E=;
-        b=WH1W97UGFUNmdh9IF+COeZ12btnJdLX4fl+9Iw0bym01rvhahdKpWKcGlIeANA7oXe
-         gxy/L6jpP9QrLct1To5E4aq31PlmpGfwydIZR0QhtNhYSI1e91q98E8Jz3JDfu2Dr2V6
-         WvLVJBjHJXwSJfz2rjN3VK7aosA/86n6mY8nd8w5mjRdidHU8vCC+opGcNfq+pjwkcPE
-         aoSWhwPmIyHyH31zXzBysq+a8swRjqQOhyCvzxIoLIglLyupKw9c20WOLAsQw+AVJlBo
-         KULyn4xCjkKfkWQTe1J8WaAF9kmnV5qDKDIc+2Q3h5tCbHs8E3mIefaVFmoHOfiShUZe
-         E7Ng==
-X-Gm-Message-State: APjAAAWZ9ifugcXc7rPrlYOo/aKrCyDXc7kSlxZxx5EOe0RuRJzDBgJA
-        bXmqiSrxgYVwV5u/YMaZTWsKVi9Dg8xzc+H78fE=
-X-Google-Smtp-Source: APXvYqzRubs7sRxl+oVCUfIW4EL3ndy9n7fDLykWAxtEagG7ww8vQ2yqiVZLk0pBacfN9B23mEk41XjLSvO9HJUoEFY=
-X-Received: by 2002:a9d:6742:: with SMTP id w2mr4128114otm.371.1563040944838;
- Sat, 13 Jul 2019 11:02:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190623164206.7467-1-tiny.windzz@gmail.com> <CA+E=qVfhDEQER2UTj65hR9erzej9Ey2FrUa9GV=iCFYsWZ2ztw@mail.gmail.com>
-In-Reply-To: <CA+E=qVfhDEQER2UTj65hR9erzej9Ey2FrUa9GV=iCFYsWZ2ztw@mail.gmail.com>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Sat, 13 Jul 2019 11:01:58 -0700
-Message-ID: <CA+E=qVdAUFJM27cNL6WRkk5moX=mEk7WUs6UBoX58Y7ove40oQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/11] add thermal driver for h6
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     rui.zhang@intel.com, Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S1728065AbfGMVbF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Jul 2019 17:31:05 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43806 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727961AbfGMVbF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jul 2019 17:31:05 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6DLRVZI033516;
+        Sat, 13 Jul 2019 17:28:15 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tqbt5g22v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 13 Jul 2019 17:28:15 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x6DLSEBQ042352;
+        Sat, 13 Jul 2019 17:28:14 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tqbt5g229-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 13 Jul 2019 17:28:14 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x6DLPAkf022684;
+        Sat, 13 Jul 2019 21:28:13 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma01wdc.us.ibm.com with ESMTP id 2tq6x5cqsh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 13 Jul 2019 21:28:13 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6DLSC2I38404564
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 13 Jul 2019 21:28:12 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E37CB205F;
+        Sat, 13 Jul 2019 21:28:12 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 46C96B2065;
+        Sat, 13 Jul 2019 21:28:12 +0000 (GMT)
+Received: from paulmck-ThinkPad-W541 (unknown [9.85.158.189])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Sat, 13 Jul 2019 21:28:12 +0000 (GMT)
+Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
+        id 4AEB516C39C0; Sat, 13 Jul 2019 14:28:12 -0700 (PDT)
+Date:   Sat, 13 Jul 2019 14:28:12 -0700
+From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>, c0d1n61at3@gmail.com,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        paulmck@linux.ibm.com, devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
+        kernel-hardening@lists.openwall.com, kernel-team@android.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        neilb@suse.com, netdev@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: [PATCH v2 3/9] rcu/sync: Remove custom check for reader-section
+Message-ID: <20190713212812.GH26519@linux.ibm.com>
+Reply-To: paulmck@linux.ibm.com
+References: <20190712213559.GA175138@google.com>
+ <20190712233206.GZ26519@linux.ibm.com>
+ <20190713030150.GA246587@google.com>
+ <20190713031008.GA248225@google.com>
+ <20190713082114.GA26519@linux.ibm.com>
+ <20190713133049.GA133650@google.com>
+ <20190713144108.GD26519@linux.ibm.com>
+ <20190713153606.GD133650@google.com>
+ <20190713155010.GF26519@linux.ibm.com>
+ <20190713161316.GA39321@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190713161316.GA39321@google.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-13_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907130264
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 10, 2019 at 4:09 PM Vasily Khoruzhick <anarsoul@gmail.com> wrote:
->
-> On Sun, Jun 23, 2019 at 9:42 AM Yangtao Li <tiny.windzz@gmail.com> wrote:
-> >
-> > This patchset add support for H3 and H6 thermal sensor.
-> >
-> > BTY, do a cleanup in thermal makfile.
-> >
-> > Yangtao Li (11):
-> >   thermal: sun8i: add thermal driver for h6
-> >   dt-bindings: thermal: add binding document for h6 thermal controller
-> >   thermal: fix indentation in makefile
-> >   thermal: sun8i: get ths sensor number from device compatible
-> >   thermal: sun8i: rework for sun8i_ths_get_temp()
-> >   thermal: sun8i: get ths init func from device compatible
-> >   thermal: sun8i: rework for ths irq handler func
-> >   thermal: sun8i: support ahb clocks
-> >   thermal: sun8i: rework for ths calibrate func
-> >   dt-bindings: thermal: add binding document for h3 thermal controller
-> >   thermal: sun8i: add thermal driver for h3
->
-> It would be nice to add dts changes to this series. It's unlikely that
-> you'll get any "Tested-by" otherwise.
+On Sat, Jul 13, 2019 at 12:13:16PM -0400, Joel Fernandes wrote:
+> On Sat, Jul 13, 2019 at 08:50:10AM -0700, Paul E. McKenney wrote:
+> > On Sat, Jul 13, 2019 at 11:36:06AM -0400, Joel Fernandes wrote:
+> > > On Sat, Jul 13, 2019 at 07:41:08AM -0700, Paul E. McKenney wrote:
+> > > > On Sat, Jul 13, 2019 at 09:30:49AM -0400, Joel Fernandes wrote:
+> > > > > On Sat, Jul 13, 2019 at 01:21:14AM -0700, Paul E. McKenney wrote:
+> > > > > > On Fri, Jul 12, 2019 at 11:10:08PM -0400, Joel Fernandes wrote:
+> > > > > > > On Fri, Jul 12, 2019 at 11:01:50PM -0400, Joel Fernandes wrote:
+> > > > > > > > On Fri, Jul 12, 2019 at 04:32:06PM -0700, Paul E. McKenney wrote:
+> > > > > > > > > On Fri, Jul 12, 2019 at 05:35:59PM -0400, Joel Fernandes wrote:
+> > > > > > > > > > On Fri, Jul 12, 2019 at 01:00:18PM -0400, Joel Fernandes (Google) wrote:
+> > > > > > > > > > > The rcu/sync code was doing its own check whether we are in a reader
+> > > > > > > > > > > section. With RCU consolidating flavors and the generic helper added in
+> > > > > > > > > > > this series, this is no longer need. We can just use the generic helper
+> > > > > > > > > > > and it results in a nice cleanup.
+> > > > > > > > > > > 
+> > > > > > > > > > > Cc: Oleg Nesterov <oleg@redhat.com>
+> > > > > > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > > > > > > 
+> > > > > > > > > > Hi Oleg,
+> > > > > > > > > > Slightly unrelated to the patch,
+> > > > > > > > > > I tried hard to understand this comment below in percpu_down_read() but no dice.
+> > > > > > > > > > 
+> > > > > > > > > > I do understand how rcu sync and percpu rwsem works, however the comment
+> > > > > > > > > > below didn't make much sense to me. For one, there's no readers_fast anymore
+> > > > > > > > > > so I did not follow what readers_fast means. Could the comment be updated to
+> > > > > > > > > > reflect latest changes?
+> > > > > > > > > > Also could you help understand how is a writer not able to change
+> > > > > > > > > > sem->state and count the per-cpu read counters at the same time as the
+> > > > > > > > > > comment tries to say?
+> > > > > > > > > > 
+> > > > > > > > > > 	/*
+> > > > > > > > > > 	 * We are in an RCU-sched read-side critical section, so the writer
+> > > > > > > > > > 	 * cannot both change sem->state from readers_fast and start checking
+> > > > > > > > > > 	 * counters while we are here. So if we see !sem->state, we know that
+> > > > > > > > > > 	 * the writer won't be checking until we're past the preempt_enable()
+> > > > > > > > > > 	 * and that once the synchronize_rcu() is done, the writer will see
+> > > > > > > > > > 	 * anything we did within this RCU-sched read-size critical section.
+> > > > > > > > > > 	 */
+> > > > > > > > > > 
+> > > > > > > > > > Also,
+> > > > > > > > > > I guess we could get rid of all of the gp_ops struct stuff now that since all
+> > > > > > > > > > the callbacks are the same now. I will post that as a follow-up patch to this
+> > > > > > > > > > series.
+> > > > > > > > > 
+> > > > > > > > > Hello, Joel,
+> > > > > > > > > 
+> > > > > > > > > Oleg has a set of patches updating this code that just hit mainline
+> > > > > > > > > this week.  These patches get rid of the code that previously handled
+> > > > > > > > > RCU's multiple flavors.  Or are you looking at current mainline and
+> > > > > > > > > me just missing your point?
+> > > > > > > > > 
+> > > > > > > > 
+> > > > > > > > Hi Paul,
+> > > > > > > > You are right on point. I have a bad habit of not rebasing my trees. In this
+> > > > > > > > case the feature branch of mine in concern was based on v5.1. Needless to
+> > > > > > > > say, I need to rebase my tree.
+> > > > > > > > 
+> > > > > > > > Yes, this sync clean up patch does conflict when I rebase, but other patches
+> > > > > > > > rebase just fine.
+> > > > > > > > 
+> > > > > > > > The 2 options I see are:
+> > > > > > > > 1. Let us drop this patch for now and I resend it later.
+> > > > > > > > 2. I resend all patches based on Linus's master branch.
+> > > > > > > 
+> > > > > > > Below is the updated patch based on Linus master branch:
+> > > > > > > 
+> > > > > > > ---8<-----------------------
+> > > > > > > 
+> > > > > > > >From 5f40c9a07fcf3d6dafc2189599d0ba9443097d0f Mon Sep 17 00:00:00 2001
+> > > > > > > From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> > > > > > > Date: Fri, 12 Jul 2019 12:13:27 -0400
+> > > > > > > Subject: [PATCH v2.1 3/9] rcu/sync: Remove custom check for reader-section
+> > > > > > > 
+> > > > > > > The rcu/sync code was doing its own check whether we are in a reader
+> > > > > > > section. With RCU consolidating flavors and the generic helper added in
+> > > > > > > this series, this is no longer need. We can just use the generic helper
+> > > > > > > and it results in a nice cleanup.
+> > > > > > > 
+> > > > > > > Cc: Oleg Nesterov <oleg@redhat.com>
+> > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > > > ---
+> > > > > > >  include/linux/rcu_sync.h | 4 +---
+> > > > > > >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > > > > > > 
+> > > > > > > diff --git a/include/linux/rcu_sync.h b/include/linux/rcu_sync.h
+> > > > > > > index 9b83865d24f9..0027d4c8087c 100644
+> > > > > > > --- a/include/linux/rcu_sync.h
+> > > > > > > +++ b/include/linux/rcu_sync.h
+> > > > > > > @@ -31,9 +31,7 @@ struct rcu_sync {
+> > > > > > >   */
+> > > > > > >  static inline bool rcu_sync_is_idle(struct rcu_sync *rsp)
+> > > > > > >  {
+> > > > > > > -	RCU_LOCKDEP_WARN(!rcu_read_lock_held() &&
+> > > > > > > -			 !rcu_read_lock_bh_held() &&
+> > > > > > > -			 !rcu_read_lock_sched_held(),
+> > > > > > > +	RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),
+> > > > > > 
+> > > > > > I believe that replacing rcu_read_lock_sched_held() with preemptible()
+> > > > > > in a CONFIG_PREEMPT=n kernel will give you false-positive splats here.
+> > > > > > If you have not already done so, could you please give it a try?
+> > > > > 
+> > > > > Hi Paul,
+> > > > > I don't think it will cause splats for !CONFIG_PREEMPT.
+> > > > > 
+> > > > > Currently, rcu_read_lock_any_held() introduced in this patch returns true if
+> > > > > !preemptible(). This means that:
+> > > > > 
+> > > > > The following expression above:
+> > > > > RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),...)
+> > > > > 
+> > > > > Becomes:
+> > > > > RCU_LOCKDEP_WARN(preemptible(), ...)
+> > > > > 
+> > > > > For, CONFIG_PREEMPT=n kernels, this means:
+> > > > > RCU_LOCKDEP_WARN(0, ...)
+> > > > > 
+> > > > > Which would mean no splats. Or, did I miss the point?
+> > > > 
+> > > > I suggest trying it out on a CONFIG_PREEMPT=n kernel.
+> > > 
+> > > Sure, will do, sorry did not try it out yet because was busy with weekend
+> > > chores but will do soon, thanks!
+> > 
+> > I am not faulting you for taking the weekend off, actually.  ;-)
+> 
+> ;-) 
+> 
+> I tried doing RCU_LOCKDEP_WARN(preemptible(), ...) in this code path and I
+> don't get any splats. I also disassembled the code and it seems to me
+> RCU_LOCKDEP_WARN() becomes a NOOP which also the above reasoning confirms.
 
-I added A64 support on top of this series, see
-https://github.com/anarsoul/linux-2.6/tree/v5.2-thermal
+OK, very good.  Could you do the same thing for the RCU_LOCKDEP_WARN()
+in synchronize_rcu()?  Why or why not?
 
-Branch also contains patches to enable DVFS on A64, feel free to
-cherry pick only those related to thermal driver if you want to
-include A64 support into v5 series.
+(No need to work this on your Sunday.)
 
->
-> >  .../bindings/thermal/sun8i-thermal.yaml       |  94 +++
-> >  MAINTAINERS                                   |   7 +
-> >  drivers/thermal/Kconfig                       |  14 +
-> >  drivers/thermal/Makefile                      |   9 +-
-> >  drivers/thermal/sun8i_thermal.c               | 534 ++++++++++++++++++
-> >  5 files changed, 654 insertions(+), 4 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-> >  create mode 100644 drivers/thermal/sun8i_thermal.c
-> >
-> > ---
-> > v4:
-> > -add h3 support
-> > -fix yaml file
-> > ---
-> > 2.17.1
-> >
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+							Thanx, Paul
