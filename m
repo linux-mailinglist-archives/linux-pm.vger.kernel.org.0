@@ -2,187 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC563680DD
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Jul 2019 20:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621C768169
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 00:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728662AbfGNSxC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 14 Jul 2019 14:53:02 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6002 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728125AbfGNSxC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Jul 2019 14:53:02 -0400
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6EIlCEJ106075;
-        Sun, 14 Jul 2019 14:50:30 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tqvuf5gts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 14 Jul 2019 14:50:30 -0400
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x6EIoUZH135521;
-        Sun, 14 Jul 2019 14:50:30 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tqvuf5gta-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 14 Jul 2019 14:50:29 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x6EInRHA026321;
-        Sun, 14 Jul 2019 18:50:28 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma03dal.us.ibm.com with ESMTP id 2tq6x6tdsf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 14 Jul 2019 18:50:28 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6EIoSV749414412
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 14 Jul 2019 18:50:28 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F3E19B205F;
-        Sun, 14 Jul 2019 18:50:27 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 88499B2065;
-        Sun, 14 Jul 2019 18:50:27 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.85.203.247])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Sun, 14 Jul 2019 18:50:27 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id 7A5C116C8FBA; Sun, 14 Jul 2019 11:50:27 -0700 (PDT)
-Date:   Sun, 14 Jul 2019 11:50:27 -0700
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>, c0d1n61at3@gmail.com,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
-        kernel-hardening@lists.openwall.com, kernel-team@android.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        neilb@suse.com, netdev@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
+        id S1728754AbfGNWTZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 14 Jul 2019 18:19:25 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40286 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728731AbfGNWTY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 14 Jul 2019 18:19:24 -0400
+Received: by mail-lj1-f193.google.com with SMTP id m8so14184684lji.7;
+        Sun, 14 Jul 2019 15:19:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=umaBieZkHQlpvJRlI46BSRt17eppj53ySrGsxMxyEG4=;
+        b=dGKKLVKd7gLPwY113cgCcCqC8J9kg/7znMzw2eIin4M0OqAI8R1bMUlioeGfBhTuua
+         1fJ+VcSaWusysnmOtj+aP2D1/1x6iH02Mx6tcBtMO61wRkky5YMAfLL/GwRVZ0DnVSj5
+         t3m5yi8C6KAXvrdHImfzVLHECQIgWX8W/fDQq3eS6yhQhTIk2vffF/X7nYKkvgy0+6+e
+         Vh3xeXl7utyhVns7hBMuMQLqF0FLhcYi9fdnPt9L+3P7vWW5MpDYKi9q8Q2f6/Jlp7rz
+         DiavHy2pWYz4nX//uHpnICAGCVYN7OFvzh+Gex1JGb7yeVVJt03QUB+hTEWj9zUojiYq
+         Z2nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=umaBieZkHQlpvJRlI46BSRt17eppj53ySrGsxMxyEG4=;
+        b=lalG2xtnd+4uSOcfBUJ1Ud5X1CtaFQWziVpKJM3bQzX2W53lOBtJbKYt8z+iTPcsA4
+         P7880vn4F85g/goLd4RvmEsMbU777gqa7InYREC5eFToxRUcH7CFuWaQkM95PEuO9ChZ
+         hQUZQmMAxQ7wnAcCmZpaYesYFtjqB6UYGli1qSHIVDU9V5WjQYerP3hb8peCYLzdO4vd
+         4B5TyAgSxBLiUpNu/0dggmkcKF9BXEydcf7ihB9NDZPtWmJnIQzV0dRp2ZftLlNZN6JX
+         XR+u74vAFuzuCvAb9shG+cqHSiBTFavzOPlJkpSR86gXpu9qgztQIyUg628f3b36sr+z
+         kLWQ==
+X-Gm-Message-State: APjAAAX2vJCMp0U6Ygd7AfqD1dRRze/T0v3yfXU/zxjYkzE5dzvcvmAy
+        y2IhuHpl5V0cJS/Z64aVIrXws/N2
+X-Google-Smtp-Source: APXvYqy5XOMeWNWyjwppmpufMHj4Zd2QTGvWzxwnDt18HRH4CsnVfOJOY5AjnP74wL5x0w0XxPawFQ==
+X-Received: by 2002:a2e:2d12:: with SMTP id t18mr12325112ljt.175.1563142761276;
+        Sun, 14 Jul 2019 15:19:21 -0700 (PDT)
+Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
+        by smtp.googlemail.com with ESMTPSA id n10sm2064700lfe.24.2019.07.14.15.19.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 14 Jul 2019 15:19:20 -0700 (PDT)
+Subject: Re: [PATCH v2 1/6] ARM: tegra: Remove cpuidle drivers
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Subject: Re: [PATCH v2 3/9] rcu/sync: Remove custom check for reader-section
-Message-ID: <20190714185027.GL26519@linux.ibm.com>
-Reply-To: paulmck@linux.ibm.com
-References: <20190713031008.GA248225@google.com>
- <20190713082114.GA26519@linux.ibm.com>
- <20190713133049.GA133650@google.com>
- <20190713144108.GD26519@linux.ibm.com>
- <20190713153606.GD133650@google.com>
- <20190713155010.GF26519@linux.ibm.com>
- <20190713161316.GA39321@google.com>
- <20190713212812.GH26519@linux.ibm.com>
- <20190714181053.GB34501@google.com>
- <20190714183820.GD34501@google.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20190711031312.10038-1-digetx@gmail.com>
+ <20190711031312.10038-2-digetx@gmail.com>
+ <c087a5cb-2ffa-1cf6-f0bf-631234759a22@nvidia.com>
+ <a6e4b43e-369c-c501-6d2e-69d5b940ff9c@gmail.com>
+ <73781434-d25a-b17b-aacb-95ace5ac5f95@nvidia.com>
+ <9d79ed3e-a37f-af9c-0696-31dc33bbdefd@gmail.com>
+Message-ID: <0a04f2f3-a2bd-b750-d6db-06dae481fb0b@gmail.com>
+Date:   Mon, 15 Jul 2019 01:19:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190714183820.GD34501@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-14_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907140234
+In-Reply-To: <9d79ed3e-a37f-af9c-0696-31dc33bbdefd@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 14, 2019 at 02:38:20PM -0400, Joel Fernandes wrote:
-> On Sun, Jul 14, 2019 at 02:10:53PM -0400, Joel Fernandes wrote:
-> > On Sat, Jul 13, 2019 at 02:28:12PM -0700, Paul E. McKenney wrote:
-> [snip]
-> > > > > > > > > > 
-> > > > > > > > > > Cc: Oleg Nesterov <oleg@redhat.com>
-> > > > > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > > > > > > > ---
-> > > > > > > > > >  include/linux/rcu_sync.h | 4 +---
-> > > > > > > > > >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > > > > > > > > > 
-> > > > > > > > > > diff --git a/include/linux/rcu_sync.h b/include/linux/rcu_sync.h
-> > > > > > > > > > index 9b83865d24f9..0027d4c8087c 100644
-> > > > > > > > > > --- a/include/linux/rcu_sync.h
-> > > > > > > > > > +++ b/include/linux/rcu_sync.h
-> > > > > > > > > > @@ -31,9 +31,7 @@ struct rcu_sync {
-> > > > > > > > > >   */
-> > > > > > > > > >  static inline bool rcu_sync_is_idle(struct rcu_sync *rsp)
-> > > > > > > > > >  {
-> > > > > > > > > > -	RCU_LOCKDEP_WARN(!rcu_read_lock_held() &&
-> > > > > > > > > > -			 !rcu_read_lock_bh_held() &&
-> > > > > > > > > > -			 !rcu_read_lock_sched_held(),
-> > > > > > > > > > +	RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),
-> > > > > > > > > 
-> > > > > > > > > I believe that replacing rcu_read_lock_sched_held() with preemptible()
-> > > > > > > > > in a CONFIG_PREEMPT=n kernel will give you false-positive splats here.
-> > > > > > > > > If you have not already done so, could you please give it a try?
-> > > > > > > > 
-> > > > > > > > Hi Paul,
-> > > > > > > > I don't think it will cause splats for !CONFIG_PREEMPT.
-> > > > > > > > 
-> > > > > > > > Currently, rcu_read_lock_any_held() introduced in this patch returns true if
-> > > > > > > > !preemptible(). This means that:
-> > > > > > > > 
-> > > > > > > > The following expression above:
-> > > > > > > > RCU_LOCKDEP_WARN(!rcu_read_lock_any_held(),...)
-> > > > > > > > 
-> > > > > > > > Becomes:
-> > > > > > > > RCU_LOCKDEP_WARN(preemptible(), ...)
-> > > > > > > > 
-> > > > > > > > For, CONFIG_PREEMPT=n kernels, this means:
-> > > > > > > > RCU_LOCKDEP_WARN(0, ...)
-> > > > > > > > 
-> > > > > > > > Which would mean no splats. Or, did I miss the point?
-> > > > > > > 
-> > > > > > > I suggest trying it out on a CONFIG_PREEMPT=n kernel.
-> > > > > > 
-> > > > > > Sure, will do, sorry did not try it out yet because was busy with weekend
-> > > > > > chores but will do soon, thanks!
-> > > > > 
-> > > > > I am not faulting you for taking the weekend off, actually.  ;-)
-> > > > 
-> > > > ;-) 
-> > > > 
-> > > > I tried doing RCU_LOCKDEP_WARN(preemptible(), ...) in this code path and I
-> > > > don't get any splats. I also disassembled the code and it seems to me
-> > > > RCU_LOCKDEP_WARN() becomes a NOOP which also the above reasoning confirms.
-> > > 
-> > > OK, very good.  Could you do the same thing for the RCU_LOCKDEP_WARN()
-> > > in synchronize_rcu()?  Why or why not?
-> > > 
-> > 
-> > Hi Paul,
-> > 
-> > Yes synchronize_rcu() can also make use of this technique since it is
-> > strictly illegal to call synchronize_rcu() within a reader section.
-> > 
-> > I will add this to the set of my patches as well and send them all out next
-> > week, along with the rcu-sync and bh clean ups we discussed.
+12.07.2019 19:23, Dmitry Osipenko пишет:
+> 12.07.2019 12:39, Jon Hunter пишет:
+>>
+>> On 11/07/2019 18:03, Dmitry Osipenko wrote:
+>>> 11.07.2019 12:26, Jon Hunter пишет:
+>>>>
+>>>> On 11/07/2019 04:13, Dmitry Osipenko wrote:
+>>>>> Remove the old drivers to replace them cleanly with a new one later on.
+>>>>>
+>>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>>>> ---
+>>>>>  arch/arm/mach-tegra/Makefile           |  13 --
+>>>>>  arch/arm/mach-tegra/cpuidle-tegra114.c |  89 -----------
+>>>>>  arch/arm/mach-tegra/cpuidle-tegra20.c  | 212 -------------------------
+>>>>>  arch/arm/mach-tegra/cpuidle-tegra30.c  | 132 ---------------
+>>>>>  arch/arm/mach-tegra/cpuidle.c          |  50 ------
+>>>>>  arch/arm/mach-tegra/cpuidle.h          |  21 ---
+>>>>>  arch/arm/mach-tegra/irq.c              |  18 ---
+>>>>>  arch/arm/mach-tegra/irq.h              |  11 --
+>>>>>  arch/arm/mach-tegra/pm.c               |   7 -
+>>>>>  arch/arm/mach-tegra/pm.h               |   1 -
+>>>>>  arch/arm/mach-tegra/reset-handler.S    |  11 --
+>>>>>  arch/arm/mach-tegra/reset.h            |   9 +-
+>>>>>  arch/arm/mach-tegra/sleep-tegra20.S    | 190 +---------------------
+>>>>>  arch/arm/mach-tegra/sleep.h            |  12 --
+>>>>>  arch/arm/mach-tegra/tegra.c            |   3 -
+>>>>>  drivers/soc/tegra/Kconfig              |   1 -
+>>>>>  include/soc/tegra/cpuidle.h            |   4 -
+>>>>>  17 files changed, 5 insertions(+), 779 deletions(-)
+>>>>>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra114.c
+>>>>>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra20.c
+>>>>>  delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra30.c
+>>>>>  delete mode 100644 arch/arm/mach-tegra/cpuidle.c
+>>>>>  delete mode 100644 arch/arm/mach-tegra/cpuidle.h
+>>>>>  delete mode 100644 arch/arm/mach-tegra/irq.h
+>>>>
+>>>> By removing all the above, it is really hard to review the diff. Is
+>>>> there any way you could first consolidate the cpuidle drivers into say
+>>>> the existing arch/arm/mach-tegra/cpuidle-tegra20.c and then move to
+>>>> drivers/cpuidle?
+>>>
+>>> I'm afraid that it will make reviewing even more difficult because
+>>> everything that is removed here is not returned in the further patches.
+>>> The new driver is based on the older ones, but I wrote it from scratch
+>>> and it's not only looks different, but also works a bit different as you
+>>> may see.
+>>>
+>>> Could you please clarify what exactly makes it hard to review? The diff
+>>> looks pretty clean to me, while squashing everything into existing
+>>> driver should be quite a mess.
+>>
+>> Ideally a patch should standalone and can be reviewed by itself.
+>> However, to review this, we need to review patches 1, 2 and 3 at the
+>> same time. So IMO it is not that convenient from a reviewers
+>> perspective. Furthermore, patches 1 and 3 are large and so easy to miss
+>> something.
+>>
+>> Is there really no way to have a patch to combined the existing drivers,
+>> then a patch to convert them into the newer rewritten version you have
+>> implemented, then move the driver?
 > 
-> After sending this email, it occurs to me it wont work in synchronize_rcu()
-> for !CONFIG_PREEMPT kernels. This is because in a !CONFIG_PREEMPT kernel,
-> executing in kernel mode itself looks like being in an RCU reader. So we
-> should leave that as is. However it will work fine for rcu_sync_is_idle (for
-> CONFIG_PREEMPT=n kernels) as I mentioned earlier.
-> 
-> Were trying to throw me a Quick-Quiz ? ;-) In that case, hope I passed!
+> Probably I spent a bit too much time with that code, so now yours
+> suggestion looks to me like an unnecessary step. But I will try and see
+> how it goes, at least it should be possible to break down the patch 1 a
+> bit more, hopefully it will help to better understand what's going on in
+> the further patches if you're not familiar or don't remember how it all
+> works.
 
-You did pass.  This time.  ;-)
-
-							Thanx, Paul
+I tried (in several attempts) and couldn't find a way how to
+meaningfully squash the old drivers. It's a lot of unnecessary churning
+that won't help with reviewing of the code at all because new driver is
+structured differently and beating of old drivers until they resemble
+the new one just not worth it. I'll write a bit more detailed commit
+message, emphasizing the details, hope it will be helpful. The old
+drivers are ~200 LOC each and the new one will be ~300 LOC + 50 lines of
+comments, I don't think that it's really very hard to review as it it
+may initially looked like to you, Jon.
