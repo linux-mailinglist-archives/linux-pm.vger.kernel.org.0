@@ -2,132 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A4169E7B
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 23:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F5769E88
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 23:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732378AbfGOVop (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 17:44:45 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:41953 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731858AbfGOVop (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jul 2019 17:44:45 -0400
-Received: by mail-ot1-f68.google.com with SMTP id o101so18695714ota.8;
-        Mon, 15 Jul 2019 14:44:44 -0700 (PDT)
+        id S1732047AbfGOVsZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 17:48:25 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:35935 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731232AbfGOVsZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jul 2019 17:48:25 -0400
+Received: by mail-oi1-f193.google.com with SMTP id w7so13893686oic.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2019 14:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I6e7DRMuQdVok4h9s3bFzY/fVAesWrHCG++TXs3wwJc=;
+        b=b+RfaTs//kWIhveDSusgI4qjyvX0eUrbNXorBAg27bcO9UpmJ4T2qDep9avaJUwfT0
+         kDsl4ZumaPNqw0I4YBrS5IYFs7EQ0wuzE7vNuHJlS2uF7TGlPuB637tG1TeAWyIvfr0c
+         pgoY6TuZDTvWTjE1RXRX7i/OB/omeFq2khiE7Md2ZgKF/7ZpBpZMXp5f696nB/um3kHH
+         smsCwp1vvsLFB+dxz3LlQoeg9++1+xgff51PUlsDp7OLXqD9qfRSTgIYtx5ahOx6/qqe
+         8VBAMiFgtbMey8lFx4HCeQ0hOruTIX4l1lqLgEQnNkJS3n3AqxsHc/mPiYs51Bi45pnb
+         2T9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hO2lc5/RCrOfroO8+pzsn6ZrqRVw3tFQDoLgNfzmBUQ=;
-        b=QxXDGZ3v64gyAMTDqUN0aDnOZUEUriuNBjPSYo18FhopZ8P0hjPzAG+ZIKn7zH4gUi
-         QQfKwc35vqrWxz9Pdos45CbPkxluZAY+xJxiCUnS/c8V3irYv3sVlFOGVsI03FOmIaXv
-         1EW+EKfby2IgVifnLuY8yMlV3B9g9zSRWk+MkjD42FojhmDrPbL1Gj05OvCQfmBMrtVC
-         H2sgMK8MwEiq61UuGNkJPV+VQ+plnLtUXI5O8yARGzjtU/JH3OxAdhS+CBaJnz7jEarF
-         rKc52Lygct/0tLMNo/N1pP0Qx0Vim/zzGg889XPO1TWBw/bRbhAqCy7vbi3fogYK9Wkn
-         2OSA==
-X-Gm-Message-State: APjAAAUsAOkRYO87kbLMCwaOxid9BCDbmnB2OvJG6nh20Bt2jxK632To
-        Re3Z9R3uMSLoWgU/fV0rp3nL8QXeSGq3NMcP2Ik=
-X-Google-Smtp-Source: APXvYqxeBU+lL3PSYmxhb7JppIVz9aT6KKyGzUIDEJ8gGEzipFV4PQx8sL/9KU3ERl8XEJvsrjqZy4/vHGyUSxfUvR0=
-X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr18941426otp.189.1563227084317;
- Mon, 15 Jul 2019 14:44:44 -0700 (PDT)
+        bh=I6e7DRMuQdVok4h9s3bFzY/fVAesWrHCG++TXs3wwJc=;
+        b=RIm6xIru+ln+isW8c099ZmttZpTkhSmClZPyfliKD/vHtoH9hgKeM99APQQcOrCYjH
+         t1Z0MGRkhW6prQKMXMh++iAY1tRX6fRH3ngUx8OLtFXqYS2kk/uf/CBpPEj/FfNmSLeD
+         4pDH6pCR/A81Me7oV1iWrDj2mlvCHCcVDtZ1XmRFzuQW0mz4We4kFrmHkkrv+l+KsDDr
+         sz5NwDSvmJLFjE3wcNMtEzhGpI4q+zfJK3icDbTspHLXhCULnz0D27CKMb2ZX1n4yKe3
+         TMu17Cohm4neqqaYnilY/40zllO0OlwHa/ABb+QJ7xLDH+XRWNI1g5rPaSXo18ipGpDz
+         sjDQ==
+X-Gm-Message-State: APjAAAXLBbJEYOqomaxy+AE0vcsBw+wwti/NUM8QX2e4TyBGPFrkGUU7
+        zAGSFTqA+3WyEcdgNWjQpw7a+5r6Xr88WVwkBNY=
+X-Google-Smtp-Source: APXvYqw9dke1ghFxnHX6HAV2lmdw3RdzqwaSF9V28TbiYgFTCr6s6WN4r5ruqE3Ue2Mqdc0xMnuCjFZwdezWm01SCQk=
+X-Received: by 2002:aca:3509:: with SMTP id c9mr15286738oia.179.1563227304035;
+ Mon, 15 Jul 2019 14:48:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190715143705.117908-1-joel@joelfernandes.org> <20190715143705.117908-9-joel@joelfernandes.org>
-In-Reply-To: <20190715143705.117908-9-joel@joelfernandes.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 15 Jul 2019 23:44:31 +0200
-Message-ID: <CAJZ5v0jdx1dgBZLyH_Loj1XVuLCV+HMHjk8r_n8xG7qmoH_z3A@mail.gmail.com>
-Subject: Re: [PATCH 8/9] acpi: Use built-in RCU list checking for
- acpi_ioremaps list (v1)
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>, c0d1n61at3@gmail.com,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+References: <CANA+-vAxU5jp6PQ26NU+UMc6iyw6KkBS9nbd6wj0qqkO-1WhYg@mail.gmail.com>
+ <20190715201116.221078-1-trong@android.com> <20190715203651.GA7513@kroah.com>
+In-Reply-To: <20190715203651.GA7513@kroah.com>
+From:   Tri Vo <trong@android.com>
+Date:   Mon, 15 Jul 2019 14:48:13 -0700
+Message-ID: <CANA+-vC+_Gp4RwdLH_XYDAepRONB66PdekvaCxNT3ZVGx73G6A@mail.gmail.com>
+Subject: Re: [PATCH v3] PM / wakeup: show wakeup sources stats in sysfs
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>, kaleshsingh@google.com,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        NeilBrown <neilb@suse.com>, netdev <netdev@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+        "Cc: Android Kernel" <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 15, 2019 at 4:43 PM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
+On Mon, Jul 15, 2019 at 1:37 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> list_for_each_entry_rcu has built-in RCU and lock checking. Make use of
-> it for acpi_ioremaps list traversal.
+> On Mon, Jul 15, 2019 at 01:11:16PM -0700, Tri Vo wrote:
+> > Userspace can use wakeup_sources debugfs node to plot history of suspend
+> > blocking wakeup sources over device's boot cycle. This information can
+> > then be used (1) for power-specific bug reporting and (2) towards
+> > attributing battery consumption to specific processes over a period of
+> > time.
+> >
+> > However, debugfs doesn't have stable ABI. For this reason, create a
+> > 'struct device' to expose wakeup sources statistics in sysfs under
+> > /sys/class/wakeup/<name>/.
+> >
+> > Introduce CONFIG_PM_SLEEP_STATS that enables/disables showing wakeup
+> > source statistics in sysfs.
+> >
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Tri Vo <trong@android.com>
+> > Tested-by: Tri Vo <trong@android.com>
 >
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Co-Developed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> perhaps given that I rewrote the whole file last time?  :)
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Thanks again for the help!
+>
+>
+> > ---
+> >  Documentation/ABI/testing/sysfs-power |  73 ++++++++++++-
+> >  drivers/base/power/Makefile           |   1 +
+> >  drivers/base/power/wakeup.c           |  12 ++-
+> >  drivers/base/power/wakeup_stats.c     | 148 ++++++++++++++++++++++++++
+> >  include/linux/pm_wakeup.h             |  19 ++++
+> >  kernel/power/Kconfig                  |  10 ++
+> >  kernel/power/wakelock.c               |  10 ++
+> >  7 files changed, 270 insertions(+), 3 deletions(-)
+> >  create mode 100644 drivers/base/power/wakeup_stats.c
+>
+> What changed from v2?  :)
 
-> ---
->  drivers/acpi/osl.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
-> index 9c0edf2fc0dd..2f9d0d20b836 100644
-> --- a/drivers/acpi/osl.c
-> +++ b/drivers/acpi/osl.c
-> @@ -14,6 +14,7 @@
->  #include <linux/slab.h>
->  #include <linux/mm.h>
->  #include <linux/highmem.h>
-> +#include <linux/lockdep.h>
->  #include <linux/pci.h>
->  #include <linux/interrupt.h>
->  #include <linux/kmod.h>
-> @@ -80,6 +81,7 @@ struct acpi_ioremap {
->
->  static LIST_HEAD(acpi_ioremaps);
->  static DEFINE_MUTEX(acpi_ioremap_lock);
-> +#define acpi_ioremap_lock_held() lock_is_held(&acpi_ioremap_lock.dep_map)
->
->  static void __init acpi_request_region (struct acpi_generic_address *gas,
->         unsigned int length, char *desc)
-> @@ -206,7 +208,7 @@ acpi_map_lookup(acpi_physical_address phys, acpi_size size)
->  {
->         struct acpi_ioremap *map;
->
-> -       list_for_each_entry_rcu(map, &acpi_ioremaps, list)
-> +       list_for_each_entry_rcu(map, &acpi_ioremaps, list, acpi_ioremap_lock_held())
->                 if (map->phys <= phys &&
->                     phys + size <= map->phys + map->size)
->                         return map;
-> @@ -249,7 +251,7 @@ acpi_map_lookup_virt(void __iomem *virt, acpi_size size)
->  {
->         struct acpi_ioremap *map;
->
-> -       list_for_each_entry_rcu(map, &acpi_ioremaps, list)
-> +       list_for_each_entry_rcu(map, &acpi_ioremaps, list, acpi_ioremap_lock_held())
->                 if (map->virt <= virt &&
->                     virt + size <= map->virt + map->size)
->                         return map;
-> --
-> 2.22.0.510.g264f2c817a-goog
->
+Oops, my bad.
+
+> And I am guessing that you actually tested this all out, and it works
+> for you?
+
+Yes, I played around with wakelocks to make sure that wakeup source
+stats are added/updated/removed as expected.
+
+> Have you changed Android userspace to use the new api with no
+> problems?
+
+Kalesh helped me test this patch (added him in Tested-by: field in
+latest patch version). We haven't tested beyond booting and manual
+inspection on android devices. Android userspace changes should be
+fairly trivial though.
