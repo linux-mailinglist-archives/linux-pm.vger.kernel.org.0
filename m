@@ -2,20 +2,20 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5DB69938
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 18:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA406993B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 18:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731244AbfGOQmH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 12:42:07 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40512 "EHLO mx1.suse.de"
+        id S1730544AbfGOQmb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 12:42:31 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40600 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730503AbfGOQmG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Jul 2019 12:42:06 -0400
+        id S1730503AbfGOQmb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Jul 2019 12:42:31 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 70162AF7A;
-        Mon, 15 Jul 2019 16:42:05 +0000 (UTC)
-Date:   Mon, 15 Jul 2019 18:42:00 +0200
+        by mx1.suse.de (Postfix) with ESMTP id 56C86AF7A;
+        Mon, 15 Jul 2019 16:42:30 +0000 (UTC)
+Date:   Mon, 15 Jul 2019 18:42:26 +0200
 From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
 To:     Patrick Bellasi <patrick.bellasi@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -35,64 +35,33 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Steve Muckle <smuckle@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
         Alessio Balsini <balsini@android.com>
-Subject: Re: [PATCH v11 2/5] sched/core: uclamp: Propagate parent clamps
-Message-ID: <20190715164200.GA30862@blackbody.suse.cz>
+Subject: Re: [PATCH v11 3/5] sched/core: uclamp: Propagate system defaults to
+ root group
+Message-ID: <20190715164226.GA30262@blackbody.suse.cz>
 References: <20190708084357.12944-1-patrick.bellasi@arm.com>
- <20190708084357.12944-3-patrick.bellasi@arm.com>
+ <20190708084357.12944-4-patrick.bellasi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190708084357.12944-3-patrick.bellasi@arm.com>
+In-Reply-To: <20190708084357.12944-4-patrick.bellasi@arm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 08, 2019 at 09:43:54AM +0100, Patrick Bellasi <patrick.bellasi@arm.com> wrote:
-> Since it's possible for a cpu.uclamp.min value to be bigger than the
-> cpu.uclamp.max value, ensure local consistency by restricting each
-> "protection"
-> (i.e. min utilization) with the corresponding "limit" (i.e. max
-> utilization).
-I think this constraint should be mentioned in the Documentation/....
-
-> +static void cpu_util_update_eff(struct cgroup_subsys_state *css)
+On Mon, Jul 08, 2019 at 09:43:55AM +0100, Patrick Bellasi <patrick.bellasi@arm.com> wrote:
+> +static void uclamp_update_root_tg(void)
 > +{
-> +	struct cgroup_subsys_state *top_css = css;
-> +	struct uclamp_se *uc_se = NULL;
-> +	unsigned int eff[UCLAMP_CNT];
-> +	unsigned int clamp_id;
-> +	unsigned int clamps;
+> +	struct task_group *tg = &root_task_group;
 > +
-> +	css_for_each_descendant_pre(css, top_css) {
-> +		uc_se = css_tg(css)->parent
-> +			? css_tg(css)->parent->uclamp : NULL;
+> +	uclamp_se_set(&tg->uclamp_req[UCLAMP_MIN],
+> +		      sysctl_sched_uclamp_util_min, false);
+> +	uclamp_se_set(&tg->uclamp_req[UCLAMP_MAX],
+> +		      sysctl_sched_uclamp_util_max, false);
 > +
-> +		for_each_clamp_id(clamp_id) {
-> +			/* Assume effective clamps matches requested clamps */
-> +			eff[clamp_id] = css_tg(css)->uclamp_req[clamp_id].value;
-> +			/* Cap effective clamps with parent's effective clamps */
-> +			if (uc_se &&
-> +			    eff[clamp_id] > uc_se[clamp_id].value) {
-> +				eff[clamp_id] = uc_se[clamp_id].value;
-> +			}
-> +		}
-> +		/* Ensure protection is always capped by limit */
-> +		eff[UCLAMP_MIN] = min(eff[UCLAMP_MIN], eff[UCLAMP_MAX]);
-> +
-> +		/* Propagate most restrictive effective clamps */
-> +		clamps = 0x0;
-> +		uc_se = css_tg(css)->uclamp;
-(Nitpick only, reassigning child where was parent before decreases
-readibility. IMO)
+> +	cpu_util_update_eff(&root_task_group.css);
+> +}
+cpu_util_update_eff internally calls css_for_each_descendant_pre() so
+this should be protected with rcu_read_lock().
 
-> +		for_each_clamp_id(clamp_id) {
-> +			if (eff[clamp_id] == uc_se[clamp_id].value)
-> +				continue;
-> +			uc_se[clamp_id].value = eff[clamp_id];
-> +			uc_se[clamp_id].bucket_id = uclamp_bucket_id(eff[clamp_id]);
-Shouldn't these writes be synchronized with writes from
-__setscheduler_uclamp()?
-
-> 
