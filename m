@@ -2,185 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6CF69BAB
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 21:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F3B69C3C
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 22:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731287AbfGOTth (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 15:49:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33468 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730487AbfGOTtg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Jul 2019 15:49:36 -0400
-Received: from earth.universe (ip4d16e7f3.dynamic.kabel-deutschland.de [77.22.231.243])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA20720659;
-        Mon, 15 Jul 2019 19:49:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563220175;
-        bh=CWlhifr0S74KzpUYXPlw1+4sVyl5iHaUCHdWSKTfiZE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Vh4JMDIBGrMfrDLOhPvg1XQqHtTBYrMeSem0llhZz4Y82PBKnq46/oDCLlRe6czjG
-         MxOTE7k3mlJrxu9etpDNcVOwKY99ovUU/Y5suDXbWy/BP4N6mg9RtApqxfxCIge0s1
-         3dVfy84G64/qRu9ir90iG5VAtEos6ZqnmN4ydWvM=
-Received: by earth.universe (Postfix, from userid 1000)
-        id D26513C0944; Mon, 15 Jul 2019 21:49:33 +0200 (CEST)
-Date:   Mon, 15 Jul 2019 21:49:33 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: [GIT PULL] power-supply changes for 5.3
-Message-ID: <20190715194933.cq3cfz7g6j3mnbmc@earth.universe>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oilo27qmkp2bf3ya"
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716
+        id S1732329AbfGOUC1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 16:02:27 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:55280 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732343AbfGOUAV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jul 2019 16:00:21 -0400
+Received: by mail-pf1-f202.google.com with SMTP id y66so10842020pfb.21
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2019 13:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=7Fsa5djs+VQ2BrQJC+FUs9YwCCHQQfjCNM9PGrMIw+A=;
+        b=cJ58uU0XE/YKJRyI5Mt8XS66fhl7mlr/5SBCN06rI3kOZahs9sJMcXx2ibpLoUVCaE
+         9N1NY7OgxzhRPwe9rAJ9sX1BJ0ihRRRL3eB1ATlWoL9AgojAMGNFU+IEzasvl9Qi8eeC
+         ZkFc3LVDfGlr7B4KL2h2Fk7rzQRbQLG0fV2EprbbLhYAb3pInpVl0C4tpIWrC5ke1CaF
+         8SpfsbNg0HaA8UNxyOZPyFO9oH7pXi6W4xurmmtxgY7D5fmX5k+NL4JCD8shTiLjN3Q2
+         SXoPSH4JASf5Jv9Der3AxoWSuW+W9hMxss6p61KH1/LToqcS5HgvobYgH+qD2KX+O9I0
+         NjTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=7Fsa5djs+VQ2BrQJC+FUs9YwCCHQQfjCNM9PGrMIw+A=;
+        b=ly3s9q3ejo44tZplnNG/dlcjW8NPugVD+Jx+R+WOWIRRoH3D/ncG+V3h/iRNTEAIZW
+         iukWZ1Z5+6fOupC8PD8ZnKa1gaPphWFprtPaPqnrek6tkr7uZYQ9WZZQu6BTc6wYvyyX
+         F3LKGbVaskqdrcMU/Ftjq6FHqZxIIcilyXUVesHwUTp//5uFCWj+hbY7UPL/5MHpNkvB
+         +bCNe4LR437VqqWlpWccaylStPUhTZjrBLgQ06tHOyMbpHBH4r7RRRjPCknHrt8jkuGM
+         a9dxOqSGN0ob7QZUB146pSrv/Q3vyS9AsEvxViqiBpD1mIdUuflK6im+QZasWyvRfhnU
+         t0Zg==
+X-Gm-Message-State: APjAAAW1mGEQEUMMtbdxJwVH82nCFueU9PtybhMpj67BjX5Yrbo4FcW7
+        2ADP4sCcmnHq9uPJBAtNs6a4b9JA1pt6o40gMZZnCA==
+X-Google-Smtp-Source: APXvYqwVtJa9IPgk7H5zDUOO19rxBXwa1dInRZDEXWO7Uz1DWQaii5wotdUMuZXkJSevrN+xH8Yzo5reUPeuqmqn92YMUQ==
+X-Received: by 2002:a63:f857:: with SMTP id v23mr3963600pgj.228.1563220820065;
+ Mon, 15 Jul 2019 13:00:20 -0700 (PDT)
+Date:   Mon, 15 Jul 2019 12:59:27 -0700
+In-Reply-To: <20190715195946.223443-1-matthewgarrett@google.com>
+Message-Id: <20190715195946.223443-11-matthewgarrett@google.com>
+Mime-Version: 1.0
+References: <20190715195946.223443-1-matthewgarrett@google.com>
+X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
+Subject: [PATCH V35 10/29] hibernate: Disable when the kernel is locked down
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     jmorris@namei.org
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Josh Boyer <jwboyer@fedoraproject.org>,
+        David Howells <dhowells@redhat.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Kees Cook <keescook@chromium.org>, rjw@rjwysocki.net,
+        pavel@ucw.cz, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Josh Boyer <jwboyer@fedoraproject.org>
 
---oilo27qmkp2bf3ya
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+There is currently no way to verify the resume image when returning
+from hibernate.  This might compromise the signed modules trust model,
+so until we can work with signed hibernate images we disable it when the
+kernel is locked down.
 
-Hi Linus,
+Signed-off-by: Josh Boyer <jwboyer@fedoraproject.org>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Cc: rjw@rjwysocki.net
+Cc: pavel@ucw.cz
+cc: linux-pm@vger.kernel.org
+---
+ include/linux/security.h     | 1 +
+ kernel/power/hibernate.c     | 3 ++-
+ security/lockdown/lockdown.c | 1 +
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
-Here is the power-supply pull request for v5.3. Stephen reported a
-merge conflict with the PCI tree in linux-next, which contains a
-patch updating the power related documentation files to ReST format.
-The merge conflict solution from Stephen looks correct to me:
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 69c5de539e9a..304a155a5628 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -106,6 +106,7 @@ enum lockdown_reason {
+ 	LOCKDOWN_MODULE_SIGNATURE,
+ 	LOCKDOWN_DEV_MEM,
+ 	LOCKDOWN_KEXEC,
++	LOCKDOWN_HIBERNATION,
+ 	LOCKDOWN_INTEGRITY_MAX,
+ 	LOCKDOWN_CONFIDENTIALITY_MAX,
+ };
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index cd7434e6000d..3c0a5a8170b0 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -30,6 +30,7 @@
+ #include <linux/ctype.h>
+ #include <linux/genhd.h>
+ #include <linux/ktime.h>
++#include <linux/security.h>
+ #include <trace/events/power.h>
+ 
+ #include "power.h"
+@@ -68,7 +69,7 @@ static const struct platform_hibernation_ops *hibernation_ops;
+ 
+ bool hibernation_available(void)
+ {
+-	return (nohibernate == 0);
++	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
+ }
+ 
+ /**
+diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+index 6f302c156bc8..a0996f75629f 100644
+--- a/security/lockdown/lockdown.c
++++ b/security/lockdown/lockdown.c
+@@ -21,6 +21,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
+ 	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
+ 	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
+ 	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
++	[LOCKDOWN_HIBERNATION] = "hibernation",
+ 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
+ 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+ };
+-- 
+2.22.0.510.g264f2c817a-goog
 
-https://lkml.org/lkml/2019/6/27/1284
-
--- Sebastian
-
-The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
-
-  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.3
-
-for you to fetch changes up to caa2b557841c8cedc1d4862cd31cf76ee940d105:
-
-  power: reset: nvmem-reboot-mode: add CONFIG_OF dependency (2019-07-09 00:28:49 +0200)
-
-----------------------------------------------------------------
-power supply and reset changes for the v5.3 series
-
-Core:
- * Add HWMON compat layer
- * New properties
-  - input power limit
-  - input voltage limit
-
-Drivers:
- * qcom-pon: add gen2 support
- * New driver for storing reboot move in NVMEM
- * New driver for Wilco EC charger configuration
- * simplify getting the adapter of a client
-
-----------------------------------------------------------------
-Andrey Smirnov (1):
-      power: supply: Add HWMON compatibility layer
-
-Arnd Bergmann (1):
-      power: reset: nvmem-reboot-mode: add CONFIG_OF dependency
-
-Enric Balletbo i Serra (2):
-      power: supply: add input power and voltage limit properties
-      power: supply: cros: allow to set input voltage and current limit
-
-Han Nandor (2):
-      dt-bindings: power: reset: add document for NVMEM based reboot-mode
-      power: reset: nvmem-reboot-mode: use NVMEM as reboot mode write interface
-
-John Stultz (2):
-      dt-bindings: power: reset: qcom: Add qcom,pm8998-pon compatibility line
-      reset: qcom-pon: Add support for gen2 pon
-
-Nick Crews (2):
-      platform/chrome: wilco_ec: Add property helper library
-      power_supply: wilco_ec: Add charging config driver
-
-Sebastian Reichel (1):
-      Merge tag 'tags/ib-chrome-psy-5.3' into psy-next
-
-Wolfram Sang (9):
-      power: supply: bq24190_charger: simplify getting the adapter of a client
-      power: supply: bq24257_charger: simplify getting the adapter of a client
-      power: supply: bq25890_charger: simplify getting the adapter of a client
-      power: supply: max14656_charger_detector: simplify getting the adapter of a client
-      power: supply: max17040_battery: simplify getting the adapter of a client
-      power: supply: max17042_battery: simplify getting the adapter of a client
-      power: supply: rt5033_battery: simplify getting the adapter of a client
-      power: supply: rt9455_charger: simplify getting the adapter of a client
-      power: supply: sbs-manager: simplify getting the adapter of a client
-
-kbuild test robot (1):
-      power: supply: fix semicolon.cocci warnings
-
- Documentation/ABI/testing/sysfs-class-power        |  32 ++
- Documentation/ABI/testing/sysfs-class-power-wilco  |  30 ++
- .../bindings/power/reset/nvmem-reboot-mode.txt     |  26 ++
- .../devicetree/bindings/power/reset/qcom,pon.txt   |   1 +
- Documentation/power/power_supply_class.txt         |   4 +
- drivers/platform/chrome/wilco_ec/Makefile          |   2 +-
- drivers/platform/chrome/wilco_ec/properties.c      | 132 ++++++++
- drivers/power/reset/Kconfig                        |  10 +
- drivers/power/reset/Makefile                       |   1 +
- drivers/power/reset/nvmem-reboot-mode.c            |  76 +++++
- drivers/power/reset/qcom-pon.c                     |  12 +-
- drivers/power/supply/Kconfig                       |  23 ++
- drivers/power/supply/Makefile                      |   2 +
- drivers/power/supply/bq24190_charger.c             |   2 +-
- drivers/power/supply/bq24257_charger.c             |   2 +-
- drivers/power/supply/bq25890_charger.c             |   2 +-
- drivers/power/supply/cros_usbpd-charger.c          | 116 +++++++
- drivers/power/supply/max14656_charger_detector.c   |   2 +-
- drivers/power/supply/max17040_battery.c            |   2 +-
- drivers/power/supply/max17042_battery.c            |   2 +-
- drivers/power/supply/power_supply_core.c           |   7 +
- drivers/power/supply/power_supply_hwmon.c          | 355 +++++++++++++++++++++
- drivers/power/supply/power_supply_sysfs.c          |   2 +
- drivers/power/supply/rt5033_battery.c              |   2 +-
- drivers/power/supply/rt9455_charger.c              |   2 +-
- drivers/power/supply/sbs-manager.c                 |   2 +-
- drivers/power/supply/ucs1002_power.c               |   2 +-
- drivers/power/supply/wilco-charger.c               | 187 +++++++++++
- include/linux/platform_data/wilco-ec.h             |  71 +++++
- include/linux/power_supply.h                       |  15 +
- 30 files changed, 1110 insertions(+), 14 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-wilco
- create mode 100644 Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.txt
- create mode 100644 drivers/platform/chrome/wilco_ec/properties.c
- create mode 100644 drivers/power/reset/nvmem-reboot-mode.c
- create mode 100644 drivers/power/supply/power_supply_hwmon.c
- create mode 100644 drivers/power/supply/wilco-charger.c
-
---oilo27qmkp2bf3ya
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0s2MoACgkQ2O7X88g7
-+prt0RAAgV6wJa9RgwamhO5IAoxGjhgzkTDNVmAyKcplFjsOEORihCc3iIcbc1Kg
-PaaYdLaArxBBBhIvFvxx5G+sXNrppe2aFv32g6X6pagZDouq1IWE8JmjUrb0sX0u
-2FnEzK26Vzk2oc9yjsEWXxI/IEGt4ia6QLvtqCH2mryIT1lFivdaNMAT0v3kZd8l
-nAzCU7sbA4iiZbq9SDJHrf+8vWmmo3ZD8hhbWm75itXmJW+w3+wnjoJHYiybcGXb
-Nc5EzB8S75yv8Jb6wcMzRCu71S7U9EULcBqtEXoAXfKJSW0mBo2vC4EtP6TDSJGX
-pSShwTztRacr4HajPpPBL7Wn8N1Cv0DbLmz4YRGeqqJ8Q85V0OUhdJpU60KIUr0v
-x6hMC8XgtoQxus8LlsW+Y1EWUrgIHWSKFXIHvlZgZS8heDCW/X3hAgUHvAZ6DIjU
-wuBqNteGsX2e+4Y6RrAouO3JjBlnYurbpa0YGN01FOSmaoxgFC0rfhN3hhZ25oOL
-iAOpLrV/MlVRt09M5fZIVIF5OZiNoalFRYeBe3YCXg/Z1E9ev9GtTLK/DTrRuNG7
-6smyD/TNM1dioVCyGsf7QxcH0OyYX6Ytu7BaOr5tpanrgfDKUX0/KfoKdexfa8+O
-zxs1UeAiS5cjzuQskFJrd17qbwp8qVkdxBx9yLR+1E1deVTRSnI=
-=qOqz
------END PGP SIGNATURE-----
-
---oilo27qmkp2bf3ya--
