@@ -2,224 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A0469A4D
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 19:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6CF69BAB
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 21:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732039AbfGOR5T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 13:57:19 -0400
-Received: from mail-eopbgr710065.outbound.protection.outlook.com ([40.107.71.65]:52976
-        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731078AbfGOR5T (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Jul 2019 13:57:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QxTubY5R0mhguOqLsX+mggQJ1h/R2jzE+UgRz/ASPij6kkos5c+cz3m0/8cVLRF6givi8RYyR70QQOEy8ag6tDtF9ItKP7vnmw84QYB2PbocVroWBGkvScqH7okWXcy0nAe1Q+QuYEHBv0aNXBg9K3Dt2MbT/fQE2bXCpUjZU+AZmQ+8hiuWA6x0PtcsKOFWFm1zPZpCGkN5jr7wZOzSu4bJegKTvnyq39FqRslBk74e5Ag7EAcqOb3vcjetZwLpnAFcmJ9iuWSj6oo3BNHBfpb2uIIX0ESnn9ojFeDEbqai6/n12nzM+oND13fe4anSQFqYpRz9UD4/CxyscZ1qSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mPEHu6kCiSPbTkAF/6l3WZ2mtrQtMm6ZUBtCO4wjaJ8=;
- b=EGgNbiJSvAszfB0XUcKIJZ95Teqg4kJJt/QXUP2riOmWyGgbAcW2Uez3qHsmPBygbSbRrCbFS63aUu/2p5XqhAfHPDVYpys6m5njKHAg8NHa7apCf/pUEfJWtgf/NlYkOr7Z4oCdFHGq0+5wvFutYjMt2c/8ZK0EZk0vMBGslVBgh2BHmIINOOXVSSS3uTaXgeWfU8g5RtxH3RHOy7xb6sG7miP2mLhiA5pPdwwNXC/76XkgutWnlbSJjAUVhvZ7X2GgelKTxs5vJOO5zeoNumMVW59MEHqI00dTfCtyZZK0jkcIcKNLHb/4aR5Sx9giKcA6ylbN4F6mskX+xuHxrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=amd.com;dmarc=pass action=none header.from=amd.com;dkim=pass
- header.d=amd.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mPEHu6kCiSPbTkAF/6l3WZ2mtrQtMm6ZUBtCO4wjaJ8=;
- b=uVQ20nUXC1Jd+HhtBZAtBWv6nRwadQ6xEcAXE6M8l4h0Vrqdw8C6GhmMAU8KWJq1wKzVamogSzTc6AGd7TgZoh3LTepM5+gAVYbV2UOnkvAYCtYGywkskzQDyw4uttsk4+T9J07WiQBAIXVAwnQqFFkYT6/cCykQPnStO02og6o=
-Received: from SN6PR12MB2639.namprd12.prod.outlook.com (52.135.103.16) by
- SN6PR12MB2782.namprd12.prod.outlook.com (52.135.107.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2073.14; Mon, 15 Jul 2019 17:57:16 +0000
-Received: from SN6PR12MB2639.namprd12.prod.outlook.com
- ([fe80::fd06:e03b:2b06:e8d7]) by SN6PR12MB2639.namprd12.prod.outlook.com
- ([fe80::fd06:e03b:2b06:e8d7%6]) with mapi id 15.20.2052.024; Mon, 15 Jul 2019
- 17:57:16 +0000
-From:   "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "Natarajan, Janakarajan" <Janakarajan.Natarajan@amd.com>
-CC:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devel@acpica.org" <devel@acpica.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Schmauss <erik.schmauss@intel.com>
-Subject: RE: [PATCHv3 0/6] CPPC optional registers AMD support
-Thread-Topic: [PATCHv3 0/6] CPPC optional registers AMD support
-Thread-Index: AQHVN057bBT6zB/KfUWS9uFb7V9o2qbIYcuAgAOQCkA=
-Date:   Mon, 15 Jul 2019 17:57:16 +0000
-Message-ID: <SN6PR12MB263964D82CED789D32AF58F1F8CF0@SN6PR12MB2639.namprd12.prod.outlook.com>
-References: <cover.1562781484.git.Janakarajan.Natarajan@amd.com>
- <20190713104619.GA3496@hirez.programming.kicks-ass.net>
-In-Reply-To: <20190713104619.GA3496@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Yazen.Ghannam@amd.com; 
-x-originating-ip: [2601:3c2:8280:2327:3414:3059:320b:d027]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7ae91538-868a-4271-bb19-08d7094ddfd9
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR12MB2782;
-x-ms-traffictypediagnostic: SN6PR12MB2782:
-x-microsoft-antispam-prvs: <SN6PR12MB2782A2C557780DF0E954B63EF8CF0@SN6PR12MB2782.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 00997889E7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(396003)(366004)(136003)(39860400002)(189003)(199004)(13464003)(9686003)(52536014)(6636002)(446003)(316002)(476003)(66556008)(6246003)(66476007)(229853002)(8676002)(64756008)(53936002)(55016002)(46003)(66446008)(66946007)(478600001)(74316002)(102836004)(76176011)(76116006)(14454004)(5660300002)(71190400001)(6436002)(99286004)(4326008)(7696005)(53546011)(305945005)(6506007)(7736002)(33656002)(8936002)(256004)(14444005)(86362001)(6116002)(81166006)(486006)(81156014)(186003)(71200400001)(54906003)(11346002)(2906002)(110136005)(25786009)(68736007)(7416002);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR12MB2782;H:SN6PR12MB2639.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: fRJjb1JvjW3xJdodAtXkzcpGZnc85cpzTeDCvr/x5qebuU08nIgHJBB8R42I0cstTXKDBnDoRu6xJYDWsFFsdpZoUeKjnAc2/7COCs7n7lsVoAbWLL55iAREdGMjgupV20lhIz+iFiOKe5OOmbjzc/HCtSbiiWIAuiUtAV52KRB0BM2++VgsLHujLtm6uGiCb+BY0QxE90xCP2PXZ02XbhDI1BlqRa9C77hCxfwJbsncLe2t5SGswXXYXHNtvXRYA3F/PVvmvjPmd4fiCZo6wacJzXodoFAy1phRFkIVIQ00LWpDcaelRhgSj840HBwotCCUC/lIVmJ76JELGWBx7CAVkfrqaBD/xgs3YLAyvborXx24RLsYAn6zzFnP3/beqVBske+s2aU2kL44FaRV1Mj9s0QQHWZj1EmIZIK+1lA=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1731287AbfGOTth (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 15:49:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33468 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730487AbfGOTtg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Jul 2019 15:49:36 -0400
+Received: from earth.universe (ip4d16e7f3.dynamic.kabel-deutschland.de [77.22.231.243])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA20720659;
+        Mon, 15 Jul 2019 19:49:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563220175;
+        bh=CWlhifr0S74KzpUYXPlw1+4sVyl5iHaUCHdWSKTfiZE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Vh4JMDIBGrMfrDLOhPvg1XQqHtTBYrMeSem0llhZz4Y82PBKnq46/oDCLlRe6czjG
+         MxOTE7k3mlJrxu9etpDNcVOwKY99ovUU/Y5suDXbWy/BP4N6mg9RtApqxfxCIge0s1
+         3dVfy84G64/qRu9ir90iG5VAtEos6ZqnmN4ydWvM=
+Received: by earth.universe (Postfix, from userid 1000)
+        id D26513C0944; Mon, 15 Jul 2019 21:49:33 +0200 (CEST)
+Date:   Mon, 15 Jul 2019 21:49:33 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: [GIT PULL] power-supply changes for 5.3
+Message-ID: <20190715194933.cq3cfz7g6j3mnbmc@earth.universe>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ae91538-868a-4271-bb19-08d7094ddfd9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2019 17:57:16.7745
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yghannam@amd.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2782
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oilo27qmkp2bf3ya"
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> -----Original Message-----
-> From: Peter Zijlstra <peterz@infradead.org>
-> Sent: Saturday, July 13, 2019 5:46 AM
-> To: Natarajan, Janakarajan <Janakarajan.Natarajan@amd.com>
-> Cc: linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-pm@vg=
-er.kernel.org; devel@acpica.org; Rafael J . Wysocki
-> <rjw@rjwysocki.net>; Len Brown <lenb@kernel.org>; Viresh Kumar <viresh.ku=
-mar@linaro.org>; Robert Moore
-> <robert.moore@intel.com>; Erik Schmauss <erik.schmauss@intel.com>; Ghanna=
-m, Yazen <Yazen.Ghannam@amd.com>
-> Subject: Re: [PATCHv3 0/6] CPPC optional registers AMD support
->=20
-> On Wed, Jul 10, 2019 at 06:37:09PM +0000, Natarajan, Janakarajan wrote:
-> > CPPC (Collaborative Processor Performance Control) offers optional
-> > registers which can be used to tune the system based on energy and/or
-> > performance requirements.
-> >
-> > Newer AMD processors (>=3D Family 17h) add support for a subset of thes=
-e
-> > optional CPPC registers, based on ACPI v6.1.
-> >
-> > The following are the supported CPPC registers for which sysfs entries
-> > are created:
-> > * enable                (NEW)
-> > * max_perf              (NEW)
-> > * min_perf              (NEW)
-> > * energy_perf
-> > * lowest_perf
-> > * nominal_perf
-> > * desired_perf          (NEW)
-> > * feedback_ctrs
-> > * auto_sel_enable       (NEW)
-> > * lowest_nonlinear_perf
-> >
-> > First, update cppc_acpi to create sysfs entries only when the optional
-> > registers are known to be supported.
-> >
-> > Next, a new CPUFreq driver is introduced to enable the OSPM and the use=
-rspace
-> > to access the newly supported registers through sysfs entries found in
-> > /sys/devices/system/cpu/cpu<num>/amd_cpufreq/.
-> >
-> > This new CPUFreq driver can only be used by providing a module paramete=
-r,
-> > amd_cpufreq.cppc_enable=3D1.
-> >
-> > The purpose of exposing the registers via the amd-cpufreq sysfs entries=
- is to
-> > allow the userspace to:
-> > * Tweak the values to fit its workload.
-> > * Apply a profile from AMD's optimization guides.
->=20
-> So in general I think it is a huge mistake to expose all that to
-> userspace. Before you know it, there's tools that actually rely on it,
-> and then inhibit the kernel from doing anything sane with it.
->=20
 
-Okay, makes sense.
+--oilo27qmkp2bf3ya
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Is there any way to expose a sysfs interface and make it explicitly "experi=
-mental"? Maybe putting it in Documentation/ABI/testing/?
+Hi Linus,
 
-Or do you think it's just not worth it?
+Here is the power-supply pull request for v5.3. Stephen reported a
+merge conflict with the PCI tree in linux-next, which contains a
+patch updating the power related documentation files to ReST format.
+The merge conflict solution from Stephen looks correct to me:
 
-> > Profiles will be documented in the performance/optimization guides.
->=20
-> I don't think userspace can really do anything sane with this; it lacks
-> much if not all useful information.
->=20
-> > Note:
-> > * AMD systems will not have a policy applied in the kernel at this time=
-.
->=20
-> And why the heck not? We're trying to move all cpufreq into the
-> scheduler and have only a single governor, namely schedutil -- yes,
-> we're still stuck with legacy, and we're still working on performance
-> parity in some cases, but I really hope to get rid of all other cpufreq
-> governors eventually.
->=20
+https://lkml.org/lkml/2019/6/27/1284
 
-Because this is new to AMD systems, we didn't want to enforce a default pol=
-icy.
+-- Sebastian
 
-We figured that exposing the CPPC interface would be a good way to decouple=
- policy from the kernel and let users experiment/tune their systems, like u=
-sing the userspace governor. And if some pattern emerged then we could make=
- that a default policy in the kernel (for AMD or in general).
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
 
-But you're saying we should focus more on working with the schedutil govern=
-or, correct? Do you think there's still a use for a userspace governor?
+  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
 
-> And if you look at schedutil (schedutil_cpu_util in specific) then
-> you'll see it is already prepared for CPPC and currently only held back
-> by the generic cpufreq interface.
->=20
-> It currently only sets desired freq, it has information for
-> min/guaranteed, and once we get thermal intergrated we might have
-> sensible data for max freq too.
->=20
+are available in the Git repository at:
 
-Will do.
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.3
 
-> > TODO:
-> > * Create a linux userspace tool that will help users generate a CPPC pr=
-ofile
-> >   for their target workload.
->=20
-> Basically a big fat NAK for this approach to cpufreq.
->=20
+for you to fetch changes up to caa2b557841c8cedc1d4862cd31cf76ee940d105:
 
-Is that for exposing the sysfs interface, having a stub driver, or both?
+  power: reset: nvmem-reboot-mode: add CONFIG_OF dependency (2019-07-09 00:28:49 +0200)
 
-Would it be better to have a cpufreq driver that implements some policy rat=
-her than just providing the sysfs interface?
+----------------------------------------------------------------
+power supply and reset changes for the v5.3 series
 
-> > * Create a general CPPC policy in the kernel.
->=20
-> We already have that, sorta.
+Core:
+ * Add HWMON compat layer
+ * New properties
+  - input power limit
+  - input voltage limit
 
-Right, but it seems to still be focused on CPU frequency rather than abstra=
-ct performance like how CPPC is defined.
+Drivers:
+ * qcom-pon: add gen2 support
+ * New driver for storing reboot move in NVMEM
+ * New driver for Wilco EC charger configuration
+ * simplify getting the adapter of a client
 
-This is another reason for exposing the CPPC interface directly. We'll give=
- users the ability to interact with the platform, using CPPC, without havin=
-g to follow the CPUFREQ paradigm.
+----------------------------------------------------------------
+Andrey Smirnov (1):
+      power: supply: Add HWMON compatibility layer
 
-Do you think this is doable? Or should we always have some kernel interacti=
-on because of the scheduler, etc.?
+Arnd Bergmann (1):
+      power: reset: nvmem-reboot-mode: add CONFIG_OF dependency
 
-Thanks,
-Yazen
+Enric Balletbo i Serra (2):
+      power: supply: add input power and voltage limit properties
+      power: supply: cros: allow to set input voltage and current limit
+
+Han Nandor (2):
+      dt-bindings: power: reset: add document for NVMEM based reboot-mode
+      power: reset: nvmem-reboot-mode: use NVMEM as reboot mode write interface
+
+John Stultz (2):
+      dt-bindings: power: reset: qcom: Add qcom,pm8998-pon compatibility line
+      reset: qcom-pon: Add support for gen2 pon
+
+Nick Crews (2):
+      platform/chrome: wilco_ec: Add property helper library
+      power_supply: wilco_ec: Add charging config driver
+
+Sebastian Reichel (1):
+      Merge tag 'tags/ib-chrome-psy-5.3' into psy-next
+
+Wolfram Sang (9):
+      power: supply: bq24190_charger: simplify getting the adapter of a client
+      power: supply: bq24257_charger: simplify getting the adapter of a client
+      power: supply: bq25890_charger: simplify getting the adapter of a client
+      power: supply: max14656_charger_detector: simplify getting the adapter of a client
+      power: supply: max17040_battery: simplify getting the adapter of a client
+      power: supply: max17042_battery: simplify getting the adapter of a client
+      power: supply: rt5033_battery: simplify getting the adapter of a client
+      power: supply: rt9455_charger: simplify getting the adapter of a client
+      power: supply: sbs-manager: simplify getting the adapter of a client
+
+kbuild test robot (1):
+      power: supply: fix semicolon.cocci warnings
+
+ Documentation/ABI/testing/sysfs-class-power        |  32 ++
+ Documentation/ABI/testing/sysfs-class-power-wilco  |  30 ++
+ .../bindings/power/reset/nvmem-reboot-mode.txt     |  26 ++
+ .../devicetree/bindings/power/reset/qcom,pon.txt   |   1 +
+ Documentation/power/power_supply_class.txt         |   4 +
+ drivers/platform/chrome/wilco_ec/Makefile          |   2 +-
+ drivers/platform/chrome/wilco_ec/properties.c      | 132 ++++++++
+ drivers/power/reset/Kconfig                        |  10 +
+ drivers/power/reset/Makefile                       |   1 +
+ drivers/power/reset/nvmem-reboot-mode.c            |  76 +++++
+ drivers/power/reset/qcom-pon.c                     |  12 +-
+ drivers/power/supply/Kconfig                       |  23 ++
+ drivers/power/supply/Makefile                      |   2 +
+ drivers/power/supply/bq24190_charger.c             |   2 +-
+ drivers/power/supply/bq24257_charger.c             |   2 +-
+ drivers/power/supply/bq25890_charger.c             |   2 +-
+ drivers/power/supply/cros_usbpd-charger.c          | 116 +++++++
+ drivers/power/supply/max14656_charger_detector.c   |   2 +-
+ drivers/power/supply/max17040_battery.c            |   2 +-
+ drivers/power/supply/max17042_battery.c            |   2 +-
+ drivers/power/supply/power_supply_core.c           |   7 +
+ drivers/power/supply/power_supply_hwmon.c          | 355 +++++++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c          |   2 +
+ drivers/power/supply/rt5033_battery.c              |   2 +-
+ drivers/power/supply/rt9455_charger.c              |   2 +-
+ drivers/power/supply/sbs-manager.c                 |   2 +-
+ drivers/power/supply/ucs1002_power.c               |   2 +-
+ drivers/power/supply/wilco-charger.c               | 187 +++++++++++
+ include/linux/platform_data/wilco-ec.h             |  71 +++++
+ include/linux/power_supply.h                       |  15 +
+ 30 files changed, 1110 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-wilco
+ create mode 100644 Documentation/devicetree/bindings/power/reset/nvmem-reboot-mode.txt
+ create mode 100644 drivers/platform/chrome/wilco_ec/properties.c
+ create mode 100644 drivers/power/reset/nvmem-reboot-mode.c
+ create mode 100644 drivers/power/supply/power_supply_hwmon.c
+ create mode 100644 drivers/power/supply/wilco-charger.c
+
+--oilo27qmkp2bf3ya
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0s2MoACgkQ2O7X88g7
++prt0RAAgV6wJa9RgwamhO5IAoxGjhgzkTDNVmAyKcplFjsOEORihCc3iIcbc1Kg
+PaaYdLaArxBBBhIvFvxx5G+sXNrppe2aFv32g6X6pagZDouq1IWE8JmjUrb0sX0u
+2FnEzK26Vzk2oc9yjsEWXxI/IEGt4ia6QLvtqCH2mryIT1lFivdaNMAT0v3kZd8l
+nAzCU7sbA4iiZbq9SDJHrf+8vWmmo3ZD8hhbWm75itXmJW+w3+wnjoJHYiybcGXb
+Nc5EzB8S75yv8Jb6wcMzRCu71S7U9EULcBqtEXoAXfKJSW0mBo2vC4EtP6TDSJGX
+pSShwTztRacr4HajPpPBL7Wn8N1Cv0DbLmz4YRGeqqJ8Q85V0OUhdJpU60KIUr0v
+x6hMC8XgtoQxus8LlsW+Y1EWUrgIHWSKFXIHvlZgZS8heDCW/X3hAgUHvAZ6DIjU
+wuBqNteGsX2e+4Y6RrAouO3JjBlnYurbpa0YGN01FOSmaoxgFC0rfhN3hhZ25oOL
+iAOpLrV/MlVRt09M5fZIVIF5OZiNoalFRYeBe3YCXg/Z1E9ev9GtTLK/DTrRuNG7
+6smyD/TNM1dioVCyGsf7QxcH0OyYX6Ytu7BaOr5tpanrgfDKUX0/KfoKdexfa8+O
+zxs1UeAiS5cjzuQskFJrd17qbwp8qVkdxBx9yLR+1E1deVTRSnI=
+=qOqz
+-----END PGP SIGNATURE-----
+
+--oilo27qmkp2bf3ya--
