@@ -2,38 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB1D695E8
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 17:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A726F697C4
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 17:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389281AbfGOOOF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 10:14:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55108 "EHLO mail.kernel.org"
+        id S1731980AbfGONug (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 09:50:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40758 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388619AbfGOOOD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:14:03 -0400
+        id S1731975AbfGONug (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:50:36 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A79A520651;
-        Mon, 15 Jul 2019 14:14:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B15C2067C;
+        Mon, 15 Jul 2019 13:50:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200042;
-        bh=K+nAwaSCsOLoCXrGtSvB3b+I+/5rVnIHdUozmEvOe+E=;
+        s=default; t=1563198635;
+        bh=JV4TrjCHig5M5UhLF1ST/rLvQTLID1nlFJm13/fztfg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CIaMTfX/tlHd9L395k84wPX2yZus6tN+iWWen+2ca7v0DRHv6C8svBoMvGGNCYbyq
-         p/lAyyCrBgC8bulbgjtxEOFAN+5Gl4PERZ8sYnF2CmTjJddpjNwyw2jY2ECUTtn/ml
-         j/qts0H1vY+1QLU8h0kURBtiwybwcQnN9BovDS3E=
+        b=ydqWtFbRKoJsHDczE+kzXNzYxfhnIicdew5nq877QkN7eI5raNfiAdwcOkdk3VwjM
+         P7KYvVXgL++KzdyCTJWvSXdsCfJ2OWWYf4AoiKlOj4QbJHPltdQpnZr4aLwCQl3aFM
+         6FI4uvC9bMP7qu5zieYL0+zoIoWv1Oots54p+0J0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+Cc:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        Thomas Renninger <trenn@suse.de>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 167/219] cpufreq: Don't skip frequency validation for has_target() drivers
-Date:   Mon, 15 Jul 2019 10:02:48 -0400
-Message-Id: <20190715140341.6443-167-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 066/249] cpupower : frequency-set -r option misses the last cpu in related cpu list
+Date:   Mon, 15 Jul 2019 09:43:51 -0400
+Message-Id: <20190715134655.4076-66-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
-References: <20190715140341.6443-1-sashal@kernel.org>
+In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
+References: <20190715134655.4076-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,81 +44,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Viresh Kumar <viresh.kumar@linaro.org>
+From: Abhishek Goel <huntbag@linux.vnet.ibm.com>
 
-[ Upstream commit 9801522840cc1073f8064b4c979b7b6995c74bca ]
+[ Upstream commit 04507c0a9385cc8280f794a36bfff567c8cc1042 ]
 
-CPUFREQ_CONST_LOOPS was introduced in a very old commit from pre-2.6
-kernel release by commit 6a4a93f9c0d5 ("[CPUFREQ] Fix 'out of sync'
-issue").
+To set frequency on specific cpus using cpupower, following syntax can
+be used :
+cpupower -c #i frequency-set -f #f -r
 
-Basically, that commit does two things:
+While setting frequency using cpupower frequency-set command, if we use
+'-r' option, it is expected to set frequency for all cpus related to
+cpu #i. But it is observed to be missing the last cpu in related cpu
+list. This patch fixes the problem.
 
- - It adds the frequency verification code (which is quite similar to
-   what we have today as well).
-
- - And it sets the CPUFREQ_CONST_LOOPS flag only for setpolicy drivers,
-   rightly so based on the code we had then. The idea was to avoid
-   frequency validation for setpolicy drivers as the cpufreq core doesn't
-   know what frequency the hardware is running at and so no point in
-   doing frequency verification.
-
-The problem happened when we started to use the same CPUFREQ_CONST_LOOPS
-flag for constant loops-per-jiffy thing as well and many has_target()
-drivers started using the same flag and unknowingly skipped the
-verification of frequency. There is no logical reason behind skipping
-frequency validation because of the presence of CPUFREQ_CONST_LOOPS
-flag otherwise.
-
-Fix this issue by skipping frequency validation only for setpolicy
-drivers and always doing it for has_target() drivers irrespective of
-the presence or absence of CPUFREQ_CONST_LOOPS flag.
-
-cpufreq_notify_transition() is only called for has_target() type driver
-and not for set_policy type, and the check is simply redundant. Remove
-it as well.
-
-Also remove () around freq comparison statement as they aren't required
-and checkpatch also warns for them.
-
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
+Reviewed-by: Thomas Renninger <trenn@suse.de>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/cpufreq.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ tools/power/cpupower/utils/cpufreq-set.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index bbf79544d0ad..86dbb784a0b8 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -316,12 +316,10 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
- 		 * which is not equal to what the cpufreq core thinks is
- 		 * "old frequency".
- 		 */
--		if (!(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
--			if (policy->cur && (policy->cur != freqs->old)) {
--				pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
--					 freqs->old, policy->cur);
--				freqs->old = policy->cur;
--			}
-+		if (policy->cur && policy->cur != freqs->old) {
-+			pr_debug("Warning: CPU frequency is %u, cpufreq assumed %u kHz\n",
-+				 freqs->old, policy->cur);
-+			freqs->old = policy->cur;
+diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
+index f49bc4aa2a08..6ed82fba5aaa 100644
+--- a/tools/power/cpupower/utils/cpufreq-set.c
++++ b/tools/power/cpupower/utils/cpufreq-set.c
+@@ -305,6 +305,8 @@ int cmd_freq_set(int argc, char **argv)
+ 				bitmask_setbit(cpus_chosen, cpus->cpu);
+ 				cpus = cpus->next;
+ 			}
++			/* Set the last cpu in related cpus list */
++			bitmask_setbit(cpus_chosen, cpus->cpu);
+ 			cpufreq_put_related_cpus(cpus);
  		}
- 
- 		for_each_cpu(freqs->cpu, policy->cpus) {
-@@ -1563,8 +1561,7 @@ static unsigned int __cpufreq_get(struct cpufreq_policy *policy)
- 	if (policy->fast_switch_enabled)
- 		return ret_freq;
- 
--	if (ret_freq && policy->cur &&
--		!(cpufreq_driver->flags & CPUFREQ_CONST_LOOPS)) {
-+	if (has_target() && ret_freq && policy->cur) {
- 		/* verify no discrepancy between actual and
- 					saved value exists */
- 		if (unlikely(ret_freq != policy->cur)) {
+ 	}
 -- 
 2.20.1
 
