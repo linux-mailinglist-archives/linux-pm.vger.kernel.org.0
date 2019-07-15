@@ -2,49 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B39469073
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 16:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B4D69193
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 16:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390534AbfGOOVv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 10:21:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48332 "EHLO mail.kernel.org"
+        id S2391164AbfGOOai (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 10:30:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43542 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731163AbfGOOVs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:21:48 -0400
+        id S2390801AbfGOOai (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:30:38 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3EABD21537;
-        Mon, 15 Jul 2019 14:21:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F14F206B8;
+        Mon, 15 Jul 2019 14:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200507;
-        bh=mS+GSMyRgwLANrflyg+Ir/2KP1M3YToZ2JpBjRRDu1o=;
+        s=default; t=1563201037;
+        bh=wH3dVA2zzh0v/D8LZeYeIYHl0GZ7SCoy6bIRg561CFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dQ7aoVQ/Y09tY5ZIyCVhK3QRUyZodP2GPyAaS5OMAeX/is2da7Uv+uWnyKf6Um1fd
-         gkQtnPKcbI71QMmzVwTcne3c/jHFaNLtUwe0VAyOu/DfFK2N526rYa6iOBWlbymMSh
-         iptDpF6iuuZUoDj3DAfSxq65xom7fkSiLbz2bUms=
+        b=foEqETdzoIJ1T+aDh4YcIpn3hcb4v5ScNydFLJmRHf79ngFRnBLYUTHmUUxJ/uIV8
+         6KkKjdfilx88Lz1s6TaD+Ji3zV0jqOYPKl9A+U+PltczWOeO6eo5N+XYaxSdJ4Na9S
+         MHEV08H7AJ6AjKA8xECCxjSMnLut8VgExQVCpl70=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, bp@suse.de,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        platform-driver-x86@vger.kernel.org,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 065/158] x86/cpu: Add Ice Lake NNPI to Intel family
-Date:   Mon, 15 Jul 2019 10:16:36 -0400
-Message-Id: <20190715141809.8445-65-sashal@kernel.org>
+Cc:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
+        Thomas Renninger <trenn@suse.de>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 032/105] cpupower : frequency-set -r option misses the last cpu in related cpu list
+Date:   Mon, 15 Jul 2019 10:27:26 -0400
+Message-Id: <20190715142839.9896-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
-References: <20190715141809.8445-1-sashal@kernel.org>
+In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
+References: <20190715142839.9896-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -54,47 +44,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
+From: Abhishek Goel <huntbag@linux.vnet.ibm.com>
 
-[ Upstream commit e32d045cd4ba06b59878323e434bad010e78e658 ]
+[ Upstream commit 04507c0a9385cc8280f794a36bfff567c8cc1042 ]
 
-Add the CPUID model number of Ice Lake Neural Network Processor for Deep
-Learning Inference (ICL-NNPI) to the Intel family list. Ice Lake NNPI uses
-model number 0x9D and this will be documented in a future version of Intel
-Software Development Manual.
+To set frequency on specific cpus using cpupower, following syntax can
+be used :
+cpupower -c #i frequency-set -f #f -r
 
-Signed-off-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: bp@suse.de
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: platform-driver-x86@vger.kernel.org
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Len Brown <lenb@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Link: https://lkml.kernel.org/r/20190606012419.13250-1-rajneesh.bhardwaj@linux.intel.com
+While setting frequency using cpupower frequency-set command, if we use
+'-r' option, it is expected to set frequency for all cpus related to
+cpu #i. But it is observed to be missing the last cpu in related cpu
+list. This patch fixes the problem.
+
+Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
+Reviewed-by: Thomas Renninger <trenn@suse.de>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/intel-family.h | 1 +
- 1 file changed, 1 insertion(+)
+ tools/power/cpupower/utils/cpufreq-set.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 2e38fb82b91d..aebedbaf5260 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -56,6 +56,7 @@
- #define INTEL_FAM6_ICELAKE_XEON_D	0x6C
- #define INTEL_FAM6_ICELAKE_DESKTOP	0x7D
- #define INTEL_FAM6_ICELAKE_MOBILE	0x7E
-+#define INTEL_FAM6_ICELAKE_NNPI		0x9D
- 
- /* "Small Core" Processors (Atom) */
- 
+diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
+index 1eef0aed6423..08a405593a79 100644
+--- a/tools/power/cpupower/utils/cpufreq-set.c
++++ b/tools/power/cpupower/utils/cpufreq-set.c
+@@ -306,6 +306,8 @@ int cmd_freq_set(int argc, char **argv)
+ 				bitmask_setbit(cpus_chosen, cpus->cpu);
+ 				cpus = cpus->next;
+ 			}
++			/* Set the last cpu in related cpus list */
++			bitmask_setbit(cpus_chosen, cpus->cpu);
+ 			cpufreq_put_related_cpus(cpus);
+ 		}
+ 	}
 -- 
 2.20.1
 
