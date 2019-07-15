@@ -2,45 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 975B56937A
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 16:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F86969366
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 16:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391743AbfGOOoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 10:44:16 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42608 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391763AbfGOOhj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jul 2019 10:37:39 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q10so7502496pff.9
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2019 07:37:38 -0700 (PDT)
+        id S2404197AbfGOOny (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 10:43:54 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:36210 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391968AbfGOOhr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jul 2019 10:37:47 -0400
+Received: by mail-pl1-f196.google.com with SMTP id k8so8405096plt.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2019 07:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UMymzQWyTMjq6dLEXUYHnnYNVQu32eRzbAFgwnIdCTM=;
-        b=sb4sRCBHFXSE2cPqMR4+T5ZCDTZOXkYZvOefdmVbThG07/8ujO+ZMUI1qi0RzfQNtk
-         L2SG3O8Wv6tkY7NUfEU97Sodrr0ncVViDxOuD+Tu+lrXlmz95G5bFlD4Z39OvL7tmZa8
-         r01KC9K2ZD2d1/zC/71KGiI4hO6ZU/NWudwNw=
+        bh=5zPd11qsqBV6enPH1pgmEhMrw3DVmEsKL+rgelJGu5E=;
+        b=XStDr0pOpAvfMPGvyaCiXhax5OpTI8omiicJPCmLonS9L7hbMWB8WbkqauDTlsAue1
+         /IzXyBhFpxdPHPkwfVRCjLPZYScMK7RsrUnJmmgQGxgyicRfMpFtWxfw1YpluI/oDB0w
+         mhjDfrjf8F43ROWC4kjFdePNxqWjxG9UE7yCo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UMymzQWyTMjq6dLEXUYHnnYNVQu32eRzbAFgwnIdCTM=;
-        b=joecFrGoHi3ArQ8nK4Wc1+teeWQp4uc8ePHoqZIOUeWveVLuynNVr8PmxCfZ3BnXwJ
-         OqvPFNYjgBxdvgjpLVjH727aEhO+0PONTYVPC07JheHtju6rzDC1IgIczyTH6h0w0th/
-         DPbBDGj0pvigjf3s2//FCzakJXscygdqt/d0fRHV23IZ8r6cGRBVZFB22SylzdbkZmZ/
-         IQXKJtffOdVpKnh5nfdAw+rHrFiXe/78YfGw9hi7YsHKb4U8UoV9gErb3Y2VGJLTofFc
-         1MEdHIxsFNKl4ZiFcvTTB2OJiQRRuTEC/2dMDjxmIVyUzThrbPv3xopMAR0NEeDmcAFK
-         2w4Q==
-X-Gm-Message-State: APjAAAXqDZx1XNVQ/yixROwlZEPTPurv8vUSHc2KLBfTX+RLEapiqT6V
-        mbD6cnQt3doHRUi3Uc+Z+DA=
-X-Google-Smtp-Source: APXvYqwREOPm8jU5KaBh/4wpCriK+UOZQMzbDI3ea0SFjpipVn94p6ZbCr/TlFhUWr/4kL8J5e58FQ==
-X-Received: by 2002:a17:90a:3270:: with SMTP id k103mr28578111pjb.54.1563201458425;
-        Mon, 15 Jul 2019 07:37:38 -0700 (PDT)
+        bh=5zPd11qsqBV6enPH1pgmEhMrw3DVmEsKL+rgelJGu5E=;
+        b=Dm5Vwo9U7knCl/mJKfdAuA4PPFqGsFaq0Yoreqyj/FPdQ3oB/RbSn+wuD3P1SSfyPt
+         HOfB8ThVAgI9ZcXCGN+f4OV2EYldXkAnJGvCj+rai6+p4VtBYHLr83NjWI8OUEYDaXOJ
+         b5WCYEchdYqHo0o6boH01Zg+rTTUFGRLbW8sr6W+E7sD0xe0UbllNFEhtblZgO66BNxO
+         CvZw+5G5DVJe1opAltjiUAauFAnyPwajcdWPUwen+Hgy4x2PKxayshIJyFcsif248DOD
+         J09MrV0jcTCc1GRZFpVW6cTa3YXy7ufC7sh5GUewG2nuQs2ZFYmhn3QyahxJJjDrjhoh
+         IY+Q==
+X-Gm-Message-State: APjAAAV91/B9dTK2nhpnAfmTxPs//GjudL2eHyu28UMu3V0yBk8gCUxb
+        L2jwfhbrHsfxbVecKBjOZOk=
+X-Google-Smtp-Source: APXvYqzkIpFv5vPuz81gmhFr3B+gCTSP4FKDqSNzw1vK/5n3JtNPasCMdlzt1VHFYex1IyUvrWl66Q==
+X-Received: by 2002:a17:902:2889:: with SMTP id f9mr27373830plb.230.1563201466638;
+        Mon, 15 Jul 2019 07:37:46 -0700 (PDT)
 Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id s66sm18381852pfs.8.2019.07.15.07.37.34
+        by smtp.gmail.com with ESMTPSA id s66sm18381852pfs.8.2019.07.15.07.37.42
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 15 Jul 2019 07:37:37 -0700 (PDT)
+        Mon, 15 Jul 2019 07:37:45 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
@@ -69,9 +69,9 @@ Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Tejun Heo <tj@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
         x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT))
-Subject: [PATCH 6/9] workqueue: Convert for_each_wq to use built-in list check (v2)
-Date:   Mon, 15 Jul 2019 10:37:02 -0400
-Message-Id: <20190715143705.117908-7-joel@joelfernandes.org>
+Subject: [PATCH 8/9] acpi: Use built-in RCU list checking for acpi_ioremaps list (v1)
+Date:   Mon, 15 Jul 2019 10:37:04 -0400
+Message-Id: <20190715143705.117908-9-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
 In-Reply-To: <20190715143705.117908-1-joel@joelfernandes.org>
 References: <20190715143705.117908-1-joel@joelfernandes.org>
@@ -82,43 +82,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-list_for_each_entry_rcu now has support to check for RCU reader sections
-as well as lock. Just use the support in it, instead of explictly
-checking in the caller.
+list_for_each_entry_rcu has built-in RCU and lock checking. Make use of
+it for acpi_ioremaps list traversal.
 
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/workqueue.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/acpi/osl.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 601d61150b65..e882477ebf6e 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -364,11 +364,6 @@ static void workqueue_sysfs_unregister(struct workqueue_struct *wq);
- 			 !lockdep_is_held(&wq_pool_mutex),		\
- 			 "RCU or wq_pool_mutex should be held")
+diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+index 9c0edf2fc0dd..2f9d0d20b836 100644
+--- a/drivers/acpi/osl.c
++++ b/drivers/acpi/osl.c
+@@ -14,6 +14,7 @@
+ #include <linux/slab.h>
+ #include <linux/mm.h>
+ #include <linux/highmem.h>
++#include <linux/lockdep.h>
+ #include <linux/pci.h>
+ #include <linux/interrupt.h>
+ #include <linux/kmod.h>
+@@ -80,6 +81,7 @@ struct acpi_ioremap {
  
--#define assert_rcu_or_wq_mutex(wq)					\
--	RCU_LOCKDEP_WARN(!rcu_read_lock_held() &&			\
--			 !lockdep_is_held(&wq->mutex),			\
--			 "RCU or wq->mutex should be held")
--
- #define assert_rcu_or_wq_mutex_or_pool_mutex(wq)			\
- 	RCU_LOCKDEP_WARN(!rcu_read_lock_held() &&			\
- 			 !lockdep_is_held(&wq->mutex) &&		\
-@@ -425,9 +420,8 @@ static void workqueue_sysfs_unregister(struct workqueue_struct *wq);
-  * ignored.
-  */
- #define for_each_pwq(pwq, wq)						\
--	list_for_each_entry_rcu((pwq), &(wq)->pwqs, pwqs_node)		\
--		if (({ assert_rcu_or_wq_mutex(wq); false; })) { }	\
--		else
-+	list_for_each_entry_rcu((pwq), &(wq)->pwqs, pwqs_node,		\
-+				 lock_is_held(&(wq->mutex).dep_map))
+ static LIST_HEAD(acpi_ioremaps);
+ static DEFINE_MUTEX(acpi_ioremap_lock);
++#define acpi_ioremap_lock_held() lock_is_held(&acpi_ioremap_lock.dep_map)
  
- #ifdef CONFIG_DEBUG_OBJECTS_WORK
+ static void __init acpi_request_region (struct acpi_generic_address *gas,
+ 	unsigned int length, char *desc)
+@@ -206,7 +208,7 @@ acpi_map_lookup(acpi_physical_address phys, acpi_size size)
+ {
+ 	struct acpi_ioremap *map;
  
+-	list_for_each_entry_rcu(map, &acpi_ioremaps, list)
++	list_for_each_entry_rcu(map, &acpi_ioremaps, list, acpi_ioremap_lock_held())
+ 		if (map->phys <= phys &&
+ 		    phys + size <= map->phys + map->size)
+ 			return map;
+@@ -249,7 +251,7 @@ acpi_map_lookup_virt(void __iomem *virt, acpi_size size)
+ {
+ 	struct acpi_ioremap *map;
+ 
+-	list_for_each_entry_rcu(map, &acpi_ioremaps, list)
++	list_for_each_entry_rcu(map, &acpi_ioremaps, list, acpi_ioremap_lock_held())
+ 		if (map->virt <= virt &&
+ 		    virt + size <= map->virt + map->size)
+ 			return map;
 -- 
 2.22.0.510.g264f2c817a-goog
 
