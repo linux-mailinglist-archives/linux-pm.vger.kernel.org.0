@@ -2,82 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B4D69193
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 16:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDAC69265
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jul 2019 16:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391164AbfGOOai (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 10:30:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390801AbfGOOai (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:30:38 -0400
-Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F14F206B8;
-        Mon, 15 Jul 2019 14:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563201037;
-        bh=wH3dVA2zzh0v/D8LZeYeIYHl0GZ7SCoy6bIRg561CFY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=foEqETdzoIJ1T+aDh4YcIpn3hcb4v5ScNydFLJmRHf79ngFRnBLYUTHmUUxJ/uIV8
-         6KkKjdfilx88Lz1s6TaD+Ji3zV0jqOYPKl9A+U+PltczWOeO6eo5N+XYaxSdJ4Na9S
-         MHEV08H7AJ6AjKA8xECCxjSMnLut8VgExQVCpl70=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Abhishek Goel <huntbag@linux.vnet.ibm.com>,
-        Thomas Renninger <trenn@suse.de>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 032/105] cpupower : frequency-set -r option misses the last cpu in related cpu list
-Date:   Mon, 15 Jul 2019 10:27:26 -0400
-Message-Id: <20190715142839.9896-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
-References: <20190715142839.9896-1-sashal@kernel.org>
+        id S1732173AbfGOOg1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 10:36:27 -0400
+Received: from mail-qk1-f174.google.com ([209.85.222.174]:45580 "EHLO
+        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391898AbfGOOct (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jul 2019 10:32:49 -0400
+Received: by mail-qk1-f174.google.com with SMTP id s22so11729894qkj.12
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2019 07:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=MXh0ZspvhTtLSjl/YpBBNEHt0/KC9OGfnArn9dg77/8=;
+        b=mjizCUklindePDtTzQUYklDtWXrSScF5E/eIuaiho6dDHG84ZVVqwsKE6FES2bLreA
+         ccUQQuyAOoOHh//yasxiPHIzhqGpNsG8sEsZ7Qivo+89/8TWdAh1FYhrLNADUElrzLEn
+         JaGL5IF5A7712yj7uMEFIqQ2ZT+UnaCQvO+VE4axq0bMTINOjbb9wB2Vpq7YOrE+IjwJ
+         caMud/008gWQ+cy5HFRyP67mHdawgxF1ILaphdq5SEjZsUFIkhCJl3aJr9YCh6jH5zVY
+         l3q8aZ6QFVumOe/l1z2o5fqdK29Tuy85kvDLzlyKQK1DyxrRImqu+70st2hUmdrNGahV
+         Fk9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=MXh0ZspvhTtLSjl/YpBBNEHt0/KC9OGfnArn9dg77/8=;
+        b=BbvZXS62+SngugURhmak5lP7UrUUoRHBpHFw9h4t/uC92H9jMK/WQxK0xj4ZYnNo6G
+         lzUvlVgQ/Drp6+1FEFYYLOK3ogekaFK6lDK4m0cCl5vm2TALTcZ+5LW8m50tzKO/qVqc
+         7Yr2o0t8nRKSqVAVSsIzm2Evp3RoGubbfS/+F2Sp8AI+2n6ytiNU7fpK6SzT3OozETsU
+         lzkwxX84kLQDOSUE7D4vmN+JXtHeC3L4+MGWyedikt5MYhPCHZ3QjtR6Ap3DmWh8T7+x
+         3L8CwjGkw33Ho1/nCZhpBxsSt2GzsB+vbfABZv8tX9Sti6HW0SCsukIf0L+WE9kSDbrI
+         MH+Q==
+X-Gm-Message-State: APjAAAVOUnEurD6ILlCpQz8RZvtHIH6BC8Tx+rrUGTfT85DGsW9Gb2Rp
+        rowzl4sbSYoS8xS+LNBIBnCz9qeL
+X-Google-Smtp-Source: APXvYqzqTH13AOI5H3VhDf6bupQHD8Pkw/ynnQyAOMawqipOaIRUbhN9A/UieYf1owHBlJjnZ1ZMUA==
+X-Received: by 2002:a37:9844:: with SMTP id a65mr16863105qke.500.1563201167989;
+        Mon, 15 Jul 2019 07:32:47 -0700 (PDT)
+Received: from localhost.localdomain ([201.17.216.227])
+        by smtp.gmail.com with ESMTPSA id h19sm5469589qto.3.2019.07.15.07.32.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Jul 2019 07:32:47 -0700 (PDT)
+Date:   Mon, 15 Jul 2019 07:32:12 -0700
+From:   Eduardo Valentin <edubezval@gmail.com>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Rui Zhang <rui.zhang@intel.com>
+Subject: [NOTICE] Eduardo is offline during July
+Message-ID: <20190715143210.GA1861@localhost.localdomain>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Abhishek Goel <huntbag@linux.vnet.ibm.com>
+Folks,
 
-[ Upstream commit 04507c0a9385cc8280f794a36bfff567c8cc1042 ]
 
-To set frequency on specific cpus using cpupower, following syntax can
-be used :
-cpupower -c #i frequency-set -f #f -r
+I just want to let you know that I am offline during July with mostly
+very limited Internet access. I will return to review and collect patch
+in August. Sorry for any inconvenience this may have caused.
 
-While setting frequency using cpupower frequency-set command, if we use
-'-r' option, it is expected to set frequency for all cpus related to
-cpu #i. But it is observed to be missing the last cpu in related cpu
-list. This patch fixes the problem.
+If any urgent fixes/patches please redirect to Rui.
 
-Signed-off-by: Abhishek Goel <huntbag@linux.vnet.ibm.com>
-Reviewed-by: Thomas Renninger <trenn@suse.de>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/power/cpupower/utils/cpufreq-set.c | 2 ++
- 1 file changed, 2 insertions(+)
+BR,
 
-diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
-index 1eef0aed6423..08a405593a79 100644
---- a/tools/power/cpupower/utils/cpufreq-set.c
-+++ b/tools/power/cpupower/utils/cpufreq-set.c
-@@ -306,6 +306,8 @@ int cmd_freq_set(int argc, char **argv)
- 				bitmask_setbit(cpus_chosen, cpus->cpu);
- 				cpus = cpus->next;
- 			}
-+			/* Set the last cpu in related cpus list */
-+			bitmask_setbit(cpus_chosen, cpus->cpu);
- 			cpufreq_put_related_cpus(cpus);
- 		}
- 	}
--- 
-2.20.1
-
+Eduardo Valentin
