@@ -2,55 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BA56A8CA
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 14:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392806A919
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 15:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732906AbfGPM3O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 08:29:14 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:38805 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728470AbfGPM3N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 08:29:13 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190716122910epoutp02ab91f2ec5219e77f054d770a6cb95032~x4wO9K6xO2286622866epoutp02X
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 12:29:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190716122910epoutp02ab91f2ec5219e77f054d770a6cb95032~x4wO9K6xO2286622866epoutp02X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563280150;
-        bh=hh2LdVR0ZS2p7Tx29kN5GzbdlcD2XPhwMYMSi/iWb3s=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=PM0OLLoTszPubcK50A28r1u9EVgYCt1J1vMzKkkec2LZOT48ITxa3jRuawBvCBbbT
-         NR16vUjMHn5csRKkY+/4CEDpDh8+IuE5XENs2e2cFo5Hjvyh5K4I45YdI2fBAnbl43
-         5C6BiG+nGUv4tPMFZwf2BMr119hK4GH4YqYTACUY=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20190716122909epcas1p40fb95c79bb247eaa71050e4f8939b649~x4wN98taA1486514865epcas1p4k;
-        Tue, 16 Jul 2019 12:29:09 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 45p07m4CLXzMqYkY; Tue, 16 Jul
-        2019 12:29:08 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EF.6D.04088.413CD2D5; Tue, 16 Jul 2019 21:29:08 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190716122907epcas1p2f858c2cb04093f8054139b8c5ddc617a~x4wL1bkMC0408604086epcas1p2h;
-        Tue, 16 Jul 2019 12:29:07 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190716122907epsmtrp23640085f56318cabcbdf3df08d338bab~x4wLyJn283055930559epsmtrp2M;
-        Tue, 16 Jul 2019 12:29:07 +0000 (GMT)
-X-AuditID: b6c32a35-85dff70000000ff8-52-5d2dc3146303
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        60.6E.03706.313CD2D5; Tue, 16 Jul 2019 21:29:07 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190716122907epsmtip236b012402c142bd529f0b4c2ea84916d~x4wLjR4pd3107831078epsmtip2T;
-        Tue, 16 Jul 2019 12:29:07 +0000 (GMT)
-Subject: Re: [PATCH v4 15/24] PM / devfreq: tegra30: Fix integer overflow on
- CPU's freq max out
-To:     Dmitry Osipenko <digetx@gmail.com>,
+        id S1728121AbfGPNDx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 09:03:53 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:37005 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725926AbfGPNDx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 09:03:53 -0400
+Received: by mail-lf1-f67.google.com with SMTP id c9so13647229lfh.4;
+        Tue, 16 Jul 2019 06:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7vUO+aDmSixtQf+Kmq7Y+cEBs2LRiHU953G0lMx12po=;
+        b=iVVr+tkDz3DW6fmqGZxulh2q0YXBNHNQqidJwx6q3Icc0lPfC2OQ16wPu1Qb+Cmx5s
+         HMrx9enixZ9w2dOm8whNg53xjNH4yxUcl0MVqrEBHXtbH8YIR3CcL0zlup40XXyWy0R9
+         3CG89hssZ8tv8R5AjtSyo2KYWm89YogOqTCVc+7B9Xd7HnqZ47plvo/Llg9rKTicwl/7
+         2n6839/mJsMlRXygX6aj0crB4DWGiPAD2slB6246tepDrfC1k6iwl3WvpPg+ghzgNEGY
+         TjUoClyhFZWZkibX+XlV/oKgbckNUHXZEgnFCTqRewV3Ekk17e9SnjtxDOQpSZmHpqP5
+         P7xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7vUO+aDmSixtQf+Kmq7Y+cEBs2LRiHU953G0lMx12po=;
+        b=rud66sy/mEVTNP4Z/CjIFBCL0paqHpxfFPfEBYXg9S4DexDzcc8WuDXczMzX8BUeib
+         WCrN4+H/xNkGWx/v4nYFFyXYDdVIpeafI/205YlTVHhLhf9V3fy+K6o8OAmod4NZcIOK
+         uZICCws02VzTyAhcgth3Q45Y3MMLhPjtK1tj079qtewfkayvB6MLHGQc/agBu37uXYKo
+         RSJae5gYNzvU2tcdT8DLV+qtm6SeiBrQbgeyg2OxA/zrF/fj061QWC4xmIDKV8By+VAt
+         dwk6gS6125CrQTJOJ2O1vSQbgEvSt1KX2MK5EFLoVYDiKYN0UHLlku895LNggoWOy5DN
+         TJrg==
+X-Gm-Message-State: APjAAAXE+l5z76qti1bOXJbv84+CHgzbh4fXoakW4+kdDlk/hTVpqCIS
+        82bWf8z6CHkUzo4njm+Z1GaokWd0
+X-Google-Smtp-Source: APXvYqwbRrvti+Refi6Ehi7FHXGu7SjxzedeBfvEcIL34RpbqoIXYIQUzl7wtB3t15yETESjAhGvRA==
+X-Received: by 2002:a19:4f4a:: with SMTP id a10mr14589699lfk.30.1563282229851;
+        Tue, 16 Jul 2019 06:03:49 -0700 (PDT)
+Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
+        by smtp.googlemail.com with ESMTPSA id x18sm2841896lfe.42.2019.07.16.06.03.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Jul 2019 06:03:47 -0700 (PDT)
+Subject: Re: [PATCH v4 02/24] PM / devfreq: tegra30: Keep interrupt disabled
+ while governor is stopped
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -58,88 +55,137 @@ To:     Dmitry Osipenko <digetx@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <bf0cf31f-4a03-f8f5-ac7b-280a384bb09d@samsung.com>
-Date:   Tue, 16 Jul 2019 21:32:13 +0900
+References: <20190707223303.6755-1-digetx@gmail.com>
+ <CGME20190707223724epcas4p2d82cecc2969fecddca67192417843418@epcas4p2.samsung.com>
+ <20190707223303.6755-3-digetx@gmail.com>
+ <f691a845-18f3-a6fb-302c-a8a3fc13e5bf@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <6c517d04-cf99-f907-e74d-9fba99405a53@gmail.com>
+Date:   Tue, 16 Jul 2019 16:03:46 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.2
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190707223303.6755-16-digetx@gmail.com>
+In-Reply-To: <f691a845-18f3-a6fb-302c-a8a3fc13e5bf@samsung.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUyMcRzf716ensPxuKKv5uV60FaUe+TykItR3MYf0Vih1bPu2XW6N/dc
-        VpiVI4ryvumRWPKWGSOpLNfbSozFyQylqY0Z14gmhLt7rum/z+/7+3y+n+/n9/viYsVNLAQ3
-        mO2szcwYSWycpKYlXBUZ1BKZqrrYNoO+9qUP0fv4Cgn9eO+nANpVX4bRg8WtiC78xmP06/wr
-        GD1cXy6hS64/w1bItLXdlUhbx3cHaIsdbkxbUl2FtIO3ZiZKN2cty2QZHWtTsuYMi85g1mvI
-        tUlpq9LUMSoqklpCLyaVZsbEasj4dYmRqw1Gz0CkcgdjzPaUEhmOIxfELbNZsu2sMtPC2TUk
-        a9UZrUusURxj4rLN+qgMi2kppVItVHuI6VmZeV1W6wE8p6yrXZyHmrAiJMOBWAT5PR3SIjQO
-        VxC1CO5WuTHh8BVBQ2mBWDgMIfg5/ACNSo4Ut/klDQj6eo/6JQMIvg18lnhZgQQDHYecIu9F
-        EPEHQeGww+coJlKgpe6ayIsxIgKcH1766pOIUOj60eezkBNxUMGPSL1YQswF5+V3vqZTiGR4
-        2FouETiToaO034dlRAyMvHuDhP7B8Kr/nEjAs8Bx54wvAxB/MTh9/JVUyBAPp26/8ONA+Nhe
-        HSDgEBh0N/ifZhdc7WjFBPFBBNXOTr8gGpwXT3gccI9DONyoXyCUQ6Hu11n/EBPB/f2w1EsB
-        Qg4HCxQCZTa4ertFAp4GFw4UYkcRyY+Jw4+JwI+JwP83O48kVWgqa+VMepajrNTY776FfNsa
-        oa5FJ5+sa0YEjsgJcqVzfqpCyuzgck3NCHAxGSTXfJ+XqpDrmNydrM2SZss2slwzUnte+5g4
-        ZEqGxbP7ZnsapV4YHR1NL6Ji1BRFBsvLf4enKgg9Y2ezWNbK2kZ1IlwWkoe2DJ5V1CYtd8/p
-        HEluKOIqqwxxG3R/MnJgW/l4QqUJTQpqTBi4/yiHHRqu2eqaeqFp6ISh5vapK+mO0L7druld
-        3IrGojWHw5LDwnoq6i9V52/XZ+1JSFE+j+3VvK8McIEj52Hxpn71ftlKd0LsVX7y40udufKn
-        50fc96YN/X67fiMp4TIZKkJs45h/yGtcV8MDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsWy7bCSvK7wYd1Yg4udoharPz5mtGiZtYjF
-        4mzTG3aLy7vmsFl87j3CaNH5ZRabxe3GFWwWP3fNY7HoW3uJzYHTY8fdJYweO2fdZffobX7H
-        5tG3ZRWjx+dNcgGsUVw2Kak5mWWpRfp2CVwZDVcLCto5KuZcPc7cwHiQrYuRk0NCwESiv/cY
-        axcjF4eQwG5Gic2vb0ElJCWmXTzK3MXIAWQLSxw+XAxR85ZRYsPuJ2A1wgKJEie79zOBJEQE
-        mpgkNvVeYAdJMAtESvTM3cIG0bGFUaLveDcTSIJNQEti/4sbYN38AooSV388ZgSxeQXsJBbN
-        +ssKYrMIqErsX/6IBcQWFYiQmHRtJwtEjaDEyZlPwGxOATOJv4/uMEIsU5f4M+8SM4QtLnHr
-        yXwmCFteonnrbOYJjMKzkLTPQtIyC0nLLCQtCxhZVjFKphYU56bnFhsWGOallusVJ+YWl+al
-        6yXn525iBMeYluYOxstL4g8xCnAwKvHwfjigGyvEmlhWXJl7iFGCg1lJhNf2q3asEG9KYmVV
-        alF+fFFpTmrxIUZpDhYlcd6neccihQTSE0tSs1NTC1KLYLJMHJxSDYwCP3Nu+EjqdSi6nPK9
-        y3naTKzomlTcaYc1HHy3J52dwjJzkWidme2GJWKneMsMtu3s/sj7JTf6zI/0GQabbZfuunJr
-        p0JQ2cfXqiVvVwe/1Dp3Q7kg/pmZ9f79d55K3T5ltqFW9+Lbb4oXbl244JmwIllc1OP39/R+
-        e7fVeTnT88vXfcnX5QpRYinOSDTUYi4qTgQAeLg3vq0CAAA=
-X-CMS-MailID: 20190716122907epcas1p2f858c2cb04093f8054139b8c5ddc617a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190707223632epcas4p2c3254e4cc10a71bb1311fcfef582ed39
-References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223632epcas4p2c3254e4cc10a71bb1311fcfef582ed39@epcas4p2.samsung.com>
-        <20190707223303.6755-16-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
-> There is another kHz-conversion bug in the code, resulting in integer
-> overflow. Although, this time the resulting value is 4294966296 and it's
-> close to ULONG_MAX, which is okay in this case.
+16.07.2019 14:47, Chanwoo Choi пишет:
+> On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
+>> There is no real need to keep interrupt always-enabled, will be nicer
+>> to keep it disabled while governor is inactive.
+>>
+>> Suggested-by: Thierry Reding <thierry.reding@gmail.com>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/devfreq/tegra30-devfreq.c | 43 ++++++++++++++++---------------
+>>  1 file changed, 22 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+>> index a27300f40b0b..5e2b133babdd 100644
+>> --- a/drivers/devfreq/tegra30-devfreq.c
+>> +++ b/drivers/devfreq/tegra30-devfreq.c
+>> @@ -11,6 +11,7 @@
+>>  #include <linux/devfreq.h>
+>>  #include <linux/interrupt.h>
+>>  #include <linux/io.h>
+>> +#include <linux/irq.h>
+>>  #include <linux/module.h>
+>>  #include <linux/mod_devicetable.h>
+>>  #include <linux/platform_device.h>
+>> @@ -416,8 +417,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
+>>  {
+>>  	unsigned int i;
+>>  
+>> -	disable_irq(tegra->irq);
+>> -
+>>  	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
+>>  		      ACTMON_GLB_PERIOD_CTRL);
+>>  
+>> @@ -442,8 +441,6 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
+>>  	}
+>>  
+>>  	actmon_write_barrier(tegra);
+>> -
+>> -	enable_irq(tegra->irq);
+>>  }
+>>  
+>>  static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
+>> @@ -552,6 +549,12 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
+>>  {
+>>  	struct tegra_devfreq *tegra = dev_get_drvdata(devfreq->dev.parent);
+>>  
+>> +	/*
+>> +	 * Couple device with the governor early as it is needed at
+>> +	 * the moment of governor's start (used by ISR).
+>> +	 */
+>> +	tegra->devfreq = devfreq;
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/devfreq/tegra30-devfreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 0de1efdaabf4..60ebf9c9cd86 100644
-> --- a/drivers/devfreq/tegra30-devfreq.c
-> +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -172,7 +172,7 @@ struct tegra_actmon_emc_ratio {
->  };
->  
->  static const struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
-> -	{ 1400000, ULONG_MAX },
-> +	{ 1400000, ULONG_MAX / KHZ },
->  	{ 1200000,    750000 },
->  	{ 1100000,    600000 },
->  	{ 1000000,    500000 },
-> 
+> I'm not sure it is necessary. Almost devfreq device get
+> the devfreq instance on probe timing through devfreq_add_device directly.
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+This is necessary because this assignment is for the "governor" and not
+the "device". Governor is started during of devfreq_add_device(), hence
+there is no better way to assign device to the driver's governor.
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+>> +
+>>  	switch (event) {
+>>  	case DEVFREQ_GOV_START:
+>>  		devfreq_monitor_start(devfreq);
+>> @@ -586,10 +589,11 @@ static struct devfreq_governor tegra_devfreq_governor = {
+>>  
+>>  static int tegra_devfreq_probe(struct platform_device *pdev)
+>>  {
+>> -	struct tegra_devfreq *tegra;
+>>  	struct tegra_devfreq_device *dev;
+>> -	unsigned int i;
+>> +	struct tegra_devfreq *tegra;
+>> +	struct devfreq *devfreq;
+>>  	unsigned long rate;
+>> +	unsigned int i;
+>>  	int err;
+>>  
+>>  	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
+>> @@ -625,6 +629,16 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>>  	}
+>>  	tegra->irq = err;
+>>  
+>> +	irq_set_status_flags(tegra->irq, IRQ_NOAUTOEN);
+>> +
+>> +	err = devm_request_threaded_irq(&pdev->dev, tegra->irq, NULL,
+>> +					actmon_thread_isr, IRQF_ONESHOT,
+>> +					"tegra-devfreq", tegra);
+>> +	if (err) {
+>> +		dev_err(&pdev->dev, "Interrupt request failed: %d\n", err);
+>> +		return err;
+>> +	}
+>> +
+>>  	reset_control_assert(tegra->reset);
+>>  
+>>  	err = clk_prepare_enable(tegra->clock);
+>> @@ -672,28 +686,15 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>>  	}
+>>  
+>>  	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
+>> -	tegra->devfreq = devfreq_add_device(&pdev->dev,
+>> -					    &tegra_devfreq_profile,
+>> -					    "tegra_actmon",
+>> -					    NULL);
+>> +	devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
+>> +				     "tegra_actmon", NULL);
+>>  	if (IS_ERR(tegra->devfreq)) {
+> 
+> Have to check 'devfreq' instead of 'tegra->devfreq'.
+> Did you test it? It might be failed because 'tegra->devfreq is NULL.
+
+That's a good catch! Thank you very much.
+
+>>  		err = PTR_ERR(tegra->devfreq);
+> 
+> ditto.
+
+Ok
