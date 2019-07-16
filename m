@@ -2,76 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 539646A4D1
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 11:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4CD6A4DB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 11:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731843AbfGPJXJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 05:23:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47068 "EHLO mail.kernel.org"
+        id S1731971AbfGPJZE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 05:25:04 -0400
+Received: from mga01.intel.com ([192.55.52.88]:26805 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731006AbfGPJXI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Jul 2019 05:23:08 -0400
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 502BC2184B;
-        Tue, 16 Jul 2019 09:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563268987;
-        bh=PamZH0A4WsEwIpGHaPzQA18kP5r8wzqlzFCVBoiw//U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=xaoSJGSp/bSa/YG2kHH4N9lDRwqjYMC15hNuRbpfjt1PL27vfozjZpg2y/f1MVaI4
-         KoAqZb3ZvVgbb8Rp3lw+u9OBakMWl0TGyeWR7cToC8Ox2gZ7KeRpqxi9qjZw1Sdni0
-         ZEfrxc+ivfEK4XLVW+v2JaQaFsv4vMjqSN/V1bV8=
-Received: by mail-lf1-f54.google.com with SMTP id p197so13144142lfa.2;
-        Tue, 16 Jul 2019 02:23:07 -0700 (PDT)
-X-Gm-Message-State: APjAAAUpRG9BFc6zTcL9dNiHGAizB/GsFybWEHn8Dr8GHNazjbokwmBL
-        a9frjrIOgAzCoPzra7F0uYXMoPoZ4m8/5ayc8QU=
-X-Google-Smtp-Source: APXvYqwMDnsmib1AtItDB/KKKIU5Xhb3gP22wpBTO6Xd7+TU89iu7Eafe6jZHcILHZmz92UTgmXNMvLw4jIxyvWAj04=
-X-Received: by 2002:ac2:4d1c:: with SMTP id r28mr13598688lfi.159.1563268985590;
- Tue, 16 Jul 2019 02:23:05 -0700 (PDT)
+        id S1726997AbfGPJZE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Jul 2019 05:25:04 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jul 2019 02:25:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,497,1557212400"; 
+   d="scan'208";a="172490719"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.128.254]) ([10.249.128.254])
+  by orsmga006.jf.intel.com with ESMTP; 16 Jul 2019 02:25:01 -0700
+Subject: Re: [PATCH AUTOSEL 5.2 190/249] cpufreq: Avoid calling
+ cpufreq_verify_current_freq() from handle_update()
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org
+References: <20190715134655.4076-1-sashal@kernel.org>
+ <20190715134655.4076-190-sashal@kernel.org>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <b43e57ea-c5b8-b4c4-f58f-405e649aada1@intel.com>
+Date:   Tue, 16 Jul 2019 11:25:00 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <CGME20190715120432eucas1p1b32d72d239420b861bf8596d4e8a053d@eucas1p1.samsung.com>
- <20190715120416.3561-1-k.konieczny@partner.samsung.com> <20190715120416.3561-4-k.konieczny@partner.samsung.com>
-In-Reply-To: <20190715120416.3561-4-k.konieczny@partner.samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 16 Jul 2019 11:22:54 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPd6a5aLf1CEhx9m7khPQOwruSuA22efkJb41BsaWXjM3A@mail.gmail.com>
-Message-ID: <CAJKOXPd6a5aLf1CEhx9m7khPQOwruSuA22efkJb41BsaWXjM3A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] ARM: dts: exynos: add initial data for coupled
- regulators for Exynos5422/5800
-To:     Kamil Konieczny <k.konieczny@partner.samsung.com>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190715134655.4076-190-sashal@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 15 Jul 2019 at 14:04, Kamil Konieczny
-<k.konieczny@partner.samsung.com> wrote:
+On 7/15/2019 3:45 PM, Sasha Levin wrote:
+> From: Viresh Kumar <viresh.kumar@linaro.org>
 >
-> Declare Exynos5422/5800 voltage ranges for opp points for big cpu core and
-> bus wcore and couple their voltage supllies as vdd_arm and vdd_int should
-> be in 300mV range.
+> [ Upstream commit 70a59fde6e69d1d8579f84bf4555bfffb3ce452d ]
 >
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
+> On some occasions cpufreq_verify_current_freq() schedules a work whose
+> callback is handle_update(), which further calls cpufreq_update_policy()
+> which may end up calling cpufreq_verify_current_freq() again.
+>
+> On the other hand, when cpufreq_update_policy() is called from
+> handle_update(), the pointer to the cpufreq policy is already
+> available, but cpufreq_cpu_acquire() is still called to get it in
+> cpufreq_update_policy(), which should be avoided as well.
+>
+> To fix these issues, create a new helper, refresh_frequency_limits(),
+> and make both handle_update() call it cpufreq_update_policy().
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> [ rjw: Rename reeval_frequency_limits() as refresh_frequency_limits() ]
+> [ rjw: Changelog ]
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   drivers/cpufreq/cpufreq.c | 26 ++++++++++++++++----------
+>   1 file changed, 16 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index e84bf0eb7239..876a4cb09de3 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1114,13 +1114,25 @@ static int cpufreq_add_policy_cpu(struct cpufreq_policy *policy, unsigned int cp
+>   	return ret;
+>   }
+>   
+> +static void refresh_frequency_limits(struct cpufreq_policy *policy)
+> +{
+> +	struct cpufreq_policy new_policy = *policy;
+> +
+> +	pr_debug("updating policy for CPU %u\n", policy->cpu);
+> +
+> +	new_policy.min = policy->user_policy.min;
+> +	new_policy.max = policy->user_policy.max;
+> +
+> +	cpufreq_set_policy(policy, &new_policy);
+> +}
+> +
+>   static void handle_update(struct work_struct *work)
+>   {
+>   	struct cpufreq_policy *policy =
+>   		container_of(work, struct cpufreq_policy, update);
+> -	unsigned int cpu = policy->cpu;
+> -	pr_debug("handle_update for cpu %u called\n", cpu);
+> -	cpufreq_update_policy(cpu);
+> +
+> +	pr_debug("handle_update for cpu %u called\n", policy->cpu);
+> +	refresh_frequency_limits(policy);
+>   }
+>   
+>   static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+> @@ -2392,7 +2404,6 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
+>   void cpufreq_update_policy(unsigned int cpu)
+>   {
+>   	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpu);
+> -	struct cpufreq_policy new_policy;
+>   
+>   	if (!policy)
+>   		return;
+> @@ -2405,12 +2416,7 @@ void cpufreq_update_policy(unsigned int cpu)
+>   	    (cpufreq_suspended || WARN_ON(!cpufreq_update_current_freq(policy))))
+>   		goto unlock;
+>   
+> -	pr_debug("updating policy for CPU %u\n", cpu);
+> -	memcpy(&new_policy, policy, sizeof(*policy));
+> -	new_policy.min = policy->user_policy.min;
+> -	new_policy.max = policy->user_policy.max;
+> -
+> -	cpufreq_set_policy(policy, &new_policy);
+> +	refresh_frequency_limits(policy);
+>   
+>   unlock:
+>   	cpufreq_cpu_release(policy);
 
-This one was previously from Marek, now it is from you. Any changes here?
+I don't think this is suitable for -stable.
 
-Best regards,
-Krzysztof
+
