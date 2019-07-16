@@ -2,698 +2,247 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 048C06A78C
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 13:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A2A6A79A
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 13:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733067AbfGPLjl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 07:39:41 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:33179 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387610AbfGPLjk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 07:39:40 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190716113937euoutp0237a85a5f4a1791c459ebf03688e3fcee~x4E975qIR1349213492euoutp02G
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 11:39:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190716113937euoutp0237a85a5f4a1791c459ebf03688e3fcee~x4E975qIR1349213492euoutp02G
+        id S2387617AbfGPLoF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 07:44:05 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:25142 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387582AbfGPLoF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 07:44:05 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190716114403epoutp03129ea82fb6c700bd4f3368fe1d757efc~x4I1Lv-Nc1137411374epoutp03X
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 11:44:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190716114403epoutp03129ea82fb6c700bd4f3368fe1d757efc~x4I1Lv-Nc1137411374epoutp03X
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563277177;
-        bh=fMb9MXvIHQMWmLmlYL443kSG4HRn1rGQIO9yE41AQpE=;
+        s=mail20170921; t=1563277443;
+        bh=c2oqOCPw5RBqIycZlfV08G2j09rZKxOnK2tN+t+HP5g=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=iRodbfpsWIXuv5hO8Hs60wTLuMO6m5B2tpVE2HIO1fOGWwHYbiIkl/AZSkTwhOPo3
-         tCB+becVrz7omQVKHTrFElW5HtQdCQquo6XrtDrkHCaQjHpqDOYVTGYCVF7qJYslHg
-         CcwyBMhMDfWkyFCmbSJOj5RaNVhmE0i9lOMFN8tw=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190716113936eucas1p2f38cf6dbfdeacc0f609727c9b2a8a368~x4E9HGLtN1772817728eucas1p2S;
-        Tue, 16 Jul 2019 11:39:36 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 83.75.04377.877BD2D5; Tue, 16
-        Jul 2019 12:39:36 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190716113936eucas1p1e7674eeed8fcabbd0e9b984d58891347~x4E8Z6nDN1106611066eucas1p1D;
-        Tue, 16 Jul 2019 11:39:36 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190716113935eusmtrp24509b691f2fdbdcfebcbcdd099187932~x4E8Lg7mM0827908279eusmtrp2F;
-        Tue, 16 Jul 2019 11:39:35 +0000 (GMT)
-X-AuditID: cbfec7f4-12dff70000001119-a7-5d2db778bbb1
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 0A.1E.04146.777BD2D5; Tue, 16
-        Jul 2019 12:39:35 +0100 (BST)
-Received: from [106.120.51.71] (unknown [106.120.51.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190716113934eusmtip1e1a0ac3811597a893390ec244f48246a~x4E7bezhL1380313803eusmtip16;
-        Tue, 16 Jul 2019 11:39:34 +0000 (GMT)
-Subject: Re: [PATCH v2 2/4] devfreq: exynos-bus: convert to use
- dev_pm_opp_set_rate()
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Kamil Konieczny <k.konieczny@partner.samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+        b=FV3knKNzgESY76rjQX6/Ansmys/6fuSKic81JZHV2rJB/L/qxWb2K3UMXQoH879eA
+         iCP/yW7WqOOPZKiE92Li+9uRbFg8pWp3ZKHiztyQBBS4wRXFc47wpi42MI11+7HBWM
+         QflqSYFKEjwMOjwEIxS5kZdk5Bu9NS/MYXpkoA84=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190716114401epcas1p1637c8fe99114d7c6f772c22bd06be793~x4I0Bfc0y0435704357epcas1p1V;
+        Tue, 16 Jul 2019 11:44:01 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 45nz7g5ktDzMqYkV; Tue, 16 Jul
+        2019 11:43:59 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F5.4A.04088.F78BD2D5; Tue, 16 Jul 2019 20:43:59 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190716114359epcas1p3a8ba56dea6e7b0fa12d671c5d4007ba1~x4IxqLV2f2518025180epcas1p33;
+        Tue, 16 Jul 2019 11:43:59 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190716114359epsmtrp2d7cc5b446e84d1dd2ba717abc0a47313~x4IxpajHA0321103211epsmtrp2Z;
+        Tue, 16 Jul 2019 11:43:59 +0000 (GMT)
+X-AuditID: b6c32a35-85dff70000000ff8-51-5d2db87f92e9
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        78.EC.03706.F78BD2D5; Tue, 16 Jul 2019 20:43:59 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190716114359epsmtip1023b583a7a601b2916ef4eb8a0d79d01~x4Ixb6mtG1787717877epsmtip1O;
+        Tue, 16 Jul 2019 11:43:59 +0000 (GMT)
+Subject: Re: [PATCH v4 02/24] PM / devfreq: tegra30: Keep interrupt disabled
+ while governor is stopped
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Message-ID: <1a9e5752-bc2b-3b08-a36b-fc02ca51764c@samsung.com>
-Date:   Tue, 16 Jul 2019 13:39:25 +0200
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <f691a845-18f3-a6fb-302c-a8a3fc13e5bf@samsung.com>
+Date:   Tue, 16 Jul 2019 20:47:05 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.6.1
+        Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <29cfafc4-ee22-6d38-4c67-776c48bfed8a@samsung.com>
+In-Reply-To: <20190707223303.6755-3-digetx@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0iTYRjt/e6OFp+r8EHFYmB0VYvAF28ZRuxHP/pjRrJq1YdKTmXTsqum
-        Zipp2t0VTkXTZhebprUsSJca4aZkaq4wvGDptEIrG2npPiX/ned5znnPOfBypOwL7c7FxCUK
-        mjhVrJyRUHXNv62bkus3Kf2qLF64e3KYxnqzhcZ5L/4ifGlglMRWazWL29LsLDYOdNH4rek2
-        gydyzQjftL4g8H3zRxaXd3cQ2HauksH2qTYCn39uZvFM1yMK13xqZkJdFfeK7iGF0ZDNKGrK
-        UhQvxxsIRV6tASlaeuoJxYTRaze7TxJ0RIiNOSZofEMOSqJ16VephKlSlDxWamNTUeuZHOTC
-        Ab8VPuSmETlIwsn4SgQ59mvzwySCru46JA4TCLILTMyCRNdhIcVDBYJ84ygrDmMIPhRmUHOs
-        5XwEOPpMaA6v4NdC4XSn8ymSb6egucpGzx0YPgAKLhicJCkfAr0lZU4xxXvDL4vZyVnJ74W+
-        5mpa5LjC68JBJ8eF3wbZuY+ckUjeDXoH9YSIV0H641vOeMDnclCQYSfF3DugxtZHi3g5jLTU
-        siL2hL9P9YQoeIBgOuvzvLoeQcWVmfnWgdDU0jGr5mYt1sFDk6+43g795x3E3Br4ZdAz5iqG
-        WAaX626Q4loKWZkykb0Gqu9UMwu2OU/vkvlIrltUTbeojm5RHd1/32JEGZCbkKRVRwnaLXHC
-        cR+tSq1NiovyORyvNqLZD/hmpmXyCTL9OdSIeA7Jl0pbGzYqZbTqmPaEuhEBR8pXSIN/bFDK
-        pEdUJ04KmvgDmqRYQduIPDhK7iY9teRTpIyPUiUKRwUhQdAsXAnOxT0VyQoTAg/7H3Ac/5pV
-        oofa/baKs2M+Htej+odWR6eUB3V+16/r7Ar3L0peXXExMtYgfxZeLk1OVRzMDmPDAvZsD7Na
-        firdX8Uot3ng6edNJUO/hycj9EsbPu6yO6yDEe22CT/OMzS4nX4/Upwy/m5K4lBFFO3scfNm
-        Dp3+ltlU1SCntNGqzetJjVb1D/uEv/98AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJIsWRmVeSWpSXmKPExsVy+t/xu7rl23VjDf5d1rS4/uU5q8X8I+dY
-        Lfr2/We06H/8mtni/PkN7BZnm96wW2x6fI3V4vKuOWwWn3uPMFrMOL+PyWLtkbvsFkuvX2Sy
-        uN24gs3izY+zTBate4+wW/y7tpHFYvODY2wOgh5r5q1h9Ni0qpPNY/OSeo+D7/YwefRtWcXo
-        cfzGdiaPz5vkAtij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMy
-        y1KL9O0S9DJmNU9hKfixiLHi7aLb7A2MJ2q7GDk5JARMJGZdPMfcxcjFISSwlFHi3tNtbF2M
-        HEAJGYnj68sgaoQl/lzrYoOoec0oMfN5JxtIQlggXOLX/V2MILaIgIbEzL9XwGxmgUssEs3T
-        SyEabjFLbJo+lwUkwSZgJTGxfRVYEa+AncSthUvA4iwCqhLfzx1hBbFFBSIkzrxfwQJRIyhx
-        cuYTMJtTwF6is3cjG8QCdYk/8y4xQ9jiEreezGeCsOUlmrfOZp7AKDQLSfssJC2zkLTMQtKy
-        gJFlFaNIamlxbnpusaFecWJucWleul5yfu4mRmC0bzv2c/MOxksbgw8xCnAwKvHwntijEyvE
-        mlhWXJl7iFGCg1lJhNf2q3asEG9KYmVValF+fFFpTmrxIUZToOcmMkuJJucDE1FeSbyhqaG5
-        haWhubG5sZmFkjhvh8DBGCGB9MSS1OzU1ILUIpg+Jg5OqQbGGNndO349WJrIdkgy+8jma73s
-        3wofKZulcaUz8641cQvR05ji3M0z36l2k1r1pbAVDs+ao7S1pHa6Vfz/e7v0qLrl1Z7MaVqn
-        8+bP518Ye6zqS8rmZWnq/yd9DxY2C+ZyX+KY5bjo0L4VDy5yZxWaaM9bcG/+wu9zNNKc50pk
-        feeb7rbw78lXSizFGYmGWsxFxYkAbxhu0gwDAAA=
-X-CMS-MailID: 20190716113936eucas1p1e7674eeed8fcabbd0e9b984d58891347
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf0gTYRjm227nKS2vmfk6pOZlhOavU1dnOKmUGClqGNEPZB3u2MztNnYz
+        MqFMo7Iy1BJplUUW9MOIzMKZMVArLYpIlLCkTKOyWj+WZSnStlPyv+d9n+f9nvf5vo+QKm7i
+        SqKIt3M2njVReBB2pys6Pm5fW1xB4mhnLHPt+whiDjguYMyTis8BTF/7GZzxVHcjpuqnA2de
+        7r+MM3/aGzHm+PXn+JpAbdvQRaR1OoYCtNWVblx7vPUq0npaFufJthWnGTlWz9lUHF9o0Rfx
+        Bg2Vla/L0KlXJtJxdCqzilLxrJnTUJnZeXHri0zehSjVLtZU4m3lsYJAJaSn2Swldk5ltAh2
+        DcVZ9SZrqjVeYM1CCW+IL7SYV9OJiUlqr3BHsXGswYmsFard0+e+Y+WoL/wICiSATIHf9SOS
+        IyiIUJBtCF5/qZeJxQ8Eg3eeYWLxC4Fn7FvA7MjXpmlcJO4haL70UCoWXxG4m25hPlUIaYSh
+        iS7kIxaS0wiq/lTiPkJKboUu5zWJD+NkDLg+vPD3g8lI6J8YQT4sJ9Ph7ftqP8bIZXD5ZoXf
+        OpTcAo+6GzFRswB6T436cSCphpbBrgDx/DAYHD0nEfESqLx92r8dkJM41D44gIkZMuF+fQcu
+        4hAYe9g6k00JHve9mX4ZXOntxsXhwwhaXc9kIpEMrksnvA6E1yEabrQniO1IcE6eRaLxfHCP
+        H5P5JEDK4fBBhShZCn1vhiQiDoemQ1V4DaIcc+I45kRwzIng+G92HmFX0SLOKpgNnEBb6bnv
+        3YL83zVG3YZOPs3uRCSBqHlylSu2QCFjdwml5k4EhJRaKNeMryhQyPVs6R7OZtHZSkyc0InU
+        3tuulSpDCy3ez8/bdbQ6KTk5mUmhV6ppmgqTN05FFyhIA2vnijnOytlm5yREoLIcRYXXfSzP
+        jX0Ts1dbdyotOoKpKCsjPmWqU+rHI/i/qGOdfiL4C1JmrFu+c21kT3qNw/lKl79pubZ54/uI
+        rKjtsWeHe+7mDmw+2nw61JXzJLhXYy5VeDbwfUkbh4mQhO1L3vW7q2+nmvKdAw1ZORnvtIbB
+        qbVJjy1LD1q29rwe7uAoTDCydIzUJrD/AKktZeLEAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsWy7bCSnG79Dt1Yg0cn+S1Wf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
+        zaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgyXk3fyVjQpFDxb/5HlgbGy5JdjJwcEgImEu8X
+        /2PrYuTiEBLYzSixcOFNNoiEpMS0i0eZuxg5gGxhicOHiyFq3jJKrJ/ymxWkRlggQ+Luj8OM
+        IAkRgSYmiU29F9hBEswCkRI9c7dATd3MKLHt+wQWkASbgJbE/hc3wDbwCyhKXP3xmBHE5hWw
+        k3j0vBfMZhFQlVixsQlskKhAhMSkaztZIGoEJU7OfAJmcwqYSmy6dRhqmbrEn3mXmCFscYlb
+        T+YzQdjyEs1bZzNPYBSehaR9FpKWWUhaZiFpWcDIsopRMrWgODc9t9iwwDAvtVyvODG3uDQv
+        XS85P3cTIzjKtDR3MF5eEn+IUYCDUYmH98QenVgh1sSy4srcQ4wSHMxKIry2X7VjhXhTEiur
+        Uovy44tKc1KLDzFKc7AoifM+zTsWKSSQnliSmp2aWpBaBJNl4uCUamBMrgr57S8wcUaIbMEZ
+        IwXN2NI/ZXLf+Y5qW7Yc/pl2OsfillKQaPvtOubP8z9YbXFpPVx5dFVRwpO7dXpasZUfUqrM
+        bzkG5nOuXjU7RD98uv/lnn4RX4tp206+8Qs38MyS3OwSxjn32imVU+JrRDs0WzSMKr6mv7p/
+        qeZ4f0LDHyu+pconOpVYijMSDbWYi4oTAeJ2RHauAgAA
+X-CMS-MailID: 20190716114359epcas1p3a8ba56dea6e7b0fa12d671c5d4007ba1
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190715120431eucas1p215eae81d0ca772d7e2a22a803669068a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190715120431eucas1p215eae81d0ca772d7e2a22a803669068a
-References: <20190715120416.3561-1-k.konieczny@partner.samsung.com>
-        <CGME20190715120431eucas1p215eae81d0ca772d7e2a22a803669068a@eucas1p2.samsung.com>
-        <20190715120416.3561-3-k.konieczny@partner.samsung.com>
-        <7f7cf551-005a-c647-d571-77eb5426478a@samsung.com>
-        <3d1687b7-4825-ad82-2706-a712c30e530b@samsung.com>
-        <5612547b-47c8-0dc4-cb3c-e972782d5a26@samsung.com>
-        <3ba736fa-832c-a72c-e60b-f4328e54c524@samsung.com>
-        <29cfafc4-ee22-6d38-4c67-776c48bfed8a@samsung.com>
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190707223724epcas4p2d82cecc2969fecddca67192417843418
+References: <20190707223303.6755-1-digetx@gmail.com>
+        <CGME20190707223724epcas4p2d82cecc2969fecddca67192417843418@epcas4p2.samsung.com>
+        <20190707223303.6755-3-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
+> There is no real need to keep interrupt always-enabled, will be nicer
+> to keep it disabled while governor is inactive.
+> 
+> Suggested-by: Thierry Reding <thierry.reding@gmail.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/devfreq/tegra30-devfreq.c | 43 ++++++++++++++++---------------
+>  1 file changed, 22 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index a27300f40b0b..5e2b133babdd 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/devfreq.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+> +#include <linux/irq.h>
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/platform_device.h>
+> @@ -416,8 +417,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
+>  {
+>  	unsigned int i;
+>  
+> -	disable_irq(tegra->irq);
+> -
+>  	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
+>  		      ACTMON_GLB_PERIOD_CTRL);
+>  
+> @@ -442,8 +441,6 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
+>  	}
+>  
+>  	actmon_write_barrier(tegra);
+> -
+> -	enable_irq(tegra->irq);
+>  }
+>  
+>  static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
+> @@ -552,6 +549,12 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
+>  {
+>  	struct tegra_devfreq *tegra = dev_get_drvdata(devfreq->dev.parent);
+>  
+> +	/*
+> +	 * Couple device with the governor early as it is needed at
+> +	 * the moment of governor's start (used by ISR).
+> +	 */
+> +	tegra->devfreq = devfreq;
 
-On 7/16/19 1:26 PM, Chanwoo Choi wrote:
-> Hi,
-> 
-> On 19. 7. 16. 오후 7:59, Bartlomiej Zolnierkiewicz wrote:
->>
->> On 7/16/19 12:33 PM, Chanwoo Choi wrote:
->>> Hi Bartlomiej,
->>>
->>> On 19. 7. 16. 오후 7:13, Bartlomiej Zolnierkiewicz wrote:
->>>>
->>>> Hi Chanwoo,
->>>>
->>>> On 7/16/19 5:56 AM, Chanwoo Choi wrote:
->>>>> Hi Kamil,
->>>>>
->>>>> Looks good to me. But, this patch has some issue.
->>>>> I added the detailed reviews.
->>>>>
->>>>> I recommend that you make the separate patches as following
->>>>> in order to clarify the role of which apply the dev_pm_opp_* function.
->>>>>
->>>>> First patch,
->>>>> Need to consolidate the following two function into one function.
->>>>> because the original exynos-bus.c has the problem that the regulator
->>>>> of parent devfreq device have to be enabled before enabling the clock.
->>>>> This issue did not happen because bootloader enables the bus-related
->>>>> regulators before kernel booting.
->>>>> - exynos_bus_parse_of()
->>>>> - exynos_bus_parent_parse_of()
->>>>>> Second patch,
->>>>> Apply dev_pm_opp_set_regulators() and dev_pm_opp_set_rate()
->>>>>
->>>>>
->>>>> On 19. 7. 15. 오후 9:04, Kamil Konieczny wrote:
->>>>>> Reuse opp core code for setting bus clock and voltage. As a side
->>>>>> effect this allow useage of coupled regulators feature (required
->>>>>> for boards using Exynos5422/5800 SoCs) because dev_pm_opp_set_rate()
->>>>>> uses regulator_set_voltage_triplet() for setting regulator voltage
->>>>>> while the old code used regulator_set_voltage_tol() with fixed
->>>>>> tolerance. This patch also removes no longer needed parsing of DT
->>>>>> property "exynos,voltage-tolerance" (no Exynos devfreq DT node uses
->>>>>> it).
->>>>>>
->>>>>> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
->>>>>> ---
->>>>>>  drivers/devfreq/exynos-bus.c | 172 ++++++++++++++---------------------
->>>>>>  1 file changed, 66 insertions(+), 106 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
->>>>>> index 486cc5b422f1..7fc4f76bd848 100644
->>>>>> --- a/drivers/devfreq/exynos-bus.c
->>>>>> +++ b/drivers/devfreq/exynos-bus.c
->>>>>> @@ -25,7 +25,6 @@
->>>>>>  #include <linux/slab.h>
->>>>>>  
->>>>>>  #define DEFAULT_SATURATION_RATIO	40
->>>>>> -#define DEFAULT_VOLTAGE_TOLERANCE	2
->>>>>>  
->>>>>>  struct exynos_bus {
->>>>>>  	struct device *dev;
->>>>>> @@ -37,9 +36,9 @@ struct exynos_bus {
->>>>>>  
->>>>>>  	unsigned long curr_freq;
->>>>>>  
->>>>>> -	struct regulator *regulator;
->>>>>> +	struct opp_table *opp_table;
->>>>>> +
->>>>>>  	struct clk *clk;
->>>>>> -	unsigned int voltage_tolerance;
->>>>>>  	unsigned int ratio;
->>>>>>  };
->>>>>>  
->>>>>> @@ -99,56 +98,25 @@ static int exynos_bus_target(struct device *dev, unsigned long *freq, u32 flags)
->>>>>>  {
->>>>>>  	struct exynos_bus *bus = dev_get_drvdata(dev);
->>>>>>  	struct dev_pm_opp *new_opp;
->>>>>> -	unsigned long old_freq, new_freq, new_volt, tol;
->>>>>>  	int ret = 0;
->>>>>> -
->>>>>> -	/* Get new opp-bus instance according to new bus clock */
->>>>>> +	/*
->>>>>> +	 * New frequency for bus may not be exactly matched to opp, adjust
->>>>>> +	 * *freq to correct value.
->>>>>> +	 */
->>>>>
->>>>> You better to change this comment with following styles
->>>>> to keep the consistency:
->>>>>
->>>>> 	/* Get correct frequency for bus ... */
->>>>>
->>>>>>  	new_opp = devfreq_recommended_opp(dev, freq, flags);
->>>>>>  	if (IS_ERR(new_opp)) {
->>>>>>  		dev_err(dev, "failed to get recommended opp instance\n");
->>>>>>  		return PTR_ERR(new_opp);
->>>>>>  	}
->>>>>>  
->>>>>> -	new_freq = dev_pm_opp_get_freq(new_opp);
->>>>>> -	new_volt = dev_pm_opp_get_voltage(new_opp);
->>>>>>  	dev_pm_opp_put(new_opp);
->>>>>>  
->>>>>> -	old_freq = bus->curr_freq;
->>>>>> -
->>>>>> -	if (old_freq == new_freq)
->>>>>> -		return 0;
->>>>>> -	tol = new_volt * bus->voltage_tolerance / 100;
->>>>>> -
->>>>>>  	/* Change voltage and frequency according to new OPP level */
->>>>>>  	mutex_lock(&bus->lock);
->>>>>> +	ret = dev_pm_opp_set_rate(dev, *freq);
->>>>>> +	if (!ret)
->>>>>> +		bus->curr_freq = *freq;
->>>>>
->>>>> Have to print the error log if ret has minus error value.
->>>>
->>>> dev_pm_opp_set_rate() should print the error message on all
->>>> errors so wouldn't printing the error log also here be superfluous?
->>>>
->>>> [ Please also note that the other user of dev_pm_opp_set_rate()
->>>>   (cpufreq-dt cpufreq driver) doesn't do this. ]
->>>
->>> OK. Thanks for the explanation. 
->>>
->>>>
->>>>> Modify it as following:
->>>>>
->>>>> 	if (ret < 0) {
->>>>> 		dev_err(dev, "failed to set bus rate\n");
->>>>> 		goto err:
->>>>> 	}
->>>>> 	bus->curr_freq = *freq;
->>>>>
->>>>> err:
->>>>> 	mutex_unlock(&bus->lock);
->>>>> 	
->>>>> 	return ret;
->>>>>
->>>>>>  
->>>>>> -	if (old_freq < new_freq) {
->>>>>> -		ret = regulator_set_voltage_tol(bus->regulator, new_volt, tol);
->>>>>> -		if (ret < 0) {
->>>>>> -			dev_err(bus->dev, "failed to set voltage\n");
->>>>>> -			goto out;
->>>>>> -		}
->>>>>> -	}
->>>>>> -
->>>>>> -	ret = clk_set_rate(bus->clk, new_freq);
->>>>>> -	if (ret < 0) {
->>>>>> -		dev_err(dev, "failed to change clock of bus\n");
->>>>>> -		clk_set_rate(bus->clk, old_freq);
->>>>>> -		goto out;
->>>>>> -	}
->>>>>> -
->>>>>> -	if (old_freq > new_freq) {
->>>>>> -		ret = regulator_set_voltage_tol(bus->regulator, new_volt, tol);
->>>>>> -		if (ret < 0) {
->>>>>> -			dev_err(bus->dev, "failed to set voltage\n");
->>>>>> -			goto out;
->>>>>> -		}
->>>>>> -	}
->>>>>> -	bus->curr_freq = new_freq;
->>>>>> -
->>>>>> -	dev_dbg(dev, "Set the frequency of bus (%luHz -> %luHz, %luHz)\n",
->>>>>> -			old_freq, new_freq, clk_get_rate(bus->clk));
->>>>>> -out:
->>>>>>  	mutex_unlock(&bus->lock);
->>>>>>  
->>>>>>  	return ret;
->>>>>> @@ -194,10 +162,11 @@ static void exynos_bus_exit(struct device *dev)
->>>>>>  	if (ret < 0)
->>>>>>  		dev_warn(dev, "failed to disable the devfreq-event devices\n");
->>>>>>  
->>>>>> -	if (bus->regulator)
->>>>>> -		regulator_disable(bus->regulator);
->>>>>> +	if (bus->opp_table)
->>>>>> +		dev_pm_opp_put_regulators(bus->opp_table);
->>>>>
->>>>> Have to disable regulator after disabling the clock
->>>>> to prevent the h/w fault.
->>>>>
->>>>> I think that you should call them with following sequence:
->>>>>
->>>>> 	clk_disable_unprepare(bus->clk);
->>>>> 	if (bus->opp_table)
->>>>> 		dev_pm_opp_put_regulators(bus->opp_table);
->>>>> 	dev_pm_opp_of_remove_table(dev);
->>>>>
->>>>>>  
->>>>>>  	dev_pm_opp_of_remove_table(dev);
->>>>>> +
->>>>>>  	clk_disable_unprepare(bus->clk);
->>>>>>  }
->>>>>>  
->>>>>> @@ -209,39 +178,26 @@ static int exynos_bus_passive_target(struct device *dev, unsigned long *freq,
->>>>>>  {
->>>>>>  	struct exynos_bus *bus = dev_get_drvdata(dev);
->>>>>>  	struct dev_pm_opp *new_opp;
->>>>>> -	unsigned long old_freq, new_freq;
->>>>>> -	int ret = 0;
->>>>>> +	int ret;
->>>>>>  
->>>>>> -	/* Get new opp-bus instance according to new bus clock */
->>>>>> +	/*
->>>>>> +	 * New frequency for bus may not be exactly matched to opp, adjust
->>>>>> +	 * *freq to correct value.
->>>>>> +	 */
->>>>>
->>>>> You better to change this comment with following styles
->>>>> to keep the consistency:
->>>>>
->>>>> 	/* Get correct frequency for bus ... */
->>>>>
->>>>>>  	new_opp = devfreq_recommended_opp(dev, freq, flags);
->>>>>>  	if (IS_ERR(new_opp)) {
->>>>>>  		dev_err(dev, "failed to get recommended opp instance\n");
->>>>>>  		return PTR_ERR(new_opp);
->>>>>>  	}
->>>>>>  
->>>>>> -	new_freq = dev_pm_opp_get_freq(new_opp);
->>>>>>  	dev_pm_opp_put(new_opp);
->>>>>>  
->>>>>> -	old_freq = bus->curr_freq;
->>>>>> -
->>>>>> -	if (old_freq == new_freq)
->>>>>> -		return 0;
->>>>>> -
->>>>>>  	/* Change the frequency according to new OPP level */
->>>>>>  	mutex_lock(&bus->lock);
->>>>>> +	ret = dev_pm_opp_set_rate(dev, *freq);
->>>>>> +	if (!ret)
->>>>>> +		bus->curr_freq = *freq;
->>>>>
->>>>> ditto. Have to print the error log, check above comment.
->>>>>
->>>>>>  
->>>>>> -	ret = clk_set_rate(bus->clk, new_freq);
->>>>>> -	if (ret < 0) {
->>>>>> -		dev_err(dev, "failed to set the clock of bus\n");
->>>>>> -		goto out;
->>>>>> -	}
->>>>>> -
->>>>>> -	*freq = new_freq;
->>>>>> -	bus->curr_freq = new_freq;
->>>>>> -
->>>>>> -	dev_dbg(dev, "Set the frequency of bus (%luHz -> %luHz, %luHz)\n",
->>>>>> -			old_freq, new_freq, clk_get_rate(bus->clk));
->>>>>> -out:
->>>>>>  	mutex_unlock(&bus->lock);
->>>>>>  
->>>>>>  	return ret;
->>>>>> @@ -259,20 +215,7 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
->>>>>>  					struct exynos_bus *bus)
->>>>>>  {
->>>>>>  	struct device *dev = bus->dev;
->>>>>> -	int i, ret, count, size;
->>>>>> -
->>>>>> -	/* Get the regulator to provide each bus with the power */
->>>>>> -	bus->regulator = devm_regulator_get(dev, "vdd");
->>>>>> -	if (IS_ERR(bus->regulator)) {
->>>>>> -		dev_err(dev, "failed to get VDD regulator\n");
->>>>>> -		return PTR_ERR(bus->regulator);
->>>>>> -	}
->>>>>> -
->>>>>> -	ret = regulator_enable(bus->regulator);
->>>>>> -	if (ret < 0) {
->>>>>> -		dev_err(dev, "failed to enable VDD regulator\n");
->>>>>> -		return ret;
->>>>>> -	}
->>>>>> +	int i, count, size;
->>>>>>  
->>>>>>  	/*
->>>>>>  	 * Get the devfreq-event devices to get the current utilization of
->>>>>> @@ -281,24 +224,20 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
->>>>>>  	count = devfreq_event_get_edev_count(dev);
->>>>>>  	if (count < 0) {
->>>>>>  		dev_err(dev, "failed to get the count of devfreq-event dev\n");
->>>>>> -		ret = count;
->>>>>> -		goto err_regulator;
->>>>>> +		return count;
->>>>>>  	}
->>>>>> +
->>>>>>  	bus->edev_count = count;
->>>>>>  
->>>>>>  	size = sizeof(*bus->edev) * count;
->>>>>>  	bus->edev = devm_kzalloc(dev, size, GFP_KERNEL);
->>>>>> -	if (!bus->edev) {
->>>>>> -		ret = -ENOMEM;
->>>>>> -		goto err_regulator;
->>>>>> -	}
->>>>>> +	if (!bus->edev)
->>>>>> +		return -ENOMEM;
->>>>>>  
->>>>>>  	for (i = 0; i < count; i++) {
->>>>>>  		bus->edev[i] = devfreq_event_get_edev_by_phandle(dev, i);
->>>>>> -		if (IS_ERR(bus->edev[i])) {
->>>>>> -			ret = -EPROBE_DEFER;
->>>>>> -			goto err_regulator;
->>>>>> -		}
->>>>>> +		if (IS_ERR(bus->edev[i]))
->>>>>> +			return -EPROBE_DEFER;
->>>>>>  	}
->>>>>>  
->>>>>>  	/*
->>>>>> @@ -314,22 +253,15 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
->>>>>>  	if (of_property_read_u32(np, "exynos,saturation-ratio", &bus->ratio))
->>>>>>  		bus->ratio = DEFAULT_SATURATION_RATIO;
->>>>>>  
->>>>>> -	if (of_property_read_u32(np, "exynos,voltage-tolerance",
->>>>>> -					&bus->voltage_tolerance))
->>>>>> -		bus->voltage_tolerance = DEFAULT_VOLTAGE_TOLERANCE;
->>>>>> -
->>>>>>  	return 0;
->>>>>> -
->>>>>> -err_regulator:
->>>>>> -	regulator_disable(bus->regulator);
->>>>>> -
->>>>>> -	return ret;
->>>>>>  }
->>>>>>  
->>>>>>  static int exynos_bus_parse_of(struct device_node *np,
->>>>>> -			      struct exynos_bus *bus)
->>>>>> +			      struct exynos_bus *bus, bool passive)
->>>>>>  {
->>>>>>  	struct device *dev = bus->dev;
->>>>>> +	struct opp_table *opp_table;
->>>>>> +	const char *vdd = "vdd";
->>>>>>  	struct dev_pm_opp *opp;
->>>>>>  	unsigned long rate;
->>>>>>  	int ret;
->>>>>> @@ -347,11 +279,22 @@ static int exynos_bus_parse_of(struct device_node *np,
->>>>>>  		return ret;
->>>>>>  	}
->>>>>>  
->>>>>> +	if (!passive) {
->>>>>> +		opp_table = dev_pm_opp_set_regulators(dev, &vdd, 1);
->>>>>> +		if (IS_ERR(opp_table)) {
->>>>>> +			ret = PTR_ERR(opp_table);
->>>>>> +			dev_err(dev, "failed to set regulators %d\n", ret);
->>>>>> +			goto err_clk;/
->>>>>> +		}
->>>>>> +
->>>>>> +		bus->opp_table = opp_table;
->>>>>> +	}
->>>>>
->>>>> This driver has exynos_bus_parent_parse_of() function for parent devfreq device.
->>>>> dev_pm_opp_set_regulators() have to be called in exynos_bus_parent_parse_of()
->>>>> because the regulator is only used by parent devfreq device.
->>>>
->>>> exynos_bus_parse_of() is called for all devfreq devices (including
->>>> parent) and (as you've noticed) the regulator should be enabled before
->>>> enabling clock (which is done in exynos_bus_parse_of()) so adding
->>>> extra argument to exynos_bus_parse_of() (like it is done currently in
->>>> the patch) 
->>>
->>> I think that this patch has still the problem about call sequence
->>> between clock and regulator as following:
->>
->> Yes, this should be fixed (though the wrong sequence between regulator
->> and clock handling is not introduced by the patchset itself and is present
->> in the original driver code).
->>
->>> 273         ret = clk_prepare_enable(bus->clk);                                     
->>> 274         if (ret < 0) {                                                          
->>> 275                 dev_err(dev, "failed to get enable clock\n");                   
->>> 276                 return ret;                                                     
->>> 277         }                                                                       
->>> 278                                                                                 
->>> 279         if (!passive) {                                                         
->>> 280                 opp_table = dev_pm_opp_set_regulators(dev, &vdd, 1);            
->>> 281                 if (IS_ERR(opp_table)) {                                        
->>> 282                         ret = PTR_ERR(opp_table);                               
->>> 283                         dev_err(dev, "failed to set regulators %d\n", ret);     
->>> 284                         goto err_clk;                                           
->>> 285                 }                                                               
->>> 286                                                                                 
->>> 287                 bus->opp_table = opp_table;                                     
->>> 288         }                   
->>>
->>> makes it possible to do the setup correctly without the need
->>>> of merging both functions into one huge function (which would be more
->>>> difficult to follow than two simpler functions IMHO). Is that approach
->>>> acceptable or do you prefer one big function?
->>>
->>> Actually, I don't force to make one function for both
->>> exynos_bus_parse_of() and exynos_bus_parent_parse_of().
->>>
->>> If we just keep this code, dev_pm_opp_set_regulators()
->>> should be handled in exynos_bus_parent_parse_of()
->>> because only parent devfreq device controls the regulator.
->>
->> Could your please explain rationale for this requirement (besides
->> function name)?
-> 
-> OK. I hope to satisfy the following requirements:
-> 
-> 1. Fix the sequence problem between clock and regulator for enabling them.
-> 2. dev_pm_opp_set_regulator() have to be handled in exynos_bus_parent_parse_of()
->    instead of exynos_bus_parse_of() for only parent devfreq device.
-> 3. exynos_bus_parse_of() have to handle the only common properties
->    of both parent devfreq device and passive devfreq device.
-> 
->>
->> The patch adds 'bool passive' argument (which is set to false for
->> parent devfreq device and true for child devfreq device) to
->> exynos_bus_parse_of() (which is called for *all* devfreq devices
-> 
-> As I menteiond, exynos_bus_parse_of have to handle the only common
-> properties of both parent device and passive device. 
-> 
-> I gathered the properties for parent device into exynos_bus_parent_parse_of()
-> This way using 'bool passive' argument is not proper in exynos_bus_parse_of().
-> 
-> 
->> and is called before exynos_bus_parent_parse_of()) and there is
->> no hard requirement to call dev_pm_opp_set_regulators() in
->> exynos_bus_parent_parse_of() so after only changing the ordering
->> between regulator and clock handling the setup code should be
->> correct.
->>
->> [ Please note that this patch moves parent/child detection before
->>   exynos_bus_parse_of() call. ]
->>
->>> In order to keep the two functions, maybe have to change
->>> the call the sequence between exynos_bus_parse_of() and
->>> exynos_bus_parent_parse_of().
->>
->> Doesn't seem to be needed, care to explain it more?
-> 
-> In order to fix the sequence problem between clock and regulator
-> with dev_pm_opp_set_regualtor() and want to keep two functions
-> (exynos_bus_parent_parse_of() and exynos_bus_parse_of()),
-> have to change the call order as following and then modify
-> the exception handling code when error happen.
-> 
-> 	node = of_parse_phandle(dev->of_node, "devfreq", 0);                    
-> 	if (node) {                                                             
-> 		of_node_put(node);                                              
-> 		passive = true
-> 	}
-> 
-> 	if (!passive)	
-> 		exynos_bus_parent_parse_of()
-> 			dev_pm_opp_set_regulator
-> 
-> 	exynos_bus_parse_of()
+I'm not sure it is necessary. Almost devfreq device get
+the devfreq instance on probe timing through devfreq_add_device directly.
 
-OK. This seems like a solution.
 
-Best regards,
---
-Bartlomiej Zolnierkiewicz
-Samsung R&D Institute Poland
+> +
+>  	switch (event) {
+>  	case DEVFREQ_GOV_START:
+>  		devfreq_monitor_start(devfreq);
+> @@ -586,10 +589,11 @@ static struct devfreq_governor tegra_devfreq_governor = {
+>  
+>  static int tegra_devfreq_probe(struct platform_device *pdev)
+>  {
+> -	struct tegra_devfreq *tegra;
+>  	struct tegra_devfreq_device *dev;
+> -	unsigned int i;
+> +	struct tegra_devfreq *tegra;
+> +	struct devfreq *devfreq;
+>  	unsigned long rate;
+> +	unsigned int i;
+>  	int err;
+>  
+>  	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
+> @@ -625,6 +629,16 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  	}
+>  	tegra->irq = err;
+>  
+> +	irq_set_status_flags(tegra->irq, IRQ_NOAUTOEN);
+> +
+> +	err = devm_request_threaded_irq(&pdev->dev, tegra->irq, NULL,
+> +					actmon_thread_isr, IRQF_ONESHOT,
+> +					"tegra-devfreq", tegra);
+> +	if (err) {
+> +		dev_err(&pdev->dev, "Interrupt request failed: %d\n", err);
+> +		return err;
+> +	}
+> +
+>  	reset_control_assert(tegra->reset);
+>  
+>  	err = clk_prepare_enable(tegra->clock);
+> @@ -672,28 +686,15 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
+> -	tegra->devfreq = devfreq_add_device(&pdev->dev,
+> -					    &tegra_devfreq_profile,
+> -					    "tegra_actmon",
+> -					    NULL);
+> +	devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
+> +				     "tegra_actmon", NULL);
+>  	if (IS_ERR(tegra->devfreq)) {
+
+Have to check 'devfreq' instead of 'tegra->devfreq'.
+Did you test it? It might be failed because 'tegra->devfreq is NULL.
+
+>  		err = PTR_ERR(tegra->devfreq);
+
+ditto.
+
+>  		goto remove_governor;
+>  	}
+>  
+> -	err = devm_request_threaded_irq(&pdev->dev, tegra->irq, NULL,
+> -					actmon_thread_isr, IRQF_ONESHOT,
+> -					"tegra-devfreq", tegra);
+> -	if (err) {
+> -		dev_err(&pdev->dev, "Interrupt request failed: %d\n", err);
+> -		goto remove_devfreq;
+> -	}
+> -
+>  	return 0;
+>  
+> -remove_devfreq:
+> -	devfreq_remove_device(tegra->devfreq);
+> -
+>  remove_governor:
+>  	devfreq_remove_governor(&tegra_devfreq_governor);
+>  
+> 
+
+
+-- 
+Best Regards,
+Chanwoo Choi
 Samsung Electronics
-
->>
->>> Once again, I don't force any fixed method. I want to fix them
->>> with correct way.
->>>
->>>>
->>>>>> +
->>>>>>  	/* Get the freq and voltage from OPP table to scale the bus freq */
->>>>>>  	ret = dev_pm_opp_of_add_table(dev);
->>>>>>  	if (ret < 0) {
->>>>>>  		dev_err(dev, "failed to get OPP table\n");
->>>>>> -		goto err_clk;
->>>>>> +		goto err_regulator;
->>>>>>  	}
->>>>>>  
->>>>>>  	rate = clk_get_rate(bus->clk);
->>>>>> @@ -362,6 +305,7 @@ static int exynos_bus_parse_of(struct device_node *np,
->>>>>>  		ret = PTR_ERR(opp);
->>>>>>  		goto err_opp;
->>>>>>  	}
->>>>>> +
->>>>>>  	bus->curr_freq = dev_pm_opp_get_freq(opp);
->>>>>>  	dev_pm_opp_put(opp);
->>>>>>  
->>>>>> @@ -369,6 +313,13 @@ static int exynos_bus_parse_of(struct device_node *np,
->>>>>>  
->>>>>>  err_opp:
->>>>>>  	dev_pm_opp_of_remove_table(dev);
->>>>>> +
->>>>>> +err_regulator:
->>>>>> +	if (bus->opp_table) {
->>>>>> +		dev_pm_opp_put_regulators(bus->opp_table);
->>>>>> +		bus->opp_table = NULL;
->>>>>> +	}
->>>>>
->>>>> As I mentioned above, it it wrong to call dev_pm_opp_put_regulators()
->>>>> after removing the opp_table by dev_pm_opp_of_remove_table().
->>>>>
->>>>>> +
->>>>>>  err_clk:
->>>>>>  	clk_disable_unprepare(bus->clk);
->>>>>>  
->>>>>> @@ -386,6 +337,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
->>>>>>  	struct exynos_bus *bus;
->>>>>>  	int ret, max_state;
->>>>>>  	unsigned long min_freq, max_freq;
->>>>>> +	bool passive = false;
->>>>>>  
->>>>>>  	if (!np) {
->>>>>>  		dev_err(dev, "failed to find devicetree node\n");
->>>>>> @@ -395,12 +347,18 @@ static int exynos_bus_probe(struct platform_device *pdev)
->>>>>>  	bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
->>>>>>  	if (!bus)
->>>>>>  		return -ENOMEM;
->>>>>> +
->>>>>>  	mutex_init(&bus->lock);
->>>>>>  	bus->dev = &pdev->dev;
->>>>>>  	platform_set_drvdata(pdev, bus);
->>>>>> +	node = of_parse_phandle(dev->of_node, "devfreq", 0);
->>>>>> +	if (node) {
->>>>>> +		of_node_put(node);
->>>>>> +		passive = true;
->>>>>> +	}
->>>>>>  
->>>>>>  	/* Parse the device-tree to get the resource information */
->>>>>> -	ret = exynos_bus_parse_of(np, bus);
->>>>>> +	ret = exynos_bus_parse_of(np, bus, passive);
->>>>>>  	if (ret < 0)
->>>>>>  		return ret;
->>>>>>  
->>>>>> @@ -410,13 +368,10 @@ static int exynos_bus_probe(struct platform_device *pdev)
->>>>>>  		goto err;
->>>>>>  	}
->>>>>>  
->>>>>> -	node = of_parse_phandle(dev->of_node, "devfreq", 0);
->>>>>> -	if (node) {
->>>>>> -		of_node_put(node);
->>>>>> +	if (passive)
->>>>>>  		goto passive;
->>>>>> -	} else {
->>>>>> -		ret = exynos_bus_parent_parse_of(np, bus);
->>>>>> -	}
->>>>>> +
->>>>>> +	ret = exynos_bus_parent_parse_of(np, bus);
->>>>>>  
->>>>>
->>>>> Remove unneeded blank line.
->>>>>
->>>>>>  	if (ret < 0)
->>>>>>  		goto err;
->>>>>> @@ -509,6 +464,11 @@ static int exynos_bus_probe(struct platform_device *pdev)
->>>>>>  
->>>>>>  err:
->>>>>>  	dev_pm_opp_of_remove_table(dev);
->>>>>> +	if (bus->opp_table) {
->>>>>> +		dev_pm_opp_put_regulators(bus->opp_table);
->>>>>> +		bus->opp_table = NULL;
->>>>>> +	}
->>>>>> +
->>>>>
->>>>> ditto.
->>>>> Have to disable regulator after disabling the clock
->>>>> to prevent the h/w fault.
->>>>>
->>>>> I think that you should call them with following sequence:
->>>>>
->>>>> 	clk_disable_unprepare(bus->clk);
->>>>> 	if (bus->opp_table)
->>>>> 		dev_pm_opp_put_regulators(bus->opp_table);
->>>>> 	dev_pm_opp_of_remove_table(dev);
->>>>>
->>>>>>  	clk_disable_unprepare(bus->clk);
->>>>>>  
->>>>>>  	return ret;
->>>>
->>>> Best regards,
->>>> --
->>>> Bartlomiej Zolnierkiewicz
->>>> Samsung R&D Institute Poland
->>>> Samsung Electronics
->>
->> Best regards,
->> --
->> Bartlomiej Zolnierkiewicz
->> Samsung R&D Institute Poland
->> Samsung Electronics
