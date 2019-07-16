@@ -2,68 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 844C46AC5E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874726ACB0
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 18:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388035AbfGPP64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 11:58:56 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52420 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728121AbfGPP64 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Jul 2019 11:58:56 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 2639DAD05;
-        Tue, 16 Jul 2019 15:58:54 +0000 (UTC)
-Date:   Tue, 16 Jul 2019 17:58:52 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     Alessio Balsini <balsini@android.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Paul Turner <pjt@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Todd Kjos <tkjos@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Tejun Heo <tj@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v11 4/5] sched/core: uclamp: Use TG's clamps to restrict
- TASK's clamps
-Message-ID: <20190716155852.GF32540@blackbody.suse.cz>
-References: <20190708084357.12944-1-patrick.bellasi@arm.com>
- <20190708084357.12944-5-patrick.bellasi@arm.com>
- <20190715164248.GA21982@blackbody.suse.cz>
- <20190716143435.iwwd6fjr3udlqol4@e110439-lin>
+        id S2388128AbfGPQ1V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 12:27:21 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:52586 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387977AbfGPQ1U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 12:27:20 -0400
+Received: from 79.184.255.39.ipv4.supernova.orange.pl (79.184.255.39) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id 1116abc0f6e4ed4e; Tue, 16 Jul 2019 18:27:18 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
+        "David E. Box" <david.e.box@linux.intel.com>
+Subject: [PATCH 0/8] PM / ACPI: sleep: Simplify the suspend-to-idle control flow
+Date:   Tue, 16 Jul 2019 18:08:29 +0200
+Message-ID: <71085220.z6FKkvYQPX@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190716143435.iwwd6fjr3udlqol4@e110439-lin>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 03:34:35PM +0100, Patrick Bellasi <patrick.bellasi@arm.com> wrote:
-> Am I missing something?
-No, it's rather my misinterpretation of the syscall semantics.
+Hi All,
 
-> Otherwise, I think the changelog sentence you quoted is just
-> misleading.
-It certainly mislead me to thinking about the sched_setattr calls as
-requests of utilization being in the given interval (substituting 0 or 1 when
-only one boundary is given, and further constrained by tg's interval).
+The rationale for these changes is explained in the changelog of patch [6/8] as follows:
 
-I see your point, those are actually two (mostly) independent controls.
-Makes sense now.
+"After commit 33e4f80ee69b ("ACPI / PM: Ignore spurious SCI wakeups
+from suspend-to-idle") the "noirq" phases of device suspend and
+resume may run for multiple times during suspend-to-idle, if there
+are spurious system wakeup events while suspended.  However, this
+is complicated and fragile and actually unnecessary.
+
+The main reason for doing this is that on some systems the EC may
+signal system wakeup events (power button events, for example) as
+well as events that should not cause the system to resume (spurious
+system wakeup events).  Thus, in order to determine whether or not
+a given event signaled by the EC while suspended is a proper system
+wakeup one, the EC GPE needs to be dispatched and to start with that
+was achieved by allowing the ACPI SCI action handler to run, which
+was only possible after calling resume_device_irqs().
+
+However, dispatching the EC GPE this way turned out to take too much
+time in some cases and some EC events might be missed due to that, so
+commit 68e22011856f ("ACPI: EC: Dispatch the EC GPE directly on
+s2idle wake") started to dispatch the EC GPE right after a wakeup
+event has been detected, so in fact the full ACPI SCI action handler
+doesn't need to run any more to deal with the wakeups coming from the
+EC.
+
+Use this observation to simplify the suspend-to-idle control flow
+so that the "noirq" phases of device suspend and resume are each
+run only once in every suspend-to-idle cycle, which is reported to
+significantly reduce power drawn by some systems when suspended to
+idle (by allowing them to reach a deep platform-wide low-power state
+through the suspend-to-idle flow)."
+
+A bonus is that after the essential changes the s2idle flow can be
+integrated back into the generic suspend/resume one (patch [7/8])
+and some simplifications can be made in drivers/base/power/main.c
+after that (patch [8/8]).
+
+Patches [1-5/8] are pre-requisite and the changes made by the first
+three of them really take effect after applying patch [6/8].  Patch
+[4/8], in turn, is a fix and patch [5/8] is an extra simplification.
+
+Please refer to the changelogs for details.
+
+For easier testing, this series is available from the git branch at:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-s2idle-rework
 
 Thanks,
-Michal
+Rafael
+
+
+
