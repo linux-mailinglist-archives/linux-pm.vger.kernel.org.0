@@ -2,57 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E987A6A5F1
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 11:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35D16A5F5
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 11:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733104AbfGPJzT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 05:55:19 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39729 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733066AbfGPJzS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 05:55:18 -0400
-Received: by mail-pg1-f193.google.com with SMTP id u17so9182267pgi.6
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 02:55:17 -0700 (PDT)
+        id S1733190AbfGPJzW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 05:55:22 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38433 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732923AbfGPJzV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 05:55:21 -0400
+Received: by mail-pf1-f194.google.com with SMTP id y15so8862916pfn.5
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 02:55:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FCHE6jmJHvvf4ZOfPHyOAwxkEw7udl1CJtgxI9QEJbs=;
-        b=cyDgYafjtQ9BTLfXLwRoWNuVpBgLISxcZazGQYNrTGFUzlsgpGS5yhv/yPp7LXUPYv
-         rTOA5TTk/wdufu1YAISq/IoarJgOmanKbMeIuXOb6AjUvC7b3XjEsefLkgEB6vYpgSBh
-         Uu1DYcNJYyWfjkGOTv6dSXqxGYj1jiAZZcX8LjVTTE4lMxEIiwbg6XgvEKKQvNp1QOXC
-         LejdLEMEqdrQagKYWyxCAieW4SOivR/2TQAZ1tPzejXzJErkSV4RZwPzgP+v7bJRKhs7
-         tHYeH++bwkEyZWAYE1Og5vEGwfutWGp6OlbowV/sjNT0rd123qx6chxSx/PznWhvxZDQ
-         IAyg==
+        bh=KfxdZKhpROdsD8TEUU0uSmTytrjjuhlMQjqVQfanDQg=;
+        b=sIKQq/n/IP1otU+tnWay329iLQbfeBKa+gHOLf+8BSb177O2C4PpldieNqWuCT7pMQ
+         IB0y1ZFV1Bi1GaLSHgUZ7NDp6dWe2iC73pe8V2S+4CqjqjsyLioEzkAU2q6KedDUJuvc
+         pO11+7NOTWd7xNAKLf754pD7YgdYV7g4hnvRaog6V7wl78et82SyyVfTViZ6GpPp/ait
+         hCUOq5vwdQrZOBZVlzOb0CE8hL13BDcZUZWWWaQbwSIqar3FQIECqQRgcDbNrd+BtXN4
+         ePwK8gBXju9KzUq4cXlDjugl1gq3Bbe0/bfZ8uQmk+/iTwCH3aVgFsqrpTWiiS5IpNPF
+         hgJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FCHE6jmJHvvf4ZOfPHyOAwxkEw7udl1CJtgxI9QEJbs=;
-        b=l/AiPP4b8IGoVnXMrGgJdhtl/hJrk6vauW04a/8K9XXJSoLckgsr0zNdUuCAMR+eUR
-         J70vGjBtr3Vf/gD9s6Jif+R7cty5s4GN2QZXXE/p2RWmOTIuhGDJxdTurcHze1QHvSsx
-         Elyj4ZM089O96efZc5Acq1G4gQl57Fdei/3LJmRgkOQSH6Kb95mwY+S+UeKh50dwICkG
-         +GvwRo582gQgdnz7FHyz3CiBKzxj69Y94gWF0EZuPb0QMvrwIo+ptwK+mw3glTnMJDAb
-         D22k1fz+UKX7XEgcImk/+/f9aM0BSSS7Vqm7rPdYO091n8IOtp1dgT2iQMI7tMf1edYw
-         dW4A==
-X-Gm-Message-State: APjAAAVE2Wd8sYZz2aMIsAB9fz9qfgSlUPw/tFsbgr5UL5lOkr5/MAk4
-        dGWYjxVxVGuu+a4XSUpm6m3YfA==
-X-Google-Smtp-Source: APXvYqwMBob2VfmnrLN5v4d5N+jfwUfKIWSHNvnYNp2pCMrmR3RooE8VYXZ1G5UeTyBjp6+lja6m2w==
-X-Received: by 2002:a17:90a:a410:: with SMTP id y16mr35296476pjp.62.1563270917408;
-        Tue, 16 Jul 2019 02:55:17 -0700 (PDT)
+        bh=KfxdZKhpROdsD8TEUU0uSmTytrjjuhlMQjqVQfanDQg=;
+        b=kVl8pz1is01d9Yc1rRWk37kw4YyxVPh+gzxibuPgZiunCkf5+2cmkcUll+iVd9KsUp
+         cmUUSPRuXV7x4/KvEVJsBcJOo4NeoyNhHg8HBnM6atRUNqB5rzh5pkpf6SpORtT626CH
+         9h2X47+bXiAce185JKqrZopNvZ7QHn4Kl825gSIGoWy9JTse4tVZaeTmPdxdw9bx0r98
+         XTOljee3fQgyxe/CrtTZ5dQ5FPINUH6PhexSzjXDPo3UlOBQuLbYmXRByR7XV8WiYffM
+         mesvHXTMCRiNlNXcaSP3MW4iiVUuNEAqjW9vJs4aTQo4sxdbEBtjTCC99y/bOi39NCCu
+         HVgg==
+X-Gm-Message-State: APjAAAX1j1XXOobPCqs5X/0DBJTbKG8VA+pxpa4aqHDRf7QF+LXPvAUg
+        HWpFTfgcgwFom+X7vp0AHPhyKA==
+X-Google-Smtp-Source: APXvYqz4LReLVuXTZhcB+0IrnhudTgieFPicyFYBFxQN+VHlf5vrWXerPK26eP64Ny5T2vVEvu8F7A==
+X-Received: by 2002:a17:90a:17c4:: with SMTP id q62mr35620240pja.104.1563270920836;
+        Tue, 16 Jul 2019 02:55:20 -0700 (PDT)
 Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id bg3sm19071910pjb.9.2019.07.16.02.55.16
+        by smtp.gmail.com with ESMTPSA id p68sm29575718pfb.80.2019.07.16.02.55.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 02:55:16 -0700 (PDT)
+        Tue, 16 Jul 2019 02:55:20 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
+To:     Rafael Wysocki <rjw@rjwysocki.net>, Len Brown <lenb@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Schmauss <erik.schmauss@intel.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 07/10] cpufreq: powerpc_cbe: Switch to QoS requests instead of cpufreq notifier
-Date:   Tue, 16 Jul 2019 15:24:51 +0530
-Message-Id: <889777691cd3de894c37f5113e4ec1cc73473a0f.1563270828.git.viresh.kumar@linaro.org>
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Subject: [PATCH 08/10] ACPI: cpufreq: Switch to QoS requests instead of cpufreq notifier
+Date:   Tue, 16 Jul 2019 15:24:52 +0530
+Message-Id: <a482dc1cbd3fd583534a898380c6158af926c8de.1563270828.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
 In-Reply-To: <cover.1563270828.git.viresh.kumar@linaro.org>
 References: <cover.1563270828.git.viresh.kumar@linaro.org>
@@ -67,231 +70,447 @@ The cpufreq core now takes the min/max frequency constraints via QoS
 requests and the CPUFREQ_ADJUST notifier shall get removed later on.
 
 Switch over to using the QoS request for maximum frequency constraint
-for ppc_cbe_cpufreq driver.
+for acpi driver.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/ppc_cbe_cpufreq.c     | 19 +++++-
- drivers/cpufreq/ppc_cbe_cpufreq.h     |  8 +++
- drivers/cpufreq/ppc_cbe_cpufreq_pmi.c | 96 +++++++++++++++++----------
- 3 files changed, 86 insertions(+), 37 deletions(-)
+ drivers/acpi/processor_driver.c  |  44 +++++++++++--
+ drivers/acpi/processor_perflib.c | 106 +++++++++++++------------------
+ drivers/acpi/processor_thermal.c |  81 ++++++++++++-----------
+ include/acpi/processor.h         |  22 ++++---
+ 4 files changed, 137 insertions(+), 116 deletions(-)
 
-diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
-index b83f36febf03..c58abb4cca3a 100644
---- a/drivers/cpufreq/ppc_cbe_cpufreq.c
-+++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
-@@ -110,6 +110,13 @@ static int cbe_cpufreq_cpu_init(struct cpufreq_policy *policy)
- #endif
- 
- 	policy->freq_table = cbe_freqs;
-+	cbe_cpufreq_pmi_policy_init(policy);
-+	return 0;
-+}
-+
-+static int cbe_cpufreq_cpu_exit(struct cpufreq_policy *policy)
-+{
-+	cbe_cpufreq_pmi_policy_exit(policy);
+diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
+index aea8d674a33d..e7a3f07e9879 100644
+--- a/drivers/acpi/processor_driver.c
++++ b/drivers/acpi/processor_driver.c
+@@ -284,6 +284,35 @@ static int acpi_processor_stop(struct device *dev)
  	return 0;
  }
  
-@@ -129,6 +136,7 @@ static struct cpufreq_driver cbe_cpufreq_driver = {
- 	.verify		= cpufreq_generic_frequency_table_verify,
- 	.target_index	= cbe_cpufreq_target,
- 	.init		= cbe_cpufreq_cpu_init,
-+	.exit		= cbe_cpufreq_cpu_exit,
- 	.name		= "cbe-cpufreq",
- 	.flags		= CPUFREQ_CONST_LOOPS,
- };
-@@ -139,15 +147,24 @@ static struct cpufreq_driver cbe_cpufreq_driver = {
- 
- static int __init cbe_cpufreq_init(void)
- {
-+	int ret;
++bool acpi_processor_cpufreq_init;
 +
- 	if (!machine_is(cell))
- 		return -ENODEV;
- 
--	return cpufreq_register_driver(&cbe_cpufreq_driver);
-+	cbe_cpufreq_pmi_init();
++static int acpi_processor_notifier(struct notifier_block *nb,
++				   unsigned long event, void *data)
++{
++	struct cpufreq_policy *policy = data;
++	int cpu;
 +
-+	ret = cpufreq_register_driver(&cbe_cpufreq_driver);
-+	if (ret)
-+		cbe_cpufreq_pmi_exit();
++	if (event == CPUFREQ_CREATE_POLICY) {
++		for_each_cpu(cpu, policy->cpus)
++			per_cpu(processors, cpu)->policy = policy;
 +
-+	return ret;
- }
++		acpi_thermal_cpufreq_init(policy);
++		acpi_processor_ppc_init(policy);
++	} else if (event == CPUFREQ_REMOVE_POLICY) {
++		acpi_processor_ppc_exit(policy);
++		acpi_thermal_cpufreq_exit(policy);
++
++		for_each_cpu(cpu, policy->cpus)
++			per_cpu(processors, cpu)->policy = NULL;
++	}
++
++	return 0;
++}
++
++static struct notifier_block acpi_processor_notifier_block = {
++	.notifier_call = acpi_processor_notifier,
++};
++
+ /*
+  * We keep the driver loaded even when ACPI is not running.
+  * This is needed for the powernow-k8 driver, that works even without
+@@ -310,8 +339,11 @@ static int __init acpi_processor_driver_init(void)
+ 	cpuhp_setup_state_nocalls(CPUHP_ACPI_CPUDRV_DEAD, "acpi/cpu-drv:dead",
+ 				  NULL, acpi_soft_cpu_dead);
  
- static void __exit cbe_cpufreq_exit(void)
- {
- 	cpufreq_unregister_driver(&cbe_cpufreq_driver);
-+	cbe_cpufreq_pmi_exit();
- }
+-	acpi_thermal_cpufreq_init();
+-	acpi_processor_ppc_init();
++	if (!cpufreq_register_notifier(&acpi_processor_notifier_block,
++				       CPUFREQ_POLICY_NOTIFIER)) {
++		acpi_processor_cpufreq_init = true;
++	}
++
+ 	acpi_processor_throttling_init();
+ 	return 0;
+ err:
+@@ -324,8 +356,12 @@ static void __exit acpi_processor_driver_exit(void)
+ 	if (acpi_disabled)
+ 		return;
  
- module_init(cbe_cpufreq_init);
-diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.h b/drivers/cpufreq/ppc_cbe_cpufreq.h
-index 9d973519d669..00cd8633b0d9 100644
---- a/drivers/cpufreq/ppc_cbe_cpufreq.h
-+++ b/drivers/cpufreq/ppc_cbe_cpufreq.h
-@@ -20,6 +20,14 @@ int cbe_cpufreq_set_pmode_pmi(int cpu, unsigned int pmode);
+-	acpi_processor_ppc_exit();
+-	acpi_thermal_cpufreq_exit();
++	if (acpi_processor_cpufreq_init) {
++		cpufreq_unregister_notifier(&acpi_processor_notifier_block,
++					    CPUFREQ_POLICY_NOTIFIER);
++		acpi_processor_cpufreq_init = false;
++	}
++
+ 	cpuhp_remove_state_nocalls(hp_online);
+ 	cpuhp_remove_state_nocalls(CPUHP_ACPI_CPUDRV_DEAD);
+ 	driver_unregister(&acpi_processor_driver);
+diff --git a/drivers/acpi/processor_perflib.c b/drivers/acpi/processor_perflib.c
+index ee87cb6f6e59..1a22b2415a8b 100644
+--- a/drivers/acpi/processor_perflib.c
++++ b/drivers/acpi/processor_perflib.c
+@@ -50,57 +50,13 @@ module_param(ignore_ppc, int, 0644);
+ MODULE_PARM_DESC(ignore_ppc, "If the frequency of your machine gets wrongly" \
+ 		 "limited by BIOS, this should help");
  
- #if IS_ENABLED(CONFIG_CPU_FREQ_CBE_PMI)
- extern bool cbe_cpufreq_has_pmi;
-+void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy);
-+void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy);
-+void cbe_cpufreq_pmi_init(void);
-+void cbe_cpufreq_pmi_exit(void);
- #else
- #define cbe_cpufreq_has_pmi (0)
-+static inline void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy) {}
-+static inline void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy) {}
-+static inline void cbe_cpufreq_pmi_init(void) {}
-+static inline void cbe_cpufreq_pmi_exit(void) {}
- #endif
-diff --git a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
-index 97c8ee4614b7..0babb27c1c72 100644
---- a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
-+++ b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
-@@ -12,6 +12,7 @@
- #include <linux/timer.h>
- #include <linux/init.h>
- #include <linux/of_platform.h>
-+#include <linux/pm_qos.h>
- 
- #include <asm/processor.h>
- #include <asm/prom.h>
-@@ -24,8 +25,6 @@
- 
- #include "ppc_cbe_cpufreq.h"
- 
--static u8 pmi_slow_mode_limit[MAX_CBE];
+-#define PPC_REGISTERED   1
+-#define PPC_IN_USE       2
 -
- bool cbe_cpufreq_has_pmi = false;
- EXPORT_SYMBOL_GPL(cbe_cpufreq_has_pmi);
- 
-@@ -65,64 +64,89 @@ EXPORT_SYMBOL_GPL(cbe_cpufreq_set_pmode_pmi);
- 
- static void cbe_cpufreq_handle_pmi(pmi_message_t pmi_msg)
- {
-+	struct cpufreq_policy *policy;
-+	struct dev_pm_qos_request *req;
- 	u8 node, slow_mode;
-+	int cpu, ret;
- 
- 	BUG_ON(pmi_msg.type != PMI_TYPE_FREQ_CHANGE);
- 
- 	node = pmi_msg.data1;
- 	slow_mode = pmi_msg.data2;
- 
--	pmi_slow_mode_limit[node] = slow_mode;
-+	cpu = cbe_node_to_cpu(node);
- 
- 	pr_debug("cbe_handle_pmi: node: %d max_freq: %d\n", node, slow_mode);
--}
+-static int acpi_processor_ppc_status;
 -
--static int pmi_notifier(struct notifier_block *nb,
+-static int acpi_processor_ppc_notifier(struct notifier_block *nb,
 -				       unsigned long event, void *data)
 -{
 -	struct cpufreq_policy *policy = data;
--	struct cpufreq_frequency_table *cbe_freqs = policy->freq_table;
--	u8 node;
+-	struct acpi_processor *pr;
+-	unsigned int ppc = 0;
 -
--	/* Should this really be called for CPUFREQ_ADJUST and CPUFREQ_NOTIFY
--	 * policy events?)
--	 */
--	node = cbe_cpu_to_node(policy->cpu);
+-	if (ignore_ppc < 0)
+-		ignore_ppc = 0;
 -
--	pr_debug("got notified, event=%lu, node=%u\n", event, node);
- 
--	if (pmi_slow_mode_limit[node] != 0) {
--		pr_debug("limiting node %d to slow mode %d\n",
--			 node, pmi_slow_mode_limit[node]);
-+	policy = cpufreq_cpu_get(cpu);
-+	if (!policy) {
-+		pr_warn("cpufreq policy not found cpu%d\n", cpu);
-+		return;
-+	}
- 
--		cpufreq_verify_within_limits(policy, 0,
-+	req = policy->driver_data;
- 
--			cbe_freqs[pmi_slow_mode_limit[node]].frequency);
--	}
-+	ret = dev_pm_qos_update_request(req,
-+			policy->freq_table[slow_mode].frequency);
-+	if (ret)
-+		pr_warn("Failed to update freq constraint: %d\n", ret);
-+	else
-+		pr_debug("limiting node %d to slow mode %d\n", node, slow_mode);
- 
+-	if (ignore_ppc)
+-		return 0;
+-
+-	if (event != CPUFREQ_ADJUST)
+-		return 0;
+-
+-	mutex_lock(&performance_mutex);
+-
+-	pr = per_cpu(processors, policy->cpu);
+-	if (!pr || !pr->performance)
+-		goto out;
+-
+-	ppc = (unsigned int)pr->performance_platform_limit;
+-
+-	if (ppc >= pr->performance->state_count)
+-		goto out;
+-
+-	cpufreq_verify_within_limits(policy, 0,
+-				     pr->performance->states[ppc].
+-				     core_frequency * 1000);
+-
+-      out:
+-	mutex_unlock(&performance_mutex);
+-
 -	return 0;
-+	cpufreq_cpu_put(policy);
+-}
+-
+-static struct notifier_block acpi_ppc_notifier_block = {
+-	.notifier_call = acpi_processor_ppc_notifier,
+-};
++static int acpi_processor_ppc_in_use;
+ 
+ static int acpi_processor_get_platform_limit(struct acpi_processor *pr)
+ {
+ 	acpi_status status = 0;
+ 	unsigned long long ppc = 0;
+-
++	int ret;
+ 
+ 	if (!pr)
+ 		return -EINVAL;
+@@ -112,7 +68,7 @@ static int acpi_processor_get_platform_limit(struct acpi_processor *pr)
+ 	status = acpi_evaluate_integer(pr->handle, "_PPC", NULL, &ppc);
+ 
+ 	if (status != AE_NOT_FOUND)
+-		acpi_processor_ppc_status |= PPC_IN_USE;
++		acpi_processor_ppc_in_use = 1;
+ 
+ 	if (ACPI_FAILURE(status) && status != AE_NOT_FOUND) {
+ 		ACPI_EXCEPTION((AE_INFO, status, "Evaluating _PPC"));
+@@ -124,6 +80,16 @@ static int acpi_processor_get_platform_limit(struct acpi_processor *pr)
+ 
+ 	pr->performance_platform_limit = (int)ppc;
+ 
++	if (ignore_ppc || ppc >= pr->performance->state_count)
++		return 0;
++
++	ret = dev_pm_qos_update_request(pr->perflib_req,
++			pr->performance->states[ppc].core_frequency * 1000);
++	if (ret) {
++		pr_warn("Failed to update perflib freq constraint: cpu%d (%d)\n",
++			pr->id, ret);
++	}
++
+ 	return 0;
  }
  
--static struct notifier_block pmi_notifier_block = {
--	.notifier_call = pmi_notifier,
--};
--
- static struct pmi_handler cbe_pmi_handler = {
- 	.type			= PMI_TYPE_FREQ_CHANGE,
- 	.handle_pmi_message	= cbe_cpufreq_handle_pmi,
- };
+@@ -184,23 +150,39 @@ int acpi_processor_get_bios_limit(int cpu, unsigned int *limit)
+ }
+ EXPORT_SYMBOL(acpi_processor_get_bios_limit);
  
-+void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy)
-+{
+-void acpi_processor_ppc_init(void)
++void acpi_processor_ppc_init(struct cpufreq_policy *policy)
+ {
+-	if (!cpufreq_register_notifier
+-	    (&acpi_ppc_notifier_block, CPUFREQ_POLICY_NOTIFIER))
+-		acpi_processor_ppc_status |= PPC_REGISTERED;
+-	else
+-		printk(KERN_DEBUG
+-		       "Warning: Processor Platform Limit not supported.\n");
++	struct acpi_processor *pr = per_cpu(processors, policy->cpu);
 +	struct dev_pm_qos_request *req;
 +	int ret;
-+
-+	if (!cbe_cpufreq_has_pmi)
-+		return;
 +
 +	req = kzalloc(sizeof(*req), GFP_KERNEL);
 +	if (!req)
 +		return;
 +
-+	ret = dev_pm_qos_add_request(get_cpu_device(policy->cpu), req,
-+				     DEV_PM_QOS_MAX_FREQUENCY,
-+				     policy->freq_table[0].frequency);
++	ret = dev_pm_qos_add_request(get_cpu_device(policy->cpu),
++				     req, DEV_PM_QOS_MAX_FREQUENCY,
++				     policy->cpuinfo.max_freq);
 +	if (ret < 0) {
-+		pr_err("Failed to add freq constraint (%d)\n", ret);
++		pr_err("Failed to add freq constraint for cpu%d (%d)\n",
++		       policy->cpu, ret);
++		kfree(req);
++		return;
++	}
++
++	pr->perflib_req = req;
++
++	if (ignore_ppc < 0)
++		ignore_ppc = 0;
+ }
+ 
+-void acpi_processor_ppc_exit(void)
++void acpi_processor_ppc_exit(struct cpufreq_policy *policy)
+ {
+-	if (acpi_processor_ppc_status & PPC_REGISTERED)
+-		cpufreq_unregister_notifier(&acpi_ppc_notifier_block,
+-					    CPUFREQ_POLICY_NOTIFIER);
++	struct acpi_processor *pr = per_cpu(processors, policy->cpu);
+ 
+-	acpi_processor_ppc_status &= ~PPC_REGISTERED;
++	dev_pm_qos_remove_request(pr->perflib_req);
++	kfree(pr->perflib_req);
++	pr->perflib_req = NULL;
+ }
+ 
+ static int acpi_processor_get_performance_control(struct acpi_processor *pr)
+@@ -477,7 +459,7 @@ int acpi_processor_notify_smm(struct module *calling_module)
+ 	static int is_done = 0;
+ 	int result;
+ 
+-	if (!(acpi_processor_ppc_status & PPC_REGISTERED))
++	if (!acpi_processor_cpufreq_init)
+ 		return -EBUSY;
+ 
+ 	if (!try_module_get(calling_module))
+@@ -513,7 +495,7 @@ int acpi_processor_notify_smm(struct module *calling_module)
+ 	 * we can allow the cpufreq driver to be rmmod'ed. */
+ 	is_done = 1;
+ 
+-	if (!(acpi_processor_ppc_status & PPC_IN_USE))
++	if (!acpi_processor_ppc_in_use)
+ 		module_put(calling_module);
+ 
+ 	return 0;
+@@ -742,7 +724,7 @@ acpi_processor_register_performance(struct acpi_processor_performance
+ {
+ 	struct acpi_processor *pr;
+ 
+-	if (!(acpi_processor_ppc_status & PPC_REGISTERED))
++	if (!acpi_processor_cpufreq_init)
+ 		return -EINVAL;
+ 
+ 	mutex_lock(&performance_mutex);
+diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
+index 50fb0107375e..02407b33b874 100644
+--- a/drivers/acpi/processor_thermal.c
++++ b/drivers/acpi/processor_thermal.c
+@@ -35,7 +35,6 @@ ACPI_MODULE_NAME("processor_thermal");
+ #define CPUFREQ_THERMAL_MAX_STEP 3
+ 
+ static DEFINE_PER_CPU(unsigned int, cpufreq_thermal_reduction_pctg);
+-static unsigned int acpi_thermal_cpufreq_is_init = 0;
+ 
+ #define reduction_pctg(cpu) \
+ 	per_cpu(cpufreq_thermal_reduction_pctg, phys_package_first_cpu(cpu))
+@@ -61,35 +60,11 @@ static int phys_package_first_cpu(int cpu)
+ static int cpu_has_cpufreq(unsigned int cpu)
+ {
+ 	struct cpufreq_policy policy;
+-	if (!acpi_thermal_cpufreq_is_init || cpufreq_get_policy(&policy, cpu))
++	if (!acpi_processor_cpufreq_init || cpufreq_get_policy(&policy, cpu))
+ 		return 0;
+ 	return 1;
+ }
+ 
+-static int acpi_thermal_cpufreq_notifier(struct notifier_block *nb,
+-					 unsigned long event, void *data)
+-{
+-	struct cpufreq_policy *policy = data;
+-	unsigned long max_freq = 0;
+-
+-	if (event != CPUFREQ_ADJUST)
+-		goto out;
+-
+-	max_freq = (
+-	    policy->cpuinfo.max_freq *
+-	    (100 - reduction_pctg(policy->cpu) * 20)
+-	) / 100;
+-
+-	cpufreq_verify_within_limits(policy, 0, max_freq);
+-
+-      out:
+-	return 0;
+-}
+-
+-static struct notifier_block acpi_thermal_cpufreq_notifier_block = {
+-	.notifier_call = acpi_thermal_cpufreq_notifier,
+-};
+-
+ static int cpufreq_get_max_state(unsigned int cpu)
+ {
+ 	if (!cpu_has_cpufreq(cpu))
+@@ -108,7 +83,9 @@ static int cpufreq_get_cur_state(unsigned int cpu)
+ 
+ static int cpufreq_set_cur_state(unsigned int cpu, int state)
+ {
+-	int i;
++	struct acpi_processor *pr;
++	unsigned long max_freq;
++	int i, ret;
+ 
+ 	if (!cpu_has_cpufreq(cpu))
+ 		return 0;
+@@ -121,33 +98,53 @@ static int cpufreq_set_cur_state(unsigned int cpu, int state)
+ 	 * frequency.
+ 	 */
+ 	for_each_online_cpu(i) {
+-		if (topology_physical_package_id(i) ==
++		if (topology_physical_package_id(i) !=
+ 		    topology_physical_package_id(cpu))
+-			cpufreq_update_policy(i);
++			continue;
++
++		pr = per_cpu(processors, i);
++		max_freq = (pr->policy->cpuinfo.max_freq * (100 - reduction_pctg(i) * 20)) / 100;
++
++		ret = dev_pm_qos_update_request(pr->thermal_req, max_freq);
++		if (ret) {
++			pr_warn("Failed to update thermal freq constraint: cpu%d (%d)\n",
++				pr->id, ret);
++		}
+ 	}
+ 	return 0;
+ }
+ 
+-void acpi_thermal_cpufreq_init(void)
++void acpi_thermal_cpufreq_init(struct cpufreq_policy *policy)
+ {
+-	int i;
++	struct acpi_processor *pr = per_cpu(processors, policy->cpu);
++	struct dev_pm_qos_request *req;
++	int ret;
++
++	req = kzalloc(sizeof(*req), GFP_KERNEL);
++	if (!req)
++		return;
++
++	ret = dev_pm_qos_add_request(get_cpu_device(policy->cpu),
++				     req, DEV_PM_QOS_MAX_FREQUENCY,
++				     policy->cpuinfo.max_freq);
++	if (ret < 0) {
++		pr_err("Failed to add freq constraint for cpu%d (%d)\n",
++		       policy->cpu, ret);
 +		kfree(req);
 +		return;
 +	}
  
-+	policy->driver_data = req;
-+}
-+EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_policy_init);
- 
--static int __init cbe_cpufreq_pmi_init(void)
-+void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy)
- {
--	cbe_cpufreq_has_pmi = pmi_register_handler(&cbe_pmi_handler) == 0;
-+	struct dev_pm_qos_request *req = policy->driver_data;
- 
--	if (!cbe_cpufreq_has_pmi)
--		return -ENODEV;
-+	if (cbe_cpufreq_has_pmi) {
-+		dev_pm_qos_remove_request(req);
-+		kfree(req);
-+	}
-+}
-+EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_policy_exit);
- 
--	cpufreq_register_notifier(&pmi_notifier_block, CPUFREQ_POLICY_NOTIFIER);
-+void cbe_cpufreq_pmi_init(void)
-+{
-+	if (!pmi_register_handler(&cbe_pmi_handler))
-+		cbe_cpufreq_has_pmi = true;
-+}
-+EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_init);
- 
--	return 0;
-+void cbe_cpufreq_pmi_exit(void)
-+{
-+	pmi_unregister_handler(&cbe_pmi_handler);
-+	cbe_cpufreq_has_pmi = false;
+-	i = cpufreq_register_notifier(&acpi_thermal_cpufreq_notifier_block,
+-				      CPUFREQ_POLICY_NOTIFIER);
+-	if (!i)
+-		acpi_thermal_cpufreq_is_init = 1;
++	pr->thermal_req = req;
  }
--device_initcall(cbe_cpufreq_pmi_init);
-+EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_exit);
+ 
+-void acpi_thermal_cpufreq_exit(void)
++void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy)
+ {
+-	if (acpi_thermal_cpufreq_is_init)
+-		cpufreq_unregister_notifier
+-		    (&acpi_thermal_cpufreq_notifier_block,
+-		     CPUFREQ_POLICY_NOTIFIER);
++	struct acpi_processor *pr = per_cpu(processors, policy->cpu);
+ 
+-	acpi_thermal_cpufreq_is_init = 0;
++	dev_pm_qos_remove_request(pr->thermal_req);
++	kfree(pr->thermal_req);
++	pr->thermal_req = NULL;
+ }
+-
+ #else				/* ! CONFIG_CPU_FREQ */
+ static int cpufreq_get_max_state(unsigned int cpu)
+ {
+diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+index 1194a4c78d55..a1a7966bb755 100644
+--- a/include/acpi/processor.h
++++ b/include/acpi/processor.h
+@@ -4,6 +4,8 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/cpu.h>
++#include <linux/cpufreq.h>
++#include <linux/pm_qos.h>
+ #include <linux/thermal.h>
+ #include <asm/acpi.h>
+ 
+@@ -230,6 +232,9 @@ struct acpi_processor {
+ 	struct acpi_processor_limit limit;
+ 	struct thermal_cooling_device *cdev;
+ 	struct device *dev; /* Processor device. */
++	struct cpufreq_policy *policy;
++	struct dev_pm_qos_request *perflib_req;
++	struct dev_pm_qos_request *thermal_req;
+ };
+ 
+ struct acpi_processor_errata {
+@@ -296,16 +301,17 @@ static inline void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx
+ /* in processor_perflib.c */
+ 
+ #ifdef CONFIG_CPU_FREQ
+-void acpi_processor_ppc_init(void);
+-void acpi_processor_ppc_exit(void);
++extern bool acpi_processor_cpufreq_init;
++void acpi_processor_ppc_init(struct cpufreq_policy *policy);
++void acpi_processor_ppc_exit(struct cpufreq_policy *policy);
+ void acpi_processor_ppc_has_changed(struct acpi_processor *pr, int event_flag);
+ extern int acpi_processor_get_bios_limit(int cpu, unsigned int *limit);
+ #else
+-static inline void acpi_processor_ppc_init(void)
++static inline void acpi_processor_ppc_init(struct cpufreq_policy *policy)
+ {
+ 	return;
+ }
+-static inline void acpi_processor_ppc_exit(void)
++static inline void acpi_processor_ppc_exit(struct cpufreq_policy *policy)
+ {
+ 	return;
+ }
+@@ -421,14 +427,14 @@ static inline int acpi_processor_hotplug(struct acpi_processor *pr)
+ int acpi_processor_get_limit_info(struct acpi_processor *pr);
+ extern const struct thermal_cooling_device_ops processor_cooling_ops;
+ #if defined(CONFIG_ACPI_CPU_FREQ_PSS) & defined(CONFIG_CPU_FREQ)
+-void acpi_thermal_cpufreq_init(void);
+-void acpi_thermal_cpufreq_exit(void);
++void acpi_thermal_cpufreq_init(struct cpufreq_policy *policy);
++void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy);
+ #else
+-static inline void acpi_thermal_cpufreq_init(void)
++static inline void acpi_thermal_cpufreq_init(struct cpufreq_policy *policy)
+ {
+ 	return;
+ }
+-static inline void acpi_thermal_cpufreq_exit(void)
++static inline void acpi_thermal_cpufreq_exit(struct cpufreq_policy *policy)
+ {
+ 	return;
+ }
 -- 
 2.21.0.rc0.269.g1a574e7a288b
 
