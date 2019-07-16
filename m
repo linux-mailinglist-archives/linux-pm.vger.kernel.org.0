@@ -2,352 +2,482 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C28A169F88
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 01:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7377F6A01C
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 02:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730635AbfGOXeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jul 2019 19:34:23 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:33894 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727379AbfGOXeX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jul 2019 19:34:23 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 6202A6037C; Mon, 15 Jul 2019 23:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563233662;
-        bh=mpLIagN7YSlBVfeKVHNqH5UIFpRVUIhSrtt1uOWyIY8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=G0eq00EIpDVfLXQYvYeDq0P9ORZ/W+ICvCs0sFB1lvCriUY1qrXIe6mJ9b5laqJcr
-         eehWJ7yWjZNuCfBZkqvEqMCQf7/D8+R3pugYZdM5V1FpD6ZDTIh670FpH62FRd8Ssd
-         zvsjnQ96oGCxaILGDmLcr/tFnn+ZwksQSqLEVp8U=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.46.162.237] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: daidavid1@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5C14C616BA;
-        Mon, 15 Jul 2019 23:34:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563233660;
-        bh=mpLIagN7YSlBVfeKVHNqH5UIFpRVUIhSrtt1uOWyIY8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=U0VMQa3yo3vD9jfu3UoVMHHtt6sv/UnxxjaxfQiH0zZYUBwxBNSAaEHCRGqCQuxSi
-         vNu/C2eBI44inKQkC+WxC1HCZyhi/NCFNFJx5DSFRSiVyA92amzx1UxtB+TQ6+VJ5F
-         xvdiPS0XDbrib2BXGwikzmSzZPNiMoYkxhOkS8PI=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5C14C616BA
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=daidavid1@codeaurora.org
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add tagging and wake/sleep
- support for sdm845
-To:     Evan Green <evgreen@chromium.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        amit.kucheria@linaro.org, Doug Anderson <dianders@chromium.org>,
-        Sean Sweeney <seansw@qti.qualcomm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20190618091724.28232-1-georgi.djakov@linaro.org>
- <20190618091724.28232-3-georgi.djakov@linaro.org>
- <CAE=gft7=ZbK3ARtWyv8n_hWJ4kuXRs0UA0QsE420pqL8R1quUQ@mail.gmail.com>
-From:   David Dai <daidavid1@codeaurora.org>
-Message-ID: <05d9fea0-c040-d609-38bf-11cddbe6aa4d@codeaurora.org>
-Date:   Mon, 15 Jul 2019 16:34:19 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1733086AbfGPA4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jul 2019 20:56:22 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:41509 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732407AbfGPA4V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jul 2019 20:56:21 -0400
+Received: by mail-ot1-f48.google.com with SMTP id o101so19145103ota.8
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2019 17:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UUZLyniF7fu1RXAeXxl0HstRsTysKzhc0o2JtfQ94P4=;
+        b=Z9+u09tzea1uOfCb4cZh34YuRGCNmbZZ25KT3cUeRV7V9vgid9Xme6o5xb5VvqLYjI
+         TTY0zNrHwQLlnffMEVNZyxk0Jpp2O0IsF5SF8RbzgeV+slNvQk7GDc/YgldhuljoZpOQ
+         HujD5fwF8l3cWMX1wipwarnFpBIeEW9k6G/odNytRe03bDo3LBY9mjhx6/qOXRSkn01x
+         b7GDURI+RRujxAL5MY5+Lc/oatH1kK7DoA/tqNp4ctdoRnmNzQvV9KY5u4yflUBbEWMb
+         8XyOQfUvRQQhXAmroD4iR/y0UDcueIDEXDptFcNwwExPZB4ZLphd3m4jiLaqGwmSRMuB
+         EB0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UUZLyniF7fu1RXAeXxl0HstRsTysKzhc0o2JtfQ94P4=;
+        b=RGi3LnWEbhgnFzneZsZbw6Qy9brRhc87iHl7E2F5ybB43Uc5vkrAAUSSeWsfjb8PRO
+         +X/bHfMqy5lRJ4qiGLuk3FkXUA8vPYSdym25Rq1OA7jUoKOwK91VSueyzRsKUmXn9fWx
+         ibpyOp9mcrB+XxTd7oRMQE6qjrS8b27q37WjZzwO4kSfK5wJRy5DW177uTIpQvoN6rDB
+         LGI4bYFzRYDUMniA7amIsIWGOFE41+Y0q4VodYxR6onLtwfwYnqXfbU9s/Yn40OpWZmo
+         85ls2jVvXqlDn7C5uUgSItR3N1CIdalZqoNhrwtU8z7S+LvPLupPGRdTuD9whIgcpxN0
+         DYZg==
+X-Gm-Message-State: APjAAAXM8kp+vMRqmyg7ADVxS7lKN7aKAWLwYInB3yipH/LL2ftfUOkK
+        bui6yAUMeTMELCuAvNZ4sPdr3Tbp//YZpWva+RXvAg==
+X-Google-Smtp-Source: APXvYqz7RJYLmsEIk072vbzfVP+LEjuR9juOg8kqZoveJ+g/uUgIcMsIUrUuIym83WxTmd40sgSDRHaqe5PYFOl1PqQ=
+X-Received: by 2002:a05:6830:160c:: with SMTP id g12mr23637672otr.231.1563238579054;
+ Mon, 15 Jul 2019 17:56:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAE=gft7=ZbK3ARtWyv8n_hWJ4kuXRs0UA0QsE420pqL8R1quUQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-7-saravanak@google.com>
+ <CAKfTPtCJFaEfvu3Dnp9WSxQEwSfY=VS+xsoQ+4P+vg7_WL0BAQ@mail.gmail.com>
+ <CAGETcx_5gu84FOVmELPnK5uJTE0NEhxYKtdFigoXGyFtjehQvw@mail.gmail.com>
+ <CAKfTPtBHrXG1QZzcaStWCtL3nx+vE_-WKtOhjiHbjFQiw9Yk8w@mail.gmail.com>
+ <CAGETcx912kpi9DejPCoWMUF5AMm4=o1C0C45zwMfUy6aX_jcYg@mail.gmail.com>
+ <CAKfTPtBngOT__TfmHXmmim-b9YhExOOvwVRaxYM9g9M6ffr_zQ@mail.gmail.com>
+ <CAGETcx90WC2o+ZmkyhOPp1xJbfSk1wpAv2RA-4VgnhJfcsmJiA@mail.gmail.com> <CAKfTPtBE7e+hc55TY43JC0XPONvrS4FBPkZcRZ4EbzyCJKNhfg@mail.gmail.com>
+In-Reply-To: <CAKfTPtBE7e+hc55TY43JC0XPONvrS4FBPkZcRZ4EbzyCJKNhfg@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 15 Jul 2019 17:55:42 -0700
+Message-ID: <CAGETcx_w=yVDiwVWT1+mmoj54FuLC37Eh2E-s0BfrtEa0AqEjw@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] interconnect: Add OPP table support for interconnects
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        sibis@codeaurora.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Evan,
-
-Thanks for the continued help in reviewing these patches!
-
-On 7/11/2019 10:06 AM, Evan Green wrote:
-> Hi Georgi and David,
+On Mon, Jul 15, 2019 at 1:16 AM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
 >
-> On Tue, Jun 18, 2019 at 2:17 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
->> From: David Dai <daidavid1@codeaurora.org>
->>
->> Add support for wake and sleep commands by using a tag to indicate
->> whether or not the aggregate and set requests fall into execution
->> state specific bucket.
->>
->> Signed-off-by: David Dai <daidavid1@codeaurora.org>
->> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
->> ---
->>   drivers/interconnect/qcom/sdm845.c | 129 ++++++++++++++++++++++-------
->>   1 file changed, 98 insertions(+), 31 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
->> index fb526004c82e..c100aab39415 100644
->> --- a/drivers/interconnect/qcom/sdm845.c
->> +++ b/drivers/interconnect/qcom/sdm845.c
->> @@ -66,6 +66,17 @@ struct bcm_db {
->>   #define SDM845_MAX_BCM_PER_NODE        2
->>   #define SDM845_MAX_VCD         10
->>
->> +#define QCOM_ICC_BUCKET_AMC            0
-> What is AMC again? Is it the "right now" bucket? Maybe a comment on
-> the meaning of this bucket would be helpful.
-That's correct. Will add a comment for this.
+> On Tue, 9 Jul 2019 at 21:03, Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > On Tue, Jul 9, 2019 at 12:25 AM Vincent Guittot
+> > <vincent.guittot@linaro.org> wrote:
+> > >
+> > > On Sun, 7 Jul 2019 at 23:48, Saravana Kannan <saravanak@google.com> wrote:
+> > > >
+> > > > On Thu, Jul 4, 2019 at 12:12 AM Vincent Guittot
+> > > > <vincent.guittot@linaro.org> wrote:
+> > > > >
+> > > > > On Wed, 3 Jul 2019 at 23:33, Saravana Kannan <saravanak@google.com> wrote:
+> > > > > >
+> > > > > > On Tue, Jul 2, 2019 at 11:45 PM Vincent Guittot
+> > > > > > <vincent.guittot@linaro.org> wrote:
+> > > > > > >
+> > > > > > > On Wed, 3 Jul 2019 at 03:10, Saravana Kannan <saravanak@google.com> wrote:
+> > > > > > > >
+> > > > > > > > Interconnect paths can have different performance points. Now that OPP
+> > > > > > > > framework supports bandwidth OPP tables, add OPP table support for
+> > > > > > > > interconnects.
+> > > > > > > >
+> > > > > > > > Devices can use the interconnect-opp-table DT property to specify OPP
+> > > > > > > > tables for interconnect paths. And the driver can obtain the OPP table for
+> > > > > > > > an interconnect path by calling icc_get_opp_table().
+> > > > > > >
+> > > > > > > The opp table of a path must come from the aggregation of OPP tables
+> > > > > > > of the interconnect providers.
+> > > > > >
+> > > > > > The aggregation of OPP tables of the providers is certainly the
+> > > > > > superset of what a path can achieve, but to say that OPPs for
+> > > > > > interconnect path should match that superset is an oversimplification
+> > > > > > of the reality in hardware.
+> > > > > >
+> > > > > > There are lots of reasons an interconnect path might not want to use
+> > > > > > all the available bandwidth options across all the interconnects in
+> > > > > > the route.
+> > > > > >
+> > > > > > 1. That particular path might not have been validated or verified
+> > > > > >    during the HW design process for some of the frequencies/bandwidth
+> > > > > >    combinations of the providers.
+> > > > >
+> > > > > All these constraint are provider's constraints and not consumer's one
+> > > > >
+> > > > > The consumer asks for a bandwidth according to its needs and then the
+> > > > > providers select the optimal bandwidth of each interconnect after
+> > > > > aggregating all the request and according to what OPP have been
+> > > > > validated
+> > > >
+> > > > Not really. The screening can be a consumer specific issue. The
+> > > > consumer IP itself might have some issue with using too low of a
+> > > > bandwidth or bandwidth that's not within some range. It should not be
+> > >
+> > > How can an IP ask for not enough bandwidth ?
+> > > It asks the needed bandwidth based on its requirements
+> >
+> > The "enough bandwidth" is not always obvious. It's only for very
+> > simple cases that you can calculate the required bandwidth. Even for
+> > cases that you think might be "obvious/easy" aren't always easy.
+> >
+> > For example, you'd think a display IP would have a fixed bandwidth
+> > requirement for a fixed resolution screen. But that's far from the
+> > truth. It can also change as the number of layers change per frame.
+> > For video decoder/encoder, it depends on how well the frames compress
+> > with a specific compression scheme.
+> > So the "required" bandwidth is often a heuristic based on the IP
+> > frequency or traffic measurement.
+> >
+> > But that's not even the point I was making in this specific "bullet".
+> >
+> > A hardware IP might be screen/verified with only certain bandwidth
+> > levels. Or it might have hardware bugs that prevent it from using
+> > lower bandwidths even though it's technically sufficient. We need a
+> > way to capture that per path. This is not even a fictional case. This
+> > has been true multiple times over widely used IPs.
 >
->> +#define QCOM_ICC_BUCKET_WAKE           1
->> +#define QCOM_ICC_BUCKET_SLEEP          2
->> +#define QCOM_ICC_NUM_BUCKETS           3
->> +#define QCOM_ICC_TAG_AMC               BIT(QCOM_ICC_BUCKET_AMC)
->> +#define QCOM_ICC_TAG_WAKE              BIT(QCOM_ICC_BUCKET_WAKE)
->> +#define QCOM_ICC_TAG_SLEEP             BIT(QCOM_ICC_BUCKET_SLEEP)
->> +#define QCOM_ICC_TAG_ACTIVE_ONLY       (QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE)
->> +#define QCOM_ICC_TAG_ALWAYS            (QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
->> +                                        QCOM_ICC_TAG_SLEEP)
->> +
->>   /**
->>    * struct qcom_icc_node - Qualcomm specific interconnect nodes
->>    * @name: the node name used in debugfs
->> @@ -75,7 +86,9 @@ struct bcm_db {
->>    * @channels: num of channels at this node
->>    * @buswidth: width of the interconnect between a node and the bus
->>    * @sum_avg: current sum aggregate value of all avg bw requests
->> + * @sum_avg_cached: previous sum aggregate value of all avg bw requests
->>    * @max_peak: current max aggregate value of all peak bw requests
->> + * @max_peak_cached: previous max aggregate value of all peak bw requests
->>    * @bcms: list of bcms associated with this logical node
->>    * @num_bcms: num of @bcms
->>    */
->> @@ -86,8 +99,10 @@ struct qcom_icc_node {
->>          u16 num_links;
->>          u16 channels;
->>          u16 buswidth;
->> -       u64 sum_avg;
->> -       u64 max_peak;
->> +       u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
->> +       u64 sum_avg_cached[QCOM_ICC_NUM_BUCKETS];
->> +       u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->> +       u64 max_peak_cached[QCOM_ICC_NUM_BUCKETS];
->>          struct qcom_icc_bcm *bcms[SDM845_MAX_BCM_PER_NODE];
->>          size_t num_bcms;
->>   };
->> @@ -112,8 +127,8 @@ struct qcom_icc_bcm {
->>          const char *name;
->>          u32 type;
->>          u32 addr;
->> -       u64 vote_x;
->> -       u64 vote_y;
->> +       u64 vote_x[QCOM_ICC_NUM_BUCKETS];
->> +       u64 vote_y[QCOM_ICC_NUM_BUCKETS];
->>          bool dirty;
->>          bool keepalive;
->>          struct bcm_db aux_data;
->> @@ -555,7 +570,7 @@ inline void tcs_cmd_gen(struct tcs_cmd *cmd, u64 vote_x, u64 vote_y,
->>                  cmd->wait = true;
->>   }
->>
->> -static void tcs_list_gen(struct list_head *bcm_list,
->> +static void tcs_list_gen(struct list_head *bcm_list, int bucket,
->>                           struct tcs_cmd tcs_list[SDM845_MAX_VCD],
->>                           int n[SDM845_MAX_VCD])
->>   {
->> @@ -573,8 +588,8 @@ static void tcs_list_gen(struct list_head *bcm_list,
->>                          commit = true;
->>                          cur_vcd_size = 0;
->>                  }
->> -               tcs_cmd_gen(&tcs_list[idx], bcm->vote_x, bcm->vote_y,
->> -                           bcm->addr, commit);
->> +               tcs_cmd_gen(&tcs_list[idx], bcm->vote_x[bucket],
->> +                           bcm->vote_y[bucket], bcm->addr, commit);
->>                  idx++;
->>                  n[batch]++;
->>                  /*
->> @@ -595,32 +610,39 @@ static void tcs_list_gen(struct list_head *bcm_list,
->>
->>   static void bcm_aggregate(struct qcom_icc_bcm *bcm)
->>   {
->> -       size_t i;
->> -       u64 agg_avg = 0;
->> -       u64 agg_peak = 0;
->> +       size_t i, bucket;
->> +       u64 agg_avg[QCOM_ICC_NUM_BUCKETS] = {0};
->> +       u64 agg_peak[QCOM_ICC_NUM_BUCKETS] = {0};
->>          u64 temp;
->>
->> -       for (i = 0; i < bcm->num_nodes; i++) {
->> -               temp = bcm->nodes[i]->sum_avg * bcm->aux_data.width;
->> -               do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
->> -               agg_avg = max(agg_avg, temp);
->> +       for (bucket = 0; bucket < QCOM_ICC_NUM_BUCKETS; bucket++) {
->> +               for (i = 0; i < bcm->num_nodes; i++) {
->> +                       temp = bcm->nodes[i]->sum_avg_cached[bucket] * bcm->aux_data.width;
->> +                       do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
->> +                       agg_avg[bucket] = max(agg_avg[bucket], temp);
->>
->> -               temp = bcm->nodes[i]->max_peak * bcm->aux_data.width;
->> -               do_div(temp, bcm->nodes[i]->buswidth);
-> Why is it that this one doesn't have the multiply by
-> bcm->nodes[i]->channels again? I can't recall if there was a reason.
-> If it's correct maybe it deserves a comment.
-
-I think the rationale behind this is generally for consumers to target a 
-certain minimum threshold to satisfy some structural latency 
-requirements as opposed to strictly throughput, and it may be easier for 
-consumers to reuse certain values to support hitting some minimum NoC 
-frequencies without having to be concerned with the number of channels 
-that may change from platform to platform.
-
+> here you are mixing HW constraint on the soc and OPP screening with
+> bandwidth request from consumer
+> ICC framework is about getting bandwidth request not trying to fix
+> some HW/voltage dependency of the SoC
 >
->> -               agg_peak = max(agg_peak, temp);
->> -       }
->> +                       temp = bcm->nodes[i]->max_peak_cached[bucket] * bcm->aux_data.width;
->> +                       do_div(temp, bcm->nodes[i]->buswidth);
->> +                       agg_peak[bucket] = max(agg_peak[bucket], temp);
->>
->> -       temp = agg_avg * 1000ULL;
->> -       do_div(temp, bcm->aux_data.unit);
->> -       bcm->vote_x = temp;
->> +                       bcm->nodes[i]->sum_avg[bucket] = 0;
->> +                       bcm->nodes[i]->max_peak[bucket] = 0;
-> I don't understand the sum_avg vs sum_avg_cached. Here's what I understand:
-> 1. qcom_icc_aggregate() does the math from the incoming values on
-> sum_avg, and then clobbers sum_avg_cached with those values.
-> 2. bcm_aggregate() uses sum_avg_cached in its calculations, then clears sum_avg.
+> >
+> > > > the provider's job to take into account all the IP that might be
+> > > > connected to the interconnects. If the interconnect HW itself didn't
+> > >
+> > > That's not what I'm saying. The provider knows which bandwidth the
+> > > interconnect can provide as it is the ones which configures it. So if
+> > > the interconnect has a finite number of bandwidth point based probably
+> > > on the possible clock frequency and others config of the interconnect,
+> > > it selects the best final config after aggregating the request of the
+> > > consumer.
+> >
+> > I completely agree with this. What you are stating above is how it
+> > should work and that's the whole point of the interconnect framework.
+> >
+> > But this is orthogonal to the point I'm making.
 >
-> But I don't get why that's needed. Why not just have sum_avg? Wouldn't
-> it work the same? Ok, it wouldn't if you ended up calling
-> bcm_aggregate() multiple times on the same bcm. But you have a dirty
-> flag that prevents this from happening. So I think it's safe to remove
-> the cached arrays, and just clear out the sum_avg when you aggregate.
-You are correct in that the dirty flag would prevent another repeat of 
-the bcm_aggregate() call in the same icc_set request. But consider a 
-following icc_set request on a different node that shares the same BCM, 
-the next bcm_aggregate() would result in an incorrect aggregate sum_avg 
-for the BCM since the avg_sum from the previous node(from the previous 
-icc_set) was cleared out. We need a way to retain the current state of 
-all nodes to accurately aggregate the bw values for the BCM.
->> +               }
->>
->> -       temp = agg_peak * 1000ULL;
->> -       do_div(temp, bcm->aux_data.unit);
->> -       bcm->vote_y = temp;
->> +               temp = agg_avg[bucket] * 1000ULL;
->> +               do_div(temp, bcm->aux_data.unit);
->> +               bcm->vote_x[bucket] = temp;
->>
->> -       if (bcm->keepalive && bcm->vote_x == 0 && bcm->vote_y == 0) {
->> -               bcm->vote_x = 1;
->> -               bcm->vote_y = 1;
->> +               temp = agg_peak[bucket] * 1000ULL;
->> +               do_div(temp, bcm->aux_data.unit);
->> +               bcm->vote_y[bucket] = temp;
->> +       }
->> +
->> +       if (bcm->keepalive && bcm->vote_x[0] == 0 && bcm->vote_y[0] == 0) {
->> +               bcm->vote_x[QCOM_ICC_BUCKET_AMC] = 1;
->> +               bcm->vote_x[QCOM_ICC_BUCKET_WAKE] = 1;
->> +               bcm->vote_y[QCOM_ICC_BUCKET_AMC] = 1;
->> +               bcm->vote_y[QCOM_ICC_BUCKET_WAKE] = 1;
->>          }
->>
->>          bcm->dirty = false;
->> @@ -631,15 +653,25 @@ static int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->>   {
->>          size_t i;
->>          struct qcom_icc_node *qn;
->> +       unsigned long tag_word = (unsigned long)tag;
->>
->>          qn = node->data;
->>
->> +       if (!tag)
->> +               tag_word = QCOM_ICC_TAG_ALWAYS;
->> +
->> +       for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->> +               if (test_bit(i, &tag_word)) {
-> I guess all this extra business with tag_word and casting is so that
-> you can use test_bit, which is presumably a tiny bit faster? Does this
-> actually make a measurable difference? Maybe in the name of simplicity
-> we just do if (tag & BIT(i)), and then optimize if we find that
-> conditional to be a hotspot?
-Using (tag & BIT(i)) as opposed to test_bit seems reasonable to me.
->> +                       qn->sum_avg[i] += avg_bw;
->> +                       qn->max_peak[i] = max_t(u32, qn->max_peak[i], peak_bw);
->> +                       qn->sum_avg_cached[i] = qn->sum_avg[i];
->> +                       qn->max_peak_cached[i] = qn->max_peak[i];
->> +               }
->> +       }
->> +
->>          *agg_avg += avg_bw;
->>          *agg_peak = max_t(u32, *agg_peak, peak_bw);
->>
->> -       qn->sum_avg = *agg_avg;
->> -       qn->max_peak = *agg_peak;
->> -
->>          for (i = 0; i < qn->num_bcms; i++)
->>                  qn->bcms[i]->dirty = true;
->>
->> @@ -675,7 +707,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>           * Construct the command list based on a pre ordered list of BCMs
->>           * based on VCD.
->>           */
->> -       tcs_list_gen(&commit_list, cmds, commit_idx);
->> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_AMC, cmds, commit_idx);
->>
->>          if (!commit_idx[0])
->>                  return ret;
->> @@ -693,6 +725,41 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>                  return ret;
->>          }
->>
->> +       INIT_LIST_HEAD(&commit_list);
->> +
->> +       for (i = 0; i < qp->num_bcms; i++) {
->> +               /*
->> +                * Only generate WAKE and SLEEP commands if a resource's
->> +                * requirements change as the execution environment transitions
->> +                * between different power states.
->> +                */
->> +               if (qp->bcms[i]->vote_x[QCOM_ICC_BUCKET_WAKE] !=
->> +                   qp->bcms[i]->vote_x[QCOM_ICC_BUCKET_SLEEP] ||
->> +                   qp->bcms[i]->vote_y[QCOM_ICC_BUCKET_WAKE] !=
->> +                   qp->bcms[i]->vote_y[QCOM_ICC_BUCKET_SLEEP]) {
->> +                       list_add_tail(&qp->bcms[i]->list, &commit_list);
->> +               }
->> +       }
->> +
->> +       if (list_empty(&commit_list))
->> +               return ret;
->> +
->> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_WAKE, cmds, commit_idx);
->> +
->> +       ret = rpmh_write_batch(qp->dev, RPMH_WAKE_ONLY_STATE, cmds, commit_idx);
->> +       if (ret) {
->> +               pr_err("Error sending WAKE RPMH requests (%d)\n", ret);
->> +               return ret;
->> +       }
->> +
->> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_SLEEP, cmds, commit_idx);
->> +
->> +       ret = rpmh_write_batch(qp->dev, RPMH_SLEEP_STATE, cmds, commit_idx);
->> +       if (ret) {
->> +               pr_err("Error sending SLEEP RPMH requests (%d)\n", ret);
->> +               return ret;
->> +       }
->> +
->>          return ret;
->>   }
->>
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> It's not orthogonal because you want to add a OPP table pointer in the
+> ICC path structure to fix your platform HW constraint whereas it's not
+> the purpose of the framework IMO
+>
+> >
+> > > > change, the provider driver shouldn't need to change. By your
+> > > > definition, a provider driver will have to account for all the
+> > > > possible bus masters that might be connected to it across all SoCs.
+> > >
+> > > you didn't catch my point
+> >
+> > Same. I think we are talking over each other. Let me try again.
+> >
+> > You are trying to describe how and interconnect provider and framework
+> > should work. There's no disagreement there.
+> >
+> > My point is that consumers might not want to or can not always use all
+> > the available bandwidth levels offered by the providers. There can be
+> > many reasons for that (which is what I listed in my earlier emails)
+> > and we need a good and generic way to capture that so that everyone
+> > isn't trying to invent their own property.
+>
+> And my point is that you want to describe some platform or even UCs
+> specific constraint in the ICC framework which is not the place to do.
+>
+> If the consumers might not want to use all available bandwidth because
+> this is not power efficient as an example, this should be describe
+> somewhere else to express  that there is a shared power domain
+> between some devices and we shoudl ensure that all devices in this
+> power domain should use the  Optimal Operating Point (optimal freq for
+> a voltage)
 
+My patch series has nothing to do with shared power domains. I think
+the examples have made it amply clear.
+
+> ICC framework describes the bandwidth request that are expressed by
+> the consumers for the current running state of their IP but it doesn't
+> reflect the fact that on platform A, the consumer should use bandwidth
+> X because it will select a voltage level of a shared power domain that
+> is optimized for the other devices B, C ... . It's up to the provider
+> to know HW details of the bus that it drives and to make such
+> decision;  the consumer should always request the same
+
+The change to ICC framework is practically just this. I don't have any
+future changes planned for the ICC framework. This is the entirety of
+it.
+
++       opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
++       if (opp_node) {
++               path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
++               of_node_put(opp_node);
++       }
+
+It's quite a stretch and bit hyperbolic to say this one change is
+getting ICC framework to do all the things you claim above.
+
+It's literally a simple helper function so that the consumer doesn't
+have to make assumptions about indices and it's a bit more explicit
+about which OPP table of the device (a device can have multiple OPP
+tables) corresponds to which ICC path.
+
+Going by your extreme argument, one can also claim that it's not the
+ICC framework's job to make it easy for consumers to figure out the
+source/destination endpoints or give them names and delete the
+interconnect and interconnect-names properties. That's clearly just as
+absurd a claim.
+
+
+-Saravana
+
+> > > > That's not good design nor is it scalable.
+> > > >
+> > > > > >
+> > > > > > 2. Similarly during parts screening in the factory, some of the
+> > > > > >    combinations might not have been screened and can't be guaranteed
+> > > > > >    to work.
+> > > > >
+> > > > > As above, it's the provider's job to select the final bandwidth
+> > > > > according to its constraint
+> > > >
+> > > > Same reply as above.
+> > > >
+> > > > > >
+> > > > > > 3. Only a certain set of bandwidth levels might make sense to use from
+> > > > > >    a power/performance balance given the device using it. For example:
+> > > > > >    - The big CPU might not want to use some of the lower bandwidths
+> > > > > >      but the little CPU might want to.
+> > > > > >    - The big CPU might not want to use some intermediate bandwidth
+> > > > > >      points if they don't save a lot of power compared to a higher
+> > > > > >      bandwidth levels, but the little CPU might want to.
+> > > > > >    - The little CPU might never want to use the higher set of
+> > > > > >      bandwidth levels since they won't be power efficient for the use
+> > > > > >      cases that might run on it.
+> > > > >
+> > > > > These example are quite vague about the reasons why little might never
+> > > > > want to use higher bandwidth.
+> > > >
+> > > > How is it vague? I just said because of power/performance balance.
+> > > >
+> > > > > But then, if little doesn't ask high bandwidth it will not use them.
+> > > >
+> > > > If you are running a heuristics based algorithm to pick bandwidth,
+> > > > this is how it'll know NOT to use some of the bandwidth levels.
+> > >
+> > > so you want to set a bandwidth according to the cpu frequency which is
+> > > what has been proposed in other thread
+> >
+> > Nope, that's just one heuristic. Often times it's based on hardware
+> > monitors measuring interconnect activity. If you go look at the SDM845
+> > in a Pixel 3, almost nothing is directly tied to the CPU frequency.
+> >
+> > Even if you are scaling bandwidth based on other hardware
+> > measurements, you might want to avoid some bandwidth level provided by
+> > the interconnect providers because it's suboptimal.
+> >
+> > For example, when making bandwidth votes to accommodate the big CPUs,
+> > you might never want to use some of the lower bandwidth levels because
+> > they are not power efficient for any CPU frequency or any bandwidth
+> > level. Because at those levels the memory/interconnect is so slow that
+> > it has a non-trivial utilization increase (because the CPU is
+> > stalling) of the big CPUs.
+> >
+> > Again, this is completely different from what the providers/icc
+> > framework does. Which is, once the request is made, they aggregate and
+> > set the actual interconnect frequencies correctly.
+> >
+> > > >
+> > > > > >
+> > > > > > 4. It might not make sense from a system level power perspective.
+> > > > > > Let's take an example of a path S (source) -> A -> B -> C -> D
+> > > > > > (destination).
+> > > > > >    - A supports only 2, 5, 7 and 10 GB/s. B supports 1, 2 ... 10 GB/s.
+> > > > > >      C supports 5 and 10 GB/s
+> > > > > >    - If you combine and list the superset of bandwidth levels
+> > > > > >      supported in that path, that'd be 1, 2, 3, ... 10 GB/s.
+> > > > > >    - Which set of bandwidth levels make sense will depend on the
+> > > > > >      hardware characteristics of the interconnects.
+> > > > > >    - If B is the biggest power sink, then you might want to use all 10
+> > > > > >      levels.
+> > > > > >    - If A is the biggest power sink, then you might want to use all 2,
+> > > > > >      5 and 10 GB/s of the levels.
+> > > > > >    - If C is the biggest power sink then you might only want to use 5
+> > > > > >      and 10 GB/s
+> > > > > >    - The more hops and paths you get the more convoluted this gets.
+> > > > > >
+> > > > > > 5. The design of the interconnects themselves might have an impact on
+> > > > > > which bandwidth levels are used.
+> > > > > >    - For example, the FIFO depth between two specific interconnects
+> > > > > >      might affect the valid bandwidth levels for a specific path.
+> > > > > >    - Say S1 -> A -> B -> D1, S2 -> C -> B -> D1 and S2 -> C -> D2 are
+> > > > > >      three paths.
+> > > > > >    - If C <-> B FIFO depth is small, then there might be a requirement
+> > > > > >      that C and B be closely performance matched to avoid system level
+> > > > > >      congestion due to back pressure.
+> > > > > >    - So S2 -> D1 path can't use all the bandwidth levels supported by
+> > > > > >      C-B combination.
+> > > > > >    - But S2 -> D2 can use all the bandwidth levels supported by C.
+> > > > > >    - And S1 -> D1 can use all the levels supported by A-B combination.
+> > > > > >
+> > > > >
+> > > > > All the examples above makes sense but have to be handle by the
+> > > > > provider not the consumer. The consumer asks for a bandwidth according
+> > > > > to its constraints. Then the provider which is the driver that manages
+> > > > > the interconnect IP, should manage all this hardware and platform
+> > > > > specific stuff related to the interconnect IP in order to set the
+> > > > > optimal bandwidth that fit both consumer constraint and platform
+> > > > > specific configuration.
+> > > >
+> > > > Sure, but the provider itself can have interconnect properties to
+> > > > indicate which other interconnects it's tied to. And the provider will
+> > > > still need the interconnect-opp-table to denote which bandwidth levels
+> > > > are sensible to use with each of its connections.
+> >
+> > You seem to have missed this comment.
+> >
+> > Thanks,
+> > Saravana
+> >
+> > > > So in some instances the interconnect-opp-table covers the needs of
+> > > > purely consumers and in some instances purely providers. But in either
+> > > > case, it's still needed to describe the hardware properly.
+> > > >
+> > > > -Saravana
+> > > >
+> > > > > > These are just some of the reasons I could recollect in a few minutes.
+> > > > > > These are all real world cases I had to deal with in the past several
+> > > > > > years of dealing with scaling interconnects. I'm sure vendors and SoCs
+> > > > > > I'm not familiar with have other good reasons I'm not aware of.
+> > > > > >
+> > > > > > Trying to figure this all out by aggregating OPP tables of
+> > > > > > interconnect providers just isn't feasible nor is it efficient. The
+> > > > > > OPP tables for an interconnect path is describing the valid BW levels
+> > > > > > supported by that path and verified in hardware and makes a lot of
+> > > > > > sense to capture it clearly in DT.
+> > > > > >
+> > > > > > > So such kind of OPP table should be at
+> > > > > > > provider level but not at path level.
+> > > > > >
+> > > > > > They can also use it if they want to, but they'll probably want to use
+> > > > > > a frequency OPP table.
+> > > > > >
+> > > > > >
+> > > > > > -Saravana
+> > > > > >
+> > > > > > >
+> > > > > > > >
+> > > > > > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > > > > > ---
+> > > > > > > >  drivers/interconnect/core.c  | 27 ++++++++++++++++++++++++++-
+> > > > > > > >  include/linux/interconnect.h |  7 +++++++
+> > > > > > > >  2 files changed, 33 insertions(+), 1 deletion(-)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> > > > > > > > index 871eb4bc4efc..881bac80bc1e 100644
+> > > > > > > > --- a/drivers/interconnect/core.c
+> > > > > > > > +++ b/drivers/interconnect/core.c
+> > > > > > > > @@ -47,6 +47,7 @@ struct icc_req {
+> > > > > > > >   */
+> > > > > > > >  struct icc_path {
+> > > > > > > >         size_t num_nodes;
+> > > > > > > > +       struct opp_table *opp_table;
+> > > > > > > >         struct icc_req reqs[];
+> > > > > > > >  };
+> > > > > > > >
+> > > > > > > > @@ -313,7 +314,7 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+> > > > > > > >  {
+> > > > > > > >         struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+> > > > > > > >         struct icc_node *src_node, *dst_node;
+> > > > > > > > -       struct device_node *np = NULL;
+> > > > > > > > +       struct device_node *np = NULL, *opp_node;
+> > > > > > > >         struct of_phandle_args src_args, dst_args;
+> > > > > > > >         int idx = 0;
+> > > > > > > >         int ret;
+> > > > > > > > @@ -381,10 +382,34 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+> > > > > > > >                 dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+> > > > > > > >         mutex_unlock(&icc_lock);
+> > > > > > > >
+> > > > > > > > +       opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
+> > > > > > > > +       if (opp_node) {
+> > > > > > > > +               path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
+> > > > > > > > +               of_node_put(opp_node);
+> > > > > > > > +       }
+> > > > > > > > +
+> > > > > > > > +
+> > > > > > > >         return path;
+> > > > > > > >  }
+> > > > > > > >  EXPORT_SYMBOL_GPL(of_icc_get);
+> > > > > > > >
+> > > > > > > > +/**
+> > > > > > > > + * icc_get_opp_table() - Get the OPP table that corresponds to a path
+> > > > > > > > + * @path: reference to the path returned by icc_get()
+> > > > > > > > + *
+> > > > > > > > + * This function will return the OPP table that corresponds to a path handle.
+> > > > > > > > + * If the interconnect API is disabled, NULL is returned and the consumer
+> > > > > > > > + * drivers will still build. Drivers are free to handle this specifically, but
+> > > > > > > > + * they don't have to.
+> > > > > > > > + *
+> > > > > > > > + * Return: opp_table pointer on success. NULL is returned when the API is
+> > > > > > > > + * disabled or the OPP table is missing.
+> > > > > > > > + */
+> > > > > > > > +struct opp_table *icc_get_opp_table(struct icc_path *path)
+> > > > > > > > +{
+> > > > > > > > +       return path->opp_table;
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > >  /**
+> > > > > > > >   * icc_set_bw() - set bandwidth constraints on an interconnect path
+> > > > > > > >   * @path: reference to the path returned by icc_get()
+> > > > > > > > diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+> > > > > > > > index dc25864755ba..0c0bc55f0e89 100644
+> > > > > > > > --- a/include/linux/interconnect.h
+> > > > > > > > +++ b/include/linux/interconnect.h
+> > > > > > > > @@ -9,6 +9,7 @@
+> > > > > > > >
+> > > > > > > >  #include <linux/mutex.h>
+> > > > > > > >  #include <linux/types.h>
+> > > > > > > > +#include <linux/pm_opp.h>
+> > > > > > > >
+> > > > > > > >  /* macros for converting to icc units */
+> > > > > > > >  #define Bps_to_icc(x)  ((x) / 1000)
+> > > > > > > > @@ -28,6 +29,7 @@ struct device;
+> > > > > > > >  struct icc_path *icc_get(struct device *dev, const int src_id,
+> > > > > > > >                          const int dst_id);
+> > > > > > > >  struct icc_path *of_icc_get(struct device *dev, const char *name);
+> > > > > > > > +struct opp_table *icc_get_opp_table(struct icc_path *path);
+> > > > > > > >  void icc_put(struct icc_path *path);
+> > > > > > > >  int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+> > > > > > > >
+> > > > > > > > @@ -49,6 +51,11 @@ static inline void icc_put(struct icc_path *path)
+> > > > > > > >  {
+> > > > > > > >  }
+> > > > > > > >
+> > > > > > > > +static inline struct opp_table *icc_get_opp_table(struct icc_path *path)
+> > > > > > > > +{
+> > > > > > > > +       return NULL;
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > >  static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+> > > > > > > >  {
+> > > > > > > >         return 0;
+> > > > > > > > --
+> > > > > > > > 2.22.0.410.gd8fdbe21b5-goog
+> > > > > > > >
+> > > > >
+> > > > > --
+> > > > > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> > > > >
