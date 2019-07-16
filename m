@@ -2,92 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE446A865
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 14:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADF46A84F
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 14:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733104AbfGPMLD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 08:11:03 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:39156 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733037AbfGPMLC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 08:11:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=79eC0tu5XeYLyVMNzpLTHyI1bupm/FqacAsZ9g1T3Zk=; b=Jc2BykXbBfJUb/SwoPH3QP+esJ
-        dBVKnxZRJw83ucI0vrFtU272RuuSuE1jsYg4N/zssx8uSBwOB0jTnHjdaaumMaTEDW+KY7NtBGucd
-        I0lpga4maMnxKv45F8zzVKRmmG0G2jEGk/zFgJ3flAb2tbNPG7zwP+iYtGW6yRXOOcmaO2FFHDXFV
-        /WdZ0vLHbHM5XljEcMKgKZVVK2xWz+lu5Qoj55gSJnXR7A/DHscT6Y9wFFuWWxF/bYsOicblcrLwO
-        aBijFuls8C3mg/d2joF+jsShVZxabWDSHdN109JFVxrJlkxAA9oGIMfvuYv4oouxmX+JdnSmhEwoH
-        dGDbG9Hg==;
-Received: from [189.27.46.152] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hnMIL-0004hy-AM; Tue, 16 Jul 2019 12:10:57 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hnMII-0000Qe-ML; Tue, 16 Jul 2019 09:10:54 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 02/14] docs: power: add it to to the main documentation index
-Date:   Tue, 16 Jul 2019 09:10:41 -0300
-Message-Id: <95abe2e389f5bfb9dd03d55de384c2b9b5bb78da.1563277838.git.mchehab+samsung@kernel.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1563277838.git.mchehab+samsung@kernel.org>
-References: <cover.1563277838.git.mchehab+samsung@kernel.org>
+        id S1732373AbfGPMKv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 08:10:51 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:42387 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732246AbfGPMKv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 08:10:51 -0400
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190716121048epoutp041f0e1427cf7af516d2f07e64e81a42c3~x4gMKK0WB2495224952epoutp04Z
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 12:10:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190716121048epoutp041f0e1427cf7af516d2f07e64e81a42c3~x4gMKK0WB2495224952epoutp04Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1563279048;
+        bh=UhIpDuoNpwBNNWUZEzDOA7ji6Ax3wSdsuDAfE43HpJY=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=B4x01Tv1fHiHXD5s6ljp51Q9g6oKqvI33hBXImdi1bSBWnYQMBL1eR8Mq9UQOkkIs
+         8e3dVlHrKBtBNjNP0lUk+xMrffE5nff++Yit9nqNGFRyWoBAns1OhIQiLvQiV0Q5nV
+         FSJ6IKE8b6GXFEgjcWstuhnW/NkYbqqDsXOGkLp0=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190716121047epcas1p3386397ef78583d4da7ea99894486133b~x4gLsDK7s1825718257epcas1p3R;
+        Tue, 16 Jul 2019 12:10:47 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 45nzkZ457fzMqYkV; Tue, 16 Jul
+        2019 12:10:46 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C5.20.04066.6CEBD2D5; Tue, 16 Jul 2019 21:10:46 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190716121045epcas1p17794ccb550d3584b059b342b4fcb8494~x4gJxshvk3078130781epcas1p10;
+        Tue, 16 Jul 2019 12:10:45 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190716121045epsmtrp292e3f0547ecff91ea4631bd931d39a12~x4gJxCpjY1878118781epsmtrp20;
+        Tue, 16 Jul 2019 12:10:45 +0000 (GMT)
+X-AuditID: b6c32a37-e27ff70000000fe2-10-5d2dbec6733a
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        49.0E.03638.5CEBD2D5; Tue, 16 Jul 2019 21:10:45 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190716121045epsmtip2c6b169baed27a718b0f2643fbdc18e57~x4gJlynHu3108531085epsmtip2Z;
+        Tue, 16 Jul 2019 12:10:45 +0000 (GMT)
+Subject: Re: [PATCH v4 09/24] PM / devfreq: tegra30: Reset boosting on
+ startup
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <caed4a78-ad8a-5bee-adc4-4a342e2898c3@samsung.com>
+Date:   Tue, 16 Jul 2019 21:13:52 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <20190707223303.6755-10-digetx@gmail.com>
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAJsWRmVeSWpSXmKPExsWy7bCmru6xfbqxBt8XK1qs/viY0aJl1iIW
+        i7NNb9gtLu+aw2bxufcIo0Xnl1lsFrcbV7BZ/Nw1j8Wib+0lNgdOjx13lzB67Jx1l92jt/kd
+        m0ffllWMHp83yQWwRmXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoq
+        ufgE6Lpl5gAdpKRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpsCzQK07MLS7NS9dL
+        zs+1MjQwMDIFKkzIztiz5R5LwTvOig0T5rI3MHZydDFyckgImEic2nqAtYuRi0NIYAejxMoZ
+        vUwQzidGiXOfNkA53xgl3p/5zdjFyAHWcqFNACK+l1Fiw9upbBDOe6D234sYQeYKCwRIfPu9
+        E2yuiMA/RonOn81sIAlmgUiJwztXM4HYbAJaEvtf3ACL8wsoSlz98RismVfATmJK8ysWEJtF
+        QFVi1odDYLaoQITEqSPzWCBqBCVOznwCZnMKmEnMapnFCjFfXOLWk/lMELa8RPPW2cwgR0gI
+        /GeTODfhESvE1y4S3693skDYwhKvjm9hh7ClJD6/28sGYVdLrDx5hA2iuYNRYsv+C1DNxhL7
+        l05mAoUFs4CmxPpd+hBhRYmdv+cyQizmk3j3tYcVEly8Eh1tQhAlyhKXH9xlgrAlJRa3d7JN
+        YFSaheSdWUhemIXkhVkIyxYwsqxiFEstKM5NTy02LDBGju5NjODUqmW+g3HDOZ9DjAIcjEo8
+        vCf26MQKsSaWFVfmHmKU4GBWEuG1/aodK8SbklhZlVqUH19UmpNafIjRFBjaE5mlRJPzgWk/
+        ryTe0NTI2NjYwsTQzNTQUEmcd94fzVghgfTEktTs1NSC1CKYPiYOTqkGRq2TE+8UFE+z4ZU9
+        +eD09yUX506vnOa4/dDtNceckmtmBhy/EitoXWC268f1+UmhYrJqR9mqPCad/L8rcFKFjJTy
+        qSxzlvuOFx7VOfG/VH3g1Zs6j2HW077g7fe+rezPF8mbfyVjJUPhj2tpXUVCWflJ++0Evm6Z
+        uPxvwI2DNgkKbPN3mygdfqjEUpyRaKjFXFScCAAodT6jwwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsWy7bCSvO7RfbqxBr0r9SxWf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
+        zaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgy9my5x1LwjrNiw4S57A2MnRxdjBwcEgImEhfa
+        BLoYuTiEBHYzSsyaOZu5i5ETKC4pMe3iUWaIGmGJw4eLIWreMkr0PnnKAhIXFvCTmDfbHCQu
+        ItDEJLGp9wI7SC+zQKREz9wtbBANWxglTs5pAkuwCWhJ7H9xgw3E5hdQlLj64zEjiM0rYCcx
+        pfkVC4jNIqAqMevDITBbVCBCYtK1nSwQNYISJ2c+AbM5BcwkZrXMYoVYpi7xZ94lZghbXOLW
+        k/lMELa8RPPW2cwTGIVnIWmfhaRlFpKWWUhaFjCyrGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L
+        10vOz93ECI4wLa0djCdOxB9iFOBgVOLhPbFHJ1aINbGsuDL3EKMEB7OSCK/tV+1YId6UxMqq
+        1KL8+KLSnNTiQ4zSHCxK4rzy+ccihQTSE0tSs1NTC1KLYLJMHJxSDYwyKxmlVOaf8bT8UyT7
+        46bETCuNrwEbpPfMNAmMusgud/mAYqNO+IF647Vidl+65r8rXcYvFpHEsmrXdIaT5o7abWXl
+        QvNe/no113ue20uXIx4Bczq/M7alKNVX/1YWyrHrPztLQV22/B1nbETh9ltheay722JjHwmn
+        x+vc+fD97EmfJZOEjyqxFGckGmoxFxUnAgCU24rArAIAAA==
+X-CMS-MailID: 20190716121045epcas1p17794ccb550d3584b059b342b4fcb8494
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190707223639epcas4p392300747244905ec06f580394d579eb4
+References: <20190707223303.6755-1-digetx@gmail.com>
+        <CGME20190707223639epcas4p392300747244905ec06f580394d579eb4@epcas4p3.samsung.com>
+        <20190707223303.6755-10-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The power docs are orphaned at the documentation body.
+On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
+> Governor could be stopped while boosting is active. We have assumption
+> that everything is reset on governor's restart, including the boosting
+> value, which was missed.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/devfreq/tegra30-devfreq.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index d5d04c25023b..32fe95458ee7 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -536,6 +536,9 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
+>  {
+>  	u32 val = 0, target_freq;
+>  
+> +	/* we don't want boosting on restart */
 
-While it could likely be moved to be inside some guide, I'm opting to just
-adding it to the main index.rst, removing the :orphan: and adding the SPDX
-header.
+nitpick.
+I think that following comment is proper in my case.
+In my case, I think 'we' expression is not good
 
-The reason is similar to what it was done for other driver-specific
-subsystems: the docs there contain a mix of Kernelspace, uAPI and
-admin-guide. So, better to keep them on its own directory,
-while the docs there are not properly classified.
+	/* Reset the boost frequency on restart */
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
----
- Documentation/index.rst       | 1 +
- Documentation/power/index.rst | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+> +	dev->boost_freq = 0;
+> +
+>  	target_freq = clk_get_rate(tegra->emc_clock) / KHZ;
+>  	dev->avg_count = target_freq * ACTMON_SAMPLING_PERIOD;
+>  	device_writel(dev, dev->avg_count, ACTMON_DEV_INIT_AVG);
+> 
 
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index 3fe6170aa41d..68ae2a4d689d 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -111,6 +111,7 @@ needed).
-    netlabel/index
-    networking/index
-    pcmcia/index
-+   power/index
-    target/index
-    timers/index
-    watchdog/index
-diff --git a/Documentation/power/index.rst b/Documentation/power/index.rst
-index 20415f21e48a..002e42745263 100644
---- a/Documentation/power/index.rst
-+++ b/Documentation/power/index.rst
-@@ -1,4 +1,4 @@
--:orphan:
-+.. SPDX-License-Identifier: GPL-2.0
- 
- ================
- Power Management
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+
+
 -- 
-2.21.0
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
