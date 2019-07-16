@@ -2,232 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A566A894
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 14:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980BF6A8AC
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 14:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726997AbfGPMU7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 08:20:59 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:34793 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728137AbfGPMU7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 08:20:59 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190716122055epoutp036928e5ef12819c53c3dad9464362c9a1~x4pBdtwI00969109691epoutp03U
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 12:20:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190716122055epoutp036928e5ef12819c53c3dad9464362c9a1~x4pBdtwI00969109691epoutp03U
+        id S1732681AbfGPMZw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 08:25:52 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:59753 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726593AbfGPMZw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 08:25:52 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190716122550euoutp01c82c4bbad88e42d7557b997499b980b9~x4tUrhVgM3130231302euoutp01g
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 12:25:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190716122550euoutp01c82c4bbad88e42d7557b997499b980b9~x4tUrhVgM3130231302euoutp01g
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563279655;
-        bh=xsjneApn5zTmMogv/3sV730QisGaiz0RQiJTq4eeYAQ=;
+        s=mail20170921; t=1563279950;
+        bh=8dxkZGheuXcwqu+8751Obi1RgIchRJd6UNRg3xcUhVs=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=sNaPnPr5kkHo2nRrr/WnbIi8BB/MYeAVDcEfuvGjOh0TDXgRG1s3EqmrQ7EoIl4a1
-         Pe7EpzL92Z8Po2H27Yt19wmvQfyd16hlzEEezdGnMAD9OuyWQdAGW/cPQST37UhKwq
-         bwFgjWC0a6dfE5Urtk3HyLuBv+c2J1HIwOEOCHKA=
-Received: from epsnrtp6.localdomain (unknown [182.195.42.167]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20190716122054epcas1p340989156d883181482e28311e7bd2648~x4pBC3NEj1358913589epcas1p33;
-        Tue, 16 Jul 2019 12:20:54 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.152]) by
-        epsnrtp6.localdomain (Postfix) with ESMTP id 45nzyD57qgzMqYkW; Tue, 16 Jul
-        2019 12:20:52 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A5.EF.04160.421CD2D5; Tue, 16 Jul 2019 21:20:52 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190716122052epcas1p150bc214698d343bf2827e2c60be3b127~x4o_v8yVL0839208392epcas1p1P;
-        Tue, 16 Jul 2019 12:20:52 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190716122052epsmtrp2e8b34e1ee7ff523b716d9ac15d1b2857~x4o_vOOdG2555525555epsmtrp2g;
-        Tue, 16 Jul 2019 12:20:52 +0000 (GMT)
-X-AuditID: b6c32a38-b4bff70000001040-8a-5d2dc124a582
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        69.5E.03638.421CD2D5; Tue, 16 Jul 2019 21:20:52 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190716122052epsmtip2f4b33cee324dd065bcf06a02f8ad8c59~x4o_hfaLH2935229352epsmtip2W;
-        Tue, 16 Jul 2019 12:20:52 +0000 (GMT)
-Subject: Re: [PATCH v4 11/24] PM / devfreq: tegra30: Add debug messages
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        b=beB6fxJGOZp7/6yovKJephHOmkUOJiv5AmsjvY/Y3fHObUFK+nqsvNWG1UCXcujRA
+         /1Nse0QddKyDCEaxDasugN6YEuuW1m3hRWIX7BL+aVyhJLhb4RzI1CXZpwM29uU4+7
+         xM7ZZOj8nxTpIwb1RyIi5+bQaWj7csgnS3xQLPvA=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190716122550eucas1p21fd5c85a08af29b5815f294a48464b03~x4tUFrQ4I0472904729eucas1p2f;
+        Tue, 16 Jul 2019 12:25:50 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 3B.CE.04298.D42CD2D5; Tue, 16
+        Jul 2019 13:25:49 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190716122549eucas1p2c757e92ae6b02f02123f2510415372d8~x4tTbuNjs0470704707eucas1p2Y;
+        Tue, 16 Jul 2019 12:25:49 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190716122549eusmtrp1c5e8222906bc800df7be15a267224311~x4tTNtNcz1452614526eusmtrp1J;
+        Tue, 16 Jul 2019 12:25:49 +0000 (GMT)
+X-AuditID: cbfec7f2-3615e9c0000010ca-f6-5d2dc24d841c
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 21.64.04146.D42CD2D5; Tue, 16
+        Jul 2019 13:25:49 +0100 (BST)
+Received: from [106.120.51.71] (unknown [106.120.51.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190716122548eusmtip17c4b9af73f748791f459f12dc1abb5fe~x4tS2CZlL1043210432eusmtip1x;
+        Tue, 16 Jul 2019 12:25:48 +0000 (GMT)
+Subject: Re: [PATCH 02/10] video: sa1100fb: Remove cpufreq policy notifier
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <c883bdbe-427f-35a1-9e63-5e4953a84286@samsung.com>
-Date:   Tue, 16 Jul 2019 21:23:57 +0900
+From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Message-ID: <8b0f9adf-8462-eeba-afd1-52201f4e7f47@samsung.com>
+Date:   Tue, 16 Jul 2019 14:25:37 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.2
+        Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190707223303.6755-12-digetx@gmail.com>
+In-Reply-To: <7163e57cfa1780d42732fa6b5ec424c24d1d4dc8.1563270828.git.viresh.kumar@linaro.org>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SWUwTURTNa6fTohbHul0blzK4gSIMpTgodYkEq2JCYmJcgnUCIyBdhpli
-        XD5ki0CjBOVDrIoGl+BCQEADREQoApq44hZNE5OiESEliqi4oG0HIn/nnnvOu8u7CqmqBlcr
-        0i02lrcwJhKfgN1yhoSHzW8NS4oo/bOIvvbZjeh8RwVGP8ztl9PdTWdwevBYO6KLvjpw+m1O
-        JU4PN5VjdHHVM3xNgKHBdREZGh0uueFYngc3FNdfRYbB2rmJsh0ZsWksk8LyGtaSbE1Jt6Tq
-        yU1bjOuMuugIKoyKoZeTGgtjZvVkXEJiWHy6ydsQqdnHmLK8VCIjCGT4qljemmVjNWlWwaYn
-        WS7FxMVwywTGLGRZUpclW80rqIiISJ1XuDsjLedcrox7Tu53Frjk2ahsth0FKICIgq7+x3I7
-        mqBQEQ0IRt4XIDH4gqD1XfVo8A2B83uHZMxiL+tEPqwimhEMPNkviga89nsOv2gqsR5qSiol
-        vsQ0YgRB0XAe7ktIie3gbLzmF+FEKLR8fO3nJxNB8OKH2/+qklgF1b0v/DxGLIC2932YD08n
-        tsGD9nJM1EyB+6d6/DiAiIaqV8NS8f2Z8KbnnETE8yDv5mmprwkg/uLwtbMSE0eIg4f2IamI
-        p8Knznq5iNUw6GnGRXwIrtxvx0VzIYL6licyMaGFlkul3goKb4UQqG4KF+kgaPx1FomFA8Ez
-        dFTmkwChhMIjKlESDN3vXKNbnAUXCorwEkQ6xo3jGDeCY9wIjv/FziPsKprBcoI5lRUoLmr8
-        d9ci/7WG0g3o9qOENkQoEDlJ2XV7aZJKxuwTDpjbECik5DSlfmhJkkqZwhw4yPJWI59lYoU2
-        pPNu+7hUPT3Z6r19i81I6SK1Wi0dRUXrKIqcqSz/HZKkIlIZG5vBshzLj/kkigB1NprTsDT6
-        ZdHGu/EreZtrYXcZp175Q94a2yXj7rkP9S2+WJtbd6svcxfo11qcVaZWd0iZJKfm5OUO1Ift
-        /vm8d+eUw/PtV1a/7ahze4qv3/BwFflzRzZqgxNHzjZez+QCZ3zg91ZpHk8kVQV1tVhCc++N
-        R4vvGIeentiq3iCT9WzeQ2JCGkOFSnmB+Qf2dyInwwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsWy7bCSvK7KQd1Yg/27hC1Wf3zMaNEyaxGL
-        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
-        zaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgyGuc3sRZcUao43H6XvYFxhkwXIyeHhICJRNeM
-        44xdjFwcQgK7GSVunV/JDpGQlJh28ShzFyMHkC0scfhwMUTNW0aJhb07mEBqhAXcJTZMWMEE
-        khARaGKS2NR7AayZWSBSomfuFjaIji2MEh23b4Ml2AS0JPa/uMEGYvMLKEpc/fGYEcTmFbCT
-        WP/yKlicRUBV4tDT1ywgtqhAhMSkaztZIGoEJU7OfAJmcwqYSay9/pMZYpm6xJ95l6BscYlb
-        T+YzQdjyEs1bZzNPYBSehaR9FpKWWUhaZiFpWcDIsopRMrWgODc9t9iwwCgvtVyvODG3uDQv
-        XS85P3cTIzjKtLR2MJ44EX+IUYCDUYmH98QenVgh1sSy4srcQ4wSHMxKIry2X7VjhXhTEiur
-        Uovy44tKc1KLDzFKc7AoifPK5x+LFBJITyxJzU5NLUgtgskycXBKNTD26K1W6MxVb/2zqnfm
-        hKKnZhM7E3l9E4O49OfWcL6byra0T5PbROXivgiBts3zDFk4e42vXF970um8hZm3Z9t3sc27
-        t7IfnXBY5oXku1vtD7uvTd5yrftm37mmyztVxTnXe7TOv+U66+R/PuUt8d99TBLEd37PTi3V
-        eFU0LaXbqudU1wvpiWZKLMUZiYZazEXFiQDypbyjrgIAAA==
-X-CMS-MailID: 20190716122052epcas1p150bc214698d343bf2827e2c60be3b127
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKKsWRmVeSWpSXmKPExsWy7djPc7q+h3RjDU68sbS48vU9m8WJvg+s
+        Fpd3zWGz+Nx7hNHizOlLrBYdR74xW2z86uHA7nHn2h42j/vdx5k8tlxtZ/H4vEkugCWKyyYl
+        NSezLLVI3y6BK2PxlnksBQtZK5ZtXMPUwLiCpYuRk0NCwETiUNMspi5GLg4hgRWMEkeutTJD
+        OF8YJV5tuscG4XxmlLi18ToTTMvsG4/ZIRLLGSWa75+D6n/LKDHp/RWwKmEBL4ne/0tZuxg5
+        OEQEtCRe3kwFCTMLnGOUOHvTF8RmE7CSmNi+ihHE5hWwk3h7Zy/YTSwCqhIrtjcxg9iiAhES
+        949tYIWoEZQ4OfMJWA2nQJzEpA2X2SFmikvcejKfCcKWl9j+dg7YCxICm9gl/s/bwwhxtYvE
+        24WroZ4Wlnh1fAs7hC0jcXpyDwtEwzpGib8dL6C6tzNKLJ/8jw2iylri8PGLYN8wC2hKrN+l
+        DxF2lNh34BcLSFhCgE/ixltBiCP4JCZtm84MEeaV6GgTgqhWk9iwbAMbzNqunSuZJzAqzULy
+        2iwk78xC8s4shL0LGFlWMYqnlhbnpqcWG+allusVJ+YWl+al6yXn525iBCae0/+Of9rB+PVS
+        0iFGAQ5GJR7eE3t0YoVYE8uKK3MPMUpwMCuJ8Np+1Y4V4k1JrKxKLcqPLyrNSS0+xCjNwaIk
+        zlvN8CBaSCA9sSQ1OzW1ILUIJsvEwSnVwBjsO7lt3Ru7+7qPG5ddXVPqlnK4sHbb5kvnnp5L
+        DlU9bVmxqMZC+Hey6s0N3/90T3gnwG9cvmS5KUcut0PaY5sDk+W/vk1sLTOVS0v5KCe91E1/
+        6wFH2x8Rydc6RLo6hVfvc9zrZV1wzFeN5dGpfW8L/JWK//drbD7wre6Eqrdym/9q6SuPKpRY
+        ijMSDbWYi4oTAR1DDzw4AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOIsWRmVeSWpSXmKPExsVy+t/xu7q+h3RjDW485bG48vU9m8WJvg+s
+        Fpd3zWGz+Nx7hNHizOlLrBYdR74xW2z86uHA7nHn2h42j/vdx5k8tlxtZ/H4vEkugCVKz6Yo
+        v7QkVSEjv7jEVina0MJIz9DSQs/IxFLP0Ng81srIVEnfziYlNSezLLVI3y5BL2PxlnksBQtZ
+        K5ZtXMPUwLiCpYuRk0NCwERi9o3H7F2MXBxCAksZJa5fXcDWxcgBlJCROL6+DKJGWOLPtS42
+        iJrXjBJ/3rSwgySEBbwkev8vZQWpFxHQknh5MxWkhlngAqPErA9tjBANfYwSF1ZNYANpYBOw
+        kpjYvooRxOYVsJN4e2cv2BUsAqoSK7Y3MYPYogIREmfeQ1zHKyAocXLmEzCbUyBOYtKGy2CL
+        mQXUJf7Mu8QMYYtL3HoynwnClpfY/nYO8wRGoVlI2mchaZmFpGUWkpYFjCyrGEVSS4tz03OL
+        DfWKE3OLS/PS9ZLzczcxAiNt27Gfm3cwXtoYfIhRgINRiYf3xB6dWCHWxLLiytxDjBIczEoi
+        vLZftWOFeFMSK6tSi/Lji0pzUosPMZoCPTeRWUo0OR+YBPJK4g1NDc0tLA3Njc2NzSyUxHk7
+        BA7GCAmkJ5akZqemFqQWwfQxcXBKNTCqzNz0hG+/lJbwg+wHh5Mq+/iEZ3HoF+Vu5+WsWPcj
+        cYXFbYeJBhz+LHkN63PymnyDKrnuahzTlL/4qT3HPkDrVm937e+qC6bp28/ZTomxabnyoad3
+        2q6fZ70dvKed2PRu6+sf1l/5a3492J3+SpB/SWim/UmLhVdOs7memmTJ/WoKp8XTLzpKLMUZ
+        iYZazEXFiQD3EvhWygIAAA==
+X-CMS-MailID: 20190716122549eucas1p2c757e92ae6b02f02123f2510415372d8
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190707223640epcas4p15337f40466342832b731ad6a53be946e
-References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223640epcas4p15337f40466342832b731ad6a53be946e@epcas4p1.samsung.com>
-        <20190707223303.6755-12-digetx@gmail.com>
+X-RootMTR: 20190716122549eucas1p2c757e92ae6b02f02123f2510415372d8
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190716122549eucas1p2c757e92ae6b02f02123f2510415372d8
+References: <cover.1563270828.git.viresh.kumar@linaro.org>
+        <7163e57cfa1780d42732fa6b5ec424c24d1d4dc8.1563270828.git.viresh.kumar@linaro.org>
+        <CGME20190716122549eucas1p2c757e92ae6b02f02123f2510415372d8@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
 
-Usually, the kernel log print for all users
-such as changing the frequency, fail or success.
+Hi Viresh,
 
-But, if the log just show the register dump,
-it is not useful for all users. It is just used
-for only specific developer.
+Please always Cc: me on fbdev patches.
 
-I recommend that you better to add more exception handling
-code on many points instead of just showing the register dump.
-
-On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
-> Add debug messages to know about what's happening in hardware and how
-> driver reacts.
+On 7/16/19 11:54 AM, Viresh Kumar wrote:
+> The cpufreq policy notifier's CPUFREQ_ADJUST notification is going to
+> get removed soon.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/devfreq/tegra30-devfreq.c | 35 +++++++++++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
+> The notifier callback sa1100fb_freq_policy() isn't doing anything apart
+> from printing a debug message on CPUFREQ_ADJUST notification. There is
+> no point in keeping an otherwise empty callback and registering the
+> notifier.
 > 
-> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 878c9396bb8c..c6c4a07d3e07 100644
-> --- a/drivers/devfreq/tegra30-devfreq.c
-> +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -41,6 +41,7 @@
->  #define ACTMON_DEV_AVG_UPPER_WMARK				0x10
->  #define ACTMON_DEV_AVG_LOWER_WMARK				0x14
->  #define ACTMON_DEV_COUNT_WEIGHT					0x18
-> +#define ACTMON_DEV_COUNT					0x1c
->  #define ACTMON_DEV_AVG_COUNT					0x20
->  #define ACTMON_DEV_INTR_STATUS					0x24
->  
-> @@ -276,6 +277,9 @@ static void tegra_actmon_get_lower_upper(struct tegra_devfreq *tegra,
->  					 unsigned long *lower,
->  					 unsigned long *upper)
->  {
-> +	struct device *ddev = tegra->devfreq->dev.parent;
-> +	u32 offset = dev->config->offset;
-> +
->  	/*
->  	 * Memory frequencies are guaranteed to have 1MHz granularity
->  	 * and thus we need this rounding down to get a proper watermarks
-> @@ -288,6 +292,9 @@ static void tegra_actmon_get_lower_upper(struct tegra_devfreq *tegra,
->  	*lower = tegra_actmon_lower_freq(tegra, target_freq);
->  	*upper = tegra_actmon_upper_freq(tegra, target_freq);
->  
-> +	dev_dbg(ddev, "%03x: target_freq %lu lower freq %lu upper freq %lu\n",
-> +		offset, target_freq, *lower, *upper);
-> +
->  	*lower /= KHZ;
->  	*upper /= KHZ;
->  
-> @@ -367,11 +374,31 @@ static void tegra_devfreq_update_wmark(struct tegra_devfreq *tegra,
->  	device_writel(dev, lower + delta, ACTMON_DEV_LOWER_WMARK);
->  }
->  
-> +static void actmon_device_debug(struct tegra_devfreq *tegra,
-> +				struct tegra_devfreq_device *dev,
-> +				const char *prefix)
-> +{
-> +	dev_dbg(tegra->devfreq->dev.parent,
-> +		"%03x: %s: 0x%08x 0x%08x a %u %u %u c %u %u %u b %lu cpu %u\n",
-> +		dev->config->offset, prefix,
-> +		device_readl(dev, ACTMON_DEV_INTR_STATUS),
-> +		device_readl(dev, ACTMON_DEV_CTRL),
-> +		device_readl(dev, ACTMON_DEV_AVG_COUNT),
-> +		device_readl(dev, ACTMON_DEV_AVG_LOWER_WMARK),
-> +		device_readl(dev, ACTMON_DEV_AVG_UPPER_WMARK),
-> +		device_readl(dev, ACTMON_DEV_COUNT),
-> +		device_readl(dev, ACTMON_DEV_LOWER_WMARK),
-> +		device_readl(dev, ACTMON_DEV_UPPER_WMARK),
-> +		dev->boost_freq, cpufreq_get(0));
-> +}
-> +
->  static void actmon_isr_device(struct tegra_devfreq *tegra,
->  			      struct tegra_devfreq_device *dev)
->  {
->  	u32 intr_status, dev_ctrl, avg_intr_mask;
->  
-> +	actmon_device_debug(tegra, dev, "isr+");
-> +
->  	dev->avg_count = device_readl(dev, ACTMON_DEV_AVG_COUNT);
->  	intr_status = device_readl(dev, ACTMON_DEV_INTR_STATUS);
->  	dev_ctrl = device_readl(dev, ACTMON_DEV_CTRL);
-> @@ -422,6 +449,8 @@ static void actmon_isr_device(struct tegra_devfreq *tegra,
->  
->  	device_writel(dev, dev_ctrl, ACTMON_DEV_CTRL);
->  	device_writel(dev, ACTMON_INTR_STATUS_CLEAR, ACTMON_DEV_INTR_STATUS);
-> +
-> +	actmon_device_debug(tegra, dev, "isr-");
->  }
->  
->  static unsigned long actmon_update_target(struct tegra_devfreq *tegra,
-> @@ -712,6 +741,7 @@ static struct devfreq_dev_profile tegra_devfreq_profile = {
->  static int tegra_governor_get_target(struct devfreq *devfreq,
->  				     unsigned long *freq)
->  {
-> +	struct device *ddev = devfreq->dev.parent;
->  	struct devfreq_dev_status *stat;
->  	struct tegra_devfreq *tegra;
->  	struct tegra_devfreq_device *dev;
-> @@ -734,6 +764,11 @@ static int tegra_governor_get_target(struct devfreq *devfreq,
->  		dev_target_freq = actmon_update_target(tegra, dev);
->  
->  		target_freq = max(target_freq, dev_target_freq);
-> +
-> +		dev_dbg(ddev, "%03x: upd: dev_target_freq %lu\n",
-> +			dev->config->offset, dev_target_freq);
-> +
-> +		actmon_device_debug(tegra, dev, "upd");
->  	}
->  
->  	*freq = target_freq * KHZ;
+> Remove it.
 > 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
--- 
-Best Regards,
-Chanwoo Choi
+Acked-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+
+Best regards,
+--
+Bartlomiej Zolnierkiewicz
+Samsung R&D Institute Poland
 Samsung Electronics
