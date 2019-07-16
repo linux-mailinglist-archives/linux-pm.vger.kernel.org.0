@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D92C6A43E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 10:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CAD6A463
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 10:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731691AbfGPIvR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 04:51:17 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:37992 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731510AbfGPIvQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 04:51:16 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190716085114epoutp01cd3bc6cf64362a7552e2a63c76d3f1a1~x1x8PfQis2980629806epoutp013
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 08:51:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190716085114epoutp01cd3bc6cf64362a7552e2a63c76d3f1a1~x1x8PfQis2980629806epoutp013
+        id S1731042AbfGPI57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 04:57:59 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:17882 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731015AbfGPI56 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 04:57:58 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190716085752epoutp02802b47446d1d17feafc205f38450b846~x13vrynSF3168831688epoutp02E
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 08:57:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190716085752epoutp02802b47446d1d17feafc205f38450b846~x13vrynSF3168831688epoutp02E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563267074;
-        bh=ACmg7AjJRbmv8mGq5gKa0bJFXDdGLqITjtTawvIlASk=;
+        s=mail20170921; t=1563267472;
+        bh=ap2pf5V1vr4DTOHde6WNETh7BisYzaT8r+hM4Fugw+o=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=GCZq5KFIPo4mvLcEvanLtpAMSJvbHRzu71cmhopmN7nTdJ4PofBtMcknOsoauPPTo
-         LkhzYjkevzg3gVYcmrYM91FNpWVnMLNYojp6fWIYaj8xgJJorbnAmRr7sv+HzsdD7v
-         SZE8aqqkXT+JN6SeEpF6OrmBOJoMlnYIhUSSnIlA=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190716085113epcas1p212a4f08e0086b5c591090dd472431915~x1x7i9__D1067710677epcas1p26;
-        Tue, 16 Jul 2019 08:51:13 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 45nvJF6VyjzMqYlp; Tue, 16 Jul
-        2019 08:51:09 +0000 (GMT)
+        b=J6QUxYXyw0t3X/8JwsIPi/kuXC2A6Ie6EF2B13WdBIv4V62nPcM6RsI0CBriaBz7+
+         MR+/AOWE2UWW5qI/IyvKjy6Q2Ztip4fDzu1Zu3tdjlDw18gmFmPz3r3LpmwEFoRifw
+         OX6kP8tyitbFLbYiet9LHwwlxTYRU8IkBSqih+6c=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190716085752epcas1p31661fc26c4cef44ea8904a40e2a9dbe1~x13u_4gyG2399723997epcas1p3J;
+        Tue, 16 Jul 2019 08:57:52 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 45nvRx1HbfzMqYkV; Tue, 16 Jul
+        2019 08:57:49 +0000 (GMT)
 Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        44.7C.04075.BFF8D2D5; Tue, 16 Jul 2019 17:51:07 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        51.B0.04160.D819D2D5; Tue, 16 Jul 2019 17:57:49 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20190716085106epcas1p4e767ed3858ed9cb3fa631460a2cdd7f5~x1x1evSBQ3230832308epcas1p4Q;
-        Tue, 16 Jul 2019 08:51:06 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190716085106epsmtrp2c953c1719788d049c8c59073b2b2ad00~x1x1dwKIU0187301873epsmtrp2i;
-        Tue, 16 Jul 2019 08:51:06 +0000 (GMT)
-X-AuditID: b6c32a36-b61ff70000000feb-96-5d2d8ffb8d9f
+        20190716085748epcas1p4ff623772e49a927d436a7affa386b2c0~x13rTksht2270122701epcas1p4b;
+        Tue, 16 Jul 2019 08:57:48 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190716085748epsmtrp1f295ca55d07d98a0ecf7bf5ddba0d09b~x13rSpz5f1598415984epsmtrp1-;
+        Tue, 16 Jul 2019 08:57:48 +0000 (GMT)
+X-AuditID: b6c32a38-b33ff70000001040-4e-5d2d918d3e7a
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        02.A3.03638.AFF8D2D5; Tue, 16 Jul 2019 17:51:06 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        90.F3.03706.C819D2D5; Tue, 16 Jul 2019 17:57:48 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190716085106epsmtip1074ab7b2b284a61a7b4ff2438f449579~x1x1BTOw-2378423784epsmtip1-;
-        Tue, 16 Jul 2019 08:51:06 +0000 (GMT)
-Subject: Re: [PATCH v2 4/4] dt-bindings: devfreq: exynos-bus: remove unused
- property
+        20190716085747epsmtip179823a39f035606534e5f3518f4534de~x13q2bpNW2273322733epsmtip1O;
+        Tue, 16 Jul 2019 08:57:47 +0000 (GMT)
+Subject: Re: [PATCH v2 3/4] ARM: dts: exynos: add initial data for coupled
+ regulators for Exynos5422/5800
 To:     Kamil Konieczny <k.konieczny@partner.samsung.com>
 Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -65,55 +65,55 @@ Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <dd74212e-a422-13ab-8237-fcaf372ab3eb@samsung.com>
-Date:   Tue, 16 Jul 2019 17:54:12 +0900
+Message-ID: <27db3883-2d84-3585-6122-e861576ffadb@samsung.com>
+Date:   Tue, 16 Jul 2019 18:00:54 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190715120416.3561-5-k.konieczny@partner.samsung.com>
+In-Reply-To: <20190715120416.3561-4-k.konieczny@partner.samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAJsWRmVeSWpSXmKPExsWy7bCmnu7vft1Yg4uXRCw2zljPajH/yDlW
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIJsWRmVeSWpSXmKPExsWy7bCmnm7vRN1YgztL2C02zljPajH/yDlW
         i759/xkt+h+/ZrY4f34Du8XZpjfsFpseX2O1uLxrDpvF594jjBYzzu9jslh75C67xdLrF5ks
         bjeuYLN48+Msk0Xr3iPsFv+ubWSx2PzgGJuDoMeaeWsYPTat6mTz2Lyk3uPguz1MHn1bVjF6
         HL+xncnj8ya5APaobJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUX
         nwBdt8wcoA+UFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQWWBXrFibnFpXnpesn5
-        uVaGBgZGpkCFCdkZz/r3Mxe856yY1bqAqYFxOUcXIyeHhICJxLrZC5i7GLk4hAR2MEp09k9h
-        hHA+ATmrz7FBON8YJeb+eMMG03Jl/zx2iMReRok3S48xgiSEBN4zSrRfKQSxhQXCJG7OPswO
-        YosImEo8Wt3ACtLALHCZRWLao0msIAk2AS2J/S9ugE3lF1CUuPrjMdggXgE7if2bngIdxcHB
-        IqAq8e9DIEhYVCBC4tSReSwQJYISJ2c+AbM5BVwkfndfBRvJLCAucevJfCYIW16ieetssN8k
-        BE6xS3xe2QH1gYvEql9/mSBsYYlXx7ewQ9hSEp/f7YWqqZZYefIIG0RzB6PElv0XWCESxhL7
-        l05mAjmOWUBTYv0ufYiwosTO33MZIRbzSbz72sMKUiIhwCvR0SYEUaIscfnBXai1khKL2zvZ
-        JjAqzULyziwkL8xC8sIshGULGFlWMYqlFhTnpqcWGxYYIcf2JkZw6tYy28G46JzPIUYBDkYl
-        Hl6F/TqxQqyJZcWVuYcYJTiYlUR4bb9qxwrxpiRWVqUW5ccXleakFh9iNAUG9kRmKdHkfGBe
-        ySuJNzQ1MjY2tjAxNDM1NFQS5533RzNWSCA9sSQ1OzW1ILUIpo+Jg1OqgXGXb9C7ZZ6GfFnB
-        5u0sYcY9F8seia2NzvUxWRP3Jt5KPac5fd2x3zGHG91Dt99umLF3Qen/p0cOXnJz8nTjYrUS
-        bzvy/LqpRlLJhYlRmyUNp7PtizzwYiuTVvGFd0LtU3v2J19m77rQa+Kxqs+goeTNLIfcpFmG
-        CxZkh68+Uf4mvjtO9tDWbCWW4oxEQy3mouJEAOWvWCDzAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNIsWRmVeSWpSXmKPExsWy7bCSnO6vft1Yg+3vNSw2zljPajH/yDlW
-        i759/xkt+h+/ZrY4f34Du8XZpjfsFpseX2O1uLxrDpvF594jjBYzzu9jslh75C67xdLrF5ks
-        bjeuYLN48+Msk0Xr3iPsFv+ubWSx2PzgGJuDoMeaeWsYPTat6mTz2Lyk3uPguz1MHn1bVjF6
-        HL+xncnj8ya5APYoLpuU1JzMstQifbsEroxn/fuZC95zVsxqXcDUwLico4uRk0NCwETiyv55
-        7F2MXBxCArsZJf4/n8AKkZCUmHbxKHMXIweQLSxx+HAxRM1bRolJOxezg9QIC4RJ3Jx9GMwW
-        ETCVeLS6gRWkiFngKovE+Y1z2CA6LjJK7Dp0Emwqm4CWxP4XN9hAbH4BRYmrPx4zgti8AnYS
-        +zc9BdvGIqAq8e9DIEhYVCBCYtK1nSwQJYISJ2c+AbM5BVwkfndfBRvJLKAu8WfeJWYIW1zi
-        1pP5TBC2vETz1tnMExiFZyFpn4WkZRaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7N
-        S9dLzs/dxAiOYi2tHYwnTsQfYhTgYFTi4T2xRydWiDWxrLgy9xCjBAezkgiv7VftWCHelMTK
-        qtSi/Pii0pzU4kOM0hwsSuK88vnHIoUE0hNLUrNTUwtSi2CyTBycUg2MUnc55mkrTz69/eq/
-        uZ9k+9/OY3SYdOeYhJzpc4ZtRf9/zi/x/qvjvevH66BvTXxTZPXXHHLa87WI2ZLj+WPRbV+Z
-        rtax3j1WLx/LbdHkyLYg+3roRsfmSpGCdQz/MoxD/e7OPM35K6bKIkNnMqNpi+hx/mrvA4IJ
-        GiaR9pt2/+E4zta7QDdWiaU4I9FQi7moOBEAUbNLAd4CAAA=
-X-CMS-MailID: 20190716085106epcas1p4e767ed3858ed9cb3fa631460a2cdd7f5
+        uVaGBgZGpkCFCdkZ109uZys46FDRtfcxewPjSYMuRk4OCQETiV3bFrJ0MXJxCAnsYJT4fmIX
+        O0hCSOATo8S/L7EQiW+MEgu/tbDDdNzt/sYIkdjLKNGx9BMbhPOeUWLt5T1gVcIC2RKrFp9l
+        BrFFBEwlHq1uYAUpYha4zCIx7dEkVpAEm4CWxP4XN9hAbH4BRYmrPx4zgti8AnYSV65MBLNZ
+        BFQlOm88B7NFBSIkTh2ZxwJRIyhxcuYTMJtTwEVi3a9OsBpmAXGJW0/mM0HY8hLNW2czgyyW
+        EDjFLvFr9SdGiB9cJOY9W8wKYQtLvDq+Beo3KYmX/W1QdrXEypNH2CCaOxgltuy/ANVgLLF/
+        6WSgDRxAGzQl1u/ShwgrSuz8PRfqCD6Jd197WEFKJAR4JTrahCBKlCUuP7jLBGFLSixu72Sb
+        wKg0C8k7s5C8MAvJC7MQli1gZFnFKJZaUJybnlpsWGCCHN2bGMHJW8tiB+Oecz6HGAU4GJV4
+        eE/s0YkVYk0sK67MPcQowcGsJMJr+1U7Vog3JbGyKrUoP76oNCe1+BCjKTC0JzJLiSbnAzNL
+        Xkm8oamRsbGxhYmhmamhoZI477w/mrFCAumJJanZqakFqUUwfUwcnFINjBsdNCd4Ov2NS377
+        qGBq5RSOFf3sG3u+7ret03iSMZV3N2PFZUnmeRYXj3ZsNvoifXH9/iMXCg9cu7yg0vTmSoMb
+        lqpzV7yao7bzw8O0woN6H+rPR4fqCuTubT+j+FEs7lbE9OUSk17aMD6d/6VI48FfqRWhIWq/
+        Sy5LrT64PM4/YmHVEemnGzuUWIozEg21mIuKEwHAb0Fz9AMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsWy7bCSnG7PRN1Yg+a/rBYbZ6xntZh/5Byr
+        Rd++/4wW/Y9fM1ucP7+B3eJs0xt2i02Pr7FaXN41h83ic+8RRosZ5/cxWaw9cpfdYun1i0wW
+        txtXsFm8+XGWyaJ17xF2i3/XNrJYbH5wjM1B0GPNvDWMHptWdbJ5bF5S73Hw3R4mj74tqxg9
+        jt/YzuTxeZNcAHsUl01Kak5mWWqRvl0CV8b1k9vZCg46VHTtfczewHjSoIuRk0NCwETibvc3
+        xi5GLg4hgd2MEic/P2OCSEhKTLt4lLmLkQPIFpY4fLgYouYto8SDcwcZQWqEBbIlVi0+ywxi
+        iwiYSjxa3cAKUsQscJVF4vzGOWwQHRcZJd4/3MUKUsUmoCWx/8UNNhCbX0BR4uqPx2CTeAXs
+        JK5cmQhmswioSnTeeA5miwpESEy6tpMFokZQ4uTMJ2A2p4CLxLpfnWA1zALqEn/mXWKGsMUl
+        bj2ZzwRhy0s0b53NPIFReBaS9llIWmYhaZmFpGUBI8sqRsnUguLc9NxiwwLDvNRyveLE3OLS
+        vHS95PzcTYzgONbS3MF4eUn8IUYBDkYlHt4Te3RihVgTy4orcw8xSnAwK4nw2n7VjhXiTUms
+        rEotyo8vKs1JLT7EKM3BoiTO+zTvWKSQQHpiSWp2ampBahFMlomDU6qB0Wt53855czdz5qi8
+        vHZeUcYuWWlb0BlbbubaBo9z7x9cNHw9SWa+l+WEApMahpczOt3VUuZ179Vur3635o3DlRUp
+        7NFe+Ypnim+YLwk9Hr8rU4V5V/ybsODWN/cY++byzSxZxBLCazi98tIK9XI3TisT9t/Lu3UW
+        XND02PTufXuxjQrPOv5PSizFGYmGWsxFxYkACkU6Nt8CAAA=
+X-CMS-MailID: 20190716085748epcas1p4ff623772e49a927d436a7affa386b2c0
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190715120433eucas1p26681c5c2d87423253b651d88446c538c
+X-CMS-RootMailID: 20190715120432eucas1p1b32d72d239420b861bf8596d4e8a053d
 References: <20190715120416.3561-1-k.konieczny@partner.samsung.com>
-        <CGME20190715120433eucas1p26681c5c2d87423253b651d88446c538c@eucas1p2.samsung.com>
-        <20190715120416.3561-5-k.konieczny@partner.samsung.com>
+        <CGME20190715120432eucas1p1b32d72d239420b861bf8596d4e8a053d@eucas1p1.samsung.com>
+        <20190715120416.3561-4-k.konieczny@partner.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -122,29 +122,258 @@ X-Mailing-List: linux-pm@vger.kernel.org
 Hi,
 
 On 19. 7. 15. 오후 9:04, Kamil Konieczny wrote:
-> Remove unused DT property "exynos,voltage-tolerance".
+> Declare Exynos5422/5800 voltage ranges for opp points for big cpu core and
+> bus wcore and couple their voltage supllies as vdd_arm and vdd_int should
+> be in 300mV range.
 > 
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
 > ---
->  Documentation/devicetree/bindings/devfreq/exynos-bus.txt | 2 --
->  1 file changed, 2 deletions(-)
+>  arch/arm/boot/dts/exynos5420.dtsi             | 34 +++++++++----------
+>  arch/arm/boot/dts/exynos5422-odroid-core.dtsi |  4 +++
+>  arch/arm/boot/dts/exynos5800-peach-pi.dts     |  4 +++
+>  arch/arm/boot/dts/exynos5800.dtsi             | 32 ++++++++---------
+>  4 files changed, 41 insertions(+), 33 deletions(-)
+
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+
 > 
-> diff --git a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-> index f8e946471a58..e71f752cc18f 100644
-> --- a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-> +++ b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-> @@ -50,8 +50,6 @@ Required properties only for passive bus device:
->  Optional properties only for parent bus device:
->  - exynos,saturation-ratio: the percentage value which is used to calibrate
->  			the performance count against total cycle count.
-> -- exynos,voltage-tolerance: the percentage value for bus voltage tolerance
-> -			which is used to calculate the max voltage.
+> diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
+> index 5fb2326875dc..0cbf74750553 100644
+> --- a/arch/arm/boot/dts/exynos5420.dtsi
+> +++ b/arch/arm/boot/dts/exynos5420.dtsi
+> @@ -48,62 +48,62 @@
+>  			opp-shared;
+>  			opp-1800000000 {
+>  				opp-hz = /bits/ 64 <1800000000>;
+> -				opp-microvolt = <1250000>;
+> +				opp-microvolt = <1250000 1250000 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-1700000000 {
+>  				opp-hz = /bits/ 64 <1700000000>;
+> -				opp-microvolt = <1212500>;
+> +				opp-microvolt = <1212500 1212500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-1600000000 {
+>  				opp-hz = /bits/ 64 <1600000000>;
+> -				opp-microvolt = <1175000>;
+> +				opp-microvolt = <1175000 1175000 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-1500000000 {
+>  				opp-hz = /bits/ 64 <1500000000>;
+> -				opp-microvolt = <1137500>;
+> +				opp-microvolt = <1137500 1137500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-1400000000 {
+>  				opp-hz = /bits/ 64 <1400000000>;
+> -				opp-microvolt = <1112500>;
+> +				opp-microvolt = <1112500 1112500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-1300000000 {
+>  				opp-hz = /bits/ 64 <1300000000>;
+> -				opp-microvolt = <1062500>;
+> +				opp-microvolt = <1062500 1062500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-1200000000 {
+>  				opp-hz = /bits/ 64 <1200000000>;
+> -				opp-microvolt = <1037500>;
+> +				opp-microvolt = <1037500 1037500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-1100000000 {
+>  				opp-hz = /bits/ 64 <1100000000>;
+> -				opp-microvolt = <1012500>;
+> +				opp-microvolt = <1012500 1012500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-1000000000 {
+>  				opp-hz = /bits/ 64 <1000000000>;
+> -				opp-microvolt = < 987500>;
+> +				opp-microvolt = < 987500 987500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-900000000 {
+>  				opp-hz = /bits/ 64 <900000000>;
+> -				opp-microvolt = < 962500>;
+> +				opp-microvolt = < 962500 962500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-800000000 {
+>  				opp-hz = /bits/ 64 <800000000>;
+> -				opp-microvolt = < 937500>;
+> +				opp-microvolt = < 937500 937500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  			opp-700000000 {
+>  				opp-hz = /bits/ 64 <700000000>;
+> -				opp-microvolt = < 912500>;
+> +				opp-microvolt = < 912500 912500 1500000>;
+>  				clock-latency-ns = <140000>;
+>  			};
+>  		};
+> @@ -1100,23 +1100,23 @@
 >  
->  Detailed correlation between sub-blocks and power line according to Exynos SoC:
->  - In case of Exynos3250, there are two power line as following:
+>  			opp00 {
+>  				opp-hz = /bits/ 64 <84000000>;
+> -				opp-microvolt = <925000>;
+> +				opp-microvolt = <925000 925000 1400000>;
+>  			};
+>  			opp01 {
+>  				opp-hz = /bits/ 64 <111000000>;
+> -				opp-microvolt = <950000>;
+> +				opp-microvolt = <950000 950000 1400000>;
+>  			};
+>  			opp02 {
+>  				opp-hz = /bits/ 64 <222000000>;
+> -				opp-microvolt = <950000>;
+> +				opp-microvolt = <950000 950000 1400000>;
+>  			};
+>  			opp03 {
+>  				opp-hz = /bits/ 64 <333000000>;
+> -				opp-microvolt = <950000>;
+> +				opp-microvolt = <950000 950000 1400000>;
+>  			};
+>  			opp04 {
+>  				opp-hz = /bits/ 64 <400000000>;
+> -				opp-microvolt = <987500>;
+> +				opp-microvolt = <987500 987500 1400000>;
+>  			};
+>  		};
+>  
+> diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> index 25d95de15c9b..65d094256b54 100644
+> --- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> +++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+> @@ -428,6 +428,8 @@
+>  				regulator-max-microvolt = <1500000>;
+>  				regulator-always-on;
+>  				regulator-boot-on;
+> +				regulator-coupled-with = <&buck3_reg>;
+> +				regulator-coupled-max-spread = <300000>;
+>  			};
+>  
+>  			buck3_reg: BUCK3 {
+> @@ -436,6 +438,8 @@
+>  				regulator-max-microvolt = <1400000>;
+>  				regulator-always-on;
+>  				regulator-boot-on;
+> +				regulator-coupled-with = <&buck2_reg>;
+> +				regulator-coupled-max-spread = <300000>;
+>  			};
+>  
+>  			buck4_reg: BUCK4 {
+> diff --git a/arch/arm/boot/dts/exynos5800-peach-pi.dts b/arch/arm/boot/dts/exynos5800-peach-pi.dts
+> index e0f470fe54c8..5c1e965ed7e9 100644
+> --- a/arch/arm/boot/dts/exynos5800-peach-pi.dts
+> +++ b/arch/arm/boot/dts/exynos5800-peach-pi.dts
+> @@ -257,6 +257,8 @@
+>  				regulator-always-on;
+>  				regulator-boot-on;
+>  				regulator-ramp-delay = <12500>;
+> +				regulator-coupled-with = <&buck3_reg>;
+> +				regulator-coupled-max-spread = <300000>;
+>  				regulator-state-mem {
+>  					regulator-off-in-suspend;
+>  				};
+> @@ -269,6 +271,8 @@
+>  				regulator-always-on;
+>  				regulator-boot-on;
+>  				regulator-ramp-delay = <12500>;
+> +				regulator-coupled-with = <&buck2_reg>;
+> +				regulator-coupled-max-spread = <300000>;
+>  				regulator-state-mem {
+>  					regulator-off-in-suspend;
+>  				};
+> diff --git a/arch/arm/boot/dts/exynos5800.dtsi b/arch/arm/boot/dts/exynos5800.dtsi
+> index 57d3b319fd65..2a74735d161c 100644
+> --- a/arch/arm/boot/dts/exynos5800.dtsi
+> +++ b/arch/arm/boot/dts/exynos5800.dtsi
+> @@ -22,61 +22,61 @@
+>  
+>  &cluster_a15_opp_table {
+>  	opp-1700000000 {
+> -		opp-microvolt = <1250000>;
+> +		opp-microvolt = <1250000 1250000 1500000>;
+>  	};
+>  	opp-1600000000 {
+> -		opp-microvolt = <1250000>;
+> +		opp-microvolt = <1250000 1250000 1500000>;
+>  	};
+>  	opp-1500000000 {
+> -		opp-microvolt = <1100000>;
+> +		opp-microvolt = <1100000 1100000 1500000>;
+>  	};
+>  	opp-1400000000 {
+> -		opp-microvolt = <1100000>;
+> +		opp-microvolt = <1100000 1100000 1500000>;
+>  	};
+>  	opp-1300000000 {
+> -		opp-microvolt = <1100000>;
+> +		opp-microvolt = <1100000 1100000 1500000>;
+>  	};
+>  	opp-1200000000 {
+> -		opp-microvolt = <1000000>;
+> +		opp-microvolt = <1000000 1000000 1500000>;
+>  	};
+>  	opp-1100000000 {
+> -		opp-microvolt = <1000000>;
+> +		opp-microvolt = <1000000 1000000 1500000>;
+>  	};
+>  	opp-1000000000 {
+> -		opp-microvolt = <1000000>;
+> +		opp-microvolt = <1000000 1000000 1500000>;
+>  	};
+>  	opp-900000000 {
+> -		opp-microvolt = <1000000>;
+> +		opp-microvolt = <1000000 1000000 1500000>;
+>  	};
+>  	opp-800000000 {
+> -		opp-microvolt = <900000>;
+> +		opp-microvolt = <900000 900000 1500000>;
+>  	};
+>  	opp-700000000 {
+> -		opp-microvolt = <900000>;
+> +		opp-microvolt = <900000 900000 1500000>;
+>  	};
+>  	opp-600000000 {
+>  		opp-hz = /bits/ 64 <600000000>;
+> -		opp-microvolt = <900000>;
+> +		opp-microvolt = <900000 900000 1500000>;
+>  		clock-latency-ns = <140000>;
+>  	};
+>  	opp-500000000 {
+>  		opp-hz = /bits/ 64 <500000000>;
+> -		opp-microvolt = <900000>;
+> +		opp-microvolt = <900000 900000 1500000>;
+>  		clock-latency-ns = <140000>;
+>  	};
+>  	opp-400000000 {
+>  		opp-hz = /bits/ 64 <400000000>;
+> -		opp-microvolt = <900000>;
+> +		opp-microvolt = <900000 900000 1500000>;
+>  		clock-latency-ns = <140000>;
+>  	};
+>  	opp-300000000 {
+>  		opp-hz = /bits/ 64 <300000000>;
+> -		opp-microvolt = <900000>;
+> +		opp-microvolt = <900000 900000 1500000>;
+>  		clock-latency-ns = <140000>;
+>  	};
+>  	opp-200000000 {
+>  		opp-hz = /bits/ 64 <200000000>;
+> -		opp-microvolt = <900000>;
+> +		opp-microvolt = <900000 900000 1500000>;
+>  		clock-latency-ns = <140000>;
+>  	};
+>  };
 > 
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
 -- 
 Best Regards,
