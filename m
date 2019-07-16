@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EA76A971
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 15:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCB26A99A
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 15:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfGPNTZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 09:19:25 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42549 "EHLO
+        id S1726593AbfGPN0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 09:26:34 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39258 "EHLO
         mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725926AbfGPNTZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 09:19:25 -0400
-Received: by mail-lj1-f194.google.com with SMTP id t28so19892432lje.9;
-        Tue, 16 Jul 2019 06:19:23 -0700 (PDT)
+        with ESMTP id S1726039AbfGPN0e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 09:26:34 -0400
+Received: by mail-lj1-f194.google.com with SMTP id v18so19919397ljh.6;
+        Tue, 16 Jul 2019 06:26:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EkdasPMgGnwihc1DSdnhBOd4C244LSLsm8CGrCb1iAU=;
-        b=YwapdDTLSP9fmg8iiyTzQ/Y504livetiGXjF0pjWgVja6KtV7nKyOLOHSmhpb4omPF
-         JePE9JLsdXwOCs9rPOMD+zSXyGuU6lnmcMzYV0sNT0T4u3ig4HdRygVkArSUb0hnbV0u
-         HH9MSrmXwnOn3+hnncg+sFEyhrtzyeWg43BzrETKjfRNEWBSKWpi0NjH+FyshHdUc2ai
-         zVwALa6M/bBFo4zWABJv75UlSXlZ9ckmS//C2RKwtnkOK6km2LvqFsM0MObDhkVq+9yD
-         clbCxDYIXNS9WNOkvth3Y1USme822AgujW8TWBp7UK7Xr69eiluL0OmS/948gJvbG+2+
-         JXsw==
+        bh=i5eernLBaFGhyCIFa6yPKjvfBtf5hN1/5FhaLw6hzyI=;
+        b=gvXucYZhO534m2RGH5gg/cG8eTfj3B6c32P1G69Wvuwp3O4k6rQrig+mRIYeJDgjlt
+         Y7n0Ac1HxHnFYP09tfX6fnZe87kRm54UNadKFlRUThjA+VVJe6+1Ts/QXts++fWrfRp/
+         iSb+ix8YNxR5z3Q0ivKHsxy8yAIxZ1xsdGm09CwPiKtbGBYudXbGdfKaKP5lHzttrFE+
+         tblVAZazjR2NlOx5AMobqN8ypsbwbQi09AonLgfv91fBCrEAi4lJUjWKwUb/+cNzbYef
+         9ZaX4dLpBtAh5MLT7nd15kmFr/Y9oFQ+SKszMJiaVaqNoCHkFCQ2SXYttJwQjbGIy7x+
+         ovnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=EkdasPMgGnwihc1DSdnhBOd4C244LSLsm8CGrCb1iAU=;
-        b=ObpR2VEY3k/6EZkokB2uddC65vRQ08ZX5EOxNpT72Zu3JUIjjgmlb3iPlkzfBWtt+3
-         lwxLtkRiPlb7JfwDIphkGfnyHEZZdAEWOR22qlIKKZXEYkP5VS0TEUvFXADB6LY0Km81
-         rHDWfAmTDV27MvQ1/eAalQYbHhVw0A5wF1mfYB/xAgWqi35EWcsWQWd3WAwD+11Qvh9t
-         lDT0L8CUDn/GIuRR5gYpaTmrGTNTy1fwoiWap98B1vplIjqYayOfULV9XT/9byS9NWpT
-         2zEriEcHbLmsAWP4jhIz2+XOjin/bbR3YfHBU+PXX4287Pqo63+Sm1kWnmINPKCWkJsZ
-         ANyw==
-X-Gm-Message-State: APjAAAWONE+Hk+Cw7J7VObOBhAAtJTl3t16a+pIBwXDSouJwjSdY8gw+
-        8d5KRMy0hHIbf9z4c9MNYAbJ2B/L
-X-Google-Smtp-Source: APXvYqzJJgD5y9i5vztuRuLgouYy44IzN5SEoidUA4vu+xPqFD03Qc2Yqh/OG7KOZ9K2kqRx/B8WOQ==
-X-Received: by 2002:a2e:96d0:: with SMTP id d16mr3668222ljj.14.1563283162653;
-        Tue, 16 Jul 2019 06:19:22 -0700 (PDT)
+        bh=i5eernLBaFGhyCIFa6yPKjvfBtf5hN1/5FhaLw6hzyI=;
+        b=pA5LNGK5Tg9DwmwkOcQwoAbyyZjDGQDi80Hse6Qdu8RcODLl5YvVYONtRqVOBEWfv7
+         ExgGQBCzCxPoD9x3qH1IcdqY7Wv2IQY+iY0iHMRQH6WWp3ZKdQEgvlPb1FdU508ZJ125
+         AToIsb9tzzJbuv4qHwfWtypdeJhuAP6eBBaMQyza+6jcfd22MqXr4DSSeehFtZYqQ/RO
+         VIdUmiO/E/AgW0my2TnYOEAk6UREyl8Z+pW7h0LDT8g+uLvEI2MCTJG8JTbcTHtgGgK+
+         KzT+otKuTRSzKnp4RZnCKsSl7L4o+Cyzj2ZrL1fQucSiW7cHktMbIY9sidlLVIkR74qm
+         wCRA==
+X-Gm-Message-State: APjAAAX9Tzqg4Qkp/D/Y/gCDsRNaV9sBWx8cdi2pd0l0HoC38EwwWar+
+        SIaND9Yq5G5vpTBR8DHB87+19SxL
+X-Google-Smtp-Source: APXvYqyW3ijl5BFSBz50w1dNQBMhm3ZSISRMKPZBneOo4V473+dhc7T7buMTUwKZAtM9Ljhj8oObHA==
+X-Received: by 2002:a2e:96d5:: with SMTP id d21mr17883568ljj.170.1563283591701;
+        Tue, 16 Jul 2019 06:26:31 -0700 (PDT)
 Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.googlemail.com with ESMTPSA id k82sm3722138lje.30.2019.07.16.06.19.21
+        by smtp.googlemail.com with ESMTPSA id a13sm2855146lfi.57.2019.07.16.06.26.30
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 06:19:22 -0700 (PDT)
-Subject: Re: [PATCH v4 09/24] PM / devfreq: tegra30: Reset boosting on startup
+        Tue, 16 Jul 2019 06:26:31 -0700 (PDT)
+Subject: Re: [PATCH v4 11/24] PM / devfreq: tegra30: Add debug messages
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -55,16 +55,16 @@ To:     Chanwoo Choi <cw00.choi@samsung.com>,
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20190707223303.6755-1-digetx@gmail.com>
- <CGME20190707223639epcas4p392300747244905ec06f580394d579eb4@epcas4p3.samsung.com>
- <20190707223303.6755-10-digetx@gmail.com>
- <caed4a78-ad8a-5bee-adc4-4a342e2898c3@samsung.com>
+ <CGME20190707223640epcas4p15337f40466342832b731ad6a53be946e@epcas4p1.samsung.com>
+ <20190707223303.6755-12-digetx@gmail.com>
+ <c883bdbe-427f-35a1-9e63-5e4953a84286@samsung.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <d86c8b97-40b7-ba63-e0a0-736862fa786c@gmail.com>
-Date:   Tue, 16 Jul 2019 16:19:21 +0300
+Message-ID: <53cd0ba5-f814-cd9b-19c5-1d42717ca58c@gmail.com>
+Date:   Tue, 16 Jul 2019 16:26:30 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <caed4a78-ad8a-5bee-adc4-4a342e2898c3@samsung.com>
+In-Reply-To: <c883bdbe-427f-35a1-9e63-5e4953a84286@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -73,43 +73,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-16.07.2019 15:13, Chanwoo Choi пишет:
-> On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
->> Governor could be stopped while boosting is active. We have assumption
->> that everything is reset on governor's restart, including the boosting
->> value, which was missed.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/devfreq/tegra30-devfreq.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
->> index d5d04c25023b..32fe95458ee7 100644
->> --- a/drivers/devfreq/tegra30-devfreq.c
->> +++ b/drivers/devfreq/tegra30-devfreq.c
->> @@ -536,6 +536,9 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
->>  {
->>  	u32 val = 0, target_freq;
->>  
->> +	/* we don't want boosting on restart */
+16.07.2019 15:23, Chanwoo Choi пишет:
+> Hi Dmitry,
 > 
-> nitpick.
-> I think that following comment is proper in my case.
-> In my case, I think 'we' expression is not good
+> Usually, the kernel log print for all users
+> such as changing the frequency, fail or success.
 > 
-> 	/* Reset the boost frequency on restart */
+> But, if the log just show the register dump,
+> it is not useful for all users. It is just used
+> for only specific developer.
+> 
+> I recommend that you better to add more exception handling
+> code on many points instead of just showing the register dump.
 
-Okay, I'll change the wording.
-
->> +	dev->boost_freq = 0;
->> +
->>  	target_freq = clk_get_rate(tegra->emc_clock) / KHZ;
->>  	dev->avg_count = target_freq * ACTMON_SAMPLING_PERIOD;
->>  	device_writel(dev, dev->avg_count, ACTMON_DEV_INIT_AVG);
->>
-> 
-> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-> 
-> 
-
+The debug messages are not users, but for developers. Yes, I primarily
+made the debugging to be useful for myself and will be happy to change
+the way debugging is done if there will be any other active developer
+for this driver. The registers dump is more than enough in order to
+understand what's going on, I don't see any real need to change anything
+here for now.
