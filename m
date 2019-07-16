@@ -2,124 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2896A12F
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 06:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AB66A145
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 06:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726564AbfGPEH5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 00:07:57 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36993 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbfGPEH5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 00:07:57 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 19so8427367pfa.4
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2019 21:07:56 -0700 (PDT)
+        id S1726537AbfGPEQf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 00:16:35 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:41075 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726502AbfGPEQf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 00:16:35 -0400
+Received: by mail-ot1-f66.google.com with SMTP id o101so19547746ota.8
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jul 2019 21:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rmC6wxi5sfJ1hgZ1T5d4GnYkV6yYjgLN1LSLJD9G/N4=;
-        b=Kq0teeTexfzjIuo8X5x7eq1y/4O5B2Bmjf3Fma8qxHKz570TnWd5F41ARTOX+ZB9o5
-         ZrA8d8qX6imHshG3/BIhlS9G3/USuQssQxWSRVgYqXyJ69AtXg6PA4i/A/poj8yG+f0m
-         jjDlhK3uHe61XmDCNPq7CEmNnt62VWeTQWFEQ=
+        d=android.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NWizBVxKl11u9zZiCQ2bgnUadptHwCxpkPEjb6InLlM=;
+        b=Y2+eRFTFLkVWKoQou0f/DY8g8pcZFhms1URLBnrzoFkschHi9zOPZjuQmvbenc7+yv
+         IyFVzLybu3DLX6Gc+3FwcnW5nG1wuIa5+AMQ0Wzzxlc/CpXA/jj9gs/h/arV4Oa/hdwJ
+         Qt8HLGn3KFNkx/CqyUhEWBJnttDVm/+LSa67mEdFvdnPnQ+CA0Ndriu4nm5UUjhdVAhO
+         a2eYWBsxQTgyaDxZddmmBUpDvu5Bi71ihgLHI6Ogt1xrjuFEwu50m1Q7YaPpZfcat/c5
+         pu7BUO2c3H3I3Ysw9d4aJZc/2OZl0S5QTEJZX4nHJmBIfQ6nN7FI4qWdS4TC9sLiAvj+
+         imlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rmC6wxi5sfJ1hgZ1T5d4GnYkV6yYjgLN1LSLJD9G/N4=;
-        b=KxHpAu6EHT0q5vhD9NlSYRrlJU38ILt7ez3Erf+EnqrIdzuvnR7qBCB2yXeTL2bC1i
-         X39pGUtRkPOAvEP8IAcQ6RxXpw3NNvUtahOuXEIY1J/gW7U0DviyI1Syw4yyA21tzd2I
-         Y75pEeeaj86RdDXwu+fFnvsKSstvhBSv3/qg9WmKQ2tKSFk8NlM0pQ+/IPNwByA3wsa8
-         klIlpQKlo6EkkthDBpYBa2LPa2a1cJcY3GgGGVq62SgVNCHZEQQLgw9AA68R//SczQZH
-         vVjFACHwxkXP07VYSRHxk44OHh6ygOzu92ipvLdamb8ZGkptA4D0zciI3lf8De04w4pK
-         KmBw==
-X-Gm-Message-State: APjAAAXLR8vKwQRIVaL93aNuJZ8T2mjBtSq2Yl5e40uo0Wxhk+OzKfr9
-        Q6JWxF251fc4ARCx8qprjSc=
-X-Google-Smtp-Source: APXvYqzgpmFKYjtDybWIlQwIoYF/PfoRh5ad2Zk33yjjz2GZk9FWUyWvHOfYTa/TTjzB9GZPuRionw==
-X-Received: by 2002:a63:9249:: with SMTP id s9mr29860119pgn.356.1563250076442;
-        Mon, 15 Jul 2019 21:07:56 -0700 (PDT)
-Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id f14sm17867883pfn.53.2019.07.15.21.07.52
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 15 Jul 2019 21:07:55 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Paul McKenney <paulmck@linux.vnet.ibm.com>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>, c0d1n61at3@gmail.com,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Triplett <josh@joshtriplett.org>, keescook@chromium.org,
-        kernel-hardening@lists.openwall.com, kernel-team@android.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        neilb@suse.com, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Pavel Machek <pavel@ucw.cz>, peterz@infradead.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT))
-Subject: [PATCH] rculist: Add build check for single optional list argument
-Date:   Tue, 16 Jul 2019 00:07:43 -0400
-Message-Id: <20190716040743.78343-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NWizBVxKl11u9zZiCQ2bgnUadptHwCxpkPEjb6InLlM=;
+        b=mjeRnMHJjgf+EmYJ29nh2yQIxwF3sjxZWqyVIuPoEqxCrwkX5ahtAjHhHYKzWZtzr8
+         dvU2IBv8kIKMnMYvCvR6SaA2WCJVceTjo288MzwNabP6v9K+IVdGywU7n7koij25ir9i
+         9Hc+ttzsiLNWtRjT4DEmy8PkWgdedyEQhbrvbllzgtuXRWsR5jetuBmeKUQba32KU42x
+         lAEBphEMXjw9fONTWPMqG1BHtItkE9XhEV8I3GyFo6wDmuJ6622+GXgWRVUVZSWbi53F
+         Ro9s9lGccIMwwFssmu137xMKexB/U7UVDS4dRbNG4ffI1wqrIU7pMmkbc5Vs2djc2gCg
+         hyMQ==
+X-Gm-Message-State: APjAAAV7mfz7CaBnrTS2FAAy/kgiJY8CuxLN0OgEzvXxx+niLSI7mfrF
+        Zk4jffWBdpdM1ihJSGBxHyuKlq+4KxMptyl8B4M=
+X-Google-Smtp-Source: APXvYqyK2Xi/JdxAp2QpiPvoM5uHa1C+X0zxzxzfXfUABgGl7k9/nlUlSqolurCEvEYDE4bg4f5gRo1ve0ATwxIKpV0=
+X-Received: by 2002:a9d:1718:: with SMTP id i24mr22110399ota.269.1563250593815;
+ Mon, 15 Jul 2019 21:16:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190715203651.GA7513@kroah.com> <20190715214348.81865-1-trong@android.com>
+ <CAJZ5v0gEzZkbeLFtW5yadwxBryvL3vWcUoQTkUy3VkxiTV+UrA@mail.gmail.com> <20190716021102.GA8310@kroah.com>
+In-Reply-To: <20190716021102.GA8310@kroah.com>
+From:   Tri Vo <trong@android.com>
+Date:   Tue, 16 Jul 2019 13:16:22 +0900
+Message-ID: <CANA+-vA_rgqEKKXsSEUBYwHLWoCJrPa1szjvLntHV0YeA6Qfkg@mail.gmail.com>
+Subject: Re: [PATCH v4] PM / wakeup: show wakeup sources stats in sysfs
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>, kaleshsingh@google.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In a previous patch series [1], we added an optional lockdep expression
-argument to list_for_each_entry_rcu() and the hlist equivalent. This
-also meant more than one optional argument can be passed to them with
-that error going unnoticed. To fix this, let us force a compiler error
-more than one optional argument is passed.
+On Tue, Jul 16, 2019 at 11:13 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jul 15, 2019 at 11:48:27PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Jul 15, 2019 at 11:44 PM Tri Vo <trong@android.com> wrote:
+> > >
+> > > Userspace can use wakeup_sources debugfs node to plot history of suspend
+> > > blocking wakeup sources over device's boot cycle. This information can
+> > > then be used (1) for power-specific bug reporting and (2) towards
+> > > attributing battery consumption to specific processes over a period of
+> > > time.
+> > >
+> > > However, debugfs doesn't have stable ABI. For this reason, create a
+> > > 'struct device' to expose wakeup sources statistics in sysfs under
+> > > /sys/class/wakeup/<name>/.
+> > >
+> > > Introduce CONFIG_PM_SLEEP_STATS that enables/disables showing wakeup
+> > > source statistics in sysfs.
+> >
+> > I'm not sure if this is really needed, but I'll let Greg decide.
+>
+> You are right.  Having zillions of config options is a pain, who is
+> going to turn this off?
+>
+> But we can always remove the option before 5.4-rc1, so I'll take this
+> as-is for now :)
+>
+> > Apart from this
+> >
+> > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> thanks for the review!  I'll wait for 5.3-rc1 to come out before adding
+> this to my tree.
 
-[1] https://lore.kernel.org/patchwork/project/lkml/list/?series=402150
-
-Suggested-by: Paul McKenney <paulmck@linux.vnet.ibm.com>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- include/linux/rculist.h | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/rculist.h b/include/linux/rculist.h
-index 1048160625bb..86659f6d72dc 100644
---- a/include/linux/rculist.h
-+++ b/include/linux/rculist.h
-@@ -44,14 +44,18 @@ static inline void INIT_LIST_HEAD_RCU(struct list_head *list)
-  * Check during list traversal that we are within an RCU reader
-  */
- 
-+#define check_arg_count_one(dummy)
-+
- #ifdef CONFIG_PROVE_RCU_LIST
--#define __list_check_rcu(dummy, cond, ...)				\
-+#define __list_check_rcu(dummy, cond, extra...)				\
- 	({								\
-+	check_arg_count_one(extra);					\
- 	RCU_LOCKDEP_WARN(!cond && !rcu_read_lock_any_held(),		\
- 			 "RCU-list traversed in non-reader section!");	\
- 	 })
- #else
--#define __list_check_rcu(dummy, cond, ...) ({})
-+#define __list_check_rcu(dummy, cond, extra...)				\
-+	({ check_arg_count_one(extra); })
- #endif
- 
- /*
--- 
-2.22.0.510.g264f2c817a-goog
-
+Greg, Rafael, thanks for taking the time to review this patch!
