@@ -2,76 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F236AF62
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 20:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAC36AF69
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 20:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388277AbfGPS4v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 14:56:51 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:46498 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728137AbfGPS4v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 14:56:51 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 304EA80593; Tue, 16 Jul 2019 20:56:38 +0200 (CEST)
-Date:   Tue, 16 Jul 2019 20:56:48 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] PM: QoS: Get rid of unused flags
-Message-ID: <20190716185648.GA10400@amd>
-References: <cover.1562854650.git.amit.kucheria@linaro.org>
- <e9e7bc3be3b51e68ae1a0f934c3724bd86f5f9af.1562854650.git.amit.kucheria@linaro.org>
+        id S1728781AbfGPS6p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 14:58:45 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:42139 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728484AbfGPS6p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 14:58:45 -0400
+Received: by mail-oi1-f196.google.com with SMTP id s184so16432480oie.9
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 11:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bKqvJ4KVvMjZevsjiH9ZbBIG3O/bWHc4fStP7VeXPqo=;
+        b=N48FQRXzdJ0h2mmJ3Zu+1ca6vXioLCPWbJNDsqs2sjjBeE0x70GmtJG0N3iiBUAxaw
+         YDYmjybPLcsokdIDwwCx+rSIvAPeEIMkomRZbABlmW7+EEWMppv1Vh/BMwICt+r96JmV
+         3Yi8yhGJK0xq3FnjXl5FIyMXtUlV+XCXarAbDCe1DBsSuHzr4STvdk1cpPVAr+TU2FeN
+         vxR7KOxDGizVbKa+nY57AR1SvEJVYKZlxFRs8SPX+oxxY98PdcaoMsjbkaSSLMc1oGzT
+         GkFuX/d7KXofUK630+e/vQ0OBjdCBs7xhGG+ss1ZJVlkJip5rnLoUr8izDC8SacIWn2l
+         mgig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bKqvJ4KVvMjZevsjiH9ZbBIG3O/bWHc4fStP7VeXPqo=;
+        b=tkapLWA+lRYXvmtkk2qdCGOcFtPEiS3Tml5HA1XAB905w+fvPKk12CDODnal08wJFN
+         qh/RhLwv/FpOYk53MRhI6h4H80qmhhcfEkZj9A2RbBR0bAATWevXlm9lLcXkGe5t4aZy
+         5mLpPaHd9gIBvHn0Um8U9/yotDfUs6sQ6tFEY7CJwP3l/gTqRLiaCSsbShi4QorB9BIq
+         YxbkIjTjP4UXR9gIpCG3G6/VODNzVBosPN3ovRrU3a3whqrKVed3JNEXA1ScJlJ6EX1H
+         xzig4T4d4ycjuyRw69o4LKydRV/nEjQL1TQ3qVM4Wjh7uFJu44m5gvXCnKIXr5koNLId
+         n9NQ==
+X-Gm-Message-State: APjAAAVoQjcPjz2Mc9ImkxMBKLEdvx+Sd4vz7rlNJAShOQ43BdqZWsTp
+        zchLV1jF0CpwuJXCDvahNINm9om1sKHuBZhNOBiwug==
+X-Google-Smtp-Source: APXvYqxMQR/81HXmnAExIUv5kJyXmc10HoZQ6gjI2/nHBupxL139pCza9qYN/IuwOoitZ2NX9Ti/aFO2OkrTJ7DlOzc=
+X-Received: by 2002:aca:5106:: with SMTP id f6mr18154752oib.69.1563303523968;
+ Tue, 16 Jul 2019 11:58:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="uAKRQypu60I7Lcqm"
-Content-Disposition: inline
-In-Reply-To: <e9e7bc3be3b51e68ae1a0f934c3724bd86f5f9af.1562854650.git.amit.kucheria@linaro.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-2-saravanak@google.com>
+ <98b2e315-e8da-80ad-1ef8-e6b222c1c6fe@codeaurora.org>
+In-Reply-To: <98b2e315-e8da-80ad-1ef8-e6b222c1c6fe@codeaurora.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 16 Jul 2019 11:58:08 -0700
+Message-ID: <CAGETcx9KSqvyzbM-S8LvBObkNBt38K683Ljm8nNQuhxk7MuvAg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: opp: Introduce opp-peak-KBps and
+ opp-avg-KBps bindings
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jul 16, 2019 at 10:25 AM Sibi Sankar <sibis@codeaurora.org> wrote:
+>
+> Hey Saravana,
+>
+> https://patchwork.kernel.org/patch/10850815/
+> There was already a discussion ^^ on how bandwidth bindings were to be
+> named.
 
---uAKRQypu60I7Lcqm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, I'm aware of that series. That series is trying to define a BW
+mapping for an existing frequency OPP table. This patch is NOT about
+adding a mapping to an existing table. This patch is about adding the
+notion of BW OPP tables where BW is the "key" instead of "frequency".
 
-On Thu 2019-07-11 19:51:25, Amit Kucheria wrote:
-> The network_latency and network_throughput flags for PM-QoS have not
-> found much use in drivers or in userspace since they were introduced.
->=20
-> Commit 4a733ef1bea7 ("mac80211: remove PM-QoS listener") removed the
-> only user PM_QOS_NETWORK_LATENCY in the kernel a while ago and there
-> don't seem to be any userspace tools using the character device files
-> either.
->=20
-> PM_QOS_MEMORY_BANDWIDTH was never even added to the trace events.
->=20
-> Remove all the flags except cpu_dma_latency.
->=20
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+So let's not mixed up these two series.
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
+-Saravana
 
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---uAKRQypu60I7Lcqm
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl0uHfAACgkQMOfwapXb+vJRpgCcCE9t/fdfV6fpDv/gchk5E7g9
-qhwAoKUmdMWsShK2uX5HYwRgtGCfzlTu
-=IZXP
------END PGP SIGNATURE-----
-
---uAKRQypu60I7Lcqm--
+> On 7/3/19 6:40 AM, Saravana Kannan wrote:
+> > Interconnects often quantify their performance points in terms of
+> > bandwidth. So, add opp-peak-KBps (required) and opp-avg-KBps (optional) to
+> > allow specifying Bandwidth OPP tables in DT.
+> >
+> > opp-peak-KBps is a required property that replace opp-hz for Bandwidth OPP
+> > tables.
+> >
+> > opp-avg-KBps is an optional property that can be used in Bandwidth OPP
+> > tables.
+> >
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > ---
+> >   Documentation/devicetree/bindings/opp/opp.txt | 15 ++++++++++++---
+> >   1 file changed, 12 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
+> > index 76b6c79604a5..c869e87caa2a 100644
+> > --- a/Documentation/devicetree/bindings/opp/opp.txt
+> > +++ b/Documentation/devicetree/bindings/opp/opp.txt
+> > @@ -83,9 +83,14 @@ properties.
+> >
+> >   Required properties:
+> >   - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
+> > -  required property for all device nodes but devices like power domains. The
+> > -  power domain nodes must have another (implementation dependent) property which
+> > -  uniquely identifies the OPP nodes.
+> > +  required property for all device nodes but for devices like power domains or
+> > +  bandwidth opp tables. The power domain nodes must have another (implementation
+> > +  dependent) property which uniquely identifies the OPP nodes. The interconnect
+> > +  opps are required to have the opp-peak-bw property.
+> > +
+> > +- opp-peak-KBps: Peak bandwidth in kilobytes per second, expressed as a 32-bit
+> > +  big-endian integer. This is a required property for all devices that don't
+> > +  have opp-hz. For example, bandwidth OPP tables for interconnect paths.
+> >
+> >   Optional properties:
+> >   - opp-microvolt: voltage in micro Volts.
+> > @@ -132,6 +137,10 @@ Optional properties:
+> >   - opp-level: A value representing the performance level of the device,
+> >     expressed as a 32-bit integer.
+> >
+> > +- opp-avg-KBps: Average bandwidth in kilobytes per second, expressed as a
+> > +  32-bit big-endian integer. This property is only meaningful in OPP tables
+> > +  where opp-peak-KBps is present.
+> > +
+> >   - clock-latency-ns: Specifies the maximum possible transition latency (in
+> >     nanoseconds) for switching to this OPP from any other OPP.
+> >
+> >
+>
+> --
+> Qualcomm Innovation Center, Inc.
+> Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
+> a Linux Foundation Collaborative Project
