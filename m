@@ -2,115 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7546A9F2
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 15:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6F06AA33
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jul 2019 16:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387649AbfGPN7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jul 2019 09:59:47 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38448 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726997AbfGPN7r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jul 2019 09:59:47 -0400
-Received: by mail-lj1-f196.google.com with SMTP id r9so20055681ljg.5;
-        Tue, 16 Jul 2019 06:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7H6i1LxDmB04ycY5ef1F3c/qYaMlYDDIBcVi4+5VGZs=;
-        b=MArk12hyaMeQaUedo0Zo3ngitcjN1CJN65igxLVq6n3lA6NpZVHcxE5KbtO3ipqBaU
-         uMl0q8Xw2v68Ha5HDdDRadjG0sJ/YvgCISRQEME+xeCFgMkfZBwNOrsOg1CTdQ463hOp
-         6w1Xr4LCn8iBjCustjV/j8mdtYdO15qVJOngV8yUkJt7Iv9zkeCRJA6QjtC7ni9HM+ru
-         lO94WMul5YG495bgeYL/rjCKxCxQAJZnxUBQzRZcPs5R5n0+xjrGh5s4h4DlvSjD1WsO
-         O/lDua85p4zwLhMVssZIttrcs2YEOKbYWr7WpRDaqXx4ABYbjRfZFZWm0uYIYh0Z4pVE
-         bmWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7H6i1LxDmB04ycY5ef1F3c/qYaMlYDDIBcVi4+5VGZs=;
-        b=A6VRIXR6eTgygpDpucFUjvj9vJClGu/R0x+zKL/Q+Qa6dN55CZv8cEqtSdnF/eQSUF
-         OPIgjSoc9U9XkEQkPKlylTtueoKcl5uHOj8EqVrBXfHNBdsCFvQoKsW0+Qc7RzAFvGLb
-         FlJ0NyqdYVnkAi7VgGglYpOgeDHW+hYHkOo7fpTvVxu2rviR2Ft0CIt+1ggD977/DlNb
-         SL5PJdxOdPpNhc5IWEUzfbn4lm6VeGYeDCPy+ASI0Bdf8ozTqLkYYzh45X9OcX/AU+Cc
-         j3wyDPzeawr8Ipi7FcDeXN4KkhuvY9U9eZBB7tLbxltdAnkymGSxj5nk+/fyiDYd387Y
-         dl2g==
-X-Gm-Message-State: APjAAAWypjzlY9ZVfurN0YHNmzu7Tv5snuleWIx+ADdva4iKb13EaufQ
-        DvPOcZkxir6rJsx6tAuUVdeND4TJ
-X-Google-Smtp-Source: APXvYqxQNH0L/ucC++0xm+Z0K2Lj8uPYP4FhAVzja+WgJC3TQm7601IQXRAm96Z0eFCAtgaG5+P1vw==
-X-Received: by 2002:a2e:2b01:: with SMTP id q1mr17270563lje.27.1563285584512;
-        Tue, 16 Jul 2019 06:59:44 -0700 (PDT)
-Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.googlemail.com with ESMTPSA id r24sm4176544ljb.72.2019.07.16.06.59.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 06:59:43 -0700 (PDT)
-Subject: Re: [PATCH v4 14/24] PM / devfreq: tegra30: Ensure that target freq
- won't overflow
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190707223303.6755-1-digetx@gmail.com>
- <CGME20190707223631epcas4p42012d0364a4c952d90f078fb45982722@epcas4p4.samsung.com>
- <20190707223303.6755-15-digetx@gmail.com>
- <e6b53ba0-ac98-bda6-b087-553088a43d9f@samsung.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <14115aa7-ed40-2775-9b0b-a2bf6ca9d47e@gmail.com>
-Date:   Tue, 16 Jul 2019 16:59:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2387770AbfGPODZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jul 2019 10:03:25 -0400
+Received: from foss.arm.com ([217.140.110.172]:35354 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728004AbfGPODZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Jul 2019 10:03:25 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 709A5337;
+        Tue, 16 Jul 2019 07:03:24 -0700 (PDT)
+Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1312E3F59C;
+        Tue, 16 Jul 2019 07:03:21 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 15:03:20 +0100
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alessio Balsini <balsini@android.com>
+Subject: Re: [PATCH v11 0/5] Add utilization clamping support (CGroups API)
+Message-ID: <20190716140319.hdmgcuevnpwdqobl@e110439-lin>
+References: <20190708084357.12944-1-patrick.bellasi@arm.com>
+ <20190715165116.GB21982@blackbody.suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <e6b53ba0-ac98-bda6-b087-553088a43d9f@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190715165116.GB21982@blackbody.suse.cz>
+User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-16.07.2019 15:30, Chanwoo Choi пишет:
-> On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
->> Potentially very high boosting could cause an integer overflow for a
->> highly clocked memory after conversion to MHz.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/devfreq/tegra30-devfreq.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
->> index 2f59c78930bd..0de1efdaabf4 100644
->> --- a/drivers/devfreq/tegra30-devfreq.c
->> +++ b/drivers/devfreq/tegra30-devfreq.c
->> @@ -460,6 +460,7 @@ static unsigned long actmon_update_target(struct tegra_devfreq *tegra,
->>  	unsigned long target_freq;
->>  
->>  	target_freq = dev->avg_count / ACTMON_SAMPLING_PERIOD + dev->boost_freq;
->> +	target_freq = min(target_freq, ULONG_MAX / KHZ);
-> 
-> Did you meet this corner case?
+On 15-Jul 18:51, Michal Koutn� wrote:
+> Hello Patrick.
 
-I can't recall that, technically it could happen and I don't feel
-comfortable by having potential integer overflows anyway.
+Hi Michal,
 
-> If have to change it, you better to use 'tegra->max_freq' as following:
-> 	min(target_freq, tegra->max_freq);
+> I took a look at your series and I've posted some notes to your patches.
 
-The 'tegra->max_freq' will work here, but 'ULONG_MAX / KHZ' is a
-constant value which is also correct and doesn't case any harm.
+thanks for your review!
 
-Probably will be even more expressive to write this as:
+> One applies more to the series overall -- I see there is enum uclamp_id
+> defined but at many places (local variables, function args) int or
+> unsigned int is used. Besides the inconsistency, I think it'd be nice to
+> use the enum at these places.
 
-	target_freq = dev->avg_freq + dev->boost_freq;
-	target_freq = tegra_actmon_account_cpu_freq(tegra, dev, target_freq);
+Right, I think in some of the original versions I had few code paths
+where it was not possible to use enum values. That seems no more the case.
 
-	return min(target_freq, tegra->max_freq);
+Since this change is likely affecting also core bits already merged in
+5.3, in v12 I'm going to add a bulk rename patch at the end of the
+series, so that we can keep a better tracking of this change.
 
+> (Also, I may suggest CCing ML cgroups@vger.kernel.org where more eyes
+> may be available to the cgroup part of your series.)
 
-Thank you very much for the reviews!
+Good point, I'll add that for the upcoming v12 posting.
+
+Cheers,
+Patrick
+
+-- 
+#include <best/regards.h>
+
+Patrick Bellasi
