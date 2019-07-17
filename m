@@ -2,132 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D636B7B4
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 09:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE9D6B7B7
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 09:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbfGQHyy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 03:54:54 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:34510 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbfGQHyy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 03:54:54 -0400
-Received: by mail-pg1-f195.google.com with SMTP id n9so4527122pgc.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 00:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7CDBem+N4Y8GonyneakgYW4yRRjV6CTTMSRhiie6FvM=;
-        b=X91hHiq+XMv6rYqH0C1L60r5PFIPz0ALpX0L4rrxy3R0L7yIB7LB1wt2GigVavcOlw
-         6oNDhqTXYbkwuqZn8UJsLbssFwcot9lLbvTZCgauXQHyKkA3hbliqn/Pln2C0fQfx8x5
-         yx3XJh+N84gqLV5iCqeUMA5IGPCBhOJsd5+DRpIv8Kbgo3yq9BSgMAlkIy/j9JAqR/tD
-         3s8BLrcNBgsG36XBmNVIcnSSPm8aUnDU06iVjLVYRaV+9zQy5rcenYGaEiCbEompeLfl
-         HtejdgkFeaAnQYV7SuoOXrGEj355XnPS6yNbRH3RUNcCJ+cEEfsWiezir5dGcPT0xRLZ
-         DsnA==
+        id S1725980AbfGQHzW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 03:55:22 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:37362 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725932AbfGQHzW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 03:55:22 -0400
+Received: by mail-ot1-f67.google.com with SMTP id s20so24042227otp.4;
+        Wed, 17 Jul 2019 00:55:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7CDBem+N4Y8GonyneakgYW4yRRjV6CTTMSRhiie6FvM=;
-        b=oIacCzlRrbovXy85ooMcUtlgUSC8eOXBx+rVKEznlua+hV/u6z/C3iZWB2nV2n9AgR
-         UJgJ0JJLdVLc7C7v2u4EBWUFfsPJUyrC/LdvjtOaKDnUNqOzGLwMfNtv30aU3S0wO8rq
-         ZfCKUR740hY11obNuOFUx2SCMrJnCzgm5eZHD/3ZPVdyxenk73szjj8TtJbXRJWoi26O
-         +sYWwh4n8BKzOHMsbJcE33tG7lmqmMOpCDap9eD5N5F7oVvuuFzgScXcQ7T/GPkyn848
-         TMOOm1A7LopgoFdDhJ0KgVPpfbJwhsVbPUVQx74YyE1AK7YMNJXqEMA1jmJRnSJLxUKS
-         vygg==
-X-Gm-Message-State: APjAAAXNCRHdFeUSTqWulM7uoxqnVTGakCuCfuSN7HtYMs6I5hwE+4Gh
-        6vWnR50lIPhGxQCSiY2th+UDgQ==
-X-Google-Smtp-Source: APXvYqwS793ra2K/Q8y9DiNBlQJ9AqGzBCIEAGcfR20+btRcZICeer3TBgT1cpHsLKOv5k3Z4wKZjQ==
-X-Received: by 2002:a17:90a:c391:: with SMTP id h17mr42645811pjt.131.1563350093035;
-        Wed, 17 Jul 2019 00:54:53 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id z20sm37644233pfk.72.2019.07.17.00.54.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Jul 2019 00:54:50 -0700 (PDT)
-Date:   Wed, 17 Jul 2019 13:24:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
-        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        sibis@codeaurora.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/6] dt-bindings: opp: Introduce opp-peak-KBps and
- opp-avg-KBps bindings
-Message-ID: <20190717075448.xlyg2ddewlci3abg@vireshk-i7>
-References: <20190703011020.151615-1-saravanak@google.com>
- <20190703011020.151615-2-saravanak@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iH2k1ar00PKs26usVcgRsgrZEYhcLBd9ajfdFKToAbs=;
+        b=HMDvr3Drdvp27hXOI4aeLQULbhmqhaaLWZ7EQc7bGlVA688Awzrb07rRd2ZwJ9EjMj
+         nV1VGlfPpdFpSAVvYiZLPKdNjr0EY9PlB+iSlxNDTwHcNdxk9aqiO4OBbi2lZ4OsLNfM
+         tenghIOn0jutRC3GlQWdM8Mx3FMrgCLKpIK6K3pPSWKrtugNudynRWeH4FsU+atBCIFA
+         egCp/JBd/dOMP35N8JtRNHJLDWm/yn2DNxLNXZx6RPIWl/eiRFR7fvNGB9QUQv8z/O6k
+         ZyJvTgGCSZIT2bVxThJfEc9rrLzYoPt7sZrR27Q4V/5rmbJQT3XvAUIiL4j8FF1UzldR
+         7hYQ==
+X-Gm-Message-State: APjAAAUxrTtow8rZPzZ+dQrnOHzYbNBqimQXBcQMmRLd4ER0J7Dobz4d
+        cBjamEaYO40BDQfvd8SJ7iZ3srB4+8p/Iq0Si3EnuaJm
+X-Google-Smtp-Source: APXvYqzlEtNuhiNzoPrvm4HvombJYRRJCzTTWi3ikgXV0m5bQF2sSaq8Fk7kIkbnac3+vka5gV1vMHciU+mlh4RjJaY=
+X-Received: by 2002:a9d:6b96:: with SMTP id b22mr29016349otq.262.1563350121302;
+ Wed, 17 Jul 2019 00:55:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190703011020.151615-2-saravanak@google.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <6254683.2O5gIZElE2@kreacher> <20190716214024.GA8345@lenoir>
+In-Reply-To: <20190716214024.GA8345@lenoir>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 17 Jul 2019 09:55:08 +0200
+Message-ID: <CAJZ5v0gB0AHTebjpp87YKA1wmE+tCw5V=eaRE2XDM3nyQYndnA@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Always stop scheduler tick on adaptive-tick CPUs
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Lindroth <thomas.lindroth@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-07-19, 18:10, Saravana Kannan wrote:
-> Interconnects often quantify their performance points in terms of
-> bandwidth. So, add opp-peak-KBps (required) and opp-avg-KBps (optional) to
-> allow specifying Bandwidth OPP tables in DT.
-> 
-> opp-peak-KBps is a required property that replace opp-hz for Bandwidth OPP
-> tables.
-> 
-> opp-avg-KBps is an optional property that can be used in Bandwidth OPP
-> tables.
-> 
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  Documentation/devicetree/bindings/opp/opp.txt | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
-> index 76b6c79604a5..c869e87caa2a 100644
-> --- a/Documentation/devicetree/bindings/opp/opp.txt
-> +++ b/Documentation/devicetree/bindings/opp/opp.txt
-> @@ -83,9 +83,14 @@ properties.
->  
->  Required properties:
->  - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
-> -  required property for all device nodes but devices like power domains. The
-> -  power domain nodes must have another (implementation dependent) property which
-> -  uniquely identifies the OPP nodes.
-> +  required property for all device nodes but for devices like power domains or
-> +  bandwidth opp tables. The power domain nodes must have another (implementation
-> +  dependent) property which uniquely identifies the OPP nodes. The interconnect
-> +  opps are required to have the opp-peak-bw property.
+On Tue, Jul 16, 2019 at 11:40 PM Frederic Weisbecker
+<frederic@kernel.org> wrote:
+>
+> On Tue, Jul 16, 2019 at 05:25:10PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Running the scheduler tick on idle adaptive-tick CPUs is not useful
+>
+> Judging by the below change, you mean full dynticks, right?
 
-                                   ??
+Right.
 
-> +
-> +- opp-peak-KBps: Peak bandwidth in kilobytes per second, expressed as a 32-bit
-> +  big-endian integer. This is a required property for all devices that don't
-> +  have opp-hz. For example, bandwidth OPP tables for interconnect paths.
->  
->  Optional properties:
->  - opp-microvolt: voltage in micro Volts.
-> @@ -132,6 +137,10 @@ Optional properties:
->  - opp-level: A value representing the performance level of the device,
->    expressed as a 32-bit integer.
->  
-> +- opp-avg-KBps: Average bandwidth in kilobytes per second, expressed as a
-> +  32-bit big-endian integer. This property is only meaningful in OPP tables
-> +  where opp-peak-KBps is present.
-> +
->  - clock-latency-ns: Specifies the maximum possible transition latency (in
->    nanoseconds) for switching to this OPP from any other OPP.
->  
-> -- 
-> 2.22.0.410.gd8fdbe21b5-goog
+> > and it may also be not expected by users (as reported by Thomas), so
+> > add a check to cpuidle_idle_call() to always stop the tick on them
+> > regardless of the idle duration predicted by the governor.
+> >
+> > Fixes: 554c8aa8ecad ("sched: idle: Select idle state before stopping the tick")
+> > Reported-by: Thomas Lindroth <thomas.lindroth@gmail.com>
+> > Tested-by: Thomas Lindroth <thomas.lindroth@gmail.com>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  kernel/sched/idle.c |    3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > Index: linux-pm/kernel/sched/idle.c
+> > ===================================================================
+> > --- linux-pm.orig/kernel/sched/idle.c
+> > +++ linux-pm/kernel/sched/idle.c
+> > @@ -191,7 +191,8 @@ static void cpuidle_idle_call(void)
+> >                */
+> >               next_state = cpuidle_select(drv, dev, &stop_tick);
+> >
+> > -             if (stop_tick || tick_nohz_tick_stopped())
+> > +             if (stop_tick || tick_nohz_tick_stopped() ||
+> > +                 !housekeeping_cpu(dev->cpu, HK_FLAG_TICK))
+>
+> But tick_nohz_tick_stopped() also works on full dynticks CPUs. If the
+> tick isn't stopped on a full dynticks CPU by the time we reach this path,
+> it means that the conditions for the tick to be stopped are not met anyway
+> (eg: more than one task and sched tick is needed, perf event requires the tick,
+> posix CPU timer, etc...)
 
--- 
-viresh
+First of all, according to Thomas, the patch does make a difference,
+so evidently on his system(s) the full dynticks CPUs enter the idle
+loop with running tick.
+
+This means that, indeed, the conditions for the tick to be stopped
+have not been met up to that point, but if the (full dynticks) CPU
+becomes idle, that's because it has been made idle on purpose
+(presumably by a user-space "orchestrator" or the sysadmin), so the
+kernel can assume that it will remain idle indefinitely.  That, in
+turn, is when the tick would be stopped on it regardless of everything
+else (even if it wasn't a full dynticks CPU).
+
+I guess I should add the above to the changelog.
+
+> Or am I missing something else?
+
+Well, if full dynticks CPUs are expected to always enter the idle loop
+with stopped tick, then something appears to be amiss, but I'm not
+sure if that expectation is entirely realistic.
+
+Cheers!
