@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 556976B6AC
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 08:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA47A6B6B4
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 08:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbfGQGeZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 02:34:25 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:63428 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbfGQGeZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 02:34:25 -0400
+        id S1727375AbfGQGfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 02:35:43 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:51740 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726056AbfGQGfn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 02:35:43 -0400
 Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190717063422epoutp04ffcd850c9dd3b5642982384471322068~yHjvMeg8N1012610126epoutp04G
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 06:34:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190717063422epoutp04ffcd850c9dd3b5642982384471322068~yHjvMeg8N1012610126epoutp04G
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190717063541epoutp03e2f45d92c1fce8a17c33a463881714d1~yHk4Sy05D2099420994epoutp03_
+        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 06:35:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190717063541epoutp03e2f45d92c1fce8a17c33a463881714d1~yHk4Sy05D2099420994epoutp03_
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563345262;
-        bh=JH91yOtS+jffgxTTFHGvw6ei+DdsN9zJJgohcmSBYac=;
+        s=mail20170921; t=1563345341;
+        bh=zhgJp2c1EEd5zsHzQMcfN8W5rw9BTdRu/SSkbuNu8x8=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Ghw6opmMfKXxmk6IuAPNpKUABd2hDsPjQFDnPWvGJB3u6CIzlb/yPkj3OS9x53TWR
-         aP1xQDwS0pBQyrpzMmG3ikC0PS91IzqqcQrSnJkizBeIfg5IHKlDFydi9VYJ48IhoL
-         FvB2VVlCu7kkfeIs+w2XWr73w280ZnEdH1vPLBLY=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190717063422epcas1p203192e207e6f33e7ff96ee2fd29038cb~yHjuzgLBD1459914599epcas1p2a;
-        Wed, 17 Jul 2019 06:34:22 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 45pSCw1dFbzMqYlv; Wed, 17 Jul
-        2019 06:34:20 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        16.F0.04160.C61CE2D5; Wed, 17 Jul 2019 15:34:20 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        b=kMk6ctcFCYLNDAToKyAVWNpnv6yc6XNgyYyGLuEC7YVh3Bsu6XVVH0Ge3UqsGR11y
+         OQEJcxn4i83vmYFQ+Bvy/TYYEeZtZA1EOGEa8mlFdLxQ+oHohMrQqbYzglOpJvcEbQ
+         IEYYR4HWHauy1KqtGR7ThglVDNkthozuecPBR4no=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190717063540epcas1p14851c1bc431c0f8da57014affbf4f72f~yHk3w-Ued0307803078epcas1p1e;
+        Wed, 17 Jul 2019 06:35:40 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 45pSFQ4LLWzMqYkc; Wed, 17 Jul
+        2019 06:35:38 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        93.8E.04088.AB1CE2D5; Wed, 17 Jul 2019 15:35:38 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20190717063419epcas1p48c8037c7214623b761c270bfefbf88d9~yHjsS0z900625506255epcas1p4j;
-        Wed, 17 Jul 2019 06:34:19 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190717063419epsmtrp2e0bd7419f210c5a1549631ecea66561e~yHjsSCCD81019710197epsmtrp2q;
-        Wed, 17 Jul 2019 06:34:19 +0000 (GMT)
-X-AuditID: b6c32a38-b4bff70000001040-71-5d2ec16cd0af
+        20190717063537epcas1p44d32e5af3318f4b9d197f7be657c72e4~yHk1IEBvU1593015930epcas1p4t;
+        Wed, 17 Jul 2019 06:35:37 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190717063537epsmtrp14c938f7baf65c4d1b3ab90a270966475~yHk1HQs_c0166501665epsmtrp19;
+        Wed, 17 Jul 2019 06:35:37 +0000 (GMT)
+X-AuditID: b6c32a35-85dff70000000ff8-4b-5d2ec1ba2bf7
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AE.8F.03638.B61CE2D5; Wed, 17 Jul 2019 15:34:19 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        13.CF.03706.9B1CE2D5; Wed, 17 Jul 2019 15:35:37 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190717063419epsmtip1ccf829f1c4c3d555a71411df1e7224d9~yHjsGweoS1162611626epsmtip1R;
-        Wed, 17 Jul 2019 06:34:19 +0000 (GMT)
-Subject: Re: [PATCH v4 02/24] PM / devfreq: tegra30: Keep interrupt disabled
- while governor is stopped
+        20190717063537epsmtip1112b8079667f54e0015e327883f5d903~yHk07EKR90815208152epsmtip13;
+        Wed, 17 Jul 2019 06:35:37 +0000 (GMT)
+Subject: Re: [PATCH v4 03/24] PM / devfreq: tegra30: Handle possible
+ round-rate error
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -60,184 +60,127 @@ Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <ca339b7f-1141-4c68-1c07-2ac818422bbc@samsung.com>
-Date:   Wed, 17 Jul 2019 15:37:28 +0900
+Message-ID: <faf0f014-71e6-ace9-391f-8b0080d94dc6@samsung.com>
+Date:   Wed, 17 Jul 2019 15:38:46 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <6c517d04-cf99-f907-e74d-9fba99405a53@gmail.com>
+In-Reply-To: <e9fd7f68-8ad1-058f-7c87-ccd280ba0b0e@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0hTcRTut7vdTW11nVnHBaW3B7lwetXVNVoUhg16IJX0AFkXvW3qXuxu
-        Pek5y7QMrShaZWVF5QPTXOmyJGeJhiVZUMoiSCjK7GGaVli73iL/+853vvP4fr8jwxSVuFKW
-        ZXGwdgtjIvFg8S1ftDrGdF+dHrevejxd/uUNonPdpWK6fX+vlO70nsXp/sJmROd/c+N0975r
-        OD3sLRHTRyuf4ouDdHX+y0hX7/ZLdYWuPlx3tLYM6fprpqVKNuYsNLJMJmuPZC0Z1swsi0FL
-        Ll+jT9Zr5sVRMVQSPZ+MtDBmVksuXZEak5JlCixERm5hTM4AlcpwHBm7aKHd6nSwkUYr59CS
-        rC3TZEuyqTnGzDktBnWG1byAiouL1wSEm3KMVd3PpLZccltFXoNoL2qdWoBkMiAS4XdbSAEK
-        limIOgRVpT0SIfiK4GRTkagABQWCQQRdD7N5zBecOjEoFUR3EeSe6MaF4BOCX0U+Ca8KI4zg
-        H/IhPjGJGEGQP+zC+QRGbABfffloW5xQQeO7F6P8RCIKng+9QfxOcmIR3CsN5mkxMQvuvS1B
-        PA4n1kNbc4mYx3IiFFpP94ziIEILt199lgrtp0BXz3mRgKeDy3MG43cAwiWFw0PtEsHzUvhQ
-        rBbchMH7llqpgJXQ33cXF/BOuN7ajAu1hxDUNnZIhEQCNF45LuL7YEQ0VHljBToK6n+eQ8Lc
-        CdA3cOTvKDkcOqgQJDOg87VfJOAIuJSXjxch0j3GjXuMA/cYB+7/wy4gcRmazNo4s4HlKFvi
-        2L+uQaOnqqLrUMPjFU2IkCFyvFzni0lXSJgt3HZzEwIZRk6Sawfmpivkmcz2Hazdqrc7TSzX
-        hDSBxy7GlOEZ1sDhWxx6ShOfkJBAJ1LzNBRFTpGX/IpOVxAGxsHmsKyNtf+rE8mClHuRkwrd
-        /9GQtMSStzq6Fzt9pmLbjxHP7q3Z9MvBcTrbk86Q5LWP0g6E71J+LfS03lS1fCz6UXwkq3p1
-        RHes52DB1Ybvq1Quj3Ekajp2zHT+bVlGx/vN7uGelWm1+nU47Q35kpcyc7Z32R0uoottDv2W
-        PMe/Z8IOqSLlRvuDi2FJFbc3kGLOyFAqzM4xfwB/p6KpwAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsWy7bCSnG72Qb1YgzVN6harPz5mtGiZtYjF
-        4mzTG3aLy7vmsFl87j3CaNH5ZRabxe3GFWwWP3fNY7HoW3uJzYHTY8fdJYweO2fdZffobX7H
-        5tG3ZRWjx+dNcgGsUVw2Kak5mWWpRfp2CVwZ629fYS9oUapY076HqYHxpHQXIyeHhICJxPQp
-        39i7GLk4hAR2M0rsazzJDJGQlJh28SiQzQFkC0scPlwMEhYSeMsocbZdCMQWFsiQuPvjMCNI
-        r4hAE5PEpt4L7CAJZoFIiZ65W9gghs5mknjQ1MoEkmAT0JLY/+IGG4jNL6AocfXHY0aQBbwC
-        dhL7FnGBhFkEVCX2PZ/HCGKLCkRITLq2kwXE5hUQlDg58wmYzSlgK7H93geoXeoSf+ZdYoaw
-        xSVuPZnPBGHLSzRvnc08gVF4FpL2WUhaZiFpmYWkZQEjyypGydSC4tz03GLDAqO81HK94sTc
-        4tK8dL3k/NxNjOAI09LawXjiRPwhRgEORiUeXo/DurFCrIllxZW5hxglOJiVRHhtv2rHCvGm
-        JFZWpRblxxeV5qQWH2KU5mBREueVzz8WKSSQnliSmp2aWpBaBJNl4uCUamDMWFW659QLs6dv
-        dGuMqmXqttf+y9xc8NNN3Mv+89dGRd34E8xK+2UmMNnvW7xHrko/SWhbf9X8b0fnH5l82i2X
-        dZd2HcuZVQu9d0+YvXdtcrlw4yGD/f2/Jm8WsVhyPmlVDu+MTwyeMSa3/SX5mYyezf2s9PbS
-        6SkrDGLOHblcWPUr5PpCxf40JZbijERDLeai4kQAPr+/sawCAAA=
-X-CMS-MailID: 20190717063419epcas1p48c8037c7214623b761c270bfefbf88d9
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjm85ydTWn1NbPe9qPsdAEVdUedncpJUcmgfhgR3RA76UHF7Wzt
+        zNJuWAtTU7sHHc0iu5hZmVnMkVhzkBndnFEURmV0R6lcaUW17Rj57/me53mv36siNE2UVpUn
+        2HmbwJloKoy81hEVH+u6GZehc/RNZ89/7kPsLukkyd7d+UnJel01FPu10oPYskGJYp/tqKfY
+        YVctyVZd6KbmhxqdvaeQsVXqVRorHf2UsaqlARm/Nk9JV6zJT8nluWzeFskLWZbsPCHHQC9Z
+        nrkwU5+sY2KZOexsOlLgzLyBXrQ0PTYtz+RviI7cyJkK/FQ6J4p0fGqKzVJg5yNzLaLdQPPW
+        bJN1jjVO5MxigZATl2Uxz2V0ugS937guP/d+hZOw9oQXln55SxSjz+PKUagKcBL0+M4oylGY
+        SoOdCI6UeBUBQYO/IHh4YJssfEPgcV0L+RfR19mllIU2BDs7/1DyYwBB04OHVMAVjlfC0OXD
+        QWEC/o2gbNgRFAi8GjpazwdTUTga2t89CfLj8DR4NNSHAliNU6H+5aNgHySeCSeltiAfgVdB
+        l6eWlD3j4fbR10Ecig1QNVAzkn8SPH19PETGU8FxtZoINAHYoYTHwxeV8gyL4NXV65SMw+HD
+        rZYRXgvv95aM4C1w7raHkoNLEbS0P1DIQiK0nz7or6DyV4iCS654mZ4GrT+PIbnwWOj3VSgC
+        FsBqKC3RyJbp4H3RO7LGyVC3u4zah2hp1DjSqBGkUSNI/4udQGQDmshbRXMOLzJWZvR3N6Pg
+        tUbrnejQvaVuhFWIHqM2dsRmaBTcRrHI7EagIugJaoMvJkOjzuaKNvM2S6atwMSLbqT3b3s/
+        oY3IsvhvX7BnMvqExMRENolJ1jMMPUld+ysqQ4NzODufz/NW3vYvLkQVqi1Gs3Vba84kdSUd
+        N857c0q4s2LQkPfRmrrpcD89Y+6COz5n41nJ8SPLq21Yk/b0e92yPc+FWZ6iwc7mAfJW8yac
+        pu7esGyo9YSxd+2YlHdkRaN3e1FI9fyt64nGxS/Kfe4bV2KSb7LF7sL6BNeryuSfuidp3i1/
+        xtdNVe9afbGwJCKsjSbFXI6JJmwi9xfKQMYBwwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsWy7bCSnO7Og3qxBic2GFus/viY0aJl1iIW
+        i7NNb9gtLu+aw2bxufcIo0Xnl1lsFrcbV7BZ/Nw1j8Wib+0lNgdOjx13lzB67Jx1l92jt/kd
+        m0ffllWMHp83yQWwRnHZpKTmZJalFunbJXBlnO/ZwVxwRbii49Nz5gbGj/xdjJwcEgImEo9P
+        nGIHsYUEdjNKHLpoCxGXlJh28ShzFyMHkC0scfhwcRcjF1DJW0aJY2s7mEFqhAXCJX5snMoG
+        khARaGKS2NR7AWwQs0CkRM/cLWwQHbOZJO4f+s4EkmAT0JLY/+IGG4jNL6AocfXHY0YQm1fA
+        TmLFw6usIDaLgKrEoll7weKiAhESk67tZIGoEZQ4OfMJmM0pYCvR934OG8QydYk/8y4xQ9ji
+        EreezGeCsOUlmrfOZp7AKDwLSfssJC2zkLTMQtKygJFlFaNkakFxbnpusWGBYV5quV5xYm5x
+        aV66XnJ+7iZGcIxpae5gvLwk/hCjAAejEg/vhwO6sUKsiWXFlbmHGCU4mJVEeG2/ascK8aYk
+        VlalFuXHF5XmpBYfYpTmYFES532adyxSSCA9sSQ1OzW1ILUIJsvEwSnVwDihcX+QeMRVw/ie
+        Gw+v8t488bRS/06+wrnS6TpHG9X/+99UTZj7mjM/gfVa76KLT6cYrJRd4ir/1yX1gu1PBka+
+        3bs4T318asK4JCTF7cUv65jzZlMe+7WwXAj+mT+t9earJ1sfLcir3vpnQpPW22gBiV2T3LRy
+        TlzQDAwsf62uEi0uxPF/xR4lluKMREMt5qLiRACFiLzdrQIAAA==
+X-CMS-MailID: 20190717063537epcas1p44d32e5af3318f4b9d197f7be657c72e4
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190707223724epcas4p2d82cecc2969fecddca67192417843418
+X-CMS-RootMailID: 20190707223726epcas4p1790944443c61b34e6c8dd4d64200a2a2
 References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223724epcas4p2d82cecc2969fecddca67192417843418@epcas4p2.samsung.com>
-        <20190707223303.6755-3-digetx@gmail.com>
-        <f691a845-18f3-a6fb-302c-a8a3fc13e5bf@samsung.com>
-        <6c517d04-cf99-f907-e74d-9fba99405a53@gmail.com>
+        <CGME20190707223726epcas4p1790944443c61b34e6c8dd4d64200a2a2@epcas4p1.samsung.com>
+        <20190707223303.6755-4-digetx@gmail.com>
+        <f28470ca-93dc-cdf9-b008-54c7b50cfd83@samsung.com>
+        <e9fd7f68-8ad1-058f-7c87-ccd280ba0b0e@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 16. 오후 10:03, Dmitry Osipenko wrote:
-> 16.07.2019 14:47, Chanwoo Choi пишет:
+On 19. 7. 16. 오후 10:09, Dmitry Osipenko wrote:
+> 16.07.2019 14:50, Chanwoo Choi пишет:
 >> On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
->>> There is no real need to keep interrupt always-enabled, will be nicer
->>> to keep it disabled while governor is inactive.
+>>> The EMC clock rate rounding technically could fail, hence let's handle
+>>> the error cases properly.
 >>>
->>> Suggested-by: Thierry Reding <thierry.reding@gmail.com>
 >>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 >>> ---
->>>  drivers/devfreq/tegra30-devfreq.c | 43 ++++++++++++++++---------------
->>>  1 file changed, 22 insertions(+), 21 deletions(-)
+>>>  drivers/devfreq/tegra30-devfreq.c | 17 +++++++++++++++--
+>>>  1 file changed, 15 insertions(+), 2 deletions(-)
 >>>
 >>> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
->>> index a27300f40b0b..5e2b133babdd 100644
+>>> index 5e2b133babdd..5e606ae3f238 100644
 >>> --- a/drivers/devfreq/tegra30-devfreq.c
 >>> +++ b/drivers/devfreq/tegra30-devfreq.c
->>> @@ -11,6 +11,7 @@
->>>  #include <linux/devfreq.h>
->>>  #include <linux/interrupt.h>
->>>  #include <linux/io.h>
->>> +#include <linux/irq.h>
->>>  #include <linux/module.h>
->>>  #include <linux/mod_devicetable.h>
->>>  #include <linux/platform_device.h>
->>> @@ -416,8 +417,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
->>>  {
->>>  	unsigned int i;
->>>  
->>> -	disable_irq(tegra->irq);
->>> -
->>>  	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
->>>  		      ACTMON_GLB_PERIOD_CTRL);
->>>  
->>> @@ -442,8 +441,6 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
->>>  	}
->>>  
->>>  	actmon_write_barrier(tegra);
->>> -
->>> -	enable_irq(tegra->irq);
->>>  }
->>>  
->>>  static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
->>> @@ -552,6 +549,12 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
->>>  {
->>>  	struct tegra_devfreq *tegra = dev_get_drvdata(devfreq->dev.parent);
->>>  
->>> +	/*
->>> +	 * Couple device with the governor early as it is needed at
->>> +	 * the moment of governor's start (used by ISR).
->>> +	 */
->>> +	tegra->devfreq = devfreq;
->>
->> I'm not sure it is necessary. Almost devfreq device get
->> the devfreq instance on probe timing through devfreq_add_device directly.
-> 
-> This is necessary because this assignment is for the "governor" and not
-> the "device". Governor is started during of devfreq_add_device(), hence
-> there is no better way to assign device to the driver's governor.
-
-OK. I understand.
-
-But, I have a question. Is it working before this patch?
-How can you test it on that tegra->devfreq is NULL?
-
-> 
->>> +
->>>  	switch (event) {
->>>  	case DEVFREQ_GOV_START:
->>>  		devfreq_monitor_start(devfreq);
->>> @@ -586,10 +589,11 @@ static struct devfreq_governor tegra_devfreq_governor = {
->>>  
->>>  static int tegra_devfreq_probe(struct platform_device *pdev)
->>>  {
->>> -	struct tegra_devfreq *tegra;
+>>> @@ -592,8 +592,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
 >>>  	struct tegra_devfreq_device *dev;
->>> -	unsigned int i;
->>> +	struct tegra_devfreq *tegra;
->>> +	struct devfreq *devfreq;
->>>  	unsigned long rate;
->>> +	unsigned int i;
+>>>  	struct tegra_devfreq *tegra;
+>>>  	struct devfreq *devfreq;
+>>> -	unsigned long rate;
+>>>  	unsigned int i;
+>>> +	long rate;
 >>>  	int err;
 >>>  
 >>>  	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
->>> @@ -625,6 +629,16 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->>>  	}
->>>  	tegra->irq = err;
+>>> @@ -650,8 +650,14 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
 >>>  
->>> +	irq_set_status_flags(tegra->irq, IRQ_NOAUTOEN);
->>> +
->>> +	err = devm_request_threaded_irq(&pdev->dev, tegra->irq, NULL,
->>> +					actmon_thread_isr, IRQF_ONESHOT,
->>> +					"tegra-devfreq", tegra);
->>> +	if (err) {
->>> +		dev_err(&pdev->dev, "Interrupt request failed: %d\n", err);
->>> +		return err;
+>>>  	reset_control_deassert(tegra->reset);
+>>>  
+>>> -	tegra->max_freq = clk_round_rate(tegra->emc_clock, ULONG_MAX) / KHZ;
+>>> +	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
+>>> +	if (rate < 0) {
+>>> +		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
+>>> +		return rate;
 >>> +	}
 >>> +
->>>  	reset_control_assert(tegra->reset);
+>>>  	tegra->cur_freq = clk_get_rate(tegra->emc_clock) / KHZ;
+>>> +	tegra->max_freq = rate / KHZ;
 >>>  
->>>  	err = clk_prepare_enable(tegra->clock);
->>> @@ -672,28 +686,15 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->>>  	}
+>>>  	for (i = 0; i < ARRAY_SIZE(actmon_device_configs); i++) {
+>>>  		dev = tegra->devices + i;
+>>> @@ -662,6 +668,13 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>>>  	for (rate = 0; rate <= tegra->max_freq * KHZ; rate++) {
+>>>  		rate = clk_round_rate(tegra->emc_clock, rate);
 >>>  
->>>  	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
->>> -	tegra->devfreq = devfreq_add_device(&pdev->dev,
->>> -					    &tegra_devfreq_profile,
->>> -					    "tegra_actmon",
->>> -					    NULL);
->>> +	devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
->>> +				     "tegra_actmon", NULL);
->>>  	if (IS_ERR(tegra->devfreq)) {
 >>
->> Have to check 'devfreq' instead of 'tegra->devfreq'.
->> Did you test it? It might be failed because 'tegra->devfreq is NULL.
+>> Please remove unneeded blank line.
 > 
-> That's a good catch! Thank you very much.
+> I can remove it, but it was added specifically to ease reading of the code.
 > 
->>>  		err = PTR_ERR(tegra->devfreq);
+>>> +		if (rate < 0) {
+>>> +			dev_err(&pdev->dev,
+>>> +				"Failed to round clock rate: %ld\n", rate);
+>>> +			err = rate;
+>>> +			goto remove_opps;
+>>> +		}
 >>
->> ditto.
+>> Also, this patch doesn't contain code which restore the previous
+>> tegra->cur_freq/max_freq when error happen.
 > 
-> Ok
+> The error here results in abortion of the driver's probing, hence
+> nothing need to be restored in that case because nothing was changed at
+> this point yet.
 > 
 > 
+
+OK.
 
 
 -- 
