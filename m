@@ -2,210 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD586BFC8
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 18:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D73A6C042
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 19:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727278AbfGQQoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 12:44:16 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45842 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbfGQQoQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 12:44:16 -0400
-Received: by mail-lj1-f194.google.com with SMTP id m23so24257303lje.12;
-        Wed, 17 Jul 2019 09:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CGE+X8ckrtnyxFAXLFXXVIZ9hPlv1NjuKqBGCRzqByI=;
-        b=hhWQv/QG2DNbPreGmmjLHGuiRKWYwIwCAi7mLxMQ3Fn1/HBgOWor4mz8yY0HFiNeit
-         fyHEwXn6a1dr/BWPpwgc/zStOsAFGdglquc8KoBgLA3AfGpCi2OQgCVjTnxYoi7CLaE8
-         bJslyBmCJ7VURR8j5KLcQeLwDktrc3+PMbU/Iy0blC4hieJN9WCbtSIAXDfzSIt2wdlp
-         2DZHeOit4RTv/SSYHWoYw0rzdSzKJ5ZreiJmhMrGIeuG625ZWP/LEINKoFoceZw3IP0S
-         eNXZiUgmBOuDtQB+F9Smiv35qPi55UWDRMVI+ALMufCyfG6H7lpIZiJ5uaeSPFHCNd2D
-         hmJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CGE+X8ckrtnyxFAXLFXXVIZ9hPlv1NjuKqBGCRzqByI=;
-        b=htNSPoMZVBnIel5gdN9qzf+F/T/EX6iVB78NhL5lzo/uilLiiz3ZfvTw323MQoqa0O
-         DNtU7ZiduJK4+DLC4qz6/nGB1ZCf75AJa1UiaRvVe/iICRHITWvNnJtFV6LiJxu85jFR
-         5W89o+hWJsDcnuDgtKeRdnoiMdvflt+C4P57WveuDPUzzwkZhSQi1ZvfvSyFatAukZc8
-         cO5Q9Si4PzXT+CPE6jOwRb9QS+wEr8rY5gu7Ae+V1Khm6Tf18OfTQWpFK5vt4vp1lZyu
-         8q5jl7PQGI5+fhq1iRTA64PG5rh6rz+7TYIaU3t/bGKPkeXgluM9By4tutYrDzt6oWKy
-         xhlg==
-X-Gm-Message-State: APjAAAXQ7rM8pMYJqviAuQTeHJeq/gLsicf15e4m4AFZvft/11hwrAgm
-        /QOCUKTcED4Q3S2GOHOVwKnZQykc
-X-Google-Smtp-Source: APXvYqxYRDRMfBu1u8Fk1hovIfRdfVNhGOozt3pkDF9g4w5Oyt0wEhsATv3DB2uXZ2AewqsblPMwww==
-X-Received: by 2002:a2e:9147:: with SMTP id q7mr20961992ljg.19.1563381853573;
-        Wed, 17 Jul 2019 09:44:13 -0700 (PDT)
-Received: from [192.168.2.145] (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.googlemail.com with ESMTPSA id x67sm4567861ljb.13.2019.07.17.09.44.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Jul 2019 09:44:12 -0700 (PDT)
-Subject: Re: [PATCH v4 02/24] PM / devfreq: tegra30: Keep interrupt disabled
- while governor is stopped
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190707223303.6755-1-digetx@gmail.com>
- <CGME20190707223724epcas4p2d82cecc2969fecddca67192417843418@epcas4p2.samsung.com>
- <20190707223303.6755-3-digetx@gmail.com>
- <f691a845-18f3-a6fb-302c-a8a3fc13e5bf@samsung.com>
- <6c517d04-cf99-f907-e74d-9fba99405a53@gmail.com>
- <ca339b7f-1141-4c68-1c07-2ac818422bbc@samsung.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <00dfcd92-a41a-11c0-b8b2-1cdc68048aa9@gmail.com>
-Date:   Wed, 17 Jul 2019 19:44:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726063AbfGQRTC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 13:19:02 -0400
+Received: from foss.arm.com ([217.140.110.172]:49330 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725873AbfGQRTC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jul 2019 13:19:02 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACFB728;
+        Wed, 17 Jul 2019 10:19:01 -0700 (PDT)
+Received: from e107155-lin (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C30D73F71F;
+        Wed, 17 Jul 2019 10:18:58 -0700 (PDT)
+Date:   Wed, 17 Jul 2019 18:18:56 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Raju P . L . S . S . S . N" <rplsssn@codeaurora.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souvik Chakravarty <souvik.chakravarty@arm.com>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lina Iyer <lina.iyer@linaro.org>,
+        Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>
+Subject: Re: [PATCH 17/18] arm64: dts: Convert to the hierarchical CPU
+ topology layout for MSM8916
+Message-ID: <20190717171856.GF18370@e107155-lin>
+References: <20190513192300.653-1-ulf.hansson@linaro.org>
+ <20190513192300.653-18-ulf.hansson@linaro.org>
+ <20190716144730.GA7250@e107155-lin>
+ <20190716203631.GC25567@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <ca339b7f-1141-4c68-1c07-2ac818422bbc@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190716203631.GC25567@codeaurora.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-17.07.2019 9:37, Chanwoo Choi пишет:
-> On 19. 7. 16. 오후 10:03, Dmitry Osipenko wrote:
->> 16.07.2019 14:47, Chanwoo Choi пишет:
->>> On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
->>>> There is no real need to keep interrupt always-enabled, will be nicer
->>>> to keep it disabled while governor is inactive.
->>>>
->>>> Suggested-by: Thierry Reding <thierry.reding@gmail.com>
->>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>>> ---
->>>>  drivers/devfreq/tegra30-devfreq.c | 43 ++++++++++++++++---------------
->>>>  1 file changed, 22 insertions(+), 21 deletions(-)
->>>>
->>>> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
->>>> index a27300f40b0b..5e2b133babdd 100644
->>>> --- a/drivers/devfreq/tegra30-devfreq.c
->>>> +++ b/drivers/devfreq/tegra30-devfreq.c
->>>> @@ -11,6 +11,7 @@
->>>>  #include <linux/devfreq.h>
->>>>  #include <linux/interrupt.h>
->>>>  #include <linux/io.h>
->>>> +#include <linux/irq.h>
->>>>  #include <linux/module.h>
->>>>  #include <linux/mod_devicetable.h>
->>>>  #include <linux/platform_device.h>
->>>> @@ -416,8 +417,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
->>>>  {
->>>>  	unsigned int i;
->>>>  
->>>> -	disable_irq(tegra->irq);
->>>> -
->>>>  	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
->>>>  		      ACTMON_GLB_PERIOD_CTRL);
->>>>  
->>>> @@ -442,8 +441,6 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
->>>>  	}
->>>>  
->>>>  	actmon_write_barrier(tegra);
->>>> -
->>>> -	enable_irq(tegra->irq);
->>>>  }
->>>>  
->>>>  static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
->>>> @@ -552,6 +549,12 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
->>>>  {
->>>>  	struct tegra_devfreq *tegra = dev_get_drvdata(devfreq->dev.parent);
->>>>  
->>>> +	/*
->>>> +	 * Couple device with the governor early as it is needed at
->>>> +	 * the moment of governor's start (used by ISR).
->>>> +	 */
->>>> +	tegra->devfreq = devfreq;
->>>
->>> I'm not sure it is necessary. Almost devfreq device get
->>> the devfreq instance on probe timing through devfreq_add_device directly.
->>
->> This is necessary because this assignment is for the "governor" and not
->> the "device". Governor is started during of devfreq_add_device(), hence
->> there is no better way to assign device to the driver's governor.
-> 
-> OK. I understand.
-> 
-> But, I have a question. Is it working before this patch?
-> How can you test it on that tegra->devfreq is NULL?
+On Tue, Jul 16, 2019 at 02:36:31PM -0600, Lina Iyer wrote:
+> On Tue, Jul 16 2019 at 08:47 -0600, Sudeep Holla wrote:
+> > On Mon, May 13, 2019 at 09:22:59PM +0200, Ulf Hansson wrote:
+> > > From: Lina Iyer <lina.iyer@linaro.org>
+> > >
+> > > In the hierarchical layout, we are creating power domains around each CPU
+> > > and describes the idle states for them inside the power domain provider
+> > > node. Note that, the CPU's idle states still needs to be compatible with
+> > > "arm,idle-state".
+> > >
+> > > Furthermore, represent the CPU cluster as a separate master power domain,
+> > > powering the CPU's power domains. The cluster node, contains the idle
+> > > states for the cluster and each idle state needs to be compatible with the
+> > > "domain-idle-state".
+> > >
+> > > If the running platform is using a PSCI FW that supports the OS initiated
+> > > CPU suspend mode, which likely should be the case unless the PSCI FW is
+> > > very old, this change triggers the PSCI driver to enable it.
+> > >
+> > > Cc: Andy Gross <andy.gross@linaro.org>
+> > > Cc: David Brown <david.brown@linaro.org>
+> > > Signed-off-by: Lina Iyer <lina.iyer@linaro.org>
+> > > Co-developed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> >
+> > [...]
+> >
+> > > @@ -166,12 +170,57 @@
+> > >  				min-residency-us = <2000>;
+> > >  				local-timer-stop;
+> > >  			};
+> > > +
+> > > +			CLUSTER_RET: cluster-retention {
+> > > +				compatible = "domain-idle-state";
+> > > +				arm,psci-suspend-param = <0x1000010>;
+> > > +				entry-latency-us = <500>;
+> > > +				exit-latency-us = <500>;
+> > > +				min-residency-us = <2000>;
+> > > +			};
+> > > +
+> > > +			CLUSTER_PWRDN: cluster-gdhs {
+> > > +				compatible = "domain-idle-state";
+> > > +				arm,psci-suspend-param = <0x1000030>;
+> > > +				entry-latency-us = <2000>;
+> > > +				exit-latency-us = <2000>;
+> > > +				min-residency-us = <6000>;
+> > > +			};
+> > >  		};
+> > >  	};
+> >
+> > I was trying to understand the composition of composite state parameters
+> > in this series and that made me look at these DT examples.
+> >
+> This was meant to depict a hierarchical state format for OSI.
+>
 
-It was working before this patch because previously interrupt was
-requested *after* devfreq_add_device(), now the IRQ requesting happens
-*before* devfreq_add_device() and enabling *during of*. If interrupt
-fires before the assignment happened, then ISR gets a NULL deference and
-this is easily reproducible.
+Hmm, I am more confused. We have 2 formats: original and extended.
 
-Please note that 'tegra->devfreq' is used only by the ISR and onward, in
-the further patches of this series the usage is extended by the cpufreq
-notifier.
+1. Original:
+	31:26 Reserved. Must be zero.
+	25:24 PowerLevel
+	23:17 Reserved. Must be zero.
+	16 StateType
+	15:0 StateID
+2. Extended
+	31 Reserved. Must be zero.
+	30 StateType
+	29:28 Reserved. Must be zero.
+	27:0 StateID
 
->>
->>>> +
->>>>  	switch (event) {
->>>>  	case DEVFREQ_GOV_START:
->>>>  		devfreq_monitor_start(devfreq);
->>>> @@ -586,10 +589,11 @@ static struct devfreq_governor tegra_devfreq_governor = {
->>>>  
->>>>  static int tegra_devfreq_probe(struct platform_device *pdev)
->>>>  {
->>>> -	struct tegra_devfreq *tegra;
->>>>  	struct tegra_devfreq_device *dev;
->>>> -	unsigned int i;
->>>> +	struct tegra_devfreq *tegra;
->>>> +	struct devfreq *devfreq;
->>>>  	unsigned long rate;
->>>> +	unsigned int i;
->>>>  	int err;
->>>>  
->>>>  	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
->>>> @@ -625,6 +629,16 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->>>>  	}
->>>>  	tegra->irq = err;
->>>>  
->>>> +	irq_set_status_flags(tegra->irq, IRQ_NOAUTOEN);
->>>> +
->>>> +	err = devm_request_threaded_irq(&pdev->dev, tegra->irq, NULL,
->>>> +					actmon_thread_isr, IRQF_ONESHOT,
->>>> +					"tegra-devfreq", tegra);
->>>> +	if (err) {
->>>> +		dev_err(&pdev->dev, "Interrupt request failed: %d\n", err);
->>>> +		return err;
->>>> +	}
->>>> +
->>>>  	reset_control_assert(tegra->reset);
->>>>  
->>>>  	err = clk_prepare_enable(tegra->clock);
->>>> @@ -672,28 +686,15 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->>>>  	}
->>>>  
->>>>  	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
->>>> -	tegra->devfreq = devfreq_add_device(&pdev->dev,
->>>> -					    &tegra_devfreq_profile,
->>>> -					    "tegra_actmon",
->>>> -					    NULL);
->>>> +	devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
->>>> +				     "tegra_actmon", NULL);
->>>>  	if (IS_ERR(tegra->devfreq)) {
->>>
->>> Have to check 'devfreq' instead of 'tegra->devfreq'.
->>> Did you test it? It might be failed because 'tegra->devfreq is NULL.
->>
->> That's a good catch! Thank you very much.
->>
->>>>  		err = PTR_ERR(tegra->devfreq);
->>>
->>> ditto.
->>
->> Ok
+I was trying to match them to that. I think I commented on other patches.
+I think simple OR logic breaks with extended format easily if StateIDs
+are not carefully crafted which is not mandated and hence the trouble.
+The same holds to original format but with PowerLevel, it slightly
+relaxing things a bit but still it needs to be crafted when firmware
+decides these parameters. E.g.: what is done with HiKey platform is
+completely wrong.
+
+It's helpful if we want to avoid save/restore for retention states.
+CPU_PM_CPU_IDLE_ENTER_RETENTION vs CPU_PM_CPU_IDLE_ENTER
+
+> > What format does the above platform use ? I tried matching them to
+> > both original as well as extended format and I fail to understand.
+> > Assuming original format:
+> > 	State         power_state PowerLevel  StateType     StateID
+> > 	SPC           0x40000002   0(core)    0(Retention)  0x2 (Res0 b[29]=1?)
+> > 	CLUSTER_RET   0x1000010   1(clusters) 0(Retention)  0x10
+> > 	CLUSTER_PWRDN 0x1000030   1(clusters) 0(Retention?) 0x30
+> > Now extended format:
+> > 	State         power_state StateType     StateID
+> > 	SPC           0x40000002  0(Retention)  0x40000002 (Res0 b[29]=1?)
+> > 	CLUSTER_RET   0x1000010   0(Retention)  0x1000010
+> The composite state would comprise of CPU state and  Cluster state.
+> So for the last CPU entering idle -
+> (CLUSTER_RET | SPC)
+> 0x41000012
+> > 	CLUSTER_PWRDN 0x1000030   0(Retention?) 0x1000030
+> >
+> (CLUSTER_PWRDN | SPC)
+> 0x41000032
+>
+> Hope this helps.
+>
+
+I just follow OR logic. I have made wrong reference to bit 29 above(I
+can't read simple 32 bit number anymore :(), it should bit 30 and if
+this platform follow extended state, then it makes some sense. But
+I expect CLUSTER_PWRDN also to have bit 30 set. I tried to match to both
+formats and failed to understand which it follows, so thought of asking.
+
+--
+Regards,
+Sudeep
