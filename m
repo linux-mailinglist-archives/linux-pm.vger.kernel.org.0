@@ -2,164 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9966C233
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 22:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE35E6C2B8
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 23:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbfGQUf1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 16:35:27 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42110 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727307AbfGQUf1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 16:35:27 -0400
-Received: by mail-ot1-f66.google.com with SMTP id l15so26508527otn.9
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 13:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FXMPE8BPcH8HZFC59zfa+SPhPyvIIvJuCBoRrteYkho=;
-        b=moNgVqVQhCBuJdG5uOFEyRfVcJzkfTBNTs1Z3BXgLCU/zNi1D4oLYm2x2ZWNlhu00o
-         LT6iBaph3MXCWS/sJoRYUvIu8UNhz9wxYLRNawV9XKeiTlkcM6V4EJgr/o0s/l7F9H9n
-         eaCRXJ8QSkb6IS+3uCDJJTElg4bu/QRKrv6kl7cRPXszOjrPpMBITdPZYbXHEjohwL+D
-         5/kfaWdk788Em87avYwEI0HznRAtBgp6KwKJ6+O5YVGIUkjhdDxnZTLwziPCixlz6PTU
-         1KCuifdDUYJNf8a0zKSnLcOplBhmSUW0TobyxmWOkuvaybNzsLmYg0kGob2RUtlutN3j
-         qGdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FXMPE8BPcH8HZFC59zfa+SPhPyvIIvJuCBoRrteYkho=;
-        b=RmrCIeTmy/DiLlbtGzfoMKQcEdHXI1WtTEAAFExVwgNcj5c/YV9Vme/yaJAqUZD4g3
-         SRQeKXHtlHvpSMpSmL9AbOBuXIFQd7BG2wj2dXxZyVOjwtxBQU8QDIvb98KNyvAyBcfV
-         dnaUJ/z0Xo/xS+adwV4EvmQSewrHF3mdsXOU75XLOBi7YPbK6HO3zF5RB8wuuAMzh7bN
-         dkihW6wCB1uhxUXlftvHqv0tu81bLtMv6IvTUnfLkzWiICemQ/xCXlu0/QxYWQ4XOlNS
-         P29v2EGUeVE/ru2Y9m09m2bUomYmB9pVCsOdu4BbMyMPivlBybLh1kUpczKeiWkmAMmY
-         c1Ig==
-X-Gm-Message-State: APjAAAWAs4XKNPlgHLrycc7ptX1ssweApl5rafyWl46XVrYLap6oc5EV
-        eTyK397Pr/uT0GR8PPgXMscdS37sJWb6b/0lfj82xQ==
-X-Google-Smtp-Source: APXvYqwiUDUXNi3NqRWqHDw5Y5A6ix3QwgYxmpU6YxwqpVdAsmXY+1UW4eisFVhv1mqNUfAErWIwIX2XUNG2O5mIWr8=
-X-Received: by 2002:a05:6830:160c:: with SMTP id g12mr32951615otr.231.1563395725759;
- Wed, 17 Jul 2019 13:35:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190703011020.151615-1-saravanak@google.com> <20190717103220.f7cys267hq23fbsb@vireshk-i7>
-In-Reply-To: <20190717103220.f7cys267hq23fbsb@vireshk-i7>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 17 Jul 2019 13:34:49 -0700
-Message-ID: <CAGETcx-tbjVzRKW8D-564zgNOhrA_z-NC1q5U70bhoUDBhp6VA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Introduce Bandwidth OPPs for interconnect paths
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S1727385AbfGQVmK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 17:42:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38706 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727205AbfGQVmK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jul 2019 17:42:10 -0400
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DBA3E2173E;
+        Wed, 17 Jul 2019 21:42:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563399729;
+        bh=7rMuXM9NN6lQ85LB+OriK3p6ENgfakggChsBPX4hfL4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RFLGAJmgJVB1w5aVi9mReam7V1gb81xeLFCjkn9xznqLGC3HEmqoL7d+ZCxavtWC0
+         0SqHxZQEnlmYDbryYN2fr8b29E52RI7YAJmgMTVDUZma5MRHYpCkk4xZ5rj3WZfGk1
+         Bhhnqd7o5hrpaYp0cH0Qh2hJOM/lTnoaeeJil6NI=
+Date:   Wed, 17 Jul 2019 16:42:05 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Alexander Fomichev <fomichev.ru@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>, linux@yadro.com,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
-        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Logan Gunthorpe <logang@deltatee.com>
+Subject: Re: [PATCH RESEND] PCI: disable runtime PM for PLX switches
+Message-ID: <20190717214205.GA61126@google.com>
+References: <20190415135903.wiyw34faiezdnbbs@yadro.com>
+ <20190415141554.GL126710@google.com>
+ <20190423215340.GH14616@google.com>
+ <20190424100102.iyxogbsa4l7dyusb@yadro.com>
+ <20190424141148.GA244134@google.com>
+ <20190424145819.GL2654@lahna.fi.intel.com>
+ <20190424172151.GB244134@google.com>
+ <CAJZ5v0gZhgMy+oQMpEGM8bsU_57w7i3iCP1nb9PcOHxENfnwAw@mail.gmail.com>
+ <20190627110624.nxwloyphithj4rmt@yadro.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190627110624.nxwloyphithj4rmt@yadro.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 17, 2019 at 3:32 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 02-07-19, 18:10, Saravana Kannan wrote:
-> > Interconnects and interconnect paths quantify their performance levels in
-> > terms of bandwidth and not in terms of frequency. So similar to how we have
-> > frequency based OPP tables in DT and in the OPP framework, we need
-> > bandwidth OPP table support in the OPP framework and in DT. Since there can
-> > be more than one interconnect path used by a device, we also need a way to
-> > assign a bandwidth OPP table to an interconnect path.
-> >
-> > This patch series:
-> > - Adds opp-peak-KBps and opp-avg-KBps properties to OPP DT bindings
-> > - Adds interconnect-opp-table property to interconnect DT bindings
-> > - Adds OPP helper functions for bandwidth OPP tables
-> > - Adds icc_get_opp_table() to get the OPP table for an interconnect path
-> >
-> > So with the DT bindings added in this patch series, the DT for a GPU
-> > that does bandwidth voting from GPU to Cache and GPU to DDR would look
-> > something like this:
-> >
-> > gpu_cache_opp_table: gpu_cache_opp_table {
-> >       compatible = "operating-points-v2";
-> >
-> >       gpu_cache_3000: opp-3000 {
-> >               opp-peak-KBps = <3000>;
-> >               opp-avg-KBps = <1000>;
-> >       };
-> >       gpu_cache_6000: opp-6000 {
-> >               opp-peak-KBps = <6000>;
-> >               opp-avg-KBps = <2000>;
-> >       };
-> >       gpu_cache_9000: opp-9000 {
-> >               opp-peak-KBps = <9000>;
-> >               opp-avg-KBps = <9000>;
-> >       };
-> > };
-> >
-> > gpu_ddr_opp_table: gpu_ddr_opp_table {
-> >       compatible = "operating-points-v2";
-> >
-> >       gpu_ddr_1525: opp-1525 {
-> >               opp-peak-KBps = <1525>;
-> >               opp-avg-KBps = <452>;
-> >       };
-> >       gpu_ddr_3051: opp-3051 {
-> >               opp-peak-KBps = <3051>;
-> >               opp-avg-KBps = <915>;
-> >       };
-> >       gpu_ddr_7500: opp-7500 {
-> >               opp-peak-KBps = <7500>;
-> >               opp-avg-KBps = <3000>;
-> >       };
-> > };
->
-> Who is going to use the above tables and how ?
+On Thu, Jun 27, 2019 at 02:06:24PM +0300, Alexander Fomichev wrote:
+> On Wed, Apr 24, 2019 at 11:09:52PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Apr 24, 2019 at 8:01 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Wed, Apr 24, 2019 at 05:58:19PM +0300, Mika Westerberg wrote:
+> > > > On Wed, Apr 24, 2019 at 09:11:48AM -0500, Bjorn Helgaas wrote:
+> > > > >   - Maybe the PCI sysfs accessors (pci_mmap_resource(), etc) should
+> > > > >     turn off runtime PM?  If we allow mmap of a BAR and then put the
+> > > > >     device in D3hot, that seems like a bug that could affect lots of
+> > > > >     things.  But maybe that's already done magically elsewhere?
+> > > >
+> > > > IIRC there is no PM magic happening for MMIO userspace accesses.
+> > > >
+> > > > What you suggest above sounds like a good way to fix it. We already do
+> > > > similar for config space access from userspace (if the device is in
+> > > > D3cold) so definitely makes sense to do the same for MMIO. However, I
+> > > > don't think we need to disable runtime PM - it should be enough to
+> > > > increase the reference count (pm_runtime_get_sync() and friends) during
+> > > > the time the MMIO resource is mmapped.
+> > >
+> > > OK, so if I understand correctly this would be basically adding
+> > > pm_runtime_get_sync(dev) in pci_mmap_resource().  I don't know what
+> > > the unmap path is, but there would have to be a matching
+> > > pm_runtime_put() somewhere.
+> > 
+> > Right.
+> > 
+> > > And a similar change in the read/write path for /sys/.../resource<N>;
+> > > I think this must be related to the sysfs_create_bin_file() call in
+> > > pci_create_attr(), but I don't see the path where the actual
+> > > read/write to the device is done.
+> > >
+> > > And probably something similar should be done in pci_resource_io(),
+> > > pci_map_rom(), and pci_unmap_rom().
+> > 
+> > In general, every path in which there is a memory or IO address space
+> > access requires pm_runtime_get_sync()/pm_runtime_put() around it as
+> > these accesses are only guaranteed to work in D0.
+> 
+> Tested a solution based on proposals by Logan, Bjorn, Mika, Rafael (thanks all
+> of you, guys), I managed to fix the problem inside the PLX driver code. So no
+> additional quirks or other modifications in Linux kernel needed. I think
+> my patch can be easily rejected.
 
-In this example the GPU driver would use these. It'll go through these
-and then decide what peak and average bw to pick based on whatever
-criteria.
+Can you fill us in a little bit on the solution?  Are you referring to
+an out-of-tree PLX kernel driver?  I assume this is not a userspace
+PLX tool because I don't think we have a solution to make sysfs mmap
+safe yet.
 
-> These are the maximum
-> BW available over these paths, right ?
+Did you have to call pm_runtime_get() or similar from your driver?
+Did your driver already call some PM interface before that?  (If you
+could point us at the source, that would be ideal.)
 
-I wouldn't call them "maximum" because there can't be multiple
-maximums :) But yes, these are the meaningful bandwidth from the GPU's
-perspective to use over these paths.
+Rafael, does a PCI driver have to indicate somehow that it's prepared
+for runtime PM?  I assume the runtime PM core is designed in such a
+way that it doesn't force driver changes (e.g., maybe driver changes
+would enable more power savings, but at least things would *work*
+unchanged).
 
->
-> > gpu_opp_table: gpu_opp_table {
-> >       compatible = "operating-points-v2";
-> >       opp-shared;
-> >
-> >       opp-200000000 {
-> >               opp-hz = /bits/ 64 <200000000>;
-> >       };
-> >       opp-400000000 {
-> >               opp-hz = /bits/ 64 <400000000>;
-> >       };
-> > };
->
-> Shouldn't this link back to the above tables via required-opp, etc ?
-> How will we know how much BW is required by the GPU device for all the
-> paths ?
-
-If that's what the GPU driver wants to do, then yes. But the GPU
-driver could also choose to scale the bandwidth for these paths based
-on multiple other signals. Eg: bus port busy percentage, measure
-bandwidth, etc.
-
-Or they might even decide to pick the BW OPP that matches the index of
-their GPU OPP. It's up to them how they actually do the heuristic.
-
--Saravana
+Bjorn
