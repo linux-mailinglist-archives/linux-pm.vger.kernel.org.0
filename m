@@ -2,54 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA47A6B6B4
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 08:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E828B6B6D8
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 08:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727375AbfGQGfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 02:35:43 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:51740 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726056AbfGQGfn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 02:35:43 -0400
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190717063541epoutp03e2f45d92c1fce8a17c33a463881714d1~yHk4Sy05D2099420994epoutp03_
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 06:35:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190717063541epoutp03e2f45d92c1fce8a17c33a463881714d1~yHk4Sy05D2099420994epoutp03_
+        id S1727116AbfGQGm7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 02:42:59 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:30407 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727097AbfGQGm7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 02:42:59 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190717064257epoutp0113474047d01ff3c9fca6c47c08c12913~yHrOb--9t0860708607epoutp01O
+        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 06:42:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190717064257epoutp0113474047d01ff3c9fca6c47c08c12913~yHrOb--9t0860708607epoutp01O
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563345341;
-        bh=zhgJp2c1EEd5zsHzQMcfN8W5rw9BTdRu/SSkbuNu8x8=;
+        s=mail20170921; t=1563345777;
+        bh=deOsYQPUlsMNAwlQxJO3S1U8Nw9DJ9s0uABjc8BsERQ=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=kMk6ctcFCYLNDAToKyAVWNpnv6yc6XNgyYyGLuEC7YVh3Bsu6XVVH0Ge3UqsGR11y
-         OQEJcxn4i83vmYFQ+Bvy/TYYEeZtZA1EOGEa8mlFdLxQ+oHohMrQqbYzglOpJvcEbQ
-         IEYYR4HWHauy1KqtGR7ThglVDNkthozuecPBR4no=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190717063540epcas1p14851c1bc431c0f8da57014affbf4f72f~yHk3w-Ued0307803078epcas1p1e;
-        Wed, 17 Jul 2019 06:35:40 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.152]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 45pSFQ4LLWzMqYkc; Wed, 17 Jul
-        2019 06:35:38 +0000 (GMT)
+        b=BHnaHm5AKTBrgWUvevQsY9cDCyiDNCHCOIOGtxeR2NVrlbXHzqN+GciT5cshBPk+c
+         5nlNyrzkRpF7VkRMP5VVoRfF26vwCgKQ9WZ/yEG/dSsM8gJLfOe+sfjgTQ/+BVH030
+         QuulTzdGIxstD50Zde0FEw/Qg72CeCrw4+cc1IHw=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190717064256epcas1p3200702665b3836af45d8688895799f70~yHrN8A_lO2561825618epcas1p3e;
+        Wed, 17 Jul 2019 06:42:56 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.40.155]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 45pSPl3stlzMqYlt; Wed, 17 Jul
+        2019 06:42:51 +0000 (GMT)
 Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        93.8E.04088.AB1CE2D5; Wed, 17 Jul 2019 15:35:38 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20190717063537epcas1p44d32e5af3318f4b9d197f7be657c72e4~yHk1IEBvU1593015930epcas1p4t;
-        Wed, 17 Jul 2019 06:35:37 +0000 (GMT)
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2B.C3.04160.B63CE2D5; Wed, 17 Jul 2019 15:42:51 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190717064250epcas1p1ef8c98ccebcb1dd2400136e35c9c5898~yHrIEMgfv3112331123epcas1p1E;
+        Wed, 17 Jul 2019 06:42:50 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190717063537epsmtrp14c938f7baf65c4d1b3ab90a270966475~yHk1HQs_c0166501665epsmtrp19;
-        Wed, 17 Jul 2019 06:35:37 +0000 (GMT)
-X-AuditID: b6c32a35-85dff70000000ff8-4b-5d2ec1ba2bf7
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190717064250epsmtrp2a1ec681dc33a76fbc0f4d9f542d996d2~yHrICtvjV1492614926epsmtrp2R;
+        Wed, 17 Jul 2019 06:42:50 +0000 (GMT)
+X-AuditID: b6c32a38-b33ff70000001040-e1-5d2ec36b267c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        13.CF.03706.9B1CE2D5; Wed, 17 Jul 2019 15:35:37 +0900 (KST)
+        6E.20.03706.A63CE2D5; Wed, 17 Jul 2019 15:42:50 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190717063537epsmtip1112b8079667f54e0015e327883f5d903~yHk07EKR90815208152epsmtip13;
-        Wed, 17 Jul 2019 06:35:37 +0000 (GMT)
-Subject: Re: [PATCH v4 03/24] PM / devfreq: tegra30: Handle possible
- round-rate error
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190717064250epsmtip2ca606eb525683e73ac8e6f2da9065cc6~yHrH20Hq63133131331epsmtip29;
+        Wed, 17 Jul 2019 06:42:50 +0000 (GMT)
+Subject: Re: [PATCH v4 11/24] PM / devfreq: tegra30: Add debug messages
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -60,128 +59,89 @@ Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <faf0f014-71e6-ace9-391f-8b0080d94dc6@samsung.com>
-Date:   Wed, 17 Jul 2019 15:38:46 +0900
+Message-ID: <922c9178-71de-46ad-eafd-805af461bedb@samsung.com>
+Date:   Wed, 17 Jul 2019 15:45:58 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <e9fd7f68-8ad1-058f-7c87-ccd280ba0b0e@gmail.com>
+In-Reply-To: <53cd0ba5-f814-cd9b-19c5-1d42717ca58c@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjm85ydTWn1NbPe9qPsdAEVdUedncpJUcmgfhgR3RA76UHF7Wzt
-        zNJuWAtTU7sHHc0iu5hZmVnMkVhzkBndnFEURmV0R6lcaUW17Rj57/me53mv36siNE2UVpUn
-        2HmbwJloKoy81hEVH+u6GZehc/RNZ89/7kPsLukkyd7d+UnJel01FPu10oPYskGJYp/tqKfY
-        YVctyVZd6KbmhxqdvaeQsVXqVRorHf2UsaqlARm/Nk9JV6zJT8nluWzeFskLWZbsPCHHQC9Z
-        nrkwU5+sY2KZOexsOlLgzLyBXrQ0PTYtz+RviI7cyJkK/FQ6J4p0fGqKzVJg5yNzLaLdQPPW
-        bJN1jjVO5MxigZATl2Uxz2V0ugS937guP/d+hZOw9oQXln55SxSjz+PKUagKcBL0+M4oylGY
-        SoOdCI6UeBUBQYO/IHh4YJssfEPgcV0L+RfR19mllIU2BDs7/1DyYwBB04OHVMAVjlfC0OXD
-        QWEC/o2gbNgRFAi8GjpazwdTUTga2t89CfLj8DR4NNSHAliNU6H+5aNgHySeCSeltiAfgVdB
-        l6eWlD3j4fbR10Ecig1QNVAzkn8SPH19PETGU8FxtZoINAHYoYTHwxeV8gyL4NXV65SMw+HD
-        rZYRXgvv95aM4C1w7raHkoNLEbS0P1DIQiK0nz7or6DyV4iCS654mZ4GrT+PIbnwWOj3VSgC
-        FsBqKC3RyJbp4H3RO7LGyVC3u4zah2hp1DjSqBGkUSNI/4udQGQDmshbRXMOLzJWZvR3N6Pg
-        tUbrnejQvaVuhFWIHqM2dsRmaBTcRrHI7EagIugJaoMvJkOjzuaKNvM2S6atwMSLbqT3b3s/
-        oY3IsvhvX7BnMvqExMRENolJ1jMMPUld+ysqQ4NzODufz/NW3vYvLkQVqi1Gs3Vba84kdSUd
-        N857c0q4s2LQkPfRmrrpcD89Y+6COz5n41nJ8SPLq21Yk/b0e92yPc+FWZ6iwc7mAfJW8yac
-        pu7esGyo9YSxd+2YlHdkRaN3e1FI9fyt64nGxS/Kfe4bV2KSb7LF7sL6BNeryuSfuidp3i1/
-        xtdNVe9afbGwJCKsjSbFXI6JJmwi9xfKQMYBwwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsWy7bCSnO7Og3qxBic2GFus/viY0aJl1iIW
-        i7NNb9gtLu+aw2bxufcIo0Xnl1lsFrcbV7BZ/Nw1j8Wib+0lNgdOjx13lzB67Jx1l92jt/kd
-        m0ffllWMHp83yQWwRnHZpKTmZJalFunbJXBlnO/ZwVxwRbii49Nz5gbGj/xdjJwcEgImEo9P
-        nGIHsYUEdjNKHLpoCxGXlJh28ShzFyMHkC0scfhwcRcjF1DJW0aJY2s7mEFqhAXCJX5snMoG
-        khARaGKS2NR7AWwQs0CkRM/cLWwQHbOZJO4f+s4EkmAT0JLY/+IGG4jNL6AocfXHY0YQm1fA
-        TmLFw6usIDaLgKrEoll7weKiAhESk67tZIGoEZQ4OfMJmM0pYCvR934OG8QydYk/8y4xQ9ji
-        EreezGeCsOUlmrfOZp7AKDwLSfssJC2zkLTMQtKygJFlFaNkakFxbnpusWGBYV5quV5xYm5x
-        aV66XnJ+7iZGcIxpae5gvLwk/hCjAAejEg/vhwO6sUKsiWXFlbmHGCU4mJVEeG2/ascK8aYk
-        VlalFuXHF5XmpBYfYpTmYFES532adyxSSCA9sSQ1OzW1ILUIJsvEwSnVwDihcX+QeMRVw/ie
-        Gw+v8t488bRS/06+wrnS6TpHG9X/+99UTZj7mjM/gfVa76KLT6cYrJRd4ir/1yX1gu1PBka+
-        3bs4T318asK4JCTF7cUv65jzZlMe+7WwXAj+mT+t9earJ1sfLcir3vpnQpPW22gBiV2T3LRy
-        TlzQDAwsf62uEi0uxPF/xR4lluKMREMt5qLiRACFiLzdrQIAAA==
-X-CMS-MailID: 20190717063537epcas1p44d32e5af3318f4b9d197f7be657c72e4
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0hTcRTut7td78TVdWqdBpXeitLycadbt2g9yGqgkVDQi2EXd9nEvdjd
+        RItiZZmP7EFEtMqyNHrQg7LUkRlOCRUzNMkUKWn0QgwzLbPXtmvkf9/5zvnOOd/5/QhMfhtX
+        ENkWB2e3sCYKDxU/9MYmxud4E3RJv+qlzM3ht4g55L4sZtoPDoYwXZ7zODNS1oSY4q9unOk7
+        cA1nxj3lYubYrU58jVRb21+JtHXu/hBtWcEQrj1WfQNpR+7NzZDszFlp5Fg9Z4/mLFlWfbbF
+        oKHStmSuy1Spk+h4ejmzjIq2sGZOQ6WmZ8RvyDb5F6Kic1mT009lsDxPJa5aabc6HVy00co7
+        NBRn05tsy20JPGvmnRZDQpbVvIJOSlKq/IW7c4yHfEpbd2hezdUikQvVECVISgCZAj5XO16C
+        Qgk5WYvgm+uxRAi+IPjxqnAyM4bgfWGFPyCCEtcpSuDrEQwfKA0Rgs8ITj95hAX6RpAb4e6J
+        a6JAIpL8jaB4vAAPJDByB3jrbooCGCfjoOFDT5CfQcZA9/e3KIBl5CqY8HqD08TkQhisCPaM
+        IrdDa1O5WCgJh5azviCWkhrwnBlGQvtZ0Ou7KBLwPCh4cA4L7ADkHxzu3zouEUynQmnVR0zA
+        EfDpaXWIgBUwMlSPC3gvXG9pwgVxEYLqhueT4mRoqDolCiyHkbFwx5Mo0DFQN3FhconpMDR6
+        VCJcSwZFhXKhZD50vekXCXg2XDlSjJ9AlHuKHfcUC+4pFtz/h11C4htoJmfjzQaOp20pUx/7
+        Hgr+1TimFj16lt6ISAJRYTKtN14nl7C5fL65EQGBUZEyzegSnVymZ/P3cHZrpt1p4vhGpPIf
+        +ySmiMqy+n++xZFJq5TJyclMCq1W0TQ1S1b+M1YnJw2sg8vhOBtn/6cTEVKFCzEb+xanf20t
+        3Lc2YmkHlqZQxp1cdFnbVFKxXpkxZ7i5b66ut/Rd7WCqcmfvh7Lmqj7F6Tq95+LqwbaP1sqw
+        gtdei34/MW3Njs1Zijz1Lk8PHO5kxmqu7uoZGEAv27ZtIHarnZtLNj1E6q3GzlTFNHZduPOF
+        IbzD92XBeNv1mIlESswbWToOs/PsX5WNQIvBAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsWy7bCSvG7WYb1Yg293ZS1Wf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
+        zaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgyWp4YFVzlqti+rIOpgXE7RxcjB4eEgIlEw2Sl
+        LkYuDiGB3YwS7xuPsnQxcgLFJSWmXTzKDFEjLHH4cDFEzVtGiVXdc9lBaoQF3CU2TFjBBJIQ
+        EWhiktjUewEswSwQKdEzdwsbRMccJok7d5tYQRJsAloS+1/cYAOx+QUUJa7+eMwIYvMK2En8
+        PnyYDWQbi4CqxJuFzCBhUYEIiUnXdrJAlAhKnJz5BMzmFLCV2DX9IyPELnWJP/MuMUPY4hK3
+        nsxngrDlJZq3zmaewCg8C0n7LCQts5C0zELSsoCRZRWjZGpBcW56brFhgWFearlecWJucWle
+        ul5yfu4mRnB8aWnuYLy8JP4QowAHoxIP74cDurFCrIllxZW5hxglOJiVRHhtv2rHCvGmJFZW
+        pRblxxeV5qQWH2KU5mBREud9mncsUkggPbEkNTs1tSC1CCbLxMEp1cBoHlOY4Rj34s0Ru57z
+        8m1Ndj1WKdxGQRE1MxUu+l7bITl55r0C331PZ965EKTVHT/RTvn6t+rWG+JnH/bpnPLxUg8O
+        e1DXJvEx9pVKeFoH77fVt84xaVZOXX7ea43beXdT2S0vUq8xrSgKfT7bUcOJLaL0yJk3zqaF
+        dRf0vtz6sohh66SFjb5KLMUZiYZazEXFiQCsvvz6qwIAAA==
+X-CMS-MailID: 20190717064250epcas1p1ef8c98ccebcb1dd2400136e35c9c5898
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190707223726epcas4p1790944443c61b34e6c8dd4d64200a2a2
+X-CMS-RootMailID: 20190707223640epcas4p15337f40466342832b731ad6a53be946e
 References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223726epcas4p1790944443c61b34e6c8dd4d64200a2a2@epcas4p1.samsung.com>
-        <20190707223303.6755-4-digetx@gmail.com>
-        <f28470ca-93dc-cdf9-b008-54c7b50cfd83@samsung.com>
-        <e9fd7f68-8ad1-058f-7c87-ccd280ba0b0e@gmail.com>
+        <CGME20190707223640epcas4p15337f40466342832b731ad6a53be946e@epcas4p1.samsung.com>
+        <20190707223303.6755-12-digetx@gmail.com>
+        <c883bdbe-427f-35a1-9e63-5e4953a84286@samsung.com>
+        <53cd0ba5-f814-cd9b-19c5-1d42717ca58c@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 16. 오후 10:09, Dmitry Osipenko wrote:
-> 16.07.2019 14:50, Chanwoo Choi пишет:
->> On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
->>> The EMC clock rate rounding technically could fail, hence let's handle
->>> the error cases properly.
->>>
->>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>> ---
->>>  drivers/devfreq/tegra30-devfreq.c | 17 +++++++++++++++--
->>>  1 file changed, 15 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
->>> index 5e2b133babdd..5e606ae3f238 100644
->>> --- a/drivers/devfreq/tegra30-devfreq.c
->>> +++ b/drivers/devfreq/tegra30-devfreq.c
->>> @@ -592,8 +592,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->>>  	struct tegra_devfreq_device *dev;
->>>  	struct tegra_devfreq *tegra;
->>>  	struct devfreq *devfreq;
->>> -	unsigned long rate;
->>>  	unsigned int i;
->>> +	long rate;
->>>  	int err;
->>>  
->>>  	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
->>> @@ -650,8 +650,14 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->>>  
->>>  	reset_control_deassert(tegra->reset);
->>>  
->>> -	tegra->max_freq = clk_round_rate(tegra->emc_clock, ULONG_MAX) / KHZ;
->>> +	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
->>> +	if (rate < 0) {
->>> +		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
->>> +		return rate;
->>> +	}
->>> +
->>>  	tegra->cur_freq = clk_get_rate(tegra->emc_clock) / KHZ;
->>> +	tegra->max_freq = rate / KHZ;
->>>  
->>>  	for (i = 0; i < ARRAY_SIZE(actmon_device_configs); i++) {
->>>  		dev = tegra->devices + i;
->>> @@ -662,6 +668,13 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->>>  	for (rate = 0; rate <= tegra->max_freq * KHZ; rate++) {
->>>  		rate = clk_round_rate(tegra->emc_clock, rate);
->>>  
+On 19. 7. 16. 오후 10:26, Dmitry Osipenko wrote:
+> 16.07.2019 15:23, Chanwoo Choi пишет:
+>> Hi Dmitry,
 >>
->> Please remove unneeded blank line.
-> 
-> I can remove it, but it was added specifically to ease reading of the code.
-> 
->>> +		if (rate < 0) {
->>> +			dev_err(&pdev->dev,
->>> +				"Failed to round clock rate: %ld\n", rate);
->>> +			err = rate;
->>> +			goto remove_opps;
->>> +		}
+>> Usually, the kernel log print for all users
+>> such as changing the frequency, fail or success.
 >>
->> Also, this patch doesn't contain code which restore the previous
->> tegra->cur_freq/max_freq when error happen.
+>> But, if the log just show the register dump,
+>> it is not useful for all users. It is just used
+>> for only specific developer.
+>>
+>> I recommend that you better to add more exception handling
+>> code on many points instead of just showing the register dump.
 > 
-> The error here results in abortion of the driver's probing, hence
-> nothing need to be restored in that case because nothing was changed at
-> this point yet.
-> 
-> 
+> The debug messages are not users, but for developers. Yes, I primarily
+> made the debugging to be useful for myself and will be happy to change
+> the way debugging is done if there will be any other active developer
+> for this driver. The registers dump is more than enough in order to
+> understand what's going on, I don't see any real need to change anything
+> here for now.
 
-OK.
+Basically, we have to develop code and add the log for anyone.
+As you commented, even if there are no other developer, we never
+guarantee this assumption forever. And also, if added debug message
+for only you, you can add them when testing it temporarily.
 
+If you want to add the just register dump log for you,
+I can't agree. Once again, I hope that anyone understand
+the meaning of debug message as much possible as.
 
 -- 
 Best Regards,
