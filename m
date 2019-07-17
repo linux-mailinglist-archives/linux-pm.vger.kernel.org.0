@@ -2,83 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6516BA8A
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 12:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625436BCE5
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 15:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbfGQKsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 06:48:31 -0400
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:36748 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbfGQKsb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 06:48:31 -0400
-Received: by mail-oi1-f178.google.com with SMTP id w7so18108023oic.3;
-        Wed, 17 Jul 2019 03:48:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=bvfEvsj27j9s8qMur8gvYFEu77AHAGnRCqkVRfegmkQ=;
-        b=cWlLA7a1OVjk1RWiE/xC+SrunH8terYSYcrzNT/06yrKlW3H1oyl90otm9FfveX8Mw
-         rxM98xhj+y43xwIllJBIpTTAyesXUbrhn9/k/v/RpT+XeMlGEQCkiKEdbEW2ieP9f9ZP
-         gD8nrGHC3m28LCNZ8FL/fziQwjWk5rs0JBgIKzFMGLugUhUl6DFTbl9rEcdZBlEnp9TC
-         L/IEDV7ToTnYHO/DxDANhzkwwkE6q+9v5uRWZRiayVGHJlDH5FJ46Iv8lPb2uXfc54Ib
-         QNkVlKmRPc9EXmEqqL2WFfsVhUx7tFmdIbtv86judwBd4v/3e622MwWGWsbCzebNtmBe
-         lT2g==
-X-Gm-Message-State: APjAAAVe1DKCvW8QNuC4Jv3jL7BdsXDLx/B72Uckr6G7vl/I8urvR2Wm
-        wTS2VtRUKMPFw651f3OEUZJ0rQ6ZBZzOw6cNYJVfXDYM
-X-Google-Smtp-Source: APXvYqyvLt2x3jI5UIFxEZbDTlsn5zNxQYrtboH7mw0dB2JI07Ix/X6Pww9sunz/9xzrsizF/8Mo4j4Bcao3tKrYN7g=
-X-Received: by 2002:aca:5a41:: with SMTP id o62mr19263570oib.110.1563360510411;
- Wed, 17 Jul 2019 03:48:30 -0700 (PDT)
+        id S1725936AbfGQNVU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 09:21:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37910 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725873AbfGQNVU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jul 2019 09:21:20 -0400
+Received: from localhost (lfbn-ncy-1-174-150.w83-194.abo.wanadoo.fr [83.194.254.150])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 995A221743;
+        Wed, 17 Jul 2019 13:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563369679;
+        bh=cU+ZOTGMZmhAI1DZC8HHXC75JkDy+oI7nGSc2naIlPg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yaWf7Qbc10OEEYlxruvGmV9OX9wT/f6lVvOuktx1OVoc5klrwhvlWrClC7ILrHCPi
+         2d5zjXynjEnnQ1QR1+DuPJuAMHrUDxCYFtutV8em79vVjO5kpFBkymxCaOQNrj/idc
+         DIbe/nOQ+J5zxQaxzLdnrCH+ix+hARzs35PAipJc=
+Date:   Wed, 17 Jul 2019 15:21:16 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Lindroth <thomas.lindroth@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] cpuidle: Always stop scheduler tick on adaptive-tick CPUs
+Message-ID: <20190717132115.GB8345@lenoir>
+References: <6254683.2O5gIZElE2@kreacher>
+ <20190716214024.GA8345@lenoir>
+ <CAJZ5v0gB0AHTebjpp87YKA1wmE+tCw5V=eaRE2XDM3nyQYndnA@mail.gmail.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 17 Jul 2019 12:48:19 +0200
-Message-ID: <CAJZ5v0hrpO_PRos3=JnLQ0ZbuBX1vdR8j2jx3je5+Y2m=Dwk2A@mail.gmail.com>
-Subject: [LPC 2019] Power Management and Thermal Control MC: Call for topics
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eduardo Valentin <edubezval@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gB0AHTebjpp87YKA1wmE+tCw5V=eaRE2XDM3nyQYndnA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi All,
+On Wed, Jul 17, 2019 at 09:55:08AM +0200, Rafael J. Wysocki wrote:
+> On Tue, Jul 16, 2019 at 11:40 PM Frederic Weisbecker
+> <frederic@kernel.org> wrote:
+> >
+> > On Tue, Jul 16, 2019 at 05:25:10PM +0200, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Running the scheduler tick on idle adaptive-tick CPUs is not useful
+> >
+> > Judging by the below change, you mean full dynticks, right?
+> 
+> Right.
+> 
+> > > and it may also be not expected by users (as reported by Thomas), so
+> > > add a check to cpuidle_idle_call() to always stop the tick on them
+> > > regardless of the idle duration predicted by the governor.
+> > >
+> > > Fixes: 554c8aa8ecad ("sched: idle: Select idle state before stopping the tick")
+> > > Reported-by: Thomas Lindroth <thomas.lindroth@gmail.com>
+> > > Tested-by: Thomas Lindroth <thomas.lindroth@gmail.com>
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >  kernel/sched/idle.c |    3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > Index: linux-pm/kernel/sched/idle.c
+> > > ===================================================================
+> > > --- linux-pm.orig/kernel/sched/idle.c
+> > > +++ linux-pm/kernel/sched/idle.c
+> > > @@ -191,7 +191,8 @@ static void cpuidle_idle_call(void)
+> > >                */
+> > >               next_state = cpuidle_select(drv, dev, &stop_tick);
+> > >
+> > > -             if (stop_tick || tick_nohz_tick_stopped())
+> > > +             if (stop_tick || tick_nohz_tick_stopped() ||
+> > > +                 !housekeeping_cpu(dev->cpu, HK_FLAG_TICK))
+> >
+> > But tick_nohz_tick_stopped() also works on full dynticks CPUs. If the
+> > tick isn't stopped on a full dynticks CPU by the time we reach this path,
+> > it means that the conditions for the tick to be stopped are not met anyway
+> > (eg: more than one task and sched tick is needed, perf event requires the tick,
+> > posix CPU timer, etc...)
+> 
+> First of all, according to Thomas, the patch does make a difference,
+> so evidently on his system(s) the full dynticks CPUs enter the idle
+> loop with running tick.
+> 
+> This means that, indeed, the conditions for the tick to be stopped
+> have not been met up to that point, but if the (full dynticks) CPU
+> becomes idle, that's because it has been made idle on purpose
+> (presumably by a user-space "orchestrator" or the sysadmin), so the
+> kernel can assume that it will remain idle indefinitely.  That, in
+> turn, is when the tick would be stopped on it regardless of everything
+> else (even if it wasn't a full dynticks CPU).
 
-Now that the PM+Thermal MC has been officially announced
+Well I think we disagree on that assumption that if a nohz_full CPU is put
+idle, it will remain there indefinitely. Nohz_full CPUs aren't really special
+in this regard, they can sleep on an IO, wait for a short event just like
+any other CPU.
 
-https://linuxplumbersconf.org/event/4/page/34-accepted-microconferences#pm-tc
+The only difference with other CPUs is that they _might_ enter the idle loop
+with the tick already stopped. Ok that should be the case most of the time
+with regular full dynticks usecases, but there can be initialization work
+or stuff that make the CPU run with periodic tick for some time.
 
-everyone interested in the problem space in question and having a
-topic for discussion is kindly requested to submit a topic proposal
-for that MC via the LPC web site:
+Thanks.
 
-https://linuxplumbersconf.org/event/4/abstracts/
-
-To do that (after following the link above):
-
-1. "Press" the "Submit new proposal" button.
-2. Log in to the LPC CFP system (* see below in case you don't want to
-create an account).
-3. Put a one line title of your topic into the "Title" field.
-4. Put your abstract into the "Content" field (please keep the
-abstracts concise).
-5. Add yourself as the author (there may be multiple authors, in which
-case add all of them).
-6. In the "Comments" field say how much time the topic is expected to take.
-7. Choose "Power Management and Thermal Control MC topic" in the
-"Track" selection.
-8. Answer "Yes" to the anti-harassment policy compliance confirmation.
-9. "Press" the "Submit" button.
-
-* In case you don't have an account in the LPC web site and you don't
-want to create one, you can send the topic title and abstract to me,
-and I will put the proposal into the LPC CFP system for you. Still,
-please do consider adding an LPC account and following the steps above
-yourself.
-
-Please note that the most relevant topics are those aimed at solving
-specific problems in the Linux "plumbing" area: the kernel, libraries,
-system management tools etc.
-
-Thanks,
-Rafael
+> 
+> I guess I should add the above to the changelog.
+> 
+> > Or am I missing something else?
+> 
+> Well, if full dynticks CPUs are expected to always enter the idle loop
+> with stopped tick, then something appears to be amiss, but I'm not
+> sure if that expectation is entirely realistic.
+> 
+> Cheers!
