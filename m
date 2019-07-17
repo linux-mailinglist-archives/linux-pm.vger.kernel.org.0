@@ -2,135 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 362116B665
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 08:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1E86B694
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 08:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725907AbfGQGNI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 02:13:08 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:34924 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbfGQGNI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 02:13:08 -0400
-Received: by mail-pg1-f195.google.com with SMTP id s1so4311469pgr.2
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jul 2019 23:13:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=98wHL3V8M3pNyD7AjD/VjmdvFc90F9O3DnpKK14WS+8=;
-        b=DXblnYwgj3/tbURi1UsD4ktaRj5BJuWdPdDx2aRF+ahc2OC9u5xmYevXLh6oHpMwWy
-         7hqdBA7l4KtXHRkTTp62+KZNyXi257cnXVrXLf6vLBCEEbHH6dTtIlPfeHxlkr+ZxR30
-         aB/ZUGP/pdGBn7Dlttvi1kBzIrUqOn0biGEPM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=98wHL3V8M3pNyD7AjD/VjmdvFc90F9O3DnpKK14WS+8=;
-        b=KhaBzNPdxez/dNspXYjYqIb7tXQ8SLWG9mRmOvpZTlPKZUP1FfIU4pWCTtumeYOEd5
-         NLJ8vGz+99srwBzNzpwddmg/hepaLVs8tB3RFUspCQEfkA+7KgYMV3Z+ar95OMSzRbQd
-         EKiW2N2k5mrlq/r86jT/XUX4tir6oUNwwilk1uzLN5BIS0kdlUHxEe0QJBlYuSR6QSyj
-         MuLTBua4QazfghR5gporklk3RUCxDI4Ti89DfcDMRTJ9CD6yxeBlM8tzLrY1f3smw7zn
-         EJacFcNX7eGWRLhQ7T7WbRvN0ms2WnMjSvZFz8btToFNDQon6c8GhR+V15cSLZs8LJgB
-         0bkw==
-X-Gm-Message-State: APjAAAVd4NqGgkFJ/hD64sCZGb43RL/TOYpR3bLgWc8pAc/Vm/EQQVj9
-        rsyDJftrR43EwSGs27ppbQvqmA==
-X-Google-Smtp-Source: APXvYqw0QPqTLvm4/cwncq8kMZs1M60f3vtMOpvmiHWE5FPXcczz63uk9yFFWGip4Q4mA9MXPHtqIg==
-X-Received: by 2002:a17:90a:a410:: with SMTP id y16mr42325982pjp.62.1563343987347;
-        Tue, 16 Jul 2019 23:13:07 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:b852:bd51:9305:4261])
-        by smtp.gmail.com with ESMTPSA id y23sm24079706pfo.106.2019.07.16.23.13.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 16 Jul 2019 23:13:06 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     "MyungJoo Ham )" <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RFC v2 2/2] cpufreq: mediatek: Support vproc shared by multiple component
-Date:   Wed, 17 Jul 2019 14:11:27 +0800
-Message-Id: <20190717061124.453-3-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190717061124.453-1-hsinyi@chromium.org>
-References: <20190717061124.453-1-hsinyi@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726056AbfGQGYK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 02:24:10 -0400
+Received: from condef-02.nifty.com ([202.248.20.67]:28650 "EHLO
+        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbfGQGYK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 02:24:10 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-02.nifty.com with ESMTP id x6H6IpYI006390;
+        Wed, 17 Jul 2019 15:18:51 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id x6H6I5Oc009435;
+        Wed, 17 Jul 2019 15:18:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x6H6I5Oc009435
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1563344286;
+        bh=MsNRvlaE02YX1DTdpyxIjkokwz0Ur1MdtPkFVwAq4b4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oq3djoWpo5WcGiuxcGvDlSmpHWrZr4kgViu2MjtmR1w8MEVYnSfr2mP4e04Ptg9kd
+         wyFg3Ycl2l0fQvSostoJg0269KOkRZR0cGf3kw3/cH4Nn67ugenUgiHeRBrofPvLt6
+         4gXYWNCsMp7iXdiLIbUxLzIpH3rZDoYOO/bRkdjJmzKepG2gRIwb1u2uVt0NmfiY7c
+         wyhhDMuG7r6fQEyiYXU+XoFcdLW4hzWwjfFpkUxFBbvu7sFwifEHp08xAZpmJPJqW0
+         isneZcJ3sCva4Z/DOlClTkLv/FqyqykwttLTfpbGThqEFuZ9MhOlYvxAIeFyoJSSZx
+         NeHOHn3Up2Hag==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Renninger <trenn@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH v3 00/12] kbuild: create *.mod with directory path and remove MODVERDIR
+Date:   Wed, 17 Jul 2019 15:17:48 +0900
+Message-Id: <20190717061800.10018-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-mt8183-cci shares vproc with small cluster. If the regulator is shared
-between several devices then the lowest request voltage that meets the
-system constraints will be used.
 
-However, previous mediatek cpufreq implementation would cause race condition
-if vproc is shared by multiple devices, which would crash device due to
-incorrect voltage supply.
+This series kills the long standing MODVERDIR.
 
-A race condition example:
-cci sets vproc 90 --> vproc=90
-cpu0 sets vproc 50 --> vproc=max(50,90)=90
-cpu0 sets vproc 70 --> cpu0 reads vproc 90, target is lower, so decide to scale
-                       up frequency first, but before it set voltage...
-cci sets vproc 60 --> vproc=max(60,50)=60. cpu0 already set freq to 70, but
-                      before it set voltage, vproc becomes 60, which is not
-                      sufficient for cpu0.
+Since MODVERDIR has a flat structure, it cannot avoid a race
+condition when somebody introduces a module name conflict.
 
-Let cpu and cci manages their own previous target voltage can avoid such race.
+Kbuild now reads modules.order to get the list of all modules.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
- drivers/cpufreq/mediatek-cpufreq.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+The post-processing/installation stages will be more robust
+and simpler.
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index 7282834e8fe2..f5e737b862f0 100644
---- a/drivers/cpufreq/mediatek-cpufreq.c
-+++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -46,6 +46,7 @@ struct mtk_cpu_dvfs_info {
- 	struct notifier_block opp_nb;
- 	int opp_cpu;
- 	unsigned long opp_freq;
-+	int old_vproc;
- };
- 
- static LIST_HEAD(dvfs_info_list);
-@@ -196,11 +197,16 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
- 
- static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info *info, int vproc)
- {
-+	int ret;
-+
- 	if (info->need_voltage_tracking)
--		return mtk_cpufreq_voltage_tracking(info, vproc);
-+		ret = mtk_cpufreq_voltage_tracking(info, vproc);
- 	else
--		return regulator_set_voltage(info->proc_reg, vproc,
--					     vproc + VOLT_TOL);
-+		ret = regulator_set_voltage(info->proc_reg, vproc,
-+					     MAX_VOLT_LIMIT);
-+	if (!ret)
-+		info->old_vproc = vproc;
-+	return ret;
- }
- 
- static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
-@@ -218,7 +224,9 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
- 	inter_vproc = info->intermediate_voltage;
- 
- 	old_freq_hz = clk_get_rate(cpu_clk);
--	old_vproc = regulator_get_voltage(info->proc_reg);
-+	old_vproc = info->old_vproc;
-+	if (old_vproc == 0)
-+		old_vproc = regulator_get_voltage(info->proc_reg);
- 	if (old_vproc < 0) {
- 		pr_err("%s: invalid Vproc value: %d\n", __func__, old_vproc);
- 		return old_vproc;
+
+
+Masahiro Yamada (12):
+  kbuild: do not create empty modules.order in the prepare stage
+  kbuild: get rid of kernel/ prefix from in-tree modules.{order,builtin}
+  kbuild: remove duplication from modules.order in sub-directories
+  scsi: remove pointless $(MODVERDIR)/$(obj)/53c700.ver
+  kbuild: modinst: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: modsign: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: modpost: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: export_report: read modules.order instead of
+    .tmp_versions/*.mod
+  kbuild: create *.mod with full directory path and remove MODVERDIR
+  kbuild: remove the first line of *.mod files
+  kbuild: remove 'prepare1' target
+  kbuild: split out *.mod out of {single,multi}-used-m rules
+
+ .gitignore                                 |  1 +
+ Documentation/dontdiff                     |  1 +
+ Makefile                                   | 36 ++++++-------------
+ drivers/scsi/Makefile                      |  2 +-
+ lib/Kconfig.debug                          | 12 +------
+ scripts/Makefile.build                     | 40 +++++++++-------------
+ scripts/Makefile.modbuiltin                |  2 +-
+ scripts/Makefile.modinst                   |  5 +--
+ scripts/Makefile.modpost                   | 19 +++++-----
+ scripts/Makefile.modsign                   |  3 +-
+ scripts/adjust_autoksyms.sh                | 14 +++-----
+ scripts/export_report.pl                   | 11 +++---
+ scripts/mod/sumversion.c                   | 23 +++----------
+ scripts/modules-check.sh                   |  2 +-
+ scripts/package/mkspec                     |  2 +-
+ tools/power/cpupower/debug/kernel/Makefile |  4 +--
+ 16 files changed, 62 insertions(+), 115 deletions(-)
+
 -- 
-2.20.1
+2.17.1
 
