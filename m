@@ -2,100 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7256C17B
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 21:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8616C21C
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 22:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727057AbfGQT2o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 15:28:44 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:43468 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726917AbfGQT2n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 15:28:43 -0400
-Received: by mail-io1-f66.google.com with SMTP id k20so47571209ios.10;
-        Wed, 17 Jul 2019 12:28:43 -0700 (PDT)
+        id S1727610AbfGQUaZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 16:30:25 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:39427 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727147AbfGQUaZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 16:30:25 -0400
+Received: by mail-oi1-f196.google.com with SMTP id m202so19621116oig.6
+        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 13:30:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WHgmdNdTahHJLMVtZuPGqZpMg+t7cvLI9kSEgTL6Hoc=;
-        b=C2Pmx6IniMXlfmCpO6ZSNlEZ/p7i68e11dMcX7VD9qbaYXTebPPCoMYa2c4xILK+MO
-         4sGJ27M43TBIzp6u+9MXQk3wputYlYjwPyzD89qF9CkNZvykAGp5kjUsnPILvL0bXLur
-         el0YS578T+Zxp/4OeyXvOAFxuKgdMQrn3L3ZBcLsyU2Nx5AA0aQcm74uoQ92Co2wnjr1
-         yTjvEBLjtJycmc3i41aMqDCZvI6XhnOmQ2gUNGn28gNfv8jAf8BVN+CmGP7x+4qfPF+h
-         K8zL4RDa50bW4D2pZksmMvSko1Ug7JcNt7YcUoZ+bPWClRw2djvQoARF1B/dxOG7N57n
-         hmMA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tXyn81JOWHSq0zYFzKJLpVAr80FpJaED0TIvbKHgfcQ=;
+        b=qbIEDAEBcSd3yvZNHQSfu64qF2mJXK+jikkEhIE7u5hGoiCEiJR7xNlQrJzvzU4pSi
+         Y7nub5uk5LGftKPxpMSvA/DkWQ8FuN+OnxRfoqvSM4AwVVrxMgUTWCFUu4Izkz7RySeZ
+         aKHx5y6hHhB1ht51x2UXZo8omt9iNPPWa2t1AI8lbd6fhE2eDB4oI3CiK6FUCRj14v7l
+         iagkIZogRaXVsNeFI+9V4YqUpfVCH0s8n01ZMx9Uh9aoh/c6aBEPCDQ7r1sdt1Z09fHI
+         lBtqmFIMr5/3dtZqMXGEAwm7ViBBZm3Guhg5bmYRQv/A4xdM04+URF6+SU6E7uIZyY4x
+         1+bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WHgmdNdTahHJLMVtZuPGqZpMg+t7cvLI9kSEgTL6Hoc=;
-        b=XPJsCrYPv9V0MjafztU/YhKFNOT46PREY4JOt9TlmArc5BNA9tyCW7kZeePXniSz8t
-         bR+DHF7yIt4MG2bAeY4613OvKd9Ptq6KeBy8/AcR/RlL4aGcvlrD4LTARBzwV/RKJlHS
-         Afe7RrpxRdRDPLZtYG8lp9tTIzzxUAm7zaJ2n9w0JBRFURwPIOgxxAQQCDFl/KZGMOV7
-         UKVHTQeGEY6gzX/qXapW28bfWRC9/4uDJiXllFgcAXltnDGHXL8EaMIhCgQO6/Z4+k5m
-         fk3ui8d7ZAE7GRaIyfzrmh/QQqgdwxInUDfz//wDPBt0hFHF6sjqT0dxTkOQug+1AU56
-         6k8Q==
-X-Gm-Message-State: APjAAAVX4qH0gjUEroPSbPd7s8gjbCEG5yfGjwyqEPh9ZR+/VtKuezPt
-        c7VY9RXja9vyj3FZevZljXs=
-X-Google-Smtp-Source: APXvYqx+y7HdX4W/yTvbrWPLGTYpFO+4CtEITlD1gV1KgXOQoOcSgbqo6i06bk9TshbYf//fNRogqw==
-X-Received: by 2002:a6b:f203:: with SMTP id q3mr39191375ioh.208.1563391723106;
-        Wed, 17 Jul 2019 12:28:43 -0700 (PDT)
-Received: from localhost.localdomain (c-73-243-191-173.hsd1.co.comcast.net. [73.243.191.173])
-        by smtp.gmail.com with ESMTPSA id n7sm18927080ioo.79.2019.07.17.12.28.41
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 17 Jul 2019 12:28:41 -0700 (PDT)
-From:   Kelsey Skunberg <skunberg.kelsey@gmail.com>
-To:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     skunberg.kelsey@gmail.com, bjorn@helgaas.com,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org, rjw@rjwysocki.net
-Subject: [PATCH] thermal: intel: int340x_thermal: Remove unnecessary acpi_has_method() uses
-Date:   Wed, 17 Jul 2019 13:26:39 -0600
-Message-Id: <20190717192639.90092-1-skunberg.kelsey@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tXyn81JOWHSq0zYFzKJLpVAr80FpJaED0TIvbKHgfcQ=;
+        b=rHwfjTuCpwKwfWknzDnYeb+23Gr+NPXJ9m72Qegb53Ml5dWhg8B6mi/QOKZ3bQPPC8
+         YuFjXWWOiqAMDZ6PzEWceyf/nl32W0pl7/J+GYu9QDIxfIeGcEIDLhgBhmWGowiZ5yfE
+         FVX8eG1ldF4LILy01lGgE+OkQ+5luWQ3QajLsC2+MCn67PXSYjtjv4nZcEusGxyF0LKS
+         s9msTdr2Z+egM34jtiIOAZBkxybcFWCtkZ/zysswNLiWpxifvn9mVKobIMOFs+EPy34F
+         F7/Tuf3V6gpBfqntiHMHpq2wlDFaKHe9LYibpHU3mgeb4xgGQY61+roBMJsX4avdVj0b
+         fVkA==
+X-Gm-Message-State: APjAAAX5kAtQzfjTFggVH+aFz3m4QJldSc/m7tFCgnyM1QtWKSZCOKcU
+        igb8/R42venWrGYBVyVE/GxQFcFJT5lqcGzBWrL9+Q==
+X-Google-Smtp-Source: APXvYqzM6K1i3WfJFZXjZCCdYIzAEiFq8msfJcBrvL+tocAgB9h7Z+36x6PjoSdCEhmN0F40EdaY10RmxbliqpAP3Nk=
+X-Received: by 2002:aca:5106:: with SMTP id f6mr21894902oib.69.1563395423899;
+ Wed, 17 Jul 2019 13:30:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-2-saravanak@google.com>
+ <20190717075448.xlyg2ddewlci3abg@vireshk-i7>
+In-Reply-To: <20190717075448.xlyg2ddewlci3abg@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 17 Jul 2019 13:29:47 -0700
+Message-ID: <CAGETcx-kUM7MqNYowwNAL1Q0bnFzxPEO6yMg0YTkk16=OnPdmg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: opp: Introduce opp-peak-KBps and
+ opp-avg-KBps bindings
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-acpi_evaluate_object() will already return in error if the method does not
-exist. Checking if the method is absent before the acpi_evaluate_object()
-call is not needed. Remove acpi_has_method() calls to avoid additional
-work.
+On Wed, Jul 17, 2019 at 12:54 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 02-07-19, 18:10, Saravana Kannan wrote:
+> > Interconnects often quantify their performance points in terms of
+> > bandwidth. So, add opp-peak-KBps (required) and opp-avg-KBps (optional) to
+> > allow specifying Bandwidth OPP tables in DT.
+> >
+> > opp-peak-KBps is a required property that replace opp-hz for Bandwidth OPP
+> > tables.
+> >
+> > opp-avg-KBps is an optional property that can be used in Bandwidth OPP
+> > tables.
+> >
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > ---
+> >  Documentation/devicetree/bindings/opp/opp.txt | 15 ++++++++++++---
+> >  1 file changed, 12 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
+> > index 76b6c79604a5..c869e87caa2a 100644
+> > --- a/Documentation/devicetree/bindings/opp/opp.txt
+> > +++ b/Documentation/devicetree/bindings/opp/opp.txt
+> > @@ -83,9 +83,14 @@ properties.
+> >
+> >  Required properties:
+> >  - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
+> > -  required property for all device nodes but devices like power domains. The
+> > -  power domain nodes must have another (implementation dependent) property which
+> > -  uniquely identifies the OPP nodes.
+> > +  required property for all device nodes but for devices like power domains or
+> > +  bandwidth opp tables. The power domain nodes must have another (implementation
+> > +  dependent) property which uniquely identifies the OPP nodes. The interconnect
+> > +  opps are required to have the opp-peak-bw property.
+>
+>                                    ??
 
-Signed-off-by: Kelsey Skunberg <skunberg.kelsey@gmail.com>
----
- drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c | 6 ------
- 1 file changed, 6 deletions(-)
+Sorry, what's the question? Was this an accidental email?
 
-diff --git a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-index 9716bc3abaf9..7130e90773ed 100644
---- a/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-+++ b/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.c
-@@ -77,9 +77,6 @@ int acpi_parse_trt(acpi_handle handle, int *trt_count, struct trt **trtp,
- 	struct acpi_buffer element = { 0, NULL };
- 	struct acpi_buffer trt_format = { sizeof("RRNNNNNN"), "RRNNNNNN" };
- 
--	if (!acpi_has_method(handle, "_TRT"))
--		return -ENODEV;
--
- 	status = acpi_evaluate_object(handle, "_TRT", NULL, &buffer);
- 	if (ACPI_FAILURE(status))
- 		return -ENODEV;
-@@ -158,9 +155,6 @@ int acpi_parse_art(acpi_handle handle, int *art_count, struct art **artp,
- 	struct acpi_buffer art_format =	{
- 		sizeof("RRNNNNNNNNNNN"), "RRNNNNNNNNNNN" };
- 
--	if (!acpi_has_method(handle, "_ART"))
--		return -ENODEV;
--
- 	status = acpi_evaluate_object(handle, "_ART", NULL, &buffer);
- 	if (ACPI_FAILURE(status))
- 		return -ENODEV;
--- 
-2.20.1
+-Saravana
 
+>
+> > +
+> > +- opp-peak-KBps: Peak bandwidth in kilobytes per second, expressed as a 32-bit
+> > +  big-endian integer. This is a required property for all devices that don't
+> > +  have opp-hz. For example, bandwidth OPP tables for interconnect paths.
+> >
+> >  Optional properties:
+> >  - opp-microvolt: voltage in micro Volts.
+> > @@ -132,6 +137,10 @@ Optional properties:
+> >  - opp-level: A value representing the performance level of the device,
+> >    expressed as a 32-bit integer.
+> >
+> > +- opp-avg-KBps: Average bandwidth in kilobytes per second, expressed as a
+> > +  32-bit big-endian integer. This property is only meaningful in OPP tables
+> > +  where opp-peak-KBps is present.
+> > +
+> >  - clock-latency-ns: Specifies the maximum possible transition latency (in
+> >    nanoseconds) for switching to this OPP from any other OPP.
+> >
+> > --
+> > 2.22.0.410.gd8fdbe21b5-goog
+>
+> --
+> viresh
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
