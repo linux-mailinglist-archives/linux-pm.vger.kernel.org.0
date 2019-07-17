@@ -2,142 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF176B9F7
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 12:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD2C6BA3D
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 12:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbfGQKT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 06:19:58 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:34508 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726519AbfGQKT5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 06:19:57 -0400
-Received: by mail-pg1-f194.google.com with SMTP id n9so4716929pgc.1
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 03:19:57 -0700 (PDT)
+        id S1726343AbfGQKcY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 06:32:24 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34085 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726085AbfGQKcY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 06:32:24 -0400
+Received: by mail-pf1-f194.google.com with SMTP id b13so10635468pfo.1
+        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 03:32:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VK4VAAKwmD6vCOcxsuweQdA7aImoD6BI1bwtOEYy7Ec=;
-        b=AJQ2aUxdLzlHM27/CtHDPhhfUR2r74bNE+Fqr8namI4DMjtm0Ji7+gNHpxvvqiRDFx
-         bS/TqlbQ6J90Uxwy03MVOU1uUp0BxIa1DOVdxUbaoshON5cRSy5QWQOcrDfOaIEIPcdP
-         Gj2ufs3wvpr0tw0Iq50TgspWBICEBWEol53OGPNkl8cZtKwGcqeS38ztPFf5v/Wd+nLa
-         kX3Mi6+0hE6FPSjCsz+vronqX1BzubKEO3WPstJw0glwlOgwWZqVOv/G7bW0m2LHVVGK
-         zPjPsD7GYAXYfav8ZhSf5kMBqYM5zQNLyMN2FfN9Agg5SVevn8e/U2FH1BycN/4I9raM
-         ejMA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Jp8lk+XdDHx/WRkU1D5GuTsiUq4pyzz7UbpMROhU2ZE=;
+        b=MOmbQpeDaySamzTzRxIvnvpX4HkW3+1U/OzVaoTxLpP6WjNEghuOIG54DmhnLBEVUB
+         Gv4MX0Yp1QzSU0H9tyF2pWpMZIzF0KJbCAupNNzEMzr68ZS9+WhIuQQmv28CL5DrsNmt
+         C8ovN8ETD/P4jJcMkoMZEko1obD20GCi4h3BDU1Is/6IxqvWKZQfFGSVfOuuALec8LbJ
+         fhX59w96WZTzCy79irx+IZYzVGnLMenGkRcY+72ECSzzAdmRqMlislssJbw3NlvMk2DX
+         W0fKLSMLIekMkjKUi20BXVICF1dGLsuyPKeRyqsJjUdbtccs+DyB0eZFfr30N96xdA3J
+         wDKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VK4VAAKwmD6vCOcxsuweQdA7aImoD6BI1bwtOEYy7Ec=;
-        b=aWMNDQdLhy/p9JTWn5oDa5TwyNGyu8lSdTZXYItOck4mKPpxnZBhtCjLJLbIQVFpLU
-         L9vB3Jo38sX+bImFbTnSm3dmCh3P0b9O/QrKW78ZodYpVLd9+yJL5L6XUduVKHERhVxd
-         BXclfG+3ZwCgwfIxbj7CGPz1QxtULmCc2e6BDxrsbqGFXnE1k/jtu4cSNImgBpMTpEqf
-         3i/KgaM4t/G/RlX+j82TtC0pyd5nSLWdCalkHNJ0UAlLOs3hEVRtdHA4XRHsISSw9JSa
-         G0tMk+yPC8QGJ/2jdf7K0g4XsyzEggnmbpK3xqCU6VJPEpnjgEkPUN850ZRJ+Q6GSgWH
-         RSnw==
-X-Gm-Message-State: APjAAAVK+Fn1DRLEqIuTk1tT9jaUmpWvI9Ox39NEGFPTry9iqzVg4Lzh
-        Yqf+T17e1LaE1d8FzbefwAc/fg==
-X-Google-Smtp-Source: APXvYqyHlVMuMahTL4YiiobGoIz/ikKUUA807jg2o7LAg2+WQ8WsgPVx+k4SS6QyIEowyz5oHtjfGA==
-X-Received: by 2002:a63:9318:: with SMTP id b24mr30127568pge.31.1563358796826;
-        Wed, 17 Jul 2019 03:19:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Jp8lk+XdDHx/WRkU1D5GuTsiUq4pyzz7UbpMROhU2ZE=;
+        b=EsTVpk6rbkarEhsfk+ERvalseMNUWN8FIn5JV9OXNmXP+dIzwM3fktcmRz8d9veUmT
+         O87d1Uzak6gplN5igY8uc2UCe968K4NJbKa0p1zg6ufOmf4vyoht8TUe7NGPJ7+T0pOa
+         N8anD0XCRM0fsErO9iQO/VRtF7CnjR7VyI1PpMZtzWyDapoep2s1rMR9UKTAqtpJ92rK
+         p7dRkbXo3HDDY4YpKL8yaP7rV9+Gy9eVanZhdnbilQtJpH/lGV13r9vqc31geFh/6JTc
+         LWRRoQH/aphKItAZxmH9ZhQXbZXPnqSgqRMjvZeouL67dOU+iwffFuJ8mCy4tEs7qYTq
+         VIUQ==
+X-Gm-Message-State: APjAAAXz8vZFgzzZ8m4Xlf2w/e9VinooQNzSpdtQzkq4HA0objzqO/jH
+        C/tjSCZrUCdYNAMSICcy1MQxmA==
+X-Google-Smtp-Source: APXvYqwzL9mzp2aY/MeHimwmrGDIE6cQH+Ek0FFpxQTvAEuh2tG8JwxKx/eWT+sFX3kvqFizrjbQXg==
+X-Received: by 2002:a63:f357:: with SMTP id t23mr7820293pgj.421.1563359543184;
+        Wed, 17 Jul 2019 03:32:23 -0700 (PDT)
 Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id r1sm27721976pfq.100.2019.07.17.03.19.55
+        by smtp.gmail.com with ESMTPSA id h1sm30377545pfo.152.2019.07.17.03.32.21
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Jul 2019 03:19:56 -0700 (PDT)
+        Wed, 17 Jul 2019 03:32:21 -0700 (PDT)
+Date:   Wed, 17 Jul 2019 16:02:20 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        niklas.cassel@linaro.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        sibis@codeaurora.org, bjorn.andersson@linaro.org,
+        evgreen@chromium.org, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 2/2] opp: Return genpd virtual devices from dev_pm_opp_attach_genpd()
-Date:   Wed, 17 Jul 2019 15:49:47 +0530
-Message-Id: <aaf5648b925aed79ffdd416be44a05ab3c8d2058.1563358721.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
-In-Reply-To: <90ba3941b56e50ea5548dd1e90bf3bcd8c9da4fe.1563358721.git.viresh.kumar@linaro.org>
-References: <90ba3941b56e50ea5548dd1e90bf3bcd8c9da4fe.1563358721.git.viresh.kumar@linaro.org>
+Subject: Re: [PATCH v3 0/6] Introduce Bandwidth OPPs for interconnect paths
+Message-ID: <20190717103220.f7cys267hq23fbsb@vireshk-i7>
+References: <20190703011020.151615-1-saravanak@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190703011020.151615-1-saravanak@google.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpufreq drivers don't need to do runtime PM operations on the
-virtual devices returned by dev_pm_domain_attach_by_name() and so the
-virtual devices weren't shared with the callers of
-dev_pm_opp_attach_genpd() earlier.
+On 02-07-19, 18:10, Saravana Kannan wrote:
+> Interconnects and interconnect paths quantify their performance levels in
+> terms of bandwidth and not in terms of frequency. So similar to how we have
+> frequency based OPP tables in DT and in the OPP framework, we need
+> bandwidth OPP table support in the OPP framework and in DT. Since there can
+> be more than one interconnect path used by a device, we also need a way to
+> assign a bandwidth OPP table to an interconnect path.
+> 
+> This patch series:
+> - Adds opp-peak-KBps and opp-avg-KBps properties to OPP DT bindings
+> - Adds interconnect-opp-table property to interconnect DT bindings
+> - Adds OPP helper functions for bandwidth OPP tables
+> - Adds icc_get_opp_table() to get the OPP table for an interconnect path
+> 
+> So with the DT bindings added in this patch series, the DT for a GPU
+> that does bandwidth voting from GPU to Cache and GPU to DDR would look
+> something like this:
+> 
+> gpu_cache_opp_table: gpu_cache_opp_table {
+> 	compatible = "operating-points-v2";
+> 
+> 	gpu_cache_3000: opp-3000 {
+> 		opp-peak-KBps = <3000>;
+> 		opp-avg-KBps = <1000>;
+> 	};
+> 	gpu_cache_6000: opp-6000 {
+> 		opp-peak-KBps = <6000>;
+> 		opp-avg-KBps = <2000>;
+> 	};
+> 	gpu_cache_9000: opp-9000 {
+> 		opp-peak-KBps = <9000>;
+> 		opp-avg-KBps = <9000>;
+> 	};
+> };
+> 
+> gpu_ddr_opp_table: gpu_ddr_opp_table {
+> 	compatible = "operating-points-v2";
+> 
+> 	gpu_ddr_1525: opp-1525 {
+> 		opp-peak-KBps = <1525>;
+> 		opp-avg-KBps = <452>;
+> 	};
+> 	gpu_ddr_3051: opp-3051 {
+> 		opp-peak-KBps = <3051>;
+> 		opp-avg-KBps = <915>;
+> 	};
+> 	gpu_ddr_7500: opp-7500 {
+> 		opp-peak-KBps = <7500>;
+> 		opp-avg-KBps = <3000>;
+> 	};
+> };
 
-But the IO device drivers would want to do that. This patch updates the
-prototype of dev_pm_opp_attach_genpd() to accept another argument to
-return the pointer to the array of genpd virtual devices.
+Who is going to use the above tables and how ? These are the maximum
+BW available over these paths, right ?
 
-Reported-by: Rajendra Nayak <rnayak@codeaurora.org>
-Tested-by: Rajendra Nayak <rnayak@codeaurora.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-V1->V2:
-- Check virt_devs pointer before assigning.
+> gpu_opp_table: gpu_opp_table {
+> 	compatible = "operating-points-v2";
+> 	opp-shared;
+> 
+> 	opp-200000000 {
+> 		opp-hz = /bits/ 64 <200000000>;
+> 	};
+> 	opp-400000000 {
+> 		opp-hz = /bits/ 64 <400000000>;
+> 	};
+> };
 
- drivers/opp/core.c     | 6 +++++-
- include/linux/pm_opp.h | 4 ++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+Shouldn't this link back to the above tables via required-opp, etc ?
+How will we know how much BW is required by the GPU device for all the
+paths ?
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 4e2a81698cd2..1f11f8c92337 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1775,6 +1775,7 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
-  * dev_pm_opp_attach_genpd - Attach genpd(s) for the device and save virtual device pointer
-  * @dev: Consumer device for which the genpd is getting attached.
-  * @names: Null terminated array of pointers containing names of genpd to attach.
-+ * @virt_devs: Pointer to return the array of virtual devices.
-  *
-  * Multiple generic power domains for a device are supported with the help of
-  * virtual genpd devices, which are created for each consumer device - genpd
-@@ -1792,7 +1793,8 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
-  * The order of entries in the names array must match the order in which
-  * "required-opps" are added in DT.
-  */
--struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names)
-+struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
-+		const char **names, struct device ***virt_devs)
- {
- 	struct opp_table *opp_table;
- 	struct device *virt_dev;
-@@ -1846,6 +1848,8 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names
- 		name++;
- 	}
- 
-+	if (virt_devs)
-+		*virt_devs = opp_table->genpd_virt_devs;
- 	mutex_unlock(&opp_table->genpd_virt_dev_lock);
- 
- 	return opp_table;
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index be570761b77a..7c2fe2952f40 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -131,7 +131,7 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char * name);
- void dev_pm_opp_put_clkname(struct opp_table *opp_table);
- struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev, int (*set_opp)(struct dev_pm_set_opp_data *data));
- void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table);
--struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names);
-+struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs);
- void dev_pm_opp_detach_genpd(struct opp_table *opp_table);
- int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
- int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
-@@ -295,7 +295,7 @@ static inline struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const
- 
- static inline void dev_pm_opp_put_clkname(struct opp_table *opp_table) {}
- 
--static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names)
-+static inline struct opp_table *dev_pm_opp_attach_genpd(struct device *dev, const char **names, struct device ***virt_devs)
- {
- 	return ERR_PTR(-ENOTSUPP);
- }
+> gpu@7864000 {
+> 	...
+> 	operating-points-v2 = <&gpu_opp_table>, <&gpu_cache_opp_table>, <&gpu_ddr_opp_table>;
+> 	interconnects = <&mmnoc MASTER_GPU_1 &bimc SLAVE_SYSTEM_CACHE>,
+> 			<&mmnoc MASTER_GPU_1 &bimc SLAVE_DDR>;
+> 	interconnect-names = "gpu-cache", "gpu-mem";
+> 	interconnect-opp-table = <&gpu_cache_opp_table>, <&gpu_ddr_opp_table>
+> };
+
 -- 
-2.21.0.rc0.269.g1a574e7a288b
-
+viresh
