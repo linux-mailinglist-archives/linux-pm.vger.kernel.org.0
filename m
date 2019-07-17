@@ -2,140 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B105C6BF5A
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 17:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F79D6BF5D
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 17:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbfGQPxT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 11:53:19 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:53962 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbfGQPxT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 11:53:19 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 8618660159; Wed, 17 Jul 2019 15:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563378798;
-        bh=neGF5FCENe6mEc6GArZIeGpuo6QccxA0L5Slvsy0ytU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=M3Ni/Dqjle3iHnjI78cK4D5tQKQixrIpLLXoW3oy++K3PWkYs9dU7JsSbUX03bvzm
-         zXx0OwigUZ2lPAj3+7E5Ll6ABls0M4xcZHxgH8/fX0K9cbb8OilM0IvVqtd9Dh+ZfR
-         62RR9eezE6iiPLtQ6fti5/Qq9jZ0oEpIJ08SpllU=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from jcrouse1-lnx.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jcrouse@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id CC9EE6072E;
-        Wed, 17 Jul 2019 15:53:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563378797;
-        bh=neGF5FCENe6mEc6GArZIeGpuo6QccxA0L5Slvsy0ytU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YAO018CN2k4FCloPKulgx4Y9bWyS5Pw0CAz+cVs2F+PPTo9c/FPeSl3LG1PaumX3q
-         dRmoWnR+Imc/NjLnxV/aajAwq1WxP5VYxePipvXXicNE6+qP5azXCOREGGWWr4wH7I
-         7L7tE4o45tx1RbDJzlhJsZ4Ip6ZDfhvYFW6Zudy4=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CC9EE6072E
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jcrouse@codeaurora.org
-From:   Jordan Crouse <jcrouse@codeaurora.org>
-To:     freedreno@lists.freedesktop.org
-Cc:     ilina@codeaurora.org, bjorn.andersson@linaro.org,
-        linux-pm@vger.kernel.org,
-        "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        David Brown <david.brown@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Subject: [PATCH] qcom: Add BCM vote macro to TCS header
-Date:   Wed, 17 Jul 2019 09:53:13 -0600
-Message-Id: <1563378793-22023-1-git-send-email-jcrouse@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S1726085AbfGQPyM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 11:54:12 -0400
+Received: from mga06.intel.com ([134.134.136.31]:62552 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726934AbfGQPyL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jul 2019 11:54:11 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jul 2019 08:54:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,274,1559545200"; 
+   d="scan'208";a="191305404"
+Received: from hongfuwa-mobl.ccr.corp.intel.com ([10.249.175.161])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Jul 2019 08:54:10 -0700
+Message-ID: <1563378848.2363.17.camel@intel.com>
+Subject: [GIT PULL] Thermal management updates for v5.3-rc1
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Eduardo Valentin <edubezval@gmail.com>
+Date:   Wed, 17 Jul 2019 23:54:08 +0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The A6XX family of Adreno GPUs use a microcontroller to control the
-GPU clock independently. The microcontroller also has the capability
-to vote for the bus but doesn't currently do so except for one initial
-vote that is hard coded [1].
+Hi, Linus,
 
-Currently there is no good way to construct a valid TCS command outside
-of the inner workings of the QCOM interconnect driver which is something
-that will need to be addressed for the next generation of GPU drivers.
+Please pull from
+  git://git.kernel.org/pub/scm/linux/kernel/git/rzhang/linux.git next
 
-To start the process, this change moves the TCS command macros from the
-sdm845 interconnect driver into a soc specific header to make it available
-for future efforts into this area.
+to receive the latest Thermal Management updates for v5.3-rc1 with
+top-most commit 6c395f66e98c895cf3ebf87c0b2fc63b6a57a196:
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/msm/adreno/a6xx_hfi.c#n219
+  drivers: thermal: processor_thermal_device: Fix build warning (2019-
+07-09 21:19:12 +0800)
 
-Signed-off-by: Jordan Crouse <jcrouse@codeaurora.org>
----
+on top of commit 4b972a01a7da614b4796475f933094751a295a2f:
 
- drivers/interconnect/qcom/sdm845.c | 17 -----------------
- include/soc/qcom/tcs.h             | 17 +++++++++++++++++
- 2 files changed, 17 insertions(+), 17 deletions(-)
+  Linux 5.2-rc6 (2019-06-22 16:01:36 -0700)
 
-diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
-index 4915b78..79b6f01 100644
---- a/drivers/interconnect/qcom/sdm845.c
-+++ b/drivers/interconnect/qcom/sdm845.c
-@@ -20,23 +20,6 @@
- #include <soc/qcom/rpmh.h>
- #include <soc/qcom/tcs.h>
- 
--#define BCM_TCS_CMD_COMMIT_SHFT		30
--#define BCM_TCS_CMD_COMMIT_MASK		0x40000000
--#define BCM_TCS_CMD_VALID_SHFT		29
--#define BCM_TCS_CMD_VALID_MASK		0x20000000
--#define BCM_TCS_CMD_VOTE_X_SHFT		14
--#define BCM_TCS_CMD_VOTE_MASK		0x3fff
--#define BCM_TCS_CMD_VOTE_Y_SHFT		0
--#define BCM_TCS_CMD_VOTE_Y_MASK		0xfffc000
--
--#define BCM_TCS_CMD(commit, valid, vote_x, vote_y)		\
--	(((commit) << BCM_TCS_CMD_COMMIT_SHFT) |		\
--	((valid) << BCM_TCS_CMD_VALID_SHFT) |			\
--	((cpu_to_le32(vote_x) &					\
--	BCM_TCS_CMD_VOTE_MASK) << BCM_TCS_CMD_VOTE_X_SHFT) |	\
--	((cpu_to_le32(vote_y) &					\
--	BCM_TCS_CMD_VOTE_MASK) << BCM_TCS_CMD_VOTE_Y_SHFT))
--
- #define to_qcom_provider(_provider) \
- 	container_of(_provider, struct qcom_icc_provider, provider)
- 
-diff --git a/include/soc/qcom/tcs.h b/include/soc/qcom/tcs.h
-index 262876a..6012a9e 100644
---- a/include/soc/qcom/tcs.h
-+++ b/include/soc/qcom/tcs.h
-@@ -53,4 +53,21 @@ struct tcs_request {
- 	struct tcs_cmd *cmds;
- };
- 
-+#define BCM_TCS_CMD_COMMIT_SHFT		30
-+#define BCM_TCS_CMD_COMMIT_MASK		0x40000000
-+#define BCM_TCS_CMD_VALID_SHFT		29
-+#define BCM_TCS_CMD_VALID_MASK		0x20000000
-+#define BCM_TCS_CMD_VOTE_X_SHFT		14
-+#define BCM_TCS_CMD_VOTE_MASK		0x3fff
-+#define BCM_TCS_CMD_VOTE_Y_SHFT		0
-+#define BCM_TCS_CMD_VOTE_Y_MASK		0xfffc000
-+
-+#define BCM_TCS_CMD(commit, valid, vote_x, vote_y)		\
-+	(((commit) << BCM_TCS_CMD_COMMIT_SHFT) |		\
-+	((valid) << BCM_TCS_CMD_VALID_SHFT) |			\
-+	((cpu_to_le32(vote_x) &					\
-+	BCM_TCS_CMD_VOTE_MASK) << BCM_TCS_CMD_VOTE_X_SHFT) |	\
-+	((cpu_to_le32(vote_y) &					\
-+	BCM_TCS_CMD_VOTE_MASK) << BCM_TCS_CMD_VOTE_Y_SHFT))
-+
- #endif /* __SOC_QCOM_TCS_H__ */
--- 
-2.7.4
+Specifics:
+ - Covert thermal documents to ReST. (Mauro Carvalho Chehab)
+ - Fix a cyclic depedency in between thermal core and governors.
+(Daniel Lezcano)
+ - Fix processor_thermal_device driver to re-evaluate power limits
+after resume. (Srinivas Pandruvada, Zhang Rui)
 
+thanks,
+rui
+
+
+----------------------------------------------------------------
+Daniel Lezcano (2):
+      thermal/drivers/core: Add init section table for self-
+encapsulation
+      thermal/drivers/core: Use governor table to initialize
+
+Mauro Carvalho Chehab (1):
+      docs: thermal: convert to ReST
+
+Srinivas Pandruvada (1):
+      drivers: thermal: processor_thermal: Read PPCC on resume
+
+Zhang Rui (2):
+      Merge branches 'thermal-core' and 'thermal-intel' into next
+      drivers: thermal: processor_thermal_device: Fix build warning
+
+ .../{cpu-cooling-api.txt => cpu-cooling-api.rst}   |  39 +-
+ .../thermal/{exynos_thermal => exynos_thermal.rst} |  47 +-
+ Documentation/thermal/exynos_thermal_emulation     |  53 ---
+ Documentation/thermal/exynos_thermal_emulation.rst |  61 +++
+ Documentation/thermal/index.rst                    |  18 +
+ .../{intel_powerclamp.txt => intel_powerclamp.rst} | 183 ++++----
+ .../{nouveau_thermal => nouveau_thermal.rst}       |  54 ++-
+ .../{power_allocator.txt => power_allocator.rst}   | 144 +++---
+ .../thermal/{sysfs-api.txt => sysfs-api.rst}       | 488
+++++++++++++++-------
+ ...ure_thermal => x86_pkg_temperature_thermal.rst} |  28 +-
+ MAINTAINERS                                        |   2 +-
+ drivers/thermal/fair_share.c                       |  12 +-
+ drivers/thermal/gov_bang_bang.c                    |  11 +-
+ .../int340x_thermal/processor_thermal_device.c     |  18 +
+ drivers/thermal/power_allocator.c                  |  11 +-
+ drivers/thermal/step_wise.c                        |  11 +-
+ drivers/thermal/thermal_core.c                     |  52 ++-
+ drivers/thermal/thermal_core.h                     |  55 +--
+ drivers/thermal/user_space.c                       |  12 +-
+ include/asm-generic/vmlinux.lds.h                  |  11 +
+ include/linux/thermal.h                            |   4 +-
+ 21 files changed, 771 insertions(+), 543 deletions(-)
+ rename Documentation/thermal/{cpu-cooling-api.txt => cpu-cooling-
+api.rst} (82%)
+ rename Documentation/thermal/{exynos_thermal => exynos_thermal.rst}
+(67%)
+ delete mode 100644 Documentation/thermal/exynos_thermal_emulation
+ create mode 100644 Documentation/thermal/exynos_thermal_emulation.rst
+ create mode 100644 Documentation/thermal/index.rst
+ rename Documentation/thermal/{intel_powerclamp.txt =>
+intel_powerclamp.rst} (76%)
+ rename Documentation/thermal/{nouveau_thermal => nouveau_thermal.rst}
+(64%)
+ rename Documentation/thermal/{power_allocator.txt =>
+power_allocator.rst} (74%)
+ rename Documentation/thermal/{sysfs-api.txt => sysfs-api.rst} (66%)
+ rename Documentation/thermal/{x86_pkg_temperature_thermal =>
+x86_pkg_temperature_thermal.rst} (80%)
