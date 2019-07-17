@@ -2,127 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA1D6C31A
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 00:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 667516C32B
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 00:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730979AbfGQWYK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 18:24:10 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:38629 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730912AbfGQWYH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 18:24:07 -0400
-Received: by mail-vk1-f201.google.com with SMTP id u202so11850574vku.5
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 15:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=DiFJ3QV0jm1YQeH6o85iwOHAT3O/cgKmhpXPhBt1zRY=;
-        b=gUnX3uWKzKk0PdpWQOACtbCTUosGhC+9X0hmQ8V9U0YJgXRqIB7VQ82FCFG0UaJZgc
-         ANHsa7Am/jr3H95GksDN+aZmOygrs8L74TDbC8/XgptqkBFsTMsk6GligRGiGe/KnInP
-         EDr4mxKVQAhQcthiTTFSxY0rADMAj9jGZYOVzO2PbcLzkZNoEvYe9g0z5YqmuKJ89dF3
-         B4ByPzdiT6Yhd+AWM6x8lr87ib5BFJAatlvOE+TvhbUy1qN12S/0oJE91nD/HkU6v/JH
-         KT24Fj55t1N5sXs0DGIBl8CjLkb4WmGcxMtiCWEMcGYeR+kD2kDk3oqQVNP3YLiLa6aq
-         sBng==
+        id S1727815AbfGQW1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 18:27:22 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45656 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727804AbfGQW1W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 18:27:22 -0400
+Received: by mail-oi1-f193.google.com with SMTP id m206so19854164oib.12;
+        Wed, 17 Jul 2019 15:27:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=DiFJ3QV0jm1YQeH6o85iwOHAT3O/cgKmhpXPhBt1zRY=;
-        b=iDPtLX8mJ5On4l19NlPDG4ancg9M4JXIpSgoi87iaAMmLhbSXestVu1+e33XkL8FQJ
-         5QEHLX5d8O8q706Jvst3079Wl4GiO4OTRjjwdCI7YsN0i83NmqXYiA90Cb8gscSRwwq7
-         8IlaHvnIiXMMktxcGBntKRiUytiHHpU0lyniSq3QIZL1LMCySq0WDmJpHYnccFOWx+VD
-         yQC+jRE0kN8ZoO0c4CCtZBX/xP5bOnn6Y4IjgVNWByavqMBuULfEI7euX/lEoo8gljqb
-         8082BZjwH3ti6MQSHipTPo4yLnv6krELo6Ap/35CYMjDSV/l2MwErIbwH1WFyiRK83rc
-         jJnw==
-X-Gm-Message-State: APjAAAWW01DwMJ5vi3lmm1L+ek4XBsvyJ91oG29io00eOBVIMmP7rnmO
-        NGo2UmS3f1LuKBHij4kv6yCV22kk8hWKh9Q=
-X-Google-Smtp-Source: APXvYqy3zbgHJTqW4oLLmWuWgsYaMIERwR4ozjSI+WlW5wAorsi4CAIdlvBrgoJK7UM67//EQe4dWRuDxbj9++c=
-X-Received: by 2002:ab0:7457:: with SMTP id p23mr4958003uaq.138.1563402246655;
- Wed, 17 Jul 2019 15:24:06 -0700 (PDT)
-Date:   Wed, 17 Jul 2019 15:23:40 -0700
-In-Reply-To: <20190717222340.137578-1-saravanak@google.com>
-Message-Id: <20190717222340.137578-6-saravanak@google.com>
-Mime-Version: 1.0
-References: <20190717222340.137578-1-saravanak@google.com>
-X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH v3 5/5] PM / devfreq: Add required OPPs support to passive governor
-From:   Saravana Kannan <saravanak@google.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Sibi Sankar <sibis@codeaurora.org>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aKdCh/T0TvCjAVMnS0S/bH9S/vTC4w+CAFYfC32nDW8=;
+        b=mIhmNY8OOmwtMFNU6RpTk6OQ2bxRPWaHGEoYM6ZeeChFB8EPoLmmSQksz7WYM6uBI5
+         8ZEUjIDNIM+0UvXGkMjqAN5ezqlWUFOlvCaSsz3ipUWKPCaNulv3Dv0AGS165zzojj3S
+         fLXCSnTVcNff2I4BqEmTr8RNdWBEbNHMl9UyxD+mtgRbsiaIRkJUbTUcUWRwvLmqi46m
+         1QTM6AtPHy6p9wYsnSD5tWSUwZWZOdsvOVCUq/02KzvJnmmQfyN48TclShPXbygr1cAX
+         FEumu/fwVZgSaniXZCKlbzzN8lRx/CIcnN7aQaNZWcqpAXXoMuEk6eyhhI9KYvwz72Sb
+         /pww==
+X-Gm-Message-State: APjAAAUzqY/mrwjEH1g80wF3vsZHauBbdEZENBYZ3GNDIuC1f+HF8bO6
+        4yaV0qfaWnSi4cVNbQtKcA4oC9Sy1QxxtOk0ZaQ=
+X-Google-Smtp-Source: APXvYqxjF6AUD3helldHpsLA2ynZmGMJJif5IvIahrbl69j2lcbFNCAcru7gRAkBWEUHYm+zLKJK8RxSzHAFHKW/TCg=
+X-Received: by 2002:aca:edc8:: with SMTP id l191mr20926358oih.103.1563402441139;
+ Wed, 17 Jul 2019 15:27:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <6254683.2O5gIZElE2@kreacher> <20190716214024.GA8345@lenoir>
+ <CAJZ5v0gB0AHTebjpp87YKA1wmE+tCw5V=eaRE2XDM3nyQYndnA@mail.gmail.com> <20190717132115.GB8345@lenoir>
+In-Reply-To: <20190717132115.GB8345@lenoir>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 18 Jul 2019 00:27:09 +0200
+Message-ID: <CAJZ5v0icfumJc7E4+LgWpi3+UNpTsH4usAJOg4FEeCBptYYzUQ@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Always stop scheduler tick on adaptive-tick CPUs
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Lindroth <thomas.lindroth@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Look at the required OPPs of the "parent" device to determine the OPP that
-is required from the slave device managed by the passive governor. This
-allows having mappings between a parent device and a slave device even when
-they don't have the same number of OPPs.
+On Wed, Jul 17, 2019 at 3:21 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+>
+> On Wed, Jul 17, 2019 at 09:55:08AM +0200, Rafael J. Wysocki wrote:
+> > On Tue, Jul 16, 2019 at 11:40 PM Frederic Weisbecker
+> > <frederic@kernel.org> wrote:
+> > >
+> > > On Tue, Jul 16, 2019 at 05:25:10PM +0200, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > Running the scheduler tick on idle adaptive-tick CPUs is not useful
+> > >
+> > > Judging by the below change, you mean full dynticks, right?
+> >
+> > Right.
+> >
+> > > > and it may also be not expected by users (as reported by Thomas), so
+> > > > add a check to cpuidle_idle_call() to always stop the tick on them
+> > > > regardless of the idle duration predicted by the governor.
+> > > >
+> > > > Fixes: 554c8aa8ecad ("sched: idle: Select idle state before stopping the tick")
+> > > > Reported-by: Thomas Lindroth <thomas.lindroth@gmail.com>
+> > > > Tested-by: Thomas Lindroth <thomas.lindroth@gmail.com>
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > ---
+> > > >  kernel/sched/idle.c |    3 ++-
+> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > >
+> > > > Index: linux-pm/kernel/sched/idle.c
+> > > > ===================================================================
+> > > > --- linux-pm.orig/kernel/sched/idle.c
+> > > > +++ linux-pm/kernel/sched/idle.c
+> > > > @@ -191,7 +191,8 @@ static void cpuidle_idle_call(void)
+> > > >                */
+> > > >               next_state = cpuidle_select(drv, dev, &stop_tick);
+> > > >
+> > > > -             if (stop_tick || tick_nohz_tick_stopped())
+> > > > +             if (stop_tick || tick_nohz_tick_stopped() ||
+> > > > +                 !housekeeping_cpu(dev->cpu, HK_FLAG_TICK))
+> > >
+> > > But tick_nohz_tick_stopped() also works on full dynticks CPUs. If the
+> > > tick isn't stopped on a full dynticks CPU by the time we reach this path,
+> > > it means that the conditions for the tick to be stopped are not met anyway
+> > > (eg: more than one task and sched tick is needed, perf event requires the tick,
+> > > posix CPU timer, etc...)
+> >
+> > First of all, according to Thomas, the patch does make a difference,
+> > so evidently on his system(s) the full dynticks CPUs enter the idle
+> > loop with running tick.
+> >
+> > This means that, indeed, the conditions for the tick to be stopped
+> > have not been met up to that point, but if the (full dynticks) CPU
+> > becomes idle, that's because it has been made idle on purpose
+> > (presumably by a user-space "orchestrator" or the sysadmin), so the
+> > kernel can assume that it will remain idle indefinitely.  That, in
+> > turn, is when the tick would be stopped on it regardless of everything
+> > else (even if it wasn't a full dynticks CPU).
+>
+> Well I think we disagree on that assumption that if a nohz_full CPU is put
+> idle, it will remain there indefinitely. Nohz_full CPUs aren't really special
+> in this regard, they can sleep on an IO, wait for a short event just like
+> any other CPU.
 
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
----
- drivers/devfreq/governor_passive.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+Fair enough.
 
-diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-index 58308948b863..24ce94c80f06 100644
---- a/drivers/devfreq/governor_passive.c
-+++ b/drivers/devfreq/governor_passive.c
-@@ -19,7 +19,7 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
- 			= (struct devfreq_passive_data *)devfreq->data;
- 	struct devfreq *parent_devfreq = (struct devfreq *)p_data->parent;
- 	unsigned long child_freq = ULONG_MAX;
--	struct dev_pm_opp *opp;
-+	struct dev_pm_opp *opp = NULL, *p_opp = NULL;
- 	int i, count, ret = 0;
- 
- 	/*
-@@ -56,13 +56,20 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
- 	 * list of parent device. Because in this case, *freq is temporary
- 	 * value which is decided by ondemand governor.
- 	 */
--	opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
--	if (IS_ERR(opp)) {
--		ret = PTR_ERR(opp);
-+	p_opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
-+	if (IS_ERR(p_opp)) {
-+		ret = PTR_ERR(p_opp);
- 		goto out;
- 	}
- 
--	dev_pm_opp_put(opp);
-+	if (devfreq->opp_table && parent_devfreq->opp_table)
-+		opp = dev_pm_opp_xlate_opp(parent_devfreq->opp_table,
-+					   devfreq->opp_table, p_opp);
-+	if (opp) {
-+		*freq = dev_pm_opp_get_freq(opp);
-+		dev_pm_opp_put(opp);
-+		goto out;
-+	}
- 
- 	/*
- 	 * Get the OPP table's index of decided freqeuncy by governor
-@@ -89,6 +96,9 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
- 	*freq = child_freq;
- 
- out:
-+	if (!IS_ERR_OR_NULL(opp))
-+		dev_pm_opp_put(p_opp);
-+
- 	return ret;
- }
- 
--- 
-2.22.0.510.g264f2c817a-goog
+This means that the governor (or rather governors) will need to be
+modified to address the issue reported by Thomas.
 
+Fortunately, I have a patch going in that direction too. :-)
+
+Cheers!
