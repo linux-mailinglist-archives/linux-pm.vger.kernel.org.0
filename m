@@ -2,148 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E828B6B6D8
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 08:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D636B7B4
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jul 2019 09:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbfGQGm7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jul 2019 02:42:59 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:30407 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727097AbfGQGm7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 02:42:59 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190717064257epoutp0113474047d01ff3c9fca6c47c08c12913~yHrOb--9t0860708607epoutp01O
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 06:42:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190717064257epoutp0113474047d01ff3c9fca6c47c08c12913~yHrOb--9t0860708607epoutp01O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563345777;
-        bh=deOsYQPUlsMNAwlQxJO3S1U8Nw9DJ9s0uABjc8BsERQ=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=BHnaHm5AKTBrgWUvevQsY9cDCyiDNCHCOIOGtxeR2NVrlbXHzqN+GciT5cshBPk+c
-         5nlNyrzkRpF7VkRMP5VVoRfF26vwCgKQ9WZ/yEG/dSsM8gJLfOe+sfjgTQ/+BVH030
-         QuulTzdGIxstD50Zde0FEw/Qg72CeCrw4+cc1IHw=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20190717064256epcas1p3200702665b3836af45d8688895799f70~yHrN8A_lO2561825618epcas1p3e;
-        Wed, 17 Jul 2019 06:42:56 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.155]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 45pSPl3stlzMqYlt; Wed, 17 Jul
-        2019 06:42:51 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2B.C3.04160.B63CE2D5; Wed, 17 Jul 2019 15:42:51 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190717064250epcas1p1ef8c98ccebcb1dd2400136e35c9c5898~yHrIEMgfv3112331123epcas1p1E;
-        Wed, 17 Jul 2019 06:42:50 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190717064250epsmtrp2a1ec681dc33a76fbc0f4d9f542d996d2~yHrICtvjV1492614926epsmtrp2R;
-        Wed, 17 Jul 2019 06:42:50 +0000 (GMT)
-X-AuditID: b6c32a38-b33ff70000001040-e1-5d2ec36b267c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6E.20.03706.A63CE2D5; Wed, 17 Jul 2019 15:42:50 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190717064250epsmtip2ca606eb525683e73ac8e6f2da9065cc6~yHrH20Hq63133131331epsmtip29;
-        Wed, 17 Jul 2019 06:42:50 +0000 (GMT)
-Subject: Re: [PATCH v4 11/24] PM / devfreq: tegra30: Add debug messages
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        id S1725948AbfGQHyy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jul 2019 03:54:54 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34510 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbfGQHyy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jul 2019 03:54:54 -0400
+Received: by mail-pg1-f195.google.com with SMTP id n9so4527122pgc.1
+        for <linux-pm@vger.kernel.org>; Wed, 17 Jul 2019 00:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7CDBem+N4Y8GonyneakgYW4yRRjV6CTTMSRhiie6FvM=;
+        b=X91hHiq+XMv6rYqH0C1L60r5PFIPz0ALpX0L4rrxy3R0L7yIB7LB1wt2GigVavcOlw
+         6oNDhqTXYbkwuqZn8UJsLbssFwcot9lLbvTZCgauXQHyKkA3hbliqn/Pln2C0fQfx8x5
+         yx3XJh+N84gqLV5iCqeUMA5IGPCBhOJsd5+DRpIv8Kbgo3yq9BSgMAlkIy/j9JAqR/tD
+         3s8BLrcNBgsG36XBmNVIcnSSPm8aUnDU06iVjLVYRaV+9zQy5rcenYGaEiCbEompeLfl
+         HtejdgkFeaAnQYV7SuoOXrGEj355XnPS6yNbRH3RUNcCJ+cEEfsWiezir5dGcPT0xRLZ
+         DsnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7CDBem+N4Y8GonyneakgYW4yRRjV6CTTMSRhiie6FvM=;
+        b=oIacCzlRrbovXy85ooMcUtlgUSC8eOXBx+rVKEznlua+hV/u6z/C3iZWB2nV2n9AgR
+         UJgJ0JJLdVLc7C7v2u4EBWUFfsPJUyrC/LdvjtOaKDnUNqOzGLwMfNtv30aU3S0wO8rq
+         ZfCKUR740hY11obNuOFUx2SCMrJnCzgm5eZHD/3ZPVdyxenk73szjj8TtJbXRJWoi26O
+         +sYWwh4n8BKzOHMsbJcE33tG7lmqmMOpCDap9eD5N5F7oVvuuFzgScXcQ7T/GPkyn848
+         TMOOm1A7LopgoFdDhJ0KgVPpfbJwhsVbPUVQx74YyE1AK7YMNJXqEMA1jmJRnSJLxUKS
+         vygg==
+X-Gm-Message-State: APjAAAXNCRHdFeUSTqWulM7uoxqnVTGakCuCfuSN7HtYMs6I5hwE+4Gh
+        6vWnR50lIPhGxQCSiY2th+UDgQ==
+X-Google-Smtp-Source: APXvYqwS793ra2K/Q8y9DiNBlQJ9AqGzBCIEAGcfR20+btRcZICeer3TBgT1cpHsLKOv5k3Z4wKZjQ==
+X-Received: by 2002:a17:90a:c391:: with SMTP id h17mr42645811pjt.131.1563350093035;
+        Wed, 17 Jul 2019 00:54:53 -0700 (PDT)
+Received: from localhost ([122.172.28.117])
+        by smtp.gmail.com with ESMTPSA id z20sm37644233pfk.72.2019.07.17.00.54.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 17 Jul 2019 00:54:50 -0700 (PDT)
+Date:   Wed, 17 Jul 2019 13:24:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        sibis@codeaurora.org, bjorn.andersson@linaro.org,
+        evgreen@chromium.org, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <922c9178-71de-46ad-eafd-805af461bedb@samsung.com>
-Date:   Wed, 17 Jul 2019 15:45:58 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.2
+Subject: Re: [PATCH v3 1/6] dt-bindings: opp: Introduce opp-peak-KBps and
+ opp-avg-KBps bindings
+Message-ID: <20190717075448.xlyg2ddewlci3abg@vireshk-i7>
+References: <20190703011020.151615-1-saravanak@google.com>
+ <20190703011020.151615-2-saravanak@google.com>
 MIME-Version: 1.0
-In-Reply-To: <53cd0ba5-f814-cd9b-19c5-1d42717ca58c@gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0hTcRTut7td78TVdWqdBpXeitLycadbt2g9yGqgkVDQi2EXd9nEvdjd
-        RItiZZmP7EFEtMqyNHrQg7LUkRlOCRUzNMkUKWn0QgwzLbPXtmvkf9/5zvnOOd/5/QhMfhtX
-        ENkWB2e3sCYKDxU/9MYmxud4E3RJv+qlzM3ht4g55L4sZtoPDoYwXZ7zODNS1oSY4q9unOk7
-        cA1nxj3lYubYrU58jVRb21+JtHXu/hBtWcEQrj1WfQNpR+7NzZDszFlp5Fg9Z4/mLFlWfbbF
-        oKHStmSuy1Spk+h4ejmzjIq2sGZOQ6WmZ8RvyDb5F6Kic1mT009lsDxPJa5aabc6HVy00co7
-        NBRn05tsy20JPGvmnRZDQpbVvIJOSlKq/IW7c4yHfEpbd2hezdUikQvVECVISgCZAj5XO16C
-        Qgk5WYvgm+uxRAi+IPjxqnAyM4bgfWGFPyCCEtcpSuDrEQwfKA0Rgs8ITj95hAX6RpAb4e6J
-        a6JAIpL8jaB4vAAPJDByB3jrbooCGCfjoOFDT5CfQcZA9/e3KIBl5CqY8HqD08TkQhisCPaM
-        IrdDa1O5WCgJh5azviCWkhrwnBlGQvtZ0Ou7KBLwPCh4cA4L7ADkHxzu3zouEUynQmnVR0zA
-        EfDpaXWIgBUwMlSPC3gvXG9pwgVxEYLqhueT4mRoqDolCiyHkbFwx5Mo0DFQN3FhconpMDR6
-        VCJcSwZFhXKhZD50vekXCXg2XDlSjJ9AlHuKHfcUC+4pFtz/h11C4htoJmfjzQaOp20pUx/7
-        Hgr+1TimFj16lt6ISAJRYTKtN14nl7C5fL65EQGBUZEyzegSnVymZ/P3cHZrpt1p4vhGpPIf
-        +ySmiMqy+n++xZFJq5TJyclMCq1W0TQ1S1b+M1YnJw2sg8vhOBtn/6cTEVKFCzEb+xanf20t
-        3Lc2YmkHlqZQxp1cdFnbVFKxXpkxZ7i5b66ut/Rd7WCqcmfvh7Lmqj7F6Tq95+LqwbaP1sqw
-        gtdei34/MW3Njs1Zijz1Lk8PHO5kxmqu7uoZGEAv27ZtIHarnZtLNj1E6q3GzlTFNHZduPOF
-        IbzD92XBeNv1mIlESswbWToOs/PsX5WNQIvBAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsWy7bCSvG7WYb1Yg293ZS1Wf3zMaNEyaxGL
-        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
-        zaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgyWp4YFVzlqti+rIOpgXE7RxcjB4eEgIlEw2Sl
-        LkYuDiGB3YwS7xuPsnQxcgLFJSWmXTzKDFEjLHH4cDFEzVtGiVXdc9lBaoQF3CU2TFjBBJIQ
-        EWhiktjUewEswSwQKdEzdwsbRMccJok7d5tYQRJsAloS+1/cYAOx+QUUJa7+eMwIYvMK2En8
-        PnyYDWQbi4CqxJuFzCBhUYEIiUnXdrJAlAhKnJz5BMzmFLCV2DX9IyPELnWJP/MuMUPY4hK3
-        nsxngrDlJZq3zmaewCg8C0n7LCQts5C0zELSsoCRZRWjZGpBcW56brFhgWFearlecWJucWle
-        ul5yfu4mRnB8aWnuYLy8JP4QowAHoxIP74cDurFCrIllxZW5hxglOJiVRHhtv2rHCvGmJFZW
-        pRblxxeV5qQWH2KU5mBREud9mncsUkggPbEkNTs1tSC1CCbLxMEp1cBoHlOY4Rj34s0Ru57z
-        8m1Ndj1WKdxGQRE1MxUu+l7bITl55r0C331PZ965EKTVHT/RTvn6t+rWG+JnH/bpnPLxUg8O
-        e1DXJvEx9pVKeFoH77fVt84xaVZOXX7ea43beXdT2S0vUq8xrSgKfT7bUcOJLaL0yJk3zqaF
-        dRf0vtz6sohh66SFjb5KLMUZiYZazEXFiQCsvvz6qwIAAA==
-X-CMS-MailID: 20190717064250epcas1p1ef8c98ccebcb1dd2400136e35c9c5898
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190707223640epcas4p15337f40466342832b731ad6a53be946e
-References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223640epcas4p15337f40466342832b731ad6a53be946e@epcas4p1.samsung.com>
-        <20190707223303.6755-12-digetx@gmail.com>
-        <c883bdbe-427f-35a1-9e63-5e4953a84286@samsung.com>
-        <53cd0ba5-f814-cd9b-19c5-1d42717ca58c@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190703011020.151615-2-saravanak@google.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 16. 오후 10:26, Dmitry Osipenko wrote:
-> 16.07.2019 15:23, Chanwoo Choi пишет:
->> Hi Dmitry,
->>
->> Usually, the kernel log print for all users
->> such as changing the frequency, fail or success.
->>
->> But, if the log just show the register dump,
->> it is not useful for all users. It is just used
->> for only specific developer.
->>
->> I recommend that you better to add more exception handling
->> code on many points instead of just showing the register dump.
+On 02-07-19, 18:10, Saravana Kannan wrote:
+> Interconnects often quantify their performance points in terms of
+> bandwidth. So, add opp-peak-KBps (required) and opp-avg-KBps (optional) to
+> allow specifying Bandwidth OPP tables in DT.
 > 
-> The debug messages are not users, but for developers. Yes, I primarily
-> made the debugging to be useful for myself and will be happy to change
-> the way debugging is done if there will be any other active developer
-> for this driver. The registers dump is more than enough in order to
-> understand what's going on, I don't see any real need to change anything
-> here for now.
+> opp-peak-KBps is a required property that replace opp-hz for Bandwidth OPP
+> tables.
+> 
+> opp-avg-KBps is an optional property that can be used in Bandwidth OPP
+> tables.
+> 
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  Documentation/devicetree/bindings/opp/opp.txt | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
+> index 76b6c79604a5..c869e87caa2a 100644
+> --- a/Documentation/devicetree/bindings/opp/opp.txt
+> +++ b/Documentation/devicetree/bindings/opp/opp.txt
+> @@ -83,9 +83,14 @@ properties.
+>  
+>  Required properties:
+>  - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
+> -  required property for all device nodes but devices like power domains. The
+> -  power domain nodes must have another (implementation dependent) property which
+> -  uniquely identifies the OPP nodes.
+> +  required property for all device nodes but for devices like power domains or
+> +  bandwidth opp tables. The power domain nodes must have another (implementation
+> +  dependent) property which uniquely identifies the OPP nodes. The interconnect
+> +  opps are required to have the opp-peak-bw property.
 
-Basically, we have to develop code and add the log for anyone.
-As you commented, even if there are no other developer, we never
-guarantee this assumption forever. And also, if added debug message
-for only you, you can add them when testing it temporarily.
+                                   ??
 
-If you want to add the just register dump log for you,
-I can't agree. Once again, I hope that anyone understand
-the meaning of debug message as much possible as.
+> +
+> +- opp-peak-KBps: Peak bandwidth in kilobytes per second, expressed as a 32-bit
+> +  big-endian integer. This is a required property for all devices that don't
+> +  have opp-hz. For example, bandwidth OPP tables for interconnect paths.
+>  
+>  Optional properties:
+>  - opp-microvolt: voltage in micro Volts.
+> @@ -132,6 +137,10 @@ Optional properties:
+>  - opp-level: A value representing the performance level of the device,
+>    expressed as a 32-bit integer.
+>  
+> +- opp-avg-KBps: Average bandwidth in kilobytes per second, expressed as a
+> +  32-bit big-endian integer. This property is only meaningful in OPP tables
+> +  where opp-peak-KBps is present.
+> +
+>  - clock-latency-ns: Specifies the maximum possible transition latency (in
+>    nanoseconds) for switching to this OPP from any other OPP.
+>  
+> -- 
+> 2.22.0.410.gd8fdbe21b5-goog
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+viresh
