@@ -2,131 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E84D76D551
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 21:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B776D6A1
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 23:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403805AbfGRTq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jul 2019 15:46:27 -0400
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:36097 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391635AbfGRTop (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 15:44:45 -0400
-Received: by mail-qt1-f201.google.com with SMTP id q26so25450316qtr.3
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 12:44:45 -0700 (PDT)
+        id S1728025AbfGRVts (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jul 2019 17:49:48 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:46810 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727685AbfGRVts (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 17:49:48 -0400
+Received: by mail-vs1-f66.google.com with SMTP id r3so20171742vsr.13
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 14:49:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7Fsa5djs+VQ2BrQJC+FUs9YwCCHQQfjCNM9PGrMIw+A=;
-        b=GUfpKO3Ga00Csg4gANFyqY7Cii9zK5UJiC7y7T53XWMHXolPbGtqL3/Y47/RTYgeVm
-         Mi6RCLXrn+mFXqpu5OsWOJKds5n11Pm7/VfKFqyJyZc9yr639fO4YGJKtjbx4J4dg9DS
-         PJwJtApulzrCc0Bgg28sX6Ujl31wRI6PaW5rfHbkzmCSi0hS7nYUQu7E9PQiI4ht1XC+
-         dnV7J2tcrTwkrO7Sg9e3n9F/+LqTDuw1UdpjFK6nE1GXMcyw2GcsKji4TXEFCm2+pont
-         rqA8db+Ui8EDLoOR90H03Sx1uL/TpWN4SwHCRaaCI4xM2JGV2I8do4YqpvWrigRG+SNK
-         TUUg==
+        bh=vVaakzPBBxcCnU1uQoatmOIcAq9lkWIyC/ZitRYoNgg=;
+        b=X0bRe+v4iwS6jdXfFpHS/B1EX7o/Ag7+xrNChOx3rwtQf1rriCNbBBc2AORVmlG9gC
+         KVxWBeK9NBQ8gBXi8w3Av9R1Yh8r3h7xlJoRYPAOSzyytZUVC4+ejy9Cn3PMuHz9YpW/
+         IxLuV6N64nVRcqJGyugTEStIUQQsmFjSjI3Fy/4XjJOaWPe1Tv10djjEfP5VnAyre9Oz
+         +v6sV/2I3P9kSX69DLaBAK+GbpCi9bKxUIteMutCxdGAkTLk6xGcGP1HExLaCbrye+OE
+         8gxLRO/Twcav0vXVKqTdUtgl/TBIEzaP0a1edGLGuHPegpLd/TMcEm8b/qDG4Ok3mPbw
+         W7Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=7Fsa5djs+VQ2BrQJC+FUs9YwCCHQQfjCNM9PGrMIw+A=;
-        b=TIedUUuwbCk5MCBasB8aLHEAbUbutKbJAnc4gmXpWG/V4VSPAPzuuFiCCQGDdYPUbh
-         +8/FkhXsDxnL2rxRqxGmhoTBo/REmW9can8ifCHRDqltL3W0MDS22O3MSYmd2cIZCDj+
-         m8FTT57pKaIu7FlnK94pDbS02I7V/xBPUVxw8kcryydd/IE/kRZudCFHuWjo7H4jmHct
-         Uz0WxV2KvliallOEg+D/lyLfivjDJDXPZqwa50ey2G/zglg07L25nmfrpsLXho2pNFwb
-         a6Mkd96fKa7/OapaCY0ifNvZbROm+oQN8tr1zkgdpj7C6yQ7wVO/dG1COy0Iz3kSM8AP
-         4qNw==
-X-Gm-Message-State: APjAAAXdqwQj5A/UTXHKcIeFwl3Y0UtThZek7Mwf1ez0dY8FByOq0xn+
-        pVllCh89/Mx1OKyQg53k3pAD24cFUB/+6I32ICLsbg==
-X-Google-Smtp-Source: APXvYqy741iSM2u6/mj5HF9mJLUvf4WTxBzk/3jchTmVB1EWeHxmWZcFTfDOtltj6LRSG0GCOtQ7D+jq/zKj0P7CgkdOdQ==
-X-Received: by 2002:a0c:acab:: with SMTP id m40mr35031284qvc.52.1563479084552;
- Thu, 18 Jul 2019 12:44:44 -0700 (PDT)
-Date:   Thu, 18 Jul 2019 12:43:56 -0700
-In-Reply-To: <20190718194415.108476-1-matthewgarrett@google.com>
-Message-Id: <20190718194415.108476-11-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190718194415.108476-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH V36 10/29] hibernate: Disable when the kernel is locked down
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Josh Boyer <jwboyer@fedoraproject.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>, rjw@rjwysocki.net,
-        pavel@ucw.cz, linux-pm@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vVaakzPBBxcCnU1uQoatmOIcAq9lkWIyC/ZitRYoNgg=;
+        b=eI8WM6B5z07IWn5ImEVw6fHyM3Yr42woWhcQJdtAn4Y7XFkxOJwxW1MvggvLoANjbM
+         Nt+PIlMnOvvunZEWyaI736nrvL2W3VozA1Zig3+wbg17nfko61uXH66IdHlA4oSBgRpL
+         4ITG2Vj46NF4ROKm6rsN3YHlzcpYM8atAkwTygmhgf7QCQwG9jMe5viLHr7OYpyrAtSD
+         4eUAvGNI00jnawi+24M0+iwc90LormOiRMcV9/9gWJk8iiYR/XoVgwrI8XVcs68ekX/k
+         rVnt7/YfaNyjEqvLE4ljK+o6YAuh6NX1GW6b5VY+OhTyTP2cmkHXEl35TjnDFTU5SCSs
+         1q0w==
+X-Gm-Message-State: APjAAAUbQP8G8HY0K3fKpiUl8wBzy91drKxJ53r/AjJp316Ji2t0irmK
+        5CotqqjGBY8TC7kEMC0PuMPo+RaFiqOA5NC9sBXBcw==
+X-Google-Smtp-Source: APXvYqx6w0adJ6xepr9OilXJBz3+Zq+jx9/hhhjOwrMjwd3XZB1LUnFpt9Xc9uk4rPa7wYkP1TAGbNJcQe6BKGLWrJs=
+X-Received: by 2002:a67:e454:: with SMTP id n20mr31593172vsm.34.1563486587134;
+ Thu, 18 Jul 2019 14:49:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190513192300.653-1-ulf.hansson@linaro.org> <20190513192300.653-15-ulf.hansson@linaro.org>
+ <20190716155317.GB32490@e121166-lin.cambridge.arm.com> <CAPDyKFrJ75mo+s6GuUCTQ-nVv7C+9YJyTVmwuBZ2RKFOvOi3Nw@mail.gmail.com>
+ <20190718133053.GA27222@e121166-lin.cambridge.arm.com> <CAPDyKFr4NmichQk4uf+Wgbanh=5idKYY=37WCb6U_hNFDVYg=w@mail.gmail.com>
+ <20190718174116.GD25567@codeaurora.org>
+In-Reply-To: <20190718174116.GD25567@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 18 Jul 2019 23:49:11 +0200
+Message-ID: <CAPDyKFrxBdZfskyp2HOb5YykkAqkBzRfW4-LLbcj1DAaL65XpA@mail.gmail.com>
+Subject: Re: [PATCH 14/18] drivers: firmware: psci: Manage runtime PM in the
+ idle path for CPUs
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Raju P . L . S . S . S . N" <rplsssn@codeaurora.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souvik Chakravarty <souvik.chakravarty@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Josh Boyer <jwboyer@fedoraproject.org>
+On Thu, 18 Jul 2019 at 19:41, Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> On Thu, Jul 18 2019 at 10:55 -0600, Ulf Hansson wrote:
+> >On Thu, 18 Jul 2019 at 15:31, Lorenzo Pieralisi
+> ><lorenzo.pieralisi@arm.com> wrote:
+> >>
+> >> On Thu, Jul 18, 2019 at 12:35:07PM +0200, Ulf Hansson wrote:
+> >> > On Tue, 16 Jul 2019 at 17:53, Lorenzo Pieralisi
+> >> > <lorenzo.pieralisi@arm.com> wrote:
+> >> > >
+> >> > > On Mon, May 13, 2019 at 09:22:56PM +0200, Ulf Hansson wrote:
+> >> > > > When the hierarchical CPU topology layout is used in DT, let's allow the
+> >> > > > CPU to be power managed through its PM domain, via deploying runtime PM
+> >> > > > support.
+> >> > > >
+> >> > > > To know for which idle states runtime PM reference counting is needed,
+> >> > > > let's store the index of deepest idle state for the CPU, in a per CPU
+> >> > > > variable. This allows psci_cpu_suspend_enter() to compare this index with
+> >> > > > the requested idle state index and then act accordingly.
+> >> > >
+> >> > > I do not see why a system with two CPU CPUidle states, say CPU retention
+> >> > > and CPU shutdown, should not be calling runtime PM on CPU retention
+> >> > > entry.
+> >> >
+> >> > If the CPU idle governor did select the CPU retention for the CPU, it
+> >> > was probably because the target residency for the CPU shutdown state
+> >> > could not be met.
+> >>
+> >> The kernel does not know what those cpu states represent, so, this is an
+> >> assumption you are making and it must be made clear that this code works
+> >> as long as your assumption is valid.
+> >>
+> >> If eg a "cluster" retention state has lower target_residency than
+> >> the deepest CPU idle state this assumption is wrong.
+> >
+> >Good point, you are right. I try to find a place to document this assumption.
+> >
+> >>
+> >> And CPUidle and genPD governor decisions are not synced anyway so,
+> >> again, this is an assumption, not a certainty.
+> >>
+> >> > In this case, there is no point in allowing any other deeper idle
+> >> > states for cluster/package/system, since those have even greater
+> >> > residencies, hence calling runtime PM doesn't make sense.
+> >>
+> >> On the systems you are testing on.
+> >
+> >So what you are saying typically means, that if all CPUs in the same
+> >cluster have entered the CPU retention state, on some system the
+> >cluster may also put into a cluster retention state (assuming the
+> >target residency is met)?
+> >
+> >Do you know of any systems that has these characteristics?
+> >
+> Many QCOM SoCs can do that. But with the hardware improving, the
+> power-performance benefits skew the results in favor of powering off
+> the cluster than keeping the CPU and cluster in retention.
+>
+> Kevin H and I thought of this problem earlier on. But that is a second
+> level problem to solve and definitely to be thought of after we have the
+> support for the deepest states in the kernel. We left that out for a
+> later date. The idea would have been to setup the allowable state(s) in
+> the DT for CPU and cluster state definitions and have the genpd take
+> that into consideration when deciding the idle state for the domain.
 
-There is currently no way to verify the resume image when returning
-from hibernate.  This might compromise the signed modules trust model,
-so until we can work with signed hibernate images we disable it when the
-kernel is locked down.
+Thanks for confirming.
 
-Signed-off-by: Josh Boyer <jwboyer@fedoraproject.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: rjw@rjwysocki.net
-Cc: pavel@ucw.cz
-cc: linux-pm@vger.kernel.org
----
- include/linux/security.h     | 1 +
- kernel/power/hibernate.c     | 3 ++-
- security/lockdown/lockdown.c | 1 +
- 3 files changed, 4 insertions(+), 1 deletion(-)
+This more or less means we need to improve the hierarchical support in
+genpd to support more levels, such that it makes sense to have a genpd
+governor assigned at more than one level. This doesn't work well
+today. As I also have stated, this is on my todo list for genpd.
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 69c5de539e9a..304a155a5628 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -106,6 +106,7 @@ enum lockdown_reason {
- 	LOCKDOWN_MODULE_SIGNATURE,
- 	LOCKDOWN_DEV_MEM,
- 	LOCKDOWN_KEXEC,
-+	LOCKDOWN_HIBERNATION,
- 	LOCKDOWN_INTEGRITY_MAX,
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
- };
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index cd7434e6000d..3c0a5a8170b0 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -30,6 +30,7 @@
- #include <linux/ctype.h>
- #include <linux/genhd.h>
- #include <linux/ktime.h>
-+#include <linux/security.h>
- #include <trace/events/power.h>
- 
- #include "power.h"
-@@ -68,7 +69,7 @@ static const struct platform_hibernation_ops *hibernation_ops;
- 
- bool hibernation_available(void)
- {
--	return (nohibernate == 0);
-+	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
- }
- 
- /**
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 6f302c156bc8..a0996f75629f 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -21,6 +21,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
- 	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
- 	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
- 	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
-+	[LOCKDOWN_HIBERNATION] = "hibernation",
- 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
- 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
- };
--- 
-2.22.0.510.g264f2c817a-goog
+However, I also agree with your standpoint, that let's start simple to
+enable the deepest state as a start with, then we can improve things
+on top.
 
+Kind regards
+Uffe
