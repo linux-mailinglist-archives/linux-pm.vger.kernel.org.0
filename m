@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3206CFBD
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 16:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AA26CFC0
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 16:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389933AbfGRObV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jul 2019 10:31:21 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:34933 "EHLO
+        id S2390646AbfGROba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jul 2019 10:31:30 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:34973 "EHLO
         mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727757AbfGRObU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 10:31:20 -0400
+        with ESMTP id S1726608AbfGROba (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 10:31:30 -0400
 Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190718143119euoutp01fe6054b01450212ab070a14dcce7bb44~yhtcuZ6VD1278312783euoutp01I
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 14:31:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190718143119euoutp01fe6054b01450212ab070a14dcce7bb44~yhtcuZ6VD1278312783euoutp01I
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190718143128euoutp01a9d4a2ad596e5260ebe170a9815f072e~yhtlSn62L1313513135euoutp01u
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 14:31:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190718143128euoutp01a9d4a2ad596e5260ebe170a9815f072e~yhtlSn62L1313513135euoutp01u
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563460279;
-        bh=lD6bLpANu+5ltBJVIOr0PCIM8ELkyvdZoAaHhN8C3Jg=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=S0DfXUlAgSWSm/GLBRG0xUgm8Cpf20zv1YldfDpk8h+c07xkFXU31NhNEe2XFm06J
-         qMLdA4IY85DwIrBQ7UtXF/kipISXDvoc2Hy/hm8gYFe0OaBPd5zZV/aIMoRwIfaxUe
-         M8+JUWUqXaGW85LE5b3oZi/f5Uv4a1XFL7OHxNDg=
+        s=mail20170921; t=1563460288;
+        bh=GxexQaGZG+sAY0gsqq2BuusRgkw0PyTNpfiAreTG6ek=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DF9PyU82NLpzwO1o89xqZRaKSDiG0A+YvlxdmNkaQp+h1A7aBDzFcwpCtEp3WRzbg
+         40a1PrdOpuzH/aI3G9xDMNwhV6sigIRShGuQes8M36YB5wT686fgdbIQpFGOnqbNqX
+         zynKlfGp3OxnzWsjQkiahAVCCa4hHHggDZjrrVgo=
 Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190718143118eucas1p205fbd75b27b2c7eb53c2756ea866f6d4~yhtcBl5g-2850928509eucas1p2T;
-        Thu, 18 Jul 2019 14:31:18 +0000 (GMT)
+        20190718143127eucas1p27977cbbd1e1640c1a7053e374b61b5e0~yhtkj8Fue3233132331eucas1p2a;
+        Thu, 18 Jul 2019 14:31:27 +0000 (GMT)
 Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id AF.10.04325.6B2803D5; Thu, 18
-        Jul 2019 15:31:18 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id C3.20.04325.FB2803D5; Thu, 18
+        Jul 2019 15:31:27 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
         eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1~yhtbFH8gJ0452404524eucas1p1X;
-        Thu, 18 Jul 2019 14:31:17 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190718143117eusmtrp19ce23a7ee881378c77967c941689d7df~yhtbEkaf61897918979eusmtrp1t;
-        Thu, 18 Jul 2019 14:31:17 +0000 (GMT)
-X-AuditID: cbfec7f5-b8fff700000010e5-a9-5d3082b68a85
+        20190718143127eucas1p13b1e2c98d270140a87f09562ef46c9a3~yhtj2aAk60448804488eucas1p1b;
+        Thu, 18 Jul 2019 14:31:27 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190718143126eusmtrp2cff0ec36d197b30db8f17c8f20ab35d9~yhtjoPfZj0339203392eusmtrp2A;
+        Thu, 18 Jul 2019 14:31:26 +0000 (GMT)
+X-AuditID: cbfec7f5-b75ff700000010e5-c4-5d3082bfb430
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id BD.2E.04146.5B2803D5; Thu, 18
-        Jul 2019 15:31:17 +0100 (BST)
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id AB.A6.04140.EB2803D5; Thu, 18
+        Jul 2019 15:31:26 +0100 (BST)
 Received: from AMDC3061.DIGITAL.local (unknown [106.120.51.75]) by
         eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190718143116eusmtip184739922c1312cde680cce9e2904106b~yhtacPjzf0929109291eusmtip1j;
-        Thu, 18 Jul 2019 14:31:16 +0000 (GMT)
+        20190718143126eusmtip18386d7ede1d45f20d7b77f0c1e339fef~yhtjBeXj11716617166eusmtip1u;
+        Thu, 18 Jul 2019 14:31:26 +0000 (GMT)
 From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
 To:     krzk@kernel.org
 Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
@@ -54,110 +54,228 @@ Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, b.zolnierkie@samsung.com,
         m.szyprowski@samsung.com,
         Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH v2 0/9] Exynos Adaptive Supply Voltage support
-Date:   Thu, 18 Jul 2019 16:30:35 +0200
-Message-Id: <20190718143044.25066-1-s.nawrocki@samsung.com>
+Subject: [PATCH v2 1/9] soc: samsung: Add exynos chipid driver support
+Date:   Thu, 18 Jul 2019 16:30:36 +0200
+Message-Id: <20190718143044.25066-2-s.nawrocki@samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkleLIzCtJLcpLzFFi42LZduzned1tTQaxBr+3S1hsnLGe1WL+kXOs
-        Fv2PXzNbnD+/gd1i0+NrrBaXd81hs/jce4TRYsb5fUwWa4/cZbdYtPULu0Xr3iPsFofftLNa
-        bH5wjM2B12PTqk42j81L6j36tqxi9Pi8SS6AJYrLJiU1J7MstUjfLoEro6/hMlvBCvGKSW/f
-        sTUwrhXqYuTkkBAwkfjVfpa1i5GLQ0hgBaPE/NsPmSCcL4wSbV+62CGcz4wSJz4tZoVpebrj
-        F1RiOaNEx8bnLHAtDU1PWECq2AQMJXqP9jGC2CICwhL3li4H62AWuMckcfrpWSaQhLCAncT8
-        BWvAGlgEVCUOtE8Cs3kFrCVunV7ECLFOXmL1hgPMIM0SAr/ZJDoP7YJKuEj87pnBAmELS7w6
-        voUdwpaROD25hwWioZlRomf3bXYIZwKjxP3jC6C6rSUOH78I9BEH0E2aEut36UOEHSX6rhxh
-        AglLCPBJ3HgrCBJmBjInbZvODBHmlehog4aeisTvVdOZIGwpie4n/6HO8ZCY+qwHbJGQQKzE
-        oUn3WSYwys1C2LWAkXEVo3hqaXFuemqxcV5quV5xYm5xaV66XnJ+7iZGYAI5/e/41x2M+/4k
-        HWIU4GBU4uENyDWIFWJNLCuuzD3EKMHBrCTCe/ulfqwQb0piZVVqUX58UWlOavEhRmkOFiVx
-        3mqGB9FCAumJJanZqakFqUUwWSYOTqkGxin+K7+K/89IKqqc3LD4osD/JeliEnuz2U4quFcx
-        OvbyOPQu28q8Sbf0/68dT9Ju6a1MvzzV8VnNxwemfyap2+ZMPs32QCrK+NLOQ1vXe1Tc0s0L
-        P7XQ4FFA4Isn3AvK7kzjn9hsEqgyNyxkdvvV1ZfMT5v0O2xM+CC4773krXmxJz4HSVTOf6zE
-        UpyRaKjFXFScCAB9He85HAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsVy+t/xu7pbmwxiDVrXKVtsnLGe1WL+kXOs
-        Fv2PXzNbnD+/gd1i0+NrrBaXd81hs/jce4TRYsb5fUwWa4/cZbdYtPULu0Xr3iPsFofftLNa
-        bH5wjM2B12PTqk42j81L6j36tqxi9Pi8SS6AJUrPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jE
-        Us/Q2DzWyshUSd/OJiU1J7MstUjfLkEvo6/hMlvBCvGKSW/fsTUwrhXqYuTkkBAwkXi64xd7
-        FyMXh5DAUkaJd2tfs3QxcgAlpCTmtyhB1AhL/LnWxQZR84lRYv70f4wgCTYBQ4neo31gtghQ
-        0b2ly8EGMQu8YpK4Pe8/E0hCWMBOYv6CNSwgNouAqsSB9klgNq+AtcSt04sYITbIS6zecIB5
-        AiPPAkaGVYwiqaXFuem5xYZ6xYm5xaV56XrJ+bmbGIFBu+3Yz807GC9tDD7EKMDBqMTDG5Br
-        ECvEmlhWXJl7iFGCg1lJhPf2S/1YId6UxMqq1KL8+KLSnNTiQ4ymQMsnMkuJJucDIyqvJN7Q
-        1NDcwtLQ3Njc2MxCSZy3Q+BgjJBAemJJanZqakFqEUwfEwenVAOj42q3x/J9laqVX3bOiy1Z
-        GvbMh6uSa9El7em/Dh72mnprq2JIoQbTnLZnRvkLl77uUbR9oWTxNf7Zw+wTbYnrn98898LM
-        5a70Wb5pahwnlRZuW2PS4drQc9Su5KLM4kuBaaaily30tHbqzFq1cd9hUVe7sC7hg8W3K2Uq
-        tVj3fG933rKt50+yEktxRqKhFnNRcSIAdecUgHACAAA=
-X-CMS-MailID: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
+In-Reply-To: <20190718143044.25066-1-s.nawrocki@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprGKsWRmVeSWpSXmKPExsWy7djP87r7mwxiDVauU7LYOGM9q8X8I+dY
+        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y26xaOsXdovWvUfYLQ6/aWe1
+        2PzgGJsDr8emVZ1sHpuX1Hv0bVnF6PF5k1wASxSXTUpqTmZZapG+XQJXxvl/75gLZuhUbH/9
+        gKmBsUe1i5GTQ0LAROLE6VOMXYxcHEICKxgl1n36wgThfGGU6P7zkQ3C+cwosXzmP0aYlo1P
+        V7JCJJYzSpxdfR+hpfXrBhaQKjYBQ4neo31gHSICwhL3li5nByliFrjHJHH66VkmkISwgJvE
+        viVd7CA2i4CqxNzuE2BxXgFriat/VjJDrJOXWL3hAJjNKWAjcfjuU7BrJQSms0tMfXMMqshF
+        YtHfW1D3CUu8Or6FHcKWkfi/cz4TREMzo0TP7tvsEM4ERon7xxdAdVhLHD5+EegjDqD7NCXW
+        79KHCDtK3DjxBCwsIcAnceOtIEiYGcictG06M0SYV6KjTQiiWkXi96rpTBC2lET3k/8sELaH
+        RNOyJmg49jNKfF8whW0Co/wshGULGBlXMYqnlhbnpqcWG+ellusVJ+YWl+al6yXn525iBKaW
+        0/+Of93BuO9P0iFGAQ5GJR7egFyDWCHWxLLiytxDjBIczEoivLdf6scK8aYkVlalFuXHF5Xm
+        pBYfYpTmYFES561meBAtJJCeWJKanZpakFoEk2Xi4JRqYDx1VsMi99e5/LzCZke5a59X6oU1
+        nDi/3JH7yuXflt2rr/PemSwjtDVPxO3Q0QM9/hVf06do1bBP25pctE5OtOhHQMSCNJ1P/Q5/
+        2C62qoTWBxWyr5txcAdb4Y7LDzbssbC82W0cXFeownjw5NZ1S34pMzz//6L56dvF94xWFk1K
+        9vibvPf49hQlluKMREMt5qLiRACA0JtXKQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrKLMWRmVeSWpSXmKPExsVy+t/xu7r7mgxiDZae1LHYOGM9q8X8I+dY
+        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y26xaOsXdovWvUfYLQ6/aWe1
+        2PzgGJsDr8emVZ1sHpuX1Hv0bVnF6PF5k1wAS5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJ
+        pZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexvl/75gLZuhUbH/9gKmBsUe1i5GTQ0LARGLj05Ws
+        XYxcHEICSxkltk86zdLFyAGUkJKY36IEUSMs8edaFxtEzSdGie/zO1lAEmwChhK9R/sYQWwR
+        oKJ7S5ezgxQxC7xikrg97z8TSEJYwE1i35IudhCbRUBVYm73CbA4r4C1xNU/K5khNshLrN5w
+        AMzmFLCROHz3KdhQIaCa2S+vMU5g5FvAyLCKUSS1tDg3PbfYSK84Mbe4NC9dLzk/dxMjMMi3
+        Hfu5ZQdj17vgQ4wCHIxKPLwBuQaxQqyJZcWVuYcYJTiYlUR4b7/UjxXiTUmsrEotyo8vKs1J
+        LT7EaAp01ERmKdHkfGAE5pXEG5oamltYGpobmxubWSiJ83YIHIwREkhPLEnNTk0tSC2C6WPi
+        4JRqYGS9zVMh3vbkk47LtbmW8w3dpabNl5976t3d4HWHAzlt+U7Hs1bkze9bNl99f6u005db
+        rT7rr7skVK+PuPkn1Nlgu9o+tYh3upcemnemMs5cmrftgLSIyrwFD1Y+23XtSuPtVMP0f0sW
+        2O9ksntxR6532pPHfxquc7CFJcgcXBLZl/Bz6vOGqd+UWIozEg21mIuKEwEE5n3GiAIAAA==
+X-CMS-MailID: 20190718143127eucas1p13b1e2c98d270140a87f09562ef46c9a3
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
+X-RootMTR: 20190718143127eucas1p13b1e2c98d270140a87f09562ef46c9a3
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
-References: <CGME20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1@eucas1p1.samsung.com>
+X-CMS-RootMailID: 20190718143127eucas1p13b1e2c98d270140a87f09562ef46c9a3
+References: <20190718143044.25066-1-s.nawrocki@samsung.com>
+        <CGME20190718143127eucas1p13b1e2c98d270140a87f09562ef46c9a3@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is second iteration of patch series adding ASV (Adaptive Supply 
-Voltage) support for Exynos SoCs. The first one can be found at:
-https://lore.kernel.org/lkml/20190404171735.12815-1-s.nawrocki@samsung.com
+From: Pankaj Dubey <pankaj.dubey@samsung.com>
 
-The main changes comparing to the first (RFC) version are:
- - moving ASV data tables from DT to the driver,
- - converting the chipid and the ASV drivers to use regmap,
- - converting the ASV driver to proper platform driver.
+Exynos SoCs have Chipid, for identification of product IDs and SoC
+revisions. This patch intends to provide initialization code for all
+these functionalities, at the same time it provides some sysfs entries
+for accessing these information to user-space.
 
-I tried the opp-supported-hw bitmask approach as in the Qualcomm CPUFreq
-DT bindings but it resulted in too many OPPs and DT nodes, around 200
-per CPU cluster. So the ASV OPP tables are now in the ASV driver, as in
-downstream kernels.  I might give it a try and restrucure these tables
-to avoid data repetition.
+This driver uses existing binding for exynos-chipid.
 
-This patch set includes Exynos CHIPID driver posted by Pankaj Dubey and
-futher improved by Bartlomiej Zolnierkiewicz [1].
+Changes by Bartlomiej:
+- fixed return values on errors
+- removed bogus kfree_const()
+- added missing Exynos4210 EVT0 id
+- converted code to use EXYNOS_MASK define
+- fixed np use after of_node_put()
+- fixed too early use of dev_info()
+- made driver fail for unknown SoC-s
+- added SPDX tag
+- updated Copyrights
 
-Tested on Odroid XU3, XU3 Lite, XU4.
-
-One of the things on TODO list is support for the Adaptive Body Bias.
-This will require modifications on the cpufreq driver side in order to 
-support multiple voltage regulators and changes in the OPP framework 
-to support adding OPPs with multiple voltages.
-
-[1] https://lkml.org/lkml/2018/11/15/908
-
-Pankaj Dubey (3):
-  soc: samsung: Add exynos chipid driver support
-  ARM: EXYNOS: enable exynos_chipid for ARCH_EXYNOS
-  ARM64: EXYNOS: enable exynos_chipid for ARCH_EXYNOS
-
-Sylwester Nawrocki (6):
-  soc: samsung: Convert exynos-chipid driver to use the regmap API
-  soc: samsung: Add Exynos Adaptive Supply Voltage driver
-  ARM: EXYNOS: Enable exynos-asv driver for ARCH_EXYNOS
-  soc: samsung: Update the CHIP ID DT binding documentation
-  ARM: dts: Add "syscon" compatible string to chipid node
-  ARM: dts: Add samsung,asv-bin property for odroidxu3-lite
-
- .../bindings/arm/samsung/exynos-chipid.txt    |  10 +-
- arch/arm/boot/dts/exynos5.dtsi                |   4 +-
- .../boot/dts/exynos5422-odroidxu3-lite.dts    |   4 +
- arch/arm/mach-exynos/Kconfig                  |   2 +
- arch/arm64/Kconfig.platforms                  |   1 +
- drivers/soc/samsung/Kconfig                   |  16 +
- drivers/soc/samsung/Makefile                  |   5 +
- drivers/soc/samsung/exynos-asv.c              | 185 +++++++
- drivers/soc/samsung/exynos-asv.h              |  82 +++
- drivers/soc/samsung/exynos-chipid.c           | 104 ++++
- drivers/soc/samsung/exynos5422-asv.c          | 499 ++++++++++++++++++
- drivers/soc/samsung/exynos5422-asv.h          |  25 +
- include/linux/soc/samsung/exynos-chipid.h     |  48 ++
- 13 files changed, 981 insertions(+), 4 deletions(-)
- create mode 100644 drivers/soc/samsung/exynos-asv.c
- create mode 100644 drivers/soc/samsung/exynos-asv.h
+Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+[m.szyprowski: for suggestion and code snippet of product_id_to_soc_id]
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+[s.nawrocki: updated copyright date]
+Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+---
+ drivers/soc/samsung/Kconfig         |   5 ++
+ drivers/soc/samsung/Makefile        |   2 +
+ drivers/soc/samsung/exynos-chipid.c | 111 ++++++++++++++++++++++++++++
+ 3 files changed, 118 insertions(+)
  create mode 100644 drivers/soc/samsung/exynos-chipid.c
- create mode 100644 drivers/soc/samsung/exynos5422-asv.c
- create mode 100644 drivers/soc/samsung/exynos5422-asv.h
- create mode 100644 include/linux/soc/samsung/exynos-chipid.h
 
+diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
+index 2186285fda92..2905f5262197 100644
+--- a/drivers/soc/samsung/Kconfig
++++ b/drivers/soc/samsung/Kconfig
+@@ -7,6 +7,11 @@ menuconfig SOC_SAMSUNG
+ 
+ if SOC_SAMSUNG
+ 
++config EXYNOS_CHIPID
++	bool "Exynos Chipid controller driver" if COMPILE_TEST
++	depends on ARCH_EXYNOS || COMPILE_TEST
++	select SOC_BUS
++
+ config EXYNOS_PMU
+ 	bool "Exynos PMU controller driver" if COMPILE_TEST
+ 	depends on ARCH_EXYNOS || ((ARM || ARM64) && COMPILE_TEST)
+diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
+index 29f294baac6e..3b6a8797416c 100644
+--- a/drivers/soc/samsung/Makefile
++++ b/drivers/soc/samsung/Makefile
+@@ -1,4 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
++
++obj-$(CONFIG_EXYNOS_CHIPID)	+= exynos-chipid.o
+ obj-$(CONFIG_EXYNOS_PMU)	+= exynos-pmu.o
+ 
+ obj-$(CONFIG_EXYNOS_PMU_ARM_DRIVERS)	+= exynos3250-pmu.o exynos4-pmu.o \
+diff --git a/drivers/soc/samsung/exynos-chipid.c b/drivers/soc/samsung/exynos-chipid.c
+new file mode 100644
+index 000000000000..78b123ee60c0
+--- /dev/null
++++ b/drivers/soc/samsung/exynos-chipid.c
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2019 Samsung Electronics Co., Ltd.
++ *	      http://www.samsung.com/
++ *
++ * EXYNOS - CHIP ID support
++ * Author: Pankaj Dubey <pankaj.dubey@samsung.com>
++ * Author: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
++ */
++
++#include <linux/io.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/sys_soc.h>
++
++#define EXYNOS_SUBREV_MASK	(0xF << 4)
++#define EXYNOS_MAINREV_MASK	(0xF << 0)
++#define EXYNOS_REV_MASK		(EXYNOS_SUBREV_MASK | EXYNOS_MAINREV_MASK)
++#define EXYNOS_MASK		0xFFFFF000
++
++static const struct exynos_soc_id {
++	const char *name;
++	unsigned int id;
++} soc_ids[] = {
++	{ "EXYNOS3250", 0xE3472000 },
++	{ "EXYNOS4210", 0x43200000 },	/* EVT0 revision */
++	{ "EXYNOS4210", 0x43210000 },
++	{ "EXYNOS4212", 0x43220000 },
++	{ "EXYNOS4412", 0xE4412000 },
++	{ "EXYNOS5250", 0x43520000 },
++	{ "EXYNOS5260", 0xE5260000 },
++	{ "EXYNOS5410", 0xE5410000 },
++	{ "EXYNOS5420", 0xE5420000 },
++	{ "EXYNOS5440", 0xE5440000 },
++	{ "EXYNOS5800", 0xE5422000 },
++	{ "EXYNOS7420", 0xE7420000 },
++	{ "EXYNOS5433", 0xE5433000 },
++};
++
++static const char * __init product_id_to_soc_id(unsigned int product_id)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(soc_ids); i++)
++		if ((product_id & EXYNOS_MASK) == soc_ids[i].id)
++			return soc_ids[i].name;
++	return NULL;
++}
++
++int __init exynos_chipid_early_init(void)
++{
++	struct soc_device_attribute *soc_dev_attr;
++	void __iomem *exynos_chipid_base;
++	struct soc_device *soc_dev;
++	struct device_node *root;
++	struct device_node *np;
++	u32 product_id;
++	u32 revision;
++
++	/* look up for chipid node */
++	np = of_find_compatible_node(NULL, NULL, "samsung,exynos4210-chipid");
++	if (!np)
++		return -ENODEV;
++
++	exynos_chipid_base = of_iomap(np, 0);
++	of_node_put(np);
++
++	if (!exynos_chipid_base) {
++		pr_err("Failed to map SoC chipid\n");
++		return -ENXIO;
++	}
++
++	product_id = readl_relaxed(exynos_chipid_base);
++	revision = product_id & EXYNOS_REV_MASK;
++	iounmap(exynos_chipid_base);
++
++	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
++	if (!soc_dev_attr)
++		return -ENOMEM;
++
++	soc_dev_attr->family = "Samsung Exynos";
++
++	root = of_find_node_by_path("/");
++	of_property_read_string(root, "model", &soc_dev_attr->machine);
++	of_node_put(root);
++
++	soc_dev_attr->revision = kasprintf(GFP_KERNEL, "%x", revision);
++	soc_dev_attr->soc_id = product_id_to_soc_id(product_id);
++	if (!soc_dev_attr->soc_id) {
++		pr_err("Unknown SoC\n");
++		return -ENODEV;
++	}
++
++	/* please note that the actual registration will be deferred */
++	soc_dev = soc_device_register(soc_dev_attr);
++	if (IS_ERR(soc_dev)) {
++		kfree(soc_dev_attr->revision);
++		kfree(soc_dev_attr);
++		return PTR_ERR(soc_dev);
++	}
++
++	/* it is too early to use dev_info() here (soc_dev is NULL) */
++	pr_info("soc soc0: Exynos: CPU[%s] PRO_ID[0x%x] REV[0x%x] Detected\n",
++		soc_dev_attr->soc_id, product_id, revision);
++
++	return 0;
++}
++early_initcall(exynos_chipid_early_init);
 -- 
 2.17.1
 
