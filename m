@@ -2,133 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2DA6D26A
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 18:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AF46D2BC
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 19:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728008AbfGRQz3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jul 2019 12:55:29 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:43085 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727770AbfGRQz3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 12:55:29 -0400
-Received: by mail-vs1-f68.google.com with SMTP id j26so19592028vsn.10
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 09:55:29 -0700 (PDT)
+        id S1726715AbfGRR0u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jul 2019 13:26:50 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:44591 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727730AbfGRR0u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 13:26:50 -0400
+Received: by mail-ot1-f66.google.com with SMTP id b7so29821736otl.11
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 10:26:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UbJA1LvVSBKZi34z8EvemKhQnL5/c6wyw0dFUXsJ7H4=;
-        b=v+KXmWJJHgzxhzH/ByzH+UGInDESBlyCnkXDLOYXkFL108hatd/9puy+QFFba3m5WD
-         bhtTKrLRw2YAQnFRC5M36S3T5i8Oe9gGBtNFE7ZdCJ/1I4gLyUmnIjKdORLB/9odeMnw
-         FhmH4wyOwzolrzleyGwIui2FQ8MLa67j+7E28mZP0dcFPtbM1CXxugMkHsdZeP6VkJ9g
-         pXT21JDk/94eK4JtwLYOUv7st8v723fVliWhRYVAZKpLQy8dM/d+IyfGekDqo5K749U+
-         kzXKq432p3MGhIBhb+v8kvOZnTcKOkNOpxCcu9VamQd7Pt/FKJqG22ZTWj0nzsbngz0X
-         0K4A==
+        bh=kHot347YLWE5nkm+ELe1ZYMvJsx/cZ07S4YDS0ZiX4U=;
+        b=s5g1DyonFBqTLhJwl7Sl2aNMuX3Z9Tb6oahSwY6QyEWQmcNZ2SWhH8/MhiOzWgra4W
+         n7tWEqkN7/dEqVLquoLllVRJtb3X27VKoRq7T5bGOrwjBRnia4Gt8kZdFSKfuAZ5n0s/
+         5hRS9hcVjmm4FDGkJmXutN9jM+rb/7SxCj8SdLOW2JSn20yN2y4B72kvSn67Y0aISFZO
+         K156I4nEPJMmpFMFfyyu6lQbwq5N1FVSFcYd107uvw9huZmEu150LjM3Nuexp41b/NO0
+         XVwPCVMQXsRSWoeWr+e2c+KBMJO1tF8M1B/VFMSSw6gQMmhLWEFmXaSpUH9+eta7vS0l
+         uuhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UbJA1LvVSBKZi34z8EvemKhQnL5/c6wyw0dFUXsJ7H4=;
-        b=A4emvM2wYFt/HTH/1L2qMtuyIPO4YDGsCq/bAMZu+SyEYTBTOL/5gkIIlvwJgB4zM0
-         dDUf96hFKeIDlFHkdA/a3WA7FFnkMFKwfh9gfbNhBGvBfjB0Qy8HHdtuZqqLkJdIiUh1
-         SehjObgK+Y+bafP8h1IjPswSDt9eQpPSq7LTWkTYjGt/gGOlrwVeUgtsyhc7He5oZeUE
-         lPu/SXZogEb9LpMAaM9fZRTpNKfoigin6fKX3LOc79gKVzwExLWEvLLLzAppJWBMVfov
-         Ecn/DeR0wL0qK+GGLs1SeW0kzAhp4DceyPYIJx6zraQ7Q5SO0Pls5KcSVxi65D+Z5NRZ
-         63bg==
-X-Gm-Message-State: APjAAAU4MZmLK0Dc3Dn2uikK8rF3LgLnWYH6bVN6Kn6vcg+iyO3M6Zz5
-        BbQjFlQG5GQNSL+lD/jZZVeEv7Qel5yEyKgk1AyjQw==
-X-Google-Smtp-Source: APXvYqz3H7NW9n8k3hccLVjUE4vzSLFYDceNlDN7TRygVSGTeYT1EPbUZoWXTC9qw+g+yzQp96xVbuz30qFeCiP1+X8=
-X-Received: by 2002:a67:61c7:: with SMTP id v190mr28723774vsb.165.1563468928660;
- Thu, 18 Jul 2019 09:55:28 -0700 (PDT)
+        bh=kHot347YLWE5nkm+ELe1ZYMvJsx/cZ07S4YDS0ZiX4U=;
+        b=DrRwiwuMv4vAAzkp2Hnaog5xAE6Oi/dJMm/XsJDph10+jY8kCCuV8F9puzEW9S2fwt
+         8fD0VX90wg/+A/3ovvbGxTfeVR6WXIIywCekVqyXW9Ke++u0TgRJJcBBtRJ+A3n7RLkV
+         kmVsPjFhaEcssxVA7B0NVnDBERmJHoD3xemteF8I7ArOZE4NrtBI/DAb8W8JWLz/trCJ
+         sIIu0GjKa3wt5c19hH1STFgUdrswDD0rm5iIsspE7zCrDqiUACWkVD6SPB5qPu11JNFS
+         4K8pAGMG5Oa1kretb634ljtI/vubbyaUyjuqwREsg9f9kO7vBTPGfibcCJswcy+z8jek
+         DbFQ==
+X-Gm-Message-State: APjAAAU1lpGsX9KAyEzONyNy6OAz+uc/osQ3nlIeg+RH7+hH9O7jPD7T
+        l1yeZeE0KqoZrNhUq9zRKXctpy1vYo6JMLhLBTFz5w==
+X-Google-Smtp-Source: APXvYqxx0wUv2PcQOeCnA7yH8Brpx911ipQxgRjsUz11FM8fMvCQ8Z/c5zcaSYTzAc9Lky0K9vcLBi7grFvfvHSwzro=
+X-Received: by 2002:a05:6830:12d6:: with SMTP id a22mr7109834otq.236.1563470809129;
+ Thu, 18 Jul 2019 10:26:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190513192300.653-1-ulf.hansson@linaro.org> <20190513192300.653-15-ulf.hansson@linaro.org>
- <20190716155317.GB32490@e121166-lin.cambridge.arm.com> <CAPDyKFrJ75mo+s6GuUCTQ-nVv7C+9YJyTVmwuBZ2RKFOvOi3Nw@mail.gmail.com>
- <20190718133053.GA27222@e121166-lin.cambridge.arm.com>
-In-Reply-To: <20190718133053.GA27222@e121166-lin.cambridge.arm.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 18 Jul 2019 18:54:52 +0200
-Message-ID: <CAPDyKFr4NmichQk4uf+Wgbanh=5idKYY=37WCb6U_hNFDVYg=w@mail.gmail.com>
-Subject: Re: [PATCH 14/18] drivers: firmware: psci: Manage runtime PM in the
- idle path for CPUs
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-2-saravanak@google.com>
+ <20190717075448.xlyg2ddewlci3abg@vireshk-i7> <CAGETcx-kUM7MqNYowwNAL1Q0bnFzxPEO6yMg0YTkk16=OnPdmg@mail.gmail.com>
+ <20190718043558.roi4j6jw5n4zkwky@vireshk-i7>
+In-Reply-To: <20190718043558.roi4j6jw5n4zkwky@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 18 Jul 2019 10:26:13 -0700
+Message-ID: <CAGETcx_XtA_-cjU6Ra1Jh4zgWJXBpHY+g_FdWvnFTW84e46D_w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: opp: Introduce opp-peak-KBps and
+ opp-avg-KBps bindings
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Raju P . L . S . S . S . N" <rplsssn@codeaurora.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souvik Chakravarty <souvik.chakravarty@arm.com>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 18 Jul 2019 at 15:31, Lorenzo Pieralisi
-<lorenzo.pieralisi@arm.com> wrote:
+On Wed, Jul 17, 2019 at 9:36 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On Thu, Jul 18, 2019 at 12:35:07PM +0200, Ulf Hansson wrote:
-> > On Tue, 16 Jul 2019 at 17:53, Lorenzo Pieralisi
-> > <lorenzo.pieralisi@arm.com> wrote:
+> On 17-07-19, 13:29, Saravana Kannan wrote:
+> > On Wed, Jul 17, 2019 at 12:54 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 > > >
-> > > On Mon, May 13, 2019 at 09:22:56PM +0200, Ulf Hansson wrote:
-> > > > When the hierarchical CPU topology layout is used in DT, let's allow the
-> > > > CPU to be power managed through its PM domain, via deploying runtime PM
-> > > > support.
+> > > On 02-07-19, 18:10, Saravana Kannan wrote:
+> > > > Interconnects often quantify their performance points in terms of
+> > > > bandwidth. So, add opp-peak-KBps (required) and opp-avg-KBps (optional) to
+> > > > allow specifying Bandwidth OPP tables in DT.
 > > > >
-> > > > To know for which idle states runtime PM reference counting is needed,
-> > > > let's store the index of deepest idle state for the CPU, in a per CPU
-> > > > variable. This allows psci_cpu_suspend_enter() to compare this index with
-> > > > the requested idle state index and then act accordingly.
+> > > > opp-peak-KBps is a required property that replace opp-hz for Bandwidth OPP
+> > > > tables.
+> > > >
+> > > > opp-avg-KBps is an optional property that can be used in Bandwidth OPP
+> > > > tables.
+> > > >
+> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/opp/opp.txt | 15 ++++++++++++---
+> > > >  1 file changed, 12 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
+> > > > index 76b6c79604a5..c869e87caa2a 100644
+> > > > --- a/Documentation/devicetree/bindings/opp/opp.txt
+> > > > +++ b/Documentation/devicetree/bindings/opp/opp.txt
+> > > > @@ -83,9 +83,14 @@ properties.
+> > > >
+> > > >  Required properties:
+> > > >  - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
+> > > > -  required property for all device nodes but devices like power domains. The
+> > > > -  power domain nodes must have another (implementation dependent) property which
+> > > > -  uniquely identifies the OPP nodes.
+> > > > +  required property for all device nodes but for devices like power domains or
+> > > > +  bandwidth opp tables. The power domain nodes must have another (implementation
+> > > > +  dependent) property which uniquely identifies the OPP nodes. The interconnect
+> > > > +  opps are required to have the opp-peak-bw property.
 > > >
-> > > I do not see why a system with two CPU CPUidle states, say CPU retention
-> > > and CPU shutdown, should not be calling runtime PM on CPU retention
-> > > entry.
+> > >                                    ??
 > >
-> > If the CPU idle governor did select the CPU retention for the CPU, it
-> > was probably because the target residency for the CPU shutdown state
-> > could not be met.
+> > Sorry, what's the question? Was this an accidental email?
 >
-> The kernel does not know what those cpu states represent, so, this is an
-> assumption you are making and it must be made clear that this code works
-> as long as your assumption is valid.
+> Too much smartness is too bad sometimes, sorry about that :)
 >
-> If eg a "cluster" retention state has lower target_residency than
-> the deepest CPU idle state this assumption is wrong.
+> I placed the ?? right below "opp-peak-bw", there is no property like
+> that. You failed to update it :)
 
-Good point, you are right. I try to find a place to document this assumption.
+Ah, "typo". I'll fix it.
 
->
-> And CPUidle and genPD governor decisions are not synced anyway so,
-> again, this is an assumption, not a certainty.
->
-> > In this case, there is no point in allowing any other deeper idle
-> > states for cluster/package/system, since those have even greater
-> > residencies, hence calling runtime PM doesn't make sense.
->
-> On the systems you are testing on.
-
-So what you are saying typically means, that if all CPUs in the same
-cluster have entered the CPU retention state, on some system the
-cluster may also put into a cluster retention state (assuming the
-target residency is met)?
-
-Do you know of any systems that has these characteristics?
-
-[...]
-
-Kind regards
-Uffe
+-Saravana
