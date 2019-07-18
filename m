@@ -2,167 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9D76CB87
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 11:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F436CB72
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 11:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbfGRJGa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jul 2019 05:06:30 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:32837 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726488AbfGRJGa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 05:06:30 -0400
-Received: by mail-ot1-f67.google.com with SMTP id q20so28194170otl.0;
-        Thu, 18 Jul 2019 02:06:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=FbAj5yhaqo7OvIXAnydPecQ9dRAE9THaUdkKuKLzG1w=;
-        b=K/g+6mHUNOSF2J+5zlaBOCLJ8T4bvEvWSHKyhOW248BJqAe8qFl6cu9M6ReX3FG6xO
-         7BvYEfE+QP6Cc3ibzXcvcr2FROwH8x8eUQWlbttMvM9M0wr1bDHsTps4uQY7OHYjh/Nv
-         mvng6hIEp+LM3y/7HyhhnH3viErVPVESIWN6yD9OBJ/kyJZkozVk/PjMGtLEtfn8LsPg
-         sUAFa3rxn83WgTFhr6h6oiBHeD9mIpgQJdn3xFEoRc1VWGHXRxwayFxcTL8qVaJ/2f9v
-         eiXg+aPQCj+CZ2Lx1Fue1sTAII+SGmt0WmPaJKmbgOWbwFpYnDIH6xWttazgi1BRoJ28
-         I1Qg==
-X-Gm-Message-State: APjAAAW6JrRkqANHUQw1yf66cOQsJvvxDRBpkDDDfuWSKIvggIrizPYo
-        YlIwexdTpQ7WjcepZWIK+HS3DU+Fv0WpEE5xEjE=
-X-Google-Smtp-Source: APXvYqwVELilhcj7/AyvcoyPaqePI4XcNocPmBuVGOTQJOffopuzXvFDyxzznYHI9PGWCSEnBWFy36yMNNu1I19cKoI=
-X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr30020650otp.189.1563440789073;
- Thu, 18 Jul 2019 02:06:29 -0700 (PDT)
+        id S1726715AbfGRJEF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jul 2019 05:04:05 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:24960 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389802AbfGRJEE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 05:04:04 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190718090400epoutp03f91a80c77319bf7f0478fa722c082d4a~ydPqaZOxY0629406294epoutp03T
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 09:04:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190718090400epoutp03f91a80c77319bf7f0478fa722c082d4a~ydPqaZOxY0629406294epoutp03T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1563440640;
+        bh=eCzRoBS64n7hVgrP135ikuTSoqkmLqw2kLKgG7YgpEU=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=bA5VVtKeasRVhApGYBSUuNXAnG7zgbPmUJw39UjjxGrJSCuoTYSFG+paejuetIfXT
+         Cv7HS23Hi68cNVpZFcONodt+esOk3WLEtJgpddDQ91P428wqVNbhp8vhaqw7FeUFf3
+         5hep0gdG48nHeKRJPfncLBeO2CCSn+y/JbntMNMk=
+Received: from epsnrtp6.localdomain (unknown [182.195.42.167]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190718090359epcas1p14d9d1a2eb89b015d6726d6c86bc8c37f~ydPpto1t13105231052epcas1p1Y;
+        Thu, 18 Jul 2019 09:03:59 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.158]) by
+        epsnrtp6.localdomain (Postfix) with ESMTP id 45q7V530nXzMqYkX; Thu, 18 Jul
+        2019 09:03:57 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0D.51.04066.DF5303D5; Thu, 18 Jul 2019 18:03:57 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190718090356epcas1p363ba27cd8b2bfbbe4461b2cd790207bb~ydPnPQrDT1995319953epcas1p3o;
+        Thu, 18 Jul 2019 09:03:56 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190718090356epsmtrp13293ce08d24cbaf4ca218978d52e2869~ydPnN-imK2474324743epsmtrp1Y;
+        Thu, 18 Jul 2019 09:03:56 +0000 (GMT)
+X-AuditID: b6c32a37-e27ff70000000fe2-72-5d3035fda9c6
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D0.1B.03706.CF5303D5; Thu, 18 Jul 2019 18:03:56 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190718090356epsmtip2bc4a93adf982290e3fddd4b433b25c85~ydPm_6KI50953309533epsmtip2Z;
+        Thu, 18 Jul 2019 09:03:56 +0000 (GMT)
+Subject: Re: [PATCH v4 11/24] PM / devfreq: tegra30: Add debug messages
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <f630dacc-2065-a12d-bd03-1fc6c4363e1f@samsung.com>
+Date:   Thu, 18 Jul 2019 18:07:05 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.2
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 18 Jul 2019 11:06:18 +0200
-Message-ID: <CAJZ5v0irbFa5E=UZ+1XiiuoXC9zD0qc7vx3NtTCmB88h3_U4hw@mail.gmail.com>
-Subject: [GIT PULL] More power management updates for v5.3-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <f819c226-4328-c85d-5da3-932391fa6747@gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHJsWRmVeSWpSXmKPExsWy7bCmge5fU4NYg91rxSxWf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
+        zaNvyypGj8+b5AJYo7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22V
+        XHwCdN0yc4AOUlIoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUWBboFSfmFpfmpesl
+        5+daGRoYGJkCFSZkZ3w7MZ2x4KJExf9bcQ2MV4W7GDk5JARMJO5cWMIKYgsJ7GCU2DPVvouR
+        C8j+xCgx7XgnO4TzjVHi1uRmoCoOsI5DF7Qg4nsZJfa2zmWDcN4zShyaPIEJZJSwgLvEhgkr
+        mEASIgL/GCU6fzazgSSYBSIlDu9cDVbEJqAlsf/FDbA4v4CixNUfjxlBbF4BO4nN63eD1bAI
+        qEp8m7iQBcQWFYiQOHVkHgtEjaDEyZlPwGxOAVuJqW9WQ80Xl7j1ZD4ThC0v0bx1NjPIERIC
+        v9kk3t3eyQjxtIvE7Lcf2CFsYYlXx7dA2VISL/vboOxqiZUnj7BBNHcwSmzZf4EVImEssX/p
+        ZCZQWDALaEqs36UPEVaU2Pl7LiPEYj6Jd197oMHFK9HRJgRRoixx+cFdJghbUmJxeyfbBEal
+        WUjemYXkhVlIXpiFsGwBI8sqRrHUguLc9NRiwwJj5MjexAhOq1rmOxg3nPM5xCjAwajEw3tD
+        ST9WiDWxrLgy9xCjBAezkgjv7ZdAId6UxMqq1KL8+KLSnNTiQ4ymwNCeyCwlmpwPTPl5JfGG
+        pkbGxsYWJoZmpoaGSuK88/5oxgoJpCeWpGanphakFsH0MXFwSjUw+jN+aZUSeJ5yuD4uadWx
+        jvy6ozM+7z6zi7fXb0vJcobc2jtWWZda34nv0uk8+qDj9foHlxqWx5xZd1vTK8F8rWTkMz7P
+        7wIljQZHU7+xKmz+VJ3qpLX+I+uPj3lzF5xSzzPovXdy1lKHLeu2ntgZVWqsaREyKfH3+mjp
+        X7/FHj0z/bb9/O0d6kosxRmJhlrMRcWJAFAoP+zBAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsWy7bCSvO4fU4NYg8bFxharPz5mtGiZtYjF
+        4mzTG3aLy7vmsFl87j3CaNH5ZRabxe3GFWwWP3fNY7HoW3uJzYHTY8fdJYweO2fdZffobX7H
+        5tG3ZRWjx+dNcgGsUVw2Kak5mWWpRfp2CVwZ305MZyy4KFHx/1ZcA+NV4S5GDg4JAROJQxe0
+        uhi5OIQEdjNKrLj8m6WLkRMoLikx7eJRZogaYYnDh4shat4ySsz6dJwJpEZYwF1iw4QVTCAJ
+        EYEmJolNvRfYQRLMApESPXO3sEF0tDBLnHzyD2wqm4CWxP4XN9hAbH4BRYmrPx4zgti8AnYS
+        m9fvBpvKIqAq8W3iQrB6UYEIiUnXdrJA1AhKnJz5BMzmFLCVmPpmNRvEMnWJP/MuMUPY4hK3
+        nsxngrDlJZq3zmaewCg8C0n7LCQts5C0zELSsoCRZRWjZGpBcW56brFhgWFearlecWJucWle
+        ul5yfu4mRnCEaWnuYLy8JP4QowAHoxIP7w0l/Vgh1sSy4srcQ4wSHMxKIry3XwKFeFMSK6tS
+        i/Lji0pzUosPMUpzsCiJ8z7NOxYpJJCeWJKanZpakFoEk2Xi4JRqYAxZwB3Dniym9DfEduk3
+        /ZWcvM7imz/0R+Xt0QiSc3414eZzbwZtaaWHCpYCJe+mbfncpWS1ZcuW++HMxgrXF10pW375
+        5qPMfRH9GiWvL5ReNVHTXTRTy9BpW/KBNt77sq4Ts89oOEZH2bfWRelJR+68p513xFGvuKLI
+        MfSV+ofX6R8N1JKXKbEUZyQaajEXFScCADDxGfGsAgAA
+X-CMS-MailID: 20190718090356epcas1p363ba27cd8b2bfbbe4461b2cd790207bb
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190707223640epcas4p15337f40466342832b731ad6a53be946e
+References: <20190707223303.6755-1-digetx@gmail.com>
+        <CGME20190707223640epcas4p15337f40466342832b731ad6a53be946e@epcas4p1.samsung.com>
+        <20190707223303.6755-12-digetx@gmail.com>
+        <c883bdbe-427f-35a1-9e63-5e4953a84286@samsung.com>
+        <53cd0ba5-f814-cd9b-19c5-1d42717ca58c@gmail.com>
+        <922c9178-71de-46ad-eafd-805af461bedb@samsung.com>
+        <f819c226-4328-c85d-5da3-932391fa6747@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On 19. 7. 18. 오전 12:46, Dmitry Osipenko wrote:
+> 17.07.2019 9:45, Chanwoo Choi пишет:
+>> On 19. 7. 16. 오후 10:26, Dmitry Osipenko wrote:
+>>> 16.07.2019 15:23, Chanwoo Choi пишет:
+>>>> Hi Dmitry,
+>>>>
+>>>> Usually, the kernel log print for all users
+>>>> such as changing the frequency, fail or success.
+>>>>
+>>>> But, if the log just show the register dump,
+>>>> it is not useful for all users. It is just used
+>>>> for only specific developer.
+>>>>
+>>>> I recommend that you better to add more exception handling
+>>>> code on many points instead of just showing the register dump.
+>>>
+>>> The debug messages are not users, but for developers. Yes, I primarily
+>>> made the debugging to be useful for myself and will be happy to change
+>>> the way debugging is done if there will be any other active developer
+>>> for this driver. The registers dump is more than enough in order to
+>>> understand what's going on, I don't see any real need to change anything
+>>> here for now.
+>>
+>> Basically, we have to develop code and add the log for anyone.
+>> As you commented, even if there are no other developer, we never
+>> guarantee this assumption forever. And also, if added debug message
+>> for only you, you can add them when testing it temporarily.
+>>
+>> If you want to add the just register dump log for you,
+>> I can't agree. Once again, I hope that anyone understand
+>> the meaning of debug message as much possible as.
+>>
+> 
+> The registers dump should be good for everyone because it's a
+> self-explanatory information for anyone who is familiar with the
+> hardware. I don't think there is a need for anything else than what is
+> proposed in this patch, at least for now. I also simply don't see any
+> other better way to debug the state of this particular hardware, again
+> this logging is for the driver developers and not for users.
+> 
+> Initially, I was temporarily adding the debug messages. Now they are
+> pretty much mandatory for verifying that driver is working properly. And
+> of course the debugging messages got into the shape of this patch after
+> several iterations of refinements. So again, I suppose that this should
+> be good enough for everyone who is familiar with the hardware. And of
+> course I'm open to the constructive suggestions, the debugging aid is
+> not an ABI and could be changed/improved at any time.
+> 
+> You're suggesting to break down the debugging into several smaller
+> pieces, but I'm finding that as not a constructive suggestion because
+> the information about the full hardware state is actually necessary for
+> the productive debugging.
+> 
+> 
 
-Please pull from the tag
+Sorry for that as I saie, I cannot agree this patch. In my case,
+I don't understand what is meaning of register dump of this patch.
+I knew that just register dump are useful for real developer.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.3-rc1-2
+If you want to show the register dump, you better to add some feature
+with debugfs for devfreq framework in order to read the register dump.
+As I knew, sound framework (alsa) has the similar feature for checking
+the register dump.
 
-with top-most commit 918e162e6a71e924a343b41f71789ad14e1e3229
-
- Merge branch 'pm-cpufreq'
-
-on top of commit cf2d213e49fdf47e4c10dc629a3659e0026a54b8
-
- Merge tag 'pm-5.3-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more power management updates for 5.3-rc1.
-
-These modify the Intel RAPL driver to allow it to use an MMIO
-interface to the hardware, make the int340X thermal driver provide
-such an interface for it, add Intel Ice Lake CPU IDs to the RAPL
-driver (these changes depend on the previously merged x86 arch
-changes), update cpufreq to use the PM QoS framework for managing
-the min and max frequency limits, and add update the imx-cpufreq-dt
-cpufreq driver to support i.MX8MN.
-
-Specifics:
-
- - Add MMIO interface support to the Intel RAPL power capping
-   driver and update the int340X thermal driver to provide a
-   RAPL MMIO interface (Zhang Rui, Stephen Rothwell).
-
- - Add Intel Ice Lake CPU IDs to the RAPL driver (Zhang Rui,
-   Rajneesh Bhardwaj).
-
- - Make cpufreq use the PM QoS framework (instead of notifiers) for
-   managing the min and max frequency constraints (Viresh Kumar).
-
- - Add i.MX8MN support to the imx-cpufreq-dt cpufreq driver (Anson
-   Huang).
-
-Thanks!
-
-
----------------
-
-Anson Huang (1):
-      cpufreq: imx-cpufreq-dt: Add i.MX8MN support
-
-Rajneesh Bhardwaj (1):
-      powercap/rapl: Add Ice Lake NNPI support to RAPL driver
-
-Stephen Rothwell (1):
-      intel_rapl: need linux/cpuhotplug.h for enum cpuhp_state
-
-Viresh Kumar (8):
-      PM / QOS: Pass request type to dev_pm_qos_{add|remove}_notifier()
-      PM / QOS: Rename __dev_pm_qos_read_value() and dev_pm_qos_raw_read_value()
-      PM / QOS: Pass request type to dev_pm_qos_read_value()
-      PM / QoS: Add support for MIN/MAX frequency constraints
-      cpufreq: Register notifiers with the PM QoS framework
-      cpufreq: intel_pstate: Reuse refresh_frequency_limits()
-      cpufreq: Add QoS requests for userspace constraints
-      cpufreq: Make cpufreq_generic_init() return void
-
-Zhang Rui (16):
-      intel_rapl: use reg instead of msr
-      intel_rapl: remove hardcoded register index
-      intel_rapl: introduce intel_rapl.h
-      intel_rapl: introduce struct rapl_if_private
-      intel_rapl: abstract register address
-      intel_rapl: abstract register access operations
-      intel_rapl: cleanup some functions
-      intel_rapl: cleanup hardcoded MSR access
-      intel_rapl: abstract RAPL common code
-      intel_rapl: support 64 bit register
-      intel_rapl: support two power limits for every RAPL domain
-      int340X/processor_thermal_device: add support for MMIO RAPL
-      intel_rapl: Fix module autoloading issue
-      powercap/intel_rapl: add support for IceLake desktop
-      powercap/intel_rapl: add support for ICX
-      powercap/intel_rapl: add support for ICX-D
-
----------------
-
- Documentation/power/pm_qos_interface.txt           |  12 +-
- MAINTAINERS                                        |   1 +
- drivers/base/power/domain.c                        |   8 +-
- drivers/base/power/domain_governor.c               |   4 +-
- drivers/base/power/qos.c                           | 135 +++-
- drivers/base/power/runtime.c                       |   2 +-
- drivers/cpufreq/bmips-cpufreq.c                    |  17 +-
- drivers/cpufreq/cpufreq.c                          | 216 ++++--
- drivers/cpufreq/davinci-cpufreq.c                  |   3 +-
- drivers/cpufreq/imx-cpufreq-dt.c                   |   3 +-
- drivers/cpufreq/imx6q-cpufreq.c                    |   6 +-
- drivers/cpufreq/intel_pstate.c                     |   7 +-
- drivers/cpufreq/kirkwood-cpufreq.c                 |   3 +-
- drivers/cpufreq/loongson1-cpufreq.c                |   8 +-
- drivers/cpufreq/loongson2_cpufreq.c                |   3 +-
- drivers/cpufreq/maple-cpufreq.c                    |   3 +-
- drivers/cpufreq/omap-cpufreq.c                     |  15 +-
- drivers/cpufreq/pasemi-cpufreq.c                   |   3 +-
- drivers/cpufreq/pmac32-cpufreq.c                   |   3 +-
- drivers/cpufreq/pmac64-cpufreq.c                   |   3 +-
- drivers/cpufreq/s3c2416-cpufreq.c                  |   9 +-
- drivers/cpufreq/s3c64xx-cpufreq.c                  |  15 +-
- drivers/cpufreq/s5pv210-cpufreq.c                  |   3 +-
- drivers/cpufreq/sa1100-cpufreq.c                   |   3 +-
- drivers/cpufreq/sa1110-cpufreq.c                   |   3 +-
- drivers/cpufreq/spear-cpufreq.c                    |   3 +-
- drivers/cpufreq/tegra20-cpufreq.c                  |   8 +-
- drivers/cpuidle/governor.c                         |   2 +-
- drivers/powercap/Kconfig                           |  11 +-
- drivers/powercap/Makefile                          |   3 +-
- .../powercap/{intel_rapl.c => intel_rapl_common.c} | 801 ++++++++-------------
- drivers/powercap/intel_rapl_msr.c                  | 183 +++++
- drivers/thermal/intel/int340x_thermal/Kconfig      |   6 +
- .../int340x_thermal/processor_thermal_device.c     | 173 ++++-
- include/linux/cpufreq.h                            |  14 +-
- include/linux/intel_rapl.h                         | 155 ++++
- include/linux/pm_qos.h                             |  48 +-
- 37 files changed, 1196 insertions(+), 699 deletions(-)
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
