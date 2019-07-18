@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B504A6CC45
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 11:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A476CC58
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 11:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389773AbfGRJsI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jul 2019 05:48:08 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:50125 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726649AbfGRJsH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 05:48:07 -0400
+        id S1726383AbfGRJxR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jul 2019 05:53:17 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:15407 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727666AbfGRJxQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 05:53:16 -0400
 Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190718094803epoutp03a2967736540c893436370219dd20df04~yd2IUWVbc1642516425epoutp03Q
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 09:48:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190718094803epoutp03a2967736540c893436370219dd20df04~yd2IUWVbc1642516425epoutp03Q
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190718095313epoutp045f3edaa0f274089e07c188c347560f9e~yd6pLaFbk1304613046epoutp043
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 09:53:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190718095313epoutp045f3edaa0f274089e07c188c347560f9e~yd6pLaFbk1304613046epoutp043
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563443283;
-        bh=EnL2xp05mWqLeGDMN6DJMsvJ0i6MvNbScjk8J1uUFsU=;
+        s=mail20170921; t=1563443593;
+        bh=uwL3QNapMBYokNIzLaQHpwasbLjWtKmrqJg35DdYJL0=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=qEGeAxPX2yWSIHKi6M/thI+UNGe+hPvbo5zBgaqb8nSZaBV3l9un2Il3fPP2E5Z6d
-         MQ76hz4w47VGTXAUQh31+9XNVbOi5k8HDctW1alrnDWodXEvqYxZ07qxVTJr9QufwP
-         eRUVtXD2MMoWoRM5baOsi2AYCvgb1reOiTHth3bs=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190718094802epcas1p2d8bf23068535be8c33835f37139f2bd7~yd2HknHGw2089520895epcas1p2Z;
-        Thu, 18 Jul 2019 09:48:02 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 45q8Sw5q2rzMqYkZ; Thu, 18 Jul
-        2019 09:48:00 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        65.76.04075.940403D5; Thu, 18 Jul 2019 18:47:53 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20190718094752epcas1p4660cd9d3968a1755369c6ad049eedbb9~yd1_Jxqwa2804528045epcas1p4C;
-        Thu, 18 Jul 2019 09:47:52 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190718094752epsmtrp1e11ba8d2cd74d9bfb934003ed8662826~yd1_JADS81806718067epsmtrp1C;
-        Thu, 18 Jul 2019 09:47:52 +0000 (GMT)
-X-AuditID: b6c32a36-b49ff70000000feb-94-5d3040496893
+        b=W7FZRT+AxgdYoEJZEtY1OxKVJ6czuKB2xOHyRk5A//i+mJB5miPWO1Dgx+gSvvwqC
+         ImmCrmdEbJMvQDpeFZ3BRpOGiXahg5n3MXWS6dLTNz0xFJFdns9ZFeyI1/68xtM2Yp
+         UJwkXT0oizudBAkW2rFBx+4OB0Ez3XLtZlRbZt7M=
+Received: from epsnrtp6.localdomain (unknown [182.195.42.167]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20190718095313epcas1p4134a217222f40a37b168b8430b3ba8c2~yd6orAGZZ1846418464epcas1p4x;
+        Thu, 18 Jul 2019 09:53:13 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.157]) by
+        epsnrtp6.localdomain (Postfix) with ESMTP id 45q8Zv16BrzMqYkX; Thu, 18 Jul
+        2019 09:53:11 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A1.B9.04066.781403D5; Thu, 18 Jul 2019 18:53:11 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190718095310epcas1p31b048b8fd64ca3ff9b86b1a5f9f1415c~yd6mHr9fQ0313803138epcas1p3D;
+        Thu, 18 Jul 2019 09:53:10 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190718095310epsmtrp243d7775a8d52216a21e59552ca59d806~yd6mG8oVF1330913309epsmtrp2X;
+        Thu, 18 Jul 2019 09:53:10 +0000 (GMT)
+X-AuditID: b6c32a37-29ba59c000000fe2-da-5d304187f03c
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F0.4D.03706.840403D5; Thu, 18 Jul 2019 18:47:52 +0900 (KST)
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        36.8C.03638.681403D5; Thu, 18 Jul 2019 18:53:10 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190718094752epsmtip1c604dc5d6ad1521a6a85093ce7212561~yd197g1V61985719857epsmtip1z;
-        Thu, 18 Jul 2019 09:47:52 +0000 (GMT)
-Subject: Re: [PATCH v4 19/24] PM / devfreq: tegra30: Optimize upper
- consecutive watermark selection
+        20190718095310epsmtip1490c46377cebcd689a7a3858b6ea304f~yd6l7UFpD2451724517epsmtip1h;
+        Thu, 18 Jul 2019 09:53:10 +0000 (GMT)
+Subject: Re: [PATCH v4 24/24] PM / devfreq: tegra20/30: Add Dmitry as a
+ maintainer
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -60,97 +60,90 @@ Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <17fabbaf-ceca-7551-0a58-9c8a0e7027ed@samsung.com>
-Date:   Thu, 18 Jul 2019 18:51:02 +0900
+Message-ID: <4f3eb6bd-a8fa-2bec-47fc-10b2eb228656@samsung.com>
+Date:   Thu, 18 Jul 2019 18:56:19 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190707223303.6755-20-digetx@gmail.com>
+In-Reply-To: <20190707223303.6755-25-digetx@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SWUwTURTNo9PpEitDUbj2Q2GMJDQCHbB1MEIwoKnKBy4xLiE4oRNAuqVT
-        iNsHWIIULUuIC6OgQYkK7hYDGEURY2qCCogiBDFqVEAximtAtO1g5O/ce8595573nlSkvIKr
-        pDlmO2szM0YSl2PX70ZGRa1O0qRrqqckdOPn14gu4uswunPfBwnd03ocp8ddHYh2fuVxeqDw
-        LE7/aq3F6LIL3XiSTN88eBrpW/hBid7lGMP1Ze4GpB+/Oj9NvDV3eTbLGFhbGGvOtBhyzFkJ
-        5NoNGckZWp2GiqLi6aVkmJkxsQlkSmpa1Koco3chMiyfMeZ5W2kMx5Exicttljw7G5Zt4ewJ
-        JGs1GK3x1miOMXF55qzoTItpGaXRxGq9wu252YdHXZj11qyd56sOiAuQU16KZFIglkChx4GV
-        IrlUSTQjqOh+Ml18QVDk2Y+E4juCrt+3sX8jjja3WCBuIqh0vRMJxScEHw41BfhUwQQLQyPX
-        JT5iDjGFwPnLgfsIEbEF7rY0+kU4oYa2933+fiARDr0/XyMfVhCJ8OLikB9jxCLoL5/y6+cS
-        m+FBRy0maILAU/3Gj2WEDvhTjZhwfij0vzkRIOAF4Gg65t8OiD84FJa9ms6QAkf2eXABB8PI
-        fbdEwCoYLi+exnvgnKcDF4ZLELjbHosFIg7a6qu8DlKvQyRcao0R2uHQMlGDBOPZMPbtoNgn
-        AUIBJcVKQbIQel4OBgh4Hpza78QrEMnPiMPPiMDPiMD/NzuJsAYUwlo5UxbLUdbYme99Ffm/
-        q1rXjOoeprYjQorIWYo+MiZdKWbyuV2mdgRSETlHMTDsbSkMzK7drM2SYcszslw70npvu1Kk
-        mptp8X5+sz2D0sbGxcXRSyidlqLIUEXtZGS6kshi7Gwuy1pZ27+5AKlMVYDWP2Mkf8a+9nd/
-        /LEsdhO/vqC6pb4hf+9JjexZxI0fBaOB6gkid42nY+VzdXpI8Pneus6INS7M2XD57YOFj75N
-        1ZQEhZuureubcCdHr46v6NLJS39Xl68oM5Xb78REji6uGwgyr7t3ZqN8T/HTVkMaOS+BSQrZ
-        0dOkqppsij+7bfIoiXHZDKUW2TjmL2hMIqPEAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsWy7bCSnK6Hg0GswcypeharPz5mtGiZtYjF
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRju2+V4Fs1OU+vNoOZJC4XpjnN6DJUuIqOk1uVHBbaO22GKuxx2
+        tkiLbo5SSSuFqKVmV1K7UVYqmKCSGFiRClZI4aQ7yzLLqKxtZ5H/nu/5nud93+f7XlysuIlF
+        44U2J+uwMRYSmy252x2vVh1Zpc5T//kQRjd/9iLa7TkvofsPfQyjB9prMXqisgfR5V89GP3i
+        4BWM/tFeL6Grrj3FVsp0rSMXka7NMxKmqyz1Ybqqliakm7i1WC/dXpRRwDIm1qFkbUa7qdBm
+        ziTXbTasMWhT1ZSKSqfTSKWNsbKZZHauXpVTaPEPRCp3MRaXn9IzPE8mZWU47C4nqyyw885M
+        kuVMFi6dS+QZK++ymRONdusKSq1O1vqFO4sKTpVeFXND+G5vg/wAOhlWgWQ4ECnQfeyMqALN
+        xhVEK4KxsQqpcPiC4Ou5U0g4fEPg+/hM+s9yaGo6ZOlA0Pb7TcjyCYG7140FVBHEFnh970tQ
+        FUlMIyj/URq8EBPboLutWRTAGJEAnW+Hg/xcIgaGprwogOVEFgw/vxacUELEwZS3PchHEVvh
+        YU+9RNDMg77TY0EsI1LhZXWHWKi/AJ6PnRUJeAmU3jkjDgwBxHcMbri7REKGbDg53h/KEwHv
+        e1tCzxENE74OTMB7oLGvBxPMZQhaOp+EDBrovFTjL4T7O8TDjfYkgY6Btp91SGgcDr7Jo9KA
+        BAg5lB1WCJKlMPBqJDTCQrhwpBw7jkjPjDieGRE8MyJ4/jdrQJImNJ/leKuZ5SlOM/O7b6Hg
+        tiaktaKbj3K7EIEjco58mEzKU0iZXXyxtQsBLiYj5S/e+Sm5iSkuYR12g8NlYfkupPW/9glx
+        dJTR7t99m9NAaZM1Gg2dQqVqKYpcIK//FZ+nIMyMky1iWY51/POJcFn0AZSwiTM2bIg1r27e
+        H/suWX8098Tl8arxyRxpZ2z2243JSTmL1y5R7utJrDk4KMuP24HWvyo7e7nRlcvujzSVzNpr
+        ncpreuO7PrrM/HgwQr0ozny7MVyl+DY47c1Pial9sKnB+1OnEundJuP9krUP60a5kRJFdR81
+        aphUpV9fHmugSAlfwFAJYgfP/AWwz95VwwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsWy7bCSnG6bo0GswdwjSharPz5mtGiZtYjF
         4mzTG3aLy7vmsFl87j3CaNH5ZRabxe3GFWwWP3fNY7HoW3uJzYHTY8fdJYweO2fdZffobX7H
-        5tG3ZRWjx+dNcgGsUVw2Kak5mWWpRfp2CVwZ0173shTs46lYM7mbtYGxk6uLkZNDQsBEonn/
-        FtYuRi4OIYHdjBKPDl1lgUhISky7eJS5i5EDyBaWOHy4GKLmLaPE3M4rrCA1wgKpEvdfbWMH
-        SYgINDFJbOq9wA6SYBaIlOiZu4UNomMLo8SEt8uYQRJsAloS+1/cYAOx+QUUJa7+eMwIYvMK
-        2EncW3cfzGYRUJW41f+PCcQWFYiQmHRtJwtEjaDEyZlPwGxOATOJWYtXs0AsU5f4M+8SM4Qt
-        LnHryXwmCFteonnrbOYJjMKzkLTPQtIyC0nLLCQtCxhZVjFKphYU56bnFhsWGOallusVJ+YW
-        l+al6yXn525iBEeZluYOxstL4g8xCnAwKvHw3lDSjxViTSwrrsw9xCjBwawkwnv7JVCINyWx
-        siq1KD++qDQntfgQozQHi5I479O8Y5FCAumJJanZqakFqUUwWSYOTqkGRq5HVnNu2j+0zdTK
-        8eLYc3d/zqwZxi8/u0TGWb06nmivOMtvU0XGZa3CWIMJx/Z9MXkwZ/tGTRvn925q9b9yVl13
-        UOavCOaYIvbylFxDPPvR2JnXEs9sdlDVkinKUd272ybq076otvLZee9fXpj0OKs+ewvrjg8K
-        P+ubZglcVcupPMV+IurYGSWW4oxEQy3mouJEAPqLqtauAgAA
-X-CMS-MailID: 20190718094752epcas1p4660cd9d3968a1755369c6ad049eedbb9
+        5tG3ZRWjx+dNcgGsUVw2Kak5mWWpRfp2CVwZM5rXMBdc5ah4vIC3gXEaexcjJ4eEgIlE049/
+        TF2MXBxCArsZJZbvusQIkZCUmHbxKHMXIweQLSxx+HAxRM1bRonfW1+ANQsLhEg82/4JrFlE
+        oIlJYlPvBbAEs0CkRM/cLWwQHVsYJbreLGECSbAJaEnsf3GDDcTmF1CUuPrjMdg2XgE7iRu3
+        1oI1swioSvx4vAssLioQITHp2k4WiBpBiZMzn4DZnAJmEvcn7WWGWKYu8WfeJShbXOLWk/lM
+        ELa8RPPW2cwTGIVnIWmfhaRlFpKWWUhaFjCyrGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L10vO
+        z93ECI4xLa0djCdOxB9iFOBgVOLhvaGkHyvEmlhWXJl7iFGCg1lJhPf2S6AQb0piZVVqUX58
+        UWlOavEhRmkOFiVxXvn8Y5FCAumJJanZqakFqUUwWSYOTqkGxtWs/6uED0YJx5hfPKj17Lps
+        5bX1Igkbs2ruGPZKuUh32M8sTrVatYL117/Sm921L8OfdDia5LUFlEVWXInx/Dx3guTVv1rN
+        fy7G7O3hYXnT9eKznHxN/L0VbFe2xpy9dCBAuPZ06e2uSbHVf3z63oU7icacfLAjaN1S4ddP
+        ei2L3vYKJNlVKbEUZyQaajEXFScCAB4DE6atAgAA
+X-CMS-MailID: 20190718095310epcas1p31b048b8fd64ca3ff9b86b1a5f9f1415c
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190707223622epcas4p48ec0d7e6fa26bc2397fa4351c0bd0c2d
+X-CMS-RootMailID: 20190707223611epcas1p4d1a36f169d3534c20aaeaec46d65f85c
 References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223622epcas4p48ec0d7e6fa26bc2397fa4351c0bd0c2d@epcas4p4.samsung.com>
-        <20190707223303.6755-20-digetx@gmail.com>
+        <CGME20190707223611epcas1p4d1a36f169d3534c20aaeaec46d65f85c@epcas1p4.samsung.com>
+        <20190707223303.6755-25-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
-> The memory activity counter may get a bit higher than a watermark which
-> is selected based on OPP that corresponds to a highest EMC rate, in this
-> case watermark is lower than the actual memory activity is and thus
-> results in unwanted "upper" interrupts.
+On 19. 7. 8. 오전 7:33, Dmitry Osipenko wrote:
+> I was contributing to the NVIDIA Tegra20+ devfreq drivers recently and
+> want to help keep them working and evolving in the future.
 > 
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/devfreq/tegra30-devfreq.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-
-It seems that you can combine patch19 with patch20.
-
+>  MAINTAINERS | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 8d6bf6e9f1ae..c3cf87231d25 100644
-> --- a/drivers/devfreq/tegra30-devfreq.c
-> +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -363,7 +363,18 @@ static void tegra_devfreq_update_wmark(struct tegra_devfreq *tegra,
->  	tegra_actmon_get_lower_upper(tegra, dev, freq - 1, &lower, &upper);
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 95d4bd85df44..4e47ce737376 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10356,6 +10356,15 @@ F:	include/linux/memblock.h
+>  F:	mm/memblock.c
+>  F:	Documentation/core-api/boot-time-mm.rst
 >  
->  	delta = do_percent(upper - lower, dev->config->boost_up_threshold);
-> -	device_writel(dev, lower + delta, ACTMON_DEV_UPPER_WMARK);
+> +MEMORY FREQUENCY SCALING DRIVERS FOR NVIDIA TEGRA
+> +M:	Dmitry Osipenko <digetx@gmail.com>
+> +L:	linux-pm@vger.kernel.org
+> +L:	linux-tegra@vger.kernel.org
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git
+> +S:	Maintained
+> +F:	drivers/devfreq/tegra20-devfreq.c
+> +F:	drivers/devfreq/tegra30-devfreq.c
 > +
-> +	/*
-> +	 * The memory events count could go a bit higher than the maximum
-> +	 * defined by the OPPs, hence make the upper watermark infinitely
-> +	 * high to avoid unnecessary upper interrupts in that case.
-> +	 */
-> +	if (freq == tegra->max_freq)
-> +		upper = ULONG_MAX;
-> +	else
-> +		upper = lower + delta;
-> +
-> +	device_writel(dev, upper, ACTMON_DEV_UPPER_WMARK);
->  
->  	/*
->  	 * Meanwhile the lower mark is based on the average value
+>  MEMORY MANAGEMENT
+>  L:	linux-mm@kvack.org
+>  W:	http://www.linux-mm.org
 > 
+
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
 
 -- 
