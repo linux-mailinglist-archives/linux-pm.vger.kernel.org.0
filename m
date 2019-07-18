@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB76D6CC63
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 11:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE8F6CC68
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jul 2019 11:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbfGRJzt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jul 2019 05:55:49 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:30436 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726423AbfGRJzs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 05:55:48 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190718095545epoutp0187e450f6339d709ef004a5b3a9761d1f~yd815I0RR0374803748epoutp01h
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 09:55:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190718095545epoutp0187e450f6339d709ef004a5b3a9761d1f~yd815I0RR0374803748epoutp01h
+        id S1727274AbfGRJ5u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jul 2019 05:57:50 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:62397 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbfGRJ5u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 05:57:50 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190718095747epoutp02807512f053ab975e2f23f5dd7d69274b~yd_oVwpWw3200032000epoutp02q
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jul 2019 09:57:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190718095747epoutp02807512f053ab975e2f23f5dd7d69274b~yd_oVwpWw3200032000epoutp02q
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563443745;
-        bh=1cYZWpty8TVGacXVxE+PxB2lbSa/vNMvyWISzXqDHPg=;
+        s=mail20170921; t=1563443867;
+        bh=4GaePmyoAtte+S8v4cYY4Z26sJLBpx/Tg0E80gjluWo=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=qk5FB1Y9HY6us/8pP8Wh7stYR3NXVkRuw8Yntij+ENAP88ATGnLX9oPcG5IKFGnEL
-         ttOugkvH+qdw2lykouRIsI9Kjl0xIIk0BaxEeZ9gaNGxr6RPe0E6u9OYohpcISwxbw
-         UU8isQj+auYUmM6Ifz0noNhgHPMTEJyi8js3B6gY=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        b=WqMdshyqCJ2e1DCSPCkMOqMz5lXI0OjpdZedeFSJM0NbDouzFgE54huH/nsYKTqc9
+         sBq88OB1dqldPPPAH89a/erWIoKTgPdfhZRLOGvhZMxVqPY0TGrmnnGvVsR/BFeZR9
+         ELVvLtVOlaPb6Rx7+yH9cBD9LtM7tn4OZdJ2YT2Q=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
         epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20190718095544epcas1p47240fdfe7dd495da81d22e1ef39ec478~yd81TlRIl1186211862epcas1p43;
-        Thu, 18 Jul 2019 09:55:44 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 45q8dn4NRtzMqYkW; Thu, 18 Jul
-        2019 09:55:41 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1D.0A.04066.D12403D5; Thu, 18 Jul 2019 18:55:41 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        20190718095747epcas1p46f65aab582c0e06a6821286f29136d8d~yd_n7Fbu21796117961epcas1p4p;
+        Thu, 18 Jul 2019 09:57:47 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.153]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 45q8h81h7RzMqYlh; Thu, 18 Jul
+        2019 09:57:44 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0B.9C.04088.892403D5; Thu, 18 Jul 2019 18:57:44 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190718095540epcas1p18bda7f795298f17535b8a0dcb84ffa06~yd8yFw3gd3203532035epcas1p1F;
-        Thu, 18 Jul 2019 09:55:40 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190718095540epsmtrp15f171dcf38d6fa0e3c90b1eecbc85174~yd8yE-SvJ2027720277epsmtrp1R;
-        Thu, 18 Jul 2019 09:55:40 +0000 (GMT)
-X-AuditID: b6c32a37-e27ff70000000fe2-64-5d30421d46b2
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        52.AD.03706.C12403D5; Thu, 18 Jul 2019 18:55:40 +0900 (KST)
+        20190718095743epcas1p152702a3de7adce67a3744f339c303ab8~yd_kenNhz2022120221epcas1p1n;
+        Thu, 18 Jul 2019 09:57:43 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190718095743epsmtrp222c257abb5a505298be8a02d2535b854~yd_kdw6e81455114551epsmtrp2Y;
+        Thu, 18 Jul 2019 09:57:43 +0000 (GMT)
+X-AuditID: b6c32a35-845ff70000000ff8-99-5d30429835a9
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        67.CC.03638.792403D5; Thu, 18 Jul 2019 18:57:43 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190718095540epsmtip28e3b00eaf901b54c93cb191b8e1e25de~yd8x5H1TW1226412264epsmtip2n;
-        Thu, 18 Jul 2019 09:55:40 +0000 (GMT)
-Subject: Re: [PATCH v4 22/24] PM / devfreq: tegra30: Include appropriate
- header
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190718095743epsmtip1b3f029b76eb5e619ca28169f19a51173~yd_kUvRsZ2451724517epsmtip1H;
+        Thu, 18 Jul 2019 09:57:43 +0000 (GMT)
+Subject: Re: [PATCH v4 23/24] PM / devfreq: tegra30: Increase sampling
+ period to 16ms
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -60,61 +60,64 @@ Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <2f317faf-8de0-2717-cda7-b15374039493@samsung.com>
-Date:   Thu, 18 Jul 2019 18:58:50 +0900
+Message-ID: <2dbe4ea5-13af-4b88-5539-b4a738f6fb1c@samsung.com>
+Date:   Thu, 18 Jul 2019 19:00:53 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190707223303.6755-23-digetx@gmail.com>
+In-Reply-To: <20190707223303.6755-24-digetx@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SeUwTQRTGMz22rbG6FtEnRq2LGCGBdi2FRQWNEtJEY/BK1ARxhU1Berlb
-        iMc/KAYBRSXeK7bGI4h3FJBWDaaixjMqIUGgIoGoIIHgCSrGbbdG/vvNN9+b976ZUUo1V7AI
-        Za7NybA22kJgY2R196N1sdMW6zP0PYOR1KXBLkTt5s/IqOe7+hRUk7cSo76UNyKq9CuPUW07
-        L2DUsNclo/ZfeY0tUpnq/eeQycP7Fabyon7MtL/mIjJ9uTE9Xb4+b0EOQ2czrJaxZdmzc23m
-        ZGLpqswlmcYEPRlLJlGJhNZGW5lkInVZemxarkUYiNAW0JZ8QUqnOY7QpSxg7flORptj55zJ
-        BOPItjiSHHEcbeXybea4LLt1HqnXzzUKxo15OVc73iBHp2Lr4NFj8kLUgJUhlRLweBh8+CnI
-        Grwegevz0jI0RuDPCCr21krExXcEnuFPin8VR0oKFeLGXQR7qw4gcTGA4KGvXTgLU4bhKyAj
-        oE7E/yAoHS4KdpDi6+C+55IkwBgeAw0fW4L6eHwmNA91oQCr8RTw+tuDHhkeBT/flskDHI6v
-        hSeNLpnomQCPT3QHWYUnQNdAJxLPnwyt3W6JyDOgqPakNDAE4D8waK3oC0VOheq6e6EwYdD7
-        qCbEEdBzoDjEO6D6cSMmFpcgqGl4KRc3DNBw/pDQQSl0iIZrXp0ozwTPr1OhIcZB/7d98oAF
-        cDWUFGtESyQ0vfNLRJ4CZ/eUYgcRwY+Kw4+KwI+KwP9vdhrJLqJJjIOzmhmOdBhGv/UNFPyq
-        MYn16PqLZT6EKxExVt1C6DI0crqA22b1IVBKiYnqth5BUmfT27YzrD2TzbcwnA8ZhduukEaE
-        Z9mFj29zZpLGuQaDgYonE4wkSUxWu35HZ2hwM+1k8hjGwbD/6iRKVUQhmhXn9g+psenFZ8An
-        iSe3JLZVze+QZvWGP7m58h68ab3OpmjXXJ6jXZha9ar8sHO9a94UY9hqrPR4k46ffWfzpltl
-        afS+bnbDs8sfCr4XFd7OPV03cHZkSfP748vtfKRK1j3ydGTaA7XPM2mjua5yndstdZsOOmuj
-        vO1pU39WVHYSMi6HJmOkLEf/BTpiWwfAAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsWy7bCSvK6Mk0GsQWe/qcXqj48ZLVpmLWKx
-        ONv0ht3i8q45bBafe48wWnR+mcVmcbtxBZvFz13zWCz61l5ic+D02HF3CaPHzll32T16m9+x
-        efRtWcXo8XmTXABrFJdNSmpOZllqkb5dAlfGuvs3GQsesld8nDadtYFxP1sXIyeHhICJxNSO
-        BvYuRi4OIYHdjBINO9YzQiQkJaZdPMrcxcgBZAtLHD5cDFHzllFi+t5OoAY2DmGBQIlYkKiI
-        QBOTxKbeC+wgncwCkRI9c7ewQZRvYZR42NfPCpJgE9CS2P/iBthefgFFias/HoOt4hWwk9h1
-        9w4TiM0ioCrx614XWL2oQITEpGs7WSBqBCVOznwCZnMKmEk8fv+QEWKZusSfeZeYIWxxiVtP
-        5jNB2PISzVtnM09gFJ6FpH0WkpZZSFpmIWlZwMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9d
-        Lzk/dxMjOL60NHcwXl4Sf4hRgINRiYf3hpJ+rBBrYllxZe4hRgkOZiUR3tsvgUK8KYmVValF
-        +fFFpTmpxYcYpTlYlMR5n+YdixQSSE8sSc1OTS1ILYLJMnFwSjUwZkw3ap7b4iXCIKaS6Xj9
-        RVa6nkKZVPFmrdDkR9tL/uc2HVynpFzrtLU0/MftrqgAofI64bC3ZezX5s/pd2Lm8Nki35ZV
-        9Vsxt7r6Lte5LLc0oT8sEp/aDy1ojlWLCBGvtW/6EfFhdoDqXw0ns13VoenFzbusH+WszVIt
-        /h4Wfulz+z3hfCWW4oxEQy3mouJEAPmzSrSrAgAA
-X-CMS-MailID: 20190718095540epcas1p18bda7f795298f17535b8a0dcb84ffa06
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLJsWRmVeSWpSXmKPExsWy7bCmnu4MJ4NYg/P7eCxWf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
+        zaNvyypGj8+b5AJYo7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22V
+        XHwCdN0yc4AOUlIoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUWBboFSfmFpfmpesl
+        5+daGRoYGJkCFSZkZ1y/upqp4ANHxYQLJ1gaGLvYuxg5OCQETCSWtkp1MXJxCAnsYJT4vukw
+        axcjJ5DziVGieYIeROIbo8Tcaw1MIAmQhk1b/jFDFO1llPi72hzCfs8ocf4mJ4gtLBAucWl1
+        AxtIs4jAP0aJzp/NbCAJZoFIicM7V4MNYhPQktj/4gZYnF9AUeLqj8eMIDavgJ3ErZMnwGpY
+        BFQlutu3gS0TFYiQOHVkHgtEjaDEyZlPwGxOATOJE9t2sEPMF5e49WQ+E4QtL9G8dTYzyBES
+        Ar/ZJKbcbYP6wEVi7Z8uRghbWOLV8S3sELaUxOd3e9kg7GqJlSePsEE0dzBKbNl/gRUiYSyx
+        f+lkJlDYMQtoSqzfpQ8RVpTY+XsuI8RiPol3X3tYIcHLK9HRJgRRoixx+cFdqBMkJRa3d7JN
+        YFSaheSdWUhemIXkhVkIyxYwsqxiFEstKM5NTy02LDBEjutNjOCkqmW6g3HKOZ9DjAIcjEo8
+        vDeU9GOFWBPLiitzDzFKcDArifDefgkU4k1JrKxKLcqPLyrNSS0+xGgKDO2JzFKiyfnAhJ9X
+        Em9oamRsbGxhYmhmamioJM47749mrJBAemJJanZqakFqEUwfEwenVAMjj3zH0/6/rsxLi3ir
+        AnkXvvrF2+8aVZHS6zx1bl66e92/unbhY9/4rxUV/JBTfvro9jRLpso1vmrrohSv7p+y48q2
+        4kn9i3Y7Lfp86r7CNrHnXCoHX1nqeRTU62myLTy1V2/1BemFlwVEixd/WJf2m6f7d/jcnxs0
+        0ra4aJhWLG+viRaryLVSYinOSDTUYi4qTgQAmfqmKcADAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsWy7bCSnO50J4NYg21PdCxWf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
+        zaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgyrl9dzVTwgaNiwoUTLA2MXexdjJwcEgImEpu2
+        /GPuYuTiEBLYzSgxd/45VoiEpMS0i0eBEhxAtrDE4cPFEDVvGSX+vW0FiwsLhEvcPe8PEhcR
+        aGKS2NR7AWwos0CkRM/cLWwQDVsYJVa+es4IkmAT0JLY/+IGG4jNL6AocfXHY7A4r4CdxK2T
+        J5hAbBYBVYnu9m3MILaoQITEpGs7WSBqBCVOznwCZnMKmEmc2LYDapm6xJ95l5ghbHGJW0/m
+        M0HY8hLNW2czT2AUnoWkfRaSlllIWmYhaVnAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10v
+        OT93EyM4xrS0djCeOBF/iFGAg1GJh/eGkn6sEGtiWXFl7iFGCQ5mJRHe2y+BQrwpiZVVqUX5
+        8UWlOanFhxilOViUxHnl849FCgmkJ5akZqemFqQWwWSZODilGhh53NPMn7TMWXFMacPs83vu
+        P9Yx2m+j3/I/j5tVXmuumPmmxSqqjnnfz7kX/eeb2zGlOeiSzdsrPZ8E39iaLzvAte9T1z62
+        WScP51zaHyOpcuiF+I+vrlx8svfu9c8+nrKBJ5T90ieBesEXDVlTw6aUddjxVynOPHeWbW7E
+        263vDc/wBnW6C6YqsRRnJBpqMRcVJwIA2+3lVa0CAAA=
+X-CMS-MailID: 20190718095743epcas1p152702a3de7adce67a3744f339c303ab8
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190707223620epcas4p16538beeb317e2ed0cbecb64147f32b71
+X-CMS-RootMailID: 20190707223611epcas1p47b94d7e80981515efcc4ef0d7b00733c
 References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223620epcas4p16538beeb317e2ed0cbecb64147f32b71@epcas4p1.samsung.com>
-        <20190707223303.6755-23-digetx@gmail.com>
+        <CGME20190707223611epcas1p47b94d7e80981515efcc4ef0d7b00733c@epcas1p4.samsung.com>
+        <20190707223303.6755-24-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 19. 7. 8. 오전 7:33, Dmitry Osipenko wrote:
-> It's not very correct to include mod_devicetable.h for the OF device
-> drivers and of_device.h should be included instead.
+> Increase sampling period by 4ms to get a nicer pow2 value, converting
+> diving into shifts in the code. That's more preferable for Tegra30 that
+> doesn't have hardware divider instructions because of older Cortex-A9 CPU.
+> In a result boosting events are delayed by 4ms, which is not sensible in
+> practice at all.
 > 
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
@@ -122,23 +125,21 @@ On 19. 7. 8. 오전 7:33, Dmitry Osipenko wrote:
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 8a674fad26be..19e872a64148 100644
+> index 19e872a64148..bde19b758643 100644
 > --- a/drivers/devfreq/tegra30-devfreq.c
 > +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -13,7 +13,7 @@
->  #include <linux/io.h>
->  #include <linux/irq.h>
->  #include <linux/module.h>
-> -#include <linux/mod_devicetable.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_opp.h>
->  #include <linux/reset.h>
+> @@ -71,7 +71,7 @@
+>   * translates to 2 ^ (K_VAL + 1). ex: 2 ^ (6 + 1) = 128
+>   */
+>  #define ACTMON_AVERAGE_WINDOW_LOG2				6
+> -#define ACTMON_SAMPLING_PERIOD					12 /* ms */
+> +#define ACTMON_SAMPLING_PERIOD					16 /* ms */
+>  
+>  #define KHZ							1000
+>  
 > 
 
 Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-
-Is not there other unused header file anymore?
 
 -- 
 Best Regards,
