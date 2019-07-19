@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F32806E0C8
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 07:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A3E6E0DB
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 08:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbfGSF6s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jul 2019 01:58:48 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:58471 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727127AbfGSF6s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jul 2019 01:58:48 -0400
+        id S1726036AbfGSGGi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jul 2019 02:06:38 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:50627 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726239AbfGSGGh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jul 2019 02:06:37 -0400
 Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190719055844epoutp01bbf684ee2ef1cf7314075eee451dbc13~yuXMm3sNl0820508205epoutp01G
-        for <linux-pm@vger.kernel.org>; Fri, 19 Jul 2019 05:58:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190719055844epoutp01bbf684ee2ef1cf7314075eee451dbc13~yuXMm3sNl0820508205epoutp01G
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190719060633epoutp04ab564613fcfbff457ace9257e6281cb8~yueA0DE6I2554225542epoutp04y
+        for <linux-pm@vger.kernel.org>; Fri, 19 Jul 2019 06:06:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190719060633epoutp04ab564613fcfbff457ace9257e6281cb8~yueA0DE6I2554225542epoutp04y
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563515924;
-        bh=szd6xmQj3SvU6GXSwtu/sUN30XFQ9i4FBtIjtp320H4=;
+        s=mail20170921; t=1563516393;
+        bh=4PKDuMRdZXsZY/A8Stw2Oa1AaKHI6FYNZBBnzTlN8NA=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=L4nPWE41/wc4XUD+raj5XIKVlG5syKLGamDYuckNk2O6nlwbVZoSW39tzowcha9r/
-         vC/OgLzaIR2GGzEhsr9mYM7S1rrgEv5lSb/85wvRBUke2aR+cBjardRFJeeDeYGFWL
-         fQQBYmDFIVJZ8SoWvR+4qZYbSbib6BkflUGsTqYo=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190719055844epcas1p108a3520911b3a51f3cd81064ffa3c012~yuXMDFWoy1828118281epcas1p1P;
-        Fri, 19 Jul 2019 05:58:44 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.156]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 45qgKr4mkHzMqYm1; Fri, 19 Jul
-        2019 05:58:40 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        74.96.04066.01C513D5; Fri, 19 Jul 2019 14:58:40 +0900 (KST)
+        b=dPMJUjEp9nlIOG2nWHrCbH9rF6s6o/89ZkfpHewYGpQ6W6rIsVD4V9vdwN1/Qspjd
+         SJ9DE9EP6FAJWGvQOje0yCTsSpR/oa7BtEco+z8oX0F9mQwXborppYhEKSKYq0p23w
+         hbAVHp2Z8b99g4NxEgMbPLUzjZRHuCa5uZRRCCRI=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20190719060632epcas1p4b20c395b31af38398ec73ece60d7517d~yueAYQHjE1472514725epcas1p4Z;
+        Fri, 19 Jul 2019 06:06:32 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 45qgVt20rczMqYkh; Fri, 19 Jul
+        2019 06:06:30 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E8.16.04075.5ED513D5; Fri, 19 Jul 2019 15:06:30 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190719055840epcas1p2cdb7e95837a9884de09f8d750b821d88~yuXISQCDJ2912029120epcas1p27;
-        Fri, 19 Jul 2019 05:58:40 +0000 (GMT)
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190719060629epcas1p33ed4a6918bed09f34fff8b287b049757~yud9WXLLb2069020690epcas1p3U;
+        Fri, 19 Jul 2019 06:06:29 +0000 (GMT)
 Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190719055840epsmtrp252be86f41996fcb3cf6e08aaf388b3c2~yuXIRcOil0338603386epsmtrp2E;
-        Fri, 19 Jul 2019 05:58:40 +0000 (GMT)
-X-AuditID: b6c32a37-e27ff70000000fe2-ab-5d315c1039f5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        20190719060629epsmtrp25f33e1f4935aceb5c76aba3b1d3ef85a~yud9VbD3G0848208482epsmtrp2-;
+        Fri, 19 Jul 2019 06:06:29 +0000 (GMT)
+X-AuditID: b6c32a36-b61ff70000000feb-99-5d315de527e3
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        84.8F.03638.01C513D5; Fri, 19 Jul 2019 14:58:40 +0900 (KST)
+        52.20.03638.5ED513D5; Fri, 19 Jul 2019 15:06:29 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190719055840epsmtip15a21710833739f20107f4d22a6ed4836~yuXIHEDtN2188921889epsmtip1Z;
-        Fri, 19 Jul 2019 05:58:40 +0000 (GMT)
-Subject: Re: [PATCH v4 12/24] PM / devfreq: tegra30: Inline all one-line
- functions
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190719060629epsmtip23d2c0bfd4bd87a1440055135801b368c~yud9FRz6S1724617246epsmtip2N;
+        Fri, 19 Jul 2019 06:06:29 +0000 (GMT)
+Subject: Re: [PATCH v4 20/24] PM / devfreq: tegra30: Optimize upper average
+ watermark selection
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -60,130 +60,156 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-kernel@vger.kernel.org
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <8e3de3b8-d3c6-fba3-0883-a2cd8d0c4c98@samsung.com>
-Date:   Fri, 19 Jul 2019 15:01:50 +0900
+Message-ID: <3c9c6a3a-8bce-d304-8472-029e6e673a99@samsung.com>
+Date:   Fri, 19 Jul 2019 15:09:39 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190719051426.4e4145d8@dimatab>
+In-Reply-To: <20190719052111.6641285d@dimatab>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SeUiTYRzHe/Zu76a5fFpWv6RSX6nQcu5tTV8jJehgkIR0QIVmL+5pmrva
-        OzuMIruV8qBLV62oLLtrTdGVCGaFQZcd2DGyjCgzI1fRBbXtLfK/z+9+vr/np6BUF+hoRYHF
-        QewW3sTQ4dKGawlJSTibzdHsuTqBO/OpG3FbnEel3O1NvXLugfcgzfl3tSGu9LOT5p6V1NHc
-        d69LypWf66Cnh+kbfceRvsnpk+t3be6j9eWe00jvd4/Nki0pnJZPeAOxxxJLntVQYDGmM3Pm
-        587I1aVo2CQ2jUtlYi28maQzMzOzkmYXmAIPYmJX8aaigCuLFwQmOWOa3VrkILH5VsGRzhCb
-        wWRLs6kF3iwUWYzqPKt5KqvRTNYFEpcV5l+piLd1Rq1pL6tEG5EPl6EwBeApcOuEX16GwhUq
-        3IigrbNSKhr9CGrqd1Oi8RVBb3l5IKIIlbx8pxX9zQge7etAovERQZW7iQr2HYYXQFfdD1mQ
-        o/B4OHn9lyyYROFLErh58awkGKBxIrS87aSDHInj4NG3bhRkJc6Avd2+UCMpHgd9bzzSIA/H
-        i6C/65pMzBkK7TWvQ/4wrIbKnppQHwqPhKevD0tEjoHN9QdCEgD/puHyK49MVD0THnd4kcjD
-        oOemRy5yNPj7mmmR18Gp9jZaLN6BwNNy72+xFlpqd0uCu6BwAlzwJovuOGj6eQiJg4dA35ed
-        MnFdStixTSWmxMODLp9E5FFwbHspXYkY5wA5zgESnAMkOP8PO4Kkp9EIYhPMRiKwNu3A33aj
-        0LEmpjaii3cyWxFWICZCmWXW5Khk/CphrbkVgYJiopTP3iXnqJQGfm0xsVtz7UUmIrQiXWDb
-        VVT08Dxr4PQtjlxWN1mr1XJT2BQdyzIjla5fCTkqbOQdpJAQG7H/q5MowqI3IpN/8QtjQ29p
-        ZJk7o/j9aMP2mJ4bE3/OyGurksVU6DWjxrh21lXcnxt+rqfDtX/ooPuzvc67yrFP58X5Hp4f
-        923pypQfnKuWOv5q69elH5avi0l9Hr9+oZrU92e/Jas3RZa8cUccGexasW1D2qRsNTmUers4
-        KqK2+klJY6R8ls++v/o5IxXyeTaRsgv8H9tFdJvCAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsWy7bCSnK5AjGGsQfNtTovVHx8zWrTMWsRi
-        cbbpDbvF5V1z2Cw+9x5htOj8MovN4nbjCjaLn7vmsVj0rb3E5sDpsePuEkaPnbPusnv0Nr9j
-        8+jbsorR4/MmuQDWKC6blNSczLLUIn27BK6M3f3KBTdEKk52TWBsYLwr0MXIwSEhYCLx8KVx
-        FyMXh5DAbkaJz8uWsXcxcgLFJSWmXTzKDFEjLHH4cDFEzVtGiVWTOlhAaoQFQiQerPjFCmKL
-        CKhJLD/6hxWkiFlgM5PE2VOr2SA6mlkkJt96CDaVTUBLYv+LG2wgNr+AosTVH48ZQWxeATuJ
-        qY/vMoPYLAKqEu+ebQHbICoQIXF4xyyoGkGJkzOfgMU5BfQkJryaCTaHWUBd4s+8S8wQtrjE
-        rSfzmSBseYnmrbOZJzAKz0LSPgtJyywkLbOQtCxgZFnFKJlaUJybnltsWGCUl1quV5yYW1ya
-        l66XnJ+7iREcYVpaOxhPnIg/xCjAwajEwxuQaxArxJpYVlyZe4hRgoNZSYT39kv9WCHelMTK
-        qtSi/Pii0pzU4kOM0hwsSuK88vnHIoUE0hNLUrNTUwtSi2CyTBycUg2MZS5fLtWbqceZXWV5
-        rbeY3dy/cqXNccZVinyxfb/74hKDbhwyeffzeU7lbrZDewWdftm9UnG8bn7mQuWcgtlBvo5K
-        uY/fzFzzdsUpx3WCkcKvBJo4bGut6ye5rnGsOv9EtHsv1zov6fAOltbOjblLPyfXecTefOky
-        SfPwZWbHRG7zT4ofn0grsRRnJBpqMRcVJwIAMZeBQawCAAA=
-X-CMS-MailID: 20190719055840epcas1p2cdb7e95837a9884de09f8d750b821d88
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHeXd2jsdq9bqsnoxyni6kMbejzU6l0o1a2AcjggiGHd3BmdvZ
+        2JmRBmVpZaZWRFCzLHTR/SYauhDJLMkulmZlJkiTLiJa2sUwom2nyG//5//8Xp7L+9CE+joV
+        QWeJLsEp8laGmqC8fS9ap31vYk366reIu/LFh7hCd6WSe7JvIITr8J6muJHSZsQd+uqmuO69
+        Fynup7dCyZVda6dWhBrrejzIWO/uCTGWFgxSxrKay8g4Uj0nldyanWgReLPg1Ahiht2cJWYm
+        MSmb0lanGRL0rJZdyi1hNCJvE5KYNRtStWuzrP6GGM0O3prjt1J5SWJ0yYlOe45L0FjskiuJ
+        ERxmq2OpI1bibVKOmBmbYbctY/X6OIMf3JZtGbrzXen4PHvnQPcJMh8VQjEKpQEvhuL8NqoY
+        TaDVuA7BUH8vIQfDCC7tvaCQg+8IvC+aiX9PTpQMkwGtxg0I7j4WZWgIQdG7VkUgMRXz8PzI
+        hyAUjhfAhfu/yABE4FsKaLl5NQhROAYaP76mAnoKjoLOUR8KaBVOhrdjJ4O+Es+Hjk/lwcrT
+        8BYY7r1HykwYPDzVpyxGNB2KY+FD/56ATeAZ8KbvrELWkVBQW/636YIQaLgTKes18HigjZL1
+        VOhvqQmRdQSMDDb89XfBpYfNwb0ALkJQ0/iMlBPx0Hj+uCJQl8DRcMOrk+0oqB87g+S6k2Hw
+        WwkZQACroOiAWkbmQkdvj0LWM6Hq4CHqKGLc44Zxj5vAPW4C9/9i55DyMpouOCRbpiCxjrjx
+        n12Ngrcak1CHKp9uaEKYRswk1eh2vUlN8jukXFsTAppgwlXdn3QmtcrM5+YJTnuaM8cqSE3I
+        4N/1MSJiWobdf/miK401xMXHx3OL2QQDyzIzVBW/ok1qnMm7hGxBcAjOf+8UdGhEPppYxdw9
+        Wjh5q07l3XRs0bNtVVGT0l9tHFruY9YTb8Z0gxpfa61+tNTStuhrZIuHNK9M+biutH3hbu32
+        l6802lVdiPc84qbsfxCbfKZTYWxPz+0KEyrqzhGdTo/nwY/0332v8+b9gPCSRDGlNjzsKb95
+        1mEy+UBXZauvjEmk6vMYpWTh2RjCKfF/AAbOEjfBAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsWy7bCSvO7TWMNYg5nbZS1Wf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
+        zaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgy3u/+xlLwQbbize2prA2MLRJdjJwcEgImElN7
+        PrGC2EICuxklbuzWgYhLSky7eJS5i5EDyBaWOHy4uIuRC6jkLaPE291PmUFqhAUSJS72Pwfr
+        FRFQk1h+9A8rSBGzwGYmibOnVrNBdDxjkpjccp0RpIpNQEti/4sbbCA2v4CixNUfj8HivAJ2
+        End+zwCLswioSlx+ORtsg6hAhMThHbOgagQlTs58wgJyEaeAnsTzV/UgYWYBdYk/8y4xQ9ji
+        EreezGeCsOUlmrfOZp7AKDwLSfcsJC2zkLTMQtKygJFlFaNkakFxbnpusWGBUV5quV5xYm5x
+        aV66XnJ+7iZGcIRpae1gPHEi/hCjAAejEg9vQK5BrBBrYllxZe4hRgkOZiUR3tsv9WOFeFMS
+        K6tSi/Lji0pzUosPMUpzsCiJ88rnH4sUEkhPLEnNTk0tSC2CyTJxcEo1MPZYrZ2suez6c8V0
+        hlvi/54tk5l0o+ud7LvVb5pqmuYu/BRw7f+T3zoixkaZvYI9d2e/qNY2XFp80/Nnv6dAQlDQ
+        5lcHps68zGzN115wY/eNUy9Feycv5JDb/1vz1oGNpzJez7fzWpK9NWmnp6jeuwAf/5LlzY1a
+        ftnilom3/Cf2Jm9rdq0OFVdiKc5INNRiLipOBABfyQ5SrAIAAA==
+X-CMS-MailID: 20190719060629epcas1p33ed4a6918bed09f34fff8b287b049757
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190707223633epcas4p3873704f3199126be0e8d5cb7454c7a51
+X-CMS-RootMailID: 20190707223619epcas4p333f556dcf5a477b5cad5c9362a6f9b97
 References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223633epcas4p3873704f3199126be0e8d5cb7454c7a51@epcas4p3.samsung.com>
-        <20190707223303.6755-13-digetx@gmail.com>
-        <b5634fbe-8bc1-0f04-e13b-6345dfbb5615@samsung.com>
-        <b7da3fa2-00d1-5bd6-408c-202c85be917d@gmail.com>
-        <45621f73-2f86-cde7-a92e-2a34810b9c05@samsung.com>
-        <20190719042251.37cc9cda@dimatab>
-        <92f82420-5c50-468f-a403-7b4c36958076@samsung.com>
-        <97f2a317-989a-bcad-dd45-ccf00ba18cca@samsung.com>
-        <20190719051426.4e4145d8@dimatab>
+        <CGME20190707223619epcas4p333f556dcf5a477b5cad5c9362a6f9b97@epcas4p3.samsung.com>
+        <20190707223303.6755-21-digetx@gmail.com>
+        <e3358039-d1b3-a5a0-1a37-aeb8edd49d6b@samsung.com>
+        <20190719045943.73b53e31@dimatab>
+        <1cec80ae-c03e-98a7-1d9f-6b57690610c7@samsung.com>
+        <20190719052111.6641285d@dimatab>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 19. 오전 11:14, Dmitry Osipenko wrote:
-> В Fri, 19 Jul 2019 10:27:16 +0900
+On 19. 7. 19. 오전 11:21, Dmitry Osipenko wrote:
+> В Fri, 19 Jul 2019 11:06:05 +0900
 > Chanwoo Choi <cw00.choi@samsung.com> пишет:
 > 
->> On 19. 7. 19. 오전 10:24, Chanwoo Choi wrote:
->>> On 19. 7. 19. 오전 10:22, Dmitry Osipenko wrote:  
->>>> В Thu, 18 Jul 2019 18:09:05 +0900
->>>> Chanwoo Choi <cw00.choi@samsung.com> пишет:
->>>>  
->>>>> On 19. 7. 16. 오후 10:35, Dmitry Osipenko wrote:  
->>>>>> 16.07.2019 15:26, Chanwoo Choi пишет:    
->>>>>>> Hi Dmitry,
->>>>>>>
->>>>>>> I'm not sure that it is necessary.
->>>>>>> As I knew, usally, the 'inline' is used on header file
->>>>>>> to define the empty functions.
->>>>>>>
->>>>>>> Do we have to change it with 'inline' keyword?    
->>>>>>
->>>>>> The 'inline' attribute tells compiler that instead of jumping
->>>>>> into the function, it should take the function's code and
->>>>>> replace the function's invocation with that code. This is done
->>>>>> in order to help compiler optimize code properly, please see
->>>>>> [1]. There is absolutely no need to create a function call into
->>>>>> a function that consists of a single instruction.
->>>>>>
->>>>>> [1] https://gcc.gnu.org/onlinedocs/gcc-9.1.0/gcc/Inline.html
->>>>>>     
+>> On 19. 7. 19. 오전 10:59, Dmitry Osipenko wrote:
+>>> В Fri, 19 Jul 2019 10:36:30 +0900
+>>> Chanwoo Choi <cw00.choi@samsung.com> пишет:
+>>>   
+>>>> On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:  
+>>>>> I noticed that CPU may be crossing the dependency threshold very
+>>>>> frequently for some workloads and this results in a lot of
+>>>>> interrupts which could be avoided if MCALL client is keeping
+>>>>> actual EMC frequency at a higher rate.
 >>>>>
->>>>> If you want to add 'inline' keyword, I recommend that 
->>>>> you better to remove the modified function in this patch
->>>>> and then just call the 'write_relaxed or read_relaxed' function
->>>>> directly. It is same result when using inline keyword.  
+>>>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>>>> ---
+>>>>>  drivers/devfreq/tegra30-devfreq.c | 23 ++++++++++++++++++-----
+>>>>>  1 file changed, 18 insertions(+), 5 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/devfreq/tegra30-devfreq.c
+>>>>> b/drivers/devfreq/tegra30-devfreq.c index
+>>>>> c3cf87231d25..4d582809acb6 100644 ---
+>>>>> a/drivers/devfreq/tegra30-devfreq.c +++
+>>>>> b/drivers/devfreq/tegra30-devfreq.c @@ -314,7 +314,8 @@ static
+>>>>> void tegra_actmon_get_lower_upper(struct tegra_devfreq *tegra, }
+>>>>>  
+>>>>>  static void tegra_devfreq_update_avg_wmark(struct tegra_devfreq
+>>>>> *tegra,
+>>>>> -					   struct
+>>>>> tegra_devfreq_device *dev)
+>>>>> +					   struct
+>>>>> tegra_devfreq_device *dev,
+>>>>> +					   unsigned long freq)
+>>>>>  {
+>>>>>  	unsigned long avg_threshold, lower, upper;
+>>>>>  
+>>>>> @@ -323,6 +324,15 @@ static void
+>>>>> tegra_devfreq_update_avg_wmark(struct tegra_devfreq *tegra,
+>>>>> avg_threshold = dev->config->avg_dependency_threshold;
+>>>>> avg_threshold = avg_threshold * ACTMON_SAMPLING_PERIOD; 
+>>>>> +	/*
+>>>>> +	 * If cumulative EMC frequency selection is higher than
+>>>>> the
+>>>>> +	 * device's, then there is no need to set upper watermark
+>>>>> to
+>>>>> +	 * a lower value because it will result in unnecessary
+>>>>> upper
+>>>>> +	 * interrupts.
+>>>>> +	 */
+>>>>> +	if (freq * ACTMON_SAMPLING_PERIOD > upper)
+>>>>> +		upper = freq * ACTMON_SAMPLING_PERIOD;    
 >>>>
->>>> That could be done, but it makes code less readable.
->>>>
->>>> See the difference:
->>>>
->>>> device_writel(dev, ACTMON_INTR_STATUS_CLEAR,
->>>> ACTMON_DEV_INTR_STATUS);
->>>>
->>>> writel_relaxed(ACTMON_INTR_STATUS_CLEAR,
->>>> 	       dev->regs + ACTMON_DEV_INTR_STATUS);  
+>>>> Also, 'upper value is used on the patch5. You can combine this code
+>>>> to patch5 or if this patch depends on the cpu notifier, you can
+>>>> combine it to the patch of adding cpu notifier without separate
+>>>> patch.  
 >>>
->>> No problem if you add the detailed comment and you want to use
->>> the 'inline' keyword.  
+>>> Well okay, I'll try to squash some of the patches in the next
+>>> revision. Usually I'm receiving comments in the other direction,
+>>> asking to separate patches into smaller changes ;) So that's more a
+>>> personal preference of each maintainer, I'd say.
+>>>   
 >>
->> Basically, I think that 'inline' keyword is not necessary.
+>> Right. We have to make the patch with atomic attribute.
+>> But, if there are patches which touch the same code
+>> in the same patchset. We can squash or do refactorig
+>> of this code.
 > 
-> Sure, but I'm finding that it's always nicer to explicitly inline a very
-> simple functions because compiler may not do it properly itself in some
-> cases.
+> The main benefit of having smaller logical changes is that when there is
+> a bug, it's easier to narrow down the offending change using bisection.
+> And it's just easier to review smaller patches, of course.
+
+I agree that the patch should contain the atomic feature.
+To remove the some communication confusion between us,
+I don't mean that you have to merge patches to only one patch.
+
+It is important to remove the following two cases on the same patchset.
+
+1. the front patch adds the code and then later patch remove the added code.
+2. the front patch changes the code and the later patch again modified
+   the changed code of the front patch
+
+
 > 
->> But if you want to use 'inline' keyword, I recommend
->> that call the 'write_relaxed or read_relaxed' function directly
->> with detailed description. 
+>> And also, if possible, I'd like you to make the patch
+>> list according to the role of patch. For example,
+>> the patches related to the 'watermark' could be sequentially
+>> listed. But, it is not forced opinion. If just possible.
 > 
-> Could you please reword this sentence? Not sure that I'm understanding
-> it correctly.
+> Okay, will take this into account.
+> 
+> 
 > 
 
-If you want to used 'inline' keyword,
-Instead, I recommend that remove 'actmon_readl/writel' wrapper functions
-and then you calls 'write_relaxed or read_relaxed' function directly
-with detailed description.
 
 -- 
 Best Regards,
