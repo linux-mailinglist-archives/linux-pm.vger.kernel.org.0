@@ -2,61 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0850E6E1F6
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 09:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40B76E28E
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 10:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbfGSHvw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jul 2019 03:51:52 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:41245 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbfGSHvw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jul 2019 03:51:52 -0400
-Received: by mail-ot1-f45.google.com with SMTP id o101so31852764ota.8
-        for <linux-pm@vger.kernel.org>; Fri, 19 Jul 2019 00:51:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9NshTXyOQJzW6SDdKntKrdHR5W2BVDC5UGM/Gomp7Bs=;
-        b=TakyH7l4kqtg5/RgoB7yVfJBcCAv4YppNbLbaEJ+pEAkJIOO+Ng4YE7v49H9r5iUoJ
-         HqPVrAXqWN4cnHEc7HB+6GQIRfj93/pz+FP7YoA1JUXqCMYNwLP+MSHTaYKKXaKghi3w
-         h8GEX7dye7KVzFpdkqOCP/5AU9hheL59vvFxVX4gD2aNNKQdIFMULj3ACSqp66/dpOlF
-         bqLcUlh0hZ0j+DnIaWNS/kBamGdkXg+4OENk8fGNj3L7a8VIsYuNLG0bH2oBJoz+2OkN
-         wgIZ8k2ucI93B6vWjR/cWoFI5h1iCfeTYkj6T0FTbzk+QeUzJhFZZPGKa5qJXohw+dU/
-         3qTg==
-X-Gm-Message-State: APjAAAV2rHBarONJkckFC0teIBh3+I+IBrxV/jXbJFKqG63FKfptmaxG
-        UD4QtGa4iil82+agT1DvVR8a2xMdDiMqhQ5Ph3o=
-X-Google-Smtp-Source: APXvYqyoAtIK3e6TddqsCJQrlP8gNzulQPQQsZBGq8J7bcSMt7+HmU/H/6pQszgeDN/qNphRf7A9EvBuMwrk7lIQKmg=
-X-Received: by 2002:a9d:6b96:: with SMTP id b22mr38756644otq.262.1563522711798;
- Fri, 19 Jul 2019 00:51:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <alpine.DEB.2.21.1907181955330.2769@hp-x360> <1563514893.2433.3.camel@intel.com>
- <alpine.DEB.2.21.1907182308321.2769@hp-x360>
-In-Reply-To: <alpine.DEB.2.21.1907182308321.2769@hp-x360>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 19 Jul 2019 09:51:40 +0200
-Message-ID: <CAJZ5v0jYdV3esYfj9Yc2NRkdTFNdDvFnuuOe-rTwFQFhFvRH=g@mail.gmail.com>
-Subject: Re: [Fwd: Commit 555c45fe0d0 ("int340X/processor_thermal_device: add
- support for MMIO RAPL") boot failure]
+        id S1726399AbfGSIa1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jul 2019 04:30:27 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42369 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbfGSIa1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jul 2019 04:30:27 -0400
+Received: from 79.184.255.39.ipv4.supernova.orange.pl (79.184.255.39) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id 5c4dc224526c469e; Fri, 19 Jul 2019 10:30:24 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     "Kenneth R. Crudup" <kenny@panix.com>
 Cc:     Zhang Rui <rui.zhang@intel.com>,
         Linux PM list <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: [Fwd: Commit 555c45fe0d0 ("int340X/processor_thermal_device: add support for MMIO RAPL") boot failure]
+Date:   Fri, 19 Jul 2019 10:30:24 +0200
+Message-ID: <1780736.Kzs3HF7DM6@kreacher>
+In-Reply-To: <alpine.DEB.2.21.1907182308321.2769@hp-x360>
+References: <alpine.DEB.2.21.1907181955330.2769@hp-x360> <1563514893.2433.3.camel@intel.com> <alpine.DEB.2.21.1907182308321.2769@hp-x360>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 8:32 AM Kenneth R. Crudup <kenny@panix.com> wrote:
->
->
+On Friday, July 19, 2019 8:13:22 AM CEST Kenneth R. Crudup wrote:
+> 
 > On Fri, 19 Jul 2019, Zhang Rui wrote:
->
+> 
 > > Are you using the latest Linus' tree today?
->
+> 
 > Yeah, Linus' master tree, as of the time of this E-mail (no new commits since
 > mid-afternoon Thursday PDT).
+> 
+> "lspci --vvnn" is attached.
 
-So can you disable PROC_THERMAL_MMIO_RAPL in Kconfig and retest?
+Also please let me know if the appended patch helps.
+
+---
+ drivers/thermal/intel/int340x_thermal/processor_thermal_device.c |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+Index: linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -487,6 +487,7 @@ static int proc_thermal_rapl_add(struct
+ 				rapl_mmio_cpu_online, rapl_mmio_cpu_down_prep);
+ 	if (ret < 0) {
+ 		powercap_unregister_control_type(rapl_mmio_priv.control_type);
++		rapl_mmio_priv.control_type = NULL:
+ 		return ret;
+ 	}
+ 	rapl_mmio_priv.pcap_rapl_online = ret;
+@@ -496,6 +497,9 @@ static int proc_thermal_rapl_add(struct
+ 
+ static void proc_thermal_rapl_remove(void)
+ {
++	if (IS_ERR_OR_NULL(rapl_mmio_priv.control_type))
++		return;
++
+ 	cpuhp_remove_state(rapl_mmio_priv.pcap_rapl_online);
+ 	powercap_unregister_control_type(rapl_mmio_priv.control_type);
+ }
+
+
+
