@@ -2,75 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C40B76E28E
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 10:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3E86E3A7
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 11:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726399AbfGSIa1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jul 2019 04:30:27 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:42369 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726328AbfGSIa1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jul 2019 04:30:27 -0400
-Received: from 79.184.255.39.ipv4.supernova.orange.pl (79.184.255.39) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
- id 5c4dc224526c469e; Fri, 19 Jul 2019 10:30:24 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "Kenneth R. Crudup" <kenny@panix.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [Fwd: Commit 555c45fe0d0 ("int340X/processor_thermal_device: add support for MMIO RAPL") boot failure]
-Date:   Fri, 19 Jul 2019 10:30:24 +0200
-Message-ID: <1780736.Kzs3HF7DM6@kreacher>
-In-Reply-To: <alpine.DEB.2.21.1907182308321.2769@hp-x360>
-References: <alpine.DEB.2.21.1907181955330.2769@hp-x360> <1563514893.2433.3.camel@intel.com> <alpine.DEB.2.21.1907182308321.2769@hp-x360>
+        id S1726100AbfGSJpu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jul 2019 05:45:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:40966 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725794AbfGSJpu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Jul 2019 05:45:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93A29337;
+        Fri, 19 Jul 2019 02:45:49 -0700 (PDT)
+Received: from e107155-lin (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7DE33F59C;
+        Fri, 19 Jul 2019 02:45:46 -0700 (PDT)
+Date:   Fri, 19 Jul 2019 10:45:30 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Raju P . L . S . S . S . N" <rplsssn@codeaurora.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souvik Chakravarty <souvik.chakravarty@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lina Iyer <lina.iyer@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH 09/18] drivers: firmware: psci: Add support for PM
+ domains using genpd
+Message-ID: <20190719094530.GA15248@e107155-lin>
+References: <20190513192300.653-1-ulf.hansson@linaro.org>
+ <20190513192300.653-10-ulf.hansson@linaro.org>
+ <20190716150533.GD7250@e107155-lin>
+ <CAPDyKFqaE2L419siFY=LGDsotAnpBt+H_vpmG62AqQw8UQJZJA@mail.gmail.com>
+ <20190718131913.GB28633@e107155-lin>
+ <20190718175746.GE25567@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190718175746.GE25567@codeaurora.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, July 19, 2019 8:13:22 AM CEST Kenneth R. Crudup wrote:
-> 
-> On Fri, 19 Jul 2019, Zhang Rui wrote:
-> 
-> > Are you using the latest Linus' tree today?
-> 
-> Yeah, Linus' master tree, as of the time of this E-mail (no new commits since
-> mid-afternoon Thursday PDT).
-> 
-> "lspci --vvnn" is attached.
+On Thu, Jul 18, 2019 at 11:57:46AM -0600, Lina Iyer wrote:
+> On Thu, Jul 18 2019 at 07:19 -0600, Sudeep Holla wrote:
+[...]
 
-Also please let me know if the appended patch helps.
+> >
+> > Yes 2 different issues here:
+> > 1. The direct assignment overwriting the value is problem which you agree.
+> > 2. The OR logic on it's own is bit not so clear from the specification.
+> >   Since firmware authors need to be aware of this to make all these
+> >   work. So it's not implicit, either we set this requirement in form
+> >   of binding. We were also thinking of stating composite state in the
+> >   DT, still just a thought, need to come up with examples/illustrations.
+> >
+> It is generally very obvious to firmware authors to map hardware
+> definitions to specific bits in the state param. If a cluster component
+> has more than on/off state, more bits are assigned to the define the
+> idle states of the component.
 
----
- drivers/thermal/intel/int340x_thermal/processor_thermal_device.c |    4 ++++
- 1 file changed, 4 insertions(+)
+While I completely agree that generally the firmware authors tend to
+assign a bit(s) to indicate a state, it not so evident from the PSCI
+specification. My worry is someone shouldn't come up with sequential
+numbering and expect this to work.
 
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-@@ -487,6 +487,7 @@ static int proc_thermal_rapl_add(struct
- 				rapl_mmio_cpu_online, rapl_mmio_cpu_down_prep);
- 	if (ret < 0) {
- 		powercap_unregister_control_type(rapl_mmio_priv.control_type);
-+		rapl_mmio_priv.control_type = NULL:
- 		return ret;
- 	}
- 	rapl_mmio_priv.pcap_rapl_online = ret;
-@@ -496,6 +497,9 @@ static int proc_thermal_rapl_add(struct
- 
- static void proc_thermal_rapl_remove(void)
- {
-+	if (IS_ERR_OR_NULL(rapl_mmio_priv.control_type))
-+		return;
-+
- 	cpuhp_remove_state(rapl_mmio_priv.pcap_rapl_online);
- 	powercap_unregister_control_type(rapl_mmio_priv.control_type);
- }
+I am fine with OR, but we need to document it somewhere so that we
+can point people so that the driver in the kernel is not expected
+to work with any other schema of numbering StateID that violates
+the assumption.
 
+> Addition is also an option, but there are enough bits compared to the
+> hardware components that we have in each state, that it hasn't been a
+> problem.
+>
+Yes, but with extended format, the StateType move to bit 30, and if
+we represent each individual state to indicate that bit correctly(I
+except everyone to so that and it shouldn't cause issue if we OR the
+parameters to get composite states), addition may cause issues.
 
+--
+Regards,
+Sudeep
 
