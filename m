@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3E86E3A7
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 11:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423DD6E3D8
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 12:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbfGSJpu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jul 2019 05:45:50 -0400
-Received: from foss.arm.com ([217.140.110.172]:40966 "EHLO foss.arm.com"
+        id S1727360AbfGSKC5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jul 2019 06:02:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:41260 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725794AbfGSJpu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Jul 2019 05:45:50 -0400
+        id S1727351AbfGSKC5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Jul 2019 06:02:57 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93A29337;
-        Fri, 19 Jul 2019 02:45:49 -0700 (PDT)
-Received: from e107155-lin (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7DE33F59C;
-        Fri, 19 Jul 2019 02:45:46 -0700 (PDT)
-Date:   Fri, 19 Jul 2019 10:45:30 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D6AC337;
+        Fri, 19 Jul 2019 03:02:56 -0700 (PDT)
+Received: from e121166-lin.cambridge.arm.com (unknown [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8CBE3F59C;
+        Fri, 19 Jul 2019 03:02:53 -0700 (PDT)
+Date:   Fri, 19 Jul 2019 11:02:16 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lina Iyer <ilina@codeaurora.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -39,66 +39,110 @@ Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         Souvik Chakravarty <souvik.chakravarty@arm.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lina Iyer <lina.iyer@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH 09/18] drivers: firmware: psci: Add support for PM
- domains using genpd
-Message-ID: <20190719094530.GA15248@e107155-lin>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 14/18] drivers: firmware: psci: Manage runtime PM in the
+ idle path for CPUs
+Message-ID: <20190719100216.GA8587@e121166-lin.cambridge.arm.com>
 References: <20190513192300.653-1-ulf.hansson@linaro.org>
- <20190513192300.653-10-ulf.hansson@linaro.org>
- <20190716150533.GD7250@e107155-lin>
- <CAPDyKFqaE2L419siFY=LGDsotAnpBt+H_vpmG62AqQw8UQJZJA@mail.gmail.com>
- <20190718131913.GB28633@e107155-lin>
- <20190718175746.GE25567@codeaurora.org>
+ <20190513192300.653-15-ulf.hansson@linaro.org>
+ <20190716155317.GB32490@e121166-lin.cambridge.arm.com>
+ <CAPDyKFrJ75mo+s6GuUCTQ-nVv7C+9YJyTVmwuBZ2RKFOvOi3Nw@mail.gmail.com>
+ <20190718133053.GA27222@e121166-lin.cambridge.arm.com>
+ <CAPDyKFr4NmichQk4uf+Wgbanh=5idKYY=37WCb6U_hNFDVYg=w@mail.gmail.com>
+ <20190718174116.GD25567@codeaurora.org>
+ <CAPDyKFrxBdZfskyp2HOb5YykkAqkBzRfW4-LLbcj1DAaL65XpA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190718175746.GE25567@codeaurora.org>
+In-Reply-To: <CAPDyKFrxBdZfskyp2HOb5YykkAqkBzRfW4-LLbcj1DAaL65XpA@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 18, 2019 at 11:57:46AM -0600, Lina Iyer wrote:
-> On Thu, Jul 18 2019 at 07:19 -0600, Sudeep Holla wrote:
-[...]
-
+On Thu, Jul 18, 2019 at 11:49:11PM +0200, Ulf Hansson wrote:
+> On Thu, 18 Jul 2019 at 19:41, Lina Iyer <ilina@codeaurora.org> wrote:
 > >
-> > Yes 2 different issues here:
-> > 1. The direct assignment overwriting the value is problem which you agree.
-> > 2. The OR logic on it's own is bit not so clear from the specification.
-> >   Since firmware authors need to be aware of this to make all these
-> >   work. So it's not implicit, either we set this requirement in form
-> >   of binding. We were also thinking of stating composite state in the
-> >   DT, still just a thought, need to come up with examples/illustrations.
+> > On Thu, Jul 18 2019 at 10:55 -0600, Ulf Hansson wrote:
+> > >On Thu, 18 Jul 2019 at 15:31, Lorenzo Pieralisi
+> > ><lorenzo.pieralisi@arm.com> wrote:
+> > >>
+> > >> On Thu, Jul 18, 2019 at 12:35:07PM +0200, Ulf Hansson wrote:
+> > >> > On Tue, 16 Jul 2019 at 17:53, Lorenzo Pieralisi
+> > >> > <lorenzo.pieralisi@arm.com> wrote:
+> > >> > >
+> > >> > > On Mon, May 13, 2019 at 09:22:56PM +0200, Ulf Hansson wrote:
+> > >> > > > When the hierarchical CPU topology layout is used in DT, let's allow the
+> > >> > > > CPU to be power managed through its PM domain, via deploying runtime PM
+> > >> > > > support.
+> > >> > > >
+> > >> > > > To know for which idle states runtime PM reference counting is needed,
+> > >> > > > let's store the index of deepest idle state for the CPU, in a per CPU
+> > >> > > > variable. This allows psci_cpu_suspend_enter() to compare this index with
+> > >> > > > the requested idle state index and then act accordingly.
+> > >> > >
+> > >> > > I do not see why a system with two CPU CPUidle states, say CPU retention
+> > >> > > and CPU shutdown, should not be calling runtime PM on CPU retention
+> > >> > > entry.
+> > >> >
+> > >> > If the CPU idle governor did select the CPU retention for the CPU, it
+> > >> > was probably because the target residency for the CPU shutdown state
+> > >> > could not be met.
+> > >>
+> > >> The kernel does not know what those cpu states represent, so, this is an
+> > >> assumption you are making and it must be made clear that this code works
+> > >> as long as your assumption is valid.
+> > >>
+> > >> If eg a "cluster" retention state has lower target_residency than
+> > >> the deepest CPU idle state this assumption is wrong.
+> > >
+> > >Good point, you are right. I try to find a place to document this assumption.
+> > >
+> > >>
+> > >> And CPUidle and genPD governor decisions are not synced anyway so,
+> > >> again, this is an assumption, not a certainty.
+> > >>
+> > >> > In this case, there is no point in allowing any other deeper idle
+> > >> > states for cluster/package/system, since those have even greater
+> > >> > residencies, hence calling runtime PM doesn't make sense.
+> > >>
+> > >> On the systems you are testing on.
+> > >
+> > >So what you are saying typically means, that if all CPUs in the same
+> > >cluster have entered the CPU retention state, on some system the
+> > >cluster may also put into a cluster retention state (assuming the
+> > >target residency is met)?
+> > >
+> > >Do you know of any systems that has these characteristics?
+> > >
+> > Many QCOM SoCs can do that. But with the hardware improving, the
+> > power-performance benefits skew the results in favor of powering off
+> > the cluster than keeping the CPU and cluster in retention.
 > >
-> It is generally very obvious to firmware authors to map hardware
-> definitions to specific bits in the state param. If a cluster component
-> has more than on/off state, more bits are assigned to the define the
-> idle states of the component.
+> > Kevin H and I thought of this problem earlier on. But that is a second
+> > level problem to solve and definitely to be thought of after we have the
+> > support for the deepest states in the kernel. We left that out for a
+> > later date. The idea would have been to setup the allowable state(s) in
+> > the DT for CPU and cluster state definitions and have the genpd take
+> > that into consideration when deciding the idle state for the domain.
+> 
+> Thanks for confirming.
+> 
+> This more or less means we need to improve the hierarchical support in
+> genpd to support more levels, such that it makes sense to have a genpd
+> governor assigned at more than one level. This doesn't work well
+> today. As I also have stated, this is on my todo list for genpd.
+> 
+> However, I also agree with your standpoint, that let's start simple to
+> enable the deepest state as a start with, then we can improve things
+> on top.
 
-While I completely agree that generally the firmware authors tend to
-assign a bit(s) to indicate a state, it not so evident from the PSCI
-specification. My worry is someone shouldn't come up with sequential
-numbering and expect this to work.
+How to solve this in the kernel I don't know but please do make sure
+that the DT bindings allow you to describe what's needed, once they are
+merged you won't be able to change them and I won't bodge the code to
+make things fit, so if anything let's focus on getting them right as a
+matter of priority to get this done please.
 
-I am fine with OR, but we need to document it somewhere so that we
-can point people so that the driver in the kernel is not expected
-to work with any other schema of numbering StateID that violates
-the assumption.
-
-> Addition is also an option, but there are enough bits compared to the
-> hardware components that we have in each state, that it hasn't been a
-> problem.
->
-Yes, but with extended format, the StateType move to bit 30, and if
-we represent each individual state to indicate that bit correctly(I
-except everyone to so that and it shouldn't cause issue if we OR the
-parameters to get composite states), addition may cause issues.
-
---
-Regards,
-Sudeep
-
+Thanks,
+Lorenzo
