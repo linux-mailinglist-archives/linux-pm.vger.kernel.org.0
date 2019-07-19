@@ -2,51 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EF86D82D
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 03:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A818A6D832
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jul 2019 03:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726066AbfGSBKX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jul 2019 21:10:23 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:35427 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726042AbfGSBKX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 21:10:23 -0400
-Received: by mail-lf1-f67.google.com with SMTP id p197so20515187lfa.2;
-        Thu, 18 Jul 2019 18:10:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=T1Cb1uc+HNNSylpCLGSfB2K7Z5KAc5egJTyCxBCXEck=;
-        b=i634c7QPpiwdP/WP9K7AkudOWgdmwiqHdNoytstivK+83m9XFxwFVRlwkIezN9W63K
-         q/+OzevpaGiTzsELx4evTb9lzq/8wpKUDLP4LqF4cTUbuAew60pHIdUC8hKT9fwoenm4
-         7v4dW5jyvhcWzoGRbyfOmC3piIvitfCsAZPx/XXwn4hQW3IJTfW7cARV88bDP99ULM/3
-         GjLtN1zvc7X7MUp4hkG39YbEX9fkA0M3aNd1pv6lEv9dON3y/YM6ERpfwArpsE64k46l
-         YrmaF3ysCtrfLc1qTMKgyS7hA913whfOPxit7D18suRpDtScPwP/w2CXlVXWdNiYGRLS
-         kpYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=T1Cb1uc+HNNSylpCLGSfB2K7Z5KAc5egJTyCxBCXEck=;
-        b=gD/f3dneyunEAspjyPjo3uTu0eIPlDojyRQlc7yHUXztbua9zfAbjLu6XJj7VAAM9h
-         4AO9ZopRbgpyKm6s+ksQWY24aUU9CIVX1MnE1RlME0gz9uUP1puprn1kn2VLb/gOxmtf
-         pou0T5V2j4hPbHOQHyAhxprZei1kiVN4nIQR7enBV3hYhGFqqlNMMMj3CGzLgGq9Dgd4
-         yKhXYx+om1xw/62oAERnPm+k7KK/iwCmGsZPbFPsHgY8GREj2QLg2KCN/0Q6M9tuARMl
-         nCjMk3nsGn3OpLIguXLZIpJwi5oyqQzANKD0Jak3r/DWCO8im4Ad4+q23arPpWinmOYx
-         0o+Q==
-X-Gm-Message-State: APjAAAVKA2ZfAJRjPK9ojR41WgKJMBdmkdCII1BwjgSeE6lnSCHsPoo+
-        P3MfFaAhi0wnupzncXjnSn0=
-X-Google-Smtp-Source: APXvYqxjJDF8pvttVkPAB7+4IqNzjc4RpokY0Afi6sHm05SGhUbMLGdt59zpwW6xppvk96pdoNZgGQ==
-X-Received: by 2002:ac2:546a:: with SMTP id e10mr22942504lfn.75.1563498620454;
-        Thu, 18 Jul 2019 18:10:20 -0700 (PDT)
-Received: from dimatab (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.gmail.com with ESMTPSA id 199sm5383111ljf.44.2019.07.18.18.10.19
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 18 Jul 2019 18:10:20 -0700 (PDT)
-Date:   Fri, 19 Jul 2019 04:13:57 +0300
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
+        id S1726042AbfGSBMD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jul 2019 21:12:03 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:44348 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726147AbfGSBMC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jul 2019 21:12:02 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190719011159epoutp020951121ff04d00fe7e08f46943fdf77c~yqc04YMb21279512795epoutp02M
+        for <linux-pm@vger.kernel.org>; Fri, 19 Jul 2019 01:11:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190719011159epoutp020951121ff04d00fe7e08f46943fdf77c~yqc04YMb21279512795epoutp02M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1563498719;
+        bh=pJRiEDTVb1Q1jLaaq6PSgmh/0pib9kUoncylR8poF1A=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=cbXvmSvrDiYL03HLkDx8+/6XH94COSdJx5IR4d02O0CiO6JBAvl/eFMDwI4UmnVZD
+         qcfdIqIMvmB33i5tRQKHVVHwYbA39De0l15Gskitiv+H0gsWNEiozjAq6zi/LZdscV
+         z4aITaekHY2ZNhJYYusxxfF22AAXJY3lN9U5ebKQ=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190719011159epcas1p3d3a8cdc5ef4a93467847de938e131da7~yqc0aEusX0518505185epcas1p3N;
+        Fri, 19 Jul 2019 01:11:59 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 45qXz04Kg0zMqYkd; Fri, 19 Jul
+        2019 01:11:56 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9C.0B.04075.CD8113D5; Fri, 19 Jul 2019 10:11:56 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190719011156epcas1p35fa6bc396c4d828c5f534dedb89fdebd~yqcxmzM0V0393503935epcas1p3P;
+        Fri, 19 Jul 2019 01:11:56 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190719011156epsmtrp18187d6ec609595767b8540e11b2ed5e1~yqcxmCJRp1723917239epsmtrp1I;
+        Fri, 19 Jul 2019 01:11:56 +0000 (GMT)
+X-AuditID: b6c32a36-b61ff70000000feb-c6-5d3118dc213b
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        40.80.03638.BD8113D5; Fri, 19 Jul 2019 10:11:55 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190719011155epsmtip15bdb56468880e51e8f973a5703044945~yqcxbroiN1683216832epsmtip1q;
+        Fri, 19 Jul 2019 01:11:55 +0000 (GMT)
+Subject: Re: [PATCH v4 19/24] PM / devfreq: tegra30: Optimize upper
+ consecutive watermark selection
+To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -54,109 +58,128 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 11/24] PM / devfreq: tegra30: Add debug messages
-Message-ID: <20190719041357.0a80a2dc@dimatab>
-In-Reply-To: <f630dacc-2065-a12d-bd03-1fc6c4363e1f@samsung.com>
-References: <20190707223303.6755-1-digetx@gmail.com>
-        <CGME20190707223640epcas4p15337f40466342832b731ad6a53be946e@epcas4p1.samsung.com>
-        <20190707223303.6755-12-digetx@gmail.com>
-        <c883bdbe-427f-35a1-9e63-5e4953a84286@samsung.com>
-        <53cd0ba5-f814-cd9b-19c5-1d42717ca58c@gmail.com>
-        <922c9178-71de-46ad-eafd-805af461bedb@samsung.com>
-        <f819c226-4328-c85d-5da3-932391fa6747@gmail.com>
-        <f630dacc-2065-a12d-bd03-1fc6c4363e1f@samsung.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; arm-unknown-linux-gnueabihf)
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <e45a250c-1860-ca86-4b60-4896166752a8@samsung.com>
+Date:   Fri, 19 Jul 2019 10:15:06 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190719034025.67c82123@dimatab>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0gUURTHuTuz42ht3Vatk710KlHBdUfbbSyNopCFCoS+VLRsg06u7bOd
+        NbK+ZPZyUSuiwO1tmmbKWlmYFda2IhWK9C4VJRNSyuglVkbtOBv57Xf+538493/vpQl1IxVD
+        59vdgsvOWxkqgrz5IDEluQdYo7bnQBx35fMA4vZ7K0muY9+HMO5py2mK+1oWQFzJNy/FdRfV
+        UtyPlrMkV97whFoZbmjurUKGW97eMENZ8QhlKG+qQ4av1+ZnKzdbMswCnyu4YgV7jiM3356X
+        yazdYFpt0um1bDKbzi1lYu28Tchk1qzLTs7KtwYPxMTu5K0FQSmbF0UmZUWGy1HgFmLNDtGd
+        yQjOXKsz3akReZtYYM/T5Dhsy1itNlUXNG61mEtvd1FOj3rX3Rt+ai9qn+ZB4TTgJXCp6Cfh
+        QRG0Gjcj8N+uoOTiC4LXDYFQMYqg6FEV8W+k9FVtqHEXwYGh+lDxCUHpnZoJVyQWoG/4ZpjE
+        UTgeatrGlZKJwFcV0N5Yr5AaFE6C1vevKImn4zh4PjaAJFbhFdAWKJvQSbwYuusrlRJH443w
+        pf+BUvbMgIcV70gPoulwrIHBSzmSTOBZ8ObdOYXMC6D4xqmJcID/UPBxoF0pR1gDdeOjYTJH
+        wnB7U4hjYOjIwRDvgcsP5fyADyNoau0KDadBa/VxhbSYwInga0mR5Ti49esMkhdPg5HvpUrJ
+        AlgFhw+qZctCeNrfq5B5Nlw8VEIdRYx3UhrvpAjeSRG8/5edR2Qdmik4RVueILLO1MnPfQ1N
+        /NYkfTOq7FznR5hGzFTV2HatUa3kd4qFNj8CmmCiVN1DKUa1Kpcv3C24HCZXgVUQ/UgXvOxj
+        REx0jiP49+1uE6tLTUtL45aweh3LMrNUZ8cTjWqcx7sFiyA4Bde/OQUdHrMXBYqNgd2Yzni+
+        aLRuzreRNt+iQCLSWpwNfVlRK7M01/X9fZusz7p6Tkwp6twxtv7+4D5zxWj5i0Jyf6PldGVE
+        wpt71TvGLhZ+/23etnwOmd4893ML4+uM1sd3eBrjF/dvgcerTL7iBNtguWZTZiutntdxYdjM
+        +Up+n3x5f3XP23yGFM08m0S4RP4vsR//5MMDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsWy7bCSnO5tCcNYg5sd1harPz5mtGiZtYjF
+        4mzTG3aLy7vmsFl87j3CaNH5ZRabxe3GFWwWP3fNY7HoW3uJzYHTY8fdJYweO2fdZffobX7H
+        5tG3ZRWjx+dNcgGsUVw2Kak5mWWpRfp2CVwZPbsvsBV0CVXs3XqIrYHxOF8XIyeHhICJRM+N
+        FWxdjFwcQgK7GSUefb7NDpGQlJh28ShzFyMHkC0scfhwMUTNW0aJbV+3gtUIC6RK3H+1DcwW
+        EVCTWH70DytIEbPAZiaJs6dWQ03tZZI4uuMEC0gVm4CWxP4XN9hAbH4BRYmrPx4zgti8AnYS
+        R4/0gsVZBFQlbq9ZxApiiwpESBzeMQuqRlDi5MwnLCAXcQroSTxdlgwSZhZQl/gz7xIzhC0u
+        cevJfCYIW16ieets5gmMwrOQdM9C0jILScssJC0LGFlWMUqmFhTnpucWGxYY5aWW6xUn5haX
+        5qXrJefnbmIEx5iW1g7GEyfiDzEKcDAq8fAG5BrECrEmlhVX5h5ilOBgVhLhvf1SP1aINyWx
+        siq1KD++qDQntfgQozQHi5I4r3z+sUghgfTEktTs1NSC1CKYLBMHp1QDY5fARQHXXT2PD6V/
+        bj7D4LFvmf/y37V8JckpE2LclZJztry392dsNXpzaa7fh8NP9xSzX00O2nHsFusXs0rlX1kf
+        Dquf2W5ucWDT8im51fNXbpq4YX9A1cZLRupz8xyF1LmruR4Z2V3cKPfkH99rpzhbOau9HxpK
+        7aSXvjd8eX9nhOVFl6LgMCWW4oxEQy3mouJEABp5uNytAgAA
+X-CMS-MailID: 20190719011156epcas1p35fa6bc396c4d828c5f534dedb89fdebd
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190707223622epcas4p48ec0d7e6fa26bc2397fa4351c0bd0c2d
+References: <20190707223303.6755-1-digetx@gmail.com>
+        <CGME20190707223622epcas4p48ec0d7e6fa26bc2397fa4351c0bd0c2d@epcas4p4.samsung.com>
+        <20190707223303.6755-20-digetx@gmail.com>
+        <17fabbaf-ceca-7551-0a58-9c8a0e7027ed@samsung.com>
+        <20190719034025.67c82123@dimatab>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=D0=92 Thu, 18 Jul 2019 18:07:05 +0900
-Chanwoo Choi <cw00.choi@samsung.com> =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+On 19. 7. 19. 오전 9:40, Dmitry Osipenko wrote:
+> В Thu, 18 Jul 2019 18:51:02 +0900
+> Chanwoo Choi <cw00.choi@samsung.com> пишет:
+> 
+>> On 19. 7. 8. 오전 7:32, Dmitry Osipenko wrote:
+>>> The memory activity counter may get a bit higher than a watermark
+>>> which is selected based on OPP that corresponds to a highest EMC
+>>> rate, in this case watermark is lower than the actual memory
+>>> activity is and thus results in unwanted "upper" interrupts.
+>>>
+>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>> ---
+>>>  drivers/devfreq/tegra30-devfreq.c | 13 ++++++++++++-
+>>>  1 file changed, 12 insertions(+), 1 deletion(-)  
+>>
+>> It seems that you can combine patch19 with patch20.
+> 
+> No, consecutive and average watermarks are different things that have
+> different purposes. Consecutive are used for boosting, while average
+> are for significant memory bandwidth changes.
+> 
+>>>
+>>> diff --git a/drivers/devfreq/tegra30-devfreq.c
+>>> b/drivers/devfreq/tegra30-devfreq.c index
+>>> 8d6bf6e9f1ae..c3cf87231d25 100644 ---
+>>> a/drivers/devfreq/tegra30-devfreq.c +++
+>>> b/drivers/devfreq/tegra30-devfreq.c @@ -363,7 +363,18 @@ static
+>>> void tegra_devfreq_update_wmark(struct tegra_devfreq *tegra,
+>>> tegra_actmon_get_lower_upper(tegra, dev, freq - 1, &lower, &upper); 
+>>>  	delta = do_percent(upper - lower,
+>>> dev->config->boost_up_threshold);
+>>> -	device_writel(dev, lower + delta, ACTMON_DEV_UPPER_WMARK);
 
-> On 19. 7. 18. =EC=98=A4=EC=A0=84 12:46, Dmitry Osipenko wrote:
-> > 17.07.2019 9:45, Chanwoo Choi =D0=BF=D0=B8=D1=88=D0=B5=D1=82: =20
-> >> On 19. 7. 16. =EC=98=A4=ED=9B=84 10:26, Dmitry Osipenko wrote: =20
-> >>> 16.07.2019 15:23, Chanwoo Choi =D0=BF=D0=B8=D1=88=D0=B5=D1=82: =20
-> >>>> Hi Dmitry,
-> >>>>
-> >>>> Usually, the kernel log print for all users
-> >>>> such as changing the frequency, fail or success.
-> >>>>
-> >>>> But, if the log just show the register dump,
-> >>>> it is not useful for all users. It is just used
-> >>>> for only specific developer.
-> >>>>
-> >>>> I recommend that you better to add more exception handling
-> >>>> code on many points instead of just showing the register dump. =20
-> >>>
-> >>> The debug messages are not users, but for developers. Yes, I
-> >>> primarily made the debugging to be useful for myself and will be
-> >>> happy to change the way debugging is done if there will be any
-> >>> other active developer for this driver. The registers dump is
-> >>> more than enough in order to understand what's going on, I don't
-> >>> see any real need to change anything here for now. =20
-> >>
-> >> Basically, we have to develop code and add the log for anyone.
-> >> As you commented, even if there are no other developer, we never
-> >> guarantee this assumption forever. And also, if added debug message
-> >> for only you, you can add them when testing it temporarily.
-> >>
-> >> If you want to add the just register dump log for you,
-> >> I can't agree. Once again, I hope that anyone understand
-> >> the meaning of debug message as much possible as.
-> >> =20
-> >=20
-> > The registers dump should be good for everyone because it's a
-> > self-explanatory information for anyone who is familiar with the
-> > hardware. I don't think there is a need for anything else than what
-> > is proposed in this patch, at least for now. I also simply don't
-> > see any other better way to debug the state of this particular
-> > hardware, again this logging is for the driver developers and not
-> > for users.
-> >=20
-> > Initially, I was temporarily adding the debug messages. Now they are
-> > pretty much mandatory for verifying that driver is working
-> > properly. And of course the debugging messages got into the shape
-> > of this patch after several iterations of refinements. So again, I
-> > suppose that this should be good enough for everyone who is
-> > familiar with the hardware. And of course I'm open to the
-> > constructive suggestions, the debugging aid is not an ABI and could
-> > be changed/improved at any time.
-> >=20
-> > You're suggesting to break down the debugging into several smaller
-> > pieces, but I'm finding that as not a constructive suggestion
-> > because the information about the full hardware state is actually
-> > necessary for the productive debugging.
-> >=20
-> >  =20
->=20
-> Sorry for that as I saie, I cannot agree this patch. In my case,
-> I don't understand what is meaning of register dump of this patch.
-> I knew that just register dump are useful for real developer.
+This line was added on patch5 and then this line is removed on this patch.
+It is wrong method to make the patch in the same patchset.
 
-It's not only a registers dump, as you may see there is also a dump of
-other properties like boosting value, OPPs selection and etc.
+It is enough to reduce the inefficient add/remove code in the same patchset.
 
-It looks to me that you're also missing important detail that debug
-messages are compiled out unless DEBUG is defined for the drivers
-build. So in order to get the debug message a user shall explicitly add
-#define DEBUG macro to the code or enable debug messages globally in
-the kernel's config. There is also an option for dynamic debug messages
-in the kernel, but it doesn't matter now because all these messages are
-turned into tracepoints later in the patch #17.
+Have to merge this patch to patch5.
 
-> If you want to show the register dump, you better to add some feature
-> with debugfs for devfreq framework in order to read the register dump.
-> As I knew, sound framework (alsa) has the similar feature for checking
-> the register dump.
->=20
+>>> +
+>>> +	/*
+>>> +	 * The memory events count could go a bit higher than the
+>>> maximum
+>>> +	 * defined by the OPPs, hence make the upper watermark
+>>> infinitely
+>>> +	 * high to avoid unnecessary upper interrupts in that case.
+>>> +	 */
+>>> +	if (freq == tegra->max_freq)
+>>> +		upper = ULONG_MAX;
+>>> +	else
+>>> +		upper = lower + delta;
+>>> +
+>>> +	device_writel(dev, upper, ACTMON_DEV_UPPER_WMARK);
+>>>  
+>>>  	/*
+>>>  	 * Meanwhile the lower mark is based on the average value
+>>>   
+>>
+>>
+> 
+> 
+> 
 
-The intent was to have an option for dynamic debugging of the driver and
-initially debug messages were good enough, but then it became not enough
-and hence the debug messages were turned into tracepoints in the patch
-#17. Would it be acceptable to squash this patch and #17?
 
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
