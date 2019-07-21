@@ -2,83 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6476F14E
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Jul 2019 04:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D756F412
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Jul 2019 18:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbfGUCtt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 20 Jul 2019 22:49:49 -0400
-Received: from mga04.intel.com ([192.55.52.120]:50076 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725995AbfGUCtt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 20 Jul 2019 22:49:49 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jul 2019 19:49:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,289,1559545200"; 
-   d="scan'208";a="344080452"
-Received: from jiajial1-mobl1.ccr.corp.intel.com (HELO rzhang-dell-9360.ccr.corp.intel.com) ([10.255.30.115])
-  by orsmga005.jf.intel.com with ESMTP; 20 Jul 2019 19:49:47 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org, srinivas.pandruvada@intel.com,
-        rui.zhang@intel.com, kenny@panix.com
-Subject: [PATCH] powercap: adjust init order
-Date:   Sun, 21 Jul 2019 10:49:44 +0800
-Message-Id: <1563677384-20163-1-git-send-email-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726797AbfGUQDy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 21 Jul 2019 12:03:54 -0400
+Received: from smtp01.smtpout.orange.fr ([80.12.242.123]:24334 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726765AbfGUQDy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Jul 2019 12:03:54 -0400
+Received: from localhost.localdomain ([92.140.204.221])
+        by mwinf5d01 with ME
+        id fU3q2000X4n7eLC03U3rbD; Sun, 21 Jul 2019 18:03:52 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 21 Jul 2019 18:03:52 +0200
+X-ME-IP: 92.140.204.221
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] power: supply: max17042_battery: Fix a typo in function names
+Date:   Sun, 21 Jul 2019 18:03:28 +0200
+Message-Id: <20190721160328.24660-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The MMIO RAPL interface driver depends on both powercap subsystem and
-the intel_rapl_common code.
-But when all of them are built in, the MMIO RAPL interface driver is
-loaded before the later two and this breaks the system during boot.
-This is because the powercap sysfs class is not registered and the
-rapl_defaults ops is not set when built-in MMIO RAPL interface driver
-gets loaded.
+It is likely that 'max10742_[un]lock_model()' functions should be
+'max17042_[un]lock_model()'
+(0 and 7 switched in 10742)
 
-Fix this by adjusting the init order of powercap subsystem and the
-intel_rapl_common code, so that their init functions are executed before
-MMIO RAPL interface driver in any case.
-
-Fixes: 555c45fe0d04 ("int340X/processor_thermal_device: add support for MMIO RAPL")
-Reported-and-tested-by: Kenneth R. Crudup <kenny@panix.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/powercap/intel_rapl_common.c | 2 +-
- drivers/powercap/powercap_sys.c      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/power/supply/max17042_battery.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 9fd6dd3..6df4818 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -1454,7 +1454,7 @@ static void __exit rapl_exit(void)
- 	unregister_pm_notifier(&rapl_pm_notifier);
+diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+index 581c6bd23388..da3904822929 100644
+--- a/drivers/power/supply/max17042_battery.c
++++ b/drivers/power/supply/max17042_battery.c
+@@ -511,7 +511,7 @@ static inline void max17042_override_por(struct regmap *map,
+ 		regmap_write(map, reg, value);
  }
  
--module_init(rapl_init);
-+fs_initcall(rapl_init);
- module_exit(rapl_exit);
+-static inline void max10742_unlock_model(struct max17042_chip *chip)
++static inline void max17042_unlock_model(struct max17042_chip *chip)
+ {
+ 	struct regmap *map = chip->regmap;
  
- MODULE_DESCRIPTION("Intel Runtime Average Power Limit (RAPL) common code");
-diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
-index 540e8aa..f808c5f 100644
---- a/drivers/powercap/powercap_sys.c
-+++ b/drivers/powercap/powercap_sys.c
-@@ -671,7 +671,7 @@ static int __init powercap_init(void)
- 	return class_register(&powercap_class);
+@@ -519,7 +519,7 @@ static inline void max10742_unlock_model(struct max17042_chip *chip)
+ 	regmap_write(map, MAX17042_MLOCKReg2, MODEL_UNLOCK2);
  }
  
--device_initcall(powercap_init);
-+fs_initcall(powercap_init);
+-static inline void max10742_lock_model(struct max17042_chip *chip)
++static inline void max17042_lock_model(struct max17042_chip *chip)
+ {
+ 	struct regmap *map = chip->regmap;
  
- MODULE_DESCRIPTION("PowerCap sysfs Driver");
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
+@@ -577,7 +577,7 @@ static int max17042_init_model(struct max17042_chip *chip)
+ 	if (!temp_data)
+ 		return -ENOMEM;
+ 
+-	max10742_unlock_model(chip);
++	max17042_unlock_model(chip);
+ 	max17042_write_model_data(chip, MAX17042_MODELChrTbl,
+ 				table_size);
+ 	max17042_read_model_data(chip, MAX17042_MODELChrTbl, temp_data,
+@@ -589,7 +589,7 @@ static int max17042_init_model(struct max17042_chip *chip)
+ 		temp_data,
+ 		table_size);
+ 
+-	max10742_lock_model(chip);
++	max17042_lock_model(chip);
+ 	kfree(temp_data);
+ 
+ 	return ret;
 -- 
-2.7.4
+2.20.1
 
