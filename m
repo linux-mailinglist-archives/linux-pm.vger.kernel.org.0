@@ -2,92 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 709C76F48A
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Jul 2019 20:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88916F4E1
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Jul 2019 21:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbfGUSIV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 21 Jul 2019 14:08:21 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:46424 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726618AbfGUSIV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Jul 2019 14:08:21 -0400
-Received: by mail-pg1-f195.google.com with SMTP id i8so16514454pgm.13;
-        Sun, 21 Jul 2019 11:08:21 -0700 (PDT)
+        id S1727238AbfGUTIo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 21 Jul 2019 15:08:44 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45157 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727036AbfGUTIn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Jul 2019 15:08:43 -0400
+Received: by mail-pl1-f195.google.com with SMTP id y8so18060709plr.12
+        for <linux-pm@vger.kernel.org>; Sun, 21 Jul 2019 12:08:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=FTXdst5R/SQuzieJLsSNsjPa5PEZl3NiZMobkmxYQpo=;
-        b=TTK9qK/8sWitI8E3pN3YavfH2FqVB/+VQYItc84o0fD/vpZ1OeI2c8c0AWWZhLBkfR
-         bEXAb5KG8cL2vk1SsPpFStibPjEpYFWeIEzSlkL4PQCDm3mDXuaZuASgZDpRySce1/uj
-         8j0v1I+MrFW7tZz0fDRiZDtQLtkKoBwTG2zZV6W2A50fIw7k6caFg64Ut8WzOhK587PD
-         za4dfniHkJZdkWRUilpR+08mlWSsjoijWSqllat/ql6W9CfLJF/DW/9VwROFGk/jfzMf
-         8LMV2FSt4zR5LXXJIZSE8/u1NbFUmRIXPLXteqUj7BC0iwhNG5mCfH2oXw6U8toPMo5b
-         hRbA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Ylc57dC3XkA6IHMlmIjnKW4Yzv6Mn8fQS/B+VYG3i7c=;
+        b=hFXuS3UuB0qEeWg8hFp1mt5M/vafnnV/H39+mmEBKBMQ6xCuRKQgpfCFQQWhnF06iN
+         7R5W7aXngTALP/5jdXOaeKtZsqrj7d5ZLrqbckNvTHKnRtqAAjvaukLNlEST2a+4/Ej7
+         H80DYxPQ177ByL70x39ot2ehYPEiWZzh8ZPjrh/b5jnNElNiveC9S9/B3RN+3MgRNgb0
+         SwDITHJRgl1p5rVxOijsGmXd0mkG6xZmiD1vCtxFMtcqfq47+v9otgdyUDxqHWMwiPWi
+         GbypFKBSjKL/xj15JNauSeR082PcvoJkrl0+zrcM6g5JwIj5y8Tb16X1Rv08njf3KThY
+         ZbrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=FTXdst5R/SQuzieJLsSNsjPa5PEZl3NiZMobkmxYQpo=;
-        b=rsUICB8mLcTdcL7lENBo6UWkujoUBhU+EeoZI/AvmJrbkKuQoBUWqWOGaSmlploHa+
-         D66xP3NKW/ncjy0pbuklPxv7W2TS2CsfNn3rSq2OICWawo4qZX1E06NagfwA7eneH93m
-         zGdGYCep1y8f5illLPTET2R2fDmtxTvomJZ3PecQBre0OtXe7zoLkw8eY+IdLrj4jVFp
-         V8JxO4V3qX9wLs92PfUJz69tihzcQfZA7V1CIHoINhOlb1vIYJjKVY/3ANcCN14eeFaI
-         uEQ49xzJ4Ff/yGQhd8SmQYEqMEq8n9mtTS4D092EttdZr48xHT+v2wfxcL1Tm22j6xZb
-         AVdQ==
-X-Gm-Message-State: APjAAAUg6ITS44Z4CsMltwEG8OS2bKntACXNgDTXBspXp12+68JkJmgC
-        tTYupBKotpdlwggxYbzujEVXKHnE
-X-Google-Smtp-Source: APXvYqxKToO74HULDPrAR27wvE/2XIeV/0Bn1VO4CaU+4sIBGxvw1p7b9ZQxXZUdfJFA3s0S9POK3g==
-X-Received: by 2002:a17:90a:228b:: with SMTP id s11mr70837355pjc.23.1563732500738;
-        Sun, 21 Jul 2019 11:08:20 -0700 (PDT)
-Received: from hari-Inspiron-1545 ([183.83.86.126])
-        by smtp.gmail.com with ESMTPSA id m31sm44011625pjb.6.2019.07.21.11.08.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 21 Jul 2019 11:08:20 -0700 (PDT)
-Date:   Sun, 21 Jul 2019 23:38:15 +0530
-From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: ap806: Add NULL check after kcalloc
-Message-ID: <20190721180815.GA12437@hari-Inspiron-1545>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Ylc57dC3XkA6IHMlmIjnKW4Yzv6Mn8fQS/B+VYG3i7c=;
+        b=PpHZifffirLQc8XhmMzQF2KxYHgkPvWI1SKPuzpsDQaWIAOLID7QfyZXbJQdLZtDAS
+         dtXvpzxAUP6y3TjRsvHiLL7FMTM2i0MjJSGpkwuvCg3QMmhHPKYEbYcLZmCkCZCpadPp
+         hf/7LUOwP/3v4kO0NPk0zR/9K+7Tpe780iahsHzrAcXx0ioOFlx7ZYNzjgnUo0rBh+Zv
+         NGRJjPC5UWpP3ARoJt+3DYa/SO/SXHwTLcrs/+Oap98+yOP7Hw1FZ4yUpsC/9oshRWBH
+         sVZueFicNW3y2QVxTRJ5z0PmsUXWtNiDmldZuh8axl1OV6/Qvfmi9+AfITZGWXrGDGBy
+         DCog==
+X-Gm-Message-State: APjAAAUzPkZyfu9Ts3oa+ZcYPjSUXR4YMk5Tdd5sd+AGZxNPGWndhS9s
+        Bh0+HPoXT67E8hhek/mhqIGKEw==
+X-Google-Smtp-Source: APXvYqzpOknbyvmRTmwYMUByzUAr778DaIFVqdKbNdR1vNVMvGgXL9ajPeFWDGgnS8HhUdoyyXXLIg==
+X-Received: by 2002:a17:902:b109:: with SMTP id q9mr61064677plr.176.1563736122702;
+        Sun, 21 Jul 2019 12:08:42 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id h9sm34413137pgh.51.2019.07.21.12.08.41
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 21 Jul 2019 12:08:42 -0700 (PDT)
+Date:   Sun, 21 Jul 2019 12:10:02 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     David Dai <daidavid1@codeaurora.org>
+Cc:     georgi.djakov@linaro.org, robh+dt@kernel.org, evgreen@google.com,
+        ilina@codeaurora.org, seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Update Qualcomm SDM845 DT
+ bindings
+Message-ID: <20190721191002.GH7234@tuxbook-pro>
+References: <1563568344-1274-1-git-send-email-daidavid1@codeaurora.org>
+ <1563568344-1274-2-git-send-email-daidavid1@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <1563568344-1274-2-git-send-email-daidavid1@codeaurora.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add NULL check  after kcalloc.
+On Fri 19 Jul 13:32 PDT 2019, David Dai wrote:
 
-Fix below issue reported by coccicheck
-./drivers/cpufreq/armada-8k-cpufreq.c:138:1-12: alloc with no test,
-possible model on line 151
+> Redefine the Network-on-Chip devices to more accurately describe
+> the interconnect topology on Qualcomm's SDM845 platform. Each
+> interconnect device can communicate with different instances of the
+> RPMh hardware which are described as RSCs(Resource State Coordinators).
+> 
+> Signed-off-by: David Dai <daidavid1@codeaurora.org>
 
-Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
----
- drivers/cpufreq/armada-8k-cpufreq.c | 2 ++
- 1 file changed, 2 insertions(+)
+I like this and we don't have any consumers in DT yet, so I think this
+is good.
 
-diff --git a/drivers/cpufreq/armada-8k-cpufreq.c b/drivers/cpufreq/armada-8k-cpufreq.c
-index 988ebc3..39e34f50 100644
---- a/drivers/cpufreq/armada-8k-cpufreq.c
-+++ b/drivers/cpufreq/armada-8k-cpufreq.c
-@@ -136,6 +136,8 @@ static int __init armada_8k_cpufreq_init(void)
- 
- 	nb_cpus = num_possible_cpus();
- 	freq_tables = kcalloc(nb_cpus, sizeof(*freq_tables), GFP_KERNEL);
-+	if (!freq_tables)
-+		return -ENOMEM;
- 	cpumask_copy(&cpus, cpu_possible_mask);
- 
- 	/*
--- 
-2.7.4
+But we need a patch to the implementation as well, to have the
+provider(s) registered with the new compatibles.
 
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Regards,
+Bjorn
+
+> ---
+>  .../bindings/interconnect/qcom,bcm-voter.txt       | 32 +++++++++++++++++
+>  .../bindings/interconnect/qcom,sdm845.txt          | 40 +++++++++++++++++-----
+>  2 files changed, 63 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.txt b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.txt
+> new file mode 100644
+> index 0000000..2cf7da2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.txt
+> @@ -0,0 +1,32 @@
+> +Qualcomm BCM-Voter interconnect driver binding
+> +-----------------------------------------------------------
+> +
+> +The Bus Clock Manager (BCM) is a dedicated hardware accelerator
+> +that manages shared system resources by aggregating requests
+> +from multiple Resource State Coordinators (RSC). Interconnect
+> +providers are able to vote for aggregated thresholds values from
+> +consumers by communicating through their respective RSCs.
+> +
+> +Required properties :
+> +- compatible : shall contain only one of the following:
+> +			"qcom,sdm845-bcm-voter",
+> +
+> +Examples:
+> +
+> +apps_rsc: rsc@179c0000 {
+> +	label = "apps_rsc";
+> +	compatible = "qcom,rpmh-rsc";
+> +
+> +	apps_bcm_voter: bcm_voter {
+> +		compatible = "qcom,sdm845-bcm-voter";
+> +	};
+> +}
+> +
+> +disp_rsc: rsc@179d0000 {
+> +	label = "disp_rsc";
+> +	compatible = "qcom,rpmh-rsc";
+> +
+> +	disp_bcm_voter: bcm_voter {
+> +		compatible = "qcom,sdm845-bcm-voter";
+> +	};
+> +}
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sdm845.txt b/Documentation/devicetree/bindings/interconnect/qcom,sdm845.txt
+> index 5c4f1d9..27f9ed9 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,sdm845.txt
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sdm845.txt
+> @@ -4,21 +4,43 @@ Qualcomm SDM845 Network-On-Chip interconnect driver binding
+>  SDM845 interconnect providers support system bandwidth requirements through
+>  RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
+>  able to communicate with the BCM through the Resource State Coordinator (RSC)
+> -associated with each execution environment. Provider nodes must reside within
+> -an RPMh device node pertaining to their RSC and each provider maps to a single
+> -RPMh resource.
+> +associated with each execution environment. Provider nodes must point to at
+> +least one RPMh device child node pertaining to their RSC and each provider
+> +can map to multiple RPMh resources.
+>  
+>  Required properties :
+>  - compatible : shall contain only one of the following:
+> -			"qcom,sdm845-rsc-hlos"
+> +			"qcom,sdm845-aggre1_noc",
+> +			"qcom,sdm845-aggre2_noc",
+> +			"qcom,sdm845-config_noc",
+> +			"qcom,sdm845-dc_noc",
+> +			"qcom,sdm845-gladiator_noc",
+> +			"qcom,sdm845-mem_noc",
+> +			"qcom,sdm845-mmss_noc",
+> +			"qcom,sdm845-system_noc",
+>  - #interconnect-cells : should contain 1
+> +- reg : shall contain base register location and length
+> +- qcom,bcm-voter : shall contain phandles to bcm voters
+>  
+>  Examples:
+>  
+> -apps_rsc: rsc {
+> -	rsc_hlos: interconnect {
+> -		compatible = "qcom,sdm845-rsc-hlos";
+> -		#interconnect-cells = <1>;
+> -	};
+> +aggre1_noc: interconnect@16e0000 {
+> +	compatible = "qcom,sdm845-aggre1_noc";
+> +	reg = <0x16e0000 0xd080>;
+> +	interconnect-cells = <1>;
+> +	qcom,bcm-voter = <&apps_bcm_voter>;
+>  };
+>  
+> +mmss_noc: interconnect@1740000 {
+> +	compatible = "qcom,sdm845-mmss_noc";
+> +	reg = <0x1740000 0x1c1000>;
+> +	interconnect-cells = <1>;
+> +	qcom,bcm-voter = <&apps_bcm_voter>, <&disp_bcm_voter>;
+> +};
+> +
+> +mem_noc: interconnect@1380000 {
+> +	compatible = "qcom,sdm845-mem_noc";
+> +	reg = <0 0x1380000 0 0x27200>;
+> +	#interconnect-cells = <1>;
+> +	qcom,bcm-voter = <&apps_bcm_voter>, <&disp_bcm_voter>;
+> +};
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
