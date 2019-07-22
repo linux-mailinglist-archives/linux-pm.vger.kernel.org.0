@@ -2,103 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DCE70D77
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 01:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1132070D81
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 01:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731247AbfGVXja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jul 2019 19:39:30 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:41705 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727021AbfGVXja (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 19:39:30 -0400
-Received: by mail-io1-f68.google.com with SMTP id j5so73702646ioj.8;
-        Mon, 22 Jul 2019 16:39:29 -0700 (PDT)
+        id S1727021AbfGVXlb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jul 2019 19:41:31 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:44694 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731102AbfGVXlb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 19:41:31 -0400
+Received: by mail-oi1-f194.google.com with SMTP id e189so30827449oib.11
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jul 2019 16:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=67APUiaG7UxLheSEbISe3Tn27sJMteMTbqoURFT1XoA=;
+        b=I6+P34LY0f5vyF9B+uy9PslT5WKLMItEvyXbe9YYr7nQoBjnek11aXKjq7SPMA8aRd
+         hyG8LG4WpMge8Tx0dLJfxmylKxyG+PshphEzX4/SNFn+UiPfLCmbbTzSfnaLKmEK3X6o
+         nLDC1oobEibs7sSL7paxJNGewRGuYDZMnnE6xUdPhoL/vrYc+vJu2xEdQBm18Nkx29Fm
+         ht0hSU6pkxIrySCddzxSXCWY0BIRx3hV0pf2pxFVj1MIorBQidxVRfXS/UlhCbpv2EL2
+         hb4orOES+rjszSEk4H3kqsZb2RWkSk/lOJNRKIOtvJAiA5hHKAjCHGyjKDlgZbVLq7g2
+         ZS0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Re1ou/Cp7xqVBQ6KMFNH/nG+U/FTlL8aNd/MoRXidQw=;
-        b=cxPkIL7XTI2cYDEdYcTCa36BsGw4YgHXOrAd8LVuB7/lgrF1kG/AAEML/OqfsKoN3Y
-         yrtBXFsjLyFJYwUcu7UB0IkKQ5rch7fKqu8Qjllqv04ni0uJCX+soHTRKjqa8gekQsfD
-         FGQlF3yYudOkyvpe1Yko26qMbGCErd0pxs82zamULlF2rkzURtTVI3JwAiZJZsq1Nxck
-         21uJYjEuqtzrjnwCa88I6ecnjxzPHXKnM4bRsO/ES5rUeb4mYmQZh/RQtlIJk+r9r5Cg
-         rluHZMPj1l+a2Gp5CkKLOswqc5buFaAChpjD4RRRcAR5ektuNAilZ/kLbWWqC9ExCY9n
-         6lnA==
-X-Gm-Message-State: APjAAAX58XTZJImbZ/K+DN6Z8Zr1PXO6s03UTHzD09Qj6cGhvHd0Zp73
-        zchWriUMKW6zh0nJpIUUkw==
-X-Google-Smtp-Source: APXvYqyxJK+kQudxi2Yk/oKLLBxmi3+hhs+D/FKOwXSGcX6KV5xW7nMlE4AxnlDjZGyuwGpb+nx6qA==
-X-Received: by 2002:a5e:cb06:: with SMTP id p6mr67249208iom.79.1563838768762;
-        Mon, 22 Jul 2019 16:39:28 -0700 (PDT)
-Received: from localhost ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id p10sm58868136iob.54.2019.07.22.16.39.27
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 22 Jul 2019 16:39:28 -0700 (PDT)
-Date:   Mon, 22 Jul 2019 17:39:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=67APUiaG7UxLheSEbISe3Tn27sJMteMTbqoURFT1XoA=;
+        b=Ytr+QG2NjBe4gIZcrnWookpjRa8R77MPKNIsMRgKbYNTcaP2zV3lsl5ad4CD5NPJ2c
+         ryRCGQlIEBsWrhz/AOXisknMYfVnc/NlonUw/0te47ok1lR3KdIwOOTGtXM4Y9PXAaYm
+         41i8R+zvam/frdmKOZlbfEGZxIUQ9+rqylG4l3k9sbXyyiBS6XvFDjJeBBphTw7ypCyS
+         9qcZdaGnz4wEUx//ZEzD4G2J5BIxu7UcuEOVhcZbPKQpR6kSVOTTA3WTwfnST9+KSWRu
+         PpHRqhJBqIKr3zDdBKpIkXN8SRyOcIix1NY2dpl4+UarZ1BqmzU+m8ot3vRd0avSjonC
+         1LzQ==
+X-Gm-Message-State: APjAAAU+C02spNDJGFIH6l9j41xW7nLoiAAieezeG/SlSPHMXEVKX1jj
+        w8jVOiiBKqUvREVRRWWlpK5SyAb7Iqlm70I1mkD4vQ==
+X-Google-Smtp-Source: APXvYqweTW5Fc5Q2uLGP2UuxiXAJzAEvzTAMLQvVQSyfXU+IfRr+1wvAwdupCvUaVh9HkQ+orIyi2efK9LWcbPQ3KJw=
+X-Received: by 2002:a05:6808:90a:: with SMTP id w10mr34680176oih.43.1563838889831;
+ Mon, 22 Jul 2019 16:41:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-2-saravanak@google.com>
+ <98b2e315-e8da-80ad-1ef8-e6b222c1c6fe@codeaurora.org> <CAGETcx9KSqvyzbM-S8LvBObkNBt38K683Ljm8nNQuhxk7MuvAg@mail.gmail.com>
+ <20190722233501.GA19594@bogus>
+In-Reply-To: <20190722233501.GA19594@bogus>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 22 Jul 2019 16:40:53 -0700
+Message-ID: <CAGETcx9GzQj0ZHNF+uR2cGHUkQ5sOPYEwyXKK1dJ2sJbHVSVyw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: opp: Introduce opp-peak-KBps and
+ opp-avg-KBps bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sibi Sankar <sibis@codeaurora.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
         daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        sibis@codeaurora.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] dt-bindings: interconnect: Add
- interconnect-opp-table property
-Message-ID: <20190722233927.GA1353@bogus>
-References: <20190703011020.151615-1-saravanak@google.com>
- <20190703011020.151615-6-saravanak@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190703011020.151615-6-saravanak@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 02, 2019 at 06:10:19PM -0700, Saravana Kannan wrote:
-> Add support for listing bandwidth OPP tables for each interconnect path
-> listed using the interconnects property.
-> 
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  .../devicetree/bindings/interconnect/interconnect.txt     | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/interconnect.txt b/Documentation/devicetree/bindings/interconnect/interconnect.txt
-> index 6f5d23a605b7..fc5b75b76a2c 100644
-> --- a/Documentation/devicetree/bindings/interconnect/interconnect.txt
-> +++ b/Documentation/devicetree/bindings/interconnect/interconnect.txt
-> @@ -55,10 +55,18 @@ interconnect-names : List of interconnect path name strings sorted in the same
->  			 * dma-mem: Path from the device to the main memory of
->  			            the system
->  
-> +interconnect-opp-table: List of phandles to OPP tables (bandwidth OPP tables)
-> +			that specify the OPPs for the interconnect paths listed
-> +			in the interconnects property. This property can only
-> +			point to OPP tables that belong to the device and are
-> +			listed in the device's operating-points-v2 property.
-> +
+On Mon, Jul 22, 2019 at 4:35 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Jul 16, 2019 at 11:58:08AM -0700, Saravana Kannan wrote:
+> > On Tue, Jul 16, 2019 at 10:25 AM Sibi Sankar <sibis@codeaurora.org> wrote:
+> > >
+> > > Hey Saravana,
+> > >
+> > > https://patchwork.kernel.org/patch/10850815/
+> > > There was already a discussion ^^ on how bandwidth bindings were to be
+> > > named.
+> >
+> > Yes, I'm aware of that series. That series is trying to define a BW
+> > mapping for an existing frequency OPP table. This patch is NOT about
+> > adding a mapping to an existing table. This patch is about adding the
+> > notion of BW OPP tables where BW is the "key" instead of "frequency".
+> >
+> > So let's not mixed up these two series.
+>
+> Maybe different reasons, but in the end we'd end up with 2 bandwidth
+> properties. We need to sort out how they'd overlap/coexist.
 
-IMO, there's no need for this property. Which OPP is which should be 
-defined already as part of the device's binding. That's enough for the 
-driver to know which OPP applies to the interconnect.
+Oh, I totally agree! My point is that the other mapping isn't the
+right approach because it doesn't handle a whole swath of use cases.
+The one I'm proposing can act as a super set of the other (as in, can
+handle that use case too).
 
->  Example:
->  
->  	sdhci@7864000 {
-> +		operating-points-v2 = <&sdhc_opp_table>, <&sdhc_mem_opp_table>;
->  		...
->  		interconnects = <&pnoc MASTER_SDCC_1 &bimc SLAVE_EBI_CH0>;
->  		interconnect-names = "sdhc-mem";
-> +		interconnect-opp-table = <&sdhc_mem_opp_table>;
->  	};
-> -- 
-> 2.22.0.410.gd8fdbe21b5-goog
-> 
+> The same comment in that series about defining a standard unit suffix
+> also applies to this one.
+
+I thought I read that whole series and I don't remember reading about
+the unit suffix. But I'll take a closer look. I've chosen to keep the
+DT units at least as "high of a resolution" as what the APIs accept
+today. The APIs take KB/s. So I make sure DT can capture KB/s
+differences. If we all agree that KB/s is "too accurate" then I think
+we should change everything to MB/s.
+
+-Saravana
