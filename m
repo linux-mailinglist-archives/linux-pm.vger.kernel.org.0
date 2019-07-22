@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2698F6FCC2
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 11:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DDF6FCB4
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 11:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728279AbfGVJsT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jul 2019 05:48:19 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:42173 "EHLO
+        id S1729236AbfGVJrb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jul 2019 05:47:31 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:42181 "EHLO
         mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728822AbfGVJra (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 05:47:30 -0400
+        with ESMTP id S1729214AbfGVJrb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 05:47:31 -0400
 Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190722094728euoutp02168a8a22f6b89ae6284252f4e74dbb07~zsawbVVsF2893128931euoutp02M
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190722094728euoutp025eb7ada998b110e5a275d4db22a83535~zsaw8mMYd2848028480euoutp024
         for <linux-pm@vger.kernel.org>; Mon, 22 Jul 2019 09:47:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190722094728euoutp02168a8a22f6b89ae6284252f4e74dbb07~zsawbVVsF2893128931euoutp02M
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190722094728euoutp025eb7ada998b110e5a275d4db22a83535~zsaw8mMYd2848028480euoutp024
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1563788848;
-        bh=V2RxqnmrrTg838z/OUohhOWlIB6UFsk0++imMcaiW7Y=;
+        bh=NOteMYCa1WF+4GdXMIe35a4uj6W81Ldk1G4gl67OZ9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X+peawCAFI4wHk/nLOHZKWP8uzawCQ84OZoEQ6DQYKhc6RqQew7ZBllNaLH/+r3IK
-         dihoeoXGwVCS76lCWqM8rW8tF8bq3a+JPLKoHLN2ouEsHMA0ror2aK/b3axojPrJT2
-         X0zPdRe8QkXvflPtZzDdpSalJfn7i8dGRkGV4mnE=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190722094727eucas1p172b6e41a8083ef30b6f7c441a6ef108f~zsavNzyNg1118511185eucas1p1Y;
-        Mon, 22 Jul 2019 09:47:27 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 6E.40.04325.E26853D5; Mon, 22
-        Jul 2019 10:47:26 +0100 (BST)
+        b=I1oBZ54w6Xavml7CQFB8b8kGMWwxSzq9dNeemvxvGp9bnLujwc5Mg6BCcezEz4JLz
+         BKkqsX92BDftuHT1M+BGTDcNhLdPcO/JHxRCzJx/lRyvj3F2y7aKvygK+5hLNhkosi
+         nIHBnZMU2/Rbs2KyFl98kjCfeE3l53i5bPP0Flzk=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190722094728eucas1p2274baec0ebd56580525e9035e4c58712~zsawKuTsc2318823188eucas1p2T;
+        Mon, 22 Jul 2019 09:47:28 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 21.26.04377.F26853D5; Mon, 22
+        Jul 2019 10:47:27 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190722094726eucas1p2471055ae10f65df44fa1e640491e528f~zsaudkWwg2048020480eucas1p2O;
-        Mon, 22 Jul 2019 09:47:26 +0000 (GMT)
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190722094727eucas1p10041ba25819e6e62d639423a97435f2d~zsavO4k5o1120311203eucas1p1N;
+        Mon, 22 Jul 2019 09:47:27 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190722094725eusmtrp1a6b6cb132700f8cacbe9c65c70984405~zsauE4qP63266032660eusmtrp1r;
-        Mon, 22 Jul 2019 09:47:25 +0000 (GMT)
-X-AuditID: cbfec7f5-b75ff700000010e5-fa-5d35862ee99c
+        20190722094726eusmtrp1761971ebbbf3b626bd649c5404583f83~zsavAmZHs3266032660eusmtrp1u;
+        Mon, 22 Jul 2019 09:47:26 +0000 (GMT)
+X-AuditID: cbfec7f4-113ff70000001119-f7-5d35862f9d1c
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id F1.2A.04140.D26853D5; Mon, 22
-        Jul 2019 10:47:25 +0100 (BST)
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 65.2A.04140.E26853D5; Mon, 22
+        Jul 2019 10:47:26 +0100 (BST)
 Received: from AMDC3778.DIGITAL.local (unknown [106.120.51.20]) by
         eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190722094724eusmtip2a5eef1354f5f1e50bb1451a3d2fa137f~zsatFmKOI1004610046eusmtip2U;
-        Mon, 22 Jul 2019 09:47:24 +0000 (GMT)
+        20190722094725eusmtip23ec009a66ffd71fbd99b2d96f78cc687~zsauCkttk1003910039eusmtip2S;
+        Mon, 22 Jul 2019 09:47:25 +0000 (GMT)
 From:   Lukasz Luba <l.luba@partner.samsung.com>
 To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
@@ -58,233 +58,350 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org,
         treding@nvidia.com, digetx@gmail.com, gregkh@linuxfoundation.org,
         willy.mh.wolff.ml@gmail.com,
         Lukasz Luba <l.luba@partner.samsung.com>
-Subject: [PATCH v12 2/9] dt-bindings: ddr: add LPDDR3 memories
-Date:   Mon, 22 Jul 2019 11:46:39 +0200
-Message-Id: <20190722094646.13342-3-l.luba@partner.samsung.com>
+Subject: [PATCH v12 3/9] drivers: memory: extend of_memory by LPDDR3 support
+Date:   Mon, 22 Jul 2019 11:46:40 +0200
+Message-Id: <20190722094646.13342-4-l.luba@partner.samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190722094646.13342-1-l.luba@partner.samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WSf0yMcRzHfe/5Wet4XNQnwlzYMVLJ9h1WDNszW83or9I4PCvTHe6pJDYX
-        q0inaOMmpbTUrkvKqTSKarIuXTeNdPIrltKPURpTpqcn/Pf6vj/v9/uzffZlCdUItYA9pI8X
-        DHptnJp2J6uf/HSs8U9bHx2Q0hGIK80VFH451kfhG83tFC772ovw2aIKGue05ilw2wUdzur9
-        QmCH4w6Dn50ZZHC30Rd/zXxD4ed112k8ampG2OyoV+Dy5h4GF790KrCzdTt2pZTSOPVhM4Ob
-        BtMp/PtFJYkbOndg16/ZePzpB7TZh7fmWxE//v0yyY90pTJ8rtFJ8vev9TB8leU8zTfkWRne
-        dHaY5h8PP1DwF20WxN+1n+RHqxbv9Ih033RQiDuUKBjWhuxzjzWZ7fTRyhVJkwMTjBG9XZyB
-        3FjggqGzrp+WWMWVInjV4ZeB3Kd4DEF7SgmSH6MIfrW7qL+Jbz+zFfKgBEH9j27yX+RRV+tU
-        hGVpzh9qLcekwDzOjCD3827JQ3DvCbhYfh1JA08uBMqemKd3k9xySH+Yzkis5ELBOnGJlLct
-        gbI7jwip043bDP0tOqkHuEIWPrmKKUkHbhtkN4bKdk8YaLExMvuCPSdzpkYEo6kQyXwKerPy
-        ZjwboanFOV1DcCuhom6tLG8Bl22clNtnQ9fQXEkmpvBy9VVClpVwLk0luzVgy+xQyOwFJdYr
-        M+U8PG/LoOXj5CBoKh+jstGSa/+XFSBkQd5CgqiLEcR1euG4v6jViQn6GP8DR3RVaOob2n+3
-        fK9F9RP7GxHHIrWHMqA6OFpFaRPFE7pGBCyhnqfUB6yPVikPak8kC4Yjew0JcYLYiBaypNpb
-        eXLWuygVF6ONFw4LwlHB8HeqYN0WGNEGTZtT3FOwetAa6905XJMdUBjZWxzuczt8u6Nrcnnp
-        R6+thkuaqiSN7675mtOeYetSJ7NC88PYhLIIYVFl7bZEi/CM8SmZsObes6b5Zby2B5lsDRWR
-        SR5FgX3LYuNrLN+KUFHPrX0paRFzkoGKGr06HEXMXarVjRRcCBq6qQxUk2KsNnAVYRC1fwBS
-        Wun+ggMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsVy+t/xe7q6baaxBrun6FtsnLGe1eL6l+es
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WSe0hTcRTH/e3eu3tdTW7T6miStCh6+oikH/TQqPASQtGDoJJadTHJLdtV
+        y5RYhZrmozYq0SztQb7Csim5zFJHE1ezZak9tGzQ+4lWSrLa7U7673O+53u+5/DjxxCqr1QQ
+        k6BL5vU6TaJariAb7o045odlRcaFV+ZG4OtFtRTuGXpL4fNWB4Wrv7sQPnqxVo5NHaUyfP+4
+        Fhe6PhK4s/MajR8c+UTjZ4Zg/D2vn8JdlrNyPJhvRbios1mGr1r7aHy5xynDzo5V+PnhCjnO
+        vG2lcdunbAq7u6+T+M7j1fj5bz/8s/01ig7kas7VIO7nDyPJfe3NpLkSg5PkGov7aK6uKkfO
+        3Smtobn8o1/kXMuXJhlXYK5C3A17OjdYN3Xt+M2KJbv4xIRUXh+2bLtid/9IA5V0KvbAqOmu
+        3IBKonKRLwPsQvhVaaFFVrEVCCpGOImHEBypD8tFCg8PIvjVMkyNDRibHJTUuILA/ecMIRWe
+        iaantz0Fw8jZULhZtU8cCGCLEJS8Wy96CHaAgIKrZ5HY8Gdj4Vuv499qkp0BrS97SJGVbBQM
+        vy2USdtCoPra3X+Zvmw0vLdpxRxgyxm4XPCDkDwrwWauJyX2hw82My1xMNhNeV5dAEN+OZI4
+        A1yFpV7PYmizOSkxn2BnQ60lTJKXg7viERJlYP2g9/MEUSY8aGw4Q0iyEo5lqST3LDDnPfQe
+        PAmu1Jz2hnNQ/+ap93VMCFyXhtEJFFL8f1kZQlVoMp8iaON5YYGO3x8qaLRCii4+dOdebR3y
+        fEO72zZ0E1lGd7QilkHq8crwhoVxKkqTKqRpWxEwhDpAqQuPjFMpd2nSDvL6vdv0KYm80Iqm
+        MKR6sjLd59UWFRuvSeb38HwSrx/ryhjfIAMaFzmQ0NidUGbJGFfus2FeO+MsBvsafdPcLks0
+        c35RQHhzXGC2zTfbVFk9rcC+dnhin3Hqhcb09imqF+bEYkVz4IqOQ5tmRgQ0f1xzy7Xi8Ea3
+        cTo+NS+nzOF3MvLgix7/jNq0h9nv1+Us3bM1aL/V1PJb9+xJfldMTH/J+uS2R5sy1aSwWxMx
+        h9ALmr9VdWqLggMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrCIsWRmVeSWpSXmKPExsVy+t/xe7p6baaxBuvXG1hsnLGe1eL6l+es
         FvOPnGO1WP3xMaNF8+L1bBaTT81lsjjTnWvR//g1s8X58xvYLc42vWG3uNUgY/Gx5x6rxeVd
         c9gsPvceYbSYcX4fk8XaI3fZLZZev8hkcfGUq8XtxhVsFq17j7BbHH7Tzmrx79pGFov9V7ws
         bv/ms/h24hGjg6THmnlrGD2+fZ3E4vH+Riu7x+yGiyweO2fdZffYtKqTzWP/3DXsHr3N79g8
         Dr7bw+TRt2UVo8fm09UenzfJBfBE6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZ
-        mSrp29mkpOZklqUW6dsl6GX0zjjNVrBRreLvqz/sDYz35boYOTkkBEwkPv2cwARiCwksZZS4
-        MC0SIi4mMWnfdnYIW1jiz7Uuti5GLqCaT4wSr460MHcxcnCwCehJ7FhVCBIXEZjDKPGzaxsj
-        iMMs8JtZ4uDdfrBuYQE7idXHZrCB2CwCqhLte9vB4rwC9hJr/kxkgdggL7F6wwGwoZwCDhIv
-        j+dCHGQvsf/FdsYJjHwLGBlWMYqklhbnpucWG+kVJ+YWl+al6yXn525iBEbotmM/t+xg7HoX
-        fIhRgINRiYf3xmaTWCHWxLLiytxDjBIczEoivHkGprFCvCmJlVWpRfnxRaU5qcWHGE2BbprI
-        LCWanA9MHnkl8YamhuYWlobmxubGZhZK4rwdAgdjhATSE0tSs1NTC1KLYPqYODilGhjDHLt1
-        1yzoZKnk/i2mw6/wYOGxcy9LFLlzlm7beEKrJCMyMHuBsttTn+onFy4c7NrcWr95y7mKdw0H
-        pt5+qpKsM3PJtfey9x9dlexW2vC/44ePZcHD9X2CzOfYFubx7ONgz10dI5Qp67x1YYzHvI0Z
-        Jmm79v58Kua/wPjXNH4tmweSRxZI7FJSYinOSDTUYi4qTgQA95o6vuYCAAA=
-X-CMS-MailID: 20190722094726eucas1p2471055ae10f65df44fa1e640491e528f
+        mSrp29mkpOZklqUW6dsl6GXc+7mNtWCqT8WfyQfYGhhn23cxcnJICJhITNpzjrWLkYtDSGAp
+        o8ThD1/YIBJiEpP2bWeHsIUl/lzrYoMo+sQo0XzpG2MXIwcHm4CexI5VhSBxEYE5jBI/u7Yx
+        gjjMAr+ZJQ7e7QfrFhbwkfhw4xyYzSKgKnHo/nUWEJtXwF7ix/N+JogN8hKrNxxgBhnKKeAg
+        8fJ4LkhYCKhk/4vtjBMY+RYwMqxiFEktLc5Nzy020itOzC0uzUvXS87P3cQIjNFtx35u2cHY
+        9S74EKMAB6MSD++NzSaxQqyJZcWVuYcYJTiYlUR48wxMY4V4UxIrq1KL8uOLSnNSiw8xmgLd
+        NJFZSjQ5H5g+8kriDU0NzS0sDc2NzY3NLJTEeTsEDsYICaQnlqRmp6YWpBbB9DFxcEo1MJ53
+        Ltt+aIUb94YnqtLhuzZ5u2kcNgnK461eJJv38J72VLad51T28iR2ql24IPvspKtA6wuZXWwH
+        c2QluFSELGaGF/5SqTOXed1ztu+0r7fJlQtLthi4qrrqnPURX6q0flpxhvi8FiUj8w3sV3+K
+        /9mTFdB/Pagm+Mjb6QVrjG5rvVvmwsNZr8RSnJFoqMVcVJwIAHUMAOrnAgAA
+X-CMS-MailID: 20190722094727eucas1p10041ba25819e6e62d639423a97435f2d
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190722094726eucas1p2471055ae10f65df44fa1e640491e528f
+X-RootMTR: 20190722094727eucas1p10041ba25819e6e62d639423a97435f2d
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20190722094726eucas1p2471055ae10f65df44fa1e640491e528f
+X-CMS-RootMailID: 20190722094727eucas1p10041ba25819e6e62d639423a97435f2d
 References: <20190722094646.13342-1-l.luba@partner.samsung.com>
-        <CGME20190722094726eucas1p2471055ae10f65df44fa1e640491e528f@eucas1p2.samsung.com>
+        <CGME20190722094727eucas1p10041ba25819e6e62d639423a97435f2d@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Specifies the AC timing parameters of the LPDDR3 memory device.
+The patch adds AC timings information needed to support LPDDR3 and memory
+controllers. The structure is used in of_memory and currently in Exynos
+5422 DMC. Add parsing data needed for LPDDR3 support.
+It is currently used in Exynos5422 Dynamic Memory Controller.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
 ---
- .../bindings/ddr/lpddr3-timings.txt           | 58 +++++++++++
- .../devicetree/bindings/ddr/lpddr3.txt        | 97 +++++++++++++++++++
- 2 files changed, 155 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/ddr/lpddr3-timings.txt
- create mode 100644 Documentation/devicetree/bindings/ddr/lpddr3.txt
+ drivers/memory/jedec_ddr.h |  61 +++++++++++++++
+ drivers/memory/of_memory.c | 154 +++++++++++++++++++++++++++++++++++++
+ drivers/memory/of_memory.h |  18 +++++
+ 3 files changed, 233 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/ddr/lpddr3-timings.txt b/Documentation/devicetree/bindings/ddr/lpddr3-timings.txt
-new file mode 100644
-index 000000000000..84705e50a3fd
---- /dev/null
-+++ b/Documentation/devicetree/bindings/ddr/lpddr3-timings.txt
-@@ -0,0 +1,58 @@
-+* AC timing parameters of LPDDR3 memories for a given speed-bin.
-+
-+The structures are based on LPDDR2 and extended where needed.
-+
-+Required properties:
-+- compatible : Should be "jedec,lpddr3-timings"
-+- min-freq : minimum DDR clock frequency for the speed-bin. Type is <u32>
-+- reg : maximum DDR clock frequency for the speed-bin. Type is <u32>
-+
-+Optional properties:
-+
-+The following properties represent AC timing parameters from the memory
-+data-sheet of the device for a given speed-bin. All these properties are
-+of type <u32> and the default unit is ps (pico seconds).
-+- tRFC
-+- tRRD
-+- tRPab
-+- tRPpb
-+- tRCD
-+- tRC
-+- tRAS
-+- tWTR
-+- tWR
-+- tRTP
-+- tW2W-C2C
-+- tR2R-C2C
-+- tFAW
-+- tXSR
-+- tXP
-+- tCKE
-+- tCKESR
-+- tMRD
-+
-+Example:
-+
-+timings_samsung_K3QF2F20DB_800mhz: lpddr3-timings@800000000 {
-+	compatible	= "jedec,lpddr3-timings";
-+	reg		= <800000000>; /* workaround: it shows max-freq */
-+	min-freq	= <100000000>;
-+	tRFC		= <65000>;
-+	tRRD		= <6000>;
-+	tRPab		= <12000>;
-+	tRPpb		= <12000>;
-+	tRCD		= <10000>;
-+	tRC		= <33750>;
-+	tRAS		= <23000>;
-+	tWTR		= <3750>;
-+	tWR		= <7500>;
-+	tRTP		= <3750>;
-+	tW2W-C2C	= <0>;
-+	tR2R-C2C	= <0>;
-+	tFAW		= <25000>;
-+	tXSR		= <70000>;
-+	tXP		= <3750>;
-+	tCKE		= <3750>;
-+	tCKESR		= <3750>;
-+	tMRD		= <7000>;
+diff --git a/drivers/memory/jedec_ddr.h b/drivers/memory/jedec_ddr.h
+index 4a21b5044ff8..38e26d461bdb 100644
+--- a/drivers/memory/jedec_ddr.h
++++ b/drivers/memory/jedec_ddr.h
+@@ -29,6 +29,7 @@
+ #define DDR_TYPE_LPDDR2_S4	3
+ #define DDR_TYPE_LPDDR2_S2	4
+ #define DDR_TYPE_LPDDR2_NVM	5
++#define DDR_TYPE_LPDDR3		6
+ 
+ /* DDR IO width */
+ #define DDR_IO_WIDTH_4		1
+@@ -169,4 +170,64 @@ extern const struct lpddr2_timings
+ 	lpddr2_jedec_timings[NUM_DDR_TIMING_TABLE_ENTRIES];
+ extern const struct lpddr2_min_tck lpddr2_jedec_min_tck;
+ 
++/*
++ * Structure for timings for LPDDR3 based on LPDDR2 plus additional fields.
++ * All parameters are in pico seconds(ps) unless explicitly indicated
++ * with a suffix like tRAS_max_ns below
++ */
++struct lpddr3_timings {
++	u32 max_freq;
++	u32 min_freq;
++	u32 tRFC;
++	u32 tRRD;
++	u32 tRPab;
++	u32 tRPpb;
++	u32 tRCD;
++	u32 tRC;
++	u32 tRAS;
++	u32 tWTR;
++	u32 tWR;
++	u32 tRTP;
++	u32 tW2W_C2C;
++	u32 tR2R_C2C;
++	u32 tWL;
++	u32 tDQSCK;
++	u32 tRL;
++	u32 tFAW;
++	u32 tXSR;
++	u32 tXP;
++	u32 tCKE;
++	u32 tCKESR;
++	u32 tMRD;
 +};
-diff --git a/Documentation/devicetree/bindings/ddr/lpddr3.txt b/Documentation/devicetree/bindings/ddr/lpddr3.txt
-new file mode 100644
-index 000000000000..3b2485b84b3f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/ddr/lpddr3.txt
-@@ -0,0 +1,97 @@
-+* LPDDR3 SDRAM memories compliant to JEDEC JESD209-3C
 +
-+Required properties:
-+- compatible : Should be  - "jedec,lpddr3"
-+- density  : <u32> representing density in Mb (Mega bits)
-+- io-width : <u32> representing bus width. Possible values are 8, 16, 32, 64
-+- #address-cells: Must be set to 1
-+- #size-cells: Must be set to 0
++/*
++ * Min value for some parameters in terms of number of tCK cycles(nCK)
++ * Please set to zero parameters that are not valid for a given memory
++ * type
++ */
++struct lpddr3_min_tck {
++	u32 tRFC;
++	u32 tRRD;
++	u32 tRPab;
++	u32 tRPpb;
++	u32 tRCD;
++	u32 tRC;
++	u32 tRAS;
++	u32 tWTR;
++	u32 tWR;
++	u32 tRTP;
++	u32 tW2W_C2C;
++	u32 tR2R_C2C;
++	u32 tWL;
++	u32 tDQSCK;
++	u32 tRL;
++	u32 tFAW;
++	u32 tXSR;
++	u32 tXP;
++	u32 tCKE;
++	u32 tCKESR;
++	u32 tMRD;
++};
 +
-+Optional properties:
+ #endif /* __JEDEC_DDR_H */
+diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
+index 46539b27a3fb..4f5b8c81669f 100644
+--- a/drivers/memory/of_memory.c
++++ b/drivers/memory/of_memory.c
+@@ -3,6 +3,12 @@
+  * OpenFirmware helpers for memory drivers
+  *
+  * Copyright (C) 2012 Texas Instruments, Inc.
++ * Copyright (C) 2019 Samsung Electronics Co., Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
+  */
+ 
+ #include <linux/device.h>
+@@ -149,3 +155,151 @@ const struct lpddr2_timings *of_get_ddr_timings(struct device_node *np_ddr,
+ 	return lpddr2_jedec_timings;
+ }
+ EXPORT_SYMBOL(of_get_ddr_timings);
 +
-+The following optional properties represent the minimum value of some AC
-+timing parameters of the DDR device in terms of number of clock cycles.
-+These values shall be obtained from the device data-sheet.
-+- tRFC-min-tck
-+- tRRD-min-tck
-+- tRPab-min-tck
-+- tRPpb-min-tck
-+- tRCD-min-tck
-+- tRC-min-tck
-+- tRAS-min-tck
-+- tWTR-min-tck
-+- tWR-min-tck
-+- tRTP-min-tck
-+- tW2W-C2C-min-tck
-+- tR2R-C2C-min-tck
-+- tWL-min-tck
-+- tDQSCK-min-tck
-+- tRL-min-tck
-+- tFAW-min-tck
-+- tXSR-min-tck
-+- tXP-min-tck
-+- tCKE-min-tck
-+- tCKESR-min-tck
-+- tMRD-min-tck
++/**
++ * of_lpddr3_get_min_tck() - extract min timing values for lpddr3
++ * @np: pointer to ddr device tree node
++ * @device: device requesting for min timing values
++ *
++ * Populates the lpddr3_min_tck structure by extracting data
++ * from device tree node. Returns a pointer to the populated
++ * structure. If any error in populating the structure, returns NULL.
++ */
++const struct lpddr3_min_tck *of_lpddr3_get_min_tck(struct device_node *np,
++						   struct device *dev)
++{
++	int			ret = 0;
++	struct lpddr3_min_tck	*min;
 +
-+Child nodes:
-+- The lpddr3 node may have one or more child nodes of type "lpddr3-timings".
-+  "lpddr3-timings" provides AC timing parameters of the device for
-+  a given speed-bin. Please see Documentation/devicetree/
-+  bindings/ddr/lpddr3-timings.txt for more information on "lpddr3-timings"
++	min = devm_kzalloc(dev, sizeof(*min), GFP_KERNEL);
++	if (!min)
++		goto default_min_tck;
 +
-+Example:
++	ret |= of_property_read_u32(np, "tRFC-min-tck", &min->tRFC);
++	ret |= of_property_read_u32(np, "tRRD-min-tck", &min->tRRD);
++	ret |= of_property_read_u32(np, "tRPab-min-tck", &min->tRPab);
++	ret |= of_property_read_u32(np, "tRPpb-min-tck", &min->tRPpb);
++	ret |= of_property_read_u32(np, "tRCD-min-tck", &min->tRCD);
++	ret |= of_property_read_u32(np, "tRC-min-tck", &min->tRC);
++	ret |= of_property_read_u32(np, "tRAS-min-tck", &min->tRAS);
++	ret |= of_property_read_u32(np, "tWTR-min-tck", &min->tWTR);
++	ret |= of_property_read_u32(np, "tWR-min-tck", &min->tWR);
++	ret |= of_property_read_u32(np, "tRTP-min-tck", &min->tRTP);
++	ret |= of_property_read_u32(np, "tW2W-C2C-min-tck", &min->tW2W_C2C);
++	ret |= of_property_read_u32(np, "tR2R-C2C-min-tck", &min->tR2R_C2C);
++	ret |= of_property_read_u32(np, "tWL-min-tck", &min->tWL);
++	ret |= of_property_read_u32(np, "tDQSCK-min-tck", &min->tDQSCK);
++	ret |= of_property_read_u32(np, "tRL-min-tck", &min->tRL);
++	ret |= of_property_read_u32(np, "tFAW-min-tck", &min->tFAW);
++	ret |= of_property_read_u32(np, "tXSR-min-tck", &min->tXSR);
++	ret |= of_property_read_u32(np, "tXP-min-tck", &min->tXP);
++	ret |= of_property_read_u32(np, "tCKE-min-tck", &min->tCKE);
++	ret |= of_property_read_u32(np, "tCKESR-min-tck", &min->tCKESR);
++	ret |= of_property_read_u32(np, "tMRD-min-tck", &min->tMRD);
 +
-+samsung_K3QF2F20DB: lpddr3 {
-+	compatible	= "Samsung,K3QF2F20DB", "jedec,lpddr3";
-+	density		= <16384>;
-+	io-width	= <32>;
-+	#address-cells	= <1>;
-+	#size-cells	= <0>;
++	if (ret) {
++		dev_warn(dev, "%s: errors while parsing min-tck values\n",
++			 __func__);
++		devm_kfree(dev, min);
++		goto default_min_tck;
++	}
 +
-+	tRFC-min-tck		= <17>;
-+	tRRD-min-tck		= <2>;
-+	tRPab-min-tck		= <2>;
-+	tRPpb-min-tck		= <2>;
-+	tRCD-min-tck		= <3>;
-+	tRC-min-tck		= <6>;
-+	tRAS-min-tck		= <5>;
-+	tWTR-min-tck		= <2>;
-+	tWR-min-tck		= <7>;
-+	tRTP-min-tck		= <2>;
-+	tW2W-C2C-min-tck	= <0>;
-+	tR2R-C2C-min-tck	= <0>;
-+	tWL-min-tck		= <8>;
-+	tDQSCK-min-tck		= <5>;
-+	tRL-min-tck		= <14>;
-+	tFAW-min-tck		= <5>;
-+	tXSR-min-tck		= <12>;
-+	tXP-min-tck		= <2>;
-+	tCKE-min-tck		= <2>;
-+	tCKESR-min-tck		= <2>;
-+	tMRD-min-tck		= <5>;
++	return min;
 +
-+	timings_samsung_K3QF2F20DB_800mhz: lpddr3-timings@800000000 {
-+		compatible	= "jedec,lpddr3-timings";
-+		reg		= <800000000>; /* workaround: it shows max-freq */
-+		min-freq	= <100000000>;
-+		tRFC		= <65000>;
-+		tRRD		= <6000>;
-+		tRPab		= <12000>;
-+		tRPpb		= <12000>;
-+		tRCD		= <10000>;
-+		tRC		= <33750>;
-+		tRAS		= <23000>;
-+		tWTR		= <3750>;
-+		tWR		= <7500>;
-+		tRTP		= <3750>;
-+		tW2W-C2C	= <0>;
-+		tR2R-C2C	= <0>;
-+		tFAW		= <25000>;
-+		tXSR		= <70000>;
-+		tXP		= <3750>;
-+		tCKE		= <3750>;
-+		tCKESR		= <3750>;
-+		tMRD		= <7000>;
-+	};
++default_min_tck:
++	dev_warn(dev, "%s: using default min-tck values\n", __func__);
++	return NULL;
 +}
++EXPORT_SYMBOL(of_lpddr3_get_min_tck);
++
++static int of_lpddr3_do_get_timings(struct device_node *np,
++				    struct lpddr3_timings *tim)
++{
++	int ret;
++
++	/* The 'reg' param required since DT has changed, used as 'max-freq' */
++	ret = of_property_read_u32(np, "reg", &tim->max_freq);
++	ret |= of_property_read_u32(np, "min-freq", &tim->min_freq);
++	ret |= of_property_read_u32(np, "tRFC", &tim->tRFC);
++	ret |= of_property_read_u32(np, "tRRD", &tim->tRRD);
++	ret |= of_property_read_u32(np, "tRPab", &tim->tRPab);
++	ret |= of_property_read_u32(np, "tRPpb", &tim->tRPpb);
++	ret |= of_property_read_u32(np, "tRCD", &tim->tRCD);
++	ret |= of_property_read_u32(np, "tRC", &tim->tRC);
++	ret |= of_property_read_u32(np, "tRAS", &tim->tRAS);
++	ret |= of_property_read_u32(np, "tWTR", &tim->tWTR);
++	ret |= of_property_read_u32(np, "tWR", &tim->tWR);
++	ret |= of_property_read_u32(np, "tRTP", &tim->tRTP);
++	ret |= of_property_read_u32(np, "tW2W-C2C", &tim->tW2W_C2C);
++	ret |= of_property_read_u32(np, "tR2R-C2C", &tim->tR2R_C2C);
++	ret |= of_property_read_u32(np, "tFAW", &tim->tFAW);
++	ret |= of_property_read_u32(np, "tXSR", &tim->tXSR);
++	ret |= of_property_read_u32(np, "tXP", &tim->tXP);
++	ret |= of_property_read_u32(np, "tCKE", &tim->tCKE);
++	ret |= of_property_read_u32(np, "tCKESR", &tim->tCKESR);
++	ret |= of_property_read_u32(np, "tMRD", &tim->tMRD);
++
++	return ret;
++}
++
++/**
++ * of_lpddr3_get_ddr_timings() - extracts the lpddr3 timings and updates no of
++ * frequencies available.
++ * @np_ddr: Pointer to ddr device tree node
++ * @dev: Device requesting for ddr timings
++ * @device_type: Type of ddr
++ * @nr_frequencies: No of frequencies available for ddr
++ * (updated by this function)
++ *
++ * Populates lpddr3_timings structure by extracting data from device
++ * tree node. Returns pointer to populated structure. If any error
++ * while populating, returns NULL.
++ */
++const struct lpddr3_timings
++*of_lpddr3_get_ddr_timings(struct device_node *np_ddr, struct device *dev,
++			   u32 device_type, u32 *nr_frequencies)
++{
++	struct lpddr3_timings	*timings = NULL;
++	u32			arr_sz = 0, i = 0;
++	struct device_node	*np_tim;
++	char			*tim_compat = NULL;
++
++	switch (device_type) {
++	case DDR_TYPE_LPDDR3:
++		tim_compat = "jedec,lpddr3-timings";
++		break;
++	default:
++		dev_warn(dev, "%s: un-supported memory type\n", __func__);
++	}
++
++	for_each_child_of_node(np_ddr, np_tim)
++		if (of_device_is_compatible(np_tim, tim_compat))
++			arr_sz++;
++
++	if (arr_sz)
++		timings = devm_kcalloc(dev, arr_sz, sizeof(*timings),
++				       GFP_KERNEL);
++
++	if (!timings)
++		goto default_timings;
++
++	for_each_child_of_node(np_ddr, np_tim) {
++		if (of_device_is_compatible(np_tim, tim_compat)) {
++			if (of_lpddr3_do_get_timings(np_tim, &timings[i])) {
++				devm_kfree(dev, timings);
++				goto default_timings;
++			}
++			i++;
++		}
++	}
++
++	*nr_frequencies = arr_sz;
++
++	return timings;
++
++default_timings:
++	dev_warn(dev, "%s: using default timings\n", __func__);
++	*nr_frequencies = 0;
++	return NULL;
++}
++EXPORT_SYMBOL(of_lpddr3_get_ddr_timings);
+diff --git a/drivers/memory/of_memory.h b/drivers/memory/of_memory.h
+index b077cc836b0b..e39ecc4c733d 100644
+--- a/drivers/memory/of_memory.h
++++ b/drivers/memory/of_memory.h
+@@ -14,6 +14,11 @@ extern const struct lpddr2_min_tck *of_get_min_tck(struct device_node *np,
+ extern const struct lpddr2_timings
+ 	*of_get_ddr_timings(struct device_node *np_ddr, struct device *dev,
+ 	u32 device_type, u32 *nr_frequencies);
++extern const struct lpddr3_min_tck
++	*of_lpddr3_get_min_tck(struct device_node *np, struct device *dev);
++extern const struct lpddr3_timings
++	*of_lpddr3_get_ddr_timings(struct device_node *np_ddr,
++	struct device *dev, u32 device_type, u32 *nr_frequencies);
+ #else
+ static inline const struct lpddr2_min_tck
+ 	*of_get_min_tck(struct device_node *np, struct device *dev)
+@@ -27,6 +32,19 @@ static inline const struct lpddr2_timings
+ {
+ 	return NULL;
+ }
++
++static inline const struct lpddr3_min_tck
++	*of_lpddr3_get_min_tck(struct device_node *np, struct device *dev)
++{
++	return NULL;
++}
++
++static inline const struct lpddr3_timings
++	*of_lpddr3_get_ddr_timings(struct device_node *np_ddr,
++	struct device *dev, u32 device_type, u32 *nr_frequencies)
++{
++	return NULL;
++}
+ #endif /* CONFIG_OF && CONFIG_DDR */
+ 
+ #endif /* __LINUX_MEMORY_OF_REG_ */
 -- 
 2.17.1
 
