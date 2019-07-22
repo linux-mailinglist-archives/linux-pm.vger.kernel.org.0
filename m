@@ -2,93 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 360EF70A05
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 21:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE13070A27
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 21:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729961AbfGVTq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jul 2019 15:46:27 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:39782 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728728AbfGVTq1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 15:46:27 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id F15B960F3E; Mon, 22 Jul 2019 19:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563824786;
-        bh=7eD+eVqFrtz3xwFVMMyatV/ixJ3r8Kbtxeq9wzu5IKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GOl+n50oNJeKGpt1Z0Psg6IsQpupO2+uH9JxXDplcwwpU+dSKAJAmcg+8J3jGxpq5
-         qf1rHJQ3vBKSAIu45h5jk6LpUa070gZ6UF7xRH/U5v8uOjyfiZztRuGZmf5BH5NS3Z
-         DhVuipozaH1XgVVBX02F7knbBYhbfRQuML0OyNOs=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1808460E72;
-        Mon, 22 Jul 2019 19:46:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563824785;
-        bh=7eD+eVqFrtz3xwFVMMyatV/ixJ3r8Kbtxeq9wzu5IKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ERr2t9TzgA7dmFYQp6vEONA9i9/l5p8TslDfJQXB+JVAmLHefAc6cSxX7TYP2fcJD
-         +URQ4J+SrDUSabnJqEPXVI0x90iUETo84prVGXQIJYcVbXNO/6qe1IUaxJGpEMYxV8
-         uxKnXuhGMVwRqMziIXCugnf7xhWEK0byf4+wjnTs=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1808460E72
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Mon, 22 Jul 2019 13:46:24 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     andy.gross@linaro.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        mkshah@codeaurora.org, "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
-Subject: Re: [PATCH 1/2] drivers: qcom: rpmh-rsc: simplify TCS locking
-Message-ID: <20190722194624.GA11589@codeaurora.org>
-References: <20190701152907.16407-1-ilina@codeaurora.org>
- <5d3209e7.1c69fb81.5ef1.5195@mx.google.com>
- <20190722162003.GG25567@codeaurora.org>
- <5d35fdfb.1c69fb81.5fafa.aaa9@mx.google.com>
+        id S1728845AbfGVTxT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jul 2019 15:53:19 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55742 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728505AbfGVTxT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 15:53:19 -0400
+Received: by mail-wm1-f68.google.com with SMTP id a15so36329795wmj.5;
+        Mon, 22 Jul 2019 12:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8cpB3PKFs/+RNz6CzNu73YznyTKNKRjiULkUbbvNL4A=;
+        b=FMeIQosVJpsSyQizbAdM5w5gCoNZ9YjgkrhzQyFpPEZ6yGbnaVaGTKix5MpzA1+nFw
+         TPLF9F94ldsU+stwhCSShs0/EKCsuqeMcgvWDXIaN4um2tcwd3hEoAogW6Dh/fMr0uz0
+         ErIl9pc9vwThWFvq9+PsG0EKASzESlzNUxGe0SfrGPvnu0Wh2Zh5GbTwhFQglLasZUx0
+         IRSHPoybDQe40mn5Z/vt46KEz4GkAwZ+pFjFqXfTlgBgKmYxxXoLxET4ecnTGPQ9+lTp
+         QREBlHnF0q4kGWdHeKPc+oRLOwyy6RVY1+JMKxymOdPhsaWD5UjvVNTi3tmUXfgjwH50
+         yp4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8cpB3PKFs/+RNz6CzNu73YznyTKNKRjiULkUbbvNL4A=;
+        b=QGtRUwHemj6RxDXSybitXIFeXKZTfF+sVMNuxZ+Wmo2TrW7o+7MVqDDMlnAgB74Wvk
+         qMnAH+Js9ZVdJeHqbFSqsWAi4fH/KXBa1ypvC5Bbnm7GHT0wlAaOCfA4wlGDqNbwx561
+         5/zZS+fFtOojdfk5Rs24z4QvjP1iyMfOfQbLQCrlTp7WMLvCE9t3GYP2jZXhJaObD9tD
+         NL977gow/ji3YaFJgayKRi1CzD4FqIcyzrGhnctAUnNUbEuM5B2JvmKCodXS/pm/13Ek
+         /kL/TXQcQcHdlvHwiKhG/n21FsVHnBQ574Rohr82GRba1srOQdZu0LIaB8t7tT0XkxEn
+         9a9w==
+X-Gm-Message-State: APjAAAUS5X/VnmWDT5IF//OnJd2hJP9QsqQzK2uPBiR0fZbcvTqRZI99
+        5yTLBKoJ6Ne10AKpnq7yrNw=
+X-Google-Smtp-Source: APXvYqwLmtg3xVtKc23mGLVZUIKYCwmvX8GSvq1g5RqXzcH4QIoCHY9XDNowPeTdHmt+tEdUgSidRw==
+X-Received: by 2002:a05:600c:22ce:: with SMTP id 14mr66479064wmg.27.1563825196792;
+        Mon, 22 Jul 2019 12:53:16 -0700 (PDT)
+Received: from localhost.localdomain (nat-113.starnet.cz. [178.255.168.113])
+        by smtp.googlemail.com with ESMTPSA id c65sm37382975wma.44.2019.07.22.12.53.15
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 22 Jul 2019 12:53:16 -0700 (PDT)
+From:   Evgeny Kolesnikov <evgenyz@gmail.com>
+Cc:     Evgeny Kolesnikov <evgenyz@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/5] Add support for WD MyCloud EX2 Ultra (+ versatile UART-based restart/poweroff drivers)
+Date:   Mon, 22 Jul 2019 21:53:00 +0200
+Message-Id: <cover.1563822216.git.evgenyz@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <5d35fdfb.1c69fb81.5fafa.aaa9@mx.google.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 22 2019 at 12:18 -0600, Stephen Boyd wrote:
->Quoting Lina Iyer (2019-07-22 09:20:03)
->> On Fri, Jul 19 2019 at 12:20 -0600, Stephen Boyd wrote:
->> >Quoting Lina Iyer (2019-07-01 08:29:06)
->> >> From: "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
->> >>
->> >> tcs->lock was introduced to serialize access with in TCS group. But
->> >> even without tcs->lock, drv->lock is serving the same purpose. So
->> >> use a single drv->lock.
->> >
->> >Isn't the downside now that we're going to be serializing access to the
->> >different TCSes when two are being written in parallel or waited on? I
->> >thought that was the whole point of splitting the lock into a TCS lock
->> >and a general "driver" lock that protects the global driver state vs.
->> >the specific TCS state.
->> >
->> Yes but we were holding the drv->lock as well as tcs->lock for the most
->> critical of the path anyways (writing to TCS). The added complexity
->> doesn't seem to help reduce the latency that it expected to reduce.
->
->Ok. That sort of information should be in the commit text to explain why
->it's not helping with reducing the latency or throughput of the API.
->
-Will add.
+This patchset consists of the DTS, which describes the WD MyCloud EX2 Ultra device,
+'poweroff' and 'resert' drivers for power-managing MCUs connected to a board via UART
+(these drivers are more versatile than qnap-poweroff and could be used as a substitude),
+and DT bindings for these drivers.
 
---Lina
+The difference between uart-poweroff and qnap-poweroff is small, but important:
+uart-poweroff is able to send to an MCU a command of arbitrary length, and the command
+itself is defined in a DTS file for a specific device/board, thus making this driver
+applicable to wider range of devices.
+
+Evgeny Kolesnikov (5):
+  power: reset: Add UART-based MCU poweroff DT bindings
+  power: reset: Add UART-based MCU restart DT bindings
+  power/reset: Add a power off driver for UART-based PM MCUs
+  power/reset: Add a restart driver for UART-based PM MCUs
+  ARM: dts: armada385-wd-mcex2u: Add DTS file for WD My Cloud EX2 Ultra
+
+ .../bindings/power/reset/uart-poweroff.txt    |  38 +++
+ .../bindings/power/reset/uart-restart.txt     |  39 +++
+ arch/arm/boot/dts/armada-385-wd-mcex2u.dts    | 313 ++++++++++++++++++
+ drivers/power/reset/Kconfig                   |  14 +
+ drivers/power/reset/Makefile                  |   2 +
+ drivers/power/reset/uart-poweroff.c           | 155 +++++++++
+ drivers/power/reset/uart-restart.c            | 204 ++++++++++++
+ 7 files changed, 765 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/uart-poweroff.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/uart-restart.txt
+ create mode 100644 arch/arm/boot/dts/armada-385-wd-mcex2u.dts
+ create mode 100644 drivers/power/reset/uart-poweroff.c
+ create mode 100644 drivers/power/reset/uart-restart.c
+
+-- 
+2.21.0
+
