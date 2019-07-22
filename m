@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 279BF70A19
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 21:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6583570A26
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 21:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728505AbfGVTxZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jul 2019 15:53:25 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37679 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732331AbfGVTxY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 15:53:24 -0400
-Received: by mail-wm1-f66.google.com with SMTP id f17so36443931wme.2;
-        Mon, 22 Jul 2019 12:53:23 -0700 (PDT)
+        id S1732368AbfGVTx2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jul 2019 15:53:28 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36402 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732359AbfGVTx2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 15:53:28 -0400
+Received: by mail-wr1-f68.google.com with SMTP id n4so40734530wrs.3;
+        Mon, 22 Jul 2019 12:53:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LSlpALgO5S3R0TyDNNvgRiZnKC8+OxLqhsNNnaICjPw=;
-        b=cFBQsyJHHatx3JSkJdhvrebXeVJ31a0VKFML6K3ScUwBUFuvBQ6L6CZbdJ2/GdtU2N
-         vk4kUD4CMe45B+UAU5a7Gap5p2YnMl5BbFPB12440cHBuThu0mPoBlwJ2/ja+rayW6A5
-         Z6jrzHt29FOd/FTRMTJuRYUn/GJMl6wf3Vl4TCGeoVStK8Tx9pthnP3b+9bAF5lAKWrg
-         NvBzRlqP6pg/z2eZiPaQ3a9mby89HjX/sqnaedi5+odKcKymV4JWEJ7qbpRK9Cb4+0sV
-         yJwcZzj3F807D9V9DkKi4/MLXbUWXm/mWvk87Pg+L6ue0SPJC0XB97/xXdX5uOhwyAHM
-         ShSw==
+        bh=25JsdnSfB14vc5phGQW2itYhu2RCyyauOMt8JESw1E4=;
+        b=pEymxfnahPYLHS1/AKiddeowpUV334fnOAVXyU6ROvk+Qxdpz/baBbKojYA7aPCose
+         UJhz20w1Q5bEPdUkNJsFGBwBT32IpGTUUKY8xXvE23L1Fje7+fURJwEYu9XXbq7ZerYX
+         u6lBFZh/Yd5Vp9/VI+cqBytm6lItXbYOc7g6zwboXg7hKOnAahlZ9ey5hkZRnjrFYt/u
+         fMmfBgYI9C27p1NV3AZ/UZFT6CScct35LaYAGNoLicbRtGo8dRhUVAGC5qEC9RJMd1uE
+         YWwm7JLuyfDF6g2JVmveUW44fzgcVeLpYfDyjx3xTmpqHplc7mEpBnicFy7EIa9b1jyF
+         lz8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LSlpALgO5S3R0TyDNNvgRiZnKC8+OxLqhsNNnaICjPw=;
-        b=l7F6IwWwIkEnZ9u5R4mN3oh5tUlE2GvXx/kel1HUbzID0P5n/s/Gq77MDenGPtHUlm
-         9tzIsX5edoc9yu5dofh/uWUP0Qb+oLzos8btHIJyTknBCu3n5v915qZzbWuCwO/LZ4CT
-         0rXFz1RFx1BFNV23rUUb3RHl1zqDB6I9/DckhEZYB1t3+ha2lJxrb8zrfntXuddYMW7N
-         KrsDudkvV3CvS6XyGAMM9D1kClAB5PG+HWyvAUTZuZfK/0GpUzpXqeb639NJmb5o8egA
-         HuMQNXVkpRAPTtRzBErw8p/nlfX3kPxvVaHGAQoTMvp4rZPyVqOG7YSajowCy4j0ujiF
-         +BDw==
-X-Gm-Message-State: APjAAAXhpBOMxbFcQ7TaCUCczfs9R2ct1QdQadDJrNO/nYY72Bn25rHX
-        akfHvwNvqLmczpyKilgnQXU=
-X-Google-Smtp-Source: APXvYqz85kfxUOA8R7vP4BPYFKPdWETr5bWy98ysJmybNus/vONpVvl7FJFmHS4slzONzL2fYE0sUg==
-X-Received: by 2002:a7b:c947:: with SMTP id i7mr67082094wml.77.1563825202676;
-        Mon, 22 Jul 2019 12:53:22 -0700 (PDT)
+        bh=25JsdnSfB14vc5phGQW2itYhu2RCyyauOMt8JESw1E4=;
+        b=ZeSSq7NOcpFBt6vqv5E3E+5oUYCag3ek4NhZeuJws1iAkQ19ZZW2Ts257yyylv5DGq
+         MebyL3EvL7PkUZ2l62XpWVI0h+yIZBQtl+7bzYohh9SarBvKKbuWnT6BWO/Tn8mz9f+S
+         J4BNzcN6KNqBzDbvD8W2VT42PmVjeA0Tft3k4W82WGdq1otGgMY5/HJcEGpAPFkVHFc6
+         WN3kaD3AZ/sejU8lc+TUnlc0b06T9oW+Y/V/hwqsKr8RVf4LT/zMCh2Z26Wf+O+cz3T2
+         05CHvwmhxboa9MOcZmToXkH/0+fpGhqzVerWHXj+RLUdWV6V+FByHezp/WJSySPU8k+b
+         ZrSg==
+X-Gm-Message-State: APjAAAVe9dlDP8kXfyi24Vl8hz4xnU7z1uMbFGwuvRVVffN0pLypNnFG
+        1sq7aQUKCxkFOol/594AFVA=
+X-Google-Smtp-Source: APXvYqyMhnYuCxR8Gz/N1m1T8Gx6jR9hqzRM9RMGKJSFEIzK+Ya060wZeQ/LR5EOT7AYdX4SFWXU9w==
+X-Received: by 2002:adf:e552:: with SMTP id z18mr78243165wrm.45.1563825205777;
+        Mon, 22 Jul 2019 12:53:25 -0700 (PDT)
 Received: from localhost.localdomain (nat-113.starnet.cz. [178.255.168.113])
-        by smtp.googlemail.com with ESMTPSA id c65sm37382975wma.44.2019.07.22.12.53.21
+        by smtp.googlemail.com with ESMTPSA id c65sm37382975wma.44.2019.07.22.12.53.24
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 22 Jul 2019 12:53:22 -0700 (PDT)
+        Mon, 22 Jul 2019 12:53:25 -0700 (PDT)
 From:   Evgeny Kolesnikov <evgenyz@gmail.com>
 Cc:     Evgeny Kolesnikov <evgenyz@gmail.com>,
         Sebastian Reichel <sre@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Evgeny Kolesnikov <evgenyz@gmail.com>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/5] power: reset: Add UART-based MCU restart DT bindings
-Date:   Mon, 22 Jul 2019 21:53:02 +0200
-Message-Id: <98b32aebe39a7b6b3ace1c2ef6f51428e8284946.1563822216.git.evgenyz@gmail.com>
+Subject: [PATCH 3/5] power/reset: Add a power off driver for UART-based PM MCUs
+Date:   Mon, 22 Jul 2019 21:53:03 +0200
+Message-Id: <efdea0d2c7c5ed65e79fb3604130a4488ec8057c.1563822216.git.evgenyz@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1563822216.git.evgenyz@gmail.com>
 References: <cover.1563822216.git.evgenyz@gmail.com>
@@ -69,61 +69,209 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds device tree bindings of the restart driver
-for power managing micro controller units that are connected
-to a board via the UART interface.
+This adds the poweroff driver for power managing
+micro controller units that are connected to a board
+via the UART interface.
 
 Signed-off-by: Evgeny Kolesnikov <evgenyz@gmail.com>
 ---
- .../bindings/power/reset/uart-restart.txt     | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/reset/uart-restart.txt
+ drivers/power/reset/Kconfig         |   7 ++
+ drivers/power/reset/Makefile        |   1 +
+ drivers/power/reset/uart-poweroff.c | 155 ++++++++++++++++++++++++++++
+ 3 files changed, 163 insertions(+)
+ create mode 100644 drivers/power/reset/uart-poweroff.c
 
-diff --git a/Documentation/devicetree/bindings/power/reset/uart-restart.txt b/Documentation/devicetree/bindings/power/reset/uart-restart.txt
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index a564237278ff..02fdf45e3988 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -216,6 +216,13 @@ config POWER_RESET_RMOBILE
+ 	help
+ 	  Reboot support for Renesas R-Mobile and SH-Mobile SoCs.
+ 
++config POWER_RESET_UART_POWEROFF
++	tristate "UART-based PM MCU power off driver"
++	depends on OF_GPIO
++	help
++	  Power off support for boards with UART-based PM MCU
++	  such as WD My Cloud NAS, QNAP Turbo NAS, Synology devices.
++
+ config POWER_RESET_ZX
+ 	tristate "ZTE SoCs reset driver"
+ 	depends on ARCH_ZX || COMPILE_TEST
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 85da3198e4e0..efe8f25f463d 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -25,6 +25,7 @@ obj-$(CONFIG_POWER_RESET_KEYSTONE) += keystone-reset.o
+ obj-$(CONFIG_POWER_RESET_SYSCON) += syscon-reboot.o
+ obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) += syscon-poweroff.o
+ obj-$(CONFIG_POWER_RESET_RMOBILE) += rmobile-reset.o
++obj-$(CONFIG_POWER_RESET_UART_POWEROFF) += uart-poweroff.o
+ obj-$(CONFIG_POWER_RESET_ZX) += zx-reboot.o
+ obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
+ obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
+diff --git a/drivers/power/reset/uart-poweroff.c b/drivers/power/reset/uart-poweroff.c
 new file mode 100644
-index 000000000000..bf831d9bdff8
+index 000000000000..8122a6b306d7
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/uart-restart.txt
-@@ -0,0 +1,39 @@
-+* UART-based PM MCU restart driver
++++ b/drivers/power/reset/uart-poweroff.c
+@@ -0,0 +1,155 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Power off for boards with UART-based PM MCUs
++ * such as WD My Cloud NAS, QNAP Turbo NAS, Synology devices.
++ *
++ * Copyright (C) 2019 Evgeny Kolesnikov <evgenyz@gmail.com>
++ *
++ * Based on the code from:
++ *
++ * Copyright (C) 2016 Martin Mueller <mm@sig21.net>
++ * Copyright (C) 2012 Andrew Lunn <andrew@lunn.ch>
++ * Copyright (C) 2009 Martin Michlmayr <tbm@cyrius.com>
++ * Copyright (C) 2008 Byron Bradley <byron.bbradley@gmail.com>
++ *
++ */
 +
-+Some devices have a microcontroller controlling the main power
-+supply. This microcontroller is connected to UART of the SoC.
-+Sending a sequence of characters tells the MCU to reset the SoC
-+and/or MCU itself.
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/serial_reg.h>
++#include <linux/kallsyms.h>
++#include <linux/of.h>
++#include <linux/io.h>
++#include <linux/clk.h>
++#include <linux/delay.h>
 +
-+The length of the sequence, baud rate and the timeout to process
-+the command may vary from device to device.
++#define UART_REG(b, x)	(b + ((UART_##x) << 2))
 +
-+This driver could be used for WD My Cloud (Marvell SoCs), QNAP
-+(Kirkwood and Orion5x SoCs) and Synology NAS devices.
++struct uart_poweroff {
++	const u8 *cmd;
++	int cmd_len;
++	void __iomem *base;
++	unsigned int divisor;
++	u32 byte_delay_ms;
++	u32 timeout_ms;
++};
 +
-+Required properties:
-+- compatible: Should be "uart-restart"
-+- reg: Address and length of the register set for UART
-+- clocks: The tclk clock
-+- cmd: Array of bytes, the command to send to the MCU
-+- baud: Baud rate [75..460800]
++static void *pm_power_off_org;
++static struct uart_poweroff uart_poweroff;
 +
-+Optional properties:
-+- byte-delay: A delay after each byte of a command, could be useful
-+              for sloppy MCUs [ms], default value is 5
-+- timeout: A timeout to wait for the MCU to process the command [ms],
-+           default value is 1000
-+- override: Boolean flag that indicates if the driver should
-+            prioritize itself over any existing restart driver,
-+            default behaviour is not to interfere
++static void uart_power_off(void)
++{
++	int i;
 +
-+Example:
-+	restart@12100 {
-+		compatible = "uart-restart";
-+		reg = <0x12100 0x100>;
-+		clocks = <&coreclk 0>;
-+		baud = <19200>;
-+		cmd = [fa 03 03 02 00 00 fb];
-+		override;
-+		status = "okay";
-+	};
++	/* Hijack UART and reset into sane state */
++	writel(0x83, UART_REG(uart_poweroff.base, LCR));
++	writel(uart_poweroff.divisor & 0xFF, UART_REG(uart_poweroff.base, DLL));
++	writel((uart_poweroff.divisor >> 8) & 0xFF, UART_REG(uart_poweroff.base, DLM));
++	writel(0x03, UART_REG(uart_poweroff.base, LCR));
++	writel(0x00, UART_REG(uart_poweroff.base, IER));
++	writel(0x00, UART_REG(uart_poweroff.base, FCR));
++	writel(0x00, UART_REG(uart_poweroff.base, MCR));
++
++	/* Send the command */
++	for (i = 0; i < uart_poweroff.cmd_len; i++) {
++		writel(uart_poweroff.cmd[i], UART_REG(uart_poweroff.base, TX));
++		mdelay(uart_poweroff.byte_delay_ms);
++	}
++
++	mdelay(uart_poweroff.timeout_ms);
++	WARN_ON(1);
++}
++
++static int uart_poweroff_probe(struct platform_device *pdev)
++{
++	struct resource *res;
++	static void __iomem *base;
++	struct clk *clk;
++	u32 baud;
++	bool override;
++	char symname[KSYM_NAME_LEN];
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res) {
++		dev_err(&pdev->dev, "Missing resource\n");
++		return -EINVAL;
++	}
++
++	base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
++	if (!base) {
++		dev_err(&pdev->dev, "Unable to map resource\n");
++		return -EINVAL;
++	}
++
++	/* We need to know tclk in order to calculate the UART divisor */
++	clk = devm_clk_get(&pdev->dev, NULL);
++	if (IS_ERR(clk)) {
++		dev_err(&pdev->dev, "Clk missing\n");
++		return PTR_ERR(clk);
++	}
++
++	uart_poweroff.cmd = of_get_property(pdev->dev.of_node, "cmd",
++						&uart_poweroff.cmd_len);
++	if (uart_poweroff.cmd == NULL || uart_poweroff.cmd_len < 1) {
++		dev_err(&pdev->dev, "Cmd is missing or empty\n");
++		return -EINVAL;
++	}
++
++	of_property_read_u32(pdev->dev.of_node, "baud", &baud);
++	if (baud < 75 || baud > 460800) {
++		dev_err(&pdev->dev, "Baud rate is missing or invalid\n");
++		return -EINVAL;
++	}
++
++	uart_poweroff.base = base;
++	uart_poweroff.divisor =
++		((clk_get_rate(clk) + (8 * baud)) / (16 * baud));
++	uart_poweroff.byte_delay_ms = 5;
++	uart_poweroff.timeout_ms = 1000;
++	of_property_read_u32(pdev->dev.of_node, "byte-delay",
++				&uart_poweroff.byte_delay_ms);
++	of_property_read_u32(pdev->dev.of_node, "timeout",
++				&uart_poweroff.timeout_ms);
++
++	override = of_property_read_bool(pdev->dev.of_node, "override");
++
++	if (pm_power_off && !override) {
++		lookup_symbol_name((ulong)pm_power_off, symname);
++		dev_err(&pdev->dev,
++			"The pm_power_off is already claimed by %s (%p) and override is false",
++			symname, pm_power_off);
++		return -EBUSY;
++	}
++	pm_power_off_org = pm_power_off;
++	pm_power_off = uart_power_off;
++
++	return 0;
++}
++
++static int uart_poweroff_remove(struct platform_device *pdev)
++{
++	if (pm_power_off == uart_power_off)
++		pm_power_off = pm_power_off_org;
++
++	return 0;
++}
++
++static const struct of_device_id of_uart_poweroff_match[] = {
++	{ .compatible = "uart-poweroff", },
++	{},
++};
++
++static struct platform_driver uart_poweroff_driver = {
++	.probe	= uart_poweroff_probe,
++	.remove	= uart_poweroff_remove,
++	.driver	= {
++		.name	= "uart_poweroff",
++		.of_match_table = of_uart_poweroff_match,
++	},
++};
++module_platform_driver(uart_poweroff_driver);
++
++MODULE_AUTHOR("Evgeny Kolesnikov <evgenyz@gmail.com>");
++MODULE_DESCRIPTION("UART-based PM MCU power off driver");
++MODULE_LICENSE("GPL v2");
 -- 
 2.21.0
 
