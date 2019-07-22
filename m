@@ -2,137 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 684D86F4E9
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Jul 2019 21:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124E76F6C6
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 02:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727295AbfGUTLq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 21 Jul 2019 15:11:46 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:40190 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726797AbfGUTLq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Jul 2019 15:11:46 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w10so16566481pgj.7
-        for <linux-pm@vger.kernel.org>; Sun, 21 Jul 2019 12:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mmeWQsmDiPaK9d82z6VLfilyAyZg9OaXDMwYxakvAF4=;
-        b=M2T/jKitt/ndj61hrkrzKLpQVRLZCq5yD+LHcZuZd/cHePE+rJBRBABvEx0q5PUQa8
-         MTj0a/Gj5PvPl+yccsBxzayr6uHV6cTmshksC35R9/mPRnr5ASTlaSTpNWOQFtm24pkL
-         mIXgtGMCNFmdMRVMBgJZlSHN9Hv1NKUX5YLNSjRHPZriU9dvLwB8wzJLzHo8mluATQJm
-         1obxsTTAu3J8mMMFx7Iww7xA6HScxVxFNDw9KY1xNC07QtSS/TJT8ubWGHcgM+aFbJJM
-         wKLLGIiBS63wD10eXycVG1jfFT5sw8HqvTtOSRLmWfQ+l+dBTYpcryy8Z80yDBLYCNJz
-         KrcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mmeWQsmDiPaK9d82z6VLfilyAyZg9OaXDMwYxakvAF4=;
-        b=YT0cRjE8B5VP9H8ls52ct0hNH/Upnnkp4X+uzHTuKSvf+cym9A3idqOgXiR1ybWKDC
-         uIirdsLTC2UuRc0/g2+1CUtkch5vCmUzRFtmEn7aTAgu+M83oqI3ku+Ebafb5Rs+29oc
-         i9OWvEyr6DA+bwrtK5yPF/oqz7HTNtIyFx1v8yEIT3QLzuoNQGnDALuwtPKdVCcJcVAc
-         Y78yyt05X73YhafiJc0Zok9CXOjSuwDD3mBfolcYcSdHxuBTP0zU/qNBC7YVvwnD/1dg
-         Ze4OHqlC9zHX0VDysBwESlQ8heeDVHuKpkN5N66678u+CraprzOYLwBIUn+l2lo6bJOc
-         SHdg==
-X-Gm-Message-State: APjAAAVa0qgqBIsfrgy5hxWF48/NvkSZsS67x5HQeaAsNuVtMNAbx3bk
-        N3BlwLAypk/CN8e2a6/LWeoZMA==
-X-Google-Smtp-Source: APXvYqym+3nEqETS5wgsiUH/zTRbb9cNoEiTS+4Gh807QNShl0JCzM7CgRP8w5qWgHfscQ4yIxc+dw==
-X-Received: by 2002:a17:90a:8688:: with SMTP id p8mr73835132pjn.57.1563736305446;
-        Sun, 21 Jul 2019 12:11:45 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id c69sm45113398pje.6.2019.07.21.12.11.44
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 21 Jul 2019 12:11:44 -0700 (PDT)
-Date:   Sun, 21 Jul 2019 12:13:05 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     David Dai <daidavid1@codeaurora.org>
-Cc:     georgi.djakov@linaro.org, robh+dt@kernel.org, evgreen@google.com,
-        ilina@codeaurora.org, seansw@qti.qualcomm.com, elder@linaro.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: sdm845: Redefine interconnect provider
- DT nodes
-Message-ID: <20190721191305.GI7234@tuxbook-pro>
-References: <1563568344-1274-1-git-send-email-daidavid1@codeaurora.org>
- <1563568344-1274-3-git-send-email-daidavid1@codeaurora.org>
+        id S1726636AbfGVAkS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 21 Jul 2019 20:40:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49866 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726233AbfGVAkS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 21 Jul 2019 20:40:18 -0400
+Received: from localhost (unknown [216.243.17.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 21184206BF;
+        Mon, 22 Jul 2019 00:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563756017;
+        bh=gPT+BxnYQ6P9BzQMa21BpYQtKFjc0KpfgzO3IKxyhrg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hlGKNRdE9T8YadL5/A8vL6K2bCe76SqK2VEw0JX4AILg2qvTPmTFIYIVgyOPq0xlU
+         fWbfBxMMFW61GnVKXqgOk/iGa2yxJqeJkfYHQaBW4vE49+0OUnwfZwrQ3QVyCWVigO
+         ZZJkl8mCoHu5/Zk1hoKyE7BPLmZrhm7Vx6LYvorI=
+Date:   Sun, 21 Jul 2019 20:40:16 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.2 190/249] cpufreq: Avoid calling
+ cpufreq_verify_current_freq() from handle_update()
+Message-ID: <20190722004016.GD1607@sasha-vm>
+References: <20190715134655.4076-1-sashal@kernel.org>
+ <20190715134655.4076-190-sashal@kernel.org>
+ <b43e57ea-c5b8-b4c4-f58f-405e649aada1@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <1563568344-1274-3-git-send-email-daidavid1@codeaurora.org>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <b43e57ea-c5b8-b4c4-f58f-405e649aada1@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 19 Jul 13:32 PDT 2019, David Dai wrote:
+On Tue, Jul 16, 2019 at 11:25:00AM +0200, Rafael J. Wysocki wrote:
+>On 7/15/2019 3:45 PM, Sasha Levin wrote:
+>>From: Viresh Kumar <viresh.kumar@linaro.org>
+>>
+>>[ Upstream commit 70a59fde6e69d1d8579f84bf4555bfffb3ce452d ]
+>>
+>>On some occasions cpufreq_verify_current_freq() schedules a work whose
+>>callback is handle_update(), which further calls cpufreq_update_policy()
+>>which may end up calling cpufreq_verify_current_freq() again.
+>>
+>>On the other hand, when cpufreq_update_policy() is called from
+>>handle_update(), the pointer to the cpufreq policy is already
+>>available, but cpufreq_cpu_acquire() is still called to get it in
+>>cpufreq_update_policy(), which should be avoided as well.
+>>
+>>To fix these issues, create a new helper, refresh_frequency_limits(),
+>>and make both handle_update() call it cpufreq_update_policy().
+>>
+>>Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+>>[ rjw: Rename reeval_frequency_limits() as refresh_frequency_limits() ]
+>>[ rjw: Changelog ]
+>>Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>---
+>>  drivers/cpufreq/cpufreq.c | 26 ++++++++++++++++----------
+>>  1 file changed, 16 insertions(+), 10 deletions(-)
+>>
+>>diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>>index e84bf0eb7239..876a4cb09de3 100644
+>>--- a/drivers/cpufreq/cpufreq.c
+>>+++ b/drivers/cpufreq/cpufreq.c
+>>@@ -1114,13 +1114,25 @@ static int cpufreq_add_policy_cpu(struct cpufreq_policy *policy, unsigned int cp
+>>  	return ret;
+>>  }
+>>+static void refresh_frequency_limits(struct cpufreq_policy *policy)
+>>+{
+>>+	struct cpufreq_policy new_policy = *policy;
+>>+
+>>+	pr_debug("updating policy for CPU %u\n", policy->cpu);
+>>+
+>>+	new_policy.min = policy->user_policy.min;
+>>+	new_policy.max = policy->user_policy.max;
+>>+
+>>+	cpufreq_set_policy(policy, &new_policy);
+>>+}
+>>+
+>>  static void handle_update(struct work_struct *work)
+>>  {
+>>  	struct cpufreq_policy *policy =
+>>  		container_of(work, struct cpufreq_policy, update);
+>>-	unsigned int cpu = policy->cpu;
+>>-	pr_debug("handle_update for cpu %u called\n", cpu);
+>>-	cpufreq_update_policy(cpu);
+>>+
+>>+	pr_debug("handle_update for cpu %u called\n", policy->cpu);
+>>+	refresh_frequency_limits(policy);
+>>  }
+>>  static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+>>@@ -2392,7 +2404,6 @@ int cpufreq_set_policy(struct cpufreq_policy *policy,
+>>  void cpufreq_update_policy(unsigned int cpu)
+>>  {
+>>  	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpu);
+>>-	struct cpufreq_policy new_policy;
+>>  	if (!policy)
+>>  		return;
+>>@@ -2405,12 +2416,7 @@ void cpufreq_update_policy(unsigned int cpu)
+>>  	    (cpufreq_suspended || WARN_ON(!cpufreq_update_current_freq(policy))))
+>>  		goto unlock;
+>>-	pr_debug("updating policy for CPU %u\n", cpu);
+>>-	memcpy(&new_policy, policy, sizeof(*policy));
+>>-	new_policy.min = policy->user_policy.min;
+>>-	new_policy.max = policy->user_policy.max;
+>>-
+>>-	cpufreq_set_policy(policy, &new_policy);
+>>+	refresh_frequency_limits(policy);
+>>  unlock:
+>>  	cpufreq_cpu_release(policy);
+>
+>I don't think this is suitable for -stable.
 
-> Add the DT nodes for each of the Network-On-Chip interconnect
-> buses found on SDM845 based platform and redefine the rsc_hlos
-> child node as a bcm-voter device to better represent the hardware.
-> 
-> Signed-off-by: David Dai <daidavid1@codeaurora.org>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 61 ++++++++++++++++++++++++++++++++++--
->  1 file changed, 58 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index e7d78bc..204222e 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -610,6 +610,62 @@
->  			#power-domain-cells = <1>;
->  		};
->  
-> +		aggre1_noc: interconnect@16e0000 {
-> +			compatible = "qcom,sdm845-aggre1_noc";
-> +			reg = <0 0x16e0000 0 0xd080>;
+I've dropped it, thanks!
 
-Please pad the address to 8 digits and keep nodes sorted by address.
-
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voter = <&apps_bcm_voter>;
-> +		};
-> +
-> +		aggre2_noc: interconnect@1700000 {
-> +			compatible = "qcom,sdm845-aggre2_noc";
-> +			reg = <0 0x1700000 0 0x3b100>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voter = <&apps_bcm_voter>;
-> +		};
-> +
-> +		config_noc: interconnect@1500000 {
-> +			compatible = "qcom,sdm845-config_noc";
-> +			reg = <0 0x1500000 0 0x5080>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voter = <&apps_bcm_voter>;
-> +		};
-[..]
->  		qfprom@784000 {
->  			compatible = "qcom,qfprom";
->  			reg = <0 0x00784000 0 0x8ff>;
-> @@ -2801,9 +2857,8 @@
->  				};
->  			};
->  
-> -			rsc_hlos: interconnect {
-> -				compatible = "qcom,sdm845-rsc-hlos";
-> -				#interconnect-cells = <1>;
-> +			apps_bcm_voter: bcm_voter {
-
-No '_' in node names, so bcm-voter.
-
-Apart from this nits this looks good.
-
-Regards,
-Bjorn
-
-> +				compatible = "qcom,sdm845-bcm-voter";
->  			};
->  		};
->  
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+--
+Thanks,
+Sasha
