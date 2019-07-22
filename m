@@ -2,86 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 839B370844
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 20:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865D37085E
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jul 2019 20:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731352AbfGVSSh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jul 2019 14:18:37 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41934 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726997AbfGVSSg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 14:18:36 -0400
-Received: by mail-pf1-f196.google.com with SMTP id m30so17774069pff.8
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jul 2019 11:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:to:cc:from:user-agent:date;
-        bh=bdmEyD1tHGaxY1ZlrNXktYNbDBoxT67t89iQedYViU4=;
-        b=jD2XRByB77jpz8oESlV2M8e2YqHA5OWvaY91DBJGZvAV4PUjKf0YAHrFyemyl1HZci
-         ZeR+SwU0zsOjunrxl82QuMicKE2IeCYMTuXzYubRB+ZpDsmnnH4cfbM9KX3lLytNKX5l
-         HWxcBaH3SKmXPuHrKGHwHLia2CN/JsZteix6U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:to:cc:from
-         :user-agent:date;
-        bh=bdmEyD1tHGaxY1ZlrNXktYNbDBoxT67t89iQedYViU4=;
-        b=QTbN3vycl8OrQk9jJDWUnnilQMpPFLOJFu7yMsMq1GMDJiAYWqbgHB55getb3CmQ0U
-         x6fxYfYuu61CbstwEloO8SReuxU3avEupoSLNkoll8jntXg1O9BU016YOOk/987+cfGC
-         cpHLczJrUdGhrBL8dsh/eFx6N0xd9RzDmfU3owiA+iGH+RhZY/W7pwjp/jUps3I+Pj0r
-         J8DMbBan9IbJjMMSXDby1AqiFeXb18iejhGkpVDTYv4upjrDEGnU+bGcP2khpRiOdtZZ
-         nN0iYg/idZ5hnyfPfjz780mjChzg1NoE0YB1Bcym1HqIueVqlqB1Zzlmi6zVz/2AQLYJ
-         rdWQ==
-X-Gm-Message-State: APjAAAWFzjGkMUbzdnZSv0ZCrM8M0UKkMrwoVOYEESTCsByGwDcrkQq7
-        t9AQsNJxkgqRRiwVjpvmz4+iXbMPRMs=
-X-Google-Smtp-Source: APXvYqw1WCTEtPf/4QpZct5Z+fOYeJwNzW8DbpFLtGpuiaWS9d42/M5FHd2yC7A0VCS35fsC46+fHQ==
-X-Received: by 2002:aa7:9a8a:: with SMTP id w10mr1513108pfi.66.1563819516250;
-        Mon, 22 Jul 2019 11:18:36 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id j1sm66969694pgl.12.2019.07.22.11.18.35
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 22 Jul 2019 11:18:35 -0700 (PDT)
-Message-ID: <5d35fdfb.1c69fb81.5fafa.aaa9@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        id S1726652AbfGVSW4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jul 2019 14:22:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60040 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726120AbfGVSW4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 22 Jul 2019 14:22:56 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7B52021901;
+        Mon, 22 Jul 2019 18:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563819775;
+        bh=J9M7faZ41fDOYZssXZM6tk4l7o043dO6n8/RMOul8QQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YlyyurH9m+xtpjE6DT+vlJNbAd1S2BPOTLxWBn89GnqD2uyJuv5XYTe2nU+DY0wV2
+         awRf1tuM1dRG+t8rpdDPX36lb2irTphUakv8OwyH9vVXYqvS8VTJRh0PGPfHZpsXLK
+         gWJ7eRbUoWwwWm6pXQaFOv7gx1WemlQNM+o8IwG0=
+Date:   Mon, 22 Jul 2019 20:22:52 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ravi Chandra Sadineni <ravisadineni@chromium.org>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        x86@kernel.org, rjw@rjwysocki.net, pavel@ucw.cz,
+        len.brown@intel.com, bhe@redhat.com, dyoung@redhat.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        tbroch@chromium.org
+Subject: Re: [PATCH] power:sysfs: Expose device wakeup_event_count.
+Message-ID: <20190722182252.GA24412@kroah.com>
+References: <20190722180258.255949-1-ravisadineni@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190722162003.GG25567@codeaurora.org>
-References: <20190701152907.16407-1-ilina@codeaurora.org> <5d3209e7.1c69fb81.5ef1.5195@mx.google.com> <20190722162003.GG25567@codeaurora.org>
-Subject: Re: [PATCH 1/2] drivers: qcom: rpmh-rsc: simplify TCS locking
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     andy.gross@linaro.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        mkshah@codeaurora.org, "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Mon, 22 Jul 2019 11:18:34 -0700
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190722180258.255949-1-ravisadineni@chromium.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Lina Iyer (2019-07-22 09:20:03)
-> On Fri, Jul 19 2019 at 12:20 -0600, Stephen Boyd wrote:
-> >Quoting Lina Iyer (2019-07-01 08:29:06)
-> >> From: "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
-> >>
-> >> tcs->lock was introduced to serialize access with in TCS group. But
-> >> even without tcs->lock, drv->lock is serving the same purpose. So
-> >> use a single drv->lock.
-> >
-> >Isn't the downside now that we're going to be serializing access to the
-> >different TCSes when two are being written in parallel or waited on? I
-> >thought that was the whole point of splitting the lock into a TCS lock
-> >and a general "driver" lock that protects the global driver state vs.
-> >the specific TCS state.
-> >
-> Yes but we were holding the drv->lock as well as tcs->lock for the most
-> critical of the path anyways (writing to TCS). The added complexity
-> doesn't seem to help reduce the latency that it expected to reduce.
+On Mon, Jul 22, 2019 at 11:02:58AM -0700, Ravi Chandra Sadineni wrote:
+> Device level event_count can help user level daemon to track if a
+> praticular device has seen an wake interrupt during a suspend resume
+> cycle. Thus expose it via sysfs.
+> 
+> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> ---
+>  Documentation/ABI/testing/sysfs-devices-power | 11 ++++++++++
+>  drivers/base/power/sysfs.c                    | 20 +++++++++++++++++++
+>  2 files changed, 31 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentation/ABI/testing/sysfs-devices-power
+> index 1ca04b4f0489..344549f4013f 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-power
+> +++ b/Documentation/ABI/testing/sysfs-devices-power
+> @@ -89,6 +89,17 @@ Description:
+>  		attribute is not present. If the device is not enabled to wake
+>  		up the system from sleep states, this attribute is empty.
+>  
+> +What:		/sys/devices/.../power/wakeup_event_count
+> +Date:		July 2019
+> +Contact:	Ravi Chandra sadineni <ravisadineni@chromium.org>
+> +Description:
+> +		The /sys/devices/.../wakeup_event_count attribute contains the
+> +		number of signaled wakeup events associated with the device.
+> +		This attribute is read-only. If the device is not capable to
+> +		wake up the system from sleep states, this attribute is not
+> +		present. If the device is not enabled to wake up the system
+> +		from sleep states, this attribute is empty.
 
-Ok. That sort of information should be in the commit text to explain why
-it's not helping with reducing the latency or throughput of the API.
+The attribute is not "empty" it returns just an empty line.
 
+Is that really a good thing if you are expecting a number?
+
+> +
+>  What:		/sys/devices/.../power/wakeup_active_count
+>  Date:		September 2010
+>  Contact:	Rafael J. Wysocki <rjw@rjwysocki.net>
+> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+> index f42044d9711c..8dc1235b9784 100644
+> --- a/drivers/base/power/sysfs.c
+> +++ b/drivers/base/power/sysfs.c
+> @@ -357,6 +357,25 @@ static ssize_t wakeup_count_show(struct device *dev,
+>  
+>  static DEVICE_ATTR_RO(wakeup_count);
+>  
+> +static ssize_t wakeup_event_count_show(struct device *dev,
+> +				 struct device_attribute *attr, char *buf)
+> +{
+> +	unsigned long count = 0;
+> +	bool enabled = false;
+> +
+> +	spin_lock_irq(&dev->power.lock);
+> +	if (dev->power.wakeup) {
+> +		count = dev->power.wakeup->event_count;
+> +		enabled = true;
+> +	}
+> +	spin_unlock_irq(&dev->power.lock);
+
+Why do you need to lock?  The state and count can change right after the
+lock, so what does this help with?
+
+> +	return enabled ? sprintf(buf, "%lu\n", count) : sprintf(buf, "\n");
+
+Use a real if statement please.
+
+> +}
+> +
+> +static DEVICE_ATTR_RO(wakeup_event_count);
+> +
+> +
+> +
+
+too many empty lines :)
+
+thanks,
+
+greg k-h
