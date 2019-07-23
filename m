@@ -2,120 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8399171606
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 12:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F4A7160F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 12:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387472AbfGWK1p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 06:27:45 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:39327 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731327AbfGWK1p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 06:27:45 -0400
-Received: by mail-ot1-f68.google.com with SMTP id r21so37454709otq.6;
-        Tue, 23 Jul 2019 03:27:44 -0700 (PDT)
+        id S2388972AbfGWK2q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 06:28:46 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38513 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388963AbfGWK2q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 06:28:46 -0400
+Received: by mail-pg1-f193.google.com with SMTP id f5so10391107pgu.5
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 03:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZcYL9/P3n49g6DqKaLI+RkNcE4jpTV+/tkfkwu+pd/I=;
+        b=VICLIGiHz6hhtuPRSMN0Rn4Tq2DcV/1P1Ybg1HBXsAWiuA6vj61xyt0mLNzXme8kX3
+         esV/scccE8LpryajCPPfFBXnjPrKeAfJpPYYXOO6IW9+HYl4svcS/Y5bpmOLY0Uftt2S
+         5lFx89MMXOr21qlPkt4ka9KBp2D079ldrslJgvwcjjuyjPrGHOzlrlivBj6mjXlhxhWI
+         ZpgzNr5HE0JS+u9CBkfSQoBRLij9HcAJ2Lv6cVc+74Qo7Ost3lLBR8f8Djm3dvW2bg31
+         Sog1WcS19jK5z/9s31Oghgd2HpIL7BrU7MLg369l9M6T43hRdswMk/ps9QRPkTFIm1pr
+         9kAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ajM+r2IdQ5rZtdFxjvMvXdnx3KB/ur/wGMtOzOPKc3A=;
-        b=oTwcSa/Sq+jmf1Q1GUK+n17NQeQo+4tD1dCkHHljZuxVErqVR/a0hP6RySZAFhzOP2
-         3RO6JT+qEGgAudlfpf9s08LEDrj7vvanJ4ej7GYktw9zmhYNIN/oykCIxuDLwdbPZyCk
-         fyIcZ5p3nHe8yuhl5gdZ43cG6HqClExly5py2lo6jSBJ8fLxsMjFGObjOlIG20pq9ATx
-         YChIRPMAH5lhF+jBxPekQWOreXmkH7XLrJY0q9KNInirUUGgfCC+HVAPibXFPdy9x8vJ
-         e1TmasSv3uYYywPeVzpgXFbxMbkyPR1UUKcuxKBtfOdF7tGbej+9GYM30tzLzUldKnLw
-         yqKw==
-X-Gm-Message-State: APjAAAVnVg/5DjcIqNFa0mu3qzpJbCJRWLYMPWW0NG8H9TLR9PK6hjsA
-        Uk1bdqQZ7Obhgq0VpmtUbG3HYvpr7/thSf7Hq+U=
-X-Google-Smtp-Source: APXvYqyRVvENaHdkxd3zgc6Gq0sdtakc+B0KKzT2csgrP84kMpJoBRiwQsWbqWCRDKE+CZYjkVIkPmOMjti7CiZ83SE=
-X-Received: by 2002:a9d:6b96:: with SMTP id b22mr56703354otq.262.1563877663855;
- Tue, 23 Jul 2019 03:27:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZcYL9/P3n49g6DqKaLI+RkNcE4jpTV+/tkfkwu+pd/I=;
+        b=bAUljCH7X2J8DIQAV3Ekx5qpoTVGtcc3jSU6/hy1iTqmM2pXJEBp7kiGjnB4ZVeAbZ
+         qT9AUboPuKjO8bwNhLbWi2yjK1O4Y+P6DRPMZABKYcwR2IHovKkVxBoW+SYaQSHwkMej
+         ywANEiCCMd/WpMawTcQfKUisyPOvcXGMh10mRRhZGhKp4O1DcqvY2N5xnROupUTHXuT4
+         4Kl+tirIv+Mp26pGvCEkaJKbTn4y08nGRRO1blPfzGWzaqiaptOqYtaygnoHG/ap0C7a
+         YewAM3lLMPOBi40nA3MX6x+FWLAgVAtgcWXMxYfCO8aq4/9kgabwDv0igJmbd/GQnd6V
+         0TCQ==
+X-Gm-Message-State: APjAAAWScW09x3e0ATpn8A7iNLzkLewNx2/LNq6rTSjJUPfyJ1Ug/lFY
+        cfUNKWRr90Nmf/G0QEuXrMyB2w==
+X-Google-Smtp-Source: APXvYqwxsaovs/FNtGL33P4TAqXSECDawb04HoVxvIb3gVkUD3njtpvqpCDo33LTTPS8jCX086ZLPg==
+X-Received: by 2002:a65:4489:: with SMTP id l9mr78187922pgq.207.1563877725327;
+        Tue, 23 Jul 2019 03:28:45 -0700 (PDT)
+Received: from localhost ([122.172.28.117])
+        by smtp.gmail.com with ESMTPSA id o24sm80368031pfp.135.2019.07.23.03.28.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jul 2019 03:28:44 -0700 (PDT)
+Date:   Tue, 23 Jul 2019 15:58:42 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sibi Sankar <sibis@codeaurora.org>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
+Message-ID: <20190723102842.t2s45zzylsjuccm4@vireshk-i7>
+References: <20190717222340.137578-1-saravanak@google.com>
+ <20190717222340.137578-4-saravanak@google.com>
 MIME-Version: 1.0
-References: <1563431200-3042-1-git-send-email-dsmythies@telus.net>
- <8091ef83f264feb2feaa827fbeefe08348bcd05d.1563778071.git.viresh.kumar@linaro.org>
- <001201d54125$a6a82350$f3f869f0$@net> <20190723091551.nchopfpqlmdmzvge@vireshk-i7>
-In-Reply-To: <20190723091551.nchopfpqlmdmzvge@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 23 Jul 2019 12:27:32 +0200
-Message-ID: <CAJZ5v0ji+ksapJ4kc2m5UM_O+AShAvJWmYhTQHiXiHnpTq+xRg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: Don't skip freq update when limits change
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Doug Smythies <dsmythies@telus.net>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "v4 . 18+" <stable@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190717222340.137578-4-saravanak@google.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 11:15 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 23-07-19, 00:10, Doug Smythies wrote:
-> > On 2019.07.21 23:52 Viresh Kumar wrote:
-> >
-> > > To avoid reducing the frequency of a CPU prematurely, we skip reducing
-> > > the frequency if the CPU had been busy recently.
-> > >
-> > > This should not be done when the limits of the policy are changed, for
-> > > example due to thermal throttling. We should always get the frequency
-> > > within limits as soon as possible.
-> > >
-> > > Fixes: ecd288429126 ("cpufreq: schedutil: Don't set next_freq to UINT_MAX")
-> > > Cc: v4.18+ <stable@vger.kernel.org> # v4.18+
-> > > Reported-by: Doug Smythies <doug.smythies@gmail.com>
-> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > ---
-> > > @Doug: Please try this patch, it must fix the issue you reported.
-> >
-> > It fixes the driver = acpi-cpufreq ; governor = schedutil test case
-> > It does not fix the driver = intel_cpufreq ; governor = schedutil test case
-> >
-> > I have checked my results twice, but will check again in the day or two.
->
-> The patch you tried to revert wasn't doing any driver specific stuff
-> but only schedutil. If that revert fixes your issue with both the
-> drivers, then this patch should do it as well.
->
-> I am clueless now on what can go wrong with intel_cpufreq driver with
-> schedutil now.
->
-> Though there is one difference between intel_cpufreq and acpi_cpufreq,
-> intel_cpufreq has fast_switch_possible=true and so it uses slightly
-> different path in schedutil. I tried to look from that perspective as
-> well but couldn't find anything wrong.
+$subject doesn't have correct property name.
 
-acpi-cpufreq should use fast switching on the Doug's system too.
+On 17-07-19, 15:23, Saravana Kannan wrote:
+> Currently, the linking of required-opps fails silently if the
+> destination OPP table hasn't been added before the source OPP table is
+> added. This puts an unnecessary requirement that the destination table
+> be added before the source table is added.
+> 
+> In reality, the destination table is needed only when we try to
+> translate from source OPP to destination OPP. So, instead of
+> completely failing, retry linking the tables when the translation is
+> attempted.
+> 
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  drivers/opp/core.c | 32 +++++++++++-----
+>  drivers/opp/of.c   | 91 ++++++++++++++++++++++------------------------
+>  drivers/opp/opp.h  |  5 +++
+>  3 files changed, 71 insertions(+), 57 deletions(-)
 
-> If you still find intel_cpufreq to be broken, even with this patch,
-> please set fast_switch_possible=false instead of true in
-> __intel_pstate_cpu_init() and try tests again. That shall make it very
-> much similar to acpi-cpufreq driver.
+Here is the general feedback and requirements I have:
 
-I wonder if this helps.  Even so, we want fast switching to be used by
-intel_cpufreq.
+- We shouldn't do it from _set_required_opps() but way earlier, it
+  shouldn't affect the fast path (where we change the frequency).
 
-Anyway, it looks like the change reverted by the Doug's patch
-introduced a race condition that had not been present before.  Namely,
-need_freq_update is cleared in get_next_freq() when it is set _or_
-when the new freq is different from the cached one, so in the latter
-case if it happens to be set by sugov_limits() after evaluating
-sugov_should_update_freq() (which returned 'true' for timing reasons),
-that update will be lost now. [Previously the update would not be
-lost, because the clearing of need_freq_update depended only on its
-current value.] Where it matters is that in the "need_freq_update set"
-case, the "premature frequency reduction avoidance" should not be
-applied (as you noticed and hence the $subject patch).
+- Programming required-opps for half of the properties isn't correct,
+  i.e. in case only few of the required-opps are parsed until now. So
+  setting of rate shouldn't even start unless the OPP table is fully
+  initialized with all required-opps in it.
 
-However, even with the $subject patch, need_freq_update may still be
-set by sugov_limits() after the check added by it and then cleared by
-get_next_freq(), so it doesn't really eliminate the problem.
-
-IMO eliminating would require invalidating next_freq this way or
-another when need_freq_update is set in sugov_should_update_freq(),
-which was done before commit ecd2884291261e3fddbc7651ee11a20d596bb514.
+-- 
+viresh
