@@ -2,116 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1702A71256
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 09:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7B9712E5
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 09:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732686AbfGWHKJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 03:10:09 -0400
-Received: from cmta19.telus.net ([209.171.16.92]:46137 "EHLO cmta19.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731529AbfGWHKJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Jul 2019 03:10:09 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id povzhPPxQeRl4pow0hmKDw; Tue, 23 Jul 2019 01:10:06 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1563865806; bh=XH+cz0n2jFZrvdwK8js+vpCkuU9iaoulaMkw/K2zsms=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=G++Hwup0R1EK/XPjtggH/7xZv8yDgRDpKUb95GLBiwrkBrDvAEZeD1njy7Mmd5wG7
-         EpKPCzpaaQfcvyLKLX188WLHDfgAFRke/aU0Y6NKC7DvCyaozReFoNnodA8/7Qks9q
-         UxPwk2m+pVWDoO+RQjs1b5NvpZiy809PURrvIYwbba2iBziAt1hwZOeKXNlolVT4bV
-         kwxx30AteLw5o/C7L5lUGkWlezabsV4UZoA2NwLMQHvnEw4iFzaPRUbE3p5PxEgrMN
-         HK1l+Z2yLvLRUISRNmHra0y5pX6A4nn0VgFqDCjC73QYs1cV/l2tciqo4yIU/5qmfg
-         BmxRR8sZBoaJw==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=KqozJleN c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=KKAkSRfTAAAA:8
- a=X7X60EFgtTFmTPkmaoQA:9 a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=cvBusfyB2V15izCimMoJ:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Rafael Wysocki'" <rjw@rjwysocki.net>,
-        "'Ingo Molnar'" <mingo@redhat.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>
-Cc:     <linux-pm@vger.kernel.org>,
-        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
-        <joel@joelfernandes.org>, "'v4 . 18+'" <stable@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1563431200-3042-1-git-send-email-dsmythies@telus.net> <8091ef83f264feb2feaa827fbeefe08348bcd05d.1563778071.git.viresh.kumar@linaro.org>
-In-Reply-To: <8091ef83f264feb2feaa827fbeefe08348bcd05d.1563778071.git.viresh.kumar@linaro.org>
-Subject: RE: [PATCH] cpufreq: schedutil: Don't skip freq update when limits change
-Date:   Tue, 23 Jul 2019 00:10:01 -0700
-Message-ID: <001201d54125$a6a82350$f3f869f0$@net>
+        id S1732659AbfGWHah (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 03:30:37 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:37968 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732657AbfGWHah (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 03:30:37 -0400
+Received: by mail-ot1-f65.google.com with SMTP id d17so43094616oth.5;
+        Tue, 23 Jul 2019 00:30:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FpJgzT+7tUT7ple40No6kP66YV3ZkuZw7itpAewQ1tQ=;
+        b=cY2FHoxLf3UFfl30MdO2WT7feOR5BXJL3ZKXU4c2Y7aIm4e+T7E3A4YNy0tsRoi6a4
+         AA4MZM5/iWL1bb+wUhPEUOXbdfTi6cXgks86yryURiI2/oW60JMJwx4qDG7+BBDpdmaj
+         Pa//eU9C8beaizKujSwSuOxBAY0uhLVvVxrWIF7IYiKmc7+1Gv7EHvh/ng4DFs9JD74x
+         ++OJ4vJhM/O5vI8Vc/WiyP7G/yOAIjrIy6dGX2A2OUH4WsRzMGoLa9xcckgUunD4rF7e
+         YFq35IqE6Be/XJ2xwCeqRYP2oi0jXBVqh9T8QOYyv9jq+fjh3gJ6IkvNLCPXsCS28GqL
+         SXjg==
+X-Gm-Message-State: APjAAAV4Jo+Nvg2E6Nxm+BfRfKYbxVVdjCelOtBOY91rcL9Lm5KNaS+P
+        J05KKS1mUecRu5WxPuuy/9hoTAmlLe7KeWsgsTcxLc37
+X-Google-Smtp-Source: APXvYqxcNJEOwGJB5fN/m/YmcCoj2DjhHm7l4wYdY7E78+ZG6LP01279MnFvvYZKIn3S3COvsmviOod7hgVpgxr6ZFA=
+X-Received: by 2002:a05:6830:8a:: with SMTP id a10mr26026736oto.167.1563867036041;
+ Tue, 23 Jul 2019 00:30:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdVAWfe+bwrPM5WESwOhTvNG8+jZwgAylY+w
-X-CMAE-Envelope: MS4wfIlZvk504tenK5OfDjLaKFLSYbpLAFtMePH9EnvmmFwRbTgJQDEN1WZ6akOpYspZyktenwTEGsQg2/SR9897cVSYAddD9ki03lKRcPwC7C1NLVSjsovm
- mK3e/gC5KpzcmPsBNzjG6X34+TI051No1xRzPSUAskKB6v97KObyvM1XiXxX+u3RENtiItk2M6RCVjLAJlyUIS1o9wwKPMCKzNjxG4sFaDkw+e0WIgjaU90X
- MR4p8AKCXJRAMlnryoJVSO1bnPEl13Zlk2wun46bb6zRtdInsj/d8FiCYGiWj2X9Gb4RIbe3Ci75bIaI6s0dljUHS/EAFNNsHpqfap5QBjauHxBPjP0XVQrU
- hrkjhl+f5ecMEVe17c2Q9jn9fuVJTyU/NF7bc5AlEOvzIuT+LszyyCOW/3m8VWqULVflx1tdOtu5Rd1fdbaGzG3QczCybw==
+References: <3270289.QqOHTbhTGK@kreacher>
+In-Reply-To: <3270289.QqOHTbhTGK@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 Jul 2019 09:30:22 +0200
+Message-ID: <CAJZ5v0ik4b0LZ_WwscvZ_WibaN89DWCy-J1KZCJCCkh5TiGXAg@mail.gmail.com>
+Subject: Re: [PATCH] int340X/processor_thermal_device: Fix proc_thermal_rapl_remove()
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019.07.21 23:52 Viresh Kumar wrote:
-
-> To avoid reducing the frequency of a CPU prematurely, we skip reducing
-> the frequency if the CPU had been busy recently.
-> 
-> This should not be done when the limits of the policy are changed, for
-> example due to thermal throttling. We should always get the frequency
-> within limits as soon as possible.
+On Mon, Jul 22, 2019 at 12:23 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> Fixes: ecd288429126 ("cpufreq: schedutil: Don't set next_freq to UINT_MAX")
-> Cc: v4.18+ <stable@vger.kernel.org> # v4.18+
-> Reported-by: Doug Smythies <doug.smythies@gmail.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Passing 0 to cpuhp_remove_state() triggers the BUG_ON() in
+> __cpuhp_remove_state_cpuslocked() and the argument passed to
+> powercap_unregister_control_type() is expected to be a valid
+> pointer, so avoid calling these functions with incorrect
+> arguments from proc_thermal_rapl_remove().
+>
+> Fixes: 555c45fe0d04 ("int340X/processor_thermal_device: add support for MMIO RAPL")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Any comments?
+
+If not, I'll queue this up along with the other RAPL-related fix
+(https://patchwork.kernel.org/patch/11050999/).
+
 > ---
-> @Doug: Please try this patch, it must fix the issue you reported.
-
-It fixes the driver = acpi-cpufreq ; governor = schedutil test case
-It does not fix the driver = intel_cpufreq ; governor = schedutil test case
-
-I have checked my results twice, but will check again in the day or two.
-
-... Doug
-
+>  drivers/thermal/intel/int340x_thermal/processor_thermal_device.c |    4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> kernel/sched/cpufreq_schedutil.c | 6 ++++--
-> 1 file changed, 4 insertions(+), 2 deletions(-)
+> Index: linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++ linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -487,6 +487,7 @@ static int proc_thermal_rapl_add(struct
+>                                 rapl_mmio_cpu_online, rapl_mmio_cpu_down_prep);
+>         if (ret < 0) {
+>                 powercap_unregister_control_type(rapl_mmio_priv.control_type);
+> +               rapl_mmio_priv.control_type = NULL;
+>                 return ret;
+>         }
+>         rapl_mmio_priv.pcap_rapl_online = ret;
+> @@ -496,6 +497,9 @@ static int proc_thermal_rapl_add(struct
 >
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 636ca6f88c8e..b53c4f02b0f1 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -447,7 +447,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
->  	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> 	unsigned long util, max;
->  	unsigned int next_f;
-> -	bool busy;
-> +	bool busy = false;
-> 
-> 	sugov_iowait_boost(sg_cpu, time, flags);
-> 	sg_cpu->last_update = time;
-> @@ -457,7 +457,9 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
-> 	if (!sugov_should_update_freq(sg_policy, time))
->		return;
-> 
-> -	busy = sugov_cpu_is_busy(sg_cpu);
-> +	/* Limits may have changed, don't skip frequency update */
-> +	if (!sg_policy->need_freq_update)
-> +		busy = sugov_cpu_is_busy(sg_cpu);
-> 
-> 	util = sugov_get_util(sg_cpu);
->  	max = sg_cpu->max;
-> -- 
-> 2.21.0.rc0.269.g1a574e7a288b
-
-
+>  static void proc_thermal_rapl_remove(void)
+>  {
+> +       if (IS_ERR_OR_NULL(rapl_mmio_priv.control_type))
+> +               return;
+> +
+>         cpuhp_remove_state(rapl_mmio_priv.pcap_rapl_online);
+>         powercap_unregister_control_type(rapl_mmio_priv.control_type);
+>  }
+>
+>
+>
