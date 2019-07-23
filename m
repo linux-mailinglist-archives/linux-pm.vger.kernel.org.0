@@ -2,119 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2FF7208B
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 22:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695787209D
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 22:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729253AbfGWULN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 16:11:13 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:44860 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726585AbfGWULN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 16:11:13 -0400
-Received: by mail-pl1-f196.google.com with SMTP id t14so21000096plr.11
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 13:11:13 -0700 (PDT)
+        id S1730924AbfGWUTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 16:19:01 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33680 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730945AbfGWUTA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 16:19:00 -0400
+Received: by mail-pg1-f195.google.com with SMTP id f20so10731303pgj.0
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 13:19:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=message-id:mime-version:content-transfer-encoding:in-reply-to
          :references:subject:to:cc:from:user-agent:date;
-        bh=QbT9jGu1lmx3/9h3LW15ROrOwQXxSF86nPLyM5BLkII=;
-        b=iTCMzgyFfG0OP9uRHM4PgqYmeTY0g0hC424bokI7JNfKuRDiJzS2wLzjLh0EP8I2L2
-         +HYLetQYiXmSxCGmJMqTzMS30qc2pCkBxCE/upXFcENcoBdrMBIIBK89qB1STSVOC3C/
-         MglHaKb+TPOMn6k5Rd/kcCj11LmsZAUzfaMm8=
+        bh=j+oQw2jdtWVrhOuLyebLNsd7ea1r8/8WD8EWU9cDAVo=;
+        b=NSMsF/ZhLMfKzsKJ2MspdGWNCHdp7/PJbl+7N68yde2T9b7DjaJfjPc857JDqwI1qG
+         ztbRuSuLw0ZiEngAIk2lr7lgbNw92V5Ke9JI45W9JpPLiUqz9GAyeFXMO/N0XaYJLgVe
+         Usz6WsyTsIwMMnJcc6EmsOhMRqeNtKrfT2vWA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:mime-version
          :content-transfer-encoding:in-reply-to:references:subject:to:cc:from
          :user-agent:date;
-        bh=QbT9jGu1lmx3/9h3LW15ROrOwQXxSF86nPLyM5BLkII=;
-        b=WOx+H5b3g5Q0g6z1E5u4l/0Ez8cKb+bD9Eet8jDmAf5j0258L452fODYWH4HrlnSwH
-         HFlUKJTaq8bkfWONLr2Aw04P/PhjOdBE3p/7Bx31IHCsVXxzNB/5ODJ2PYizKEGNrQUl
-         p+pOBr5jeHApy8XyEdxFapKUnUAoY02qnBSE/IdeaJaq9OsnLj7N3OojM4D2PCaboEid
-         jV5SYYgdpcAB41qfMdDgHWCXYkYNC2HmtnbI/msy9zIr8N0sew3fcQYj114EbxsZdE3n
-         lP4cD6M8Ch/OjrYRJop1qIcrK6MRuoV1a2V1OsTf1DIKokB6S7rK0svVoq/8hpvcqo3j
-         4lPg==
-X-Gm-Message-State: APjAAAVDt3W3oJNgDW9cpFdjpVRpjpTaWFokKZM+gNkVV55NG9/mSXJh
-        MdLU6Ag0uIlnmcmgv8WCf0Ntgw==
-X-Google-Smtp-Source: APXvYqyUHxwi4zszpvLpkepttGZ93I6RHVvOvH/ZmJ63coG/n6yxOGvC7vHRakTYhBSKWoTO8G414w==
-X-Received: by 2002:a17:902:e282:: with SMTP id cf2mr83244845plb.301.1563912672555;
-        Tue, 23 Jul 2019 13:11:12 -0700 (PDT)
+        bh=j+oQw2jdtWVrhOuLyebLNsd7ea1r8/8WD8EWU9cDAVo=;
+        b=SRxa44xQfHQzPKMeRb8EW5vdh2fBaLdIdBBCbwjVBSWiXwl1xbWb8b4ltSc/KVA5lN
+         JiwYMmJXpHyMSjpxyacFmSl9SDPEfsqmACombtTylLosJIiys7L5xPsHZATGfFQZiItA
+         G4dLQHoiJk0CKL2afcCd3f0ADObblt9h28HkUu0Y5KCkGudI0WYziNjXC4fd/+rWAqjV
+         8UgjL3pzHoPA9O7ZMstzuz72VhB/eAoCYEhMPWaKZfoAmcPf92fHKksGogFLY3pwFh7s
+         Zv9KlLiEGwX79i7cBp7VZH7Oj/2VO4++uhM1oHZN2qoJ3XdyiY9aThnW337gXcnfMDMG
+         K+Lw==
+X-Gm-Message-State: APjAAAWonKvX9qCUZ7XUNNHARgO2vhiah6iJlJekXruGkRSX15taDZDJ
+        MVhgStrYFjB4x9HiNOuco6/QPg==
+X-Google-Smtp-Source: APXvYqy9POj2+Xo/YOz/WRQitO0yZSvOEN3J5hTLe0FEyZ6UIHk6V8VuYl0CMgI/lhCvoIzz8gSysw==
+X-Received: by 2002:a63:c748:: with SMTP id v8mr46673106pgg.418.1563913140016;
+        Tue, 23 Jul 2019 13:19:00 -0700 (PDT)
 Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id b136sm51971272pfb.73.2019.07.23.13.11.11
+        by smtp.gmail.com with ESMTPSA id k6sm53132496pfi.12.2019.07.23.13.18.59
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 23 Jul 2019 13:11:11 -0700 (PDT)
-Message-ID: <5d3769df.1c69fb81.55d03.aa33@mx.google.com>
+        Tue, 23 Jul 2019 13:18:59 -0700 (PDT)
+Message-ID: <5d376bb3.1c69fb81.2bb4e.7771@mx.google.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190722215340.3071-2-ilina@codeaurora.org>
-References: <20190722215340.3071-1-ilina@codeaurora.org> <20190722215340.3071-2-ilina@codeaurora.org>
-Subject: Re: [PATCH V2 2/4] drivers: qcom: rpmh-rsc: avoid locking in the interrupt handler
-To:     Lina Iyer <ilina@codeaurora.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+In-Reply-To: <20190723192159.GA18620@codeaurora.org>
+References: <20190722215340.3071-1-ilina@codeaurora.org> <5d375054.1c69fb81.7ce3f.3591@mx.google.com> <20190723192159.GA18620@codeaurora.org>
+Subject: Re: [PATCH V2 1/4] drivers: qcom: rpmh-rsc: simplify TCS locking
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
         rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, dianders@chromium.org,
-        mkshah@codeaurora.org, Lina Iyer <ilina@codeaurora.org>
+        mkshah@codeaurora.org, "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.8.1
-Date:   Tue, 23 Jul 2019 13:11:10 -0700
+Date:   Tue, 23 Jul 2019 13:18:58 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Lina Iyer (2019-07-22 14:53:38)
-> Avoid locking in the interrupt context to improve latency. Since we
-> don't lock in the interrupt context, it is possible that we now could
-> race with the DRV_CONTROL register that writes the enable register and
-> cleared by the interrupt handler. For fire-n-forget requests, the
-> interrupt may be raised as soon as the TCS is triggered and the IRQ
-> handler may clear the enable bit before the DRV_CONTROL is read back.
->=20
-> Use the non-sync variant when enabling the TCS register to avoid reading
-> back a value that may been cleared because the interrupt handler ran
-> immediately after triggering the TCS.
->=20
-> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
-> ---
+Quoting Lina Iyer (2019-07-23 12:21:59)
+> On Tue, Jul 23 2019 at 12:22 -0600, Stephen Boyd wrote:
+> >Quoting Lina Iyer (2019-07-22 14:53:37)
+> >> From: "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
+> >>
+> >> The tcs->lock was introduced to serialize access with in TCS group. Bu=
+t,
+> >> drv->lock is still needed to synchronize core aspects of the
+> >> communication. This puts the drv->lock in the critical and high latency
+> >> path of sending a request. drv->lock provides the all necessary
+> >> synchronization. So remove locking around TCS group and simply use the
+> >> drv->lock instead.
+> >
+> >This doesn't talk about removing the irq saving and restoring though.
+> You mean for drv->lock? It was not an _irqsave/_irqrestore anyways and
+> we were only removing the tcs->lock.
 
-I have to read this patch carefully. The commit text isn't convincing me
-that it is actually safe to make this change. It mostly talks about the
-performance improvements and how we need to fix __tcs_trigger(), which
-is good, but I was hoping to be convinced that not grabbing the lock
-here is safe.=20
+Yes drv->lock wasn't an irqsave/restore variant because it was a
+spinlock inside of an obviously already irqsaved region of code because
+the tcs->lock was outside the drv->lock and that was saving the irq
+flags.
 
-How do we ensure that drv->tcs_in_use is cleared before we call
-tcs_write() and try to look for a free bit? Isn't it possible that we'll
-get into a situation where the bitmap is all used up but the hardware
-has just received an interrupt and is going to clear out a bit and then
-an rpmh write fails with -EBUSY?
-
->  drivers/soc/qcom/rpmh-rsc.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
 >=20
-> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-> index 5ede8d6de3ad..694ba881624e 100644
-> --- a/drivers/soc/qcom/rpmh-rsc.c
-> +++ b/drivers/soc/qcom/rpmh-rsc.c
-> @@ -242,9 +242,7 @@ static irqreturn_t tcs_tx_done(int irq, void *p)
->                 write_tcs_reg(drv, RSC_DRV_CMD_ENABLE, i, 0);
->                 write_tcs_reg(drv, RSC_DRV_CMD_WAIT_FOR_CMPL, i, 0);
->                 write_tcs_reg(drv, RSC_DRV_IRQ_CLEAR, 0, BIT(i));
-> -               spin_lock(&drv->lock);
->                 clear_bit(i, drv->tcs_in_use);
-> -               spin_unlock(&drv->lock);
->                 if (req)
->                         rpmh_tx_done(req, err);
->         }
-> @@ -304,7 +302,7 @@ static void __tcs_trigger(struct rsc_drv *drv, int tc=
-s_id)
->         enable =3D TCS_AMC_MODE_ENABLE;
->         write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
->         enable |=3D TCS_AMC_MODE_TRIGGER;
-> -       write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
-> +       write_tcs_reg(drv, RSC_DRV_CONTROL, tcs_id, enable);
->  }
-> =20
->  static int check_for_req_inflight(struct rsc_drv *drv, struct tcs_group =
-*tcs,
+> >Can you keep irq saving and restoring in this patch and then remove that
+> >in the next patch with reasoning? It probably isn't safe if the lock is
+> >taken in interrupt context anyway.
+> >
+> Yes, the drv->lock should have been irqsave/irqrestore, but it hasn't
+> been changed by this patch.
+
+It needs to be changed to maintain the irqsaving/restoring of the code.
+
+> >> @@ -349,41 +349,35 @@ static int tcs_write(struct rsc_drv *drv, const =
+struct tcs_request *msg)
+> >>  {
+> >>         struct tcs_group *tcs;
+> >>         int tcs_id;
+> >> -       unsigned long flags;
+> >>         int ret;
+> >>
+> >>         tcs =3D get_tcs_for_msg(drv, msg);
+> >>         if (IS_ERR(tcs))
+> >>                 return PTR_ERR(tcs);
+> >>
+> >> -       spin_lock_irqsave(&tcs->lock, flags);
+> >>         spin_lock(&drv->lock);
+> >>         /*
+> >>          * The h/w does not like if we send a request to the same addr=
+ess,
+> >>          * when one is already in-flight or being processed.
+> >>          */
+> >>         ret =3D check_for_req_inflight(drv, tcs, msg);
+> >> -       if (ret) {
+> >> -               spin_unlock(&drv->lock);
+> >> +       if (ret)
+> >>                 goto done_write;
+> >> -       }
+> >>
+> >>         tcs_id =3D find_free_tcs(tcs);
+> >>         if (tcs_id < 0) {
+> >>                 ret =3D tcs_id;
+> >> -               spin_unlock(&drv->lock);
+> >>                 goto done_write;
+> >>         }
+> >>
+> >>         tcs->req[tcs_id - tcs->offset] =3D msg;
+> >>         set_bit(tcs_id, drv->tcs_in_use);
+> >> -       spin_unlock(&drv->lock);
+> >>
+> >>         __tcs_buffer_write(drv, tcs_id, 0, msg);
+> >>         __tcs_trigger(drv, tcs_id);
+> >>
+> >>  done_write:
+> >> -       spin_unlock_irqrestore(&tcs->lock, flags);
+> >> +       spin_unlock(&drv->lock);
+> >>         return ret;
+> >>  }
+> >>
+> >> @@ -481,19 +475,18 @@ static int tcs_ctrl_write(struct rsc_drv *drv, c=
+onst struct tcs_request *msg)
+> >>  {
+> >>         struct tcs_group *tcs;
+> >>         int tcs_id =3D 0, cmd_id =3D 0;
+> >> -       unsigned long flags;
+> >>         int ret;
+> >>
+> >>         tcs =3D get_tcs_for_msg(drv, msg);
+> >>         if (IS_ERR(tcs))
+> >>                 return PTR_ERR(tcs);
+> >>
+> >> -       spin_lock_irqsave(&tcs->lock, flags);
+> >> +       spin_lock(&drv->lock);
+> >>         /* find the TCS id and the command in the TCS to write to */
+> >>         ret =3D find_slots(tcs, msg, &tcs_id, &cmd_id);
+> >>         if (!ret)
+> >>                 __tcs_buffer_write(drv, tcs_id, cmd_id, msg);
+> >> -       spin_unlock_irqrestore(&tcs->lock, flags);
+> >> +       spin_unlock(&drv->lock);
+> >>
+> >
+> >These ones, just leave them doing the irq save restore for now?
+> >
+> drv->lock ??
+>=20
+
+Yes, it should have irq save/restore still.
+
