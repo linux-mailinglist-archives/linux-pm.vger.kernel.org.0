@@ -2,171 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 695787209D
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 22:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8DF720DC
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 22:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730924AbfGWUTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 16:19:01 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:33680 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730945AbfGWUTA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 16:19:00 -0400
-Received: by mail-pg1-f195.google.com with SMTP id f20so10731303pgj.0
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 13:19:00 -0700 (PDT)
+        id S2387626AbfGWUgl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 16:36:41 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:44675 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732472AbfGWUgl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 16:36:41 -0400
+Received: by mail-oi1-f196.google.com with SMTP id e189so33240347oib.11
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 13:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:to:cc:from:user-agent:date;
-        bh=j+oQw2jdtWVrhOuLyebLNsd7ea1r8/8WD8EWU9cDAVo=;
-        b=NSMsF/ZhLMfKzsKJ2MspdGWNCHdp7/PJbl+7N68yde2T9b7DjaJfjPc857JDqwI1qG
-         ztbRuSuLw0ZiEngAIk2lr7lgbNw92V5Ke9JI45W9JpPLiUqz9GAyeFXMO/N0XaYJLgVe
-         Usz6WsyTsIwMMnJcc6EmsOhMRqeNtKrfT2vWA=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g/2BGGrFh2KLC5qxtGNSu6iKrTWzABVeH6rFOx3c7Qw=;
+        b=BL1zhkUPPRxU40lcrS8uiFDXE+2BGu9l8vsUdji2crvpvlihwTFnCFaONc/CM3nZ+f
+         6sgtoSkf2YWktAl7/P+aU1k4z7V5yXaYQ2kOb8j4r5fi2LyqwQiOjUWHyrIWioWCL4Bs
+         81pw6zpZ5iETwRan/qS15wby7O/Aks2MjCm1+j0tIEqdT6jqBDDXAgqGnY+cAwKOTWSL
+         oc5DNx3zubzmiP8dpeGOYZZu/Un6Lr6gO0U68bhBmOm7gWRpz3C6sgl8wJGVoegzWCM0
+         M1l6y+DSuH8YHY2mifWrqjdF0tJodWFDASRV75XKcIRd+IfHEcXJ/f31HGcLizZeadfs
+         EBUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:to:cc:from
-         :user-agent:date;
-        bh=j+oQw2jdtWVrhOuLyebLNsd7ea1r8/8WD8EWU9cDAVo=;
-        b=SRxa44xQfHQzPKMeRb8EW5vdh2fBaLdIdBBCbwjVBSWiXwl1xbWb8b4ltSc/KVA5lN
-         JiwYMmJXpHyMSjpxyacFmSl9SDPEfsqmACombtTylLosJIiys7L5xPsHZATGfFQZiItA
-         G4dLQHoiJk0CKL2afcCd3f0ADObblt9h28HkUu0Y5KCkGudI0WYziNjXC4fd/+rWAqjV
-         8UgjL3pzHoPA9O7ZMstzuz72VhB/eAoCYEhMPWaKZfoAmcPf92fHKksGogFLY3pwFh7s
-         Zv9KlLiEGwX79i7cBp7VZH7Oj/2VO4++uhM1oHZN2qoJ3XdyiY9aThnW337gXcnfMDMG
-         K+Lw==
-X-Gm-Message-State: APjAAAWonKvX9qCUZ7XUNNHARgO2vhiah6iJlJekXruGkRSX15taDZDJ
-        MVhgStrYFjB4x9HiNOuco6/QPg==
-X-Google-Smtp-Source: APXvYqy9POj2+Xo/YOz/WRQitO0yZSvOEN3J5hTLe0FEyZ6UIHk6V8VuYl0CMgI/lhCvoIzz8gSysw==
-X-Received: by 2002:a63:c748:: with SMTP id v8mr46673106pgg.418.1563913140016;
-        Tue, 23 Jul 2019 13:19:00 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id k6sm53132496pfi.12.2019.07.23.13.18.59
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 23 Jul 2019 13:18:59 -0700 (PDT)
-Message-ID: <5d376bb3.1c69fb81.2bb4e.7771@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g/2BGGrFh2KLC5qxtGNSu6iKrTWzABVeH6rFOx3c7Qw=;
+        b=PuLw4t4E5tQzAYzNo+BNYYOmaXnw3K74G0xW87do+FCZxyVUfNfmgEvjYsLoRnSUDp
+         0OztbroKV7ako2X7bDjMycH4TbDQ6id7ZjUhbDsFdCoPrIpDi9k6rUVg9vRLol/iX4/g
+         b73ojvW+/Np8Gy1ZyzhGQHud9vH5rf2HwF/AAvfO2zRiOlRO2FokdqaryhOGP7qgmZDq
+         DieCUz2sTD4qSerHKS8oV9DzFPlzgrYfCXK6D7ene8cOgTXrxAAWP3qE/NEQ767o250c
+         IVKfOvsFeKn2HuSx7uadyZ54YavSmQT0bOXY7e/M2MrCRzpg525LOHGM5ikZz4mfghe4
+         Vpxw==
+X-Gm-Message-State: APjAAAUBOQzvd2A55pSH01VtxRZyWNN6XD8Ryx/awIwWynYMRaEZPxhf
+        +h86A8QnOH26GfYw3JLW1juNhEj7PmQLAsU5FEOXkA==
+X-Google-Smtp-Source: APXvYqy9VJmbWkvDpT4M3SIpbRF3dqdqe5Zhd/hh5ShO8VLur1e+DBTTOISx8N1NpvX5A+GHQD6ltf1BojILtrZcglM=
+X-Received: by 2002:aca:5106:: with SMTP id f6mr40545168oib.69.1563914199859;
+ Tue, 23 Jul 2019 13:36:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190723192159.GA18620@codeaurora.org>
-References: <20190722215340.3071-1-ilina@codeaurora.org> <5d375054.1c69fb81.7ce3f.3591@mx.google.com> <20190723192159.GA18620@codeaurora.org>
-Subject: Re: [PATCH V2 1/4] drivers: qcom: rpmh-rsc: simplify TCS locking
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        mkshah@codeaurora.org, "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Tue, 23 Jul 2019 13:18:58 -0700
+References: <20190717222340.137578-1-saravanak@google.com> <20190717222340.137578-4-saravanak@google.com>
+ <20190723102842.t2s45zzylsjuccm4@vireshk-i7>
+In-Reply-To: <20190723102842.t2s45zzylsjuccm4@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 23 Jul 2019 13:36:03 -0700
+Message-ID: <CAGETcx_4N8uBbA0yhMdcTHpw_DkMVqQwbZeSDTLOzR7t-uZnVg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Lina Iyer (2019-07-23 12:21:59)
-> On Tue, Jul 23 2019 at 12:22 -0600, Stephen Boyd wrote:
-> >Quoting Lina Iyer (2019-07-22 14:53:37)
-> >> From: "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
-> >>
-> >> The tcs->lock was introduced to serialize access with in TCS group. Bu=
-t,
-> >> drv->lock is still needed to synchronize core aspects of the
-> >> communication. This puts the drv->lock in the critical and high latency
-> >> path of sending a request. drv->lock provides the all necessary
-> >> synchronization. So remove locking around TCS group and simply use the
-> >> drv->lock instead.
+Resending again due to accidental HTML (minor rewording/typo fixes too).
+
+On Tue, Jul 23, 2019 at 3:28 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> $subject doesn't have correct property name.
+>
+> On 17-07-19, 15:23, Saravana Kannan wrote:
+> > Currently, the linking of required-opps fails silently if the
+> > destination OPP table hasn't been added before the source OPP table is
+> > added. This puts an unnecessary requirement that the destination table
+> > be added before the source table is added.
 > >
-> >This doesn't talk about removing the irq saving and restoring though.
-> You mean for drv->lock? It was not an _irqsave/_irqrestore anyways and
-> we were only removing the tcs->lock.
-
-Yes drv->lock wasn't an irqsave/restore variant because it was a
-spinlock inside of an obviously already irqsaved region of code because
-the tcs->lock was outside the drv->lock and that was saving the irq
-flags.
-
->=20
-> >Can you keep irq saving and restoring in this patch and then remove that
-> >in the next patch with reasoning? It probably isn't safe if the lock is
-> >taken in interrupt context anyway.
+> > In reality, the destination table is needed only when we try to
+> > translate from source OPP to destination OPP. So, instead of
+> > completely failing, retry linking the tables when the translation is
+> > attempted.
 > >
-> Yes, the drv->lock should have been irqsave/irqrestore, but it hasn't
-> been changed by this patch.
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > ---
+> >  drivers/opp/core.c | 32 +++++++++++-----
+> >  drivers/opp/of.c   | 91 ++++++++++++++++++++++------------------------
+> >  drivers/opp/opp.h  |  5 +++
+> >  3 files changed, 71 insertions(+), 57 deletions(-)
+>
+> Here is the general feedback and requirements I have:
+>
+> - We shouldn't do it from _set_required_opps() but way earlier, it
+>   shouldn't affect the fast path (where we change the frequency).
 
-It needs to be changed to maintain the irqsaving/restoring of the code.
+I don't think there's any other intermediate OPP API call where we can
+try to lazily link the tables. Also if the tables are already fully
+linked, I don't think this is really going to slow down the fast path
+in anyway (because it's just a few NULL checks).
 
-> >> @@ -349,41 +349,35 @@ static int tcs_write(struct rsc_drv *drv, const =
-struct tcs_request *msg)
-> >>  {
-> >>         struct tcs_group *tcs;
-> >>         int tcs_id;
-> >> -       unsigned long flags;
-> >>         int ret;
-> >>
-> >>         tcs =3D get_tcs_for_msg(drv, msg);
-> >>         if (IS_ERR(tcs))
-> >>                 return PTR_ERR(tcs);
-> >>
-> >> -       spin_lock_irqsave(&tcs->lock, flags);
-> >>         spin_lock(&drv->lock);
-> >>         /*
-> >>          * The h/w does not like if we send a request to the same addr=
-ess,
-> >>          * when one is already in-flight or being processed.
-> >>          */
-> >>         ret =3D check_for_req_inflight(drv, tcs, msg);
-> >> -       if (ret) {
-> >> -               spin_unlock(&drv->lock);
-> >> +       if (ret)
-> >>                 goto done_write;
-> >> -       }
-> >>
-> >>         tcs_id =3D find_free_tcs(tcs);
-> >>         if (tcs_id < 0) {
-> >>                 ret =3D tcs_id;
-> >> -               spin_unlock(&drv->lock);
-> >>                 goto done_write;
-> >>         }
-> >>
-> >>         tcs->req[tcs_id - tcs->offset] =3D msg;
-> >>         set_bit(tcs_id, drv->tcs_in_use);
-> >> -       spin_unlock(&drv->lock);
-> >>
-> >>         __tcs_buffer_write(drv, tcs_id, 0, msg);
-> >>         __tcs_trigger(drv, tcs_id);
-> >>
-> >>  done_write:
-> >> -       spin_unlock_irqrestore(&tcs->lock, flags);
-> >> +       spin_unlock(&drv->lock);
-> >>         return ret;
-> >>  }
-> >>
-> >> @@ -481,19 +475,18 @@ static int tcs_ctrl_write(struct rsc_drv *drv, c=
-onst struct tcs_request *msg)
-> >>  {
-> >>         struct tcs_group *tcs;
-> >>         int tcs_id =3D 0, cmd_id =3D 0;
-> >> -       unsigned long flags;
-> >>         int ret;
-> >>
-> >>         tcs =3D get_tcs_for_msg(drv, msg);
-> >>         if (IS_ERR(tcs))
-> >>                 return PTR_ERR(tcs);
-> >>
-> >> -       spin_lock_irqsave(&tcs->lock, flags);
-> >> +       spin_lock(&drv->lock);
-> >>         /* find the TCS id and the command in the TCS to write to */
-> >>         ret =3D find_slots(tcs, msg, &tcs_id, &cmd_id);
-> >>         if (!ret)
-> >>                 __tcs_buffer_write(drv, tcs_id, cmd_id, msg);
-> >> -       spin_unlock_irqrestore(&tcs->lock, flags);
-> >> +       spin_unlock(&drv->lock);
-> >>
-> >
-> >These ones, just leave them doing the irq save restore for now?
-> >
-> drv->lock ??
->=20
+If you have other ideas, I'm willing to look at it. But as it is right
+now seems the best to me.
 
-Yes, it should have irq save/restore still.
+> - Programming required-opps for half of the properties isn't correct,
+>   i.e. in case only few of the required-opps are parsed until now. So
+>   setting of rate shouldn't even start unless the OPP table is fully
+>   initialized with all required-opps in it.
 
+Ok, I can fix this.
+
+-Saravana
