@@ -2,111 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD19A70F16
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 04:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979C570F3D
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 04:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730363AbfGWCVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jul 2019 22:21:08 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37433 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727959AbfGWCVI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 22:21:08 -0400
-Received: by mail-pg1-f195.google.com with SMTP id i70so7840152pgd.4
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jul 2019 19:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=BnCBC+zUlqDIIAOvfSKLBUp5eSfkGPiVUglDWmp/gR8=;
-        b=PE4Zoq08LGucIhGqujRu/QuMdngn1fAHXLyBPyBVeoeIL4QaDln7Ag7evhB/1vWITd
-         Iz12quvXzcyb3F9x+U/2kD6J6lvzx45cJRvDOQN7WHsyVubQCP7ZmT0w4LahjIviE90q
-         +LhBeVkYuO1tct6jD364mH4L3/nxbWossI1aMQ2I6CU+bIe4H29fqE/AOWIM/4moyv1r
-         lUQ+HBkTyS/CeRFtkgjmjXa+6djuHjWQl7nXHpBFaAvpCnA/GQuTok5Zgh8PPO9TFTPg
-         z1R8+qqgg2s+rxFI/xaRAcRDzP623lGRAOHfZewEhKDwKB9SdOUHHD+vUrrIJDWZYx0a
-         A5+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BnCBC+zUlqDIIAOvfSKLBUp5eSfkGPiVUglDWmp/gR8=;
-        b=l0VIaRTrvMcehQw8BSov8ohXxPCOQFqbm1qUuWoscu1XqECspYO9SjDS50DYk2MKA5
-         a4NiSsJq3IP9/3c9oDuqS+HQJ1VkniUFkbDqq0zip190v3M76GBO+2gINkBrcl1uxeno
-         Xv08vNeMJpy6ELfdX5wBcJHtw93q1Ji7dq7vdWZaOefXURqu5g3U4SEHEO8gLjVZPJd2
-         LJD0F5g7OgaWo/dUuxUjmBy0mzAHMQLzh3G9jkR3UA+0BCal4kl7uASlXH3S+/uMeR0Z
-         BpAo03SXWF6KH2JKjdpQBt3uypJeogcGiO39km2mqrfKXPnSuUqovnsLYXsgVBZlZQxv
-         ggZw==
-X-Gm-Message-State: APjAAAXhORPbMW+RXkXpchMChzCYASxIELtMAC7WJKrZhz8B4iP6xqox
-        gerCtL1B/grPrnGA8T0jQoLEYA==
-X-Google-Smtp-Source: APXvYqxL2jAvzgpf0MMdvr4SEuFbkxGKEEoNZbidbXR7lRbw9PpJt9A0P4ipBQJ+Wf4gE23lgoCWYw==
-X-Received: by 2002:a62:e801:: with SMTP id c1mr3287708pfi.41.1563848467126;
-        Mon, 22 Jul 2019 19:21:07 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id p2sm55113862pfb.118.2019.07.22.19.21.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Jul 2019 19:21:06 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 07:51:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
-        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        sibis@codeaurora.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] dt-bindings: interconnect: Add
- interconnect-opp-table property
-Message-ID: <20190723022104.m3zx4w7i6ki5cmgd@vireshk-i7>
-References: <20190703011020.151615-1-saravanak@google.com>
- <20190703011020.151615-6-saravanak@google.com>
- <20190722233927.GA1353@bogus>
+        id S1731763AbfGWCqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jul 2019 22:46:09 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:55728 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726962AbfGWCqH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jul 2019 22:46:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1563849964; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=fL5yem8QsUYkhZu+Pm1PTITp0l+jVscmMyZeS34IKsQ=;
+        b=Vb/+i3osY1n11LJAcDyhzXABp5jCqHMJnOUEKjZWHUDZvGxGJ2U0beZdgw+/ZVudnMkOqj
+        SNYVPb1fNyl6K0KobhTaETLyhYaPad9d45FiPrzttvGZ5gcJXjbR04sYj4ZNk6ULQTtdcP
+        Rx9jzBniH4E0gGStjD/mTqxvcwloR5Q=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     od@zcrc.me, Artur Rojek <contact@artur-rojek.eu>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
+Subject: [PATCH] power/supply: ingenic-battery: Don't change scale if there's only one
+Date:   Mon, 22 Jul 2019 22:45:54 -0400
+Message-Id: <20190723024554.9248-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190722233927.GA1353@bogus>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-07-19, 17:39, Rob Herring wrote:
-> On Tue, Jul 02, 2019 at 06:10:19PM -0700, Saravana Kannan wrote:
-> > Add support for listing bandwidth OPP tables for each interconnect path
-> > listed using the interconnects property.
-> > 
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > ---
-> >  .../devicetree/bindings/interconnect/interconnect.txt     | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/interconnect/interconnect.txt b/Documentation/devicetree/bindings/interconnect/interconnect.txt
-> > index 6f5d23a605b7..fc5b75b76a2c 100644
-> > --- a/Documentation/devicetree/bindings/interconnect/interconnect.txt
-> > +++ b/Documentation/devicetree/bindings/interconnect/interconnect.txt
-> > @@ -55,10 +55,18 @@ interconnect-names : List of interconnect path name strings sorted in the same
-> >  			 * dma-mem: Path from the device to the main memory of
-> >  			            the system
-> >  
-> > +interconnect-opp-table: List of phandles to OPP tables (bandwidth OPP tables)
-> > +			that specify the OPPs for the interconnect paths listed
-> > +			in the interconnects property. This property can only
-> > +			point to OPP tables that belong to the device and are
-> > +			listed in the device's operating-points-v2 property.
-> > +
-> 
-> IMO, there's no need for this property. Which OPP is which should be 
-> defined already as part of the device's binding. That's enough for the 
-> driver to know which OPP applies to the interconnect.
+The ADC in the JZ4740 can work either in high-precision mode with a 2.5V
+range, or in low-precision mode with a 7.5V range. The code in place in
+this driver will select the proper scale according to the maximum
+voltage of the battery.
 
-And if there is confusion we can actually use the compatible property
-to have another string which highlights that it is an interconnect OPP
-?
+The JZ4770 however only has one mode, with a 6.6V range. If only one
+scale is available, there's no need to change it (and nothing to change
+it to), and trying to do so will fail with -EINVAL.
 
+Fixes commit fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery
+driver.")
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Cc: stable@vger.kernel.org
+---
+ drivers/power/supply/ingenic-battery.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/power/supply/ingenic-battery.c b/drivers/power/supply/ingenic-battery.c
+index 35816d4b3012..5a53057b4f64 100644
+--- a/drivers/power/supply/ingenic-battery.c
++++ b/drivers/power/supply/ingenic-battery.c
+@@ -80,6 +80,10 @@ static int ingenic_battery_set_scale(struct ingenic_battery *bat)
+ 	if (ret != IIO_AVAIL_LIST || scale_type != IIO_VAL_FRACTIONAL_LOG2)
+ 		return -EINVAL;
+ 
++	/* Only one (fractional) entry - nothing to change */
++	if (scale_len == 2)
++		return 0;
++
+ 	max_mV = bat->info.voltage_max_design_uv / 1000;
+ 
+ 	for (i = 0; i < scale_len; i += 2) {
 -- 
-viresh
+2.21.0.593.g511ec345e18
+
