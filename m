@@ -2,52 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 330C17175E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 13:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5223A7176E
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 13:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732025AbfGWLrq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 07:47:46 -0400
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:45197 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731223AbfGWLrq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 07:47:46 -0400
-Received: by mail-vk1-f195.google.com with SMTP id e83so8557720vke.12
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 04:47:45 -0700 (PDT)
+        id S2387596AbfGWLtw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 07:49:52 -0400
+Received: from mail-vk1-f193.google.com ([209.85.221.193]:46266 "EHLO
+        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726575AbfGWLtw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 07:49:52 -0400
+Received: by mail-vk1-f193.google.com with SMTP id b64so8568996vke.13
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 04:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9dBxJDUf07AXZT1DslLp2oPEscDOmXAV+KRm01KVmpI=;
-        b=ve9dNQIU1/ScDGRilK0yswo1rbhImUF9nVICpYHb485c/Bj4lDj04wxmDmoyFjB8mr
-         aid5olNv3hC03Je2M0Yi+c/yaAMWkANnaHJfmN7k5hMFnTMMCxa2/t+yVeX6fEGYSH/g
-         +phgBCSHBdCNeK0F73qWUdixYw95HKKvatfcABX0y3Qx98v/FdadS6BxrckWRPnmYhn1
-         NvxBrLaFy/pVn30DNFAioHuEw5yqalhKaitfwkw+4fhyceclxiZSqhdL2d13iaSWBB3P
-         CkGnMGApXt3qLRSyzv5Vrkb87mumfSWdV1zzJhMR4bw1Vk3Fa9YJyvJlKZe80Nq6hlef
-         +UrA==
+        bh=eCc8oz4uiY5oWVmZXIo5sT3kYxDAiMvuCiy1W2eyWGs=;
+        b=IcKy60K678v+J0heI68tZHz8GPQxO3NxVDFj7+zJrF5AlvdfaU4g7QvRBm4WzK2N23
+         pDKiRHpCNnOLUYPIN99LoT+yt2FC3qBbHHQCKxLUEjiAu1+4X7mxR23Ke87joLy6cjbI
+         s3/6QiwZIo4K0jxG1wUGV+ZYdWyrhdjWi+nN9ZjiCyoRpATnDAt+2ggPiQacmFtWkrVD
+         BrcbtUmBD1XehP1guAAKJcsNS9FBV6Hj/B9IQZitsYgSfyYPTwanhyZrQB7wwo4flyGj
+         NNhILO8zBbNZ6oupsz5WyUKBloxPApdSZeMXiRE1p5gl+NEcbn5V4bIv7J/i7P9twUoG
+         bIcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9dBxJDUf07AXZT1DslLp2oPEscDOmXAV+KRm01KVmpI=;
-        b=IFfMjMKgiZG2XiRlCj4s5QnAtRcs9h0iurR728W6ax8JMgGSGFayTK0pAfPkgEg/AS
-         ljmIX+IWrWGy2jp2kmAzz2oc/23ZKvAK8VLyxe/rLI5va4Q1JyquIMKSrnDoBY04D59a
-         3e13eN9c5Lvd6TSx4xqfziDQSizKY9rewTGMN+mzMo3BbHHKrBBOi6hPuwuCYEiNSe/h
-         yA0f3zfLYNzArDzPbGoL8PqvvstrxKgNQpTY1i7l9jAtBKSdUNJakLhtpD7t994gke92
-         +T6k4pzXYD97jgmM4k75xzQqya/2uy5JgGWLiE4H4yq+X14XwEf5ym6sWttWLXrKDLas
-         AEmg==
-X-Gm-Message-State: APjAAAXr7jXIgJ06DCGHHb7fN3eOchNP/XIZpWiYyS7fgSIo+D142OOw
-        YRwa4uwxVqoaSk+6skPqrU1YMTQThzxu6DYbYSO9ew==
-X-Google-Smtp-Source: APXvYqys3QoXnQABINpJN0For4m7L6uG7ajsZKIGLu3Ym5MrKZDHkQYDNotxM7t1yjupurrNwmbVyPXRHdtIHhe1VJ8=
-X-Received: by 2002:a1f:9f06:: with SMTP id i6mr28502502vke.52.1563882464630;
- Tue, 23 Jul 2019 04:47:44 -0700 (PDT)
+        bh=eCc8oz4uiY5oWVmZXIo5sT3kYxDAiMvuCiy1W2eyWGs=;
+        b=FSZqAioYzE7PIWj8eKSts8TwplQ6Vg+7ewRvMXIcGzrfhEFaRrRSKAdFzxWrOJst4s
+         cRV7y8bvJgaeMmXX6LKryEGixv2vbQx8gWRWVMpdB2Kdgol/6hphuP2ITKQQpxng2jG4
+         75sgKYQ0QhW0go+HvUzML+7B226iZpHiQRh/4OLrzND2nQaUvA6N8DkB0ju7gN8EJQTi
+         itwFNMugoPkzCQDRjHTIH6RoIcwgtHGEq85N+7u1JOMS3MShWbU5QOLHYIRR/rDa6Qv/
+         BfrvEq9btJ0UUCAtrmHFts6170UBP98lLRMbEZvGrnp2B6KufwlZSbzCdf8H3hrNIzEy
+         Awzw==
+X-Gm-Message-State: APjAAAUUlT3BhlwUn0j7rrqEkPljMNP2lkBPxiaATtCBV1ofyoi2O8xo
+        mCZiN7PBWBmxXiVFKg7dZ12VpUI3oq1PYcK+tHoSWQ==
+X-Google-Smtp-Source: APXvYqzQew1R0hp4RpT558NdXJ2lVRHSHKaFuji8MnNl0ExroDkpLeuQgO9KGA19hr8dIxNU/dxd/h2ROvbh8X67rj0=
+X-Received: by 2002:ac5:c2d2:: with SMTP id i18mr27496163vkk.36.1563882591235;
+ Tue, 23 Jul 2019 04:49:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190722153745.32446-1-lorenzo.pieralisi@arm.com> <20190722153745.32446-7-lorenzo.pieralisi@arm.com>
-In-Reply-To: <20190722153745.32446-7-lorenzo.pieralisi@arm.com>
+References: <20190722153745.32446-1-lorenzo.pieralisi@arm.com>
+In-Reply-To: <20190722153745.32446-1-lorenzo.pieralisi@arm.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 23 Jul 2019 13:47:08 +0200
-Message-ID: <CAPDyKFrhggN_TDcB-Qdhe6booD1MzMJTe90D4DyRCKTq3cgU=g@mail.gmail.com>
-Subject: Re: [PATCH 6/6] PSCI: cpuidle: Refactor CPU suspend power_state
- parameter handling
+Date:   Tue, 23 Jul 2019 13:49:15 +0200
+Message-ID: <CAPDyKFqAMhx_8T5FF7MujYc7HuNVAfCYx4j1UEfesuCc-TE-rw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] ARM: psci: cpuidle: PSCI CPUidle rework
 To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Cc:     Linux PM <linux-pm@vger.kernel.org>, Will Deacon <will@kernel.org>,
         Sudeep Holla <sudeep.holla@arm.com>,
@@ -63,31 +62,61 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 22 Jul 2019 at 17:38, Lorenzo Pieralisi
+On Mon, 22 Jul 2019 at 17:37, Lorenzo Pieralisi
 <lorenzo.pieralisi@arm.com> wrote:
 >
-> Current PSCI code handles idle state entry through the
-> psci_cpu_suspend_enter() API, that takes an idle state index as a
-> parameter and convert the index into a previously initialized
-> power_state parameter before calling the PSCI.CPU_SUSPEND() with it.
+> Current PSCI CPUidle driver is built on top of the generic ARM
+> CPUidle infrastructure that relies on the architectural back-end
+> idle operations to initialize and enter idle states.
 >
-> This is unwieldly, since it forces the PSCI firmware layer to keep track
-> of power_state parameter for every idle state so that the
-> index->power_state conversion can be made in the PSCI firmware layer
-> instead of the CPUidle driver implementations.
+> On ARM64 systems, PSCI is the only interface the kernel ever uses
+> to enter idle states, so, having to rely on a generic ARM CPUidle
+> driver when there is and there will always be only one method
+> for entering idle states proved to be overkill, more so given
+> that on ARM 32-bit systems (that can also enable the generic
+> ARM CPUidle driver) only one additional idle back-end was
+> ever added:
 >
-> Move the power_state handling out of drivers/firmware/psci
-> into the respective ACPI/DT PSCI CPUidle backends and convert
-> the psci_cpu_suspend_enter() API to get the power_state
-> parameter as input, which makes it closer to its firmware
-> interface PSCI.CPU_SUSPEND() API.
+> drivers/soc/qcom/spm.c
 >
-> A notable side effect is that the PSCI ACPI/DT CPUidle backends
-> now can directly handle (and if needed update) power_state
-> parameters before handing them over to the PSCI firmware
-> interface to trigger PSCI.CPU_SUSPEND() calls.
+> and it can be easily converted to a full-fledged CPUidle driver
+> without requiring the generic ARM CPUidle framework.
 >
-> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Furthermore, the generic ARM CPUidle infrastructure forces the
+> PSCI firmware layer to keep CPUidle specific information in it,
+> which does not really fit its purpose that should be kernel
+> control/data structure agnostic.
+>
+> Lastly, the interface between the generic ARM CPUidle driver and
+> the arch back-end requires an idle state index to be passed to
+> suspend operations, with idle states back-end internals (such
+> as idle state parameters) hidden in architectural back-ends and
+> not available to the generic ARM CPUidle driver.
+>
+> To improve the above mentioned shortcomings, implement a stand
+> alone PSCI CPUidle driver; this improves the current kernel
+> code from several perspective:
+>
+> - Move CPUidle internal knowledge into CPUidle driver out of
+>   the PSCI firmware interface
+> - Give the PSCI CPUidle driver control over power state parameters,
+>   in particular in preparation for PSCI OSI support
+> - Remove generic CPUidle operations infrastructure from the kernel
+>
+> This patchset does not go as far as removing the generic ARM CPUidle
+> infrastructure in order to collect feedback on the new approach
+> before completing the removal from the kernel, the generic and PSCI
+> CPUidle driver are left to co-exist.
+
+I like the approach and I think this series definitely moves things in
+the right direction.
+
+Of course, some additional cleanups/re-works on top are needed to show
+its full benefit, but step by step we reach that point.
+
+>
+> Tested on Juno platform with both DT and ACPI boot firmwares.
+>
 > Cc: Will Deacon <will@kernel.org>
 > Cc: Ulf Hansson <ulf.hansson@linaro.org>
 > Cc: Sudeep Holla <sudeep.holla@arm.com>
@@ -95,87 +124,38 @@ On Mon, 22 Jul 2019 at 17:38, Lorenzo Pieralisi
 > Cc: Catalin Marinas <catalin.marinas@arm.com>
 > Cc: Mark Rutland <mark.rutland@arm.com>
 > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> ---
->  arch/arm64/kernel/cpuidle.c    |  47 +++++++++-
->  drivers/cpuidle/cpuidle-psci.c |  87 +++++++++++++++++-
->  drivers/firmware/psci/psci.c   | 158 ++-------------------------------
->  include/linux/cpuidle.h        |  17 +++-
->  include/linux/psci.h           |   4 +-
->  5 files changed, 153 insertions(+), 160 deletions(-)
 >
-> diff --git a/arch/arm64/kernel/cpuidle.c b/arch/arm64/kernel/cpuidle.c
-> index 4bcd1bca0dfc..e4d6af2fdec7 100644
-> --- a/arch/arm64/kernel/cpuidle.c
-> +++ b/arch/arm64/kernel/cpuidle.c
-> @@ -47,6 +47,44 @@ int arm_cpuidle_suspend(int index)
+> Lorenzo Pieralisi (6):
+>   ARM: cpuidle: Remove useless header include
+>   ARM: cpuidle: Remove overzealous error logging
+>   drivers: firmware: psci: Decouple checker from generic ARM CPUidle
+>   ARM: psci: cpuidle: Introduce PSCI CPUidle driver
+>   ARM: psci: cpuidle: Enable PSCI CPUidle driver
+>   PSCI: cpuidle: Refactor CPU suspend power_state parameter handling
 >
->  #define ARM64_LPI_IS_RETENTION_STATE(arch_flags) (!(arch_flags))
+>  MAINTAINERS                          |   8 +
+>  arch/arm/configs/imx_v6_v7_defconfig |   1 +
+>  arch/arm64/configs/defconfig         |   1 +
+>  arch/arm64/kernel/cpuidle.c          |  50 +++++-
+>  arch/arm64/kernel/psci.c             |   4 -
+>  drivers/cpuidle/Kconfig.arm          |   7 +
+>  drivers/cpuidle/Makefile             |   1 +
+>  drivers/cpuidle/cpuidle-arm.c        |  13 +-
+>  drivers/cpuidle/cpuidle-psci.c       | 235 +++++++++++++++++++++++++++
+>  drivers/firmware/psci/psci.c         | 167 +------------------
+>  drivers/firmware/psci/psci_checker.c |  16 +-
+>  include/linux/cpuidle.h              |  17 +-
+>  include/linux/psci.h                 |   4 +-
+>  13 files changed, 338 insertions(+), 186 deletions(-)
+>  create mode 100644 drivers/cpuidle/cpuidle-psci.c
 >
-> +static int psci_acpi_cpu_init_idle(unsigned int cpu)
-> +{
-> +       int i, count;
-> +       struct acpi_lpi_state *lpi;
-> +       struct acpi_processor *pr = per_cpu(processors, cpu);
-> +
-> +       /*
-> +        * If the PSCI cpu_suspend function hook has not been initialized
-> +        * idle states must not be enabled, so bail out
-> +        */
-> +       if (!psci_ops.cpu_suspend)
-> +               return -EOPNOTSUPP;
-> +
-> +       if (unlikely(!pr || !pr->flags.has_lpi))
-> +               return -EINVAL;
-> +
-> +       count = pr->power.count - 1;
-> +       if (count <= 0)
-> +               return -ENODEV;
-> +
-> +       for (i = 0; i < count; i++) {
-> +               u32 state;
-> +
-> +               lpi = &pr->power.lpi_states[i + 1];
-> +               /*
-> +                * Only bits[31:0] represent a PSCI power_state while
-> +                * bits[63:32] must be 0x0 as per ARM ACPI FFH Specification
-> +                */
-> +               state = lpi->address;
-> +               if (!psci_power_state_is_valid(state)) {
-> +                       pr_warn("Invalid PSCI power state %#x\n", state);
-> +                       return -EINVAL;
-> +               }
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  int acpi_processor_ffh_lpi_probe(unsigned int cpu)
->  {
->         return psci_acpi_cpu_init_idle(cpu);
-> @@ -54,10 +92,13 @@ int acpi_processor_ffh_lpi_probe(unsigned int cpu)
+> --
+> 2.21.0
 >
->  int acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
->  {
-> +       u32 state = lpi->address;
-> +
->         if (ARM64_LPI_IS_RETENTION_STATE(lpi->arch_flags))
-> -               return CPU_PM_CPU_IDLE_ENTER_RETENTION(psci_cpu_suspend_enter,
-> -                                               lpi->index);
-> +               return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM(psci_cpu_suspend_enter,
-> +                                               lpi->index, state);
->         else
-> -               return CPU_PM_CPU_IDLE_ENTER(psci_cpu_suspend_enter, lpi->index);
-> +               return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter,
-> +                                            lpi->index, state);
->  }
 
-I am not sure where the acpi+psci cpuidle code really belongs. Perhaps
-some code should be moved into separate acpi+psci cpuidle driver?
+For the series, besides the minor comments I had on patch 4, feel free to add:
 
-In any case and whatever makes sense, it can be done on top of the
-current series.
-
-[...]
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
