@@ -2,120 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D54B71374
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 09:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC0A7140F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 10:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388607AbfGWH51 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 03:57:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35118 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388605AbfGWH51 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Jul 2019 03:57:27 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2467A2239E;
-        Tue, 23 Jul 2019 07:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563868646;
-        bh=raesEJUrKUUjIY47oo0d7Am8Mms/YmjXGF8ELt5JU0k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yyalUf2YIUgBilePpnS3sBf6REYxD18aL8zOEZSw0XNEaG7ucE/Q3ipoUm4T3nHA4
-         h4qLkxVTZEjh8PRY+nO8KIIouncngiAOJ5A+XW0K5GBpzwxwyeRXUdU4yyJMU7wWHU
-         wnTpEzTHqjs6fl/nVs+XxIK4QhpblnNaHCznZ+bY=
-Date:   Tue, 23 Jul 2019 09:57:24 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [PATCH v2] driver core: Remove device link creation limitation
-Message-ID: <20190723075724.GB27243@kroah.com>
-References: <2305283.AStDPdUUnE@kreacher>
- <CAJZ5v0h-nWr1vie61U6BzDxns+qmj_3EOFztE_X-CGgtzkz=ZA@mail.gmail.com>
+        id S1731115AbfGWIgH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 04:36:07 -0400
+Received: from mail-eopbgr80082.outbound.protection.outlook.com ([40.107.8.82]:47847
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727801AbfGWIgG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 23 Jul 2019 04:36:06 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AG7d02dhlsgcRu/FCpKGu8mVJrQTnCGOKi2ezvPw08fJ7GO0k3bTltKDLp49XnR+CvCR3uQp4bTCnk9p/Zo5KG9RGh6FMvpkW/2OqSrssk0G+TzpLuDGDYW+t1DUtCEbglE9NzOiSJqCkoQX750c+8H2UYw0rlecWkHcoi28KtBcFIiV5SREU5ncPKOQELyVAp7c1TTs/XAsXiR3TzhrOvN9EKf3k+xGYexXhEGVMZojXXa4uzajnuaT02Qs00LdfRC1FmLX/GrBEw1c1u3rkpTprnvJZN2gvLrWlDSTevK5ccbFHEj7ATLa7UPkrXrw1eMiNkCMFZYaXK2459DtmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D+DMNvR/r0LZQSKAN9D80xWojyJEfpmuFE/8+uUnpc8=;
+ b=MWHxNhevwLrTqg+ZVsVncC4oBbwrEJIKdG4BIMbbBgApT+UBcc6uO4N5DvLgf8IVyM8HscqVL4/TfG5xB5zDFQbruHOgWp5Gw1w4l+7L/5KHsyJMeUy5WiUZBeQUMjExyLI/Rh3zYPVK5cmXk5EWCYSkLrXEROiBvfdAyWithsSjPfdgV44xUBxhoTtZiGb8Vo5qTuuKPC4fuaob58hkMlJ5F/XoqumNytsvR5VOjgZl+Bs6ZZP6hTG8JCmCwBsHOgZ28xX8TTeob99eOL9iwNsrENxlo1/bUz5WFjvJcXCZzJdJtWORi9tTi1Cj9vOvMRxmNtiBVYvgiq349wZ7Vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=mellanox.com;dmarc=pass action=none
+ header.from=mellanox.com;dkim=pass header.d=mellanox.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D+DMNvR/r0LZQSKAN9D80xWojyJEfpmuFE/8+uUnpc8=;
+ b=DUtTfFsxqZ6vOGDiWoBTEXjEv+9E6frhqjDSE5Y3CnG0lMWX+fJWQyrm/LrVo1pXcNhL1mlq/lq/V3DO2H86CGFJcFs8EbUr4z4K+HP/TTsnGk7pHtFajOchCruw51wgTTSXv6GjaB4g9tP2bRxX512/EUvJkcnhSyuqndQYsK4=
+Received: from DB7PR05MB5338.eurprd05.prod.outlook.com (20.178.41.21) by
+ DB7PR05MB4506.eurprd05.prod.outlook.com (52.135.131.27) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2115.10; Tue, 23 Jul 2019 08:36:02 +0000
+Received: from DB7PR05MB5338.eurprd05.prod.outlook.com
+ ([fe80::bceb:bd6:4a4a:a604]) by DB7PR05MB5338.eurprd05.prod.outlook.com
+ ([fe80::bceb:bd6:4a4a:a604%2]) with mapi id 15.20.2094.013; Tue, 23 Jul 2019
+ 08:36:02 +0000
+From:   Ido Schimmel <idosch@mellanox.com>
+To:     "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        mlxsw <mlxsw@mellanox.com>,
+        "idosch@idosch.org" <idosch@idosch.org>
+Subject: Re: [PATCH] thermal: Fix use-after-free when unregistering thermal
+ zone device
+Thread-Topic: [PATCH] thermal: Fix use-after-free when unregistering thermal
+ zone device
+Thread-Index: AQHVNwkSlqT2tAfrEU2yZ3KmbaFNk6bX9T0A
+Date:   Tue, 23 Jul 2019 08:36:02 +0000
+Message-ID: <20190723083600.GA31076@splinter>
+References: <20190710101452.32748-1-idosch@idosch.org>
+In-Reply-To: <20190710101452.32748-1-idosch@idosch.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: AM7PR03CA0013.eurprd03.prod.outlook.com
+ (2603:10a6:20b:130::23) To DB7PR05MB5338.eurprd05.prod.outlook.com
+ (2603:10a6:10:64::21)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=idosch@mellanox.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [193.47.165.251]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3fb1b5c4-c12e-44cd-a828-08d70f48cb9b
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR05MB4506;
+x-ms-traffictypediagnostic: DB7PR05MB4506:
+x-microsoft-antispam-prvs: <DB7PR05MB4506FAD65AFF3526A57FF78BBFC70@DB7PR05MB4506.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0107098B6C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(39860400002)(396003)(346002)(136003)(366004)(376002)(189003)(199004)(102836004)(110136005)(7736002)(305945005)(386003)(1076003)(54906003)(6506007)(66066001)(52116002)(99286004)(446003)(26005)(4744005)(25786009)(53936002)(11346002)(68736007)(6512007)(9686003)(186003)(6246003)(486006)(33656002)(8936002)(66946007)(476003)(4326008)(81166006)(81156014)(2906002)(66476007)(66556008)(66446008)(33716001)(8676002)(64756008)(2201001)(3846002)(6116002)(76176011)(256004)(71200400001)(71190400001)(2501003)(86362001)(478600001)(6436002)(6486002)(5660300002)(229853002)(14454004)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR05MB4506;H:DB7PR05MB5338.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 1fbpJpdFxX9ZCSUy3iMacseCRaXbQtxsbRaO810aC1Kh2cEX3sXAdcz/KFZohFfSQj7o+zoIvlNJPjTCYco0RqQR5gs6dQXyJKHZA7IBfl//oBpP2ipzHDLkd80eNp5eb+qAlw4U2TzIpjEI2KFiOxJOKqa3itibtlzAc+gWvU3F/OTUoCeT7Ld8mKmVuYm428yjpvz4oybGMSxudkxHHOzZc/qtmPEY2lj6ebsfBoKx9XfKPy/uTDwRvFNukyLiR60oS7NSfaPyK/UoCBMtx2i3EXaAW4Tswj4GH05DaCU7yi38LRQIlVlqhg7NRTLbvkjmIhKYAj2s2q0hLUBeTCzq+9LsUU0YCDG3CKcEO4VnZqagWwv+yM+poon7ftXOA/Mk2Ggn+1K5uW6ub3tlYHKvDXBqItgF2K/FJBlyCyw=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <BE77FE7CD91C9748B5E554C26B595F2A@eurprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h-nWr1vie61U6BzDxns+qmj_3EOFztE_X-CGgtzkz=ZA@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fb1b5c4-c12e-44cd-a828-08d70f48cb9b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2019 08:36:02.6261
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: idosch@mellanox.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR05MB4506
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 09:34:54AM +0200, Rafael J. Wysocki wrote:
-> Hi Greg,
-> 
-> On Tue, Jul 16, 2019 at 5:21 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Subject: [PATCH] driver core: Remove device link creation limitation
-> >
-> > If device_link_add() is called for a consumer/supplier pair with an
-> > existing device link between them and the existing link's type is
-> > not in agreement with the flags passed to that function by its
-> > caller, NULL will be returned.  That is seriously inconvenient,
-> > because it forces the callers of device_link_add() to worry about
-> > what others may or may not do even if that is not relevant to them
-> > for any other reasons.
-> >
-> > It turns out, however, that this limitation can be made go away
-> > relatively easily.
-> >
-> > The underlying observation is that if DL_FLAG_STATELESS has been
-> > passed to device_link_add() in flags for the given consumer/supplier
-> > pair at least once, calling either device_link_del() or
-> > device_link_remove() to release the link returned by it should work,
-> > but there are no other requirements associated with that flag.  In
-> > turn, if at least one of the callers of device_link_add() for the
-> > given consumer/supplier pair has not passed DL_FLAG_STATELESS to it
-> > in flags, the driver core should track the status of the link and act
-> > on it as appropriate (ie. the link should be treated as "managed").
-> > This means that DL_FLAG_STATELESS needs to be set for managed device
-> > links and it should be valid to call device_link_del() or
-> > device_link_remove() to drop references to them in certain
-> > sutiations.
-> >
-> > To allow that to happen, introduce a new (internal) device link flag
-> > called DL_FLAG_MANAGED and make device_link_add() set it automatically
-> > whenever DL_FLAG_STATELESS is not passed to it.  Also make it take
-> > additional references to existing device links that were previously
-> > stateless (that is, with DL_FLAG_STATELESS set and DL_FLAG_MANAGED
-> > unset) and will need to be managed going forward and initialize
-> > their status (which has been DL_STATE_NONE so far).
-> >
-> > Accordingly, when a managed device link is dropped automatically
-> > by the driver core, make it clear DL_FLAG_MANAGED, reset the link's
-> > status back to DL_STATE_NONE and drop the reference to it associated
-> > with DL_FLAG_MANAGED instead of just deleting it right away (to
-> > allow it to stay around in case it still needs to be released
-> > explicitly by someone).
-> >
-> > With that, since setting DL_FLAG_STATELESS doesn't mean that the
-> > device link in question is not managed any more, replace all of the
-> > status-tracking checks against DL_FLAG_STATELESS with analogous
-> > checks against DL_FLAG_MANAGED and update the documentation to
-> > reflect these changes.
-> >
-> > While at it, make device_link_add() reject flags that it does not
-> > recognize, including DL_FLAG_MANAGED.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Reviewed-by: Saravana Kannan <saravanak@google.com>
-> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> 
-> Do I need to resend this?
-> 
-> I know that posting new things during a merge window is not most
-> convenient, sorry about that.
+On Wed, Jul 10, 2019 at 01:14:52PM +0300, Ido Schimmel wrote:
+> From: Ido Schimmel <idosch@mellanox.com>
+>=20
+> thermal_zone_device_unregister() cancels the delayed work that polls the
+> thermal zone, but it does not wait for it to finish. This is racy with
+> respect to the freeing of the thermal zone device, which can result in a
+> use-after-free [1].
+>=20
+> Fix this by waiting for the delayed work to finish before freeing the
+> thermal zone device. Note that thermal_zone_device_set_polling() is
+> never invoked from an atomic context, so it is safe to call
+> cancel_delayed_work_sync() that can block.
 
-No, it's in my queue, give me a few days to dig out from my huge pending
-patch list, no need to resend it.
-
-thanks,
-
-greg k-h
+Ping?
