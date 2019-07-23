@@ -2,117 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8834371DA0
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 19:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAB571DF4
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jul 2019 19:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391028AbfGWRZ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 13:25:59 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:42895 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726513AbfGWRZ7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 13:25:59 -0400
-Received: by mail-qk1-f196.google.com with SMTP id 201so31694602qkm.9
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 10:25:58 -0700 (PDT)
+        id S2388720AbfGWRsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 13:48:54 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46869 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732899AbfGWRsy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 13:48:54 -0400
+Received: by mail-wr1-f65.google.com with SMTP id z1so44078403wru.13;
+        Tue, 23 Jul 2019 10:48:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EUphuEwrZLhheaivYxOs3+IP5xczivEPWWhKQbWqQ58=;
-        b=RUIRiGCv3r2B0G7EM/oszmuYFak/HPhbNhHVHSOw6GfhPSmI27qdHWWzbjPLNujhku
-         vKvw7tsmMJcEem2MDYaqZvuSLJ+iVj0LkkO4QOSg7LaEoNGsY+6N8l8XrAF++jqBK+Jp
-         yy0Bt21MGZqulZ68hVt935Qosr6mEE0Br7sgk=
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lw64+rRIlfN9llW/JDiD/kh+iAbtqzU9FtUm2AviLUY=;
+        b=Ke3RPY0nRkGmJqorFON4W7UvAFnkA1mTmK8gK+LxqpYaD0WyDD4gpEOy9WsiKfyMAF
+         ckDHJKdnFRzE9HTqkBBdOaYhlR5E/tb2JQV5L+QmIyzLEeetcUt041iAxRTcIXJSssDL
+         xFcEbyhOSfvP6/WUTcANQZ2cxsbzehXZpQnWoAK5tWbQ5+zgaoAXS2v1UG0SPhDIsv2E
+         +sCFF9b2EcSE/6YySPLIpwiCJYhxkvkMNdD5uCxyTokdTkPN6kjFKvkoM3dpGNBCMAr9
+         88nNP/eTPYMxt28eJph8/yqDKWHTZUuZowGAwm0op/JW6H8FBGEAFbFPC0Hl7SD9Q5vv
+         0aug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EUphuEwrZLhheaivYxOs3+IP5xczivEPWWhKQbWqQ58=;
-        b=ZoPvOxG/Ts8rqHUQkOu+2/s2gnxgni+6Om97DIRuxAY7GMxxrXHvdFhD9SsAOZ1Amn
-         tlZWpgx1tEumfTMqaGU3yxZsDGWzojV7vRCHvJwwKmGjuQwyvMo1c0UK9jvPMKRACYJk
-         fdc1xp7ghfKpGmdaoBWkJ2BCd9dl0YvOfrxWmvxVSF+3ZAE9hs+xvtnEOfai+D5RSykj
-         fSIkaamrAM0fRPdInFVTsnay7sjx9Uoc0eleBMra6grSDiLGzB2bupXqzT80K4h6Nkb1
-         Yd7iI6f8LTKToRvy+R3ZrZsjR+PACWN3IkwqMZ5yRzEooCUerO+10tzemdnZagLi0BhS
-         mTWA==
-X-Gm-Message-State: APjAAAXx6a2iPP7O3w7vfL5GvouTyA5IRJKx4uTyVY1C1nB2izPIFaKL
-        wng0RmO8+hPvsRoEvj2T0SW6EaXxos1oMUOBRbaAvQ==
-X-Google-Smtp-Source: APXvYqw/KYvGT8AjEz2Oi5MYCARnmBO009jytp3nugfUE/B/EQ1VNgD6XwtLYNA69KGDktQR4LNR+NAr7ZVhhAacF6Q=
-X-Received: by 2002:a05:620a:1425:: with SMTP id k5mr51778003qkj.146.1563902758554;
- Tue, 23 Jul 2019 10:25:58 -0700 (PDT)
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lw64+rRIlfN9llW/JDiD/kh+iAbtqzU9FtUm2AviLUY=;
+        b=i0FWOtBMREEDc+9OlgTM4G2FO2IYhOLmP1RswPeEohD4To0NbUnc5RVFmAOQYeJQMT
+         NDg6LAi8qmkMvglXtHi7bpdI3dWhGpydV1jZ1QywbgSZ4K4QUsvRjNKSQA70kgB1h9SY
+         75x3pHwc+zNA3pg/ntnVjSgSGGcqpUK9u/Yb6dzX8EbLdxWRO0RSzYcS5nxn2xD45uZB
+         G21PprFI4UtwYVSCWD4bYoYvGpFO/aV/lJX63f+HPBWGIPn0x8kc49AQhkoBw4KXxmyZ
+         q78xsLxGTnSD6EHq5Ggt0hprX7RIumvNh3RpXOao5GsAW0f2GX5BZWVAVWrZpA2FrbaB
+         nrsg==
+X-Gm-Message-State: APjAAAVxmxzdvZfnmC4TfHzvnrobP8Vwz9bbYgjcu62/udKfYbQC6UzJ
+        VK6MuIreW9y62CGztEwcd4o=
+X-Google-Smtp-Source: APXvYqxdFMbhlyWIB3rurr1U5IoeuLXQYUOJJbXjUXp92CDnV3P5Zl4OeajfZDbeHqLTFBexZfqAgQ==
+X-Received: by 2002:a5d:4284:: with SMTP id k4mr79701010wrq.194.1563904131910;
+        Tue, 23 Jul 2019 10:48:51 -0700 (PDT)
+Received: from [192.168.8.14] (nat-113.starnet.cz. [178.255.168.113])
+        by smtp.gmail.com with ESMTPSA id r123sm39419602wme.7.2019.07.23.10.48.50
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jul 2019 10:48:50 -0700 (PDT)
+From:   Evgeny Kolesnikov <evgenyz@gmail.com>
+Subject: Re: [PATCH 0/5] Add support for WD MyCloud EX2 Ultra (+ versatile
+ UART-based restart/poweroff drivers)
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Jason Cooper <jason@lakedaemon.net>, linux-pm@vger.kernel.org,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+References: <cover.1563822216.git.evgenyz@gmail.com>
+ <20190723015631.GI8972@lunn.ch>
+Message-ID: <c2ffe662-6975-351b-87b8-af760984ef4d@gmail.com>
+Date:   Tue, 23 Jul 2019 19:48:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20190722182451.GB24412@kroah.com> <20190722223337.36199-1-ravisadineni@chromium.org>
- <CAJZ5v0ikknRGPg0fhPRB2oLxtC0kD=8DX=6Z9MgtAYTO+YZ3ng@mail.gmail.com>
- <CAEZbON5aC+iYzg58YH59rvfvcUYkjwQyjA9wAJstFEQvUei_-A@mail.gmail.com> <CAJZ5v0hk8kvRUzw1Xs0S8+kcn++=4JNO7fjty3S9nq5iM=BG3w@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hk8kvRUzw1Xs0S8+kcn++=4JNO7fjty3S9nq5iM=BG3w@mail.gmail.com>
-From:   Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Date:   Tue, 23 Jul 2019 10:25:47 -0700
-Message-ID: <CAEZbON4PSUtmgAy7OCXuMM0k4+0S=JjpgQfyUq09ijVxpq-rfw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] power: Refactor device level sysfs.
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Todd Broch <tbroch@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190723015631.GI8972@lunn.ch>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks Rafael. I will abandon this patch set and try to create a
-symlink as you suggested.
+On 23/07/2019 03:56, Andrew Lunn wrote:
+> On Mon, Jul 22, 2019 at 09:53:00PM +0200, Evgeny Kolesnikov wrote:
+>>
+>> The difference between uart-poweroff and qnap-poweroff is small, but important:
+>> uart-poweroff is able to send to an MCU a command of arbitrary length, and the command
+>> itself is defined in a DTS file for a specific device/board, thus making this driver
+>> applicable to wider range of devices.
+> 
+> There is a lot of replicated code here, and in the original
+> qnap-poweroff.c driver. Please consolidate it by extending the current
+> driver. It should be easy to add a new compatible string, and turn
+> power_off_cfg.cmd into an array.
 
-Thanks,
-Ravi
+Hi, Andrew.
 
-On Tue, Jul 23, 2019 at 10:02 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, Jul 23, 2019 at 6:57 PM Ravi Chandra Sadineni
-> <ravisadineni@chromium.org> wrote:
-> >
-> > Hi Greg,
-> >
-> > https://patchwork.kernel.org/patch/11045069/ seems to create a virtual
-> > device under wakeup class with the same name as the actual device. I
-> > don't see a way to reliably map these virtual devices to the actual
-> > device sysfs node. For example if we have to know if a particular
-> > input device has triggered a wake event, we have to look for a virtual
-> > device under /sys/class/wakeup with the same name. I am afraid that
-> > depending just on the name might be too risky as there can be multiple
-> > devices under different buses with the same name.  Am I missing
-> > something?
->
-> There can be a symlink (say "wakeup_source") from under the actual
-> device to the virtual wakeup one associated with it.
->
-> Then we can advise everybody to use the symlink for the stats and
-> deprecate the stats attributes under the actual device going forward.
-> :-)
->
-> I have a plan to cut a patch to add such a symlink, but you can try to
-> beat me to that if you want.
->
-> > On Tue, Jul 23, 2019 at 12:44 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Tue, Jul 23, 2019 at 12:33 AM Ravi Chandra Sadineni
-> > > <ravisadineni@chromium.org> wrote:
-> > > >
-> > > > wakeup_abort_count and wakeup_count attributes print the
-> > > > same (wakeup_count) variable. Thus this patchset removes the
-> > > > duplicate wakeup_abort_count sysfs attribute. This patchset also
-> > > > exposes event_count as a sysfs attribute.
-> > > >
-> > > > Ravi Chandra Sadineni (2):
-> > > >   power: sysfs: Remove wakeup_abort_count attribute.
-> > > >   power:sysfs: Expose device wakeup_event_count.
-> > >
-> > > I don't think you need this at all, because
-> > > https://patchwork.kernel.org/patch/11045069/ is exposing what you need
-> > > already.
-> > >
-> > > Thanks!
+I've considered extending qnap driver, but I have some doubts about this 
+approach.
+
+First of all there is only a poweroff counterpart. As there is no
+qnap-restart driver, what should I do with uart-restart? Is it OK to 
+have xxx-restart-poweroff driver (never saw anything like that)?
+
+While I can add cmd as a parameter to qnap driver (having it converted
+into an array) it should be optional as original qnap relies on two 
+hardcoded values for its devices. And having a non-qnap device with this 
+driver in DT without defined cmd would not make any sense. It feels 
+kinda ugly.
+
+Wouldn't it be more fitting to have these two generic drivers and then 
+retire old qnap driver while moving everything that uses it to the new one?
+
+Thanks for the review.
+
+EK.
