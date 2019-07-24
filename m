@@ -2,91 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD984721F8
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 00:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A637235C
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 02:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389302AbfGWWGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 18:06:35 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:60540 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389193AbfGWWGf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Jul 2019 18:06:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=E/LUBzLCJzpcb95mBekwKy8gZoYu7sAEuAiBQdoSSiA=; b=UDfC2FY/7QnEVtXmemf42irTpU
-        wU+REj/7meBbBTKOigPdM0rK6mIj3oswO4Bdc7VYYvfx5qdrK5OpFJyfuxReqODGFI0trlm5EdvGr
-        m42/sfxUKYVUo1HAOnCi5EjUPA9+2Ww25yW4X+SG4wGN1XWbm/QhPu4BR/KHE+CwXnPM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hq2vU-0003aB-QJ; Wed, 24 Jul 2019 00:06:28 +0200
-Date:   Wed, 24 Jul 2019 00:06:28 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Evgeny Kolesnikov <evgenyz@gmail.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Jason Cooper <jason@lakedaemon.net>, linux-pm@vger.kernel.org,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [PATCH 0/5] Add support for WD MyCloud EX2 Ultra (+ versatile
- UART-based restart/poweroff drivers)
-Message-ID: <20190723220628.GA13517@lunn.ch>
-References: <cover.1563822216.git.evgenyz@gmail.com>
- <20190723015631.GI8972@lunn.ch>
- <c2ffe662-6975-351b-87b8-af760984ef4d@gmail.com>
+        id S1727265AbfGXATN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 20:19:13 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:42191 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727294AbfGXATI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 20:19:08 -0400
+Received: by mail-ot1-f65.google.com with SMTP id l15so45990129otn.9
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 17:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HEWjLSp+3ZYUNuS4KEhJxXUV1NrMjDNJTyQjAT98l0c=;
+        b=KyTmnzEVvpYk+8Vlka2lOIuadkdcTW/Tz8dySg662PkCDcfqcEtDIWJHSQjNaXMk0C
+         haii7dxiHOazpNAsR3Z5uOs1P7uV2Vqw/MLZ02bTVjbLF8knC5hZGHCDpTU4NMPLpWuL
+         Xhx3HY2Hw65F9lEzCn6KA48uIWF57MLOLQvoohWT9KUUMS/pA7OUMytCzoKMUioppvFj
+         vWSTNw9ple229Kqqzr/vF/e++yp0Xaojca4wB+WeVU9cDFpKWtVztOMrEWXFACXsEgpL
+         FOKqSw6cChnRDA39sXL1mdr0XGu4PW1KThKsddz652YlAEIG+ce02Vei72xDob9tgh9J
+         HffQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HEWjLSp+3ZYUNuS4KEhJxXUV1NrMjDNJTyQjAT98l0c=;
+        b=g+l+JaaHJzOZuyuG68jP/T8+AYSbWcwKF2HLUjBdWp/vHpnnSL2jKj71G9MWMxkl8K
+         0ko9am+XzbAJsrYVnTpq/a8CpIaXyfLWm9+6YpWvyla9WVYC6V1RgEiO6pQ5biIXmlyY
+         bneiKdPB4AOzpyuL06FWFN5NqUcdiK/Kffch0GnlaAF6cAg/nEBH2+MviRzmawJhhyw3
+         VgiG395nI0TPRf8qxOFDNuCEKm8POKxJqTYK5mrRmPRqnyhoGlEhv01wteSIcr+OApE1
+         ESd1CtngfTeUbKBxhe+3KY1bt+lFEM/3IfZOYzbBAdV6crzSm9NT/RX14rBUswDudxVc
+         nqLA==
+X-Gm-Message-State: APjAAAXsztxwzQe/AfXwI8cbIbhUvvS2zIc/FTBEtmHVLZfk4A6iNEWH
+        3dzINAwSypdNylUCdeLgVgCF3sNNKRnDLD+E8KJZRw==
+X-Google-Smtp-Source: APXvYqzquNMPlzmL6KiNv9dmgPAQ6VX+Yc1CbsySXKc3HGl9ASNz/27eBQrBEGbA7tg6Cvx7smNnbzqfSRN1LoHdaAs=
+X-Received: by 2002:a05:6830:160c:: with SMTP id g12mr2293485otr.231.1563927547521;
+ Tue, 23 Jul 2019 17:19:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2ffe662-6975-351b-87b8-af760984ef4d@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-2-saravanak@google.com>
+ <98b2e315-e8da-80ad-1ef8-e6b222c1c6fe@codeaurora.org> <CAGETcx9KSqvyzbM-S8LvBObkNBt38K683Ljm8nNQuhxk7MuvAg@mail.gmail.com>
+ <20190722233501.GA19594@bogus> <CAGETcx9GzQj0ZHNF+uR2cGHUkQ5sOPYEwyXKK1dJ2sJbHVSVyw@mail.gmail.com>
+ <CAL_JsqJeGK2m6hVEqvFxW6dEhi22LXaRKgb5JmnJfmCp+J6XuA@mail.gmail.com>
+In-Reply-To: <CAL_JsqJeGK2m6hVEqvFxW6dEhi22LXaRKgb5JmnJfmCp+J6XuA@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 23 Jul 2019 17:18:31 -0700
+Message-ID: <CAGETcx9GkwDJHBuFBRheMqR80=JWnXa4xtPqQ+2xHcfvSd55+A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: opp: Introduce opp-peak-KBps and
+ opp-avg-KBps bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sibi Sankar <sibis@codeaurora.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 07:48:49PM +0200, Evgeny Kolesnikov wrote:
-> On 23/07/2019 03:56, Andrew Lunn wrote:
-> >On Mon, Jul 22, 2019 at 09:53:00PM +0200, Evgeny Kolesnikov wrote:
-> >>
-> >>The difference between uart-poweroff and qnap-poweroff is small, but important:
-> >>uart-poweroff is able to send to an MCU a command of arbitrary length, and the command
-> >>itself is defined in a DTS file for a specific device/board, thus making this driver
-> >>applicable to wider range of devices.
+On Tue, Jul 23, 2019 at 7:27 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Jul 22, 2019 at 5:41 PM Saravana Kannan <saravanak@google.com> wrote:
 > >
-> >There is a lot of replicated code here, and in the original
-> >qnap-poweroff.c driver. Please consolidate it by extending the current
-> >driver. It should be easy to add a new compatible string, and turn
-> >power_off_cfg.cmd into an array.
-> 
-> Hi, Andrew.
-> 
-> I've considered extending qnap driver, but I have some doubts about this
-> approach.
-> 
-> First of all there is only a poweroff counterpart. As there is no
-> qnap-restart driver, what should I do with uart-restart? Is it OK to have
-> xxx-restart-poweroff driver (never saw anything like that)?
+> > On Mon, Jul 22, 2019 at 4:35 PM Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Tue, Jul 16, 2019 at 11:58:08AM -0700, Saravana Kannan wrote:
+> > > > On Tue, Jul 16, 2019 at 10:25 AM Sibi Sankar <sibis@codeaurora.org> wrote:
+> > > > >
+> > > > > Hey Saravana,
+> > > > >
+> > > > > https://patchwork.kernel.org/patch/10850815/
+> > > > > There was already a discussion ^^ on how bandwidth bindings were to be
+> > > > > named.
+> > > >
+> > > > Yes, I'm aware of that series. That series is trying to define a BW
+> > > > mapping for an existing frequency OPP table. This patch is NOT about
+> > > > adding a mapping to an existing table. This patch is about adding the
+> > > > notion of BW OPP tables where BW is the "key" instead of "frequency".
+> > > >
+> > > > So let's not mixed up these two series.
+> > >
+> > > Maybe different reasons, but in the end we'd end up with 2 bandwidth
+> > > properties. We need to sort out how they'd overlap/coexist.
+> >
+> > Oh, I totally agree! My point is that the other mapping isn't the
+> > right approach because it doesn't handle a whole swath of use cases.
+> > The one I'm proposing can act as a super set of the other (as in, can
+> > handle that use case too).
+> >
+> > > The same comment in that series about defining a standard unit suffix
+> > > also applies to this one.
+> >
+> > I thought I read that whole series and I don't remember reading about
+> > the unit suffix. But I'll take a closer look. I've chosen to keep the
+> > DT units at least as "high of a resolution" as what the APIs accept
+> > today. The APIs take KB/s. So I make sure DT can capture KB/s
+> > differences. If we all agree that KB/s is "too accurate" then I think
+> > we should change everything to MB/s.
+>
+> Either one is fine with me, but trying to align to what the OS picked
+> doesn't work. What does BSD use for example? More important is
+> aligning across DT properties so we don't have folks picking whatever
+> random unit they like. We generally try to go with the smallest units
+> that will have enough (32-bit) range for everyone, so that's probably
+> KB/s here.
 
-Hi Evgeny
+Yeah, that makes sense.
 
-There are a few options. You can refactor all the code into a library
-and small drivers which wrap around the library. Or you can make the
-driver handle both, using the compatible string to determine which it
-should do.
- 
-> While I can add cmd as a parameter to qnap driver (having it converted
-> into an array) it should be optional as original qnap relies on two
-> hardcoded values for its devices.
-
-That is not what i meant. You can make the current code more generic
-by changing the single byte in power_off_cfg to an array. DT should
-describe the hardware, not bytes you poke into registers. So it is
-perfectly valid to have the bytes hard coded in the driver.
-
-	  Andrew
+-Saravana
