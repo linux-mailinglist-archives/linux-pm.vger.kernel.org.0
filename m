@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BF37377F
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 21:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219227378D
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 21:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728393AbfGXTKM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 Jul 2019 15:10:12 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:33332 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbfGXTKM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 15:10:12 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n9so48218602wru.0;
-        Wed, 24 Jul 2019 12:10:10 -0700 (PDT)
+        id S1728915AbfGXTOV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 Jul 2019 15:14:21 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52777 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726430AbfGXTOV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 15:14:21 -0400
+Received: by mail-wm1-f67.google.com with SMTP id s3so42779962wms.2;
+        Wed, 24 Jul 2019 12:14:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=HSdo9ZmudjoY5QfVd80yVoDhymQ27WsVZ3uLmAFSang=;
-        b=UQ6HCb0/f1XrGVWnQ40XkLGhlIU01u9FQrsfKnawPRRbBuY16J/QH2JzBwJAHgL0DO
-         Ug2eMEw8Sb9WnAJs+hOkydXE90YuQlmBKVFxTBpTm58axGPVbTWSIJxdJEQAVxgNG96l
-         ua9+c82futZonjh0nb73t4+vzIdgNyHW7itfIrL12WqogghfrnCgAhq9Dt4FifSCQl7u
-         /Qu5mGwmpiwhcU8/3Ck6uGgL/f4CRRNUDpeiecNnkFff0uLLjbIHTMLRYmBY3uyy39d3
-         tZ4SIXPMgqZup56+6xH39XYDfRzylaK9Qm5j0+1VPhupoYxwL70XkHGon9OyPAX0l2DW
-         HWUA==
-X-Gm-Message-State: APjAAAVK6/jarw+YTYNSrNzeAJY0B6Cg3I5c2xLHLgc0ScA9cFa6xDfi
-        VGshgPIgOIKq6cbPmyhO94s=
-X-Google-Smtp-Source: APXvYqyWQBOON9MCwlXaZ8Eic8a5Grk22K3A0wrcZg+IPuNCk48LkzoWpj7xmqjgI5qwVDbGSZBdAQ==
-X-Received: by 2002:a5d:4d81:: with SMTP id b1mr6533715wru.27.1563995409586;
-        Wed, 24 Jul 2019 12:10:09 -0700 (PDT)
+        bh=+dgR7D/EXKyMHjC4KOvCZR7USJlIlrVgRqVtNiYm68A=;
+        b=eCu7trHBlB2LOcMmTpoOt5Rocl4eYwi2sKmw3S29EziTNsVfhDsqDIl8m7NS55/hzt
+         IynheOuSDWhfwNefZn0VCmq1yWOpwWZLnQBVgBSrfqVyPVB9fxGgRf/wvn4sQ+4NgyG0
+         U2Eg+tApcDks5OTLZ0I+uCX04odB224CUFj2SPK0Xnwi3iBKCTgJPbPHcszzzAMBpm/P
+         Vbi5RhCP9YzW0MZC6CtAkV6tl1i3Fh4UcCF9tcaZMSUUvvtYvJHv/m3LZ71k+CC9OgZu
+         Rx3mwj9tQtF9A4oUCErpy+EjnV2l4adrzyO8YgHIKU8ogHVW9YmgLKVUs8X9nAml5eOs
+         bamQ==
+X-Gm-Message-State: APjAAAWKqudN6GbYHsn15NCl68FMAq5LIHq7MN6iq+zSzDd3/ZitwbIH
+        0ciIkF85ekkOIJJm11YEaD+rGxM4
+X-Google-Smtp-Source: APXvYqxr0ifyhVtp91zsXaTGdqxuq3wdKwgnKuWnLCyxSECwcySUMHL3yuZ93uJZ/W8HD1t2wKkzTw==
+X-Received: by 2002:a1c:a186:: with SMTP id k128mr69920564wme.74.1563995658727;
+        Wed, 24 Jul 2019 12:14:18 -0700 (PDT)
 Received: from kozik-lap ([194.230.155.239])
-        by smtp.googlemail.com with ESMTPSA id v4sm44882540wmg.22.2019.07.24.12.10.08
+        by smtp.googlemail.com with ESMTPSA id p6sm50559987wrq.97.2019.07.24.12.14.17
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 24 Jul 2019 12:10:08 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 21:10:06 +0200
+        Wed, 24 Jul 2019 12:14:17 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 21:14:15 +0200
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -43,48 +43,32 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         cw00.choi@samsung.com, myungjoo.ham@samsung.com,
         inki.dae@samsung.com, sw0312.kim@samsung.com,
         georgi.djakov@linaro.org, m.szyprowski@samsung.com
-Subject: Re: [RFC PATCH 03/11] devfreq: exynos-bus: Change goto-based logic
- to if-else logic
-Message-ID: <20190724191006.GF14346@kozik-lap>
+Subject: Re: [RFC PATCH 04/11] devfreq: exynos-bus: Clean up code
+Message-ID: <20190724191415.GG14346@kozik-lap>
 References: <20190723122016.30279-1-a.swigon@partner.samsung.com>
- <CGME20190723122024eucas1p1ff060d072132bfbc8a8a1d10fa1f90f8@eucas1p1.samsung.com>
- <20190723122016.30279-4-a.swigon@partner.samsung.com>
+ <CGME20190723122024eucas1p25a480ccddaa69ee1d0f1a07960ca3f22@eucas1p2.samsung.com>
+ <20190723122016.30279-5-a.swigon@partner.samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20190723122016.30279-4-a.swigon@partner.samsung.com>
+In-Reply-To: <20190723122016.30279-5-a.swigon@partner.samsung.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 02:20:08PM +0200, Artur Świgoń wrote:
-> This patch improves code readability by changing the following construct:
-> 
-> >    if (cond)
-> >        goto passive;
-> >    foo();
-> >    goto out;
-> >passive:
-> >    bar();
-> >out:
-> 
-> into this:
-> 
-> >    if (cond)
-> >        bar();
-> >    else
-> >        foo();
+On Tue, Jul 23, 2019 at 02:20:09PM +0200, Artur Świgoń wrote:
+> This patch adds minor improvements to the exynos-bus driver.
 > 
 > Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
 > ---
->  drivers/devfreq/exynos-bus.c | 24 +++++++++---------------
->  1 file changed, 9 insertions(+), 15 deletions(-)
+>  drivers/devfreq/exynos-bus.c | 49 ++++++++++++++++--------------------
+>  1 file changed, 22 insertions(+), 27 deletions(-)
 
-Code looks much better:
 Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
 Best regards,
 Krzysztof
+
