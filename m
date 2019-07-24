@@ -2,128 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDAF7323D
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 16:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1C873242
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 16:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387416AbfGXOwz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jul 2019 10:52:55 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:57016 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfGXOwz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 10:52:55 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id BEC4260256; Wed, 24 Jul 2019 14:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563979973;
-        bh=GLF+INpUZtE9vDJdCTqRAtCJy5OjjE16gdlqI1ORlT4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TdQ7z7+0lgIwRufSCZJ94H9BM6jN6fQ9sh+dDMMS+x8HG0IMGNd15ozl7BCaLj6hB
-         +KH9Uj1Fyzee8aIfT0vh3Qb+C8nyVSXMe0c0ffFCPSy1P9dewg4J0RyfcaQ6LGH0B0
-         Xqq/UrtOGxhXCOLdi/Pc3U8vY89Kgb5H3hVIvDrc=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 840C160256;
-        Wed, 24 Jul 2019 14:52:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563979972;
-        bh=GLF+INpUZtE9vDJdCTqRAtCJy5OjjE16gdlqI1ORlT4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QND30vBzpIkaYYFjjvb2CT2OH40UymiL3J86jcesMc7H0XSMHVTiFYVSWQs2rev0K
-         yBpfVDzLjBwijs3EiVMX/Qpoy9IfZGOuNUw4JQ4QKelTd3SyskBCaWca/Z2/iEwFSX
-         D0YV6YBWte/uye5F+POPV0UZ/pxUV/7ROT8mnjYw=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 840C160256
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Wed, 24 Jul 2019 08:52:51 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        mkshah@codeaurora.org
-Subject: Re: [PATCH V2 2/4] drivers: qcom: rpmh-rsc: avoid locking in the
- interrupt handler
-Message-ID: <20190724145251.GB18620@codeaurora.org>
-References: <20190722215340.3071-1-ilina@codeaurora.org>
- <20190722215340.3071-2-ilina@codeaurora.org>
- <5d3769df.1c69fb81.55d03.aa33@mx.google.com>
+        id S2387460AbfGXOxY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 10:53:24 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:40606 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbfGXOxY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 10:53:24 -0400
+Received: by mail-io1-f65.google.com with SMTP id h6so3631032iom.7;
+        Wed, 24 Jul 2019 07:53:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=f1uxVtxe60Lcr7dI5TQEbK5Cmx2NSVJK7C4T4Q5hp2Y=;
+        b=Xs8OoW84Cso8psAS9wFCWPgdp7MSw98gEpsW47oWTUZorY1m8URStG3q5oMv9Yxp1T
+         GI8+81RFhsJyiMLSVaIDRmqGHvDZCPaLHxECeAr3wpkjbXaBdNEaYy1LHFP8gS3m1MvR
+         5iaXqQYCHwOQY1iGxFP2mxyReqbb/ZWuSzCHrtXNGIDONsTS908m7XcfyZVCL9U/Ewd6
+         hWbXY21reeirsSUK4CzxfcLLyzhYbeF85Q8juZhpFiPN+XzuE4fmA1T64JIzwthujUuM
+         Nri48FLqU2fXq3Rvas2cVD7tcJc821h4Ux9G1IWr51ce9NLVjqHkmKa0OKu+WvzvwyR1
+         HvlQ==
+X-Gm-Message-State: APjAAAWfZMlZdmtHhtHX1AINhLswppRnwgOzgDfmBueJ6c9ZlGgv/G4x
+        75O8d9tg5zc+YvB9Q+yrzqvPcxc=
+X-Google-Smtp-Source: APXvYqxz45jNhjF9OdeNK+P0XXsH47UQdfWWYJlbey+fEz9h4ZWF7VXuyUUr5GMcM9viKwV/q3AN8w==
+X-Received: by 2002:a6b:4f0d:: with SMTP id d13mr7295101iob.170.1563980003520;
+        Wed, 24 Jul 2019 07:53:23 -0700 (PDT)
+Received: from localhost ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id n17sm37419022iog.63.2019.07.24.07.53.22
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 24 Jul 2019 07:53:22 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 08:53:22 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Niklas Cassel <niklas.cassel@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org, jorge.ramirez-ortiz@linaro.org,
+        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        Sricharan R <sricharan@codeaurora.org>,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/13] dt-bindings: cpufreq: Re-organise kryo cpufreq to
+ use it for other nvmem based qcom socs
+Message-ID: <20190724145322.GA4233@bogus>
+References: <20190705095726.21433-1-niklas.cassel@linaro.org>
+ <20190705095726.21433-2-niklas.cassel@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5d3769df.1c69fb81.55d03.aa33@mx.google.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190705095726.21433-2-niklas.cassel@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 23 2019 at 14:11 -0600, Stephen Boyd wrote:
->Quoting Lina Iyer (2019-07-22 14:53:38)
->> Avoid locking in the interrupt context to improve latency. Since we
->> don't lock in the interrupt context, it is possible that we now could
->> race with the DRV_CONTROL register that writes the enable register and
->> cleared by the interrupt handler. For fire-n-forget requests, the
->> interrupt may be raised as soon as the TCS is triggered and the IRQ
->> handler may clear the enable bit before the DRV_CONTROL is read back.
->>
->> Use the non-sync variant when enabling the TCS register to avoid reading
->> back a value that may been cleared because the interrupt handler ran
->> immediately after triggering the TCS.
->>
->> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
->> ---
->
->I have to read this patch carefully. The commit text isn't convincing me
->that it is actually safe to make this change. It mostly talks about the
->performance improvements and how we need to fix __tcs_trigger(), which
->is good, but I was hoping to be convinced that not grabbing the lock
->here is safe.
->
->How do we ensure that drv->tcs_in_use is cleared before we call
->tcs_write() and try to look for a free bit? Isn't it possible that we'll
->get into a situation where the bitmap is all used up but the hardware
->has just received an interrupt and is going to clear out a bit and then
->an rpmh write fails with -EBUSY?
->
-If we have a situation where there are no available free bits, we retry
-and that is part of the function. Since we have only 2 TCSes avaialble
-to write to the hardware and there could be multiple requests coming in,
-it is a very common situation. We try and acquire the drv->lock and if
-there are free TCS available and if available mark them busy and send
-our requests. If there are none available, we keep retrying.
+On Fri,  5 Jul 2019 11:57:12 +0200, Niklas Cassel wrote:
+> From: Sricharan R <sricharan@codeaurora.org>
+> 
+> The kryo cpufreq driver reads the nvmem cell and uses that data to
+> populate the opps. There are other qcom cpufreq socs like krait which
+> does similar thing. Except for the interpretation of the read data,
+> rest of the driver is same for both the cases. So pull the common things
+> out for reuse.
+> 
+> Signed-off-by: Sricharan R <sricharan@codeaurora.org>
+> [niklas.cassel@linaro.org: split dt-binding into a separate patch and
+> do not rename the compatible string.]
+> Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
+> ---
+> Changes since RFC:
+> -Made DT bindings a separate patch.
+> -Keep the original compatible string, since renaming it breaks DT
+> backwards compatibility.
+> 
+>  .../opp/{kryo-cpufreq.txt => qcom-nvmem-cpufreq.txt}   | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>  rename Documentation/devicetree/bindings/opp/{kryo-cpufreq.txt => qcom-nvmem-cpufreq.txt} (98%)
+> 
 
->>  drivers/soc/qcom/rpmh-rsc.c | 4 +---
->>  1 file changed, 1 insertion(+), 3 deletions(-)
->>
->> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
->> index 5ede8d6de3ad..694ba881624e 100644
->> --- a/drivers/soc/qcom/rpmh-rsc.c
->> +++ b/drivers/soc/qcom/rpmh-rsc.c
->> @@ -242,9 +242,7 @@ static irqreturn_t tcs_tx_done(int irq, void *p)
->>                 write_tcs_reg(drv, RSC_DRV_CMD_ENABLE, i, 0);
->>                 write_tcs_reg(drv, RSC_DRV_CMD_WAIT_FOR_CMPL, i, 0);
->>                 write_tcs_reg(drv, RSC_DRV_IRQ_CLEAR, 0, BIT(i));
->> -               spin_lock(&drv->lock);
->>                 clear_bit(i, drv->tcs_in_use);
->> -               spin_unlock(&drv->lock);
->>                 if (req)
->>                         rpmh_tx_done(req, err);
->>         }
->> @@ -304,7 +302,7 @@ static void __tcs_trigger(struct rsc_drv *drv, int tcs_id)
->>         enable = TCS_AMC_MODE_ENABLE;
->>         write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
->>         enable |= TCS_AMC_MODE_TRIGGER;
->> -       write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
->> +       write_tcs_reg(drv, RSC_DRV_CONTROL, tcs_id, enable);
->>  }
->>
->>  static int check_for_req_inflight(struct rsc_drv *drv, struct tcs_group *tcs,
+Reviewed-by: Rob Herring <robh@kernel.org>
