@@ -2,179 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2443E741C0
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 00:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDBD74210
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 01:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728819AbfGXWxr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 Jul 2019 18:53:47 -0400
-Received: from tyo161.gate.nec.co.jp ([114.179.232.161]:41187 "EHLO
-        tyo161.gate.nec.co.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbfGXWxr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 18:53:47 -0400
-X-Greylist: delayed 628 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Jul 2019 18:53:45 EDT
-Received: from mailgate01.nec.co.jp ([114.179.233.122])
-        by tyo161.gate.nec.co.jp (8.15.1/8.15.1) with ESMTPS id x6OMhBC6027156
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 25 Jul 2019 07:43:11 +0900
-Received: from mailsv02.nec.co.jp (mailgate-v.nec.co.jp [10.204.236.94])
-        by mailgate01.nec.co.jp (8.15.1/8.15.1) with ESMTP id x6OMhBmf001811;
-        Thu, 25 Jul 2019 07:43:11 +0900
-Received: from mail01b.kamome.nec.co.jp (mail01b.kamome.nec.co.jp [10.25.43.2])
-        by mailsv02.nec.co.jp (8.15.1/8.15.1) with ESMTP id x6OMgfpR007696;
-        Thu, 25 Jul 2019 07:43:11 +0900
-Received: from bpxc99gp.gisp.nec.co.jp ([10.38.151.139] [10.38.151.139]) by mail02.kamome.nec.co.jp with ESMTP id BT-MMP-7086063; Thu, 25 Jul 2019 07:42:53 +0900
-Received: from BPXM09GP.gisp.nec.co.jp ([10.38.151.201]) by
- BPXC11GP.gisp.nec.co.jp ([10.38.151.139]) with mapi id 14.03.0439.000; Thu,
- 25 Jul 2019 07:42:52 +0900
-From:   Kosuke Tatsukawa <tatsu@ab.jp.nec.com>
-To:     Prarit Bhargava <prarit@redhat.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH] turbostat: Fix Haswell Core systems 
-Thread-Topic: [PATCH] turbostat: Fix Haswell Core systems 
-Thread-Index: AdVCcSCXTnq79uaRSFaHy+s9EiQ3qA==
-Date:   Wed, 24 Jul 2019 22:42:52 +0000
-Message-ID: <17EC94B0A072C34B8DCF0D30AD16044A02A7EFF9@BPXM09GP.gisp.nec.co.jp>
-In-Reply-To: <263dbd7a-6149-afb3-eb7b-23ee40a8875d@redhat.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.34.125.78]
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: 8BIT
+        id S1727941AbfGXX2M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 19:28:12 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:43665 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727628AbfGXX2L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 19:28:11 -0400
+Received: by mail-io1-f65.google.com with SMTP id k20so93226375ios.10
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 16:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g4ABzFOQlTG/3OQcp5oSZYVxTY4a6VgvyY/WeWtEMFc=;
+        b=QCbvY8EZib/jrxmnLyPloobD7WJRQmMzJ7AXOwhOTWB9bsQacV0NcHpV6x/21LMgkj
+         SKZxLR07ohia9fQFOFISVg4RLZuPotp5Coy5IAA3CYjMvzGKXqa964OJO6aQykLl2Fav
+         e6tKW3wTiA2m+6abUrdRIutbhcwMpjxasjSAk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g4ABzFOQlTG/3OQcp5oSZYVxTY4a6VgvyY/WeWtEMFc=;
+        b=PxKUhOY2L/MrHIt8+CM3oCUyRiMQwttqcjumWls/R0yM/XWpSOxSymOEVI0yxjDSYR
+         HpVhfHhrARCY5iFiT0oXxd+ruVbM5rp9r5FU6cs+SueLbpxZqaWAS/kF6sv3QQYys0D+
+         3agrRnlzxg4J8qNIgx9sZP8TaHu23bIYkjLz18rnB+tnxT9+h7hgOIfr2990Sw9ywSqD
+         gzNAPvO87JWQdGykmV1T43eYKI+OtAeSCmAugetsUErC8MhH5mp8pTNVMI/EQBhLwImo
+         K1d9p2X1NGolf742E6NduwdzdU5ZwydaKAkoInV4c9MGVEEtOU3EjzyUXXgyc7bp8Q39
+         N8MA==
+X-Gm-Message-State: APjAAAVyi5RG6O3YbVqz1TCWDt72T+DPvAXUBd6RJkrb0LAHFTYAyUCU
+        xcugwotGOAaWQqrlW6Bkl0P99rvoy7s=
+X-Google-Smtp-Source: APXvYqwCgr5WU+hg6htUjHZJIXZVIre0iqrfWSosLnM/lj5dibY1ECbFD4ycKMmPbNBJrapoxSYgPQ==
+X-Received: by 2002:a6b:5103:: with SMTP id f3mr74740816iob.142.1564010890531;
+        Wed, 24 Jul 2019 16:28:10 -0700 (PDT)
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com. [209.85.166.43])
+        by smtp.gmail.com with ESMTPSA id p3sm40876587iog.70.2019.07.24.16.28.08
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Wed, 24 Jul 2019 16:28:08 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id k8so93332063iot.1
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 16:28:08 -0700 (PDT)
+X-Received: by 2002:a5e:8f08:: with SMTP id c8mr78822417iok.52.1564010888053;
+ Wed, 24 Jul 2019 16:28:08 -0700 (PDT)
 MIME-Version: 1.0
-X-TM-AS-MML: disable
+References: <20190722215340.3071-1-ilina@codeaurora.org> <20190722215340.3071-2-ilina@codeaurora.org>
+ <5d3769df.1c69fb81.55d03.aa33@mx.google.com> <20190724145251.GB18620@codeaurora.org>
+ <5d38b38e.1c69fb81.e8e5d.035b@mx.google.com> <20190724203610.GE18620@codeaurora.org>
+In-Reply-To: <20190724203610.GE18620@codeaurora.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 24 Jul 2019 16:27:52 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UYj55m99EcQXmkYhs257A46x8DaarE0DC-GRF_3dY3-Q@mail.gmail.com>
+Message-ID: <CAD=FV=UYj55m99EcQXmkYhs257A46x8DaarE0DC-GRF_3dY3-Q@mail.gmail.com>
+Subject: Re: [PATCH V2 2/4] drivers: qcom: rpmh-rsc: avoid locking in the
+ interrupt handler
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, mkshah@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> On 6/9/19 11:14 PM, Kosuke Tatsukawa wrote:
->> Hi,
->> 
->>> On Haswell (model 0x3C) turbostat fails with
->>>
->>> turbostat: cpu0: msr offset 0x630 read failed: Input/output error
->>>
->>> because Haswell Core does not have C8-C10.
->>>
->>> Output C8-C10 only on Haswell ULT.
->> 
->> has_hsw_msrs() uses the model number returned by intel_model_duplicates(),
->> but commit f5a4c76ad7de added code to return INTEL_FAM6_HASWELL_CORE for
->> INTEL_FAM6_HASWELL_ULT there.  So I think Haswell UTL also doesn't
->> output C8-C10 with your patch.
->> 
->> Something similar to the below patch is needed to differentiate between
->> INTEL_FAM6_HASWELL_CORE and INTEL_FAM6_HASWELL_ULT.  I don't have a
->> Haswell-ULT machine, so I've only tested it on a Haswell-DT CPU.
->> 
-> 
-> Kosuke, my apologies this was in my junk folder and I just found it.
-> 
-> Yes.  I agree with your patch below.  I will resubmit.  OK to add Signed-off-by
-> from you?
+Hi,
 
-Prarit, yes, that's OK with me.
+On Wed, Jul 24, 2019 at 1:36 PM Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> On Wed, Jul 24 2019 at 13:38 -0600, Stephen Boyd wrote:
+> >Quoting Lina Iyer (2019-07-24 07:52:51)
+> >> On Tue, Jul 23 2019 at 14:11 -0600, Stephen Boyd wrote:
+> >> >Quoting Lina Iyer (2019-07-22 14:53:38)
+> >> >> Avoid locking in the interrupt context to improve latency. Since we
+> >> >> don't lock in the interrupt context, it is possible that we now could
+> >> >> race with the DRV_CONTROL register that writes the enable register and
+> >> >> cleared by the interrupt handler. For fire-n-forget requests, the
+> >> >> interrupt may be raised as soon as the TCS is triggered and the IRQ
+> >> >> handler may clear the enable bit before the DRV_CONTROL is read back.
+> >> >>
+> >> >> Use the non-sync variant when enabling the TCS register to avoid reading
+> >> >> back a value that may been cleared because the interrupt handler ran
+> >> >> immediately after triggering the TCS.
+> >> >>
+> >> >> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> >> >> ---
+> >> >
+> >> >I have to read this patch carefully. The commit text isn't convincing me
+> >> >that it is actually safe to make this change. It mostly talks about the
+> >> >performance improvements and how we need to fix __tcs_trigger(), which
+> >> >is good, but I was hoping to be convinced that not grabbing the lock
+> >> >here is safe.
+> >> >
+> >> >How do we ensure that drv->tcs_in_use is cleared before we call
+> >> >tcs_write() and try to look for a free bit? Isn't it possible that we'll
+> >> >get into a situation where the bitmap is all used up but the hardware
+> >> >has just received an interrupt and is going to clear out a bit and then
+> >> >an rpmh write fails with -EBUSY?
+> >> >
+> >> If we have a situation where there are no available free bits, we retry
+> >> and that is part of the function. Since we have only 2 TCSes avaialble
+> >> to write to the hardware and there could be multiple requests coming in,
+> >> it is a very common situation. We try and acquire the drv->lock and if
+> >> there are free TCS available and if available mark them busy and send
+> >> our requests. If there are none available, we keep retrying.
+> >>
+> >
+> >Ok. I wonder if we need some sort of barriers here too, like an
+> >smp_mb__after_atomic()? That way we can make sure that the write to
+> >clear the bit is seen by another CPU that could be spinning forever
+> >waiting for that bit to be cleared? Before this change the spinlock
+> >would be guaranteed to make these barriers for us, but now that doesn't
+> >seem to be the case. I really hope that this whole thing can be changed
+> >to be a mutex though, in which case we can use the bit_wait() API, etc.
+> >to put tasks to sleep while RPMh is processing things.
+> >
+> We have drivers that want to send requests in atomic contexts and
+> therefore mutex locks would not work.
 
-Best regards.
+Jumping in without reading all the context, but I saw this fly by and
+it seemed odd.  If I'm way off base then please ignore...
 
+Can you give more details?  Why are these drivers in atomic contexts?
+If they are in atomic contexts because they are running in the context
+of an interrupt then your next patch in the series isn't so correct.
 
-> P.
-> 
->> Best regards.
->> 
->>> Fixes: f5a4c76ad7de ("tools/power turbostat: consolidate duplicate model
->>> numbers")
->>> Cc: Len Brown <len.brown@intel.com>
->>> ---
->>>  tools/power/x86/turbostat/turbostat.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
->>> index c7727be9719f..ec8797005731 100644
->>> --- a/tools/power/x86/turbostat/turbostat.c
->>> +++ b/tools/power/x86/turbostat/turbostat.c
->>> @@ -4296,7 +4296,7 @@ int has_hsw_msrs(unsigned int family, unsigned int model)
->>> 		return 0;
->>>
->>> 	switch (model) {
->>> -	case INTEL_FAM6_HASWELL_CORE:
->>> +	case INTEL_FAM6_HASWELL_ULT:
->>> 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
->>> 	case INTEL_FAM6_SKYLAKE_MOBILE:	/* SKL */
->>> 	case INTEL_FAM6_CANNONLAKE_MOBILE:	/* CNL */
->>> -- 
->>> 2.21.0
->> 
->> 
->> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
->> index 75fc4fb..5830552 100644
->> --- a/tools/power/x86/turbostat/turbostat.c
->> +++ b/tools/power/x86/turbostat/turbostat.c
->> @@ -3209,6 +3209,7 @@ int probe_nhm_msrs(unsigned int family, unsigned int model)
->>  		break;
->>  	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
->>  	case INTEL_FAM6_HASWELL_X:	/* HSX */
->> +	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
->>  	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
->>  	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
->>  	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
->> @@ -3405,6 +3406,7 @@ int has_config_tdp(unsigned int family, unsigned int model)
->>  	case INTEL_FAM6_IVYBRIDGE:	/* IVB */
->>  	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
->>  	case INTEL_FAM6_HASWELL_X:	/* HSX */
->> +	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
->>  	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
->>  	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
->>  	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
->> @@ -3841,6 +3843,7 @@ void rapl_probe_intel(unsigned int family, unsigned int model)
->>  	case INTEL_FAM6_SANDYBRIDGE:
->>  	case INTEL_FAM6_IVYBRIDGE:
->>  	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
->> +	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
->>  	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
->>  	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
->>  	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
->> @@ -4032,6 +4035,7 @@ void perf_limit_reasons_probe(unsigned int family, unsigned int model)
->>  
->>  	switch (model) {
->>  	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
->> +	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
->>  	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
->>  		do_gfx_perf_limit_reasons = 1;
->>  	case INTEL_FAM6_HASWELL_X:	/* HSX */
->> @@ -4251,6 +4255,7 @@ int has_snb_msrs(unsigned int family, unsigned int model)
->>  	case INTEL_FAM6_IVYBRIDGE_X:	/* IVB Xeon */
->>  	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
->>  	case INTEL_FAM6_HASWELL_X:	/* HSW */
->> +	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
->>  	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
->>  	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
->>  	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
->> @@ -4284,7 +4289,7 @@ int has_hsw_msrs(unsigned int family, unsigned int model)
->>  		return 0;
->>  
->>  	switch (model) {
->> -	case INTEL_FAM6_HASWELL_CORE:
->> +	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
->>  	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
->>  	case INTEL_FAM6_SKYLAKE_MOBILE:	/* SKL */
->>  	case INTEL_FAM6_CANNONLAKE_MOBILE:	/* CNL */
->> @@ -4568,9 +4573,6 @@ unsigned int intel_model_duplicates(unsigned int model)
->>  	case INTEL_FAM6_XEON_PHI_KNM:
->>  		return INTEL_FAM6_XEON_PHI_KNL;
->>  
->> -	case INTEL_FAM6_HASWELL_ULT:
->> -		return INTEL_FAM6_HASWELL_CORE;
->> -
->>  	case INTEL_FAM6_BROADWELL_X:
->>  	case INTEL_FAM6_BROADWELL_XEON_D:	/* BDX-DE */
->>  		return INTEL_FAM6_BROADWELL_X;
->> 
----
-Kosuke TATSUKAWA  | 1st Platform Software Division
-                  | NEC Solution Innovators
-                  | tatsu@ab.jp.nec.com
+Also: when people submit requests in atomic context are they always
+submitting an asynchronous request?  In that case we could
+(presumably) just use a spinlock to protect the queue of async
+requests and a mutex for everything else?
 
+-Doug
