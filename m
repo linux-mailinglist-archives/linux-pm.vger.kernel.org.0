@@ -2,86 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1C873242
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 16:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2619973246
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 16:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387460AbfGXOxY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jul 2019 10:53:24 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:40606 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfGXOxY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 10:53:24 -0400
-Received: by mail-io1-f65.google.com with SMTP id h6so3631032iom.7;
-        Wed, 24 Jul 2019 07:53:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=f1uxVtxe60Lcr7dI5TQEbK5Cmx2NSVJK7C4T4Q5hp2Y=;
-        b=Xs8OoW84Cso8psAS9wFCWPgdp7MSw98gEpsW47oWTUZorY1m8URStG3q5oMv9Yxp1T
-         GI8+81RFhsJyiMLSVaIDRmqGHvDZCPaLHxECeAr3wpkjbXaBdNEaYy1LHFP8gS3m1MvR
-         5iaXqQYCHwOQY1iGxFP2mxyReqbb/ZWuSzCHrtXNGIDONsTS908m7XcfyZVCL9U/Ewd6
-         hWbXY21reeirsSUK4CzxfcLLyzhYbeF85Q8juZhpFiPN+XzuE4fmA1T64JIzwthujUuM
-         Nri48FLqU2fXq3Rvas2cVD7tcJc821h4Ux9G1IWr51ce9NLVjqHkmKa0OKu+WvzvwyR1
-         HvlQ==
-X-Gm-Message-State: APjAAAWfZMlZdmtHhtHX1AINhLswppRnwgOzgDfmBueJ6c9ZlGgv/G4x
-        75O8d9tg5zc+YvB9Q+yrzqvPcxc=
-X-Google-Smtp-Source: APXvYqxz45jNhjF9OdeNK+P0XXsH47UQdfWWYJlbey+fEz9h4ZWF7VXuyUUr5GMcM9viKwV/q3AN8w==
-X-Received: by 2002:a6b:4f0d:: with SMTP id d13mr7295101iob.170.1563980003520;
-        Wed, 24 Jul 2019 07:53:23 -0700 (PDT)
-Received: from localhost ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id n17sm37419022iog.63.2019.07.24.07.53.22
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 24 Jul 2019 07:53:22 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 08:53:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
-        linux-arm-msm@vger.kernel.org, jorge.ramirez-ortiz@linaro.org,
-        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
-        Sricharan R <sricharan@codeaurora.org>,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/13] dt-bindings: cpufreq: Re-organise kryo cpufreq to
- use it for other nvmem based qcom socs
-Message-ID: <20190724145322.GA4233@bogus>
-References: <20190705095726.21433-1-niklas.cassel@linaro.org>
- <20190705095726.21433-2-niklas.cassel@linaro.org>
+        id S1726631AbfGXOy4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 10:54:56 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:58300 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbfGXOyz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 10:54:55 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 45D0960274; Wed, 24 Jul 2019 14:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1563980094;
+        bh=yWgNZ+6j27JK6qHT8Wru4w9mCaugWru6Fkq+nAqkWAw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pua54TwApd+WIRPxsD62yTuahZGP8CGJFMO1meGOq+qsGoOvSOmuD8rZoi2PbOdIr
+         N5PhuA9sZWIncNmhnMPY7faMPWHUiBV7+njNo8sKeXA0WCCJBKgZ6dMnB4xZHAlau4
+         wdMqmgHyOt+bgbgMRTWBfED2BqS54Pe7jY0G2ssw=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 02DBD60256;
+        Wed, 24 Jul 2019 14:54:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1563980093;
+        bh=yWgNZ+6j27JK6qHT8Wru4w9mCaugWru6Fkq+nAqkWAw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DtQ+dy6wZ/clfrH9yDnsfRlopdptwRgUupbLa7Gr/pfpGJeUNO8GKnVx9VEsC6d+y
+         Y3v7JFxJsA/veONur0M94ZxBaugCuQjhsLrzVO+b9lZD0ZN6bppvoAkRNzDPPAdvTR
+         9TiU9A5DiOirFuxxqLVMqODHyM4jWGK5+CCvsSfg=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 02DBD60256
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
+Date:   Wed, 24 Jul 2019 08:54:52 -0600
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org,
+        mkshah@codeaurora.org, "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
+Subject: Re: [PATCH V2 1/4] drivers: qcom: rpmh-rsc: simplify TCS locking
+Message-ID: <20190724145452.GC18620@codeaurora.org>
+References: <20190722215340.3071-1-ilina@codeaurora.org>
+ <5d375054.1c69fb81.7ce3f.3591@mx.google.com>
+ <20190723192159.GA18620@codeaurora.org>
+ <5d376bb3.1c69fb81.2bb4e.7771@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20190705095726.21433-2-niklas.cassel@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <5d376bb3.1c69fb81.2bb4e.7771@mx.google.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri,  5 Jul 2019 11:57:12 +0200, Niklas Cassel wrote:
-> From: Sricharan R <sricharan@codeaurora.org>
-> 
-> The kryo cpufreq driver reads the nvmem cell and uses that data to
-> populate the opps. There are other qcom cpufreq socs like krait which
-> does similar thing. Except for the interpretation of the read data,
-> rest of the driver is same for both the cases. So pull the common things
-> out for reuse.
-> 
-> Signed-off-by: Sricharan R <sricharan@codeaurora.org>
-> [niklas.cassel@linaro.org: split dt-binding into a separate patch and
-> do not rename the compatible string.]
-> Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
-> ---
-> Changes since RFC:
-> -Made DT bindings a separate patch.
-> -Keep the original compatible string, since renaming it breaks DT
-> backwards compatibility.
-> 
->  .../opp/{kryo-cpufreq.txt => qcom-nvmem-cpufreq.txt}   | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->  rename Documentation/devicetree/bindings/opp/{kryo-cpufreq.txt => qcom-nvmem-cpufreq.txt} (98%)
-> 
+On Tue, Jul 23 2019 at 14:19 -0600, Stephen Boyd wrote:
+>Quoting Lina Iyer (2019-07-23 12:21:59)
+>> On Tue, Jul 23 2019 at 12:22 -0600, Stephen Boyd wrote:
+>> >Quoting Lina Iyer (2019-07-22 14:53:37)
+>> >> From: "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>
+>> >>
+>> >> The tcs->lock was introduced to serialize access with in TCS group. But,
+>> >> drv->lock is still needed to synchronize core aspects of the
+>> >> communication. This puts the drv->lock in the critical and high latency
+>> >> path of sending a request. drv->lock provides the all necessary
+>> >> synchronization. So remove locking around TCS group and simply use the
+>> >> drv->lock instead.
+>> >
+>> >This doesn't talk about removing the irq saving and restoring though.
+>> You mean for drv->lock? It was not an _irqsave/_irqrestore anyways and
+>> we were only removing the tcs->lock.
+>
+>Yes drv->lock wasn't an irqsave/restore variant because it was a
+>spinlock inside of an obviously already irqsaved region of code because
+>the tcs->lock was outside the drv->lock and that was saving the irq
+>flags.
+>
+Oh, right.
+>>
+>> >Can you keep irq saving and restoring in this patch and then remove that
+>> >in the next patch with reasoning? It probably isn't safe if the lock is
+>> >taken in interrupt context anyway.
+>> >
+>> Yes, the drv->lock should have been irqsave/irqrestore, but it hasn't
+>> been changed by this patch.
+>
+>It needs to be changed to maintain the irqsaving/restoring of the code.
+>
+May be I should club this with the following patch. Instead of adding
+irqsave and restore to drv->lock and then remvoing them again in the
+following patch.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+>> >> @@ -349,41 +349,35 @@ static int tcs_write(struct rsc_drv *drv, const struct tcs_request *msg)
+>> >>  {
+>> >>         struct tcs_group *tcs;
+>> >>         int tcs_id;
+>> >> -       unsigned long flags;
+>> >>         int ret;
+>> >>
+>> >>         tcs = get_tcs_for_msg(drv, msg);
+>> >>         if (IS_ERR(tcs))
+>> >>                 return PTR_ERR(tcs);
+>> >>
+>> >> -       spin_lock_irqsave(&tcs->lock, flags);
+>> >>         spin_lock(&drv->lock);
+>> >>         /*
+>> >>          * The h/w does not like if we send a request to the same address,
+>> >>          * when one is already in-flight or being processed.
+>> >>          */
+>> >>         ret = check_for_req_inflight(drv, tcs, msg);
+>> >> -       if (ret) {
+>> >> -               spin_unlock(&drv->lock);
+>> >> +       if (ret)
+>> >>                 goto done_write;
+>> >> -       }
+>> >>
+>> >>         tcs_id = find_free_tcs(tcs);
+>> >>         if (tcs_id < 0) {
+>> >>                 ret = tcs_id;
+>> >> -               spin_unlock(&drv->lock);
+>> >>                 goto done_write;
+>> >>         }
+>> >>
+>> >>         tcs->req[tcs_id - tcs->offset] = msg;
+>> >>         set_bit(tcs_id, drv->tcs_in_use);
+>> >> -       spin_unlock(&drv->lock);
+>> >>
+>> >>         __tcs_buffer_write(drv, tcs_id, 0, msg);
+>> >>         __tcs_trigger(drv, tcs_id);
+>> >>
+>> >>  done_write:
+>> >> -       spin_unlock_irqrestore(&tcs->lock, flags);
+>> >> +       spin_unlock(&drv->lock);
+>> >>         return ret;
+>> >>  }
+>> >>
+>> >> @@ -481,19 +475,18 @@ static int tcs_ctrl_write(struct rsc_drv *drv, const struct tcs_request *msg)
+>> >>  {
+>> >>         struct tcs_group *tcs;
+>> >>         int tcs_id = 0, cmd_id = 0;
+>> >> -       unsigned long flags;
+>> >>         int ret;
+>> >>
+>> >>         tcs = get_tcs_for_msg(drv, msg);
+>> >>         if (IS_ERR(tcs))
+>> >>                 return PTR_ERR(tcs);
+>> >>
+>> >> -       spin_lock_irqsave(&tcs->lock, flags);
+>> >> +       spin_lock(&drv->lock);
+>> >>         /* find the TCS id and the command in the TCS to write to */
+>> >>         ret = find_slots(tcs, msg, &tcs_id, &cmd_id);
+>> >>         if (!ret)
+>> >>                 __tcs_buffer_write(drv, tcs_id, cmd_id, msg);
+>> >> -       spin_unlock_irqrestore(&tcs->lock, flags);
+>> >> +       spin_unlock(&drv->lock);
+>> >>
+>> >
+>> >These ones, just leave them doing the irq save restore for now?
+>> >
+>> drv->lock ??
+>>
+>
+>Yes, it should have irq save/restore still.
+>
