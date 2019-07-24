@@ -2,271 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAE472F07
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 14:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA27672F9F
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 15:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbfGXMi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jul 2019 08:38:58 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:51570 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726762AbfGXMi5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 24 Jul 2019 08:38:57 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C01931A030E;
-        Wed, 24 Jul 2019 14:38:54 +0200 (CEST)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B22D81A02F9;
-        Wed, 24 Jul 2019 14:38:54 +0200 (CEST)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id AFBA8205D8;
-        Wed, 24 Jul 2019 14:38:53 +0200 (CEST)
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Will Deacon <will@kernel.org>, Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frank Li <Frank.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFCv3 3/3] PM / devfreq: Add imx perf event support
-Date:   Wed, 24 Jul 2019 15:38:46 +0300
-Message-Id: <72c89cd93817faf450ecd2d6e1d9c273198ff9ab.1563971855.git.leonard.crestez@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1563971855.git.leonard.crestez@nxp.com>
-References: <cover.1563971855.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1563971855.git.leonard.crestez@nxp.com>
-References: <cover.1563971855.git.leonard.crestez@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1727395AbfGXNKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 09:10:52 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:57987 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727405AbfGXNKt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 09:10:49 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190724131047euoutp02959865cb0ad995b6d7feddf59ed82499~0We11O9hi1103511035euoutp02V
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 13:10:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190724131047euoutp02959865cb0ad995b6d7feddf59ed82499~0We11O9hi1103511035euoutp02V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1563973847;
+        bh=PEOtSSoRhkQX8OsDsJURuU47w80rGtTf9ArwdLYI4tU=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=o56GXd55wfxDL4xD0jeVqb82HviKy2O2dxMO3tCDxuaYTlM9kJhV9iE3VK30MfF+f
+         r3oVJlOmkU56cIzeSgWzJPBLzV9h8fQhNzvHNPtaH+zFaJQhGOYUebSfAnX1WI0nL/
+         el6vdQAp9naWwoSgcQBTLgio9P95vQQWbH8lDFkI=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190724131046eucas1p1e5135c654b515f7044eeb7597e0ae41a~0We1ECbTY2976329763eucas1p1L;
+        Wed, 24 Jul 2019 13:10:46 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 37.D8.04325.5D8583D5; Wed, 24
+        Jul 2019 14:10:45 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190724131045eucas1p162379c36506e8b94147baa865f0409f7~0We0SfRBJ2476524765eucas1p1m;
+        Wed, 24 Jul 2019 13:10:45 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190724131045eusmtrp2d7e8381dfed5e5e61bd40cf0f0003339~0We0EUqBM0076200762eusmtrp2Q;
+        Wed, 24 Jul 2019 13:10:45 +0000 (GMT)
+X-AuditID: cbfec7f5-b8fff700000010e5-31-5d3858d53e1b
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 31.45.04140.4D8583D5; Wed, 24
+        Jul 2019 14:10:45 +0100 (BST)
+Received: from [106.120.50.63] (unknown [106.120.50.63]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190724131040eusmtip1c8fbf50afad8f6dde8c1ad38a074adcf~0WewOCuXU1901719017eusmtip1c;
+        Wed, 24 Jul 2019 13:10:40 +0000 (GMT)
+Subject: Re: [PATCH v2 0/9] Exynos Adaptive Supply Voltage support
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     krzk@kernel.org, robh+dt@kernel.org, vireshk@kernel.org,
+        devicetree@vger.kernel.org, kgene@kernel.org,
+        pankaj.dubey@samsung.com, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <5ef302a4-5bbf-483d-dfdf-cf76f6f69cee@samsung.com>
+Date:   Wed, 24 Jul 2019 15:10:39 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190723020450.z2pqwetkn2tfhacq@vireshk-i7>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOKsWRmVeSWpSXmKPExsWy7djP87pXIyxiDZ59MLPYOGM9q8X8I+dY
+        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gsFm39wm7RuvcIu8XhN+2sFhu/elhs
+        fnCMzYHXY9OqTjaPO9f2sHlsXlLv0bdlFaPH501yAaxRXDYpqTmZZalF+nYJXBmta6IKJvBU
+        TDuzgLGB8RJnFyMnh4SAicTv2d9Zuxi5OIQEVjBKHL+4kQnC+cIocalxNjOE85lRovfQYzaY
+        lu87T0ElljNKrG88DdX/llHi64e/YFXCAk4Se35/BbNFBCIlnk6AmMsssIxJ4vaEjWAJNgFD
+        ia63XWA2r4CdxKpH/WA2i4CqxNKJc1lBbFGBGImdb3qYIWoEJU7OfMICYnMKWEosfX2dEcRm
+        FpCX2P52DjOELS5x68l8sGUSArfYJTZc+gKU4AByXCTu77KCeEFY4tXxLewQtozE/50w9c2M
+        Eg/PrWWHcHoYJS43zWCEqLKWOHz8IivIIGYBTYn1u/Qhwo4SfVeOMEHM55O48VYQ4gY+iUnb
+        pkOt5ZXoaBOCqFaTmHV8HdzagxcuMU9gVJqF5LNZSL6ZheSbWQh7FzCyrGIUTy0tzk1PLTbO
+        Sy3XK07MLS7NS9dLzs/dxAhMXqf/Hf+6g3Hfn6RDjAIcjEo8vBVM5rFCrIllxZW5hxglOJiV
+        RHgDG8xihXhTEiurUovy44tKc1KLDzFKc7AoifNWMzyIFhJITyxJzU5NLUgtgskycXBKNTCa
+        By7ezWPl6j4vS1tC/J9EY5Pg4exN934q6+kKqLj3/ExZI7zEMdTm2tqfyts3tdinSF37fqri
+        v0zp1/VH7rZ8W87w7kq0Q2qwsu/LJj7TSD/jWTdNVx/U9xW1kuDXFtIv2ji1v+tx5Fw1XRMR
+        niXPU2zY3ub+Patd9DmEq4hz1rawHuvYu0osxRmJhlrMRcWJAOcDRbxaAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsVy+t/xu7pXIyxiDV4uYrTYOGM9q8X8I+dY
+        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gsFm39wm7RuvcIu8XhN+2sFhu/elhs
+        fnCMzYHXY9OqTjaPO9f2sHlsXlLv0bdlFaPH501yAaxRejZF+aUlqQoZ+cUltkrRhhZGeoaW
+        FnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehmta6IKJvBUTDuzgLGB8RJnFyMnh4SAicT3
+        naeYQWwhgaWMEodPZUDEZSROTmtghbCFJf5c62LrYuQCqnnNKDHtz3QmkISwgJPEnt9f2UBs
+        EYFIiYmtC5lBipgFljFJNLSfZoGYuo9R4tjyNBCbTcBQouttF1gDr4CdxKpH/WA2i4CqxNKJ
+        c8G2iQrESOw7s50dokZQ4uTMJ2BzOAUsJZa+vs4IYjMLmEnM2/yQGcKWl9j+dg6ULS5x68l8
+        pgmMQrOQtM9C0jILScssJC0LGFlWMYqklhbnpucWG+kVJ+YWl+al6yXn525iBMbqtmM/t+xg
+        7HoXfIhRgINRiYe3gsk8Vog1say4MvcQowQHs5IIb2CDWawQb0piZVVqUX58UWlOavEhRlOg
+        5yYyS4km5wPTSF5JvKGpobmFpaG5sbmxmYWSOG+HwMEYIYH0xJLU7NTUgtQimD4mDk6pBsat
+        BpObGdb8eNJ9TFIk3e1X9luVtLSYO/Hfn5gHz1o2dy5nQTbHA//GV8xaq/eGsF/doTVFYGnZ
+        mrkmtsem1kxsWnAyoFfmec/a849zGFfPPiD1rXt9PtPkvjtX/36u+/tVL/iq0pLH38+8Wni8
+        M9/SKmjeubJ5tu4MD+YvEnyR6Zil1rSUbfNMJZbijERDLeai4kQA1LqK2+sCAAA=
+X-CMS-MailID: 20190724131045eucas1p162379c36506e8b94147baa865f0409f7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
+References: <CGME20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1@eucas1p1.samsung.com>
+        <20190718143044.25066-1-s.nawrocki@samsung.com>
+        <20190723020450.z2pqwetkn2tfhacq@vireshk-i7>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The imx8m ddrc has a performance monitoring block attached which can be
-used to measure bandwidth usage automatically adjust frequency.
+Hi Viresh,
 
-There is already a perf driver for that block so instead of implementing
-a devfreq events driver use the in-kernel perf API to fetch read/write
-bandwidth values and sum them.
+On 2019-07-23 04:04, Viresh Kumar wrote:
+> On 18-07-19, 16:30, Sylwester Nawrocki wrote:
+>> This is second iteration of patch series adding ASV (Adaptive Supply
+>> Voltage) support for Exynos SoCs. The first one can be found at:
+>> https://lore.kernel.org/lkml/20190404171735.12815-1-s.nawrocki@samsung.com
+>>
+>> The main changes comparing to the first (RFC) version are:
+>>   - moving ASV data tables from DT to the driver,
+>>   - converting the chipid and the ASV drivers to use regmap,
+>>   - converting the ASV driver to proper platform driver.
+>>
+>> I tried the opp-supported-hw bitmask approach as in the Qualcomm CPUFreq
+>> DT bindings but it resulted in too many OPPs and DT nodes, around 200
+>> per CPU cluster. So the ASV OPP tables are now in the ASV driver, as in
+>> downstream kernels.
+> Hmm. Can you explain why do you have so many OPPs? How many
+> frequencies do you actually support per cluster and what all varies
+> per frequency based on hw ? How many hw version do u have ?
 
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
----
- drivers/devfreq/imx-devfreq.c | 135 ++++++++++++++++++++++++++++++++++
- 1 file changed, 135 insertions(+)
+For big cores there are 20 frequencies (2100MHz .. 200MHz). Each SoC 
+might belong to one of the 3 production 'sets' and each set contains 14 
+so called 'asv groups', which assign the certain voltage values for each 
+of those 20 frequencies (the lower asv group means lower voltage needed 
+for given frequency).
 
-diff --git a/drivers/devfreq/imx-devfreq.c b/drivers/devfreq/imx-devfreq.c
-index 3ee2d37883c6..fd4c8ffb8b4a 100644
---- a/drivers/devfreq/imx-devfreq.c
-+++ b/drivers/devfreq/imx-devfreq.c
-@@ -11,14 +11,28 @@
- #include <linux/of_device.h>
- #include <linux/pm_opp.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- 
-+#include <asm/perf_event.h>
-+#include <linux/perf_event.h>
-+
- struct imx_devfreq {
- 	struct devfreq_dev_profile profile;
- 	struct devfreq *devfreq;
- 	struct clk *clk;
-+
-+	struct platform_device* pmu_pdev;
-+	struct pmu *pmu;
-+
-+	struct perf_event_attr rd_event_attr;
-+	struct perf_event_attr wr_event_attr;
-+	struct perf_event *rd_event;
-+	struct perf_event *wr_event;
-+
-+	u64 last_rd_val, last_rd_ena, last_rd_run;
-+	u64 last_wr_val, last_wr_ena, last_wr_run;
- };
- 
- static int imx_devfreq_target(struct device *dev, unsigned long *freq, u32 flags)
- {
- 	struct imx_devfreq *priv = dev_get_drvdata(dev);
-@@ -64,22 +78,131 @@ static int imx_devfreq_get_dev_status(struct device *dev,
- 
- 	stat->busy_time = 0;
- 	stat->total_time = 0;
- 	stat->current_frequency = clk_get_rate(priv->clk);
- 
-+	if (priv->rd_event && priv->wr_event) {
-+		u64 rd_delta, rd_val, rd_ena, rd_run;
-+		u64 wr_delta, wr_val, wr_ena, wr_run;
-+
-+		rd_val = perf_event_read_value(priv->rd_event, &rd_ena, &rd_run);
-+		wr_val = perf_event_read_value(priv->wr_event, &wr_ena, &wr_run);
-+
-+		rd_delta = (rd_val - priv->last_rd_val) * (rd_ena - priv->last_rd_ena) / (rd_run - priv->last_rd_run);
-+		priv->last_rd_val = rd_val;
-+		priv->last_rd_ena = rd_ena;
-+		priv->last_rd_run = rd_run;
-+		wr_delta = (wr_val - priv->last_wr_val) * (wr_ena - priv->last_wr_ena) / (wr_run - priv->last_wr_run);
-+		priv->last_wr_val = wr_val;
-+		priv->last_wr_ena = wr_ena;
-+		priv->last_wr_run = wr_run;
-+
-+		/* magic numbers, possibly wrong */
-+		stat->busy_time = 4 * (rd_delta + wr_delta);
-+		stat->total_time = stat->current_frequency;
-+
-+		dev_dbg(dev, "perf load %02lu%% read=%lu write=%lu freq=%lu\n",
-+			100 * stat->busy_time / stat->total_time,
-+			rd_delta, wr_delta, stat->current_frequency);
-+	}
-+
-+	return 0;
-+}
-+
-+static int imx_devfreq_perf_disable(struct imx_devfreq *priv)
-+{
-+	/* release and set to NULL */
-+	if (!IS_ERR_OR_NULL(priv->rd_event))
-+		perf_event_release_kernel(priv->rd_event);
-+	if (!IS_ERR_OR_NULL(priv->wr_event))
-+		perf_event_release_kernel(priv->wr_event);
-+	priv->rd_event = NULL;
-+	priv->wr_event = NULL;
-+
-+	return 0;
-+}
-+
-+static int imx_devfreq_perf_enable(struct imx_devfreq *priv)
-+{
-+	int ret;
-+
-+	priv->rd_event_attr.size = sizeof(priv->rd_event_attr);
-+	priv->rd_event_attr.type = priv->pmu->type;
-+	priv->rd_event_attr.config = 0x2a;
-+
-+	priv->rd_event = perf_event_create_kernel_counter(
-+			&priv->rd_event_attr, 0, NULL, NULL, NULL);
-+	if (IS_ERR(priv->rd_event)) {
-+		ret = PTR_ERR(priv->rd_event);
-+		goto err;
-+	}
-+
-+	priv->wr_event_attr.size = sizeof(priv->wr_event_attr);
-+	priv->wr_event_attr.type = priv->pmu->type;
-+	priv->wr_event_attr.config = 0x2b;
-+
-+	priv->wr_event = perf_event_create_kernel_counter(
-+			&priv->wr_event_attr, 0, NULL, NULL, NULL);
-+	if (IS_ERR(priv->wr_event)) {
-+		ret = PTR_ERR(priv->wr_event);
-+		goto err;
-+	}
-+
- 	return 0;
-+
-+err:
-+	imx_devfreq_perf_disable(priv);
-+	return ret;
-+}
-+
-+static int imx_devfreq_init_events(struct device *dev,
-+				   struct device_node* events_node)
-+{
-+	struct imx_devfreq *priv = dev_get_drvdata(dev);
-+	struct device_driver *driver;
-+
-+	/*
-+	 * We need pmu->type for perf_event_attr but there is no API for
-+	 * mapping device_node to pmu. Fetch private data for imx-ddr-pmu and
-+	 * cast that to a struct pmu instead.
-+	 */
-+	priv->pmu_pdev = of_find_device_by_node(events_node);
-+	if (!priv->pmu_pdev)
-+		return -ENOENT;
-+	driver = priv->pmu_pdev->dev.driver;
-+	if (!driver)
-+		return -ENOENT;
-+	if (strcmp(driver->name, "imx-ddr-pmu")) {
-+		dev_warn(dev, "devfreq-events node %pOF has unexpected driver %s\n",
-+				events_node, driver->name);
-+		return -ENODEV;
-+	}
-+
-+	priv->pmu = platform_get_drvdata(priv->pmu_pdev);
-+	if (!priv->pmu)
-+		return -EPROBE_DEFER;
-+
-+	dev_info(dev, "events from pmu %s\n", priv->pmu->name);
-+
-+	return imx_devfreq_perf_enable(priv);
- }
- 
- static void imx_devfreq_exit(struct device *dev)
- {
-+	struct imx_devfreq *priv = dev_get_drvdata(dev);
-+
-+	imx_devfreq_perf_disable(priv);
-+	platform_device_put(priv->pmu_pdev);
-+
- 	return dev_pm_opp_of_remove_table(dev);
- }
- 
- static int imx_devfreq_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct imx_devfreq *priv;
-+	struct device_node *events_node;
- 	const char *gov = DEVFREQ_GOV_USERSPACE;
- 	int ret;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -104,10 +227,20 @@ static int imx_devfreq_probe(struct platform_device *pdev)
- 	priv->profile.get_dev_status = imx_devfreq_get_dev_status;
- 	priv->profile.exit = imx_devfreq_exit;
- 	priv->profile.get_cur_freq = imx_devfreq_get_cur_freq;
- 	priv->profile.initial_freq = clk_get_rate(priv->clk);
- 
-+	/* Handle devfreq-events */
-+	events_node = of_parse_phandle(dev->of_node, "devfreq-events", 0);
-+	if (events_node) {
-+		ret = imx_devfreq_init_events(dev, events_node);
-+		of_node_put(events_node);
-+		if (ret)
-+			goto err;
-+		gov = DEVFREQ_GOV_SIMPLE_ONDEMAND;
-+	}
-+
- 	priv->devfreq = devm_devfreq_add_device(dev, &priv->profile,
- 						gov, NULL);
- 	if (IS_ERR(priv->devfreq)) {
- 		ret = PTR_ERR(priv->devfreq);
- 		dev_err(dev, "failed to add devfreq device: %d\n", ret);
-@@ -115,10 +248,12 @@ static int imx_devfreq_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
- 
- err:
-+	imx_devfreq_perf_disable(priv);
-+	platform_device_put(priv->pmu_pdev);
- 	dev_pm_opp_of_remove_table(dev);
- 	return ret;
- }
- 
- static const struct of_device_id imx_devfreq_of_match[] = {
+> I am asking as the OPP core can be improved to support your case if
+> possible. But I need to understand the problem first.
+
+
+Best regards
 -- 
-2.17.1
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
