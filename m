@@ -2,141 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA27672F9F
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 15:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF38E7300B
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 15:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727395AbfGXNKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jul 2019 09:10:52 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:57987 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727405AbfGXNKt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 09:10:49 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190724131047euoutp02959865cb0ad995b6d7feddf59ed82499~0We11O9hi1103511035euoutp02V
-        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 13:10:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190724131047euoutp02959865cb0ad995b6d7feddf59ed82499~0We11O9hi1103511035euoutp02V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563973847;
-        bh=PEOtSSoRhkQX8OsDsJURuU47w80rGtTf9ArwdLYI4tU=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=o56GXd55wfxDL4xD0jeVqb82HviKy2O2dxMO3tCDxuaYTlM9kJhV9iE3VK30MfF+f
-         r3oVJlOmkU56cIzeSgWzJPBLzV9h8fQhNzvHNPtaH+zFaJQhGOYUebSfAnX1WI0nL/
-         el6vdQAp9naWwoSgcQBTLgio9P95vQQWbH8lDFkI=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190724131046eucas1p1e5135c654b515f7044eeb7597e0ae41a~0We1ECbTY2976329763eucas1p1L;
-        Wed, 24 Jul 2019 13:10:46 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 37.D8.04325.5D8583D5; Wed, 24
-        Jul 2019 14:10:45 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190724131045eucas1p162379c36506e8b94147baa865f0409f7~0We0SfRBJ2476524765eucas1p1m;
-        Wed, 24 Jul 2019 13:10:45 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190724131045eusmtrp2d7e8381dfed5e5e61bd40cf0f0003339~0We0EUqBM0076200762eusmtrp2Q;
-        Wed, 24 Jul 2019 13:10:45 +0000 (GMT)
-X-AuditID: cbfec7f5-b8fff700000010e5-31-5d3858d53e1b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 31.45.04140.4D8583D5; Wed, 24
-        Jul 2019 14:10:45 +0100 (BST)
-Received: from [106.120.50.63] (unknown [106.120.50.63]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190724131040eusmtip1c8fbf50afad8f6dde8c1ad38a074adcf~0WewOCuXU1901719017eusmtip1c;
-        Wed, 24 Jul 2019 13:10:40 +0000 (GMT)
-Subject: Re: [PATCH v2 0/9] Exynos Adaptive Supply Voltage support
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     krzk@kernel.org, robh+dt@kernel.org, vireshk@kernel.org,
-        devicetree@vger.kernel.org, kgene@kernel.org,
-        pankaj.dubey@samsung.com, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <5ef302a4-5bbf-483d-dfdf-cf76f6f69cee@samsung.com>
-Date:   Wed, 24 Jul 2019 15:10:39 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S1726862AbfGXNiG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 09:38:06 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:37119 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726759AbfGXNiG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 09:38:06 -0400
+Received: by mail-io1-f71.google.com with SMTP id v3so51117510ios.4
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 06:38:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=YmlYbeeXg8KipqZm+95RyiuSWYiaWNME9/ZKLNADTzI=;
+        b=AnpJwaRExVi4h1pJDald9E5SZa8ycSOVzBUzYSBFmzg/+00HsEVmmLrLE3unOPx9FD
+         98ppiQAJIkS4bsxHiimYmQ2RVRVhjFTMJUD1y0V4t+4G5ZlEGUTl0WPZZkQ5fQhJi+RF
+         TqGlFtiFqUQ1Iq/lr0YVlKxd6vULSJusanJ6unPRjM8n3+RYHVdDzp1HpZVJQM7iLCvn
+         ye8XVVa7UsTQpdXO/5PAlRhvPheTH61W5dS4kXG7q/jZvYzf6r0p5X3OXhJGYzavrSUz
+         /d3LlQNBq27ikU50bnGvIv5g0GgSuaw3hgL78M2slxksHk8OEFV8baQTM/U49ByKUT4G
+         dxSQ==
+X-Gm-Message-State: APjAAAUcubkPJXSLk1bwA09BItqANWoRq32VgISU0oBfgDlxE+ACPON5
+        xZFHWSLsDZTi37Hbqsh0XmmCNXBJnhg+a+hdHMdqnPIOqS1a
+X-Google-Smtp-Source: APXvYqz2PxYFGpRCTtrjQIXkXtIveQHB4aG4N+6UmgzI6K4L4WM1q80LZoqSsv2AF51hyBZCqSCxZDmCm99YFNaGIo/9e+AxJw1A
 MIME-Version: 1.0
-In-Reply-To: <20190723020450.z2pqwetkn2tfhacq@vireshk-i7>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOKsWRmVeSWpSXmKPExsWy7djP87pXIyxiDZ59MLPYOGM9q8X8I+dY
-        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gsFm39wm7RuvcIu8XhN+2sFhu/elhs
-        fnCMzYHXY9OqTjaPO9f2sHlsXlLv0bdlFaPH501yAaxRXDYpqTmZZalF+nYJXBmta6IKJvBU
-        TDuzgLGB8RJnFyMnh4SAicTv2d9Zuxi5OIQEVjBKHL+4kQnC+cIocalxNjOE85lRovfQYzaY
-        lu87T0ElljNKrG88DdX/llHi64e/YFXCAk4Se35/BbNFBCIlnk6AmMsssIxJ4vaEjWAJNgFD
-        ia63XWA2r4CdxKpH/WA2i4CqxNKJc1lBbFGBGImdb3qYIWoEJU7OfMICYnMKWEosfX2dEcRm
-        FpCX2P52DjOELS5x68l8sGUSArfYJTZc+gKU4AByXCTu77KCeEFY4tXxLewQtozE/50w9c2M
-        Eg/PrWWHcHoYJS43zWCEqLKWOHz8IivIIGYBTYn1u/Qhwo4SfVeOMEHM55O48VYQ4gY+iUnb
-        pkOt5ZXoaBOCqFaTmHV8HdzagxcuMU9gVJqF5LNZSL6ZheSbWQh7FzCyrGIUTy0tzk1PLTbO
-        Sy3XK07MLS7NS9dLzs/dxAhMXqf/Hf+6g3Hfn6RDjAIcjEo8vBVM5rFCrIllxZW5hxglOJiV
-        RHgDG8xihXhTEiurUovy44tKc1KLDzFKc7AoifNWMzyIFhJITyxJzU5NLUgtgskycXBKNTCa
-        By7ezWPl6j4vS1tC/J9EY5Pg4exN934q6+kKqLj3/ExZI7zEMdTm2tqfyts3tdinSF37fqri
-        v0zp1/VH7rZ8W87w7kq0Q2qwsu/LJj7TSD/jWTdNVx/U9xW1kuDXFtIv2ji1v+tx5Fw1XRMR
-        niXPU2zY3ub+Patd9DmEq4hz1rawHuvYu0osxRmJhlrMRcWJAOcDRbxaAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsVy+t/xu7pXIyxiDV4uYrTYOGM9q8X8I+dY
-        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gsFm39wm7RuvcIu8XhN+2sFhu/elhs
-        fnCMzYHXY9OqTjaPO9f2sHlsXlLv0bdlFaPH501yAaxRejZF+aUlqQoZ+cUltkrRhhZGeoaW
-        FnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehmta6IKJvBUTDuzgLGB8RJnFyMnh4SAicT3
-        naeYQWwhgaWMEodPZUDEZSROTmtghbCFJf5c62LrYuQCqnnNKDHtz3QmkISwgJPEnt9f2UBs
-        EYFIiYmtC5lBipgFljFJNLSfZoGYuo9R4tjyNBCbTcBQouttF1gDr4CdxKpH/WA2i4CqxNKJ
-        c8G2iQrESOw7s50dokZQ4uTMJ2BzOAUsJZa+vs4IYjMLmEnM2/yQGcKWl9j+dg6ULS5x68l8
-        pgmMQrOQtM9C0jILScssJC0LGFlWMYqklhbnpucWG+kVJ+YWl+al6yXn525iBMbqtmM/t+xg
-        7HoXfIhRgINRiYe3gsk8Vog1say4MvcQowQHs5IIb2CDWawQb0piZVVqUX58UWlOavEhRlOg
-        5yYyS4km5wPTSF5JvKGpobmFpaG5sbmxmYWSOG+HwMEYIYH0xJLU7NTUgtQimD4mDk6pBsat
-        BpObGdb8eNJ9TFIk3e1X9luVtLSYO/Hfn5gHz1o2dy5nQTbHA//GV8xaq/eGsF/doTVFYGnZ
-        mrkmtsem1kxsWnAyoFfmec/a849zGFfPPiD1rXt9PtPkvjtX/36u+/tVL/iq0pLH38+8Wni8
-        M9/SKmjeubJ5tu4MD+YvEnyR6Zil1rSUbfNMJZbijERDLeai4kQA1LqK2+sCAAA=
-X-CMS-MailID: 20190724131045eucas1p162379c36506e8b94147baa865f0409f7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
-References: <CGME20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1@eucas1p1.samsung.com>
-        <20190718143044.25066-1-s.nawrocki@samsung.com>
-        <20190723020450.z2pqwetkn2tfhacq@vireshk-i7>
+X-Received: by 2002:a02:c550:: with SMTP id g16mr83081468jaj.49.1563975485145;
+ Wed, 24 Jul 2019 06:38:05 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 06:38:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003acc06058e6d6b70@google.com>
+Subject: general protection fault in __pm_runtime_resume
+From:   syzbot <syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        len.brown@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, pavel@ucw.cz,
+        rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+Hello,
 
-On 2019-07-23 04:04, Viresh Kumar wrote:
-> On 18-07-19, 16:30, Sylwester Nawrocki wrote:
->> This is second iteration of patch series adding ASV (Adaptive Supply
->> Voltage) support for Exynos SoCs. The first one can be found at:
->> https://lore.kernel.org/lkml/20190404171735.12815-1-s.nawrocki@samsung.com
->>
->> The main changes comparing to the first (RFC) version are:
->>   - moving ASV data tables from DT to the driver,
->>   - converting the chipid and the ASV drivers to use regmap,
->>   - converting the ASV driver to proper platform driver.
->>
->> I tried the opp-supported-hw bitmask approach as in the Qualcomm CPUFreq
->> DT bindings but it resulted in too many OPPs and DT nodes, around 200
->> per CPU cluster. So the ASV OPP tables are now in the ASV driver, as in
->> downstream kernels.
-> Hmm. Can you explain why do you have so many OPPs? How many
-> frequencies do you actually support per cluster and what all varies
-> per frequency based on hw ? How many hw version do u have ?
+syzbot found the following crash on:
 
-For big cores there are 20 frequencies (2100MHz .. 200MHz). Each SoC 
-might belong to one of the 3 production 'sets' and each set contains 14 
-so called 'asv groups', which assign the certain voltage values for each 
-of those 20 frequencies (the lower asv group means lower voltage needed 
-for given frequency).
+HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=15562358600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+dashboard link: https://syzkaller.appspot.com/bug?extid=3cbe5cd105d2ad56a1df
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-> I am asking as the OPP core can be improved to support your case if
-> possible. But I need to understand the problem first.
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
+
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN
+CPU: 0 PID: 3715 Comm: syz-executor.3 Not tainted 5.2.0-rc6+ #15
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
+Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
+00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
+RSP: 0018:ffff8881d99d78e0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffc90003f3f000
+RDX: 0000000416d8686d RSI: ffffffff82676841 RDI: 00000020b6c3436a
+RBP: 00000020b6c340a9 R08: ffff8881c6d64800 R09: fffffbfff0e84c25
+R10: ffff8881d99d7940 R11: ffffffff87426127 R12: 0000000000000004
+R13: 0000000000000000 R14: ffff8881d9b94000 R15: ffffffff897f9048
+FS:  00007f047f542700(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30f21000 CR3: 00000001ca032000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+  usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1707
+  usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
+  hid_hw_power include/linux/hid.h:1038 [inline]
+  hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
+  chrdev_open+0x219/0x5c0 fs/char_dev.c:413
+  do_dentry_open+0x497/0x1040 fs/open.c:778
+  do_last fs/namei.c:3416 [inline]
+  path_openat+0x1430/0x3ff0 fs/namei.c:3533
+  do_filp_open+0x1a1/0x280 fs/namei.c:3563
+  do_sys_open+0x3c0/0x580 fs/open.c:1070
+  do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x413711
+Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48  
+83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48  
+89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
+RSP: 002b:00007f047f5417a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 0000000000413711
+RDX: 0000000000000000 RSI: 0000000000084002 RDI: 00007f047f541850
+RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000293 R12: 00007f047f5426d4
+R13: 00000000004c8a7a R14: 00000000004df748 R15: 00000000ffffffff
+Modules linked in:
+---[ end trace a2dcf3f649bfec9a ]---
+RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
+Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
+00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
+89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
+RSP: 0018:ffff8881d99d78e0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffc90003f3f000
+RDX: 0000000416d8686d RSI: ffffffff82676841 RDI: 00000020b6c3436a
+RBP: 00000020b6c340a9 R08: ffff8881c6d64800 R09: fffffbfff0e84c25
+R10: ffff8881d99d7940 R11: ffffffff87426127 R12: 0000000000000004
+R13: 0000000000000000 R14: ffff8881d9b94000 R15: ffffffff897f9048
+FS:  00007f047f542700(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30f21000 CR3: 00000001ca032000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
