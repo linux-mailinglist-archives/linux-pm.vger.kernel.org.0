@@ -2,121 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C843373FE6
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 22:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB8174040
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 22:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387978AbfGXUgP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jul 2019 16:36:15 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:52914 "EHLO
+        id S1727878AbfGXUmX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 16:42:23 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:56034 "EHLO
         smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726632AbfGXUgO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 16:36:14 -0400
+        with ESMTP id S1726314AbfGXUmX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 16:42:23 -0400
 Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 4F28560588; Wed, 24 Jul 2019 20:36:13 +0000 (UTC)
+        id 01D6F60314; Wed, 24 Jul 2019 20:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564000573;
-        bh=LeXYBF4XZF+Eab2E7VFMqCpPAbcHZ5qGNQCkNioMI04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e+1uovH+DfPEa13HCBRKq6kYXCNe6BUY6BmVLWd3OKIn8uKQvdwzAsfQWJOsWBzQo
-         3pvyITvUwHHKKGVn2H9TVqF4fswgAvsjnPVfGJHJrwFaAxji7ZtNGamZ99JAUT88Z6
-         5jWTHlmS8r64iMczX1k0rRZfF/s0hfElDANZnM5c=
+        s=default; t=1564000942;
+        bh=yE4b8DVH6UNu3QtVYOP2/QoCPJazwMi7Z4vS46emglg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=P2IEkSSlKMVUy3LeWMufAbJitm5TNC0i6tCCpJnHtpgadAoJmo9sMWoJrDPVkYx1f
+         eQwki+EuAigzGH5WM/pauyFu0Ri57e9XQ6yEGtHs/X0fcBuPQePirqJ6XgWl9vTVFO
+         cgkvLkHcRfprCuq+l0ht8IzBTUHUAvBM1HlcKasM=
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         pdx-caf-mail.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
         DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
         version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from [10.46.162.237] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: ilina@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4B4F460392;
-        Wed, 24 Jul 2019 20:36:11 +0000 (UTC)
+        (Authenticated sender: daidavid1@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4203360256;
+        Wed, 24 Jul 2019 20:42:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564000572;
-        bh=LeXYBF4XZF+Eab2E7VFMqCpPAbcHZ5qGNQCkNioMI04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a7cYdd2xjX2abQ5f3LG+OcGurndQp/AjKXZLkjoyWEbhzmCKz5cGH9RYpwbVgNul3
-         DXzxFpU9IaTIG/TbQawoIbIfm78gJR8tDStF9ih2Mr3HYMPS5o2h5Yt5g6r/4sKjZM
-         ieya17n3ksapj9vhBRNQYj6TdCHqcfu4GSdYaPg0=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4B4F460392
+        s=default; t=1564000940;
+        bh=yE4b8DVH6UNu3QtVYOP2/QoCPJazwMi7Z4vS46emglg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=GlwlEVE9LNssety46OVjURuumaCj9inIy8RTbpcCJmeyX7SXYxh/sctD1NqIGhqUo
+         4U1fHOENMOhGaeQqRsy3xv7Gz8O2U3AGH9ucG/W8Im+tLmkdTtLqvBY/gNLj7I8i0o
+         oO3XGSYAzij2M5m2apgGUSlhuYaD5DCz4mOAPMcg=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4203360256
 Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Wed, 24 Jul 2019 14:36:10 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        rnayak@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        mkshah@codeaurora.org
-Subject: Re: [PATCH V2 2/4] drivers: qcom: rpmh-rsc: avoid locking in the
- interrupt handler
-Message-ID: <20190724203610.GE18620@codeaurora.org>
-References: <20190722215340.3071-1-ilina@codeaurora.org>
- <20190722215340.3071-2-ilina@codeaurora.org>
- <5d3769df.1c69fb81.55d03.aa33@mx.google.com>
- <20190724145251.GB18620@codeaurora.org>
- <5d38b38e.1c69fb81.e8e5d.035b@mx.google.com>
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=daidavid1@codeaurora.org
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Update Qualcomm SDM845 DT
+ bindings
+To:     Stephen Boyd <swboyd@chromium.org>, bjorn.andersson@linaro.org,
+        georgi.djakov@linaro.org, robh+dt@kernel.org
+Cc:     evgreen@google.com, ilina@codeaurora.org, seansw@qti.qualcomm.com,
+        elder@linaro.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <1563568344-1274-1-git-send-email-daidavid1@codeaurora.org>
+ <1563568344-1274-2-git-send-email-daidavid1@codeaurora.org>
+ <5d371ce7.1c69fb81.9650.8239@mx.google.com>
+ <8c181f08-559b-5d77-a617-65cfd3d5da55@codeaurora.org>
+ <5d3868a9.1c69fb81.876aa.ac30@mx.google.com>
+ <8efd5c48-5d3a-97e1-1dec-6a9cdc4c8ef6@codeaurora.org>
+ <5d38a31d.1c69fb81.80992.0052@mx.google.com>
+From:   David Dai <daidavid1@codeaurora.org>
+Message-ID: <150445a8-a6be-aa46-026b-1ad254128037@codeaurora.org>
+Date:   Wed, 24 Jul 2019 13:42:19 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <5d38b38e.1c69fb81.e8e5d.035b@mx.google.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <5d38a31d.1c69fb81.80992.0052@mx.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 24 2019 at 13:38 -0600, Stephen Boyd wrote:
->Quoting Lina Iyer (2019-07-24 07:52:51)
->> On Tue, Jul 23 2019 at 14:11 -0600, Stephen Boyd wrote:
->> >Quoting Lina Iyer (2019-07-22 14:53:38)
->> >> Avoid locking in the interrupt context to improve latency. Since we
->> >> don't lock in the interrupt context, it is possible that we now could
->> >> race with the DRV_CONTROL register that writes the enable register and
->> >> cleared by the interrupt handler. For fire-n-forget requests, the
->> >> interrupt may be raised as soon as the TCS is triggered and the IRQ
->> >> handler may clear the enable bit before the DRV_CONTROL is read back.
->> >>
->> >> Use the non-sync variant when enabling the TCS register to avoid reading
->> >> back a value that may been cleared because the interrupt handler ran
->> >> immediately after triggering the TCS.
->> >>
->> >> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
->> >> ---
->> >
->> >I have to read this patch carefully. The commit text isn't convincing me
->> >that it is actually safe to make this change. It mostly talks about the
->> >performance improvements and how we need to fix __tcs_trigger(), which
->> >is good, but I was hoping to be convinced that not grabbing the lock
->> >here is safe.
->> >
->> >How do we ensure that drv->tcs_in_use is cleared before we call
->> >tcs_write() and try to look for a free bit? Isn't it possible that we'll
->> >get into a situation where the bitmap is all used up but the hardware
->> >has just received an interrupt and is going to clear out a bit and then
->> >an rpmh write fails with -EBUSY?
->> >
->> If we have a situation where there are no available free bits, we retry
->> and that is part of the function. Since we have only 2 TCSes avaialble
->> to write to the hardware and there could be multiple requests coming in,
->> it is a very common situation. We try and acquire the drv->lock and if
->> there are free TCS available and if available mark them busy and send
->> our requests. If there are none available, we keep retrying.
->>
->
->Ok. I wonder if we need some sort of barriers here too, like an
->smp_mb__after_atomic()? That way we can make sure that the write to
->clear the bit is seen by another CPU that could be spinning forever
->waiting for that bit to be cleared? Before this change the spinlock
->would be guaranteed to make these barriers for us, but now that doesn't
->seem to be the case. I really hope that this whole thing can be changed
->to be a mutex though, in which case we can use the bit_wait() API, etc.
->to put tasks to sleep while RPMh is processing things.
->
-We have drivers that want to send requests in atomic contexts and
-therefore mutex locks would not work.
 
---Lina
+On 7/24/2019 11:27 AM, Stephen Boyd wrote:
+> Quoting David Dai (2019-07-24 10:22:57)
+>> The way that I view this is that the consumers consume both bandwidth
+>> and QoS from these physical NoC devices by getting some path between two
+>> endpoints on these different NoCs and applying some constraints. The NoC
+>> providers can accomplish that either by writing to MMIO spaces or by
+>> talking to some remote processor/hardware to tune its clock speed. The
+>> consumer doesn't interact with the RSCs directly, but can select a
+>> different bcm voter based on the endpoints that are associated with a
+>> particular bcm(apps or disp rsc). Each node(endpoints) will have its own
+>> BCM designation and an unique bcm voter.
+> Ok. I get it now. The MMIO nodes will be interconnect providers and
+> they'll know what RSCs they can use by exposing the same RSC "resource"
+> multiple times for each RSC that can be targeted? This is what the
+> postfix is with _DISP on your examples? Presumably there's an _APPS
+> version of the same prefixed endpoint in case the consumer wants to use
+> the APPS RSC instead of the DISP one, or maybe there's just no postfix
+> in this case because APPS is the "default".
+
+Right, the suffixes will denote the RSC association and will default to 
+APPS otherwise.
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
