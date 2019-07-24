@@ -2,153 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C387236C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 02:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B611B723D8
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 03:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbfGXA1H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 20:27:07 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:38435 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727729AbfGXA1H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 20:27:07 -0400
-Received: by mail-ot1-f65.google.com with SMTP id d17so46060984oth.5
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 17:27:07 -0700 (PDT)
+        id S1728398AbfGXBm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jul 2019 21:42:27 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:45670 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728339AbfGXBm1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jul 2019 21:42:27 -0400
+Received: by mail-pf1-f201.google.com with SMTP id i27so27459097pfk.12
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jul 2019 18:42:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QbJ/1aH4qmoVTHal9gpfV1OZmeGiXehd+erlFI4ek/0=;
-        b=iRJ9Sn87zWuOpYEnizaW5JtalKaYxcMNWYJAjp/AR+/0Zc8vASOONpO8nK5rX3imuE
-         BLaMby2VMeVjTU/7+VoD9jpZQGu6BKh+tmkMklrUkFqrQjeHrRwKucPSF8sliWDbFrct
-         MEz2LMQd7QDaWwPREoKdqUOqEenHPvTmqsp/202cUlegS0CmAB3rCb/XQuvR560Is5/z
-         i2kgg8iuHG9M4fgtBwMxqlT37zL1EsOOeeKSg804XVIbz9xS0lArhWd9c3FTb/J/zyoH
-         mrl9fP3pH46wCjZxtS3Cl32+pLzZxZvobOtkBq8bJwIJARsX+udaITcxbi8OrDNvarWF
-         isTg==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=RW3z74bdMJzDTGtz2VwJiLTUpXRTvYUzeWaG6+K3XV8=;
+        b=vNJBiF/x6OHCcjwCOHbluPIl8E9mfj1/fOW0MrKGISKuPO8IhHo2qNzcurebvR82nK
+         dqlzTf7VT1DWoGeS8gGDdsKgIJ0/ZslL6xo0xsTAsGC+8PzIBWHWoeuDXRVFnVcP6LmZ
+         FsC8Cjf6JjX24Uv5ARw/vbdQ6c3Ob4XzzNN62dE6/C6FOfoyxMTykQ9YpQ0XNZM9wOE3
+         zppn0MTMxA0U8dSv5AmsrWloImz4yc/9NOU9iiETG2AuRum/lVVkQRy/ef5YnBD18GBb
+         EkpJOEv2Uu9UheyGucrCVKtNu6l5F8cnJxvukg9wtmBA3/N7AMJEVKQmgDKbas0Pkoa1
+         91FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QbJ/1aH4qmoVTHal9gpfV1OZmeGiXehd+erlFI4ek/0=;
-        b=nP//P/jG7/QxLCe3IctTxQkLMStA9SWRvbUKQr1T3N84IFS7Te+Mn6mLznVEh44xzV
-         PoXOZ0EWsWK7MBciPgyG5EdUUILloELMn1CUN/T5yADUEamtQ33V1SzfIgxYT/kwRqah
-         T7hkl/ERaZRVQK87tUh4yTLzr6bmxp0nGUYTH/6CvBhdkQY+p/iuNUl22MT0QcF2HImV
-         q24Afq8huVTQG4wwCXxDpCWt4WNH6KvQZbTv+jtfpUS+djxm2vVz9134laUhBYpSj/TO
-         DZOIoVHriFKVvVfKRJ5ItdOPulfZ6FENRYEzVKNEOksmkHJ5bdSIH4u+Fus/9rkpLe0W
-         MhaA==
-X-Gm-Message-State: APjAAAWt5JjObBzIPZRPdFN8B2o6qnw6cwTFHdYkQKAn+qzMBh0v7B4f
-        jH5nLWFvX3cO+U82K1VxbdncS/8luRmFjA/Jeml3DQ==
-X-Google-Smtp-Source: APXvYqz4vq055vl6/OkytYryvRoOr01Jisg/KjTWh/dZ6l5R62vOkPuzpv1JTdWNE0meEetcx6LiqYUaEpuqQfDZhAE=
-X-Received: by 2002:a9d:6201:: with SMTP id g1mr59743749otj.195.1563928026489;
- Tue, 23 Jul 2019 17:27:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190717222340.137578-1-saravanak@google.com> <20190717222340.137578-6-saravanak@google.com>
- <20190723100406.7zchvflrmoaipxek@vireshk-i7>
-In-Reply-To: <20190723100406.7zchvflrmoaipxek@vireshk-i7>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=RW3z74bdMJzDTGtz2VwJiLTUpXRTvYUzeWaG6+K3XV8=;
+        b=PuAWUeSktl2444kOF5/IE6sm7qBPzW2f0co8NjmuAoNE+QNg3iZVi7kvsjWTFMH1Db
+         00ju5dc6ASDyNHi3wObB1k/k1rIpktj1PRC+BjNQIZj2JL0QiAkle2T764n16G5lc5x/
+         p6QPQBRMfvFzNhuQg88cGwTxpMAJRL/s0o9vABrvZpxkGNhRBIxcAvHROgo3gNpJiD1S
+         eo2r/XvACgILrqM/RBVcpH4bvx46NoFBJan2tkLUkgMIl+G9GP4+3fhfnAKgl74iWAne
+         MNl46/msCIjxMusInPiZiwVAuncSjU+ARDyrFt2+tbhi+sDMk3yZ9KNC11jk2Owhs4pj
+         BDRQ==
+X-Gm-Message-State: APjAAAXhAVB2oXLImAH5xMXD38LN0e2iVy92tRC1IqAWUs++3chUCgxm
+        2ze3fb62LBbzZzd9WjlmTy+3R7jksAJO8y4=
+X-Google-Smtp-Source: APXvYqyJ6rmRSMmpqO+pIAEVowap7BIjPFpMLo4a6RxHglx5k3LvlGrTrwVN1wOjB7wOGkYUfP//+q9zcmN1xcE=
+X-Received: by 2002:a63:4404:: with SMTP id r4mr77918560pga.245.1563932546228;
+ Tue, 23 Jul 2019 18:42:26 -0700 (PDT)
+Date:   Tue, 23 Jul 2019 18:42:16 -0700
+Message-Id: <20190724014222.110767-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
+Subject: [PATCH v4 0/5] Add required-opps support to devfreq passive gov
 From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 23 Jul 2019 17:26:30 -0700
-Message-ID: <CAGETcx89X0Xra+3HK+jbuCHXMgRL7QCwSShyMy7DY2Bg1eVjDQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] PM / devfreq: Add required OPPs support to passive governor
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Sibi Sankar <sibis@codeaurora.org>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 3:04 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 17-07-19, 15:23, Saravana Kannan wrote:
-> > Look at the required OPPs of the "parent" device to determine the OPP that
-> > is required from the slave device managed by the passive governor. This
-> > allows having mappings between a parent device and a slave device even when
-> > they don't have the same number of OPPs.
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-> > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> > ---
-> >  drivers/devfreq/governor_passive.c | 20 +++++++++++++++-----
-> >  1 file changed, 15 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-> > index 58308948b863..24ce94c80f06 100644
-> > --- a/drivers/devfreq/governor_passive.c
-> > +++ b/drivers/devfreq/governor_passive.c
-> > @@ -19,7 +19,7 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
-> >                       = (struct devfreq_passive_data *)devfreq->data;
-> >       struct devfreq *parent_devfreq = (struct devfreq *)p_data->parent;
-> >       unsigned long child_freq = ULONG_MAX;
-> > -     struct dev_pm_opp *opp;
-> > +     struct dev_pm_opp *opp = NULL, *p_opp = NULL;
->
-> This won't be required if ...
->
-> >       int i, count, ret = 0;
-> >
-> >       /*
-> > @@ -56,13 +56,20 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
-> >        * list of parent device. Because in this case, *freq is temporary
-> >        * value which is decided by ondemand governor.
-> >        */
-> > -     opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
-> > -     if (IS_ERR(opp)) {
-> > -             ret = PTR_ERR(opp);
-> > +     p_opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
-> > +     if (IS_ERR(p_opp)) {
-> > +             ret = PTR_ERR(p_opp);
-> >               goto out;
-> >       }
-> >
-> > -     dev_pm_opp_put(opp);
-> > +     if (devfreq->opp_table && parent_devfreq->opp_table)
-> > +             opp = dev_pm_opp_xlate_opp(parent_devfreq->opp_table,
-> > +                                        devfreq->opp_table, p_opp);
->
-> you put p_opp right here.
->
-> Also shouldn't you try to get p_opp under the above if block only? As
-> that is the only user of it ?
+The devfreq passive governor scales the frequency of a "child" device based
+on the current frequency of a "parent" device (not parent/child in the
+sense of device hierarchy). As of today, the passive governor requires one
+of the following to work correctly:
+1. The parent and child device have the same number of frequencies
+2. The child device driver passes a mapping function to translate from
+   parent frequency to child frequency.
 
-No, p_opp (used to be called opp) was used even before my changes. If
-there's no required-opps mapping this falls back to assuming the slave
-device OPP to pick should be the same index as the master device's
-opp.
+When (1) is not true, (2) is the only option right now. But often times,
+all that is required is a simple mapping from parent's frequency to child's
+frequency.
 
-So I believe this patch is correct as-is.
+Since OPPs already support pointing to other "required-opps", add support
+for using that to map from parent device frequency to child device
+frequency. That way, every child device driver doesn't have to implement a
+separate mapping function anytime (1) isn't true.
+
+Some common (but not comprehensive) reason for needing a devfreq passive
+governor to adjust the frequency of one device based on another are:
+
+1. These were the combination of frequencies that were validated/screened
+   during the manufacturing process.
+2. These are the sensible performance combinations between two devices
+   interacting with each other. So that when one runs fast the other
+   doesn't become the bottleneck.
+3. Hardware bugs requiring some kind of frequency ratio between devices.
+
+For example, the following mapping can't be captured in DT as it stands
+today because the parent and child device have different number of OPPs.
+But with this patch series, this mapping can be captured cleanly.
+
+In arch/arm64/boot/dts/exynos/exynos5433-bus.dtsi you have something
+like this with the following changes:
+
+	bus_g2d_400: bus0 {
+		compatible = "samsung,exynos-bus";
+		clocks = <&cmu_top CLK_ACLK_G2D_400>;
+		clock-names = "bus";
+		operating-points-v2 = <&bus_g2d_400_opp_table>;
+		status = "disabled";
+	};
+
+	bus_noc2: bus9 {
+		compatible = "samsung,exynos-bus";
+		clocks = <&cmu_mif CLK_ACLK_BUS2_400>;
+		clock-names = "bus";
+		operating-points-v2 = <&bus_noc2_opp_table>;
+		status = "disabled";
+	};
+
+	bus_g2d_400_opp_table: opp_table2 {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		opp-400000000 {
+			opp-hz = /bits/ 64 <400000000>;
+			opp-microvolt = <1075000>;
+			required-opps = <&noc2_400>;
+		};
+		opp-267000000 {
+			opp-hz = /bits/ 64 <267000000>;
+			opp-microvolt = <1000000>;
+			required-opps = <&noc2_200>;
+		};
+		opp-200000000 {
+			opp-hz = /bits/ 64 <200000000>;
+			opp-microvolt = <975000>;
+			required-opps = <&noc2_200>;
+		};
+		opp-160000000 {
+			opp-hz = /bits/ 64 <160000000>;
+			opp-microvolt = <962500>;
+			required-opps = <&noc2_134>;
+		};
+		opp-134000000 {
+			opp-hz = /bits/ 64 <134000000>;
+			opp-microvolt = <950000>;
+			required-opps = <&noc2_134>;
+		};
+		opp-100000000 {
+			opp-hz = /bits/ 64 <100000000>;
+			opp-microvolt = <937500>;
+			required-opps = <&noc2_100>;
+		};
+	};
+
+	bus_noc2_opp_table: opp_table6 {
+		compatible = "operating-points-v2";
+
+		noc2_400: opp-400000000 {
+			opp-hz = /bits/ 64 <400000000>;
+		};
+		noc2_200: opp-200000000 {
+			opp-hz = /bits/ 64 <200000000>;
+		};
+		noc2_134: opp-134000000 {
+			opp-hz = /bits/ 64 <134000000>;
+		};
+		noc2_100: opp-100000000 {
+			opp-hz = /bits/ 64 <100000000>;
+		};
+	};
 
 -Saravana
 
->
-> > +     if (opp) {
-> > +             *freq = dev_pm_opp_get_freq(opp);
-> > +             dev_pm_opp_put(opp);
-> > +             goto out;
-> > +     }
-> >
-> >       /*
-> >        * Get the OPP table's index of decided freqeuncy by governor
-> > @@ -89,6 +96,9 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
-> >       *freq = child_freq;
-> >
-> >  out:
-> > +     if (!IS_ERR_OR_NULL(opp))
-> > +             dev_pm_opp_put(p_opp);
-> > +
-> >       return ret;
-> >  }
-> >
-> > --
-> > 2.22.0.510.g264f2c817a-goog
->
-> --
-> viresh
+v3 -> v4:
+- Fixed documentation comments
+- Fixed order of functions in .h file
+- Renamed the new xlate API
+- Caused _set_required_opps() to fail if all required opps tables aren't
+  linked.
+v2 -> v3:
+- Rebased onto linux-next.
+- Added documentation comment for new fields.
+- Added support for lazy required-opps linking.
+- Updated Ack/Reviewed-bys.
+v1 -> v2:
+- Cached OPP table reference in devfreq to avoid looking up every time.
+- Renamed variable in passive governor to be more intuitive.
+- Updated cover letter with examples.
+
+
+Saravana Kannan (5):
+  OPP: Allow required-opps even if the device doesn't have power-domains
+  OPP: Add function to look up required OPP's for a given OPP
+  OPP: Improve required-opps linking
+  PM / devfreq: Cache OPP table reference in devfreq
+  PM / devfreq: Add required OPPs support to passive governor
+
+ drivers/devfreq/devfreq.c          |   6 ++
+ drivers/devfreq/governor_passive.c |  20 ++++--
+ drivers/opp/core.c                 |  83 +++++++++++++++++++---
+ drivers/opp/of.c                   | 108 ++++++++++++++---------------
+ drivers/opp/opp.h                  |   5 ++
+ include/linux/devfreq.h            |   2 +
+ include/linux/pm_opp.h             |  11 +++
+ 7 files changed, 165 insertions(+), 70 deletions(-)
+
+-- 
+2.22.0.709.g102302147b-goog
+
