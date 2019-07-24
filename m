@@ -2,133 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF38E7300B
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 15:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3304973136
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 16:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726862AbfGXNiG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jul 2019 09:38:06 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:37119 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726759AbfGXNiG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 09:38:06 -0400
-Received: by mail-io1-f71.google.com with SMTP id v3so51117510ios.4
-        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 06:38:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=YmlYbeeXg8KipqZm+95RyiuSWYiaWNME9/ZKLNADTzI=;
-        b=AnpJwaRExVi4h1pJDald9E5SZa8ycSOVzBUzYSBFmzg/+00HsEVmmLrLE3unOPx9FD
-         98ppiQAJIkS4bsxHiimYmQ2RVRVhjFTMJUD1y0V4t+4G5ZlEGUTl0WPZZkQ5fQhJi+RF
-         TqGlFtiFqUQ1Iq/lr0YVlKxd6vULSJusanJ6unPRjM8n3+RYHVdDzp1HpZVJQM7iLCvn
-         ye8XVVa7UsTQpdXO/5PAlRhvPheTH61W5dS4kXG7q/jZvYzf6r0p5X3OXhJGYzavrSUz
-         /d3LlQNBq27ikU50bnGvIv5g0GgSuaw3hgL78M2slxksHk8OEFV8baQTM/U49ByKUT4G
-         dxSQ==
-X-Gm-Message-State: APjAAAUcubkPJXSLk1bwA09BItqANWoRq32VgISU0oBfgDlxE+ACPON5
-        xZFHWSLsDZTi37Hbqsh0XmmCNXBJnhg+a+hdHMdqnPIOqS1a
-X-Google-Smtp-Source: APXvYqz2PxYFGpRCTtrjQIXkXtIveQHB4aG4N+6UmgzI6K4L4WM1q80LZoqSsv2AF51hyBZCqSCxZDmCm99YFNaGIo/9e+AxJw1A
-MIME-Version: 1.0
-X-Received: by 2002:a02:c550:: with SMTP id g16mr83081468jaj.49.1563975485145;
- Wed, 24 Jul 2019 06:38:05 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 06:38:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003acc06058e6d6b70@google.com>
-Subject: general protection fault in __pm_runtime_resume
-From:   syzbot <syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        len.brown@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, pavel@ucw.cz,
-        rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        id S1726944AbfGXOKX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 10:10:23 -0400
+Received: from mga05.intel.com ([192.55.52.43]:19012 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726287AbfGXOKX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Jul 2019 10:10:23 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Jul 2019 07:10:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,303,1559545200"; 
+   d="scan'208";a="193472557"
+Received: from jiayuchi-mobl.ccr.corp.intel.com ([10.255.31.122])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Jul 2019 07:10:19 -0700
+Message-ID: <1563977418.2256.0.camel@intel.com>
+Subject: Re: [PATCH] thermal: Fix use-after-free when unregistering thermal
+ zone device
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Ido Schimmel <idosch@idosch.org>, linux-pm@vger.kernel.org
+Cc:     edubezval@gmail.com, daniel.lezcano@linaro.org, jiri@mellanox.com,
+        vadimp@mellanox.com, mlxsw@mellanox.com,
+        Ido Schimmel <idosch@mellanox.com>
+Date:   Wed, 24 Jul 2019 22:10:18 +0800
+In-Reply-To: <20190710101452.32748-1-idosch@idosch.org>
+References: <20190710101452.32748-1-idosch@idosch.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.18.5.2-0ubuntu3.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On 三, 2019-07-10 at 13:14 +0300, Ido Schimmel wrote:
+> From: Ido Schimmel <idosch@mellanox.com>
+> 
+> thermal_zone_device_unregister() cancels the delayed work that polls
+> the
+> thermal zone, but it does not wait for it to finish. This is racy
+> with
+> respect to the freeing of the thermal zone device, which can result
+> in a
+> use-after-free [1].
+> 
+> Fix this by waiting for the delayed work to finish before freeing the
+> thermal zone device. Note that thermal_zone_device_set_polling() is
+> never invoked from an atomic context, so it is safe to call
+> cancel_delayed_work_sync() that can block.
+> 
+> [1]
+> [  +0.002221]
+> ==================================================================
+> [  +0.000064] BUG: KASAN: use-after-free in
+> __mutex_lock+0x1076/0x11c0
+> [  +0.000016] Read of size 8 at addr ffff8881e48e0450 by task
+> kworker/1:0/17
+> 
+> [  +0.000023] CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.2.0-rc6-
+> custom-02495-g8e73ca3be4af #1701
+> [  +0.000010] Hardware name: Mellanox Technologies Ltd. MSN2100-
+> CB2FO/SA001017, BIOS 5.6.5 06/07/2016
+> [  +0.000016] Workqueue: events_freezable_power_
+> thermal_zone_device_check
+> [  +0.000012] Call Trace:
+> [  +0.000021]  dump_stack+0xa9/0x10e
+> [  +0.000020]  print_address_description.cold.2+0x9/0x25e
+> [  +0.000018]  __kasan_report.cold.3+0x78/0x9d
+> [  +0.000016]  kasan_report+0xe/0x20
+> [  +0.000016]  __mutex_lock+0x1076/0x11c0
+> [  +0.000014]  step_wise_throttle+0x72/0x150
+> [  +0.000018]  handle_thermal_trip+0x167/0x760
+> [  +0.000019]  thermal_zone_device_update+0x19e/0x5f0
+> [  +0.000019]  process_one_work+0x969/0x16f0
+> [  +0.000017]  worker_thread+0x91/0xc40
+> [  +0.000014]  kthread+0x33d/0x400
+> [  +0.000015]  ret_from_fork+0x3a/0x50
+> 
+> [  +0.000020] Allocated by task 1:
+> [  +0.000015]  save_stack+0x19/0x80
+> [  +0.000015]  __kasan_kmalloc.constprop.4+0xc1/0xd0
+> [  +0.000014]  kmem_cache_alloc_trace+0x152/0x320
+> [  +0.000015]  thermal_zone_device_register+0x1b4/0x13a0
+> [  +0.000015]  mlxsw_thermal_init+0xc92/0x23d0
+> [  +0.000014]  __mlxsw_core_bus_device_register+0x659/0x11b0
+> [  +0.000013]  mlxsw_core_bus_device_register+0x3d/0x90
+> [  +0.000013]  mlxsw_pci_probe+0x355/0x4b0
+> [  +0.000014]  local_pci_probe+0xc3/0x150
+> [  +0.000013]  pci_device_probe+0x280/0x410
+> [  +0.000013]  really_probe+0x26a/0xbb0
+> [  +0.000013]  driver_probe_device+0x208/0x2e0
+> [  +0.000013]  device_driver_attach+0xfe/0x140
+> [  +0.000013]  __driver_attach+0x110/0x310
+> [  +0.000013]  bus_for_each_dev+0x14b/0x1d0
+> [  +0.000013]  driver_register+0x1c0/0x400
+> [  +0.000015]  mlxsw_sp_module_init+0x5d/0xd3
+> [  +0.000014]  do_one_initcall+0x239/0x4dd
+> [  +0.000013]  kernel_init_freeable+0x42b/0x4e8
+> [  +0.000012]  kernel_init+0x11/0x18b
+> [  +0.000013]  ret_from_fork+0x3a/0x50
+> 
+> [  +0.000015] Freed by task 581:
+> [  +0.000013]  save_stack+0x19/0x80
+> [  +0.000014]  __kasan_slab_free+0x125/0x170
+> [  +0.000013]  kfree+0xf3/0x310
+> [  +0.000013]  thermal_release+0xc7/0xf0
+> [  +0.000014]  device_release+0x77/0x200
+> [  +0.000014]  kobject_put+0x1a8/0x4c0
+> [  +0.000014]  device_unregister+0x38/0xc0
+> [  +0.000014]  thermal_zone_device_unregister+0x54e/0x6a0
+> [  +0.000014]  mlxsw_thermal_fini+0x184/0x35a
+> [  +0.000014]  mlxsw_core_bus_device_unregister+0x10a/0x640
+> [  +0.000013]  mlxsw_devlink_core_bus_device_reload+0x92/0x210
+> [  +0.000015]  devlink_nl_cmd_reload+0x113/0x1f0
+> [  +0.000014]  genl_family_rcv_msg+0x700/0xee0
+> [  +0.000013]  genl_rcv_msg+0xca/0x170
+> [  +0.000013]  netlink_rcv_skb+0x137/0x3a0
+> [  +0.000012]  genl_rcv+0x29/0x40
+> [  +0.000013]  netlink_unicast+0x49b/0x660
+> [  +0.000013]  netlink_sendmsg+0x755/0xc90
+> [  +0.000013]  __sys_sendto+0x3de/0x430
+> [  +0.000013]  __x64_sys_sendto+0xe2/0x1b0
+> [  +0.000013]  do_syscall_64+0xa4/0x4d0
+> [  +0.000013]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> 
+> [  +0.000017] The buggy address belongs to the object at
+> ffff8881e48e0008
+>                which belongs to the cache kmalloc-2k of size 2048
+> [  +0.000012] The buggy address is located 1096 bytes inside of
+>                2048-byte region [ffff8881e48e0008, ffff8881e48e0808)
+> [  +0.000007] The buggy address belongs to the page:
+> [  +0.000012] page:ffffea0007923800 refcount:1 mapcount:0
+> mapping:ffff88823680d0c0 index:0x0 compound_mapcount: 0
+> [  +0.000020] flags: 0x200000000010200(slab|head)
+> [  +0.000019] raw: 0200000000010200 ffffea0007682008 ffffea00076ab808
+> ffff88823680d0c0
+> [  +0.000016] raw: 0000000000000000 00000000000d000d 00000001ffffffff
+> 0000000000000000
+> [  +0.000007] page dumped because: kasan: bad access detected
+> 
+> [  +0.000012] Memory state around the buggy address:
+> [  +0.000012]  ffff8881e48e0300: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [  +0.000012]  ffff8881e48e0380: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [  +0.000012] >ffff8881e48e0400: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [  +0.000008]                                                  ^
+> [  +0.000012]  ffff8881e48e0480: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [  +0.000012]  ffff8881e48e0500: fb fb fb fb fb fb fb fb fb fb fb fb
+> fb fb fb fb
+> [  +0.000007]
+> ==================================================================
+> 
+> Fixes: b1569e99c795 ("ACPI: move thermal trip handling to generic
+> thermal layer")
+> Reported-by: Jiri Pirko <jiri@mellanox.com>
+> Signed-off-by: Ido Schimmel <idosch@mellanox.com>
+> Acked-by: Jiri Pirko <jiri@mellanox.com>
 
-syzbot found the following crash on:
+patch applied.
 
-HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=15562358600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-dashboard link: https://syzkaller.appspot.com/bug?extid=3cbe5cd105d2ad56a1df
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
-
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] SMP KASAN
-CPU: 0 PID: 3715 Comm: syz-executor.3 Not tainted 5.2.0-rc6+ #15
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
-Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
-00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
-89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
-RSP: 0018:ffff8881d99d78e0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffc90003f3f000
-RDX: 0000000416d8686d RSI: ffffffff82676841 RDI: 00000020b6c3436a
-RBP: 00000020b6c340a9 R08: ffff8881c6d64800 R09: fffffbfff0e84c25
-R10: ffff8881d99d7940 R11: ffffffff87426127 R12: 0000000000000004
-R13: 0000000000000000 R14: ffff8881d9b94000 R15: ffffffff897f9048
-FS:  00007f047f542700(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30f21000 CR3: 00000001ca032000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-  pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
-  usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1707
-  usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
-  hid_hw_power include/linux/hid.h:1038 [inline]
-  hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
-  chrdev_open+0x219/0x5c0 fs/char_dev.c:413
-  do_dentry_open+0x497/0x1040 fs/open.c:778
-  do_last fs/namei.c:3416 [inline]
-  path_openat+0x1430/0x3ff0 fs/namei.c:3533
-  do_filp_open+0x1a1/0x280 fs/namei.c:3563
-  do_sys_open+0x3c0/0x580 fs/open.c:1070
-  do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x413711
-Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48  
-83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48  
-89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
-RSP: 002b:00007f047f5417a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 0000000000413711
-RDX: 0000000000000000 RSI: 0000000000084002 RDI: 00007f047f541850
-RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000293 R12: 00007f047f5426d4
-R13: 00000000004c8a7a R14: 00000000004df748 R15: 00000000ffffffff
-Modules linked in:
----[ end trace a2dcf3f649bfec9a ]---
-RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
-Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02  
-00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48  
-89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
-RSP: 0018:ffff8881d99d78e0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffc90003f3f000
-RDX: 0000000416d8686d RSI: ffffffff82676841 RDI: 00000020b6c3436a
-RBP: 00000020b6c340a9 R08: ffff8881c6d64800 R09: fffffbfff0e84c25
-R10: ffff8881d99d7940 R11: ffffffff87426127 R12: 0000000000000004
-R13: 0000000000000000 R14: ffff8881d9b94000 R15: ffffffff897f9048
-FS:  00007f047f542700(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30f21000 CR3: 00000001ca032000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+thanks,
+rui
+> ---
+>  drivers/thermal/thermal_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c
+> b/drivers/thermal/thermal_core.c
+> index 46cfb7de4eb2..f87f462c60c1 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -298,7 +298,7 @@ static void
+> thermal_zone_device_set_polling(struct thermal_zone_device *tz,
+>  				 &tz->poll_queue,
+>  				 msecs_to_jiffies(delay));
+>  	else
+> -		cancel_delayed_work(&tz->poll_queue);
+> +		cancel_delayed_work_sync(&tz->poll_queue);
+>  }
+>  
+>  static void monitor_thermal_zone(struct thermal_zone_device *tz)
