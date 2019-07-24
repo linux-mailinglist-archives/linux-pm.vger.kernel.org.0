@@ -2,154 +2,500 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC74672538
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 05:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8ED728E7
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jul 2019 09:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725861AbfGXDRI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jul 2019 23:17:08 -0400
-Received: from mail-eopbgr40057.outbound.protection.outlook.com ([40.107.4.57]:15942
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725828AbfGXDRI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Jul 2019 23:17:08 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n8qcp6rPfc7/zvm5FT4pwVD+0AtEG4mpGkDmJ7Bp871psDAMZ1o4rsuTedG/2Dnu9WNa1UTbmqBjfNvs5f+xnnAYdgkBvFMJTX0xgHdfQ4+osW0dTfurlbIgxqNm2HTQrgzpPN0860UoqGdLTPFjWEVO/DgOgBwOI7m9oYmc1R2FjAJuDcDBt1b1vP0crK+4E523i3nJyawMfgFHb2HJHH5UKTkAC20reazgRjQ23pVoroz5MPNfmUnIoa/mDdGFseQ68800qs3++cU0ERvF5JTTt/KPg+PUxQ2TTiWgN/GgXWWzKWGzq2uJF2kB42HXGP5jVwdlEswpuosQ+Gaquw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F4s6gOeuodSoyUOPUAU23lLZHe+QbUK8IOOoLOZxYCk=;
- b=PK4zgwDWETOoyVN6+OySX+PTmUEoKOTjTYMXXEI/NFm5tyHwDcfUvYj2fXvGi1lu/UPCOwasmJ+Hw86QLGI2PzjxpZCgyd7Zm1SkU+LoJ/nA/5ApnRd17N/ka3oFYBqzYTPkB12fFq8gGOvcr0MJnyjtixnIXQN4cDQ3oUvVF47FUyl7stK6X63Q6+bM71QXFXkUYEfqaiItcsp/Ai/RnRih1YYd5azcsjsiZ3gH3KamRoi2XUqdcqYHoj76uwYvm9vLmoLdhkYJ2ayCQy3JSSpw9/CkEdY3sT8HMCh9cqxv+LegfY1EMSFFgGZJP0U/fKNddhSupcymBUm7VTgfDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F4s6gOeuodSoyUOPUAU23lLZHe+QbUK8IOOoLOZxYCk=;
- b=N/ryaTxl7yn6LUEGEJM+VvHdpKO94DT6NuUf1JN3OBFWxUUona36WunMS7Sc+9kUZsvUiNurEa8s9IwtmtJUAMUUMUYn44rKyvkHQ/1Qu8gO6/G9PXy3R7OqTt90+44E+jlukKfW7VHT2W9joYI32EQIObxN1yDF8xNTlvG9PuM=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3769.eurprd04.prod.outlook.com (52.134.71.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2115.10; Wed, 24 Jul 2019 03:17:00 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::7cdf:bddc:212c:f77e]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::7cdf:bddc:212c:f77e%4]) with mapi id 15.20.2094.017; Wed, 24 Jul 2019
- 03:16:59 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Anson Huang <anson.huang@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "edubezval@gmail.com" <edubezval@gmail.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "maxime.ripard@bootlin.com" <maxime.ripard@bootlin.com>,
-        "horms+renesas@verge.net.au" <horms+renesas@verge.net.au>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "jagan@amarulasolutions.com" <jagan@amarulasolutions.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V15 1/5] dt-bindings: fsl: scu: add thermal binding
-Thread-Topic: [PATCH V15 1/5] dt-bindings: fsl: scu: add thermal binding
-Thread-Index: AQHVJXvnLQPj9qjL2U2LZTWuyBDONqaqeq9ggC7WvJA=
-Date:   Wed, 24 Jul 2019 03:16:59 +0000
-Message-ID: <DB3PR0402MB39162EB555CD7AE75D58C582F5C60@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <20190618021820.14885-1-Anson.Huang@nxp.com>
- <DB3PR0402MB39162C5B5AF828B127DD871EF5E00@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-In-Reply-To: <DB3PR0402MB39162C5B5AF828B127DD871EF5E00@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 31936f57-d2e2-4326-9e48-08d70fe5643a
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3769;
-x-ms-traffictypediagnostic: DB3PR0402MB3769:
-x-microsoft-antispam-prvs: <DB3PR0402MB37696D24A8E05080CFCC8D18F5C60@DB3PR0402MB3769.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0108A997B2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(346002)(136003)(39860400002)(366004)(199004)(189003)(9686003)(14454004)(55016002)(53936002)(6436002)(33656002)(7416002)(478600001)(305945005)(7736002)(74316002)(2501003)(256004)(44832011)(446003)(2906002)(11346002)(486006)(476003)(66066001)(3846002)(6116002)(186003)(26005)(6506007)(102836004)(68736007)(81166006)(8676002)(81156014)(76176011)(8936002)(229853002)(316002)(71190400001)(71200400001)(110136005)(99286004)(7696005)(2201001)(6246003)(25786009)(4326008)(66446008)(76116006)(52536014)(66946007)(5660300002)(66476007)(66556008)(86362001)(64756008)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3769;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: Bj1vxS/qyAckNIUkEfG27smZ76qHrrvIwsf02G4wQrsroiaKC48WWpYmJdQYatEf5WDSXzFN1nxXEE/ag86VSGE+//6P1BkNRP1NxJJN9dMW/fKXByXNbEW7Ty0uyYcX3nhg4OQjCD+1Z2fhN2JVKqgDJQTSTO1yoFq69GwIfq/d5U7Yao4nEeN0eYAREEXDXVOX4ZJQk1naWtDePXOsbgHUQ4MbxlhO1ZLqMiCHeyCdgBd3AmGRoMmvaFRi8ydwVlJRpX0vwmDek5hULQQc6Seeefan+PLMOsgTH/eFEDnI0ikNuR7U0hbMNnxnuQ3CCePai6hmSXhWZRe6j0mjZegEtjOUzGzU7DaHI2iRFt6zEBvOsGvOz+BtbvhfQvqVbCpUD9PoXqe1RiOQGy4nEiRAaZp8YcDw8V7yrWVAhNM=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726038AbfGXHQv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 03:16:51 -0400
+Received: from mail-lj1-f174.google.com ([209.85.208.174]:33604 "EHLO
+        mail-lj1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbfGXHQv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 03:16:51 -0400
+Received: by mail-lj1-f174.google.com with SMTP id h10so43492996ljg.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 00:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E19KQXbLdBxdFAeBbr3phSTShYHx6S2NroBWiDOi9TY=;
+        b=AfphNYrkJDAb9bLq6L2xP7Bskp7Epj64CI3dUAjNpfHlmDGTDGyKci6rXFe50EaP7j
+         Qa4Yl6+cgI1tWujPutNAmehNS2zhS57Zh1Lc7QCg3EJGvpkScuzSbtiQ/yOR1EzqeL6A
+         u6fOkwkir5vpYl5dinZEO5SoGB5pXAdvS8sAKGBolGqC5+E7jyBg6FjFFa8e2RlZ8y2b
+         IIAsLZOyHA0bDKW2Bu2IWIYFL62qVlOFmX3+/UWy2yHpxxaoOkjrHcF/ekiaoh5jPxGX
+         lmHZ5WtEOKYPvdNZqehnWNlUyAdsH9wp6juijwvGNUKDjMkBOsZGkHG/QZ2djoZP54fd
+         Jq9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E19KQXbLdBxdFAeBbr3phSTShYHx6S2NroBWiDOi9TY=;
+        b=QLdeggC7dq8lnc858oULaPd9ScvDrls0SsVMXZFwlM4iphiFFrQ3ElypCyZzr7cTE8
+         ntxN4+MykyLN33NisgNepN0udxEI+OFrPOYexNPZOUGQOjSZfQdaWR9wItlRHfkCEhJT
+         dTBD5N0SXtMgWAoLx2/+4Eyw3BamHFXa6JbZJpVBml8Nj9Rt3FouBflgueK49f0EL4bw
+         /LqKDrMVPBHnfn2vx/6viaLbfRTtnDjIZ3wDaeoCsVYRQJa4NG8xH8v+C1XeNEHZeZ5s
+         ogwONi78vl/UuCb2UG3qVSgoOYO7+PiXmMPKrZxZjstzJvFCkQ1w7fUSZlm/wNuzp+Hf
+         JkcQ==
+X-Gm-Message-State: APjAAAVdpqUG0K/7ApwynhOYSkLmDI9B8Qe+h+p+eUDtNd9wJfpBSMf8
+        a/vEKtcBzCoKPFfwIITsF94qXgMlUBxe7oPD/3v1Ow==
+X-Google-Smtp-Source: APXvYqx++u6mTfy/2VcID2fTZzSyAiknM0Ei5QVp3zrGzaXE+izuwkH/JkRVh6NneV3gLgqSdrNUrPkANNoTEW7zgNY=
+X-Received: by 2002:a05:651c:20d:: with SMTP id y13mr40619460ljn.204.1563952607461;
+ Wed, 24 Jul 2019 00:16:47 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31936f57-d2e2-4326-9e48-08d70fe5643a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jul 2019 03:16:59.9045
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: anson.huang@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3769
+References: <20190703011020.151615-1-saravanak@google.com> <20190703011020.151615-7-saravanak@google.com>
+ <CAKfTPtCJFaEfvu3Dnp9WSxQEwSfY=VS+xsoQ+4P+vg7_WL0BAQ@mail.gmail.com>
+ <CAGETcx_5gu84FOVmELPnK5uJTE0NEhxYKtdFigoXGyFtjehQvw@mail.gmail.com>
+ <CAKfTPtBHrXG1QZzcaStWCtL3nx+vE_-WKtOhjiHbjFQiw9Yk8w@mail.gmail.com>
+ <CAGETcx912kpi9DejPCoWMUF5AMm4=o1C0C45zwMfUy6aX_jcYg@mail.gmail.com>
+ <CAKfTPtBngOT__TfmHXmmim-b9YhExOOvwVRaxYM9g9M6ffr_zQ@mail.gmail.com>
+ <CAGETcx90WC2o+ZmkyhOPp1xJbfSk1wpAv2RA-4VgnhJfcsmJiA@mail.gmail.com>
+ <CAKfTPtBE7e+hc55TY43JC0XPONvrS4FBPkZcRZ4EbzyCJKNhfg@mail.gmail.com> <CAGETcx_w=yVDiwVWT1+mmoj54FuLC37Eh2E-s0BfrtEa0AqEjw@mail.gmail.com>
+In-Reply-To: <CAGETcx_w=yVDiwVWT1+mmoj54FuLC37Eh2E-s0BfrtEa0AqEjw@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 24 Jul 2019 09:16:36 +0200
+Message-ID: <CAKfTPtA+VAXPLRy8k7qC5PPmtOjO-Pq-3HmakFfxn98=Oj8Tug@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] interconnect: Add OPP table support for interconnects
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        daidavid1@codeaurora.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        sibis@codeaurora.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-UGluZy4uLg0KDQo+IEhpLCBEYW5pZWwvUnVpL0VkdWFyZG8NCj4gCUNvdWxkIHlvdSBwbGVhc2Ug
-dGFrZSBhIGxvb2sgYXQgdGhpcyBwYXRjaCBzZXJpZXM/DQo+IA0KPiBBbnNvbg0KPiANCj4gPiBG
-cm9tOiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gPg0KPiA+IE5YUCBpLk1Y
-OFFYUCBpcyBhbiBBUk12OCBTb0Mgd2l0aCBhIENvcnRleC1NNCBjb3JlIGluc2lkZSBhcyBzeXN0
-ZW0NCj4gPiBjb250cm9sbGVyLCB0aGUgc3lzdGVtIGNvbnRyb2xsZXIgaXMgaW4gY2hhcmdlIG9m
-IHN5c3RlbSBwb3dlciwgY2xvY2sNCj4gPiBhbmQgdGhlcm1hbCBzZW5zb3JzIGV0Yy4gbWFuYWdl
-bWVudCwgTGludXgga2VybmVsIGhhcyB0byBjb21tdW5pY2F0ZQ0KPiA+IHdpdGggc3lzdGVtIGNv
-bnRyb2xsZXIgdmlhIE1VIChtZXNzYWdlIHVuaXQpIElQQyB0byBnZXQgdGVtcGVyYXR1cmUNCj4g
-PiBmcm9tIHRoZXJtYWwgc2Vuc29ycywgdGhpcyBwYXRjaCBhZGRzIGJpbmRpbmcgZG9jIGZvciBp
-Lk1YIHN5c3RlbQ0KPiA+IGNvbnRyb2xsZXIgdGhlcm1hbCBkcml2ZXIuDQo+ID4NCj4gPiBTaWdu
-ZWQtb2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gPiBSZXZpZXdl
-ZC1ieTogUm9iIEhlcnJpbmcgPHJvYmhAa2VybmVsLm9yZz4NCj4gPiBSZXZpZXdlZC1ieTogRG9u
-ZyBBaXNoZW5nIDxhaXNoZW5nLmRvbmdAbnhwLmNvbT4NCj4gPiAtLS0NCj4gPiBObyBjaGFuZ2Uu
-DQo+ID4gLS0tDQo+ID4gIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9mcmVlc2NhbGUvZnNs
-LHNjdS50eHQgICAgICAgIHwgMTYNCj4gKysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hh
-bmdlZCwgMTYgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdA0KPiA+IGEvRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9mcmVlc2NhbGUvZnNsLHNjdS50eHQNCj4g
-PiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vZnJlZXNjYWxlL2ZzbCxz
-Y3UudHh0DQo+ID4gaW5kZXggYTU3NWU0Mi4uZmMzODQ0ZSAxMDA2NDQNCj4gPiAtLS0gYS9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL2ZyZWVzY2FsZS9mc2wsc2N1LnR4dA0K
-PiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vZnJlZXNjYWxl
-L2ZzbCxzY3UudHh0DQo+ID4gQEAgLTE1NSw2ICsxNTUsMTcgQEAgUmVxdWlyZWQgcHJvcGVydGll
-czoNCj4gPiAgT3B0aW9uYWwgcHJvcGVydGllczoNCj4gPiAgLSB0aW1lb3V0LXNlYzogY29udGFp
-bnMgdGhlIHdhdGNoZG9nIHRpbWVvdXQgaW4gc2Vjb25kcy4NCj4gPg0KPiA+ICtUaGVybWFsIGJp
-bmRpbmdzIGJhc2VkIG9uIFNDVSBNZXNzYWdlIFByb3RvY29sDQo+ID4gKy0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICsNCj4g
-PiArUmVxdWlyZWQgcHJvcGVydGllczoNCj4gPiArLSBjb21wYXRpYmxlOgkJCVNob3VsZCBiZSA6
-DQo+ID4gKwkJCQkgICJmc2wsaW14OHF4cC1zYy10aGVybWFsIg0KPiA+ICsJCQkJZm9sbG93ZWQg
-YnkgImZzbCxpbXgtc2MtdGhlcm1hbCI7DQo+ID4gKw0KPiA+ICstICN0aGVybWFsLXNlbnNvci1j
-ZWxsczoJU2VlDQo+ID4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3RoZXJtYWwv
-dGhlcm1hbC50eHQNCj4gPiArCQkJCWZvciBhIGRlc2NyaXB0aW9uLg0KPiA+ICsNCj4gPiAgRXhh
-bXBsZSAoaW14OHF4cCk6DQo+ID4gIC0tLS0tLS0tLS0tLS0NCj4gPiAgYWxpYXNlcyB7DQo+ID4g
-QEAgLTIyMiw2ICsyMzMsMTEgQEAgZmlybXdhcmUgew0KPiA+ICAJCQljb21wYXRpYmxlID0gImZz
-bCxpbXg4cXhwLXNjLXdkdCIsICJmc2wsaW14LXNjLXdkdCI7DQo+ID4gIAkJCXRpbWVvdXQtc2Vj
-ID0gPDYwPjsNCj4gPiAgCQl9Ow0KPiA+ICsNCj4gPiArCQl0c2VuczogdGhlcm1hbC1zZW5zb3Ig
-ew0KPiA+ICsJCQljb21wYXRpYmxlID0gImZzbCxpbXg4cXhwLXNjLXRoZXJtYWwiLCAiZnNsLGlt
-eC1zYy0NCj4gPiB0aGVybWFsIjsNCj4gPiArCQkJI3RoZXJtYWwtc2Vuc29yLWNlbGxzID0gPDE+
-Ow0KPiA+ICsJCX07DQo+ID4gIAl9Ow0KPiA+ICB9Ow0KPiA+DQo+ID4gLS0NCj4gPiAyLjcuNA0K
-DQo=
+On Tue, 16 Jul 2019 at 02:56, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Mon, Jul 15, 2019 at 1:16 AM Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+> >
+> > On Tue, 9 Jul 2019 at 21:03, Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > On Tue, Jul 9, 2019 at 12:25 AM Vincent Guittot
+> > > <vincent.guittot@linaro.org> wrote:
+> > > >
+> > > > On Sun, 7 Jul 2019 at 23:48, Saravana Kannan <saravanak@google.com> wrote:
+> > > > >
+> > > > > On Thu, Jul 4, 2019 at 12:12 AM Vincent Guittot
+> > > > > <vincent.guittot@linaro.org> wrote:
+> > > > > >
+> > > > > > On Wed, 3 Jul 2019 at 23:33, Saravana Kannan <saravanak@google.com> wrote:
+> > > > > > >
+> > > > > > > On Tue, Jul 2, 2019 at 11:45 PM Vincent Guittot
+> > > > > > > <vincent.guittot@linaro.org> wrote:
+> > > > > > > >
+> > > > > > > > On Wed, 3 Jul 2019 at 03:10, Saravana Kannan <saravanak@google.com> wrote:
+> > > > > > > > >
+> > > > > > > > > Interconnect paths can have different performance points. Now that OPP
+> > > > > > > > > framework supports bandwidth OPP tables, add OPP table support for
+> > > > > > > > > interconnects.
+> > > > > > > > >
+> > > > > > > > > Devices can use the interconnect-opp-table DT property to specify OPP
+> > > > > > > > > tables for interconnect paths. And the driver can obtain the OPP table for
+> > > > > > > > > an interconnect path by calling icc_get_opp_table().
+> > > > > > > >
+> > > > > > > > The opp table of a path must come from the aggregation of OPP tables
+> > > > > > > > of the interconnect providers.
+> > > > > > >
+> > > > > > > The aggregation of OPP tables of the providers is certainly the
+> > > > > > > superset of what a path can achieve, but to say that OPPs for
+> > > > > > > interconnect path should match that superset is an oversimplification
+> > > > > > > of the reality in hardware.
+> > > > > > >
+> > > > > > > There are lots of reasons an interconnect path might not want to use
+> > > > > > > all the available bandwidth options across all the interconnects in
+> > > > > > > the route.
+> > > > > > >
+> > > > > > > 1. That particular path might not have been validated or verified
+> > > > > > >    during the HW design process for some of the frequencies/bandwidth
+> > > > > > >    combinations of the providers.
+> > > > > >
+> > > > > > All these constraint are provider's constraints and not consumer's one
+> > > > > >
+> > > > > > The consumer asks for a bandwidth according to its needs and then the
+> > > > > > providers select the optimal bandwidth of each interconnect after
+> > > > > > aggregating all the request and according to what OPP have been
+> > > > > > validated
+> > > > >
+> > > > > Not really. The screening can be a consumer specific issue. The
+> > > > > consumer IP itself might have some issue with using too low of a
+> > > > > bandwidth or bandwidth that's not within some range. It should not be
+> > > >
+> > > > How can an IP ask for not enough bandwidth ?
+> > > > It asks the needed bandwidth based on its requirements
+> > >
+> > > The "enough bandwidth" is not always obvious. It's only for very
+> > > simple cases that you can calculate the required bandwidth. Even for
+> > > cases that you think might be "obvious/easy" aren't always easy.
+> > >
+> > > For example, you'd think a display IP would have a fixed bandwidth
+> > > requirement for a fixed resolution screen. But that's far from the
+> > > truth. It can also change as the number of layers change per frame.
+> > > For video decoder/encoder, it depends on how well the frames compress
+> > > with a specific compression scheme.
+> > > So the "required" bandwidth is often a heuristic based on the IP
+> > > frequency or traffic measurement.
+> > >
+> > > But that's not even the point I was making in this specific "bullet".
+> > >
+> > > A hardware IP might be screen/verified with only certain bandwidth
+> > > levels. Or it might have hardware bugs that prevent it from using
+> > > lower bandwidths even though it's technically sufficient. We need a
+> > > way to capture that per path. This is not even a fictional case. This
+> > > has been true multiple times over widely used IPs.
+> >
+> > here you are mixing HW constraint on the soc and OPP screening with
+> > bandwidth request from consumer
+> > ICC framework is about getting bandwidth request not trying to fix
+> > some HW/voltage dependency of the SoC
+> >
+> > >
+> > > > > the provider's job to take into account all the IP that might be
+> > > > > connected to the interconnects. If the interconnect HW itself didn't
+> > > >
+> > > > That's not what I'm saying. The provider knows which bandwidth the
+> > > > interconnect can provide as it is the ones which configures it. So if
+> > > > the interconnect has a finite number of bandwidth point based probably
+> > > > on the possible clock frequency and others config of the interconnect,
+> > > > it selects the best final config after aggregating the request of the
+> > > > consumer.
+> > >
+> > > I completely agree with this. What you are stating above is how it
+> > > should work and that's the whole point of the interconnect framework.
+> > >
+> > > But this is orthogonal to the point I'm making.
+> >
+> > It's not orthogonal because you want to add a OPP table pointer in the
+> > ICC path structure to fix your platform HW constraint whereas it's not
+> > the purpose of the framework IMO
+> >
+> > >
+> > > > > change, the provider driver shouldn't need to change. By your
+> > > > > definition, a provider driver will have to account for all the
+> > > > > possible bus masters that might be connected to it across all SoCs.
+> > > >
+> > > > you didn't catch my point
+> > >
+> > > Same. I think we are talking over each other. Let me try again.
+> > >
+> > > You are trying to describe how and interconnect provider and framework
+> > > should work. There's no disagreement there.
+> > >
+> > > My point is that consumers might not want to or can not always use all
+> > > the available bandwidth levels offered by the providers. There can be
+> > > many reasons for that (which is what I listed in my earlier emails)
+> > > and we need a good and generic way to capture that so that everyone
+> > > isn't trying to invent their own property.
+> >
+> > And my point is that you want to describe some platform or even UCs
+> > specific constraint in the ICC framework which is not the place to do.
+> >
+> > If the consumers might not want to use all available bandwidth because
+> > this is not power efficient as an example, this should be describe
+> > somewhere else to express  that there is a shared power domain
+> > between some devices and we shoudl ensure that all devices in this
+> > power domain should use the  Optimal Operating Point (optimal freq for
+> > a voltage)
+>
+> My patch series has nothing to do with shared power domains. I think
+> the examples have made it amply clear.
+
+It's far from being clear why a consumer doesn't want to use some
+bandwidth level TBH
+
+Do you have a real example ?
+
+>
+> > ICC framework describes the bandwidth request that are expressed by
+> > the consumers for the current running state of their IP but it doesn't
+> > reflect the fact that on platform A, the consumer should use bandwidth
+> > X because it will select a voltage level of a shared power domain that
+> > is optimized for the other devices B, C ... . It's up to the provider
+> > to know HW details of the bus that it drives and to make such
+> > decision;  the consumer should always request the same
+>
+> The change to ICC framework is practically just this. I don't have any
+> future changes planned for the ICC framework. This is the entirety of
+> it.
+>
+> +       opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
+> +       if (opp_node) {
+> +               path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
+> +               of_node_put(opp_node);
+> +       }
+>
+> It's quite a stretch and bit hyperbolic to say this one change is
+> getting ICC framework to do all the things you claim above.
+>
+
+So I clearly don't see the benefit of adding this opp_table field in
+icc_path struct because I'm still convinced that the consumer doesn't
+have to get a bandwidth table like that.
+If the consumer already get a bandwidth value and it should in order
+to call icc_set or even in order to select one element in your table,
+then it should directly set it with icc_set and let the provider
+aggregate and choose the real one
+
+> It's literally a simple helper function so that the consumer doesn't
+> have to make assumptions about indices and it's a bit more explicit
+> about which OPP table of the device (a device can have multiple OPP
+> tables) corresponds to which ICC path.
+>
+> Going by your extreme argument, one can also claim that it's not the
+> ICC framework's job to make it easy for consumers to figure out the
+> source/destination endpoints or give them names and delete the
+> interconnect and interconnect-names properties. That's clearly just as
+> absurd a claim.
+>
+>
+> -Saravana
+>
+> > > > > That's not good design nor is it scalable.
+> > > > >
+> > > > > > >
+> > > > > > > 2. Similarly during parts screening in the factory, some of the
+> > > > > > >    combinations might not have been screened and can't be guaranteed
+> > > > > > >    to work.
+> > > > > >
+> > > > > > As above, it's the provider's job to select the final bandwidth
+> > > > > > according to its constraint
+> > > > >
+> > > > > Same reply as above.
+> > > > >
+> > > > > > >
+> > > > > > > 3. Only a certain set of bandwidth levels might make sense to use from
+> > > > > > >    a power/performance balance given the device using it. For example:
+> > > > > > >    - The big CPU might not want to use some of the lower bandwidths
+> > > > > > >      but the little CPU might want to.
+> > > > > > >    - The big CPU might not want to use some intermediate bandwidth
+> > > > > > >      points if they don't save a lot of power compared to a higher
+> > > > > > >      bandwidth levels, but the little CPU might want to.
+> > > > > > >    - The little CPU might never want to use the higher set of
+> > > > > > >      bandwidth levels since they won't be power efficient for the use
+> > > > > > >      cases that might run on it.
+> > > > > >
+> > > > > > These example are quite vague about the reasons why little might never
+> > > > > > want to use higher bandwidth.
+> > > > >
+> > > > > How is it vague? I just said because of power/performance balance.
+> > > > >
+> > > > > > But then, if little doesn't ask high bandwidth it will not use them.
+> > > > >
+> > > > > If you are running a heuristics based algorithm to pick bandwidth,
+> > > > > this is how it'll know NOT to use some of the bandwidth levels.
+> > > >
+> > > > so you want to set a bandwidth according to the cpu frequency which is
+> > > > what has been proposed in other thread
+> > >
+> > > Nope, that's just one heuristic. Often times it's based on hardware
+> > > monitors measuring interconnect activity. If you go look at the SDM845
+> > > in a Pixel 3, almost nothing is directly tied to the CPU frequency.
+> > >
+> > > Even if you are scaling bandwidth based on other hardware
+> > > measurements, you might want to avoid some bandwidth level provided by
+> > > the interconnect providers because it's suboptimal.
+> > >
+> > > For example, when making bandwidth votes to accommodate the big CPUs,
+> > > you might never want to use some of the lower bandwidth levels because
+> > > they are not power efficient for any CPU frequency or any bandwidth
+> > > level. Because at those levels the memory/interconnect is so slow that
+> > > it has a non-trivial utilization increase (because the CPU is
+> > > stalling) of the big CPUs.
+> > >
+> > > Again, this is completely different from what the providers/icc
+> > > framework does. Which is, once the request is made, they aggregate and
+> > > set the actual interconnect frequencies correctly.
+> > >
+> > > > >
+> > > > > > >
+> > > > > > > 4. It might not make sense from a system level power perspective.
+> > > > > > > Let's take an example of a path S (source) -> A -> B -> C -> D
+> > > > > > > (destination).
+> > > > > > >    - A supports only 2, 5, 7 and 10 GB/s. B supports 1, 2 ... 10 GB/s.
+> > > > > > >      C supports 5 and 10 GB/s
+> > > > > > >    - If you combine and list the superset of bandwidth levels
+> > > > > > >      supported in that path, that'd be 1, 2, 3, ... 10 GB/s.
+> > > > > > >    - Which set of bandwidth levels make sense will depend on the
+> > > > > > >      hardware characteristics of the interconnects.
+> > > > > > >    - If B is the biggest power sink, then you might want to use all 10
+> > > > > > >      levels.
+> > > > > > >    - If A is the biggest power sink, then you might want to use all 2,
+> > > > > > >      5 and 10 GB/s of the levels.
+> > > > > > >    - If C is the biggest power sink then you might only want to use 5
+> > > > > > >      and 10 GB/s
+> > > > > > >    - The more hops and paths you get the more convoluted this gets.
+> > > > > > >
+> > > > > > > 5. The design of the interconnects themselves might have an impact on
+> > > > > > > which bandwidth levels are used.
+> > > > > > >    - For example, the FIFO depth between two specific interconnects
+> > > > > > >      might affect the valid bandwidth levels for a specific path.
+> > > > > > >    - Say S1 -> A -> B -> D1, S2 -> C -> B -> D1 and S2 -> C -> D2 are
+> > > > > > >      three paths.
+> > > > > > >    - If C <-> B FIFO depth is small, then there might be a requirement
+> > > > > > >      that C and B be closely performance matched to avoid system level
+> > > > > > >      congestion due to back pressure.
+> > > > > > >    - So S2 -> D1 path can't use all the bandwidth levels supported by
+> > > > > > >      C-B combination.
+> > > > > > >    - But S2 -> D2 can use all the bandwidth levels supported by C.
+> > > > > > >    - And S1 -> D1 can use all the levels supported by A-B combination.
+> > > > > > >
+> > > > > >
+> > > > > > All the examples above makes sense but have to be handle by the
+> > > > > > provider not the consumer. The consumer asks for a bandwidth according
+> > > > > > to its constraints. Then the provider which is the driver that manages
+> > > > > > the interconnect IP, should manage all this hardware and platform
+> > > > > > specific stuff related to the interconnect IP in order to set the
+> > > > > > optimal bandwidth that fit both consumer constraint and platform
+> > > > > > specific configuration.
+> > > > >
+> > > > > Sure, but the provider itself can have interconnect properties to
+> > > > > indicate which other interconnects it's tied to. And the provider will
+> > > > > still need the interconnect-opp-table to denote which bandwidth levels
+> > > > > are sensible to use with each of its connections.
+> > >
+> > > You seem to have missed this comment.
+> > >
+> > > Thanks,
+> > > Saravana
+> > >
+> > > > > So in some instances the interconnect-opp-table covers the needs of
+> > > > > purely consumers and in some instances purely providers. But in either
+> > > > > case, it's still needed to describe the hardware properly.
+> > > > >
+> > > > > -Saravana
+> > > > >
+> > > > > > > These are just some of the reasons I could recollect in a few minutes.
+> > > > > > > These are all real world cases I had to deal with in the past several
+> > > > > > > years of dealing with scaling interconnects. I'm sure vendors and SoCs
+> > > > > > > I'm not familiar with have other good reasons I'm not aware of.
+> > > > > > >
+> > > > > > > Trying to figure this all out by aggregating OPP tables of
+> > > > > > > interconnect providers just isn't feasible nor is it efficient. The
+> > > > > > > OPP tables for an interconnect path is describing the valid BW levels
+> > > > > > > supported by that path and verified in hardware and makes a lot of
+> > > > > > > sense to capture it clearly in DT.
+> > > > > > >
+> > > > > > > > So such kind of OPP table should be at
+> > > > > > > > provider level but not at path level.
+> > > > > > >
+> > > > > > > They can also use it if they want to, but they'll probably want to use
+> > > > > > > a frequency OPP table.
+> > > > > > >
+> > > > > > >
+> > > > > > > -Saravana
+> > > > > > >
+> > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > > > > > > ---
+> > > > > > > > >  drivers/interconnect/core.c  | 27 ++++++++++++++++++++++++++-
+> > > > > > > > >  include/linux/interconnect.h |  7 +++++++
+> > > > > > > > >  2 files changed, 33 insertions(+), 1 deletion(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> > > > > > > > > index 871eb4bc4efc..881bac80bc1e 100644
+> > > > > > > > > --- a/drivers/interconnect/core.c
+> > > > > > > > > +++ b/drivers/interconnect/core.c
+> > > > > > > > > @@ -47,6 +47,7 @@ struct icc_req {
+> > > > > > > > >   */
+> > > > > > > > >  struct icc_path {
+> > > > > > > > >         size_t num_nodes;
+> > > > > > > > > +       struct opp_table *opp_table;
+> > > > > > > > >         struct icc_req reqs[];
+> > > > > > > > >  };
+> > > > > > > > >
+> > > > > > > > > @@ -313,7 +314,7 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+> > > > > > > > >  {
+> > > > > > > > >         struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+> > > > > > > > >         struct icc_node *src_node, *dst_node;
+> > > > > > > > > -       struct device_node *np = NULL;
+> > > > > > > > > +       struct device_node *np = NULL, *opp_node;
+> > > > > > > > >         struct of_phandle_args src_args, dst_args;
+> > > > > > > > >         int idx = 0;
+> > > > > > > > >         int ret;
+> > > > > > > > > @@ -381,10 +382,34 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+> > > > > > > > >                 dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+> > > > > > > > >         mutex_unlock(&icc_lock);
+> > > > > > > > >
+> > > > > > > > > +       opp_node = of_parse_phandle(np, "interconnect-opp-table", idx);
+> > > > > > > > > +       if (opp_node) {
+> > > > > > > > > +               path->opp_table = dev_pm_opp_of_find_table_from_node(opp_node);
+> > > > > > > > > +               of_node_put(opp_node);
+> > > > > > > > > +       }
+> > > > > > > > > +
+> > > > > > > > > +
+> > > > > > > > >         return path;
+> > > > > > > > >  }
+> > > > > > > > >  EXPORT_SYMBOL_GPL(of_icc_get);
+> > > > > > > > >
+> > > > > > > > > +/**
+> > > > > > > > > + * icc_get_opp_table() - Get the OPP table that corresponds to a path
+> > > > > > > > > + * @path: reference to the path returned by icc_get()
+> > > > > > > > > + *
+> > > > > > > > > + * This function will return the OPP table that corresponds to a path handle.
+> > > > > > > > > + * If the interconnect API is disabled, NULL is returned and the consumer
+> > > > > > > > > + * drivers will still build. Drivers are free to handle this specifically, but
+> > > > > > > > > + * they don't have to.
+> > > > > > > > > + *
+> > > > > > > > > + * Return: opp_table pointer on success. NULL is returned when the API is
+> > > > > > > > > + * disabled or the OPP table is missing.
+> > > > > > > > > + */
+> > > > > > > > > +struct opp_table *icc_get_opp_table(struct icc_path *path)
+> > > > > > > > > +{
+> > > > > > > > > +       return path->opp_table;
+> > > > > > > > > +}
+> > > > > > > > > +
+> > > > > > > > >  /**
+> > > > > > > > >   * icc_set_bw() - set bandwidth constraints on an interconnect path
+> > > > > > > > >   * @path: reference to the path returned by icc_get()
+> > > > > > > > > diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+> > > > > > > > > index dc25864755ba..0c0bc55f0e89 100644
+> > > > > > > > > --- a/include/linux/interconnect.h
+> > > > > > > > > +++ b/include/linux/interconnect.h
+> > > > > > > > > @@ -9,6 +9,7 @@
+> > > > > > > > >
+> > > > > > > > >  #include <linux/mutex.h>
+> > > > > > > > >  #include <linux/types.h>
+> > > > > > > > > +#include <linux/pm_opp.h>
+> > > > > > > > >
+> > > > > > > > >  /* macros for converting to icc units */
+> > > > > > > > >  #define Bps_to_icc(x)  ((x) / 1000)
+> > > > > > > > > @@ -28,6 +29,7 @@ struct device;
+> > > > > > > > >  struct icc_path *icc_get(struct device *dev, const int src_id,
+> > > > > > > > >                          const int dst_id);
+> > > > > > > > >  struct icc_path *of_icc_get(struct device *dev, const char *name);
+> > > > > > > > > +struct opp_table *icc_get_opp_table(struct icc_path *path);
+> > > > > > > > >  void icc_put(struct icc_path *path);
+> > > > > > > > >  int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+> > > > > > > > >
+> > > > > > > > > @@ -49,6 +51,11 @@ static inline void icc_put(struct icc_path *path)
+> > > > > > > > >  {
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > > +static inline struct opp_table *icc_get_opp_table(struct icc_path *path)
+> > > > > > > > > +{
+> > > > > > > > > +       return NULL;
+> > > > > > > > > +}
+> > > > > > > > > +
+> > > > > > > > >  static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+> > > > > > > > >  {
+> > > > > > > > >         return 0;
+> > > > > > > > > --
+> > > > > > > > > 2.22.0.410.gd8fdbe21b5-goog
+> > > > > > > > >
+> > > > > >
+> > > > > > --
+> > > > > > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> > > > > >
