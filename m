@@ -2,125 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C18EA7507F
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 16:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006BA7511A
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 16:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388098AbfGYOCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 10:02:47 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:45774 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388101AbfGYOCq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 10:02:46 -0400
-Received: from mail-pl1-f200.google.com ([209.85.214.200])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1hqeKR-0002td-88
-        for linux-pm@vger.kernel.org; Thu, 25 Jul 2019 14:02:43 +0000
-Received: by mail-pl1-f200.google.com with SMTP id n1so26306092plk.11
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 07:02:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=dRGqqRdc8tkI0wtRj4b9pGjBs0cS4r9SniesDI0dk5k=;
-        b=J63WGIxkES0I6ERrwE/gV+eA5PmSmpPzIsR/bzZRoycA2p6Neact9J4Ae7OTJ5vvYq
-         mHSgpYZFKR1ILTkhpht8moGnRSvopCK++PE5Nta7jASLdjt17GSxcL1pShagcPLgApO8
-         inye2pB0KgEpvmttoqjtK80otbq+16MntCuTpU+1O4AzssIGzS0R6sKB7TKEp2XvGeu7
-         KMBYv8VEu+Kzvo26gMtjQHw677+Gme7aHiq8ZYxWBKsnzcRLIZhyy1x3kqxURsl560l1
-         vxILzJC7kS6pZJFdO3/I3bTEOiXaYCbO38P029jBHkPs0d8wTHPT1HlW+T5t3F0VZkAT
-         3OAg==
-X-Gm-Message-State: APjAAAUTzO7uGe4kmqT/a+lob1slj0XuQ6mw10PgZcLr1o18zrODsZwu
-        rYtVmt+Dau4sshnEUCRTaR75vANxXClm2FdH5o0qGcVKvkMmXbeTrFTnb8lahOtAYIS58KhyQVb
-        knoECKzOUzN0MqCqU+iYo1LLFzIWsHmszOdyn
-X-Received: by 2002:a63:9e54:: with SMTP id r20mr52056709pgo.64.1564063361877;
-        Thu, 25 Jul 2019 07:02:41 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzqyGieoMSzMW+cs+usTVtQ0tbDQ4xtlJACIElsyAMlDRT8SdSAUIjRG0amm82rcIJMkeA+5A==
-X-Received: by 2002:a63:9e54:: with SMTP id r20mr52056676pgo.64.1564063361539;
-        Thu, 25 Jul 2019 07:02:41 -0700 (PDT)
-Received: from 2001-b011-380f-3c20-0160-ac1c-9209-b8ff.dynamic-ip6.hinet.net (2001-b011-380f-3c20-0160-ac1c-9209-b8ff.dynamic-ip6.hinet.net. [2001:b011:380f:3c20:160:ac1c:9209:b8ff])
-        by smtp.gmail.com with ESMTPSA id e124sm80839839pfh.181.2019.07.25.07.02.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jul 2019 07:02:40 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8;
-        delsp=yes;
-        format=flowed
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
- suspend" has problems
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <2332799.izEFUvJP67@kreacher>
-Date:   Thu, 25 Jul 2019 22:02:37 +0800
-Cc:     Keith Busch <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8bit
-Message-Id: <E62786E4-5DA9-4542-899A-658D0E021190@canonical.com>
-References: <2332799.izEFUvJP67@kreacher>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S1727560AbfGYO2m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 10:28:42 -0400
+Received: from vern.gendns.com ([98.142.107.122]:53982 "EHLO vern.gendns.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725981AbfGYO2l (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Jul 2019 10:28:41 -0400
+X-Greylist: delayed 1209 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Jul 2019 10:28:41 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8iXF3z4I/1bFhPymp5brEezEOAt+VD8wjloraO/Zwfk=; b=EXZ5L71uP37YRG8OARqdv6Xg/0
+        RIycvmcz3YOUZ0lh/L7nIdAPHoDU74Ucg9nrvCgA6rkrGvJbgukLUmvm56LRBVfSsBHgf7sp+oGfg
+        P1n2E2cIznyFkE6WsIIUQe9Yb4A3ZOsTedEF5WXsXF8QEFGfQxPjH3z/cT2fi3Raj5YCuXmE3HsrQ
+        f6rylb6AqSyWzPSS4OQIu81FVjPKBUV7PBTjGtlvyMVvQEwkCFNZGbNzOAMIOm2VCVtJKaOI8wf+U
+        eVQUfi6Y4W9tptS0LJZSkugqoi8vNNwv16UNEmLySJwnwHcaeHb4gLyMF9+RtHQSdU75lO/vA9ECC
+        qUHojtRA==;
+Received: from 108-198-5-147.lightspeed.okcbok.sbcglobal.net ([108.198.5.147]:60968 helo=[192.168.0.134])
+        by vern.gendns.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <david@lechnology.com>)
+        id 1hqeQ1-00Givk-AR; Thu, 25 Jul 2019 10:08:29 -0400
+Subject: Re: [PATCH 1/1] power/supply/powersupply_sysfs: Add of_node name to
+ uevent message if available
+To:     Richard Tresidder <rtresidd@electromag.com.au>, sre@kernel.org,
+        enric.balletbo@collabora.com, ncrews@chromium.org,
+        andrew.smirnov@gmail.com, groeck@chromium.org, tglx@linutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1564040858-24202-1-git-send-email-rtresidd@electromag.com.au>
+From:   David Lechner <david@lechnology.com>
+Message-ID: <9a10b934-e7f3-c95f-6250-8a857bdfa912@lechnology.com>
+Date:   Thu, 25 Jul 2019 09:08:28 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <1564040858-24202-1-git-send-email-rtresidd@electromag.com.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On 7/25/19 2:47 AM, Richard Tresidder wrote:
+> If the of_node name of the supply is available from the devicetree binding
+> then include it under the var POWER_SUPPLY_OF_NODE_NAME.
+> This helps where a consistent name is known via the device tree binding
+> but it is hard to identify based on the usual enumeration process.
+> 
 
-at 17:51, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-
-> Hi Keith,
->
-> Unfortunately,
->
-> commit d916b1be94b6dc8d293abed2451f3062f6af7551
-> Author: Keith Busch <keith.busch@intel.com>
-> Date:   Thu May 23 09:27:35 2019 -0600
->
->     nvme-pci: use host managed power state for suspend
->
-> doesn't universally improve things.  In fact, in some cases it makes  
-> things worse.
->
-> For example, on the Dell XPS13 9380 I have here it prevents the processor  
-> package
-> from reaching idle states deeper than PC2 in suspend-to-idle (which, of  
-> course, also
-> prevents the SoC from reaching any kind of S0ix).
->
-> That can be readily explained too.  Namely, with the commit above the  
-> NVMe device
-> stays in D0 over suspend/resume, so the root port it is connected to also  
-> has to stay in
-> D0 and that "blocks" package C-states deeper than PC2.
->
-> In order for the root port to be able to go to D3, the device connected  
-> to it also needs
-> to go into D3, so it looks like (at least on this particular machine, but  
-> maybe in
-> general), both D3 and the NVMe-specific PM are needed.
->
-> I'm not sure what to do here, because evidently there are systems where  
-> that commit
-> helps.  I was thinking about adding a module option allowing the user to  
-> override the
-> default behavior which in turn should be compatible with 5.2 and earlier  
-> kernels.
-
-I just briefly tested s2i on XPS 9370, and the power meter shows a 0.8~0.9W  
-power consumption so at least I don’t see the issue on XPS 9370.
-
-Can you please provide the output of `nvme id-ctrl /dev/nvme*` and I’ll  
-test the NVMe controller on XPS 9380.
-
-Kai-Heng
-
->
-> Cheers,
-> Rafael
-
+Would it be possible to use of_device_uevent() instead of introducing a new
+property?
 
