@@ -2,59 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5058B74BDC
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 12:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380C274BE5
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 12:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388484AbfGYKmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 06:42:19 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:33004 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388393AbfGYKmS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 06:42:18 -0400
-Received: by mail-lj1-f196.google.com with SMTP id h10so47542856ljg.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 03:42:16 -0700 (PDT)
+        id S2389537AbfGYKme (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 06:42:34 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:36598 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389200AbfGYKmd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 06:42:33 -0400
+Received: by mail-lj1-f193.google.com with SMTP id i21so47549454ljj.3
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 03:42:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ODSVjEMilzmw0oUsLQphP6kBlNpfwYrpDQeMD5cqjhU=;
-        b=cSmg7NNw7N8fLsMuon8fUBjwTziBT12VKBjTNrvrsUhv/PwWVas79m23KzHAkkBl3F
-         GggpQQzzhUovPkr3NxauavPTPoBH8msAe8yQ/ewawbikW9QsamGBIP8HBC4+fgf0G/YC
-         REGKls9DWih/7xKPW/Kfg+Vtz5vnvhuMjsMSu4Za7f/dFePGqWEA86DNk5Te5w9a36OJ
-         qAH+JHYEmJP31HCr8w2fPIgwqCR37w1CkoM/T0ny++RKi+EgZ0icBLCQ9p90f8ZP+/DR
-         XVRpdjevN5y7ONyn7QQjLn8d8y558ZzGx+3N2pmHRozMlFe4eiVFvzN1+yLyn1zBKqD7
-         mvJA==
+        bh=3GNalLtrTqW5s+BFJJMMFnFc3aO7NBuze3htvzi00W0=;
+        b=csVHpCLA5Pk3GDmRAP9m1Ka9VSO+6NzJzZMzdJorVAdGE3hwGdBVrpgI7dNWlxKh5+
+         gp2Jnqh1jTzEYKZ2cuAO9fNIysTEyilMqkvBZ7Es/sttkX11gsh4pt17Bq5V5ikLgcPZ
+         07h4eMoW6kC1kiC/JWESg9NsKm9MS3EWFMcEDENNY4HnbldWLbbmD0U/xtAOPCaINXcP
+         lwBrhC+T1897IM+jvEohanzwbCHC/BLsmnRGCTZu41aQcIjP8uexSxkp2ORA4s2orTNl
+         d0Daf2zOXzOT9wsg3Vk0S0kKM6dwDOTBAegabpvisdrX3oBYB2iPQrG5HICwn2pT+Pt0
+         Cx0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ODSVjEMilzmw0oUsLQphP6kBlNpfwYrpDQeMD5cqjhU=;
-        b=cLuj4YlmxfxCJOczE8/XcBXEThWghBH0eYj/QUq8oMSmjUapEKuzDpfE5x9mKD837w
-         dHyO8jW3RhUMXs6SNnDkCvAPDWRVinXZVoPhGQHMsG3zUkssrQDqyJGLlDyUdcobi7QD
-         mTz4dUWlcPkZqUh6X5fuP75PVEJFX+Y8uDTc8BdjuBP5s/kVvakQi1QrEeS81mrj/HhN
-         gvuik5DOWqe3UJXckrWxVxj7+H769lXji3ISCs9krd9KreQFg79rsi9B2gIqf8Zno55b
-         qdaqCr4nojoXh5Wf03jJPCkXJPhjW/j+b392C44+rtcyPU26jMfOAex8Ell8QxY+plRg
-         mO6Q==
-X-Gm-Message-State: APjAAAVQjuVidORKFjKVho5bgW+8K20yayVdmagFSgLEhZ55y+lEldZz
-        iLECXa16Yy1/AbiM264R3seW1w==
-X-Google-Smtp-Source: APXvYqxqPnnMfWtFf4gpDY4U1anj3Tce3X7+ZDjChlh89egeZnuM1tain9c+o2LyaDDBvvIdNZXJNQ==
-X-Received: by 2002:a2e:87d0:: with SMTP id v16mr6293419ljj.24.1564051335646;
-        Thu, 25 Jul 2019 03:42:15 -0700 (PDT)
+        bh=3GNalLtrTqW5s+BFJJMMFnFc3aO7NBuze3htvzi00W0=;
+        b=ubI43GTZ03npY9gj4Km5h1CmBBp3w/zt+669AcQG3ta/s8i9GSmhT/ThZ+CyqEmk/g
+         OUYDvmw7QCj1uHAV+Bjib2Op/2OFDaPsC/1YPR75afGH7ZUVxnj9dYG2FdQG8m6/tmGZ
+         u/DTWNd2yfc1juJdHVZ38zPXk1fnElSPcOVQPAZCVE1CmVqhuVHZg2Cvw6dWWFE/oBKF
+         GGX4To6nfhVVNbjoUIM8YeAX06ggSCE7HnzDm4IL3U8aX+y2IwG7THPi6AQFF7bDo6az
+         QYo1hKWiXCpGXb7s8R3ZpMAztnc5k8VkF2ZOgvIkDlJPJ9T12iuObVaIvPvnbuo0/K6C
+         E+8g==
+X-Gm-Message-State: APjAAAXjT0zTSe1yfsznDwX6zEZpikyPeyTOeoz7GJC3TuvM6GEUb8TE
+        LmHZyLXNmgAKW6dWESoXp7gbVA==
+X-Google-Smtp-Source: APXvYqyHvHkP+AWTOyXPquqI0XYCPqA34oDmByMsp0Rt6v7ofJrmE5t2XRx7pQR6v1/c4yYOJ+NJ7g==
+X-Received: by 2002:a2e:8849:: with SMTP id z9mr6421628ljj.203.1564051351281;
+        Thu, 25 Jul 2019 03:42:31 -0700 (PDT)
 Received: from localhost.localdomain (ua-83-226-44-230.bbcust.telenor.se. [83.226.44.230])
-        by smtp.gmail.com with ESMTPSA id h1sm7451290lfj.21.2019.07.25.03.42.14
+        by smtp.gmail.com with ESMTPSA id k124sm7461299lfd.60.2019.07.25.03.42.30
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 25 Jul 2019 03:42:15 -0700 (PDT)
+        Thu, 25 Jul 2019 03:42:30 -0700 (PDT)
 From:   Niklas Cassel <niklas.cassel@linaro.org>
 To:     Andy Gross <agross@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, jorge.ramirez-ortiz@linaro.org,
-        sboyd@kernel.org, vireshk@kernel.org, bjorn.andersson@linaro.org,
-        ulf.hansson@linaro.org, Niklas Cassel <niklas.cassel@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 05/14] cpufreq: qcom: Refactor the driver to make it easier to extend
-Date:   Thu, 25 Jul 2019 12:41:33 +0200
-Message-Id: <20190725104144.22924-6-niklas.cassel@linaro.org>
+        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 06/14] dt-bindings: cpufreq: qcom-nvmem: Support pstates provided by a power domain
+Date:   Thu, 25 Jul 2019 12:41:34 +0200
+Message-Id: <20190725104144.22924-7-niklas.cassel@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190725104144.22924-1-niklas.cassel@linaro.org>
 References: <20190725104144.22924-1-niklas.cassel@linaro.org>
@@ -65,246 +67,143 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Refactor the driver to make it easier to extend in a later commit.
+Some Qualcomm SoCs have support for Core Power Reduction (CPR).
+On these platforms, we need to attach to the power domain provider
+providing the performance states, so that the leaky device (the CPU)
+can configure the performance states (which represent different
+CPU clock frequencies).
 
-Create a driver struct to collect all common resources, in order to make
-it easier to free up all common resources.
-Create a driver match_data struct to make it easier to extend the driver
-with support for new features that might only be supported on certain SoCs.
-
-Co-developed-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
 Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
-Reviewed-by: Ilia Lin <ilia.lin@kernel.org>
 ---
-Changes since V1:
--Picked up tags.
--Fixed an incorrectly placed of_node_put().
+ .../bindings/opp/qcom-nvmem-cpufreq.txt       | 111 ++++++++++++++++++
+ 1 file changed, 111 insertions(+)
 
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 123 +++++++++++++++++----------
- 1 file changed, 79 insertions(+), 44 deletions(-)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index fd08120768af..2d798a1685c5 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -43,6 +43,20 @@ enum _msm8996_version {
- 	NUM_OF_MSM8996_VERSIONS,
+diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+index c5ea8b90e35d..e19a95318e98 100644
+--- a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
++++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+@@ -23,6 +23,15 @@ In 'operating-points-v2' table:
+ 
+ Optional properties:
+ --------------------
++In 'cpus' nodes:
++- power-domains: A phandle pointing to the PM domain specifier which provides
++		the performance states available for active state management.
++		Please refer to the power-domains bindings
++		Documentation/devicetree/bindings/power/power_domain.txt
++		and also examples below.
++- power-domain-names: Should be
++	- 'cpr' for qcs404.
++
+ In 'operating-points-v2' table:
+ - nvmem-cells: A phandle pointing to a nvmem-cells node representing the
+ 		efuse registers that has information about the
+@@ -682,3 +691,105 @@ soc {
+ 		};
+ 	};
  };
- 
-+struct qcom_cpufreq_drv;
 +
-+struct qcom_cpufreq_match_data {
-+	int (*get_version)(struct device *cpu_dev,
-+			   struct nvmem_cell *speedbin_nvmem,
-+			   struct qcom_cpufreq_drv *drv);
++Example 2:
++---------
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		CPU0: cpu@100 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x100>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cprpd>;
++			power-domain-names = "cpr";
++		};
++
++		CPU1: cpu@101 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x101>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cprpd>;
++			power-domain-names = "cpr";
++		};
++
++		CPU2: cpu@102 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x102>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cprpd>;
++			power-domain-names = "cpr";
++		};
++
++		CPU3: cpu@103 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x103>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cprpd>;
++			power-domain-names = "cpr";
++		};
++	};
++
++	cpu_opp_table: cpu-opp-table {
++		compatible = "operating-points-v2-kryo-cpu";
++		opp-shared;
++
++		opp-1094400000 {
++			opp-hz = /bits/ 64 <1094400000>;
++			required-opps = <&cpr_opp1>;
++		};
++		opp-1248000000 {
++			opp-hz = /bits/ 64 <1248000000>;
++			required-opps = <&cpr_opp2>;
++		};
++		opp-1401600000 {
++			opp-hz = /bits/ 64 <1401600000>;
++			required-opps = <&cpr_opp3>;
++		};
++	};
++
++	cpr_opp_table: cpr-opp-table {
++		compatible = "operating-points-v2-qcom-level";
++
++		cpr_opp1: opp1 {
++			opp-level = <1>;
++			....
++		};
++		cpr_opp2: opp2 {
++			opp-level = <2>;
++			....
++		};
++		cpr_opp3: opp3 {
++			opp-level = <3>;
++			....
++		};
++	};
++
++....
++
++soc {
++....
++	cprpd: cpr@b018000 {
++		compatible = "qcom,qcs404-cpr", "qcom,cpr";
++		reg = <0x0b018000 0x1000>;
++		....
++		vdd-apc-supply = <&pms405_s3>;
++		#power-domain-cells = <0>;
++		operating-points-v2 = <&cpr_opp_table>;
++		....
++	};
 +};
-+
-+struct qcom_cpufreq_drv {
-+	struct opp_table **opp_tables;
-+	u32 versions;
-+	const struct qcom_cpufreq_match_data *data;
-+};
-+
- static struct platform_device *cpufreq_dt_pdev, *cpufreq_pdev;
- 
- static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
-@@ -76,7 +90,7 @@ static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
- 
- static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
- 					  struct nvmem_cell *speedbin_nvmem,
--					  u32 *versions)
-+					  struct qcom_cpufreq_drv *drv)
- {
- 	size_t len;
- 	u8 *speedbin;
-@@ -94,10 +108,10 @@ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
- 
- 	switch (msm8996_version) {
- 	case MSM8996_V3:
--		*versions = 1 << (unsigned int)(*speedbin);
-+		drv->versions = 1 << (unsigned int)(*speedbin);
- 		break;
- 	case MSM8996_SG:
--		*versions = 1 << ((unsigned int)(*speedbin) + 4);
-+		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
- 		break;
- 	default:
- 		BUG();
-@@ -108,17 +122,17 @@ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
- 	return 0;
- }
- 
-+static const struct qcom_cpufreq_match_data match_data_kryo = {
-+	.get_version = qcom_cpufreq_kryo_name_version,
-+};
-+
- static int qcom_cpufreq_probe(struct platform_device *pdev)
- {
--	struct opp_table **opp_tables;
--	int (*get_version)(struct device *cpu_dev,
--			   struct nvmem_cell *speedbin_nvmem,
--			   u32 *versions);
-+	struct qcom_cpufreq_drv *drv;
- 	struct nvmem_cell *speedbin_nvmem;
- 	struct device_node *np;
- 	struct device *cpu_dev;
- 	unsigned cpu;
--	u32 versions;
- 	const struct of_device_id *match;
- 	int ret;
- 
-@@ -126,11 +140,6 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 	if (!cpu_dev)
- 		return -ENODEV;
- 
--	match = pdev->dev.platform_data;
--	get_version = match->data;
--	if (!get_version)
--		return -ENODEV;
--
- 	np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
- 	if (!np)
- 		return -ENOENT;
-@@ -141,23 +150,43 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 		return -ENOENT;
- 	}
- 
--	speedbin_nvmem = of_nvmem_cell_get(np, NULL);
--	of_node_put(np);
--	if (IS_ERR(speedbin_nvmem)) {
--		if (PTR_ERR(speedbin_nvmem) != -EPROBE_DEFER)
--			dev_err(cpu_dev, "Could not get nvmem cell: %ld\n",
--				PTR_ERR(speedbin_nvmem));
--		return PTR_ERR(speedbin_nvmem);
-+	drv = kzalloc(sizeof(*drv), GFP_KERNEL);
-+	if (!drv)
-+		return -ENOMEM;
-+
-+	match = pdev->dev.platform_data;
-+	drv->data = match->data;
-+	if (!drv->data) {
-+		ret = -ENODEV;
-+		goto free_drv;
- 	}
- 
--	ret = get_version(cpu_dev, speedbin_nvmem, &versions);
--	nvmem_cell_put(speedbin_nvmem);
--	if (ret)
--		return ret;
-+	if (drv->data->get_version) {
-+		speedbin_nvmem = of_nvmem_cell_get(np, NULL);
-+		if (IS_ERR(speedbin_nvmem)) {
-+			if (PTR_ERR(speedbin_nvmem) != -EPROBE_DEFER)
-+				dev_err(cpu_dev,
-+					"Could not get nvmem cell: %ld\n",
-+					PTR_ERR(speedbin_nvmem));
-+			ret = PTR_ERR(speedbin_nvmem);
-+			goto free_drv;
-+		}
- 
--	opp_tables = kcalloc(num_possible_cpus(), sizeof(*opp_tables), GFP_KERNEL);
--	if (!opp_tables)
--		return -ENOMEM;
-+		ret = drv->data->get_version(cpu_dev, speedbin_nvmem, drv);
-+		if (ret) {
-+			nvmem_cell_put(speedbin_nvmem);
-+			goto free_drv;
-+		}
-+		nvmem_cell_put(speedbin_nvmem);
-+	}
-+	of_node_put(np);
-+
-+	drv->opp_tables = kcalloc(num_possible_cpus(), sizeof(*drv->opp_tables),
-+				  GFP_KERNEL);
-+	if (!drv->opp_tables) {
-+		ret = -ENOMEM;
-+		goto free_drv;
-+	}
- 
- 	for_each_possible_cpu(cpu) {
- 		cpu_dev = get_cpu_device(cpu);
-@@ -166,19 +195,23 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 			goto free_opp;
- 		}
- 
--		opp_tables[cpu] = dev_pm_opp_set_supported_hw(cpu_dev,
--							      &versions, 1);
--		if (IS_ERR(opp_tables[cpu])) {
--			ret = PTR_ERR(opp_tables[cpu]);
--			dev_err(cpu_dev, "Failed to set supported hardware\n");
--			goto free_opp;
-+		if (drv->data->get_version) {
-+			drv->opp_tables[cpu] =
-+				dev_pm_opp_set_supported_hw(cpu_dev,
-+							    &drv->versions, 1);
-+			if (IS_ERR(drv->opp_tables[cpu])) {
-+				ret = PTR_ERR(drv->opp_tables[cpu]);
-+				dev_err(cpu_dev,
-+					"Failed to set supported hardware\n");
-+				goto free_opp;
-+			}
- 		}
- 	}
- 
- 	cpufreq_dt_pdev = platform_device_register_simple("cpufreq-dt", -1,
- 							  NULL, 0);
- 	if (!IS_ERR(cpufreq_dt_pdev)) {
--		platform_set_drvdata(pdev, opp_tables);
-+		platform_set_drvdata(pdev, drv);
- 		return 0;
- 	}
- 
-@@ -187,26 +220,30 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 
- free_opp:
- 	for_each_possible_cpu(cpu) {
--		if (IS_ERR_OR_NULL(opp_tables[cpu]))
-+		if (IS_ERR_OR_NULL(drv->opp_tables[cpu]))
- 			break;
--		dev_pm_opp_put_supported_hw(opp_tables[cpu]);
-+		dev_pm_opp_put_supported_hw(drv->opp_tables[cpu]);
- 	}
--	kfree(opp_tables);
-+	kfree(drv->opp_tables);
-+free_drv:
-+	kfree(drv);
- 
- 	return ret;
- }
- 
- static int qcom_cpufreq_remove(struct platform_device *pdev)
- {
--	struct opp_table **opp_tables = platform_get_drvdata(pdev);
-+	struct qcom_cpufreq_drv *drv = platform_get_drvdata(pdev);
- 	unsigned int cpu;
- 
- 	platform_device_unregister(cpufreq_dt_pdev);
- 
- 	for_each_possible_cpu(cpu)
--		dev_pm_opp_put_supported_hw(opp_tables[cpu]);
-+		if (drv->opp_tables[cpu])
-+			dev_pm_opp_put_supported_hw(drv->opp_tables[cpu]);
- 
--	kfree(opp_tables);
-+	kfree(drv->opp_tables);
-+	kfree(drv);
- 
- 	return 0;
- }
-@@ -220,10 +257,8 @@ static struct platform_driver qcom_cpufreq_driver = {
- };
- 
- static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
--	{ .compatible = "qcom,apq8096",
--	  .data = qcom_cpufreq_kryo_name_version },
--	{ .compatible = "qcom,msm8996",
--	  .data = qcom_cpufreq_kryo_name_version },
-+	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
-+	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
- 	{},
- };
- 
 -- 
 2.21.0
 
