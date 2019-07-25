@@ -2,136 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E15E753CE
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 18:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82B3753D5
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 18:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389553AbfGYQXv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 12:23:51 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:47765 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388704AbfGYQXu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 12:23:50 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190725162349euoutp01cd8539e38c55bf098c58cc87e6fa4b6b~0swrAsriL3239732397euoutp01-
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 16:23:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190725162349euoutp01cd8539e38c55bf098c58cc87e6fa4b6b~0swrAsriL3239732397euoutp01-
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1564071829;
-        bh=VcdlZyKrQCdgkYUt20ZBw2/TUXd1x62JJBXr6EHpia8=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=XvNiJPnR4xylIsj9T2NATRQ2lcH0fM8lr9CVTXhzw4VUMrYhSsiO7IbPuueFrHpU5
-         yU0ipTKi81vTWARn2GpTEMpfVE13c1mSWD+N4WZDx10h8htD9dI+9sLMRDHqZtjNrj
-         FkifOq9e/gJ4ync6ko/sksv1UPjhChQlQ5oAAIJg=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190725162348eucas1p2d04c89a2846f8586af7949b4a13942de~0swqMOc8H1109611096eucas1p2u;
-        Thu, 25 Jul 2019 16:23:48 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id CB.B0.04298.497D93D5; Thu, 25
-        Jul 2019 17:23:48 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190725162347eucas1p15f983918e07b912c4a00fefd0c2a5d8e~0swpaXOGQ3041930419eucas1p1N;
-        Thu, 25 Jul 2019 16:23:47 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190725162347eusmtrp29900cce149672f61a0bdef0c8a88c966~0swpMPzBg1648516485eusmtrp2B;
-        Thu, 25 Jul 2019 16:23:47 +0000 (GMT)
-X-AuditID: cbfec7f2-f2dff700000010ca-4a-5d39d7949571
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 04.46.04146.397D93D5; Thu, 25
-        Jul 2019 17:23:47 +0100 (BST)
-Received: from [106.120.51.20] (unknown [106.120.51.20]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190725162346eusmtip1ad4b284580c6a68ae2f63e50c9027790~0swoSc50i3163931639eusmtip1Z;
-        Thu, 25 Jul 2019 16:23:46 +0000 (GMT)
-Subject: Re: [PATCH v4 3/5] drivers: devfreq: events: extend events by type
- of counted data
-To:     Chanwoo Choi <cw00.choi@samsung.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, myungjoo.ham@samsung.com
-Cc:     b.zolnierkie@samsung.com, krzk@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, kyungmin.park@samsung.com,
-        m.szyprowski@samsung.com, s.nawrocki@samsung.com, kgene@kernel.org,
-        willy.mh.wolff.ml@gmail.com
-From:   Lukasz Luba <l.luba@partner.samsung.com>
-Message-ID: <6ad9882f-10c8-3708-1a06-ee712bb1c66d@partner.samsung.com>
-Date:   Thu, 25 Jul 2019 18:23:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <15375017-2e82-7df8-344c-a9c41d61331c@samsung.com>
+        id S2390451AbfGYQX6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 12:23:58 -0400
+Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:22468 "EHLO
+        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390441AbfGYQX5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 12:23:57 -0400
+Received: from pps.filterd (m0170391.ppops.net [127.0.0.1])
+        by mx0a-00154904.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6PG0Gud023674;
+        Thu, 25 Jul 2019 12:23:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=smtpout1;
+ bh=hgeOWCF5225x8T7FXLIFD/0bcalsAY0rIcUyWAy7H8c=;
+ b=sT8ZX2WfhOoVVp02SKsmeZiCSjlKygXO88tDw2SsoRgVzyW4rHjzeFxZ8f7CK5D/EPDt
+ wkHxE2CfNbu8pqOR+K9L8jpoePWkazhPTxQRl8ItA0K761zHDEfsDy9eq0wlTL33dlJ5
+ jslb45J+7x9LUtjnuV4jf9tM6vcWd5DLC17JoGajSaJLNjFP84tAuWKMS2eq5fBmPrVA
+ 4+UGGlPN2IrYHNMCRzUrdfGVnonE4PnLIIeXRsoUUAZB6hqw8mIkTpxIqZK+iw0lqOOr
+ euBlKExvQ7XJYQG57mIZfqFvBvt57jYE8Ca4Sp3JH/zRAnTbZNwCEFnig3UjU6LNHqAt IQ== 
+Received: from mx0b-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
+        by mx0a-00154904.pphosted.com with ESMTP id 2ty4km3623-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 Jul 2019 12:23:56 -0400
+Received: from pps.filterd (m0144104.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6PFw7aU109731;
+        Thu, 25 Jul 2019 12:23:55 -0400
+Received: from ausxippc110.us.dell.com (AUSXIPPC110.us.dell.com [143.166.85.200])
+        by mx0b-00154901.pphosted.com with ESMTP id 2tydtgtbmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Jul 2019 12:23:55 -0400
+X-LoopCount0: from 10.166.132.130
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="836039950"
+From:   <Mario.Limonciello@dell.com>
+To:     <kai.heng.feng@canonical.com>, <rjw@rjwysocki.net>
+CC:     <keith.busch@intel.com>, <hch@lst.de>, <sagi@grimberg.me>,
+        <linux-nvme@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <rajatja@google.com>
+Subject: RE: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+Thread-Topic: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+Thread-Index: AQHVQs6UiIesxZzK0UKkUWrQRuKoE6bbsW+A///PBcA=
+Date:   Thu, 25 Jul 2019 16:23:53 +0000
+Message-ID: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
+References: <2332799.izEFUvJP67@kreacher>
+ <E62786E4-5DA9-4542-899A-658D0E021190@canonical.com>
+In-Reply-To: <E62786E4-5DA9-4542-899A-658D0E021190@canonical.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUxNYRz23nPPR62bt9vl/pav7W6+MoWZvcXCmF0zk41NaJx0VtG9ck9F
-        MepaoUkWI5eUj3aTS0la5aN2Sx8aUeO2SJSWUkJl+aNyTyfTf8/v+T2/93me7eUodQvtxUUY
-        owWTkY/UMa7K4uo/rxZfdPgFL+kdciMPMvJp4hjsoklW1SuapHV8o0hDQwFLXpp7WVLY8Y4m
-        TWXXGDKQWoVIRsMzBblX1cqSHMcbBXmfmMuQpKdVLKnsPUWT37XtaA3W267bkL7U0srqC/PO
-        MPqHt0/ozxXlIf1A4exAZqfrqlAhMiJWMPkG7HUNz347wkT10EfOfL7OJKA6ZQpy4QAvh/vW
-        fFrCapyLYKxek4JcnXgQwdBwJyMPAwjuVA8r/l1YKzJpeWF1XlQUK+ShD4G97SabgjjOEwdD
-        8t0VEq/BnQjuljeOX1DYgcBm7kKSiME+UJJ3SHpVhTfAyR/9jISVeC587LYgCU/DO6CpqAzJ
-        Gg+ou/JlPLcLXg0D5u/jPIW10PIlSyHjOXDy0VVK8gKcyEFTcRIrx14Pj5+PUjL2hJ6aogl+
-        JoyVZk1UEyEh9QaS8THoSMuc0KyEypo3tJSZwgshv8xXptdCdlq7UqIBu0Nzn4ccwR3Siy9T
-        Mq2C08lqWb0Ais6+njCaDlbbJfY80lkmFbNMKmOZVMby3zcbKfOQVogRDWGCuNQoHPYReYMY
-        Ywzz2XfQUIicP65+tOZXCRpqDLEjzCGdm+q11S9YTfOxYpzBjoCjdBrVoxInpQrl4+IF08E9
-        pphIQbSjGZxSp1UdnfJplxqH8dHCAUGIEkz/tgrOxSsBKWILzP7mW6eGDLVNbcs0tqRA//m6
-        dZqYn2h3+dX4oEOVLr3Lkrqzm895b2mclfBk3sUdiVvdlrQmB9pyRjxSL3uHdH5e2B6/sV67
-        6OuwNkAZdDx4/3Kv0Nqv6ezmvRdyjHxqzpQX27dtCijwTY7a3t96b2pG5gfU3jUYKJTW7Eyx
-        x+qUYji/1JsyifxfdPWf8m0DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAIsWRmVeSWpSXmKPExsVy+t/xu7qTr1vGGnS3iFpsnLGe1eL6l+es
-        FvOPnGO16H/8mtni/PkN7BZnm96wW2x6fI3V4vKuOWwWn3uPMFrMOL+PyWLtkbvsFkuvX2Sy
-        uN24gs2ide8RdovDb9pZLb6deMToIOCxZt4aRo+ds+6ye2xa1cnmsXlJvUffllWMHp83yQWw
-        RenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq6dvZpKTmZJalFunbJehlLLj6
-        l63gFWtF58N5bA2MJ1m6GDk5JARMJJYfmMvaxcjFISSwlFFi85XfTBAJMYlJ+7azQ9jCEn+u
-        dbFBFL1mlJj+YikzSEJYIFai6dJlsG4RgaeMEmt/NoJVMQtcZ5Q4O3EG1NzdTBJN02YDLeTg
-        YBPQk9ixqhCkm1fATaL5w3s2EJtFQFXi3stZjCC2qECERF/bbDaIGkGJkzOfgN3KKWAv8bnp
-        HVgNs4CZxLzND5khbHGJW0/mM0HY8hLNW2czT2AUmoWkfRaSlllIWmYhaVnAyLKKUSS1tDg3
-        PbfYUK84Mbe4NC9dLzk/dxMjMLa3Hfu5eQfjpY3BhxgFOBiVeHgvLLeMFWJNLCuuzD3EKMHB
-        rCTCu3UHUIg3JbGyKrUoP76oNCe1+BCjKdBzE5mlRJPzgWknryTe0NTQ3MLS0NzY3NjMQkmc
-        t0PgYIyQQHpiSWp2ampBahFMHxMHp1QDY9eTWw+lP0oWdmaYvVpSceM3+y2O6M+LLNbJptz8
-        4HXJ5oVg+7MzhSHLheIO/OCUtxAtyt/aoyf02slkKzP3Ac+LNZ/irJ5uf7pV+7Fam/6d858M
-        sjbtstzQffKQ3cmHGZOKFzPM2fOz+2/J3ivSN3xrDmbGTDb+5FYUkShluOnc4tNuld83rVJi
-        Kc5INNRiLipOBAC0EGq+AwMAAA==
-X-CMS-MailID: 20190725162347eucas1p15f983918e07b912c4a00fefd0c2a5d8e
-X-Msg-Generator: CA
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-07-25T16:10:40.2048648Z;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
+ aiplabel=External Public
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.143.18.86]
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190605091303eucas1p27177d349e0f2bd37bf582dbd7266321a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190605091303eucas1p27177d349e0f2bd37bf582dbd7266321a
-References: <20190605091236.24263-1-l.luba@partner.samsung.com>
-        <CGME20190605091303eucas1p27177d349e0f2bd37bf582dbd7266321a@eucas1p2.samsung.com>
-        <20190605091236.24263-4-l.luba@partner.samsung.com>
-        <37af143f-a585-a28a-a36f-2ed25c5b6d3b@partner.samsung.com>
-        <15375017-2e82-7df8-344c-a9c41d61331c@samsung.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-25_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907250188
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1907250188
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
-
-On 7/24/19 12:24 PM, Chanwoo Choi wrote:
-> Hi Lukasz,
-> 
-> On 19. 7. 24. 오후 7:15, Lukasz Luba wrote:
->> Hi Chanwoo,
->>
->> Could you have a look a this patch, please?
->> This patch has been rewritten accorifing to your suggestion.
->> Krzysztof tried to apply 5/5 DT patch on his current branch,
->> but it is missing earlier stuff.
->> The other patches have needed ACKs so could go through devfreq tree
->> probably, but this one left.
-> 
-> Sorry for the late reply. It looks good to me.
-> 
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-Thank you for the ACK.
-
-MyungJoo could you take the patches (apart from 5/5 which will be in
-Krzysztof's tree probably) through devfreq tree, please?
-
-Regards,
-Lukasz
+K1JhamF0DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS2FpLUhlbmcg
+RmVuZyA8a2FpLmhlbmcuZmVuZ0BjYW5vbmljYWwuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgSnVs
+eSAyNSwgMjAxOSA5OjAzIEFNDQo+IFRvOiBSYWZhZWwgSi4gV3lzb2NraQ0KPiBDYzogS2VpdGgg
+QnVzY2g7IENocmlzdG9waCBIZWxsd2lnOyBTYWdpIEdyaW1iZXJnOyBsaW51eC0NCj4gbnZtZUBs
+aXN0cy5pbmZyYWRlYWQub3JnOyBMaW1vbmNpZWxsbywgTWFyaW87IExpbnV4IFBNOyBMS01MDQo+
+IFN1YmplY3Q6IFJlOiBbUmVncmVzc2lvbl0gQ29tbWl0ICJudm1lL3BjaTogVXNlIGhvc3QgbWFu
+YWdlZCBwb3dlciBzdGF0ZSBmb3INCj4gc3VzcGVuZCIgaGFzIHByb2JsZW1zDQo+IA0KPiANCj4g
+W0VYVEVSTkFMIEVNQUlMXQ0KPiANCj4gSGkgUmFmYWVsLA0KPiANCj4gYXQgMTc6NTEsIFJhZmFl
+bCBKLiBXeXNvY2tpIDxyandAcmp3eXNvY2tpLm5ldD4gd3JvdGU6DQo+IA0KPiA+IEhpIEtlaXRo
+LA0KPiA+DQo+ID4gVW5mb3J0dW5hdGVseSwNCj4gPg0KPiA+IGNvbW1pdCBkOTE2YjFiZTk0YjZk
+YzhkMjkzYWJlZDI0NTFmMzA2MmY2YWY3NTUxDQo+ID4gQXV0aG9yOiBLZWl0aCBCdXNjaCA8a2Vp
+dGguYnVzY2hAaW50ZWwuY29tPg0KPiA+IERhdGU6ICAgVGh1IE1heSAyMyAwOToyNzozNSAyMDE5
+IC0wNjAwDQo+ID4NCj4gPiAgICAgbnZtZS1wY2k6IHVzZSBob3N0IG1hbmFnZWQgcG93ZXIgc3Rh
+dGUgZm9yIHN1c3BlbmQNCj4gPg0KPiA+IGRvZXNuJ3QgdW5pdmVyc2FsbHkgaW1wcm92ZSB0aGlu
+Z3MuICBJbiBmYWN0LCBpbiBzb21lIGNhc2VzIGl0IG1ha2VzDQo+ID4gdGhpbmdzIHdvcnNlLg0K
+PiA+DQo+ID4gRm9yIGV4YW1wbGUsIG9uIHRoZSBEZWxsIFhQUzEzIDkzODAgSSBoYXZlIGhlcmUg
+aXQgcHJldmVudHMgdGhlIHByb2Nlc3Nvcg0KPiA+IHBhY2thZ2UNCj4gPiBmcm9tIHJlYWNoaW5n
+IGlkbGUgc3RhdGVzIGRlZXBlciB0aGFuIFBDMiBpbiBzdXNwZW5kLXRvLWlkbGUgKHdoaWNoLCBv
+Zg0KPiA+IGNvdXJzZSwgYWxzbw0KPiA+IHByZXZlbnRzIHRoZSBTb0MgZnJvbSByZWFjaGluZyBh
+bnkga2luZCBvZiBTMGl4KS4NCj4gPg0KPiA+IFRoYXQgY2FuIGJlIHJlYWRpbHkgZXhwbGFpbmVk
+IHRvby4gIE5hbWVseSwgd2l0aCB0aGUgY29tbWl0IGFib3ZlIHRoZQ0KPiA+IE5WTWUgZGV2aWNl
+DQo+ID4gc3RheXMgaW4gRDAgb3ZlciBzdXNwZW5kL3Jlc3VtZSwgc28gdGhlIHJvb3QgcG9ydCBp
+dCBpcyBjb25uZWN0ZWQgdG8gYWxzbw0KPiA+IGhhcyB0byBzdGF5IGluDQo+ID4gRDAgYW5kIHRo
+YXQgImJsb2NrcyIgcGFja2FnZSBDLXN0YXRlcyBkZWVwZXIgdGhhbiBQQzIuDQo+ID4NCj4gPiBJ
+biBvcmRlciBmb3IgdGhlIHJvb3QgcG9ydCB0byBiZSBhYmxlIHRvIGdvIHRvIEQzLCB0aGUgZGV2
+aWNlIGNvbm5lY3RlZA0KPiA+IHRvIGl0IGFsc28gbmVlZHMNCj4gPiB0byBnbyBpbnRvIEQzLCBz
+byBpdCBsb29rcyBsaWtlIChhdCBsZWFzdCBvbiB0aGlzIHBhcnRpY3VsYXIgbWFjaGluZSwgYnV0
+DQo+ID4gbWF5YmUgaW4NCj4gPiBnZW5lcmFsKSwgYm90aCBEMyBhbmQgdGhlIE5WTWUtc3BlY2lm
+aWMgUE0gYXJlIG5lZWRlZC4NCg0KV2VsbCB0aGlzIGlzIHJlYWxseSB1bmZvcnR1bmF0ZSB0byBo
+ZWFyLiAgSSByZWNhbGwgdGhhdCB3aXRoIHNvbWUgZGlza3Mgd2Ugd2VyZQ0Kc2VlaW5nIHByb2Js
+ZW1zIHdoZXJlIE5WTUUgc3BlY2lmaWMgUE0gd2Fzbid0IHdvcmtpbmcgd2hlbiB0aGUgZGlzayB3
+YXMgaW4gRDMuDQoNCk9uIHlvdXIgc3BlY2lmaWMgZGlzaywgaXQgd291bGQgYmUgZ29vZCB0byBr
+bm93IGlmIGp1c3QgcmVtb3ZpbmcgdGhlIHBjaV9zYXZlX3N0YXRlKHBkZXYpDQpjYWxsIGhlbHBz
+Lg0KDQpJZiBzbywgOg0KKiB0aGF0IG1pZ2h0IGJlIGEgYmV0dGVyIG9wdGlvbiB0byBhZGQgYXMg
+YSBwYXJhbWV0ZXIuDQoqIG1heWJlIHdlIHNob3VsZCBkb3VibGUgY2hlY2sgYWxsIHRoZSBkaXNr
+cyBvbmUgbW9yZSB0aW1lIHdpdGggdGhhdCB0d2Vhay4NCg0KPiA+DQo+ID4gSSdtIG5vdCBzdXJl
+IHdoYXQgdG8gZG8gaGVyZSwgYmVjYXVzZSBldmlkZW50bHkgdGhlcmUgYXJlIHN5c3RlbXMgd2hl
+cmUNCj4gPiB0aGF0IGNvbW1pdA0KPiA+IGhlbHBzLiAgSSB3YXMgdGhpbmtpbmcgYWJvdXQgYWRk
+aW5nIGEgbW9kdWxlIG9wdGlvbiBhbGxvd2luZyB0aGUgdXNlciB0bw0KPiA+IG92ZXJyaWRlIHRo
+ZQ0KPiA+IGRlZmF1bHQgYmVoYXZpb3Igd2hpY2ggaW4gdHVybiBzaG91bGQgYmUgY29tcGF0aWJs
+ZSB3aXRoIDUuMiBhbmQgZWFybGllcg0KPiA+IGtlcm5lbHMuDQo+IA0KPiBJIGp1c3QgYnJpZWZs
+eSB0ZXN0ZWQgczJpIG9uIFhQUyA5MzcwLCBhbmQgdGhlIHBvd2VyIG1ldGVyIHNob3dzIGEgMC44
+fjAuOVcNCj4gcG93ZXIgY29uc3VtcHRpb24gc28gYXQgbGVhc3QgSSBkb27igJl0IHNlZSB0aGUg
+aXNzdWUgb24gWFBTIDkzNzAuDQo+IA0KDQpUbyBtZSB0aGF0IGNvbmZpcm1zIE5WTUUgaXMgZG93
+biwgYnV0IGl0IHN0aWxsIHNlZW1zIGhpZ2hlciB0aGFuIEkgd291bGQgaGF2ZQ0KZXhwZWN0ZWQu
+ICBXZSBzaG91bGQgYmUgbW9yZSB0eXBpY2FsbHkgaW4gdGhlIG9yZGVyIG9mIH4wLjNXIEkgdGhp
+bmsuDQoNCj4gQ2FuIHlvdSBwbGVhc2UgcHJvdmlkZSB0aGUgb3V0cHV0IG9mIGBudm1lIGlkLWN0
+cmwgL2Rldi9udm1lKmAgYW5kIEnigJlsbA0KPiB0ZXN0IHRoZSBOVk1lIGNvbnRyb2xsZXIgb24g
+WFBTIDkzODAuDQo+IA0KPiBLYWktSGVuZw0KPiANCj4gPg0K
