@@ -2,146 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A865E75267
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 17:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FBD75270
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 17:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388979AbfGYPS5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 11:18:57 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:46914 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388736AbfGYPS4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 11:18:56 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 3CE77607DE; Thu, 25 Jul 2019 15:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564067935;
-        bh=hnHhbe9q2IRKMtnzCZ2ig0RS/AUD9YxThPnuMNlk9D8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=By2gD602wfGFKF5ttG1fS+NbvbHMmWaPI1sqfQ/NTN5FVQR8M0A/sRZFNOrqPSTgk
-         pcgvoVbrPbEJxxxPn0h+MrVXJaMWP32Zn7elvYxPJ724rVNtge4N+PO5m74WsUDiVE
-         wvxeLJkSmojIkK9x9VnIRVXAqbBrjFcRbhWsXGNY=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 15C5060312;
-        Thu, 25 Jul 2019 15:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564067934;
-        bh=hnHhbe9q2IRKMtnzCZ2ig0RS/AUD9YxThPnuMNlk9D8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YfAfVEyfyjHOH1K+e7WFQFs8oC4PxsyySdDgQxFsrZMPwEbKeSJAgETfScZ0dIa7V
-         K6ins/go/UOKVqrCBpwt5hzK3dFSPpUOf7+t9RtmiTjFmCJY1XMadJC0MV+9wTSDsz
-         A5vgV0iFLyRawDjGwXQhqn1HGJe0NeMNigtnIIsI=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 15C5060312
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Thu, 25 Jul 2019 09:18:51 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, mkshah@codeaurora.org
-Subject: Re: [PATCH V2 2/4] drivers: qcom: rpmh-rsc: avoid locking in the
- interrupt handler
-Message-ID: <20190725151851.GG18620@codeaurora.org>
-References: <20190722215340.3071-1-ilina@codeaurora.org>
- <20190722215340.3071-2-ilina@codeaurora.org>
- <5d3769df.1c69fb81.55d03.aa33@mx.google.com>
- <20190724145251.GB18620@codeaurora.org>
- <5d38b38e.1c69fb81.e8e5d.035b@mx.google.com>
- <20190724203610.GE18620@codeaurora.org>
- <CAD=FV=UYj55m99EcQXmkYhs257A46x8DaarE0DC-GRF_3dY3-Q@mail.gmail.com>
+        id S2388931AbfGYPUI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 11:20:08 -0400
+Received: from cmta17.telus.net ([209.171.16.90]:38606 "EHLO cmta17.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388636AbfGYPUH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Jul 2019 11:20:07 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id qfXGhGxCSzEP4qfXIhjKhV; Thu, 25 Jul 2019 09:20:06 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1564068006; bh=Yj6Fbdz6cjL7+b5dzv3RJ6R+eBunjGaQmRvWeERhOWY=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=sYk8HlfLRIcUdWq2AcujYgfp2zGYgb1gr3Hw/FRHIZIAb9bPc2hnHs+A88dWYtAuW
+         rUtabzSLw0Kf9abWS8i6SXX9QdgP8EfoviktUvyjP9OHCvKKxVoxPgP5f6ib9pODUh
+         d21y/L7sed8S9iHkbfJ6naK+4e8tGanpqst8fI7fnIpvapYdXiy1j7J1EJOAKtwdO5
+         Qwc1E9skOSyMNjgWt5yyJFBuOYutZtdp71JRycamNjelJHXPYSo/JEPE98dZ/IxUQ1
+         YZzIEf6+YLaU0N0mgwLOVKktEx7XuKA+jPLzB1YoBNVtvjYh0Iwc0BN/TJIDba52qz
+         +rR3OtXi2cHgg==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=cYmsUULM c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=kj9zAlcOel0A:10 a=KKAkSRfTAAAA:8 a=gu6fZOg2AAAA:8 a=_GkJrRlwnCL7A2mvMCAA:9
+ a=CjuIK1q_8ugA:10 a=-FEs8UIgK8oA:10 a=NWVoK91CQyQA:10
+ a=cvBusfyB2V15izCimMoJ:22 a=2RSlZUUhi9gRBrsHwhhZ:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>
+Cc:     "'Rafael Wysocki'" <rjw@rjwysocki.net>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'Joel Fernandes'" <joel@joelfernandes.org>,
+        "'v4 . 18+'" <stable@vger.kernel.org>,
+        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>
+References: <1563431200-3042-1-git-send-email-dsmythies@telus.net> <8091ef83f264feb2feaa827fbeefe08348bcd05d.1563778071.git.viresh.kumar@linaro.org> <001201d54125$a6a82350$f3f869f0$@net> <20190723091551.nchopfpqlmdmzvge@vireshk-i7> <CAJZ5v0ji+ksapJ4kc2m5UM_O+AShAvJWmYhTQHiXiHnpTq+xRg@mail.gmail.com> <20190724114327.apmx35c7a4tv3qt5@vireshk-i7>
+In-Reply-To: <20190724114327.apmx35c7a4tv3qt5@vireshk-i7>
+Subject: RE: [PATCH] cpufreq: schedutil: Don't skip freq update when limits change
+Date:   Thu, 25 Jul 2019 08:20:01 -0700
+Message-ID: <000c01d542fc$703ff850$50bfe8f0$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=UYj55m99EcQXmkYhs257A46x8DaarE0DC-GRF_3dY3-Q@mail.gmail.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdVCFQVr1phaD+P6Sq6kW1+vmsbdwQAm2IYQ
+X-CMAE-Envelope: MS4wfLaRfd1rcOoDWaHnU5xIUUcYswZjdnsvzSocGsFvBURZhWQjg5H3b8U2RJUu1tOGE5yQvC4520ORyxtygI2C7uH2qFUMWZ1Dnrjhmh14hfVSj7vVKSvv
+ pA57riQC4hXWfAFtM/q/e4dgvtdW+jmJ6vHz4AwZCteGAsf8iGpj51/1bs5ck+Aj7QwYbk5IJWJ7Kjcf/SJugOMKBoeD2hL8IYHbZkcXC+d64KJz3LZjraYR
+ /ftFdHFIayhdJlpzWgtGryp0qv6rq1ZlC83yAaldADbAiWlKvjJtpTkc1bt85O58bvO0HpsJIL18wB7NH+XTw4WHT6gRdRAx/9RHO4X1+z63yqtIKxNmpyjZ
+ bMFHfrCeAmUpiJuulm0Jz+/FGF2QSwAGgEPYE09iCGBVSqK66//MGK281SWN0GqMW5mKWqZuamKe6ZU4qXI/s/YxmqkpKStsKfFBLj6lBrxoBoQjQ7A=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 24 2019 at 17:28 -0600, Doug Anderson wrote:
->Hi,
->
->On Wed, Jul 24, 2019 at 1:36 PM Lina Iyer <ilina@codeaurora.org> wrote:
->>
->> On Wed, Jul 24 2019 at 13:38 -0600, Stephen Boyd wrote:
->> >Quoting Lina Iyer (2019-07-24 07:52:51)
->> >> On Tue, Jul 23 2019 at 14:11 -0600, Stephen Boyd wrote:
->> >> >Quoting Lina Iyer (2019-07-22 14:53:38)
->> >> >> Avoid locking in the interrupt context to improve latency. Since we
->> >> >> don't lock in the interrupt context, it is possible that we now could
->> >> >> race with the DRV_CONTROL register that writes the enable register and
->> >> >> cleared by the interrupt handler. For fire-n-forget requests, the
->> >> >> interrupt may be raised as soon as the TCS is triggered and the IRQ
->> >> >> handler may clear the enable bit before the DRV_CONTROL is read back.
->> >> >>
->> >> >> Use the non-sync variant when enabling the TCS register to avoid reading
->> >> >> back a value that may been cleared because the interrupt handler ran
->> >> >> immediately after triggering the TCS.
->> >> >>
->> >> >> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
->> >> >> ---
->> >> >
->> >> >I have to read this patch carefully. The commit text isn't convincing me
->> >> >that it is actually safe to make this change. It mostly talks about the
->> >> >performance improvements and how we need to fix __tcs_trigger(), which
->> >> >is good, but I was hoping to be convinced that not grabbing the lock
->> >> >here is safe.
->> >> >
->> >> >How do we ensure that drv->tcs_in_use is cleared before we call
->> >> >tcs_write() and try to look for a free bit? Isn't it possible that we'll
->> >> >get into a situation where the bitmap is all used up but the hardware
->> >> >has just received an interrupt and is going to clear out a bit and then
->> >> >an rpmh write fails with -EBUSY?
->> >> >
->> >> If we have a situation where there are no available free bits, we retry
->> >> and that is part of the function. Since we have only 2 TCSes avaialble
->> >> to write to the hardware and there could be multiple requests coming in,
->> >> it is a very common situation. We try and acquire the drv->lock and if
->> >> there are free TCS available and if available mark them busy and send
->> >> our requests. If there are none available, we keep retrying.
->> >>
->> >
->> >Ok. I wonder if we need some sort of barriers here too, like an
->> >smp_mb__after_atomic()? That way we can make sure that the write to
->> >clear the bit is seen by another CPU that could be spinning forever
->> >waiting for that bit to be cleared? Before this change the spinlock
->> >would be guaranteed to make these barriers for us, but now that doesn't
->> >seem to be the case. I really hope that this whole thing can be changed
->> >to be a mutex though, in which case we can use the bit_wait() API, etc.
->> >to put tasks to sleep while RPMh is processing things.
->> >
->> We have drivers that want to send requests in atomic contexts and
->> therefore mutex locks would not work.
->
->Jumping in without reading all the context, but I saw this fly by and
->it seemed odd.  If I'm way off base then please ignore...
->
->Can you give more details?  Why are these drivers in atomic contexts?
->If they are in atomic contexts because they are running in the context
->of an interrupt then your next patch in the series isn't so correct.
->
->Also: when people submit requests in atomic context are they always
->submitting an asynchronous request?  In that case we could
->(presumably) just use a spinlock to protect the queue of async
->requests and a mutex for everything else?
-Yes, drivers only make async requests in interrupt contexts. They cannot
-use the sync variants. The async and sync variants are streamlined into
-the same code path. Hence the use of spinlocks instead of mutexes
-through the critical path.
+Hi,
 
---Lina
+I am having trouble keeping up.
+Here is what I have so far:
+
+On 2019.07.24 04:43 Viresh Kumar wrote:
+> On 23-07-19, 12:27, Rafael J. Wysocki wrote:
+>> On Tue, Jul 23, 2019 at 11:15 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+
+>>> Though there is one difference between intel_cpufreq and acpi_cpufreq,
+>>> intel_cpufreq has fast_switch_possible=true and so it uses slightly
+>>> different path in schedutil. I tried to look from that perspective as
+>>> well but couldn't find anything wrong.
+>> 
+>> acpi-cpufreq should use fast switching on the Doug's system too.
+>
+> Ah okay.
+>
+>>> If you still find intel_cpufreq to be broken, even with this patch,
+
+It is.
+
+>>> please set fast_switch_possible=false instead of true in
+>>> __intel_pstate_cpu_init() and try tests again. That shall make it very
+>>> much similar to acpi-cpufreq driver.
+>> 
+>> I wonder if this helps.
+
+It does not help.
+
+>> Even so, we want fast switching to be used by intel_cpufreq.
+
+>
+> With both using fast switching it shouldn't make any difference.
+
+>> Anyway, it looks like the change reverted by the Doug's patch
+>> introduced a race condition that had not been present before.  Namely,
+>> need_freq_update is cleared in get_next_freq() when it is set _or_
+>> when the new freq is different from the cached one, so in the latter
+>> case if it happens to be set by sugov_limits() after evaluating
+>> sugov_should_update_freq() (which returned 'true' for timing reasons),
+>> that update will be lost now. [Previously the update would not be
+>> lost, because the clearing of need_freq_update depended only on its
+>> current value.] Where it matters is that in the "need_freq_update set"
+>> case, the "premature frequency reduction avoidance" should not be
+>> applied (as you noticed and hence the $subject patch).
+>> 
+>> However, even with the $subject patch, need_freq_update may still be
+>> set by sugov_limits() after the check added by it and then cleared by
+>> get_next_freq(), so it doesn't really eliminate the problem.
+>> 
+>> IMO eliminating would require invalidating next_freq this way or
+>> another when need_freq_update is set in sugov_should_update_freq(),
+>> which was done before commit ecd2884291261e3fddbc7651ee11a20d596bb514.
+>
+> Hmm, so to avoid locking in fast path we need two variable group to
+> protect against this kind of issues. I still don't want to override
+> next_freq with a special meaning as it can cause hidden bugs, we have
+> seen that earlier.
+>
+> What about something like this then ?
+
+I tried the patch ("patch2"). It did not fix the issue.
+
+To summarize, all kernel 5.2 based, all intel_cpufreq driver and schedutil governor:
+
+Test: Does a busy system respond to maximum CPU clock frequency reduction?
+
+stock, unaltered: No.
+revert ecd2884291261e3fddbc7651ee11a20d596bb514: Yes
+viresh patch: No.
+fast_switch edit: No.
+viresh patch2: No.
+
+References (and procedures used):
+https://marc.info/?l=linux-pm&m=156346478429147&w=2
+https://marc.info/?l=linux-kernel&m=156343125319461&w=2
+
+... Doug
+
 
