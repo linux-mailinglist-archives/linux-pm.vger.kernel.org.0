@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EC674390
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 05:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCC9743A1
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 05:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389341AbfGYDBl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jul 2019 23:01:41 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38675 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389299AbfGYDBk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 23:01:40 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y15so21934992pfn.5
-        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 20:01:40 -0700 (PDT)
+        id S2389634AbfGYDHQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jul 2019 23:07:16 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:37221 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389615AbfGYDHP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jul 2019 23:07:15 -0400
+Received: by mail-pf1-f194.google.com with SMTP id 19so21939277pfa.4
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 20:07:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=jqf8vsSQMR94XfPuzjd466qFEcaiXpTcAQ55AzJc7DU=;
-        b=wn50C/Q84xBwjLKKhX7OkkbWtf+dnGxzOKobzhNmx0UeEP8PAmThBR92dQMa1IyUIb
-         XUkuQxe35kpZS357GCgy1y4VcJ43hVV37YzTNEHmLLWqiSXlqtFoZSbGcukA4/nNY4ub
-         ZO5D2VV9yh29Yw3Iumsw1Q20b76lKOWgG7XxgdgI7WLXeDVMN0VzbNqCypJfwWWoA/PJ
-         AYGdncDNfONlMkaRK7M8FQrgxVLAhKY7aslJa0hwfzArkVbBd9z2PRwMTbfVd00rpIrL
-         /bTF2fdAyIUg2eYB3nDx9fplBJGpwu3t7od4Ws123jeIsa3ECOD2ILLZYXNCwQJCQ0mO
-         TF4g==
+        bh=n/mY7p8FgX0kKanouYLWZrHhV2DuR3wDcDqUNd4j1is=;
+        b=QoVlYWFaozyLKwWU5HggK0Wsb5zETd9BwqfjXiyHJ7wD+0kSnsripFXn9+voUc/xAP
+         qR36PPUNGeKqje5Et1/ByDqWH+c1EyjDKoD4SJpMhGtfi8rXuv2QS53f0kXrZVkHTuDE
+         RdufRBxUfGcYyIjBBxCgjc/zYqnbl2ZvZ/gniUAhRRG9jvYZp8rzdEif8I1hV7nYUprY
+         Yj7UZxTp3c7IQXXfz2ED6Gl8H7Nt4AsJp9FccYa0itf3AT97nY1CBD2oUcKIV2XrBI1L
+         tm4dA+Rwe6yz+PI8bKmSkYnwdewtChl2Qa9ZGj/uLjQXnEOS9FKffVHxPkoPTVdtKaE2
+         Krow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jqf8vsSQMR94XfPuzjd466qFEcaiXpTcAQ55AzJc7DU=;
-        b=XY38W/JFcMqt9V0pA4/LL/Nhh75sJbjPG0KJyGmCM/hP1gcRIV8t8RHOnECbKYT32V
-         Su9Ye6dkFM4/wgCIWvbc9o/94Bloxf7NXym0UzTA9LUR0xsJYqFYwvbHc2ggoAhRoeBM
-         hyBekMaw/RqOKHYn3ewDmC3Jzt2f9HPgguKACE5ghvtysufkb4Tv8v/Sx2sLen4rIxFS
-         vIu/yvzUGlHMAb43Pu+lPE9uGRRHLvf8DsZDN12m5drWU6U+n4mjsZumikNR8uM5SszP
-         uGXgepoxrCQobkCTIItsxtPjnlW+G3/Nw1lL0xJP580JaqS7rUEkOXyYn2S/j1gwKs+l
-         Ngcw==
-X-Gm-Message-State: APjAAAXZTZAXPfZRW7v1ygwdgZeRUZDnCr8EdL7Js6aImvZtBAo6z6ZI
-        qdgEbokNBgu3GgFyLLUldutIYg==
-X-Google-Smtp-Source: APXvYqw71EQNZoF1EeaQQUf7DPyno7aB8xgu0IkSJ2vtzF50+7ew4BZC2tgrZsLg3aSp2DcnXv0obQ==
-X-Received: by 2002:a63:1046:: with SMTP id 6mr86480080pgq.111.1564023700028;
-        Wed, 24 Jul 2019 20:01:40 -0700 (PDT)
+        bh=n/mY7p8FgX0kKanouYLWZrHhV2DuR3wDcDqUNd4j1is=;
+        b=t3vqxeRFivCqOHAmYbWYBa1NBtPpyQKGKVnTt8qqajW8IA1w8Z2NMVtdrpSCFtkjeV
+         /vTQgIndKP44pnD+HcNYJS+GtuYporB10i6wmMtrTMokiiCcNW4HNH140qc932B4+GSb
+         Kf+9rTOtAMv45uqfGPQWBXF7c3bXhJBwswspqkFCqZ+NEWaRWHh+OdRwmiuHaw1K0OcU
+         X3Cmf8l0yLcm1gpfa+nWaWHAj2sfcQaZ0m++hKgos14mEcLpLmVymQMFtfM8UO1rV/Pk
+         Rr4gtBjKCzqR6qRaipJya0TVgWjTf2AfXAlj0egE1k5NtAacq0iSRvWpVSCEJqJ9ClIg
+         +i7w==
+X-Gm-Message-State: APjAAAX+8Avn3oR/QJLRNgGbJIH6+/d+2eQJFq6SjUWuFCXNPXXR6yKS
+        NyWZQfncoyzf2Tmnv+us5HobUQ==
+X-Google-Smtp-Source: APXvYqxeSWBAIQmtKu3LZAmez/8I0ha6YbZ1bPhln0NTkDdp3FYD3+2+P9KawBwJxG+vAKZtoq566w==
+X-Received: by 2002:a63:f807:: with SMTP id n7mr86929749pgh.119.1564024035139;
+        Wed, 24 Jul 2019 20:07:15 -0700 (PDT)
 Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id g2sm62095703pfb.95.2019.07.24.20.01.38
+        by smtp.gmail.com with ESMTPSA id h6sm45272924pfb.20.2019.07.24.20.07.14
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Jul 2019 20:01:39 -0700 (PDT)
-Date:   Thu, 25 Jul 2019 08:31:37 +0530
+        Wed, 24 Jul 2019 20:07:14 -0700 (PDT)
+Date:   Thu, 25 Jul 2019 08:37:12 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Saravana Kannan <saravanak@google.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,65 +53,72 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 5/5] PM / devfreq: Add required OPPs support to
- passive governor
-Message-ID: <20190725030137.uz22iwvdv37fsw56@vireshk-i7>
+        Sibi Sankar <sibis@codeaurora.org>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
+Message-ID: <20190725030712.lx3cjogo5r7kc262@vireshk-i7>
 References: <20190717222340.137578-1-saravanak@google.com>
- <20190717222340.137578-6-saravanak@google.com>
- <20190723100406.7zchvflrmoaipxek@vireshk-i7>
- <CAGETcx89X0Xra+3HK+jbuCHXMgRL7QCwSShyMy7DY2Bg1eVjDQ@mail.gmail.com>
+ <20190717222340.137578-4-saravanak@google.com>
+ <20190723102842.t2s45zzylsjuccm4@vireshk-i7>
+ <CAGETcx-6M9Ts8tfMf6aA8GjMyzK5sOLr069ZCxTG7RHMFPLzHw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGETcx89X0Xra+3HK+jbuCHXMgRL7QCwSShyMy7DY2Bg1eVjDQ@mail.gmail.com>
+In-Reply-To: <CAGETcx-6M9Ts8tfMf6aA8GjMyzK5sOLr069ZCxTG7RHMFPLzHw@mail.gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-07-19, 17:26, Saravana Kannan wrote:
-> On Tue, Jul 23, 2019 at 3:04 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On 23-07-19, 07:47, Saravana Kannan wrote:
+> On Tue, Jul 23, 2019, 3:28 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> 
+> > $subject doesn't have correct property name.
+> >
 > > On 17-07-19, 15:23, Saravana Kannan wrote:
-> > >       /*
-> > > @@ -56,13 +56,20 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
-> > >        * list of parent device. Because in this case, *freq is temporary
-> > >        * value which is decided by ondemand governor.
-> > >        */
-> > > -     opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
-> > > -     if (IS_ERR(opp)) {
-> > > -             ret = PTR_ERR(opp);
-> > > +     p_opp = devfreq_recommended_opp(parent_devfreq->dev.parent, freq, 0);
-> > > +     if (IS_ERR(p_opp)) {
-> > > +             ret = PTR_ERR(p_opp);
-> > >               goto out;
-> > >       }
+> > > Currently, the linking of required-opps fails silently if the
+> > > destination OPP table hasn't been added before the source OPP table is
+> > > added. This puts an unnecessary requirement that the destination table
+> > > be added before the source table is added.
 > > >
-> > > -     dev_pm_opp_put(opp);
-> > > +     if (devfreq->opp_table && parent_devfreq->opp_table)
-> > > +             opp = dev_pm_opp_xlate_opp(parent_devfreq->opp_table,
-> > > +                                        devfreq->opp_table, p_opp);
+> > > In reality, the destination table is needed only when we try to
+> > > translate from source OPP to destination OPP. So, instead of
+> > > completely failing, retry linking the tables when the translation is
+> > > attempted.
+> > >
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > ---
+> > >  drivers/opp/core.c | 32 +++++++++++-----
+> > >  drivers/opp/of.c   | 91 ++++++++++++++++++++++------------------------
+> > >  drivers/opp/opp.h  |  5 +++
+> > >  3 files changed, 71 insertions(+), 57 deletions(-)
 > >
-> > you put p_opp right here.
-
-What about this comment ?
-
+> > Here is the general feedback and requirements I have:
 > >
-> > Also shouldn't you try to get p_opp under the above if block only? As
-> > that is the only user of it ?
+> > - We shouldn't do it from _set_required_opps() but way earlier, it
+> >   shouldn't affect the fast path (where we change the frequency).
+> >
 > 
-> No, p_opp (used to be called opp) was used even before my changes. If
-> there's no required-opps mapping this falls back to assuming the slave
-> device OPP to pick should be the same index as the master device's
-> opp.
-> 
-> So I believe this patch is correct as-is.
+> I don't think there's any other intermediate OPP call where we can try to
+> link the tables. Also if there tables are already fully linked, this is
+> just checking for not NULL for a few elements in the array.
 
-Right.
+We should be doing this whenever a new OPP table is created, and see
+if someone else was waiting for this OPP table to come alive. Also we
+must make sure that we do this linking only if the new OPP table has
+its own required-opps links fixed, otherwise delay further.
+
+> I don't think
+> this is really going to allow down the fast path in anyway.
+
+> If you have other ideas, I'm willing to look at it. But as it is right now
+> seems the best to me.
+> 
+Even then I don't want to add these checks to those places. For the
+opp-set-rate routine, add another flag to the OPP table which
+indicates if we are ready to do dvfs or not and mark it true only
+after the required-opps are all set.
 
 -- 
 viresh
