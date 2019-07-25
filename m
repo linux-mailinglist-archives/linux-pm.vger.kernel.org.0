@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F159744C8
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 07:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D02744D5
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 07:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390507AbfGYFRr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 01:17:47 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39368 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390505AbfGYFRr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 01:17:47 -0400
-Received: by mail-pf1-f194.google.com with SMTP id f17so18107024pfn.6
-        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 22:17:46 -0700 (PDT)
+        id S2390566AbfGYFWd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 01:22:33 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38794 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390542AbfGYFWd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 01:22:33 -0400
+Received: by mail-pl1-f194.google.com with SMTP id az7so22902059plb.5
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jul 2019 22:22:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=/u83+hQ1QJSZQhZrXmEUjb2K6ijc3Xy3tbFtshDxhfA=;
-        b=DLPjA6ebSqQMnWFq4JJNbgskYTCbvMXOTpeb8SzA8dD4lhEAgVdGspxIw+UuL7XB8h
-         Gv4P7+W73rim2Ym3ir6uigy++MwBE7jbkrV+NBR0y87WvSD8U9kKhEZCh7kngp+1mzoj
-         GZXUawj94hGsKbTlIbluVoxHyEigED8f5YqicUEqymMAO/V2uMTGGTDrLusi4YjnEb85
-         8iGdPO6D9jhR9M5yCZ1AK5Lnw2YT6ti5IUvLqL7JwX7xlv/HWIEFJpuOqk1LNDlXq9w7
-         BqJMbrNM5/+c+kNO7xfx9wIkPkoybKFjTYoCW7g2pIbEbA8JALpEZjFLLk486+T0gBb/
-         wrYA==
+        bh=/xZxGXc0Ivxqr92bf1BipffjFV4zTI0LPpEMDctA4sg=;
+        b=rSsfQjeJREPnV1Zd0y8XVUwIPaLW1Mk6hoim+fB9ibMquuACj+uIFH7x/+VzUt7CrZ
+         2HDtB9T4fLvxla0hXbinFc02wCSXsdSPMKZl3kvALhMtFnskG7Q2pOeZIgEQG0EcRJcO
+         W4TPnwHjb9Z6z4YqYfry9+yDoNPMkTOVJPuamGW/LGaddBvDctGgZ9Y28ozdwu98yWLv
+         bL4ul3ZDkofYEDajqCyMmSUP0aNFNZtV7tVcBvh4JCElexCsucFGb4YJqcpEFBkqoBsN
+         shJ5FfukcfpaHy05XzzxmqamcvmTPcP0/jphlSUIZBOlbzVzVqP8yGwyRfEznpWcfo9l
+         obnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/u83+hQ1QJSZQhZrXmEUjb2K6ijc3Xy3tbFtshDxhfA=;
-        b=EHIALerwy1Ukp3K4iF2rrgPGKRJiHJLg1XQp/JKkiZoI7CgF0zsT/YN28qYoiQoyv0
-         pUxs/jBFVGUgcb0IQkud4xtkCCO9empeV0cAAnfqaRPyPQC84HUDQZSc1kX+N3YTaerO
-         DN1RHS3bNmNtAZrUaM9GdG63GHssFvlA8gmplo7qVy3zLiofFV9P/ZEBCkZPb9N2zf3j
-         mcjX07i80KYikuMkbPxpCm+94nI4ewmQyg36DqlJtsrmzXezSxLA0EuEGUjkG8qWcA/x
-         aRhLvc/ohi8w/AXnVQF6RNzIHasJxt30a7UnVFunQgCGpiwH4HnRvKfyAyeR1mYWOCnJ
-         ujBw==
-X-Gm-Message-State: APjAAAUahr+sog6MeOfBh+rXCJIGRr0Mv07R3wuEFzxurXSjw7srzNcv
-        pXL43lFpWxI0dPR0KakqPhxfdA==
-X-Google-Smtp-Source: APXvYqwRgHw22t1Ez3v6HGsA4DNuKmxxcEJSqzfywoFPkhctAPIvI9uRybfdTAWZi5/HEcfLafSq2g==
-X-Received: by 2002:aa7:8b55:: with SMTP id i21mr14861350pfd.155.1564031866108;
-        Wed, 24 Jul 2019 22:17:46 -0700 (PDT)
+        bh=/xZxGXc0Ivxqr92bf1BipffjFV4zTI0LPpEMDctA4sg=;
+        b=sOf0JJbcuV5H/FKJshdiK0jVr7d+AqOGSoqeyC2ZrqZggrc8Gwtc2xIAfvxaTG6/pl
+         efTuW/wMo1Ls8Bvs9aPUaP5sT70Kw2KuYs7Cn8lZFpUyJJiH4Zr6Vw/+nQNuooGJDaXv
+         IlJlVO0USaw7CKIbOHfQcch3BON/LscVfL+TONlA6j6yuBD4e55ybp2gcgxpHuOKuX27
+         Q7r1QBIUTFoOM/cyGhOB94ck5VZm8D+hrdPZ5UdUTge4MOY3MLfLctRNkXs4ek02+g/z
+         aWEJspImEEptxPIgQoTWXXyI8Xuj+2tQfnqFykzkM7yaaAMj9UGohkVchkNTt6qEaWAc
+         kwMg==
+X-Gm-Message-State: APjAAAVWD5amo1dqGnSMhzMGkBTJjhSgv4NfUrjL13jFPOATstyNAy8R
+        DzQGC5jgH44hRghCz95yk4Ibaw==
+X-Google-Smtp-Source: APXvYqzsumr0UqkwlGeOG7n6Wk6nxVjmT7yfiqwz9Ib4PjshFHVHMFgbschdLdFDiNL9McSo8p6NTg==
+X-Received: by 2002:a17:902:2ac8:: with SMTP id j66mr85115769plb.273.1564032152747;
+        Wed, 24 Jul 2019 22:22:32 -0700 (PDT)
 Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id b37sm77297543pjc.15.2019.07.24.22.17.44
+        by smtp.gmail.com with ESMTPSA id u134sm45825640pfc.19.2019.07.24.22.22.31
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Jul 2019 22:17:44 -0700 (PDT)
-Date:   Thu, 25 Jul 2019 10:47:42 +0530
+        Wed, 24 Jul 2019 22:22:31 -0700 (PDT)
+Date:   Thu, 25 Jul 2019 10:52:29 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Saravana Kannan <saravanak@google.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -57,76 +57,62 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Android Kernel Team <kernel-team@android.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
-Message-ID: <20190725051742.mn54pi722txkpddg@vireshk-i7>
-References: <20190717222340.137578-1-saravanak@google.com>
- <20190717222340.137578-4-saravanak@google.com>
- <20190723102842.t2s45zzylsjuccm4@vireshk-i7>
- <CAGETcx-6M9Ts8tfMf6aA8GjMyzK5sOLr069ZCxTG7RHMFPLzHw@mail.gmail.com>
- <20190725030712.lx3cjogo5r7kc262@vireshk-i7>
- <CAGETcx8QTs2Dqqppb_gwiUa2fte92K_q+B+j_CreRgqU52L7EA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] Add required-opps support to devfreq passive gov
+Message-ID: <20190725052229.znf6asnvl44rjqxg@vireshk-i7>
+References: <20190724014222.110767-1-saravanak@google.com>
+ <20190725023050.7ggjbwsthoxpkexv@vireshk-i7>
+ <CAGETcx_ZHXkjZMBhO8YTW2fMyVqmsj8f9F8d6oJTn=NmRL1q=A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGETcx8QTs2Dqqppb_gwiUa2fte92K_q+B+j_CreRgqU52L7EA@mail.gmail.com>
+In-Reply-To: <CAGETcx_ZHXkjZMBhO8YTW2fMyVqmsj8f9F8d6oJTn=NmRL1q=A@mail.gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-07-19, 21:09, Saravana Kannan wrote:
-> On Wed, Jul 24, 2019 at 8:07 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > We should be doing this whenever a new OPP table is created, and see
-> > if someone else was waiting for this OPP table to come alive.
+On 24-07-19, 20:40, Saravana Kannan wrote:
+> On Wed, Jul 24, 2019 at 7:30 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 23-07-19, 18:42, Saravana Kannan wrote:
+> > > The devfreq passive governor scales the frequency of a "child" device based
+> > > on the current frequency of a "parent" device (not parent/child in the
+> > > sense of device hierarchy). As of today, the passive governor requires one
+> > > of the following to work correctly:
+> > > 1. The parent and child device have the same number of frequencies
+> > > 2. The child device driver passes a mapping function to translate from
+> > >    parent frequency to child frequency.
+> >
+> > > v3 -> v4:
+> > > - Fixed documentation comments
+> > > - Fixed order of functions in .h file
+> > > - Renamed the new xlate API
+> > > - Caused _set_required_opps() to fail if all required opps tables aren't
+> > >   linked.
+> >
+> > We are already in the middle of a discussion for your previous version
+> > and I haven't said yet that I am happy with what you suggested just 2
+> > days back. Why send another version so soon ?
 > 
-> Searching the global OPP table list seems a ton more wasteful than
-> doing the lazy linking. I'd rather not do this.
+> I wanted you to see how I addressed your comments.
 
-We can see how best to optimize that, but it will be done only once
-while a new OPP table is created and putting stress there is the right
-thing to do IMO. And doing anything like that in a place like
-opp-set-rate is the worst one. It will be a bad choice by design if
-you ask me and so I am very much against that.
+Sure, but that is just half the comments.
 
-> > Also we
-> > must make sure that we do this linking only if the new OPP table has
-> > its own required-opps links fixed, otherwise delay further.
-> 
-> This can be done. Although even without doing that, this patch is
-> making things better by not failing silently like it does today? Can I
-> do this later as a separate patch set series?
+> It didn't look like
+> you were going to make more comments on the code.
 
-I would like this to get fixed now in a proper way, there is no hurry
-for a quick fix currently. No band-aids please.
+I posted some queries and you posted your opinions on them. Now
+shouldn't I get a chance to reply again to see if I agree with your
+replies or if we can settle to something else ? I only got one day in
+between where I was busy with other stuff and so couldn't come back to
+it. Please wait a little longer specially when the comments aren't
+minor in nature.
 
-> > Even then I don't want to add these checks to those places. For the
-> > opp-set-rate routine, add another flag to the OPP table which
-> > indicates if we are ready to do dvfs or not and mark it true only
-> > after the required-opps are all set.
-> 
-> Honestly, this seems like extra memory and micro optimization without
-> any data to back it.
+Anyway, lets get over it now. Lets continue our discussion on V3 and
+then we can have a V5 :)
 
-Again, opp-set-rate isn't supposed to do something like this. It
-shouldn't handle initializations of things, that is broken design.
-
-> Show me data that checking all these table
-> pointers is noticeably slower than what I'm doing. What's the max
-> "required tables count" you've seen in upstream so far?
-
-Running anything extra (specially some initialization stuff) in
-opp-set-rate is wrong as per me and as a Maintainer of the OPP core it
-is my responsibility to not allow such things to happen.
-
-> I'd even argue that doing it the way I do might actually reduce the
-> cache misses/warm the cache because those pointers are going to be
-> searched/used right after anyway.
-
-So you want to make the cache hot with data, by running some code at a
-place where it is not required to be run really, and the fact that
-most of the data cached may not get used anyway ? And that is an
-improvement somehow ?
+Have a good day Saravana.
 
 -- 
 viresh
