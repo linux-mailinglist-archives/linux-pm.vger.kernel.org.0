@@ -2,53 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0368474E86
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 14:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F68C74E9F
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 14:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389118AbfGYMve (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 08:51:34 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40955 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388100AbfGYMve (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 08:51:34 -0400
-Received: by mail-lf1-f68.google.com with SMTP id b17so34470432lff.7;
-        Thu, 25 Jul 2019 05:51:31 -0700 (PDT)
+        id S2388871AbfGYM52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 08:57:28 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:37839 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387901AbfGYM52 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 08:57:28 -0400
+Received: by mail-lf1-f66.google.com with SMTP id c9so34421524lfh.4;
+        Thu, 25 Jul 2019 05:57:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:reply-to:from:date:message-id
          :subject:to:cc:content-transfer-encoding;
-        bh=/Xsj00ljhBsEGtdT+wj7N34Rn+B2eibrc+3bGLHtXVM=;
-        b=KrxMTzFAhzWFqULF0MbgezdmTCddBLW97aZPw3roEOocGi9PDJFCSZH+TnwulnpeHu
-         3dXe6bI5xxyAEbMIqJ7cE0SM5Oidx/BetTLPcq2iPyBBaZJUK4Fu316uFx+7yYEtQspd
-         7Wd9dy9MMx4pEro5eP9OpYcYTFB+yFEDUswcHd8NvJXkH/qh9HqcXpCcPo98DeGgu+Fz
-         yDYtoOYw+cgpWw0MTtZg/sSmqRJkcceW1Rw7N/o+FwuIIM4y7hjxM6d7sVHRcrlWfviM
-         tdoCkMRczvDnAkzxE4hW0IdrhEwqrpzzmBZ/wdXyF8q8+hkBo2kecS8AtzQnc4HOXUYY
-         4dAA==
+        bh=xM6KrE+i6GTD27vbYKn5cqDmPVp4Sc2Sjq00mSvmh2U=;
+        b=XXpK0Ruyln89lB3FtPJQlFIHzkNrM+OFf+i4hux201WJ2ZQ8HIQVoKrEtlgpvzYKl8
+         oMsc2mWrk11bd2G5oHFfJO1z+s0WY7Dl0onn1RinPh3VwNrcKIGFzJOq9Qe6lhWUu3O7
+         Q//XStbzPtGgslB+AyFj7C9tNlGfnBI+gRo9FIMgyx0jEwMeLn2x4F8wKA6r5N3IX9ub
+         wCJNweqMuL6PuOwrtsjlvREok7Xhb1Sh6VxWtKC+zMYOCm8oUvl5uU6BQ/NfWo+uDRP7
+         UjdD/7nLSbX5rRAp8Cy+mf/717jZ4SR7ewR9CiHXWoYJNISCHqvUACA5Bth2MyT6Bu1t
+         9G8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=/Xsj00ljhBsEGtdT+wj7N34Rn+B2eibrc+3bGLHtXVM=;
-        b=ZVT5j4lZyHk5Z290cj99uRQ/hFuvQxsCgrVSyhSPiJCGNkpyrgoJjkAZRyP5dpZT1/
-         xvl78D10Oy9T9PwldTjVHarvnYvqn6eubZSBFntjLpBZMeS17NUaXlkYsumQ3S1tDMoa
-         ajzNHvwXoEZQRd43Clx1Lxs/IVCDbnLknCwQpYUnrBmraqDu0I0ea9vxCtRlim5uZyZe
-         SEdss2eYWVJgEPtNNHeFiMVS/ZdsfFP7BMZOI3PpQGd/Xxw9ZuynVwgNyf10P0xuc3ox
-         FZQ5bU9Chfm/xeUFOJexF/a1HWxPx1j6aXhd0MQNM6ME8IMUi/OVy5fpcn1ZJwbzmU+S
-         EbeA==
-X-Gm-Message-State: APjAAAU/W3x1jCfafWxhbgGHssldwjF631wi5GrBr4utXSsmuTGULu4t
-        cb0iZwLSP5tKuWQFtb7dmd/UOSmVnxd8Zl5uXkE=
-X-Google-Smtp-Source: APXvYqxevdANPfOlkVtzMQ882vgwBXm0Jbm6vzvza8p7XXpVnciz9Vl5i1ZzZxjAhKyc6EfZHmf4aPb+4/23UDQiUlw=
-X-Received: by 2002:a19:914c:: with SMTP id y12mr41019898lfj.108.1564059090602;
- Thu, 25 Jul 2019 05:51:30 -0700 (PDT)
+        bh=xM6KrE+i6GTD27vbYKn5cqDmPVp4Sc2Sjq00mSvmh2U=;
+        b=XxTcQPNy++k2IO6C3G3CX+gEGk1N8U/xxazqUq49qorA+iMWQc5rKPiPK1cgESQ+ZM
+         kLQFVtwyP68qwJ/f/DEjqUzaPooFc7nVD78L+JqfYCQEK+Kqqdv0moF/vSxU8K5Uy4Kn
+         HxHxA1NFrjDUGMnl+XGYR25bHRyOcOIfwmCoNVVmXpqZiW9HN5XADNiVkvy+/ZZ8WVSZ
+         4PiM97tJnHNt4EI4p9P+Gk5/MMXAjrSYLJFIcrxTe7Y3vx+IY/TD/cJK1QL4z/HjKKNt
+         fTokDp41UpypVFLKWKAbkFDUPLbKibODRdcVgSycfIPVQEFK7INH3kn+bUKFV+CHJtGq
+         RvTw==
+X-Gm-Message-State: APjAAAX+x8tKlm9QyLFv4pNS9rVbz0UXpF+LdJYvp0oMwREua9lRS9mH
+        H+fPMirdox3+JTC1lAT5jwj+gDBLJqwde/YCsmo=
+X-Google-Smtp-Source: APXvYqy87nc1SZfVl4oFMMftjXVfgZz3Rbm0BYNTg4fKAWIu9Eqqr7bor/GS6c2HKFxbPTv05+jyugcTeGyUoK+wC+g=
+X-Received: by 2002:ac2:42ca:: with SMTP id n10mr23728905lfl.121.1564059445077;
+ Thu, 25 Jul 2019 05:57:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190723122024eucas1p25a480ccddaa69ee1d0f1a07960ca3f22@eucas1p2.samsung.com>
- <20190723122016.30279-1-a.swigon@partner.samsung.com> <20190723122016.30279-5-a.swigon@partner.samsung.com>
-In-Reply-To: <20190723122016.30279-5-a.swigon@partner.samsung.com>
+References: <CGME20190723122024eucas1p1ff060d072132bfbc8a8a1d10fa1f90f8@eucas1p1.samsung.com>
+ <20190723122016.30279-1-a.swigon@partner.samsung.com> <20190723122016.30279-4-a.swigon@partner.samsung.com>
+In-Reply-To: <20190723122016.30279-4-a.swigon@partner.samsung.com>
 Reply-To: cwchoi00@gmail.com
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Thu, 25 Jul 2019 21:50:53 +0900
-Message-ID: <CAGTfZH3Z334D3OKpBOGSfS9RoHkOX-s_2M858z1Ye2NoMtVh4g@mail.gmail.com>
-Subject: Re: [RFC PATCH 04/11] devfreq: exynos-bus: Clean up code
+Date:   Thu, 25 Jul 2019 21:56:48 +0900
+Message-ID: <CAGTfZH09n9UOLMwNrCvcdeRCHYFO4TiB-YG2rMVuxA4bxuLCVw@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/11] devfreq: exynos-bus: Change goto-based logic to
+ if-else logic
 To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>
 Cc:     devicetree <devicetree@vger.kernel.org>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
@@ -69,214 +70,79 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-2019=EB=85=84 7=EC=9B=94 24=EC=9D=BC (=EC=88=98) =EC=98=A4=EC=A0=84 8:07, A=
+2019=EB=85=84 7=EC=9B=94 24=EC=9D=BC (=EC=88=98) =EC=98=A4=EC=A0=84 8:08, A=
 rtur =C5=9Awigo=C5=84 <a.swigon@partner.samsung.com>=EB=8B=98=EC=9D=B4 =EC=
 =9E=91=EC=84=B1:
 >
-> This patch adds minor improvements to the exynos-bus driver.
+> This patch improves code readability by changing the following construct:
+>
+> >    if (cond)
+> >        goto passive;
+> >    foo();
+> >    goto out;
+> >passive:
+> >    bar();
+> >out:
+>
+> into this:
+>
+> >    if (cond)
+> >        bar();
+> >    else
+> >        foo();
 >
 > Signed-off-by: Artur =C5=9Awigo=C5=84 <a.swigon@partner.samsung.com>
 > ---
->  drivers/devfreq/exynos-bus.c | 49 ++++++++++++++++--------------------
->  1 file changed, 22 insertions(+), 27 deletions(-)
+>  drivers/devfreq/exynos-bus.c | 24 +++++++++---------------
+>  1 file changed, 9 insertions(+), 15 deletions(-)
 >
 > diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-> index 4bb83b945bf7..412511ca7703 100644
+> index cf6f6cbd0f55..4bb83b945bf7 100644
 > --- a/drivers/devfreq/exynos-bus.c
 > +++ b/drivers/devfreq/exynos-bus.c
-> @@ -15,11 +15,10 @@
->  #include <linux/device.h>
->  #include <linux/export.h>
->  #include <linux/module.h>
-> -#include <linux/of_device.h>
-> +#include <linux/of.h>
->  #include <linux/pm_opp.h>
->  #include <linux/platform_device.h>
->  #include <linux/regulator/consumer.h>
-> -#include <linux/slab.h>
->
->  #define DEFAULT_SATURATION_RATIO       40
->  #define DEFAULT_VOLTAGE_TOLERANCE      2
-> @@ -256,7 +255,7 @@ static int exynos_bus_parent_parse_of(struct device_n=
-ode *np,
->                                         struct exynos_bus *bus)
->  {
->         struct device *dev =3D bus->dev;
-> -       int i, ret, count, size;
-> +       int i, ret, count;
->
->         /* Get the regulator to provide each bus with the power */
->         bus->regulator =3D devm_regulator_get(dev, "vdd");
-> @@ -283,8 +282,7 @@ static int exynos_bus_parent_parse_of(struct device_n=
-ode *np,
->         }
->         bus->edev_count =3D count;
->
-> -       size =3D sizeof(*bus->edev) * count;
-> -       bus->edev =3D devm_kzalloc(dev, size, GFP_KERNEL);
-> +       bus->edev =3D devm_kcalloc(dev, count, sizeof(*bus->edev), GFP_KE=
-RNEL);
->         if (!bus->edev) {
->                 ret =3D -ENOMEM;
->                 goto err_regulator;
-> @@ -388,7 +386,7 @@ static int exynos_bus_profile_init(struct exynos_bus =
-*bus,
->         ondemand_data =3D devm_kzalloc(dev, sizeof(*ondemand_data), GFP_K=
-ERNEL);
->         if (!ondemand_data) {
->                 ret =3D -ENOMEM;
-> -               goto err;
-> +               goto out;
->         }
->         ondemand_data->upthreshold =3D 40;
->         ondemand_data->downdifferential =3D 5;
-> @@ -400,14 +398,14 @@ static int exynos_bus_profile_init(struct exynos_bu=
-s *bus,
->         if (IS_ERR(bus->devfreq)) {
->                 dev_err(dev, "failed to add devfreq device\n");
->                 ret =3D PTR_ERR(bus->devfreq);
-> -               goto err;
-> +               goto out;
->         }
->
->         /* Register opp_notifier to catch the change of OPP  */
->         ret =3D devm_devfreq_register_opp_notifier(dev, bus->devfreq);
->         if (ret < 0) {
->                 dev_err(dev, "failed to register opp notifier\n");
-> -               goto err;
-> +               goto out;
->         }
->
->         /*
-> @@ -417,16 +415,16 @@ static int exynos_bus_profile_init(struct exynos_bu=
-s *bus,
->         ret =3D exynos_bus_enable_edev(bus);
->         if (ret < 0) {
->                 dev_err(dev, "failed to enable devfreq-event devices\n");
-> -               goto err;
-> +               goto out;
->         }
->
->         ret =3D exynos_bus_set_event(bus);
->         if (ret < 0) {
->                 dev_err(dev, "failed to set event to devfreq-event device=
-s\n");
-> -               goto err;
-> +               goto out;
->         }
->
-> -err:
-> +out:
->         return ret;
->  }
->
-> @@ -446,27 +444,28 @@ static int exynos_bus_profile_init_passive(struct e=
-xynos_bus *bus,
->         parent_devfreq =3D devfreq_get_devfreq_by_phandle(dev, 0);
->         if (IS_ERR(parent_devfreq)) {
->                 ret =3D -EPROBE_DEFER;
-> -               goto err;
-> +               goto out;
->         }
->
->         passive_data =3D devm_kzalloc(dev, sizeof(*passive_data), GFP_KER=
-NEL);
->         if (!passive_data) {
->                 ret =3D -ENOMEM;
-> -               goto err;
-> +               goto out;
->         }
->         passive_data->parent =3D parent_devfreq;
->
->         /* Add devfreq device for exynos bus with passive governor */
-> -       bus->devfreq =3D devm_devfreq_add_device(dev, profile, DEVFREQ_GO=
-V_PASSIVE,
-> +       bus->devfreq =3D devm_devfreq_add_device(dev, profile,
-> +                                               DEVFREQ_GOV_PASSIVE,
->                                                 passive_data);
->         if (IS_ERR(bus->devfreq)) {
->                 dev_err(dev,
->                         "failed to add devfreq dev with passive governor\=
-n");
->                 ret =3D PTR_ERR(bus->devfreq);
-> -               goto err;
-> +               goto out;
->         }
->
-> -err:
-> +out:
->         return ret;
->  }
->
-> @@ -484,11 +483,11 @@ static int exynos_bus_probe(struct platform_device =
+> @@ -505,25 +505,19 @@ static int exynos_bus_probe(struct platform_device =
 *pdev)
->                 return -EINVAL;
->         }
->
-> -       bus =3D devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
-> +       bus =3D devm_kzalloc(dev, sizeof(*bus), GFP_KERNEL);
->         if (!bus)
->                 return -ENOMEM;
->         mutex_init(&bus->lock);
-> -       bus->dev =3D &pdev->dev;
-> +       bus->dev =3D dev;
->         platform_set_drvdata(pdev, bus);
->
->         /* Parse the device-tree to get the resource information */
-> @@ -502,7 +501,7 @@ static int exynos_bus_probe(struct platform_device *p=
-dev)
->                 goto err;
->         }
->
-> -       node =3D of_parse_phandle(dev->of_node, "devfreq", 0);
-> +       node =3D of_parse_phandle(np, "devfreq", 0);
+>         node =3D of_parse_phandle(dev->of_node, "devfreq", 0);
 >         if (node) {
 >                 of_node_put(node);
->                 ret =3D exynos_bus_profile_init_passive(bus, profile);
-> @@ -547,12 +546,10 @@ static int exynos_bus_resume(struct device *dev)
->         int ret;
+> -               goto passive;
+> +               ret =3D exynos_bus_profile_init_passive(bus, profile);
+> +               if (ret < 0)
+> +                       goto err;
+>         } else {
+>                 ret =3D exynos_bus_parent_parse_of(np, bus);
+> +               if (ret < 0)
+> +                       goto err;
+> +
+> +               ret =3D exynos_bus_profile_init(bus, profile);
+> +               if (ret < 0)
+> +                       goto err;
+>         }
 >
->         ret =3D exynos_bus_enable_edev(bus);
-> -       if (ret < 0) {
-> +       if (ret < 0)
->                 dev_err(dev, "failed to enable the devfreq-event devices\=
-n");
-> -               return ret;
-> -       }
->
-> -       return 0;
-> +       return ret;
->  }
->
->  static int exynos_bus_suspend(struct device *dev)
-> @@ -561,12 +558,10 @@ static int exynos_bus_suspend(struct device *dev)
->         int ret;
->
-
-NACK.
->         ret =3D exynos_bus_disable_edev(bus);
-> -       if (ret < 0) {
-> +       if (ret < 0)
->                 dev_err(dev, "failed to disable the devfreq-event devices=
-\n");
-> -               return ret;
-> -       }
->
-> -       return 0;
-> +       return ret;
->  }
->  #endif
->
+> -       if (ret < 0)
+> -               goto err;
+> -
+> -       ret =3D exynos_bus_profile_init(bus, profile);
+> -       if (ret < 0)
+> -               goto err;
+> -
+> -       goto out;
+> -passive:
+> -       ret =3D exynos_bus_profile_init_passive(bus, profile);
+> -       if (ret < 0)
+> -               goto err;
+> -
+> -out:
+>         max_state =3D bus->devfreq->profile->max_state;
+>         min_freq =3D (bus->devfreq->profile->freq_table[0] / 1000);
+>         max_freq =3D (bus->devfreq->profile->freq_table[max_state - 1] / =
+1000);
 > --
 > 2.17.1
 >
 
-NACK.
-
-As I already commented, It has never any benefit.
-I think that it is not usful. Please drop it.
-
-
+It seems more simple than before.
+Instead, please merge patch1/2/3 to one patch. and drop the patch4.
 
 --=20
 Best Regards,
