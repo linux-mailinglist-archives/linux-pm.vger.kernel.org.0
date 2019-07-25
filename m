@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA0475A86
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 00:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA0175A8F
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 00:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbfGYWTM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 18:19:12 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:44844 "EHLO
+        id S1727084AbfGYWTZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 18:19:25 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43400 "EHLO
         mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726902AbfGYWTK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 18:19:10 -0400
-Received: by mail-pl1-f193.google.com with SMTP id t14so23898769plr.11
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 15:19:10 -0700 (PDT)
+        with ESMTP id S1727070AbfGYWTY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 18:19:24 -0400
+Received: by mail-pl1-f193.google.com with SMTP id 4so16940127pld.10
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 15:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=fkQr8KOslonbKlTQUlxHcW0SDWSAq6G6dYt76az0Euo=;
-        b=BxTd+Mq8DDlvZfySa7oB1wsL32KYMn9TQUJjJCdGruGdTTKSFUhdFmWcGZAj3MzgjL
-         uH/Pywr11SI12qWyTVX/FDB6Vo2FGRH8GmXCO7AFjlOGjvk8TC2ML+TbSoVo2nFXpzEh
-         veHGaw9P3N9+zOM86eHdLvF+VdVdnf96Y9z1ebmDS/pXzDO5WCrNREp4uyqhRty3WCpm
-         Zn/SEP/gZnCzSs34VF1P2XZKZCH+oKWJGrQE8fmtax3pbeQwzQrEdOgAff/xD2rdotdH
-         mNjPx0OGKbl8rgSs1lbMifu+H4kO/m0dbu0Yl606CXgw5/WxwihNO99yjIS2z3tu5DTg
-         J9Cg==
+        bh=amjpNRleha+KN/EuHRyzTUgCt6MkSmYthRSSTGRJeLk=;
+        b=cc4FhF/zO5NxWck5NRRbEzVCBekK3ZlKjGzUReO9izSEdqV9t/vA0x8UlJcDEYNz9S
+         gFdGWsMoYXFnoOrsbhwgJFKIg+JQD9DdqJCL24K4mszOrf4QsAR4GscI5ZJoteuJfqLD
+         plgixsXge/LHkeiMYc2lX34OH6pQbQ0gqridn1qii9eWgGbUAwRcw42Qe5nx0SNvfvei
+         LVamvvA/gmzss9Agus4cbSGg4rUlZ19FgNss8J6wMkNVx1z8h1bnYBZOJ9To6cjRISVY
+         e7IEw43MEAoTp11jeowtIAG5+DYli8+dhDKZ6GTwXWfJHk7L9rXDSLR6EIlzgtWjLk69
+         d3Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=fkQr8KOslonbKlTQUlxHcW0SDWSAq6G6dYt76az0Euo=;
-        b=fFoivkBOfQEBHDDvRuhWNE8elnDtgCCNSOgbDP+ZI44PY5sHn//wHGchP57pfFNNml
-         1uj9k/llmq5VlfQNtIU9+c7gx900DxFB1BoSV3DNHeKLwfY3JqI4BD6vwKuZgryb3tiI
-         oqub4JRPHI/Hni/cOdgigxOv2rKMLbk0qQKn03T1r6BEbLltLd22lVjI1f1uzzsgSF2a
-         1tCssbdHgWM11pCehP7ujUCRvxrZGqrVj6rKqHcXqAFkXrHjzOOqV+zYOxZSqf1M1FfT
-         1t1x8xdEcw8V7LkWf+19l3V9ImB7eS4t+IOc0FhVEWJxCPcrV3D9oNTXatWvvJZxcxx0
-         ppaQ==
-X-Gm-Message-State: APjAAAUl2tF3msnbd2oR4pI5zHZ+xils63HoqlvBAHBrfxAtNAk/cxTf
-        iUeW0QJ7AHtFAq2mcRgHmXTKsQ==
-X-Google-Smtp-Source: APXvYqx6htv/ZtSKKbk/Mwym9XT+maC1eUu2ulFPMEKMSIVq4qmwhcmWMXeu4x7QxCQv2D0olD9N0Q==
-X-Received: by 2002:a17:902:e282:: with SMTP id cf2mr94194405plb.301.1564093149644;
-        Thu, 25 Jul 2019 15:19:09 -0700 (PDT)
+        bh=amjpNRleha+KN/EuHRyzTUgCt6MkSmYthRSSTGRJeLk=;
+        b=KjZmLHvWC+4AscKQMpi1uL/QpMe/8puVfuKQdogK/p8qjV8KUfkMBUHjrjwvTTm1p6
+         tcmQGgCGzmZGG9xShs2TS9e2NYK2tRe2bUVJdjovnoqocg5jkwfU7b4gyUthyGemT6fZ
+         3kvuX+SyracvUhJRIcwQkB+4W3yv0JsQbRkM7l9GI+3zid9weKlj3d/LdVsbEIHSNn4t
+         8yF8CZaE3026FDpaBDNr1sdIkVIHC01dePmRXZQdlBQQHKH28ol0i8L8fIHwr4vQoLOW
+         O5CVOVx0bIFZ9JeQK5oVTmniZqurzAFt4suOCDpIli9L9ySvcWRO9SDItraX3lmbhcKb
+         eROQ==
+X-Gm-Message-State: APjAAAUjnBYPkyVkyYZJX3OHgaria3J7u1MWSjNPn88LIc5dspdv2oUC
+        MmK8VjfOzX+W4j1y8eucmcgR4g==
+X-Google-Smtp-Source: APXvYqzTJsiFKu9NIQp8XByePsHuTBie+TyiE7Ko6FeqH3s31ixG9OJlPkCgk8n/UIiQyF6EAKi5RA==
+X-Received: by 2002:a17:902:106:: with SMTP id 6mr94863155plb.64.1564093163818;
+        Thu, 25 Jul 2019 15:19:23 -0700 (PDT)
 Received: from localhost ([49.248.170.216])
-        by smtp.gmail.com with ESMTPSA id r12sm28050317pgb.73.2019.07.25.15.19.08
+        by smtp.gmail.com with ESMTPSA id x26sm65297712pfq.69.2019.07.25.15.19.22
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 25 Jul 2019 15:19:09 -0700 (PDT)
+        Thu, 25 Jul 2019 15:19:23 -0700 (PDT)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         bjorn.andersson@linaro.org, edubezval@gmail.com,
@@ -52,10 +52,10 @@ To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH 03/15] drivers: thermal: tsens: Add __func__ identifier to debug statements
-Date:   Fri, 26 Jul 2019 03:48:38 +0530
-Message-Id: <0f2027f458f8b7f17acb024cf47082052f416805.1564091601.git.amit.kucheria@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 07/15] dt: thermal: tsens: Document interrupt support in tsens driver
+Date:   Fri, 26 Jul 2019 03:48:42 +0530
+Message-Id: <72bce036fa8cba3db6e5ba82249837ee46e9c077.1564091601.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1564091601.git.amit.kucheria@linaro.org>
 References: <cover.1564091601.git.amit.kucheria@linaro.org>
@@ -66,79 +66,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Printing the function name when enabling debugging makes logs easier to
-read.
+Define two new required properties to define interrupts and
+interrupt-names for tsens.
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- drivers/thermal/qcom/tsens-common.c | 8 ++++----
- drivers/thermal/qcom/tsens.c        | 6 +++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ Documentation/devicetree/bindings/thermal/qcom-tsens.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-index c037bdf92c66..7437bfe196e5 100644
---- a/drivers/thermal/qcom/tsens-common.c
-+++ b/drivers/thermal/qcom/tsens-common.c
-@@ -42,8 +42,8 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+index 673cc1831ee9..3d3dd5dc6d36 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+@@ -22,6 +22,8 @@ Required properties:
  
- 	for (i = 0; i < priv->num_sensors; i++) {
- 		dev_dbg(priv->dev,
--			"sensor%d - data_point1:%#x data_point2:%#x\n",
--			i, p1[i], p2[i]);
-+			"%s: sensor%d - data_point1:%#x data_point2:%#x\n",
-+			__func__, i, p1[i], p2[i]);
+ - #thermal-sensor-cells : Should be 1. See ./thermal.txt for a description.
+ - #qcom,sensors: Number of sensors in tsens block
++- interrupts: Interrupts generated from Always-On subsystem (AOSS)
++- interrupt-names: The name of the interrupt e.g. "tsens0", "tsens1"
+ - Refer to Documentation/devicetree/bindings/nvmem/nvmem.txt to know how to specify
+ nvmem cells
  
- 		priv->sensor[i].slope = SLOPE_DEFAULT;
- 		if (mode == TWO_PT_CALIB) {
-@@ -60,7 +60,7 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
- 		priv->sensor[i].offset = (p1[i] * SLOPE_FACTOR) -
- 				(CAL_DEGC_PT1 *
- 				priv->sensor[i].slope);
--		dev_dbg(priv->dev, "offset:%d\n", priv->sensor[i].offset);
-+		dev_dbg(priv->dev, "%s: offset:%d\n", __func__, priv->sensor[i].offset);
- 	}
- }
+@@ -40,6 +42,9 @@ tsens0: thermal-sensor@c263000 {
+ 		reg = <0xc263000 0x1ff>, /* TM */
+ 			<0xc222000 0x1ff>; /* SROT */
+ 		#qcom,sensors = <13>;
++		interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "tsens0";
++
+ 		#thermal-sensor-cells = <1>;
+ 	};
  
-@@ -209,7 +209,7 @@ int __init init_common(struct tsens_priv *priv)
- 	if (ret)
- 		goto err_put_device;
- 	if (!enabled) {
--		dev_err(dev, "tsens device is not enabled\n");
-+		dev_err(dev, "%s: device not enabled\n", __func__);
- 		ret = -ENODEV;
- 		goto err_put_device;
- 	}
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 542a7f8c3d96..06c6bbd69a1a 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -127,7 +127,7 @@ static int tsens_probe(struct platform_device *pdev)
- 		of_property_read_u32(np, "#qcom,sensors", &num_sensors);
- 
- 	if (num_sensors <= 0) {
--		dev_err(dev, "invalid number of sensors\n");
-+		dev_err(dev, "%s: invalid number of sensors\n", __func__);
- 		return -EINVAL;
- 	}
- 
-@@ -156,7 +156,7 @@ static int tsens_probe(struct platform_device *pdev)
- 
- 	ret = priv->ops->init(priv);
- 	if (ret < 0) {
--		dev_err(dev, "tsens init failed\n");
-+		dev_err(dev, "%s: init failed\n", __func__);
- 		return ret;
- 	}
- 
-@@ -164,7 +164,7 @@ static int tsens_probe(struct platform_device *pdev)
- 		ret = priv->ops->calibrate(priv);
- 		if (ret < 0) {
- 			if (ret != -EPROBE_DEFER)
--				dev_err(dev, "tsens calibration failed\n");
-+				dev_err(dev, "%s: calibration failed\n", __func__);
- 			return ret;
- 		}
- 	}
 -- 
 2.17.1
 
