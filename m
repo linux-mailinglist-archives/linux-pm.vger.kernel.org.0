@@ -2,97 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6150749D1
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 11:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049F574A60
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 11:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389553AbfGYJ0l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 05:26:41 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:32923 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388704AbfGYJ0k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 05:26:40 -0400
-Received: by mail-oi1-f194.google.com with SMTP id u15so37216431oiv.0;
-        Thu, 25 Jul 2019 02:26:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=w38Ou4OJOlMG5lDoxJ8ldT1Y+XC1NV6l4c49/2DKWfI=;
-        b=aPjTa6lZ3dPRvLfbSX7weGuh1z1fvuG/Bc++iPDQ9yMAdpzJRUuzeMVpef52Dywzsj
-         nwGWBviRQecrmVql63lNNaNOUtfAyVl/PG+UOAyB5oy7tJ2djRGxK8nWKEk4ygLlMyKL
-         mbor11aYv+n70rwETMehWtnyY7v8gx78Uwxr3NNg4ShqEa9Woxabw8Ku+Q57vXc6MHOA
-         HuGEPLjDSv/yF1AG766/JjHNDMc+cQh/ciC+ezGmG/BjIavWK72FkN+SCy9yYBJBdz9Q
-         qcF10j4lzjZmNcH0PhN/lU52JXrP18H84tsD7l1HJgryRZjz1AT9AkeDhZUOrMuBvgYw
-         4htg==
-X-Gm-Message-State: APjAAAVERIgtPHV/tnciieUTdfzA4Hnh5N41DunGGz9oHnWAglUDmQlT
-        dg1+S0OXeInxBCIr8eFVSSIeT9uN8dlKBwDfzR3+QQOL
-X-Google-Smtp-Source: APXvYqydXzzzbK+sslefknnxfPouRbypTTltL5e7dCGlIuW+utt4we8xB7FdEFttPQhKU/MffPLNOP7QQ6ufX5hD2Fc=
-X-Received: by 2002:aca:cdd3:: with SMTP id d202mr38571220oig.115.1564046799855;
- Thu, 25 Jul 2019 02:26:39 -0700 (PDT)
+        id S1727535AbfGYJvo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 05:51:44 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:65413 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725808AbfGYJvn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 05:51:43 -0400
+Received: from 79.184.253.188.ipv4.supernova.orange.pl (79.184.253.188) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.267)
+ id 4cf206ac235193a0; Thu, 25 Jul 2019 11:51:41 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Keith Busch <keith.busch@intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Kai Heng Feng <kai.heng.feng@canonical.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [Regression] Commit "nvme/pci: Use host managed power state for suspend" has problems
+Date:   Thu, 25 Jul 2019 11:51:41 +0200
+Message-ID: <2332799.izEFUvJP67@kreacher>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 25 Jul 2019 11:26:29 +0200
-Message-ID: <CAJZ5v0h5ZR9EhER_J1Qn9PJL-OAWbFvUb1rjTJkBg22p+Db6Kg@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v5.3-rc2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+Hi Keith,
 
-Please pull from the tag
+Unfortunately,
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.3-rc2
+commit d916b1be94b6dc8d293abed2451f3062f6af7551
+Author: Keith Busch <keith.busch@intel.com>
+Date:   Thu May 23 09:27:35 2019 -0600
 
-with top-most commit fdc75701578269f6931975aebf4069d9d8c77d34
+    nvme-pci: use host managed power state for suspend
 
- Merge branch 'pm-cpufreq'
+doesn't universally improve things.  In fact, in some cases it makes things worse.
 
-on top of commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b
+For example, on the Dell XPS13 9380 I have here it prevents the processor package
+from reaching idle states deeper than PC2 in suspend-to-idle (which, of course, also
+prevents the SoC from reaching any kind of S0ix).
 
- Linus 5.3-rc1
+That can be readily explained too.  Namely, with the commit above the NVMe device
+stays in D0 over suspend/resume, so the root port it is connected to also has to stay in
+D0 and that "blocks" package C-states deeper than PC2.
 
-to receive power management fixes for 5.3-rc2.
+In order for the root port to be able to go to D3, the device connected to it also needs
+to go into D3, so it looks like (at least on this particular machine, but maybe in
+general), both D3 and the NVMe-specific PM are needed.
 
-These fix two issues related to the RAPL MMIO interface support
-added recently and one cpufreq driver issue.
+I'm not sure what to do here, because evidently there are systems where that commit
+helps.  I was thinking about adding a module option allowing the user to override the
+default behavior which in turn should be compatible with 5.2 and earlier kernels.
 
-Specifics:
-
- - Initialize the power capping subsystem and the RAPL driver earlier
-   in case the int340X thermal driver is built-in and attempts to
-   register an MMIO interface for RAPL which must not happen before
-   the requisite infrastructure is ready (Zhang Rui).
-
- - Fix the int340X thermal driver's RAPL MMIO interface registration
-   error path (Rafael Wysocki).
-
- - Fix possible use-after-free in the pasemi cpufreq driver (Wen Yang).
-
-Thanks!
+Cheers,
+Rafael
 
 
----------------
 
-Rafael J. Wysocki (1):
-      int340X/processor_thermal_device: Fix proc_thermal_rapl_remove()
-
-Wen Yang (1):
-      cpufreq/pasemi: fix use-after-free in pas_cpufreq_cpu_init()
-
-Zhang Rui (1):
-      powercap: Invoke powercap_init() and rapl_init() earlier
-
----------------
-
- drivers/cpufreq/pasemi-cpufreq.c                   | 23 +++++++++-------------
- drivers/powercap/intel_rapl_common.c               |  2 +-
- drivers/powercap/powercap_sys.c                    |  2 +-
- .../int340x_thermal/processor_thermal_device.c     |  4 ++++
- 4 files changed, 15 insertions(+), 16 deletions(-)
