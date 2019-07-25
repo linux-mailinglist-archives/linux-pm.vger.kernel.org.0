@@ -2,116 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C3874D57
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 13:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C8B74E14
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 14:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404162AbfGYLls (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 07:41:48 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58006 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2404095AbfGYLlr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 25 Jul 2019 07:41:47 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5F5EBAD4C;
-        Thu, 25 Jul 2019 11:41:45 +0000 (UTC)
-Date:   Thu, 25 Jul 2019 13:41:37 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     cgroups@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Alessio Balsini <balsini@android.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Paul Turner <pjt@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Todd Kjos <tkjos@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Tejun Heo <tj@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [PATCH v12 3/6] sched/core: uclamp: Propagate system defaults to
- root group
-Message-ID: <20190725114126.GA4130@blackbody.suse.cz>
-References: <20190718181748.28446-1-patrick.bellasi@arm.com>
- <20190718181748.28446-4-patrick.bellasi@arm.com>
+        id S1726005AbfGYMV4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 08:21:56 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:35446 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726001AbfGYMV4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 08:21:56 -0400
+Received: by mail-wr1-f65.google.com with SMTP id y4so50583238wrm.2
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 05:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=8/wvc0WureKNtxeBX4xKzjM6p1k0k3v7vDz7PwmMihg=;
+        b=xwD8+kGFQN4TrY0AmtoOYNnSFqePZc/1IPqhIIlFG3eWCx+GZQBJY/pIKkNCfpJBCS
+         peQGDfp1vwHqkrJe5wxM4Qxgag8c5ctv1OO0xDBYe8zhTPdvLPJW6xrhNZ7i29tPYtMW
+         Jwr1Gf8yzvvMpJO6EDbZr1QIBd1qXuS0h9iw4GJuXfFNS93ToRPC9/LsUEl2KUmhc60j
+         Jd+LGiRjcX7p+mPWWNEZayxNe0LJyKVS+NWWHsJajnDJPdQKQ0/XyDcuh9bhlfB+sl3u
+         KYLuqjhiqLm9B2oMn0KjR6GXHjYsJfXKb4eUoJclc6dnmGad9d0b/FtX+kz0B/r+qUS9
+         YMJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=8/wvc0WureKNtxeBX4xKzjM6p1k0k3v7vDz7PwmMihg=;
+        b=NnjdIkZFnDNYKfb6+zjLoWJxLsaaAR6Jb4NM3sgcoN8yA4EBmrREz4/5O7I0ni7KHD
+         EOpU8HePhYwz/nlU/Z/uJSS5jfFtOk0jMcG+F450I9oY1vty94SL2p2vi8E9CbvWmbHc
+         4GGzSQ3j9w4t+eZGNkW5r6QQLjfKhXBawqaTiyQsMxWsEv0rdqCwkivk3b9kUrSsIsur
+         QnPG+GJImLkvOA0nev8tyM7INFgKyojJLFlT29ycnltAN57o7vNWxblw0WmyLobt+TYJ
+         WMD+wkIe9L8eTPw/BhtfAb+KL8hXr3dzi8x9EOyYlo1QJsERYxytZghajrDnqa73gAcz
+         NEwQ==
+X-Gm-Message-State: APjAAAXVB7kPFtCqQrKL7VQNMv1HmBR+DoxDyjs/uIwRHEEIJl+Rq60J
+        KhZbCWO4T2T5gubbNYMS16u95H3G+Ko=
+X-Google-Smtp-Source: APXvYqxyJI8DKFlWjprGdQfvA8WroDaw2sDrEe2mop88xU2pVgPYcdT3+AaTvEVj5EZN90UQwwtBXQ==
+X-Received: by 2002:a5d:4ecc:: with SMTP id s12mr97366887wrv.157.1564057313793;
+        Thu, 25 Jul 2019 05:21:53 -0700 (PDT)
+Received: from dell ([2.27.35.164])
+        by smtp.gmail.com with ESMTPSA id w67sm62323556wma.24.2019.07.25.05.21.48
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 25 Jul 2019 05:21:53 -0700 (PDT)
+Date:   Thu, 25 Jul 2019 13:21:42 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/2] thermal: db8500: Finalize device tree conversion
+Message-ID: <20190725122142.GI23883@dell>
+References: <20190717063222.5902-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wzJLGUyc3ArbnUjN"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190718181748.28446-4-patrick.bellasi@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190717063222.5902-1-linus.walleij@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, 17 Jul 2019, Linus Walleij wrote:
 
---wzJLGUyc3ArbnUjN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> At some point there was an attempt to convert the DB8500
+> thermal sensor to device tree: a probe path was added
+> and the device tree was augmented for the Snowball board.
+> The switchover was never completed: instead the thermal
+> devices came from from the PRCMU MFD device and the probe
+> on the Snowball was confused as another set of configuration
+> appeared from the device tree.
+> 
+> Move over to a device-tree only approach, as we fixed up
+> the device trees.
+> 
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> Lee: it'd be great if you could ACK this, it is a file
+> with low change rate so we should likely not see any
+> collisions.
+> ---
+>  drivers/mfd/db8500-prcmu.c                   | 53 +-------------------
+>  drivers/thermal/Kconfig                      |  2 +-
+>  drivers/thermal/db8500_thermal.c             | 30 +++++------
+>  include/linux/platform_data/db8500_thermal.h | 29 -----------
+>  4 files changed, 17 insertions(+), 97 deletions(-)
+>  delete mode 100644 include/linux/platform_data/db8500_thermal.h
 
-On Thu, Jul 18, 2019 at 07:17:45PM +0100, Patrick Bellasi <patrick.bellasi@=
-arm.com> wrote:
-> The clamp values are not tunable at the level of the root task group.
-> That's for two main reasons:
->=20
->  - the root group represents "system resources" which are always
->    entirely available from the cgroup standpoint.
->=20
->  - when tuning/restricting "system resources" makes sense, tuning must
->    be done using a system wide API which should also be available when
->    control groups are not.
->=20
-> When a system wide restriction is available, cgroups should be aware of
-> its value in order to know exactly how much "system resources" are
-> available for the subgroups.
-IIUC, the global default would apply in uclamp_eff_get(), so this
-propagation isn't strictly necessary in order to apply to tasks (that's
-how it works under !CONFIG_UCLAMP_TASK_GROUP).
-The reason is that effective value (which isn't exposed currently) in a
-group takes into account this global restriction, right?
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-
-> @@ -1043,12 +1063,17 @@ int sysctl_sched_uclamp_handler(struct ctl_table =
-*table, int write,
-> [...]
-> +	if (update_root_tg)
-> +		uclamp_update_root_tg();
-> +
->  	/*
->  	 * Updating all the RUNNABLE task is expensive, keep it simple and do
->  	 * just a lazy update at each next enqueue time.
-Since uclamp_update_root_tg() traverses down to
-uclamp_update_active_tasks() is this comment half true now?
-
-
---wzJLGUyc3ArbnUjN
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+amhwRV4jZeXdUhoK2l36XSZ9y4FAl05lXAACgkQK2l36XSZ
-9y5cgw//QQud17T2NvswG8hJs4iqq9hLqZdoEQh3auHGt5gBhY//Pre7fKieLaeQ
-twqmtcup1hN8T5n1s3J88mCC/Hl7uRlvQyHj2TrN5kFbRgrPRExi6desTMWU6hGp
-nyfsenwH7NvPPUWlO7RhIQtRJRc23cHen01DxTWDJZrg48oeZnoJV533Sj9Qf6tV
-qGTj1ZikLeyPzlVvHwnP1Vb+kBIQ1VTU8dZCkV+0RW4qFtnin7nmYca57/ARC8RV
-KnE/DZNVETsikE/J/3dyvxw/5cJGYoZssikqIjnSrmF9eoXvWzkEnUsg2WFO6Rtl
-UuFllWgrPScfjBlq1KfsD4WOCGgMtiuUtaOSe3SSnH2dVALsHfgmW5pqnMC38N3O
-kEV1abGka6x2VTX1HJyXW/buNP5WQY2fh2dWFm06oe1iC80NiLmIULpTKZYIVdtZ
-LWZfAOjcXU3fwdAu8daZOKnizG0mOfQxT7PiaX/A74ucc0DV0C2JnM+MszR3pWIp
-huSGQ3AU4V2+OGbJPO7/rht//Du47t77tzF1RXjpjONMq8ONGIeFQ4Ansp3hSQS3
-98shobgsl2Be0MUm7nWKHSOay48IoJJuZoKwvoi/rFE3Elnlbs6fcJE5IWdM3PW4
-EmmxngweF0LmvVlDGLZ4JP6utbdgvGEUpJ1DUfmkKOnE4bKT60o=
-=lOBr
------END PGP SIGNATURE-----
-
---wzJLGUyc3ArbnUjN--
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
