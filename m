@@ -2,162 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7944874970
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 10:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6150749D1
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 11:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389944AbfGYIzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 04:55:37 -0400
-Received: from icp-osb-irony-out1.external.iinet.net.au ([203.59.1.210]:13393
-        "EHLO icp-osb-irony-out1.external.iinet.net.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388546AbfGYIzh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 04:55:37 -0400
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2AkBQC3bTld/1/rO8tmghmDdhIXE40?=
- =?us-ascii?q?ZiBcBgkMBg1mFU48egXsJAQEBAQEBAQEBGxwBAYQ6BIMCNAkOAQMBAQEEAQE?=
- =?us-ascii?q?BAQUBbYRlRYV4L3JwEoMigXcTrkwzhAYBhG6BSIE0hwmEboFAP4ERgmRshAM?=
- =?us-ascii?q?NGIV/BIwkiROVNQmBJXeUEhmYC4tggViZTTiBWE0fGYMngk4XFI1WRDUwjko?=
- =?us-ascii?q?BAQ?=
-X-IPAS-Result: =?us-ascii?q?A2AkBQC3bTld/1/rO8tmghmDdhIXE40ZiBcBgkMBg1mFU?=
- =?us-ascii?q?48egXsJAQEBAQEBAQEBGxwBAYQ6BIMCNAkOAQMBAQEEAQEBAQUBbYRlRYV4L?=
- =?us-ascii?q?3JwEoMigXcTrkwzhAYBhG6BSIE0hwmEboFAP4ERgmRshAMNGIV/BIwkiROVN?=
- =?us-ascii?q?QmBJXeUEhmYC4tggViZTTiBWE0fGYMngk4XFI1WRDUwjkoBAQ?=
-X-IronPort-AV: E=Sophos;i="5.64,306,1559491200"; 
-   d="scan'208";a="228554185"
-Received: from 203-59-235-95.perm.iinet.net.au (HELO rtcentos7.electromag.com.au) ([203.59.235.95])
-  by icp-osb-irony-out1.iinet.net.au with ESMTP; 25 Jul 2019 16:55:30 +0800
-From:   Richard Tresidder <rtresidd@electromag.com.au>
-To:     sre@kernel.org, enric.balletbo@collabora.com, ncrews@chromium.org,
-        andrew.smirnov@gmail.com, groeck@chromium.org,
-        rtresidd@electromag.com.au, david@lechnology.com,
-        tglx@linutronix.de, kstewart@linuxfoundation.org,
-        gregkh@linuxfoundation.org, rfontana@redhat.com,
-        allison@lohutok.net, baolin.wang@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND v2 1/1] power/supply/sbs-battery: Fix confusing battery status when idle or empty
-Date:   Thu, 25 Jul 2019 16:55:29 +0800
-Message-Id: <1564044929-26104-1-git-send-email-rtresidd@electromag.com.au>
-X-Mailer: git-send-email 1.8.3.1
+        id S2389553AbfGYJ0l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 05:26:41 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:32923 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388704AbfGYJ0k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 05:26:40 -0400
+Received: by mail-oi1-f194.google.com with SMTP id u15so37216431oiv.0;
+        Thu, 25 Jul 2019 02:26:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=w38Ou4OJOlMG5lDoxJ8ldT1Y+XC1NV6l4c49/2DKWfI=;
+        b=aPjTa6lZ3dPRvLfbSX7weGuh1z1fvuG/Bc++iPDQ9yMAdpzJRUuzeMVpef52Dywzsj
+         nwGWBviRQecrmVql63lNNaNOUtfAyVl/PG+UOAyB5oy7tJ2djRGxK8nWKEk4ygLlMyKL
+         mbor11aYv+n70rwETMehWtnyY7v8gx78Uwxr3NNg4ShqEa9Woxabw8Ku+Q57vXc6MHOA
+         HuGEPLjDSv/yF1AG766/JjHNDMc+cQh/ciC+ezGmG/BjIavWK72FkN+SCy9yYBJBdz9Q
+         qcF10j4lzjZmNcH0PhN/lU52JXrP18H84tsD7l1HJgryRZjz1AT9AkeDhZUOrMuBvgYw
+         4htg==
+X-Gm-Message-State: APjAAAVERIgtPHV/tnciieUTdfzA4Hnh5N41DunGGz9oHnWAglUDmQlT
+        dg1+S0OXeInxBCIr8eFVSSIeT9uN8dlKBwDfzR3+QQOL
+X-Google-Smtp-Source: APXvYqydXzzzbK+sslefknnxfPouRbypTTltL5e7dCGlIuW+utt4we8xB7FdEFttPQhKU/MffPLNOP7QQ6ufX5hD2Fc=
+X-Received: by 2002:aca:cdd3:: with SMTP id d202mr38571220oig.115.1564046799855;
+ Thu, 25 Jul 2019 02:26:39 -0700 (PDT)
+MIME-Version: 1.0
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 25 Jul 2019 11:26:29 +0200
+Message-ID: <CAJZ5v0h5ZR9EhER_J1Qn9PJL-OAWbFvUb1rjTJkBg22p+Db6Kg@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.3-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When a battery or batteries in a system are in parallel then one or more
-may not be providing any current to the system.
-This fixes an incorrect status indication of FULL for the battery simply
-because it wasn't discharging at that point in time.
-The battery will now be flagged as IDLE.
-Have also added the additional check for the battery FULL DISCHARGED flag
-which will now flag a status of EMPTY.
+Hi Linus,
 
-Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
----
+Please pull from the tag
 
-Notes:
-    power/supply/sbs-battery: Fix confusing battery status when idle or empty
-    
-    When a battery or batteries in a system are in parallel then one or more
-    may not be providing any current to the system.
-    This fixes an incorrect
-    status indication of FULL for the battery simply because it wasn't
-    discharging at that point in time.
-    The battery will now be flagged as IDLE.
-    Have also added the additional check for the battery FULL DISCHARGED flag
-    which will now flag a status of EMPTY.
-    
-    v2: missed a later merge that should have been included in original patch
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.3-rc2
 
- drivers/power/supply/power_supply_sysfs.c |  3 ++-
- drivers/power/supply/sbs-battery.c        | 32 +++++++++++++++----------------
- include/linux/power_supply.h              |  2 ++
- 3 files changed, 20 insertions(+), 17 deletions(-)
+with top-most commit fdc75701578269f6931975aebf4069d9d8c77d34
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index ce6671c..68ec49d 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -51,7 +51,8 @@
- };
- 
- static const char * const power_supply_status_text[] = {
--	"Unknown", "Charging", "Discharging", "Not charging", "Full"
-+	"Unknown", "Charging", "Discharging", "Not charging", "Full",
-+	"Empty", "Idle"
- };
- 
- static const char * const power_supply_charge_type_text[] = {
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index ea8ba3e..664c317 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -294,16 +294,12 @@ static int sbs_status_correct(struct i2c_client *client, int *intval)
- 
- 	ret = (s16)ret;
- 
--	/* Not drawing current means full (cannot be not charging) */
--	if (ret == 0)
--		*intval = POWER_SUPPLY_STATUS_FULL;
--
--	if (*intval == POWER_SUPPLY_STATUS_FULL) {
--		/* Drawing or providing current when full */
--		if (ret > 0)
--			*intval = POWER_SUPPLY_STATUS_CHARGING;
--		else if (ret < 0)
--			*intval = POWER_SUPPLY_STATUS_DISCHARGING;
-+	if ((*intval == POWER_SUPPLY_STATUS_DISCHARGING && (ret == 0)) {
-+		/* Charging indicator not set in battery */
-+		*intval = POWER_SUPPLY_STATUS_IDLE;
-+	} else if ((*intval == POWER_SUPPLY_STATUS_FULL) && (ret < 0)) {
-+		/* Full Flag set but we are discharging */
-+		*intval = POWER_SUPPLY_STATUS_DISCHARGING;
- 	}
- 
- 	return 0;
-@@ -424,10 +420,12 @@ static int sbs_get_battery_property(struct i2c_client *client,
- 
- 		if (ret & BATTERY_FULL_CHARGED)
- 			val->intval = POWER_SUPPLY_STATUS_FULL;
--		else if (ret & BATTERY_DISCHARGING)
--			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
--		else
-+		else if (ret & BATTERY_FULL_DISCHARGED)
-+			val->intval = POWER_SUPPLY_STATUS_EMPTY;
-+		else if (!(ret & BATTERY_DISCHARGING))
- 			val->intval = POWER_SUPPLY_STATUS_CHARGING;
-+		else
-+			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
- 
- 		sbs_status_correct(client, &val->intval);
- 
-@@ -781,10 +779,12 @@ static void sbs_delayed_work(struct work_struct *work)
- 
- 	if (ret & BATTERY_FULL_CHARGED)
- 		ret = POWER_SUPPLY_STATUS_FULL;
--	else if (ret & BATTERY_DISCHARGING)
--		ret = POWER_SUPPLY_STATUS_DISCHARGING;
--	else
-+	else if (ret & BATTERY_FULL_DISCHARGED)
-+		ret = POWER_SUPPLY_STATUS_EMPTY;
-+	else if (!(ret & BATTERY_DISCHARGING))
- 		ret = POWER_SUPPLY_STATUS_CHARGING;
-+	else
-+		ret = POWER_SUPPLY_STATUS_DISCHARGING;
- 
- 	sbs_status_correct(chip->client, &ret);
- 
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 28413f7..c9f3347 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -37,6 +37,8 @@ enum {
- 	POWER_SUPPLY_STATUS_DISCHARGING,
- 	POWER_SUPPLY_STATUS_NOT_CHARGING,
- 	POWER_SUPPLY_STATUS_FULL,
-+	POWER_SUPPLY_STATUS_EMPTY,
-+	POWER_SUPPLY_STATUS_IDLE,
- };
- 
- /* What algorithm is the charger using? */
--- 
-1.8.3.1
+ Merge branch 'pm-cpufreq'
 
+on top of commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b
+
+ Linus 5.3-rc1
+
+to receive power management fixes for 5.3-rc2.
+
+These fix two issues related to the RAPL MMIO interface support
+added recently and one cpufreq driver issue.
+
+Specifics:
+
+ - Initialize the power capping subsystem and the RAPL driver earlier
+   in case the int340X thermal driver is built-in and attempts to
+   register an MMIO interface for RAPL which must not happen before
+   the requisite infrastructure is ready (Zhang Rui).
+
+ - Fix the int340X thermal driver's RAPL MMIO interface registration
+   error path (Rafael Wysocki).
+
+ - Fix possible use-after-free in the pasemi cpufreq driver (Wen Yang).
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (1):
+      int340X/processor_thermal_device: Fix proc_thermal_rapl_remove()
+
+Wen Yang (1):
+      cpufreq/pasemi: fix use-after-free in pas_cpufreq_cpu_init()
+
+Zhang Rui (1):
+      powercap: Invoke powercap_init() and rapl_init() earlier
+
+---------------
+
+ drivers/cpufreq/pasemi-cpufreq.c                   | 23 +++++++++-------------
+ drivers/powercap/intel_rapl_common.c               |  2 +-
+ drivers/powercap/powercap_sys.c                    |  2 +-
+ .../int340x_thermal/processor_thermal_device.c     |  4 ++++
+ 4 files changed, 15 insertions(+), 16 deletions(-)
