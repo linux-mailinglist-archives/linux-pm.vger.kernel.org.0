@@ -2,102 +2,237 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C8B74E14
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 14:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C70D74E5C
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jul 2019 14:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726005AbfGYMV4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 08:21:56 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35446 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726001AbfGYMV4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 08:21:56 -0400
-Received: by mail-wr1-f65.google.com with SMTP id y4so50583238wrm.2
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 05:21:54 -0700 (PDT)
+        id S2388607AbfGYMoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 08:44:12 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:41688 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387824AbfGYMoM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 08:44:12 -0400
+Received: by mail-lf1-f65.google.com with SMTP id 62so29561915lfa.8;
+        Thu, 25 Jul 2019 05:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=8/wvc0WureKNtxeBX4xKzjM6p1k0k3v7vDz7PwmMihg=;
-        b=xwD8+kGFQN4TrY0AmtoOYNnSFqePZc/1IPqhIIlFG3eWCx+GZQBJY/pIKkNCfpJBCS
-         peQGDfp1vwHqkrJe5wxM4Qxgag8c5ctv1OO0xDBYe8zhTPdvLPJW6xrhNZ7i29tPYtMW
-         Jwr1Gf8yzvvMpJO6EDbZr1QIBd1qXuS0h9iw4GJuXfFNS93ToRPC9/LsUEl2KUmhc60j
-         Jd+LGiRjcX7p+mPWWNEZayxNe0LJyKVS+NWWHsJajnDJPdQKQ0/XyDcuh9bhlfB+sl3u
-         KYLuqjhiqLm9B2oMn0KjR6GXHjYsJfXKb4eUoJclc6dnmGad9d0b/FtX+kz0B/r+qUS9
-         YMJA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=eknW/TOhMypD0xkCLP+fL/Yr6TV2yqEhmiGmkOzq3EY=;
+        b=SGrHQnGamBfhL9h2LIZhaX7f9KvB10ttFxb277iUL+BvpuX19DWhTckbrOHBS4+bB+
+         m9YetynEB8y7ypr4B8nFLVAGyapGKxWjoZxUPkuSEeDirKOx+jYujLjma9zqPA4jRlS3
+         GqwZ7gFTVqcgMYaMp5hSI+XykjFFYKDAt78k+JUDX26g+tebTeWpVj7PKL3tuV7FVjHN
+         JuE8XfOXKZUJ/QTUpnBfsy4KGo+SEGF8wT74VSYK0JXj9TD9qMCge0cJS9XqIsPcrFd7
+         r8QfBLlVMx5sLRIa7z3M/0UhksbtUTCZ/ao0mZ7+K907kG9CK9zFquLPd5PxSCf8UdbU
+         grbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=8/wvc0WureKNtxeBX4xKzjM6p1k0k3v7vDz7PwmMihg=;
-        b=NnjdIkZFnDNYKfb6+zjLoWJxLsaaAR6Jb4NM3sgcoN8yA4EBmrREz4/5O7I0ni7KHD
-         EOpU8HePhYwz/nlU/Z/uJSS5jfFtOk0jMcG+F450I9oY1vty94SL2p2vi8E9CbvWmbHc
-         4GGzSQ3j9w4t+eZGNkW5r6QQLjfKhXBawqaTiyQsMxWsEv0rdqCwkivk3b9kUrSsIsur
-         QnPG+GJImLkvOA0nev8tyM7INFgKyojJLFlT29ycnltAN57o7vNWxblw0WmyLobt+TYJ
-         WMD+wkIe9L8eTPw/BhtfAb+KL8hXr3dzi8x9EOyYlo1QJsERYxytZghajrDnqa73gAcz
-         NEwQ==
-X-Gm-Message-State: APjAAAXVB7kPFtCqQrKL7VQNMv1HmBR+DoxDyjs/uIwRHEEIJl+Rq60J
-        KhZbCWO4T2T5gubbNYMS16u95H3G+Ko=
-X-Google-Smtp-Source: APXvYqxyJI8DKFlWjprGdQfvA8WroDaw2sDrEe2mop88xU2pVgPYcdT3+AaTvEVj5EZN90UQwwtBXQ==
-X-Received: by 2002:a5d:4ecc:: with SMTP id s12mr97366887wrv.157.1564057313793;
-        Thu, 25 Jul 2019 05:21:53 -0700 (PDT)
-Received: from dell ([2.27.35.164])
-        by smtp.gmail.com with ESMTPSA id w67sm62323556wma.24.2019.07.25.05.21.48
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 25 Jul 2019 05:21:53 -0700 (PDT)
-Date:   Thu, 25 Jul 2019 13:21:42 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: db8500: Finalize device tree conversion
-Message-ID: <20190725122142.GI23883@dell>
-References: <20190717063222.5902-1-linus.walleij@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=eknW/TOhMypD0xkCLP+fL/Yr6TV2yqEhmiGmkOzq3EY=;
+        b=mfTzABfxm8CpRRZbTq1wgaJ85AiA/btb6CDHTVLj03ucLhZVkcRTJ1s8s3/6sgsHU8
+         0TdKoaxbyEBLAnVH66usqEuCBtvOfXq3EBHYp49w3w/6ac+yROVlr8iwAgW78x6yLM7x
+         qdomT6yrbCfCjndaoC/kdkriaMD3WcCse5NXsR93fF/RGWEoQlL5r7ScqrJ++bW8CTHP
+         JVJTVwkQ00zO+V9ioJHi8Koywc7OJwFWlwWqBUEitQkn+uM7fQDMO6D7wVBB2/pdPu2B
+         gnePJJLy/bmB1t5F5eqVFwPbj+AUekWlt2c672DCJmX3LMnsJ5M3cnMmc0QDixGXLCFC
+         GOTQ==
+X-Gm-Message-State: APjAAAVsMZmJPDOmCPg6Rhp77vtzy/eIA2GjsiouLt/XgUK6VoxuScod
+        QpMsbKio7TvVtlptZc9KtkHvclMbTuHsWkPwmF8=
+X-Google-Smtp-Source: APXvYqwpmD94AweNs5qa5XTy4hbRxs01Hq1+o+UpAxFYnCbprWQUIs8wQla3LFmrbYj8sb8whiJOm8JPZnPJaxTAFyo=
+X-Received: by 2002:a19:7f17:: with SMTP id a23mr44348217lfd.49.1564058649021;
+ Thu, 25 Jul 2019 05:44:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190717063222.5902-1-linus.walleij@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <CGME20190723122022eucas1p1266d90873d564894bd852c20140f8474@eucas1p1.samsung.com>
+ <20190723122016.30279-1-a.swigon@partner.samsung.com> <20190723122016.30279-2-a.swigon@partner.samsung.com>
+In-Reply-To: <20190723122016.30279-2-a.swigon@partner.samsung.com>
+Reply-To: cwchoi00@gmail.com
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Date:   Thu, 25 Jul 2019 21:43:31 +0900
+Message-ID: <CAGTfZH0JE0PmiCHaT3vMrDaP0-8eZ3afyHy_zT9aFmMOGNTR8g@mail.gmail.com>
+Subject: Re: [RFC PATCH 01/11] devfreq: exynos-bus: Extract exynos_bus_profile_init()
+To:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>, inki.dae@samsung.com,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        georgi.djakov@linaro.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 17 Jul 2019, Linus Walleij wrote:
-
-> At some point there was an attempt to convert the DB8500
-> thermal sensor to device tree: a probe path was added
-> and the device tree was augmented for the Snowball board.
-> The switchover was never completed: instead the thermal
-> devices came from from the PRCMU MFD device and the probe
-> on the Snowball was confused as another set of configuration
-> appeared from the device tree.
-> 
-> Move over to a device-tree only approach, as we fixed up
-> the device trees.
-> 
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+2019=EB=85=84 7=EC=9B=94 24=EC=9D=BC (=EC=88=98) =EC=98=A4=EC=A0=84 8:09, A=
+rtur =C5=9Awigo=C5=84 <a.swigon@partner.samsung.com>=EB=8B=98=EC=9D=B4 =EC=
+=9E=91=EC=84=B1:
+>
+> This patch adds a new static function, exynos_bus_profile_init(), extract=
+ed
+> from exynos_bus_probe().
+>
+> Signed-off-by: Artur =C5=9Awigo=C5=84 <a.swigon@partner.samsung.com>
 > ---
-> Lee: it'd be great if you could ACK this, it is a file
-> with low change rate so we should likely not see any
-> collisions.
-> ---
->  drivers/mfd/db8500-prcmu.c                   | 53 +-------------------
->  drivers/thermal/Kconfig                      |  2 +-
->  drivers/thermal/db8500_thermal.c             | 30 +++++------
->  include/linux/platform_data/db8500_thermal.h | 29 -----------
->  4 files changed, 17 insertions(+), 97 deletions(-)
->  delete mode 100644 include/linux/platform_data/db8500_thermal.h
+>  drivers/devfreq/exynos-bus.c | 106 ++++++++++++++++++++---------------
+>  1 file changed, 60 insertions(+), 46 deletions(-)
+>
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index d9f377912c10..d8f1efaf2d49 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -372,12 +372,69 @@ static int exynos_bus_parse_of(struct device_node *=
+np,
+>         return ret;
+>  }
+>
+> +static int exynos_bus_profile_init(struct exynos_bus *bus,
+> +                                  struct devfreq_dev_profile *profile)
+> +{
+> +       struct device *dev =3D bus->dev;
+> +       struct devfreq_simple_ondemand_data *ondemand_data;
+> +       int ret;
+> +
+> +       /* Initialize the struct profile and governor data for parent dev=
+ice */
+> +       profile->polling_ms =3D 50;
+> +       profile->target =3D exynos_bus_target;
+> +       profile->get_dev_status =3D exynos_bus_get_dev_status;
+> +       profile->exit =3D exynos_bus_exit;
+> +
+> +       ondemand_data =3D devm_kzalloc(dev, sizeof(*ondemand_data), GFP_K=
+ERNEL);
+> +       if (!ondemand_data) {
+> +               ret =3D -ENOMEM;
+> +               goto err;
+> +       }
+> +       ondemand_data->upthreshold =3D 40;
+> +       ondemand_data->downdifferential =3D 5;
+> +
+> +       /* Add devfreq device to monitor and handle the exynos bus */
+> +       bus->devfreq =3D devm_devfreq_add_device(dev, profile,
+> +                                               DEVFREQ_GOV_SIMPLE_ONDEMA=
+ND,
+> +                                               ondemand_data);
+> +       if (IS_ERR(bus->devfreq)) {
+> +               dev_err(dev, "failed to add devfreq device\n");
+> +               ret =3D PTR_ERR(bus->devfreq);
+> +               goto err;
+> +       }
+> +
+> +       /* Register opp_notifier to catch the change of OPP  */
+> +       ret =3D devm_devfreq_register_opp_notifier(dev, bus->devfreq);
+> +       if (ret < 0) {
+> +               dev_err(dev, "failed to register opp notifier\n");
+> +               goto err;
+> +       }
+> +
+> +       /*
+> +        * Enable devfreq-event to get raw data which is used to determin=
+e
+> +        * current bus load.
+> +        */
+> +       ret =3D exynos_bus_enable_edev(bus);
+> +       if (ret < 0) {
+> +               dev_err(dev, "failed to enable devfreq-event devices\n");
+> +               goto err;
+> +       }
+> +
+> +       ret =3D exynos_bus_set_event(bus);
+> +       if (ret < 0) {
+> +               dev_err(dev, "failed to set event to devfreq-event device=
+s\n");
+> +               goto err;
+> +       }
+> +
+> +err:
+> +       return ret;
+> +}
+> +
+>  static int exynos_bus_probe(struct platform_device *pdev)
+>  {
+>         struct device *dev =3D &pdev->dev;
+>         struct device_node *np =3D dev->of_node, *node;
+>         struct devfreq_dev_profile *profile;
+> -       struct devfreq_simple_ondemand_data *ondemand_data;
+>         struct devfreq_passive_data *passive_data;
+>         struct devfreq *parent_devfreq;
+>         struct exynos_bus *bus;
+> @@ -418,52 +475,9 @@ static int exynos_bus_probe(struct platform_device *=
+pdev)
+>         if (ret < 0)
+>                 goto err;
+>
+> -       /* Initialize the struct profile and governor data for parent dev=
+ice */
+> -       profile->polling_ms =3D 50;
+> -       profile->target =3D exynos_bus_target;
+> -       profile->get_dev_status =3D exynos_bus_get_dev_status;
+> -       profile->exit =3D exynos_bus_exit;
+> -
+> -       ondemand_data =3D devm_kzalloc(dev, sizeof(*ondemand_data), GFP_K=
+ERNEL);
+> -       if (!ondemand_data) {
+> -               ret =3D -ENOMEM;
+> +       ret =3D exynos_bus_profile_init(bus, profile);
+> +       if (ret < 0)
+>                 goto err;
+> -       }
+> -       ondemand_data->upthreshold =3D 40;
+> -       ondemand_data->downdifferential =3D 5;
+> -
+> -       /* Add devfreq device to monitor and handle the exynos bus */
+> -       bus->devfreq =3D devm_devfreq_add_device(dev, profile,
+> -                                               DEVFREQ_GOV_SIMPLE_ONDEMA=
+ND,
+> -                                               ondemand_data);
+> -       if (IS_ERR(bus->devfreq)) {
+> -               dev_err(dev, "failed to add devfreq device\n");
+> -               ret =3D PTR_ERR(bus->devfreq);
+> -               goto err;
+> -       }
+> -
+> -       /* Register opp_notifier to catch the change of OPP  */
+> -       ret =3D devm_devfreq_register_opp_notifier(dev, bus->devfreq);
+> -       if (ret < 0) {
+> -               dev_err(dev, "failed to register opp notifier\n");
+> -               goto err;
+> -       }
+> -
+> -       /*
+> -        * Enable devfreq-event to get raw data which is used to determin=
+e
+> -        * current bus load.
+> -        */
+> -       ret =3D exynos_bus_enable_edev(bus);
+> -       if (ret < 0) {
+> -               dev_err(dev, "failed to enable devfreq-event devices\n");
+> -               goto err;
+> -       }
+> -
+> -       ret =3D exynos_bus_set_event(bus);
+> -       if (ret < 0) {
+> -               dev_err(dev, "failed to set event to devfreq-event device=
+s\n");
+> -               goto err;
+> -       }
+>
+>         goto out;
+>  passive:
+> --
+> 2.17.1
+>
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+NACK.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+It has not any benefit and I don't understand reason why it is necessary.
+I don't agree. Please drop it.
+
+--=20
+Best Regards,
+Chanwoo Choi
