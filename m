@@ -2,137 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C35A77402
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2019 00:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CB1774D3
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2019 01:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728522AbfGZW1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 18:27:05 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:36254 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728471AbfGZW1E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 18:27:04 -0400
-Received: by mail-wm1-f67.google.com with SMTP id g67so44717795wme.1;
-        Fri, 26 Jul 2019 15:27:03 -0700 (PDT)
+        id S1727771AbfGZXQF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 19:16:05 -0400
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:56245 "EHLO
+        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726571AbfGZXQE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 19:16:04 -0400
+Received: by mail-pg1-f201.google.com with SMTP id z14so26920811pgr.22
+        for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2019 16:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pLIvL1ELNjaZefRkSo34EEeqZ5ctkKw3Nhc4gJBc33s=;
-        b=ePOopMHVtBJWVbqlKtDxoGAEJq2W+MrKFCPb2aExEk+4Js7x0XFa33YynjU0aYy+Zd
-         cy8SOMYIf8ILafKjZKdQNPmN5l+a6/AtmSX16476xaqtwIhafaF+Tkr3Hhy8mEupfqD1
-         l1Fxv4/EWdfc3Znt515XrTWt1Gpj/K2hQoYPL5Cr9SGL6Y1I8TqxbhGeL1OoCedTXnsz
-         WDJ33syVp6qDMLPxtq5zlNFdpUAgGk8NfG0/NIPKuHicwUUS0OIkT0oli/9bAznmh+rR
-         IPghhpH766v1ZEoaeXrdL+5+dmvIE7ZsoovhwgJdcWh2/YKaxv8k+WD3GA7eCwtwaCLI
-         a9nw==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=cpXw17kbjpY+4NI0A8ywBRzRbBcUV30TBmJ29JFZSu8=;
+        b=lGeUakeOQjQpoRbjD3eQTccJQgPrsvuP1WdT/liYx7Tq4s/KNjmGm7SiRV+T/GO/9u
+         YWiGATr1gNWtXgVWidLbG4uLV5w27wVYiH72EFZ5EBpetALJZMJotGMiioYxzJ/7QXF4
+         D3WPjrZ/bGa2vn4yHXpsDyijYQuJOgC8gJw3ebo9oU9IAzsEP+O84JwPlOy8yym3io0s
+         OVIMEsVaCh7+brCgiFB87+mCAMmIs3QEmHlxASphKIK2SPhxWBgiNl9AhSiPneEENtWn
+         cXwtId0Hz9cKJG0NRap3E9lfm4x0wdY+ycCU+1qZ5uEmAKpZyjh/uW242uPqyM4DaIet
+         iY3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pLIvL1ELNjaZefRkSo34EEeqZ5ctkKw3Nhc4gJBc33s=;
-        b=bO22VTu4vtev8BcMp6FGcxh3SQKf2HTS2EtEc+bue1CQod3DiJrMBUXtvGuaOZDxkE
-         FJYI4mrpmFS0KBSGQa/E56xs2l8i0LRDmz9GT8vqvfKjL02UahMDahHGMx4f3vAmOfeT
-         V8I7SDakzRf14PWdd+chgnLZJ2JKgQcW8C3WLb8/FH70hdQT2U1Yu9/t8UmPoZg+vO8E
-         PxQr6+7kIP9RNb0ELCPpeDci+9xyr7ptq7D9YZsRzype4Gt6yIwkuzFO9ia8j+Wug4Cj
-         X2JFUxFo1vrO/Evp3Lsm3JmP1aACjTLDdJpCKhNaw7Onlf20O2E2kBuCifYIT6tyvi4s
-         4qCA==
-X-Gm-Message-State: APjAAAX76wy+lEoicfZTNLjCuMA4dUfT1LHq6T5qyZGeQ+TSihw17BSw
-        2ZMS23+Uy9NajE6F/PeLNZ9OC+LXSxHm8nxxcBs=
-X-Google-Smtp-Source: APXvYqxg4Ing4cAKxRNOyIS5IE4D6JXVjbgrCbkFHO/3jK45VR23Z9xnWOALa5i4VOTyOCbFR45W/I9i3pdpSHZMPSA=
-X-Received: by 2002:a1c:96c7:: with SMTP id y190mr80069646wmd.87.1564180022241;
- Fri, 26 Jul 2019 15:27:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190705045612.27665-1-Anson.Huang@nxp.com> <20190705045612.27665-5-Anson.Huang@nxp.com>
-In-Reply-To: <20190705045612.27665-5-Anson.Huang@nxp.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Sat, 27 Jul 2019 01:26:50 +0300
-Message-ID: <CAEnQRZAZNMBx3ApVmRP8hYPw0XY_QgR-saE6WLcT8oZmHPCxSA@mail.gmail.com>
-Subject: Re: [PATCH 5/6] clk: imx8mq: Remove CLK_IS_CRITICAL flag for IMX8MQ_CLK_TMU_ROOT
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=cpXw17kbjpY+4NI0A8ywBRzRbBcUV30TBmJ29JFZSu8=;
+        b=OhTKYhXEJE0vWpIhSqmO4ykomJYRSyDja8hCVzKt1tm6+X+d+A3v46JZW8IlihnAdS
+         Y5d7L8VCBJd5tr3tmlBqnWMtCDBVjZcXjcXMygfN+KsxePGPylAWGCRYX0X9HWxuBt6b
+         LHmeFUabId2TR7NIWlS0JXLClUrzDZ1gLDVFH+9kVixebDHf30wwa48dT6e1DklKnhek
+         bJwvG171y0+ohu3vC2BMJi1jkW1JSuF03o2EBj08El6prloMtGq3k1fzA04RwFj8ZNUO
+         fgbZHt9oyWSjB43FMvwXfMNETEwMIJ26MQT6eRMAGWZ3bC47UGjeEKMlIrV9N7UWhOrn
+         6Olw==
+X-Gm-Message-State: APjAAAUah31nJZFii+Rq5TMxH8trOp48A4dTwcvlJV72un/VWH6zOKMl
+        M9KgI4lrkIZ7GTaHuf1Oy6/Wg/qj5sQXiaQ=
+X-Google-Smtp-Source: APXvYqyLFXzg7wzzQqNVNsI8TFZ+iafyw/A7sv3S5RiRtNoVmsGtyF3JmmM3anWSx8u0e6UhM5jUYxwYZmhQdZo=
+X-Received: by 2002:a63:c442:: with SMTP id m2mr95101718pgg.286.1564182963590;
+ Fri, 26 Jul 2019 16:16:03 -0700 (PDT)
+Date:   Fri, 26 Jul 2019 16:15:54 -0700
+Message-Id: <20190726231558.175130-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
+Subject: [PATCH v4 0/3] Introduce Bandwidth OPPs for interconnects
+From:   Saravana Kannan <saravanak@google.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        "Angus Ainslie (Purism)" <angus@akkea.ca>,
-        Carlo Caione <ccaione@baylibre.com>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        linux-pm@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-clk@vger.kernel.org, dl-linux-imx <Linux-imx@nxp.com>
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
+        daidavid1@codeaurora.org, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>, sibis@codeaurora.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+Interconnects and interconnect paths quantify their performance levels in
+terms of bandwidth and not in terms of frequency. So similar to how we have
+frequency based OPP tables in DT and in the OPP framework, we need
+bandwidth OPP table support in DT and in the OPP framework.
 
-latest linux-next hangs at boot.
+So with the DT bindings added in this patch series, the DT for a GPU
+that does bandwidth voting from GPU to Cache and GPU to DDR would look
+something like this:
 
-commit fde50b96be821ac9673a7e00847cc4605bd88f34 (HEAD -> master, tag:
-next-20190726, origin/master, origin/HEAD)
-Author: Stephen Rothwell <sfr@canb.auug.org.au>
-Date:   Fri Jul 26 15:18:02 2019 +1000
+gpu_cache_opp_table: gpu_cache_opp_table {
+	compatible = "operating-points-v2";
 
-    Add linux-next specific files for 20190726
+	gpu_cache_3000: opp-3000 {
+		opp-peak-KBps = <3000000>;
+		opp-avg-KBps = <1000000>;
+	};
+	gpu_cache_6000: opp-6000 {
+		opp-peak-KBps = <6000000>;
+		opp-avg-KBps = <2000000>;
+	};
+	gpu_cache_9000: opp-9000 {
+		opp-peak-KBps = <9000000>;
+		opp-avg-KBps = <9000000>;
+	};
+};
 
-    Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+gpu_ddr_opp_table: gpu_ddr_opp_table {
+	compatible = "operating-points-v2";
 
+	gpu_ddr_1525: opp-1525 {
+		opp-peak-KBps = <1525000>;
+		opp-avg-KBps = <452000>;
+	};
+	gpu_ddr_3051: opp-3051 {
+		opp-peak-KBps = <3051000>;
+		opp-avg-KBps = <915000>;
+	};
+	gpu_ddr_7500: opp-7500 {
+		opp-peak-KBps = <7500000>;
+		opp-avg-KBps = <3000000>;
+	};
+};
 
-I know this is crazy but reverting commit:
+gpu_opp_table: gpu_opp_table {
+	compatible = "operating-points-v2";
+	opp-shared;
 
-commit 431bdd1df48ee2896ea9980d9153e3aeaf0c81ef (refs/bisect/bad)
-Author: Anson Huang <Anson.Huang@nxp.com>
-Date:   Fri Jul 5 12:56:11 2019 +0800
+	opp-200000000 {
+		opp-hz = /bits/ 64 <200000000>;
+	};
+	opp-400000000 {
+		opp-hz = /bits/ 64 <400000000>;
+	};
+};
 
-    clk: imx8mq: Remove CLK_IS_CRITICAL flag for IMX8MQ_CLK_TMU_ROOT
+gpu@7864000 {
+	...
+	operating-points-v2 = <&gpu_opp_table>, <&gpu_cache_opp_table>, <&gpu_ddr_opp_table>;
+	...
+};
 
-    IMX8MQ_CLK_TMU_ROOT is ONLY used for thermal module, the driver
-    should manage this clock, so no need to have CLK_IS_CRITICAL flag
-    set.
+v1 -> v3:
+- Lots of patch additions that were later dropped
+v3 -> v4:
+- Fixed typo bugs pointed out by Sibi.
+- Fixed bug that incorrectly reset rate to 0 all the time
+- Added units documentation
+- Dropped interconnect-opp-table property and related changes
 
+Cheers,
+Saravana
 
+Saravana Kannan (3):
+  dt-bindings: opp: Introduce opp-peak-KBps and opp-avg-KBps bindings
+  OPP: Add support for bandwidth OPP tables
+  OPP: Add helper function for bandwidth OPP tables
 
-makes the boot work again.
+ Documentation/devicetree/bindings/opp/opp.txt | 15 ++++--
+ .../devicetree/bindings/property-units.txt    |  4 ++
+ drivers/opp/core.c                            | 51 +++++++++++++++++++
+ drivers/opp/of.c                              | 41 +++++++++++----
+ drivers/opp/opp.h                             |  4 +-
+ include/linux/pm_opp.h                        | 19 +++++++
+ 6 files changed, 121 insertions(+), 13 deletions(-)
 
-Any idea?
+-- 
+2.22.0.709.g102302147b-goog
 
-On Fri, Jul 5, 2019 at 8:07 AM <Anson.Huang@nxp.com> wrote:
->
-> From: Anson Huang <Anson.Huang@nxp.com>
->
-> IMX8MQ_CLK_TMU_ROOT is ONLY used for thermal module, the driver
-> should manage this clock, so no need to have CLK_IS_CRITICAL flag
-> set.
->
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
->  drivers/clk/imx/clk-imx8mq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
-> index d407a07..91de69a 100644
-> --- a/drivers/clk/imx/clk-imx8mq.c
-> +++ b/drivers/clk/imx/clk-imx8mq.c
-> @@ -539,7 +539,7 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
->         clks[IMX8MQ_CLK_DISP_AXI_ROOT]  = imx_clk_gate2_shared2("disp_axi_root_clk", "disp_axi", base + 0x45d0, 0, &share_count_dcss);
->         clks[IMX8MQ_CLK_DISP_APB_ROOT]  = imx_clk_gate2_shared2("disp_apb_root_clk", "disp_apb", base + 0x45d0, 0, &share_count_dcss);
->         clks[IMX8MQ_CLK_DISP_RTRM_ROOT] = imx_clk_gate2_shared2("disp_rtrm_root_clk", "disp_rtrm", base + 0x45d0, 0, &share_count_dcss);
-> -       clks[IMX8MQ_CLK_TMU_ROOT] = imx_clk_gate4_flags("tmu_root_clk", "ipg_root", base + 0x4620, 0, CLK_IS_CRITICAL);
-> +       clks[IMX8MQ_CLK_TMU_ROOT] = imx_clk_gate4("tmu_root_clk", "ipg_root", base + 0x4620, 0);
->         clks[IMX8MQ_CLK_VPU_DEC_ROOT] = imx_clk_gate2_flags("vpu_dec_root_clk", "vpu_bus", base + 0x4630, 0, CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE);
->         clks[IMX8MQ_CLK_CSI1_ROOT] = imx_clk_gate4("csi1_root_clk", "csi1_core", base + 0x4650, 0);
->         clks[IMX8MQ_CLK_CSI2_ROOT] = imx_clk_gate4("csi2_root_clk", "csi2_core", base + 0x4660, 0);
-> --
-> 2.7.4
->
