@@ -2,102 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 780EC75D5C
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 05:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BDB75DF4
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 06:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbfGZD0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 23:26:34 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44478 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbfGZD0e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 23:26:34 -0400
-Received: by mail-pg1-f193.google.com with SMTP id i18so24043726pgl.11
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 20:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YfhbltO6FtqY+nhX3A4c4C7VpTkM+5+6ovBigThYvB0=;
-        b=mMpsHV9ElNPYpaobsGlXivKLT7vbB0JAEpP7GYdEvTMn910AvbCidJ3JVjpj7Zt5xO
-         NEOiwgKk5owsCRQ7JkP48WP0iwfQ2o6QqoIaqaz1po699V1Y9BXGHQuhLc/DUx5rra87
-         0g3MLd0ArNNknkZsiNP+WkvbwMvBPl8CQTPN+jMd32AG50a3q9CehG1Jm/i+x4+pMVNL
-         OJHm7YoiI9V3/xFI7qakp9Fup0NPV7AX3zRuGEfnnOLSZdQ+13e45e4i/f6C4NBIrn89
-         t8HdpdLCqdmV7DzVH/uD++SKlZZ985zB/po5Nwnm5fMAGO4MKGuhjMzRoFJLL9HgF91v
-         ShXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YfhbltO6FtqY+nhX3A4c4C7VpTkM+5+6ovBigThYvB0=;
-        b=Mvh9+6+cVXJ98V+5IV9eYe3jz6ts4zqRCpXM5FefCFdyD8FsQnVN09uE8VVvbZN0Xh
-         fARPi5E7ccZokjMiMUgBu0RDYQozhtQy9qY1uv6hWpMRPmXOuuXTzfRnA1LSB9QxAULJ
-         UCewvdRoR7MsO3y/n4t4vwS0EMBn+WkQ4Y7hRrE38YJm7ycnAenYwsXBy1co4P8iClj6
-         pmu2x11HjqGK3ScbaQoYf+nsS8aa5KkTg+w0DxcKdR3VCrEirxGi5axHQ9fJiPhRMzFy
-         doI8HhY0XNBQ7ZAKejt2EMREqhza2FtNtgdj4sbV/4TUhWrVzweGqN1V7wydqPhvtgdj
-         KR3Q==
-X-Gm-Message-State: APjAAAViYWBMp1RfrIR0ksErygLLVyrjKHnAjD1CHdKRSHJbCL5cY+NU
-        0qN4hDT9NP97SAGmRUAj2LGSKg==
-X-Google-Smtp-Source: APXvYqxTg6RaVRHtF9c9R4BCNa8UgHa7F5aWitP9SzEaN+tdcNZSH3RKI8L0lLXVfubPFM9Nx2djIA==
-X-Received: by 2002:a63:de07:: with SMTP id f7mr51786968pgg.213.1564111593449;
-        Thu, 25 Jul 2019 20:26:33 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id y12sm59772600pfn.187.2019.07.25.20.26.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jul 2019 20:26:32 -0700 (PDT)
-Date:   Fri, 26 Jul 2019 08:56:31 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        'Rafael Wysocki' <rjw@rjwysocki.net>,
-        'Ingo Molnar' <mingo@redhat.com>,
-        'Peter Zijlstra' <peterz@infradead.org>,
-        'Linux PM' <linux-pm@vger.kernel.org>,
-        'Vincent Guittot' <vincent.guittot@linaro.org>,
-        'Joel Fernandes' <joel@joelfernandes.org>,
-        "'v4 . 18+'" <stable@vger.kernel.org>,
-        'Linux Kernel Mailing List' <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: schedutil: Don't skip freq update when limits
- change
-Message-ID: <20190726032631.rflrl5wxgbphqxyf@vireshk-i7>
-References: <1563431200-3042-1-git-send-email-dsmythies@telus.net>
- <8091ef83f264feb2feaa827fbeefe08348bcd05d.1563778071.git.viresh.kumar@linaro.org>
- <001201d54125$a6a82350$f3f869f0$@net>
- <20190723091551.nchopfpqlmdmzvge@vireshk-i7>
- <CAJZ5v0ji+ksapJ4kc2m5UM_O+AShAvJWmYhTQHiXiHnpTq+xRg@mail.gmail.com>
- <20190724114327.apmx35c7a4tv3qt5@vireshk-i7>
- <000c01d542fc$703ff850$50bfe8f0$@net>
+        id S1725944AbfGZEvq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 00:51:46 -0400
+Received: from anchovy3.45ru.net.au ([203.30.46.155]:47002 "EHLO
+        anchovy3.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725867AbfGZEvq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 00:51:46 -0400
+Received: (qmail 2589 invoked by uid 5089); 26 Jul 2019 04:51:44 -0000
+Received: by simscan 1.2.0 ppid: 2555, pid: 2556, t: 0.3125s
+         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950 spam: 3.1.4
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on anchovy3.45ru.net.au
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.4 required=6.0 tests=ALL_TRUSTED,AWL
+        autolearn=disabled version=3.4.1
+Received: from unknown (HELO ?192.168.0.34?) (rtresidd@electromag.com.au@203.59.235.95)
+  by anchovy2.45ru.net.au with ESMTPA; 26 Jul 2019 04:51:43 -0000
+Subject: Re: [PATCH 1/1] power/supply/powersupply_sysfs: Add of_node name to
+ uevent message if available
+From:   Richard Tresidder <rtresidd@electromag.com.au>
+To:     David Lechner <david@lechnology.com>, linux-pm@vger.kernel.org
+References: <1564040858-24202-1-git-send-email-rtresidd@electromag.com.au>
+ <9a10b934-e7f3-c95f-6250-8a857bdfa912@lechnology.com>
+ <3c372ca4-373d-9c03-8636-a9f065eed577@electromag.com.au>
+Message-ID: <f6082ff8-b9fc-a52d-ad48-fc1b348246f4@electromag.com.au>
+Date:   Fri, 26 Jul 2019 12:51:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000c01d542fc$703ff850$50bfe8f0$@net>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <3c372ca4-373d-9c03-8636-a9f065eed577@electromag.com.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-AU
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-07-19, 08:20, Doug Smythies wrote:
-> I tried the patch ("patch2"). It did not fix the issue.
-> 
-> To summarize, all kernel 5.2 based, all intel_cpufreq driver and schedutil governor:
-> 
-> Test: Does a busy system respond to maximum CPU clock frequency reduction?
-> 
-> stock, unaltered: No.
-> revert ecd2884291261e3fddbc7651ee11a20d596bb514: Yes
-> viresh patch: No.
-> fast_switch edit: No.
+Hi David
+   That call requires a struct device *
+But the of_node pointer is located in the struct power_supply
+Seems the of_node value in the base device* is null, and often is.
+I find it hard at times to figure out which one of these to reference as 
+things seem to be duplicated in a lot of places..
 
-You tried this fast-switch thing with my patch applied, right ?
+Should that call potentially be refactored to take a device_node * 
+instead of a device *
 
-> viresh patch2: No.
-> 
-> References (and procedures used):
-> https://marc.info/?l=linux-pm&m=156346478429147&w=2
-> https://marc.info/?l=linux-kernel&m=156343125319461&w=2
-> 
-> ... Doug
-> 
+**
+Regards
+    Richard Tresidder
 
--- 
-viresh
+On 26/07/2019 10:40 am, Richard Tresidder wrote:
+> Hi David
+>   That it would be. I wasn't aware of that call.
+> I'll give it a crack and send in a new version of the patch.
+>
+> Cheers
+>   Richard Tresidder
+>
+> Richard Tresidder
+> On 25/07/2019 10:08 pm, David Lechner wrote:
+>> On 7/25/19 2:47 AM, Richard Tresidder wrote:
+>>> If the of_node name of the supply is available from the devicetree 
+>>> binding
+>>> then include it under the var POWER_SUPPLY_OF_NODE_NAME.
+>>> This helps where a consistent name is known via the device tree binding
+>>> but it is hard to identify based on the usual enumeration process.
+>>>
+>>
+>> Would it be possible to use of_device_uevent() instead of introducing 
+>> a new
+>> property?
+>>
+>>
+>>
+>
+>
+>
+
