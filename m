@@ -2,121 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27546762B9
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 11:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91EF763A2
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 12:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725872AbfGZJnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 05:43:52 -0400
-Received: from anchovy2.45ru.net.au ([203.30.46.146]:34198 "EHLO
-        anchovy2.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726000AbfGZJnw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 05:43:52 -0400
-Received: (qmail 32330 invoked by uid 5089); 26 Jul 2019 09:43:49 -0000
-Received: by simscan 1.2.0 ppid: 32245, pid: 32246, t: 0.2943s
-         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950 spam: 3.1.4
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on anchovy2
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=6.0 tests=ALL_TRUSTED,AWL
-        autolearn=disabled version=3.4.1
-Received: from unknown (HELO ?192.168.0.34?) (rtresidd@electromag.com.au@203.59.235.95)
-  by anchovy3.45ru.net.au with ESMTPA; 26 Jul 2019 09:43:48 -0000
-Subject: Re: [PATCH 1/1] power/supply/powersupply_sysfs: Add of_node name to
- uevent message if available
-From:   Richard Tresidder <rtresidd@electromag.com.au>
-To:     David Lechner <david@lechnology.com>, linux-pm@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Nick Crews <ncrews@chromium.org>, andrew.smirnov@gmail.com,
-        Guenter Roeck <groeck@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <1564040858-24202-1-git-send-email-rtresidd@electromag.com.au>
- <9a10b934-e7f3-c95f-6250-8a857bdfa912@lechnology.com>
- <3c372ca4-373d-9c03-8636-a9f065eed577@electromag.com.au>
- <f6082ff8-b9fc-a52d-ad48-fc1b348246f4@electromag.com.au>
-Message-ID: <54e304f6-d689-acf7-eb63-5dc6e29235ea@electromag.com.au>
-Date:   Fri, 26 Jul 2019 17:43:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726287AbfGZKgH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 06:36:07 -0400
+Received: from onstation.org ([52.200.56.107]:52052 "EHLO onstation.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726203AbfGZKgH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 26 Jul 2019 06:36:07 -0400
+Received: from localhost (c-98-239-145-235.hsd1.wv.comcast.net [98.239.145.235])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: masneyb)
+        by onstation.org (Postfix) with ESMTPSA id 458643E911;
+        Fri, 26 Jul 2019 10:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onstation.org;
+        s=default; t=1564137366;
+        bh=lKvd7xwHN2gTtBvSBeM80nkC5+jI2IdP2zf9IWcj8NI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DwJAR0l/PlTB8EKtJeyHiFIrEplJUNzBELIsGzBbyaeN0ET539lJkNE8ewsKzw7IO
+         bqIsQ4nMVsWps0/XoPEAe3PKLqr+5O24jkruC/66WXF+F9K9XuyHmcDJ14z7qAgMZH
+         YyiT7dtR45ZxeDvE0fBNU1pmyozMlJ4lgCdvGZBg=
+Date:   Fri, 26 Jul 2019 06:36:05 -0400
+From:   Brian Masney <masneyb@onstation.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, edubezval@gmail.com,
+        andy.gross@linaro.org, Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, marc.w.gonzalez@free.fr,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 00/15] thermal: qcom: tsens: Add interrupt support
+Message-ID: <20190726103605.GB3327@onstation.org>
+References: <cover.1564091601.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <f6082ff8-b9fc-a52d-ad48-fc1b348246f4@electromag.com.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-AU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1564091601.git.amit.kucheria@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As per David's suggestion
-I did a quick refactor of the of_device_uevent() call to handle a 
-device_node "of_device_node_uevent()" instead of a device and ran into a 
-problem.
-Was getting stack dumps (via a WARN message) generated out of 
-add_uevent_var() for any power supply device.
-It was trigered in the first check of
-     if (env->envp_idx >= ARRAY_SIZE(env->envp)) {
-     ...
-of that add_uevent_var function.
-So it looks like to many value pairs were being shoved into the event?
-envp array is set to a fixed length of 32 via the UEVENT_NUM_ENVP value 
-in kobject.h
+Hi Amit,
 
-I verified it had nothing to do with with the refactor by backing it out 
-and simply adding a few more
-dummy add_uevent_var calls in the power_supply_uevent call..
+On Fri, Jul 26, 2019 at 03:48:35AM +0530, Amit Kucheria wrote:
+> Add interrupt support to TSENS. The first 6 patches are general fixes and
+> cleanups to the driver before interrupt support is introduced.
+> 
+> This series has been developed against qcs404 and sdm845 and then tested on
+> msm8916. Testing on msm8998 and msm8974 would be appreciated since I don't
+> have hardware handy. Further, I plan to test on msm8996 and also submit to
+> kernelci.
+> 
+> I'm sending this out for more review to get help with testing.
 
-so there appears to be a hard limit on this.. which we are very near for 
-the power supply stuff.
+I can test this on msm8974 for you using a Nexus 5. Here's what I've
+done so far:
 
-Thoughts?
+The device tree nodes appear in sysfs:
 
-Thanks
-    Richard Tresidder
+/ # ls -1 /sys/class/thermal/
+cooling_device0
+cooling_device1
+thermal_zone0
+thermal_zone1
+thermal_zone2
+thermal_zone3
+thermal_zone4
+thermal_zone5
+thermal_zone6
+thermal_zone7
+thermal_zone8
+thermal_zone9
 
-On 26/07/2019 12:51 pm, Richard Tresidder wrote:
-> Hi David
->   That call requires a struct device *
-> But the of_node pointer is located in the struct power_supply
-> Seems the of_node value in the base device* is null, and often is.
-> I find it hard at times to figure out which one of these to reference 
-> as things seem to be duplicated in a lot of places..
->
-> Should that call potentially be refactored to take a device_node * 
-> instead of a device *
->
-> **
-> Regards
->    Richard Tresidder
->
-> On 26/07/2019 10:40 am, Richard Tresidder wrote:
->> Hi David
->>   That it would be. I wasn't aware of that call.
->> I'll give it a crack and send in a new version of the patch.
->>
->> Cheers
->>   Richard Tresidder
->>
->> Richard Tresidder
->> On 25/07/2019 10:08 pm, David Lechner wrote:
->>> On 7/25/19 2:47 AM, Richard Tresidder wrote:
->>>> If the of_node name of the supply is available from the devicetree 
->>>> binding
->>>> then include it under the var POWER_SUPPLY_OF_NODE_NAME.
->>>> This helps where a consistent name is known via the device tree 
->>>> binding
->>>> but it is hard to identify based on the usual enumeration process.
->>>>
->>>
->>> Would it be possible to use of_device_uevent() instead of 
->>> introducing a new
->>> property?
->>>
->>>
->>>
->>
->>
->>
->
->
->
+The various temperatures were in the upper 40s and I threw some work at
+all four CPU cores to warm up the phone and watched the various
+temperatures rise:
 
+/ # for i in $(seq 0 9) ; do
+> TYPE=$(cat /sys/class/thermal/thermal_zone$i/type)
+> TEMP=$(cat /sys/class/thermal/thermal_zone$i/temp)
+> echo "$TYPE = $TEMP"
+> done
+cpu-thermal0 = 66000
+cpu-thermal1 = 66000
+cpu-thermal2 = 66000
+cpu-thermal3 = 66000
+q6-dsp-thermal = 60000
+modemtx-thermal = 57000
+video-thermal = 61000
+wlan-thermal = 65000
+gpu-thermal-top = 61000
+gpu-thermal-bottom = 59000
+
+To test the interrupt support, I lowered all of the temperature trips to
+51C but I'm not sure where to read that notification. I assume one of
+the cooling devices or a governor should be started? Sorry but I haven't
+done any work in the thermal subsystem yet and I'm short on time this
+morning to investigate right now.
+
+Brian
