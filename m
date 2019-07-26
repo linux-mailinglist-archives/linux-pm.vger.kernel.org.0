@@ -2,55 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA47775C9B
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 03:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99F175CA8
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 03:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbfGZBmV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 21:42:21 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:39076 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725854AbfGZBmV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 21:42:21 -0400
-Received: by mail-ot1-f67.google.com with SMTP id r21so47708627otq.6
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 18:42:21 -0700 (PDT)
+        id S1725867AbfGZBwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 21:52:51 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36523 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725851AbfGZBwu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 21:52:50 -0400
+Received: by mail-ot1-f66.google.com with SMTP id r6so53764781oti.3
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 18:52:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4xZv/cnujU0oqDcp877dW2V6UxgQGvLsyyGAH+W7I5Q=;
-        b=qKSd1EDbUaxk7Iml18aMNgKB1KOluUzbqTK8JoXGWgOObVnyonZySJSebDxiRunuzG
-         ONV9GJmMyrbKV1mWeZVfLP8vBOai9WA5JH2ETG9fSWiZjygeP6B3wYHrbD9kaGqCJigF
-         hHeBo47AFH/uGAExbpBWJfFRCd5rEVaa2/zoEpiWHzfs45skGgYWqW15xuFuU8qSDNN9
-         MaWTiHUQznOw7F7Ert6XCD9UZrFjEMo/tG7a5Yc37JAgzSedkrtRNQB1z32tqhcibVh1
-         c01SnJBiAu0lndpZProKdtv4Jh04By4fyCt74wCAJ8OiIghLfU0f61I7gDdy/XXG6a4Q
-         2zzw==
+        bh=TiousANIM8Ym1d99fpbOzWaRdwbbqZlUg00mIz18Zzs=;
+        b=QSMLORbC76eYIkEJoBLupfx/zQ8ufC6hcV0EJNWlC9L1gDKgU9axM65c6GyR4Zk2sL
+         qenZTXiQk/OnWyleJmxfTnm2MiSNYQDKqgTEi7ooH7Cf1lTdIBG+L2MM+iu2wiQewP4P
+         oiqxtP0wmi3DTCWlx6JKh/Pv+4DP2yyWN4iLjywmEvSmhyHuyUQBR3KaYTP+eEcgI1Bs
+         zMERjZiMuH2snJ8G/wnF2K/7lk3MmZr/FjeF8RKBTJYDeddu49izpxJcqmhVhUxX4tnp
+         8KrG6fCpd4x0P8PCcXC7fWzWIdOLSS1DQG4QMUdXOZN6Njt2jsgiXXFwVnpWIdJHNOja
+         V4aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4xZv/cnujU0oqDcp877dW2V6UxgQGvLsyyGAH+W7I5Q=;
-        b=AYHT0gERVCsMJ7DqjFiHiEXtY6ZonnQDT1GselTrHe5HI44djmZ0PX+0rIl90Amm29
-         2yDPb9MqeEtKPgS0lGgUic4SPWmCeFRSAahgNLaTQ/fGe6yajB2lmbDUJVopvABTrq8g
-         IIhMqjP6yvY1B1CJokGRFZAtCU+WcYMAjMDxLd63KMowqpAocG8Ni45BtnMBq8B8J/cV
-         79cn+8/6/OQrJdXlUF4pA27sxK0510sNtKMNiplr5CE48fXcFHN7L/rNocRmvwrQ8MPa
-         XZ+4Ks1JJuiH+0sqk88rJ86RZIFCxd8h6Cmx0rc0ZM2zuqdQlkzT3N1TfaDACOoUP5PA
-         44sg==
-X-Gm-Message-State: APjAAAWPidOzAR0b2tbQr5DFDj9OVxmbkMK454+7643kxAK/b4mtYEZR
-        uDbnHezTZ99Nr3tmX1CvsCdmA++tGdUFYJFyqMOI1Q==
-X-Google-Smtp-Source: APXvYqzBT6V8BKTmErDkTC6/DiTsYm+9qsuAcDebvhWuQludZowll3Hh8C7QVnHF58QiogxuxCzCliIKfabB9C+OTbw=
-X-Received: by 2002:a9d:6256:: with SMTP id i22mr46575918otk.139.1564105340461;
- Thu, 25 Jul 2019 18:42:20 -0700 (PDT)
+        bh=TiousANIM8Ym1d99fpbOzWaRdwbbqZlUg00mIz18Zzs=;
+        b=tUKtRl9lkCem6RD9UBCbNVXnJAJMC+ATbk8Ebmcct/bujjAp+awEdX74A9uep1UJd3
+         Nrz331yz7YwPXmN+tL9ZxnDWHRJFNY7Zln6QZgqBpKee4j0H5EC9XftNC7xvfN+yqaIF
+         +clYQlvNPrmXr2JUlgBEx2n+P5VobY4B+u/DTOV1FWDXLmBSYcldYJjV4lUW6OSYlpJL
+         kmrN3eUNZCLfuTl1OI8S5ZYK3i/Y7UbtJlaAHoU2YrSFcvOaOkqaqP/kAOnqPB2cOTYM
+         AM6I+T6DYfCgKiFnYW80OTAxa5dDWKGY3tWs1DO1IoXldYlXS3qybOMek3etk0dch7Rf
+         jUmg==
+X-Gm-Message-State: APjAAAUVJrlQnUoywvPtuaDjUhryGlh/gUNADPYqRyW5rU7RIEnOXFcw
+        XzRzFFDareFbmhQSPDvDyJwxxdLUzdCfB6fsuhxGvA==
+X-Google-Smtp-Source: APXvYqxcYuMUWiDwRwA2OJ6MD9+ZDILLOWvrJDjR6OvjPD3hun3BBu9PeDPdULURc2DNhKHtgkiBXezSPtLjUKh7A7E=
+X-Received: by 2002:a05:6830:160c:: with SMTP id g12mr12061343otr.231.1564105969661;
+ Thu, 25 Jul 2019 18:52:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190717222340.137578-1-saravanak@google.com> <20190717222340.137578-3-saravanak@google.com>
- <20190723095316.t5ltprixxd5veuj7@vireshk-i7> <CAGETcx-r6fZH0xYea-YXyXDwe33pimtfNerLzzBn4UHT2qQVvA@mail.gmail.com>
- <20190725025849.y2xyxmqmgorrny6k@vireshk-i7> <CAGETcx8r3C_=Y0vSwqekCZPUeYkNQ6EOUDK4bUJksDHG6zPUjA@mail.gmail.com>
- <20190725053823.yqaxnk2a7geebmqw@vireshk-i7>
-In-Reply-To: <20190725053823.yqaxnk2a7geebmqw@vireshk-i7>
+References: <20190717222340.137578-1-saravanak@google.com> <20190717222340.137578-4-saravanak@google.com>
+ <20190723102842.t2s45zzylsjuccm4@vireshk-i7> <CAGETcx-6M9Ts8tfMf6aA8GjMyzK5sOLr069ZCxTG7RHMFPLzHw@mail.gmail.com>
+ <20190725030712.lx3cjogo5r7kc262@vireshk-i7> <CAGETcx8QTs2Dqqppb_gwiUa2fte92K_q+B+j_CreRgqU52L7EA@mail.gmail.com>
+ <20190725051742.mn54pi722txkpddg@vireshk-i7>
+In-Reply-To: <20190725051742.mn54pi722txkpddg@vireshk-i7>
 From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 25 Jul 2019 18:41:44 -0700
-Message-ID: <CAGETcx9thoqwAuGOc3t9oiw9fzB_-Gcsb4qBAESb0rfwk9T75Q@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] OPP: Add function to look up required OPP's for a
- given OPP
+Date:   Thu, 25 Jul 2019 18:52:13 -0700
+Message-ID: <CAGETcx9yO7HCz-rvqRMQf6srN_9-O_wc1bb7HadL+4QxvuqyWA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -68,69 +67,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 10:38 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Wed, Jul 24, 2019 at 10:17 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On 24-07-19, 20:46, Saravana Kannan wrote:
-> > On Wed, Jul 24, 2019 at 7:58 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > On 23-07-19, 17:23, Saravana Kannan wrote:
->
-> > > > I almost said "not sure. Let me just compare pointers".
-> > > > I think (not sure) it has to do with the same OPP table being used to
-> > > > create multiple OPP table copies if the "shared OPP table" flag isn't
-> > > > set?
-> > > > Can you confirm if this makes sense? If so, I can add a comment patch
-> > > > that adds comments to the existing code and then copies it into this
-> > > > function in this patch.
-> > >
-> > > Right, that was the reason but we also need to fix ...
+> On 24-07-19, 21:09, Saravana Kannan wrote:
+> > On Wed, Jul 24, 2019 at 8:07 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > We should be doing this whenever a new OPP table is created, and see
+> > > if someone else was waiting for this OPP table to come alive.
 > >
-> > I know I gave that explanation but I'm still a bit confused by the
-> > existing logic. If the same DT OPP table is used to create multiple in
-> > memory OPP tables, how do you device which in memory OPP table is the
-> > right one to point to?
+> > Searching the global OPP table list seems a ton more wasteful than
+> > doing the lazy linking. I'd rather not do this.
 >
-> This is a bit broken actually, we don't see any problems right now but
-> may eventually have to fix it someday.
+> We can see how best to optimize that, but it will be done only once
+> while a new OPP table is created and putting stress there is the right
+> thing to do IMO. And doing anything like that in a place like
+> opp-set-rate is the worst one. It will be a bad choice by design if
+> you ask me and so I am very much against that.
 >
-> We pick the first in-memory OPP table that was created using the DT
-> OPP table. This is done because the DT doesn't provide any explicit
-> linking to the required-opp device right now.
->
-> Right now the required-opps is only used for power domains and so it
-> is working fine. It may work fine for your case as well. But once we
-> have a case we want to use required-opps in a single OPP table for
-> both power-domains and master/slave thing you are proposing, we may
-> see more problems.
->
-> > > > > > +                     break;
-> > > > > > +     }
-> > > > > > +
-> > > > > > +     if (unlikely(i == src_table->required_opp_count)) {
-> > > > > > +             pr_err("%s: Couldn't find matching OPP table (%p: %p)\n",
-> > > > > > +                    __func__, src_table, dst_table);
-> > > > > > +             return NULL;
-> > > > > > +     }
-> > > > > > +
-> > > > > > +     mutex_lock(&src_table->lock);
-> > > > > > +
-> > > > > > +     list_for_each_entry(opp, &src_table->opp_list, node) {
-> > > > > > +             if (opp == src_opp) {
-> > >
-> > > ... this as well. We must be comparing node pointers here as well.
+> > > Also we
+> > > must make sure that we do this linking only if the new OPP table has
+> > > its own required-opps links fixed, otherwise delay further.
 > >
-> > Not really, if an in memory OPP entry is not part of an in memory OPP
-> > table list, I don't think it should be considered part of the OPP
-> > table just because the node pointer is the same. I think that's
-> > explicitly wrong and the above code is correct as is.
+> > This can be done. Although even without doing that, this patch is
+> > making things better by not failing silently like it does today? Can I
+> > do this later as a separate patch set series?
 >
-> I understand what you are saying, but because we match the very first
-> OPP table that was there in the list we need to match the DT node here
-> as well.
+> I would like this to get fixed now in a proper way, there is no hurry
+> for a quick fix currently. No band-aids please.
 >
-> Or somehow we make sure to have the correct in-memory OPP table being
-> pointed by the required-opp-table array. Then we don't need the node
-> pointer anywhere here.
+> > > Even then I don't want to add these checks to those places. For the
+> > > opp-set-rate routine, add another flag to the OPP table which
+> > > indicates if we are ready to do dvfs or not and mark it true only
+> > > after the required-opps are all set.
+> >
+> > Honestly, this seems like extra memory and micro optimization without
+> > any data to back it.
+>
+> Again, opp-set-rate isn't supposed to do something like this. It
+> shouldn't handle initializations of things, that is broken design.
+>
+> > Show me data that checking all these table
+> > pointers is noticeably slower than what I'm doing. What's the max
+> > "required tables count" you've seen in upstream so far?
+>
+> Running anything extra (specially some initialization stuff) in
+> opp-set-rate is wrong as per me and as a Maintainer of the OPP core it
+> is my responsibility to not allow such things to happen.
 
-Ah, right. I'll fix this.
+Doing operations lazily right before they are needed isn't something
+new in the kernel. It's done all over the place (VFP save/restore?).
+It's not worth arguing though -- so I'll agree to disagree but follow
+the Maintainer's preference.
+
+> > I'd even argue that doing it the way I do might actually reduce the
+> > cache misses/warm the cache because those pointers are going to be
+> > searched/used right after anyway.
+>
+> So you want to make the cache hot with data, by running some code at a
+> place where it is not required to be run really, and the fact that
+> most of the data cached may not get used anyway ? And that is an
+> improvement somehow ?
+
+My point is that both of us are hypothesizing and for some
+micro-optimization like this, data is needed.
 
 -Saravana
