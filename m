@@ -2,184 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0E077362
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 23:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C35A77402
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2019 00:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728369AbfGZVY0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 17:24:26 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:33234 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728453AbfGZVYU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 17:24:20 -0400
-Received: by mail-qt1-f194.google.com with SMTP id r6so49811652qtt.0
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2019 14:24:19 -0700 (PDT)
+        id S1728522AbfGZW1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 18:27:05 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:36254 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728471AbfGZW1E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 18:27:04 -0400
+Received: by mail-wm1-f67.google.com with SMTP id g67so44717795wme.1;
+        Fri, 26 Jul 2019 15:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=owpXJzkwRhTQpFv3YFYd1YLSHkq3ebxH7N/mkMxT22w=;
-        b=aMJ/j5Za4QMl8Pf2M7kaOR415fQRH6rbjYvIyS/i6JoHNO1516z0Q7L7CjFPJ7OSS1
-         51Tf7qtTEW9o3QxpAl09Ian0zWGVtbbD0nG+Um3baSMk8x4ZwW46HfklJgWl9rFAmdxC
-         wOIhrnvM2feyVB+D596KSvP2fwa183EZXUZsR09c5+V9awonePLsdUEd9pE+vVyhKSl4
-         dLsxG2Cd86+m28G2I5cieWpy294e4O+naTmRX3y3ThmoJ7iWdyCdI1EvgPueMmA5RgwT
-         sq/HsxDn/okq7PDtBIalb+vyn7ZR4elNjex9aOv4MTGiRGn9pQe0NeSPFFZAvApATh8c
-         GZdA==
+        bh=pLIvL1ELNjaZefRkSo34EEeqZ5ctkKw3Nhc4gJBc33s=;
+        b=ePOopMHVtBJWVbqlKtDxoGAEJq2W+MrKFCPb2aExEk+4Js7x0XFa33YynjU0aYy+Zd
+         cy8SOMYIf8ILafKjZKdQNPmN5l+a6/AtmSX16476xaqtwIhafaF+Tkr3Hhy8mEupfqD1
+         l1Fxv4/EWdfc3Znt515XrTWt1Gpj/K2hQoYPL5Cr9SGL6Y1I8TqxbhGeL1OoCedTXnsz
+         WDJ33syVp6qDMLPxtq5zlNFdpUAgGk8NfG0/NIPKuHicwUUS0OIkT0oli/9bAznmh+rR
+         IPghhpH766v1ZEoaeXrdL+5+dmvIE7ZsoovhwgJdcWh2/YKaxv8k+WD3GA7eCwtwaCLI
+         a9nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=owpXJzkwRhTQpFv3YFYd1YLSHkq3ebxH7N/mkMxT22w=;
-        b=WtXmH2XDiM8UglTQhHix8lkFLmtxQ7ZodxsbbV3M2XwSq0Qm7DdwQ979nWeHF2gZ5+
-         /jUBB0oIGyNRRguZ68y520o+uAy+UYCn7ewl8IcLk0f1GuO4/8brYAUWkm1FGM39e98u
-         JqCeJfoXMxhRM2SvTRLfLPsOLeOgOcxTDgcBVHOrfSBLnXDUqeBw87T4v40JQp6MQeVR
-         JueeMxNdEFP6EIaqL4cE5B6yWFOuqR/03rIiYdQkc2JWh1EBbR4RYgnoGXfKXSyvRFkY
-         lYUtYlElp/ChjEEwDy5s1mbWrnV//igyftyjezPw+ajrxhrtXGee5YBVdREk7s4igPLG
-         ss8Q==
-X-Gm-Message-State: APjAAAV0Y3qiCk9Sm7IE11sXsxpTDjn5f5RCiOfh+a1K+iJQWnRFjWiH
-        d1M7M31vQywnuTMp7qv4aT1HgwPy08CwnVFeRUgtbw==
-X-Google-Smtp-Source: APXvYqwE2TYMffQJtT7kl52cvJrjGWqA9vEUfORVMtMAylZHsE47npdSnAmrQgan5ft+zsV9NfDaKeUFkLTLYLHvv0Q=
-X-Received: by 2002:a0c:baa1:: with SMTP id x33mr70919945qvf.200.1564176258418;
- Fri, 26 Jul 2019 14:24:18 -0700 (PDT)
+        bh=pLIvL1ELNjaZefRkSo34EEeqZ5ctkKw3Nhc4gJBc33s=;
+        b=bO22VTu4vtev8BcMp6FGcxh3SQKf2HTS2EtEc+bue1CQod3DiJrMBUXtvGuaOZDxkE
+         FJYI4mrpmFS0KBSGQa/E56xs2l8i0LRDmz9GT8vqvfKjL02UahMDahHGMx4f3vAmOfeT
+         V8I7SDakzRf14PWdd+chgnLZJ2JKgQcW8C3WLb8/FH70hdQT2U1Yu9/t8UmPoZg+vO8E
+         PxQr6+7kIP9RNb0ELCPpeDci+9xyr7ptq7D9YZsRzype4Gt6yIwkuzFO9ia8j+Wug4Cj
+         X2JFUxFo1vrO/Evp3Lsm3JmP1aACjTLDdJpCKhNaw7Onlf20O2E2kBuCifYIT6tyvi4s
+         4qCA==
+X-Gm-Message-State: APjAAAX76wy+lEoicfZTNLjCuMA4dUfT1LHq6T5qyZGeQ+TSihw17BSw
+        2ZMS23+Uy9NajE6F/PeLNZ9OC+LXSxHm8nxxcBs=
+X-Google-Smtp-Source: APXvYqxg4Ing4cAKxRNOyIS5IE4D6JXVjbgrCbkFHO/3jK45VR23Z9xnWOALa5i4VOTyOCbFR45W/I9i3pdpSHZMPSA=
+X-Received: by 2002:a1c:96c7:: with SMTP id y190mr80069646wmd.87.1564180022241;
+ Fri, 26 Jul 2019 15:27:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190717222340.137578-1-saravanak@google.com> <20190717222340.137578-4-saravanak@google.com>
- <20190723102842.t2s45zzylsjuccm4@vireshk-i7> <CAGETcx-6M9Ts8tfMf6aA8GjMyzK5sOLr069ZCxTG7RHMFPLzHw@mail.gmail.com>
- <20190725030712.lx3cjogo5r7kc262@vireshk-i7> <CAGETcx8QTs2Dqqppb_gwiUa2fte92K_q+B+j_CreRgqU52L7EA@mail.gmail.com>
- <20190725051742.mn54pi722txkpddg@vireshk-i7> <CAGETcx9yO7HCz-rvqRMQf6srN_9-O_wc1bb7HadL+4QxvuqyWA@mail.gmail.com>
-In-Reply-To: <CAGETcx9yO7HCz-rvqRMQf6srN_9-O_wc1bb7HadL+4QxvuqyWA@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 26 Jul 2019 14:23:41 -0700
-Message-ID: <CAGETcx9UAAc6u=qFPN49Pn2u4xiMCroL-PhHqLZrBPRSXBbHBw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+References: <20190705045612.27665-1-Anson.Huang@nxp.com> <20190705045612.27665-5-Anson.Huang@nxp.com>
+In-Reply-To: <20190705045612.27665-5-Anson.Huang@nxp.com>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Sat, 27 Jul 2019 01:26:50 +0300
+Message-ID: <CAEnQRZAZNMBx3ApVmRP8hYPw0XY_QgR-saE6WLcT8oZmHPCxSA@mail.gmail.com>
+Subject: Re: [PATCH 5/6] clk: imx8mq: Remove CLK_IS_CRITICAL flag for IMX8MQ_CLK_TMU_ROOT
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     rui.zhang@intel.com, edubezval@gmail.com,
+        daniel.lezcano@linaro.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Lucas Stach <l.stach@pengutronix.de>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        "Angus Ainslie (Purism)" <angus@akkea.ca>,
+        Carlo Caione <ccaione@baylibre.com>,
+        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        linux-pm@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-clk@vger.kernel.org, dl-linux-imx <Linux-imx@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 25, 2019 at 6:52 PM Saravana Kannan <saravanak@google.com> wrote:
+Hi all,
+
+latest linux-next hangs at boot.
+
+commit fde50b96be821ac9673a7e00847cc4605bd88f34 (HEAD -> master, tag:
+next-20190726, origin/master, origin/HEAD)
+Author: Stephen Rothwell <sfr@canb.auug.org.au>
+Date:   Fri Jul 26 15:18:02 2019 +1000
+
+    Add linux-next specific files for 20190726
+
+    Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+
+
+I know this is crazy but reverting commit:
+
+commit 431bdd1df48ee2896ea9980d9153e3aeaf0c81ef (refs/bisect/bad)
+Author: Anson Huang <Anson.Huang@nxp.com>
+Date:   Fri Jul 5 12:56:11 2019 +0800
+
+    clk: imx8mq: Remove CLK_IS_CRITICAL flag for IMX8MQ_CLK_TMU_ROOT
+
+    IMX8MQ_CLK_TMU_ROOT is ONLY used for thermal module, the driver
+    should manage this clock, so no need to have CLK_IS_CRITICAL flag
+    set.
+
+
+
+makes the boot work again.
+
+Any idea?
+
+On Fri, Jul 5, 2019 at 8:07 AM <Anson.Huang@nxp.com> wrote:
 >
-> On Wed, Jul 24, 2019 at 10:17 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 24-07-19, 21:09, Saravana Kannan wrote:
-> > > On Wed, Jul 24, 2019 at 8:07 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > > We should be doing this whenever a new OPP table is created, and see
-> > > > if someone else was waiting for this OPP table to come alive.
-> > >
-> > > Searching the global OPP table list seems a ton more wasteful than
-> > > doing the lazy linking. I'd rather not do this.
-> >
-> > We can see how best to optimize that, but it will be done only once
-> > while a new OPP table is created and putting stress there is the right
-> > thing to do IMO. And doing anything like that in a place like
-> > opp-set-rate is the worst one. It will be a bad choice by design if
-> > you ask me and so I am very much against that.
-> >
-> > > > Also we
-> > > > must make sure that we do this linking only if the new OPP table has
-> > > > its own required-opps links fixed, otherwise delay further.
-> > >
-> > > This can be done. Although even without doing that, this patch is
-> > > making things better by not failing silently like it does today? Can I
-> > > do this later as a separate patch set series?
-> >
-> > I would like this to get fixed now in a proper way, there is no hurry
-> > for a quick fix currently. No band-aids please.
-> >
-> > > > Even then I don't want to add these checks to those places. For the
-> > > > opp-set-rate routine, add another flag to the OPP table which
-> > > > indicates if we are ready to do dvfs or not and mark it true only
-> > > > after the required-opps are all set.
-> > >
-> > > Honestly, this seems like extra memory and micro optimization without
-> > > any data to back it.
-> >
-> > Again, opp-set-rate isn't supposed to do something like this. It
-> > shouldn't handle initializations of things, that is broken design.
-> >
-> > > Show me data that checking all these table
-> > > pointers is noticeably slower than what I'm doing. What's the max
-> > > "required tables count" you've seen in upstream so far?
-> >
-> > Running anything extra (specially some initialization stuff) in
-> > opp-set-rate is wrong as per me and as a Maintainer of the OPP core it
-> > is my responsibility to not allow such things to happen.
+> From: Anson Huang <Anson.Huang@nxp.com>
 >
-> Doing operations lazily right before they are needed isn't something
-> new in the kernel. It's done all over the place (VFP save/restore?).
-> It's not worth arguing though -- so I'll agree to disagree but follow
-> the Maintainer's preference.
+> IMX8MQ_CLK_TMU_ROOT is ONLY used for thermal module, the driver
+> should manage this clock, so no need to have CLK_IS_CRITICAL flag
+> set.
 >
-
-I was taking a closer look at the OPP framework code to try and do
-what you ask above, but it's kind of a mess. The whole "the same OPP
-table can be used by multiple devices without the opp-shared flag set"
-is effectively breaking "required-opps" at a minimum and probably a
-lot more cases. I don't think I can rewrite my patch the way you want
-it without fixing the existing bugs.
-
-Let's take this example DT (leaving out the irrelevant part):
-
-OPP table 1:
-    required-opps = <OPP table 2 entry>;
-
-OPP table 2:
-    <opp-shared property not set>
-
-Device A:
-    operating-points-v2 = <&OPP table 1>
-
-Device B:
-    operating-points-v2 = <&OPP table 2>
-
-Device C:
-    operating-points-v2 = <&OPP table 2>
-
-Let's say device B and C add their OPP tables. They both get their own
-"in-memory" copy of the OPP table. They can then enabled/disable
-different OPP entries (rows) and not affect each other's OPP table.
-Which is how it's expected to work.
-
-Now if device A adds its OPP table 1, the "in-memory"
-required_opp_tables pointer of OPP table 1 can end up pointing to
-either Device A's copy of the OPP table or Device B's copy of the OPP
-table depending on which happens to be added first. This effectively
-random linking of OPP tables is mutually exclusive to the point of
-required-opps.
-
-Also, at a DT definition level, OPP table 1 pointing to OPP table 2
-when OPP table 2 is used by more than one device doesn't make any
-sense. Which device/genpd is OPP table 1 saying it "requires to
-operate at a certain level"?
-
-So I propose that we should consider the OPP table DT configuration
-invalid if one OPP table points to another OPP tables that's NOT
-shared but is ALSO pointed to by multiple devices. Basically the
-example above would be considered an invalid DT configuration. Does
-that sound okay to you? If I make changes to enforce that, will that
-be acceptable?
-
-If this sounds okay to you, then in the example above, assume Device C
-isn't present. Then when OPP table 1 is added by device A, if OPP
-table 2 hasn't been added already, I can just go ahead and allocate
-OPP table 2. And then when device B tries to add OPP table 2, I can
-just tie device B to OPP table 2 and fill up any of the missing
-pieces.
-
-This sounds better than trying to loop through existing OPP tables and
-seeing if any other table is waiting for the newly added table and
-marking the waiting tables as "linked". Especially because it gets a
-lot more complicated and inefficient when you consider a chain of OPP
-tables and many-to-many linking of OPP tables.
-
--Saravana
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+>  drivers/clk/imx/clk-imx8mq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
+> index d407a07..91de69a 100644
+> --- a/drivers/clk/imx/clk-imx8mq.c
+> +++ b/drivers/clk/imx/clk-imx8mq.c
+> @@ -539,7 +539,7 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
+>         clks[IMX8MQ_CLK_DISP_AXI_ROOT]  = imx_clk_gate2_shared2("disp_axi_root_clk", "disp_axi", base + 0x45d0, 0, &share_count_dcss);
+>         clks[IMX8MQ_CLK_DISP_APB_ROOT]  = imx_clk_gate2_shared2("disp_apb_root_clk", "disp_apb", base + 0x45d0, 0, &share_count_dcss);
+>         clks[IMX8MQ_CLK_DISP_RTRM_ROOT] = imx_clk_gate2_shared2("disp_rtrm_root_clk", "disp_rtrm", base + 0x45d0, 0, &share_count_dcss);
+> -       clks[IMX8MQ_CLK_TMU_ROOT] = imx_clk_gate4_flags("tmu_root_clk", "ipg_root", base + 0x4620, 0, CLK_IS_CRITICAL);
+> +       clks[IMX8MQ_CLK_TMU_ROOT] = imx_clk_gate4("tmu_root_clk", "ipg_root", base + 0x4620, 0);
+>         clks[IMX8MQ_CLK_VPU_DEC_ROOT] = imx_clk_gate2_flags("vpu_dec_root_clk", "vpu_bus", base + 0x4630, 0, CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE);
+>         clks[IMX8MQ_CLK_CSI1_ROOT] = imx_clk_gate4("csi1_root_clk", "csi1_core", base + 0x4650, 0);
+>         clks[IMX8MQ_CLK_CSI2_ROOT] = imx_clk_gate4("csi2_root_clk", "csi2_core", base + 0x4660, 0);
+> --
+> 2.7.4
+>
