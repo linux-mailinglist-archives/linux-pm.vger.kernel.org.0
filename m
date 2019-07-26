@@ -2,184 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9FA75D26
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 04:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780EC75D5C
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 05:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbfGZCqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jul 2019 22:46:38 -0400
-Received: from anchovy2.45ru.net.au ([203.30.46.146]:45085 "EHLO
-        anchovy2.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725944AbfGZCqi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 22:46:38 -0400
-Received: (qmail 30833 invoked by uid 5089); 26 Jul 2019 02:46:34 -0000
-Received: by simscan 1.2.0 ppid: 30700, pid: 30704, t: 0.4346s
-         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950 spam: 3.1.4
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on anchovy2
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=6.0 tests=ALL_TRUSTED,AWL
-        autolearn=disabled version=3.4.1
-Received: from unknown (HELO ?192.168.0.34?) (rtresidd@electromag.com.au@203.59.235.95)
-  by anchovy3.45ru.net.au with ESMTPA; 26 Jul 2019 02:46:33 -0000
-Subject: Re: [PATCH 1/1] power/supply/sbs-battery: Fix confusing battery
- status when idle or empty
-To:     Guenter Roeck <groeck@google.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Nick Crews <ncrews@chromium.org>, andrew.smirnov@gmail.com,
-        Guenter Roeck <groeck@chromium.org>, david@lechnology.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rfontana@redhat.com, allison@lohutok.net, baolin.wang@linaro.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <1564043102-25298-1-git-send-email-rtresidd@electromag.com.au>
- <CABXOdTdz=+P-HXaUbGAuLBjNE1GA0C8o4OPmF996DOrXxkQJAg@mail.gmail.com>
-From:   Richard Tresidder <rtresidd@electromag.com.au>
-Message-ID: <71a968f7-88c9-aa6c-6822-edfc12484d91@electromag.com.au>
-Date:   Fri, 26 Jul 2019 10:46:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1725909AbfGZD0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jul 2019 23:26:34 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44478 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725867AbfGZD0e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jul 2019 23:26:34 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i18so24043726pgl.11
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 20:26:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YfhbltO6FtqY+nhX3A4c4C7VpTkM+5+6ovBigThYvB0=;
+        b=mMpsHV9ElNPYpaobsGlXivKLT7vbB0JAEpP7GYdEvTMn910AvbCidJ3JVjpj7Zt5xO
+         NEOiwgKk5owsCRQ7JkP48WP0iwfQ2o6QqoIaqaz1po699V1Y9BXGHQuhLc/DUx5rra87
+         0g3MLd0ArNNknkZsiNP+WkvbwMvBPl8CQTPN+jMd32AG50a3q9CehG1Jm/i+x4+pMVNL
+         OJHm7YoiI9V3/xFI7qakp9Fup0NPV7AX3zRuGEfnnOLSZdQ+13e45e4i/f6C4NBIrn89
+         t8HdpdLCqdmV7DzVH/uD++SKlZZ985zB/po5Nwnm5fMAGO4MKGuhjMzRoFJLL9HgF91v
+         ShXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YfhbltO6FtqY+nhX3A4c4C7VpTkM+5+6ovBigThYvB0=;
+        b=Mvh9+6+cVXJ98V+5IV9eYe3jz6ts4zqRCpXM5FefCFdyD8FsQnVN09uE8VVvbZN0Xh
+         fARPi5E7ccZokjMiMUgBu0RDYQozhtQy9qY1uv6hWpMRPmXOuuXTzfRnA1LSB9QxAULJ
+         UCewvdRoR7MsO3y/n4t4vwS0EMBn+WkQ4Y7hRrE38YJm7ycnAenYwsXBy1co4P8iClj6
+         pmu2x11HjqGK3ScbaQoYf+nsS8aa5KkTg+w0DxcKdR3VCrEirxGi5axHQ9fJiPhRMzFy
+         doI8HhY0XNBQ7ZAKejt2EMREqhza2FtNtgdj4sbV/4TUhWrVzweGqN1V7wydqPhvtgdj
+         KR3Q==
+X-Gm-Message-State: APjAAAViYWBMp1RfrIR0ksErygLLVyrjKHnAjD1CHdKRSHJbCL5cY+NU
+        0qN4hDT9NP97SAGmRUAj2LGSKg==
+X-Google-Smtp-Source: APXvYqxTg6RaVRHtF9c9R4BCNa8UgHa7F5aWitP9SzEaN+tdcNZSH3RKI8L0lLXVfubPFM9Nx2djIA==
+X-Received: by 2002:a63:de07:: with SMTP id f7mr51786968pgg.213.1564111593449;
+        Thu, 25 Jul 2019 20:26:33 -0700 (PDT)
+Received: from localhost ([122.172.28.117])
+        by smtp.gmail.com with ESMTPSA id y12sm59772600pfn.187.2019.07.25.20.26.32
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Jul 2019 20:26:32 -0700 (PDT)
+Date:   Fri, 26 Jul 2019 08:56:31 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        'Rafael Wysocki' <rjw@rjwysocki.net>,
+        'Ingo Molnar' <mingo@redhat.com>,
+        'Peter Zijlstra' <peterz@infradead.org>,
+        'Linux PM' <linux-pm@vger.kernel.org>,
+        'Vincent Guittot' <vincent.guittot@linaro.org>,
+        'Joel Fernandes' <joel@joelfernandes.org>,
+        "'v4 . 18+'" <stable@vger.kernel.org>,
+        'Linux Kernel Mailing List' <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: schedutil: Don't skip freq update when limits
+ change
+Message-ID: <20190726032631.rflrl5wxgbphqxyf@vireshk-i7>
+References: <1563431200-3042-1-git-send-email-dsmythies@telus.net>
+ <8091ef83f264feb2feaa827fbeefe08348bcd05d.1563778071.git.viresh.kumar@linaro.org>
+ <001201d54125$a6a82350$f3f869f0$@net>
+ <20190723091551.nchopfpqlmdmzvge@vireshk-i7>
+ <CAJZ5v0ji+ksapJ4kc2m5UM_O+AShAvJWmYhTQHiXiHnpTq+xRg@mail.gmail.com>
+ <20190724114327.apmx35c7a4tv3qt5@vireshk-i7>
+ <000c01d542fc$703ff850$50bfe8f0$@net>
 MIME-Version: 1.0
-In-Reply-To: <CABXOdTdz=+P-HXaUbGAuLBjNE1GA0C8o4OPmF996DOrXxkQJAg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-AU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000c01d542fc$703ff850$50bfe8f0$@net>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Guenter
-    Yep sorry there was a merge that I missed during that initial send 
-of the patch.
-I sent a version 2 shortly after.
+On 25-07-19, 08:20, Doug Smythies wrote:
+> I tried the patch ("patch2"). It did not fix the issue.
+> 
+> To summarize, all kernel 5.2 based, all intel_cpufreq driver and schedutil governor:
+> 
+> Test: Does a busy system respond to maximum CPU clock frequency reduction?
+> 
+> stock, unaltered: No.
+> revert ecd2884291261e3fddbc7651ee11a20d596bb514: Yes
+> viresh patch: No.
+> fast_switch edit: No.
 
-Regards
-    Richard Tresidder
+You tried this fast-switch thing with my patch applied, right ?
 
-On 25/07/2019 9:39 pm, Guenter Roeck wrote:
-> On Thu, Jul 25, 2019 at 1:25 AM Richard Tresidder
-> <rtresidd@electromag.com.au> wrote:
->> When a battery or batteries in a system are in parallel then one or more
->> may not be providing any current to the system.
->> This fixes an incorrect
->> status indication of FULL for the battery simply because it wasn't
->> discharging at that point in time.
->> The battery will now be flagged as IDLE.
->> Have also added the additional check for the battery FULL DISCHARGED flag
->> which will now flag a status of EMPTY.
->>
->> Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
->> ---
->>
->> Notes:
->>      power/supply/sbs-battery: Fix confusing battery status when idle or empty
->>
->>      When a battery or batteries in a system are in parallel then one or more
->>      may not be providing any current to the system.
->>      This fixes an incorrect
->>      status indication of FULL for the battery simply because it wasn't
->>      discharging at that point in time.
->>      The battery will now be flagged as IDLE.
->>      Have also added the additional check for the battery FULL DISCHARGED flag
->>      which will now flag a status of EMPTY.
->>
->>   drivers/power/supply/power_supply_sysfs.c |  3 ++-
->>   drivers/power/supply/sbs-battery.c        | 28 ++++++++++++++--------------
->>   include/linux/power_supply.h              |  2 ++
->>   3 files changed, 18 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
->> index ce6671c..68ec49d 100644
->> --- a/drivers/power/supply/power_supply_sysfs.c
->> +++ b/drivers/power/supply/power_supply_sysfs.c
->> @@ -51,7 +51,8 @@
->>   };
->>
->>   static const char * const power_supply_status_text[] = {
->> -       "Unknown", "Charging", "Discharging", "Not charging", "Full"
->> +       "Unknown", "Charging", "Discharging", "Not charging", "Full",
->> +       "Empty", "Idle"
->>   };
->>
->>   static const char * const power_supply_charge_type_text[] = {
->> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
->> index ea8ba3e..e6c636c 100644
->> --- a/drivers/power/supply/sbs-battery.c
->> +++ b/drivers/power/supply/sbs-battery.c
->> @@ -294,14 +294,10 @@ static int sbs_status_correct(struct i2c_client *client, int *intval)
->>
->>          ret = (s16)ret;
->>
->> -       /* Not drawing current means full (cannot be not charging) */
->> -       if (ret == 0)
->> -               *intval = POWER_SUPPLY_STATUS_FULL;
->> -
->> -       if (*intval == POWER_SUPPLY_STATUS_FULL) {
->> -               /* Drawing or providing current when full */
->> -               if (ret > 0)
->> -                       *intval = POWER_SUPPLY_STATUS_CHARGING;
->> +       if (*intval == POWER_SUPPLY_STATUS_DISCHARGING) {
->> +               /* Charging indicator not set in battery */
->> +               if (ret == 0)
->> +                       *intval = POWER_SUPPLY_STATUS_IDLE;
-> But doesn't the above already indicate that it _is_ discharging ?
->
->>                  else if (ret < 0)
->>                          *intval = POWER_SUPPLY_STATUS_DISCHARGING;
-> This doesn't make sense. *intval is already set to
-> POWER_SUPPLY_STATUS_DISCHARGING
-> in this situation.
->
->>          }
->> @@ -424,10 +420,12 @@ static int sbs_get_battery_property(struct i2c_client *client,
->>
->>                  if (ret & BATTERY_FULL_CHARGED)
->>                          val->intval = POWER_SUPPLY_STATUS_FULL;
->> -               else if (ret & BATTERY_DISCHARGING)
->> -                       val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
->> -               else
->> +               else if (ret & BATTERY_FULL_DISCHARGED)
->> +                       val->intval = POWER_SUPPLY_STATUS_EMPTY;
->> +               else if (!(ret & BATTERY_DISCHARGING))
->>                          val->intval = POWER_SUPPLY_STATUS_CHARGING;
->> +               else
->> +                       val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
->>
->>                  sbs_status_correct(client, &val->intval);
->>
->> @@ -781,10 +779,12 @@ static void sbs_delayed_work(struct work_struct *work)
->>
->>          if (ret & BATTERY_FULL_CHARGED)
->>                  ret = POWER_SUPPLY_STATUS_FULL;
->> -       else if (ret & BATTERY_DISCHARGING)
->> -               ret = POWER_SUPPLY_STATUS_DISCHARGING;
->> -       else
->> +       else if (ret & BATTERY_FULL_DISCHARGED)
->> +               ret = POWER_SUPPLY_STATUS_EMPTY;
->> +       else if (!(ret & BATTERY_DISCHARGING))
->>                  ret = POWER_SUPPLY_STATUS_CHARGING;
->> +       else
->> +               ret = POWER_SUPPLY_STATUS_DISCHARGING;
->>
->>          sbs_status_correct(chip->client, &ret);
->>
->> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
->> index 28413f7..c9f3347 100644
->> --- a/include/linux/power_supply.h
->> +++ b/include/linux/power_supply.h
->> @@ -37,6 +37,8 @@ enum {
->>          POWER_SUPPLY_STATUS_DISCHARGING,
->>          POWER_SUPPLY_STATUS_NOT_CHARGING,
->>          POWER_SUPPLY_STATUS_FULL,
->> +       POWER_SUPPLY_STATUS_EMPTY,
->> +       POWER_SUPPLY_STATUS_IDLE,
->>   };
->>
->>   /* What algorithm is the charger using? */
->> --
->> 1.8.3.1
->>
->
+> viresh patch2: No.
+> 
+> References (and procedures used):
+> https://marc.info/?l=linux-pm&m=156346478429147&w=2
+> https://marc.info/?l=linux-kernel&m=156343125319461&w=2
+> 
+> ... Doug
+> 
 
+-- 
+viresh
