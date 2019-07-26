@@ -2,84 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BDB75DF4
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 06:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C48675EBE
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 08:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725944AbfGZEvq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 00:51:46 -0400
-Received: from anchovy3.45ru.net.au ([203.30.46.155]:47002 "EHLO
-        anchovy3.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbfGZEvq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 00:51:46 -0400
-Received: (qmail 2589 invoked by uid 5089); 26 Jul 2019 04:51:44 -0000
-Received: by simscan 1.2.0 ppid: 2555, pid: 2556, t: 0.3125s
-         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950 spam: 3.1.4
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on anchovy3.45ru.net.au
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=6.0 tests=ALL_TRUSTED,AWL
-        autolearn=disabled version=3.4.1
-Received: from unknown (HELO ?192.168.0.34?) (rtresidd@electromag.com.au@203.59.235.95)
-  by anchovy2.45ru.net.au with ESMTPA; 26 Jul 2019 04:51:43 -0000
-Subject: Re: [PATCH 1/1] power/supply/powersupply_sysfs: Add of_node name to
- uevent message if available
-From:   Richard Tresidder <rtresidd@electromag.com.au>
-To:     David Lechner <david@lechnology.com>, linux-pm@vger.kernel.org
-References: <1564040858-24202-1-git-send-email-rtresidd@electromag.com.au>
- <9a10b934-e7f3-c95f-6250-8a857bdfa912@lechnology.com>
- <3c372ca4-373d-9c03-8636-a9f065eed577@electromag.com.au>
-Message-ID: <f6082ff8-b9fc-a52d-ad48-fc1b348246f4@electromag.com.au>
-Date:   Fri, 26 Jul 2019 12:51:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <3c372ca4-373d-9c03-8636-a9f065eed577@electromag.com.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-AU
+        id S1726007AbfGZGIa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 02:08:30 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38039 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725842AbfGZGIa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 02:08:30 -0400
+Received: by mail-pl1-f193.google.com with SMTP id az7so24318863plb.5
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 23:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=7ws1qKYpjHUbJBcDEjX+O45O4PeS/F7CJBjcK+b80DI=;
+        b=eFD2SvfC4aW7c9EH62OZkBc5TVdsTFmugcm+I4moIuOACjKYGEFe0Kk43P2gHQ+9l5
+         3XwjOce81bW5EusPu1TWOmRAywaELFY/2xEHnmfXV/GnFKJllG12Oe9WaWqiijswAci0
+         1mAn0sSyoLb1L4MYhcBEp60cHOJ1fjV2u1TiDgkkpknP9n40mozFEeeOY+Vrc0is60kh
+         37p/3hj7dhJI9NdCmQh64uInc8KRvABr5OqmHwfzY/ECcAoVjqzVuPh8/jPvfmyFFWdT
+         XCFAdicET4E2/NXtnyQbds6DYEcR7GB7Cth+wgtrzBmzA4KNeVyq/y06xTJUrgURgKi3
+         KR2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7ws1qKYpjHUbJBcDEjX+O45O4PeS/F7CJBjcK+b80DI=;
+        b=bukSyfJ+5PoBSIq51sBx4mi9JTzdnRJRgnn9O93cwA215EVbppJmbEOVhkqLBFeMhG
+         nKg0pMnM1/Xhp4fG5zvrtncfgD1vh1okSin7kB0t6E1I6PgnZEqobslPabqebYKLK0jC
+         EMOppyZJPrnPq6ulfWAy8vCTK1Rup4GsI8E1RqanHEH+F+udyPrSRFDz4/B3JAxEUAE9
+         TqdpWMlMTt/WJV8ijDoVXFnLAW5C5V9luV2VurgMhE3ru9NNBFy6HRCj3nJFLJD33Vy8
+         JLPGVxvmlP7sHgB9xeqX+hZ4p/vZI+zqauEOAQrN0h+JqIb5EmPc/7QGG6rGRbTy0XAt
+         upVQ==
+X-Gm-Message-State: APjAAAUrHMCVjY3x4eNk+Uw6JkV2mbT1uFtTidufxtoEbxro5fXLJ2km
+        iLXnqtCtrvFN/myDhYeEHoM=
+X-Google-Smtp-Source: APXvYqz42D1hSQPDA/GlNfy+K3GJggOIIpXxWbBz2HWh1QSh7ev6aI469EeqUu1yzVlm2+LCTseiJw==
+X-Received: by 2002:a17:902:b20c:: with SMTP id t12mr95366309plr.285.1564121309632;
+        Thu, 25 Jul 2019 23:08:29 -0700 (PDT)
+Received: from huyue2.ccdomain.com ([218.189.10.173])
+        by smtp.gmail.com with ESMTPSA id g4sm65843430pfo.93.2019.07.25.23.08.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Jul 2019 23:08:28 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
+Cc:     linux-pm@vger.kernel.org, huyue2@yulong.com
+Subject: [PATCH] PM / OPP: Correct Documentation about library location
+Date:   Fri, 26 Jul 2019 14:07:47 +0800
+Message-Id: <20190726060747.8700-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1.windows.2
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi David
-   That call requires a struct device *
-But the of_node pointer is located in the struct power_supply
-Seems the of_node value in the base device* is null, and often is.
-I find it hard at times to figure out which one of these to reference as 
-things seem to be duplicated in a lot of places..
+From: Yue Hu <huyue2@yulong.com>
 
-Should that call potentially be refactored to take a device_node * 
-instead of a device *
+OPP library is now located in drivers/opp/ directory.
 
-**
-Regards
-    Richard Tresidder
+Signed-off-by: Yue Hu <huyue2@yulong.com>
+---
+ Documentation/power/opp.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 26/07/2019 10:40 am, Richard Tresidder wrote:
-> Hi David
->   That it would be. I wasn't aware of that call.
-> I'll give it a crack and send in a new version of the patch.
->
-> Cheers
->   Richard Tresidder
->
-> Richard Tresidder
-> On 25/07/2019 10:08 pm, David Lechner wrote:
->> On 7/25/19 2:47 AM, Richard Tresidder wrote:
->>> If the of_node name of the supply is available from the devicetree 
->>> binding
->>> then include it under the var POWER_SUPPLY_OF_NODE_NAME.
->>> This helps where a consistent name is known via the device tree binding
->>> but it is hard to identify based on the usual enumeration process.
->>>
->>
->> Would it be possible to use of_device_uevent() instead of introducing 
->> a new
->> property?
->>
->>
->>
->
->
->
+diff --git a/Documentation/power/opp.rst b/Documentation/power/opp.rst
+index b3cf1de..209c761 100644
+--- a/Documentation/power/opp.rst
++++ b/Documentation/power/opp.rst
+@@ -46,7 +46,7 @@ We can represent these as three OPPs as the following {Hz, uV} tuples:
+ ----------------------------------------
+ 
+ OPP library provides a set of helper functions to organize and query the OPP
+-information. The library is located in drivers/base/power/opp.c and the header
++information. The library is located in drivers/opp/ directory and the header
+ is located in include/linux/pm_opp.h. OPP library can be enabled by enabling
+ CONFIG_PM_OPP from power management menuconfig menu. OPP library depends on
+ CONFIG_PM as certain SoCs such as Texas Instrument's OMAP framework allows to
+-- 
+1.9.1
 
