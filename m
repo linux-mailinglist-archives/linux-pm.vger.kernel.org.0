@@ -2,241 +2,465 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F24A276513
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 14:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E74F76669
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 14:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbfGZMCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 08:02:43 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:56961 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726655AbfGZMCm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 08:02:42 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190726120239euoutp025a7a9f8c98d9430d1872e9e289e6496e~08179R0oQ3068230682euoutp02G
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2019 12:02:39 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190726120239euoutp025a7a9f8c98d9430d1872e9e289e6496e~08179R0oQ3068230682euoutp02G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1564142559;
-        bh=DpZBxh2b3FgthXala1yFlfzP7R3sugOAntJqovIx5ks=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=gkZItRGkiEfS246wY2lcNcwXj1+9oKYG/cG/j0IFhNQI4up5bXH43DY/Eo7ILurcL
-         LNogapGj+FApDzNMGsX1lgXEwGsfR/aiC0ugaf87G1p9v3jkyoMRpZEY1KZyqCV5cb
-         ypjeiakYVqv/zpJMgiESU5X1LFkjwM11kPVrxpPU=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190726120239eucas1p20656c7e558391a8f78390c795dafdbbe~0817JtnK02738827388eucas1p2t;
-        Fri, 26 Jul 2019 12:02:39 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id CE.45.04377.EDBEA3D5; Fri, 26
-        Jul 2019 13:02:38 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190726120238eucas1p243c54e3f3ff3d514e3873d40e2bdf3ab~0816VHYQC0843408434eucas1p2o;
-        Fri, 26 Jul 2019 12:02:38 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190726120237eusmtrp21bb6a34874d8337ecbd2413f228e72b4~0816EElWM1338313383eusmtrp2e;
-        Fri, 26 Jul 2019 12:02:37 +0000 (GMT)
-X-AuditID: cbfec7f4-113ff70000001119-dc-5d3aebdef158
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 21.DF.04140.DDBEA3D5; Fri, 26
-        Jul 2019 13:02:37 +0100 (BST)
-Received: from [106.120.50.63] (unknown [106.120.50.63]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190726120237eusmtip2c70175156eed774cdc329002f19d0590~0815ZG3vE1048010480eusmtip2N;
-        Fri, 26 Jul 2019 12:02:37 +0000 (GMT)
-Subject: Re: [RFC PATCH 08/11] arm: dts: exynos: Add parents and
- #interconnect-cells to Exynos4412
-To:     cwchoi00@gmail.com,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>, inki.dae@samsung.com,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        georgi.djakov@linaro.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <cc4c48c3-06a5-c58f-20de-0aa18ae8667e@samsung.com>
-Date:   Fri, 26 Jul 2019 14:02:34 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S1726769AbfGZMvu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 08:51:50 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:40022 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726674AbfGZMvp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 08:51:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=fu356YrPMzndyFm+mjI4xYuszQip5jZIznwBf4V2bFA=; b=NIqaM7XSYnaOI+0JbvLfelNId
+        e2SufG8jn+l1k8PHNZRSqf+J6epByjUKQ3giDW+BBx4ytRSOUxmffLivk4zYUJGkMTAYnOTqlGRlC
+        puhDyzf+64CPiBXxI5yAuAV3g50sIkqXucPnjqBFqAHvXysltOeN1E7TyGdFHUrrNAhlt/SNVEqiy
+        I1wgL/7+Bb4V1Be+jArftX4o4VWJuf9uflSNpXUbiLZNSZvXkFrlaVS4IwQN/Xu1VvIW62PjkSbYy
+        AXOkbE589ZoOEQXbOT9oYM67TzhFvlhEsP7P2u7YycEY3rqamPmxXZauyS5P0cv/tu2nwL4sgLUQo
+        V4nHpkdkA==;
+Received: from [179.95.31.157] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hqzhE-0006Aq-MV; Fri, 26 Jul 2019 12:51:41 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hqzhB-0005a5-Sq; Fri, 26 Jul 2019 09:51:37 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
+        openrisc@lists.librecores.org, devel@driverdev.osuosl.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        devel@lists.orangefs.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
+        linux-wireless@vger.kernel.org, rcu@vger.kernel.org
+Subject: [PATCH v2 00/26] ReST conversion of text files without .txt extension
+Date:   Fri, 26 Jul 2019 09:51:10 -0300
+Message-Id: <cover.1564145354.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <CAGTfZH1_Qk+vNa_AJW_8OA8MJbnZa3yCTLLRs2w23bNTm72gyQ@mail.gmail.com>
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SaUwTYRD16263S0Pxs6BM0ABpgihGEKJxBaNoMNk/GDz+eBCosuGQcrRQ
-        PGLkSDwQEDAEKAjG4JEmeBRKKCBSBCoQAVFR5I6IoIIJrT84BCkryr83b97Mm5cMTUj7hE50
-        ZEwCp4yRR8soMVnVMtOxffC7b/CO1FseTGOLXsR8sHwVMmPN25jSpg4h8+7XT4rJf66jmNyh
-        bJLp7HwqYnSfe4TM25piijFnNiGmoLNewPSlPKKYgtsTlL8da9AMiFid9gbF9vfUUezQTZOA
-        rSi7whqn6gRsVqUWsWadcxB9Urw3jIuOVHNKr32h4oj7IxmCuEX38wv9RpSM2iEd2dCAd8JE
-        wyBKR2Jaih8haKttFfCFBcFsRxnJF2YEOcUjwpWRnPtGgm88RJA31vt3ZBKB+ZVBZFXZ4zAY
-        r3+NrNgBn4Bc09VlEwLPEZB1Z25ZRGFvSJ9Mp6xYgvfB6ND0EqZpErtBQ8V+K70enwbDjwyC
-        l6yD1sJR0opt8BEwFJcsjxLYBdL0RQSPHeHTaOnyQYB/iyD78XuRdSfgAHgxsJZPYA/fTJUi
-        Hm+CRcOKPg3BSEe5iC8yELxNLUC8yg9emt4IrYsIvBWe1Hjx9AGwtF8j+f128HFyHX+DHeRW
-        5RM8LYHrV6W8ejNoTI//2Rq7uolsJNOsSqZZlUazKo3mv+9dRGqRI5eoUoRzKp8YLslTJVeo
-        EmPCPc/GKnRo6eXaF0yWalQzf6YRYRrJbCVbtHuCpUK5WnVB0YiAJmQOEn31EiUJk1+4yClj
-        Q5SJ0ZyqEW2kSZmj5NKa4VNSHC5P4M5xXBynXOkKaBunZJQkVh5NSUVj8cVNx20PWgTds4eL
-        jjVDSNe92sL4jSXeifOZltoBlzXDisvmeDWbVP5gIVCBt7i32U6luNplTEc9m3lwfVfohqii
-        CLcydaDPnviE8f5Fbe96fQA3dMjJVv9kxh/tftjlEJnn6xHqUYCD1PbO3BeTG1EX6MpO+8lI
-        VYTc24NQquR/AB0p7rFuAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHIsWRmVeSWpSXmKPExsVy+t/xe7p3X1vFGlzdpGdx6NhWdovrX56z
-        Wjw7qm0x/8g5VosrX9+zWUzfu4nNYtL9CSwW589vYLfY9Pgaq8XlXXPYLD73HmG0mHF+H5PF
-        7cYVbBYzJr9kc+Dz2DnrLrvHplWdbB53ru1h87jffZzJY/OSeo+D7/YwefRtWcXo8XmTXABH
-        lJ5NUX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1NSmpOZllqkb5dgl7G0oc9
-        TAX/1Sv+3TnI2MB4WqKLkZNDQsBEYuLSg8xdjFwcQgJLGSX+TjrBBpGQkTg5rYEVwhaW+HOt
-        iw2i6DWjxOYJL1lAEsICKRIv9p1lBLFFBCIlGpZPYQIpYhb4yyyxf80dRoiOKUwS/V8vgHWw
-        CRhKdL3tAlvBK2An8eT+JyCbg4NFQFXiwGZ7kLCoQIzEvjPb2SFKBCVOznwC1sopECixc848
-        sFZmATOJeZsfMkPY8hLNW2dD2eISt57MZ5rAKDQLSfssJC2zkLTMQtKygJFlFaNIamlxbnpu
-        sZFecWJucWleul5yfu4mRmBcbzv2c8sOxq53wYcYBTgYlXh4Lyy3jBViTSwrrsw9xCjBwawk
-        wrt1B1CINyWxsiq1KD++qDQntfgQoynQbxOZpUST84EpJ68k3tDU0NzC0tDc2NzYzEJJnLdD
-        4GCMkEB6YklqdmpqQWoRTB8TB6dUA2NYbcmhy2fqTspY9euu6pqnIX6Fe8qX91pm/4+lM/L/
-        z/33OtY9cZ/AuWUqhcfN/vol6zwv13h0uOBgu9WHumdBBp8Vtz6aVSiU7/R62hNj8z9Fxyds
-        XsxXoPvNyWglu+ah+w8Yp9mePq0SEvrt6+5Jz142rZzLlm049+gVk/jFyV6CgT0L4pYrsRRn
-        JBpqMRcVJwIArD3n3wEDAAA=
-X-CMS-MailID: 20190726120238eucas1p243c54e3f3ff3d514e3873d40e2bdf3ab
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190723122027eucas1p24b1d76e3139f7cc52614d7613ff9ba98
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190723122027eucas1p24b1d76e3139f7cc52614d7613ff9ba98
-References: <CGME20190723122027eucas1p24b1d76e3139f7cc52614d7613ff9ba98@eucas1p2.samsung.com>
-        <20190723122016.30279-1-a.swigon@partner.samsung.com>
-        <20190723122016.30279-9-a.swigon@partner.samsung.com>
-        <CAGTfZH1_Qk+vNa_AJW_8OA8MJbnZa3yCTLLRs2w23bNTm72gyQ@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi
+This series converts the text files under Documentation with doesn't end
+neither .txt or .rst and are not part of ABI or features.
 
-On 2019-07-25 15:13, Chanwoo Choi wrote:
-> 2019년 7월 24일 (수) 오전 8:07, Artur Świgoń <a.swigon@partner.samsung.com>님이 작성:
->> This patch adds two fields tp the Exynos4412 DTS:
->>    - parent: to declare connections between nodes that are not in a
->>      parent-child relation in devfreq;
->>    - #interconnect-cells: required by the interconnect framework.
->>
->> Please note that #interconnect-cells is always zero and node IDs are not
->> hardcoded anywhere.
->>
->> Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
->> ---
->>   arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 1 +
->>   arch/arm/boot/dts/exynos4412.dtsi               | 9 +++++++++
->>   2 files changed, 10 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
->> index ea55f377d17c..bdd61ae86103 100644
->> --- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
->> +++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
->> @@ -106,6 +106,7 @@
->>   &bus_leftbus {
->>          devfreq-events = <&ppmu_leftbus_3>, <&ppmu_rightbus_3>;
->>          vdd-supply = <&buck3_reg>;
->> +       parent = <&bus_dmc>;
-> It is wrong. 'bus_leftbus' has not any h/w dependency of 'bus_dmc'
-> and 'bus_leftbus' is not child of 'bus_dmc'.
->
-> Even it there are some PMQoS requirement between them,
-> it it not proper to tie both 'bus_leftbus' and 'bus_dmc'.
+This series is at:
+	https://git.linuxtv.org/mchehab/experimental.git/log/?h=rst_for_5_4_v3
 
-There is strict dependency between them. DMC bus running at frequency 
-lower than left (or right) bus really doesn't make much sense, because 
-it will limit the left bus performance. This dependency should be 
-modeled somehow.
+And it is based on yesterday's upstream tree.
 
->>          status = "okay";
->>   };
->>
->> diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
->> index d20db2dfe8e2..a70a671acacd 100644
->> --- a/arch/arm/boot/dts/exynos4412.dtsi
->> +++ b/arch/arm/boot/dts/exynos4412.dtsi
->> @@ -390,6 +390,7 @@
->>                          clocks = <&clock CLK_DIV_DMC>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_dmc_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> @@ -398,6 +399,7 @@
->>                          clocks = <&clock CLK_DIV_ACP>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_acp_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> @@ -406,6 +408,7 @@
->>                          clocks = <&clock CLK_DIV_C2C>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_dmc_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> @@ -459,6 +462,7 @@
->>                          clocks = <&clock CLK_DIV_GDL>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_leftbus_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> @@ -467,6 +471,7 @@
->>                          clocks = <&clock CLK_DIV_GDR>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_leftbus_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> @@ -475,6 +480,7 @@
->>                          clocks = <&clock CLK_ACLK160>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_display_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> @@ -483,6 +489,7 @@
->>                          clocks = <&clock CLK_ACLK133>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_fsys_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> @@ -491,6 +498,7 @@
->>                          clocks = <&clock CLK_ACLK100>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_peri_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> @@ -499,6 +507,7 @@
->>                          clocks = <&clock CLK_SCLK_MFC>;
->>                          clock-names = "bus";
->>                          operating-points-v2 = <&bus_leftbus_opp_table>;
->> +                       #interconnect-cells = <0>;
->>                          status = "disabled";
->>                  };
->>
->> --
->> 2.17.1
->>
->
-Best regards
+After this series, we have ~320 files left to be converted to ReST.
+
+v2:
+  - Added 3 files submitted for v5.3 that weren't merged yet;
+  - markdown patch broken into two, per Rob's request;
+  - rebased on the top of upstream master branch
+
+Mauro Carvalho Chehab (26):
+  docs: power: add it to to the main documentation index
+  docs: thermal: add it to the driver API
+  docs: powerpc: convert docs to ReST and rename to *.rst
+  docs: ubifs-authentication.md: convert to ReST
+  docs: writing-schema.md: convert from markdown to ReST
+  docs: i2c: convert to ReST and add to driver-api bookset
+  docs: w1: convert to ReST and add to the kAPI group of docs
+  spi: docs: convert to ReST and add it to the kABI bookset
+  docs: ipmb: place it at driver-api and convert to ReST
+  docs: packing: move it to core-api book and adjust markups
+  docs: admin-guide: add auxdisplay files to it after conversion to ReST
+  docs: README.buddha: convert to ReST and add to m68k book
+  docs: parisc: convert to ReST and add to documentation body
+  docs: openrisc: convert to ReST and add to documentation body
+  docs: isdn: convert to ReST and add to kAPI bookset
+  docs: fs: cifs: convert to ReST and add to admin-guide book
+  docs: fs: convert docs without extension to ReST
+  docs: fs: convert porting to ReST
+  docs: index.rst: don't use genindex for pdf output
+  docs: wimax: convert to ReST and add to admin-guide
+  docs: mips: add to the documentation body as ReST
+  docs: hwmon: pxe1610: convert to ReST format and add to the index
+  docs: nios2: add it to the main Documentation body
+  docs: net: convert two README files to ReST format
+  docs: rcu: convert some articles from html to ReST
+  docs: ABI: remove extension from sysfs-class-mic.txt
+
+ Documentation/ABI/stable/sysfs-bus-w1         |    2 +-
+ .../ABI/stable/sysfs-driver-w1_ds28e04        |    4 +-
+ .../ABI/stable/sysfs-driver-w1_ds28ea00       |    2 +-
+ .../{sysfs-class-mic.txt => sysfs-class-mic}  |    0
+ Documentation/PCI/pci-error-recovery.rst      |    2 +-
+ .../Data-Structures/Data-Structures.html      | 1391 -------
+ .../Data-Structures/Data-Structures.rst       | 1163 ++++++
+ ...riods.html => Expedited-Grace-Periods.rst} |  949 ++---
+ .../Memory-Ordering/Tree-RCU-Diagram.html     |    9 -
+ ...ring.html => Tree-RCU-Memory-Ordering.rst} | 1181 +++---
+ .../RCU/Design/Requirements/Requirements.html | 3330 -----------------
+ .../RCU/Design/Requirements/Requirements.rst  | 2662 +++++++++++++
+ Documentation/RCU/index.rst                   |    5 +
+ Documentation/RCU/whatisRCU.txt               |    4 +-
+ .../auxdisplay/cfag12864b.rst}                |  115 +-
+ .../admin-guide/auxdisplay/index.rst          |   16 +
+ .../auxdisplay/ks0108.rst}                    |   53 +-
+ .../AUTHORS => admin-guide/cifs/authors.rst}  |   64 +-
+ .../CHANGES => admin-guide/cifs/changes.rst}  |    4 +
+ Documentation/admin-guide/cifs/index.rst      |   21 +
+ .../cifs/introduction.rst}                    |    8 +
+ .../cifs/TODO => admin-guide/cifs/todo.rst}   |   87 +-
+ .../README => admin-guide/cifs/usage.rst}     |  560 +--
+ .../cifs/winucase_convert.pl                  |    0
+ Documentation/admin-guide/index.rst           |    3 +
+ .../wimax/i2400m.rst}                         |  145 +-
+ Documentation/admin-guide/wimax/index.rst     |   19 +
+ .../wimax/wimax.rst}                          |   36 +-
+ Documentation/core-api/index.rst              |    3 +-
+ .../{packing.txt => core-api/packing.rst}     |   81 +-
+ .../devicetree/bindings/i2c/i2c-mux-gpmux.txt |    2 +-
+ .../{writing-schema.md => writing-schema.rst} |  137 +-
+ Documentation/driver-api/dmaengine/index.rst  |    2 +-
+ Documentation/driver-api/index.rst            |    2 +
+ Documentation/driver-api/ipmb.rst             |    2 +-
+ Documentation/driver-api/soundwire/index.rst  |    2 +-
+ .../thermal/cpu-cooling-api.rst               |    0
+ .../thermal/exynos_thermal.rst                |    0
+ .../thermal/exynos_thermal_emulation.rst      |    0
+ .../{ => driver-api}/thermal/index.rst        |    2 +-
+ .../thermal/intel_powerclamp.rst              |    0
+ .../thermal/nouveau_thermal.rst               |    0
+ .../thermal/power_allocator.rst               |    0
+ .../{ => driver-api}/thermal/sysfs-api.rst    |   12 +-
+ .../thermal/x86_pkg_temperature_thermal.rst   |    2 +-
+ ...irectory-locking => directory-locking.rst} |   40 +-
+ Documentation/filesystems/index.rst           |    4 +
+ .../filesystems/{Locking => locking.rst}      |  257 +-
+ .../nfs/{Exporting => exporting.rst}          |   31 +-
+ .../filesystems/{porting => porting.rst}      |  824 ++--
+ ...entication.md => ubifs-authentication.rst} |   70 +-
+ Documentation/filesystems/vfs.rst             |    2 +-
+ Documentation/hwmon/adm1021.rst               |    2 +-
+ Documentation/hwmon/adm1275.rst               |    2 +-
+ Documentation/hwmon/hih6130.rst               |    2 +-
+ Documentation/hwmon/ibm-cffps.rst             |    2 +-
+ Documentation/hwmon/index.rst                 |    1 +
+ Documentation/hwmon/lm25066.rst               |    2 +-
+ Documentation/hwmon/max16064.rst              |    2 +-
+ Documentation/hwmon/max16065.rst              |    2 +-
+ Documentation/hwmon/max20751.rst              |    2 +-
+ Documentation/hwmon/max34440.rst              |    2 +-
+ Documentation/hwmon/max6650.rst               |    2 +-
+ Documentation/hwmon/max8688.rst               |    2 +-
+ Documentation/hwmon/menf21bmc.rst             |    2 +-
+ Documentation/hwmon/pcf8591.rst               |    2 +-
+ Documentation/hwmon/{pxe1610 => pxe1610.rst}  |   33 +-
+ Documentation/hwmon/sht3x.rst                 |    2 +-
+ Documentation/hwmon/shtc1.rst                 |    2 +-
+ Documentation/hwmon/tmp103.rst                |    2 +-
+ Documentation/hwmon/tps40422.rst              |    2 +-
+ Documentation/hwmon/ucd9000.rst               |    2 +-
+ Documentation/hwmon/ucd9200.rst               |    2 +-
+ Documentation/hwmon/via686a.rst               |    2 +-
+ Documentation/hwmon/zl6100.rst                |    2 +-
+ .../busses/{i2c-ali1535 => i2c-ali1535.rst}   |   13 +-
+ .../busses/{i2c-ali1563 => i2c-ali1563.rst}   |    3 +
+ .../busses/{i2c-ali15x3 => i2c-ali15x3.rst}   |   64 +-
+ .../busses/{i2c-amd-mp2 => i2c-amd-mp2.rst}   |   14 +-
+ .../i2c/busses/{i2c-amd756 => i2c-amd756.rst} |    8 +-
+ .../busses/{i2c-amd8111 => i2c-amd8111.rst}   |   14 +-
+ .../{i2c-diolan-u2c => i2c-diolan-u2c.rst}    |    3 +
+ .../i2c/busses/{i2c-i801 => i2c-i801.rst}     |   33 +-
+ .../i2c/busses/{i2c-ismt => i2c-ismt.rst}     |   20 +-
+ .../busses/{i2c-mlxcpld => i2c-mlxcpld.rst}   |    6 +
+ .../busses/{i2c-nforce2 => i2c-nforce2.rst}   |   33 +-
+ .../{i2c-nvidia-gpu => i2c-nvidia-gpu.rst}    |    6 +-
+ .../i2c/busses/{i2c-ocores => i2c-ocores.rst} |   22 +-
+ ...2c-parport-light => i2c-parport-light.rst} |    8 +-
+ .../busses/{i2c-parport => i2c-parport.rst}   |  164 +-
+ .../busses/{i2c-pca-isa => i2c-pca-isa.rst}   |    9 +-
+ .../i2c/busses/{i2c-piix4 => i2c-piix4.rst}   |   18 +-
+ .../busses/{i2c-sis5595 => i2c-sis5595.rst}   |   19 +-
+ .../i2c/busses/{i2c-sis630 => i2c-sis630.rst} |   39 +-
+ .../i2c/busses/{i2c-sis96x => i2c-sis96x.rst} |   31 +-
+ .../busses/{i2c-taos-evm => i2c-taos-evm.rst} |    8 +-
+ .../i2c/busses/{i2c-via => i2c-via.rst}       |   28 +-
+ .../i2c/busses/{i2c-viapro => i2c-viapro.rst} |   12 +-
+ Documentation/i2c/busses/index.rst            |   33 +
+ .../i2c/busses/{scx200_acb => scx200_acb.rst} |    9 +-
+ .../i2c/{dev-interface => dev-interface.rst}  |   94 +-
+ ...-considerations => dma-considerations.rst} |    0
+ .../i2c/{fault-codes => fault-codes.rst}      |    5 +-
+ .../i2c/{functionality => functionality.rst}  |   22 +-
+ ...ult-injection => gpio-fault-injection.rst} |   12 +-
+ .../i2c/{i2c-protocol => i2c-protocol.rst}    |   28 +-
+ Documentation/i2c/{i2c-stub => i2c-stub.rst}  |   20 +-
+ .../i2c/{i2c-topology => i2c-topology.rst}    |   68 +-
+ Documentation/i2c/index.rst                   |   37 +
+ ...ting-devices => instantiating-devices.rst} |   45 +-
+ .../muxes/{i2c-mux-gpio => i2c-mux-gpio.rst}  |   26 +-
+ ...e-parameters => old-module-parameters.rst} |   27 +-
+ ...eprom-backend => slave-eeprom-backend.rst} |    4 +-
+ .../{slave-interface => slave-interface.rst}  |   33 +-
+ .../{smbus-protocol => smbus-protocol.rst}    |   86 +-
+ Documentation/i2c/{summary => summary.rst}    |    6 +-
+ ...en-bit-addresses => ten-bit-addresses.rst} |    5 +
+ ...pgrading-clients => upgrading-clients.rst} |  204 +-
+ .../{writing-clients => writing-clients.rst}  |   94 +-
+ Documentation/index.rst                       |   10 +
+ .../isdn/{README.avmb1 => avmb1.rst}          |  231 +-
+ Documentation/isdn/{CREDITS => credits.rst}   |    7 +-
+ .../isdn/{README.gigaset => gigaset.rst}      |  290 +-
+ .../isdn/{README.hysdn => hysdn.rst}          |  125 +-
+ Documentation/isdn/index.rst                  |   24 +
+ .../{INTERFACE.CAPI => interface_capi.rst}    |  182 +-
+ .../isdn/{README.mISDN => m_isdn.rst}         |    5 +-
+ .../m68k/{README.buddha => buddha-driver.rst} |   95 +-
+ Documentation/m68k/index.rst                  |    1 +
+ .../{AU1xxx_IDE.README => au1xxx_ide.rst}     |   89 +-
+ Documentation/mips/index.rst                  |   17 +
+ .../networking/caif/{README => caif.rst}      |   88 +-
+ .../networking/device_drivers/index.rst       |    2 +-
+ Documentation/networking/index.rst            |    2 +-
+ .../{README => mac80211_hwsim.rst}            |   28 +-
+ Documentation/nios2/{README => nios2.rst}     |    1 +
+ Documentation/openrisc/index.rst              |   18 +
+ .../openrisc/{README => openrisc_port.rst}    |   25 +-
+ Documentation/openrisc/{TODO => todo.rst}     |    9 +-
+ .../parisc/{debugging => debugging.rst}       |    7 +
+ Documentation/parisc/index.rst                |   18 +
+ .../parisc/{registers => registers.rst}       |   59 +-
+ Documentation/power/index.rst                 |    2 +-
+ .../{bootwrapper.txt => bootwrapper.rst}      |   28 +-
+ .../{cpu_families.txt => cpu_families.rst}    |   23 +-
+ .../{cpu_features.txt => cpu_features.rst}    |    6 +-
+ Documentation/powerpc/{cxl.txt => cxl.rst}    |   46 +-
+ .../powerpc/{cxlflash.txt => cxlflash.rst}    |   10 +-
+ .../{DAWR-POWER9.txt => dawr-power9.rst}      |   15 +-
+ Documentation/powerpc/{dscr.txt => dscr.rst}  |   18 +-
+ ...ecovery.txt => eeh-pci-error-recovery.rst} |  108 +-
+ ...ed-dump.txt => firmware-assisted-dump.rst} |  117 +-
+ Documentation/powerpc/{hvcs.txt => hvcs.rst}  |  108 +-
+ Documentation/powerpc/index.rst               |   34 +
+ Documentation/powerpc/isa-versions.rst        |   15 +-
+ .../powerpc/{mpc52xx.txt => mpc52xx.rst}      |   12 +-
+ ...nv.txt => pci_iov_resource_on_powernv.rst} |   15 +-
+ .../powerpc/{pmu-ebb.txt => pmu-ebb.rst}      |    1 +
+ .../powerpc/{ptrace.txt => ptrace.rst}        |  169 +-
+ .../{qe_firmware.txt => qe_firmware.rst}      |   37 +-
+ .../{syscall64-abi.txt => syscall64-abi.rst}  |   29 +-
+ ...al_memory.txt => transactional_memory.rst} |   45 +-
+ Documentation/sound/index.rst                 |    2 +-
+ .../spi/{butterfly => butterfly.rst}          |   44 +-
+ Documentation/spi/index.rst                   |   22 +
+ Documentation/spi/{pxa2xx => pxa2xx.rst}      |   95 +-
+ .../spi/{spi-lm70llp => spi-lm70llp.rst}      |   17 +-
+ .../spi/{spi-sc18is602 => spi-sc18is602.rst}  |    5 +-
+ .../spi/{spi-summary => spi-summary.rst}      |  105 +-
+ Documentation/spi/{spidev => spidev.rst}      |   30 +-
+ Documentation/w1/index.rst                    |   21 +
+ .../w1/masters/{ds2482 => ds2482.rst}         |   16 +-
+ .../w1/masters/{ds2490 => ds2490.rst}         |    6 +-
+ Documentation/w1/masters/index.rst            |   14 +
+ .../w1/masters/{mxc-w1 => mxc-w1.rst}         |   13 +-
+ .../w1/masters/{omap-hdq => omap-hdq.rst}     |   12 +-
+ .../w1/masters/{w1-gpio => w1-gpio.rst}       |   21 +-
+ Documentation/w1/slaves/index.rst             |   16 +
+ .../w1/slaves/{w1_ds2406 => w1_ds2406.rst}    |    4 +-
+ .../w1/slaves/{w1_ds2413 => w1_ds2413.rst}    |    9 +
+ .../w1/slaves/{w1_ds2423 => w1_ds2423.rst}    |   27 +-
+ .../w1/slaves/{w1_ds2438 => w1_ds2438.rst}    |   10 +-
+ .../w1/slaves/{w1_ds28e04 => w1_ds28e04.rst}  |    5 +
+ .../w1/slaves/{w1_ds28e17 => w1_ds28e17.rst}  |   16 +-
+ .../w1/slaves/{w1_therm => w1_therm.rst}      |   11 +-
+ .../w1/{w1.generic => w1-generic.rst}         |   88 +-
+ .../w1/{w1.netlink => w1-netlink.rst}         |   89 +-
+ MAINTAINERS                                   |   68 +-
+ arch/powerpc/kernel/exceptions-64s.S          |    2 +-
+ drivers/auxdisplay/Kconfig                    |    2 +-
+ drivers/hwmon/atxp1.c                         |    2 +-
+ drivers/hwmon/smm665.c                        |    2 +-
+ drivers/i2c/Kconfig                           |    4 +-
+ drivers/i2c/busses/Kconfig                    |    2 +-
+ drivers/i2c/busses/i2c-i801.c                 |    2 +-
+ drivers/i2c/busses/i2c-taos-evm.c             |    2 +-
+ drivers/i2c/i2c-core-base.c                   |    4 +-
+ drivers/iio/dummy/iio_simple_dummy.c          |    4 +-
+ drivers/rtc/rtc-ds1374.c                      |    2 +-
+ drivers/soc/fsl/qe/qe.c                       |    2 +-
+ drivers/spi/Kconfig                           |    2 +-
+ drivers/spi/spi-butterfly.c                   |    2 +-
+ drivers/spi/spi-lm70llp.c                     |    2 +-
+ drivers/staging/isdn/hysdn/Kconfig            |    2 +-
+ drivers/tty/hvc/hvcs.c                        |    2 +-
+ fs/cifs/export.c                              |    2 +-
+ fs/exportfs/expfs.c                           |    2 +-
+ fs/isofs/export.c                             |    2 +-
+ fs/orangefs/file.c                            |    2 +-
+ fs/orangefs/orangefs-kernel.h                 |    2 +-
+ include/linux/dcache.h                        |    2 +-
+ include/linux/exportfs.h                      |    2 +-
+ include/linux/i2c.h                           |    2 +-
+ include/linux/platform_data/sc18is602.h       |    2 +-
+ include/linux/thermal.h                       |    4 +-
+ include/soc/fsl/qe/qe.h                       |    2 +-
+ 216 files changed, 9148 insertions(+), 8672 deletions(-)
+ rename Documentation/ABI/testing/{sysfs-class-mic.txt => sysfs-class-mic} (100%)
+ delete mode 100644 Documentation/RCU/Design/Data-Structures/Data-Structures.html
+ create mode 100644 Documentation/RCU/Design/Data-Structures/Data-Structures.rst
+ rename Documentation/RCU/Design/Expedited-Grace-Periods/{Expedited-Grace-Periods.html => Expedited-Grace-Periods.rst} (15%)
+ delete mode 100644 Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Diagram.html
+ rename Documentation/RCU/Design/Memory-Ordering/{Tree-RCU-Memory-Ordering.html => Tree-RCU-Memory-Ordering.rst} (10%)
+ delete mode 100644 Documentation/RCU/Design/Requirements/Requirements.html
+ create mode 100644 Documentation/RCU/Design/Requirements/Requirements.rst
+ rename Documentation/{auxdisplay/cfag12864b => admin-guide/auxdisplay/cfag12864b.rst} (26%)
+ create mode 100644 Documentation/admin-guide/auxdisplay/index.rst
+ rename Documentation/{auxdisplay/ks0108 => admin-guide/auxdisplay/ks0108.rst} (32%)
+ rename Documentation/{filesystems/cifs/AUTHORS => admin-guide/cifs/authors.rst} (60%)
+ rename Documentation/{filesystems/cifs/CHANGES => admin-guide/cifs/changes.rst} (91%)
+ create mode 100644 Documentation/admin-guide/cifs/index.rst
+ rename Documentation/{filesystems/cifs/cifs.txt => admin-guide/cifs/introduction.rst} (98%)
+ rename Documentation/{filesystems/cifs/TODO => admin-guide/cifs/todo.rst} (58%)
+ rename Documentation/{filesystems/cifs/README => admin-guide/cifs/usage.rst} (72%)
+ rename Documentation/{filesystems => admin-guide}/cifs/winucase_convert.pl (100%)
+ rename Documentation/{wimax/README.i2400m => admin-guide/wimax/i2400m.rst} (69%)
+ create mode 100644 Documentation/admin-guide/wimax/index.rst
+ rename Documentation/{wimax/README.wimax => admin-guide/wimax/wimax.rst} (74%)
+ rename Documentation/{packing.txt => core-api/packing.rst} (61%)
+ rename Documentation/devicetree/{writing-schema.md => writing-schema.rst} (48%)
+ rename Documentation/{ => driver-api}/thermal/cpu-cooling-api.rst (100%)
+ rename Documentation/{ => driver-api}/thermal/exynos_thermal.rst (100%)
+ rename Documentation/{ => driver-api}/thermal/exynos_thermal_emulation.rst (100%)
+ rename Documentation/{ => driver-api}/thermal/index.rst (86%)
+ rename Documentation/{ => driver-api}/thermal/intel_powerclamp.rst (100%)
+ rename Documentation/{ => driver-api}/thermal/nouveau_thermal.rst (100%)
+ rename Documentation/{ => driver-api}/thermal/power_allocator.rst (100%)
+ rename Documentation/{ => driver-api}/thermal/sysfs-api.rst (98%)
+ rename Documentation/{ => driver-api}/thermal/x86_pkg_temperature_thermal.rst (94%)
+ rename Documentation/filesystems/{directory-locking => directory-locking.rst} (86%)
+ rename Documentation/filesystems/{Locking => locking.rst} (79%)
+ rename Documentation/filesystems/nfs/{Exporting => exporting.rst} (91%)
+ rename Documentation/filesystems/{porting => porting.rst} (49%)
+ rename Documentation/filesystems/{ubifs-authentication.md => ubifs-authentication.rst} (95%)
+ rename Documentation/hwmon/{pxe1610 => pxe1610.rst} (82%)
+ rename Documentation/i2c/busses/{i2c-ali1535 => i2c-ali1535.rst} (82%)
+ rename Documentation/i2c/busses/{i2c-ali1563 => i2c-ali1563.rst} (93%)
+ rename Documentation/i2c/busses/{i2c-ali15x3 => i2c-ali15x3.rst} (72%)
+ rename Documentation/i2c/busses/{i2c-amd-mp2 => i2c-amd-mp2.rst} (42%)
+ rename Documentation/i2c/busses/{i2c-amd756 => i2c-amd756.rst} (79%)
+ rename Documentation/i2c/busses/{i2c-amd8111 => i2c-amd8111.rst} (66%)
+ rename Documentation/i2c/busses/{i2c-diolan-u2c => i2c-diolan-u2c.rst} (91%)
+ rename Documentation/i2c/busses/{i2c-i801 => i2c-i801.rst} (89%)
+ rename Documentation/i2c/busses/{i2c-ismt => i2c-ismt.rst} (81%)
+ rename Documentation/i2c/busses/{i2c-mlxcpld => i2c-mlxcpld.rst} (88%)
+ rename Documentation/i2c/busses/{i2c-nforce2 => i2c-nforce2.rst} (58%)
+ rename Documentation/i2c/busses/{i2c-nvidia-gpu => i2c-nvidia-gpu.rst} (63%)
+ rename Documentation/i2c/busses/{i2c-ocores => i2c-ocores.rst} (82%)
+ rename Documentation/i2c/busses/{i2c-parport-light => i2c-parport-light.rst} (91%)
+ rename Documentation/i2c/busses/{i2c-parport => i2c-parport.rst} (49%)
+ rename Documentation/i2c/busses/{i2c-pca-isa => i2c-pca-isa.rst} (72%)
+ rename Documentation/i2c/busses/{i2c-piix4 => i2c-piix4.rst} (92%)
+ rename Documentation/i2c/busses/{i2c-sis5595 => i2c-sis5595.rst} (74%)
+ rename Documentation/i2c/busses/{i2c-sis630 => i2c-sis630.rst} (37%)
+ rename Documentation/i2c/busses/{i2c-sis96x => i2c-sis96x.rst} (74%)
+ rename Documentation/i2c/busses/{i2c-taos-evm => i2c-taos-evm.rst} (91%)
+ rename Documentation/i2c/busses/{i2c-via => i2c-via.rst} (54%)
+ rename Documentation/i2c/busses/{i2c-viapro => i2c-viapro.rst} (87%)
+ create mode 100644 Documentation/i2c/busses/index.rst
+ rename Documentation/i2c/busses/{scx200_acb => scx200_acb.rst} (86%)
+ rename Documentation/i2c/{dev-interface => dev-interface.rst} (71%)
+ rename Documentation/i2c/{DMA-considerations => dma-considerations.rst} (100%)
+ rename Documentation/i2c/{fault-codes => fault-codes.rst} (98%)
+ rename Documentation/i2c/{functionality => functionality.rst} (91%)
+ rename Documentation/i2c/{gpio-fault-injection => gpio-fault-injection.rst} (97%)
+ rename Documentation/i2c/{i2c-protocol => i2c-protocol.rst} (83%)
+ rename Documentation/i2c/{i2c-stub => i2c-stub.rst} (93%)
+ rename Documentation/i2c/{i2c-topology => i2c-topology.rst} (89%)
+ create mode 100644 Documentation/i2c/index.rst
+ rename Documentation/i2c/{instantiating-devices => instantiating-devices.rst} (93%)
+ rename Documentation/i2c/muxes/{i2c-mux-gpio => i2c-mux-gpio.rst} (85%)
+ rename Documentation/i2c/{old-module-parameters => old-module-parameters.rst} (75%)
+ rename Documentation/i2c/{slave-eeprom-backend => slave-eeprom-backend.rst} (90%)
+ rename Documentation/i2c/{slave-interface => slave-interface.rst} (94%)
+ rename Documentation/i2c/{smbus-protocol => smbus-protocol.rst} (82%)
+ rename Documentation/i2c/{summary => summary.rst} (96%)
+ rename Documentation/i2c/{ten-bit-addresses => ten-bit-addresses.rst} (95%)
+ rename Documentation/i2c/{upgrading-clients => upgrading-clients.rst} (54%)
+ rename Documentation/i2c/{writing-clients => writing-clients.rst} (91%)
+ rename Documentation/isdn/{README.avmb1 => avmb1.rst} (50%)
+ rename Documentation/isdn/{CREDITS => credits.rst} (96%)
+ rename Documentation/isdn/{README.gigaset => gigaset.rst} (74%)
+ rename Documentation/isdn/{README.hysdn => hysdn.rst} (80%)
+ create mode 100644 Documentation/isdn/index.rst
+ rename Documentation/isdn/{INTERFACE.CAPI => interface_capi.rst} (75%)
+ rename Documentation/isdn/{README.mISDN => m_isdn.rst} (89%)
+ rename Documentation/m68k/{README.buddha => buddha-driver.rst} (73%)
+ rename Documentation/mips/{AU1xxx_IDE.README => au1xxx_ide.rst} (67%)
+ create mode 100644 Documentation/mips/index.rst
+ rename Documentation/networking/caif/{README => caif.rst} (70%)
+ rename Documentation/networking/mac80211_hwsim/{README => mac80211_hwsim.rst} (81%)
+ rename Documentation/nios2/{README => nios2.rst} (96%)
+ create mode 100644 Documentation/openrisc/index.rst
+ rename Documentation/openrisc/{README => openrisc_port.rst} (80%)
+ rename Documentation/openrisc/{TODO => todo.rst} (78%)
+ rename Documentation/parisc/{debugging => debugging.rst} (94%)
+ create mode 100644 Documentation/parisc/index.rst
+ rename Documentation/parisc/{registers => registers.rst} (70%)
+ rename Documentation/powerpc/{bootwrapper.txt => bootwrapper.rst} (93%)
+ rename Documentation/powerpc/{cpu_families.txt => cpu_families.rst} (95%)
+ rename Documentation/powerpc/{cpu_features.txt => cpu_features.rst} (97%)
+ rename Documentation/powerpc/{cxl.txt => cxl.rst} (95%)
+ rename Documentation/powerpc/{cxlflash.txt => cxlflash.rst} (98%)
+ rename Documentation/powerpc/{DAWR-POWER9.txt => dawr-power9.rst} (95%)
+ rename Documentation/powerpc/{dscr.txt => dscr.rst} (91%)
+ rename Documentation/powerpc/{eeh-pci-error-recovery.txt => eeh-pci-error-recovery.rst} (82%)
+ rename Documentation/powerpc/{firmware-assisted-dump.txt => firmware-assisted-dump.rst} (80%)
+ rename Documentation/powerpc/{hvcs.txt => hvcs.rst} (91%)
+ create mode 100644 Documentation/powerpc/index.rst
+ rename Documentation/powerpc/{mpc52xx.txt => mpc52xx.rst} (91%)
+ rename Documentation/powerpc/{pci_iov_resource_on_powernv.txt => pci_iov_resource_on_powernv.rst} (97%)
+ rename Documentation/powerpc/{pmu-ebb.txt => pmu-ebb.rst} (99%)
+ rename Documentation/powerpc/{ptrace.txt => ptrace.rst} (48%)
+ rename Documentation/powerpc/{qe_firmware.txt => qe_firmware.rst} (95%)
+ rename Documentation/powerpc/{syscall64-abi.txt => syscall64-abi.rst} (82%)
+ rename Documentation/powerpc/{transactional_memory.txt => transactional_memory.rst} (93%)
+ rename Documentation/spi/{butterfly => butterfly.rst} (71%)
+ create mode 100644 Documentation/spi/index.rst
+ rename Documentation/spi/{pxa2xx => pxa2xx.rst} (83%)
+ rename Documentation/spi/{spi-lm70llp => spi-lm70llp.rst} (88%)
+ rename Documentation/spi/{spi-sc18is602 => spi-sc18is602.rst} (92%)
+ rename Documentation/spi/{spi-summary => spi-summary.rst} (93%)
+ rename Documentation/spi/{spidev => spidev.rst} (90%)
+ create mode 100644 Documentation/w1/index.rst
+ rename Documentation/w1/masters/{ds2482 => ds2482.rst} (71%)
+ rename Documentation/w1/masters/{ds2490 => ds2490.rst} (98%)
+ create mode 100644 Documentation/w1/masters/index.rst
+ rename Documentation/w1/masters/{mxc-w1 => mxc-w1.rst} (33%)
+ rename Documentation/w1/masters/{omap-hdq => omap-hdq.rst} (90%)
+ rename Documentation/w1/masters/{w1-gpio => w1-gpio.rst} (75%)
+ create mode 100644 Documentation/w1/slaves/index.rst
+ rename Documentation/w1/slaves/{w1_ds2406 => w1_ds2406.rst} (96%)
+ rename Documentation/w1/slaves/{w1_ds2413 => w1_ds2413.rst} (81%)
+ rename Documentation/w1/slaves/{w1_ds2423 => w1_ds2423.rst} (48%)
+ rename Documentation/w1/slaves/{w1_ds2438 => w1_ds2438.rst} (93%)
+ rename Documentation/w1/slaves/{w1_ds28e04 => w1_ds28e04.rst} (93%)
+ rename Documentation/w1/slaves/{w1_ds28e17 => w1_ds28e17.rst} (88%)
+ rename Documentation/w1/slaves/{w1_therm => w1_therm.rst} (95%)
+ rename Documentation/w1/{w1.generic => w1-generic.rst} (59%)
+ rename Documentation/w1/{w1.netlink => w1-netlink.rst} (77%)
+
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.21.0
+
 
