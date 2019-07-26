@@ -2,156 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7A275F5F
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 08:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841FB75F65
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 08:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbfGZG5o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 02:57:44 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:34493 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbfGZG5o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 02:57:44 -0400
-Received: by mail-pl1-f195.google.com with SMTP id i2so24415646plt.1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 23:57:43 -0700 (PDT)
+        id S1725953AbfGZG7n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 02:59:43 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41826 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725903AbfGZG7n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 02:59:43 -0400
+Received: by mail-pl1-f194.google.com with SMTP id m9so24290063pls.8
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jul 2019 23:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=bzQNKaZKw8eToFqDsQXbuB2yvZDO2AGHnxOmbSadekg=;
-        b=D7jepyajIBROtTtVBRHO30NiYXAeVmjGCJbHSHXTuzjnSS8FsQ3UuvfORc1nANBoCV
-         4CKKsTIM5dtsEO607omtllGtCE8qOnJmQCgTbR1fYXDggum829aLmyTii5PkS6fd34od
-         T2cNSa8CjGv9SEDMGaCU33ritC8YGOBNMhBoWe3ZRvwB41GWr9XjgqkBMvZ0QDrcWs4L
-         irdsOPL2P9Fg1+oEAAw1PUVDBjx6voLdFWjdrEsONJ55F1XS6VlJs1SEpAek+1so9BNd
-         NTazoekjIgNqSPfCw/ZOVTRebwGFq8baCu0Xq8yDDvZLf6hFmjfiL7BxVK25Jti7ffq1
-         bx+w==
+        bh=mCRqDgGf7sKXskPLrVhm05S+BTBlIF9UyZs1GvTrm9g=;
+        b=mRKZEYiemsMOst46Lta0e4Kf/qyIYoKy1SxAhwgYk5s9Bhb3sUBIFRvfqPkrnjTfly
+         fB+Yx1jbyxEKGeI6gW0gTRkHkzZpyKIYNDhW/LVRH+yFslpA3qRYYQu0sPY57VrVu/oq
+         /zA0S4VsCpb97qcysfkdO7+tGnI8/QKDlNM4tMIdPmE9Zr5A7YTG+vFGYkX/qi3Ovfij
+         lpYM1DYSVx6rFVxKQfPBzl15RjLt5SkATGQPlmPDFIibsrE1nAc5zwU+FiDGVUxDGmz1
+         dcaGuiDBQjCf5pJ9Tcl2R2WWFfO+2khZfRQB+KEkqxnm9z/nrJuLK1HsuGpnNkOzDuy2
+         I5NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bzQNKaZKw8eToFqDsQXbuB2yvZDO2AGHnxOmbSadekg=;
-        b=GU4Vk3XmUyxt9MHMkL77eiLErKGdOd47+KBHWvk8j4IWZvTdgbXTBrzsYdZdtcvW0X
-         74f0KWFM9kPZcg4ubUcUgYJJRbI4C4HvRqz50eXH6iniT9FJSGAca6LD4SZqAgQsUqZ5
-         4BUvG2aoPxcc10s2Eer1kq69TnligT2yAKQbj7HeEHFIzUhqE2MG3E16eibWtlkdvcgB
-         Ea0w03Ruwlx+hXy/j686vAt0BFaNc7JTKiQjvW2x8C34iKYJ9Lum4MnE5vVRis1pO7or
-         DUYrYz5FkMgOOruvdAFRo1zD1RLWHWC4d67tFJ1NbY8e2Pg+rwsTDZNvWLEwDe+/Ks2l
-         Bdeg==
-X-Gm-Message-State: APjAAAVLp3MT7n3RePPwOezYFNrclv2JxF2R8nUOIzOyfc6ksbLdVKmw
-        UajB9cfYFekgVoRKMJx8rZkk2g==
-X-Google-Smtp-Source: APXvYqzzo+ODsFIczIG4j/cy5XNrUcZj88VBcx5YjQ+nwxEcwhFoGe3xWYa2zhp/yiPSVfhcKjKEfw==
-X-Received: by 2002:a17:902:ff11:: with SMTP id f17mr96645555plj.121.1564124263268;
-        Thu, 25 Jul 2019 23:57:43 -0700 (PDT)
+        bh=mCRqDgGf7sKXskPLrVhm05S+BTBlIF9UyZs1GvTrm9g=;
+        b=ctKr4hmGknRsc7TAAjptkX/Vy7C2wN+TBYGzP4wrEF6h5CyC/s7uWza4oVcLeu1vLn
+         vkYAc+BsS8AwtNCi2C6LjqPPf03PBxwbAibqkohCBX68kfjKgp/AfxKinneM9WkptCa9
+         2WLFh7LGtwgkWFWPsvz+aCNe01kS6d13bp1PPBIJ9RTjaXIuk8KxY0N9iFC5bSsqyxOt
+         rwnw7JUa3dXzNi985ixxPK/thoDq+GrnDcjXBMdu5gCLDyQx3oWvLSPTcsskD5LG7kLJ
+         lFAZkSK5BQ18kcKVLLcMej/+S2CVg5oYXPe71nbjRloqIQ5SkKOJvnEIHjDdWdSlwb0y
+         FSGQ==
+X-Gm-Message-State: APjAAAV2XfKgcvISsMyaTIaOO1EWd34Hs0atMSMvvX+gi8K7uyifxUhs
+        foznFkAXUfpXpqFvToctl3yiew==
+X-Google-Smtp-Source: APXvYqw05J1myt3HAmsydEPvF99WYIt3aQYbFUIG8WM/rwk7V/ehYqbwPOQukswXctUYjKmlrzFgrQ==
+X-Received: by 2002:a17:902:2868:: with SMTP id e95mr88686237plb.319.1564124382989;
+        Thu, 25 Jul 2019 23:59:42 -0700 (PDT)
 Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id o24sm7949706pgn.93.2019.07.25.23.57.41
+        by smtp.gmail.com with ESMTPSA id o32sm49160891pje.9.2019.07.25.23.59.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jul 2019 23:57:41 -0700 (PDT)
-Date:   Fri, 26 Jul 2019 12:27:39 +0530
+        Thu, 25 Jul 2019 23:59:42 -0700 (PDT)
+Date:   Fri, 26 Jul 2019 12:29:39 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        'Rafael Wysocki' <rjw@rjwysocki.net>,
-        'Ingo Molnar' <mingo@redhat.com>,
-        'Peter Zijlstra' <peterz@infradead.org>,
-        'Linux PM' <linux-pm@vger.kernel.org>,
-        'Vincent Guittot' <vincent.guittot@linaro.org>,
-        'Joel Fernandes' <joel@joelfernandes.org>,
-        "'v4 . 18+'" <stable@vger.kernel.org>,
-        'Linux Kernel Mailing List' <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: schedutil: Don't skip freq update when limits
- change
-Message-ID: <20190726065739.xjvyvqpkb3o6m4ty@vireshk-i7>
-References: <1563431200-3042-1-git-send-email-dsmythies@telus.net>
- <8091ef83f264feb2feaa827fbeefe08348bcd05d.1563778071.git.viresh.kumar@linaro.org>
- <001201d54125$a6a82350$f3f869f0$@net>
- <20190723091551.nchopfpqlmdmzvge@vireshk-i7>
- <CAJZ5v0ji+ksapJ4kc2m5UM_O+AShAvJWmYhTQHiXiHnpTq+xRg@mail.gmail.com>
- <20190724114327.apmx35c7a4tv3qt5@vireshk-i7>
- <000c01d542fc$703ff850$50bfe8f0$@net>
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        linux-pm@vger.kernel.org, huyue2@yulong.com
+Subject: Re: [PATCH] PM / OPP: Correct Documentation about library location
+Message-ID: <20190726065939.lvvmd23wna5sf3e5@vireshk-i7>
+References: <20190726060747.8700-1-zbestahu@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000c01d542fc$703ff850$50bfe8f0$@net>
+In-Reply-To: <20190726060747.8700-1-zbestahu@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-07-19, 08:20, Doug Smythies wrote:
-> I tried the patch ("patch2"). It did not fix the issue.
+On 26-07-19, 14:07, Yue Hu wrote:
+> From: Yue Hu <huyue2@yulong.com>
 > 
-> To summarize, all kernel 5.2 based, all intel_cpufreq driver and schedutil governor:
+> OPP library is now located in drivers/opp/ directory.
 > 
-> Test: Does a busy system respond to maximum CPU clock frequency reduction?
+> Signed-off-by: Yue Hu <huyue2@yulong.com>
+> ---
+>  Documentation/power/opp.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> stock, unaltered: No.
-> revert ecd2884291261e3fddbc7651ee11a20d596bb514: Yes
-> viresh patch: No.
-> fast_switch edit: No.
-> viresh patch2: No.
+> diff --git a/Documentation/power/opp.rst b/Documentation/power/opp.rst
+> index b3cf1de..209c761 100644
+> --- a/Documentation/power/opp.rst
+> +++ b/Documentation/power/opp.rst
+> @@ -46,7 +46,7 @@ We can represent these as three OPPs as the following {Hz, uV} tuples:
+>  ----------------------------------------
+>  
+>  OPP library provides a set of helper functions to organize and query the OPP
+> -information. The library is located in drivers/base/power/opp.c and the header
+> +information. The library is located in drivers/opp/ directory and the header
+>  is located in include/linux/pm_opp.h. OPP library can be enabled by enabling
+>  CONFIG_PM_OPP from power management menuconfig menu. OPP library depends on
+>  CONFIG_PM as certain SoCs such as Texas Instrument's OMAP framework allows to
 
-Hmm, so I tried to reproduce your setup on my ARM board.
-- booted only with CPU0 so I hit the sugov_update_single() routine
-- And applied below diff to make CPU look permanently busy:
-
--------------------------8<-------------------------
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 2f382b0959e5..afb47490e5dc 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -121,6 +121,7 @@ static void sugov_fast_switch(struct sugov_policy *sg_policy, u64 time,
-        if (!sugov_update_next_freq(sg_policy, time, next_freq))
-                return;
- 
-+       pr_info("%s: %d: %u\n", __func__, __LINE__, freq);
-        next_freq = cpufreq_driver_fast_switch(policy, next_freq);
-        if (!next_freq)
-                return;
-@@ -424,14 +425,10 @@ static unsigned long sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time,
- #ifdef CONFIG_NO_HZ_COMMON
- static bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu)
- {
--       unsigned long idle_calls = tick_nohz_get_idle_calls_cpu(sg_cpu->cpu);
--       bool ret = idle_calls == sg_cpu->saved_idle_calls;
--
--       sg_cpu->saved_idle_calls = idle_calls;
--       return ret;
-+       return true;
- }
- #else
--static inline bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu) { return false; }
-+static inline bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu) { return true; }
- #endif /* CONFIG_NO_HZ_COMMON */
- 
- /*
-@@ -565,6 +562,7 @@ static void sugov_work(struct kthread_work *work)
-        sg_policy->work_in_progress = false;
-        raw_spin_unlock_irqrestore(&sg_policy->update_lock, flags);
- 
-+       pr_info("%s: %d: %u\n", __func__, __LINE__, freq);
-        mutex_lock(&sg_policy->work_lock);
-        __cpufreq_driver_target(sg_policy->policy, freq, CPUFREQ_RELATION_L);
-        mutex_unlock(&sg_policy->work_lock);
-
--------------------------8<-------------------------
-
-Now, the frequency never gets down and so gets set to the maximum
-possible after a bit.
-
-- Then I did:
-
-echo <any-low-freq-value> > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
-
-Without my patch applied:
-        The print never gets printed and so frequency doesn't go down.
-
-With my patch applied:
-        The print gets printed immediately from sugov_work() and so
-        the frequency reduces.
-
-Can you try with this diff along with my Patch2 ? I suspect there may
-be something wrong with the intel_cpufreq driver as the patch fixes
-the only path we have in the schedutil governor which takes busyness
-of a CPU into account.
+Applied. Thanks.
 
 -- 
 viresh
