@@ -2,108 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DF476061
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 10:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27546762B9
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 11:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726001AbfGZII0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 04:08:26 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37177 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbfGZII0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 04:08:26 -0400
-Received: by mail-pg1-f194.google.com with SMTP id i70so13657332pgd.4
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2019 01:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6GhmKWt6x6g4JeMnsdkEsHpQSie6HYXc08TEONF6ep4=;
-        b=n6WXmFb6NJb1VDNPQg4jO1cjrEDb4DE4V1d3nSxW/tUAj9eTVtMjjNTCSj6+ASZCdl
-         G/scPEuJI+Abaxi6NlVvFlnoIYsmxxtE89knUPK5NJbQIf+dRZRBG0igszN4qomenA/H
-         2SrVjLOALgmb08gzV4+vi9TF4xsXqPcLyqS0cNFoz3OJETJLwCJj9ypLQPnYp4yzJS/u
-         4gWQQU79QYRQbhul4Tz8t4v+krSOvI85dXy5PURGtflyjER6T7mTlZ0U84JwYDJC2fa9
-         LVZhryGsJjM577AfdBHTm7wX8gjvGJYZ8n3736xs92Z4hHhha/man1T9uPe3xG8IurgI
-         AmPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6GhmKWt6x6g4JeMnsdkEsHpQSie6HYXc08TEONF6ep4=;
-        b=fNPY19ukXbytEgf8SJJ6WGTATJVdHARoVfq+gYXLnb9oiFWR4NdrgHQc5S+ac3+kAL
-         PKl//54m5cRomqdOGQAocZSziNOljdMRVUKYtYf6WmrPvpGZL3hKR7s1FSJqmmxqkPh2
-         NNBtciC8meqSxr4XDyHp9fjx/wHdPC79oohrW7esBK2ELvM9POn0pjlqqH45sKVWvr7f
-         sDRdQ70sNnRmy39NIU+it4ZX/NKMmk0XevoiRu827tWSPEBFj8qme2jcwWskP8u5kESR
-         1CfHjJjC7VdNZ6NAD70nztUTm2xKTNTXY9/2yi4r+Ip5SDfYpbHZYm+9FPT8YhHQxqHt
-         1hbg==
-X-Gm-Message-State: APjAAAXrKEuM3q2dOVch3W0a/Sl3HLLgGnj0Xd3EekUNgyBgoLC+QoRI
-        6a0l6USybgHd+BFvmHLz0IVSUQ==
-X-Google-Smtp-Source: APXvYqyT9ZKXFFPNPq9JhH0XdJl1BiqKPW6iP2gtCefxpHHM+yjax7AxEbe1z2UP56YTq6iXpWC95A==
-X-Received: by 2002:a62:3895:: with SMTP id f143mr20705053pfa.116.1564128505484;
-        Fri, 26 Jul 2019 01:08:25 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id a1sm5500514pgh.61.2019.07.26.01.08.24
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Jul 2019 01:08:24 -0700 (PDT)
-Date:   Fri, 26 Jul 2019 13:38:23 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        jorge.ramirez-ortiz@linaro.org, sboyd@kernel.org,
-        vireshk@kernel.org, bjorn.andersson@linaro.org,
-        ulf.hansson@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 00/14] Add support for QCOM Core Power Reduction
-Message-ID: <20190726080823.xwhxagv5iuhudmic@vireshk-i7>
-References: <20190725104144.22924-1-niklas.cassel@linaro.org>
+        id S1725872AbfGZJnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 05:43:52 -0400
+Received: from anchovy2.45ru.net.au ([203.30.46.146]:34198 "EHLO
+        anchovy2.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbfGZJnw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 05:43:52 -0400
+Received: (qmail 32330 invoked by uid 5089); 26 Jul 2019 09:43:49 -0000
+Received: by simscan 1.2.0 ppid: 32245, pid: 32246, t: 0.2943s
+         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950 spam: 3.1.4
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on anchovy2
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.4 required=6.0 tests=ALL_TRUSTED,AWL
+        autolearn=disabled version=3.4.1
+Received: from unknown (HELO ?192.168.0.34?) (rtresidd@electromag.com.au@203.59.235.95)
+  by anchovy3.45ru.net.au with ESMTPA; 26 Jul 2019 09:43:48 -0000
+Subject: Re: [PATCH 1/1] power/supply/powersupply_sysfs: Add of_node name to
+ uevent message if available
+From:   Richard Tresidder <rtresidd@electromag.com.au>
+To:     David Lechner <david@lechnology.com>, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Nick Crews <ncrews@chromium.org>, andrew.smirnov@gmail.com,
+        Guenter Roeck <groeck@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <1564040858-24202-1-git-send-email-rtresidd@electromag.com.au>
+ <9a10b934-e7f3-c95f-6250-8a857bdfa912@lechnology.com>
+ <3c372ca4-373d-9c03-8636-a9f065eed577@electromag.com.au>
+ <f6082ff8-b9fc-a52d-ad48-fc1b348246f4@electromag.com.au>
+Message-ID: <54e304f6-d689-acf7-eb63-5dc6e29235ea@electromag.com.au>
+Date:   Fri, 26 Jul 2019 17:43:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190725104144.22924-1-niklas.cassel@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <f6082ff8-b9fc-a52d-ad48-fc1b348246f4@electromag.com.au>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-AU
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-07-19, 12:41, Niklas Cassel wrote:
-> This series adds support for Core Power Reduction (CPR), a form of
-> Adaptive Voltage Scaling (AVS), found on certain Qualcomm SoCs.
-> 
-> This series is based on top of the qcs404 cpufreq patch series that
-> hasn't landed yet:
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=137809
-> 
-> CPR is a technology that reduces core power on a CPU or on other device.
-> It reads voltage settings from efuses (that have been written in
-> production), it uses these voltage settings as initial values, for each
-> OPP.
-> 
-> After moving to a certain OPP, CPR monitors dynamic factors such as
-> temperature, etc. and adjusts the voltage for that frequency accordingly
-> to save power and meet silicon characteristic requirements.
-> 
-> This driver has been developed together with Jorge Ramirez-Ortiz, and
-> is based on an RFC by Stephen Boyd[1], which in turn is based on work
-> by others on codeaurora.org[2].
-> 
-> [1] https://lkml.org/lkml/2015/9/18/833
-> [2] https://www.codeaurora.org/cgit/quic/la/kernel/msm-3.10/tree/drivers/regulator/cpr-regulator.c?h=msm-3.10
-> 
-> Changes since V1:
-> Added a new patch implementing dev_pm_opp_find_level_exact() in order to
-> make the CPR OPP table in device tree cleaner.
-> For more detailed changes, check the "Changes since V1" as comments in
-> the individual patches, where applicable.
+As per David's suggestion
+I did a quick refactor of the of_device_uevent() call to handle a 
+device_node "of_device_node_uevent()" instead of a device and ran into a 
+problem.
+Was getting stack dumps (via a WARN message) generated out of 
+add_uevent_var() for any power supply device.
+It was trigered in the first check of
+     if (env->envp_idx >= ARRAY_SIZE(env->envp)) {
+     ...
+of that add_uevent_var function.
+So it looks like to many value pairs were being shoved into the event?
+envp array is set to a fixed length of 32 via the UEVENT_NUM_ENVP value 
+in kobject.h
 
-Applied patches [1-9/14] to cpufreq and OPP trees and done some
-reordering as well to keep all binding patches together.
+I verified it had nothing to do with with the refactor by backing it out 
+and simply adding a few more
+dummy add_uevent_var calls in the power_supply_uevent call..
 
-Rob's Ack is missing on two of the binding patches and I will add them
-later once he provides it.
+so there appears to be a hard limit on this.. which we are very near for 
+the power supply stuff.
 
-Everything should be available here for you to base rest of the stuff.
+Thoughts?
 
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+Thanks
+    Richard Tresidder
 
--- 
-viresh
+On 26/07/2019 12:51 pm, Richard Tresidder wrote:
+> Hi David
+>   That call requires a struct device *
+> But the of_node pointer is located in the struct power_supply
+> Seems the of_node value in the base device* is null, and often is.
+> I find it hard at times to figure out which one of these to reference 
+> as things seem to be duplicated in a lot of places..
+>
+> Should that call potentially be refactored to take a device_node * 
+> instead of a device *
+>
+> **
+> Regards
+>    Richard Tresidder
+>
+> On 26/07/2019 10:40 am, Richard Tresidder wrote:
+>> Hi David
+>>   That it would be. I wasn't aware of that call.
+>> I'll give it a crack and send in a new version of the patch.
+>>
+>> Cheers
+>>   Richard Tresidder
+>>
+>> Richard Tresidder
+>> On 25/07/2019 10:08 pm, David Lechner wrote:
+>>> On 7/25/19 2:47 AM, Richard Tresidder wrote:
+>>>> If the of_node name of the supply is available from the devicetree 
+>>>> binding
+>>>> then include it under the var POWER_SUPPLY_OF_NODE_NAME.
+>>>> This helps where a consistent name is known via the device tree 
+>>>> binding
+>>>> but it is hard to identify based on the usual enumeration process.
+>>>>
+>>>
+>>> Would it be possible to use of_device_uevent() instead of 
+>>> introducing a new
+>>> property?
+>>>
+>>>
+>>>
+>>
+>>
+>>
+>
+>
+>
+
