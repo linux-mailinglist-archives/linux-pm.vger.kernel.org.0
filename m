@@ -2,310 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B8F763AD
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 12:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B9A763C0
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 12:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726074AbfGZKk3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 06:40:29 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:33393 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726000AbfGZKk2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 06:40:28 -0400
-Received: by mail-pf1-f196.google.com with SMTP id g2so24335706pfq.0;
-        Fri, 26 Jul 2019 03:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6xe2gGXqYDfrudhhkFUeEtI5AY9hgJvX9l2+WUlDdTI=;
-        b=iwl1/iwtL919NfOuB2DLdfkiWTAYvKA9nyZOxdz9JMjtfdC1kjdi8SLMlR1g46Zu7p
-         dHOQCmf0ChAYEImgXYkG+HZfJSc4R35GRsBBWSk/oBYWQq54Ih+zRdgFq+gA42/2YTkG
-         Bf5DbIzMAn8zCdq5KvnLKRzBp/iWg4XgpDSCbjuOULrt9yR9aYUL7OrIfw/12CktqIR1
-         XBMZqhq1UqGaoCE8+HY5aJP2gmdhqRpNgEF1c1nTl5r4JROyoMGllfIoN2FHUrkj634N
-         Mr7VKIOUUy3QiXoqtkh2tyZHSWpjqThAuqoA0bJmNGzWWS+WdE11e8AwgcZcHV1v3yrw
-         5NNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6xe2gGXqYDfrudhhkFUeEtI5AY9hgJvX9l2+WUlDdTI=;
-        b=PLAyN+WTkbQNFZar+5YfDXxLLJnlWuC3NQnsQ3N7sjEmMlyrcHlE+SX7C2H6h5nhzb
-         w9AEStKEpnBnWXc0nmSMnDnJJAAMYVbL7I4LDygo5FWdCdLgJzkHzautYdp2L43B7ytr
-         nCOsjqzdpAm0YOqxy1yJd2Wn+SaTxsx94cE7eVDjRsKoZOlHqBeZvVbuDGf69xDnrjW9
-         WfKg3nVEfZYPTE3Ll5Ddgys+jBglEpqTTx0PArSDtmir7gku8UgdcuA5FSGqTC5+yEdU
-         K9LG0mHK1zStsj5GnHljeQyy+PkkIWBCcXK9+W/379tinAhCBETiL3jRLxt9BaEkflDb
-         z29g==
-X-Gm-Message-State: APjAAAW7akxxm+177HYNiYb5EwGLz14V+Ae5CDQ2oJfxyq4QrEzgg8L9
-        wsk9V31xPoV8NiZBLAHdiGgNuV9vL1IUXx6RqPIV1RXp164=
-X-Google-Smtp-Source: APXvYqzvMKSrLI4v0QBf2VimeBDcUacZGLDSDUsOf7o5lFoc4NBFHC49x6bT8NOI+TBOdg+MrSenH6JY5SHjxhiL0os=
-X-Received: by 2002:a17:90b:d8b:: with SMTP id bg11mr97529130pjb.30.1564137627571;
- Fri, 26 Jul 2019 03:40:27 -0700 (PDT)
+        id S1726473AbfGZKmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 06:42:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52634 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726203AbfGZKmT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 26 Jul 2019 06:42:19 -0400
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2142122CB9;
+        Fri, 26 Jul 2019 10:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564137737;
+        bh=X7zomnphSoatQ2ExsZCymGrIKUnr+7mD1sl02mTPfh4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xOIT7hQdaE/9saCJ016SORI9yKJR4VdvxCbG1H173OLs1s6mHJXKyd7rc897GqvTd
+         gKGbYk2M0FXGKg+ThrcP47kYqY52jrdZIUTa1y2tkWazRdgbUglzRXmdiVxFD9JWf4
+         /rjQ/hqg3pM0VOSD8zR3w9k9kqGBqh95ky+LeizI=
+Received: by mail-lj1-f181.google.com with SMTP id r9so51018570ljg.5;
+        Fri, 26 Jul 2019 03:42:17 -0700 (PDT)
+X-Gm-Message-State: APjAAAVDXb0Q5x4XbONwUkcsxIi2/ifvFlxLaIxo3aYUjeskf/uI71Ho
+        8v35IMSOwEap4g5K8BGskqPXEgimI6tnZ65E+RI=
+X-Google-Smtp-Source: APXvYqwjjPIUcxkurCk45AI+olnU8bXwOyRqJMGB5KvMZHbMvG1vzBey1kV3fpe6+DzCzU8EHqwv22xT+qk5FHRVVEY=
+X-Received: by 2002:a2e:b4d4:: with SMTP id r20mr23905543ljm.5.1564137735265;
+ Fri, 26 Jul 2019 03:42:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <3471485.I2vrcDHEeC@kreacher> <3163213.d4HCi86EAO@kreacher>
-In-Reply-To: <3163213.d4HCi86EAO@kreacher>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 26 Jul 2019 13:40:16 +0300
-Message-ID: <CAHp75VdV-PTfG8Cy673W4r1fFn5h=DQzZe2kHH5_y+HfrA8j6A@mail.gmail.com>
-Subject: Re: [PATCH 1/4] ACPI: PM: Set up EC GPE for system wakeup from
- drivers that need it
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>
+References: <CGME20190723122022eucas1p1266d90873d564894bd852c20140f8474@eucas1p1.samsung.com>
+ <20190723122016.30279-1-a.swigon@partner.samsung.com> <20190723122016.30279-2-a.swigon@partner.samsung.com>
+ <CAGTfZH0JE0PmiCHaT3vMrDaP0-8eZ3afyHy_zT9aFmMOGNTR8g@mail.gmail.com>
+In-Reply-To: <CAGTfZH0JE0PmiCHaT3vMrDaP0-8eZ3afyHy_zT9aFmMOGNTR8g@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Fri, 26 Jul 2019 12:42:03 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPe4nOjjuA2MXLP1n=dPa7o6egjLZScSBNhyi9agHqqM7A@mail.gmail.com>
+Message-ID: <CAJKOXPe4nOjjuA2MXLP1n=dPa7o6egjLZScSBNhyi9agHqqM7A@mail.gmail.com>
+Subject: Re: [RFC PATCH 01/11] devfreq: exynos-bus: Extract exynos_bus_profile_init()
+To:     cwchoi00@gmail.com
+Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        georgi.djakov@linaro.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 1:57 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Thu, 25 Jul 2019 at 14:44, Chanwoo Choi <cwchoi00@gmail.com> wrote:
 >
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 2019=EB=85=84 7=EC=9B=94 24=EC=9D=BC (=EC=88=98) =EC=98=A4=EC=A0=84 8:09,=
+ Artur =C5=9Awigo=C5=84 <a.swigon@partner.samsung.com>=EB=8B=98=EC=9D=B4 =
+=EC=9E=91=EC=84=B1:
+> >
+> > This patch adds a new static function, exynos_bus_profile_init(), extra=
+cted
+> > from exynos_bus_probe().
+> >
+> > Signed-off-by: Artur =C5=9Awigo=C5=84 <a.swigon@partner.samsung.com>
+> > ---
+> >  drivers/devfreq/exynos-bus.c | 106 ++++++++++++++++++++---------------
+> >  1 file changed, 60 insertions(+), 46 deletions(-)
+> >
+> > diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.=
+c
+> > index d9f377912c10..d8f1efaf2d49 100644
+> > --- a/drivers/devfreq/exynos-bus.c
+> > +++ b/drivers/devfreq/exynos-bus.c
+> > @@ -372,12 +372,69 @@ static int exynos_bus_parse_of(struct device_node=
+ *np,
+> >         return ret;
+> >  }
+> >
+> > +static int exynos_bus_profile_init(struct exynos_bus *bus,
+> > +                                  struct devfreq_dev_profile *profile)
+> > +{
+> > +       struct device *dev =3D bus->dev;
+> > +       struct devfreq_simple_ondemand_data *ondemand_data;
+> > +       int ret;
+> > +
+> > +       /* Initialize the struct profile and governor data for parent d=
+evice */
+> > +       profile->polling_ms =3D 50;
+> > +       profile->target =3D exynos_bus_target;
+> > +       profile->get_dev_status =3D exynos_bus_get_dev_status;
+> > +       profile->exit =3D exynos_bus_exit;
+> > +
+> > +       ondemand_data =3D devm_kzalloc(dev, sizeof(*ondemand_data), GFP=
+_KERNEL);
+> > +       if (!ondemand_data) {
+> > +               ret =3D -ENOMEM;
+> > +               goto err;
+> > +       }
+> > +       ondemand_data->upthreshold =3D 40;
+> > +       ondemand_data->downdifferential =3D 5;
+> > +
+> > +       /* Add devfreq device to monitor and handle the exynos bus */
+> > +       bus->devfreq =3D devm_devfreq_add_device(dev, profile,
+> > +                                               DEVFREQ_GOV_SIMPLE_ONDE=
+MAND,
+> > +                                               ondemand_data);
+> > +       if (IS_ERR(bus->devfreq)) {
+> > +               dev_err(dev, "failed to add devfreq device\n");
+> > +               ret =3D PTR_ERR(bus->devfreq);
+> > +               goto err;
+> > +       }
+> > +
+> > +       /* Register opp_notifier to catch the change of OPP  */
+> > +       ret =3D devm_devfreq_register_opp_notifier(dev, bus->devfreq);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "failed to register opp notifier\n");
+> > +               goto err;
+> > +       }
+> > +
+> > +       /*
+> > +        * Enable devfreq-event to get raw data which is used to determ=
+ine
+> > +        * current bus load.
+> > +        */
+> > +       ret =3D exynos_bus_enable_edev(bus);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "failed to enable devfreq-event devices\n"=
+);
+> > +               goto err;
+> > +       }
+> > +
+> > +       ret =3D exynos_bus_set_event(bus);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "failed to set event to devfreq-event devi=
+ces\n");
+> > +               goto err;
+> > +       }
+> > +
+> > +err:
+> > +       return ret;
+> > +}
+> > +
+> >  static int exynos_bus_probe(struct platform_device *pdev)
+> >  {
+> >         struct device *dev =3D &pdev->dev;
+> >         struct device_node *np =3D dev->of_node, *node;
+> >         struct devfreq_dev_profile *profile;
+> > -       struct devfreq_simple_ondemand_data *ondemand_data;
+> >         struct devfreq_passive_data *passive_data;
+> >         struct devfreq *parent_devfreq;
+> >         struct exynos_bus *bus;
+> > @@ -418,52 +475,9 @@ static int exynos_bus_probe(struct platform_device=
+ *pdev)
+> >         if (ret < 0)
+> >                 goto err;
+> >
+> > -       /* Initialize the struct profile and governor data for parent d=
+evice */
+> > -       profile->polling_ms =3D 50;
+> > -       profile->target =3D exynos_bus_target;
+> > -       profile->get_dev_status =3D exynos_bus_get_dev_status;
+> > -       profile->exit =3D exynos_bus_exit;
+> > -
+> > -       ondemand_data =3D devm_kzalloc(dev, sizeof(*ondemand_data), GFP=
+_KERNEL);
+> > -       if (!ondemand_data) {
+> > -               ret =3D -ENOMEM;
+> > +       ret =3D exynos_bus_profile_init(bus, profile);
+> > +       if (ret < 0)
+> >                 goto err;
+> > -       }
+> > -       ondemand_data->upthreshold =3D 40;
+> > -       ondemand_data->downdifferential =3D 5;
+> > -
+> > -       /* Add devfreq device to monitor and handle the exynos bus */
+> > -       bus->devfreq =3D devm_devfreq_add_device(dev, profile,
+> > -                                               DEVFREQ_GOV_SIMPLE_ONDE=
+MAND,
+> > -                                               ondemand_data);
+> > -       if (IS_ERR(bus->devfreq)) {
+> > -               dev_err(dev, "failed to add devfreq device\n");
+> > -               ret =3D PTR_ERR(bus->devfreq);
+> > -               goto err;
+> > -       }
+> > -
+> > -       /* Register opp_notifier to catch the change of OPP  */
+> > -       ret =3D devm_devfreq_register_opp_notifier(dev, bus->devfreq);
+> > -       if (ret < 0) {
+> > -               dev_err(dev, "failed to register opp notifier\n");
+> > -               goto err;
+> > -       }
+> > -
+> > -       /*
+> > -        * Enable devfreq-event to get raw data which is used to determ=
+ine
+> > -        * current bus load.
+> > -        */
+> > -       ret =3D exynos_bus_enable_edev(bus);
+> > -       if (ret < 0) {
+> > -               dev_err(dev, "failed to enable devfreq-event devices\n"=
+);
+> > -               goto err;
+> > -       }
+> > -
+> > -       ret =3D exynos_bus_set_event(bus);
+> > -       if (ret < 0) {
+> > -               dev_err(dev, "failed to set event to devfreq-event devi=
+ces\n");
+> > -               goto err;
+> > -       }
+> >
+> >         goto out;
+> >  passive:
+> > --
+> > 2.17.1
+> >
 >
-> The EC GPE needs to be set up for system wakeup only if there is a
-> driver depending on it, either intel-hid or intel-vbtn, bound to a
-> button device that is expected to wake up the system from sleep (such
-> as the power button on some Dell systems, like the XPS13 9360).  It
-> doesn't need to be set up for waking up the system from sleep in any
-> other cases and whether or not it is expected to wake up the system
-> from sleep doesn't depend on whether or not the LPS0 device is
-> present in the ACPI namespace.
+> NACK.
 >
-> For this reason, rearrange the ACPI suspend-to-idle code to make the
-> drivers depending on the EC GPE wakeup take care of setting it up and
-> decouple that from the LPS0 device handling.
->
-> While at it, make intel-hid and intel-vbtn prepare for system wakeup
-> only if they are allowed to wake up the system from sleep by user
-> space (via sysfs).
->
-> [Note that acpi_ec_mark_gpe_for_wake() and acpi_ec_set_gpe_wake_mask()
->  are there to prevent the EC GPE from being disabled by the
->  acpi_enable_all_wakeup_gpes() call in acpi_s2idle_prepare(), so on
->  systems with either intel-hid or intel-vbtn this change doesn't
->  affect any interactions with the hardware or platform firmware.]
->
+> It has not any benefit and I don't understand reason why it is necessary.
+> I don't agree. Please drop it.
 
-Thank you!
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+The probe has 12 local variables and around 140 lines of code (so much
+more than coding style recommendations). Therefore splitting some
+logical part out of probe to make code better organized and more
+readable is pretty obvious benefit.
 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/acpi/ec.c                 |    5 ++++-
->  drivers/acpi/internal.h           |    2 --
->  drivers/acpi/sleep.c              |   11 +----------
->  drivers/platform/x86/intel-hid.c  |   20 ++++++++++++++++----
->  drivers/platform/x86/intel-vbtn.c |   20 ++++++++++++++++----
->  include/linux/acpi.h              |    4 ++++
->  6 files changed, 41 insertions(+), 21 deletions(-)
->
-> Index: linux-pm/drivers/acpi/internal.h
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/internal.h
-> +++ linux-pm/drivers/acpi/internal.h
-> @@ -194,8 +194,6 @@ void acpi_ec_ecdt_probe(void);
->  void acpi_ec_dsdt_probe(void);
->  void acpi_ec_block_transactions(void);
->  void acpi_ec_unblock_transactions(void);
-> -void acpi_ec_mark_gpe_for_wake(void);
-> -void acpi_ec_set_gpe_wake_mask(u8 action);
->  bool acpi_ec_dispatch_gpe(void);
->  int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit,
->                               acpi_handle handle, acpi_ec_query_func func,
-> Index: linux-pm/drivers/platform/x86/intel-hid.c
-> ===================================================================
-> --- linux-pm.orig/drivers/platform/x86/intel-hid.c
-> +++ linux-pm/drivers/platform/x86/intel-hid.c
-> @@ -253,9 +253,12 @@ static void intel_button_array_enable(st
->
->  static int intel_hid_pm_prepare(struct device *device)
->  {
-> -       struct intel_hid_priv *priv = dev_get_drvdata(device);
-> +       if (device_may_wakeup(device)) {
-> +               struct intel_hid_priv *priv = dev_get_drvdata(device);
->
-> -       priv->wakeup_mode = true;
-> +               priv->wakeup_mode = true;
-> +               acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
-> +       }
->         return 0;
->  }
->
-> @@ -270,9 +273,12 @@ static int intel_hid_pl_suspend_handler(
->
->  static int intel_hid_pl_resume_handler(struct device *device)
->  {
-> -       struct intel_hid_priv *priv = dev_get_drvdata(device);
-> +       if (device_may_wakeup(device)) {
-> +               struct intel_hid_priv *priv = dev_get_drvdata(device);
->
-> -       priv->wakeup_mode = false;
-> +               acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
-> +               priv->wakeup_mode = false;
-> +       }
->         if (pm_resume_via_firmware()) {
->                 intel_hid_set_enable(device, true);
->                 intel_button_array_enable(device, true);
-> @@ -491,6 +497,12 @@ static int intel_hid_probe(struct platfo
->         }
->
->         device_init_wakeup(&device->dev, true);
-> +       /*
-> +        * In order for system wakeup to work, the EC GPE has to be marked as
-> +        * a wakeup one, so do that here (this setting will persist, but it has
-> +        * no effect until the wakeup mask is set for the EC GPE).
-> +        */
-> +       acpi_ec_mark_gpe_for_wake();
->         return 0;
->
->  err_remove_notify:
-> Index: linux-pm/drivers/platform/x86/intel-vbtn.c
-> ===================================================================
-> --- linux-pm.orig/drivers/platform/x86/intel-vbtn.c
-> +++ linux-pm/drivers/platform/x86/intel-vbtn.c
-> @@ -176,6 +176,12 @@ static int intel_vbtn_probe(struct platf
->                 return -EBUSY;
->
->         device_init_wakeup(&device->dev, true);
-> +       /*
-> +        * In order for system wakeup to work, the EC GPE has to be marked as
-> +        * a wakeup one, so do that here (this setting will persist, but it has
-> +        * no effect until the wakeup mask is set for the EC GPE).
-> +        */
-> +       acpi_ec_mark_gpe_for_wake();
->         return 0;
->  }
->
-> @@ -195,17 +201,23 @@ static int intel_vbtn_remove(struct plat
->
->  static int intel_vbtn_pm_prepare(struct device *dev)
->  {
-> -       struct intel_vbtn_priv *priv = dev_get_drvdata(dev);
-> +       if (device_may_wakeup(dev)) {
-> +               struct intel_vbtn_priv *priv = dev_get_drvdata(dev);
->
-> -       priv->wakeup_mode = true;
-> +               priv->wakeup_mode = true;
-> +               acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
-> +       }
->         return 0;
->  }
->
->  static int intel_vbtn_pm_resume(struct device *dev)
->  {
-> -       struct intel_vbtn_priv *priv = dev_get_drvdata(dev);
-> +       if (device_may_wakeup(dev)) {
-> +               struct intel_vbtn_priv *priv = dev_get_drvdata(dev);
->
-> -       priv->wakeup_mode = false;
-> +               acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
-> +               priv->wakeup_mode = false;
-> +       }
->         return 0;
->  }
->
-> Index: linux-pm/include/linux/acpi.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/acpi.h
-> +++ linux-pm/include/linux/acpi.h
-> @@ -931,6 +931,8 @@ int acpi_subsys_suspend_noirq(struct dev
->  int acpi_subsys_suspend(struct device *dev);
->  int acpi_subsys_freeze(struct device *dev);
->  int acpi_subsys_poweroff(struct device *dev);
-> +void acpi_ec_mark_gpe_for_wake(void);
-> +void acpi_ec_set_gpe_wake_mask(u8 action);
->  #else
->  static inline int acpi_subsys_prepare(struct device *dev) { return 0; }
->  static inline void acpi_subsys_complete(struct device *dev) {}
-> @@ -939,6 +941,8 @@ static inline int acpi_subsys_suspend_no
->  static inline int acpi_subsys_suspend(struct device *dev) { return 0; }
->  static inline int acpi_subsys_freeze(struct device *dev) { return 0; }
->  static inline int acpi_subsys_poweroff(struct device *dev) { return 0; }
-> +static inline void acpi_ec_mark_gpe_for_wake(void) {}
-> +static inline void acpi_ec_set_gpe_wake_mask(u8 action) {}
->  #endif
->
->  #ifdef CONFIG_ACPI
-> Index: linux-pm/drivers/acpi/ec.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/ec.c
-> +++ linux-pm/drivers/acpi/ec.c
-> @@ -25,6 +25,7 @@
->  #include <linux/list.h>
->  #include <linux/spinlock.h>
->  #include <linux/slab.h>
-> +#include <linux/suspend.h>
->  #include <linux/acpi.h>
->  #include <linux/dmi.h>
->  #include <asm/io.h>
-> @@ -1053,12 +1054,14 @@ void acpi_ec_mark_gpe_for_wake(void)
->         if (first_ec && !ec_no_wakeup)
->                 acpi_mark_gpe_for_wake(NULL, first_ec->gpe);
->  }
-> +EXPORT_SYMBOL_GPL(acpi_ec_mark_gpe_for_wake);
->
->  void acpi_ec_set_gpe_wake_mask(u8 action)
->  {
-> -       if (first_ec && !ec_no_wakeup)
-> +       if (pm_suspend_no_platform() && first_ec && !ec_no_wakeup)
->                 acpi_set_gpe_wake_mask(NULL, first_ec->gpe, action);
->  }
-> +EXPORT_SYMBOL_GPL(acpi_ec_set_gpe_wake_mask);
->
->  bool acpi_ec_dispatch_gpe(void)
->  {
-> Index: linux-pm/drivers/acpi/sleep.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/sleep.c
-> +++ linux-pm/drivers/acpi/sleep.c
-> @@ -930,8 +930,6 @@ static int lps0_device_attach(struct acp
->
->                 acpi_handle_debug(adev->handle, "_DSM function mask: 0x%x\n",
->                                   bitmask);
-> -
-> -               acpi_ec_mark_gpe_for_wake();
->         } else {
->                 acpi_handle_debug(adev->handle,
->                                   "_DSM function 0 evaluation failed\n");
-> @@ -960,8 +958,6 @@ static int acpi_s2idle_prepare(void)
->         if (lps0_device_handle) {
->                 acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_OFF);
->                 acpi_sleep_run_lps0_dsm(ACPI_LPS0_ENTRY);
-> -
-> -               acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
->         }
->
->         if (acpi_sci_irq_valid())
-> @@ -979,10 +975,7 @@ static int acpi_s2idle_prepare(void)
->
->  static void acpi_s2idle_wake(void)
->  {
-> -       if (!lps0_device_handle)
-> -               return;
-> -
-> -       if (pm_debug_messages_on)
-> +       if (lps0_device_handle && pm_debug_messages_on)
->                 lpi_check_constraints();
->
->         /*
-> @@ -1031,8 +1024,6 @@ static void acpi_s2idle_restore(void)
->                 disable_irq_wake(acpi_sci_irq);
->
->         if (lps0_device_handle) {
-> -               acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
-> -
->                 acpi_sleep_run_lps0_dsm(ACPI_LPS0_EXIT);
->                 acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_ON);
->         }
->
->
->
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof
