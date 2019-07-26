@@ -2,54 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A1A763DB
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 12:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8C976407
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jul 2019 13:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfGZKtU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jul 2019 06:49:20 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:28035 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfGZKtT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 06:49:19 -0400
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190726104914epoutp01f5f27ef11324f7daee04fa1964142876~07108fxhX0870808708epoutp01s
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2019 10:49:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190726104914epoutp01f5f27ef11324f7daee04fa1964142876~07108fxhX0870808708epoutp01s
+        id S1726086AbfGZLBL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jul 2019 07:01:11 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:18348 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726129AbfGZLBK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jul 2019 07:01:10 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190726110106epoutp040e91695dc3ed208fc7d571087d30e241~08AMhRWdU2763727637epoutp04M
+        for <linux-pm@vger.kernel.org>; Fri, 26 Jul 2019 11:01:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190726110106epoutp040e91695dc3ed208fc7d571087d30e241~08AMhRWdU2763727637epoutp04M
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1564138154;
-        bh=FIem0CBgLtzFAqemq5f5qbAnnycsSJMfeDVL8zF1qi4=;
+        s=mail20170921; t=1564138866;
+        bh=kcE3GR2TU8uayVxoqH3p+KC+NazB5aH2KDMPv6Ni+zs=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=WczEiAsv1rqzmdAOf14xZOESPKte7VHAJhZnEilN4tmci3GsxhVjWIWcifXfT2aF/
-         XkJKFMULS08uM0I7x0Y5R2/a/25T6FKCYqOcUch+eBCuq4eOeBfIfzS6vsUPPd3O4S
-         W0HxitfWe6g5wFmkuV5gTg9Jt3ma50XSZaAvHGt4=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20190726104913epcas1p2d655cf59d621852a8144b4e197e4a334~0710Lb4eX2019720197epcas1p2N;
-        Fri, 26 Jul 2019 10:49:13 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 45w5Rq2TRZzMqYkZ; Fri, 26 Jul
-        2019 10:49:11 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D0.8D.04075.7AADA3D5; Fri, 26 Jul 2019 19:49:11 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190726104910epcas1p2eeb9f55b4fc0bc7b4d4a1bc05358758b~071xJudE-2019720197epcas1p2L;
-        Fri, 26 Jul 2019 10:49:10 +0000 (GMT)
+        b=oNLtgUtdcnkXLULaWkLiDNqQ0AMAAlQ5BgRp4OCeu9UkJdn7ZTyxuC1DID9DuippJ
+         6yb2Df8fMVSqa5CsNKYdHFEKmWM2dZN6BQB/byRCofuMUJIXNipVCdd0H8zQ25tcQz
+         sKPyRHoYcl1TvKeWhuUSjPCctwwoUVCPTw+0SIAw=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20190726110106epcas1p4515c63070edf78d9f02390f05d2b934e~08AL_ZNwC3048430484epcas1p4J;
+        Fri, 26 Jul 2019 11:01:06 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 45w5jX128mzMqYkY; Fri, 26 Jul
+        2019 11:01:04 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        69.00.04085.07DDA3D5; Fri, 26 Jul 2019 20:01:04 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190726110103epcas1p10cc201a13c99ffa8497329d70b7d2520~08AJeN-kU2936629366epcas1p1w;
+        Fri, 26 Jul 2019 11:01:03 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190726104910epsmtrp211de1d153c6bdc03c887623f840fa98a~071xGVDnz0122601226epsmtrp23;
-        Fri, 26 Jul 2019 10:49:10 +0000 (GMT)
-X-AuditID: b6c32a36-b49ff70000000feb-de-5d3adaa76465
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190726110103epsmtrp11fc4f1aea89fcff8fce9276745333a6e~08AJdWKQM0394803948epsmtrp1y;
+        Fri, 26 Jul 2019 11:01:03 +0000 (GMT)
+X-AuditID: b6c32a39-cebff70000000ff5-02-5d3add70e81b
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C4.9A.03706.6AADA3D5; Fri, 26 Jul 2019 19:49:10 +0900 (KST)
+        1F.FA.03706.F6DDA3D5; Fri, 26 Jul 2019 20:01:03 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190726104909epsmtip1e1bb6a5400bed5480c06a24590667b60~071w323wD2044320443epsmtip1Q;
-        Fri, 26 Jul 2019 10:49:09 +0000 (GMT)
-Subject: Re: [RFC PATCH 01/11] devfreq: exynos-bus: Extract
- exynos_bus_profile_init()
+        20190726110103epsmtip1e2a115c4e055c4b7f82188e52a79fd35~08AJNGAGj2769327693epsmtip1K;
+        Fri, 26 Jul 2019 11:01:03 +0000 (GMT)
+Subject: Re: [RFC PATCH 04/11] devfreq: exynos-bus: Clean up code
 To:     Krzysztof Kozlowski <krzk@kernel.org>, cwchoi00@gmail.com
 Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
         devicetree <devicetree@vger.kernel.org>,
@@ -65,221 +64,289 @@ Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <ea48649f-736e-4d76-e1f5-47731fb44a74@samsung.com>
-Date:   Fri, 26 Jul 2019 19:52:30 +0900
+Message-ID: <2871b90b-f8e6-13c0-0e0b-66ce70e3ec86@samsung.com>
+Date:   Fri, 26 Jul 2019 20:04:24 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <CAJKOXPe4nOjjuA2MXLP1n=dPa7o6egjLZScSBNhyi9agHqqM7A@mail.gmail.com>
+In-Reply-To: <CAJKOXPfsD0XFs2hM64Kf0eG2G+xhWef3QZKjk9NU2ECzgQeqsA@mail.gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrCJsWRmVeSWpSXmKPExsWy7bCmnu7yW1axBmcmClgcOraV3eLZUW2L
-        +UfOsVpc+fqezWL63k1sFpPuT2CxOH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y25x
-        u3EFm8WMyS/ZHPg8ds66y+6xaVUnm8eda3vYPO53H2fy2Lyk3uPguz1MHn1bVjF6fN4kF8AR
-        lW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3S2kkJZ
-        Yk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAskCvODG3uDQvXS85P9fK0MDAyBSoMCE7
-        4/p11YLrRhXH/8xnamD8p9TFyMkhIWAisezfTTYQW0hgB6PExRd+XYxcQPYnRon5E6+wQTjf
-        GCVe3D/OCNPxaeZLqMReRolnW7uYIJz3jBJ7OjewgFQJC4RLvFz2BWyuiICtxO7Z81hAipgF
-        VrJIrOt4BzaKTUBLYv+LG2BF/AKKEld/PAaL8wrYSXzb8hPI5uBgEVCVuDvNCyQsKhAh8enB
-        YVaIEkGJkzOfgO3iFAiUOLZzDVgrs4C4xK0n85kgbHmJ5q2zmUH2SgjsYpfo+bAK6gUXib3P
-        W9ggbGGJV8e3sEPYUhKf3+2FildLrDx5hA2iuYNRYsv+C6wQCWOJ/UsnM4EcxyygKbF+lz5E
-        WFFi5++5UEfwSbz72sMKUiIhwCvR0SYEUaIscfnBXSYIW1JicXsn2wRGpVlI3pmF5IVZSF6Y
-        hbBsASPLKkax1ILi3PTUYsMCI+TI3sQITtFaZjsYF53zOcQowMGoxMN7YbllrBBrYllxZe4h
-        RgkOZiUR3q07gEK8KYmVValF+fFFpTmpxYcYTYGBPZFZSjQ5H5g/8kriDU2NjI2NLUwMzUwN
-        DZXEeRf+sIgVEkhPLEnNTk0tSC2C6WPi4JRqYDzqYnWxqo6N5+p5yyOL3KxOtcseSOg8Pe+S
-        yBuZlgfsUsuNPZZ+8p85R3ryvXA7ZnFL4fi29RYmb17dTRQ9NeFjcGBk5Hw55dJ41j+N0foe
-        v191bVJVUT+1/1Tv5ZbEC4/NitfrnZi/vd7dQOf4yo6Vd/8Lst5UFp146POVnsehq7IEGm8x
-        3VZiKc5INNRiLipOBADNjK8U5wMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPIsWRmVeSWpSXmKPExsWy7bCSnO6yW1axBo/72C0OHdvKbvHsqLbF
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGJsWRmVeSWpSXmKPExsWy7bCmrm7BXatYg+nP2SwOHdvKbvHsqLbF
         /CPnWC2ufH3PZjF97yY2i0n3J7BYnD+/gd1i0+NrrBaXd81hs/jce4TRYsb5fUwWa4/cZbe4
         3biCzWLG5JdsDnweO2fdZffYtKqTzePOtT1sHve7jzN5bF5S73Hw3R4mj74tqxg9Pm+SC+CI
-        4rJJSc3JLEst0rdL4Mq4fl214LpRxfE/85kaGP8pdTFyckgImEh8mvmSrYuRi0NIYDejxOYp
-        z9kgEpIS0y4eZe5i5ACyhSUOHy6GqHnLKPHoaBczSI2wQLjEy2VfwOpFBGwlds+exwJSxCyw
-        mkXizIb/TBAdt5kkdp7eyApSxSagJbH/xQ2wDn4BRYmrPx4zgti8AnYS37b8ZATZxiKgKnF3
-        mhdIWFQgQuLwjllQJYISJ2c+YQGxOQUCJY7tXAMWZxZQl/gz7xIzhC0ucevJfCYIW16ieets
-        5gmMwrOQtM9C0jILScssJC0LGFlWMUqmFhTnpucWGxYY5qWW6xUn5haX5qXrJefnbmIER6uW
-        5g7Gy0viDzEKcDAq8fBqrLKMFWJNLCuuzD3EKMHBrCTCu3UHUIg3JbGyKrUoP76oNCe1+BCj
-        NAeLkjjv07xjkUIC6YklqdmpqQWpRTBZJg5OqQZGXfmfuRI3Yq04JA6/nlawKrSIuf7cya+K
-        4QX9TgqHZ6g2bDFrWhZ7JeGbeE/vbr3w6Rzv/0hyBOQrThM5tsexVz/XfX5K+mWd6oIJ5uVT
-        Jz/v/uuW/J6p5XKpjYTws6f2S7WdG50+/HXtZQxI/iWu+UVK4r/N87iZXwWTqqfXHgpjWet4
-        46MSS3FGoqEWc1FxIgC7Xjrq0gIAAA==
-X-CMS-MailID: 20190726104910epcas1p2eeb9f55b4fc0bc7b4d4a1bc05358758b
+        yrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMATpbSaEs
+        MacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgWaBXnJhbXJqXrpecn2tlaGBgZApUmJCd
+        8WzlOZaChY4V1w+vYmtg3KzbxcjBISFgIrFiqn8XIxeHkMAORokJU1rYIJxPjBLHJjxnhHC+
+        MUrc694L5HCCdUz+1MUKkdjLKLF5fzcThPOeUeL9jd3sIFXCAo4S17tOgdkiArYSu2fPYwEp
+        YhZYySKxruMd2Cg2AS2J/S9usIHY/AKKEld/PAaL8wrYSVz7u5EVxGYRUJWYvmgxmC0qECHx
+        6cFhVogaQYmTM5+wgNicAoES7+5vAbOZBcQlbj2ZzwRhy0s0b53NDLJYQmAXu8TsfS+YIH5w
+        kTh+/hgLhC0s8er4FnYIW0riZX8blF0tsfLkETaI5g5GiS37L7BCJIwl9i+dzAQKPmYBTYn1
+        u/QhwooSO3/PZYRYzCfx7msPKySEeSU62oQgSpQlLj+4C3WCpMTi9k62CYxKs5C8MwvJC7OQ
+        vDALYdkCRpZVjGKpBcW56anFhgWmyNG9iRGcprUsdzAeO+dziFGAg1GJh/fCcstYIdbEsuLK
+        3EOMEhzMSiK8W3cAhXhTEiurUovy44tKc1KLDzGaAkN7IrOUaHI+MIfklcQbmhoZGxtbmBia
+        mRoaKonzLvxhESskkJ5YkpqdmlqQWgTTx8TBKdXAeJJxE7PG4WjL3G1vfq7z77u/aFuVqm37
+        T5/lCS0Xz6eKv8ibba3BcV3/yO+0Y7XHUxrj361T2Hups3bJ8WVnv+8p05sjkcbblXhh0s3w
+        2oMKKod9mT6/EDJm2McYGN2YtfpR1gPtLbJltwoOLRWcdfQg++bAlQeZXl1XuxPdv+SQ1pv1
+        c87OX6HEUpyRaKjFXFScCADcYXDr6QMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRmVeSWpSXmKPExsWy7bCSnG7+XatYgyXnZCwOHdvKbvHsqLbF
+        /CPnWC2ufH3PZjF97yY2i0n3J7BYnD+/gd1i0+NrrBaXd81hs/jce4TRYsb5fUwWa4/cZbe4
+        3biCzWLG5JdsDnweO2fdZffYtKqTzePOtT1sHve7jzN5bF5S73Hw3R4mj74tqxg9Pm+SC+CI
+        4rJJSc3JLEst0rdL4Mp4tvIcS8FCx4rrh1exNTBu1u1i5OSQEDCRmPypi7WLkYtDSGA3o8TK
+        E59YIBKSEtMuHmXuYuQAsoUlDh8uhqh5yyjxdcM9dpAaYQFHietdp8BsEQFbid2z57GAFDEL
+        rGaROLPhPxNEx20mib7jU5hBqtgEtCT2v7jBBmLzCyhKXP3xmBHE5hWwk7j2dyMriM0ioCox
+        fdFiMFtUIELi8I5ZUDWCEidnPgG7jlMgUOLd/S1gNrOAusSfeZeYIWxxiVtP5jNB2PISzVtn
+        M09gFJ6FpH0WkpZZSFpmIWlZwMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9dLzk/dxMjOGK1
+        NHcwXl4Sf4hRgINRiYdXY5VlrBBrYllxZe4hRgkOZiUR3q07gEK8KYmVValF+fFFpTmpxYcY
+        pTlYlMR5n+YdixQSSE8sSc1OTS1ILYLJMnFwSjUwrvSz4W9O8XhVusyYWaDk8IUp7C8CT9Tu
+        kfN+Ov2w7JO965feLP7CITVhnkOkmux+yWItJfcVT6oOvJwoUlgYvrb39d76iNRjvJHX49tf
+        ZR+p9Nv/4tsCF5WNnqejzrVyHtsWyHP3cTjvHxEZp1nx93iLqngOlvd7B0izP13aULdze5uW
+        nvZWJZbijERDLeai4kQANKPnUdQCAAA=
+X-CMS-MailID: 20190726110103epcas1p10cc201a13c99ffa8497329d70b7d2520
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190723122022eucas1p1266d90873d564894bd852c20140f8474
-References: <CGME20190723122022eucas1p1266d90873d564894bd852c20140f8474@eucas1p1.samsung.com>
+X-CMS-RootMailID: 20190723122024eucas1p25a480ccddaa69ee1d0f1a07960ca3f22
+References: <CGME20190723122024eucas1p25a480ccddaa69ee1d0f1a07960ca3f22@eucas1p2.samsung.com>
         <20190723122016.30279-1-a.swigon@partner.samsung.com>
-        <20190723122016.30279-2-a.swigon@partner.samsung.com>
-        <CAGTfZH0JE0PmiCHaT3vMrDaP0-8eZ3afyHy_zT9aFmMOGNTR8g@mail.gmail.com>
-        <CAJKOXPe4nOjjuA2MXLP1n=dPa7o6egjLZScSBNhyi9agHqqM7A@mail.gmail.com>
+        <20190723122016.30279-5-a.swigon@partner.samsung.com>
+        <CAGTfZH3Z334D3OKpBOGSfS9RoHkOX-s_2M858z1Ye2NoMtVh4g@mail.gmail.com>
+        <CAJKOXPfsD0XFs2hM64Kf0eG2G+xhWef3QZKjk9NU2ECzgQeqsA@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 26. 오후 7:42, Krzysztof Kozlowski wrote:
-> On Thu, 25 Jul 2019 at 14:44, Chanwoo Choi <cwchoi00@gmail.com> wrote:
+On 19. 7. 26. 오후 7:45, Krzysztof Kozlowski wrote:
+> On Thu, 25 Jul 2019 at 14:51, Chanwoo Choi <cwchoi00@gmail.com> wrote:
 >>
->> 2019년 7월 24일 (수) 오전 8:09, Artur Świgoń <a.swigon@partner.samsung.com>님이 작성:
+>> 2019년 7월 24일 (수) 오전 8:07, Artur Świgoń <a.swigon@partner.samsung.com>님이 작성:
 >>>
->>> This patch adds a new static function, exynos_bus_profile_init(), extracted
->>> from exynos_bus_probe().
+>>> This patch adds minor improvements to the exynos-bus driver.
 >>>
 >>> Signed-off-by: Artur Świgoń <a.swigon@partner.samsung.com>
 >>> ---
->>>  drivers/devfreq/exynos-bus.c | 106 ++++++++++++++++++++---------------
->>>  1 file changed, 60 insertions(+), 46 deletions(-)
+>>>  drivers/devfreq/exynos-bus.c | 49 ++++++++++++++++--------------------
+>>>  1 file changed, 22 insertions(+), 27 deletions(-)
 >>>
 >>> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
->>> index d9f377912c10..d8f1efaf2d49 100644
+>>> index 4bb83b945bf7..412511ca7703 100644
 >>> --- a/drivers/devfreq/exynos-bus.c
 >>> +++ b/drivers/devfreq/exynos-bus.c
->>> @@ -372,12 +372,69 @@ static int exynos_bus_parse_of(struct device_node *np,
+>>> @@ -15,11 +15,10 @@
+>>>  #include <linux/device.h>
+>>>  #include <linux/export.h>
+>>>  #include <linux/module.h>
+>>> -#include <linux/of_device.h>
+>>> +#include <linux/of.h>
+>>>  #include <linux/pm_opp.h>
+>>>  #include <linux/platform_device.h>
+>>>  #include <linux/regulator/consumer.h>
+>>> -#include <linux/slab.h>
+>>>
+>>>  #define DEFAULT_SATURATION_RATIO       40
+>>>  #define DEFAULT_VOLTAGE_TOLERANCE      2
+>>> @@ -256,7 +255,7 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+>>>                                         struct exynos_bus *bus)
+>>>  {
+>>>         struct device *dev = bus->dev;
+>>> -       int i, ret, count, size;
+>>> +       int i, ret, count;
+>>>
+>>>         /* Get the regulator to provide each bus with the power */
+>>>         bus->regulator = devm_regulator_get(dev, "vdd");
+>>> @@ -283,8 +282,7 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+>>>         }
+>>>         bus->edev_count = count;
+>>>
+>>> -       size = sizeof(*bus->edev) * count;
+>>> -       bus->edev = devm_kzalloc(dev, size, GFP_KERNEL);
+>>> +       bus->edev = devm_kcalloc(dev, count, sizeof(*bus->edev), GFP_KERNEL);
+>>>         if (!bus->edev) {
+>>>                 ret = -ENOMEM;
+>>>                 goto err_regulator;
+>>> @@ -388,7 +386,7 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+>>>         ondemand_data = devm_kzalloc(dev, sizeof(*ondemand_data), GFP_KERNEL);
+>>>         if (!ondemand_data) {
+>>>                 ret = -ENOMEM;
+>>> -               goto err;
+>>> +               goto out;
+>>>         }
+>>>         ondemand_data->upthreshold = 40;
+>>>         ondemand_data->downdifferential = 5;
+>>> @@ -400,14 +398,14 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+>>>         if (IS_ERR(bus->devfreq)) {
+>>>                 dev_err(dev, "failed to add devfreq device\n");
+>>>                 ret = PTR_ERR(bus->devfreq);
+>>> -               goto err;
+>>> +               goto out;
+>>>         }
+>>>
+>>>         /* Register opp_notifier to catch the change of OPP  */
+>>>         ret = devm_devfreq_register_opp_notifier(dev, bus->devfreq);
+>>>         if (ret < 0) {
+>>>                 dev_err(dev, "failed to register opp notifier\n");
+>>> -               goto err;
+>>> +               goto out;
+>>>         }
+>>>
+>>>         /*
+>>> @@ -417,16 +415,16 @@ static int exynos_bus_profile_init(struct exynos_bus *bus,
+>>>         ret = exynos_bus_enable_edev(bus);
+>>>         if (ret < 0) {
+>>>                 dev_err(dev, "failed to enable devfreq-event devices\n");
+>>> -               goto err;
+>>> +               goto out;
+>>>         }
+>>>
+>>>         ret = exynos_bus_set_event(bus);
+>>>         if (ret < 0) {
+>>>                 dev_err(dev, "failed to set event to devfreq-event devices\n");
+>>> -               goto err;
+>>> +               goto out;
+>>>         }
+>>>
+>>> -err:
+>>> +out:
 >>>         return ret;
 >>>  }
 >>>
->>> +static int exynos_bus_profile_init(struct exynos_bus *bus,
->>> +                                  struct devfreq_dev_profile *profile)
->>> +{
->>> +       struct device *dev = bus->dev;
->>> +       struct devfreq_simple_ondemand_data *ondemand_data;
->>> +       int ret;
->>> +
->>> +       /* Initialize the struct profile and governor data for parent device */
->>> +       profile->polling_ms = 50;
->>> +       profile->target = exynos_bus_target;
->>> +       profile->get_dev_status = exynos_bus_get_dev_status;
->>> +       profile->exit = exynos_bus_exit;
->>> +
->>> +       ondemand_data = devm_kzalloc(dev, sizeof(*ondemand_data), GFP_KERNEL);
->>> +       if (!ondemand_data) {
->>> +               ret = -ENOMEM;
->>> +               goto err;
->>> +       }
->>> +       ondemand_data->upthreshold = 40;
->>> +       ondemand_data->downdifferential = 5;
->>> +
->>> +       /* Add devfreq device to monitor and handle the exynos bus */
+>>> @@ -446,27 +444,28 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+>>>         parent_devfreq = devfreq_get_devfreq_by_phandle(dev, 0);
+>>>         if (IS_ERR(parent_devfreq)) {
+>>>                 ret = -EPROBE_DEFER;
+>>> -               goto err;
+>>> +               goto out;
+>>>         }
+>>>
+>>>         passive_data = devm_kzalloc(dev, sizeof(*passive_data), GFP_KERNEL);
+>>>         if (!passive_data) {
+>>>                 ret = -ENOMEM;
+>>> -               goto err;
+>>> +               goto out;
+>>>         }
+>>>         passive_data->parent = parent_devfreq;
+>>>
+>>>         /* Add devfreq device for exynos bus with passive governor */
+>>> -       bus->devfreq = devm_devfreq_add_device(dev, profile, DEVFREQ_GOV_PASSIVE,
 >>> +       bus->devfreq = devm_devfreq_add_device(dev, profile,
->>> +                                               DEVFREQ_GOV_SIMPLE_ONDEMAND,
->>> +                                               ondemand_data);
->>> +       if (IS_ERR(bus->devfreq)) {
->>> +               dev_err(dev, "failed to add devfreq device\n");
->>> +               ret = PTR_ERR(bus->devfreq);
->>> +               goto err;
->>> +       }
->>> +
->>> +       /* Register opp_notifier to catch the change of OPP  */
->>> +       ret = devm_devfreq_register_opp_notifier(dev, bus->devfreq);
->>> +       if (ret < 0) {
->>> +               dev_err(dev, "failed to register opp notifier\n");
->>> +               goto err;
->>> +       }
->>> +
->>> +       /*
->>> +        * Enable devfreq-event to get raw data which is used to determine
->>> +        * current bus load.
->>> +        */
->>> +       ret = exynos_bus_enable_edev(bus);
->>> +       if (ret < 0) {
->>> +               dev_err(dev, "failed to enable devfreq-event devices\n");
->>> +               goto err;
->>> +       }
->>> +
->>> +       ret = exynos_bus_set_event(bus);
->>> +       if (ret < 0) {
->>> +               dev_err(dev, "failed to set event to devfreq-event devices\n");
->>> +               goto err;
->>> +       }
->>> +
->>> +err:
->>> +       return ret;
->>> +}
->>> +
->>>  static int exynos_bus_probe(struct platform_device *pdev)
->>>  {
->>>         struct device *dev = &pdev->dev;
->>>         struct device_node *np = dev->of_node, *node;
->>>         struct devfreq_dev_profile *profile;
->>> -       struct devfreq_simple_ondemand_data *ondemand_data;
->>>         struct devfreq_passive_data *passive_data;
->>>         struct devfreq *parent_devfreq;
->>>         struct exynos_bus *bus;
->>> @@ -418,52 +475,9 @@ static int exynos_bus_probe(struct platform_device *pdev)
->>>         if (ret < 0)
->>>                 goto err;
+>>> +                                               DEVFREQ_GOV_PASSIVE,
+>>>                                                 passive_data);
+>>>         if (IS_ERR(bus->devfreq)) {
+>>>                 dev_err(dev,
+>>>                         "failed to add devfreq dev with passive governor\n");
+>>>                 ret = PTR_ERR(bus->devfreq);
+>>> -               goto err;
+>>> +               goto out;
+>>>         }
 >>>
->>> -       /* Initialize the struct profile and governor data for parent device */
->>> -       profile->polling_ms = 50;
->>> -       profile->target = exynos_bus_target;
->>> -       profile->get_dev_status = exynos_bus_get_dev_status;
->>> -       profile->exit = exynos_bus_exit;
->>> -
->>> -       ondemand_data = devm_kzalloc(dev, sizeof(*ondemand_data), GFP_KERNEL);
->>> -       if (!ondemand_data) {
->>> -               ret = -ENOMEM;
->>> +       ret = exynos_bus_profile_init(bus, profile);
+>>> -err:
+>>> +out:
+>>>         return ret;
+>>>  }
+>>>
+>>> @@ -484,11 +483,11 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>>>                 return -EINVAL;
+>>>         }
+>>>
+>>> -       bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
+>>> +       bus = devm_kzalloc(dev, sizeof(*bus), GFP_KERNEL);
+>>>         if (!bus)
+>>>                 return -ENOMEM;
+>>>         mutex_init(&bus->lock);
+>>> -       bus->dev = &pdev->dev;
+>>> +       bus->dev = dev;
+>>>         platform_set_drvdata(pdev, bus);
+>>>
+>>>         /* Parse the device-tree to get the resource information */
+>>> @@ -502,7 +501,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>>>                 goto err;
+>>>         }
+>>>
+>>> -       node = of_parse_phandle(dev->of_node, "devfreq", 0);
+>>> +       node = of_parse_phandle(np, "devfreq", 0);
+>>>         if (node) {
+>>>                 of_node_put(node);
+>>>                 ret = exynos_bus_profile_init_passive(bus, profile);
+>>> @@ -547,12 +546,10 @@ static int exynos_bus_resume(struct device *dev)
+>>>         int ret;
+>>>
+>>>         ret = exynos_bus_enable_edev(bus);
+>>> -       if (ret < 0) {
 >>> +       if (ret < 0)
->>>                 goto err;
->>> -       }
->>> -       ondemand_data->upthreshold = 40;
->>> -       ondemand_data->downdifferential = 5;
->>> -
->>> -       /* Add devfreq device to monitor and handle the exynos bus */
->>> -       bus->devfreq = devm_devfreq_add_device(dev, profile,
->>> -                                               DEVFREQ_GOV_SIMPLE_ONDEMAND,
->>> -                                               ondemand_data);
->>> -       if (IS_ERR(bus->devfreq)) {
->>> -               dev_err(dev, "failed to add devfreq device\n");
->>> -               ret = PTR_ERR(bus->devfreq);
->>> -               goto err;
->>> -       }
->>> -
->>> -       /* Register opp_notifier to catch the change of OPP  */
->>> -       ret = devm_devfreq_register_opp_notifier(dev, bus->devfreq);
->>> -       if (ret < 0) {
->>> -               dev_err(dev, "failed to register opp notifier\n");
->>> -               goto err;
->>> -       }
->>> -
->>> -       /*
->>> -        * Enable devfreq-event to get raw data which is used to determine
->>> -        * current bus load.
->>> -        */
->>> -       ret = exynos_bus_enable_edev(bus);
->>> -       if (ret < 0) {
->>> -               dev_err(dev, "failed to enable devfreq-event devices\n");
->>> -               goto err;
->>> -       }
->>> -
->>> -       ret = exynos_bus_set_event(bus);
->>> -       if (ret < 0) {
->>> -               dev_err(dev, "failed to set event to devfreq-event devices\n");
->>> -               goto err;
+>>>                 dev_err(dev, "failed to enable the devfreq-event devices\n");
+>>> -               return ret;
 >>> -       }
 >>>
->>>         goto out;
->>>  passive:
+>>> -       return 0;
+>>> +       return ret;
+>>>  }
+>>>
+>>>  static int exynos_bus_suspend(struct device *dev)
+>>> @@ -561,12 +558,10 @@ static int exynos_bus_suspend(struct device *dev)
+>>>         int ret;
+>>>
+>>
+>> NACK.
+> 
+> Instead of simple nack you should explain what is wrong with proposed
+> approach. The existing code could be improved and this patch clearly
+> improves the readability. "err" label is confusing if it is used for
+> correct exit path. The last "if() return" block is subjective - but
+> then explain exactly why you prefer one over another. No just "nack"
+> for peoples contributions.
+
+OK. Sorry for my lack comment.
+
+Actually, I prefer 'err' instead of 'out' because jump to 'err'
+statement point when failed to call some functions. In my case,
+'err' is proper without any problem.
+
+
+> 
+>>>         ret = exynos_bus_disable_edev(bus);
+>>> -       if (ret < 0) {
+>>> +       if (ret < 0)
+>>>                 dev_err(dev, "failed to disable the devfreq-event devices\n");
+>>> -               return ret;
+>>> -       }
+
+When happen error by function call, I think that have to print
+the error log, just return or jump some point like 'err'
+for restoring the previous state.
+
+But, in this case, even if happen the error, the exception handling
+of exynos_bus_disable_edev() just prints the error log without return.
+
+I knew that this it is possible because the exynos_bus_disable_edev(bus)
+was called at the end of function. But, I want to keep the same style
+for exception handling if there are no any critical benefits.
+
+>>>
+>>> -       return 0;
+>>> +       return ret;
+>>>  }
+>>>  #endif
+>>>
 >>> --
 >>> 2.17.1
 >>>
 >>
 >> NACK.
 >>
->> It has not any benefit and I don't understand reason why it is necessary.
->> I don't agree. Please drop it.
+>> As I already commented, It has never any benefit.
+>> I think that it is not usful. Please drop it.
 > 
-> The probe has 12 local variables and around 140 lines of code (so much
-> more than coding style recommendations). Therefore splitting some
-> logical part out of probe to make code better organized and more
-> readable is pretty obvious benefit.
+> The benefit for me is clear - makes the code easier to understand.
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
 
-After checked the patch3, I changed my opinion. It seems more simple than before
-and I replied on patch3. But, I think that can merge patch1/2/2 to one patch.
 
 -- 
 Best Regards,
