@@ -2,169 +2,334 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23170778CB
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2019 14:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5282778D9
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2019 15:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387514AbfG0MzT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Jul 2019 08:55:19 -0400
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:36120 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728431AbfG0MzT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Jul 2019 08:55:19 -0400
-Received: by mail-ot1-f48.google.com with SMTP id r6so58068477oti.3;
-        Sat, 27 Jul 2019 05:55:18 -0700 (PDT)
+        id S2387559AbfG0NKO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Jul 2019 09:10:14 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46548 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728431AbfG0NKO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Jul 2019 09:10:14 -0400
+Received: by mail-ot1-f68.google.com with SMTP id z23so29750617ote.13;
+        Sat, 27 Jul 2019 06:10:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mYB+RjZcYLykoUihvv7WfT1+n77aCY+3wlgKPlvm/4U=;
-        b=uClwzkIszIFQRkpjsjt2XbY2wNaLx1mYdvIRyBRK5BzE30eK8yZ+m6oS6+UoydfFP6
-         H5Cd1jgtirUhLqJU07AKVrrXhGt0UDz6PGoMzoa6NBmYEmN0To1+wUQCuehqLiUpIdZ+
-         2Iw4/Iw5NrnPi+/VbflSZa9nqWGaNjym6DXlcuLcP9iBnol2eLAbluBTeChF59+7bnZw
-         WxsJn6eZF/HoKePN41fHg47ABu75y/e5AFgarjQZS+1UMNQxXwiFowcCPpcfPa89UHRM
-         GccdWljEd7w9TZUYXsK99m8mmj3zq77vfqOMgYfeqJcDsENuKAWaRo5v/W1P1atoCKBZ
-         2ipQ==
-X-Gm-Message-State: APjAAAWX1gnnJ5Q2L1ZQWPHkMrQ1btMgNCOhI53nITPb89OWH0IszJ7B
-        rlkrIrlO29Sd7T1ELN86lViHgbf9bD+8+wJAQQM=
-X-Google-Smtp-Source: APXvYqyeCupN68o5IDANCONQioST/jWzm+ZCSqIdammMjKTD8zYEU4lf98oZYMw1Wj54n2rFP2reNc+PRrSsy2fUGXc=
-X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr68774265otp.189.1564232117536;
- Sat, 27 Jul 2019 05:55:17 -0700 (PDT)
+        bh=fwwpufhGSYZUAeP57GdLkQun/sM3lCExwP7ukIzmMqk=;
+        b=EfoQ9+A7heLaVoraHrt9xmn3cjovco0Ieh9oT6lMNap7NBbpc5o3bXCHN6gAgJIGB8
+         Wff2BUAcARRLdFS94/fORbO2n9bKlyCd39/GiuLtHCPi46Lo9hb6tdRVSlp614FnY/pD
+         sE6l5L2Devtxrh59R7VSiRg2RjxQKeA39Sj5M2BrPSlyMVUHdhNd7w97vfSJhrFvMHTy
+         UoNUNcaG+NLwvDzTXZRwov8PZn5jhArHGZZR8wwE0TS3ZXsZpe99yc5LnL4eBl5QxHtl
+         b6Mm7r1ftuRF4i2w50s8QCbgvjAq/D0Utueuicij4m672W/nW5NSuo1k62fZKgQJYANj
+         dyQg==
+X-Gm-Message-State: APjAAAU/51BaYmrTmW39+u7IWicCmWBKn+tGckDOONYXOboCzQJ4gvab
+        jafZvAo5ke879vMMi6sOcZPYuAOilJW390Mf1qc=
+X-Google-Smtp-Source: APXvYqwNrOj93v/IhuIZ8eMgV5Rg5WIlXhNpcGncnW5mvDH9fSWVVnxCXPeYovOJ1IOMgJAib1s+HonBP18d8cYJM3c=
+X-Received: by 2002:a9d:6b96:: with SMTP id b22mr5327761otq.262.1564233012702;
+ Sat, 27 Jul 2019 06:10:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <2332799.izEFUvJP67@kreacher> <2428826.VBuqOhikiK@kreacher>
- <20190725195258.GA7307@localhost.localdomain> <15043168.halW6uqc8m@kreacher> <D33632F4-E119-4833-816C-79084DA03DE4@canonical.com>
-In-Reply-To: <D33632F4-E119-4833-816C-79084DA03DE4@canonical.com>
+References: <20190727011040.89582-1-swboyd@chromium.org>
+In-Reply-To: <20190727011040.89582-1-swboyd@chromium.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 27 Jul 2019 14:55:05 +0200
-Message-ID: <CAJZ5v0imsVS-eDB+Lmd5qzAfmb0UpJ5AwV_Vf+v8D21KAtqTOg@mail.gmail.com>
-Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
- suspend" has problems
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Sat, 27 Jul 2019 15:10:00 +0200
+Message-ID: <CAJZ5v0hroRuGQ5N42Z8=yFVXiJPdid3wJrHoKqr2BZVx=sfnBQ@mail.gmail.com>
+Subject: Re: [PATCH] PM / wakeup: Avoid dev_name collisions in wakeup class
+To:     Stephen Boyd <swboyd@chromium.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Keith Busch <kbusch@kernel.org>,
-        "Busch, Keith" <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Tri Vo <trong@android.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 4:03 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
+On Sat, Jul 27, 2019 at 3:11 AM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> at 04:02, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> If a device is wakeup capable and the driver calls device_wakeup_init()
+> on it during probe and then userspace writes 'enabled' to that device's
+> power/wakeup file in sysfs we'll try to create the same named wakeup
+> device in sysfs. The kernel will complain about duplicate file names.
 >
-> > On Thursday, July 25, 2019 9:52:59 PM CEST Keith Busch wrote:
-> >> On Thu, Jul 25, 2019 at 09:48:57PM +0200, Rafael J. Wysocki wrote:
-> >>> NVME Identify Controller:
-> >>> vid     : 0x1c5c
-> >>> ssvid   : 0x1c5c
-> >>> sn      : MS92N171312902J0N
-> >>> mn      : PC401 NVMe SK hynix 256GB
-> >>> fr      : 80007E00
-> >>> rab     : 2
-> >>> ieee    : ace42e
-> >>> cmic    : 0
-> >>> mdts    : 5
-> >>> cntlid  : 1
-> >>> ver     : 10200
-> >>> rtd3r   : 7a120
-> >>> rtd3e   : 1e8480
-> >>> oaes    : 0x200
-> >>> ctratt  : 0
-> >>> oacs    : 0x17
-> >>> acl     : 7
-> >>> aerl    : 3
-> >>> frmw    : 0x14
-> >>> lpa     : 0x2
-> >>> elpe    : 255
-> >>> npss    : 4
-> >>> avscc   : 0x1
-> >>> apsta   : 0x1
-> >>> wctemp  : 352
-> >>> cctemp  : 354
-> >>> mtfa    : 0
-> >>> hmpre   : 0
-> >>> hmmin   : 0
-> >>> tnvmcap : 0
-> >>> unvmcap : 0
-> >>> rpmbs   : 0
-> >>> edstt   : 10
-> >>> dsto    : 0
-> >>> fwug    : 0
-> >>> kas     : 0
-> >>> hctma   : 0
-> >>> mntmt   : 0
-> >>> mxtmt   : 0
-> >>> sanicap : 0
-> >>> hmminds : 0
-> >>> hmmaxd  : 0
-> >>> nsetidmax : 0
-> >>> anatt   : 0
-> >>> anacap  : 0
-> >>> anagrpmax : 0
-> >>> nanagrpid : 0
-> >>> sqes    : 0x66
-> >>> cqes    : 0x44
-> >>> maxcmd  : 0
-> >>> nn      : 1
-> >>> oncs    : 0x1f
-> >>> fuses   : 0x1
-> >>> fna     : 0
-> >>> vwc     : 0x1
-> >>> awun    : 7
-> >>> awupf   : 7
-> >>> nvscc   : 1
-> >>> acwu    : 7
-> >>> sgls    : 0
-> >>> mnan    : 0
-> >>> subnqn  :
-> >>> ioccsz  : 0
-> >>> iorcsz  : 0
-> >>> icdoff  : 0
-> >>> ctrattr : 0
-> >>> msdbd   : 0
-> >>> ps    0 : mp:6.00W operational enlat:5 exlat:5 rrt:0 rrl:0
-> >>>           rwt:0 rwl:0 idle_power:- active_power:-
-> >>> ps    1 : mp:3.80W operational enlat:30 exlat:30 rrt:1 rrl:1
-> >>>           rwt:1 rwl:1 idle_power:- active_power:-
-> >>> ps    2 : mp:2.40W operational enlat:100 exlat:100 rrt:2 rrl:2
-> >>>           rwt:2 rwl:2 idle_power:- active_power:-
-> >>> ps    3 : mp:0.0700W non-operational enlat:1000 exlat:1000 rrt:3 rrl:3
-> >>>           rwt:3 rwl:3 idle_power:- active_power:-
-> >>> ps    4 : mp:0.0070W non-operational enlat:1000 exlat:5000 rrt:3 rrl:3
-> >>>           rwt:3 rwl:3 idle_power:- active_power:-
-> >>
-> >> Hm, nothing stands out as something we can use to determine if we should
-> >> skip the nvme specific settings or allow D3. I've no other ideas at the
-> >> moment for what we may check.
-> >
-> > Well, do ASPM settings matter here?
+> sysfs: cannot create duplicate filename '/devices/virtual/wakeup/1-1.1'
+> kobject_add_internal failed for 1-1.1 with -EEXIST, don't try to register things with the same name in the same directory.
 >
-> Seems like it's a regression in the firmware.
+> It may be advantageous to not write 'enabled' to the wakeup file (see
+> wakeup_store()) from userspace for these devices because we allocate
+> devices and register them and then throw them all away later on if the
+> device driver has already initialized the wakeup attribute. The
+> implementation currently tries to avoid taking locks here so it seems
+> best to optimize that path in a separate patch.
 >
-> The issue happens in version 80007E00 but not version 80006E00.
-
-So you mean the NVMe firmware, to be entirely precise.
-
-> I am not sure how to downgrade it under Linux though.
-
-Me neither.
-
-> The firmware changelog [1] is very interesting:
-> - Improves the performance of the solid-state drive (SSD) by distributing
-> power into the SSD efficiently according to the power state of the system.
+> Let's rename the wakeup class devices as 'wakeupN' with an IDA that's
+> simple enough to just return some sort of number. In addition, let's
+> make the device registering the wakeup the parent and include a 'name'
+> attribute in case userspace wants to figure out the type of wakeup it is
+> (in the case of virtual wakeups) or the device associated with the
+> wakeup. This makes it easier for userspace to go from /sys/class/wakeup
+> to a place in the device hierarchy where the wakeup is generated from
+> like an input device.
 >
-> [1]
-> https://www.dell.com/support/home/us/en/04/drivers/driversdetails?driverid=mcxm8
+> Cc: Tri Vo <trong@android.com>
+> Cc: Kalesh Singh <kaleshsingh@google.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-Huh.
+I'd rather change the commit that introduced this issue which is only
+in linux-next for now.
 
-It looks like something else prevents the PCH on my 9380 from reaching
-the right state for S0ix, though.  I still need to find out what it
-is.
+> ---
+>  drivers/acpi/device_pm.c          |  2 +-
+>  drivers/base/power/wakeup.c       |  8 +++++---
+>  drivers/base/power/wakeup_stats.c | 31 ++++++++++++++++++++++++++-----
+>  fs/eventpoll.c                    |  4 ++--
+>  include/linux/pm_wakeup.h         | 12 ++++++++----
+>  kernel/power/autosleep.c          |  2 +-
+>  kernel/power/wakelock.c           |  2 +-
+>  kernel/time/alarmtimer.c          |  2 +-
+>  8 files changed, 45 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> index 28cffaaf9d82..0863be1e42d6 100644
+> --- a/drivers/acpi/device_pm.c
+> +++ b/drivers/acpi/device_pm.c
+> @@ -495,7 +495,7 @@ acpi_status acpi_add_pm_notifier(struct acpi_device *adev, struct device *dev,
+>                 goto out;
+>
+>         mutex_lock(&acpi_pm_notifier_lock);
+> -       adev->wakeup.ws = wakeup_source_register(dev_name(&adev->dev));
+> +       adev->wakeup.ws = wakeup_source_register(&adev->dev, dev_name(&adev->dev));
+>         adev->wakeup.context.dev = dev;
+>         adev->wakeup.context.func = func;
+>         adev->wakeup.flags.notifier_present = true;
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 2b8def0ea59f..7ba242b49831 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -201,15 +201,17 @@ EXPORT_SYMBOL_GPL(wakeup_source_remove);
+>  /**
+>   * wakeup_source_register - Create wakeup source and add it to the list.
+>   * @name: Name of the wakeup source to register.
+> + * @dev: Device wakeup source is associated with (or NULL if virtual)
+>   */
+> -struct wakeup_source *wakeup_source_register(const char *name)
+> +struct wakeup_source *wakeup_source_register(struct device *dev,
+> +                                            const char *name)
+>  {
+>         struct wakeup_source *ws;
+>         int ret;
+>
+>         ws = wakeup_source_create(name);
+>         if (ws) {
+> -               ret = wakeup_source_sysfs_add(ws);
+> +               ret = wakeup_source_sysfs_add(dev, ws);
+>                 if (ret) {
+>                         kfree_const(ws->name);
+>                         kfree(ws);
+> @@ -273,7 +275,7 @@ int device_wakeup_enable(struct device *dev)
+>         if (pm_suspend_target_state != PM_SUSPEND_ON)
+>                 dev_dbg(dev, "Suspicious %s() during system transition!\n", __func__);
+>
+> -       ws = wakeup_source_register(dev_name(dev));
+> +       ws = wakeup_source_register(dev, dev_name(dev));
+>         if (!ws)
+>                 return -ENOMEM;
+>
+> diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeup_stats.c
+> index 9c01150f1213..927cc84d3392 100644
+> --- a/drivers/base/power/wakeup_stats.c
+> +++ b/drivers/base/power/wakeup_stats.c
+> @@ -7,8 +7,9 @@
+>   * Copyright (c) 2019 Google Inc.
+>   */
+>
+> -#include <linux/slab.h>
+> +#include <linux/idr.h>
+>  #include <linux/kdev_t.h>
+> +#include <linux/slab.h>
+>
+>  #include "power.h"
+>
+> @@ -80,6 +81,15 @@ static ssize_t last_change_ms_show(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RO(last_change_ms);
+>
+> +static ssize_t name_show(struct device *dev,
+> +                                  struct device_attribute *attr, char *buf)
+> +{
+> +       struct wakeup_source *ws = dev_get_drvdata(dev);
+> +
+> +       return sprintf(buf, "%s\n", ws->name);
+> +}
+> +static DEVICE_ATTR_RO(name);
+> +
+>  static ssize_t prevent_suspend_time_ms_show(struct device *dev,
+>                                             struct device_attribute *attr,
+>                                             char *buf)
+> @@ -96,6 +106,7 @@ static ssize_t prevent_suspend_time_ms_show(struct device *dev,
+>  static DEVICE_ATTR_RO(prevent_suspend_time_ms);
+>
+>  static struct attribute *wakeup_source_attrs[] = {
+> +       &dev_attr_name.attr,
+>         &dev_attr_active_count.attr,
+>         &dev_attr_event_count.attr,
+>         &dev_attr_wakeup_count.attr,
+> @@ -109,18 +120,27 @@ static struct attribute *wakeup_source_attrs[] = {
+>  };
+>  ATTRIBUTE_GROUPS(wakeup_source);
+>
+> +static DEFINE_IDA(wakeup_ida);
+> +
+>  /**
+>   * wakeup_source_sysfs_add - Add wakeup_source attributes to sysfs.
+>   * @ws: Wakeup source to be added in sysfs.
+> + * @parent: Device wakeup source is associated with (or NULL if virtual)
+>   */
+> -int wakeup_source_sysfs_add(struct wakeup_source *ws)
+> +int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *ws)
+>  {
+>         struct device *dev;
+>
+> -       dev = device_create_with_groups(wakeup_class, NULL, MKDEV(0, 0), ws,
+> -                                       wakeup_source_groups, "%s", ws->name);
+> -       if (IS_ERR(dev))
+> +       ws->id = ida_simple_get(&wakeup_ida, 0, 0, GFP_KERNEL);
+> +       if (ws->id < 0)
+> +               return ws->id;
+> +
+> +       dev = device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
+> +                                       wakeup_source_groups, "wakeup%d", ws->id);
+> +       if (IS_ERR(dev)) {
+> +               ida_simple_remove(&wakeup_ida, ws->id);
+>                 return PTR_ERR(dev);
+> +       }
+>
+>         ws->dev = dev;
+>         return 0;
+> @@ -134,6 +154,7 @@ EXPORT_SYMBOL_GPL(wakeup_source_sysfs_add);
+>  void wakeup_source_sysfs_remove(struct wakeup_source *ws)
+>  {
+>         device_unregister(ws->dev);
+> +       ida_simple_remove(&wakeup_ida, ws->id);
+>  }
+>  EXPORT_SYMBOL_GPL(wakeup_source_sysfs_remove);
+>
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index d7f1f5011fac..c4159bcc05d9 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -1459,13 +1459,13 @@ static int ep_create_wakeup_source(struct epitem *epi)
+>         struct wakeup_source *ws;
+>
+>         if (!epi->ep->ws) {
+> -               epi->ep->ws = wakeup_source_register("eventpoll");
+> +               epi->ep->ws = wakeup_source_register(NULL, "eventpoll");
+>                 if (!epi->ep->ws)
+>                         return -ENOMEM;
+>         }
+>
+>         name = epi->ffd.file->f_path.dentry->d_name.name;
+> -       ws = wakeup_source_register(name);
+> +       ws = wakeup_source_register(NULL, name);
+>
+>         if (!ws)
+>                 return -ENOMEM;
+> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+> index 500f9cfe2db8..822e74f45384 100644
+> --- a/include/linux/pm_wakeup.h
+> +++ b/include/linux/pm_wakeup.h
+> @@ -41,6 +41,7 @@ struct wake_irq;
+>   */
+>  struct wakeup_source {
+>         const char              *name;
+> +       int                     id;
+>         struct list_head        entry;
+>         spinlock_t              lock;
+>         struct wake_irq         *wakeirq;
+> @@ -88,7 +89,8 @@ extern struct wakeup_source *wakeup_source_create(const char *name);
+>  extern void wakeup_source_destroy(struct wakeup_source *ws);
+>  extern void wakeup_source_add(struct wakeup_source *ws);
+>  extern void wakeup_source_remove(struct wakeup_source *ws);
+> -extern struct wakeup_source *wakeup_source_register(const char *name);
+> +extern struct wakeup_source *wakeup_source_register(struct device *dev,
+> +                                                   const char *name);
+>  extern void wakeup_source_unregister(struct wakeup_source *ws);
+>  extern int device_wakeup_enable(struct device *dev);
+>  extern int device_wakeup_disable(struct device *dev);
+> @@ -128,7 +130,8 @@ static inline void wakeup_source_add(struct wakeup_source *ws) {}
+>
+>  static inline void wakeup_source_remove(struct wakeup_source *ws) {}
+>
+> -static inline struct wakeup_source *wakeup_source_register(const char *name)
+> +static inline struct wakeup_source *wakeup_source_register(struct device *dev,
+> +                                                          const char *name)
+>  {
+>         return NULL;
+>  }
+> @@ -186,12 +189,13 @@ static inline void pm_wakeup_dev_event(struct device *dev, unsigned int msec,
+>  #ifdef CONFIG_PM_SLEEP_STATS
+>
+>  /* drivers/base/power/wakeup_stats.c */
+> -int wakeup_source_sysfs_add(struct wakeup_source *ws);
+> +int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *ws);
+>  void wakeup_source_sysfs_remove(struct wakeup_source *ws);
+>
+>  #else /* !CONFIG_PM_SLEEP_STATS */
+>
+> -static inline int wakeup_source_sysfs_add(struct wakeup_source *ws)
+> +static inline int wakeup_source_sysfs_add(struct device *parent,
+> +                                         struct wakeup_source *ws)
+>  {
+>         return 0;
+>  }
+> diff --git a/kernel/power/autosleep.c b/kernel/power/autosleep.c
+> index 41e83a779e19..9af5a50d3489 100644
+> --- a/kernel/power/autosleep.c
+> +++ b/kernel/power/autosleep.c
+> @@ -116,7 +116,7 @@ int pm_autosleep_set_state(suspend_state_t state)
+>
+>  int __init pm_autosleep_init(void)
+>  {
+> -       autosleep_ws = wakeup_source_register("autosleep");
+> +       autosleep_ws = wakeup_source_register(NULL, "autosleep");
+>         if (!autosleep_ws)
+>                 return -ENOMEM;
+>
+> diff --git a/kernel/power/wakelock.c b/kernel/power/wakelock.c
+> index 32726da3d6e6..826fcd97647a 100644
+> --- a/kernel/power/wakelock.c
+> +++ b/kernel/power/wakelock.c
+> @@ -192,7 +192,7 @@ static struct wakelock *wakelock_lookup_add(const char *name, size_t len,
+>         wl->ws.name = wl->name;
+>         wl->ws.last_time = ktime_get();
+>
+> -       ret = wakeup_source_sysfs_add(&wl->ws);
+> +       ret = wakeup_source_sysfs_add(NULL, &wl->ws);
+>         if (ret) {
+>                 kfree(wl->name);
+>                 kfree(wl);
+> diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+> index 57518efc3810..93b382d9701c 100644
+> --- a/kernel/time/alarmtimer.c
+> +++ b/kernel/time/alarmtimer.c
+> @@ -97,7 +97,7 @@ static int alarmtimer_rtc_add_device(struct device *dev,
+>         if (!device_may_wakeup(rtc->dev.parent))
+>                 return -1;
+>
+> -       __ws = wakeup_source_register("alarmtimer");
+> +       __ws = wakeup_source_register(dev, "alarmtimer");
+>
+>         spin_lock_irqsave(&rtcdev_lock, flags);
+>         if (!rtcdev) {
+>
+> base-commit: 0c826a07dd696d99784c68ec1e8def4399cc4a0b
+> --
+> Sent by a computer through tubes
+>
