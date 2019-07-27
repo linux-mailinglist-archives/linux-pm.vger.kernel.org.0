@@ -2,145 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A3D77745
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2019 08:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6B17776E
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jul 2019 09:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728614AbfG0GdY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 Jul 2019 02:33:24 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:37205 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbfG0GdX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Jul 2019 02:33:23 -0400
-Received: by mail-wm1-f65.google.com with SMTP id f17so49271994wme.2;
-        Fri, 26 Jul 2019 23:33:22 -0700 (PDT)
+        id S1728254AbfG0H3H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 Jul 2019 03:29:07 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:39214 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728246AbfG0H3H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 Jul 2019 03:29:07 -0400
+Received: by mail-vs1-f65.google.com with SMTP id u3so37574800vsh.6
+        for <linux-pm@vger.kernel.org>; Sat, 27 Jul 2019 00:29:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ldJpVA6CE8TYIFWLOiSPguYs7EOGYw+Dfb3wpQniKEw=;
-        b=sPAPHVvj/MDKirz5G4DrNwsHaEC0OfA1zsJsGk2qMS1qyY87+dcEx7MzdyqHWvfh+e
-         zPkHdYDZdYpEHzIPzgrYVsxPJMz/2orE7rs6BQcAf1EnyZouv2q9YKBs6ULpldMnIoRw
-         DKPC8U0a+vCYNaheHFFXB/AVlxozJpJI16dQxFkPak/RBGY2p15dte3hJ3E9Id2vRUZQ
-         sfC3oIjEse/IRiiXQNnfhQNLPlukknwB4Qcy0Sjz5+52G6mINUwuiwSdY1+CeXvVQWSc
-         Ap8uXbYfRIx5yi8Gy6GbGBjXPVMRQr4arZd6854a5NbouDV3IWi6pRu6GhSevHiJgD82
-         OsAw==
+        bh=cxunsPUwif5aLQDZ7sw3iCnfCxZR3QXtrcqccdvRBUE=;
+        b=XQpiTYZ9xP8kfuOvYF5UuVjyCjzkKJXv8g3Uy277K6shi7janlZkKs6gC84q0Lqz+E
+         HS7YZrUlR8AzAU7yRr2GouwVT5cXzacTo754kna36L2MIaoC7rsGZiJxyC3Oj7iazlxG
+         AM1+JYop6aeIqnowiHLVPH2Bgin+wBEnqkCbhWDED/S7tTvVCxyI84P69AMqT7DkMVzp
+         ipMLorv6F3KFpPN1BADJ0HDasXB/xghZuoHfJLZtxa1DZTTUlMpwy4bXY2EKY3zGTO/n
+         MgYxyRWJhrIkvhZ43bE0F3kCNyaV6hoAUsGYy5myn2W/+FSwjwmj+lCPo+KnvPSZXn20
+         WCtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ldJpVA6CE8TYIFWLOiSPguYs7EOGYw+Dfb3wpQniKEw=;
-        b=B0MKRtk+nwB17UO9MKmDgD97ppmu9r8TisruBjuBxwuESs6O9hNtJa1d0crXgY5VRn
-         2QEKg2VLTILaIYIJf0FAuYf/k2KdeydI7kzw5D2aAWn+c3VxoeTO1Q6HAkhxY0EjjPNI
-         rXD/ibZ4NKvnxMnqASiC5iLSHRI/Jy8YHatniLVZricleFRrG0wKPJapDGtzFwcOYV7s
-         tMPfjLO9uyDKBQHeeNAWQcwyJdlcXzFK06nCVwnuJXaUcuL5hJNY48wcQvAmKZm2CijU
-         nTrlXSirx0NRtgV08WjJmc3pasyQUBjwz5zuS6WwCs6ROoSXCVmda46Hovm4ABmBS1T9
-         Lh2w==
-X-Gm-Message-State: APjAAAWfXALFhv7bRctswB4NcjFZFJMJNYxmYfqJOdfcm4xr7RIkYeto
-        XCkUzzPSMpprdHpZhQyzsZuecFYAggURqihbUdQ=
-X-Google-Smtp-Source: APXvYqy92oOEaSw9pO9I2bT0W1j8OkANGqP73txRdDJZYc35yUpNin5FBhApbrCoeq1jkR6QhmZfNC1vyrlkYdmvbdQ=
-X-Received: by 2002:a1c:96c7:: with SMTP id y190mr81779074wmd.87.1564209201152;
- Fri, 26 Jul 2019 23:33:21 -0700 (PDT)
+        bh=cxunsPUwif5aLQDZ7sw3iCnfCxZR3QXtrcqccdvRBUE=;
+        b=DKBoufY71almv6ITe/RlXIqRNdNiVND3RntG+iR+Ntwll4EngJO2bpqrxlsQ2z+wot
+         4FK9gdGCHVjH1TuM1r8O4DKPS8Oi+OeJ+j9MPhVM4CILx9M2ozpEXIHdTtSEgtE2ZeXk
+         KevIZnU3R3MjVZ1uxI5VkSriceNk6U0/BR6lyLx+yW/zPAry3OFD5/uyGKgi4dejIude
+         CCqlM+8nZl8XehubBuiGWwEQ7XzJD0Kc90By4IlXN1w5cr+s4dLwOTpwPybb6rfGkRhf
+         fl5WUGuDR6Lf0Z9MONnnho9wScKtwMSjwcKUOXFZqoiRmjh/l+01FBwHKQMrUPEoIXSh
+         qK6g==
+X-Gm-Message-State: APjAAAVDXXehn1Bfbc4FmjYAUWVAudkrhGy0c6iMtRZ7tm+zLe9wsqZv
+        VzFrDIGELde+VXsKBq6R9W6/oHYUEcaO7hYuKfY=
+X-Google-Smtp-Source: APXvYqzdbu03FfN+kgOYOFmlr4ZU8NZUhg1MsgUeBs4XDwFDKzalIdoJAFmBlvxK+0Tj+7ypiipHMklNULU0iNN2MYk=
+X-Received: by 2002:a67:fb87:: with SMTP id n7mr32787176vsr.9.1564212545563;
+ Sat, 27 Jul 2019 00:29:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190705045612.27665-1-Anson.Huang@nxp.com> <20190705045612.27665-5-Anson.Huang@nxp.com>
- <CAEnQRZAZNMBx3ApVmRP8hYPw0XY_QgR-saE6WLcT8oZmHPCxSA@mail.gmail.com> <DB3PR0402MB3916233A56CF5DF778115716F5C30@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-In-Reply-To: <DB3PR0402MB3916233A56CF5DF778115716F5C30@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Sat, 27 Jul 2019 09:33:10 +0300
-Message-ID: <CAEnQRZCrZybzcy__u4p_Eq4zSVc2ESyfKLk5sPf1JYba1JSOiA@mail.gmail.com>
-Subject: Re: [PATCH 5/6] clk: imx8mq: Remove CLK_IS_CRITICAL flag for IMX8MQ_CLK_TMU_ROOT
-To:     Anson Huang <anson.huang@nxp.com>
-Cc:     "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "edubezval@gmail.com" <edubezval@gmail.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <cover.1564091601.git.amit.kucheria@linaro.org>
+ <20190726103605.GB3327@onstation.org> <CAHLCerOs3cMQrWrYk7F_bnxr_nxJ-nsRL8oOGALU63ySqmLaig@mail.gmail.com>
+ <20190726112954.GA3984@onstation.org>
+In-Reply-To: <20190726112954.GA3984@onstation.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Sat, 27 Jul 2019 12:58:54 +0530
+Message-ID: <CAHLCerNay31+RNQvQZyxMMVyb1mLLfN5BoZbz-M+bMqbmbYwtA@mail.gmail.com>
+Subject: Re: [PATCH 00/15] thermal: qcom: tsens: Add interrupt support
+To:     Brian Masney <masneyb@onstation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <andy.gross@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        "Angus Ainslie (Purism)" <angus@akkea.ca>,
-        Carlo Caione <ccaione@baylibre.com>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 27, 2019 at 9:19 AM Anson Huang <anson.huang@nxp.com> wrote:
+On Fri, Jul 26, 2019 at 4:59 PM Brian Masney <masneyb@onstation.org> wrote:
 >
-> Hi, Daniel
+> Hi Amit,
 >
-> > Subject: Re: [PATCH 5/6] clk: imx8mq: Remove CLK_IS_CRITICAL flag for
-> > IMX8MQ_CLK_TMU_ROOT
+> On Fri, Jul 26, 2019 at 04:40:16PM +0530, Amit Kucheria wrote:
+> > > The device tree nodes appear in sysfs:
+> > >
+> > > / # ls -1 /sys/class/thermal/
+> > > cooling_device0
+> > > cooling_device1
+> > > thermal_zone0
+> > > thermal_zone1
+> > > thermal_zone2
+> > > thermal_zone3
+> > > thermal_zone4
+> > > thermal_zone5
+> > > thermal_zone6
+> > > thermal_zone7
+> > > thermal_zone8
+> > > thermal_zone9
 > >
-> > Hi all,
+> > Looks good. What are the contents of the files inside the two
+> > cooling_device directories? The output of the following command would
+> > be nice:
 > >
-> > latest linux-next hangs at boot.
-> >
-> > commit fde50b96be821ac9673a7e00847cc4605bd88f34 (HEAD -> master, tag:
-> > next-20190726, origin/master, origin/HEAD)
-> > Author: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date:   Fri Jul 26 15:18:02 2019 +1000
-> >
-> >     Add linux-next specific files for 20190726
-> >
-> >     Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> >
-> >
-> > I know this is crazy but reverting commit:
-> >
-> > commit 431bdd1df48ee2896ea9980d9153e3aeaf0c81ef (refs/bisect/bad)
-> > Author: Anson Huang <Anson.Huang@nxp.com>
-> > Date:   Fri Jul 5 12:56:11 2019 +0800
-> >
-> >     clk: imx8mq: Remove CLK_IS_CRITICAL flag for IMX8MQ_CLK_TMU_ROOT
-> >
-> >     IMX8MQ_CLK_TMU_ROOT is ONLY used for thermal module, the driver
-> >     should manage this clock, so no need to have CLK_IS_CRITICAL flag
-> >     set.
-> >
-> >
-> >
-> > makes the boot work again.
-> >
-> > Any idea?
+> > $ grep "" cooling_device?/*
 >
-> I just found if disabling SDMA1, then kernel can boot up, it does NOT make sense
-> TMU clock is related to SDMA1, I will check with design and get back to you soon.
+> /sys/class/thermal # grep "" cooling_device?/*
+> cooling_device0/cur_state:100000
+> cooling_device0/max_state:2500000
+> cooling_device0/type:smbb-usbin
+> cooling_device1/cur_state:500000
+> cooling_device1/max_state:2500000
+> cooling_device1/type:smbb-dcin
 >
+> > > The various temperatures were in the upper 40s and I threw some work at
+> > > all four CPU cores to warm up the phone and watched the various
+> > > temperatures rise:
+> > >
+> > > / # for i in $(seq 0 9) ; do
+> > > > TYPE=$(cat /sys/class/thermal/thermal_zone$i/type)
+> > > > TEMP=$(cat /sys/class/thermal/thermal_zone$i/temp)
+> > > > echo "$TYPE = $TEMP"
+> > > > done
+> > > cpu-thermal0 = 66000
+> > > cpu-thermal1 = 66000
+> > > cpu-thermal2 = 66000
+> > > cpu-thermal3 = 66000
+> > > q6-dsp-thermal = 60000
+> > > modemtx-thermal = 57000
+> > > video-thermal = 61000
+> > > wlan-thermal = 65000
+> > > gpu-thermal-top = 61000
+> > > gpu-thermal-bottom = 59000
+> > >
+> > > To test the interrupt support, I lowered all of the temperature trips to
+> > > 51C but I'm not sure where to read that notification. I assume one of
+> > > the cooling devices or a governor should be started? Sorry but I haven't
+> > > done any work in the thermal subsystem yet and I'm short on time this
+> > > morning to investigate right now.
+> >
+> > For now, just checking if the tsens interrupt in /proc/interrupts
+> > fires should be fine. I have another patch to add some information to
+> > debugs that I'll send at some point.
+>
+> An interrupt fires as each thermal zone exceeds the trip temperature and
+> an interrupt fires again when it goes below that temperature.
+> Here's my new test script:
+>
+> for i in $(seq 0 9) ; do
+>         TYPE=$(cat /sys/class/thermal/thermal_zone$i/type)
+>         TEMP=$(cat /sys/class/thermal/thermal_zone$i/temp)
+>         TRIP=$(cat /sys/class/thermal/thermal_zone$i/trip_point_0_temp)
+>         echo "$TYPE = $TEMP. trip = $TRIP"
+> done
+>
+> # Warm the phone up
+>
+> /sys/class/thermal # /temp.sh
+> cpu-thermal0 = 57000. trip = 51000
+> cpu-thermal1 = 56000. trip = 51000
+> cpu-thermal2 = 57000. trip = 51000
+> cpu-thermal3 = 56000. trip = 51000
+> q6-dsp-thermal = 51000. trip = 51000
+> modemtx-thermal = 49000. trip = 51000
+> video-thermal = 53000. trip = 51000
+> wlan-thermal = 55000. trip = 51000
+> gpu-thermal-top = 53000. trip = 51000
+> gpu-thermal-bottom = 52000. trip = 51000
+>
+> /sys/class/thermal # grep tsens /proc/interrupts
+>  27:          8          0          0          0     GIC-0 216 Level     tsens
+>
+> # Let the phone cool off
+>
+> /sys/class/thermal # /temp.sh
+> cpu-thermal0 = 48000. trip = 51000
+> cpu-thermal1 = 48000. trip = 51000
+> cpu-thermal2 = 49000. trip = 51000
+> cpu-thermal3 = 48000. trip = 51000
+> q6-dsp-thermal = 47000. trip = 51000
+> modemtx-thermal = 45000. trip = 51000
+> video-thermal = 48000. trip = 51000
+> wlan-thermal = 48000. trip = 51000
+> gpu-thermal-top = 48000. trip = 51000
+> gpu-thermal-bottom = 47000. trip = 51000
+>
+> /sys/class/thermal # grep tsens /proc/interrupts
+>  27:         19          0          0          0     GIC-0 216 Level     tsens
 
-Hi Anson,
+OK, seems reasonable. I'll finish up a debugfs patch that'll dump more
+state transition information to give more insight.
 
-Applying Abel's patch:
+> > How well does cpufreq work on 8974? I haven't looked at it yet but
+> > we'll need it for thermal throttling.
+>
+> I'm not sure how to tell if the frequency is dynamically changed during
+> runtime on arm. x86-64 shows this information in /proc/cpuinfo. Here's
+> the /proc/cpuinfo on the Nexus 5:
 
-commit 8816c47db6a82f55bb4d64f62fd9dd3af680f0e4 (HEAD -> master)
-Author: Abel Vesa <abel.vesa@nxp.com>
-Date:   Tue Jun 25 12:01:56 2019 +0300
+Nah. /proc/cpuinfo won't show what we need.
 
-    clk: imx8mq: Mark AHB clock as critical
+Try the following:
 
-    Keep the AHB clock always on since there is no driver to control it and
-    all the other clocks that use it as parent rely on it being always enabled.
+$ grep "" /sys/devices/system/cpu/cpufreq/policy?/*
 
+More specifically, the following files have the information you need.
+Run watch -n1 on them.
 
+$ grep "" /sys/devices/system/cpu/cpufreq/policy?/scaling_*_freq
 
-The kernel boots up again.
+Thanks for your help.
 
-It make some sense. I don't understand though why having
-IMX8MQ_CLK_TMU_ROOT as critical also "unhangs" the kernel.
-
-thanks,
-Daniel.
+Regards,
+Amit
