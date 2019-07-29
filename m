@@ -2,119 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB54C79C4E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 00:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D006779C9E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 01:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727816AbfG2WOL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 18:14:11 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:41405 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbfG2WOL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 18:14:11 -0400
-Received: by mail-ot1-f68.google.com with SMTP id o101so64194106ota.8
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2019 15:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=srsaV7rzeEymjAzgSWNLmNrniFdnk6Pa83TgYZnyX/o=;
-        b=GDOHpV5z0vkTp/Hi9k2G9RgZZVziD9cVw4u/mDbabUF6fthqBEpD/8MLgeaoZ54AXl
-         gp0l4hXk6AWGC2IzW4ii/4UQEBxzajmUlkfHWmKxGm24d+k5C45V0pg1L+oyVAX4YD7u
-         h8NXxkhTqhfvFrBdj6h4GOpXGJxxrvxpRVDn2kNMV7WMhIA18dWbtiofquPD9NoIBfQ7
-         zUVtuqXW4rzQFaGb7Feac5wlgC92z0LPraATDJ2Qo9/hSoW6qpBPmDv2n5UdUAi0DT04
-         q2OHystI5so/Rgnn1bJznS4CHAiSrfhiNNdMDQZ4lT+pZ8/1qrm3uIT8I4LhsfaGG8f7
-         F5Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=srsaV7rzeEymjAzgSWNLmNrniFdnk6Pa83TgYZnyX/o=;
-        b=DJ9S4rGbugOxNI6RGfb6ybeI6zyY00QdiMPOqgFXqlrK36oj//uiqXXH2zU6JzTAvE
-         PhTv4vYYWus+sJvYJQ6LVezkZ4pcxu6+qsz74rXBaP8453x+CK5EbkV7VhJ0tSinmE+f
-         9R6blNSj3bWMQcp8qeNEMEp8RVuMVlPKmn5oGkHN0G9NPFNo3x+lJLECYJKRdyLKCGdi
-         rqawswSDCakjBUBo2HQ4/464rdK5ca6NR+MF7d+33W9Hg9y4+ibCK+h7s7HbHDqRfT8s
-         dNDdodU3FxaRCoKjBnH5kE3a6AERsN3JLZzxuECbh4x0uuAXpt+2YsTQgO93l+O+ieYf
-         XzBw==
-X-Gm-Message-State: APjAAAWDP8NQLXv4X6nsrx4zaJgLaMeLXfBkS8V0DkXzRZTXCU9R/3XG
-        Zmp3ihPzIauo9uEapjhBvhIeMZitWQsuxMdjy285Wg==
-X-Google-Smtp-Source: APXvYqyuO53DWB1GnZbL8WPgAO6wYlxjhUKdDeUSsQXNzJYXk94EMFolKbpzDqKJBJk8IqgjhsI+ynp/TAB7yS3S1qk=
-X-Received: by 2002:a9d:6201:: with SMTP id g1mr85088815otj.195.1564438450498;
- Mon, 29 Jul 2019 15:14:10 -0700 (PDT)
+        id S1727572AbfG2XKk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 19:10:40 -0400
+Received: from gateway33.websitewelcome.com ([192.185.146.85]:46635 "EHLO
+        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726129AbfG2XKk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 19:10:40 -0400
+X-Greylist: delayed 1265 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 19:10:40 EDT
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id AF0B8B7427
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2019 17:49:35 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id sESVhJJBwdnCesESVhme2m; Mon, 29 Jul 2019 17:49:35 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RsCF2vuzTm3iwzaX6PiskbgBBNm8IovFMRJ8CCI/Gmg=; b=GaCue3ojx2KA5yk8vKLnHWpkW2
+        7DexMxtvyZkfRcB/kCwqzsGtBSXxqfmdiVHfceSNJXIJnnG3zEyI1RCxltTrS4Zmc/27ICiwT45XX
+        ojrNiRulP3299WA31HPphgswkUBxkg9pbhIJzbGAr8hHxepn+xbS942SAUq8Wkfo8OSsyhwtXe911
+        Xg3Rkk0Sp5Ue4s/vvgQdlb0GFdL2IHrbxr5OfTfwHc/NIDMsQrYYFHDY/2wJiOsOf6FDJpC6XnZRa
+        raoymwXO6PMiGYSKmo7n0pCIndftZNEtASHi/bmch+Wov8gzCVlvIKPKpWutNrTznz1PSKJkHlzyH
+        rJoEih4g==;
+Received: from [187.192.11.120] (port=60902 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hsESU-002FpJ-FR; Mon, 29 Jul 2019 17:49:34 -0500
+Date:   Mon, 29 Jul 2019 17:49:33 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH] cpufreq: ti-cpufreq: Mark expected switch fall-through
+Message-ID: <20190729224933.GA23686@embeddedor>
 MIME-Version: 1.0
-References: <2305283.AStDPdUUnE@kreacher> <c8960d91-4446-9acf-5575-e442a652bd05@gmail.com>
- <CAGETcx_+i6_0Q2rf-UdzZ3bCPUos9Tu4JmvvO0zUoy5gB8_ESQ@mail.gmail.com>
- <CAJZ5v0h5U60yCyaHeHVbWmwWDa4NBnuhgsV022nZm5HuGgV7ow@mail.gmail.com>
- <CAGETcx9oqAJ-VoJnD0Y8k+W8cCGPDz--=amktSgW_sB4MEngDA@mail.gmail.com> <CAJZ5v0gSyPn8sZ2jJ+nZ_nu1Y=8+7Pg+pPvKGSijUm_sKitk4Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gSyPn8sZ2jJ+nZ_nu1Y=8+7Pg+pPvKGSijUm_sKitk4Q@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 29 Jul 2019 15:13:34 -0700
-Message-ID: <CAGETcx-g+gbzgy0ZDKdMreRVWqnQyXLmuLRC4g5Zexyj5yThnA@mail.gmail.com>
-Subject: Re: [PATCH v2] driver core: Remove device link creation limitation
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.11.120
+X-Source-L: No
+X-Exim-ID: 1hsESU-002FpJ-FR
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [187.192.11.120]:60902
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 42
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 3:03 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Jul 29, 2019 at 11:43 PM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Mon, Jul 29, 2019 at 2:25 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Mon, Jul 29, 2019 at 10:47 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > Rafael,
-> > > >
-> > > > This is the fix you need. Or something link this.
-> > > >
-> > > > I had asked you to reject DL_FLAG_MANAGED as an input flag if you are
-> > > > marking it as internal (in the comments). But looks like you were also
-> > > > trying to check for "undefined" bit positions. However, the check
-> > > > isn't correct because DL_MANAGED_FLAGS doesn't include (rightfully so)
-> > > > DL_FLAG_PM_RUNTIME and DL_FLAG_RPM_ACTIVE .
-> > > >
-> > > > I tried to write a DL_FLAG_EXTERNAL to include all the external flags,
-> > > > but that felt like a maintenance headache that's not worth carrying. I
-> > > > think it's simpler to just error out when internal flags being passed
-> > > > in and ignore any undefined bit positions.
-> > >
-> > > Well, IMO it is better to prevent people from passing unrecognized
-> > > flags to device_link_add() at all, even if that means some extra
-> > > effort when adding new flags.
-> >
-> > It isn't so much the extra effort that's a concern, but people might
-> > miss updating whatever grouping macro we use.
-> >
-> > >
-> > > I'll post an alternative fix shortly.
-> >
-> > You might want to move the MANAGED_FLAGs and other grouping macros
-> > into the header file then? So that if someone is adding new flags,
-> > it'll be less likely they'll forget to update the grouping macro?
->
-> They would need to update device_link_add() itself, so updating a
-> thing next to it does't seem to be so much of an issue.
->
-> Moreover, the "grouping macro" is not relevant for any users of the
-> API, just for device_link_add() itself, so I'm not sure how much
-> better it is to have it in the header.
->
-> And, of course, if anyone forgets to update the "grouping macro", they
-> will find that the new flags are rejected immediately.
+Mark switch cases where we are expecting to fall through.
 
-Sounds good.
+This patch fixes the following warning (Building: arm):
 
--Saravana
+drivers/cpufreq/ti-cpufreq.c: In function ‘dra7_efuse_xlate’:
+drivers/cpufreq/ti-cpufreq.c:79:20: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   calculated_efuse |= DRA7_EFUSE_HIGH_MPU_OPP;
+drivers/cpufreq/ti-cpufreq.c:80:2: note: here
+  case DRA7_EFUSE_HAS_OD_MPU_OPP:
+  ^~~~
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/cpufreq/ti-cpufreq.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+index 2ad1ae17932d..aeaa883a8c9d 100644
+--- a/drivers/cpufreq/ti-cpufreq.c
++++ b/drivers/cpufreq/ti-cpufreq.c
+@@ -77,6 +77,7 @@ static unsigned long dra7_efuse_xlate(struct ti_cpufreq_data *opp_data,
+ 	case DRA7_EFUSE_HAS_ALL_MPU_OPP:
+ 	case DRA7_EFUSE_HAS_HIGH_MPU_OPP:
+ 		calculated_efuse |= DRA7_EFUSE_HIGH_MPU_OPP;
++		/* Fall through */
+ 	case DRA7_EFUSE_HAS_OD_MPU_OPP:
+ 		calculated_efuse |= DRA7_EFUSE_OD_MPU_OPP;
+ 	}
+-- 
+2.22.0
+
