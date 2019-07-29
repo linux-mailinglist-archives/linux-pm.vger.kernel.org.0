@@ -2,134 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5FF788DB
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 11:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5EF78942
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 12:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728060AbfG2JuX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 05:50:23 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:44043 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728018AbfG2JuX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 05:50:23 -0400
-Received: by mail-vs1-f66.google.com with SMTP id v129so40324601vsb.11
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2019 02:50:22 -0700 (PDT)
+        id S1726470AbfG2KIu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 06:08:50 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:47001 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726358AbfG2KIu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 06:08:50 -0400
+Received: by mail-pl1-f193.google.com with SMTP id c2so27294645plz.13
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2019 03:08:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CzaFJVRP7rz1Xn1j1tEOM0QcT+gEL6pO8dvc2N0dP2Y=;
-        b=C8j5yjkNZ6U/VPHZ4r62V8CWeH8KpzPm515Ag1x9FEsL4k5LgOauwRMq9s+vF+BHfX
-         fFDTwZKzLi7ns6fudr/PsdNzbJQRfUt2hkSs1aY6tkz7xxYkzDZ3UFtieCr8kh+itmaP
-         b5uMvUIDsqYX//X70H483L2sa60IKMlXfvYgBY2yjauqypYn367UNoUx7ovyiQIhcqWW
-         6wTZ3pZbLiWMTDClMOFRiTM7xK3JcdJIJPsG7LEeqeX3fbcQn1OV+N5KVhZGQXUMSU4p
-         +mh8+9bXjLFF5yNmINoPvfv6qrS7SjoC+2lFQNGz964P3XcomoP1lugux4bdCCfpHDJX
-         GoEg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=fEW7+SbxzCoi91sgqoZtF3yOSneHk+JvM7yQhAXJHCs=;
+        b=HmseaTTmcgTcjq0JixMYiUyyeZqlLv0Erxz8MwOVHB3bG2OSRlcZYPxp2HFwKuxmaX
+         MazvSOS+AIyud5Thwr9MknkMOaeqwM79fNcGThy8VdfJU6jqr6/5MkQQvSKLYI90ryZ1
+         BQdtRmTnefC3QYOzeDuAocFfoE/Xx8aV35GZBk5z7mJ3vSVm/ts8Q43l3RDXRba8mUcl
+         7a4zhfzE03firC9Wa5JwdPMF6RZRwXmDFezqVmS9yMc3eKJIiQpnV+L3ffK5UewCIug1
+         kSB9DcJW0SCDDYd9WNmELN5KSR+5Zylb1vGkF+aEObDZgzVPW997yqlouQ4H3CiryacB
+         vP9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CzaFJVRP7rz1Xn1j1tEOM0QcT+gEL6pO8dvc2N0dP2Y=;
-        b=T2RFG3KVRWxFh5GE3EV0NA3zg2ynm7hky9Hfp9Ti8ofgj8NhIKufNUziM5CX6s/9C6
-         h5ILyPgjdRlZ49ith8IPOgpvDROvzp+r7HIRDUGAvy7bDoG5riS0aqv8ODCWH/ABdZ8v
-         dG1VA5WptYKRDExU6UN4hwE1hUYnPsM86NC9x4HUJOPw7RKSaF0asZ3r0LFdOA8+Eb5L
-         dCudBnrxyNhJdGoT2wsxv7Y15AQJyqnwo91wBQ0N4bY4KKZF4cLvFs70gwmpqR3DXA8e
-         +/xv19I019MvPys8lY/kgTQZzeFKiyRJlGPkb9YJvtkkyqlr799k/QMuk3QKZXSsSHU3
-         jvng==
-X-Gm-Message-State: APjAAAXIfKxLBtmiIzCtJzyvsEkSCr45GwhGGVzrPi4qllk7thnpTh2Q
-        p79BwBFlynBThIIIRhoUr9JlORmS+llaRd8Mkeg=
-X-Google-Smtp-Source: APXvYqzt+e0TkSyD2IjnZbOc+XZRv78fmNUciBSTvrIVx4syul/AuxdFZue2ZFYiBb+W0cbiB67nPhUSWFOOcrTGMH8=
-X-Received: by 2002:a67:2e0e:: with SMTP id u14mr68681759vsu.182.1564393822065;
- Mon, 29 Jul 2019 02:50:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1564091601.git.amit.kucheria@linaro.org>
- <CAHLCerNay31+RNQvQZyxMMVyb1mLLfN5BoZbz-M+bMqbmbYwtA@mail.gmail.com>
- <20190729090735.GA897@onstation.org> <2123341.TWUfUUIiFt@g550jk>
-In-Reply-To: <2123341.TWUfUUIiFt@g550jk>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 29 Jul 2019 15:20:11 +0530
-Message-ID: <CAHLCerNU3oAZd6aGw1pgN-SLOJTebi5usqxaFHbQUd+sC2sc9g@mail.gmail.com>
-Subject: Re: [PATCH 00/15] thermal: qcom: tsens: Add interrupt support
-To:     Luca Weiss <luca@z3ntu.xyz>,
-        Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Brian Masney <masneyb@onstation.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Andy Gross <andy.gross@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=fEW7+SbxzCoi91sgqoZtF3yOSneHk+JvM7yQhAXJHCs=;
+        b=Xd/fReL80Tvc2OCKNX/aHyLJ3uH4Q0Aeg5A62wqs32Si5nm+yLLMoh3FdUmqKhR908
+         rvFh15sadpppEu6iLefGocEazbkmkQBAqHzNyo755ccA9CbWeQiHCSbS4dXz3aT0hhbj
+         tIWLKpirk+XHf3qjboDTQn9j1s1IqQLZszww/7YPyjhQyy/8IzB0q0IUpLUdVw8Q5gIY
+         zIYvqET0oLsUD8HJkctI7kld0SRrwhOG4h3bBq6q2U6AwKIJ9s/xCOvSAe1+1R0gjU2f
+         RJu4iwdCr+FVA4KqE/aqQNdhATYm/Dbr91roGxXDBd1l3yIErgc4LJhXl260Fi+AMEuR
+         W5iA==
+X-Gm-Message-State: APjAAAW6pQJxKweykN9ssCcYgI/bsDiM70HXNZGp3YcI2DDnXRCqhwmd
+        vHFTyxRSKduagGI028Ss7zM=
+X-Google-Smtp-Source: APXvYqwuMYnCrY+bY1H5UCK71VEsJ8Zw+/SHwQieCR+YfK5//a1nTu3XLWjnd2UUKtWSzJTOPRM8qg==
+X-Received: by 2002:a17:902:a01:: with SMTP id 1mr25401303plo.278.1564394929300;
+        Mon, 29 Jul 2019 03:08:49 -0700 (PDT)
+Received: from huyue2.ccdomain.com ([218.189.10.173])
+        by smtp.gmail.com with ESMTPSA id g2sm76981953pfb.95.2019.07.29.03.08.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 03:08:48 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com
+Cc:     linux-pm@vger.kernel.org, huyue2@yulong.com, zhangwen@yulong.com
+Subject: [PATCH v2] PM / devfreq: Remove list_for_each_entry() in devfreq_add_governor()
+Date:   Mon, 29 Jul 2019 18:08:34 +0800
+Message-Id: <20190729100834.8072-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1.windows.2
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 3:03 PM Luca Weiss <luca@z3ntu.xyz> wrote:
->
-> On Montag, 29. Juli 2019 11:07:35 CEST Brian Masney wrote:
-> > On Sat, Jul 27, 2019 at 12:58:54PM +0530, Amit Kucheria wrote:
-> > > On Fri, Jul 26, 2019 at 4:59 PM Brian Masney <masneyb@onstation.org> wrote:
-> > > > On Fri, Jul 26, 2019 at 04:40:16PM +0530, Amit Kucheria wrote:
-> > > > > How well does cpufreq work on 8974? I haven't looked at it yet but
-> > > > > we'll need it for thermal throttling.
-> > > >
-> > > > I'm not sure how to tell if the frequency is dynamically changed during
-> > > > runtime on arm. x86-64 shows this information in /proc/cpuinfo. Here's
-> > >
-> > > > the /proc/cpuinfo on the Nexus 5:
-> > > Nah. /proc/cpuinfo won't show what we need.
-> > >
-> > > Try the following:
-> > >
-> > > $ grep "" /sys/devices/system/cpu/cpufreq/policy?/*
-> > >
-> > > More specifically, the following files have the information you need.
-> > > Run watch -n1 on them.
-> > >
-> > > $ grep "" /sys/devices/system/cpu/cpufreq/policy?/scaling_*_freq
-> >
-> > There's no cpufreq directory on msm8974:
-> >
-> >     # ls -1 /sys/devices/system/cpu/
-> >     cpu0
-> >     cpu1
-> >     cpu2
-> >     cpu3
-> >     cpuidle
-> >     hotplug
-> >     isolated
-> >     kernel_max
-> >     modalias
-> >     offline
-> >     online
-> >     possible
-> >     power
-> >     present
-> >     smt
-> >     uevent
-> >
-> > I'm using qcom_defconfig.
-> >
-> > Brian
->
-> Hi Brian,
-> cpufreq isn't supported on msm8974 yet.
-> I have these patches [0] in my tree but I'm not sure they work correctly, but I haven't tested much with them. Feel free to try them on hammerhead.
->
-> Luca
->
-> [0] https://github.com/z3ntu/linux/compare/b0917f53ada0e929896a094b451219cd8091366e...6459ca6aff498c9d12acd35709b4903effc4c3f8
+From: Yue Hu <huyue2@yulong.com>
 
-Niklas is working on refactoring some of the Krait code[1]. I'm not
-sure if he looked at 8974 directly as part of the refactor adding him
-here to get a better sense of the state of cpufreq on 8974.
+We will call try_then_request_governor() to find a governor from a list
+of devfreq_governor_list in devfreq_add_device(). Only if the governor
+has been registered in this list, the devfreq adding will be successful,
+fails if not. That means we should do the governor registration charged
+by devfreq_add_governor() before adding devfreq for a device with this
+governor. So, the devfreq_list would not contain the device which has
+the governor to be added when registering governor.
 
-[1] https://lore.kernel.org/linux-arm-msm/20190726080823.xwhxagv5iuhudmic@vireshk-i7/T/#t
+Moreover, use EEXIST instead of EINVAL in devfreq_add_{governor,device},
+update message existing related also.
+
+Signed-off-by: Yue Hu <huyue2@yulong.com>
+---
+v2: correct syntax error in description
+
+ drivers/devfreq/devfreq.c | 39 +++------------------------------------
+ 1 file changed, 3 insertions(+), 36 deletions(-)
+
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 784c08e..104f03d 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -625,9 +625,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
+ 	devfreq = find_device_devfreq(dev);
+ 	mutex_unlock(&devfreq_list_lock);
+ 	if (!IS_ERR(devfreq)) {
+-		dev_err(dev, "%s: Unable to create devfreq for the device.\n",
++		dev_err(dev, "%s: Existing devfreq for the device.\n",
+ 			__func__);
+-		err = -EINVAL;
++		err = -EEXIST;
+ 		goto err_out;
+ 	}
+ 
+@@ -998,7 +998,6 @@ void devfreq_resume(void)
+ int devfreq_add_governor(struct devfreq_governor *governor)
+ {
+ 	struct devfreq_governor *g;
+-	struct devfreq *devfreq;
+ 	int err = 0;
+ 
+ 	if (!governor) {
+@@ -1011,44 +1010,12 @@ int devfreq_add_governor(struct devfreq_governor *governor)
+ 	if (!IS_ERR(g)) {
+ 		pr_err("%s: governor %s already registered\n", __func__,
+ 		       g->name);
+-		err = -EINVAL;
++		err = -EEXIST;
+ 		goto err_out;
+ 	}
+ 
+ 	list_add(&governor->node, &devfreq_governor_list);
+ 
+-	list_for_each_entry(devfreq, &devfreq_list, node) {
+-		int ret = 0;
+-		struct device *dev = devfreq->dev.parent;
+-
+-		if (!strncmp(devfreq->governor_name, governor->name,
+-			     DEVFREQ_NAME_LEN)) {
+-			/* The following should never occur */
+-			if (devfreq->governor) {
+-				dev_warn(dev,
+-					 "%s: Governor %s already present\n",
+-					 __func__, devfreq->governor->name);
+-				ret = devfreq->governor->event_handler(devfreq,
+-							DEVFREQ_GOV_STOP, NULL);
+-				if (ret) {
+-					dev_warn(dev,
+-						 "%s: Governor %s stop = %d\n",
+-						 __func__,
+-						 devfreq->governor->name, ret);
+-				}
+-				/* Fall through */
+-			}
+-			devfreq->governor = governor;
+-			ret = devfreq->governor->event_handler(devfreq,
+-						DEVFREQ_GOV_START, NULL);
+-			if (ret) {
+-				dev_warn(dev, "%s: Governor %s start=%d\n",
+-					 __func__, devfreq->governor->name,
+-					 ret);
+-			}
+-		}
+-	}
+-
+ err_out:
+ 	mutex_unlock(&devfreq_list_lock);
+ 
+-- 
+1.9.1
+
