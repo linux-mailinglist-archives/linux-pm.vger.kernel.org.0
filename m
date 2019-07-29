@@ -2,88 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E81B79836
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 22:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A4C79910
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 22:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390048AbfG2UGM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 16:06:12 -0400
-Received: from mail-pg1-f174.google.com ([209.85.215.174]:44342 "EHLO
-        mail-pg1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389378AbfG2UGK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 16:06:10 -0400
-Received: by mail-pg1-f174.google.com with SMTP id i18so28787178pgl.11;
-        Mon, 29 Jul 2019 13:06:09 -0700 (PDT)
+        id S1730159AbfG2UMu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 16:12:50 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:42984 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728931AbfG2UMq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 16:12:46 -0400
+Received: by mail-ot1-f66.google.com with SMTP id l15so63866497otn.9
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2019 13:12:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=P3EUM+tzT2Mr9lYyH9h+ka7j8G70ef8Dl2l22x1qowY=;
-        b=e68jNLw0799EKEVQytct+JZQNey8bkPM//gc4ZFMDQZt6EuWjdKKRGpVlCTMWq7Iqo
-         A+dcRsjM4FizcWmU+Pe5CRlrHn1pVvJyOmfNMEJfMlsdrGvxgecpZ/Vz2EjV+oGs4zZv
-         caDGsF7LjY/bt2zUP/pfgLlCSthMkMgm0P30KycyqAo/vHsx4JIUHzrLR6z1YlWrQHF2
-         Z/O54RfdGRdkJdCERpIQTbLh8SD1teL8PkDFWC337LABr2NOIPBHPVBaqvBIZ+Fjr6S9
-         FQfjphUq5UIZmZbQAPaqMS0yFAL1KgtnRWEoarVjXw+oyOU2oF5/pLul9G4CyNiLufzV
-         Aw4Q==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rLtTrMx9bNgV2e5WT+U4GbHrtwL6tZTxsShVYrHD6s8=;
+        b=tGszBRzPbi6dD+NRM2bN3t9p9ftDIDFlandOwt8DpUAVkYZ4vU9DgEhnuPtU35uxQ/
+         KJflcPgXXlm6X0pPEHjnN6jl2/WiXLYOc8kTsFgZjm52JZb//9cc8NSlJ0h/z9Gntkww
+         IHh1MZfFJO8t/jlHNiHPzn2KUh++WFzQaiWc7R7+sEi8mVNA/wgN1EoPKSVvlaWeX9U4
+         Cqmw8jl8KuzAg9Pto9YHhmzF1ClROkAaxGZTDhB2AgrMQ6fC9wMp2k2yFzK7yUsFbviP
+         jHFwQ0oNY3I0nJ4xOe0eVdhRJm6bn2zkQQhWvisj0JWCFFjM/ME1xtG/G/UGYMcwvYHp
+         hFtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=P3EUM+tzT2Mr9lYyH9h+ka7j8G70ef8Dl2l22x1qowY=;
-        b=K0G2ea8spd/u+MUgfpYWYg15RnGE/neEKE6wyFmPyvIRcrlQ2cX9ZjA0sf2Fh3gFb2
-         KKpRoRJhrPDIFTcbP62EK/mYDyI/n61X8dH2+Nmcu6bUVd/ictAjHYzRb/iyRhwInc2J
-         VfT3FSH2d5lZRUTo6vLAJdkyI7lgQ4Bdjr2LAbijwcxgSI7Xjx5nuL7tkZioFRb3ciX2
-         WRFkFvARUd9WE15K8+6sQ5VpkuqWOAwb5x2xAeO3Jrk7HucqJlS0W0ayOYeAByDn4Rjc
-         kJ65WBBjp8wdL0pQeXDQVdmq3/QWrD3UPygf1K07SI8xZqbpNgtCWMssI+/HcZ+RdSRP
-         af5Q==
-X-Gm-Message-State: APjAAAWUtjO+Yqq1eWoCTqKnLVytZN8G9wQ8GPkwUnh51pPtmuN+rNpc
-        Gb33s1Vp7AChrDyQifW3x9k=
-X-Google-Smtp-Source: APXvYqx8/ZCCakSV0L+VbVZZR4VTz4XJbOiCwNm038NWGAf8GVPi+6hwZfOg57M6dniSlHu1GcB3ag==
-X-Received: by 2002:a63:ab08:: with SMTP id p8mr16604294pgf.340.1564430768869;
-        Mon, 29 Jul 2019 13:06:08 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:500::1:309b])
-        by smtp.gmail.com with ESMTPSA id b24sm31938348pfd.91.2019.07.29.13.06.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Jul 2019 13:06:08 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 13:06:06 -0700
-From:   Tejun Heo <tj@kernel.org>
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-api@vger.kernel.org, cgroups@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>, Michal Koutny <mkoutny@suse.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alessio Balsini <balsini@android.com>
-Subject: Re: [PATCH v12 0/6] Add utilization clamping support (CGroups API)
-Message-ID: <20190729200606.GA136335@devbig004.ftw2.facebook.com>
-References: <20190718181748.28446-1-patrick.bellasi@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rLtTrMx9bNgV2e5WT+U4GbHrtwL6tZTxsShVYrHD6s8=;
+        b=qCkOBR3RFHLitHMBMnrkw7bXRXnNS1SpI4byqxHOEbANkK50vqarVxtR8IKa+DzRVJ
+         9Job05jkQITLh10Cc9GZRYEyQcaN/ssHFvD6tNQW+DooYXJzndMon779xeG1TpsmJAWH
+         WaKFh9E9sMyINbFAfBIMIJb2MRWi+ehRqgWbzNAh3sdwWquVCcFnvixE7Nw6TrrwPYYN
+         QkfsxljB+5Kp6eFoqerXw6emnDID72A4Qn7RIGpdXNToraB7QiPKUI7qTw6ZETsulrme
+         qXB7yjm14993REyvD4BUstL6UWwGHQYORSb0OEFyWriI46jmqirC25OD4Br8hs89HdIz
+         bSvQ==
+X-Gm-Message-State: APjAAAVPivrS3UMxuoWCmPY6dNnJwUS8zOKgI09owGmWB/+uFqRLJR8F
+        MwzFUy/wi6EXQdbE2UJ9zLEsYyaby54hciXjlFTuDA==
+X-Google-Smtp-Source: APXvYqyalfL7uKo9yflW1Pyt9NtQK1vzEzGUhuLM63HRXQD3JmtpxZUwdeQTJ4TkIvAAhjMpgK7mWf7IUvOUuGB9nzw=
+X-Received: by 2002:a9d:6256:: with SMTP id i22mr4789080otk.139.1564431164859;
+ Mon, 29 Jul 2019 13:12:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190718181748.28446-1-patrick.bellasi@arm.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20190703011020.151615-1-saravanak@google.com> <20190717103220.f7cys267hq23fbsb@vireshk-i7>
+ <CAGETcx-tbjVzRKW8D-564zgNOhrA_z-NC1q5U70bhoUDBhp6VA@mail.gmail.com>
+ <20190718053746.64drmonk72vwnt4s@vireshk-i7> <CAGETcx_-=b3An9YdxLUnZap=0iaeczvWTEnw65FMLU8BwA3HfQ@mail.gmail.com>
+ <20190729092454.6lfqzmhkvrhpimsp@vireshk-i7>
+In-Reply-To: <20190729092454.6lfqzmhkvrhpimsp@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 29 Jul 2019 13:12:08 -0700
+Message-ID: <CAGETcx_7fK20VZ6Zn07Z+Ran1_O7gSPohck_tg-aEr5oONQ5iA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Introduce Bandwidth OPPs for interconnect paths
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        David Dai <daidavid1@codeaurora.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Mon, Jul 29, 2019 at 2:24 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 18-07-19, 21:12, Saravana Kannan wrote:
+> > On Wed, Jul 17, 2019 at 10:37 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > I would like
+> > > to put this data in the GPU OPP table only. What about putting a
+> > > range in the GPU OPP table for the Bandwidth if it can change so much
+> > > for the same frequency.
+> >
+> > I don't think the range is going to work.
+>
+> Any specific reason for that ?
 
-Looks good to me.  On cgroup side,
+The next sentence was literally explaining this :) Fine to debate
+that, but ignoring that and asking this question is kinda funny.
 
-Acked-by: Tejun Heo <tj@kernel.org>
+> > If a GPU is doing purely
+> > computational work, it's not unreasonable for it to vote for the
+> > lowest bandwidth for any GPU frequency.
+>
+> I think that is fine, but if the GPU is able to find how much
+> bandwidth it needs why can't it just pass that value without needing
+> to have another OPP table for the path ?
 
-Thanks.
+You were asking this question in the context of "can the GPU OPP just
+list all the range of bandwidth it might use per GPU frequency". My point
+is that the range would be useless because it would the entire
+available bandwidth range (because purely compute work might not need
+any bandwidth).
 
--- 
-tejun
+Whereas, what the GPU's algorithm actually needs might be the list of
+"useful" bandwidth levels to use.
+
+Also, as we add more ICC request properties, this range idea will not scale.
+
+-Saravana
