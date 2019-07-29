@@ -2,89 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 116B47939E
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 21:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E81B79836
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 22:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729317AbfG2TPO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 15:15:14 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:38572 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729309AbfG2TPO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 15:15:14 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 818E3802BB; Mon, 29 Jul 2019 21:15:00 +0200 (CEST)
-Date:   Mon, 29 Jul 2019 21:15:12 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Chuhong Yuan <hslester96@gmail.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/12] power: Replace strncmp with str_has_prefix
-Message-ID: <20190729191511.GB2023@amd>
-References: <20190729151454.9606-1-hslester96@gmail.com>
+        id S2390048AbfG2UGM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 16:06:12 -0400
+Received: from mail-pg1-f174.google.com ([209.85.215.174]:44342 "EHLO
+        mail-pg1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389378AbfG2UGK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 16:06:10 -0400
+Received: by mail-pg1-f174.google.com with SMTP id i18so28787178pgl.11;
+        Mon, 29 Jul 2019 13:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=P3EUM+tzT2Mr9lYyH9h+ka7j8G70ef8Dl2l22x1qowY=;
+        b=e68jNLw0799EKEVQytct+JZQNey8bkPM//gc4ZFMDQZt6EuWjdKKRGpVlCTMWq7Iqo
+         A+dcRsjM4FizcWmU+Pe5CRlrHn1pVvJyOmfNMEJfMlsdrGvxgecpZ/Vz2EjV+oGs4zZv
+         caDGsF7LjY/bt2zUP/pfgLlCSthMkMgm0P30KycyqAo/vHsx4JIUHzrLR6z1YlWrQHF2
+         Z/O54RfdGRdkJdCERpIQTbLh8SD1teL8PkDFWC337LABr2NOIPBHPVBaqvBIZ+Fjr6S9
+         FQfjphUq5UIZmZbQAPaqMS0yFAL1KgtnRWEoarVjXw+oyOU2oF5/pLul9G4CyNiLufzV
+         Aw4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=P3EUM+tzT2Mr9lYyH9h+ka7j8G70ef8Dl2l22x1qowY=;
+        b=K0G2ea8spd/u+MUgfpYWYg15RnGE/neEKE6wyFmPyvIRcrlQ2cX9ZjA0sf2Fh3gFb2
+         KKpRoRJhrPDIFTcbP62EK/mYDyI/n61X8dH2+Nmcu6bUVd/ictAjHYzRb/iyRhwInc2J
+         VfT3FSH2d5lZRUTo6vLAJdkyI7lgQ4Bdjr2LAbijwcxgSI7Xjx5nuL7tkZioFRb3ciX2
+         WRFkFvARUd9WE15K8+6sQ5VpkuqWOAwb5x2xAeO3Jrk7HucqJlS0W0ayOYeAByDn4Rjc
+         kJ65WBBjp8wdL0pQeXDQVdmq3/QWrD3UPygf1K07SI8xZqbpNgtCWMssI+/HcZ+RdSRP
+         af5Q==
+X-Gm-Message-State: APjAAAWUtjO+Yqq1eWoCTqKnLVytZN8G9wQ8GPkwUnh51pPtmuN+rNpc
+        Gb33s1Vp7AChrDyQifW3x9k=
+X-Google-Smtp-Source: APXvYqx8/ZCCakSV0L+VbVZZR4VTz4XJbOiCwNm038NWGAf8GVPi+6hwZfOg57M6dniSlHu1GcB3ag==
+X-Received: by 2002:a63:ab08:: with SMTP id p8mr16604294pgf.340.1564430768869;
+        Mon, 29 Jul 2019 13:06:08 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:500::1:309b])
+        by smtp.gmail.com with ESMTPSA id b24sm31938348pfd.91.2019.07.29.13.06.07
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 13:06:08 -0700 (PDT)
+Date:   Mon, 29 Jul 2019 13:06:06 -0700
+From:   Tejun Heo <tj@kernel.org>
+To:     Patrick Bellasi <patrick.bellasi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, cgroups@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>, Michal Koutny <mkoutny@suse.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alessio Balsini <balsini@android.com>
+Subject: Re: [PATCH v12 0/6] Add utilization clamping support (CGroups API)
+Message-ID: <20190729200606.GA136335@devbig004.ftw2.facebook.com>
+References: <20190718181748.28446-1-patrick.bellasi@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="GRPZ8SYKNexpdSJ7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190729151454.9606-1-hslester96@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190718181748.28446-1-patrick.bellasi@arm.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello,
 
---GRPZ8SYKNexpdSJ7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Looks good to me.  On cgroup side,
 
-On Mon 2019-07-29 23:14:54, Chuhong Yuan wrote:
-> strncmp(str, const, len) is error-prone.
-> We had better use newly introduced
-> str_has_prefix() instead of it.
->=20
-> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-> ---
->  kernel/power/hibernate.c | 8 ++++----
->  kernel/power/main.c      | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
->=20
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index cd7434e6000d..49d4bfdb2b67 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -1188,15 +1188,15 @@ static int __init resume_offset_setup(char *str)
-> =20
->  static int __init hibernate_setup(char *str)
->  {
-> -	if (!strncmp(str, "noresume", 8)) {
-> +	if (str_has_prefix(str, "noresume")) {
->  		noresume =3D 1;
-> -	} else if (!strncmp(str, "nocompress", 10)) {
-> +	} else if (str_has_prefix(str, "nocompress")) {
->  		nocompress =3D 1;
+Acked-by: Tejun Heo <tj@kernel.org>
 
-Ok, old code is bad, too... but this makes the error visible. We do
-not want "noresumenextmonday" to set noresume =3D 1, right?
+Thanks.
 
-								Pavel
-							=09
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---GRPZ8SYKNexpdSJ7
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl0/Rb8ACgkQMOfwapXb+vInuwCgm63IL4aJrE7dX7FYi1KtYfOC
-g7QAoIxTBaj1yYq/7ThkT594xjbmCZJI
-=+PIY
------END PGP SIGNATURE-----
-
---GRPZ8SYKNexpdSJ7--
+-- 
+tejun
