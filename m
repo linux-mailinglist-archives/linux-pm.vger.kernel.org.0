@@ -2,205 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D21579C2F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 00:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB54C79C4E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 00:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728032AbfG2WF4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 18:05:56 -0400
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:42969 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727946AbfG2WF4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 18:05:56 -0400
-Received: by mail-ot1-f43.google.com with SMTP id l15so64169739otn.9;
-        Mon, 29 Jul 2019 15:05:55 -0700 (PDT)
+        id S1727816AbfG2WOL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 18:14:11 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:41405 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725934AbfG2WOL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 18:14:11 -0400
+Received: by mail-ot1-f68.google.com with SMTP id o101so64194106ota.8
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2019 15:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=srsaV7rzeEymjAzgSWNLmNrniFdnk6Pa83TgYZnyX/o=;
+        b=GDOHpV5z0vkTp/Hi9k2G9RgZZVziD9cVw4u/mDbabUF6fthqBEpD/8MLgeaoZ54AXl
+         gp0l4hXk6AWGC2IzW4ii/4UQEBxzajmUlkfHWmKxGm24d+k5C45V0pg1L+oyVAX4YD7u
+         h8NXxkhTqhfvFrBdj6h4GOpXGJxxrvxpRVDn2kNMV7WMhIA18dWbtiofquPD9NoIBfQ7
+         zUVtuqXW4rzQFaGb7Feac5wlgC92z0LPraATDJ2Qo9/hSoW6qpBPmDv2n5UdUAi0DT04
+         q2OHystI5so/Rgnn1bJznS4CHAiSrfhiNNdMDQZ4lT+pZ8/1qrm3uIT8I4LhsfaGG8f7
+         F5Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UEA32fU0I6ytXCKg3XtwmUrMebt1jpdSsOdRBgXgNeM=;
-        b=r5YAnYae8I76jCmy1JBClemWy31leSvyCgowlDe6/etH3MB/HnJvKYCK6MW/sstlFi
-         OVUgRNza+ZDCBcGcrfBG/fYkDuxSuCS5jWfvwyF6fB+IAtrftPaWI8doqoGxtEitV/pW
-         bGmWQPr8YcCcI7/Z+N1uPofiWSMKjVUzb1jr0Ets8h5AYOYsfG711419ep5jHz11vXiq
-         upqLSuXHNdZYDKHpLHBhSZIzWOsaTN/FytA8uz4N1x2ovQq0kDXoZ0EMi81SsEY6hn6t
-         AiUaoFzpglNUKx8HhTC0NBL8oHyG0Qw7CTXfUZmpioHjI/Www/CE0SANjYO3TPcL997v
-         9iig==
-X-Gm-Message-State: APjAAAWoviUKCNDAlmo/A2JbVHrZlejhuUdPo5/4V1vCbecKxY/tN8+t
-        MrAIcBnj5ip4hRC+4Lpc1iZcnVksZOk621vFgms=
-X-Google-Smtp-Source: APXvYqy8Yk4N8UHHzj20KAMpPsb/zsAUKO3D/YBaq2Muo+H6UBXNUPih+VuLQB+hmRT5+c/N3COtIY7CD7gYCLOrrgg=
-X-Received: by 2002:a05:6830:8a:: with SMTP id a10mr52930409oto.167.1564437954851;
- Mon, 29 Jul 2019 15:05:54 -0700 (PDT)
+        bh=srsaV7rzeEymjAzgSWNLmNrniFdnk6Pa83TgYZnyX/o=;
+        b=DJ9S4rGbugOxNI6RGfb6ybeI6zyY00QdiMPOqgFXqlrK36oj//uiqXXH2zU6JzTAvE
+         PhTv4vYYWus+sJvYJQ6LVezkZ4pcxu6+qsz74rXBaP8453x+CK5EbkV7VhJ0tSinmE+f
+         9R6blNSj3bWMQcp8qeNEMEp8RVuMVlPKmn5oGkHN0G9NPFNo3x+lJLECYJKRdyLKCGdi
+         rqawswSDCakjBUBo2HQ4/464rdK5ca6NR+MF7d+33W9Hg9y4+ibCK+h7s7HbHDqRfT8s
+         dNDdodU3FxaRCoKjBnH5kE3a6AERsN3JLZzxuECbh4x0uuAXpt+2YsTQgO93l+O+ieYf
+         XzBw==
+X-Gm-Message-State: APjAAAWDP8NQLXv4X6nsrx4zaJgLaMeLXfBkS8V0DkXzRZTXCU9R/3XG
+        Zmp3ihPzIauo9uEapjhBvhIeMZitWQsuxMdjy285Wg==
+X-Google-Smtp-Source: APXvYqyuO53DWB1GnZbL8WPgAO6wYlxjhUKdDeUSsQXNzJYXk94EMFolKbpzDqKJBJk8IqgjhsI+ynp/TAB7yS3S1qk=
+X-Received: by 2002:a9d:6201:: with SMTP id g1mr85088815otj.195.1564438450498;
+ Mon, 29 Jul 2019 15:14:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <2332799.izEFUvJP67@kreacher> <2428826.VBuqOhikiK@kreacher>
- <20190725195258.GA7307@localhost.localdomain> <15043168.halW6uqc8m@kreacher>
- <D33632F4-E119-4833-816C-79084DA03DE4@canonical.com> <CAJZ5v0imsVS-eDB+Lmd5qzAfmb0UpJ5AwV_Vf+v8D21KAtqTOg@mail.gmail.com>
- <868a042a9422463fa1166653982bb985@AUSX13MPC105.AMER.DELL.COM>
-In-Reply-To: <868a042a9422463fa1166653982bb985@AUSX13MPC105.AMER.DELL.COM>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Jul 2019 00:05:43 +0200
-Message-ID: <CAJZ5v0gibD_oboFt7x7VjUTe4mw+mZxHcOiFEEcWdw8dUZ5RXw@mail.gmail.com>
-Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
- suspend" has problems
-To:     Mario Limonciello <Mario.Limonciello@dell.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+References: <2305283.AStDPdUUnE@kreacher> <c8960d91-4446-9acf-5575-e442a652bd05@gmail.com>
+ <CAGETcx_+i6_0Q2rf-UdzZ3bCPUos9Tu4JmvvO0zUoy5gB8_ESQ@mail.gmail.com>
+ <CAJZ5v0h5U60yCyaHeHVbWmwWDa4NBnuhgsV022nZm5HuGgV7ow@mail.gmail.com>
+ <CAGETcx9oqAJ-VoJnD0Y8k+W8cCGPDz--=amktSgW_sB4MEngDA@mail.gmail.com> <CAJZ5v0gSyPn8sZ2jJ+nZ_nu1Y=8+7Pg+pPvKGSijUm_sKitk4Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gSyPn8sZ2jJ+nZ_nu1Y=8+7Pg+pPvKGSijUm_sKitk4Q@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 29 Jul 2019 15:13:34 -0700
+Message-ID: <CAGETcx-g+gbzgy0ZDKdMreRVWqnQyXLmuLRC4g5Zexyj5yThnA@mail.gmail.com>
+Subject: Re: [PATCH v2] driver core: Remove device link creation limitation
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Keith Busch <kbusch@kernel.org>,
-        Keith Busch <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Lukas Wunner <lukas@wunner.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 5:53 PM <Mario.Limonciello@dell.com> wrote:
+On Mon, Jul 29, 2019 at 3:03 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> > -----Original Message-----
-> > From: Rafael J. Wysocki <rafael@kernel.org>
-> > Sent: Saturday, July 27, 2019 7:55 AM
-> > To: Kai-Heng Feng
-> > Cc: Rafael J. Wysocki; Keith Busch; Busch, Keith; Christoph Hellwig; Sagi Grimberg;
-> > linux-nvme@lists.infradead.org; Limonciello, Mario; Linux PM; LKML
-> > Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
-> > suspend" has problems
+> On Mon, Jul 29, 2019 at 11:43 PM Saravana Kannan <saravanak@google.com> wrote:
 > >
-> >
-> > [EXTERNAL EMAIL]
-> >
-> > On Fri, Jul 26, 2019 at 4:03 PM Kai-Heng Feng
-> > <kai.heng.feng@canonical.com> wrote:
+> > On Mon, Jul 29, 2019 at 2:25 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 > > >
-> > > at 04:02, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > >
-> > > > On Thursday, July 25, 2019 9:52:59 PM CEST Keith Busch wrote:
-> > > >> On Thu, Jul 25, 2019 at 09:48:57PM +0200, Rafael J. Wysocki wrote:
-> > > >>> NVME Identify Controller:
-> > > >>> vid     : 0x1c5c
-> > > >>> ssvid   : 0x1c5c
-> > > >>> sn      : MS92N171312902J0N
-> > > >>> mn      : PC401 NVMe SK hynix 256GB
-> > > >>> fr      : 80007E00
-> > > >>> rab     : 2
-> > > >>> ieee    : ace42e
-> > > >>> cmic    : 0
-> > > >>> mdts    : 5
-> > > >>> cntlid  : 1
-> > > >>> ver     : 10200
-> > > >>> rtd3r   : 7a120
-> > > >>> rtd3e   : 1e8480
-> > > >>> oaes    : 0x200
-> > > >>> ctratt  : 0
-> > > >>> oacs    : 0x17
-> > > >>> acl     : 7
-> > > >>> aerl    : 3
-> > > >>> frmw    : 0x14
-> > > >>> lpa     : 0x2
-> > > >>> elpe    : 255
-> > > >>> npss    : 4
-> > > >>> avscc   : 0x1
-> > > >>> apsta   : 0x1
-> > > >>> wctemp  : 352
-> > > >>> cctemp  : 354
-> > > >>> mtfa    : 0
-> > > >>> hmpre   : 0
-> > > >>> hmmin   : 0
-> > > >>> tnvmcap : 0
-> > > >>> unvmcap : 0
-> > > >>> rpmbs   : 0
-> > > >>> edstt   : 10
-> > > >>> dsto    : 0
-> > > >>> fwug    : 0
-> > > >>> kas     : 0
-> > > >>> hctma   : 0
-> > > >>> mntmt   : 0
-> > > >>> mxtmt   : 0
-> > > >>> sanicap : 0
-> > > >>> hmminds : 0
-> > > >>> hmmaxd  : 0
-> > > >>> nsetidmax : 0
-> > > >>> anatt   : 0
-> > > >>> anacap  : 0
-> > > >>> anagrpmax : 0
-> > > >>> nanagrpid : 0
-> > > >>> sqes    : 0x66
-> > > >>> cqes    : 0x44
-> > > >>> maxcmd  : 0
-> > > >>> nn      : 1
-> > > >>> oncs    : 0x1f
-> > > >>> fuses   : 0x1
-> > > >>> fna     : 0
-> > > >>> vwc     : 0x1
-> > > >>> awun    : 7
-> > > >>> awupf   : 7
-> > > >>> nvscc   : 1
-> > > >>> acwu    : 7
-> > > >>> sgls    : 0
-> > > >>> mnan    : 0
-> > > >>> subnqn  :
-> > > >>> ioccsz  : 0
-> > > >>> iorcsz  : 0
-> > > >>> icdoff  : 0
-> > > >>> ctrattr : 0
-> > > >>> msdbd   : 0
-> > > >>> ps    0 : mp:6.00W operational enlat:5 exlat:5 rrt:0 rrl:0
-> > > >>>           rwt:0 rwl:0 idle_power:- active_power:-
-> > > >>> ps    1 : mp:3.80W operational enlat:30 exlat:30 rrt:1 rrl:1
-> > > >>>           rwt:1 rwl:1 idle_power:- active_power:-
-> > > >>> ps    2 : mp:2.40W operational enlat:100 exlat:100 rrt:2 rrl:2
-> > > >>>           rwt:2 rwl:2 idle_power:- active_power:-
-> > > >>> ps    3 : mp:0.0700W non-operational enlat:1000 exlat:1000 rrt:3 rrl:3
-> > > >>>           rwt:3 rwl:3 idle_power:- active_power:-
-> > > >>> ps    4 : mp:0.0070W non-operational enlat:1000 exlat:5000 rrt:3 rrl:3
-> > > >>>           rwt:3 rwl:3 idle_power:- active_power:-
-> > > >>
-> > > >> Hm, nothing stands out as something we can use to determine if we should
-> > > >> skip the nvme specific settings or allow D3. I've no other ideas at the
-> > > >> moment for what we may check.
+> > > On Mon, Jul 29, 2019 at 10:47 PM Saravana Kannan <saravanak@google.com> wrote:
 > > > >
-> > > > Well, do ASPM settings matter here?
+> > > > Rafael,
+> > > >
+> > > > This is the fix you need. Or something link this.
+> > > >
+> > > > I had asked you to reject DL_FLAG_MANAGED as an input flag if you are
+> > > > marking it as internal (in the comments). But looks like you were also
+> > > > trying to check for "undefined" bit positions. However, the check
+> > > > isn't correct because DL_MANAGED_FLAGS doesn't include (rightfully so)
+> > > > DL_FLAG_PM_RUNTIME and DL_FLAG_RPM_ACTIVE .
+> > > >
+> > > > I tried to write a DL_FLAG_EXTERNAL to include all the external flags,
+> > > > but that felt like a maintenance headache that's not worth carrying. I
+> > > > think it's simpler to just error out when internal flags being passed
+> > > > in and ignore any undefined bit positions.
 > > >
-> > > Seems like it's a regression in the firmware.
+> > > Well, IMO it is better to prevent people from passing unrecognized
+> > > flags to device_link_add() at all, even if that means some extra
+> > > effort when adding new flags.
+> >
+> > It isn't so much the extra effort that's a concern, but people might
+> > miss updating whatever grouping macro we use.
+> >
 > > >
-> > > The issue happens in version 80007E00 but not version 80006E00.
+> > > I'll post an alternative fix shortly.
 > >
-> > So you mean the NVMe firmware, to be entirely precise.
+> > You might want to move the MANAGED_FLAGs and other grouping macros
+> > into the header file then? So that if someone is adding new flags,
+> > it'll be less likely they'll forget to update the grouping macro?
 >
-> Yes.
+> They would need to update device_link_add() itself, so updating a
+> thing next to it does't seem to be so much of an issue.
 >
-> >
-> > > I am not sure how to downgrade it under Linux though.
-> >
-> > Me neither.
+> Moreover, the "grouping macro" is not relevant for any users of the
+> API, just for device_link_add() itself, so I'm not sure how much
+> better it is to have it in the header.
 >
-> I'll ask the storage team to ask Hynix to make both these FW available on LVFS.
-> Fwupd can upgrade and downgrade firmware when the binaries are made available.
->
-> They could potentially be pulled directly out of the Windows executables too, but I don't
-> know how to identify them myself.
+> And, of course, if anyone forgets to update the "grouping macro", they
+> will find that the new flags are rejected immediately.
 
-Well, thanks, but I'm not quite convinced that the NVMe is the reason
-why my 9380 cannot reach SLP_S0 and this is my production system, so
-I'd rather not do NVMe firmware downgrade experiments on it. :-)
+Sounds good.
 
-
-
->
-> >
-> > > The firmware changelog [1] is very interesting:
-> > > - Improves the performance of the solid-state drive (SSD) by distributing
-> > > power into the SSD efficiently according to the power state of the system.
-> > >
-> > > [1]
-> > >
-> > https://www.dell.com/support/home/us/en/04/drivers/driversdetails?driverid=m
-> > cxm8
-> >
-> > Huh.
-> >
-> > It looks like something else prevents the PCH on my 9380 from reaching
-> > the right state for S0ix, though.  I still need to find out what it
-> > is.
+-Saravana
