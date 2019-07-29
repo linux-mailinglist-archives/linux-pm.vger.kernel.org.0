@@ -2,36 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFA57930F
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 20:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E6879324
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 20:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387697AbfG2SbF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 14:31:05 -0400
-Received: from mxwww.masterlogin.de ([95.129.51.170]:34404 "EHLO
+        id S2387893AbfG2Sd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 14:33:58 -0400
+Received: from mxwww.masterlogin.de ([95.129.51.220]:40470 "EHLO
         mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387573AbfG2SbF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 14:31:05 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 14:31:03 EDT
-Received: from mxout1.routing.net (unknown [192.168.10.81])
-        by backup.mxwww.masterlogin.de (Postfix) with ESMTPS id E60D72C41E;
-        Mon, 29 Jul 2019 18:16:19 +0000 (UTC)
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.253])
-        by mxout1.routing.net (Postfix) with ESMTP id C9DC743E4E;
-        Mon, 29 Jul 2019 18:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=dkim; t=1564424174; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HP6trMB9va7UVgbWclPeNJtnCBo+M1pqC/xaYjKxvj8=;
-        b=sm+KrCEUw+eAxXAsg/LcgF3MQTCbRVLNqKsuxtH5m8fYpSZWdaXQCQ/KPJ7vK5JYq1JR8F
-        oBeNmeY7VC5uTNpp+UVWvnXAu8LjpojxVF3JwQWgv7ieQg5e+fWpX/2UdpF/MvEyliNoiW
-        r1m9nL5PR+zxy0ff3ItRqhSzBj5pNiE=
-Received: from [192.168.0.21] (fttx-pool-185.76.97.79.bambit.de [185.76.97.79])
-        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 7DC8D405D3;
-        Mon, 29 Jul 2019 20:16:13 +0200 (CEST)
-Subject: Re: [PATCH v3 00/10] implement poweroff for mt6323 / bpi-r2
+        with ESMTP id S2387849AbfG2Sd6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 14:33:58 -0400
+Received: from mxout2.routing.net (unknown [192.168.10.82])
+        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id E1DAD961CD;
+        Mon, 29 Jul 2019 18:24:11 +0000 (UTC)
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.253])
+        by mxout2.routing.net (Postfix) with ESMTP id 1DB7D64896;
+        Mon, 29 Jul 2019 18:24:12 +0000 (UTC)
+Received: from localhost.localdomain (fttx-pool-185.76.97.79.bambit.de [185.76.97.79])
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id B23E5100051;
+        Mon, 29 Jul 2019 20:24:10 +0200 (CEST)
+From:   Frank Wunderlich <frank-w@public-files.de>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Allison Randal <allison@lohutok.net>,
@@ -53,27 +42,47 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         Sebastian Reichel <sre@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Tianping . Fang" <tianping.fang@mediatek.com>
-References: <20190729174154.4335-1-frank-w@public-files.de>
-From:   Frank Wunderlich <frank@fw-web.de>
-Message-ID: <e1274024-b67c-3d04-50d3-f6fcd3b3cbe6@fw-web.de>
-Date:   Mon, 29 Jul 2019 20:16:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190729174154.4335-1-frank-w@public-files.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Cc:     Josef Friedl <josef.friedl@speed.at>,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH v3 09/10] MAINTAINERS: add Mediatek shutdown drivers
+Date:   Mon, 29 Jul 2019 20:24:03 +0200
+Message-Id: <20190729182403.7128-1-frank-w@public-files.de>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+From: Josef Friedl <josef.friedl@speed.at>
 
-sorry about missing part 9+10, my mail-provider blocks the mails, 
-currently i cannot send with this account
+add Section in MAINTAINERS file for poweroff driver
 
-i try sending with another
+changes since v2: none (=v2 part 6)
 
-regards Frank
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6426db5198f0..4172a3177633 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10128,6 +10128,13 @@ S:	Maintained
+ F:	drivers/net/dsa/mt7530.*
+ F:	net/dsa/tag_mtk.c
+ 
++MEDIATEK BOARD LEVEL SHUTDOWN DRIVERS
++M:	Sean Wang <sean.wang@mediatek.com>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
++F:	drivers/power/reset/mt6323-poweroff.c
++
+ MEDIATEK JPEG DRIVER
+ M:	Rick Chang <rick.chang@mediatek.com>
+ M:	Bin Liu <bin.liu@mediatek.com>
+-- 
+2.17.1
+
