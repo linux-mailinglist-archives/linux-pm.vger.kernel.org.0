@@ -2,71 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8502E78B3E
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 14:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBE778BAB
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 14:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387644AbfG2MD2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 08:03:28 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:57427 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387398AbfG2MD2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 08:03:28 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
-        (Exim 4.76)
-        (envelope-from <colin.king@canonical.com>)
-        id 1hs4NA-0004K2-3O; Mon, 29 Jul 2019 12:03:24 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
+        id S1726267AbfG2MVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 08:21:13 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39353 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725956AbfG2MVM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 08:21:12 -0400
+Received: by mail-lj1-f194.google.com with SMTP id v18so58336375ljh.6;
+        Mon, 29 Jul 2019 05:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Lus5TxJaffuFpsnjVsSfL9Xup/2Q5tADoKnscqx0e0o=;
+        b=InwwDQ224lgQiDVL9i6pVtS0Vvh/lrCRZAxHHs4uW1jMEQPzbbUSxpf4sKK/Q3pwIl
+         ZdTz2bXA7p1Cdp5KBxKh3ZZxvyU+r3a6IPnDAaLC1vMZ2LgYDpx3ybkwByC86vuTMmTz
+         3rAuPRhyobMGW1t8u/jALQxJRjDYuL1EVqIdME9w0sIrUSuAKhm5KzRM/scP+HLr9lMy
+         En33fmBmbL8yfRBJ15NY4JFAwox6OLvV/nhvbKL0YYnVyOvfOtcuFtW8cft3f5iLfRF7
+         HI5LsUGxSdhYCDDCOdSi/p6WntIlRfnF+CsTLP05zNREVNWGEBzHJxKIZlHCS38Ke5f/
+         1LQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Lus5TxJaffuFpsnjVsSfL9Xup/2Q5tADoKnscqx0e0o=;
+        b=St3YIIhTddGRxK2ntSzVI3rRabNipzaIVRRq35hT0ik16PV6DybuQ6J88aDpDGDpsC
+         F+9rwK7JilCck8FF8A/DyWAW6WTCASM9tWnGHkmUBpuTK5OYQrbMRE15dlP8EBolUao4
+         ypKqhsEZy0iMB6vjUIF2+ysdrSKrukbmwZqllDy3k3rP1VwZODLtcstux6HAOo5srPYw
+         3QhLyw//yBK4flyMtVe4jaaeI85wt5k0NPfd2zCMaZMDZqJbwJZjyOwT29LhnOY0nM8r
+         BPMoKa+05ziVaLzSIqjfFPmZaQjl/0TMWpafPA7CsbKU54Ic6PIcCaJU/EGYQadxFbXG
+         XO2g==
+X-Gm-Message-State: APjAAAWL+NTtwSx20QI0m7kEIOKwg4vLxFc4fPVDenRWP3IMQw2Oxdcb
+        MHOCqbSF/0llxqMyWIpHzw7B8Gs2umJckRXLUpM=
+X-Google-Smtp-Source: APXvYqxkW5SmThMalAQq31UlmmO81GX4lGXENqxdVeAnVIsK+llwHK4DqHkMcrejGumyqG/qS1DuqMlt/5yp0CWS+HM=
+X-Received: by 2002:a2e:a311:: with SMTP id l17mr55967735lje.214.1564402870592;
+ Mon, 29 Jul 2019 05:21:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190729083915.4855-1-Anson.Huang@nxp.com> <20190729083915.4855-3-Anson.Huang@nxp.com>
+In-Reply-To: <20190729083915.4855-3-Anson.Huang@nxp.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 29 Jul 2019 09:21:15 -0300
+Message-ID: <CAOMZO5Ao8aNGfj3KHd+rsX=kj528BvzeSHFvQR6pEWXN3BD98g@mail.gmail.com>
+Subject: Re: [PATCH V2 3/4] dt-bindings: thermal: qoriq: Add optional clocks property
+To:     Yongcai Huang <Anson.Huang@nxp.com>
+Cc:     "rui.zhang" <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][V2] drivers: thermal: processor_thermal_device: fix missing bitwise-or operators
-Date:   Mon, 29 Jul 2019 13:03:23 +0100
-Message-Id: <20190729120323.15838-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        NXP Linux Team <Linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Hi Anson,
 
-The variable val is having the top 8 bits cleared and then the variable is being
-re-assinged and setting just the top 8 bits.  I believe the intention was bitwise-or
-in the top 8 bits.  Fix this by replacing the = operators with &= and |= instead.
+On Mon, Jul 29, 2019 at 6:04 AM <Anson.Huang@nxp.com> wrote:
+>
+> From: Anson Huang <Anson.Huang@nxp.com>
+>
+> Some platforms have clock control for TMU, add optional
+> clocks property to the binding doc.
 
-Addresses-Coverity: ("Unused value")
-Fixes: b0c74b08517e ("drivers: thermal: processor_thermal_device: Export sysfs inteface for TCC offset")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
-
-V2: Add in &= operator missing from V1. Doh.
-
----
- .../thermal/intel/int340x_thermal/processor_thermal_device.c  | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-index 6f6ac6a8e82d..97333fc4be42 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-@@ -163,8 +163,8 @@ static int tcc_offset_update(int tcc)
- 	if (err)
- 		return err;
- 
--	val = ~GENMASK_ULL(31, 24);
--	val = (tcc & 0xff) << 24;
-+	val &= ~GENMASK_ULL(31, 24);
-+	val |= (tcc & 0xff) << 24;
- 
- 	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
- 	if (err)
--- 
-2.20.1
-
+Please add a note that this is needed for i.MX8M.
