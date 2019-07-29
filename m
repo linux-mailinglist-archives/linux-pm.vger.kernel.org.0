@@ -2,153 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E707870B
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 10:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F05C78714
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 10:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726907AbfG2IM0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 04:12:26 -0400
-Received: from honk.sigxcpu.org ([24.134.29.49]:48310 "EHLO honk.sigxcpu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725988AbfG2IM0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 29 Jul 2019 04:12:26 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id 5FE39FB03;
-        Mon, 29 Jul 2019 10:12:23 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3avP_g3MYwj1; Mon, 29 Jul 2019 10:12:22 +0200 (CEST)
-Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
-        id 9C4E846BAF; Mon, 29 Jul 2019 10:12:21 +0200 (CEST)
-Date:   Mon, 29 Jul 2019 10:12:21 +0200
-From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
-To:     Anson.Huang@nxp.com
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, mturquette@baylibre.com,
-        sboyd@kernel.org, l.stach@pengutronix.de, abel.vesa@nxp.com,
-        andrew.smirnov@gmail.com, angus@akkea.ca, ccaione@baylibre.com,
-        leonard.crestez@nxp.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Linux-imx@nxp.com
-Subject: Re: [PATCH 4/6] thermal: qoriq: Add clock operations
-Message-ID: <20190729081221.GA2523@bogon.m.sigxcpu.org>
-References: <20190705045612.27665-1-Anson.Huang@nxp.com>
- <20190705045612.27665-4-Anson.Huang@nxp.com>
+        id S1726833AbfG2IN1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 04:13:27 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:34686 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726690AbfG2IN1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 04:13:27 -0400
+Received: by mail-wm1-f67.google.com with SMTP id w9so42409795wmd.1;
+        Mon, 29 Jul 2019 01:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SyFl8pL1iDZjmoOSkzXlnQ91ZUZpLkZdLRiM5vUWoME=;
+        b=RMc4NRl9Idazs+XYRc2PCVJrla+XcMB5QI9fW4vskcW4AWdCAjW114u0ltcwv3J3kS
+         MejM0+8lWjKST59WU3AMIZxd4/R8oxvP5WYmQZ/s+MfdW0r6aFSv4SZMNIv8js7Nr4IX
+         7Gaa0m/10cn1v9XCIjcejFparxRsgjkUPGkLrC907ae/L4wg583BzHLdcoNoI1Xw+JJL
+         J4QUDcdP7QMkggQGmKsgFfCqz9l+OvK80s89AN0hnR8wIaN8/pIPLxO/Jq7oo4ieNU4W
+         2n2Ym18F3HuEavyXhWQ9Wbjei3xF1zzsbxx0b3hGtD55UjczEVPEeLSlS6D+SvQpiqid
+         wP1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SyFl8pL1iDZjmoOSkzXlnQ91ZUZpLkZdLRiM5vUWoME=;
+        b=EOTzOhZSouXAe9wGvfqX8QNJf3XlGPafKuOvNgKeB/TkSASVeeW40rBN1KuIQoXIqt
+         4pwMAVBsxcyVRPACcINZ+I/kaGgb+Ka5C91KSzZVENB/s321KJ3N2LfjlsiEuMdLhZ22
+         jfO4WBxgL/dFzwn/BH/O0RXlO8p381udF3xxBDQ9jelJiZVA0VVq7lgOexOeYYFoXyf2
+         sAi4UKlzX9Lex3PgOgf8vJQ9TBek8UI6MP2M9xJwAzliShy6pd9Gw6R6ZHnaCJMF1CaW
+         r37HrFP4DzwC5ZD9Nx4y47KZrkeIO13o5Shwj1HP3F7TfsahdAcvreg/zDA38HyFO8Br
+         5jXQ==
+X-Gm-Message-State: APjAAAXw2JaYHpBjkta+ERTioOoc0IL8Aomsh1YsubRdopSHt05tKELL
+        Qfcv6fFOdnGjmVKggncR3l7NvUMzM6vQq7JVwF4=
+X-Google-Smtp-Source: APXvYqyJSF9giFQVsItTxUvBm5InpdKI0AD91vYK8YMt/vMVNe8Bcy9zHxVTrPIj7PKEgF2MKDJZ8Wm9t5JIOx9xuEE=
+X-Received: by 2002:a7b:c247:: with SMTP id b7mr102240187wmj.13.1564388004695;
+ Mon, 29 Jul 2019 01:13:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190705045612.27665-4-Anson.Huang@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190705045612.27665-1-Anson.Huang@nxp.com> <20190705045612.27665-5-Anson.Huang@nxp.com>
+ <CAEnQRZAZNMBx3ApVmRP8hYPw0XY_QgR-saE6WLcT8oZmHPCxSA@mail.gmail.com>
+ <DB3PR0402MB3916233A56CF5DF778115716F5C30@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <CAEnQRZCrZybzcy__u4p_Eq4zSVc2ESyfKLk5sPf1JYba1JSOiA@mail.gmail.com>
+ <20190727161736.4dkfqgwftre67v56@fsr-ub1664-175> <DB3PR0402MB391600891BA75DFFA9674058F5DD0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <CAEnQRZB6tmYFA8wwh0Fm49LTTDuCLq-SWVfrcUkRWWBo=0U13w@mail.gmail.com>
+ <DB3PR0402MB391627F725AA7237BCACBE87F5DD0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <CAEnQRZBrmikenTvnh7syhy=PDPcTL3fn2TJ+ya=ToZ+SFmH5tw@mail.gmail.com>
+ <CAEnQRZDSjmcU8Q7+kMeFf12tx0NuMNjrcsgnXayvHpu4ChwHGA@mail.gmail.com> <DB3PR0402MB3916F32F03E542AEFBD39A43F5DD0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <DB3PR0402MB3916F32F03E542AEFBD39A43F5DD0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Mon, 29 Jul 2019 11:13:12 +0300
+Message-ID: <CAEnQRZBqdGY9A69ew=ukdp1iWVR_jvJih-cZPx_XzAri+xWppA@mail.gmail.com>
+Subject: Re: [PATCH 5/6] clk: imx8mq: Remove CLK_IS_CRITICAL flag for IMX8MQ_CLK_TMU_ROOT
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     Abel Vesa <abel.vesa@nxp.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        "Angus Ainslie (Purism)" <angus@akkea.ca>,
+        Carlo Caione <ccaione@baylibre.com>,
+        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Anson,
-On Fri, Jul 05, 2019 at 12:56:10PM +0800, Anson.Huang@nxp.com wrote:
-> From: Anson Huang <Anson.Huang@nxp.com>
-> 
-> Some platforms like i.MX8MQ has clock control for this module,
-> need to add clock operations to make sure the driver is working
-> properly.
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
->  drivers/thermal/qoriq_thermal.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-> index 2b2f79b..0813c1b 100644
-> --- a/drivers/thermal/qoriq_thermal.c
-> +++ b/drivers/thermal/qoriq_thermal.c
-> @@ -2,6 +2,7 @@
->  //
->  // Copyright 2016 Freescale Semiconductor, Inc.
->  
-> +#include <linux/clk.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/err.h>
-> @@ -72,6 +73,7 @@ struct qoriq_sensor {
->  
->  struct qoriq_tmu_data {
->  	struct qoriq_tmu_regs __iomem *regs;
-> +	struct clk *clk;
->  	bool little_endian;
->  	struct qoriq_sensor	*sensor[SITES_MAX];
->  };
-> @@ -208,6 +210,19 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
->  		return PTR_ERR(data->regs);
->  	}
->  
-> +	data->clk = devm_clk_get(&pdev->dev, NULL);
-> +	if (IS_ERR(data->clk)) {
-> +		if (PTR_ERR(data->clk) == -EPROBE_DEFER)
-> +			return -EPROBE_DEFER;
-> +		data->clk = NULL;
-> +	}
+On Mon, Jul 29, 2019 at 10:49 AM Anson Huang <anson.huang@nxp.com> wrote:
 
-Wouldn't devm_clk_get_optional make more sense?
+> > We are all set then. Thanks Anson for clarifications!
+>
+> Thanks, so we are all clear about this issue, need to wait thermal maintainer to review
+> the rest patch in this series, but I did NOT receive any response from thermal sub-system
+> maintainer for really long time, NOT sure when the thermal patches can be accepted.
 
-> +
-> +	ret = clk_prepare_enable(data->clk);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Failed to enable clock\n");
-> +		return ret;
-> +	}
-> +
->  	qoriq_tmu_init_device(data);	/* TMU initialization */
->  
->  	ret = qoriq_tmu_calibration(pdev);	/* TMU calibration */
-> @@ -235,6 +250,8 @@ static int qoriq_tmu_remove(struct platform_device *pdev)
->  	/* Disable monitoring */
->  	tmu_write(data, TMR_DISABLE, &data->regs->tmr);
->  
-> +	clk_disable_unprepare(data->clk);
-> +
->  	platform_set_drvdata(pdev, NULL);
->  
->  	return 0;
-> @@ -250,14 +267,21 @@ static int __maybe_unused qoriq_tmu_suspend(struct device *dev)
->  	tmr &= ~TMR_ME;
->  	tmu_write(data, tmr, &data->regs->tmr);
->  
-> +	clk_disable_unprepare(data->clk);
-> +
->  	return 0;
->  }
->  
->  static int __maybe_unused qoriq_tmu_resume(struct device *dev)
->  {
->  	u32 tmr;
-> +	int ret;
->  	struct qoriq_tmu_data *data = dev_get_drvdata(dev);
->  
-> +	ret = clk_prepare_enable(data->clk);
-> +	if (ret)
-> +		return ret;
-> +
->  	/* Enable monitoring */
->  	tmr = tmu_read(data, &data->regs->tmr);
->  	tmr |= TMR_ME;
+This is really unfortunate. I think it is safe to do a RESEND of the
+patches as it has
+been at least 3 weeks since your first send them.
 
-Apart from that it looks like what Fabio sent and what i tested so
-
-Reviewed-by: Guido Günther <agx@sigxcpu.org>
-
-Cheers,
- -- Guido
-
-> -- 
-> 2.7.4
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+Pick any reviewed-by you got and do a resend.
