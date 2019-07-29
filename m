@@ -2,595 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A216B78FC6
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 17:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A533878FDE
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 17:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387943AbfG2PtD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 11:49:03 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:36187 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387495AbfG2PtC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 11:49:02 -0400
-Received: by mail-lf1-f65.google.com with SMTP id q26so42442434lfc.3;
-        Mon, 29 Jul 2019 08:49:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oZHNGmcwNeCcaACNpIQI9kWx89RjJOdvMaX6gZt+AZc=;
-        b=lGQa4KNWBCMAtJA11dwI6SkdLRLCv2XDDSj9sAzk5wo+Nh1h3+rxc2Vx0tGApQCQfq
-         T2aHyQL3n1uYO3ThOuBSn/blgcdsj2LVRuwLpF5gPLXFun6Rj8OM8qhEp3L7Pk9II0XV
-         J+pHC7K8BUD5yRaQRwWbNlH3c+5zvtxMPgjjW5trCQr6gR/uL8A1PytlpgkN/SaLuwE1
-         OnfLYniLsMyglJxuUYAYkWKlU4szf3v9t1A+uy9FqBfVkfiYoppJq9xM8t6CaOiZmJAM
-         mTfWd4tgtxLS5xh8hWXR5/pD++FRdsiyB5XVvDCATiXpQnNifLt7Ty2JEv8tjBo6b4D7
-         DD0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oZHNGmcwNeCcaACNpIQI9kWx89RjJOdvMaX6gZt+AZc=;
-        b=gRmjsyTGehaIi45pjL02Hpbu+b2LYEA5MqHgCamX1xFIkZODKyur8P/P7HyPZQxsr1
-         Gc+Xxh3pArh7b9DxEEpp36hp8M9rtRVMCCK2oHSTxxDau7QSdDqif4FLHqXVn1/j7q2R
-         8pw2uHVFYiLWPkF+K2bIC7esdzVhi+ZJ8kcGAIgJlft/NpUHUtAeMAl3O29n64tHT6Qk
-         Mc+HLMbtSxf4MK9Y2j17wWoRT8I+fvOtD/pYor1T/eXlnpdQWmuQqasSAjXummAXpUkf
-         r9xVuCCqQQ6mvozpTJMI/TdK/UO0iwXLI4t856Vv+O30swtDcDYUqNRfwWjIBoIhEcgA
-         MRWA==
-X-Gm-Message-State: APjAAAXDyn31xP/WnF5R7weiJzr9e7U0GYpQUoM10lbCAtYdVZILTSNE
-        IROq9d+GbulNR3fvtbf85sI=
-X-Google-Smtp-Source: APXvYqxVRV4oYd5Ux+zGbBXMHbJvgN8D0Nk11ncZLNYegNl9ElBVNehEYI6/m2AxY9Z8aoW1Z7lF9A==
-X-Received: by 2002:a19:8c57:: with SMTP id i23mr50870933lfj.192.1564415339247;
-        Mon, 29 Jul 2019 08:48:59 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.googlemail.com with ESMTPSA id t63sm12878065lje.65.2019.07.29.08.48.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Jul 2019 08:48:58 -0700 (PDT)
-Subject: Re: [PATCH v2] driver core: Remove device link creation limitation
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-References: <2305283.AStDPdUUnE@kreacher>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c8960d91-4446-9acf-5575-e442a652bd05@gmail.com>
-Date:   Mon, 29 Jul 2019 18:48:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <2305283.AStDPdUUnE@kreacher>
-Content-Type: text/plain; charset=utf-8
+        id S2387617AbfG2Pxd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 11:53:33 -0400
+Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:58882 "EHLO
+        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387467AbfG2Pxc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 11:53:32 -0400
+Received: from pps.filterd (m0170390.ppops.net [127.0.0.1])
+        by mx0a-00154904.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6TFiK3T006805;
+        Mon, 29 Jul 2019 11:53:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=smtpout1;
+ bh=2q97VoKTLol6hqzznRi5AK9oOy1nejb2onfq1aZxkCc=;
+ b=mwSun/DxgNwZi1a1aa2jrA4KJAtfNdNxqcnS6PL+huLVagv66ytnR87/eu3XjVwJ0WWT
+ STurONOZTanwYA+TAi1hMR7rnBTMsrnL1TBV+znWu1IDWf6IwBgW1cAOZejpi4bUGZtQ
+ tA/mGXoE1hYG2TRuFNOHZ02n24mJ43xp/0/+gtOPTLs8sQjCNSQFvSKrNKqF3ZWAx3sb
+ D9iizCZvLVtANKm+zn+XfyhW9U3OPMF8UMSrlCGGCwa9JMfOyqyQl9UvCUx2SBjC66Re
+ LbN2r4X2p3pQuXT8NSuDe+8J1s6NHkqBnnVKn6WDQcOs4dAhZToqAZTnMSU9kvOvWMWW 5g== 
+Received: from mx0b-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0a-00154904.pphosted.com with ESMTP id 2u22qrrdqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Jul 2019 11:53:31 -0400
+Received: from pps.filterd (m0090350.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6TFlagu055022;
+        Mon, 29 Jul 2019 11:53:31 -0400
+Received: from ausc60ps301.us.dell.com (ausc60ps301.us.dell.com [143.166.148.206])
+        by mx0b-00154901.pphosted.com with ESMTP id 2u20yvkcvq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Jul 2019 11:53:30 -0400
+X-LoopCount0: from 10.166.132.130
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="1338051051"
+From:   <Mario.Limonciello@dell.com>
+To:     <rafael@kernel.org>, <kai.heng.feng@canonical.com>
+CC:     <rjw@rjwysocki.net>, <kbusch@kernel.org>, <keith.busch@intel.com>,
+        <hch@lst.de>, <sagi@grimberg.me>, <linux-nvme@lists.infradead.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: RE: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+Thread-Topic: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+Thread-Index: AQHVQs6UiIesxZzK0UKkUWrQRuKoE6bbv0cAgABS64CAAAEhgIAAAsaAgAEtwoCAAX9fgIADAZew
+Date:   Mon, 29 Jul 2019 15:51:50 +0000
+Message-ID: <868a042a9422463fa1166653982bb985@AUSX13MPC105.AMER.DELL.COM>
+References: <2332799.izEFUvJP67@kreacher> <2428826.VBuqOhikiK@kreacher>
+ <20190725195258.GA7307@localhost.localdomain> <15043168.halW6uqc8m@kreacher>
+ <D33632F4-E119-4833-816C-79084DA03DE4@canonical.com>
+ <CAJZ5v0imsVS-eDB+Lmd5qzAfmb0UpJ5AwV_Vf+v8D21KAtqTOg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0imsVS-eDB+Lmd5qzAfmb0UpJ5AwV_Vf+v8D21KAtqTOg@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-07-29T15:51:48.5689646Z;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
+ aiplabel=External Public
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.143.18.86]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-29_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907290178
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1907290178
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-16.07.2019 18:21, Rafael J. Wysocki пишет:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH] driver core: Remove device link creation limitation
-> 
-> If device_link_add() is called for a consumer/supplier pair with an
-> existing device link between them and the existing link's type is
-> not in agreement with the flags passed to that function by its
-> caller, NULL will be returned.  That is seriously inconvenient,
-> because it forces the callers of device_link_add() to worry about
-> what others may or may not do even if that is not relevant to them
-> for any other reasons.
-> 
-> It turns out, however, that this limitation can be made go away
-> relatively easily.
-> 
-> The underlying observation is that if DL_FLAG_STATELESS has been
-> passed to device_link_add() in flags for the given consumer/supplier
-> pair at least once, calling either device_link_del() or
-> device_link_remove() to release the link returned by it should work,
-> but there are no other requirements associated with that flag.  In
-> turn, if at least one of the callers of device_link_add() for the
-> given consumer/supplier pair has not passed DL_FLAG_STATELESS to it
-> in flags, the driver core should track the status of the link and act
-> on it as appropriate (ie. the link should be treated as "managed").
-> This means that DL_FLAG_STATELESS needs to be set for managed device
-> links and it should be valid to call device_link_del() or
-> device_link_remove() to drop references to them in certain
-> sutiations.
-> 
-> To allow that to happen, introduce a new (internal) device link flag
-> called DL_FLAG_MANAGED and make device_link_add() set it automatically
-> whenever DL_FLAG_STATELESS is not passed to it.  Also make it take
-> additional references to existing device links that were previously
-> stateless (that is, with DL_FLAG_STATELESS set and DL_FLAG_MANAGED
-> unset) and will need to be managed going forward and initialize
-> their status (which has been DL_STATE_NONE so far).
-> 
-> Accordingly, when a managed device link is dropped automatically
-> by the driver core, make it clear DL_FLAG_MANAGED, reset the link's
-> status back to DL_STATE_NONE and drop the reference to it associated
-> with DL_FLAG_MANAGED instead of just deleting it right away (to
-> allow it to stay around in case it still needs to be released
-> explicitly by someone).
-> 
-> With that, since setting DL_FLAG_STATELESS doesn't mean that the
-> device link in question is not managed any more, replace all of the
-> status-tracking checks against DL_FLAG_STATELESS with analogous
-> checks against DL_FLAG_MANAGED and update the documentation to
-> reflect these changes.
-> 
-> While at it, make device_link_add() reject flags that it does not
-> recognize, including DL_FLAG_MANAGED.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Saravana Kannan <saravanak@google.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
-> 
-> -> v2:
->    * Add a check to device_link_add() to return NULL if unrecognized flags are
->      passed to it.
->    * Modify kerneldoc comments around DL_FLAG_MANAGED.
-> 
-> I've tentatively added the Tested-by tag from Marek, because I don't expect
-> the changes made between the initial posting and the v2 to make any difference
-> for him.
-> 
-> ---
->  Documentation/driver-api/device_link.rst |    4 
->  drivers/base/core.c                      |  176 +++++++++++++++++--------------
->  drivers/base/power/runtime.c             |    4 
->  include/linux/device.h                   |    4 
->  4 files changed, 106 insertions(+), 82 deletions(-)
-> 
-> Index: linux-pm/drivers/base/core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/core.c
-> +++ linux-pm/drivers/base/core.c
-> @@ -124,6 +124,50 @@ static int device_is_dependent(struct de
->  	return ret;
->  }
->  
-> +static void device_link_init_status(struct device_link *link,
-> +				    struct device *consumer,
-> +				    struct device *supplier)
-> +{
-> +	switch (supplier->links.status) {
-> +	case DL_DEV_PROBING:
-> +		switch (consumer->links.status) {
-> +		case DL_DEV_PROBING:
-> +			/*
-> +			 * A consumer driver can create a link to a supplier
-> +			 * that has not completed its probing yet as long as it
-> +			 * knows that the supplier is already functional (for
-> +			 * example, it has just acquired some resources from the
-> +			 * supplier).
-> +			 */
-> +			link->status = DL_STATE_CONSUMER_PROBE;
-> +			break;
-> +		default:
-> +			link->status = DL_STATE_DORMANT;
-> +			break;
-> +		}
-> +		break;
-> +	case DL_DEV_DRIVER_BOUND:
-> +		switch (consumer->links.status) {
-> +		case DL_DEV_PROBING:
-> +			link->status = DL_STATE_CONSUMER_PROBE;
-> +			break;
-> +		case DL_DEV_DRIVER_BOUND:
-> +			link->status = DL_STATE_ACTIVE;
-> +			break;
-> +		default:
-> +			link->status = DL_STATE_AVAILABLE;
-> +			break;
-> +		}
-> +		break;
-> +	case DL_DEV_UNBINDING:
-> +		link->status = DL_STATE_SUPPLIER_UNBIND;
-> +		break;
-> +	default:
-> +		link->status = DL_STATE_DORMANT;
-> +		break;
-> +	}
-> +}
-> +
->  static int device_reorder_to_tail(struct device *dev, void *not_used)
->  {
->  	struct device_link *link;
-> @@ -165,6 +209,10 @@ void device_pm_move_to_tail(struct devic
->  	device_links_read_unlock(idx);
->  }
->  
-> +#define DL_MANAGED_LINK_FLAGS (DL_FLAG_AUTOREMOVE_CONSUMER | \
-> +			       DL_FLAG_AUTOREMOVE_SUPPLIER | \
-> +			       DL_FLAG_AUTOPROBE_CONSUMER)
-> +
->  /**
->   * device_link_add - Create a link between two devices.
->   * @consumer: Consumer end of the link.
-> @@ -179,9 +227,9 @@ void device_pm_move_to_tail(struct devic
->   * of the link.  If DL_FLAG_PM_RUNTIME is not set, DL_FLAG_RPM_ACTIVE will be
->   * ignored.
->   *
-> - * If DL_FLAG_STATELESS is set in @flags, the link is not going to be managed by
-> - * the driver core and, in particular, the caller of this function is expected
-> - * to drop the reference to the link acquired by it directly.
-> + * If DL_FLAG_STATELESS is set in @flags, the caller of this function is
-> + * expected to release the link returned by it directly with the help of either
-> + * device_link_del() or device_link_remove().
->   *
->   * If that flag is not set, however, the caller of this function is handing the
->   * management of the link over to the driver core entirely and its return value
-> @@ -201,9 +249,16 @@ void device_pm_move_to_tail(struct devic
->   * be used to request the driver core to automaticall probe for a consmer
->   * driver after successfully binding a driver to the supplier device.
->   *
-> - * The combination of DL_FLAG_STATELESS and either DL_FLAG_AUTOREMOVE_CONSUMER
-> - * or DL_FLAG_AUTOREMOVE_SUPPLIER set in @flags at the same time is invalid and
-> - * will cause NULL to be returned upfront.
-> + * The combination of DL_FLAG_STATELESS and one of DL_FLAG_AUTOREMOVE_CONSUMER,
-> + * DL_FLAG_AUTOREMOVE_SUPPLIER, or DL_FLAG_AUTOPROBE_CONSUMER set in @flags at
-> + * the same time is invalid and will cause NULL to be returned upfront.
-> + * However, if a device link between the given @consumer and @supplier pair
-> + * exists already when this function is called for them, the existing link will
-> + * be returned regardless of its current type and status (the link's flags may
-> + * be modified then).  The caller of this function is then expected to treat
-> + * the link as though it has just been created, so (in particular) if
-> + * DL_FLAG_STATELESS was passed in @flags, the link needs to be released
-> + * explicitly when not needed any more (as stated above).
->   *
->   * A side effect of the link creation is re-ordering of dpm_list and the
->   * devices_kset list by moving the consumer device and all devices depending
-> @@ -220,10 +275,8 @@ struct device_link *device_link_add(stru
->  	struct device_link *link;
->  
->  	if (!consumer || !supplier ||
-> -	    (flags & DL_FLAG_STATELESS &&
-> -	     flags & (DL_FLAG_AUTOREMOVE_CONSUMER |
-> -		      DL_FLAG_AUTOREMOVE_SUPPLIER |
-> -		      DL_FLAG_AUTOPROBE_CONSUMER)) ||
-> +	    (flags & ~(DL_FLAG_STATELESS | DL_MANAGED_LINK_FLAGS)) ||
-> +	    (flags & DL_FLAG_STATELESS && flags & DL_MANAGED_LINK_FLAGS) ||
->  	    (flags & DL_FLAG_AUTOPROBE_CONSUMER &&
->  	     flags & (DL_FLAG_AUTOREMOVE_CONSUMER |
->  		      DL_FLAG_AUTOREMOVE_SUPPLIER)))
-> @@ -236,6 +289,9 @@ struct device_link *device_link_add(stru
->  		}
->  	}
->  
-> +	if (!(flags & DL_FLAG_STATELESS))
-> +		flags |= DL_FLAG_MANAGED;
-> +
->  	device_links_write_lock();
->  	device_pm_lock();
->  
-> @@ -262,15 +318,6 @@ struct device_link *device_link_add(stru
->  		if (link->consumer != consumer)
->  			continue;
->  
-> -		/*
-> -		 * Don't return a stateless link if the caller wants a stateful
-> -		 * one and vice versa.
-> -		 */
-> -		if (WARN_ON((flags & DL_FLAG_STATELESS) != (link->flags & DL_FLAG_STATELESS))) {
-> -			link = NULL;
-> -			goto out;
-> -		}
-> -
->  		if (flags & DL_FLAG_PM_RUNTIME) {
->  			if (!(link->flags & DL_FLAG_PM_RUNTIME)) {
->  				pm_runtime_new_link(consumer);
-> @@ -281,6 +328,7 @@ struct device_link *device_link_add(stru
->  		}
->  
->  		if (flags & DL_FLAG_STATELESS) {
-> +			link->flags |= DL_FLAG_STATELESS;
->  			kref_get(&link->kref);
->  			goto out;
->  		}
-> @@ -299,6 +347,11 @@ struct device_link *device_link_add(stru
->  			link->flags &= ~(DL_FLAG_AUTOREMOVE_CONSUMER |
->  					 DL_FLAG_AUTOREMOVE_SUPPLIER);
->  		}
-> +		if (!(link->flags & DL_FLAG_MANAGED)) {
-> +			kref_get(&link->kref);
-> +			link->flags |= DL_FLAG_MANAGED;
-> +			device_link_init_status(link, consumer, supplier);
-> +		}
->  		goto out;
->  	}
->  
-> @@ -325,48 +378,10 @@ struct device_link *device_link_add(stru
->  	kref_init(&link->kref);
->  
->  	/* Determine the initial link state. */
-> -	if (flags & DL_FLAG_STATELESS) {
-> +	if (flags & DL_FLAG_STATELESS)
->  		link->status = DL_STATE_NONE;
-> -	} else {
-> -		switch (supplier->links.status) {
-> -		case DL_DEV_PROBING:
-> -			switch (consumer->links.status) {
-> -			case DL_DEV_PROBING:
-> -				/*
-> -				 * A consumer driver can create a link to a
-> -				 * supplier that has not completed its probing
-> -				 * yet as long as it knows that the supplier is
-> -				 * already functional (for example, it has just
-> -				 * acquired some resources from the supplier).
-> -				 */
-> -				link->status = DL_STATE_CONSUMER_PROBE;
-> -				break;
-> -			default:
-> -				link->status = DL_STATE_DORMANT;
-> -				break;
-> -			}
-> -			break;
-> -		case DL_DEV_DRIVER_BOUND:
-> -			switch (consumer->links.status) {
-> -			case DL_DEV_PROBING:
-> -				link->status = DL_STATE_CONSUMER_PROBE;
-> -				break;
-> -			case DL_DEV_DRIVER_BOUND:
-> -				link->status = DL_STATE_ACTIVE;
-> -				break;
-> -			default:
-> -				link->status = DL_STATE_AVAILABLE;
-> -				break;
-> -			}
-> -			break;
-> -		case DL_DEV_UNBINDING:
-> -			link->status = DL_STATE_SUPPLIER_UNBIND;
-> -			break;
-> -		default:
-> -			link->status = DL_STATE_DORMANT;
-> -			break;
-> -		}
-> -	}
-> +	else
-> +		device_link_init_status(link, consumer, supplier);
->  
->  	/*
->  	 * Some callers expect the link creation during consumer driver probe to
-> @@ -528,7 +543,7 @@ static void device_links_missing_supplie
->   * mark the link as "consumer probe in progress" to make the supplier removal
->   * wait for us to complete (or bad things may happen).
->   *
-> - * Links with the DL_FLAG_STATELESS flag set are ignored.
-> + * Links without the DL_FLAG_MANAGED flag set are ignored.
->   */
->  int device_links_check_suppliers(struct device *dev)
->  {
-> @@ -538,7 +553,7 @@ int device_links_check_suppliers(struct
->  	device_links_write_lock();
->  
->  	list_for_each_entry(link, &dev->links.suppliers, c_node) {
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		if (link->status != DL_STATE_AVAILABLE) {
-> @@ -563,7 +578,7 @@ int device_links_check_suppliers(struct
->   *
->   * Also change the status of @dev's links to suppliers to "active".
->   *
-> - * Links with the DL_FLAG_STATELESS flag set are ignored.
-> + * Links without the DL_FLAG_MANAGED flag set are ignored.
->   */
->  void device_links_driver_bound(struct device *dev)
->  {
-> @@ -572,7 +587,7 @@ void device_links_driver_bound(struct de
->  	device_links_write_lock();
->  
->  	list_for_each_entry(link, &dev->links.consumers, s_node) {
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		/*
-> @@ -593,7 +608,7 @@ void device_links_driver_bound(struct de
->  	}
->  
->  	list_for_each_entry(link, &dev->links.suppliers, c_node) {
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		WARN_ON(link->status != DL_STATE_CONSUMER_PROBE);
-> @@ -605,6 +620,13 @@ void device_links_driver_bound(struct de
->  	device_links_write_unlock();
->  }
->  
-> +static void device_link_drop_managed(struct device_link *link)
-> +{
-> +	link->flags &= ~DL_FLAG_MANAGED;
-> +	WRITE_ONCE(link->status, DL_STATE_NONE);
-> +	kref_put(&link->kref, __device_link_del);
-> +}
-> +
->  /**
->   * __device_links_no_driver - Update links of a device without a driver.
->   * @dev: Device without a drvier.
-> @@ -615,18 +637,18 @@ void device_links_driver_bound(struct de
->   * unless they already are in the "supplier unbind in progress" state in which
->   * case they need not be updated.
->   *
-> - * Links with the DL_FLAG_STATELESS flag set are ignored.
-> + * Links without the DL_FLAG_MANAGED flag set are ignored.
->   */
->  static void __device_links_no_driver(struct device *dev)
->  {
->  	struct device_link *link, *ln;
->  
->  	list_for_each_entry_safe_reverse(link, ln, &dev->links.suppliers, c_node) {
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		if (link->flags & DL_FLAG_AUTOREMOVE_CONSUMER)
-> -			__device_link_del(&link->kref);
-> +			device_link_drop_managed(link);
->  		else if (link->status == DL_STATE_CONSUMER_PROBE ||
->  			 link->status == DL_STATE_ACTIVE)
->  			WRITE_ONCE(link->status, DL_STATE_AVAILABLE);
-> @@ -643,7 +665,7 @@ static void __device_links_no_driver(str
->   * %__device_links_no_driver() to update links to suppliers for it as
->   * appropriate.
->   *
-> - * Links with the DL_FLAG_STATELESS flag set are ignored.
-> + * Links without the DL_FLAG_MANAGED flag set are ignored.
->   */
->  void device_links_no_driver(struct device *dev)
->  {
-> @@ -652,7 +674,7 @@ void device_links_no_driver(struct devic
->  	device_links_write_lock();
->  
->  	list_for_each_entry(link, &dev->links.consumers, s_node) {
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		/*
-> @@ -680,7 +702,7 @@ void device_links_no_driver(struct devic
->   * invoke %__device_links_no_driver() to update links to suppliers for it as
->   * appropriate.
->   *
-> - * Links with the DL_FLAG_STATELESS flag set are ignored.
-> + * Links without the DL_FLAG_MANAGED flag set are ignored.
->   */
->  void device_links_driver_cleanup(struct device *dev)
->  {
-> @@ -689,7 +711,7 @@ void device_links_driver_cleanup(struct
->  	device_links_write_lock();
->  
->  	list_for_each_entry_safe(link, ln, &dev->links.consumers, s_node) {
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		WARN_ON(link->flags & DL_FLAG_AUTOREMOVE_CONSUMER);
-> @@ -702,7 +724,7 @@ void device_links_driver_cleanup(struct
->  		 */
->  		if (link->status == DL_STATE_SUPPLIER_UNBIND &&
->  		    link->flags & DL_FLAG_AUTOREMOVE_SUPPLIER)
-> -			__device_link_del(&link->kref);
-> +			device_link_drop_managed(link);
->  
->  		WRITE_ONCE(link->status, DL_STATE_DORMANT);
->  	}
-> @@ -724,7 +746,7 @@ void device_links_driver_cleanup(struct
->   *
->   * Return 'false' if there are no probing or active consumers.
->   *
-> - * Links with the DL_FLAG_STATELESS flag set are ignored.
-> + * Links without the DL_FLAG_MANAGED flag set are ignored.
->   */
->  bool device_links_busy(struct device *dev)
->  {
-> @@ -734,7 +756,7 @@ bool device_links_busy(struct device *de
->  	device_links_write_lock();
->  
->  	list_for_each_entry(link, &dev->links.consumers, s_node) {
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		if (link->status == DL_STATE_CONSUMER_PROBE
-> @@ -764,7 +786,7 @@ bool device_links_busy(struct device *de
->   * driver to unbind and start over (the consumer will not re-probe as we have
->   * changed the state of the link already).
->   *
-> - * Links with the DL_FLAG_STATELESS flag set are ignored.
-> + * Links without the DL_FLAG_MANAGED flag set are ignored.
->   */
->  void device_links_unbind_consumers(struct device *dev)
->  {
-> @@ -776,7 +798,7 @@ void device_links_unbind_consumers(struc
->  	list_for_each_entry(link, &dev->links.consumers, s_node) {
->  		enum device_link_state status;
->  
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		status = link->status;
-> Index: linux-pm/drivers/base/power/runtime.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/runtime.c
-> +++ linux-pm/drivers/base/power/runtime.c
-> @@ -1624,7 +1624,7 @@ void pm_runtime_remove(struct device *de
->   * runtime PM references to the device, drop the usage counter of the device
->   * (as many times as needed).
->   *
-> - * Links with the DL_FLAG_STATELESS flag set are ignored.
-> + * Links with the DL_FLAG_MANAGED flag unset are ignored.
->   *
->   * Since the device is guaranteed to be runtime-active at the point this is
->   * called, nothing else needs to be done here.
-> @@ -1641,7 +1641,7 @@ void pm_runtime_clean_up_links(struct de
->  	idx = device_links_read_lock();
->  
->  	list_for_each_entry_rcu(link, &dev->links.consumers, s_node) {
-> -		if (link->flags & DL_FLAG_STATELESS)
-> +		if (!(link->flags & DL_FLAG_MANAGED))
->  			continue;
->  
->  		while (refcount_dec_not_one(&link->rpm_active))
-> Index: linux-pm/include/linux/device.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/device.h
-> +++ linux-pm/include/linux/device.h
-> @@ -829,12 +829,13 @@ enum device_link_state {
->  /*
->   * Device link flags.
->   *
-> - * STATELESS: The core won't track the presence of supplier/consumer drivers.
-> + * STATELESS: The core will not remove this link automatically.
->   * AUTOREMOVE_CONSUMER: Remove the link automatically on consumer driver unbind.
->   * PM_RUNTIME: If set, the runtime PM framework will use this link.
->   * RPM_ACTIVE: Run pm_runtime_get_sync() on the supplier during link creation.
->   * AUTOREMOVE_SUPPLIER: Remove the link automatically on supplier driver unbind.
->   * AUTOPROBE_CONSUMER: Probe consumer driver automatically after supplier binds.
-> + * MANAGED: The core tracks presence of supplier/consumer drivers (internal).
->   */
->  #define DL_FLAG_STATELESS		BIT(0)
->  #define DL_FLAG_AUTOREMOVE_CONSUMER	BIT(1)
-> @@ -842,6 +843,7 @@ enum device_link_state {
->  #define DL_FLAG_RPM_ACTIVE		BIT(3)
->  #define DL_FLAG_AUTOREMOVE_SUPPLIER	BIT(4)
->  #define DL_FLAG_AUTOPROBE_CONSUMER	BIT(5)
-> +#define DL_FLAG_MANAGED			BIT(6)
->  
->  /**
->   * struct device_link - Device link representation.
-> Index: linux-pm/Documentation/driver-api/device_link.rst
-> ===================================================================
-> --- linux-pm.orig/Documentation/driver-api/device_link.rst
-> +++ linux-pm/Documentation/driver-api/device_link.rst
-> @@ -78,8 +78,8 @@ typically deleted in its ``->remove`` ca
->  driver is compiled as a module, the device link is added on module load and
->  orderly deleted on unload.  The same restrictions that apply to device link
->  addition (e.g. exclusion of a parallel suspend/resume transition) apply equally
-> -to deletion.  Device links with ``DL_FLAG_STATELESS`` unset (i.e. managed
-> -device links) are deleted automatically by the driver core.
-> +to deletion.  Device links managed by the driver core are deleted automatically
-> +by it.
->  
->  Several flags may be specified on device link addition, two of which
->  have already been mentioned above:  ``DL_FLAG_STATELESS`` to express that no
-> 
-> 
-> 
-> 
-
-Hello Rafael,
-
-This patch breaks NVIDIA Tegra DRM driver, which fails to probe now
-using the recent linux-next.
-
-	tegra-dc 54240000.dc: failed to link controllers
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBSYWZhZWwgSi4gV3lzb2NraSA8
+cmFmYWVsQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IFNhdHVyZGF5LCBKdWx5IDI3LCAyMDE5IDc6NTUg
+QU0NCj4gVG86IEthaS1IZW5nIEZlbmcNCj4gQ2M6IFJhZmFlbCBKLiBXeXNvY2tpOyBLZWl0aCBC
+dXNjaDsgQnVzY2gsIEtlaXRoOyBDaHJpc3RvcGggSGVsbHdpZzsgU2FnaSBHcmltYmVyZzsNCj4g
+bGludXgtbnZtZUBsaXN0cy5pbmZyYWRlYWQub3JnOyBMaW1vbmNpZWxsbywgTWFyaW87IExpbnV4
+IFBNOyBMS01MDQo+IFN1YmplY3Q6IFJlOiBbUmVncmVzc2lvbl0gQ29tbWl0ICJudm1lL3BjaTog
+VXNlIGhvc3QgbWFuYWdlZCBwb3dlciBzdGF0ZSBmb3INCj4gc3VzcGVuZCIgaGFzIHByb2JsZW1z
+DQo+IA0KPiANCj4gW0VYVEVSTkFMIEVNQUlMXQ0KPiANCj4gT24gRnJpLCBKdWwgMjYsIDIwMTkg
+YXQgNDowMyBQTSBLYWktSGVuZyBGZW5nDQo+IDxrYWkuaGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+
+IHdyb3RlOg0KPiA+DQo+ID4gYXQgMDQ6MDIsIFJhZmFlbCBKLiBXeXNvY2tpIDxyandAcmp3eXNv
+Y2tpLm5ldD4gd3JvdGU6DQo+ID4NCj4gPiA+IE9uIFRodXJzZGF5LCBKdWx5IDI1LCAyMDE5IDk6
+NTI6NTkgUE0gQ0VTVCBLZWl0aCBCdXNjaCB3cm90ZToNCj4gPiA+PiBPbiBUaHUsIEp1bCAyNSwg
+MjAxOSBhdCAwOTo0ODo1N1BNICswMjAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90ZToNCj4gPiA+
+Pj4gTlZNRSBJZGVudGlmeSBDb250cm9sbGVyOg0KPiA+ID4+PiB2aWQgICAgIDogMHgxYzVjDQo+
+ID4gPj4+IHNzdmlkICAgOiAweDFjNWMNCj4gPiA+Pj4gc24gICAgICA6IE1TOTJOMTcxMzEyOTAy
+SjBODQo+ID4gPj4+IG1uICAgICAgOiBQQzQwMSBOVk1lIFNLIGh5bml4IDI1NkdCDQo+ID4gPj4+
+IGZyICAgICAgOiA4MDAwN0UwMA0KPiA+ID4+PiByYWIgICAgIDogMg0KPiA+ID4+PiBpZWVlICAg
+IDogYWNlNDJlDQo+ID4gPj4+IGNtaWMgICAgOiAwDQo+ID4gPj4+IG1kdHMgICAgOiA1DQo+ID4g
+Pj4+IGNudGxpZCAgOiAxDQo+ID4gPj4+IHZlciAgICAgOiAxMDIwMA0KPiA+ID4+PiBydGQzciAg
+IDogN2ExMjANCj4gPiA+Pj4gcnRkM2UgICA6IDFlODQ4MA0KPiA+ID4+PiBvYWVzICAgIDogMHgy
+MDANCj4gPiA+Pj4gY3RyYXR0ICA6IDANCj4gPiA+Pj4gb2FjcyAgICA6IDB4MTcNCj4gPiA+Pj4g
+YWNsICAgICA6IDcNCj4gPiA+Pj4gYWVybCAgICA6IDMNCj4gPiA+Pj4gZnJtdyAgICA6IDB4MTQN
+Cj4gPiA+Pj4gbHBhICAgICA6IDB4Mg0KPiA+ID4+PiBlbHBlICAgIDogMjU1DQo+ID4gPj4+IG5w
+c3MgICAgOiA0DQo+ID4gPj4+IGF2c2NjICAgOiAweDENCj4gPiA+Pj4gYXBzdGEgICA6IDB4MQ0K
+PiA+ID4+PiB3Y3RlbXAgIDogMzUyDQo+ID4gPj4+IGNjdGVtcCAgOiAzNTQNCj4gPiA+Pj4gbXRm
+YSAgICA6IDANCj4gPiA+Pj4gaG1wcmUgICA6IDANCj4gPiA+Pj4gaG1taW4gICA6IDANCj4gPiA+
+Pj4gdG52bWNhcCA6IDANCj4gPiA+Pj4gdW52bWNhcCA6IDANCj4gPiA+Pj4gcnBtYnMgICA6IDAN
+Cj4gPiA+Pj4gZWRzdHQgICA6IDEwDQo+ID4gPj4+IGRzdG8gICAgOiAwDQo+ID4gPj4+IGZ3dWcg
+ICAgOiAwDQo+ID4gPj4+IGthcyAgICAgOiAwDQo+ID4gPj4+IGhjdG1hICAgOiAwDQo+ID4gPj4+
+IG1udG10ICAgOiAwDQo+ID4gPj4+IG14dG10ICAgOiAwDQo+ID4gPj4+IHNhbmljYXAgOiAwDQo+
+ID4gPj4+IGhtbWluZHMgOiAwDQo+ID4gPj4+IGhtbWF4ZCAgOiAwDQo+ID4gPj4+IG5zZXRpZG1h
+eCA6IDANCj4gPiA+Pj4gYW5hdHQgICA6IDANCj4gPiA+Pj4gYW5hY2FwICA6IDANCj4gPiA+Pj4g
+YW5hZ3JwbWF4IDogMA0KPiA+ID4+PiBuYW5hZ3JwaWQgOiAwDQo+ID4gPj4+IHNxZXMgICAgOiAw
+eDY2DQo+ID4gPj4+IGNxZXMgICAgOiAweDQ0DQo+ID4gPj4+IG1heGNtZCAgOiAwDQo+ID4gPj4+
+IG5uICAgICAgOiAxDQo+ID4gPj4+IG9uY3MgICAgOiAweDFmDQo+ID4gPj4+IGZ1c2VzICAgOiAw
+eDENCj4gPiA+Pj4gZm5hICAgICA6IDANCj4gPiA+Pj4gdndjICAgICA6IDB4MQ0KPiA+ID4+PiBh
+d3VuICAgIDogNw0KPiA+ID4+PiBhd3VwZiAgIDogNw0KPiA+ID4+PiBudnNjYyAgIDogMQ0KPiA+
+ID4+PiBhY3d1ICAgIDogNw0KPiA+ID4+PiBzZ2xzICAgIDogMA0KPiA+ID4+PiBtbmFuICAgIDog
+MA0KPiA+ID4+PiBzdWJucW4gIDoNCj4gPiA+Pj4gaW9jY3N6ICA6IDANCj4gPiA+Pj4gaW9yY3N6
+ICA6IDANCj4gPiA+Pj4gaWNkb2ZmICA6IDANCj4gPiA+Pj4gY3RyYXR0ciA6IDANCj4gPiA+Pj4g
+bXNkYmQgICA6IDANCj4gPiA+Pj4gcHMgICAgMCA6IG1wOjYuMDBXIG9wZXJhdGlvbmFsIGVubGF0
+OjUgZXhsYXQ6NSBycnQ6MCBycmw6MA0KPiA+ID4+PiAgICAgICAgICAgcnd0OjAgcndsOjAgaWRs
+ZV9wb3dlcjotIGFjdGl2ZV9wb3dlcjotDQo+ID4gPj4+IHBzICAgIDEgOiBtcDozLjgwVyBvcGVy
+YXRpb25hbCBlbmxhdDozMCBleGxhdDozMCBycnQ6MSBycmw6MQ0KPiA+ID4+PiAgICAgICAgICAg
+cnd0OjEgcndsOjEgaWRsZV9wb3dlcjotIGFjdGl2ZV9wb3dlcjotDQo+ID4gPj4+IHBzICAgIDIg
+OiBtcDoyLjQwVyBvcGVyYXRpb25hbCBlbmxhdDoxMDAgZXhsYXQ6MTAwIHJydDoyIHJybDoyDQo+
+ID4gPj4+ICAgICAgICAgICByd3Q6MiByd2w6MiBpZGxlX3Bvd2VyOi0gYWN0aXZlX3Bvd2VyOi0N
+Cj4gPiA+Pj4gcHMgICAgMyA6IG1wOjAuMDcwMFcgbm9uLW9wZXJhdGlvbmFsIGVubGF0OjEwMDAg
+ZXhsYXQ6MTAwMCBycnQ6MyBycmw6Mw0KPiA+ID4+PiAgICAgICAgICAgcnd0OjMgcndsOjMgaWRs
+ZV9wb3dlcjotIGFjdGl2ZV9wb3dlcjotDQo+ID4gPj4+IHBzICAgIDQgOiBtcDowLjAwNzBXIG5v
+bi1vcGVyYXRpb25hbCBlbmxhdDoxMDAwIGV4bGF0OjUwMDAgcnJ0OjMgcnJsOjMNCj4gPiA+Pj4g
+ICAgICAgICAgIHJ3dDozIHJ3bDozIGlkbGVfcG93ZXI6LSBhY3RpdmVfcG93ZXI6LQ0KPiA+ID4+
+DQo+ID4gPj4gSG0sIG5vdGhpbmcgc3RhbmRzIG91dCBhcyBzb21ldGhpbmcgd2UgY2FuIHVzZSB0
+byBkZXRlcm1pbmUgaWYgd2Ugc2hvdWxkDQo+ID4gPj4gc2tpcCB0aGUgbnZtZSBzcGVjaWZpYyBz
+ZXR0aW5ncyBvciBhbGxvdyBEMy4gSSd2ZSBubyBvdGhlciBpZGVhcyBhdCB0aGUNCj4gPiA+PiBt
+b21lbnQgZm9yIHdoYXQgd2UgbWF5IGNoZWNrLg0KPiA+ID4NCj4gPiA+IFdlbGwsIGRvIEFTUE0g
+c2V0dGluZ3MgbWF0dGVyIGhlcmU/DQo+ID4NCj4gPiBTZWVtcyBsaWtlIGl0J3MgYSByZWdyZXNz
+aW9uIGluIHRoZSBmaXJtd2FyZS4NCj4gPg0KPiA+IFRoZSBpc3N1ZSBoYXBwZW5zIGluIHZlcnNp
+b24gODAwMDdFMDAgYnV0IG5vdCB2ZXJzaW9uIDgwMDA2RTAwLg0KPiANCj4gU28geW91IG1lYW4g
+dGhlIE5WTWUgZmlybXdhcmUsIHRvIGJlIGVudGlyZWx5IHByZWNpc2UuDQoNClllcy4NCg0KPiAN
+Cj4gPiBJIGFtIG5vdCBzdXJlIGhvdyB0byBkb3duZ3JhZGUgaXQgdW5kZXIgTGludXggdGhvdWdo
+Lg0KPiANCj4gTWUgbmVpdGhlci4NCg0KSSdsbCBhc2sgdGhlIHN0b3JhZ2UgdGVhbSB0byBhc2sg
+SHluaXggdG8gbWFrZSBib3RoIHRoZXNlIEZXIGF2YWlsYWJsZSBvbiBMVkZTLg0KRnd1cGQgY2Fu
+IHVwZ3JhZGUgYW5kIGRvd25ncmFkZSBmaXJtd2FyZSB3aGVuIHRoZSBiaW5hcmllcyBhcmUgbWFk
+ZSBhdmFpbGFibGUuDQoNClRoZXkgY291bGQgcG90ZW50aWFsbHkgYmUgcHVsbGVkIGRpcmVjdGx5
+IG91dCBvZiB0aGUgV2luZG93cyBleGVjdXRhYmxlcyB0b28sIGJ1dCBJIGRvbid0DQprbm93IGhv
+dyB0byBpZGVudGlmeSB0aGVtIG15c2VsZi4NCg0KPiANCj4gPiBUaGUgZmlybXdhcmUgY2hhbmdl
+bG9nIFsxXSBpcyB2ZXJ5IGludGVyZXN0aW5nOg0KPiA+IC0gSW1wcm92ZXMgdGhlIHBlcmZvcm1h
+bmNlIG9mIHRoZSBzb2xpZC1zdGF0ZSBkcml2ZSAoU1NEKSBieSBkaXN0cmlidXRpbmcNCj4gPiBw
+b3dlciBpbnRvIHRoZSBTU0QgZWZmaWNpZW50bHkgYWNjb3JkaW5nIHRvIHRoZSBwb3dlciBzdGF0
+ZSBvZiB0aGUgc3lzdGVtLg0KPiA+DQo+ID4gWzFdDQo+ID4NCj4gaHR0cHM6Ly93d3cuZGVsbC5j
+b20vc3VwcG9ydC9ob21lL3VzL2VuLzA0L2RyaXZlcnMvZHJpdmVyc2RldGFpbHM/ZHJpdmVyaWQ9
+bQ0KPiBjeG04DQo+IA0KPiBIdWguDQo+IA0KPiBJdCBsb29rcyBsaWtlIHNvbWV0aGluZyBlbHNl
+IHByZXZlbnRzIHRoZSBQQ0ggb24gbXkgOTM4MCBmcm9tIHJlYWNoaW5nDQo+IHRoZSByaWdodCBz
+dGF0ZSBmb3IgUzBpeCwgdGhvdWdoLiAgSSBzdGlsbCBuZWVkIHRvIGZpbmQgb3V0IHdoYXQgaXQN
+Cj4gaXMuDQo=
