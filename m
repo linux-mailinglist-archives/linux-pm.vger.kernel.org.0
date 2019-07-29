@@ -2,175 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F9C78700
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 10:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E707870B
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 10:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbfG2IIE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 04:08:04 -0400
-Received: from icp-osb-irony-out6.external.iinet.net.au ([203.59.1.106]:5354
-        "EHLO icp-osb-irony-out6.external.iinet.net.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726432AbfG2IIE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 04:08:04 -0400
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2ANBgB3qD5d/1/rO8tmghmDVSESFxO?=
- =?us-ascii?q?NGogaAYJDAYNZhVORGgkBAQEBAQEBAQEbHAEBhDoEgwo3Bg4BAwEBAQQBAQE?=
- =?us-ascii?q?BBQFthGVFhXgvcnASgyKBdxOsVjOEBgGEcoFIgTSHCYRugUA/g3VshAMNGIV?=
- =?us-ascii?q?/BIwbCokUbZRRCYEld5QWGYIuizKKLotjgViZZCKBWE0fGYMngk4XFI1WRDU?=
- =?us-ascii?q?wjk4BAQ?=
-X-IPAS-Result: =?us-ascii?q?A2ANBgB3qD5d/1/rO8tmghmDVSESFxONGogaAYJDAYNZh?=
- =?us-ascii?q?VORGgkBAQEBAQEBAQEbHAEBhDoEgwo3Bg4BAwEBAQQBAQEBBQFthGVFhXgvc?=
- =?us-ascii?q?nASgyKBdxOsVjOEBgGEcoFIgTSHCYRugUA/g3VshAMNGIV/BIwbCokUbZRRC?=
- =?us-ascii?q?YEld5QWGYIuizKKLotjgViZZCKBWE0fGYMngk4XFI1WRDUwjk4BAQ?=
-X-IronPort-AV: E=Sophos;i="5.64,322,1559491200"; 
-   d="scan'208";a="178664786"
-Received: from 203-59-235-95.perm.iinet.net.au (HELO rtcentos7.electromag.com.au) ([203.59.235.95])
-  by icp-osb-irony-out6.iinet.net.au with ESMTP; 29 Jul 2019 16:07:59 +0800
-From:   Richard Tresidder <rtresidd@electromag.com.au>
-To:     sre@kernel.org, enric.balletbo@collabora.com, ncrews@chromium.org,
-        andrew.smirnov@gmail.com, groeck@chromium.org,
-        david@lechnology.com, rtresidd@electromag.com.au,
-        tglx@linutronix.de, kstewart@linuxfoundation.org,
-        gregkh@linuxfoundation.org, rfontana@redhat.com,
-        allison@lohutok.net, baolin.wang@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] power/supply/sbs-battery: Fix confusing battery status when idle or empty
-Date:   Mon, 29 Jul 2019 16:07:39 +0800
-Message-Id: <1564387659-62064-1-git-send-email-rtresidd@electromag.com.au>
-X-Mailer: git-send-email 1.8.3.1
+        id S1726907AbfG2IM0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 04:12:26 -0400
+Received: from honk.sigxcpu.org ([24.134.29.49]:48310 "EHLO honk.sigxcpu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725988AbfG2IM0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 29 Jul 2019 04:12:26 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 5FE39FB03;
+        Mon, 29 Jul 2019 10:12:23 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3avP_g3MYwj1; Mon, 29 Jul 2019 10:12:22 +0200 (CEST)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 9C4E846BAF; Mon, 29 Jul 2019 10:12:21 +0200 (CEST)
+Date:   Mon, 29 Jul 2019 10:12:21 +0200
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
+To:     Anson.Huang@nxp.com
+Cc:     rui.zhang@intel.com, edubezval@gmail.com,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, mturquette@baylibre.com,
+        sboyd@kernel.org, l.stach@pengutronix.de, abel.vesa@nxp.com,
+        andrew.smirnov@gmail.com, angus@akkea.ca, ccaione@baylibre.com,
+        leonard.crestez@nxp.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH 4/6] thermal: qoriq: Add clock operations
+Message-ID: <20190729081221.GA2523@bogon.m.sigxcpu.org>
+References: <20190705045612.27665-1-Anson.Huang@nxp.com>
+ <20190705045612.27665-4-Anson.Huang@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190705045612.27665-4-Anson.Huang@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When a battery or batteries in a system are in parallel then one or more
-may not be providing any current to the system.
-This fixes an incorrect status indication of FULL for the battery simply
-because it wasn't discharging at that point in time.
-The battery will now be flagged as NOT CHARGING.
-Have also added the additional check for the battery FULL DISCHARGED flag
-which will now flag a status of EMPTY.
+Hi Anson,
+On Fri, Jul 05, 2019 at 12:56:10PM +0800, Anson.Huang@nxp.com wrote:
+> From: Anson Huang <Anson.Huang@nxp.com>
+> 
+> Some platforms like i.MX8MQ has clock control for this module,
+> need to add clock operations to make sure the driver is working
+> properly.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+>  drivers/thermal/qoriq_thermal.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+> index 2b2f79b..0813c1b 100644
+> --- a/drivers/thermal/qoriq_thermal.c
+> +++ b/drivers/thermal/qoriq_thermal.c
+> @@ -2,6 +2,7 @@
+>  //
+>  // Copyright 2016 Freescale Semiconductor, Inc.
+>  
+> +#include <linux/clk.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/err.h>
+> @@ -72,6 +73,7 @@ struct qoriq_sensor {
+>  
+>  struct qoriq_tmu_data {
+>  	struct qoriq_tmu_regs __iomem *regs;
+> +	struct clk *clk;
+>  	bool little_endian;
+>  	struct qoriq_sensor	*sensor[SITES_MAX];
+>  };
+> @@ -208,6 +210,19 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+>  		return PTR_ERR(data->regs);
+>  	}
+>  
+> +	data->clk = devm_clk_get(&pdev->dev, NULL);
+> +	if (IS_ERR(data->clk)) {
+> +		if (PTR_ERR(data->clk) == -EPROBE_DEFER)
+> +			return -EPROBE_DEFER;
+> +		data->clk = NULL;
+> +	}
 
-Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
----
+Wouldn't devm_clk_get_optional make more sense?
 
-Notes:
-    power/supply/sbs-battery: Fix confusing battery status when idle or empty
-    
-    When a battery or batteries in a system are in parallel then one or more
-    may not be providing any current to the system.
-    This fixes an incorrect status indication of FULL for the battery simply
-    because it wasn't discharging at that point in time.
-    The battery will now be flagged as NOT CHARGING.
-    Have also added the additional check for the battery FULL DISCHARGED flag
-    which will now flag a status of EMPTY.
-    
-    v2: Missed a later merge that should have been included in original patch
-    v3: Refactor the sbs_status_correct function to capture all the states for
-        normal operation rather than being spread across multile functions.
+> +
+> +	ret = clk_prepare_enable(data->clk);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to enable clock\n");
+> +		return ret;
+> +	}
+> +
+>  	qoriq_tmu_init_device(data);	/* TMU initialization */
+>  
+>  	ret = qoriq_tmu_calibration(pdev);	/* TMU calibration */
+> @@ -235,6 +250,8 @@ static int qoriq_tmu_remove(struct platform_device *pdev)
+>  	/* Disable monitoring */
+>  	tmu_write(data, TMR_DISABLE, &data->regs->tmr);
+>  
+> +	clk_disable_unprepare(data->clk);
+> +
+>  	platform_set_drvdata(pdev, NULL);
+>  
+>  	return 0;
+> @@ -250,14 +267,21 @@ static int __maybe_unused qoriq_tmu_suspend(struct device *dev)
+>  	tmr &= ~TMR_ME;
+>  	tmu_write(data, tmr, &data->regs->tmr);
+>  
+> +	clk_disable_unprepare(data->clk);
+> +
+>  	return 0;
+>  }
+>  
+>  static int __maybe_unused qoriq_tmu_resume(struct device *dev)
+>  {
+>  	u32 tmr;
+> +	int ret;
+>  	struct qoriq_tmu_data *data = dev_get_drvdata(dev);
+>  
+> +	ret = clk_prepare_enable(data->clk);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* Enable monitoring */
+>  	tmr = tmu_read(data, &data->regs->tmr);
+>  	tmr |= TMR_ME;
 
- drivers/power/supply/power_supply_sysfs.c |  2 +-
- drivers/power/supply/sbs-battery.c        | 44 +++++++++++--------------------
- include/linux/power_supply.h              |  1 +
- 3 files changed, 18 insertions(+), 29 deletions(-)
+Apart from that it looks like what Fabio sent and what i tested so
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index f37ad4e..305e833 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -51,7 +51,7 @@
- };
- 
- static const char * const power_supply_status_text[] = {
--	"Unknown", "Charging", "Discharging", "Not charging", "Full"
-+	"Unknown", "Charging", "Discharging", "Not charging", "Full", "Empty"
- };
- 
- static const char * const power_supply_charge_type_text[] = {
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 048d205..b28402d 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -293,16 +293,18 @@ static int sbs_status_correct(struct i2c_client *client, int *intval)
- 
- 	ret = (s16)ret;
- 
--	/* Not drawing current means full (cannot be not charging) */
--	if (ret == 0)
--		*intval = POWER_SUPPLY_STATUS_FULL;
--
--	if (*intval == POWER_SUPPLY_STATUS_FULL) {
--		/* Drawing or providing current when full */
--		if (ret > 0)
--			*intval = POWER_SUPPLY_STATUS_CHARGING;
--		else if (ret < 0)
--			*intval = POWER_SUPPLY_STATUS_DISCHARGING;
-+	if (ret > 0)
-+		*intval = POWER_SUPPLY_STATUS_CHARGING;
-+	else if (ret < 0)
-+		*intval = POWER_SUPPLY_STATUS_DISCHARGING;
-+	else {
-+		/* Current is 0, so how full is the battery? */
-+		if (*intval & BATTERY_FULL_CHARGED)
-+			*intval = POWER_SUPPLY_STATUS_FULL;
-+		else if (*intval & BATTERY_FULL_DISCHARGED)
-+			*intval = POWER_SUPPLY_STATUS_EMPTY;
-+		else
-+			*intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
- 	}
- 
- 	return 0;
-@@ -421,14 +423,9 @@ static int sbs_get_battery_property(struct i2c_client *client,
- 			return 0;
- 		}
- 
--		if (ret & BATTERY_FULL_CHARGED)
--			val->intval = POWER_SUPPLY_STATUS_FULL;
--		else if (ret & BATTERY_DISCHARGING)
--			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
--		else
--			val->intval = POWER_SUPPLY_STATUS_CHARGING;
--
--		sbs_status_correct(client, &val->intval);
-+		ret = sbs_status_correct(client, &val->intval);
-+		if (ret < 0)
-+			return ret;
- 
- 		if (chip->poll_time == 0)
- 			chip->last_state = val->intval;
-@@ -773,20 +770,11 @@ static void sbs_delayed_work(struct work_struct *work)
- 
- 	ret = sbs_read_word_data(chip->client, sbs_data[REG_STATUS].addr);
- 	/* if the read failed, give up on this work */
--	if (ret < 0) {
-+	if ((ret < 0) || (sbs_status_correct(chip->client, &ret) < 0)) {
- 		chip->poll_time = 0;
- 		return;
- 	}
- 
--	if (ret & BATTERY_FULL_CHARGED)
--		ret = POWER_SUPPLY_STATUS_FULL;
--	else if (ret & BATTERY_DISCHARGING)
--		ret = POWER_SUPPLY_STATUS_DISCHARGING;
--	else
--		ret = POWER_SUPPLY_STATUS_CHARGING;
--
--	sbs_status_correct(chip->client, &ret);
--
- 	if (chip->last_state != ret) {
- 		chip->poll_time = 0;
- 		power_supply_changed(chip->power_supply);
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 28413f7..8fb10ec 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -37,6 +37,7 @@ enum {
- 	POWER_SUPPLY_STATUS_DISCHARGING,
- 	POWER_SUPPLY_STATUS_NOT_CHARGING,
- 	POWER_SUPPLY_STATUS_FULL,
-+	POWER_SUPPLY_STATUS_EMPTY,
- };
- 
- /* What algorithm is the charger using? */
--- 
-1.8.3.1
+Reviewed-by: Guido Günther <agx@sigxcpu.org>
 
+Cheers,
+ -- Guido
+
+> -- 
+> 2.7.4
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
