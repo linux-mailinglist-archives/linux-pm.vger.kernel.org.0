@@ -2,127 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EA278D70
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 16:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107F978ED4
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 17:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728034AbfG2OHV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 10:07:21 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:32874 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727539AbfG2OHV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 10:07:21 -0400
-Received: by mail-pg1-f193.google.com with SMTP id f20so19098174pgj.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2019 07:07:21 -0700 (PDT)
+        id S1727775AbfG2PNo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 11:13:44 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33313 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbfG2PNo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 11:13:44 -0400
+Received: by mail-pg1-f196.google.com with SMTP id f20so19188411pgj.0;
+        Mon, 29 Jul 2019 08:13:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:from:to:subject:cc:user-agent:date;
-        bh=9Nybox5Ems434Y8f3uqSl08wrdR2vXIjQfpnAfsknyE=;
-        b=m6J4d8MLpDyS0VX2HOOIiddbS2yNdkHuPM8c0SDZ1G48A3hCxTPHNGwFSpl629Rh0S
-         Mx7Ji294l7tBty6/kP3U0Q9wuVavXqhq7w3cFZB5ZwBbSKuaLlIaF+Nq1xDfAtYGUYVF
-         zJkWY/NjMrKnQgzpDXc0BlOgWU7R5e5kpNBXE=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CReZX3ZIW9UVm3F381oja+qdURlLghUskZk6mGhexL4=;
+        b=DF5eQiR/9iQxp/I05TpQxh96+yZz7SV9RG6uhl8zm5tQDkywRpo7tBrHo6+JYi9DMP
+         aIHtjuXNygQy++dokdfX3GdSr9dlSz9bgGKf6DU4b9xcRtUDPafirv5OFFt7xntBUlZn
+         j9XvmuoU2MOmMqnoKS+Lf5IRijAZXLO3YL5YivUqg9npFcmjI7ffrnyM4bxclXLs+p3V
+         89IiySx2lv/p3CIxLGE/Lan/Kj6cJbPLYkh7Npa85VJ89wVuDve2mibdyFGFJyGUsvSq
+         UdQYN969Ua7dgZYoTV74bAdwxPJ56h4tOpoaX8SKamq34W+W1tIrFUBiMsFps7A/3pBX
+         3Y5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:from:to:subject:cc
-         :user-agent:date;
-        bh=9Nybox5Ems434Y8f3uqSl08wrdR2vXIjQfpnAfsknyE=;
-        b=TuYg9zJrduzQncyctaqnon6a42DvPmYBU2ZvLc0BNk8lKwul60Zmjn7Ztn41cgI1Ef
-         5F5hKr5rO/8FifYl6DESRjPebj/gqOJTv5MpplK8kkXe1HbmImgCEDAofrf9D+t4avxl
-         8Qwb2/qsvu/pP9UUbas1HxG2BloAYcE7wBBbePRDXbLW5MvwVgBjtcgbqszbMWP+nVIg
-         ih5lCOOewA0Rc06Xhl/t53pia2Cj6s+hJZ+QALM1YchqW6JoB4W6e8/tdwmgy+sCSSdJ
-         vwwiWAYAA+TA2K5BwP/xeukwOjCzOEyAOC5ScwCY4rKuol718nRfeW67JHuMOWLUs963
-         PZkA==
-X-Gm-Message-State: APjAAAUQEqWee3vCfWepZluuVtBZjoEWoHCfmhM1uYrRnahaT28Uehcz
-        uNFMlBVZE2zdAfN2zizv7yC9iw==
-X-Google-Smtp-Source: APXvYqwa80ZrMiQQWSZwZ3dtH8/0siPpnsrbdnWv4yQ+VOXFFERc9PmbfcA/ZdJfwPd71fBJTxgB2w==
-X-Received: by 2002:a63:dd4e:: with SMTP id g14mr32640178pgj.227.1564409240743;
-        Mon, 29 Jul 2019 07:07:20 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id m31sm69058880pjb.6.2019.07.29.07.07.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CReZX3ZIW9UVm3F381oja+qdURlLghUskZk6mGhexL4=;
+        b=NPxkspTDJFyFQibADXQUIiq1bAZx+9WbrRHocrZG1WUVwNa46G4C3UDLvxr/vZUXv1
+         pNig3bmR0+8khKEnwumTk7dapvg55wqbQVt/CMSaNShidUQDj2pmxhQ7x03js6lRp4B8
+         tUiaG/ANJw41KwEV35yaGg+FoLcflXmcB+z2TXDZk2u+6hWRV1rHGODnG+IGnYvS3s93
+         5X516HNC00WHT5AADrjMXXtAWfm5mh8BQh9BTski2+/rrHDHwfssMwwW5QCwQrVXsM8H
+         utKPeQa5P95+RMBZi5g8IG78kWbY3NMWced6QGg0bpet+c/teNd7hGR7lfB9mryQiCc/
+         PLIA==
+X-Gm-Message-State: APjAAAVH4ihe5WZKK91DPtMPTV3Me732kspcPsDMt2TDWUFPHUqjYFEH
+        qq0V3VLM3UYamOOc6CO22iM=
+X-Google-Smtp-Source: APXvYqxycRdMpLgXrpeUG1h0C8XXmc1sTfWKOqLpMdVBbrO+ryHMITBy2w3gpaZ3FHBwmuORXJgyLw==
+X-Received: by 2002:a63:6056:: with SMTP id u83mr100397059pgb.181.1564413223953;
+        Mon, 29 Jul 2019 08:13:43 -0700 (PDT)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
+        by smtp.gmail.com with ESMTPSA id v184sm57845951pgd.34.2019.07.29.08.13.37
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 07:07:20 -0700 (PDT)
-Message-ID: <5d3efd98.1c69fb81.5f60d.059a@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        Mon, 29 Jul 2019 08:13:43 -0700 (PDT)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jessica Yu <jeyu@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH 00/12] Replace strncmp with str_has_prefix
+Date:   Mon, 29 Jul 2019 23:13:23 +0800
+Message-Id: <20190729151323.9226-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAJZ5v0hroRuGQ5N42Z8=yFVXiJPdid3wJrHoKqr2BZVx=sfnBQ@mail.gmail.com>
-References: <20190727011040.89582-1-swboyd@chromium.org> <CAJZ5v0hroRuGQ5N42Z8=yFVXiJPdid3wJrHoKqr2BZVx=sfnBQ@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] PM / wakeup: Avoid dev_name collisions in wakeup class
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Tri Vo <trong@android.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Mon, 29 Jul 2019 07:07:19 -0700
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Rafael J. Wysocki (2019-07-27 06:10:00)
-> On Sat, Jul 27, 2019 at 3:11 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > If a device is wakeup capable and the driver calls device_wakeup_init()
-> > on it during probe and then userspace writes 'enabled' to that device's
-> > power/wakeup file in sysfs we'll try to create the same named wakeup
-> > device in sysfs. The kernel will complain about duplicate file names.
-> >
-> > sysfs: cannot create duplicate filename '/devices/virtual/wakeup/1-1.1'
-> > kobject_add_internal failed for 1-1.1 with -EEXIST, don't try to regist=
-er things with the same name in the same directory.
-> >
-> > It may be advantageous to not write 'enabled' to the wakeup file (see
-> > wakeup_store()) from userspace for these devices because we allocate
-> > devices and register them and then throw them all away later on if the
-> > device driver has already initialized the wakeup attribute. The
-> > implementation currently tries to avoid taking locks here so it seems
-> > best to optimize that path in a separate patch.
-> >
-> > Let's rename the wakeup class devices as 'wakeupN' with an IDA that's
-> > simple enough to just return some sort of number. In addition, let's
-> > make the device registering the wakeup the parent and include a 'name'
-> > attribute in case userspace wants to figure out the type of wakeup it is
-> > (in the case of virtual wakeups) or the device associated with the
-> > wakeup. This makes it easier for userspace to go from /sys/class/wakeup
-> > to a place in the device hierarchy where the wakeup is generated from
-> > like an input device.
-> >
-> > Cc: Tri Vo <trong@android.com>
-> > Cc: Kalesh Singh <kaleshsingh@google.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->=20
-> I'd rather change the commit that introduced this issue which is only
-> in linux-next for now.
+The commit 72921427d46b
+("string.h: Add str_has_prefix() helper function")
+introduced str_has_prefix() to substitute error-prone
+strncmp(str, const, len).
 
-Feel free to squash the two patches together and throw my signed-off-by
-on it. I forgot to add 'name' to the Documentation directory. Here's
-something to that effect.
+The commit b6b2735514bc
+("tracing: Use str_has_prefix() instead of using fixed sizes")
+has fixed some codes.
 
------8<-----
-diff --git a/Documentation/ABI/testing/sysfs-class-wakeup b/Documentation/A=
-BI/testing/sysfs-class-wakeup
-index 30fb23eb9112..b83a87380d2c 100644
---- a/Documentation/ABI/testing/sysfs-class-wakeup
-+++ b/Documentation/ABI/testing/sysfs-class-wakeup
-@@ -5,6 +5,13 @@ Description:
- 		The /sys/class/wakeup/ directory contains pointers to all
- 		wakeup sources in the kernel at that moment in time.
-=20
-+What:		/sys/class/wakeup/.../name
-+Date:		June 2019
-+Contact:	Tri Vo <trong@android.com>
-+Description:
-+		This file contains the name of the wakeup source when
-+		it was created.
-+
- What:		/sys/class/wakeup/.../active_count
- Date:		June 2019
- Contact:	Tri Vo <trong@android.com>
+These patches use str_has_prefix to replace
+such pattern of strncmp usages.
+
+Chuhong Yuan (12):
+  rdmacg: Replace strncmp with str_has_prefix
+  kdb: Replace strncmp with str_has_prefix
+  dma-debug: Replace strncmp with str_has_prefix
+  gcov: Replace strncmp with str_has_prefix
+  genirq/debugfs: Replace strncmp with str_has_prefix
+  module: Replace strncmp with str_has_prefix
+  power: Replace strncmp with str_has_prefix
+  printk: Replace strncmp with str_has_prefix
+  reboot: Replace strncmp with str_has_prefix
+  sched: Replace strncmp with str_has_prefix
+  userns: Replace strncmp with str_has_prefix
+  watchdog: Replace strncmp with str_has_prefix
+
+ kernel/cgroup/rdma.c        | 2 +-
+ kernel/debug/kdb/kdb_main.c | 2 +-
+ kernel/dma/debug.c          | 2 +-
+ kernel/gcov/fs.c            | 2 +-
+ kernel/irq/debugfs.c        | 2 +-
+ kernel/module.c             | 2 +-
+ kernel/power/hibernate.c    | 8 ++++----
+ kernel/power/main.c         | 2 +-
+ kernel/printk/braille.c     | 4 ++--
+ kernel/printk/printk.c      | 6 +++---
+ kernel/reboot.c             | 2 +-
+ kernel/sched/debug.c        | 2 +-
+ kernel/sched/isolation.c    | 4 ++--
+ kernel/user_namespace.c     | 4 ++--
+ kernel/watchdog.c           | 8 ++++----
+ 15 files changed, 26 insertions(+), 26 deletions(-)
+
+-- 
+2.20.1
+
