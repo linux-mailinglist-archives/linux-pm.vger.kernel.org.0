@@ -2,87 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3996F79A9D
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 23:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C31B79B03
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 23:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729625AbfG2VJF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 17:09:05 -0400
-Received: from mga03.intel.com ([134.134.136.65]:19268 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726708AbfG2VJF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 29 Jul 2019 17:09:05 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 14:09:04 -0700
-X-IronPort-AV: E=Sophos;i="5.64,324,1559545200"; 
-   d="scan'208";a="171681418"
-Received: from afuhr-mobl.amr.corp.intel.com ([10.255.94.250])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 14:09:03 -0700
-Message-ID: <42db46c33466a12221e0968e82c4c4ee17b0341d.camel@linux.intel.com>
-Subject: Re: [PATCH][V2] drivers: thermal: processor_thermal_device: fix
- missing bitwise-or operators
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Colin King <colin.king@canonical.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 29 Jul 2019 14:09:00 -0700
-In-Reply-To: <20190729120323.15838-1-colin.king@canonical.com>
-References: <20190729120323.15838-1-colin.king@canonical.com>
+        id S1728960AbfG2VZI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 17:25:08 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34722 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725945AbfG2VZI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 17:25:08 -0400
+Received: by mail-ot1-f65.google.com with SMTP id n5so64145254otk.1;
+        Mon, 29 Jul 2019 14:25:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KJFm+29xdmh4eMN4D0nGSnJhY+tLmcYbySYne7TR5rk=;
+        b=e46aDFveK7zG4xYYs0IECKEtaCORx0QzVb1zgQIKbIyChyNJX+s1ihxDVtTARc9SeO
+         n74BbPaT4n/xjKFS4TTfpCVnP4ZnqfPCbSlnqR5/V5DTn1z1bwLk/VegxEcOwAeBYPn4
+         R0NiP2wC85C8jlWXlBb4P1Tx4AKyMiHc0Lyp8qpiqmNSR2Er5C9eGGnwSGdfxhpZo80d
+         x+pKrkQ79wjKEHyAfju28iN1RWNQXomxtOfHljtf9ocr0azLpgzlEQndDS8rQBoBaAC+
+         rClZFLIrPnsmea6N6To34jU3HCEruDXWf5MmuTRlO6BLRBvmman4WblxmSmI8GXPZRxs
+         0fyw==
+X-Gm-Message-State: APjAAAWw6wE4eXS+Y3bx5EIOKOlycTONZVHUw0N2GbNaemjy0Amwuzi4
+        ulDegCjaNYTyNAzkYQ3Gf3JKYfg3HwX2qjYktos=
+X-Google-Smtp-Source: APXvYqwZKJSEHahFNopVUM0XNCLRgSdZ263ULw6EoirQNLdhBkJnGI89d2oNHu1aN8Et/1+cJZJbadg/yjCLAQjxwxI=
+X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr77695493otp.189.1564435507068;
+ Mon, 29 Jul 2019 14:25:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <2305283.AStDPdUUnE@kreacher> <c8960d91-4446-9acf-5575-e442a652bd05@gmail.com>
+ <CAGETcx_+i6_0Q2rf-UdzZ3bCPUos9Tu4JmvvO0zUoy5gB8_ESQ@mail.gmail.com>
+In-Reply-To: <CAGETcx_+i6_0Q2rf-UdzZ3bCPUos9Tu4JmvvO0zUoy5gB8_ESQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 29 Jul 2019 23:24:56 +0200
+Message-ID: <CAJZ5v0h5U60yCyaHeHVbWmwWDa4NBnuhgsV022nZm5HuGgV7ow@mail.gmail.com>
+Subject: Re: [PATCH v2] driver core: Remove device link creation limitation
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-1.fc28) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2019-07-29 at 13:03 +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> The variable val is having the top 8 bits cleared and then the
-> variable is being
-> re-assinged and setting just the top 8 bits.  I believe the intention
-> was bitwise-or
-> in the top 8 bits.  Fix this by replacing the = operators with &= and
-> |= instead.
-> 
-> Addresses-Coverity: ("Unused value")
-> Fixes: b0c74b08517e ("drivers: thermal: processor_thermal_device:
-> Export sysfs inteface for TCC offset")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Mon, Jul 29, 2019 at 10:47 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> Rafael,
+>
+> This is the fix you need. Or something link this.
+>
+> I had asked you to reject DL_FLAG_MANAGED as an input flag if you are
+> marking it as internal (in the comments). But looks like you were also
+> trying to check for "undefined" bit positions. However, the check
+> isn't correct because DL_MANAGED_FLAGS doesn't include (rightfully so)
+> DL_FLAG_PM_RUNTIME and DL_FLAG_RPM_ACTIVE .
+>
+> I tried to write a DL_FLAG_EXTERNAL to include all the external flags,
+> but that felt like a maintenance headache that's not worth carrying. I
+> think it's simpler to just error out when internal flags being passed
+> in and ignore any undefined bit positions.
 
-> ---
-> 
-> V2: Add in &= operator missing from V1. Doh.
-> 
-> ---
->  .../thermal/intel/int340x_thermal/processor_thermal_device.c  | 4
-> ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git
-> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> index 6f6ac6a8e82d..97333fc4be42 100644
-> ---
-> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> +++
-> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-> @@ -163,8 +163,8 @@ static int tcc_offset_update(int tcc)
->  	if (err)
->  		return err;
->  
-> -	val = ~GENMASK_ULL(31, 24);
-> -	val = (tcc & 0xff) << 24;
-> +	val &= ~GENMASK_ULL(31, 24);
-> +	val |= (tcc & 0xff) << 24;
->  
->  	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
->  	if (err)
+Well, IMO it is better to prevent people from passing unrecognized
+flags to device_link_add() at all, even if that means some extra
+effort when adding new flags.
 
+I'll post an alternative fix shortly.
