@@ -2,85 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25ED7792D1
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 20:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFA57930F
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jul 2019 20:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387423AbfG2SIm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 29 Jul 2019 14:08:42 -0400
-Received: from lithops.sigma-star.at ([195.201.40.130]:42270 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727482AbfG2SIm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 14:08:42 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id E832A60632C0;
-        Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ehX5VuQgnl7G; Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 70E276083139;
-        Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id XjNoOe8nauWF; Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id D590B608311C;
-        Mon, 29 Jul 2019 20:08:37 +0200 (CEST)
-Date:   Mon, 29 Jul 2019 20:08:37 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Richard Weinberger <richard.weinberger@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        id S2387697AbfG2SbF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 14:31:05 -0400
+Received: from mxwww.masterlogin.de ([95.129.51.170]:34404 "EHLO
+        mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387573AbfG2SbF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 14:31:05 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 14:31:03 EDT
+Received: from mxout1.routing.net (unknown [192.168.10.81])
+        by backup.mxwww.masterlogin.de (Postfix) with ESMTPS id E60D72C41E;
+        Mon, 29 Jul 2019 18:16:19 +0000 (UTC)
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.253])
+        by mxout1.routing.net (Postfix) with ESMTP id C9DC743E4E;
+        Mon, 29 Jul 2019 18:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=dkim; t=1564424174; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HP6trMB9va7UVgbWclPeNJtnCBo+M1pqC/xaYjKxvj8=;
+        b=sm+KrCEUw+eAxXAsg/LcgF3MQTCbRVLNqKsuxtH5m8fYpSZWdaXQCQ/KPJ7vK5JYq1JR8F
+        oBeNmeY7VC5uTNpp+UVWvnXAu8LjpojxVF3JwQWgv7ieQg5e+fWpX/2UdpF/MvEyliNoiW
+        r1m9nL5PR+zxy0ff3ItRqhSzBj5pNiE=
+Received: from [192.168.0.21] (fttx-pool-185.76.97.79.bambit.de [185.76.97.79])
+        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 7DC8D405D3;
+        Mon, 29 Jul 2019 20:16:13 +0200 (CEST)
+Subject: Re: [PATCH v3 00/10] implement poweroff for mt6323 / bpi-r2
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allison Randal <allison@lohutok.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
         Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, od@zcrc.me,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        dmaengine@vger.kernel.org, Artur Rojek <contact@artur-rojek.eu>
-Message-ID: <339409106.53616.1564423717793.JavaMail.zimbra@nod.at>
-In-Reply-To: <1564419921.1759.1@crapouillou.net>
-References: <20190725220215.460-1-paul@crapouillou.net> <CAFLxGvyi0+0E3M12A7cRoHfEKd8-7Yr8EMG9J=2XcjCxPWY5pA@mail.gmail.com> <1564419921.1759.1@crapouillou.net>
-Subject: Re: [PATCH 00/11] JZ4740 SoC cleanup
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Tianping . Fang" <tianping.fang@mediatek.com>
+References: <20190729174154.4335-1-frank-w@public-files.de>
+From:   Frank Wunderlich <frank@fw-web.de>
+Message-ID: <e1274024-b67c-3d04-50d3-f6fcd3b3cbe6@fw-web.de>
+Date:   Mon, 29 Jul 2019 20:16:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF60 (Linux)/8.8.12_GA_3809)
-Thread-Topic: JZ4740 SoC cleanup
-Thread-Index: pyW9XJwx/g8VXIVrZC/ODWU++joHAw==
+In-Reply-To: <20190729174154.4335-1-frank-w@public-files.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
------ Ursprüngliche Mail -----
->> Was this series tested with the Ben Nanonote device?
->> I have one of these and from time to time I upgrade the kernel on it.
-> 
-> Yes! Artur (Cc'd) tested it.
-> 
-> You can test it yourself, after merging this patchset with:
-> https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/slave-dma.git
-> branch next,
-> git://git.freedesktop.org/git/drm-misc branch drm-misc-next.
-> 
-> These will be in 5.4-rc1.
+Hi,
 
-Awesome! Thanks a lot for cleaning this up.
+sorry about missing part 9+10, my mail-provider blocks the mails, 
+currently i cannot send with this account
 
-Thanks,
-//richard
+i try sending with another
+
+regards Frank
