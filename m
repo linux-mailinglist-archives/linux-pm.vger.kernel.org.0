@@ -2,176 +2,437 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 838737B5E5
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 00:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF4A7B5E9
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 00:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726394AbfG3WyD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 18:54:03 -0400
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:42495 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbfG3WyD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 18:54:03 -0400
-Received: by mail-qt1-f201.google.com with SMTP id x1so59933305qts.9
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 15:54:03 -0700 (PDT)
+        id S1726440AbfG3Wz0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 18:55:26 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:44787 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726016AbfG3Wz0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 18:55:26 -0400
+Received: by mail-lf1-f67.google.com with SMTP id r15so28957359lfm.11
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 15:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=R0JVGOkQwLlFihmKcCgicUJ0hNgc0t9L8L2hrWLxGhI=;
-        b=cyFn2M0UOi/5de2AIh7Z0rxfDIaF65v/DKUYrGKgZahY0nh0GxlpgMLhIRLn37FkG9
-         mlphLss5qJzjnE9eW25MnJTDN54hmf6ky8a6e2/62mAcyNRNiXfOBZFJsn+z5duIghCJ
-         iOpuLRxoSWD8Oept37t/FEECF3xV6GoX3iYi7AVMRPXil1lpmMB9ETR5fa/iqK0csaAl
-         0tEnsy4DqZ7RXltAY9x/AvGm9sLowVERoIH+VYbY0O8FY3YmlEbVxMo14bV2WcY39b+2
-         QmT2f/Asklv3fdDAGMZrdrZs9mpHYwni8t7cLkCR6a3ogyHhF8/xHLLV2lOkbeR7SV5z
-         w2Vg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HuxacadCKeWEKqWWz9RqubYvlMjn7xoCg6JlJ2blDyM=;
+        b=ATyahzvYUmfJmfke4/0o+vZFaFO5T+Pqk00mtTrEoeiYP6s2PRLR/UbctKEbnlkqSf
+         vfjEONIULNau/ADeCCLOaWiTkDNP3JC7rmiUbFT2xS35uYgaqC2g8/VBBAGpsJcMb0Dn
+         tqmeqKdOzQ+KjLVeOVzSmT5oEBm1p6/IrjotI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=R0JVGOkQwLlFihmKcCgicUJ0hNgc0t9L8L2hrWLxGhI=;
-        b=O8L8jnC2NJwX9Ro1jaL43HHoRMquvCGgMt+xSm5gqB4b7lqaw7RSQ0faiZYHiUt9XI
-         4FiUNPdq3jiDkyTmUFr8u9i3G6flPetygNs29wMHMpC7P9HCv9k4ZhSdEpA+gSV2r6LY
-         b0J+mKuQYzYkjbvvqg5wcdCa1ezzJaf0O/ejHvJOKWNwTBgsLWHof5h9wC/3uMMqiWvD
-         8ZMtebHWr97WtNRS5lbHhDLQEQAqoGY62xA3u6tWLaMHdk/7ExoJpjzVP2YdKSJ7KrUP
-         /xutdsMzjGMHkJsmhQgSW5JgyjmivyL9+n3YX7oHFHYHO1vEH4LVwcwR25jhRgQJJbn2
-         1B+Q==
-X-Gm-Message-State: APjAAAXNpO1/QDg57hnagZQQKuyhH+JafgXp6HDSQqI5RkxIF9IwVnXK
-        GnMb39jsjG85rC9Nj42iOFsyckpsZAvyItlrHA==
-X-Google-Smtp-Source: APXvYqxWqVNHp1EVqXYHvG4vL2AyDQ+o5xOQUG6C1tZwNnMOYl6ICpAa1caoZqDprfudm3UIFGBxlIXvMTbYp0N3lQ==
-X-Received: by 2002:a0c:9890:: with SMTP id f16mr85244695qvd.165.1564527242501;
- Tue, 30 Jul 2019 15:54:02 -0700 (PDT)
-Date:   Tue, 30 Jul 2019 15:52:28 -0700
-Message-Id: <20190730225228.126044-1-kaleshsingh@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
-Subject: [PATCH] PM/sleep: Expose suspend stats in sysfs
-From:   Kalesh Singh <kaleshsingh@google.com>
-To:     rjw@rjwysocki.net, gregkh@linuxfoundation.org
-Cc:     trong@google.com, trong@android.com, sspatil@google.com,
-        hridya@google.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Kalesh Singh <kaleshsingh@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HuxacadCKeWEKqWWz9RqubYvlMjn7xoCg6JlJ2blDyM=;
+        b=kmlTNxW2tqsCI5z10eH9I4wGNBnP7qmEgfw27xPsTAZWD7kT6r2Nrfy96ZNyY4tRiL
+         8d3Hv0QdDEAc8+UdezaKdLK3CnynsV261MnmXIli7A7tqUqKXLHKnoxIut6nF+0hTxfi
+         jpoaZhxHHHdpI+nQqS7d6b/H5OggL54XjnCGqWJ0yYqID19uz/iO9qFsW1VYvdfsWxWA
+         x0ShX+J3FMGY6Qt+Zq4qEvK+e+0jTcG+jLMKKFj5OAyemfvsLc5oXN2QWSXWCBuoVUpc
+         /ZPNRjZ5GgGQmAmnNshtWNzGpYzCFZ+9o1NmJUZAslnxyJYyZ43gjFbARdF8onlq6bKQ
+         sJtw==
+X-Gm-Message-State: APjAAAUpfBKm489TOhTGo3irKLj7W/7VlW1xkSixzoH0aKzu9f8GbPjd
+        8inzUac3qeul76iVdKaxoe+PlT6ivJk=
+X-Google-Smtp-Source: APXvYqwk5ZwAA7E4SPcQ/xPvxgZfqnUj/2tkRnrils+KViIBITPxIey3Gfh9ioEo195qvDUN3C959w==
+X-Received: by 2002:a19:c6d4:: with SMTP id w203mr56401474lff.135.1564527322759;
+        Tue, 30 Jul 2019 15:55:22 -0700 (PDT)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id j3sm11436307lfp.34.2019.07.30.15.55.21
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Jul 2019 15:55:21 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id p17so63684904ljg.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 15:55:21 -0700 (PDT)
+X-Received: by 2002:a2e:2bd3:: with SMTP id r80mr63477163ljr.23.1564527321106;
+ Tue, 30 Jul 2019 15:55:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190618091724.28232-1-georgi.djakov@linaro.org>
+ <20190618091724.28232-3-georgi.djakov@linaro.org> <CAE=gft7=ZbK3ARtWyv8n_hWJ4kuXRs0UA0QsE420pqL8R1quUQ@mail.gmail.com>
+ <05d9fea0-c040-d609-38bf-11cddbe6aa4d@codeaurora.org> <CAE=gft4pQXyCdRsMkN7Xs-R5HU=2baYhCPqSsw=uqOfT+hTJDg@mail.gmail.com>
+ <1fa30512-a0aa-dcc1-4160-778100a03e7c@codeaurora.org>
+In-Reply-To: <1fa30512-a0aa-dcc1-4160-778100a03e7c@codeaurora.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 30 Jul 2019 15:54:43 -0700
+X-Gmail-Original-Message-ID: <CAE=gft5_ZNUd7WC3c6t59Dwg32jeapvPFLxnESt143SaLqdO3g@mail.gmail.com>
+Message-ID: <CAE=gft5_ZNUd7WC3c6t59Dwg32jeapvPFLxnESt143SaLqdO3g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add tagging and wake/sleep
+ support for sdm845
+To:     David Dai <daidavid1@codeaurora.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        amit.kucheria@linaro.org, Doug Anderson <dianders@chromium.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Userspace can get suspend stats from the suspend stats debugfs node.
-Since debugfs doesn't have stable ABI, expose suspend stats in
-sysfs under /sys/power/suspend_stats.
+On Thu, Jul 18, 2019 at 10:59 AM David Dai <daidavid1@codeaurora.org> wrote:
+>
+> On 7/16/2019 1:15 PM, Evan Green wrote:
+> > On Mon, Jul 15, 2019 at 4:34 PM David Dai <daidavid1@codeaurora.org> wrote:
+> >> Hi Evan,
+> >>
+> >> Thanks for the continued help in reviewing these patches!
+> > No problem. I want to do more, but haven't found time to do the
+> > prerequisite research before jumping into some of the other
+> > discussions yet.
+> >
+> >> On 7/11/2019 10:06 AM, Evan Green wrote:
+> >>> Hi Georgi and David,
+> >>>
+> >>> On Tue, Jun 18, 2019 at 2:17 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
+> >>>> From: David Dai <daidavid1@codeaurora.org>
+> >>>>
+> >>>> Add support for wake and sleep commands by using a tag to indicate
+> >>>> whether or not the aggregate and set requests fall into execution
+> >>>> state specific bucket.
+> >>>>
+> >>>> Signed-off-by: David Dai <daidavid1@codeaurora.org>
+> >>>> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> >>>> ---
+> >>>>    drivers/interconnect/qcom/sdm845.c | 129 ++++++++++++++++++++++-------
+> >>>>    1 file changed, 98 insertions(+), 31 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
+> >>>> index fb526004c82e..c100aab39415 100644
+> >>>> --- a/drivers/interconnect/qcom/sdm845.c
+> >>>> +++ b/drivers/interconnect/qcom/sdm845.c
+> >>>> @@ -66,6 +66,17 @@ struct bcm_db {
+> >>>>    #define SDM845_MAX_BCM_PER_NODE        2
+> >>>>    #define SDM845_MAX_VCD         10
+> >>>>
+> >>>> +#define QCOM_ICC_BUCKET_AMC            0
+> >>> What is AMC again? Is it the "right now" bucket? Maybe a comment on
+> >>> the meaning of this bucket would be helpful.
+> >> That's correct. Will add a comment for this.
+> >>>> +#define QCOM_ICC_BUCKET_WAKE           1
+> >>>> +#define QCOM_ICC_BUCKET_SLEEP          2
+> >>>> +#define QCOM_ICC_NUM_BUCKETS           3
+> >>>> +#define QCOM_ICC_TAG_AMC               BIT(QCOM_ICC_BUCKET_AMC)
+> >>>> +#define QCOM_ICC_TAG_WAKE              BIT(QCOM_ICC_BUCKET_WAKE)
+> >>>> +#define QCOM_ICC_TAG_SLEEP             BIT(QCOM_ICC_BUCKET_SLEEP)
+> >>>> +#define QCOM_ICC_TAG_ACTIVE_ONLY       (QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE)
+> >>>> +#define QCOM_ICC_TAG_ALWAYS            (QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
+> >>>> +                                        QCOM_ICC_TAG_SLEEP)
+> >>>> +
+> >>>>    /**
+> >>>>     * struct qcom_icc_node - Qualcomm specific interconnect nodes
+> >>>>     * @name: the node name used in debugfs
+> >>>> @@ -75,7 +86,9 @@ struct bcm_db {
+> >>>>     * @channels: num of channels at this node
+> >>>>     * @buswidth: width of the interconnect between a node and the bus
+> >>>>     * @sum_avg: current sum aggregate value of all avg bw requests
+> >>>> + * @sum_avg_cached: previous sum aggregate value of all avg bw requests
+> >>>>     * @max_peak: current max aggregate value of all peak bw requests
+> >>>> + * @max_peak_cached: previous max aggregate value of all peak bw requests
+> >>>>     * @bcms: list of bcms associated with this logical node
+> >>>>     * @num_bcms: num of @bcms
+> >>>>     */
+> >>>> @@ -86,8 +99,10 @@ struct qcom_icc_node {
+> >>>>           u16 num_links;
+> >>>>           u16 channels;
+> >>>>           u16 buswidth;
+> >>>> -       u64 sum_avg;
+> >>>> -       u64 max_peak;
+> >>>> +       u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
+> >>>> +       u64 sum_avg_cached[QCOM_ICC_NUM_BUCKETS];
+> >>>> +       u64 max_peak[QCOM_ICC_NUM_BUCKETS];
+> >>>> +       u64 max_peak_cached[QCOM_ICC_NUM_BUCKETS];
+> >>>>           struct qcom_icc_bcm *bcms[SDM845_MAX_BCM_PER_NODE];
+> >>>>           size_t num_bcms;
+> >>>>    };
+> >>>> @@ -112,8 +127,8 @@ struct qcom_icc_bcm {
+> >>>>           const char *name;
+> >>>>           u32 type;
+> >>>>           u32 addr;
+> >>>> -       u64 vote_x;
+> >>>> -       u64 vote_y;
+> >>>> +       u64 vote_x[QCOM_ICC_NUM_BUCKETS];
+> >>>> +       u64 vote_y[QCOM_ICC_NUM_BUCKETS];
+> >>>>           bool dirty;
+> >>>>           bool keepalive;
+> >>>>           struct bcm_db aux_data;
+> >>>> @@ -555,7 +570,7 @@ inline void tcs_cmd_gen(struct tcs_cmd *cmd, u64 vote_x, u64 vote_y,
+> >>>>                   cmd->wait = true;
+> >>>>    }
+> >>>>
+> >>>> -static void tcs_list_gen(struct list_head *bcm_list,
+> >>>> +static void tcs_list_gen(struct list_head *bcm_list, int bucket,
+> >>>>                            struct tcs_cmd tcs_list[SDM845_MAX_VCD],
+> >>>>                            int n[SDM845_MAX_VCD])
+> >>>>    {
+> >>>> @@ -573,8 +588,8 @@ static void tcs_list_gen(struct list_head *bcm_list,
+> >>>>                           commit = true;
+> >>>>                           cur_vcd_size = 0;
+> >>>>                   }
+> >>>> -               tcs_cmd_gen(&tcs_list[idx], bcm->vote_x, bcm->vote_y,
+> >>>> -                           bcm->addr, commit);
+> >>>> +               tcs_cmd_gen(&tcs_list[idx], bcm->vote_x[bucket],
+> >>>> +                           bcm->vote_y[bucket], bcm->addr, commit);
+> >>>>                   idx++;
+> >>>>                   n[batch]++;
+> >>>>                   /*
+> >>>> @@ -595,32 +610,39 @@ static void tcs_list_gen(struct list_head *bcm_list,
+> >>>>
+> >>>>    static void bcm_aggregate(struct qcom_icc_bcm *bcm)
+> >>>>    {
+> >>>> -       size_t i;
+> >>>> -       u64 agg_avg = 0;
+> >>>> -       u64 agg_peak = 0;
+> >>>> +       size_t i, bucket;
+> >>>> +       u64 agg_avg[QCOM_ICC_NUM_BUCKETS] = {0};
+> >>>> +       u64 agg_peak[QCOM_ICC_NUM_BUCKETS] = {0};
+> >>>>           u64 temp;
+> >>>>
+> >>>> -       for (i = 0; i < bcm->num_nodes; i++) {
+> >>>> -               temp = bcm->nodes[i]->sum_avg * bcm->aux_data.width;
+> >>>> -               do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
+> >>>> -               agg_avg = max(agg_avg, temp);
+> >>>> +       for (bucket = 0; bucket < QCOM_ICC_NUM_BUCKETS; bucket++) {
+> >>>> +               for (i = 0; i < bcm->num_nodes; i++) {
+> >>>> +                       temp = bcm->nodes[i]->sum_avg_cached[bucket] * bcm->aux_data.width;
+> >>>> +                       do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
+> >>>> +                       agg_avg[bucket] = max(agg_avg[bucket], temp);
+> >>>>
+> >>>> -               temp = bcm->nodes[i]->max_peak * bcm->aux_data.width;
+> >>>> -               do_div(temp, bcm->nodes[i]->buswidth);
+> >>> Why is it that this one doesn't have the multiply by
+> >>> bcm->nodes[i]->channels again? I can't recall if there was a reason.
+> >>> If it's correct maybe it deserves a comment.
+> >> I think the rationale behind this is generally for consumers to target a
+> >> certain minimum threshold to satisfy some structural latency
+> >> requirements as opposed to strictly throughput, and it may be easier for
+> >> consumers to reuse certain values to support hitting some minimum NoC
+> >> frequencies without having to be concerned with the number of channels
+> >> that may change from platform to platform.
+> > I was mostly pointing out that sum_avg seems to have the multiply, but
+> > max_peak does not. I would have expected those two things to be of the
+> > same units, and get the same treatment. Maybe the hardware is taking
+> > in different final units for that field, one that is per-channel and
+> > one that isn't?
+>
+> The hardware isn't treating the values differently. I couldn't find any
+> justification other than the intuition mentioned above for the ease of
+> voting from the consumer perspective. The consumer would know that this
+> peak_bw value results in some floor performance from the system to
+> satisfy its latency requirements. The same approach would work if we
+> accounted for the number of channels as well, but given that channels
+> may vary from platform to platform or even on the same platform that
+> shares multiple channel configurations(DDR), it can be difficult for
+> consumers to keep track of and have to adjust their votes constantly(to
+> try to hit some frequency/latency requirement, this intuition doesn't
+> apply for avg_bw since we're concerned with throughput in that case).
+>
+> >>>> -               agg_peak = max(agg_peak, temp);
+> >>>> -       }
+> >>>> +                       temp = bcm->nodes[i]->max_peak_cached[bucket] * bcm->aux_data.width;
+> >>>> +                       do_div(temp, bcm->nodes[i]->buswidth);
+> >>>> +                       agg_peak[bucket] = max(agg_peak[bucket], temp);
+> >>>>
+> >>>> -       temp = agg_avg * 1000ULL;
+> >>>> -       do_div(temp, bcm->aux_data.unit);
+> >>>> -       bcm->vote_x = temp;
+> >>>> +                       bcm->nodes[i]->sum_avg[bucket] = 0;
+> >>>> +                       bcm->nodes[i]->max_peak[bucket] = 0;
+> >>> I don't understand the sum_avg vs sum_avg_cached. Here's what I understand:
+> >>> 1. qcom_icc_aggregate() does the math from the incoming values on
+> >>> sum_avg, and then clobbers sum_avg_cached with those values.
+> >>> 2. bcm_aggregate() uses sum_avg_cached in its calculations, then clears sum_avg.
+> >>>
+> >>> But I don't get why that's needed. Why not just have sum_avg? Wouldn't
+> >>> it work the same? Ok, it wouldn't if you ended up calling
+> >>> bcm_aggregate() multiple times on the same bcm. But you have a dirty
+> >>> flag that prevents this from happening. So I think it's safe to remove
+> >>> the cached arrays, and just clear out the sum_avg when you aggregate.
+> >> You are correct in that the dirty flag would prevent another repeat of
+> >> the bcm_aggregate() call in the same icc_set request. But consider a
+> >> following icc_set request on a different node that shares the same BCM,
+> >> the next bcm_aggregate() would result in an incorrect aggregate sum_avg
+> >> for the BCM since the avg_sum from the previous node(from the previous
+> >> icc_set) was cleared out. We need a way to retain the current state of
+> >> all nodes to accurately aggregate the bw values for the BCM.
+> > I don't get it. qcom_icc_aggregate() clobbers sum_avg_cached. So
+> > they're only ever a) equal, like after qcom_icc_aggregate(), or b)
+> > sum_avg is zeroed, and sum_avg_cached is its old value. A new
+> > icc_set_bw() would call aggregate_requests(), which would clobber
+> > sum_avg_cached to sum_avg for every BCM involved. Then the core would
+> > call apply_constraints(), then qcom_icc_set(), which would use
+> > sum_avg_cached, and clear out sum_avg, being sure with the dirty flag
+> > that bcm_aggregate() is only called once per BCM. This all happens
+> > under the mutex held in the core. A new request would start the whole
+> > thing over, since sum_avg is cleared. It seems to me that flow would
+> > work the same with one array as it does with two. Maybe you can walk
+> > me through a scenario?
+> > -Evan
+>
+> Let's walk through the scenario you've just described with the
+> assumption that there's only one avg_sum value per node with two
+> icc_set_bw() requests on two different nodes(say 2MB for node 1 and 1MB
+> for node 2) under the same BCM(say BCM A). The first
+> qcom_icc_aggregate() aggregates to a 2MB avg_sum at the node1 followed
+> by apply_constraints(), qcom_icc_set(), bcm_aggregate() which causes BCM
+> A to aggregate to max(node1->avg_sum, node2->avg_sum) and reach a vote_x
+> of 2MB(for simplicity let's ignore unit). We then clear out
+> node1->avg_sum before we start the next icc_set_bw(). In the following
+> icc_set_bw(), the qcom_icc_aggregate() aggregates to 1MB in node2
+> followed by apply_constraints(), qcom_icc_set(), bcm_aggregate(), but
+> now incorrectly aggregates BCM A to 1MB by looking at
+> max(node1->avg_sum, node2->avg_sum) because node1->avg_sum was cleared
+> out when in reality BCM A should have a vote_x value of 2MB at this
+> point. The subsequent bcm_aggregate do not re-aggregate all of the
+> requests for each of its nodes, but assumes that the aggregated results
+> at the nodes are correct.
 
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
----
- kernel/power/main.c | 77 +++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 75 insertions(+), 2 deletions(-)
+Ah, I finally get it. Thanks for the detailed explanation. It's pretty
+confusing that there are essentially two connected graphs laid on top
+of each other, one graph consisting of nodes the framework deals with,
+and another graph that groups those nodes together into BCMs. I was
+failing to understand that bcm_aggregate loops over nodes that have
+nothing to do with the current request, and so it needs to remember
+the old totals from former requests. You've got the two arrays
+basically to differentiate between "add together all requests for this
+node", and "max all nodes into a BCM", since you need to reset sum_avg
+at the start of the first call to qcom_icc_aggregate().
 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index bdbd605c4215..2a0edfcd50dc 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -254,7 +254,6 @@ static ssize_t pm_test_store(struct kobject *kobj, struct kobj_attribute *attr,
- power_attr(pm_test);
- #endif /* CONFIG_PM_SLEEP_DEBUG */
- 
--#ifdef CONFIG_DEBUG_FS
- static char *suspend_step_name(enum suspend_stat_step step)
- {
- 	switch (step) {
-@@ -275,6 +274,72 @@ static char *suspend_step_name(enum suspend_stat_step step)
- 	}
- }
- 
-+#define suspend_attr(_name)						\
-+static ssize_t _name##_show(struct kobject *kobj,			\
-+		struct kobj_attribute *attr, char *buf)			\
-+{									\
-+	int index;							\
-+	enum suspend_stat_step step;					\
-+	char *last_failed_stat = NULL;					\
-+									\
-+	if (strcmp(attr->attr.name, "last_failed_dev") == 0) {		\
-+		index = suspend_stats._name + REC_FAILED_NUM - 1;	\
-+		index %= REC_FAILED_NUM;				\
-+		last_failed_stat = suspend_stats.failed_devs[index];	\
-+		return sprintf(buf, "%s\n", last_failed_stat);		\
-+	} else if (strcmp(attr->attr.name, "last_failed_step") == 0) {	\
-+		index = suspend_stats._name + REC_FAILED_NUM - 1;	\
-+		index %= REC_FAILED_NUM;				\
-+		step = suspend_stats.failed_steps[index];		\
-+		last_failed_stat = suspend_step_name(step);		\
-+		return sprintf(buf, "%s\n", last_failed_stat);		\
-+	} else if (strcmp(attr->attr.name, "last_failed_errno") == 0) {	\
-+		index = suspend_stats._name + REC_FAILED_NUM - 1;	\
-+		index %= REC_FAILED_NUM;				\
-+		return sprintf(buf, "%d\n", suspend_stats.errno[index]);\
-+	}								\
-+									\
-+	return sprintf(buf, "%d\n", suspend_stats._name);		\
-+}									\
-+static struct kobj_attribute _name = __ATTR_RO(_name)
-+
-+suspend_attr(success);
-+suspend_attr(fail);
-+suspend_attr(failed_freeze);
-+suspend_attr(failed_prepare);
-+suspend_attr(failed_suspend);
-+suspend_attr(failed_suspend_late);
-+suspend_attr(failed_suspend_noirq);
-+suspend_attr(failed_resume);
-+suspend_attr(failed_resume_early);
-+suspend_attr(failed_resume_noirq);
-+suspend_attr(last_failed_dev);
-+suspend_attr(last_failed_errno);
-+suspend_attr(last_failed_step);
-+
-+static struct attribute *suspend_attrs[] = {
-+	&success.attr,
-+	&fail.attr,
-+	&failed_freeze.attr,
-+	&failed_prepare.attr,
-+	&failed_suspend.attr,
-+	&failed_suspend_late.attr,
-+	&failed_suspend_noirq.attr,
-+	&failed_resume.attr,
-+	&failed_resume_early.attr,
-+	&failed_resume_noirq.attr,
-+	&last_failed_dev.attr,
-+	&last_failed_errno.attr,
-+	&last_failed_step.attr,
-+	NULL,
-+};
-+
-+static struct attribute_group suspend_attr_group = {
-+	.name = "suspend_stats",
-+	.attrs = suspend_attrs,
-+};
-+
-+#ifdef CONFIG_DEBUG_FS
- static int suspend_stats_show(struct seq_file *s, void *unused)
- {
- 	int i, index, last_dev, last_errno, last_step;
-@@ -794,6 +859,14 @@ static const struct attribute_group attr_group = {
- 	.attrs = g,
- };
- 
-+static const struct attribute_group *attr_groups[] = {
-+	&attr_group,
-+#ifdef CONFIG_PM_SLEEP
-+	&suspend_attr_group,
-+#endif
-+	NULL,
-+};
-+
- struct workqueue_struct *pm_wq;
- EXPORT_SYMBOL_GPL(pm_wq);
- 
-@@ -815,7 +888,7 @@ static int __init pm_init(void)
- 	power_kobj = kobject_create_and_add("power", NULL);
- 	if (!power_kobj)
- 		return -ENOMEM;
--	error = sysfs_create_group(power_kobj, &attr_group);
-+	error = sysfs_create_groups(power_kobj, attr_groups);
- 	if (error)
- 		return error;
- 	pm_print_times_init();
--- 
-2.22.0.770.g0f2c4a37fd-goog
+I had suggested a callback in the core earlier to tell the providers
+"I'm about to start aggregating on these nodes", which would have
+allowed you to clear sum_avg in that callback and reduce down to one
+array. IMO that's a lot easier to understand than these double arrays,
+but maybe it's just me that gets confused.
 
+Why do we bother with the individual nodes at all, why don't we just
+build a graph out of the BCMs themselves and pass that to the
+framework? I guess you can't do that because of .channels and
+.bus_width, you wouldn't know what to multiply/divide by to translate
+to a vote value? Hm... it would be great to make this simpler, but I'm
+out of suggestions for now.
+-Evan
+
+>
+> >
+> >>>> +               }
+> >>>>
+> >>>> -       temp = agg_peak * 1000ULL;
+> >>>> -       do_div(temp, bcm->aux_data.unit);
+> >>>> -       bcm->vote_y = temp;
+> >>>> +               temp = agg_avg[bucket] * 1000ULL;
+> >>>> +               do_div(temp, bcm->aux_data.unit);
+> >>>> +               bcm->vote_x[bucket] = temp;
+> >>>>
+> >>>> -       if (bcm->keepalive && bcm->vote_x == 0 && bcm->vote_y == 0) {
+> >>>> -               bcm->vote_x = 1;
+> >>>> -               bcm->vote_y = 1;
+> >>>> +               temp = agg_peak[bucket] * 1000ULL;
+> >>>> +               do_div(temp, bcm->aux_data.unit);
+> >>>> +               bcm->vote_y[bucket] = temp;
+> >>>> +       }
+> >>>> +
+> >>>> +       if (bcm->keepalive && bcm->vote_x[0] == 0 && bcm->vote_y[0] == 0) {
+> >>>> +               bcm->vote_x[QCOM_ICC_BUCKET_AMC] = 1;
+> >>>> +               bcm->vote_x[QCOM_ICC_BUCKET_WAKE] = 1;
+> >>>> +               bcm->vote_y[QCOM_ICC_BUCKET_AMC] = 1;
+> >>>> +               bcm->vote_y[QCOM_ICC_BUCKET_WAKE] = 1;
+> >>>>           }
+> >>>>
+> >>>>           bcm->dirty = false;
+> >>>> @@ -631,15 +653,25 @@ static int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+> >>>>    {
+> >>>>           size_t i;
+> >>>>           struct qcom_icc_node *qn;
+> >>>> +       unsigned long tag_word = (unsigned long)tag;
+> >>>>
+> >>>>           qn = node->data;
+> >>>>
+> >>>> +       if (!tag)
+> >>>> +               tag_word = QCOM_ICC_TAG_ALWAYS;
+> >>>> +
+> >>>> +       for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> >>>> +               if (test_bit(i, &tag_word)) {
+> >>> I guess all this extra business with tag_word and casting is so that
+> >>> you can use test_bit, which is presumably a tiny bit faster? Does this
+> >>> actually make a measurable difference? Maybe in the name of simplicity
+> >>> we just do if (tag & BIT(i)), and then optimize if we find that
+> >>> conditional to be a hotspot?
+> >> Using (tag & BIT(i)) as opposed to test_bit seems reasonable to me.
+> >>>> +                       qn->sum_avg[i] += avg_bw;
+> >>>> +                       qn->max_peak[i] = max_t(u32, qn->max_peak[i], peak_bw);
+> >>>> +                       qn->sum_avg_cached[i] = qn->sum_avg[i];
+> >>>> +                       qn->max_peak_cached[i] = qn->max_peak[i];
+> >>>> +               }
+> >>>> +       }
+> >>>> +
+> >>>>           *agg_avg += avg_bw;
+> >>>>           *agg_peak = max_t(u32, *agg_peak, peak_bw);
+> >>>>
+> >>>> -       qn->sum_avg = *agg_avg;
+> >>>> -       qn->max_peak = *agg_peak;
+> >>>> -
+> >>>>           for (i = 0; i < qn->num_bcms; i++)
+> >>>>                   qn->bcms[i]->dirty = true;
+> >>>>
+> >>>> @@ -675,7 +707,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+> >>>>            * Construct the command list based on a pre ordered list of BCMs
+> >>>>            * based on VCD.
+> >>>>            */
+> >>>> -       tcs_list_gen(&commit_list, cmds, commit_idx);
+> >>>> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_AMC, cmds, commit_idx);
+> >>>>
+> >>>>           if (!commit_idx[0])
+> >>>>                   return ret;
+> >>>> @@ -693,6 +725,41 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+> >>>>                   return ret;
+> >>>>           }
+> >>>>
+> >>>> +       INIT_LIST_HEAD(&commit_list);
+> >>>> +
+> >>>> +       for (i = 0; i < qp->num_bcms; i++) {
+> >>>> +               /*
+> >>>> +                * Only generate WAKE and SLEEP commands if a resource's
+> >>>> +                * requirements change as the execution environment transitions
+> >>>> +                * between different power states.
+> >>>> +                */
+> >>>> +               if (qp->bcms[i]->vote_x[QCOM_ICC_BUCKET_WAKE] !=
+> >>>> +                   qp->bcms[i]->vote_x[QCOM_ICC_BUCKET_SLEEP] ||
+> >>>> +                   qp->bcms[i]->vote_y[QCOM_ICC_BUCKET_WAKE] !=
+> >>>> +                   qp->bcms[i]->vote_y[QCOM_ICC_BUCKET_SLEEP]) {
+> >>>> +                       list_add_tail(&qp->bcms[i]->list, &commit_list);
+> >>>> +               }
+> >>>> +       }
+> >>>> +
+> >>>> +       if (list_empty(&commit_list))
+> >>>> +               return ret;
+> >>>> +
+> >>>> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_WAKE, cmds, commit_idx);
+> >>>> +
+> >>>> +       ret = rpmh_write_batch(qp->dev, RPMH_WAKE_ONLY_STATE, cmds, commit_idx);
+> >>>> +       if (ret) {
+> >>>> +               pr_err("Error sending WAKE RPMH requests (%d)\n", ret);
+> >>>> +               return ret;
+> >>>> +       }
+> >>>> +
+> >>>> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_SLEEP, cmds, commit_idx);
+> >>>> +
+> >>>> +       ret = rpmh_write_batch(qp->dev, RPMH_SLEEP_STATE, cmds, commit_idx);
+> >>>> +       if (ret) {
+> >>>> +               pr_err("Error sending SLEEP RPMH requests (%d)\n", ret);
+> >>>> +               return ret;
+> >>>> +       }
+> >>>> +
+> >>>>           return ret;
+> >>>>    }
+> >>>>
+> >> --
+> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> >> a Linux Foundation Collaborative Project
+> >>
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
