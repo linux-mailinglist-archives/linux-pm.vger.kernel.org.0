@@ -2,112 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 895AF79CE4
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 01:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE9E79E6E
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 04:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729346AbfG2Xhz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jul 2019 19:37:55 -0400
-Received: from mga14.intel.com ([192.55.52.115]:18711 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727533AbfG2Xhy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 29 Jul 2019 19:37:54 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Jul 2019 16:37:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,324,1559545200"; 
-   d="scan'208";a="165650561"
-Received: from ahanamuk-mobl.amr.corp.intel.com (HELO [10.251.134.69]) ([10.251.134.69])
-  by orsmga008.jf.intel.com with ESMTP; 29 Jul 2019 16:37:51 -0700
-Subject: Re: [alsa-devel] [RFC PATCH 17/40] soundwire: bus: use
- runtime_pm_get_sync/pm when enabled
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, tiwai@suse.de,
-        gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org, broonie@kernel.org,
-        srinivas.kandagatla@linaro.org, jank@cadence.com,
-        slawomir.blauciak@intel.com, Sanyog Kale <sanyog.r.kale@intel.com>
-References: <20190725234032.21152-1-pierre-louis.bossart@linux.intel.com>
- <20190725234032.21152-18-pierre-louis.bossart@linux.intel.com>
- <45a912c5-134b-8642-70ef-8c1060389300@linux.intel.com>
- <20190726190823.GD9224@smile.fi.intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <5a16d9e6-0a9c-a0a8-3b11-d046247f3879@linux.intel.com>
-Date:   Mon, 29 Jul 2019 17:07:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190726190823.GD9224@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1730962AbfG3CAa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jul 2019 22:00:30 -0400
+Received: from icp-osb-irony-out1.external.iinet.net.au ([203.59.1.210]:61548
+        "EHLO icp-osb-irony-out1.external.iinet.net.au" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725864AbfG3CAa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jul 2019 22:00:30 -0400
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2BABQCWoz9d/1/rO8tmghmECBcTjRq?=
+ =?us-ascii?q?IHgGCQwGJLI8fgXsJAQEBAQEBAQEBGxwBAYQ6BIMTNAkOAQMBAQEEAQEBAQU?=
+ =?us-ascii?q?BbYRlRYV4L3JwEoMigXcTrXkzhAYBhHSBSIE0hwmEboFAP4N1bIQDDRiFfwS?=
+ =?us-ascii?q?MGwqJFG2UUQmBJXeUFhmCLosyii6LY4FYmU44gVhNHxmDJ4JOFxSNVkQ1MI4?=
+ =?us-ascii?q?bAQE?=
+X-IPAS-Result: =?us-ascii?q?A2BABQCWoz9d/1/rO8tmghmECBcTjRqIHgGCQwGJLI8fg?=
+ =?us-ascii?q?XsJAQEBAQEBAQEBGxwBAYQ6BIMTNAkOAQMBAQEEAQEBAQUBbYRlRYV4L3JwE?=
+ =?us-ascii?q?oMigXcTrXkzhAYBhHSBSIE0hwmEboFAP4N1bIQDDRiFfwSMGwqJFG2UUQmBJ?=
+ =?us-ascii?q?XeUFhmCLosyii6LY4FYmU44gVhNHxmDJ4JOFxSNVkQ1MI4bAQE?=
+X-IronPort-AV: E=Sophos;i="5.64,325,1559491200"; 
+   d="scan'208";a="229481622"
+Received: from 203-59-235-95.perm.iinet.net.au (HELO rtcentos7.electromag.com.au) ([203.59.235.95])
+  by icp-osb-irony-out1.iinet.net.au with ESMTP; 30 Jul 2019 10:00:26 +0800
+From:   Richard Tresidder <rtresidd@electromag.com.au>
+To:     sre@kernel.org, enric.balletbo@collabora.com, ncrews@chromium.org,
+        andrew.smirnov@gmail.com, groeck@chromium.org,
+        david@lechnology.com, rtresidd@electromag.com.au,
+        tglx@linutronix.de, kstewart@linuxfoundation.org,
+        gregkh@linuxfoundation.org, rfontana@redhat.com,
+        allison@lohutok.net, baolin.wang@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/1] power/supply/sbs-battery: Fix confusing battery status when idle or empty
+Date:   Tue, 30 Jul 2019 10:00:25 +0800
+Message-Id: <1564452025-12673-1-git-send-email-rtresidd@electromag.com.au>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+When a battery or batteries in a system are in parallel then one or more
+may not be providing any current to the system.
+This fixes an incorrect status indication of FULL for the battery simply
+because it wasn't discharging at that point in time.
+The battery will now be flagged as NOT CHARGING.
+Have also added the additional check for the battery FULL DISCHARGED flag
+which will now flag a status of EMPTY.
 
+Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
+---
 
-On 7/26/19 2:08 PM, Andy Shevchenko wrote:
-> On Fri, Jul 26, 2019 at 01:08:57PM -0500, Pierre-Louis Bossart wrote:
->> This thread became unreadable with interleaved top-posting, allow me restate
->> the options and ask PM folks what they think
->>
->> On 7/25/19 6:40 PM, Pierre-Louis Bossart wrote:
->>> Not all platforms support runtime_pm for now, let's use runtime_pm
->>> only when enabled.
-> 
-> Just a side note below...
-> 
->>> -	ret = pm_runtime_get_sync(slave->bus->dev);
->>> -	if (ret < 0)
-> 
-> Here...
-> 
->>> -		return ret;
->>> +	if (pm_runtime_enabled(slave->bus->dev)) {
->>> +		ret = pm_runtime_get_sync(slave->bus->dev);
->>> +		if (ret < 0)
-> 
-> ...and thus here...
-> 
->>> +			return ret;
->>> +	}
->>>    	ret = sdw_transfer(slave->bus, &msg);
->>> -	pm_runtime_put(slave->bus->dev);
->>> +
->>> +	if (pm_runtime_enabled(slave->bus->dev))
->>> +		pm_runtime_put(slave->bus->dev);
->>
->> This is option1: we explicitly test if pm_runtime is enabled before calling
->> _get_sync() and _put()
->>
->> option2 (suggested by Jan Kotas): catch the -EACCESS error code
->>
->>   	ret = pm_runtime_get_sync(slave->bus->dev);
->> -	if (ret < 0)
->> +	if (ret < 0 && ret != -EACCES)
-> 
-> ...and here, the pm_runtime_put_noidle() call is missed.
+Notes:
+    power/supply/sbs-battery: Fix confusing battery status when idle or empty
+    
+    When a battery or batteries in a system are in parallel then one or more
+    may not be providing any current to the system.
+    This fixes an incorrect status indication of FULL for the battery simply
+    because it wasn't discharging at that point in time.
+    The battery will now be flagged as NOT CHARGING.
+    Have also added the additional check for the battery FULL DISCHARGED flag
+    which will now flag a status of EMPTY.
+    
+    v2: Missed a later merge that should have been included in original patch
+    v3: Refactor the sbs_status_correct function to capture all the states for
+        normal operation rather than being spread across multile functions.
+    v4: Remove unnecessary brackets, rename sbs_status_correct to
+        sbs_correct_battery_status
 
-yes but in the example you provided, they actually do more work than 
-just decrement the device usage counter:
+ drivers/power/supply/power_supply_sysfs.c |  2 +-
+ drivers/power/supply/sbs-battery.c        | 46 ++++++++++++-------------------
+ include/linux/power_supply.h              |  1 +
+ 3 files changed, 19 insertions(+), 30 deletions(-)
 
-static int
-radeonfb_open(struct fb_info *info, int user)
-{
-	struct radeon_fbdev *rfbdev = info->par;
-	struct radeon_device *rdev = rfbdev->rdev;
-	int ret = pm_runtime_get_sync(rdev->ddev->dev);
-	if (ret < 0 && ret != -EACCES) {
-		pm_runtime_mark_last_busy(rdev->ddev->dev);
-		pm_runtime_put_autosuspend(rdev->ddev->dev);
-		return ret;
-	}
-	return 0;
-}
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index f37ad4e..305e833 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -51,7 +51,7 @@
+ };
+ 
+ static const char * const power_supply_status_text[] = {
+-	"Unknown", "Charging", "Discharging", "Not charging", "Full"
++	"Unknown", "Charging", "Discharging", "Not charging", "Full", "Empty"
+ };
+ 
+ static const char * const power_supply_charge_type_text[] = {
+diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+index 048d205..3ed70d4 100644
+--- a/drivers/power/supply/sbs-battery.c
++++ b/drivers/power/supply/sbs-battery.c
+@@ -283,7 +283,7 @@ static int sbs_write_word_data(struct i2c_client *client, u8 address,
+ 	return 0;
+ }
+ 
+-static int sbs_status_correct(struct i2c_client *client, int *intval)
++static int sbs_correct_battery_status(struct i2c_client *client, int *status)
+ {
+ 	int ret;
+ 
+@@ -293,16 +293,18 @@ static int sbs_status_correct(struct i2c_client *client, int *intval)
+ 
+ 	ret = (s16)ret;
+ 
+-	/* Not drawing current means full (cannot be not charging) */
+-	if (ret == 0)
+-		*intval = POWER_SUPPLY_STATUS_FULL;
+-
+-	if (*intval == POWER_SUPPLY_STATUS_FULL) {
+-		/* Drawing or providing current when full */
+-		if (ret > 0)
+-			*intval = POWER_SUPPLY_STATUS_CHARGING;
+-		else if (ret < 0)
+-			*intval = POWER_SUPPLY_STATUS_DISCHARGING;
++	if (ret > 0)
++		*status = POWER_SUPPLY_STATUS_CHARGING;
++	else if (ret < 0)
++		*status = POWER_SUPPLY_STATUS_DISCHARGING;
++	else {
++		/* Current is 0, so how full is the battery? */
++		if (*status & BATTERY_FULL_CHARGED)
++			*status = POWER_SUPPLY_STATUS_FULL;
++		else if (*status & BATTERY_FULL_DISCHARGED)
++			*status = POWER_SUPPLY_STATUS_EMPTY;
++		else
++			*status = POWER_SUPPLY_STATUS_NOT_CHARGING;
+ 	}
+ 
+ 	return 0;
+@@ -421,14 +423,9 @@ static int sbs_get_battery_property(struct i2c_client *client,
+ 			return 0;
+ 		}
+ 
+-		if (ret & BATTERY_FULL_CHARGED)
+-			val->intval = POWER_SUPPLY_STATUS_FULL;
+-		else if (ret & BATTERY_DISCHARGING)
+-			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
+-		else
+-			val->intval = POWER_SUPPLY_STATUS_CHARGING;
+-
+-		sbs_status_correct(client, &val->intval);
++		ret = sbs_correct_battery_status(client, &val->intval);
++		if (ret < 0)
++			return ret;
+ 
+ 		if (chip->poll_time == 0)
+ 			chip->last_state = val->intval;
+@@ -773,20 +770,11 @@ static void sbs_delayed_work(struct work_struct *work)
+ 
+ 	ret = sbs_read_word_data(chip->client, sbs_data[REG_STATUS].addr);
+ 	/* if the read failed, give up on this work */
+-	if (ret < 0) {
++	if (ret < 0 || sbs_correct_battery_status(chip->client, &ret) < 0) {
+ 		chip->poll_time = 0;
+ 		return;
+ 	}
+ 
+-	if (ret & BATTERY_FULL_CHARGED)
+-		ret = POWER_SUPPLY_STATUS_FULL;
+-	else if (ret & BATTERY_DISCHARGING)
+-		ret = POWER_SUPPLY_STATUS_DISCHARGING;
+-	else
+-		ret = POWER_SUPPLY_STATUS_CHARGING;
+-
+-	sbs_status_correct(chip->client, &ret);
+-
+ 	if (chip->last_state != ret) {
+ 		chip->poll_time = 0;
+ 		power_supply_changed(chip->power_supply);
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 28413f7..8fb10ec 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -37,6 +37,7 @@ enum {
+ 	POWER_SUPPLY_STATUS_DISCHARGING,
+ 	POWER_SUPPLY_STATUS_NOT_CHARGING,
+ 	POWER_SUPPLY_STATUS_FULL,
++	POWER_SUPPLY_STATUS_EMPTY,
+ };
+ 
+ /* What algorithm is the charger using? */
+-- 
+1.8.3.1
 
-unless I am missing something pm_runtime_put_noidle() and 
-_put_autosuspend() are not equivalent, are they?
