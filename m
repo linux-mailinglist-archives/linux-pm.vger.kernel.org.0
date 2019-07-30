@@ -2,154 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CF87AFE6
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A8C7B06F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729103AbfG3R3i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 13:29:38 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:43442 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728935AbfG3R3i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 13:29:38 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 468726037C; Tue, 30 Jul 2019 17:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564507777;
-        bh=E7jANAXXkajQa6C5PUztGcfWtG5q4XzpnhfVwCjYX9E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dgl4wrJMPHWyja+Qb8FeMv3prWlJBX1WSvlSbxBO2TrB5kp8ROUSHAvd7yaaLyFZs
-         oe21hvwDdwUpgSDts/iPwTSmUGTTmK1fAsW9w1d110lJ6BQ5bI/tkTcpYEM67updlO
-         tFfEoB7YYp1Xr/Kdp5CzGsAHF9Nxagkdf4NHZxZY=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0678F602BC;
-        Tue, 30 Jul 2019 17:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564507776;
-        bh=E7jANAXXkajQa6C5PUztGcfWtG5q4XzpnhfVwCjYX9E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VpmDr2ipp6AByTDQOLnlZBeRmVtl3lmYmYIQjWu9DWjJNPQVo+roHb0j+5s/THjoh
-         8KaLpJ+xwwF88ubJqNBr5wHKsCiTRzu/N3cM8NkLLS9GdLc0ct0HwKURiLVgVvapXC
-         KuL4JJQ/mocvPY35hZeyzZ5CGgnaBZK2aqTFdJ0M=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0678F602BC
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Tue, 30 Jul 2019 11:29:35 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, mkshah@codeaurora.org
-Subject: Re: [PATCH V2 2/4] drivers: qcom: rpmh-rsc: avoid locking in the
- interrupt handler
-Message-ID: <20190730172935.GJ18620@codeaurora.org>
-References: <20190722215340.3071-2-ilina@codeaurora.org>
- <5d3769df.1c69fb81.55d03.aa33@mx.google.com>
- <20190724145251.GB18620@codeaurora.org>
- <5d38b38e.1c69fb81.e8e5d.035b@mx.google.com>
- <20190724203610.GE18620@codeaurora.org>
- <CAD=FV=UYj55m99EcQXmkYhs257A46x8DaarE0DC-GRF_3dY3-Q@mail.gmail.com>
- <20190725151851.GG18620@codeaurora.org>
- <CAD=FV=X2ENqt5+vdUoRnLTRbedj_sFdQD3Me-yYEW0fDOdBCvg@mail.gmail.com>
- <20190729190139.GH18620@codeaurora.org>
- <5d3f5d6d.1c69fb81.4c1e2.5be6@mx.google.com>
+        id S1730810AbfG3Rnq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 13:43:46 -0400
+Received: from mail-eopbgr680132.outbound.protection.outlook.com ([40.107.68.132]:37763
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726432AbfG3Rnp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Jul 2019 13:43:45 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NHKJ6MBBxAKF2whOmS5Bk+w3OAIwjjgysjlr6J1nJOVUseyb4tG85iGdf/0/Xq1fderjhEdjjcRgEgfKWY48KVrA593Y2nr3Ib0OQkkgwEloRIl3ukjGFRGgFxFNlAdfRLrLgES94xso8iDtqmJMCpeabckHya7EblYqjWwcGefS1oH/01ODc2Hh97AJDsMTeHGKOJ0A2zREuIVjc5t5AO4n/qxV9loso+thEoDcqoYQnL8KVmP8ihT+F49H4gQiqGnW7ipQtR/v9r9Gqbg4TczjBwEi+VopmlvhvO0JmkNol3ik4t7d4zToNGgAkVGArLjEaaoz8DqcqohU9vvnVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LeuDWkU/r6uI1NbxsCKBz6y/i7szA6zYECYktHMV9VE=;
+ b=LGSDOMsaddMIttFo5j3EHF8MTIyydjwGuFL7Cv3fCBXZEd4pxlYK+MgVtVJZGnn4radjSC7ZjSiW3uQTDXkPi92TebjCuBBz/Ohs+Lpw5+WZSXBulLhUpWvDm7WE75zXXlwUFL3Xfr/kZZmFJBZQuWa5XOQXDnSn4fV7pn2/ZOoliy/9C5VqCI5TVMVn8+ObIJEWP1X2ITijYN64152DTAhAG2JYDheIhVUOp4ln98vYnAci9+jWXZ02TT9XLl07u/TDY95atyRJv/w6Kuujsbxi/+K3Ua1qu8tCcDpyKggYZEx+pdK71kzeT7J6Srg26uM5ZqIbocDrS0oaHlqjzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=wavecomp.com;dmarc=pass action=none
+ header.from=mips.com;dkim=pass header.d=mips.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LeuDWkU/r6uI1NbxsCKBz6y/i7szA6zYECYktHMV9VE=;
+ b=i7SNH2BmvkwNKet+lwUtURmZlSwqXCIdAZHVCKHrdDhRPt+/xdKsdYyPW7r1VTcH1DPJCc0V2O6BlkUaULPeyE1OnsieiS8jzeKE6eFBC2r2HbQVMDrAb7S0HyuZJTuD5t1gVQze/a92AUjC+qyt7XpERloQWlvSnusZCNgSgjI=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1088.namprd22.prod.outlook.com (10.174.169.150) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2115.15; Tue, 30 Jul 2019 17:43:39 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::105a:1595:b6ef:cbdf]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::105a:1595:b6ef:cbdf%4]) with mapi id 15.20.2115.005; Tue, 30 Jul 2019
+ 17:43:39 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <pburton@wavecomp.com>,
+        James Hogan <jhogan@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, "od@zcrc.me" <od@zcrc.me>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH 01/11] MIPS: DTS: jz4740: Add missing nodes
+Thread-Topic: [PATCH 01/11] MIPS: DTS: jz4740: Add missing nodes
+Thread-Index: AQHVRv5SC/UNRQ0j0kSBIM7bj9GbPQ==
+Date:   Tue, 30 Jul 2019 17:43:39 +0000
+Message-ID: <MWHPR2201MB127769D32FAA4944F9A791CDC1DC0@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190725220215.460-2-paul@crapouillou.net>
+In-Reply-To: <20190725220215.460-2-paul@crapouillou.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR06CA0037.namprd06.prod.outlook.com
+ (2603:10b6:a03:14b::14) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [12.94.197.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5ced0446-cc98-4527-5f3b-08d71515748d
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1088;
+x-ms-traffictypediagnostic: MWHPR2201MB1088:
+x-microsoft-antispam-prvs: <MWHPR2201MB1088E78D70BEA742AA3314F8C1DC0@MWHPR2201MB1088.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 0114FF88F6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(39850400004)(346002)(376002)(396003)(189003)(199004)(7736002)(6436002)(52536014)(386003)(486006)(74316002)(6116002)(446003)(9686003)(11346002)(305945005)(5660300002)(55016002)(99286004)(66446008)(66946007)(53936002)(64756008)(66556008)(66476007)(4326008)(6246003)(25786009)(3846002)(71200400001)(66066001)(71190400001)(7416002)(8676002)(6916009)(76176011)(81156014)(52116002)(54906003)(186003)(44832011)(229853002)(476003)(4744005)(8936002)(81166006)(68736007)(102836004)(7696005)(2906002)(6506007)(256004)(33656002)(316002)(478600001)(42882007)(26005)(14454004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1088;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: M1ii7ytiPwEAhGxpkKFJMpHe2XzBeS7zQo8zdz0nU6lzNoPhTDPxi99uwN3zo6hj9Pf9bP6HmkFKqesN5qbGRkV62/cGIFXHZ4SMNRoknnIqBQpe/pVjzrWctk6h9ekEnNE52Ds9pOpaWUdLKtBEIxJcfHC/oednXE1SCLWfWbz9JEx20vINHkZxV6hZv4VEO1MtUWO3ZaVMpBydPQ5xY/118hYTVWBZNpZKiLitJ/Vqnoo/9aTIeLwkbT6Zf/h6qhINuXuVCBCLW9F2S5sZ8F+ZjwH4x49PPJ2FCQCRrwTg1v6WcWVx6jo4FwMVqksuvb2vWFBTKFvlVqiCkPpi8P8i/psIIiSVSUhaA8/yojZJhULM7BCQTS2saQsvSi3tPPo6GY9lGiVe4NPTjpQYrKaYJceIgyb4ahQghUs3/Z4=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <5d3f5d6d.1c69fb81.4c1e2.5be6@mx.google.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ced0446-cc98-4527-5f3b-08d71515748d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2019 17:43:39.3095
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1088
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 29 2019 at 14:56 -0600, Stephen Boyd wrote:
->Quoting Lina Iyer (2019-07-29 12:01:39)
->> On Thu, Jul 25 2019 at 09:44 -0600, Doug Anderson wrote:
->> >On Thu, Jul 25, 2019 at 8:18 AM Lina Iyer <ilina@codeaurora.org> wrote:
->> >>
->> >> On Wed, Jul 24 2019 at 17:28 -0600, Doug Anderson wrote:
->> >> >
->> >> >Jumping in without reading all the context, but I saw this fly by and
->> >> >it seemed odd.  If I'm way off base then please ignore...
->> >> >
->> >> >Can you give more details?  Why are these drivers in atomic contexts?
->> >> >If they are in atomic contexts because they are running in the context
->> >> >of an interrupt then your next patch in the series isn't so correct.
->> >> >
->> >> >Also: when people submit requests in atomic context are they always
->> >> >submitting an asynchronous request?  In that case we could
->> >> >(presumably) just use a spinlock to protect the queue of async
->> >> >requests and a mutex for everything else?
->> >> Yes, drivers only make async requests in interrupt contexts.
->> >
->> >So correct me if I'm off base, but you're saying that drivers make
->> >requests in interrupt contexts even after your whole series and that's
->> >why you're using spinlocks instead of mutexes.  ...but then in patch
->> >#3 in your series you say:
->> >
->> >> Switch over from using _irqsave/_irqrestore variants since we no longer
->> >> race with a lock from the interrupt handler.
->> >
->> >Those seem like contradictions.  What happens if someone is holding
->> >the lock, then an interrupt fires, then the interrupt routine wants to
->> >do an async request.  Boom, right?
->> >
->> The interrupt routine is handled by the driver and only completes the
->> waiting object (for sync requests). No other requests can be made from
->> our interrupt handler.
->
->The question is more if an interrupt handler for some consumer driver
->can call into this code and make an async request. Is that possible? If
->so, the concern is that the driver's interrupt handler can run and try
->to grab the lock on a CPU that already holds the lock in a non-irq
->disabled context. This would lead to a deadlock while the CPU servicing
->the interrupt waits for the lock held by another task that's been
->interrupted.
->
-Hmm.. this patch will cause that issue, since we remove the irqsave
-aspects of the locking. Let me give that a thought.
->>
->> >> They cannot
->> >> use the sync variants. The async and sync variants are streamlined into
->> >> the same code path. Hence the use of spinlocks instead of mutexes
->> >> through the critical path.
->> >
->> >I will perhaps defer to Stephen who was the one thinking that a mutex
->> >would be a big win here.  ...but if a mutex truly is a big win then it
->> >doesn't seem like it'd be that hard to have a linked list (protected
->> >by a spinlock) and then some type of async worker that:
->> >
->> >1. Grab the spinlock, pops one element off the linked list, release the spinlock
->> >2. Grab the mutex, send the one element, release the mutex
->> This would be a problem when the request is made from an irq handler. We
->> want to keep things simple and quick.
->>
->
->Is the problem that you want to use RPMh code from deep within the idle
->thread? As part of some sort of CPU idle driver for qcom platforms? The
->way this discussion is going it sounds like nothing is standing in the
->way of a design that use a kthread to pump messages off a queue of
->messages that is protected by a spinlock. The kthread would be woken up
->by the sync or async write to continue to pump messages out until the
->queue is empty.
->
-While it is true that we want to use RPMH in cpuidle driver. Its just
-that we had threads and all in our downstream 845 and it complicated the
-whole setup a bit too much to our liking and did not help debug either.
-I would rather not get all that back in the driver.
+Hello,
 
---Lina
+Paul Cercueil wrote:
+> Add nodes for the MMC, AIC, ADC, CODEC, MUSB, LCD, memory,
+> and BCH controllers.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Tested-by: Artur Rojek <contact@artur-rojek.eu>
+
+Applied to mips-next.
+
+Thanks,
+    Paul
+
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paul.burton@mips.com to report it. ]
