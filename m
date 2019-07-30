@@ -2,60 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCB07B329
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 21:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB357B325
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 21:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387878AbfG3TWT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 15:22:19 -0400
-Received: from mga05.intel.com ([192.55.52.43]:43559 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387863AbfG3TWS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Jul 2019 15:22:18 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 12:22:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,327,1559545200"; 
-   d="scan'208";a="173805048"
-Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Jul 2019 12:22:17 -0700
-Date:   Tue, 30 Jul 2019 13:19:34 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Mario.Limonciello@dell.com, rjw@rjwysocki.net,
-        keith.busch@intel.com, hch@lst.de, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rajatja@google.com
-Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
- suspend" has problems
-Message-ID: <20190730191934.GD13948@localhost.localdomain>
-References: <2332799.izEFUvJP67@kreacher>
- <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
- <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
- <47415939.KV5G6iaeJG@kreacher>
- <20190730144134.GA12844@localhost.localdomain>
- <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
- <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com>
+        id S2387591AbfG3TU2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 15:20:28 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:33606 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727797AbfG3TU2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 15:20:28 -0400
+Received: by mail-ot1-f66.google.com with SMTP id q20so67435474otl.0
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 12:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lG7iy+1TUm+VzW+0drIYHjU3Qdez5tE551tVEBNTmeo=;
+        b=OQQuPmBcpMZJBJouO1aP91Dqm5eUdHs6vf8Es3y6gatwl7fi640xxXvrSF2orp8jgg
+         mWDqfiijza5vmEP8V1sCwsXqhTJzcFycCdGjbwFB9FL0dvUQSdLXwaQckaD405bDvXeu
+         pq66QciEHh3BNsSIWLZnw9pxvC3lJC0/HNKsb9d/WAnGlAEeWBXnj2mers2MQDqKwhwO
+         SRQhEDYTpGoyXNvmpt0O3qyx+FYCpoY7x6PuXKtOKeTBuxDMR2xS1J6iZV0bBHEH8hoG
+         y6azRXHRg0lTQovJi+biD14b6lJG9drbO/cWsLgXzEpmHKCzTdFnqoAPe6XWOYE6oO8P
+         +emw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lG7iy+1TUm+VzW+0drIYHjU3Qdez5tE551tVEBNTmeo=;
+        b=S+4FTKu+/cIiRHNW2V5Jf+ipmhFBYz5ZEJJbphg5B0xzliqJPD4ZzVp/TKUXiXpK4W
+         E3DNxannNlQLs0jK07skzTdAi9Gt/5jhpNWa3i6/ukAIHP2rJfp67Rr+PvCk/Bx8bpym
+         /ahnQDuwdIDsiD8jA5iIYSS0d9CGaBpWiZ4N17b+OLIAPngZ+3Y7FCfYY/9+59Y4emAf
+         SmmcVYVNRs+/skHbmmcfBxFczrfOtyDg8CNeDKqNwNcp1wifWDNCYQVd0FS7HTL6isRd
+         VlpApaAwbv57WNU/g+GxHvOMFvkioEvQ9VUNRcpKTt09VrI/uzp+rwreK8bC7atgJEFA
+         JNgw==
+X-Gm-Message-State: APjAAAVnP3NKpjrjpciDK4l1gVDHpmhl16ATW78MH5VemcXitQyjaYCS
+        /LAod02ZFqpPtsimqBfOQa9heihr39UkQEwThZA=
+X-Google-Smtp-Source: APXvYqxDLgQC6sU6Gvr2uWSUyy6YFhHal6IoQSyORWGJqTbWRGkciZAL9GeLKHdPbtGdlIt9djDId/kCFPhrR2l1nQg=
+X-Received: by 2002:a9d:5f02:: with SMTP id f2mr1883265oti.148.1564514427329;
+ Tue, 30 Jul 2019 12:20:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
+References: <20190730024309.233728-1-trong@android.com> <20190730064657.GA1213@kroah.com>
+In-Reply-To: <20190730064657.GA1213@kroah.com>
+From:   Tri Vo <trong@android.com>
+Date:   Tue, 30 Jul 2019 12:20:16 -0700
+Message-ID: <CANA+-vA7TcGMndqwmYk4y8Kyi6LbcmtnBBhzWca2qreJ0dU_Hw@mail.gmail.com>
+Subject: Re: [PATCH v5] PM / wakeup: show wakeup sources stats in sysfs
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 02:50:01AM +0800, Kai-Heng Feng wrote:
-> 
-> Just did a quick test, this patch regress SK Hynix BC501, the SoC stays at
-> PC3 once the patch is applied.
+On Mon, Jul 29, 2019 at 11:47 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jul 29, 2019 at 07:43:09PM -0700, Tri Vo wrote:
+> > Userspace can use wakeup_sources debugfs node to plot history of suspend
+> > blocking wakeup sources over device's boot cycle. This information can
+> > then be used (1) for power-specific bug reporting and (2) towards
+> > attributing battery consumption to specific processes over a period of
+> > time.
+> >
+> > However, debugfs doesn't have stable ABI. For this reason, create a
+> > 'struct device' to expose wakeup sources statistics in sysfs under
+> > /sys/class/wakeup/wakeup<ID>/*.
+>
+> I agree with Rafael here, no need for the extra "wakeup" in the device
+> name as you are in the "wakeup" namespace already.
+>
+> If you have an IDA-allocated name, there's no need for the extra
+> 'wakeup' at all.
+>
+> > +int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *ws)
+> > +{
+> > +     struct device *dev;
+> > +     int id;
+> > +
+> > +     id = ida_simple_get(&wakeup_ida, 0, 0, GFP_KERNEL);
+> > +     if (id < 0)
+> > +             return id;
+>
+> No lock needed for this ida?  Are you sure?
+>
+> > +     ws->id = id;
+> > +
+> > +     dev = device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
+> > +                                     wakeup_source_groups, "wakeup%d",
+> > +                                     ws->id);
+> > +     if (IS_ERR(dev)) {
+> > +             ida_simple_remove(&wakeup_ida, ws->id);
+> > +             return PTR_ERR(dev);
+> > +     }
+> > +
+> > +     ws->dev = dev;
+> > +     return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(wakeup_source_sysfs_add);
+> > +
+> > +/**
+> > + * wakeup_source_sysfs_remove - Remove wakeup_source attributes from sysfs.
+> > + * @ws: Wakeup source to be removed from sysfs.
+> > + */
+> > +void wakeup_source_sysfs_remove(struct wakeup_source *ws)
+> > +{
+> > +     device_unregister(ws->dev);
+> > +     ida_simple_remove(&wakeup_ida, ws->id);
+>
+> Again, no lock, is that ok?  I think ida's can work without a lock, but
+> not always, sorry, I don't remember the rules anymore given the recent
+> changes in that code.
 
-Okay, I'm afraid device/platform quirks may be required unless there are
-any other ideas out there.
-
-I'm not a big fan of adding more params to this driver. Those are
-global to the module, so that couldn't really handle a platform with
-two different devices that want different behavior.
+Documentation says, "The IDA handles its own locking. It is safe to
+call any of the IDA functions without synchronisation in your code."
+https://www.kernel.org/doc/html/latest/core-api/idr.html#ida-usage
