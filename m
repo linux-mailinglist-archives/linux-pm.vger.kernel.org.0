@@ -2,86 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 628AB7A5AC
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 12:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281EF7A5B2
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 12:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729719AbfG3KKL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 06:10:11 -0400
-Received: from icp-osb-irony-out1.external.iinet.net.au ([203.59.1.210]:44702
-        "EHLO icp-osb-irony-out1.external.iinet.net.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729648AbfG3KKK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 06:10:10 -0400
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2AIBgDsFkBd/1/rO8tmghmDVSESFxO?=
- =?us-ascii?q?NGogdAYJDAYkskRsJAQEBAQEBAQEBGxwBAYQ6BAICgmQ3Bg4BAwEBAQQBAQE?=
- =?us-ascii?q?BBQFthGVFhUsGJy8zPxJXBxKDIoF3E61XM4QGAYRygUiBNIcJhG6BQD+DdWy?=
- =?us-ascii?q?EAwobhX8ElTqVQwmBJXeUGBmYEYtkgVmZaCKBWE0fGYMngnmNVkQ1MIt0glI?=
- =?us-ascii?q?BAQ?=
-X-IPAS-Result: =?us-ascii?q?A2AIBgDsFkBd/1/rO8tmghmDVSESFxONGogdAYJDAYksk?=
- =?us-ascii?q?RsJAQEBAQEBAQEBGxwBAYQ6BAICgmQ3Bg4BAwEBAQQBAQEBBQFthGVFhUsGJ?=
- =?us-ascii?q?y8zPxJXBxKDIoF3E61XM4QGAYRygUiBNIcJhG6BQD+DdWyEAwobhX8ElTqVQ?=
- =?us-ascii?q?wmBJXeUGBmYEYtkgVmZaCKBWE0fGYMngnmNVkQ1MIt0glIBAQ?=
-X-IronPort-AV: E=Sophos;i="5.64,326,1559491200"; 
-   d="scan'208";a="229598851"
-Received: from 203-59-235-95.perm.iinet.net.au (HELO rtcentos7.electromag.com.au) ([203.59.235.95])
-  by icp-osb-irony-out1.iinet.net.au with ESMTP; 30 Jul 2019 18:10:07 +0800
-From:   Richard Tresidder <rtresidd@electromag.com.au>
-To:     sre@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        rtresidd@electromag.com.au, kstewart@linuxfoundation.org,
-        gregkh@linuxfoundation.org, tglx@linutronix.de,
-        rfontana@redhat.com, allison@lohutok.net, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND v2 2/2] power/supply/sbs-battery: Add ability to force load a battery via the devicetree
-Date:   Tue, 30 Jul 2019 18:10:04 +0800
-Message-Id: <1564481404-39505-3-git-send-email-rtresidd@electromag.com.au>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1564481404-39505-1-git-send-email-rtresidd@electromag.com.au>
-References: <1564481404-39505-1-git-send-email-rtresidd@electromag.com.au>
+        id S1726210AbfG3KLK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 06:11:10 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42105 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726078AbfG3KLK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 06:11:10 -0400
+Received: from 79.184.255.110.ipv4.supernova.orange.pl (79.184.255.110) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
+ id f1d19142855f53dd; Tue, 30 Jul 2019 12:11:08 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpuidle: teo: Get rid of redundant check in teo_update()
+Date:   Tue, 30 Jul 2019 12:11:08 +0200
+Message-ID: <2331986.krM4XTe0ch@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the ability to force load a hot pluggable battery during boot where
-there is no gpio detect method available and the module is statically
-built. Normal polling will then occur on that battery when it is inserted.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
+Notice that setting measured_us to UINT_MAX in teo_update() earlier
+doesn't change the behavior of the following code, so do that and
+eliminate a redundant check used for setting measured_us to UINT_MAX.
+
+This change is not expected to alter functionality.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/power/supply/sbs-battery.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/cpuidle/governors/teo.c |   16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 048d205..b55721d 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -816,6 +816,7 @@ static int sbs_probe(struct i2c_client *client,
- 	struct power_supply_config psy_cfg = {};
- 	int rc;
- 	int irq;
-+	bool dt_force_load;
+Index: linux-pm/drivers/cpuidle/governors/teo.c
+===================================================================
+--- linux-pm.orig/drivers/cpuidle/governors/teo.c
++++ linux-pm/drivers/cpuidle/governors/teo.c
+@@ -125,10 +125,11 @@ static void teo_update(struct cpuidle_dr
  
- 	sbs_desc = devm_kmemdup(&client->dev, &sbs_default_desc,
- 			sizeof(*sbs_desc), GFP_KERNEL);
-@@ -852,6 +853,9 @@ static int sbs_probe(struct i2c_client *client,
- 	if (rc)
- 		chip->poll_retry_count = 0;
+ 	if (cpu_data->time_span_ns >= cpu_data->sleep_length_ns) {
+ 		/*
+-		 * One of the safety nets has triggered or this was a timer
+-		 * wakeup (or equivalent).
++		 * One of the safety nets has triggered or the wakeup was close
++		 * enough to the closest timer event expected at the idle state
++		 * selection time to be discarded.
+ 		 */
+-		measured_us = sleep_length_us;
++		measured_us = UINT_MAX;
+ 	} else {
+ 		unsigned int lat = drv->states[cpu_data->last_state].exit_latency;
  
-+	dt_force_load = of_property_read_bool(client->dev.of_node,
-+						"sbs,force-load");
-+
- 	if (pdata) {
- 		chip->poll_retry_count = pdata->poll_retry_count;
- 		chip->i2c_retry_count  = pdata->i2c_retry_count;
-@@ -890,7 +894,7 @@ static int sbs_probe(struct i2c_client *client,
- 	 * Before we register, we might need to make sure we can actually talk
- 	 * to the battery.
+@@ -189,15 +190,6 @@ static void teo_update(struct cpuidle_dr
+ 	}
+ 
+ 	/*
+-	 * If the total time span between idle state selection and the "reflect"
+-	 * callback is greater than or equal to the sleep length determined at
+-	 * the idle state selection time, the wakeup is likely to be due to a
+-	 * timer event.
+-	 */
+-	if (cpu_data->time_span_ns >= cpu_data->sleep_length_ns)
+-		measured_us = UINT_MAX;
+-
+-	/*
+ 	 * Save idle duration values corresponding to non-timer wakeups for
+ 	 * pattern detection.
  	 */
--	if (!(force_load || chip->gpio_detect)) {
-+	if (!(force_load || chip->gpio_detect || dt_force_load)) {
- 		rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
- 
- 		if (rc < 0) {
--- 
-1.8.3.1
+
+
 
