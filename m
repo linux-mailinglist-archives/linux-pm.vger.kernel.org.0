@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E23BB7AF2D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2B17AF36
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730404AbfG3RKW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 13:10:22 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:32769 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730286AbfG3RKV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 13:10:21 -0400
-Received: by mail-wm1-f66.google.com with SMTP id h19so45749315wme.0;
-        Tue, 30 Jul 2019 10:10:19 -0700 (PDT)
+        id S1730258AbfG3RKj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 13:10:39 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:39166 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730372AbfG3RKW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 13:10:22 -0400
+Received: by mail-wm1-f67.google.com with SMTP id u25so46982017wmc.4;
+        Tue, 30 Jul 2019 10:10:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/8nZZlhkjH8gmOBLsrwLlw6x1w6bpTtxl5DUoKSzyGY=;
-        b=RdQSw1juEsmNYUQ1d0WQk7AOJYHlWOgVUmS234Op8YJXCCWsiauFHUEIOZVyHo/0eo
-         MJgFvkIadkVQI89foGSQJn0woeBf4wvyyVM+ct4U9QQwF8r1SR92UKFWKmPmYGskpvWo
-         975AjHl5mM+zKzJ6HJ/W4xn+b03UXXAgt/AB+rT2AV1OMMnMJkhN5Hsc4l8iT8gdXDfU
-         LuQC8kdpyMEcEXefuzv6MPkj8d+5smo92vNXpPB9huhhw3VsTy6sqjgx765f2SrkTsEC
-         T0vPlcRka1RDYIh2gvWwLhy9B5x2tYAfYcCu+rkKybzBhgcWs6DMRYcfXiMDrgDugyCU
-         3uOg==
+        bh=ez/DtEbZm91hvKH3/uYPobJLTWojYBqiK7N01oWP7xA=;
+        b=JUaIZUxSEsHYmEI0ls5DWjv2KtKHaJgHFG3N27a0nlkFxaWBeI/a41JkQPG77U3hA+
+         YNfod7UD+3ituq/uQz3v6CY1gQOv3M7d6qm0TRK6M9cardOBH/FiPY1mc4OzkRD2j6I6
+         BSedX9kbsx/9cD5RQdGeJUOmuvPvboOw5kN8yeefcxa9ySR9G8FfgqmXLH1/lpaj1gJD
+         0IveRqBqUHVN7opIfPG6bQ0fkPiJ5jF4glGe/oAWpelaiQGT1zQANa2+hRTe3/udsOr6
+         7aEkuN/NQbigsX+jdv3SKe2+kvZCmrNhfPuwaN2dz9LhsSxK8O0iCz5oX8TYjL79Fm4q
+         hFdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/8nZZlhkjH8gmOBLsrwLlw6x1w6bpTtxl5DUoKSzyGY=;
-        b=QaasonKXLKyKqQ91ZBnAbWBbsU85i1udo479xSKJeJqSsCy+nFf4xz0a6G9Zl86aaA
-         WCljqlRjJ3zH3on8fvr+x4xkqoFEsec20use4kOA6ReUkSguOBoPZuTOLYVaVtwoAu6o
-         R9tWCyn2Hf1tHV8YqTRf4ql0RnwnY0becrPdXGPOBnIWinOpoB2oj9DNr+gioZ6n0Z0X
-         1vv/UywzqDI/ew+3A3mFSgjo9WNtxeDSzZWznIRYo8TbXKXfrSBgtd+cTrf72ebfK00u
-         yqp3q09FowuDdxn5q+5OMO+kf6rZ5UcNYBWBHuv29wHBJZnIlPORFzwBO3zU1XbzDezC
-         5fTw==
-X-Gm-Message-State: APjAAAUWAGafLl9t/lEYo8MjlUZk2zz1hRJBowPjSLXWkR+YnFtiWE8k
-        xF5Vggi9tgKaTEsb9Ef0nYnEPibT
-X-Google-Smtp-Source: APXvYqwCVF92t4LAwe29F7M9D7NcwGu25M05HbpWbYMfDD0c2QSQVYsjUBd3P5BDXZHWyZChlcvSyw==
-X-Received: by 2002:a1c:a1c5:: with SMTP id k188mr106228570wme.102.1564506618949;
-        Tue, 30 Jul 2019 10:10:18 -0700 (PDT)
+        bh=ez/DtEbZm91hvKH3/uYPobJLTWojYBqiK7N01oWP7xA=;
+        b=TNUvVC4G+8HA9Www5VE9Ie9PPi+TWyhMWX4cYoaOoEz2tbMd47stg/DtJ/5WPT5473
+         dnZX3Mgmra0FAh5wjKZqo1wpclSZ1gYGsodK6tfxueMgCHDdA/oCLYxpPHE//i8T2v+Q
+         XpcD7EBXp+v+COry65qpE1VYrpi/eaoSOf+QJ9VEfwZIKerh9sKXZ6lDZjoExj1gDAfh
+         n7d0xupjNt8ZVvrw+GmZIM6nMt4dfXAm4z1pyBOmryAUEsZ7sUzPPos0TS4fG2280VWf
+         1O/8LxM3NwgxEWD1uv+z+EGjzMkf3raKijXa5Qr4L02rTWXmvl++nV+Kh8RwA6mgCfYm
+         sH8Q==
+X-Gm-Message-State: APjAAAXTZW3rvF3dA4Pcm3Q4qUdbwXMuVqq66072roUXePFixwrLkSsZ
+        UtKU3T1U+uZCoHsgiT005aY=
+X-Google-Smtp-Source: APXvYqw6zcbOYrRen1/+NlRr06lBi6pn7loELvbKEaRD5+06q7HkgvTKT8/fRNYwNoe5DkkXTAAIZg==
+X-Received: by 2002:a1c:770d:: with SMTP id t13mr32874121wmi.79.1564506620301;
+        Tue, 30 Jul 2019 10:10:20 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.gmail.com with ESMTPSA id i13sm58897736wrr.73.2019.07.30.10.10.17
+        by smtp.gmail.com with ESMTPSA id i13sm58897736wrr.73.2019.07.30.10.10.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 10:10:18 -0700 (PDT)
+        Tue, 30 Jul 2019 10:10:19 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -52,9 +52,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 10/13] cpuidle: tegra: Support CPU cluster power-down state on Tegra30
-Date:   Tue, 30 Jul 2019 20:09:52 +0300
-Message-Id: <20190730170955.11987-11-digetx@gmail.com>
+Subject: [PATCH v4 11/13] ARM: tegra: Create simple platform device for cpuidle driver
+Date:   Tue, 30 Jul 2019 20:09:53 +0300
+Message-Id: <20190730170955.11987-12-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190730170955.11987-1-digetx@gmail.com>
 References: <20190730170955.11987-1-digetx@gmail.com>
@@ -65,51 +65,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The new CPU Idle driver has all necessary features in order to allow
-the deepest idling state on Tegra30 SoC where the whole CPU cluster is
-power-gated using the coupled idle state.
-
-Note that outer_disable() now need to be invoked directly since it
-produces erroneous warning message about secondary CPUs being online
-because it doesn't know that secondaries are turned off at that point
-by the cpuidle driver.
+The new CPUIDLE driver now is a proper platform driver, hence it needs
+a platform device in order to be functional. Register the platform device,
+like we do that for the CPUFreq driver. Note that on some Tegra114(124)
+devices PSCI may be used for the CPU hotplugging and CPUIDLE driver
+doesn't support that case, thus CPUIDLE device won't be registered if
+PCSI presents.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/mach-tegra/pm.c        | 7 ++++---
- drivers/cpuidle/cpuidle-tegra.c | 1 -
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ arch/arm/mach-tegra/tegra.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/mach-tegra/pm.c b/arch/arm/mach-tegra/pm.c
-index 7d9ef26e52a7..16a02937d3da 100644
---- a/arch/arm/mach-tegra/pm.c
-+++ b/arch/arm/mach-tegra/pm.c
-@@ -146,9 +146,10 @@ static int tegra_sleep_cpu(unsigned long v2p)
- 	 * if any of secondary CPU's is online and this is the LP2-idle
- 	 * code-path only for Tegra20/30.
- 	 */
--	if (trusted_foundations_registered())
--		outer_disable();
--
-+#ifdef CONFIG_OUTER_CACHE
-+	if (trusted_foundations_registered() && outer_cache.disable)
-+		outer_cache.disable();
-+#endif
- 	/*
- 	 * Note that besides of setting up CPU reset vector this firmware
- 	 * call may also do the following, depending on the FW version:
-diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-index 867c0403ea81..9e1659e93af6 100644
---- a/drivers/cpuidle/cpuidle-tegra.c
-+++ b/drivers/cpuidle/cpuidle-tegra.c
-@@ -324,7 +324,6 @@ static int tegra_cpuidle_probe(struct platform_device *pdev)
- 		tegra_idle_driver.states[TEGRA_C7].disabled = true;
- 		break;
- 	case TEGRA30:
--		tegra_idle_driver.states[TEGRA_CC6].disabled = true;
- 		break;
- 	case TEGRA114:
- 	case TEGRA124:
+diff --git a/arch/arm/mach-tegra/tegra.c b/arch/arm/mach-tegra/tegra.c
+index d9237769a37c..f1ce2857a251 100644
+--- a/arch/arm/mach-tegra/tegra.c
++++ b/arch/arm/mach-tegra/tegra.c
+@@ -36,6 +36,7 @@
+ #include <asm/mach/arch.h>
+ #include <asm/mach/time.h>
+ #include <asm/mach-types.h>
++#include <asm/psci.h>
+ #include <asm/setup.h>
+ 
+ #include "board.h"
+@@ -92,6 +93,9 @@ static void __init tegra_dt_init_late(void)
+ 	if (IS_ENABLED(CONFIG_ARCH_TEGRA_2x_SOC) &&
+ 	    of_machine_is_compatible("nvidia,tegra20"))
+ 		platform_device_register_simple("tegra20-cpufreq", -1, NULL, 0);
++
++	if (IS_ENABLED(CONFIG_ARM_TEGRA_CPUIDLE) && !psci_smp_available())
++		platform_device_register_simple("tegra-cpuidle", -1, NULL, 0);
+ }
+ 
+ static const char * const tegra_dt_board_compat[] = {
 -- 
 2.22.0
 
