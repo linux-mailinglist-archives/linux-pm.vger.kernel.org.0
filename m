@@ -2,139 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C86067AE3D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 18:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D307AF1C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727360AbfG3Qno (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 12:43:44 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:58870 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726751AbfG3Qno (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 12:43:44 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id B501560850; Tue, 30 Jul 2019 16:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564505022;
-        bh=nzlx+WA8YpyPWGC852+7ZM1qfO8l79oxasafpFjso+c=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=HOl2oflInJUHQq2PZ68pCYQNQYdFCO+4JJDpEmNEvs49i4kZiqV10RlrLP2bhZs8c
-         S8a2q/z0w9eWP1x6/KjBQtyEkYlMei1S6kRHUYDaKQ7lDM1zr0kp+CsX7VLlMzCuJg
-         D1DVLX47+Yjxz05bcWdpCbU3/E19t0Csq//tIpEg=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.79.43.230] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 915F3602BC;
-        Tue, 30 Jul 2019 16:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564505021;
-        bh=nzlx+WA8YpyPWGC852+7ZM1qfO8l79oxasafpFjso+c=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=giQuwOOght+bx4P3Ia3F/fMlV8ERnpI8PRUC20JNo8qJIr0KXTBoby48qa2lmfAL3
-         /sjUn3+QJrx6sOjCwtrE0B9gbngmM9FIWZ+mHQU8Mw+UTzw7yW8VPEn4fp4sp6F6Sr
-         ozzHq2Z2qC/0vcVOmmA1Kz7Ad2G+XJ/GhSIGQFoo=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 915F3602BC
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-Subject: Re: [PATCH v4 0/3] Introduce Bandwidth OPPs for interconnects
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S1729908AbfG3RKI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 13:10:08 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39144 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726246AbfG3RKI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 13:10:08 -0400
+Received: by mail-wm1-f66.google.com with SMTP id u25so46981357wmc.4;
+        Tue, 30 Jul 2019 10:10:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QMMwBZ+wPi5N3A625ygkZR4cE1oderMpAJBhWBkLHY8=;
+        b=ayoiR1m4FqC/qaZmeKnUgSERK11yKotMN1DqucKBCmYKq1eVtp/g+pdQ4eTFYgpUwt
+         S3CuTM5K4/JE9uHD1Lu5hlnoj1E2DvByOiJnuJshAYaOgrloMoq+wjQT0Zb0QXFFTehp
+         hk/rlBCArnc2oZqrKX2q42JL/8+N7//FOSYlW+B+cMGYd00EcX2hufpyvm1cW1vI3qhs
+         zDagrw6LyROjyL8Anel8qSVXlvtFPO9SlGwvBwjCuxP2d+MaYT1WvD2o/SErvynoemcH
+         LHxtalLkdbMcW3Xsx3dUa93J+4MRdhBKlGEBPnuTnFaTiTt4dBKf/6C/oGOVeMe1y1Ut
+         o8AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QMMwBZ+wPi5N3A625ygkZR4cE1oderMpAJBhWBkLHY8=;
+        b=Cp7wP+2F2AzeBl6M2rIsENh2S5ewbEDdY5oYlDReVLg9BWK5eltstXGDPJ53hG0ZRb
+         iedRLTEq8vsY9xdFXnfvWO3YiaFxpDiDgOZMShFgdLHCJ/BQW6YM0CEG8kKFzLEkHtFt
+         kL0ngEL3/SEWy7JoN4k+Q1Jkk1Wzqc7ZXOCiSG5Ag+Wxc96Uw+R8d4Uc3f10vuZGmQPW
+         T/pE/SH7VMCtLMV/Jwl5LaLPCB/0HvEBrU5EHIN/374PMJiv2XLsnYqz+owEDwhZk+p7
+         g1K0Ix5BsRsZGGQPCAnZQz5DUongPI+RAAGKi9tWTpr8sSwkem4VVxRWt41/yiAHBuWp
+         4kTA==
+X-Gm-Message-State: APjAAAU4ohmZKH/qIILajyeQxD+ZV/hLROdLYkP5c6YjVKTIC9D7I2EF
+        7rvKDuzXSLtNs2IQWqJmH7g=
+X-Google-Smtp-Source: APXvYqxbBF6HgmRbnge5qXYXW5fvDCB0OpYXesJYnFSB2oA6mzE7L6bvZhypunTpklAoBfu+F+mM+Q==
+X-Received: by 2002:a1c:6c08:: with SMTP id h8mr16976384wmc.62.1564506605557;
+        Tue, 30 Jul 2019 10:10:05 -0700 (PDT)
+Received: from localhost.localdomain (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
+        by smtp.gmail.com with ESMTPSA id i13sm58897736wrr.73.2019.07.30.10.10.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Jul 2019 10:10:04 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
-        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20190726231558.175130-1-saravanak@google.com>
- <20190729093545.kvnqxjkyx4nogddk@vireshk-i7>
- <CAGETcx8OBFGgP1-hj717Sk-_N95-kacVsz0yb288n3pej12n1Q@mail.gmail.com>
- <20190730024640.xk27jgdfl2j6ucx7@vireshk-i7>
- <361effba-4433-24d9-243c-201af39214cc@codeaurora.org>
- <CAGETcx_BpJswxA4AGARogZ1xRJPqm=_zTOZq1xJ2vgx+DUYsqQ@mail.gmail.com>
-From:   Sibi Sankar <sibis@codeaurora.org>
-Message-ID: <a9ab8614-7626-c309-24cc-02ce08a80ce5@codeaurora.org>
-Date:   Tue, 30 Jul 2019 22:13:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/13] Consolidate and improve NVIDIA Tegra CPUIDLE driver(s)
+Date:   Tue, 30 Jul 2019 20:09:42 +0300
+Message-Id: <20190730170955.11987-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-In-Reply-To: <CAGETcx_BpJswxA4AGARogZ1xRJPqm=_zTOZq1xJ2vgx+DUYsqQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/30/19 11:23 AM, Saravana Kannan wrote:
-> On Mon, Jul 29, 2019 at 10:28 PM Sibi Sankar <sibis@codeaurora.org> wrote:
->>
->> Hey Viresh,
->>
->> On 7/30/19 8:16 AM, Viresh Kumar wrote:
->>> On 29-07-19, 13:16, Saravana Kannan wrote:
->>>> Sibi might be working on doing that for the SDM845 CPUfreq driver.
->>>> Georgi could also change his GPU driver use case to use this BW OPP
->>>> table and required-opps.
->>>>
->>>> The problem is that people don't want to start using this until we
->>>> decide on the DT representation. So it's like a chicken and egg
->>>> situation.
->>>
->>> Yeah, I agree to that.
->>>
->>> @Georgi and @Sibi: This is your chance to speak up about the proposal
->>> from Saravana and if you find anything wrong with them. And specially
->>> that it is mostly about interconnects here, I would like to have an
->>> explicit Ack from Georgi on this.
->>>
->>> And if you guys are all okay about this then please at least commit
->>> that you will convert your stuff based on this in coming days.
->>
->> I've been using both Saravana's and Georgi's series for a while
->> now to scale DDR and L3 on SDM845. There is currently no consensus
->> as to where the votes are to be actuated from, hence couldn't post
->> anything out.
->>
->> DCVS based on Saravana's series + passive governor:
->> https://github.com/QuinAsura/linux/tree/lnext-072619-SK-series
-> 
-> Thanks Sibi! You might want to convert your patches so that until the
-> passive governor is ready, you just look up the required opps and vote
-> for BW directly from the cpufreq driver. Once devfreq governor is
-> ready, you can switch to it.
+Hello,
 
-Sure I'll do that.
+I was spending quite some time recently trying to hunt down CPU-suspend
+bug on Tegra30 SoC and in the end it was nailed. During that time I
+realized that the CPU Idle drivers could get some polish and gain new
+features, thus that's what this series does:
 
-> 
-> -Saravana
-> 
->>
->> DCVS based on Georgi's series: (I had already posted this out)
->> https://github.com/QuinAsura/linux/tree/lnext-072619-GJ-series
->>
->> --
->> Qualcomm Innovation Center, Inc.
->> Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
->> a Linux Foundation Collaborative Project
+  1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
+     into common drivers/cpuidle/ directory.
+
+  2. Enables CPU cluster power-down idling state on Tegra30.
+
+In the end there is a quite nice clean up of the Tegra CPUIDLE driver(s)
+and of the Tegra's arch code in general. Please review, thanks!
+
+Changelog:
+
+v4: - Fixed compilation with !CONFIG_CACHE_L2X0 (and tested that it still
+      works).
+
+    - Replaced ktime_compare() with ktime_before() in the new driver,
+      for consistency.
+
+v3: - Addressed review comments that were made by Jon Hunter to v2 by
+      splitting patches into smaller (and simpler) chunks, better
+      documenting changes in the commit messages and using proper error
+      codes in the code.
+
+      Warnings are replaced with a useful error messages in the code of
+      "Introduce unified driver for NVIDIA Tegra SoCs" patch.
+
+      Secondary CPUs parking timeout increased to 100ms because I found
+      that it actually may happen to take more than 1ms if CPU is running
+      on a *very* low frequency.
+
+      Added diagnostic messages that are reporting Flow Controller state
+      when CPU parking fails.
+
+      Further polished cpuidle driver's code.
+
+      The coupled state entering is now aborted if there is a pending SGI
+      (Software Generated Interrupt) because it will be lost after GIC's
+      power-cycling. Like it was done by the old Tegra20 CPUIDLE driver.
+
+v2: - Added patches to enable the new cpuidle driver in the defconfigs:
+
+        ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
+        ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
+
+    - Dropped patches that removed CPUIDLE_FLAG_TIMER_STOP from the idling
+      states because that flag actually doesn't have any negative effects,
+      but still is correct for the case of a local CPU timer on older Tegra
+      SoCs:
+
+        cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from Tegra114/124 idle-state
+        cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from all states
+
+    - The "Add unified driver for NVIDIA Tegra SoCs" patch got more polish.
+      Tegra30 and Terga114 states are now squashed into a single common C7
+      state (following Parker TRM terminology, see 17.2.2.2 Power Management
+      States), more comments added, etc minor changes.
+
+Dmitry Osipenko (13):
+  ARM: tegra: Remove cpuidle drivers to replace them with a new driver
+  ARM: tegra: Change tegra_set_cpu_in_lp2() type to void
+  ARM: tegra: Propagate error from tegra_idle_lp2_last()
+  ARM: tegra: Compile sleep-tegra20/30.S unconditionally
+  ARM: tegra: Expose PM functions required for new cpuidle driver
+  ARM: tegra: Rename some of the newly exposed PM functions
+  ARM: tegra: Add tegra_pm_park_secondary_cpu()
+  clk: tegra: Add missing stubs for the case of !CONFIG_PM_SLEEP
+  cpuidle: Introduce unified driver for NVIDIA Tegra SoCs
+  cpuidle: tegra: Support CPU cluster power-down state on Tegra30
+  ARM: tegra: Create simple platform device for cpuidle driver
+  ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
+  ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
+
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/tegra_defconfig              |   1 +
+ arch/arm/mach-tegra/Makefile                  |  23 +-
+ arch/arm/mach-tegra/cpuidle-tegra114.c        |  89 -----
+ arch/arm/mach-tegra/cpuidle-tegra20.c         | 212 -----------
+ arch/arm/mach-tegra/cpuidle-tegra30.c         | 132 -------
+ arch/arm/mach-tegra/cpuidle.c                 |  50 ---
+ arch/arm/mach-tegra/cpuidle.h                 |  21 --
+ arch/arm/mach-tegra/irq.c                     |   3 +-
+ arch/arm/mach-tegra/pm.c                      |  50 +--
+ arch/arm/mach-tegra/pm.h                      |   4 -
+ arch/arm/mach-tegra/reset-handler.S           |  11 -
+ arch/arm/mach-tegra/reset.h                   |   9 +-
+ arch/arm/mach-tegra/sleep-tegra20.S           | 170 ---------
+ arch/arm/mach-tegra/sleep-tegra30.S           |   6 +-
+ arch/arm/mach-tegra/sleep.h                   |  15 -
+ arch/arm/mach-tegra/tegra.c                   |   7 +-
+ drivers/cpuidle/Kconfig.arm                   |   8 +
+ drivers/cpuidle/Makefile                      |   1 +
+ drivers/cpuidle/cpuidle-tegra.c               | 348 ++++++++++++++++++
+ drivers/soc/tegra/Kconfig                     |   1 -
+ include/linux/clk/tegra.h                     |  13 +
+ include/soc/tegra/cpuidle.h                   |   2 +-
+ .../mach-tegra => include/soc/tegra}/irq.h    |   8 +-
+ include/soc/tegra/pm.h                        |  31 ++
+ 25 files changed, 452 insertions(+), 764 deletions(-)
+ delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra114.c
+ delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra20.c
+ delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra30.c
+ delete mode 100644 arch/arm/mach-tegra/cpuidle.c
+ delete mode 100644 arch/arm/mach-tegra/cpuidle.h
+ create mode 100644 drivers/cpuidle/cpuidle-tegra.c
+ rename {arch/arm/mach-tegra => include/soc/tegra}/irq.h (59%)
 
 -- 
-Qualcomm Innovation Center, Inc.
-Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.22.0
+
