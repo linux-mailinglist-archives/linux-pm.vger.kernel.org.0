@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 587637AD9A
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 18:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA7D7AD97
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 18:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732854AbfG3Qcd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 12:32:33 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:37083 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732828AbfG3Qc2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 12:32:28 -0400
-Received: by mail-wr1-f68.google.com with SMTP id n9so41401344wrr.4;
-        Tue, 30 Jul 2019 09:32:27 -0700 (PDT)
+        id S1725871AbfG3Qcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 12:32:32 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33964 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732831AbfG3Qc3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 12:32:29 -0400
+Received: by mail-wr1-f65.google.com with SMTP id 31so66515162wrm.1;
+        Tue, 30 Jul 2019 09:32:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=g5tURnCPvlR1FgVTUPFvio04s8CzBn2V+f8QGTCwOFA=;
-        b=IGInv4Z4YwMrX+CzLKwBULMOwtb1kMKFrTq5nNuQJXWIxGRIAxRnoRhL/V0wizQrc2
-         OYfkqFqb8nmpMrTo9SIAWsIHJP+aWJouQTY/LOHOCZvYu5hbbCALBhYFe6DmdiNBTp0L
-         DCp9z6Bc4mJ5sXMG/uLNbAEJRkcXeI+OlsqPj4a5muYfK/QU2EKmdDqTaHUrDSyI67cd
-         2f5Hoq6j6xmbvpWaWycijHRihZuxYHaBY58LEuznOBmhb+2KRsWS6iwG+1ceup7Ss5qq
-         DWz/uzhsDsC7ATPepc0H6DB5JvVFYqrNhfW7vNu0q1ckJzvq1+a5Tf/oN4dDe29E5ifo
-         PXQQ==
+        bh=WHBbqbfFd0BRb3uV6lTGI/raeYIwezEYsIDJ6CAqnew=;
+        b=NOsQUkAHUbBKJkEQDYdf9orMNjGdUlOLEbihtSpdWqMReWthFuC7gSvsnTq6k0HJu2
+         WXLTu49yiS9IkRNFuM2dmZWl53KqzY0aNt71mzrweHjPE95NsaErymAHmPPkL5Ui87Gv
+         FzQzWg/IpryqzRPE2NvosLu0nhGrZKk9LTKV5OAbOsRSNQj31FjK4VgPtwH79V+v0Pnu
+         hq7W8iwWInx+F+C8WYEfc9Qjm7Hw5Puff4FlMmcgbu+/dUemJkedAYBTzYjaG1U6FWJ9
+         pY3QFdmyJp4eUd+7GeLDXDRd03bJ+tr5rRaUe+zaXD6583btfDgfaIhhnuSvy5odbcU3
+         5hGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=g5tURnCPvlR1FgVTUPFvio04s8CzBn2V+f8QGTCwOFA=;
-        b=aGNo+BO9D/+JEZmXqtzFk75iD6Ar5aPU+l05BA+CCgdFFdbE2CNYkIpAq4fuYY6IUG
-         QeNl6p417OutPFcg2Fe0Otk/qJfM40x4iXH9g2X/2kAyrOrRBhP0/syoV2KTcXa5J+iG
-         tOcv0kHLksGJNbDRy0L6Us5KVNEWXheEYlQU17PTgQTnuh+V2KCoUayJrz+3gZk/S8ZL
-         MgdhjkE9b29uRXfrQuxoWcpVBE6YCUd/LfViJOuTOyLMj96oH/nl1byIOHEF766bmVEx
-         L3bGQVM6sixydsdnEiu+NiYlADJ8/jnjKzuxW8UI8zKwt9cOxvpfH3mPsjrPbr5Dq/VU
-         9Ccg==
-X-Gm-Message-State: APjAAAVNl2AG3MuBV+J7UkM2GzooDjYSTlnXnzwSbERQ2SmfdqhddELT
-        SIdepviy5KHCa6dPXC+MYp740ibt
-X-Google-Smtp-Source: APXvYqwd3YWgwQpq7SrWlW8v2kpTJkh48PQh6m24ruER9NF1l3cCVBckpMSQWVcPAfZly9ld9NEJfw==
-X-Received: by 2002:adf:ed8a:: with SMTP id c10mr132636248wro.33.1564504346710;
-        Tue, 30 Jul 2019 09:32:26 -0700 (PDT)
+        bh=WHBbqbfFd0BRb3uV6lTGI/raeYIwezEYsIDJ6CAqnew=;
+        b=G5RY28pL4PbBwl+Xs69+XN3QCldEg9zLTXIi9k1A/yGW+zAttIudpNFWxZ55jn6v6a
+         iFhjYYG4+nuE7vyN4tiLVl8jF+FwWkr7MiEaL6LvfonigFS2giK+s09BPpqo9pVPvb1m
+         rkBd0gJnB8nESeoz2mR/ekmR027t/IkXehsCqLzopWDVaxgF/TmS+Mx59Kx4H0UAAkp+
+         lsZoSw1Y7UCUBpbPbxzK8CvljAqXkbnI3s01f7KN3++6fUU9EZYZ09mBmv6d++hmiLl5
+         rcrrz1Lr7fOTq3Tq36vv1Do+W5ZOsu/OE0qboVdkXDjeNPLvoK0iPqiMbmtJCnykjUb9
+         AytQ==
+X-Gm-Message-State: APjAAAW26sijGKqVZ1qAdU1pDJf2AziIpfa2GA8qjlUTYWVLEbmIJuWt
+        IE5Vz7+3zS9j9g1ACOnGf40=
+X-Google-Smtp-Source: APXvYqzGQEp+w42idntKHGTPcZFnvHK7pxdgdlOjEGe3nu686QWc4MYOrCIqgRrUzTQ1l8Iif6Yd9w==
+X-Received: by 2002:adf:dd8e:: with SMTP id x14mr126350891wrl.344.1564504347946;
+        Tue, 30 Jul 2019 09:32:27 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.gmail.com with ESMTPSA id c65sm64835175wma.44.2019.07.30.09.32.25
+        by smtp.gmail.com with ESMTPSA id c65sm64835175wma.44.2019.07.30.09.32.26
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 09:32:26 -0700 (PDT)
+        Tue, 30 Jul 2019 09:32:27 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 06/20] PM / devfreq: tegra30: Tune up boosting thresholds
-Date:   Tue, 30 Jul 2019 19:22:22 +0300
-Message-Id: <20190730162236.6063-7-digetx@gmail.com>
+Subject: [PATCH v5 07/20] PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
+Date:   Tue, 30 Jul 2019 19:22:23 +0300
+Message-Id: <20190730162236.6063-8-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190730162236.6063-1-digetx@gmail.com>
 References: <20190730162236.6063-1-digetx@gmail.com>
@@ -66,32 +66,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that average-sustain coefficient / multiplier is gone, it won't hurt
-to re-tune the boosting thresholds to get a bit harder boosting for MCALL
-clients, resulting in a more reactive governing in a case of multimedia
-applications usage like 3d / video.
+There is another kHz-conversion bug in the code, resulting in integer
+overflow. Although, this time the resulting value is 4294966296 and it's
+close to ULONG_MAX, which is okay in this case.
 
 Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 2331052fd8bd..4525c051f85c 100644
+index 4525c051f85c..70dce58212a4 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -111,8 +111,8 @@ static struct tegra_devfreq_device_config actmon_device_configs[] = {
- 		.irq_mask = 1 << 26,
- 		.boost_up_coeff = 200,
- 		.boost_down_coeff = 50,
--		.boost_up_threshold = 60,
--		.boost_down_threshold = 40,
-+		.boost_up_threshold = 50,
-+		.boost_down_threshold = 25,
- 	},
- 	{
- 		/* MCCPU: memory accesses from the CPUs */
+@@ -70,6 +70,8 @@
+ 
+ #define KHZ							1000
+ 
++#define KHZ_MAX						(ULONG_MAX / KHZ)
++
+ /* Assume that the bus is saturated if the utilization is 25% */
+ #define BUS_SATURATION_RATIO					25
+ 
+@@ -167,7 +169,7 @@ struct tegra_actmon_emc_ratio {
+ };
+ 
+ static struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
+-	{ 1400000, ULONG_MAX },
++	{ 1400000,    KHZ_MAX },
+ 	{ 1200000,    750000 },
+ 	{ 1100000,    600000 },
+ 	{ 1000000,    500000 },
 -- 
 2.22.0
 
