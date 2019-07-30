@@ -2,127 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8745379FC1
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 06:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582657A053
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 07:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726136AbfG3EJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 00:09:33 -0400
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:39746 "EHLO
-        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726079AbfG3EJc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 00:09:32 -0400
-Received: by mail-yw1-f66.google.com with SMTP id x74so5375701ywx.6
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jul 2019 21:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CZ/qbh71cM7/4Sn8yjlhaQLGnLaI4jI9zz5SRsmHonU=;
-        b=gEUI3Lxu5EebGD79kpxXdVItRKE8YQtmrOx6MnmyBgNFQsAgthepQdmZ7YR24w91Au
-         t2mdnKbzJP26aoKvKj64M3Y1fbgDMqFpixGzeM4dryfG/Q7j1VgUiN7NsjbxINHXxHFD
-         MkKT9HFQLK9wYcOWV5UZR2X4jiPOMR/XsKylcLWpPDfQVS+Abg8MYfhpyx29l3LoeiFa
-         c+/vLs6STG4OAqwqT2s1otHpzYVR3GdRdWLH0QQH7fi/vopR5hK50jpEx4hG0kNBEd9T
-         CKkXZ33pqiZn67enA6AfLOLSTk+TqDn8xdvWDXTotFeFlA21RHjqlu1Qo7h4o6LXfcr+
-         gfAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CZ/qbh71cM7/4Sn8yjlhaQLGnLaI4jI9zz5SRsmHonU=;
-        b=cR0XG/haYCxIrzT1PRw9MVqN6F6h6W0GjNWvx79oWWg3xXdgQNQoIFHKnhMc06Ivwf
-         g5/vmnYAVY/xaHU775UJcfiMJoCa6TsBfxvgZEO6ItDt7zClwgrvgcrz2PnYM8+EOkxb
-         9bHiOU2VKnhmWpQyMCxMzefXWLo/Ci1gkKQZLuLgrr4dNfi5NCp5fSvxl5jP4ImHts0W
-         oabInCRj77El7OBOfqutyw6PEtPEYv8S4Mp7Sjf7+KH/73fKSTyr1SOs7gsDMzWjPn7J
-         50+Sbq+3ppnFBUbKiluwL6CeYx8tJZ8GvK15+GlynAZ0NpLh1XfusVZ+tH16t5HoFC8o
-         4snw==
-X-Gm-Message-State: APjAAAXZ3Lq9Y3nuGiCYSFv9tY3e8qkDocn0koCgTwBiDVUPrR3cPm0W
-        tT02QqWlsUfgzvevTwD1km0D9fkxsVd2VNtWE2c9AA==
-X-Google-Smtp-Source: APXvYqxvGwed2JfCJB11l5R+IOYds/ZYaZtd3Zdle3DGE6x31mLpHihO7SiNQn4zOOnRJdqDO9fBDXBaqvxk7N3Ds58=
-X-Received: by 2002:a81:3803:: with SMTP id f3mr67420374ywa.337.1564459771762;
- Mon, 29 Jul 2019 21:09:31 -0700 (PDT)
+        id S1729295AbfG3F24 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 01:28:56 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:52350 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729293AbfG3F2z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 01:28:55 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 5500160790; Tue, 30 Jul 2019 05:28:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1564464534;
+        bh=CMiqiJA9dGTxLVRLhOlk6KwjAuYDs4kAVLEkfwXcBcs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=XlCrNyfRKRNzHUhsNBgrlSRlDOHrJ23JJGKv5Bf736k7nucx6bR6XjEr4mMqAk98c
+         I+6/O5ukztJko/KIRH/0hYGVgj660QKoxUxuRB0oUC4b6FZ7zYwpGm2ymBJJsPf7BY
+         BEbTt5wiCKov6tkot/QTE3pVf4uq1U5RYG94nJaA=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.79.43.230] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 87DB36030E;
+        Tue, 30 Jul 2019 05:28:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1564464533;
+        bh=CMiqiJA9dGTxLVRLhOlk6KwjAuYDs4kAVLEkfwXcBcs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=LIbC5lTR5O8GUzQJJ+kHSYmI4N91Mya32Qp2DWWxq3DphY20JeK5QtoLQOrTT8qno
+         HciHmgISMYPbGqFsu20xwpcqyNVGr7+Yfz9xpY3QEIKNocyulB45XLrv00Xd3Ozf0i
+         YtcjjlApkvOWsdRvAqkTgQnni93j4csE0gy/n0fo=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 87DB36030E
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+Subject: Re: [PATCH v4 0/3] Introduce Bandwidth OPPs for interconnects
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20190726231558.175130-1-saravanak@google.com>
+ <20190729093545.kvnqxjkyx4nogddk@vireshk-i7>
+ <CAGETcx8OBFGgP1-hj717Sk-_N95-kacVsz0yb288n3pej12n1Q@mail.gmail.com>
+ <20190730024640.xk27jgdfl2j6ucx7@vireshk-i7>
+From:   Sibi Sankar <sibis@codeaurora.org>
+Message-ID: <361effba-4433-24d9-243c-201af39214cc@codeaurora.org>
+Date:   Tue, 30 Jul 2019 10:58:43 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <1564030601-14639-1-git-send-email-rtresidd@electromag.com.au> <5023c937-0662-57e0-c104-bb9c23b07a49@electromag.com.au>
-In-Reply-To: <5023c937-0662-57e0-c104-bb9c23b07a49@electromag.com.au>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 29 Jul 2019 21:09:20 -0700
-Message-ID: <CABXOdTf45YEvF7YVxczzMwC2XQ2xuTpEo7cAAEqEs4=bdxmKNQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] power: supply: sbs-battery: Add ability to force load
- a battery via the devicetree
-To:     Richard Tresidder <rtresidd@electromag.com.au>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>, rfontana@redhat.com,
-        allison@lohutok.net, Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Nick Crews <ncrews@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190730024640.xk27jgdfl2j6ucx7@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 8:02 PM Richard Tresidder
-<rtresidd@electromag.com.au> wrote:
->
-> Hi Nick and Guenter
-> Just adding you to this one also seeing as you're looking at that other
-> sbs_battery patch for me.
-> Not sure why the get maintainers didn't list you for this one.
->
-> Cheers
->     Richard Tresidder
-> > Add the ability to force load a hot pluggable battery during boot where
-> > there is no gpio detect method available and the module is statically
-> > built. Normal polling will then occur on that battery when it is inserted.
-> >
-> > Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
-> > ---
-> >
-> > Notes:
-> >      Add the ability to force load a hot pluggable battery during boot where
-> >      there is no gpio detect method available and the module is statically
-> >      built. Normal polling will then occur on that battery when it is inserted.
-> >
-> >   drivers/power/supply/sbs-battery.c | 6 +++++-
-> >   1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-> > index 048d205..ea8ba3e 100644
-> > --- a/drivers/power/supply/sbs-battery.c
-> > +++ b/drivers/power/supply/sbs-battery.c
-> > @@ -161,6 +161,7 @@ struct sbs_info {
-> >       int                             poll_time;
-> >       u32                             i2c_retry_count;
-> >       u32                             poll_retry_count;
-> > +     bool                            force_load;
-> >       struct delayed_work             work;
-> >       struct mutex                    mode_lock;
-> >       u32                             flags;
-> > @@ -852,6 +853,9 @@ static int sbs_probe(struct i2c_client *client,
-> >       if (rc)
-> >               chip->poll_retry_count = 0;
-> >
-> > +     chip->force_load = of_property_read_bool(client->dev.of_node,
-> > +                                             "sbs,force-load");
-> > +
+Hey Viresh,
 
-Maybe it is documented in another patch, which I have not seen. If it
-isn't, it will have to be documented and reviewed by a devicetree
-maintainer. Either case, I don't immediately see why the variable
-needs to reside in struct sbs_info; it seems to be used only in the
-probe function.
+On 7/30/19 8:16 AM, Viresh Kumar wrote:
+> On 29-07-19, 13:16, Saravana Kannan wrote:
+>> Sibi might be working on doing that for the SDM845 CPUfreq driver.
+>> Georgi could also change his GPU driver use case to use this BW OPP
+>> table and required-opps.
+>>
+>> The problem is that people don't want to start using this until we
+>> decide on the DT representation. So it's like a chicken and egg
+>> situation.
+> 
+> Yeah, I agree to that.
+> 
+> @Georgi and @Sibi: This is your chance to speak up about the proposal
+> from Saravana and if you find anything wrong with them. And specially
+> that it is mostly about interconnects here, I would like to have an
+> explicit Ack from Georgi on this.
+> 
+> And if you guys are all okay about this then please at least commit
+> that you will convert your stuff based on this in coming days.
 
-> >       if (pdata) {
-> >               chip->poll_retry_count = pdata->poll_retry_count;
-> >               chip->i2c_retry_count  = pdata->i2c_retry_count;
-> > @@ -890,7 +894,7 @@ static int sbs_probe(struct i2c_client *client,
-> >        * Before we register, we might need to make sure we can actually talk
-> >        * to the battery.
-> >        */
-> > -     if (!(force_load || chip->gpio_detect)) {
-> > +     if (!(force_load || chip->gpio_detect || chip->force_load)) {
-> >               rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
-> >
-> >               if (rc < 0) {
->
+I've been using both Saravana's and Georgi's series for a while
+now to scale DDR and L3 on SDM845. There is currently no consensus
+as to where the votes are to be actuated from, hence couldn't post
+anything out.
+
+DCVS based on Saravana's series + passive governor:
+https://github.com/QuinAsura/linux/tree/lnext-072619-SK-series
+
+DCVS based on Georgi's series: (I had already posted this out)
+https://github.com/QuinAsura/linux/tree/lnext-072619-GJ-series
+
+-- 
+Qualcomm Innovation Center, Inc.
+Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
