@@ -2,161 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8A17B29E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 20:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E767B2A7
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 20:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387875AbfG3StL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 14:49:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60714 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387746AbfG3StK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Jul 2019 14:49:10 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C79A020693;
-        Tue, 30 Jul 2019 18:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564512549;
-        bh=zrZwl+oAJ26k/mkZR+vY6j+SizAcayvNiJdsXrJsITs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xJ++MjBb3KqdiDuI1APz1Pfm+/fO1U3eLC9vBgr5rnHGkl5Y6YA0+C2/Lo3Z7tbuJ
-         Srn/hSIZh5RCui7qxcZaVYBnTbJq2M2bT9Wmj0eG3ouGdk65UwIlUoIpBez2BCFQ3g
-         IapYWA6dej/9wjOle1UxwWcLlR4BGPxR00Q+0l9I=
-Date:   Tue, 30 Jul 2019 20:49:06 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tri Vo <trong@android.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        kbuild test robot <lkp@intel.com>
-Subject: Re: [PATCH v5] PM / wakeup: show wakeup sources stats in sysfs
-Message-ID: <20190730184906.GA4011@kroah.com>
-References: <20190730024309.233728-1-trong@android.com>
- <CAJZ5v0jJn=vHdYExbzwRAMsk=Ad5bhvOAvHEXe-FHOj2R4Gwig@mail.gmail.com>
- <CANA+-vBKg_W88Oy_wJs1NNYaZ2ciJKO=Mrs47etYTDNXUKW9Uw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANA+-vBKg_W88Oy_wJs1NNYaZ2ciJKO=Mrs47etYTDNXUKW9Uw@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S2388418AbfG3SuR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 14:50:17 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:47184 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388054AbfG3SuJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 14:50:09 -0400
+Received: from mail-pl1-f199.google.com ([209.85.214.199])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hsXCI-0008Q7-O6
+        for linux-pm@vger.kernel.org; Tue, 30 Jul 2019 18:50:06 +0000
+Received: by mail-pl1-f199.google.com with SMTP id d2so35860468pla.18
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 11:50:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=8AX9oe3ZacxjT4EiPIUnCdg/jOWgIIX7DxG+k/pFbS8=;
+        b=FlS6OnEA87y15T5iZj+OJA9dc9wM5EeddSzeU5VsJAu/8kLGFeY9UVMgAVBfLvBE/v
+         nuS6YgiqPzKpQqveRl1sw0LSnJZSh7DLQ/z57AC+i4w4AjNZBdDhhNCErnfNicubBdcf
+         F+25pRCXUwuFp/XVejRWY6RDoRxBkeqyg5errupAQ157dMr0s6pUjhIDpUsVwpURP6a+
+         wlfvfrD0LPuv7v17VQkv82jDJHRFKFSGvm3gA1uJ+XyqOWzhcgJZ9bN2D381txPw/iIQ
+         41vCPoswFNaGs7FzQuS7uH3UNWxqGPFFfRpVCgNmHoQ1/atwH8hCG22XFcpbW3bS+LDP
+         vOEA==
+X-Gm-Message-State: APjAAAWN2Jsz/hCkMwiFpweqkejE9nc22NTr5GkHLmGNOEB5YOnXjYS+
+        n6XcJ6yKp+nLGKJ3Gd1S2YV8lhORqGkfMFXeS/LeZFcVoGLe5JcdoL/HWkjXtYrivawJrsFv9t6
+        ViLDX2TUI5ryBZBnwyR8OhWRGQfOD34Ub2kLv
+X-Received: by 2002:a17:902:6b81:: with SMTP id p1mr113381983plk.91.1564512605414;
+        Tue, 30 Jul 2019 11:50:05 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxvCU5ize3AwSJB2TM51RQU/Q2wBF3GrSjiotc5LGGtRBCPjWjkrkKo6GCfdHilGoejjSBy7g==
+X-Received: by 2002:a17:902:6b81:: with SMTP id p1mr113381952plk.91.1564512605139;
+        Tue, 30 Jul 2019 11:50:05 -0700 (PDT)
+Received: from 2001-b011-380f-37d3-91ca-5fad-3233-fb26.dynamic-ip6.hinet.net (2001-b011-380f-37d3-91ca-5fad-3233-fb26.dynamic-ip6.hinet.net. [2001:b011:380f:37d3:91ca:5fad:3233:fb26])
+        by smtp.gmail.com with ESMTPSA id h1sm88791118pfo.152.2019.07.30.11.50.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Jul 2019 11:50:04 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
+Date:   Wed, 31 Jul 2019 02:50:01 +0800
+Cc:     Keith Busch <kbusch@kernel.org>, rjw@rjwysocki.net,
+        keith.busch@intel.com, hch@lst.de, sagi@grimberg.me,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajatja@google.com
+Content-Transfer-Encoding: 7bit
+Message-Id: <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com>
+References: <2332799.izEFUvJP67@kreacher>
+ <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
+ <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
+ <47415939.KV5G6iaeJG@kreacher> <20190730144134.GA12844@localhost.localdomain>
+ <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
+To:     Mario.Limonciello@dell.com
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 30, 2019 at 11:39:34AM -0700, Tri Vo wrote:
-> On Mon, Jul 29, 2019 at 10:46 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Tue, Jul 30, 2019 at 4:45 AM Tri Vo <trong@android.com> wrote:
-> > >
-> > > Userspace can use wakeup_sources debugfs node to plot history of suspend
-> > > blocking wakeup sources over device's boot cycle. This information can
-> > > then be used (1) for power-specific bug reporting and (2) towards
-> > > attributing battery consumption to specific processes over a period of
-> > > time.
-> > >
-> > > However, debugfs doesn't have stable ABI. For this reason, create a
-> > > 'struct device' to expose wakeup sources statistics in sysfs under
-> > > /sys/class/wakeup/wakeup<ID>/*.
-> > >
-> > > Co-developed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Co-developed-by: Stephen Boyd <swboyd@chromium.org>
-> > > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > > Signed-off-by: Tri Vo <trong@android.com>
-> > > Tested-by: Tri Vo <trong@android.com>
-> > > Tested-by: Kalesh Singh <kaleshsingh@google.com>
-> > > Reported-by: kbuild test robot <lkp@intel.com>
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-class-wakeup |  76 +++++++++
-> > >  drivers/acpi/device_pm.c                     |   3 +-
-> > >  drivers/base/power/Makefile                  |   2 +-
-> > >  drivers/base/power/wakeup.c                  |  21 ++-
-> > >  drivers/base/power/wakeup_stats.c            | 171 +++++++++++++++++++
-> > >  fs/eventpoll.c                               |   4 +-
-> > >  include/linux/pm_wakeup.h                    |  15 +-
-> > >  kernel/power/autosleep.c                     |   2 +-
-> > >  kernel/power/wakelock.c                      |  10 ++
-> > >  kernel/time/alarmtimer.c                     |   2 +-
-> > >  10 files changed, 294 insertions(+), 12 deletions(-)
-> > >  create mode 100644 Documentation/ABI/testing/sysfs-class-wakeup
-> > >  create mode 100644 drivers/base/power/wakeup_stats.c
-> > >
-> > > v2:
-> > > - Updated Documentation/ABI/, as per Greg.
-> > > - Removed locks in attribute functions, as per Greg.
-> > > - Lifetimes of struct wakelock and struck wakeup_source are now different due to
-> > >   the latter embedding a refcounted kobject. Changed it so that struct wakelock
-> > >   only has a pointer to struct wakeup_source, instead of embedding it.
-> > > - Added CONFIG_PM_SLEEP_STATS that enables/disables wakeup source statistics in
-> > >   sysfs.
-> > >
-> > > v3:
-> > > Changes by Greg:
-> > > - Reworked code to use 'struct device' instead of raw kobjects.
-> > > - Updated documentation file.
-> > > - Only link wakeup_stats.o when CONFIG_PM_SLEEP_STATS is enabled.
-> > > Changes by Tri:
-> > > - Reverted changes to kernel/power/wakelock.c. 'struct device' hides kobject
-> > >   operations. So no need to handle lifetimes in wakelock.c
-> > >
-> > > v4:
-> > > - Added 'Co-developed-by:' and 'Tested-by:' fields to commit message.
-> > > - Moved new documentation to a separate file
-> > >   Documentation/ABI/testing/sysfs-class-wakeup, as per Greg.
-> > > - Fixed copyright header in drivers/base/power/wakeup_stats.c, as per Greg.
-> > >
-> > > v5:
-> > > - Removed CONFIG_PM_SLEEP_STATS
-> > > - Used PTR_ERR_OR_ZERO instead of if(IS_ERR(...)) + PTR_ERR, reported by
-> > >   kbuild test robot <lkp@intel.com>
-> > > - Stephen reported that a call to device_init_wakeup() and writing 'enabled' to
-> > >   that device's power/wakeup file results in multiple wakeup source being
-> > >   allocated for that device.  Changed device_wakeup_enable() to check if device
-> > >   wakeup was previously enabled.
-> > > Changes by Stephen:
-> > > - Changed stats location from /sys/class/wakeup/<name>/* to
-> > >   /sys/class/wakeup/wakeup<ID>/*, where ID is an IDA-allocated integer. This
-> > >   avoids name collisions in /sys/class/wakeup/ directory.
-> > > - Added a "name" attribute to wakeup sources, and updated documentation.
-> > > - Device registering the wakeup source is now the parent of the wakeup source.
-> > >   Updated wakeup_source_register()'s signature and its callers accordingly.
-> >
-> > And I really don't like these changes.  Especially having "wakeup"
-> > twice in the path.
-> 
-> I can trim it down to /sys/class/wakeup/<ID>/. Does that sound good?
+at 01:14, <Mario.Limonciello@dell.com> <Mario.Limonciello@dell.com> wrote:
 
-Yes.
+>> -----Original Message-----
+>> From: Keith Busch <kbusch@kernel.org>
+>> Sent: Tuesday, July 30, 2019 9:42 AM
+>> To: Rafael J. Wysocki
+>> Cc: Busch, Keith; Limonciello, Mario; Kai-Heng Feng; Christoph Hellwig;  
+>> Sagi
+>> Grimberg; linux-nvme; Linux PM; Linux Kernel Mailing List; Rajat Jain
+>> Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state  
+>> for
+>> suspend" has problems
+>>
+>>
+>> [EXTERNAL EMAIL]
+>>
+>> On Tue, Jul 30, 2019 at 03:45:31AM -0700, Rafael J. Wysocki wrote:
+>>> So I can reproduce this problem with plain 5.3-rc1 and the patch below  
+>>> fixes it.
+>>>
+>>> Also Mario reports that the same patch needs to be applied for his 9380  
+>>> to
+>> reach
+>>> SLP_S0 after some additional changes under testing/review now, so here it
+>> goes.
+>>> [The changes mentioned above are in the pm-s2idle-testing branch in the
+>>>  linux-pm.git tree at kernel.org.]
+>>>
+>>> ---
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> Subject: [PATCH] nvme-pci: Do not prevent PCI bus-level PM from being  
+>>> used
+>>>
+>>> One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
+>>> host managed power state for suspend") was adding a pci_save_state()
+>>> call to nvme_suspend() in order to prevent the PCI bus-level PM from
+>>> being applied to the suspended NVMe devices, but that causes the NVMe
+>>> drive (PC401 NVMe SK hynix 256GB) in my Dell XPS13 9380 to prevent
+>>> the SoC from reaching package idle states deeper than PC3, which is
+>>> way insufficient for system suspend.
+>>>
+>>> Fix this issue by removing the pci_save_state() call in question.
+>>
+>> I'm okay with the patch if we can get confirmation this doesn't break
+>> any previously tested devices. I recall we add the pci_save_state() in
+>> the first place specifically to prevent PCI D3 since that was reported
+>> to break some devices' low power settings. Kai-Heng or Mario, any input
+>> here?
+>
+> It's entirely possible that in fixing the shutdown/flush/send NVME power  
+> state command
+> that D3 will be OK now but it will take some time to double check across  
+> the variety of disks that
+> we tested before.
 
-> About the other change, I think making the registering device the
-> parent of the wakeup source is a worthwhile change, since that way one
-> can associate a wakeup source sysfs entry with the device that created
-> it.
+Just did a quick test, this patch regress SK Hynix BC501, the SoC stays at  
+PC3 once the patch is applied.
 
-that's fine with me.
+Kai-Heng
 
-> > Couldn't you find a simpler way to avoid the name collisions?
-> 
-> I could also simply log an error in case of a name collision instead
-> of failing hard. That way I can keep the old path with the wakeup
-> source name in it. Other than that, I can't think of a way to resolve
-> the directory name collisions without making that directory name
-> unique, i.e. generating IDs is probably the simplest way. I'm still
-> learning about the kernel, and I might be wrong though. What do you
-> think?
+>
+> What's kernel policy in terms of adding a module parameter and removing  
+> it later?  My gut
+> reaction is I'd like to see that behind a module parameter and if we see  
+> that all the disks
+> are actually OK we can potentially rip it out in a future release.  Also  
+> gives us a knob for easier
+> wider testing outside of the 4 of us.
+>
+>>> Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for  
+>>> suspend")
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>  drivers/nvme/host/pci.c |    8 +-------
+>>>  1 file changed, 1 insertion(+), 7 deletions(-)
+>>>
+>>> Index: linux-pm/drivers/nvme/host/pci.c
+>> ==============================================================
+>> =====
+>>> --- linux-pm.orig/drivers/nvme/host/pci.c
+>>> +++ linux-pm/drivers/nvme/host/pci.c
+>>> @@ -2897,14 +2897,8 @@ static int nvme_suspend(struct device *d
+>>>  		nvme_dev_disable(ndev, true);
+>>>  		ctrl->npss = 0;
+>>>  		ret = 0;
+>>> -		goto unfreeze;
+>>>  	}
+>>> -	/*
+>>> -	 * A saved state prevents pci pm from generically controlling the
+>>> -	 * device's power. If we're using protocol specific settings, we don't
+>>> -	 * want pci interfering.
+>>> -	 */
+>>> -	pci_save_state(pdev);
+>>> +
+>>>  unfreeze:
+>>>  	nvme_unfreeze(ctrl);
+>>>  	return ret;
 
-Uniqe ids for the class should be fine, that's all you need to have.
 
-thanks,
-
-greg k-h
