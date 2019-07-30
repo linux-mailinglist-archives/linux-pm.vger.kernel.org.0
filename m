@@ -2,78 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 560677A90E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 14:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E017AB46
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 16:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726717AbfG3M5t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 08:57:49 -0400
-Received: from mga04.intel.com ([192.55.52.120]:45000 "EHLO mga04.intel.com"
+        id S1730163AbfG3OoU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 10:44:20 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32265 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726241AbfG3M5t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Jul 2019 08:57:49 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1728764AbfG3OoT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Jul 2019 10:44:19 -0400
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 05:57:48 -0700
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 07:44:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,326,1559545200"; 
-   d="scan'208";a="183122529"
-Received: from chingkai-mobl.amr.corp.intel.com (HELO [10.252.137.193]) ([10.252.137.193])
-  by orsmga002.jf.intel.com with ESMTP; 30 Jul 2019 05:57:47 -0700
-Subject: Re: [alsa-devel] [RFC PATCH 17/40] soundwire: bus: use
- runtime_pm_get_sync/pm when enabled
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, linux-pm@vger.kernel.org,
-        tiwai@suse.de, gregkh@linuxfoundation.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org, broonie@kernel.org,
-        srinivas.kandagatla@linaro.org, jank@cadence.com,
-        slawomir.blauciak@intel.com, Sanyog Kale <sanyog.r.kale@intel.com>
-References: <20190725234032.21152-1-pierre-louis.bossart@linux.intel.com>
- <20190725234032.21152-18-pierre-louis.bossart@linux.intel.com>
- <45a912c5-134b-8642-70ef-8c1060389300@linux.intel.com>
- <20190726190823.GD9224@smile.fi.intel.com>
- <5a16d9e6-0a9c-a0a8-3b11-d046247f3879@linux.intel.com>
- <20190730112157.GM23480@smile.fi.intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <a1b383b3-7846-3545-38a5-beece3e52849@linux.intel.com>
-Date:   Tue, 30 Jul 2019 07:57:46 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+X-IronPort-AV: E=Sophos;i="5.64,327,1559545200"; 
+   d="scan'208";a="195815593"
+Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Jul 2019 07:44:18 -0700
+Date:   Tue, 30 Jul 2019 08:41:35 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     "Busch, Keith" <keith.busch@intel.com>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@google.com>
+Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+Message-ID: <20190730144134.GA12844@localhost.localdomain>
+References: <2332799.izEFUvJP67@kreacher>
+ <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
+ <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
+ <47415939.KV5G6iaeJG@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <20190730112157.GM23480@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <47415939.KV5G6iaeJG@kreacher>
+User-Agent: Mutt/1.9.1 (2017-09-22)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 7/30/19 6:21 AM, Andy Shevchenko wrote:
-> On Mon, Jul 29, 2019 at 05:07:39PM -0500, Pierre-Louis Bossart wrote:
->> On 7/26/19 2:08 PM, Andy Shevchenko wrote:
->>> On Fri, Jul 26, 2019 at 01:08:57PM -0500, Pierre-Louis Bossart wrote:
+On Tue, Jul 30, 2019 at 03:45:31AM -0700, Rafael J. Wysocki wrote:
+> So I can reproduce this problem with plain 5.3-rc1 and the patch below fixes it.
 > 
->>>> -	if (ret < 0)
->>>> +	if (ret < 0 && ret != -EACCES)
->>>
->>> ...and here, the pm_runtime_put_noidle() call is missed.
->>
->> yes but in the example you provided, they actually do more work than just
->> decrement the device usage counter:
+> Also Mario reports that the same patch needs to be applied for his 9380 to reach
+> SLP_S0 after some additional changes under testing/review now, so here it goes.
 > 
-> In their case they would like to do that. You decide what is appropriate call
-> in your case.
+> [The changes mentioned above are in the pm-s2idle-testing branch in the
+>  linux-pm.git tree at kernel.org.]
 > 
-> My point is, that reference counter in case of error handling should be
-> returned back to its value.
+> ---
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Subject: [PATCH] nvme-pci: Do not prevent PCI bus-level PM from being used
+> 
+> One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
+> host managed power state for suspend") was adding a pci_save_state()
+> call to nvme_suspend() in order to prevent the PCI bus-level PM from
+> being applied to the suspended NVMe devices, but that causes the NVMe
+> drive (PC401 NVMe SK hynix 256GB) in my Dell XPS13 9380 to prevent
+> the SoC from reaching package idle states deeper than PC3, which is
+> way insufficient for system suspend.
+> 
+> Fix this issue by removing the pci_save_state() call in question.
 
-Agree on the reference count.
-I am however not clear on the next step and 'what is appropriate'.
+I'm okay with the patch if we can get confirmation this doesn't break
+any previously tested devices. I recall we add the pci_save_state() in
+the first place specifically to prevent PCI D3 since that was reported
+to break some devices' low power settings. Kai-Heng or Mario, any input
+here?
 
-If pm_runtime_get_sync() failed, then technically the device was not 
-resumed so marking it as last_busy+autosuspend, or using a plain vanilla 
-put() will not result in any action. I must be missing something here.
+
+ 
+> Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for suspend")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/nvme/host/pci.c |    8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+> 
+> Index: linux-pm/drivers/nvme/host/pci.c
+> ===================================================================
+> --- linux-pm.orig/drivers/nvme/host/pci.c
+> +++ linux-pm/drivers/nvme/host/pci.c
+> @@ -2897,14 +2897,8 @@ static int nvme_suspend(struct device *d
+>  		nvme_dev_disable(ndev, true);
+>  		ctrl->npss = 0;
+>  		ret = 0;
+> -		goto unfreeze;
+>  	}
+> -	/*
+> -	 * A saved state prevents pci pm from generically controlling the
+> -	 * device's power. If we're using protocol specific settings, we don't
+> -	 * want pci interfering.
+> -	 */
+> -	pci_save_state(pdev);
+> +
+>  unfreeze:
+>  	nvme_unfreeze(ctrl);
+>  	return ret;
