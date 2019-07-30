@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E05F7AF27
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AEB7AF3A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730292AbfG3RKS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 13:10:18 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:40547 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730074AbfG3RKR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 13:10:17 -0400
-Received: by mail-wr1-f67.google.com with SMTP id r1so66593543wrl.7;
-        Tue, 30 Jul 2019 10:10:15 -0700 (PDT)
+        id S1730337AbfG3RKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 13:10:45 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:42339 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730282AbfG3RKS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 13:10:18 -0400
+Received: by mail-wr1-f68.google.com with SMTP id x1so16704690wrr.9;
+        Tue, 30 Jul 2019 10:10:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2jx9uRBt6JB5ilMndbuQtI4fuwVo1oth3W6XlcI98xo=;
-        b=H+L0aLW5CdeY4D/XejT1s8llSymAxTF1yyCNR3v7feiNOM83jgP4TZR6O3mV8kKFIa
-         67C2l0UlaRSBBRAXtFJz6sp9jdzXIuUkuT5EnmR30fIkGNwZ7BBkQaWu3KN8L1J1OD/3
-         jBqRD7sHA9ALOUxEizou112ro7cotPtzJaXVO+gA72McPD8/59VMG4kNMvyWLFu+vBob
-         OiHc5wDspQX169M6Vxs4kcSxnqAxxYg4UizBgbAlNFrdfP+SM8Sx8x/IVqaIXod/DL+Z
-         Cy51jN1Kp5yI965m9w9emiOfRfnDMViXboa9EPjjZPk4NGZDzXIpAMBddlIeYlP7FWgU
-         JOEw==
+        bh=YB/K51J2yBjrGqQBOAGlFNTt2rdW770Na58VRvSkzkE=;
+        b=uJe3a6TOWAkM0mBZl1xcGfff3uOQlBMGjTwvrJW7ConUXBv8e7wLGzXhofdwzjNFY9
+         2HlDM46hjPxrc53kIIOgBuH+rCdbssmvt9zLn7g1gKix1tS1LJl4bPfPC+V6NiI+A2hZ
+         6O0oJX5RJ2V9bMAvPDErMcmBHO5YaIJ1fiDxpwtElaBtLEveFNJc5blNA0L3QEMolX7q
+         hVmh39pREkZYztrVqnB8OgixwzPLzRpTBC2L0HqKwdTqBo3txkwaM5QlSNOHo/lmrqYr
+         zmBwD6Oae7caejyIxycYDFQUIcUGJmHOAu4hOjyGkmPDheWKRtSf3ggM8r1ZzGWPdTdX
+         uLVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2jx9uRBt6JB5ilMndbuQtI4fuwVo1oth3W6XlcI98xo=;
-        b=CQ/n3xSlENfVRKB0SW8M4BMH+B+nmpVOyWqMtIDo7mjtHJaJpsyRfJfI4qXr5xhC1E
-         jthfzJU6Bbxnyt3yQv4F5G72eW226lmoQEqjV2yuS18mzeTdcaGZ3qfJSnWtBzXrmd5v
-         T8J32R2qX8HjkdESkOCWBgaFVKIsXGUUQj4Ts5Ou6CbWvTquvKth3ycCz97+FbhrETQe
-         RGT57SRZl/IKxqYDYXw24lwtXFuRxavlyedl1Zy3S1bYknwZhs4kzg5va0ebQEA2vhiq
-         MkFxdcD5A3JdelGtxZmxnaxCKLieruD058hTHRUuaHDt7cJqeDoC6E2wjUWwzNQqR/xx
-         Mcsg==
-X-Gm-Message-State: APjAAAXTdrbzEfWQC5gcDSl/HTkAzR93NmOuAqRihyinc4lHCfKrOlHH
-        9r0k7Lp+azQrYys2U7ozAuY=
-X-Google-Smtp-Source: APXvYqzycZSrm0esL/eLQiwlzq8G51YnZ68F3nWXoIV0MnnSl5kTIqDLuiFnNM+pV3FbAPx25q7eog==
-X-Received: by 2002:a5d:4e4d:: with SMTP id r13mr40131142wrt.295.1564506615247;
-        Tue, 30 Jul 2019 10:10:15 -0700 (PDT)
+        bh=YB/K51J2yBjrGqQBOAGlFNTt2rdW770Na58VRvSkzkE=;
+        b=QnTNaEpQ+ue9Re3AM9BDAGo/eVBp1b4pqC9MGrbzvD57r/BCmTrgKUkRJBWWlFMqHS
+         w/f/ails8Fa0nzAMG+mkEXoYSF7nn10wXjW9wD44PeXY3QRowxq2gzPMei560HjJw666
+         SoKdW1dSeyWh9P+IUT4nMiVJeGfxV+8XsCyPonSWcmCkBcuKr5rfSA9agwi/iRPXedKE
+         nYXUphDobAnecdk2HUC+CnfwGWprMJMXMJfapHzH9x1B4kD5NSQ6sPEdTU084YHR/VgQ
+         4Hoves7nLRS25njhmgHsIrju+M/1+UpZNcFokvKw3QglvZ9w2Z5Byk8AlhMy770Veg7X
+         NAHg==
+X-Gm-Message-State: APjAAAUEfMlJjYmCktK0bikZ3CvB877EKeIx9SBqtw4d9UvZeyg1hZA0
+        Xw7sRyA26BNyo+5GyMxubAo=
+X-Google-Smtp-Source: APXvYqwWUAkefGUrF7CbjIjQzU6py/KkUB1MLPIDQTIp7IrpU1U4AQIrh4JiKWRfXqEHCPhNed0DSQ==
+X-Received: by 2002:a5d:69c4:: with SMTP id s4mr98720282wrw.163.1564506616472;
+        Tue, 30 Jul 2019 10:10:16 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.gmail.com with ESMTPSA id i13sm58897736wrr.73.2019.07.30.10.10.13
+        by smtp.gmail.com with ESMTPSA id i13sm58897736wrr.73.2019.07.30.10.10.15
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 10:10:14 -0700 (PDT)
+        Tue, 30 Jul 2019 10:10:16 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -52,9 +52,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 07/13] ARM: tegra: Add tegra_pm_park_secondary_cpu()
-Date:   Tue, 30 Jul 2019 20:09:49 +0300
-Message-Id: <20190730170955.11987-8-digetx@gmail.com>
+Subject: [PATCH v4 08/13] clk: tegra: Add missing stubs for the case of !CONFIG_PM_SLEEP
+Date:   Tue, 30 Jul 2019 20:09:50 +0300
+Message-Id: <20190730170955.11987-9-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190730170955.11987-1-digetx@gmail.com>
 References: <20190730170955.11987-1-digetx@gmail.com>
@@ -65,64 +65,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This function resembles tegra_cpu_die() of the hotplug code, but
-this variant is more suitable to be used for CPU PM because it's made
-specifically to be used by cpu_suspend(). In short this function puts
-secondary CPU offline, it will be used by the new CPUIDLE driver.
+The new CPUIDLE driver uses the Tegra's CLK API and that driver won't
+strictly depend on CONFIG_PM_SLEEP, hence add the required stubs in
+order to allow compiling of the new driver with the CONFIG_PM_SLEEP=n.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/mach-tegra/pm.c | 14 ++++++++++++++
- include/soc/tegra/pm.h   |  6 ++++++
- 2 files changed, 20 insertions(+)
+ include/linux/clk/tegra.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm/mach-tegra/pm.c b/arch/arm/mach-tegra/pm.c
-index 4cc64a135a3e..7d9ef26e52a7 100644
---- a/arch/arm/mach-tegra/pm.c
-+++ b/arch/arm/mach-tegra/pm.c
-@@ -427,4 +427,18 @@ void __init tegra_init_suspend(void)
+diff --git a/include/linux/clk/tegra.h b/include/linux/clk/tegra.h
+index b8aef62cc3f5..cf0f2cb5e109 100644
+--- a/include/linux/clk/tegra.h
++++ b/include/linux/clk/tegra.h
+@@ -108,6 +108,19 @@ static inline void tegra_cpu_clock_resume(void)
  
- 	suspend_set_ops(&tegra_suspend_ops);
+ 	tegra_cpu_car_ops->resume();
  }
-+
-+int tegra_pm_park_secondary_cpu(unsigned long cpu)
++#else
++static inline bool tegra_cpu_rail_off_ready(void)
 +{
-+	if (cpu > 0) {
-+		tegra_disable_clean_inv_dcache(TEGRA_FLUSH_CACHE_LOUIS);
++	return false;
++}
 +
-+		if (tegra_get_chip_id() == TEGRA20)
-+			tegra20_hotplug_shutdown();
-+		else
-+			tegra30_hotplug_shutdown();
-+	}
++static inline void tegra_cpu_clock_suspend(void)
++{
++}
 +
-+	return -EINVAL;
++static inline void tegra_cpu_clock_resume(void)
++{
 +}
  #endif
-diff --git a/include/soc/tegra/pm.h b/include/soc/tegra/pm.h
-index 2fbee9efda21..08477d7bfab9 100644
---- a/include/soc/tegra/pm.h
-+++ b/include/soc/tegra/pm.h
-@@ -27,6 +27,7 @@ int tegra30_pm_secondary_cpu_suspend(unsigned long arg);
- void tegra_pm_clear_cpu_in_lp2(void);
- void tegra_pm_set_cpu_in_lp2(void);
- int tegra_pm_enter_lp2(void);
-+int tegra_pm_park_secondary_cpu(unsigned long cpu);
- #else
- static inline enum tegra_suspend_mode
- tegra_pm_validate_suspend_mode(enum tegra_suspend_mode mode)
-@@ -55,6 +56,11 @@ static inline int tegra_pm_enter_lp2(void)
- {
- 	return -ENOTSUPP;
- }
-+
-+static inline int tegra_pm_park_secondary_cpu(unsigned long cpu)
-+{
-+	return -ENOTSUPP;
-+}
- #endif /* CONFIG_PM_SLEEP */
  
- #endif /* __SOC_TEGRA_PM_H__ */
+ extern void tegra210_xusb_pll_hw_control_enable(void);
 -- 
 2.22.0
 
