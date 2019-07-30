@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FC77B221
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 20:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDB07B28F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 20:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730081AbfG3Sjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 14:39:46 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:33875 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbfG3Sjq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 14:39:46 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l12so48683259oil.1
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 11:39:45 -0700 (PDT)
+        id S2388407AbfG3SsM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 14:48:12 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43801 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388028AbfG3SsL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 14:48:11 -0400
+Received: by mail-pf1-f194.google.com with SMTP id i189so30306673pfg.10
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 11:48:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Hn8rVqsLu57CTsIv+4AEu3lgPz7dzu5u0LtZwakTzpQ=;
-        b=aZq4W3sYpLbfDXk5mPkDRrGoJ9ERrPYOH1zTUawx2IBk9XlL1qSZOl4yzfvfL6lp4M
-         mW8BUurVMViiftyaCdfttaIrynR3pQLSfUsP0pYx2Xa+rrmVgxB4/ajPx5Ia37i8SKKB
-         JVbwfSMPoPgxuthtY56dIC9aQLYBODZDnwAlFGbDq6lG7ZhY2DSg7W8XyOvx6Opbn2Pq
-         Qxae5KbdBEwPr1o8HPt5Can+Qah0B7u2dsFtxAtFMQEepS3fEsVCRjgRCJY4Mu29f+q6
-         YMQ8ayP2AL+nzAdJPXhcxlxwzyBLScI2Rp1M+5mLTjZgSUrj45+O4e1F8SPftegc70+c
-         hPDg==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:from:to:subject:user-agent:date;
+        bh=z+31YRcGYKxlw4zSSmAToPPt3gVT1HPAnO6GnYlbMZo=;
+        b=TJAq4qg2C4MBQbkD/CTjGokwpAKEzdcOAFM3jCYS+mlBvSYxgOUsD6++v8VwgpaaYf
+         SnCgoasoMjxoVS0Oq099Bjly5HzPXJFsePK4WjeTg3GfZPjMPTBd6HL1yDn6dDWty9zB
+         TYGgUam3ePk5GjM3kr1xPw56i9qyvhK8YjlW0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hn8rVqsLu57CTsIv+4AEu3lgPz7dzu5u0LtZwakTzpQ=;
-        b=JiMEUBoQuM1Vn+EQUpZyILn2v6Hy7Ry+A0D5T8MYWMJjVTYFdyeV7Hzr8P8YWERcSz
-         pmGmOURDs9IJ/BKNrxGezpxcUE8+uwtV6qs0xYdIgc/P16OsOq/EWKwdSqCRnkcK4u5J
-         epFF92vatL/3irxmcugOoiWSwBQEMvjVPRrHVmEkaRO69vHzstMkAJyXcsFdsqlJDufE
-         05vM5YJXYFkpWHCF2WY4n4IlTQorqlAH7gt3twH51Ddts1w1L7Y6H5tUuJ/dqXul3IBY
-         ZMVpv4oAYQGkMcGUGswo5AJyeOhjXvPcGT1TklqtXgck6eWEz0kmjDQBhGFWPQjFTWuT
-         gMQQ==
-X-Gm-Message-State: APjAAAU2hzEPZxuYcatzNerK7TaEqItxWLw1Pvn235ntS3ZwW5OsyzBr
-        YFYxUqNKz5odiKaAp71o2/ycSSyheWHGql1oiv4=
-X-Google-Smtp-Source: APXvYqzcHIs1IocmYpbfRWUSjCZAhhUgwcXSaYsCUrLX2GJ9L0TTQB47knLCvvOTNP4HMJqHvGbL3aG3dPnIio241hw=
-X-Received: by 2002:aca:3509:: with SMTP id c9mr60354165oia.179.1564511985221;
- Tue, 30 Jul 2019 11:39:45 -0700 (PDT)
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:from:to:subject
+         :user-agent:date;
+        bh=z+31YRcGYKxlw4zSSmAToPPt3gVT1HPAnO6GnYlbMZo=;
+        b=kXvb0X+MjAuV493O1Jvqk5t39j8otaN1AnxTtVaVfV/Yp+cJFxbg9/E/rkB1G/XJXd
+         RaIdWcr8HNAHPv8gEtsWJKESPVJenJCtyIt3GVgw6o+tCJbgPHPj/8goN5Vt6Y72qeql
+         Y8lwn9v9lc9lBocqrK7N3Bp6qIZvyX/qZ7lejKw3uTm+zndBMcTy4d6NK+FeBbSrdQVn
+         0r0UZanDaYXW3lNzpFP4u2zCFBob/gkXNK83JOcR7alWkebgAcLqHqYxYZOTq84MhCM6
+         RIfXZnfimwhok9/IaeKmp7FI4/lg3g3gvjwqTVTgmbAzb6QsgtGvqkdY2y3MobrxcYt1
+         Yc8g==
+X-Gm-Message-State: APjAAAXNB8J2Ghk/xieBrlcOGPJHZYCacRvYgZ3b2AkYlTm3Kq9EMvBq
+        oydl0/IpTpO7cVPVtiz9kTpppQ==
+X-Google-Smtp-Source: APXvYqxAVgwtF+7Gc1/v2YuISir9lkLsH3N699o/8YpjsdFSEKU1zdqtP5clNwyMIyol+CT08586/g==
+X-Received: by 2002:a62:3445:: with SMTP id b66mr43403564pfa.246.1564512490944;
+        Tue, 30 Jul 2019 11:48:10 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id n140sm68012721pfd.132.2019.07.30.11.48.10
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 30 Jul 2019 11:48:10 -0700 (PDT)
+Message-ID: <5d4090ea.1c69fb81.d5cab.4dcd@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20190730024309.233728-1-trong@android.com> <CAJZ5v0jJn=vHdYExbzwRAMsk=Ad5bhvOAvHEXe-FHOj2R4Gwig@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jJn=vHdYExbzwRAMsk=Ad5bhvOAvHEXe-FHOj2R4Gwig@mail.gmail.com>
-From:   Tri Vo <trong@android.com>
-Date:   Tue, 30 Jul 2019 11:39:34 -0700
-Message-ID: <CANA+-vBKg_W88Oy_wJs1NNYaZ2ciJKO=Mrs47etYTDNXUKW9Uw@mail.gmail.com>
-Subject: Re: [PATCH v5] PM / wakeup: show wakeup sources stats in sysfs
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CANA+-vBKg_W88Oy_wJs1NNYaZ2ciJKO=Mrs47etYTDNXUKW9Uw@mail.gmail.com>
+References: <20190730024309.233728-1-trong@android.com> <CAJZ5v0jJn=vHdYExbzwRAMsk=Ad5bhvOAvHEXe-FHOj2R4Gwig@mail.gmail.com> <CANA+-vBKg_W88Oy_wJs1NNYaZ2ciJKO=Mrs47etYTDNXUKW9Uw@mail.gmail.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -55,110 +55,38 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Sandeep Patil <sspatil@google.com>,
         Kalesh Singh <kaleshsingh@google.com>,
         Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         "Cc: Android Kernel" <kernel-team@android.com>,
         kbuild test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>, Tri Vo <trong@android.com>
+Subject: Re: [PATCH v5] PM / wakeup: show wakeup sources stats in sysfs
+User-Agent: alot/0.8.1
+Date:   Tue, 30 Jul 2019 11:48:09 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 29, 2019 at 10:46 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, Jul 30, 2019 at 4:45 AM Tri Vo <trong@android.com> wrote:
+Quoting Tri Vo (2019-07-30 11:39:34)
+> On Mon, Jul 29, 2019 at 10:46 PM Rafael J. Wysocki <rafael@kernel.org> wr=
+ote:
 > >
-> > Userspace can use wakeup_sources debugfs node to plot history of suspend
-> > blocking wakeup sources over device's boot cycle. This information can
-> > then be used (1) for power-specific bug reporting and (2) towards
-> > attributing battery consumption to specific processes over a period of
-> > time.
+> > On Tue, Jul 30, 2019 at 4:45 AM Tri Vo <trong@android.com> wrote:
+> > > - Device registering the wakeup source is now the parent of the wakeu=
+p source.
+> > >   Updated wakeup_source_register()'s signature and its callers accord=
+ingly.
 > >
-> > However, debugfs doesn't have stable ABI. For this reason, create a
-> > 'struct device' to expose wakeup sources statistics in sysfs under
-> > /sys/class/wakeup/wakeup<ID>/*.
-> >
-> > Co-developed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Co-developed-by: Stephen Boyd <swboyd@chromium.org>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > Signed-off-by: Tri Vo <trong@android.com>
-> > Tested-by: Tri Vo <trong@android.com>
-> > Tested-by: Kalesh Singh <kaleshsingh@google.com>
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-wakeup |  76 +++++++++
-> >  drivers/acpi/device_pm.c                     |   3 +-
-> >  drivers/base/power/Makefile                  |   2 +-
-> >  drivers/base/power/wakeup.c                  |  21 ++-
-> >  drivers/base/power/wakeup_stats.c            | 171 +++++++++++++++++++
-> >  fs/eventpoll.c                               |   4 +-
-> >  include/linux/pm_wakeup.h                    |  15 +-
-> >  kernel/power/autosleep.c                     |   2 +-
-> >  kernel/power/wakelock.c                      |  10 ++
-> >  kernel/time/alarmtimer.c                     |   2 +-
-> >  10 files changed, 294 insertions(+), 12 deletions(-)
-> >  create mode 100644 Documentation/ABI/testing/sysfs-class-wakeup
-> >  create mode 100644 drivers/base/power/wakeup_stats.c
-> >
-> > v2:
-> > - Updated Documentation/ABI/, as per Greg.
-> > - Removed locks in attribute functions, as per Greg.
-> > - Lifetimes of struct wakelock and struck wakeup_source are now different due to
-> >   the latter embedding a refcounted kobject. Changed it so that struct wakelock
-> >   only has a pointer to struct wakeup_source, instead of embedding it.
-> > - Added CONFIG_PM_SLEEP_STATS that enables/disables wakeup source statistics in
-> >   sysfs.
-> >
-> > v3:
-> > Changes by Greg:
-> > - Reworked code to use 'struct device' instead of raw kobjects.
-> > - Updated documentation file.
-> > - Only link wakeup_stats.o when CONFIG_PM_SLEEP_STATS is enabled.
-> > Changes by Tri:
-> > - Reverted changes to kernel/power/wakelock.c. 'struct device' hides kobject
-> >   operations. So no need to handle lifetimes in wakelock.c
-> >
-> > v4:
-> > - Added 'Co-developed-by:' and 'Tested-by:' fields to commit message.
-> > - Moved new documentation to a separate file
-> >   Documentation/ABI/testing/sysfs-class-wakeup, as per Greg.
-> > - Fixed copyright header in drivers/base/power/wakeup_stats.c, as per Greg.
-> >
-> > v5:
-> > - Removed CONFIG_PM_SLEEP_STATS
-> > - Used PTR_ERR_OR_ZERO instead of if(IS_ERR(...)) + PTR_ERR, reported by
-> >   kbuild test robot <lkp@intel.com>
-> > - Stephen reported that a call to device_init_wakeup() and writing 'enabled' to
-> >   that device's power/wakeup file results in multiple wakeup source being
-> >   allocated for that device.  Changed device_wakeup_enable() to check if device
-> >   wakeup was previously enabled.
-> > Changes by Stephen:
-> > - Changed stats location from /sys/class/wakeup/<name>/* to
-> >   /sys/class/wakeup/wakeup<ID>/*, where ID is an IDA-allocated integer. This
-> >   avoids name collisions in /sys/class/wakeup/ directory.
-> > - Added a "name" attribute to wakeup sources, and updated documentation.
-> > - Device registering the wakeup source is now the parent of the wakeup source.
-> >   Updated wakeup_source_register()'s signature and its callers accordingly.
->
-> And I really don't like these changes.  Especially having "wakeup"
-> twice in the path.
+> > And I really don't like these changes.  Especially having "wakeup"
+> > twice in the path.
+>=20
+> I can trim it down to /sys/class/wakeup/<ID>/. Does that sound good?
 
-I can trim it down to /sys/class/wakeup/<ID>/. Does that sound good?
+Using the same prefix for the class and the device name is quite common.
+For example, see the input, regulator, tty, tpm, remoteproc, hwmon,
+extcon classes. I'd prefer it was left as /sys/class/wakeup/wakeupN. The
+class name could be changed to wakeup_source perhaps (i.e.
+/sys/class/wakeup_source/wakeupN)?
 
-About the other change, I think making the registering device the
-parent of the wakeup source is a worthwhile change, since that way one
-can associate a wakeup source sysfs entry with the device that created
-it.
->
-> Couldn't you find a simpler way to avoid the name collisions?
-
-I could also simply log an error in case of a name collision instead
-of failing hard. That way I can keep the old path with the wakeup
-source name in it. Other than that, I can't think of a way to resolve
-the directory name collisions without making that directory name
-unique, i.e. generating IDs is probably the simplest way. I'm still
-learning about the kernel, and I might be wrong though. What do you
-think?
