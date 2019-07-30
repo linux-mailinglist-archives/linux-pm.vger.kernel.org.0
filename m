@@ -2,105 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B3F7B307
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 21:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCB07B329
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 21:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388284AbfG3TNY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 15:13:24 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38201 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388262AbfG3TNY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 15:13:24 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y15so30343197pfn.5
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 12:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aCFi9VKfA/regOH6ME0h7V2OJPrhlZ4OE3HFuZl/Mr4=;
-        b=hk0Bac0aiWQasaW/82OqlXyeS+zRRbeGWMF9iYoYCCjmyk5hKfhbErMAfoM104i7Br
-         TdpwZFEl9pU+frxz1cazoSP6L1BNAC+8jncLJVwuFEsDynqzb3OP7vNis0EU/ikkPW8m
-         /LeN2upB3IFugt/kUzhj6IfHluZI3rXDFFkRA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aCFi9VKfA/regOH6ME0h7V2OJPrhlZ4OE3HFuZl/Mr4=;
-        b=oBr8ty01a308ojvDV6OEEwkhkLdHfqUEMsFloXwBcoWo0QqGoXu9nQEkXs9hcTa0KW
-         K3Z8a/zRKQWxB4hyS93c3FgjYyYND6ZTtSrRQYxruc+3vK+wqwRD5dx68I0v5auT+MzY
-         bqCPr9savHMMbBeUUJb+cgMEDsKqxgdGPh4BC1/Awxb4OG97k5jEZP54zWHr2bL6FFHN
-         hQbhaqO51s5eOaOxGJ3uLvWkOi0pAAeZ1rNqcbEHEJkPitl08vbP/Fla5EcHrHJ47wR4
-         OudUFkrzobTiOzRzbeDAekU7R4Ubm+KHoFNKBtZbQcz15f99DJKH08FIBVIIt74/fIr3
-         5d9A==
-X-Gm-Message-State: APjAAAXNyOrJKnm2r66CU7/t1ZjM00DZZn7KnEl+Uda84SwA/02V+Qo2
-        ddVHgVT2sgeu4W2RInzzOTST4Q==
-X-Google-Smtp-Source: APXvYqyTpbQ7f3xITrwKbyFWcIPqfOysYAwjkN9vIf84u+eLPDg/LwjNFZLDtMcMgZUrWQ+iiuxmZg==
-X-Received: by 2002:a65:57ca:: with SMTP id q10mr113599135pgr.52.1564514003446;
-        Tue, 30 Jul 2019 12:13:23 -0700 (PDT)
-Received: from skynet.sea.corp.google.com ([2620:0:1008:1100:c4b5:ec23:d87b:d6d3])
-        by smtp.gmail.com with ESMTPSA id n89sm84649540pjc.0.2019.07.30.12.13.22
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 30 Jul 2019 12:13:23 -0700 (PDT)
-From:   Thomas Garnier <thgarnie@chromium.org>
-To:     kernel-hardening@lists.openwall.com
-Cc:     kristen@linux.intel.com, keescook@chromium.org,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v9 09/11] x86/power/64: Adapt assembly for PIE support
-Date:   Tue, 30 Jul 2019 12:12:53 -0700
-Message-Id: <20190730191303.206365-10-thgarnie@chromium.org>
-X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
-In-Reply-To: <20190730191303.206365-1-thgarnie@chromium.org>
-References: <20190730191303.206365-1-thgarnie@chromium.org>
+        id S2387878AbfG3TWT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 15:22:19 -0400
+Received: from mga05.intel.com ([192.55.52.43]:43559 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387863AbfG3TWS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Jul 2019 15:22:18 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 12:22:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,327,1559545200"; 
+   d="scan'208";a="173805048"
+Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Jul 2019 12:22:17 -0700
+Date:   Tue, 30 Jul 2019 13:19:34 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Mario.Limonciello@dell.com, rjw@rjwysocki.net,
+        keith.busch@intel.com, hch@lst.de, sagi@grimberg.me,
+        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajatja@google.com
+Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+Message-ID: <20190730191934.GD13948@localhost.localdomain>
+References: <2332799.izEFUvJP67@kreacher>
+ <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
+ <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
+ <47415939.KV5G6iaeJG@kreacher>
+ <20190730144134.GA12844@localhost.localdomain>
+ <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
+ <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com>
+User-Agent: Mutt/1.9.1 (2017-09-22)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change the assembly code to use only relative references of symbols for the
-kernel to be PIE compatible.
+On Wed, Jul 31, 2019 at 02:50:01AM +0800, Kai-Heng Feng wrote:
+> 
+> Just did a quick test, this patch regress SK Hynix BC501, the SoC stays at
+> PC3 once the patch is applied.
 
-Position Independent Executable (PIE) support will allow to extend the
-KASLR randomization range below 0xffffffff80000000.
+Okay, I'm afraid device/platform quirks may be required unless there are
+any other ideas out there.
 
-Signed-off-by: Thomas Garnier <thgarnie@chromium.org>
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- arch/x86/power/hibernate_asm_64.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/power/hibernate_asm_64.S b/arch/x86/power/hibernate_asm_64.S
-index a4d5eb0a7ece..796cd19d575b 100644
---- a/arch/x86/power/hibernate_asm_64.S
-+++ b/arch/x86/power/hibernate_asm_64.S
-@@ -23,7 +23,7 @@
- #include <asm/frame.h>
- 
- ENTRY(swsusp_arch_suspend)
--	movq	$saved_context, %rax
-+	leaq	saved_context(%rip), %rax
- 	movq	%rsp, pt_regs_sp(%rax)
- 	movq	%rbp, pt_regs_bp(%rax)
- 	movq	%rsi, pt_regs_si(%rax)
-@@ -114,7 +114,7 @@ ENTRY(restore_registers)
- 	movq	%rax, %cr4;  # turn PGE back on
- 
- 	/* We don't restore %rax, it must be 0 anyway */
--	movq	$saved_context, %rax
-+	leaq	saved_context(%rip), %rax
- 	movq	pt_regs_sp(%rax), %rsp
- 	movq	pt_regs_bp(%rax), %rbp
- 	movq	pt_regs_si(%rax), %rsi
--- 
-2.22.0.770.g0f2c4a37fd-goog
-
+I'm not a big fan of adding more params to this driver. Those are
+global to the module, so that couldn't really handle a platform with
+two different devices that want different behavior.
