@@ -2,190 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D89187AF6B
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CF87AFE6
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 19:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729860AbfG3RO7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 13:14:59 -0400
-Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:1856 "EHLO
-        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729423AbfG3RO6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 13:14:58 -0400
-Received: from pps.filterd (m0170389.ppops.net [127.0.0.1])
-        by mx0a-00154904.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6UHAlfo026063;
-        Tue, 30 Jul 2019 13:14:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=RMjHjkmRIljGcoRTDzfV1VDswcuS2fCCA1qfE4N+knk=;
- b=KRkclfMsm5RZ4Xf7ND4oKHRp4qrA8ObE2/3POnXYmm6q59Z8+94H4+0xhXlAurv7R5YV
- gF1mocfTw7BiBg4JxqsET3EhhJKnCpkJH5/1mx3yABm2AJgGFKKu97QutpjsiWxyN1ZF
- JhJT6DiF40m9ZqWsklPvNS95+tEXI3xtzGh8h2Zleg2rw8UtnSarfmwjzSY0GnAAMUGZ
- hz0KwkMNwTxgxDzstsTdoo+qmSB+8wvCWLyPu6s5IavcoJ8VQlx4IB6REnf+aJV7oylu
- fr/lxadUXv5DjhCeb2v64ZA0f0yiqkxkXFDIdCCywO0d5qZlRbgYHoLzwIOjrSpoeQzS RQ== 
-Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
-        by mx0a-00154904.pphosted.com with ESMTP id 2u2gv42p04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Jul 2019 13:14:57 -0400
-Received: from pps.filterd (m0142699.ppops.net [127.0.0.1])
-        by mx0a-00154901.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6UHEioc187517;
-        Tue, 30 Jul 2019 13:14:57 -0400
-Received: from ausc60pc101.us.dell.com (ausc60pc101.us.dell.com [143.166.85.206])
-        by mx0a-00154901.pphosted.com with ESMTP id 2u2q5hbgf0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 13:14:57 -0400
-X-LoopCount0: from 10.166.132.127
-X-PREM-Routing: D-Outbound
-X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
-   d="scan'208";a="1447641413"
-From:   <Mario.Limonciello@dell.com>
-To:     <kbusch@kernel.org>, <rjw@rjwysocki.net>
-CC:     <keith.busch@intel.com>, <kai.heng.feng@canonical.com>,
-        <hch@lst.de>, <sagi@grimberg.me>, <linux-nvme@lists.infradead.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rajatja@google.com>
-Subject: RE: [Regression] Commit "nvme/pci: Use host managed power state for
- suspend" has problems
-Thread-Topic: [Regression] Commit "nvme/pci: Use host managed power state for
- suspend" has problems
-Thread-Index: AQHVQs6UiIesxZzK0UKkUWrQRuKoE6bbsW+A///PBcCAAGObgIAHcfaAgABB9YD//9WSkA==
-Date:   Tue, 30 Jul 2019 17:14:54 +0000
-Message-ID: <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
-References: <2332799.izEFUvJP67@kreacher>
- <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
- <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
- <47415939.KV5G6iaeJG@kreacher> <20190730144134.GA12844@localhost.localdomain>
-In-Reply-To: <20190730144134.GA12844@localhost.localdomain>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-07-30T17:14:52.5849194Z;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
- aiplabel=External Public
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.143.18.86]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1729103AbfG3R3i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 13:29:38 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:43442 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728935AbfG3R3i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 13:29:38 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 468726037C; Tue, 30 Jul 2019 17:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1564507777;
+        bh=E7jANAXXkajQa6C5PUztGcfWtG5q4XzpnhfVwCjYX9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dgl4wrJMPHWyja+Qb8FeMv3prWlJBX1WSvlSbxBO2TrB5kp8ROUSHAvd7yaaLyFZs
+         oe21hvwDdwUpgSDts/iPwTSmUGTTmK1fAsW9w1d110lJ6BQ5bI/tkTcpYEM67updlO
+         tFfEoB7YYp1Xr/Kdp5CzGsAHF9Nxagkdf4NHZxZY=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0678F602BC;
+        Tue, 30 Jul 2019 17:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1564507776;
+        bh=E7jANAXXkajQa6C5PUztGcfWtG5q4XzpnhfVwCjYX9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VpmDr2ipp6AByTDQOLnlZBeRmVtl3lmYmYIQjWu9DWjJNPQVo+roHb0j+5s/THjoh
+         8KaLpJ+xwwF88ubJqNBr5wHKsCiTRzu/N3cM8NkLLS9GdLc0ct0HwKURiLVgVvapXC
+         KuL4JJQ/mocvPY35hZeyzZ5CGgnaBZK2aqTFdJ0M=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0678F602BC
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
+Date:   Tue, 30 Jul 2019 11:29:35 -0600
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, mkshah@codeaurora.org
+Subject: Re: [PATCH V2 2/4] drivers: qcom: rpmh-rsc: avoid locking in the
+ interrupt handler
+Message-ID: <20190730172935.GJ18620@codeaurora.org>
+References: <20190722215340.3071-2-ilina@codeaurora.org>
+ <5d3769df.1c69fb81.55d03.aa33@mx.google.com>
+ <20190724145251.GB18620@codeaurora.org>
+ <5d38b38e.1c69fb81.e8e5d.035b@mx.google.com>
+ <20190724203610.GE18620@codeaurora.org>
+ <CAD=FV=UYj55m99EcQXmkYhs257A46x8DaarE0DC-GRF_3dY3-Q@mail.gmail.com>
+ <20190725151851.GG18620@codeaurora.org>
+ <CAD=FV=X2ENqt5+vdUoRnLTRbedj_sFdQD3Me-yYEW0fDOdBCvg@mail.gmail.com>
+ <20190729190139.GH18620@codeaurora.org>
+ <5d3f5d6d.1c69fb81.4c1e2.5be6@mx.google.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-30_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907300180
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1907300179
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <5d3f5d6d.1c69fb81.4c1e2.5be6@mx.google.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> -----Original Message-----
-> From: Keith Busch <kbusch@kernel.org>
-> Sent: Tuesday, July 30, 2019 9:42 AM
-> To: Rafael J. Wysocki
-> Cc: Busch, Keith; Limonciello, Mario; Kai-Heng Feng; Christoph Hellwig; S=
-agi
-> Grimberg; linux-nvme; Linux PM; Linux Kernel Mailing List; Rajat Jain
-> Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state =
-for
-> suspend" has problems
->=20
->=20
-> [EXTERNAL EMAIL]
->=20
-> On Tue, Jul 30, 2019 at 03:45:31AM -0700, Rafael J. Wysocki wrote:
-> > So I can reproduce this problem with plain 5.3-rc1 and the patch below =
-fixes it.
-> >
-> > Also Mario reports that the same patch needs to be applied for his 9380=
- to
-> reach
-> > SLP_S0 after some additional changes under testing/review now, so here =
-it
-> goes.
-> >
-> > [The changes mentioned above are in the pm-s2idle-testing branch in the
-> >  linux-pm.git tree at kernel.org.]
-> >
-> > ---
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Subject: [PATCH] nvme-pci: Do not prevent PCI bus-level PM from being u=
-sed
-> >
-> > One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
-> > host managed power state for suspend") was adding a pci_save_state()
-> > call to nvme_suspend() in order to prevent the PCI bus-level PM from
-> > being applied to the suspended NVMe devices, but that causes the NVMe
-> > drive (PC401 NVMe SK hynix 256GB) in my Dell XPS13 9380 to prevent
-> > the SoC from reaching package idle states deeper than PC3, which is
-> > way insufficient for system suspend.
-> >
-> > Fix this issue by removing the pci_save_state() call in question.
->=20
-> I'm okay with the patch if we can get confirmation this doesn't break
-> any previously tested devices. I recall we add the pci_save_state() in
-> the first place specifically to prevent PCI D3 since that was reported
-> to break some devices' low power settings. Kai-Heng or Mario, any input
-> here?
->=20
+On Mon, Jul 29 2019 at 14:56 -0600, Stephen Boyd wrote:
+>Quoting Lina Iyer (2019-07-29 12:01:39)
+>> On Thu, Jul 25 2019 at 09:44 -0600, Doug Anderson wrote:
+>> >On Thu, Jul 25, 2019 at 8:18 AM Lina Iyer <ilina@codeaurora.org> wrote:
+>> >>
+>> >> On Wed, Jul 24 2019 at 17:28 -0600, Doug Anderson wrote:
+>> >> >
+>> >> >Jumping in without reading all the context, but I saw this fly by and
+>> >> >it seemed odd.  If I'm way off base then please ignore...
+>> >> >
+>> >> >Can you give more details?  Why are these drivers in atomic contexts?
+>> >> >If they are in atomic contexts because they are running in the context
+>> >> >of an interrupt then your next patch in the series isn't so correct.
+>> >> >
+>> >> >Also: when people submit requests in atomic context are they always
+>> >> >submitting an asynchronous request?  In that case we could
+>> >> >(presumably) just use a spinlock to protect the queue of async
+>> >> >requests and a mutex for everything else?
+>> >> Yes, drivers only make async requests in interrupt contexts.
+>> >
+>> >So correct me if I'm off base, but you're saying that drivers make
+>> >requests in interrupt contexts even after your whole series and that's
+>> >why you're using spinlocks instead of mutexes.  ...but then in patch
+>> >#3 in your series you say:
+>> >
+>> >> Switch over from using _irqsave/_irqrestore variants since we no longer
+>> >> race with a lock from the interrupt handler.
+>> >
+>> >Those seem like contradictions.  What happens if someone is holding
+>> >the lock, then an interrupt fires, then the interrupt routine wants to
+>> >do an async request.  Boom, right?
+>> >
+>> The interrupt routine is handled by the driver and only completes the
+>> waiting object (for sync requests). No other requests can be made from
+>> our interrupt handler.
+>
+>The question is more if an interrupt handler for some consumer driver
+>can call into this code and make an async request. Is that possible? If
+>so, the concern is that the driver's interrupt handler can run and try
+>to grab the lock on a CPU that already holds the lock in a non-irq
+>disabled context. This would lead to a deadlock while the CPU servicing
+>the interrupt waits for the lock held by another task that's been
+>interrupted.
+>
+Hmm.. this patch will cause that issue, since we remove the irqsave
+aspects of the locking. Let me give that a thought.
+>>
+>> >> They cannot
+>> >> use the sync variants. The async and sync variants are streamlined into
+>> >> the same code path. Hence the use of spinlocks instead of mutexes
+>> >> through the critical path.
+>> >
+>> >I will perhaps defer to Stephen who was the one thinking that a mutex
+>> >would be a big win here.  ...but if a mutex truly is a big win then it
+>> >doesn't seem like it'd be that hard to have a linked list (protected
+>> >by a spinlock) and then some type of async worker that:
+>> >
+>> >1. Grab the spinlock, pops one element off the linked list, release the spinlock
+>> >2. Grab the mutex, send the one element, release the mutex
+>> This would be a problem when the request is made from an irq handler. We
+>> want to keep things simple and quick.
+>>
+>
+>Is the problem that you want to use RPMh code from deep within the idle
+>thread? As part of some sort of CPU idle driver for qcom platforms? The
+>way this discussion is going it sounds like nothing is standing in the
+>way of a design that use a kthread to pump messages off a queue of
+>messages that is protected by a spinlock. The kthread would be woken up
+>by the sync or async write to continue to pump messages out until the
+>queue is empty.
+>
+While it is true that we want to use RPMH in cpuidle driver. Its just
+that we had threads and all in our downstream 845 and it complicated the
+whole setup a bit too much to our liking and did not help debug either.
+I would rather not get all that back in the driver.
 
-It's entirely possible that in fixing the shutdown/flush/send NVME power st=
-ate command
-that D3 will be OK now but it will take some time to double check across th=
-e variety of disks that
-we tested before.
-
-What's kernel policy in terms of adding a module parameter and removing it =
-later?  My gut
-reaction is I'd like to see that behind a module parameter and if we see th=
-at all the disks
-are actually OK we can potentially rip it out in a future release.  Also gi=
-ves us a knob for easier
-wider testing outside of the 4 of us.
-
->=20
->=20
-> > Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for suspen=
-d")
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/nvme/host/pci.c |    8 +-------
-> >  1 file changed, 1 insertion(+), 7 deletions(-)
-> >
-> > Index: linux-pm/drivers/nvme/host/pci.c
-> >
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =3D=3D=3D=3D=3D
-> > --- linux-pm.orig/drivers/nvme/host/pci.c
-> > +++ linux-pm/drivers/nvme/host/pci.c
-> > @@ -2897,14 +2897,8 @@ static int nvme_suspend(struct device *d
-> >  		nvme_dev_disable(ndev, true);
-> >  		ctrl->npss =3D 0;
-> >  		ret =3D 0;
-> > -		goto unfreeze;
-> >  	}
-> > -	/*
-> > -	 * A saved state prevents pci pm from generically controlling the
-> > -	 * device's power. If we're using protocol specific settings, we don'=
-t
-> > -	 * want pci interfering.
-> > -	 */
-> > -	pci_save_state(pdev);
-> > +
-> >  unfreeze:
-> >  	nvme_unfreeze(ctrl);
-> >  	return ret;
+--Lina
