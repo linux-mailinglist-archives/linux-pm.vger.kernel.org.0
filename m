@@ -2,99 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A51FC7ADB3
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 18:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86067AE3D
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 18:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732932AbfG3Qcr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 12:32:47 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:35823 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732924AbfG3Qcq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 12:32:46 -0400
-Received: by mail-wm1-f65.google.com with SMTP id l2so57214847wmg.0;
-        Tue, 30 Jul 2019 09:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hKvLl5MtLqHMnv3zCjcaW8MF73v11AH4bgm8S8ldXCE=;
-        b=GlqFb134XfxnMkEh6uLn1kRhDbMEnXJfanH+X3B32Z4zKb0sE8jm/rxkuSYxWHisOi
-         OU3o1DyNgJk7/7GgUrWw5IhJtxiwz0Y2iiK/0eY7zdagnniETk2BjXEGHS/yR1kMuaWv
-         4ULJmslxpRwhmDfifIuTY7KyhK9ByrMfKd9Shhor0iFBaiYVotkTN//Ns7JYzgvhvj6y
-         VitepvML8Gwaj5g9DLkZd4hfgCV0JQ6TnThaJ0wB9sADjyqQLmHgmd226tt4ZNqtflnS
-         8jzr1iOqhxicgKU5SD8/Rwt3B3CVao2lNUUr0NUSamKRp8o0dApg04ulG7OZzkjSHj8q
-         /2OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hKvLl5MtLqHMnv3zCjcaW8MF73v11AH4bgm8S8ldXCE=;
-        b=qfkRlbqDaNpF83miNLFcOGuviPmFmAuT15ClTPwhi3afJ/i/U91R9hNblKs7f5OkPI
-         N+sHTByAQQUzO7LeHzloZIk33DwLMU+r5oiyyycRutjDmKfYSlU8yrGMHMip05pCLAkf
-         kRMOrqRZEqNDHd8+Pno01SJszwZi+6n0DL7V7O2OG6b+7qWy3wkbwjObEbUqMclhDsc4
-         ZFu97k84drx0Nsy8AanuC5LESDYUtIqEV2YPyXSc//icvQs5+OMFH0pikB6BNNiwagfE
-         ZSU5JkytdejTIC4SumMHfSDXxaryvYvP8WZCb4gYYDiFC+JSoGXfe4z15CZtPJF0XBMG
-         DyKQ==
-X-Gm-Message-State: APjAAAVsitiXWJ/gforVcxJIYPU/Fd5IGzHDWV8bvnf7XmM8phoj+U5k
-        pvPm+JE+qJza9060qpDS3YK3B8EN
-X-Google-Smtp-Source: APXvYqy7ZambOH2FqJffPbsZIhK05NktYW91mK2UAxhPST/+7yvKY9FJpMgpADfq2QZ6C86Eb63VQQ==
-X-Received: by 2002:a1c:6a11:: with SMTP id f17mr98670207wmc.110.1564504364538;
-        Tue, 30 Jul 2019 09:32:44 -0700 (PDT)
-Received: from localhost.localdomain (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.gmail.com with ESMTPSA id c65sm64835175wma.44.2019.07.30.09.32.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 09:32:44 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 20/20] PM / devfreq: tegra20/30: Add Dmitry as a maintainer
-Date:   Tue, 30 Jul 2019 19:22:36 +0300
-Message-Id: <20190730162236.6063-21-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190730162236.6063-1-digetx@gmail.com>
-References: <20190730162236.6063-1-digetx@gmail.com>
+        id S1727360AbfG3Qno (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 12:43:44 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:58870 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726751AbfG3Qno (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 12:43:44 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id B501560850; Tue, 30 Jul 2019 16:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1564505022;
+        bh=nzlx+WA8YpyPWGC852+7ZM1qfO8l79oxasafpFjso+c=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=HOl2oflInJUHQq2PZ68pCYQNQYdFCO+4JJDpEmNEvs49i4kZiqV10RlrLP2bhZs8c
+         S8a2q/z0w9eWP1x6/KjBQtyEkYlMei1S6kRHUYDaKQ7lDM1zr0kp+CsX7VLlMzCuJg
+         D1DVLX47+Yjxz05bcWdpCbU3/E19t0Csq//tIpEg=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.79.43.230] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 915F3602BC;
+        Tue, 30 Jul 2019 16:43:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1564505021;
+        bh=nzlx+WA8YpyPWGC852+7ZM1qfO8l79oxasafpFjso+c=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=giQuwOOght+bx4P3Ia3F/fMlV8ERnpI8PRUC20JNo8qJIr0KXTBoby48qa2lmfAL3
+         /sjUn3+QJrx6sOjCwtrE0B9gbngmM9FIWZ+mHQU8Mw+UTzw7yW8VPEn4fp4sp6F6Sr
+         ozzHq2Z2qC/0vcVOmmA1Kz7Ad2G+XJ/GhSIGQFoo=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 915F3602BC
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+Subject: Re: [PATCH v4 0/3] Introduce Bandwidth OPPs for interconnects
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20190726231558.175130-1-saravanak@google.com>
+ <20190729093545.kvnqxjkyx4nogddk@vireshk-i7>
+ <CAGETcx8OBFGgP1-hj717Sk-_N95-kacVsz0yb288n3pej12n1Q@mail.gmail.com>
+ <20190730024640.xk27jgdfl2j6ucx7@vireshk-i7>
+ <361effba-4433-24d9-243c-201af39214cc@codeaurora.org>
+ <CAGETcx_BpJswxA4AGARogZ1xRJPqm=_zTOZq1xJ2vgx+DUYsqQ@mail.gmail.com>
+From:   Sibi Sankar <sibis@codeaurora.org>
+Message-ID: <a9ab8614-7626-c309-24cc-02ce08a80ce5@codeaurora.org>
+Date:   Tue, 30 Jul 2019 22:13:34 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGETcx_BpJswxA4AGARogZ1xRJPqm=_zTOZq1xJ2vgx+DUYsqQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I was contributing to the NVIDIA Tegra20+ devfreq drivers recently and
-want to help keep them working and evolving in the future.
+On 7/30/19 11:23 AM, Saravana Kannan wrote:
+> On Mon, Jul 29, 2019 at 10:28 PM Sibi Sankar <sibis@codeaurora.org> wrote:
+>>
+>> Hey Viresh,
+>>
+>> On 7/30/19 8:16 AM, Viresh Kumar wrote:
+>>> On 29-07-19, 13:16, Saravana Kannan wrote:
+>>>> Sibi might be working on doing that for the SDM845 CPUfreq driver.
+>>>> Georgi could also change his GPU driver use case to use this BW OPP
+>>>> table and required-opps.
+>>>>
+>>>> The problem is that people don't want to start using this until we
+>>>> decide on the DT representation. So it's like a chicken and egg
+>>>> situation.
+>>>
+>>> Yeah, I agree to that.
+>>>
+>>> @Georgi and @Sibi: This is your chance to speak up about the proposal
+>>> from Saravana and if you find anything wrong with them. And specially
+>>> that it is mostly about interconnects here, I would like to have an
+>>> explicit Ack from Georgi on this.
+>>>
+>>> And if you guys are all okay about this then please at least commit
+>>> that you will convert your stuff based on this in coming days.
+>>
+>> I've been using both Saravana's and Georgi's series for a while
+>> now to scale DDR and L3 on SDM845. There is currently no consensus
+>> as to where the votes are to be actuated from, hence couldn't post
+>> anything out.
+>>
+>> DCVS based on Saravana's series + passive governor:
+>> https://github.com/QuinAsura/linux/tree/lnext-072619-SK-series
+> 
+> Thanks Sibi! You might want to convert your patches so that until the
+> passive governor is ready, you just look up the required opps and vote
+> for BW directly from the cpufreq driver. Once devfreq governor is
+> ready, you can switch to it.
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Sure I'll do that.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cf2225b161f0..49010404fdea 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10420,6 +10420,15 @@ F:	include/linux/memblock.h
- F:	mm/memblock.c
- F:	Documentation/core-api/boot-time-mm.rst
- 
-+MEMORY FREQUENCY SCALING DRIVERS FOR NVIDIA TEGRA
-+M:	Dmitry Osipenko <digetx@gmail.com>
-+L:	linux-pm@vger.kernel.org
-+L:	linux-tegra@vger.kernel.org
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git
-+S:	Maintained
-+F:	drivers/devfreq/tegra20-devfreq.c
-+F:	drivers/devfreq/tegra30-devfreq.c
-+
- MEMORY MANAGEMENT
- L:	linux-mm@kvack.org
- W:	http://www.linux-mm.org
+> 
+> -Saravana
+> 
+>>
+>> DCVS based on Georgi's series: (I had already posted this out)
+>> https://github.com/QuinAsura/linux/tree/lnext-072619-GJ-series
+>>
+>> --
+>> Qualcomm Innovation Center, Inc.
+>> Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+
 -- 
-2.22.0
-
+Qualcomm Innovation Center, Inc.
+Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
