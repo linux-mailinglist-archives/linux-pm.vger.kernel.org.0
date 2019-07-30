@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8397ADD5
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 18:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42A57ADCB
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 18:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729022AbfG3QeG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 12:34:06 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:33048 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732677AbfG3QcX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 12:32:23 -0400
-Received: by mail-wm1-f67.google.com with SMTP id h19so45682709wme.0;
-        Tue, 30 Jul 2019 09:32:22 -0700 (PDT)
+        id S1732814AbfG3QcZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 12:32:25 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40452 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725871AbfG3QcY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 12:32:24 -0400
+Received: by mail-wr1-f66.google.com with SMTP id r1so66466211wrl.7;
+        Tue, 30 Jul 2019 09:32:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ox12S6Tw4A+nuZKMeS2Wc28MQmpMbXQ3Ba/CygAYf44=;
-        b=jmyHZHsp2CKndQo92fDRhxclKrIGhfZzfr/veEVbopBWKo8QmsEdN0yPNlRdDHuqgZ
-         sLGOOpuajf6gl0FEwHw9nMUEzZNAVgUyv9c+mjAY321LPQhEixQ0SzOdK24MWch+On5M
-         mSdn8iJu/L3JjAP4xt5JY7428JXbWuIGybUMuLevrffyDYumSZGU9Tx+8ZVj1JPVDkFL
-         Idp3bESlQZim8uo97NYBZlsIL8ChJRB1bTvYDpMKC+r0NF4X5PJfTODk8BxVtAcF8wvF
-         fstXGFF95XLX7g1o80ZsC0+Etoh2ROKtecu5uX9X5QnQfgUZTsTqf+nUVRpV0iGco1KB
-         gJoA==
+        bh=1OA59L/PDO/fIoCl0NQYE6ljbPRlOkug9V9TGpbxlIc=;
+        b=UjPcaR49D0raHN5n5LpUrIqLVIYxGuUgcwKIDR20hVmAi42K9J3Teum4Dv8hqXp4tT
+         sXOgPorkDuBqQmL7Yd44zH02PTJrqOu7El6TvYdo8KaOBvf1Qa9MIghdVG4OtX1st45d
+         U2bP4rcMIten7LhVc7K6cy5G8rMFJy3w5U4dprMmCMGXfjPEVK/4QFwgr9dTLBoMElbq
+         Tpa5+m03HzVrT1bM2I7m9+wv+D9Fz52UeeF9i6kIocwZKlAjbhLNenr86ggWwM6AJKoW
+         UD+xuD+s6viJQiekJKb8f08MrYVnJzGzjq747zXbfzfBXE8vAxrvjPjsUPDojTbentmc
+         aLJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ox12S6Tw4A+nuZKMeS2Wc28MQmpMbXQ3Ba/CygAYf44=;
-        b=bo2bnNUTFsy7mNlLGw67smpsUvf5i2S+5YFaw/vJoNhjVArLRhzw7ivR2YinspYASC
-         htJn58NdkeOWx7+eFBVQzBVjmN/6ptxUftJSM9ph6QpN7IWkooNOzotjEqBImhCsPQcZ
-         i1/qA/ByExUE6oSBUk4539HKwDwdk1fFIZ7NS9RvfCjaMe8sASWpCCeHIBf0a3iokYZ9
-         eJQ2ftna64TEWc0exJev/BFfIHrlC9gfJ0pVA0wXE171z0XXZAxqef0peFqQlqE9ECXJ
-         arjjEUL7CGPy7GC+KGziy5PjxPoZB+l/hK9WRhmGVziU8pp3DeBUI77wcZwOT7bgB0CI
-         2cDQ==
-X-Gm-Message-State: APjAAAVr2Ya0ROD6civZzxP7IE13V3qlDoPzWF0+CbmBXmt9MGP/35DU
-        qIX5vLSLtINCDqyGZ4eefrE=
-X-Google-Smtp-Source: APXvYqw8JG3pfF+XLVK0hRFO6f0QeIxfJhVD3nT6uYo73YjCX4jXxgT3T/dyU9HItd+TXHTqiM9k+Q==
-X-Received: by 2002:a7b:c106:: with SMTP id w6mr111461186wmi.80.1564504341406;
-        Tue, 30 Jul 2019 09:32:21 -0700 (PDT)
+        bh=1OA59L/PDO/fIoCl0NQYE6ljbPRlOkug9V9TGpbxlIc=;
+        b=XQPnX1+BYb4OC08bytCwkAwokaaUiHyhpMaVVsLgZax4DcRs8lSIgHGNWObNGtq0/7
+         OK/vR+J0kEDc4mzeF7U6E7EioZxkd4YAhTQf5icJGzdFERO8qVMKAefhO3Mbhhfs7Z48
+         tUI94U4NhsXJjMgB1A4MBdxngUTf55sSpb8vDdVFxl3vo3olYAJnfVAKQTPX3eDtLxTk
+         gbbrCR2M5S4n4CyUZ/Bm1slXI3V7GDRVffyyMLzakq52UkKaUlmzjjcaCK3DPNI/r3lM
+         BuQCAbUjNNVOpHBYdprKmrvBqAldhT0J0jC2JjUXJk+yvJcKaOAPGjZEuzRnlixe5+Dm
+         wGig==
+X-Gm-Message-State: APjAAAXGWX7drDkAasrVPL/246iUmTKDTc5/Tq1+Lh43mv+D9J2NXqtu
+        vzFtjubGgJkMYSTnkYk9swE=
+X-Google-Smtp-Source: APXvYqy55VJPIwBbpJxEJ+BkBJhd8VlXEglnPIl5cXskz3bIVLr622tIHUGMZfgTFWN6OuXcGhe+2w==
+X-Received: by 2002:adf:dd0f:: with SMTP id a15mr40299198wrm.265.1564504342627;
+        Tue, 30 Jul 2019 09:32:22 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.gmail.com with ESMTPSA id c65sm64835175wma.44.2019.07.30.09.32.20
+        by smtp.gmail.com with ESMTPSA id c65sm64835175wma.44.2019.07.30.09.32.21
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 09:32:20 -0700 (PDT)
+        Tue, 30 Jul 2019 09:32:22 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 02/20] PM / devfreq: tegra30: Keep interrupt disabled while governor is stopped
-Date:   Tue, 30 Jul 2019 19:22:18 +0300
-Message-Id: <20190730162236.6063-3-digetx@gmail.com>
+Subject: [PATCH v5 03/20] PM / devfreq: tegra30: Handle possible round-rate error
+Date:   Tue, 30 Jul 2019 19:22:19 +0300
+Message-Id: <20190730162236.6063-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190730162236.6063-1-digetx@gmail.com>
 References: <20190730162236.6063-1-digetx@gmail.com>
@@ -66,122 +66,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no real need to keep interrupt always-enabled, will be nicer
-to keep it disabled while governor is inactive.
+The EMC clock rate rounding technically could fail, hence let's handle
+the error cases properly.
 
-Suggested-by: Thierry Reding <thierry.reding@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 47 ++++++++++++++++---------------
- 1 file changed, 24 insertions(+), 23 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index a27300f40b0b..8be6a33beb9c 100644
+index 8be6a33beb9c..bfee9d43de1e 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -11,6 +11,7 @@
- #include <linux/devfreq.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/irq.h>
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
-@@ -416,8 +417,6 @@ static void tegra_actmon_start(struct tegra_devfreq *tegra)
- {
- 	unsigned int i;
- 
--	disable_irq(tegra->irq);
--
- 	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
- 		      ACTMON_GLB_PERIOD_CTRL);
- 
-@@ -442,8 +441,6 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
- 	}
- 
- 	actmon_write_barrier(tegra);
--
--	enable_irq(tegra->irq);
- }
- 
- static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
-@@ -552,6 +549,12 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
- {
- 	struct tegra_devfreq *tegra = dev_get_drvdata(devfreq->dev.parent);
- 
-+	/*
-+	 * Couple device with the governor early as it is needed at
-+	 * the moment of governor's start (used by ISR).
-+	 */
-+	tegra->devfreq = devfreq;
-+
- 	switch (event) {
- 	case DEVFREQ_GOV_START:
- 		devfreq_monitor_start(devfreq);
-@@ -586,10 +589,11 @@ static struct devfreq_governor tegra_devfreq_governor = {
- 
- static int tegra_devfreq_probe(struct platform_device *pdev)
- {
--	struct tegra_devfreq *tegra;
+@@ -592,8 +592,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
  	struct tegra_devfreq_device *dev;
--	unsigned int i;
-+	struct tegra_devfreq *tegra;
-+	struct devfreq *devfreq;
- 	unsigned long rate;
-+	unsigned int i;
+ 	struct tegra_devfreq *tegra;
+ 	struct devfreq *devfreq;
+-	unsigned long rate;
+ 	unsigned int i;
++	long rate;
  	int err;
  
  	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
-@@ -625,6 +629,16 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	}
- 	tegra->irq = err;
+@@ -650,8 +650,14 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
  
-+	irq_set_status_flags(tegra->irq, IRQ_NOAUTOEN);
-+
-+	err = devm_request_threaded_irq(&pdev->dev, tegra->irq, NULL,
-+					actmon_thread_isr, IRQF_ONESHOT,
-+					"tegra-devfreq", tegra);
-+	if (err) {
-+		dev_err(&pdev->dev, "Interrupt request failed: %d\n", err);
-+		return err;
+ 	reset_control_deassert(tegra->reset);
+ 
+-	tegra->max_freq = clk_round_rate(tegra->emc_clock, ULONG_MAX) / KHZ;
++	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
++	if (rate < 0) {
++		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
++		return rate;
 +	}
 +
- 	reset_control_assert(tegra->reset);
+ 	tegra->cur_freq = clk_get_rate(tegra->emc_clock) / KHZ;
++	tegra->max_freq = rate / KHZ;
  
- 	err = clk_prepare_enable(tegra->clock);
-@@ -672,28 +686,15 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	}
+ 	for (i = 0; i < ARRAY_SIZE(actmon_device_configs); i++) {
+ 		dev = tegra->devices + i;
+@@ -662,6 +668,13 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 	for (rate = 0; rate <= tegra->max_freq * KHZ; rate++) {
+ 		rate = clk_round_rate(tegra->emc_clock, rate);
  
- 	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
--	tegra->devfreq = devfreq_add_device(&pdev->dev,
--					    &tegra_devfreq_profile,
--					    "tegra_actmon",
--					    NULL);
--	if (IS_ERR(tegra->devfreq)) {
--		err = PTR_ERR(tegra->devfreq);
-+	devfreq = devfreq_add_device(&pdev->dev, &tegra_devfreq_profile,
-+				     "tegra_actmon", NULL);
-+	if (IS_ERR(devfreq)) {
-+		err = PTR_ERR(devfreq);
- 		goto remove_governor;
- 	}
- 
--	err = devm_request_threaded_irq(&pdev->dev, tegra->irq, NULL,
--					actmon_thread_isr, IRQF_ONESHOT,
--					"tegra-devfreq", tegra);
--	if (err) {
--		dev_err(&pdev->dev, "Interrupt request failed: %d\n", err);
--		goto remove_devfreq;
--	}
--
- 	return 0;
- 
--remove_devfreq:
--	devfreq_remove_device(tegra->devfreq);
--
- remove_governor:
- 	devfreq_remove_governor(&tegra_devfreq_governor);
- 
++		if (rate < 0) {
++			dev_err(&pdev->dev,
++				"Failed to round clock rate: %ld\n", rate);
++			err = rate;
++			goto remove_opps;
++		}
++
+ 		err = dev_pm_opp_add(&pdev->dev, rate, 0);
+ 		if (err) {
+ 			dev_err(&pdev->dev, "Failed to add OPP: %d\n", err);
 -- 
 2.22.0
 
