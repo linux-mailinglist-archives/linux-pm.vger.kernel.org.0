@@ -2,118 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 582657A053
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 07:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1EC7A088
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 07:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729295AbfG3F24 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 01:28:56 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:52350 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729293AbfG3F2z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 01:28:55 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 5500160790; Tue, 30 Jul 2019 05:28:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564464534;
-        bh=CMiqiJA9dGTxLVRLhOlk6KwjAuYDs4kAVLEkfwXcBcs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=XlCrNyfRKRNzHUhsNBgrlSRlDOHrJ23JJGKv5Bf736k7nucx6bR6XjEr4mMqAk98c
-         I+6/O5ukztJko/KIRH/0hYGVgj660QKoxUxuRB0oUC4b6FZ7zYwpGm2ymBJJsPf7BY
-         BEbTt5wiCKov6tkot/QTE3pVf4uq1U5RYG94nJaA=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.79.43.230] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 87DB36030E;
-        Tue, 30 Jul 2019 05:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564464533;
-        bh=CMiqiJA9dGTxLVRLhOlk6KwjAuYDs4kAVLEkfwXcBcs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=LIbC5lTR5O8GUzQJJ+kHSYmI4N91Mya32Qp2DWWxq3DphY20JeK5QtoLQOrTT8qno
-         HciHmgISMYPbGqFsu20xwpcqyNVGr7+Yfz9xpY3QEIKNocyulB45XLrv00Xd3Ozf0i
-         YtcjjlApkvOWsdRvAqkTgQnni93j4csE0gy/n0fo=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 87DB36030E
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-Subject: Re: [PATCH v4 0/3] Introduce Bandwidth OPPs for interconnects
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
-        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20190726231558.175130-1-saravanak@google.com>
- <20190729093545.kvnqxjkyx4nogddk@vireshk-i7>
- <CAGETcx8OBFGgP1-hj717Sk-_N95-kacVsz0yb288n3pej12n1Q@mail.gmail.com>
- <20190730024640.xk27jgdfl2j6ucx7@vireshk-i7>
-From:   Sibi Sankar <sibis@codeaurora.org>
-Message-ID: <361effba-4433-24d9-243c-201af39214cc@codeaurora.org>
-Date:   Tue, 30 Jul 2019 10:58:43 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726281AbfG3Fqy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 01:46:54 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38944 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbfG3Fqx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 01:46:53 -0400
+Received: by mail-ot1-f67.google.com with SMTP id r21so59031707otq.6;
+        Mon, 29 Jul 2019 22:46:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jMOUaXgENhw7c5CQJ0IlirbOeRGGcqxTZWNVzp5Nhn4=;
+        b=eAcaiU13snkUCtWd2P4Bam8po4kmlLaZ92dQM2chr0Z7NtiXhIYj+j1LdY5rKHNKfw
+         KCFHcRjbp6XsUKhy0M94CxPb8VAPsG62WXCQpDvoZ8DgI1ft6rRegaiGDjY7aZewF7E1
+         Qih45PrTN2W2I0u9jCLrY7aSQ/SWDBraUVJ3/890MIzrE1IHT7lnBMXwW6P2skryKM46
+         S9F7pNHyj+/G0G4dKhIRxO33xP611teS8eP8EUHpRY66Y9LFbcYMeDALxl3hjTjehhJR
+         d81Aslnd093q6CQjC92GM4hyFKb1YSSWJSbRvNLYS2AWAtp9jihPEwAUy5M75nNgT7ov
+         D/6w==
+X-Gm-Message-State: APjAAAVaK6TYtw/u8gcPrehyUVQ+qbeo8frmOmYZoPBDyw4FUoy4yDdF
+        LNVYkpE064FFDI5wlVxHLtmagOlBiJOkF37BsTw=
+X-Google-Smtp-Source: APXvYqyQkcz5FVKAON64DOvc7wXyiLuBKR60JbdzyA2IBU7uWK8lBbuJl29z4ZCXSC8fjca86GPgJrAI8cGt9ZMrxuc=
+X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr78953797otp.189.1564465612966;
+ Mon, 29 Jul 2019 22:46:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190730024640.xk27jgdfl2j6ucx7@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190730024309.233728-1-trong@android.com>
+In-Reply-To: <20190730024309.233728-1-trong@android.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 30 Jul 2019 07:46:44 +0200
+Message-ID: <CAJZ5v0jJn=vHdYExbzwRAMsk=Ad5bhvOAvHEXe-FHOj2R4Gwig@mail.gmail.com>
+Subject: Re: [PATCH v5] PM / wakeup: show wakeup sources stats in sysfs
+To:     Tri Vo <trong@android.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Viresh,
+On Tue, Jul 30, 2019 at 4:45 AM Tri Vo <trong@android.com> wrote:
+>
+> Userspace can use wakeup_sources debugfs node to plot history of suspend
+> blocking wakeup sources over device's boot cycle. This information can
+> then be used (1) for power-specific bug reporting and (2) towards
+> attributing battery consumption to specific processes over a period of
+> time.
+>
+> However, debugfs doesn't have stable ABI. For this reason, create a
+> 'struct device' to expose wakeup sources statistics in sysfs under
+> /sys/class/wakeup/wakeup<ID>/*.
+>
+> Co-developed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Co-developed-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Tri Vo <trong@android.com>
+> Tested-by: Tri Vo <trong@android.com>
+> Tested-by: Kalesh Singh <kaleshsingh@google.com>
+> Reported-by: kbuild test robot <lkp@intel.com>
+> ---
+>  Documentation/ABI/testing/sysfs-class-wakeup |  76 +++++++++
+>  drivers/acpi/device_pm.c                     |   3 +-
+>  drivers/base/power/Makefile                  |   2 +-
+>  drivers/base/power/wakeup.c                  |  21 ++-
+>  drivers/base/power/wakeup_stats.c            | 171 +++++++++++++++++++
+>  fs/eventpoll.c                               |   4 +-
+>  include/linux/pm_wakeup.h                    |  15 +-
+>  kernel/power/autosleep.c                     |   2 +-
+>  kernel/power/wakelock.c                      |  10 ++
+>  kernel/time/alarmtimer.c                     |   2 +-
+>  10 files changed, 294 insertions(+), 12 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-class-wakeup
+>  create mode 100644 drivers/base/power/wakeup_stats.c
+>
+> v2:
+> - Updated Documentation/ABI/, as per Greg.
+> - Removed locks in attribute functions, as per Greg.
+> - Lifetimes of struct wakelock and struck wakeup_source are now different due to
+>   the latter embedding a refcounted kobject. Changed it so that struct wakelock
+>   only has a pointer to struct wakeup_source, instead of embedding it.
+> - Added CONFIG_PM_SLEEP_STATS that enables/disables wakeup source statistics in
+>   sysfs.
+>
+> v3:
+> Changes by Greg:
+> - Reworked code to use 'struct device' instead of raw kobjects.
+> - Updated documentation file.
+> - Only link wakeup_stats.o when CONFIG_PM_SLEEP_STATS is enabled.
+> Changes by Tri:
+> - Reverted changes to kernel/power/wakelock.c. 'struct device' hides kobject
+>   operations. So no need to handle lifetimes in wakelock.c
+>
+> v4:
+> - Added 'Co-developed-by:' and 'Tested-by:' fields to commit message.
+> - Moved new documentation to a separate file
+>   Documentation/ABI/testing/sysfs-class-wakeup, as per Greg.
+> - Fixed copyright header in drivers/base/power/wakeup_stats.c, as per Greg.
+>
+> v5:
+> - Removed CONFIG_PM_SLEEP_STATS
+> - Used PTR_ERR_OR_ZERO instead of if(IS_ERR(...)) + PTR_ERR, reported by
+>   kbuild test robot <lkp@intel.com>
+> - Stephen reported that a call to device_init_wakeup() and writing 'enabled' to
+>   that device's power/wakeup file results in multiple wakeup source being
+>   allocated for that device.  Changed device_wakeup_enable() to check if device
+>   wakeup was previously enabled.
+> Changes by Stephen:
+> - Changed stats location from /sys/class/wakeup/<name>/* to
+>   /sys/class/wakeup/wakeup<ID>/*, where ID is an IDA-allocated integer. This
+>   avoids name collisions in /sys/class/wakeup/ directory.
+> - Added a "name" attribute to wakeup sources, and updated documentation.
+> - Device registering the wakeup source is now the parent of the wakeup source.
+>   Updated wakeup_source_register()'s signature and its callers accordingly.
 
-On 7/30/19 8:16 AM, Viresh Kumar wrote:
-> On 29-07-19, 13:16, Saravana Kannan wrote:
->> Sibi might be working on doing that for the SDM845 CPUfreq driver.
->> Georgi could also change his GPU driver use case to use this BW OPP
->> table and required-opps.
->>
->> The problem is that people don't want to start using this until we
->> decide on the DT representation. So it's like a chicken and egg
->> situation.
-> 
-> Yeah, I agree to that.
-> 
-> @Georgi and @Sibi: This is your chance to speak up about the proposal
-> from Saravana and if you find anything wrong with them. And specially
-> that it is mostly about interconnects here, I would like to have an
-> explicit Ack from Georgi on this.
-> 
-> And if you guys are all okay about this then please at least commit
-> that you will convert your stuff based on this in coming days.
+And I really don't like these changes.  Especially having "wakeup"
+twice in the path.
 
-I've been using both Saravana's and Georgi's series for a while
-now to scale DDR and L3 on SDM845. There is currently no consensus
-as to where the votes are to be actuated from, hence couldn't post
-anything out.
-
-DCVS based on Saravana's series + passive governor:
-https://github.com/QuinAsura/linux/tree/lnext-072619-SK-series
-
-DCVS based on Georgi's series: (I had already posted this out)
-https://github.com/QuinAsura/linux/tree/lnext-072619-GJ-series
-
--- 
-Qualcomm Innovation Center, Inc.
-Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Couldn't you find a simpler way to avoid the name collisions?
