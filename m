@@ -2,190 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5CC7B111
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 20:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD997B18F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 20:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728869AbfG3SBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 14:01:53 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:39497 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726174AbfG3SBx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 14:01:53 -0400
-Received: by mail-pg1-f194.google.com with SMTP id u17so30457231pgi.6
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 11:01:52 -0700 (PDT)
+        id S2388075AbfG3SQf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 14:16:35 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:39615 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388067AbfG3SQe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 14:16:34 -0400
+Received: by mail-pg1-f193.google.com with SMTP id u17so30477070pgi.6
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 11:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=e4oBhvl2JGL/g7znlpJb17wcZ4f4c/GlFLmGamjl13c=;
-        b=fbKhNQxzz82g4sdnAhZ57A0hb0uBcdzsGtvJIewH6J8HFiWd4v1DbjhZme3+FPpHN+
-         CgVrRWW5s0YuozJII/YB+2NZ5r573QGkU38HNUz7maBvW4CAJRPZpo9gRRMOu66NfgT1
-         4s1JAmGCs8uLjMqep+2ShT7MpdeLsB0l8QKaU=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eK4LqccbexBbFwqN6Jv75UZiA5HD108HkeIAaMcaoSk=;
+        b=EeipzuZUgBBHDP2m+SB0YDxqn3NNwmT9E+BBw37WtV1keN0d+FirRsAehrjHIIdrRu
+         sTo+j3ADlw6xCRXXqiUe7x+YdqidUOQTLwQdf//CvX7cvcvu+MigUapFC3Fb+GikoW9V
+         7xpLH4IkurfaDjtVNMPl0YG4lXWTXlMLMsN0E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e4oBhvl2JGL/g7znlpJb17wcZ4f4c/GlFLmGamjl13c=;
-        b=DiQQ+yXwkwARSwBLSA2hzci1melKuya7Le+kl7MFGzJfNn1OzIsjiPxFC+zS8QAT6d
-         Kg7TE8pMa/dpFDRRfO3soxZbz3OXoakxBplVFJ5DM3/8ztSVApwyGMMvFUZ5lRIaCL73
-         hmVGbHnQKqwcaCCCFHzTdxB+V+/yFxPFixlLAR+zvyUKj4S7tpDjmLC+lSdbzjsUVODK
-         t8aix8cbLk7X2JLlMdt3xSYipFkYfRNXzfnMw7vTVPEsvgtZT9LIODuGuRw27fQfuDzE
-         2alit6N8gQexjg/oreEDbRrLmD8HY87sCnCIYgVOoh8f/BfGLaKVGABvuMxFuYhIF/p1
-         UpHQ==
-X-Gm-Message-State: APjAAAUvWbBmJf3NVJmegyjAVdpvGEvknotgMNCRFPiurXLM0ltZBPdl
-        1t6zRJi4EjSMT/v62fmUl6Cn6Q==
-X-Google-Smtp-Source: APXvYqxjt+I4v/sdEnywIDMFxpX9dhohJ2h/xcn+2r0A6Nitb41VcNHFgzjYokT3yWbk7qgmF27dvQ==
-X-Received: by 2002:a17:90a:cb12:: with SMTP id z18mr112668727pjt.82.1564509712356;
-        Tue, 30 Jul 2019 11:01:52 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c7sm7783391pgq.31.2019.07.30.11.01.51
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Jul 2019 11:01:51 -0700 (PDT)
-Date:   Tue, 30 Jul 2019 11:01:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Thomas Garnier <thgarnie@chromium.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        kernel-hardening@lists.openwall.com, kristen@linux.intel.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Alok Kataria <akataria@vmware.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nadav Amit <namit@vmware.com>, Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Maran Wilson <maran.wilson@oracle.com>,
-        Enrico Weigelt <info@metux.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v8 00/11] x86: PIE support to extend KASLR randomization
-Message-ID: <201907301100.90BB865078@keescook>
-References: <20190708174913.123308-1-thgarnie@chromium.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=eK4LqccbexBbFwqN6Jv75UZiA5HD108HkeIAaMcaoSk=;
+        b=M6hHNFvQL+gqVfdIiKuVN06prqFcHailUniMrHT8oi6CyNpJ+K0/Ku+XKsgmRcoaqH
+         Lqx2t3NLazsKpo8lKPSGbRJGTf6bXa0ScQgISNnP9WfoBCjPljSeqQuyaRgcSPfecbQU
+         I1UB+m+Sm574qnV1U02vVEs7AuV28YcnAnE5RIcG6KvnK6KD5PsOZmXQQamuESgDGwun
+         qDhg+sy1tBxzAB+83Nm5mR+CUhLUwbaqiAel6FqiReITvfOQ6vARpLhClj90UPMTmWjE
+         JYGVzjzBFVzOvNolnh4VvcIJgVZxEP9c5NF9B36Jvj4QgPR9xXiJxcAtgoI9KDqfBnfl
+         J8sQ==
+X-Gm-Message-State: APjAAAVRvtKwbLEMc1rTR/98F7hbBF7eLhEMbZWIyMjXKdaT7vogKBEK
+        Wa02GgfYM0yC6Goo4mLj901fXx6pZzKG5A==
+X-Google-Smtp-Source: APXvYqxkh5jvsKtB7zLA6qKpix95JeAIwIFrX0WRqlAuCLmFQpKrKljFdeMBb/DMKUIjAIXMzawtlQ==
+X-Received: by 2002:a63:7c0d:: with SMTP id x13mr70206332pgc.360.1564510594054;
+        Tue, 30 Jul 2019 11:16:34 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.33
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 30 Jul 2019 11:16:33 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v6 43/57] thermal: Remove dev_err() usage after platform_get_irq()
+Date:   Tue, 30 Jul 2019 11:15:43 -0700
+Message-Id: <20190730181557.90391-44-swboyd@chromium.org>
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
+In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
+References: <20190730181557.90391-1-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190708174913.123308-1-thgarnie@chromium.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 08, 2019 at 10:48:53AM -0700, Thomas Garnier wrote:
-> Splitting the previous series in two. This part contains assembly code
-> changes required for PIE but without any direct dependencies with the
-> rest of the patchset.
-> 
-> Changes:
->  - patch v8 (assembly):
->    - Fix issues in crypto changes (thanks to Eric Biggers).
->    - Remove unnecessary jump table change.
->    - Change author and signoff to chromium email address.
+We don't need dev_err() messages when platform_get_irq() fails now that
+platform_get_irq() prints an error message itself when something goes
+wrong. Let's remove these prints with a simple semantic patch.
 
-With -rc2 done, is this a good time for this to land in -tip? Are there
-more steps needed for review?
+// <smpl>
+@@
+expression ret;
+struct platform_device *E;
+@@
 
-Thanks!
+ret =
+(
+platform_get_irq(E, ...)
+|
+platform_get_irq_byname(E, ...)
+);
 
--Kees
+if ( \( ret < 0 \| ret <= 0 \) )
+{
+(
+-if (ret != -EPROBE_DEFER)
+-{ ...
+-dev_err(...);
+-... }
+|
+...
+-dev_err(...);
+)
+...
+}
+// </smpl>
 
->  - patch v7 (assembly):
->    - Split patchset and reorder changes.
->  - patch v6:
->    - Rebase on latest changes in jump tables and crypto.
->    - Fix wording on couple commits.
->    - Revisit checkpatch warnings.
->    - Moving to @chromium.org.
->  - patch v5:
->    - Adapt new crypto modules for PIE.
->    - Improve per-cpu commit message.
->    - Fix xen 32-bit build error with .quad.
->    - Remove extra code for ftrace.
->  - patch v4:
->    - Simplify early boot by removing global variables.
->    - Modify the mcount location script for __mcount_loc intead of the address
->      read in the ftrace implementation.
->    - Edit commit description to explain better where the kernel can be located.
->    - Streamlined the testing done on each patch proposal. Always testing
->      hibernation, suspend, ftrace and kprobe to ensure no regressions.
->  - patch v3:
->    - Update on message to describe longer term PIE goal.
->    - Minor change on ftrace if condition.
->    - Changed code using xchgq.
->  - patch v2:
->    - Adapt patch to work post KPTI and compiler changes
->    - Redo all performance testing with latest configs and compilers
->    - Simplify mov macro on PIE (MOVABS now)
->    - Reduce GOT footprint
->  - patch v1:
->    - Simplify ftrace implementation.
->    - Use gcc mstack-protector-guard-reg=%gs with PIE when possible.
->  - rfc v3:
->    - Use --emit-relocs instead of -pie to reduce dynamic relocation space on
->      mapped memory. It also simplifies the relocation process.
->    - Move the start the module section next to the kernel. Remove the need for
->      -mcmodel=large on modules. Extends module space from 1 to 2G maximum.
->    - Support for XEN PVH as 32-bit relocations can be ignored with
->      --emit-relocs.
->    - Support for GOT relocations previously done automatically with -pie.
->    - Remove need for dynamic PLT in modules.
->    - Support dymamic GOT for modules.
->  - rfc v2:
->    - Add support for global stack cookie while compiler default to fs without
->      mcmodel=kernel
->    - Change patch 7 to correctly jump out of the identity mapping on kexec load
->      preserve.
-> 
-> These patches make some of the changes necessary to build the kernel as
-> Position Independent Executable (PIE) on x86_64. Another patchset will
-> add the PIE option and larger architecture changes.
-> 
-> The patches:
->  - 1, 3-11: Change in assembly code to be PIE compliant.
->  - 2: Add a new _ASM_MOVABS macro to fetch a symbol address generically.
-> 
-> diffstat:
->  crypto/aegis128-aesni-asm.S         |    6 +-
->  crypto/aegis128l-aesni-asm.S        |    8 +--
->  crypto/aegis256-aesni-asm.S         |    6 +-
->  crypto/aes-x86_64-asm_64.S          |   45 ++++++++++------
->  crypto/aesni-intel_asm.S            |    8 +--
->  crypto/aesni-intel_avx-x86_64.S     |    3 -
->  crypto/camellia-aesni-avx-asm_64.S  |   42 +++++++--------
->  crypto/camellia-aesni-avx2-asm_64.S |   44 ++++++++--------
->  crypto/camellia-x86_64-asm_64.S     |    8 +--
->  crypto/cast5-avx-x86_64-asm_64.S    |   50 ++++++++++--------
->  crypto/cast6-avx-x86_64-asm_64.S    |   44 +++++++++-------
->  crypto/des3_ede-asm_64.S            |   96 ++++++++++++++++++++++++------------
->  crypto/ghash-clmulni-intel_asm.S    |    4 -
->  crypto/glue_helper-asm-avx.S        |    4 -
->  crypto/glue_helper-asm-avx2.S       |    6 +-
->  crypto/morus1280-avx2-asm.S         |    4 -
->  crypto/morus1280-sse2-asm.S         |    8 +--
->  crypto/morus640-sse2-asm.S          |    6 +-
->  crypto/sha256-avx2-asm.S            |   18 ++++--
->  entry/entry_64.S                    |   16 ++++--
->  include/asm/alternative.h           |    6 +-
->  include/asm/asm.h                   |    1 
->  include/asm/paravirt_types.h        |   25 +++++++--
->  include/asm/pm-trace.h              |    2 
->  include/asm/processor.h             |    6 +-
->  kernel/acpi/wakeup_64.S             |   31 ++++++-----
->  kernel/head_64.S                    |   16 +++---
->  kernel/relocate_kernel_64.S         |    2 
->  power/hibernate_asm_64.S            |    4 -
->  29 files changed, 306 insertions(+), 213 deletions(-)
-> 
-> Patchset is based on next-20190708.
-> 
-> 
+While we're here, remove braces on if statements that only have one
+statement (manually).
 
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Eduardo Valentin <edubezval@gmail.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+Please apply directly to subsystem trees
+
+ drivers/thermal/broadcom/brcmstb_thermal.c  | 4 +---
+ drivers/thermal/da9062-thermal.c            | 4 +---
+ drivers/thermal/db8500_thermal.c            | 2 --
+ drivers/thermal/rockchip_thermal.c          | 4 +---
+ drivers/thermal/st/st_thermal_memmap.c      | 4 +---
+ drivers/thermal/st/stm_thermal.c            | 4 +---
+ drivers/thermal/ti-soc-thermal/ti-bandgap.c | 4 +---
+ 7 files changed, 6 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+index 5825ac581f56..619ad86dbdbc 100644
+--- a/drivers/thermal/broadcom/brcmstb_thermal.c
++++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+@@ -331,10 +331,8 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
+ 	priv->thermal = thermal;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		dev_err(&pdev->dev, "could not get IRQ\n");
++	if (irq < 0)
+ 		return irq;
+-	}
+ 	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+ 					brcmstb_tmon_irq_thread, IRQF_ONESHOT,
+ 					DRV_NAME, priv);
+diff --git a/drivers/thermal/da9062-thermal.c b/drivers/thermal/da9062-thermal.c
+index c32709badeda..2917b1cee1e9 100644
+--- a/drivers/thermal/da9062-thermal.c
++++ b/drivers/thermal/da9062-thermal.c
+@@ -254,10 +254,8 @@ static int da9062_thermal_probe(struct platform_device *pdev)
+ 		thermal->zone->passive_delay);
+ 
+ 	ret = platform_get_irq_byname(pdev, "THERMAL");
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "Failed to get platform IRQ.\n");
++	if (ret < 0)
+ 		goto err_zone;
+-	}
+ 	thermal->irq = ret;
+ 
+ 	ret = request_threaded_irq(thermal->irq, NULL,
+diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
+index b71a999d17d6..e391b5687147 100644
+--- a/drivers/thermal/db8500_thermal.c
++++ b/drivers/thermal/db8500_thermal.c
+@@ -408,7 +408,6 @@ static int db8500_thermal_probe(struct platform_device *pdev)
+ 
+ 	low_irq = platform_get_irq_byname(pdev, "IRQ_HOTMON_LOW");
+ 	if (low_irq < 0) {
+-		dev_err(&pdev->dev, "Get IRQ_HOTMON_LOW failed.\n");
+ 		ret = low_irq;
+ 		goto out_unlock;
+ 	}
+@@ -423,7 +422,6 @@ static int db8500_thermal_probe(struct platform_device *pdev)
+ 
+ 	high_irq = platform_get_irq_byname(pdev, "IRQ_HOTMON_HIGH");
+ 	if (high_irq < 0) {
+-		dev_err(&pdev->dev, "Get IRQ_HOTMON_HIGH failed.\n");
+ 		ret = high_irq;
+ 		goto out_unlock;
+ 	}
+diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
+index 343c2f5c5a25..00169e5a719a 100644
+--- a/drivers/thermal/rockchip_thermal.c
++++ b/drivers/thermal/rockchip_thermal.c
+@@ -1229,10 +1229,8 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
+ 		return -ENXIO;
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		dev_err(&pdev->dev, "no irq resource?\n");
++	if (irq < 0)
+ 		return -EINVAL;
+-	}
+ 
+ 	thermal = devm_kzalloc(&pdev->dev, sizeof(struct rockchip_thermal_data),
+ 			       GFP_KERNEL);
+diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/st_thermal_memmap.c
+index a824b78dabf8..a0114452d11f 100644
+--- a/drivers/thermal/st/st_thermal_memmap.c
++++ b/drivers/thermal/st/st_thermal_memmap.c
+@@ -94,10 +94,8 @@ static int st_mmap_register_enable_irq(struct st_thermal_sensor *sensor)
+ 	int ret;
+ 
+ 	sensor->irq = platform_get_irq(pdev, 0);
+-	if (sensor->irq < 0) {
+-		dev_err(dev, "failed to register IRQ\n");
++	if (sensor->irq < 0)
+ 		return sensor->irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(dev, sensor->irq,
+ 					NULL, st_mmap_thermal_trip_handler,
+diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
+index cf9ddc52f30e..4697849de1ca 100644
+--- a/drivers/thermal/st/stm_thermal.c
++++ b/drivers/thermal/st/stm_thermal.c
+@@ -487,10 +487,8 @@ static int stm_register_irq(struct stm_thermal_sensor *sensor)
+ 	int ret;
+ 
+ 	sensor->irq = platform_get_irq(pdev, 0);
+-	if (sensor->irq < 0) {
+-		dev_err(dev, "%s: Unable to find IRQ\n", __func__);
++	if (sensor->irq < 0)
+ 		return sensor->irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(dev, sensor->irq,
+ 					stm_thermal_alarm_irq,
+diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+index 2fa78f738568..1747dcaba365 100644
+--- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
++++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+@@ -787,10 +787,8 @@ static int ti_bandgap_talert_init(struct ti_bandgap *bgp,
+ 	int ret;
+ 
+ 	bgp->irq = platform_get_irq(pdev, 0);
+-	if (bgp->irq < 0) {
+-		dev_err(&pdev->dev, "get_irq failed\n");
++	if (bgp->irq < 0)
+ 		return bgp->irq;
+-	}
+ 	ret = request_threaded_irq(bgp->irq, NULL,
+ 				   ti_bandgap_talert_irq_handler,
+ 				   IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
 -- 
-Kees Cook
+Sent by a computer through tubes
+
