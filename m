@@ -2,94 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5377A570
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 12:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6707A58B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jul 2019 12:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbfG3KEn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 06:04:43 -0400
-Received: from icp-osb-irony-out1.external.iinet.net.au ([203.59.1.210]:44024
-        "EHLO icp-osb-irony-out1.external.iinet.net.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725947AbfG3KEn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 06:04:43 -0400
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2AEBgC6FUBd/1/rO8tmghmDVSESFxO?=
- =?us-ascii?q?NGogdAYJDAYkskRsJAQEBAQEBAQEBGxwBAYQ6BIJoNwYOAQMBAQEEAQEBAQU?=
- =?us-ascii?q?BbYRlRYV4L3JwEoMigXcTrVwziHmBSIE0hwmEboFAP4N1bIQDChuFfwSVOpV?=
- =?us-ascii?q?DCYEld5QYGZgRi2SBWZloIoFYTR8ZgyeCeY4aNTCLdIJSAQE?=
-X-IPAS-Result: =?us-ascii?q?A2AEBgC6FUBd/1/rO8tmghmDVSESFxONGogdAYJDAYksk?=
- =?us-ascii?q?RsJAQEBAQEBAQEBGxwBAYQ6BIJoNwYOAQMBAQEEAQEBAQUBbYRlRYV4L3JwE?=
- =?us-ascii?q?oMigXcTrVwziHmBSIE0hwmEboFAP4N1bIQDChuFfwSVOpVDCYEld5QYGZgRi?=
- =?us-ascii?q?2SBWZloIoFYTR8ZgyeCeY4aNTCLdIJSAQE?=
-X-IronPort-AV: E=Sophos;i="5.64,326,1559491200"; 
-   d="scan'208";a="229597879"
-Received: from 203-59-235-95.perm.iinet.net.au (HELO rtcentos7.electromag.com.au) ([203.59.235.95])
-  by icp-osb-irony-out1.iinet.net.au with ESMTP; 30 Jul 2019 18:04:40 +0800
-From:   Richard Tresidder <rtresidd@electromag.com.au>
-To:     sre@kernel.org, kstewart@linuxfoundation.org,
-        gregkh@linuxfoundation.org, tglx@linutronix.de,
-        rfontana@redhat.com, allison@lohutok.net,
-        rtresidd@electromag.com.au, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] power/supply/sbs-battery: Add ability to force load a battery via the devicetree
-Date:   Tue, 30 Jul 2019 18:04:39 +0800
-Message-Id: <1564481079-39238-1-git-send-email-rtresidd@electromag.com.au>
-X-Mailer: git-send-email 1.8.3.1
+        id S1732223AbfG3KFN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 06:05:13 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:57843 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbfG3KFM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 06:05:12 -0400
+Received: from 79.184.255.110.ipv4.supernova.orange.pl (79.184.255.110) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
+ id 29803c6a92586caf; Tue, 30 Jul 2019 12:05:10 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 8/8] ACPI: EC: PM: Make acpi_ec_dispatch_gpe() print debug message
+Date:   Tue, 30 Jul 2019 12:04:58 +0200
+Message-ID: <5021710.3QdRCBUraa@kreacher>
+In-Reply-To: <7528887.mqcfy9PZua@kreacher>
+References: <7528887.mqcfy9PZua@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the ability to force load a hot pluggable battery during boot where
-there is no gpio detect method available and the module is statically
-built. Normal polling will then occur on that battery when it is inserted.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
+Add a pm_pr_dbg() debug statement to acpi_ec_dispatch_gpe() to print
+a message when the EC GPE has been dispatched (because its status
+was set).
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-Notes:
-    sbs_battery: Add ability to force load from devicetree
-    
-    Add the ability to force load a hot pluggable battery during boot where
-    there is no gpio detect method available and the module is statically
-    built. Normal polling will then occur on that battery when it is inserted.
-    
-    v2: move forceload variable to a local in probe.
-        merge device tree documentation into this patch
+New in v2.
 
- drivers/power/supply/sbs-battery.c | 6 +++++-
+---
+ drivers/acpi/ec.c |    6 +++++-
  1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 048d205..b55721d 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -816,6 +816,7 @@ static int sbs_probe(struct i2c_client *client,
- 	struct power_supply_config psy_cfg = {};
- 	int rc;
- 	int irq;
-+	bool dt_force_load;
+Index: linux-pm/drivers/acpi/ec.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/ec.c
++++ linux-pm/drivers/acpi/ec.c
+@@ -1980,7 +1980,11 @@ bool acpi_ec_dispatch_gpe(void)
+ 		return false;
  
- 	sbs_desc = devm_kmemdup(&client->dev, &sbs_default_desc,
- 			sizeof(*sbs_desc), GFP_KERNEL);
-@@ -852,6 +853,9 @@ static int sbs_probe(struct i2c_client *client,
- 	if (rc)
- 		chip->poll_retry_count = 0;
+ 	ret = acpi_dispatch_gpe(NULL, first_ec->gpe);
+-	return ret == ACPI_INTERRUPT_HANDLED;
++	if (ret == ACPI_INTERRUPT_HANDLED) {
++		pm_pr_dbg("EC GPE dispatched\n");
++		return true;
++	}
++	return false;
+ }
+ #endif /* CONFIG_PM_SLEEP */
  
-+	dt_force_load = of_property_read_bool(client->dev.of_node,
-+						"sbs,force-load");
-+
- 	if (pdata) {
- 		chip->poll_retry_count = pdata->poll_retry_count;
- 		chip->i2c_retry_count  = pdata->i2c_retry_count;
-@@ -890,7 +894,7 @@ static int sbs_probe(struct i2c_client *client,
- 	 * Before we register, we might need to make sure we can actually talk
- 	 * to the battery.
- 	 */
--	if (!(force_load || chip->gpio_detect)) {
-+	if (!(force_load || chip->gpio_detect || dt_force_load)) {
- 		rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
- 
- 		if (rc < 0) {
--- 
-1.8.3.1
+
+
 
