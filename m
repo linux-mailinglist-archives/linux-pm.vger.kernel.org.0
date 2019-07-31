@@ -2,96 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D537C0D1
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 14:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708E67C0E8
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 14:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728589AbfGaMOP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Jul 2019 08:14:15 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38967 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726908AbfGaMOP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 08:14:15 -0400
-Received: by mail-wr1-f66.google.com with SMTP id x4so16266387wrt.6
+        id S1728793AbfGaMOq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Jul 2019 08:14:46 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34590 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728390AbfGaMOQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 08:14:16 -0400
+Received: by mail-wr1-f68.google.com with SMTP id 31so69456497wrm.1
         for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 05:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=LjD7zv10OSEEYASmHj/VO2M7lzphFAaxTy5j9pYxJDo=;
-        b=wq+OcFSyqHwlGFEmAGphrBhbP+jw2ZeUDJvnr2ryt0UBu4Kc8BRJiGhW6nT4CpumyV
-         SKOb8IQMeNonlQPsKhQERiB/vwfGBTE0wB75t/eaDiGV22IphLZrF1IBc1ENghpzhQel
-         ZYhMZKVg3ke0P91tgzfMITOJuO4O8bOJTwI3GPQteEg68oqQb8yfK6SSaGQ0qaQazN8x
-         8t8ESnrCXgYEnHfjqb7iJQmssQOB0Al/KAIWguYzWba4gqqGSoYAoZAqEzF9AsSUX7Up
-         WaZ6pwGSnfOltvm6IF58V/oAvcv+TGqUo0y3gUuOSsOl361ChIoMnUMxB5ahxtY1gEQj
-         ooJQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=ZCxLPCe1ACQErDUW8aWQ5KGtk3yR1/KdxyjnNrl959M=;
+        b=hEtFsx3E+vxVxKVnkVJrIPQhq8u5k6R7R82zb8hMdxf9abXPdtLUh28KELgdxJxC7H
+         fRk2y7UTqODUNIsjHz/e6c/DCcMZFDmYmRqcQer0vInc6NtYSx+JKe507QqSSmy+27sA
+         si1yo3vz6FWgANa91bC16sQzkIS5vyEUgDzCdvaqR4tzTBvn61aSjX6IhW0cw61qZQPE
+         NbnbApP+KE2tqktTZaEEwZ6VIEEC7DjdrKqhLyYtc/cUEbL48PcGFI70udjecD5SUYgU
+         1DavhttVuzkByIzpTjIXy8Ot5Ginl8C4aNnpTVOXHvtAjoj3meueKbzIOTXOZxjIfDvF
+         9LwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LjD7zv10OSEEYASmHj/VO2M7lzphFAaxTy5j9pYxJDo=;
-        b=lwl22DNPCm99ubYH9suWQ6n8VrAdy4pfsBkMeUPKW0lfxosJtAOvGLtghpvWdRcO7S
-         bT/5otdnpjDRaUPSeb5jaKjlt3so00QH5xmbiczwI+1SeebtZIB2VzH7SUyjQq8OQH93
-         OUZN/WKhxG9uMRa30uxXJQUxrRmHEcGjvUwqygFQlOkGkiygROw3KTJfr10CJbt6vUSj
-         c8qrHrkovopTZj+W/Gv+F2pWO5jdgzFwyXYZ//mQ7eDt95ppLngyj8V/ug+2Xo+5wqOg
-         yVe0YX3yYlkD+sYYCtCQ87q/Gaj7T2Hs9fEIB82xd7YAcjxG4HJoPJRZH2Er6yKmtVxG
-         xpUg==
-X-Gm-Message-State: APjAAAX/mwNtJDy48iCtQkrzSA5IuLg2iMmHpJJftY2wSbcW65RBfeIm
-        yfaEqANgxtvF+y/br8kpg0rirw==
-X-Google-Smtp-Source: APXvYqxJbSn0OApVvnN6CpKmYBH7g0bhbbP4QJ0hUCNLf17qIH6FUg3NTYWzUkcC4F/NvISPNemGcw==
-X-Received: by 2002:adf:db46:: with SMTP id f6mr5645832wrj.212.1564575253424;
-        Wed, 31 Jul 2019 05:14:13 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=ZCxLPCe1ACQErDUW8aWQ5KGtk3yR1/KdxyjnNrl959M=;
+        b=o0YucsRlPKhaMpl0n6HTtvgiwtRxOEGYOAR5vLAr3xTWYs9HidOudT91Q2j7CLIhjK
+         HTIZE2UZt+Ray6cv2FIjNhOs+4oafftEFYcvOrnBIlSVnU6OaWShlmWNnC0cQK6rYFyM
+         eu/45E2c7FFwCJSK0hyOZwbMgG16d8+Ax7QjgR4HSIJ9qOaA1cqPLf0v40VrS8l9tqrK
+         N5u4VEqYcgu+AhVEHVKPWfjbuxlGHEGp8hh01oe0K1UGKVUdut3jP9mN3k4wDgkLTtmQ
+         8+LPJFEY4SXwhDWvoPh/MxtnDKiJusJas4lrmsSNQ0yNExTS7zyqj1Ms6DQ4fsYeKctH
+         ipxg==
+X-Gm-Message-State: APjAAAXS6hTvX2KS1pg6zs8wBbYQ0vwlV8CrvlCRjTjq7NTVU6dpj35e
+        4bwxL+vCcCfif8d1JiwpaBck6A==
+X-Google-Smtp-Source: APXvYqyR0a3A3NknrNBLDCX+TNBWHtgAMABkJnJgH0JnXRb3PYf4C6vmioWW1jWll9xmx8tLdvDNwg==
+X-Received: by 2002:adf:e50c:: with SMTP id j12mr51394689wrm.117.1564575254371;
+        Wed, 31 Jul 2019 05:14:14 -0700 (PDT)
 Received: from glaroque-ThinkPad-T480.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id a64sm3613713wmf.1.2019.07.31.05.14.10
+        by smtp.gmail.com with ESMTPSA id a64sm3613713wmf.1.2019.07.31.05.14.13
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 31 Jul 2019 05:14:10 -0700 (PDT)
+        Wed, 31 Jul 2019 05:14:13 -0700 (PDT)
 From:   Guillaume La Roque <glaroque@baylibre.com>
 To:     daniel.lezcano@linaro.org, khilman@baylibre.com
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 0/6]  Add support of New Amlogic temperature sensor for G12 SoCs
-Date:   Wed, 31 Jul 2019 14:14:03 +0200
-Message-Id: <20190731121409.17285-1-glaroque@baylibre.com>
+Subject: [PATCH 1/6] dt-bindings: thermal: Add DT bindings documentation for Amlogic Thermal
+Date:   Wed, 31 Jul 2019 14:14:04 +0200
+Message-Id: <20190731121409.17285-2-glaroque@baylibre.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190731121409.17285-1-glaroque@baylibre.com>
+References: <20190731121409.17285-1-glaroque@baylibre.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patchs series add support of New Amlogic temperature sensor and minimal
-thermal zone for SEI510 and ODROID-N2 boards.
+Adding the devicetree binding documentation for the Amlogic temperature
+sensor found in the Amlogic Meson G12 SoCs.
+the G12A  and G12B SoCs are supported.
 
-First implementation was doing on IIO[1] but after comments i move on thermal framework.
-Formulas and calibration values come from amlogic.
-
-Dependencies :
-- patch 3: depends on Neil's patchs :
-              - missing dwc2 phy-names[1] 
-              - rework on G12 DT[2]
-
-[1] https://lore.kernel.org/linux-amlogic/20190604144714.2009-1-glaroque@baylibre.com/
-[2] https://lore.kernel.org/linux-amlogic/20190625123647.26117-1-narmstrong@baylibre.com/
-[3] https://lore.kernel.org/linux-amlogic/20190729132622.7566-2-narmstrong@baylibre.com/
-
-Guillaume La Roque (6):
-  dt-bindings: thermal: Add DT bindings documentation for Amlogic
-    Thermal
-  thermal: amlogic: Add thermal driver to support G12 SoCs
-  arm64: dts: amlogic: g12: add temperature sensor
-  arm64: dts: meson: sei510: Add minimal thermal zone
-  arm64: dts: amlogic: odroid-n2: add minimal thermal zone
-  MAINTAINERS: add entry for Amlogic Thermal driver
-
- .../bindings/thermal/amlogic,thermal.yaml     |  58 +++
- MAINTAINERS                                   |   9 +
- .../boot/dts/amlogic/meson-g12-common.dtsi    |  22 ++
- .../boot/dts/amlogic/meson-g12a-sei510.dts    |  13 +
- .../boot/dts/amlogic/meson-g12b-odroid-n2.dts |  13 +
- drivers/thermal/Kconfig                       |  12 +-
- drivers/thermal/Makefile                      |   1 +
- drivers/thermal/amlogic_thermal.c             | 335 ++++++++++++++++++
- 8 files changed, 462 insertions(+), 1 deletion(-)
+Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+---
+ .../bindings/thermal/amlogic,thermal.yaml     | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
- create mode 100644 drivers/thermal/amlogic_thermal.c
 
+diff --git a/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+new file mode 100644
+index 000000000000..1e2fe84da13d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/amlogic,thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic Thermal Driver
++
++maintainers:
++  - Guillaume La Roque <glaroque@baylibre.com>
++
++description: Amlogic Thermal driver
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - amlogic,g12-cpu-thermal
++              - amlogic,g12-ddr-thermal
++          - enum:
++              - amlogic,g12-thermal
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  amlogic,ao-secure:
++    description: phandle to the ao-secure syscon
++    allOf:
++     - $ref: /schemas/types.yaml#/definitions/uint32
++
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - amlogic,ao-secure
++
++examples:
++  - |
++        cpu_temp: temperature-sensor@ff634800 {
++                compatible = "amlogic,g12-cpu-thermal",
++                             "amlogic,g12-thermal";
++                reg = <0x0 0xff634800 0x0 0x50>;
++                interrupts = <0x0 0x24 0x0>;
++                clocks = <&clk 164>;
++                status = "okay";
++                #thermal-sensor-cells = <1>;
++                amlogic,ao-secure = <&sec_AO>;
++        };
++...
+\ No newline at end of file
 -- 
 2.17.1
 
