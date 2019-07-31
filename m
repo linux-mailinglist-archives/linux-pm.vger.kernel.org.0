@@ -2,181 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8172B7B6A7
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 02:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB707B732
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 02:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728457AbfGaASL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 20:18:11 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:48908 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728341AbfGaASL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 20:18:11 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190731001807epoutp012f40742145e189386854c2bf3fb7086c~2VdOPN6aZ0648506485epoutp01D
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 00:18:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190731001807epoutp012f40742145e189386854c2bf3fb7086c~2VdOPN6aZ0648506485epoutp01D
+        id S1726078AbfGaAaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 20:30:12 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:39314 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbfGaAaL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 20:30:11 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190731003007epoutp0463e70402c29f4ff239757cce152bd75b~2VnshUWNk1223112231epoutp04d
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 00:30:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190731003007epoutp0463e70402c29f4ff239757cce152bd75b~2VnshUWNk1223112231epoutp04d
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1564532287;
-        bh=YA0rQQn7uFtCA1rL5L6a/uZ7R7HvlbhOmEm0nlDhbi4=;
+        s=mail20170921; t=1564533007;
+        bh=wTd3fwtX0IxUTdzCG0cl1kybCtrsuYuv54bmF5iTvGM=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=ocI68rG3XVfIbZW7vONUXxhT3/hOiUeEUuVPBmuCyx2X9bGU7PFldw/JwReCXFfA2
-         Kwz/ZqrGPZNz5nTbIIaCN4snHXNlsKd89z+lMSC98pXuI/3PQsYbQfMLZdtwg8I4Uw
-         8wiEjxtAo310dc+1tB/wcGYS65RLEGtqcdeklOcs=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        b=l+x04DqTDw+tXkXiQrMRZCa08s3Oev9TrLeQhQmAN2O0vhqe91fxGGTCnTcdPpTOi
+         ShC2Z6nFs60dS9PxhfcCGmrc5TYhItLmEb2mCarFxgoi9vMpXzJNEwJS2n1qpQ5ZWz
+         J9rejzKDy/RrbocAdbm8ZV0MXcAOu4wMvUQOalng=
+Received: from epsnrtp5.localdomain (unknown [182.195.42.166]) by
         epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190731001807epcas1p117728fd1ec6365cf9a1c5ca30fcd6788~2VdN2FGEJ2896428964epcas1p1Z;
-        Wed, 31 Jul 2019 00:18:07 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.155]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 45yvCD01C7zMqYkg; Wed, 31 Jul
-        2019 00:18:00 +0000 (GMT)
+        20190731003007epcas1p1463917ad173e6be1cc417ddd1b77e62b~2VnsQUBl52053920539epcas1p1X;
+        Wed, 31 Jul 2019 00:30:07 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp5.localdomain (Postfix) with ESMTP id 45yvT64KqQzMqYkh; Wed, 31 Jul
+        2019 00:30:02 +0000 (GMT)
 Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7B.CB.04066.63ED04D5; Wed, 31 Jul 2019 09:17:58 +0900 (KST)
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B4.D9.04075.501E04D5; Wed, 31 Jul 2019 09:29:57 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190731001757epcas1p13076c1198c94549817285784a116fb15~2VdE9y7Og0200902009epcas1p1J;
-        Wed, 31 Jul 2019 00:17:57 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20190731002957epcas1p4ed4e79fa6d81dedc8aef3e17e7459668~2VnjAt6lZ2116821168epcas1p4a;
+        Wed, 31 Jul 2019 00:29:57 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190731001757epsmtrp1251c5163a43a353d8262b6b2fff60d04~2VdE9GWjo1858918589epsmtrp1C;
-        Wed, 31 Jul 2019 00:17:57 +0000 (GMT)
-X-AuditID: b6c32a37-e3fff70000000fe2-42-5d40de36bcde
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9B.DF.03638.53ED04D5; Wed, 31 Jul 2019 09:17:57 +0900 (KST)
+        20190731002957epsmtrp1c75d695fc7bb7369025de4713bfdbcd2~2VnjAB20k2425724257epsmtrp1D;
+        Wed, 31 Jul 2019 00:29:57 +0000 (GMT)
+X-AuditID: b6c32a36-b61ff70000000feb-f1-5d40e10522e1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        01.5E.03706.501E04D5; Wed, 31 Jul 2019 09:29:57 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190731001757epsmtip2db3c3e90afb702190e5922168b6bf604~2VdE12wN20512905129epsmtip2X;
-        Wed, 31 Jul 2019 00:17:57 +0000 (GMT)
-Subject: Re: [PATCH v6 09/57] devfreq: Remove dev_err() usage after
- platform_get_irq()
-To:     Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-pm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190731002956epsmtip16320b414752961c44fae2aa4dd52b64c~2Vni1iQYZ2271322713epsmtip1G;
+        Wed, 31 Jul 2019 00:29:56 +0000 (GMT)
+Subject: Re: [PATCH] PM / devfreq: Drop the name check to request module in
+ try_then_request_governor()
+To:     Yue Hu <zbestahu@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com
+Cc:     linux-pm@vger.kernel.org, huyue2@yulong.com
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <f59aa777-85f3-f399-1319-3b4b0cc46805@samsung.com>
-Date:   Wed, 31 Jul 2019 09:21:07 +0900
+Message-ID: <8e5efa9c-96c4-0c2c-b92a-d72ee598838c@samsung.com>
+Date:   Wed, 31 Jul 2019 09:33:06 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190730181557.90391-10-swboyd@chromium.org>
+In-Reply-To: <20190730100819.8056-1-zbestahu@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTcRTH++3e3V3N1a+leRqhdqMgQfO2ZjfJMrIYJKQEEcHQi97U3Kvd
-        rTdk9lKxFysjdZStmVlmhUWNxNLEjLbeT7OEsrSiKEsGErXrNfK/zznne37n9/39Dk1oaigt
-        XWhxCHYLb2KocPJq++zEhOQ3acYkV38Et8vTRHH+ki8q7rGvhuIG999GXPfOeorrfN2nSKMM
-        1cUPSUOr+7zKcKC5ARkGL8dkkmuLFhYIfJ5gjxMsuda8Qkt+KrNiVfbSbH1yEpvALuDmM3EW
-        3iykMukZmQnLC02h4UzcRt7kDKUyeVFk5ixaaLc6HUJcgVV0pDKCLc9kW2BLFHmz6LTkJ+Za
-        zSlsUtJcfUiYU1Twc58b2YLqzS+rr1DFaPf4chRGA54HgUCjohyF0xp8DcHDIR+Sgx8I2l23
-        RoMhBH+edJH/Wu6f8CvlQguCobLzpBx8Q7Bn+AZVjmh6Ml4Dz3bHSw2ROB3ag15K0hDYi+BI
-        iR9JBQrHQ2v/C0riiXg6PA2+G8mr8SI4/dWtlJjEM6HFNaiSOCp05o/edqWsmQRdx9+P3CgM
-        p0BNcJiQmMDR8Or9CYXMsbDrSjUhDQb8joKKQOWohXTwvn5AyTwZPnU2q2TWwsDBvaO8Dc52
-        3abk5lIEza0PlHJBB61el0JySeDZ0OSbI6enw/VhN5IHT4CvvyqUkgSwGkr3amTJDHjc26OQ
-        eSp49pVRhxBTNcZO1RgLVWMsVP0fdhKRDWiKYBPN+YLI2nRjv/syGtnM+PnX0MVARhvCNGIi
-        1HeMaUaNkt8objG3IaAJJlLtiV5s1Kjz+C1bBbs12+40CWIb0ode+zChjcq1hvbc4shm9XN1
-        Oh03j03WsywTra4NckYNzucdQpEg2AT7vz4FHaYtRrXR6yLO5Fy/X2aIurup/nOH72OUoeVU
-        wKbKyp3ljl08rlLnXPP8orq4u6PC7wqP2RzpTit0gD9nw73y9b4Ub722J0torPNMO+f5kDV1
-        oA8vuzDxbaWT/L2+qX98Y0X3o+SBkpXpHy/x1tV36pq+/97hUw5/2z7t6M1bjmOlfaeWAEOK
-        BTwbT9hF/i+/IkxNrwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjkeLIzCtJLcpLzFFi42LZdlhJXtf0nkOswc6NWhbNi9ezWZxtesNu
-        cXnXHDaLz71HGC1uN65gszh+5ymTA5vH7IaLLB77565h9+jbsorR4/MmuQCWKC6blNSczLLU
-        In27BK6ML+1zGQt+8FbcnL2VrYGxhbuLkZNDQsBE4vz8s6xdjFwcQgK7GSX2/n7FCpGQlJh2
-        8ShzFyMHkC0scfhwMUTNW0aJrz+PMYLEhQUiJK61aIGUiwi4SBz+sZQNpIZZYCmjxJnzi6CG
-        7mGUWDj3ISNIFZuAlsT+FzfYQGx+AUWJqz8eg8V5BewklrybC7aYRUBVYu/kz+wgtijQgsM7
-        ZkHVCEqcnPmEBcTmFLCSmPPjNzOIzSygLvFn3iUoW1zi1pP5TBC2vETz1tnMExiFZyFpn4Wk
-        ZRaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOHS2tHYwnTsQfYhTg
-        YFTi4T0R6xArxJpYVlyZe4hRgoNZSYR3sbh9rBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFe+fxj
-        kUIC6YklqdmpqQWpRTBZJg5OqQbGIEH+Uy+U2A5vEYqSfPONh5l9+3p7J5M3jAwVxo2SV5gb
-        tiqqKFWfYZm7rPeee9j1nZ/3ViRmLuE/cLehLELuX8g+zRnR6z6zeempnYjnaJA5/2eHqsaL
-        36+yDH9yXMlRW8+4X8vlR0aGdv651OPXkrNbTsSwT9A9f1CUnXXx5x5NYaPdX3YosRRnJBpq
-        MRcVJwIA5ambi5kCAAA=
-X-CMS-MailID: 20190731001757epcas1p13076c1198c94549817285784a116fb15
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKJsWRmVeSWpSXmKPExsWy7bCmni7rQ4dYg8cvJSz2zL7LbHG26Q27
+        xefeI4wWtxtXsFnMPcXlwOqxc9Zddo++LasYPT5vkvPYumYxcwBLVLZNRmpiSmqRQmpecn5K
+        Zl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtBaJYWyxJxSoFBAYnGxkr6dTVF+
+        aUmqQkZ+cYmtUmpBSk6BZYFecWJucWleul5yfq6VoYGBkSlQYUJ2RvPSa8wFJ4Ur3rw8y97A
+        2CbQxcjJISFgInHw+WXWLkYuDiGBHYwSz/9cYgVJCAl8YpTYvDMfIvGNUeJNbz8TTMeylm1s
+        EIm9jBK7/lxggnDeM0q0rLoC1i4skCnx9MZiFhBbRCBM4urjF4wgNrOAvsTNJe+ZQWw2AS2J
+        /S9usIHY/AKKEld/PAar4RWwk7h5tBlsDouAqsT77UvAbFGBCIlPDw6zQtQISpyc+QRsPqeA
+        ucTlLROh5otL3HoynwnClpdo3jqbGeQ4CYHrbBKXl3SzQrzgInH+30xmCFtY4tXxLewQtpTE
+        y/42KLtaYuXJI2wQzR2MElv2X4BqNpbYv3Qy0AYOoA2aEut36UOEFSV2/p4LdQSfxLuvPawg
+        JRICvBIdbUIQJcoSlx/chYaipMTi9k62CYxKs5C8MwvJC7OQvDALYdkCRpZVjGKpBcW56anF
+        hgVGyLG9iRGcJLXMdjAuOudziFGAg1GJh/dErEOsEGtiWXFl7iFGCQ5mJRHexeL2sUK8KYmV
+        ValF+fFFpTmpxYcYTYGhPZFZSjQ5H5jA80riDU2NjI2NLUwMzUwNDZXEeRf+sIgVEkhPLEnN
+        Tk0tSC2C6WPi4JRqYGTN7DNZ27FmUZ+c4v3PijwlH369ZPesETud/CbvVI2Hxe0U5kLHo8o3
+        dDX79D1npqjsPeV+sTk96MqPp+c1NGUD7scF/vplXbT0A//P9e92dkfK7mZQ/sl9VS1YR1kl
+        zPY+4589shHWnOX/7k4TETraZqVxpCykrU7t265jn6fJHTlz1GnlZyWW4oxEQy3mouJEAGsr
+        37+oAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgkeLIzCtJLcpLzFFi42LZdlhJTpf1oUOswca/rBZ7Zt9ltjjb9Ibd
+        4nPvEUaL240r2CzmnuJyYPXYOesuu0ffllWMHp83yXlsXbOYOYAlissmJTUnsyy1SN8ugSuj
+        eek15oKTwhVvXp5lb2BsE+hi5OSQEDCRWNayja2LkYtDSGA3o8TpE9fZIBKSEtMuHmXuYuQA
+        soUlDh8uhqh5yyixdedWVpAaYYFMiac3FrOA2CICYRL9vZOZQGxmAX2Jm0veM0M0dAE1TNzB
+        CJJgE9CS2P/iBtgCfgFFias/HoPFeQXsJG4ebQYbyiKgKvF++xIwW1QgQuLwjllQNYISJ2c+
+        AVvGKWAucXnLREaIZeoSf+ZdYoawxSVuPZkPdYS8RPPW2cwTGIVnIWmfhaRlFpKWWUhaFjCy
+        rGKUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vOz93ECI4XLc0djJeXxB9iFOBgVOLhPRHrECvE
+        mlhWXJl7iFGCg1lJhHexuH2sEG9KYmVValF+fFFpTmrxIUZpDhYlcd6neccihQTSE0tSs1NT
+        C1KLYLJMHJxSDYyqr964b3F3+3C2UiW7Xi/G8D2f/oRTe14cy404+dNRaQaH2LfwVNOS1opF
+        Em4vf3nnL7rwOJBRdedZA4FtQdNOGheebxZdyK9iuVH/doZ/usWUBUnnHq3kMc08fXHK45+T
+        73ZJVWUIb1U18Yp57PK1ZLuMpfu/252z5hZ/UikV+dP8hPtvN4sSS3FGoqEWc1FxIgA4mQB0
+        kwIAAA==
+X-CMS-MailID: 20190731002957epcas1p4ed4e79fa6d81dedc8aef3e17e7459668
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190730181610epcas1p4efb84a1b5cfbb6dea0b59936e8ae1ab3
-References: <20190730181557.90391-1-swboyd@chromium.org>
-        <CGME20190730181610epcas1p4efb84a1b5cfbb6dea0b59936e8ae1ab3@epcas1p4.samsung.com>
-        <20190730181557.90391-10-swboyd@chromium.org>
+X-CMS-RootMailID: 20190730100844epcas4p14dfa39fff2636e89c94033f154240db0
+References: <CGME20190730100844epcas4p14dfa39fff2636e89c94033f154240db0@epcas4p1.samsung.com>
+        <20190730100819.8056-1-zbestahu@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 31. 오전 3:15, Stephen Boyd wrote:
-> We don't need dev_err() messages when platform_get_irq() fails now that
-> platform_get_irq() prints an error message itself when something goes
-> wrong. Let's remove these prints with a simple semantic patch.
+On 19. 7. 30. 오후 7:08, Yue Hu wrote:
+> From: Yue Hu <huyue2@yulong.com>
 > 
-> // <smpl>
-> @@
-> expression ret;
-> struct platform_device *E;
-> @@
-> 
-> ret =
-> (
-> platform_get_irq(E, ...)
-> |
-> platform_get_irq_byname(E, ...)
-> );
-> 
-> if ( \( ret < 0 \| ret <= 0 \) )
-> {
-> (
-> -if (ret != -EPROBE_DEFER)
-> -{ ...
-> -dev_err(...);
-> -... }
-> |
-> ...
-> -dev_err(...);
-> )
-> ...
-> }
-> // </smpl>
-> 
-> While we're here, remove braces on if statements that only have one
-> statement (manually).
-> 
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Kyungmin Park <kyungmin.park@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
-> 
-> Please apply directly to subsystem trees
-> 
->  drivers/devfreq/tegra-devfreq.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
-> index 35c38aad8b4f..ffd17aba7533 100644
-> --- a/drivers/devfreq/tegra-devfreq.c
-> +++ b/drivers/devfreq/tegra-devfreq.c
-> @@ -674,10 +674,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
->  	}
->  
->  	irq = platform_get_irq(pdev, 0);
-> -	if (irq < 0) {
-> -		dev_err(&pdev->dev, "Failed to get IRQ: %d\n", irq);
-> +	if (irq < 0)
->  		return irq;
-> -	}
->  
->  	platform_set_drvdata(pdev, tegra);
->  
-> 
+> No need to check specific governor name of `simple_ondemand` to request
+> module, let's change the name string to `simpleondemand` to keep the
+> consistency on loading module if needed.
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+NACK.
+
+hmm.... It is impossible to change the devfreq governor name
+because there are many reason.
+
+The devfreq governor could be changed through the sysfs interface
+on runtime. For a long time, many users or platforms change
+the devfreq governor with the defined governor name through sysfs.
+If it is just changed, it breaks ABI interface and cannot support
+the compatibility. It is very critical problem. Please drop it.
+
+
+Maybe, you didn't check the usage of devfreq device driver
+in the mainline kernel. Almost devfreq device using simple_ondemand
+governor have to add the governor name with devfreq_add_device().
+If changed the governor name, it cause the fault of device driver
+using the devfreq framework with simple_ondemand.
+
+
+> 
+> Signed-off-by: Yue Hu <huyue2@yulong.com>
+> ---
+>  drivers/devfreq/devfreq.c | 6 +-----
+>  include/linux/devfreq.h   | 2 +-
+>  2 files changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 784c08e..baff682 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -246,11 +246,7 @@ static struct devfreq_governor *try_then_request_governor(const char *name)
+>  	if (IS_ERR(governor)) {
+>  		mutex_unlock(&devfreq_list_lock);
+>  
+> -		if (!strncmp(name, DEVFREQ_GOV_SIMPLE_ONDEMAND,
+> -			     DEVFREQ_NAME_LEN))
+> -			err = request_module("governor_%s", "simpleondemand");
+> -		else
+> -			err = request_module("governor_%s", name);
+> +		err = request_module("governor_%s", name);
+>  		/* Restore previous state before return */
+>  		mutex_lock(&devfreq_list_lock);
+>  		if (err)
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index 2bae9ed..41e8792 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -17,7 +17,7 @@
+>  #define DEVFREQ_NAME_LEN 16
+>  
+>  /* DEVFREQ governor name */
+> -#define DEVFREQ_GOV_SIMPLE_ONDEMAND	"simple_ondemand"
+> +#define DEVFREQ_GOV_SIMPLE_ONDEMAND	"simpleondemand"
+>  #define DEVFREQ_GOV_PERFORMANCE		"performance"
+>  #define DEVFREQ_GOV_POWERSAVE		"powersave"
+>  #define DEVFREQ_GOV_USERSPACE		"userspace"
+> 
 
 
 -- 
