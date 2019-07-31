@@ -2,160 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7917B819
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 04:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9178E7B875
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 06:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbfGaC7J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 22:59:09 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39855 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726210AbfGaC7J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 22:59:09 -0400
-Received: by mail-pg1-f196.google.com with SMTP id u17so31129224pgi.6
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 19:59:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B7l52D/cRUQyEKtM6D9Z02BVoe/7k/AeNEzc9yQ+CeI=;
-        b=bkoXiW2ZCG3VyC8G6LPZgBZuI3y0v2RUc/ccSE0ChSGLNoZT6BX5NE8m9Z8F/1Y46T
-         OlrlmQZ/RU9gu6V2zSy+QA4wqnBGe23ABaN6+GETOMjbLTwv1v0b6ssiRxV1BOsJR6OV
-         Uq1l0VsAIibFVMIuqQKhdKY/kCgPlFwMeCZh5+PL7h55QoJDscTpXhbqdZiuWmNXmreq
-         YpyyRZaweDEJoQ+Rsj6RPXrtLPb3B5O3q6827dDVLuy49O+OVtJuCmfTYghgQ0IhHMIu
-         ZAZGttFO4gUbQBSHY8UfufkMuYWTuIvjBg4AE05QyoJdH+v2asCd9GLKgyhlytygWTJa
-         xG3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B7l52D/cRUQyEKtM6D9Z02BVoe/7k/AeNEzc9yQ+CeI=;
-        b=Oj6GJMVD4SAYxOXatCf8/pCokAUfmuznfQpC2HPElkxGjey5XWNjqgLe3dabsy2CFn
-         CFW2A6kcrgCJ8bwHz/Sj5XACM/nr6oynT5rFWHMUhuPKXLZlKfTe0RA41qP/NQUr64f6
-         ZEOfbxNRNeyzGst1Nnp6iOskL1b3arFDbB81sN9f5u8sX0h/Uy8BZsZjzXa1merrcKGg
-         2v7nhzZAHLGjY+Fnzz2XvzvD4/QVwK4RXKsnda4Z63knDPr+5Tyf6n8qR3TcYPj0cYng
-         PwQIQsfJ+jUpJRJoSDTei+egXpNinegdSY4K8sDCpZPazWu1vxh1bwgmtIDXrK1+bEWs
-         JkOA==
-X-Gm-Message-State: APjAAAWQpWQlQLYCGIeGNPz2fheZkY3tUZZYC1tlNA1fw/l/kpCWU1Nm
-        0A8Xu9nln2j71IvI2dbR5X5Upg==
-X-Google-Smtp-Source: APXvYqzX977xFiSHTriuRuGYyl0OLc4P0XfrtGSCyPCZP10LRC7cWGWRT5jd8/2+n6pShJuBgEhHow==
-X-Received: by 2002:a17:90a:1b48:: with SMTP id q66mr502148pjq.83.1564541948328;
-        Tue, 30 Jul 2019 19:59:08 -0700 (PDT)
-Received: from localhost ([122.172.28.117])
-        by smtp.gmail.com with ESMTPSA id v18sm63769086pgl.87.2019.07.30.19.59.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 19:59:07 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "v4 . 18+" <stable@vger.kernel.org>,
-        Doug Smythies <doug.smythies@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: schedutil: Don't skip freq update when limits change
-Date:   Wed, 31 Jul 2019 08:28:57 +0530
-Message-Id: <04ff2be6ef108585d57aa2462aa7a4c676b6d1cd.1564541875.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727391AbfGaEVV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Jul 2019 00:21:21 -0400
+Received: from mga18.intel.com ([134.134.136.126]:41294 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726421AbfGaEVV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 31 Jul 2019 00:21:21 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jul 2019 21:21:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,328,1559545200"; 
+   d="scan'208";a="347395045"
+Received: from chenyu-office.sh.intel.com ([10.239.158.163])
+  by orsmga005.jf.intel.com with ESMTP; 30 Jul 2019 21:21:18 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, yu.c.chen@intel.com,
+        Len Brown <len.brown@intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Rui Zhang <rui.zhang@intel.com>,
+        David Box <david.e.box@intel.com>,
+        "Tan, Raymond" <raymond.tan@intel.com>
+Subject: [PATCH] Introducing the mask_cstate to disable specific c-states during bootup
+Date:   Wed, 31 Jul 2019 12:31:44 +0800
+Message-Id: <20190731043144.30863-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To avoid reducing the frequency of a CPU prematurely, we skip reducing
-the frequency if the CPU had been busy recently.
+There is request to disable specific c-states during bootup for
+debug purpose. For example, deeper c-states except C1,C1E,C10
+are disabled during bootup otherwise it might not boot up well
+due to incorrect setting in FW.
 
-This should not be done when the limits of the policy are changed, for
-example due to thermal throttling. We should always get the frequency
-within the new limits as soon as possible.
+For example, intel_idle.mask_cstate=0x3c, would disable cstate
+2,3,4,5 in the table
+(1<<2) | (1<<3) | (1<<4) | (1<<5)
+which is C6,C7s,C8,C9 on Broxton.
+This could have it come up as present, but with c-states disabled,
+so user can enable those c-states later to test.
 
-Fixes: ecd288429126 ("cpufreq: schedutil: Don't set next_freq to UINT_MAX")
-Cc: v4.18+ <stable@vger.kernel.org> # v4.18+
-Reported-by: Doug Smythies <doug.smythies@gmail.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Len Brown <len.brown@intel.com>
+Cc: "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+Cc: Rui Zhang <rui.zhang@intel.com>
+Cc: David Box <david.e.box@intel.com>
+Cc: "Tan, Raymond" <raymond.tan@intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 ---
-@Doug: Can you please provide your Tested-by for this commit, as it
-already fixed the issue around acpi-cpufreq driver.
+ .../admin-guide/kernel-parameters.txt         |  7 ++++
+ drivers/idle/intel_idle.c                     | 36 +++++++++++++++++++
+ 2 files changed, 43 insertions(+)
 
-We will continue to see what's wrong with intel-pstate though.
-
- kernel/sched/cpufreq_schedutil.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 636ca6f88c8e..2f382b0959e5 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -40,6 +40,7 @@ struct sugov_policy {
- 	struct task_struct	*thread;
- 	bool			work_in_progress;
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 7ccd158b3894..93a326c42877 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1733,6 +1733,13 @@
+ 			provided by tboot because it makes the system
+ 			vulnerable to DMA attacks.
  
-+	bool			limits_changed;
- 	bool			need_freq_update;
- };
++	intel_idle.mask_cstate=	[HW,X86]
++			Mask of C-states to be disabled during bootup. For
++			example, mask_cstate=0x3c, would disable cstate 2,3,4,5
++			in the table
++			(1<<2) | (1<<3) | (1<<4) | (1<<5)
++			which is C6,C7s,C8,C9 on Broxton.
++
+ 	intel_idle.max_cstate=	[KNL,HW,ACPI,X86]
+ 			0	disables intel_idle and fall back on acpi_idle.
+ 			1 to 9	specify maximum depth of C-state.
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index fa5ff77b8fe4..ed3233864b69 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -63,6 +63,8 @@ static struct cpuidle_driver intel_idle_driver = {
+ /* intel_idle.max_cstate=0 disables driver */
+ static int max_cstate = CPUIDLE_STATE_MAX - 1;
  
-@@ -89,8 +90,11 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
- 	    !cpufreq_this_cpu_can_update(sg_policy->policy))
- 		return false;
++static unsigned int mask_cstate;
++
+ static unsigned int mwait_substates;
  
--	if (unlikely(sg_policy->need_freq_update))
-+	if (unlikely(sg_policy->limits_changed)) {
-+		sg_policy->limits_changed = false;
-+		sg_policy->need_freq_update = true;
- 		return true;
+ #define LAPIC_TIMER_ALWAYS_RELIABLE 0xFFFFFFFF
+@@ -1354,6 +1356,12 @@ static void __init intel_idle_cpuidle_driver_init(void)
+ 		if (num_substates == 0)
+ 			continue;
+ 
++		if ((1UL<<cstate) & mask_cstate) {
++			pr_info("Disable #%d[%s] by user\n",
++					cstate,
++					cpuidle_state_table[cstate].name);
++			cpuidle_state_table[cstate].disabled = 1;
++		}
+ 		/* if state marked as disabled, skip it */
+ 		if (cpuidle_state_table[cstate].disabled != 0) {
+ 			pr_debug("state %s is disabled\n",
+@@ -1480,3 +1488,31 @@ device_initcall(intel_idle_init);
+  * is the easiest way (currently) to continue doing that.
+  */
+ module_param(max_cstate, int, 0444);
++
++static int mask_cstate_set(const char *arg, const struct kernel_param *kp)
++{
++	int ret = 0;
++	unsigned long new_mask_cstate, max_bit;
++
++	ret = kstrtoul(arg, 0, &new_mask_cstate);
++	if (ret)
++		goto exit_mask;
++
++	max_bit = find_last_bit(&new_mask_cstate, BITS_PER_LONG);
++	if (max_bit >= CPUIDLE_STATE_MAX) {
++		ret = -EINVAL;
++		goto exit_mask;
 +	}
- 
- 	delta_ns = time - sg_policy->last_freq_update_time;
- 
-@@ -437,7 +441,7 @@ static inline bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu) { return false; }
- static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu, struct sugov_policy *sg_policy)
- {
- 	if (cpu_bw_dl(cpu_rq(sg_cpu->cpu)) > sg_cpu->bw_dl)
--		sg_policy->need_freq_update = true;
-+		sg_policy->limits_changed = true;
- }
- 
- static void sugov_update_single(struct update_util_data *hook, u64 time,
-@@ -447,7 +451,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
- 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	unsigned long util, max;
- 	unsigned int next_f;
--	bool busy;
-+	bool busy = false;
- 
- 	sugov_iowait_boost(sg_cpu, time, flags);
- 	sg_cpu->last_update = time;
-@@ -457,7 +461,9 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
- 	if (!sugov_should_update_freq(sg_policy, time))
- 		return;
- 
--	busy = sugov_cpu_is_busy(sg_cpu);
-+	/* Limits may have changed, don't skip frequency update */
-+	if (!sg_policy->need_freq_update)
-+		busy = sugov_cpu_is_busy(sg_cpu);
- 
- 	util = sugov_get_util(sg_cpu);
- 	max = sg_cpu->max;
-@@ -831,6 +837,7 @@ static int sugov_start(struct cpufreq_policy *policy)
- 	sg_policy->last_freq_update_time	= 0;
- 	sg_policy->next_freq			= 0;
- 	sg_policy->work_in_progress		= false;
-+	sg_policy->limits_changed		= false;
- 	sg_policy->need_freq_update		= false;
- 	sg_policy->cached_raw_freq		= 0;
- 
-@@ -879,7 +886,7 @@ static void sugov_limits(struct cpufreq_policy *policy)
- 		mutex_unlock(&sg_policy->work_lock);
- 	}
- 
--	sg_policy->need_freq_update = true;
-+	sg_policy->limits_changed = true;
- }
- 
- struct cpufreq_governor schedutil_gov = {
++
++	mask_cstate = new_mask_cstate;
++	smp_mb();
++
++exit_mask:
++	return ret;
++}
++
++static const struct kernel_param_ops mask_cstate_ops = {
++	.set = mask_cstate_set,
++	.get = param_get_int,
++};
++module_param_cb(mask_cstate, &mask_cstate_ops, &mask_cstate, 0644);
 -- 
-2.21.0.rc0.269.g1a574e7a288b
+2.17.1
 
