@@ -2,127 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D78A07B655
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 01:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8172B7B6A7
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 02:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727830AbfG3Xlk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jul 2019 19:41:40 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37147 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726940AbfG3Xlk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 19:41:40 -0400
-Received: by mail-pg1-f195.google.com with SMTP id i70so20127180pgd.4
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jul 2019 16:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:from:to:subject:user-agent:date;
-        bh=RMtoPUl/RBYxxF03isIZZU4IT1wOKxVP33QmvRDz/ZM=;
-        b=nV0Fe6DYSKBdcNqNdo1iXt1Hv+gkVK2XCcgjEk752BmeGLbxX29B4Mxq5L1EAXRGWK
-         W+h6WjYs6BehJZOgMvjXrAvmlJop+v4+xLUrcBQDS/VKBYghFXbETqosCbimtU83/KbR
-         JmAzi3Wj8kKUHkUCo3P6mZiY0GGDONRUk6XBM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:from:to:subject
-         :user-agent:date;
-        bh=RMtoPUl/RBYxxF03isIZZU4IT1wOKxVP33QmvRDz/ZM=;
-        b=XifEInlJD8t1XUZHXitW6cZo2zX31470ePEiDh5yQdebJrzj2Skv3HB46gJcZVTKP0
-         O+1sofk3lOoyGU7DLRT+Qa6/eWgoqJn2fjKoOKoqBvR9Ak8q7VB5O/AgqpwCOARIJnNT
-         6azuo2Hn55PVcQWFSuM32u2svfG7kuv/eM/I+Gb9d+kmLmM4Mg662+p3PvVOdzoYjMH/
-         8b4R5iDoVoWlSraXRkX+yJ17k16jvQPFs1B3psKtc6qdfB9hvC21e9xIIoduiJoOHvIM
-         +/RtIQ/u9n85otzzUztXVMOxOJ8VaQDfr2E0FmvAhq7/pW71xrbsFl/8SvipOQxYF1Pf
-         S/bQ==
-X-Gm-Message-State: APjAAAUylmslfxSsy34x6jI9+4H4ZQkoyK4hjR0/HkEIQ/XzoZLYib8q
-        O+djefaIKvSkLOezyQ/Urm2eOw==
-X-Google-Smtp-Source: APXvYqxjbGPcuBRGJOZm+FKR9TKRPf48qmHS4nFRcAbHsbDDS9ilpXBtpCakxkHuXxb7JqvqeeEppw==
-X-Received: by 2002:a65:52ca:: with SMTP id z10mr61452134pgp.424.1564530099848;
-        Tue, 30 Jul 2019 16:41:39 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id v7sm25844316pff.87.2019.07.30.16.41.39
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 30 Jul 2019 16:41:39 -0700 (PDT)
-Message-ID: <5d40d5b3.1c69fb81.6047f.1cc3@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        id S1728457AbfGaASL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jul 2019 20:18:11 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:48908 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728341AbfGaASL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jul 2019 20:18:11 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190731001807epoutp012f40742145e189386854c2bf3fb7086c~2VdOPN6aZ0648506485epoutp01D
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 00:18:07 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190731001807epoutp012f40742145e189386854c2bf3fb7086c~2VdOPN6aZ0648506485epoutp01D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1564532287;
+        bh=YA0rQQn7uFtCA1rL5L6a/uZ7R7HvlbhOmEm0nlDhbi4=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=ocI68rG3XVfIbZW7vONUXxhT3/hOiUeEUuVPBmuCyx2X9bGU7PFldw/JwReCXFfA2
+         Kwz/ZqrGPZNz5nTbIIaCN4snHXNlsKd89z+lMSC98pXuI/3PQsYbQfMLZdtwg8I4Uw
+         8wiEjxtAo310dc+1tB/wcGYS65RLEGtqcdeklOcs=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190731001807epcas1p117728fd1ec6365cf9a1c5ca30fcd6788~2VdN2FGEJ2896428964epcas1p1Z;
+        Wed, 31 Jul 2019 00:18:07 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.40.155]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 45yvCD01C7zMqYkg; Wed, 31 Jul
+        2019 00:18:00 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7B.CB.04066.63ED04D5; Wed, 31 Jul 2019 09:17:58 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190731001757epcas1p13076c1198c94549817285784a116fb15~2VdE9y7Og0200902009epcas1p1J;
+        Wed, 31 Jul 2019 00:17:57 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190731001757epsmtrp1251c5163a43a353d8262b6b2fff60d04~2VdE9GWjo1858918589epsmtrp1C;
+        Wed, 31 Jul 2019 00:17:57 +0000 (GMT)
+X-AuditID: b6c32a37-e3fff70000000fe2-42-5d40de36bcde
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9B.DF.03638.53ED04D5; Wed, 31 Jul 2019 09:17:57 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190731001757epsmtip2db3c3e90afb702190e5922168b6bf604~2VdE12wN20512905129epsmtip2X;
+        Wed, 31 Jul 2019 00:17:57 +0000 (GMT)
+Subject: Re: [PATCH v6 09/57] devfreq: Remove dev_err() usage after
+ platform_get_irq()
+To:     Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-pm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <f59aa777-85f3-f399-1319-3b4b0cc46805@samsung.com>
+Date:   Wed, 31 Jul 2019 09:21:07 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAJZ5v0hj+e3+LZ+J1eOAT2REQne_J6aAXzkKVb0tJM4u9u--Rw@mail.gmail.com>
-References: <20190730024309.233728-1-trong@android.com> <CANA+-vBKg_W88Oy_wJs1NNYaZ2ciJKO=Mrs47etYTDNXUKW9Uw@mail.gmail.com> <5d4090ea.1c69fb81.d5cab.4dcd@mx.google.com> <2085893.cJkfNvi94x@kreacher> <5d40c41f.1c69fb81.ac63f.947f@mx.google.com> <CAJZ5v0hj+e3+LZ+J1eOAT2REQne_J6aAXzkKVb0tJM4u9u--Rw@mail.gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tri Vo <trong@android.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        kbuild test robot <lkp@intel.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v5] PM / wakeup: show wakeup sources stats in sysfs
-User-Agent: alot/0.8.1
-Date:   Tue, 30 Jul 2019 16:41:38 -0700
+In-Reply-To: <20190730181557.90391-10-swboyd@chromium.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTcRTH++3e3V3N1a+leRqhdqMgQfO2ZjfJMrIYJKQEEcHQi97U3Kvd
+        rTdk9lKxFysjdZStmVlmhUWNxNLEjLbeT7OEsrSiKEsGErXrNfK/zznne37n9/39Dk1oaigt
+        XWhxCHYLb2KocPJq++zEhOQ3acYkV38Et8vTRHH+ki8q7rGvhuIG999GXPfOeorrfN2nSKMM
+        1cUPSUOr+7zKcKC5ARkGL8dkkmuLFhYIfJ5gjxMsuda8Qkt+KrNiVfbSbH1yEpvALuDmM3EW
+        3iykMukZmQnLC02h4UzcRt7kDKUyeVFk5ixaaLc6HUJcgVV0pDKCLc9kW2BLFHmz6LTkJ+Za
+        zSlsUtJcfUiYU1Twc58b2YLqzS+rr1DFaPf4chRGA54HgUCjohyF0xp8DcHDIR+Sgx8I2l23
+        RoMhBH+edJH/Wu6f8CvlQguCobLzpBx8Q7Bn+AZVjmh6Ml4Dz3bHSw2ROB3ag15K0hDYi+BI
+        iR9JBQrHQ2v/C0riiXg6PA2+G8mr8SI4/dWtlJjEM6HFNaiSOCp05o/edqWsmQRdx9+P3CgM
+        p0BNcJiQmMDR8Or9CYXMsbDrSjUhDQb8joKKQOWohXTwvn5AyTwZPnU2q2TWwsDBvaO8Dc52
+        3abk5lIEza0PlHJBB61el0JySeDZ0OSbI6enw/VhN5IHT4CvvyqUkgSwGkr3amTJDHjc26OQ
+        eSp49pVRhxBTNcZO1RgLVWMsVP0fdhKRDWiKYBPN+YLI2nRjv/syGtnM+PnX0MVARhvCNGIi
+        1HeMaUaNkt8objG3IaAJJlLtiV5s1Kjz+C1bBbs12+40CWIb0ode+zChjcq1hvbc4shm9XN1
+        Oh03j03WsywTra4NckYNzucdQpEg2AT7vz4FHaYtRrXR6yLO5Fy/X2aIurup/nOH72OUoeVU
+        wKbKyp3ljl08rlLnXPP8orq4u6PC7wqP2RzpTit0gD9nw73y9b4Ub722J0torPNMO+f5kDV1
+        oA8vuzDxbaWT/L2+qX98Y0X3o+SBkpXpHy/x1tV36pq+/97hUw5/2z7t6M1bjmOlfaeWAEOK
+        BTwbT9hF/i+/IkxNrwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjkeLIzCtJLcpLzFFi42LZdlhJXtf0nkOswc6NWhbNi9ezWZxtesNu
+        cXnXHDaLz71HGC1uN65gszh+5ymTA5vH7IaLLB77565h9+jbsorR4/MmuQCWKC6blNSczLLU
+        In27BK6ML+1zGQt+8FbcnL2VrYGxhbuLkZNDQsBE4vz8s6xdjFwcQgK7GSX2/n7FCpGQlJh2
+        8ShzFyMHkC0scfhwMUTNW0aJrz+PMYLEhQUiJK61aIGUiwi4SBz+sZQNpIZZYCmjxJnzi6CG
+        7mGUWDj3ISNIFZuAlsT+FzfYQGx+AUWJqz8eg8V5BewklrybC7aYRUBVYu/kz+wgtijQgsM7
+        ZkHVCEqcnPmEBcTmFLCSmPPjNzOIzSygLvFn3iUoW1zi1pP5TBC2vETz1tnMExiFZyFpn4Wk
+        ZRaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOHS2tHYwnTsQfYhTg
+        YFTi4T0R6xArxJpYVlyZe4hRgoNZSYR3sbh9rBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFe+fxj
+        kUIC6YklqdmpqQWpRTBZJg5OqQbGIEH+Uy+U2A5vEYqSfPONh5l9+3p7J5M3jAwVxo2SV5gb
+        tiqqKFWfYZm7rPeee9j1nZ/3ViRmLuE/cLehLELuX8g+zRnR6z6zeempnYjnaJA5/2eHqsaL
+        36+yDH9yXMlRW8+4X8vlR0aGdv651OPXkrNbTsSwT9A9f1CUnXXx5x5NYaPdX3YosRRnJBpq
+        MRcVJwIA5ambi5kCAAA=
+X-CMS-MailID: 20190731001757epcas1p13076c1198c94549817285784a116fb15
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190730181610epcas1p4efb84a1b5cfbb6dea0b59936e8ae1ab3
+References: <20190730181557.90391-1-swboyd@chromium.org>
+        <CGME20190730181610epcas1p4efb84a1b5cfbb6dea0b59936e8ae1ab3@epcas1p4.samsung.com>
+        <20190730181557.90391-10-swboyd@chromium.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Rafael J. Wysocki (2019-07-30 16:05:55)
-> On Wed, Jul 31, 2019 at 12:26 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Rafael J. Wysocki (2019-07-30 15:17:55)
-> > > On Tuesday, July 30, 2019 8:48:09 PM CEST Stephen Boyd wrote:
-> > > >
-> > > > Using the same prefix for the class and the device name is quite co=
-mmon.
-> > > > For example, see the input, regulator, tty, tpm, remoteproc, hwmon,
-> > > > extcon classes. I'd prefer it was left as /sys/class/wakeup/wakeupN=
-. The
-> > > > class name could be changed to wakeup_source perhaps (i.e.
-> > > > /sys/class/wakeup_source/wakeupN)?
-> > >
-> > > Alternatively /sys/class/wakeup/wsN
-> > >
-> >
-> > Or /sys/class/wakeup/eventN? It's your bikeshed to paint.
->=20
-> So actually the underlying problem here is that device_wakeup_enable()
-> tries to register a wakeup source and then attach it to the device to
-> avoid calling possibly sleeping functions under a spinlock.
+On 19. 7. 31. 오전 3:15, Stephen Boyd wrote:
+> We don't need dev_err() messages when platform_get_irq() fails now that
+> platform_get_irq() prints an error message itself when something goes
+> wrong. Let's remove these prints with a simple semantic patch.
+> 
+> // <smpl>
+> @@
+> expression ret;
+> struct platform_device *E;
+> @@
+> 
+> ret =
+> (
+> platform_get_irq(E, ...)
+> |
+> platform_get_irq_byname(E, ...)
+> );
+> 
+> if ( \( ret < 0 \| ret <= 0 \) )
+> {
+> (
+> -if (ret != -EPROBE_DEFER)
+> -{ ...
+> -dev_err(...);
+> -... }
+> |
+> ...
+> -dev_err(...);
+> )
+> ...
+> }
+> // </smpl>
+> 
+> While we're here, remove braces on if statements that only have one
+> statement (manually).
+> 
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Kyungmin Park <kyungmin.park@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+> 
+> Please apply directly to subsystem trees
+> 
+>  drivers/devfreq/tegra-devfreq.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
+> index 35c38aad8b4f..ffd17aba7533 100644
+> --- a/drivers/devfreq/tegra-devfreq.c
+> +++ b/drivers/devfreq/tegra-devfreq.c
+> @@ -674,10 +674,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	irq = platform_get_irq(pdev, 0);
+> -	if (irq < 0) {
+> -		dev_err(&pdev->dev, "Failed to get IRQ: %d\n", irq);
+> +	if (irq < 0)
+>  		return irq;
+> -	}
+>  
+>  	platform_set_drvdata(pdev, tegra);
+>  
+> 
 
-Agreed, that is one problem.
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 
->=20
-> However, it should be possible to call wakeup_source_create(name)
-> first, then attach the wakeup source to the device (after checking for
-> presence), and then invoke wakeup_source_add() (after dropping the
-> lock).  If the wakeup source virtual device registration is done in
-> wakeup_source_add(), that should avoid the problem altogether without
-> having to introduce extra complexity.
 
-While reordering the code to do what you describe will fix this specific
-duplicate name problem, it won't fix the general problem with reusing
-device names from one bus on a different bus/class. We can run into the
-same problem when two buses name their devices the same name and then we
-attempt to attach a wakeup source to those two devices. Or we can have a
-problem where a virtual wakeup is made with the same name, and again
-we'll try to make a duplicate named device. Using something like 'event'
-or 'wakeup' or 'ws' as the prefix avoids this problem and keeps things
-clean.
-
-We should probably avoid letting the same virtual wakeup source be made
-with the same name anyway, because userspace will be confused about what
-virtual wakeup it is otherwise. I concede that using the name of the
-wakeup source catches this problem without adding extra code.
-
-Either way, I'd like to see what you outline implemented so that we
-don't need to do more work than is necessary when userspace writes to
-the file. I just don't want to see us need to change the name of the
-wakeup device later on and then add a 'name' attribute to the class so
-that we can avoid name collisions due to various buses controlling the
-string we use to create the name of the wakeup device.
-
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
