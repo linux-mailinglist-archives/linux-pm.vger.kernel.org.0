@@ -2,64 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5507D0CA
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 00:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D877E7D114
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 00:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730165AbfGaWSG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Jul 2019 18:18:06 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:51265 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727702AbfGaWR7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 18:17:59 -0400
-Received: from 79.184.255.110.ipv4.supernova.orange.pl (79.184.255.110) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
- id 930e658ccde014c4; Thu, 1 Aug 2019 00:17:57 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Stephen Boyd <swboyd@chromium.org>, Tri Vo <trong@android.com>
-Cc:     gregkh@linuxfoundation.org, viresh.kumar@linaro.org,
-        rafael@kernel.org, hridya@google.com, sspatil@google.com,
-        kaleshsingh@google.com, ravisadineni@chromium.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
-Date:   Thu, 01 Aug 2019 00:17:57 +0200
-Message-ID: <32598586.Mjd66ZhNnG@kreacher>
-In-Reply-To: <5d420f45.1c69fb81.35877.3d86@mx.google.com>
-References: <20190731215514.212215-1-trong@android.com> <5d420f45.1c69fb81.35877.3d86@mx.google.com>
+        id S1726641AbfGaWWi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Jul 2019 18:22:38 -0400
+Received: from mga02.intel.com ([134.134.136.20]:38707 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726073AbfGaWWi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 31 Jul 2019 18:22:38 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Jul 2019 15:22:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,331,1559545200"; 
+   d="scan'208";a="371719160"
+Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
+  by fmsmga005.fm.intel.com with ESMTP; 31 Jul 2019 15:22:36 -0700
+Date:   Wed, 31 Jul 2019 16:19:56 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Mario Limonciello <Mario.Limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Keith Busch <keith.busch@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@google.com>
+Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+Message-ID: <20190731221956.GB15795@localhost.localdomain>
+References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
+ <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
+ <47415939.KV5G6iaeJG@kreacher>
+ <20190730144134.GA12844@localhost.localdomain>
+ <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
+ <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com>
+ <20190730191934.GD13948@localhost.localdomain>
+ <7d3e0b8ba1444194a153c93faa1cabb3@AUSX13MPC105.AMER.DELL.COM>
+ <20190730213114.GK13948@localhost.localdomain>
+ <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com>
+User-Agent: Mutt/1.9.1 (2017-09-22)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, July 31, 2019 11:59:32 PM CEST Stephen Boyd wrote:
-> Quoting Tri Vo (2019-07-31 14:55:14)
-> > +/**
-> > + * wakeup_source_sysfs_add - Add wakeup_source attributes to sysfs.
-> > + * @parent: Device given wakeup source is associated with (or NULL if virtual).
-> > + * @ws: Wakeup source to be added in sysfs.
-> > + */
-> > +int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *ws)
-> > +{
-> > +       struct device *dev;
-> > +       int id;
-> > +
-> > +       id = ida_alloc(&wakeup_ida, GFP_KERNEL);
-
-So can anyone remind me why the IDA thing is needed here at all?
-
-> > +       if (id < 0)
-> > +               return id;
-> > +       ws->id = id;
-> > +
-> > +       dev = device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
-> > +                                       wakeup_source_groups, "ws%d",
+On Wed, Jul 31, 2019 at 11:25:51PM +0200, Rafael J. Wysocki wrote:
 > 
-> I thought the name was going to still be 'wakeupN'?
+> A couple of remarks if you will.
+> 
+> First, we don't know which case is the majority at this point.  For
+> now, there is one example of each, but it may very well turn out that
+> the SK Hynix BC501 above needs to be quirked.
+> 
+> Second, the reference here really is 5.2, so if there are any systems
+> that are not better off with 5.3-rc than they were with 5.2, well, we
+> have not made progress.  However, if there are systems that are worse
+> off with 5.3, that's bad.  In the face of the latest findings the only
+> way to avoid that is to be backwards compatible with 5.2 and that's
+> where my patch is going.  That cannot be achieved by quirking all
+> cases that are reported as "bad", because there still may be
+> unreported ones.
 
-So can't we prefix the wakeup source name with something like "wakeup:" or similar here?
-
-
-
+I have to agree. I think your proposal may allow PCI D3cold, in which
+case we do need to reintroduce the HMB handling.
