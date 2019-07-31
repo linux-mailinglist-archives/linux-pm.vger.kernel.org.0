@@ -2,106 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC957C955
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 18:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9697C9AA
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 19:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729976AbfGaQ6j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Jul 2019 12:58:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44526 "EHLO mail.kernel.org"
+        id S1728544AbfGaRBF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Jul 2019 13:01:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727487AbfGaQ6j (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 31 Jul 2019 12:58:39 -0400
-Received: from localhost (173-25-83-245.client.mchsi.com [173.25.83.245])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726448AbfGaRBE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 31 Jul 2019 13:01:04 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 41F16206B8;
-        Wed, 31 Jul 2019 16:58:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 36D1421855;
+        Wed, 31 Jul 2019 17:01:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564592318;
-        bh=GK34hMoIqS1LKB9/No990zj8xBhgXxjxz3Ly73DSymU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TxlVBaEuhFsldFgAeHf8Y1D6LI9uq6ZOcqm8JNesR4uKorcJy3Q7I9yA37uouUgk+
-         9AzugpCizac2aJ6E2oHOSrntgaDHaW0WSHBlD1iyMD1HwlAI+P6vOV/jxrNIS2O+UB
-         yuMudGiZVvcz3XXYdO2WYKpaGQazBDYiE6IX0iio=
-Date:   Wed, 31 Jul 2019 11:58:36 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     AceLan Kao <acelan@gmail.com>, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [bugzilla-daemon@bugzilla.kernel.org: [Bug 204385] New: Failed to
- resume from S3 with thunderbolt daisy chain]
-Message-ID: <20190731165836.GB151852@google.com>
+        s=default; t=1564592463;
+        bh=y/z8SK50ZpO4nCmvVJnpvHDo1YUj59MbZ52y+l8J5m0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HbwUPQ/TqNvkzRJEcfZ45zRKq9UrnGWvUXJ0/cdlWu/BJVBs2LG/ZZYYUrk4dGsAo
+         AjbOYmZU11vX9u5eeQwPrz6tRO6FbPeES2AcQ8GI18tGedmrKCP7LT72FixIM3jwNu
+         Aak7Z3x3bzlKlc3NTPWHGAeUTjEWh4pIQALXNY0k=
+Received: by mail-qt1-f175.google.com with SMTP id h18so67318021qtm.9;
+        Wed, 31 Jul 2019 10:01:03 -0700 (PDT)
+X-Gm-Message-State: APjAAAXqChy7pPlRu0B5aU6wkXLxK9WpOTkzfuqNg0N6vHtBX+REdSMn
+        36P/e+93kCh1KZ0rjt3J8TdeIMkKpdi66sFzbQ==
+X-Google-Smtp-Source: APXvYqyjhn7/hvSOJl+L9+ZR20USCeZlDySkINDz19gr0YGu/PGoSbb4n4RnD39j2VWH+e65HF3uPE1NOiig1AteLQA=
+X-Received: by 2002:a0c:b786:: with SMTP id l6mr89053606qve.148.1564592462233;
+ Wed, 31 Jul 2019 10:01:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190731121409.17285-1-glaroque@baylibre.com> <20190731121409.17285-2-glaroque@baylibre.com>
+ <f0f0dfe5-0cd3-5275-53ff-cfc4bb44f7e6@baylibre.com>
+In-Reply-To: <f0f0dfe5-0cd3-5275-53ff-cfc4bb44f7e6@baylibre.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 31 Jul 2019 11:00:50 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+Z1JvvtrDBtqbcuzdy_k5=OSSLQ7ezKvs9-oyvGi=-9A@mail.gmail.com>
+Message-ID: <CAL_Jsq+Z1JvvtrDBtqbcuzdy_k5=OSSLQ7ezKvs9-oyvGi=-9A@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: thermal: Add DT bindings documentation
+ for Amlogic Thermal
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Guillaume La Roque <glaroque@baylibre.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-AceLan, before suspending, can you please run "sudo lspci -vv" and
-attach the complete output to the bugzilla?
+On Wed, Jul 31, 2019 at 6:44 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
+>
+> On 31/07/2019 14:14, Guillaume La Roque wrote:
+> > Adding the devicetree binding documentation for the Amlogic temperature
+> > sensor found in the Amlogic Meson G12 SoCs.
+> > the G12A  and G12B SoCs are supported.
+> >
+> > Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+> > ---
+> >  .../bindings/thermal/amlogic,thermal.yaml     | 58 +++++++++++++++++++
+> >  1 file changed, 58 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+> > new file mode 100644
+> > index 000000000000..1e2fe84da13d
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+> > @@ -0,0 +1,58 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/thermal/amlogic,thermal.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Amlogic Thermal Driver
+> > +
+> > +maintainers:
+> > +  - Guillaume La Roque <glaroque@baylibre.com>
+> > +
+> > +description: Amlogic Thermal driver
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - amlogic,g12-cpu-thermal
+> > +              - amlogic,g12-ddr-thermal
+> > +          - enum:
+> > +              - amlogic,g12-thermal
+>
+> Shouldn't be :
+>     compatible:
+>         items:
+>           - enum:
+>               - amlogic,g12-cpu-thermal
+>               - amlogic,g12-ddr-thermal
+>           - const:
+>               - amlogic,g12-thermal
+>
+> instead ?
 
------ Forwarded message from bugzilla-daemon@bugzilla.kernel.org -----
+Yes, except 'const' is a string, not list value.
 
-Date: Wed, 31 Jul 2019 02:58:33 +0000
-From: bugzilla-daemon@bugzilla.kernel.org
-To: bugzilla.pci@gmail.com
-Subject: [Bug 204385] New: Failed to resume from S3 with thunderbolt daisy
-	chain
-Message-ID: <bug-204385-193951@https.bugzilla.kernel.org/>
+>
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  amlogic,ao-secure:
+> > +    description: phandle to the ao-secure syscon
+> > +    allOf:
+> > +     - $ref: /schemas/types.yaml#/definitions/uint32
 
-https://bugzilla.kernel.org/show_bug.cgi?id=204385
+phandle, not uint32
 
-            Bug ID: 204385
-           Summary: Failed to resume from S3 with thunderbolt daisy chain
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.3.0-rc2
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: PCI
-          Assignee: drivers_pci@kernel-bugs.osdl.org
-          Reporter: acelan@gmail.com
-        Regression: No
+> > +
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - amlogic,ao-secure
+> > +
+> > +examples:
+> > +  - |
+> > +        cpu_temp: temperature-sensor@ff634800 {
+> > +                compatible = "amlogic,g12-cpu-thermal",
+> > +                             "amlogic,g12-thermal";
+> > +                reg = <0x0 0xff634800 0x0 0x50>;
+> > +                interrupts = <0x0 0x24 0x0>;
+> > +                clocks = <&clk 164>;
+> > +                status = "okay";
+> > +                #thermal-sensor-cells = <1>;
+> > +                amlogic,ao-secure = <&sec_AO>;
+> > +        };
+> > +...
+> > \ No newline at end of file
 
-Created attachment 284047
-  --> https://bugzilla.kernel.org/attachment.cgi?id=284047&action=edit
-dmesg.log
+Fix this.
 
-The system can't resume while connecting to a tbt storage and a tbt monitor
-over Thunderbolt port(daisy-chaining)
 
-Dell Precision 5540 --> Dell WD19TB Thunderbolt Dock --> ASUS-Display PA27AC
---> HP P800 Thunderbolt Storage
-
-Reproduce steps:
-1. Connect Dell WD19TB Thunderbolt Dock to your system(thunderbolt port)
-2. Connect ASUS-Display PA27AC(thuderbolt port) to WD19TB(thunderbolt port)
-3. Connect HP P800 thunderbolt storage to PA27AC display(thunderbolt port)
-4. mount and access files on HP P800
-5. enter S3(echo deep | sudo tee /sys/power/mem_sleep && systemctl suspend) and
-resume
-6. it hangs
-
-It works well if laptop
-1. connects to HP P800 directly
-2. or connects to ASUS monitor directly
-3. or connects to ASUS monitor -> HP P800
-4. or connects to WD19TB -> HP P800
-5. or connects to WD19TB -> ASUS monitor
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
-
------ End forwarded message -----
+> >
+>
