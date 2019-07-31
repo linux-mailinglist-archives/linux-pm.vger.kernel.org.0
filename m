@@ -2,243 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCCE7B960
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 07:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C307BBC0
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jul 2019 10:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbfGaF7q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Jul 2019 01:59:46 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:40749 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbfGaF7p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 01:59:45 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190731055941epoutp0467dd332b9492eb36ed0fb97f5fc3f33e~2aHcvPKla3213732137epoutp04U
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 05:59:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190731055941epoutp0467dd332b9492eb36ed0fb97f5fc3f33e~2aHcvPKla3213732137epoutp04U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1564552781;
-        bh=xB1BtDc7Td0WqeSb+RfxdTz7QOB8xqClgnbel9tM/Aw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=SXSBYWP3KTaLhLCkEnzSbs9YKrHoJDtgg0kEYZ2s2LCseoK3mScGRNd3bC9tBGL9o
-         ti/cxNA1dhJUJrmg71LA2ANIB9CXGpmic6a6qeIDMzBGBSHhkHrfNojWsBzsQrpDDK
-         ai0A/RPGjO0BwkbTx9aT6ONDhzcRd6fXTA9HCsAs=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190731055940epcas1p1fb5b52f1c4745f318eac07bc5b20e62f~2aHcDxyEN1197911979epcas1p1J;
-        Wed, 31 Jul 2019 05:59:40 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 45z2nN6n6szMqYm1; Wed, 31 Jul
-        2019 05:59:36 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        99.B9.04088.73E214D5; Wed, 31 Jul 2019 14:59:20 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20190731055919epcas1p3c1375339831c9022fd72a3a35ab14887~2aHIT-RZI1249212492epcas1p39;
-        Wed, 31 Jul 2019 05:59:19 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190731055919epsmtrp2089dfc4c98ca6a1d9b4513a7c599a749~2aHITPuwg3017830178epsmtrp2p;
-        Wed, 31 Jul 2019 05:59:19 +0000 (GMT)
-X-AuditID: b6c32a35-85dff70000000ff8-00-5d412e37918c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8F.58.03638.73E214D5; Wed, 31 Jul 2019 14:59:19 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190731055919epsmtip24aa5aa0872b1c8f5cfe4aa3f2398dc4b~2aHIMIbxt1857718577epsmtip2l;
-        Wed, 31 Jul 2019 05:59:19 +0000 (GMT)
-Subject: Re: [PATCH] PM / devfreq: Drop the name check to request module in
- try_then_request_governor()
-To:     Yue Hu <zbestahu@gmail.com>
-Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        linux-pm@vger.kernel.org, huyue2@yulong.com
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <2e16d9c4-3207-6f0d-9210-1948f64b20cc@samsung.com>
-Date:   Wed, 31 Jul 2019 15:02:29 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S1726578AbfGaIeZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Jul 2019 04:34:25 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:43863 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726428AbfGaIeY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 04:34:24 -0400
+Received: by mail-ot1-f66.google.com with SMTP id j11so12025731otp.10;
+        Wed, 31 Jul 2019 01:34:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AB8Hs1jyVm8RnPRFNhSx7PcKVllFtK5cSajR3rR52nI=;
+        b=KOwnd+Uv3zA5G86muDK28NkoIOBlEFh97YaNPc+yEUgFl4M7ngpDMhpjxGWUbhBsO5
+         6atiOe0wvF1tDRds8iQsgOV/CpAZqCwktA1hSrNJBn1DDJHlBQWUqw3iOJRV3C/92fM+
+         17KVdn22e0aRp7pzicMEMCsY1olo2S9YrBCykTURtGQBu57sb6lVmOqIDno0Y5aDFJyy
+         BRXIP17dYgbW2YX4zFA/yol8j/of6OFdviLmkRoWF/TyoVCf4SeJXxZEKrs8W9yqGFks
+         7752rvpnzWpWU4Xvltv/cEgs4eEYlb41xpRQaUOLVrPvDllNS8fXla+500CkjHBBXQsj
+         cvUw==
+X-Gm-Message-State: APjAAAWAnazlI58zcoyaWmRLy0fb2w3mKmWGHz2t3MmR691wKkHX4aIp
+        tbf0cGjCBFTDovqrwNn6qpSE0lvwzdJJhSTCWIw=
+X-Google-Smtp-Source: APXvYqyO+qCi+ceNoUV7NyMgDZqz9y+y6uuENZytW9BejICpGIGD7X9KWd3XPMOOR2Z0tAFzdtL+a06XvDdsXEB6vVo=
+X-Received: by 2002:a9d:7a51:: with SMTP id z17mr3227635otm.266.1564562063546;
+ Wed, 31 Jul 2019 01:34:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190731135736.00006a55.zbestahu@gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SWUwTURTN67TTAa0+K8uVKMugH2IoHbA4KGAJxpBgEMOPMWlwLCMg3dIp
-        ROTHJVEkYDSiSBGXFKPiUkNAQTEolAhEcSEKgdQlYgQXNKxGTLDtSOTv3PPOeSfnvUsRykoy
-        hMo32XiriTPQpL/0bsfamGhWlaJTv5yUsK01boJ9dvibnJ2ocCF26NA1kq3t8dfK0lrsbnna
-        icZ6lDbREJrWdNNBZEp3FSTm8VwObw3nTXpzTr4pN4lOz8pOzdbEq5loJoHdQIebOCOfRG/Z
-        lhm9Nd/giaXDizhDoYfK5ASBjklOtJoLbXx4nlmwJdG8JcdgSbCoBM4oFJpyVXqzcSOjVsdq
-        PMLdBXm9znLS4li9/9GFKulBNLmqDPlRgNdDq/OKrAz5U0rcjKBnqJUQh3EED2pnZV6VEk8j
-        mBrbM++Yudn5z/EQwemZUlIcfiBwOf7IvarlOB8+DTikXhyAw+Dr6E8PT1EE3gtX3ayXJnEU
-        tI0MkF68FEfA618fkRcrcDJ0znz3BUvxGnjbcIzw4kC8E8bfd8hEzTLorh72Xe+HE2B2rtqn
-        IXAwDA5flIg4DI401fjaAO4n4U7XZ1JssAWcv28RIl4OX540ykUcAhNjD/9pSuB6t4sUzaUI
-        GtteyMSDOGi7cloillkLzvsxIh0BLbO1SAxeAmNT5TKvBLACSo8qRUkk9L13S0S8AhzHjpMn
-        EW1fUMe+oIJ9QQX7/7BLSFqPgniLYMzlBcbCLPzsBuTbyChNM6rs3daOMIXoxYounVanlHFF
-        QrGxHQFF0AEKR/BmnVKRwxUf4K3mbGuhgRfakcbz2qeIkEC92bPfJls2o4mNi4tj1zPxGoah
-        gxWXf7E6Jc7lbHwBz1t467xPQvmFHERddWNaktI8H3qszwiWR9QdTn319HtSeueXnh3Df+7d
-        jn3UN/g5oqYsdt3oh3stI30pAUVR7tDn77Rr4rNe+a9MrlhUVtVkytLeXRfAqjuOXHjT+/sG
-        d7ayns3YrjdPy0pdZOo5VVB/fFVr4Nz4DUdzZsm3fV2bFLNBkWeOT5jPL3XRUiGPY6IIq8D9
-        BTeyk8qnAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPLMWRmVeSWpSXmKPExsWy7bCSvK65nmOswfUeLYs9s+8yW5xtesNu
-        8bn3CKPF7cYVbBZzT3E5sHrsnHWX3aNvyypGj8+b5Dy2rlnMHMASxWWTkpqTWZZapG+XwJVx
-        bn0PW8FilYoD86azNDB+ke1i5OSQEDCR+L7mKGsXIxeHkMBuRondp68zQiQkJaZdPMrcxcgB
-        ZAtLHD5cDBIWEnjLKPH6QwSILSyQKfH0xmIWEFtEQF7i9csP7CA2s0CaxNJn06FmXmKSmL+u
-        EyzBJqAlsf/FDTYQm19AUeLqj8dgu3gF7CSOfn/LCmKzCKhK3NvUzgxiiwpESBzeMQuqRlDi
-        5MwnYMs4BSwlfv+fyQyxTF3iz7xLULa4xK0n85kgbHmJ5q2zmScwCs9C0j4LScssJC2zkLQs
-        YGRZxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHC1aWjsYT5yIP8QowMGoxMN7ItYh
-        Vog1say4MvcQowQHs5II72Jx+1gh3pTEyqrUovz4otKc1OJDjNIcLErivPL5xyKFBNITS1Kz
-        U1MLUotgskwcnFINjKmL2K200ox5GKfwn9opalOoJuV9hVXDqXiZt/Jn5s8cChun5Mu2BXzi
-        6JipNsP3yKrFngfalj5+wh8Qpr7Aes0S381sc5uVjhwUEXhk0DzT8J2we9TZ5RN1H+yQv8C2
-        V1cg9XnCFF6HYEmhLa5BMuHn3VlzvkxulH2zpFX5oEKC3anYKyH8SizFGYmGWsxFxYkAro+L
-        tJICAAA=
-X-CMS-MailID: 20190731055919epcas1p3c1375339831c9022fd72a3a35ab14887
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190730100844epcas4p14dfa39fff2636e89c94033f154240db0
-References: <CGME20190730100844epcas4p14dfa39fff2636e89c94033f154240db0@epcas4p1.samsung.com>
-        <20190730100819.8056-1-zbestahu@gmail.com>
-        <8e5efa9c-96c4-0c2c-b92a-d72ee598838c@samsung.com>
-        <20190731133808.00006f5b.zbestahu@gmail.com>
-        <cf760204-2504-cef9-09e7-19643986a902@samsung.com>
-        <20190731135736.00006a55.zbestahu@gmail.com>
+References: <20190730024309.233728-1-trong@android.com> <CANA+-vBKg_W88Oy_wJs1NNYaZ2ciJKO=Mrs47etYTDNXUKW9Uw@mail.gmail.com>
+ <5d4090ea.1c69fb81.d5cab.4dcd@mx.google.com> <2085893.cJkfNvi94x@kreacher>
+ <5d40c41f.1c69fb81.ac63f.947f@mx.google.com> <CAJZ5v0hj+e3+LZ+J1eOAT2REQne_J6aAXzkKVb0tJM4u9u--Rw@mail.gmail.com>
+ <5d40d5b3.1c69fb81.6047f.1cc3@mx.google.com>
+In-Reply-To: <5d40d5b3.1c69fb81.6047f.1cc3@mx.google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 31 Jul 2019 10:34:11 +0200
+Message-ID: <CAJZ5v0hj-GpiYN7nwPJvKJag71MG6zEFbJ6BNwzDidD+7fNFWw@mail.gmail.com>
+Subject: Re: [PATCH v5] PM / wakeup: show wakeup sources stats in sysfs
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Tri Vo <trong@android.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 7. 31. 오후 2:57, Yue Hu wrote:
-> On Wed, 31 Jul 2019 14:55:39 +0900
-> Chanwoo Choi <cw00.choi@samsung.com> wrote:
-> 
->> On 19. 7. 31. 오후 2:38, Yue Hu wrote:
->>> On Wed, 31 Jul 2019 09:33:06 +0900
->>> Chanwoo Choi <cw00.choi@samsung.com> wrote:
->>>   
->>>> On 19. 7. 30. 오후 7:08, Yue Hu wrote:  
->>>>> From: Yue Hu <huyue2@yulong.com>
->>>>>
->>>>> No need to check specific governor name of `simple_ondemand` to request
->>>>> module, let's change the name string to `simpleondemand` to keep the
->>>>> consistency on loading module if needed.    
->>>>
->>>> NACK.
->>>>
->>>> hmm.... It is impossible to change the devfreq governor name
->>>> because there are many reason.
->>>>
->>>> The devfreq governor could be changed through the sysfs interface
->>>> on runtime. For a long time, many users or platforms change
->>>> the devfreq governor with the defined governor name through sysfs.
->>>> If it is just changed, it breaks ABI interface and cannot support
->>>> the compatibility. It is very critical problem. Please drop it.  
->>>
->>> Yes, needs update also if using sysfs. it's problem indeed.  
->>
->> No, It is impossible to update it. You have to change all kind of
->> platform in the world. We never know the all use-case in the world.
->> As I said, it break the ABI interface. 
->>
->>>   
->>>>
->>>>
->>>> Maybe, you didn't check the usage of devfreq device driver
->>>> in the mainline kernel. Almost devfreq device using simple_ondemand
->>>> governor have to add the governor name with devfreq_add_device().
->>>> If changed the governor name, it cause the fault of device driver
->>>> using the devfreq framework with simple_ondemand.  
->>>
->>> Currently, seems no devfreq users use the simple_ondemand directly in
->>> mainline kernel.  
->>
->> You can find them in the mainline kernel as following:
->>
->> drivers/gpu/drm/panfrost/panfrost_devfreq.c:160:&panfrost_devfreq_profile, "simple_ondemand", NULL);
->> drivers/gpu/drm/msm/msm_gpu.c:98:		&msm_devfreq_profile, "simple_ondemand", NULL);
-> 
-> drm related code is already updated as below link:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=67fe62dcf713c36f4766c0218cc14796ee9536e1
-> 
->>
->> drivers/scsi/ufs/ufshcd.c:1333:			DEVFREQ_GOV_SIMPLE_ONDEMAND,
->> drivers/devfreq/tegra20-devfreq.c:176:		DEVFREQ_GOV_SIMPLE_ONDEMAND, NULL);
->> drivers/devfreq/rk3399_dmc.c:452:		DEVFREQ_GOV_SIMPLE_ONDEMAND,
->> drivers/devfreq/exynos-bus.c:437:		DEVFREQ_GOV_SIMPLE_ONDEMAND,
->>
->>>
->>> Maybe we can rename the governor file name to governor_simpleondemand.c,
->>> just not compatible to module name compared with this change.  
->>
->> The file name was already 'drivers/devfreq/governor_simpleondemand.c'.
-> 
-> Sorry for the typo error. I mean governor_simple_ondemand.c?
+On Wed, Jul 31, 2019 at 1:41 AM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Rafael J. Wysocki (2019-07-30 16:05:55)
+> > On Wed, Jul 31, 2019 at 12:26 AM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > Quoting Rafael J. Wysocki (2019-07-30 15:17:55)
+> > > > On Tuesday, July 30, 2019 8:48:09 PM CEST Stephen Boyd wrote:
+> > > > >
+> > > > > Using the same prefix for the class and the device name is quite common.
+> > > > > For example, see the input, regulator, tty, tpm, remoteproc, hwmon,
+> > > > > extcon classes. I'd prefer it was left as /sys/class/wakeup/wakeupN. The
+> > > > > class name could be changed to wakeup_source perhaps (i.e.
+> > > > > /sys/class/wakeup_source/wakeupN)?
+> > > >
+> > > > Alternatively /sys/class/wakeup/wsN
+> > > >
+> > >
+> > > Or /sys/class/wakeup/eventN? It's your bikeshed to paint.
+> >
+> > So actually the underlying problem here is that device_wakeup_enable()
+> > tries to register a wakeup source and then attach it to the device to
+> > avoid calling possibly sleeping functions under a spinlock.
+>
+> Agreed, that is one problem.
+>
+> >
+> > However, it should be possible to call wakeup_source_create(name)
+> > first, then attach the wakeup source to the device (after checking for
+> > presence), and then invoke wakeup_source_add() (after dropping the
+> > lock).  If the wakeup source virtual device registration is done in
+> > wakeup_source_add(), that should avoid the problem altogether without
+> > having to introduce extra complexity.
+>
+> While reordering the code to do what you describe will fix this specific
+> duplicate name problem, it won't fix the general problem with reusing
+> device names from one bus on a different bus/class.
 
-Actually, it is not necessary because there are no benefit.
+Fair enough.
 
-> 
-> Thanks.
-> 
->>
->>
->>>
->>> Thanks.
->>>   
->>>>
->>>>  
->>>>>
->>>>> Signed-off-by: Yue Hu <huyue2@yulong.com>
->>>>> ---
->>>>>  drivers/devfreq/devfreq.c | 6 +-----
->>>>>  include/linux/devfreq.h   | 2 +-
->>>>>  2 files changed, 2 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->>>>> index 784c08e..baff682 100644
->>>>> --- a/drivers/devfreq/devfreq.c
->>>>> +++ b/drivers/devfreq/devfreq.c
->>>>> @@ -246,11 +246,7 @@ static struct devfreq_governor *try_then_request_governor(const char *name)
->>>>>  	if (IS_ERR(governor)) {
->>>>>  		mutex_unlock(&devfreq_list_lock);
->>>>>  
->>>>> -		if (!strncmp(name, DEVFREQ_GOV_SIMPLE_ONDEMAND,
->>>>> -			     DEVFREQ_NAME_LEN))
->>>>> -			err = request_module("governor_%s", "simpleondemand");
->>>>> -		else
->>>>> -			err = request_module("governor_%s", name);
->>>>> +		err = request_module("governor_%s", name);
->>>>>  		/* Restore previous state before return */
->>>>>  		mutex_lock(&devfreq_list_lock);
->>>>>  		if (err)
->>>>> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
->>>>> index 2bae9ed..41e8792 100644
->>>>> --- a/include/linux/devfreq.h
->>>>> +++ b/include/linux/devfreq.h
->>>>> @@ -17,7 +17,7 @@
->>>>>  #define DEVFREQ_NAME_LEN 16
->>>>>  
->>>>>  /* DEVFREQ governor name */
->>>>> -#define DEVFREQ_GOV_SIMPLE_ONDEMAND	"simple_ondemand"
->>>>> +#define DEVFREQ_GOV_SIMPLE_ONDEMAND	"simpleondemand"
->>>>>  #define DEVFREQ_GOV_PERFORMANCE		"performance"
->>>>>  #define DEVFREQ_GOV_POWERSAVE		"powersave"
->>>>>  #define DEVFREQ_GOV_USERSPACE		"userspace"
->>>>>     
->>>>
->>>>  
->>>
->>>
->>>   
->>
->>
-> 
-> 
-> 
+> We can run into the same problem when two buses name their devices the
+> same name and then we attempt to attach a wakeup source to those two
+> devices. Or we can have a problem where a virtual wakeup is made with
+> the same name, and again we'll try to make a duplicate named device.
+> Using something like 'event' or 'wakeup' or 'ws' as the prefix avoids this
+> problem and keeps things clean.
 
+Or suffix, like "<devname-wakeup>.
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+But if prefixes are used by an existing convention, I would prefer
+"ws-" as it is concise enough and should not be confusing.
+
+> We should probably avoid letting the same virtual wakeup source be made
+> with the same name anyway, because userspace will be confused about what
+> virtual wakeup it is otherwise. I concede that using the name of the
+> wakeup source catches this problem without adding extra code.
+>
+> Either way, I'd like to see what you outline implemented so that we
+> don't need to do more work than is necessary when userspace writes to
+> the file.
+
+Since we agree here, let's make this change first.  I can cut a patch
+for that in a reasonable time frame I think if no one else beats me to
+that.
+
+> I just don't want to see us need to change the name of the
+> wakeup device later on and then add a 'name' attribute to the class so
+> that we can avoid name collisions due to various buses controlling the
+> string we use to create the name of the wakeup device.
+
+OK
