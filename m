@@ -2,122 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D10F97D11E
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 00:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174097D129
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 00:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbfGaW0z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 31 Jul 2019 18:26:55 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56913 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726231AbfGaW0z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 18:26:55 -0400
-Received: from 79.184.255.110.ipv4.supernova.orange.pl (79.184.255.110) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
- id 0f4f0307dd885295; Thu, 1 Aug 2019 00:26:52 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [Regression] Commit "ACPI: PM: Allow transitions to D0 to occur in special cases"
-Date:   Thu, 01 Aug 2019 00:26:51 +0200
-Message-ID: <6494680.N7F1gMbocb@kreacher>
-In-Reply-To: <20190731213001.GC151852@google.com>
-References: <578BD3F1-B185-471B-A3EB-FF71BA34B822@canonical.com> <20190731213001.GC151852@google.com>
+        id S1726231AbfGaWb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Jul 2019 18:31:28 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42675 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbfGaWb1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 18:31:27 -0400
+Received: by mail-ot1-f67.google.com with SMTP id l15so71912738otn.9
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 15:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bSadfWcJlLBywRMIXV9mcKywOnO5UwqEGEWSQilvyk4=;
+        b=LW/2QAVfnNW3GEBvxs9wNawPIAoMZk/0kwFSaO1XaizvoejDoLgbxsgsUgY/uGL0dZ
+         yhxvSHeR5lsR+wFWpl/2fj8xc6VbU7TQrZloxL27dMYuF4TDl6mJtaP5h4ZfgvaGVHBK
+         lfnAEQCAxd3LAyWlAgRYCL03Urv2hulKQP7B8BD45BjA+IsG6tM9pBZdB8sRDgDimvMm
+         ge8q0uG4NeM10+6to5axXDi4dnvwesT52peVFmh6Nl95hktoj+XmTwPTujTWmRKUdjIc
+         2vQE6FJRQoHGe3et+ANR8Lft0SqgQ3GbPTMr6gtNTnVo6ppgvF8+lwff4SsTTLZDuevb
+         MLCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bSadfWcJlLBywRMIXV9mcKywOnO5UwqEGEWSQilvyk4=;
+        b=jRuvu/Kg/3eXmuMgd75S9OBCiGUwkSggSAz3VOxqLodfmGX8qRjWutubj/0+AAaSr6
+         lUCsdHLzV32q7/GAoUvh2IrMj28H+EZCIlfhvRFjHaViCH/FFpjStqHxQSOXm03rvmZb
+         nBtUQ/Khu7zk8ZiyGiSmfk8SlKga9jaYsTC/FrhMd4slghXf/miCfC4I9BpqikWyWceG
+         m0GYPyXtvCLSJGytpN1pCH48Ps+y6cCDi0Z6PXW/blr3tSH1e9Fh8dRIpa1XY/yc4TMe
+         M6TZuYZ0cdYll0SQVZ2okxU9lAbVg5lQr9QSxOc+GacJku05QcrANNHsIX4Dmc8AX/xg
+         JsIg==
+X-Gm-Message-State: APjAAAXxtnkMuyDlmLj/ZGU2E6iEnpb7fM/mlu7p0LVQDeZfjteLPtoR
+        h7LGULe24WDDy3ck5EdypyYgEnwVaGQEnvhss/w=
+X-Google-Smtp-Source: APXvYqyY4M0ZbQ9S2sovoW2815xr3pNT9xRL/dTcExgSxr/7uBuTQP/vrOsNAKkgiamDk10BFoz3IdaIfk7gSZmsTaE=
+X-Received: by 2002:a9d:5911:: with SMTP id t17mr9029675oth.159.1564612287120;
+ Wed, 31 Jul 2019 15:31:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+References: <20190731215514.212215-1-trong@android.com> <5d420f45.1c69fb81.35877.3d86@mx.google.com>
+ <32598586.Mjd66ZhNnG@kreacher>
+In-Reply-To: <32598586.Mjd66ZhNnG@kreacher>
+From:   Tri Vo <trong@android.com>
+Date:   Wed, 31 Jul 2019 15:31:16 -0700
+Message-ID: <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com>
+Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, July 31, 2019 11:30:01 PM CEST Bjorn Helgaas wrote:
-> [+cc Thunderbolt folks, see
-> https://lore.kernel.org/r/578BD3F1-B185-471B-A3EB-FF71BA34B822@canonical.com
-> for beginning of thread]
-> 
-> On Thu, Aug 01, 2019 at 12:04:29AM +0800, Kai-Heng Feng wrote:
-> > Hi,
-> > 
-> > After commit "ACPI: PM: Allow transitions to D0 to occur in special cases”,
-> 
-> This is f850a48a0799 ("ACPI: PM: Allow transitions to D0 to occur in
-> special cases").
-> 
-> > Thunderbolt on XPS 9380 spews the following when it runtime resumes:
-> > [   36.136554] pci_raw_set_power_state: 25 callbacks suppressed
-> > [   36.136558] pcieport 0000:03:00.0: Refused to change power state,
-> > currently in D3
-> 
-> We really should be smarter about what we print here, maybe something
-> like the patch below?
-> 
-> pci_raw_set_power_state() prints "Refused to change power state" if
-> (in this case) the value of (PCI_PM_CTRL & PCI_PM_CTRL_STATE_MASK) is
-> 0x3.  Most likely we got 0xffff from PCI_PM_CTRL because the device is
-> in D3cold.  If the device is in D3cold, pci_raw_set_power_state() has
-> no hope of doing anything because it only uses PCI PM config
-> registers, and they're inaccessible in D3cold.
-> 
-> Presumably there's some platform PM method that is supposed to take
-> the device out of D3cold, and maybe we're missing that somehow?
+On Wed, Jul 31, 2019 at 3:17 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> On Wednesday, July 31, 2019 11:59:32 PM CEST Stephen Boyd wrote:
+> > Quoting Tri Vo (2019-07-31 14:55:14)
+> > > +/**
+> > > + * wakeup_source_sysfs_add - Add wakeup_source attributes to sysfs.
+> > > + * @parent: Device given wakeup source is associated with (or NULL if virtual).
+> > > + * @ws: Wakeup source to be added in sysfs.
+> > > + */
+> > > +int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *ws)
+> > > +{
+> > > +       struct device *dev;
+> > > +       int id;
+> > > +
+> > > +       id = ida_alloc(&wakeup_ida, GFP_KERNEL);
+>
+> So can anyone remind me why the IDA thing is needed here at all?
 
-Yes, there is.
+IDA is used to generate the directory name ("ws%d", ID) that is unique
+among wakeup_sources. That is what ends up in
+/sys/class/wakeup/ws<ID>/* path.
+>
+> > > +       if (id < 0)
+> > > +               return id;
+> > > +       ws->id = id;
+> > > +
+> > > +       dev = device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
+> > > +                                       wakeup_source_groups, "ws%d",
+> >
+> > I thought the name was going to still be 'wakeupN'?
+>
+> So can't we prefix the wakeup source name with something like "wakeup:" or similar here?
 
-> Based on an lspci I found at [1], I suspect 03:00.0 is a Thunderbolt
-> switch leading to [bus 04-6d].  From your log, it looks like these
-> devices don't work:
-> 
->   03:00.0 Thunderbolt Upstream Port
->   04:00.0 Thunderbolt Downstream Port
->   04:01.0 Thunderbolt Downstream Port (Slot 1)
->   04:02.0 Thunderbolt Downstream Port
->   04:04.0 Thunderbolt Downstream Port (Slot 4)
->   05:00.0 Thunderbolt NHI
->   39:00.0 XHCI USB
-> 
-> If 03:00.0 is stuck in D3cold, that would explain why none of these
-> things work.
-> 
-> [1] https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1826125
-> 
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 29ed5ec1ac27..63ca963ebff9 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -851,6 +852,11 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
->  		return -EIO;
->  
->  	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> +	if (pmcsr == (u16) ~0) {
-
-Is the "device not accessible" the only case in which we can get all ones from this?
-
-If so, the change will be fine by me.
-
-> +		pci_err(dev, "device not responding; can't change to power state D%d\n",
-> +			state);
-
-But I wouldn't break this line.
-
-> +		return -EIO;
-> +	}
->  
->  	/*
->  	 * If we're (effectively) in D3, force entire word to 0.
-> 
-
-Thanks!
-
-
-
+"ws%d" here is the name in the sysfs path rather than the name of the
+wakeup source. Wakeup source name is not altered in this patch.
