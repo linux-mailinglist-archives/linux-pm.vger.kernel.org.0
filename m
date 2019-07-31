@@ -2,53 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F2E7D19E
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 00:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EAD7D1A2
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 01:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729606AbfGaW7F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Jul 2019 18:59:05 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44825 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726817AbfGaW7F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 18:59:05 -0400
-Received: by mail-oi1-f195.google.com with SMTP id e189so51946414oib.11
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 15:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fvayO7XeLTy4X/5U3hiq/uu/ecirEncxcxFHnyvxXOY=;
-        b=MZwcDUi4tR1G4oOJB4TqUTN5aSX1GloRDcsyDdkg9pgM6Y4OOeIdzBZz+5e9apI2TF
-         SfqkvWNFv8Hp7X83FA7vjkoOPtJiWY9tLmmHUvhcyo+lyjS1ZCHoS2x74bE1dX8YEFPl
-         WAHZ8LyXqJ63ftyyerKaspMAHnrCjY6J5lgp3VSKoHklPJwMsP6DlW2EKdgqv2gg1OmK
-         bdapoa0TuPAT5F5ZICJwjifRuzY7TWULCwViKgLADIwKMa1pOo9W5Mm2T4Tg4ZebCfDH
-         RGeJxb2rwYX219Fyq3lT1DzNEDCkEitB6etiQCdh5Pm2hZyIEE7513zhXdcjE/fH7lGD
-         wnEw==
+        id S1727508AbfGaXAQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Jul 2019 19:00:16 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38532 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727373AbfGaXAQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 19:00:16 -0400
+Received: by mail-oi1-f193.google.com with SMTP id v186so52076112oie.5;
+        Wed, 31 Jul 2019 16:00:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fvayO7XeLTy4X/5U3hiq/uu/ecirEncxcxFHnyvxXOY=;
-        b=LrIgb+pEgl0m/PFrPeTkiD/Fo0R54XAUO8GiIQlmzI94SPcNYGQE5RZWi/3TkBTIi8
-         m982Fyj7EgKQZeIa/QBHAimIlw291zTiO2T4GWz23JAescz1R/YgEnLMTS3QrVxoSWF+
-         VNENiW1Oei0EUCaBo6wwdND50Q3JFZlRrUj7LrBntoZ5Ss5601mU+brC4WbXEZsTiHqm
-         UulGSql3QdBasJos2Rypy4XcY7GjP4J39Zpbgqj9kRq4e8huZQh5Bj5aNBcAOz/eA5KR
-         9eNmFIp3PQ9QzPD9XJdjw+QUKUKtVy8lSs6UUqoX/BqhznubrAAafVlxYqixiJwqg0V1
-         EyDg==
-X-Gm-Message-State: APjAAAVpKu2LW6gESwkGbkArXuorDzv90TJwYZomRsJDg0eDOnN4nqbq
-        ETv8dV670zalN870F20i55TXjLzvecCwS/FDOYs=
-X-Google-Smtp-Source: APXvYqyUMhMQGrPCnz4Km3SI1BL8a++DrhrK10Cd3/evsUszLBjGzYJ96bkzEQgPGssDRVfcF2DZTFh6Eh/vfDu63eU=
-X-Received: by 2002:aca:af55:: with SMTP id y82mr59277816oie.172.1564613944162;
- Wed, 31 Jul 2019 15:59:04 -0700 (PDT)
+        bh=g1XGA7+OOT5M94yaSPtFGkRyMp9RBaIxbFA4iWh0TPU=;
+        b=oir4h7Qbwxjou/TsIYiSWBpO5s7T+pl0WM4ye2uPEBT2APk0dqegCcdXBNm3ZY1/JY
+         z18bACf5lRlOVW/HkHXdsV5v8xGNImn4mE55pWayZqNdZdQcfQ8bMfJ4KyMYfamsi4fN
+         0uyoPCc72Ma413Xcn1MPqam5mupMLmTE5CT8dtsE3vb/kivq0blfH5Y0+H4pyRq+6+9x
+         rpKsSHfBqg79VuF2Jg0Qsh1peZYek3236uvn8YacjjTS/Yz9J7golr9GP2rSVzy4ldaM
+         7cO33hL+wE6W1F79Ymco7Z12VCmDKON9ar0twI2pyWzjr1A3TPzdUB6ovQGBBZcl5YJm
+         sQ+Q==
+X-Gm-Message-State: APjAAAU1GHDRncXHbjoQamqbh7E+/Ev4ZqaK5urI8DYPC8eneIB/2jG6
+        HeKVenYBryt6kqofnRt4M/vOhixhDfNp3wXLCYg=
+X-Google-Smtp-Source: APXvYqxyKtZ+TJkRBsq9SCAb52PyvOrYXcza7RJymYREaG9NE3KY9niyKZ+Sn4OndoXJqhnn9omlWX7RrQb2pWMtrFs=
+X-Received: by 2002:aca:edc8:: with SMTP id l191mr60392932oih.103.1564614015358;
+ Wed, 31 Jul 2019 16:00:15 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190731215514.212215-1-trong@android.com> <32598586.Mjd66ZhNnG@kreacher>
  <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com> <6987393.M0uybTKmdI@kreacher>
 In-Reply-To: <6987393.M0uybTKmdI@kreacher>
-From:   Tri Vo <trong@android.com>
-Date:   Wed, 31 Jul 2019 15:58:53 -0700
-Message-ID: <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 1 Aug 2019 01:00:03 +0200
+Message-ID: <CAJZ5v0j7ZbSq45U9DFt_KsKuk30h5vB1m2a7L6qx2fRb+4kP2A@mail.gmail.com>
 Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Tri Vo <trong@android.com>
 Cc:     Stephen Boyd <swboyd@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -66,7 +55,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 3:42 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Thu, Aug 1, 2019 at 12:42 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
 > On Thursday, August 1, 2019 12:31:16 AM CEST Tri Vo wrote:
 > > On Wed, Jul 31, 2019 at 3:17 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
@@ -115,6 +104,6 @@ On Wed, Jul 31, 2019 at 3:42 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
 > ?
 
-ws->name is inherited from the device name. IIUC device names are not
-guaranteed to be unique. So if different devices with the same name
-register wakeup sources, there is an error.
+And more generally speaking, we are adding another way to identify
+wakeup sources (by id), which is not related to the one we already
+have (by name).  Why do we need both of them?
