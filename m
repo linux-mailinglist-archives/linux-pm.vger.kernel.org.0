@@ -2,94 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2CC7D1C4
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 01:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4407D1DF
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 01:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730119AbfGaXTR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Jul 2019 19:19:17 -0400
-Received: from cmta18.telus.net ([209.171.16.91]:49145 "EHLO cmta18.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730014AbfGaXTR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 31 Jul 2019 19:19:17 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id sxsFhbpqL7TgTsxsHhHHOJ; Wed, 31 Jul 2019 17:19:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1564615155; bh=3rzn4hYxIH9EzUzyImMhDAPA+7iJOX/pi/weI4QgB7I=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=LCGpVOoLu+jUaCaWp4KfyFBqxs6GqHCqsPXIwiHTEQ10xLHufMpdzEUcs9ropvfqB
-         M3ZzYGtKNcNwUY2TVJAMDtkqLicOH8ABlw6QxXUGgoiDBHgLDBh8snRb9fKj8/BlGq
-         SZbJDRdXu+HRCqYqFEBzClPzC2vL2On+QLervLD7pdOPl0zrE+dq372fbXnjq57Rzl
-         z2FBWsTsjLPO08neKVrW+Ulhzu+33XNRM5U2ypwOMqEykTrtH0Uwwg0A1j2/UuvYVi
-         3xQg8n6IwZxm8Ua3YqJrlsfvTWTWCzdjiO/LwSsFCeFEAxwCpg4lZ7+SeH9hUdNRMV
-         5LIolfiJLjKLA==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=e6N4tph/ c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=KKAkSRfTAAAA:8
- a=gu6fZOg2AAAA:8 a=fGXEpK-jy_bYTHPgIHoA:9 a=CjuIK1q_8ugA:10 a=-FEs8UIgK8oA:10
- a=NWVoK91CQyQA:10 a=AjGcO6oz07-iQ99wixmX:22 a=cvBusfyB2V15izCimMoJ:22
- a=2RSlZUUhi9gRBrsHwhhZ:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Rafael Wysocki'" <rjw@rjwysocki.net>,
-        "'Ingo Molnar'" <mingo@redhat.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>
-Cc:     <linux-pm@vger.kernel.org>,
-        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
-        "'v4 . 18+'" <stable@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <04ff2be6ef108585d57aa2462aa7a4c676b6d1cd.1564541875.git.viresh.kumar@linaro.org>
-In-Reply-To: <04ff2be6ef108585d57aa2462aa7a4c676b6d1cd.1564541875.git.viresh.kumar@linaro.org>
-Subject: RE: [PATCH] cpufreq: schedutil: Don't skip freq update when limits change
-Date:   Wed, 31 Jul 2019 16:19:10 -0700
-Message-ID: <000701d547f6$5e4254f0$1ac6fed0$@net>
+        id S1729879AbfGaX1g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 Jul 2019 19:27:36 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:46742 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729787AbfGaX1f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 19:27:35 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 65so52093977oid.13
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 16:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Tl5pYeZ72qtvUfn4lyn1cjKCDdQYMVgYKeR/aYm1DhE=;
+        b=v47GlmL8kD1utdUfl8QhSsYQ4Ycd1eqmlLIHQozoHfiH8imsFoYdxlYhZfXBlHKFOj
+         uc6mUixJlfqK2Ks7KZrES+UXs3+sQ+cRBxjYePOuqQaWoYycbs3/Uee7taScQRy8QISM
+         3owBKhe1Przm4WbIC7G+XSYIy/zAqp8IlFfNkg17DwlXCEoPRmT/hvTqqsFF2nA57OYy
+         XH++6DrmmoxUbh+d6ESIDCalkrsni5GDPUaMhoLe+JHbWReauiXTwZUKmosfI3M//lT5
+         o9UOiMzDqvjjctii9bqV4cS9Ej+khBG6LKgnKtr6NkUqgvP3cFHkcQW/BHJTthIuY1px
+         kgyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Tl5pYeZ72qtvUfn4lyn1cjKCDdQYMVgYKeR/aYm1DhE=;
+        b=p4onqAqTCtR8QD/9Aoy/KhEO4U2OHDoWfZqmrfEhk292AUzIxVFkDYIhh943UYEk7D
+         b4r/NmqOw4ydzFHv9TpiSRVSRQ8zxiMi2+cP350O5f2Kzgbvx/Sce03LlmSif6fuurpU
+         L8/inaE9FiOcU0IS5aPlJ0Xb4IzjJz1VmHA6iRjrcD/xkwaQlgQ5ODAg2+Z2j914kacF
+         YneOHj2PpnwW5AmdoXEQCP3RI8YuxW/HBnTMnPrE+rUiOwrYfGoVevr6k720jgHb9ETl
+         IjrGj5cMZxn37Ds70GthKgvq5Mm+NkLW25C7yxcH7PrJXtoKwm1knlSQZgRY9jNKFqV8
+         rygw==
+X-Gm-Message-State: APjAAAUbr+wxfGeTtBzBoFpZl8TpgISjovr1WIW5Qnf1NiUbxp/yRloS
+        7Qtd3+bMiaCoYRujKS+Ne4EGWInpgW5zSlxWQF4=
+X-Google-Smtp-Source: APXvYqyppFnT/zO2PIEGT6+0P4UqCcqPeWL48szxnJE54BD9KxbK4wyAaRAVfkEEU0cRzX4ZhboJkbq9bcf/MYP1XpA=
+X-Received: by 2002:aca:3509:: with SMTP id c9mr64322694oia.179.1564615654731;
+ Wed, 31 Jul 2019 16:27:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdVHS+4YI9BnHjPrQbmpxp6l6KKevwApiyrA
-X-CMAE-Envelope: MS4wfGh9dvqKE8TMltwZiw0xfBDEnZROYYG2ebYYPQEoBjk9gSYuUsYTGBgldRZnlNwe8tfA/CPF2gKNKkKLNXT7Vgmsm8SkvXihyBqtFFxQsLncZoziYcFi
- 1LVOpox3Z+Wc4Y2YyKQUs0tz9X1AwODr9TV6Jn6tSBbkVfbOgxUkjLHjvhwt8EpNUVObY6g3GdgxnBZ0xor0g958P9+8yTCkyJudLwSp8qnt8IHIjxmaMlhN
- GpUy4UZzOSTftTdYLrLO8Ljbo1J02QkFqEoTj5Q8AIOE+IuJOTPAXcEtHHRPLq1MqoMg3UrEPCEDT5jXoeXFr8E5lZ7J7MjgnitmwXNeMejCPhztfkIYYHrh
- iwdNYKfLcE7KTWKTPtf5t0H7jDHCfS2KnNMNl3NA9EDXv2iI4Rw=
+References: <20190731215514.212215-1-trong@android.com> <32598586.Mjd66ZhNnG@kreacher>
+ <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com>
+ <6987393.M0uybTKmdI@kreacher> <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com>
+ <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com>
+From:   Tri Vo <trong@android.com>
+Date:   Wed, 31 Jul 2019 16:27:23 -0700
+Message-ID: <CANA+-vDikTE21qOYcvtduqaqPkEaK+8d46A1ReV5VDEZ_O49ww@mail.gmail.com>
+Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2019.07.31 Viresh Kumar wrote:
-> To avoid reducing the frequency of a CPU prematurely, we skip reducing
-> the frequency if the CPU had been busy recently.
+On Wed, Jul 31, 2019 at 4:10 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> This should not be done when the limits of the policy are changed, for
-> example due to thermal throttling. We should always get the frequency
-> within the new limits as soon as possible.
-> 
-> Fixes: ecd288429126 ("cpufreq: schedutil: Don't set next_freq to UINT_MAX")
-> Cc: v4.18+ <stable@vger.kernel.org> # v4.18+
-> Reported-by: Doug Smythies <doug.smythies@gmail.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> @Doug: Can you please provide your Tested-by for this commit, as it
-> already fixed the issue around acpi-cpufreq driver.
+> On Thu, Aug 1, 2019 at 12:59 AM Tri Vo <trong@android.com> wrote:
+> >
+> > On Wed, Jul 31, 2019 at 3:42 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > >
+> > > On Thursday, August 1, 2019 12:31:16 AM CEST Tri Vo wrote:
+> > > > On Wed, Jul 31, 2019 at 3:17 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > > > >
+> > > > > On Wednesday, July 31, 2019 11:59:32 PM CEST Stephen Boyd wrote:
+> > > > > > Quoting Tri Vo (2019-07-31 14:55:14)
+> > > > > > > +/**
+> > > > > > > + * wakeup_source_sysfs_add - Add wakeup_source attributes to sysfs.
+> > > > > > > + * @parent: Device given wakeup source is associated with (or NULL if virtual).
+> > > > > > > + * @ws: Wakeup source to be added in sysfs.
+> > > > > > > + */
+> > > > > > > +int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *ws)
+> > > > > > > +{
+> > > > > > > +       struct device *dev;
+> > > > > > > +       int id;
+> > > > > > > +
+> > > > > > > +       id = ida_alloc(&wakeup_ida, GFP_KERNEL);
+> > > > >
+> > > > > So can anyone remind me why the IDA thing is needed here at all?
+> > > >
+> > > > IDA is used to generate the directory name ("ws%d", ID) that is unique
+> > > > among wakeup_sources. That is what ends up in
+> > > > /sys/class/wakeup/ws<ID>/* path.
+> > >
+> > > That's not my point (see below).
+> > >
+> > > > > > > +       if (id < 0)
+> > > > > > > +               return id;
+> > > > > > > +       ws->id = id;
+> > > > > > > +
+> > > > > > > +       dev = device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
+> > > > > > > +                                       wakeup_source_groups, "ws%d",
+> > > > > >
+> > > > > > I thought the name was going to still be 'wakeupN'?
+> > > > >
+> > > > > So can't we prefix the wakeup source name with something like "wakeup:" or similar here?
+> > > >
+> > > > "ws%d" here is the name in the sysfs path rather than the name of the
+> > > > wakeup source. Wakeup source name is not altered in this patch.
+> > > >
+> > >
+> > > So why wouldn't something like this suffice:
+> > >
+> > > dev = device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
+> > >                                 wakeup_source_groups, "wakeup:%s", ws->name);
+> > >
+> > > ?
+> >
+> > ws->name is inherited from the device name. IIUC device names are not
+> > guaranteed to be unique. So if different devices with the same name
+> > register wakeup sources, there is an error.
 >
-> We will continue to see what's wrong with intel-pstate though.
+> OK
+>
+> So I guess the names are retained for backwards compatibility with
+> existing user space that may be using them?
 
-Please give me a few more hours.
-I'll reply to another thread with new information at that time.
+Yes, in Android we do rely on the name to aggregate statistics across
+a fleet of devices. That wouldn't be possible with just the id, as
+those are generated at dynamically runtime.
+>
+> That's kind of fair enough, but having two different identification
+> schemes for wakeup sources will end up confusing.
 
-My recommendation will be to scrap this "patch2" and go back
-to "patch1" [1], with a couple of modifications. The logic
-of patch1 is sound.
-Teaser: it is working for intel_cpufreq/schedutil, but I
-have yet to test acpi-cpufreq/schedutil.
-
-[1] https://marc.info/?l=linux-pm&m=156377832225470&w=2
-
-... Doug
-
-
+It's not without precedent though. rtc, input, and other devices have
+a similar scheme.
