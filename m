@@ -2,195 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3E17D6D1
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 10:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A91E7D6ED
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 10:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730165AbfHAH7s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Aug 2019 03:59:48 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:55917 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729902AbfHAH7s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 03:59:48 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190801075946euoutp01edfc1d2a6f619968a5ee4fa8f1515cc4~2vZlJjI591809418094euoutp01L
-        for <linux-pm@vger.kernel.org>; Thu,  1 Aug 2019 07:59:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190801075946euoutp01edfc1d2a6f619968a5ee4fa8f1515cc4~2vZlJjI591809418094euoutp01L
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1564646386;
-        bh=uCq2MLxSrtJv6mtG5c2BOzfNDZhr5+amxgb65dHy6RI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ds1V6aYMuCCKMDH/NjpiXFm8lRbBr1Bu1QfnNfxwT3VHpuf0dQFP0ufzFAYxj/BC+
-         YB0yBchnYdgT3sCT8yZLu5OD0eZYRcAlKm2VH33MiPpyuRVqFtkc9ipMedlitc7UXD
-         hhYvqQHSHAvgB6MB63YFPifkdMIRXm44W8NDW+Cc=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190801075945eucas1p148c54c5c41f014ec4238e03d73209f3d~2vZkNXfay1104411044eucas1p1V;
-        Thu,  1 Aug 2019 07:59:45 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 88.6E.04377.1FB924D5; Thu,  1
-        Aug 2019 08:59:45 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190801075944eucas1p10f92b2f34172c4c8f85656983d335f64~2vZjRx4fk2237322373eucas1p15;
-        Thu,  1 Aug 2019 07:59:44 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190801075944eusmtrp24b52198052c3e8764b8e81666c050d5b~2vZjDhtfg0694206942eusmtrp2o;
-        Thu,  1 Aug 2019 07:59:44 +0000 (GMT)
-X-AuditID: cbfec7f4-12dff70000001119-b6-5d429bf12fd3
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 48.83.04140.0FB924D5; Thu,  1
-        Aug 2019 08:59:44 +0100 (BST)
-Received: from AMDC3555 (unknown [106.120.51.67]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20190801075943eusmtip1f5f38bb917a2d719f295ac3ea68eae5d~2vZidr86Z1476114761eusmtip1I;
-        Thu,  1 Aug 2019 07:59:43 +0000 (GMT)
-Message-ID: <62557522be4924a01d3822d4734c30f2965c608b.camel@partner.samsung.com>
-Subject: Re: [RFC PATCH 09/11] devfreq: exynos-bus: Add interconnect
- functionality to exynos-bus
-From:   Artur =?UTF-8?Q?=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     krzk@kernel.org, cw00.choi@samsung.com, myungjoo.ham@samsung.com,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        m.szyprowski@samsung.com,
-        =?UTF-8?Q?Bart=C5=82omiej_?= =?UTF-8?Q?=C5=BBo=C5=82nierkiewicz?= 
-        <b.zolnierkie@samsung.com>
-Date:   Thu, 01 Aug 2019 09:59:42 +0200
-In-Reply-To: <6e8b2081-2fb3-9ab8-37d1-8b5fe5fd8e11@linaro.org>
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMKsWRmVeSWpSXmKPExsWy7djP87ofZzvFGhz+KGqxccZ6VovrX56z
-        Wsw/co7V4srX92wW0/duYrOYdH8Ci8X58xvYLTY9vsZqcXnXHDaLz71HGC1mnN/HZLH2yF12
-        i9uNK9gsZkx+yebA57FpVSebx51re9g87ncfZ/LYvKTeo2/LKkaPz5vkAtiiuGxSUnMyy1KL
-        9O0SuDJ+H3rJWLBBpuLKcs8Gxh7xLkZODgkBE4mX23cwdTFycQgJrGCU2LvnNwuE84VRYsq3
-        VewQzmdGifam92xdjBxgLXdb+CHiyxklTv6fDlX0jFHiyp5TzCBzeQUCJC5dfcgKYgsLJEks
-        eHQRzGYTcJf49/wKK0iDiMAnRomzS2YzgjjMAh8ZJRp+tYN1swioSizt280EYnMK2En8vrWU
-        DeJaHYm3p/pYQM7gFRCU+LtDGCTMLCAv0bx1NjPIHAmBe+wSK6d0QNW7SPRtXMEOYQtLvDq+
-        BcqWkfi/cz4ThF0s8XTnfVaI5gZGiU3LjjBDJKwlDh8HOZsDaIOmxPpd+hBhR4m3fUeZIUHB
-        J3HjrSDEDXwSk7ZNhwrzSnS0CUGYWhILfkdDNEpINK2+BjXbQ6Ll0XP2CYyKsxB+mYXkl1kI
-        WxcwMq9iFE8tLc5NTy02ykst1ytOzC0uzUvXS87P3cQITFqn/x3/soNx15+kQ4wCHIxKPLwK
-        PY6xQqyJZcWVuYcYJTiYlUR4F4vbxwrxpiRWVqUW5ccXleakFh9ilOZgURLnrWZ4EC0kkJ5Y
-        kpqdmlqQWgSTZeLglGpgnLni6xnpLQGJwfNuRr/glW86JHIzhrupyPahbfujSf1e9SdyHi/q
-        eln+MmHF7w+ykyX/tOTYGFquef277K+5/9Q6/+DLhg7t7sq6X3r+JSos7TXcfKRfbq+zj9nD
-        m2V7Zn1MiHzuLdvymOvQidfta6fpCNRq8TblWbDf+eN4m6Pt0G9+3iwtJZbijERDLeai4kQA
-        C54i6lYDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJIsWRmVeSWpSXmKPExsVy+t/xu7ofZjvFGvT1iVpsnLGe1eL6l+es
-        FvOPnGO1uPL1PZvF9L2b2Cwm3Z/AYnH+/AZ2i02Pr7FaXN41h83ic+8RRosZ5/cxWaw9cpfd
-        4nbjCjaLGZNfsjnweWxa1cnmcefaHjaP+93HmTw2L6n36NuyitHj8ya5ALYoPZui/NKSVIWM
-        /OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYzfh14yFmyQqbiy3LOB
-        sUe8i5GDQ0LAROJuC38XIxeHkMBSRonvB9cydzFyAsUlJD6uv8EKYQtL/LnWxQZiCwk8YZTY
-        c50HxOYVCJC4dPUhWI2wQJLEgkcXwWw2AXeJf8+vsIIMFRH4zChxeNEnFpAEM4hzY1kOiM0i
-        oCqxtG83E4jNKWAn8fvWUjaIK1qZJK5N2ssK0aAp0br9NzvEFToSb0/1sYBczSsgKPF3hzBE
-        ibxE89bZzBMYBWch6ZiFUDULSdUCRuZVjCKppcW56bnFRnrFibnFpXnpesn5uZsYgdG47djP
-        LTsYu94FH2IU4GBU4uE90ekYK8SaWFZcmXuIUYKDWUmEd7G4fawQb0piZVVqUX58UWlOavEh
-        RlOgfyYyS4km5wMTRV5JvKGpobmFpaG5sbmxmYWSOG+HwMEYIYH0xJLU7NTUgtQimD4mDk6p
-        Bsb1q25rmmglLj/orXzOP+9HfIvQPAbDC5Vb7t53ZZXVUI1ecvfDntMdte1PzX9+8IlLKvud
-        sfBB5pYVUd8eq69unzHLuUn4/b1jbGcE//8O2yWb7rn54uRbdWaZvhNE3h60UPN/vsYs7ubD
-        2Defz29q8Fx288Sp2W/Yty4zWXwxbp+V6RqdA18TlViKMxINtZiLihMBIkRDMdwCAAA=
-X-CMS-MailID: 20190801075944eucas1p10f92b2f34172c4c8f85656983d335f64
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190723122028eucas1p2eb75f35b810e71d6c590370aaff0997b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190723122028eucas1p2eb75f35b810e71d6c590370aaff0997b
-References: <20190723122016.30279-1-a.swigon@partner.samsung.com>
-        <CGME20190723122028eucas1p2eb75f35b810e71d6c590370aaff0997b@eucas1p2.samsung.com>
-        <20190723122016.30279-10-a.swigon@partner.samsung.com>
-        <6e8b2081-2fb3-9ab8-37d1-8b5fe5fd8e11@linaro.org>
+        id S1730859AbfHAIIA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Aug 2019 04:08:00 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:35492 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729572AbfHAIH7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 04:07:59 -0400
+Received: by mail-ed1-f66.google.com with SMTP id w20so68257417edd.2;
+        Thu, 01 Aug 2019 01:07:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/A98ENoFGQr2SCQn9ABBf4M5URnbGIlXVcItSyIlQIY=;
+        b=Wpfuc/Jm6RyYET0+1F4x08xRLhNOqe5AZMmhCVijzNJP0ZYLJnTwSDSFDJw4yTm9ts
+         GEQJ0hM6YnpfnbAcWoA1PXGG/NunmgXCF89xCSgAx4qkFc7lBDGuN6lm3Nz3JTSNMpFw
+         pAlgYEVRRXnQmVqy41rIOnkkXV1TE9BmCOMSiQpQO3QsPYXzCCgzPucE8gKyMfAGlgWP
+         hiN1704KehFy0lXo+asJa+it+YSV4ckYq0QfCU8uKWBKFdcIiCPH6ivx54ru8hjqxAfm
+         X/oIQPD6gH/w4WFdbmMNAWbpaL478XNI6RiZJ459MJIPGS+uN4UxDnXNmt4Gi538CCDC
+         Amww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/A98ENoFGQr2SCQn9ABBf4M5URnbGIlXVcItSyIlQIY=;
+        b=okGLzs99uJLZdKoWoAKbLGFpFKid41ifYOdf4qpFqFgadgvvg1J+/nTm4hQtybW/zh
+         zvtPrTl0bGzYstJfTw+LdMJKtdH3xx5KIxf0YKiFzn+4Azrz6l6OFCHLyhjuGZYgY73E
+         VV8vQwZ1SpMqNUK6drKXS16tyWVxPDS9EJ5tflyoj37bnDXuuZOpNt7GTyYSNw/k775s
+         tqtZYdvje6tyULp2G/A5FljSTaIgZ833K6WLD95AFJck10Hd53ctlTjDZut8PHheb1dw
+         +cMZeBgiyIOwKgC26yGnmmxxz8JMS/bs7fSev/22W648IgAWHXWkrmIgf1Y543maIKl1
+         ErGw==
+X-Gm-Message-State: APjAAAUGWj9gRhlXRvI6r3tsvjvs4i5aK6Kkdk8bsbsE4BnXI5+2BpZx
+        J6LdzzNHAsSHgzZyj3Hu0wYRznuw7JK4ffIedBq8qvlyfms=
+X-Google-Smtp-Source: APXvYqz1uwxLNSvD1OY5M5VgD6Oshlf7Q3vqRumXchcxbJpiZ6TcvfXvmGTOuvRZYUmwhvOYdd5AJ1jHDmJNpEIKpCQ=
+X-Received: by 2002:a50:fb0a:: with SMTP id d10mr84112001edq.124.1564646877779;
+ Thu, 01 Aug 2019 01:07:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190729151454.9606-1-hslester96@gmail.com> <20190729191511.GB2023@amd>
+In-Reply-To: <20190729191511.GB2023@amd>
+From:   Chuhong Yuan <hslester96@gmail.com>
+Date:   Thu, 1 Aug 2019 16:07:47 +0800
+Message-ID: <CANhBUQ3beB_aHMJSy9G942oUo_BT=x0w3gB3Vip_-nJxVjqu8A@mail.gmail.com>
+Subject: Re: [PATCH 07/12] power: Replace strncmp with str_has_prefix
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Georgi,
+Pavel Machek <pavel@ucw.cz> =E4=BA=8E2019=E5=B9=B47=E6=9C=8830=E6=97=A5=E5=
+=91=A8=E4=BA=8C =E4=B8=8A=E5=8D=883:15=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon 2019-07-29 23:14:54, Chuhong Yuan wrote:
+> > strncmp(str, const, len) is error-prone.
+> > We had better use newly introduced
+> > str_has_prefix() instead of it.
+> >
+> > Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+> > ---
+> >  kernel/power/hibernate.c | 8 ++++----
+> >  kernel/power/main.c      | 2 +-
+> >  2 files changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> > index cd7434e6000d..49d4bfdb2b67 100644
+> > --- a/kernel/power/hibernate.c
+> > +++ b/kernel/power/hibernate.c
+> > @@ -1188,15 +1188,15 @@ static int __init resume_offset_setup(char *str=
+)
+> >
+> >  static int __init hibernate_setup(char *str)
+> >  {
+> > -     if (!strncmp(str, "noresume", 8)) {
+> > +     if (str_has_prefix(str, "noresume")) {
+> >               noresume =3D 1;
+> > -     } else if (!strncmp(str, "nocompress", 10)) {
+> > +     } else if (str_has_prefix(str, "nocompress")) {
+> >               nocompress =3D 1;
+>
+> Ok, old code is bad, too... but this makes the error visible. We do
+> not want "noresumenextmonday" to set noresume =3D 1, right?
+>
 
-On Fri, 2019-07-26 at 11:05 +0300, Georgi Djakov wrote:
-> Hi Artur,
-> 
-> On 7/23/19 15:20, Artur Świgoń wrote:
-> > This patch adds interconnect functionality to the exynos-bus devfreq
-> > driver.
-> > 
-> > The SoC topology is a graph (or, more specifically, a tree) and most of its
-> > edges are taken from the devfreq parent-child hierarchy (cf.
-> > Documentation/devicetree/bindings/devfreq/exynos-bus.txt). The previous
-> > patch adds missing edges to the DT (under the name 'parent'). Due to
-> > unspecified relative probing order, -EPROBE_DEFER may be propagated to
-> > guarantee that a child is probed before its parent.
-> > 
-> > Each bus is now an interconnect provider and an interconnect node as well
-> > (cf. Documentation/interconnect/interconnect.rst), i.e. every bus registers
-> > itself as a node. Node IDs are not hardcoded but rather assigned at
-> > runtime, in probing order (subject to the above-mentioned exception
-> > regarding relative order). This approach allows for using this driver with
-> > various Exynos SoCs.
-> 
-> I am not familiar with the Exynos bus topology, but it seems to me that it's not
-> represented correctly. An interconnect provider with just a single node (port)
-> is odd. I would expect that each provider consists of multiple master and slave
-> nodes. This data would be used by a framework to understand what are the links
-> and how the traffic flows between the IP blocks and through which buses.
+I am not clear about the semantic of the code.
+Therefore, what is the right way to fix this error?
 
-To summarize the exynos-bus topology[1] used by the devfreq driver: There are
-many data buses for data transfer in Samsung Exynos SoC. Every bus has its own
-clock. Buses often share power lines, in which case one of the buses on the
-power line is referred to as 'parent' (or as 'devfreq' in the DT). In the
-particular case of Exynos4412[1][2], the topology can be expressed as follows:
-
-bus_dmc
--- bus_acp
--- bus_c2c
-
-bus_leftbus
--- bus_rightbus
--- bus_display
--- bus_fsys
--- bus_peri
--- bus_mfc
-
-Where bus_dmc and bus_leftbus probably could be referred to as masters, and the
-following indented nodes as slaves. Patch 08/11 of this RFC additionally adds
-the following to the DT:
-
-bus_dmc
--- bus_leftbus
-
-Which makes the topology a valid tree.
-
-The exynos-bus concept in devfreq[3] is designed in such a way that every bus is
-probed separately as a platform device, and is a largely independent entity.
-This RFC proposes an extension to the existing devfreq driver that basically
-provides a simple QoS to ensure minimum clock frequency for selected buses
-(possibly overriding devfreq governor calculations) using the interconnect
-framework.
-
-The hierarchy is modelled in such a way that every bus is an interconnect node.
-On the other hand, what is considered an interconnect provider here is quite
-arbitrary, but for the reasons mentioned in the above paragraph, this RFC
-assumes that every bus is a provider of itself as a node. Using an alternative
-singleton provider approach was deemed more complicated since the 'dev' field in
-'struct icc_provider' has to be set to something meaningful and we are tied to
-the 'samsung,exynos-bus' compatible string in the driver (and multiple instances
-of exynos-bus probed in indeterminate relative order).
-
-I'm looking forward to hearing any additional thoughts you may have on this
-topic.
-
-Best regards,
--- 
-Artur Świgoń
-Samsung R&D Institute Poland
-Samsung Electronics
-
-[1] Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-[2]
-arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-[3] drivers/devfreq/exynos-bus.c
-(subject of this patch)
-
-
+>                                                                 Pavel
+>
+> --
+> (english) http://www.livejournal.com/~pavelmachek
+> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/b=
+log.html
