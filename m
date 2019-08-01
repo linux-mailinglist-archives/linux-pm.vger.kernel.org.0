@@ -2,154 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC7F7E2FD
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 21:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1BB7E345
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 21:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388317AbfHATGb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Aug 2019 15:06:31 -0400
-Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:61870 "EHLO
-        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727616AbfHATGa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 15:06:30 -0400
-Received: from pps.filterd (m0170390.ppops.net [127.0.0.1])
-        by mx0a-00154904.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x71J4bAL008217;
-        Thu, 1 Aug 2019 15:06:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=B1v8JXwk0MuhGn3zEyy1ZSeANdg/4igk7l7QlSKuk6o=;
- b=FL5OT1u4MzN+kdMELLtrlDJFmqr4LivW+U/3hZd/NSO5PcMqO1fT/rl7NZmaWhX4qUal
- 4SdqDjS3R4pEf/6ZD8e/JX5hQ44/SLTLvdFMAyE//bpDJd35P9w4Qbr/lHbyQKeqjpEL
- SOt6gk+d21SN2Z5t43ZefJP4zCOUwsw9/sW5rhDPPXtaVYJqico5j0/BxB5J5ON8s849
- KfDsRZ9bRh/+u5/VhtHQFMqed0OmeSnpkP7dTTlRph+B5bdbyR9WBmc9GTaH5RjfC9tb
- orA5LUZTB1nEpnXdlhET+wOEk/+9RSWUv0zBKy1xwu9XY2b6pWwaH8CpWcPJdylLDjNV sg== 
-Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
-        by mx0a-00154904.pphosted.com with ESMTP id 2u3vrb2m6t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Aug 2019 15:06:28 -0400
-Received: from pps.filterd (m0134746.ppops.net [127.0.0.1])
-        by mx0a-00154901.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x71J3O9W136383;
-        Thu, 1 Aug 2019 15:06:28 -0400
-Received: from ausxipps306.us.dell.com (AUSXIPPS306.us.dell.com [143.166.148.156])
-        by mx0a-00154901.pphosted.com with ESMTP id 2u45a08kum-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Aug 2019 15:06:28 -0400
-X-LoopCount0: from 10.166.132.128
-X-PREM-Routing: D-Outbound
-X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
-   d="scan'208";a="355632777"
-From:   <Mario.Limonciello@dell.com>
-To:     <kai.heng.feng@canonical.com>, <rjw@rjwysocki.net>
-CC:     <linux-acpi@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mika.westerberg@linux.intel.com>, <helgaas@kernel.org>
-Subject: RE: [PATCH] ACPI: PM: Fix regression in acpi_device_set_power()
-Thread-Topic: [PATCH] ACPI: PM: Fix regression in acpi_device_set_power()
-Thread-Index: AQHVR/gLL0tkuMFPkka1OwBGYwDZZ6bmI6kAgACEsAA=
-Date:   Thu, 1 Aug 2019 19:06:25 +0000
-Message-ID: <9cdfa1cd722e48a789a114a3d805cdfa@AUSX13MPC105.AMER.DELL.COM>
-References: <4199592.UtrPOv3ZmA@kreacher>
- <27715F95-E729-4EF5-B2BA-03BA3C87AE29@canonical.com>
-In-Reply-To: <27715F95-E729-4EF5-B2BA-03BA3C87AE29@canonical.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-08-01T19:06:23.8715385Z;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
- aiplabel=External Public
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.143.18.86]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2388622AbfHATZH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Aug 2019 15:25:07 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33034 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388603AbfHATZH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 15:25:07 -0400
+Received: by mail-pf1-f193.google.com with SMTP id g2so34634383pfq.0
+        for <linux-pm@vger.kernel.org>; Thu, 01 Aug 2019 12:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:from:to:subject:user-agent:date;
+        bh=YaxBDmm4w6BxFdLcy1jn89PkJwYAWRGHPRdVfiDQRHM=;
+        b=ngdU8xy+iHRs7rlnaToJzNd5WH7HncGMsuD5TRZ7tEyyzGqqZFG7GFYIufuwz+VmxT
+         epuk93Kk1F0gG1Z2roZPQ4y3CoRWdi+sT/PZXv1BZXaBnl+covbf5XsLOLYHKlg7IB62
+         cWkYR/qEgz8laAMUe6DPHSe3cNMu/zCGkvtfE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:from:to:subject
+         :user-agent:date;
+        bh=YaxBDmm4w6BxFdLcy1jn89PkJwYAWRGHPRdVfiDQRHM=;
+        b=Xz74/OQ4y9ZFmmOTPPTmNEp57Gu/NT0tn/AaWJb4K6mWLuNJnPzdGGYDQsP1Uaz4Y7
+         w18Hv9h1/gGFzTYH/4XOv5tWzDvUlFa6rowi3AlzJ9+/U32jejt8IToBUatp6kT6VSBY
+         8P4nARrjEJuxUHEjp+kEsgfaNI7wCGBprPzzUyfZea7HzxhQ2QegdRqgKqdxP8UypmAO
+         vV8z/trRgOj3ZFvDCBa07LMlXC/s+N2f+tz+8HMSXANuW0FHgGZ3qH5kNxXnGCeTd5SQ
+         hlZL9f2p/h5HKnCEOniDwLV4uNsWtItlFW2Ivbukv1+yvU9P0osBTc8xt9UM0uWZGOID
+         4DDQ==
+X-Gm-Message-State: APjAAAWG6/YDVaxNnugovYq8ldEngqICmVRblJu+aT/LOVgS4QOI2yXF
+        ZFyuOuQ0iqHan2+cjp81XE6cgg==
+X-Google-Smtp-Source: APXvYqxdgdlnp7cMvSt/ZUjqO9dvf+s5hQC0iB9FgVdGgYleySugtl6eoS1EjZoCYW6HFRx3+s5GKg==
+X-Received: by 2002:a17:90a:cb87:: with SMTP id a7mr392002pju.130.1564687506224;
+        Thu, 01 Aug 2019 12:25:06 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id t9sm6136860pji.18.2019.08.01.12.25.05
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 01 Aug 2019 12:25:05 -0700 (PDT)
+Message-ID: <5d433c91.1c69fb81.93f13.febc@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-01_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908010198
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908010199
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAJZ5v0hDE908XcreUyzZ8JGjFJbgVX1N1ELeMwf+n_ENxPA_DA@mail.gmail.com>
+References: <20190731215514.212215-1-trong@android.com> <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com> <6987393.M0uybTKmdI@kreacher> <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com> <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com> <5d42281c.1c69fb81.bcda1.71f5@mx.google.com> <5d423637.1c69fb81.62114.ca6f@mx.google.com> <CAJZ5v0jkLXwqmXwyYtdZ9X2=W2KNKS4Ok_NrDew2yvvt1=4pgQ@mail.gmail.com> <5d4305df.1c69fb81.c4013.1950@mx.google.com> <CAJZ5v0hDE908XcreUyzZ8JGjFJbgVX1N1ELeMwf+n_ENxPA_DA@mail.gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tri Vo <trong@android.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
+User-Agent: alot/0.8.1
+Date:   Thu, 01 Aug 2019 12:25:04 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> -----Original Message-----
-> From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Sent: Thursday, August 1, 2019 1:11 AM
-> To: Rafael J. Wysocki
-> Cc: Linux ACPI; Linux PM; Linux PCI; LKML; Mika Westerberg; Bjorn Helgaas=
-;
-> Limonciello, Mario
-> Subject: Re: [PATCH] ACPI: PM: Fix regression in acpi_device_set_power()
->=20
->=20
-> at 07:31, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->=20
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Quoting Rafael J. Wysocki (2019-08-01 10:21:44)
+> On Thu, Aug 1, 2019 at 5:31 PM Stephen Boyd <swboyd@chromium.org> wrote:
 > >
-> > Commit f850a48a0799 ("ACPI: PM: Allow transitions to D0 to occur in
-> > special cases") overlooked the fact that acpi_power_transition() may
-> > change the power.state value for the target device and if that
-> > happens, it may confuse acpi_device_set_power() and cause it to
-> > omit the _PS0 evaluation which on some systems is necessary to
-> > change power states of devices from low-power to D0.
-> >
-> > Fix that by saving the current value of power.state for the
-> > target device before passing it to acpi_power_transition() and
-> > using the saved value in a subsequent check.
-> >
-> > Fixes: f850a48a0799 ("ACPI: PM: Allow transitions to D0 to occur in
-> > special cases")
-> > Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > Reported-by: Mario Limonciello <mario.limonciello@dell.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > BTW, paths in /sys/devices aren't supposed to matter too much. In this
+> > case, I'd expect to see userspace looking at the /sys/class/wakeup path
+> > to follow the symlink to figure out what device triggered a wakeup. It
+> > can look at the 'device' symlink inside the directory for the wakeup
+> > device to figure out which one it is.
 >=20
-> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> But if you go from the device, it would be good to be able to figure
+> out which wakeup sources are associated with it and in the alarmtimer
+> example you don't even see that it is a wakeup source without
+> following the link.
 
-Tested-by: Mario Limonciello <mario.limonciello@dell.com>
+Userspace shouldn't go from the device path (/sys/devices/.../rtc0 in
+this example). That's incorrect. Instead, userspace should go from the
+/sys/class/wakeup/... path. It should iterate over all the devices in
+the class path and look at the device pointers instead.
+
+# ls /sys/class/wakeup/*/device -l
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/alarmtimer/device =
+-> ../../rtc0
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup0/device -> =
+../../../a6f8800.usb
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup1/device -> =
+../../../a8f8800.usb
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup2/device -> =
+../../../cros-ec-rtc.1.auto
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup3/device -> =
+../../sbs-16-000b
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup4/device -> =
+../../../a88000.spi:ec@0:keyboard-controller
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup5/device -> =
+../../../spi10.0
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup6/device -> =
+../../../gpio-keys
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup7/device -> =
+../../../1-1.1
+lrwxrwxrwx. 1 root root 0 Aug  1 12:13 /sys/class/wakeup/wakeup8/device -> =
+../../../1-1.2.4.1
 
 >=20
-> > ---
-> >  drivers/acpi/device_pm.c |    4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > Index: linux-pm/drivers/acpi/device_pm.c
-> >
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =3D=3D=3D=3D=3D
-> > --- linux-pm.orig/drivers/acpi/device_pm.c
-> > +++ linux-pm/drivers/acpi/device_pm.c
-> > @@ -236,13 +236,15 @@ int acpi_device_set_power(struct acpi_de
-> >  		if (device->power.flags.power_resources)
-> >  			result =3D acpi_power_transition(device, target_state);
-> >  	} else {
-> > +		int cur_state =3D device->power.state;
-> > +
-> >  		if (device->power.flags.power_resources) {
-> >  			result =3D acpi_power_transition(device, ACPI_STATE_D0);
-> >  			if (result)
-> >  				goto end;
-> >  		}
-> >
-> > -		if (device->power.state =3D=3D ACPI_STATE_D0) {
-> > +		if (cur_state =3D=3D ACPI_STATE_D0) {
-> >  			int psc;
-> >
-> >  			/* Nothing to do here if _PSC is not present. */
+> So the "wakeupN" virtual dev names for all wakeup source objects are
+> less confusing IMO.
 >=20
+> It would be good to avoid the glue dir creation in all cases somehow too.
+
+I recall some differences between a bus_type and a class. Are you
+suggesting to use a bus_type for the wakeup sources? I like the class
+approach taken here to use different device names because it avoids the
+name collisions, avoids making another attribute to express the name of
+the wakeup source, and doesn't make a more heavyweight driver
+abstraction on top of wakeup sources.
+
+In fact, that ls command above pretty much sums up the wakeup source
+name and the device that it's associated with. Whatever goes on inside
+/sys/devices/... with respect to where the devices go and how they're
+structured is not important, at least to me. Why is it important to you?
 
