@@ -2,119 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D61AE7E53A
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 00:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F137E59F
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 00:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731606AbfHAWL7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Aug 2019 18:11:59 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43239 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728675AbfHAWL7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 18:11:59 -0400
-Received: by mail-pf1-f195.google.com with SMTP id i189so34851813pfg.10
-        for <linux-pm@vger.kernel.org>; Thu, 01 Aug 2019 15:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:from:cc:to:user-agent:date;
-        bh=ODIRyiL2jtm5+/15idQHr4S7cTy4XyQupt2hfbfu6pE=;
-        b=HrCl0x5QBEnYD9qwWOywZJP+pIVZLFd/RMfSyMarPnYV6bB5gkfq4UstgZv/I6KWre
-         WrZqFHlGrgGS2NpJ3Zkh0adwD9LjZiHgqs7DmVbDJd2cBJ7k/9zsOKFRqwx6DsIpGGPa
-         DRexuLZIGD8yWzRNR69KPmmdZWa7pRQnY8bWc=
+        id S1729985AbfHAW0u convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 1 Aug 2019 18:26:50 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:40047 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbfHAW0u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 18:26:50 -0400
+Received: by mail-ot1-f67.google.com with SMTP id l15so18816740oth.7;
+        Thu, 01 Aug 2019 15:26:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
-         :user-agent:date;
-        bh=ODIRyiL2jtm5+/15idQHr4S7cTy4XyQupt2hfbfu6pE=;
-        b=LC07VNUeKRbBnVCRDXKnQXBk0FigXKXa+DaWzwZkiNBSuqKJRhgxSqM1chAFmv7117
-         g+CV2aHVvtctfL59qy5Glj6MI/Z7jlEtqPFc9H+/9LxsnDpzKpJl4rZDW/tUOl+S7MLF
-         e/MRFX2domOAWibmR5yR7Oqc4oEBYxNZfabk+qcdK4jJdfr1Q7nI7lGCfsDlTRTsEAgR
-         rT+cJFNgoLo11MLpxmktR3yW8Gu4I8XSkwi9fVGj1JGdjA6k7BilqsDdPkYD/VDLZcIx
-         4074JUFNXesMnV7/u1My/q1cFhtvkN94SLOEmFeCKIiNV8ezoRyYZ4CnwXSA+PR2GCQX
-         S/wg==
-X-Gm-Message-State: APjAAAU8nMzSJ5qxKehbKzyhcgmgDTOjjEWU25ekW4hMvgGU5fQEef4+
-        fDFwn+CxvrKeASTjCYH4r81mqg==
-X-Google-Smtp-Source: APXvYqzUKogwUrnGchxyuNQspz6IllekXTdbX1rD7q4rhhL1SC2V1i+o0c6K8ExVK774XbpjyozXyQ==
-X-Received: by 2002:a17:90a:19c2:: with SMTP id 2mr959761pjj.13.1564697518491;
-        Thu, 01 Aug 2019 15:11:58 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id e5sm2796523pgt.91.2019.08.01.15.11.57
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 15:11:58 -0700 (PDT)
-Message-ID: <5d4363ae.1c69fb81.b621e.65ed@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/U68io9MXJcCtneF4Dy5Tc9iiZd2lS4WQ/pQsjjPPUk=;
+        b=M90fsuTjMvw3kZ2JUbalgzscFYd3gHPVU5OHYbVK26b68+JDeP6e7ijnymoyDK6uuQ
+         peUFmIXF8EIdhOgF6xNI/Y3ucyi3agd9Kpiqa2HR1SyqWOvsbebq0Vud5jIiLlJE9ciK
+         xQn8OgXUtMaSKOCOzaJKGIQG+fgIaQtL/187gk0OCYIi4dxRsLx8hJqZpExfgi8b9ZBl
+         T3q/YatA5ZvMOPUOWGdZnahzrCbmwLfnYndLx+Cx7enGDnPpsxQSPzNpPENa8BpGSCVw
+         gDbBTv1mqoqlcwkoB9eKVzopwyXNx9NsRWttYY/ktD62wKjt2GfUH9dzOkYjGXzLbapY
+         HB8g==
+X-Gm-Message-State: APjAAAVPc2+KnQMkKg9ks2+ghbVPQDw+Ch/dvvFq+hk1wsE1LpSla1Pi
+        +T8JW7k+A/LFNevjDLWabNRMIgBAaJtJFdOp/1o=
+X-Google-Smtp-Source: APXvYqwKfesq/lJ1QntLf/AywPMU7Xu149eenGp4PQUGX59bTgHgEKrVLwwsYDzS+tBP1TtegSkQ3C2oL7ye7dFTbo4=
+X-Received: by 2002:a9d:6959:: with SMTP id p25mr15307951oto.118.1564698409151;
+ Thu, 01 Aug 2019 15:26:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CANA+-vCt3QJDykzbZWBDZyaiaMiz_SOJ+Htv7+G0czjL07MjmQ@mail.gmail.com>
-References: <20190731215514.212215-1-trong@android.com> <32598586.Mjd66ZhNnG@kreacher> <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com> <6987393.M0uybTKmdI@kreacher> <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com> <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com> <5d42281c.1c69fb81.bcda1.71f5@mx.google.com> <CANA+-vCoCuMtSKCfnav9NSwrzX7of9iLbppNX+pcymBp19kgQQ@mail.gmail.com> <5d434a23.1c69fb81.c4201.c65b@mx.google.com> <CANA+-vCt3QJDykzbZWBDZyaiaMiz_SOJ+Htv7+G0czjL07MjmQ@mail.gmail.com>
-Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
-From:   Stephen Boyd <swboyd@chromium.org>
+References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
+ <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
+ <47415939.KV5G6iaeJG@kreacher> <20190730144134.GA12844@localhost.localdomain>
+ <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
+ <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com> <20190730191934.GD13948@localhost.localdomain>
+ <7d3e0b8ba1444194a153c93faa1cabb3@AUSX13MPC105.AMER.DELL.COM>
+ <20190730213114.GK13948@localhost.localdomain> <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com>
+ <20190731221956.GB15795@localhost.localdomain> <CAJZ5v0hxYGBXau39sb80MQ8jbZZCzH0JU2DYZvn9JOtYT2+30g@mail.gmail.com>
+ <70D536BE-8DC7-4CA2-84A9-AFB067BA520E@canonical.com> <CAJZ5v0hFYEv_+vFkrxaCn_pNAbyqmO_cLb5GOLNn_xxRRwjh2g@mail.gmail.com>
+ <38d4b4b107154454a932781acde0fa5a@AUSX13MPC105.AMER.DELL.COM>
+In-Reply-To: <38d4b4b107154454a932781acde0fa5a@AUSX13MPC105.AMER.DELL.COM>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Aug 2019 00:26:37 +0200
+Message-ID: <CAJZ5v0jmO4FMOVYs62wkvPrUW81scD2H7cJyRc+tfoj+vODVbQ@mail.gmail.com>
+Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+To:     Mario Limonciello <Mario.Limonciello@dell.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Keith Busch <keith.busch@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>
-To:     Tri Vo <trong@android.com>
-User-Agent: alot/0.8.1
-Date:   Thu, 01 Aug 2019 15:11:57 -0700
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Tri Vo (2019-08-01 14:44:52)
-> On Thu, Aug 1, 2019 at 1:23 PM Stephen Boyd <swboyd@chromium.org> wrote:
+On Thu, Aug 1, 2019 at 9:05 PM <Mario.Limonciello@dell.com> wrote:
+>
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rafael@kernel.org>
+> > Sent: Thursday, August 1, 2019 12:30 PM
+> > To: Kai-Heng Feng; Keith Busch; Limonciello, Mario
+> > Cc: Keith Busch; Christoph Hellwig; Sagi Grimberg; linux-nvme; Linux PM; Linux
+> > Kernel Mailing List; Rajat Jain
+> > Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
+> > suspend" has problems
 > >
 > >
-> > I don't find it awkward or difficult. Just know what the name of the
-> > /sys/class/wakeup/ path is and then extract the name from there if it
-> > doesn't match wakeupN, otherwise read the 'device' symlink and run it
-> > through basename.
->=20
-> The concern was that having both "id" and "name" around might be
-> confusing. I don't think that making the presence of "name"
-> conditional helps here. And we have to maintain additional logic in
-> both kernel and userspace to support this.
->=20
-> Also, say, userspace grabs a wakelock named "wakeup0". In the current
-> patch, this results in a name collision and an error. Even assuming
-> that userspace doesn't have ill intent, it still needs to be aware of
-> "wakeupN" naming pattern to avoid this error condition.
->=20
-> All wakeup sources in the /sys/class/wakeup/ are in the same namespace
-> regardless of where they originate from, i.e. we have to either (1)
-> inspect the name of a wakeup source and make sure it's unique before
-> using it as a directory name OR (2) generate the directory name on
-> behalf of whomever is registering a wakeup source, which I think is a
-> much simpler solution.
+> > [EXTERNAL EMAIL]
+> >
+> > On Thu, Aug 1, 2019 at 11:06 AM Kai-Heng Feng
+> > <kai.heng.feng@canonical.com> wrote:
+> > >
+> > > at 06:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > >
+> > > > On Thu, Aug 1, 2019 at 12:22 AM Keith Busch <kbusch@kernel.org> wrote:
+> > > >> On Wed, Jul 31, 2019 at 11:25:51PM +0200, Rafael J. Wysocki wrote:
+> > > >>> A couple of remarks if you will.
+> > > >>>
+> > > >>> First, we don't know which case is the majority at this point.  For
+> > > >>> now, there is one example of each, but it may very well turn out that
+> > > >>> the SK Hynix BC501 above needs to be quirked.
+> > > >>>
+> > > >>> Second, the reference here really is 5.2, so if there are any systems
+> > > >>> that are not better off with 5.3-rc than they were with 5.2, well, we
+> > > >>> have not made progress.  However, if there are systems that are worse
+> > > >>> off with 5.3, that's bad.  In the face of the latest findings the only
+> > > >>> way to avoid that is to be backwards compatible with 5.2 and that's
+> > > >>> where my patch is going.  That cannot be achieved by quirking all
+> > > >>> cases that are reported as "bad", because there still may be
+> > > >>> unreported ones.
+> > > >>
+> > > >> I have to agree. I think your proposal may allow PCI D3cold,
+> > > >
+> > > > Yes, it may.
+> > >
+> > > Somehow the 9380 with Toshiba NVMe never hits SLP_S0 with or without
+> > > Rafael’s patch.
+> > > But the “real” s2idle power consumption does improve with the patch.
+> >
+> > Do you mean this patch:
+> >
+> > https://lore.kernel.org/linux-pm/70D536BE-8DC7-4CA2-84A9-
+> > AFB067BA520E@canonical.com/T/#m456aa5c69973a3b68f2cdd4713a1ce83be5145
+> > 8f
+> >
+> > or the $subject one without the above?
+> >
+> > > Can we use a DMI based quirk for this platform? It seems like a platform
+> > > specific issue.
+> >
+> > We seem to see too many "platform-specific issues" here. :-)
+> >
+> > To me, the status quo (ie. what we have in 5.3-rc2) is not defensible.
+> > Something needs to be done to improve the situation.
+>
+> Rafael, would it be possible to try popping out PC401 from the 9380 and into a 9360 to
+> confirm there actually being a platform impact or not?
 
-Ok. If the device name is going to be something generic like 'wakeupN',
-then we need to make sure that the wakeup source name is unique.
-Otherwise, I'm not able to see how userspace will differentiate between
-two of the same named wakelocks. Before this patch the wakeup source
-name looks to have been used for debugging, but now it's being used
-programmatically to let userspace act upon it somehow. Maybe it's for
-debug still, but I could see how userspace may want to hunt down the
-wakelock that's created in userspace and penalize or kill the task
-that's waking up the device.
+Not really, sorry.
 
-I see that wakelock_lookup_add() already checks the list of wakelock
-wakeup sources, but I don't see how I can't create an "alarmtimer"
-wakelock again, but this time for userspace, by writing into
-/sys/power/wake_lock.
+> I was hoping to have something useful from Hynix by now before responding, but oh well.
+>
+> In terms of what is the majority, I do know that between folks at Dell, Google, Compal,
+> Wistron, Canonical, Micron, Hynix, Toshiba, LiteOn, and Western Digital we tested a wide
+> variety of SSDs with this patch series.  I would like to think that they are representative of
+> what's being manufactured into machines now.
 
-What happens with namespaces here BTW? Can a wakelock be made in one
-namespace and that is the same name as another wakelock in a different
-namespace? Right now it doesn't look possible because of the global name
-matching, but it probably makes sense to support this? Maybe we just
-shouldn't make anything in sysfs for wake sources that can be any random
-name created from the wakelock path right now. I don't see how it can be
-traced back to the process that created it in any reasonable way.
+Well, what about drives already in the field?  My concern is mostly
+about those ones.
 
+> Notably the LiteOn CL1 was tested with the HMB flushing support and
+> and Hynix PC401 was tested with older firmware though.
+>
+> >
+> > > >
+> > > >> In which case we do need to reintroduce the HMB handling.
+> > > >
+> > > > Right.
+> > >
+> > > The patch alone doesn’t break HMB Toshiba NVMe I tested. But I think it’s
+> > > still safer to do proper HMB handling.
+> >
+> > Well, so can anyone please propose something specific?  Like an
+> > alternative patch?
+>
+> This was proposed a few days ago:
+> http://lists.infradead.org/pipermail/linux-nvme/2019-July/026056.html
+>
+> However we're still not sure why it is needed, and it will take some time to get
+> a proper failure analysis from LiteOn  regarding the CL1.
+
+Thanks for the update, but IMO we still need to do something before
+final 5.3 while the investigation continues.
+
+Honestly, at this point I would vote for going back to the 5.2
+behavior at least by default and only running the new code on the
+drives known to require it (because they will block PC10 otherwise).
+
+Possibly (ideally) with an option for users who can't get beyond PC3
+to test whether or not the new code helps them.
