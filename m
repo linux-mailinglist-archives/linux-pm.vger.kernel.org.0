@@ -2,48 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFBA7E537
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 00:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D61AE7E53A
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 00:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389353AbfHAWKO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Aug 2019 18:10:14 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:43656 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731606AbfHAWKO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 18:10:14 -0400
-Received: by mail-ot1-f66.google.com with SMTP id j11so18704982otp.10;
-        Thu, 01 Aug 2019 15:10:14 -0700 (PDT)
+        id S1731606AbfHAWL7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Aug 2019 18:11:59 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43239 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728675AbfHAWL7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 18:11:59 -0400
+Received: by mail-pf1-f195.google.com with SMTP id i189so34851813pfg.10
+        for <linux-pm@vger.kernel.org>; Thu, 01 Aug 2019 15:11:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:from:cc:to:user-agent:date;
+        bh=ODIRyiL2jtm5+/15idQHr4S7cTy4XyQupt2hfbfu6pE=;
+        b=HrCl0x5QBEnYD9qwWOywZJP+pIVZLFd/RMfSyMarPnYV6bB5gkfq4UstgZv/I6KWre
+         WrZqFHlGrgGS2NpJ3Zkh0adwD9LjZiHgqs7DmVbDJd2cBJ7k/9zsOKFRqwx6DsIpGGPa
+         DRexuLZIGD8yWzRNR69KPmmdZWa7pRQnY8bWc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=icGQ7KbXQOBn9ZuqWfvGCA7fdSC9Cq3WEqhHvcvzjCk=;
-        b=Yh6GuWlKshm/HjqJVrJn/7odRseVGJO3hFLGiL5/7O2+GpI22X9ss6nLTtQhTEsjXI
-         88lYyNXA217f6zEy6pHI6cjskz1vUl17eg0Eie1A1zyoi+rjetMoGnmw1W4U9IkJIhBz
-         Q/7NKw447ygHDggeAgsvI1hjapHx+cYmGGwLeO6PnlEifeg5CS0IEEOg8SoDfxlPwU4g
-         9jz4j02sp3OJ9bwBAGKe/gwms5SFN3WZeFnH3R8l20rJ015qDzLJMHrBS1jDFB/QAcZf
-         FZZQcgZV3COnSBye6W1mQbGy+16+jBfpYOrqyjcd2bl9xGbCyZIoT98NSJ7G/877zNiW
-         o7ug==
-X-Gm-Message-State: APjAAAUcYgZ34sPnzlogTZEGQh1w1Zwlcb33XlwZkID7vxdYKoyXsd1U
-        miYLbPbZHbeAlvtyaProlL0Fdjp6siRczhnJphw=
-X-Google-Smtp-Source: APXvYqwEvtyrpT6/CM38Bf5IVR9zJg5hy7k0mY9PrXRB7P8CiwmEgr1lsJHCmoN2LyeQXTb/1Y9df2KfbocHQD87lg8=
-X-Received: by 2002:a9d:6b96:: with SMTP id b22mr29585963otq.262.1564697413585;
- Thu, 01 Aug 2019 15:10:13 -0700 (PDT)
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
+         :user-agent:date;
+        bh=ODIRyiL2jtm5+/15idQHr4S7cTy4XyQupt2hfbfu6pE=;
+        b=LC07VNUeKRbBnVCRDXKnQXBk0FigXKXa+DaWzwZkiNBSuqKJRhgxSqM1chAFmv7117
+         g+CV2aHVvtctfL59qy5Glj6MI/Z7jlEtqPFc9H+/9LxsnDpzKpJl4rZDW/tUOl+S7MLF
+         e/MRFX2domOAWibmR5yR7Oqc4oEBYxNZfabk+qcdK4jJdfr1Q7nI7lGCfsDlTRTsEAgR
+         rT+cJFNgoLo11MLpxmktR3yW8Gu4I8XSkwi9fVGj1JGdjA6k7BilqsDdPkYD/VDLZcIx
+         4074JUFNXesMnV7/u1My/q1cFhtvkN94SLOEmFeCKIiNV8ezoRyYZ4CnwXSA+PR2GCQX
+         S/wg==
+X-Gm-Message-State: APjAAAU8nMzSJ5qxKehbKzyhcgmgDTOjjEWU25ekW4hMvgGU5fQEef4+
+        fDFwn+CxvrKeASTjCYH4r81mqg==
+X-Google-Smtp-Source: APXvYqzUKogwUrnGchxyuNQspz6IllekXTdbX1rD7q4rhhL1SC2V1i+o0c6K8ExVK774XbpjyozXyQ==
+X-Received: by 2002:a17:90a:19c2:: with SMTP id 2mr959761pjj.13.1564697518491;
+        Thu, 01 Aug 2019 15:11:58 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id e5sm2796523pgt.91.2019.08.01.15.11.57
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 01 Aug 2019 15:11:58 -0700 (PDT)
+Message-ID: <5d4363ae.1c69fb81.b621e.65ed@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20190731215514.212215-1-trong@android.com> <32598586.Mjd66ZhNnG@kreacher>
- <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com>
- <6987393.M0uybTKmdI@kreacher> <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com>
- <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com>
- <5d42281c.1c69fb81.bcda1.71f5@mx.google.com> <CANA+-vCoCuMtSKCfnav9NSwrzX7of9iLbppNX+pcymBp19kgQQ@mail.gmail.com>
- <5d434a23.1c69fb81.c4201.c65b@mx.google.com> <CANA+-vCt3QJDykzbZWBDZyaiaMiz_SOJ+Htv7+G0czjL07MjmQ@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
 In-Reply-To: <CANA+-vCt3QJDykzbZWBDZyaiaMiz_SOJ+Htv7+G0czjL07MjmQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 2 Aug 2019 00:10:02 +0200
-Message-ID: <CAJZ5v0ioPioGBNBjiK-i5eydT9AGU3JvOBAy8L0zvs3kQNF35Q@mail.gmail.com>
+References: <20190731215514.212215-1-trong@android.com> <32598586.Mjd66ZhNnG@kreacher> <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com> <6987393.M0uybTKmdI@kreacher> <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com> <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com> <5d42281c.1c69fb81.bcda1.71f5@mx.google.com> <CANA+-vCoCuMtSKCfnav9NSwrzX7of9iLbppNX+pcymBp19kgQQ@mail.gmail.com> <5d434a23.1c69fb81.c4201.c65b@mx.google.com> <CANA+-vCt3QJDykzbZWBDZyaiaMiz_SOJ+Htv7+G0czjL07MjmQ@mail.gmail.com>
 Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
-To:     Tri Vo <trong@android.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -54,82 +61,33 @@ Cc:     Stephen Boyd <swboyd@chromium.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         "Cc: Android Kernel" <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Tri Vo <trong@android.com>
+User-Agent: alot/0.8.1
+Date:   Thu, 01 Aug 2019 15:11:57 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 1, 2019 at 11:45 PM Tri Vo <trong@android.com> wrote:
->
+Quoting Tri Vo (2019-08-01 14:44:52)
 > On Thu, Aug 1, 2019 at 1:23 PM Stephen Boyd <swboyd@chromium.org> wrote:
 > >
-> > Quoting Tri Vo (2019-08-01 12:50:25)
-> > > On Wed, Jul 31, 2019 at 4:45 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > > Quoting Rafael J. Wysocki (2019-07-31 16:10:38)
-> > > > > On Thu, Aug 1, 2019 at 12:59 AM Tri Vo <trong@android.com> wrote:
-> > > > > >
-> > > > > > >
-> > > > > > > So why wouldn't something like this suffice:
-> > > > > > >
-> > > > > > > dev = device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
-> > > > > > >                                 wakeup_source_groups, "wakeup:%s", ws->name);
-> > > > > > >
-> > > > > > > ?
-> > > > > >
-> > > > > > ws->name is inherited from the device name. IIUC device names are not
-> > > > > > guaranteed to be unique. So if different devices with the same name
-> > > > > > register wakeup sources, there is an error.
-> > > > >
-> > > > > OK
-> > > > >
-> > > > > So I guess the names are retained for backwards compatibility with
-> > > > > existing user space that may be using them?
-> > > > >
-> > > > > That's kind of fair enough, but having two different identification
-> > > > > schemes for wakeup sources will end up confusing.
-> > > >
-> > > > I understand your concern about the IDA now. Thanks for clarifying.
-> > > >
-> > > > How about we name the devices 'wakeupN' with the IDA when they're
-> > > > registered with a non-NULL device pointer and then name them whatever
-> > > > the name argument is when the device pointer is NULL. If we have this,
-> > > > we should be able to drop the name attribute in sysfs and figure out the
-> > > > name either by looking at the device name in /sys/class/wakeup/ if it
-> > > > isn't 'wakeupN', or follow the symlink to the device in /sys/devices/
-> > > > and look at the parent device name there.
-> > >
-> > > This makes it difficult for userspace to query the name a wakeup
-> > > source, as it now has to first figure out if a wakeup source is
-> > > associated with a device or not. The criteria for that is also
-> > > awkward, userspase has to check if directory path contains "wakeupN",
-> > > then it's a virtual wakeup source.
-> >
-> > I think you mean if it doesn't match wakeupN then it's a virtual wakeup
-> > source?
->
-> Yes
-> >
-> > >
-> > > IMO it's cleaner to consistently have /sys/class/wakeup/wakeupN/name
-> > > for every wakeup source.
 > >
 > > I don't find it awkward or difficult. Just know what the name of the
 > > /sys/class/wakeup/ path is and then extract the name from there if it
 > > doesn't match wakeupN, otherwise read the 'device' symlink and run it
 > > through basename.
->
+>=20
 > The concern was that having both "id" and "name" around might be
 > confusing. I don't think that making the presence of "name"
 > conditional helps here. And we have to maintain additional logic in
 > both kernel and userspace to support this.
->
+>=20
 > Also, say, userspace grabs a wakelock named "wakeup0". In the current
 > patch, this results in a name collision and an error. Even assuming
 > that userspace doesn't have ill intent, it still needs to be aware of
 > "wakeupN" naming pattern to avoid this error condition.
->
+>=20
 > All wakeup sources in the /sys/class/wakeup/ are in the same namespace
 > regardless of where they originate from, i.e. we have to either (1)
 > inspect the name of a wakeup source and make sure it's unique before
@@ -137,11 +95,26 @@ On Thu, Aug 1, 2019 at 11:45 PM Tri Vo <trong@android.com> wrote:
 > behalf of whomever is registering a wakeup source, which I think is a
 > much simpler solution.
 
-OK, whatever.
+Ok. If the device name is going to be something generic like 'wakeupN',
+then we need to make sure that the wakeup source name is unique.
+Otherwise, I'm not able to see how userspace will differentiate between
+two of the same named wakelocks. Before this patch the wakeup source
+name looks to have been used for debugging, but now it's being used
+programmatically to let userspace act upon it somehow. Maybe it's for
+debug still, but I could see how userspace may want to hunt down the
+wakelock that's created in userspace and penalize or kill the task
+that's waking up the device.
 
-Let's use the IDA as originally proposed and retain the names for
-backwards compatibility only.
+I see that wakelock_lookup_add() already checks the list of wakelock
+wakeup sources, but I don't see how I can't create an "alarmtimer"
+wakelock again, but this time for userspace, by writing into
+/sys/power/wake_lock.
 
-Maybe just allocate the ID at the wakeup source object creation time
-already (ISTR that you did that before attempting to create a virtual
-device for the wakeup source).
+What happens with namespaces here BTW? Can a wakelock be made in one
+namespace and that is the same name as another wakelock in a different
+namespace? Right now it doesn't look possible because of the global name
+matching, but it probably makes sense to support this? Maybe we just
+shouldn't make anything in sysfs for wake sources that can be any random
+name created from the wakelock path right now. I don't see how it can be
+traced back to the process that created it in any reasonable way.
+
