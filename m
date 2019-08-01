@@ -2,56 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E464A7E09A
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 18:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA147E0C1
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 19:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732234AbfHAQy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Aug 2019 12:54:58 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38178 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732294AbfHAQyx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 12:54:53 -0400
-Received: by mail-wr1-f66.google.com with SMTP id g17so74346425wrr.5
-        for <linux-pm@vger.kernel.org>; Thu, 01 Aug 2019 09:54:52 -0700 (PDT)
+        id S1732290AbfHARKr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Aug 2019 13:10:47 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:40591 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732281AbfHARKr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 13:10:47 -0400
+Received: by mail-wm1-f67.google.com with SMTP id v19so63904736wmj.5;
+        Thu, 01 Aug 2019 10:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FghonA4IabkJaTgLr8fM3E6htRJ5CzRRLsDA7y0O0VY=;
+        b=IXREDAqVq4+TQykJaNC3vMKRY1s8sfyb4cqoqV1qIJHds766TvFSenvnluadnn3JGN
+         49vKKJKm4LipWYwD5He7qF0AHhwSe10Hu6DLske6AsXxiaporx3njUEjBmcYekgdTvnq
+         5rnH632NNorGfygsGzzUazJX3QP618R5+SyZTlK0ExbbWUDfmVF3Jk4RMtOx1pdVAtBR
+         FAgM8kIL74JD/bfgmJe8IA2dfAay3nmkLdGTZX6V3YX+tmUEMojSASxMsyyif6AqBJCm
+         gpQEsHfz/KJkXN18bals8U3lmH6qEhVmI0Eftbhtdy0yHkLKIm05QttGenqwbLX2x+CC
+         n5+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=xk32o95NCOLgUCqaaBPTpr45XpC6FO5dIRTVup5ncyo=;
-        b=h+aEXKMKhEcYKhm8PJ5uUhqBnN3Cho1kurmhda/NJJK47KkJyaVxjJfzEQaVmCxxkZ
-         Y5wuH2XnpOcWwk7CThCxEHJLT8e7vVh3k6j44plW86UMWkivKyPLRdvN3VtyQoF0AO0Z
-         URyaNEH3gLS1rwMmr8Bf/xh6d5f3Y3JwOm+pq22ivSFPk8cFcs9oxD5qZBTVrnZUd1fY
-         8QSZcxePbA4jj4ohtJYt5+WmuXgiko3B6OOntg2zMuQ/TeQUfYJf0MIFt19pLFaHetpq
-         igcsxaiSmN/zmVSbtkv8sOOc+CP2+2VmYkL+mADZNd6im8z+sUUVYxwcEgIvOK4Ri6uA
-         WGLw==
-X-Gm-Message-State: APjAAAW6RWEfwdzxCwsD4EdgUezEtML7suYBqK72xjDuPjzrIh/v2GDG
-        GiYp21jLyqhsoFt0oMXBQVyJjscYzj8=
-X-Google-Smtp-Source: APXvYqx4rwx51xdjuRB5YgIrLUydM30Bos6mOWLmy3EJ68VNQ2cELBXtN3JThNTb+NcCk2E7jyCLAQ==
-X-Received: by 2002:a5d:438e:: with SMTP id i14mr18809848wrq.122.1564678491260;
-        Thu, 01 Aug 2019 09:54:51 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:91e7:65e:d8cd:fdb3? ([2001:b07:6468:f312:91e7:65e:d8cd:fdb3])
-        by smtp.gmail.com with ESMTPSA id r11sm114254839wre.14.2019.08.01.09.54.50
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 01 Aug 2019 09:54:50 -0700 (PDT)
-Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when dedicated
- physical CPUs are available
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wanpeng Li <kernellwp@gmail.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
- <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Openpgp: preference=signencrypt
-Message-ID: <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
-Date:   Thu, 1 Aug 2019 18:54:49 +0200
+        bh=FghonA4IabkJaTgLr8fM3E6htRJ5CzRRLsDA7y0O0VY=;
+        b=VpWkZr5nMewFWFhg3z7jh7UVwyfYThXdTu6I4Y0xhWtGfkP0kKgpcKb57HUDXulSOk
+         0tZ9ckDMCsLvqHt8ef0QzbnOzBMU8ZVr7+el5zRa88uUvh8H6lSPwc2XXKmL3e4H/B4v
+         iWaw8h7n6mM14k/6/2PuJV//u+iJf32iH2PZL0q+G2HVCzED61RUhMvy6jVkLQpEeDey
+         Rh4uIhhmJybU4Zm31dyWVI0wbYpwNuevv5Zw+tYRRJv2LaBSnvmg/eOOWraggysuiW2y
+         uT+mNWMVIhoS5l4HFR6Zxp2IhVHVQ0BeIhDL1s8qcoCxkAt+p81dpaEfOd+G/GmlSoNP
+         MOaQ==
+X-Gm-Message-State: APjAAAUzntiNPvwmjqM2zAbcW2YQ8vgKYYOniYMuLAodcvRYuNlmT851
+        C6Rn//DDIypXrEXR4RSD8GPWZeqe
+X-Google-Smtp-Source: APXvYqxByZB/gh88C6wRDNij3X4Fh7cbfowCUmSN5SWstCnDpG/3spte6L9Wyr3/77AaFAU2sLB6xg==
+X-Received: by 2002:a7b:c455:: with SMTP id l21mr119115981wmi.114.1564679444023;
+        Thu, 01 Aug 2019 10:10:44 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
+        by smtp.googlemail.com with ESMTPSA id u2sm5377105wmc.3.2019.08.01.10.10.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 01 Aug 2019 10:10:43 -0700 (PDT)
+Subject: Re: [PATCH v7 10/20] clk: tegra: clk-dfll: Add suspend and resume
+ support
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "jason@lakedaemon.net" <jason@lakedaemon.net>,
+        "marc.zyngier@arm.com" <marc.zyngier@arm.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "stefan@agner.ch" <stefan@agner.ch>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+Cc:     Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        Jui Chang Kuo <jckuo@nvidia.com>,
+        Joseph Lo <josephl@nvidia.com>, Timo Alho <talho@nvidia.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Sandipan Patra <spatra@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <1564607463-28802-1-git-send-email-skomatineni@nvidia.com>
+ <1564607463-28802-11-git-send-email-skomatineni@nvidia.com>
+ <4400ffef-685f-b9e6-3b07-4790f851282c@gmail.com>
+ <501a9d0e-ce78-9b35-642d-dff7f9223926@gmail.com>
+ <BYAPR12MB3398C388471BC5811614C8FEC2DE0@BYAPR12MB3398.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <31990250-e237-ddb9-ce71-29b7c2302fc3@gmail.com>
+Date:   Thu, 1 Aug 2019 20:10:38 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com>
+In-Reply-To: <BYAPR12MB3398C388471BC5811614C8FEC2DE0@BYAPR12MB3398.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -60,60 +92,13 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/08/19 18:51, Rafael J. Wysocki wrote:
-> On 8/1/2019 9:06 AM, Wanpeng Li wrote:
->> From: Wanpeng Li <wanpengli@tencent.com>
->>
->> The downside of guest side polling is that polling is performed even
->> with other runnable tasks in the host. However, even if poll in kvm
->> can aware whether or not other runnable tasks in the same pCPU, it
->> can still incur extra overhead in over-subscribe scenario. Now we can
->> just enable guest polling when dedicated pCPUs are available.
->>
->> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> Cc: Paolo Bonzini <pbonzini@redhat.com>
->> Cc: Radim Krčmář <rkrcmar@redhat.com>
->> Cc: Marcelo Tosatti <mtosatti@redhat.com>
->> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> 
-> Paolo, Marcelo, any comments?
+01.08.2019 19:10, Sowjanya Komatineni пишет:
+> I didn’t updated any patches. This is still same v7 just resent with
+> CPUFreq maintainers in CC as I missed to add them earlier.
 
-Yes, it's a good idea.
-
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-
-Paolo
-
-> 
->> ---
->>   drivers/cpuidle/cpuidle-haltpoll.c   | 3 ++-
->>   drivers/cpuidle/governors/haltpoll.c | 2 +-
->>   2 files changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c
->> b/drivers/cpuidle/cpuidle-haltpoll.c
->> index 9ac093d..7aee38a 100644
->> --- a/drivers/cpuidle/cpuidle-haltpoll.c
->> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
->> @@ -53,7 +53,8 @@ static int __init haltpoll_init(void)
->>         cpuidle_poll_state_init(drv);
->>   -    if (!kvm_para_available())
->> +    if (!kvm_para_available() ||
->> +        !kvm_para_has_hint(KVM_HINTS_REALTIME))
->>           return 0;
->>         ret = cpuidle_register(&haltpoll_driver, NULL);
->> diff --git a/drivers/cpuidle/governors/haltpoll.c
->> b/drivers/cpuidle/governors/haltpoll.c
->> index 797477b..685c7007 100644
->> --- a/drivers/cpuidle/governors/haltpoll.c
->> +++ b/drivers/cpuidle/governors/haltpoll.c
->> @@ -141,7 +141,7 @@ static struct cpuidle_governor haltpoll_governor = {
->>     static int __init init_haltpoll(void)
->>   {
->> -    if (kvm_para_available())
->> +    if (kvm_para_available() && kvm_para_has_hint(KVM_HINTS_REALTIME))
->>           return cpuidle_register_governor(&haltpoll_governor);
->>         return 0;
-> 
-> 
-
+There are now two different threads for the same patches, which is not
+very good. When I said that CPUFreq maintainers should be CC'ed, I
+didn't mean to resend it all, sorry for not being clear about it. You
+should've wait for more comments to the original patches and then make a
+v8. I suggest to do the same in the current situation as well, please
+address all the current comments and wait for 1-2 days, then make a v8.
