@@ -2,103 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA147E0C1
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 19:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CFF7E0F6
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 19:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732290AbfHARKr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Aug 2019 13:10:47 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:40591 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732281AbfHARKr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 13:10:47 -0400
-Received: by mail-wm1-f67.google.com with SMTP id v19so63904736wmj.5;
-        Thu, 01 Aug 2019 10:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=FghonA4IabkJaTgLr8fM3E6htRJ5CzRRLsDA7y0O0VY=;
-        b=IXREDAqVq4+TQykJaNC3vMKRY1s8sfyb4cqoqV1qIJHds766TvFSenvnluadnn3JGN
-         49vKKJKm4LipWYwD5He7qF0AHhwSe10Hu6DLske6AsXxiaporx3njUEjBmcYekgdTvnq
-         5rnH632NNorGfygsGzzUazJX3QP618R5+SyZTlK0ExbbWUDfmVF3Jk4RMtOx1pdVAtBR
-         FAgM8kIL74JD/bfgmJe8IA2dfAay3nmkLdGTZX6V3YX+tmUEMojSASxMsyyif6AqBJCm
-         gpQEsHfz/KJkXN18bals8U3lmH6qEhVmI0Eftbhtdy0yHkLKIm05QttGenqwbLX2x+CC
-         n5+g==
+        id S1729011AbfHARV5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Aug 2019 13:21:57 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:35001 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbfHARV5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 13:21:57 -0400
+Received: by mail-ot1-f65.google.com with SMTP id j19so36628294otq.2;
+        Thu, 01 Aug 2019 10:21:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FghonA4IabkJaTgLr8fM3E6htRJ5CzRRLsDA7y0O0VY=;
-        b=VpWkZr5nMewFWFhg3z7jh7UVwyfYThXdTu6I4Y0xhWtGfkP0kKgpcKb57HUDXulSOk
-         0tZ9ckDMCsLvqHt8ef0QzbnOzBMU8ZVr7+el5zRa88uUvh8H6lSPwc2XXKmL3e4H/B4v
-         iWaw8h7n6mM14k/6/2PuJV//u+iJf32iH2PZL0q+G2HVCzED61RUhMvy6jVkLQpEeDey
-         Rh4uIhhmJybU4Zm31dyWVI0wbYpwNuevv5Zw+tYRRJv2LaBSnvmg/eOOWraggysuiW2y
-         uT+mNWMVIhoS5l4HFR6Zxp2IhVHVQ0BeIhDL1s8qcoCxkAt+p81dpaEfOd+G/GmlSoNP
-         MOaQ==
-X-Gm-Message-State: APjAAAUzntiNPvwmjqM2zAbcW2YQ8vgKYYOniYMuLAodcvRYuNlmT851
-        C6Rn//DDIypXrEXR4RSD8GPWZeqe
-X-Google-Smtp-Source: APXvYqxByZB/gh88C6wRDNij3X4Fh7cbfowCUmSN5SWstCnDpG/3spte6L9Wyr3/77AaFAU2sLB6xg==
-X-Received: by 2002:a7b:c455:: with SMTP id l21mr119115981wmi.114.1564679444023;
-        Thu, 01 Aug 2019 10:10:44 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.googlemail.com with ESMTPSA id u2sm5377105wmc.3.2019.08.01.10.10.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 01 Aug 2019 10:10:43 -0700 (PDT)
-Subject: Re: [PATCH v7 10/20] clk: tegra: clk-dfll: Add suspend and resume
- support
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "jason@lakedaemon.net" <jason@lakedaemon.net>,
-        "marc.zyngier@arm.com" <marc.zyngier@arm.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "stefan@agner.ch" <stefan@agner.ch>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-Cc:     Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Jui Chang Kuo <jckuo@nvidia.com>,
-        Joseph Lo <josephl@nvidia.com>, Timo Alho <talho@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Sandipan Patra <spatra@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <1564607463-28802-1-git-send-email-skomatineni@nvidia.com>
- <1564607463-28802-11-git-send-email-skomatineni@nvidia.com>
- <4400ffef-685f-b9e6-3b07-4790f851282c@gmail.com>
- <501a9d0e-ce78-9b35-642d-dff7f9223926@gmail.com>
- <BYAPR12MB3398C388471BC5811614C8FEC2DE0@BYAPR12MB3398.namprd12.prod.outlook.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <31990250-e237-ddb9-ce71-29b7c2302fc3@gmail.com>
-Date:   Thu, 1 Aug 2019 20:10:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ONDKKiCVIxrv79Fe4EJypm2SI1odtF39CM+MiqFDUUs=;
+        b=BRpnJdJ5CiCDbJzilHwBl70VA+3u6o1DoYavTdwpN0cbNcM5MLn6lBBn0gi41ZHS71
+         fWNb7S9MXdNEVWkfX/WYB15QrVf56O2j3d1g2RzYEApvHFOGRYUo0GMalW+xc0CjkZ1P
+         BcaVVLqCbNX2JyQf9JY3Dc1uDN+a9X8vMFAWc1THaJLA0DF8RZiUAC9KAKkfmNB8vQWz
+         vbFIn1jDDJJZ86FVUI9V8/9WkBHpnmq6A8a9dnF4Wcw0bwG4pqxq9NS9p4s0/q/ER4J6
+         ggQK5yudFsffH/LuylVj3vhZwqI2DyTLrC5YSJVAIQsOxtM+D4aOZxEuf9nzupYr2Yh8
+         +63w==
+X-Gm-Message-State: APjAAAUYXDX4yFaKJomua8oYfCZLtFbYairnf+QqD8swcl9FOrMchqFA
+        km+2/CzL07xj4uAb0zbwWBxkq9TZInMh4oY6Fqs=
+X-Google-Smtp-Source: APXvYqyuyaONhATriUIvpzRyvAHuQcipIx3MF7QaOFWyyvWZCViadzdAlvjYDkBwEhh9cdRxeE+KKuFikcNj567QEzU=
+X-Received: by 2002:a05:6830:1516:: with SMTP id k22mr91002299otp.189.1564680115917;
+ Thu, 01 Aug 2019 10:21:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <BYAPR12MB3398C388471BC5811614C8FEC2DE0@BYAPR12MB3398.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190731215514.212215-1-trong@android.com> <32598586.Mjd66ZhNnG@kreacher>
+ <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com>
+ <6987393.M0uybTKmdI@kreacher> <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com>
+ <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com>
+ <5d42281c.1c69fb81.bcda1.71f5@mx.google.com> <5d423637.1c69fb81.62114.ca6f@mx.google.com>
+ <CAJZ5v0jkLXwqmXwyYtdZ9X2=W2KNKS4Ok_NrDew2yvvt1=4pgQ@mail.gmail.com> <5d4305df.1c69fb81.c4013.1950@mx.google.com>
+In-Reply-To: <5d4305df.1c69fb81.c4013.1950@mx.google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 1 Aug 2019 19:21:44 +0200
+Message-ID: <CAJZ5v0hDE908XcreUyzZ8JGjFJbgVX1N1ELeMwf+n_ENxPA_DA@mail.gmail.com>
+Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tri Vo <trong@android.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-01.08.2019 19:10, Sowjanya Komatineni пишет:
-> I didn’t updated any patches. This is still same v7 just resent with
-> CPUFreq maintainers in CC as I missed to add them earlier.
+On Thu, Aug 1, 2019 at 5:31 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Rafael J. Wysocki (2019-08-01 01:09:22)
+> > On Thu, Aug 1, 2019 at 2:45 AM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > Quoting Stephen Boyd (2019-07-31 16:45:31)
+> > > >
+> > > > This approach also nicely detects duplicate wakeup source names in the
+> > > > case that the string passed in to wakeup_source_register() is already
+> > > > used on the virtual bus.
+> > >
+> > > This was clearly untested! Here's a better one. This is what I see on my
+> > > device with this patch squashed in:
+> > >
+> > > localhost ~ # cat /sys/kernel/debug/wakeup_sources
+> > > name            active_count    event_count     wakeup_count    expire_count    active_since    total_time      max_time        last_change  prevent_suspend_time
+> > > 1-1.2.4.1       0               0               0               0               0               0               0               0   0
+> > > 1-1.1           0               0               0               0               0               0               0               0   0
+> > > gpio-keys       0               0               0               0               0               0               0               0   0
+> > > spi10.0         0               0               0               0               0               0               0               0   0
+> > > a88000.spi:ec@0:keyboard-controller     0               0               0               0               0               0           0
+> > >                 0               0
+> > > alarmtimer      0               0               0               0               0               0               0               0   0
+> > > cros-ec-rtc.1.auto      0               0               0               0               0               0               0           0
+> > >                 0
+> > > a8f8800.usb     0               0               0               0               0               0               0               0   0
+> > > a6f8800.usb     0               0               0               0               0               0               0               0   0
+> > > localhost ~ # ls -l /sys/class/wakeup/
+> > > total 0
+> > > lrwxrwxrwx. 1 root root 0 Jul 31 17:43 alarmtimer -> ../../devices/platform/soc/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/cros-ec-dev.0.auto/cros-ec-rtc.1.auto/rtc/rtc0/alarmtimer
+> >
+> > So why is this not "(...)rtc0/wakeup/alarmtimer" ?
+> >
+> > This particular bit looks kind of inconsistent.
+>
+> I believe this is the code you're looking for in drivers/base/core.c
+>
+>                 /*
+>                  * If we have no parent, we live in "virtual".
+>                  * Class-devices with a non class-device as parent, live
+>                  * in a "glue" directory to prevent namespace collisions.
+>                  */
+>                 if (parent == NULL)
+>                         parent_kobj = virtual_device_parent(dev);
+>                 else if (parent->class && !dev->class->ns_type)
+>                         return &parent->kobj;
+>                 else
+>                         parent_kobj = &parent->kobj;
+>
 
-There are now two different threads for the same patches, which is not
-very good. When I said that CPUFreq maintainers should be CC'ed, I
-didn't mean to resend it all, sorry for not being clear about it. You
-should've wait for more comments to the original patches and then make a
-v8. I suggest to do the same in the current situation as well, please
-address all the current comments and wait for 1-2 days, then make a v8.
+OK, so it looks like there really is a little benefit from making the
+device associated with the wakeup source be the parent of its virtual
+dev.
+
+> >
+> > I guess without your patch you'd see "(...)rtc0/wakeup/wakeup0" instead, right?
+>
+> No, it would be rtc0/wakeup0. That's because rtc is a class, and rtc0 is
+> part of that class, so we don't try to make a glue directory named after
+> the class to avoid collisions (see class_dir_create_and_add()
+> implementation).
+
+That's not really consistent.
+
+> BTW, paths in /sys/devices aren't supposed to matter too much. In this
+> case, I'd expect to see userspace looking at the /sys/class/wakeup path
+> to follow the symlink to figure out what device triggered a wakeup. It
+> can look at the 'device' symlink inside the directory for the wakeup
+> device to figure out which one it is.
+
+But if you go from the device, it would be good to be able to figure
+out which wakeup sources are associated with it and in the alarmtimer
+example you don't even see that it is a wakeup source without
+following the link.
+
+So the "wakeupN" virtual dev names for all wakeup source objects are
+less confusing IMO.
+
+It would be good to avoid the glue dir creation in all cases somehow too.
+
+> Final thought, might want to suppress the power directory from being
+> created for the wakeup class. It looks odd to have
+> /sys/class/wakeup/wakeup0/power when the presumably does nothing.
+
+I agree and there is a flag for that IIRC.
