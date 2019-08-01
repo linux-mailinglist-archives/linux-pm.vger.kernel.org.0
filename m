@@ -2,281 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D64417D25C
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 02:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A447D4F9
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 07:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728879AbfHAApp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 Jul 2019 20:45:45 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41921 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbfHAApo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 Jul 2019 20:45:44 -0400
-Received: by mail-pl1-f194.google.com with SMTP id m9so31096722pls.8
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 17:45:44 -0700 (PDT)
+        id S1728476AbfHAFk7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Aug 2019 01:40:59 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:41789 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728483AbfHAFk6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 01:40:58 -0400
+Received: by mail-pg1-f195.google.com with SMTP id x15so23108356pgg.8
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 22:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:from:to:subject:user-agent:date;
-        bh=Gk2QCSUiXttK0DpMjrYYxGGSGPwiVtPzozTzPLwckQk=;
-        b=OZNZh5RgQj+c21xd9fx1O0GKIykxqvn0eo7tx5caoozgFnc6gFlrrU00H6PijLBp/T
-         8Ed2i5y7wYz0704iX7SL1rPJPnwQ7nEta0IkzPUcGhqq5UdZpxjkmXAG/EJLo9xTQAWJ
-         TIZv4yn7bzDpkyXOp2JwxU+BzcaybpOJiwP90=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=y/o8YTbNsjxw2k6UgbsxYXXjTg0fvc1tjD9GHYk14MU=;
+        b=TzLFx9yjS2cOaxig8Qru/VS6YDnRG6KdulTld7+Nu2jkuGuJIvdKq4dubYNb2h/bIT
+         7CpZj8guUFYuqdB/x/nRLtbMOxHEU6ZiEk8yW4y+Mt5xL0FIkt6jiBjmS0g0qTdNlnSu
+         lofI0X8paFqgVW1G1+a67lLfDVpkg+dGbKxbWEFC9WwM9r0hZS/0PooASt5Wezo7nuO+
+         puyyuTBh2jKZM7SK3smdmRzK6AZWm5odBoIv0OAkV/ATL2lhoqvMS0U5If1MEGm9XfEc
+         8CNmE4IbbnlG01j76SCXuyUs+aKf9LaRFX82Bp6zgHnVKnmgo/MN68OeHZuTMIqOOO2N
+         MSHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:from:to:subject
-         :user-agent:date;
-        bh=Gk2QCSUiXttK0DpMjrYYxGGSGPwiVtPzozTzPLwckQk=;
-        b=aWC2mskic92cdaHZ5fETBAVil8irs6gKQFx5ZpugAL/29DXoaMN/3Nz/t7EumwjB0o
-         7SgdO3giSVPX9s8Ph//RNw82ZL61lpa6woYFXRWm3Tw3CoKJ5R8sk+WWHpXq3PX6Gf67
-         A4oKq4nCCO7jY6DI0gIdAalkmVtBvHXneycAOH3hs9PhcqLlXQ2fTbqObbA2oDDBOmUh
-         MxGABeMH3/ytewAo31imRrb5vPu7yKtGd1e9lW5PHlgT/jOzDmBnX6jvaDJ1e+ZYYTjN
-         rdM1Kmt8ULodHoKQB60vQ9GI4yqEO+JcuPaytjVnwysFDuippsXXf+OBDljqbqVcxHTC
-         dGtA==
-X-Gm-Message-State: APjAAAUNxROKWCP5xrEvHUe/xri5OETL6ROvj3eJbynvW9KzVmjL/tjC
-        KvKtQVFDX9IkP/Uu/8BcfAgfmg==
-X-Google-Smtp-Source: APXvYqxHW8vfm/YSXch50SJ6dYCLCVyXFK5B8g5Aib6Vk7BXUffeZpUKJLPY+G5yqs2Ub5T4fKcFYA==
-X-Received: by 2002:a17:902:e30b:: with SMTP id cg11mr22374400plb.335.1564620343901;
-        Wed, 31 Jul 2019 17:45:43 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id p65sm68869957pfp.58.2019.07.31.17.45.42
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 31 Jul 2019 17:45:43 -0700 (PDT)
-Message-ID: <5d423637.1c69fb81.62114.ca6f@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=y/o8YTbNsjxw2k6UgbsxYXXjTg0fvc1tjD9GHYk14MU=;
+        b=O0jvTvm7kQeI7NDp9XSdaqbt1X8xtu4BcS38ngMEZF9fu2fzWgcRShxY67HJtPk1yo
+         EvqFDCk1o5jCEqrKqKG9vRPaGqu51VTPBOJBBAFAAA/xL9qufpuCVnN8qLC7Om+qkpaW
+         pM5VAoN0fQIL1y2sNVpyDNNRLFaW70mDwVWlGUc7BVxj8W408zT+2g6B62bjlFgona4r
+         McfB4VCA7Gg3TtS92f6TsUCC3uf3oxl5QZ94KzJwdOOkFagEg24ao4/GqjD/ObnTzcBS
+         /3xa45EFIHVR0QOQ9lyrwrjQ+9Lz5ad5Te/tT67GrhCrEqbcybz0gybtynFQQCbLSYcg
+         nBYQ==
+X-Gm-Message-State: APjAAAVuGnJn8PCLE9ctx3IQrGg+BURk/cw9Ve4Utq1PbscxGrd3VKw7
+        uRnD+dsBDsOmWX1rE50mw9kD7Q==
+X-Google-Smtp-Source: APXvYqzmiX/7OLzhXxCrID/iE/IWvU1lPO7qvH9ysJv1dJuRrPCk+zMaNF2FdZswGzAuBvGwID2I3w==
+X-Received: by 2002:a63:124a:: with SMTP id 10mr116595500pgs.254.1564638057851;
+        Wed, 31 Jul 2019 22:40:57 -0700 (PDT)
+Received: from localhost ([122.172.28.117])
+        by smtp.gmail.com with ESMTPSA id d15sm10245980pjc.8.2019.07.31.22.40.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 31 Jul 2019 22:40:57 -0700 (PDT)
+Date:   Thu, 1 Aug 2019 11:10:55 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
+        jason@lakedaemon.net, marc.zyngier@arm.com,
+        linus.walleij@linaro.org, stefan@agner.ch, mark.rutland@arm.com,
+        pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
+        digetx@gmail.com, devicetree@vger.kernel.org, rjw@rjwysocki.net,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 11/20] cpufreq: tegra124: Add suspend and resume
+ support
+Message-ID: <20190801054055.trmabmcaj3cpe4pc@vireshk-i7>
+References: <1564607463-28802-1-git-send-email-skomatineni@nvidia.com>
+ <1564607463-28802-12-git-send-email-skomatineni@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <5d42281c.1c69fb81.bcda1.71f5@mx.google.com>
-References: <20190731215514.212215-1-trong@android.com> <32598586.Mjd66ZhNnG@kreacher> <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com> <6987393.M0uybTKmdI@kreacher> <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com> <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com> <5d42281c.1c69fb81.bcda1.71f5@mx.google.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>, Tri Vo <trong@android.com>
-Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
-User-Agent: alot/0.8.1
-Date:   Wed, 31 Jul 2019 17:45:42 -0700
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564607463-28802-12-git-send-email-skomatineni@nvidia.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Stephen Boyd (2019-07-31 16:45:31)
->=20
-> This approach also nicely detects duplicate wakeup source names in the
-> case that the string passed in to wakeup_source_register() is already
-> used on the virtual bus.
+On 31-07-19, 14:10, Sowjanya Komatineni wrote:
+> This patch adds suspend and resume pm ops for cpufreq driver.
+> 
+> PLLP is the safe clock source for CPU during system suspend and
+> resume as PLLP rate is below the CPU Fmax at Vmin.
+> 
+> CPUFreq driver suspend switches the CPU clock source to PLLP and
+> disables the DFLL clock.
+> 
+> During system resume, warmboot code powers up the CPU with PLLP
+> clock source. So CPUFreq driver resume enabled DFLL clock and
+> switches CPU back to DFLL clock source.
+> 
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  drivers/cpufreq/tegra124-cpufreq.c | 60 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 60 insertions(+)
 
-This was clearly untested! Here's a better one. This is what I see on my
-device with this patch squashed in:
+Is there any hard dependency of this patch on the rest of the patches?
+Can I apply it alone to cpufreq tree ?
 
-localhost ~ # cat /sys/kernel/debug/wakeup_sources=20
-name            active_count    event_count     wakeup_count    expire_coun=
-t    active_since    total_time      max_time        last_change  prevent_s=
-uspend_time
-1-1.2.4.1       0               0               0               0          =
-     0               0               0               0   0
-1-1.1           0               0               0               0          =
-     0               0               0               0   0
-gpio-keys       0               0               0               0          =
-     0               0               0               0   0
-spi10.0         0               0               0               0          =
-     0               0               0               0   0
-a88000.spi:ec@0:keyboard-controller     0               0               0  =
-             0               0               0           0
-                0               0
-alarmtimer      0               0               0               0          =
-     0               0               0               0   0
-cros-ec-rtc.1.auto      0               0               0               0  =
-             0               0               0           0
-                0
-a8f8800.usb     0               0               0               0          =
-     0               0               0               0   0
-a6f8800.usb     0               0               0               0          =
-     0               0               0               0   0
-localhost ~ # ls -l /sys/class/wakeup/=20
-total 0
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 alarmtimer -> ../../devices/platform=
-/soc/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/cros-ec-dev.0.auto/=
-cros-ec-rtc.1.auto/rtc/rtc0/alarmtimer
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup0 -> ../../devices/platform/so=
-c/a6f8800.usb/wakeup/wakeup0
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup1 -> ../../devices/platform/so=
-c/a8f8800.usb/wakeup/wakeup1
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup2 -> ../../devices/platform/so=
-c/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/cros-ec-dev.0.auto/cro=
-s-ec-rtc.1.auto/wakeup/wakeup2
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup3 -> ../../devices/platform/so=
-c/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/a88000.spi:ec@0:keyboa=
-rd-controller/wakeup/wakeup3
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup4 -> ../../devices/platform/so=
-c/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/wakeup/wakeup4
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup5 -> ../../devices/platform/gp=
-io-keys/wakeup/wakeup5
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup6 -> ../../devices/platform/so=
-c/a8f8800.usb/a800000.dwc3/xhci-hcd.7.auto/usb1/1-1/1-1.1/wakeup/wakeup6
-lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup7 -> ../../devices/platform/so=
-c/a8f8800.usb/a800000.dwc3/xhci-hcd.7.auto/usb1/1-1/1-1.2/1-1.2.4/1-1.2.4.1=
-/wakeup/wakeup7
-
-----8<----
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 79668b45eae6..ec414f0db0b1 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -201,7 +201,7 @@ EXPORT_SYMBOL_GPL(wakeup_source_remove);
- /**
-  * wakeup_source_register - Create wakeup source and add it to the list.
-  * @dev: Device this wakeup source is associated with (or NULL if virtual).
-- * @name: Name of the wakeup source to register.
-+ * @name: Name of the wakeup source to register (or NULL if device wakeup).
-  */
- struct wakeup_source *wakeup_source_register(struct device *dev,
- 					     const char *name)
-@@ -209,9 +209,9 @@ struct wakeup_source *wakeup_source_register(struct dev=
-ice *dev,
- 	struct wakeup_source *ws;
- 	int ret;
-=20
--	ws =3D wakeup_source_create(name);
-+	ws =3D wakeup_source_create(name ? : dev_name(dev));
- 	if (ws) {
--		ret =3D wakeup_source_sysfs_add(dev, ws);
-+		ret =3D wakeup_source_sysfs_add(dev, ws, !!name);
- 		if (ret) {
- 			kfree_const(ws->name);
- 			kfree(ws);
-@@ -275,7 +275,7 @@ int device_wakeup_enable(struct device *dev)
- 	if (pm_suspend_target_state !=3D PM_SUSPEND_ON)
- 		dev_dbg(dev, "Suspicious %s() during system transition!\n", __func__);
-=20
--	ws =3D wakeup_source_register(dev, dev_name(dev));
-+	ws =3D wakeup_source_register(dev, NULL);
- 	if (!ws)
- 		return -ENOMEM;
-=20
-diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeup_=
-stats.c
-index a26f019faca9..0f4c59b02d5d 100644
---- a/drivers/base/power/wakeup_stats.c
-+++ b/drivers/base/power/wakeup_stats.c
-@@ -81,15 +81,6 @@ static ssize_t last_change_ms_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(last_change_ms);
-=20
--static ssize_t name_show(struct device *dev, struct device_attribute *attr,
--			 char *buf)
--{
--	struct wakeup_source *ws =3D dev_get_drvdata(dev);
--
--	return sprintf(buf, "%s\n", ws->name);
--}
--static DEVICE_ATTR_RO(name);
--
- static ssize_t prevent_suspend_time_ms_show(struct device *dev,
- 					    struct device_attribute *attr,
- 					    char *buf)
-@@ -106,7 +97,6 @@ static ssize_t prevent_suspend_time_ms_show(struct devic=
-e *dev,
- static DEVICE_ATTR_RO(prevent_suspend_time_ms);
-=20
- static struct attribute *wakeup_source_attrs[] =3D {
--	&dev_attr_name.attr,
- 	&dev_attr_active_count.attr,
- 	&dev_attr_event_count.attr,
- 	&dev_attr_wakeup_count.attr,
-@@ -126,22 +116,35 @@ static DEFINE_IDA(wakeup_ida);
-  * wakeup_source_sysfs_add - Add wakeup_source attributes to sysfs.
-  * @parent: Device given wakeup source is associated with (or NULL if virt=
-ual).
-  * @ws: Wakeup source to be added in sysfs.
-+ * @use_ws_name: True to use ws->name or false to use 'wakeupN' for device=
- name
-  */
--int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *w=
-s)
-+int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *w=
-s,
-+			    bool use_ws_name)
- {
- 	struct device *dev;
- 	int id;
-=20
--	id =3D ida_alloc(&wakeup_ida, GFP_KERNEL);
--	if (id < 0)
--		return id;
--	ws->id =3D id;
-+	ws->id =3D -1;
-+	if (use_ws_name) {
-+		dev =3D device_create_with_groups(wakeup_class, parent,
-+						MKDEV(0, 0), ws,
-+						wakeup_source_groups,
-+						ws->name);
-+	} else {
-+		id =3D ida_alloc(&wakeup_ida, GFP_KERNEL);
-+		if (id < 0)
-+			return id;
-+		ws->id =3D id;
-+
-+		dev =3D device_create_with_groups(wakeup_class, parent,
-+						MKDEV(0, 0), ws,
-+						wakeup_source_groups,
-+						"wakeup%d", ws->id);
-+	}
-=20
--	dev =3D device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
--					wakeup_source_groups, "ws%d",
--					ws->id);
- 	if (IS_ERR(dev)) {
--		ida_free(&wakeup_ida, ws->id);
-+		if (ws->id >=3D 0)
-+			ida_free(&wakeup_ida, ws->id);
- 		return PTR_ERR(dev);
- 	}
-=20
-@@ -157,7 +160,8 @@ EXPORT_SYMBOL_GPL(wakeup_source_sysfs_add);
- void wakeup_source_sysfs_remove(struct wakeup_source *ws)
- {
- 	device_unregister(ws->dev);
--	ida_simple_remove(&wakeup_ida, ws->id);
-+	if (ws->id >=3D 0)
-+		ida_free(&wakeup_ida, ws->id);
- }
- EXPORT_SYMBOL_GPL(wakeup_source_sysfs_remove);
-=20
-diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-index f39f768389c8..c9fb00fca22e 100644
---- a/include/linux/pm_wakeup.h
-+++ b/include/linux/pm_wakeup.h
-@@ -107,7 +107,7 @@ extern void pm_wakeup_dev_event(struct device *dev, uns=
-igned int msec, bool hard
-=20
- /* drivers/base/power/wakeup_stats.c */
- extern int wakeup_source_sysfs_add(struct device *parent,
--				   struct wakeup_source *ws);
-+				   struct wakeup_source *ws, bool use_ws_name);
- extern void wakeup_source_sysfs_remove(struct wakeup_source *ws);
-=20
- #else /* !CONFIG_PM_SLEEP */
-diff --git a/kernel/power/wakelock.c b/kernel/power/wakelock.c
-index 826fcd97647a..7f2fc5f9b3b3 100644
---- a/kernel/power/wakelock.c
-+++ b/kernel/power/wakelock.c
-@@ -192,7 +192,7 @@ static struct wakelock *wakelock_lookup_add(const char =
-*name, size_t len,
- 	wl->ws.name =3D wl->name;
- 	wl->ws.last_time =3D ktime_get();
-=20
--	ret =3D wakeup_source_sysfs_add(NULL, &wl->ws);
-+	ret =3D wakeup_source_sysfs_add(NULL, &wl->ws, true);
- 	if (ret) {
- 		kfree(wl->name);
- 		kfree(wl);
+-- 
+viresh
