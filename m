@@ -2,102 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A91E7D6ED
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 10:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59217D6F3
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 10:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730859AbfHAIIA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Aug 2019 04:08:00 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:35492 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729572AbfHAIH7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 04:07:59 -0400
-Received: by mail-ed1-f66.google.com with SMTP id w20so68257417edd.2;
-        Thu, 01 Aug 2019 01:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/A98ENoFGQr2SCQn9ABBf4M5URnbGIlXVcItSyIlQIY=;
-        b=Wpfuc/Jm6RyYET0+1F4x08xRLhNOqe5AZMmhCVijzNJP0ZYLJnTwSDSFDJw4yTm9ts
-         GEQJ0hM6YnpfnbAcWoA1PXGG/NunmgXCF89xCSgAx4qkFc7lBDGuN6lm3Nz3JTSNMpFw
-         pAlgYEVRRXnQmVqy41rIOnkkXV1TE9BmCOMSiQpQO3QsPYXzCCgzPucE8gKyMfAGlgWP
-         hiN1704KehFy0lXo+asJa+it+YSV4ckYq0QfCU8uKWBKFdcIiCPH6ivx54ru8hjqxAfm
-         X/oIQPD6gH/w4WFdbmMNAWbpaL478XNI6RiZJ459MJIPGS+uN4UxDnXNmt4Gi538CCDC
-         Amww==
+        id S1729491AbfHAIJf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Aug 2019 04:09:35 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:33744 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728987AbfHAIJf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 04:09:35 -0400
+Received: by mail-oi1-f195.google.com with SMTP id u15so53240167oiv.0;
+        Thu, 01 Aug 2019 01:09:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/A98ENoFGQr2SCQn9ABBf4M5URnbGIlXVcItSyIlQIY=;
-        b=okGLzs99uJLZdKoWoAKbLGFpFKid41ifYOdf4qpFqFgadgvvg1J+/nTm4hQtybW/zh
-         zvtPrTl0bGzYstJfTw+LdMJKtdH3xx5KIxf0YKiFzn+4Azrz6l6OFCHLyhjuGZYgY73E
-         VV8vQwZ1SpMqNUK6drKXS16tyWVxPDS9EJ5tflyoj37bnDXuuZOpNt7GTyYSNw/k775s
-         tqtZYdvje6tyULp2G/A5FljSTaIgZ833K6WLD95AFJck10Hd53ctlTjDZut8PHheb1dw
-         +cMZeBgiyIOwKgC26yGnmmxxz8JMS/bs7fSev/22W648IgAWHXWkrmIgf1Y543maIKl1
-         ErGw==
-X-Gm-Message-State: APjAAAUGWj9gRhlXRvI6r3tsvjvs4i5aK6Kkdk8bsbsE4BnXI5+2BpZx
-        J6LdzzNHAsSHgzZyj3Hu0wYRznuw7JK4ffIedBq8qvlyfms=
-X-Google-Smtp-Source: APXvYqz1uwxLNSvD1OY5M5VgD6Oshlf7Q3vqRumXchcxbJpiZ6TcvfXvmGTOuvRZYUmwhvOYdd5AJ1jHDmJNpEIKpCQ=
-X-Received: by 2002:a50:fb0a:: with SMTP id d10mr84112001edq.124.1564646877779;
- Thu, 01 Aug 2019 01:07:57 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=PnrQp5j1m0yFk+XdNNI7T+UuldEPxUP37dAU4GQXquY=;
+        b=YmOjuJQB5BoWZ0dvhzl9cd9RqUngcwaJDa1j+nUuc997r21zv048ssyh+nz1L2fCMP
+         tWJEdcU7BQsPXaYr1ZP4J0vLW/6/9uBNibvOEtiriH08NzgHImccvaMOTYh+mW9Qy/kF
+         49lsVribuZ/CCE68KzwwYnFQscDQt2zNF6kUhWwbpWXvgjLiSH0lV4M7FlEr7Qoa/eHY
+         aMBBpKM088IujE5d9pXzNOzSbNfw9F0b2A4QsqNyeCRlDrHfwSQgXvhpV89fCzX1Yvhi
+         ffSEmLE9iEVtG8qvO6MWO1OZSXxW78c2bSMKQbQOzF82Yl8VK++YE3Zt82zrGlOGpGhc
+         wD+Q==
+X-Gm-Message-State: APjAAAWc2wZsoAITkDS+bWURnx9ZeRmD4TfPQUOTkB8f0K9xdCwQwjhj
+        CxMuJTU8CKgox3ebZ1aa60dP55O8DkpV+XTa8IE=
+X-Google-Smtp-Source: APXvYqzw3njB9ouhlA9TZZ9d/96/mZWajsV43NsasZuiZZnxUQr6RbPGUXkds+37hfGpZV4wqdGAsFChtqmH9xAHMFs=
+X-Received: by 2002:aca:4e89:: with SMTP id c131mr62367385oib.57.1564646974249;
+ Thu, 01 Aug 2019 01:09:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190729151454.9606-1-hslester96@gmail.com> <20190729191511.GB2023@amd>
-In-Reply-To: <20190729191511.GB2023@amd>
-From:   Chuhong Yuan <hslester96@gmail.com>
-Date:   Thu, 1 Aug 2019 16:07:47 +0800
-Message-ID: <CANhBUQ3beB_aHMJSy9G942oUo_BT=x0w3gB3Vip_-nJxVjqu8A@mail.gmail.com>
-Subject: Re: [PATCH 07/12] power: Replace strncmp with str_has_prefix
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20190731215514.212215-1-trong@android.com> <32598586.Mjd66ZhNnG@kreacher>
+ <CANA+-vDTDq__LnLBpM5u_VHHvpFA--K5Du63vPB7HfaKzBsPtg@mail.gmail.com>
+ <6987393.M0uybTKmdI@kreacher> <CANA+-vAPpXF1=z1=OjOhr8HWQ=Qn39qtQ3+8bUeXNTuFFTxoJQ@mail.gmail.com>
+ <CAJZ5v0go-qOTyQV4D2Sj_xQxT831PxJZP0uay67rG73Q3K2pHQ@mail.gmail.com>
+ <5d42281c.1c69fb81.bcda1.71f5@mx.google.com> <5d423637.1c69fb81.62114.ca6f@mx.google.com>
+In-Reply-To: <5d423637.1c69fb81.62114.ca6f@mx.google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 1 Aug 2019 10:09:22 +0200
+Message-ID: <CAJZ5v0jkLXwqmXwyYtdZ9X2=W2KNKS4Ok_NrDew2yvvt1=4pgQ@mail.gmail.com>
+Subject: Re: [PATCH v6] PM / wakeup: show wakeup sources stats in sysfs
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tri Vo <trong@android.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Pavel Machek <pavel@ucw.cz> =E4=BA=8E2019=E5=B9=B47=E6=9C=8830=E6=97=A5=E5=
-=91=A8=E4=BA=8C =E4=B8=8A=E5=8D=883:15=E5=86=99=E9=81=93=EF=BC=9A
+On Thu, Aug 1, 2019 at 2:45 AM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> On Mon 2019-07-29 23:14:54, Chuhong Yuan wrote:
-> > strncmp(str, const, len) is error-prone.
-> > We had better use newly introduced
-> > str_has_prefix() instead of it.
+> Quoting Stephen Boyd (2019-07-31 16:45:31)
 > >
-> > Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-> > ---
-> >  kernel/power/hibernate.c | 8 ++++----
-> >  kernel/power/main.c      | 2 +-
-> >  2 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> > index cd7434e6000d..49d4bfdb2b67 100644
-> > --- a/kernel/power/hibernate.c
-> > +++ b/kernel/power/hibernate.c
-> > @@ -1188,15 +1188,15 @@ static int __init resume_offset_setup(char *str=
-)
-> >
-> >  static int __init hibernate_setup(char *str)
-> >  {
-> > -     if (!strncmp(str, "noresume", 8)) {
-> > +     if (str_has_prefix(str, "noresume")) {
-> >               noresume =3D 1;
-> > -     } else if (!strncmp(str, "nocompress", 10)) {
-> > +     } else if (str_has_prefix(str, "nocompress")) {
-> >               nocompress =3D 1;
+> > This approach also nicely detects duplicate wakeup source names in the
+> > case that the string passed in to wakeup_source_register() is already
+> > used on the virtual bus.
 >
-> Ok, old code is bad, too... but this makes the error visible. We do
-> not want "noresumenextmonday" to set noresume =3D 1, right?
+> This was clearly untested! Here's a better one. This is what I see on my
+> device with this patch squashed in:
 >
+> localhost ~ # cat /sys/kernel/debug/wakeup_sources
+> name            active_count    event_count     wakeup_count    expire_count    active_since    total_time      max_time        last_change  prevent_suspend_time
+> 1-1.2.4.1       0               0               0               0               0               0               0               0   0
+> 1-1.1           0               0               0               0               0               0               0               0   0
+> gpio-keys       0               0               0               0               0               0               0               0   0
+> spi10.0         0               0               0               0               0               0               0               0   0
+> a88000.spi:ec@0:keyboard-controller     0               0               0               0               0               0           0
+>                 0               0
+> alarmtimer      0               0               0               0               0               0               0               0   0
+> cros-ec-rtc.1.auto      0               0               0               0               0               0               0           0
+>                 0
+> a8f8800.usb     0               0               0               0               0               0               0               0   0
+> a6f8800.usb     0               0               0               0               0               0               0               0   0
+> localhost ~ # ls -l /sys/class/wakeup/
+> total 0
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 alarmtimer -> ../../devices/platform/soc/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/cros-ec-dev.0.auto/cros-ec-rtc.1.auto/rtc/rtc0/alarmtimer
 
-I am not clear about the semantic of the code.
-Therefore, what is the right way to fix this error?
+So why is this not "(...)rtc0/wakeup/alarmtimer" ?
 
->                                                                 Pavel
+This particular bit looks kind of inconsistent.
+
+I guess without your patch you'd see "(...)rtc0/wakeup/wakeup0" instead, right?
+
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup0 -> ../../devices/platform/soc/a6f8800.usb/wakeup/wakeup0
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup1 -> ../../devices/platform/soc/a8f8800.usb/wakeup/wakeup1
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup2 -> ../../devices/platform/soc/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/cros-ec-dev.0.auto/cros-ec-rtc.1.auto/wakeup/wakeup2
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup3 -> ../../devices/platform/soc/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/a88000.spi:ec@0:keyboard-controller/wakeup/wakeup3
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup4 -> ../../devices/platform/soc/ac0000.geniqup/a88000.spi/spi_master/spi10/spi10.0/wakeup/wakeup4
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup5 -> ../../devices/platform/gpio-keys/wakeup/wakeup5
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup6 -> ../../devices/platform/soc/a8f8800.usb/a800000.dwc3/xhci-hcd.7.auto/usb1/1-1/1-1.1/wakeup/wakeup6
+> lrwxrwxrwx. 1 root root 0 Jul 31 17:43 wakeup7 -> ../../devices/platform/soc/a8f8800.usb/a800000.dwc3/xhci-hcd.7.auto/usb1/1-1/1-1.2/1-1.2.4/1-1.2.4.1/wakeup/wakeup7
 >
-> --
-> (english) http://www.livejournal.com/~pavelmachek
-> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/b=
-log.html
