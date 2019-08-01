@@ -2,119 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3737D54A
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 08:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD4F7D55A
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Aug 2019 08:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728216AbfHAGLI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Aug 2019 02:11:08 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37886 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728754AbfHAGLI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 02:11:08 -0400
-Received: from mail-pg1-f198.google.com ([209.85.215.198])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1ht4Is-0002HZ-CG
-        for linux-pm@vger.kernel.org; Thu, 01 Aug 2019 06:11:06 +0000
-Received: by mail-pg1-f198.google.com with SMTP id m19so29996145pgv.7
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 23:11:06 -0700 (PDT)
+        id S1729345AbfHAGRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Aug 2019 02:17:06 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:37607 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729414AbfHAGRF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Aug 2019 02:17:05 -0400
+Received: by mail-pg1-f194.google.com with SMTP id d1so687833pgp.4
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jul 2019 23:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zJU4/vqQd2lede9CTG0BdiKFL0gqtq+BwHXXmJrB8fQ=;
+        b=fFvaKlbb5E4jj3yRMeAa/ZW2S/ppRG+OpK/AhwwWbKQcC/4YfViMmxDe/oGKJ66NRF
+         K8thAb112yJhn+r+ZQtUURJp9BcOe402p/EwC6mCYdgu4rvs2WoYBTdA8C5y16FywXAH
+         bhuH6FxKpsZMXibxq9/PjGG21VlC/cdnL5nVItDVgyWk+bGnYW4x5H0ZiaPUrotg2ilQ
+         H/SarItReeLth6sEtc1grq6xLZVkcK+y8O38Pu2XR0ZYffXCvu29lxs2wh/Ro+HSVHMA
+         AvVqKOCYi3AzLDu2GyTxx5OyYqTInBA23MyIiAOrZ0TkEASBSV7+kthSaqWk7Woo+HYa
+         7dAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=QZGV7+BXR1toRoMcvP04+kAINcsNNoog0nbXTRBRUkI=;
-        b=raZlTe9h/uUcLxYVTI7msU6a9jj2j3sO/5WGCWVTYTlOkQr80mdJ9Coe2lt4Le9iOq
-         HBxvkoGqZyRPEcX+wYKMO9V+jKtO49mMP/Gb8hTLmHMu1c/Eak2tGojXyJg2H64wYTkF
-         hycJXY4K0cKjcxWH1EY5i9K6TpC+Hy2VwQ57gVoeDdH0iDL4wFvLbdF7QD7xBZmQw9fd
-         XnelWJORYCIn1cRM0QdDVWjdN/Cbh9k9XAxaMnPK8AQaoJVCqjNmIPfN6gqjg50Mmtzj
-         sxKP+0cI0+o6UpdL7vMfCP3Fu7yQ8GiIGjj8zffYCDJxFORYWbSuh0huRTRVZzds3vOZ
-         OMUA==
-X-Gm-Message-State: APjAAAWNskNGxQd74X5v/U3ge682uWZHPv3sZR95XBNpHb9OK4M+jgVc
-        Mi5Wlf9INgqERE/KkLO2lkmTenGmmN2NfTRlFTkwEV1NbVtB7OVl4SjuC82EN+5wyTk1vwbFJEn
-        oV6GEVEnErtST+/D6J4IsLaG124YaM/9htRZb
-X-Received: by 2002:a17:902:aa95:: with SMTP id d21mr10486362plr.185.1564639865078;
-        Wed, 31 Jul 2019 23:11:05 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzzXh5jh0NLL++hnpmUdxpOQK3aTn8RT4M9XQoFlEZWbL6U+5kk0SoJW9sp8o1OsqZo1L05qA==
-X-Received: by 2002:a17:902:aa95:: with SMTP id d21mr10486342plr.185.1564639864814;
-        Wed, 31 Jul 2019 23:11:04 -0700 (PDT)
-Received: from 2001-b011-380f-37d3-f52e-c69b-5d89-c245.dynamic-ip6.hinet.net (2001-b011-380f-37d3-f52e-c69b-5d89-c245.dynamic-ip6.hinet.net. [2001:b011:380f:37d3:f52e:c69b:5d89:c245])
-        by smtp.gmail.com with ESMTPSA id 97sm4210103pjz.12.2019.07.31.23.11.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zJU4/vqQd2lede9CTG0BdiKFL0gqtq+BwHXXmJrB8fQ=;
+        b=VeqG3yZdp5QkY3bf4CyVYlKQ0KYh9jK61xUjMHNf+807whF5TVg5h6fE0XxziC3tqa
+         770DSJAYLbGoVwuiVH4GPB9zr5SaCLMuCXjwN8V59ca2xRTRqnmjm66xf9rINeoK0vOL
+         ghZ2O7KaHN/KOtu9kbMACw5Cmgze+n6f+c5A4cFffXay0noqqNDdFiMDKPLJCunaCdTF
+         n98Frgd9apdgaBrFf89j0eocOFGCMVRIQOmf2ibu92kkAwKbXNbnEcR6zJh83wd0BIqF
+         sTKdDYsNdVHLiT+glSykVsI3stDjnqvYIeNDYQ7w+9P62qCnzKmk/2+08QePT6AEqBT1
+         tqMw==
+X-Gm-Message-State: APjAAAVswMIlyvuqtQWhy0mg1zPPxhXVmsPjj6NhtWk7kyeRrXwUO1Qv
+        /o7f9GESf85oYmzZ9eciGz+HDA==
+X-Google-Smtp-Source: APXvYqwvXsV+CZfOZxkl9ZRmoZj1nVH1f4aWphFWwvwgP5gQl8Oe8LfcDsG+LKw/lWVEjOXZvljO8g==
+X-Received: by 2002:a17:90a:a008:: with SMTP id q8mr6784770pjp.114.1564640224089;
+        Wed, 31 Jul 2019 23:17:04 -0700 (PDT)
+Received: from localhost ([122.172.28.117])
+        by smtp.gmail.com with ESMTPSA id 81sm112707819pfx.111.2019.07.31.23.17.02
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 31 Jul 2019 23:11:04 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii;
-        delsp=yes;
-        format=flowed
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH] ACPI: PM: Fix regression in acpi_device_set_power()
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <4199592.UtrPOv3ZmA@kreacher>
-Date:   Thu, 1 Aug 2019 14:11:00 +0800
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mario Limonciello <mario.limonciello@dell.com>
-Content-Transfer-Encoding: 7bit
-Message-Id: <27715F95-E729-4EF5-B2BA-03BA3C87AE29@canonical.com>
-References: <4199592.UtrPOv3ZmA@kreacher>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-X-Mailer: Apple Mail (2.3445.104.11)
+        Wed, 31 Jul 2019 23:17:02 -0700 (PDT)
+Date:   Thu, 1 Aug 2019 11:47:00 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        'Rafael Wysocki' <rjw@rjwysocki.net>,
+        'Ingo Molnar' <mingo@redhat.com>,
+        'Peter Zijlstra' <peterz@infradead.org>,
+        'Linux PM' <linux-pm@vger.kernel.org>,
+        'Vincent Guittot' <vincent.guittot@linaro.org>,
+        'Joel Fernandes' <joel@joelfernandes.org>,
+        "'v4 . 18+'" <stable@vger.kernel.org>,
+        'Linux Kernel Mailing List' <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: schedutil: Don't skip freq update when limits
+ change
+Message-ID: <20190801061700.dl33rtilvg44obzu@vireshk-i7>
+References: <001201d54125$a6a82350$f3f869f0$@net>
+ <20190723091551.nchopfpqlmdmzvge@vireshk-i7>
+ <CAJZ5v0ji+ksapJ4kc2m5UM_O+AShAvJWmYhTQHiXiHnpTq+xRg@mail.gmail.com>
+ <20190724114327.apmx35c7a4tv3qt5@vireshk-i7>
+ <000c01d542fc$703ff850$50bfe8f0$@net>
+ <20190726065739.xjvyvqpkb3o6m4ty@vireshk-i7>
+ <000001d545e3$047d9750$0d78c5f0$@net>
+ <20190729083219.fe4xxq4ugmetzntm@vireshk-i7>
+ <CAJZ5v0gaW=ujtsDmewrVXL7V8K0YZysNqwu=qKLw+kPC86ydqA@mail.gmail.com>
+ <000b01d547fe$e7b51fd0$b71f5f70$@net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000b01d547fe$e7b51fd0$b71f5f70$@net>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-at 07:31, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On 31-07-19, 17:20, Doug Smythies wrote:
+> Hi Viresh,
+> 
+> Summary:
+> 
+> The old way, using UINT_MAX had two purposes: first,
+> as a "need to do a frequency update" flag; but also second, to
+> force any subsequent old/new frequency comparison to NOT be "the same,
+> so why bother actually updating" (see: sugov_update_next_freq). All
+> patches so far have been dealing with the flag, but only partially
+> the comparisons. In a busy system, and when schedutil.c doesn't actually
+> know the currently set system limits, the new frequency is dominated by
+> values the same as the old frequency. So, when sugov_fast_switch calls 
+> sugov_update_next_freq, false is usually returned.
 
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Commit f850a48a0799 ("ACPI: PM: Allow transitions to D0 to occur in
-> special cases") overlooked the fact that acpi_power_transition() may
-> change the power.state value for the target device and if that
-> happens, it may confuse acpi_device_set_power() and cause it to
-> omit the _PS0 evaluation which on some systems is necessary to
-> change power states of devices from low-power to D0.
->
-> Fix that by saving the current value of power.state for the
-> target device before passing it to acpi_power_transition() and
-> using the saved value in a subsequent check.
->
-> Fixes: f850a48a0799 ("ACPI: PM: Allow transitions to D0 to occur in  
-> special cases")
-> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Reported-by: Mario Limonciello <mario.limonciello@dell.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+And finally we know "Why" :)
 
-Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Good work Doug. Thanks for taking it to the end.
 
-> ---
->  drivers/acpi/device_pm.c |    4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> Index: linux-pm/drivers/acpi/device_pm.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/device_pm.c
-> +++ linux-pm/drivers/acpi/device_pm.c
-> @@ -236,13 +236,15 @@ int acpi_device_set_power(struct acpi_de
->  		if (device->power.flags.power_resources)
->  			result = acpi_power_transition(device, target_state);
->  	} else {
-> +		int cur_state = device->power.state;
-> +
->  		if (device->power.flags.power_resources) {
->  			result = acpi_power_transition(device, ACPI_STATE_D0);
->  			if (result)
->  				goto end;
->  		}
->
-> -		if (device->power.state == ACPI_STATE_D0) {
-> +		if (cur_state == ACPI_STATE_D0) {
->  			int psc;
->
->  			/* Nothing to do here if _PSC is not present. */
+> However, if we move the resetting of the flag and add another condition
+> to the "no need to actually update" decision, then perhaps this patch
+> version 1 will be O.K. It seems to be. (see way later in this e-mail).
 
+> With all this new knowledge, how about going back to
+> version 1 of this patch, and then adding this:
+> 
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 808d32b..f9156db 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -100,7 +100,12 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+>  static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
+>                                    unsigned int next_freq)
+>  {
+> -       if (sg_policy->next_freq == next_freq)
+> +       /*
+> +        * Always force an update if the flag is set, regardless.
+> +        * In some implementations (intel_cpufreq) the frequency is clamped
+> +        * further downstream, and might not actually be different here.
+> +        */
+> +       if (sg_policy->next_freq == next_freq && !sg_policy->need_freq_update)
+>                 return false;
 
+This is not correct because this is an optimization we have in place
+to make things more efficient. And it was working by luck earlier and
+my patch broke it for good :)
+
+Things need to get a bit more synchronized and something like this may
+help (completely untested):
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index cc27d4c59dca..2d84361fbebc 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -2314,6 +2314,18 @@ static int intel_cpufreq_target(struct cpufreq_policy *policy,
+        return 0;
+ }
+ 
++static unsigned int intel_cpufreq_resolve_freq(struct cpufreq_policy *policy,
++                                              unsigned int target_freq)
++{
++       struct cpudata *cpu = all_cpu_data[policy->cpu];
++       int target_pstate;
++
++       target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
++       target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
++
++       return target_pstate * cpu->pstate.scaling;
++}
++
+ static unsigned int intel_cpufreq_fast_switch(struct cpufreq_policy *policy,
+                                              unsigned int target_freq)
+ {
+@@ -2350,6 +2362,7 @@ static struct cpufreq_driver intel_cpufreq = {
+        .verify         = intel_cpufreq_verify_policy,
+        .target         = intel_cpufreq_target,
+        .fast_switch    = intel_cpufreq_fast_switch,
++       .resolve_freq   = intel_cpufreq_resolve_freq,
+        .init           = intel_cpufreq_cpu_init,
+        .exit           = intel_pstate_cpu_exit,
+        .stop_cpu       = intel_cpufreq_stop_cpu,
+
+-------------------------8<-------------------------
+
+Please try this with my patch 2. We need patch 2 instead of 1 because
+of another race condition Rafael noticed.
+
+cpufreq_schedutil calls driver specific resolve_freq() to find the new
+target frequency and this is where the limits should get applied IMO.
+
+Rafael can help with reviewing this diff but it would be great if you
+can give this a try Doug.
+
+Thanks.
+
+-- 
+viresh
