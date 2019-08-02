@@ -2,94 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD65B7FBD8
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 16:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5927FE17
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 18:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388957AbfHBON2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Aug 2019 10:13:28 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41603 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389189AbfHBON1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Aug 2019 10:13:27 -0400
-Received: by mail-pg1-f196.google.com with SMTP id x15so25794008pgg.8
-        for <linux-pm@vger.kernel.org>; Fri, 02 Aug 2019 07:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5treBjW4ojfofZKzbstHsda4v5OqUABJGRx6t6ZH9CA=;
-        b=DXHR6ABYqH0h3ErX1CGCyj9oFdGOkuWQz5xaeVmLGPxQHExg2mLZ8afYJcvtHmuXqE
-         L20AgP7+xUJ4V7qAQs5B/BJ11bjm8pSt9u+EnbShqDMGU0uhL+rRktj+PNPGxttUDcUO
-         IHhV4g3O+mQnpNSZgujQMBw0vY29Y5UlWzexdAaWhAtBOlJ7D06vuhabLGuonB0TomkS
-         5SlnmCjTIB5CDwJrozyi7Go3G8ThnoANR0iexUYoHhIr0PjXnnJdp3HWMh0wexSPboUD
-         +C8GOmO09pobgglUY/dTY1X3abZWEATbRdfmlraPBN2dxmD5GKuMW7DdLI3cpjayxpml
-         TVHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5treBjW4ojfofZKzbstHsda4v5OqUABJGRx6t6ZH9CA=;
-        b=fG1ART5t8E7k4LVJPFFUmN9mMVvCbVY0UdiJzEiRy034UE22PfMX86cxfQSRlDONq9
-         D0MB51fy5TADepTAiNnMtacyp447QhCfIwXD2cfKWt69HvZwiK9m3i58/fP47byHXA/1
-         O0+R5+lFbQnNZ86hCau+R+fdatM1a+VgDD52SLSTPVhqOz63p6uwVoqopslnI/6eSW7p
-         amVLl7M9HXs10mm2+2ytspARaE8d57rQZmzP+8rOi9u5SYgqLqKdliIYYAMYOLcrHBwz
-         mafg3hc1oLJGEHyRLbqOPz4k6J/u+QaZyvBk3FcZ2vblPPo9frkVYCYQeX7dakIAXdw2
-         8G5w==
-X-Gm-Message-State: APjAAAWBtwE2O55YiKOVjSpObwVmd/Dj0GWKOUHA9MHbbcaU82vwF4wM
-        LLSZqi8dbDqnFvComN4Cr2s5PGbkeaD6pcGzDQxoiQ==
-X-Google-Smtp-Source: APXvYqzJzMIq2BOAXKkfk2ONCggXPJ354hGozdppgPTsk/gVMr7/MXdnjVkdh4xqKYqTMjZSIuwIvWZwZ8GOnQ6Cmbo=
-X-Received: by 2002:a65:4b8b:: with SMTP id t11mr123928876pgq.130.1564755206144;
- Fri, 02 Aug 2019 07:13:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000cd0435058f21e8c3@google.com> <20190802133317.GA5538@amd>
-In-Reply-To: <20190802133317.GA5538@amd>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 2 Aug 2019 16:13:15 +0200
-Message-ID: <CAAeHK+ziKCz=SZss7mnWZWQXWBGyXkw5dcPfjdH-6MJLUJqO8Q@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in __pm_runtime_resume
-To:     Pavel Machek <pavel@denx.de>
-Cc:     syzbot <syzbot+b156665cf4d1b5e00c76@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        len.brown@intel.com, LKML <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        rjw@rjwysocki.net, syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S2389127AbfHBQFT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Aug 2019 12:05:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44950 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388999AbfHBQFO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Aug 2019 12:05:14 -0400
+Subject: Re: [GIT PULL] Power management fix for v5.3-rc3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564761913;
+        bh=3rMZaXbQ41/dbreVvWj6reoVXIkk+yBfu5l630T1gKY=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=vEpwfarRPNtcJ/ojIlXH1CthZUvzPjolvFJDkSMPiLq/GgYRbENby6zmo3otakS17
+         xt75TK5D/3MupqGg1hR/wzCPLzFxjNXGpyB1eyzPW7tOWJhQMc/7fn2dk3weoqYrXp
+         pX9+2qEGeAOvanMb7xJhXahtiS/GDSOOEZUIn7RA=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0i+ZJEdVw=sZfB1KUuqJFWA=mSfB6jL66c1HFfZN9MR6g@mail.gmail.com>
+References: <CAJZ5v0i+ZJEdVw=sZfB1KUuqJFWA=mSfB6jL66c1HFfZN9MR6g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0i+ZJEdVw=sZfB1KUuqJFWA=mSfB6jL66c1HFfZN9MR6g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.3-rc3
+X-PR-Tracked-Commit-Id: 42787ed79638dc7f0f8d5c164caba1e87bfab50f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 755f1fed27f4b1d57dd8b2856c06086636cd7284
+Message-Id: <156476191344.27663.6822076135265555352.pr-tracker-bot@kernel.org>
+Date:   Fri, 02 Aug 2019 16:05:13 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 2, 2019 at 3:33 PM Pavel Machek <pavel@denx.de> wrote:
->
-> On Fri 2019-08-02 05:58:05, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=146071b4600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=b156665cf4d1b5e00c76
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> >
-> > Unfortunately, I don't have any reproducer for this crash yet.
->
-> I asked a question, noone bothered to reply, yet you spam me again?
->
-> You are a bad bot. Go away. Come back when your human master is
-> willing to communicate.
+The pull request you sent on Fri, 2 Aug 2019 11:45:03 +0200:
 
-Hi Pavel,
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.3-rc3
 
-What was the question that you've asked and where did you send it? I
-can't find anything in my inbox.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/755f1fed27f4b1d57dd8b2856c06086636cd7284
 
-Thanks!
+Thank you!
 
->
->                                                                 Pavel
->
-> --
-> (english) http://www.livejournal.com/~pavelmachek
-> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
