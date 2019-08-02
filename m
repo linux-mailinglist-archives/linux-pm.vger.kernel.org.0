@@ -2,103 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 369517F851
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 15:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54A67F97F
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 15:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393175AbfHBNTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Aug 2019 09:19:15 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:44938 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390134AbfHBNTO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Aug 2019 09:19:14 -0400
-Received: by mail-lf1-f68.google.com with SMTP id r15so35930576lfm.11
-        for <linux-pm@vger.kernel.org>; Fri, 02 Aug 2019 06:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BYlIJPvFssOK64x+am/xS2wZWcj/FM4eymxQYdJNO0E=;
-        b=l1ySagA5Vavb8EysRzrgjml8hUDMlz1+OS0qxIY9MuS/t4+ISzmv+SatgRNkZes9N4
-         NxBnY3tJ4i4w6lZXvX/wi3/LKGu49oc9XLvkdBGMC5vn4ZS0qjvfmYZiRqeGd8sOsnNq
-         mzChlxS6LnKnDA804KT9bA2jzbFjy64GLuZ6qhFT32Yor75167thxtgFkXzHU2g6dN8m
-         VhsG+JKQ8tDYXVTWdC+k4Jpdq3+3sPRfEC4a72mi0rku3noody1gCMEbSif5LhOTXOUJ
-         fD0tVWHzbs/PmTwRUALLRcWk5EVEdFTwixoUDVkEWxPKGH/IZmqHrMmlYXFFvL/omZC9
-         PdAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BYlIJPvFssOK64x+am/xS2wZWcj/FM4eymxQYdJNO0E=;
-        b=d6de4qy5JB+doZsMCQX0aecnYuDsmqqOBKzhXFshuOQ1ojsy9Izy/d3ZuVAmLSwiZF
-         a+e1wwzeOeCltYuTUfM99x7zGGinmbRqvKWk2bFbtuDTXDJg4YjI+iHfvqJECbflH0Zp
-         6Ulk01D/slur/aF5/NlwpRyQw9OzScUfzH0jrr1RIipQpcpIp8TXpFBExlJSdcCFU8+g
-         amMF/SlhA6Ie4clJSWzUxT+PQrfcL2c/q1E9C3/SWL9PiY77h+lBUAEGaOMyrWJKMcUw
-         p87O8R4sVHaMg7fGrlntco2QGIGrRm3u3WlE8gEswuJyCko2KQafl+2th8hdammxcHai
-         5XYQ==
-X-Gm-Message-State: APjAAAXyEMYKddqGvOoKKXiIVNv4d/zSHgymTYSlY2rsXoB4RuDPiBS6
-        7/szU2fhguIPzhnQlb9SzzQwIfXwu/UFIZaLNymTIA==
-X-Google-Smtp-Source: APXvYqz47bQkJowsL0czNkaKYpSnYdc6hiS5O1FqH5ObL6RyI/23H5A2jSTq1qZmoQtSLLA93qeYpvHJnfmT/d6Rg94=
-X-Received: by 2002:a19:ec15:: with SMTP id b21mr10642487lfa.32.1564751952808;
- Fri, 02 Aug 2019 06:19:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190802104628.8410-1-qais.yousef@arm.com>
-In-Reply-To: <20190802104628.8410-1-qais.yousef@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 2 Aug 2019 15:19:02 +0200
-Message-ID: <CAKfTPtDxuwhnSrHDK4hq86wEu2JP8OwXVb_TQbo5UL9D+fkoJQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: fix equation in comment
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        id S2394268AbfHBNYu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Aug 2019 09:24:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35560 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394265AbfHBNYu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Aug 2019 09:24:50 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE4C3217D4;
+        Fri,  2 Aug 2019 13:24:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564752289;
+        bh=cuzsLpdJnu8xilvueIg4SUhy4s/85cu7P1L/irrvDH0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZCwZYVLxdH0CVteS/PxLHsYNu3R3xGMPPVfxrwFRkX6ryqZdOvlNlYo/X89aaBCTO
+         cs0nYx5z9ffEo6WaWeDZj0tpLPqGd2ZtLRDoT2fnivoF8X/BKc/oSAwREwhKudN1kQ
+         Fo4Bg48Z9C/XTKzKzsAw9yTGr/xxU6RzLaS2PfSM=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Wen Yang <wen.yang99@zte.com.cn>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 13/30] cpufreq/pasemi: fix use-after-free in pas_cpufreq_cpu_init()
+Date:   Fri,  2 Aug 2019 09:24:05 -0400
+Message-Id: <20190802132422.13963-13-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190802132422.13963-1-sashal@kernel.org>
+References: <20190802132422.13963-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2 Aug 2019 at 12:46, Qais Yousef <qais.yousef@arm.com> wrote:
->
-> scale_irq_capacity() call in schedutil_cpu_util() does
->
->         util *= (max - irq)
->         util /= max
->
-> But the comment says
->
->         util *= (1 - irq)
->         util /= max
->
-> Fix the comment to match what the scaling function does.
->
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+From: Wen Yang <wen.yang99@zte.com.cn>
 
-FWIW
-Acked-by:  Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 636ca6f88c8e..e127d89d5974 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -259,9 +259,9 @@ unsigned long schedutil_cpu_util(int cpu, unsigned long util_cfs,
->          * irq metric. Because IRQ/steal time is hidden from the task clock we
->          * need to scale the task numbers:
->          *
-> -        *              1 - irq
-> -        *   U' = irq + ------- * U
-> -        *                max
-> +        *              max - irq
-> +        *   U' = irq + --------- * U
-> +        *                 max
->          */
->         util = scale_irq_capacity(util, irq, max);
->         util += irq;
-> --
-> 2.17.1
->
+[ Upstream commit e0a12445d1cb186d875410d093a00d215bec6a89 ]
+
+The cpu variable is still being used in the of_get_property() call
+after the of_node_put() call, which may result in use-after-free.
+
+Fixes: a9acc26b75f6 ("cpufreq/pasemi: fix possible object reference leak")
+Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/cpufreq/pasemi-cpufreq.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
+index 8456492124f0c..d1bdd8f622476 100644
+--- a/drivers/cpufreq/pasemi-cpufreq.c
++++ b/drivers/cpufreq/pasemi-cpufreq.c
+@@ -145,10 +145,18 @@ static int pas_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	int err = -ENODEV;
+ 
+ 	cpu = of_get_cpu_node(policy->cpu, NULL);
++	if (!cpu)
++		goto out;
+ 
++	max_freqp = of_get_property(cpu, "clock-frequency", NULL);
+ 	of_node_put(cpu);
+-	if (!cpu)
++	if (!max_freqp) {
++		err = -EINVAL;
+ 		goto out;
++	}
++
++	/* we need the freq in kHz */
++	max_freq = *max_freqp / 1000;
+ 
+ 	dn = of_find_compatible_node(NULL, NULL, "1682m-sdc");
+ 	if (!dn)
+@@ -185,16 +193,6 @@ static int pas_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	}
+ 
+ 	pr_debug("init cpufreq on CPU %d\n", policy->cpu);
+-
+-	max_freqp = of_get_property(cpu, "clock-frequency", NULL);
+-	if (!max_freqp) {
+-		err = -EINVAL;
+-		goto out_unmap_sdcpwr;
+-	}
+-
+-	/* we need the freq in kHz */
+-	max_freq = *max_freqp / 1000;
+-
+ 	pr_debug("max clock-frequency is at %u kHz\n", max_freq);
+ 	pr_debug("initializing frequency table\n");
+ 
+@@ -212,9 +210,6 @@ static int pas_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 
+ 	return cpufreq_generic_init(policy, pas_freqs, get_gizmo_latency());
+ 
+-out_unmap_sdcpwr:
+-	iounmap(sdcpwr_mapbase);
+-
+ out_unmap_sdcasr:
+ 	iounmap(sdcasr_mapbase);
+ out:
+-- 
+2.20.1
+
