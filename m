@@ -2,32 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 443007F077
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 11:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327A77F287
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Aug 2019 11:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388754AbfHBJ21 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Aug 2019 05:28:27 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:55229 "EHLO
+        id S2405149AbfHBJt1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Aug 2019 05:49:27 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:64240 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388741AbfHBJ21 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Aug 2019 05:28:27 -0400
+        with ESMTP id S2405137AbfHBJt0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Aug 2019 05:49:26 -0400
 Received: from 79.184.255.110.ipv4.supernova.orange.pl (79.184.255.110) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
- id 2774d927111a2d21; Fri, 2 Aug 2019 11:28:24 +0200
+ id e1982bc9eb5b63f9; Fri, 2 Aug 2019 11:49:24 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "v4 . 18+" <stable@vger.kernel.org>,
-        Doug Smythies <doug.smythies@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3 2/2] cpufreq: intel_pstate: Implement ->resolve_freq()
-Date:   Fri, 02 Aug 2019 11:28:24 +0200
-Message-ID: <2676200.jfxhmTd764@kreacher>
-In-Reply-To: <CAJZ5v0iqztRWyxf1cgiAN1dK4qTGwy9raaGOx5u3tfBTGUKOng@mail.gmail.com>
-References: <7dedb6bd157b8183c693bb578e25e313cf4f451d.1564724511.git.viresh.kumar@linaro.org> <23e3dee8688f5a9767635b686bb7a9c0e09a4438.1564724511.git.viresh.kumar@linaro.org> <CAJZ5v0iqztRWyxf1cgiAN1dK4qTGwy9raaGOx5u3tfBTGUKOng@mail.gmail.com>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, kernel-team@android.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tri Vo <trong@android.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH] power: supply: Init device wakeup after device_add()
+Date:   Fri, 02 Aug 2019 11:49:24 +0200
+Message-ID: <5888477.sfNfyo0UZj@kreacher>
+In-Reply-To: <20190801213330.81079-1-swboyd@chromium.org>
+References: <20190801213330.81079-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -36,30 +36,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, August 2, 2019 11:17:55 AM CEST Rafael J. Wysocki wrote:
-> On Fri, Aug 2, 2019 at 7:44 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > Intel pstate driver exposes min_perf_pct and max_perf_pct sysfs files,
-> > which can be used to force a limit on the min/max P state of the driver.
-> > Though these files eventually control the min/max frequencies that the
-> > CPUs will run at, they don't make a change to policy->min/max values.
+On Thursday, August 1, 2019 11:33:30 PM CEST Stephen Boyd wrote:
+> We may want to use the device pointer in device_init_wakeup() with
+> functions that expect the device to already be added with device_add().
+> For example, if we were to link the device initializing wakeup to
+> something in sysfs such as a class for wakeups we'll run into an error.
+> It looks like this code was written with the assumption that the device
+> would be added before initializing wakeup due to the order of operations
+> in power_supply_unregister().
 > 
-> That's correct.
+> Let's change the order of operations so we don't run into problems here.
 > 
-> > When the values of these files are changed (in passive mode of the
-> > driver), it leads to calling ->limits() callback of the cpufreq
-> > governors, like schedutil. On a call to it the governors shall
-> > forcefully update the frequency to come within the limits.
+> Fixes: 948dcf966228 ("power_supply: Prevent suspend until power supply events are processed")
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>                                                                                                                      
+> Cc: Tri Vo <trong@android.com>                                                                                                                                             
+> Cc: Kalesh Singh <kaleshsingh@google.com>      
+> Cc: Ravi Chandra Sadineni <ravisadineni@chromium.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
 > 
-> OK, so the problem is that it is a bug to invoke the governor's ->limits()
-> callback without updating policy->min/max, because that's what
-> "limits" mean to the governors.
+> See this thread[1] for more information on how this will be necessary.
 > 
-> Fair enough.
+> [1] https://lkml.kernel.org/r/20190731215514.212215-1-trong@android.com
+> 
+> 
+>  drivers/power/supply/power_supply_core.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index 82e84801264c..5c36c430ce8b 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -1051,14 +1051,14 @@ __power_supply_register(struct device *parent,
+>  	}
+>  
+>  	spin_lock_init(&psy->changed_lock);
+> -	rc = device_init_wakeup(dev, ws);
+> -	if (rc)
+> -		goto wakeup_init_failed;
+> -
+>  	rc = device_add(dev);
+>  	if (rc)
+>  		goto device_add_failed;
+>  
+> +	rc = device_init_wakeup(dev, ws);
+> +	if (rc)
+> +		goto wakeup_init_failed;
+> +
+>  	rc = psy_register_thermal(psy);
+>  	if (rc)
+>  		goto register_thermal_failed;
+> @@ -1101,8 +1101,8 @@ __power_supply_register(struct device *parent,
+>  	psy_unregister_thermal(psy);
+>  register_thermal_failed:
+>  	device_del(dev);
+> -device_add_failed:
+>  wakeup_init_failed:
+> +device_add_failed:
+>  check_supplies_failed:
+>  dev_set_name_failed:
+>  	put_device(dev);
+> 
 
-AFAICS this can be addressed by adding PM QoS freq limits requests of each CPU to
-intel_pstate in the passive mode such that changing min_perf_pct or max_perf_pct
-will cause these requests to be updated.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
 
 
 
