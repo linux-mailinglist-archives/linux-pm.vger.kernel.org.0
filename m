@@ -2,105 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E828055A
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Aug 2019 10:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA20880668
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Aug 2019 15:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387802AbfHCIsA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Aug 2019 04:48:00 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:45073 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387692AbfHCIr7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Aug 2019 04:47:59 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id C481380318; Sat,  3 Aug 2019 10:47:44 +0200 (CEST)
-Date:   Sat, 3 Aug 2019 10:47:56 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: OLPC in 5.3? was Re: [PATCH v7 01/10] dt-bindings:
- olpc,xo1.75-ec: Add OLPC XO-1.75 EC bindings
-Message-ID: <20190803084755.GA8224@amd>
-References: <20190513075641.1277716-1-lkundrak@v3.sk>
- <20190513075641.1277716-2-lkundrak@v3.sk>
- <20190513090743.GA19319@amd>
- <20190801192713.GA22373@amd>
- <390f31d2f85e8075d9b1e250a2ec093ac8769703.camel@v3.sk>
+        id S2391000AbfHCN6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Aug 2019 09:58:21 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:33495 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390999AbfHCN6V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Aug 2019 09:58:21 -0400
+Received: by mail-lj1-f193.google.com with SMTP id h10so3972332ljg.0
+        for <linux-pm@vger.kernel.org>; Sat, 03 Aug 2019 06:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MupMaC+XmWsb2GGGGsZRCBFziER7Wmhu89RotOfylV8=;
+        b=qFU43RoQ58wOat3dL3H9kuErmIElXjDBKHkhvJ6htAOTpUDUUxnnlP76KYeE/vseTl
+         mvLbGmIT2lfYsQ9s0sCOiApwgMrylnCCAsKYytDT7/8FuIkKPUp7rxvdnt4cY9oDrTYA
+         a0gIFp0pwrQ+NmKD0Di6pRIbsxt8DJ+m1RuXkGcROZy0m5sjil92HFXx/q728TC1ltsA
+         MbbuahwS0XQYyDKRX2/zzprxBCgC6xfEYDeh2HDnlaGU7mPXmFL6ne5JaMMpenPCNDy1
+         eAnO+RO31hgwuuQGWluPDUp06KK61kvC/hfjTZCvAp6nl+wgL/NltJZdymSBmPwVktCF
+         yj5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MupMaC+XmWsb2GGGGsZRCBFziER7Wmhu89RotOfylV8=;
+        b=DlMUuNXJXXUIlGX6/f+P60tSIZSpcUJSSc4H+xXpduxXldwqF08+eSU7gAFVk7dTB/
+         61OjQKGnlQqbs8jirFasIfYQlsVF1KSW8mzxwQhC5Mw5Vw/F2WeuedMje8wiSUvkzyOL
+         c3+/ca1r0f4ks/oja26p7nPyMGhfArf4BL0P2VavScDMICzOEU8JPwto6ZoamyXhtbbk
+         HDq1gmOk3Xj3pH2yZQY08+2yx8snANVezdL5jcWHkoSejyZMedYD3d1UTaOfkyntR/8r
+         Zk77nWZ5AjrmjMsSnjVZFBQbfey52TNEHfJI2SxL8czgN3UDRsuxFsv68g9WJpjcJwTc
+         UsBA==
+X-Gm-Message-State: APjAAAXHfe5n31M1YpJn/QMxnjN/pEKssQYs5b+xWzzyEy59py1L3tVj
+        Qa1R3FIygxm/EaQmCgK8D8AyvFW/7KfMzxF6if3K1w==
+X-Google-Smtp-Source: APXvYqwxZvx2gMGUkGxJBm279SI5kM7npKrkb3Kgq3Y21d91YTewSxvFDB3w98mrOdhQ7DZ4HRHKTpnm4gHPWE9r2Fo=
+X-Received: by 2002:a05:651c:28c:: with SMTP id b12mr9571442ljo.69.1564840699603;
+ Sat, 03 Aug 2019 06:58:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
-Content-Disposition: inline
-In-Reply-To: <390f31d2f85e8075d9b1e250a2ec093ac8769703.camel@v3.sk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20190717063222.5902-1-linus.walleij@linaro.org>
+In-Reply-To: <20190717063222.5902-1-linus.walleij@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 3 Aug 2019 15:58:08 +0200
+Message-ID: <CACRpkdZcuqeUXVtwNJj8N+ncs6CVjmthdoe1cDj+M_imGLqisg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: db8500: Finalize device tree conversion
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Jul 17, 2019 at 8:34 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 
---liOOAslEiF7prFVr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> At some point there was an attempt to convert the DB8500
+> thermal sensor to device tree: a probe path was added
+> and the device tree was augmented for the Snowball board.
+> The switchover was never completed: instead the thermal
+> devices came from from the PRCMU MFD device and the probe
+> on the Snowball was confused as another set of configuration
+> appeared from the device tree.
+>
+> Move over to a device-tree only approach, as we fixed up
+> the device trees.
+>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Hi!
+Thermal folks: can you apply/look into this?
 
-> > What is status of OLPC-1.75 in v5.3? IIRC most of the patches went in,
-> > but I don't see suitable dts file in the tree. I tried porting one
-> > from working (4.19 or so) kernel, but it was not quite trivial.
-> >=20
-> > Is there time for dts to be merged?
->=20
-> Short answer is that it's not absolutely necessary. With a new enough
-> OpenFirmware, the firmware will just construct a correct FDT.
+If you're short on time, please just ACK it if it looks OK and
+I can send it through the ARM SoC tree.
 
-> To upgrade your machine to the new firmware, just copy=20
-> http://dev.laptop.org/~quozl/q4e00ja.rom to a FAT partition on a USB
-> flash stick and run "flash u:\q4e00ja.rom" from the "ok" prompt.
-> Then you'll be able to run stock mainline kernels happily.
-
-Aha, good, thanks. That went smoothly.
-
-> That said, it might still be useful to have a DTS file in tree (for
-> reference, testing, machines with older firmware, etc.). I've now re-
-> sent the MMP2 devicetree update patch set with the DTS file included
-> and copied you on that one.
-
-Yes: sometimes it is neccessary to modify the dts. I was changing the
-kernel command line, for example.
-
-> As usual, I'm thankful for testing, reviews and acks.
-
-I'll take a look. I tried 5.2 with defconfig from one of the branches
-(olpc_xo175_defconfig), and that does not boot.
-
-What config should I use? Is it enough to produce zImage and put it on
-the flashdisk with olpc.fth file? Is there some kind of documentation
-somewhere? :-).
-
-Thanks and best regards,
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---liOOAslEiF7prFVr
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl1FSjsACgkQMOfwapXb+vJejgCgwOhDGjCagQoLmYOk3RUIcISI
-X6EAoJWL5JyswxbnkK51RiCTaV6D6nCw
-=NXI7
------END PGP SIGNATURE-----
-
---liOOAslEiF7prFVr--
+Yours,
+Linus Walleij
