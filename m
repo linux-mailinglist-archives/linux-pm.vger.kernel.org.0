@@ -2,82 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA20880668
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Aug 2019 15:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE54806DD
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Aug 2019 17:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391000AbfHCN6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Aug 2019 09:58:21 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:33495 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390999AbfHCN6V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Aug 2019 09:58:21 -0400
-Received: by mail-lj1-f193.google.com with SMTP id h10so3972332ljg.0
-        for <linux-pm@vger.kernel.org>; Sat, 03 Aug 2019 06:58:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MupMaC+XmWsb2GGGGsZRCBFziER7Wmhu89RotOfylV8=;
-        b=qFU43RoQ58wOat3dL3H9kuErmIElXjDBKHkhvJ6htAOTpUDUUxnnlP76KYeE/vseTl
-         mvLbGmIT2lfYsQ9s0sCOiApwgMrylnCCAsKYytDT7/8FuIkKPUp7rxvdnt4cY9oDrTYA
-         a0gIFp0pwrQ+NmKD0Di6pRIbsxt8DJ+m1RuXkGcROZy0m5sjil92HFXx/q728TC1ltsA
-         MbbuahwS0XQYyDKRX2/zzprxBCgC6xfEYDeh2HDnlaGU7mPXmFL6ne5JaMMpenPCNDy1
-         eAnO+RO31hgwuuQGWluPDUp06KK61kvC/hfjTZCvAp6nl+wgL/NltJZdymSBmPwVktCF
-         yj5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MupMaC+XmWsb2GGGGsZRCBFziER7Wmhu89RotOfylV8=;
-        b=DlMUuNXJXXUIlGX6/f+P60tSIZSpcUJSSc4H+xXpduxXldwqF08+eSU7gAFVk7dTB/
-         61OjQKGnlQqbs8jirFasIfYQlsVF1KSW8mzxwQhC5Mw5Vw/F2WeuedMje8wiSUvkzyOL
-         c3+/ca1r0f4ks/oja26p7nPyMGhfArf4BL0P2VavScDMICzOEU8JPwto6ZoamyXhtbbk
-         HDq1gmOk3Xj3pH2yZQY08+2yx8snANVezdL5jcWHkoSejyZMedYD3d1UTaOfkyntR/8r
-         Zk77nWZ5AjrmjMsSnjVZFBQbfey52TNEHfJI2SxL8czgN3UDRsuxFsv68g9WJpjcJwTc
-         UsBA==
-X-Gm-Message-State: APjAAAXHfe5n31M1YpJn/QMxnjN/pEKssQYs5b+xWzzyEy59py1L3tVj
-        Qa1R3FIygxm/EaQmCgK8D8AyvFW/7KfMzxF6if3K1w==
-X-Google-Smtp-Source: APXvYqwxZvx2gMGUkGxJBm279SI5kM7npKrkb3Kgq3Y21d91YTewSxvFDB3w98mrOdhQ7DZ4HRHKTpnm4gHPWE9r2Fo=
-X-Received: by 2002:a05:651c:28c:: with SMTP id b12mr9571442ljo.69.1564840699603;
- Sat, 03 Aug 2019 06:58:19 -0700 (PDT)
+        id S1727578AbfHCPAa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Aug 2019 11:00:30 -0400
+Received: from cmta20.telus.net ([209.171.16.93]:54622 "EHLO cmta20.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727554AbfHCPAa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 3 Aug 2019 11:00:30 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id tvWDhKTHvmIDxtvWEhxFKv; Sat, 03 Aug 2019 09:00:28 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1564844428; bh=Lj1By7YmAc45Sa4BMiPVFr2mo3E8ffsuE5NLZErH4xY=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=nZWI92EOtREXBJ+AE4XUGaBBPa/kIC9KmLUrj9PIvfEWt/iK2H/MF79VLoLG2HisG
+         fr+bhEBQU0cfIvVxMyBklje9Z/DeVTz6jgShCYuj9CS5tudfImYJJOGhhSMLU63g5t
+         7G0Zp6Wo5x+ixpmZaWlh0QVDpahVJXDz0XQ2E55rFbUnH5pDyTBltbmfS+j5miAtOR
+         72oElGyYngLFw4f4gQb3BcqfKQO9Ydb2ci7sPndPW1pf9KbrhSFDs1lCDnHP+qJQfg
+         DtZRmpwzd6GjajMqHnzFUzL6ifENOyp7RneHOTeHQbkNprP9ULAbEhCjFRed5ogFLT
+         3iHpqLLRgd2zQ==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=Tq+Yewfh c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=kj9zAlcOel0A:10 a=KKAkSRfTAAAA:8 a=QvZYLQxYM4yHgahalX0A:9 a=CjuIK1q_8ugA:10
+ a=cvBusfyB2V15izCimMoJ:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>
+Cc:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Len Brown'" <lenb@kernel.org>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'v4 . 18+'" <stable@vger.kernel.org>,
+        "'Doug Smythies'" <doug.smythies@gmail.com>,
+        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>
+References: <7dedb6bd157b8183c693bb578e25e313cf4f451d.1564724511.git.viresh.kumar@linaro.org> <23e3dee8688f5a9767635b686bb7a9c0e09a4438.1564724511.git.viresh.kumar@linaro.org> <CAJZ5v0iqztRWyxf1cgiAN1dK4qTGwy9raaGOx5u3tfBTGUKOng@mail.gmail.com> <2676200.jfxhmTd764@kreacher>
+In-Reply-To: <2676200.jfxhmTd764@kreacher>
+Subject: RE: [PATCH V3 2/2] cpufreq: intel_pstate: Implement ->resolve_freq()
+Date:   Sat, 3 Aug 2019 08:00:23 -0700
+Message-ID: <000401d54a0c$2f03aa50$8d0afef0$@net>
 MIME-Version: 1.0
-References: <20190717063222.5902-1-linus.walleij@linaro.org>
-In-Reply-To: <20190717063222.5902-1-linus.walleij@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 3 Aug 2019 15:58:08 +0200
-Message-ID: <CACRpkdZcuqeUXVtwNJj8N+ncs6CVjmthdoe1cDj+M_imGLqisg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal: db8500: Finalize device tree conversion
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdVJFKTHz0k2Xgs/RzO01AVtAMTNrwAejLVg
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfG+TdJyI6eP2AGXmcP91oklGkSevBO0/OgYrXTxgVOtmzrBQhs/sV/aH2oS+YWag+QT1XxhlsWaZldrJxjZ92TnGN01gKUw2U8yZpOmIkrU0Pj0sGjnt
+ Wn061oU1sFzXh4j3IvF/Ll7ciVA9G4Qc0EZ/xKk924qnUXnFG4EQB2/2plbuaFzxaTj7FdtyrIOAPZcEkES3RfitGFIIAM+Bazerteh6RiZw+3Pi/DVrnYgV
+ Q8v3IYDr5Y3GlBAGMQrQYxushPnvNoJFRQeUgk8YdGQkjgTfYm7ZGKGfoICkShNfGxmlUP9F64LFIvpnZe9Kx5/h8ihFmXjvpvKrSKU/LKbNw84RlqngIPv8
+ b3+FlgDt+oZyE1tjk9E+fB5mVa95WDDP2HL7lfpzt6x1njnArlPxiAMtDmUJc4mzpWR/FW2V7y0oatl2OVABuD/qxkXnJ03SKZllm9h9VuulmaRfA18=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 17, 2019 at 8:34 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-
-> At some point there was an attempt to convert the DB8500
-> thermal sensor to device tree: a probe path was added
-> and the device tree was augmented for the Snowball board.
-> The switchover was never completed: instead the thermal
-> devices came from from the PRCMU MFD device and the probe
-> on the Snowball was confused as another set of configuration
-> appeared from the device tree.
+On 2019.08.02 02:28 Rafael J. Wysocki wrote:
+> On Friday, August 2, 2019 11:17:55 AM CEST Rafael J. Wysocki wrote:
+>> On Fri, Aug 2, 2019 at 7:44 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>>
+>>> Intel pstate driver exposes min_perf_pct and max_perf_pct sysfs files,
+>>> which can be used to force a limit on the min/max P state of the driver.
+>>> Though these files eventually control the min/max frequencies that the
+>>> CPUs will run at, they don't make a change to policy->min/max values.
+>> 
+>> That's correct.
+>> 
+>>> When the values of these files are changed (in passive mode of the
+>>> driver), it leads to calling ->limits() callback of the cpufreq
+>>> governors, like schedutil. On a call to it the governors shall
+>>> forcefully update the frequency to come within the limits.
+>> 
+>> OK, so the problem is that it is a bug to invoke the governor's ->limits()
+>> callback without updating policy->min/max, because that's what
+>> "limits" mean to the governors.
+>> 
+>> Fair enough.
 >
-> Move over to a device-tree only approach, as we fixed up
-> the device trees.
->
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> AFAICS this can be addressed by adding PM QoS freq limits requests of each CPU to
+> intel_pstate in the passive mode such that changing min_perf_pct or max_perf_pct
+> will cause these requests to be updated.
 
-Thermal folks: can you apply/look into this?
+All governors for the intel_cpufreq (intel_pstate in passive mode) CPU frequency
+scaling driver are broken with respect to this issue, not just the schedutil
+governor. My initial escalation had been focused on acpi-cpufreq/schedutil
+and intel_cpufreq/schedutil, as they were both broken, and both fixed by my initially
+submitted reversion. What can I say, I missed that other intel_cpufreq governors
+were also involved.
 
-If you're short on time, please just ACK it if it looks OK and
-I can send it through the ARM SoC tree.
+I tested all of them: conservative ondemand userspace powersave performance schedutil
+Note that no other governor uses resolve_freq().
 
-Yours,
-Linus Walleij
+... Doug
+
+
