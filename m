@@ -2,102 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB19802DC
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Aug 2019 00:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A771780350
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Aug 2019 02:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729913AbfHBWhC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Aug 2019 18:37:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45604 "EHLO mail.kernel.org"
+        id S2392600AbfHCAA7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Aug 2019 20:00:59 -0400
+Received: from cmta18.telus.net ([209.171.16.91]:60413 "EHLO cmta18.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728242AbfHBWhC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 2 Aug 2019 18:37:02 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 27AA82087E;
-        Fri,  2 Aug 2019 22:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564785421;
-        bh=k6A88DuQEvAIoLZeKCV5w8lg3gPfOlEbV8DJruVNIvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HaEoVLJwSjtIMakvSZXXvIDVQkyQQ7paLq7JQYIOPb1FJyOAa7VrtP77sau3BwOaN
-         YdwpFNHzZRYFWXWZUmN6x6kqK8fhg1q5kxVa44OGLrUCqklfTEciGGZyLOGkcThD0o
-         NnZ5IyDLLbL+gXKEeAjLnTjYJU6FAmQEWNU39SZ0=
-Date:   Fri, 2 Aug 2019 17:36:59 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [Regression] Commit "ACPI: PM: Allow transitions to D0 to occur
- in special cases"
-Message-ID: <20190802223659.GO151852@google.com>
-References: <578BD3F1-B185-471B-A3EB-FF71BA34B822@canonical.com>
- <20190731213001.GC151852@google.com>
- <6494680.N7F1gMbocb@kreacher>
+        id S2390665AbfHCAA7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Aug 2019 20:00:59 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id thTihsw9n7TgTthTjhTKWb; Fri, 02 Aug 2019 18:00:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1564790457; bh=F7V2+VOnHcn4fwkSv3TDF+F7RNbW/H8xyC92UEWKRsA=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=CdVDYEfk7QJlV0gtGvNT85cgLKsjA2t90Yb7Nc1WY6rSD+vadt4kysBxKbLrDIY1Z
+         Jg0z9h6xrsXhUhFsGHV6DsDf+21kXUnccX5iUjF3g7XM9T8Zj0rqg5GDJvA583Rda8
+         QIUk5CHMyMlpNmlXzTQx94ZA9ch9bIkuv7KEXHgScSzeePOwkkE0l7PWwh90NHsHry
+         7SXSpIx4Po+5rgQ2clD4UaLeBD0VRs0RyEtKNvE/DpFfwOrOI+062T7/Yf+uZ8QPbk
+         m0kOEbG8tanKt9FJ81bHlv1OhA52qLKVTNrgfJi4vxaiEBCAumTeQqloghBKPeNf3j
+         YLDYf/sP089dg==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=e6N4tph/ c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=IkcTkHD0fZMA:10 a=KKAkSRfTAAAA:8 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8
+ a=aatUQebYAAAA:8 a=EKkws6boqHGLJ_gLzfMA:9 a=QEXdDO2ut3YA:10
+ a=cvBusfyB2V15izCimMoJ:22 a=AjGcO6oz07-iQ99wixmX:22 a=7715FyvI7WU-l6oqrZBK:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>
+Cc:     "'Rafael Wysocki'" <rjw@rjwysocki.net>,
+        "'Ingo Molnar'" <mingo@redhat.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'v4 . 18+'" <stable@vger.kernel.org>,
+        "'Doug Smythies'" <doug.smythies@gmail.com>,
+        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>
+References: <7dedb6bd157b8183c693bb578e25e313cf4f451d.1564724511.git.viresh.kumar@linaro.org> <CAJZ5v0g=zXWps29EiFJBPozyw4b9z0YOhtU-UV6hfyu8NbVKNw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0g=zXWps29EiFJBPozyw4b9z0YOhtU-UV6hfyu8NbVKNw@mail.gmail.com>
+Subject: RE: [PATCH V3 1/2] cpufreq: schedutil: Don't skip freq update when limits change
+Date:   Fri, 2 Aug 2019 17:00:52 -0700
+Message-ID: <000701d5498e$85bf7b40$913e71c0$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6494680.N7F1gMbocb@kreacher>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdVJEl0/y7b0nLfcROucUfHaff8dzAAegK7Q
+X-CMAE-Envelope: MS4wfP0b9oNOCGiMJ+jjHYWyvLDFO6aTm0NLjTpKkuh8/Ay5GQANsLiWSUW1s+gZhY6+Cql9wTcEuYPZkoXdoCdlU15YNiWXQkkZoBD/1r7xcFGXHbmIiUtP
+ conQucH9aVp2Q981TbV3u/20CUth4gFX5vKTAS4XaUmul8IgKDC15tvPNmNsQlZFibpNjx/2vB0+cklD62aRb8Ly5nAA685oFCAfH89u/1iXG2MVpe8zSolL
+ w6SFdfdtCiHZ1wzbYEDkyB/NjF29WISYLOO5wn5C6wkg2n6Q5dtyo4e1rrQVtHVQLpAq8Pj/EVE7qq8Vm+GrLJZNfuXkiJxrDNdZAdIpIJu93DZcdYxV2Tyq
+ 8cF6zABqjLllOl8t1SWDIXXT83NIwNzq3NH06ua0aUUErb/bPpOSOwtVI++t3KJ0necZ9SljjCf37ugs28zt3zaN/+MIOZ/4VBxNAEN+DNrJ4yCmG5c=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 01, 2019 at 12:26:51AM +0200, Rafael J. Wysocki wrote:
-> On Wednesday, July 31, 2019 11:30:01 PM CEST Bjorn Helgaas wrote:
-> > [+cc Thunderbolt folks, see
-> > https://lore.kernel.org/r/578BD3F1-B185-471B-A3EB-FF71BA34B822@canonical.com
-> > for beginning of thread]
-> > 
-> > On Thu, Aug 01, 2019 at 12:04:29AM +0800, Kai-Heng Feng wrote:
-> > > Hi,
-> > > 
-> > > After commit "ACPI: PM: Allow transitions to D0 to occur in special cases”,
-> > 
-> > This is f850a48a0799 ("ACPI: PM: Allow transitions to D0 to occur in
-> > special cases").
-> > 
-> > > Thunderbolt on XPS 9380 spews the following when it runtime resumes:
-> > > [   36.136554] pci_raw_set_power_state: 25 callbacks suppressed
-> > > [   36.136558] pcieport 0000:03:00.0: Refused to change power state,
-> > > currently in D3
-> > 
-> > We really should be smarter about what we print here, maybe something
-> > like the patch below?
-> > 
-> > pci_raw_set_power_state() prints "Refused to change power state" if
-> > (in this case) the value of (PCI_PM_CTRL & PCI_PM_CTRL_STATE_MASK) is
-> > 0x3.  Most likely we got 0xffff from PCI_PM_CTRL because the device is
-> > in D3cold.  If the device is in D3cold, pci_raw_set_power_state() has
-> > no hope of doing anything because it only uses PCI PM config
-> > registers, and they're inaccessible in D3cold.
+On 2019.08.02 02:12 Rafael J. Wysocki wrote:
+> On Fri, Aug 2, 2019 at 7:44 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>
+>> To avoid reducing the frequency of a CPU prematurely, we skip reducing
+>> the frequency if the CPU had been busy recently.
+>>
+>> This should not be done when the limits of the policy are changed, for
+>> example due to thermal throttling. We should always get the frequency
+>> within the new limits as soon as possible.
+>>
+>> Trying to fix this by using only one flag, i.e. need_freq_update, can
+>> lead to a race condition where the flag gets cleared without forcing us
+>> to change the frequency at least once. And so this patch introduces
+>>  another flag to avoid that race condition.
+>>
+>> Fixes: ecd288429126 ("cpufreq: schedutil: Don't set next_freq to UINT_MAX")
+>> Cc: v4.18+ <stable@vger.kernel.org> # v4.18+
+>> Reported-by: Doug Smythies <doug.smythies@gmail.com>
+>> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> ---
+>> V2->V3:
+>> - Updated commit log.
+>>
+>> V1->V2:
+>> - Fixed the race condition using a different flag.
+>>
+>> @Doug: I haven't changed the code since you last tested these. Your
+>> Tested-by tag can be useful while applying the patches. Thanks.
 
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index 29ed5ec1ac27..63ca963ebff9 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -851,6 +852,11 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
-> >  		return -EIO;
-> >  
-> >  	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> > +	if (pmcsr == (u16) ~0) {
-> 
-> Is the "device not accessible" the only case in which we can get all ones from this?
-> 
-> If so, the change will be fine by me.
+Tested-by: Doug Smythies <dsmythies@telus.net>
+For acpi-cpufreq/schedutil only (which we already know).
 
-There are several RsvdP bits in that register, so it's not possible to
-read all ones except in error cases.  I'll finish up a patch for it.
+I tested including Rafael's suggested change.
+I.E.
 
-Bjorn
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 592ff72..ae3ec77 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -441,7 +441,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+        struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+        unsigned long util, max;
+        unsigned int next_f;
+-       bool busy = false;
++       bool busy;
+
+        sugov_iowait_boost(sg_cpu, time, flags);
+        sg_cpu->last_update = time;
+@@ -452,8 +452,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+                return;
+
+        /* Limits may have changed, don't skip frequency update */
+-       if (!sg_policy->need_freq_update)
+-               busy = sugov_cpu_is_busy(sg_cpu);
++       busy = !sg_policy->need_freq_update && sugov_cpu_is_busy(sg_cpu);
+
+        util = sugov_get_util(sg_cpu);
+        max = sg_cpu->max;
+
+... Doug
+
+
