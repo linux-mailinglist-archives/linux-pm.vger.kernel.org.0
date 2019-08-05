@@ -2,678 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DC3826AD
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 23:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F40826E7
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 23:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730055AbfHEVQb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 17:16:31 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39610 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729383AbfHEVQb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 17:16:31 -0400
-Received: by mail-ot1-f66.google.com with SMTP id r21so81308540otq.6;
-        Mon, 05 Aug 2019 14:16:28 -0700 (PDT)
+        id S1730854AbfHEV3N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 5 Aug 2019 17:29:13 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35282 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730515AbfHEV3K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 17:29:10 -0400
+Received: by mail-ot1-f67.google.com with SMTP id j19so10726867otq.2;
+        Mon, 05 Aug 2019 14:29:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GDdesnj82Jahy2ZXdW4+EGDjIFVGyBJSBzRlHWugLVc=;
-        b=WT0uDQpvOMk+KW3cmaVR8ny4HEwCFLELScccNZ6eaytNRnWVVBBosV7WMs4juKUEWu
-         R5RmE/0ukWjsUBqdWYS0FBTtO4ATHYwbGnZPYVh69ZUaBlcRIvExdyXQevsyNzslrmbE
-         bjwEDsh3bSVsBqznEsCU9ykuVrXj+nmUNmozRbSge6Qe7F2xRppMoUqB2Fef2rGAqjWf
-         cT1FQJN+iRzx5SuAV8WAhxO/vTLE+1xZiNFwE5VANVxaL1e4RlpgrUTmOKLsG/454dR+
-         +WOPdEW1CeMLbyHHdSRz2c6jOYZqPMdXjRQr2yPjSqjNGErHg9aqiXs/zin255++1Grp
-         I3zw==
-X-Gm-Message-State: APjAAAVdhuMm4NgD6DMg+JnbRtsw5wVgkI6IvFN2bR6P7N7y83tuQZDz
-        StIJTd559rA28O9tiHeRN8AWpBazhBWVVVPN6ac=
-X-Google-Smtp-Source: APXvYqy8hX93Zy7iSF3ktUoOvgTS7tC+0sdEQ/Nc9M+TYMGaJfyF1S/lSwY3gR6WrS6Ad00P928FM53X42PJvPI033M=
-X-Received: by 2002:a9d:7a51:: with SMTP id z17mr11889515otm.266.1565039788327;
- Mon, 05 Aug 2019 14:16:28 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=n9m4a81xA4A6Gqrjsk6A7X7AeMPsJrAB1x7Sj73OucU=;
+        b=dEadA3gmF0D61r6p8D0XoHUvnh08RHGJxYL5k2j8xQU9jrQs1ouCIWhQ0VcI16afi2
+         unjfdO33QLC4hhSAK2bgF0lROKv13GY28tE7xaljiUTqiIEnotEcCdGIZjIDZd7zmLmH
+         hfq5tw+EVsWIDlDPsMncUkceP9ThDSsqNeUFSWz9EooRQMgrGIeqzjDhb5tgNRvime4h
+         BbL4nAcSIpSi2FvXH6huFOCmMHtyDDfV19xtQAoy0kKXiqRQ6RDA61ucNpANgd4Ee8sH
+         lOdwh62ARrmMtcIBTWfNKFITCJKYKCxZuk05zWAgcosv95phuoszZowgbZZHVNHSuS7P
+         RhEg==
+X-Gm-Message-State: APjAAAVszxBF8bYOfe9ffqsfgk+g+FxpthLPvrXRvTUt4iVnWeO+lG2S
+        +AuJ2pd2CfKN/u/pqn/6n5N0QYhOsUwlJ/kBGws=
+X-Google-Smtp-Source: APXvYqxpTVSOfNsXqw6xI0jyOWBRBVQU09/rqkjcCwO+AoepqViogqw6NBs6AWYwfaCIzRhHKhGXX40Fn2EsuJZSwEk=
+X-Received: by 2002:a05:6830:8a:: with SMTP id a10mr2125745oto.167.1565040549855;
+ Mon, 05 Aug 2019 14:29:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190805205214.194981-1-helgaas@kernel.org> <20190805205214.194981-2-helgaas@kernel.org>
-In-Reply-To: <20190805205214.194981-2-helgaas@kernel.org>
+References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
+ <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
+ <47415939.KV5G6iaeJG@kreacher> <20190730144134.GA12844@localhost.localdomain>
+ <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
+ <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com> <20190730191934.GD13948@localhost.localdomain>
+ <7d3e0b8ba1444194a153c93faa1cabb3@AUSX13MPC105.AMER.DELL.COM>
+ <20190730213114.GK13948@localhost.localdomain> <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com>
+ <20190731221956.GB15795@localhost.localdomain> <CAJZ5v0hxYGBXau39sb80MQ8jbZZCzH0JU2DYZvn9JOtYT2+30g@mail.gmail.com>
+ <70D536BE-8DC7-4CA2-84A9-AFB067BA520E@canonical.com> <CAJZ5v0hFYEv_+vFkrxaCn_pNAbyqmO_cLb5GOLNn_xxRRwjh2g@mail.gmail.com>
+ <38d4b4b107154454a932781acde0fa5a@AUSX13MPC105.AMER.DELL.COM>
+ <CAJZ5v0jmO4FMOVYs62wkvPrUW81scD2H7cJyRc+tfoj+vODVbQ@mail.gmail.com>
+ <43A8DF53-8463-4314-9E8E-47A7D3C5A709@canonical.com> <CAJZ5v0ipG-MJjERBL9fjx29QktaYEKSmMCbWiEGPHsbF=Xfxtw@mail.gmail.com>
+ <1FA3D56B-80C6-496C-8772-2F773AA8043C@canonical.com>
+In-Reply-To: <1FA3D56B-80C6-496C-8772-2F773AA8043C@canonical.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 5 Aug 2019 23:16:15 +0200
-Message-ID: <CAJZ5v0ioxO4XYb7g18FD5K7jz6LFgsNTLUbCb=E+m61uoV827w@mail.gmail.com>
-Subject: Re: [PATCH 1/5] PCI: Add PCI_ERROR_RESPONSE definition
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+Date:   Mon, 5 Aug 2019 23:28:58 +0200
+Message-ID: <CAJZ5v0g_yAP=zgYDXtJWtwceQp4wWPWFghDDD0opdZ4zT-yo5Q@mail.gmail.com>
+Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
+ suspend" has problems
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Keith Busch <kbusch@kernel.org>,
         Keith Busch <keith.busch@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
+        Rajat Jain <rajatja@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 5, 2019 at 10:52 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+On Mon, Aug 5, 2019 at 9:14 PM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
 >
-> From: Bjorn Helgaas <bhelgaas@google.com>
+> at 19:04, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> An MMIO read from a PCI device that doesn't exist or doesn't respond causes
-> a PCI error.  There's no real data to return to satisfy the CPU read, so
-> most hardware fabricates ~0 data.
+> > On Fri, Aug 2, 2019 at 12:55 PM Kai-Heng Feng
+> > <kai.heng.feng@canonical.com> wrote:
+> >> at 06:26, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>
+> >>> On Thu, Aug 1, 2019 at 9:05 PM <Mario.Limonciello@dell.com> wrote:
+> >>>>> -----Original Message-----
+> >>>>> From: Rafael J. Wysocki <rafael@kernel.org>
+> >>>>> Sent: Thursday, August 1, 2019 12:30 PM
+> >>>>> To: Kai-Heng Feng; Keith Busch; Limonciello, Mario
+> >>>>> Cc: Keith Busch; Christoph Hellwig; Sagi Grimberg; linux-nvme; Linux
+> >>>>> PM; Linux
+> >>>>> Kernel Mailing List; Rajat Jain
+> >>>>> Subject: Re: [Regression] Commit "nvme/pci: Use host managed power
+> >>>>> state for
+> >>>>> suspend" has problems
+> >>>>>
+> >>>>>
+> >>>>> [EXTERNAL EMAIL]
+> >>>>>
+> >>>>> On Thu, Aug 1, 2019 at 11:06 AM Kai-Heng Feng
+> >>>>> <kai.heng.feng@canonical.com> wrote:
+> >>>>>> at 06:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>>>>>
+> >>>>>>> On Thu, Aug 1, 2019 at 12:22 AM Keith Busch <kbusch@kernel.org>
+> >>>>>>> wrote:
+> >>>>>>>> On Wed, Jul 31, 2019 at 11:25:51PM +0200, Rafael J. Wysocki wrote:
+> >>>>>>>>> A couple of remarks if you will.
+> >>>>>>>>>
+> >>>>>>>>> First, we don't know which case is the majority at this point.  For
+> >>>>>>>>> now, there is one example of each, but it may very well turn out
+> >>>>>>>>> that
+> >>>>>>>>> the SK Hynix BC501 above needs to be quirked.
+> >>>>>>>>>
+> >>>>>>>>> Second, the reference here really is 5.2, so if there are any
+> >>>>>>>>> systems
+> >>>>>>>>> that are not better off with 5.3-rc than they were with 5.2,
+> >>>>>>>>> well, we
+> >>>>>>>>> have not made progress.  However, if there are systems that are
+> >>>>>>>>> worse
+> >>>>>>>>> off with 5.3, that's bad.  In the face of the latest findings the
+> >>>>>>>>> only
+> >>>>>>>>> way to avoid that is to be backwards compatible with 5.2 and that's
+> >>>>>>>>> where my patch is going.  That cannot be achieved by quirking all
+> >>>>>>>>> cases that are reported as "bad", because there still may be
+> >>>>>>>>> unreported ones.
+> >>>>>>>>
+> >>>>>>>> I have to agree. I think your proposal may allow PCI D3cold,
+> >>>>>>>
+> >>>>>>> Yes, it may.
+> >>>>>>
+> >>>>>> Somehow the 9380 with Toshiba NVMe never hits SLP_S0 with or without
+> >>>>>> Rafael’s patch.
+> >>>>>> But the “real” s2idle power consumption does improve with the patch.
+> >>>>>
+> >>>>> Do you mean this patch:
+> >>>>>
+> >>>>> https://lore.kernel.org/linux-pm/70D536BE-8DC7-4CA2-84A9-
+> >>>>> AFB067BA520E@canonical.com/T/#m456aa5c69973a3b68f2cdd4713a1ce83be5145
+> >>>>> 8f
+> >>>>>
+> >>>>> or the $subject one without the above?
+> >>>>>
+> >>>>>> Can we use a DMI based quirk for this platform? It seems like a
+> >>>>>> platform
+> >>>>>> specific issue.
+> >>>>>
+> >>>>> We seem to see too many "platform-specific issues" here. :-)
+> >>>>>
+> >>>>> To me, the status quo (ie. what we have in 5.3-rc2) is not defensible.
+> >>>>> Something needs to be done to improve the situation.
+> >>>>
+> >>>> Rafael, would it be possible to try popping out PC401 from the 9380 and
+> >>>> into a 9360 to
+> >>>> confirm there actually being a platform impact or not?
+> >>>
+> >>> Not really, sorry.
+> >>>
+> >>>> I was hoping to have something useful from Hynix by now before
+> >>>> responding, but oh well.
+> >>>>
+> >>>> In terms of what is the majority, I do know that between folks at Dell,
+> >>>> Google, Compal,
+> >>>> Wistron, Canonical, Micron, Hynix, Toshiba, LiteOn, and Western Digital
+> >>>> we tested a wide
+> >>>> variety of SSDs with this patch series.  I would like to think that they
+> >>>> are representative of
+> >>>> what's being manufactured into machines now.
+> >>>
+> >>> Well, what about drives already in the field?  My concern is mostly
+> >>> about those ones.
+> >>>
+> >>>> Notably the LiteOn CL1 was tested with the HMB flushing support and
+> >>>> and Hynix PC401 was tested with older firmware though.
+> >>>>
+> >>>>>>>> In which case we do need to reintroduce the HMB handling.
+> >>>>>>>
+> >>>>>>> Right.
+> >>>>>>
+> >>>>>> The patch alone doesn’t break HMB Toshiba NVMe I tested. But I think
+> >>>>>> it’s
+> >>>>>> still safer to do proper HMB handling.
+> >>>>>
+> >>>>> Well, so can anyone please propose something specific?  Like an
+> >>>>> alternative patch?
+> >>>>
+> >>>> This was proposed a few days ago:
+> >>>> http://lists.infradead.org/pipermail/linux-nvme/2019-July/026056.html
+> >>>>
+> >>>> However we're still not sure why it is needed, and it will take some
+> >>>> time to get
+> >>>> a proper failure analysis from LiteOn  regarding the CL1.
+> >>>
+> >>> Thanks for the update, but IMO we still need to do something before
+> >>> final 5.3 while the investigation continues.
+> >>>
+> >>> Honestly, at this point I would vote for going back to the 5.2
+> >>> behavior at least by default and only running the new code on the
+> >>> drives known to require it (because they will block PC10 otherwise).
+> >>>
+> >>> Possibly (ideally) with an option for users who can't get beyond PC3
+> >>> to test whether or not the new code helps them.
+> >>
+> >> I just found out that the XPS 9380 at my hand never reaches SLP_S0 but
+> >> only
+> >> PC10.
+> >
+> > That's the case for me too.
+> >
+> >> This happens with or without putting the device to D3.
+> >
+> > On my system, though, it only can get to PC3 without putting the NVMe
+> > into D3 (as reported previously).
 >
-> Add a PCI_ERROR_RESPONSE definition for that and use it where appropriate
-> to make these checks consistent and easier to find.
->
-> Note that successful reads *also* may return ~0 data, so additional
-> information (e.g., knowledge that ~0 is not a valid register value) is
-> needed to reliably identify errors.
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> I forgot to ask, what BIOS version does the system have?
+> I don’t see this issue on BIOS v1.5.0.
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-> ---
->  drivers/pci/access.c                          | 13 ++++++------
->  .../pci/controller/dwc/pcie-designware-host.c |  2 +-
->  drivers/pci/controller/pci-aardvark.c         |  2 +-
->  drivers/pci/controller/pci-mvebu.c            |  4 ++--
->  drivers/pci/controller/pci-thunder-ecam.c     | 20 +++++++++----------
->  drivers/pci/controller/pci-thunder-pem.c      |  2 +-
->  drivers/pci/controller/pcie-altera.c          |  2 +-
->  drivers/pci/controller/pcie-iproc.c           |  2 +-
->  drivers/pci/controller/pcie-mediatek.c        |  4 ++--
->  drivers/pci/controller/pcie-rcar.c            |  2 +-
->  drivers/pci/controller/pcie-rockchip-host.c   |  2 +-
->  drivers/pci/controller/vmd.c                  |  2 +-
->  drivers/pci/hotplug/cpqphp_ctrl.c             | 12 +++++------
->  drivers/pci/hotplug/cpqphp_pci.c              | 20 +++++++++----------
->  drivers/pci/hotplug/pciehp_hpc.c              |  6 +++---
->  drivers/pci/pci.c                             |  8 ++++----
->  drivers/pci/pcie/dpc.c                        |  3 ++-
->  drivers/pci/pcie/pme.c                        |  4 ++--
->  drivers/pci/probe.c                           |  4 ++--
->  drivers/pci/quirks.c                          |  2 +-
->  include/linux/pci.h                           |  7 +++++++
->  21 files changed, 65 insertions(+), 58 deletions(-)
->
-> diff --git a/drivers/pci/access.c b/drivers/pci/access.c
-> index 544922f097c0..02186f3471d8 100644
-> --- a/drivers/pci/access.c
-> +++ b/drivers/pci/access.c
-> @@ -81,7 +81,7 @@ int pci_generic_config_read(struct pci_bus *bus, unsigned int devfn,
->
->         addr = bus->ops->map_bus(bus, devfn, where);
->         if (!addr) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> @@ -123,7 +123,7 @@ int pci_generic_config_read32(struct pci_bus *bus, unsigned int devfn,
->
->         addr = bus->ops->map_bus(bus, devfn, where & ~0x3);
->         if (!addr) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> @@ -536,7 +536,7 @@ EXPORT_SYMBOL(pcie_capability_clear_and_set_dword);
->  int pci_read_config_byte(const struct pci_dev *dev, int where, u8 *val)
->  {
->         if (pci_dev_is_disconnected(dev)) {
-> -               *val = ~0;
-> +               *val = (u8) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->         return pci_bus_read_config_byte(dev->bus, dev->devfn, where, val);
-> @@ -546,18 +546,17 @@ EXPORT_SYMBOL(pci_read_config_byte);
->  int pci_read_config_word(const struct pci_dev *dev, int where, u16 *val)
->  {
->         if (pci_dev_is_disconnected(dev)) {
-> -               *val = ~0;
-> +               *val = (u16) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->         return pci_bus_read_config_word(dev->bus, dev->devfn, where, val);
->  }
->  EXPORT_SYMBOL(pci_read_config_word);
->
-> -int pci_read_config_dword(const struct pci_dev *dev, int where,
-> -                                       u32 *val)
-> +int pci_read_config_dword(const struct pci_dev *dev, int where, u32 *val)
->  {
->         if (pci_dev_is_disconnected(dev)) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->         return pci_bus_read_config_dword(dev->bus, dev->devfn, where, val);
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index f93252d0da5b..eb2e8b080a7d 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -594,7 +594,7 @@ static int dw_pcie_rd_conf(struct pci_bus *bus, u32 devfn, int where,
->         struct pcie_port *pp = bus->sysdata;
->
->         if (!dw_pcie_valid_device(pp, bus, PCI_SLOT(devfn))) {
-> -               *val = 0xffffffff;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-> index fc0fe4d4de49..77ad25ed7d38 100644
-> --- a/drivers/pci/controller/pci-aardvark.c
-> +++ b/drivers/pci/controller/pci-aardvark.c
-> @@ -520,7 +520,7 @@ static int advk_pcie_rd_conf(struct pci_bus *bus, u32 devfn,
->         int ret;
->
->         if (!advk_pcie_valid_device(pcie, bus, devfn)) {
-> -               *val = 0xffffffff;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index d3a0419e42f2..a45e45226790 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -648,7 +648,7 @@ static int mvebu_pcie_rd_conf(struct pci_bus *bus, u32 devfn, int where,
->
->         port = mvebu_pcie_find_port(pcie, bus, devfn);
->         if (!port) {
-> -               *val = 0xffffffff;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> @@ -658,7 +658,7 @@ static int mvebu_pcie_rd_conf(struct pci_bus *bus, u32 devfn, int where,
->                                                  size, val);
->
->         if (!mvebu_pcie_link_up(port)) {
-> -               *val = 0xffffffff;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> diff --git a/drivers/pci/controller/pci-thunder-ecam.c b/drivers/pci/controller/pci-thunder-ecam.c
-> index 32d1d7b81ef4..b0332f349863 100644
-> --- a/drivers/pci/controller/pci-thunder-ecam.c
-> +++ b/drivers/pci/controller/pci-thunder-ecam.c
-> @@ -42,7 +42,7 @@ static int handle_ea_bar(u32 e0, int bar, struct pci_bus *bus,
->         if (where_a == 0x4) {
->                 addr = bus->ops->map_bus(bus, devfn, bar); /* BAR 0 */
->                 if (!addr) {
-> -                       *val = ~0;
-> +                       *val = (u32) PCI_ERROR_RESPONSE;
->                         return PCIBIOS_DEVICE_NOT_FOUND;
->                 }
->                 v = readl(addr);
-> @@ -57,7 +57,7 @@ static int handle_ea_bar(u32 e0, int bar, struct pci_bus *bus,
->
->                 addr = bus->ops->map_bus(bus, devfn, bar); /* BAR 0 */
->                 if (!addr) {
-> -                       *val = ~0;
-> +                       *val = (u32) PCI_ERROR_RESPONSE;
->                         return PCIBIOS_DEVICE_NOT_FOUND;
->                 }
->                 barl_orig = readl(addr + 0);
-> @@ -73,7 +73,7 @@ static int handle_ea_bar(u32 e0, int bar, struct pci_bus *bus,
->         if (where_a == 0xc) {
->                 addr = bus->ops->map_bus(bus, devfn, bar + 4); /* BAR 1 */
->                 if (!addr) {
-> -                       *val = ~0;
-> +                       *val = (u32) PCI_ERROR_RESPONSE;
->                         return PCIBIOS_DEVICE_NOT_FOUND;
->                 }
->                 v = readl(addr); /* EA entry-3. Base-H */
-> @@ -105,7 +105,7 @@ static int thunder_ecam_p2_config_read(struct pci_bus *bus, unsigned int devfn,
->
->         addr = bus->ops->map_bus(bus, devfn, where_a);
->         if (!addr) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> @@ -136,7 +136,7 @@ static int thunder_ecam_config_read(struct pci_bus *bus, unsigned int devfn,
->
->         addr = bus->ops->map_bus(bus, devfn, 0xc);
->         if (!addr) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> @@ -147,7 +147,7 @@ static int thunder_ecam_config_read(struct pci_bus *bus, unsigned int devfn,
->
->         addr = bus->ops->map_bus(bus, devfn, 8);
->         if (!addr) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> @@ -177,7 +177,7 @@ static int thunder_ecam_config_read(struct pci_bus *bus, unsigned int devfn,
->
->         addr = bus->ops->map_bus(bus, devfn, 0);
->         if (!addr) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> @@ -197,7 +197,7 @@ static int thunder_ecam_config_read(struct pci_bus *bus, unsigned int devfn,
->
->                 addr = bus->ops->map_bus(bus, devfn, 0x70);
->                 if (!addr) {
-> -                       *val = ~0;
-> +                       *val = (u32) PCI_ERROR_RESPONSE;
->                         return PCIBIOS_DEVICE_NOT_FOUND;
->                 }
->                 /* E_CAP */
-> @@ -212,7 +212,7 @@ static int thunder_ecam_config_read(struct pci_bus *bus, unsigned int devfn,
->                 if (where_a == 0xb0) {
->                         addr = bus->ops->map_bus(bus, devfn, where_a);
->                         if (!addr) {
-> -                               *val = ~0;
-> +                               *val = (u32) PCI_ERROR_RESPONSE;
->                                 return PCIBIOS_DEVICE_NOT_FOUND;
->                         }
->                         v = readl(addr);
-> @@ -269,7 +269,7 @@ static int thunder_ecam_config_read(struct pci_bus *bus, unsigned int devfn,
->                 if (where_a == 0x70) {
->                         addr = bus->ops->map_bus(bus, devfn, where_a);
->                         if (!addr) {
-> -                               *val = ~0;
-> +                               *val = (u32) PCI_ERROR_RESPONSE;
->                                 return PCIBIOS_DEVICE_NOT_FOUND;
->                         }
->                         v = readl(addr);
-> diff --git a/drivers/pci/controller/pci-thunder-pem.c b/drivers/pci/controller/pci-thunder-pem.c
-> index f127ce8bd4ef..115e2c94d968 100644
-> --- a/drivers/pci/controller/pci-thunder-pem.c
-> +++ b/drivers/pci/controller/pci-thunder-pem.c
-> @@ -31,7 +31,7 @@ static int thunder_pem_bridge_read(struct pci_bus *bus, unsigned int devfn,
->         struct thunder_pem_pci *pem_pci = (struct thunder_pem_pci *)cfg->priv;
->
->         if (devfn != 0 || where >= 2048) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> diff --git a/drivers/pci/controller/pcie-altera.c b/drivers/pci/controller/pcie-altera.c
-> index d2497ca43828..3bd63b507eb1 100644
-> --- a/drivers/pci/controller/pcie-altera.c
-> +++ b/drivers/pci/controller/pcie-altera.c
-> @@ -512,7 +512,7 @@ static int altera_pcie_cfg_read(struct pci_bus *bus, unsigned int devfn,
->                 return PCIBIOS_BAD_REGISTER_NUMBER;
->
->         if (!altera_pcie_valid_device(pcie, bus, PCI_SLOT(devfn))) {
-> -               *value = 0xffffffff;
-> +               *value = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> diff --git a/drivers/pci/controller/pcie-iproc.c b/drivers/pci/controller/pcie-iproc.c
-> index 2d457bfdaf66..1fafedb39c00 100644
-> --- a/drivers/pci/controller/pcie-iproc.c
-> +++ b/drivers/pci/controller/pcie-iproc.c
-> @@ -668,7 +668,7 @@ static int iproc_pci_raw_config_read32(struct iproc_pcie *pcie,
->
->         addr = iproc_pcie_map_cfg_bus(pcie, 0, devfn, where & ~0x3);
->         if (!addr) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-> index 80601e1b939e..38f15a5e18ad 100644
-> --- a/drivers/pci/controller/pcie-mediatek.c
-> +++ b/drivers/pci/controller/pcie-mediatek.c
-> @@ -361,13 +361,13 @@ static int mtk_pcie_config_read(struct pci_bus *bus, unsigned int devfn,
->
->         port = mtk_pcie_find_port(bus, devfn);
->         if (!port) {
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
->         ret = mtk_pcie_hw_rd_cfg(port, bn, devfn, where, size, val);
->         if (ret)
-> -               *val = ~0;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->
->         return ret;
->  }
-> diff --git a/drivers/pci/controller/pcie-rcar.c b/drivers/pci/controller/pcie-rcar.c
-> index f6a669a9af41..ae8d95146351 100644
-> --- a/drivers/pci/controller/pcie-rcar.c
-> +++ b/drivers/pci/controller/pcie-rcar.c
-> @@ -277,7 +277,7 @@ static int rcar_pcie_read_conf(struct pci_bus *bus, unsigned int devfn,
->         ret = rcar_pcie_config_access(pcie, RCAR_PCI_ACCESS_READ,
->                                       bus, devfn, where, val);
->         if (ret != PCIBIOS_SUCCESSFUL) {
-> -               *val = 0xffffffff;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return ret;
->         }
->
-> diff --git a/drivers/pci/controller/pcie-rockchip-host.c b/drivers/pci/controller/pcie-rockchip-host.c
-> index 8d20f1793a61..48d85f648d79 100644
-> --- a/drivers/pci/controller/pcie-rockchip-host.c
-> +++ b/drivers/pci/controller/pcie-rockchip-host.c
-> @@ -226,7 +226,7 @@ static int rockchip_pcie_rd_conf(struct pci_bus *bus, u32 devfn, int where,
->         struct rockchip_pcie *rockchip = bus->sysdata;
->
->         if (!rockchip_pcie_valid_device(rockchip, bus, PCI_SLOT(devfn))) {
-> -               *val = 0xffffffff;
-> +               *val = (u32) PCI_ERROR_RESPONSE;
->                 return PCIBIOS_DEVICE_NOT_FOUND;
->         }
->
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index 4575e0c6dc4b..2af43b9e85db 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -578,7 +578,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->
->                 membar2_offset = 0x2018;
->                 ret = pci_read_config_dword(vmd->dev, PCI_REG_VMLOCK, &vmlock);
-> -               if (ret || vmlock == ~0)
-> +               if (ret || vmlock == (u32) PCI_ERROR_RESPONSE)
->                         return -ENODEV;
->
->                 if (MB2_SHADOW_EN(vmlock)) {
-> diff --git a/drivers/pci/hotplug/cpqphp_ctrl.c b/drivers/pci/hotplug/cpqphp_ctrl.c
-> index b7f4e1f099d9..e9d2bf4eeeef 100644
-> --- a/drivers/pci/hotplug/cpqphp_ctrl.c
-> +++ b/drivers/pci/hotplug/cpqphp_ctrl.c
-> @@ -1497,7 +1497,7 @@ static u32 board_added(struct pci_func *func, struct controller *ctrl)
->         /* Check for a power fault */
->         if (func->status == 0xFF) {
->                 /* power fault occurred, but it was benign */
-> -               temp_register = 0xFFFFFFFF;
-> +               temp_register = (u32) PCI_ERROR_RESPONSE;
->                 dbg("%s: temp register set to %x by power fault\n", __func__, temp_register);
->                 rc = POWER_FAILURE;
->                 func->status = 0;
-> @@ -1510,7 +1510,7 @@ static u32 board_added(struct pci_func *func, struct controller *ctrl)
->
->                 if (rc != 0) {
->                         /* Something's wrong here */
-> -                       temp_register = 0xFFFFFFFF;
-> +                       temp_register = (u32) PCI_ERROR_RESPONSE;
->                         dbg("%s: temp register set to %x by error\n", __func__, temp_register);
->                 }
->                 /* Preset return code.  It will be changed later if things go okay. */
-> @@ -1518,7 +1518,7 @@ static u32 board_added(struct pci_func *func, struct controller *ctrl)
->         }
->
->         /* All F's is an empty slot or an invalid board */
-> -       if (temp_register != 0xFFFFFFFF) {
-> +       if (temp_register != (u32) PCI_ERROR_RESPONSE) {
->                 res_lists.io_head = ctrl->io_head;
->                 res_lists.mem_head = ctrl->mem_head;
->                 res_lists.p_mem_head = ctrl->p_mem_head;
-> @@ -2277,7 +2277,7 @@ static u32 configure_new_device(struct controller  *ctrl, struct pci_func  *func
->                 while ((function < max_functions) && (!stop_it)) {
->                         pci_bus_read_config_dword(ctrl->pci_bus, PCI_DEVFN(func->device, function), 0x00, &ID);
->
-> -                       if (ID == 0xFFFFFFFF) {
-> +                       if (ID == (u32) PCI_ERROR_RESPONSE) {
->                                 function++;
->                         } else {
->                                 /* Setup slot structure. */
-> @@ -2516,12 +2516,12 @@ static int configure_new_function(struct controller *ctrl, struct pci_func *func
->                 for (device = 0; (device <= 0x1F) && !rc; device++) {
->                         irqs.barber_pole = (irqs.barber_pole + 1) & 0x03;
->
-> -                       ID = 0xFFFFFFFF;
-> +                       ID = (u32) PCI_ERROR_RESPONSE;
->                         pci_bus->number = hold_bus_node->base;
->                         pci_bus_read_config_dword(pci_bus, PCI_DEVFN(device, 0), 0x00, &ID);
->                         pci_bus->number = func->bus;
->
-> -                       if (ID != 0xFFFFFFFF) {   /*  device present */
-> +                       if (ID != (u32) PCI_ERROR_RESPONSE) {     /*  device present */
->                                 /* Setup slot structure. */
->                                 new_slot = cpqhp_slot_create(hold_bus_node->base);
->
-> diff --git a/drivers/pci/hotplug/cpqphp_pci.c b/drivers/pci/hotplug/cpqphp_pci.c
-> index 1b2b3f3b648b..d6ab73b9b280 100644
-> --- a/drivers/pci/hotplug/cpqphp_pci.c
-> +++ b/drivers/pci/hotplug/cpqphp_pci.c
-> @@ -138,7 +138,7 @@ static int PCI_RefinedAccessConfig(struct pci_bus *bus, unsigned int devfn, u8 o
->
->         if (pci_bus_read_config_dword(bus, devfn, PCI_VENDOR_ID, &vendID) == -1)
->                 return -1;
-> -       if (vendID == 0xffffffff)
-> +       if (vendID == (u32) PCI_ERROR_RESPONSE)
->                 return -1;
->         return pci_bus_read_config_dword(bus, devfn, offset, value);
->  }
-> @@ -251,7 +251,7 @@ static int PCI_GetBusDevHelper(struct controller *ctrl, u8 *bus_num, u8 *dev_num
->                         *dev_num = tdevice;
->                         ctrl->pci_bus->number = tbus;
->                         pci_bus_read_config_dword(ctrl->pci_bus, *dev_num, PCI_VENDOR_ID, &work);
-> -                       if (!nobridge || (work == 0xffffffff))
-> +                       if (!nobridge || (work == (u32) PCI_ERROR_RESPONSE))
->                                 return 0;
->
->                         dbg("bus_num %d devfn %d\n", *bus_num, *dev_num);
-> @@ -330,10 +330,10 @@ int cpqhp_save_config(struct controller *ctrl, int busnumber, int is_hot_plug)
->         /* Save PCI configuration space for all devices in supported slots */
->         ctrl->pci_bus->number = busnumber;
->         for (device = FirstSupported; device <= LastSupported; device++) {
-> -               ID = 0xFFFFFFFF;
-> +               ID = (u32) PCI_ERROR_RESPONSE;
->                 rc = pci_bus_read_config_dword(ctrl->pci_bus, PCI_DEVFN(device, 0), PCI_VENDOR_ID, &ID);
->
-> -               if (ID == 0xFFFFFFFF) {
-> +               if (ID == (u32) PCI_ERROR_RESPONSE) {
->                         if (is_hot_plug) {
->                                 /* Setup slot structure with entry for empty
->                                  * slot
-> @@ -431,7 +431,7 @@ int cpqhp_save_config(struct controller *ctrl, int busnumber, int is_hot_plug)
->                          */
->                         while ((function < max_functions) && (!stop_it)) {
->                                 rc = pci_bus_read_config_dword(ctrl->pci_bus, PCI_DEVFN(device, function), PCI_VENDOR_ID, &ID);
-> -                               if (ID == 0xFFFFFFFF) {
-> +                               if (ID == (u32) PCI_ERROR_RESPONSE) {
->                                         function++;
->                                         continue;
->                                 }
-> @@ -474,12 +474,12 @@ int cpqhp_save_slot_config(struct controller *ctrl, struct pci_func *new_slot)
->         int cloop = 0;
->         int stop_it;
->
-> -       ID = 0xFFFFFFFF;
-> +       ID = (u32) PCI_ERROR_RESPONSE;
->
->         ctrl->pci_bus->number = new_slot->bus;
->         pci_bus_read_config_dword(ctrl->pci_bus, PCI_DEVFN(new_slot->device, 0), PCI_VENDOR_ID, &ID);
->
-> -       if (ID == 0xFFFFFFFF)
-> +       if (ID == (u32) PCI_ERROR_RESPONSE)
->                 return 2;
->
->         pci_bus_read_config_byte(ctrl->pci_bus, PCI_DEVFN(new_slot->device, 0), 0x0B, &class_code);
-> @@ -522,7 +522,7 @@ int cpqhp_save_slot_config(struct controller *ctrl, struct pci_func *new_slot)
->                 while ((function < max_functions) && (!stop_it)) {
->                         pci_bus_read_config_dword(ctrl->pci_bus, PCI_DEVFN(new_slot->device, function), PCI_VENDOR_ID, &ID);
->
-> -                       if (ID == 0xFFFFFFFF)
-> +                       if (ID == (u32) PCI_ERROR_RESPONSE)
->                                 function++;
->                         else {
->                                 pci_bus_read_config_byte(ctrl->pci_bus, PCI_DEVFN(new_slot->device, function), 0x0B, &class_code);
-> @@ -1049,7 +1049,7 @@ int cpqhp_valid_replace(struct controller *ctrl, struct pci_func *func)
->                 pci_bus_read_config_dword(pci_bus, devfn, PCI_VENDOR_ID, &temp_register);
->
->                 /* No adapter present */
-> -               if (temp_register == 0xFFFFFFFF)
-> +               if (temp_register == (u32) PCI_ERROR_RESPONSE)
->                         return(NO_ADAPTER_PRESENT);
->
->                 if (temp_register != func->config_space[0])
-> @@ -1267,7 +1267,7 @@ int cpqhp_find_available_resources(struct controller *ctrl, void __iomem *rom_st
->                 pci_bus_read_config_dword(ctrl->pci_bus, dev_func, PCI_VENDOR_ID, &temp_dword);
->                 dbg("temp_D_word = %x\n", temp_dword);
->
-> -               if (temp_dword != 0xFFFFFFFF) {
-> +               if (temp_dword != (u32) PCI_ERROR_RESPONSE) {
->                         index = 0;
->                         func = cpqhp_slot_find(primary_bus, dev_func >> 3, 0);
->
-> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
-> index bd990e3371e3..f0489f305ad7 100644
-> --- a/drivers/pci/hotplug/pciehp_hpc.c
-> +++ b/drivers/pci/hotplug/pciehp_hpc.c
-> @@ -70,7 +70,7 @@ static int pcie_poll_cmd(struct controller *ctrl, int timeout)
->
->         while (true) {
->                 pcie_capability_read_word(pdev, PCI_EXP_SLTSTA, &slot_status);
-> -               if (slot_status == (u16) ~0) {
-> +               if (slot_status == (u16) PCI_ERROR_RESPONSE) {
->                         ctrl_info(ctrl, "%s: no response from device\n",
->                                   __func__);
->                         return 0;
-> @@ -148,7 +148,7 @@ static void pcie_do_write_cmd(struct controller *ctrl, u16 cmd,
->         pcie_wait_cmd(ctrl);
->
->         pcie_capability_read_word(pdev, PCI_EXP_SLTCTL, &slot_ctrl);
-> -       if (slot_ctrl == (u16) ~0) {
-> +       if (slot_ctrl == (u16) PCI_ERROR_RESPONSE) {
->                 ctrl_info(ctrl, "%s: no response from device\n", __func__);
->                 goto out;
->         }
-> @@ -543,7 +543,7 @@ static irqreturn_t pciehp_isr(int irq, void *dev_id)
->         }
->
->         pcie_capability_read_word(pdev, PCI_EXP_SLTSTA, &status);
-> -       if (status == (u16) ~0) {
-> +       if (status == (u16) PCI_ERROR_RESPONSE) {
->                 ctrl_info(ctrl, "%s: no response from device\n", __func__);
->                 if (parent)
->                         pm_runtime_put(parent);
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 29ed5ec1ac27..bfc739dc6ada 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -4434,16 +4434,16 @@ static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
->          * After reset, the device should not silently discard config
->          * requests, but it may still indicate that it needs more time by
->          * responding to them with CRS completions.  The Root Port will
-> -        * generally synthesize ~0 data to complete the read (except when
-> -        * CRS SV is enabled and the read was for the Vendor ID; in that
-> -        * case it synthesizes 0x0001 data).
-> +        * generally synthesize ~0 data (PCI_ERROR_RESPONSE) to complete
-> +        * the read (except when CRS SV is enabled and the read was for the
-> +        * Vendor ID; in that case it synthesizes 0x0001 data).
->          *
->          * Wait for the device to return a non-CRS completion.  Read the
->          * Command register instead of Vendor ID so we don't have to
->          * contend with the CRS SV value.
->          */
->         pci_read_config_dword(dev, PCI_COMMAND, &id);
-> -       while (id == ~0) {
-> +       while (id == (u32) PCI_ERROR_RESPONSE) {
->                 if (delay > timeout) {
->                         pci_warn(dev, "not ready %dms after %s; giving up\n",
->                                  delay - 1, reset_type);
-> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-> index a32ec3487a8d..96b6b87a0af3 100644
-> --- a/drivers/pci/pcie/dpc.c
-> +++ b/drivers/pci/pcie/dpc.c
-> @@ -272,7 +272,8 @@ static irqreturn_t dpc_irq(int irq, void *context)
->
->         pci_read_config_word(pdev, cap + PCI_EXP_DPC_STATUS, &status);
->
-> -       if (!(status & PCI_EXP_DPC_STATUS_INTERRUPT) || status == (u16)(~0))
-> +       if (!(status & PCI_EXP_DPC_STATUS_INTERRUPT) ||
-> +           status == (u16)(PCI_ERROR_RESPONSE))
->                 return IRQ_NONE;
->
->         pci_write_config_word(pdev, cap + PCI_EXP_DPC_STATUS,
-> diff --git a/drivers/pci/pcie/pme.c b/drivers/pci/pcie/pme.c
-> index f38e6c19dd50..3c46622e6c3f 100644
-> --- a/drivers/pci/pcie/pme.c
-> +++ b/drivers/pci/pcie/pme.c
-> @@ -224,7 +224,7 @@ static void pcie_pme_work_fn(struct work_struct *work)
->                         break;
->
->                 pcie_capability_read_dword(port, PCI_EXP_RTSTA, &rtsta);
-> -               if (rtsta == (u32) ~0)
-> +               if (rtsta == (u32) PCI_ERROR_RESPONSE)
->                         break;
->
->                 if (rtsta & PCI_EXP_RTSTA_PME) {
-> @@ -274,7 +274,7 @@ static irqreturn_t pcie_pme_irq(int irq, void *context)
->         spin_lock_irqsave(&data->lock, flags);
->         pcie_capability_read_dword(port, PCI_EXP_RTSTA, &rtsta);
->
-> -       if (rtsta == (u32) ~0 || !(rtsta & PCI_EXP_RTSTA_PME)) {
-> +       if (rtsta == (u32) PCI_ERROR_RESPONSE || !(rtsta & PCI_EXP_RTSTA_PME)) {
->                 spin_unlock_irqrestore(&data->lock, flags);
->                 return IRQ_NONE;
->         }
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index a3c7338fad86..fb953f2666b9 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -1549,7 +1549,7 @@ static int pci_cfg_space_size_ext(struct pci_dev *dev)
->
->         if (pci_read_config_dword(dev, pos, &status) != PCIBIOS_SUCCESSFUL)
->                 return PCI_CFG_SPACE_SIZE;
-> -       if (status == 0xffffffff || pci_ext_cfg_is_aliased(dev))
-> +       if (status == (u32) PCI_ERROR_RESPONSE || pci_ext_cfg_is_aliased(dev))
->                 return PCI_CFG_SPACE_SIZE;
->
->         return PCI_CFG_SPACE_EXP_SIZE;
-> @@ -2488,7 +2488,7 @@ bool pci_bus_generic_read_dev_vendor_id(struct pci_bus *bus, int devfn, u32 *l,
->                 return false;
->
->         /* Some broken boards return 0 or ~0 if a slot is empty: */
-> -       if (*l == 0xffffffff || *l == 0x00000000 ||
-> +       if (*l == (u32) PCI_ERROR_RESPONSE || *l == 0x00000000 ||
->             *l == 0x0000ffff || *l == 0xffff0000)
->                 return false;
->
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 208aacf39329..3d5c92b53310 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -4854,7 +4854,7 @@ static void quirk_intel_qat_vf_cap(struct pci_dev *pdev)
->
->                 pdev->cfg_size = PCI_CFG_SPACE_EXP_SIZE;
->                 if (pci_read_config_dword(pdev, PCI_CFG_SPACE_SIZE, &status) !=
-> -                   PCIBIOS_SUCCESSFUL || (status == 0xffffffff))
-> +                   PCIBIOS_SUCCESSFUL || (status == (u32) PCI_ERROR_RESPONSE))
->                         pdev->cfg_size = PCI_CFG_SPACE_SIZE;
->
->                 if (pci_find_saved_cap(pdev, PCI_CAP_ID_EXP))
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 9e700d9f9f28..d64fd3788061 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -123,6 +123,13 @@ enum pci_interrupt_pin {
->  /* The number of legacy PCI INTx interrupts */
->  #define PCI_NUM_INTX   4
->
-> +/*
-> + * Reading from a device that doesn't respond typically returns ~0.  A
-> + * successful read from a device may also return ~0, so you need additional
-> + * information to reliably identify errors.
-> + */
-> +#define PCI_ERROR_RESPONSE             (~0ULL)
-> +
->  /*
->   * pci_power_t values must match the bits in the Capabilities PME_Support
->   * and Control/Status PowerState fields in the Power Management capability.
-> --
-> 2.22.0.770.g0f2c4a37fd-goog
->
+It is 1.5.0 here too.
