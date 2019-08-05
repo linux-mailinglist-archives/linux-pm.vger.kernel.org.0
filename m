@@ -2,140 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C7D82380
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 19:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E644982458
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 19:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730024AbfHERCq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 13:02:46 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52258 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730011AbfHERCq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 13:02:46 -0400
-Received: by mail-wm1-f68.google.com with SMTP id s3so75435231wms.2
-        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 10:02:45 -0700 (PDT)
+        id S1727830AbfHER7i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Aug 2019 13:59:38 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:32976 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726559AbfHER7h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 13:59:37 -0400
+Received: by mail-pl1-f193.google.com with SMTP id c14so36684641plo.0
+        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 10:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=8seUtniCWRwFTJq4JInJW6atX1NHBdkEw579O8M2U9c=;
-        b=rZuWM93zis34ydR/ncwm9ywfu2puMq373eHZDdgwqmtjXJXB1PEM9wVVrN1dGDB+Ey
-         VV2wbneQrvNNZxmOELIEn9K+wnBS6lcBwOldd8Ic/DHqfynnRkVfUsKNa4KOKnetFmsS
-         ZFYK5/OmE6emlTxZZ/UJkEjx6X1LwwrAhN+Eoss6ERTPRQ78FTgRpf3jCWG+R7dG2hay
-         CbfdNRQanY9NIos3Zo17BWvTT8pmxSTIK7LMpKEa6FuMbCZtFj7iKiYQ2MoSAx1QM4LH
-         oK1DzgT1Xm1vrsCLu7rfRFb/hZGZeCd+OAZMvD0K+14jUH4vIefXM50yCm35Q2lR92Ok
-         RAeA==
+        d=android.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ud8kaTYnOTLsJDKCOZKHErxyavHvXjt//haLV/7Osr0=;
+        b=hGv9CDgTazwbClR18fPbNFhTKGeCpdG7RyYZ0RgTJwkDw2aXb20quOE6DK9Eht6Z7z
+         2MofnoF7J4WkV1cYD08hq/4gFHLbNc5XqtgO+cXa9HIL6zH5+G6dcDy46jNhO7QohcBB
+         KqlzL7A3QAjCFunqxat85FVs4BDNh8lb7lCvGlqIFTjgA9iiGf67aABNq4oWuQXDcf75
+         C/RWme/+HRNYZOySvQLeFJ6j4o8EitJf03vvmqVPdku+9AHjBJTgJ9j45Du7RlPmP6s1
+         6xpMQqA9OexXzEbbjrT3gFx1ylDOAk3kRJO/qr894VSkZ0uVau7xs9NhaVJ2P4hmPw8Z
+         kJQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=8seUtniCWRwFTJq4JInJW6atX1NHBdkEw579O8M2U9c=;
-        b=AH4PGjyygE+bsYtUsOs/250qU/5DbSprJ/BZ7RreMSYSGlLYgru4HYgLWYUl8VgtbC
-         h2VQJ7A1RDlzLPXB+JpKJnrss45Juk/lQ4hpDcR6NE15RVKxkk7c3Zyr7t/aQodZ5m/P
-         slALjoCcpoGtD5vzhVWipJziRo9x4U8dJ8oJ1LDYojW+uPXCwZqWoulO60V6ayyMEu3p
-         dSRiEkAzfOE0N0vNOUoOofjP3QdJglnYMWNpGw85k31n/1UJmPhFgf0DRtsebsLg1VEc
-         6q22kHS9KUGdc0gyIJ5oZgFqPib2UWQFMapP09AgAfqNz63sXCrbQru/FWvdQg0uxAdE
-         0m1w==
-X-Gm-Message-State: APjAAAV2FUbzBV/6UVIP0o8RNG6i0DBmSFDDPOrsbD6INJO1+knjvLZO
-        2zUnjafvem/zgw8MDNTwnb3xuU489uI=
-X-Google-Smtp-Source: APXvYqwNMG6nkRMSEbp8tcPVmOdfLttrjljhraM67lgOekaFbI3CEyHmigGc/TLZS7gq3QrWAxIbgA==
-X-Received: by 2002:a1c:a8c9:: with SMTP id r192mr20084425wme.43.1565024564444;
-        Mon, 05 Aug 2019 10:02:44 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:e5cb:2287:9bbb:b7eb])
-        by smtp.gmail.com with ESMTPSA id v29sm28893685wrv.74.2019.08.05.10.02.43
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ud8kaTYnOTLsJDKCOZKHErxyavHvXjt//haLV/7Osr0=;
+        b=Bn33I8XbRVJkex0DkNBRhXW21qTz3htv0U09SiLankel3hH28S2GLtA26OjCb01U/f
+         +xiyHFFtkuy0kU5MYwKnCj+bzUb19GDF5lKcjdapj/d98B2Pxr9jYbWQ+s9RTEBeqLD/
+         KbGlt41w5wPZDsVwag2Sm3XMWIfq+018d2vz+CHpLA/ZpmJPmoBvIbyzlFdfAQ6pTbPh
+         +/oqp+kMIznDp/XQs304ul8zJ87Xlat3b6FVyxDLwq454fGVaVhll5N2kp65673j521G
+         DFd4JoK9Bf4NHXeWEco6GegkmuE3TPUmgYQJnqphr3rGTDDmdg64CyDjRp2ZUmuDBC03
+         arcw==
+X-Gm-Message-State: APjAAAX5ZJgmP7KFUCS+ZBioQDtuN8+2I0OB2TC2Qp1EPN96pxnZCTmq
+        DeJe8jcjqViKn6u+O/rX1nM=
+X-Google-Smtp-Source: APXvYqwZeYBRnbQ/QlTDw+8YaaB6BBCMQBBMQNRLF+ujIAQ9yn9fFzWGqTAFqhE6Jd8wptS+jiashQ==
+X-Received: by 2002:a17:902:7894:: with SMTP id q20mr140347877pll.339.1565027976621;
+        Mon, 05 Aug 2019 10:59:36 -0700 (PDT)
+Received: from trong0.mtv.corp.google.com ([2620:15c:211:0:469:982a:29da:f29b])
+        by smtp.gmail.com with ESMTPSA id f19sm124403670pfk.180.2019.08.05.10.59.35
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 10:02:44 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] powercap/drivers/idle_inject: Specify the idle state to inject
-Date:   Mon,  5 Aug 2019 19:02:08 +0200
-Message-Id: <20190805170208.26873-3-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190805170208.26873-1-daniel.lezcano@linaro.org>
-References: <20190805170208.26873-1-daniel.lezcano@linaro.org>
+        Mon, 05 Aug 2019 10:59:36 -0700 (PDT)
+From:   Tri Vo <trong@android.com>
+To:     rjw@rjwysocki.net, gregkh@linuxfoundation.org,
+        viresh.kumar@linaro.org
+Cc:     rafael@kernel.org, hridya@google.com, sspatil@google.com,
+        kaleshsingh@google.com, ravisadineni@chromium.org,
+        swboyd@chromium.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, kernel-team@android.com,
+        Tri Vo <trong@android.com>
+Subject: [PATCH v7 0/3] PM / wakeup: show wakeup sources stats in sysfs
+Date:   Mon,  5 Aug 2019 10:58:45 -0700
+Message-Id: <20190805175848.163558-1-trong@android.com>
+X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the idle injection framework only allows to inject the
-deepest idle state available on the system.
+Userspace can use wakeup_sources debugfs node to plot history of suspend
+blocking wakeup sources over device's boot cycle. This information can
+then be used (1) for power-specific bug reporting and (2) towards
+attributing battery consumption to specific processes over a period of
+time.
 
-Give the opportunity to specify which idle state we want to inject by
-adding a new function helper to set the state and use it when calling
-play_idle().
+However, debugfs doesn't have stable ABI. For this reason, create a
+'struct device' to expose wakeup sources statistics in sysfs under
+/sys/class/wakeup/wakeup<ID>/*.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/powercap/idle_inject.c | 15 ++++++++++++++-
- include/linux/idle_inject.h    |  3 +++
- 2 files changed, 17 insertions(+), 1 deletion(-)
+Patch 1 and 2 do some cleanup to simplify our changes to how wakeup sources are
+created. Patch 3 implements wakeup sources stats in sysfs.
 
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index 9b18667b9f26..a94ebab9ee21 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -38,6 +38,7 @@
- #define pr_fmt(fmt) "ii_dev: " fmt
- 
- #include <linux/cpu.h>
-+#include <linux/cpuidle.h>
- #include <linux/hrtimer.h>
- #include <linux/kthread.h>
- #include <linux/sched.h>
-@@ -65,6 +66,7 @@ struct idle_inject_thread {
-  */
- struct idle_inject_device {
- 	struct hrtimer timer;
-+	int state;
- 	unsigned int idle_duration_us;
- 	unsigned int run_duration_us;
- 	unsigned long int cpumask[0];
-@@ -139,7 +141,7 @@ static void idle_inject_fn(unsigned int cpu)
- 	iit->should_run = 0;
- 
- 	play_idle(READ_ONCE(ii_dev->idle_duration_us),
--		  cpuidle_find_deepest_state());
-+		  READ_ONCE(ii_dev->state));
- }
- 
- /**
-@@ -170,6 +172,16 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 	*idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
- }
- 
-+/**
-+ * idle_inject_set_state - set the idle state to inject
-+ * @state: an integer for the idle state to inject
-+ */
-+void idle_inject_set_state(struct idle_inject_device *ii_dev, int state)
-+{
-+	if (state >= -1 && state < CPUIDLE_STATE_MAX)
-+		WRITE_ONCE(ii_dev->state, state);
-+}
-+
- /**
-  * idle_inject_start - start idle injections
-  * @ii_dev: idle injection control device structure
-@@ -298,6 +310,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
- 	cpumask_copy(to_cpumask(ii_dev->cpumask), cpumask);
- 	hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	ii_dev->timer.function = idle_inject_timer_fn;
-+	ii_dev->state = cpuidle_find_deepest_state();
- 
- 	for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
- 
-diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
-index a445cd1a36c5..e2b26b9ccd34 100644
---- a/include/linux/idle_inject.h
-+++ b/include/linux/idle_inject.h
-@@ -26,4 +26,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
- void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 				 unsigned int *run_duration_us,
- 				 unsigned int *idle_duration_us);
-+
-+void idle_inject_set_state(struct idle_inject_device *ii_dev, int state);
-+
- #endif /* __IDLE_INJECT_H__ */
--- 
-2.17.1
+Tri Vo (3):
+  PM / wakeup: Drop wakeup_source_init(), wakeup_source_prepare()
+  PM / wakeup: Use wakeup_source_register() in wakelock.c
+  PM / wakeup: Show wakeup sources stats in sysfs
+
+ Documentation/ABI/testing/sysfs-class-wakeup |  76 +++++++++
+ drivers/acpi/device_pm.c                     |   3 +-
+ drivers/base/power/Makefile                  |   2 +-
+ drivers/base/power/power.h                   |   9 ++
+ drivers/base/power/wakeup.c                  |  59 ++++---
+ drivers/base/power/wakeup_stats.c            | 161 +++++++++++++++++++
+ fs/eventpoll.c                               |   4 +-
+ include/linux/pm_wakeup.h                    |  21 +--
+ kernel/power/autosleep.c                     |   2 +-
+ kernel/power/wakelock.c                      |  32 ++--
+ kernel/time/alarmtimer.c                     |   2 +-
+ 11 files changed, 316 insertions(+), 55 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-wakeup
+ create mode 100644 drivers/base/power/wakeup_stats.c
+
+v2:
+- Updated Documentation/ABI/, as per Greg.
+- Removed locks in attribute functions, as per Greg.
+- Lifetimes of struct wakelock and struck wakeup_source are now different due to
+  the latter embedding a refcounted kobject. Changed it so that struct wakelock
+  only has a pointer to struct wakeup_source, instead of embedding it.
+- Added CONFIG_PM_SLEEP_STATS that enables/disables wakeup source statistics in
+  sysfs.
+
+v3:
+Changes by Greg:
+- Reworked code to use 'struct device' instead of raw kobjects.
+- Updated documentation file.
+- Only link wakeup_stats.o when CONFIG_PM_SLEEP_STATS is enabled.
+Changes by Tri:
+- Reverted changes to kernel/power/wakelock.c. 'struct device' hides kobject
+  operations. So no need to handle lifetimes in wakelock.c
+
+v4:
+- Added 'Co-developed-by:' and 'Tested-by:' fields to commit message.
+- Moved new documentation to a separate file
+  Documentation/ABI/testing/sysfs-class-wakeup, as per Greg.
+- Fixed copyright header in drivers/base/power/wakeup_stats.c, as per Greg.
+
+v5:
+- Removed CONFIG_PM_SLEEP_STATS
+- Used PTR_ERR_OR_ZERO instead of if(IS_ERR(...)) + PTR_ERR, reported by
+  kbuild test robot <lkp@intel.com>
+- Stephen reported that a call to device_init_wakeup() and writing 'enabled' to
+  that device's power/wakeup file results in multiple wakeup source being
+  allocated for that device.  Changed device_wakeup_enable() to check if device
+  wakeup was previously enabled.
+Changes by Stephen:
+- Changed stats location from /sys/class/wakeup/<name>/* to
+  /sys/class/wakeup/wakeup<ID>/*, where ID is an IDA-allocated integer. This
+  avoids name collisions in /sys/class/wakeup/ directory.
+- Added a "name" attribute to wakeup sources, and updated documentation.
+- Device registering the wakeup source is now the parent of the wakeup source.
+  Updated wakeup_source_register()'s signature and its callers accordingly.
+
+v6:
+- Changed stats location to /sys/class/wakeup/ws<ID>/*
+- Replaced ida_simple_get()/ida_simple_remove() with ida_alloc()/ida_free() as
+  the former is deprecated.
+- Reverted changes to device_init_wakeup(). Rafael is preparing a patch to deal
+  with extra wakeup source allocation in a separate patch.
+
+v7:
+- Removed wakeup_source_init(), wakeup_source_prepare().
+- Removed duplicate wakeup source creation code from  kernel/power/wakelock.
+- Moved ID allocation to wakeup source object creation time.
+- Changed stats location back to /sys/class/wakeup/wakeup<ID>/*
+- Remove wakeup source device's "power" attributes.
+
+--
+2.22.0.770.g0f2c4a37fd-goog
 
