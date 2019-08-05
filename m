@@ -2,126 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E1082132
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 18:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2583A821A4
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 18:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbfHEQFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 12:05:24 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:43103 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728759AbfHEQFX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 12:05:23 -0400
-Received: by mail-lf1-f66.google.com with SMTP id c19so58429756lfm.10
-        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 09:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=61p5AzjQF9OjwcCgDHmk+Gn1Hy4tPflyDpQWg2DQeqY=;
-        b=Wpyzd4Y2/nkmPiRjFFM8P8mROdyXEGby1MykkxLW9L1Exfr+0LwcJOAJCMZms0c2Im
-         /0Ir/txcMgrbgOV1l8OtAba+XUIKIq55sZqgoSCknx6AWCJpLu+LwC9fDZiEEiRBaHgL
-         fqdm4ygFQZzcnCi4raOJMsAdKGJ9l+fKlol/w=
+        id S1729088AbfHEQZx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Aug 2019 12:25:53 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:41098 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727928AbfHEQZx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 12:25:53 -0400
+Received: from mail-pl1-f199.google.com ([209.85.214.199])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1hufnz-0007xi-2t
+        for linux-pm@vger.kernel.org; Mon, 05 Aug 2019 16:25:51 +0000
+Received: by mail-pl1-f199.google.com with SMTP id ci3so3998124plb.8
+        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 09:25:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=61p5AzjQF9OjwcCgDHmk+Gn1Hy4tPflyDpQWg2DQeqY=;
-        b=sjsX7y2isx24+xAL9DQ2ZYgtyWw6Tux/WY9KGrE9LmIwDgSuRzCfA+vDRMbrfBpJ1j
-         pFSKMsiATFoAx5Ut1pb8kixbdzYOVaE9F3yVD0WE9jN4yuB0d3RWDU3R3a2NPfXLj6IK
-         0REL5NXmFKUFognd3fX8GieHM3Iw2ysgVF6xyI6QOlEMWwaaQh6tngnYlgYdgJRZ74yy
-         D16/cx9FfgW46jWRcqDhvRSpvwjNUnJQQtmu3QRR2bubhYzFWGxRrufKMJQPpgMUBRn7
-         WR3RipveKQ0GKbv75pFWqPTiQ0nPPfK/fegpexrjX8Fb2lMzYKVcg0Ylj3xtPEO+0DIT
-         9vTw==
-X-Gm-Message-State: APjAAAWspHK1ATz5i+esvgijWuGwFlPFI9psjNPtbHB6EuyBmeT7mIeF
-        fC1LTZHxg3j6gLIS2Gv0G9BQ6T/IUxM=
-X-Google-Smtp-Source: APXvYqwMWcl7yecZ9DmR5VZEOWVbToCGyH+jhk7jnqZ40uDcdaK7W9meVCsLHCjASV/3beHbWX9yGQ==
-X-Received: by 2002:ac2:5dc3:: with SMTP id x3mr1434955lfq.168.1565021121289;
-        Mon, 05 Aug 2019 09:05:21 -0700 (PDT)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id k82sm17393653lje.30.2019.08.05.09.05.20
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Aug 2019 09:05:20 -0700 (PDT)
-Received: by mail-lf1-f42.google.com with SMTP id p197so58398132lfa.2
-        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 09:05:20 -0700 (PDT)
-X-Received: by 2002:a19:cbd3:: with SMTP id b202mr8777985lfg.185.1565021119654;
- Mon, 05 Aug 2019 09:05:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <752aca6f-4f69-301d-81ef-ff29bc25b614@linaro.org> <20190805153332.10047-1-georgi.djakov@linaro.org>
-In-Reply-To: <20190805153332.10047-1-georgi.djakov@linaro.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 5 Aug 2019 09:04:43 -0700
-X-Gmail-Original-Message-ID: <CAE=gft48ytM4Bb8iVdE7=mZkum-xx8TBm9=vE1Dj9fxnH7stnQ@mail.gmail.com>
-Message-ID: <CAE=gft48ytM4Bb8iVdE7=mZkum-xx8TBm9=vE1Dj9fxnH7stnQ@mail.gmail.com>
-Subject: Re: [PATCH] interconnect: Add pre_aggregate() callback
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     linux-pm@vger.kernel.org, David Dai <daidavid1@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        amit.kucheria@linaro.org, Doug Anderson <dianders@chromium.org>,
-        Sean Sweeney <seansw@qti.qualcomm.com>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ahDv1JQ0w2AsFEFKjWvYewqWbx39Q78We1s4PnzLIHE=;
+        b=p8Apq0tYc+v9R2Co/hG5tx/x2VVBptj5rWh1dqMiODy11/3X7qzVRsD5MWleSTR6c3
+         0RIx8KnQ7X5tMA7noYdXla4R8GIUgcpDVV9sR13zjZpHLhKdOXvTRa4B/q+18Eiw9rQ9
+         U2ZJvGlkaMT+z66c8vP8Ptqc5QYJIPbDToq8/4tvRy0PG8hm+Eqq9cokldUvKqu1SxEh
+         V1XFqdBiZ0qMWQKM9wTI+8UPve1EBT7nezTPiHIYtdFL45N75hKUmK1LTcOh/PyB569E
+         DOWaUgm4+bdCPPK08zknt2HNj+x4BAyPHQdpt8F/bjdMn4XPrw15zza3V/WuwnOd4Qg9
+         ftbA==
+X-Gm-Message-State: APjAAAWzIFPHIb2uZlmd4i/MMAsx3ykraXVYaChbLxU3WCh9RxJIvBTh
+        GMM8+ohmXwMBAhFMtTAMyamTjr2A7AfT2Lg3xxWanbID1QPz//noCYnIk8Grh2jIBuLgRrOAaUx
+        hKvEy00knQL5zpi1vUOwlIXPxLiZLXSN6nkDH
+X-Received: by 2002:a63:1c22:: with SMTP id c34mr30357128pgc.56.1565022349742;
+        Mon, 05 Aug 2019 09:25:49 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyGlZdsZ6bGXay0VR9+yR4cNcswW8S4n0UbagMs6pMa5uYImce0UHWrQvcHTxX+l+t8F0knuA==
+X-Received: by 2002:a63:1c22:: with SMTP id c34mr30357110pgc.56.1565022349363;
+        Mon, 05 Aug 2019 09:25:49 -0700 (PDT)
+Received: from 2001-b011-380f-37d3-6851-7bc4-3469-2fa7.dynamic-ip6.hinet.net (2001-b011-380f-37d3-6851-7bc4-3469-2fa7.dynamic-ip6.hinet.net. [2001:b011:380f:37d3:6851:7bc4:3469:2fa7])
+        by smtp.gmail.com with ESMTPSA id u134sm82343207pfc.19.2019.08.05.09.25.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Aug 2019 09:25:48 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to
+ suspend-to-idle
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <5997740.FPbUVk04hV@kreacher>
+Date:   Tue, 6 Aug 2019 00:25:41 +0800
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Zhang Rui <rui.zhang@intel.com>,
+        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@dell.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <63E89FFF-9471-4F65-B05D-E99EC5C9EFD6@canonical.com>
+References: <5997740.FPbUVk04hV@kreacher>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 5, 2019 at 8:33 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
->
-> Introduce an optional callback in interconnect provider drivers. It can be
-> used for implementing actions, that need to be executed before the actual
-> aggregation of the bandwidth requests has started.
->
-> The benefit of this for now is that it will significantly simplify the code
-> in provider drivers.
->
-> Suggested-by: Evan Green <evgreen@chromium.org>
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+at 18:33, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 
-Thanks Georgi, I like it! We should confirm that it actually does
-allow David to remove the sum_avg_cached and max_peak_cached shadow
-arrays.
+> Hi All,
+>
+>>> On top of the "Simplify the suspend-to-idle control flow" patch series
+>>> posted previously:
+>>>
+>>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
+>>>
+>>> sanitize the suspend-to-idle flow even further.
+>>>
+>>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
+>>>
+>>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
+>>> specification-compliant order with respect to suspending and resuming
+>>> devices (patch 2).
+>>>
+>>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
+>>> switch to prevent the LPS0 _DSM from being used.
+>>
+>> The v2 is because I found a (minor) bug in patch 1, decided to use a  
+>> module
+>> parameter instead of a kernel command line option in patch 4.  Also, there
+>> are 4 new patches:
+>>
+>> Patch 5: Switch the EC over to polling during "noirq" suspend and back
+>> during "noirq" resume.
+>>
+>> Patch 6: Eliminate acpi_sleep_no_ec_events().
+>>
+>> Patch 7: Consolidate some EC code depending on PM_SLEEP.
+>>
+>> Patch 8: Add EC GPE dispatching debug message.
+>
+> The v3 is just a rearranged v2 so as to move the post sensitive patch  
+> (previous patch 2)
+> to the end of the series.   [After applying the full series the code is  
+> the same as before.]
+>
+> For easier testing, the series (along with some previous patches depended  
+> on by it)
+> is available in the pm-s2idle-testing branch of the linux-pm.git tree at  
+> kernel.org:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
 
-> ---
->  drivers/interconnect/core.c           | 3 +++
->  include/linux/interconnect-provider.h | 3 +++
->  2 files changed, 6 insertions(+)
+I’ve just tested the full series on Latitude 5300, and the additional  
+spurious wake up is gone.
+
+Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
 >
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index 251354bb7fdc..7b971228df38 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -205,6 +205,9 @@ static int aggregate_requests(struct icc_node *node)
->         node->avg_bw = 0;
->         node->peak_bw = 0;
+> Please refer to the changelogs for details.
 >
-> +       if (p->pre_aggregate)
-> +               p->pre_aggregate(node);
-> +
->         hlist_for_each_entry(r, &node->req_list, req_node)
->                 p->aggregate(node, r->tag, r->avg_bw, r->peak_bw,
->                              &node->avg_bw, &node->peak_bw);
-> diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
-> index 4ee19fd41568..fd42bd19302d 100644
-> --- a/include/linux/interconnect-provider.h
-> +++ b/include/linux/interconnect-provider.h
-> @@ -36,6 +36,8 @@ struct icc_node *of_icc_xlate_onecell(struct of_phandle_args *spec,
->   * @nodes: internal list of the interconnect provider nodes
->   * @set: pointer to device specific set operation function
->   * @aggregate: pointer to device specific aggregate operation function
-> + * @pre_aggregate: pointer to device specific function that is called
-> + *                before the aggregation begins (optional)
->   * @xlate: provider-specific callback for mapping nodes from phandle arguments
->   * @dev: the device this interconnect provider belongs to
->   * @users: count of active users
-> @@ -47,6 +49,7 @@ struct icc_provider {
->         int (*set)(struct icc_node *src, struct icc_node *dst);
->         int (*aggregate)(struct icc_node *node, u32 tag, u32 avg_bw,
->                          u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
-> +       int (*pre_aggregate)(struct icc_node *node);
->         struct icc_node* (*xlate)(struct of_phandle_args *spec, void *data);
->         struct device           *dev;
->         int                     users;
+> Thanks,
+> Rafael
+
+
