@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D40A81393
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 09:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B5881396
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 09:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727620AbfHEHhs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 03:37:48 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:38281 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726394AbfHEHhs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 03:37:48 -0400
-Received: by mail-wm1-f65.google.com with SMTP id s15so50603592wmj.3
-        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 00:37:45 -0700 (PDT)
+        id S1726829AbfHEHjg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Aug 2019 03:39:36 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52609 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726394AbfHEHjg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 03:39:36 -0400
+Received: by mail-wm1-f67.google.com with SMTP id s3so73668516wms.2
+        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 00:39:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=r6fe7x293e4wOp44Ut+Bibnd8MRk0heR72SoF2xR5CU=;
-        b=fmd06l74DLIJXIvc+xSRDHjX7oas+wqD7pcFUTny5k5+vuXxEAVYS7ipw9Ba1S1us2
-         wX1UkOAEdnYQXmkpoqQbR+716onL7H2DHk4DrEu1ikKlSlnuq/QKU604p/XHmQlAiylS
-         scUDWMcsDTUyD5Qbj6rAI774xauL4BgZUdFFgn0SvgXSWxD6FyphQtSfe+pOZ16gncAY
-         B9bPPePxjhLZdUtbsQpSc2cRyMHWJKZMgsRjHQZNiiliPJ5iSx7C0WmuvxCNUjV6tt3p
-         L9Qr46G61RSBfzaQQ9hgGfbfMc7l7fh3CiINL/V0Er5e78V06az9wsbxGcss3w/SAmIc
-         4Uag==
+        bh=gVMANjQqX7xJ6/8cxO8dNvpIcNL+A2tZ1v+gsk/IhVs=;
+        b=p8zmnz7GYUc7O/gl77VcD7WJ/7oMnd+AyEkakwRMhgK35WM7ZMoI4MTFDd7n/w3scY
+         yD0nxAJjjWSHSifizu+DGXk3o6r7BYh2O/MCZxhs8JzN/EQROBgrNbr/Ctc2DniL6/Hf
+         zl8fMMhV0LxXeLIDWn8v45lTOlZfszxPqaNMqIm7oDPq/GfSqeVTTergkDHccKFXZTYO
+         R54jfbMvSLdZicshNYlmU61rJNQNYE0rAhcYWCvUyGeDiD20Ui0CtbwSxirT8pnsEH5d
+         G/cwaMvgE3EVaD7RuABjggPpgVnn32CEZKx+mwqZdwXvRp/EDO82DmVJQlfB3ZOatFov
+         hRgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=r6fe7x293e4wOp44Ut+Bibnd8MRk0heR72SoF2xR5CU=;
-        b=pm/07ceaCWUZ4jy/hBg0GeVpv1/HbIzQjUVlyzm/RV305SlCwv0+h0Z8eZq+sy7uIk
-         f0hGUf+eEj+d0n4/kLuWcLA9Sb5dwcl4bwCYV0QKVt0LRl3C7u8JoPjtvP3W/nMdIfHO
-         KexKhIwn8nslkAglqJST96AeRL/lbYcjvZWdaBkrTUakBqXaop67Rgd8tYUQR8Et4pth
-         B+iAh5qJUHGDf+jPJpCXoNlfEslpEOol3UCSPrSwO2e+5YRPuppMFTg37L4LcCELbzcV
-         R3B5lsNUI40rrxmXlKd2itTbjQPPlvak+61/vQVDNP2XnzfyaltOZyLJSFq7eL9KXO31
-         TksA==
-X-Gm-Message-State: APjAAAV03X61iiP71Y+tDxkqxM04WdCVAWt5ZKm9nlG5vppsQ3WWN4mz
-        avGopjtwCCiVCkc3kB2i3mSYHw==
-X-Google-Smtp-Source: APXvYqyytLH6S2sSDwfpVHnnpkIAw8bXb/aawKVTmBsX/q/VBqzmaOemTILM6cQJUlzey58tiS2Q2w==
-X-Received: by 2002:a7b:cd9a:: with SMTP id y26mr18035140wmj.44.1564990664992;
-        Mon, 05 Aug 2019 00:37:44 -0700 (PDT)
+        bh=gVMANjQqX7xJ6/8cxO8dNvpIcNL+A2tZ1v+gsk/IhVs=;
+        b=aHnjKYGpJgMDOlPw9I71Zg+kGhnkHpf4T2xUi7+dho4tIEQ9wl5DGe3OcVVipNQJqj
+         t/xwfdBMjtQHm1/D7QfURfsDSOmvUMjkj0h8kOmgfxQRopCTE7TQpEe+JRLtAk7VG5Q0
+         kYNEyzP8V4IkMN2L7DVCjzhQ8sL3ayeAE3Yi0LycdN534TvM7CQZlMHDlkCV+7qThf32
+         92eq7801sY3vcs/7mr0s2J7tJafErNXZimayei2D/dy8SuHgynWqnB+jpgQLxS0xRLki
+         kdtATTvlake2Z6H+0Wl6n9ZQTqJbCIoYFMC66w1UWrY3hv7NH4JX5mIfAJ0ED3t2NJwi
+         2Q6w==
+X-Gm-Message-State: APjAAAXQ6OfvR3RFQgUbhUQLVsP2Nn77wmOlvFzJdtoS51dVCG0zK2uX
+        pATT6fC3n7sx2kGx9BsUkYYz5g==
+X-Google-Smtp-Source: APXvYqwMcooMWTSTJsMglvepUFKRgc9wXpBvFKGr8CyDXejev0uxAC7WZXLoobHbUZrXdov+kjzB1g==
+X-Received: by 2002:a1c:7c08:: with SMTP id x8mr17159109wmc.19.1564990772252;
+        Mon, 05 Aug 2019 00:39:32 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:1d1:2aa9:b538:861? ([2a01:e34:ed2f:f020:1d1:2aa9:b538:861])
-        by smtp.googlemail.com with ESMTPSA id v4sm85202897wmg.22.2019.08.05.00.37.43
+        by smtp.googlemail.com with ESMTPSA id t185sm74696960wma.11.2019.08.05.00.39.30
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Aug 2019 00:37:44 -0700 (PDT)
+        Mon, 05 Aug 2019 00:39:31 -0700 (PDT)
 Subject: Re: [PATCH v3 6/7] thermal/drivers/cpu_cooling: Introduce the cpu
  idle cooling driver
 To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
@@ -56,6 +56,7 @@ To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1522945005-7165-7-git-send-email-daniel.lezcano@linaro.org>
  <20190805051111.24318-1-martin.kepplinger@puri.sm>
+ <02ec23c3-37ee-4e9f-56a4-453a30a29747@puri.sm>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
@@ -118,12 +119,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  adkDXtr4MeL8BaB7Ij2oyRVjXUwhFQNKi5Z5Rve0a3zvGkkqw8Mz20BOksjSWjAF6g9byukl
  CUVjC03PdMSufNLK06x5hPc/c4tFR4J9cLrV+XxdCX7r0zGos9SzTPGNuIk1LK++S3EJhLFj
  4eoWtNhMWc1uiTf9ENza0ntqH9XBWEQ6IA1gubCniGG+Xg==
-Message-ID: <2d7f1caa-351a-8fdc-bb6b-151f7313a042@linaro.org>
-Date:   Mon, 5 Aug 2019 09:37:43 +0200
+Message-ID: <421c43a9-c721-05eb-1860-dfb5c042bc95@linaro.org>
+Date:   Mon, 5 Aug 2019 09:39:30 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190805051111.24318-1-martin.kepplinger@puri.sm>
+In-Reply-To: <02ec23c3-37ee-4e9f-56a4-453a30a29747@puri.sm>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -132,54 +133,102 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/08/2019 07:11, Martin Kepplinger wrote:
-> ---
+On 05/08/2019 08:53, Martin Kepplinger wrote:
 
 [ ... ]
 
->> +static s64 cpuidle_cooling_runtime(struct cpuidle_cooling_device *idle_cdev)
->> +{
->> +	s64 next_wakeup;
->> +	unsigned long state = idle_cdev->state;
->> +
->> +	/*
->> +	 * The function should not be called when there is no
->> +	 * mitigation because:
->> +	 * - that does not make sense
->> +	 * - we end up with a division by zero
->> +	 */
->> +	if (!state)
->> +		return 0;
->> +
->> +	next_wakeup = (s64)((idle_cdev->idle_cycle * 100) / state) -
->> +		idle_cdev->idle_cycle;
->> +
->> +	return next_wakeup * NSEC_PER_USEC;
->> +}
->> +
+>>> +static s64 cpuidle_cooling_runtime(struct cpuidle_cooling_device *idle_cdev)
+>>> +{
+>>> +	s64 next_wakeup;
+>>> +	unsigned long state = idle_cdev->state;
+>>> +
+>>> +	/*
+>>> +	 * The function should not be called when there is no
+>>> +	 * mitigation because:
+>>> +	 * - that does not make sense
+>>> +	 * - we end up with a division by zero
+>>> +	 */
+>>> +	if (!state)
+>>> +		return 0;
+>>> +
+>>> +	next_wakeup = (s64)((idle_cdev->idle_cycle * 100) / state) -
+>>> +		idle_cdev->idle_cycle;
+>>> +
+>>> +	return next_wakeup * NSEC_PER_USEC;
+>>> +}
+>>> +
+>>
+>> There is a bug in your calculation formula here when "state" becomes 100.
+>> You return 0 for the injection rate, which is the same as "rate" being 0,
+>> which is dangerous. You stop cooling when it's most necessary :)
+>>
+>> I'm not sure how much sense really being 100% idle makes, so I, when testing
+>> this, just say if (state == 100) { state = 99 }. Anyways, just don't return 0.
+>>
 > 
-> There is a bug in your calculation formula here when "state" becomes 100.
-> You return 0 for the injection rate, which is the same as "rate" being 0,
-> which is dangerous. You stop cooling when it's most necessary :)
+> oh and also, this breaks S3 suspend:
 
-Right, thanks for spotting this.
+What breaks the S3 suspend? The idle cooling device or the bug above ?
 
-> I'm not sure how much sense really being 100% idle makes, so I, when testing
-> this, just say if (state == 100) { state = 99 }. Anyways, just don't return 0.
+> Aug  5 06:09:20 pureos kernel: [  807.487887] PM: suspend entry (deep)
+> Aug  5 06:09:40 pureos kernel: [  807.501148] Filesystems sync: 0.013
+> seconds
+> Aug  5 06:09:40 pureos kernel: [  807.501591] Freezing user space
+> processes ... (elapsed 0.003 seconds) done.
+> Aug  5 06:09:40 pureos kernel: [  807.504741] OOM killer disabled.
+> Aug  5 06:09:40 pureos kernel: [  807.504744] Freezing remaining
+> freezable tasks ...
+> Aug  5 06:09:40 pureos kernel: [  827.517712] Freezing of tasks failed
+> after 20.002 seconds (4 tasks refusing to freeze, wq_busy=0):
+> Aug  5 06:09:40 pureos kernel: [  827.527122] thermal-idle/0  S    0
+> 161      2 0x00000028
+> Aug  5 06:09:40 pureos kernel: [  827.527131] Call trace:
+> Aug  5 06:09:40 pureos kernel: [  827.527148]  __switch_to+0xb4/0x200
+> Aug  5 06:09:40 pureos kernel: [  827.527156]  __schedule+0x1e0/0x488
+> Aug  5 06:09:40 pureos kernel: [  827.527162]  schedule+0x38/0xc8
+> Aug  5 06:09:40 pureos kernel: [  827.527169]  smpboot_thread_fn+0x250/0x2a8
+> Aug  5 06:09:40 pureos kernel: [  827.527176]  kthread+0xf4/0x120
+> Aug  5 06:09:40 pureos kernel: [  827.527182]  ret_from_fork+0x10/0x18
+> Aug  5 06:09:40 pureos kernel: [  827.527186] thermal-idle/1  S    0
+> 162      2 0x00000028
+> Aug  5 06:09:40 pureos kernel: [  827.527192] Call trace:
+> Aug  5 06:09:40 pureos kernel: [  827.527197]  __switch_to+0x188/0x200
+> Aug  5 06:09:40 pureos kernel: [  827.527203]  __schedule+0x1e0/0x488
+> Aug  5 06:09:40 pureos kernel: [  827.527208]  schedule+0x38/0xc8
+> Aug  5 06:09:40 pureos kernel: [  827.527213]  smpboot_thread_fn+0x250/0x2a8
+> Aug  5 06:09:40 pureos kernel: [  827.527218]  kthread+0xf4/0x120
+> Aug  5 06:09:40 pureos kernel: [  827.527222]  ret_from_fork+0x10/0x18
+> Aug  5 06:09:40 pureos kernel: [  827.527226] thermal-idle/2  S    0
+> 163      2 0x00000028
+> Aug  5 06:09:40 pureos kernel: [  827.527231] Call trace:
+> Aug  5 06:09:40 pureos kernel: [  827.527237]  __switch_to+0xb4/0x200
+> Aug  5 06:09:40 pureos kernel: [  827.527242]  __schedule+0x1e0/0x488
+> Aug  5 06:09:40 pureos kernel: [  827.527247]  schedule+0x38/0xc8
+> Aug  5 06:09:40 pureos kernel: [  827.527259]  smpboot_thread_fn+0x250/0x2a8
+> Aug  5 06:09:40 pureos kernel: [  827.527264]  kthread+0xf4/0x120
+> Aug  5 06:09:40 pureos kernel: [  827.527268]  ret_from_fork+0x10/0x18
+> Aug  5 06:09:40 pureos kernel: [  827.527272] thermal-idle/3  S    0
+> 164      2 0x00000028
+> Aug  5 06:09:40 pureos kernel: [  827.527278] Call trace:
+> Aug  5 06:09:40 pureos kernel: [  827.527283]  __switch_to+0xb4/0x200
+> Aug  5 06:09:40 pureos kernel: [  827.527288]  __schedule+0x1e0/0x488
+> Aug  5 06:09:40 pureos kernel: [  827.527293]  schedule+0x38/0xc8
+> Aug  5 06:09:40 pureos kernel: [  827.527298]  smpboot_thread_fn+0x250/0x2a8
+> Aug  5 06:09:40 pureos kernel: [  827.527303]  kthread+0xf4/0x120
+> Aug  5 06:09:40 pureos kernel: [  827.527308]  ret_from_fork+0x10/0x18
+> Aug  5 06:09:40 pureos kernel: [  827.527375] Restarting kernel threads
+> ... done.
+> Aug  5 06:09:40 pureos kernel: [  827.527771] OOM killer enabled.
+> Aug  5 06:09:40 pureos kernel: [  827.527772] Restarting tasks ... done.
+> Aug  5 06:09:40 pureos kernel: [  827.528926] PM: suspend exit
 > 
-> Daniel, thanks a lot for these additions! Could you send an update of this?
-
-Yes, I'm working on a new version.
-
-> btw, that's what I'm referring to:
-> https://lore.kernel.org/linux-pm/1522945005-7165-1-git-send-email-daniel.lezcano@linaro.org/
-> I know it's a little old already, but it seems like there hasn't been any
-> equivalent solution in the meantime, has it?
 > 
-> Using cpuidle for cooling is way more effective than cpufreq (which often
-> hardly is).
-
-On which platform that happens?
+> do you know where things might go wrong here?
+> 
+> thanks,
+> 
+>                             martin
+> 
 
 
 -- 
