@@ -2,203 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0E6813C2
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 09:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D991E813BF
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 09:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbfHEH6i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 03:58:38 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:53869 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726423AbfHEH6h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 03:58:37 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MLAF0-1hcKXl0u5i-00IAXS; Mon, 05 Aug 2019 09:58:23 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Nandor Han <nandor.han@vaisala.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] power: reset: make reboot-mode user selectable
-Date:   Mon,  5 Aug 2019 09:57:15 +0200
-Message-Id: <20190805075812.1056069-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
+        id S1727346AbfHEH6I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Aug 2019 03:58:08 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:54140 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726394AbfHEH6H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 03:58:07 -0400
+Received: by mail-wm1-f68.google.com with SMTP id x15so73755280wmj.3
+        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 00:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Tqd0bpoP//iZnBL1ULJ+B/2/MGB5z7IFUqOHk1lrMKo=;
+        b=fwyq5GgrZ2K1IspWWeLOBJr4Fg+uzFcey+ANWp8BNtlAA9Va5QCdDLuDD3l9NPqaxN
+         WcQZ4n6CKO/bNhaMGg6uDEQ1BY9ShNuhmtodCrBaEUK/bBvV6l9yPWOyBNSNZXE2i3Ig
+         9NOocffHrMTQ3918y7XZsW4PV6vp6gwiRVaYFYBi703AfKILCr9lL2yK52AmKr8Eyp71
+         aMddZ4R4d/GCg0B2ZvlJ5WOFPkT3P73HcVzP7ycLRfJgTEfIq0yyrsj+QrzEMgMNSy3s
+         Vwhelnz0xQl6ZPW57daevtBExV3cBBQH7jJpKbcSOj/2alMQiq1KkqkJ9IqIDbCHOKY9
+         1esQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Tqd0bpoP//iZnBL1ULJ+B/2/MGB5z7IFUqOHk1lrMKo=;
+        b=pvXa8CvKSADcRgugQz6Q0oFR6/3JQC4zrha8VviPn5z9cSPCa0fZErRQjzaXiIM6av
+         bY5w1nTY22DAKWAkuT056HUo7HfBCiUxnvJ6cHvWIeACkKyCEwulCbuIfFPO98RJh56P
+         /xcm79y9xlJrRBR7bAHuU56t6v+GJDNNsO1XH61VTD6gRH8uXHFPDOD92rmtJMsDwsTL
+         2XxX/FAfZchYfUtaexZ7eF4Jna6G/2EQ5dK8hkJDriPSV2eFQIHYT/H3HcCYTNlK5rav
+         6jY3CSQg3RVrKlOcI/SMgDtjoKnK+v1YtIjoar83WemB4o9yaVQbfNOLgp/p6M5+1F3f
+         4kuw==
+X-Gm-Message-State: APjAAAW5ASmQinHRJM3s87XqIaD8/VF6ZNmbEVcXhyrCOS6DhvPfe6AM
+        WYjsjJuzU0FulbBqMwl8mT+VkA==
+X-Google-Smtp-Source: APXvYqxZBpBR2p2HFq/p+efcH5Wm1ABwIn4w5fvAe0T778XAYwBtuXaBr5T+GODrY1iqpp8bBsULkw==
+X-Received: by 2002:a7b:cf3a:: with SMTP id m26mr17858708wmg.6.1564991883482;
+        Mon, 05 Aug 2019 00:58:03 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:1d1:2aa9:b538:861? ([2a01:e34:ed2f:f020:1d1:2aa9:b538:861])
+        by smtp.googlemail.com with ESMTPSA id g2sm72770348wmh.0.2019.08.05.00.58.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Aug 2019 00:58:02 -0700 (PDT)
+Subject: Re: [PATCH v3 6/7] thermal/drivers/cpu_cooling: Introduce the cpu
+ idle cooling driver
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
+        viresh.kumar@linaro.org, leo.yan@linaro.org, edubezval@gmail.com,
+        vincent.guittot@linaro.org, javi.merino@kernel.org,
+        rui.zhang@intel.com, daniel.thompson@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1522945005-7165-7-git-send-email-daniel.lezcano@linaro.org>
+ <20190805051111.24318-1-martin.kepplinger@puri.sm>
+ <02ec23c3-37ee-4e9f-56a4-453a30a29747@puri.sm>
+ <421c43a9-c721-05eb-1860-dfb5c042bc95@linaro.org>
+ <172fc66f-a385-1d58-91f1-60224fac348b@puri.sm>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <34b1ed94-1223-60ec-ac4f-0b32be67eab2@linaro.org>
+Date:   Mon, 5 Aug 2019 09:58:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <172fc66f-a385-1d58-91f1-60224fac348b@puri.sm>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:eB6KAa6NN+juzvqJXgzHBfsfG/scGuoWUNe/iXcQ4WsqcfrIT4c
- abT1fGHqLKnDU5AgeZfPXwiEpachq2sxcC1bcghQEJVDXahbDdkuKpdlceGWMvv2oLT517f
- 1AhDr+hSSSGpK5xTRq7TXJuaN+Af28kshLMnVtDBs+9CuaXJTVrcVo3pFjPnS0NokZ11J0a
- YJROpXnDR2Y39WdDhBsHA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tNJ49rDmRec=:vWYI6b80lwQs6h4UnOE/YK
- Y+ceupVhOpprNmKpqD8SEcdR/9rX4DtZrdgekpLYIKV1PrgXJn9mmmOzSdWlNhujkTCFvmPu4
- msJpr9EICT9JyMGOwBRfVZQEK+OiGDYli9CF9X8mzSnXFU1Zdm0Lbfr5nfEi1RlUVBqIhhign
- qSJKFtNuZIqzS+J3NwRiyhFmHPdNNlHAS1TngkYd4rOaPlPN9udRhkeSVQYcbZ5UOKUhM8zRw
- CiNRAiASlTJhkdf3SD7dd8HHY4qi9TgUaHuGZ162ELSL3lBKP9pIAXAHnagZRX+A5UZQJZPjp
- WGFcOhF8GAAo0wEWeKqTTNXj19b7f2iBprSaYwBjZDMlSPBTHDsaU1G1NuoYS+hl+G74CJc7U
- einXiunzhprAU95Wi9wfLGmwuDLE4/t8Bqu46aAvnlfamSutlpy4ZbyQFoIiFCvpQbt0vdrDZ
- tvsI1B5pDfz3o98w8Asv3sz7jycXvKevk7ExEMoRJJ/SIPgLYaCtCuMPAXncFGOJrKdMFU/gs
- +6U9imBonMlivUCizLAreqCKA19lO/5tgmnK+feOjUCRvpUd23Wb1dTm6LW1UMl337Sj5hny0
- 47fZdXMq6R+xvWXWv42BuSynTY4t8fjcqVpeD1b4BC7kFS1UMOdRCajQQzG8Sb7cPnPxtflZU
- wXqrbyMaCNr4KzcVSlfohsZjbzKxV8KfYmADtDpZG+Wm+wuxA64nGgsCO+S7EFYdHwZPAUZN7
- Vp2SauL0pj1f9+4pN9CX/IGuSoCFB0ALAHu0SQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Nandor Han points out that there might be drivers that can use
-the reboot-mode interfaces but might also be usable on configurations
-without device tree.
+On 05/08/2019 09:42, Martin Kepplinger wrote:
+> On 05.08.19 09:39, Daniel Lezcano wrote:
+>> On 05/08/2019 08:53, Martin Kepplinger wrote:
+>>
+>> [ ... ]
+>>
+>>>>> +static s64 cpuidle_cooling_runtime(struct cpuidle_cooling_device *idle_cdev)
+>>>>> +{
+>>>>> +	s64 next_wakeup;
+>>>>> +	unsigned long state = idle_cdev->state;
+>>>>> +
+>>>>> +	/*
+>>>>> +	 * The function should not be called when there is no
+>>>>> +	 * mitigation because:
+>>>>> +	 * - that does not make sense
+>>>>> +	 * - we end up with a division by zero
+>>>>> +	 */
+>>>>> +	if (!state)
+>>>>> +		return 0;
+>>>>> +
+>>>>> +	next_wakeup = (s64)((idle_cdev->idle_cycle * 100) / state) -
+>>>>> +		idle_cdev->idle_cycle;
+>>>>> +
+>>>>> +	return next_wakeup * NSEC_PER_USEC;
+>>>>> +}
+>>>>> +
+>>>>
+>>>> There is a bug in your calculation formula here when "state" becomes 100.
+>>>> You return 0 for the injection rate, which is the same as "rate" being 0,
+>>>> which is dangerous. You stop cooling when it's most necessary :)
+>>>>
+>>>> I'm not sure how much sense really being 100% idle makes, so I, when testing
+>>>> this, just say if (state == 100) { state = 99 }. Anyways, just don't return 0.
+>>>>
+>>>
+>>> oh and also, this breaks S3 suspend:
+>>
+>> What breaks the S3 suspend? The idle cooling device or the bug above ?
+> 
+> The idle cooling device. I have to configure it out: remove
+> CONFIG_CPU_IDLE_THERMAL to test suspend/resume again. Errors in the
+> kernel log, see below.
 
-Move the 'depends on OF' dependency into CONFIG_REBOOT_MODE since
-that is the only thing that truely has a compile-time dependency
-on CONFIG_OF, and make it user visible to make it possible to
-disable it.
+Ok, thanks for reporting. I'll fix the issue.
 
-The drivers that used to 'select REBOOT_MODE' of course now have to
-use 'depends on REBOOT_MODE instead'. With this, we can soften the
-dependency and allow compile-testing the three front-end drivers
-on non-OF platforms.
 
-Note: anyone who was using a reboot mode driver in their kernel
-configuration now has to enable CONFIG_REBOOT_MODE as well.
+>>> Aug  5 06:09:20 pureos kernel: [  807.487887] PM: suspend entry (deep)
+>>> Aug  5 06:09:40 pureos kernel: [  807.501148] Filesystems sync: 0.013
+>>> seconds
+>>> Aug  5 06:09:40 pureos kernel: [  807.501591] Freezing user space
+>>> processes ... (elapsed 0.003 seconds) done.
+>>> Aug  5 06:09:40 pureos kernel: [  807.504741] OOM killer disabled.
+>>> Aug  5 06:09:40 pureos kernel: [  807.504744] Freezing remaining
+>>> freezable tasks ...
+>>> Aug  5 06:09:40 pureos kernel: [  827.517712] Freezing of tasks failed
+>>> after 20.002 seconds (4 tasks refusing to freeze, wq_busy=0):
+>>> Aug  5 06:09:40 pureos kernel: [  827.527122] thermal-idle/0  S    0
+>>> 161      2 0x00000028
+>>> Aug  5 06:09:40 pureos kernel: [  827.527131] Call trace:
+>>> Aug  5 06:09:40 pureos kernel: [  827.527148]  __switch_to+0xb4/0x200
+>>> Aug  5 06:09:40 pureos kernel: [  827.527156]  __schedule+0x1e0/0x488
+>>> Aug  5 06:09:40 pureos kernel: [  827.527162]  schedule+0x38/0xc8
+>>> Aug  5 06:09:40 pureos kernel: [  827.527169]  smpboot_thread_fn+0x250/0x2a8
+>>> Aug  5 06:09:40 pureos kernel: [  827.527176]  kthread+0xf4/0x120
+>>> Aug  5 06:09:40 pureos kernel: [  827.527182]  ret_from_fork+0x10/0x18
+>>> Aug  5 06:09:40 pureos kernel: [  827.527186] thermal-idle/1  S    0
+>>> 162      2 0x00000028
+>>> Aug  5 06:09:40 pureos kernel: [  827.527192] Call trace:
+>>> Aug  5 06:09:40 pureos kernel: [  827.527197]  __switch_to+0x188/0x200
+>>> Aug  5 06:09:40 pureos kernel: [  827.527203]  __schedule+0x1e0/0x488
+>>> Aug  5 06:09:40 pureos kernel: [  827.527208]  schedule+0x38/0xc8
+>>> Aug  5 06:09:40 pureos kernel: [  827.527213]  smpboot_thread_fn+0x250/0x2a8
+>>> Aug  5 06:09:40 pureos kernel: [  827.527218]  kthread+0xf4/0x120
+>>> Aug  5 06:09:40 pureos kernel: [  827.527222]  ret_from_fork+0x10/0x18
+>>> Aug  5 06:09:40 pureos kernel: [  827.527226] thermal-idle/2  S    0
+>>> 163      2 0x00000028
+>>> Aug  5 06:09:40 pureos kernel: [  827.527231] Call trace:
+>>> Aug  5 06:09:40 pureos kernel: [  827.527237]  __switch_to+0xb4/0x200
+>>> Aug  5 06:09:40 pureos kernel: [  827.527242]  __schedule+0x1e0/0x488
+>>> Aug  5 06:09:40 pureos kernel: [  827.527247]  schedule+0x38/0xc8
+>>> Aug  5 06:09:40 pureos kernel: [  827.527259]  smpboot_thread_fn+0x250/0x2a8
+>>> Aug  5 06:09:40 pureos kernel: [  827.527264]  kthread+0xf4/0x120
+>>> Aug  5 06:09:40 pureos kernel: [  827.527268]  ret_from_fork+0x10/0x18
+>>> Aug  5 06:09:40 pureos kernel: [  827.527272] thermal-idle/3  S    0
+>>> 164      2 0x00000028
+>>> Aug  5 06:09:40 pureos kernel: [  827.527278] Call trace:
+>>> Aug  5 06:09:40 pureos kernel: [  827.527283]  __switch_to+0xb4/0x200
+>>> Aug  5 06:09:40 pureos kernel: [  827.527288]  __schedule+0x1e0/0x488
+>>> Aug  5 06:09:40 pureos kernel: [  827.527293]  schedule+0x38/0xc8
+>>> Aug  5 06:09:40 pureos kernel: [  827.527298]  smpboot_thread_fn+0x250/0x2a8
+>>> Aug  5 06:09:40 pureos kernel: [  827.527303]  kthread+0xf4/0x120
+>>> Aug  5 06:09:40 pureos kernel: [  827.527308]  ret_from_fork+0x10/0x18
+>>> Aug  5 06:09:40 pureos kernel: [  827.527375] Restarting kernel threads
+>>> ... done.
+>>> Aug  5 06:09:40 pureos kernel: [  827.527771] OOM killer enabled.
+>>> Aug  5 06:09:40 pureos kernel: [  827.527772] Restarting tasks ... done.
+>>> Aug  5 06:09:40 pureos kernel: [  827.528926] PM: suspend exit
+>>>
+>>>
+>>> do you know where things might go wrong here?
+>>>
+>>> thanks,
+>>>
+>>>                             martin
+>>>
+>>
+>>
+> 
 
-Suggested-by: Nandor Han <nandor.han@vaisala.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-Nandor, this is so far untested, could you make sure this
-works in all configurations and forward it along with the
-bugfix?
 
-Sebastian, I'm not convinced this is a good idea, just sending
-it as Nandor requested. Please decide for yourself.
----
- arch/arm/configs/davinci_all_defconfig |  1 +
- arch/arm64/configs/defconfig           |  1 +
- drivers/power/reset/Kconfig            | 22 +++++++++++++---------
- include/linux/reboot-mode.h            | 20 ++++++++++++++++++++
- 4 files changed, 35 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm/configs/davinci_all_defconfig b/arch/arm/configs/davinci_all_defconfig
-index b34970ce6b31..ebf506c01899 100644
---- a/arch/arm/configs/davinci_all_defconfig
-+++ b/arch/arm/configs/davinci_all_defconfig
-@@ -139,6 +139,7 @@ CONFIG_GPIO_PCA953X_IRQ=y
- CONFIG_RESET_CONTROLLER=y
- CONFIG_POWER_RESET=y
- CONFIG_POWER_RESET_GPIO=y
-+CONFIG_REBOOT_MODE=m
- CONFIG_SYSCON_REBOOT_MODE=m
- CONFIG_BATTERY_LEGO_EV3=m
- CONFIG_WATCHDOG=y
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0e58ef02880c..bb7d7bec1413 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -419,6 +419,7 @@ CONFIG_ROCKCHIP_IODOMAIN=y
- CONFIG_POWER_RESET_MSM=y
- CONFIG_POWER_RESET_XGENE=y
- CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_REBOOT_MODE=y
- CONFIG_SYSCON_REBOOT_MODE=y
- CONFIG_BATTERY_SBS=m
- CONFIG_BATTERY_BQ27XXX=y
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index a564237278ff..997323d443f5 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -9,6 +9,13 @@ menuconfig POWER_RESET
- 
- if POWER_RESET
- 
-+config REBOOT_MODE
-+	tristate "Pass reboot-mode to firmware"
-+	depends on OF
-+	help
-+	  Some drivers allow setting the reboot mode through a platform
-+	  interface that the boot firmware can read.
-+
- config POWER_RESET_AS3722
- 	bool "ams AS3722 power-off driver"
- 	depends on MFD_AS3722
-@@ -107,9 +114,9 @@ config POWER_RESET_MSM
- 
- config POWER_RESET_QCOM_PON
- 	tristate "Qualcomm power-on driver"
--	depends on ARCH_QCOM
-+	depends on ARCH_QCOM || COMPILE_TEST
- 	depends on MFD_SPMI_PMIC
--	select REBOOT_MODE
-+	depends on REBOOT_MODE || !REBOOT_MODE
- 	help
- 	  Power On support for Qualcomm boards.
- 	  If you have a Qualcomm platform and need support for
-@@ -223,14 +230,11 @@ config POWER_RESET_ZX
- 	help
- 	  Reboot support for ZTE SoCs.
- 
--config REBOOT_MODE
--	tristate
--
- config SYSCON_REBOOT_MODE
- 	tristate "Generic SYSCON regmap reboot mode driver"
--	depends on OF
-+	depends on OF || COMPILE_TEST
- 	depends on MFD_SYSCON
--	select REBOOT_MODE
-+	depends on REBOOT_MODE || !REBOOT_MODE
- 	help
- 	  Say y here will enable reboot mode driver. This will
- 	  get reboot mode arguments and store it in SYSCON mapped
-@@ -248,8 +252,8 @@ config POWER_RESET_SC27XX
- 
- config NVMEM_REBOOT_MODE
- 	tristate "Generic NVMEM reboot mode driver"
--	depends on OF
--	select REBOOT_MODE
-+	depends on OF || COMPILE_TEST
-+	depends on REBOOT_MODE || !REBOOT_MODE
- 	help
- 	  Say y here will enable reboot mode driver. This will
- 	  get reboot mode arguments and store it in a NVMEM cell,
-diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
-index 4a2abb38d1d6..bd002060e3d0 100644
---- a/include/linux/reboot-mode.h
-+++ b/include/linux/reboot-mode.h
-@@ -9,11 +9,31 @@ struct reboot_mode_driver {
- 	struct notifier_block reboot_notifier;
- };
- 
-+#if IS_ENABLED(CONFIG_REBOOT_MODE)
- int reboot_mode_register(struct reboot_mode_driver *reboot);
- int reboot_mode_unregister(struct reboot_mode_driver *reboot);
- int devm_reboot_mode_register(struct device *dev,
- 			      struct reboot_mode_driver *reboot);
- void devm_reboot_mode_unregister(struct device *dev,
- 				 struct reboot_mode_driver *reboot);
-+#else
-+static inline int reboot_mode_register(struct reboot_mode_driver *reboot)
-+{
-+	return 0;
-+}
-+static inline int reboot_mode_unregister(struct reboot_mode_driver *reboot)
-+{
-+	return 0;
-+}
-+static inline int devm_reboot_mode_register(struct device *dev,
-+			      struct reboot_mode_driver *reboot)
-+{
-+	return 0;
-+}
-+static inline void devm_reboot_mode_unregister(struct device *dev,
-+				 struct reboot_mode_driver *reboot)
-+{
-+}
-+#endif
- 
- #endif
 -- 
-2.20.0
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
