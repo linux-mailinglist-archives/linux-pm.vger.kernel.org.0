@@ -2,160 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F2D81629
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 11:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FC881700
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 12:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727349AbfHEJ7M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 05:59:12 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:43109 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727259AbfHEJ7L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 05:59:11 -0400
-Received: from 79.184.254.29.ipv4.supernova.orange.pl (79.184.254.29) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
- id a3463300b674835e; Mon, 5 Aug 2019 11:59:09 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Ran Wang <ran.wang_1@nxp.com>
-Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        id S1728128AbfHEK0d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Aug 2019 06:26:33 -0400
+Received: from shell.v3.sk ([90.176.6.54]:60458 "EHLO shell.v3.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727158AbfHEK0d (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 5 Aug 2019 06:26:33 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id D61D8D5DEB;
+        Mon,  5 Aug 2019 12:26:28 +0200 (CEST)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 2Zcvwn24q6Uv; Mon,  5 Aug 2019 12:26:18 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 171F9D5DE6;
+        Mon,  5 Aug 2019 12:26:18 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id HZkQZEnNuYu7; Mon,  5 Aug 2019 12:26:15 +0200 (CEST)
+Received: from zimbra.v3.sk (zimbra.v3.sk [10.13.37.31])
+        by zimbra.v3.sk (Postfix) with ESMTP id 99217D5DEB;
+        Mon,  5 Aug 2019 12:26:14 +0200 (CEST)
+Date:   Mon, 5 Aug 2019 12:26:12 +0200 (CEST)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Andy Shevchenko <andy@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
         Mark Rutland <mark.rutland@arm.com>,
-        Pavel Machek <pavel@ucw.cz>, Li Biwen <biwen.li@nxp.com>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] PM: wakeup: Add routine to help fetch wakeup source object.
-Date:   Mon, 05 Aug 2019 11:59:09 +0200
-Message-ID: <4158639.B12JYek7R7@kreacher>
-In-Reply-To: <20190724074722.12270-1-ran.wang_1@nxp.com>
-References: <20190724074722.12270-1-ran.wang_1@nxp.com>
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Rob Herring <robh@kernel.org>
+Message-ID: <42288023.4384.1565000772220.JavaMail.zimbra@v3.sk>
+In-Reply-To: <20190803084755.GA8224@amd>
+References: <20190513075641.1277716-1-lkundrak@v3.sk> <20190513075641.1277716-2-lkundrak@v3.sk> <20190513090743.GA19319@amd> <20190801192713.GA22373@amd> <390f31d2f85e8075d9b1e250a2ec093ac8769703.camel@v3.sk> <20190803084755.GA8224@amd>
+Subject: Re: OLPC in 5.3? was Re: [PATCH v7 01/10] dt-bindings:
+ olpc,xo1.75-ec: Add OLPC XO-1.75 EC bindings
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.13.37.1]
+X-Mailer: Zimbra 8.6.0_GA_1153 (ZimbraWebClient - FF68 (Linux)/8.6.0_GA_1153)
+Thread-Topic: OLPC in 5.3? was Re: [PATCH v7 01/10] dt-bindings: olpc,xo1.75-ec: Add OLPC XO-1.75 EC bindings
+Thread-Index: dT6Cyk1a7TWDiehHLbTTn6BCstY0sg==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, July 24, 2019 9:47:20 AM CEST Ran Wang wrote:
-> Some user might want to go through all registered wakeup sources
-> and doing things accordingly. For example, SoC PM driver might need to
-> do HW programming to prevent powering down specific IP which wakeup
-> source depending on. So add this API to help walk through all registered
-> wakeup source objects on that list and return them one by one.
+----- On Aug 3, 2019, at 10:47 AM, Pavel Machek pavel@ucw.cz wrote:
+
+> Hi!
 > 
-> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> ---
-> Change in v5:
-> 	- Update commit message, add decription of walk through all wakeup
-> 	source objects.
-> 	- Add SCU protection in function wakeup_source_get_next().
-> 	- Rename wakeup_source member 'attached_dev' to 'dev' and move it up
-> 	(before wakeirq).
+>> > What is status of OLPC-1.75 in v5.3? IIRC most of the patches went in,
+>> > but I don't see suitable dts file in the tree. I tried porting one
+>> > from working (4.19 or so) kernel, but it was not quite trivial.
+>> > 
+>> > Is there time for dts to be merged?
+>> 
+>> Short answer is that it's not absolutely necessary. With a new enough
+>> OpenFirmware, the firmware will just construct a correct FDT.
 > 
-> Change in v4:
-> 	- None.
+>> To upgrade your machine to the new firmware, just copy
+>> http://dev.laptop.org/~quozl/q4e00ja.rom to a FAT partition on a USB
+>> flash stick and run "flash u:\q4e00ja.rom" from the "ok" prompt.
+>> Then you'll be able to run stock mainline kernels happily.
 > 
-> Change in v3:
-> 	- Adjust indentation of *attached_dev;.
+> Aha, good, thanks. That went smoothly.
 > 
-> Change in v2:
-> 	- None.
+>> That said, it might still be useful to have a DTS file in tree (for
+>> reference, testing, machines with older firmware, etc.). I've now re-
+>> sent the MMP2 devicetree update patch set with the DTS file included
+>> and copied you on that one.
 > 
->  drivers/base/power/wakeup.c | 24 ++++++++++++++++++++++++
->  include/linux/pm_wakeup.h   |  3 +++
->  2 files changed, 27 insertions(+)
+> Yes: sometimes it is neccessary to modify the dts. I was changing the
+> kernel command line, for example.
+
+Well, you can do that from OFW too. E.g.:
+
+  " console=ttyS2,115200" to boot-file
+
+>> As usual, I'm thankful for testing, reviews and acks.
 > 
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index ee31d4f..2fba891 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -14,6 +14,7 @@
->  #include <linux/suspend.h>
->  #include <linux/seq_file.h>
->  #include <linux/debugfs.h>
-> +#include <linux/of_device.h>
->  #include <linux/pm_wakeirq.h>
->  #include <trace/events/power.h>
->  
-> @@ -226,6 +227,28 @@ void wakeup_source_unregister(struct wakeup_source *ws)
->  	}
->  }
->  EXPORT_SYMBOL_GPL(wakeup_source_unregister);
-> +/**
-> + * wakeup_source_get_next - Get next wakeup source from the list
-> + * @ws: Previous wakeup source object, null means caller want first one.
-> + */
-> +struct wakeup_source *wakeup_source_get_next(struct wakeup_source *ws)
-> +{
-> +	struct list_head *ws_head = &wakeup_sources;
-> +	struct wakeup_source *next_ws = NULL;
-> +	int idx;
-> +
-> +	idx = srcu_read_lock(&wakeup_srcu);
-> +	if (ws)
-> +		next_ws = list_next_or_null_rcu(ws_head, &ws->entry,
-> +				struct wakeup_source, entry);
-> +	else
-> +		next_ws = list_entry_rcu(ws_head->next,
-> +				struct wakeup_source, entry);
-> +	srcu_read_unlock(&wakeup_srcu, idx);
-> +
+> I'll take a look. I tried 5.2 with defconfig from one of the branches
+> (olpc_xo175_defconfig), and that does not boot.
 
-This is incorrect.
+I'm using [1].
 
-The SRCU cannot be unlocked until the caller of this is done
-with the object returned by it, or that object can be freed
-while it is still being accessed.
+[1] https://raw.githubusercontent.com/hackerspace/olpc-xo175-linux/lr/olpc-xo175/arch/arm/configs/olpc_xo175_defconfig
 
-Besides, this patch conflicts with some general wakeup sources
-changes in the works, so it needs to be deferred and rebased on
-top of those changes.
+I'm wondering if it would make sense to include this upstream?
+My guess was that nowadays multi_v7_defconfig that just works
+on any DT-based platform is preferred to machine specific ones.
 
-> +	return next_ws;
-> +}
-> +EXPORT_SYMBOL_GPL(wakeup_source_get_next);
->  
->  /**
->   * device_wakeup_attach - Attach a wakeup source object to a device object.
-> @@ -242,6 +265,7 @@ static int device_wakeup_attach(struct device *dev, struct wakeup_source *ws)
->  		return -EEXIST;
->  	}
->  	dev->power.wakeup = ws;
-> +	ws->dev = dev;
->  	if (dev->power.wakeirq)
->  		device_wakeup_attach_irq(dev, dev->power.wakeirq);
->  	spin_unlock_irq(&dev->power.lock);
-> diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> index 9102760..fc23c1a 100644
-> --- a/include/linux/pm_wakeup.h
-> +++ b/include/linux/pm_wakeup.h
-> @@ -23,6 +23,7 @@ struct wake_irq;
->   * @name: Name of the wakeup source
->   * @entry: Wakeup source list entry
->   * @lock: Wakeup source lock
-> + * @dev: The device it attached to
->   * @wakeirq: Optional device specific wakeirq
->   * @timer: Wakeup timer list
->   * @timer_expires: Wakeup timer expiration
-> @@ -42,6 +43,7 @@ struct wakeup_source {
->  	const char 		*name;
->  	struct list_head	entry;
->  	spinlock_t		lock;
-> +	struct device		*dev;
->  	struct wake_irq		*wakeirq;
->  	struct timer_list	timer;
->  	unsigned long		timer_expires;
-> @@ -88,6 +90,7 @@ extern void wakeup_source_add(struct wakeup_source *ws);
->  extern void wakeup_source_remove(struct wakeup_source *ws);
->  extern struct wakeup_source *wakeup_source_register(const char *name);
->  extern void wakeup_source_unregister(struct wakeup_source *ws);
-> +extern struct wakeup_source *wakeup_source_get_next(struct wakeup_source *ws);
->  extern int device_wakeup_enable(struct device *dev);
->  extern int device_wakeup_disable(struct device *dev);
->  extern void device_set_wakeup_capable(struct device *dev, bool capable);
-> 
+However, this one would enable OLPC-specific drivers the
+multi_v7_defconfig defconfig wouldn't.
 
+I've sent out an update to multi_v7_defconfig [2]. Once it is applied,
+it should work on the XO-1.75 (without fancy things like camera or
+power button).
 
+[2] https://lore.kernel.org/lkml/20190620114816.1387881-1-lkundrak@v3.sk/
 
+> What config should I use? Is it enough to produce zImage and put it on
+> the flashdisk with olpc.fth file?
 
+Yes. OFW loads olpc.fth from the first active FAT or ext3 partition on
+SD card or a USB flash drive. If you put the zImage in the same place,
+the following script would work:
+  
+  \ OLPC boot script
+
+  " last:\zImage" to boot-device
+  visible unfreeze
+  boot
+
+Note that it has to start with a backslash. The "visible" and "unfreeze"
+words enable the DCON pass-through mode. You would see the XO logo
+instead of the actual screen output without it.
+
+> Is there some kind of documentation somewhere? :-).
+
+This is always a tough question. Short answer would be no.
+
+I'm happy to answer questions though, if the above wouldn't be
+sufficient to make the thing boot for you.
+
+I'd prefer if things just worked to documenting how to hack things
+to make them work. If you got a Fedora machine, you can already
+just pick a nightly [1] armhfp image and install it with
+fedora-arm-installer the same way as any other ARM machine. I hope
+to make Debian work too. An image that already boots would then
+hopefully be a good start for whoever wishes to run their own kernels.
+That's my excuse for not documenting things...
+
+[1] https://www.happyassassin.net/nightlies.html
+
+> Thanks and best regards,
+> Pavel
+
+Take care
+Lubo
+
+> --
+> (english) http://www.livejournal.com/~pavelmachek
+> (cesky, pictures)
+> http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
