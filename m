@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D80C81399
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 09:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817248139C
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 09:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727450AbfHEHkI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 03:40:08 -0400
-Received: from comms.puri.sm ([159.203.221.185]:49542 "EHLO comms.puri.sm"
+        id S1726423AbfHEHmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Aug 2019 03:42:44 -0400
+Received: from comms.puri.sm ([159.203.221.185]:49670 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726659AbfHEHkI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 5 Aug 2019 03:40:08 -0400
+        id S1726394AbfHEHmo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 5 Aug 2019 03:42:44 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 2FF24DF6EA;
-        Mon,  5 Aug 2019 00:40:06 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id AD8D8DF6EA;
+        Mon,  5 Aug 2019 00:42:42 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3_qw5-q6KSNU; Mon,  5 Aug 2019 00:40:05 -0700 (PDT)
+        with ESMTP id 00cR1ykuyMYJ; Mon,  5 Aug 2019 00:42:41 -0700 (PDT)
 Subject: Re: [PATCH v3 6/7] thermal/drivers/cpu_cooling: Introduce the cpu
  idle cooling driver
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -27,7 +27,8 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1522945005-7165-7-git-send-email-daniel.lezcano@linaro.org>
  <20190805051111.24318-1-martin.kepplinger@puri.sm>
- <2d7f1caa-351a-8fdc-bb6b-151f7313a042@linaro.org>
+ <02ec23c3-37ee-4e9f-56a4-453a30a29747@puri.sm>
+ <421c43a9-c721-05eb-1860-dfb5c042bc95@linaro.org>
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 Openpgp: preference=signencrypt
 Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
@@ -135,11 +136,11 @@ Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
  4t1RG8Nxma/hJwwu1zRNsFK55Q/8Nlukc1WI1U+iF+EmpjZVfjFl9P9X2ArrX6mZfOgUipiY
  5VqX5Dys8s44RkFWa02WJygLuO9YUb/P+g8eSbmSYAwp2Gpzcdww63kTLv56uk32jnpDLcYD
  WG//KA68tPVBR2xhy7Fp+qAa
-Message-ID: <55edd1a1-0120-0f5e-5105-050a4f93e713@puri.sm>
-Date:   Mon, 5 Aug 2019 09:40:01 +0200
+Message-ID: <172fc66f-a385-1d58-91f1-60224fac348b@puri.sm>
+Date:   Mon, 5 Aug 2019 09:42:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
-In-Reply-To: <2d7f1caa-351a-8fdc-bb6b-151f7313a042@linaro.org>
+In-Reply-To: <421c43a9-c721-05eb-1860-dfb5c042bc95@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -148,63 +149,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05.08.19 09:37, Daniel Lezcano wrote:
-> On 05/08/2019 07:11, Martin Kepplinger wrote:
->> ---
+On 05.08.19 09:39, Daniel Lezcano wrote:
+> On 05/08/2019 08:53, Martin Kepplinger wrote:
 > 
 > [ ... ]
 > 
->>> +static s64 cpuidle_cooling_runtime(struct cpuidle_cooling_device *idle_cdev)
->>> +{
->>> +	s64 next_wakeup;
->>> +	unsigned long state = idle_cdev->state;
->>> +
->>> +	/*
->>> +	 * The function should not be called when there is no
->>> +	 * mitigation because:
->>> +	 * - that does not make sense
->>> +	 * - we end up with a division by zero
->>> +	 */
->>> +	if (!state)
->>> +		return 0;
->>> +
->>> +	next_wakeup = (s64)((idle_cdev->idle_cycle * 100) / state) -
->>> +		idle_cdev->idle_cycle;
->>> +
->>> +	return next_wakeup * NSEC_PER_USEC;
->>> +}
->>> +
+>>>> +static s64 cpuidle_cooling_runtime(struct cpuidle_cooling_device *idle_cdev)
+>>>> +{
+>>>> +	s64 next_wakeup;
+>>>> +	unsigned long state = idle_cdev->state;
+>>>> +
+>>>> +	/*
+>>>> +	 * The function should not be called when there is no
+>>>> +	 * mitigation because:
+>>>> +	 * - that does not make sense
+>>>> +	 * - we end up with a division by zero
+>>>> +	 */
+>>>> +	if (!state)
+>>>> +		return 0;
+>>>> +
+>>>> +	next_wakeup = (s64)((idle_cdev->idle_cycle * 100) / state) -
+>>>> +		idle_cdev->idle_cycle;
+>>>> +
+>>>> +	return next_wakeup * NSEC_PER_USEC;
+>>>> +}
+>>>> +
+>>>
+>>> There is a bug in your calculation formula here when "state" becomes 100.
+>>> You return 0 for the injection rate, which is the same as "rate" being 0,
+>>> which is dangerous. You stop cooling when it's most necessary :)
+>>>
+>>> I'm not sure how much sense really being 100% idle makes, so I, when testing
+>>> this, just say if (state == 100) { state = 99 }. Anyways, just don't return 0.
+>>>
 >>
->> There is a bug in your calculation formula here when "state" becomes 100.
->> You return 0 for the injection rate, which is the same as "rate" being 0,
->> which is dangerous. You stop cooling when it's most necessary :)
+>> oh and also, this breaks S3 suspend:
 > 
-> Right, thanks for spotting this.
+> What breaks the S3 suspend? The idle cooling device or the bug above ?
+
+The idle cooling device. I have to configure it out: remove
+CONFIG_CPU_IDLE_THERMAL to test suspend/resume again. Errors in the
+kernel log, see below.
+
+
 > 
->> I'm not sure how much sense really being 100% idle makes, so I, when testing
->> this, just say if (state == 100) { state = 99 }. Anyways, just don't return 0.
+>> Aug  5 06:09:20 pureos kernel: [  807.487887] PM: suspend entry (deep)
+>> Aug  5 06:09:40 pureos kernel: [  807.501148] Filesystems sync: 0.013
+>> seconds
+>> Aug  5 06:09:40 pureos kernel: [  807.501591] Freezing user space
+>> processes ... (elapsed 0.003 seconds) done.
+>> Aug  5 06:09:40 pureos kernel: [  807.504741] OOM killer disabled.
+>> Aug  5 06:09:40 pureos kernel: [  807.504744] Freezing remaining
+>> freezable tasks ...
+>> Aug  5 06:09:40 pureos kernel: [  827.517712] Freezing of tasks failed
+>> after 20.002 seconds (4 tasks refusing to freeze, wq_busy=0):
+>> Aug  5 06:09:40 pureos kernel: [  827.527122] thermal-idle/0  S    0
+>> 161      2 0x00000028
+>> Aug  5 06:09:40 pureos kernel: [  827.527131] Call trace:
+>> Aug  5 06:09:40 pureos kernel: [  827.527148]  __switch_to+0xb4/0x200
+>> Aug  5 06:09:40 pureos kernel: [  827.527156]  __schedule+0x1e0/0x488
+>> Aug  5 06:09:40 pureos kernel: [  827.527162]  schedule+0x38/0xc8
+>> Aug  5 06:09:40 pureos kernel: [  827.527169]  smpboot_thread_fn+0x250/0x2a8
+>> Aug  5 06:09:40 pureos kernel: [  827.527176]  kthread+0xf4/0x120
+>> Aug  5 06:09:40 pureos kernel: [  827.527182]  ret_from_fork+0x10/0x18
+>> Aug  5 06:09:40 pureos kernel: [  827.527186] thermal-idle/1  S    0
+>> 162      2 0x00000028
+>> Aug  5 06:09:40 pureos kernel: [  827.527192] Call trace:
+>> Aug  5 06:09:40 pureos kernel: [  827.527197]  __switch_to+0x188/0x200
+>> Aug  5 06:09:40 pureos kernel: [  827.527203]  __schedule+0x1e0/0x488
+>> Aug  5 06:09:40 pureos kernel: [  827.527208]  schedule+0x38/0xc8
+>> Aug  5 06:09:40 pureos kernel: [  827.527213]  smpboot_thread_fn+0x250/0x2a8
+>> Aug  5 06:09:40 pureos kernel: [  827.527218]  kthread+0xf4/0x120
+>> Aug  5 06:09:40 pureos kernel: [  827.527222]  ret_from_fork+0x10/0x18
+>> Aug  5 06:09:40 pureos kernel: [  827.527226] thermal-idle/2  S    0
+>> 163      2 0x00000028
+>> Aug  5 06:09:40 pureos kernel: [  827.527231] Call trace:
+>> Aug  5 06:09:40 pureos kernel: [  827.527237]  __switch_to+0xb4/0x200
+>> Aug  5 06:09:40 pureos kernel: [  827.527242]  __schedule+0x1e0/0x488
+>> Aug  5 06:09:40 pureos kernel: [  827.527247]  schedule+0x38/0xc8
+>> Aug  5 06:09:40 pureos kernel: [  827.527259]  smpboot_thread_fn+0x250/0x2a8
+>> Aug  5 06:09:40 pureos kernel: [  827.527264]  kthread+0xf4/0x120
+>> Aug  5 06:09:40 pureos kernel: [  827.527268]  ret_from_fork+0x10/0x18
+>> Aug  5 06:09:40 pureos kernel: [  827.527272] thermal-idle/3  S    0
+>> 164      2 0x00000028
+>> Aug  5 06:09:40 pureos kernel: [  827.527278] Call trace:
+>> Aug  5 06:09:40 pureos kernel: [  827.527283]  __switch_to+0xb4/0x200
+>> Aug  5 06:09:40 pureos kernel: [  827.527288]  __schedule+0x1e0/0x488
+>> Aug  5 06:09:40 pureos kernel: [  827.527293]  schedule+0x38/0xc8
+>> Aug  5 06:09:40 pureos kernel: [  827.527298]  smpboot_thread_fn+0x250/0x2a8
+>> Aug  5 06:09:40 pureos kernel: [  827.527303]  kthread+0xf4/0x120
+>> Aug  5 06:09:40 pureos kernel: [  827.527308]  ret_from_fork+0x10/0x18
+>> Aug  5 06:09:40 pureos kernel: [  827.527375] Restarting kernel threads
+>> ... done.
+>> Aug  5 06:09:40 pureos kernel: [  827.527771] OOM killer enabled.
+>> Aug  5 06:09:40 pureos kernel: [  827.527772] Restarting tasks ... done.
+>> Aug  5 06:09:40 pureos kernel: [  827.528926] PM: suspend exit
 >>
->> Daniel, thanks a lot for these additions! Could you send an update of this?
-> 
-> Yes, I'm working on a new version.
-
-great.
-
-> 
->> btw, that's what I'm referring to:
->> https://lore.kernel.org/linux-pm/1522945005-7165-1-git-send-email-daniel.lezcano@linaro.org/
->> I know it's a little old already, but it seems like there hasn't been any
->> equivalent solution in the meantime, has it?
 >>
->> Using cpuidle for cooling is way more effective than cpufreq (which often
->> hardly is).
-> 
-> On which platform that happens?
+>> do you know where things might go wrong here?
+>>
+>> thanks,
+>>
+>>                             martin
+>>
 > 
 > 
 
-I'm running this on imx8mq.
-
-thanks,
-
-                                    martin
