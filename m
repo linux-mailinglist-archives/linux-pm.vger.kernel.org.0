@@ -2,156 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1155881779
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 12:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A1181910
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 14:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728532AbfHEKuM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 06:50:12 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:37278 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728520AbfHEKuL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 06:50:11 -0400
-Received: by mail-lf1-f65.google.com with SMTP id c9so57502539lfh.4;
-        Mon, 05 Aug 2019 03:50:09 -0700 (PDT)
+        id S1728028AbfHEMWT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Aug 2019 08:22:19 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41924 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727259AbfHEMWS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 08:22:18 -0400
+Received: by mail-pl1-f194.google.com with SMTP id m9so36281705pls.8;
+        Mon, 05 Aug 2019 05:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QQyVc+vK6ut2H0EG3cdDkucf3SZC0gbmKE/5o4Bm72I=;
-        b=l+hxbhJ5A2G+CiX6S/ucjwNgK6YG4cRCO+fATV6YsGv1HWP8zgWZEMGvqqcfHy4cwC
-         DoT62oUQtZP70wA62cDV4yZv1gjoj+r/rtuthaQfnyX6tGOmaMQXcGaXvxEPDxWfKPcm
-         ImhDgPsdikVBORVOJa4tbEPdHa46e1Fy0G0hKuOidDmHZ0ucaqwWBLLj5fpJkm8B8PR6
-         Tc6+puPFpiI7euURISTNr4sw/jv+uNYlXelMv/tYzL9x+iOrCeWanjfZXyBQKXkfnDtg
-         QsHeqSX+CQonsYIJ1C8U5rV653ZncxJRKwPQ3uq/PwJzLDklOM2MJa0sewO+6GuqoAKl
-         u0pw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vEWoK/ncnnL5HeoDBfuY5M1+24Qlh2DA31rCewI/52E=;
+        b=p6Z3kfl4eEvXmrZiU9Y687TE0tfxSww44x8bZWTyiuM1Kk4+Ls0NTJ67ignEqCsb8V
+         qFoXvj+B7+OYXH5/sjVkWdJMQWfVVVxqkBrItVYnnYbjuQruh8Pd55RQm7Gf3vIwN4pj
+         qvFF+yNwQbDj6TRhMxwvFnYifcpkdEi0xX3oWKOj8LdlE6VWvZniE5rgSbC33RSHiq4p
+         7ji9b3MO2QrjgFvyBkTOmN49Uh9HswzgDWNIntCDXWJkN7bXuY50icgNCxMwWIO5O1uq
+         QDRhnwKy2BjH/9Q8ZEHjRSSsJ4pjm1yh0yC14L22KF3amQ9pxCsB+WlNpVLLiEgmX7It
+         MkiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QQyVc+vK6ut2H0EG3cdDkucf3SZC0gbmKE/5o4Bm72I=;
-        b=gEeJqBHLkfcHRKJAohG4UBH90WwhM+ydqmQ4aJXOfDoOvI3Z+kj7urHqslxBO7Chet
-         nrZSfDzFLbEWCt/RkID7zYx2QSHnoQdTvCuggQTQOrly1KUlsgijwwgld0wuOD3atRr0
-         z5WWEXjC6CI3jstSMd6lZIjI8rupwx7PoSBG6o1sarORTEWkv64aAApYvUnMrpFStVq0
-         JrebJCozdkLuUTaG6/lBWur5cqJ3cLS+MiDK4Kna4eOM6q8H5kdSrIo9KjzTMFCwxW5H
-         ekh3oRfELkS7yF+BMFE8VH0zCspIZsz/KAKbUWSWWKpsFdTXH3O/QL4Wxnaxu0qcZatj
-         Ge4w==
-X-Gm-Message-State: APjAAAX+Ida2n8Ih5nqjpyKGlMdR6kpoVum8akCdvZUYbHdaoqxuEKld
-        dVWxw0xmz96dKv4Buaj0TMvoE5dM
-X-Google-Smtp-Source: APXvYqwCMD+UPHgwi0+gii65cCcprbuoYyXe5kKadJL+bGPq6VyxKoiIx5GYVs6OAThHmSQPKiw0Kg==
-X-Received: by 2002:a05:6512:4c8:: with SMTP id w8mr5749003lfq.98.1565002208653;
-        Mon, 05 Aug 2019 03:50:08 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.googlemail.com with ESMTPSA id n10sm14787543lfe.24.2019.08.05.03.50.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Aug 2019 03:50:07 -0700 (PDT)
-Subject: Re: [PATCH v7 01/20] pinctrl: tegra: Add suspend and resume support
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
-        jason@lakedaemon.net, marc.zyngier@arm.com,
-        linus.walleij@linaro.org, stefan@agner.ch, mark.rutland@arm.com
-Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org
-References: <1564607463-28802-1-git-send-email-skomatineni@nvidia.com>
- <1564607463-28802-2-git-send-email-skomatineni@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <6b1482f6-0578-f602-d8d1-541d86303ce2@gmail.com>
-Date:   Mon, 5 Aug 2019 13:50:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        bh=vEWoK/ncnnL5HeoDBfuY5M1+24Qlh2DA31rCewI/52E=;
+        b=N9W5HPJJ297AYWdM5eOJqTaUXyFm9kJdiLc9mcYtbErl/hoMMicZojooQ6m/6fGFSA
+         uZ1go1CjdHMhw/87cQvJdwDqXjbKBdaivkX1AGAEt6wKz72dF4RZZfMEwnrXFatPAa4J
+         brKm4mI+Fd191YDJyF5jpMvj/OQu5IW08LpNK9mz2ZSclugJ7Aa0k8h6BowWlES0vDPe
+         GRvFoJrA9FVvMbrsRQk0DsdojYOBbb0/nBi+McO7s1cVhKdJMU3WnJA7uET8qm5nvJoD
+         vLdUzThvhZylc1frWuNQ7YOtCYfgygSkz5mveppbDXTncyuPCNTIfdjiDJDhnnZrTTaF
+         mmMQ==
+X-Gm-Message-State: APjAAAUW+rYMai3yN96EcMV3a3RgYVnYEeWT8ygBws+DyZrO+FmlKYI2
+        rU0DNa8sFURT3Av52OWsHyA=
+X-Google-Smtp-Source: APXvYqyKEfTE85E4XHkXoQNUJWBl4w/9gg2ux5fA/09qhCairbUTm2pP4GaeK6Zg8ntOYFTPUxt7kQ==
+X-Received: by 2002:a17:902:8b88:: with SMTP id ay8mr139369488plb.139.1565007738273;
+        Mon, 05 Aug 2019 05:22:18 -0700 (PDT)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
+        by smtp.gmail.com with ESMTPSA id a16sm92646276pfd.68.2019.08.05.05.22.10
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 05 Aug 2019 05:22:17 -0700 (PDT)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Perches <joe@perches.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        iommu@lists.linux-foundation.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH v3 0/8] Replace strncmp with str_has_prefix
+Date:   Mon,  5 Aug 2019 20:22:04 +0800
+Message-Id: <20190805122204.12823-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <1564607463-28802-2-git-send-email-skomatineni@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-01.08.2019 0:10, Sowjanya Komatineni пишет:
-> This patch adds support for Tegra pinctrl driver suspend and resume.
-> 
-> During suspend, context of all pinctrl registers are stored and
-> on resume they are all restored to have all the pinmux and pad
-> configuration for normal operation.
-> 
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  drivers/pinctrl/tegra/pinctrl-tegra.c | 59 +++++++++++++++++++++++++++++++++++
->  drivers/pinctrl/tegra/pinctrl-tegra.h |  3 ++
->  2 files changed, 62 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> index 186ef98e7b2b..e3a237534281 100644
-> --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
-> +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> @@ -631,6 +631,58 @@ static void tegra_pinctrl_clear_parked_bits(struct tegra_pmx *pmx)
->  	}
->  }
->  
-> +static size_t tegra_pinctrl_get_bank_size(struct device *dev,
-> +					  unsigned int bank_id)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct resource *res;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, bank_id);
-> +
-> +	return resource_size(res) / 4;
-> +}
-> +
-> +static int tegra_pinctrl_suspend(struct device *dev)
-> +{
-> +	struct tegra_pmx *pmx = dev_get_drvdata(dev);
-> +	u32 *backup_regs = pmx->backup_regs;
-> +	u32 *regs;
-> +	size_t bank_size;
-> +	unsigned int i, k;
-> +
-> +	for (i = 0; i < pmx->nbanks; i++) {
-> +		bank_size = tegra_pinctrl_get_bank_size(dev, i);
-> +		regs = pmx->regs[i];
-> +		for (k = 0; k < bank_size; k++)
-> +			*backup_regs++ = readl_relaxed(regs++);
-> +	}
-> +
-> +	return pinctrl_force_sleep(pmx->pctl);
-> +}
-> +
-> +static int tegra_pinctrl_resume(struct device *dev)
-> +{
-> +	struct tegra_pmx *pmx = dev_get_drvdata(dev);
-> +	u32 *backup_regs = pmx->backup_regs;
-> +	u32 *regs;
-> +	size_t bank_size;
-> +	unsigned int i, k;
-> +
-> +	for (i = 0; i < pmx->nbanks; i++) {
-> +		bank_size = tegra_pinctrl_get_bank_size(dev, i);
-> +		regs = pmx->regs[i];
-> +		for (k = 0; k < bank_size; k++)
-> +			writel_relaxed(*backup_regs++, regs++);
-> +	}
+The commit 72921427d46b
+("string.h: Add str_has_prefix() helper function")
+introduced str_has_prefix() to substitute error-prone
+strncmp(str, const, len).
 
-I'm now curious whether any kind of barrier is needed after the
-writings. The pmx_writel() doesn't insert a barrier after the write and
-seems it just misuses writel, which actually should be writel_relaxed()
-+ barrier, IIUC.
+strncmp(str, const, len) is easy to have error in len
+because of counting error or sizeof(const) without - 1.
 
-It's also not obvious whether PINCTRL HW has any kind of write-FIFO and
-thus maybe read-back + rmb() is needed in order ensure that writes are
-actually completed.
+These patches replace such pattern with str_has_prefix()
+to avoid hard coded constant length and sizeof.
 
-The last thing which is not obvious is when the new configuration
-actually takes into effect, does it happen immediately or maybe some
-delay is needed?
+Besides, str_has_prefix() returns the length of prefix
+when the comparison returns true.
+We can use this return value to substitute some hard-coding.
 
-[snip]
+Changelog:
+
+v1 -> v2:
+  - Revise the description.
+  - Use the return value of str_has_prefix() to eliminate
+    hard coding.
+  - Remove possible false positives and add newly detected
+    one in upstream.
+
+v2 -> v3:
+  - Revise the description.
+  - Remove else uses in printk.c.
+
+Chuhong Yuan (8):
+  dma: debug: Replace strncmp with str_has_prefix
+  module: Replace strncmp with str_has_prefix
+  PM/sleep: Replace strncmp with str_has_prefix
+  printk: Replace strncmp with str_has_prefix
+  reboot: Replace strncmp with str_has_prefix
+  sched: Replace strncmp with str_has_prefix
+  userns: Replace strncmp with str_has_prefix
+  watchdog: Replace strncmp with str_has_prefix
+
+ kernel/dma/debug.c       |  2 +-
+ kernel/module.c          |  2 +-
+ kernel/power/main.c      |  2 +-
+ kernel/printk/braille.c  | 10 ++++++----
+ kernel/printk/printk.c   | 19 +++++++++++++------
+ kernel/reboot.c          |  6 ++++--
+ kernel/sched/debug.c     |  5 +++--
+ kernel/sched/isolation.c |  9 +++++----
+ kernel/user_namespace.c  | 10 +++++-----
+ kernel/watchdog.c        |  8 ++++----
+ 10 files changed, 43 insertions(+), 30 deletions(-)
+
+-- 
+2.20.1
+
