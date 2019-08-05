@@ -2,119 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F33BF8269A
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 23:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19CB826A4
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Aug 2019 23:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730454AbfHEVMH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Aug 2019 17:12:07 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:37817 "EHLO
+        id S1730036AbfHEVOr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Aug 2019 17:14:47 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35229 "EHLO
         mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729383AbfHEVMH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 17:12:07 -0400
-Received: by mail-ot1-f67.google.com with SMTP id s20so21796600otp.4
-        for <linux-pm@vger.kernel.org>; Mon, 05 Aug 2019 14:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/aLchTHYoHWAQzUHdw1YUw9ePu7ibtM6cSSC7Blp19M=;
-        b=UMHxs4ROxz2PTSqTX0empNVp8Wv+9qWN1sceNStYa1Y9hT35D2cPyiwUZaWElXsMWn
-         u/GsOqo12e1KILmtRe4bX/V/5s6e6j+Ddpix2KoIduL+KR180eWVQE4lIHrCllspGsS1
-         c1De/nvmdHMHJKAPjZTnxW8SDpjS0CME2/tcMYhy9enE3BaKfsQdc6k2J2rq/eA+RAaF
-         HrpG+KCfCxqcWvSpVIjPHQezTDrvvaMe8UEqv+ye00Zm2qJJKtR+rAmUVYbMbfQmMmym
-         2YAuTo+s/AwxQYkgou/mhazx//qNWz6NhbtNeSBAzqd5waBJRpB++YPWiqQl59vcN8Bf
-         JUPA==
+        with ESMTP id S1729383AbfHEVOr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Aug 2019 17:14:47 -0400
+Received: by mail-ot1-f67.google.com with SMTP id j19so10642333otq.2;
+        Mon, 05 Aug 2019 14:14:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/aLchTHYoHWAQzUHdw1YUw9ePu7ibtM6cSSC7Blp19M=;
-        b=Z6XqBygeGBKXbN9WYUou40LnY65q8dyu0MSpRMxm0ew3KBRuhSB5j7Mr8ux5yWBNFB
-         75RUJRQxVmTRf1jqgLhLJtT9WxhK4n7PQB1klOdGNKtrNpTe3+hsU5cKcRrSoaPHWz1M
-         PM1YPkxvR0X9qUdM77XGRwFHjoiiJ9qyd1KoljeQhglmPX5Uqmbmc94J3oM+SKp1kfgO
-         h76onLpMA2TsnnFp35gZW7Acgv0nIyPAksPoQtKv7NhcUvsYBk73N70r8B8YCZhK8GSU
-         wtts2RAum90mPduRqwGYqFguesDpiTcjPd+mNoUDazx9MasC0UTKoEAbLFagKUs4Dvyr
-         KjJw==
-X-Gm-Message-State: APjAAAVKckuaZHm513M4pkd6TQoGm5yHnMthqECTsbq4MdcgyZXI0YTL
-        c0Bfip1EmDaHkFZiWyagQVi+XiKyfsDyXMZjynA=
-X-Google-Smtp-Source: APXvYqwwScQRkfiBTALhWC8Nbx4aHv5GJ2VHRHOI2Q4Rimq9QYZhFcyYBkjwRW9TBZDD1GlPox+bVXDhGfR8Rd5Aguo=
-X-Received: by 2002:a9d:5911:: with SMTP id t17mr30743705oth.159.1565039526309;
- Mon, 05 Aug 2019 14:12:06 -0700 (PDT)
+        bh=K81VJiYZHz48k5xpZL9JVC+H5GcFEAdkpsb0gf8wQuM=;
+        b=SMtfl8tVA71nFqJGEm+lxR2HMNcCzgcHWuldb5bGXwb1iSPuM9If0bbkc5FdTbxrJN
+         6FjTMYRWrqnaWeLK4Mp9UgqiEiUrwxWBRbOw50IvEvKF1t2Gq7Rf3k8Kdl/1wDuKkimF
+         0P+9eKadA4orH2fNnrOb98xaCxkWiW23rx+xH7unCaLHhG7y9iSa/6/OeRLB3EsfJzmJ
+         dqhylpAPXI/73Web3YcSIHUVqQ2g8OQP0ayiEj7Ht9osqYNHY1LpjvfFq0WCd1hw2pht
+         orTM+7SSVHXm4Hv9J8gr1Vm1hOGcWfzz6yzYkxQUA6oaTH05Mgk59pPcw4eZHAkQ73av
+         tFww==
+X-Gm-Message-State: APjAAAVQ+yjn7FqlrtILypAl4tRRBMLFDjHWqe1WYVIZzS0J9xLIkbx+
+        KMvD80fx/wFNDzaf9L17oyKMx24IBUHoxmZR2h0=
+X-Google-Smtp-Source: APXvYqxAOvq6brWaQzk/LEyKzX+snTQA2yXv4SbP05AZTRriz+D8QJvlIqBpei/jWnH2T4tFiMx8z/ExVaTjVwvcCJM=
+X-Received: by 2002:a05:6830:8a:: with SMTP id a10mr2078732oto.167.1565039686381;
+ Mon, 05 Aug 2019 14:14:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190805175848.163558-1-trong@android.com> <20190805175848.163558-2-trong@android.com>
- <5d48976e.1c69fb81.a6781.3565@mx.google.com>
-In-Reply-To: <5d48976e.1c69fb81.a6781.3565@mx.google.com>
-From:   Tri Vo <trong@android.com>
-Date:   Mon, 5 Aug 2019 14:11:55 -0700
-Message-ID: <CANA+-vBX0ZAyZu3itcHUpFcqbbDsa5n3xz547mMYCn_q2dbHtw@mail.gmail.com>
-Subject: Re: [PATCH v7 1/3] PM / wakeup: Drop wakeup_source_init(), wakeup_source_prepare()
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+References: <20190805205214.194981-1-helgaas@kernel.org> <20190805205214.194981-6-helgaas@kernel.org>
+In-Reply-To: <20190805205214.194981-6-helgaas@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Aug 2019 23:14:34 +0200
+Message-ID: <CAJZ5v0iovG=96rz1B_Fcwi0ZMA3GipoW24zOC6JwZhU=5ZhooQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] PCI / PM: Decode D3cold power state correctly
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 5, 2019 at 1:54 PM Stephen Boyd <swboyd@chromium.org> wrote:
+On Mon, Aug 5, 2019 at 10:52 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> Quoting Tri Vo (2019-08-05 10:58:46)
-> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> > index ee31d4f8d856..3938892c8903 100644
-> > --- a/drivers/base/power/wakeup.c
-> > +++ b/drivers/base/power/wakeup.c
-> > @@ -72,23 +72,6 @@ static struct wakeup_source deleted_ws = {
-> >         .lock =  __SPIN_LOCK_UNLOCKED(deleted_ws.lock),
-> >  };
-> >
-> > -/**
-> > - * wakeup_source_prepare - Prepare a new wakeup source for initialization.
-> > - * @ws: Wakeup source to prepare.
-> > - * @name: Pointer to the name of the new wakeup source.
-> > - *
-> > - * Callers must ensure that the @name string won't be freed when @ws is still in
-> > - * use.
-> > - */
-> > -void wakeup_source_prepare(struct wakeup_source *ws, const char *name)
-> > -{
-> > -       if (ws) {
-> > -               memset(ws, 0, sizeof(*ws));
-> > -               ws->name = name;
-> > -       }
-> > -}
-> > -EXPORT_SYMBOL_GPL(wakeup_source_prepare);
-> > -
-> >  /**
-> >   * wakeup_source_create - Create a struct wakeup_source object.
-> >   * @name: Name of the new wakeup source.
-> > @@ -96,13 +79,23 @@ EXPORT_SYMBOL_GPL(wakeup_source_prepare);
-> >  struct wakeup_source *wakeup_source_create(const char *name)
-> >  {
-> >         struct wakeup_source *ws;
-> > +       const char *ws_name;
-> >
-> > -       ws = kmalloc(sizeof(*ws), GFP_KERNEL);
-> > +       ws = kzalloc(sizeof(*ws), GFP_KERNEL);
-> >         if (!ws)
-> > -               return NULL;
-> > +               goto err_ws;
-> > +
-> > +       ws_name = kstrdup_const(name, GFP_KERNEL);
-> > +       if (!ws_name)
+> From: Bjorn Helgaas <bhelgaas@google.com>
 >
-> Does this intentionally change this function to return an error if
-> 'name' is NULL? Before, wakeup_source_prepare() would just assign
-> ws->name to NULL, but now it errors out. I don't see how it's good or
-> useful to allow NULL for the wakeup source name, but it is what it is.
+> Use pci_power_name() to print pci_power_t correctly.  This changes:
+>
+>   "state 0" or "D0"   to   "D0"
+>   "state 1" or "D1"   to   "D1"
+>   "state 2" or "D2"   to   "D2"
+>   "state 3" or "D3"   to   "D3hot"
+>   "state 4" or "D4"   to   "D3cold"
+>
+> Changes dmesg logging only, no other functional change intended.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Yes, the change to not allow ws->name to be NULL is intentional.
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> ---
+>  drivers/pci/pci.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index d8686e3cd5eb..17ae2615ac11 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -834,14 +834,16 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+>                 return -EINVAL;
+>
+>         /*
+> -        * Validate current state:
+> -        * Can enter D0 from any state, but if we can only go deeper
+> -        * to sleep if we're already in a low power state
+> +        * Validate transition: We can enter D0 from any state, but if
+> +        * we're already in a low-power state, we can only go deeper.  E.g.,
+> +        * we can go from D1 to D3, but we can't go directly from D3 to D1;
+> +        * we'd have to go from D3 to D0, then to D1.
+>          */
+>         if (state != PCI_D0 && dev->current_state <= PCI_D3cold
+>             && dev->current_state > state) {
+> -               pci_err(dev, "invalid power transition (from state %d to %d)\n",
+> -                       dev->current_state, state);
+> +               pci_err(dev, "invalid power transition (from %s to %s)\n",
+> +                       pci_power_name(dev->current_state),
+> +                       pci_power_name(state));
+>                 return -EINVAL;
+>         }
+>
+> @@ -896,8 +898,8 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+>         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+>         dev->current_state = pci_power_state(pmcsr);
+>         if (dev->current_state != state && printk_ratelimit())
+> -               pci_info(dev, "Refused to change power state, currently in D%d\n",
+> -                        dev->current_state);
+> +               pci_info(dev, "refused to change power state (currently %s)\n",
+> +                        pci_power_name(dev->current_state));
+>
+>         /*
+>          * According to section 5.4.1 of the "PCI BUS POWER MANAGEMENT
+> --
+> 2.22.0.770.g0f2c4a37fd-goog
+>
