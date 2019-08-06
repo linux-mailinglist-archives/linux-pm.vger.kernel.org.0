@@ -2,187 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E5A83724
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 18:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4482F8372B
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 18:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732834AbfHFQkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 12:40:24 -0400
-Received: from foss.arm.com ([217.140.110.172]:36726 "EHLO foss.arm.com"
+        id S1732940AbfHFQlB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 6 Aug 2019 12:41:01 -0400
+Received: from foss.arm.com ([217.140.110.172]:36768 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732729AbfHFQkY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Aug 2019 12:40:24 -0400
+        id S1732917AbfHFQlB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Aug 2019 12:41:01 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9AD5344;
-        Tue,  6 Aug 2019 09:40:23 -0700 (PDT)
-Received: from e121166-lin.cambridge.arm.com (unknown [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8522B3F575;
-        Tue,  6 Aug 2019 09:40:22 -0700 (PDT)
-Date:   Tue, 6 Aug 2019 17:40:20 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-pm@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAKML <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 5/6] ARM: psci: cpuidle: Enable PSCI CPUidle driver
-Message-ID: <20190806164020.GD15498@e121166-lin.cambridge.arm.com>
-References: <20190722153745.32446-1-lorenzo.pieralisi@arm.com>
- <20190722153745.32446-6-lorenzo.pieralisi@arm.com>
- <20190806161624.GE16546@e107155-lin>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12764344;
+        Tue,  6 Aug 2019 09:41:00 -0700 (PDT)
+Received: from e110439-lin (e110439-lin.cambridge.arm.com [10.1.194.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CC9F3F575;
+        Tue,  6 Aug 2019 09:40:57 -0700 (PDT)
+References: <20190802090853.4810-1-patrick.bellasi@arm.com> <20190806161206.GA20526@blackbody.suse.cz>
+User-agent: mu4e 1.3.3; emacs 26.2
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, cgroups@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Vincent Guittot" <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alessio Balsini <balsini@android.com>
+Subject: Re: [PATCH v13 0/6] Add utilization clamping support (CGroups API)
+In-reply-to: <20190806161206.GA20526@blackbody.suse.cz>
+Date:   Tue, 06 Aug 2019 17:40:55 +0100
+Message-ID: <87k1bqfdrc.fsf@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190806161624.GE16546@e107155-lin>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 06, 2019 at 05:16:24PM +0100, Sudeep Holla wrote:
-> On Mon, Jul 22, 2019 at 04:37:44PM +0100, Lorenzo Pieralisi wrote:
-> > Allow selection of the PSCI CPUidle in the kernel by adding
-> > the required Kconfig options.
-> > 
-> > Remove PSCI callbacks from ARM/ARM64 generic CPU ops
-> > to prevent the PSCI idle driver from clashing with the generic
-> > ARM CPUidle driver initialization, that relies on CPU ops
-> > to initialize and enter idle states.
-> > 
-> > Update the affected defconfig files to guarantee seamingless
-> > transition from the generic ARM CPUidle to the PSCI CPUidle
-> > driver on arch/platforms using it.
-> > 
-> > Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > ---
-> >  arch/arm/configs/imx_v6_v7_defconfig | 1 +
-> >  arch/arm64/configs/defconfig         | 1 +
-> 
-> Better to keep above you as separate patch, though it may cause
-> minor issues from bisectibility. It may be needed anyway for merging.
 
-That's a good point, I will split these bits in a separate patch.
+On Tue, Aug 06, 2019 at 17:12:06 +0100, Michal Koutný wrote...
 
-> >  arch/arm64/kernel/cpuidle.c          | 7 ++++---
-> >  arch/arm64/kernel/psci.c             | 4 ----
-> >  drivers/cpuidle/Kconfig.arm          | 8 ++++++--
-> >  drivers/firmware/psci/psci.c         | 9 ---------
-> >  6 files changed, 12 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
-> > index a53b29251ed4..4174fd1b79e7 100644
-> > --- a/arch/arm/configs/imx_v6_v7_defconfig
-> > +++ b/arch/arm/configs/imx_v6_v7_defconfig
-> > @@ -60,6 +60,7 @@ CONFIG_ARM_IMX6Q_CPUFREQ=y
-> >  CONFIG_ARM_IMX_CPUFREQ_DT=y
-> >  CONFIG_CPU_IDLE=y
-> >  CONFIG_ARM_CPUIDLE=y
-> > +CONFIG_ARM_PSCI_CPUIDLE=y
-> >  CONFIG_VFP=y
-> >  CONFIG_NEON=y
-> >  CONFIG_PM_DEBUG=y
-> > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> > index 0e58ef02880c..c0a7cfe3aebd 100644
-> > --- a/arch/arm64/configs/defconfig
-> > +++ b/arch/arm64/configs/defconfig
-> > @@ -72,6 +72,7 @@ CONFIG_RANDOMIZE_BASE=y
-> >  CONFIG_HIBERNATION=y
-> >  CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
-> >  CONFIG_ARM_CPUIDLE=y
-> > +CONFIG_ARM_PSCI_CPUIDLE=y
-> >  CONFIG_CPU_FREQ=y
-> >  CONFIG_CPU_FREQ_STAT=y
-> >  CONFIG_CPU_FREQ_GOV_POWERSAVE=m
-> > diff --git a/arch/arm64/kernel/cpuidle.c b/arch/arm64/kernel/cpuidle.c
-> > index d1048173fd8a..4bcd1bca0dfc 100644
-> > --- a/arch/arm64/kernel/cpuidle.c
-> > +++ b/arch/arm64/kernel/cpuidle.c
-> > @@ -11,6 +11,7 @@
-> >  #include <linux/cpu_pm.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> > +#include <linux/psci.h>
-> >  
-> >  #include <asm/cpuidle.h>
-> >  #include <asm/cpu_ops.h>
-> > @@ -48,15 +49,15 @@ int arm_cpuidle_suspend(int index)
-> >  
-> >  int acpi_processor_ffh_lpi_probe(unsigned int cpu)
-> >  {
-> > -	return arm_cpuidle_init(cpu);
-> > +	return psci_acpi_cpu_init_idle(cpu);
-> 
-> This will break build as psci_acpi_cpu_init_idle is introduced in next patch.
-> You can simply move it to next patch I assume.
+> On Fri, Aug 02, 2019 at 10:08:47AM +0100, Patrick Bellasi <patrick.bellasi@arm.com> wrote:
+>> Patrick Bellasi (6):
+>>   sched/core: uclamp: Extend CPU's cgroup controller
+>>   sched/core: uclamp: Propagate parent clamps
+>>   sched/core: uclamp: Propagate system defaults to root group
+>>   sched/core: uclamp: Use TG's clamps to restrict TASK's clamps
+>>   sched/core: uclamp: Update CPU's refcount on TG's clamp changes
+>>   sched/core: uclamp: always use enum uclamp_id for clamp_id values
 
-Yes, it is a bisectability issue, I fixed it already but thanks
-for spotting it anyway.
+Hi Michal!
 
-> >  }
-> >  
-> >  int acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
-> >  {
-> >  	if (ARM64_LPI_IS_RETENTION_STATE(lpi->arch_flags))
-> > -		return CPU_PM_CPU_IDLE_ENTER_RETENTION(arm_cpuidle_suspend,
-> > +		return CPU_PM_CPU_IDLE_ENTER_RETENTION(psci_cpu_suspend_enter,
-> >  						lpi->index);
-> >  	else
-> > -		return CPU_PM_CPU_IDLE_ENTER(arm_cpuidle_suspend, lpi->index);
-> > +		return CPU_PM_CPU_IDLE_ENTER(psci_cpu_suspend_enter, lpi->index);
-> >  }
-> >  #endif
-> > diff --git a/arch/arm64/kernel/psci.c b/arch/arm64/kernel/psci.c
-> > index 85ee7d07889e..a543ab7e007c 100644
-> > --- a/arch/arm64/kernel/psci.c
-> > +++ b/arch/arm64/kernel/psci.c
-> > @@ -105,10 +105,6 @@ static int cpu_psci_cpu_kill(unsigned int cpu)
-> >  
-> >  const struct cpu_operations cpu_psci_ops = {
-> >  	.name		= "psci",
-> > -#ifdef CONFIG_CPU_IDLE
-> > -	.cpu_init_idle	= psci_cpu_init_idle,
-> > -	.cpu_suspend	= psci_cpu_suspend_enter,
-> > -#endif
-> >  	.cpu_init	= cpu_psci_cpu_init,
-> >  	.cpu_prepare	= cpu_psci_cpu_prepare,
-> >  	.cpu_boot	= cpu_psci_cpu_boot,
-> > diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-> > index 929b57424ea4..b9c56c60ab98 100644
-> > --- a/drivers/cpuidle/Kconfig.arm
-> > +++ b/drivers/cpuidle/Kconfig.arm
-> > @@ -14,8 +14,12 @@ config ARM_CPUIDLE
-> >            provided by architecture code.
-> >  
-> >  config ARM_PSCI_CPUIDLE
-> > -	bool
-> > -
-> > +	bool "PSCI CPU idle Driver"
-> 
-> As mentioned in previous patch, do you see issues having just above
-> change in this patch and the below ones moved to the previous.
+> Thank you Patrick for your patience.
 
-No you are right, I will make this change.
+Thanks to you for your reviews.
 
-> > +	depends on ARM_PSCI_FW
-> > +	select DT_IDLE_STATES
-> > +	select CPU_IDLE_MULTIPLE_DRIVERS
-> > +	help
-> > +	  Select this to enable PSCI firmware based CPUidle driver for ARM.
-> 
-> You need extra blank line here.
+> I used the time to revisit the series once again and I think the RCU
+> locks can be streamlined a bit.
 
-OK.
+I'll have a look at those, thanks!
 
-Thanks,
-Lorenzo
+> If you find that correct, feel free to add my Reviewed-by to the
+> updated series (for 1/6 and legacy, I'm just asking).
+
+Sure, actually sorry for not having already added that tag in the
+current version, it will be there in v14 ;)
+
+> Michal
+
+Cheers,
+Patrick
+
+--
+#include <best/regards.h>
+
+Patrick Bellasi
+
