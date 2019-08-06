@@ -2,165 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C958305E
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 13:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0878321A
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 15:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732732AbfHFLMg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 07:12:36 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:54224 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730676AbfHFLMg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Aug 2019 07:12:36 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4C18A1A01DD;
-        Tue,  6 Aug 2019 13:12:34 +0200 (CEST)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3F06F1A00B7;
-        Tue,  6 Aug 2019 13:12:34 +0200 (CEST)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id B1E02205DD;
-        Tue,  6 Aug 2019 13:12:33 +0200 (CEST)
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        linux-pm@vger.kernel.org
-Subject: [RFC 4/4] PM / QoS: Add dev_pm_qos_get_curr_value
-Date:   Tue,  6 Aug 2019 14:12:28 +0300
-Message-Id: <9d1620026842209841a122e17fa7686d02fa23e9.1565089196.git.leonard.crestez@nxp.com>
+        id S1731538AbfHFNFM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Aug 2019 09:05:12 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:35582 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726092AbfHFNFL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 09:05:11 -0400
+Received: by mail-wm1-f66.google.com with SMTP id l2so76348089wmg.0
+        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2019 06:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=aOEiMClLlNGKFVgF1uc0XEaaUElK/j2HAOeb7aEDvFU=;
+        b=QrHunvwKeKucFciStUYnaBDIvwjbtVpPHlnqiz3nLHv64cImQ6ZWapGOmwJODU4VLP
+         ZPiVt2SwMBihahTHWCN8XcNpI7HrQmpTJ9Nt97qmanE1n8BPpAj6nVn0N9iOrtOR0tjK
+         Xe7xUq7BxMHTpM7mc/qVw/xUG7J5a5cMVEgnDkCyi0zvvRYU4jsTYBbPEsKrHRuOrtmK
+         T76ta9UFaZaEqXcNeykmL0Mtxlem0QkosHKK/Jbaa6eUCG96kG1nCSfnulsxCeMpCW83
+         4NxW5N1Of460J2bRdadsQd8c5hT74maA0jDsrCLx6tBs96NuNwmYViLWPg0Mn67OE90j
+         2yBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=aOEiMClLlNGKFVgF1uc0XEaaUElK/j2HAOeb7aEDvFU=;
+        b=uKyh8K04NBknXRzAlXtLh8EfteZc4tuXYXeLPsm40X04rrqUVRmv6m6xsuc4On6UDA
+         fkrsrfeYPYM0YhA4qJyOi8f1yb0wbPAWHWaqxbo4qLU0GZHIEx90rBopZZiZKAdm4rpt
+         MxFx2mXjaW/FJho3sUC53VlnZiQVhXDmFqAc5m1Iv/PkhoIe1PLZ4TKYDsI5my7dSrUv
+         3X7GDHYFWEHqQHMkTL8Q2lseydR1XTjMRjIXP7LfeSAm0PSsBDvSkWX+iueCpZF3yQUV
+         TgzAxP/YYSj8+9a4+xUsB4zgP2f8TbRvn1+pMYpvotzz9SrMcg/TdsOQeMRWPjIOa0g9
+         2BHQ==
+X-Gm-Message-State: APjAAAU0kRhvVD41sTvXvBAx2Lihtea1Qvd86y0jgJ0bjFw/cdXUD0uS
+        AwNWdbMXhkbmy+W9tuRvuikrTw==
+X-Google-Smtp-Source: APXvYqzZdDSexSvzr2ocbt3H/8w9W8songZyclA+NoREaLstGEeN4Xmf95HAcs1eq0OWGBEqyn2/kw==
+X-Received: by 2002:a05:600c:2182:: with SMTP id e2mr4842124wme.104.1565096710025;
+        Tue, 06 Aug 2019 06:05:10 -0700 (PDT)
+Received: from glaroque-ThinkPad-T480.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id j33sm201888738wre.42.2019.08.06.06.05.07
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 06 Aug 2019 06:05:07 -0700 (PDT)
+From:   Guillaume La Roque <glaroque@baylibre.com>
+To:     daniel.lezcano@linaro.org, khilman@baylibre.com
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/6] Add support of New Amlogic temperature sensor for G12 SoCs
+Date:   Tue,  6 Aug 2019 15:05:00 +0200
+Message-Id: <20190806130506.8753-1-glaroque@baylibre.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1565089196.git.leonard.crestez@nxp.com>
-References: <cover.1565089196.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1565089196.git.leonard.crestez@nxp.com>
-References: <cover.1565089196.git.leonard.crestez@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a new API for fetching the value set with dev_pm_qos_add_request by
-refactoring __dev_pm_qos_update_request.
+This patchs series add support of New Amlogic temperature sensor and minimal
+thermal zone for SEI510 and ODROID-N2 boards.
 
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
----
- drivers/base/power/qos.c | 59 ++++++++++++++++++++++++++++------------
- include/linux/pm_qos.h   |  1 +
- 2 files changed, 43 insertions(+), 17 deletions(-)
+First implementation was doing on IIO[1] but after comments i move on thermal framework.
+Formulas and calibration values come from amlogic.
 
-diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-index 6c90fd7e2ff8..f171a7137c5d 100644
---- a/drivers/base/power/qos.c
-+++ b/drivers/base/power/qos.c
-@@ -402,10 +402,49 @@ int dev_pm_qos_add_request(struct device *dev, struct dev_pm_qos_request *req,
- 	mutex_unlock(&dev_pm_qos_mtx);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(dev_pm_qos_add_request);
- 
-+/**
-+ * __dev_pm_qos_get_curr_value - Modify an existing device PM QoS request.
-+ * @req : PM QoS request to query
-+ */
-+static int __dev_pm_qos_get_curr_value(struct dev_pm_qos_request *req,
-+				       s32 *curr_value)
-+{
-+	if (WARN(!dev_pm_qos_request_active(req),
-+		 "%s() called for unknown object\n", __func__))
-+		return -EINVAL;
-+
-+	switch(req->type) {
-+	case DEV_PM_QOS_RESUME_LATENCY:
-+	case DEV_PM_QOS_LATENCY_TOLERANCE:
-+	case DEV_PM_QOS_MIN_FREQUENCY:
-+	case DEV_PM_QOS_MAX_FREQUENCY:
-+		*curr_value = req->data.pnode.prio;
-+		return 0;
-+	case DEV_PM_QOS_FLAGS:
-+		*curr_value = req->data.flr.flags;
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+int dev_pm_qos_get_curr_value(struct dev_pm_qos_request *req,
-+				     s32 *curr_value)
-+{
-+	int ret;
-+
-+	mutex_lock(&dev_pm_qos_mtx);
-+	ret = __dev_pm_qos_get_curr_value(req, curr_value);
-+	mutex_unlock(&dev_pm_qos_mtx);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_qos_get_curr_value);
-+
- /**
-  * __dev_pm_qos_update_request - Modify an existing device PM QoS request.
-  * @req : PM QoS request to modify.
-  * @new_value: New value to request.
-  */
-@@ -416,31 +455,17 @@ static int __dev_pm_qos_update_request(struct dev_pm_qos_request *req,
- 	int ret = 0;
- 
- 	if (!req) /*guard against callers passing in null */
- 		return -EINVAL;
- 
--	if (WARN(!dev_pm_qos_request_active(req),
--		 "%s() called for unknown object\n", __func__))
--		return -EINVAL;
-+	ret = __dev_pm_qos_get_curr_value(req, &curr_value);
-+	if (ret)
-+		return ret;
- 
- 	if (IS_ERR_OR_NULL(req->dev->power.qos))
- 		return -ENODEV;
- 
--	switch(req->type) {
--	case DEV_PM_QOS_RESUME_LATENCY:
--	case DEV_PM_QOS_LATENCY_TOLERANCE:
--	case DEV_PM_QOS_MIN_FREQUENCY:
--	case DEV_PM_QOS_MAX_FREQUENCY:
--		curr_value = req->data.pnode.prio;
--		break;
--	case DEV_PM_QOS_FLAGS:
--		curr_value = req->data.flr.flags;
--		break;
--	default:
--		return -EINVAL;
--	}
--
- 	trace_dev_pm_qos_update_request(dev_name(req->dev), req->type,
- 					new_value);
- 	if (curr_value != new_value)
- 		ret = apply_constraint(req, PM_QOS_UPDATE_REQ, new_value);
- 
-diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-index 2aebbc5b9950..ae42e58d02bb 100644
---- a/include/linux/pm_qos.h
-+++ b/include/linux/pm_qos.h
-@@ -149,10 +149,11 @@ enum pm_qos_flags_status __dev_pm_qos_flags(struct device *dev, s32 mask);
- enum pm_qos_flags_status dev_pm_qos_flags(struct device *dev, s32 mask);
- s32 __dev_pm_qos_resume_latency(struct device *dev);
- s32 dev_pm_qos_read_value(struct device *dev, enum dev_pm_qos_req_type type);
- int dev_pm_qos_add_request(struct device *dev, struct dev_pm_qos_request *req,
- 			   enum dev_pm_qos_req_type type, s32 value);
-+int dev_pm_qos_get_curr_value(struct dev_pm_qos_request *req, s32 *value);
- int dev_pm_qos_update_request(struct dev_pm_qos_request *req, s32 new_value);
- int dev_pm_qos_remove_request(struct dev_pm_qos_request *req);
- int dev_pm_qos_add_notifier(struct device *dev,
- 			    struct notifier_block *notifier,
- 			    enum dev_pm_qos_req_type type);
+Changes since v2:
+  - fix yaml documention 
+  - remove unneeded status variable for temperature-sensor node
+  - rework driver after Martin review
+  - add some information in commit message
+
+Changes since v1:
+  - fix enum vs const in documentation
+  - fix error with thermal-sensor-cells value set to 1 instead of 0
+  - add some dependencies needed to add cooling-maps
+
+Dependencies :
+- patch 3,4 & 5: depends on Neil's patch and series :
+              - missing dwc2 phy-names[2]
+              - patchsets to add DVFS on G12a[3] which have deps on [4] and [5]
+
+[1] https://lore.kernel.org/linux-amlogic/20190604144714.2009-1-glaroque@baylibre.com/
+[2] https://lore.kernel.org/linux-amlogic/20190625123647.26117-1-narmstrong@baylibre.com/
+[3] https://lore.kernel.org/linux-amlogic/20190729132622.7566-1-narmstrong@baylibre.com/
+[4] https://lore.kernel.org/linux-amlogic/20190731084019.8451-5-narmstrong@baylibre.com/
+[5] https://lore.kernel.org/linux-amlogic/20190729132622.7566-3-narmstrong@baylibre.com/
+
+Guillaume La Roque (6):
+  dt-bindings: thermal: Add DT bindings documentation for Amlogic
+    Thermal
+  thermal: amlogic: Add thermal driver to support G12 SoCs
+  arm64: dts: amlogic: g12: add temperature sensor
+  arm64: dts: meson: sei510: Add minimal thermal zone
+  arm64: dts: amlogic: odroid-n2: add minimal thermal zone
+  MAINTAINERS: add entry for Amlogic Thermal driver
+
+ .../bindings/thermal/amlogic,thermal.yaml     |  54 +++
+ MAINTAINERS                                   |   9 +
+ .../boot/dts/amlogic/meson-g12-common.dtsi    |  20 ++
+ .../boot/dts/amlogic/meson-g12a-sei510.dts    |  56 +++
+ .../boot/dts/amlogic/meson-g12b-odroid-n2.dts |  60 ++++
+ drivers/thermal/Kconfig                       |  11 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/amlogic_thermal.c             | 336 ++++++++++++++++++
+ 8 files changed, 547 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+ create mode 100644 drivers/thermal/amlogic_thermal.c
+
 -- 
 2.17.1
 
