@@ -2,91 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC5B8322D
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 15:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBAB832CA
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 15:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730006AbfHFNFb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 09:05:31 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34750 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731905AbfHFNFS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 09:05:18 -0400
-Received: by mail-wr1-f66.google.com with SMTP id 31so87872301wrm.1
-        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2019 06:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=60yWYtJLk0Xp9SLelz+MaI60GmV6Utt18fBkUyG2qxM=;
-        b=1XsB9wyPJKfVdt0XFULvvBF/+L4sPvBzqlPsQ3/7818JIn78HG6OJumFYaHF72EZiQ
-         3r+tbI6kf2XmvaBnMq6a9/lZ/5papd0jJyFpoUtVL53nadn8VtpgPDafseSrDIuOt+UT
-         /EOZC41Tt9sDGPOxzi32bafjR1WXbVk/3gWg/V9UJ5Fpw2N7m9BdV4BU7JOCUi66GVAM
-         vOKee9IcLeW4v9gjgMpfseHvCaSfgaOf7oL/xhk/+EpuMxjYaBdClEpCYIIj567dUUTK
-         4YsjCLeXbhoLlybPpGffo8skD2wRjyHpahZ2KL35fD/n7RtMFVdx4ePceqC4B4/n3Ofy
-         U67w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=60yWYtJLk0Xp9SLelz+MaI60GmV6Utt18fBkUyG2qxM=;
-        b=pVA7rXY+uD6cAWjPVjqDEVk79p2XkKhVPil7HiJwkk88ibZbEkFV/cf2lfrCoe/g9r
-         lvrLGAbtjGRyhCHDCXvOYrh3EUN+QltFpcL1J2z7WZIAJ+HpxylcoOEHHMvcy7WeOQU8
-         IYfkevqxlFEdTStvsWP4QdW7ki83SUyaUkIpsjzP/SSQySyyGbRW1gqL3nXZDwX06PwR
-         ovJndCTMmXJXBLl0QBBb9R4A1GKGBHywzCdZvOGqa5wpQiq9oHzSAbyn7RAqroDOhE8N
-         4mO8ctCg/6FWuNoQzUKck5B71Emt15eC7AmcQxH8DaB+agub93tQ51ikvdvDwOGh2iUc
-         oX/g==
-X-Gm-Message-State: APjAAAWwY0V7ReNPiYA1RFCdhxxJ2zK2a7eyKpiZJft6KhLi1MP8F4Fh
-        DVxcwhQSaaTOKJOeX+p3sy8iYg==
-X-Google-Smtp-Source: APXvYqxe8+FVvkyz0LH3/p+5jXQjRtCu1JfWNK+8gB5Jwg7o9KmjpX18AjkaFMctc3YE7l8bagEx+Q==
-X-Received: by 2002:adf:dcc6:: with SMTP id x6mr4927209wrm.322.1565096716745;
-        Tue, 06 Aug 2019 06:05:16 -0700 (PDT)
-Received: from glaroque-ThinkPad-T480.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id j33sm201888738wre.42.2019.08.06.06.05.15
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 06 Aug 2019 06:05:16 -0700 (PDT)
-From:   Guillaume La Roque <glaroque@baylibre.com>
-To:     daniel.lezcano@linaro.org, khilman@baylibre.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 6/6] MAINTAINERS: add entry for Amlogic Thermal driver
-Date:   Tue,  6 Aug 2019 15:05:06 +0200
-Message-Id: <20190806130506.8753-7-glaroque@baylibre.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190806130506.8753-1-glaroque@baylibre.com>
-References: <20190806130506.8753-1-glaroque@baylibre.com>
+        id S1726373AbfHFNgl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Aug 2019 09:36:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47700 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726092AbfHFNgl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Aug 2019 09:36:41 -0400
+Received: from localhost (173-25-83-245.client.mchsi.com [173.25.83.245])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 63992206A2;
+        Tue,  6 Aug 2019 13:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565098599;
+        bh=Z+FnyuvhyHFY98v/41stQdrl5WFV8d/8/KwkxLTuC0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1jO/BjLahJpbTqPAHOWZ3Gtqul5YAAcpR/h+ZcBUq0gsXqu0vO9fysubuai58qPHW
+         NOTI4prJ+iWQWCkM/HD4dPJ8pnXabGg0d3REehztoV7uo6f2kpY0l5NUzMCZldZYX3
+         qOhDdanOEeA5kqx7ewR+43T4mvwyCxyMgFBBtGXs=
+Date:   Tue, 6 Aug 2019 08:36:38 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/5] PCI / PM: Check for error when reading PME status
+Message-ID: <20190806133638.GQ151852@google.com>
+References: <20190805205214.194981-1-helgaas@kernel.org>
+ <20190805205214.194981-4-helgaas@kernel.org>
+ <CAJZ5v0i5oVuZMxFmYiLnYPk=BsFGGiYntez3m1V5xeWgTgA4hg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i5oVuZMxFmYiLnYPk=BsFGGiYntez3m1V5xeWgTgA4hg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add myself as maintainer for Amlogic Thermal driver.
+On Mon, Aug 05, 2019 at 11:02:51PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Aug 5, 2019 at 10:52 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > pci_check_pme_status() reads the Power Management capability to determine
+> > whether a device has generated a PME.  The capability is in config space,
+> > which is accessible in D0, D1, D2, and D3hot, but not in D3cold.
+> >
+> > If we call pci_check_pme_status() on a device that's in D3cold, config
+> > reads fail and return ~0 data, which we erroneously interpreted as "the
+> > device has generated a PME".
+> >
+> > 000dd5316e1c ("PCI: Do not poll for PME if the device is in D3cold")
+> > avoided many of these problems by avoiding pci_check_pme_status() if we
+> > think the device is in D3cold.  However, it is not a complete fix because
+> > the device may go to D3cold after we check its power state but before
+> > pci_check_pme_status() reads the Power Management Status Register.
+> >
+> > Return false ("device has not generated a PME") if we get an error response
+> > reading the Power Management Status Register.
+> >
+> > Fixes: 000dd5316e1c ("PCI: Do not poll for PME if the device is in D3cold")
+> > Fixes: 71a83bd727cc ("PCI/PM: add runtime PM support to PCIe port")
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > ---
+> >  drivers/pci/pci.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 984171d40858..af6a97d7012b 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -2008,6 +2008,9 @@ bool pci_check_pme_status(struct pci_dev *dev)
+> >
+> >         pmcsr_pos = dev->pm_cap + PCI_PM_CTRL;
+> >         pci_read_config_word(dev, pmcsr_pos, &pmcsr);
+> > +       if (pmcsr == (u16) PCI_ERROR_RESPONSE)
+> > +               return false;
+> 
+> No, sorry.
+> 
+> We tried that and it didn't work.
+> 
+> pcie_pme_handle_request() depends on this returning "true" for all
+> bits set, as from its perspective "device is not accessible" may very
+> well mean "device may have signaled PME".
 
-Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Right, it's obviously wrong in the case of devices that advertise
+D3cold in PME_Support, i.e., devices that can generate PME even with
+main power off.  Also, we may want to try to wake up devices if the
+config read fails for a reason other than the device being in D3cold.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fb2b12f75c37..299f27d11058 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15910,6 +15910,15 @@ F:	Documentation/driver-api/thermal/cpu-cooling-api.rst
- F:	drivers/thermal/cpu_cooling.c
- F:	include/linux/cpu_cooling.h
- 
-+THERMAL DRIVER FOR AMLOGIC SOCS
-+M:	Guillaume La Roque <glaroque@baylibre.com>
-+L:	linux-pm@vger.kernel.org
-+L:	linux-amlogic@lists.infradead.org
-+W:	http://linux-meson.com/
-+S:	Supported
-+F:	drivers/thermal/amlogic_thermal.c
-+F:	Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
-+
- THINKPAD ACPI EXTRAS DRIVER
- M:	Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>
- L:	ibm-acpi-devel@lists.sourceforge.net
--- 
-2.17.1
+What I don't like about the current code is that it checks
+PCI_PM_CTRL_PME_STATUS in data that may be completely bogus.  Do you
+think it would be better to do something like this:
 
+  pci_read_config_word(dev, pmcsr_pos, &pmcsr);
+  if (pmcsr == (u16) PCI_ERROR_RESPONSE) {
+    if (pci_pme_capable(dev, PCI_PM_CAP_PME_D3cold))
+      return true;
+    return false;
+  }
+
+or maybe this:
+
+  pci_read_config_word(dev, pmcsr_pos, &pmcsr);
+  if (pmcsr == (u16) PCI_ERROR_RESPONSE)
+    return true;
+
+We should get PCI_ERROR_RESPONSE pretty reliably from devices in
+D3cold, so the first possibility would cover that case.
+
+But since pci_check_pme_status() basically returns a hint ("true"
+means a device *may* have generated a PME), and even if the hint is
+wrong, the worst that happens is an unnecessary wakeup, maybe the
+second possibility is safer.
+
+What do you think?
+
+> >         if (!(pmcsr & PCI_PM_CTRL_PME_STATUS))
+> >                 return false;
