@@ -2,184 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 463888384F
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 20:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65FF838FD
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 20:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731664AbfHFSAH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 14:00:07 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:45198 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726713AbfHFSAG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 14:00:06 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n1so2481367wrw.12;
-        Tue, 06 Aug 2019 11:00:04 -0700 (PDT)
+        id S1726068AbfHFSv6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Aug 2019 14:51:58 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38913 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbfHFSv5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 14:51:57 -0400
+Received: by mail-ot1-f67.google.com with SMTP id r21so89103433otq.6
+        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2019 11:51:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=H5oxnh6AO2iA8nJMA3gm0i0KrEK2AnvYtvfzFwUa/VE=;
-        b=IzSuLQwki0yPJVH+d2Lbq4S+g4ZX2atTnbAvcpq0wE42xwkMJXiMqPeaS+r8xL/eJR
-         yYnjYN4vJkH3QaoGEegtr4CskAhmGEEJlNnan2gZeaJ/3x8JtuBMJNuNfrSBD+PS0WVE
-         1DbHnAkhJcKPjfpoprfD9f9K469CSmuGORfCOxkyIbCXql6IgsdNXiwySWIQSfdJser5
-         VjDTtVoAhWsxRu4uYcGxs9xZolHRtAkdOq2IXCzk2//Zv+7Oy8EzDl2EUB/iwXGh5PWK
-         /7jCtQ56iS/RLwsu/+GtzMSMZ8vkSSukriVez8SsXpLnO+CZ4zq5Gr82na4GPtZGD89d
-         5oXA==
+        d=android.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aGCcLtK25GuveYiFjhwocqTOqxw5HIZH0JbQl66UTl8=;
+        b=q5a6Wu2JffaVHSnXg3X5NgLo7sEfrMh4H/pE7ZTJenizHNyZziPaDY+sKY4OALTbdm
+         wWeUsPsuiAD7aiR2FOdge5bw9vBJkZpbZK/ApWIjWB3eOGut9lYi7v626S/DWLkuG+Fr
+         HsqzZuekniCMpYkDgy/V6P9lbnq9eSJXNuVH7/+d+SlnrhpWcjGn3c8gqHa1e6jPm2He
+         44FW/xjQAlIzFwFgX6j548WyXfkKSDNpble5Vw2lfIJHPA2Lb5ZWUjBDWaxgMWCRMb6J
+         H2FW8SGNPvor8jaYMjskiuEJCJSfaC57nPSIZVEgYfTfpuFwxmHWH3nSpAXN/go/VPiE
+         D0Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=H5oxnh6AO2iA8nJMA3gm0i0KrEK2AnvYtvfzFwUa/VE=;
-        b=p+85ICzLfBQzknBS85lr/c50S5gA98FUcJyYeji6zmVSOhbyHKuQSiPcdoG4+hGt+L
-         Jvlj6VQT/fj8BCHCgpFa/1lyqx6AiNbT3R2oS2e9tIdFNWu5yRMrUqHbvVihh00oQovB
-         7yPFQDAiqqeRegiiu3eUD8pdNPSl6rN3KTQiVC5On2l8bf7UtnD6Z4p9sWzQHesiuhFd
-         Bq8JyZVbUyuVrcu1M9VGFqEgQLU665hdXqX66SBvhkJ8MRzKCusL7MNK1DahUswDXD0g
-         dzz63/GaX64fTjzbktQnQ6aZAIaCLAmI86nBYrhvI5Xojmf0vcbIdwSoc0lPo1DqPHC1
-         9DDw==
-X-Gm-Message-State: APjAAAVvhjB0LMgS4wUSYsebp96HT5DTJ9usjaAdd4yQb6DdmaeRYM8h
-        l1Ik/950SbLzLJm5Qjf3yoJOSMUy
-X-Google-Smtp-Source: APXvYqwjSklAKmvrxBm7vAtY5yV+LjCxCE5435J3gWbWBlaR4/GMOjfR3ZIimhrfsVDAPcavz8+urg==
-X-Received: by 2002:adf:dd01:: with SMTP id a1mr5755415wrm.12.1565114403275;
-        Tue, 06 Aug 2019 11:00:03 -0700 (PDT)
-Received: from [192.168.2.145] ([94.29.34.218])
-        by smtp.googlemail.com with ESMTPSA id k9sm22855190wrd.46.2019.08.06.11.00.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Aug 2019 11:00:02 -0700 (PDT)
-Subject: Re: [PATCH v7 01/20] pinctrl: tegra: Add suspend and resume support
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
-        jason@lakedaemon.net, marc.zyngier@arm.com,
-        linus.walleij@linaro.org, stefan@agner.ch, mark.rutland@arm.com
-Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org
-References: <1564607463-28802-1-git-send-email-skomatineni@nvidia.com>
- <1564607463-28802-2-git-send-email-skomatineni@nvidia.com>
- <6b1482f6-0578-f602-d8d1-541d86303ce2@gmail.com>
- <b45ca99a-188a-c695-3f3d-48d273808f9c@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <36351140-afd4-38c4-3722-4ee0894287fa@gmail.com>
-Date:   Tue, 6 Aug 2019 20:59:55 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aGCcLtK25GuveYiFjhwocqTOqxw5HIZH0JbQl66UTl8=;
+        b=Q0WPHZDWTBzKYfbxCY1V+Vyc8ikKc1yEzCm6JE3vIbRZYAyQ8tKVy1Nob52sZq1U3d
+         nU7U8gWndhgce4CG+3so4efC91GvSzc/BgV3GCmYzmdx/MWb25nRrb2gflDTnMtlIt9K
+         bSlyyexoHddgNFDE4hsEaffx6DuMZLuEU4QyyW9QV63wKbMUd8ICln1xOjTzAPCPcsBf
+         pUs7mIGx8OYJMnLpIqWifrVUxzuIhOw5LRqxwTJguAbF305rgDnwz+njQpqmgn6B0td6
+         0VAZ0fQIJ7PrtUrqx1NZTZ+f11f59e/shV5SJ/Mek5AYCq5+4KFPdPwMW936ygeyNwKO
+         0QWQ==
+X-Gm-Message-State: APjAAAUUjiISHB9AiQuZtq+wIjFMJXxBonsgW/+O5cbuWdPbCo8jpcH5
+        nvJD3gtcIjuyPgEWFzxcnUc2vJXGMQsIcNP3pmRqNg==
+X-Google-Smtp-Source: APXvYqwcmVP6EF7nHglBfXmejG+UyrqAm46scDpHmg5aEHLa6bLfwM+0QBmdRY1EL3pmwrUfpCyo9HYDXxOrdkSyK5s=
+X-Received: by 2002:a05:6830:13d9:: with SMTP id e25mr4622173otq.197.1565117516786;
+ Tue, 06 Aug 2019 11:51:56 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <b45ca99a-188a-c695-3f3d-48d273808f9c@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190805175848.163558-1-trong@android.com> <20190805175848.163558-4-trong@android.com>
+ <5d48bbc2.1c69fb81.62114.5473@mx.google.com>
+In-Reply-To: <5d48bbc2.1c69fb81.62114.5473@mx.google.com>
+From:   Tri Vo <trong@android.com>
+Date:   Tue, 6 Aug 2019 11:51:45 -0700
+Message-ID: <CANA+-vBFY_mVfhhK=5BL5m_yyQ5+GTE9bv32fk-qsfnAmfE4nA@mail.gmail.com>
+Subject: Re: [PATCH v7 3/3] PM / wakeup: Show wakeup sources stats in sysfs
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-05.08.2019 21:06, Sowjanya Komatineni пишет:
-> 
-> On 8/5/19 3:50 AM, Dmitry Osipenko wrote:
->> 01.08.2019 0:10, Sowjanya Komatineni пишет:
->>> This patch adds support for Tegra pinctrl driver suspend and resume.
->>>
->>> During suspend, context of all pinctrl registers are stored and
->>> on resume they are all restored to have all the pinmux and pad
->>> configuration for normal operation.
->>>
->>> Acked-by: Thierry Reding <treding@nvidia.com>
->>> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
->>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>> ---
->>>   drivers/pinctrl/tegra/pinctrl-tegra.c | 59
->>> +++++++++++++++++++++++++++++++++++
->>>   drivers/pinctrl/tegra/pinctrl-tegra.h |  3 ++
->>>   2 files changed, 62 insertions(+)
->>>
->>> diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c
->>> b/drivers/pinctrl/tegra/pinctrl-tegra.c
->>> index 186ef98e7b2b..e3a237534281 100644
->>> --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
->>> +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
->>> @@ -631,6 +631,58 @@ static void
->>> tegra_pinctrl_clear_parked_bits(struct tegra_pmx *pmx)
->>>       }
->>>   }
->>>   +static size_t tegra_pinctrl_get_bank_size(struct device *dev,
->>> +                      unsigned int bank_id)
->>> +{
->>> +    struct platform_device *pdev = to_platform_device(dev);
->>> +    struct resource *res;
->>> +
->>> +    res = platform_get_resource(pdev, IORESOURCE_MEM, bank_id);
->>> +
->>> +    return resource_size(res) / 4;
->>> +}
->>> +
->>> +static int tegra_pinctrl_suspend(struct device *dev)
->>> +{
->>> +    struct tegra_pmx *pmx = dev_get_drvdata(dev);
->>> +    u32 *backup_regs = pmx->backup_regs;
->>> +    u32 *regs;
->>> +    size_t bank_size;
->>> +    unsigned int i, k;
->>> +
->>> +    for (i = 0; i < pmx->nbanks; i++) {
->>> +        bank_size = tegra_pinctrl_get_bank_size(dev, i);
->>> +        regs = pmx->regs[i];
->>> +        for (k = 0; k < bank_size; k++)
->>> +            *backup_regs++ = readl_relaxed(regs++);
->>> +    }
->>> +
->>> +    return pinctrl_force_sleep(pmx->pctl);
->>> +}
->>> +
->>> +static int tegra_pinctrl_resume(struct device *dev)
->>> +{
->>> +    struct tegra_pmx *pmx = dev_get_drvdata(dev);
->>> +    u32 *backup_regs = pmx->backup_regs;
->>> +    u32 *regs;
->>> +    size_t bank_size;
->>> +    unsigned int i, k;
->>> +
->>> +    for (i = 0; i < pmx->nbanks; i++) {
->>> +        bank_size = tegra_pinctrl_get_bank_size(dev, i);
->>> +        regs = pmx->regs[i];
->>> +        for (k = 0; k < bank_size; k++)
->>> +            writel_relaxed(*backup_regs++, regs++);
->>> +    }
->> I'm now curious whether any kind of barrier is needed after the
->> writings. The pmx_writel() doesn't insert a barrier after the write and
->> seems it just misuses writel, which actually should be writel_relaxed()
->> + barrier, IIUC.
-> 
-> pmx_writel uses writel and it has wmb before raw_write which complete
-> all writes initiated prior to this.
-> 
-> By misusing writel, you mean to have barrier after register write?
+On Mon, Aug 5, 2019 at 4:29 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Tri Vo (2019-08-05 10:58:48)
+> > diff --git a/drivers/base/power/wakeup_stats.c b/drivers/base/power/wakeup_stats.c
+> > new file mode 100644
+> > index 000000000000..3a4f55028e27
+> > --- /dev/null
+> > +++ b/drivers/base/power/wakeup_stats.c
+> > @@ -0,0 +1,161 @@
+> [...]
+> > +/**
+> > + * wakeup_source_sysfs_add - Add wakeup_source attributes to sysfs.
+> > + * @parent: Device given wakeup source is associated with (or NULL if virtual).
+> > + * @ws: Wakeup source to be added in sysfs.
+> > + */
+> > +int wakeup_source_sysfs_add(struct device *parent, struct wakeup_source *ws)
+> > +{
+> > +       struct device *dev;
+> > +
+> > +       dev = device_create_with_groups(wakeup_class, parent, MKDEV(0, 0), ws,
+> > +                                       wakeup_source_groups, "wakeup%d",
+> > +                                       ws->id);
+> > +       if (IS_ERR(dev))
+> > +               return PTR_ERR(dev);
+> > +       ws->dev = dev;
+> > +       pm_runtime_no_callbacks(ws->dev);
+>
+> Does this only avoid adding runtime PM attributes?
+>
+> I thought we would call device_set_pm_not_required() on the device here.
+> Probably requiring a bit of copy/paste from device_create_with_groups()
+> so that it can be set before the device is registered. Or another
+> version of device_create_with_groups() that does everything besides call
+> device_add().
 
-Yes, at least to me it doesn't make much sense for this driver to stall
-before the write. It's the pinctrl user which should be taking care
-about everything to be ready before making a change to the pinctrl's
-configuration.
+Comments on pm_runtime_no_callbacks() say,
+  "Set the power.no_callbacks flag, which tells the PM core that this
+   device is power-managed through its parent and has no runtime PM
+   callbacks of its own.  The runtime sysfs attributes will be removed."
 
->> It's also not obvious whether PINCTRL HW has any kind of write-FIFO and
->> thus maybe read-back + rmb() is needed in order ensure that writes are
->> actually completed.
-> I believe adding write barrier wmb after writel_relaxed should be good
-> rather than doing readback + rmb
->>
->> The last thing which is not obvious is when the new configuration
->> actually takes into effect, does it happen immediately or maybe some
->> delay is needed?
->>
->> [snip]
-> 
-> Based on internal design there is no internal delay and it all depends
-> on APB rate that it takes to write to register.
-> 
-> Pinmux value change to reflect internally might take couple of clock
-> cycles which is much faster than SW can read.
-
-Still not quite obvious if it's possible to have a case where some
-hardware is touched before necessary pinctrl change is fully completed
-and then to get into trouble because of it.
+Sound like it's appropriate to apply this function to the wakeup source.
