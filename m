@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D39836DB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 18:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDFD836DE
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 18:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387944AbfHFQ3D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 12:29:03 -0400
-Received: from mout.gmx.net ([212.227.17.20]:44951 "EHLO mout.gmx.net"
+        id S2387949AbfHFQ3E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Aug 2019 12:29:04 -0400
+Received: from mout.gmx.net ([212.227.17.20]:58799 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387906AbfHFQ3B (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Aug 2019 12:29:01 -0400
+        id S2387916AbfHFQ3C (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Aug 2019 12:29:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1565108888;
-        bh=HzEHIxIKYm6KPLL0JPFew9mFnKGyvVsgusVw6nRHTTw=;
+        s=badeba3b8450; t=1565108889;
+        bh=JOUQ+oPDKcgPIIjUYlOez/IGFEXhWH3PKrXpZ/Nj0Pw=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=S+FiRh76N9kjTLJHbv400S0ijDXh2zkWxH5w5CLk030WIBkRI06GV8ukh3RO0ol64
-         YBYy/K7BYNGLXIk4f6J802F9eai4Y6/ikli5H8+0yxkUxmQTSWK2buGWhmUSEpVIU3
-         qb32jY7S6ebeUhWIXNfwOsWgIsO1m8GTapkJI3Ig=
+        b=iZL6rIKkgpSRvIyMJ7yrjA1AvAGWJeQUirgBbXGAm2djIScT7P1VbcGWwAYsyjJVX
+         /Ou8ir8pEc6TsXU+9CPn+sk0JaVDzBPqENOVYqoCIbnYfvZQf5wXsmyEinlA5s75VD
+         ux5tlFXELueinyIkBF7heHsH/HCMBOOJO52dfs1Q=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([217.61.153.94]) by mail.gmx.com
  (mrgmx103 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0MMkgl-1hycgK36Ct-008YWc; Tue, 06 Aug 2019 18:28:08 +0200
+ 0MS5jy-1hkbwp1SOo-00TGKh; Tue, 06 Aug 2019 18:28:09 +0200
 From:   Frank Wunderlich <frank-w@public-files.de>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -46,34 +46,34 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         "Tianping . Fang" <tianping.fang@mediatek.com>
 Cc:     Josef Friedl <josef.friedl@speed.at>,
         Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v4 03/10] rtc: mt6397: move some common definitions into rtc.h
-Date:   Tue,  6 Aug 2019 18:27:38 +0200
-Message-Id: <20190806162745.8414-4-frank-w@public-files.de>
+Subject: [PATCH v4 04/10] rtc: mt6397: improvements of rtc driver
+Date:   Tue,  6 Aug 2019 18:27:39 +0200
+Message-Id: <20190806162745.8414-5-frank-w@public-files.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190806162745.8414-1-frank-w@public-files.de>
 References: <20190806162745.8414-1-frank-w@public-files.de>
-X-Provags-ID: V03:K1:u9hdvNiTHJABtB4jUq16WoTMdaMAfx9o4ccbdvchDpyvkEG5xf/
- RNkuAZBPOx/Ddf7gtrBUcv2FiFU+MmFN46QBEnpkNfei3idXzfMaDVp0L17g/wQdJuCx5ix
- hzU2kWnFpbiwgiDDa8F9HIgDKbxWWpB9nY0pDRoPPrfRo+EFiih5VPQ+LNxL96k8/AryIra
- BuE+fOnKU++LTNRtQfUtA==
+X-Provags-ID: V03:K1:Fo7b1eCTmtbEceNwBLDjCvbnWHtd4rgJki9dQjNxSmpo7n+DzFO
+ 6t+DoUaDcg1ZnqfqkptI6EYT1AkV9a+JcNZFDn6akif1zuOloZoIuqUcOEvJE+xc6IpmC69
+ yul5ZHuc/3dJYrkQyZHwfAIJg9NM/OdUBNNLJWh0anxKOOf3rT10idQ/mJD2y6zQOyAtMew
+ egld+N2kVA/30bFa7BObg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cMUz6x+Gsec=:eEPPRAYpOPjYGPdy4lEqJg
- YKfxGrOEh+0c/i4LKTG6X3aiqybpgwtA1h7e9rp2uP3Wd3mK3XNAVmlzF0oqL2IVGBGfVCs41
- /kEWgjmAyxaZbP+KCUP5NhsWhyMysyTdeTaRDRy3RrB/pCy4hUSeerb21H8wi2/8eLJCxD0Wd
- QKdi6P5YLA5E16EY3ReI3i3EJ7pffskC9iCnCUZCnHqqma20B/VgonSyLeEEEvBafKhw+U+OR
- +NPyg7YzrjXTN/5Xx8aL047QaUAlxwfbYsiXApyZEtqTuSRA6VJ8dA0a2OM97PJUdCEJ8mP1B
- NUdTJ7IdqAWHy/vdFpHE2Si0V885aHceu6R5edSHQ+FpqKuzR/Y4xbhTctTwOu1D6n5mnYpXx
- j+XoBqJGGLQfOzxns1nM8V+MYMtGjeq3yWn1rzXyACrqaMm3Eq0SYUvErsJbVfJfGmXzTifiz
- ueUB/HTsMzkOkfCYN5WJDuZhPl7WNg/bqQd2cxeR5w1bZSfBR1E4W6ZDfIKVsRvXWjH+8QtoN
- vaou6TupBywkEDMXGLg+46gOOniLxZBjCA+Y0g42D5sUcqb0XvOjvwkFKn4Z6o0T3mwmQhU6d
- 1fv4/SMxvmiTvQ6tPBa/TdX0sNsQtLGWRcmxm0GaQnGY/pGim/AtFVirjObFXPz007oNe9sqW
- UOSDDjACW5EMiiwLYyW3CnORQ3BfEhrlLAZDkf7DY9mhhjYspr1k4XvX4YGtzJMk9s4/gW4ro
- Ws5hWSMKYo+Ofj6mu1hMLjQrO6eA5DTGleh1N1PnpyiXXCwFvJEJ0Gs3uuPMlT6t6TBH1rZzQ
- UdYysD7xZ2jCE05v3oITyhxoFVxIByYsLWzWspKiu7x55BD+PBps65he/4nuB/1KBH04VDMGM
- xGJ5CcEGogagIse3Agzw7Cubv2TqY0c2LY38vX/0/bZrpRgaVEaE/7uYodsX3TLWo29XQukKo
- BxAe3FDp7ZW5OGjLDZhH5ROWMA5LSingpR/45TylfuA/R88cfv8HVSvx7Uh7Zd6rYyEuN2FXT
- FAlyO2Qymn/B51JAM8+byz6qN9xW6Ee8+eGc625/E0Cd8DejuinuSHwlonGTa1q9e0f5t/0dQ
- slNfV5m+FZL9gere6jpwZDdeCDuhrjjsT2G3mXfTJ2mGNp+EXOps1wYjQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AbPc73zCr+k=:tTtvNHVMujzgME3Cq+L3Gt
+ cQgc4Xk9AOFahoyHHEqmUkzRr2E2p91APx2A/Ib0UKADE0t1zG/dZZkH8WjQRtEszbQ49aX2u
+ c6Jq3vI2g3FjnANQ/197dcqwTJ0oaU+0NGOsGuGeG45ClWTovd/Ju0QaUCiUinAraUJjk+6o2
+ lOm6PMIXslC3t9xqLhtOh8lRxKPfeixR4i3GLKkucXoToW6E2MJpwE2szKwB6rA+Ucl/JGsu4
+ VrsbmX5C/EfRnLGgYfSv4JR2itePj4WdKfNXQA0viVYYOLWkxs7z0YT6B3cZTAwJVm14ocbGC
+ KSUUtLIVKQWqDQ/hBAqr3FguJ+pTlaZoabYrgslHBvbeytGaQJEngFhsZZqM+rZbCCOcUfzGi
+ KGpGAyYgMlLyIhu+XX3lscrwRYuHW9yTotsHQA1W2nA7Vtlf0x9mOfcPtH8rYsFPfh+cDZ78E
+ P3njoqHFBXaOm5jPEwkvtANw6Us2cTcHEMfSI4XSUv0IJTfaukLbunpItOEZr0IlYDwwgSWCn
+ o66/NYiWQ9uUmMWUSurpaBnSkyHepr88eh54D9+YlcjElK4usnwDswjVxOjZVJzN6DKzrEe53
+ r6z2itizisGr7ZYQRgDd1KX7jo29ei7N03HSI5xpGm2n1x7EwNVycim2lpzAV+7z4gRiNuNx3
+ 5GkrioMqExCxUDkDZMqapJXzcPriFEXU9KYA2pUHB1TKbQJAlpDS8oeBeYHHggpH5qYoDxJU6
+ slzQZOPoWLmG60y9lFklbWjDfNgsBH/iTN9ymDgkhegRyYIOvDRsXshnbo++c3OIoBh0aYdrh
+ NubfVq5LGHFue4fQL9Ys8RxwdnNYIC5GsXe199Mp/NkmZMVuMhv7cR3pVoVR8dVCFreyWFiAq
+ qplgDMZ24R+uovA37Rm0YWABHLWz3pH84P86liMg5nh+/TQXpVTw9OJ5S8wlT3tF1cfaFJZAG
+ epEPr6kykVOLm3dgy4d8wWRXDC5/X7W17XRZ9UDMY28fPyt6v64FHSwA4V2puBnpQvC0XmoPG
+ UE07pbFu2E+vfMQyz94yIWdI0MPY9U8Q1BqAozNN5ubluhZCjWc55K+ZE4A32ayDCb0V2STln
+ 9VagosHuyciUb65sEFfPOgLKGw1HMFX3xXQ94VcYcBH2nDsXOxVm3/pNA==
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -82,165 +82,128 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Josef Friedl <josef.friedl@speed.at>
 
-move code to separate header-file to reuse definitions later
-in poweroff-driver (drivers/power/reset/mt6323-poweroff.c)
+- use regmap_read_poll_timeout to drop while-loop
+- use devm-api to drop remove-callback
 
-Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+Suggested-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 =2D--
 changes since v3: none
-changes since v2: add missing commit-message
+changes since v2:
+- fix allocation after irq-request
+- compatible for mt6323 in separate commit =3D> part 5
 
- drivers/rtc/rtc-mt6397.c       | 55 +-------------------------
- include/linux/mfd/mt6397/rtc.h | 71 ++++++++++++++++++++++++++++++++++
- 2 files changed, 72 insertions(+), 54 deletions(-)
- create mode 100644 include/linux/mfd/mt6397/rtc.h
+ drivers/rtc/rtc-mt6397.c | 51 +++++++++++++++-------------------------
+ 1 file changed, 19 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-index b46ed4dc7015..c08ee5edf865 100644
+index c08ee5edf865..9370b7fc9f81 100644
 =2D-- a/drivers/rtc/rtc-mt6397.c
 +++ b/drivers/rtc/rtc-mt6397.c
-@@ -9,60 +9,7 @@
+@@ -4,16 +4,19 @@
+ * Author: Tianping.Fang <tianping.fang@mediatek.com>
+ */
+
+-#include <linux/delay.h>
+-#include <linux/init.h>
++#include <linux/err.h>
++#include <linux/interrupt.h>
++#include <linux/mfd/mt6397/core.h>
  #include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/platform_device.h>
  #include <linux/regmap.h>
  #include <linux/rtc.h>
--#include <linux/irqdomain.h>
--#include <linux/platform_device.h>
--#include <linux/of_address.h>
--#include <linux/of_irq.h>
--#include <linux/io.h>
--#include <linux/mfd/mt6397/core.h>
--
--#define RTC_BBPU		0x0000
--#define RTC_BBPU_CBUSY		BIT(6)
--
--#define RTC_WRTGR		0x003c
--
--#define RTC_IRQ_STA		0x0002
--#define RTC_IRQ_STA_AL		BIT(0)
--#define RTC_IRQ_STA_LP		BIT(3)
--
--#define RTC_IRQ_EN		0x0004
--#define RTC_IRQ_EN_AL		BIT(0)
--#define RTC_IRQ_EN_ONESHOT	BIT(2)
--#define RTC_IRQ_EN_LP		BIT(3)
--#define RTC_IRQ_EN_ONESHOT_AL	(RTC_IRQ_EN_ONESHOT | RTC_IRQ_EN_AL)
--
--#define RTC_AL_MASK		0x0008
--#define RTC_AL_MASK_DOW		BIT(4)
--
--#define RTC_TC_SEC		0x000a
--/* Min, Hour, Dom... register offset to RTC_TC_SEC */
--#define RTC_OFFSET_SEC		0
--#define RTC_OFFSET_MIN		1
--#define RTC_OFFSET_HOUR		2
--#define RTC_OFFSET_DOM		3
--#define RTC_OFFSET_DOW		4
--#define RTC_OFFSET_MTH		5
--#define RTC_OFFSET_YEAR		6
--#define RTC_OFFSET_COUNT	7
--
--#define RTC_AL_SEC		0x0018
--
--#define RTC_PDN2		0x002e
--#define RTC_PDN2_PWRON_ALARM	BIT(4)
--
--#define RTC_MIN_YEAR		1968
--#define RTC_BASE_YEAR		1900
--#define RTC_NUM_YEARS		128
--#define RTC_MIN_YEAR_OFFSET	(RTC_MIN_YEAR - RTC_BASE_YEAR)
--
--struct mt6397_rtc {
--	struct device		*dev;
--	struct rtc_device	*rtc_dev;
--	struct mutex		lock;
--	struct regmap		*regmap;
--	int			irq;
--	u32			addr_base;
--};
-+#include <linux/mfd/mt6397/rtc.h>
+ #include <linux/mfd/mt6397/rtc.h>
++#include <linux/mod_devicetable.h>
 
  static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
  {
-diff --git a/include/linux/mfd/mt6397/rtc.h b/include/linux/mfd/mt6397/rtc=
-.h
-new file mode 100644
-index 000000000000..b702c29e8c74
-=2D-- /dev/null
-+++ b/include/linux/mfd/mt6397/rtc.h
-@@ -0,0 +1,71 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2014-2018 MediaTek Inc.
-+ *
-+ * Author: Tianping.Fang <tianping.fang@mediatek.com>
-+ *        Sean Wang <sean.wang@mediatek.com>
-+ */
+-	unsigned long timeout =3D jiffies + HZ;
+ 	int ret;
+ 	u32 data;
+
+@@ -21,19 +24,13 @@ static int mtk_rtc_write_trigger(struct mt6397_rtc *rt=
+c)
+ 	if (ret < 0)
+ 		return ret;
+
+-	while (1) {
+-		ret =3D regmap_read(rtc->regmap, rtc->addr_base + RTC_BBPU,
+-				  &data);
+-		if (ret < 0)
+-			break;
+-		if (!(data & RTC_BBPU_CBUSY))
+-			break;
+-		if (time_after(jiffies, timeout)) {
+-			ret =3D -ETIMEDOUT;
+-			break;
+-		}
+-		cpu_relax();
+-	}
++	ret =3D regmap_read_poll_timeout(rtc->regmap,
++					rtc->addr_base + RTC_BBPU, data,
++					!(data & RTC_BBPU_CBUSY),
++					MTK_RTC_POLL_DELAY_US,
++					MTK_RTC_POLL_TIMEOUT);
++	if (ret < 0)
++		dev_err(rtc->dev, "failed to write WRTGE: %d\n", ret);
+
+ 	return ret;
+ }
+@@ -266,19 +263,19 @@ static int mtk_rtc_probe(struct platform_device *pde=
+v)
+ 		return rtc->irq;
+
+ 	rtc->regmap =3D mt6397_chip->regmap;
+-	rtc->dev =3D &pdev->dev;
+ 	mutex_init(&rtc->lock);
+
+ 	platform_set_drvdata(pdev, rtc);
+
+-	rtc->rtc_dev =3D devm_rtc_allocate_device(rtc->dev);
++	rtc->rtc_dev =3D devm_rtc_allocate_device(&pdev->dev);
+ 	if (IS_ERR(rtc->rtc_dev))
+ 		return PTR_ERR(rtc->rtc_dev);
+
+-	ret =3D request_threaded_irq(rtc->irq, NULL,
+-				   mtk_rtc_irq_handler_thread,
+-				   IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
+-				   "mt6397-rtc", rtc);
++	ret =3D devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
++					mtk_rtc_irq_handler_thread,
++					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
++					"mt6397-rtc", rtc);
 +
-+#ifndef _LINUX_MFD_MT6397_RTC_H_
-+#define _LINUX_MFD_MT6397_RTC_H_
-+
-+#include <linux/jiffies.h>
-+#include <linux/mutex.h>
-+#include <linux/regmap.h>
-+#include <linux/rtc.h>
-+
-+#define RTC_BBPU               0x0000
-+#define RTC_BBPU_CBUSY         BIT(6)
-+#define RTC_BBPU_KEY            (0x43 << 8)
-+
-+#define RTC_WRTGR              0x003c
-+
-+#define RTC_IRQ_STA            0x0002
-+#define RTC_IRQ_STA_AL         BIT(0)
-+#define RTC_IRQ_STA_LP         BIT(3)
-+
-+#define RTC_IRQ_EN             0x0004
-+#define RTC_IRQ_EN_AL          BIT(0)
-+#define RTC_IRQ_EN_ONESHOT     BIT(2)
-+#define RTC_IRQ_EN_LP          BIT(3)
-+#define RTC_IRQ_EN_ONESHOT_AL  (RTC_IRQ_EN_ONESHOT | RTC_IRQ_EN_AL)
-+
-+#define RTC_AL_MASK            0x0008
-+#define RTC_AL_MASK_DOW                BIT(4)
-+
-+#define RTC_TC_SEC             0x000a
-+/* Min, Hour, Dom... register offset to RTC_TC_SEC */
-+#define RTC_OFFSET_SEC         0
-+#define RTC_OFFSET_MIN         1
-+#define RTC_OFFSET_HOUR                2
-+#define RTC_OFFSET_DOM         3
-+#define RTC_OFFSET_DOW         4
-+#define RTC_OFFSET_MTH         5
-+#define RTC_OFFSET_YEAR                6
-+#define RTC_OFFSET_COUNT       7
-+
-+#define RTC_AL_SEC             0x0018
-+
-+#define RTC_PDN2               0x002e
-+#define RTC_PDN2_PWRON_ALARM   BIT(4)
-+
-+#define RTC_MIN_YEAR           1968
-+#define RTC_BASE_YEAR          1900
-+#define RTC_NUM_YEARS          128
-+#define RTC_MIN_YEAR_OFFSET    (RTC_MIN_YEAR - RTC_BASE_YEAR)
-+
-+#define MTK_RTC_POLL_DELAY_US  10
-+#define MTK_RTC_POLL_TIMEOUT   (jiffies_to_usecs(HZ))
-+
-+struct mt6397_rtc {
-+	struct device           *dev;
-+	struct rtc_device       *rtc_dev;
-+
-+	/* Protect register access from multiple tasks */
-+	struct mutex            lock;
-+	struct regmap           *regmap;
-+	int                     irq;
-+	u32                     addr_base;
-+};
-+
-+#endif /* _LINUX_MFD_MT6397_RTC_H_ */
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
+ 			rtc->irq, ret);
+@@ -302,15 +299,6 @@ static int mtk_rtc_probe(struct platform_device *pdev=
+)
+ 	return ret;
+ }
+
+-static int mtk_rtc_remove(struct platform_device *pdev)
+-{
+-	struct mt6397_rtc *rtc =3D platform_get_drvdata(pdev);
+-
+-	free_irq(rtc->irq, rtc);
+-
+-	return 0;
+-}
+-
+ #ifdef CONFIG_PM_SLEEP
+ static int mt6397_rtc_suspend(struct device *dev)
+ {
+@@ -349,7 +337,6 @@ static struct platform_driver mtk_rtc_driver =3D {
+ 		.pm =3D &mt6397_pm_ops,
+ 	},
+ 	.probe	=3D mtk_rtc_probe,
+-	.remove =3D mtk_rtc_remove,
+ };
+
+ module_platform_driver(mtk_rtc_driver);
 =2D-
 2.17.1
 
