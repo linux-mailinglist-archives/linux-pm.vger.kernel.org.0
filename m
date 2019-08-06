@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E33448305B
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 13:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9828305C
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 13:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732733AbfHFLMf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1731116AbfHFLMf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 6 Aug 2019 07:12:35 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:54140 "EHLO inva020.nxp.com"
+Received: from inva021.nxp.com ([92.121.34.21]:32906 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731116AbfHFLMf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1731309AbfHFLMf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Tue, 6 Aug 2019 07:12:35 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7FDE21A00D8;
-        Tue,  6 Aug 2019 13:12:32 +0200 (CEST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 1C8862002C1;
+        Tue,  6 Aug 2019 13:12:33 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 728261A00CD;
-        Tue,  6 Aug 2019 13:12:32 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0F32220020B;
+        Tue,  6 Aug 2019 13:12:33 +0200 (CEST)
 Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id E465A205DD;
-        Tue,  6 Aug 2019 13:12:31 +0200 (CEST)
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 82289205DD;
+        Tue,  6 Aug 2019 13:12:32 +0200 (CEST)
 From:   Leonard Crestez <leonard.crestez@nxp.com>
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -33,9 +33,9 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Alexandre Bailon <abailon@baylibre.com>,
         linux-pm@vger.kernel.org
-Subject: [RFC 1/4] opp: Drop const from opp_device struct device
-Date:   Tue,  6 Aug 2019 14:12:25 +0300
-Message-Id: <fbb05862236198862e54126c2f3167a93c641274.1565089196.git.leonard.crestez@nxp.com>
+Subject: [RFC 2/4] opp: Add dev_pm_opp_table_get_device
+Date:   Tue,  6 Aug 2019 14:12:26 +0300
+Message-Id: <53d047703057fb09a0345b0a13715576d6eea3da.1565089196.git.leonard.crestez@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1565089196.git.leonard.crestez@nxp.com>
 References: <cover.1565089196.git.leonard.crestez@nxp.com>
@@ -47,78 +47,95 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is required for fetching struct device from struct opp_table with
-casts
+This API is the opposite of dev_pm_opp_get_opp_table. OPP tables can be
+shared between devices but this ambiguity can be handled by returning an
+error if opp table is not exclusive.
+
+This can used for fetching the device pointed to by "required-opps".
 
 Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-
 ---
-Does "const" here have any particular significance?
-
- drivers/opp/core.c | 4 ++--
- drivers/opp/opp.h  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/opp/core.c     | 30 ++++++++++++++++++++++++++++++
+ include/linux/pm_opp.h |  6 ++++++
+ 2 files changed, 36 insertions(+)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 3b7ffd0234e9..77814d3bc4e6 100644
+index 77814d3bc4e6..b8bbabbbe44a 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -913,11 +913,11 @@ static void _remove_opp_dev(struct opp_device *opp_dev,
- 	opp_debug_unregister(opp_dev, opp_table);
- 	list_del(&opp_dev->node);
- 	kfree(opp_dev);
+@@ -87,10 +87,40 @@ struct opp_table *_find_opp_table(struct device *dev)
+ 	mutex_unlock(&opp_table_lock);
+ 
+ 	return opp_table;
  }
  
--static struct opp_device *_add_opp_dev_unlocked(const struct device *dev,
-+static struct opp_device *_add_opp_dev_unlocked(struct device *dev,
- 						struct opp_table *opp_table)
- {
- 	struct opp_device *opp_dev;
++/**
++ * _find_opp_table() - find device struct using opp_table pointer
++ *
++ * OPP table must be exclusive: not be shared between devices.
++ */
++struct device *dev_pm_opp_table_get_device(struct opp_table *opp_table)
++{
++	struct opp_device *opp_dev;
++	struct device *dev = ERR_PTR(-EINVAL);
++	int opp_dev_cnt = 0;
++
++	mutex_lock(&opp_table->lock);
++
++	/* OPP table must not be shared: only one device */
++	if (opp_table->shared_opp != OPP_TABLE_ACCESS_EXCLUSIVE)
++		goto out;
++	list_for_each_entry(opp_dev, &opp_table->dev_list, node)
++		opp_dev_cnt++;
++	if (opp_dev_cnt != 1)
++		goto out;
++
++	opp_dev = list_first_entry(&opp_table->dev_list, struct opp_device, node);
++	dev = opp_dev->dev;
++
++out:
++	mutex_unlock(&opp_table->lock);
++	return dev;
++}
++EXPORT_SYMBOL_GPL(dev_pm_opp_table_get_device);
++
+ /**
+  * dev_pm_opp_get_voltage() - Gets the voltage corresponding to an opp
+  * @opp:	opp for which voltage has to be returned for
+  *
+  * Return: voltage in micro volt corresponding to the opp, else
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index b8197ab014f2..a4db3f42d787 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -76,10 +76,11 @@ struct dev_pm_set_opp_data {
+ #if defined(CONFIG_PM_OPP)
  
- 	opp_dev = kzalloc(sizeof(*opp_dev), GFP_KERNEL);
-@@ -933,11 +933,11 @@ static struct opp_device *_add_opp_dev_unlocked(const struct device *dev,
- 	opp_debug_register(opp_dev, opp_table);
+ struct opp_table *dev_pm_opp_get_opp_table(struct device *dev);
+ struct opp_table *dev_pm_opp_get_opp_table_indexed(struct device *dev, int index);
+ void dev_pm_opp_put_opp_table(struct opp_table *opp_table);
++struct device *dev_pm_opp_table_get_device(struct opp_table *opp_table);
  
- 	return opp_dev;
+ unsigned long dev_pm_opp_get_voltage(struct dev_pm_opp *opp);
+ 
+ unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp);
+ 
+@@ -149,10 +150,15 @@ static inline struct opp_table *dev_pm_opp_get_opp_table_indexed(struct device *
+ 	return ERR_PTR(-ENOTSUPP);
  }
  
--struct opp_device *_add_opp_dev(const struct device *dev,
-+struct opp_device *_add_opp_dev(struct device *dev,
- 				struct opp_table *opp_table)
+ static inline void dev_pm_opp_put_opp_table(struct opp_table *opp_table) {}
+ 
++struct struct device *dev_pm_opp_table_get_device(struct opp_table *opp_table)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
+ static inline unsigned long dev_pm_opp_get_voltage(struct dev_pm_opp *opp)
  {
- 	struct opp_device *opp_dev;
+ 	return 0;
+ }
  
- 	mutex_lock(&opp_table->lock);
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 01a500e2c40a..5a7ddd55bd84 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -103,11 +103,11 @@ struct dev_pm_opp {
-  * This is an internal data structure maintaining the devices that are managed
-  * by 'struct opp_table'.
-  */
- struct opp_device {
- 	struct list_head node;
--	const struct device *dev;
-+	struct device *dev;
- 
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *dentry;
- #endif
- };
-@@ -207,11 +207,11 @@ struct opp_table {
- void dev_pm_opp_get(struct dev_pm_opp *opp);
- void _opp_remove_all_static(struct opp_table *opp_table);
- void _get_opp_table_kref(struct opp_table *opp_table);
- int _get_opp_count(struct opp_table *opp_table);
- struct opp_table *_find_opp_table(struct device *dev);
--struct opp_device *_add_opp_dev(const struct device *dev, struct opp_table *opp_table);
-+struct opp_device *_add_opp_dev(struct device *dev, struct opp_table *opp_table);
- void _dev_pm_opp_find_and_remove_table(struct device *dev);
- struct dev_pm_opp *_opp_allocate(struct opp_table *opp_table);
- void _opp_free(struct dev_pm_opp *opp);
- int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *opp_table, bool rate_not_available);
- int _opp_add_v1(struct opp_table *opp_table, struct device *dev, unsigned long freq, long u_volt, bool dynamic);
 -- 
 2.17.1
 
