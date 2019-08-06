@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E1C836C3
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 18:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5CB836E5
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 18:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387892AbfHFQ3C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 12:29:02 -0400
-Received: from mout.gmx.net ([212.227.17.21]:58567 "EHLO mout.gmx.net"
+        id S2387985AbfHFQ3H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Aug 2019 12:29:07 -0400
+Received: from mout.gmx.net ([212.227.17.22]:38137 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387909AbfHFQ3C (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Aug 2019 12:29:02 -0400
+        id S2387968AbfHFQ3G (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Aug 2019 12:29:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1565108877;
-        bh=xGvBBhBv8mIQUww1OPe1/FCAqKvtmv/lhpMvp7Optzo=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=BSfD2+tA0aFUeRWZUCCocQ7jVyr4dAsFDcSNF064B7Iw+MZQxKnTCLGg5sxQ4LloC
-         QjZegJ6sNrw5PcK19M7/KIcsV2i2q/Dx1tuiQ5oQKm/JmC2GFkERV5QeLMhit7Nqwm
-         /DF5TEImzOdzQt0nQiTjiaFu4BEYB4qOR68brwpc=
+        s=badeba3b8450; t=1565108884;
+        bh=zpDHFZtFnB6jtb9Ty5VxV4oP5o3ljb0IMfQ1WZg0clY=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Sm7iniuLTfio2K6K9jk23/qCkaDP0SaifhnYXC3l6DFmQe1/qob5bGW/zHV+CnEL7
+         NZmponM93e49n/3Aw8tLWhhxLX2qjpNnHfwUI2iNCqrxQtBqZKPkYywtnonxdAkOBV
+         4yr1wJQLYRrnURxW59FVRPs7gJwHVaLOrrVLUEX4=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([217.61.153.94]) by mail.gmx.com
  (mrgmx103 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0MgsVY-1hhvJc3Ibg-00M5Kb; Tue, 06 Aug 2019 18:27:56 +0200
+ 0Mg3h3-1hikmv1UOL-00NSmC; Tue, 06 Aug 2019 18:28:04 +0200
 From:   Frank Wunderlich <frank-w@public-files.de>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -44,104 +44,129 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         Sebastian Reichel <sre@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Tianping . Fang" <tianping.fang@mediatek.com>
-Cc:     Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v4 00/10] implement poweroff for mt6323 / bpi-r2
-Date:   Tue,  6 Aug 2019 18:27:35 +0200
-Message-Id: <20190806162745.8414-1-frank-w@public-files.de>
+Cc:     Josef Friedl <josef.friedl@speed.at>,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH v4 01/10] dt-bindings: add powercontroller
+Date:   Tue,  6 Aug 2019 18:27:36 +0200
+Message-Id: <20190806162745.8414-2-frank-w@public-files.de>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:fDGgKZ6spNEPfINJWpjM4TL6DAKb4WwwHdcrKqACYngUW5cxd34
- UZ0Ho8Wdo+kM1XFugD0+bBIsncohO47Y/sc/RusG2Zb7ILZYqlMpyXGwEgIhoisr16zD0un
- YDZ+MewnWXpQezMt+h+8894slE/RbtsTaGLPHyMnNHkGqHrjfuww/avOiQJ2WeZ7o/KEC1I
- zQAEPiRtVQ33nCYGGyFEA==
+In-Reply-To: <20190806162745.8414-1-frank-w@public-files.de>
+References: <20190806162745.8414-1-frank-w@public-files.de>
+X-Provags-ID: V03:K1:AIGOCby4oFv47YSJ9VFQ9scd8B6VnGGTMhIk5HuNYlF12fPSCco
+ xKJUKT6QYOFGIKQ/z6NSePLt0CdsRa+wV9mqMkGua7Wffu3uHXZ5GOP+r81dHjoAOYNJDfu
+ e/5lRA4Zr/gAapa68Gp9+4b7M1GCmMLNxEIvYHwHWvx9ONzS5qP8Hqyb3Nr1jYM+UxZbj2k
+ paoqGOeO7rPQh33p9JYoQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gTunm3r6LcY=:+rmQ5RPc3CYtKjH56Fxl5y
- vdyanBHcAMIOsE31w0gi6hFSfzJhhsOufq774CqVZBjjb/ijn4jYzA12RCL+zCl5P/5ysvUpH
- UJ4/PISlMpUSzkVPnaZ4ikA21TgNkQvltXlJUh5AZBvcOYbpWU/U/KIZfDVZV7x2GSCzVB6Ov
- 4Z9Ds35L9fOJ4DOB8HpCllPXK9Zwn3PVS0/O5FJULdJTBYvw4zKUMFb/aAQYPzNm6O1tAASLP
- ZK5UW6wFuwisdCGk2aczDlK6PQSsVzvj+3IQsH8xtgpZKP6GGRSgyMDS0EkIJVk3wXOzTab1a
- e6lfBJZgs2royFjjJk7mtoeUMMnXkXu5VaGVDbo9rJHA6PmNSBxpeIuTHxX1+wN94R0gFxrY4
- 11tq/wO1MS5Fl0HrWMhzj9T7xsP7V0m/htbEb2Ckkd6y2zAhc5zDFDJvw+jJmxJeeM/LUEKFN
- mIxjwe21KxXFdGLHvL0+Au9kqAns25TfeIZoSOALUeFtmfspB+gkSoyoZwlIIAROWs7ko5r3L
- fGISutTiyK63UI0Mzx2JJoSZQeFl+3IjxhD9BEEv0D68NgcmQ+OorS+OpA5hMeSdDXXK9YgWE
- eeiz1jCZ2L1q1WxxAQX+0ml95KUWAaOuw7a7Cu/By/qTFT/5XPvJinje9KvXs+LBSsWTmbaqn
- Li2QFfIzL1NvY4LGMM91uer4Y5Af57CdBQAwu5uQvwAnwyPsuk0xmD/C9++rMqZawP5v0HUsl
- SMNkbhrdHRNKQKAfP4EQ3UNNB/XVMaLNSehJLXUBwXYkD7jcr+udDBDjXqewNP2qlr4NxLJf1
- ed+GSlbU6HjIJDM41eet0w7Zx5ckQ2Y+5nAyq+yvnsXDBdICORm5jFxS03CTJ7SGkLIxR7EHg
- lQ27xFMC4eyzw/ssfpiYW1FKmWz8aq1/Ndr0Rka2p/ricCEaFb1EU9LAbmB8CoG47DLAq8dja
- +udTuoRvPkWg/62YQtWhTYFx8Ev8lgPQnTVWL1vYKfFsEOnd1T1px4DRZtAogiSbrfJe8XRqf
- DM+kLIMjACgDT5aiRCXGQjwckMtqCRPHkQ3l09EqUetTmAmR4yz3a/5zTWtQsKzr+UWzff34P
- zJXVD4E/SzPHxUcl1t5Xmwhn6ANLJNRYAIFE25H4bt/+U5SxFTXk7lInkfB+/NSM5fP9K38pk
- /6GDw=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XWjw5J45VAM=:2dSZxUR1GbmeEjxNlusGLw
+ bS/X4iPie7hRL4oNU0IhIawv8w7+UaAWS95KxFVjElYWEJvvWqTdn6Of+Z5s3pA5a9TSAtTMj
+ CNctLTB1MuM/wZXB0BiCWE0l8i5SsBGBTEMa6FYysrIVH6UcYZQHj/oXM85L+Q/rYgzFwQ7t9
+ KrYKViVdYJ3Cj/HGncWtchT8zc6jf/VVEXyEgb8OzWklBRbUKLf8vXVajYu8EqaMY4HTEffiS
+ ERCxOFFmDFBcBp2ziLwibJKhxV9qWOrsf3c0D0RFmsdiaINA4aO44zOnVKSg3odRwKzHFg+9y
+ yvTBNPqvgqJn2UJVieb5Z5k+jE8MDkgk97ncG1an3Dp+/5LkmCmSS0agyHjVMOhoKkjB4uCH/
+ 4X3Ui7XOo1nSJrRZTJhyWDPVYlq+Muv3n8wnI4MxiZUQe6UMAX2oLXdHnHF/Ia8u/+WfUHoV2
+ tQdK+HuRiK+2xvrxaUgyhvU0esYsoGZdM6htmr03ZbflgROiJdJgqPghUdnnCz5dABD6VQjLr
+ CRV2mgHbch0EACyFGdFBkc2EDfrKVHajslHZDqg+BNtjewwzgdoTAIXCswuNAAcRG3SHLY9Cr
+ F7kRexbw9K0pwF4OTHNgMf25kgvRHEkDHvi16uh+BGahESYj4HBnribGQ2OUWnA+lbGgeZ28S
+ 2F4GwZU08OlcbJRvneemznuruY3ibbR05hjE6AbcWWPgvyYpQXBYWnoFkRzrtSMiYstbt0kEX
+ GgWQH78SAYaE5hTmH51YVSxQp/JvjCsfcWKDveoM0AtjrDNaaLFCmevOSssHo23ywjF3Jf0/e
+ 0fTx4cJ9IIZ0X+Qfs+hC+xdW8Bj6UHsssu7G6UluKU/7SvzBiCY00JL6I0/B7lNzbXcL+HcVQ
+ fm4NgU5Z6Z6jy8dzgVeUiFvzJOZQQGvTEr1VvSHkhT0susH89L9ZYOoORcRB1mV8DwF/nA7So
+ 2h+msJBOwWROaNUIXy/NTGNiHq/VV352sSO1x86bfskFwlT/bLkEVE80aH9fOIKxq7TzxP1JJ
+ 8wZu2uOSr4wwEKqJ64LTSYdq2OOiZsm1EgvhjeCav0HTs7diGxKHv7gDj/RM5/GREsfhgyVQg
+ zjAqbidpbe8q32hMi7f5Z/Qb5OTiNuYD3oKEzkaLPWDUc54ZGLJ/s/5Og==
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-mainline-driver does not support mt6323
+From: Josef Friedl <josef.friedl@speed.at>
 
-this series makes some cleanup to mt6397-rtc-driver, adds mt6323 and
-implement power-controller on it.
+add mt6323-rtc and mt6323-pwrc to mt6397 mfd DT bindings
+an example is shown in mt6323-poweroff.txt
 
-tested on bananapi-r2
+Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+=2D--
+changes since v3: none
+changes since v2: separated rtc-mt6397.txt to part 2
 
-Original Patch from Josef Friedl
-
-changes since v3:
-	- moved SOB in 2/10 and 9/10
-	- moved part 5 to 6 to be near driver-change
-	- changehistory of patches below ---
-
-changes since v2:
-	- Splitted some parts and rebased on 5.3-rc2:
-
-	v2.1 dt-bindings: add powercontroller =E2=80=93 try to make better subjec=
-t
-	v2.2 separate rtc-mt6397.txt (suggested by Alexandre Belloni)
-		add missing commit-message (suggested by Matthias Brugger)
-	v2.3 fix alloc after IRQ (suggested by Alexandre Belloni)
-		new compatible (splitting suggested by Alexandre Belloni)
-		needed due to different rtc-base/size see #7
-	v2.4 simplifications (Define-res-macros)
-		add mt6323 rtc+pwrc
-	v2.5 add poweroff-driver (no change)
-	v2.6 MAINTAINERS (no change)
-	v2.7 DTS-Changes (no change)
-
-
-Josef Friedl (10):
-  dt-bindings: add powercontroller
-  dt-bindings: add missing mt6397 rtc
-  rtc: mt6397: move some common definitions into rtc.h
-  rtc: mt6397: improvements of rtc driver
-  mfd: mt6323: some improvements of mt6397-core
-  rtc: mt6397: add compatible for mt6323
-  mfd: mt6323: add mt6323 rtc+pwrc
-  power: reset: add driver for mt6323 poweroff
-  MAINTAINERS: add Mediatek shutdown drivers
-  arm: dts: mt6323: add keys, power-controller, rtc and codec
-
- .../devicetree/bindings/mfd/mt6397.txt        |  10 +-
- .../bindings/power/reset/mt6323-poweroff.txt  |  20 ++++
- .../devicetree/bindings/rtc/rtc-mt6397.txt    |  29 +++++
- MAINTAINERS                                   |   7 ++
- arch/arm/boot/dts/mt6323.dtsi                 |  27 +++++
- drivers/mfd/mt6397-core.c                     |  40 +++++--
- drivers/power/reset/Kconfig                   |  10 ++
- drivers/power/reset/Makefile                  |   1 +
- drivers/power/reset/mt6323-poweroff.c         |  97 ++++++++++++++++
- drivers/rtc/rtc-mt6397.c                      | 107 ++++--------------
- include/linux/mfd/mt6397/core.h               |   2 +
- include/linux/mfd/mt6397/rtc.h                |  71 ++++++++++++
- 12 files changed, 323 insertions(+), 98 deletions(-)
+ .../devicetree/bindings/mfd/mt6397.txt        | 10 +++++++++-
+ .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++++++++
+ 2 files changed, 29 insertions(+), 1 deletion(-)
  create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-p=
 oweroff.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
- create mode 100644 drivers/power/reset/mt6323-poweroff.c
- create mode 100644 include/linux/mfd/mt6397/rtc.h
 
+diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentat=
+ion/devicetree/bindings/mfd/mt6397.txt
+index 0ebd08af777d..44acb9827716 100644
+=2D-- a/Documentation/devicetree/bindings/mfd/mt6397.txt
++++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+@@ -8,6 +8,7 @@ MT6397/MT6323 is a multifunction device with the following=
+ sub modules:
+ - Clock
+ - LED
+ - Keys
++- Power controller
+
+ It is interfaced to host controller using SPI interface by a proprietary =
+hardware
+ called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwra=
+p.
+@@ -22,8 +23,10 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
+ Optional subnodes:
+
+ - rtc
+-	Required properties:
++	Required properties: Should be one of follows
++		- compatible: "mediatek,mt6323-rtc"
+ 		- compatible: "mediatek,mt6397-rtc"
++	For details, see Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+ - regulators
+ 	Required properties:
+ 		- compatible: "mediatek,mt6397-regulator"
+@@ -46,6 +49,11 @@ Optional subnodes:
+ 		- compatible: "mediatek,mt6397-keys" or "mediatek,mt6323-keys"
+ 	see Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+
++- power-controller
++	Required properties:
++		- compatible: "mediatek,mt6323-pwrc"
++	For details, see Documentation/devicetree/bindings/power/reset/mt6323-po=
+weroff.txt
++
+ Example:
+ 	pwrap: pwrap@1000f000 {
+ 		compatible =3D "mediatek,mt8135-pwrap";
+diff --git a/Documentation/devicetree/bindings/power/reset/mt6323-poweroff=
+.txt b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+new file mode 100644
+index 000000000000..933f0c48e887
+=2D-- /dev/null
++++ b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+@@ -0,0 +1,20 @@
++Device Tree Bindings for Power Controller on MediaTek PMIC
++
++The power controller which could be found on PMIC is responsible for exte=
+rnally
++powering off or on the remote MediaTek SoC through the circuit BBPU.
++
++Required properties:
++- compatible: Should be one of follows
++       "mediatek,mt6323-pwrc": for MT6323 PMIC
++
++Example:
++
++       pmic {
++               compatible =3D "mediatek,mt6323";
++
++               ...
++
++               power-controller {
++                       compatible =3D "mediatek,mt6323-pwrc";
++               };
++       }
 =2D-
 2.17.1
 
