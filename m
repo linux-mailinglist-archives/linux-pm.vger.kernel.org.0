@@ -2,249 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 920D183493
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 17:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CBB83532
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 17:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733065AbfHFPAT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 6 Aug 2019 11:00:19 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46228 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732976AbfHFPAT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 11:00:19 -0400
-Received: by mail-ot1-f65.google.com with SMTP id z23so64882505ote.13;
-        Tue, 06 Aug 2019 08:00:18 -0700 (PDT)
+        id S1731314AbfHFP1S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Aug 2019 11:27:18 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:42127 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728156AbfHFP1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 11:27:17 -0400
+Received: by mail-lj1-f195.google.com with SMTP id t28so82592430lje.9
+        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2019 08:27:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lQLK4tb5Z256tMmoTbFqTBvyP3uC/HL9pRxf6y947jw=;
+        b=FdHnNHPgfbF3ymARaKBNViWrTvZwfqthjKmU18mLnfuyV9/hU8KwTGKqrCkYC2c7p1
+         FaHUji7eK/d9R32k1vK8A2AO5MszIgZKI/LL+SIIqjZBdYHxRuiaiypq8d6blILjN/eG
+         mUPaAdM/2GyLRse4P6TgTMZgUtyBgS7EPvbD9jBJnFBrmp3Wm2zlDLZPFT/YdAWUiLIu
+         epxK5Z3WYlBq12C8PkBYNAQrxSeao6xujqTFkO6QKX/yc8fYnl7DTX7Cb8ulLJY28MpX
+         jVUD+Q/rEbxuatHSv3H4vvehKoI7A9+XvgGciT4BNq9t4/61RKLY1FqqaXg6Yjlmc1c/
+         DC9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RxscOdQ0kyBswnMzdbZHYfByGlVUrX+tfvvqdJiBFoE=;
-        b=dlrY7TcNezIHDw9MIxBilcl0dt5iTNrBXNFbWK628xkXLjiozV0BDf7A3w5B4FRiIV
-         nP0t2iFQA3jiV1PbLDgUX66Tl7uVTJflUruflp+6A1oy16U/iRiDqixy6pd2/LQofBkz
-         6jHEahV+r68xHB+KavsIwle4fBehASUS+1oNYhBVY9PFpXX0mwyu28f/5nHqt4scXC3+
-         hBpdHobXfYYh6fB+ei6irI3OcxSow9z1NGxKoyFawpw1B9psSygoBzrhcr0Ti3QEbC70
-         FILAbkvZS5e02qNCXuqd6wA1hPm7ZxpsB2TMxXPfWq43RQ90f1L37E+XP+Vuk74ZWGE9
-         quqw==
-X-Gm-Message-State: APjAAAVBEpsM8Oa52dRdif+q/ZrEErxVPYDUQfafCeLh5mSKn5UyQ46S
-        GztL8j8Rga5q2qD56xP7+UojbihvhCa/XdZfXwk=
-X-Google-Smtp-Source: APXvYqx8ItX5xoIIAX4vHz++TW/l+PdKzaANPtE5r8IzO3glW5pLIh9f66W8bKa5i983pNTmH/Pbg6Ga79cH2/85Qks=
-X-Received: by 2002:a9d:6959:: with SMTP id p25mr3267007oto.118.1565103618356;
- Tue, 06 Aug 2019 08:00:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
- <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com>
- <47415939.KV5G6iaeJG@kreacher> <20190730144134.GA12844@localhost.localdomain>
- <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
- <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com> <20190730191934.GD13948@localhost.localdomain>
- <7d3e0b8ba1444194a153c93faa1cabb3@AUSX13MPC105.AMER.DELL.COM>
- <20190730213114.GK13948@localhost.localdomain> <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com>
- <20190731221956.GB15795@localhost.localdomain> <CAJZ5v0hxYGBXau39sb80MQ8jbZZCzH0JU2DYZvn9JOtYT2+30g@mail.gmail.com>
- <70D536BE-8DC7-4CA2-84A9-AFB067BA520E@canonical.com> <CAJZ5v0hFYEv_+vFkrxaCn_pNAbyqmO_cLb5GOLNn_xxRRwjh2g@mail.gmail.com>
- <38d4b4b107154454a932781acde0fa5a@AUSX13MPC105.AMER.DELL.COM>
- <CAJZ5v0jmO4FMOVYs62wkvPrUW81scD2H7cJyRc+tfoj+vODVbQ@mail.gmail.com>
- <43A8DF53-8463-4314-9E8E-47A7D3C5A709@canonical.com> <CAJZ5v0ipG-MJjERBL9fjx29QktaYEKSmMCbWiEGPHsbF=Xfxtw@mail.gmail.com>
- <1FA3D56B-80C6-496C-8772-2F773AA8043C@canonical.com> <CAJZ5v0g_yAP=zgYDXtJWtwceQp4wWPWFghDDD0opdZ4zT-yo5Q@mail.gmail.com>
- <1d05e26a91f94e5b92eaf5854fa85289@AUSX13MPC105.AMER.DELL.COM>
-In-Reply-To: <1d05e26a91f94e5b92eaf5854fa85289@AUSX13MPC105.AMER.DELL.COM>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 6 Aug 2019 17:00:06 +0200
-Message-ID: <CAJZ5v0gBCTyRwg0ePHOD4qQvcSwXzHjb5hkswQ7=Ki=gO_nx0A@mail.gmail.com>
-Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
- suspend" has problems
-To:     Mario Limonciello <Mario.Limonciello@dell.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Keith Busch <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lQLK4tb5Z256tMmoTbFqTBvyP3uC/HL9pRxf6y947jw=;
+        b=dq7w8BcbcZ7Eotfq7DJxWpK9klmuwtsI/hNhnfPHOrDhKPnjGET7GdYjqqyf2/Xos1
+         ndCa3bJIWl4MkAg8RlJ5yoZZJU18ej0+TngQRpStDTnjY1Ifa3ZNRV6qz0O7R2CSKxSk
+         e3iZFF3CcsMrRvqwNaW/1z+uh62+Tq5o8kZKIjKIbNzcKhlufee0pzFnw7r2ql5rGiY5
+         f83bIRtcPM/uEVXzF9A+H0YDBRD46Fe/pdHHUu0ddA3QrakOp0uFOQpzFG2RiBgIZNGi
+         8rJXhEsxVLGhf163oNiAHBw7fRBnywIHHqqvtKUVjUt0XXYqbfkY8l27hxE3letZjJK9
+         8Y8g==
+X-Gm-Message-State: APjAAAUD9FShRzTjwWkXVECNqncmFfajZTfLdF+Hn1zypkAKTAcnPKlK
+        dfSVf4viCDV6ITVe2VKl/djcbg==
+X-Google-Smtp-Source: APXvYqwGDIikezEUCpyF3cWy2FfzA7zvcCQTl5EZtpBbYwgUbe1LZDM7iaW/jgjtceJP6PoArtd7dQ==
+X-Received: by 2002:a2e:834e:: with SMTP id l14mr2066083ljh.158.1565105234727;
+        Tue, 06 Aug 2019 08:27:14 -0700 (PDT)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id e23sm1539179lfn.43.2019.08.06.08.27.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Aug 2019 08:27:13 -0700 (PDT)
+Subject: Re: [PATCH v4 0/3] Introduce Bandwidth OPPs for interconnects
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Sibi Sankar <sibis@codeaurora.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Sweeney, Sean" <seansw@qti.qualcomm.com>,
+        David Dai <daidavid1@codeaurora.org>, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20190726231558.175130-1-saravanak@google.com>
+ <20190729093545.kvnqxjkyx4nogddk@vireshk-i7>
+ <CAGETcx8OBFGgP1-hj717Sk-_N95-kacVsz0yb288n3pej12n1Q@mail.gmail.com>
+ <20190730024640.xk27jgdfl2j6ucx7@vireshk-i7>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <b1d2697d-bf72-3476-b9a0-0bf79cec2145@linaro.org>
+Date:   Tue, 6 Aug 2019 18:27:09 +0300
+MIME-Version: 1.0
+In-Reply-To: <20190730024640.xk27jgdfl2j6ucx7@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 6, 2019 at 4:02 PM <Mario.Limonciello@dell.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Rafael J. Wysocki <rafael@kernel.org>
-> > Sent: Monday, August 5, 2019 4:29 PM
-> > To: Kai-Heng Feng
-> > Cc: Rafael J. Wysocki; Limonciello, Mario; Keith Busch; Keith Busch; Christoph
-> > Hellwig; Sagi Grimberg; linux-nvme; Linux PM; Linux Kernel Mailing List; Rajat Jain
-> > Subject: Re: [Regression] Commit "nvme/pci: Use host managed power state for
-> > suspend" has problems
-> >
-> >
-> > [EXTERNAL EMAIL]
-> >
-> > On Mon, Aug 5, 2019 at 9:14 PM Kai-Heng Feng
-> > <kai.heng.feng@canonical.com> wrote:
-> > >
-> > > at 19:04, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > > On Fri, Aug 2, 2019 at 12:55 PM Kai-Heng Feng
-> > > > <kai.heng.feng@canonical.com> wrote:
-> > > >> at 06:26, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > >>
-> > > >>> On Thu, Aug 1, 2019 at 9:05 PM <Mario.Limonciello@dell.com> wrote:
-> > > >>>>> -----Original Message-----
-> > > >>>>> From: Rafael J. Wysocki <rafael@kernel.org>
-> > > >>>>> Sent: Thursday, August 1, 2019 12:30 PM
-> > > >>>>> To: Kai-Heng Feng; Keith Busch; Limonciello, Mario
-> > > >>>>> Cc: Keith Busch; Christoph Hellwig; Sagi Grimberg; linux-nvme; Linux
-> > > >>>>> PM; Linux
-> > > >>>>> Kernel Mailing List; Rajat Jain
-> > > >>>>> Subject: Re: [Regression] Commit "nvme/pci: Use host managed power
-> > > >>>>> state for
-> > > >>>>> suspend" has problems
-> > > >>>>>
-> > > >>>>>
-> > > >>>>> [EXTERNAL EMAIL]
-> > > >>>>>
-> > > >>>>> On Thu, Aug 1, 2019 at 11:06 AM Kai-Heng Feng
-> > > >>>>> <kai.heng.feng@canonical.com> wrote:
-> > > >>>>>> at 06:33, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > >>>>>>
-> > > >>>>>>> On Thu, Aug 1, 2019 at 12:22 AM Keith Busch <kbusch@kernel.org>
-> > > >>>>>>> wrote:
-> > > >>>>>>>> On Wed, Jul 31, 2019 at 11:25:51PM +0200, Rafael J. Wysocki wrote:
-> > > >>>>>>>>> A couple of remarks if you will.
-> > > >>>>>>>>>
-> > > >>>>>>>>> First, we don't know which case is the majority at this point.  For
-> > > >>>>>>>>> now, there is one example of each, but it may very well turn out
-> > > >>>>>>>>> that
-> > > >>>>>>>>> the SK Hynix BC501 above needs to be quirked.
-> > > >>>>>>>>>
-> > > >>>>>>>>> Second, the reference here really is 5.2, so if there are any
-> > > >>>>>>>>> systems
-> > > >>>>>>>>> that are not better off with 5.3-rc than they were with 5.2,
-> > > >>>>>>>>> well, we
-> > > >>>>>>>>> have not made progress.  However, if there are systems that are
-> > > >>>>>>>>> worse
-> > > >>>>>>>>> off with 5.3, that's bad.  In the face of the latest findings the
-> > > >>>>>>>>> only
-> > > >>>>>>>>> way to avoid that is to be backwards compatible with 5.2 and that's
-> > > >>>>>>>>> where my patch is going.  That cannot be achieved by quirking all
-> > > >>>>>>>>> cases that are reported as "bad", because there still may be
-> > > >>>>>>>>> unreported ones.
-> > > >>>>>>>>
-> > > >>>>>>>> I have to agree. I think your proposal may allow PCI D3cold,
-> > > >>>>>>>
-> > > >>>>>>> Yes, it may.
-> > > >>>>>>
-> > > >>>>>> Somehow the 9380 with Toshiba NVMe never hits SLP_S0 with or
-> > without
-> > > >>>>>> Rafael’s patch.
-> > > >>>>>> But the “real” s2idle power consumption does improve with the patch.
-> > > >>>>>
-> > > >>>>> Do you mean this patch:
-> > > >>>>>
-> > > >>>>> https://lore.kernel.org/linux-pm/70D536BE-8DC7-4CA2-84A9-
-> > > >>>>>
-> > AFB067BA520E@canonical.com/T/#m456aa5c69973a3b68f2cdd4713a1ce83be5145
-> > > >>>>> 8f
-> > > >>>>>
-> > > >>>>> or the $subject one without the above?
-> > > >>>>>
-> > > >>>>>> Can we use a DMI based quirk for this platform? It seems like a
-> > > >>>>>> platform
-> > > >>>>>> specific issue.
-> > > >>>>>
-> > > >>>>> We seem to see too many "platform-specific issues" here. :-)
-> > > >>>>>
-> > > >>>>> To me, the status quo (ie. what we have in 5.3-rc2) is not defensible.
-> > > >>>>> Something needs to be done to improve the situation.
-> > > >>>>
-> > > >>>> Rafael, would it be possible to try popping out PC401 from the 9380 and
-> > > >>>> into a 9360 to
-> > > >>>> confirm there actually being a platform impact or not?
-> > > >>>
-> > > >>> Not really, sorry.
-> > > >>>
-> > > >>>> I was hoping to have something useful from Hynix by now before
-> > > >>>> responding, but oh well.
-> > > >>>>
-> > > >>>> In terms of what is the majority, I do know that between folks at Dell,
-> > > >>>> Google, Compal,
-> > > >>>> Wistron, Canonical, Micron, Hynix, Toshiba, LiteOn, and Western Digital
-> > > >>>> we tested a wide
-> > > >>>> variety of SSDs with this patch series.  I would like to think that they
-> > > >>>> are representative of
-> > > >>>> what's being manufactured into machines now.
-> > > >>>
-> > > >>> Well, what about drives already in the field?  My concern is mostly
-> > > >>> about those ones.
-> > > >>>
-> > > >>>> Notably the LiteOn CL1 was tested with the HMB flushing support and
-> > > >>>> and Hynix PC401 was tested with older firmware though.
-> > > >>>>
-> > > >>>>>>>> In which case we do need to reintroduce the HMB handling.
-> > > >>>>>>>
-> > > >>>>>>> Right.
-> > > >>>>>>
-> > > >>>>>> The patch alone doesn’t break HMB Toshiba NVMe I tested. But I think
-> > > >>>>>> it’s
-> > > >>>>>> still safer to do proper HMB handling.
-> > > >>>>>
-> > > >>>>> Well, so can anyone please propose something specific?  Like an
-> > > >>>>> alternative patch?
-> > > >>>>
-> > > >>>> This was proposed a few days ago:
-> > > >>>> http://lists.infradead.org/pipermail/linux-nvme/2019-July/026056.html
-> > > >>>>
-> > > >>>> However we're still not sure why it is needed, and it will take some
-> > > >>>> time to get
-> > > >>>> a proper failure analysis from LiteOn  regarding the CL1.
-> > > >>>
-> > > >>> Thanks for the update, but IMO we still need to do something before
-> > > >>> final 5.3 while the investigation continues.
-> > > >>>
-> > > >>> Honestly, at this point I would vote for going back to the 5.2
-> > > >>> behavior at least by default and only running the new code on the
-> > > >>> drives known to require it (because they will block PC10 otherwise).
-> > > >>>
-> > > >>> Possibly (ideally) with an option for users who can't get beyond PC3
-> > > >>> to test whether or not the new code helps them.
-> > > >>
-> > > >> I just found out that the XPS 9380 at my hand never reaches SLP_S0 but
-> > > >> only
-> > > >> PC10.
-> > > >
-> > > > That's the case for me too.
-> > > >
-> > > >> This happens with or without putting the device to D3.
-> > > >
-> > > > On my system, though, it only can get to PC3 without putting the NVMe
-> > > > into D3 (as reported previously).
-> > >
-> > > I forgot to ask, what BIOS version does the system have?
-> > > I don’t see this issue on BIOS v1.5.0.
-> >
-> > It is 1.5.0 here too.
->
-> All, regarding the need for the patch proposed by Rafael on PC401, I have some updates
-> to share from Hynix.
-> First off - the firmware changelog is misleading from 80006E00 to 80007E00.
->
-> The change was made in the firmware specifically because of a change in behavior from
-> Intel KBL to CFL and WHL.  On CFL/WHL the period of time that RefClk was turned on after L1.2
-> was larger than KBL platforms.  So this meant that Hynix couldn't lock up from CLKREQ#
-> to RefClk as quickly on CFL/WHL.  So there is a "larger" fixed delay introduced in their FW.
->
-> To those that don't know - XPS 9380 is a WHL platform.
->
-> Second - a hypothesis of what is happening with the patch proposed by Rafael is that the link
-> is only transitioning to L1.0 rather than L1.2.  This may satisfy the PMC but it shouldn't lead to
-> the lowest actual device power state.
+On 7/30/19 05:46, Viresh Kumar wrote:
+> On 29-07-19, 13:16, Saravana Kannan wrote:
+>> Sibi might be working on doing that for the SDM845 CPUfreq driver.
+>> Georgi could also change his GPU driver use case to use this BW OPP
+>> table and required-opps.
+>>
+>> The problem is that people don't want to start using this until we
+>> decide on the DT representation. So it's like a chicken and egg
+>> situation.
+> 
+> Yeah, I agree to that.
+> 
+> @Georgi and @Sibi: This is your chance to speak up about the proposal
+> from Saravana and if you find anything wrong with them. And specially
+> that it is mostly about interconnects here, I would like to have an
+> explicit Ack from Georgi on this.
+> 
+> And if you guys are all okay about this then please at least commit
+> that you will convert your stuff based on this in coming days.
 
-The north complex doesn't get to PC10 without this patch, so this is
-more about the PCIe root complex than the PMC.
+Looks fine to me. I am already doing some testing with this patchset.
+However, as Stephen already pointed out, we should s/KBps/kBps/.
 
-PC3 vs PC10 is a big deal regardless of what the NVMe can achieve.
+Thanks,
+Georgi
