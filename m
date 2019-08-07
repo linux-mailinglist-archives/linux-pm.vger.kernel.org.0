@@ -2,127 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7092D842FE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 05:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE46D84525
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 09:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727502AbfHGDku (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 23:40:50 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:9400 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726612AbfHGDku (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 23:40:50 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d4a48420002>; Tue, 06 Aug 2019 20:40:50 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 06 Aug 2019 20:40:49 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 06 Aug 2019 20:40:49 -0700
-Received: from [10.2.168.234] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 7 Aug
- 2019 03:40:47 +0000
-Subject: Re: [PATCH v7 01/20] pinctrl: tegra: Add suspend and resume support
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        <jckuo@nvidia.com>, "Joseph Lo" <josephl@nvidia.com>,
-        <talho@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Mikko Perttunen" <mperttunen@nvidia.com>, <spatra@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        viresh kumar <viresh.kumar@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <1564607463-28802-1-git-send-email-skomatineni@nvidia.com>
- <1564607463-28802-2-git-send-email-skomatineni@nvidia.com>
- <CACRpkdZVR-i1c5eATL2hSPbLXcX1sR8NgXwa4j259XXUi57xug@mail.gmail.com>
- <a2fb3795-5ec1-1d03-f496-f151d1270e90@nvidia.com>
-Message-ID: <dadf0cc7-fba4-9ab5-6ac9-0c8699eb4401@nvidia.com>
-Date:   Tue, 6 Aug 2019 20:40:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727673AbfHGHGK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Aug 2019 03:06:10 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:44498 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727281AbfHGHGK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 03:06:10 -0400
+Received: by mail-pl1-f194.google.com with SMTP id t14so39286040plr.11
+        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 00:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qZIcf8cwa9igDXcslC8hIzH7Ja/YvdjdJITOrrBaFhM=;
+        b=uGWRV7REDU+/UifJJKwmcUdbbfC4+kwOlu/L+nhcItsXbS9UPMcFi7KVOdRDWbGf1q
+         dRx1FjrW5TtVAPn5B7HMX1/W5eDB7o/iEVGTwe3yxgl4WRZVORhNkGMWxpZfqnlErHMb
+         hji3OIQC0rxu9lxBbQnzsjqSwv2EsvVrEBLBxSYg5/cf0pLOrl96k/FannaVJcaklLjc
+         HYf5DtgdzxJZbnA/z8yBce20TryrnPvNlAVrvFTRkGMkHRv2RAeqbSZ6gcq6/18qUt1Z
+         316qtvwaOJAwd/k0dSY0XSCLu4CtLuKCCUIb59IcZgwHPgdnF09QRh7sOw8W6tEheyEA
+         pBeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qZIcf8cwa9igDXcslC8hIzH7Ja/YvdjdJITOrrBaFhM=;
+        b=siBLwBEQTnKv8ShBwRSIUW9kT2ekWJdBv3Hd7cdL0aXLJj990xfZaPn5A7oSO8h7LD
+         FqQ7rh5lgMYmOmQUiUYKG0+abUBruCFfHHqQFS/QUU2aDJkVNY3IZuHqxB8LPDIrqGw5
+         6a0hLZMZzAlb1xaq6misUZKF1OHI0wZlt40SAmL/3MfaTAMhaggvgN6ZchVOSuzG/VO8
+         tYkQ09za7hHCShBJFlWcpZWFsiaONwknY2DYh7QFgeHBIHPgC4hVcgl+KyDEuB0Yi/iu
+         rGA4Zt7kpKFT2FvFNyac7vw5lpGBBNBx4HCQjV+3xBbkCWpuGbb4MLW5mjXh4FnZCa74
+         C/mA==
+X-Gm-Message-State: APjAAAVSxb5GGCThIWIJyab8tEaln8z5xD2r2g4FD/RoUsOmXug1YJpx
+        0fRkL5vDDU3WFDL7J2id/bc3Vw==
+X-Google-Smtp-Source: APXvYqxsGH/vkO58EVKD1Ayh4k2OV+dF9TGQ3bVrsoL4AlH+dQDYEfCMyEC/Imc3tg8DFDt/Myxq0A==
+X-Received: by 2002:a62:3347:: with SMTP id z68mr8065751pfz.174.1565161569245;
+        Wed, 07 Aug 2019 00:06:09 -0700 (PDT)
+Received: from localhost ([122.172.76.219])
+        by smtp.gmail.com with ESMTPSA id c98sm25633299pje.1.2019.08.07.00.06.07
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 07 Aug 2019 00:06:08 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "v4 . 18+" <stable@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V4 1/2] cpufreq: schedutil: Don't skip freq update when limits change
+Date:   Wed,  7 Aug 2019 12:36:01 +0530
+Message-Id: <70fce19e43bb825c3b2546e1211d262a59ae7378.1565161495.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
 MIME-Version: 1.0
-In-Reply-To: <a2fb3795-5ec1-1d03-f496-f151d1270e90@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL104.nvidia.com (172.18.146.11) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1565149250; bh=R1aWkHhQGEDFlMq3J3HvsOTVA4LJ2HzCFYLdH2+sUvw=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=BLRI9h7q5uMUyX7sQu/YuoHnLzETuXQV9ErKqBny0vCUcL8RLClZ9466K66AwBrMj
-         dr15JGaRNq9162+jZoTTbeQo4InXE+YXNZ8kz/AfjToy101DOXpLDwkVcahW2Keaex
-         69R9dtf0Uikm/C4AF8rC0SsbTzNBWID8e45ARmd4w2xxYtSETYPRwx3OmmL8jM7TPj
-         5U/0MSvKHadcF6LvbSyFTaB659bfuFQCQZuJtfp/9hn/a8/3tXDT0pgAvTKwwWOhyh
-         70sBra263MOy2F7zVG/8EWwv4tIXIVcRLnbTUE+WZyQJ3LYaBg5dKbOqn1sY7nb/HW
-         iUjF6vBEglSWw==
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+To avoid reducing the frequency of a CPU prematurely, we skip reducing
+the frequency if the CPU had been busy recently.
 
-On 8/6/19 2:51 PM, Sowjanya Komatineni wrote:
->
-> On 8/5/19 2:20 AM, Linus Walleij wrote:
->> On Wed, Jul 31, 2019 at 11:11 PM Sowjanya Komatineni
->> <skomatineni@nvidia.com> wrote:
->>
->>> This patch adds support for Tegra pinctrl driver suspend and resume.
->>>
->>> During suspend, context of all pinctrl registers are stored and
->>> on resume they are all restored to have all the pinmux and pad
->>> configuration for normal operation.
->>>
->>> Acked-by: Thierry Reding <treding@nvidia.com>
->>> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
->>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->> Patch applied to the pinctrl tree.
->>
->> This patch seems finished.
->>
->> Also if the rest don't get merged for v5.4 then at least this is so
->> your patch stack gets more shallow.
->>
->> I hope it's fine to merge this separately, else tell me and I'll
->> pull it out.
->>
->> Yours,
->> Linus Walleij
->
-> Yes, this patch can be merged separately. But, there's latest feedback 
-> from Dmitry to add barrier after writes to make sure pinmux register 
-> writes happen.
->
-> So will update this patch to add barrier in v8. So, need to wait for v8.
->
-> Thanks
->
-> Sowjanya
->
-I see it merged. So will exclude suspend/resume patch and will add patch 
-for necessary write barrier fix in v8 version.
+This should not be done when the limits of the policy are changed, for
+example due to thermal throttling. We should always get the frequency
+within the new limits as soon as possible.
 
-Thanks
+Trying to fix this by using only one flag, i.e. need_freq_update, can
+lead to a race condition where the flag gets cleared without forcing us
+to change the frequency at least once. And so this patch introduces
+another flag to avoid that race condition.
 
-Sowjanya
+Fixes: ecd288429126 ("cpufreq: schedutil: Don't set next_freq to UINT_MAX")
+Cc: v4.18+ <stable@vger.kernel.org> # v4.18+
+Reported-by: Doug Smythies <dsmythies@telus.net>
+Tested-by: Doug Smythies <dsmythies@telus.net>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+V3->V4:
+- Rewrite "if" block to avoid setting variable to false at
+  initialization.
+- Added Tested-by from Doug.
+
+ kernel/sched/cpufreq_schedutil.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 636ca6f88c8e..867b4bb6d4be 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -40,6 +40,7 @@ struct sugov_policy {
+ 	struct task_struct	*thread;
+ 	bool			work_in_progress;
+ 
++	bool			limits_changed;
+ 	bool			need_freq_update;
+ };
+ 
+@@ -89,8 +90,11 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
+ 	    !cpufreq_this_cpu_can_update(sg_policy->policy))
+ 		return false;
+ 
+-	if (unlikely(sg_policy->need_freq_update))
++	if (unlikely(sg_policy->limits_changed)) {
++		sg_policy->limits_changed = false;
++		sg_policy->need_freq_update = true;
+ 		return true;
++	}
+ 
+ 	delta_ns = time - sg_policy->last_freq_update_time;
+ 
+@@ -437,7 +441,7 @@ static inline bool sugov_cpu_is_busy(struct sugov_cpu *sg_cpu) { return false; }
+ static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu, struct sugov_policy *sg_policy)
+ {
+ 	if (cpu_bw_dl(cpu_rq(sg_cpu->cpu)) > sg_cpu->bw_dl)
+-		sg_policy->need_freq_update = true;
++		sg_policy->limits_changed = true;
+ }
+ 
+ static void sugov_update_single(struct update_util_data *hook, u64 time,
+@@ -457,7 +461,8 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+ 	if (!sugov_should_update_freq(sg_policy, time))
+ 		return;
+ 
+-	busy = sugov_cpu_is_busy(sg_cpu);
++	/* Limits may have changed, don't skip frequency update */
++	busy = !sg_policy->need_freq_update && sugov_cpu_is_busy(sg_cpu);
+ 
+ 	util = sugov_get_util(sg_cpu);
+ 	max = sg_cpu->max;
+@@ -831,6 +836,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+ 	sg_policy->last_freq_update_time	= 0;
+ 	sg_policy->next_freq			= 0;
+ 	sg_policy->work_in_progress		= false;
++	sg_policy->limits_changed		= false;
+ 	sg_policy->need_freq_update		= false;
+ 	sg_policy->cached_raw_freq		= 0;
+ 
+@@ -879,7 +885,7 @@ static void sugov_limits(struct cpufreq_policy *policy)
+ 		mutex_unlock(&sg_policy->work_lock);
+ 	}
+ 
+-	sg_policy->need_freq_update = true;
++	sg_policy->limits_changed = true;
+ }
+ 
+ struct cpufreq_governor schedutil_gov = {
+-- 
+2.21.0.rc0.269.g1a574e7a288b
 
