@@ -2,71 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBED685024
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 17:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBC785112
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 18:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388620AbfHGPmY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Aug 2019 11:42:24 -0400
-Received: from foss.arm.com ([217.140.110.172]:50498 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387827AbfHGPmY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Aug 2019 11:42:24 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 769C8344;
-        Wed,  7 Aug 2019 08:42:23 -0700 (PDT)
-Received: from queper01-lin (queper01-lin.cambridge.arm.com [10.1.195.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72BB53F706;
-        Wed,  7 Aug 2019 08:42:21 -0700 (PDT)
-Date:   Wed, 7 Aug 2019 16:42:20 +0100
-From:   Quentin Perret <quentin.perret@arm.com>
-To:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
-        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
-        catalin.marinas@arm.com, will@kernel.org,
-        daniel.lezcano@linaro.org, lkp@intel.com
-Cc:     dietmar.eggemann@arm.com, ionela.voinescu@arm.com,
-        mka@chromium.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 3/3] thermal: cpu_cooling: Migrate to using the EM
- framework
-Message-ID: <20190807154217.a4rxvj4uerptq52r@queper01-lin>
-References: <20190801124643.17112-1-quentin.perret@arm.com>
- <20190801124643.17112-4-quentin.perret@arm.com>
+        id S2387977AbfHGQad (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Aug 2019 12:30:33 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:51035 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387827AbfHGQad (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 12:30:33 -0400
+Received: by mail-wm1-f65.google.com with SMTP id v15so683921wml.0
+        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 09:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=95c0aXoL6EPG66Q36qr8W3A2KuNLw5UaP+V7653tdSU=;
+        b=q9uiBK32lLZr5A/pV2DpNLX6Cq4ls94ALbz9aUJBfeV29qXsbzGDyXJUfR5TaTLL7o
+         jNQduh+CyIam5IyNZYzq3kg+pJt9gKpq8aHxCZ646emgOXgEQ7NsTBzwabFUje9Yshyn
+         NZftJZtwK9CRwvfjBquhAeV5lhmSDbVHi4yqv+lTKDMWLXM1/YvTWvH6976XDOzeAA2m
+         m/j/7tQDv5wP1nvpX7LCGuO4ZOIQ8/z4U7+jrwxoSTdyyCDDmoMNlbZedyFMRH+ovINl
+         qwmFQIR9sl+9nfInU1YWBy585cYQF+7CHGKnjQznjzS5qv0m46wGWJ47Y+RxuB8qy6oQ
+         FL8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=95c0aXoL6EPG66Q36qr8W3A2KuNLw5UaP+V7653tdSU=;
+        b=aw3zO4dxJx59jzdHCneT7W2dWbJOzsdwUq+KDqqEnV17Po/tcMy7o+NnqVqJoqpocJ
+         uuZzsozVl/Jx3e5ITR9tWKWTbhb7BRYW015ng9j/xfb7PJJAssMdPikR17t3q57dWkVX
+         arraYCCpfafmVdFUCGe2v+b2QJuFSZN0bniiHUxoC4on08UpJVfs1lSXaO4lmQN0ey2f
+         aujr3TTNOknw3zG9NWzXCfZ2PWClBLFKcYOK8llvxj+ZnZrXKy9U7rCwGKB/NPnajpLO
+         JkewzyjhW/k0f4SYl9s8/ItjHnsJUNN6+EKXmrp5aATC9wkRSjE+M7jTfBolDTlMWvKL
+         +1JA==
+X-Gm-Message-State: APjAAAUllfJ1hio5U8miyZ12MPsLi+1c85DuX3zAQK8c5XAKJoE31ibq
+        pVDVRpeVe93mrujBDJ/+IXQNcA==
+X-Google-Smtp-Source: APXvYqxBZYCWizlHblswlINrudZHpDjBmo5qn26d2RqjE6nPVYbafJrqZkm7WCEGYhSi8YEbV6os2w==
+X-Received: by 2002:a05:600c:214c:: with SMTP id v12mr789229wml.28.1565195430051;
+        Wed, 07 Aug 2019 09:30:30 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:90cb:64c9:c238:a704? ([2a01:e34:ed2f:f020:90cb:64c9:c238:a704])
+        by smtp.googlemail.com with ESMTPSA id u186sm852407wmu.26.2019.08.07.09.30.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 07 Aug 2019 09:30:29 -0700 (PDT)
+Subject: Re: [PATCH 4/6] ARM: psci: cpuidle: Introduce PSCI CPUidle driver
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-pm@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LAKML <linux-arm-kernel@lists.infradead.org>
+References: <20190722153745.32446-1-lorenzo.pieralisi@arm.com>
+ <20190722153745.32446-5-lorenzo.pieralisi@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <41813f90-8a1e-b712-328c-0390bfe4a471@linaro.org>
+Date:   Wed, 7 Aug 2019 18:30:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190801124643.17112-4-quentin.perret@arm.com>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <20190722153745.32446-5-lorenzo.pieralisi@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
+On 22/07/2019 17:37, Lorenzo Pieralisi wrote:
+> PSCI firmware is the standard power management control for
+> all ARM64 based platforms and it is also deployed on some
+> ARM 32 bit platforms to date.
+> 
+> Idle state entry in PSCI is currently achieved by calling
+> arm_cpuidle_init() and arm_cpuidle_suspend() in a generic
+> idle driver, which in turn relies on ARM/ARM64 CPUidle back-end
+> to relay the call into PSCI firmware if PSCI is the boot method.
+> 
+> Given that PSCI is the standard idle entry method on ARM64 systems
+> (which means that no other CPUidle driver are expected on ARM64
+> platforms - so PSCI is already a generic idle driver), in order to
+> simplify idle entry and code maintenance, it makes sense to have a PSCI
+> specific idle driver so that idle code that it is currently living in
+> drivers/firmware directory can be hoisted out of it and moved
+> where it belongs, into a full-fledged PSCI driver, leaving PSCI code
+> in drivers/firmware as a pure firmware interface, as it should be.
+> 
+> Implement a PSCI CPUidle driver. By default it is a silent Kconfig entry
+> which is left unselected, since it selection would clash with the
+> generic ARM CPUidle driver that provides a PSCI based idle driver
+> through the arm/arm64 arches back-ends CPU operations.
+> 
+> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> ---
 
-On Thursday 01 Aug 2019 at 13:46:43 (+0100), Quentin Perret wrote:
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 9966364a6deb..340853a3ca48 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -144,6 +144,7 @@ config THERMAL_GOV_USER_SPACE
->  
->  config THERMAL_GOV_POWER_ALLOCATOR
->  	bool "Power allocator thermal governor"
-> +	depends on ENERGY_MODEL
->  	help
->  	  Enable this to manage platform thermals by dynamically
->  	  allocating and limiting power to devices.
+Modulo Ulf and Sudeep comments,
 
-FYI, the kbuild bot just reported a randconfig build issue with this.
-THERMAL_DEFAULT_GOV_POWER_ALLOCATOR 'select' THERMAL_GOV_POWER_ALLOCATOR
-unconditionally. And I just learned 'select' will force the option ON
-and totally ignore its dependencies. That is, we can end up with IPA
-force-compiled in, and no PM_EM, which is broken.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-So I guess the simplest fix is to do 'select ENERGY_MODEL' in this
-patch, instead of depending on it.
 
-I'll send a v7 with this fixed shortly.
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Thanks,
-Quentin
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
