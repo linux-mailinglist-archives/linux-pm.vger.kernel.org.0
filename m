@@ -2,193 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A6883CFF
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Aug 2019 23:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA75841CE
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 03:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbfHFVyY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 17:54:24 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:6328 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726052AbfHFVyY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 17:54:24 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d49f70d0000>; Tue, 06 Aug 2019 14:54:23 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 06 Aug 2019 14:54:22 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 06 Aug 2019 14:54:22 -0700
-Received: from [10.110.102.151] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 6 Aug
- 2019 21:54:18 +0000
-Subject: Re: [PATCH v7 01/20] pinctrl: tegra: Add suspend and resume support
-To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <tglx@linutronix.de>,
-        <jason@lakedaemon.net>, <marc.zyngier@arm.com>,
-        <linus.walleij@linaro.org>, <stefan@agner.ch>,
-        <mark.rutland@arm.com>
-CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
-        <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <jckuo@nvidia.com>,
-        <josephl@nvidia.com>, <talho@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mperttunen@nvidia.com>, <spatra@nvidia.com>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <rjw@rjwysocki.net>,
-        <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>
-References: <1564607463-28802-1-git-send-email-skomatineni@nvidia.com>
- <1564607463-28802-2-git-send-email-skomatineni@nvidia.com>
- <6b1482f6-0578-f602-d8d1-541d86303ce2@gmail.com>
- <b45ca99a-188a-c695-3f3d-48d273808f9c@nvidia.com>
- <36351140-afd4-38c4-3722-4ee0894287fa@gmail.com>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <961ceece-f42a-b933-9184-97e9d30ea381@nvidia.com>
-Date:   Tue, 6 Aug 2019 14:54:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727911AbfHGBtL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Aug 2019 21:49:11 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39222 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727776AbfHGBtK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 21:49:10 -0400
+Received: by mail-pf1-f196.google.com with SMTP id f17so38523691pfn.6
+        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2019 18:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HJ3esN1ahDfJjJR96PwcK66MyhHcH/NFW9YKUR9reys=;
+        b=LLvPBe19SlIAKDxSydDNUKqZo39qYY7Zz0vT6YLucgwG+eoxjBfX+EKClzNpe3dKwE
+         4LF0GUohOhBGJrcAaYR/kKUv/9oEFSGR3skjgiVvxDmAQgLNZKlLgRGJRe/iwZLijHJl
+         qT+JKc2MATdQBg04Zo3UldAUBqfYoS2QJBUO5w7slCaF0sQ+Xdn+EIE848oNeEXt+bv3
+         nRmP+4+d97EAvfvCNPTTPdwZ5A4X1yIMOkD+KtSYF9zBNp13/tLSqhSZRraiX5FNpewo
+         0nN8F1hAUrAwegEPNiyAFzmht0Ti8ObhdYMQxfS3MGueMltWqTuFdad/ySORLXyaCPe0
+         wiEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HJ3esN1ahDfJjJR96PwcK66MyhHcH/NFW9YKUR9reys=;
+        b=NXYYUQD+dm2scwqH/ucFncDgLJVbHC5UY00IO0JOa6axmn1Fpd8ucE/diamN7vT5Y+
+         izmCln88icoUBm1Kc/AYkK9N7cjbLM95geiI4gV57Mk6243UsvJfj0SABjvFgS0CgXjP
+         gXvLbdIfER7lXI44Cts0pJ3UNtjKDguelj4pNla+2dK7yI6P8iuDZ8Uf93idEgTWBtsK
+         DWqL+DlaGKgLVcIQRo0AbXq4kh5yr4astdK/rmZvexv96HQ2Wn6sshF7LjrNrHjfTLpf
+         jMM6gHA81armiP+bPpNv1BC3idT921NaT2T6eXwhQul8BYVbQOLOvhsuiwidLKp1NSU3
+         XaRA==
+X-Gm-Message-State: APjAAAWJhUtUnePG7BuD6fend2NelrN8Ry2E1f8EqqZyquAAKZ8xues9
+        Vm4IZOay3y0hC7F36Bq38a+Dtw==
+X-Google-Smtp-Source: APXvYqwJ2vVO50mw2/ZIMUTOHrmqILOhGYNKOygNOKtBD8NdIMY0sirHAWCpVwGH8KQdH1oLAGh1Pw==
+X-Received: by 2002:a62:8c81:: with SMTP id m123mr6738728pfd.240.1565142549655;
+        Tue, 06 Aug 2019 18:49:09 -0700 (PDT)
+Received: from trong0.mtv.corp.google.com ([2620:15c:211:0:469:982a:29da:f29b])
+        by smtp.gmail.com with ESMTPSA id q1sm104159076pfg.84.2019.08.06.18.49.08
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 06 Aug 2019 18:49:09 -0700 (PDT)
+From:   Tri Vo <trong@android.com>
+To:     rjw@rjwysocki.net, gregkh@linuxfoundation.org,
+        viresh.kumar@linaro.org
+Cc:     rafael@kernel.org, hridya@google.com, sspatil@google.com,
+        kaleshsingh@google.com, ravisadineni@chromium.org,
+        swboyd@chromium.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, kernel-team@android.com,
+        Tri Vo <trong@android.com>
+Subject: [PATCH v8 0/3] PM / wakeup: Show wakeup sources stats in sysfs
+Date:   Tue,  6 Aug 2019 18:48:43 -0700
+Message-Id: <20190807014846.143949-1-trong@android.com>
+X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
 MIME-Version: 1.0
-In-Reply-To: <36351140-afd4-38c4-3722-4ee0894287fa@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL104.nvidia.com (172.18.146.11) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1565128463; bh=PVOjXIF+h+isaZujY/+iB+zLIz1zcPjtFjV9ZXA4++s=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=a3WZIm9XcXwus1d36RFmpHdqXZHFkFcDczX0E1fQhmQZlYCIoC3p1cAKACHZoJ51L
-         zmiGE5+ZLVbes5JkcO1DEKwZOv44Oio7LW7JngdMWVcWv19fF00FBcDyvl0QO75vku
-         3VhkchAk7YLUw108KAwmJKT5NpIGc48m6lMAFd5D39T59FtF3OhBtrWyHav2Xi18Dd
-         0p3d8TiiR0Re6ikOPHJvJSUZKdWpn9+09aThtpIynYuNEhygJK+/F20l6X+RDLV2E7
-         VOckSGhgSDh1xp+BaVcw6zEwJJI7jAiRm7jiidyUOB5AEOxIupaDDXqaZ/TQ3dPkzC
-         XGRzKbwX2A+Gg==
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Userspace can use wakeup_sources debugfs node to plot history of suspend
+blocking wakeup sources over device's boot cycle. This information can
+then be used (1) for power-specific bug reporting and (2) towards
+attributing battery consumption to specific processes over a period of
+time.
 
-On 8/6/19 10:59 AM, Dmitry Osipenko wrote:
-> 05.08.2019 21:06, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->> On 8/5/19 3:50 AM, Dmitry Osipenko wrote:
->>> 01.08.2019 0:10, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>> This patch adds support for Tegra pinctrl driver suspend and resume.
->>>>
->>>> During suspend, context of all pinctrl registers are stored and
->>>> on resume they are all restored to have all the pinmux and pad
->>>> configuration for normal operation.
->>>>
->>>> Acked-by: Thierry Reding <treding@nvidia.com>
->>>> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
->>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>>> ---
->>>>  =C2=A0 drivers/pinctrl/tegra/pinctrl-tegra.c | 59
->>>> +++++++++++++++++++++++++++++++++++
->>>>  =C2=A0 drivers/pinctrl/tegra/pinctrl-tegra.h |=C2=A0 3 ++
->>>>  =C2=A0 2 files changed, 62 insertions(+)
->>>>
->>>> diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c
->>>> b/drivers/pinctrl/tegra/pinctrl-tegra.c
->>>> index 186ef98e7b2b..e3a237534281 100644
->>>> --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
->>>> +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
->>>> @@ -631,6 +631,58 @@ static void
->>>> tegra_pinctrl_clear_parked_bits(struct tegra_pmx *pmx)
->>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>  =C2=A0 }
->>>>  =C2=A0 +static size_t tegra_pinctrl_get_bank_size(struct device *dev,
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int bank=
-_id)
->>>> +{
->>>> +=C2=A0=C2=A0=C2=A0 struct platform_device *pdev =3D to_platform_devic=
-e(dev);
->>>> +=C2=A0=C2=A0=C2=A0 struct resource *res;
->>>> +
->>>> +=C2=A0=C2=A0=C2=A0 res =3D platform_get_resource(pdev, IORESOURCE_MEM=
-, bank_id);
->>>> +
->>>> +=C2=A0=C2=A0=C2=A0 return resource_size(res) / 4;
->>>> +}
->>>> +
->>>> +static int tegra_pinctrl_suspend(struct device *dev)
->>>> +{
->>>> +=C2=A0=C2=A0=C2=A0 struct tegra_pmx *pmx =3D dev_get_drvdata(dev);
->>>> +=C2=A0=C2=A0=C2=A0 u32 *backup_regs =3D pmx->backup_regs;
->>>> +=C2=A0=C2=A0=C2=A0 u32 *regs;
->>>> +=C2=A0=C2=A0=C2=A0 size_t bank_size;
->>>> +=C2=A0=C2=A0=C2=A0 unsigned int i, k;
->>>> +
->>>> +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < pmx->nbanks; i++) {
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bank_size =3D tegra_pinctr=
-l_get_bank_size(dev, i);
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regs =3D pmx->regs[i];
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (k =3D 0; k < bank_siz=
-e; k++)
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *b=
-ackup_regs++ =3D readl_relaxed(regs++);
->>>> +=C2=A0=C2=A0=C2=A0 }
->>>> +
->>>> +=C2=A0=C2=A0=C2=A0 return pinctrl_force_sleep(pmx->pctl);
->>>> +}
->>>> +
->>>> +static int tegra_pinctrl_resume(struct device *dev)
->>>> +{
->>>> +=C2=A0=C2=A0=C2=A0 struct tegra_pmx *pmx =3D dev_get_drvdata(dev);
->>>> +=C2=A0=C2=A0=C2=A0 u32 *backup_regs =3D pmx->backup_regs;
->>>> +=C2=A0=C2=A0=C2=A0 u32 *regs;
->>>> +=C2=A0=C2=A0=C2=A0 size_t bank_size;
->>>> +=C2=A0=C2=A0=C2=A0 unsigned int i, k;
->>>> +
->>>> +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < pmx->nbanks; i++) {
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bank_size =3D tegra_pinctr=
-l_get_bank_size(dev, i);
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regs =3D pmx->regs[i];
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (k =3D 0; k < bank_siz=
-e; k++)
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wr=
-itel_relaxed(*backup_regs++, regs++);
->>>> +=C2=A0=C2=A0=C2=A0 }
->>> I'm now curious whether any kind of barrier is needed after the
->>> writings. The pmx_writel() doesn't insert a barrier after the write and
->>> seems it just misuses writel, which actually should be writel_relaxed()
->>> + barrier, IIUC.
->> pmx_writel uses writel and it has wmb before raw_write which complete
->> all writes initiated prior to this.
->>
->> By misusing writel, you mean to have barrier after register write?
-> Yes, at least to me it doesn't make much sense for this driver to stall
-> before the write. It's the pinctrl user which should be taking care
-> about everything to be ready before making a change to the pinctrl's
-> configuration.
->
->>> It's also not obvious whether PINCTRL HW has any kind of write-FIFO and
->>> thus maybe read-back + rmb() is needed in order ensure that writes are
->>> actually completed.
->> I believe adding write barrier wmb after writel_relaxed should be good
->> rather than doing readback + rmb
->>> The last thing which is not obvious is when the new configuration
->>> actually takes into effect, does it happen immediately or maybe some
->>> delay is needed?
->>>
->>> [snip]
->> Based on internal design there is no internal delay and it all depends
->> on APB rate that it takes to write to register.
->>
->> Pinmux value change to reflect internally might take couple of clock
->> cycles which is much faster than SW can read.
-> Still not quite obvious if it's possible to have a case where some
-> hardware is touched before necessary pinctrl change is fully completed
-> and then to get into trouble because of it.
+However, debugfs doesn't have stable ABI. For this reason, create a
+'struct device' to expose wakeup sources statistics in sysfs under
+/sys/class/wakeup/wakeup<ID>/*.
 
-To be safer, will add write barrier after all writes in resume and also=20
-will have separate patch for pmx_writel fix to use writel_relaxed=20
-followed by write barrier.
+Patch 1 and 2 do some cleanup to simplify our changes to how wakeup sources are
+created. Patch 3 implements wakeup sources stats in sysfs.
 
-Thanks
+Tri Vo (3):
+  PM / wakeup: Drop wakeup_source_init(), wakeup_source_prepare()
+  PM / wakeup: Use wakeup_source_register() in wakelock.c
+  PM / wakeup: Show wakeup sources stats in sysfs
 
-Sowjanya
+ Documentation/ABI/testing/sysfs-class-wakeup |  76 +++++++
+ drivers/acpi/device_pm.c                     |   3 +-
+ drivers/base/power/Makefile                  |   2 +-
+ drivers/base/power/power.h                   |   9 +
+ drivers/base/power/wakeup.c                  |  59 +++---
+ drivers/base/power/wakeup_stats.c            | 203 +++++++++++++++++++
+ fs/eventpoll.c                               |   4 +-
+ include/linux/pm_wakeup.h                    |  21 +-
+ kernel/power/autosleep.c                     |   2 +-
+ kernel/power/wakelock.c                      |  32 +--
+ kernel/time/alarmtimer.c                     |   2 +-
+ 11 files changed, 358 insertions(+), 55 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-wakeup
+ create mode 100644 drivers/base/power/wakeup_stats.c
+
+v2:
+- Updated Documentation/ABI/, as per Greg.
+- Removed locks in attribute functions, as per Greg.
+- Lifetimes of struct wakelock and struck wakeup_source are now different due to
+  the latter embedding a refcounted kobject. Changed it so that struct wakelock
+  only has a pointer to struct wakeup_source, instead of embedding it.
+- Added CONFIG_PM_SLEEP_STATS that enables/disables wakeup source statistics in
+  sysfs.
+
+v3:
+Changes by Greg:
+- Reworked code to use 'struct device' instead of raw kobjects.
+- Updated documentation file.
+- Only link wakeup_stats.o when CONFIG_PM_SLEEP_STATS is enabled.
+Changes by Tri:
+- Reverted changes to kernel/power/wakelock.c. 'struct device' hides kobject
+  operations. So no need to handle lifetimes in wakelock.c
+
+v4:
+- Added 'Co-developed-by:' and 'Tested-by:' fields to commit message.
+- Moved new documentation to a separate file
+  Documentation/ABI/testing/sysfs-class-wakeup, as per Greg.
+- Fixed copyright header in drivers/base/power/wakeup_stats.c, as per Greg.
+
+v5:
+- Removed CONFIG_PM_SLEEP_STATS
+- Used PTR_ERR_OR_ZERO instead of if(IS_ERR(...)) + PTR_ERR, reported by
+  kbuild test robot <lkp@intel.com>
+- Stephen reported that a call to device_init_wakeup() and writing 'enabled' to
+  that device's power/wakeup file results in multiple wakeup source being
+  allocated for that device.  Changed device_wakeup_enable() to check if device
+  wakeup was previously enabled.
+Changes by Stephen:
+- Changed stats location from /sys/class/wakeup/<name>/* to
+  /sys/class/wakeup/wakeup<ID>/*, where ID is an IDA-allocated integer. This
+  avoids name collisions in /sys/class/wakeup/ directory.
+- Added a "name" attribute to wakeup sources, and updated documentation.
+- Device registering the wakeup source is now the parent of the wakeup source.
+  Updated wakeup_source_register()'s signature and its callers accordingly.
+
+v6:
+- Changed stats location to /sys/class/wakeup/ws<ID>/*
+- Replaced ida_simple_get()/ida_simple_remove() with ida_alloc()/ida_free() as
+  the former is deprecated.
+- Reverted changes to device_init_wakeup(). Rafael is preparing a patch to deal
+  with extra wakeup source allocation in a separate patch.
+
+v7:
+- Removed wakeup_source_init(), wakeup_source_prepare().
+- Removed duplicate wakeup source creation code from  kernel/power/wakelock.
+- Moved ID allocation to wakeup source object creation time.
+- Changed stats location back to /sys/class/wakeup/wakeup<ID>/*
+- Remove wakeup source device's "power" attributes.
+
+v8:
+- Updated commit message on patch 1 to indicate change of behavior of
+  wakeup_source_create(), as per Stephen.
+- Included headers for used symbols, as per Stephen.
+- Added a function to create wakeup source devices to use
+  device_set_pm_not_required() to skip power management for such devices, as per
+  Stephen.
+
+--
+2.22.0.770.g0f2c4a37fd-goog
 
