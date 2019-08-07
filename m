@@ -2,63 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBC785112
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 18:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F59852B3
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 20:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387977AbfHGQad (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Aug 2019 12:30:33 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51035 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387827AbfHGQad (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 12:30:33 -0400
-Received: by mail-wm1-f65.google.com with SMTP id v15so683921wml.0
-        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 09:30:31 -0700 (PDT)
+        id S2389176AbfHGSJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Aug 2019 14:09:50 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:51809 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389175AbfHGSJu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 14:09:50 -0400
+Received: by mail-wm1-f67.google.com with SMTP id 207so956430wma.1
+        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 11:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=95c0aXoL6EPG66Q36qr8W3A2KuNLw5UaP+V7653tdSU=;
-        b=q9uiBK32lLZr5A/pV2DpNLX6Cq4ls94ALbz9aUJBfeV29qXsbzGDyXJUfR5TaTLL7o
-         jNQduh+CyIam5IyNZYzq3kg+pJt9gKpq8aHxCZ646emgOXgEQ7NsTBzwabFUje9Yshyn
-         NZftJZtwK9CRwvfjBquhAeV5lhmSDbVHi4yqv+lTKDMWLXM1/YvTWvH6976XDOzeAA2m
-         m/j/7tQDv5wP1nvpX7LCGuO4ZOIQ8/z4U7+jrwxoSTdyyCDDmoMNlbZedyFMRH+ovINl
-         qwmFQIR9sl+9nfInU1YWBy585cYQF+7CHGKnjQznjzS5qv0m46wGWJ47Y+RxuB8qy6oQ
-         FL8A==
+        bh=Z69czHNpMMZYmp5DiHWRPu9dV/HbYAv+Qy3R1jmhONs=;
+        b=CmSZUjrEKyoDC6JEZLKF3y8xaLm0Y05XM+NhORxJKY0TH25BPXoT7ysbrCvAG3H6O6
+         yfJEmGmUNI0KXVPhjKo9vrUMcdc9pfDkyZMOwhz21lSY4HazOUXczGBYoT2Yaq7Ihd3e
+         vjtwNWEvkD+Xfd86GL5owOtKyVZgZLvga7n3fNwfI0iRsCqxuBNnOmJBZXkOTdMwumhL
+         xTbahUIbM5Nbj6cJY98N4A1ywzrA0zQ3wpQT2ya1Vr75DMr893TUTOVv+a5eaakqKjcz
+         cOS5TsDUxti1g3rN7zaBUbyZjzpkVPvdSsIgzVu3P6szrOiPsE2coBQ3/ZKo1vUbV8HZ
+         O0Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=95c0aXoL6EPG66Q36qr8W3A2KuNLw5UaP+V7653tdSU=;
-        b=aw3zO4dxJx59jzdHCneT7W2dWbJOzsdwUq+KDqqEnV17Po/tcMy7o+NnqVqJoqpocJ
-         uuZzsozVl/Jx3e5ITR9tWKWTbhb7BRYW015ng9j/xfb7PJJAssMdPikR17t3q57dWkVX
-         arraYCCpfafmVdFUCGe2v+b2QJuFSZN0bniiHUxoC4on08UpJVfs1lSXaO4lmQN0ey2f
-         aujr3TTNOknw3zG9NWzXCfZ2PWClBLFKcYOK8llvxj+ZnZrXKy9U7rCwGKB/NPnajpLO
-         JkewzyjhW/k0f4SYl9s8/ItjHnsJUNN6+EKXmrp5aATC9wkRSjE+M7jTfBolDTlMWvKL
-         +1JA==
-X-Gm-Message-State: APjAAAUllfJ1hio5U8miyZ12MPsLi+1c85DuX3zAQK8c5XAKJoE31ibq
-        pVDVRpeVe93mrujBDJ/+IXQNcA==
-X-Google-Smtp-Source: APXvYqxBZYCWizlHblswlINrudZHpDjBmo5qn26d2RqjE6nPVYbafJrqZkm7WCEGYhSi8YEbV6os2w==
-X-Received: by 2002:a05:600c:214c:: with SMTP id v12mr789229wml.28.1565195430051;
-        Wed, 07 Aug 2019 09:30:30 -0700 (PDT)
+        bh=Z69czHNpMMZYmp5DiHWRPu9dV/HbYAv+Qy3R1jmhONs=;
+        b=HJA8Hi/LwFT1HFH84srwLyfyaBelIhWia2yWUrDJGRYxUXjTnxx6blwY8ZPj3pxCYO
+         TsZD1p6yzYfqDUoJvBjvmO97CdR+2FiM8fQWmTK5EAsukRiy+G/Q/iUmFTCyk48RYthb
+         9nBEtLXlbR+p0CcttNGykc0T0ZLXoa0zZuQV764W80sd4q0GfRZ9C68Szg+jSIqR49yJ
+         9O1qXmQ+wAhANAKi5fyDi+4Ac04VI9hTs0gGSDbkrU4F1u6RAhZB9q2/hgSbyOinsY7F
+         1lbqY/p/JiqwNFQ8ejJuJIsRm3yZhD10zvuCQ/HlXOiCMuUXKEeXT6Op86+1yR3UCUGk
+         fKXg==
+X-Gm-Message-State: APjAAAWrS3e77J2nJgxWAIxCfW2VjDDTlFQNG9pGNA1YtEvwKS8xCVlG
+        jLWXGFNR3tA+0nHPMsfPh0Z0vw==
+X-Google-Smtp-Source: APXvYqxKnTBTEleaK1lDcO6OoiMCmnSnY3YDmdO0jQLS7Z34nzg/qXIPiVqvZmm5GUEkyPYYwhjdKw==
+X-Received: by 2002:a1c:a101:: with SMTP id k1mr1147504wme.98.1565201387298;
+        Wed, 07 Aug 2019 11:09:47 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:90cb:64c9:c238:a704? ([2a01:e34:ed2f:f020:90cb:64c9:c238:a704])
-        by smtp.googlemail.com with ESMTPSA id u186sm852407wmu.26.2019.08.07.09.30.28
+        by smtp.googlemail.com with ESMTPSA id 66sm10519308wrc.83.2019.08.07.11.09.45
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Aug 2019 09:30:29 -0700 (PDT)
-Subject: Re: [PATCH 4/6] ARM: psci: cpuidle: Introduce PSCI CPUidle driver
+        Wed, 07 Aug 2019 11:09:46 -0700 (PDT)
+Subject: Re: [PATCH 6/6] PSCI: cpuidle: Refactor CPU suspend power_state
+ parameter handling
 To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         linux-pm@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+Cc:     Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sudeep Holla <sudeep.holla@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         LAKML <linux-arm-kernel@lists.infradead.org>
 References: <20190722153745.32446-1-lorenzo.pieralisi@arm.com>
- <20190722153745.32446-5-lorenzo.pieralisi@arm.com>
+ <20190722153745.32446-7-lorenzo.pieralisi@arm.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
@@ -121,12 +122,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  adkDXtr4MeL8BaB7Ij2oyRVjXUwhFQNKi5Z5Rve0a3zvGkkqw8Mz20BOksjSWjAF6g9byukl
  CUVjC03PdMSufNLK06x5hPc/c4tFR4J9cLrV+XxdCX7r0zGos9SzTPGNuIk1LK++S3EJhLFj
  4eoWtNhMWc1uiTf9ENza0ntqH9XBWEQ6IA1gubCniGG+Xg==
-Message-ID: <41813f90-8a1e-b712-328c-0390bfe4a471@linaro.org>
-Date:   Wed, 7 Aug 2019 18:30:28 +0200
+Message-ID: <cfa96819-dda8-e481-8421-250c7c4c7565@linaro.org>
+Date:   Wed, 7 Aug 2019 20:09:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190722153745.32446-5-lorenzo.pieralisi@arm.com>
+In-Reply-To: <20190722153745.32446-7-lorenzo.pieralisi@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -136,40 +137,41 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 22/07/2019 17:37, Lorenzo Pieralisi wrote:
-> PSCI firmware is the standard power management control for
-> all ARM64 based platforms and it is also deployed on some
-> ARM 32 bit platforms to date.
+> Current PSCI code handles idle state entry through the
+> psci_cpu_suspend_enter() API, that takes an idle state index as a
+> parameter and convert the index into a previously initialized
+> power_state parameter before calling the PSCI.CPU_SUSPEND() with it.
 > 
-> Idle state entry in PSCI is currently achieved by calling
-> arm_cpuidle_init() and arm_cpuidle_suspend() in a generic
-> idle driver, which in turn relies on ARM/ARM64 CPUidle back-end
-> to relay the call into PSCI firmware if PSCI is the boot method.
+> This is unwieldly, since it forces the PSCI firmware layer to keep track
+> of power_state parameter for every idle state so that the
+> index->power_state conversion can be made in the PSCI firmware layer
+> instead of the CPUidle driver implementations.
 > 
-> Given that PSCI is the standard idle entry method on ARM64 systems
-> (which means that no other CPUidle driver are expected on ARM64
-> platforms - so PSCI is already a generic idle driver), in order to
-> simplify idle entry and code maintenance, it makes sense to have a PSCI
-> specific idle driver so that idle code that it is currently living in
-> drivers/firmware directory can be hoisted out of it and moved
-> where it belongs, into a full-fledged PSCI driver, leaving PSCI code
-> in drivers/firmware as a pure firmware interface, as it should be.
+> Move the power_state handling out of drivers/firmware/psci
+> into the respective ACPI/DT PSCI CPUidle backends and convert
+> the psci_cpu_suspend_enter() API to get the power_state
+> parameter as input, which makes it closer to its firmware
+> interface PSCI.CPU_SUSPEND() API.
 > 
-> Implement a PSCI CPUidle driver. By default it is a silent Kconfig entry
-> which is left unselected, since it selection would clash with the
-> generic ARM CPUidle driver that provides a PSCI based idle driver
-> through the arm/arm64 arches back-ends CPU operations.
+> A notable side effect is that the PSCI ACPI/DT CPUidle backends
+> now can directly handle (and if needed update) power_state
+> parameters before handing them over to the PSCI firmware
+> interface to trigger PSCI.CPU_SUSPEND() calls.
 > 
 > Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Will Deacon <will@kernel.org>
 > Cc: Ulf Hansson <ulf.hansson@linaro.org>
 > Cc: Sudeep Holla <sudeep.holla@arm.com>
 > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
 > Cc: Mark Rutland <mark.rutland@arm.com>
 > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 > ---
 
-Modulo Ulf and Sudeep comments,
+AFAICT,
 
 Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
 
 
 -- 
