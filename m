@@ -2,160 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 203DE846C7
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 10:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4DA846FB
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 10:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727603AbfHGIHP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Aug 2019 04:07:15 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:57842 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727413AbfHGIHP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 04:07:15 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190807080712epoutp0286832f5bfcba6010fd68d09233c3e383~4lXxuqcnI2148421484epoutp02M
-        for <linux-pm@vger.kernel.org>; Wed,  7 Aug 2019 08:07:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190807080712epoutp0286832f5bfcba6010fd68d09233c3e383~4lXxuqcnI2148421484epoutp02M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1565165232;
-        bh=PeE7VB47v5DstVn25w1iQxP2DLTkXCMIZuhpW8+XalI=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=VKH3JmPBwW5M7LTHAoBk/dhX5eBO8J73KPSYgDvvN45DpekfJEM6d0v15P3hKK7JO
-         7CThildIfiLCUpxHsdDj37D7za+mXGKr223SzZfDFvlmpSXf2V+GsNjFTIb8NFfBKR
-         NsJgp6k099BVsoAgR7TouhtkSuofX3siMz5HrnGs=
-Received: from epsnrtp5.localdomain (unknown [182.195.42.166]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190807080711epcas1p1c7ce15a52d252d787dd88d59fc2eb148~4lXxG-Gmb2167521675epcas1p1E;
-        Wed,  7 Aug 2019 08:07:11 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.152]) by
-        epsnrtp5.localdomain (Postfix) with ESMTP id 463PHK2HzJzMqYkj; Wed,  7 Aug
-        2019 08:07:09 +0000 (GMT)
-X-AuditID: b6c32a38-b33ff70000001040-67-5d4a86ad5062
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2A.17.04160.DA68A4D5; Wed,  7 Aug 2019 17:07:09 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH] PM / devfreq: Add dev_pm_qos support
-Reply-To: myungjoo.ham@samsung.com
-From:   MyungJoo Ham <myungjoo.ham@samsung.com>
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-CC:     Artur Swigon <a.swigon@partner.samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
+        id S1728484AbfHGITU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Aug 2019 04:19:20 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41048 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728074AbfHGITT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 04:19:19 -0400
+Received: by mail-wr1-f68.google.com with SMTP id c2so87183557wrm.8
+        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 01:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Afi/L72j963YISNahgxd8Ahp1QEr+bA4vXY3Tl6VcZU=;
+        b=uQsVaDLRpOfcBC2buJuUpgHMjyOS6QZwt0eCYxcJpwOGmEOQ9+VuHhFX37ppBR1qAI
+         nrwmYcI6Ee01uMX3N9ywiJsplKCn/+5uJYVHCVsaWQIRfsrGJsx0a8urdOzlgNtjBgQb
+         FW7mCbNUG4QNbRJxW1o35gRzUg/xmArJBde+LEVk4hFlU4KPTF67oxBX5dvBaemcZxuX
+         EEwYXtdXWsqbvra27nSNDi5N6Rs5/E7S1biwXKEkqhYyIJ6HAwn1+83T9nsbCS0nPtrc
+         BRgThXYVkiWEIMuQ6k9kdX7KdvrTg3tcGK+uusl7e4dEjjokKF77rKU0/1agV5BvhwYF
+         TS9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Afi/L72j963YISNahgxd8Ahp1QEr+bA4vXY3Tl6VcZU=;
+        b=k5w4whkqyf5Ckol7aynRdWFgFOUB+ugu881vu5pJUFveXOZV4zJArv3jlzDGq3upKF
+         kV/6G7zy/Qn/PVqwIj7rr4Igw2aB0x13trEl/2UAYGZLPbYCJJcMjnUDT2JR0xaUoMZK
+         YpS7vdt0dnRbtB5d1K83JJIgZRbgenU4vvOtYScNlcnOtdmsA49E6Dvwhfsfavm5BtcE
+         pqWwvBK7i9zL37RUBZocfZvZrHe+IHP06HNMMBBJMMRcNDbRePoYTW8V6F00CmaBSrM6
+         2A4D18Nsocd11rbJ5BEWKoUU7gNhxo+H+ObI/upu3iGO/Fhq6kGqKZl7v5AerX6i9c94
+         Qf1w==
+X-Gm-Message-State: APjAAAUclI4mGLwSvi3HQBHUginFjv1p7CeCJ8o5nVwDMVqCqmE6ayKQ
+        8pm0OjUWveXRIlPMtuDYoL0AEQ==
+X-Google-Smtp-Source: APXvYqyuSIIhPD3Oei4cgz+J441LvCaR42Ewr0CnVWlrOMU8CaN508+g1aYa20VCLRzH5YJ8pCPHPQ==
+X-Received: by 2002:adf:f14f:: with SMTP id y15mr3190888wro.28.1565165957000;
+        Wed, 07 Aug 2019 01:19:17 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:a920:eb8d:e571:a6d0? ([2a01:e34:ed2f:f020:a920:eb8d:e571:a6d0])
+        by smtp.googlemail.com with ESMTPSA id n12sm1482533wrw.25.2019.08.07.01.19.15
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 07 Aug 2019 01:19:16 -0700 (PDT)
+Subject: Re: [PATCH 1/6] ARM: cpuidle: Remove useless header include
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-pm@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <bcbab490489ef5143361048db93752741b38e379.1565081126.git.leonard.crestez@nxp.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20190807080709epcms1p666f0a1ba637e020b484e62129a0345c9@epcms1p6>
-Date:   Wed, 07 Aug 2019 17:07:09 +0900
-X-CMS-MailID: 20190807080709epcms1p666f0a1ba637e020b484e62129a0345c9
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCJsWRmVeSWpSXmKPExsWy7bCmvu7aNq9YgxltQhaHjm1lt/h6+hSj
-        xctDmhbXvzxntZi+dxObxfnzG9gtzja9YbdYcfcjq0XXr5XMFp97jzBanDl9Ccg99JfNYuNX
-        Dwdej/c3Wtk9Fmwq9di0qpPN4861PWweG9/tYPI4+G4Pk8eWq+0sHn1bVjF6fN4kF8AZlW2T
-        kZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3S1kkJZYk4p
-        UCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAskCvODG3uDQvXS85P9fK0MDAyBSoMCE7Y9KN
-        woIegYq21V8YGxjX8HYxcnJICJhILJjQxNTFyMUhJLCDUeLfm9VADgcHr4CgxN8dwiA1wgKW
-        Emd3rmcEsYUElCQabu5jhojrS3Q82AYWZxPQldi64S4LyBwRgVVAc7a/BRvKLPCISeLc9OVM
-        ENt4JWa0P2WBsKUlti/fCtbNKRAnsff3EzaIuKjEzdVv2WHs98fmM0LYIhKt984yQ9iCEg9+
-        7maEmTNjyn+omdUS16YvZgdZLCHQwijRu3oKVJG+xJm5J8EW8Ar4Stw9sA6sgUVAVeLFy99Q
-        x7lIPHjaDraAWUBeYvvbOcygkGAW0JRYv0sfokRRYufvuYwwvzRs/M2OzmYW4JN497WHFSa+
-        Y94TqPFqEod2L4Gql5E4PX0h8wRGpVmIsJ6FZPEshMULGJlXMYqlFhTnpqcWGxaYIMfuJkZw
-        Ctay2MG455zPIUYBDkYlHl6LLs9YIdbEsuLK3EOMEhzMSiK898qAQrwpiZVVqUX58UWlOanF
-        hxhNgf6fyCwlmpwPzA95JfGGpkbGxsYWJoZmpoaGSuK8C39YxAoJpCeWpGanphakFsH0MXFw
-        SjUw5lfe5toh8nOC4RIjnoXcshOT/xil3X2/LrUpkD1Z/OL7H2rMFpeuzJf7U8T9Jot5Wd6+
-        52e3f1y2KfdNhPx0NnGFk41ab1ITb+x7d22F4Zf1EXP2S6s5KeUknXGUWjQxK4hLVz0qukxC
-        wF4r9qix2qytjvE38kzOsb2+KXTgT1Cf/u471+LTlViKMxINtZiLihMBDkh0F9cDAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190806090343epcas1p366bca79527337fcc169ff5c4451f2129
-References: <bcbab490489ef5143361048db93752741b38e379.1565081126.git.leonard.crestez@nxp.com>
-        <CGME20190806090343epcas1p366bca79527337fcc169ff5c4451f2129@epcms1p6>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LAKML <linux-arm-kernel@lists.infradead.org>
+References: <20190722153745.32446-1-lorenzo.pieralisi@arm.com>
+ <20190722153745.32446-2-lorenzo.pieralisi@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <e16bb5ce-bab5-e91a-2c5a-b55896cc8f1f@linaro.org>
+Date:   Wed, 7 Aug 2019 10:19:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190722153745.32446-2-lorenzo.pieralisi@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
->Add dev_pm_qos notifies to devfreq core in order to support frequency
->limits via dev_pm_qos_add_request and related APIs
->
->Unlike the rest of devfreq the dev_pm_qos frequency is measured kHz:
->this is consistent with current dev_pm_qos usage for cpufreq and allows
->frequencies above 2Ghz.
->
->Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-[]
->diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->index 784c08e4f931..de9e825ae1f4 100644
->--- a/drivers/devfreq/devfreq.c
->+++ b/drivers/devfreq/devfreq.c
-[]
->+	/*
->+	 * notifier from pm_qos
->+	 *
->+	 * initialized outside of devfreq->lock to avoid circular warning
->+	 * between devfreq->lock and dev_pm_qos_mtx
->+	 */
->+	devfreq->nb_min.notifier_call = devfreq_qos_min_notifier_call;
->+	devfreq->nb_max.notifier_call = devfreq_qos_max_notifier_call;
->+
->+	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
->+				      DEV_PM_QOS_MIN_FREQUENCY);
->+	if (err) {
->+		dev_err(dev, "Failed to register MIN QoS notifier: %d\n", err);
->+		panic("fail\n");
->+		goto err_dev;
->+	}
->+
->+	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_max,
->+				      DEV_PM_QOS_MAX_FREQUENCY);
->+	if (err) {
->+		dev_err(dev, "Failed to register MAX QoS notifier: %d\n", err);
->+		panic("fail\n");
->+		goto err_dev;
->+	}
-
-Do you really need to have two notifier blocks?
-Wouldn't it be sufficient to register the same notifier block for both types?
-
-[]
->diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
->index 2bae9ed3c783..939cb025d2aa 100644
->--- a/include/linux/devfreq.h
->+++ b/include/linux/devfreq.h
->@@ -176,10 +176,13 @@ struct devfreq {
-> 	unsigned int *trans_table;
-> 	unsigned long *time_in_state;
-> 	unsigned long last_stat_updated;
+On 22/07/2019 17:37, Lorenzo Pieralisi wrote:
+> The generic ARM CPUidle driver includes <linux/topology.h> by mistake.
 > 
-> 	struct srcu_notifier_head transition_notifier_list;
->+
->+	struct notifier_block nb_min;
->+	struct notifier_block nb_max;
-
-Need Doxygen entries.
-
-> };
+> Remove the topology header include.
 > 
-> struct devfreq_freqs {
-> 	unsigned long old;
-> 	unsigned long new;
+> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
 
-Cheers,
-MyungJoo
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
