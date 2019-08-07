@@ -2,65 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3EE84A54
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 13:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0373884A5B
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 13:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbfHGLGG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Aug 2019 07:06:06 -0400
-Received: from mga02.intel.com ([134.134.136.20]:57170 "EHLO mga02.intel.com"
+        id S1727171AbfHGLKC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Aug 2019 07:10:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36104 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726418AbfHGLGG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Aug 2019 07:06:06 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 04:05:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,357,1559545200"; 
-   d="scan'208";a="192894810"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 07 Aug 2019 04:05:37 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 07 Aug 2019 14:05:36 +0300
-Date:   Wed, 7 Aug 2019 14:05:36 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Keith Busch <keith.busch@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-        Matthias Andree <matthias.andree@gmx.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        linux-pci@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] Revert "PCI: Add missing link delays required by the
- PCIe spec"
-Message-ID: <20190807110536.GK2716@lahna.fi.intel.com>
-References: <20190807105718.77600-1-mika.westerberg@linux.intel.com>
- <2705367.zNMUfgmSmy@kreacher>
+        id S1726418AbfHGLKC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Aug 2019 07:10:02 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB9FB21922;
+        Wed,  7 Aug 2019 11:10:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565176201;
+        bh=Vq2npu9qMy3ZqaCzN2MnrJysGD5g2Rtrj7n/5e5Lct8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WUv84g6rvSfIfVN4nmM8/Fn817fqIm/npqcHrA8tLuIqk56sKKIUUkcBCFhZg7bqa
+         d8+RSFhPZZVIqfyVE+yzZ7H9RC8cNxaUdYTKrolgrSUkfXYEkwLUBapWLe5iDXW9YQ
+         s43IIo0ktgn5/Xq6JYRRklrWpVZld9z8yu+Q1bxk=
+Date:   Wed, 7 Aug 2019 13:09:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tri Vo <trong@android.com>
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, rafael@kernel.org,
+        hridya@google.com, sspatil@google.com, kaleshsingh@google.com,
+        ravisadineni@chromium.org, swboyd@chromium.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v8 1/3] PM / wakeup: Drop wakeup_source_init(),
+ wakeup_source_prepare()
+Message-ID: <20190807110959.GA16863@kroah.com>
+References: <20190807014846.143949-1-trong@android.com>
+ <20190807014846.143949-2-trong@android.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2705367.zNMUfgmSmy@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20190807014846.143949-2-trong@android.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 07, 2019 at 01:01:26PM +0200, Rafael J. Wysocki wrote:
-> On Wednesday, August 7, 2019 12:57:18 PM CEST Mika Westerberg wrote:
-> > Commit c2bf1fc212f7 ("PCI: Add missing link delays required by the PCIe
-> > spec") turned out causing issues with some systems either by making them
-> > unresponsive or slowing down runtime and system wide resume of PCIe
-> > devices. While root cause for the unresponsiveness is still under
-> > investigation given the amount of issues reported better to revert it
-> > for now.
+On Tue, Aug 06, 2019 at 06:48:44PM -0700, Tri Vo wrote:
+> wakeup_source_init() has no users. Remove it.
 > 
-> Well, I've applied it, so I guess I should do the revert.
+> As a result, wakeup_source_prepare() is only called from
+> wakeup_source_create(). Merge wakeup_source_prepare() into
+> wakeup_source_create() and remove it.
 > 
-> I'll queue this one up as a fix for -rc4.
+> Change wakeup_source_create() behavior so that assigning NULL to wakeup
+> source's name throws an error.
 
-Thanks!
+The kernel C code can not "throw" errors :)
+
+Anyway, odd verbage asside, patch looks good to me:
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
