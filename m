@@ -2,146 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A07D84201
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 03:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBBB842BD
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 05:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbfHGB4t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Aug 2019 21:56:49 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44113 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727765AbfHGB4t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 21:56:49 -0400
-Received: by mail-pf1-f194.google.com with SMTP id t16so42496579pfe.11
-        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2019 18:56:49 -0700 (PDT)
+        id S1726797AbfHGDB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Aug 2019 23:01:56 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:44192 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726334AbfHGDBz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Aug 2019 23:01:55 -0400
+Received: by mail-pl1-f195.google.com with SMTP id t14so38645086plr.11
+        for <linux-pm@vger.kernel.org>; Tue, 06 Aug 2019 20:01:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=h3YaDPv00/avJlZSQWNbmVylhizhO/sYz7AvHGg5w3g=;
-        b=YY7tqnZ+65cWDTGrXQYMsKenjk6zyIZEwv6Re4lGRIS94mFNvInPYITvMPTY//yUqI
-         9Wwd4DxP1TI9+6oScZI8kWYuQiMoufUX/xAxIn5D60MhQDsngVqhZRpxAH+jiH8FKgOx
-         M2Fw7sj9KCKZcaPx7xW8sP4oIdfVzLxqe71LqiXSkOBGvUyq1ijC1tYb3goxSMR7yJA0
-         4p9OJfGWAAzkqCzJUh8ZrfeJuRserJqSasn47MUShrK9WIEEsmDclSi+bI3U4C6hHOlx
-         pcQwYkETNEV1rVfhYLj7v8ynVdiKqs4Q/px/8xP0HMdBoEQ7roisQosHN51mDw5/X0Z3
-         LfMA==
+        h=from:to:cc:subject:date:message-id;
+        bh=HCWtXmm8PXUeDMR1t8C344/4HIGAq2JhsfErKkKrQRY=;
+        b=poCmGXNSsGWW5k/jTH72xOiKGf0zy+71CD3ty2E9Akpw9FfY4p9ThFtsmcL0+ZqKzL
+         tP+FBARsBFLsfw7UC5cziJzKlNZ1n6ZMxp8m2guKlRmDLvliIJwjvl4Pnb16dW/fSzUy
+         ZVk6kYzGhQqcEkLiYhVGW/FxwevRqX5HvUmlJvq1pMK9J5Bjv/xDgIE4zTuZwhQy3/Lq
+         LxVhIDvDg93CRSL8e7aCPSu/ekB+SGEHBtIBKR3xhidzXt8jUVoT7NDpnW1tUqAQFfNY
+         86K7XpyfqBOcERR0ntDTfbDGy7BzDfsWmRoFcExRhhVXH/Lh/1V5m/bhiM8voU6ojzXC
+         HuJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=h3YaDPv00/avJlZSQWNbmVylhizhO/sYz7AvHGg5w3g=;
-        b=Yhv1cstBzxkU5VbuhkOdll/zVhLK9PnKSFuWOUMMLzgeCV59KJwKSBEuyVVYY2ofuc
-         afPx8p4xhUSfH0blJrVq/JoVfu2TzH6cXsW2vMBbkfoiavsFM7kijDaQFRbUtr3HhXTT
-         he8DHg2ob1uD0QaOnQQQJepgZzeLKTbAVcJ/vinTGuQ4iG7xpUnHV4LG73PrebCwdSWo
-         l5S4ewMrU+j4xJlIY0RxEItQdW7ECVEMWjmXCzunD9/u6pqUB55t4sHL4klt4AGOlpXs
-         c7reyfkFfHU2IrLQci5dQCQbFz82Ks0AkUcjVvWeixtOh7lsmQ9zsYYb6/aiSxdk5Gpm
-         U6Cw==
-X-Gm-Message-State: APjAAAX2kHuYWoyGfxWf4wrIVjoYipOmrGhhTTf7xNNo0XSqm24diAm4
-        my0q+DpIAJcKXHIpUAQtTQ0=
-X-Google-Smtp-Source: APXvYqxYxMbTzKIxMJUtX59dFmmz63+VukwwJxRuzWscI+1vhHdRSQ560BMiKem+1X1ZTovnUkuL7A==
-X-Received: by 2002:a17:90a:2190:: with SMTP id q16mr5842498pjc.23.1565143008832;
-        Tue, 06 Aug 2019 18:56:48 -0700 (PDT)
-Received: from localhost ([218.189.10.173])
-        by smtp.gmail.com with ESMTPSA id t9sm94081335pgj.89.2019.08.06.18.56.46
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 06 Aug 2019 18:56:48 -0700 (PDT)
-Date:   Wed, 7 Aug 2019 09:56:37 +0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=HCWtXmm8PXUeDMR1t8C344/4HIGAq2JhsfErKkKrQRY=;
+        b=PewrKjuot0fx/ZFNausX2+FYqzkw0cM+iNpif291INUdZRZPd1BhKzn+iDvmUcDkt1
+         n7EJpLAFDLGqwq29tRKHlr21RXv/7JHB+fwlc5tKsu60bopldGqf5lt9q/PkNvqhokO9
+         BsNiLQFcOgEh6ZPtk+7f7SYRVOEwatLSzpkNqSSkuRCvzbS/oCUkYIeLZfasO+rlprhC
+         4/M4KbhVyNtodMRjP2Lx6fi0uRbzVktbBQ35cni28UIHr7CV8F0ZbBq8tpqIW7SHb4CE
+         6z2nCXCJp4EHggv7Z/8zJBlH79SGvMjYoRx/h5cVBnJ/S1teDGOnXpJwj5cW11ZRM0Lx
+         WDqA==
+X-Gm-Message-State: APjAAAVzvIULLJAbwiZnY3Zq+aFrtXZ334gyfsFGnk8FOgtl63nJ5z6D
+        lFboi7y7JgxEZ1X46tklKrM=
+X-Google-Smtp-Source: APXvYqyGSOodV13okJuPrZL6qyh68pdRMaBxUK/4KTFp56Jcfw8tstkFG1FJ+KP2brtaFr5XH17m3Q==
+X-Received: by 2002:a17:902:aa8a:: with SMTP id d10mr6312287plr.154.1565146915338;
+        Tue, 06 Aug 2019 20:01:55 -0700 (PDT)
+Received: from huyue2.ccdomain.com ([218.189.10.173])
+        by smtp.gmail.com with ESMTPSA id w132sm91449652pfd.78.2019.08.06.20.01.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Aug 2019 20:01:54 -0700 (PDT)
 From:   Yue Hu <zbestahu@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, huyue2@yulong.com
-Subject: Re: [PATCH RESEND] thermal/drivers/core: Use put_device() if
- device_register() fails
-Message-ID: <20190807095637.000021f8.zbestahu@gmail.com>
-In-Reply-To: <6135a0d0-9dc5-7b85-b014-6131f67332fc@linaro.org>
-References: <20190806020221.8504-1-zbestahu@gmail.com>
-        <6135a0d0-9dc5-7b85-b014-6131f67332fc@linaro.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+To:     rui.zhang@intel.com, edubezval@gmail.com, daniel.lezcano@linaro.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org, huyue2@yulong.com, zhangwen@yulong.com
+Subject: [PATCH v2] thermal/drivers/core: Use put_device() if device_register() fails
+Date:   Wed,  7 Aug 2019 11:01:30 +0800
+Message-Id: <20190807030130.11856-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1.windows.2
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 6 Aug 2019 12:26:18 +0200
-Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+From: Yue Hu <huyue2@yulong.com>
 
-> On 06/08/2019 04:02, Yue Hu wrote:
-> > From: Yue Hu <huyue2@yulong.com>
-> > 
-> > Never directly free @dev after calling device_register(), even if it
-> > returned an error! Always use put_device() to give up the reference
-> > initialized.
-> > 
-> > Signed-off-by: Yue Hu <huyue2@yulong.com>
-> > ---  
-> 
-> Thanks for catching this. Instead of adding a new rollback block, can
-> you do a cleanup in the rollback routine and then add this patch with
-> the proper label at the end of the function?
+Never directly free @dev after calling device_register(), even if it
+returned an error! Always use put_device() to give up the reference
+initialized. Clean up the rollback block also.
 
-Ok, i will try to clean up the rollback code in the v2.
+Signed-off-by: Yue Hu <huyue2@yulong.com>
+---
+v2: clean up rollback code, update commit message
 
-Thank you.
+ drivers/thermal/thermal_core.c | 25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-> 
-> eg.
-> 
-> unregister:
-> 	device_unregister(&tz->device);
-> release_device:
-> 	put_device(&tz->device);
-> ...
-> 
-> remove_id:
-> 	ida_simple_remove(&thermal_tz_ida, tz->id);
-> free_tz:
-> 	kfree(tz);
-> 	return ERR_PTR(result);
-> 
-> 
-> >  drivers/thermal/thermal_core.c | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> > index 6bab66e..ffe5d8e 100644
-> > --- a/drivers/thermal/thermal_core.c
-> > +++ b/drivers/thermal/thermal_core.c
-> > @@ -985,7 +985,7 @@ static void bind_cdev(struct thermal_cooling_device *cdev)
-> >  	result = device_register(&cdev->device);
-> >  	if (result) {
-> >  		ida_simple_remove(&thermal_cdev_ida, cdev->id);
-> > -		kfree(cdev);
-> > +		put_device(&cdev->device);
-> >  		return ERR_PTR(result);
-> >  	}
-> >  
-> > @@ -1292,7 +1292,7 @@ struct thermal_zone_device *
-> >  	dev_set_name(&tz->device, "thermal_zone%d", tz->id);
-> >  	result = device_register(&tz->device);
-> >  	if (result)
-> > -		goto remove_device_groups;
-> > +		goto release_device;
-> >  
-> >  	for (count = 0; count < trips; count++) {
-> >  		if (tz->ops->get_trip_type(tz, count, &trip_type))
-> > @@ -1347,8 +1347,11 @@ struct thermal_zone_device *
-> >  	device_unregister(&tz->device);
-> >  	return ERR_PTR(result);
-> >  
-> > -remove_device_groups:
-> > -	thermal_zone_destroy_device_groups(tz);
-> > +release_device:
-> > +	ida_simple_remove(&thermal_tz_ida, tz->id);
-> > +	put_device(&tz->device);
-> > +	return ERR_PTR(result);
-> > +
-> >  remove_id:
-> >  	ida_simple_remove(&thermal_tz_ida, tz->id);
-> >  free_tz:
-> >   
-> 
-> 
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 6bab66e..bae1e41 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -985,7 +985,7 @@ static void bind_cdev(struct thermal_cooling_device *cdev)
+ 	result = device_register(&cdev->device);
+ 	if (result) {
+ 		ida_simple_remove(&thermal_cdev_ida, cdev->id);
+-		kfree(cdev);
++		put_device(&cdev->device);
+ 		return ERR_PTR(result);
+ 	}
+ 
+@@ -1240,6 +1240,7 @@ struct thermal_zone_device *
+ 	struct thermal_zone_device *tz;
+ 	enum thermal_trip_type trip_type;
+ 	int trip_temp;
++	int id;
+ 	int result;
+ 	int count;
+ 	struct thermal_governor *governor;
+@@ -1266,11 +1267,13 @@ struct thermal_zone_device *
+ 	INIT_LIST_HEAD(&tz->thermal_instances);
+ 	ida_init(&tz->ida);
+ 	mutex_init(&tz->lock);
+-	result = ida_simple_get(&thermal_tz_ida, 0, 0, GFP_KERNEL);
+-	if (result < 0)
++	id = ida_simple_get(&thermal_tz_ida, 0, 0, GFP_KERNEL);
++	if (id < 0) {
++		result = id;
+ 		goto free_tz;
++	}
+ 
+-	tz->id = result;
++	tz->id = id;
+ 	strlcpy(tz->type, type, sizeof(tz->type));
+ 	tz->ops = ops;
+ 	tz->tzp = tzp;
+@@ -1292,7 +1295,7 @@ struct thermal_zone_device *
+ 	dev_set_name(&tz->device, "thermal_zone%d", tz->id);
+ 	result = device_register(&tz->device);
+ 	if (result)
+-		goto remove_device_groups;
++		goto release_device;
+ 
+ 	for (count = 0; count < trips; count++) {
+ 		if (tz->ops->get_trip_type(tz, count, &trip_type))
+@@ -1343,14 +1346,12 @@ struct thermal_zone_device *
+ 	return tz;
+ 
+ unregister:
+-	ida_simple_remove(&thermal_tz_ida, tz->id);
+-	device_unregister(&tz->device);
+-	return ERR_PTR(result);
+-
+-remove_device_groups:
+-	thermal_zone_destroy_device_groups(tz);
++	device_del(&tz->device);
++release_device:
++	put_device(&tz->device);
++	tz = NULL;
+ remove_id:
+-	ida_simple_remove(&thermal_tz_ida, tz->id);
++	ida_simple_remove(&thermal_tz_ida, id);
+ free_tz:
+ 	kfree(tz);
+ 	return ERR_PTR(result);
+-- 
+1.9.1
 
