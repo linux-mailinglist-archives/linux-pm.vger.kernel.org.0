@@ -2,104 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF0B84EF1
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 16:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A9384F54
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Aug 2019 17:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729745AbfHGOkE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Aug 2019 10:40:04 -0400
-Received: from mga04.intel.com ([192.55.52.120]:56257 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729516AbfHGOkD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Aug 2019 10:40:03 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 07:40:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,357,1559545200"; 
-   d="scan'208";a="165338496"
-Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
-  by orsmga007.jf.intel.com with ESMTP; 07 Aug 2019 07:40:01 -0700
-Date:   Wed, 7 Aug 2019 08:37:34 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Mario Limonciello <Mario.Limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "Busch, Keith" <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: Re: [PATCH] nvme-pci: Do not prevent PCI bus-level PM from being used
-Message-ID: <20190807143733.GA25621@localhost.localdomain>
-References: <47415939.KV5G6iaeJG@kreacher>
- <20190730144134.GA12844@localhost.localdomain>
- <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
- <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com>
- <20190730191934.GD13948@localhost.localdomain>
- <7d3e0b8ba1444194a153c93faa1cabb3@AUSX13MPC105.AMER.DELL.COM>
- <20190730213114.GK13948@localhost.localdomain>
- <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com>
- <20190731221956.GB15795@localhost.localdomain>
- <1893355.EP2830DdO9@kreacher>
+        id S2387952AbfHGPAN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Aug 2019 11:00:13 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:38962 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387815AbfHGPAN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 11:00:13 -0400
+Received: by mail-pl1-f195.google.com with SMTP id b7so41281058pls.6
+        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 08:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:from:cc:to:user-agent:date;
+        bh=KZ8uTQBbhCoVPVLq+C4BHS+Mf8ZC86MmMMrTG7ha+H0=;
+        b=Jp0UtNZCC8cbLtwVC11RHbJ5sVa6xcn/gHKlJHfNoAjGid9R1Ro/fP956hygnVjnlx
+         UXeRVeP6z12LPFFvwUt4MGsHKitKyDjNpezOtPUTkpdN8zJWkAx3Ky3KuJczrqCmKJPD
+         BlsXtDa2l9ldljcENRwWPj+3XjCA6TNE+VAno=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
+         :user-agent:date;
+        bh=KZ8uTQBbhCoVPVLq+C4BHS+Mf8ZC86MmMMrTG7ha+H0=;
+        b=i28mA0Wfx21dC3ZPg4ZDKlhawHn816+ymZTk27J1DlXhIxaSFHDhcRv3XCEn0lTxNM
+         SLT/w0A9BLGIo7g1w02ruwPpYFb2y3McXOn26jaRHaHiyefaJnX1TJhT5Z7azk1sN1Gh
+         e9CzIC3NvS2defZBQQFbQJcQn24k322anzSXa9GWU1Z0foo8F+M6g6RxPDmuemoNK1a+
+         AlUMjumFUve71Y2eYY8OWqnnq7FVGQA/3XFgie3qZJE/GWO1pZD5W6WBBkN34U48xVNs
+         SM4Ycxsi9bRUSTWtl9tADos9TqyoAGYsJhOY1cziigna/eJfeqc7gGt6rvtbVuNm1CLM
+         nBbg==
+X-Gm-Message-State: APjAAAViwTHjmzDN9nl57N/EdBOkQNkEASXKpWiq90t6ivkFn/5uJch0
+        TWCwUZWwAAKORJ+kKp/y9EHlng==
+X-Google-Smtp-Source: APXvYqy2jxaSa12yeJ+hSX/nC2py2R6uMv7QFDeb3lys0otIzEa3uukW94IdpTYGAPXXXgF8jqwACQ==
+X-Received: by 2002:a63:dc4f:: with SMTP id f15mr8183383pgj.227.1565190012942;
+        Wed, 07 Aug 2019 08:00:12 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id 143sm141606468pgc.6.2019.08.07.08.00.12
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 07 Aug 2019 08:00:12 -0700 (PDT)
+Message-ID: <5d4ae77c.1c69fb81.8078a.b6ba@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1893355.EP2830DdO9@kreacher>
-User-Agent: Mutt/1.9.1 (2017-09-22)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190807014846.143949-2-trong@android.com>
+References: <20190807014846.143949-1-trong@android.com> <20190807014846.143949-2-trong@android.com>
+Subject: Re: [PATCH v8 1/3] PM / wakeup: Drop wakeup_source_init(), wakeup_source_prepare()
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     rafael@kernel.org, hridya@google.com, sspatil@google.com,
+        kaleshsingh@google.com, ravisadineni@chromium.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel-team@android.com, Tri Vo <trong@android.com>
+To:     Tri Vo <trong@android.com>, gregkh@linuxfoundation.org,
+        rjw@rjwysocki.net, viresh.kumar@linaro.org
+User-Agent: alot/0.8.1
+Date:   Wed, 07 Aug 2019 08:00:11 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 07, 2019 at 02:53:44AM -0700, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
-> host managed power state for suspend") was adding a pci_save_state()
-> call to nvme_suspend() in order to prevent the PCI bus-level PM from
-> being applied to the suspended NVMe devices, but if ASPM is not
-> enabled for the target NVMe device, that causes its PCIe link to stay
-> up and the platform may not be able to get into its optimum low-power
-> state because of that.
-> 
-> For example, if ASPM is disabled for the NVMe drive (PC401 NVMe SK
-> hynix 256GB) in my Dell XPS13 9380, leaving it in D0 during
-> suspend-to-idle prevents the SoC from reaching package idle states
-> deeper than PC3, which is way insufficient for system suspend.
-> 
-> To address this shortcoming, make nvme_suspend() check if ASPM is
-> enabled for the target device and fall back to full device shutdown
-> and PCI bus-level PM if that is not the case.
-> 
-> Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for suspend")
-> Link: https://lore.kernel.org/linux-pm/2763495.NmdaWeg79L@kreacher/T/#t
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Quoting Tri Vo (2019-08-06 18:48:44)
+> wakeup_source_init() has no users. Remove it.
+>=20
+> As a result, wakeup_source_prepare() is only called from
+> wakeup_source_create(). Merge wakeup_source_prepare() into
+> wakeup_source_create() and remove it.
+>=20
+> Change wakeup_source_create() behavior so that assigning NULL to wakeup
+> source's name throws an error.
+>=20
+> Signed-off-by: Tri Vo <trong@android.com>
+> ---
 
-Thanks for tracking down the cause. Sounds like your earlier assumption
-on ASPM's involvement was spot on.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-> +/*
-> + * pcie_aspm_enabled - Return the mask of enabled ASPM link states.
-> + * @pci_device: Target device.
-> + */
-> +u32 pcie_aspm_enabled(struct pci_dev *pci_device)
-> +{
-> +	struct pci_dev *bridge = pci_device->bus->self;
-
-You may want use pci_upstream_bridge() instead, just in case someone
-calls this on a virtual function's pci_dev.
-
-> +	u32 aspm_enabled;
-> +
-> +	mutex_lock(&aspm_lock);
-> +	aspm_enabled = bridge->link_state ? bridge->link_state->aspm_enabled : 0;
-> +	mutex_unlock(&aspm_lock);
-> +
-> +	return aspm_enabled;
-> +}
