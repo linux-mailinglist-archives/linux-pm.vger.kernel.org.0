@@ -2,47 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2CF855D2
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 00:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F7D855D5
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 00:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389423AbfHGWbQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Aug 2019 18:31:16 -0400
-Received: from mail-vs1-f74.google.com ([209.85.217.74]:36275 "EHLO
-        mail-vs1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388978AbfHGWbQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 18:31:16 -0400
-Received: by mail-vs1-f74.google.com with SMTP id j77so23532085vsd.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 15:31:15 -0700 (PDT)
+        id S2389471AbfHGWbU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Aug 2019 18:31:20 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:42364 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389284AbfHGWbT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 18:31:19 -0400
+Received: by mail-qk1-f202.google.com with SMTP id p18so7026011qke.9
+        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 15:31:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=cO1gXGOyS0gi4TQ5Wq0NWKmVpQwgP9l+EbKlT+h4gHU=;
-        b=uuZtBdB/7qm120Nq4qybmRvPR+I9q9Ixj2SEs5qLEw7hCnWKJaIX7nHfzN05S8Vy4N
-         epZt1M0q+U54DDnq2jYdBwqpJyjE0IPSPk29QdW4rpPRMHTSevRMRaNO3InbE5rrVdAt
-         t3axTnksX9aJake09fiFXBtGmaOWP277JThdHw8b4/gR8nb/0UoWf06gDjhQcqBRK2Ml
-         QuFI9Kv7ZSiPp9tnwhKBRXIo0rSrKFKp86U8aVh+u316HgpJmZ2j5OiG+DVtheQqEqeW
-         bADKCYVbMb6k+xyfjFFIMI86n4ofrnNOKXzvwf3M9loIElQpTlHmu9VjWQUyx72b8yee
-         6Hsg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=ckpmb+TNBKBpyxo3hmHEyu4vxqKi6Nk6GzLW2/f2keU=;
+        b=BSiqMpq6HoHNp0p49Nzkyt13lkHVX/6GuQpF8Kr8KnGBApx+sMX49a0LJvr8MGIUjS
+         EdPDbkfgrECeizFLqhMGngAXCxcAZ0cTnWpnR65ROBYXP/G7QR3LGE2rbLw2Cra4ThiM
+         7rrCINPrbNFIOy+XrgB+T0lBNam/8Wac5k3l2IFjBBu8MdAwOmsgFSWKndSDyYHrO1Xh
+         TtHur7MsUe0HOzKF/E4BPURvDt23OGElVYq5r9NgKsaDuiEsW3bR35MH3nXQTNGrTwwV
+         sFaHapXc6X2Nv71ho23ujXWOM4Y10idK1WOQOJmoGP/BzLFZzboUCloJTqNyBnSILmLE
+         VprQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=cO1gXGOyS0gi4TQ5Wq0NWKmVpQwgP9l+EbKlT+h4gHU=;
-        b=B3TDjixo5iTElFuPCbPGUb6nkotEF3lzwFLWzm8j3LDkR/BRD3Cn9rCRyfh0O9Oczd
-         bJ1ebfRuQcSbeggpSVxAKSjRLItXyVdmcvDUsvQC7PJ/BwAkYZvD/WF3DoMC+VAwyvi8
-         I5VLGPAFf5quNXxbRHoTHkQ6a0+PvKdeXX8XfaBliZh6cGesKKcckF+3JgRtJA2ZAEvE
-         PmYs79FJZ9BfebHF4qPLTPOG8HpkMRzaRhqX0crdtMGvH0jQOftODhXwJrmLxdvT4g7A
-         q287PTom5GH2iDThWxjc1H7T6SMu4CE8/PTCU4zMR0y47qMxJmybMhlDf+GdhuyzbJzX
-         RHyg==
-X-Gm-Message-State: APjAAAX9dJlk3CBs5bRQDLluPRLDHRuhuVg4ULZ6H4bx3AuJ44CV3Nvz
-        9x2DRNhIQCAGdrv9q2aPK1uOuNR2octi2xI=
-X-Google-Smtp-Source: APXvYqya79a8mTDjLu2/eYtzqZNc/blOum2HVA6RIc6UOhuB5YGHpARfWsXtxe4HrnBdTDDJj7wdN9IHAnOOlF8=
-X-Received: by 2002:ac5:c4cc:: with SMTP id a12mr4618231vkl.28.1565217074937;
- Wed, 07 Aug 2019 15:31:14 -0700 (PDT)
-Date:   Wed,  7 Aug 2019 15:31:08 -0700
-Message-Id: <20190807223111.230846-1-saravanak@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=ckpmb+TNBKBpyxo3hmHEyu4vxqKi6Nk6GzLW2/f2keU=;
+        b=iuC5hj/DsPo1iJ2J9olIHFuIybgn/N+CB8J+Ziv894eBprnYwe+TqFM/F36oIVkAEI
+         aW93/ut+xuaqdfQPSzVWqrc5JLtcNWc69tQaO8BN9wiiIblrer96wrJ1bFsWFKVfRUee
+         zlh4+F0U9dzwpJzDC3Ll9RMV5KUTV0QqiBx6iBbpgjlwqwmQAEJEqJfwcSvUNb9IbGJ/
+         ymVhAEsdqilZqAVJ+a/+Qw2cRTtPQa1GBxGFuoR+Nn85CiOtMnGug3UWrQXWwAiGc6AO
+         y7hHS8/A9jUTBcbmytzbR1f+CVTWsoD9IVOueBnzYxTdrO0Rq+dMA8ub8yKccZlCxSZv
+         WMFg==
+X-Gm-Message-State: APjAAAXia0oEbKFYWS0u685637HAwWXGF4ATMxwvpoF3ufMIseGsKu7a
+        oi3UsD8uZ7mZP2/JZT8m4yS2U+Ei3lh7zBs=
+X-Google-Smtp-Source: APXvYqxDhQTeMZ27YhUXhV335PAv5RzZgLceI6C81MqWo0wkCxeUetGuTCa6PoXaTHbL84zYlcM32MoiII/dMXk=
+X-Received: by 2002:a37:be87:: with SMTP id o129mr10537574qkf.31.1565217078090;
+ Wed, 07 Aug 2019 15:31:18 -0700 (PDT)
+Date:   Wed,  7 Aug 2019 15:31:09 -0700
+In-Reply-To: <20190807223111.230846-1-saravanak@google.com>
+Message-Id: <20190807223111.230846-2-saravanak@google.com>
 Mime-Version: 1.0
+References: <20190807223111.230846-1-saravanak@google.com>
 X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH v5 0/3] Introduce Bandwidth OPPs for interconnects
+Subject: [PATCH v5 1/3] dt-bindings: opp: Introduce opp-peak-kBps and
+ opp-avg-kBps bindings
 From:   Saravana Kannan <saravanak@google.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -63,94 +68,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Interconnects and interconnect paths quantify their performance levels in
-terms of bandwidth and not in terms of frequency. So similar to how we have
-frequency based OPP tables in DT and in the OPP framework, we need
-bandwidth OPP table support in DT and in the OPP framework.
+Interconnects often quantify their performance points in terms of
+bandwidth. So, add opp-peak-kBps (required) and opp-avg-kBps (optional) to
+allow specifying Bandwidth OPP tables in DT.
 
-So with the DT bindings added in this patch series, the DT for a GPU
-that does bandwidth voting from GPU to Cache and GPU to DDR would look
-something like this:
+opp-peak-kBps is a required property that replaces opp-hz for Bandwidth OPP
+tables.
 
-gpu_cache_opp_table: gpu_cache_opp_table {
-	compatible = "operating-points-v2";
+opp-avg-kBps is an optional property that can be used in Bandwidth OPP
+tables.
 
-	gpu_cache_3000: opp-3000 {
-		opp-peak-KBps = <3000000>;
-		opp-avg-KBps = <1000000>;
-	};
-	gpu_cache_6000: opp-6000 {
-		opp-peak-KBps = <6000000>;
-		opp-avg-KBps = <2000000>;
-	};
-	gpu_cache_9000: opp-9000 {
-		opp-peak-KBps = <9000000>;
-		opp-avg-KBps = <9000000>;
-	};
-};
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+ Documentation/devicetree/bindings/opp/opp.txt     | 15 ++++++++++++---
+ .../devicetree/bindings/property-units.txt        |  4 ++++
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-gpu_ddr_opp_table: gpu_ddr_opp_table {
-	compatible = "operating-points-v2";
-
-	gpu_ddr_1525: opp-1525 {
-		opp-peak-KBps = <1525000>;
-		opp-avg-KBps = <452000>;
-	};
-	gpu_ddr_3051: opp-3051 {
-		opp-peak-KBps = <3051000>;
-		opp-avg-KBps = <915000>;
-	};
-	gpu_ddr_7500: opp-7500 {
-		opp-peak-KBps = <7500000>;
-		opp-avg-KBps = <3000000>;
-	};
-};
-
-gpu_opp_table: gpu_opp_table {
-	compatible = "operating-points-v2";
-	opp-shared;
-
-	opp-200000000 {
-		opp-hz = /bits/ 64 <200000000>;
-	};
-	opp-400000000 {
-		opp-hz = /bits/ 64 <400000000>;
-	};
-};
-
-gpu@7864000 {
-	...
-	operating-points-v2 = <&gpu_opp_table>, <&gpu_cache_opp_table>, <&gpu_ddr_opp_table>;
-	...
-};
-
-v1 -> v3:
-- Lots of patch additions that were later dropped
-v3 -> v4:
-- Fixed typo bugs pointed out by Sibi.
-- Fixed bug that incorrectly reset rate to 0 all the time
-- Added units documentation
-- Dropped interconnect-opp-table property and related changes
-v4->v5:
-- Replaced KBps with kBps
-- Minor documentation fix
-
-Cheers,
-Saravana
-
-Saravana Kannan (3):
-  dt-bindings: opp: Introduce opp-peak-kBps and opp-avg-kBps bindings
-  OPP: Add support for bandwidth OPP tables
-  OPP: Add helper function for bandwidth OPP tables
-
- Documentation/devicetree/bindings/opp/opp.txt | 15 ++++--
- .../devicetree/bindings/property-units.txt    |  4 ++
- drivers/opp/core.c                            | 51 +++++++++++++++++++
- drivers/opp/of.c                              | 41 +++++++++++----
- drivers/opp/opp.h                             |  4 +-
- include/linux/pm_opp.h                        | 19 +++++++
- 6 files changed, 121 insertions(+), 13 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
+index 68592271461f..dbad8eb6c746 100644
+--- a/Documentation/devicetree/bindings/opp/opp.txt
++++ b/Documentation/devicetree/bindings/opp/opp.txt
+@@ -83,9 +83,14 @@ properties.
+ 
+ Required properties:
+ - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
+-  required property for all device nodes but devices like power domains. The
+-  power domain nodes must have another (implementation dependent) property which
+-  uniquely identifies the OPP nodes.
++  required property for all device nodes except for devices like power domains
++  or bandwidth opp tables. The power domain nodes must have another
++  (implementation dependent) property which uniquely identifies the OPP nodes.
++  The interconnect opps are required to have the opp-peak-kBps property.
++
++- opp-peak-kBps: Peak bandwidth in kilobytes per second, expressed as a 32-bit
++  big-endian integer. This is a required property for all devices that don't
++  have opp-hz. For example, bandwidth OPP tables for interconnect paths.
+ 
+ Optional properties:
+ - opp-microvolt: voltage in micro Volts.
+@@ -132,6 +137,10 @@ Optional properties:
+ - opp-level: A value representing the performance level of the device,
+   expressed as a 32-bit integer.
+ 
++- opp-avg-kBps: Average bandwidth in kilobytes per second, expressed as a
++  32-bit big-endian integer. This property is only meaningful in OPP tables
++  where opp-peak-kBps is present.
++
+ - clock-latency-ns: Specifies the maximum possible transition latency (in
+   nanoseconds) for switching to this OPP from any other OPP.
+ 
+diff --git a/Documentation/devicetree/bindings/property-units.txt b/Documentation/devicetree/bindings/property-units.txt
+index e9b8360b3288..c80a110c1e26 100644
+--- a/Documentation/devicetree/bindings/property-units.txt
++++ b/Documentation/devicetree/bindings/property-units.txt
+@@ -41,3 +41,7 @@ Temperature
+ Pressure
+ ----------------------------------------
+ -kpascal	: kilopascal
++
++Throughput
++----------------------------------------
++-kBps		: kilobytes per second
 -- 
 2.23.0.rc1.153.gdeed80330f-goog
 
