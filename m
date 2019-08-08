@@ -2,107 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA11D86B17
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 22:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFC586BC9
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 22:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404174AbfHHUGN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 16:06:13 -0400
-Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:53166 "EHLO
-        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404070AbfHHUGM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 16:06:12 -0400
-Received: from pps.filterd (m0170393.ppops.net [127.0.0.1])
-        by mx0a-00154904.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x78Jt2df030495;
-        Thu, 8 Aug 2019 16:06:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=spsW3iJj1C+z5+hobnJKI3JF6/CSZLZhsxP1rFK06xI=;
- b=Rq2ekKxw0YDYt1yk99p2KNKEQVqEbzNWb8vDtd6+ZUlk/Im71MAXiuc3oHmiLLFf3+Jy
- 8NtlzD8iI03JsZ1Y+t5Oq7bI9DOYFdSikBrLry+sJ94Kl9bNWkjATEmE4mW00X6yJbog
- i6rBs8cPIKHw5zcWI95B33Juh3pJfFDrEoMEYxyrquQvLGUoJGJMKiNw5xG+k0d1cJc1
- 3+ZUxNKfpn6hEszW4+rFx8XXKcWoL8lxdWGsetuVeUy9nOWu65CsIaAFQNLTbMJsi7ce
- 5gEcxylft/2Z15fgcZIUJOspVF+PDiXyYm/hvbVRzv3dDqGgyN7Ff9A1ryP9VLigL+No oA== 
-Received: from mx0b-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
-        by mx0a-00154904.pphosted.com with ESMTP id 2u8qf08sys-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Aug 2019 16:06:11 -0400
-Received: from pps.filterd (m0144102.ppops.net [127.0.0.1])
-        by mx0b-00154901.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x78JrOQL100095;
-        Thu, 8 Aug 2019 16:06:11 -0400
-Received: from ausxippc110.us.dell.com (AUSXIPPC110.us.dell.com [143.166.85.200])
-        by mx0b-00154901.pphosted.com with ESMTP id 2u8q3cu1c2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Aug 2019 16:06:10 -0400
-X-LoopCount0: from 10.166.132.131
-X-PREM-Routing: D-Outbound
-X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
-   d="scan'208";a="841637776"
-From:   <Mario.Limonciello@dell.com>
-To:     <helgaas@kernel.org>, <rafael@kernel.org>
-CC:     <rjw@rjwysocki.net>, <linux-nvme@lists.infradead.org>,
-        <kbusch@kernel.org>, <kai.heng.feng@canonical.com>,
-        <keith.busch@intel.com>, <hch@lst.de>, <sagi@grimberg.me>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rajatja@google.com>, <linux-pci@vger.kernel.org>
-Subject: RE: [PATCH v2 2/2] nvme-pci: Allow PCI bus-level PM to be used if
- ASPM is disabled
-Thread-Topic: [PATCH v2 2/2] nvme-pci: Allow PCI bus-level PM to be used if
- ASPM is disabled
-Thread-Index: AQHVTdGT69rR0fb3wUCKiH74wnB2qabxltQAgAAR1ICAAEDdAP//rTHA
-Date:   Thu, 8 Aug 2019 20:05:48 +0000
-Message-ID: <707af7109fee4942a4ba8eebbee6cde8@AUSX13MPC105.AMER.DELL.COM>
+        id S2404196AbfHHUmK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 16:42:10 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:46680 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733140AbfHHUmJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 16:42:09 -0400
+Received: by mail-ot1-f67.google.com with SMTP id z17so5619993otk.13;
+        Thu, 08 Aug 2019 13:42:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dPx3oxQe9mnn97sFiVMnQ+/paC/GNRx7B//ee5f5G+w=;
+        b=ugYUBcK+EN5qAowjCobddOV5hfi0mnhAPmOFo0ZYFUxnhvg95duSbiYtF1z2naP2+V
+         q2xd/dANW+KpuStXLVn9Ve4FW4CZPLhiGE4HSv63DtyP0FMwYW2IPckzs2qs0Hu6yHDS
+         je+Xw7Yn6zGIPrIbvP6tlvCrKtSC9MVwQA+kQhqR67GANpQ28XqxTKOeXB/Ds8e+BIuD
+         MpUGVD60OZ+desjBlnCJ+39Lb4FU7qCM/SpM2TDp1db0Zz0M3Vz1UmajJIif0Y2m/pOX
+         dawfTkSsc9d2EnTiXLfpFCH4TlOMPTFMEq2vSbwNggmDq387GmUKYYogpIdB3qeTOa98
+         tMWQ==
+X-Gm-Message-State: APjAAAUgrd0PZWefls767rRfSToKzAJeWV7G0D89YUOEdu17av7w5mvu
+        ZXtwaSGuIpOX5C6c/4Lz103ZEQgGXxrLqSyi8Mo=
+X-Google-Smtp-Source: APXvYqwI9N0vho3Kstoj/H4iMj4aMw65wU5o8DrhhcaHfjfCflP5uRJ/sVsJbHZuSDGKa7kedtXjfG4YYWD9/H6BxTQ=
+X-Received: by 2002:aca:5a41:: with SMTP id o62mr4004626oib.110.1565296927852;
+ Thu, 08 Aug 2019 13:42:07 -0700 (PDT)
+MIME-Version: 1.0
 References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
  <20190731221956.GB15795@localhost.localdomain> <1921165.pTveHRX1Co@kreacher>
  <1870928.r7tBYyfqdz@kreacher> <20190808134356.GF151852@google.com>
- <CAJZ5v0h=nz8yXwOOGBUB9m1GtJPOqBwtNK7zXPNMJjzPhMWd9w@mail.gmail.com>
- <20190808183954.GG151852@google.com>
+ <CAJZ5v0h=nz8yXwOOGBUB9m1GtJPOqBwtNK7zXPNMJjzPhMWd9w@mail.gmail.com> <20190808183954.GG151852@google.com>
 In-Reply-To: <20190808183954.GG151852@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-08-08T20:05:47.1803865Z;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
- aiplabel=External Public
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.143.18.86]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-08_08:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908080177
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908080177
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 8 Aug 2019 22:41:56 +0200
+Message-ID: <CAJZ5v0h95m=G2T_i7uSygK4H=VLH4Txte_ffKc5JBA33A=N76Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] nvme-pci: Allow PCI bus-level PM to be used if
+ ASPM is disabled
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Aug 8, 2019, 20:39 Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Thu, Aug 08, 2019 at 04:47:45PM +0200, Rafael J. Wysocki wrote:
+> > On Thu, Aug 8, 2019 at 3:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Thu, Aug 08, 2019 at 12:10:06PM +0200, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
+> > > > host managed power state for suspend") was adding a pci_save_state()
+> > > > call to nvme_suspend() in order to prevent the PCI bus-level PM from
+> > > > being applied to the suspended NVMe devices, but if ASPM is not
+> > > > enabled for the target NVMe device, that causes its PCIe link to stay
+> > > > up and the platform may not be able to get into its optimum low-power
+> > > > state because of that.
+> > > >
+> > > > For example, if ASPM is disabled for the NVMe drive (PC401 NVMe SK
+> > > > hynix 256GB) in my Dell XPS13 9380, leaving it in D0 during
+> > > > suspend-to-idle prevents the SoC from reaching package idle states
+> > > > deeper than PC3, which is way insufficient for system suspend.
+> > >
+> > > Just curious: I assume the SoC you reference is some part of the NVMe
+> > > drive?
+> >
+> > No, the SoC is what contains the Intel processor and PCH (formerly "chipset").
+> >
+> > > > To address this shortcoming, make nvme_suspend() check if ASPM is
+> > > > enabled for the target device and fall back to full device shutdown
+> > > > and PCI bus-level PM if that is not the case.
+> > > >
+> > > > Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for suspend")
+> > > > Link: https://lore.kernel.org/linux-pm/2763495.NmdaWeg79L@kreacher/T/#t
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > ---
+> > > >
+> > > > -> v2:
+> > > >   * Move the PCI/PCIe ASPM changes to a separate patch.
+> > > >   * Do not add a redundant ndev->last_ps == U32_MAX check in nvme_suspend().
+> > > >
+> > > > ---
+> > > >  drivers/nvme/host/pci.c |   13 ++++++++++---
+> > > >  1 file changed, 10 insertions(+), 3 deletions(-)
+> > > >
+> > > > Index: linux-pm/drivers/nvme/host/pci.c
+> > > > ===================================================================
+> > > > --- linux-pm.orig/drivers/nvme/host/pci.c
+> > > > +++ linux-pm/drivers/nvme/host/pci.c
+> > > > @@ -2846,7 +2846,7 @@ static int nvme_resume(struct device *de
+> > > >       struct nvme_dev *ndev = pci_get_drvdata(to_pci_dev(dev));
+> > > >       struct nvme_ctrl *ctrl = &ndev->ctrl;
+> > > >
+> > > > -     if (pm_resume_via_firmware() || !ctrl->npss ||
+> > > > +     if (ndev->last_ps == U32_MAX ||
+> > > >           nvme_set_power_state(ctrl, ndev->last_ps) != 0)
+> > > >               nvme_reset_ctrl(ctrl);
+> > > >       return 0;
+> > > > @@ -2859,6 +2859,8 @@ static int nvme_suspend(struct device *d
+> > > >       struct nvme_ctrl *ctrl = &ndev->ctrl;
+> > > >       int ret = -EBUSY;
+> > > >
+> > > > +     ndev->last_ps = U32_MAX;
+> > > > +
+> > > >       /*
+> > > >        * The platform does not remove power for a kernel managed suspend so
+> > > >        * use host managed nvme power settings for lowest idle power if
+> > > > @@ -2866,8 +2868,14 @@ static int nvme_suspend(struct device *d
+> > > >        * shutdown.  But if the firmware is involved after the suspend or the
+> > > >        * device does not support any non-default power states, shut down the
+> > > >        * device fully.
+> > > > +      *
+> > > > +      * If ASPM is not enabled for the device, shut down the device and allow
+> > > > +      * the PCI bus layer to put it into D3 in order to take the PCIe link
+> > > > +      * down, so as to allow the platform to achieve its minimum low-power
+> > > > +      * state (which may not be possible if the link is up).
+> > > >        */
+> > > > -     if (pm_suspend_via_firmware() || !ctrl->npss) {
+> > > > +     if (pm_suspend_via_firmware() || !ctrl->npss ||
+> > > > +         !pcie_aspm_enabled_mask(pdev)) {
+> > >
+> > > This seems like a layering violation, in the sense that ASPM is
+> > > supposed to be hardware-autonomous and invisible to software.
+> >
+> > But software has to enable it.
+> >
+> > If it is not enabled, it will not be used, and that's what the check
+> > is about.
+> >
+> > > IIUC the NVMe device will go to the desired package idle state if
+> > > the link is in L0s or L1, but not if the link is in L0.  I don't
+> > > understand that connection; AFAIK that would be something outside
+> > > the scope of the PCIe spec.
+> >
+> > Yes, it is outside of the PCIe spec.
+> >
+> > No, this is not about the NVMe device, it is about the Intel SoC
+> > (System-on-a-Chip) the platform is based on.
+>
+> Ah.  So this problem could occur with any device, not just NVMe?  If
+> so, how do you address that?  Obviously you don't want to patch all
+> drivers this way.
+
+It could, if the device was left in D0 during suspend, but drivers
+don't let devices stay in D0 during suspend as a rule, so this is all
+academic, except for the NVMe driver that has just started to do it in
+5.3-rc1.
+
+It has started to do that becasuse of what can be regarded as a
+hardware issue, but this does not even matter here.
+
+>
+> > The background really is commit d916b1be94b6 and its changelog is
+> > kind of misleading, unfortunately.  What it did, among other things,
+> > was to cause the NVMe driver to prevent the PCI bus type from
+> > applying the standard PCI PM to the devices handled by it in the
+> > suspend-to-idle flow.
+>
 > This is more meaningful to you than to most people because "applying
 > the standard PCI PM" doesn't tell us what that means in terms of the
 > device.  Presumably it has something to do with a D-state transition?
 > I *assume* a suspend might involve the D0 -> D3hot transition you
 > mention below?
->=20
+
+By "standard PCI PM" I mean what pci_prepare_to_sleep() does. And yes,
+in the vast majority of cases the device goes from D0 to D3hot then.
+
+>
 > > The reason for doing that was a (reportedly) widespread failure to
 > > take the PCIe link down during D0 -> D3hot transitions of NVMe
 > > devices,
->=20
+>
 > I don't know any of the details, but "failure to take the link down
 > during D0 -> D3hot transitions" is phrased as though it might be a
 > hardware erratum.  If this *is* related to an NVMe erratum, that would
@@ -110,63 +196,41 @@ X-Mailing-List: linux-pm@vger.kernel.org
 > useful to mention that in the commit log, since otherwise it sounds
 > like something that might be needed in other drivers, too.
 
-NVME is special in this case that there is other logic being put in place
-to set the drive's power state explicitly.
+Yes, that can be considered as an NVMe erratum and the NVMe driver has
+been *already* patched because of that in 5.3-rc1. [That's the commit
+mentioned in the changelog of the $subject patch.]
 
-I would mention that also this alternate flow is quicker for s0ix
-resume since NVME doesn't go through shutdown routine.
+It effectively asks the PCI bus type to leave *all* devices handled by
+it in D0 during suspend-to-idle.  Already today.
 
-Unanimously the feedback from vendors was to avoid NVME shutdown
-and to instead use SetFeatures to go into deepest power state instead
-over S0ix.
+I hope that this clarifies the current situation. :-)
 
->=20
+>
 > According to PCIe r5.0 sec 5.3.2, the only legal link states for D3hot
 > are L1, L2/L3 Ready.  So if you put a device in D3hot and its link
 > stays in L0, that sounds like a defect.  Is that what happens?
->=20
-> Obviously I'm still confused.  I think it would help if you could
-> describe the problem in terms of the specific PCIe states involved
-> (D0, D3hot, L0, L1, L2, L3, etc) because then the spec would help
-> explain what's happening.
 
-Before that commit, the flow for NVME s0ix was:
+For some devices that's what happens. For some other devices the state
+of the link in D3hot appears to be L1 or L2/L3 Ready (as per the spec)
+and that's when the $subject patch makes a difference.
 
-* Delete IO SQ/CQ
-* Shutdown NVME controller
-* Save PCI registers
-* Go into D3hot
-* Read PMCSR
+The underlying principle is that the energy used by the system while
+suspended depends on the states of all of the PCIe links and the
+deeper the link state, the less energy the system will use.
 
-A functioning drive had the link at L1.2 and NVME power state at PS4
-at this point.
-Resuming looked like this:
+Now, say an NVMe device works in accordance with the spec, so when it
+goes from D0 to D3hot, its PCIe link goes into L1 or L2/L3 Ready.  As
+of 5.3-rc1 or later it will be left in D0 during suspend-to-idle
+(because that's how the NVMe driver works), so its link state will
+depend on whether or not ASPM is enabled for it.  If ASPM is enabled
+for it, the final state of its link will depend on how deep ASPM is
+allowed to go, but if ASPM is not enabled for it, its link will remain
+in L0.
 
-* Restore PCI registers
-* Enable NVME controller
-* Configure NVME controller (IO queues, features, etc).
+This means, however, that by allowing that device to go into D3hot
+when ASPM is not enabled for it, the energy used by the system while
+suspended can be reduced, because the PCIe link of the device will
+then go to L1 or L2/L3 Ready.  That's exactly what the $subject patch
+does.
 
-After that commit the flow for NVME s0ix is:
-
-* Use NVME SetFeatures to put drive into low power mode (PS3 or PS4)
-* Save PCI config register
-* ASPM is used to bring link into L1.2
-
-The resume flow is:
-
-* Restore PCI registers
-
-"Non-functioning" drives consumed too much power from the old flow.
-
-The root cause varied from manufacturer to manufacturer.
-The two I know off hand:
-
-One instance is that when PM status register is read after the device in L1=
-.2
-from D3 it causes link to go to L0 and then stay there.
-
-Another instance I heard drive isn't able to service D3hot request when NVM=
-E
-was already shut down.
-
-
+Is this still not convincing enough?
