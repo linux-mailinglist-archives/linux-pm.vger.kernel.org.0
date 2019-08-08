@@ -2,95 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F9A86263
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 14:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F0D86293
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 15:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732704AbfHHMzY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 08:55:24 -0400
-Received: from foss.arm.com ([217.140.110.172]:32980 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732634AbfHHMzY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Aug 2019 08:55:24 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39A7515A2;
-        Thu,  8 Aug 2019 05:55:24 -0700 (PDT)
-Received: from e107155-lin (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D913F3F694;
-        Thu,  8 Aug 2019 05:55:22 -0700 (PDT)
-Date:   Thu, 8 Aug 2019 13:55:16 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     linux-pm@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAKML <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 6/6] PSCI: cpuidle: Refactor CPU suspend power_state
- parameter handling
-Message-ID: <20190808125516.GA2246@e107155-lin>
-References: <20190722153745.32446-1-lorenzo.pieralisi@arm.com>
- <20190722153745.32446-7-lorenzo.pieralisi@arm.com>
+        id S1726156AbfHHNEt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 09:04:49 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:41607 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732429AbfHHNEt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 09:04:49 -0400
+Received: by mail-vs1-f68.google.com with SMTP id 2so62932757vso.8
+        for <linux-pm@vger.kernel.org>; Thu, 08 Aug 2019 06:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yVPeB+St4GsfV4+rvU+wUWYIPVqFTU7qMjefLsTGDCk=;
+        b=B0zU9BKtNhlSEKo6kKYAsY4u7PN+VPvRfvn+58jakXBjrysCX6tUOR7URHJIAMEm4q
+         RH3G9v787hEUo9uudsxNZ/U5ymkg8YKbZ9X/sFY0l7Chji4cFFfnvMFaNqBl6IEoKvIu
+         ADqhq3f1tsOe6K0RMz6rDuj0VIcE4rjQAalVJeVcjaADUo9YPkBV74qrFtI1gRRuc6RK
+         uExR/PtW0Id9fobcvztepC7ZqnrMal9PRifw+s8uNyVZi4nF4O7ninIYFkmg1JKoOAUL
+         zuc0HscZLEHCXMIkIxEZcOarnQu7QnnEri6lOX/k6qxN94tmfvREhBnWrnF/pA35X1Xk
+         LtfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yVPeB+St4GsfV4+rvU+wUWYIPVqFTU7qMjefLsTGDCk=;
+        b=H1OIYxiKtJSNwgj9pK/a3llnr/l6HRkFUcCs+Z8VSmuwYuQQPHMtpmOgtKkjJV98GG
+         1X3cK1LO8v2dlBiR9CGALGeRA9S11P+pFXw/fAH78wOx1StVDU/08Qh5ujcJ9Ir+nYhM
+         ReblTWMh2ZRUJzGw32iYkHELiY1968tl3gUDn7LdQYXHZwLxh5xiUeZdn5SAMlNeWj9U
+         gvRjPiKuWC+okYctSB8lNA5m9c0+mLEWvv1tIwxoYmU6I0+AE2m7hKsA9w/03xpxewP3
+         eoFRghhz3qZ8PhVTW5642NY/FbcgmMqy99qnFMEm3utAJW7JpRaPd0/QfT/tF3KCWAe8
+         eZ3A==
+X-Gm-Message-State: APjAAAVGtR/16/hKT9b4kGoir+4Mkwk51afE9GW4p+ujfS8XdxkcRtwf
+        fL0edFlMX/W7uaCXw8in6GBEqE7kJvKBjol78TLtWQ==
+X-Google-Smtp-Source: APXvYqwz4sEsZKLGse5oWlgt5eN1TzALbdcsnHo96qnOT8qI6DXH4l2SvV6vxlWxJGY6nX4j8iQr0jJNPuU3PgiNq7U=
+X-Received: by 2002:a67:fb87:: with SMTP id n7mr9548609vsr.9.1565269488210;
+ Thu, 08 Aug 2019 06:04:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190722153745.32446-7-lorenzo.pieralisi@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <cover.1564091601.git.amit.kucheria@linaro.org>
+In-Reply-To: <cover.1564091601.git.amit.kucheria@linaro.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Thu, 8 Aug 2019 18:34:37 +0530
+Message-ID: <CAHLCerP4v_Lz5OGswx7+Z5uHVq_D8G5brq-_M6fOc0K6DK2OKg@mail.gmail.com>
+Subject: Re: [PATCH 00/15] thermal: qcom: tsens: Add interrupt support
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, sivaa@codeaurora.org
+Cc:     Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Brian Masney <masneyb@onstation.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 22, 2019 at 04:37:45PM +0100, Lorenzo Pieralisi wrote:
-> Current PSCI code handles idle state entry through the
-> psci_cpu_suspend_enter() API, that takes an idle state index as a
-> parameter and convert the index into a previously initialized
-> power_state parameter before calling the PSCI.CPU_SUSPEND() with it.
+On Fri, Jul 26, 2019 at 3:48 AM Amit Kucheria <amit.kucheria@linaro.org> wrote:
 >
-> This is unwieldly, since it forces the PSCI firmware layer to keep track
-> of power_state parameter for every idle state so that the
-> index->power_state conversion can be made in the PSCI firmware layer
-> instead of the CPUidle driver implementations.
+> Add interrupt support to TSENS. The first 6 patches are general fixes and
+> cleanups to the driver before interrupt support is introduced.
 >
-> Move the power_state handling out of drivers/firmware/psci
-> into the respective ACPI/DT PSCI CPUidle backends and convert
-> the psci_cpu_suspend_enter() API to get the power_state
-> parameter as input, which makes it closer to its firmware
-> interface PSCI.CPU_SUSPEND() API.
+> This series has been developed against qcs404 and sdm845 and then tested on
+> msm8916. Testing on msm8998 and msm8974 would be appreciated since I don't
+> have hardware handy. Further, I plan to test on msm8996 and also submit to
+> kernelci.
+
+Gentle nudge for reviews. This has now been successfully tested on
+8974 (along with 8916, qcs404, sdm845). Testing on msm8998 would be
+much appreciated.
+
+> I'm sending this out for more review to get help with testing.
 >
-> A notable side effect is that the PSCI ACPI/DT CPUidle backends
-> now can directly handle (and if needed update) power_state
-> parameters before handing them over to the PSCI firmware
-> interface to trigger PSCI.CPU_SUSPEND() calls.
+> Amit Kucheria (15):
+>   drivers: thermal: tsens: Get rid of id field in tsens_sensor
+>   drivers: thermal: tsens: Simplify code flow in tsens_probe
+>   drivers: thermal: tsens: Add __func__ identifier to debug statements
+>   drivers: thermal: tsens: Add debugfs support
+>   arm: dts: msm8974: thermal: Add thermal zones for each sensor
+>   arm64: dts: msm8916: thermal: Fixup HW ids for cpu sensors
+>   dt: thermal: tsens: Document interrupt support in tsens driver
+>   arm64: dts: sdm845: thermal: Add interrupt support
+>   arm64: dts: msm8996: thermal: Add interrupt support
+>   arm64: dts: msm8998: thermal: Add interrupt support
+>   arm64: dts: qcs404: thermal: Add interrupt support
+>   arm64: dts: msm8974: thermal: Add interrupt support
+>   arm64: dts: msm8916: thermal: Add interrupt support
+>   drivers: thermal: tsens: Create function to return sign-extended
+>     temperature
+>   drivers: thermal: tsens: Add interrupt support
 >
-> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-
-> +static __init int psci_cpu_init_idle(unsigned int cpu)
-> +{
-> +	struct device_node *cpu_node;
-> +	int ret;
-> +
-> +	/*
-> +	 * If the PSCI cpu_suspend function hook has not been initialized
-> +	 * idle states must not be enabled, so bail out
-> +	 */
-> +	if (!psci_ops.cpu_suspend)
-> +		return -EOPNOTSUPP;
-> +
-> +	cpu_node = of_get_cpu_node(cpu, NULL);
-
-[nit] You could use of_cpu_device_node_get in linux/of_device.h as
-it may avoid parsing if used later during the boot(i.e. after
-cpu->of_node is populated). I think there's another instance in
-psci_idle_init_cpu
-
---
-Regards,
-Sudeep
+>  .../bindings/thermal/qcom-tsens.txt           |   5 +
+>  arch/arm/boot/dts/qcom-msm8974.dtsi           | 108 +++-
+>  arch/arm64/boot/dts/qcom/msm8916.dtsi         |  26 +-
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi         |  60 +-
+>  arch/arm64/boot/dts/qcom/msm8998.dtsi         |  82 +--
+>  arch/arm64/boot/dts/qcom/qcs404.dtsi          |  42 +-
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi          |  88 +--
+>  drivers/thermal/qcom/tsens-8960.c             |   4 +-
+>  drivers/thermal/qcom/tsens-common.c           | 610 +++++++++++++++++-
+>  drivers/thermal/qcom/tsens-v0_1.c             |  11 +
+>  drivers/thermal/qcom/tsens-v1.c               |  29 +
+>  drivers/thermal/qcom/tsens-v2.c               |  18 +
+>  drivers/thermal/qcom/tsens.c                  |  52 +-
+>  drivers/thermal/qcom/tsens.h                  | 285 +++++++-
+>  14 files changed, 1214 insertions(+), 206 deletions(-)
+>
+> --
+> 2.17.1
+>
