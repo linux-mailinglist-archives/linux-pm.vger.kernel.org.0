@@ -2,371 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB6385A5B
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 08:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FBE85CFE
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 10:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731098AbfHHGNf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 02:13:35 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:46368 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730927AbfHHGNf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 02:13:35 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id C3E576058E; Thu,  8 Aug 2019 06:13:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1565244814;
-        bh=1iME6ppVp1VoWQYGmbZMKD1rVId64moVHK8NrmaA64o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XhinH6f2bKcYl70HjIiGR295AxK7YYKm7ovCplrDYwazs2DgH6FK8FEpVKA1D4/5g
-         0UF4vD7uZ4gYx3HfOKM4d7alrlPO5XagI76uZbdjwcNXQPYoiiaB2sNNNMgYBMOtAV
-         FWvkn+bLhkmWlU8eK+MqVlV2NkgLTZI7xDnxDx7M=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from mkshah-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mkshah@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6B685608FF;
-        Thu,  8 Aug 2019 06:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1565244811;
-        bh=1iME6ppVp1VoWQYGmbZMKD1rVId64moVHK8NrmaA64o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AiqLC4IzjXJn6gtQBKHp9ZyzjF9qFQPmwd6pZlS3//Q6TvGXrXBFLR1Ky0VWNiVVK
-         SBf7j4p83EHmM1d3w+/Ch5TtwxpRDe7dRM4gAESYiacLMudKW0RoQddGTh7n7YLoZK
-         jwZKJLmsUDMHaXktrpmTFz9/kanOxgz+InB+4SVk=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6B685608FF
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
-From:   Maulik Shah <mkshah@codeaurora.org>
-To:     andy.gross@linaro.org, david.brown@linaro.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        bjorn.andersson@linaro.org, evgreen@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org, rnayak@codeaurora.org,
-        ilina@codeaurora.org, lsrao@codeaurora.org, mkshah@codeaurora.org,
-        Mahesh Sivasubramanian <msivasub@codeaurora.org>
-Subject: [PATCH 2/2] drivers: qcom: Add SoC sleep stats driver
-Date:   Thu,  8 Aug 2019 11:42:28 +0530
-Message-Id: <20190808061228.16573-3-mkshah@codeaurora.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190808061228.16573-1-mkshah@codeaurora.org>
-References: <20190808061228.16573-1-mkshah@codeaurora.org>
+        id S1730994AbfHHIgl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 04:36:41 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:46339 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbfHHIgl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 04:36:41 -0400
+Received: from 79.184.254.29.ipv4.supernova.orange.pl (79.184.254.29) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
+ id 20bffa7542b3d3cc; Thu, 8 Aug 2019 10:36:38 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     linux-nvme <linux-nvme@lists.infradead.org>
+Cc:     Keith Busch <kbusch@kernel.org>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: [PATCH] nvme-pci: Allow PCI bus-level PM to be used if ASPM is disabled
+Date:   Thu, 08 Aug 2019 10:36:37 +0200
+Message-ID: <2583975.4sIyE3leJj@kreacher>
+In-Reply-To: <20190731221956.GB15795@localhost.localdomain>
+References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM> <CAJZ5v0iDQ4=kTUgW94tKGt7oJzA_3uVU_M6HAMbNCRXwp_do8A@mail.gmail.com> <47415939.KV5G6iaeJG@kreacher> <20190730144134.GA12844@localhost.localdomain> <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM> <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com> <20190730191934.GD13948@localhost.localdomain> <7d3e0b8ba1444194a153c93faa1cabb3@AUSX13MPC105.AMER.DELL.COM> <20190730213114.GK13948@localhost.localdomain> <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com> <20190731221956.GB15795@localhost.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Qualcomm Technologies Inc's (QTI) chipsets support SoC level
-low power modes. Statistics for SoC sleep stats are produced
-by remote processor.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Lets's add a driver to read the shared memory exported by the
-remote processor and export to sysfs.
+One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
+host managed power state for suspend") was adding a pci_save_state()
+call to nvme_suspend() in order to prevent the PCI bus-level PM from
+being applied to the suspended NVMe devices, but if ASPM is not
+enabled for the target NVMe device, that causes its PCIe link to stay
+up and the platform may not be able to get into its optimum low-power
+state because of that.
 
-Signed-off-by: Mahesh Sivasubramanian <msivasub@codeaurora.org>
-Signed-off-by: Lina Iyer <ilina@codeaurora.org>
-Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
+For example, if ASPM is disabled for the NVMe drive (PC401 NVMe SK
+hynix 256GB) in my Dell XPS13 9380, leaving it in D0 during
+suspend-to-idle prevents the SoC from reaching package idle states
+deeper than PC3, which is way insufficient for system suspend.
+
+To address this shortcoming, make nvme_suspend() check if ASPM is
+enabled for the target device and fall back to full device shutdown
+and PCI bus-level PM if that is not the case.
+
+Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for suspend")
+Link: https://lore.kernel.org/linux-pm/2763495.NmdaWeg79L@kreacher/T/#t
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/soc/qcom/Kconfig           |   9 ++
- drivers/soc/qcom/Makefile          |   1 +
- drivers/soc/qcom/soc_sleep_stats.c | 249 +++++++++++++++++++++++++++++
- 3 files changed, 259 insertions(+)
- create mode 100644 drivers/soc/qcom/soc_sleep_stats.c
 
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index 880cf0290962..7aac24430e99 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -163,6 +163,15 @@ config QCOM_SMSM
- 	  Say yes here to support the Qualcomm Shared Memory State Machine.
- 	  The state machine is represented by bits in shared memory.
+This is an update of the following patch:
+
+https://patchwork.kernel.org/patch/11081791/
+
+going with the subject matching the changes in the patch.
+
+This also addresses style-related comments from Christoph and follows the
+Keith's advice to use pci_upstream_bridge() to get to the upstream bridge
+of the device.
+
+Thanks!
+
+---
+ drivers/nvme/host/pci.c |   15 +++++++++++----
+ drivers/pci/pcie/aspm.c |   20 ++++++++++++++++++++
+ include/linux/pci.h     |    2 ++
+ 3 files changed, 33 insertions(+), 4 deletions(-)
+
+Index: linux-pm/drivers/nvme/host/pci.c
+===================================================================
+--- linux-pm.orig/drivers/nvme/host/pci.c
++++ linux-pm/drivers/nvme/host/pci.c
+@@ -2846,7 +2846,7 @@ static int nvme_resume(struct device *de
+ 	struct nvme_dev *ndev = pci_get_drvdata(to_pci_dev(dev));
+ 	struct nvme_ctrl *ctrl = &ndev->ctrl;
  
-+config QCOM_SOC_SLEEP_STATS
-+	tristate "Qualcomm Technologies Inc. (QTI) SoC sleep stats driver"
-+	depends on ARCH_QCOM
-+	help
-+	  Qualcomm Technologies Inc. (QTI) SoC sleep stats driver to read
-+	  the shared memory exported by the remote processor related to
-+	  various SoC level low power modes statistics and export to sysfs
-+	  interface.
+-	if (pm_resume_via_firmware() || !ctrl->npss ||
++	if (ndev->last_ps == U32_MAX ||
+ 	    nvme_set_power_state(ctrl, ndev->last_ps) != 0)
+ 		nvme_reset_ctrl(ctrl);
+ 	return 0;
+@@ -2859,6 +2859,8 @@ static int nvme_suspend(struct device *d
+ 	struct nvme_ctrl *ctrl = &ndev->ctrl;
+ 	int ret = -EBUSY;
+ 
++	ndev->last_ps = U32_MAX;
 +
- config QCOM_WCNSS_CTRL
- 	tristate "Qualcomm WCNSS control driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index ffe519b0cb66..1530e0e73075 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_QCOM_SMEM) +=	smem.o
- obj-$(CONFIG_QCOM_SMEM_STATE) += smem_state.o
- obj-$(CONFIG_QCOM_SMP2P)	+= smp2p.o
- obj-$(CONFIG_QCOM_SMSM)	+= smsm.o
-+obj-$(CONFIG_QCOM_SOC_SLEEP_STATS)	+= soc_sleep_stats.o
- obj-$(CONFIG_QCOM_WCNSS_CTRL) += wcnss_ctrl.o
- obj-$(CONFIG_QCOM_APR) += apr.o
- obj-$(CONFIG_QCOM_LLCC) += llcc-slice.o
-diff --git a/drivers/soc/qcom/soc_sleep_stats.c b/drivers/soc/qcom/soc_sleep_stats.c
-new file mode 100644
-index 000000000000..5b95d68512ec
---- /dev/null
-+++ b/drivers/soc/qcom/soc_sleep_stats.c
-@@ -0,0 +1,249 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
+ 	/*
+ 	 * The platform does not remove power for a kernel managed suspend so
+ 	 * use host managed nvme power settings for lowest idle power if
+@@ -2866,8 +2868,14 @@ static int nvme_suspend(struct device *d
+ 	 * shutdown.  But if the firmware is involved after the suspend or the
+ 	 * device does not support any non-default power states, shut down the
+ 	 * device fully.
++	 *
++	 * If ASPM is not enabled for the device, shut down the device and allow
++	 * the PCI bus layer to put it into D3 in order to take the PCIe link
++	 * down, so as to allow the platform to achieve its minimum low-power
++	 * state (which may not be possible if the link is up).
+ 	 */
+-	if (pm_suspend_via_firmware() || !ctrl->npss) {
++	if (pm_suspend_via_firmware() || !ctrl->npss ||
++	    !pcie_aspm_enabled(pdev)) {
+ 		nvme_dev_disable(ndev, true);
+ 		return 0;
+ 	}
+@@ -2880,9 +2888,8 @@ static int nvme_suspend(struct device *d
+ 	    ctrl->state != NVME_CTRL_ADMIN_ONLY)
+ 		goto unfreeze;
+ 
+-	ndev->last_ps = 0;
+ 	ret = nvme_get_power_state(ctrl, &ndev->last_ps);
+-	if (ret < 0)
++	if (ret < 0 || ndev->last_ps == U32_MAX)
+ 		goto unfreeze;
+ 
+ 	ret = nvme_set_power_state(ctrl, ctrl->npss);
+Index: linux-pm/drivers/pci/pcie/aspm.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pcie/aspm.c
++++ linux-pm/drivers/pci/pcie/aspm.c
+@@ -1170,6 +1170,26 @@ static int pcie_aspm_get_policy(char *bu
+ module_param_call(policy, pcie_aspm_set_policy, pcie_aspm_get_policy,
+ 	NULL, 0644);
+ 
 +/*
-+ * Copyright (c) 2011-2019, The Linux Foundation. All rights reserved.
++ * pcie_aspm_enabled - Return the mask of enabled ASPM link states.
++ * @pci_device: Target device.
 + */
-+
-+#define pr_fmt(fmt) "%s: " fmt, __func__
-+
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/uaccess.h>
-+
-+#define ARCH_TIMER_FREQ	19200000
-+
-+struct stats_config {
-+	u32 offset_addr;
-+	u32 num_records;
-+	bool appended_stats_avail;
-+};
-+
-+struct soc_sleep_stats_data {
-+	phys_addr_t stats_base;
-+	resource_size_t stats_size;
-+	const struct stats_config *config;
-+	struct kobject *kobj;
-+	struct kobj_attribute ka;
-+	struct mutex lock;
-+};
-+
-+struct entry {
-+	__le32 stat_type;
-+	__le32 count;
-+	__le64 last_entered_at;
-+	__le64 last_exited_at;
-+	__le64 accumulated;
-+};
-+
-+struct appended_entry {
-+	__le32 client_votes;
-+	__le32 reserved[3];
-+};
-+
-+struct stats_entry {
-+	struct entry entry;
-+	struct appended_entry appended_entry;
-+};
-+
-+static inline u64 get_time_in_sec(u64 counter)
++u32 pcie_aspm_enabled(struct pci_dev *pci_device)
 +{
-+	do_div(counter, ARCH_TIMER_FREQ);
++	struct pci_dev *bridge = pci_upstream_bridge(pci_device);
++	u32 ret;
 +
-+	return counter;
-+}
++	if (!bridge)
++		return 0;
 +
-+static inline ssize_t append_data_to_buf(char *buf, int length,
-+					 struct stats_entry *data)
-+{
-+	char stat_type[5] = {0};
-+
-+	memcpy(stat_type, &data->entry.stat_type, sizeof(u32));
-+
-+	return scnprintf(buf, length,
-+			 "%s\n"
-+			 "\tCount                    :%u\n"
-+			 "\tLast Entered At(sec)     :%llu\n"
-+			 "\tLast Exited At(sec)      :%llu\n"
-+			 "\tAccumulated Duration(sec):%llu\n"
-+			 "\tClient Votes             :0x%x\n\n",
-+			 stat_type, data->entry.count,
-+			 data->entry.last_entered_at,
-+			 data->entry.last_exited_at,
-+			 data->entry.accumulated,
-+			 data->appended_entry.client_votes);
-+}
-+
-+static ssize_t stats_show(struct kobject *obj, struct kobj_attribute *attr,
-+			  char *buf)
-+{
-+	void __iomem *reg;
-+	int i;
-+	uint32_t offset;
-+	ssize_t length = 0, op_length;
-+	struct stats_entry data;
-+	struct entry *e = &data.entry;
-+	struct appended_entry *ae = &data.appended_entry;
-+	struct soc_sleep_stats_data *drv = container_of(attr,
-+					   struct soc_sleep_stats_data, ka);
-+
-+	mutex_lock(&drv->lock);
-+	reg = ioremap_nocache(drv->stats_base, drv->stats_size);
-+	if (!reg) {
-+		pr_err("io remap failed\n");
-+		mutex_unlock(&drv->lock);
-+		return length;
-+	}
-+
-+	for (i = 0; i < drv->config->num_records; i++) {
-+		offset = offsetof(struct entry, stat_type);
-+		e->stat_type = le32_to_cpu(readl_relaxed(reg + offset));
-+
-+		offset = offsetof(struct entry, count);
-+		e->count = le32_to_cpu(readl_relaxed(reg + offset));
-+
-+		offset = offsetof(struct entry, last_entered_at);
-+		e->last_entered_at = le64_to_cpu(readq_relaxed(reg + offset));
-+
-+		offset = offsetof(struct entry, last_exited_at);
-+		e->last_exited_at = le64_to_cpu(readq_relaxed(reg + offset));
-+
-+		offset = offsetof(struct entry, last_exited_at);
-+		e->accumulated = le64_to_cpu(readq_relaxed(reg + offset));
-+
-+		e->last_entered_at = get_time_in_sec(e->last_entered_at);
-+		e->last_exited_at = get_time_in_sec(e->last_exited_at);
-+		e->accumulated = get_time_in_sec(e->accumulated);
-+
-+		reg += sizeof(struct entry);
-+
-+		if (drv->config->appended_stats_avail) {
-+			offset = offsetof(struct appended_entry, client_votes);
-+			ae->client_votes = le32_to_cpu(readl_relaxed(reg +
-+								     offset));
-+
-+			reg += sizeof(struct appended_entry);
-+		} else
-+			ae->client_votes = 0;
-+
-+		op_length = append_data_to_buf(buf + length, PAGE_SIZE - length,
-+					       &data);
-+		if (op_length >= PAGE_SIZE - length)
-+			goto exit;
-+
-+		length += op_length;
-+	}
-+exit:
-+	iounmap(reg);
-+	mutex_unlock(&drv->lock);
-+	return length;
-+}
-+
-+static int soc_sleep_stats_create_sysfs(struct platform_device *pdev,
-+					struct soc_sleep_stats_data *drv)
-+{
-+	int ret = -ENOMEM;
-+
-+	drv->kobj = kobject_create_and_add("soc_sleep", power_kobj);
-+	if (!drv->kobj)
-+		goto fail;
-+
-+	sysfs_attr_init(drv->ka.attr);
-+	drv->ka.attr.mode = 0444;
-+	drv->ka.attr.name = "stats";
-+	drv->ka.show = stats_show;
-+
-+	ret = sysfs_create_file(drv->kobj, &drv->ka.attr);
-+	if (ret)
-+		goto fail;
-+
-+	platform_set_drvdata(pdev, drv);
-+fail:
-+	return ret;
-+}
-+
-+static const struct stats_config rpm_data = {
-+	.offset_addr = 0x14,
-+	.num_records = 2,
-+	.appended_stats_avail = true,
-+};
-+
-+static const struct stats_config rpmh_data = {
-+	.offset_addr = 0x4,
-+	.num_records = 3,
-+	.appended_stats_avail = false,
-+};
-+
-+static const struct of_device_id soc_sleep_stats_table[] = {
-+	{ .compatible = "qcom,rpm-sleep-stats", .data = &rpm_data},
-+	{ .compatible = "qcom,rpmh-sleep-stats", .data = &rpmh_data},
-+	{ },
-+};
-+
-+static int soc_sleep_stats_probe(struct platform_device *pdev)
-+{
-+	const struct of_device_id *match;
-+	struct soc_sleep_stats_data *drv;
-+	struct resource *res;
-+	void __iomem *offset_addr;
-+	int ret;
-+
-+	drv = devm_kzalloc(&pdev->dev, sizeof(*drv), GFP_KERNEL);
-+	if (!drv)
-+		return -ENOMEM;
-+
-+	match = of_match_node(soc_sleep_stats_table, pdev->dev.of_node);
-+	if (!match)
-+		return -ENODEV;
-+
-+	drv->config = match->data;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res)
-+		return PTR_ERR(res);
-+
-+	offset_addr = ioremap_nocache(res->start + drv->config->offset_addr,
-+				      sizeof(u32));
-+	if (IS_ERR(offset_addr))
-+		return PTR_ERR(offset_addr);
-+
-+	drv->stats_base = res->start | readl_relaxed(offset_addr);
-+	drv->stats_size = resource_size(res);
-+	iounmap(offset_addr);
-+	mutex_init(&drv->lock);
-+
-+	ret = soc_sleep_stats_create_sysfs(pdev, drv);
-+	if (ret)
-+		pr_info("Failed to create sysfs interface\n");
++	mutex_lock(&aspm_lock);
++	ret = bridge->link_state ? bridge->link_state->aspm_enabled : 0;
++	mutex_unlock(&aspm_lock);
 +
 +	return ret;
 +}
 +
-+static int soc_sleep_stats_remove(struct platform_device *pdev)
-+{
-+	struct soc_sleep_stats_data *drv = platform_get_drvdata(pdev);
 +
-+	sysfs_remove_file(drv->kobj, &drv->ka.attr);
-+	kobject_put(drv->kobj);
-+	platform_set_drvdata(pdev, NULL);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver soc_sleep_stats_driver = {
-+	.probe = soc_sleep_stats_probe,
-+	.remove = soc_sleep_stats_remove,
-+	.driver = {
-+		.name = "soc_sleep_stats",
-+		.of_match_table = soc_sleep_stats_table,
-+	},
-+};
-+module_platform_driver(soc_sleep_stats_driver);
-+
-+MODULE_DESCRIPTION("Qualcomm Technologies, Inc. SoC sleep stats driver");
-+MODULE_LICENSE("GPL v2");
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by The Linux Foundation.
+ #ifdef CONFIG_PCIEASPM_DEBUG
+ static ssize_t link_state_show(struct device *dev,
+ 		struct device_attribute *attr,
+Index: linux-pm/include/linux/pci.h
+===================================================================
+--- linux-pm.orig/include/linux/pci.h
++++ linux-pm/include/linux/pci.h
+@@ -1567,8 +1567,10 @@ extern bool pcie_ports_native;
+ 
+ #ifdef CONFIG_PCIEASPM
+ bool pcie_aspm_support_enabled(void);
++u32 pcie_aspm_enabled(struct pci_dev *pci_device);
+ #else
+ static inline bool pcie_aspm_support_enabled(void) { return false; }
++static inline u32 pcie_aspm_enabled(struct pci_dev *pci_device) { return 0; }
+ #endif
+ 
+ #ifdef CONFIG_PCIEAER
+
+
 
