@@ -2,132 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA11A86CD9
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 23:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BE886CFD
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 00:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732708AbfHHV64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 17:58:56 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:50579 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbfHHV64 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 17:58:56 -0400
-Received: from 79.184.254.29.ipv4.supernova.orange.pl (79.184.254.29) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
- id 198204becd846193; Thu, 8 Aug 2019 23:58:52 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     linux-nvme <linux-nvme@lists.infradead.org>
-Cc:     Keith Busch <kbusch@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
+        id S2404581AbfHHWQU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 18:16:20 -0400
+Received: from mga06.intel.com ([134.134.136.31]:33795 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725535AbfHHWQU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Aug 2019 18:16:20 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 15:16:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,363,1559545200"; 
+   d="scan'208";a="165834000"
+Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
+  by orsmga007.jf.intel.com with ESMTP; 08 Aug 2019 15:16:18 -0700
+Date:   Thu, 8 Aug 2019 16:13:53 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-nvme <linux-nvme@lists.infradead.org>,
         Sagi Grimberg <sagi@grimberg.me>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: [PATCH v3 2/2] nvme-pci: Allow PCI bus-level PM to be used if ASPM is disabled
-Date:   Thu, 08 Aug 2019 23:58:38 +0200
-Message-ID: <4856352.pThfM6cRGE@kreacher>
-In-Reply-To: <2184247.yL3mcj2FRQ@kreacher>
-References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM> <20190731221956.GB15795@localhost.localdomain> <2184247.yL3mcj2FRQ@kreacher>
+        Keith Busch <keith.busch@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Rajat Jain <rajatja@google.com>, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v3 0/2] nvme-pci: Allow PCI bus-level PM to be used if
+ ASPM is disabled
+Message-ID: <20190808221353.GA27570@localhost.localdomain>
+References: <47415939.KV5G6iaeJG@kreacher>
+ <20190730144134.GA12844@localhost.localdomain>
+ <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
+ <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com>
+ <20190730191934.GD13948@localhost.localdomain>
+ <7d3e0b8ba1444194a153c93faa1cabb3@AUSX13MPC105.AMER.DELL.COM>
+ <20190730213114.GK13948@localhost.localdomain>
+ <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com>
+ <20190731221956.GB15795@localhost.localdomain>
+ <2184247.yL3mcj2FRQ@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2184247.yL3mcj2FRQ@kreacher>
+User-Agent: Mutt/1.9.1 (2017-09-22)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The v3 series looks good to me.
 
-One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
-host managed power state for suspend") was adding a pci_save_state()
-call to nvme_suspend() so as to instruct the PCI bus type to leave
-devices handled by the nvme driver in D0 during suspend-to-idle.
-That was done with the assumption that ASPM would transition the
-device's PCIe link into a low-power state when the device became
-inactive.  However, if ASPM is disabled for the device, its PCIe
-link will stay in L0 and in that case commit d916b1be94b6 is likely
-to cause the energy used by the system while suspended to increase.
+Reviewed-by: Keith Busch <keith.busch@intel.com>
 
-Namely, if the device in question works in accordance with the PCIe
-specification, putting it into D3hot causes its PCIe link to go to
-L1 or L2/L3 Ready, which is lower-power than L0.  Since the energy
-used by the system while suspended depends on the state of its PCIe
-link (as a general rule, the lower-power the state of the link, the
-less energy the system will use), putting the device into D3hot
-during suspend-to-idle should be more energy-efficient that leaving
-it in D0 with disabled ASPM.
+Bjorn,
 
-For this reason, avoid leaving NVMe devices with disabled ASPM in D0
-during suspend-to-idle.  Instead, shut them down entirely and let
-the PCI bus type put them into D3.
+If you're okay with the series, we can either take it through nvme,
+or you can feel free to apply through pci, whichever you prefer.
 
-Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for suspend")
-Link: https://lore.kernel.org/linux-pm/2763495.NmdaWeg79L@kreacher/T/#t
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v2 -> v3:
-  * Modify the changelog to describe the rationale for this patch in
-    a less confusing and more convincing way.
-
--> v2:
-  * Move the PCI/PCIe ASPM changes to a separate patch.
-  * Do not add a redundant ndev->last_ps == U32_MAX check in nvme_suspend().
-
----
- drivers/nvme/host/pci.c |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-Index: linux-pm/drivers/nvme/host/pci.c
-===================================================================
---- linux-pm.orig/drivers/nvme/host/pci.c
-+++ linux-pm/drivers/nvme/host/pci.c
-@@ -2846,7 +2846,7 @@ static int nvme_resume(struct device *de
- 	struct nvme_dev *ndev = pci_get_drvdata(to_pci_dev(dev));
- 	struct nvme_ctrl *ctrl = &ndev->ctrl;
- 
--	if (pm_resume_via_firmware() || !ctrl->npss ||
-+	if (ndev->last_ps == U32_MAX ||
- 	    nvme_set_power_state(ctrl, ndev->last_ps) != 0)
- 		nvme_reset_ctrl(ctrl);
- 	return 0;
-@@ -2859,6 +2859,8 @@ static int nvme_suspend(struct device *d
- 	struct nvme_ctrl *ctrl = &ndev->ctrl;
- 	int ret = -EBUSY;
- 
-+	ndev->last_ps = U32_MAX;
-+
- 	/*
- 	 * The platform does not remove power for a kernel managed suspend so
- 	 * use host managed nvme power settings for lowest idle power if
-@@ -2866,8 +2868,14 @@ static int nvme_suspend(struct device *d
- 	 * shutdown.  But if the firmware is involved after the suspend or the
- 	 * device does not support any non-default power states, shut down the
- 	 * device fully.
-+	 *
-+	 * If ASPM is not enabled for the device, shut down the device and allow
-+	 * the PCI bus layer to put it into D3 in order to take the PCIe link
-+	 * down, so as to allow the platform to achieve its minimum low-power
-+	 * state (which may not be possible if the link is up).
- 	 */
--	if (pm_suspend_via_firmware() || !ctrl->npss) {
-+	if (pm_suspend_via_firmware() || !ctrl->npss ||
-+	    !pcie_aspm_enabled(pdev)) {
- 		nvme_dev_disable(ndev, true);
- 		return 0;
- 	}
-@@ -2880,7 +2888,6 @@ static int nvme_suspend(struct device *d
- 	    ctrl->state != NVME_CTRL_ADMIN_ONLY)
- 		goto unfreeze;
- 
--	ndev->last_ps = 0;
- 	ret = nvme_get_power_state(ctrl, &ndev->last_ps);
- 	if (ret < 0)
- 		goto unfreeze;
-
-
-
+Thanks,
+Keith
