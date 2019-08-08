@@ -2,68 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBB0866D0
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 18:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9442866DA
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 18:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404093AbfHHQSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 12:18:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:35660 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725535AbfHHQSD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Aug 2019 12:18:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7AD301596;
-        Thu,  8 Aug 2019 09:18:02 -0700 (PDT)
-Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 52AEC3F706;
-        Thu,  8 Aug 2019 09:18:01 -0700 (PDT)
-Subject: Re: [PATCH] sched/cpufreq: Align trace event behavior of fast
- switching
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20190807153340.11516-1-douglas.raillard@arm.com>
- <CAJZ5v0gqqoOzjUMhUgqKzaj8tCegddJphr+MHj5HD2_VAc1QYQ@mail.gmail.com>
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Organization: ARM
-Message-ID: <433793e3-14c4-9f3b-d503-76471a98b0af@arm.com>
-Date:   Thu, 8 Aug 2019 17:18:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1730291AbfHHQUI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 12:20:08 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45555 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732344AbfHHQUH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 12:20:07 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r1so44365761pfq.12
+        for <linux-pm@vger.kernel.org>; Thu, 08 Aug 2019 09:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:from:cc:to:user-agent:date;
+        bh=rpT1/n0MtDKR55gc7Xe/1ERiGiwTe4vZMPU9Bfy10FI=;
+        b=Y7o7tDsMydMyUuzGRnboQKe/5DZGF0GAAcTEKQ3TnqBW9YBJW+NKiPXSdtZCCYObN8
+         AtJrE90vxGnVWdwPAxzaJhl9IPp4pUP4BUo49u+TH7K9mJ7N7xJ5Ne1r/mTSLgfDqOqe
+         KMeAzvYaE5+sipQTmnJqT9BRA14XUcjFtqt14=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
+         :user-agent:date;
+        bh=rpT1/n0MtDKR55gc7Xe/1ERiGiwTe4vZMPU9Bfy10FI=;
+        b=BytBuIllqP5ol5MTZnuOBjDelNjVQG4hF1iA9IEk0RK6mp5u4n2jtXxfo4BQdsIQhB
+         1Mxs4C1ePf9J2EcjPpNNe/lOb+WQ2Cc9DTLFySQT1oTegPiVGBewuJjYEjaKBbTnexv3
+         bo7GLceJg6UndJjlLV+J8VWtuiu+3f4eE1Gwz15DWnrJiCfsiX3hziCSHAI4kOiTDKxs
+         7Iu4wMXuzMJ1oZzgIsGS0h5dLWc5FXYMfK33gdJyenWOdV9BkwaPBEAtCGFg7xBJ0v6p
+         C4PhxEXt5iZwEkY4sFlAwVa7Vp5//fDmXlAg4j9xRROmng1uifD2yq8E9DN6xGjPwmkr
+         iAbA==
+X-Gm-Message-State: APjAAAUWv8VN25mlPYSgpz2r6utGAOidEyMGnis1fkLx2Jlk8WBJVFgP
+        aF6wnPtuVdGf/yIB4RcfsxsI5A==
+X-Google-Smtp-Source: APXvYqwrRIJFaN3/EOnl4mURCxYQeFmoB2bV4p9L6PhJ6mv+tvNN2NH1QgEbMDZXoHTTiaqtDYC/uQ==
+X-Received: by 2002:a17:90a:c58e:: with SMTP id l14mr4875532pjt.104.1565281206991;
+        Thu, 08 Aug 2019 09:20:06 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id j6sm3065998pjd.19.2019.08.08.09.20.06
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 08 Aug 2019 09:20:06 -0700 (PDT)
+Message-ID: <5d4c4bb6.1c69fb81.db640.7518@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0gqqoOzjUMhUgqKzaj8tCegddJphr+MHj5HD2_VAc1QYQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190808061228.16573-2-mkshah@codeaurora.org>
+References: <20190808061228.16573-1-mkshah@codeaurora.org> <20190808061228.16573-2-mkshah@codeaurora.org>
+Subject: Re: [PATCH 1/2] dt-bindings: Introduce soc sleep stats bindings for Qualcomm SoCs
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
+        lsrao@codeaurora.org, mkshah@codeaurora.org,
+        devicetree@vger.kernel.org,
+        Mahesh Sivasubramanian <msivasub@codeaurora.org>
+To:     Maulik Shah <mkshah@codeaurora.org>, andy.gross@linaro.org,
+        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
+User-Agent: alot/0.8.1
+Date:   Thu, 08 Aug 2019 09:20:04 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Quoting Maulik Shah (2019-08-07 23:12:27)
+> Add device binding documentation for Qualcomm Technology Inc's (QTI)
+> SoC sleep stats driver. The driver is used for displaying SoC sleep
+> statistic maintained by Always On Processor or Resource Power Manager.
+>=20
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Mahesh Sivasubramanian <msivasub@codeaurora.org>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
 
-On 8/7/19 9:40 PM, Rafael J. Wysocki wrote:
-> On Wed, Aug 7, 2019 at 5:34 PM Douglas RAILLARD
-> <douglas.raillard@arm.com> wrote:
->>
->> Fast switching path only emits an event for the CPU of interest, whereas the
->> regular path emits an event for all the CPUs that had their frequency changed,
->> i.e. all the CPUs sharing the same policy.
->>
->> With the current behavior, looking at cpu_frequency event for a given CPU that
->> is using the fast switching path will not give the correct frequency signal.
-> 
-> Do you actually have any systems where that is a problem?  If so, then
-> what are they?
-> 
+Your SoB chain is odd. The author is Mahesh? Otherwise, use the
+Co-Developed-by tag.
 
-That happens on Google Pixel 3 smartphone, which uses this cpufreq driver: drivers/cpufreq/qcom-cpufreq-hw.c.
+> ---
+>  .../bindings/soc/qcom/soc-sleep-stats.txt     | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/soc-sleep-=
+stats.txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/soc-sleep-stats.t=
+xt b/Documentation/devicetree/bindings/soc/qcom/soc-sleep-stats.txt
+> new file mode 100644
+> index 000000000000..ee40687ded34
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/soc-sleep-stats.txt
+> @@ -0,0 +1,36 @@
+> +* SoC Sleep Stats
+> +
+> +Always On Processor/Resource Power Manager maintains statistics of the S=
+oC
+> +sleep modes involving lowering or powering down of the backbone rails - =
+Cx
 
-[1] git clone https://git.linaro.org/people/amit.pundir/linux.git -b blueline-mainline-tracking
+What is a 'backbone' rail?
 
-Thanks,
-Douglas
+> +and Mx and the oscillator clock, XO.
+
+Drop the comma? XO is the oscillator clock.
+
+> +
+> +Statistics includes SoC sleep mode type, number of times low power mode =
+were
+> +entered, time of last entry, time of last exit and accumulated sleep dur=
+ation.
+> +SoC Sleep Stats driver provides sysfs interface to display this informat=
+ion.
+
+Can this document be YAML? Then it can be validated.
+
+> +
+> +PROPERTIES
+> +
+> +- compatible:
+> +       Usage: required
+> +       Value type: <string>
+> +       Definition: Should be "qcom,rpmh-sleep-stats" or "qcom,rpm-sleep-=
+stats".
+> +
+> +- reg:
+> +       Usage: required
+> +       Value type: <prop-encoded-array>
+> +       Definition: The base address on the Always On Processor or Resour=
+ce Power
+> +                   Manager from where the stats are read.
+> +
+> +EXAMPLE 1:
+> +
+> +       rpmh_sleep_stats: soc-sleep-stats@c3f0000 {
+> +               compatible =3D "qcom,rpmh-sleep-stats";
+> +               reg =3D <0 0xc3f0000 0 0x400>;
+
+Is this memory region in DDR? Or some specific IMEM location? I wonder
+if it would be better to just have a pointer from the RPM node to this
+memory region and then populate some stats if so.
+
+> +       };
+> +
