@@ -2,92 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 565B48663A
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 17:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5FA86697
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 18:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403886AbfHHPuI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 11:50:08 -0400
-Received: from mga02.intel.com ([134.134.136.20]:4859 "EHLO mga02.intel.com"
+        id S1732698AbfHHQEX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 12:04:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:35484 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403889AbfHHPuI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Aug 2019 11:50:08 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 08:50:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,362,1559545200"; 
-   d="scan'208";a="326351409"
-Received: from rbhardw1-mobl.gar.corp.intel.com (HELO [10.252.86.4]) ([10.252.86.4])
-  by orsmga004.jf.intel.com with ESMTP; 08 Aug 2019 08:50:04 -0700
-Subject: Re: [PATCH] x86/cpu: Add Elkhart Lake to Intel family
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>, x86@kernel.org,
-        bp@suse.de, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20190808101045.19239-1-rajneesh.bhardwaj@linux.intel.com>
- <9ea08a94-a3e0-0e89-401b-a240e1bce7fa@linux.intel.com>
- <20190808141427.GI2369@hirez.programming.kicks-ass.net>
- <599ca9b6-442a-3764-e117-0311f995bb51@linux.intel.com>
- <20190808152326.GL2369@hirez.programming.kicks-ass.net>
- <20190808153144.GM2369@hirez.programming.kicks-ass.net>
-From:   "Bhardwaj, Rajneesh" <rajneesh.bhardwaj@linux.intel.com>
-Message-ID: <76d459fd-5d23-6d1a-1d2d-30205ec5a518@linux.intel.com>
-Date:   Thu, 8 Aug 2019 21:20:03 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1732845AbfHHQEX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Aug 2019 12:04:23 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6ACEB1684;
+        Thu,  8 Aug 2019 09:04:22 -0700 (PDT)
+Received: from e107155-lin (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 169B13F706;
+        Thu,  8 Aug 2019 09:04:20 -0700 (PDT)
+Date:   Thu, 8 Aug 2019 17:04:14 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LAKML <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 6/6] PSCI: cpuidle: Refactor CPU suspend power_state
+ parameter handling
+Message-ID: <20190808160414.GA19233@e107155-lin>
+References: <20190722153745.32446-1-lorenzo.pieralisi@arm.com>
+ <20190722153745.32446-7-lorenzo.pieralisi@arm.com>
+ <20190808125516.GA2246@e107155-lin>
+ <CAPDyKFqHHwq=3XhSH_=uu5QoFkP3VYJ+2h7ENG5DNs-YzM6bNQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190808153144.GM2369@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqHHwq=3XhSH_=uu5QoFkP3VYJ+2h7ENG5DNs-YzM6bNQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 08-Aug-19 9:01 PM, Peter Zijlstra wrote:
-> On Thu, Aug 08, 2019 at 05:23:26PM +0200, Peter Zijlstra wrote:
->> On Thu, Aug 08, 2019 at 08:40:49PM +0530, Bhardwaj, Rajneesh wrote:
->>> On 08-Aug-19 7:44 PM, Peter Zijlstra wrote:
->>>> On Thu, Aug 08, 2019 at 09:19:23AM -0400, Liang, Kan wrote:
->>>>> Usually, we should use the code name of microarchitecture for the name of
->>>>> CPUID.
->>>> Oh yes, very much. A quick google seems to suggest these are in fact
->>>> Tremont cores. So then the naming should be:
->>>>
->>>>     INTEL_FAM6_ATOM_TREMONT_xxx
->>> Sure, I feel INTEL_FAM6_ATOM_TREMONT_ELKHART_LAKE may be too long so is
->>> INTEL_FAM6_ATOM_TREMONT_PLUS a better name?
->> Neither. WikiChip says it is the successor to Denverton, which is a
->> server chip. If this is true then:
->>
->> #define INTEL_FAM6_ATOM_TREMONT_X	0x.. /* Elkhart Lake */
->>
->> is what it should be.
-> Of course we already have a TREMONT_X :-/ WikiChip is also confusing me
-> further by stating that Jacobsville is the platform that carries the
-> Elkhart Lake core, so they should be the bloody same chip.
+On Thu, Aug 08, 2019 at 05:29:24PM +0200, Ulf Hansson wrote:
+> On Thu, 8 Aug 2019 at 14:55, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Mon, Jul 22, 2019 at 04:37:45PM +0100, Lorenzo Pieralisi wrote:
+> > > Current PSCI code handles idle state entry through the
+> > > psci_cpu_suspend_enter() API, that takes an idle state index as a
+> > > parameter and convert the index into a previously initialized
+> > > power_state parameter before calling the PSCI.CPU_SUSPEND() with it.
+> > >
+> > > This is unwieldly, since it forces the PSCI firmware layer to keep track
+> > > of power_state parameter for every idle state so that the
+> > > index->power_state conversion can be made in the PSCI firmware layer
+> > > instead of the CPUidle driver implementations.
+> > >
+> > > Move the power_state handling out of drivers/firmware/psci
+> > > into the respective ACPI/DT PSCI CPUidle backends and convert
+> > > the psci_cpu_suspend_enter() API to get the power_state
+> > > parameter as input, which makes it closer to its firmware
+> > > interface PSCI.CPU_SUSPEND() API.
+> > >
+> > > A notable side effect is that the PSCI ACPI/DT CPUidle backends
+> > > now can directly handle (and if needed update) power_state
+> > > parameters before handing them over to the PSCI firmware
+> > > interface to trigger PSCI.CPU_SUSPEND() calls.
+> > >
+> > > Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > > Cc: Will Deacon <will@kernel.org>
+> > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> >
+> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> >
+> > > +static __init int psci_cpu_init_idle(unsigned int cpu)
+> > > +{
+> > > +     struct device_node *cpu_node;
+> > > +     int ret;
+> > > +
+> > > +     /*
+> > > +      * If the PSCI cpu_suspend function hook has not been initialized
+> > > +      * idle states must not be enabled, so bail out
+> > > +      */
+> > > +     if (!psci_ops.cpu_suspend)
+> > > +             return -EOPNOTSUPP;
+> > > +
+> > > +     cpu_node = of_get_cpu_node(cpu, NULL);
+> >
+> > [nit] You could use of_cpu_device_node_get in linux/of_device.h as
+> > it may avoid parsing if used later during the boot(i.e. after
+> > cpu->of_node is populated). I think there's another instance in
+> > psci_idle_init_cpu
 >
-> But here we are, with two different model numbers.
+> Good idea!
 >
-> Can someone please spell out in dummy language wth these chips are?
+> However, as $subject patch more or less just moves code from the
+> current psci firmware directory into cpuidle, perhaps it's better to
+> defer improvements to be made on top?
 >
-> Are they both server chips?
 
+I am fine either way. But since cpuidle-psci.c is new file introduced
+in this series, we can have it as part of the original patch. I leave it
+to Lorenzo to decide :)
 
-Elkhart Lake is Intel Atom based CPU product targeting primarily PC 
-Client, IOT and industrial segments.  Jacobsville is Atom (Tremont) 
-based Microserver.
-
-Internally, preferred acronym for Elkhart Lake is EHL so does 
-INTEL_FAM6_ATOM_TREMONT_EHL look ok?
-
-
-
-
+--
+Regards,
+Sudeep
