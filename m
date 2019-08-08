@@ -2,134 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DA686490
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 16:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42DE864B4
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 16:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732811AbfHHOk0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 10:40:26 -0400
-Received: from mail-eopbgr30083.outbound.protection.outlook.com ([40.107.3.83]:45699
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732375AbfHHOk0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Aug 2019 10:40:26 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DJmIVRXlPuHQWOtSxjzjmw8Zytgw0OVD4iMKZKi1mxLhEqRHbH129BmIAQmvhsJzUR7LIbFCCL6yl7TIVK/rHMDuplAQi0oCvRBBRYpQppppOqXchLe83uHo7btZlVjNERi8Mw+n7mZ0pEgxpU8TOgEvNW8It4RewnBQH5uJpRy+ddLrAhy9ZtuBkyz65vgDtHIcFOumV6plSVs5QyOA/qlIC6aW5S45DK14i6t0ty5SMATzw8pqobbPWWT3SBCiWnyeirehvSO8tHtiSAoOQ+Sek5cw9mSA38wYVh4fsqFKjvWQHPsh1jjtdy44gAFSXRLubblo1xALoBsFYzJIjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pihd/gRFSxCVv7ZE75MqtvfYdRkD0F0ISCeGgX0UBuU=;
- b=Cu2Eixf3fVoEBIRV3VzzkiYZfY+q0U9TdB5ba92ITqtS1fqXA/QYF3BED56Mso+ZjbH6AOj1Nr/U+FgHa6hB4WtS4QR5fBeRKLd9lDzYoGOOU5gGByqqjp3K8WvPAFt+xHzZomNEgIXNCa3iz1+e/+Fd3wH4dH0qObkN8ezsSOf+3+iXFImX2eDxTtiq/ZDhw8Q8tHzQckD7UTdiNgxp3dxe1QPm9iFA+gNxRXJsu44LSoobivaMQJYA/PwAqYBHmiZK+URtRlIiIr5WXJCgFkH2tOQqodbtfvu2zjMRFAzfFt6akz6l1CfWR4Rb4udJ5hOz+kX+uvJj68NQ2Au9Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
- header.d=nxp.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pihd/gRFSxCVv7ZE75MqtvfYdRkD0F0ISCeGgX0UBuU=;
- b=Z5yCsiAtAGPok6x2Yo+yWS717+yZIGWKdKHvpyA0ZZj6v40BGJRmBwvw72E9gNI8rWKyIrJnAlYbzs9bjX8AL4cJxoN1EIDBvIRnFLUIMkTJGmCjQ+Y2VnvOQPHr42fwMuAzm9jc7a7aW2nyhXlmDkyZS2dKyzxEIlxMNmM/mrM=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB3167.eurprd04.prod.outlook.com (10.170.229.29) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2136.17; Thu, 8 Aug 2019 14:40:22 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::e53d:e6a9:79bd:f970]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::e53d:e6a9:79bd:f970%2]) with mapi id 15.20.2157.015; Thu, 8 Aug 2019
- 14:40:22 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Saravana Kannan <saravanak@google.com>
-CC:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] PM / devfreq: Add dev_pm_qos support
-Thread-Topic: [PATCH] PM / devfreq: Add dev_pm_qos support
-Thread-Index: AQHVTDXXQompASFxY0iEK4ZTlwB6yA==
-Date:   Thu, 8 Aug 2019 14:40:22 +0000
-Message-ID: <VI1PR04MB7023B254B29A2BA9C9FAD65FEED70@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <bcbab490489ef5143361048db93752741b38e379.1565081126.git.leonard.crestez@nxp.com>
- <CAGETcx9pf543R4j3_YE2TtFMPM8Teh-NNj06ikvo92JuNHDtGg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [212.146.100.6]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 564ad226-32af-49b0-c8c5-08d71c0e57fc
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB3167;
-x-ms-traffictypediagnostic: VI1PR04MB3167:
-x-microsoft-antispam-prvs: <VI1PR04MB31679EB57BA242E6D228C62DEED70@VI1PR04MB3167.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 012349AD1C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(396003)(346002)(376002)(136003)(189003)(199004)(76176011)(64756008)(446003)(99286004)(6916009)(486006)(66556008)(2906002)(256004)(74316002)(305945005)(476003)(7736002)(6506007)(26005)(71190400001)(102836004)(316002)(86362001)(186003)(71200400001)(53546011)(54906003)(7696005)(44832011)(33656002)(7416002)(229853002)(25786009)(6116002)(66446008)(52536014)(6246003)(9686003)(8936002)(4326008)(81166006)(55016002)(66476007)(14444005)(6436002)(81156014)(14454004)(3846002)(66946007)(5660300002)(478600001)(66066001)(8676002)(53936002)(91956017)(76116006);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3167;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: YqVaFhtmx1q4QiLGZhSuQHBmSI3ba6PMX05TnXvLrRBN5EDuO8m8ZYitvgWhxPDN545oT2OrwWotJ+J8E9H2+exG/WdSfYupgi+4CJJ5aDKS6CWuwxdYr72ZHq9lZC9TUxghXMKkCesfs+74mg6reldAt+gprqSPRAgxHrUJ6vOS6rC0Yps9nbG8teJcQLh3mGAfMXOOVjxAFJ0fiI5gOJHhv3Jt6rz/yWrtWC3+VSigyRXs/WhRR5443qSM14nK3GufhXD3tfTfh1Mobl6F5RX9rVyXJ/l3nzvg6PpVsHdx1a8JfhdI51REMeSpEbrEGWDbvqHqcz0UqudLHzrexig8UNHEV963cmqJEupdxrZbislc8t8+BaqEs6SjTq8l/z9uR1Gec6dqhQbCzphOGcQ0HiTnHj9A0aIFVqU/Ek8=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S2389773AbfHHOr6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 10:47:58 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:46519 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732404AbfHHOr6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 10:47:58 -0400
+Received: by mail-ot1-f65.google.com with SMTP id z17so1163022otk.13;
+        Thu, 08 Aug 2019 07:47:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I2LQv2Mh3q+oxacBs4vqpejh3fV7xCiqjE/VE3P9HYI=;
+        b=cW0OylHHll3raz2LT8ADD88OJ+MijJZokht/koJzAkBGepI5uUxJdabgHfxkaGlgq1
+         AxIOZX3xywc4ENObpSiL9Fb1UJ3jN+RNbT1MMGH09QqOTqtKJ2co1aHml4Z0w0lY7wtS
+         5MEqWWm/jVrbBA7JskE/3+Pgoceyx2CW/rXoZ2TPV3w4F/nxK66P+e6wpwJMfxsVs84/
+         A9nbaS2Fu2eZL9/rZaotf+NRogeqH9M2CQktJd8d7GR83fCONmPIGQsXFb5KiAI0Wb1j
+         ZDv+bNRetPO/wJuUYHmYn/m1TD3jPBKn23yChjD+2fGk1due+XjNqcPXE6Hn97CjG+Ps
+         8DEw==
+X-Gm-Message-State: APjAAAVRu2wOdk1vru23SwF0mZDr907PriBHGkBPHXd9fQppRbVVDeoV
+        QDJbNCKftEbjVpgRQ9lmdina0/zkcA7XydcGcLQ=
+X-Google-Smtp-Source: APXvYqxhAc826GrmJGD4OfqvZgJgeZfwbZvGz+35G+ZgfvJXzYCj3T5Dfx2Mt+Z1mmcPKFI1n4PVLgtOFov2VmT+4zo=
+X-Received: by 2002:a9d:7a51:: with SMTP id z17mr13988216otm.266.1565275676960;
+ Thu, 08 Aug 2019 07:47:56 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 564ad226-32af-49b0-c8c5-08d71c0e57fc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2019 14:40:22.7218
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3JViiQ0AokWOQjKXeV3UgdP7LL/ptCDF2hUqL3WKJUAU0edmG0zezhaSj1RcOTOU2MfDgqWcf+pz4V9+g1Qo/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3167
+References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
+ <20190731221956.GB15795@localhost.localdomain> <1921165.pTveHRX1Co@kreacher>
+ <1870928.r7tBYyfqdz@kreacher> <20190808134356.GF151852@google.com>
+In-Reply-To: <20190808134356.GF151852@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 8 Aug 2019 16:47:45 +0200
+Message-ID: <CAJZ5v0h=nz8yXwOOGBUB9m1GtJPOqBwtNK7zXPNMJjzPhMWd9w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] nvme-pci: Allow PCI bus-level PM to be used if
+ ASPM is disabled
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/8/2019 12:48 AM, Saravana Kannan wrote:=0A=
-> On Tue, Aug 6, 2019 at 2:03 AM Leonard Crestez <leonard.crestez@nxp.com> =
-wrote:=0A=
->>=0A=
->> Add dev_pm_qos notifies to devfreq core in order to support frequency=0A=
->> limits via dev_pm_qos_add_request and related APIs=0A=
->>=0A=
->> Unlike the rest of devfreq the dev_pm_qos frequency is measured kHz:=0A=
->> this is consistent with current dev_pm_qos usage for cpufreq and allows=
-=0A=
->> frequencies above 2Ghz.=0A=
-=0A=
-> Where's the devfreq_remove_device() clean up of this?=0A=
-=0A=
-Oops, see v2=0A=
->>   static ssize_t min_freq_show(struct device *dev, struct device_attribu=
-te *attr,=0A=
->>                               char *buf)=0A=
->>   {=0A=
->> -       struct devfreq *df =3D to_devfreq(dev);=0A=
->> -=0A=
->> -       return sprintf(buf, "%lu\n", max(df->scaling_min_freq, df->min_f=
-req));=0A=
->> +       return sprintf(buf, "%lu\n", get_effective_min_freq(to_devfreq(d=
-ev)));=0A=
-> =0A=
-> Not directly related to your patch but I wish I had caught this=0A=
-> behavior of min_freq_show earlier and nacked it. The "show the=0A=
-> aggregated instantaneous min freq" file should have been separate from=0A=
-> the user space min freq file. So if init scripts set some minfreq and=0A=
-> some other userspace daemon wants to take control of the min_freq=0A=
-> userspace vote, there's no way for it to query the current userspace=0A=
-> vote because the PMQoS or OPP based minfreq limits might have caused=0A=
-> the instantaneous min freq value to have changed. We have this same=0A=
-> mess with cpufreq too. We really need to fix this and split userspace=0A=
-> min/max freq votes file from current min/max freq.=0A=
-=0A=
-This seems solvable by adding extra files to sysfs.=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+On Thu, Aug 8, 2019 at 3:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Thu, Aug 08, 2019 at 12:10:06PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
+> > host managed power state for suspend") was adding a pci_save_state()
+> > call to nvme_suspend() in order to prevent the PCI bus-level PM from
+> > being applied to the suspended NVMe devices, but if ASPM is not
+> > enabled for the target NVMe device, that causes its PCIe link to stay
+> > up and the platform may not be able to get into its optimum low-power
+> > state because of that.
+> >
+> > For example, if ASPM is disabled for the NVMe drive (PC401 NVMe SK
+> > hynix 256GB) in my Dell XPS13 9380, leaving it in D0 during
+> > suspend-to-idle prevents the SoC from reaching package idle states
+> > deeper than PC3, which is way insufficient for system suspend.
+>
+> Just curious: I assume the SoC you reference is some part of the NVMe
+> drive?
+
+No, the SoC is what contains the Intel processor and PCH (formerly "chipset").
+
+> > To address this shortcoming, make nvme_suspend() check if ASPM is
+> > enabled for the target device and fall back to full device shutdown
+> > and PCI bus-level PM if that is not the case.
+> >
+> > Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for suspend")
+> > Link: https://lore.kernel.org/linux-pm/2763495.NmdaWeg79L@kreacher/T/#t
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > -> v2:
+> >   * Move the PCI/PCIe ASPM changes to a separate patch.
+> >   * Do not add a redundant ndev->last_ps == U32_MAX check in nvme_suspend().
+> >
+> > ---
+> >  drivers/nvme/host/pci.c |   13 ++++++++++---
+> >  1 file changed, 10 insertions(+), 3 deletions(-)
+> >
+> > Index: linux-pm/drivers/nvme/host/pci.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/nvme/host/pci.c
+> > +++ linux-pm/drivers/nvme/host/pci.c
+> > @@ -2846,7 +2846,7 @@ static int nvme_resume(struct device *de
+> >       struct nvme_dev *ndev = pci_get_drvdata(to_pci_dev(dev));
+> >       struct nvme_ctrl *ctrl = &ndev->ctrl;
+> >
+> > -     if (pm_resume_via_firmware() || !ctrl->npss ||
+> > +     if (ndev->last_ps == U32_MAX ||
+> >           nvme_set_power_state(ctrl, ndev->last_ps) != 0)
+> >               nvme_reset_ctrl(ctrl);
+> >       return 0;
+> > @@ -2859,6 +2859,8 @@ static int nvme_suspend(struct device *d
+> >       struct nvme_ctrl *ctrl = &ndev->ctrl;
+> >       int ret = -EBUSY;
+> >
+> > +     ndev->last_ps = U32_MAX;
+> > +
+> >       /*
+> >        * The platform does not remove power for a kernel managed suspend so
+> >        * use host managed nvme power settings for lowest idle power if
+> > @@ -2866,8 +2868,14 @@ static int nvme_suspend(struct device *d
+> >        * shutdown.  But if the firmware is involved after the suspend or the
+> >        * device does not support any non-default power states, shut down the
+> >        * device fully.
+> > +      *
+> > +      * If ASPM is not enabled for the device, shut down the device and allow
+> > +      * the PCI bus layer to put it into D3 in order to take the PCIe link
+> > +      * down, so as to allow the platform to achieve its minimum low-power
+> > +      * state (which may not be possible if the link is up).
+> >        */
+> > -     if (pm_suspend_via_firmware() || !ctrl->npss) {
+> > +     if (pm_suspend_via_firmware() || !ctrl->npss ||
+> > +         !pcie_aspm_enabled_mask(pdev)) {
+>
+> This seems like a layering violation, in the sense that ASPM is
+> supposed to be hardware-autonomous and invisible to software.
+
+But software has to enable it.
+
+If it is not enabled, it will not be used, and that's what the check is about.
+
+> IIUC the NVMe device will go to the desired package idle state if the
+> link is in L0s or L1, but not if the link is in L0.  I don't
+> understand that connection; AFAIK that would be something outside the
+> scope of the PCIe spec.
+
+Yes, it is outside of the PCIe spec.
+
+No, this is not about the NVMe device, it is about the Intel SoC
+(System-on-a-Chip) the platform is based on.
+
+The background really is commit d916b1be94b6 and its changelog is kind
+of misleading, unfortunately.  What it did, among other things, was to
+cause the NVMe driver to prevent the PCI bus type from applying the
+standard PCI PM to the devices handled by it in the suspend-to-idle
+flow.  The reason for doing that was a (reportedly) widespread failure
+to take the PCIe link down during D0 -> D3hot transitions of NVMe
+devices, which then prevented the platform from going into a deep
+enough low-power state while suspended (because it was not sure
+whether or not the NVMe device was really "sufficiently" inactive).
+[I guess I should mention that in the changelog of the $subject
+patch.]  So the idea was to put the (NVMe) device into a low-power
+state internally and then let ASPM take care of the PCIe link.
+
+Of course, that can only work if ASPM is enabled at all for the device
+in question, even though it may not be sufficient as you say below.
+
+> The spec (PCIe r5.0, sec 5.4.1.1.1 for L0s, 5.4.1.2.1 for L1) is
+> careful to say that when the conditions are right, devices "should"
+> enter L0s but it is never mandatory, or "may" enter L1.
+>
+> And this patch assumes that if ASPM is enabled, the link will
+> eventually go to L0s or L1.
+
+No, it doesn't.
+
+It avoids failure in the case in which it is guaranteed to happen
+(disabled ASPM) and that's it.
+
+> Because the PCIe spec doesn't mandate that transition, I think this patch makes the
+> driver dependent on device-specific behavior.
+
+IMO not really.  It just adds a "don't do it if you are going to fail"
+kind of check.
+
+>
+> >               nvme_dev_disable(ndev, true);
+> >               return 0;
+> >       }
+> > @@ -2880,7 +2888,6 @@ static int nvme_suspend(struct device *d
+> >           ctrl->state != NVME_CTRL_ADMIN_ONLY)
+> >               goto unfreeze;
+> >
+> > -     ndev->last_ps = 0;
+> >       ret = nvme_get_power_state(ctrl, &ndev->last_ps);
+> >       if (ret < 0)
+> >               goto unfreeze;
+> >
+> >
+> >
