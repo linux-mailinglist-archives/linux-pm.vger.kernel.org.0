@@ -2,89 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6249A86048
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 12:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBEE860B9
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 13:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731487AbfHHKnF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 06:43:05 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:58376 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728289AbfHHKnE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 06:43:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=VcZrARhSE3qBwq5oVlGMKVHmroJrAIRYW3Oc3mvar5k=; b=u8YI4I4Oq3AgGmfTp7QqH0oO7
-        fLJ6wqLEj3cdtVBg/jgxdg/jPycqeUiWjYdPaUK0W74N4uNAolzKSGAiC3vjsUaBYKq/Tr1HtuNQz
-        r4yEO5Y1lasNa6cBCMbOQgPqUjJSf63PUxo/EBimcC8QioUoqkj0V5TNrzovfdeq7333zSYOqkkVe
-        w71bWJjqUvMChjTxx53cVD41EaT34uejEzJFAo/cvWZk06wh0pkfkLl9/23Gcz+xBWY9elNLJ3kdC
-        T4APDjZU7K99vGr0xxpZv2lhikXynJYo2ET2TkjkiVLeWDMBHlulDGK3V52Bi+nuCYtZQ3ncR8YPT
-        NW/djxS3Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hvfsn-0000AU-4q; Thu, 08 Aug 2019 10:42:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9D1A530754B;
-        Thu,  8 Aug 2019 12:42:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ABF2E2018B96F; Thu,  8 Aug 2019 12:42:53 +0200 (CEST)
-Date:   Thu, 8 Aug 2019 12:42:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
-Cc:     x86@kernel.org, bp@suse.de, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] x86/cpu: Add Elkhart Lake to Intel family
-Message-ID: <20190808104253.GG2369@hirez.programming.kicks-ass.net>
-References: <20190808101045.19239-1-rajneesh.bhardwaj@linux.intel.com>
+        id S1731622AbfHHLTr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 07:19:47 -0400
+Received: from mga01.intel.com ([192.55.52.88]:25767 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731312AbfHHLTr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Aug 2019 07:19:47 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 04:19:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,360,1559545200"; 
+   d="scan'208";a="186319415"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by orsmga002.jf.intel.com with ESMTP; 08 Aug 2019 04:19:43 -0700
+Received: from andy by smile with local (Exim 4.92.1)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1hvgSL-0001t9-Rk; Thu, 08 Aug 2019 14:19:41 +0300
+Date:   Thu, 8 Aug 2019 14:19:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     platform-driver-x86@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH 0/2] intel-hid: intel-vbtn: Suspend-related fix and update
+Message-ID: <20190808111941.GJ30120@smile.fi.intel.com>
+References: <1717835.1Yz4jNODO2@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190808101045.19239-1-rajneesh.bhardwaj@linux.intel.com>
+In-Reply-To: <1717835.1Yz4jNODO2@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 03:40:45PM +0530, Rajneesh Bhardwaj wrote:
-> Elkhart Lake is Atom based SoC that uses model number 0x96. CPUID details
-> will be documented in a future version of Intel Software Development
-> Manual.
+On Thu, Aug 08, 2019 at 10:40:19AM +0200, Rafael J. Wysocki wrote:
+> Hi,
 > 
-> Cc: bp@suse.de
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Kan Liang <kan.liang@linux.intel.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: x86-ml <x86@kernel.org>
-> Cc: Linux PM <linux-pm@vger.kernel.org>
-> Signed-off-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
-> ---
->  arch/x86/include/asm/intel-family.h | 1 +
->  1 file changed, 1 insertion(+)
+> These two patches fix a minor issue related to system suspend in the intel-hid
+> and intel-vbtn drivers and update the suspend/resume handling in intel-hid to
+> reduce special-casing in it somewhat.
 > 
-> diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-> index 0278aa66ef62..06e94ae65f28 100644
-> --- a/arch/x86/include/asm/intel-family.h
-> +++ b/arch/x86/include/asm/intel-family.h
-> @@ -79,6 +79,7 @@
->  #define INTEL_FAM6_ATOM_GOLDMONT_PLUS	0x7A /* Gemini Lake */
->  
->  #define INTEL_FAM6_ATOM_TREMONT_X	0x86 /* Jacobsville */
-> +#define INTEL_FAM6_ATOM_ELKHART_LAKE	0x96 /*Elkhart Lake */
 
-Almost, please try again.
+AFAIR the original patches go via other than PDx86 tree.
+Thus, while patches are looking good to me,
+
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Please refer to the changelogs for details.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
