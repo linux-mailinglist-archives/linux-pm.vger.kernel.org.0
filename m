@@ -2,98 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 835FD8619F
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 14:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9317D861D6
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 14:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727649AbfHHM2k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 08:28:40 -0400
-Received: from mga05.intel.com ([192.55.52.43]:62417 "EHLO mga05.intel.com"
+        id S2403884AbfHHMby (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 08:31:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727096AbfHHM2k (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Aug 2019 08:28:40 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Aug 2019 05:28:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,361,1559545200"; 
-   d="scan'208";a="374835021"
-Received: from rbhardw1-mobl.gar.corp.intel.com (HELO [10.252.86.4]) ([10.252.86.4])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Aug 2019 05:28:36 -0700
-Subject: Re: [PATCH] x86/cpu: Add Elkhart Lake to Intel family
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, bp@suse.de, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20190808101045.19239-1-rajneesh.bhardwaj@linux.intel.com>
- <20190808104253.GG2369@hirez.programming.kicks-ass.net>
-From:   "Bhardwaj, Rajneesh" <rajneesh.bhardwaj@linux.intel.com>
-Message-ID: <9d7241a1-5c2c-2369-5b1d-68912cc430b4@linux.intel.com>
-Date:   Thu, 8 Aug 2019 17:58:35 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2403878AbfHHMbx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Aug 2019 08:31:53 -0400
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3667F218A4;
+        Thu,  8 Aug 2019 12:31:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565267512;
+        bh=bdQZvsSQ32pIcK00dvHnvYCuayYBNzzTq0JqfKXAAnA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=opj1qQf9iEv45GohNPIZzhCfVIZu1ZKpRtt66TnyPL0lOzTJk5eitdVMhBoy+g0Hf
+         UVInrjj0SFWueYHRvOSGyc2Fpz0WX4Dk4DE0AzIZES1sOm0BnypToJNP5f4pPpc22P
+         wQUfdU1+dQ5DAUF2r3Ky0lG/+/V7pVl8LsPRJRnY=
+Received: by mail-lj1-f181.google.com with SMTP id p17so88755682ljg.1;
+        Thu, 08 Aug 2019 05:31:52 -0700 (PDT)
+X-Gm-Message-State: APjAAAUT5PPbj95rvcI9AaKvULcLH5UuERGUxkAPpnVMe3cRJG1kPyFF
+        WmS/pyH828ZjbTD7Dn0OwwGFNTNcj/dhTaIaMmA=
+X-Google-Smtp-Source: APXvYqzE6I+ay+3PmHe0pYVJmR3CgZhxE3A6RP3FlUDg7MjWb3h3zbv3W0JwnvdTTIFomcUI0MjdcuE87ZGWhiIDMH0=
+X-Received: by 2002:a2e:3008:: with SMTP id w8mr8290719ljw.13.1565267510378;
+ Thu, 08 Aug 2019 05:31:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190808104253.GG2369@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <CGME20190718143130eucas1p26f2058f47eb2f4020e1ddbf1619d1ac8@eucas1p2.samsung.com>
+ <20190718143044.25066-1-s.nawrocki@samsung.com> <20190718143044.25066-4-s.nawrocki@samsung.com>
+ <CAJKOXPeOfDHjqSotxVwVuy+6r9X3Q8ZXLit1_=gGd7bOwkHupA@mail.gmail.com> <a56fe2d8-1f26-b462-1564-f23902f7dbb5@samsung.com>
+In-Reply-To: <a56fe2d8-1f26-b462-1564-f23902f7dbb5@samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Thu, 8 Aug 2019 14:31:39 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPc8iFo=2JAGEZSC46N3sZae4+JcZYBCjpKysb6PFPzyaQ@mail.gmail.com>
+Message-ID: <CAJKOXPc8iFo=2JAGEZSC46N3sZae4+JcZYBCjpKysb6PFPzyaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/9] soc: samsung: Add Exynos Adaptive Supply Voltage driver
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
+        kgene@kernel.org, pankaj.dubey@samsung.com,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org,
+        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
+        <b.zolnierkie@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Peter,
+On Thu, 8 Aug 2019 at 14:07, Sylwester Nawrocki <s.nawrocki@samsung.com> wrote:
+> >> +static unsigned int exynos5422_asv_parse_table(struct exynos_asv *asv,
+> >> +                                     unsigned int pkg_id)
+> >> +{
+> >> +       return (pkg_id >> EXYNOS5422_TABLE_OFFSET) & EXYNOS5422_TABLE_MASK;
+> >> +}
+> >> +
+> >> +static bool exynos5422_asv_parse_bin2(struct exynos_asv *asv,
+> >> +                                    unsigned int pkg_id)
+> >> +{
+> >> +       return (pkg_id >> EXYNOS5422_BIN2_OFFSET) & EXYNOS5422_BIN2_MASK;
+> >
+> > return !!() for converting to boolean.
+>
+> I'm not convinced it is needed, the return type of the function is bool
+> and value of the expression will be implicitly converted to that type.
+> Is there any compiler warning related to that?
 
-Thanks for the review.
+Yeah, but bool is int so there will be no implicit conversion... I
+guess it is a convention. In theory !! is the proper conversion to
+bool but if bool==int then it's essentially conversion to 1. I am not
+sure what's the benefit, maybe for some wrong code which would do
+comparisons on result like if (exynos5422_asv_parse_bin2() == TRUE)...
 
-On 08-Aug-19 4:12 PM, Peter Zijlstra wrote:
-> On Thu, Aug 08, 2019 at 03:40:45PM +0530, Rajneesh Bhardwaj wrote:
->> Elkhart Lake is Atom based SoC that uses model number 0x96. CPUID details
->> will be documented in a future version of Intel Software Development
->> Manual.
->>
->> Cc: bp@suse.de
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->> Cc: "H. Peter Anvin" <hpa@zytor.com>
->> Cc: Kan Liang <kan.liang@linux.intel.com>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
->> Cc: Len Brown <lenb@kernel.org>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: x86-ml <x86@kernel.org>
->> Cc: Linux PM <linux-pm@vger.kernel.org>
->> Signed-off-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
->> ---
->>   arch/x86/include/asm/intel-family.h | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
->> index 0278aa66ef62..06e94ae65f28 100644
->> --- a/arch/x86/include/asm/intel-family.h
->> +++ b/arch/x86/include/asm/intel-family.h
->> @@ -79,6 +79,7 @@
->>   #define INTEL_FAM6_ATOM_GOLDMONT_PLUS	0x7A /* Gemini Lake */
->>   
->>   #define INTEL_FAM6_ATOM_TREMONT_X	0x86 /* Jacobsville */
->> +#define INTEL_FAM6_ATOM_ELKHART_LAKE	0x96 /*Elkhart Lake */
-> Almost, please try again.
-
-Did you mean "It should be after Gemini Lake"? And / Or a Space inside 
-comment before 'E' ?
-
-I kept it at the current location because of increasing chronological 
-order within Atom section but i can move it to another place.
-
-Please let me know if my understanding is correct? I can send a v2 
-addressing your suggestion.
-
-Thank you,
-
-Rajneesh
-
-
+Best regards,
+Krzysztof
