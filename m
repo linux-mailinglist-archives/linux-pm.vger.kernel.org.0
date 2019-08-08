@@ -2,232 +2,433 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4404D868E4
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 20:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDF3868EF
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 20:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390186AbfHHSj4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 14:39:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59502 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389883AbfHHSj4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Aug 2019 14:39:56 -0400
-Received: from localhost (unknown [150.199.191.185])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6AD54217F4;
-        Thu,  8 Aug 2019 18:39:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565289595;
-        bh=d9WMpQ18wPaCSAl8L9q4LyWOMnhWyCQuXribMUhFASA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VLKCzjDUC3356BGnBZagIOCZpjp2vhuMYe4MLA4mTTkR0HgQFZF6gLfdRTOl49FLd
-         WHvw0chHRhV1oAOfBAEKvh1u2D4ZOM65d6++xx/Kye5j/kXgyPSxneH38I63jG2LBY
-         0Ne2IAExBivEosxfHb105LMY82xFMH3FVfnkb6Ic=
-Date:   Thu, 8 Aug 2019 13:39:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] nvme-pci: Allow PCI bus-level PM to be used if
- ASPM is disabled
-Message-ID: <20190808183954.GG151852@google.com>
-References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
- <20190731221956.GB15795@localhost.localdomain>
- <1921165.pTveHRX1Co@kreacher>
- <1870928.r7tBYyfqdz@kreacher>
- <20190808134356.GF151852@google.com>
- <CAJZ5v0h=nz8yXwOOGBUB9m1GtJPOqBwtNK7zXPNMJjzPhMWd9w@mail.gmail.com>
+        id S2390231AbfHHSkV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 14:40:21 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43992 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390228AbfHHSkU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 14:40:20 -0400
+Received: by mail-pg1-f195.google.com with SMTP id r26so8551728pgl.10
+        for <linux-pm@vger.kernel.org>; Thu, 08 Aug 2019 11:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:from:cc:to:user-agent:date;
+        bh=7NN04FEl7bvWdIxYSdH6KV6rKdpmdwVRM9IjBo0UhHs=;
+        b=bq74X2mT6DcA6A0FY6YvwMrqIFPQNTQW56JpfiIVVvB0b/VUTBT1f6x0ODMTPTCd68
+         svuYBtypdWGQM7RNjun5TEWkuV3RGe6rlm5+xQTKebpD9NEVADlkL9Q+3Ap2JODVs5rA
+         S3WMpqXcuIqFz0DjgGOXKV8MmzxrlmLS61rxg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
+         :user-agent:date;
+        bh=7NN04FEl7bvWdIxYSdH6KV6rKdpmdwVRM9IjBo0UhHs=;
+        b=BlgkSx6mIYAAQVCX8n/lGYXS2k+V2hjoavbMAYj9ZnbYW4mk4BE2CCIIEEu8+kjTZ1
+         K8EA4mLrXpnPLezOI0I3HaAosewKGoGH3C8H21N8rQJxYznsTQEKLhkKXntWPWPqYrnb
+         lQDatwigaYUMvmiONvTWc6wN37TFlMBj8Qj3UNLaPYVENQcHj59TZMf4aXC20MBC1I7e
+         FPxPbk7mXRU1siOo1PkNx8HnyL63LVzpJIFdjTDE+oCxvlDpEO8mVgzhRBlU2y4WaKtj
+         cQCNnHbADCuAEyNTNRfW0Y1/2KVm83pBps3I4nIiNtjEuewc7mmWly6eC6W/kXM7vAA3
+         QzGw==
+X-Gm-Message-State: APjAAAVmGCm3YnB0mQP339A+1vmyiikKetMssNQ6M72W0xbe/3ejX6t0
+        yfRSGYN0uMhy6+GsQJk7cMDlVg==
+X-Google-Smtp-Source: APXvYqwIttXOQSLrliAc8oKmvGlPitcplGRoPMPqnF058BiKj9lgglcyKeIhBnaP9fPUFlHdSHUOnQ==
+X-Received: by 2002:a62:e806:: with SMTP id c6mr17182540pfi.158.1565289619342;
+        Thu, 08 Aug 2019 11:40:19 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id j20sm91226002pfr.113.2019.08.08.11.40.18
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 08 Aug 2019 11:40:18 -0700 (PDT)
+Message-ID: <5d4c6c92.1c69fb81.876aa.90c6@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h=nz8yXwOOGBUB9m1GtJPOqBwtNK7zXPNMJjzPhMWd9w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190808061228.16573-3-mkshah@codeaurora.org>
+References: <20190808061228.16573-1-mkshah@codeaurora.org> <20190808061228.16573-3-mkshah@codeaurora.org>
+Subject: Re: [PATCH 2/2] drivers: qcom: Add SoC sleep stats driver
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
+        lsrao@codeaurora.org, mkshah@codeaurora.org,
+        Mahesh Sivasubramanian <msivasub@codeaurora.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Maulik Shah <mkshah@codeaurora.org>, andy.gross@linaro.org,
+        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
+User-Agent: alot/0.8.1
+Date:   Thu, 08 Aug 2019 11:40:17 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 04:47:45PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Aug 8, 2019 at 3:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Thu, Aug 08, 2019 at 12:10:06PM +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > One of the modifications made by commit d916b1be94b6 ("nvme-pci: use
-> > > host managed power state for suspend") was adding a pci_save_state()
-> > > call to nvme_suspend() in order to prevent the PCI bus-level PM from
-> > > being applied to the suspended NVMe devices, but if ASPM is not
-> > > enabled for the target NVMe device, that causes its PCIe link to stay
-> > > up and the platform may not be able to get into its optimum low-power
-> > > state because of that.
-> > >
-> > > For example, if ASPM is disabled for the NVMe drive (PC401 NVMe SK
-> > > hynix 256GB) in my Dell XPS13 9380, leaving it in D0 during
-> > > suspend-to-idle prevents the SoC from reaching package idle states
-> > > deeper than PC3, which is way insufficient for system suspend.
-> >
-> > Just curious: I assume the SoC you reference is some part of the NVMe
-> > drive?
-> 
-> No, the SoC is what contains the Intel processor and PCH (formerly "chipset").
-> 
-> > > To address this shortcoming, make nvme_suspend() check if ASPM is
-> > > enabled for the target device and fall back to full device shutdown
-> > > and PCI bus-level PM if that is not the case.
-> > >
-> > > Fixes: d916b1be94b6 ("nvme-pci: use host managed power state for suspend")
-> > > Link: https://lore.kernel.org/linux-pm/2763495.NmdaWeg79L@kreacher/T/#t
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >
-> > > -> v2:
-> > >   * Move the PCI/PCIe ASPM changes to a separate patch.
-> > >   * Do not add a redundant ndev->last_ps == U32_MAX check in nvme_suspend().
-> > >
-> > > ---
-> > >  drivers/nvme/host/pci.c |   13 ++++++++++---
-> > >  1 file changed, 10 insertions(+), 3 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/nvme/host/pci.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/nvme/host/pci.c
-> > > +++ linux-pm/drivers/nvme/host/pci.c
-> > > @@ -2846,7 +2846,7 @@ static int nvme_resume(struct device *de
-> > >       struct nvme_dev *ndev = pci_get_drvdata(to_pci_dev(dev));
-> > >       struct nvme_ctrl *ctrl = &ndev->ctrl;
-> > >
-> > > -     if (pm_resume_via_firmware() || !ctrl->npss ||
-> > > +     if (ndev->last_ps == U32_MAX ||
-> > >           nvme_set_power_state(ctrl, ndev->last_ps) != 0)
-> > >               nvme_reset_ctrl(ctrl);
-> > >       return 0;
-> > > @@ -2859,6 +2859,8 @@ static int nvme_suspend(struct device *d
-> > >       struct nvme_ctrl *ctrl = &ndev->ctrl;
-> > >       int ret = -EBUSY;
-> > >
-> > > +     ndev->last_ps = U32_MAX;
-> > > +
-> > >       /*
-> > >        * The platform does not remove power for a kernel managed suspend so
-> > >        * use host managed nvme power settings for lowest idle power if
-> > > @@ -2866,8 +2868,14 @@ static int nvme_suspend(struct device *d
-> > >        * shutdown.  But if the firmware is involved after the suspend or the
-> > >        * device does not support any non-default power states, shut down the
-> > >        * device fully.
-> > > +      *
-> > > +      * If ASPM is not enabled for the device, shut down the device and allow
-> > > +      * the PCI bus layer to put it into D3 in order to take the PCIe link
-> > > +      * down, so as to allow the platform to achieve its minimum low-power
-> > > +      * state (which may not be possible if the link is up).
-> > >        */
-> > > -     if (pm_suspend_via_firmware() || !ctrl->npss) {
-> > > +     if (pm_suspend_via_firmware() || !ctrl->npss ||
-> > > +         !pcie_aspm_enabled_mask(pdev)) {
-> >
-> > This seems like a layering violation, in the sense that ASPM is
-> > supposed to be hardware-autonomous and invisible to software.
-> 
-> But software has to enable it.
-> 
-> If it is not enabled, it will not be used, and that's what the check
-> is about.
-> 
-> > IIUC the NVMe device will go to the desired package idle state if
-> > the link is in L0s or L1, but not if the link is in L0.  I don't
-> > understand that connection; AFAIK that would be something outside
-> > the scope of the PCIe spec.
-> 
-> Yes, it is outside of the PCIe spec.
-> 
-> No, this is not about the NVMe device, it is about the Intel SoC
-> (System-on-a-Chip) the platform is based on.
+Quoting Maulik Shah (2019-08-07 23:12:28)
+> Qualcomm Technologies Inc's (QTI) chipsets support SoC level
+> low power modes. Statistics for SoC sleep stats are produced
+> by remote processor.
+>=20
+> Lets's add a driver to read the shared memory exported by the
+> remote processor and export to sysfs.
+>=20
+> Signed-off-by: Mahesh Sivasubramanian <msivasub@codeaurora.org>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
 
-Ah.  So this problem could occur with any device, not just NVMe?  If
-so, how do you address that?  Obviously you don't want to patch all
-drivers this way.
+SoB chain is weird here too.
 
-> The background really is commit d916b1be94b6 and its changelog is
-> kind of misleading, unfortunately.  What it did, among other things,
-> was to cause the NVMe driver to prevent the PCI bus type from
-> applying the standard PCI PM to the devices handled by it in the
-> suspend-to-idle flow.  
+> ---
+>  drivers/soc/qcom/Kconfig           |   9 ++
+>  drivers/soc/qcom/Makefile          |   1 +
+>  drivers/soc/qcom/soc_sleep_stats.c | 249 +++++++++++++++++++++++++++++
 
-This is more meaningful to you than to most people because "applying
-the standard PCI PM" doesn't tell us what that means in terms of the
-device.  Presumably it has something to do with a D-state transition?
-I *assume* a suspend might involve the D0 -> D3hot transition you
-mention below?
+There should be a Documentation/ABI/ path in this diffstat above because
+you're adding sysfs attributes.
 
-> The reason for doing that was a (reportedly) widespread failure to
-> take the PCIe link down during D0 -> D3hot transitions of NVMe
-> devices,
+There's some similar support in the ARM PSCI spec for extracting
+idle/suspend stats, see section 5.21 PSCI_STAT_RESIDENCY/COUNT. Maybe
+this code can align with that feature in PSCI? At the least, I hope we
+can come up with a generic sysfs ABI that can be used to describe CPU
+and system wide power states in a way that userspace can read and
+understand how long the device was in these different power states. I
+would guess that other architectures like x86 may also want to get
+involved in reporting this information in a standard way, so please loop
+in some x86 power folks too.
 
-I don't know any of the details, but "failure to take the link down
-during D0 -> D3hot transitions" is phrased as though it might be a
-hardware erratum.  If this *is* related to an NVMe erratum, that would
-explain why you only need to patch the nvme driver, and it would be
-useful to mention that in the commit log, since otherwise it sounds
-like something that might be needed in other drivers, too.
+It would be neat if the PSCI feature could be used for this instead of
+having a custom SoC driver. Maybe that won't work though because this
+works for shipping firmware and/or because of the 'client_votes' thing
+which looks like special extra data describing the other subsystems? At
+least for some SoCs it may be all they need though, so keeping the PSCI
+call in mind would be good when developing the ABI and may be enough for
+userspace purposes. The client_votes part may be possible to layer on
+top of the PSCI calls anyway, and go into some other file so we can
+figure out which remoteproc is holding up suspend or idle states.
 
-According to PCIe r5.0 sec 5.3.2, the only legal link states for D3hot
-are L1, L2/L3 Ready.  So if you put a device in D3hot and its link
-stays in L0, that sounds like a defect.  Is that what happens?
+>=20
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index 880cf0290962..7aac24430e99 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -163,6 +163,15 @@ config QCOM_SMSM
+>           Say yes here to support the Qualcomm Shared Memory State Machin=
+e.
+>           The state machine is represented by bits in shared memory.
+> =20
+> +config QCOM_SOC_SLEEP_STATS
+> +       tristate "Qualcomm Technologies Inc. (QTI) SoC sleep stats driver"
+> +       depends on ARCH_QCOM
+> +       help
+> +         Qualcomm Technologies Inc. (QTI) SoC sleep stats driver to read
+> +         the shared memory exported by the remote processor related to
 
-Obviously I'm still confused.  I think it would help if you could
-describe the problem in terms of the specific PCIe states involved
-(D0, D3hot, L0, L1, L2, L3, etc) because then the spec would help
-explain what's happening.
+Shared memory sounds like DDR.
 
-> which then prevented the platform from going into a deep enough
-> low-power state while suspended (because it was not sure whether or
-> not the NVMe device was really "sufficiently" inactive).  [I guess I
-> should mention that in the changelog of the $subject patch.]  So the
-> idea was to put the (NVMe) device into a low-power state internally
-> and then let ASPM take care of the PCIe link.
-> 
-> Of course, that can only work if ASPM is enabled at all for the
-> device in question, even though it may not be sufficient as you say
-> below.
-> 
-> > The spec (PCIe r5.0, sec 5.4.1.1.1 for L0s, 5.4.1.2.1 for L1) is
-> > careful to say that when the conditions are right, devices
-> > "should" enter L0s but it is never mandatory, or "may" enter L1.
-> >
-> > And this patch assumes that if ASPM is enabled, the link will
-> > eventually go to L0s or L1.
-> 
-> No, it doesn't.
-> 
-> It avoids failure in the case in which it is guaranteed to happen
-> (disabled ASPM) and that's it.
-> 
-> > Because the PCIe spec doesn't mandate that transition, I think
-> > this patch makes the driver dependent on device-specific behavior.
-> 
-> IMO not really.  It just adds a "don't do it if you are going to
-> fail" kind of check.
-> 
-> >
-> > >               nvme_dev_disable(ndev, true);
-> > >               return 0;
-> > >       }
-> > > @@ -2880,7 +2888,6 @@ static int nvme_suspend(struct device *d
-> > >           ctrl->state != NVME_CTRL_ADMIN_ONLY)
-> > >               goto unfreeze;
-> > >
-> > > -     ndev->last_ps = 0;
-> > >       ret = nvme_get_power_state(ctrl, &ndev->last_ps);
-> > >       if (ret < 0)
-> > >               goto unfreeze;
-> > >
-> > >
-> > >
+> +         various SoC level low power modes statistics and export to sysfs
+> +         interface.
+> +
+>  config QCOM_WCNSS_CTRL
+>         tristate "Qualcomm WCNSS control driver"
+>         depends on ARCH_QCOM || COMPILE_TEST
+> diff --git a/drivers/soc/qcom/soc_sleep_stats.c b/drivers/soc/qcom/soc_sl=
+eep_stats.c
+> new file mode 100644
+> index 000000000000..5b95d68512ec
+> --- /dev/null
+> +++ b/drivers/soc/qcom/soc_sleep_stats.c
+> @@ -0,0 +1,249 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/*
+> + * Copyright (c) 2011-2019, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#define pr_fmt(fmt) "%s: " fmt, __func__
+> +
+> +#include <linux/init.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +#include <linux/uaccess.h>
+
+Is this include used?
+
+> +
+> +#define ARCH_TIMER_FREQ        19200000
+
+Can't this come through clk APIs? Or is this the ARM architected timer
+freqeuency?
+
+> +
+> +struct stats_config {
+> +       u32 offset_addr;
+> +       u32 num_records;
+> +       bool appended_stats_avail;
+> +};
+> +
+> +struct soc_sleep_stats_data {
+> +       phys_addr_t stats_base;
+> +       resource_size_t stats_size;
+> +       const struct stats_config *config;
+> +       struct kobject *kobj;
+> +       struct kobj_attribute ka;
+> +       struct mutex lock;
+> +};
+> +
+> +struct entry {
+> +       __le32 stat_type;
+> +       __le32 count;
+> +       __le64 last_entered_at;
+> +       __le64 last_exited_at;
+> +       __le64 accumulated;
+> +};
+> +
+> +struct appended_entry {
+> +       __le32 client_votes;
+> +       __le32 reserved[3];
+> +};
+> +
+> +struct stats_entry {
+> +       struct entry entry;
+> +       struct appended_entry appended_entry;
+> +};
+> +
+> +static inline u64 get_time_in_sec(u64 counter)
+> +{
+> +       do_div(counter, ARCH_TIMER_FREQ);
+> +
+> +       return counter;
+> +}
+> +
+> +static inline ssize_t append_data_to_buf(char *buf, int length,
+> +                                        struct stats_entry *data)
+> +{
+> +       char stat_type[5] =3D {0};
+> +
+> +       memcpy(stat_type, &data->entry.stat_type, sizeof(u32));
+
+sizeof(u32) !=3D 5. Is this on purpose?
+
+> +
+> +       return scnprintf(buf, length,
+> +                        "%s\n"
+> +                        "\tCount                    :%u\n"
+> +                        "\tLast Entered At(sec)     :%llu\n"
+> +                        "\tLast Exited At(sec)      :%llu\n"
+> +                        "\tAccumulated Duration(sec):%llu\n"
+> +                        "\tClient Votes             :0x%x\n\n",
+> +                        stat_type, data->entry.count,
+> +                        data->entry.last_entered_at,
+> +                        data->entry.last_exited_at,
+> +                        data->entry.accumulated,
+> +                        data->appended_entry.client_votes);
+> +}
+> +
+> +static ssize_t stats_show(struct kobject *obj, struct kobj_attribute *at=
+tr,
+> +                         char *buf)
+> +{
+> +       void __iomem *reg;
+> +       int i;
+> +       uint32_t offset;
+> +       ssize_t length =3D 0, op_length;
+> +       struct stats_entry data;
+> +       struct entry *e =3D &data.entry;
+> +       struct appended_entry *ae =3D &data.appended_entry;
+> +       struct soc_sleep_stats_data *drv =3D container_of(attr,
+> +                                          struct soc_sleep_stats_data, k=
+a);
+> +
+> +       mutex_lock(&drv->lock);
+> +       reg =3D ioremap_nocache(drv->stats_base, drv->stats_size);
+> +       if (!reg) {
+> +               pr_err("io remap failed\n");
+
+This looks like a real bad idea to ioremap each time the stats are
+shown. Why not just map once in probe so we don't have to create a
+mapping and suffer the overhead involved in that?
+
+> +               mutex_unlock(&drv->lock);
+> +               return length;
+> +       }
+> +
+> +       for (i =3D 0; i < drv->config->num_records; i++) {
+> +               offset =3D offsetof(struct entry, stat_type);
+> +               e->stat_type =3D le32_to_cpu(readl_relaxed(reg + offset));
+> +
+> +               offset =3D offsetof(struct entry, count);
+> +               e->count =3D le32_to_cpu(readl_relaxed(reg + offset));
+> +
+> +               offset =3D offsetof(struct entry, last_entered_at);
+> +               e->last_entered_at =3D le64_to_cpu(readq_relaxed(reg + of=
+fset));
+> +
+> +               offset =3D offsetof(struct entry, last_exited_at);
+> +               e->last_exited_at =3D le64_to_cpu(readq_relaxed(reg + off=
+set));
+> +
+> +               offset =3D offsetof(struct entry, last_exited_at);
+> +               e->accumulated =3D le64_to_cpu(readq_relaxed(reg + offset=
+));
+> +
+> +               e->last_entered_at =3D get_time_in_sec(e->last_entered_at=
+);
+> +               e->last_exited_at =3D get_time_in_sec(e->last_exited_at);
+> +               e->accumulated =3D get_time_in_sec(e->accumulated);
+> +
+> +               reg +=3D sizeof(struct entry);
+> +
+> +               if (drv->config->appended_stats_avail) {
+> +                       offset =3D offsetof(struct appended_entry, client=
+_votes);
+> +                       ae->client_votes =3D le32_to_cpu(readl_relaxed(re=
+g +
+> +                                                                    offs=
+et));
+> +
+> +                       reg +=3D sizeof(struct appended_entry);
+> +               } else
+> +                       ae->client_votes =3D 0;
+
+Please add braces to the else statement when the if statement has
+braces.
+
+> +
+> +               op_length =3D append_data_to_buf(buf + length, PAGE_SIZE =
+- length,
+> +                                              &data);
+> +               if (op_length >=3D PAGE_SIZE - length)
+> +                       goto exit;
+> +
+> +               length +=3D op_length;
+> +       }
+> +exit:
+> +       iounmap(reg);
+> +       mutex_unlock(&drv->lock);
+> +       return length;
+> +}
+> +
+> +static int soc_sleep_stats_create_sysfs(struct platform_device *pdev,
+> +                                       struct soc_sleep_stats_data *drv)
+> +{
+> +       int ret =3D -ENOMEM;
+> +
+> +       drv->kobj =3D kobject_create_and_add("soc_sleep", power_kobj);
+> +       if (!drv->kobj)
+> +               goto fail;
+
+Just return -ENOMEM here. It is really weird to make kobjects directly
+like this. How is userspace expected to use this?
+
+> +
+> +       sysfs_attr_init(drv->ka.attr);
+> +       drv->ka.attr.mode =3D 0444;
+> +       drv->ka.attr.name =3D "stats";
+> +       drv->ka.show =3D stats_show;
+> +
+> +       ret =3D sysfs_create_file(drv->kobj, &drv->ka.attr);
+> +       if (ret)
+> +               goto fail;
+
+Just return sysfs_create_file()?
+
+> +
+> +       platform_set_drvdata(pdev, drv);
+
+Do this platform_set_drvdata in probe?
+
+> +fail:
+> +       return ret;
+> +}
+> +
+> +static const struct stats_config rpm_data =3D {
+> +       .offset_addr =3D 0x14,
+> +       .num_records =3D 2,
+> +       .appended_stats_avail =3D true,
+> +};
+> +
+> +static const struct stats_config rpmh_data =3D {
+> +       .offset_addr =3D 0x4,
+> +       .num_records =3D 3,
+> +       .appended_stats_avail =3D false,
+> +};
+> +
+> +static const struct of_device_id soc_sleep_stats_table[] =3D {
+> +       { .compatible =3D "qcom,rpm-sleep-stats", .data =3D &rpm_data},
+> +       { .compatible =3D "qcom,rpmh-sleep-stats", .data =3D &rpmh_data},
+> +       { },
+> +};
+> +
+> +static int soc_sleep_stats_probe(struct platform_device *pdev)
+> +{
+> +       const struct of_device_id *match;
+> +       struct soc_sleep_stats_data *drv;
+> +       struct resource *res;
+> +       void __iomem *offset_addr;
+> +       int ret;
+> +
+> +       drv =3D devm_kzalloc(&pdev->dev, sizeof(*drv), GFP_KERNEL);
+> +       if (!drv)
+> +               return -ENOMEM;
+> +
+> +       match =3D of_match_node(soc_sleep_stats_table, pdev->dev.of_node);
+> +       if (!match)
+> +               return -ENODEV;
+> +
+> +       drv->config =3D match->data;
+
+Is this of_device_get_match_data()?
+
+> +
+> +       res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +       if (!res)
+> +               return PTR_ERR(res);
+> +
+> +       offset_addr =3D ioremap_nocache(res->start + drv->config->offset_=
+addr,
+> +                                     sizeof(u32));
+
+Why not just devm_platform_ioremap_resource()?
+
+> +       if (IS_ERR(offset_addr))
+> +               return PTR_ERR(offset_addr);
+> +
+> +       drv->stats_base =3D res->start | readl_relaxed(offset_addr);
+> +       drv->stats_size =3D resource_size(res);
+> +       iounmap(offset_addr);
+> +       mutex_init(&drv->lock);
+
+Hopefully this lock isn't required?
+
+> +
+> +       ret =3D soc_sleep_stats_create_sysfs(pdev, drv);
+> +       if (ret)
+> +               pr_info("Failed to create sysfs interface\n");
+
+Not pr_err()? Or dev_err()?
+
+> +
+> +       return ret;
+> +}
+> +
+> +static int soc_sleep_stats_remove(struct platform_device *pdev)
+> +{
+> +       struct soc_sleep_stats_data *drv =3D platform_get_drvdata(pdev);
+> +
+> +       sysfs_remove_file(drv->kobj, &drv->ka.attr);
+> +       kobject_put(drv->kobj);
+> +       platform_set_drvdata(pdev, NULL);
+
+This last line isn't necessary. Please remove.
+
+> +
+> +       return 0;
+> +}
+> +
