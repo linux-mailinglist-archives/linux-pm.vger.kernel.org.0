@@ -2,136 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AC585DB9
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 11:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F241185DD0
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 11:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731913AbfHHJC5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 05:02:57 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:59894 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731899AbfHHJCz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 05:02:55 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190808090254euoutp013f9acdb433fda173df6cb552e624dae6~45xsV_OkS1912219122euoutp01N
-        for <linux-pm@vger.kernel.org>; Thu,  8 Aug 2019 09:02:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190808090254euoutp013f9acdb433fda173df6cb552e624dae6~45xsV_OkS1912219122euoutp01N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1565254974;
-        bh=uK2H2CY5YVkbPXh3EKmhTQmAPpi5mTFt1H3u7NFbf9M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XYPKv9CisR+UF202TRHf4jqXzAqQShDRULjROkz37kNF/mA2dGJteJUt3QoLBNbcz
-         461B5SlCTqSpa5K3oZ/zJLDD5evvdpPWb4EzF3Ul4ZnSaD7wrvgrR6ajM3eGin87md
-         wsXq7jG/pkVpoicUvGt3abzZI92BPGaFtMWEcA9c=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190808090253eucas1p1052985fcc9af22168ed4480c9a027637~45xrw0RSf1971519715eucas1p1B;
-        Thu,  8 Aug 2019 09:02:53 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 76.9E.04469.D35EB4D5; Thu,  8
-        Aug 2019 10:02:53 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190808090252eucas1p1be186b7a34fa75073fddca120c292f04~45xq-4Wln0879608796eucas1p19;
-        Thu,  8 Aug 2019 09:02:52 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190808090252eusmtrp2ead827ae93f6a338cf8c2d2c4a3ecd55~45xq-Sb2T0889008890eusmtrp2C;
-        Thu,  8 Aug 2019 09:02:52 +0000 (GMT)
-X-AuditID: cbfec7f2-994db9c000001175-46-5d4be53d1584
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id A1.B1.04117.C35EB4D5; Thu,  8
-        Aug 2019 10:02:52 +0100 (BST)
-Received: from AMDC3218.DIGITAL.local (unknown [106.120.51.18]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190808090251eusmtip2c7bb3e0bb2f5f86d0937dc0a10dafa2d~45xqP_hYf3174031740eusmtip2K;
-        Thu,  8 Aug 2019 09:02:51 +0000 (GMT)
-From:   Kamil Konieczny <k.konieczny@partner.samsung.com>
-To:     k.konieczny@partner.samsung.com
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: [RESEND PATCH v5 4/4] dt-bindings: devfreq: exynos-bus: remove
- unused property
-Date:   Thu,  8 Aug 2019 11:02:34 +0200
-Message-Id: <20190808090234.12577-5-k.konieczny@partner.samsung.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190808090234.12577-1-k.konieczny@partner.samsung.com>
+        id S1730879AbfHHJGb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 05:06:31 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:46646 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730777AbfHHJGa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 05:06:30 -0400
+Received: by mail-ot1-f65.google.com with SMTP id z23so7467046ote.13;
+        Thu, 08 Aug 2019 02:06:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=34pNCA2fAatpNgW2gdL2L6PIclEzNScEt8bxwQ+wQhw=;
+        b=btZ7kWQQ7+ANtWZZv0B8Zmo7GHQyct0e5GJoz2SUmqFBw5okICc3X8pjW217ewd8rP
+         tX8Axugdb5ZczQ608pY0Z7daXPJMT9KZsbCp2IdJl5ciRBtQG4NYoC2Za59aboZYK99O
+         0kOHoQXfd/CnpLcAEBu6HdpPoi4hecd8Qduk7rqPjVuvpkaTXgbdQSSAKdD5IT1HzyI2
+         0DzkyAjb7FXgHYNzP0hGRwPxQV/mI3hh6rECqosAOoEKCWosPZ3eecsSsHJx3+Q/TJM2
+         kGxp9upFhpDnA+zA2EGwdP87XSiQgat2RxfE6AxG31947lVx+kepppOamFbdidxYrYoq
+         FBbw==
+X-Gm-Message-State: APjAAAXiwkCDbdsRixfuTrleg//Eq9wEOAqeVAlC0HSQzawBkx2yAlTA
+        JKQ4f5z5qsnFLVZHqhfMvzZZonZC9WPFGkfJl8c=
+X-Google-Smtp-Source: APXvYqzj3UqThCxDGgQPBMBDcNMHtdPq2BpaEuppJuuyxhOKl1E6sX2FzFWUaJgpE/jjcNezeJuicOhA12ciL3iufCI=
+X-Received: by 2002:aca:cdd3:: with SMTP id d202mr1665889oig.115.1565255189517;
+ Thu, 08 Aug 2019 02:06:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0gUURTHuzM7O+PSyLgVHdQKN4JK8oGFF8ooerBqgV8zpFYdVHJ12VXT
-        /JDZQ13IIvNZqFG2tqn5fuZa6+Km+UjFtEKz1ILSSk0pyczZMfTb7/zv/3/POZfLkPK3lCMT
-        ERXDa6NUkQqpTFLb9rtnj8+Ef5BHxgCDK3KeUHjw52cKF1i6KZxuWkL4xthXEvf0lNO4K3mS
-        xpVjrync33hXimevWxDO6TERuNQyTOOiwV4Cv7tULMWTv7oIfLXZQuO/ryskuGq0TXpIrizJ
-        L0HKSmOaVFn14KLy+benhDK92oiU1qE6QjlbuTWADpQdCOUjI+J4rfvBs7LwsoYTmmEmPqu5
-        gEpCrbQeMQxwe0HfEqNHMkbOFSN43JImFYufCDqyM0k9slsuZhG0TdsJLATu1b+lRd2AIMMC
-        q4GucVtAynnDx7pOQuCN3HbIGMkmBRPJ/ZZAeX+FLb2BOwWmiikkjCHhdsCiyVWQWe4oXHtj
-        lYjNtkFafZON7bhjUGpsl4geB2jPHbcxuey5XHPHdj9w0zQs3Hq/Ej4KA32LSOQN8MVaTYvs
-        DEsNBYTI52HiXjothq8gGE2ZXgnvh1ZrLyUMR3K74Emjuygfhu6+fEJ8OnsYmnIQZ7CHW7XC
-        joLMQuo1uejeA/lLnZTITqBfKqNEixLmmumbyCVvzTJ5a5bJW21biEgj2szH6tRhvM4zij/v
-        plOpdbFRYW4h0epKtPzjXv61ztSjub5gM+IYpFjPal74B8kpVZwuQW1GwJCKjexInG+QnA1V
-        JVzgtdFntLGRvM6MnBiJYjObuG70tJwLU8Xw53hew2v/nxKMnWMS8nZYSIy/sm9wr6EmcdLp
-        q+/Aq9RNrhBfy1JNj+oWMhftfee3JKfLy263BpQlm0cLaowphn6XmvKdx19orCaPoqpc2Td1
-        WshUofn+TS//H25vzupjDRNh8xrWL+TTiXlzp89A33BDlt+zP8FIn+Ls1dvx8Dt7MvCD15yf
-        QXHEMKOQ6MJVnrtJrU71D5VwGedtAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsVy+t/xe7o2T71jDSaclrfYOGM9q8X1L89Z
-        LeYfOcdq0bfvP6NF/+PXzBbnz29gtzjb9IbdYtPja6wWl3fNYbP43HuE0WLG+X1MFmuP3GW3
-        WHr9IpPF7cYVbBZvfpxlsmjde4Td4t+1jSwWmx8cY3MQ8lgzbw2jx6ZVnWwem5fUexx8t4fJ
-        o2/LKkaP4ze2M3l83iQXwB6lZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRv
-        Z5OSmpNZllqkb5egl7Fup0/BXY6KaXvnszYwHmbvYuTkkBAwkVi44xaQzcUhJLCUUeL3gmeM
-        EAlpicbTq5kgbGGJP9e62CCKPjFKPNq8kBkkwSZgLvFo+xmwIhEBZYnJ96YzgxQxC3SySqx4
-        coQNJCEsEC7xuP8D0AoODhYBVYm/+7RBwrwCLhJtN4+zQCyQl+jcsRvM5hRwlVi76iSYLQRU
-        s/H9dVaIekGJkzOfgMWZgeqbt85mnsAoMAtJahaS1AJGplWMIqmlxbnpucVGesWJucWleel6
-        yfm5mxiBMbnt2M8tOxi73gUfYhTgYFTi4S044R0rxJpYVlyZe4hRgoNZSYT3XplnrBBvSmJl
-        VWpRfnxRaU5q8SFGU6AfJjJLiSbnA9NFXkm8oamhuYWlobmxubGZhZI4b4fAwRghgfTEktTs
-        1NSC1CKYPiYOTqkGRrsW0eMyj04tnixwnuOEk12+8bzJiz2WKy46VhF0oMzvj9KGRe4Pj+Qu
-        4Dh+4PWt8h7nH3yP+JRe7V9z9OnNmZ8/H6r01BCsPC9hXDT3nanPF64FXFIH4napsbXdaNIv
-        2FoUv9Vn4+yOnotbtkrnGnrfOLP56aNPristQ+8t+f1O+spRt7SZjAeUWIozEg21mIuKEwGw
-        5K803wIAAA==
-X-CMS-MailID: 20190808090252eucas1p1be186b7a34fa75073fddca120c292f04
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190808090252eucas1p1be186b7a34fa75073fddca120c292f04
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190808090252eucas1p1be186b7a34fa75073fddca120c292f04
-References: <20190808090234.12577-1-k.konieczny@partner.samsung.com>
-        <CGME20190808090252eucas1p1be186b7a34fa75073fddca120c292f04@eucas1p1.samsung.com>
+References: <47415939.KV5G6iaeJG@kreacher> <20190730144134.GA12844@localhost.localdomain>
+ <100ba4aff1c6434a81e47774ab4acddc@AUSX13MPC105.AMER.DELL.COM>
+ <8246360B-F7D9-42EB-94FC-82995A769E28@canonical.com> <20190730191934.GD13948@localhost.localdomain>
+ <7d3e0b8ba1444194a153c93faa1cabb3@AUSX13MPC105.AMER.DELL.COM>
+ <20190730213114.GK13948@localhost.localdomain> <CAJZ5v0gxfeMN8eCNRjcXmUOkReVsdozb3EccaYMpnmSHu3771g@mail.gmail.com>
+ <20190731221956.GB15795@localhost.localdomain> <2583975.4sIyE3leJj@kreacher> <20190808084804.GA31404@lst.de>
+In-Reply-To: <20190808084804.GA31404@lst.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 8 Aug 2019 11:06:17 +0200
+Message-ID: <CAJZ5v0hTJKPi1zfB_RjuZ415-JjmK2nVP7mss3npqoB3+Xvy4w@mail.gmail.com>
+Subject: Re: [PATCH] nvme-pci: Allow PCI bus-level PM to be used if ASPM is disabled
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Mario Limonciello <Mario.Limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Remove unused DT property "exynos,voltage-tolerance".
+On Thu, Aug 8, 2019 at 10:48 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> > -     ndev->last_ps = 0;
+> >       ret = nvme_get_power_state(ctrl, &ndev->last_ps);
+> > -     if (ret < 0)
+> > +     if (ret < 0 || ndev->last_ps == U32_MAX)
+>
+> Is the intent of the magic U32_MAX check to see if the
+> nvme_get_power_state failed at the nvme level?  In that case just
+> checking for any non-zero return value from nvme_get_power_state might
+> be the easier and more clear way to do it.
 
-Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
----
- Documentation/devicetree/bindings/devfreq/exynos-bus.txt | 2 --
- 1 file changed, 2 deletions(-)
+Now that I think of that, it appears redundant.  I'll drop it.
 
-diff --git a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-index f8e946471a58..e71f752cc18f 100644
---- a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-+++ b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
-@@ -50,8 +50,6 @@ Required properties only for passive bus device:
- Optional properties only for parent bus device:
- - exynos,saturation-ratio: the percentage value which is used to calibrate
- 			the performance count against total cycle count.
--- exynos,voltage-tolerance: the percentage value for bus voltage tolerance
--			which is used to calculate the max voltage.
- 
- Detailed correlation between sub-blocks and power line according to Exynos SoC:
- - In case of Exynos3250, there are two power line as following:
--- 
-2.22.0
+>
+> > Index: linux-pm/drivers/pci/pcie/aspm.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/pci/pcie/aspm.c
+> > +++ linux-pm/drivers/pci/pcie/aspm.c
+>
+> Shouldn't we split PCI vs nvme in two patches?
 
+That can be done.
+
+> > @@ -1170,6 +1170,26 @@ static int pcie_aspm_get_policy(char *bu
+> >  module_param_call(policy, pcie_aspm_set_policy, pcie_aspm_get_policy,
+> >       NULL, 0644);
+> >
+> > +/*
+> > + * pcie_aspm_enabled - Return the mask of enabled ASPM link states.
+> > + * @pci_device: Target device.
+> > + */
+> > +u32 pcie_aspm_enabled(struct pci_dev *pci_device)
+>
+> pcie_aspm_enabled sounds like it returns a boolean.  Shouldn't there be
+> a mask or so in the name better documenting what it returns?
+
+OK
+
+> > +{
+> > +     struct pci_dev *bridge = pci_upstream_bridge(pci_device);
+> > +     u32 ret;
+> > +
+> > +     if (!bridge)
+> > +             return 0;
+> > +
+> > +     mutex_lock(&aspm_lock);
+> > +     ret = bridge->link_state ? bridge->link_state->aspm_enabled : 0;
+> > +     mutex_unlock(&aspm_lock);
+> > +
+> > +     return ret;
+> > +}
+>
+> I think this will need a EXPORT_SYMBOL_GPL thrown in so that modular
+> nvme continues working.
+
+Right, sorry.
+
+> > +
+> > +
+> >  #ifdef CONFIG_PCIEASPM_DEBUG
+>
+> Nit: double blank line here.
+
+Overlooked, will fix.
+
+Thanks!
