@@ -2,294 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C188647F
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 16:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DA686490
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 16:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728327AbfHHOjO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 10:39:14 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:37140 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728289AbfHHOjO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Aug 2019 10:39:14 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 5BD6720000A;
-        Thu,  8 Aug 2019 16:39:11 +0200 (CEST)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4E0662000A9;
-        Thu,  8 Aug 2019 16:39:11 +0200 (CEST)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id B5B5220618;
-        Thu,  8 Aug 2019 16:39:10 +0200 (CEST)
+        id S1732811AbfHHOk0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 10:40:26 -0400
+Received: from mail-eopbgr30083.outbound.protection.outlook.com ([40.107.3.83]:45699
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732375AbfHHOk0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Aug 2019 10:40:26 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DJmIVRXlPuHQWOtSxjzjmw8Zytgw0OVD4iMKZKi1mxLhEqRHbH129BmIAQmvhsJzUR7LIbFCCL6yl7TIVK/rHMDuplAQi0oCvRBBRYpQppppOqXchLe83uHo7btZlVjNERi8Mw+n7mZ0pEgxpU8TOgEvNW8It4RewnBQH5uJpRy+ddLrAhy9ZtuBkyz65vgDtHIcFOumV6plSVs5QyOA/qlIC6aW5S45DK14i6t0ty5SMATzw8pqobbPWWT3SBCiWnyeirehvSO8tHtiSAoOQ+Sek5cw9mSA38wYVh4fsqFKjvWQHPsh1jjtdy44gAFSXRLubblo1xALoBsFYzJIjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pihd/gRFSxCVv7ZE75MqtvfYdRkD0F0ISCeGgX0UBuU=;
+ b=Cu2Eixf3fVoEBIRV3VzzkiYZfY+q0U9TdB5ba92ITqtS1fqXA/QYF3BED56Mso+ZjbH6AOj1Nr/U+FgHa6hB4WtS4QR5fBeRKLd9lDzYoGOOU5gGByqqjp3K8WvPAFt+xHzZomNEgIXNCa3iz1+e/+Fd3wH4dH0qObkN8ezsSOf+3+iXFImX2eDxTtiq/ZDhw8Q8tHzQckD7UTdiNgxp3dxe1QPm9iFA+gNxRXJsu44LSoobivaMQJYA/PwAqYBHmiZK+URtRlIiIr5WXJCgFkH2tOQqodbtfvu2zjMRFAzfFt6akz6l1CfWR4Rb4udJ5hOz+kX+uvJj68NQ2Au9Dw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
+ header.d=nxp.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pihd/gRFSxCVv7ZE75MqtvfYdRkD0F0ISCeGgX0UBuU=;
+ b=Z5yCsiAtAGPok6x2Yo+yWS717+yZIGWKdKHvpyA0ZZj6v40BGJRmBwvw72E9gNI8rWKyIrJnAlYbzs9bjX8AL4cJxoN1EIDBvIRnFLUIMkTJGmCjQ+Y2VnvOQPHr42fwMuAzm9jc7a7aW2nyhXlmDkyZS2dKyzxEIlxMNmM/mrM=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB3167.eurprd04.prod.outlook.com (10.170.229.29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2136.17; Thu, 8 Aug 2019 14:40:22 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::e53d:e6a9:79bd:f970]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::e53d:e6a9:79bd:f970%2]) with mapi id 15.20.2157.015; Thu, 8 Aug 2019
+ 14:40:22 +0000
 From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Saravana Kannan <saravanak@google.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+To:     Saravana Kannan <saravanak@google.com>
+CC:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Lukasz Luba <l.luba@partner.samsung.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCHv2] PM / devfreq: Add dev_pm_qos support
-Date:   Thu,  8 Aug 2019 17:39:07 +0300
-Message-Id: <e45c28528ff941abb1f72fdb1eedf65fb3345c5a.1565274802.git.leonard.crestez@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
+        dl-linux-imx <linux-imx@nxp.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] PM / devfreq: Add dev_pm_qos support
+Thread-Topic: [PATCH] PM / devfreq: Add dev_pm_qos support
+Thread-Index: AQHVTDXXQompASFxY0iEK4ZTlwB6yA==
+Date:   Thu, 8 Aug 2019 14:40:22 +0000
+Message-ID: <VI1PR04MB7023B254B29A2BA9C9FAD65FEED70@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <bcbab490489ef5143361048db93752741b38e379.1565081126.git.leonard.crestez@nxp.com>
+ <CAGETcx9pf543R4j3_YE2TtFMPM8Teh-NNj06ikvo92JuNHDtGg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [212.146.100.6]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 564ad226-32af-49b0-c8c5-08d71c0e57fc
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB3167;
+x-ms-traffictypediagnostic: VI1PR04MB3167:
+x-microsoft-antispam-prvs: <VI1PR04MB31679EB57BA242E6D228C62DEED70@VI1PR04MB3167.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 012349AD1C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(396003)(346002)(376002)(136003)(189003)(199004)(76176011)(64756008)(446003)(99286004)(6916009)(486006)(66556008)(2906002)(256004)(74316002)(305945005)(476003)(7736002)(6506007)(26005)(71190400001)(102836004)(316002)(86362001)(186003)(71200400001)(53546011)(54906003)(7696005)(44832011)(33656002)(7416002)(229853002)(25786009)(6116002)(66446008)(52536014)(6246003)(9686003)(8936002)(4326008)(81166006)(55016002)(66476007)(14444005)(6436002)(81156014)(14454004)(3846002)(66946007)(5660300002)(478600001)(66066001)(8676002)(53936002)(91956017)(76116006);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3167;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: YqVaFhtmx1q4QiLGZhSuQHBmSI3ba6PMX05TnXvLrRBN5EDuO8m8ZYitvgWhxPDN545oT2OrwWotJ+J8E9H2+exG/WdSfYupgi+4CJJ5aDKS6CWuwxdYr72ZHq9lZC9TUxghXMKkCesfs+74mg6reldAt+gprqSPRAgxHrUJ6vOS6rC0Yps9nbG8teJcQLh3mGAfMXOOVjxAFJ0fiI5gOJHhv3Jt6rz/yWrtWC3+VSigyRXs/WhRR5443qSM14nK3GufhXD3tfTfh1Mobl6F5RX9rVyXJ/l3nzvg6PpVsHdx1a8JfhdI51REMeSpEbrEGWDbvqHqcz0UqudLHzrexig8UNHEV963cmqJEupdxrZbislc8t8+BaqEs6SjTq8l/z9uR1Gec6dqhQbCzphOGcQ0HiTnHj9A0aIFVqU/Ek8=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 564ad226-32af-49b0-c8c5-08d71c0e57fc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2019 14:40:22.7218
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3JViiQ0AokWOQjKXeV3UgdP7LL/ptCDF2hUqL3WKJUAU0edmG0zezhaSj1RcOTOU2MfDgqWcf+pz4V9+g1Qo/g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3167
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add dev_pm_qos notifies to devfreq core in order to support frequency
-limits via the dev_pm_qos_add_request.
-
-Unlike the rest of devfreq the dev_pm_qos frequency is measured Khz:
-this is consistent with current dev_pm_qos usage for cpufreq and allows
-frequencies above 2Ghz (pm_qos expresses limits as s32).
-
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-
----
-Changes since v1:
- * Add doxygen comments for min_nb/max_nb
- * Remove notifiers on error/cleanup paths. Keep gotos simple by relying
-on dev_pm_qos_remove_notifier ignoring notifiers which were not added.
-Link to v1: https://patchwork.kernel.org/patch/11078475/
-
- drivers/devfreq/devfreq.c | 83 ++++++++++++++++++++++++++++++++++-----
- include/linux/devfreq.h   |  5 +++
- 2 files changed, 79 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 784c08e4f931..7f1f273562f4 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -22,10 +22,11 @@
- #include <linux/platform_device.h>
- #include <linux/list.h>
- #include <linux/printk.h>
- #include <linux/hrtimer.h>
- #include <linux/of.h>
-+#include <linux/pm_qos.h>
- #include "governor.h"
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/devfreq.h>
- 
-@@ -96,10 +97,26 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
- 		dev_pm_opp_put(opp);
- 
- 	return max_freq;
- }
- 
-+static unsigned long get_effective_min_freq(struct devfreq *devfreq)
-+{
-+	return max3(devfreq->scaling_min_freq, devfreq->min_freq,
-+		1000 * (unsigned long)dev_pm_qos_read_value(
-+				devfreq->dev.parent,
-+				DEV_PM_QOS_MIN_FREQUENCY));
-+}
-+
-+static unsigned long get_effective_max_freq(struct devfreq *devfreq)
-+{
-+	return min3(devfreq->scaling_max_freq, devfreq->max_freq,
-+		1000 * (unsigned long)dev_pm_qos_read_value(
-+				devfreq->dev.parent,
-+				DEV_PM_QOS_MAX_FREQUENCY));
-+}
-+
- /**
-  * devfreq_get_freq_level() - Lookup freq_table for the frequency
-  * @devfreq:	the devfreq instance
-  * @freq:	the target frequency
-  */
-@@ -356,12 +373,12 @@ int update_devfreq(struct devfreq *devfreq)
- 	 *
- 	 * List from the highest priority
- 	 * max_freq
- 	 * min_freq
- 	 */
--	max_freq = min(devfreq->scaling_max_freq, devfreq->max_freq);
--	min_freq = max(devfreq->scaling_min_freq, devfreq->min_freq);
-+	max_freq = get_effective_max_freq(devfreq);
-+	min_freq = get_effective_min_freq(devfreq);
- 
- 	if (freq < min_freq) {
- 		freq = min_freq;
- 		flags &= ~DEVFREQ_FLAG_LEAST_UPPER_BOUND; /* Use GLB */
- 	}
-@@ -570,10 +587,31 @@ static int devfreq_notifier_call(struct notifier_block *nb, unsigned long type,
- 	mutex_unlock(&devfreq->lock);
- 
- 	return ret;
- }
- 
-+static int devfreq_qos_notifier_call(struct devfreq *devfreq)
-+{
-+	int ret;
-+
-+	mutex_lock(&devfreq->lock);
-+	ret = update_devfreq(devfreq);
-+	mutex_unlock(&devfreq->lock);
-+
-+	return ret;
-+}
-+
-+static int devfreq_qos_min_notifier_call(struct notifier_block *nb, unsigned long val, void *ptr)
-+{
-+	return devfreq_qos_notifier_call(container_of(nb, struct devfreq, nb_min));
-+}
-+
-+static int devfreq_qos_max_notifier_call(struct notifier_block *nb, unsigned long val, void *ptr)
-+{
-+	return devfreq_qos_notifier_call(container_of(nb, struct devfreq, nb_max));
-+}
-+
- /**
-  * devfreq_dev_release() - Callback for struct device to release the device.
-  * @dev:	the devfreq device
-  *
-  * Remove devfreq from the list and release its resources.
-@@ -592,10 +630,14 @@ static void devfreq_dev_release(struct device *dev)
- 	mutex_unlock(&devfreq_list_lock);
- 
- 	if (devfreq->profile->exit)
- 		devfreq->profile->exit(devfreq->dev.parent);
- 
-+	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
-+			DEV_PM_QOS_MAX_FREQUENCY);
-+	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_min,
-+			DEV_PM_QOS_MIN_FREQUENCY);
- 	mutex_destroy(&devfreq->lock);
- 	kfree(devfreq);
- }
- 
- /**
-@@ -636,21 +678,44 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 		err = -ENOMEM;
- 		goto err_out;
- 	}
- 
- 	mutex_init(&devfreq->lock);
--	mutex_lock(&devfreq->lock);
- 	devfreq->dev.parent = dev;
- 	devfreq->dev.class = devfreq_class;
- 	devfreq->dev.release = devfreq_dev_release;
- 	devfreq->profile = profile;
- 	strncpy(devfreq->governor_name, governor_name, DEVFREQ_NAME_LEN);
- 	devfreq->previous_freq = profile->initial_freq;
- 	devfreq->last_status.current_frequency = profile->initial_freq;
- 	devfreq->data = data;
- 	devfreq->nb.notifier_call = devfreq_notifier_call;
- 
-+	/*
-+	 * notifier from pm_qos
-+	 *
-+	 * initialized outside of devfreq->lock to avoid circular warning
-+	 * between devfreq->lock and dev_pm_qos_mtx
-+	 */
-+	devfreq->nb_min.notifier_call = devfreq_qos_min_notifier_call;
-+	devfreq->nb_max.notifier_call = devfreq_qos_max_notifier_call;
-+
-+	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_min,
-+				      DEV_PM_QOS_MIN_FREQUENCY);
-+	if (err) {
-+		dev_err(dev, "Failed to register MIN QoS notifier: %d\n", err);
-+		goto err_dev;
-+	}
-+
-+	err = dev_pm_qos_add_notifier(devfreq->dev.parent, &devfreq->nb_max,
-+				      DEV_PM_QOS_MAX_FREQUENCY);
-+	if (err) {
-+		dev_err(dev, "Failed to register MAX QoS notifier: %d\n", err);
-+		goto err_dev;
-+	}
-+
-+	mutex_lock(&devfreq->lock);
- 	if (!devfreq->profile->max_state && !devfreq->profile->freq_table) {
- 		mutex_unlock(&devfreq->lock);
- 		err = set_freq_table(devfreq);
- 		if (err < 0)
- 			goto err_dev;
-@@ -741,10 +806,14 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 	mutex_unlock(&devfreq_list_lock);
- err_devfreq:
- 	devfreq_remove_device(devfreq);
- 	devfreq = NULL;
- err_dev:
-+	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_max,
-+			DEV_PM_QOS_MAX_FREQUENCY);
-+	dev_pm_qos_remove_notifier(devfreq->dev.parent, &devfreq->nb_min,
-+			DEV_PM_QOS_MIN_FREQUENCY);
- 	kfree(devfreq);
- err_out:
- 	return ERR_PTR(err);
- }
- EXPORT_SYMBOL(devfreq_add_device);
-@@ -1311,13 +1380,11 @@ static ssize_t min_freq_store(struct device *dev, struct device_attribute *attr,
- }
- 
- static ssize_t min_freq_show(struct device *dev, struct device_attribute *attr,
- 			     char *buf)
- {
--	struct devfreq *df = to_devfreq(dev);
--
--	return sprintf(buf, "%lu\n", max(df->scaling_min_freq, df->min_freq));
-+	return sprintf(buf, "%lu\n", get_effective_min_freq(to_devfreq(dev)));
- }
- 
- static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
- 			      const char *buf, size_t count)
- {
-@@ -1356,13 +1423,11 @@ static ssize_t max_freq_store(struct device *dev, struct device_attribute *attr,
- static DEVICE_ATTR_RW(min_freq);
- 
- static ssize_t max_freq_show(struct device *dev, struct device_attribute *attr,
- 			     char *buf)
- {
--	struct devfreq *df = to_devfreq(dev);
--
--	return sprintf(buf, "%lu\n", min(df->scaling_max_freq, df->max_freq));
-+	return sprintf(buf, "%lu\n", get_effective_max_freq(to_devfreq(dev)));
- }
- static DEVICE_ATTR_RW(max_freq);
- 
- static ssize_t available_frequencies_show(struct device *d,
- 					  struct device_attribute *attr,
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 2bae9ed3c783..8b92ccbd1962 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -134,10 +134,12 @@ struct devfreq_dev_profile {
-  * @total_trans:	Number of devfreq transitions
-  * @trans_table:	Statistics of devfreq transitions
-  * @time_in_state:	Statistics of devfreq states
-  * @last_stat_updated:	The last time stat updated
-  * @transition_notifier_list: list head of DEVFREQ_TRANSITION_NOTIFIER notifier
-+ * @nb_min:		Notifier block for DEV_PM_QOS_MIN_FREQUENCY
-+ * @nb_max:		Notifier block for DEV_PM_QOS_MAX_FREQUENCY
-  *
-  * This structure stores the devfreq information for a give device.
-  *
-  * Note that when a governor accesses entries in struct devfreq in its
-  * functions except for the context of callbacks defined in struct
-@@ -176,10 +178,13 @@ struct devfreq {
- 	unsigned int *trans_table;
- 	unsigned long *time_in_state;
- 	unsigned long last_stat_updated;
- 
- 	struct srcu_notifier_head transition_notifier_list;
-+
-+	struct notifier_block nb_min;
-+	struct notifier_block nb_max;
- };
- 
- struct devfreq_freqs {
- 	unsigned long old;
- 	unsigned long new;
--- 
-2.17.1
-
+On 8/8/2019 12:48 AM, Saravana Kannan wrote:=0A=
+> On Tue, Aug 6, 2019 at 2:03 AM Leonard Crestez <leonard.crestez@nxp.com> =
+wrote:=0A=
+>>=0A=
+>> Add dev_pm_qos notifies to devfreq core in order to support frequency=0A=
+>> limits via dev_pm_qos_add_request and related APIs=0A=
+>>=0A=
+>> Unlike the rest of devfreq the dev_pm_qos frequency is measured kHz:=0A=
+>> this is consistent with current dev_pm_qos usage for cpufreq and allows=
+=0A=
+>> frequencies above 2Ghz.=0A=
+=0A=
+> Where's the devfreq_remove_device() clean up of this?=0A=
+=0A=
+Oops, see v2=0A=
+>>   static ssize_t min_freq_show(struct device *dev, struct device_attribu=
+te *attr,=0A=
+>>                               char *buf)=0A=
+>>   {=0A=
+>> -       struct devfreq *df =3D to_devfreq(dev);=0A=
+>> -=0A=
+>> -       return sprintf(buf, "%lu\n", max(df->scaling_min_freq, df->min_f=
+req));=0A=
+>> +       return sprintf(buf, "%lu\n", get_effective_min_freq(to_devfreq(d=
+ev)));=0A=
+> =0A=
+> Not directly related to your patch but I wish I had caught this=0A=
+> behavior of min_freq_show earlier and nacked it. The "show the=0A=
+> aggregated instantaneous min freq" file should have been separate from=0A=
+> the user space min freq file. So if init scripts set some minfreq and=0A=
+> some other userspace daemon wants to take control of the min_freq=0A=
+> userspace vote, there's no way for it to query the current userspace=0A=
+> vote because the PMQoS or OPP based minfreq limits might have caused=0A=
+> the instantaneous min freq value to have changed. We have this same=0A=
+> mess with cpufreq too. We really need to fix this and split userspace=0A=
+> min/max freq votes file from current min/max freq.=0A=
+=0A=
+This seems solvable by adding extra files to sysfs.=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
