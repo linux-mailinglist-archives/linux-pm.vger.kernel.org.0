@@ -2,131 +2,375 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9603F85718
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 02:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7843985775
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Aug 2019 03:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389087AbfHHAHy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Aug 2019 20:07:54 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:38645 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389558AbfHHAHv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 20:07:51 -0400
-Received: by mail-qt1-f202.google.com with SMTP id r58so83950230qtb.5
-        for <linux-pm@vger.kernel.org>; Wed, 07 Aug 2019 17:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=mRx6DvobeAgz9fXiYoI+VAmx830kBHXoGc7G6A5EVd0=;
-        b=Nb/f8Yv6FUVnI6AIYErVf4XUZ415HdkvpRagDvig0laxwN4e5b6qWT1BqjPfyTY3gh
-         /H3whwCBPF7qu+ONJFFcvISfyrKbJANEayQYzgY9gHmZ8YKQ+kEmvPYPYXODnWGXvi5d
-         F8znJJWnR7znYQH4GDVeoGbQexpU7EVwK6PZksEIOj0WfKvyQIByPBZuAZ9IteArwCXj
-         WCIVC/+E1p3z4aH2TMUjSVRwVSsuCq7uBHKlr80Wfaai9/4Xn1k7/15AnRb9A4Ctyc3R
-         GgvmLYIcY0b7C23Fi2Fqh6yf9PKj8RyyTjrNT2czlJijhFqHjk2/PrJ/3idRZYhmTtMI
-         D/Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=mRx6DvobeAgz9fXiYoI+VAmx830kBHXoGc7G6A5EVd0=;
-        b=Rev2M+M9QryzUAhpFVNNDYR7gqODitLSntxvBANTvICngGP/FWMQt5IVLexGLlh+G3
-         1IMTH17D+/Mhi8k/+N6n6YIWBYtFB43bb7Ywf5bziQIdYzPF/7xhnPu4oM+bkmCkK2bF
-         7jf1IUi0xOg+mLW4t89tHMmjYY+P7wFuZ6O7cPm78ABs6Oz7oBZbo9BYcomnVKroE4QA
-         QuMon36RGYOeUHx5tqY3frZXoftgbmAU/fmq7EBjWnO7AkRB82GhX37fEGZ9137a8v8V
-         NnfCOQhT2Y78Xf7S0wtZz2ONz3O/tUdGDjfbJFRR17qiztdK2sl/FZpjLnSIhzmFD/53
-         mPwA==
-X-Gm-Message-State: APjAAAWfrie5ouDy3FTn8rd7gr3BlczhDJIKdDX7b6OciWR0Dh1Qhor0
-        gcW4IX1nuWTXO5A1UqOHwubpsHhXJOEtPCYk1Y2KkA==
-X-Google-Smtp-Source: APXvYqzDD3e/DDDmmiFWtFLYPkI8+F4oMu/Vs4BKQACi8mWeuLre1RbWU/82SKWjQJaIbIWLzYoh5zi/iHEUBl2vePR/rA==
-X-Received: by 2002:ae9:c303:: with SMTP id n3mr10359268qkg.372.1565222870081;
- Wed, 07 Aug 2019 17:07:50 -0700 (PDT)
-Date:   Wed,  7 Aug 2019 17:07:02 -0700
-In-Reply-To: <20190808000721.124691-1-matthewgarrett@google.com>
-Message-Id: <20190808000721.124691-11-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190808000721.124691-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
-Subject: [PATCH V38 10/29] hibernate: Disable when the kernel is locked down
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Josh Boyer <jwboyer@fedoraproject.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>, rjw@rjwysocki.net,
-        pavel@ucw.cz, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S2389314AbfHHBS0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Aug 2019 21:18:26 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:59544 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389330AbfHHBS0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Aug 2019 21:18:26 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190808011822epoutp040dd32ca63fbae4e54203098f424590f8~4zcGsXvgD0416304163epoutp04h
+        for <linux-pm@vger.kernel.org>; Thu,  8 Aug 2019 01:18:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190808011822epoutp040dd32ca63fbae4e54203098f424590f8~4zcGsXvgD0416304163epoutp04h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1565227102;
+        bh=suZAtkIZTbidJYEnTA76OQo7ZKcjFnobhaY/lmuV4Xk=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=abQtU9kI2ZQdYYVw3HnZxvGI1wnP66yE3Qww/GGgXSXbVpw1VSQHwCmDletFWvyr9
+         p6n2BncgLrks4aXMjXeHBCFwnKaDxQ1ttnxjZBoa2/j5eAP6C3m2G1a1UlPB76ruYO
+         2mkylD3DWFkKOaouLW11eeTsC5nUNBK43rSii8tI=
+Received: from epsnrtp5.localdomain (unknown [182.195.42.166]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20190808011821epcas1p3b9c69c2336d6f97be75f9061d122b066~4zcGG1UI-2572025720epcas1p3Y;
+        Thu,  8 Aug 2019 01:18:21 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.158]) by
+        epsnrtp5.localdomain (Postfix) with ESMTP id 463r9626FjzMqYkd; Thu,  8 Aug
+        2019 01:18:18 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9F.EB.04085.A587B4D5; Thu,  8 Aug 2019 10:18:18 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190808011817epcas1p3134a8b6ebab5e8c22283ac185f1337e5~4zcCjpb002041420414epcas1p3B;
+        Thu,  8 Aug 2019 01:18:17 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190808011817epsmtrp141a3aa2f06d91e432431428489e33030~4zcCisNPF2993829938epsmtrp1x;
+        Thu,  8 Aug 2019 01:18:17 +0000 (GMT)
+X-AuditID: b6c32a39-d03ff70000000ff5-c4-5d4b785a8158
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B0.2D.03638.9587B4D5; Thu,  8 Aug 2019 10:18:17 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190808011817epsmtip2fa34f57945596b559e162d892de38d13~4zcCVFcDl2156621566epsmtip2h;
+        Thu,  8 Aug 2019 01:18:17 +0000 (GMT)
+Subject: Re: [PATCH v5 2/4] devfreq: exynos-bus: convert to use
+ dev_pm_opp_set_rate()
+To:     k.konieczny@partner.samsung.com
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <9dd88e2e-f9fc-aa05-4ba4-8dfb009ec9f6@samsung.com>
+Date:   Thu, 8 Aug 2019 10:21:56 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190807133838.14678-3-k.konieczny@partner.samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIJsWRmVeSWpSXmKPExsWy7bCmrm5UhXesweGz/BYbZ6xntZh/5Byr
+        Rd++/4wW/Y9fM1ucP7+B3eJs0xt2i02Pr7FaXN41h83ic+8RRosZ5/cxWaw9cpfdYun1i0wW
+        txtXsFm8+XGWyaJ17xF2i3/XNrJYbH5wjM1B0GPNvDWMHptWdbJ5bF5S73Hw3R4mj74tqxg9
+        jt/YzuTxeZNcAHtUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKL
+        T4CuW2YO0AdKCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnALLAr3ixNzi0rx0veT8
+        XCtDAwMjU6DChOyM6XsvsxUctquY2vKcuYHxpmEXIyeHhICJxOeGr6xdjFwcQgI7GCVOTP7P
+        COF8YpR4uv8eO4TzjVHiyM8ORpiWOS3vWCASexklFlxoYYZw3jNKtD7+AeRwcAgLhEt8veIG
+        0iAioCwx+d50sBpmgcssEtMeTWIFSbAJaEnsf3GDDcTmF1CUuPrjMdgGXgE7idfPLzKD2CwC
+        KhK9N28zgdiiAhESnx4cZoWoEZQ4OfMJC4jNKeAqseZCCzuIzSwgLnHryXwmCFteonnrbLDF
+        EgLn2CU+Tn/BBvGCi8SKOx1QtrDEq+Nb2CFsKYmX/W1QdrXEypNH2CCaOxgltuy/wAqRMJbY
+        v3QyE8iXzAKaEut36UOEFSV2/p7LCLGYT+Ld1x5WkBIJAV6JjjYhiBJlicsP7jJB2JISi9s7
+        2SYwKs1C8s4sJC/MQvLCLIRlCxhZVjGKpRYU56anFhsWmCJH9yZGcPLWstzBeOyczyFGAQ5G
+        JR5ehgtesUKsiWXFlbmHGCU4mJVEeO+VecYK8aYkVlalFuXHF5XmpBYfYjQFhvZEZinR5Hxg
+        ZskriTc0NTI2NrYwMTQzNTRUEudd+MMiVkggPbEkNTs1tSC1CKaPiYNTqoFRdJ57xpzzjx1c
+        LXvZq3RkGVRZvr5J3ahRY/zdI8ImtuPy7diZr6+wzVsbabJI6lF9g7Yna2pBLMOCv2rXcnu0
+        Iu/rhzu/uc967MarZTHlh3q9u78XFM7bLvI0PVT0xNnedSsfd01d/FOpm/u3gF69WISOaCR7
+        1uqUNpZvrC1/s/8XB0kFdymxFGckGmoxFxUnAgCudC/r9AMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNIsWRmVeSWpSXmKPExsWy7bCSvG5khXeswaP72hYbZ6xntZh/5Byr
+        Rd++/4wW/Y9fM1ucP7+B3eJs0xt2i02Pr7FaXN41h83ic+8RRosZ5/cxWaw9cpfdYun1i0wW
+        txtXsFm8+XGWyaJ17xF2i3/XNrJYbH5wjM1B0GPNvDWMHptWdbJ5bF5S73Hw3R4mj74tqxg9
+        jt/YzuTxeZNcAHsUl01Kak5mWWqRvl0CV8b0vZfZCg7bVUxtec7cwHjTsIuRk0NCwERiTss7
+        li5GLg4hgd2MEtvm9LJBJCQlpl08ytzFyAFkC0scPlwMUfOWUWL62wZGkLiwQLjE1ytuIOUi
+        AsoSk+9NZwapYRa4yiJxfuMcNoiGy4wSL//OYwWpYhPQktj/4gbYAn4BRYmrPx4zgti8AnYS
+        r59fZAaxWQRUJHpv3mYCsUUFIiQO75gFVSMocXLmExYQm1PAVWLNhRZ2EJtZQF3iz7xLzBC2
+        uMStJ/OZIGx5ieats5knMArPQtI+C0nLLCQts5C0LGBkWcUomVpQnJueW2xYYJSXWq5XnJhb
+        XJqXrpecn7uJERzFWlo7GE+ciD/EKMDBqMTDy3DBK1aINbGsuDL3EKMEB7OSCO+9Ms9YId6U
+        xMqq1KL8+KLSnNTiQ4zSHCxK4rzy+ccihQTSE0tSs1NTC1KLYLJMHJxSDYyaUy5eWlgr2NoW
+        tkD2nYm4vIHwwxli9wP092x7URPxzM1z9u+DLFKG2uv6jdPuSoTMbczI47J+udxtQdzxLhtV
+        b3PnDVaLkpV2rQ83FVyYOZlTyl0vrSzZpPjUtuBrx198tTQoz7t2q3rzn5PJVzmKZaLm3zed
+        8Vsvprx/wU3JVaqyOemTZiqxFGckGmoxFxUnAgBgN9cs3gIAAA==
+X-CMS-MailID: 20190808011817epcas1p3134a8b6ebab5e8c22283ac185f1337e5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190807133857eucas1p23d2618db67434fa1301585cab059fa5b
+References: <20190807133838.14678-1-k.konieczny@partner.samsung.com>
+        <CGME20190807133857eucas1p23d2618db67434fa1301585cab059fa5b@eucas1p2.samsung.com>
+        <20190807133838.14678-3-k.konieczny@partner.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Josh Boyer <jwboyer@fedoraproject.org>
+Hi Kamil,
 
-There is currently no way to verify the resume image when returning
-from hibernate.  This might compromise the signed modules trust model,
-so until we can work with signed hibernate images we disable it when the
-kernel is locked down.
+On 19. 8. 7. 오후 10:38, k.konieczny@partner.samsung.com wrote:
+> Reuse opp core code for setting bus clock and voltage. As a side
+> effect this allow usage of coupled regulators feature (required
+> for boards using Exynos5422/5800 SoCs) because dev_pm_opp_set_rate()
+> uses regulator_set_voltage_triplet() for setting regulator voltage
+> while the old code used regulator_set_voltage_tol() with fixed
+> tolerance. This patch also removes no longer needed parsing of DT
+> property "exynos,voltage-tolerance" (no Exynos devfreq DT node uses
+> it). After applying changes both functions exynos_bus_passive_target()
+> and exynos_bus_target() have the same code, so remove
+> exynos_bus_passive_target(). In exynos_bus_probe() replace it with
+> exynos_bus_target.
+> 
+> Signed-off-by: Kamil Konieczny <k.konieczny@partner.samsung.com>
+> ---
+> Changes:
+> v5:
+> - squashed last patch into this one, as suggested by Chanwoo Choi
+> v4:
+> - remove unrelated changes, add newline before comment
+> 
+> ---
+>  drivers/devfreq/exynos-bus.c | 130 +++++++----------------------------
+>  1 file changed, 24 insertions(+), 106 deletions(-)
+> 
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index f34fa26f00d0..2aeb6cc07960 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -25,7 +25,6 @@
+>  #include <linux/slab.h>
+>  
+>  #define DEFAULT_SATURATION_RATIO	40
+> -#define DEFAULT_VOLTAGE_TOLERANCE	2
+>  
+>  struct exynos_bus {
+>  	struct device *dev;
+> @@ -37,9 +36,8 @@ struct exynos_bus {
+>  
+>  	unsigned long curr_freq;
+>  
+> -	struct regulator *regulator;
+> +	struct opp_table *opp_table;
+>  	struct clk *clk;
+> -	unsigned int voltage_tolerance;
+>  	unsigned int ratio;
+>  };
+>  
+> @@ -93,62 +91,29 @@ static int exynos_bus_get_event(struct exynos_bus *bus,
+>  }
+>  
+>  /*
+> - * Must necessary function for devfreq simple-ondemand governor
+> + * devfreq function for both simple-ondemand and passive governor
+>   */
+>  static int exynos_bus_target(struct device *dev, unsigned long *freq, u32 flags)
+>  {
+>  	struct exynos_bus *bus = dev_get_drvdata(dev);
+>  	struct dev_pm_opp *new_opp;
+> -	unsigned long old_freq, new_freq, new_volt, tol;
+>  	int ret = 0;
+>  
+> -	/* Get new opp-bus instance according to new bus clock */
+> +	/* Get correct frequency for bus. */
+>  	new_opp = devfreq_recommended_opp(dev, freq, flags);
+>  	if (IS_ERR(new_opp)) {
+>  		dev_err(dev, "failed to get recommended opp instance\n");
+>  		return PTR_ERR(new_opp);
+>  	}
+>  
+> -	new_freq = dev_pm_opp_get_freq(new_opp);
+> -	new_volt = dev_pm_opp_get_voltage(new_opp);
+>  	dev_pm_opp_put(new_opp);
+>  
+> -	old_freq = bus->curr_freq;
+> -
+> -	if (old_freq == new_freq)
+> -		return 0;
+> -	tol = new_volt * bus->voltage_tolerance / 100;
+> -
+>  	/* Change voltage and frequency according to new OPP level */
+>  	mutex_lock(&bus->lock);
+> +	ret = dev_pm_opp_set_rate(dev, *freq);
+> +	if (!ret)
+> +		bus->curr_freq = *freq;
+>  
+> -	if (old_freq < new_freq) {
+> -		ret = regulator_set_voltage_tol(bus->regulator, new_volt, tol);
+> -		if (ret < 0) {
+> -			dev_err(bus->dev, "failed to set voltage\n");
+> -			goto out;
+> -		}
+> -	}
+> -
+> -	ret = clk_set_rate(bus->clk, new_freq);
+> -	if (ret < 0) {
+> -		dev_err(dev, "failed to change clock of bus\n");
+> -		clk_set_rate(bus->clk, old_freq);
+> -		goto out;
+> -	}
+> -
+> -	if (old_freq > new_freq) {
+> -		ret = regulator_set_voltage_tol(bus->regulator, new_volt, tol);
+> -		if (ret < 0) {
+> -			dev_err(bus->dev, "failed to set voltage\n");
+> -			goto out;
+> -		}
+> -	}
+> -	bus->curr_freq = new_freq;
+> -
+> -	dev_dbg(dev, "Set the frequency of bus (%luHz -> %luHz, %luHz)\n",
+> -			old_freq, new_freq, clk_get_rate(bus->clk));
+> -out:
+>  	mutex_unlock(&bus->lock);
+>  
+>  	return ret;
+> @@ -196,54 +161,10 @@ static void exynos_bus_exit(struct device *dev)
+>  
+>  	dev_pm_opp_of_remove_table(dev);
+>  	clk_disable_unprepare(bus->clk);
+> -	if (bus->regulator)
+> -		regulator_disable(bus->regulator);
+> -}
+> -
+> -/*
+> - * Must necessary function for devfreq passive governor
+> - */
+> -static int exynos_bus_passive_target(struct device *dev, unsigned long *freq,
+> -					u32 flags)
+> -{
+> -	struct exynos_bus *bus = dev_get_drvdata(dev);
+> -	struct dev_pm_opp *new_opp;
+> -	unsigned long old_freq, new_freq;
+> -	int ret = 0;
+> -
+> -	/* Get new opp-bus instance according to new bus clock */
+> -	new_opp = devfreq_recommended_opp(dev, freq, flags);
+> -	if (IS_ERR(new_opp)) {
+> -		dev_err(dev, "failed to get recommended opp instance\n");
+> -		return PTR_ERR(new_opp);
+> -	}
+> -
+> -	new_freq = dev_pm_opp_get_freq(new_opp);
+> -	dev_pm_opp_put(new_opp);
+> -
+> -	old_freq = bus->curr_freq;
+> -
+> -	if (old_freq == new_freq)
+> -		return 0;
+> -
+> -	/* Change the frequency according to new OPP level */
+> -	mutex_lock(&bus->lock);
+> -
+> -	ret = clk_set_rate(bus->clk, new_freq);
+> -	if (ret < 0) {
+> -		dev_err(dev, "failed to set the clock of bus\n");
+> -		goto out;
+> +	if (bus->opp_table) {
+> +		dev_pm_opp_put_regulators(bus->opp_table);
+> +		bus->opp_table = NULL;
+>  	}
+> -
+> -	*freq = new_freq;
+> -	bus->curr_freq = new_freq;
+> -
+> -	dev_dbg(dev, "Set the frequency of bus (%luHz -> %luHz, %luHz)\n",
+> -			old_freq, new_freq, clk_get_rate(bus->clk));
+> -out:
+> -	mutex_unlock(&bus->lock);
+> -
+> -	return ret;
+>  }
+>  
+>  static void exynos_bus_passive_exit(struct device *dev)
+> @@ -258,21 +179,19 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+>  					struct exynos_bus *bus)
+>  {
+>  	struct device *dev = bus->dev;
+> +	struct opp_table *opp_table;
+> +	const char *vdd = "vdd";
+>  	int i, ret, count, size;
+>  
+> -	/* Get the regulator to provide each bus with the power */
+> -	bus->regulator = devm_regulator_get(dev, "vdd");
+> -	if (IS_ERR(bus->regulator)) {
+> -		dev_err(dev, "failed to get VDD regulator\n");
+> -		return PTR_ERR(bus->regulator);
+> -	}
+> -
+> -	ret = regulator_enable(bus->regulator);
+> -	if (ret < 0) {
+> -		dev_err(dev, "failed to enable VDD regulator\n");
+> +	opp_table = dev_pm_opp_set_regulators(dev, &vdd, 1);
+> +	if (IS_ERR(opp_table)) {
+> +		ret = PTR_ERR(opp_table);
+> +		dev_err(dev, "failed to set regulators %d\n", ret);
+>  		return ret;
+>  	}
+>  
+> +	bus->opp_table = opp_table;
+> +
+>  	/*
+>  	 * Get the devfreq-event devices to get the current utilization of
+>  	 * buses. This raw data will be used in devfreq ondemand governor.
+> @@ -313,14 +232,11 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
+>  	if (of_property_read_u32(np, "exynos,saturation-ratio", &bus->ratio))
+>  		bus->ratio = DEFAULT_SATURATION_RATIO;
+>  
+> -	if (of_property_read_u32(np, "exynos,voltage-tolerance",
+> -					&bus->voltage_tolerance))
+> -		bus->voltage_tolerance = DEFAULT_VOLTAGE_TOLERANCE;
+> -
+>  	return 0;
+>  
+>  err_regulator:
+> -	regulator_disable(bus->regulator);
+> +	dev_pm_opp_put_regulators(bus->opp_table);
+> +	bus->opp_table = NULL;
+>  
+>  	return ret;
+>  }
+> @@ -471,7 +387,7 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>  	goto out;
+>  passive:
+>  	/* Initialize the struct profile and governor data for passive device */
+> -	profile->target = exynos_bus_passive_target;
+> +	profile->target = exynos_bus_target;
+>  	profile->exit = exynos_bus_passive_exit;
+>  
+>  	/* Get the instance of parent devfreq device */
+> @@ -511,8 +427,10 @@ static int exynos_bus_probe(struct platform_device *pdev)
+>  	dev_pm_opp_of_remove_table(dev);
+>  	clk_disable_unprepare(bus->clk);
+>  err_reg:
+> -	if (!passive)
+> -		regulator_disable(bus->regulator);
+> +	if (!passive) {
+> +		dev_pm_opp_put_regulators(bus->opp_table);
+> +		bus->opp_table = NULL;
+> +	}
+>  
+>  	return ret;
+>  }
+> 
 
-Signed-off-by: Josh Boyer <jwboyer@fedoraproject.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: rjw@rjwysocki.net
-Cc: pavel@ucw.cz
-cc: linux-pm@vger.kernel.org
----
- include/linux/security.h     | 1 +
- kernel/power/hibernate.c     | 3 ++-
- security/lockdown/lockdown.c | 1 +
- 3 files changed, 4 insertions(+), 1 deletion(-)
+It looks good to me.
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 69c5de539e9a..304a155a5628 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -106,6 +106,7 @@ enum lockdown_reason {
- 	LOCKDOWN_MODULE_SIGNATURE,
- 	LOCKDOWN_DEV_MEM,
- 	LOCKDOWN_KEXEC,
-+	LOCKDOWN_HIBERNATION,
- 	LOCKDOWN_INTEGRITY_MAX,
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
- };
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index cd7434e6000d..3c0a5a8170b0 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -30,6 +30,7 @@
- #include <linux/ctype.h>
- #include <linux/genhd.h>
- #include <linux/ktime.h>
-+#include <linux/security.h>
- #include <trace/events/power.h>
- 
- #include "power.h"
-@@ -68,7 +69,7 @@ static const struct platform_hibernation_ops *hibernation_ops;
- 
- bool hibernation_available(void)
- {
--	return (nohibernate == 0);
-+	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
- }
- 
- /**
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 6f302c156bc8..a0996f75629f 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -21,6 +21,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
- 	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
- 	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
- 	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
-+	[LOCKDOWN_HIBERNATION] = "hibernation",
- 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
- 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
- };
+
 -- 
-2.22.0.770.g0f2c4a37fd-goog
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
