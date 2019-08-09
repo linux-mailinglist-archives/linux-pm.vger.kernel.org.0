@@ -2,142 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA4487112
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 06:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BD5871B4
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 07:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726025AbfHIEvS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 00:51:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59254 "EHLO mail.kernel.org"
+        id S2405353AbfHIFsI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 01:48:08 -0400
+Received: from cmta19.telus.net ([209.171.16.92]:37698 "EHLO cmta19.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725989AbfHIEvS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Aug 2019 00:51:18 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A4972171F;
-        Fri,  9 Aug 2019 04:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565326277;
-        bh=UscCNqfBtTv94Eh7VjCme0SCZjD0JPyLgvJmYMx3GfQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lqS+ENNlfxRG+eOO2xNd79wvwo0vxI1wk8SJaRQxLjR3SQIZWfk8dVCPsUcUOo4ni
-         7yu7DmxYPQ/NkxxDX5h/DpggLwcOvhCAMgsI8wEAf7ggVdqQJsYvLHGnTbmPz00is4
-         nt3xfsVdRDXyJe4xM4KA9cbSGTF+Fo5DE2gxwu40=
-Date:   Thu, 8 Aug 2019 23:50:58 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-nvme <linux-nvme@lists.infradead.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Mario Limonciello <Mario.Limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] PCI: PCIe: ASPM: Introduce pcie_aspm_enabled()
-Message-ID: <20190809045058.GE7302@google.com>
-References: <4323ed84dd07474eab65699b4d007aaf@AUSX13MPC105.AMER.DELL.COM>
- <20190731221956.GB15795@localhost.localdomain>
- <2184247.yL3mcj2FRQ@kreacher>
- <1618955.HVa0YQSOW5@kreacher>
+        id S1725912AbfHIFsH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Aug 2019 01:48:07 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id vxkxhj2oCeRl4vxkzhGzqZ; Thu, 08 Aug 2019 23:48:06 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1565329686; bh=g2gTzFC4G+ftse5loP4iwGkez7MZ+RNpw9w4IkSd6M4=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=ztpno6V+F+A+72BoqukRLXSOyncnJpVTxZOLXyXRWxxp3i7TjavD7o1WDSV65P4FV
+         VHcJYG2E5zRdjFqQsGgBL0Vqh9bKpav0MBA0Xlv7Ca90dFx5Lf5FeCIv5LQ4wvyA83
+         zSGWA0B9CQYf0hhAQm9810dFxfYbEotMguFxIV0TIHvnGv2+1fIdRBODkn7VHc3M9P
+         zPVE752JfvfG//p4yIKQJE1Kg0ee/vdyr7dIPr2wVuJ2CBVSvX+mK2l8ZCV5K47u7y
+         /DV3s+LSWiFrZt/cPyrElgCQtnrnEu8Fi4sVwVW8KVa6mVf2T15jw1ZgYx2jsURwgu
+         RLtXGF/dz8s6Q==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=KqozJleN c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
+ a=kj9zAlcOel0A:10 a=FPmxDNgG4_xlF3046EEA:9 a=CjuIK1q_8ugA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Viresh Kumar'" <viresh.kumar@linaro.org>
+Cc:     <linux-pm@vger.kernel.org>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        "'Rafael Wysocki'" <rjw@rjwysocki.net>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Len Brown'" <lenb@kernel.org>
+References: <e789eceae3f32a66fff923daeb85b33b88f21fe1.1565161495.git.viresh.kumar@linaro.org> <85cdbc41f7f59a79b96793cbdcd49c53f964e46d.1565317135.git.viresh.kumar@linaro.org>
+In-Reply-To: <85cdbc41f7f59a79b96793cbdcd49c53f964e46d.1565317135.git.viresh.kumar@linaro.org>
+Subject: RE: [PATCH V5 2/2] cpufreq: intel_pstate: Implement QoS supported freq constraints
+Date:   Thu, 8 Aug 2019 22:48:02 -0700
+Message-ID: <001e01d54e76$037c4180$0a74c480$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1618955.HVa0YQSOW5@kreacher>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdVOWVya2W5jJ0NsR3CbiEAS4upLywAHDk0Q
+X-CMAE-Envelope: MS4wfFFgQRQ0Myu0YxB0EfN0X8DDw4IkrfGkavkV8mRwFdQl1fMUoVXmnnFRq/fDppxqhT5cOVQ1UN/8eDwkHZqSO4yHjFGJNgA+YFukFy1nGBKtcIVlDRMn
+ gACMCX7jOt+Z4wFJTMezZe4BA/uZfac/k183w+rQq/uepPELNQU62d3VwdmGm0Jigb05mo/fLgehIIPbFXz2UswjDYFevumNhggla53P7NIWogCjas5NpdcN
+ eXv26qGt1yY1rrZo2dxtJJS5JYGD4k/9E63hSkx4k82FZi1th9A6UcG17pQAgWOtxVeaIOZTD73IVgJV/YWhwZ6JjB04aE8XhPvyHVMHWC38xEHO9xNTel+n
+ GHjoSktCZZPIZZf7yEfSCIO02u28WPpfgS1p0SLtkp9IQ431tSw=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-s|PCI: PCIe: ASPM: Introduce pcie_aspm_enabled()|PCI/ASPM: Add pcie_aspm_enabled()|
-
-to match previous history.
-
-On Thu, Aug 08, 2019 at 11:55:07PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Add a function checking whether or not PCIe ASPM has been enabled for
-> a given device.
-> 
-> It will be used by the NVMe driver to decide how to handle the
-> device during system suspend.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
+On 2019.08.08 19:23 Viresh Kumar wrote:
 > ---
-> 
-> v2 -> v3:
->   * Make the new function return bool.
->   * Change its name back to pcie_aspm_enabled().
->   * Fix kerneldoc comment formatting.
-> 
-> -> v2:
->   * Move the PCI/PCIe ASPM changes to a separate patch.
->   * Add the _mask suffix to the new function name.
->   * Add EXPORT_SYMBOL_GPL() to the new function.
->   * Avoid adding an unnecessary blank line.
-> 
-> ---
->  drivers/pci/pcie/aspm.c |   20 ++++++++++++++++++++
->  include/linux/pci.h     |    3 +++
->  2 files changed, 23 insertions(+)
-> 
-> Index: linux-pm/drivers/pci/pcie/aspm.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pcie/aspm.c
-> +++ linux-pm/drivers/pci/pcie/aspm.c
-> @@ -1170,6 +1170,26 @@ static int pcie_aspm_get_policy(char *bu
->  module_param_call(policy, pcie_aspm_set_policy, pcie_aspm_get_policy,
->  	NULL, 0644);
->  
-> +/**
-> + * pcie_aspm_enabled - Check if PCIe ASPM has been enabled for a device.
-> + * @pci_device: Target device.
-> + */
-> +bool pcie_aspm_enabled(struct pci_dev *pci_device)
+> V4->V5:
+> - dev_pm_qos_update_request() can return 1 in case of success, handle
+>   that.
 
-The typical name in this file is "pdev".
+O.K. thanks,
+That fixes the "Fail" messages I was getting with V4.
 
-> +{
-> +	struct pci_dev *bridge = pci_upstream_bridge(pci_device);
-> +	bool ret;
-> +
-> +	if (!bridge)
-> +		return false;
-> +
-> +	mutex_lock(&aspm_lock);
-> +	ret = bridge->link_state ? !!bridge->link_state->aspm_enabled : false;
-> +	mutex_unlock(&aspm_lock);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(pcie_aspm_enabled);
-> +
->  #ifdef CONFIG_PCIEASPM_DEBUG
->  static ssize_t link_state_show(struct device *dev,
->  		struct device_attribute *attr,
-> Index: linux-pm/include/linux/pci.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/pci.h
-> +++ linux-pm/include/linux/pci.h
-> @@ -1567,8 +1567,11 @@ extern bool pcie_ports_native;
->  
->  #ifdef CONFIG_PCIEASPM
->  bool pcie_aspm_support_enabled(void);
-> +bool pcie_aspm_enabled(struct pci_dev *pci_device);
->  #else
->  static inline bool pcie_aspm_support_enabled(void) { return false; }
-> +static inline bool pcie_aspm_enabled(struct pci_dev *pci_device)
-> +{ return false; }
->  #endif
->  
->  #ifdef CONFIG_PCIEAER
-> 
-> 
-> 
+... Doug
+
+
