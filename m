@@ -2,216 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7624587994
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 14:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F65879A0
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 14:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406725AbfHIMPR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 08:15:17 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42570 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbfHIMPR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 08:15:17 -0400
-Received: by mail-ot1-f65.google.com with SMTP id l15so131744057otn.9;
-        Fri, 09 Aug 2019 05:15:16 -0700 (PDT)
+        id S2406724AbfHIMRb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 08:17:31 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:34327 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbfHIMRa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 08:17:30 -0400
+Received: by mail-lj1-f194.google.com with SMTP id p17so91933287ljg.1;
+        Fri, 09 Aug 2019 05:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2Y6cibe++jUg1MqhLsa4ocC0OGOAItgbasTPZNkc7eI=;
+        b=Es6Xtux7P3VZubYU24Nu2MzcD53Hn5+4l+jctyBOlss37Ut6Fr35RRHB7rum14F/YO
+         im/2vEWM/Mbwk86IrmWCV3j2JqQfZ18hNsJZtpnwc6KVv37RoYQuXP2le7U5Z90Pp7Tm
+         UOrCh9NsBbBwrn1YVlm9icOVMh5XrQ0dbVE4/ZOcOrL866nFG/cDYJKlV59WH+SHYNSG
+         h1SY+AmpqR6S1ouoiDNZ/6TbGvvZzCkAv6/ctDWfYBQvHxEbOFqvUsu7970eJZDtw+Oo
+         yANlaSFTAl1ZaM5Nta13wmxvh1Z7/P6Py7s5kfj/2IKExjMyvVSdB6O4TNR+WSYavIun
+         VitQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CPhQEfpz2L9VudZCV93fBfsiwCxuI7FC2IEWQ3k3cwk=;
-        b=bu9o1lxop2dB53R9PaxhTZb0axc1le/joJNESDWnIh+/6kOvvya3BVVtT9xjy8/7LS
-         lKe3qmqO7kCy5YMkYDx0UPICb+Y27//RuWt3ww8LuydVGdwi3zXbKuojrfalmVaS5opP
-         dvBxkt/hn1a+A27ChN/G1g43wKA5xa4TBxRbL9CymNXE9X2CyOeW2kptbjqwJXPTLIo3
-         GTdCHiIbobI3xKt4FwVWyGmAkeJEpw9MuVzDI6R0zBhMsH8Wbszl3Z0RE+2J6Px66r3j
-         79w8892bMoThOw8pEvzTw3MIVgj9/GRmCGb9uXfzh6Njyg1q1gwnuWbNWmpvLDkhegpK
-         0YyA==
-X-Gm-Message-State: APjAAAXNX4MeOr+QZRjCr4E2uMsihkSKokDnK3zP9Lts/Zefi4Ib/SGD
-        o2Wd8fYFRLKTU5p1O93HZXMbscK7f/QTCOWwRXI=
-X-Google-Smtp-Source: APXvYqxNJ013eLC09yGsgapHlLqfUe7REnVobb2QQ0Zm5fWHeXii/Qw7Uj++14PuKNVdHPErOsjLrF24st3nrgHmFx4=
-X-Received: by 2002:aca:d907:: with SMTP id q7mr5752039oig.68.1565352915951;
- Fri, 09 Aug 2019 05:15:15 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2Y6cibe++jUg1MqhLsa4ocC0OGOAItgbasTPZNkc7eI=;
+        b=ttJsX8OESu7QANCrHv3lItf+z85Jh+j1qBRJxoCaZI8zLinz1ufMl+mV65Loi/JxaU
+         MI0W+Nv7y2RlfwUbQC2JuR13Km4NxF8b3Vamt6T5pgQkdW23XhbOUQls+WWVntOn5cJO
+         WRDCao7fLEO1pwL7CvJrEY6IT0lOcp1C7UdlGyMWL+/cx8Vl7LVXidafkxnq1izf7MBL
+         AsHA63XsG2I52MvHm4HjkxfkaWnvlA20JYt3WpszBPzRNHUnkzbfBtLSy2+YNfReRrWi
+         OkNb3+jm+Uu+YBxKHA5g7c9EtGl8bOC5VdLqdAM9JdNnlKdE8AGo93OxDdFqIQU2hwYs
+         8S3A==
+X-Gm-Message-State: APjAAAXfuR9FSRrPbHOQS4XOE7mXfEqeS6PTpHMKqafWY6ErY9DN51jg
+        yNSgD6W+JBHoHJlHhum7M7QKuZr/
+X-Google-Smtp-Source: APXvYqzCXqbF8YtE4fLH2dz9U0bvhopDeKHat7TwKL2v5Op5k+Prytgbyv6O6tgSJkzGbUcN7TNCCg==
+X-Received: by 2002:a2e:93cc:: with SMTP id p12mr5978706ljh.11.1565353047460;
+        Fri, 09 Aug 2019 05:17:27 -0700 (PDT)
+Received: from [192.168.2.145] ([94.29.34.218])
+        by smtp.googlemail.com with ESMTPSA id g5sm19606366ljj.69.2019.08.09.05.17.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 09 Aug 2019 05:17:26 -0700 (PDT)
+Subject: Re: [PATCH v8 10/21] clk: tegra: clk-super: Add restore-context
+ support
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
+        jason@lakedaemon.net, marc.zyngier@arm.com,
+        linus.walleij@linaro.org, stefan@agner.ch, mark.rutland@arm.com
+Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, linux-pm@vger.kernel.org
+References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
+ <1565308020-31952-11-git-send-email-skomatineni@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4e33bad9-8d5a-dcd7-c75e-db5843c9be4a@gmail.com>
+Date:   Fri, 9 Aug 2019 15:17:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <5997740.FPbUVk04hV@kreacher> <CGME20190809120052eucas1p11b56806662ef4f4efb82a152ad651481@eucas1p1.samsung.com>
- <74514118.QN1Ey1fWSL@kreacher> <1b181f35-29c3-c6ce-6c42-ae55e890579e@samsung.com>
-In-Reply-To: <1b181f35-29c3-c6ce-6c42-ae55e890579e@samsung.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 9 Aug 2019 14:15:04 +0200
-Message-ID: <CAJZ5v0h_Bem4U46tgJyE7k+uHFN7viqUo10Vgh+UWZf_C1qD2g@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] ACPI: PM: s2idle: Execute LPS0 _DSM functions with
- suspended devices
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1565308020-31952-11-git-send-email-skomatineni@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 9, 2019 at 2:00 PM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> Hi Rafael,
->
-> On 2019-08-02 12:45, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > According to Section 3.5 of the "Intel Low Power S0 Idle" document [1],
-> > Function 5 of the LPS0 _DSM is expected to be invoked when the system
-> > configuration matches the criteria for entering the target low-power
-> > state of the platform.  In particular, this means that all devices
-> > should be suspended and in low-power states already when that function
-> > is invoked.
-> >
-> > This is not the case currently, however, because Function 5 of the
-> > LPS0 _DSM is invoked by it before the "noirq" phase of device suspend,
-> > which means that some devices may not have been put into low-power
-> > states yet at that point.  That is a consequence of the previous
-> > design of the suspend-to-idle flow that allowed the "noirq" phase of
-> > device suspend and the "noirq" phase of device resume to be carried
-> > out for multiple times while "suspended" (if any spurious wakeup
-> > events were detected) and the point of the LPS0 _DSM Function 5
-> > invocation was chosen so as to call it (and LPS0 _DSM Function 6
-> > analogously) once per suspend-resume cycle (regardless of how many
-> > times the "noirq" phases of device suspend and resume were carried
-> > out while "suspended").
-> >
-> > Now that the suspend-to-idle flow has been redesigned to carry out
-> > the "noirq" phases of device suspend and resume once in each cycle,
-> > the code can be reordered to follow the specification that it is
-> > based on more closely.
-> >
-> > For this purpose, add ->prepare_late and ->restore_early platform
-> > callbacks for suspend-to-idle, to be executed, respectively, after
-> > the "noirq" phase of suspending devices and before the "noirq"
-> > phase of resuming them and make ACPI use them for the invocation
-> > of LPS0 _DSM functions as appropriate.
-> >
-> > While at it, move the LPS0 entry requirements check to be made
-> > before invoking Functions 3 and 5 of the LPS0 _DSM (also once
-> > per cycle) as follows from the specification [1].
-> >
-> > Link: https://uefi.org/sites/default/files/resources/Intel_ACPI_Low_Power_S0_Idle.pdf # [1]
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > In v2 this was patch 2.
-> >
-> > ---
-> >   drivers/acpi/sleep.c    |   36 ++++++++++++++++++++++++------------
-> >   include/linux/suspend.h |    2 ++
-> >   kernel/power/suspend.c  |   12 +++++++++---
-> >   3 files changed, 35 insertions(+), 15 deletions(-)
-> >
-> > Index: linux-pm/drivers/acpi/sleep.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/acpi/sleep.c
-> > +++ linux-pm/drivers/acpi/sleep.c
-> > @@ -954,11 +954,6 @@ static int acpi_s2idle_begin(void)
-> >
-> >   static int acpi_s2idle_prepare(void)
-> >   {
-> > -     if (lps0_device_handle && !sleep_no_lps0) {
-> > -             acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_OFF);
-> > -             acpi_sleep_run_lps0_dsm(ACPI_LPS0_ENTRY);
-> > -     }
-> > -
-> >       if (acpi_sci_irq_valid())
-> >               enable_irq_wake(acpi_sci_irq);
-> >
-> > @@ -972,11 +967,22 @@ static int acpi_s2idle_prepare(void)
-> >       return 0;
-> >   }
-> >
-> > -static void acpi_s2idle_wake(void)
-> > +static int acpi_s2idle_prepare_late(void)
-> >   {
-> > -     if (lps0_device_handle && !sleep_no_lps0 && pm_debug_messages_on)
-> > +     if (!lps0_device_handle || sleep_no_lps0)
-> > +             return 0;
-> > +
-> > +     if (pm_debug_messages_on)
-> >               lpi_check_constraints();
-> >
-> > +     acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_OFF);
-> > +     acpi_sleep_run_lps0_dsm(ACPI_LPS0_ENTRY);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void acpi_s2idle_wake(void)
-> > +{
-> >       /*
-> >        * If IRQD_WAKEUP_ARMED is set for the SCI at this point, the SCI has
-> >        * not triggered while suspended, so bail out.
-> > @@ -1011,6 +1017,15 @@ static void acpi_s2idle_wake(void)
-> >       rearm_wake_irq(acpi_sci_irq);
-> >   }
-> >
-> > +static void acpi_s2idle_restore_early(void)
-> > +{
-> > +     if (!lps0_device_handle || sleep_no_lps0)
-> > +             return;
-> > +
-> > +     acpi_sleep_run_lps0_dsm(ACPI_LPS0_EXIT);
-> > +     acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_ON);
-> > +}
-> > +
-> >   static void acpi_s2idle_restore(void)
-> >   {
-> >       s2idle_wakeup = false;
-> > @@ -1021,11 +1036,6 @@ static void acpi_s2idle_restore(void)
-> >
-> >       if (acpi_sci_irq_valid())
-> >               disable_irq_wake(acpi_sci_irq);
-> > -
-> > -     if (lps0_device_handle && !sleep_no_lps0) {
-> > -             acpi_sleep_run_lps0_dsm(ACPI_LPS0_EXIT);
-> > -             acpi_sleep_run_lps0_dsm(ACPI_LPS0_SCREEN_ON);
-> > -     }
-> >   }
-> >
-> >   static void acpi_s2idle_end(void)
-> > @@ -1036,7 +1046,9 @@ static void acpi_s2idle_end(void)
-> >   static const struct platform_s2idle_ops acpi_s2idle_ops = {
-> >       .begin = acpi_s2idle_begin,
-> >       .prepare = acpi_s2idle_prepare,
-> > +     .prepare_late = acpi_s2idle_prepare_late,
-> >       .wake = acpi_s2idle_wake,
-> > +     .restore_early = acpi_s2idle_restore_early,
-> >       .restore = acpi_s2idle_restore,
-> >       .end = acpi_s2idle_end,
-> >   };
-> > Index: linux-pm/kernel/power/suspend.c
-> > ===================================================================
-> > --- linux-pm.orig/kernel/power/suspend.c
-> > +++ linux-pm/kernel/power/suspend.c
-> > @@ -253,13 +253,19 @@ static int platform_suspend_prepare_late
-> >
-> >   static int platform_suspend_prepare_noirq(suspend_state_t state)
-> >   {
-> > -     return state != PM_SUSPEND_TO_IDLE && suspend_ops->prepare_late ?
-> > -             suspend_ops->prepare_late() : 0;
-> > +     if (state == PM_SUSPEND_TO_IDLE) {
-> > +             if (s2idle_ops && s2idle_ops->prepare_late)
-> > +                     return s2idle_ops->prepare_late();
+09.08.2019 2:46, Sowjanya Komatineni пишет:
+> This patch implements restore_context for clk_super_mux and clk_super.
+> 
+> During system supend, core power goes off the and context of Tegra
+> CAR registers is lost.
+> 
+> So on system resume, context of super clock registers are restored
+> to have them in same state as before suspend.
+> 
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  drivers/clk/tegra/clk-super.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/drivers/clk/tegra/clk-super.c b/drivers/clk/tegra/clk-super.c
+> index e2a1e95a8db7..74c9e913e41c 100644
+> --- a/drivers/clk/tegra/clk-super.c
+> +++ b/drivers/clk/tegra/clk-super.c
+> @@ -124,9 +124,18 @@ static int clk_super_set_parent(struct clk_hw *hw, u8 index)
+>  	return err;
+>  }
+>  
+> +static void clk_super_mux_restore_context(struct clk_hw *hw)
+> +{
+> +	struct clk_hw *parent = clk_hw_get_parent(hw);
+> +	int parent_id = clk_hw_get_parent_index(hw, parent);
+> +
+> +	clk_super_set_parent(hw, parent_id);
 
-This should be
+All Super clocks have a divider, including the "MUX". Thus I'm wondering
+if there is a chance that divider's configuration may differ on resume
+from what it was on suspend.
 
-return s2idle_ops && s2idle_ops->prepare_late ? s2idle_ops->prepare_late() : 0;
+> +}
+> +
+>  static const struct clk_ops tegra_clk_super_mux_ops = {
+>  	.get_parent = clk_super_get_parent,
+>  	.set_parent = clk_super_set_parent,
+> +	.restore_context = clk_super_mux_restore_context,
+>  };
+>  
+>  static long clk_super_round_rate(struct clk_hw *hw, unsigned long rate,
+> @@ -162,12 +171,24 @@ static int clk_super_set_rate(struct clk_hw *hw, unsigned long rate,
+>  	return super->div_ops->set_rate(div_hw, rate, parent_rate);
+>  }
+>  
+> +static void clk_super_restore_context(struct clk_hw *hw)
+> +{
+> +	struct tegra_clk_super_mux *super = to_clk_super_mux(hw);
+> +	struct clk_hw *div_hw = &super->frac_div.hw;
+> +	struct clk_hw *parent = clk_hw_get_parent(hw);
+> +	int parent_id = clk_hw_get_parent_index(hw, parent);
+> +
+> +	super->div_ops->restore_context(div_hw);
+> +	clk_super_set_parent(hw, parent_id);
+> +}
+> +
+>  const struct clk_ops tegra_clk_super_ops = {
+>  	.get_parent = clk_super_get_parent,
+>  	.set_parent = clk_super_set_parent,
+>  	.set_rate = clk_super_set_rate,
+>  	.round_rate = clk_super_round_rate,
+>  	.recalc_rate = clk_super_recalc_rate,
+> +	.restore_context = clk_super_restore_context,
+>  };
+>  
+>  struct clk *tegra_clk_register_super_mux(const char *name,
+> 
 
-> > +     }
-> > +     return suspend_ops->prepare_late ? suspend_ops->prepare_late() : 0;
->
-> This unconditionally references suspend_ops here, what wasn't done
-> earlier. On one of my test boards (OdroidXU) it causes following NULL
-> pointer dereference since Linux next-20190809 (the first -next, which
-> contains this patch):
-
-Sorry about this, will fix early next week.
