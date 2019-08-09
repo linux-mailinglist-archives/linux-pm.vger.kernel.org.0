@@ -2,176 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE20882F5
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 20:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF4288476
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 23:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726421AbfHISwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 14:52:08 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:45065 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726168AbfHISwH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 14:52:07 -0400
-Received: by mail-lj1-f193.google.com with SMTP id t3so4436810ljj.12;
-        Fri, 09 Aug 2019 11:52:04 -0700 (PDT)
+        id S1726557AbfHIVRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 17:17:38 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:41881 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726078AbfHIVRi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 17:17:38 -0400
+Received: by mail-lf1-f68.google.com with SMTP id 62so65587959lfa.8
+        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2019 14:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=h22eQ216TUwl2M9AY0DcsqhpZJRWYBzIWJYlSY8put4=;
-        b=tvKxQNTpYVlmAtY5mOsYS3ycnzI27d22L/8l3Bh4h+8YXUZA9FQxZoRtY9/e8v0nQO
-         aT5S4V4sx4fKTg9c8gyT8ItkLNK3YPAsXrTn8qgJee/U8UmBMR9/XtikkniIEbmntOhS
-         6MHdTBWurgumRTtVSOuYMPscOTYJjYOLcJlJ/9jPhGrjVTkUJMaOut22wB+0jit2v13M
-         IqJByuXO+9t5W8djPn+0ucZ2RbfvddJIk2HZwoe3ijLkQANoc7UzyAHRaV8+PxMaJGzM
-         AiZBBzLfIBjbsGxjzgtwLTOC6oIuPXSf/SPiUVdn8U0XmbGtdZIK0gw0sVxz8JvSUPCM
-         WjVg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a6qcKD1aVaygupbagJQvs2szHppirdYUK1GjYON7+Wc=;
+        b=PZAf+XDThboVQRyYZztPO0KbXTs1zesXPlhPtOdK0cxWUGJAax/ZcgrlVtr+Flu12b
+         LM63vttNkoeT5Zskzk7N+8pLvqMd4TuogzXoQ2gjJk1vVQfgsxf3f9vx0Q2iLXCcEOj0
+         jvveAaMqqpP2Aa/Eyw+wy7Ba4XmwDB4MEXCmg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=h22eQ216TUwl2M9AY0DcsqhpZJRWYBzIWJYlSY8put4=;
-        b=UqWAqPZXGVfq8bpfTeeI812MqTsSl5dwPpKfbfybQYz7fyLksdvRykPvFv9AltBzhf
-         lK+rZmEbyKhqZTzK9YcWj6LQOPXqj9RdDGM/xIRVlkAc5dyplWE5pTrn625ghxJ0j+86
-         MsnxpepoTyjV1mlunJtMuwd6AmF+n+8ZerfssFrbwFhClEoUnqoS2AfSLc71fN/PT1tJ
-         6kLIPgWwfn593SF7C2rreb4bTPHSEukcwMKlwH7psmY6jeTaWeYmf6/rlgvHfPNG4y4n
-         7YstcMPORyj1VBoYIAhW60uwkaMYUvVEFmiXElsYBprhMxJZVbED2u0vFxIALfCaFF0y
-         5GbQ==
-X-Gm-Message-State: APjAAAU9UImjzsAjOchEjKwQDmfTXixwsCVlB54VHEFh0cdZpTTRaNK4
-        oqInIH484GQ02IoxWTvhHkGguTYe
-X-Google-Smtp-Source: APXvYqytQt1+S3AxDk9AK0nr3ulH0kn0895rC1IYdLSAHMThZ0GCZqdDBUKukPz62P7FmUIG5OmWhQ==
-X-Received: by 2002:a2e:98c9:: with SMTP id s9mr12333317ljj.176.1565376723803;
-        Fri, 09 Aug 2019 11:52:03 -0700 (PDT)
-Received: from [192.168.2.145] ([94.29.34.218])
-        by smtp.googlemail.com with ESMTPSA id c89sm11389695ljf.83.2019.08.09.11.52.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Aug 2019 11:52:03 -0700 (PDT)
-Subject: Re: [PATCH v8 11/21] clk: tegra: clk-dfll: Add suspend and resume
- support
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
-        jason@lakedaemon.net, marc.zyngier@arm.com,
-        linus.walleij@linaro.org, stefan@agner.ch, mark.rutland@arm.com
-Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org
-References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
- <1565308020-31952-12-git-send-email-skomatineni@nvidia.com>
- <eb4fdab8-aba3-7f0c-a391-d751674fd03e@gmail.com>
- <29a85a35-10ff-2d43-d148-9dba1ee25869@nvidia.com>
- <84a0d46a-bca2-1000-a2a6-8890ee702dd3@gmail.com>
- <9902aa72-3f18-9840-35ad-137293d2e26c@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3f94d6c9-4e33-8e67-abe4-8d948f151910@gmail.com>
-Date:   Fri, 9 Aug 2019 21:52:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a6qcKD1aVaygupbagJQvs2szHppirdYUK1GjYON7+Wc=;
+        b=gUGBS0zCicpMuOFAlURDr1cQog/xityeh6yoQ3c7I7nIv3iyX0juWGz9ZuDTCGaptd
+         hsIvmGvFUunewICRT8fD+kZqbAtSykmNPZR/HHU4QXtSlBd+GqhLNMNsUaV2RGgt6HaJ
+         PdfE/Mg3MigfVFYy1VRFbIlsWKuWLx7+OHbBC64gqgJ5ODNPinXWdIn3ow9PuXoF5zrl
+         yb3OHHf9pjxdZpORsFQtj+ZZrQKMNmkS21qJHvAcgZn+/qVrWJYSoM/Joa3mnmhgQy7O
+         GIjnVz4m/wASdTYRBQuhZl9Rt47ytMDvBjCxrx/mtv29ftOngGuqboHMnF8h9PI7G92D
+         gyKw==
+X-Gm-Message-State: APjAAAUGzFdwB+Pu9IImnzl6IZaa5cWz30nm/a/2R+q2Xmt4JBJ2nHFl
+        583eQ189aPure1tFyKU/JikoePPVw7c=
+X-Google-Smtp-Source: APXvYqyDr23x4r9HL1OjlpuygIBcNeoDVTsGJhRDyEBfwWw8E0M3anSf9Wz7mIqZo+4x3fGH1Gwmcg==
+X-Received: by 2002:ac2:4242:: with SMTP id m2mr2218599lfl.121.1565385456205;
+        Fri, 09 Aug 2019 14:17:36 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id k82sm19636377lje.30.2019.08.09.14.17.35
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 09 Aug 2019 14:17:35 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id c19so70485814lfm.10
+        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2019 14:17:35 -0700 (PDT)
+X-Received: by 2002:a19:110:: with SMTP id 16mr14160555lfb.63.1565385454814;
+ Fri, 09 Aug 2019 14:17:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <9902aa72-3f18-9840-35ad-137293d2e26c@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190809121325.8138-1-georgi.djakov@linaro.org> <20190809121325.8138-2-georgi.djakov@linaro.org>
+In-Reply-To: <20190809121325.8138-2-georgi.djakov@linaro.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Fri, 9 Aug 2019 14:16:58 -0700
+X-Gmail-Original-Message-ID: <CAE=gft4mkz=rhmC7p903UuAhzG2obaST+ZTecOfmDFKbpgSTpg@mail.gmail.com>
+Message-ID: <CAE=gft4mkz=rhmC7p903UuAhzG2obaST+ZTecOfmDFKbpgSTpg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] interconnect: Add support for path tags
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, David Dai <daidavid1@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        amit.kucheria@linaro.org, Doug Anderson <dianders@chromium.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-09.08.2019 21:33, Sowjanya Komatineni пишет:
-> 
-> On 8/9/19 11:00 AM, Dmitry Osipenko wrote:
->> 09.08.2019 19:39, Sowjanya Komatineni пишет:
->>> On 8/9/19 5:23 AM, Dmitry Osipenko wrote:
->>>> 09.08.2019 2:46, Sowjanya Komatineni пишет:
->>>>> This patch implements DFLL suspend and resume operation.
->>>>>
->>>>> During system suspend entry, CPU clock will switch CPU to safe
->>>>> clock source of PLLP and disables DFLL clock output.
->>>>>
->>>>> DFLL driver suspend confirms DFLL disable state and errors out on
->>>>> being active.
->>>>>
->>>>> DFLL is re-initialized during the DFLL driver resume as it goes
->>>>> through complete reset during suspend entry.
->>>>>
->>>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>>>> ---
->>>>>    drivers/clk/tegra/clk-dfll.c               | 56 ++++++++++++++++++++++++++++++
->>>>>    drivers/clk/tegra/clk-dfll.h               |  2 ++
->>>>>    drivers/clk/tegra/clk-tegra124-dfll-fcpu.c |  1 +
->>>>>    3 files changed, 59 insertions(+)
->>>>>
->>>>> diff --git a/drivers/clk/tegra/clk-dfll.c b/drivers/clk/tegra/clk-dfll.c
->>>>> index f8688c2ddf1a..eb298a5d7be9 100644
->>>>> --- a/drivers/clk/tegra/clk-dfll.c
->>>>> +++ b/drivers/clk/tegra/clk-dfll.c
->>>>> @@ -1487,6 +1487,7 @@ static int dfll_init(struct tegra_dfll *td)
->>>>>        td->last_unrounded_rate = 0;
->>>>>          pm_runtime_enable(td->dev);
->>>>> +    pm_runtime_irq_safe(td->dev);
->>>>>        pm_runtime_get_sync(td->dev);
->>>>>          dfll_set_mode(td, DFLL_DISABLED);
->>>>> @@ -1513,6 +1514,61 @@ static int dfll_init(struct tegra_dfll *td)
->>>>>        return ret;
->>>>>    }
->>>>>    +/**
->>>>> + * tegra_dfll_suspend - check DFLL is disabled
->>>>> + * @dev: DFLL device *
->>>>> + *
->>>>> + * DFLL clock should be disabled by the CPUFreq driver. So, make
->>>>> + * sure it is disabled and disable all clocks needed by the DFLL.
->>>>> + */
->>>>> +int tegra_dfll_suspend(struct device *dev)
->>>>> +{
->>>>> +    struct tegra_dfll *td = dev_get_drvdata(dev);
->>>>> +
->>>>> +    if (dfll_is_running(td)) {
->>>>> +        dev_err(td->dev, "dfll is enabled while shouldn't be\n");
->>>>> +        return -EBUSY;
->>>>> +    }
->>>>> +
->>>>> +    reset_control_assert(td->dvco_rst);
->>>>> +
->>>>> +    return 0;
->>>>> +}
->>>>> +EXPORT_SYMBOL(tegra_dfll_suspend);
->>>>> +
->>>>> +/**
->>>>> + * tegra_dfll_resume - reinitialize DFLL on resume
->>>>> + * @dev: DFLL instance
->>>>> + *
->>>>> + * DFLL is disabled and reset during suspend and resume.
->>>>> + * So, reinitialize the DFLL IP block back for use.
->>>>> + * DFLL clock is enabled later in closed loop mode by CPUFreq
->>>>> + * driver before switching its clock source to DFLL output.
->>>>> + */
->>>>> +int tegra_dfll_resume(struct device *dev)
->>>>> +{
->>>>> +    struct tegra_dfll *td = dev_get_drvdata(dev);
->>>>> +
->>>>> +    reset_control_deassert(td->dvco_rst);
->>>> This doesn't look right because I assume that DFLL resetting is
->>>> synchronous and thus clk should be enabled in order for reset to
->>>> propagate inside hardware.
->>>>
->>>>> +    pm_runtime_get_sync(td->dev);
->>>> Hence it will be better to remove the above reset_control_deassert() and
->>>> add here:
->>>>
->>>>      reset_control_reset(td->dvco_rst);
->>> By the time dfll resume happens, dfll controller clock will already be enabled.
->>>
->>> so doing reset de-assert before pm_runtime seems ok.
->> I don't see what enables the DFLL clock because it should be enabled by the CPUFreq driver
->> on resume from suspend and resume happens after resuming of the DFLL driver.
-> 
-> dvco_rst is part of peripheral clocks and all peripheral clocks are restored by clk-tegra210
-> driver which happens before dfll driver resume.
-> 
-> So dfll rst thru part of peripheral clock enable is set prior to dfll reset deassertion
+On Fri, Aug 9, 2019 at 5:13 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
+>
+> Consumers may have use cases with different bandwidth requirements based
+> on the system or driver state. The consumer driver can append a specific
+> tag to the path and pass this information to the interconnect platform
+> driver to do the aggregation based on this state.
+>
+> Introduce icc_set_tag() function that will allow the consumers to append
+> an optional tag to each path. The aggregation of these tagged paths is
+> platform specific.
+>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-Ah, so that is DVCO resetting and not DFLL, which are different blocks. Looks correct then.
-
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Reviewed-by: Evan Green <evgreen@chromium.org>
