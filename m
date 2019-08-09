@@ -2,155 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F4688254
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 20:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82D38828A
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 20:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436646AbfHISWd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 14:22:33 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:32840 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407519AbfHISWc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 14:22:32 -0400
-Received: by mail-lf1-f65.google.com with SMTP id x3so70272717lfc.0;
-        Fri, 09 Aug 2019 11:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=d17w+XfuyIIJSGQTvN29rXadrWu0vpB5brrtMkm6CsM=;
-        b=YedaAfoXaWKKR4xheV/cw+fePm0iEaiWHKnkr6AeeS0ea6v0cPmihNn19xVHKDdb+/
-         rJxupantlpiPHL3QmOZOHpvMcH3/H7Dzmdv+C8ESKzwqryJFYJboUdF/C5H3t+3Wwyc9
-         C/ddZfv2X9WkowWYehUVQqwofdG4rNr91APrD4tXCGoSjznplsxwP16iMa/iYnq/HDmI
-         bukG7ojiP+IbR2Iemuw9Amxp4IEDvLy9CKOrH2yXOIBskhDFpv09IW9ce+cXsWRufPUE
-         VtQtH6VXB6PfBix3tOG5rmj96V1DPHKuM4M5PiNUkLVgNpyfHYEUfQVQbEzu2a3cr+1l
-         2zZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=d17w+XfuyIIJSGQTvN29rXadrWu0vpB5brrtMkm6CsM=;
-        b=twn5syXN5N1o/4fV4qlIzSirHJ0VwW9WLcoyJiH1p4j+1G8UeZt5UWzDwtZBtUX95j
-         qJIjMLdogzw7W91QKVlubX3buQbudzJcy3SS92zSdUMqLvfz0+0+YVcG1lgDejF09I4W
-         dlxfatdKUHO16Q/2Yrwt1AnOz1s4duYhSwu5vGbibmomH5r9pRzqS0D2NRsp0P/eKYXp
-         2FxwID7D7+OoKQhYG4vjg0FOs5kbwJqHJEnw0hUSgxwwZax6BFmlr7IcWZVYeFhlB5IO
-         j370xWCrX/RxuMNYty7g6LcLX9UY8m9Fcn1iAnuK/MV+QRhHRBrtwsqYO7wJFpzDgA1Z
-         LPqw==
-X-Gm-Message-State: APjAAAVXmlZrjbogC/qES46XxZXSHmsB6KOKeHyTBhewJA7u3DS7ObkS
-        dY4oROoAIJXsqDpvU1mfDIYwXeMc
-X-Google-Smtp-Source: APXvYqwD55t6TduNNq/nj1xhhTb8oJCD1U9R3vSd8pnx4NuWlAr61iSdw9qIjaKQSJh4jGRioOIDZA==
-X-Received: by 2002:ac2:5468:: with SMTP id e8mr13255013lfn.2.1565374948181;
-        Fri, 09 Aug 2019 11:22:28 -0700 (PDT)
-Received: from [192.168.2.145] ([94.29.34.218])
-        by smtp.googlemail.com with ESMTPSA id d3sm585122ljj.55.2019.08.09.11.22.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Aug 2019 11:22:27 -0700 (PDT)
-Subject: Re: [PATCH v8 19/21] soc/tegra: pmc: Configure deep sleep control
- settings
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
-        jason@lakedaemon.net, marc.zyngier@arm.com,
-        linus.walleij@linaro.org, stefan@agner.ch, mark.rutland@arm.com
-Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org
+        id S2436754AbfHISda (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 14:33:30 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:10517 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405723AbfHISda (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 14:33:30 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d4dbc7a0002>; Fri, 09 Aug 2019 11:33:30 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 09 Aug 2019 11:33:28 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 09 Aug 2019 11:33:28 -0700
+Received: from [10.2.167.88] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 9 Aug
+ 2019 18:33:27 +0000
+Subject: Re: [PATCH v8 11/21] clk: tegra: clk-dfll: Add suspend and resume
+ support
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <tglx@linutronix.de>,
+        <jason@lakedaemon.net>, <marc.zyngier@arm.com>,
+        <linus.walleij@linaro.org>, <stefan@agner.ch>,
+        <mark.rutland@arm.com>
+CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
+        <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <jckuo@nvidia.com>,
+        <josephl@nvidia.com>, <talho@nvidia.com>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mperttunen@nvidia.com>, <spatra@nvidia.com>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <rjw@rjwysocki.net>,
+        <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>
 References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
- <1565308020-31952-20-git-send-email-skomatineni@nvidia.com>
- <57ed54cd-bf57-cab1-eb63-8548761640de@gmail.com>
- <275f3685-bc53-38ff-c778-cf2ea588e5a5@nvidia.com>
- <60ea494a-9960-b7fc-3afb-8c17feec9fda@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <5b585870-f622-0727-8c4d-78cd48623edd@gmail.com>
-Date:   Fri, 9 Aug 2019 21:22:26 +0300
+ <1565308020-31952-12-git-send-email-skomatineni@nvidia.com>
+ <eb4fdab8-aba3-7f0c-a391-d751674fd03e@gmail.com>
+ <29a85a35-10ff-2d43-d148-9dba1ee25869@nvidia.com>
+ <84a0d46a-bca2-1000-a2a6-8890ee702dd3@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <9902aa72-3f18-9840-35ad-137293d2e26c@nvidia.com>
+Date:   Fri, 9 Aug 2019 11:33:26 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <60ea494a-9960-b7fc-3afb-8c17feec9fda@nvidia.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <84a0d46a-bca2-1000-a2a6-8890ee702dd3@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1565375610; bh=RL3xW/QV8ig+4LOtDKUXlwGYg2LoxLMNhawJPeDdkro=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=PpZY5iBbGEvm7gAPal8Gj+kjDjdYIKM7c5m+y3squ6PxdfK5512ANCp1yXGF7WkGK
+         8MkEkIKzaxbXdfOt2lUUbaALPWiLC6HhZbFtcCaRlPHX99vikblmdxalGwDVbqrWPY
+         vMdiOYXR5FAtwHBK1UFt3pT6F/M49X0MM5AFCm80KTjs2EY/5n4DYtKz3kAuiPCch8
+         UEujoW4PLGOiPOY3Agj/Q24f+7i34V83GgK/b/DmLrxsJgLJbXmdUtUC65GPuXU56m
+         FXvfyS94TS6MFriG1tBDlKSloKPwddwBZO2oL++f/jMty0h6HqoqosjFY0YQ0ydsaC
+         ZlHwkkyO/A7SA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-09.08.2019 20:24, Sowjanya Komatineni пишет:
-> 
-> On 8/9/19 9:23 AM, Sowjanya Komatineni wrote:
->>
->> On 8/9/19 6:23 AM, Dmitry Osipenko wrote:
->>> 09.08.2019 2:46, Sowjanya Komatineni пишет:
->>>> Tegra210 and prior Tegra chips have deep sleep entry and wakeup related
->>>> timings which are platform specific that should be configured before
->>>> entering into deep sleep.
+
+On 8/9/19 11:00 AM, Dmitry Osipenko wrote:
+> 09.08.2019 19:39, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> On 8/9/19 5:23 AM, Dmitry Osipenko wrote:
+>>> 09.08.2019 2:46, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>>> This patch implements DFLL suspend and resume operation.
 >>>>
->>>> Below are the timing specific configurations for deep sleep entry and
->>>> wakeup.
->>>> - Core rail power-on stabilization timer
->>>> - OSC clock stabilization timer after SOC rail power is stabilized.
->>>> - Core power off time is the minimum wake delay to keep the system
->>>>    in deep sleep state irrespective of any quick wake event.
+>>>> During system suspend entry, CPU clock will switch CPU to safe
+>>>> clock source of PLLP and disables DFLL clock output.
 >>>>
->>>> These values depends on the discharge time of regulators and turn OFF
->>>> time of the PMIC to allow the complete system to finish entering into
->>>> deep sleep state.
+>>>> DFLL driver suspend confirms DFLL disable state and errors out on
+>>>> being active.
 >>>>
->>>> These values vary based on the platform design and are specified
->>>> through the device tree.
->>>>
->>>> This patch has implementation to configure these timings which are must
->>>> to have for proper deep sleep and wakeup operations.
+>>>> DFLL is re-initialized during the DFLL driver resume as it goes
+>>>> through complete reset during suspend entry.
 >>>>
 >>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 >>>> ---
->>>>   drivers/soc/tegra/pmc.c | 13 ++++++++++++-
->>>>   1 file changed, 12 insertions(+), 1 deletion(-)
+>>>>  =C2=A0 drivers/clk/tegra/clk-dfll.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 56 ++++++++++++++++++=
+++++++++++++
+>>>>  =C2=A0 drivers/clk/tegra/clk-dfll.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 ++
+>>>>  =C2=A0 drivers/clk/tegra/clk-tegra124-dfll-fcpu.c |=C2=A0 1 +
+>>>>  =C2=A0 3 files changed, 59 insertions(+)
 >>>>
->>>> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
->>>> index e013ada7e4e9..9a78d8417367 100644
->>>> --- a/drivers/soc/tegra/pmc.c
->>>> +++ b/drivers/soc/tegra/pmc.c
->>>> @@ -88,6 +88,8 @@
->>>>     #define PMC_CPUPWRGOOD_TIMER        0xc8
->>>>   #define PMC_CPUPWROFF_TIMER        0xcc
->>>> +#define PMC_COREPWRGOOD_TIMER        0x3c
->>>> +#define PMC_COREPWROFF_TIMER        0xe0
->>>>     #define PMC_PWR_DET_VALUE        0xe4
->>>>   @@ -2277,7 +2279,7 @@ static const struct tegra_pmc_regs tegra20_pmc_regs = {
->>>>     static void tegra20_pmc_init(struct tegra_pmc *pmc)
->>>>   {
->>>> -    u32 value;
->>>> +    u32 value, osc, pmu, off;
->>>>         /* Always enable CPU power request */
->>>>       value = tegra_pmc_readl(pmc, PMC_CNTRL);
->>>> @@ -2303,6 +2305,15 @@ static void tegra20_pmc_init(struct tegra_pmc *pmc)
->>>>       value = tegra_pmc_readl(pmc, PMC_CNTRL);
->>>>       value |= PMC_CNTRL_SYSCLK_OE;
->>>>       tegra_pmc_writel(pmc, value, PMC_CNTRL);
+>>>> diff --git a/drivers/clk/tegra/clk-dfll.c b/drivers/clk/tegra/clk-dfll=
+.c
+>>>> index f8688c2ddf1a..eb298a5d7be9 100644
+>>>> --- a/drivers/clk/tegra/clk-dfll.c
+>>>> +++ b/drivers/clk/tegra/clk-dfll.c
+>>>> @@ -1487,6 +1487,7 @@ static int dfll_init(struct tegra_dfll *td)
+>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 td->last_unrounded_rate =3D 0;
+>>>>  =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pm_runtime_enable(td->dev);
+>>>> +=C2=A0=C2=A0=C2=A0 pm_runtime_irq_safe(td->dev);
+>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pm_runtime_get_sync(td->dev);
+>>>>  =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dfll_set_mode(td, DFLL_DISABLED=
+);
+>>>> @@ -1513,6 +1514,61 @@ static int dfll_init(struct tegra_dfll *td)
+>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
+>>>>  =C2=A0 }
+>>>>  =C2=A0 +/**
+>>>> + * tegra_dfll_suspend - check DFLL is disabled
+>>>> + * @dev: DFLL device *
+>>>> + *
+>>>> + * DFLL clock should be disabled by the CPUFreq driver. So, make
+>>>> + * sure it is disabled and disable all clocks needed by the DFLL.
+>>>> + */
+>>>> +int tegra_dfll_suspend(struct device *dev)
+>>>> +{
+>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_dfll *td =3D dev_get_drvdata(dev);
 >>>> +
->>>> +    osc = DIV_ROUND_UP(pmc->core_osc_time * 8192, 1000000);
->>>> +    pmu = DIV_ROUND_UP(pmc->core_pmu_time * 32768, 1000000);
->>>> +    off = DIV_ROUND_UP(pmc->core_off_time * 32768, 1000000);
->>>> +    if (osc && pmu)
->>>> +        tegra_pmc_writel(pmc, ((osc << 8) & 0xff00) | (pmu & 0xff),
->>>> +                 PMC_COREPWRGOOD_TIMER);
->>>> +    if (off)
->>>> +        tegra_pmc_writel(pmc, off, PMC_COREPWROFF_TIMER);
->>> The osc/pmu/off values are undefined if they are not defined in device-tree. I suppose this
->>> need to be corrected in tegra_pmc_parse_dt() if the values really matter even if LP0 suspend
->>> isn't supported in device-tree.
+>>>> +=C2=A0=C2=A0=C2=A0 if (dfll_is_running(td)) {
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_err(td->dev, "dfll is =
+enabled while shouldn't be\n");
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EBUSY;
+>>>> +=C2=A0=C2=A0=C2=A0 }
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0 reset_control_assert(td->dvco_rst);
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0 return 0;
+>>>> +}
+>>>> +EXPORT_SYMBOL(tegra_dfll_suspend);
+>>>> +
+>>>> +/**
+>>>> + * tegra_dfll_resume - reinitialize DFLL on resume
+>>>> + * @dev: DFLL instance
+>>>> + *
+>>>> + * DFLL is disabled and reset during suspend and resume.
+>>>> + * So, reinitialize the DFLL IP block back for use.
+>>>> + * DFLL clock is enabled later in closed loop mode by CPUFreq
+>>>> + * driver before switching its clock source to DFLL output.
+>>>> + */
+>>>> +int tegra_dfll_resume(struct device *dev)
+>>>> +{
+>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_dfll *td =3D dev_get_drvdata(dev);
+>>>> +
+>>>> +=C2=A0=C2=A0=C2=A0 reset_control_deassert(td->dvco_rst);
+>>> This doesn't look right because I assume that DFLL resetting is
+>>> synchronous and thus clk should be enabled in order for reset to
+>>> propagate inside hardware.
 >>>
->>> And I'm also not sure what's wrong with setting 0 for the timers.
+>>>> +=C2=A0=C2=A0=C2=A0 pm_runtime_get_sync(td->dev);
+>>> Hence it will be better to remove the above reset_control_deassert() an=
+d
+>>> add here:
 >>>
->> These settings are for SC7 only and will not have any impact in normal state.
-> POR value for these timing registers is not 0 and has default timings based on chip design
-> and on top of that based on platform HW components charge/discharge timings there's a need
-> to increase these timings so support for programming these thru DT is needed and these
-> values have effect only in LP0.
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0reset_control_reset(td->dvco_rst);
+>> By the time dfll resume happens, dfll controller clock will already be e=
+nabled.
+>>
+>> so doing reset de-assert before pm_runtime seems ok.
+> I don't see what enables the DFLL clock because it should be enabled by t=
+he CPUFreq driver
+> on resume from suspend and resume happens after resuming of the DFLL driv=
+er.
 
-If it is legal to omit the timings in DT, then tegra_pmc_parse_dt() need to be corrected if
-there is assumption of 0 meaning that values are undefined in DT.
+dvco_rst is part of peripheral clocks and all peripheral clocks are=20
+restored by clk-tegra210 driver which happens before dfll driver resume.
+
+So dfll rst thru part of peripheral clock enable is set prior to dfll=20
+reset deassertion
+
