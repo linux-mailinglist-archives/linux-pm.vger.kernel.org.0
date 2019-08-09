@@ -2,314 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2177E8847F
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 23:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7ED8856D
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 00:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbfHIVST (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 17:18:19 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:45659 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727727AbfHIVST (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 17:18:19 -0400
-Received: by mail-lj1-f193.google.com with SMTP id t3so4746242ljj.12
-        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2019 14:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7rznYohCzIvHrSGGawNsShs1u2jjUcR06gJVcpCbKyM=;
-        b=AbGwaqU26WXKooucDSmlKHCUsdXOFpSQB9Urtt8Qa10t5dZCaFkgl/0BMYvmrfj+qE
-         Suc+3mFOohecGHExbjo5rBIAcX2y1vZUIuuZLk+BWJ4nL/7DtC9mtlXfMJWyYSXv6aB5
-         0sYuEm6hbcCFLsTq2fCpjruLulQ4UzAGF7sR0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7rznYohCzIvHrSGGawNsShs1u2jjUcR06gJVcpCbKyM=;
-        b=HraMAt2ikoYT8edhVMss3oXmpK42BxwZ/Vuv3zDMPUdEf5jHsWuAsTOjs250vDRk2s
-         8tMzxtyIwzYE9a8GxmxWeSS2U/ne/pl2laVmbxvNN6jLbWyRAgxDRzVMt+BV6Jx/yptt
-         iLBwN7wU6HZyk+Ix+ngtloONibxxT6/3zdsrG/hn9Br6RSD04BlNvkXBDAds47SC04M0
-         d0c3BLW2Vu7/wTjTjU7s0hFPqcBGTNt6nZg4jhf7u+5MoUsK9qFw1s/l8zSjZj3prJAb
-         K06917ZV0SRNq0wlIKazn+609MSunFwn6DXu5MZyz0BTPcB2ISw0D5bHU0r0u0G1Ojin
-         ur3Q==
-X-Gm-Message-State: APjAAAVUtsOFoe4UygxccBamoIluehuQHVvpzRVPU0rxSMJpDqt+DjFl
-        p26Fhsw19NDqgf8sSdxxpmZeQMABEi8=
-X-Google-Smtp-Source: APXvYqz7KtyEFX5lYFRKStvGIdHZrc3dwrq0lmEkHUTxevtmWGbovUfvQDjRYiaOFIglPqenCbEoXA==
-X-Received: by 2002:a2e:980a:: with SMTP id a10mr12589589ljj.40.1565385495822;
-        Fri, 09 Aug 2019 14:18:15 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id r89sm574524ljr.75.2019.08.09.14.18.14
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Aug 2019 14:18:15 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id 62so65588907lfa.8
-        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2019 14:18:14 -0700 (PDT)
-X-Received: by 2002:ac2:5976:: with SMTP id h22mr13683199lfp.79.1565385494359;
- Fri, 09 Aug 2019 14:18:14 -0700 (PDT)
+        id S1726185AbfHIWBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 18:01:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34230 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726157AbfHIWBT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Aug 2019 18:01:19 -0400
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 71C4F2089E;
+        Fri,  9 Aug 2019 22:01:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565388078;
+        bh=g7gv0QYYb35ljO9lYoG4pHHDfLadVPRJuFZjOE++jYE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JDwR44NcwyUy5qLqieDYFPX65nZosdcUdIEypACHYZl3lvY+6CqyW8/ZTS+hxjjw1
+         E8O/T6Ojc44aE3AVNS7dfP0CWS3biO5peNqqWKRGpMVlGeA2EQusMMcwtQUC+dyO0B
+         1/dVBQvcvXjlxTrNCeHqj8blERBfcsn25zhgBo1o=
+Date:   Fri, 9 Aug 2019 17:01:16 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] PCI / PM: Check for error when reading Power State
+Message-ID: <20190809220116.GA221706@google.com>
+References: <20190805205214.194981-1-helgaas@kernel.org>
+ <20190805205214.194981-5-helgaas@kernel.org>
+ <CAJZ5v0jFPU38zDugumJB0iq5d-LctcMCdygTrFU4=gYP3UJ+oA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20190809121325.8138-1-georgi.djakov@linaro.org> <20190809121325.8138-4-georgi.djakov@linaro.org>
-In-Reply-To: <20190809121325.8138-4-georgi.djakov@linaro.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Fri, 9 Aug 2019 14:17:38 -0700
-X-Gmail-Original-Message-ID: <CAE=gft7HObn4Q-6P_pd1QbpWJG-yvs4C87qpiQm6BbmHzwZW5w@mail.gmail.com>
-Message-ID: <CAE=gft7HObn4Q-6P_pd1QbpWJG-yvs4C87qpiQm6BbmHzwZW5w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] interconnect: qcom: Add tagging and wake/sleep
- support for sdm845
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     linux-pm@vger.kernel.org, David Dai <daidavid1@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        amit.kucheria@linaro.org, Doug Anderson <dianders@chromium.org>,
-        Sean Sweeney <seansw@qti.qualcomm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0jFPU38zDugumJB0iq5d-LctcMCdygTrFU4=gYP3UJ+oA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 9, 2019 at 5:13 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
->
-> From: David Dai <daidavid1@codeaurora.org>
->
-> Add support for wake and sleep commands by using a tag to indicate
-> whether or not the aggregate and set requests fall into execution
-> state specific bucket.
->
-> Signed-off-by: David Dai <daidavid1@codeaurora.org>
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> ---
->  drivers/interconnect/qcom/sdm845.c | 134 ++++++++++++++++++++++-------
->  1 file changed, 103 insertions(+), 31 deletions(-)
->
-> diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
-> index fb526004c82e..b2047d1c6d84 100644
-> --- a/drivers/interconnect/qcom/sdm845.c
-> +++ b/drivers/interconnect/qcom/sdm845.c
-> @@ -66,6 +66,17 @@ struct bcm_db {
->  #define SDM845_MAX_BCM_PER_NODE        2
->  #define SDM845_MAX_VCD         10
->
-> +#define QCOM_ICC_BUCKET_AMC            0
-> +#define QCOM_ICC_BUCKET_WAKE           1
-> +#define QCOM_ICC_BUCKET_SLEEP          2
-> +#define QCOM_ICC_NUM_BUCKETS           3
-> +#define QCOM_ICC_TAG_AMC               BIT(QCOM_ICC_BUCKET_AMC)
-> +#define QCOM_ICC_TAG_WAKE              BIT(QCOM_ICC_BUCKET_WAKE)
-> +#define QCOM_ICC_TAG_SLEEP             BIT(QCOM_ICC_BUCKET_SLEEP)
-> +#define QCOM_ICC_TAG_ACTIVE_ONLY       (QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE)
-> +#define QCOM_ICC_TAG_ALWAYS            (QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
-> +                                        QCOM_ICC_TAG_SLEEP)
-> +
->  /**
->   * struct qcom_icc_node - Qualcomm specific interconnect nodes
->   * @name: the node name used in debugfs
-> @@ -86,8 +97,8 @@ struct qcom_icc_node {
->         u16 num_links;
->         u16 channels;
->         u16 buswidth;
-> -       u64 sum_avg;
-> -       u64 max_peak;
-> +       u64 sum_avg[QCOM_ICC_NUM_BUCKETS];
-> +       u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->         struct qcom_icc_bcm *bcms[SDM845_MAX_BCM_PER_NODE];
->         size_t num_bcms;
->  };
-> @@ -112,8 +123,8 @@ struct qcom_icc_bcm {
->         const char *name;
->         u32 type;
->         u32 addr;
-> -       u64 vote_x;
-> -       u64 vote_y;
-> +       u64 vote_x[QCOM_ICC_NUM_BUCKETS];
-> +       u64 vote_y[QCOM_ICC_NUM_BUCKETS];
->         bool dirty;
->         bool keepalive;
->         struct bcm_db aux_data;
-> @@ -555,7 +566,7 @@ inline void tcs_cmd_gen(struct tcs_cmd *cmd, u64 vote_x, u64 vote_y,
->                 cmd->wait = true;
->  }
->
-> -static void tcs_list_gen(struct list_head *bcm_list,
-> +static void tcs_list_gen(struct list_head *bcm_list, int bucket,
->                          struct tcs_cmd tcs_list[SDM845_MAX_VCD],
->                          int n[SDM845_MAX_VCD])
->  {
-> @@ -573,8 +584,8 @@ static void tcs_list_gen(struct list_head *bcm_list,
->                         commit = true;
->                         cur_vcd_size = 0;
->                 }
-> -               tcs_cmd_gen(&tcs_list[idx], bcm->vote_x, bcm->vote_y,
-> -                           bcm->addr, commit);
-> +               tcs_cmd_gen(&tcs_list[idx], bcm->vote_x[bucket],
-> +                           bcm->vote_y[bucket], bcm->addr, commit);
->                 idx++;
->                 n[batch]++;
->                 /*
-> @@ -595,51 +606,76 @@ static void tcs_list_gen(struct list_head *bcm_list,
->
->  static void bcm_aggregate(struct qcom_icc_bcm *bcm)
->  {
-> -       size_t i;
-> -       u64 agg_avg = 0;
-> -       u64 agg_peak = 0;
-> +       size_t i, bucket;
-> +       u64 agg_avg[QCOM_ICC_NUM_BUCKETS] = {0};
-> +       u64 agg_peak[QCOM_ICC_NUM_BUCKETS] = {0};
->         u64 temp;
->
-> -       for (i = 0; i < bcm->num_nodes; i++) {
-> -               temp = bcm->nodes[i]->sum_avg * bcm->aux_data.width;
-> -               do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
-> -               agg_avg = max(agg_avg, temp);
-> +       for (bucket = 0; bucket < QCOM_ICC_NUM_BUCKETS; bucket++) {
-> +               for (i = 0; i < bcm->num_nodes; i++) {
-> +                       temp = bcm->nodes[i]->sum_avg[bucket] * bcm->aux_data.width;
-> +                       do_div(temp, bcm->nodes[i]->buswidth * bcm->nodes[i]->channels);
-> +                       agg_avg[bucket] = max(agg_avg[bucket], temp);
->
-> -               temp = bcm->nodes[i]->max_peak * bcm->aux_data.width;
-> -               do_div(temp, bcm->nodes[i]->buswidth);
-> -               agg_peak = max(agg_peak, temp);
-> -       }
-> +                       temp = bcm->nodes[i]->max_peak[bucket] * bcm->aux_data.width;
-> +                       do_div(temp, bcm->nodes[i]->buswidth);
-> +                       agg_peak[bucket] = max(agg_peak[bucket], temp);
-> +               }
->
-> -       temp = agg_avg * 1000ULL;
-> -       do_div(temp, bcm->aux_data.unit);
-> -       bcm->vote_x = temp;
-> +               temp = agg_avg[bucket] * 1000ULL;
-> +               do_div(temp, bcm->aux_data.unit);
-> +               bcm->vote_x[bucket] = temp;
->
-> -       temp = agg_peak * 1000ULL;
-> -       do_div(temp, bcm->aux_data.unit);
-> -       bcm->vote_y = temp;
-> +               temp = agg_peak[bucket] * 1000ULL;
-> +               do_div(temp, bcm->aux_data.unit);
-> +               bcm->vote_y[bucket] = temp;
-> +       }
->
-> -       if (bcm->keepalive && bcm->vote_x == 0 && bcm->vote_y == 0) {
-> -               bcm->vote_x = 1;
-> -               bcm->vote_y = 1;
-> +       if (bcm->keepalive && bcm->vote_x[0] == 0 && bcm->vote_y[0] == 0) {
+On Mon, Aug 05, 2019 at 11:09:19PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Aug 5, 2019 at 10:52 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> >
+> > The Power Management Status Register is in config space, and reads while
+> > the device is in D3cold typically return ~0 data (PCI_ERROR_RESPONSE).  If
+> > we just look at the PCI_PM_CTRL_STATE_MASK bits, that is 0x3, which looks
+> > like D3hot, not D3cold.
+> >
+> > Check the entire register for PCI_ERROR_RESPONSE so we can distinguish
+> > D3cold from D3hot.
+> >
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > ---
+> >  drivers/pci/pci.c   |  6 +++---
+> >  include/linux/pci.h | 13 +++++++++++++
+> >  2 files changed, 16 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index af6a97d7012b..d8686e3cd5eb 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -894,7 +894,7 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+> >                 udelay(PCI_PM_D2_DELAY);
+> >
+> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > -       dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> > +       dev->current_state = pci_power_state(pmcsr);
+> 
+> But pci_raw_set_power_state() should not even be called for devices in
+> D3_cold, so this at best is redundant.
 
-Consider using QCOM_ICC_BUCKET_AMC instead of 0.
+I tried to verify that we don't call pci_raw_set_power_state() for
+devices in D3cold, but it wasn't obvious to me.  Is there an easy way
+to verify that?  I'd rather have code that doesn't rely on deep
+knowledge about other areas.
 
-> +               bcm->vote_x[QCOM_ICC_BUCKET_AMC] = 1;
-> +               bcm->vote_x[QCOM_ICC_BUCKET_WAKE] = 1;
-> +               bcm->vote_y[QCOM_ICC_BUCKET_AMC] = 1;
-> +               bcm->vote_y[QCOM_ICC_BUCKET_WAKE] = 1;
->         }
->
->         bcm->dirty = false;
->  }
->
-> +static void qcom_icc_pre_aggregate(struct icc_node *node)
-> +{
-> +       size_t i;
-> +       struct qcom_icc_node *qn;
-> +
-> +       qn = node->data;
-> +
-> +       for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-> +               qn->sum_avg[i] = 0;
-> +               qn->max_peak[i] = 0;
-> +       }
-> +}
-> +
->  static int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->                               u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
->  {
->         size_t i;
->         struct qcom_icc_node *qn;
-> +       unsigned long tag_word = (unsigned long)tag;
+Even if the device was in, say D0, what if it is hot-removed just
+before we read PCI_PM_CTRL?  We'll set dev->current_state to D3hot,
+when I think D3cold would better correspond to the state of the
+device.  Maybe that's harmless, but I don't know how to verify that.
 
-Is this local still needed? Can't we just use tag directly?
+> >         if (dev->current_state != state && printk_ratelimit())
+> >                 pci_info(dev, "Refused to change power state, currently in D%d\n",
+> >                          dev->current_state);
+> > @@ -942,7 +942,7 @@ void pci_update_current_state(struct pci_dev *dev, pci_power_t state)
+> >                 u16 pmcsr;
+> >
+> >                 pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > -               dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> > +               dev->current_state = pci_power_state(pmcsr);
+> 
+> The if () branch above should cover the D3cold case, shouldn't it?
 
->
->         qn = node->data;
->
-> +       if (!tag)
-> +               tag_word = QCOM_ICC_TAG_ALWAYS;
-> +
-> +       for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-> +               if (test_bit(i, &tag_word)) {
-> +                       qn->sum_avg[i] += avg_bw;
-> +                       qn->max_peak[i] = max_t(u32, qn->max_peak[i], peak_bw);
-> +               }
-> +       }
-> +
->         *agg_avg += avg_bw;
->         *agg_peak = max_t(u32, *agg_peak, peak_bw);
->
-> -       qn->sum_avg = *agg_avg;
-> -       qn->max_peak = *agg_peak;
-> -
->         for (i = 0; i < qn->num_bcms; i++)
->                 qn->bcms[i]->dirty = true;
->
-> @@ -675,7 +711,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->          * Construct the command list based on a pre ordered list of BCMs
->          * based on VCD.
->          */
-> -       tcs_list_gen(&commit_list, cmds, commit_idx);
-> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_AMC, cmds, commit_idx);
->
->         if (!commit_idx[0])
->                 return ret;
-> @@ -693,6 +729,41 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->                 return ret;
->         }
->
-> +       INIT_LIST_HEAD(&commit_list);
-> +
-> +       for (i = 0; i < qp->num_bcms; i++) {
-> +               /*
-> +                * Only generate WAKE and SLEEP commands if a resource's
-> +                * requirements change as the execution environment transitions
-> +                * between different power states.
-> +                */
-> +               if (qp->bcms[i]->vote_x[QCOM_ICC_BUCKET_WAKE] !=
-> +                   qp->bcms[i]->vote_x[QCOM_ICC_BUCKET_SLEEP] ||
-> +                   qp->bcms[i]->vote_y[QCOM_ICC_BUCKET_WAKE] !=
-> +                   qp->bcms[i]->vote_y[QCOM_ICC_BUCKET_SLEEP]) {
-> +                       list_add_tail(&qp->bcms[i]->list, &commit_list);
-> +               }
-> +       }
-> +
-> +       if (list_empty(&commit_list))
-> +               return ret;
-> +
-> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_WAKE, cmds, commit_idx);
-> +
-> +       ret = rpmh_write_batch(qp->dev, RPMH_WAKE_ONLY_STATE, cmds, commit_idx);
-> +       if (ret) {
-> +               pr_err("Error sending WAKE RPMH requests (%d)\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       tcs_list_gen(&commit_list, QCOM_ICC_BUCKET_SLEEP, cmds, commit_idx);
-> +
-> +       ret = rpmh_write_batch(qp->dev, RPMH_SLEEP_STATE, cmds, commit_idx);
-> +       if (ret) {
-> +               pr_err("Error sending SLEEP RPMH requests (%d)\n", ret);
-> +               return ret;
-> +       }
-> +
->         return ret;
->  }
->
-> @@ -738,6 +809,7 @@ static int qnoc_probe(struct platform_device *pdev)
->         provider = &qp->provider;
->         provider->dev = &pdev->dev;
->         provider->set = qcom_icc_set;
-> +       provider->pre_aggregate = qcom_icc_pre_aggregate;
->         provider->aggregate = qcom_icc_aggregate;
->         provider->xlate = of_icc_xlate_onecell;
->         INIT_LIST_HEAD(&provider->nodes);
+You mean the "if (platform_pci_get_power_state(dev) == PCI_D3cold)"
+test?
+
+platform_pci_get_power_state() returns PCI_UNKNOWN in some cases.
+When that happens, might we not read PCI_PM_CTRL of a device in
+D3cold?  I think this also has the same hotplug question as above.
+
+> >         } else {
+> >                 dev->current_state = state;
+> >         }
+> > @@ -1677,7 +1677,7 @@ static int pci_enable_device_flags(struct pci_dev *dev, unsigned long flags)
+> >         if (dev->pm_cap) {
+> >                 u16 pmcsr;
+> >                 pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > -               dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> > +               dev->current_state = pci_power_state(pmcsr);
+> 
+> So this appears to be only case in which pci_power_state(pmcsr) is
+> useful at all.
+> 
+> It might be better to use the code from it directly here IMO.
+
+If we're decoding CSR values, I think it's better to notice error
+responses when we can than it is to try to figure out whether the
+error response is theoretically impossible or the incorrectly decoded
+value (e.g., D3hot instead of D3cold) is harmless.
+
+> >         }
+> >
+> >         if (atomic_inc_return(&dev->enable_cnt) > 1)
+> > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > index d64fd3788061..fdfe990e9661 100644
+> > --- a/include/linux/pci.h
+> > +++ b/include/linux/pci.h
+> > @@ -152,6 +152,19 @@ static inline const char *pci_power_name(pci_power_t state)
+> >         return pci_power_names[1 + (__force int) state];
+> >  }
+> >
+> > +/*
+> > + * Convert a Power Management Status Register value to a pci_power_t.
+> > + * Note that if we read the register while the device is in D3cold, we
+> > + * typically get PCI_ERROR_RESPONSE, which looks like D3hot (0x3) if we
+> > + * only look at the PCI_PM_CTRL_STATE_MASK bits.
+> > + */
+> > +static inline pci_power_t pci_power_state(u16 pmcsr)
+> > +{
+> > +       if (pmcsr == (u16) PCI_ERROR_RESPONSE)
+> > +               return PCI_D3cold;
+> > +       return pmcsr & PCI_PM_CTRL_STATE_MASK;
+> > +}
+> > +
+> >  #define PCI_PM_D2_DELAY                200
+> >  #define PCI_PM_D3_WAIT         10
+> >  #define PCI_PM_D3COLD_WAIT     100
+> > --
+> > 2.22.0.770.g0f2c4a37fd-goog
+> >
