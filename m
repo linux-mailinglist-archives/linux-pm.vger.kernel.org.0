@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAB8878D5
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 13:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0100C878DD
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 13:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406582AbfHILjA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 07:39:00 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33227 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406550AbfHILjA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 07:39:00 -0400
-Received: by mail-lj1-f194.google.com with SMTP id z17so3349911ljz.0;
-        Fri, 09 Aug 2019 04:38:57 -0700 (PDT)
+        id S2406609AbfHILjh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 07:39:37 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43345 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726420AbfHILjg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 07:39:36 -0400
+Received: by mail-lj1-f193.google.com with SMTP id y17so67246712ljk.10;
+        Fri, 09 Aug 2019 04:39:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jDJVABbE7QjcU+mBIQ+zrFhm3muZXA8d67yINbJkGx8=;
-        b=qY8quRX6czxpIVO/UyLxGGZxaQxcDuNfImzT7mKj5EEf7dtKCPAlhw4QZ1gRU97LqO
-         Aq26UYW1ci/IT1NLCkTagrzp1XQ0G9yPy1jywrqCW7bfA5UoD1FVW+EBor6mFyducJRg
-         pabqx3tAly+6FzqF96+FPxXi/sQV2/jq6dbtJX4FjgyAsypRZNGAnpGEgI30TtuIpG9+
-         BNFKhI/KHqFE52/6iX/5Iv+fWDoTH+Ou4f5IKd7+Yj4wFhcvsmyD/HRwWM4wGhCpQhEV
-         r1nML0hToW+TlD0tTnZloGMvxypGq4Kz+kuFGfZlGfVQw5m0XggX5g3vFgRHNFWjsj00
-         Yh1w==
+        bh=AQJyB8h4B7rOWZbk5WXfwukwf2zyCOzcC9K/huoManI=;
+        b=H0Xa35QGHgBqAsebCDW9Dn/N5OmODk95lSH57TnY2TIdEZ6gE2Drtibg07AxHtpsHP
+         RxdKMCD0dtERN5sFIBQRIzyZg3Ki0c2joQ7IdkgpH2IBBykAANExfqkZIClV8rzCG0JR
+         M6Hgzgh1pGOXCcDTySVShrotrCoM9Xk5z75EBeFIwYqpVDw18ZLnLZ0eBpC8DExWsX2E
+         JFwiyd2R6Xy5Pjn1h+BURTU86IqXxmYbcn1TbV4uI77VngstOxlZCdMaYWigNfUUsckf
+         30ru51gn541989iet0WsUqIM8FFdOXVBEQ6KDASRmvNS9g5y1jCqAopYdJX3g5HmiLWJ
+         ypAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=jDJVABbE7QjcU+mBIQ+zrFhm3muZXA8d67yINbJkGx8=;
-        b=T4GZ+p9XOdre4ODk3Ho97IEW99JVnZ9ueU/hnvEQ/pVX8Pu/HhgFd7lQreCk6hesC8
-         T8z4wcRoWjYAlT51DrBitplY3RvabCHXuGWrtjEsgRamz6PEaeNgClOQztgxZZi6VJ4b
-         +S9RBr9xIxY2QvwNlX0/fUVVYhFv1lC/tzTrmUL+8Jw9hF0LgQIFQcLzrzk5fRYi2/Pp
-         bo9pHHL1qKld5pPyqwnOl6Pq4lUglRtH8o3dQMwx/aNPXz7ehcJJQ6O1NPfORYl9op1x
-         1L9uv60ZgttNqw7S8aX1C615N9POeIw41qbOEd9/2zLbAlaINWL90JO+eXpRUsl7hJh9
-         uOcw==
-X-Gm-Message-State: APjAAAXWAp/P4OwNir5nwtp7qXg3RiE+AEixXaPsOtu3jAD45B6p/ZJd
-        UOGSqRX8nJMhaphSbgpN+dQpnqk+
-X-Google-Smtp-Source: APXvYqw6zmnGz5vd8ob1ec0PDqYiDbVvdlAz8Fsv1WOfJtP26F/bP23KtXAyMEoNf26u0xdAfwFW5Q==
-X-Received: by 2002:a2e:5b94:: with SMTP id m20mr10895600lje.7.1565350736887;
-        Fri, 09 Aug 2019 04:38:56 -0700 (PDT)
+        bh=AQJyB8h4B7rOWZbk5WXfwukwf2zyCOzcC9K/huoManI=;
+        b=glu8pKjIHHXyO1mZV4y21JEiRXP8cb6A2IrlbLXDcE5BH7wxg/Lze5zN6BNAI/nHkn
+         9GK6oXgsyTjHjQJFD8rO3Bu2qdalVq9ODqA8NtZtFuiEhXN634YtvsTQEzCuhKUHh9JQ
+         NzrKTWIYDHr6vidFItOQ2KFnb1P4Vb3N+icTZAkgTw5jF7R2BJ6v9am4kyHdBRP312j0
+         iWKyq4s3/nHePhVZeikOKRluipAij12HUpnet46bR59lCA9kFbD4sCurpbn1wE3IO63p
+         rX2nFTG4S3JuNkB3QaI8pNFiR5iG1DG6K7BHKEajLGGWcmzZ/vnMzC/H2nNfkxn7b+D4
+         8eVA==
+X-Gm-Message-State: APjAAAU2v6gZyzrvZydyfpXYW7V5y3osCyilV22H5+6aAhHMmm3LaLDh
+        //e4A0b7CGHFsa3zksODbHPAJGJH
+X-Google-Smtp-Source: APXvYqysTFs3vR72El2ESsAVoDjXGL13f7YH0IhJmCSoNL/XhcpTMUDHfPKD3pLu3UIlhqnr2Cg68A==
+X-Received: by 2002:a2e:93c8:: with SMTP id p8mr10954071ljh.6.1565350773511;
+        Fri, 09 Aug 2019 04:39:33 -0700 (PDT)
 Received: from [192.168.2.145] ([94.29.34.218])
-        by smtp.googlemail.com with ESMTPSA id g12sm3320968lfc.96.2019.08.09.04.38.55
+        by smtp.googlemail.com with ESMTPSA id 141sm450768ljf.32.2019.08.09.04.39.32
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Aug 2019 04:38:56 -0700 (PDT)
-Subject: Re: [PATCH v8 01/21] pinctrl: tegra: Fix write barrier placement in
- pmx_writel
+        Fri, 09 Aug 2019 04:39:32 -0700 (PDT)
+Subject: Re: [PATCH v8 02/21] pinctrl: tegra: Add write barrier after all
+ pinctrl register writes
 To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
         thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
         jason@lakedaemon.net, marc.zyngier@arm.com,
@@ -59,14 +59,14 @@ Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
         devicetree@vger.kernel.org, rjw@rjwysocki.net,
         viresh.kumar@linaro.org, linux-pm@vger.kernel.org
 References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
- <1565308020-31952-2-git-send-email-skomatineni@nvidia.com>
+ <1565308020-31952-3-git-send-email-skomatineni@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a8b0c979-de6f-16d0-5e46-436a1a6ced8c@gmail.com>
-Date:   Fri, 9 Aug 2019 14:38:54 +0300
+Message-ID: <c71faafa-51db-f11a-1e56-c4b79a7468d1@gmail.com>
+Date:   Fri, 9 Aug 2019 14:39:31 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <1565308020-31952-2-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1565308020-31952-3-git-send-email-skomatineni@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -76,39 +76,27 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 09.08.2019 2:46, Sowjanya Komatineni пишет:
-> pmx_writel uses writel which inserts write barrier before the
-> register write rather.
-> 
-> This patch has fix to replace writel with writel_relaxed followed
-> by a write barrier to ensure write operation before the barrier
-> is completed for successful pinctrl change.
+> This patch adds write barrier after all pinctrl register writes
+> during resume to make sure all pinctrl changes are complete.
 > 
 > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 > ---
->  drivers/pinctrl/tegra/pinctrl-tegra.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  drivers/pinctrl/tegra/pinctrl-tegra.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 > diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> index e3a237534281..982ee634b3b1 100644
+> index 982ee634b3b1..f49fe29fb6df 100644
 > --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
 > +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> @@ -32,7 +32,9 @@ static inline u32 pmx_readl(struct tegra_pmx *pmx, u32 bank, u32 reg)
+> @@ -677,6 +677,8 @@ static int tegra_pinctrl_resume(struct device *dev)
+>  			writel_relaxed(*backup_regs++, regs++);
+>  	}
 >  
->  static inline void pmx_writel(struct tegra_pmx *pmx, u32 val, u32 bank, u32 reg)
->  {
-> -	writel(val, pmx->regs[bank] + reg);
-> +	writel_relaxed(val, pmx->regs[bank] + reg);
-> +	/* make sure pinmux register write completed */
+> +	/* make sure all the pinmux register writes are complete */
 > +	wmb();
+>  	return 0;
 >  }
 >  
->  static int tegra_pinctrl_get_groups_count(struct pinctrl_dev *pctldev)
 > 
-
-But this only ensures that CPU have sent the write to the APB BUS and
-not that the write actually taken into effect? I'm a bit paranoid when
-it comes to a cross-domain synchronization things.
-
-Any ways it looks better than it was before.
 
 Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
