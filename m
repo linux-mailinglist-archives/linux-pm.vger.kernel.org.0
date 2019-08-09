@@ -2,98 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B980186E14
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 01:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0809F86EC5
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 02:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404979AbfHHXrJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Aug 2019 19:47:09 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:12809 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404964AbfHHXrI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 19:47:08 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d4cb4850003>; Thu, 08 Aug 2019 16:47:17 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 08 Aug 2019 16:47:07 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 08 Aug 2019 16:47:07 -0700
-Received: from HQMAIL110.nvidia.com (172.18.146.15) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 8 Aug
- 2019 23:47:07 +0000
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by hqmail110.nvidia.com
- (172.18.146.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 8 Aug
- 2019 23:47:06 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 8 Aug 2019 23:47:06 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.110.103.110]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d4cb47a0002>; Thu, 08 Aug 2019 16:47:06 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <tglx@linutronix.de>, <jason@lakedaemon.net>,
-        <marc.zyngier@arm.com>, <linus.walleij@linaro.org>,
-        <stefan@agner.ch>, <mark.rutland@arm.com>
-CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
-        <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <jckuo@nvidia.com>,
-        <josephl@nvidia.com>, <talho@nvidia.com>, <skomatineni@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mperttunen@nvidia.com>, <spatra@nvidia.com>, <robh+dt@kernel.org>,
-        <digetx@gmail.com>, <devicetree@vger.kernel.org>,
-        <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
-        <linux-pm@vger.kernel.org>
-Subject: [PATCH v8 21/21] arm64: dts: tegra210-p3450: Jetson Nano SC7 timings
-Date:   Thu, 8 Aug 2019 16:47:00 -0700
-Message-ID: <1565308020-31952-22-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
-References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S2404329AbfHIAVw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Aug 2019 20:21:52 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:44675 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732796AbfHIAVw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Aug 2019 20:21:52 -0400
+Received: by mail-ot1-f67.google.com with SMTP id b7so75799596otl.11;
+        Thu, 08 Aug 2019 17:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qJ18L1wbrERX6F3k10BGEMdcTJ2aPiTL4BfastDFNCk=;
+        b=efR77BEuls51ClSBywaN/hcJ6AZ5kn0vIw/M0u8cgAabCxj3RPufdHV5E1zFLIPjh5
+         VLQe4lQ4mfafTAjeFWtrG/iApUet5NUBLELLd8cIU05T/6SJU+oQSWuZxnsck5H9e4+d
+         AVqYTen2tOawpHvT88kTFJ+rkFlUjutbPiH2qtNIfZXKzKb2j42mkPjoj2qoSlCjWzBa
+         03hQyHaULEXxY81DUZa6zdt1ZD9tYWybRTFng5/Vb13BSD5AZ7lVsIzyPuFFga6wyWNe
+         SK0zzHsRmbI+0uFe0MrUwL2xkALc+H6kLZFpFlq/a29ZzgjfRfLpiUXDJBDErrGk/KJS
+         vDuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=qJ18L1wbrERX6F3k10BGEMdcTJ2aPiTL4BfastDFNCk=;
+        b=JdGVI2THjL+GdCadLm7SoJu/YjaIbm0B4SUY0uJZtlDS1O+oOXBiO8AQX2x8glpLyX
+         rm9hwEN290nHVYf7m98Pxq4nizUiKR689A0O8aKxVKpMrjE7Jemjg6zkDomuDxsAQyMV
+         8QDwZoQSSBQ8VQbC1AZhxHtp2GoGoizB2uZ6QWKvdcaUEDBm7J47ARmMCGm4VHAzxMTm
+         1MA+oVAoujYia3lD1o8uEnLkgmOM1JDCRDAfRBdcro6PkEPLs57WbqjQpXNr0E6hfv1l
+         El2F+UsdPiyTOehV0IISL5tUPdjBdi5146AyFKitdnfeaGWrOZjgXVRQCPYDpMhl1cfs
+         7a8Q==
+X-Gm-Message-State: APjAAAXh7bxNVjlV0bW3xer9iYGZDIjllMhRpcv9LhC6wYT0nFbTAzra
+        /gZu+M6sY1faffNl2yW/YsE=
+X-Google-Smtp-Source: APXvYqz+CkU4806/CIx6WZm+rcWifVImcUB5taTQGzvDeO2HlNEropKLCzMbdOV3P7x3CatDHMWbTA==
+X-Received: by 2002:a5d:8451:: with SMTP id w17mr18797106ior.226.1565310111075;
+        Thu, 08 Aug 2019 17:21:51 -0700 (PDT)
+Received: from wandering.us.cray.com (msp-nat.cray.com. [136.162.2.1])
+        by smtp.gmail.com with ESMTPSA id l7sm8426377iof.81.2019.08.08.17.21.49
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 08 Aug 2019 17:21:50 -0700 (PDT)
+From:   Shaun Tancheff <shaun@tancheff.com>
+X-Google-Original-From: Shaun Tancheff <stancheff@cray.com>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Shaun Tancheff <stancheff@cray.com>, linux-kbuild@vger.kernel.org,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "'James E . J . Bottomley'" <jejb@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "'Martin K . Petersen'" <martin.petersen@oracle.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Renninger <trenn@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 0/1] kbuild: Support building a tree of modules with -M=<root>
+Date:   Thu,  8 Aug 2019 19:21:03 -0500
+Message-Id: <20190809002104.18599-1-stancheff@cray.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1565308037; bh=IAZSdScPMp/Ip7Sf+sfNEWrp2xlTiRUarz1Aolfu/RA=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=gGVf9K/C2hEFMhSP2TMrSAuQ/uTf/Fpt6++Y9NY6luzA3o0eTLmRf8awIGxsC+lzZ
-         UZJM/oIGNZ5omu3P5m0aNO8CNSDKKvwI5s1XU/77wnpGtW4CSt2pp9R44PqzXdS26p
-         aNFu1t7XUVlwlXRZUQl5eDlq+vC622Rp/lyEjtF1ETMe62TE/OE8zIdACtqc6481Ey
-         nMyo2D4kS6L26Z75x2O3OEoyTwhLhc9j62Aa+JhflLAWxr4xAcU6PZe80hwlOMHYCc
-         MUftckjqPjqsuHZr3BguK0+Ep07+nGD09/tS7KHyG6ePNU0wQla09DZloekeL3xZQQ
-         P88odYm1Pg8kA==
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds Jetson Nano platform specific SC7 timing configuration
-in the device tree.
+Currently when building lustre against 5.3 kernel modules fail to
+generate <module>.ko files.
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts | 7 +++++++
- 1 file changed, 7 insertions(+)
+Lustre builds a tree of modules however the numerous modules.order files
+are created but only the modules.order file at the root appears to be 
+read.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-index 9d17ec707bce..b525e69c172a 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-@@ -382,6 +382,13 @@
- 
- 	pmc@7000e400 {
- 		nvidia,invert-interrupt;
-+		nvidia,suspend-mode = <0>;
-+		nvidia,cpu-pwr-good-time = <0>;
-+		nvidia,cpu-pwr-off-time = <0>;
-+		nvidia,core-pwr-good-time = <4587 3876>;
-+		nvidia,core-pwr-off-time = <39065>;
-+		nvidia,core-power-req-active-high;
-+		nvidia,sys-clock-req-active-high;
- 	};
- 
- 	hda@70030000 {
+This changes the the scheme for KBUILD_EXTMOD to write to and read from
+a single modules.order file at the root.
+
+Shaun Tancheff (1):
+  kbuild: recursive build of external kernel modules
+
+ Makefile               | 1 +
+ scripts/Makefile.build | 8 +++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
 -- 
-2.7.4
+2.20.1
 
