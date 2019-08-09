@@ -2,69 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A8F873DD
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 10:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5325487487
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Aug 2019 10:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405921AbfHIIPd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 04:15:33 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:37793 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbfHIIPd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 04:15:33 -0400
-Received: by mail-ot1-f66.google.com with SMTP id s20so63989493otp.4;
-        Fri, 09 Aug 2019 01:15:32 -0700 (PDT)
+        id S2405957AbfHIIrl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 04:47:41 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39251 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405932AbfHIIrk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 04:47:40 -0400
+Received: by mail-ot1-f65.google.com with SMTP id r21so123818616otq.6;
+        Fri, 09 Aug 2019 01:47:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vnY7oAsY1586ACxhjBeo4HzooGDvWg/bO7dlEEDQ6lw=;
-        b=W4xi6YfwcjwWKsSEIGkzW3famA2I1TNwh6HCniGiDvW077yhXA4k6xl9h8/mQaKcsL
-         3mmzgR+TOJ0dXpZXR6rt0zfIMfEGlWcSqXbU/kjHNqhtAFnW5O8bvvjEPOAQeHQ4Bu2m
-         UeNzXSW2cJ0REzRndKE3/ytB4zBH9ONmm3OAIHd0ZpbRUVE7UfuVQM6Efu25Im6U8M0F
-         VHI+TTmGyuciNeYowtyBKREtz75ZZUfCMBGXVCuLDIEYE4Web8LWYCOUxqIhdd+JVpsT
-         VKrvTng3y4SU1B4IlJmFMcXOMu2bh9t49zeUfWB2GBOgkNW/KRccPIgzhvvgdNFEqwEn
-         RT6w==
-X-Gm-Message-State: APjAAAWxtF5kuat+woIuTVcB3meuf0kCe4mey5yiHQfY/CwlC+fb5kft
-        xCk0wO08LGSOq9etxcLGHAhUmmB9uimVO8tLRoA=
-X-Google-Smtp-Source: APXvYqxD5CZq8T4kQd204KLi1aG86Z1J38p4cBHVivVKXkMRm7iLcJLySC1n4t0d2NHxSE2hatpOs10CBonmjZQMous=
-X-Received: by 2002:a05:6830:8a:: with SMTP id a10mr15636164oto.167.1565338532516;
- Fri, 09 Aug 2019 01:15:32 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=SnWypE8I5rfMeHeIUzc3s634zV9WzHWr9FpC9i6scCA=;
+        b=Ff3UGx44dR96b4TG10nLH/tw0e2NLFXBXHVAEjrkz0c8Sbcn2CvA+PTa3jiLWDIXQg
+         KKH5y9V5DfxOB6IE54e6SiKMN/BH99PUXsV14m8XBOqginEbCnjJX3E7GYGOiVJmnAQL
+         XZWguvw/ugsgMoOJ+/CA2TBgz0CFK4AQpZA+by2J8bU9+oLkZZVawKQunnvvOCRiQC7d
+         UGb7LsPGXESj10mCaasL/YypUcxYqVdnjRzWzEi6GGbKZzj/sEA7rNhbJdJAw4f+Vp5p
+         EMkbrvsmQYAtpBSnq9rKTkGnULglSCDexeIWiPbd9ugvLsk3MdNYNxfnfoVqlhMcXjMj
+         Q37g==
+X-Gm-Message-State: APjAAAXieHg5kuvoq+6WBFRmZeH5Dcu19JRQCOSB30KtH/LdlEIp0TnN
+        F6c4gSJa6Jl0zX03A4zlQPBWeXtBer4kkodls/Y=
+X-Google-Smtp-Source: APXvYqxZ8zzjZcAFE6v568A8l6hKRIdFJDsOtTJCB7GaiHgGa7XvQHdM/hQi7f8P2Zq/Phdhhs1JtFx4jsQ7w5RYa6o=
+X-Received: by 2002:aca:5a41:: with SMTP id o62mr5639087oib.110.1565340460061;
+ Fri, 09 Aug 2019 01:47:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <1717835.1Yz4jNODO2@kreacher> <20190808111941.GJ30120@smile.fi.intel.com>
-In-Reply-To: <20190808111941.GJ30120@smile.fi.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 9 Aug 2019 10:15:21 +0200
-Message-ID: <CAJZ5v0h+iHWMkS-vVHUHwd6AmYE2UR_CCoUjhBJH_-ik_jbVQQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] intel-hid: intel-vbtn: Suspend-related fix and update
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
+Date:   Fri, 9 Aug 2019 10:47:28 +0200
+Message-ID: <CAJZ5v0jeVsVCC70s-jVphdMH9zx+pFTcMm-EhHcthJCtDxwkvQ@mail.gmail.com>
+Subject: [GIT PULL] Power management fix for v5.3-rc3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 8, 2019 at 1:19 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Aug 08, 2019 at 10:40:19AM +0200, Rafael J. Wysocki wrote:
-> > Hi,
-> >
-> > These two patches fix a minor issue related to system suspend in the intel-hid
-> > and intel-vbtn drivers and update the suspend/resume handling in intel-hid to
-> > reduce special-casing in it somewhat.
-> >
->
-> AFAIR the original patches go via other than PDx86 tree.
+Hi Linus,
 
-That's correct.
+Please pull from the tag
 
-> Thus, while patches are looking good to me,
->
-> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.3-rc4
+
+with top-most commit 0617bdede5114a0002298b12cd0ca2b0cfd0395d
+
+ Revert "PCI: Add missing link delays required by the PCIe spec"
+
+on top of commit e21a712a9685488f5ce80495b37b9fdbe96c230d
+
+ Linux 5.3-rc3
+
+to receive a power management fix for 5.3-rc4.
+
+This reverts a recent PCI power management change that caused
+problems to occur on multiple systems (Mika Westerberg).
 
 Thanks!
+
+
+---------------
+
+Mika Westerberg (1):
+      Revert "PCI: Add missing link delays required by the PCIe spec"
+
+---------------
+
+ drivers/pci/pci.c               | 29 +++++++-----------
+ drivers/pci/pci.h               |  1 -
+ drivers/pci/pcie/portdrv_core.c | 66 -----------------------------------------
+ 3 files changed, 10 insertions(+), 86 deletions(-)
