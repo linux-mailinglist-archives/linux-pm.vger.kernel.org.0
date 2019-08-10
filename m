@@ -2,309 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E56F88B4C
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 14:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D6C88E80
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 23:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbfHJMTV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Aug 2019 08:19:21 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:45579 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbfHJMTV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Aug 2019 08:19:21 -0400
-Received: by mail-ot1-f67.google.com with SMTP id m97so9558536otm.12;
-        Sat, 10 Aug 2019 05:19:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0uKqbMKY9etVt/K8NqzTXUIEa91wHYZJJ5dxzLOMVcA=;
-        b=lxtBB5sLGygMxloMk8ONnUwKfF3P2O9kVHjn0sp/gYvtaHvc/qApOKP91g2M3cg8yx
-         8DVqgaETji/nLZHDw1D1i7GYBxRI8OPuKGs8AP/mmeKysU4DQwGrhMYqk62WfRB9Bmll
-         umZ4lpzPu3tvK5RaWYF1RAXx1dxVil6kTKoo5J/ExfVGxQgsrh6PxsvFG3B93jqNW0FS
-         CaWGayVfVWp0UMP0NUE8FTttOXyS+eISyis/3braSSxiltvoB/PTcPL6xsIuY0LnfJNR
-         QtbQNlctMMFgIXzLg28RZ899gleUWq2rvxwjiCBoLooUxT0ipZxhZBbmO/HSxuMD8E6U
-         tKvQ==
-X-Gm-Message-State: APjAAAVzsnud36wPpmlcUCcD6jMxVd6snkEpNMCSOpmSi9Tf/+ec/NmV
-        kvB82K3aQW5Y4h6u0UvT7LeGxSWWt0KbdMUBwWQ=
-X-Google-Smtp-Source: APXvYqy2UpogvI2PpXFujEoMkyxR9oiIUv3tZkrRpozRQTlycuY3yBWNoqxdtJ+mxd81FJCUXR5Ner48REcMsL60xkA=
-X-Received: by 2002:a05:6830:154:: with SMTP id j20mr4910717otp.266.1565439560183;
- Sat, 10 Aug 2019 05:19:20 -0700 (PDT)
+        id S1726055AbfHJVLN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Aug 2019 17:11:13 -0400
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:47409 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725863AbfHJVLN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 10 Aug 2019 17:11:13 -0400
+Received: from [192.168.0.6] (ip5f5bd16e.dynamic.kabel-deutschland.de [95.91.209.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id A18E6201A3C38;
+        Sat, 10 Aug 2019 23:11:10 +0200 (CEST)
+Subject: Re: [Linux 5.2.x] /sys/kernel/debug/tracing/events/power/cpu_idle/id:
+ BUG: kernel NULL pointer dereference, address: 0000000000000000
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+References: <4b54ff1e-f18b-3c58-7caa-945a0775c24c@molgen.mpg.de>
+ <alpine.DEB.2.21.1908101910280.7324@nanos.tec.linutronix.de>
+ <01c7bc6b-dc6d-5eca-401a-8869e02f7c2a@molgen.mpg.de>
+Message-ID: <e18e2a11-ea96-a612-48cd-877fa307115f@molgen.mpg.de>
+Date:   Sat, 10 Aug 2019 23:11:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <cover.1563862014.git.viresh.kumar@linaro.org> <524de8ace0596e68a24b57b3b4043c707db32ca7.1563862014.git.viresh.kumar@linaro.org>
- <20190809023445.xn3mlv5qxjgz6bpp@vireshk-i7>
-In-Reply-To: <20190809023445.xn3mlv5qxjgz6bpp@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 10 Aug 2019 14:19:09 +0200
-Message-ID: <CAJZ5v0i9oO1M4m7WsKDFkpTEOkbiONWunT6UfqjhgSkBcrbEKA@mail.gmail.com>
-Subject: Re: [PATCH V2 04/10] cpufreq: powerpc_cbe: Switch to QoS requests
- instead of cpufreq notifier
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <01c7bc6b-dc6d-5eca-401a-8869e02f7c2a@molgen.mpg.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: de-DE
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 9, 2019 at 4:34 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 23-07-19, 11:44, Viresh Kumar wrote:
-> > The cpufreq core now takes the min/max frequency constraints via QoS
-> > requests and the CPUFREQ_ADJUST notifier shall get removed later on.
-> >
-> > Switch over to using the QoS request for maximum frequency constraint
-> > for ppc_cbe_cpufreq driver.
-> >
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> >  drivers/cpufreq/ppc_cbe_cpufreq.c     | 19 +++++-
-> >  drivers/cpufreq/ppc_cbe_cpufreq.h     |  8 +++
-> >  drivers/cpufreq/ppc_cbe_cpufreq_pmi.c | 96 +++++++++++++++++----------
-> >  3 files changed, 86 insertions(+), 37 deletions(-)
+[+ INTEL IDLE DRIVER]
 
-OK, picked up from email this time, but in the future please let
-Patchwork pick up new versions of patches.
+Dear Linux folks,
 
-Thanks!
 
-> -------------------------8<-------------------------
-> From b84e1c119d63ab842c9e4f3acbc3aec22efa866d Mon Sep 17 00:00:00 2001
-> Message-Id: <b84e1c119d63ab842c9e4f3acbc3aec22efa866d.1565318034.git.viresh.kumar@linaro.org>
-> From: Viresh Kumar <viresh.kumar@linaro.org>
-> Date: Fri, 5 Jul 2019 15:49:48 +0530
-> Subject: [PATCH] cpufreq: powerpc_cbe: Switch to QoS requests instead of
->  cpufreq notifier
->
-> The cpufreq core now takes the min/max frequency constraints via QoS
-> requests and the CPUFREQ_ADJUST notifier shall get removed later on.
->
-> Switch over to using the QoS request for maximum frequency constraint
-> for ppc_cbe_cpufreq driver.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> - dev_pm_qos_update_request() can return 1 on success
->  drivers/cpufreq/ppc_cbe_cpufreq.c     | 19 +++++-
->  drivers/cpufreq/ppc_cbe_cpufreq.h     |  8 +++
->  drivers/cpufreq/ppc_cbe_cpufreq_pmi.c | 96 +++++++++++++++++----------
->  3 files changed, 86 insertions(+), 37 deletions(-)
->
-> diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
-> index b83f36febf03..c58abb4cca3a 100644
-> --- a/drivers/cpufreq/ppc_cbe_cpufreq.c
-> +++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
-> @@ -110,6 +110,13 @@ static int cbe_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  #endif
->
->         policy->freq_table = cbe_freqs;
-> +       cbe_cpufreq_pmi_policy_init(policy);
-> +       return 0;
-> +}
-> +
-> +static int cbe_cpufreq_cpu_exit(struct cpufreq_policy *policy)
-> +{
-> +       cbe_cpufreq_pmi_policy_exit(policy);
->         return 0;
->  }
->
-> @@ -129,6 +136,7 @@ static struct cpufreq_driver cbe_cpufreq_driver = {
->         .verify         = cpufreq_generic_frequency_table_verify,
->         .target_index   = cbe_cpufreq_target,
->         .init           = cbe_cpufreq_cpu_init,
-> +       .exit           = cbe_cpufreq_cpu_exit,
->         .name           = "cbe-cpufreq",
->         .flags          = CPUFREQ_CONST_LOOPS,
->  };
-> @@ -139,15 +147,24 @@ static struct cpufreq_driver cbe_cpufreq_driver = {
->
->  static int __init cbe_cpufreq_init(void)
->  {
-> +       int ret;
-> +
->         if (!machine_is(cell))
->                 return -ENODEV;
->
-> -       return cpufreq_register_driver(&cbe_cpufreq_driver);
-> +       cbe_cpufreq_pmi_init();
-> +
-> +       ret = cpufreq_register_driver(&cbe_cpufreq_driver);
-> +       if (ret)
-> +               cbe_cpufreq_pmi_exit();
-> +
-> +       return ret;
->  }
->
->  static void __exit cbe_cpufreq_exit(void)
->  {
->         cpufreq_unregister_driver(&cbe_cpufreq_driver);
-> +       cbe_cpufreq_pmi_exit();
->  }
->
->  module_init(cbe_cpufreq_init);
-> diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.h b/drivers/cpufreq/ppc_cbe_cpufreq.h
-> index 9d973519d669..00cd8633b0d9 100644
-> --- a/drivers/cpufreq/ppc_cbe_cpufreq.h
-> +++ b/drivers/cpufreq/ppc_cbe_cpufreq.h
-> @@ -20,6 +20,14 @@ int cbe_cpufreq_set_pmode_pmi(int cpu, unsigned int pmode);
->
->  #if IS_ENABLED(CONFIG_CPU_FREQ_CBE_PMI)
->  extern bool cbe_cpufreq_has_pmi;
-> +void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy);
-> +void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy);
-> +void cbe_cpufreq_pmi_init(void);
-> +void cbe_cpufreq_pmi_exit(void);
->  #else
->  #define cbe_cpufreq_has_pmi (0)
-> +static inline void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy) {}
-> +static inline void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy) {}
-> +static inline void cbe_cpufreq_pmi_init(void) {}
-> +static inline void cbe_cpufreq_pmi_exit(void) {}
->  #endif
-> diff --git a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
-> index 97c8ee4614b7..bc9dd30395c4 100644
-> --- a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
-> +++ b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
-> @@ -12,6 +12,7 @@
->  #include <linux/timer.h>
->  #include <linux/init.h>
->  #include <linux/of_platform.h>
-> +#include <linux/pm_qos.h>
->
->  #include <asm/processor.h>
->  #include <asm/prom.h>
-> @@ -24,8 +25,6 @@
->
->  #include "ppc_cbe_cpufreq.h"
->
-> -static u8 pmi_slow_mode_limit[MAX_CBE];
-> -
->  bool cbe_cpufreq_has_pmi = false;
->  EXPORT_SYMBOL_GPL(cbe_cpufreq_has_pmi);
->
-> @@ -65,64 +64,89 @@ EXPORT_SYMBOL_GPL(cbe_cpufreq_set_pmode_pmi);
->
->  static void cbe_cpufreq_handle_pmi(pmi_message_t pmi_msg)
->  {
-> +       struct cpufreq_policy *policy;
-> +       struct dev_pm_qos_request *req;
->         u8 node, slow_mode;
-> +       int cpu, ret;
->
->         BUG_ON(pmi_msg.type != PMI_TYPE_FREQ_CHANGE);
->
->         node = pmi_msg.data1;
->         slow_mode = pmi_msg.data2;
->
-> -       pmi_slow_mode_limit[node] = slow_mode;
-> +       cpu = cbe_node_to_cpu(node);
->
->         pr_debug("cbe_handle_pmi: node: %d max_freq: %d\n", node, slow_mode);
-> -}
-> -
-> -static int pmi_notifier(struct notifier_block *nb,
-> -                                      unsigned long event, void *data)
-> -{
-> -       struct cpufreq_policy *policy = data;
-> -       struct cpufreq_frequency_table *cbe_freqs = policy->freq_table;
-> -       u8 node;
-> -
-> -       /* Should this really be called for CPUFREQ_ADJUST and CPUFREQ_NOTIFY
-> -        * policy events?)
-> -        */
-> -       node = cbe_cpu_to_node(policy->cpu);
-> -
-> -       pr_debug("got notified, event=%lu, node=%u\n", event, node);
->
-> -       if (pmi_slow_mode_limit[node] != 0) {
-> -               pr_debug("limiting node %d to slow mode %d\n",
-> -                        node, pmi_slow_mode_limit[node]);
-> +       policy = cpufreq_cpu_get(cpu);
-> +       if (!policy) {
-> +               pr_warn("cpufreq policy not found cpu%d\n", cpu);
-> +               return;
-> +       }
->
-> -               cpufreq_verify_within_limits(policy, 0,
-> +       req = policy->driver_data;
->
-> -                       cbe_freqs[pmi_slow_mode_limit[node]].frequency);
-> -       }
-> +       ret = dev_pm_qos_update_request(req,
-> +                       policy->freq_table[slow_mode].frequency);
-> +       if (ret < 0)
-> +               pr_warn("Failed to update freq constraint: %d\n", ret);
-> +       else
-> +               pr_debug("limiting node %d to slow mode %d\n", node, slow_mode);
->
-> -       return 0;
-> +       cpufreq_cpu_put(policy);
->  }
->
-> -static struct notifier_block pmi_notifier_block = {
-> -       .notifier_call = pmi_notifier,
-> -};
-> -
->  static struct pmi_handler cbe_pmi_handler = {
->         .type                   = PMI_TYPE_FREQ_CHANGE,
->         .handle_pmi_message     = cbe_cpufreq_handle_pmi,
->  };
->
-> +void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy)
-> +{
-> +       struct dev_pm_qos_request *req;
-> +       int ret;
-> +
-> +       if (!cbe_cpufreq_has_pmi)
-> +               return;
-> +
-> +       req = kzalloc(sizeof(*req), GFP_KERNEL);
-> +       if (!req)
-> +               return;
-> +
-> +       ret = dev_pm_qos_add_request(get_cpu_device(policy->cpu), req,
-> +                                    DEV_PM_QOS_MAX_FREQUENCY,
-> +                                    policy->freq_table[0].frequency);
-> +       if (ret < 0) {
-> +               pr_err("Failed to add freq constraint (%d)\n", ret);
-> +               kfree(req);
-> +               return;
-> +       }
->
-> +       policy->driver_data = req;
-> +}
-> +EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_policy_init);
->
-> -static int __init cbe_cpufreq_pmi_init(void)
-> +void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy)
->  {
-> -       cbe_cpufreq_has_pmi = pmi_register_handler(&cbe_pmi_handler) == 0;
-> +       struct dev_pm_qos_request *req = policy->driver_data;
->
-> -       if (!cbe_cpufreq_has_pmi)
-> -               return -ENODEV;
-> +       if (cbe_cpufreq_has_pmi) {
-> +               dev_pm_qos_remove_request(req);
-> +               kfree(req);
-> +       }
-> +}
-> +EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_policy_exit);
->
-> -       cpufreq_register_notifier(&pmi_notifier_block, CPUFREQ_POLICY_NOTIFIER);
-> +void cbe_cpufreq_pmi_init(void)
-> +{
-> +       if (!pmi_register_handler(&cbe_pmi_handler))
-> +               cbe_cpufreq_has_pmi = true;
-> +}
-> +EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_init);
->
-> -       return 0;
-> +void cbe_cpufreq_pmi_exit(void)
-> +{
-> +       pmi_unregister_handler(&cbe_pmi_handler);
-> +       cbe_cpufreq_has_pmi = false;
->  }
-> -device_initcall(cbe_cpufreq_pmi_init);
-> +EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_exit);
+On 10.08.19 20:28, Paul Menzel wrote:
+
+> On 10.08.19 19:31, Thomas Gleixner wrote:
+> 
+>> On Sat, 10 Aug 2019, Paul Menzel wrote:
+>>>
+>>> I have no idea, who to report this to, so I please refer me to the 
+>>> correct
+>>> list.
+>>
+>> I have no idea yet either :)
+>>
+>>> With Linux 5.2.7 from Debian Sid/unstable and PowerTOP 2.10, executing
+>>>
+>>>      sudo powertop --auto-tune
+>>>
+>>> causes a NULL pointer dereference, and the graphical session crashes 
+>>> due to an
+>>> effect on the i915 driver. It worked in the past with the 4.19 series 
+>>> from
+>>> Debian.
+>>>
+>>> Here is the trace, and please find all Linux kernel logs attached.
+>>>
+>>>> [ 2027.170589] BUG: kernel NULL pointer dereference, address:
+>>>> 0000000000000000
+>>>> [ 2027.170600] #PF: supervisor instruction fetch in kernel mode
+>>>> [ 2027.170604] #PF: error_code(0x0010) - not-present page
+>>>> [ 2027.170609] PGD 0 P4D 0 [ 2027.170619] Oops: 0010 [#1] SMP PTI
+>> ...
+>>>> [ 2027.170730]  do_dentry_open+0x13a/0x370
+>>
+>> If you have compiled with debug info, please decode the line:
+>>
+>>    linux/scripts/faddr2line vmlinux do_dentry_open+0x13a/0x370
+>>
+>> That gives us the fops pointer which is NULL.
+> 
+> Hah, luckily it’s reproducible.
+> 
+> ```
+> $ scripts/faddr2line /usr/lib/debug/boot/vmlinux-5.2.0-2-amd64 
+> do_dentry_open+0x13a/0x370
+> do_dentry_open+0x13a/0x370:
+> do_dentry_open at fs/open.c:799
+> ```
+> 
+>>>> [ 2027.170745]  path_openat+0x2c6/0x1480
+>>>> [ 2027.170757]  ? terminate_walk+0xe6/0x100
+>>>> [ 2027.170767]  ? path_lookupat.isra.48+0xa3/0x220
+>>>> [ 2027.170779]  ? reuse_swap_page+0x105/0x320
+>>>> [ 2027.170791]  do_filp_open+0x93/0x100
+>>>> [ 2027.170804]  ? __check_object_size+0x15d/0x189
+>>>> [ 2027.170816]  do_sys_open+0x184/0x220
+>>>> [ 2027.170828]  do_syscall_64+0x53/0x130
+>>>> [ 2027.170837]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>>
+>> That's an open crashing. We just don't know which file. Is the machine
+>> completely hosed after that or is it just the graphics stuff dying?
+> 
+> No, the graphical login manager showed up, and I could log back in, and 
+> continue using hte machine.
+> 
+>> If it's not completely dead then instead of running it from your 
+>> graphical
+>> desktop you could switch to a VGA terminal Alt+Ctrl+F1 (or whatever
+>> function key your distro maps to) after boot and run powertop with strace
+>> from there:
+>>
+>>    strace -f -o xxx.log powertop
+>>
+>> With a bit of luck xxx.log should contain the information about the 
+>> file it
+>> tries to open.
+> 
+> ```
+> 2157  access("/sys/class/drm/card0/power/rc6_residency_ms", R_OK) = 0
+> 2157  openat(AT_FDCWD, 
+> "/sys/kernel/debug/tracing/events/power/cpu_idle/id", O_RDONLY) = ?
+> 2157  +++ killed by SIGKILL +++
+> ```
+> 
+>> Alternatively if you have a serial console you can enable the
+>> sys_enter_open* tracepoints:
+>>
+>> # echo 1 >/sys/kernel/debug/tracing/events/syscalls/sys_enter_open
+>> # echo 1 >/sys/kernel/debug/tracing/events/syscalls/sys_enter_openat
+>>
+>> Either add 'ftrace_dump_on_oops' to the kernel command line or enable it
+>> from the shell:
+>>
+>> # echo 1 > /proc/sys/kernel/ftrace_dump_on_oops
+>>
+>> Then run powertop. After the crash it will take some time to spill out 
+>> the trace buffer over serial, but it will pinpoint the offending file.
+> 
+> I do not have serial console on this device.
+
+For the record. It is also reproducible with Linux 5.2.6, and trying to 
+print the file contents with cat already fails.
+
+```
+$ sudo ls -l /sys/kernel/debug/tracing/events/power/cpu_idle/id
+-r--r--r-- 1 root root 0 Aug 10 23:05 
+/sys/kernel/debug/tracing/events/power/cpu_idle/id
+$ sudo cat /sys/kernel/debug/tracing/events/power/cpu_idle/id
+Killed
+```
+
+
+Kind regards,
+
+Paul
