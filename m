@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 452F28888A
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 07:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EF98888C
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 07:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbfHJFaE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Aug 2019 01:30:04 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45088 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbfHJFaD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Aug 2019 01:30:03 -0400
-Received: by mail-pf1-f195.google.com with SMTP id w26so1848440pfq.12;
-        Fri, 09 Aug 2019 22:30:03 -0700 (PDT)
+        id S1726519AbfHJFaJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Aug 2019 01:30:09 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:35838 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726165AbfHJFaI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Aug 2019 01:30:08 -0400
+Received: by mail-pg1-f193.google.com with SMTP id n4so5123079pgv.2;
+        Fri, 09 Aug 2019 22:30:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=mDKOJXA/ys1npDjXBTQ2s0rGwBbMEHrF7ffvpNaphqY=;
-        b=rsarVL0KdYe7Il/Tpaw1MIVKtFiR0Y2kuIrFSMBz5fojZCq1sgccTdo1ozHTVdD8y1
-         mfMc9r955mHTdwEeKcbiyCugDa6k7IC3GoTyvxUqkEeEl+h0unaFWnC+QjvpLgxHtXX0
-         99C42B+QCDpqqwwQcgn1jBc3UlwLB/KAqVTJS4THZPjKa2fQPzGa/yhfjwxb9LngoAkc
-         4JGi4JCJ1jdb2+2+oCMlrs1LOc66trOuznPVR4bE0EoM9TGXilRjQ0yG1KcSR1qBrG8B
-         ra+er8sAtFIPxl6HNIoKJq42HGwRe6rFx8silSqCqs+OoiOZA7TixdSAPDum+RgMN1Uo
-         EcEQ==
+        bh=71DUVtj5Cvg/Wok9dZsUDEqRY7qzU/CKNT9zSocN+ao=;
+        b=AHZ5OqTYDdsovC5n1BNsaS8kgOU6oa6y2cAM5Wbguuqk5X5JFfCB99NyHGj1db+4X6
+         MdEl7N+AOMFOoTs6oYVoU/1LtNcBNYKSFh/+dcZryJAp6056TKQKoZKWgELUPsA/t+RU
+         7mZeZnDlpJoV8qs/Fekb/eNC5INfy6h3z9PXVNwktXZjAtaIRvOAuFQTodDeVeyRTMMI
+         c9sYeO6khNfyyoCr0gwVC/M6JZvyLAbXKVKzHnkA7bJSqXHlBS3k7WTu0XfCnBu1tJ5J
+         dGASctZiWvoOEgrrTdIyvM1NBcDFX4TzCg75DRXDb7lYZiGB2YcX6EfvWA9XSIXjpFD0
+         r70A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=mDKOJXA/ys1npDjXBTQ2s0rGwBbMEHrF7ffvpNaphqY=;
-        b=r3skL4ms+p4slcK6xxKVk7jawnaW1WD8a3GAryfgnPfbhbeH/TpY+sD43/wljHQUBo
-         7fL/NzPTHTzh8cg3iFoCVMQdr7Z/vciFEa9IOQwCdNPfqa336bXuH75baFgUkXu+nrQF
-         1dMczxeyvG4IfGFCDqu0dswY7yfXBEVBNARMvSA9IyMG+L0goZyPT6r+jhJ1DdbR6M2M
-         NSreMHx8R+L/5Cp+aWxeXAU3TaZ+LNTi4p2PDZyFQe9kwH9o93ty4f/EBiaUbJ2cG6w0
-         vslffvSHegVr6EIDxjKHjg31NGQOHf8dLz9bJMgq3nbZEene/EGg/EstdcLPliwB2H4w
-         wCNQ==
-X-Gm-Message-State: APjAAAW8Bqy+Igi7DENPwhfRidr9Sk3Z1JS+pLb0JFHtOPWr0ZIe5mmu
-        lsf2Yt5u6GRGFmz1SzaSU4Q=
-X-Google-Smtp-Source: APXvYqwAkVuLdow5oO8itFrdem+xM/Zhwse/76vid6q2uk8MGOkz2hXbK0XNT0eZiUWzl0KdwWjjtw==
-X-Received: by 2002:a63:7b18:: with SMTP id w24mr20690940pgc.328.1565415002991;
-        Fri, 09 Aug 2019 22:30:02 -0700 (PDT)
+        bh=71DUVtj5Cvg/Wok9dZsUDEqRY7qzU/CKNT9zSocN+ao=;
+        b=B3Ws9koyjE3QbWyyGIoz3oPb6x1YvEYpl6jzwIk799Ej/qPZQP2x63CPvpYMCUHRKC
+         amKnKi5hf0nkvQ4Sf1JAi5AN5BmvgU69DduriCjKi1cz8FNDU9RR9AKmZkRc+ekMzY4E
+         zo3op/p4zEbg8wspBSAEqZdFvET38qG47+OEYiAPAlKv8Xx0sAn4NzGv9ZHhPX1mOGkm
+         ehgKbOvSZDbQYsk5/ZfCEM+9vtoVDzppsri9lGg+Z8SOr/+SsRrL991DN4I/QaNd7nSk
+         Jtx/x4SEYS1wHOS7FuBltpHnaWjHNUwS2EKVenHvapzYdJX0UD5OLQGei+ZlHtrHmLIe
+         2tAA==
+X-Gm-Message-State: APjAAAUh6TyeWsuIQqdWS+i0+frIh9bm8MxnW/oKduEuWkcIc/vrPd5B
+        3ZxiTXq6a4LnpJJJaxEufCA=
+X-Google-Smtp-Source: APXvYqy0SbXHrw7PFXc5NqzKKuYBZBqpPz4Kx438X2kv6H5qephacghobTnQMk+4EBLFALhrbhee5Q==
+X-Received: by 2002:aa7:8d98:: with SMTP id i24mr25671345pfr.199.1565415007779;
+        Fri, 09 Aug 2019 22:30:07 -0700 (PDT)
 Received: from localhost ([202.182.106.211])
-        by smtp.gmail.com with ESMTPSA id n128sm55019042pfn.46.2019.08.09.22.30.01
+        by smtp.gmail.com with ESMTPSA id o12sm6113304pjr.22.2019.08.09.22.30.06
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 09 Aug 2019 22:30:02 -0700 (PDT)
+        Fri, 09 Aug 2019 22:30:07 -0700 (PDT)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     rui.zhang@intel.com, edubezval@gmail.com,
         daniel.lezcano@linaro.org, robh+dt@kernel.org,
@@ -52,10 +52,10 @@ To:     rui.zhang@intel.com, edubezval@gmail.com,
         nicolas.ferre@microchip.com
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH v5 12/18] dt-bindings: thermal: add binding document for a64 thermal controller
-Date:   Sat, 10 Aug 2019 05:28:23 +0000
-Message-Id: <20190810052829.6032-13-tiny.windzz@gmail.com>
+        Vasily Khoruzhick <anarsoul@gmail.com>
+Subject: [PATCH v5 13/18] thermal: sun8i: add thermal driver for A64
+Date:   Sat, 10 Aug 2019 05:28:24 +0000
+Message-Id: <20190810052829.6032-14-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190810052829.6032-1-tiny.windzz@gmail.com>
 References: <20190810052829.6032-1-tiny.windzz@gmail.com>
@@ -64,25 +64,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds binding document for allwinner a64 thermal controller.
+From: Vasily Khoruzhick <anarsoul@gmail.com>
 
-Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+Thermal sensor controller in A64 is similar to H3, but it has 3 sensors.
+Extend H3 functions to add support for multiple sensors.
+
+Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
 ---
- Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/sun8i_thermal.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml b/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-index 6624cf6b1ce8..f935b4fab8ec 100644
---- a/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-@@ -17,6 +17,7 @@ properties:
-   compatible:
-     enum:
-       - allwinner,sun8i-h3-ths
-+      - allwinner,sun50i-a64-ths
-       - allwinner,sun50i-h6-ths
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 41ce8cdc0546..3259081da841 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -515,6 +515,17 @@ static const struct ths_thermal_chip sun8i_h3_ths = {
+ 	.irq_ack = sun8i_h3_irq_ack,
+ };
  
-   reg:
++static const struct ths_thermal_chip sun50i_a64_ths = {
++	.sensor_num = 3,
++	.offset = -2170,
++	.scale = -117,
++	.has_mod_clk = true,
++	.temp_data_base = SUN8I_THS_TEMP_DATA,
++	.calibrate = sun8i_h3_ths_calibrate,
++	.init = sun8i_h3_thermal_init,
++	.irq_ack = sun8i_h3_irq_ack,
++};
++
+ static const struct ths_thermal_chip sun50i_h6_ths = {
+ 	.sensor_num = 2,
+ 	.offset = -2794,
+@@ -528,6 +539,7 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
+ 
+ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
++	{ .compatible = "allwinner,sun50i-a64-ths", .data = &sun50i_a64_ths },
+ 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
+ 	{ /* sentinel */ },
+ };
 -- 
 2.17.1
 
