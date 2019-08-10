@@ -2,89 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 413198876C
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 02:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C5E8885F
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 07:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbfHJA6y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 20:58:54 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:35102 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbfHJA6y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 20:58:54 -0400
-Received: by mail-qt1-f195.google.com with SMTP id d23so97650481qto.2
-        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2019 17:58:53 -0700 (PDT)
+        id S1725939AbfHJF3D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Aug 2019 01:29:03 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43756 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbfHJF3D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Aug 2019 01:29:03 -0400
+Received: by mail-pl1-f193.google.com with SMTP id 4so38766794pld.10;
+        Fri, 09 Aug 2019 22:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=CuxrDfYHX+eqS5X0AI2ZfNX50adsNBjzE4KO2XDlGmw=;
-        b=wLJ6COGi00EZzVvhlzI73V5txQJk5y+H6rWCcKlD954xIHUCfP8m2VYviThMqxBojP
-         4vib4/Y4ETOAh6PlCNzNGhIXDLUuWMHQFwyBzoQk7RYn6jHlfJlq67AJ0fgMGI0t0yok
-         2EyCycA76rfiaJAMaIk/rRQGEa74kWvRUJGTKo/qmU/nCkmNioxAHGo0XlWLfIPwTEgl
-         oo5Z63gEJpR+GPEcVm999m+ms24PwgY+CGjMzz0SCH5bML0hHA3kgyp9zrMiRVnTgAsH
-         bUk16dImjWgHom1eTH7oiju2B43/z+RtntSy9shtBqRzVryuolfBSaogj4cAZZH5ZZ4C
-         y3Ag==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=wwnkha2cPalip0BRfrHsmWB3+skZcqk2g4L3dadW7dk=;
+        b=H9+DbqeRAbiVFOVv27yxPfHJ4OI4UyI/Oo/c7lNEytzV7UFucZSdGLxmxtx9pPR7ny
+         9YpDzxGgR8zy/2BL7xHfkr6066cTNPsSoeOv93JqxYfrpiDnFK/Zj3OIn+GQUykM5jtQ
+         XdduqCV93DQF4uWog0v3M5FWj/bU8osBz28QjwUoQo/lnt6RLzIWa0ElT+ZuCfyk5/jF
+         0knjq5eWJoix988ngCDNNOlJmbwYY/ndIl7KPvHCB9kVdTcfQKlr7JvrI960ivEY3nqB
+         xogVwXvTx7sN2tVE+wZnPsJn5GvNDTfESVV2m0PV5rLhH4oVIows53TAst0y3hq74fgv
+         kvLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=CuxrDfYHX+eqS5X0AI2ZfNX50adsNBjzE4KO2XDlGmw=;
-        b=Seob9QGRZs0UeL5Y/uS9fNsSQoBSTcgo0Z0hnOXJ//0AHJaKlOAGnB47/w0BS0/4Sr
-         wOCDWg6U/kSAFvwKJrKP1V/dRWyUDMJwChyo9uwYHY3qd/brP4C70IwkDmVz5SbFl2O+
-         D/Aa6c+V1u1hjPnaYQZsNA7JogVTje0wxeUtBpzAyMNBXjtrLE3vObt1QPcNR6dy7RFl
-         RvZ+M8/cdywqHmRmt6WcKh7KGsAZmGsfjgjsHKWZyq1KySgUMPR4fpwGi+o5i53PkGEQ
-         YUETu45kcRRYZ/3wVYP0UrlRdXj3ZuECiSA3GYHXyToUkXX8qguEnBFGyXnx7dU4btiR
-         YBRQ==
-X-Gm-Message-State: APjAAAW9A/fDhsBTM0dXj+e2irJW2cN5v5piHY1oBNnym59CcSG/9Z1M
-        DbmApTp2nM6i17lPANjy8tiT1g==
-X-Google-Smtp-Source: APXvYqym0VKtSznFP0fe2fhj1MWj+0eP3A7FDjWXXlNAntNZTMw5e6o5lDQ1CCB2qP0C5RDVYY9uTA==
-X-Received: by 2002:a0c:b88e:: with SMTP id y14mr20116512qvf.93.1565398733254;
-        Fri, 09 Aug 2019 17:58:53 -0700 (PDT)
-Received: from Thara-Work-Ubuntu.fios-router.home (pool-71-255-245-97.washdc.fios.verizon.net. [71.255.245.97])
-        by smtp.googlemail.com with ESMTPSA id t9sm4603105qtr.29.2019.08.09.17.58.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 09 Aug 2019 17:58:52 -0700 (PDT)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     qualcomm-lt@lists.linaro.org, linux-pm@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
-        rnayak@codeaurora.org
-Subject: [PATCH 4/4] arm64: dts: qcom: Extend AOSS RPMHPD node
-Date:   Fri,  9 Aug 2019 20:58:47 -0400
-Message-Id: <1565398727-23090-5-git-send-email-thara.gopinath@linaro.org>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
-References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wwnkha2cPalip0BRfrHsmWB3+skZcqk2g4L3dadW7dk=;
+        b=eFSpYiewhVSA+ezWc6lPeaKNaMHeyOQAFLqrIHxzdWLhhmA7JnhulzBP4w4EqVW6Ma
+         0YbSlauV02138uJ4D6IVZI34ZaPNxfY6hPE7wxIZd61nDwq9VLcR59Eq4aGo05sd/hOE
+         q7xSkYcgE2WfMxSOan60tOy9uD5dWgsDwqvK41NRdntMGjAkcLgif5jLdUypxf+eCT8b
+         jyHGJgcvPr27bwLexZJiyyokhSFd6+V1kiVlKh8yL8QRmtf7CVy5EpP+PPy8kkhpVI8Z
+         pZQkh1S8BTXaBCJqNrpz1tRlLK+uLrEkcz1VNqVzIbHs7/7XrfvNx1dSqvpyvudkMiaz
+         CY0g==
+X-Gm-Message-State: APjAAAW8OZvapbUzQH1QOIMWPvtWF4UUj/nNPvShfKVAVnKZWlML7R6u
+        T6luLPh5kIxOEtW7iTXEfUs=
+X-Google-Smtp-Source: APXvYqzMo7nOByZJMmjM7GKUOTMF/RVyxY8jSVwew10yohKpvdkmRmd12vIA5OSvtsjRXEUGHIttwQ==
+X-Received: by 2002:a17:902:1125:: with SMTP id d34mr22696273pla.40.1565414942290;
+        Fri, 09 Aug 2019 22:29:02 -0700 (PDT)
+Received: from localhost ([202.182.106.211])
+        by smtp.gmail.com with ESMTPSA id a12sm25517729pgv.48.2019.08.09.22.29.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 09 Aug 2019 22:29:01 -0700 (PDT)
+From:   Yangtao Li <tiny.windzz@gmail.com>
+To:     rui.zhang@intel.com, edubezval@gmail.com,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
+        mchehab+samsung@kernel.org, davem@davemloft.net,
+        gregkh@linuxfoundation.org, Jonathan.Cameron@huawei.com,
+        nicolas.ferre@microchip.com
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yangtao Li <tiny.windzz@gmail.com>
+Subject: [PATCH v5 00/18] add thermal driver for h6
+Date:   Sat, 10 Aug 2019 05:28:11 +0000
+Message-Id: <20190810052829.6032-1-tiny.windzz@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RPMHPD hosts resources that can be used to warm up
-Add nodes for these resources for sdm845 (mx power
-domain).
+This patchset add support for A64, H3, H5, H6 and R40 thermal sensor.
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+Thx to Icenowy and Vasily.
+
+BTY, do a cleanup in thermal makfile.
+
+Icenowy Zheng (3):
+  thermal: sun8i: allow to use custom temperature calculation function
+  thermal: sun8i: add support for Allwinner H5 thermal sensor
+  thermal: sun8i: add support for Allwinner R40 thermal sensor
+
+Vasily Khoruzhick (1):
+  thermal: sun8i: add thermal driver for A64
+
+Yangtao Li (14):
+  thermal: sun8i: add thermal driver for h6
+  dt-bindings: thermal: add binding document for h6 thermal controller
+  thermal: fix indentation in makefile
+  thermal: sun8i: get ths sensor number from device compatible
+  thermal: sun8i: rework for sun8i_ths_get_temp()
+  thermal: sun8i: get ths init func from device compatible
+  thermal: sun8i: rework for ths irq handler func
+  thermal: sun8i: support mod clocks
+  thermal: sun8i: rework for ths calibrate func
+  dt-bindings: thermal: add binding document for h3 thermal controller
+  thermal: sun8i: add thermal driver for h3
+  dt-bindings: thermal: add binding document for a64 thermal controller
+  dt-bindings: thermal: add binding document for h5 thermal controller
+  dt-bindings: thermal: add binding document for r40 thermal controller
+
+ .../bindings/thermal/sun8i-thermal.yaml       | 157 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/thermal/Kconfig                       |  14 +
+ drivers/thermal/Makefile                      |   9 +-
+ drivers/thermal/sun8i_thermal.c               | 596 ++++++++++++++++++
+ 5 files changed, 779 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
+ create mode 100644 drivers/thermal/sun8i_thermal.c
+
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index d0c0d4f..c5b8459 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2602,6 +2602,13 @@
- 				compatible = "qcom,sdm845-rsc-hlos";
- 				#interconnect-cells = <1>;
- 			};
-+
-+			rpmh_mx_cdev: mx {
-+				compatible = "qcom,sdm845-rpmhpd-cdev";
-+				#cooling-cells = <2>;
-+				power-domains =  <&rpmhpd SDM845_MX>;
-+				power-domain-names = "mx";
-+			};
- 		};
- 
- 		intc: interrupt-controller@17a00000 {
--- 
-2.1.4
+v5:
+-add more support
+-some trival fix
+---
+2.17.1
 
