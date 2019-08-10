@@ -2,108 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DF088721
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 02:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AF988768
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 02:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbfHJALk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 20:11:40 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33805 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbfHJALk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 20:11:40 -0400
-Received: by mail-pg1-f194.google.com with SMTP id n9so40390335pgc.1
-        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2019 17:11:40 -0700 (PDT)
+        id S1726053AbfHJA6u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 20:58:50 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:33505 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726022AbfHJA6u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 20:58:50 -0400
+Received: by mail-qt1-f196.google.com with SMTP id v38so5218395qtb.0
+        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2019 17:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=EuQ/R3CppOBh2T1D6FSE6/gAUMLd+emlPXZ8P0KlK4E=;
-        b=KECCdmknzaH0Ve1akzRhLGqPfYzLSqiQZzqIGqUTh+SAcO6Q19ScBeUTVGmT9Kn2fi
-         wuc/H+9Zvt1RiYlS2YMjELwda9ElQG3tetwgpwSLKyc3GMze7p3oJ/iAFf+mlr04fS3p
-         4SoG8g9Vg49LMc+XN9CN2yjxwMYkHbcBup94eMKinNVLCmVJIOstAPR1bTlg+BvjkpIY
-         cd36ZXrgFEWiqQp6BRzMLy0rpNVl0ji479pxHPF2OWsm4aIthkJshQrCEUBBzGGR6KqN
-         xCB5+OxoXjeEhzq/eUA6LgN2F98/tP71hoMrI7Rz306vlRZd504t0Hj1N10xjJOIG5GQ
-         EZNQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=qV35lBGYXu/17vEOwiu+stH8NOwLsbZEES1POAZWDmw=;
+        b=QNww/17CeUfJIyFz5+BrdkpIQzJ7RRhvmrayAvRKzZ/xwNShQ/kPUeW9JUiSwxOAPF
+         37CGLv6zf6lknwkYZZAnqyZf9RhsXJ2JQPb4HNQI0CNQ8/867BBEKptmzp5J+Q50F8SC
+         v7+6OjdCO4jlJmi1FqgtSeGtpb9whmzoNN0atg4439PLWich4YYoMJ1i/YcLelYY382x
+         iYorQIBIp/UP5OBjT/S/+Fg5Rm14o230hbtnRABNMFGmlFTK3fKCe5TutgrCBXSsIiob
+         YwK3eVA1a0z0hVYr4mTifJeczJSr0ehG8xNxwO+LlRWHglNi0+yDReQU22eLOs73XEE4
+         HODQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=EuQ/R3CppOBh2T1D6FSE6/gAUMLd+emlPXZ8P0KlK4E=;
-        b=EVFyOPeUNRo35MZkGLUo21wNI4nmbSWTd4UWNeLzqm/ZaTIkNmdijNyaZ0UbiWiZSR
-         6+WDNjBd3HHeL90YjshhFviSLKfNx8q4r2b/DH7wbjZCA6d12U+fHyXGHL4ZUzky6rox
-         sShnpqe1BBQ830NgOocODLU/ICK9D4HV+YtpGErD6vv2qCV6/7ty0PMkjfaM4HDUWmxk
-         bdN1Ouelr9FlM0V1PiH5DK60sE4vW1IjpAFutcHTp8h+l2IlAdbi6gRKv/wo/dAHmvC9
-         tsxBYXxgQOQGcDiMPxzAR38Jg3Ts2sM4oTg38CmQMfBGbJ/YtbZlPZwhjbi8HgYENaPJ
-         n8YA==
-X-Gm-Message-State: APjAAAWJVDUkQ5nWeB31nR4mCUf67kOLj7IJAB9Me63iBpZVQTIwb0fp
-        C2ohFRCYo+mkABXvRtrulER35Q==
-X-Google-Smtp-Source: APXvYqwfo3bJUKvTH7g4ZfJhFp6Q9sQXhh6NsNs21MEaB/aVJYLW2l4lX40Zlrs3JJt56T2EbsbNBA==
-X-Received: by 2002:a62:82c1:: with SMTP id w184mr24770723pfd.8.1565395899475;
-        Fri, 09 Aug 2019 17:11:39 -0700 (PDT)
-Received: from localhost ([2601:602:9200:a1a5:b873:707a:e893:cdb3])
-        by smtp.gmail.com with ESMTPSA id k14sm25201452pgb.78.2019.08.09.17.11.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 09 Aug 2019 17:11:38 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Guillaume La Roque <glaroque@baylibre.com>,
-        daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 0/6] Add support of New Amlogic temperature sensor for G12 SoCs
-In-Reply-To: <20190806130506.8753-1-glaroque@baylibre.com>
-References: <20190806130506.8753-1-glaroque@baylibre.com>
-Date:   Fri, 09 Aug 2019 17:11:37 -0700
-Message-ID: <7hd0hd3mme.fsf@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=qV35lBGYXu/17vEOwiu+stH8NOwLsbZEES1POAZWDmw=;
+        b=huAMcjQvfskGoUUQNPmQifkCxmiYOxpONe1K5AEaQpg179fyqSXncFwJO+EC7K6o77
+         dxNqAx03fV0GagQeKK7m+cBOOiRGUOPoIzJMsGZTCH9Mv32239BdsAUtaOnPeCTIBuI5
+         ib01k1fyQKtgaIf+JG1UFDLq/wgyLwUmPlYy4suI+p1Ubac4eHYUXLQarewAQTJMbXQm
+         MdoDMC3nRk5kKFOelLVISandcMCaVt2un0KS/uQkMxlE07Ue/8hMjiSy6sOK0MdvJZnm
+         aDBIjw34ZJcnFBcrsgTNo9zKJgR/36sAVN7U9TjaLaDZcSICLHJO3bjT7s6e+w/nG3gR
+         wTFA==
+X-Gm-Message-State: APjAAAXfP2FskHWNiyRARCGqDW+RoPqjh9V8ETubUwqc2XGaneslTsPt
+        CpjMno0/OCk9TdLv9/JEthk11sI3anQ=
+X-Google-Smtp-Source: APXvYqz9A+GSGwzt20kaowYU0kIb9kblK9YJGersspim48Z6Sr3M77zOsAimPLTIxGpI7svhZz6yCQ==
+X-Received: by 2002:a05:6214:32e:: with SMTP id j14mr9738129qvu.77.1565398729182;
+        Fri, 09 Aug 2019 17:58:49 -0700 (PDT)
+Received: from Thara-Work-Ubuntu.fios-router.home (pool-71-255-245-97.washdc.fios.verizon.net. [71.255.245.97])
+        by smtp.googlemail.com with ESMTPSA id t9sm4603105qtr.29.2019.08.09.17.58.48
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 09 Aug 2019 17:58:48 -0700 (PDT)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     qualcomm-lt@lists.linaro.org, linux-pm@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        rnayak@codeaurora.org
+Subject: [PATCH 0/4] qcom: Model RPMH power domains as thermal cooling devices
+Date:   Fri,  9 Aug 2019 20:58:43 -0400
+Message-Id: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.1.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Guillaume La Roque <glaroque@baylibre.com> writes:
+Certain RPMH power domains can be used to warm up the SoC (mx on sdm845)
+if the temperature falls below certain threshold. These power domains
+can be considered as thermal warming devices
+(opposite of thermal cooling devices).
 
-> This patchs series add support of New Amlogic temperature sensor and minimal
-> thermal zone for SEI510 and ODROID-N2 boards.
->
-> First implementation was doing on IIO[1] but after comments i move on thermal framework.
-> Formulas and calibration values come from amlogic.
->
-> Changes since v2:
->   - fix yaml documention 
->   - remove unneeded status variable for temperature-sensor node
->   - rework driver after Martin review
->   - add some information in commit message
->
-> Changes since v1:
->   - fix enum vs const in documentation
->   - fix error with thermal-sensor-cells value set to 1 instead of 0
->   - add some dependencies needed to add cooling-maps
->
-> Dependencies :
-> - patch 3,4 & 5: depends on Neil's patch and series :
->               - missing dwc2 phy-names[2]
->               - patchsets to add DVFS on G12a[3] which have deps on [4] and [5]
->
-> [1] https://lore.kernel.org/linux-amlogic/20190604144714.2009-1-glaroque@baylibre.com/
-> [2] https://lore.kernel.org/linux-amlogic/20190625123647.26117-1-narmstrong@baylibre.com/
-> [3] https://lore.kernel.org/linux-amlogic/20190729132622.7566-1-narmstrong@baylibre.com/
-> [4] https://lore.kernel.org/linux-amlogic/20190731084019.8451-5-narmstrong@baylibre.com/
-> [5] https://lore.kernel.org/linux-amlogic/20190729132622.7566-3-narmstrong@baylibre.com/
+In kernel, these warming devices can be modeled as a 
+thermal cooling device. To use these power domains as warming devices
+require further tweaks in the thermal framework which are out of scope
+of this patch series.
 
-Thank you for the detailed list of dependencies!  Much appreciated.
+The first patch in this series extends the genpd framework to export out
+the performance states of a power domain so that when the RPMH power
+domain is modeled as a cooling device, the number of possible states and
+current state of the cooling device can be retrieved from the genpd
+framework.
 
-With all the deps, I tested this on sei510 and odroid-n2, and basic
-functionality seems to work.
+The second patch implements the newly added genpd callback for RPMH power
+domain driver.
 
-As discussed off-list: it would be nice to have an example of how
-cpufreq could be used as a cooling device for hot temperatures.  The
-vendor kernel has some trip points that could be included as examples,
-or even included as extra patches.
+The third patch implements the modeling of a RPMH power domain as
+a cooling device and the final patch adds the device node entry for sdm845
+to consider RPMHPD MX a cooling device.
 
-Also the driver patch is missing the two main thermal maintainers, so
-please resend at least the driver and bindings including them.
+Thara Gopinath (4):
+  PM/Domains: Add support for retrieving genpd performance states
+    information
+  soc: qcom: rpmhpd: Introduce function to retrieve power domain
+    performance state count
+  thermal: qcom: Add RPMHPD cooling device driver.
+  arm64: dts: qcom: Extend AOSS RPMHPD node
 
+ arch/arm64/boot/dts/qcom/sdm845.dtsi    |   7 ++
+ drivers/base/power/domain.c             |  38 +++++++++
+ drivers/soc/qcom/rpmhpd.c               |  11 +++
+ drivers/thermal/qcom/Kconfig            |   7 ++
+ drivers/thermal/qcom/Makefile           |   1 +
+ drivers/thermal/qcom/qcom-rpmhpd-cdev.c | 141 ++++++++++++++++++++++++++++++++
+ include/linux/pm_domain.h               |  18 ++++
+ 7 files changed, 223 insertions(+)
+ create mode 100644 drivers/thermal/qcom/qcom-rpmhpd-cdev.c
 
-Kevin
+-- 
+2.1.4
+
