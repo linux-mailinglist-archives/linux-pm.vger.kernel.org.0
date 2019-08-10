@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B7C88866
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 07:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2B58886B
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 07:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726155AbfHJF3R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Aug 2019 01:29:17 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:37401 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbfHJF3R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Aug 2019 01:29:17 -0400
-Received: by mail-pg1-f196.google.com with SMTP id d1so14035611pgp.4;
-        Fri, 09 Aug 2019 22:29:17 -0700 (PDT)
+        id S1726200AbfHJF3V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Aug 2019 01:29:21 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37920 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbfHJF3V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Aug 2019 01:29:21 -0400
+Received: by mail-pl1-f193.google.com with SMTP id m12so7152834plt.5;
+        Fri, 09 Aug 2019 22:29:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=WD7K8OdpREzm1d+Yp/Bs4WvDvu3iqySNq1hJesChH3M=;
-        b=ZjZzeIglNii9MVXF4P8OwuiKgvJ2AHN60l4wGAcONk09u1ivPdMkqI43JqxPDri+QV
-         PB7H0lw2f709GHYwg8FyAv7TLYfOtBcTEAHgEXmuJGAtb/pGf948Gw/pq5z+ObqEqiXB
-         +b8C7S2ZilSzoKFdc98s2LsPtBS31O5PClOucmS+EebLVEBlcsvNFm9JH2WM/Nunka5I
-         qutMLMsCHQ9F5bGjneCFosdCy0NTeuj61nsSVehEjP+jf9VzKBnOwEXj4ErcqdbK82gx
-         cs09OuO4nIZkTGqUeR3Il7kHmrEAKg6/d++iHP2zpXtSH7PUTO03SfQSZfakvFpXnndq
-         lk5w==
+        bh=l52fWtW3aoPkxwNQa5fIqgZrHE13Sc/TSQJ/idB7mO0=;
+        b=SM0O7cIBHumsQ4jcRMA3jRfbG/8uHpdHyKP1/m9OqUsDitUK6fDmwbyMStdXWaYfeb
+         uwG4TwQJwGkbIZDm+/oa/wTjePH1DL0w5Wa0fBWTZGkbVfmMq1dCXkazSjE9p+PXvxsC
+         cb17n22QlHUjEYGxUKggT+zpvIIh5pgLmPF9m718SkEYNp9Wz9kpusTVC7yaiDIMBbrZ
+         FZdMFDQYPzzXaDaUfe/5xb6CtgXTL2no5kW4FdG0AVJWimrLP6wOM+kFfTSjnGbCxLTO
+         fn1pwE8bZtWUqWoege1KQLdDZvYMIZ+XB366MeBVsV3hSOuEf2q7HiMJQ24K7H+j5NX/
+         QS4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=WD7K8OdpREzm1d+Yp/Bs4WvDvu3iqySNq1hJesChH3M=;
-        b=VbNJUamJmHFCBVbJaaqifoDmnP70H2cX3sSumDdKPIICA28L2sA2RxxVR738vXlPfO
-         ilBCfAMoczRe4Lrn3v9Sh20DYMwXwLG86jzg7157EJno/cAGK08D97cP1CqRsEcJZu2j
-         uRMMROjkHcl6wTk0gaZcSRCd71yLbADNvYGM/mCyaOpyLoFf8L/eqTeUW2j4d1eFX+tI
-         mjbn7HgZKSGELSCThPuYZq7oTg1YfuhmNzSurw3rBnvp0vmJkg2sMJ3dekwMaRsfubdY
-         yor3U1/mowzBZrpcFNIvaGYKHsXiZKRrct5Kc4z3fdPrzC0oFvZjbarlPln/YOggVcMz
-         0TRQ==
-X-Gm-Message-State: APjAAAVlB40y2oVTaWdI/8nnAeCfP4sVlPdRPGMKOaZeXH66HoL3hy33
-        r8LSuza/jILkdBjHL4U0FlM=
-X-Google-Smtp-Source: APXvYqxOuJTk2SD/x1hTFhYbreUKUwvlmtGBd51QcJppuCmzl0G9FTfJ2bbK6b1tELoE8SPSEf8lcg==
-X-Received: by 2002:aa7:818b:: with SMTP id g11mr25731541pfi.122.1565414956974;
-        Fri, 09 Aug 2019 22:29:16 -0700 (PDT)
+        bh=l52fWtW3aoPkxwNQa5fIqgZrHE13Sc/TSQJ/idB7mO0=;
+        b=lBhHbrSgCF5Zb591F8ChGUJnug84AF69Ceka1QEBUKknCH4pLtpDKgFaGVeE0y1MfR
+         obxKQZxeW8u5f6mkbKXx9DxHfMu1F+zt9DpVQkQA3b8KhBn1xDent2AhQx9oEOPgU6Um
+         3yYS2qKhh2IT8/mrKirPw9C6Vl7Z9t02m1/l9ztqwAZpA9aQg6QROAhc2zFuiVQiRCVi
+         +i0lHk9ATmrJC4oub616lrg38Dbk3ymnkWBJSfB4J8TjS+Fgmh2YyVEw2hik+hiqP/kJ
+         lvcIS7s6DhQhIKRRaQWmDCg1QouRJ9hoRFiospdlK6dd4fxJc2Azr0ks4VNZPX9/A5eu
+         6pag==
+X-Gm-Message-State: APjAAAUPt2TdtdM4QsgFU3JOAmAztqMX//A+2ixpno9aXYIxWBTXpOiI
+        hWlX53UyQb+qn3goAN9f5a0=
+X-Google-Smtp-Source: APXvYqwUY/gyosJ94ferIscuoGwHXFjy46dluwnpWU7klQFptAP8nSXiVk8T0B+sedSgs2wC6IUWXg==
+X-Received: by 2002:a17:902:ac86:: with SMTP id h6mr16333345plr.79.1565414960902;
+        Fri, 09 Aug 2019 22:29:20 -0700 (PDT)
 Received: from localhost ([202.182.106.211])
-        by smtp.gmail.com with ESMTPSA id k5sm6083835pjl.32.2019.08.09.22.29.16
+        by smtp.gmail.com with ESMTPSA id 67sm81943594pfd.177.2019.08.09.22.29.19
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 09 Aug 2019 22:29:16 -0700 (PDT)
+        Fri, 09 Aug 2019 22:29:20 -0700 (PDT)
 From:   Yangtao Li <tiny.windzz@gmail.com>
 To:     rui.zhang@intel.com, edubezval@gmail.com,
         daniel.lezcano@linaro.org, robh+dt@kernel.org,
@@ -53,9 +53,9 @@ To:     rui.zhang@intel.com, edubezval@gmail.com,
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Yangtao Li <tiny.windzz@gmail.com>
-Subject: [PATCH v5 02/18] dt-bindings: thermal: add binding document for h6 thermal controller
-Date:   Sat, 10 Aug 2019 05:28:13 +0000
-Message-Id: <20190810052829.6032-3-tiny.windzz@gmail.com>
+Subject: [PATCH v5 03/18] thermal: fix indentation in makefile
+Date:   Sat, 10 Aug 2019 05:28:14 +0000
+Message-Id: <20190810052829.6032-4-tiny.windzz@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190810052829.6032-1-tiny.windzz@gmail.com>
 References: <20190810052829.6032-1-tiny.windzz@gmail.com>
@@ -64,99 +64,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds binding document for allwinner h6 thermal controller.
+To unify code style.
 
 Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 ---
- .../bindings/thermal/sun8i-thermal.yaml       | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
+ drivers/thermal/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml b/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-new file mode 100644
-index 000000000000..e0973199ba3c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/sun8i-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allwinner SUN8I Thermal Controller Device Tree Bindings
-+
-+maintainers:
-+  - Yangtao Li <tiny.windzz@gmail.com>
-+
-+description: |-
-+  This describes the device tree binding for the Allwinner thermal
-+  controller which measures the on-SoC temperatures.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - allwinner,sun50i-h6-ths
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: bus
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+  nvmem-cells:
-+    description: ths calibrate data
-+
-+  nvmem-cell-names:
-+    const: calib
-+
-+required:
-+  - compatible
-+  - reg
-+  - reset
-+  - clocks
-+  - clock-names
-+  - interrupts
-+  - "#thermal-sensor-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ths: ths@5070400 {
-+        compatible = "allwinner,sun50i-h6-ths";
-+        reg = <0x05070400 0x100>;
-+        clocks = <&ccu CLK_BUS_THS>;
-+        clock-names = "bus";
-+        resets = <&ccu RST_BUS_THS>;
-+        interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
-+        nvmem-cells = <&tsen_calib>;
-+        nvmem-cell-names = "calib";
-+        #thermal-sensor-cells = <1>;
-+    };
-+
-+    sid: sid@3006000 {
-+        compatible = "allwinner,sun50i-h6-sid";
-+        reg = <0x03006000 0x400>;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        tsen_calib: calib@14 {
-+                reg = <0x14 6>;
-+        };
-+    };
-+...
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index fa6f8b206281..d7eafb5ef8ef 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -5,7 +5,7 @@
+ 
+ obj-$(CONFIG_THERMAL)		+= thermal_sys.o
+ thermal_sys-y			+= thermal_core.o thermal_sysfs.o \
+-					thermal_helpers.o
++				   thermal_helpers.o
+ 
+ # interface to/from other layers providing sensors
+ thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
+@@ -25,11 +25,11 @@ thermal_sys-$(CONFIG_CPU_THERMAL)	+= cpu_cooling.o
+ thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
+ 
+ # devfreq cooling
+-thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
++thermal_sys-$(CONFIG_DEVFREQ_THERMAL) 	+= devfreq_cooling.o
+ 
+ # platform thermal drivers
+ obj-y				+= broadcom/
+-obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
++obj-$(CONFIG_THERMAL_MMIO)	+= thermal_mmio.o
+ obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
+ obj-$(CONFIG_SUN8I_THERMAL)     += sun8i_thermal.o
+ obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
+@@ -50,7 +50,7 @@ obj-$(CONFIG_TI_SOC_THERMAL)	+= ti-soc-thermal/
+ obj-y				+= st/
+ obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+ obj-y				+= tegra/
+-obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
++obj-$(CONFIG_HISI_THERMAL)     	+= hisi_thermal.o
+ obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+ obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+ obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
 -- 
 2.17.1
 
