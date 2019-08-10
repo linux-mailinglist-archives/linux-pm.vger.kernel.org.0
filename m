@@ -2,105 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB61888A6
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 07:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4E0888CC
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 08:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725847AbfHJFcg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Aug 2019 01:32:36 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41671 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbfHJFcg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Aug 2019 01:32:36 -0400
-Received: by mail-pl1-f193.google.com with SMTP id m9so45610661pls.8;
-        Fri, 09 Aug 2019 22:32:36 -0700 (PDT)
+        id S1725830AbfHJGRP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Aug 2019 02:17:15 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:32840 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725468AbfHJGRO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Aug 2019 02:17:14 -0400
+Received: by mail-ot1-f68.google.com with SMTP id q20so140948366otl.0;
+        Fri, 09 Aug 2019 23:17:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=71DUVtj5Cvg/Wok9dZsUDEqRY7qzU/CKNT9zSocN+ao=;
-        b=oH/Pf9MtSMDZkluj4qQKlvh6Kv8FriGzPN9CjiWS1WBhMkpRogJ5AYRzjRkOt+MO9y
-         DensadzKBFHj3agCJgnb3xMpazh9MI43ilUc0NXpzI7eyC0gmIAhzJp5zvR0IQrsdymo
-         nJIPKVISeubH+rufmf3Lc/KYui2pUCc3Zyhu8DXu9KDooJesZmLnC+5g1bJlVOetHSS1
-         Woq5wOdnef8MHDFi4DP/rUQLksb2NhiKvjWqfWI6ehlkuoq12Kn+A80ApJodRlFiTsUR
-         1fy4fS7ySH71Gaelyza0+EmuwftY6JgenWu8GsFN/nwMdBTweYeMYDt6TksRya0JxO5C
-         3SCg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GFQESJU0HLdydkYi11prZWb0uKl8NCE/OD8DthGkiqE=;
+        b=f+3F7E1eh0XF4E+DiMuJruDYCrdAxIWvreWv1xMzoCqqFDrKDsFZbsz4DqpLVIM5q4
+         B0UIQGGgOvdLbbMpmHHEBM7aabze/uBMEOBO5BTq2VAM/RwVghSrIBLEZLan0b2rYKTA
+         FLHRlmM51F48KNsXTFkXPTO3locOu5bpiuxxX7uwvMVgfIXquX/0XcbHl908xUz8rR3Z
+         LbQXf8GVeCqWKnjhwh+E/Ud0+e2VBckJ6Hdlg+EmikqVaSIrGItSoetXFbMHwPDqJTi7
+         Kth46OfyhGtUvnTzQ6zxhNBVi4ewZRdFcoEDGUgqozTIZeuKmUgOwXRyA3PJtt2eDlp8
+         O2Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=71DUVtj5Cvg/Wok9dZsUDEqRY7qzU/CKNT9zSocN+ao=;
-        b=V29Dr9ILk6NhD4XdXoSr2FUkFgOFvVTNnu7Uqy2HRCClB09UkTe1K+H0swzb588c4e
-         Hhwfn5p//+3qdlxpcXgdmZb61/E7UuOkkHIndToKYPuPpm4kfb5+uHGBIUeO0jdTGUvf
-         Tb2Abu4P5Tjy4HVWOn/2w0MuqtIEW4zza7DAKrLhuFjUGQvR+koLI2e3vckugOb1bRJu
-         DYRrEtm+6Lnrd/k10wrYNrBIfu+ALWqDc7EwJpieyxuwEyYIdQDKLdSADEb6KUyLKhhR
-         xaqam4jVT1Mzql4BSv6qKQq6thGlEGu5Dak5qvlamYQQdTClrQqkvHuOW8KWMYoSblhB
-         wBIg==
-X-Gm-Message-State: APjAAAX3DVBEGBdSx4UeCkIO67DST8Fehr81bKkobu2oibhh1+0+ynI+
-        vf9ymKJjRICuPX+ZNpAa6kQ=
-X-Google-Smtp-Source: APXvYqzx2x2due+dcKfhyyCVT9miXzJYXimf/VWFq0pAMOqAFhvOtdO+BDXCCX1MutojsCyob5lLGg==
-X-Received: by 2002:a17:902:4383:: with SMTP id j3mr16103296pld.69.1565415155840;
-        Fri, 09 Aug 2019 22:32:35 -0700 (PDT)
-Received: from localhost ([202.182.106.211])
-        by smtp.gmail.com with ESMTPSA id 16sm26554443pfc.66.2019.08.09.22.32.34
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 09 Aug 2019 22:32:35 -0700 (PDT)
-From:   Yangtao Li <tiny.windzz@gmail.com>
-To:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        mchehab+samsung@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, Jonathan.Cameron@huawei.com,
-        nicolas.ferre@microchip.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>
-Subject: [PATCH v5 13/18] thermal: sun8i: add thermal driver for A64
-Date:   Sat, 10 Aug 2019 05:32:32 +0000
-Message-Id: <20190810053232.6125-1-tiny.windzz@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GFQESJU0HLdydkYi11prZWb0uKl8NCE/OD8DthGkiqE=;
+        b=qdniQkQ3qQ3mXy0e9LuW0SUR20WjCIxFETEbeIKPD45F4rwWBjCsOmTjWi1sgBVZ1u
+         8MzKIiWmG1EShcgx+8V+S/RZXEzd6zK7Enclpem5JlBqOdR03hb6WghxmZPUF4FjOrTF
+         AsumlkinZh4OVZraLX7r52gbZOiVWCJkkypwWUuoXh36vzgAwdmW4N1e8wL0icpb4Hf6
+         nRBNcyL/+foBRZ1nE8f15L48OH9q7O6lzpobY/VN5NGOGBnU8Xy8HnNyjSm/kD0br99q
+         vMOkdmcsGJRWB8l2pnnYvVWB2A5jyiCiBgdAIR+1zjP04p/GwAhuSbc+8IY8LyWeH/z+
+         zfuQ==
+X-Gm-Message-State: APjAAAXTsx8yM7fkn3SUBzE2rXKNpD4vziTP7mBZCNJSYS3lCuTLPlUZ
+        qy2spPG2+OGZYnBtPpINvSy0uqKhnjAardPU560=
+X-Google-Smtp-Source: APXvYqyHHWc+Ae3MZP5usnRpiYzR1mL1m3YZLNpeSjJ0StHZktGgRfPkbbXhPSuFohfq/eXEokgAUj1A9vc9DkA86io=
+X-Received: by 2002:a9d:4109:: with SMTP id o9mr19424717ote.353.1565417833721;
+ Fri, 09 Aug 2019 23:17:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190810052829.6032-1-tiny.windzz@gmail.com> <20190810052829.6032-9-tiny.windzz@gmail.com>
+In-Reply-To: <20190810052829.6032-9-tiny.windzz@gmail.com>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Fri, 9 Aug 2019 23:16:48 -0700
+Message-ID: <CA+E=qVfp-rProxOwX__J6jM-pZ9g_SmeuOCOgvC_5DJVQw4OGw@mail.gmail.com>
+Subject: Re: [PATCH v5 08/18] thermal: sun8i: support mod clocks
+To:     Yangtao Li <tiny.windzz@gmail.com>
+Cc:     rui.zhang@intel.com, Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan.Cameron@huawei.com,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Vasily Khoruzhick <anarsoul@gmail.com>
+On Fri, Aug 9, 2019 at 10:31 PM Yangtao Li <tiny.windzz@gmail.com> wrote:
+>
+> H3 has extra clock, so introduce something in ths_thermal_chip/ths_device
+> and adds the process of the clock.
+>
+> This is pre-work for supprt it.
+>
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+> ---
+>  drivers/thermal/sun8i_thermal.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> index b934bc81eba7..6f4294c2aba7 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -54,6 +54,7 @@ struct tsensor {
+>  };
+>
+>  struct ths_thermal_chip {
+> +       bool            has_mod_clk;
+>         int             sensor_num;
+>         int             offset;
+>         int             scale;
+> @@ -69,6 +70,7 @@ struct ths_device {
+>         struct regmap                           *regmap;
+>         struct reset_control                    *reset;
+>         struct clk                              *bus_clk;
+> +       struct clk                              *mod_clk;
+>         struct tsensor                          sensor[MAX_SENSOR_NUM];
+>  };
+>
+> @@ -274,6 +276,12 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+>         if (IS_ERR(tmdev->bus_clk))
+>                 return PTR_ERR(tmdev->bus_clk);
+>
+> +       if (tmdev->chip->has_mod_clk) {
+> +               tmdev->mod_clk = devm_clk_get(&pdev->dev, "mod");
+> +               if (IS_ERR(tmdev->mod_clk))
+> +                       return PTR_ERR(tmdev->mod_clk);
+> +       }
+> +
+>         ret = reset_control_deassert(tmdev->reset);
+>         if (ret)
+>                 return ret;
+> @@ -282,12 +290,18 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+>         if (ret)
+>                 goto assert_reset;
+>
+> -       ret = sun50i_ths_calibrate(tmdev);
+> +       ret = clk_prepare_enable(tmdev->mod_clk);
 
-Thermal sensor controller in A64 is similar to H3, but it has 3 sensors.
-Extend H3 functions to add support for multiple sensors.
+You have to set rate of modclk before enabling it since you can't rely
+on whatever bootloader left for you.
 
-Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
----
- drivers/thermal/sun8i_thermal.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Also I found that parameters you're using for PC_TEMP_PERIOD, ACQ0 and
+ACQ1 are too aggressive and may result in high interrupt rate to the
+point when it may stall RCU. I changed driver a bit to use params from
+Philipp Rossak's work (modclk set to 4MHz, PC_TEMP_PERIOD is 7, ACQ0
+is 255, ACQ1 is 63) and it fixed RCU stalls for me, see [1] for
+details.
 
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index 41ce8cdc0546..3259081da841 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -515,6 +515,17 @@ static const struct ths_thermal_chip sun8i_h3_ths = {
- 	.irq_ack = sun8i_h3_irq_ack,
- };
- 
-+static const struct ths_thermal_chip sun50i_a64_ths = {
-+	.sensor_num = 3,
-+	.offset = -2170,
-+	.scale = -117,
-+	.has_mod_clk = true,
-+	.temp_data_base = SUN8I_THS_TEMP_DATA,
-+	.calibrate = sun8i_h3_ths_calibrate,
-+	.init = sun8i_h3_thermal_init,
-+	.irq_ack = sun8i_h3_irq_ack,
-+};
-+
- static const struct ths_thermal_chip sun50i_h6_ths = {
- 	.sensor_num = 2,
- 	.offset = -2794,
-@@ -528,6 +539,7 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
- 
- static const struct of_device_id of_ths_match[] = {
- 	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
-+	{ .compatible = "allwinner,sun50i-a64-ths", .data = &sun50i_a64_ths },
- 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
- 	{ /* sentinel */ },
- };
--- 
-2.17.1
+[1] https://github.com/anarsoul/linux-2.6/commit/46b8bb0fe2ccd1cd88fa9181a2ecbf79e8d513b2
 
+
+>         if (ret)
+>                 goto bus_disable;
+>
+> +       ret = sun50i_ths_calibrate(tmdev);
+> +       if (ret)
+> +               goto mod_disable;
+> +
+>         return 0;
+>
+> +mod_disable:
+> +       clk_disable_unprepare(tmdev->mod_clk);
+>  bus_disable:
+>         clk_disable_unprepare(tmdev->bus_clk);
+>  assert_reset:
+> @@ -395,6 +409,7 @@ static int sun8i_ths_remove(struct platform_device *pdev)
+>  {
+>         struct ths_device *tmdev = platform_get_drvdata(pdev);
+>
+> +       clk_disable_unprepare(tmdev->mod_clk);
+>         clk_disable_unprepare(tmdev->bus_clk);
+>         reset_control_assert(tmdev->reset);
+>
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
