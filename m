@@ -2,162 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7ED8856D
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 00:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DF088721
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Aug 2019 02:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbfHIWBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Aug 2019 18:01:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34230 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726157AbfHIWBT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Aug 2019 18:01:19 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 71C4F2089E;
-        Fri,  9 Aug 2019 22:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565388078;
-        bh=g7gv0QYYb35ljO9lYoG4pHHDfLadVPRJuFZjOE++jYE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JDwR44NcwyUy5qLqieDYFPX65nZosdcUdIEypACHYZl3lvY+6CqyW8/ZTS+hxjjw1
-         E8O/T6Ojc44aE3AVNS7dfP0CWS3biO5peNqqWKRGpMVlGeA2EQusMMcwtQUC+dyO0B
-         1/dVBQvcvXjlxTrNCeHqj8blERBfcsn25zhgBo1o=
-Date:   Fri, 9 Aug 2019 17:01:16 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/5] PCI / PM: Check for error when reading Power State
-Message-ID: <20190809220116.GA221706@google.com>
-References: <20190805205214.194981-1-helgaas@kernel.org>
- <20190805205214.194981-5-helgaas@kernel.org>
- <CAJZ5v0jFPU38zDugumJB0iq5d-LctcMCdygTrFU4=gYP3UJ+oA@mail.gmail.com>
+        id S1726770AbfHJALk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Aug 2019 20:11:40 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33805 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbfHJALk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Aug 2019 20:11:40 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n9so40390335pgc.1
+        for <linux-pm@vger.kernel.org>; Fri, 09 Aug 2019 17:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=EuQ/R3CppOBh2T1D6FSE6/gAUMLd+emlPXZ8P0KlK4E=;
+        b=KECCdmknzaH0Ve1akzRhLGqPfYzLSqiQZzqIGqUTh+SAcO6Q19ScBeUTVGmT9Kn2fi
+         wuc/H+9Zvt1RiYlS2YMjELwda9ElQG3tetwgpwSLKyc3GMze7p3oJ/iAFf+mlr04fS3p
+         4SoG8g9Vg49LMc+XN9CN2yjxwMYkHbcBup94eMKinNVLCmVJIOstAPR1bTlg+BvjkpIY
+         cd36ZXrgFEWiqQp6BRzMLy0rpNVl0ji479pxHPF2OWsm4aIthkJshQrCEUBBzGGR6KqN
+         xCB5+OxoXjeEhzq/eUA6LgN2F98/tP71hoMrI7Rz306vlRZd504t0Hj1N10xjJOIG5GQ
+         EZNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=EuQ/R3CppOBh2T1D6FSE6/gAUMLd+emlPXZ8P0KlK4E=;
+        b=EVFyOPeUNRo35MZkGLUo21wNI4nmbSWTd4UWNeLzqm/ZaTIkNmdijNyaZ0UbiWiZSR
+         6+WDNjBd3HHeL90YjshhFviSLKfNx8q4r2b/DH7wbjZCA6d12U+fHyXGHL4ZUzky6rox
+         sShnpqe1BBQ830NgOocODLU/ICK9D4HV+YtpGErD6vv2qCV6/7ty0PMkjfaM4HDUWmxk
+         bdN1Ouelr9FlM0V1PiH5DK60sE4vW1IjpAFutcHTp8h+l2IlAdbi6gRKv/wo/dAHmvC9
+         tsxBYXxgQOQGcDiMPxzAR38Jg3Ts2sM4oTg38CmQMfBGbJ/YtbZlPZwhjbi8HgYENaPJ
+         n8YA==
+X-Gm-Message-State: APjAAAWJVDUkQ5nWeB31nR4mCUf67kOLj7IJAB9Me63iBpZVQTIwb0fp
+        C2ohFRCYo+mkABXvRtrulER35Q==
+X-Google-Smtp-Source: APXvYqwfo3bJUKvTH7g4ZfJhFp6Q9sQXhh6NsNs21MEaB/aVJYLW2l4lX40Zlrs3JJt56T2EbsbNBA==
+X-Received: by 2002:a62:82c1:: with SMTP id w184mr24770723pfd.8.1565395899475;
+        Fri, 09 Aug 2019 17:11:39 -0700 (PDT)
+Received: from localhost ([2601:602:9200:a1a5:b873:707a:e893:cdb3])
+        by smtp.gmail.com with ESMTPSA id k14sm25201452pgb.78.2019.08.09.17.11.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 09 Aug 2019 17:11:38 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Guillaume La Roque <glaroque@baylibre.com>,
+        daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 0/6] Add support of New Amlogic temperature sensor for G12 SoCs
+In-Reply-To: <20190806130506.8753-1-glaroque@baylibre.com>
+References: <20190806130506.8753-1-glaroque@baylibre.com>
+Date:   Fri, 09 Aug 2019 17:11:37 -0700
+Message-ID: <7hd0hd3mme.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jFPU38zDugumJB0iq5d-LctcMCdygTrFU4=gYP3UJ+oA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 05, 2019 at 11:09:19PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Aug 5, 2019 at 10:52 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > The Power Management Status Register is in config space, and reads while
-> > the device is in D3cold typically return ~0 data (PCI_ERROR_RESPONSE).  If
-> > we just look at the PCI_PM_CTRL_STATE_MASK bits, that is 0x3, which looks
-> > like D3hot, not D3cold.
-> >
-> > Check the entire register for PCI_ERROR_RESPONSE so we can distinguish
-> > D3cold from D3hot.
-> >
-> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > ---
-> >  drivers/pci/pci.c   |  6 +++---
-> >  include/linux/pci.h | 13 +++++++++++++
-> >  2 files changed, 16 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index af6a97d7012b..d8686e3cd5eb 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -894,7 +894,7 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
-> >                 udelay(PCI_PM_D2_DELAY);
-> >
-> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> > -       dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> > +       dev->current_state = pci_power_state(pmcsr);
-> 
-> But pci_raw_set_power_state() should not even be called for devices in
-> D3_cold, so this at best is redundant.
+Guillaume La Roque <glaroque@baylibre.com> writes:
 
-I tried to verify that we don't call pci_raw_set_power_state() for
-devices in D3cold, but it wasn't obvious to me.  Is there an easy way
-to verify that?  I'd rather have code that doesn't rely on deep
-knowledge about other areas.
+> This patchs series add support of New Amlogic temperature sensor and minimal
+> thermal zone for SEI510 and ODROID-N2 boards.
+>
+> First implementation was doing on IIO[1] but after comments i move on thermal framework.
+> Formulas and calibration values come from amlogic.
+>
+> Changes since v2:
+>   - fix yaml documention 
+>   - remove unneeded status variable for temperature-sensor node
+>   - rework driver after Martin review
+>   - add some information in commit message
+>
+> Changes since v1:
+>   - fix enum vs const in documentation
+>   - fix error with thermal-sensor-cells value set to 1 instead of 0
+>   - add some dependencies needed to add cooling-maps
+>
+> Dependencies :
+> - patch 3,4 & 5: depends on Neil's patch and series :
+>               - missing dwc2 phy-names[2]
+>               - patchsets to add DVFS on G12a[3] which have deps on [4] and [5]
+>
+> [1] https://lore.kernel.org/linux-amlogic/20190604144714.2009-1-glaroque@baylibre.com/
+> [2] https://lore.kernel.org/linux-amlogic/20190625123647.26117-1-narmstrong@baylibre.com/
+> [3] https://lore.kernel.org/linux-amlogic/20190729132622.7566-1-narmstrong@baylibre.com/
+> [4] https://lore.kernel.org/linux-amlogic/20190731084019.8451-5-narmstrong@baylibre.com/
+> [5] https://lore.kernel.org/linux-amlogic/20190729132622.7566-3-narmstrong@baylibre.com/
 
-Even if the device was in, say D0, what if it is hot-removed just
-before we read PCI_PM_CTRL?  We'll set dev->current_state to D3hot,
-when I think D3cold would better correspond to the state of the
-device.  Maybe that's harmless, but I don't know how to verify that.
+Thank you for the detailed list of dependencies!  Much appreciated.
 
-> >         if (dev->current_state != state && printk_ratelimit())
-> >                 pci_info(dev, "Refused to change power state, currently in D%d\n",
-> >                          dev->current_state);
-> > @@ -942,7 +942,7 @@ void pci_update_current_state(struct pci_dev *dev, pci_power_t state)
-> >                 u16 pmcsr;
-> >
-> >                 pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> > -               dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> > +               dev->current_state = pci_power_state(pmcsr);
-> 
-> The if () branch above should cover the D3cold case, shouldn't it?
+With all the deps, I tested this on sei510 and odroid-n2, and basic
+functionality seems to work.
 
-You mean the "if (platform_pci_get_power_state(dev) == PCI_D3cold)"
-test?
+As discussed off-list: it would be nice to have an example of how
+cpufreq could be used as a cooling device for hot temperatures.  The
+vendor kernel has some trip points that could be included as examples,
+or even included as extra patches.
 
-platform_pci_get_power_state() returns PCI_UNKNOWN in some cases.
-When that happens, might we not read PCI_PM_CTRL of a device in
-D3cold?  I think this also has the same hotplug question as above.
+Also the driver patch is missing the two main thermal maintainers, so
+please resend at least the driver and bindings including them.
 
-> >         } else {
-> >                 dev->current_state = state;
-> >         }
-> > @@ -1677,7 +1677,7 @@ static int pci_enable_device_flags(struct pci_dev *dev, unsigned long flags)
-> >         if (dev->pm_cap) {
-> >                 u16 pmcsr;
-> >                 pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> > -               dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> > +               dev->current_state = pci_power_state(pmcsr);
-> 
-> So this appears to be only case in which pci_power_state(pmcsr) is
-> useful at all.
-> 
-> It might be better to use the code from it directly here IMO.
 
-If we're decoding CSR values, I think it's better to notice error
-responses when we can than it is to try to figure out whether the
-error response is theoretically impossible or the incorrectly decoded
-value (e.g., D3hot instead of D3cold) is harmless.
-
-> >         }
-> >
-> >         if (atomic_inc_return(&dev->enable_cnt) > 1)
-> > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > index d64fd3788061..fdfe990e9661 100644
-> > --- a/include/linux/pci.h
-> > +++ b/include/linux/pci.h
-> > @@ -152,6 +152,19 @@ static inline const char *pci_power_name(pci_power_t state)
-> >         return pci_power_names[1 + (__force int) state];
-> >  }
-> >
-> > +/*
-> > + * Convert a Power Management Status Register value to a pci_power_t.
-> > + * Note that if we read the register while the device is in D3cold, we
-> > + * typically get PCI_ERROR_RESPONSE, which looks like D3hot (0x3) if we
-> > + * only look at the PCI_PM_CTRL_STATE_MASK bits.
-> > + */
-> > +static inline pci_power_t pci_power_state(u16 pmcsr)
-> > +{
-> > +       if (pmcsr == (u16) PCI_ERROR_RESPONSE)
-> > +               return PCI_D3cold;
-> > +       return pmcsr & PCI_PM_CTRL_STATE_MASK;
-> > +}
-> > +
-> >  #define PCI_PM_D2_DELAY                200
-> >  #define PCI_PM_D3_WAIT         10
-> >  #define PCI_PM_D3COLD_WAIT     100
-> > --
-> > 2.22.0.770.g0f2c4a37fd-goog
-> >
+Kevin
