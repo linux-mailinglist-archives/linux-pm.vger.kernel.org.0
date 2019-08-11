@@ -2,51 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A1B892FC
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2019 19:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1149A89305
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2019 20:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726137AbfHKRwd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Aug 2019 13:52:33 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:35622 "EHLO
+        id S1726011AbfHKSCH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Aug 2019 14:02:07 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42913 "EHLO
         mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725847AbfHKRwc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 13:52:32 -0400
-Received: by mail-lj1-f193.google.com with SMTP id l14so6444471lje.2;
-        Sun, 11 Aug 2019 10:52:30 -0700 (PDT)
+        with ESMTP id S1725939AbfHKSCH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 14:02:07 -0400
+Received: by mail-lj1-f193.google.com with SMTP id 15so4621495ljr.9;
+        Sun, 11 Aug 2019 11:02:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rIU90j9rmc0loKWn/Zvdc4rY0H97o0GEeKBESXJwW0A=;
-        b=VMfbVcIxRwIj74Ya3SeIBTYo+Q3lx7+9VjhmEhhYZlu4988dm4YbJmz++gucXsDGBB
-         nRD073sJKCh8P95/CCmX/chQxVKVIfRlErURNt3qv5u1OI3MQmEqqx7ut24BOB4xTEFi
-         VqbKzvtH8LF1sNKMqvWCfiQFe51v14/8XKFSi9t0aYG8k6VntcJf+c+yx+E5RdzNmUQy
-         MiK4nI8QpD43MIrbcilgqt3oH4QFehZi0dn4oAY8011Ls703PmYSm9g2FJCP68Q+ccTq
-         svrQrRWp0j0Yp+hUM2cbQkORp+MU2hV0ciOOmf1owjLD8AKnc+ub6WAITcBtoJuvcDuq
-         xEjg==
+        bh=LQ1iGLfDtj2lnEsk9iIw/qcpoUF+FjucXrL64iBzuIo=;
+        b=Qi18f0UGWsqimFRmNgEi+JAh6KKllabRbZFih7yICet9D6skfqFNh0KNZpY5X0b6PP
+         h8nOJQJ3/slwMuoLD8t3FqZkqyKAYYydgF89bqs26XT54Gndism8/CJpEEZ5mato8yV+
+         1TKaOb3HxvRzlSrG9//F9+mYrFinND8xChZzUS4KWJls6acFEmvtJzEyjb4PME1Klcm2
+         ch1a0yMx3EtXIjVN9BoHKOn6+NkpXr+BkcUOT+REwvUE/aGgMCZHGG5SZQjH/c7b50cM
+         8gA3eYQ2R1BA+ij/yufa5mKq1I27OlLRPUCqVH6PjMgbrz4Og4fcbTrRmHLKhUVNLdKx
+         r9ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=rIU90j9rmc0loKWn/Zvdc4rY0H97o0GEeKBESXJwW0A=;
-        b=eOAB0Urb/hs+e9L36UujyxySy7Kiz67XEQnLmlYeWmqg0WmCjCmDkDgnQWO1TzCvBx
-         Md78/WEp16XERIECp9ekBVEogp4cIWQE7wJKtezUW3Piu4Dn9BFF1YW+wNGDOlI14+LQ
-         XISxPNIVobGGqlZ2GKK6qiUyft4SWMHxFWXhB6ktk6kv2BhX1yiP4+W/dluJzKIBi/5n
-         nZKCTocbkJCVn32SzW+gFQfjLQKLOJkAZfAOlGbjfGfcFGMIHwnuXPMe4bhMOP7+mZb5
-         Ijx2FjOvlSijOdoGAedV6eXqIiQk6oo49YV3YTeWh2YayEWnbW9FrT0VUhKzygqLSmAZ
-         kcXA==
-X-Gm-Message-State: APjAAAVjwBb6tO1h1ZgAorc9aWfOZqlcDuikswEu1f6yMvdtAqf44F2A
-        Q/9n7PjmVCxZbtrKditFMFFv4J94
-X-Google-Smtp-Source: APXvYqwZ9Ji04vtk6kNzV+t0QZO7OK2X65TeYFt1oxK8FP21Bf2xuGQRdgvYT7bIR3lDyeFMnGFD1A==
-X-Received: by 2002:a2e:b0c6:: with SMTP id g6mr6084135ljl.60.1565545949227;
-        Sun, 11 Aug 2019 10:52:29 -0700 (PDT)
+        bh=LQ1iGLfDtj2lnEsk9iIw/qcpoUF+FjucXrL64iBzuIo=;
+        b=b0wnYbz/ofHZG+iUK4YZNUQkgDJpfCj+DoruiQ22RqvLPL9sDksPlBs1EjOZpz25hE
+         U1eRN6rZDveQk33bgO12XKvet7wQElVskDC2zQuNTFZ0rqtoMkgaOHSyvnp3T25Xi0FL
+         urm/AFZVk/y7q2T3lM+2ZW3JuUba+vrbtDMR1q1mIseiI41rUlo7+kyStVoWT7vrHAXp
+         vUqtJnTav3AQI37W0nezgIeNwOg5qCgxneoL0qoBt3l8r3VkF10TPpHGY4BwMhNr8yyh
+         WtoIlJkoYJyC/AigGBv90nQTWK15Dqn1keoUOFvyvILVJsOSllGZAR0mPVYufKRGvG+t
+         V5pw==
+X-Gm-Message-State: APjAAAXMFFy4UIyGw6XA2QHgG+fVZ7RLX4pvHdy+zSZXMm11ZykfH9Ty
+        NjhMiShIZgJVCJ+mmqEPxtYFnyhh
+X-Google-Smtp-Source: APXvYqzJz/lxfWp/jMF5PcwzLjTZoSv1bG469uZHzL2G05C6AuC027/gqH9yshQye84YFDUV/mgNpQ==
+X-Received: by 2002:a2e:995a:: with SMTP id r26mr17008164ljj.107.1565546524242;
+        Sun, 11 Aug 2019 11:02:04 -0700 (PDT)
 Received: from [192.168.2.145] ([94.29.34.218])
-        by smtp.googlemail.com with ESMTPSA id r68sm18553765lff.52.2019.08.11.10.52.27
+        by smtp.googlemail.com with ESMTPSA id v7sm1698146ljc.46.2019.08.11.11.02.02
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Aug 2019 10:52:28 -0700 (PDT)
-Subject: Re: [PATCH v8 15/21] soc/tegra: pmc: Allow to support more tegras
- wake
+        Sun, 11 Aug 2019 11:02:03 -0700 (PDT)
+Subject: Re: [PATCH v8 13/21] clk: tegra210: Use fence_udelay during PLLU init
 To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
         thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
         jason@lakedaemon.net, marc.zyngier@arm.com,
@@ -59,14 +58,14 @@ Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
         devicetree@vger.kernel.org, rjw@rjwysocki.net,
         viresh.kumar@linaro.org, linux-pm@vger.kernel.org
 References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
- <1565308020-31952-16-git-send-email-skomatineni@nvidia.com>
+ <1565308020-31952-14-git-send-email-skomatineni@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <53634c8e-1295-86eb-60c2-27da26d05400@gmail.com>
-Date:   Sun, 11 Aug 2019 20:52:27 +0300
+Message-ID: <1d09a2c5-4973-340f-fdfc-d4e665c8b55d@gmail.com>
+Date:   Sun, 11 Aug 2019 21:02:02 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <1565308020-31952-16-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1565308020-31952-14-git-send-email-skomatineni@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -76,73 +75,54 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 09.08.2019 2:46, Sowjanya Komatineni пишет:
-> This patch allows to create separate irq_set_wake and irq_set_type
-> implementations for different tegra designs PMC that has different
-> wake models which require difference wake registers and different
-> programming sequence.
+> This patch uses fence_udelay rather than udelay during PLLU
+> initialization to ensure writes to clock registers happens before
+> waiting for specified delay.
 > 
-> AOWAKE model support is available for Tegra186 and Tegra194 only
-> and it resides within PMC and supports tiered wake architecture.
-> 
-> Tegra210 and prior tegra designs uses PMC directly to receive wake
-> events and coordinate the wake sequence.
-> 
+> Acked-by: Thierry Reding <treding@nvidia.com>
 > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 > ---
->  drivers/soc/tegra/pmc.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+>  drivers/clk/tegra/clk-tegra210.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-> index 9f9c1c677cf4..91c84d0e66ae 100644
-> --- a/drivers/soc/tegra/pmc.c
-> +++ b/drivers/soc/tegra/pmc.c
-> @@ -226,6 +226,8 @@ struct tegra_pmc_soc {
->  	void (*setup_irq_polarity)(struct tegra_pmc *pmc,
->  				   struct device_node *np,
->  				   bool invert);
-> +	int (*irq_set_wake)(struct irq_data *data, unsigned int on);
-> +	int (*irq_set_type)(struct irq_data *data, unsigned int type);
+> diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-tegra210.c
+> index 4721ee030d1c..998bf60b219a 100644
+> --- a/drivers/clk/tegra/clk-tegra210.c
+> +++ b/drivers/clk/tegra/clk-tegra210.c
+> @@ -2841,7 +2841,7 @@ static int tegra210_enable_pllu(void)
+>  	reg = readl_relaxed(clk_base + pllu.params->ext_misc_reg[0]);
+>  	reg &= ~BIT(pllu.params->iddq_bit_idx);
+>  	writel_relaxed(reg, clk_base + pllu.params->ext_misc_reg[0]);
+> -	udelay(5);
+> +	fence_udelay(5, clk_base);
 >  
->  	const char * const *reset_sources;
->  	unsigned int num_reset_sources;
-> @@ -1920,7 +1922,7 @@ static const struct irq_domain_ops tegra_pmc_irq_domain_ops = {
->  	.alloc = tegra_pmc_irq_alloc,
->  };
+>  	reg = readl_relaxed(clk_base + PLLU_BASE);
+>  	reg &= ~GENMASK(20, 0);
+> @@ -2849,7 +2849,7 @@ static int tegra210_enable_pllu(void)
+>  	reg |= fentry->n << 8;
+>  	reg |= fentry->p << 16;
+>  	writel(reg, clk_base + PLLU_BASE);
+> -	udelay(1);
+> +	fence_udelay(1, clk_base);
+>  	reg |= PLL_ENABLE;
+>  	writel(reg, clk_base + PLLU_BASE);
 >  
-> -static int tegra_pmc_irq_set_wake(struct irq_data *data, unsigned int on)
-> +static int tegra186_pmc_irq_set_wake(struct irq_data *data, unsigned int on)
->  {
->  	struct tegra_pmc *pmc = irq_data_get_irq_chip_data(data);
->  	unsigned int offset, bit;
-> @@ -1952,7 +1954,7 @@ static int tegra_pmc_irq_set_wake(struct irq_data *data, unsigned int on)
->  	return 0;
->  }
+> @@ -2895,12 +2895,12 @@ static int tegra210_init_pllu(void)
+>  		reg = readl_relaxed(clk_base + XUSB_PLL_CFG0);
+>  		reg &= ~XUSB_PLL_CFG0_PLLU_LOCK_DLY_MASK;
+>  		writel_relaxed(reg, clk_base + XUSB_PLL_CFG0);
+> -		udelay(1);
+> +		fence_udelay(1, clk_base);
 >  
-> -static int tegra_pmc_irq_set_type(struct irq_data *data, unsigned int type)
-> +static int tegra186_pmc_irq_set_type(struct irq_data *data, unsigned int type)
->  {
->  	struct tegra_pmc *pmc = irq_data_get_irq_chip_data(data);
->  	u32 value;
-> @@ -2006,8 +2008,8 @@ static int tegra_pmc_irq_init(struct tegra_pmc *pmc)
->  	pmc->irq.irq_unmask = irq_chip_unmask_parent;
->  	pmc->irq.irq_eoi = irq_chip_eoi_parent;
->  	pmc->irq.irq_set_affinity = irq_chip_set_affinity_parent;
-> -	pmc->irq.irq_set_type = tegra_pmc_irq_set_type;
-> -	pmc->irq.irq_set_wake = tegra_pmc_irq_set_wake;
-> +	pmc->irq.irq_set_type = pmc->soc->irq_set_type;
-> +	pmc->irq.irq_set_wake = pmc->soc->irq_set_wake;
+>  		reg = readl_relaxed(clk_base + PLLU_HW_PWRDN_CFG0);
+>  		reg |= PLLU_HW_PWRDN_CFG0_SEQ_ENABLE;
+>  		writel_relaxed(reg, clk_base + PLLU_HW_PWRDN_CFG0);
+> -		udelay(1);
+> +		fence_udelay(1, clk_base);
 >  
->  	pmc->domain = irq_domain_add_hierarchy(parent, 0, 96, pmc->dev->of_node,
->  					       &tegra_pmc_irq_domain_ops, pmc);
-> @@ -2680,6 +2682,8 @@ static const struct tegra_pmc_soc tegra186_pmc_soc = {
->  	.regs = &tegra186_pmc_regs,
->  	.init = NULL,
->  	.setup_irq_polarity = tegra186_pmc_setup_irq_polarity,
-> +	.irq_set_wake = tegra186_pmc_irq_set_wake,
-> +	.irq_set_type = tegra186_pmc_irq_set_type,
->  	.reset_sources = tegra186_reset_sources,
->  	.num_reset_sources = ARRAY_SIZE(tegra186_reset_sources),
->  	.reset_levels = tegra186_reset_levels,
+>  		reg = readl_relaxed(clk_base + PLLU_BASE);
+>  		reg &= ~PLLU_BASE_CLKENABLE_USB;
 > 
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+The clk_base corresponds to the RESET controller's part of Clock-and-Reset hardware, is it
+okay to read-back the RST register and not the clock for the fencing?
