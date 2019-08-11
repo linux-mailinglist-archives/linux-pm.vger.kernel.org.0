@@ -2,110 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA7C89254
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2019 17:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F2A89261
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2019 17:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbfHKPda (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Aug 2019 11:33:30 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:33901 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726424AbfHKPda (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 11:33:30 -0400
-Received: by mail-ed1-f68.google.com with SMTP id s49so66688224edb.1;
-        Sun, 11 Aug 2019 08:33:28 -0700 (PDT)
+        id S1726460AbfHKPoC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Aug 2019 11:44:02 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:36918 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726014AbfHKPoB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 11:44:01 -0400
+Received: by mail-ot1-f68.google.com with SMTP id f17so15185008otq.4;
+        Sun, 11 Aug 2019 08:44:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LfMEDWO38iSQdUunD3Hlo38F1+ICCQ2/45EAVCriAGU=;
-        b=RuuhpUV689wLH1DbjcLv4FhAUABCkgt82R1kvweXIITporFlF1QKQPG7lAG+W1AaCy
-         sKZoPqipL5rdQNoz++R8piru/ObupX5XI3F2Up/PoXeUPI2H65vb7Wl6QHFT62rv5XrR
-         7zxELGop2IU1DulIwAOA0ggsZ3cd20qUpH4laFbz9bJn7ZvrNQJSycCereePjVdu3/Mk
-         qQSjKmPKaslGJW5oa1DnPEQ5udoBr8NMaWkccNOp1ZyKEm4DViHQuBfrv4Nu+BB2WMlP
-         f7qpHePH1TfDluHZj3bh0NHpwqgjvdIcNSNU6R9f+t7qhJ1jUd4PnzzGyfd7OYsTU7bR
-         n9bA==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RgzDUY8iEdtjWOC/UcjlQu0YWYk/dEALxCJaSLPEEOM=;
+        b=o+O/hv48sg3cHwHlW8B8v0viNUMFEX8D2CGWAPNzX9pjzuu/6K7dFO7SSRtt2y1bhV
+         7jKQAk4MWx9nG/yoH+SE4caHw/uu9/DzLJy6fjcx0ZiKYbC7E8bWqkIeJPYHSsW5MvOK
+         H298XXnhhFWqJ7Ywh1i6i7IaPm9io3SWKnbkSZUCJJiqcjHs9Iwn9wDdqsSnnR5u18Us
+         yPwcZGmvwNxzPEDgvOKruL+EDjUeODouMUmA1RobQOVJwCfPqIvEr75T3kD7DKSAth42
+         15cgsvRSL3VL1Y4NJI/ChaSumrxgEUXqmeRtgj1yrY4E4Ogo3XWGopCuM3sC623wBrEx
+         xGjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LfMEDWO38iSQdUunD3Hlo38F1+ICCQ2/45EAVCriAGU=;
-        b=bkK9Isv09xy7CdejWYQhXBfdHgGylbtNvOK5gHwy0jsrtZZON7jL262UGMDTZWW85a
-         54q1Zwfov84yJ2+DBdhID2ZEdkLK2Bz7oHnHZIAxQz7ASLvkdL1eV9m/sm39wgR/ZSwK
-         xjVWjQykNYofAeMrneZ3vrTZA9PTYS5uqYT7+Lc0EmzcCIiZwxsMhe8lcGRkpBuVYovW
-         RfY/JL+jU8/vSLGRbseIcSMg0gSz3MLqwRTohpJV/DAdE0Hnay2snjpsmYOLRNYsudfS
-         WFKJKW+4U/0tagPfp94hMmneELVk7oWonGXQWy25HeVUedNnOitPjVcJo7yKdAW016nA
-         5LVg==
-X-Gm-Message-State: APjAAAW/doPUFkcybi1KA0dVUgpj3xuYwxiT1+Z8HCjN/QK/BORJJATm
-        AsH+eNRUg8akL2xtnnfsWeg=
-X-Google-Smtp-Source: APXvYqyfFv9/ip91xdh1XW8s+k1djdxmFVOY71xWnEgjW3JNlPgvdFxUn2BiYRCXMVowcqsNE/G51w==
-X-Received: by 2002:a05:6402:397:: with SMTP id o23mr32658840edv.68.1565537608022;
-        Sun, 11 Aug 2019 08:33:28 -0700 (PDT)
-Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
-        by smtp.gmail.com with ESMTPSA id c1sm102702edn.62.2019.08.11.08.33.27
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 11 Aug 2019 08:33:27 -0700 (PDT)
-Date:   Sun, 11 Aug 2019 17:33:26 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, x86@kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Garrett <mjg59@google.com>
-Subject: Re: [Linux 5.2.x]
- /sys/kernel/debug/tracing/events/power/cpu_idle/id: BUG: kernel NULL pointer
- dereference, address: 0000000000000000
-Message-ID: <20190811153326.GA8036@eldamar.local>
-References: <4b54ff1e-f18b-3c58-7caa-945a0775c24c@molgen.mpg.de>
- <alpine.DEB.2.21.1908101910280.7324@nanos.tec.linutronix.de>
- <01c7bc6b-dc6d-5eca-401a-8869e02f7c2a@molgen.mpg.de>
- <e18e2a11-ea96-a612-48cd-877fa307115f@molgen.mpg.de>
- <alpine.DEB.2.21.1908110822110.7324@nanos.tec.linutronix.de>
- <20190811094630.GA18925@eldamar.local>
- <alpine.DEB.2.21.1908111456430.7324@nanos.tec.linutronix.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RgzDUY8iEdtjWOC/UcjlQu0YWYk/dEALxCJaSLPEEOM=;
+        b=JOVYdsw7FVYaZpEMp5ldSWLRnmxAAXKAV48AF0by/RpYBpWt3hNlCAPlGZ0RzBJnEc
+         yT0UrFzQV7TCiT44PyQYjOU44LXUTho/r05IVkXyJcjrSFj5MjWfwtvrihPNRdLTOsVD
+         rFumdqFScDGgJBgvKcK4lFN4Wp0cjxFPSgh0fSbbOG5OCncwK0EH/oAYg1izYvO+8iip
+         ZppkOcKmzizWB0CKtk8+8T7BULfwRxXVV4oxdZ0RDrDhlkMb043mPSr1oCECGLAlJPiX
+         iwU0ed8D+2P+/trBJcbBIYdgqvdunlcOp0WDzwL0bWVLNp3nMq9X1sIsRBDNzdfxGuyo
+         nfWQ==
+X-Gm-Message-State: APjAAAXk6gazu/BsZoAeCuGlxPc1mjGU+BWnRid6nDV6SsqIn5u2qs32
+        1W3VrlWFDt3ThMdtGOQVUQ97H7OIH8+Yo/hkX8hl/DVo
+X-Google-Smtp-Source: APXvYqxWNrdwhdZjUN0E+QG+e/rP9vdmU9vDHg66HyoGvwKrC0kqPidAohwxJoPiEC9Es5jTZv3FayaUbUh8NtS3QYo=
+X-Received: by 2002:a05:6830:1e5a:: with SMTP id e26mr11850575otj.96.1565538240642;
+ Sun, 11 Aug 2019 08:44:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.1908111456430.7324@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190806130506.8753-1-glaroque@baylibre.com> <20190806130506.8753-3-glaroque@baylibre.com>
+In-Reply-To: <20190806130506.8753-3-glaroque@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 11 Aug 2019 17:43:49 +0200
+Message-ID: <CAFBinCAMjtWTAvVEhMxDx1NPvCp9dU8HewxBxxp1TAtr3ZbKtw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] thermal: amlogic: Add thermal driver to support
+ G12 SoCs
+To:     Guillaume La Roque <glaroque@baylibre.com>
+Cc:     daniel.lezcano@linaro.org, khilman@baylibre.com,
+        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Neil Armstrong <narmstrong@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thomas,
+Hi Guillaume,
 
-On Sun, Aug 11, 2019 at 02:58:15PM +0200, Thomas Gleixner wrote:
-> Salvatore,
-> 
-> On Sun, 11 Aug 2019, Salvatore Bonaccorso wrote:
-> > On Sun, Aug 11, 2019 at 08:22:35AM +0200, Thomas Gleixner wrote:
-> > > On Sat, 10 Aug 2019, Paul Menzel wrote:
-> > > > For the record. It is also reproducible with Linux 5.2.6, and trying to print
-> > > > the file contents with cat already fails.
-> > > > 
-> > > > ```
-> > > > $ sudo ls -l /sys/kernel/debug/tracing/events/power/cpu_idle/id
-> > > > -r--r--r-- 1 root root 0 Aug 10 23:05
-> > > > /sys/kernel/debug/tracing/events/power/cpu_idle/id
-> > > > $ sudo cat /sys/kernel/debug/tracing/events/power/cpu_idle/id
-> > > > Killed
-> > > > ```
-> > 
-> > This seems to be related to https://bugs.debian.org/934304 (in
-> > particular https://bugs.debian.org/934304#29). The mentioned patch
-> > features/all/lockdown/0031-tracefs-Restrict-tracefs-when-the-kernel-is-locked-d.patch
-> > is a backport of https://patchwork.kernel.org/patch/11069661/ with
-> > only change that it is converted back to the non-LSM lockdown API.
-> 
-> So that's a debian kernel specific issue?
+[...]
+> +struct amlogic_thermal {
+> +       struct platform_device *pdev;
+> +       const struct amlogic_thermal_data *data;
+> +       struct regmap *regmap;
+> +       struct regmap *sec_ao_map;
+> +       struct clk *clk;
+> +       struct thermal_zone_device *tzd;
+> +       u32 trim_info;
+> +       void __iomem *base;
+nit-pick: this is only used in _probe() so you could make it a local
+variable there
 
-"yes". A kernel build without the above patch does not exhibit the
-issue. So the issue is specific to that lockdown patch ("tracefs:
-Restrict tracefs when the kernel is locked down").
+[...]
+> +static const struct of_device_id of_amlogic_thermal_match[] = {
+> +       {
+> +               .compatible = "amlogic,g12-ddr-thermal",
+> +               .data = &amlogic_thermal_g12_ddr_param,
+> +       },
+> +       {
+> +               .compatible = "amlogic,g12-cpu-thermal",
+> +               .data = &amlogic_thermal_g12_cpu_param,
+> +       },
+I assume you are using "g12" to indicate that it's valid for both,
+G12A and G12B?
+meson-g12-common.dtsi currently does not use any other "amlogic,g12-*"
+compatible string (there are some meson-axg-*, meson-gx-* and
+meson-g12a-* ones, but no g12-*)
+I would like to hear Kevin's and Neil's opinion on this one whether we
+should introduce that "amlogic,g12-*" prefix or stick to
+"amlogic,g12a-*"
 
-Steven and Matthew are both CC'ed.
+[...]
+> +       ret = amlogic_thermal_enable(pdata);
+> +       if (ret)
+> +               clk_disable_unprepare(pdata->clk);
+amlogic_thermal_enable only returns an error-code if clk_prepare_enable() fails
+in that case the clock is neither prepared nor enabled so we must not
+call clk_disable_unprepare
 
-Regards,
-Salvatore
+apart from that it looks good to me (as someone who doesn't know the
+thermal framework)
+
+
+Martin
