@@ -2,50 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1149A89305
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2019 20:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD9E89307
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2019 20:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726011AbfHKSCH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Aug 2019 14:02:07 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42913 "EHLO
+        id S1726053AbfHKSEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Aug 2019 14:04:30 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:46414 "EHLO
         mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbfHKSCH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 14:02:07 -0400
-Received: by mail-lj1-f193.google.com with SMTP id 15so4621495ljr.9;
-        Sun, 11 Aug 2019 11:02:05 -0700 (PDT)
+        with ESMTP id S1725939AbfHKSE3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 14:04:29 -0400
+Received: by mail-lj1-f193.google.com with SMTP id h13so921849ljc.13;
+        Sun, 11 Aug 2019 11:04:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LQ1iGLfDtj2lnEsk9iIw/qcpoUF+FjucXrL64iBzuIo=;
-        b=Qi18f0UGWsqimFRmNgEi+JAh6KKllabRbZFih7yICet9D6skfqFNh0KNZpY5X0b6PP
-         h8nOJQJ3/slwMuoLD8t3FqZkqyKAYYydgF89bqs26XT54Gndism8/CJpEEZ5mato8yV+
-         1TKaOb3HxvRzlSrG9//F9+mYrFinND8xChZzUS4KWJls6acFEmvtJzEyjb4PME1Klcm2
-         ch1a0yMx3EtXIjVN9BoHKOn6+NkpXr+BkcUOT+REwvUE/aGgMCZHGG5SZQjH/c7b50cM
-         8gA3eYQ2R1BA+ij/yufa5mKq1I27OlLRPUCqVH6PjMgbrz4Og4fcbTrRmHLKhUVNLdKx
-         r9ag==
+        bh=mwCCmTPyZMzB8rOB2/u+aHD+9E+Hp331HV98rXItsy0=;
+        b=ibKaAsX9ikH9awumenb7RFQejb6OIAjvguIQ9x3qSfgbwDLOe8y/isrP8t5T3aExCp
+         yCo5P6K2VaEfSATv2a+z1mCazdhQDKSs13QPvF6ht/6RIOfmsM5k/GPSlqSCDzFyhyrq
+         8ZTzSXievbbq6VrTpFjYFyF4VDrWM15oD0e2Yr54MKmRoj8TPqHFO0PE9ZqH7F5EYnB0
+         yt9kf7ReoKEBg+km75tj9r38bOrDmRoqH5a/lrG0V49p5edci7qQRpLv6srb35j+qnki
+         C0o3grbkFP9lECGJys7YY4BBYLKiBGB5fjZFOZc88RrrgHAsUQDGF7l1HzbYh6NWEWcC
+         DG7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=LQ1iGLfDtj2lnEsk9iIw/qcpoUF+FjucXrL64iBzuIo=;
-        b=b0wnYbz/ofHZG+iUK4YZNUQkgDJpfCj+DoruiQ22RqvLPL9sDksPlBs1EjOZpz25hE
-         U1eRN6rZDveQk33bgO12XKvet7wQElVskDC2zQuNTFZ0rqtoMkgaOHSyvnp3T25Xi0FL
-         urm/AFZVk/y7q2T3lM+2ZW3JuUba+vrbtDMR1q1mIseiI41rUlo7+kyStVoWT7vrHAXp
-         vUqtJnTav3AQI37W0nezgIeNwOg5qCgxneoL0qoBt3l8r3VkF10TPpHGY4BwMhNr8yyh
-         WtoIlJkoYJyC/AigGBv90nQTWK15Dqn1keoUOFvyvILVJsOSllGZAR0mPVYufKRGvG+t
-         V5pw==
-X-Gm-Message-State: APjAAAXMFFy4UIyGw6XA2QHgG+fVZ7RLX4pvHdy+zSZXMm11ZykfH9Ty
-        NjhMiShIZgJVCJ+mmqEPxtYFnyhh
-X-Google-Smtp-Source: APXvYqzJz/lxfWp/jMF5PcwzLjTZoSv1bG469uZHzL2G05C6AuC027/gqH9yshQye84YFDUV/mgNpQ==
-X-Received: by 2002:a2e:995a:: with SMTP id r26mr17008164ljj.107.1565546524242;
-        Sun, 11 Aug 2019 11:02:04 -0700 (PDT)
+        bh=mwCCmTPyZMzB8rOB2/u+aHD+9E+Hp331HV98rXItsy0=;
+        b=jWeplow+YNcVZjmXikoRY3sGYBYKEiBTIi3SMGD/s12Sa6kXudQyuLc1mklpaRFGIV
+         +QQaalfsyIv2XuZzZt9W1oyOy69S2FSeWXV1Y61QOXa+8iK3gMIR/IlwVUKsq40wNupH
+         f4fNuVo6do3z413dArM0UlFans9++fnCBTP/HY5nDvw7qwVQhBbO5KZBeGa+sj4im910
+         bNsWVUs5Q8kQamkydp9PzyxZZVkVLgjmBFsgM14loWYQ6/DHc/XqyI+oDHCdOgQ3021k
+         3x8MoBR2f7bfi3GULg+NB9ItVEufGHm7iQPe8jB0AAcYfgvLo7iYLOPXKrdxrmoPjVmF
+         PCVw==
+X-Gm-Message-State: APjAAAWX1/+4OqoHVo7b/5QQiX2hBJu1o+DnutedGs+PkFFTi7i5frGl
+        eQ1nYiFq2FEJotn5mjTEh+8U0odi
+X-Google-Smtp-Source: APXvYqwSAgc+L2f0y5uKMKUohDnZg6B/2bgLcBngpfnUX56foIbBQ87h6ZEZBm1g5ve48U2Q1YAbvw==
+X-Received: by 2002:a2e:9f0d:: with SMTP id u13mr17165699ljk.186.1565546666339;
+        Sun, 11 Aug 2019 11:04:26 -0700 (PDT)
 Received: from [192.168.2.145] ([94.29.34.218])
-        by smtp.googlemail.com with ESMTPSA id v7sm1698146ljc.46.2019.08.11.11.02.02
+        by smtp.googlemail.com with ESMTPSA id v7sm20649866ljj.3.2019.08.11.11.04.24
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Aug 2019 11:02:03 -0700 (PDT)
-Subject: Re: [PATCH v8 13/21] clk: tegra210: Use fence_udelay during PLLU init
+        Sun, 11 Aug 2019 11:04:25 -0700 (PDT)
+Subject: Re: [PATCH v8 04/21] clk: tegra: pllout: Save and restore pllout
+ context
 To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
         thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
         jason@lakedaemon.net, marc.zyngier@arm.com,
@@ -58,14 +59,14 @@ Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
         devicetree@vger.kernel.org, rjw@rjwysocki.net,
         viresh.kumar@linaro.org, linux-pm@vger.kernel.org
 References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
- <1565308020-31952-14-git-send-email-skomatineni@nvidia.com>
+ <1565308020-31952-5-git-send-email-skomatineni@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <1d09a2c5-4973-340f-fdfc-d4e665c8b55d@gmail.com>
-Date:   Sun, 11 Aug 2019 21:02:02 +0300
+Message-ID: <3bc1cdc5-c8e7-a210-67ae-2a3f6f01660f@gmail.com>
+Date:   Sun, 11 Aug 2019 21:04:24 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <1565308020-31952-14-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1565308020-31952-5-git-send-email-skomatineni@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -75,54 +76,88 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 09.08.2019 2:46, Sowjanya Komatineni пишет:
-> This patch uses fence_udelay rather than udelay during PLLU
-> initialization to ensure writes to clock registers happens before
-> waiting for specified delay.
+> This patch implements save and restore of pllout context.
+> 
+> During system suspend, core power goes off and looses the settings
+> of the Tegra CAR controller registers.
+> 
+> So during suspend entry the state of pllout is saved and on resume
+> it is restored back to have pllout in same state as before suspend.
+> 
+> pllout rate is saved and restore in clock divider so it will be at
+> same rate as before suspend when pllout state is restored.
 > 
 > Acked-by: Thierry Reding <treding@nvidia.com>
 > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 > ---
->  drivers/clk/tegra/clk-tegra210.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/clk/tegra/clk-pll-out.c  | 9 +++++++++
+>  drivers/clk/tegra/clk-tegra210.c | 3 ++-
+>  drivers/clk/tegra/clk.h          | 6 ++++++
+>  3 files changed, 17 insertions(+), 1 deletion(-)
 > 
+> diff --git a/drivers/clk/tegra/clk-pll-out.c b/drivers/clk/tegra/clk-pll-out.c
+> index 35f2bf00e1e6..d8bf89a81e6d 100644
+> --- a/drivers/clk/tegra/clk-pll-out.c
+> +++ b/drivers/clk/tegra/clk-pll-out.c
+> @@ -69,10 +69,19 @@ static void clk_pll_out_disable(struct clk_hw *hw)
+>  		spin_unlock_irqrestore(pll_out->lock, flags);
+>  }
+>  
+> +static void tegra_clk_pll_out_restore_context(struct clk_hw *hw)
+> +{
+> +	if (!__clk_get_enable_count(hw->clk))
+> +		clk_pll_out_disable(hw);
+> +	else
+> +		clk_pll_out_enable(hw);
+> +}
+> +
+>  const struct clk_ops tegra_clk_pll_out_ops = {
+>  	.is_enabled = clk_pll_out_is_enabled,
+>  	.enable = clk_pll_out_enable,
+>  	.disable = clk_pll_out_disable,
+> +	.restore_context = tegra_clk_pll_out_restore_context,
+>  };
+>  
+>  struct clk *tegra_clk_register_pll_out(const char *name,
 > diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-tegra210.c
-> index 4721ee030d1c..998bf60b219a 100644
+> index df172d5772d7..4721ee030d1c 100644
 > --- a/drivers/clk/tegra/clk-tegra210.c
 > +++ b/drivers/clk/tegra/clk-tegra210.c
-> @@ -2841,7 +2841,7 @@ static int tegra210_enable_pllu(void)
->  	reg = readl_relaxed(clk_base + pllu.params->ext_misc_reg[0]);
->  	reg &= ~BIT(pllu.params->iddq_bit_idx);
->  	writel_relaxed(reg, clk_base + pllu.params->ext_misc_reg[0]);
-> -	udelay(5);
-> +	fence_udelay(5, clk_base);
+> @@ -3200,7 +3200,8 @@ static void __init tegra210_pll_init(void __iomem *clk_base,
+>  					 8, 8, 1, NULL);
+>  	clk = tegra_clk_register_pll_out("pll_re_out1", "pll_re_out1_div",
+>  					 clk_base + PLLRE_OUT1, 1, 0,
+> -					 CLK_SET_RATE_PARENT, 0, NULL);
+> +					 CLK_SET_RATE_PARENT, TEGRA_PLLRE_OUT,
+> +					 NULL);
+>  	clks[TEGRA210_CLK_PLL_RE_OUT1] = clk;
 >  
->  	reg = readl_relaxed(clk_base + PLLU_BASE);
->  	reg &= ~GENMASK(20, 0);
-> @@ -2849,7 +2849,7 @@ static int tegra210_enable_pllu(void)
->  	reg |= fentry->n << 8;
->  	reg |= fentry->p << 16;
->  	writel(reg, clk_base + PLLU_BASE);
-> -	udelay(1);
-> +	fence_udelay(1, clk_base);
->  	reg |= PLL_ENABLE;
->  	writel(reg, clk_base + PLLU_BASE);
+>  	/* PLLE */
+> diff --git a/drivers/clk/tegra/clk.h b/drivers/clk/tegra/clk.h
+> index 905bf1096558..a464524fbc90 100644
+> --- a/drivers/clk/tegra/clk.h
+> +++ b/drivers/clk/tegra/clk.h
+> @@ -437,6 +437,10 @@ struct clk *tegra_clk_register_pllu_tegra210(const char *name,
+>   * @rst_bit_idx:	bit to reset PLL divider
+>   * @lock:		register lock
+>   * @flags:		hardware-specific flags
+> + *
+> + * Flags:
+> + * TEGRA_PLLRE_OUT - This flag indicates that it is PLLRE_OUT and is used to
+> + *		     identify PLLRE_OUT during clk_pll_out save and restore.
+>   */
+>  struct tegra_clk_pll_out {
+>  	struct clk_hw	hw;
+> @@ -447,6 +451,8 @@ struct tegra_clk_pll_out {
+>  	u8		flags;
+>  };
 >  
-> @@ -2895,12 +2895,12 @@ static int tegra210_init_pllu(void)
->  		reg = readl_relaxed(clk_base + XUSB_PLL_CFG0);
->  		reg &= ~XUSB_PLL_CFG0_PLLU_LOCK_DLY_MASK;
->  		writel_relaxed(reg, clk_base + XUSB_PLL_CFG0);
-> -		udelay(1);
-> +		fence_udelay(1, clk_base);
+> +#define TEGRA_PLLRE_OUT BIT(0)
+> +
+>  #define to_clk_pll_out(_hw) container_of(_hw, struct tegra_clk_pll_out, hw)
 >  
->  		reg = readl_relaxed(clk_base + PLLU_HW_PWRDN_CFG0);
->  		reg |= PLLU_HW_PWRDN_CFG0_SEQ_ENABLE;
->  		writel_relaxed(reg, clk_base + PLLU_HW_PWRDN_CFG0);
-> -		udelay(1);
-> +		fence_udelay(1, clk_base);
->  
->  		reg = readl_relaxed(clk_base + PLLU_BASE);
->  		reg &= ~PLLU_BASE_CLKENABLE_USB;
+>  extern const struct clk_ops tegra_clk_pll_out_ops;
 > 
 
-The clk_base corresponds to the RESET controller's part of Clock-and-Reset hardware, is it
-okay to read-back the RST register and not the clock for the fencing?
+Looks like the TEGRA_PLLRE_OUT flag is unused.
+
