@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC9689452
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2019 23:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE58D89441
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Aug 2019 23:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbfHKVZ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Aug 2019 17:25:26 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:46098 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726688AbfHKVYr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 17:24:47 -0400
-Received: by mail-lf1-f66.google.com with SMTP id n19so4571023lfe.13;
-        Sun, 11 Aug 2019 14:24:45 -0700 (PDT)
+        id S1726796AbfHKVZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Aug 2019 17:25:16 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39606 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726694AbfHKVYs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 17:24:48 -0400
+Received: by mail-lf1-f67.google.com with SMTP id x3so19207715lfn.6;
+        Sun, 11 Aug 2019 14:24:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Lns2F1Z8CpqknymSvh5W98Sjrak+4HxbHPvWO55eGpU=;
-        b=rTUtHuiPNe7o8K8j17CoKUgmNGCABvr1V/0mZfK2hx64sgNJ+Qe4d/ATdBExamK5D3
-         RuO65xa1Ct4j53rk86GHcJ4W+7VfZTUdGt+AISGhyzWM/ycpbVooGbcwv+yYdJSRDQhK
-         anGvprizBk8gK8rUieCSjbMGgN1TOwxDTl3weYZy1yTgknWaMv1dcm5td+zRi2asDz6Y
-         cOLCu38Y/itGS2aQHzU3iiVmB22kZsTVUOZzq2qUVyUB0MAibJFX0N6Y2NFWQAWJFzhK
-         2+45C7oSyI72RM2uAAc1hEEwHMA/LyjbIj5/SmEa/WSWmiYPcsaIj8YmxfsNaEphl5vD
-         ImPw==
+        bh=1DipR4hwlo+C3xieASjVQKlAxunkARzuIH2w7oPgSg0=;
+        b=gjsyse6wDQwZA4x+EK9knjC9/CpkfAp9T5JAVNm63P+Hs51Z7jUl8hCAxM4g+5zPHi
+         Ay7+ZsRhwLUtIxWTBhWEgGT7f7wXMUd3scx0J7hCBjy5Lj3hVrlXKqBYrMv6JJlljzwm
+         wfhoJQPX3Y73TLHed1K6qqV8OmWnUU0ov+UyMOYurtDPHVbmi4xXLU2kWQvfErkL+MdO
+         bBD21VRaWwooDP0lW68btSVyLtrFl5btrZZe5RC3Kbg/OsKpO8me6FdewHQBhAxjv6GQ
+         MjDGnHLFgmBPAwxUq0LxLmcEJooV0V5wAP9UDL9VFlg3hsiDwTogaCery5s/XUkR5Zkz
+         J/kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Lns2F1Z8CpqknymSvh5W98Sjrak+4HxbHPvWO55eGpU=;
-        b=S6WBbP6VNOgA2a+v9NrR7EgB1cQL+skIiwo0d4C+zZn7vaVBQVlggRc/1RB5HB2rgN
-         ZrPeGehDAF/Xui7EuAH+i248Fneyo+8lolxGwt6V+mCUizkOeUeMfwO9FuSfAPzflqIB
-         +PX+4LgLhKpg1+ypz8qA8eSpapQPXJXGnVd5rqJ/C1mvkeV13natemFPM15nGHI7Lnn+
-         iYoFxNBmLq24HatOCo/6B+tf2IlQq1nMYBd5sJV5RlpB8TvUd+v21iGrhYl8oS9JNe8K
-         TvcXSQE3dMr/+LMJuMgu3p+azW1+kQttfGL/JlSQDoFgBFd+7HFUk578rYDxhONYzekM
-         mvPw==
-X-Gm-Message-State: APjAAAVE6VHQC8j3/AUwYusBwoq0HiqXv1Le2UzM6BX9Pf9iT2Xd7etl
-        BT6h2Jd7jRaYnvMIPuaqsdg=
-X-Google-Smtp-Source: APXvYqzVb1EudV5q+8upA2GUBirn8Fc7LPgdchyfJk8YU0+8PpxmVn2hfZm4lkVV8o1NdDfH1RaC3g==
-X-Received: by 2002:ac2:5dfb:: with SMTP id z27mr18248162lfq.128.1565558685294;
-        Sun, 11 Aug 2019 14:24:45 -0700 (PDT)
+        bh=1DipR4hwlo+C3xieASjVQKlAxunkARzuIH2w7oPgSg0=;
+        b=RNat1D9Zmxuz88PAsAvP5mFsghAFZMk0V3kdiIn/XSBjAPMayhyA+CVPYL4xnGoKn3
+         4VrMPLyZCR8tjqMklK+oBU0P3Sq0Nxj0jFwvZ28f3sWtscRy/MgUifNrLgxGbuYNuxir
+         z6sx8hlTzMkWv20OPoSXhD+T9K662pHacTZvfhC8sofi4ZKj3GbEszW+lpFeP2EiaTon
+         pttNqtP6C0Pf52aJm/pP0bBJr7GMpJ/l5TSBvbzutdZ/9XDoxsIII4p9eyFpVj9ZOQ27
+         pLj4nVJP79RcH0+dJBPbnHE+B5InvTdpG3jn18UXwzGbY1nDTafqoJ2qIQdGO49n359H
+         JA/Q==
+X-Gm-Message-State: APjAAAWT99B2EH5573ilD2OKPLjb1imP/k+YdzMQw9VNBA+L5xA6QgRx
+        R6150hTk3XIFeu1CV7xE1rw=
+X-Google-Smtp-Source: APXvYqyzYo4TOGkWXwCOZT/8T07hDkQuGj2IQhFTkTVwQKv7xIItsXzSOD+douKo2pEtw/JwgX5pbg==
+X-Received: by 2002:a19:4f42:: with SMTP id a2mr17836593lfk.23.1565558686247;
+        Sun, 11 Aug 2019 14:24:46 -0700 (PDT)
 Received: from localhost.localdomain ([94.29.34.218])
-        by smtp.gmail.com with ESMTPSA id f1sm20470806ljk.86.2019.08.11.14.24.44
+        by smtp.gmail.com with ESMTPSA id f1sm20470806ljk.86.2019.08.11.14.24.45
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Aug 2019 14:24:44 -0700 (PDT)
+        Sun, 11 Aug 2019 14:24:45 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 12/19] PM / devfreq: tegra30: Move clk-notifier's registration to governor's start
-Date:   Mon, 12 Aug 2019 00:23:08 +0300
-Message-Id: <20190811212315.12689-13-digetx@gmail.com>
+Subject: [PATCH v6 13/19] PM / devfreq: tegra30: Reset boosting on startup
+Date:   Mon, 12 Aug 2019 00:23:09 +0300
+Message-Id: <20190811212315.12689-14-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190811212315.12689-1-digetx@gmail.com>
 References: <20190811212315.12689-1-digetx@gmail.com>
@@ -66,104 +66,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no point in receiving of the notifications while governor is
-stopped, let's keep them disabled like we do for the CPU freq-change
-notifications. This also fixes a potential use-after-free bug if
-notification happens after device's removal.
+Governor could be stopped while boosting is active. We have assumption
+that everything is reset on governor's restart, including the boosting
+value, which was missed.
 
 Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra30-devfreq.c | 33 ++++++++++++++++++-------------
- 1 file changed, 19 insertions(+), 14 deletions(-)
+ drivers/devfreq/tegra30-devfreq.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index a260812f7744..bad9836b1eea 100644
+index bad9836b1eea..5002dca4c403 100644
 --- a/drivers/devfreq/tegra30-devfreq.c
 +++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -726,6 +726,19 @@ static int tegra_actmon_start(struct tegra_devfreq *tegra)
- 	actmon_writel(tegra, ACTMON_SAMPLING_PERIOD - 1,
- 		      ACTMON_GLB_PERIOD_CTRL);
+@@ -686,6 +686,9 @@ static void tegra_actmon_configure_device(struct tegra_devfreq *tegra,
+ {
+ 	u32 val = 0;
  
-+	/*
-+	 * CLK notifications are needed in order to reconfigure the upper
-+	 * consecutive watermark in accordance to the actual clock rate
-+	 * to avoid unnecessary upper interrupts.
-+	 */
-+	err = clk_notifier_register(tegra->emc_clock,
-+				    &tegra->clk_rate_change_nb);
-+	if (err) {
-+		dev_err(tegra->devfreq->dev.parent,
-+			"Failed to register rate change notifier\n");
-+		return err;
-+	}
++	/* reset boosting on governor's restart */
++	dev->boost_freq = 0;
 +
- 	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++)
- 		tegra_actmon_configure_device(tegra, &tegra->devices[i]);
- 
-@@ -752,6 +765,8 @@ static int tegra_actmon_start(struct tegra_devfreq *tegra)
- 	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++)
- 		tegra_actmon_stop_device(&tegra->devices[i]);
- 
-+	clk_notifier_unregister(tegra->emc_clock, &tegra->clk_rate_change_nb);
-+
- 	return err;
- }
- 
-@@ -768,6 +783,8 @@ static void tegra_actmon_stop(struct tegra_devfreq *tegra)
- 
- 	for (i = 0; i < ARRAY_SIZE(tegra->devices); i++)
- 		tegra_actmon_stop_device(&tegra->devices[i]);
-+
-+	clk_notifier_unregister(tegra->emc_clock, &tegra->clk_rate_change_nb);
- }
- 
- static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
-@@ -1012,24 +1029,16 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, tegra);
- 
-+	tegra->clk_rate_change_nb.notifier_call = tegra_actmon_clk_notify_cb;
- 	tegra->cpu_rate_change_nb.notifier_call = tegra_actmon_cpu_notify_cb;
- 
- 	INIT_DELAYED_WORK(&tegra->cpufreq_update_work,
- 			  tegra_actmon_delayed_update);
- 
--	tegra->clk_rate_change_nb.notifier_call = tegra_actmon_clk_notify_cb;
--	err = clk_notifier_register(tegra->emc_clock,
--				    &tegra->clk_rate_change_nb);
--	if (err) {
--		dev_err(&pdev->dev,
--			"Failed to register rate change notifier\n");
--		goto remove_opps;
--	}
--
- 	err = devfreq_add_governor(&tegra_devfreq_governor);
- 	if (err) {
- 		dev_err(&pdev->dev, "Failed to add governor: %d\n", err);
--		goto unreg_notifier;
-+		goto remove_opps;
- 	}
- 
- 	tegra_devfreq_profile.initial_freq = clk_get_rate(tegra->emc_clock);
-@@ -1047,9 +1056,6 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- remove_governor:
- 	devfreq_remove_governor(&tegra_devfreq_governor);
- 
--unreg_notifier:
--	clk_notifier_unregister(tegra->emc_clock, &tegra->clk_rate_change_nb);
--
- remove_opps:
- 	dev_pm_opp_remove_all_dynamic(&pdev->dev);
- 
-@@ -1066,7 +1072,6 @@ static int tegra_devfreq_remove(struct platform_device *pdev)
- 	devfreq_remove_device(tegra->devfreq);
- 	devfreq_remove_governor(&tegra_devfreq_governor);
- 
--	clk_notifier_unregister(tegra->emc_clock, &tegra->clk_rate_change_nb);
- 	dev_pm_opp_remove_all_dynamic(&pdev->dev);
- 
- 	reset_control_reset(tegra->reset);
+ 	dev->avg_freq = clk_get_rate(tegra->emc_clock) / KHZ;
+ 	device_writel(dev, dev->avg_freq * ACTMON_SAMPLING_PERIOD,
+ 		      ACTMON_DEV_INIT_AVG);
 -- 
 2.22.0
 
