@@ -2,20 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B27DD898F8
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 10:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0632789911
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 10:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727128AbfHLItV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 04:49:21 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:55959 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727017AbfHLItV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 04:49:21 -0400
+        id S1727154AbfHLI4M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 04:56:12 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:40435 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbfHLI4M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 04:56:12 -0400
+X-Originating-IP: 86.250.200.211
 Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 8E8D6200006;
-        Mon, 12 Aug 2019 08:49:16 +0000 (UTC)
-Date:   Mon, 12 Aug 2019 10:49:15 +0200
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id E3E8460006;
+        Mon, 12 Aug 2019 08:56:04 +0000 (UTC)
+Date:   Mon, 12 Aug 2019 10:56:04 +0200
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Yangtao Li <tiny.windzz@gmail.com>
 Cc:     rui.zhang@intel.com, edubezval@gmail.com,
@@ -24,18 +25,17 @@ Cc:     rui.zhang@intel.com, edubezval@gmail.com,
         davem@davemloft.net, gregkh@linuxfoundation.org,
         Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Icenowy Zheng <icenowy@aosc.io>
-Subject: Re: [PATCH v5 15/18] thermal: sun8i: allow to use custom temperature
- calculation function
-Message-ID: <20190812084915.lasb4dh25bfeoigr@flea>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 02/18] dt-bindings: thermal: add binding document for
+ h6 thermal controller
+Message-ID: <20190812085604.ozhl35wwm3ehlvqn@flea>
 References: <20190810052829.6032-1-tiny.windzz@gmail.com>
- <20190810052829.6032-16-tiny.windzz@gmail.com>
+ <20190810052829.6032-3-tiny.windzz@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="f4uotbkobwqxzt7r"
+        protocol="application/pgp-signature"; boundary="4zhzclyt6oncb76d"
 Content-Disposition: inline
-In-Reply-To: <20190810052829.6032-16-tiny.windzz@gmail.com>
+In-Reply-To: <20190810052829.6032-3-tiny.windzz@gmail.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -43,65 +43,108 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---f4uotbkobwqxzt7r
+--4zhzclyt6oncb76d
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi,
-
-On Sat, Aug 10, 2019 at 05:28:26AM +0000, Yangtao Li wrote:
-> From: Icenowy Zheng <icenowy@aosc.io>
+On Sat, Aug 10, 2019 at 05:28:13AM +0000, Yangtao Li wrote:
+> This patch adds binding document for allwinner h6 thermal controller.
 >
-> The H5 temperature calculation function is strange. Firstly, it's
-> segmented. Secondly, the formula of two sensors are different in the
-> second segment.
->
-> Allow to use a custom temperature calculation function, in case of
-> the function is complex.
->
-> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-
-When you send a patch on someone else's behalf, you need to put your
-Signed-off-by as well.
-
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 > ---
->  drivers/thermal/sun8i_thermal.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+>  .../bindings/thermal/sun8i-thermal.yaml       | 79 +++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
 >
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-> index 3259081da841..a761e2afda08 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -76,6 +76,7 @@ struct ths_thermal_chip {
->  				     u16 *caldata, int callen);
->  	int		(*init)(struct ths_device *tmdev);
->  	int             (*irq_ack)(struct ths_device *tmdev);
-> +	int		(*calc_temp)(int id, int reg);
->  };
->
->  struct ths_device {
-> @@ -90,9 +91,12 @@ struct ths_device {
->
->  /* Temp Unit: millidegree Celsius */
->  static int sun8i_ths_reg2temp(struct ths_device *tmdev,
-> -			      int reg)
-> +			      int id, int reg)
->  {
-> -	return (reg + tmdev->chip->offset) * tmdev->chip->scale;
-> +	if (tmdev->chip->calc_temp)
-> +		return tmdev->chip->calc_temp(id, reg);
-> +	else
-> +		return (reg + tmdev->chip->offset) * tmdev->chip->scale;
+> diff --git a/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml b/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
+> new file mode 100644
+> index 000000000000..e0973199ba3c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
 
-You're not consistent here compared to the other callbacks you have
-introduced: calibrate, init and irq_ack all need to be set and will
-fail (hard) if you don't set them, yet this one will have a different
-behaviour (that behaviour being to use the H6 formula, which is the
-latest SoC, which is a bit odd in itself).
+We've used so far for the schemas the first compatible to introduce
+that controller as the filename, we should be consistent here. In that
+case that would be allwinner,sun8i-a23-ths.yaml
 
-I guess we should either make it mandatory as the rest of the
-callbacks, or document which callbacks are mandatory and which are
-optional (and the behaviour when it's optional).
+> @@ -0,0 +1,79 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/sun8i-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner SUN8I Thermal Controller Device Tree Bindings
+> +
+> +maintainers:
+> +  - Yangtao Li <tiny.windzz@gmail.com>
+> +
+> +description: |-
+> +  This describes the device tree binding for the Allwinner thermal
+> +  controller which measures the on-SoC temperatures.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - allwinner,sun50i-h6-ths
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: bus
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +  nvmem-cells:
+
+You need a maxItems here too
+
+> +    description: ths calibrate data
+
+What about something like this:
+
+Calibration data for the thermal sensor
+
+> +
+> +  nvmem-cell-names:
+> +    const: calib
+
+I'm not sure we need a abbreviation here, calibration would be more
+explicit
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reset
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - "#thermal-sensor-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    ths: ths@5070400 {
+> +        compatible = "allwinner,sun50i-h6-ths";
+> +        reg = <0x05070400 0x100>;
+> +        clocks = <&ccu CLK_BUS_THS>;
+> +        clock-names = "bus";
+> +        resets = <&ccu RST_BUS_THS>;
+> +        interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+
+Those examples won't compile.
 
 Maxime
 
@@ -110,15 +153,15 @@ Maxime Ripard, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
 
---f4uotbkobwqxzt7r
+--4zhzclyt6oncb76d
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXVEoCwAKCRDj7w1vZxhR
-xfQmAP9xX6EXk3hDLg/bBSbrnJp6QkeJeiCQrfENROxox3MBTQD/Xm0PpUdxbQaF
-HD4uZ6W1In3fv39oufKd/j0DlKZ5Lwc=
-=i8aL
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXVEppAAKCRDj7w1vZxhR
+xbePAQD4oGzekU98J4bCgNXtImN3X9EeDQ3DpYjvOJSUQtIlZgEAnRIw2ceIxFC7
+AomJrBOwFCYE3Ly30TnJfIXLEPZvYAU=
+=Si6e
 -----END PGP SIGNATURE-----
 
---f4uotbkobwqxzt7r--
+--4zhzclyt6oncb76d--
