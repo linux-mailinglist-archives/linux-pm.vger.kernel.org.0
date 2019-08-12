@@ -2,66 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FBC89EC3
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 14:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971C289F94
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 15:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728419AbfHLMvB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 08:51:01 -0400
-Received: from mail-ot1-f70.google.com ([209.85.210.70]:57306 "EHLO
-        mail-ot1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726587AbfHLMvB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 08:51:01 -0400
-Received: by mail-ot1-f70.google.com with SMTP id q22so84054948otl.23
-        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 05:51:01 -0700 (PDT)
+        id S1728117AbfHLNYC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 09:24:02 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:46897 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728750AbfHLNYC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 09:24:02 -0400
+Received: by mail-wr1-f67.google.com with SMTP id z1so104549610wru.13
+        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 06:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=nC0XBOiWbAbQwJIvttLNUSDXZEWVPgrZEH9kYI4ESEg=;
+        b=KdowPy/ZBvnwn/HSU7gjkVq9UrYpR3h4Rz7yrxwQA3ohuwT4La1YEbafzwTQiyGbB3
+         6QonaqtKmwTvQvVAkUuXqhFlDfDjkaXKQ7zpwE7eGxhuj1ceYyytsva8K5UQ8S9Sxa1l
+         0Y1oon8rOVVaf+boODQgVUswo8xgye+BoTn+yDsiXWTW/NS6IQsn/plpM4JQaaNP4O6B
+         TqZTxR3XHrKVwJXd9XdY0hqFqBNW8M1q45w82I966F/alSFqF39B+Nsz1nWQEnNynAc4
+         A2YNPddK8smYE3BcVulLdkdiz+QMZyywgQdjm7O4meR9DNvs9jp6Y3XjTE1cuP7rEBBJ
+         1TgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=dpFe0pxSvvQ3CiqTWvVQ3nfhIYJ6p2bt/fOgk0i68So=;
-        b=jromoq0Ob5Y/oLd5UhdBkMkbyD5CjKQpVnGMMIxnXKJBu4qZ1FG2U7ldNMOd/Hruq3
-         01lZ310/ZLFPWa2ieuc/GadHbCgevSyLL8HgS3K20vEYo+BifiD1+eYehDI4YcLH8xPZ
-         zQe37Wp7gbuuSJJt1NgYEe6cL2mYD5gEAt/Nv8pKWrirAsAfdagUN77sg76p7TebkptH
-         kvf/xFH9vcW8q2OLpM0wgSgOq5+PNxhodpGPGWpuKEYzXwFyJ3JgGo6qHjH1aGQmAxYM
-         5EVtEJK9QSUY7gguw9d+800/60FvNyfItObWO+R37U4Lzl+sfHSrbNkN3QCesrr08DdE
-         mNuA==
-X-Gm-Message-State: APjAAAU4BVPua5PVXy9g6Ez87p+DBAvL5xefMFCQoNG1ApLxE/vlD1yw
-        ehQkGOCfS1EDBVXBsSsvxU9BCw4Zlia5F8F4W0dmECWmQzYb
-X-Google-Smtp-Source: APXvYqzeOUNSZLHmIICrYoJx4kMoidLoy3cH2txtjlUjoEvrc0w4LGRMoWRVjXiMwJnpcl9H9P/TLOzvY92piEQmZ4Or2+jAFETO
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=nC0XBOiWbAbQwJIvttLNUSDXZEWVPgrZEH9kYI4ESEg=;
+        b=hJ4C3nsAh9Rh+yFKo+LgdY9V3itxFoZbatcFRurXDiHy53XO3AZiDeYS5vj6eVtJFU
+         CR/RnNx8m6Pm/dhS8quPYrOAtppJvgpN/fqfSduEzH+r1rDuCmwo/8/7Bu4HTELuCepU
+         +F7EcJtaIrZAyngzMAb1lpWrq6KdhX3FUGdXbxQYqb/QwKRiZ+NiBDz3VbioFtC7YOR5
+         w0E1zEjHHb12TIP35GirVeWiL5y1GxS99Sj+Z7cV83wEd8DJj8HfmMRfR1zLjONVG99k
+         x3bK/Uza5drouN1JaZp+9zN8+IjYNTbcVvidtCNAa2rgDnihPBXr+Gp9fGYTCJvjOV1l
+         M0Mg==
+X-Gm-Message-State: APjAAAVV3ltF72csq1jwoWOmYt67vfS3zXfLt081U4RxLp3amRKhuoXx
+        l9aYRMciAQI4nIwPXnldUm7Rzg==
+X-Google-Smtp-Source: APXvYqzLO2AY4MikUonMGWLbUw1cnzGTo7DsP/PsiUuAIcFjooUQxIKV9Ku81rDgvyEOx2q7Cg6gpA==
+X-Received: by 2002:adf:8364:: with SMTP id 91mr40735060wrd.13.1565616239967;
+        Mon, 12 Aug 2019 06:23:59 -0700 (PDT)
+Received: from dell ([2.27.35.255])
+        by smtp.gmail.com with ESMTPSA id g7sm25060681wmg.8.2019.08.12.06.23.58
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 12 Aug 2019 06:23:59 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 14:23:57 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allison Randal <allison@lohutok.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Tianping . Fang" <tianping.fang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>
+Subject: Re: [PATCH v5 08/10] power: reset: add driver for mt6323 poweroff
+Message-ID: <20190812132357.GU26727@dell>
+References: <20190812121511.4169-1-frank-w@public-files.de>
+ <20190812121511.4169-9-frank-w@public-files.de>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:990a:: with SMTP id t10mr14376062ioj.182.1565614261189;
- Mon, 12 Aug 2019 05:51:01 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 05:51:01 -0700
-In-Reply-To: <CAAeHK+wnqRzpUDfspoXPVw76bAbrZ49JiwkeTj-g3U9zqLjZRg@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e4c41e058feaf977@google.com>
-Subject: Re: general protection fault in __pm_runtime_resume
-From:   syzbot <syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        hdanton@sina.com, len.brown@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, pavel@ucw.cz, rjw@rjwysocki.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190812121511.4169-9-frank-w@public-files.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Mon, 12 Aug 2019, Frank Wunderlich wrote:
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+> From: Josef Friedl <josef.friedl@speed.at>
+> 
+> add poweroff driver for mt6323 and make Makefile and Kconfig-Entries
+> 
+> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> changes since v4: none
+> changes since v3: none
+> changes since v2: none (=v2 part 5)
+> ---
+>  drivers/power/reset/Kconfig           | 10 +++
+>  drivers/power/reset/Makefile          |  1 +
+>  drivers/power/reset/mt6323-poweroff.c | 97 +++++++++++++++++++++++++++
 
-Reported-and-tested-by:  
-syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
+>  include/linux/mfd/mt6397/core.h       |  2 +
 
-Tested on:
+This looks like an unrelated change.
 
-commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1341679a600000
+Please separate it out.
 
-Note: testing is done by a robot and is best-effort only.
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
