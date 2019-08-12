@@ -2,105 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2DB8988F
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 10:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE25A898DB
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 10:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbfHLIQp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 04:16:45 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40938 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726996AbfHLIQp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 04:16:45 -0400
-Received: by mail-wr1-f66.google.com with SMTP id r1so4676041wrl.7
-        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 01:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=MJHxBxh/Q5vo+W76uNGRUJUeN3hwDfWxfMg6P/gBOg0=;
-        b=u4QlkRbMDiHfGrjdu436aHZusopdsD94AaT6zXTM3eaZ4y6BosUM0tlaA56X51nN9c
-         umI3PH27REA1YdEm/bDm3OE2UI9MGULdMLuGUTvnDBKUBlM+u5BgwEJXKd1SByIuWkrY
-         2kv99VeKU+V5QXG9oieP77x7yQgoExIDYXx4vPH8vlEru6HzZ6/p32cpzzObsHy5W3az
-         O2VbXSjzdwyFpNJYin4w9mGvGx4NIQqGMocgiLaaq7HHG8qkJjXvIxiD9mAgo53+VJlh
-         LCcGJbAa2s5qZg9/JZfFsSRo/t/+spxSIJYxDJW7Gfq3OorZb4uOTIjODwyWsHDkDNXd
-         LmBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=MJHxBxh/Q5vo+W76uNGRUJUeN3hwDfWxfMg6P/gBOg0=;
-        b=FSMGebYGecaf/Ntfp8Ay7Ug2XEZ2dff/XZIOJTgdZ7PcNfYrW5Rbdb9kt4PNl50IWH
-         dAeNcNZ8dK7fmiwJN15LOA89pAt+E2Uh0R6vQEmYZ3ISpcGjoUaDSeYo9EvcYL1Cr4xs
-         aNhBxOdSMWpxReCjZN/XJY7/6kWtLL/IGy8VzqyC9SQsVKNTKlId3d7d/HmpyMto5i12
-         2iKliirJS//VoVpmXBtwbBAXC0crWvUrKCO331B0QNMPq1oWPVDaww336zZaKK/Z7rw+
-         oOopp7s5zXdzq9tghDEurkz3DtWOTDeABfZu34jII2tpGVBioVAZI72OrrNkADifMIN1
-         i5wg==
-X-Gm-Message-State: APjAAAVLrN+vzRgvWLr7lyUruoqoy8AUHDRSkz80ACZQjTmJmqcsa785
-        eU8ZtPUYb0iL+jY2R6+oVUbKjQ==
-X-Google-Smtp-Source: APXvYqyD6fPKryZQTpN9zsdwGV7yS5BKNQZ8tOEeMIPGi0uW8Qmgi+HgiANiv0VmQSgyzgbueGKdzg==
-X-Received: by 2002:adf:ec0d:: with SMTP id x13mr40515082wrn.240.1565597802765;
-        Mon, 12 Aug 2019 01:16:42 -0700 (PDT)
-Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id g15sm16420028wrp.29.2019.08.12.01.16.41
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Aug 2019 01:16:42 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 09:16:40 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, od@zcrc.me,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: Re: [PATCH 10/11] mfd: Drop obsolete JZ4740 driver
-Message-ID: <20190812081640.GA26727@dell>
-References: <20190725220215.460-1-paul@crapouillou.net>
- <20190725220215.460-11-paul@crapouillou.net>
+        id S1727094AbfHLImo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 04:42:44 -0400
+Received: from foss.arm.com ([217.140.110.172]:45182 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727070AbfHLImo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Aug 2019 04:42:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A4F8C15A2;
+        Mon, 12 Aug 2019 01:42:43 -0700 (PDT)
+Received: from queper01-lin.cambridge.arm.com (queper01-lin.cambridge.arm.com [10.1.195.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A01643F718;
+        Mon, 12 Aug 2019 01:42:41 -0700 (PDT)
+From:   Quentin Perret <quentin.perret@arm.com>
+To:     edubezval@gmail.com, rui.zhang@intel.com, javi.merino@kernel.org,
+        viresh.kumar@linaro.org, amit.kachhap@gmail.com, rjw@rjwysocki.net,
+        catalin.marinas@arm.com, will@kernel.org, daniel.lezcano@linaro.org
+Cc:     dietmar.eggemann@arm.com, ionela.voinescu@arm.com,
+        mka@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        quentin.perret@arm.com
+Subject: [PATCH v7 0/4] Make IPA use PM_EM
+Date:   Mon, 12 Aug 2019 09:42:31 +0100
+Message-Id: <20190812084235.21440-1-quentin.perret@arm.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190725220215.460-11-paul@crapouillou.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 25 Jul 2019, Paul Cercueil wrote:
+Changes in v7
+*************
+ - Added patch 02/04 to fix the build error reported by the kbuild bot
 
-> It has been replaced with the ingenic-iio driver for the ADC.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Tested-by: Artur Rojek <contact@artur-rojek.eu>
-> ---
->  drivers/mfd/Kconfig      |   9 --
->  drivers/mfd/Makefile     |   1 -
->  drivers/mfd/jz4740-adc.c | 324 ---------------------------------------
->  3 files changed, 334 deletions(-)
->  delete mode 100644 drivers/mfd/jz4740-adc.c
+Changes in v6
+*************
+ - Added Daniel's and Viresh's Acked-by to all patches
 
-Applied, thanks.
+Changes in v5:
+**************
+ - Changed patch 02 to guard IPA-specific code in cpu_cooling.c with
+   appropriate ifdefery (Daniel)
+ - Rebased on 5.2-rc2
+
+Changes in v4:
+**************
+ - Added Viresh's Acked-by to all 3 patches
+ - Improved commit message of patch 3/3 to explain how it has no
+   functional impact on existing users (Eduardo)
+
+Changes in v3:
+**************
+ - Changed warning message for unordered tables to something more
+   explicit (Viresh)
+ - Changed WARN() into a pr_err() for consistency
+
+Changes in v2:
+**************
+ - Fixed patch 01/03 to actually enable CONFIG_ENERGY_MODEL
+ - Added "depends on ENERGY_MODEL" to IPA (Daniel)
+ - Added check to bail out if the freq table is unsorted (Viresh)
+
+Cover letter:
+*************
+
+The Intelligent Power Allocator (IPA) thermal governor uses an Energy
+Model (or EM) of the CPUs to re-distribute the power budget. To do so,
+it builds a table of <frequency, power> tuples where the power values
+are computed using the 'dynamic-power-coefficient' DT property. All of
+this is done in and only for the thermal subsystem, and more
+specifically for CPUs -- the power of other types of devices is obtained
+differently.
+
+Recently, the CPU scheduler has seen the introduction of Energy Aware
+Scheduling (EAS) patches, which also rely on an EM of the CPUs. This EM,
+however, is managed by an independent framework, called PM_EM, aimed to
+be used by all kernel subsystems interested in the power consumed by
+CPUs, and not only the scheduler.
+
+This patch series follows this logic and removes the (now redundant)
+thermal-specific EM computation code to migrate IPA to use PM_EM
+instead.
+
+Doing so should have no visible functional impact for existing users of
+IPA since:
+
+ - during the 5.1 development cycle, a series of patches [1] introduced
+   in PM_OPP some infrastructure (dev_pm_opp_of_register_em()) enabling
+   the registration of EMs in PM_EM using the DT property used by IPA;
+
+ - the existing upstream cpufreq drivers marked with the
+   'CPUFREQ_IS_COOLING_DEV' flag all call dev_pm_opp_of_register_em(),
+   which means they all support PM_EM (the only two exceptions are
+   qoriq-cpufreq which doesn't in fact use an EM and scmi-cpufreq which
+   already supports PM_EM without using the PM_OPP infrastructurei
+   because it read power costs directly from firmware);
+
+So, migrating IPA to using PM_EM should effectively be just plumbing
+since for the existing IPA users the PM_EM tables will contain the
+exact same power values that IPA used to compute on its own until now.
+The only new dependency is to compile in CONFIG_ENERGY_MODEL.
+
+Why is this migration still a good thing ? For three main reasons.
+
+ 1. it removes redundant code;
+
+ 2. it introduces an abstraction layer between IPA and the EM
+    computation. PM_EM offers to EAS and IPA (and potentially other
+    clients) standardized EM tables and hides 'how' these tables have
+    been obtained. PM_EM as of now supports power values either coming
+    from the 'dynamic-power-coefficient' DT property or obtained
+    directly from firmware using SCMI. The latter is a new feature for
+    IPA and that comes 'for free' with the migration. This will also be
+    true in the future every time PM_EM gets support for other ways of
+    loading the EM. Moreover, PM_EM is documented and has a debugfs
+    interface which should help adding support for new platforms.
+
+ 3. it builds a consistent view of the EM of CPUs across kernel
+    subsystems, which is a pre-requisite for any kind of future work
+    aiming at a smarter power allocation using scheduler knowledge about
+    the system for example.
+
+[1] https://lore.kernel.org/lkml/20190204110952.16025-1-quentin.perret@arm.com/
+
+
+Quentin Perret (4):
+  arm64: defconfig: Enable CONFIG_ENERGY_MODEL
+  PM / EM: Declare EM data types unconditionally
+  thermal: cpu_cooling: Make the power-related code depend on IPA
+  thermal: cpu_cooling: Migrate to using the EM framework
+
+ arch/arm64/configs/defconfig  |   1 +
+ drivers/thermal/Kconfig       |   1 +
+ drivers/thermal/cpu_cooling.c | 428 ++++++++++++++--------------------
+ include/linux/energy_model.h  |   3 +-
+ 4 files changed, 179 insertions(+), 254 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.22.0
+
