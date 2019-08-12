@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D38789E30
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 14:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D66E89E34
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 14:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728759AbfHLMYp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 08:24:45 -0400
-Received: from mxwww.masterlogin.de ([95.129.51.220]:59242 "EHLO
+        id S1728783AbfHLMYx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 08:24:53 -0400
+Received: from mxwww.masterlogin.de ([95.129.51.220]:59246 "EHLO
         mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728390AbfHLMYK (ORCPT
+        with ESMTP id S1728510AbfHLMYK (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 08:24:10 -0400
 Received: from mxout2.routing.net (unknown [192.168.10.82])
-        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id 67BAA96D7A;
-        Mon, 12 Aug 2019 12:15:29 +0000 (UTC)
+        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id 7729A96D5E;
+        Mon, 12 Aug 2019 12:15:30 +0000 (UTC)
 Received: from mxbox2.masterlogin.de (unknown [192.168.10.253])
-        by mxout2.routing.net (Postfix) with ESMTP id A21DA647BC;
-        Mon, 12 Aug 2019 12:15:29 +0000 (UTC)
+        by mxout2.routing.net (Postfix) with ESMTP id C7876647BC;
+        Mon, 12 Aug 2019 12:15:30 +0000 (UTC)
 Received: from localhost.localdomain (fttx-pool-217.61.152.193.bambit.de [217.61.152.193])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id DD8EC100D06;
-        Mon, 12 Aug 2019 14:15:26 +0200 (CEST)
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 7BDD1100D0A;
+        Mon, 12 Aug 2019 14:15:29 +0200 (CEST)
 From:   Frank Wunderlich <frank-w@public-files.de>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -44,9 +44,9 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         "Tianping . Fang" <tianping.fang@mediatek.com>
 Cc:     Josef Friedl <josef.friedl@speed.at>,
         Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v5 01/10] dt-bindings: add powercontroller
-Date:   Mon, 12 Aug 2019 14:15:02 +0200
-Message-Id: <20190812121511.4169-2-frank-w@public-files.de>
+Subject: [PATCH v5 02/10] dt-bindings: add missing mt6397 rtc
+Date:   Mon, 12 Aug 2019 14:15:03 +0200
+Message-Id: <20190812121511.4169-3-frank-w@public-files.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190812121511.4169-1-frank-w@public-files.de>
 References: <20190812121511.4169-1-frank-w@public-files.de>
@@ -57,95 +57,44 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Josef Friedl <josef.friedl@speed.at>
 
-add mt6323-rtc and mt6323-pwrc to mt6397 mfd DT bindings
-an example is shown in mt6323-poweroff.txt
+add missing devicetree-binding document for mt6397 rtc
+in later patch driver is extended with mt6323 chip
 
-Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+Suggested-By: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 ---
 changes since v4: use relative path
-changes since v3: none
-changes since v2: separated rtc-mt6397.txt to part 2
+changes since v3: moved SOB
+changes since v2: splitted rtc-mt6397.txt from first patch
 ---
- .../devicetree/bindings/mfd/mt6397.txt        | 20 +++++++++++++------
- .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++++++++
- 2 files changed, 34 insertions(+), 6 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+ .../devicetree/bindings/rtc/rtc-mt6397.txt    | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
 
-diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-index 0ebd08af777d..063f5fe1cace 100644
---- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-+++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-@@ -8,11 +8,12 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
- - Clock
- - LED
- - Keys
-+- Power controller
- 
- It is interfaced to host controller using SPI interface by a proprietary hardware
- called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
- See the following for pwarp node definitions:
--Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-+../../bindings/soc/mediatek/pwrap.txt
- 
- This document describes the binding for MFD device and its sub module.
- 
-@@ -22,14 +23,16 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
- Optional subnodes:
- 
- - rtc
--	Required properties:
-+	Required properties: Should be one of follows
-+		- compatible: "mediatek,mt6323-rtc"
- 		- compatible: "mediatek,mt6397-rtc"
-+	For details, see ../../bindings/rtc/rtc-mt6397.txt
- - regulators
- 	Required properties:
- 		- compatible: "mediatek,mt6397-regulator"
--	see Documentation/devicetree/bindings/regulator/mt6397-regulator.txt
-+	see ../../bindings/regulator/mt6397-regulator.txt
- 		- compatible: "mediatek,mt6323-regulator"
--	see Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
-+	see ../../bindings/regulator/mt6323-regulator.txt
- - codec
- 	Required properties:
- 		- compatible: "mediatek,mt6397-codec"
-@@ -39,12 +42,17 @@ Optional subnodes:
- - led
- 	Required properties:
- 		- compatible: "mediatek,mt6323-led"
--	see Documentation/devicetree/bindings/leds/leds-mt6323.txt
-+	see ../../bindings/leds/leds-mt6323.txt
- 
- - keys
- 	Required properties:
- 		- compatible: "mediatek,mt6397-keys" or "mediatek,mt6323-keys"
--	see Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
-+	see ../../bindings/input/mtk-pmic-keys.txt
-+
-+- power-controller
-+	Required properties:
-+		- compatible: "mediatek,mt6323-pwrc"
-+	For details, see ../../bindings/power/reset/mt6323-poweroff.txt
- 
- Example:
- 	pwrap: pwrap@1000f000 {
-diff --git a/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
 new file mode 100644
-index 000000000000..933f0c48e887
+index 000000000000..4d2d8317e16b
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
-@@ -0,0 +1,20 @@
-+Device Tree Bindings for Power Controller on MediaTek PMIC
++++ b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+@@ -0,0 +1,29 @@
++Device-Tree bindings for MediaTek PMIC based RTC
 +
-+The power controller which could be found on PMIC is responsible for externally
-+powering off or on the remote MediaTek SoC through the circuit BBPU.
++MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
++as a type of multi-function device (MFD). The RTC can be configured and set up
++with PMIC wrapper bus which is a common resource shared with the other
++functions found on the same PMIC.
++
++For MediaTek PMIC MFD bindings, see:
++../../bindings/mfd/mt6397.txt
++
++For MediaTek PMIC wrapper bus bindings, see:
++../../bindings/soc/mediatek/pwrap.txt
 +
 +Required properties:
 +- compatible: Should be one of follows
-+       "mediatek,mt6323-pwrc": for MT6323 PMIC
++       "mediatek,mt6323-rtc": for MT6323 PMIC
++       "mediatek,mt6397-rtc": for MT6397 PMIC
 +
 +Example:
 +
@@ -154,10 +103,10 @@ index 000000000000..933f0c48e887
 +
 +               ...
 +
-+               power-controller {
-+                       compatible = "mediatek,mt6323-pwrc";
++               rtc {
++                       compatible = "mediatek,mt6323-rtc";
 +               };
-+       }
++       };
 -- 
 2.17.1
 
