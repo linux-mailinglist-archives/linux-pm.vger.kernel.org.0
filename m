@@ -2,87 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E81B9894AC
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 00:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2DB8988F
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 10:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbfHKWVp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Aug 2019 18:21:45 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40709 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbfHKWVo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Aug 2019 18:21:44 -0400
-Received: by mail-lf1-f66.google.com with SMTP id b17so73024955lff.7
-        for <linux-pm@vger.kernel.org>; Sun, 11 Aug 2019 15:21:43 -0700 (PDT)
+        id S1727054AbfHLIQp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 04:16:45 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40938 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726996AbfHLIQp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 04:16:45 -0400
+Received: by mail-wr1-f66.google.com with SMTP id r1so4676041wrl.7
+        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 01:16:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9PKMnQITWwiXFSMsZSKMDb22TaOXVnDVmZW4//J3IWw=;
-        b=F87DPDCxu7qIiZp3Iste/+lk9+QFN97gCAZMErm/aWY1IvruObafGHsGTw0CQyf2k4
-         8gOeV67Q6Clph22ez5jP3zA7VXVGeEiKiLLfQw3VVc7vmOMJWqOQHmguB6fnIQHZb9EU
-         8OH9pkSXbmZHWZzeM5pxDYzhyMSl6TycH7RAOo2dDDyWzE2aQGtaxt9itY7qPaYT8iLb
-         V9cbjhVBzEl9ZcqSoZVtbRFtZ9gCagNIds8d6P9fWYqFtEUcyrQewT+daihzzX6/AF/9
-         JPL8a5ze71GKaTXakXMixC83mi2I5SOFnzOafvhWAjwYGC57VU/zn5RWtOwhttjyeS9k
-         o93w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=MJHxBxh/Q5vo+W76uNGRUJUeN3hwDfWxfMg6P/gBOg0=;
+        b=u4QlkRbMDiHfGrjdu436aHZusopdsD94AaT6zXTM3eaZ4y6BosUM0tlaA56X51nN9c
+         umI3PH27REA1YdEm/bDm3OE2UI9MGULdMLuGUTvnDBKUBlM+u5BgwEJXKd1SByIuWkrY
+         2kv99VeKU+V5QXG9oieP77x7yQgoExIDYXx4vPH8vlEru6HzZ6/p32cpzzObsHy5W3az
+         O2VbXSjzdwyFpNJYin4w9mGvGx4NIQqGMocgiLaaq7HHG8qkJjXvIxiD9mAgo53+VJlh
+         LCcGJbAa2s5qZg9/JZfFsSRo/t/+spxSIJYxDJW7Gfq3OorZb4uOTIjODwyWsHDkDNXd
+         LmBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9PKMnQITWwiXFSMsZSKMDb22TaOXVnDVmZW4//J3IWw=;
-        b=sQBoquPjvdpqxeIGrSGz/TwUZv3qsTmcwJlgaspAZrPKcXTdgVgzQ88Nt8LubCUzLK
-         9zzQct3E8+wqNMru0tNW+NoNhEgGC5msVE9RIEPSHwaq6QzbwnQuNdAPtiC1sWPxXzLK
-         gwKQIFsxZPcAsprvStaYQe8VfibpqfhZ0WA1Mk4dy7SQLj7GSSXE7uKGy8MgZEDOn45L
-         RzJQW+xE2YlSbAzty7EaQEFWyxMSOzuElnCsCTZihcDxtv2ko8d4v7xTj0qcAHXbKl0m
-         Q+Kk6PcUsk0QE7zuzE7tinfa1r9SiYH0gFiwDvjgXD78htCuNdeNkgpl+Xfc8Scr+7X/
-         ZYpA==
-X-Gm-Message-State: APjAAAU4UO/9OsZzj+Sxh/2tA33z3UhMo3wsIQGyMsJLee/Omej6zxDx
-        T18ZAw7khGG1/yEMGaEztV09gSAQYjQ9CFB/bGsDcA==
-X-Google-Smtp-Source: APXvYqy6mTIfA60NE7kmS7s1BxZG3hi4Qgr/HAnUJW4KB8c+62S/9s0VLcQaLSRgmtQkP2qox9Vitw+vqHeZRJ6c4pk=
-X-Received: by 2002:a19:e006:: with SMTP id x6mr17864493lfg.165.1565562102810;
- Sun, 11 Aug 2019 15:21:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=MJHxBxh/Q5vo+W76uNGRUJUeN3hwDfWxfMg6P/gBOg0=;
+        b=FSMGebYGecaf/Ntfp8Ay7Ug2XEZ2dff/XZIOJTgdZ7PcNfYrW5Rbdb9kt4PNl50IWH
+         dAeNcNZ8dK7fmiwJN15LOA89pAt+E2Uh0R6vQEmYZ3ISpcGjoUaDSeYo9EvcYL1Cr4xs
+         aNhBxOdSMWpxReCjZN/XJY7/6kWtLL/IGy8VzqyC9SQsVKNTKlId3d7d/HmpyMto5i12
+         2iKliirJS//VoVpmXBtwbBAXC0crWvUrKCO331B0QNMPq1oWPVDaww336zZaKK/Z7rw+
+         oOopp7s5zXdzq9tghDEurkz3DtWOTDeABfZu34jII2tpGVBioVAZI72OrrNkADifMIN1
+         i5wg==
+X-Gm-Message-State: APjAAAVLrN+vzRgvWLr7lyUruoqoy8AUHDRSkz80ACZQjTmJmqcsa785
+        eU8ZtPUYb0iL+jY2R6+oVUbKjQ==
+X-Google-Smtp-Source: APXvYqyD6fPKryZQTpN9zsdwGV7yS5BKNQZ8tOEeMIPGi0uW8Qmgi+HgiANiv0VmQSgyzgbueGKdzg==
+X-Received: by 2002:adf:ec0d:: with SMTP id x13mr40515082wrn.240.1565597802765;
+        Mon, 12 Aug 2019 01:16:42 -0700 (PDT)
+Received: from dell ([2.27.35.255])
+        by smtp.gmail.com with ESMTPSA id g15sm16420028wrp.29.2019.08.12.01.16.41
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 12 Aug 2019 01:16:42 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 09:16:40 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, od@zcrc.me,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        Artur Rojek <contact@artur-rojek.eu>
+Subject: Re: [PATCH 10/11] mfd: Drop obsolete JZ4740 driver
+Message-ID: <20190812081640.GA26727@dell>
+References: <20190725220215.460-1-paul@crapouillou.net>
+ <20190725220215.460-11-paul@crapouillou.net>
 MIME-Version: 1.0
-References: <20190717063222.5902-1-linus.walleij@linaro.org> <CACRpkdZcuqeUXVtwNJj8N+ncs6CVjmthdoe1cDj+M_imGLqisg@mail.gmail.com>
-In-Reply-To: <CACRpkdZcuqeUXVtwNJj8N+ncs6CVjmthdoe1cDj+M_imGLqisg@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 12 Aug 2019 00:21:31 +0200
-Message-ID: <CACRpkdbtk_hjwuEp+9-NuGDs6OficrJVWZ86ncmiH+NANay6CQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal: db8500: Finalize device tree conversion
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190725220215.460-11-paul@crapouillou.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Aug 3, 2019 at 3:58 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Wed, Jul 17, 2019 at 8:34 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> > At some point there was an attempt to convert the DB8500
-> > thermal sensor to device tree: a probe path was added
-> > and the device tree was augmented for the Snowball board.
-> > The switchover was never completed: instead the thermal
-> > devices came from from the PRCMU MFD device and the probe
-> > on the Snowball was confused as another set of configuration
-> > appeared from the device tree.
-> >
-> > Move over to a device-tree only approach, as we fixed up
-> > the device trees.
-> >
-> > Cc: Lee Jones <lee.jones@linaro.org>
-> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
->
-> Thermal folks: can you apply/look into this?
->
-> If you're short on time, please just ACK it if it looks OK and
-> I can send it through the ARM SoC tree.
+On Thu, 25 Jul 2019, Paul Cercueil wrote:
 
-Ping on this patch, I need to merge dependent code, so it'd
-be great of it could be applied. Sorry for hammering, just a
-bit desperate.
+> It has been replaced with the ingenic-iio driver for the ADC.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Tested-by: Artur Rojek <contact@artur-rojek.eu>
+> ---
+>  drivers/mfd/Kconfig      |   9 --
+>  drivers/mfd/Makefile     |   1 -
+>  drivers/mfd/jz4740-adc.c | 324 ---------------------------------------
+>  3 files changed, 334 deletions(-)
+>  delete mode 100644 drivers/mfd/jz4740-adc.c
 
-Yours,
-Linus Walleij
+Applied, thanks.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
