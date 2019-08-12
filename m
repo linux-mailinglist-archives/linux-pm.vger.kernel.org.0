@@ -2,131 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA278A4B7
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 19:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807258A565
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 20:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727154AbfHLReo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 13:34:44 -0400
-Received: from mail-vk1-f194.google.com ([209.85.221.194]:41928 "EHLO
-        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbfHLReo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 13:34:44 -0400
-Received: by mail-vk1-f194.google.com with SMTP id u64so20870530vku.8;
-        Mon, 12 Aug 2019 10:34:43 -0700 (PDT)
+        id S1726200AbfHLSJ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 14:09:56 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45949 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbfHLSJ4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 14:09:56 -0400
+Received: by mail-ot1-f66.google.com with SMTP id m24so9327278otp.12;
+        Mon, 12 Aug 2019 11:09:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3QcxG+y7uUMimiO/pMRblr0nxvjdwfHSC6ubDdIrvAY=;
+        b=fuz3IDi2CHnDwBAgnOX/DqTGjTs3nNMhTLi8a+4MBC4JvaZtIf/AXR0RTZMq1Ci4yT
+         DVuVjirlqcHJ6alHRJ+MzctL6YGDUXtSSTXoQtS1c20O9CE5CrRKqG4n5877qy5y7ZY/
+         imbn41271Q3nH7lr7OXXDfUPxy/44B6JBpNaQcv4f9gcXtgFIy72XOS5XYo2pvKNcgZA
+         WMZoEjVC8+D+7sUuNd0aQHllsNuoxnjWphZk5rGGLUeJIq1OPGGf/S174XSXV0KVJrjZ
+         fSNjewZucdPsd+4ZVheYDBAXpGtavwho+MHHtsAB58zzu4tW6l+WnO8kh2SSnGqdtLlL
+         ba1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XCsKdiFdCyUb9h1XpQVRtFcaXFlzTncnJBLcRKOgyMM=;
-        b=AnxMh+t8b0773ZzHDr31aS5lKDV9T9SzVCmQT/Sw3iVpt8oCqyN202akVsNfKec/4B
-         dep1gbQs/pKoJxl532mIRPpFyXSYpmNB+Lot3bcgzemFI4D5rIhrxkSNvCqyurS5nV79
-         ANj/uRGKGnw2Wv/3MDh82P52VMctHhOvyvjERGzOWPfrqwqHB4eEoHiYIhhm+waYyoIR
-         omYnxcomRI3zXRyWB+vMFC4c9HKDF9sqSAtf46SV/nnyQC+ep262OZzJQsX+YcrOtyR6
-         70wUaMV3/vKtHf7K8X860ADjdACgnZoWdMgxzxyTfpllnlMq0oL5fL1SQTllwijfxt0k
-         d9IA==
-X-Gm-Message-State: APjAAAVctJ51NxmI66r0mPP54LQ/en4JATnnaP+/KNYKBOF9FMOK0uwv
-        Moc5ohwGFZZ2fds4ElPcR54LFKuf2MkW6XUFIzs7KGxxXVMbUA==
-X-Google-Smtp-Source: APXvYqzcrQcBsk0/Yrys6c8GgXQrSpsNz4FqdTvJYCSbqFE1AU6tZPX+nx2Ca0ELNiwlAPTAwEcFEPS8L5YbFKICUH4=
-X-Received: by 2002:a1f:d687:: with SMTP id n129mr12600410vkg.71.1565631281261;
- Mon, 12 Aug 2019 10:34:41 -0700 (PDT)
+        bh=3QcxG+y7uUMimiO/pMRblr0nxvjdwfHSC6ubDdIrvAY=;
+        b=R+WeG+uYcm5KHA/1uTSuPGUKZNksohFmzUGWQH+OBayg5NRr6sNZ6tOge2Y1SBrWLz
+         qcIBmtYmTnt0bGSd5aZ8nukBpE/Fq/NEu+9apKNE+curaCHsSOwwBKSJTO8PZ2+4LbT0
+         n0YFvSBYPON3TkZDzHSLWXo5M0bsj1He/2guJ3sd1xNxG7fYP/2r4+peVh02jF6oKgeQ
+         TP0iAbGPISCxldoqdgWIjGICOJU5YTHbdr9QRbUoOEUxXN3JrPU13ElFkdrt/OonBg4V
+         iI39rr++6GRnuOEi9pu4FctnUEVkBcOZ00EsWxCEkpqYYfIa7kJoNC+EJhCyQDwcB2S9
+         bNmQ==
+X-Gm-Message-State: APjAAAURK+p8xPGZH8PJsNY3nepsWDtpLCprcaO3GQKy+r9PXzJvEZAk
+        6z8mbwSjv34aFvgRIxiHLcuMqfL5H/h0htFiY/I=
+X-Google-Smtp-Source: APXvYqych12uoPQYE7uuZ8a1AC5thPiDjPijuWFFmC5taSfdClmoUGYk9Jlug2BMANoD67mIwsAS0n9ZKcYVfw49Mbc=
+X-Received: by 2002:a5d:9711:: with SMTP id h17mr35204728iol.280.1565633395709;
+ Mon, 12 Aug 2019 11:09:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190809002104.18599-1-stancheff@cray.com> <20190809002104.18599-2-stancheff@cray.com>
- <CAK7LNAScm9P+QMZiqqSQnOoPsN54OTcTGpaDgxTbjJ_knoeGhA@mail.gmail.com>
-In-Reply-To: <CAK7LNAScm9P+QMZiqqSQnOoPsN54OTcTGpaDgxTbjJ_knoeGhA@mail.gmail.com>
-From:   Shaun Tancheff <shaun@tancheff.com>
-Date:   Mon, 12 Aug 2019 12:34:30 -0500
-Message-ID: <CAJ48U8Xp40is+R1dMW8sXq77ZS5D_h+hHte5Mq5eOrtpb41Qxw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] kbuild: recursive build of external kernel modules
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Shaun Tancheff <stancheff@cray.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Renninger <trenn@suse.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>
+References: <20190617161458.3754-1-andrew.smirnov@gmail.com>
+In-Reply-To: <20190617161458.3754-1-andrew.smirnov@gmail.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Mon, 12 Aug 2019 11:09:44 -0700
+Message-ID: <CAHQ1cqH29NaKTjere6DiuT=KmuhQ3YAphs4LZKN576vdA-KSEg@mail.gmail.com>
+Subject: Re: [PATCH v6 00/12] QorIQ TMU multi-sensor and HWMON support
+To:     Eduardo Valentin <edubezval@gmail.com>
+Cc:     Chris Healy <cphealy@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 10:24 AM Masahiro Yamada
-<yamada.masahiro@socionext.com> wrote:
+On Mon, Jun 17, 2019 at 9:15 AM Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
 >
-> On Fri, Aug 9, 2019 at 9:21 AM Shaun Tancheff <shaun@tancheff.com> wrote:
-> >
-> > When building a tree of external modules stage 2 fails
-> > silently as the root modules.order is empty.
-> >
-> > Modify the modules.order location to be fixed to the
-> > root when KBUILD_EXTMOD is specified and write all
-> > module paths to the single modules.order file.
+> Everyone:
 >
-> Could you try v5.3-rc4 please?
+> This series contains patches adding support for HWMON integration, bug
+> fixes and general improvements (hopefully) for TMU driver I made while
+> working on it on i.MX8MQ.n
+>
+> Feedback is welcome!
+>
+> Thanks,
+> Andrey Smirnov
+>
 
-So it seems we are using 'subdir-m' but that is now gone?
+Eduardo:
 
-Is there a recommend pattern for backward compatibility?
+Do you have any comment on this series?
 
-Thanks!
+Thanks,
+Andrey Smirnov
+
+> Changes since [v5]
 >
-> > Signed-off-by: Shaun Tancheff <stancheff@cray.com>
-> > ---
-> >  Makefile               | 1 +
-> >  scripts/Makefile.build | 8 +++++++-
-> >  2 files changed, 8 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 23cdf1f41364..a9964492f47e 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1622,6 +1622,7 @@ $(module-dirs): prepare $(objtree)/Module.symvers
-> >
-> >  modules: $(module-dirs)
-> >         @$(kecho) '  Building modules, stage 2.';
-> > +       $(Q)$rm -f $(KBUILD_EXTMOD)/modules.order
-> >         $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-> >
-> >  PHONY += modules_install
-> > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> > index 0d434d0afc0b..f9908b3d59e0 100644
-> > --- a/scripts/Makefile.build
-> > +++ b/scripts/Makefile.build
-> > @@ -64,7 +64,13 @@ builtin-target := $(obj)/built-in.a
-> >  endif
-> >
-> >  ifeq ($(CONFIG_MODULES)$(need-modorder),y1)
-> > +ifneq ($(KBUILD_EXTMOD),)
-> > +modorder-target := $(KBUILD_EXTMOD)/modules.order
-> > +modorder-add := >>
-> > +else
-> >  modorder-target := $(obj)/modules.order
-> > +modorder-add := >
-> > +endif
-> >  endif
-> >
-> >  mod-targets := $(patsubst %.o, %.mod, $(obj-m))
-> > @@ -423,7 +429,7 @@ endif # builtin-target
-> >  $(modorder-target): $(subdir-ym) FORCE
-> >         $(Q){ $(foreach m, $(modorder), \
-> >         $(if $(filter %/modules.order, $m), cat $m, echo $m);) :; } \
-> > -       | $(AWK) '!x[$$0]++' - > $@
-> > +       | $(AWK) '!x[$$0]++' - $(modorder-add) $@
-> >
-> >  #
-> >  # Rule to compile a set of .o files into one .a file (with symbol table)
-> > --
-> > 2.20.1
-> >
+>     - Rebased on recent linux-next, dropped "thermal: qoriq: Remove
+>       unnecessary DT node is NULL check" since it is already in the
+>       tree
 >
+>     - Dropped dependency on [rfc]
+>
+> Changes since [v4]
+>
+>     - Collected Tested-by from Lucas
+>
+>     - Collected Reviewed-by from Daniel
+>
+>     - Converted "thermal: qoriq: Enable all sensors before registering
+>       them" to use if instead of switch statement for error checking
+>
+> Changes since [v3]
+>
+>     - Series reabse on top of [rfc]
+>
+>     - Fixed incorrect goto label in "thermal: qoriq: Pass data to
+>       qoriq_tmu_calibration()"
+>
+>     - Added REGS_TRITSR() register description to "thermal: qoriq: Do
+>       not report invalid temperature reading"
+>
+>     - Reworded commit message of "thermal: qoriq: Remove unnecessary
+>       DT node is NULL check"
+>
+> Changes since [v2]
+>
+>     - Patches rebased on v5.1-rc1
+>
+> Changes since [v1]
+>
+>     - Rebased on "linus" branch of
+>       git.kernel.org/pub/scm/linux/kernel/git/evalenti/linux-soc-thermal.git
+>       that included latest chagnes adding multi-sensors support
+>
+>     - Dropped
+>
+>         thermal: qoriq: Add support for multiple thremal sites
+>         thermal: qoriq: Be more strict when parsing
+>         thermal: qoriq: Simplify error handling in qoriq_tmu_get_sensor_id()
+>
+>       since they are no longer relevant
+>
+>     - Added
+>
+>         thermal: qoriq: Don't store struct thermal_zone_device reference
+>         thermal: qoriq: Add local struct qoriq_sensor pointer
+>         thermal: qoriq: Embed per-sensor data into struct qoriq_tmu_data
+>         thermal: qoriq: Pass data to qoriq_tmu_register_tmu_zone() directly
+>
+>       to simplify latest codebase
+>
+>     - Changed "thermal: qoriq: Do not report invalid temperature
+>       reading" to use regmap_read_poll_timeout() to make sure that
+>       tmu_get_temp() waits for fist sample to be ready before
+>       reporting it. This case is triggered on my setup if
+>       qoriq_thermal is compiled as a module
+>
+> [v1] lore.kernel.org/lkml/20190218191141.3729-1-andrew.smirnov@gmail.com
+> [v2] lore.kernel.org/lkml/20190222200508.26325-1-andrew.smirnov@gmail.com
+> [v3] lore.kernel.org/lkml/20190401041418.5999-1-andrew.smirnov@gmail.com
+> [v4] lore.kernel.org/lkml/20190413082748.29990-1-andrew.smirnov@gmail.com
+> [v5] lore.kernel.org/lkml/20190424064830.18179-1-andrew.smirnov@gmail.com
+> [rfc] lore.kernel.org/lkml/20190404080647.8173-1-daniel.lezcano@linaro.org
+>
+>
+> Andrey Smirnov (12):
+>   thermal: qoriq: Add local struct device pointer
+>   thermal: qoriq: Don't store struct thermal_zone_device reference
+>   thermal: qoriq: Add local struct qoriq_sensor pointer
+>   thermal: qoriq: Embed per-sensor data into struct qoriq_tmu_data
+>   thermal: qoriq: Pass data to qoriq_tmu_register_tmu_zone() directly
+>   thermal: qoriq: Pass data to qoriq_tmu_calibration() directly
+>   thermal: qoriq: Convert driver to use devm_ioremap()
+>   thermal: qoriq: Convert driver to use regmap API
+>   thermal: qoriq: Enable all sensors before registering them
+>   thermal: qoriq: Do not report invalid temperature reading
+>   thermal_hwmon: Add devres wrapper for thermal_add_hwmon_sysfs()
+>   thermal: qoriq: Add hwmon support
+>
+>  drivers/thermal/qoriq_thermal.c | 272 ++++++++++++++++----------------
+>  drivers/thermal/thermal_hwmon.c |  28 ++++
+>  drivers/thermal/thermal_hwmon.h |   7 +
+>  3 files changed, 175 insertions(+), 132 deletions(-)
 >
 > --
-> Best Regards
-> Masahiro Yamada
+> 2.21.0
+>
