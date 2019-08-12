@@ -2,302 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 161238A059
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 16:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAA58A10C
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 16:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727103AbfHLOHW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 10:07:22 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40256 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbfHLOHW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 10:07:22 -0400
-Received: by mail-lj1-f194.google.com with SMTP id e27so3264434ljb.7
-        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 07:07:20 -0700 (PDT)
+        id S1726964AbfHLO1K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 10:27:10 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45470 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726530AbfHLO1D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 10:27:03 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w26so4506523pfq.12
+        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 07:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:from:to:cc:references:openpgp:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=A59LGVEP6S58PG03Us3mEWpZumJu1goEWu0jXUauzI0=;
-        b=iMjU/r9m8m5TIlnmfHfWMqZie1kHIRZf/iwtUBaAd8TMMVgdDMl5IGEGG4sU6CRu5E
-         HlRq7r6NNGGDuUjpbusnXPKQ4++wSUHsXvnDQ72VPVStSqkfR5ARAqfRul5RNhqj/mbq
-         J4zkNZ+p4VIgNsfeWP1QQZBA4wovyoO8ES5Fmw7I2UTZWqILUDJN8dN9qOetZV0ob/50
-         N5zUqt3/YjDV2l7xPbft3XETNMfrx+3qq2sadDnHmXYjGRoyQ8//EDzWRyFVE5ItEjVX
-         VOCPBJFko8LtrQRpczOr4yEnetAT7XD1XxDSe0jg3kiT0YmhrNeDH0D8mXASfaUZ7yqv
-         sISg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n2WxJiGCm4RBS0exiF6fH56uO4BQYHzOnm3yCxG5G5g=;
+        b=o1rd0YZwYwIbcoj/zpkKgawyPq+6s3Jopt65DtitMmblcrV11Wg3FVfN90bz8jHuiH
+         pFY2DPDQuNyjKofX9QNpURR/UKGsKkldcpWRS2VyUxzghUZ99A/49da1qbNG/R/T6+v5
+         q2FOW9BAxLfs0EbMXBOVpZfvpKzPiJChf2MZtRRdYEsMVfq27HabBKNWl9dfO+piRWsO
+         xxKSsXrsPX6jO0H/UQz/qMCzB8ws7bCEDMTQVqoBLJ7wemW2IV5zOyFvUOoG6cVTyMG+
+         dN406QuKKLP6CTQcKw0NRowjB/+PboGRX0roR+VhPL6O223hysemMdhK1Hj5PHrhR9kR
+         0YZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:openpgp:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=A59LGVEP6S58PG03Us3mEWpZumJu1goEWu0jXUauzI0=;
-        b=qvIwEKcF7YQuQ2MPemihbW74iy9mLyoWUQ40E8sEDckYID+bHVyA/ufiWJIsUzrdqf
-         Yo3RPTpA7aRvutu6wthyafeCPULt+hI7hnTT4O/etFORP6x02hdxrlz29PyKZP2cgWFu
-         8EFHadvUZFBTRxjc34BG/wZgnbxRs2u6ODnaySPCurvuJR6JbCEw8AQIUGK2BH3wrHUS
-         xb3aCXDGrhl8/viDY5djQ6b6P5rr9AT18o1WrCpxWopWyBcu5lr51UxOOWAcS9xvEvtV
-         WtDzI9UKRNHK7LOO20qr1/65Py0t+HB8LQqXoB6Q5kryWyjB+Z/o/FiQJ/0yU0zPjUkB
-         61Ow==
-X-Gm-Message-State: APjAAAUrqkKy+AELWqZXkCeAszxWIz/gXS2Jhwr4/Me93GVATzX/+9p4
-        7BnBxmtqixAx4hjfsrQRbxESHA==
-X-Google-Smtp-Source: APXvYqwyAQDFXO/Y8xqSbwi9seUrp7a/WlITbGdPwUCwBIGloK5d9VBwZq/ugMDh/QgrtgvYnvSanA==
-X-Received: by 2002:a05:651c:282:: with SMTP id b2mr8038797ljo.208.1565618839594;
-        Mon, 12 Aug 2019 07:07:19 -0700 (PDT)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id k8sm20901421lja.24.2019.08.12.07.07.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Aug 2019 07:07:18 -0700 (PDT)
-Subject: Re: [PATCH v5 1/5] dt-bindings: interconnect: Add Qualcomm QCS404 DT
- bindings
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org, vkoul@kernel.org,
-        evgreen@chromium.org, daidavid1@codeaurora.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20190723142339.27772-1-georgi.djakov@linaro.org>
- <20190723142339.27772-2-georgi.djakov@linaro.org>
- <c4cb4320-52a1-ab26-4b0e-ae2b51312c27@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Message-ID: <8764496e-5869-45cf-da72-c640dbcaaea5@linaro.org>
-Date:   Mon, 12 Aug 2019 17:07:15 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n2WxJiGCm4RBS0exiF6fH56uO4BQYHzOnm3yCxG5G5g=;
+        b=Zfh+KS7XnTKcDU+judpNyCP0ewPaiyzL4IoRzEG7IYp9upiIRkW6VINLqRRn7xRqai
+         3tWbUd4Ox4/OBUkSlmi/FpaGfMDnRbLBbzP7Neb3m+G4ZK9EF3mPdcavyQXGGG+Etva8
+         0eIkiP5XWvZGF/OqED2nddZVmHQ8smviAuyQ9uSRmS/KWM1dIVPJtCA5VU//+X3VkKq3
+         xHyqgchgsGsBXGqVM9BqzAbOukdV89CdPXBhxv3nSAAbkPssvxfUGHbivNPXNFYlERp3
+         E+3kb9YwCAicD5qFPNtqsCjbAqeNBejNdVzWnqm3+mZTZ73VU1VHJgVvJjz3gTViYlc8
+         xk2Q==
+X-Gm-Message-State: APjAAAWbM45D4nFoG/C1A0pMFtksgZZvL+aNSUniGOy/yVyyvaaC8+QM
+        pvluN68OoI3iZTjdiT14VIOTTPF75uPkjTkiONWprw==
+X-Google-Smtp-Source: APXvYqzdN/du/wYtE3nQuPzKMNh7fs2hPiSCh8g9x0yenVoWFOwd0UaVtQnPz5OK2L4xNhxeCg/40N3KHuozqDD1CXo=
+X-Received: by 2002:a65:4b8b:: with SMTP id t11mr30277525pgq.130.1565620021680;
+ Mon, 12 Aug 2019 07:27:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <c4cb4320-52a1-ab26-4b0e-ae2b51312c27@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190803091232.1836-1-hdanton@sina.com>
+In-Reply-To: <20190803091232.1836-1-hdanton@sina.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 12 Aug 2019 16:26:50 +0200
+Message-ID: <CAAeHK+x2n11zWO7yC1zWz45d_2qJTFW=ODZ-1bxSGpn5BuVuGA@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in __pm_runtime_resume
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     syzbot <syzbot+b156665cf4d1b5e00c76@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        len.brown@intel.com, LKML <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        rjw@rjwysocki.net, syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/5/19 16:50, Georgi Djakov wrote:
-> On 7/23/19 17:23, Georgi Djakov wrote:
->> The Qualcomm QCS404 platform has several buses that could be controlled
->> and tuned according to the bandwidth demand.
->>
->> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
->> ---
-> 
-> Hi Rob,
-> 
-> Could you please help to review this patch?
-> 
-> Thanks,
-> Georgi
+On Sat, Aug 3, 2019 at 11:12 AM Hillf Danton <hdanton@sina.com> wrote:
+>
+>
+> On Fri, 02 Aug 2019 05:58:05 -0700
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=146071b4600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=b156665cf4d1b5e00c76
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> >
+> > Unfortunately, I don't have any reproducer for this crash yet.
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+b156665cf4d1b5e00c76@syzkaller.appspotmail.com
+> >
+> > ==================================================================
+> > BUG: KASAN: use-after-free in __pm_runtime_resume+0x162/0x180
+> > drivers/base/power/runtime.c:1069
+> > Read of size 1 at addr ffff8881c775b671 by task syz-executor.4/5918
+> >
+> > CPU: 1 PID: 5918 Comm: syz-executor.4 Not tainted 5.3.0-rc2+ #24
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 01/01/2011
+> > Call Trace:
+> >   __dump_stack lib/dump_stack.c:77 [inline]
+> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
+> >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
+> >   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+> >   kasan_report+0xe/0x12 mm/kasan/common.c:612
+> >   __pm_runtime_resume+0x162/0x180 drivers/base/power/runtime.c:1069
+> >   pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+> >   usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1707
+> >   usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
+> >   hid_hw_power include/linux/hid.h:1038 [inline]
+> >   hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
+> >   chrdev_open+0x219/0x5c0 fs/char_dev.c:414
+> >   do_dentry_open+0x494/0x1120 fs/open.c:797
+> >   do_last fs/namei.c:3416 [inline]
+> >   path_openat+0x1430/0x3f50 fs/namei.c:3533
+> >   do_filp_open+0x1a1/0x280 fs/namei.c:3563
+> >   do_sys_open+0x3c0/0x580 fs/open.c:1089
+> >   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+> >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> > RIP: 0033:0x413711
+> > Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48
+> > 83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48
+> > 89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
+> > RSP: 002b:00007fa3309ef7a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
+> > RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 0000000000413711
+> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fa3309ef850
+> > RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
+> > R10: ffffffffffffffff R11: 0000000000000293 R12: 00007fa3309f06d4
+> > R13: 00000000004c8c02 R14: 00000000004dfa80 R15: 00000000ffffffff
+> >
+> > Allocated by task 103:
+> >   save_stack+0x1b/0x80 mm/kasan/common.c:69
+> >   set_track mm/kasan/common.c:77 [inline]
+> >   __kasan_kmalloc mm/kasan/common.c:487 [inline]
+> >   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
+> >   kmalloc include/linux/slab.h:552 [inline]
+> >   kzalloc include/linux/slab.h:748 [inline]
+> >   usb_set_configuration+0x2c4/0x1670 drivers/usb/core/message.c:1846
+> >   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+> >   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+> >   really_probe+0x281/0x650 drivers/base/dd.c:548
+> >   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
+> >   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
+> >   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+> >   __device_attach+0x217/0x360 drivers/base/dd.c:882
+> >   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+> >   device_add+0xae6/0x16f0 drivers/base/core.c:2114
+> >   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+> >   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+> >   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+> >   port_event drivers/usb/core/hub.c:5359 [inline]
+> >   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+> >   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+> >   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+> >   kthread+0x318/0x420 kernel/kthread.c:255
+> >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> >
+> > Freed by task 103:
+> >   save_stack+0x1b/0x80 mm/kasan/common.c:69
+> >   set_track mm/kasan/common.c:77 [inline]
+> >   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
+> >   slab_free_hook mm/slub.c:1423 [inline]
+> >   slab_free_freelist_hook mm/slub.c:1470 [inline]
+> >   slab_free mm/slub.c:3012 [inline]
+> >   kfree+0xe4/0x2f0 mm/slub.c:3953
+> >   device_release+0x71/0x200 drivers/base/core.c:1064
+> >   kobject_cleanup lib/kobject.c:693 [inline]
+> >   kobject_release lib/kobject.c:722 [inline]
+> >   kref_put include/linux/kref.h:65 [inline]
+> >   kobject_put+0x171/0x280 lib/kobject.c:739
+> >   put_device+0x1b/0x30 drivers/base/core.c:2213
+> >   usb_disable_device+0x2ce/0x690 drivers/usb/core/message.c:1244
+> >   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
+> >   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+> >   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+> >   port_event drivers/usb/core/hub.c:5359 [inline]
+> >   hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
+> >   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+> >   process_scheduled_works kernel/workqueue.c:2331 [inline]
+> >   worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+> >   kthread+0x318/0x420 kernel/kthread.c:255
+> >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> >
+> > The buggy address belongs to the object at ffff8881c775b300
+> >   which belongs to the cache kmalloc-2k of size 2048
+> > The buggy address is located 881 bytes inside of
+> >   2048-byte region [ffff8881c775b300, ffff8881c775bb00)
+> > The buggy address belongs to the page:
+> > page:ffffea00071dd600 refcount:1 mapcount:0 mapping:ffff8881da00c000
+> > index:0x0 compound_mapcount: 0
+> > flags: 0x200000000010200(slab|head)
+> > raw: 0200000000010200 ffffea0007541a00 0000000300000003 ffff8881da00c000
+> > raw: 0000000000000000 00000000000f000f 00000001ffffffff 0000000000000000
+> > page dumped because: kasan: bad access detected
+> >
+> > Memory state around the buggy address:
+> >   ffff8881c775b500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> >   ffff8881c775b580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > > ffff8881c775b600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> >                                                               ^
+> >   ffff8881c775b680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> >   ffff8881c775b700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > ==================================================================
+>
+> --- a/drivers/hid/usbhid/hid-core.c
+> +++ b/drivers/hid/usbhid/hid-core.c
+> @@ -1410,6 +1410,7 @@ static void usbhid_disconnect(struct usb
+>         spin_lock_irq(&usbhid->lock);   /* Sync with error and led handlers */
+>         set_bit(HID_DISCONNECTED, &usbhid->iofl);
+>         spin_unlock_irq(&usbhid->lock);
+> +       hid_hw_stop(hid);
+>         hid_destroy_device(hid);
+>         kfree(usbhid);
+>  }
+> --
+>
 
-Hey Rob,
+Hi Hillf,
 
-Did you get a chance to look at this?
+Looks like your patch fixes the issue (one of the issues at least), as
+tested on this report:
 
-Thanks,
-Georgi
+https://syzkaller.appspot.com/bug?extid=3cbe5cd105d2ad56a1df
 
-> 
->>
->> v5:
->> - Make reg and clocks DT properties required.
->> - Remove the _clk suffix from clock names.
->>
->> v4:
->> - Add the DT header into this patch.
->> - Pick Bjorn's r-b.
->>
->> v3:
->> - Add a reg property and move the interconnect nodes under the "soc" node.
->>
->> v2:
->> - No changes.
->>
->>  .../bindings/interconnect/qcom,qcs404.txt     | 45 ++++++++++
->>  .../dt-bindings/interconnect/qcom,qcs404.h    | 88 +++++++++++++++++++
->>  2 files changed, 133 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
->>  create mode 100644 include/dt-bindings/interconnect/qcom,qcs404.h
->>
->> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
->> new file mode 100644
->> index 000000000000..c07d89812b73
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
->> @@ -0,0 +1,45 @@
->> +Qualcomm QCS404 Network-On-Chip interconnect driver binding
->> +-----------------------------------------------------------
->> +
->> +Required properties :
->> +- compatible : shall contain only one of the following:
->> +			"qcom,qcs404-bimc"
->> +			"qcom,qcs404-pcnoc"
->> +			"qcom,qcs404-snoc"
->> +- #interconnect-cells : should contain 1
->> +
->> +reg : specifies the physical base address and size of registers
->> +clocks : list of phandles and specifiers to all interconnect bus clocks
->> +clock-names : clock names should include both "bus" and "bus_a"
->> +
->> +Example:
->> +
->> +soc {
->> +	...
->> +	bimc: interconnect@400000 {
->> +		reg = <0x00400000 0x80000>;
->> +		compatible = "qcom,qcs404-bimc";
->> +		#interconnect-cells = <1>;
->> +		clock-names = "bus", "bus_a";
->> +		clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
->> +			<&rpmcc RPM_SMD_BIMC_A_CLK>;
->> +	};
->> +
->> +	pnoc: interconnect@500000 {
->> +		reg = <0x00500000 0x15080>;
->> +		compatible = "qcom,qcs404-pcnoc";
->> +		#interconnect-cells = <1>;
->> +		clock-names = "bus", "bus_a";
->> +		clocks = <&rpmcc RPM_SMD_PNOC_CLK>,
->> +			<&rpmcc RPM_SMD_PNOC_A_CLK>;
->> +	};
->> +
->> +	snoc: interconnect@580000 {
->> +		reg = <0x00580000 0x23080>;
->> +		compatible = "qcom,qcs404-snoc";
->> +		#interconnect-cells = <1>;
->> +		clock-names = "bus", "bus_a";
->> +		clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
->> +			<&rpmcc RPM_SMD_SNOC_A_CLK>;
->> +	};
->> +};
->> diff --git a/include/dt-bindings/interconnect/qcom,qcs404.h b/include/dt-bindings/interconnect/qcom,qcs404.h
->> new file mode 100644
->> index 000000000000..960f6e39c5f2
->> --- /dev/null
->> +++ b/include/dt-bindings/interconnect/qcom,qcs404.h
->> @@ -0,0 +1,88 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Qualcomm interconnect IDs
->> + *
->> + * Copyright (c) 2019, Linaro Ltd.
->> + * Author: Georgi Djakov <georgi.djakov@linaro.org>
->> + */
->> +
->> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_QCS404_H
->> +#define __DT_BINDINGS_INTERCONNECT_QCOM_QCS404_H
->> +
->> +#define MASTER_AMPSS_M0			0
->> +#define MASTER_OXILI			1
->> +#define MASTER_MDP_PORT0		2
->> +#define MASTER_SNOC_BIMC_1		3
->> +#define MASTER_TCU_0			4
->> +#define SLAVE_EBI_CH0			5
->> +#define SLAVE_BIMC_SNOC			6
->> +
->> +#define MASTER_SPDM			0
->> +#define MASTER_BLSP_1			1
->> +#define MASTER_BLSP_2			2
->> +#define MASTER_XI_USB_HS1		3
->> +#define MASTER_CRYPT0			4
->> +#define MASTER_SDCC_1			5
->> +#define MASTER_SDCC_2			6
->> +#define MASTER_SNOC_PCNOC		7
->> +#define MASTER_QPIC			8
->> +#define PCNOC_INT_0			9
->> +#define PCNOC_INT_2			10
->> +#define PCNOC_INT_3			11
->> +#define PCNOC_S_0			12
->> +#define PCNOC_S_1			13
->> +#define PCNOC_S_2			14
->> +#define PCNOC_S_3			15
->> +#define PCNOC_S_4			16
->> +#define PCNOC_S_6			17
->> +#define PCNOC_S_7			18
->> +#define PCNOC_S_8			19
->> +#define PCNOC_S_9			20
->> +#define PCNOC_S_10			21
->> +#define PCNOC_S_11			22
->> +#define SLAVE_SPDM			23
->> +#define SLAVE_PDM			24
->> +#define SLAVE_PRNG			25
->> +#define SLAVE_TCSR			26
->> +#define SLAVE_SNOC_CFG			27
->> +#define SLAVE_MESSAGE_RAM		28
->> +#define SLAVE_DISP_SS_CFG		29
->> +#define SLAVE_GPU_CFG			30
->> +#define SLAVE_BLSP_1			31
->> +#define SLAVE_BLSP_2			32
->> +#define SLAVE_TLMM_NORTH		33
->> +#define SLAVE_PCIE			34
->> +#define SLAVE_ETHERNET			35
->> +#define SLAVE_TLMM_EAST			36
->> +#define SLAVE_TCU			37
->> +#define SLAVE_PMIC_ARB			38
->> +#define SLAVE_SDCC_1			39
->> +#define SLAVE_SDCC_2			40
->> +#define SLAVE_TLMM_SOUTH		41
->> +#define SLAVE_USB_HS			42
->> +#define SLAVE_USB3			43
->> +#define SLAVE_CRYPTO_0_CFG		44
->> +#define SLAVE_PCNOC_SNOC		45
->> +
->> +#define MASTER_QDSS_BAM			0
->> +#define MASTER_BIMC_SNOC		1
->> +#define MASTER_PCNOC_SNOC		2
->> +#define MASTER_QDSS_ETR			3
->> +#define MASTER_EMAC			4
->> +#define MASTER_PCIE			5
->> +#define MASTER_USB3			6
->> +#define QDSS_INT			7
->> +#define SNOC_INT_0			8
->> +#define SNOC_INT_1			9
->> +#define SNOC_INT_2			10
->> +#define SLAVE_KPSS_AHB			11
->> +#define SLAVE_WCSS			12
->> +#define SLAVE_SNOC_BIMC_1		13
->> +#define SLAVE_IMEM			14
->> +#define SLAVE_SNOC_PCNOC		15
->> +#define SLAVE_QDSS_STM			16
->> +#define SLAVE_CATS_0			17
->> +#define SLAVE_CATS_1			18
->> +#define SLAVE_LPASS			19
->> +
->> +#endif
+I'm duping this bug to that one:
+
+#syz dup: KASAN: use-after-free Read in __pm_runtime_resume
+
+Could you submit your patch?
+
+Thanks!
