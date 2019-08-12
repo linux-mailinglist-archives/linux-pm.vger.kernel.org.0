@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9198A778
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 21:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C26B8A787
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 21:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726549AbfHLTrF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 15:47:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56422 "EHLO mail.kernel.org"
+        id S1726911AbfHLTwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 15:52:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57228 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726200AbfHLTrE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Aug 2019 15:47:04 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        id S1726749AbfHLTwL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Aug 2019 15:52:11 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61D63208C2;
-        Mon, 12 Aug 2019 19:47:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4AFC020842;
+        Mon, 12 Aug 2019 19:52:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565639223;
-        bh=gbsmrMPddSxxadzx4LbWD73OWFywYXXRX4TrDQhuD34=;
+        s=default; t=1565639530;
+        bh=9uCqcZ7pE/p3iqj1BkvfAc1CGK2aQmF1BjqLAbmYehU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qeaq8oDKtFymRNc+PylRKzYspbegh+5NF8+13536zkBIQX00uF/TGUGv7ERys+Wgx
-         OZaZEocFaDzwcR3N/3q6nhsrkdHhWU6CoYRQC1D7ws8QhEd6H0ONmK9pnLGfMsQMD3
-         u48aCx7G7GSfaaZ1DCbDuxjMk2OzzQg4t2Jd5HrM=
-Received: by mail-qt1-f182.google.com with SMTP id j15so10474972qtl.13;
-        Mon, 12 Aug 2019 12:47:03 -0700 (PDT)
-X-Gm-Message-State: APjAAAXgKjB62XuiVJxqxG4/o2fPjHjH/QftiX73sQnlPCDy7VW7B7OS
-        yN7ZbbuM06WQ5mbAVk7LnebpB1aHScSVVFruYg==
-X-Google-Smtp-Source: APXvYqx9uWEvSTWXRvuMQbtv/sqVk/coICqllSDh3WmkM5dZr4ZJb/kPYXz6IcU9nLuN6tc97SrlM/c6aW08otez3Hc=
-X-Received: by 2002:ad4:4050:: with SMTP id r16mr6580061qvp.200.1565639222506;
- Mon, 12 Aug 2019 12:47:02 -0700 (PDT)
+        b=fI7mxdeUfP7enoyrkJfamrxaSYCetiUpXD/K6TL5jtbawK9oqvwBGKea29PJwcXdy
+         mCMN+twO+4ip1BHBbmFpBxxGPT3dPJ83XltPbqS5WeAgvOqxY5KX35eOcay26pLFFQ
+         CG0fKil0uRkV+tb9VnHR7Nme9fIZ6SoHAFLA3RQQ=
+Received: by mail-qk1-f179.google.com with SMTP id s145so77915599qke.7;
+        Mon, 12 Aug 2019 12:52:10 -0700 (PDT)
+X-Gm-Message-State: APjAAAV0pKALe3x8/2A5XbB9p89PnYERBcfjgHj13fepSuv3XiSK++5U
+        XNa+odIjx6Kum0ezveXXt6vfrljqyI4/sVL+6Q==
+X-Google-Smtp-Source: APXvYqwwLQrQl/3qr9l9hCi32QT/QmiDSaWwPfSaBPzEWwjlgQK/Oh9Wo1UWaCQ3HzMu9T4YG8bY9Q3DTx5u+6Olp/Q=
+X-Received: by 2002:a37:a44a:: with SMTP id n71mr30534758qke.393.1565639529456;
+ Mon, 12 Aug 2019 12:52:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1565633880.git.leonard.crestez@nxp.com> <97b0bff95ddb85b06ef3d2f8079faa36562a956d.1565633880.git.leonard.crestez@nxp.com>
-In-Reply-To: <97b0bff95ddb85b06ef3d2f8079faa36562a956d.1565633880.git.leonard.crestez@nxp.com>
+References: <cover.1565633880.git.leonard.crestez@nxp.com> <4cbddd75652c63aab19866c93faa0b784b56d53f.1565633880.git.leonard.crestez@nxp.com>
+In-Reply-To: <4cbddd75652c63aab19866c93faa0b784b56d53f.1565633880.git.leonard.crestez@nxp.com>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 12 Aug 2019 13:46:50 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJWpQN2oTm8Q2_Gzd0GJ+YZoc9j-zh-U1s4eGhMxDEmEA@mail.gmail.com>
-Message-ID: <CAL_JsqJWpQN2oTm8Q2_Gzd0GJ+YZoc9j-zh-U1s4eGhMxDEmEA@mail.gmail.com>
-Subject: Re: [PATCH 2/7] dt-bindings: devfreq: Add bindings for generic imx buses
+Date:   Mon, 12 Aug 2019 13:51:57 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+5zp1nW=sNtU_+wdUO9KJ4ABWjdX=R9DHjBsgygTxV6g@mail.gmail.com>
+Message-ID: <CAL_Jsq+5zp1nW=sNtU_+wdUO9KJ4ABWjdX=R9DHjBsgygTxV6g@mail.gmail.com>
+Subject: Re: [PATCH 4/7] dt-bindings: devfreq: Add bindings for imx ddr controller
 To:     Leonard Crestez <leonard.crestez@nxp.com>
 Cc:     Stephen Boyd <sboyd@kernel.org>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -69,95 +69,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 12:49 PM Leonard Crestez
+On Mon, Aug 12, 2019 at 12:50 PM Leonard Crestez
 <leonard.crestez@nxp.com> wrote:
 >
-> Add initial dt bindings for the interconnects inside i.MX chips.
-> Multiple external IPs are involved but SOC integration means the
-> software controllable interfaces are very similar.
->
-> This is initially only for imx8mm but add an "fsl,imx8m-nic" fallback
-> similar to exynos-bus.
+> Add devicetree bindings for the i.MX DDR Controller on imx8m series
+> chips. It supports dynamic frequency switching between multiple data
+> rates and this is exposed to Linux via the devfreq subsystem.
 >
 > Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 > ---
->  .../devicetree/bindings/devfreq/imx.yaml      | 50 +++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/devfreq/imx.yaml
+>  .../devicetree/bindings/devfreq/imx-ddrc.yaml | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/imx-ddrc.yaml
 >
-> diff --git a/Documentation/devicetree/bindings/devfreq/imx.yaml b/Documentation/devicetree/bindings/devfreq/imx.yaml
+> diff --git a/Documentation/devicetree/bindings/devfreq/imx-ddrc.yaml b/Documentation/devicetree/bindings/devfreq/imx-ddrc.yaml
 > new file mode 100644
-> index 000000000000..0e2ee3a5205e
+> index 000000000000..fa20280a682f
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/devfreq/imx.yaml
-> @@ -0,0 +1,50 @@
+> +++ b/Documentation/devicetree/bindings/devfreq/imx-ddrc.yaml
+> @@ -0,0 +1,53 @@
 > +# SPDX-License-Identifier: GPL-2.0
 > +%YAML 1.2
 > +---
 > +$id: http://devicetree.org/schemas/devfreq/imx.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Generic i.MX bus frequency device
+> +title: i.MX DDR Controller
 > +
 > +maintainers:
 > +  - Leonard Crestez <leonard.crestez@nxp.com>
 > +
-> +description: |
-> +  The i.MX SoC family has multiple buses for which clock frequency (and sometimes
-> +  voltage) can be adjusted.
-> +
-> +  Some of those buses expose register areas mentioned in the memory maps as GPV
-> +  ("Global Programmers View") but not all. Access to this area might be denied for
-> +  normal world.
-> +
-> +  The buses are based on externally licensed IPs such as ARM NIC-301 and Arteris
-> +  FlexNOC but DT bindings are specific to the integration of these bus
-> +  interconnect IPs into imx SOCs.
-
-No need to use the interconnect binding?
-
-> +
 > +properties:
 > +  compatible:
 > +    contains:
+
+Don't use 'contains'.
+
 > +      enum:
-> +       - fsl,imx8m-noc
-> +       - fsl,imx8m-nic
-
-This means any combination of these 2 strings is valid. I suspect you
-want a given node to have only one of them, so drop 'contains'
-
+> +       - fsl,imx8m-ddrc
 > +
 > +  reg:
 > +    maxItems: 1
-> +    description: GPV area
+> +    description: DDR Controller registers
+
+Don't really need a description for a standard property with a single item.
+
 > +
 > +  clocks:
-> +    maxItems: 1
+> +    minItems: 5
+
+Just maxItems is sufficient unless there's a variable number of items.
+
+> +    maxItems: 5
+> +
+> +  clock-names:
+> +    items:
+> +      - const: dram_core
+> +      - const: dram_pll
+> +      - const: dram_alt_root
+> +      - const: dram_alt
+> +      - const: dram_apb
 > +
 > +required:
+> +  - reg
 > +  - compatible
 > +  - clocks
+> +  - clock-names
 
-reg?
+You should add an 'additionalProperties: false' here.
 
 > +
 > +examples:
 > +  - |
 > +    #include <dt-bindings/clock/imx8mm-clock.h>
-> +    noc: noc@32700000 {
-> +            compatible = "fsl,imx8mm-noc", "fsl,imx8m-noc";
+> +    ddrc: dram-controller@3d400000 {
+> +        compatible = "fsl,imx8mm-ddrc", "fsl,imx8m-ddrc";
+> +        reg = <0x3d400000 0x400000>;
+> +        clock-names = "dram_core", "dram_pll", "dram_alt_root", "dram_alt", "dram_apb";
+> +        clocks = <&clk IMX8MM_CLK_DRAM_CORE>,
+> +                 <&clk IMX8MM_DRAM_PLL>,
+> +                 <&clk IMX8MM_CLK_DRAM_ALT_ROOT>,
+> +                 <&clk IMX8MM_CLK_DRAM_ALT>,
+> +                 <&clk IMX8MM_CLK_DRAM_APB>;
+> +        operating-points-v2 = <&ddrc_opp_table>;
 
-Doesn't match the schema. (Well, it does with 'contains', but
-fsl,imx8mm-noc is not documented.)
+Not documented. You can assume a common property has a type definition
+already (this one doesn't yet), so just this is enough:
 
-> +            reg = <0x32700000 0x100000>;
-> +            clocks = <&clk IMX8MM_CLK_NOC>;
-> +            operating-points-v2 = <&noc_opp_table>;
-
-Not documented.
-
-> +    };
-> --
-> 2.17.1
->
+operating-points-v2: true
