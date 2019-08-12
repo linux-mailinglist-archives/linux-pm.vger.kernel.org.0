@@ -2,106 +2,302 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE928A025
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 15:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161238A059
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 16:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbfHLNzV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 09:55:21 -0400
-Received: from mga18.intel.com ([134.134.136.126]:45219 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727103AbfHLNzV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Aug 2019 09:55:21 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Aug 2019 06:55:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,377,1559545200"; 
-   d="scan'208";a="187434113"
-Received: from rbhardw1-mobl.gar.corp.intel.com (HELO [10.252.80.195]) ([10.252.80.195])
-  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2019 06:55:17 -0700
-Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to
- suspend-to-idle
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <5997740.FPbUVk04hV@kreacher>
-From:   "Bhardwaj, Rajneesh" <rajneesh.bhardwaj@linux.intel.com>
-Message-ID: <a5548466-2e8e-84d0-357d-e2ca0c72097c@linux.intel.com>
-Date:   Mon, 12 Aug 2019 19:25:16 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727103AbfHLOHW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 10:07:22 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40256 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726670AbfHLOHW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 10:07:22 -0400
+Received: by mail-lj1-f194.google.com with SMTP id e27so3264434ljb.7
+        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 07:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:from:to:cc:references:openpgp:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=A59LGVEP6S58PG03Us3mEWpZumJu1goEWu0jXUauzI0=;
+        b=iMjU/r9m8m5TIlnmfHfWMqZie1kHIRZf/iwtUBaAd8TMMVgdDMl5IGEGG4sU6CRu5E
+         HlRq7r6NNGGDuUjpbusnXPKQ4++wSUHsXvnDQ72VPVStSqkfR5ARAqfRul5RNhqj/mbq
+         J4zkNZ+p4VIgNsfeWP1QQZBA4wovyoO8ES5Fmw7I2UTZWqILUDJN8dN9qOetZV0ob/50
+         N5zUqt3/YjDV2l7xPbft3XETNMfrx+3qq2sadDnHmXYjGRoyQ8//EDzWRyFVE5ItEjVX
+         VOCPBJFko8LtrQRpczOr4yEnetAT7XD1XxDSe0jg3kiT0YmhrNeDH0D8mXASfaUZ7yqv
+         sISg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:openpgp:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=A59LGVEP6S58PG03Us3mEWpZumJu1goEWu0jXUauzI0=;
+        b=qvIwEKcF7YQuQ2MPemihbW74iy9mLyoWUQ40E8sEDckYID+bHVyA/ufiWJIsUzrdqf
+         Yo3RPTpA7aRvutu6wthyafeCPULt+hI7hnTT4O/etFORP6x02hdxrlz29PyKZP2cgWFu
+         8EFHadvUZFBTRxjc34BG/wZgnbxRs2u6ODnaySPCurvuJR6JbCEw8AQIUGK2BH3wrHUS
+         xb3aCXDGrhl8/viDY5djQ6b6P5rr9AT18o1WrCpxWopWyBcu5lr51UxOOWAcS9xvEvtV
+         WtDzI9UKRNHK7LOO20qr1/65Py0t+HB8LQqXoB6Q5kryWyjB+Z/o/FiQJ/0yU0zPjUkB
+         61Ow==
+X-Gm-Message-State: APjAAAUrqkKy+AELWqZXkCeAszxWIz/gXS2Jhwr4/Me93GVATzX/+9p4
+        7BnBxmtqixAx4hjfsrQRbxESHA==
+X-Google-Smtp-Source: APXvYqwyAQDFXO/Y8xqSbwi9seUrp7a/WlITbGdPwUCwBIGloK5d9VBwZq/ugMDh/QgrtgvYnvSanA==
+X-Received: by 2002:a05:651c:282:: with SMTP id b2mr8038797ljo.208.1565618839594;
+        Mon, 12 Aug 2019 07:07:19 -0700 (PDT)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id k8sm20901421lja.24.2019.08.12.07.07.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Aug 2019 07:07:18 -0700 (PDT)
+Subject: Re: [PATCH v5 1/5] dt-bindings: interconnect: Add Qualcomm QCS404 DT
+ bindings
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org, vkoul@kernel.org,
+        evgreen@chromium.org, daidavid1@codeaurora.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20190723142339.27772-1-georgi.djakov@linaro.org>
+ <20190723142339.27772-2-georgi.djakov@linaro.org>
+ <c4cb4320-52a1-ab26-4b0e-ae2b51312c27@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <8764496e-5869-45cf-da72-c640dbcaaea5@linaro.org>
+Date:   Mon, 12 Aug 2019 17:07:15 +0300
 MIME-Version: 1.0
-In-Reply-To: <5997740.FPbUVk04hV@kreacher>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <c4cb4320-52a1-ab26-4b0e-ae2b51312c27@linaro.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael
-
-On 02-Aug-19 4:03 PM, Rafael J. Wysocki wrote:
-> Hi All,
->
->>> On top of the "Simplify the suspend-to-idle control flow" patch series
->>> posted previously:
->>>
->>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
->>>
->>> sanitize the suspend-to-idle flow even further.
->>>
->>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
->>>
->>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
->>> specification-compliant order with respect to suspending and resuming
->>> devices (patch 2).
->>>
->>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
->>> switch to prevent the LPS0 _DSM from being used.
->> The v2 is because I found a (minor) bug in patch 1, decided to use a module
->> parameter instead of a kernel command line option in patch 4.  Also, there
->> are 4 new patches:
+On 8/5/19 16:50, Georgi Djakov wrote:
+> On 7/23/19 17:23, Georgi Djakov wrote:
+>> The Qualcomm QCS404 platform has several buses that could be controlled
+>> and tuned according to the bandwidth demand.
 >>
->> Patch 5: Switch the EC over to polling during "noirq" suspend and back
->> during "noirq" resume.
->>
->> Patch 6: Eliminate acpi_sleep_no_ec_events().
->>
->> Patch 7: Consolidate some EC code depending on PM_SLEEP.
->>
->> Patch 8: Add EC GPE dispatching debug message.
-> The v3 is just a rearranged v2 so as to move the post sensitive patch (previous patch 2)
-> to the end of the series.   [After applying the full series the code is the same as before.]
->
-> For easier testing, the series (along with some previous patches depended on by it)
-> is available in the pm-s2idle-testing branch of the linux-pm.git tree at kernel.org:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
->
-> Please refer to the changelogs for details.
-
-
-I have tested both pm-s2idle-testing and pm-s2idle-rework branches 
-including recently introduced commit "PM: suspend: Fix 
-platform_suspend_prepare_noirq()".
-
-Works fine for me on Ice Lake platform.
-
-  Acked-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
-
-Tested-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
-
-
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+>> ---
+> 
+> Hi Rob,
+> 
+> Could you please help to review this patch?
+> 
 > Thanks,
-> Rafael
->
->
->
+> Georgi
+
+Hey Rob,
+
+Did you get a chance to look at this?
+
+Thanks,
+Georgi
+
+> 
+>>
+>> v5:
+>> - Make reg and clocks DT properties required.
+>> - Remove the _clk suffix from clock names.
+>>
+>> v4:
+>> - Add the DT header into this patch.
+>> - Pick Bjorn's r-b.
+>>
+>> v3:
+>> - Add a reg property and move the interconnect nodes under the "soc" node.
+>>
+>> v2:
+>> - No changes.
+>>
+>>  .../bindings/interconnect/qcom,qcs404.txt     | 45 ++++++++++
+>>  .../dt-bindings/interconnect/qcom,qcs404.h    | 88 +++++++++++++++++++
+>>  2 files changed, 133 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
+>>  create mode 100644 include/dt-bindings/interconnect/qcom,qcs404.h
+>>
+>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
+>> new file mode 100644
+>> index 000000000000..c07d89812b73
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
+>> @@ -0,0 +1,45 @@
+>> +Qualcomm QCS404 Network-On-Chip interconnect driver binding
+>> +-----------------------------------------------------------
+>> +
+>> +Required properties :
+>> +- compatible : shall contain only one of the following:
+>> +			"qcom,qcs404-bimc"
+>> +			"qcom,qcs404-pcnoc"
+>> +			"qcom,qcs404-snoc"
+>> +- #interconnect-cells : should contain 1
+>> +
+>> +reg : specifies the physical base address and size of registers
+>> +clocks : list of phandles and specifiers to all interconnect bus clocks
+>> +clock-names : clock names should include both "bus" and "bus_a"
+>> +
+>> +Example:
+>> +
+>> +soc {
+>> +	...
+>> +	bimc: interconnect@400000 {
+>> +		reg = <0x00400000 0x80000>;
+>> +		compatible = "qcom,qcs404-bimc";
+>> +		#interconnect-cells = <1>;
+>> +		clock-names = "bus", "bus_a";
+>> +		clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
+>> +			<&rpmcc RPM_SMD_BIMC_A_CLK>;
+>> +	};
+>> +
+>> +	pnoc: interconnect@500000 {
+>> +		reg = <0x00500000 0x15080>;
+>> +		compatible = "qcom,qcs404-pcnoc";
+>> +		#interconnect-cells = <1>;
+>> +		clock-names = "bus", "bus_a";
+>> +		clocks = <&rpmcc RPM_SMD_PNOC_CLK>,
+>> +			<&rpmcc RPM_SMD_PNOC_A_CLK>;
+>> +	};
+>> +
+>> +	snoc: interconnect@580000 {
+>> +		reg = <0x00580000 0x23080>;
+>> +		compatible = "qcom,qcs404-snoc";
+>> +		#interconnect-cells = <1>;
+>> +		clock-names = "bus", "bus_a";
+>> +		clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
+>> +			<&rpmcc RPM_SMD_SNOC_A_CLK>;
+>> +	};
+>> +};
+>> diff --git a/include/dt-bindings/interconnect/qcom,qcs404.h b/include/dt-bindings/interconnect/qcom,qcs404.h
+>> new file mode 100644
+>> index 000000000000..960f6e39c5f2
+>> --- /dev/null
+>> +++ b/include/dt-bindings/interconnect/qcom,qcs404.h
+>> @@ -0,0 +1,88 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Qualcomm interconnect IDs
+>> + *
+>> + * Copyright (c) 2019, Linaro Ltd.
+>> + * Author: Georgi Djakov <georgi.djakov@linaro.org>
+>> + */
+>> +
+>> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_QCS404_H
+>> +#define __DT_BINDINGS_INTERCONNECT_QCOM_QCS404_H
+>> +
+>> +#define MASTER_AMPSS_M0			0
+>> +#define MASTER_OXILI			1
+>> +#define MASTER_MDP_PORT0		2
+>> +#define MASTER_SNOC_BIMC_1		3
+>> +#define MASTER_TCU_0			4
+>> +#define SLAVE_EBI_CH0			5
+>> +#define SLAVE_BIMC_SNOC			6
+>> +
+>> +#define MASTER_SPDM			0
+>> +#define MASTER_BLSP_1			1
+>> +#define MASTER_BLSP_2			2
+>> +#define MASTER_XI_USB_HS1		3
+>> +#define MASTER_CRYPT0			4
+>> +#define MASTER_SDCC_1			5
+>> +#define MASTER_SDCC_2			6
+>> +#define MASTER_SNOC_PCNOC		7
+>> +#define MASTER_QPIC			8
+>> +#define PCNOC_INT_0			9
+>> +#define PCNOC_INT_2			10
+>> +#define PCNOC_INT_3			11
+>> +#define PCNOC_S_0			12
+>> +#define PCNOC_S_1			13
+>> +#define PCNOC_S_2			14
+>> +#define PCNOC_S_3			15
+>> +#define PCNOC_S_4			16
+>> +#define PCNOC_S_6			17
+>> +#define PCNOC_S_7			18
+>> +#define PCNOC_S_8			19
+>> +#define PCNOC_S_9			20
+>> +#define PCNOC_S_10			21
+>> +#define PCNOC_S_11			22
+>> +#define SLAVE_SPDM			23
+>> +#define SLAVE_PDM			24
+>> +#define SLAVE_PRNG			25
+>> +#define SLAVE_TCSR			26
+>> +#define SLAVE_SNOC_CFG			27
+>> +#define SLAVE_MESSAGE_RAM		28
+>> +#define SLAVE_DISP_SS_CFG		29
+>> +#define SLAVE_GPU_CFG			30
+>> +#define SLAVE_BLSP_1			31
+>> +#define SLAVE_BLSP_2			32
+>> +#define SLAVE_TLMM_NORTH		33
+>> +#define SLAVE_PCIE			34
+>> +#define SLAVE_ETHERNET			35
+>> +#define SLAVE_TLMM_EAST			36
+>> +#define SLAVE_TCU			37
+>> +#define SLAVE_PMIC_ARB			38
+>> +#define SLAVE_SDCC_1			39
+>> +#define SLAVE_SDCC_2			40
+>> +#define SLAVE_TLMM_SOUTH		41
+>> +#define SLAVE_USB_HS			42
+>> +#define SLAVE_USB3			43
+>> +#define SLAVE_CRYPTO_0_CFG		44
+>> +#define SLAVE_PCNOC_SNOC		45
+>> +
+>> +#define MASTER_QDSS_BAM			0
+>> +#define MASTER_BIMC_SNOC		1
+>> +#define MASTER_PCNOC_SNOC		2
+>> +#define MASTER_QDSS_ETR			3
+>> +#define MASTER_EMAC			4
+>> +#define MASTER_PCIE			5
+>> +#define MASTER_USB3			6
+>> +#define QDSS_INT			7
+>> +#define SNOC_INT_0			8
+>> +#define SNOC_INT_1			9
+>> +#define SNOC_INT_2			10
+>> +#define SLAVE_KPSS_AHB			11
+>> +#define SLAVE_WCSS			12
+>> +#define SLAVE_SNOC_BIMC_1		13
+>> +#define SLAVE_IMEM			14
+>> +#define SLAVE_SNOC_PCNOC		15
+>> +#define SLAVE_QDSS_STM			16
+>> +#define SLAVE_CATS_0			17
+>> +#define SLAVE_CATS_1			18
+>> +#define SLAVE_LPASS			19
+>> +
+>> +#endif
