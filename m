@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C96899BB
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 11:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0769789A57
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 11:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbfHLJVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 05:21:38 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38122 "EHLO
+        id S1727437AbfHLJri (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 05:47:38 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:53480 "EHLO
         mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727023AbfHLJVh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 05:21:37 -0400
-Received: by mail-wm1-f68.google.com with SMTP id m125so7053241wmm.3;
-        Mon, 12 Aug 2019 02:21:36 -0700 (PDT)
+        with ESMTP id S1727323AbfHLJri (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 05:47:38 -0400
+Received: by mail-wm1-f68.google.com with SMTP id 10so11544383wmp.3;
+        Mon, 12 Aug 2019 02:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=BLDuAK08TKNLQJlZE4xf8scGpyyBOHsDCwJyjOgqjDg=;
-        b=kMZeJErZHjqdJUQN7g33dNHR1nwoiXVLmJqq01F4jhQBFYBx3125ontVaFbi6cuvTK
-         Ka6KmMxHTQ1oUxOEkUJAKx64OAagdEs65w1+8fupQX4wQ+TkHA+HA8Vz06GD9OfoVLoj
-         fFENiXdoXHLJ8/8hEqKl3gWckK/Ev+ys7buLOQ17WfmgbdHnBXJei9IboIoYKngFngFT
-         U2YSmAztCEzhz+QEVdOUvtiiRYBSAbZeW2ZzLLZaU/ugtHWp5a6RhFRoo5MxDsr8+YBW
-         S9obvYqSIMo7XgwkRP55kyMEW61I744YgRpOIm4ENPJ1aDkr7HRiOVjlhDQybFLWhw+X
-         XPfQ==
+        bh=P3Tt0hVFMeQO9WKnMLt0unZfnULQUSGm6Y8+KX1wABY=;
+        b=I1sE1d7EaGl/q7KxoFPph8dUQJL5MYq+TkA/7MKHlrpe5pTnqrRQ1Qyq/dyi6nqToG
+         6MDKfag1hIXu0R51glp/qPsKBJEqSfBlsp6qYqASxY8rNzk/+ZdFKEF6fIzXTW6yGAqz
+         RTmBMzpNT6SCMpxR5GEcTJA2At8Mw+mrnZGrrJYlNEplTz060HdwlOyc7CizuAOH0y+p
+         ucsMdOD2Vb0EwMMKYfYaILJqutj7CNfWqG0z7MYxQG93MwGH500Phhh+qr7wsUPRekMC
+         wmdZY8gOb8UWP0A6/r90TYJvbiVT2V2e8UXX4xG3lwyaFw1MfmPXG/RxzT1oO5AZRrdt
+         XDjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BLDuAK08TKNLQJlZE4xf8scGpyyBOHsDCwJyjOgqjDg=;
-        b=Uy7T7nE5SO8DfNCHYi4svSdJYQV2VOwvjqFTePHEQdGc7IrdPmHRxPDcFloP7XGeB2
-         srS499YNMtWx1puCfAsXgQ+YPp6FbzTGy5WzLuazKCOvNn9efFlI4IIf+wVSq3dARSuK
-         q2M72IEFRTnwaCFUMQWtcuirVhOcfAh9Y/z4Q4GuWI22d0K7E72+ph58/OlpPc3zr1Ty
-         Grw/5/HlQneT3N0NZpYs1rPzbBgT7NpwGMwmV/j/+qa7/ebn0Cw1yu89AX84+aa+y2Sh
-         wew2Dwz7DrMsf1fiZohvFSRyRqMQDeLVxs0e2C+bt9n5uRyL6ZFtT5t5/riyBdPOkN2G
-         ES8g==
-X-Gm-Message-State: APjAAAXlq74+q9E3y7WDQ+CHlkBZkgVYjqBn3lvaXCqWClykRb1miPWP
-        ryeOmHuQolZ9ybf0K5z4qSQ=
-X-Google-Smtp-Source: APXvYqzkq/Kh/UDHkyDzpKpx3Xqc2ssuOI6RBB8doiDSlOyLTd0Ni+3KC1NGxxpPsyBZkUTThBxNrw==
-X-Received: by 2002:a7b:c453:: with SMTP id l19mr25845318wmi.106.1565601695283;
-        Mon, 12 Aug 2019 02:21:35 -0700 (PDT)
+        bh=P3Tt0hVFMeQO9WKnMLt0unZfnULQUSGm6Y8+KX1wABY=;
+        b=EDXm55vQ8+SkobmTfqinOzoLVfBl32dhX5/uMLOHTNkuD/LZRaGUYrBo8nUN8ynf6D
+         hWqUiXuDHFKd88IczPNABYa3MCYX+QxEKMvWF9bU9mrQovF/HgYHSSHZ8j0u5yp5AN88
+         0DuHdjKHHAEnsUvsoFcwJQawwJU16uh+bCnGuGBgGe7QVZFEFU9DUfpdXAAknlhSFup9
+         6D12bxEa2gch9gA1q3//oCyNKNU9Om1gRrfcULGMVB1DSmGoRO/FCl8429xgg1EI0G9P
+         V/JhrEIcyEsmVvozpnXvZ6HiK6St68LazfCrpn0Au2xTOYnKvfXvB/0pYmz6XYZ3qROg
+         XnTQ==
+X-Gm-Message-State: APjAAAWSmFtZrYAp5S8jQMIYkH76aU1DNn1RuGFmWOzlMntLoH+6FOY/
+        alC5JL05TNGB6R9npRnpJY+VtNw3
+X-Google-Smtp-Source: APXvYqx6wQo6Pmfnamku65GgkuW6kOZqIbz2Qumz2X/qbaAzrxHyWQQ1tTSaVAp8yp6St60D20w5+w==
+X-Received: by 2002:a7b:c758:: with SMTP id w24mr2100045wmk.143.1565603255334;
+        Mon, 12 Aug 2019 02:47:35 -0700 (PDT)
 Received: from localhost (pD9E51890.dip0.t-ipconnect.de. [217.229.24.144])
-        by smtp.gmail.com with ESMTPSA id x20sm231084483wrg.10.2019.08.12.02.21.33
+        by smtp.gmail.com with ESMTPSA id u186sm24647842wmu.26.2019.08.12.02.47.33
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 12 Aug 2019 02:21:34 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 11:21:33 +0200
+        Mon, 12 Aug 2019 02:47:33 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 11:47:32 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Sowjanya Komatineni <skomatineni@nvidia.com>
 Cc:     jonathanh@nvidia.com, tglx@linutronix.de, jason@lakedaemon.net,
@@ -57,16 +57,15 @@ Cc:     jonathanh@nvidia.com, tglx@linutronix.de, jason@lakedaemon.net,
         spatra@nvidia.com, robh+dt@kernel.org, digetx@gmail.com,
         devicetree@vger.kernel.org, rjw@rjwysocki.net,
         viresh.kumar@linaro.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v8 03/21] clk: tegra: divider: Save and restore divider
- rate
-Message-ID: <20190812092133.GE8903@ulmo>
+Subject: Re: [PATCH v8 07/21] clk: Add API to get index of the clock parent
+Message-ID: <20190812094732.GF8903@ulmo>
 References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
- <1565308020-31952-4-git-send-email-skomatineni@nvidia.com>
+ <1565308020-31952-8-git-send-email-skomatineni@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xJK8B5Wah2CMJs8h"
+        protocol="application/pgp-signature"; boundary="0hHDr/TIsw4o3iPK"
 Content-Disposition: inline
-In-Reply-To: <1565308020-31952-4-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1565308020-31952-8-git-send-email-skomatineni@nvidia.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -74,45 +73,69 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---xJK8B5Wah2CMJs8h
+--0hHDr/TIsw4o3iPK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 08, 2019 at 04:46:42PM -0700, Sowjanya Komatineni wrote:
-> This patch implements context restore for clock divider.
+On Thu, Aug 08, 2019 at 04:46:46PM -0700, Sowjanya Komatineni wrote:
+> This patch adds an API clk_hw_get_parent_index to get index of the
+> clock parent to use during the clock restore operations on system
+> resume.
 >=20
-> During system suspend, core power goes off and looses the settings
-> of the Tegra CAR controller registers.
->=20
-> So on resume, clock dividers are restored back for normal operation.
->=20
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 > ---
->  drivers/clk/tegra/clk-divider.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  drivers/clk/clk.c            | 17 +++++++++++++++++
+>  include/linux/clk-provider.h |  1 +
+>  2 files changed, 18 insertions(+)
+>=20
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index c0990703ce54..f26252e48f73 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -1643,6 +1643,23 @@ static int clk_fetch_parent_index(struct clk_core =
+*core,
+>  	return i;
+>  }
+> =20
+> +/**
+> + * clk_hw_get_parent_index - return the index of parent clock
+> + * @hw: clk_hw associated with the clk being consumed
+> + * @parent_hw: clk_hw associated with the parent of clk
+> + *
+> + * Fetches and returns the index of parent clock.
+> + * if hw or parent_hw is NULL, returns -EINVAL.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+"If" because it's at the beginning of a sentence. You may also want to
+turn this into a "Return:" section as described in:
 
---xJK8B5Wah2CMJs8h
+	Documentation/doc-guide/kernel-doc.rst
+
+That said, other functions in this file don't use that construct either,
+so I suppose this is fine as-is, for consistency.
+
+So with the capitalization of "If" fixed, this is:
+
+Reviewed-by: Thierry Reding <treding@nvidia.com>
+
+--0hHDr/TIsw4o3iPK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1RL50ACgkQ3SOs138+
-s6GciRAAu7ihjAvzjleKr5l/wYMUx50GqCmlDbJPPj3jcAiRgKqgWMrvVdOgdbZp
-QdV017XzIRxpMkj8v62RKCOm/PlnAbbZ+a7RGu0qvGpMK5a4RnfrYHvyK+e+DaN4
-YSOYsPYSviDEb8kGhWGe5m6cVDaR8b6EZFhqMfNi3eFXp15+c1JZylmbHRlL0cU3
-EGlVEXewNcAseec8V4d8EXNEi2DZOKfq4l1hKiTr1HfHqw3RwJeXMF0mbv5DLKey
-H0LYXW+dDWn4SLGLOl4KxXh6TUi7pqhkT7Iu9Q8DSVa+LyuYS2wOcHewvDmnD6gD
-ELNQ1trgtsbz6SPpVNXVbvXDuYkI+Uzxla2Cs6I7zS2xK4tbQFUeHtSKrBc8cfK9
-UP3BQmVfpVR9OQmHUL+GrEiGB05CaYtIoZLOpFvv31XYjYaCy+MtvjnM0HjZGj+K
-sZIQ0hSIDGcWDlg+2K7PU3wL7PXOA4C95cVjPjqghkEhnoBP8jZ6qYSHCoZ+UKEC
-PhaQue7ePjTN3iSgqp0CGzUDN3+JRxS4MsYVbudTiwxAd+LYD0830r9IwDH2kIPE
-o4uWmo67u4pqaoMu3MP4Ll9hJiXur61rLMQXt6MQacvD3eG/bG6W5hP5l00bPEgA
-K8TMgeZWF8HtT2QNf7fyJKCzLIC6vV3/w6jtc0VP6EWvDYg3aDU=
-=9Mj2
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1RNbIACgkQ3SOs138+
+s6FV1A//VN8FoQqHYUZDRFeTFLp0ScDoXoSuHZPsgTeHnWdfLuI6hjX0BwnBpuou
+xp0VC0KcQdVBw0mL+B/0aKRlYcTsXGB0Pk0qi786ZQ5HicqrF7ixVfWNns9TIbAC
+WQbjyPR0SoG0kBTfIXn36aSRfJh9ulnaPQjJ/SpoaT+pAsc4IUjCaGFVw+Eu2LNX
+Av3p5BKIcCIynHfmMFNgM4wh44PInWZ7KHqW8yVNk+yJV41rSYqzV0TO2ANg/a6b
+LaWziwn3XN+aPyuo5dB++g8xIATX2dQSfG6uYjZC4HDt08f3pCBkSEAfyup2xEIF
+epEcFzFYBuSqyrMZ587honAJ0a5AqzFDSGCxxZw2qd1MSiW5EaIIdQE1PEiY2zeC
+ldZGCn0iMPizacDQqkRrd96KwDsZ1s8oTGHyNya7z+6PHLRF36nb4EEg0OF1AJ95
+aj9EI5IfJlfKSN1RSuR1K7DaZzIunI9Ji7Ip3WlkNc4LIBL9duQ0WQ0D6ttFLpZ4
+cTcrkgo/uJ2DOaK84DCEt9w21jIkOoiSFstUKBCC/0+IPURVcHC+ByhHOJbjJMge
+oYq5uhB2pVscLpnzfjjy5XLBuVjYiapsuWy74tUm1YAyyRvJSLr9+6McvwLjQAHk
+hpiiENkRMsXAPGywAKTdlrIUK5JYRyXTR7rVHW2xI5M47aMJOdo=
+=fkP5
 -----END PGP SIGNATURE-----
 
---xJK8B5Wah2CMJs8h--
+--0hHDr/TIsw4o3iPK--
