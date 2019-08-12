@@ -2,115 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 971C289F94
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 15:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE928A025
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 15:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728117AbfHLNYC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 09:24:02 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46897 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728750AbfHLNYC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 09:24:02 -0400
-Received: by mail-wr1-f67.google.com with SMTP id z1so104549610wru.13
-        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 06:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=nC0XBOiWbAbQwJIvttLNUSDXZEWVPgrZEH9kYI4ESEg=;
-        b=KdowPy/ZBvnwn/HSU7gjkVq9UrYpR3h4Rz7yrxwQA3ohuwT4La1YEbafzwTQiyGbB3
-         6QonaqtKmwTvQvVAkUuXqhFlDfDjkaXKQ7zpwE7eGxhuj1ceYyytsva8K5UQ8S9Sxa1l
-         0Y1oon8rOVVaf+boODQgVUswo8xgye+BoTn+yDsiXWTW/NS6IQsn/plpM4JQaaNP4O6B
-         TqZTxR3XHrKVwJXd9XdY0hqFqBNW8M1q45w82I966F/alSFqF39B+Nsz1nWQEnNynAc4
-         A2YNPddK8smYE3BcVulLdkdiz+QMZyywgQdjm7O4meR9DNvs9jp6Y3XjTE1cuP7rEBBJ
-         1TgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=nC0XBOiWbAbQwJIvttLNUSDXZEWVPgrZEH9kYI4ESEg=;
-        b=hJ4C3nsAh9Rh+yFKo+LgdY9V3itxFoZbatcFRurXDiHy53XO3AZiDeYS5vj6eVtJFU
-         CR/RnNx8m6Pm/dhS8quPYrOAtppJvgpN/fqfSduEzH+r1rDuCmwo/8/7Bu4HTELuCepU
-         +F7EcJtaIrZAyngzMAb1lpWrq6KdhX3FUGdXbxQYqb/QwKRiZ+NiBDz3VbioFtC7YOR5
-         w0E1zEjHHb12TIP35GirVeWiL5y1GxS99Sj+Z7cV83wEd8DJj8HfmMRfR1zLjONVG99k
-         x3bK/Uza5drouN1JaZp+9zN8+IjYNTbcVvidtCNAa2rgDnihPBXr+Gp9fGYTCJvjOV1l
-         M0Mg==
-X-Gm-Message-State: APjAAAVV3ltF72csq1jwoWOmYt67vfS3zXfLt081U4RxLp3amRKhuoXx
-        l9aYRMciAQI4nIwPXnldUm7Rzg==
-X-Google-Smtp-Source: APXvYqzLO2AY4MikUonMGWLbUw1cnzGTo7DsP/PsiUuAIcFjooUQxIKV9Ku81rDgvyEOx2q7Cg6gpA==
-X-Received: by 2002:adf:8364:: with SMTP id 91mr40735060wrd.13.1565616239967;
-        Mon, 12 Aug 2019 06:23:59 -0700 (PDT)
-Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id g7sm25060681wmg.8.2019.08.12.06.23.58
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Aug 2019 06:23:59 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 14:23:57 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allison Randal <allison@lohutok.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Tianping . Fang" <tianping.fang@mediatek.com>,
-        Josef Friedl <josef.friedl@speed.at>
-Subject: Re: [PATCH v5 08/10] power: reset: add driver for mt6323 poweroff
-Message-ID: <20190812132357.GU26727@dell>
-References: <20190812121511.4169-1-frank-w@public-files.de>
- <20190812121511.4169-9-frank-w@public-files.de>
+        id S1727192AbfHLNzV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 09:55:21 -0400
+Received: from mga18.intel.com ([134.134.136.126]:45219 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727103AbfHLNzV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Aug 2019 09:55:21 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Aug 2019 06:55:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,377,1559545200"; 
+   d="scan'208";a="187434113"
+Received: from rbhardw1-mobl.gar.corp.intel.com (HELO [10.252.80.195]) ([10.252.80.195])
+  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2019 06:55:17 -0700
+Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to
+ suspend-to-idle
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <5997740.FPbUVk04hV@kreacher>
+From:   "Bhardwaj, Rajneesh" <rajneesh.bhardwaj@linux.intel.com>
+Message-ID: <a5548466-2e8e-84d0-357d-e2ca0c72097c@linux.intel.com>
+Date:   Mon, 12 Aug 2019 19:25:16 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <5997740.FPbUVk04hV@kreacher>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190812121511.4169-9-frank-w@public-files.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 12 Aug 2019, Frank Wunderlich wrote:
+Hi Rafael
 
-> From: Josef Friedl <josef.friedl@speed.at>
-> 
-> add poweroff driver for mt6323 and make Makefile and Kconfig-Entries
-> 
-> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
-> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> changes since v4: none
-> changes since v3: none
-> changes since v2: none (=v2 part 5)
-> ---
->  drivers/power/reset/Kconfig           | 10 +++
->  drivers/power/reset/Makefile          |  1 +
->  drivers/power/reset/mt6323-poweroff.c | 97 +++++++++++++++++++++++++++
+On 02-Aug-19 4:03 PM, Rafael J. Wysocki wrote:
+> Hi All,
+>
+>>> On top of the "Simplify the suspend-to-idle control flow" patch series
+>>> posted previously:
+>>>
+>>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
+>>>
+>>> sanitize the suspend-to-idle flow even further.
+>>>
+>>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
+>>>
+>>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
+>>> specification-compliant order with respect to suspending and resuming
+>>> devices (patch 2).
+>>>
+>>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
+>>> switch to prevent the LPS0 _DSM from being used.
+>> The v2 is because I found a (minor) bug in patch 1, decided to use a module
+>> parameter instead of a kernel command line option in patch 4.  Also, there
+>> are 4 new patches:
+>>
+>> Patch 5: Switch the EC over to polling during "noirq" suspend and back
+>> during "noirq" resume.
+>>
+>> Patch 6: Eliminate acpi_sleep_no_ec_events().
+>>
+>> Patch 7: Consolidate some EC code depending on PM_SLEEP.
+>>
+>> Patch 8: Add EC GPE dispatching debug message.
+> The v3 is just a rearranged v2 so as to move the post sensitive patch (previous patch 2)
+> to the end of the series.   [After applying the full series the code is the same as before.]
+>
+> For easier testing, the series (along with some previous patches depended on by it)
+> is available in the pm-s2idle-testing branch of the linux-pm.git tree at kernel.org:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
+>
+> Please refer to the changelogs for details.
 
->  include/linux/mfd/mt6397/core.h       |  2 +
 
-This looks like an unrelated change.
+I have tested both pm-s2idle-testing and pm-s2idle-rework branches 
+including recently introduced commit "PM: suspend: Fix 
+platform_suspend_prepare_noirq()".
 
-Please separate it out.
+Works fine for me on Ice Lake platform.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+  Acked-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
+
+Tested-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
+
+
+> Thanks,
+> Rafael
+>
+>
+>
