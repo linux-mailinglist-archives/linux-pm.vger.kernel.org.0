@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E59C389E26
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 14:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DA189E2A
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 14:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728727AbfHLMY1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728574AbfHLMY1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 12 Aug 2019 08:24:27 -0400
-Received: from mxwww.masterlogin.de ([95.129.51.220]:59312 "EHLO
+Received: from mxwww.masterlogin.de ([95.129.51.220]:59306 "EHLO
         mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728563AbfHLMYN (ORCPT
+        with ESMTP id S1728550AbfHLMYN (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 08:24:13 -0400
 Received: from mxout2.routing.net (unknown [192.168.10.82])
-        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id BB9AA96DC9;
-        Mon, 12 Aug 2019 12:15:33 +0000 (UTC)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.253])
-        by mxout2.routing.net (Postfix) with ESMTP id 1504B647BC;
+        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id C8BF696DCC;
         Mon, 12 Aug 2019 12:15:34 +0000 (UTC)
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.253])
+        by mxout2.routing.net (Postfix) with ESMTP id 2B5F6647BC;
+        Mon, 12 Aug 2019 12:15:35 +0000 (UTC)
 Received: from localhost.localdomain (fttx-pool-217.61.152.193.bambit.de [217.61.152.193])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id EBC66100D7A;
-        Mon, 12 Aug 2019 14:15:32 +0200 (CEST)
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 0B06610083A;
+        Mon, 12 Aug 2019 14:15:34 +0200 (CEST)
 From:   Frank Wunderlich <frank-w@public-files.de>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -44,9 +44,9 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         "Tianping . Fang" <tianping.fang@mediatek.com>
 Cc:     Josef Friedl <josef.friedl@speed.at>,
         Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v5 05/10] mfd: mt6323: some improvements of mt6397-core
-Date:   Mon, 12 Aug 2019 14:15:06 +0200
-Message-Id: <20190812121511.4169-6-frank-w@public-files.de>
+Subject: [PATCH v5 06/10] rtc: mt6397: add compatible for mt6323
+Date:   Mon, 12 Aug 2019 14:15:07 +0200
+Message-Id: <20190812121511.4169-7-frank-w@public-files.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190812121511.4169-1-frank-w@public-files.de>
 References: <20190812121511.4169-1-frank-w@public-files.de>
@@ -57,50 +57,31 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Josef Friedl <josef.friedl@speed.at>
 
-simplyfications (resource definitions my DEFINE_RES_* macros)
+use mt6397 rtc driver also for mt6323 but with different
+base/size see "mfd: mt6323: add mt6323 rtc+pwrc"
 
 Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 ---
-changes since v4: do not touch year of copyright
-changes since v3: moved part 6 forward to let compatible and driver be together
-changes since v2: splitted v2 part 4 into 6+7
+changes since v4: none
+changes since v3: moved (was part 5)
+changes since v2: splitted this from v2.3 suggested-by Alexandre Belloni
 ---
- drivers/mfd/mt6397-core.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ drivers/rtc/rtc-mt6397.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
-index 337bcccdb914..c9a81087fa55 100644
---- a/drivers/mfd/mt6397-core.c
-+++ b/drivers/mfd/mt6397-core.c
-@@ -5,6 +5,7 @@
-  */
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index 9370b7fc9f81..21cd9cc8b4c7 100644
+--- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -325,6 +325,7 @@ static SIMPLE_DEV_PM_OPS(mt6397_pm_ops, mt6397_rtc_suspend,
+ 			mt6397_rtc_resume);
  
- #include <linux/interrupt.h>
-+#include <linux/ioport.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/of_irq.h>
-@@ -23,16 +24,8 @@
- #define MT6397_CID_CODE		0x97
- 
- static const struct resource mt6397_rtc_resources[] = {
--	{
--		.start = MT6397_RTC_BASE,
--		.end   = MT6397_RTC_BASE + MT6397_RTC_SIZE,
--		.flags = IORESOURCE_MEM,
--	},
--	{
--		.start = MT6397_IRQ_RTC,
--		.end   = MT6397_IRQ_RTC,
--		.flags = IORESOURCE_IRQ,
--	},
-+	DEFINE_RES_MEM(MT6397_RTC_BASE, MT6397_RTC_SIZE),
-+	DEFINE_RES_IRQ(MT6397_IRQ_RTC),
+ static const struct of_device_id mt6397_rtc_of_match[] = {
++	{ .compatible = "mediatek,mt6323-rtc", },
+ 	{ .compatible = "mediatek,mt6397-rtc", },
+ 	{ }
  };
- 
- static const struct resource mt6323_keys_resources[] = {
 -- 
 2.17.1
 
