@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C2989AB6
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 12:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CDF89ADC
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 12:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727560AbfHLKBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 06:01:34 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:35660 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727423AbfHLKBd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 06:01:33 -0400
-Received: by mail-wm1-f66.google.com with SMTP id l2so11222505wmg.0;
-        Mon, 12 Aug 2019 03:01:30 -0700 (PDT)
+        id S1727772AbfHLKHM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 06:07:12 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33215 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727409AbfHLKHM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 06:07:12 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n9so104158710wru.0;
+        Mon, 12 Aug 2019 03:07:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=lWrWlWYj8cvJ3r/FmTFT+tjcuUTnaXDsUrXZMHuksYo=;
-        b=ar7EqkwRDl4xpHq7AvfU+gQfmaCoAx0Y5xv4UIH3A22fsLoa1bYP0OmScYRKH7+sm7
-         cdyo2gCE+RqLB4wPd4ZmdFEnrHNyi3oMc07+lRaOYIcG7SZ2H0NAW+98RQuHLW/Y6qab
-         577eq+Ax3qjdC06Yapg/VO4CQgJopb94nnJ6aDssiGX1GJKvrxdXinB25/bc7erswV0y
-         A9GZ5L02/zoR2WgNtvroCGwisa5J14PcsEajq8BH1g/MttOaw2vZheArGNnvPHmgCCe1
-         FEdFjG7+h6oMs79m/flFofwXY3u6zHPrJIwo+KNyQ+F9At/C0yyA4hv+rZpdT59aTqkg
-         PbBw==
+        bh=62GUIJaxsBr0ns4SlEavg70SWuAMSrdfYiBgGd57XwE=;
+        b=koRkDpUJs8FTTEu+44bl2ey1mrNgtTjT+bTugu+eIyQg7hsNVOy5j7iOjWTJqAP8MQ
+         2LqlsSn95ssNqyFoIfESU563xqDB+zB0Oh3K8FXIGJyd+4JfZ4mQWYtfIh90UaoOME1f
+         o/4ZxOnvGrCE+I7z9oRMQaEyZs3Lx8iNk3yVd4QAp0f6AXu+lnPQeT2Oiom2zYDu2GR6
+         o/y1zD13X49NUWXxbMAzMyTfc5eshBlMerUT1Lf7Z86/RjC++8QYBFRoINc1RyqVWj+o
+         Q0uz7KoiRHoMeFBlEPVPGI46wBVUBoujXXN0UKElYyJ3vUiAt/Z6DpzVvAJ/O73dQGPi
+         ofxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lWrWlWYj8cvJ3r/FmTFT+tjcuUTnaXDsUrXZMHuksYo=;
-        b=XZHO4aElWcg0GG4OPN5rXJ9FNtlOSJLUQZ+WzMMh+U7x+EKASHN1eRKhFgNIZr1EGF
-         e1Lok/jhuKbtMvJpcoBis0fJbvaZg83q3UdzU6T6XefJBKuMY9GMmO5eRohb9HsI/QZS
-         WBWuILAtNA7zNf6NUGGyYTvYTfvhg5BSnRHZUGJzlFOXfygbuJwOlboSpupNQrmYPo/S
-         +RCyWK3xs/NLBYdefDoZN3+ulMDUqIJcx6KEO0AAbB2wMIrTVCjvYXNUrbQesm3FjMkM
-         NT8FZzDxtd/ByQ3scQh4KxPQiqtkjoODIe7xR49dG/GZBVGg+kvHwfH9Px+biOWYfuve
-         W0ww==
-X-Gm-Message-State: APjAAAXLBoz3zKi7Xt1fce3yGqvlzkueEFeW3cOvi4OVHqIdPpQYP24V
-        KgWErTdZKjVbQI9arNUKqkY=
-X-Google-Smtp-Source: APXvYqxDtGEc4QyyHF/B4+oUczVRvnYQ6PMqgZN8YjrpYNhCxVjC+msiBt4HMMk+Kaaf+7tJZEYpJQ==
-X-Received: by 2002:a1c:f20f:: with SMTP id s15mr25880744wmc.33.1565604089682;
-        Mon, 12 Aug 2019 03:01:29 -0700 (PDT)
+        bh=62GUIJaxsBr0ns4SlEavg70SWuAMSrdfYiBgGd57XwE=;
+        b=Kvf3WIjBFnnMBdakTG+YPkFcQCHkqEXxk4iPkK7Yb1I1C7A/EYA5SJMGGt/PY0Hq9e
+         GK1WsqHDI2Dn+3FIMqXD2sQn/KBVUbbIDbFbwtSMeTMQiVWeWoVfXIowRKojhj+BvYbr
+         5p70oLGWb0XEb5L6oQ2ZlzafDfdR7kf5zbjd1bfeiILXsXfmwt9VLqlpsbBZBuhkIrIN
+         S9IAotlT9ESorTEsz/6O/oGgGjlkF8loPwkaKDznpxGX8hMjh7g2sVA90RVr8O+jW+6I
+         OJ5a8seRVjJlW0P4tGl51SLtTn0/KCkuwMX7M1Z1HyjdDo9uxRgxrjJwBBfDFYnqWnX/
+         x3Eg==
+X-Gm-Message-State: APjAAAWYE3FqP6dzIcCiL5m7c/oySiy758LX9QIakBAaiycd9oe7szKR
+        1nwrBXdP7KBdJZMxieAMen0=
+X-Google-Smtp-Source: APXvYqyGe3Uwpwg7TpcsDIQdq3Bc6K7fyTqjMAwH5wH1xbomsRFtWiYH1mhqegRSYkgIiRW1ibmNkg==
+X-Received: by 2002:adf:f710:: with SMTP id r16mr5314208wrp.81.1565604428659;
+        Mon, 12 Aug 2019 03:07:08 -0700 (PDT)
 Received: from localhost (pD9E51890.dip0.t-ipconnect.de. [217.229.24.144])
-        by smtp.gmail.com with ESMTPSA id u5sm8764194wmc.17.2019.08.12.03.01.28
+        by smtp.gmail.com with ESMTPSA id e4sm29119075wrh.39.2019.08.12.03.07.07
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 12 Aug 2019 03:01:28 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 12:01:27 +0200
+        Mon, 12 Aug 2019 03:07:07 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 12:07:06 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Sowjanya Komatineni <skomatineni@nvidia.com>
 Cc:     jonathanh@nvidia.com, tglx@linutronix.de, jason@lakedaemon.net,
@@ -57,16 +57,16 @@ Cc:     jonathanh@nvidia.com, tglx@linutronix.de, jason@lakedaemon.net,
         spatra@nvidia.com, robh+dt@kernel.org, digetx@gmail.com,
         devicetree@vger.kernel.org, rjw@rjwysocki.net,
         viresh.kumar@linaro.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v8 11/21] clk: tegra: clk-dfll: Add suspend and resume
+Subject: Re: [PATCH v8 12/21] cpufreq: tegra124: Add suspend and resume
  support
-Message-ID: <20190812100127.GJ8903@ulmo>
+Message-ID: <20190812100706.GK8903@ulmo>
 References: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
- <1565308020-31952-12-git-send-email-skomatineni@nvidia.com>
+ <1565308020-31952-13-git-send-email-skomatineni@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="72k7VsmfIboquFwl"
+        protocol="application/pgp-signature"; boundary="rwbb4r/vLufKlfJs"
 Content-Disposition: inline
-In-Reply-To: <1565308020-31952-12-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1565308020-31952-13-git-send-email-skomatineni@nvidia.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -74,98 +74,94 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---72k7VsmfIboquFwl
+--rwbb4r/vLufKlfJs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 08, 2019 at 04:46:50PM -0700, Sowjanya Komatineni wrote:
-> This patch implements DFLL suspend and resume operation.
+On Thu, Aug 08, 2019 at 04:46:51PM -0700, Sowjanya Komatineni wrote:
+> This patch adds suspend and resume pm ops for cpufreq driver.
 >=20
-> During system suspend entry, CPU clock will switch CPU to safe
-> clock source of PLLP and disables DFLL clock output.
+> PLLP is the safe clock source for CPU during system suspend and
+> resume as PLLP rate is below the CPU Fmax at Vmin.
 >=20
-> DFLL driver suspend confirms DFLL disable state and errors out on
-> being active.
+> CPUFreq driver suspend switches the CPU clock source to PLLP and
+> disables the DFLL clock.
 >=20
-> DFLL is re-initialized during the DFLL driver resume as it goes
-> through complete reset during suspend entry.
+> During system resume, warmboot code powers up the CPU with PLLP
+> clock source. So CPUFreq driver resume enabled DFLL clock and
+> switches CPU back to DFLL clock source.
 >=20
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 > Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 > ---
->  drivers/clk/tegra/clk-dfll.c               | 56 ++++++++++++++++++++++++=
+>  drivers/cpufreq/tegra124-cpufreq.c | 60 ++++++++++++++++++++++++++++++++=
 ++++++
->  drivers/clk/tegra/clk-dfll.h               |  2 ++
->  drivers/clk/tegra/clk-tegra124-dfll-fcpu.c |  1 +
->  3 files changed, 59 insertions(+)
+>  1 file changed, 60 insertions(+)
 >=20
-> diff --git a/drivers/clk/tegra/clk-dfll.c b/drivers/clk/tegra/clk-dfll.c
-> index f8688c2ddf1a..eb298a5d7be9 100644
-> --- a/drivers/clk/tegra/clk-dfll.c
-> +++ b/drivers/clk/tegra/clk-dfll.c
-> @@ -1487,6 +1487,7 @@ static int dfll_init(struct tegra_dfll *td)
->  	td->last_unrounded_rate =3D 0;
+> diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra12=
+4-cpufreq.c
+> index 4f0c637b3b49..e979a3370988 100644
+> --- a/drivers/cpufreq/tegra124-cpufreq.c
+> +++ b/drivers/cpufreq/tegra124-cpufreq.c
+> @@ -6,6 +6,7 @@
+>  #define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
 > =20
->  	pm_runtime_enable(td->dev);
-> +	pm_runtime_irq_safe(td->dev);
->  	pm_runtime_get_sync(td->dev);
-> =20
->  	dfll_set_mode(td, DFLL_DISABLED);
-> @@ -1513,6 +1514,61 @@ static int dfll_init(struct tegra_dfll *td)
+>  #include <linux/clk.h>
+> +#include <linux/cpufreq.h>
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+> @@ -128,8 +129,67 @@ static int tegra124_cpufreq_probe(struct platform_de=
+vice *pdev)
 >  	return ret;
 >  }
 > =20
-> +/**
-> + * tegra_dfll_suspend - check DFLL is disabled
-> + * @dev: DFLL device *
-> + *
-> + * DFLL clock should be disabled by the CPUFreq driver. So, make
-> + * sure it is disabled and disable all clocks needed by the DFLL.
-> + */
-> +int tegra_dfll_suspend(struct device *dev)
+> +static int __maybe_unused tegra124_cpufreq_suspend(struct device *dev)
 > +{
-> +	struct tegra_dfll *td =3D dev_get_drvdata(dev);
+> +	struct tegra124_cpufreq_priv *priv =3D dev_get_drvdata(dev);
+> +	int err;
 > +
-> +	if (dfll_is_running(td)) {
-> +		dev_err(td->dev, "dfll is enabled while shouldn't be\n");
+> +	/*
+> +	 * PLLP rate 408Mhz is below the CPU Fmax at Vmin and is safe to
+> +	 * use during suspend and resume. So, switch the CPU clock source
+> +	 * to PLLP and disable DFLL.
+> +	 */
+> +	err =3D clk_set_parent(priv->cpu_clk, priv->pllp_clk);
+> +	if (err < 0) {
+> +		dev_err(dev, "failed to reparent to PLLP: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	/* disable DFLL clock */
+> +	clk_disable_unprepare(priv->dfll_clk);
 
-Minor nit: "DFLL" in the error message, just like you have in the
-kerneldoc comment above. Perhaps also make the error message a little
-more specific. "while shouldn't be" makes the user guess what that
-means. Perhaps better to say something like:
+This comment is superfluous since it doesn't explain anything that the
+code below doesn't explain already.
 
-	"DFLL still enabled while suspending\n"
-
-or perhaps even add a hint as to what could be the culprit:
-
-	"DFLL still enabled while suspending, possibly a cpufreq driverbug\n"
-
-The latter is somewhat long and the former is enough because the
-kerneldoc comment already explains that cpufreq might be the reason for
-this.
-
-With a more specific error message, this is:
+Not sure who will end up merging this. If not me, then this is:
 
 Acked-by: Thierry Reding <treding@nvidia.com>
 
---72k7VsmfIboquFwl
+--rwbb4r/vLufKlfJs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1ROPcACgkQ3SOs138+
-s6GNTQ//VCpA84fs+aIIyDiD3wn1shO+OCh67D3tZ+8ScJa6j54SmHrCHGGWY3GP
-9JVQr5VFX4tMxrslidnMe6laHcoM5JU+vPSovEq5dTqjZe2HTmjsMswUBABd/Jrg
-fid7ioVcpPfdbbO2qNMS42Q698Kx0IFAv1t4NmhmCDDaE6NerYN8eJ94KYrFx7TI
-p4mvNUV3WcR9aGEOLwVyAcUatmR5EReyZJJ8nSNdPxfdzrLHUUtI9oIP9q8ADgpl
-djfabIZYjrDWaNIx6X/HLQU+3zf3C/SvDMsDJd8/oOa1WkOXKy7Wsbgt6PWZpm8q
-DbMkl8e57/v5fEfaERkqq+U9C0GFdZfpriI7qofQvbi80rkVrDq8UKEAQa/KkfeN
-8wiHr9XVeIwddApapx1YilBL1gAAphRdD7NOzvxeO4KMKCzbuQ7upYReNtBEaMVA
-EwhjYNEVWuEMwg3S5ssxpjqyWMT11WUDIxmX3WqPswNzN1K/dNCrDzKye1IVIET/
-s66UjxKscWJVnsmQWUVE4LKw3S6Tct4BOR+Us7XDJd9f417iSCTTC8lsEoz2PCIv
-tWNEWekILl5Pg/yT5SXy6z8+0g0fsD9R3Pxe56vf9dnGiG9kGx0wmP02FENpKUs2
-T+fSap9ZYLgjVvT2L3WDyQZWbVDl8X31T5nCquBVXKYSWOQqwrM=
-=U0sL
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1ROkoACgkQ3SOs138+
+s6EJKQ/+I3cbYEQ/nCqI+FT9m+vu0hLSkyzx0lJlJVnxlgxIi4AJGx6Pb3bXgNy4
+LEOQC2nlCzm1Lr9JeKBVpZ/AtP8axsHNXtAffRCITM3nfaXZhLCq1dhCXbf4uobC
+RCS8mOavaYc3hiqjb3Kg0V7CsGJ7TbNmAiCv32yIRKt21/vFz4nR+cyEEFZqYmkc
+BoCTX1+soYNwseydeRYxzCh619PxkfhENk41LrFlERSmQ7Ao4NVi1kq0FKLANmoi
+eY0Z++jK0OBTn74N2txmRuzguQe5UwqC6AAgMAzB7dvBHyFLc8iOJUmrNNL8bqj7
+vorJ7UK5f61JX9rEDC8Wq4i3RApb9aEyG+PiCpRTXlMbQOscpIZUnTU7P86DSfBt
+OxB1ZF2VZs9m/zoGOOKBPkO6ZpPNGKjjC+W1vhNNcHbB7uKolgABRgqvIK74wUrK
+ldM4+ba2hQxur5YU3Nrffaml2KORg2zBXm4YAm0DElONwx4Xtx0eQ1ymX2k9k/Dj
+KMiWTNSrN+jXruhyECkO90ogxk/DIzaBkVfieIDTzKYOggXKEo/PNUAepL0Osq7q
+IpQ576FFctxafQLakYMk0O89nTJnNtVkAUmdVi1BK2m0vKQclpzlE4w43UcJl3zb
+MYbIcsCnKZwWz9QsUmRI76d8JLPKsPiTtFjUopToIkOhSMcVO10=
+=xDLq
 -----END PGP SIGNATURE-----
 
---72k7VsmfIboquFwl--
+--rwbb4r/vLufKlfJs--
