@@ -2,144 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 406168A20F
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 17:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4478B8A238
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Aug 2019 17:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727236AbfHLPP1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 11:15:27 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:43760 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbfHLPP1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 11:15:27 -0400
-Received: by mail-wr1-f66.google.com with SMTP id p13so30311021wru.10
-        for <linux-pm@vger.kernel.org>; Mon, 12 Aug 2019 08:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=kxqbuY4B1dItH0K76N5jkNqR9OjL/xCxchMz+Ee+8mE=;
-        b=lr/cfQpIZIaBSo6b9Q3zxeOVa2+U0uJcOFT+1l6c30ZI2NbC+DOeDIoBUtdF0VF0ov
-         iwtSxkFt8UCR7dfeUmqY7rXB+7He3ZhOOiiMgmL9FmhQZgX9io9AucbNrI9nJyrQPpiQ
-         E09PfHLDjAQW2IEh/0AroZo9xVRg/aeq/biCAQVAdq5XJb+nsYnv99EIGDBAAuOFFspl
-         SvwOCXElndrpLEvzqNZeT1j0BHnGnbf85ioODXWRgasd1a/qtdcwvPJPWxwnBX0nqdQV
-         SOBGjVPPASSZhDPvsfTKmRg64PHj8QlxLf59HMArxIzwN0KgPsk+8C2CZB54WJ5SHGl+
-         0P7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=kxqbuY4B1dItH0K76N5jkNqR9OjL/xCxchMz+Ee+8mE=;
-        b=s+SfEro9eAMu2rswRs44z+WkW0koSporyHPLr+1QAK/bEJ8m2rRM4sXrE/004LbnD8
-         oQFnU2RyCXZXQbpGl2EJ0DLM3FdnflSNlLgFyIJ+WNvMP/m1aonPNrBZrwloc162ySs2
-         wzIdjSWOGjnbFvOIHX3x7a5kqAmfCbEFIN4zh6aOjEBnWCRA8hL9N8QRRgf0jfr+qvDp
-         QBQxZ/nf0Q8Bp86II5D/XpmnXb4beQJBKPQ2QoLHFQKgDSpU3ax5/p+0gK4ib2ieovmS
-         QW1mFROwNkE9qFXhhujceJiAEVd/OAsgSLgCL3U3E4vEKzWd2qe116GUsf4ByfCn5nSt
-         HuTw==
-X-Gm-Message-State: APjAAAUnDROoqOuIdeR/fBI0+uaGD+ktCp1Sgok7BDNDzPwMkz5Fz6JI
-        TDCfqENFZsvPkyUtom7xVGgfJw==
-X-Google-Smtp-Source: APXvYqyuePFlhOmpa07Fm6SyAPeyyhzMKjfeXv4MqLRtO62+RwuhXTyFoBewlD8zEFNaSN29kSEuGg==
-X-Received: by 2002:adf:f008:: with SMTP id j8mr26439756wro.129.1565622925048;
-        Mon, 12 Aug 2019 08:15:25 -0700 (PDT)
-Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id f134sm30682221wmg.20.2019.08.12.08.15.23
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Aug 2019 08:15:24 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 16:15:22 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allison Randal <allison@lohutok.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Tianping . Fang" <tianping.fang@mediatek.com>,
-        Josef Friedl <josef.friedl@speed.at>
-Subject: Re: [PATCH v5 01/10] dt-bindings: add powercontroller
-Message-ID: <20190812151522.GW26727@dell>
-References: <20190812121511.4169-1-frank-w@public-files.de>
- <20190812121511.4169-2-frank-w@public-files.de>
+        id S1727263AbfHLPYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 11:24:40 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:28767 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727037AbfHLPYk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 11:24:40 -0400
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id x7CFOFVG015133;
+        Tue, 13 Aug 2019 00:24:16 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x7CFOFVG015133
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1565623456;
+        bh=/ZLs0+GV+nR6TLnoM6cTJUiEDAyiLErBYzFGbX3v72M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OJzpQWw2Fwn/3fQ8DT/dj2bh1YFydaCAq5v8YJE8AxCIe3WPS2T5YtkW77TWjg9Tz
+         NoPYiwNyTZ1D4o7k8CKS1haSTcSef3BiTAMomiGs87V+5ICLpWQfMf9oiUGg/NdJVa
+         XR/HQovpgZ5u/XigRZl1C435CMvqiCsSUiMIch+Wvjr3r+UX2mL8LAttxrl0kqyAOH
+         GanJ99UvCbY4bHWZ/zsww5K0gRvD2Ezm7Tx8AWjUNbXiMzoe7Saef+lIqw8OrswMSy
+         VLezLRZfFoAtfQ8/5mqinYzP2XYhoQ0knpYwMA0q5isCpqxmy4PKpUdZaJ2QyPTriE
+         7FK8Zf13mX2xQ==
+X-Nifty-SrcIP: [209.85.221.182]
+Received: by mail-vk1-f182.google.com with SMTP id r13so292799vke.12;
+        Mon, 12 Aug 2019 08:24:16 -0700 (PDT)
+X-Gm-Message-State: APjAAAVMe2zbbQ5LGhS2eWq39HREyZFrilPa36wIzmT03ve3zkXzkpQM
+        WLG01bFqrJDQRsZ72sSK5Y+it/954scagU/RzWM=
+X-Google-Smtp-Source: APXvYqyf2GMOFUsRxNDu7JdMijybibC42MDZO/L+m1JKVxZCXdD83lEdp4K2xTiKxVjtWaNp/waolXng2NwGRKVWNbI=
+X-Received: by 2002:a1f:93cd:: with SMTP id v196mr5084585vkd.84.1565623454953;
+ Mon, 12 Aug 2019 08:24:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190812121511.4169-2-frank-w@public-files.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20190809002104.18599-1-stancheff@cray.com> <20190809002104.18599-2-stancheff@cray.com>
+In-Reply-To: <20190809002104.18599-2-stancheff@cray.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Tue, 13 Aug 2019 00:23:38 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAScm9P+QMZiqqSQnOoPsN54OTcTGpaDgxTbjJ_knoeGhA@mail.gmail.com>
+Message-ID: <CAK7LNAScm9P+QMZiqqSQnOoPsN54OTcTGpaDgxTbjJ_knoeGhA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kbuild: recursive build of external kernel modules
+To:     Shaun Tancheff <shaun@tancheff.com>
+Cc:     Shaun Tancheff <stancheff@cray.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Renninger <trenn@suse.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 12 Aug 2019, Frank Wunderlich wrote:
+On Fri, Aug 9, 2019 at 9:21 AM Shaun Tancheff <shaun@tancheff.com> wrote:
+>
+> When building a tree of external modules stage 2 fails
+> silently as the root modules.order is empty.
+>
+> Modify the modules.order location to be fixed to the
+> root when KBUILD_EXTMOD is specified and write all
+> module paths to the single modules.order file.
 
-> From: Josef Friedl <josef.friedl@speed.at>
-> 
-> add mt6323-rtc and mt6323-pwrc to mt6397 mfd DT bindings
-> an example is shown in mt6323-poweroff.txt
-> 
-> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
-> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> ---
-> changes since v4: use relative path
-> changes since v3: none
-> changes since v2: separated rtc-mt6397.txt to part 2
-> ---
->  .../devicetree/bindings/mfd/mt6397.txt        | 20 +++++++++++++------
->  .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++++++++
->  2 files changed, 34 insertions(+), 6 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> index 0ebd08af777d..063f5fe1cace 100644
-> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> @@ -8,11 +8,12 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
->  - Clock
->  - LED
->  - Keys
-> +- Power controller
->  
->  It is interfaced to host controller using SPI interface by a proprietary hardware
->  called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
->  See the following for pwarp node definitions:
-> -Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> +../../bindings/soc/mediatek/pwrap.txt
->  
->  This document describes the binding for MFD device and its sub module.
->  
-> @@ -22,14 +23,16 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
->  Optional subnodes:
->  
->  - rtc
-> -	Required properties:
-> +	Required properties: Should be one of follows
-> +		- compatible: "mediatek,mt6323-rtc"
->  		- compatible: "mediatek,mt6397-rtc"
-> +	For details, see ../../bindings/rtc/rtc-mt6397.txt
+Could you try v5.3-rc4 please?
 
-Apologies for the ambiguity.  I don't think you need to go all the way
-back to 'bindings'.  Just one step back will do fine.  ../rtc/* will be
-fine here.
+
+
+
+> Signed-off-by: Shaun Tancheff <stancheff@cray.com>
+> ---
+>  Makefile               | 1 +
+>  scripts/Makefile.build | 8 +++++++-
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 23cdf1f41364..a9964492f47e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1622,6 +1622,7 @@ $(module-dirs): prepare $(objtree)/Module.symvers
+>
+>  modules: $(module-dirs)
+>         @$(kecho) '  Building modules, stage 2.';
+> +       $(Q)$rm -f $(KBUILD_EXTMOD)/modules.order
+>         $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
+>
+>  PHONY += modules_install
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index 0d434d0afc0b..f9908b3d59e0 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -64,7 +64,13 @@ builtin-target := $(obj)/built-in.a
+>  endif
+>
+>  ifeq ($(CONFIG_MODULES)$(need-modorder),y1)
+> +ifneq ($(KBUILD_EXTMOD),)
+> +modorder-target := $(KBUILD_EXTMOD)/modules.order
+> +modorder-add := >>
+> +else
+>  modorder-target := $(obj)/modules.order
+> +modorder-add := >
+> +endif
+>  endif
+>
+>  mod-targets := $(patsubst %.o, %.mod, $(obj-m))
+> @@ -423,7 +429,7 @@ endif # builtin-target
+>  $(modorder-target): $(subdir-ym) FORCE
+>         $(Q){ $(foreach m, $(modorder), \
+>         $(if $(filter %/modules.order, $m), cat $m, echo $m);) :; } \
+> -       | $(AWK) '!x[$$0]++' - > $@
+> +       | $(AWK) '!x[$$0]++' - $(modorder-add) $@
+>
+>  #
+>  # Rule to compile a set of .o files into one .a file (with symbol table)
+> --
+> 2.20.1
+>
+
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Best Regards
+Masahiro Yamada
