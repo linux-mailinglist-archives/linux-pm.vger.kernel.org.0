@@ -2,86 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C028BD33
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 17:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589EC8BEBF
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 18:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728738AbfHMPcw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Aug 2019 11:32:52 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:45256 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728267AbfHMPcv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 11:32:51 -0400
-Received: by mail-ot1-f65.google.com with SMTP id m24so21070296otp.12;
-        Tue, 13 Aug 2019 08:32:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gUxjdv29i/zz0yhsyQQ9tXUj0teXUnXVx5wZn0u8xcY=;
-        b=D9X0LvAkKS8YirmXLIbUVWf+FPT6WQ2M/LjspRaVT715+rzo3645LZdlYSUglYkVMk
-         ziuODUX1LBT147yztFmPok0Q3RlJFX5mu1T26aFHRfvgmCi41ndBcTNUX4OXxP/iO77J
-         psz0bDJf54fgrExMwLvhYUkZ6eMpCoSgnHkjCp2mtSIzkjgIA/g7PBYOiwVLgMDsvyue
-         ri/fGWe5O2aceb5E0NFhPa6tTlvHAuK4cG1z7xjp/MQhp9DsS62ceN9+gAEK+amUWz/i
-         YmHmDfFTm52378JgBVFHwpBkpruotW/+tUIrPUlAobFJ2L627bTai+zw9qJaFwhVhWEJ
-         +9HA==
-X-Gm-Message-State: APjAAAUnAvEuckSX5gRr1inN8YQvVGevwD9/uM4mddnVVykfJc8Zgc5a
-        oXiHGmuIVKgeBFLXyJn4ijKqfYM=
-X-Google-Smtp-Source: APXvYqxixYytzQ0z+Eqgae6XCzjyQXj3k1zO1h3drY1QrnRfI0pQ9tw/0l3ht5LZ+XliX8W5/u4DFw==
-X-Received: by 2002:a02:5ec9:: with SMTP id h192mr43818608jab.25.1565710370564;
-        Tue, 13 Aug 2019 08:32:50 -0700 (PDT)
-Received: from localhost ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id s10sm224695749iod.46.2019.08.13.08.32.49
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 13 Aug 2019 08:32:49 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 09:32:49 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
-        georgi.djakov@linaro.org, vkoul@kernel.org, evgreen@chromium.org,
-        daidavid1@codeaurora.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 1/5] dt-bindings: interconnect: Add Qualcomm QCS404 DT
- bindings
-Message-ID: <20190813153249.GA29326@bogus>
-References: <20190723142339.27772-1-georgi.djakov@linaro.org>
- <20190723142339.27772-2-georgi.djakov@linaro.org>
+        id S1727035AbfHMQj0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Aug 2019 12:39:26 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:42008 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726705AbfHMQj0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Aug 2019 12:39:26 -0400
+Received: from zn.tnic (p200300EC2F0D2400E0D08C31C935E2D1.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:2400:e0d0:8c31:c935:e2d1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 697FA1EC09A0;
+        Tue, 13 Aug 2019 18:39:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1565714364;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=tOgOTHvWMeHZFSdHNNZyL9v8M9xW20CzYKvXuBdVzB0=;
+        b=SdH/BX/ZtKkWrAAMGoEAKLYZu/28PVBMu784kb4l6BSJLoDVCO3E6T/LXvTzRg+woz7CBl
+        XWlbxOteNZf4VXV0YNDFRMq4gKTDmo+4Dm/v5HboUjXbczmwjRjuXRv6o6jx6CrSYn6Puo
+        5xS8oeEbXTiaVcmM09p0Si1b/q1hZSs=
+Date:   Tue, 13 Aug 2019 18:40:09 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v8 02/28] x86/asm/suspend: use SYM_DATA for data
+Message-ID: <20190813164009.GG16770@zn.tnic>
+References: <20190808103854.6192-1-jslaby@suse.cz>
+ <20190808103854.6192-3-jslaby@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190723142339.27772-2-georgi.djakov@linaro.org>
+In-Reply-To: <20190808103854.6192-3-jslaby@suse.cz>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 23 Jul 2019 17:23:35 +0300, Georgi Djakov wrote:
-> The Qualcomm QCS404 platform has several buses that could be controlled
-> and tuned according to the bandwidth demand.
-> 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> ---
-> 
-> v5:
-> - Make reg and clocks DT properties required.
-> - Remove the _clk suffix from clock names.
-> 
-> v4:
-> - Add the DT header into this patch.
-> - Pick Bjorn's r-b.
-> 
-> v3:
-> - Add a reg property and move the interconnect nodes under the "soc" node.
-> 
-> v2:
-> - No changes.
-> 
->  .../bindings/interconnect/qcom,qcs404.txt     | 45 ++++++++++
->  .../dt-bindings/interconnect/qcom,qcs404.h    | 88 +++++++++++++++++++
->  2 files changed, 133 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
->  create mode 100644 include/dt-bindings/interconnect/qcom,qcs404.h
-> 
+On Thu, Aug 08, 2019 at 12:38:28PM +0200, Jiri Slaby wrote:
+> Some global data in the suspend code were marked as `ENTRY'. ENTRY was
+> intended for functions and shall be paired with ENDPROC. ENTRY also
+> aligns symbols which creates unnecessary holes here between data.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Well, but are we sure that removing that alignment is fine in all cases?
+If so, the commit message should state why it is ok for those symbols to
+not be aligned now.
+
+And before it, phys_base looks like this:
+
+.globl phys_base ; .p2align 4, 0x90 ; phys_base:
+
+and it is correctly 8 bytes:
+
+ffffffff82011010 <phys_base>:
+ffffffff82011010:       00 00                   add    %al,(%rax)
+ffffffff82011012:       00 00                   add    %al,(%rax)
+ffffffff82011014:       00 00                   add    %al,(%rax)
+ffffffff82011016:       00 00                   add    %al,(%rax)
+
+However, with this patch, it becomes:
+
+.globl phys_base ; ; phys_base: ; .quad 0x0000000000000000 ; .type phys_base STT_OBJECT ; .size phys_base, .-phys_base
+
+which is better as now we'll have the proper symbol size:
+
+ 86679: ffffffff8200f00a     8 OBJECT  GLOBAL DEFAULT   11 phys_base
+
+but in the vmlinux image it is 14(!) bytes:
+
+...
+ffffffff8200f002 <early_gdt_descr_base>:
+ffffffff8200f002:       00 a0 3b 82 ff ff       add    %ah,-0x7dc5(%rax)
+ffffffff8200f008:       ff                      (bad)
+ffffffff8200f009:       ff                      incl   (%rax)
+
+ffffffff8200f00a <phys_base>:
+ffffffff8200f00a:       00 00                   add    %al,(%rax)
+ffffffff8200f00c:       00 00                   add    %al,(%rax)
+ffffffff8200f00e:       00 00                   add    %al,(%rax)
+ffffffff8200f010:       00 00                   add    %al,(%rax)
+
+<--- should end here but the toolchain "stretches" it for whatever
+reason. Perhaps padding?
+
+ffffffff8200f012:       00 00                   add    %al,(%rax)
+ffffffff8200f014:       00 00                   add    %al,(%rax)
+ffffffff8200f016:       00 00                   add    %al,(%rax)
+
+ffffffff8200f018 <early_pmd_flags>:
+ffffffff8200f018:       e3 00                   jrcxz  ffffffff8200f01a <early_pmd_flags+0x2>
+...
+
+And that looks strange...
+
+> Since we are dropping historical markings, make proper use of newly added
+> SYM_DATA in this code.
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Acked-by: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> ---
+>  arch/x86/kernel/acpi/wakeup_32.S | 2 +-
+>  arch/x86/kernel/acpi/wakeup_64.S | 2 +-
+>  arch/x86/kernel/head_32.S        | 6 ++----
+>  arch/x86/kernel/head_64.S        | 5 ++---
+>  4 files changed, 6 insertions(+), 9 deletions(-)
+
+...
+
+> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+> index f3d3e9646a99..6c1bf7ae55ff 100644
+> --- a/arch/x86/kernel/head_64.S
+> +++ b/arch/x86/kernel/head_64.S
+> @@ -469,9 +469,8 @@ early_gdt_descr:
+>  early_gdt_descr_base:
+>  	.quad	INIT_PER_CPU_VAR(gdt_page)
+>  
+> -ENTRY(phys_base)
+> -	/* This must match the first entry in level2_kernel_pgt */
+> -	.quad   0x0000000000000000
+> +/* This must match the first entry in level2_kernel_pgt */
+> +SYM_DATA(phys_base, .quad 0x0000000000000000)
+
+You can write it
+
+SYM_DATA(phys_base, .quad 0x0)
+
+while at it. That string of 16 zeroes is unreadable and not needed.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+Good mailing practices for 400: avoid top-posting and trim the reply.
