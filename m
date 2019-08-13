@@ -2,135 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CACD8BC8B
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 17:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9258BCF7
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 17:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730038AbfHMPJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Aug 2019 11:09:15 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:54877 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729997AbfHMPJE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 11:09:04 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190813150902euoutp02df98466d7c5613fb4dd6e99f133729bc~6g-zw9xO71988619886euoutp02p
-        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2019 15:09:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190813150902euoutp02df98466d7c5613fb4dd6e99f133729bc~6g-zw9xO71988619886euoutp02p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1565708942;
-        bh=RSuWB2xKQuhROQTDhZij7BzEdzlLgFlLbdhuBzwZOp4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FNnU6/LNKWK9Fxz/Eeylw0hL3enUfb1V/kax3zEvxV7KO3CUQlv31gE2+pFsUqXRv
-         nrsYcKPDlvD4NtMUJYpF92TdC3KrcXjIF/RJ4MV0lmUXt12VQ9BIVx2ZMSeVulCubk
-         JYndVcNqx2Q2BLZYJpCEk9wrpcpre52ARtun/qwE=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190813150902eucas1p1f5ce8352c88dcb2283b5d575b316a36c~6g-zCwXJZ2552325523eucas1p1I;
-        Tue, 13 Aug 2019 15:09:02 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 0D.9E.04309.D82D25D5; Tue, 13
-        Aug 2019 16:09:01 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190813150900eucas1p12fbf753613c727d8cb6992b6f77aca80~6g-x4xntO0107601076eucas1p1I;
-        Tue, 13 Aug 2019 15:09:00 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190813150900eusmtrp1ef12e9ff19451c11121bb092049a0cd6~6g-xo0_cP1601316013eusmtrp1_;
-        Tue, 13 Aug 2019 15:09:00 +0000 (GMT)
-X-AuditID: cbfec7f4-ae1ff700000010d5-01-5d52d28d84ff
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id B1.D1.04166.C82D25D5; Tue, 13
-        Aug 2019 16:09:00 +0100 (BST)
-Received: from AMDC3061.DIGITAL.local (unknown [106.120.51.75]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190813150859eusmtip204ac58fffdac289ffdfa45d6d91ec1f8~6g-xDo-_d1702317023eusmtip2E;
-        Tue, 13 Aug 2019 15:08:59 +0000 (GMT)
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-To:     krzk@kernel.org
-Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
-        kgene@kernel.org, pankaj.dubey@samsung.com,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com,
-        m.szyprowski@samsung.com,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH v3 9/9] ARM: dts: Add samsung,asv-bin property for
- odroidxu3-lite
-Date:   Tue, 13 Aug 2019 17:08:27 +0200
-Message-Id: <20190813150827.31972-10-s.nawrocki@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190813150827.31972-1-s.nawrocki@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCKsWRmVeSWpSXmKPExsWy7djP87q9l4JiDZavMLDYOGM9q8X8I+dY
-        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y26xaOsXdovWvUfYLQ6/aWe1
-        2PzgGJsDr8emVZ1sHpuX1Hv0bVnF6PF5k1wASxSXTUpqTmZZapG+XQJXxsqr5gXf2Cp29t5g
-        bGC8wdrFyMkhIWAicb7rCGMXIxeHkMAKRokZH06yQThfGCUav9xlh3A+M0r0HZoK17Jow21W
-        iMRyRon9LXMY4VomLXkIVsUmYCjRe7SPEcQWERCWuLd0OdgoZoF7TBKnn55lAkkICwRL7Ghv
-        AmtgEVCVuLPuAVgDr4CNxPqLGxgh1slLrN5wgBnE5gSK75z+Hmy1hMBkdolTky8wQxS5SDT9
-        bYSyhSVeHd/CDmHLSJye3MMC0dDMKNGz+zY7hDOBUeL+8QVQK6wlDh+/CDSWA+g+TYn1u/RB
-        TAkBR4krXfwQJp/EjbeCIMXMQOakbdOZIcK8Eh1tQhAzVCR+r5rOBGFLSXQ/+c8CYXtINH76
-        Dw2tfmAwHtnEPIFRfhbCrgWMjKsYxVNLi3PTU4uN8lLL9YoTc4tL89L1kvNzNzEC08rpf8e/
-        7GDc9SfpEKMAB6MSD2/AlqBYIdbEsuLK3EOMEhzMSiK8Ey4ChXhTEiurUovy44tKc1KLDzFK
-        c7AoifNWMzyIFhJITyxJzU5NLUgtgskycXBKNTAKbhW4ZfN6bcvNYsPOqvm/G0271bZ+sq+Z
-        J/9nukh+VvLEvwxBpWx9t7f3sE/Qy0hqiH3Lwvz8dWsg+6VZZYKvr97t6Fq3pVXguW3lhvBV
-        S7r0I+bdmP+Iby9X6eoTd4uORPk3u6QLe7SdL0rdl7DurF2Y2ZrVpRPrGQO4/iZs/LTtqTpj
-        fboSS3FGoqEWc1FxIgDctfmmJwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCLMWRmVeSWpSXmKPExsVy+t/xe7o9l4JiDZ5PUbLYOGM9q8X8I+dY
-        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y26xaOsXdovWvUfYLQ6/aWe1
-        2PzgGJsDr8emVZ1sHpuX1Hv0bVnF6PF5k1wAS5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJ
-        pZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexsqr5gXf2Cp29t5gbGC8wdrFyMkhIWAisWjDbSCb
-        i0NIYCmjxNObZ5i6GDmAElIS81uUIGqEJf5c62KDqPnEKDF/eSdYM5uAoUTv0T5GEFsEqOje
-        0uXsIEXMAq+YJG7P+88EkhAWCJQ4s2UuC4jNIqAqcWfdA7AGXgEbifUXNzBCbJCXWL3hADOI
-        zQkU3zn9PdgCIQFriafv1jNPYORbwMiwilEktbQ4Nz232FCvODG3uDQvXS85P3cTIzDEtx37
-        uXkH46WNwYcYBTgYlXh4A7YExQqxJpYVV+YeYpTgYFYS4Z1wESjEm5JYWZValB9fVJqTWnyI
-        0RToqInMUqLJ+cD4yyuJNzQ1NLewNDQ3Njc2s1AS5+0QOBgjJJCeWJKanZpakFoE08fEwSnV
-        wJh54eb3R/aLPeUWFdSVbe8MDWfw+8zmOVWPvTvwTcIRputzzTe/uNWv3sJ1fdL/otaqm8lr
-        khcpKBgtbxP7F8Ly3iz12uZtp6bsW8j5bvqtAxo3l7EKqwQfnzl/oveDmC058qLRB0y41hi7
-        T521bmlIUOAx29CoOM+E+/v3sSxZlNQn3aIm2KLEUpyRaKjFXFScCADlvQxshwIAAA==
-X-CMS-MailID: 20190813150900eucas1p12fbf753613c727d8cb6992b6f77aca80
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190813150900eucas1p12fbf753613c727d8cb6992b6f77aca80
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190813150900eucas1p12fbf753613c727d8cb6992b6f77aca80
-References: <20190813150827.31972-1-s.nawrocki@samsung.com>
-        <CGME20190813150900eucas1p12fbf753613c727d8cb6992b6f77aca80@eucas1p1.samsung.com>
+        id S1728793AbfHMP0C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Aug 2019 11:26:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37690 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727494AbfHMP0B (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Aug 2019 11:26:01 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAC942184B;
+        Tue, 13 Aug 2019 15:26:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565709960;
+        bh=HmV3d0tX/vIGU4K6vVAo5cUg5Z8uSssDtsYqHJAG5bg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oXTK/Z2XPavPmmocWCTzqLAhdopHEqr0+WhpFAK86e901QMUz2hwOJ782cXRzWt6O
+         dd73osGsviYHzdVpTeZ7PctENRLocN/S6i3IIyyXpit2zvkMSpRGWyOpqenE2s4clG
+         NWV+sTZ4ZhnFbgA7AijE2ghB1sb8nDYpGJvZVppw=
+Received: by mail-qk1-f176.google.com with SMTP id 201so79889272qkm.9;
+        Tue, 13 Aug 2019 08:26:00 -0700 (PDT)
+X-Gm-Message-State: APjAAAWLC6YJdMtPlS/iI+m/2q69RnrRQJSKhRbSsao4/flCJw99Muwd
+        V/7qONQvMCUEJMCrEzeSciYqz86Z16DgmEP+nQ==
+X-Google-Smtp-Source: APXvYqwu0CBqLROjtaQy/EXgqwp575KsDNniswfKsW6qsOEg0w760DgeRdr91KRxD6alIStviaHUoqrBGdSw3n2c0Xw=
+X-Received: by 2002:a37:6944:: with SMTP id e65mr31723600qkc.119.1565709959793;
+ Tue, 13 Aug 2019 08:25:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190812121511.4169-1-frank-w@public-files.de> <20190812121511.4169-2-frank-w@public-files.de>
+In-Reply-To: <20190812121511.4169-2-frank-w@public-files.de>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 13 Aug 2019 09:25:47 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+fW=x8MoL3GMj6+ZKC3fd6F6+8Rtx=j5R9vEuL9UHCuQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+fW=x8MoL3GMj6+ZKC3fd6F6+8Rtx=j5R9vEuL9UHCuQ@mail.gmail.com>
+Subject: Re: [PATCH v5 01/10] dt-bindings: add powercontroller
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allison Randal <allison@lohutok.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Tianping . Fang" <tianping.fang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Exynos5422 SoC used on Odroid XU3 Lite boards belongs to
-a special ASV bin but this information cannot be read from the
-CHIPID block registers. Add samsung,asv-bin property for XU3
-Lite to ensure the ASV bin is properly determined.
+On Mon, Aug 12, 2019 at 6:24 AM Frank Wunderlich
+<frank-w@public-files.de> wrote:
+>
+> From: Josef Friedl <josef.friedl@speed.at>
+>
+> add mt6323-rtc and mt6323-pwrc to mt6397 mfd DT bindings
+> an example is shown in mt6323-poweroff.txt
 
-Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
----
-Changes since v2:
- - none
+How does this get to v5 with such a terrible subject? At least give
+some indication this is for some Mediatek chip.
 
-Changes since v1 (RFC):
- - new patch
----
- arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+The recipient list needs some work too. Don't Cc git committers that
+get_maintainers.pl lists.
 
-diff --git a/arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts b/arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts
-index c19b5a51ca44..a31ca2ef750f 100644
---- a/arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts
-+++ b/arch/arm/boot/dts/exynos5422-odroidxu3-lite.dts
-@@ -26,6 +26,10 @@
- 	status = "disabled";
- };
- 
-+&chipid {
-+	samsung,asv-bin = <2>;
-+};
-+
- &pwm {
- 	/*
- 	 * PWM 0 -- fan
--- 
-2.17.1
+>
+> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> ---
+> changes since v4: use relative path
+> changes since v3: none
+> changes since v2: separated rtc-mt6397.txt to part 2
+> ---
+>  .../devicetree/bindings/mfd/mt6397.txt        | 20 +++++++++++++------
+>  .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++++++++
+>  2 files changed, 34 insertions(+), 6 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+>
+> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> index 0ebd08af777d..063f5fe1cace 100644
+> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
+> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> @@ -8,11 +8,12 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
+>  - Clock
+>  - LED
+>  - Keys
+> +- Power controller
+>
+>  It is interfaced to host controller using SPI interface by a proprietary hardware
+>  called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
+>  See the following for pwarp node definitions:
+> -Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
+> +../../bindings/soc/mediatek/pwrap.txt
 
+Unrelated change to what the subject says. Clean-ups and new things in
+separate patches please.
+
+>
+>  This document describes the binding for MFD device and its sub module.
+>
+> @@ -22,14 +23,16 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
+>  Optional subnodes:
+>
+>  - rtc
+> -       Required properties:
+> +       Required properties: Should be one of follows
+> +               - compatible: "mediatek,mt6323-rtc"
+
+How is this related to 'powercontroller'?
+
+>                 - compatible: "mediatek,mt6397-rtc"
+> +       For details, see ../../bindings/rtc/rtc-mt6397.txt
+>  - regulators
+>         Required properties:
+>                 - compatible: "mediatek,mt6397-regulator"
+> -       see Documentation/devicetree/bindings/regulator/mt6397-regulator.txt
+> +       see ../../bindings/regulator/mt6397-regulator.txt
+>                 - compatible: "mediatek,mt6323-regulator"
+> -       see Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+> +       see ../../bindings/regulator/mt6323-regulator.txt
+>  - codec
+>         Required properties:
+>                 - compatible: "mediatek,mt6397-codec"
+> @@ -39,12 +42,17 @@ Optional subnodes:
+>  - led
+>         Required properties:
+>                 - compatible: "mediatek,mt6323-led"
+> -       see Documentation/devicetree/bindings/leds/leds-mt6323.txt
+> +       see ../../bindings/leds/leds-mt6323.txt
+>
+>  - keys
+>         Required properties:
+>                 - compatible: "mediatek,mt6397-keys" or "mediatek,mt6323-keys"
+> -       see Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+> +       see ../../bindings/input/mtk-pmic-keys.txt
+> +
+> +- power-controller
+> +       Required properties:
+> +               - compatible: "mediatek,mt6323-pwrc"
+> +       For details, see ../../bindings/power/reset/mt6323-poweroff.txt
+>
+>  Example:
+>         pwrap: pwrap@1000f000 {
+> diff --git a/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+> new file mode 100644
+> index 000000000000..933f0c48e887
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+> @@ -0,0 +1,20 @@
+> +Device Tree Bindings for Power Controller on MediaTek PMIC
+> +
+> +The power controller which could be found on PMIC is responsible for externally
+> +powering off or on the remote MediaTek SoC through the circuit BBPU.
+> +
+> +Required properties:
+> +- compatible: Should be one of follows
+> +       "mediatek,mt6323-pwrc": for MT6323 PMIC
+> +
+> +Example:
+> +
+> +       pmic {
+> +               compatible = "mediatek,mt6323";
+> +
+> +               ...
+> +
+> +               power-controller {
+> +                       compatible = "mediatek,mt6323-pwrc";
+> +               };
+> +       }
+> --
+> 2.17.1
+>
