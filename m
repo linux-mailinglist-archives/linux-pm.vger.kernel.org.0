@@ -2,153 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 589EC8BEBF
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 18:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF23C8BF5F
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 19:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727035AbfHMQj0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Aug 2019 12:39:26 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:42008 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726705AbfHMQj0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 13 Aug 2019 12:39:26 -0400
-Received: from zn.tnic (p200300EC2F0D2400E0D08C31C935E2D1.dip0.t-ipconnect.de [IPv6:2003:ec:2f0d:2400:e0d0:8c31:c935:e2d1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 697FA1EC09A0;
-        Tue, 13 Aug 2019 18:39:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1565714364;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=tOgOTHvWMeHZFSdHNNZyL9v8M9xW20CzYKvXuBdVzB0=;
-        b=SdH/BX/ZtKkWrAAMGoEAKLYZu/28PVBMu784kb4l6BSJLoDVCO3E6T/LXvTzRg+woz7CBl
-        XWlbxOteNZf4VXV0YNDFRMq4gKTDmo+4Dm/v5HboUjXbczmwjRjuXRv6o6jx6CrSYn6Puo
-        5xS8oeEbXTiaVcmM09p0Si1b/q1hZSs=
-Date:   Tue, 13 Aug 2019 18:40:09 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v8 02/28] x86/asm/suspend: use SYM_DATA for data
-Message-ID: <20190813164009.GG16770@zn.tnic>
-References: <20190808103854.6192-1-jslaby@suse.cz>
- <20190808103854.6192-3-jslaby@suse.cz>
+        id S1726094AbfHMRJU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Aug 2019 13:09:20 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:41283 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725923AbfHMRJU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 13:09:20 -0400
+Received: by mail-lj1-f194.google.com with SMTP id d24so102220161ljg.8
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2019 10:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GVzAnVzEMjxkSBqu8V9mlBdGqDjrrYQzVhEjxzd+3hI=;
+        b=I4qWR+mzqRT7c1SEkHGhKmL6s1EYBMsgtyPriDKNziH+B4FMxlEGuvrJH5HcS4lcUd
+         oEuShorJ4j1kTmfzSPRIGn/stYQAr97GOiXpjAyAAXj4cxkN8Dy0uFFDrdXb/ecYQt9m
+         1yniZalDerzD5yTNTTGHitP5LFfOrIUdgwpGE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GVzAnVzEMjxkSBqu8V9mlBdGqDjrrYQzVhEjxzd+3hI=;
+        b=Ihygdww829GbPCZF0t2bB1nehay3dQnKIM5yN6kF21uv3yjM7/xt3xIPCaZPtipFHs
+         QoOE0EiaEvO26kfDuxjk1RZpUvwHRXreqZHb2loo/EMGtujejL9+epYOoHRUsjrqPXTd
+         P5DGvMwfwjL/9jCivhf4WernIukOFVQqozR5K6n/QfTltTXqWG1RxyWzo9bE2mtWKGDO
+         s670eKUbRZKv9LKNpO0FBSrLPZ0PJAPgz8WD50WdanZyr4tfsTlA0vZOMQfY3ZSc2dYL
+         uIOEANb1e+CTfdh5aoLJYI5jgjvp9H9VtvIgfoaLup4+BAO9Ll7p9C5QTZW3rr3y6eix
+         DXmQ==
+X-Gm-Message-State: APjAAAWixRXFEJx2ZooH6bpD64I+XDxM5BY6invu+JlsfqxNYO6HvaqT
+        xb717tFmmM1iS+ZavgqtIUA1/dghGFQ=
+X-Google-Smtp-Source: APXvYqzfMkxOkKxQh0suC8Mrhvy3ZGDv8zJXwYH3kb85T0Kdw/zi3vPVsKvKTYN6JmfREuQ8yLR3iw==
+X-Received: by 2002:a2e:8545:: with SMTP id u5mr8529449ljj.125.1565716158606;
+        Tue, 13 Aug 2019 10:09:18 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id d7sm19686641lfa.86.2019.08.13.10.09.17
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 10:09:17 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id h28so77213956lfj.5
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2019 10:09:17 -0700 (PDT)
+X-Received: by 2002:a19:641a:: with SMTP id y26mr22803433lfb.29.1565716156648;
+ Tue, 13 Aug 2019 10:09:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190808103854.6192-3-jslaby@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190813145341.28530-1-georgi.djakov@linaro.org> <20190813145341.28530-4-georgi.djakov@linaro.org>
+In-Reply-To: <20190813145341.28530-4-georgi.djakov@linaro.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 13 Aug 2019 10:08:40 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6ZpM6x21X+SxCbNDdNS5B51yYAFA0XBbViqLmr99n5SQ@mail.gmail.com>
+Message-ID: <CAE=gft6ZpM6x21X+SxCbNDdNS5B51yYAFA0XBbViqLmr99n5SQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] interconnect: qcom: Add tagging and wake/sleep
+ support for sdm845
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, David Dai <daidavid1@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        amit.kucheria@linaro.org, Doug Anderson <dianders@chromium.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 12:38:28PM +0200, Jiri Slaby wrote:
-> Some global data in the suspend code were marked as `ENTRY'. ENTRY was
-> intended for functions and shall be paired with ENDPROC. ENTRY also
-> aligns symbols which creates unnecessary holes here between data.
+On Tue, Aug 13, 2019 at 7:53 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
+>
+> From: David Dai <daidavid1@codeaurora.org>
+>
+> Add support for wake and sleep commands by using a tag to indicate
+> whether or not the aggregate and set requests fall into execution
+> state specific bucket.
+>
+> Signed-off-by: David Dai <daidavid1@codeaurora.org>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-Well, but are we sure that removing that alignment is fine in all cases?
-If so, the commit message should state why it is ok for those symbols to
-not be aligned now.
-
-And before it, phys_base looks like this:
-
-.globl phys_base ; .p2align 4, 0x90 ; phys_base:
-
-and it is correctly 8 bytes:
-
-ffffffff82011010 <phys_base>:
-ffffffff82011010:       00 00                   add    %al,(%rax)
-ffffffff82011012:       00 00                   add    %al,(%rax)
-ffffffff82011014:       00 00                   add    %al,(%rax)
-ffffffff82011016:       00 00                   add    %al,(%rax)
-
-However, with this patch, it becomes:
-
-.globl phys_base ; ; phys_base: ; .quad 0x0000000000000000 ; .type phys_base STT_OBJECT ; .size phys_base, .-phys_base
-
-which is better as now we'll have the proper symbol size:
-
- 86679: ffffffff8200f00a     8 OBJECT  GLOBAL DEFAULT   11 phys_base
-
-but in the vmlinux image it is 14(!) bytes:
-
-...
-ffffffff8200f002 <early_gdt_descr_base>:
-ffffffff8200f002:       00 a0 3b 82 ff ff       add    %ah,-0x7dc5(%rax)
-ffffffff8200f008:       ff                      (bad)
-ffffffff8200f009:       ff                      incl   (%rax)
-
-ffffffff8200f00a <phys_base>:
-ffffffff8200f00a:       00 00                   add    %al,(%rax)
-ffffffff8200f00c:       00 00                   add    %al,(%rax)
-ffffffff8200f00e:       00 00                   add    %al,(%rax)
-ffffffff8200f010:       00 00                   add    %al,(%rax)
-
-<--- should end here but the toolchain "stretches" it for whatever
-reason. Perhaps padding?
-
-ffffffff8200f012:       00 00                   add    %al,(%rax)
-ffffffff8200f014:       00 00                   add    %al,(%rax)
-ffffffff8200f016:       00 00                   add    %al,(%rax)
-
-ffffffff8200f018 <early_pmd_flags>:
-ffffffff8200f018:       e3 00                   jrcxz  ffffffff8200f01a <early_pmd_flags+0x2>
-...
-
-And that looks strange...
-
-> Since we are dropping historical markings, make proper use of newly added
-> SYM_DATA in this code.
-> 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Acked-by: Pavel Machek <pavel@ucw.cz>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: x86@kernel.org
-> Cc: linux-pm@vger.kernel.org
-> ---
->  arch/x86/kernel/acpi/wakeup_32.S | 2 +-
->  arch/x86/kernel/acpi/wakeup_64.S | 2 +-
->  arch/x86/kernel/head_32.S        | 6 ++----
->  arch/x86/kernel/head_64.S        | 5 ++---
->  4 files changed, 6 insertions(+), 9 deletions(-)
-
-...
-
-> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-> index f3d3e9646a99..6c1bf7ae55ff 100644
-> --- a/arch/x86/kernel/head_64.S
-> +++ b/arch/x86/kernel/head_64.S
-> @@ -469,9 +469,8 @@ early_gdt_descr:
->  early_gdt_descr_base:
->  	.quad	INIT_PER_CPU_VAR(gdt_page)
->  
-> -ENTRY(phys_base)
-> -	/* This must match the first entry in level2_kernel_pgt */
-> -	.quad   0x0000000000000000
-> +/* This must match the first entry in level2_kernel_pgt */
-> +SYM_DATA(phys_base, .quad 0x0000000000000000)
-
-You can write it
-
-SYM_DATA(phys_base, .quad 0x0)
-
-while at it. That string of 16 zeroes is unreadable and not needed.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-Good mailing practices for 400: avoid top-posting and trim the reply.
+Reviewed-by: Evan Green <evgreen@chromium.org>
