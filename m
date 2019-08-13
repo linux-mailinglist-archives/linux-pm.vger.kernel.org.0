@@ -2,182 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B275D8BC49
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 17:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8B58BC76
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 17:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729657AbfHMPAB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Aug 2019 11:00:01 -0400
-Received: from mail-eopbgr40043.outbound.protection.outlook.com ([40.107.4.43]:31851
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729060AbfHMPAB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 13 Aug 2019 11:00:01 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a/b1AE7vjIJqNqPNdlUquZJzsx45yqlq3MhhaN+/uD3i+EKm1H3sH6E6pQdbkhkgOZOGYUlxPeXysTKqfeu20pdGSMAbb4w2r7FLaMgc+uvHvGH73lMEONkH0SuCQPavG25zZ7reVMxb5MFk97VurCyZYRezGkYtIdWDZlmJ5+KmTmBs/D+j/HRzyagHKP4H6k6kf/dpcjB+QnDMCVBJ2ZTcgHgPP8j8CiUohwgAkzJ5yUAvViIozzsFT8q5EqFOGFzvLEO4dZY2YHqj+cbiKAsH2Ief0+5oKxIGFKXDmowEm5WBkZnUXoSNO/ZppguWLuWyHGgffpb9+/FB+DTYNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mDiILO7SooLmClTeL9XDv9DJ76g+A5SreUDfpe+zN4I=;
- b=AC7xpxg6fUrOannUh5rWXCEzg7lDvrfuleI9f0d3Izf9Gwt0gaRI9aUAaPC50Vq63ZqwfM+0IUDcC3B8a+UdKtBKN3vpODaR2rX+WMv3c9mDXF9URyVfymaRCqGsELQM6HzzuWCOFPmYZtPDcRvt6mxEGAH+L7L1jCbuxSqBN6AeNYwAc/olieLTOb7MbTYJFfOMxFr7ODdSkIzoucK15j+9DgJcTKmJKVJnXgHujbw5jgpGc6zxYUHEjQ7bDemaYP7ztkKffy6R60giVjG4FLSytqEvp6KfOjRRkbioCn0tsABloF7HY7+ySm+WfyhZCCbqF2bIxvYkk0eqTQr4WQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mDiILO7SooLmClTeL9XDv9DJ76g+A5SreUDfpe+zN4I=;
- b=eCchaYVjbxb1tj2sx7I6c+U3tzvwvvwZTdTd4h3kX8OaEq1ojBIFoMEcTK/+A14UIlA/FCW64FV+kT27rwFytPtj3IWs0jmD8Gm13M4katpUu6xn/P7FhAzXlD1fWF9GmtLZCwfvzvbYxi+fKCp9lEI92NRf8jjwTI29JziPd+o=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB5231.eurprd04.prod.outlook.com (20.177.51.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.23; Tue, 13 Aug 2019 14:59:56 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::e53d:e6a9:79bd:f970]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::e53d:e6a9:79bd:f970%2]) with mapi id 15.20.2157.022; Tue, 13 Aug 2019
- 14:59:56 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/7] dt-bindings: devfreq: Add bindings for generic imx
- buses
-Thread-Topic: [PATCH 2/7] dt-bindings: devfreq: Add bindings for generic imx
- buses
-Thread-Index: AQHVUT6+xLIyJJ3RiUKs8c+X3Pwpzw==
-Date:   Tue, 13 Aug 2019 14:59:56 +0000
-Message-ID: <VI1PR04MB70237460E84C4F8AC9EBE582EED20@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1565633880.git.leonard.crestez@nxp.com>
- <97b0bff95ddb85b06ef3d2f8079faa36562a956d.1565633880.git.leonard.crestez@nxp.com>
- <CAL_JsqJWpQN2oTm8Q2_Gzd0GJ+YZoc9j-zh-U1s4eGhMxDEmEA@mail.gmail.com>
- <VI1PR04MB702300C8C78BC033D16EDB85EED20@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <CAL_Jsq+BDO-J12BddWw-KbhjTx95p58qqpUhhKzUHED6vFK2TA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c39602a3-02da-404d-71bd-08d71ffee7ac
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5231;
-x-ms-traffictypediagnostic: VI1PR04MB5231:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB52316504812CE809F110E4CBEED20@VI1PR04MB5231.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 01283822F8
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(346002)(396003)(39860400002)(376002)(136003)(189003)(199004)(66946007)(99286004)(91956017)(33656002)(71200400001)(71190400001)(305945005)(14454004)(74316002)(7736002)(66446008)(8936002)(66476007)(66556008)(64756008)(76116006)(7416002)(478600001)(86362001)(66066001)(81156014)(6116002)(14444005)(53936002)(55016002)(256004)(8676002)(5660300002)(9686003)(316002)(2906002)(6246003)(6436002)(3846002)(229853002)(25786009)(446003)(76176011)(476003)(4326008)(486006)(7696005)(110136005)(6506007)(26005)(53546011)(102836004)(186003)(54906003)(81166006)(52536014)(44832011)(41533002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5231;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: +oivDm7qkUVaNWKCnrwGa50AJ3OiLZat36kPCpfPuotVYL9Hy4LhV+aOEbUPh/31WPjiHbL8ti+6tNnv00cz+Z3W7ecZnh7tmLyHw4wKAWRNoZJ+KLnBGSzz5NqVVOyB4ZG2IGghT6symAah0cn69QAR2dHmBODmgA7TRDpc6S4BZXKhT5mbgsh8eYPvFNdFHBSu0VlXwOvyEi9V4KcsijXufw1JMrzSrWWE9A/q57RZ0RyfY1ZNk0tQ6HEE9T/KU2A8jLv2b7Gwbz3mK7xAv1CmKuyPCDMddkgEHZS61HfzjN/A7eqP1D5D8nTDiG4vXa9d13AkuoO1stmGsPuvkYj4W6x0xKfnrqAIYjgW6fp2wkhkyI+oh1Y3WcfMVTiTYCOA4cALQxqAZx9uxKGZh4Fno51F2Rin2Ieqc4f/OWU=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S1729915AbfHMPIq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Aug 2019 11:08:46 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:54750 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729913AbfHMPIq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 11:08:46 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190813150844euoutp02cfacef1d05337694df71a57428d260c1~6g-iyMFur1874218742euoutp02i
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2019 15:08:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190813150844euoutp02cfacef1d05337694df71a57428d260c1~6g-iyMFur1874218742euoutp02i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1565708924;
+        bh=7ATlolmKB2vLAwWlEKLrEMvaSHiuKCWTBcweaWIHNYc=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=FihvMt4lSk7Hj2Nd8IkQjvu2q/vtJ4BP4vj/J7R/E9nfnFIMxQybD7P0PLdUlyFq8
+         juH4xaZB+0ydCehHmjahW3xUZer6TfD4Ul6vdLJsWHgU6X+P9/NHYRp/1REBIefxh1
+         OaoJBW5U7q/NhZOxX4CFBs7Xbf9iPeFvptqJ3G6s=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190813150843eucas1p19382c776b90dd8a959dbfabde955d639~6g-h5XLUT0898208982eucas1p1J;
+        Tue, 13 Aug 2019 15:08:43 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id C2.9E.04309.B72D25D5; Tue, 13
+        Aug 2019 16:08:43 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190813150842eucas1p2c248537d9cd593073e12abeac2cacab5~6g-g7bwt52657926579eucas1p2u;
+        Tue, 13 Aug 2019 15:08:42 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190813150842eusmtrp15fcd0a834058ad23143a20e535a97203~6g-grdCL91601316013eusmtrp1j;
+        Tue, 13 Aug 2019 15:08:42 +0000 (GMT)
+X-AuditID: cbfec7f4-ae1ff700000010d5-d9-5d52d27b5da6
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 06.C1.04166.A72D25D5; Tue, 13
+        Aug 2019 16:08:42 +0100 (BST)
+Received: from AMDC3061.DIGITAL.local (unknown [106.120.51.75]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190813150841eusmtip2c0cefc9844cbef5bf5c605e8884af6ed~6g-gC7cEV1406314063eusmtip2X;
+        Tue, 13 Aug 2019 15:08:41 +0000 (GMT)
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+To:     krzk@kernel.org
+Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
+        kgene@kernel.org, pankaj.dubey@samsung.com,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [PATCH v3 0/9] Exynos Adaptive Supply Voltage support
+Date:   Tue, 13 Aug 2019 17:08:18 +0200
+Message-Id: <20190813150827.31972-1-s.nawrocki@samsung.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c39602a3-02da-404d-71bd-08d71ffee7ac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2019 14:59:56.2705
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qiInde8124Kwa7NBBs23Kt/FEE434S4IjjBy8vPBb/r6S1s2kFZ+caytrxh8/G1HI+hcZoUCCj5mfOL0tU2Q9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5231
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SfSyUcRzv97zc8zDHzyHfXaa6MquWl9CepolV223WMrU2lenKM4zDnvOS
+        /JHNVIRUW6RaSnbnTDhHIta8zlTCZrcpydtCkVxbRcl5KP99Xr6f7+/z3X4sKWug5WxMfBIv
+        xKviFBJrqr7zZ+/e9P7QcK8q02aupqiK5h62v6G5G2MzJNfbW81whrFBmhtovC/hFvLaEVfU
+        20Jwle3vGe5xnZnhsprbGa7t81Waqx3plARKlQZ9tkRZ++SyMt+oR8oFg2sIddr6YCQfF5PC
+        C54B56yjOxeqqMRCp4vNS8/IDPQW5yArFrAvvCv+TuQga1aGdQgymyrWiBlBf3UNI5IFBFPd
+        HWg9Mv7rFS0aWgQfJ7X0v0iGScdYpiTYG/I68lcTjtgBhsu0q6tIPExAz8RrwmI44AAYH10m
+        LZjCbmB8sbiCWVaK/aHsQYL42laoqH65OiLF9tB9d5yyYHJFz6y7R1p2An7KQNtoPiMGjsDk
+        w1ZaxA4w3WVc012g53YuJQYyEeQ2DTEiKUDwoatk7Th/aOvqoy0tSLwLqho9RTkIimp1EosM
+        2BZMX+zFErZwq76QFGUpXLsiE6d3wqK+kBCxHK6PL1MiVsLs4PJqHRkOh2HzDFGAthVvOK14
+        w2nF/zuUIFKPnPlkjTqK1+yL51M9NCq1Jjk+yuNCgtqAVv5Tz58ucwNqXDrfijCLFDbSEGNo
+        uIxWpWjS1K0IWFLhKC3oW5Gkkaq0S7yQECEkx/GaVrSFpRTO0vRNI2dkOEqVxMfyfCIvrLsE
+        ayXPQMHTi8+VXn7aJhfnww4FYNIKFS5BSwduHpoLTZ1yfUTg2RNJgkHi3u8e9tu3xfUU53gs
+        f3bMXOrm0xTett9mPrC8LBup7bzCVNvLf+woFbqHvpqD6z75SHQzcyePH5Urzwb4yearnTrs
+        vnlOyF1jAwci9tgOjt7x6B5trkwishSUJlrlvZsUNKq/gyHdpEsDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIIsWRmVeSWpSXmKPExsVy+t/xe7pVl4JiDdbe4LfYOGM9q8X8I+dY
+        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y26xaOsXdovWvUfYLQ6/aWe1
+        2PzgGJsDr8emVZ1sHpuX1Hv0bVnF6PF5k1wAS5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJ
+        pZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexrHP61kKpotW7P2znbmB8YJAFyMnh4SAicSTX2dY
+        QWwhgaWMEg2tMl2MHEBxKYn5LUoQJcISf651sXUxcgGVfGKUmDHpFiNIgk3AUKL3aB+YLQJU
+        dG/pcnaQImaBV0wSt+f9ZwJJCAvYSTx59J8ZxGYRUJXYsuc3M8gCXgFriaVz8yEWyEus3nAA
+        rIRXQFDi5MwnLCAlzALqEuvnCYGEmYFKmrfOZp7AyD8LSdUshKpZSKoWMDKvYhRJLS3OTc8t
+        NtQrTswtLs1L10vOz93ECIyebcd+bt7BeGlj8CFGAQ5GJR7egC1BsUKsiWXFlbmHGCU4mJVE
+        eCdcBArxpiRWVqUW5ccXleakFh9iNAX6YCKzlGhyPjCy80riDU0NzS0sDc2NzY3NLJTEeTsE
+        DsYICaQnlqRmp6YWpBbB9DFxcEo1MJaah3wSb63vzrd/acX6UM5vefZ1074yda/UTbNeb37e
+        f9vQWnhbxyvODUs47mocXrSQIZv3zMVzXNtZrO+KrpOKZ/3ZKvz2mN7KZY7TbTcnC/3YcTeo
+        f3uEu9Jl3dIDD6TmSnhHhZ5LtRfYrv757aJ0Oe+iuN3X6ty4H/ysDTm4/v8vx+6lj5RYijMS
+        DbWYi4oTAY4cMiK0AgAA
+X-CMS-MailID: 20190813150842eucas1p2c248537d9cd593073e12abeac2cacab5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190813150842eucas1p2c248537d9cd593073e12abeac2cacab5
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190813150842eucas1p2c248537d9cd593073e12abeac2cacab5
+References: <CGME20190813150842eucas1p2c248537d9cd593073e12abeac2cacab5@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13.08.2019 17:06, Rob Herring wrote:=0A=
-> On Mon, Aug 12, 2019 at 7:32 PM Leonard Crestez <leonard.crestez@nxp.com>=
- wrote:=0A=
->> On 8/12/2019 10:47 PM, Rob Herring wrote:=0A=
->>> On Mon, Aug 12, 2019 at 12:49 PM Leonard Crestez <leonard.crestez@nxp.c=
-om> wrote:=0A=
-=0A=
->>>> Add initial dt bindings for the interconnects inside i.MX chips.=0A=
->>>> Multiple external IPs are involved but SOC integration means the=0A=
->>>> software controllable interfaces are very similar.=0A=
->>>>=0A=
->>>> +description: |=0A=
->>>> +  The i.MX SoC family has multiple buses for which clock frequency (a=
-nd sometimes=0A=
->>>> +  voltage) can be adjusted.=0A=
->>>> +=0A=
->>>> +  Some of those buses expose register areas mentioned in the memory m=
-aps as GPV=0A=
->>>> +  ("Global Programmers View") but not all. Access to this area might =
-be denied for=0A=
->>>> +  normal world.=0A=
->>>> +=0A=
->>>> +  The buses are based on externally licensed IPs such as ARM NIC-301 =
-and Arteris=0A=
->>>> +  FlexNOC but DT bindings are specific to the integration of these bu=
-s=0A=
->>>> +  interconnect IPs into imx SOCs.=0A=
->>>=0A=
->>> No need to use the interconnect binding?=0A=
->>=0A=
->> The interconnect is represented by a separate "virtual" node which might=
-=0A=
->> not be OK. There was also a recent RFC from samsung which turns devfreq=
-=0A=
->> nodes into interconnect providers:=0A=
->>=0A=
->> Is that preferable?=0A=
-> =0A=
-> Virtual nodes are not OK.=0A=
-=0A=
-Then I'll try to make the "interconnect" device probe from a soc driver =0A=
-and turn devfreq nodes into interconnect providers backed by this same =0A=
-singleton device.=0A=
-=0A=
-Still separate from this series.=0A=
-=0A=
->>>> +required:=0A=
->>>> +  - compatible=0A=
->>>> +  - clocks=0A=
->>>=0A=
->>> reg?=0A=
->>=0A=
->> This is deliberately optional: for some NICs the GPV register area is=0A=
->> not exposed in the memory map. This is unusual but an accurate=0A=
->> description of the hardware.=0A=
-> =0A=
-> Different h/w blocks should have different compatibles. GPV is an Arm=0A=
-> thing and I'd expect FlexNOC to be different.=0A=
-=0A=
-The imx reference manuals call them both "GPV" though layout is indeed =0A=
-quite different (and for FlexNoC it's not even documented).=0A=
-=0A=
-The h/w blocks do have different compat strings (imx8m-nic and =0A=
-imx8m-noc). They have a single binding document because didn't want to =0A=
-create two nearly-identical bindings, I assume it would be fine to split =
-=0A=
-later if needed.=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+This is third iteration of my patch series adding ASV (Adaptive Supply 
+Voltage) support for Exynos SoCs. The previous one can be found at:
+https://lore.kernel.org/lkml/20190718143044.25066-1-s.nawrocki@samsung.com
+
+There is no major changes in this series comparing to v2, only minor
+corrections addressing review comments.
+
+I was not sure it was a good idea to try to extend the OPP binding 
+so as to include the ASV data tables in DT, so the tables are left
+in the driver.
+
+This patch set includes Exynos CHIPID driver posted by Pankaj Dubey and
+futher improved by Bartłomiej Żołnierkiewicz [1].
+
+Tested on Odroid XU3, XU3 Lite, XU4.
+
+One of the things on TODO list is support for the Adaptive Body Bias.
+This will require modifications on the cpufreq driver side in order to 
+support multiple voltage regulators and changes in the OPP framework 
+to support adding OPPs with multiple voltages.
+
+[1] https://lkml.org/lkml/2018/11/15/908
+
+Pankaj Dubey (3):
+  soc: samsung: Add exynos chipid driver support
+  ARM: EXYNOS: enable exynos_chipid for ARCH_EXYNOS
+  ARM64: EXYNOS: enable exynos_chipid for ARCH_EXYNOS
+
+Sylwester Nawrocki (6):
+  soc: samsung: Convert exynos-chipid driver to use the regmap API
+  soc: samsung: Add Exynos Adaptive Supply Voltage driver
+  ARM: EXYNOS: Enable exynos-asv driver for ARCH_EXYNOS
+  soc: samsung: Update the CHIP ID DT binding documentation
+  ARM: dts: Add "syscon" compatible string to chipid node
+  ARM: dts: Add samsung,asv-bin property for odroidxu3-lite
+
+ .../bindings/arm/samsung/exynos-chipid.txt    |  10 +-
+ arch/arm/boot/dts/exynos5.dtsi                |   4 +-
+ .../boot/dts/exynos5422-odroidxu3-lite.dts    |   4 +
+ arch/arm/mach-exynos/Kconfig                  |   2 +
+ arch/arm64/Kconfig.platforms                  |   1 +
+ drivers/soc/samsung/Kconfig                   |  15 +
+ drivers/soc/samsung/Makefile                  |   5 +
+ drivers/soc/samsung/exynos-asv.c              | 184 +++++++
+ drivers/soc/samsung/exynos-asv.h              |  82 +++
+ drivers/soc/samsung/exynos-chipid.c           | 101 ++++
+ drivers/soc/samsung/exynos5422-asv.c          | 498 ++++++++++++++++++
+ drivers/soc/samsung/exynos5422-asv.h          |  25 +
+ include/linux/soc/samsung/exynos-chipid.h     |  52 ++
+ 13 files changed, 979 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/soc/samsung/exynos-asv.c
+ create mode 100644 drivers/soc/samsung/exynos-asv.h
+ create mode 100644 drivers/soc/samsung/exynos-chipid.c
+ create mode 100644 drivers/soc/samsung/exynos5422-asv.c
+ create mode 100644 drivers/soc/samsung/exynos5422-asv.h
+ create mode 100644 include/linux/soc/samsung/exynos-chipid.h
+
+-- 
+2.17.1
+
