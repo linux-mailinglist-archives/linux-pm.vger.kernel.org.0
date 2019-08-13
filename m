@@ -2,180 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A268C44D
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 00:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6C28C48C
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 00:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727185AbfHMWft (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Aug 2019 18:35:49 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45523 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726893AbfHMWfs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 18:35:48 -0400
-Received: by mail-pg1-f195.google.com with SMTP id o13so51984014pgp.12
-        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2019 15:35:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:from:cc:to:user-agent:date;
-        bh=mAGeWIXe6MQJuIUiTRMUvfwygGGoJcMf2QyhITXHXtg=;
-        b=XJP8Xmhw7g0F4QLB73GBqerBE9NZmQRPXhIggC8smBOoGVgOJvr2tTSVGEUip/CQkg
-         rI3XfMrRbRfDJwjHO9Jbhy3rShDvoIkjcC9BGB+vZ1aIwzn0/vlOWN4JjpV7FyKW1DSI
-         y+5qBySuwVD/w4FyVJwvTZvOnuaZKKM1TxKa0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
-         :user-agent:date;
-        bh=mAGeWIXe6MQJuIUiTRMUvfwygGGoJcMf2QyhITXHXtg=;
-        b=uS7t5HYB9uHUqmnahTQavZR2A7C3+FPbsZ6tNc9XlCfzpCU+74mcwglyHz1hWMJd1u
-         fSnJAxLx7NVHCApwNWumgjcFMVUe1iQZfWXET9zXc6alCu7XpdbyfPhJxWi6uVoRIlnN
-         0OKp38zRGMQlQurOP7Wl7Sl+DklPZNjx1v6zUJNLQHv3lyJdpTAGhi+nafeIZvelLJ/F
-         Is3zTPUBF6VVpYgjUDtr3IQZlsxVFCGvqu4Ph4lpMkmCiFt2VaICK2TgS9BWf/jLafdQ
-         i2nehEjXdqCuvmloOpxEjWsSxQuYK1lEVIj+ldQkn5G5s1ezkxGVs4kJseLp9T5XVN3p
-         bJrw==
-X-Gm-Message-State: APjAAAXRFqpuuMgibku+NKPZh8lsmMbJ75FADS+F9sFIVWH1dRqf0uh2
-        KEKapIHPyszUJLpTbU05akP9aQ==
-X-Google-Smtp-Source: APXvYqzFvOWfUI7+1gDQANt2POJD2JCIPU+hftPOMda1R/K0iQXkeO8xTlGExJT8ZY8lMB0Ep4Ef4g==
-X-Received: by 2002:a17:90a:d593:: with SMTP id v19mr4275052pju.1.1565735747820;
-        Tue, 13 Aug 2019 15:35:47 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id r13sm194208501pfr.25.2019.08.13.15.35.47
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 13 Aug 2019 15:35:47 -0700 (PDT)
-Message-ID: <5d533b43.1c69fb81.5729.a6bc@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1565731976.8572.16.camel@lca.pw>
-References: <1565731976.8572.16.camel@lca.pw>
-Subject: Re: "PM / wakeup: Show wakeup sources stats in sysfs" causes boot warnings
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        id S1727327AbfHMW7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Aug 2019 18:59:30 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:43006 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbfHMW7a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 18:59:30 -0400
+Received: from 79.184.255.155.ipv4.supernova.orange.pl (79.184.255.155) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
+ id 8199637f5f8090f3; Wed, 14 Aug 2019 00:59:26 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Keith Busch <keith.busch@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Qian Cai <cai@lca.pw>, Tri Vo <trong@android.com>
-User-Agent: alot/0.8.1
-Date:   Tue, 13 Aug 2019 15:35:46 -0700
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] PCI / PM: Check for error when reading Power State
+Date:   Wed, 14 Aug 2019 00:59:26 +0200
+Message-ID: <27964051.NtteWoIlyA@kreacher>
+In-Reply-To: <20190809220116.GA221706@google.com>
+References: <20190805205214.194981-1-helgaas@kernel.org> <CAJZ5v0jFPU38zDugumJB0iq5d-LctcMCdygTrFU4=gYP3UJ+oA@mail.gmail.com> <20190809220116.GA221706@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Qian Cai (2019-08-13 14:32:56)
-> The linux-next commit "PM / wakeup: Show wakeup sources stats in sysfs" [=
-1]
-> introduced some baddies during boot on several x86 servers. Reverted the =
-commit
-> fixed the issue.
->=20
-> [1] https://lore.kernel.org/lkml/20190807014846.143949-4-trong@android.co=
-m/
->=20
-> [=C2=A0=C2=A0=C2=A039.195053][=C2=A0=C2=A0=C2=A0=C2=A0T1] serio: i8042 KB=
-D port at 0x60,0x64 irq 1
-> [=C2=A0=C2=A0=C2=A039.197347][=C2=A0=C2=A0=C2=A0=C2=A0T1] kobject_add_int=
-ernal failed for wakeup (error: -2 parent:
-> serio0)
-> [=C2=A0=C2=A0=C2=A039.199845][=C2=A0=C2=A0=C2=A0=C2=A0T1] INFO: trying to=
- register non-static key.
-> [=C2=A0=C2=A0=C2=A039.201582][=C2=A0=C2=A0=C2=A0=C2=A0T1] the code is fin=
-e but needs lockdep annotation.
-> [=C2=A0=C2=A0=C2=A039.203477][=C2=A0=C2=A0=C2=A0=C2=A0T1] turning off the=
- locking correctness validator.
-> [=C2=A0=C2=A0=C2=A039.205399][=C2=A0=C2=A0=C2=A0=C2=A0T1] CPU: 12 PID: 1 =
-Comm: swapper/0 Not tainted 5.3.0-rc4-
-> next-20190813 #3
-> [=C2=A0=C2=A0=C2=A039.207938][=C2=A0=C2=A0=C2=A0=C2=A0T1] Hardware name: =
-HP ProLiant XL420 Gen9/ProLiant XL420
-> Gen9, BIOS U19 12/27/2015
-> [=C2=A0=C2=A0=C2=A039.210606][=C2=A0=C2=A0=C2=A0=C2=A0T1] Call Trace:
-> [=C2=A0=C2=A0=C2=A039.210606][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0dump=
-_stack+0x62/0x9a
-> [=C2=A0=C2=A0=C2=A039.210606][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0regi=
-ster_lock_class+0x95a/0x960
-> [=C2=A0=C2=A0=C2=A039.210606][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? __=
-platform_driver_probe+0xcd/0x230
-> [=C2=A0=C2=A0=C2=A039.210606][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? __=
-platform_create_bundle+0xc0/0xe0
-> [=C2=A0=C2=A0=C2=A039.210606][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? i8=
-042_init+0x4ec/0x578
-> [=C2=A0=C2=A0=C2=A039.210606][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? do=
-_one_initcall+0xfe/0x45a
-> [=C2=A0=C2=A0=C2=A039.219571][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? ke=
-rnel_init_freeable+0x614/0x6a7
-> [=C2=A0=C2=A0=C2=A039.219571][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? ke=
-rnel_init+0x11/0x138
-> [=C2=A0=C2=A0=C2=A039.219571][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? re=
-t_from_fork+0x35/0x40
-> [=C2=A0=C2=A0=C2=A039.219571][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? is=
-_dynamic_key+0xf0/0xf0
-> [=C2=A0=C2=A0=C2=A039.219571][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? rw=
-lock_bug.part.0+0x60/0x60
-> [=C2=A0=C2=A0=C2=A039.219571][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? __=
-debug_check_no_obj_freed+0x8e/0x250
-> [=C2=A0=C2=A0=C2=A039.219571][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0__lo=
-ck_acquire.isra.13+0x5f/0x830
-> [=C2=A0=C2=A0=C2=A039.229491][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? __=
-debug_check_no_obj_freed+0x152/0x250
-> [=C2=A0=C2=A0=C2=A039.229491][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0lock=
-_acquire+0x107/0x220
-> [=C2=A0=C2=A0=C2=A039.229491][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? __=
-pm_relax.part.2+0x21/0xa0
-> [=C2=A0=C2=A0=C2=A039.229491][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0_raw=
-_spin_lock_irqsave+0x35/0x50
-> [=C2=A0=C2=A0=C2=A039.229491][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0? __=
-pm_relax.part.2+0x21/0xa0
-> [=C2=A0=C2=A0=C2=A039.229491][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0__pm=
-_relax.part.2+0x21/0xa0
-> [=C2=A0=C2=A0=C2=A039.239588][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0wake=
-up_source_destroy.part.3+0x18/0x190
-> [=C2=A0=C2=A0=C2=A039.239588][=C2=A0=C2=A0=C2=A0=C2=A0T1]=C2=A0=C2=A0wake=
-up_source_register+0x43/0x50
+On Saturday, August 10, 2019 12:01:16 AM CEST Bjorn Helgaas wrote:
+> On Mon, Aug 05, 2019 at 11:09:19PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Aug 5, 2019 at 10:52 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > >
+> > > From: Bjorn Helgaas <bhelgaas@google.com>
+> > >
+> > > The Power Management Status Register is in config space, and reads while
+> > > the device is in D3cold typically return ~0 data (PCI_ERROR_RESPONSE).  If
+> > > we just look at the PCI_PM_CTRL_STATE_MASK bits, that is 0x3, which looks
+> > > like D3hot, not D3cold.
+> > >
+> > > Check the entire register for PCI_ERROR_RESPONSE so we can distinguish
+> > > D3cold from D3hot.
+> > >
+> > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > > ---
+> > >  drivers/pci/pci.c   |  6 +++---
+> > >  include/linux/pci.h | 13 +++++++++++++
+> > >  2 files changed, 16 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > > index af6a97d7012b..d8686e3cd5eb 100644
+> > > --- a/drivers/pci/pci.c
+> > > +++ b/drivers/pci/pci.c
+> > > @@ -894,7 +894,7 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+> > >                 udelay(PCI_PM_D2_DELAY);
+> > >
+> > >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > > -       dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> > > +       dev->current_state = pci_power_state(pmcsr);
+> > 
+> > But pci_raw_set_power_state() should not even be called for devices in
+> > D3_cold, so this at best is redundant.
+> 
+> I tried to verify that we don't call pci_raw_set_power_state() for
+> devices in D3cold, but it wasn't obvious to me.  Is there an easy way
+> to verify that?  I'd rather have code that doesn't rely on deep
+> knowledge about other areas.
 
-We shouldn't call wakeup_source_destroy() from the error path in
-wakeup_source_register() because that calls __pm_relax() and that takes
-a lock that isn't initialized until wakeup_source_add() is called. Can
-you try this patch?
+It is called in two places, pci_power_up() and pci_set_power_state().
 
-----8<----
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 3a7f5803aa81..f7925820b5ca 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -137,6 +137,13 @@ static void wakeup_source_record(struct wakeup_source =
-*ws)
- 	spin_unlock_irqrestore(&deleted_ws.lock, flags);
- }
-=20
-+static void wakeup_source_free(struct wakeup_source *ws)
-+{
-+	ida_free(&wakeup_ida, ws->id);
-+	kfree_const(ws->name);
-+	kfree(ws);
-+}
-+
- /**
-  * wakeup_source_destroy - Destroy a struct wakeup_source object.
-  * @ws: Wakeup source to destroy.
-@@ -150,9 +157,7 @@ void wakeup_source_destroy(struct wakeup_source *ws)
-=20
- 	__pm_relax(ws);
- 	wakeup_source_record(ws);
--	ida_free(&wakeup_ida, ws->id);
--	kfree_const(ws->name);
--	kfree(ws);
-+	wakeup_source_free(ws);
- }
- EXPORT_SYMBOL_GPL(wakeup_source_destroy);
-=20
-@@ -217,7 +222,7 @@ struct wakeup_source *wakeup_source_register(struct dev=
-ice *dev,
- 	if (ws) {
- 		ret =3D wakeup_source_sysfs_add(dev, ws);
- 		if (ret) {
--			wakeup_source_destroy(ws);
-+			wakeup_source_free(ws);
- 			return NULL;
- 		}
- 		wakeup_source_add(ws);
+pci_power_up() is called on resume when the whole hierarchy is
+turned on and pci_set_power_state() explicitly powers up the
+device if in D3cold (with the help of the platform).
+
+And the "device not accessible at all" case should be covered by patch [2/5]
+in this series.
+
+> Even if the device was in, say D0, what if it is hot-removed just
+> before we read PCI_PM_CTRL?
+
+I guess you mean surprise-hot-removed?
+
+Then it may as well be hot-removed after setting current_state.
+
+> We'll set dev->current_state to D3hot,
+> when I think D3cold would better correspond to the state of the
+> device.  Maybe that's harmless, but I don't know how to verify that.
+
+Well, D3cold may just be equally misleading, because the device may
+very well not be present at all any more.
+
+> > >         if (dev->current_state != state && printk_ratelimit())
+> > >                 pci_info(dev, "Refused to change power state, currently in D%d\n",
+> > >                          dev->current_state);
+> > > @@ -942,7 +942,7 @@ void pci_update_current_state(struct pci_dev *dev, pci_power_t state)
+> > >                 u16 pmcsr;
+> > >
+> > >                 pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > > -               dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> > > +               dev->current_state = pci_power_state(pmcsr);
+> > 
+> > The if () branch above should cover the D3cold case, shouldn't it?
+> 
+> You mean the "if (platform_pci_get_power_state(dev) == PCI_D3cold)"
+> test?
+
+Not exactly.
+
+I mean "if (platform_pci_get_power_state(dev) == PCI_D3cold ||
+!pci_device_is_present(dev))".
+
+> platform_pci_get_power_state() returns PCI_UNKNOWN in some cases.
+> When that happens, might we not read PCI_PM_CTRL of a device in
+> D3cold?  I think this also has the same hotplug question as above.
+
+Surprise hot-removal can take place at any time, in particular after setting
+current_state, so adding extra checks here doesn't prevent the value of
+it from becoming stale at least sometimes anyway.
+
+> > >         } else {
+> > >                 dev->current_state = state;
+> > >         }
+> > > @@ -1677,7 +1677,7 @@ static int pci_enable_device_flags(struct pci_dev *dev, unsigned long flags)
+> > >         if (dev->pm_cap) {
+> > >                 u16 pmcsr;
+> > >                 pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> > > -               dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+> > > +               dev->current_state = pci_power_state(pmcsr);
+> > 
+> > So this appears to be only case in which pci_power_state(pmcsr) is
+> > useful at all.
+> > 
+> > It might be better to use the code from it directly here IMO.
+> 
+> If we're decoding CSR values, I think it's better to notice error
+> responses when we can than it is to try to figure out whether the
+> error response is theoretically impossible or the incorrectly decoded
+> value (e.g., D3hot instead of D3cold) is harmless.
+
+IMO this means more complex code and extra overhead for a very
+little practical value, however.
+
+
+
