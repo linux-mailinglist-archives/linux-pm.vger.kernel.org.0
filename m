@@ -2,188 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDAC8AB89
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 01:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3EB8AC4B
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 02:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbfHLXyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 19:54:37 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:46892 "EHLO
+        id S1726516AbfHMAzm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Aug 2019 20:55:42 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:36797 "EHLO
         mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726578AbfHLXyh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 19:54:37 -0400
-Received: by mail-ot1-f67.google.com with SMTP id z17so47325350otk.13;
-        Mon, 12 Aug 2019 16:54:36 -0700 (PDT)
+        with ESMTP id S1726236AbfHMAzm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Aug 2019 20:55:42 -0400
+Received: by mail-ot1-f67.google.com with SMTP id k18so34095076otr.3;
+        Mon, 12 Aug 2019 17:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w2kdR+7b7KvFC+HWFUinAh+s80F0DWNtdCahrnarn44=;
-        b=MURQZflgt53gZwpL/adUQPWglHlq+Vte6KXRI0z/ItnHLIbuIWVx+AHjTIX3e2/2XJ
-         AgQauFkwH8PiW27qaftBzb8SjEZ22PQqEWa+nCPvevt0Be+071pvDuvfrffhPLtBRpdA
-         LBIdY9YYHhtIhRwH3KeCIhyxenjmm3/uupxNakiv2kKJarsmfSyGbsbA9DFnwaS0ukVe
-         W1bFdGY9LnSQmBVakQlpzuluvXvyRyG+GjF+BMnQ3AsRKnDVSirB6IyXN29SEnjYM10Q
-         Kg+r75M1tzmCtWw+PxSZkLBjos7xfe2rDFrJIyNyazO4H6GArHp+JAU+pZqjWawZp4oF
-         m2ug==
+         :cc:content-transfer-encoding;
+        bh=tWuGMpfvpi8rnoPC1nxIMSH77huA/siJ3AWEzI3xTs4=;
+        b=cdoqbO7X+MHlqsYbY8wcYKMu8ZiVU/PnEECnYlul350769xA+jJ/DHDldH73SJHM9x
+         jCLEZaXj0eOs0lrUj/ZbAkmBErQaxUQK4lgaGUk0G8vW1Hm6UkVtac5jxe1WMHj74dDn
+         sJuOrHlmsazBackDrzbtX8BaRJCxCqX7DxYWMpizL9scBtr3lJM9wDIkOX15UNTQZstN
+         H8dTO/vlWkBYZlbVfI4x6A4UmaX1W8N3IJhwl1Y+AkRAb58zX+Y070wQY3OU61v7fixw
+         tX+2QdSDxNJABKy99euf/v0NwPY0pItxvKVSa+rBMsZnBoY1V/Nmu7ol86/vv9BqD4h4
+         Bscg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w2kdR+7b7KvFC+HWFUinAh+s80F0DWNtdCahrnarn44=;
-        b=V9s9vJUc2ceaccAPpSEc85odBC0MXUNSVC7Y4m6nL8EsmlzVI69PnHsPK1oawq8Dcy
-         tadoWeuWmIjF4Id7G8mKWnQTk0E131wfZ0sytTC8YZZPfbM240OReedPywq/8+ruEM+L
-         nS8GjYFjrJ8kA3qt4q+SYey8TMBQ+lOwIuvPI4RqiH98t8LviB/JYqxQ6T9OR2/+xnem
-         LktKRuwXUKpYRiaGiNYnH86+TkMc7zj+HFD/28YfROYZB4CSP9Xhl5z5+b3xbIfQnmUz
-         o6ur5QC3VTQZ4Xc0k28QjI2orut7QjAtsMGPZyn3MgWqiUf04rC13P0LqSwybm8VVY0Y
-         j9kg==
-X-Gm-Message-State: APjAAAUlFqjsrnlMsd8bS5hT+xo5eUXNU26lIUY+V8SNHLO3icvuggbN
-        Ic8cC6txMZu5vadJs3QZf649/DDN1uFhdrzni7w=
-X-Google-Smtp-Source: APXvYqz72zUtIykO8D1IdH6U+dE5fed0U7T2C3hqJGnZx13Lu2B8gFOyDxVqs3R/+r4Eq6F8rMwsnza3cbCy+u/sHjs=
-X-Received: by 2002:a05:6830:1f0b:: with SMTP id u11mr23846230otg.263.1565654075918;
- Mon, 12 Aug 2019 16:54:35 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tWuGMpfvpi8rnoPC1nxIMSH77huA/siJ3AWEzI3xTs4=;
+        b=tqJo4HMbxz9RHyhHdKTSFGgggln4JoaOtdO6q3DbfkPuoC5XHS0vEh9oIaYUIEar1H
+         RCNacQ7CaDbOPMXy4cdbPs7Rs6aqBiF5XWUmOb9eitoxF2vesMrbDmqaFYKreXaeOhsQ
+         bbRjFPo8hj4dRa3QqNeWMaaogW3FdBzr9ZCe49qIgqM1bnlyjW/XwxrCH29x4cG5dLC2
+         SqdRwqSS7UT/u0QAOQeurbZvAZbxrE8Kpo4/Ifoe+NB6NIkPAA9n8ITDa2P76TbLRLDO
+         6IZgK/iNJEUhfN6f3XLrkMI3tOsfznD6WQG5RMWeDaMshPOqViyHk5q6SQNqGwg/bmBa
+         BwcA==
+X-Gm-Message-State: APjAAAX03r16gPkf/DeHbeXzrP1NNv08SwZFRoMt0DTIoA8lLm+c8xXD
+        Ua/bb9fw+wHaEYCEHw5U8pVl8p9eYlhNHkH+0Hk=
+X-Google-Smtp-Source: APXvYqxFUejRwv90klmWLQY0ZnGSa/zWt+ZB47N82vsS2BbcZs9ZZ7OVLxQ2jCM+HFwTwqP1mrDp6dwz7pFH0Le1m4w=
+X-Received: by 2002:a9d:1b02:: with SMTP id l2mr28824055otl.45.1565657741864;
+ Mon, 12 Aug 2019 17:55:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190810052829.6032-1-tiny.windzz@gmail.com> <20190810052829.6032-9-tiny.windzz@gmail.com>
- <CA+E=qVfp-rProxOwX__J6jM-pZ9g_SmeuOCOgvC_5DJVQw4OGw@mail.gmail.com> <CAEExFWubLqtPZ=ZKJTCb6x2-PeYebXb3sr-t-XvtrLJTRiUU1A@mail.gmail.com>
-In-Reply-To: <CAEExFWubLqtPZ=ZKJTCb6x2-PeYebXb3sr-t-XvtrLJTRiUU1A@mail.gmail.com>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Mon, 12 Aug 2019 16:54:15 -0700
-Message-ID: <CA+E=qVf9V9iTvCfXXyjqKeviCJOvYpKUO8qw6cQsKqoaRmdKYQ@mail.gmail.com>
-Subject: Re: [PATCH v5 08/18] thermal: sun8i: support mod clocks
-To:     Frank Lee <tiny.windzz@gmail.com>
-Cc:     rui.zhang@intel.com, Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan.Cameron@huawei.com,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
+References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
+ <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com> <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
+ <20190803202058.GA9316@amt.cnet>
+In-Reply-To: <20190803202058.GA9316@amt.cnet>
+From:   Wanpeng Li <kernellwp@gmail.com>
+Date:   Tue, 13 Aug 2019 08:55:29 +0800
+Message-ID: <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when dedicated
+ physical CPUs are available
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 4:46 PM Frank Lee <tiny.windzz@gmail.com> wrote:
+On Sun, 4 Aug 2019 at 04:21, Marcelo Tosatti <mtosatti@redhat.com> wrote:
 >
-> HI Vasily,
+> On Thu, Aug 01, 2019 at 06:54:49PM +0200, Paolo Bonzini wrote:
+> > On 01/08/19 18:51, Rafael J. Wysocki wrote:
+> > > On 8/1/2019 9:06 AM, Wanpeng Li wrote:
+> > >> From: Wanpeng Li <wanpengli@tencent.com>
+> > >>
+> > >> The downside of guest side polling is that polling is performed even
+> > >> with other runnable tasks in the host. However, even if poll in kvm
+> > >> can aware whether or not other runnable tasks in the same pCPU, it
+> > >> can still incur extra overhead in over-subscribe scenario. Now we ca=
+n
+> > >> just enable guest polling when dedicated pCPUs are available.
+> > >>
+> > >> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > >> Cc: Radim Kr=C4=8Dm=C3=A1=C5=99 <rkrcmar@redhat.com>
+> > >> Cc: Marcelo Tosatti <mtosatti@redhat.com>
+> > >> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> > >
+> > > Paolo, Marcelo, any comments?
+> >
+> > Yes, it's a good idea.
+> >
+> > Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+> >
+> > Paolo
 >
-> On Sat, Aug 10, 2019 at 2:17 PM Vasily Khoruzhick <anarsoul@gmail.com> wrote:
-> >
-> > On Fri, Aug 9, 2019 at 10:31 PM Yangtao Li <tiny.windzz@gmail.com> wrote:
-> > >
-> > > H3 has extra clock, so introduce something in ths_thermal_chip/ths_device
-> > > and adds the process of the clock.
-> > >
-> > > This is pre-work for supprt it.
-> > >
-> > > Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> > > ---
-> > >  drivers/thermal/sun8i_thermal.c | 17 ++++++++++++++++-
-> > >  1 file changed, 16 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-> > > index b934bc81eba7..6f4294c2aba7 100644
-> > > --- a/drivers/thermal/sun8i_thermal.c
-> > > +++ b/drivers/thermal/sun8i_thermal.c
-> > > @@ -54,6 +54,7 @@ struct tsensor {
-> > >  };
-> > >
-> > >  struct ths_thermal_chip {
-> > > +       bool            has_mod_clk;
-> > >         int             sensor_num;
-> > >         int             offset;
-> > >         int             scale;
-> > > @@ -69,6 +70,7 @@ struct ths_device {
-> > >         struct regmap                           *regmap;
-> > >         struct reset_control                    *reset;
-> > >         struct clk                              *bus_clk;
-> > > +       struct clk                              *mod_clk;
-> > >         struct tsensor                          sensor[MAX_SENSOR_NUM];
-> > >  };
-> > >
-> > > @@ -274,6 +276,12 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
-> > >         if (IS_ERR(tmdev->bus_clk))
-> > >                 return PTR_ERR(tmdev->bus_clk);
-> > >
-> > > +       if (tmdev->chip->has_mod_clk) {
-> > > +               tmdev->mod_clk = devm_clk_get(&pdev->dev, "mod");
-> > > +               if (IS_ERR(tmdev->mod_clk))
-> > > +                       return PTR_ERR(tmdev->mod_clk);
-> > > +       }
-> > > +
-> > >         ret = reset_control_deassert(tmdev->reset);
-> > >         if (ret)
-> > >                 return ret;
-> > > @@ -282,12 +290,18 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
-> > >         if (ret)
-> > >                 goto assert_reset;
-> > >
-> > > -       ret = sun50i_ths_calibrate(tmdev);
-> > > +       ret = clk_prepare_enable(tmdev->mod_clk);
-> >
-> > You have to set rate of modclk before enabling it since you can't rely
-> > on whatever bootloader left for you.
-> >
-> > Also I found that parameters you're using for PC_TEMP_PERIOD, ACQ0 and
-> > ACQ1 are too aggressive and may result in high interrupt rate to the
-> > point when it may stall RCU. I changed driver a bit to use params from
-> > Philipp Rossak's work (modclk set to 4MHz, PC_TEMP_PERIOD is 7, ACQ0
-> > is 255, ACQ1 is 63) and it fixed RCU stalls for me, see [1] for
-> > details.
->
-> Why is the RCU stall happening, is it caused by a deadlock?
-> Can you provide log information and your configuration?
-> I am a bit curious.
 
-It's not deadlock, I believe it just can't handle that many interrupts
-when running at lowest CPU frequency. Even with Philipp's settings
-there's ~20 interrupts a second from ths. I don't remember how many
-interrupts were there with your settings.
+Hi Marcelo,
 
-Unfortunately there's nothing interesting in backtraces, I'm using
-Pine64-LTS board.
+Sorry for the late response.
 
-> Thx,
-> Yangtao
+> I think KVM_HINTS_REALTIME is being abused somewhat.
+> It has no clear meaning and used in different locations
+> for different purposes.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+KVM_HINTS_REALTIME 0                      guest checks this feature bit to
+
+determine that vCPUs are never
+
+preempted for an unlimited time
+
+allowing optimizations
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Now it disables pv queued spinlock, pv tlb shootdown, pv sched yield
+which are not expected present in vCPUs are never preempted for an
+unlimited time scenario.
+
 >
-> >
-> > [1] https://github.com/anarsoul/linux-2.6/commit/46b8bb0fe2ccd1cd88fa9181a2ecbf79e8d513b2
-> >
-> >
-> > >         if (ret)
-> > >                 goto bus_disable;
-> > >
-> > > +       ret = sun50i_ths_calibrate(tmdev);
-> > > +       if (ret)
-> > > +               goto mod_disable;
-> > > +
-> > >         return 0;
-> > >
-> > > +mod_disable:
-> > > +       clk_disable_unprepare(tmdev->mod_clk);
-> > >  bus_disable:
-> > >         clk_disable_unprepare(tmdev->bus_clk);
-> > >  assert_reset:
-> > > @@ -395,6 +409,7 @@ static int sun8i_ths_remove(struct platform_device *pdev)
-> > >  {
-> > >         struct ths_device *tmdev = platform_get_drvdata(pdev);
-> > >
-> > > +       clk_disable_unprepare(tmdev->mod_clk);
-> > >         clk_disable_unprepare(tmdev->bus_clk);
-> > >         reset_control_assert(tmdev->reset);
-> > >
-> > > --
-> > > 2.17.1
-> > >
-> > >
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> For example, i think that using pv queued spinlocks and
+> haltpoll is a desired scenario, which the patch below disallows.
+
+So even if dedicated pCPU is available, pv queued spinlocks should
+still be chose if something like vhost-kthreads are used instead of
+DPDK/vhost-user. kvm adaptive halt-polling will compete with
+vhost-kthreads, however, poll in guest unaware other runnable tasks in
+the host which will defeat vhost-kthreads.
+
+Regards,
+Wanpeng Li
