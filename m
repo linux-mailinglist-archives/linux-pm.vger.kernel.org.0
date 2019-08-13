@@ -2,139 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 075038ACE9
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 05:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518BC8AD69
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 06:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbfHMDCh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Aug 2019 23:02:37 -0400
-Received: from mail-eopbgr130041.outbound.protection.outlook.com ([40.107.13.41]:38464
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726296AbfHMDCh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Aug 2019 23:02:37 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i+PGLgAZXB53PYrZ1HGtCKWUJAfMyP/fxoPgjXwNRjDIGI2SXpaoWcPxKTuR8BjsgTRES/CZWnBDTfpSqmmU5Qd1lnQF3jreb2xpW6xUYE4VYLFnnT7vMV5MKC0eetZ4LUWDiUI2QzbE8qQWNOkkqT3WnothRwsj4l5+vuLg7YGhQ57qs07fy/CjL44zZIpat/6Rhgj76GMOQMLz5uCSIE0CEeMuc1VyvnGlHpbbeSQfNyEExzpl9qFZawbXx0oL+SZMQNLV9Y5ERLgb7+WWHPQZZ3NhTRCWxrMoAcKYPHHLFPdCVpiF5bCB+kCdr0NbcpRrE/LX5xiPxlDMTFEH8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=amZvjLJBrshvm4Udxpp/gtStDQG++4jpFLEWjjBh5Lk=;
- b=fJojtRXU0kSOkwHfEL638o2uW9GbbSI8ZFUvJkwo+1MFc7EF/0vM8kxEdD1+aoLxxmP4rPxUXf7ta2PUGjOqywd2vnfUbAuVfB0Jq+vv34lWCQjfpUrd4qeMzRS108kBJKgAM8QSFL4dOJe2wEwB76+ZoSCrZCjyJic3AZyPNmuL1RBRYLi/nN4d+HHs5lBTbm+1BZkBo5GAPZg1fRUMTF4SbCZfYNz3jCI9g9kt02Am32rtaKYpevNLsI2NjnjDOeIisdBPfA1N8NXQ74eevZx2wFBQoKta9wrPnWhv6YKroUAY/V6zvh242VkCvOa9NvcMAtnmLquFNmggpf776Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=amZvjLJBrshvm4Udxpp/gtStDQG++4jpFLEWjjBh5Lk=;
- b=Y+mFz0LiS0Cxp6PX7eYHPgI1Cizo5ZxghziWlkxgY4+Kdyp/UmFaCWg3rzk1+/VUa3EUg1nsTEPZg9fWGvAP50lUndEEQoPT/IJ9C09AtkZnIfpnb1Y0ROb6X4l0ccDF+mL9CVS/zjgOvNJeOago6f+scXmv1lP3n9PjBp+l9wo=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB4445.eurprd04.prod.outlook.com (20.177.55.161) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.14; Tue, 13 Aug 2019 03:02:32 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::e53d:e6a9:79bd:f970]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::e53d:e6a9:79bd:f970%2]) with mapi id 15.20.2157.022; Tue, 13 Aug 2019
- 03:02:32 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S1725869AbfHMETp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Aug 2019 00:19:45 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:32593 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725836AbfHMETp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 00:19:45 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190813041941epoutp04ce6bc625a692ffb754d11fef36ea6ea1~6YI2g2GUU0177201772epoutp04k
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2019 04:19:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190813041941epoutp04ce6bc625a692ffb754d11fef36ea6ea1~6YI2g2GUU0177201772epoutp04k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1565669981;
+        bh=07b7XUHda9WrEg1bmfF4iuDAMyHk6cA/OSKVvjSJkUU=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Cl1zwdvFaSPWESLWkf2AzT6INysMEqH+8wYsSp8VyFYVKGeacAHO0+PgJdOehAS9E
+         kXV0fsq0VoB7lAfkMlElab/UWra+y4vnx6YXLrDt9/OExRRg6Cqm6/yCorerSMod5s
+         PABQMNJ41Y95Kg7muw2NhlbCWZu5+K2bxcM8A+II=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20190813041941epcas1p4dbcf1ea21ec5a2c25e811f79955168b9~6YI10RW3S0854308543epcas1p43;
+        Tue, 13 Aug 2019 04:19:41 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 466zy250zJzMqYkY; Tue, 13 Aug
+        2019 04:19:38 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        88.53.04085.A5A325D5; Tue, 13 Aug 2019 13:19:38 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190813041937epcas1p3d80d80932d7240a07937737279e54f8c~6YIyv9mxc2852628526epcas1p3k;
+        Tue, 13 Aug 2019 04:19:37 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190813041937epsmtrp1ccd83c1bfa681e68e24e7bfd0638b280~6YIyvCUTz2769827698epsmtrp1H;
+        Tue, 13 Aug 2019 04:19:37 +0000 (GMT)
+X-AuditID: b6c32a39-cebff70000000ff5-cd-5d523a5a19bb
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        50.FA.03706.95A325D5; Tue, 13 Aug 2019 13:19:37 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190813041937epsmtip1c134ada5e8ba8ec2cdec25946e1444a3~6YIyZps391930419304epsmtip1q;
+        Tue, 13 Aug 2019 04:19:37 +0000 (GMT)
+Subject: Re: [PATCH] PM / devfreq: passive: Use non-devm notifiers
+To:     Leonard Crestez <leonard.crestez@nxp.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Artur Swigon <a.swigon@partner.samsung.com>,
+Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
         Saravana Kannan <saravanak@google.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 3/7] PM / devfreq: Add generic imx bus driver
-Thread-Topic: [PATCH 3/7] PM / devfreq: Add generic imx bus driver
-Thread-Index: AQHVUT6/NClFZjcCl0WOnsdNWPX55A==
-Date:   Tue, 13 Aug 2019 03:02:31 +0000
-Message-ID: <VI1PR04MB7023485353FCBBD7F8BEE8F3EED20@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <dbdd1ae60993d5fe73ce5b446b2c7d559c981cf1.1565633880.git.leonard.crestez@nxp.com>
- <cover.1565633880.git.leonard.crestez@nxp.com>
- <CGME20190812185005epcas3p10a9a3dbb90489534222e093c63f27900@epcms1p3>
- <20190813023338epcms1p307caf6727399e9f3e320b965fb95a603@epcms1p3>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [82.144.34.2]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2a3bf337-1683-4c9a-9b11-08d71f9aaf51
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4445;
-x-ms-traffictypediagnostic: VI1PR04MB4445:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4445582CCC325D2E79ACE7F5EED20@VI1PR04MB4445.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 01283822F8
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(979002)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(189003)(199004)(66946007)(53936002)(71200400001)(478600001)(81156014)(110136005)(71190400001)(7416002)(81166006)(99286004)(316002)(64756008)(76116006)(91956017)(66446008)(54906003)(9686003)(229853002)(6246003)(66556008)(66476007)(5660300002)(55016002)(6436002)(8936002)(86362001)(2906002)(52536014)(4326008)(26005)(102836004)(4744005)(256004)(74316002)(14454004)(305945005)(7736002)(186003)(33656002)(6506007)(25786009)(2501003)(7696005)(6116002)(76176011)(3846002)(476003)(66066001)(8676002)(486006)(44832011)(53546011)(446003)(41533002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4445;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: lqUfeRrqDsAxKEiiS9w0zrHbWgVbH2wqp7WEk+hQq5h2CmZigGFFG+vB0gdECWiHBCdu0egnWtZdse3oPXgQF2YVSaAOipmzfZVqECfi6KcMbV/dyjiLf4JqdWcnJ0/NGadoWni8BCobix70vqKrR1Nu/Ry5FDiOSYepadMwJJhLBaYDx+T6kvKvphF+ihSnMP9k8YBUA78l2I8RTz+psu97s8/m59srp8sveE+MIDgNK1breRzUawWYwxJXy81hz5c6d/4vYJaa82gdHJOiK4C8PdjMRpExv/FJbKIYYDFpROBbXnV1tPaDvAmZqMc35G4Oc8fTAv9Ec8BL3tLMgXhxmGEzR8p4osNhaS+n393Z+f3XGr6lmUCy52CqCkW7CwUUMJ69QXQ6HFemREl5gX98M5xaf18ZE3ugjod/11s=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Lukasz Luba <l.luba@partner.samsung.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "cpgs (cpgs@samsung.com)" <cpgs@samsung.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <9ddb0fc0-5cdf-19a7-fac4-3c70002404b2@samsung.com>
+Date:   Tue, 13 Aug 2019 13:23:23 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a3bf337-1683-4c9a-9b11-08d71f9aaf51
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2019 03:02:31.9667
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: W0aHh/Ym4ijfXC6hOmdtcAflDZmettUtAPPm9ioVNRXECQPYEsEx5IyLnjNFTz5s7a1wCHHZnBkL9rlT9XOiBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4445
+In-Reply-To: <38b77bb80d12aa788d4e234e399780a27dcd9e9f.1565282993.git.leonard.crestez@nxp.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEJsWRmVeSWpSXmKPExsWy7bCmvm6UVVCswYIHyhaHjm1lt/h6+hSj
+        xen971gsdj3Yxmbx8pCmxdzZkxgtmhevZ7M4f34Du8XZpjfsFrcaZCxW3P3IarHp8TVWi8+9
+        RxgtbjeuYLOY+2Uqs0XXob9sDgIe72+0snssvnab1WPiWV2PBZtKPTat6mTzuHNtD5vH/rlr
+        2D02L6n32PhuB5PHwXd7mDz6tqxi9Pi8SS6AJyrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7U
+        zMBQ19DSwlxJIS8xN9VWycUnQNctMwfoIyWFssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJq
+        QUpOgWWBXnFibnFpXrpecn6ulaGBgZEpUGFCdsaUi2tYCnrEK67en8XSwNgp3MXIySEhYCKx
+        YN5Xli5GLg4hgR2MEm83HmaFcD4xSvy8f5cZwvnGKNFy5CMrTMvtNW/ZIBJ7GSX6vv1mhHDe
+        M0o8enAUyOHgEBZwkphzTAMkLiLQzCix9cRbJhCHWWAfi8SPWa/ARrEJaEnsf3GDDcTmF1CU
+        uPrjMSOIzStgJ3H+2TGwGhYBVYnZd/eC2aICERKfHhxmhagRlDg58wkLiM0pECcx58ZssF5m
+        AXGJW0/mM0HY8hLNW2eD/SAhcI9d4t6/n8wQP7hIXH5/hw3CFpZ4dXwLO4QtJfGyvw3KrpZY
+        efIIG0RzB6PElv0XoAFgLLF/6WQmkDeZBTQl1u/ShwgrSuz8PZcRwuaVaNj4mx3iCD6Jd197
+        WEHKQeIdbUIQJcoSlx/cZZrAqDwLyTuzkLwwC8kLsxCWLWBkWcUollpQnJueWmxYYIoc35sY
+        weldy3IH47FzPocYBTgYlXh4KxICY4VYE8uKK3MPMUpwMCuJ8F4yCYoV4k1JrKxKLcqPLyrN
+        SS0+xGgKDO2JzFKiyfnA3JNXEm9oamRsbGxhYmhmamioJM678IdFrJBAemJJanZqakFqEUwf
+        EwenVANj5r1zEw8lJXbkn5LN35x4rlDw7IWlC35a3llye0X8cVGVwumzLBiXNtRcFjLqF36o
+        Fnx+Uc7uyZI9OVc79sVfjjjl+HmZQo6id4Cgs43HDp/vIceS1suJPnBuY3mpcYMn74J7seOB
+        m8c3yuZl7dqm67kprDgubWfW77d9pUWqmeERio06b6WVWIozEg21mIuKEwGTdpmiBQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsWy7bCSnG6kVVCswZZlmhaHjm1lt/h6+hSj
+        xen971gsdj3Yxmbx8pCmxdzZkxgtmhevZ7M4f34Du8XZpjfsFrcaZCxW3P3IarHp8TVWi8+9
+        RxgtbjeuYLOY+2Uqs0XXob9sDgIe72+0snssvnab1WPiWV2PBZtKPTat6mTzuHNtD5vH/rlr
+        2D02L6n32PhuB5PHwXd7mDz6tqxi9Pi8SS6AJ4rLJiU1J7MstUjfLoErY8rFNSwFPeIVV+/P
+        Ymlg7BTuYuTkkBAwkbi95i1bFyMXh5DAbkaJS20/mCESkhLTLh4FsjmAbGGJw4eLIWreMkq8
+        W/0TLC4s4CQx55gGSFxEoJVR4s7pH2CDmAUOsUi0dvZATd3IKLGm/ycLyFQ2AS2J/S9usIHY
+        /AKKEld/PGYEsXkF7CTOPzvGCmKzCKhKzL67F8wWFYiQOLxjFlSNoMTJmU/A5nAKxEnMuTEb
+        LM4soC7xZ94lZghbXOLWk/lMELa8RPPW2cwTGIVnIWmfhaRlFpKWWUhaFjCyrGKUTC0ozk3P
+        LTYsMMxLLdcrTswtLs1L10vOz93ECI5zLc0djJeXxB9iFOBgVOLhrUgIjBViTSwrrsw9xCjB
+        wawkwnvJJChWiDclsbIqtSg/vqg0J7X4EKM0B4uSOO/TvGORQgLpiSWp2ampBalFMFkmDk6p
+        BkbhQPZdTsv65zgqbJzbkaReUSEgMTmWu+fW25l3L5noqblq8vdJ37koOUNlperPH/1MP53j
+        Zh870u4ndLiXQSBv6uPKjTtMNPjOnHq7XV1n1hYh9yKr8n+b/h+w/dU/P7T3jWysxME/1qzu
+        HvYn+W52Tp0TfNnHVKkvZmrY4YsnNNY/ET505L0SS3FGoqEWc1FxIgAYDPHH7wIAAA==
+X-CMS-MailID: 20190813041937epcas1p3d80d80932d7240a07937737279e54f8c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-CPGSPASS: Y
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190808165416epcas5p24d8b4688357cd0985592e457c107d98b
+References: <CGME20190808165416epcas5p24d8b4688357cd0985592e457c107d98b@epcas5p2.samsung.com>
+        <38b77bb80d12aa788d4e234e399780a27dcd9e9f.1565282993.git.leonard.crestez@nxp.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/13/2019 5:33 AM, MyungJoo Ham wrote:=0A=
-=0A=
->> Add initial support for dynamic frequency switching on pieces of the imx=
-=0A=
->> interconnect fabric.=0A=
->>=0A=
->> All this driver actually does is set a clk rate based on an opp table.=
-=0A=
->>=0A=
->> +config ARM_IMX_DEVFREQ=0A=
->> +	tristate "i.MX DEVFREQ Driver"=0A=
->> +	depends on ARCH_MXC || COMPILE_TEST=0A=
->> +	select DEVFREQ_GOV_PASSIVE=0A=
->> +	select DEVFREQ_GOV_SIMPLE_ONDEMAND=0A=
->> +	select DEVFREQ_GOV_USERSPACE=0A=
->> +	select PM_OPP=0A=
-> =0A=
-> Does it support ALL ARCH_MXC SoCs?=0A=
-=0A=
-Only imx8m currently but out of tree we support bus+dram frequency =0A=
-switching for ~10 imx6/7 SOCs, all other than imx7ulp.=0A=
-=0A=
-When imx8 was upstreamed as the first 64-bit imx chip the arm64 =0A=
-maintainers told us to drop stuff like ARCH_FSL_IMX8MM so there is no =0A=
-per-soc kconfig more specific than "ARCH_MXC".=0A=
-=0A=
-I guess we could make it depend on (ARCH_MXC && ARM64) but the ARM64 =0A=
-would eventually be dropped anyway.=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+Hi,
+
+On 19. 8. 9. 오전 1:54, Leonard Crestez wrote:
+> The devfreq passive governor registers and unregisters devfreq
+> transition notifiers on DEVFREQ_GOV_START/GOV_STOP using devm wrappers.
+> 
+> If devfreq itself is registered with devm then a warning is triggered on
+> rmmod from devm_devfreq_unregister_notifier. Call stack looks like this:
+> 
+> 	devm_devfreq_unregister_notifier+0x30/0x40
+> 	devfreq_passive_event_handler+0x4c/0x88
+> 	devfreq_remove_device.part.8+0x6c/0x9c
+> 	devm_devfreq_dev_release+0x18/0x20
+> 	release_nodes+0x1b0/0x220
+> 	devres_release_all+0x78/0x84
+> 	device_release_driver_internal+0x100/0x1c0
+> 	driver_detach+0x4c/0x90
+> 	bus_remove_driver+0x7c/0xd0
+> 	driver_unregister+0x2c/0x58
+> 	platform_driver_unregister+0x10/0x18
+> 	imx_devfreq_platdrv_exit+0x14/0xd40 [imx_devfreq]
+> 
+> This happens because devres_release_all will first remove all the nodes
+> into a separate todo list so the nested devres_release from
+> devm_devfreq_unregister_notifier won't find anything.
+> 
+> Fix the warning by calling the non-devm APIS for frequency notification.
+> Using devm wrappers is not actually useful for a governor anyway: it
+> relies on the devfreq core to correctly match the GOV_START/GOV_STOP
+> notifications.
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> 
+> ---
+>  drivers/devfreq/governor_passive.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> The only current user of passive governor is exynos-bus; does rmmod work
+> for you? Maybe I'm missing something.
+> 
+> It also seems that no attempt is made to increase the ref count of
+> the passive "parent" so in theory devices can be removed while still
+> referenced. However that would be a separate issue.
+> 
+> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> index 58308948b863..da485477065c 100644
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -163,16 +163,16 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
+>  	case DEVFREQ_GOV_START:
+>  		if (!p_data->this)
+>  			p_data->this = devfreq;
+>  
+>  		nb->notifier_call = devfreq_passive_notifier_call;
+> -		ret = devm_devfreq_register_notifier(dev, parent, nb,
+> +		ret = devfreq_register_notifier(parent, nb,
+>  					DEVFREQ_TRANSITION_NOTIFIER);
+>  		break;
+>  	case DEVFREQ_GOV_STOP:
+> -		devm_devfreq_unregister_notifier(dev, parent, nb,
+> -					DEVFREQ_TRANSITION_NOTIFIER);
+> +		WARN_ON(devfreq_unregister_notifier(parent, nb,
+> +					DEVFREQ_TRANSITION_NOTIFIER));
+>  		break;
+>  	default:
+>  		break;
+>  	}
+>  
+> 
+
+Looks good to me. But, you have to add the following fixes tag
+and send it to stable mailing list to fix the bug.
+- Fixes: 996133119f57 ("PM / devfreq: Add new passive governor")
+
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com> 
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
