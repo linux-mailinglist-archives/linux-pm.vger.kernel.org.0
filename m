@@ -2,123 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 945218B094
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 09:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8308B19D
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Aug 2019 09:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726282AbfHMHUZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Aug 2019 03:20:25 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45935 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727299AbfHMHUX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 03:20:23 -0400
-Received: by mail-wr1-f68.google.com with SMTP id q12so16488777wrj.12
-        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2019 00:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=jh+u0/5C9sC+jh4TIlKIxaJHuXDdftZDgr4L90RCuIA=;
-        b=hEFcVJVzbO+JRAcIntpp/zkyNlS7/GvdeEjrweS18w0t6brHWY49x4M06TnFdZSwxW
-         GGaQNP7MUgT/naNeXacrDjPlReBWjvfVLRj+jwnfOSnzi0OUNk5l34AoZpS5DnvuLpDl
-         7cNl0BEt+sVJKtQ+LT++mw33Dm284lEGuMdRBBrFKcyC4hjm0k0kVy/4G26aCy6Fo+oY
-         uRsQzWvgL5XujoH7taBtmR3FwWDy8klSb77UV1u2YiYIN/RaktD6HE0sLCjVhZ3gWcxT
-         6MHB9kBjCkdbPzg7uohM0ruCkgjKBGkq74L2O7ondbwMC4ypfOyxsU8N6t9D74MVit5m
-         sEVQ==
+        id S1727129AbfHMHzW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Aug 2019 03:55:22 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:33992 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725842AbfHMHzV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Aug 2019 03:55:21 -0400
+Received: by mail-wr1-f67.google.com with SMTP id 31so106876243wrm.1
+        for <linux-pm@vger.kernel.org>; Tue, 13 Aug 2019 00:55:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=jh+u0/5C9sC+jh4TIlKIxaJHuXDdftZDgr4L90RCuIA=;
-        b=JZFGPjWJfIpnApvHCaSzv86+ktSLCpSOR3bbJtCQyEoDi9LebHEi7+FP8UmbvuxVaN
-         EOXcy9YVhRmNGgTFPBOhpUZAp2X4QkUdFMGN0zhozxX6bnVThV1z8cJpSHb30hb61ooZ
-         pd8BZkLHePwR7K47OL5PePPDzEmORk6v1JxgEha1xEhzHbS7WVw6/iHFx6ciqq7LY1YV
-         cPSUra6QILgKA6ukYyO3nfr/y5etC8Fy7CFVb9asyN5c/z2aWrgWMtaL3as9UG9S02ee
-         /bGm+rJjeLIi9yv9GSashtEKTCHbTbIGPS2b1uWXeXd8cdBgLCwvKLPP+aRFFmMAuJcg
-         7ElA==
-X-Gm-Message-State: APjAAAUIIQsKYfuf62NJfLQsfgkommDidAXgfnnApHS19xNnpe7ZXt0c
-        /gjTbac0pAMtuir6rxpjjvB9Cw==
-X-Google-Smtp-Source: APXvYqwQjf7fTO6Udq8hrYKQOuwTwlMrSM8lymQq+3WwhEOVys4N9qu95PdOanYcKCvd51L3ufdJRQ==
-X-Received: by 2002:adf:fe12:: with SMTP id n18mr38762652wrr.105.1565680821103;
-        Tue, 13 Aug 2019 00:20:21 -0700 (PDT)
-Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id k1sm14475486wru.49.2019.08.13.00.20.19
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Aug 2019 00:20:20 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 08:20:18 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Allison Randal <allison@lohutok.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Tianping . Fang" <tianping.fang@mediatek.com>,
-        Josef Friedl <josef.friedl@speed.at>
-Subject: Re: [PATCH v5 03/10] rtc: mt6397: move some common definitions into
- rtc.h
-Message-ID: <20190813072018.GZ26727@dell>
-References: <20190812121511.4169-1-frank-w@public-files.de>
- <20190812121511.4169-4-frank-w@public-files.de>
- <20190812151128.GV26727@dell>
- <20190812153856.GR3600@piout.net>
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bVL/mybMCWMTdXy3Ie2SVHe4c9Hx4KouLy8pC3F5wcA=;
+        b=dYtJiWOC/K9GMY28ClklRcuSExEUJqrLkcA4D/ODZCTEh6ggN/lYFtlXiPvOlr+7/y
+         skFU57uHaftyoh3mEqkjU1akvwnqHQiEckDKb2nXCYjpAOemVMl4bfFruYVyBxK2VfN9
+         HDTYTE1jaLsLlxIyQAyF27RIqqgXdao38nSQ7JkMBSbinPRWp/GHvHDH57nq9xhcLaKx
+         bsF5kXPPEjWu3B/SD8RM0PlE2BDhmopW6tIAIq3XkU8o02bpARlMfn113iqxn5SG0z0Q
+         PWBnaD8/qTcJaOqUMdjDBrmH70zOeqepCW7wiHWGoQAkNKq1z0C2WaoMfLtBWF1vi87M
+         zihg==
+X-Gm-Message-State: APjAAAXSiihn3Rf6/zGoB+Id2IkSY3UvrJSo16SPrQvK1Qit93/bjZde
+        UqAOhw4ofY4I/t09MwgeETWO7CYjU1w=
+X-Google-Smtp-Source: APXvYqwivA9E8nT6UWemqH28l7RGEjlSIsZbiQntGdA8wDZDm20vpIV9sc9NrxcWYynUjGx7YH+s4g==
+X-Received: by 2002:a5d:62c1:: with SMTP id o1mr44926663wrv.293.1565682920051;
+        Tue, 13 Aug 2019 00:55:20 -0700 (PDT)
+Received: from [192.168.10.150] ([93.56.166.5])
+        by smtp.gmail.com with ESMTPSA id c11sm2771923wrs.86.2019.08.13.00.55.18
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 00:55:19 -0700 (PDT)
+Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when dedicated
+ physical CPUs are available
+To:     Wanpeng Li <kernellwp@gmail.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
+ <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com>
+ <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
+ <20190803202058.GA9316@amt.cnet>
+ <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Openpgp: preference=signencrypt
+Message-ID: <b33a432f-b6a5-e9e8-a744-f29c21c69fd8@redhat.com>
+Date:   Tue, 13 Aug 2019 09:55:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190812153856.GR3600@piout.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 12 Aug 2019, Alexandre Belloni wrote:
-
-> On 12/08/2019 16:11:29+0100, Lee Jones wrote:
-> > On Mon, 12 Aug 2019, Frank Wunderlich wrote:
-> > 
-> > > From: Josef Friedl <josef.friedl@speed.at>
-> > > 
-> > > move code to separate header-file to reuse definitions later
-> > > in poweroff-driver (drivers/power/reset/mt6323-poweroff.c)
-> > > 
-> > > Suggested-by: Frank Wunderlich <frank-w@public-files.de>
-> > > Signed-off-by: Josef Friedl <josef.friedl@speed.at>
-> > > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > > ---
-> > > changes since v4: none
-> > > changes since v3: none
-> > > changes since v2: add missing commit-message
-> > > ---
-> > >  drivers/rtc/rtc-mt6397.c       | 55 +-------------------------
-> > >  include/linux/mfd/mt6397/rtc.h | 71 ++++++++++++++++++++++++++++++++++
-> > 
-> > include/linux/rtc/mt6397.h?
-> > 
+On 13/08/19 02:55, Wanpeng Li wrote:
+>> I think KVM_HINTS_REALTIME is being abused somewhat.
+>> It has no clear meaning and used in different locations
+>> for different purposes.
 > 
-> It's just a bunch of registers and bit definitions so it may as well
-> stay close to include/linux/mfd/mt6397/registers.h
+> Now it disables pv queued spinlock, pv tlb shootdown, pv sched yield
+> which are not expected present in vCPUs are never preempted for an
+> unlimited time scenario.
 
-Sure.  It was a weak preference.
+Guest side polling definitely matches the purpose of KVM_HINTS_REALTIME.
+ While host-side polling is conditional on single_task_running, this is
+obviously not true of guest-side polling.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+The alternative would be to enable it only if KVM_FEATURE_POLL_CONTROL
+is available, but I prefer Wanpeng's patch.
+
+Paolo
+
+>> For example, i think that using pv queued spinlocks and
+>> haltpoll is a desired scenario, which the patch below disallows.
+> 
+> So even if dedicated pCPU is available, pv queued spinlocks should
+> still be chose if something like vhost-kthreads are used instead of
+> DPDK/vhost-user. kvm adaptive halt-polling will compete with
+> vhost-kthreads, however, poll in guest unaware other runnable tasks in
+> the host which will defeat vhost-kthreads.
+> 
+> Regards,
+> Wanpeng Li
+> 
+
