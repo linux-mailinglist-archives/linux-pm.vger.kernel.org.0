@@ -2,136 +2,350 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D71558D304
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 14:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9C88D403
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 14:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbfHNMY5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Aug 2019 08:24:57 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:34085 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725888AbfHNMY5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Aug 2019 08:24:57 -0400
-Received: by mail-wm1-f67.google.com with SMTP id e8so3224848wme.1;
-        Wed, 14 Aug 2019 05:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=qvNyqHPxqM17Hgwfx7q6qGcw30LiEL2kP6HeS6GNFVk=;
-        b=TqzSu3r+JKdRwqwXMxKNEjktlIzFuuB5McOF228N/8JIw1F4JBLqzzcwneQE0o/cKd
-         5wICaY7S25HNHsrXXue6xGmC/UviD83CsaZUd5bmETUNFATYt+hI3S4aWmBtSy/tfrti
-         mLWrd/+elniaPpb8c2fO8Pacmccxbwnyj1zAT6xIhqUABTnFzaEyj5vUVry4ox1btx48
-         tZ07Sy+405SyHtQ836cmoYhbMr11W7XVn2IN28dRLJXmcMHcsRklcyxI3km9skDhRESw
-         7Kgu4fYoqdNCbWNoSslPkVJic79u2dD57kRyyGJg3Ru0/JWungE8E8+oing9AgfoHDIk
-         lmpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=qvNyqHPxqM17Hgwfx7q6qGcw30LiEL2kP6HeS6GNFVk=;
-        b=XHXeIxApr10EKBelFAkbWrj3u2N2cqKW2+C7+yucFizkGQxx+fryj6ROmikB03k7YK
-         t4Wsi3Um6IY1vXRY3gHg4hMF3op4e5Yy5kR9W6Qhx/MeaiYWHqnwakXlbekzeLKaDAED
-         YSCs4e1eiPwo1oJxFZHaWXbZQEVgiVfwubQYewf9Jai8wQcAaQZsfk82eXgIcOVlqbA1
-         uzzV8QFz2kWuZXKS5PqXGSfuSPKTCy8pPH/Sfw+J2FyBpABl4siefU38Q1qCFS6IKFqh
-         pXxhU8zEutNWk0VNGHhfXIXuUoUj9OM2N+96ZxIQkkoD9+yCaRPwMJFgYoehM4T5WzWM
-         Wb5Q==
-X-Gm-Message-State: APjAAAURbE7sdhe+QE+skrjkz/2z7nXCEFNR8J6wbq1CmGpxt59fOsUU
-        RrZqCUzWR/yyuLgeaXcK/44=
-X-Google-Smtp-Source: APXvYqzkK3WQL9KYB1TyBBzuH6MQ5nCwZyYjF7EGNKE+AniVd85uZ9BfFF8sWaTFPPOyfIqxvfmzrg==
-X-Received: by 2002:a1c:e90d:: with SMTP id q13mr8649524wmc.89.1565785495404;
-        Wed, 14 Aug 2019 05:24:55 -0700 (PDT)
-Received: from [192.168.1.169] ([87.201.30.26])
-        by smtp.gmail.com with ESMTPSA id l62sm4544230wml.13.2019.08.14.05.24.53
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Aug 2019 05:24:54 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH v3 0/6] Add support of New Amlogic temperature sensor for
- G12 SoCs
-From:   Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <20190806130506.8753-1-glaroque@baylibre.com>
-Date:   Wed, 14 Aug 2019 16:24:51 +0400
-Cc:     daniel.lezcano@linaro.org, khilman@baylibre.com,
-        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <357FACA6-6EAC-4E9D-B6F7-4D8D0D59A20A@gmail.com>
-References: <20190806130506.8753-1-glaroque@baylibre.com>
-To:     Guillaume La Roque <glaroque@baylibre.com>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S1726934AbfHNM7A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Aug 2019 08:59:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39880 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726721AbfHNM67 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 14 Aug 2019 08:58:59 -0400
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6F7ED206C2;
+        Wed, 14 Aug 2019 12:58:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565787537;
+        bh=chscWvw2qJy3DCHmDF0qUAKcyZp2r4+EyUbfw3QjrQA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=yTJbt7eLpctF0EvpW6FI9Xc+0fFwasBkBLwpVzOcKzqEjKZAm8Q5/7430sYK3cPJV
+         2PX3bh/vbLmkmZjhrlBbzPiK1kT1ZKm13JmZW+P/6JS6AqyfWRwuSDpnW1u/L51TOD
+         dKLhqq6S5gKxueFAY4TCRQ+av/E29bfLebhA/nKQ=
+Received: by mail-lf1-f49.google.com with SMTP id x3so79372615lfc.0;
+        Wed, 14 Aug 2019 05:58:57 -0700 (PDT)
+X-Gm-Message-State: APjAAAWddZnpnGZ5ZHEEfda+c/F+ysIVDmI5BoIM49JMSYPTu7sN1t1x
+        beWu0PiJxTuijVP0K4DfthuowQ9HYApIrGw8ZQg=
+X-Google-Smtp-Source: APXvYqxQ3CILwZyO7aMuVkPvtJmLWkrrorfwZy+M3mPc504RphvA/JLKZvLpLLHFTFSxiegNdbLxGlCc+NuZWnt7VAg=
+X-Received: by 2002:ac2:44ac:: with SMTP id c12mr13152915lfm.33.1565787535537;
+ Wed, 14 Aug 2019 05:58:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <CGME20190813150853eucas1p20257455cc323a8b78b37977b0ed4937d@eucas1p2.samsung.com>
+ <20190813150827.31972-1-s.nawrocki@samsung.com> <20190813150827.31972-4-s.nawrocki@samsung.com>
+In-Reply-To: <20190813150827.31972-4-s.nawrocki@samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 14 Aug 2019 14:58:44 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPfqeq4vB87Ehd4zyZtfqNVsn8vznq16GAwVsH01jOtvtg@mail.gmail.com>
+Message-ID: <CAJKOXPfqeq4vB87Ehd4zyZtfqNVsn8vznq16GAwVsH01jOtvtg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/9] soc: samsung: Add Exynos Adaptive Supply Voltage driver
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
+        kgene@kernel.org, pankaj.dubey@samsung.com,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org,
+        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
+        <b.zolnierkie@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6 Aug 2019, at 5:05 pm, Guillaume La Roque <glaroque@baylibre.com> =
-wrote:
->=20
-> This patchs series add support of New Amlogic temperature sensor and =
-minimal
-> thermal zone for SEI510 and ODROID-N2 boards.
->=20
-> First implementation was doing on IIO[1] but after comments i move on =
-thermal framework.
-> Formulas and calibration values come from amlogic.
->=20
+On Tue, 13 Aug 2019 at 17:08, Sylwester Nawrocki <s.nawrocki@samsung.com> wrote:
+>
+> The Adaptive Supply Voltage (ASV) driver adjusts CPU cluster operating
+> points depending on exact revision of an SoC retrieved from the CHIPID
+> block or the OTP memory.  This allows for some power saving as for some
+> CPU clock frequencies we can lower CPU cluster supply voltage comparing
+> to safe values common to the all chip revisions.
+>
+> This patch adds support for Exynos5422/5800 SoC, it is partially based
+> on code from https://github.com/hardkernel/linux repository,
+> branch odroidxu4-4.14.y, files: arch/arm/mach-exynos/exynos5422-asv.[ch].
+>
+> Tested on Odroid XU3, XU4, XU3 Lite.
+>
+> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> ---
 > Changes since v2:
->  - fix yaml documention=20
->  - remove unneeded status variable for temperature-sensor node
->  - rework driver after Martin review
->  - add some information in commit message
->=20
-> Changes since v1:
->  - fix enum vs const in documentation
->  - fix error with thermal-sensor-cells value set to 1 instead of 0
->  - add some dependencies needed to add cooling-maps
->=20
-> Dependencies :
-> - patch 3,4 & 5: depends on Neil's patch and series :
->              - missing dwc2 phy-names[2]
->              - patchsets to add DVFS on G12a[3] which have deps on [4] =
-and [5]
->=20
-> [1] =
-https://lore.kernel.org/linux-amlogic/20190604144714.2009-1-glaroque@bayli=
-bre.com/
-> [2] =
-https://lore.kernel.org/linux-amlogic/20190625123647.26117-1-narmstrong@ba=
-ylibre.com/
-> [3] =
-https://lore.kernel.org/linux-amlogic/20190729132622.7566-1-narmstrong@bay=
-libre.com/
-> [4] =
-https://lore.kernel.org/linux-amlogic/20190731084019.8451-5-narmstrong@bay=
-libre.com/
-> [5] =
-https://lore.kernel.org/linux-amlogic/20190729132622.7566-3-narmstrong@bay=
-libre.com/
->=20
-> Guillaume La Roque (6):
->  dt-bindings: thermal: Add DT bindings documentation for Amlogic
->    Thermal
->  thermal: amlogic: Add thermal driver to support G12 SoCs
->  arm64: dts: amlogic: g12: add temperature sensor
->  arm64: dts: meson: sei510: Add minimal thermal zone
->  arm64: dts: amlogic: odroid-n2: add minimal thermal zone
->  MAINTAINERS: add entry for Amlogic Thermal driver
+>  - Use devm_kzalloc() in probe() to avoid memory leak,
+>  - removed leading spaces in exynos-chipid.h,
+>  - removed unneeded <linux/init.h> header inclusion,
+>  - dropped parentheses from exynos542_asv_parse_sg(),
+>  - updated Kconfig entry,
+>  - added const attribute to struct exynos_asv_susbsys::cpu_dt_compat.
+>
+> Changes since v1 (RFC):
+>  - removed code for parsing the ASV OPP tables from DT, the ASV OPP tables
+>    moved to the driver;
+>  - converted to use the regmap API;
+>  - converted to normal platform driver.
+> ---
+>  drivers/soc/samsung/Kconfig          |  10 +
+>  drivers/soc/samsung/Makefile         |   3 +
+>  drivers/soc/samsung/exynos-asv.c     | 184 ++++++++++
+>  drivers/soc/samsung/exynos-asv.h     |  82 +++++
+>  drivers/soc/samsung/exynos5422-asv.c | 498 +++++++++++++++++++++++++++
+>  drivers/soc/samsung/exynos5422-asv.h |  25 ++
+>  6 files changed, 802 insertions(+)
+>  create mode 100644 drivers/soc/samsung/exynos-asv.c
+>  create mode 100644 drivers/soc/samsung/exynos-asv.h
+>  create mode 100644 drivers/soc/samsung/exynos5422-asv.c
+>  create mode 100644 drivers/soc/samsung/exynos5422-asv.h
+>
+> diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
+> index 2905f5262197..73ccf59676a1 100644
+> --- a/drivers/soc/samsung/Kconfig
+> +++ b/drivers/soc/samsung/Kconfig
+> @@ -7,6 +7,16 @@ menuconfig SOC_SAMSUNG
+>
+>  if SOC_SAMSUNG
+>
+> +config EXYNOS_ASV
+> +       bool "Exynos Adaptive Supply Voltage support" if COMPILE_TEST
+> +       depends on (ARCH_EXYNOS && EXYNOS_CHIPID) || COMPILE_TEST
+> +       select EXYNOS_ASV_ARM if ARM && ARCH_EXYNOS
+> +
+> +# There is no need to enable these drivers for ARMv8
+> +config EXYNOS_ASV_ARM
+> +       bool "Exynos ASV ARMv7-specific driver extensions" if COMPILE_TEST
+> +       depends on EXYNOS_ASV
+> +
+>  config EXYNOS_CHIPID
+>         bool "Exynos Chipid controller driver" if COMPILE_TEST
+>         depends on ARCH_EXYNOS || COMPILE_TEST
+> diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
+> index 3b6a8797416c..edd1d6ea064d 100644
+> --- a/drivers/soc/samsung/Makefile
+> +++ b/drivers/soc/samsung/Makefile
+> @@ -1,5 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>
+> +obj-$(CONFIG_EXYNOS_ASV)       += exynos-asv.o
+> +obj-$(CONFIG_EXYNOS_ASV_ARM)   += exynos5422-asv.o
+> +
+>  obj-$(CONFIG_EXYNOS_CHIPID)    += exynos-chipid.o
+>  obj-$(CONFIG_EXYNOS_PMU)       += exynos-pmu.o
+>
+> diff --git a/drivers/soc/samsung/exynos-asv.c b/drivers/soc/samsung/exynos-asv.c
+> new file mode 100644
+> index 000000000000..481deb600afc
+> --- /dev/null
+> +++ b/drivers/soc/samsung/exynos-asv.c
+> @@ -0,0 +1,184 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2019 Samsung Electronics Co., Ltd.
+> + *           http://www.samsung.com/
+> + * Author: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> + *
+> + * Samsung Exynos SoC Adaptive Supply Voltage support
+> + */
+> +
+> +#include <linux/cpu.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/errno.h>
+> +#include <linux/init.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_opp.h>
+> +#include <linux/regmap.h>
+> +#include <linux/soc/samsung/exynos-chipid.h>
+> +
+> +#include "exynos-asv.h"
+> +#include "exynos5422-asv.h"
+> +
+> +#define MHZ 1000000U
+> +
+> +static int exynos_asv_update_cpu_opps(struct exynos_asv *asv,
+> +                                     struct device *cpu)
+> +{
+> +       struct exynos_asv_subsys *subsys = NULL;
+> +       struct dev_pm_opp *opp;
+> +       unsigned int opp_freq;
+> +       int i;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(asv->subsys); i++) {
+> +               if (of_device_is_compatible(cpu->of_node,
+> +                                           asv->subsys[i].cpu_dt_compat)) {
+> +                       subsys = &asv->subsys[i];
+> +                       break;
+> +               }
+> +       }
+> +       if (!subsys)
+> +               return -EINVAL;
+> +
+> +       for (i = 0; i < subsys->table.num_rows; i++) {
+> +               unsigned int new_voltage;
+> +               unsigned int voltage;
+> +               int timeout = 1000;
+> +               int err;
+> +
+> +               opp_freq = exynos_asv_opp_get_frequency(subsys, i);
+> +
+> +               opp = dev_pm_opp_find_freq_exact(cpu, opp_freq * MHZ, true);
+> +               if (IS_ERR(opp)) {
+> +                       dev_info(asv->dev, "cpu%d opp%d, freq: %u missing\n",
+> +                                cpu->id, i, opp_freq);
+> +
+> +                       continue;
+> +               }
+> +
+> +               voltage = dev_pm_opp_get_voltage(opp);
+> +               new_voltage = asv->opp_get_voltage(subsys, i, voltage);
+> +               dev_pm_opp_put(opp);
+> +
+> +               opp_freq *= MHZ;
+> +               dev_pm_opp_remove(cpu, opp_freq);
+> +
+> +               while (--timeout) {
+> +                       opp = dev_pm_opp_find_freq_exact(cpu, opp_freq, true);
+> +                       if (IS_ERR(opp))
+> +                               break;
+> +                       dev_pm_opp_put(opp);
+> +                       msleep(1);
+> +               }
+> +
+> +               err = dev_pm_opp_add(cpu, opp_freq, new_voltage);
+> +               if (err < 0)
+> +                       dev_err(asv->dev,
+> +                               "Failed to add OPP %u Hz/%u uV for cpu%d\n",
+> +                               opp_freq, new_voltage, cpu->id);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int exynos_asv_update_opps(struct exynos_asv *asv)
+> +{
+> +       struct opp_table *last_opp_table = NULL;
+> +       struct device *cpu;
+> +       int ret, cpuid;
+> +
+> +       for_each_possible_cpu(cpuid) {
+> +               struct opp_table *opp_table;
+> +
+> +               cpu = get_cpu_device(cpuid);
+> +               if (!cpu)
+> +                       continue;
+> +
+> +               opp_table = dev_pm_opp_get_opp_table(cpu);
+> +               if (IS_ERR(opp_table))
+> +                       continue;
+> +
+> +               if (!last_opp_table || opp_table != last_opp_table) {
+> +                       last_opp_table = opp_table;
+> +
+> +                       ret = exynos_asv_update_cpu_opps(asv, cpu);
+> +                       if (ret < 0)
+> +                               dev_err(asv->dev, "Couldn't udate OPPs for cpu%d\n",
+> +                                       cpuid);
+> +               }
+> +
+> +               dev_pm_opp_put_opp_table(opp_table);
+> +       }
+> +
+> +       return  0;
+> +}
+> +
+> +static int exynos_asv_probe(struct platform_device *pdev)
+> +{
+> +       int (*probe_func)(struct exynos_asv *asv);
+> +       struct exynos_asv *asv;
+> +       struct device *cpu_dev;
+> +       u32 product_id = 0;
+> +       int ret, i;
+> +
+> +       cpu_dev = get_cpu_device(0);
+> +       ret = dev_pm_opp_get_opp_count(cpu_dev);
+> +       if (ret < 0)
+> +               return -EPROBE_DEFER;
+> +
+> +       asv = devm_kzalloc(&pdev->dev, sizeof(*asv), GFP_KERNEL);
+> +       if (!asv)
+> +               return -ENOMEM;
+> +
+> +       asv->chipid_regmap = syscon_node_to_regmap(pdev->dev.of_node);
+> +       if (IS_ERR(asv->chipid_regmap)) {
+> +               dev_err(&pdev->dev, "Could not find syscon regmap\n");
+> +               return PTR_ERR(asv->chipid_regmap);
+> +       }
+> +
+> +       regmap_read(asv->chipid_regmap, EXYNOS_CHIPID_REG_PRO_ID, &product_id);
+> +
+> +       switch (product_id & EXYNOS_MASK) {
+> +       case 0xE5422000:
+> +               probe_func = exynos5422_asv_init;
+> +               break;
+> +       default:
+> +               dev_err(&pdev->dev, "Unsupported product ID: %#x", product_id);
+> +               return -ENODEV;
+> +       }
+> +
+> +       ret = of_property_read_u32(pdev->dev.of_node, "samsung,asv-bin",
+> +                                  &asv->of_bin);
+> +       if (ret < 0)
+> +               asv->of_bin = -EINVAL;
+> +
+> +       asv->dev = &pdev->dev;
+> +       dev_set_drvdata(&pdev->dev, asv);
+> +
+> +       for (i = 0; i < ARRAY_SIZE(asv->subsys); i++)
+> +               asv->subsys[i].asv = asv;
+> +
+> +       ret = probe_func(asv);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       return exynos_asv_update_opps(asv);
+> +}
+> +
+> +static const struct of_device_id exynos_asv_of_device_ids[] = {
+> +       { .compatible = "samsung,exynos4210-chipid" },
+> +       {}
+> +};
+> +
+> +static struct platform_driver exynos_asv_driver = {
+> +       .driver = {
+> +               .name = "exynos-asv",
+> +               .of_match_table = exynos_asv_of_device_ids,
+> +       },
+> +       .probe  = exynos_asv_probe,
+> +};
+> +module_platform_driver(exynos_asv_driver);
+> diff --git a/drivers/soc/samsung/exynos-asv.h b/drivers/soc/samsung/exynos-asv.h
+> new file mode 100644
+> index 000000000000..14b4fedf2ddd
+> --- /dev/null
+> +++ b/drivers/soc/samsung/exynos-asv.h
+> @@ -0,0 +1,82 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2019 Samsung Electronics Co., Ltd.
+> + *           http://www.samsung.com/
+> + * Author: Sylwester Nawrocki <s.nawrocki@samsung.com>
+> + *
+> + * Samsung Exynos SoC Adaptive Supply Voltage support
+> + */
+> +#ifndef __LINUX_SOC_EXYNOS_ASV_H
+> +#define __LINUX_SOC_EXYNOS_ASV_H
 
-Tested-by: Christian Hewitt <christianshewitt@gmail.com>
+Yikes, that was my mistake. The file is in drivers/soc, not include,
+so this could stay as previous one. Or make more path dependend -
+__DRIVERS_SOC... Now it is inconsistent with
+drivers/soc/samsung/exynos5422-asv.h.
 
-I=E2=80=99ve tested this series with Odroid N2 and Khadas VIM3, X96-Max. =
-Patches to add
-support for VIM3/X96-max will be submitted once the driver is merged.
+I can fixup these two files while applying but if there is going to be
+a resend, then change both to __DRIVERS_SOC_..._H.
 
-VIM3:~ # dmesg | grep thermal
-[    0.046375] thermal_sys: Registered thermal governor 'step_wise'
-
-VIM3:~ # cat /sys/devices/virtual/thermal/thermal_zone0/temp
-51300
-
-VIM3:~ # cat /sys/devices/virtual/thermal/thermal_zone1/temp
-52800
-
-Christian=
+Best regards,
+Krzysztof
