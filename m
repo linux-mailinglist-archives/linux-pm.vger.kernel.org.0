@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DC38D40D
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 15:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF098D423
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 15:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727875AbfHNNBE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Aug 2019 09:01:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40782 "EHLO mail.kernel.org"
+        id S1727756AbfHNNDX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Aug 2019 09:03:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41774 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726721AbfHNNBE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 14 Aug 2019 09:01:04 -0400
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+        id S1726865AbfHNNDX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 14 Aug 2019 09:03:23 -0400
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E759221744;
-        Wed, 14 Aug 2019 13:01:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 70CFC206C2;
+        Wed, 14 Aug 2019 13:03:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565787663;
-        bh=sxfCJqJU/qaOohNVgHPQHtwC8Q7H8C3hXjEXkCV0LNo=;
+        s=default; t=1565787801;
+        bh=3OUlSHJn0lTrnJ5fKTpkrRdkhD4r845rbCuZ5nFCWHQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tiBxKOHYPSR9Y16yt71V0kc9fqsUD3IQPem9PJ+ncdv72uoSxmqJtsd0RLTgE1vhZ
-         zPnAJCALKkwQ1OQTB7iDM9vbtg1WlAG9wCYw+O4SUFaOQa7pTN/CQsOM92O6VI18V/
-         bXMlvMyNZfAyuY9uE3S+ddZXnYhANUtNV02Jxty0=
-Received: by mail-lj1-f169.google.com with SMTP id u15so9741898ljl.3;
-        Wed, 14 Aug 2019 06:01:02 -0700 (PDT)
-X-Gm-Message-State: APjAAAULxOpygd4VJgACuT0l7DrARQnRgLiqQHvjxd8ES7TWrUQuXfKj
-        wi/cSA7Zesw22i5ohC89fi/Dv3jipyrsSi1n58E=
-X-Google-Smtp-Source: APXvYqxsCMPhEB6d19AkAwrH2WmpslgogpPgDenxgBgQD8gEdZbqPk9ibFEDJH1FhqxoSOjrLiasHqOPI013151j9Zs=
-X-Received: by 2002:a2e:8197:: with SMTP id e23mr4590849ljg.80.1565787661091;
- Wed, 14 Aug 2019 06:01:01 -0700 (PDT)
+        b=EDCnd1iWrMYY5eTCyl2C4OcbbG7hwyR/yBNNl1DEgM7rxl2JhllcRp+qc1n1e3wQn
+         5m9Cif0BRl33bPWPSpZjlT1ETGRv6XhqJe/99+FqhpGmSNPd3P9/Fkl2Pv/6NY/aJ+
+         36HbweNwXt3W5499mCcC2xN0FGArisPikhNobVWE=
+Received: by mail-lf1-f44.google.com with SMTP id b29so72023750lfq.1;
+        Wed, 14 Aug 2019 06:03:21 -0700 (PDT)
+X-Gm-Message-State: APjAAAU84prkwE67YXO9KMSNCfUEUL5OEuW2YWcNB+6G54CcRK09v+pN
+        5hZNHDBJJADedFmKc4qS1fbNOJ54BovJan1OSkc=
+X-Google-Smtp-Source: APXvYqz10vuC20rP+LQQhwdjZM0MrWzEZ/evwZm1M1ZsrA4lt+zFV303rcMeni4yzkxrQ0voupVR/up/rPG64KZGaEE=
+X-Received: by 2002:a19:f512:: with SMTP id j18mr21053059lfb.159.1565787799622;
+ Wed, 14 Aug 2019 06:03:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190813150858eucas1p1a5fbf425753e4911c50631c3a6d34ffd@eucas1p1.samsung.com>
- <20190813150827.31972-1-s.nawrocki@samsung.com> <20190813150827.31972-8-s.nawrocki@samsung.com>
-In-Reply-To: <20190813150827.31972-8-s.nawrocki@samsung.com>
+References: <CGME20190813150842eucas1p2c248537d9cd593073e12abeac2cacab5@eucas1p2.samsung.com>
+ <20190813150827.31972-1-s.nawrocki@samsung.com>
+In-Reply-To: <20190813150827.31972-1-s.nawrocki@samsung.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 14 Aug 2019 15:00:50 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPdfe-ON9wmy30YGoGG_LzwhEuXmcv_-kt07cS-Wd3cG8w@mail.gmail.com>
-Message-ID: <CAJKOXPdfe-ON9wmy30YGoGG_LzwhEuXmcv_-kt07cS-Wd3cG8w@mail.gmail.com>
-Subject: Re: [PATCH v3 7/9] soc: samsung: Update the CHIP ID DT binding documentation
+Date:   Wed, 14 Aug 2019 15:03:08 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPdm2qj_GDR4NQriuOjPFyAxf_CdH_hXEsQNDp4qGHaUZA@mail.gmail.com>
+Message-ID: <CAJKOXPdm2qj_GDR4NQriuOjPFyAxf_CdH_hXEsQNDp4qGHaUZA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] Exynos Adaptive Supply Voltage support
 To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
 Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
         kgene@kernel.org, pankaj.dubey@samsung.com,
@@ -51,60 +51,53 @@ Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
         <b.zolnierkie@samsung.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 13 Aug 2019 at 17:09, Sylwester Nawrocki <s.nawrocki@samsung.com> wrote:
+On Tue, 13 Aug 2019 at 17:08, Sylwester Nawrocki <s.nawrocki@samsung.com> w=
+rote:
 >
-> This patch adds documentation of a new optional "samsung,asv-bin"
-> property in the chipid device node and documents requirement of
-> "syscon" compatible string.  These additions are needed to support
-> Exynos ASV (Adaptive Supply Voltage) feature.
+> This is third iteration of my patch series adding ASV (Adaptive Supply
+> Voltage) support for Exynos SoCs. The previous one can be found at:
+> https://lore.kernel.org/lkml/20190718143044.25066-1-s.nawrocki@samsung.co=
+m
 >
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> ---
-> Changes since v2:
->  - none
+> There is no major changes in this series comparing to v2, only minor
+> corrections addressing review comments.
 >
-> Changes since v1 (RFC):
->  - new patch
-> ---
->  .../devicetree/bindings/arm/samsung/exynos-chipid.txt  | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+> I was not sure it was a good idea to try to extend the OPP binding
+> so as to include the ASV data tables in DT, so the tables are left
+> in the driver.
 >
-> diff --git a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.txt b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.txt
-> index 85c5dfd4a720..be3657e6c00c 100644
-> --- a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.txt
-> +++ b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.txt
-> @@ -1,12 +1,18 @@
-> -SAMSUNG Exynos SoCs Chipid driver.
-> +SAMSUNG Exynos SoC series CHIPID subsystem
+> This patch set includes Exynos CHIPID driver posted by Pankaj Dubey and
+> futher improved by Bart=C5=82omiej =C5=BBo=C5=82nierkiewicz [1].
 >
->  Required properties:
-> -- compatible : Should at least contain "samsung,exynos4210-chipid".
-> +- compatible : Should at least contain "samsung,exynos4210-chipid", "syscon".
+> Tested on Odroid XU3, XU3 Lite, XU4.
 >
->  - reg: offset and length of the register set
+> One of the things on TODO list is support for the Adaptive Body Bias.
+> This will require modifications on the cpufreq driver side in order to
+> support multiple voltage regulators and changes in the OPP framework
+> to support adding OPPs with multiple voltages.
 >
-> +Optional properties:
-> + - samsung,asv-bin : Adaptive Supply Voltage bin selection. This can be used
-> +   to determine the ASV bin of an SoC if respective information is missing
-> +   in the CHIPID registers or in the OTP memory. Possible values: 0...3.
-> +
->  Example:
->         chipid@10000000 {
->                 compatible = "samsung,exynos4210-chipid";
+> [1] https://lkml.org/lkml/2018/11/15/908
+>
+> Pankaj Dubey (3):
+>   soc: samsung: Add exynos chipid driver support
+>   ARM: EXYNOS: enable exynos_chipid for ARCH_EXYNOS
+>   ARM64: EXYNOS: enable exynos_chipid for ARCH_EXYNOS
+>
+> Sylwester Nawrocki (6):
+>   soc: samsung: Convert exynos-chipid driver to use the regmap API
+>   soc: samsung: Add Exynos Adaptive Supply Voltage driver
+>   ARM: EXYNOS: Enable exynos-asv driver for ARCH_EXYNOS
+>   soc: samsung: Update the CHIP ID DT binding documentation
+>   ARM: dts: Add "syscon" compatible string to chipid node
+>   ARM: dts: Add samsung,asv-bin property for odroidxu3-lite
 
-Please update the example with new required compatible.
+All look good to me but I need acks for bindings before applying.
 
 Best regards,
 Krzysztof
-
->                 reg = <0x10000000 0x100>;
-> +               samsung,asv-bin = <2>;
->         };
-> --
-> 2.17.1
->
