@@ -2,192 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6270F8DCEC
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 20:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15558DD19
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 20:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbfHNSZE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Aug 2019 14:25:04 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36856 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728384AbfHNSZE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Aug 2019 14:25:04 -0400
-Received: by mail-pf1-f196.google.com with SMTP id w2so3248459pfi.3
-        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2019 11:25:03 -0700 (PDT)
+        id S1728517AbfHNShV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Aug 2019 14:37:21 -0400
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:40546 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728389AbfHNShS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Aug 2019 14:37:18 -0400
+Received: by mail-ot1-f52.google.com with SMTP id c34so269070otb.7
+        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2019 11:37:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:from:cc:to:user-agent:date;
-        bh=N9JGHYuENBo6LI4cBzytfOqDlISO6qEtWahhb1tznSg=;
-        b=TW14/7JpTaH7Jot09F83/edfsuN7PZqPT/t2KHRSRcFmxfkGIH0Ga1ih1wOEoLZWg3
-         PJ4CH5PgSyjXydAzcYMZrZ45m+W1+SbVM2N79LMRlqsGZztFdNkM0AmolymrRX8Ptt2v
-         iWpRqvmjd/ogT8LaD7sfVl2xaPZVZOEioC/k4=
+        d=android.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n1ZhkxlA5RiuxtYaWeDgg6qWaM8JmbM5adPrEVLQCaY=;
+        b=mHFrTUKiPm4qyuo740JkJ7NzrjP6aZ05fw+cbk/S1SH/Xp8XRyb4Qr6JMvEHaqDpeb
+         6k0m7zmpxIeHgqZ05hZyX5ciFz3Y1cfCb9EcgczR9hd2ZlCgcrE0EooCzT9ib+3XuG7D
+         /hH9E0TM8qOyoW8OcZ+td0oBasB3IvuTybxtCcqufMHMhsFCL7bEy0eHDHp1PCBL7xKk
+         kDsDdv+NHXzgr/G0Ue7HQpILnjPycMftf8nGNwLT0wie+5+X3GoK7WnnKmLXnKrecD32
+         xVSfVhk0jJPLfG/CcjPSVLRxanongInZpzdKxAc6s1lKXNoimCvL6qIIguTYZ+5AxMW0
+         hVfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
-         :user-agent:date;
-        bh=N9JGHYuENBo6LI4cBzytfOqDlISO6qEtWahhb1tznSg=;
-        b=ubvcQ1NtxylYwjD8uMV3NSho32Xs1HbnLRKlxFU/veeMdGvqenhjlxrLC71+Dd8Ypw
-         gDkL8f0hH0UPKpw/8i21Q7tkyO3JH1us0PFFkth6EV/cNRBpEiDVUMeQY0EJEKsGwwB4
-         8poS7xEe3tRhEhg+ovu0qFl/+qT+rHsNBokH63GBRje7U/9H0ZoXQu4OGSVKab9dtkoa
-         V9u4Su6UA1+A3+qT8/CTqTN7UjOgGr5ROt36JFkvYV12F/7vmVxcpW+vrQmiy/k0juzT
-         bAHzmrpMB//ypbNBUlRXXi4+pLt0mhYktDT8iVC4WLwmy2vyfwFPDKl4A+Ka0NfYJXyj
-         qTMg==
-X-Gm-Message-State: APjAAAWFAMugUULIotysiI3wsHBqDEeJpl+ebijsrFE5Xqtd+PSjBuG6
-        ZoT+kp9A8tsL7Fr6T8Y7R3wHpw==
-X-Google-Smtp-Source: APXvYqwx1cNv7KXO8GPOLDPiAoft0yMlhl6xu12cCga8P4mioA7Rt0WlLa0RjsLJMnzJ0HD0UBmlNg==
-X-Received: by 2002:a65:5348:: with SMTP id w8mr448232pgr.176.1565807103356;
-        Wed, 14 Aug 2019 11:25:03 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id p90sm585636pjp.7.2019.08.14.11.25.02
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 14 Aug 2019 11:25:02 -0700 (PDT)
-Message-ID: <5d5451fe.1c69fb81.ee115.1711@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n1ZhkxlA5RiuxtYaWeDgg6qWaM8JmbM5adPrEVLQCaY=;
+        b=spNMWHVVmhnFSusBjusKjOF3XZjrG4eoMEDsvhXKELNyJj3N95DeNkSkoxz4kcUZuV
+         XVR7xxfaFSMx22i27+v4ljk2/mjkPgPPzEzwK2JtqABHQRD9ij8JxBa8xEVqkDoS6JVB
+         BOSMBeOPH5YPJoUy0S3nwjCmjKzwDPRpyhFn5Pdhtp+LzC1wb6kEdqlfsrPJz8L8Napx
+         0T2MElqpglxF0780ajRrD58h1qKulOopt9J9pQVKzaYLb6Xq8SxBA5BpZ7gy4xOp8hn0
+         QKgYPx4rucZtsTzh2HCvCPMaT9KXUuN6TGBAgq8wKKoE6j4efq1tHHajQAkt12iI4Ltu
+         SxMQ==
+X-Gm-Message-State: APjAAAU/qa6i0f4Jl68CBi3svlsDhdpkG98Or3v4X8ZyrloYxqWwU2Rc
+        9oy30iMgzWLDu93LsP8VgHLB3qf6GBFtM9gULP5gxA==
+X-Google-Smtp-Source: APXvYqxbpuYpgfQERx/WDHl76hZenTI35Sh0ai+nP9DIPjQa3J7qJfNAG5EVro6PHqaavQ2NvV+TrvsE/9vX002QLeo=
+X-Received: by 2002:a05:6830:13d9:: with SMTP id e25mr411557otq.197.1565807836826;
+ Wed, 14 Aug 2019 11:37:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190813082442.25796-5-mkshah@codeaurora.org>
-References: <20190813082442.25796-1-mkshah@codeaurora.org> <20190813082442.25796-5-mkshah@codeaurora.org>
-Subject: Re: [PATCH 4/4] drivers: qcom: rpmh-rsc: Add RSC power domain support
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        bjorn.andersson@linaro.org, evgreen@chromium.org,
-        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
-        lsrao@codeaurora.org, ulf.hansson@linaro.org,
-        Maulik Shah <mkshah@codeaurora.org>
-To:     Maulik Shah <mkshah@codeaurora.org>, agross@kernel.org,
-        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
-User-Agent: alot/0.8.1
-Date:   Wed, 14 Aug 2019 11:25:01 -0700
+References: <1565731976.8572.16.camel@lca.pw> <5d53b238.1c69fb81.d3cd3.cd53@mx.google.com>
+ <20190814084014.GB52127@atomide.com>
+In-Reply-To: <20190814084014.GB52127@atomide.com>
+From:   Tri Vo <trong@android.com>
+Date:   Wed, 14 Aug 2019 11:37:05 -0700
+Message-ID: <CANA+-vDeSAYUNfTQzQPT2N_CUgvYr6i_LP_BdHT_zX+FPt8NHg@mail.gmail.com>
+Subject: Re: "PM / wakeup: Show wakeup sources stats in sysfs" causes boot warnings
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, Qian Cai <cai@lca.pw>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Maulik Shah (2019-08-13 01:24:42)
-> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-> index e278fc11fe5c..bd8e9f1a43b4 100644
-> --- a/drivers/soc/qcom/rpmh-rsc.c
-> +++ b/drivers/soc/qcom/rpmh-rsc.c
-> @@ -498,6 +498,32 @@ static int tcs_ctrl_write(struct rsc_drv *drv, const=
- struct tcs_request *msg)
->         return ret;
->  }
-> =20
-> +/**
-> + *  rpmh_rsc_ctrlr_is_idle: Check if any of the AMCs are busy.
-> + *
-> + *  @drv: The controller
-> + *
-> + *  Returns false if the TCSes are engaged in handling requests,
-> + *  True if controller is idle.
-> + */
-> +static bool rpmh_rsc_ctrlr_is_idle(struct rsc_drv *drv)
-> +{
-> +       int m;
-> +       struct tcs_group *tcs =3D get_tcs_of_type(drv, ACTIVE_TCS);
-> +       bool ret =3D true;
-> +
-> +       spin_lock(&drv->lock);
-> +       for (m =3D tcs->offset; m < tcs->offset + tcs->num_tcs; m++) {
-> +               if (!tcs_is_free(drv, m)) {
+On Wed, Aug 14, 2019 at 1:40 AM Tony Lindgren <tony@atomide.com> wrote:
+>
+> * Stephen Boyd <swboyd@chromium.org> [691231 23:00]:
+> > I also notice that device_set_wakeup_capable() has a check to see if the
+> > device is registered yet and it skips creating sysfs entries for the
+> > device if it isn't created in sysfs yet. Why? Just so it can be called
+> > before the device is created? I guess the same logic is handled by
+> > dpm_sysfs_add() if the device is registered after calling
+> > device_set_wakeup_*().
+>
+> Hmm just guessing.. It's maybe because drivers can enable and disable
+> the wakeup capability at any point for example like driver/net drivers
+> do based on WOL etc?
+>
+> > There's two approaches I see:
+> >
+> >       1) Do a similar check for device_set_wakeup_enable() and skip
+> >       adding the wakeup class until dpm_sysfs_add().
+> >
+> >       2) Find each case where this happens and only call wakeup APIs
+> >       on the device after the device is added.
+> >
+> > I guess it's better to let devices have wakeup modified on them before
+> > they're registered with the device core?
+>
+> I think we should at least initially handle case #1 above as multiple
+> places otherwise seem to break. Then maybe we could add a warning to
+> help fix all the #2 cases if needed?
 
-Isn't this a copy of an existing function in the rpmh driver?
-
-> +                       ret =3D false;
-> +                       break;
-> +               }
-> +       }
-> +       spin_unlock(&drv->lock);
-> +
-> +       return ret;
-> +}
-> +
->  /**
->   * rpmh_rsc_write_ctrl_data: Write request to the controller
->   *
-> @@ -521,6 +547,65 @@ int rpmh_rsc_write_ctrl_data(struct rsc_drv *drv, co=
-nst struct tcs_request *msg)
->         return tcs_ctrl_write(drv, msg);
->  }
-> =20
-> +int rpmh_domain_power_off(struct generic_pm_domain *rsc_pd)
-> +{
-> +       struct rsc_drv *drv =3D container_of(rsc_pd, struct rsc_drv, rsc_=
-pd);
-> +       int ret =3D 0;
-> +
-> +       /*
-> +        * RPMh domain can not be powered off when there is pending ACK f=
-or
-> +        * ACTIVE_TCS request. Exit when controller is busy.
-> +        */
-> +
-> +       ret =3D rpmh_rsc_ctrlr_is_idle(drv);
-> +       if (!ret)
-> +               goto exit;
-
-return 0? Shouldn't it return some negative value?
-
-> +
-> +       ret =3D rpmh_flush(&drv->client);
-> +       if (ret)
-> +               goto exit;
-
-Why not just return rpmh_flush(...)?
-
-The usage of goto in this function is entirely unnecessary.
-
-> +
-> +exit:
-> +       return ret;
-> +}
-> +
-> +static int rpmh_probe_power_domain(struct platform_device *pdev,
-> +                                  struct rsc_drv *drv)
-> +{
-> +       int ret =3D -ENOMEM;
-> +       struct generic_pm_domain *rsc_pd =3D &drv->rsc_pd;
-> +       struct device_node *dn =3D pdev->dev.of_node;
-> +
-> +       rsc_pd->name =3D kasprintf(GFP_KERNEL, "%s", dn->name);
-> +       if (!rsc_pd->name)
-> +               goto exit;
-
-return -ENOMEM;
-
-> +
-> +       rsc_pd->name =3D kbasename(rsc_pd->name);
-> +       rsc_pd->power_off =3D rpmh_domain_power_off;
-> +       rsc_pd->flags |=3D GENPD_FLAG_IRQ_SAFE;
-> +
-> +       ret =3D pm_genpd_init(rsc_pd, NULL, false);
-> +       if (ret)
-> +               goto free_name;
-> +
-> +       ret =3D of_genpd_add_provider_simple(dn, rsc_pd);
-> +       if (ret)
-> +               goto remove_pd;
-> +
-> +       pr_debug("init PM domain %s\n", rsc_pd->name);
-> +
-> +       return ret;
-
-	ret =3D of_genpd_add_provider_simple(...)
-	if (!ret)
-		return 0;
-
-Drop the pr_debug(), it's not useful.
-
-> +
-> +remove_pd:
-> +       pm_genpd_remove(rsc_pd);
-> +
-> +free_name:
-> +       kfree(rsc_pd->name);
-> +
-> +exit:
-> +       return ret;
-
-Please remove newlines between labels above.
-
+Makes sense. For case#1, we could also just register the wakeup source
+without specifying the parent device if the latter hasn't been
+registered yet. Userspace won't be able to associate a wakeup source
+to the parent device. But I think it's a reasonable fix, assuming we
+want to fix devices not being added before calling wakeup APIs #2.
