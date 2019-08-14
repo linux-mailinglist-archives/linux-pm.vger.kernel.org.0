@@ -2,151 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C9B8E00A
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Aug 2019 23:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423818E062
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2019 00:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728859AbfHNVnd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Aug 2019 17:43:33 -0400
-Received: from mail.andi.de1.cc ([85.214.55.253]:56696 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728855AbfHNVnc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 14 Aug 2019 17:43:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rzfhwFa3vGxoAkostceCbIdcn+mpEwU4ARYQbmvuyIk=; b=m4VSz6yPLD1INnQVjkWpFn2qps
-        fSyfckhDJhYEai8gy0FwfRSrR9yWrYNcrGnAwnR8TRKT/qAM8CIHuDlTxchGrAP2FWHng2nOcMn+U
-        nb2r+79X4T14vNdmx9UzMj0mcOEd6/26DwjRdFYzetfHZlduSC546ugr2LBmLQbnMTlQ=;
-Received: from p5dcc3d63.dip0.t-ipconnect.de ([93.204.61.99] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1hy13F-0002T6-0Y; Wed, 14 Aug 2019 23:43:25 +0200
-Received: from andi by aktux with local (Exim 4.92)
-        (envelope-from <andreas@kemnade.info>)
-        id 1hy13E-0006HI-Mq; Wed, 14 Aug 2019 23:43:24 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     tony@atomide.com, lgirdwood@gmail.com, broonie@kernel.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, sboyd@kernel.org, nm@ti.com,
-        vireshk@kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>, stable@vger.kernel.org
-Subject: [PATCH v2] regulator: twl: voltage lists for vdd1/2 on twl4030
-Date:   Wed, 14 Aug 2019 23:43:19 +0200
-Message-Id: <20190814214319.24087-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.20.1
+        id S1729815AbfHNWMr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Aug 2019 18:12:47 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:35970 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729805AbfHNWMq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Aug 2019 18:12:46 -0400
+Received: by mail-pf1-f193.google.com with SMTP id w2so199096pfi.3
+        for <linux-pm@vger.kernel.org>; Wed, 14 Aug 2019 15:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pn4+TVeFCCrcFG61M/ievKm/DZAmwLymLPS9PLFRAC0=;
+        b=EXLXiKcwPDfZkDU3XkB5qIFQTQ25u5KzxI/NkZKQr00Ib8AkKTPEA+PjN59Qxb86VH
+         0TwkGx7bpIp1HSMsDsleheBWi4srrti35kr4xdaaliQyM7PeVM41oYPfQkulEeDt6UfC
+         pyno9YE+Tr81So6uEXPqtEDHIU/I8nu/GT4OqIxvh/15nIqtReIlOcbSGPyPiMU9vqwL
+         RPrjVJcDJ2nxBzrfDuNilPNgD0YkPJliWFfzs7WIuWpNW2uVvFrfgl118craXTgwpKB9
+         ikgRK4uvBlN7WngDbX6fGxNtjOU2SeFjd1dd/NXZzqqtn4DKX3+4o63yHvHNkt1mgBn2
+         vG+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pn4+TVeFCCrcFG61M/ievKm/DZAmwLymLPS9PLFRAC0=;
+        b=QFvoOdN+j71Kq1wlB7L76gEFYA1pjreED8MrMknp9+T0p0GxxeyQkkn6wmk8mOHryg
+         sKR7mOT1hu3IrZnxJffomLzT9HTjO/LjiHH7g1fojrARqKu4uanOjSz8Xa6mCV3Cm0I2
+         Lj5Z/6+wc94wnRJICsYvi1fuo5LGuqsD35hFEz77u5guns5Zuprm/WxtG9jerpNH9hFC
+         AZPadfTQbCkqt/7U31i4N+54aePnhtjoKv54oDHHxCHda2ZOwOaBRMOqoPQ5kbNqETzC
+         w1NsInl+77xM23ZSEfsQIPlPo75Mf3cqy0+Sqs/91YEgnPe1Pkez3QO2fBFhXcZku4il
+         gHog==
+X-Gm-Message-State: APjAAAVEs/6O4WayP8hbnkSqoGTUpKb5D59LSzCD5Vxuqby+EMKdgtDI
+        BopfvJhnmDDBaGvdsYxqAQgVYBSC5oCTDPXB7cfT2g==
+X-Google-Smtp-Source: APXvYqw9g0Ol6/us+Q/GSJVfgGX9NA6KnY0Keszi05hjY2TDTg9/n6bBjGRTuD0ehbKefyqYBvdltfVoI7u4VRb0bnE=
+X-Received: by 2002:a62:cec4:: with SMTP id y187mr2208756pfg.84.1565820765370;
+ Wed, 14 Aug 2019 15:12:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
+References: <20190613184923.245935-1-nhuck@google.com> <27428324-129e-ee37-304a-0da2ed3810a0@linaro.org>
+ <CAJkfWY4X-YwuansL1R5w0rQNmE_hVJZKrMBJmOLp9G2DJPkNow@mail.gmail.com>
+In-Reply-To: <CAJkfWY4X-YwuansL1R5w0rQNmE_hVJZKrMBJmOLp9G2DJPkNow@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 14 Aug 2019 15:12:34 -0700
+Message-ID: <CAKwvOdkEp=q+2B_iqqyHJLwwUaFH2jnO+Ey8t-hn=x4shTbdoA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: armada: Fix -Wshift-negative-value
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, edubezval@gmail.com
+Cc:     linux-pm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Huckleberry <nhuck@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-_opp_supported_by_regulators() wrongly ignored errors from
-regulator_is_supported_voltage(), so it considered errors as
-success. Since
-commit 498209445124 ("regulator: core: simplify return value on suported_voltage")
-regulator_is_supported_voltage() returns a real boolean, so
-errors make _opp_supported_by_regulators() return false.
+On Tue, Aug 13, 2019 at 10:28 AM 'Nathan Huckleberry' via Clang Built
+Linux <clang-built-linux@googlegroups.com> wrote:
+>
+> Following up to see if this patch is going to be accepted.
 
-That reveals a problem with the declaration of the VDD1/2
-regulators on twl4030.
-The VDD1/VDD2 regulators on twl4030 are neither defined with
-voltage lists nor with the continuous flag set, so
-regulator_is_supported_voltage() returns false and an error
-before above mentioned commit (which was considered success)
-The result is that after the above mentioned commit cpufreq
-does not work properly e.g. dm3730.
-
-[    2.490997] core: _opp_supported_by_regulators: OPP minuV: 1012500 maxuV: 1012500, not supported by regulator
-[    2.501617] cpu cpu0: _opp_add: OPP not supported by regulators (300000000)
-[    2.509246] core: _opp_supported_by_regulators: OPP minuV: 1200000 maxuV: 1200000, not supported by regulator
-[    2.519775] cpu cpu0: _opp_add: OPP not supported by regulators (600000000)
-[    2.527313] core: _opp_supported_by_regulators: OPP minuV: 1325000 maxuV: 1325000, not supported by regulator
-[    2.537750] cpu cpu0: _opp_add: OPP not supported by regulators (800000000)
-
-The patch fixes declaration of VDD1/2 regulators by
-adding proper voltage lists.
-
-Fixes: 498209445124 ("regulator: core: simplify return value on suported_voltage")
-Cc: stable@vger.kernel.org
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
-resent because it was rejected by mailing lists, due to technical
-issues, sorry for the noise.
-changes in v2:
-  using a proper voltage list instead of misusing the continuous flag
-  subject was regulator: twl: mark vdd1/2 as continuous on twl4030
-
- drivers/regulator/twl-regulator.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/regulator/twl-regulator.c b/drivers/regulator/twl-regulator.c
-index 6fa15b2d6fb3..866b4dd01da9 100644
---- a/drivers/regulator/twl-regulator.c
-+++ b/drivers/regulator/twl-regulator.c
-@@ -359,6 +359,17 @@ static const u16 VINTANA2_VSEL_table[] = {
- 	2500, 2750,
- };
- 
-+/* 600mV to 1450mV in 12.5 mV steps */
-+static const struct regulator_linear_range VDD1_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(600000, 0, 68, 12500)
-+};
-+
-+/* 600mV to 1450mV in 12.5 mV steps, everything above = 1500mV */
-+static const struct regulator_linear_range VDD2_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(600000, 0, 68, 12500),
-+	REGULATOR_LINEAR_RANGE(1500000, 69, 69, 12500)
-+};
-+
- static int twl4030ldo_list_voltage(struct regulator_dev *rdev, unsigned index)
- {
- 	struct twlreg_info	*info = rdev_get_drvdata(rdev);
-@@ -427,6 +438,8 @@ static int twl4030smps_get_voltage(struct regulator_dev *rdev)
- }
- 
- static const struct regulator_ops twl4030smps_ops = {
-+	.list_voltage   = regulator_list_voltage_linear_range,
-+
- 	.set_voltage	= twl4030smps_set_voltage,
- 	.get_voltage	= twl4030smps_get_voltage,
- };
-@@ -466,7 +479,8 @@ static const struct twlreg_info TWL4030_INFO_##label = { \
- 		}, \
- 	}
- 
--#define TWL4030_ADJUSTABLE_SMPS(label, offset, num, turnon_delay, remap_conf) \
-+#define TWL4030_ADJUSTABLE_SMPS(label, offset, num, turnon_delay, remap_conf, \
-+		n_volt) \
- static const struct twlreg_info TWL4030_INFO_##label = { \
- 	.base = offset, \
- 	.id = num, \
-@@ -479,6 +493,9 @@ static const struct twlreg_info TWL4030_INFO_##label = { \
- 		.owner = THIS_MODULE, \
- 		.enable_time = turnon_delay, \
- 		.of_map_mode = twl4030reg_map_mode, \
-+		.n_voltages = n_volt, \
-+		.n_linear_ranges = ARRAY_SIZE(label ## _ranges), \
-+		.linear_ranges = label ## _ranges, \
- 		}, \
- 	}
- 
-@@ -518,8 +535,8 @@ TWL4030_ADJUSTABLE_LDO(VSIM, 0x37, 9, 100, 0x00);
- TWL4030_ADJUSTABLE_LDO(VDAC, 0x3b, 10, 100, 0x08);
- TWL4030_ADJUSTABLE_LDO(VINTANA2, 0x43, 12, 100, 0x08);
- TWL4030_ADJUSTABLE_LDO(VIO, 0x4b, 14, 1000, 0x08);
--TWL4030_ADJUSTABLE_SMPS(VDD1, 0x55, 15, 1000, 0x08);
--TWL4030_ADJUSTABLE_SMPS(VDD2, 0x63, 16, 1000, 0x08);
-+TWL4030_ADJUSTABLE_SMPS(VDD1, 0x55, 15, 1000, 0x08, 68);
-+TWL4030_ADJUSTABLE_SMPS(VDD2, 0x63, 16, 1000, 0x08, 69);
- /* VUSBCP is managed *only* by the USB subchip */
- TWL4030_FIXED_LDO(VINTANA1, 0x3f, 1500, 11, 100, 0x08);
- TWL4030_FIXED_LDO(VINTDIG, 0x47, 1500, 13, 100, 0x08);
+Miquel is listed as the maintainer of this file in MAINTAINERS.
+Miquel, can you please pick this up?  Otherwise Zhang, Eduardo, and
+Daniel are listed as maintainers for drivers/thermal/.
 -- 
-2.20.1
-
+Thanks,
+~Nick Desaulniers
