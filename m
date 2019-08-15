@@ -2,79 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE978F365
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2019 20:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90188F592
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2019 22:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731202AbfHOS3q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Aug 2019 14:29:46 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39562 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728828AbfHOS3q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Aug 2019 14:29:46 -0400
-Received: by mail-wr1-f66.google.com with SMTP id t16so3051127wra.6;
-        Thu, 15 Aug 2019 11:29:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=G+ti5MoYAXo5Gey/THUpmV9/n/MyYAX4cVlRNM3ewyk=;
-        b=kenpdG4zz+zDKowXgcmj7UlWEl408gEFB2M50TpE/sSbfSmUZqxDRMEC9M3mzW4c1b
-         yhC3B+U3rqwfd8xhx/TexIe0Hfv1H8KKzTydU0Bg4UJtk3IRnSputNkKrBF0dH/YIh58
-         LdvhJdLdOZ2N4xKgwdWxuMEgmkBdLPKPHnPxqL3lgu7uFaDbnoeaPMowo6/NZNbCmKhD
-         48lJfG7oaF3UDeqjr0LvFP299t2fAyocWazXuNakUGYRAt+LUQowsTbPXO6JbvUrrlK9
-         +5kqU4Lkta6k3vPgEECYJrrl9+/5+h7j69ogkGx63gawb0bM6ENYxufrHjcE98oTn3BU
-         aKbA==
-X-Gm-Message-State: APjAAAVGNfVPrRd8D6wV23+8kJNoUlM33F+YicIXaoeDbgOchmNd2Nsi
-        HzkoM8NXfqDdzmzhAWXngu4=
-X-Google-Smtp-Source: APXvYqzcm8U/A1Qgplcw2RiLILIE0EgMkCH1v2MhQN4StF7iqTRUm9rJjXSeZuEZ0RWP8wo36QOmyw==
-X-Received: by 2002:adf:fd8b:: with SMTP id d11mr6497885wrr.300.1565893783407;
-        Thu, 15 Aug 2019 11:29:43 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.124])
-        by smtp.googlemail.com with ESMTPSA id h97sm9341511wrh.74.2019.08.15.11.29.42
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 15 Aug 2019 11:29:42 -0700 (PDT)
-Date:   Thu, 15 Aug 2019 20:29:40 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
-        kgene@kernel.org, pankaj.dubey@samsung.com,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com,
-        m.szyprowski@samsung.com
-Subject: Re: [PATCH v3 5/9] ARM64: EXYNOS: enable exynos_chipid for
- ARCH_EXYNOS
-Message-ID: <20190815182940.GF14360@kozik-lap>
-References: <20190813150827.31972-1-s.nawrocki@samsung.com>
- <CGME20190813150856eucas1p1a8957cfe50e3b421ccbc3084404de43b@eucas1p1.samsung.com>
- <20190813150827.31972-6-s.nawrocki@samsung.com>
+        id S1728662AbfHOUO4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Aug 2019 16:14:56 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:40777 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726008AbfHOUO4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Aug 2019 16:14:56 -0400
+Received: from pd9ef1cb8.dip0.t-ipconnect.de ([217.239.28.184] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hyM92-0005Rc-Vs; Thu, 15 Aug 2019 22:14:49 +0200
+Date:   Thu, 15 Aug 2019 22:14:48 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Borislav Petkov <bp@alien8.de>
+cc:     "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Chen Yu <yu.c.chen@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family
+ 15h/16h
+In-Reply-To: <20190815153447.GH15313@zn.tnic>
+Message-ID: <alpine.DEB.2.21.1908152212120.1908@nanos.tec.linutronix.de>
+References: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com> <20190815071940.GB15313@zn.tnic> <768aa720-1db1-81ca-4d0d-adf31f4d134b@amd.com> <20190815153447.GH15313@zn.tnic>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190813150827.31972-6-s.nawrocki@samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 05:08:23PM +0200, Sylwester Nawrocki wrote:
-> From: Pankaj Dubey <pankaj.dubey@samsung.com>
+On Thu, 15 Aug 2019, Borislav Petkov wrote:
+> On Thu, Aug 15, 2019 at 01:47:24PM +0000, Lendacky, Thomas wrote:
+> > I think this is a clearer indication that the action has taken place.
 > 
-> This patch enables exynos_chipid driver for ARCH_EXYNOS
-> based SoC.
-> 
-> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
-> ---
-> Changes since v1 (RFC):
->  - none
-> ---
->  arch/arm64/Kconfig.platforms | 1 +
+> Yeah, but what does that bring us? You wanna know this now, while
+> testing. Once that whole effort is done, it is a useless printing of
+> info which you have in cpuinfo already.
 
-Thanks, applied.
+No. Print something useful in dmesg, telling the user that and also why
+this has been disabled.
 
-Best regards,
-Krzysztof
+That avoids stupid questions and if they come up nevertheless we can reduce
+the answer to LMGT4Y.
 
+Thanks,
+
+	tglx
