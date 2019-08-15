@@ -2,99 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0488EF66
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2019 17:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD6F8EFDB
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2019 17:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730049AbfHOPeG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Aug 2019 11:34:06 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:43036 "EHLO mail.skyhub.de"
+        id S1729251AbfHOP7C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Aug 2019 11:59:02 -0400
+Received: from mail.heine.tech ([195.201.24.99]:44184 "EHLO mail.heine.tech"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728728AbfHOPeG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 15 Aug 2019 11:34:06 -0400
-Received: from zn.tnic (p200300EC2F0B52001DDC45CCE62FC494.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:5200:1ddc:45cc:e62f:c494])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7627B1EC074B;
-        Thu, 15 Aug 2019 17:34:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1565883244;
+        id S1728662AbfHOP7B (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 15 Aug 2019 11:59:01 -0400
+X-Greylist: delayed 332 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Aug 2019 11:59:01 EDT
+Received: from localhost (localhost [127.0.0.1]) (Authenticated sender: michael@nosthoff.rocks)
+        by mail.heine.tech (Postcow) with ESMTPSA id 8A6D11814A1;
+        Thu, 15 Aug 2019 17:53:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.so; s=dkim;
+        t=1565884407;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=6ea0+0I7fYBanPI40B3Ad6TnGdmO71uK0qGfHM+0Bo4=;
-        b=ixw2ad5rraIJ95A28jqAg/FczeVEcYhxQFEzLrDlcL+fFOZ9Gc1GDa6MUF2M8s0AdfC+Bz
-        S77CYzbLrz7CLJC3Tv9lWuQRXOz97162qtRh/TmVGCmoYewt7C5uv5G64Zsn2XNbg6BB/R
-        IDkIkwuGBgKSfBHUmJCbTXH/Ll8qt5s=
-Date:   Thu, 15 Aug 2019 17:34:47 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Lendacky, Thomas" <Thomas.Lendacky@amd.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Chen Yu <yu.c.chen@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family 15h/16h
-Message-ID: <20190815153447.GH15313@zn.tnic>
-References: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com>
- <20190815071940.GB15313@zn.tnic>
- <768aa720-1db1-81ca-4d0d-adf31f4d134b@amd.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BE1Zy5Qog+TxzY8S3tJkSl6a3YgdLE5ERaIG4+hlWjA=;
+        b=dKS+jggoEJ3y6kCqy+xQfwW2KyZFLUFkQwQR0qAnACo0btZSpl6xa+mE1PqU+3aFr+PsKw
+        PuY9B+kjsZUSFcG8rYuWJNNfi+1yHc0JM4mVoIKeCW3R47Yjb20FJEtK1vfn7zovppe+gA
+        hps03dtZ9mx74tjSnu+nKFNM97SWrKw=
+From:   Michael Nosthoff <committed@heine.so>
+To:     linux-pm@vger.kernel.org
+Cc:     briannorris@chromium.org, Michael Nosthoff <committed@heine.so>
+Subject: [PATCH] power: supply: sbs-battery: use correct flags field
+Date:   Thu, 15 Aug 2019 17:53:22 +0200
+Message-Id: <20190815155322.20923-1-committed@heine.so>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <768aa720-1db1-81ca-4d0d-adf31f4d134b@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 01:47:24PM +0000, Lendacky, Thomas wrote:
-> Sure, I can do that. Do we want to tie this into the nordrand option and
-> add rdrand=off or keep that separate?
+the type flag is stored in the chip->flags field not in the
+client->flags field. This currently leads to never using the ti
+specific function but always falling back to the general one.
 
-Yeah, I was looking at that this morning and I'd say keep 'em separate
-because if you have to tie, you need to export functions and then
-there's
+Signed-off-by: Michael Nosthoff <committed@heine.so>
+---
+ drivers/power/supply/sbs-battery.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	setup_clear_cpu_cap(X86_FEATURE_RDSEED);
-
-in the nordrand callback but then F15h and F16h don't have RDSEED and
-people would wonder, why clear RDSEED on AMD, blabla... so keeping them
-separate saves us all that.
-
-> I think this is a clearer indication that the action has taken place.
-
-Yeah, but what does that bring us? You wanna know this now, while
-testing. Once that whole effort is done, it is a useless printing of
-info which you have in cpuinfo already.
-
-> Not sure what you mean. We can't use the DMI stuff for this. So now, with
-> the x86 family checks, if anyone adds some DMI stuff or x86 family stuff
-> in the future that matches both the DMI and x86 family checks, this will
-> be called more than once and so you need to copy any previous settings and
-> add the new ones.
-
-I had a suspicion that it was something like that. Ok, this is not a
-big structure currently so I guess it is fine but if it keeps growing,
-it would need a proper redesign like making it a list and callbacks
-doing list_add_tail() for MSRs which get added. It would avoid that
-kmalloc and copying which is silly. Please put a comment ontop why we're
-copying.
-
-> Except that X86_FEATURE_RDRAND isn't set anymore. I could create a new
-> software feature that is set when the CPUID bit is cleared if that's
-> preferred.
-
-Nah, let's leave it like you had it.
-
-Thx.
-
+diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+index 048d205d7074..2e86cc1e0e35 100644
+--- a/drivers/power/supply/sbs-battery.c
++++ b/drivers/power/supply/sbs-battery.c
+@@ -620,7 +620,7 @@ static int sbs_get_property(struct power_supply *psy,
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_PRESENT:
+ 	case POWER_SUPPLY_PROP_HEALTH:
+-		if (client->flags & SBS_FLAGS_TI_BQ20Z75)
++		if (chip->flags & SBS_FLAGS_TI_BQ20Z75)
+ 			ret = sbs_get_ti_battery_presence_and_health(client,
+ 								     psp, val);
+ 		else
 -- 
-Regards/Gruss,
-    Boris.
+2.20.1
 
-Good mailing practices for 400: avoid top-posting and trim the reply.
