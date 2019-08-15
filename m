@@ -2,83 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B27348F62E
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2019 23:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389C68F63C
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Aug 2019 23:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730205AbfHOVER (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Aug 2019 17:04:17 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:40858 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726008AbfHOVER (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Aug 2019 17:04:17 -0400
-Received: from pd9ef1cb8.dip0.t-ipconnect.de ([217.239.28.184] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hyMup-000685-8z; Thu, 15 Aug 2019 23:04:11 +0200
-Date:   Thu, 15 Aug 2019 23:04:10 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
+        id S1731388AbfHOVFI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Aug 2019 17:05:08 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:35698 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729562AbfHOVFI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 15 Aug 2019 17:05:08 -0400
+Received: from zn.tnic (p200300EC2F0B5200F4090F5F0FC894B7.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:5200:f409:f5f:fc8:94b7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 050B11EC074B;
+        Thu, 15 Aug 2019 23:05:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1565903107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3cTqspnxsRR+dFtWCSWAL1onU2pvC0uxIqpEe+/lcYY=;
+        b=Ipq2V1iJgsNLv9JZZ2ex9QwuIv/pOG9GfxP5YFImUmGL7w5NNfRH5wMrUzhU8THeFQi4YZ
+        sgCc9SsMP0DxBvRnxTCF4crIRMPOhqkCroMfre5zzrgQGJk6t9m02uFUwdiBDjB1v8qoL0
+        j0sz2O37NXmrbpPn4o0ctrIpXqTRLv8=
+Date:   Thu, 15 Aug 2019 23:05:47 +0200
+From:   Borislav Petkov <bp@alien8.de>
 To:     Andrew Cooper <andrew.cooper3@citrix.com>
-cc:     "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+Cc:     "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
         "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Pavel Machek <pavel@ucw.cz>, Chen Yu <yu.c.chen@intel.com>,
         Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family
- 15h/16h
-In-Reply-To: <a24a2c7d-cfab-a049-37e8-7260a9063a7c@citrix.com>
-Message-ID: <alpine.DEB.2.21.1908152301300.1908@nanos.tec.linutronix.de>
-References: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com> <a24a2c7d-cfab-a049-37e8-7260a9063a7c@citrix.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+Subject: Re: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family 15h/16h
+Message-ID: <20190815210547.GL15313@zn.tnic>
+References: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com>
+ <a24a2c7d-cfab-a049-37e8-7260a9063a7c@citrix.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1612320073-1565903051=:1908"
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a24a2c7d-cfab-a049-37e8-7260a9063a7c@citrix.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1612320073-1565903051=:1908
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 15 Aug 2019, Andrew Cooper wrote:
-
-> On 14/08/2019 22:17, Lendacky, Thomas wrote:
-> > +static void init_hide_rdrand(struct cpuinfo_x86 *c)
-> > +{
-> > +	/*
-> > +	 * The nordrand option can clear X86_FEATURE_RDRAND, so check for
-> > +	 * RDRAND support using the CPUID function directly.
-> > +	 */
-> > +	if (!(cpuid_ecx(1) & BIT(30)) || rdrand_force)
-> > +		return;
-> > +
-> > +	msr_clear_bit(MSR_AMD64_CPUID_FN_00000001, 62);
-> > +	clear_cpu_cap(c, X86_FEATURE_RDRAND);
-> > +	pr_info_once("hiding RDRAND via CPUID\n");
-> 
+On Thu, Aug 15, 2019 at 09:59:03PM +0100, Andrew Cooper wrote:
 > If you're virtualised, the write to MSR_AMD64_CPUID_FN_1 almost
 > certainly won't take effect, which means userspace will still be able to
 > see the bit.
-> 
-> Best to leave everything untouched if you can't actually clear the bit. 
-> All you can do is trust that your hypervisor knows what it is doing.
 
-Well, we can read the CPUID entry again after writing that MSR bit. If it
-still says RDRAND is available then we know that the hypervisor did not
-allow the write and print something to that effect.
+msr_clear_bit() has a return value. We should check it before
+doing anything further. I hope the HV actually signals the write
+success/failure properly so that we get a correct return value.
 
-Thanks,
+-- 
+Regards/Gruss,
+    Boris.
 
-	tglx
---8323329-1612320073-1565903051=:1908--
+Good mailing practices for 400: avoid top-posting and trim the reply.
