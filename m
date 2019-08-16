@@ -2,103 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8243790971
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 22:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93C290A17
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 23:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727589AbfHPU0y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 16:26:54 -0400
-Received: from mail.klausen.dk ([174.138.9.187]:52666 "EHLO mail.klausen.dk"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727568AbfHPU0x (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 16 Aug 2019 16:26:53 -0400
-X-Greylist: delayed 397 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Aug 2019 16:26:52 EDT
-From:   Kristian Klausen <kristian@klausen.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=klausen.dk; s=dkim;
-        t=1565986812;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s9A+nkXWVA/jF2o9MhtP9GY66Zha2aaG5LtnYmm+FZk=;
-        b=HbFInzYxixr8DpRdSujExpk4Qnj2TL+nlNzxCd+8zdl9iLRZTJ07PriEb9iDB1TuBHj2MH
-        rQaO2qSQpFOawtgs8823BoyI8+EMnRDTVWJJLzAbLbX8dgb1D+8dtEsC+DZ+AW6G8ctcud
-        3p/HPeXTs2blBx9pOcLnlMzF81XWVU0=
-Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to
- suspend-to-idle
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <5997740.FPbUVk04hV@kreacher>
-Message-ID: <800186a2-e912-3498-f08b-47469bbe8b0d@klausen.dk>
-Date:   Fri, 16 Aug 2019 22:20:10 +0200
+        id S1727752AbfHPVOd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 17:14:33 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:40761 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727649AbfHPVOd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 17:14:33 -0400
+Received: by mail-oi1-f194.google.com with SMTP id h21so5794998oie.7;
+        Fri, 16 Aug 2019 14:14:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4gRR6HvBg6u5veUlkvaSp6+HCcvQCdmIeBVhPgvLg/I=;
+        b=NLghpoLPSElcRSsklqLLctbkIfqC6ZkjLvrSvw60ruskZmUsNtHJ551HeTCg1Pw785
+         UgBb81J34MpcvYUj/YyXgh5X16p9EM+FUvkIh2aPBjOLePmGDHFQfUHAnY6Jia0t627B
+         rjoa/ARNU/U7/0oXkDjPLSz6UrILJQfVZAl9e3nY9olUbwKFSpb0xVoEHDTRQ0yNkpaZ
+         tX9tcTrIOUQVsco6qsakLyEGJpWtyDacswN9pqFvK2WLpG/9VjYZClX9UDnCCuv/I5uZ
+         LIpNJosHsZqJ+1MN3wbyPqZreezLeCddfyuSCAn8ROlyLzOPGzF6X4NNiXW1IWOvM/Ti
+         GO2g==
+X-Gm-Message-State: APjAAAWNgVR7c97BLfUmy8rs+tWBtpiw7S5iAee+EwfNZxRe1jYBsRzz
+        zTsqzC4g4M0smm78sj4WKNMv57M=
+X-Google-Smtp-Source: APXvYqyGpQgU9LoPcwD1U3cdu93f8C8iY9sv3eSKzx9WuZ10PDu6m4tPQlcQpTQ6ajbc+Hs+/Zam7A==
+X-Received: by 2002:a05:6808:903:: with SMTP id w3mr5765893oih.119.1565990071859;
+        Fri, 16 Aug 2019 14:14:31 -0700 (PDT)
+Received: from localhost (ip-173-126-47-137.ftwttx.spcsdns.net. [173.126.47.137])
+        by smtp.gmail.com with ESMTPSA id c11sm1095758otr.54.2019.08.16.14.14.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2019 14:14:31 -0700 (PDT)
+Date:   Fri, 16 Aug 2019 16:14:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Richard Tresidder <rtresidd@electromag.com.au>
+Cc:     sre@kernel.org, mark.rutland@arm.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] dt-bindings: power/supply/sbs_sbs-battery: Addition
+ of force_load binding Add device tree binding documentation for addition of
+ force_load boolean value to allow loading a battery during boot even if not
+ present at that time.
+Message-ID: <20190816211430.GA8175@bogus>
+References: <1564037445-22936-1-git-send-email-rtresidd@electromag.com.au>
 MIME-Version: 1.0
-In-Reply-To: <5997740.FPbUVk04hV@kreacher>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564037445-22936-1-git-send-email-rtresidd@electromag.com.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02.08.2019 12.33, Rafael J. Wysocki wrote:
-> Hi All,
->
->>> On top of the "Simplify the suspend-to-idle control flow" patch series
->>> posted previously:
->>>
->>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
->>>
->>> sanitize the suspend-to-idle flow even further.
->>>
->>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
->>>
->>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
->>> specification-compliant order with respect to suspending and resuming
->>> devices (patch 2).
->>>
->>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
->>> switch to prevent the LPS0 _DSM from being used.
->> The v2 is because I found a (minor) bug in patch 1, decided to use a module
->> parameter instead of a kernel command line option in patch 4.  Also, there
->> are 4 new patches:
->>
->> Patch 5: Switch the EC over to polling during "noirq" suspend and back
->> during "noirq" resume.
->>
->> Patch 6: Eliminate acpi_sleep_no_ec_events().
->>
->> Patch 7: Consolidate some EC code depending on PM_SLEEP.
->>
->> Patch 8: Add EC GPE dispatching debug message.
-> The v3 is just a rearranged v2 so as to move the post sensitive patch (previous patch 2)
-> to the end of the series.   [After applying the full series the code is the same as before.]
->
-> For easier testing, the series (along with some previous patches depended on by it)
-> is available in the pm-s2idle-testing branch of the linux-pm.git tree at kernel.org:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
-It was just testing this patch series(461fc1caed55), to see if it would 
-fix my charging issue 
-(https://bugzilla.kernel.org/show_bug.cgi?id=201307), which it didn't.
+On Thu, Jul 25, 2019 at 02:50:45PM +0800, Richard Tresidder wrote:
+> Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
+> ---
+> 
+> Notes:
+>     Add device tree binding documentation for addition of force_load
+>     boolean value to allow loading a battery during boot even if not
+>     present at that time.
+>     Accompanying patch to drivers/power/supply/sbs-battery.c submitted to linux-pm@vger.kernel.org
+> 
+>  Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
+> index 4e78e51..187d7bb 100644
+> --- a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
+> +++ b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
+> @@ -15,7 +15,8 @@ Optional properties :
+>     after an external change notification.
+>   - sbs,battery-detect-gpios : The gpio which signals battery detection and
+>     a flag specifying its polarity.
+> -
+> + - sbs,force-load : Allow loading of a hot-pluggable battery when there is no
+> +   GPIO detect available and the module is statically built.
 
-I did however notice that my laptop (ASUS Zenbook UX430UNR/i7-8550U) 
-won't wake when opening the lid or pressing a key, the only way to wake 
-the laptop is pressing the power button.
+What's a module? That's Linux specific and nothing to do with the 
+binding. 
 
-I also tested mainline (5.3.0-rc4 b7e7c85dc7b0) and 5.2.8 and the laptop 
-wakes without issue when the lid is opened or a key is presed.
-> Please refer to the changelogs for details.
->
-> Thanks,
-> Rafael
->
->
->
+Can't you just force load if sbs,battery-detect-gpios is not present?
 
+Rob
