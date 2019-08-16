@@ -2,106 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AFE8FCE0
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 09:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A318FEA7
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 11:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726637AbfHPH7C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 03:59:02 -0400
-Received: from mail.heine.tech ([195.201.24.99]:37346 "EHLO mail.heine.tech"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726678AbfHPH7B (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 16 Aug 2019 03:59:01 -0400
-Received: from localhost (localhost [127.0.0.1]) (Authenticated sender: michael@nosthoff.rocks)
-        by mail.heine.tech (Postcow) with ESMTPSA id 9B0541814A5;
-        Fri, 16 Aug 2019 09:58:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.so; s=dkim;
-        t=1565942339;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GkQ4o+vnZ8bfYSlgoMHLP37yPkIuBnAX45qO7WjdZqU=;
-        b=aFZ4wiSZUPYEU/2ifm6MIxYKR1BCt+ckvNQfFnxemkkajVf+YfTr3e7Y/wu86QnxjHPuNj
-        AVLEsDYz5PBwJnuwTDm0dTPqVvdmKMaVkZJlvEhlI1vlrk74TzsTd32i4jxOot23ugP+CC
-        IMPzeiXPFYsw4HpCV8AkjGpq0mJPaGE=
-From:   Michael Nosthoff <committed@heine.so>
-To:     linux-pm@vger.kernel.org
-Cc:     Michael Nosthoff <committed@heine.so>,
-        Brian Norris <briannorris@chromium.org>, stable@vger.kernel.org
-Subject: [PATCH] power: supply: sbs-battery: only return health when battery present
-Date:   Fri, 16 Aug 2019 09:58:42 +0200
-Message-Id: <20190816075842.27333-1-committed@heine.so>
+        id S1726810AbfHPJHS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 05:07:18 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:39959 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726800AbfHPJHS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 05:07:18 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id D68E380F3A; Fri, 16 Aug 2019 11:07:01 +0200 (CEST)
+Date:   Fri, 16 Aug 2019 11:07:13 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        nhorman@tuxdriver.com,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Chen Yu <yu.c.chen@intel.com>, Jonathan Corbet <corbet@lwn.net>
+Subject: Re: Non-random RDRAND Re: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID
+ bit on AMD family 15h/16h
+Message-ID: <20190816090713.GA17833@amd>
+References: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com>
+ <20190814232434.GA31769@amd>
+ <20190815151224.GB18727@mit.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="vtzGhvizbBRQ85DL"
+Content-Disposition: inline
+In-Reply-To: <20190815151224.GB18727@mit.edu>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-when the battery is set to sbs-mode and  no gpio detection is enabled
-"health" is always returning a value even when the battery is not present.
-All other fields return "not present".
-This leads to a scenario where the driver is constantly switching between
-"present" and "not present" state. This generates a lot of constant
-traffic on the i2c.
 
-This commit changes the response of "health" to an error when the battery
-is not responding leading to a consistent "not present" state.
+--vtzGhvizbBRQ85DL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 76b16f4cdfb8 ("power: supply: sbs-battery: don't assume
-MANUFACTURER_DATA formats")
+On Thu 2019-08-15 11:12:24, Theodore Y. Ts'o wrote:
+> On Thu, Aug 15, 2019 at 01:24:35AM +0200, Pavel Machek wrote:
+> > Burn it with fire!
+> >=20
+> > I mean... people were afraid RDRAND would be backdoored, and you now
+> > confirm ... it indeed _is_ backdoored? /., here's news for you!
+>=20
+> To be fair to AMD, I wouldn't call it a backdoor.  Hanlon's razor is
+> applicable here:
+>=20
+> 	"Never attribute to malice that which can be adequately
+> 	explained by neglect."
 
-Signed-off-by: Michael Nosthoff <committed@heine.so>
-Cc: Brian Norris <briannorris@chromium.org>
-Cc: <stable@vger.kernel.org>
----
- drivers/power/supply/sbs-battery.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+> (Sometimes other words are used instead of neglect, but i'm trying to
+> be nice.)
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 2e86cc1e0e35..f8d74e9f7931 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -314,17 +314,22 @@ static int sbs_get_battery_presence_and_health(
- {
- 	int ret;
- 
--	if (psp == POWER_SUPPLY_PROP_PRESENT) {
--		/* Dummy command; if it succeeds, battery is present. */
--		ret = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
--		if (ret < 0)
--			val->intval = 0; /* battery disconnected */
--		else
--			val->intval = 1; /* battery present */
--	} else { /* POWER_SUPPLY_PROP_HEALTH */
-+	/* Dummy command; if it succeeds, battery is present. */
-+	ret = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
-+
-+	if (ret < 0) { /* battery not present*/
-+		if (psp == POWER_SUPPLY_PROP_PRESENT) {
-+			val->intval = 0;
-+			return 0;
-+		}
-+		return ret;
-+	}
-+
-+	if (psp == POWER_SUPPLY_PROP_PRESENT)
-+		val->intval = 1; /* battery present */
-+	else /* POWER_SUPPLY_PROP_HEALTH */
- 		/* SBS spec doesn't have a general health command. */
- 		val->intval = POWER_SUPPLY_HEALTH_UNKNOWN;
--	}
- 
- 	return 0;
- }
-@@ -626,6 +631,8 @@ static int sbs_get_property(struct power_supply *psy,
- 		else
- 			ret = sbs_get_battery_presence_and_health(client, psp,
- 								  val);
-+
-+		/* this can only be true if no gpio is used */
- 		if (psp == POWER_SUPPLY_PROP_PRESENT)
- 			return 0;
- 		break;
--- 
-2.20.1
+You are right, I thought it was returning values with low entropy, and
+it returns ~0 (so -- really really low entropy :-) and can't be
+clasified as a backdoor.
 
+Anyway, AMD is _not_ doing good job right now.
+
+I'd expect:
+
+a) CVE reference
+
+b) real fix; if BIOS can init the rng, so can kernel
+
+									Pavel
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--vtzGhvizbBRQ85DL
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl1WckEACgkQMOfwapXb+vJUmgCbBaZAQvUTMEhu0sVBHUxqvAVR
+ZPEAn3mz1LDei9CmYiqspf9+V/tvyKCj
+=tgYd
+-----END PGP SIGNATURE-----
+
+--vtzGhvizbBRQ85DL--
