@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA08690856
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 21:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14141908A7
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 21:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727717AbfHPTme (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 15:42:34 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:13117 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727671AbfHPTma (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 15:42:30 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d5707270000>; Fri, 16 Aug 2019 12:42:31 -0700
+        id S1727747AbfHPTmk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 15:42:40 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:13294 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727709AbfHPTme (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 15:42:34 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d57072b0003>; Fri, 16 Aug 2019 12:42:35 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 16 Aug 2019 12:42:29 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 16 Aug 2019 12:42:32 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 16 Aug 2019 12:42:29 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Aug
- 2019 19:42:28 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 16 Aug 2019 19:42:28 +0000
+        by hqpgpgate102.nvidia.com on Fri, 16 Aug 2019 12:42:32 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Aug
+ 2019 19:42:32 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 16 Aug 2019 19:42:32 +0000
 Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.166.126]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d5707230000>; Fri, 16 Aug 2019 12:42:28 -0700
+        id <B5d570724000b>; Fri, 16 Aug 2019 12:42:32 -0700
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
 To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
         <tglx@linutronix.de>, <jason@lakedaemon.net>,
@@ -40,9 +40,9 @@ CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
         <digetx@gmail.com>, <devicetree@vger.kernel.org>,
         <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
         <linux-pm@vger.kernel.org>
-Subject: [PATCH v9 08/22] clk: tegra: periph: Add restore_context support
-Date:   Fri, 16 Aug 2019 12:41:53 -0700
-Message-ID: <1565984527-5272-9-git-send-email-skomatineni@nvidia.com>
+Subject: [PATCH v9 09/22] clk: tegra: clk-super: Fix to enable PLLP branches to CPU
+Date:   Fri, 16 Aug 2019 12:41:54 -0700
+Message-ID: <1565984527-5272-10-git-send-email-skomatineni@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com>
 References: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com>
@@ -50,125 +50,167 @@ X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1565984551; bh=Iw7xdi6+oXEPCLHWZuUnzXeVEWHm9P1Mfz/SFOgojZQ=;
+        t=1565984556; bh=CGHgUE/KvZkZSW5C8uLwjJhtGJ2U7iA84uP+AwPU0w0=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:X-NVConfidentiality:MIME-Version:
          Content-Type;
-        b=hpjFWmoRpyfhFFpo24s/ZNMW/cE69NP7i2554krL9bjJFm4p+5s2DAcpqqCrHPByT
-         hIEBxZeAFKQ249hBU8q4hIeAdVn9aOt0CxJmVb6mDWaeIdmCezhQS45MQHp+Xmb3PY
-         fi9OhkmR1IHjFY4Y3eTofMcDkGur9dKDm941KBhmvyag/ZECE85ycQoSEf8dVh2WMT
-         lf63fL94ol3YtJwfmH3+KSQLEzEcT5yX36bMvZXFEXffBHG7dww/7ptbbPB/zXd28f
-         ZByMviowPBbrDa0eWkzo7iUDghWdFOfVNJXQbryraX47QfqSnxFSHlPp8DidhJzE2u
-         nvQukDXZCwA8g==
+        b=KfbkEbqBoz60cCOWVRff2YX0oMRkzYXM//bSqEz9BZoGj+BidCDGQJf5U+oSaHw0j
+         C0h/IpeB34f1ZjS87+egPLwDIAA2fEUAuz99xLz4LxMIwGGUjQ2eVo8AlcPEmKobnR
+         GP6r9SWC90DRpAz/FMpSR6lGcEV5gV871uyjf1rwPHIRFq1B8yhB4BlXNe1ivZoAx7
+         45p/Ul4SrQnyzhOHPaXT7C4NB2wxOYUNu9pVR1Ao2ZGY415ziKFQ00RPiqa3TYj8/X
+         x/p5B5S46/szFBp+slagFZ0MWpzYaEqMX2LD1q1NSv4EsLQDSm4pABofGg7nFSttF3
+         avXaY8HcOND3g==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch implements restore_context support for clk-periph and
-clk-sdmmc-mux clock operations to restore clock parent and rates
-on system resume.
+This patch has a fix to enable PLLP branches to CPU before changing
+the CPU cluster clock source to PLLP for Gen5 Super clock and
+disables PLLP branches to CPU when not in use.
 
-During system suspend, core power goes off and looses the context
-of the Tegra clock controller registers.
+During system suspend entry and exit, CPU source will be switched
+to PLLP and this needs PLLP branches to be enabled to CPU prior to
+the switch.
 
-So on system resume, clocks parent and rate are restored back to
-the context before suspend based on cached data.
+On system resume, warmboot code enables PLLP branches to CPU and
+powers up the CPU with PLLP clock source.
 
 Acked-by: Thierry Reding <treding@nvidia.com>
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- drivers/clk/tegra/clk-periph.c    | 18 ++++++++++++++++++
- drivers/clk/tegra/clk-sdmmc-mux.c | 12 ++++++++++++
- 2 files changed, 30 insertions(+)
+ drivers/clk/tegra/clk-super.c            | 14 ++++++++++++++
+ drivers/clk/tegra/clk-tegra-super-gen4.c |  7 ++++++-
+ drivers/clk/tegra/clk.c                  | 14 ++++++++++++++
+ drivers/clk/tegra/clk.h                  |  5 +++++
+ 4 files changed, 39 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/tegra/clk-periph.c b/drivers/clk/tegra/clk-periph.c
-index 58437da25156..c9d28cbadccc 100644
---- a/drivers/clk/tegra/clk-periph.c
-+++ b/drivers/clk/tegra/clk-periph.c
-@@ -3,6 +3,7 @@
-  * Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
+diff --git a/drivers/clk/tegra/clk-super.c b/drivers/clk/tegra/clk-super.c
+index 39ef31b46df5..e2a1e95a8db7 100644
+--- a/drivers/clk/tegra/clk-super.c
++++ b/drivers/clk/tegra/clk-super.c
+@@ -28,6 +28,9 @@
+ #define super_state_to_src_shift(m, s) ((m->width * s))
+ #define super_state_to_src_mask(m) (((1 << m->width) - 1))
+ 
++#define CCLK_SRC_PLLP_OUT0 4
++#define CCLK_SRC_PLLP_OUT4 5
++
+ static u8 clk_super_get_parent(struct clk_hw *hw)
+ {
+ 	struct tegra_clk_super_mux *mux = to_clk_super_mux(hw);
+@@ -97,12 +100,23 @@ static int clk_super_set_parent(struct clk_hw *hw, u8 index)
+ 		if (index == mux->div2_index)
+ 			index = mux->pllx_index;
+ 	}
++
++	/* enable PLLP branches to CPU before selecting PLLP source */
++	if ((mux->flags & TEGRA210_CPU_CLK) &&
++	    (index == CCLK_SRC_PLLP_OUT0 || index == CCLK_SRC_PLLP_OUT4))
++		tegra_clk_set_pllp_out_cpu(true);
++
+ 	val &= ~((super_state_to_src_mask(mux)) << shift);
+ 	val |= (index & (super_state_to_src_mask(mux))) << shift;
+ 
+ 	writel_relaxed(val, mux->reg);
+ 	udelay(2);
+ 
++	/* disable PLLP branches to CPU if not used */
++	if ((mux->flags & TEGRA210_CPU_CLK) &&
++	    index != CCLK_SRC_PLLP_OUT0 && index != CCLK_SRC_PLLP_OUT4)
++		tegra_clk_set_pllp_out_cpu(false);
++
+ out:
+ 	if (mux->lock)
+ 		spin_unlock_irqrestore(mux->lock, flags);
+diff --git a/drivers/clk/tegra/clk-tegra-super-gen4.c b/drivers/clk/tegra/clk-tegra-super-gen4.c
+index cdfe7c9697e1..5760c978bef7 100644
+--- a/drivers/clk/tegra/clk-tegra-super-gen4.c
++++ b/drivers/clk/tegra/clk-tegra-super-gen4.c
+@@ -180,7 +180,7 @@ static void __init tegra_super_clk_init(void __iomem *clk_base,
+ 					gen_info->num_cclk_g_parents,
+ 					CLK_SET_RATE_PARENT,
+ 					clk_base + CCLKG_BURST_POLICY,
+-					0, 4, 8, 0, NULL);
++					TEGRA210_CPU_CLK, 4, 8, 0, NULL);
+ 		} else {
+ 			clk = tegra_clk_register_super_mux("cclk_g",
+ 					gen_info->cclk_g_parents,
+@@ -196,6 +196,11 @@ static void __init tegra_super_clk_init(void __iomem *clk_base,
+ 	dt_clk = tegra_lookup_dt_id(tegra_clk_cclk_lp, tegra_clks);
+ 	if (dt_clk) {
+ 		if (gen_info->gen == gen5) {
++			/*
++			 * TEGRA210_CPU_CLK flag is not needed for cclk_lp as
++			 * cluster switching is not currently supported on
++			 * Tegra210 and also cpu_lp is not used.
++			 */
+ 			clk = tegra_clk_register_super_mux("cclk_lp",
+ 					gen_info->cclk_lp_parents,
+ 					gen_info->num_cclk_lp_parents,
+diff --git a/drivers/clk/tegra/clk.c b/drivers/clk/tegra/clk.c
+index 573e3c967ae1..eb08047fd02f 100644
+--- a/drivers/clk/tegra/clk.c
++++ b/drivers/clk/tegra/clk.c
+@@ -23,6 +23,7 @@
+ #define CLK_OUT_ENB_W			0x364
+ #define CLK_OUT_ENB_X			0x280
+ #define CLK_OUT_ENB_Y			0x298
++#define CLK_ENB_PLLP_OUT_CPU		BIT(31)
+ #define CLK_OUT_ENB_SET_L		0x320
+ #define CLK_OUT_ENB_CLR_L		0x324
+ #define CLK_OUT_ENB_SET_H		0x328
+@@ -199,6 +200,19 @@ const struct tegra_clk_periph_regs *get_reg_bank(int clkid)
+ 	}
+ }
+ 
++void tegra_clk_set_pllp_out_cpu(bool enable)
++{
++	u32 val;
++
++	val = readl_relaxed(clk_base + CLK_OUT_ENB_Y);
++	if (enable)
++		val |= CLK_ENB_PLLP_OUT_CPU;
++	else
++		val &= ~CLK_ENB_PLLP_OUT_CPU;
++
++	writel_relaxed(val, clk_base + CLK_OUT_ENB_Y);
++}
++
+ struct clk ** __init tegra_clk_init(void __iomem *regs, int num, int banks)
+ {
+ 	clk_base = regs;
+diff --git a/drivers/clk/tegra/clk.h b/drivers/clk/tegra/clk.h
+index cbbca28bf7e4..55c4b78280be 100644
+--- a/drivers/clk/tegra/clk.h
++++ b/drivers/clk/tegra/clk.h
+@@ -669,6 +669,9 @@ struct clk *tegra_clk_register_periph_data(void __iomem *clk_base,
+  * Flags:
+  * TEGRA_DIVIDER_2 - LP cluster has additional divider. This flag indicates
+  *     that this is LP cluster clock.
++ * TEGRA210_CPU_CLK - This flag is used to identify CPU cluster for gen5
++ * super mux parent using PLLP branches. To use PLLP branches to CPU, need
++ * to configure additional bit PLLP_OUT_CPU in the clock registers.
   */
+ struct tegra_clk_super_mux {
+ 	struct clk_hw	hw;
+@@ -685,6 +688,7 @@ struct tegra_clk_super_mux {
+ #define to_clk_super_mux(_hw) container_of(_hw, struct tegra_clk_super_mux, hw)
  
-+#include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/export.h>
- #include <linux/slab.h>
-@@ -99,6 +100,20 @@ static void clk_periph_disable(struct clk_hw *hw)
- 	gate_ops->disable(gate_hw);
- }
+ #define TEGRA_DIVIDER_2 BIT(0)
++#define TEGRA210_CPU_CLK BIT(1)
  
-+static void clk_periph_restore_context(struct clk_hw *hw)
-+{
-+	struct tegra_clk_periph *periph = to_clk_periph(hw);
-+	const struct clk_ops *div_ops = periph->div_ops;
-+	struct clk_hw *div_hw = &periph->divider.hw;
-+	struct clk_hw *parent = clk_hw_get_parent(hw);
-+	int parent_id = clk_hw_get_parent_index(hw, parent);
-+
-+	if (!(periph->gate.flags & TEGRA_PERIPH_NO_DIV))
-+		div_ops->restore_context(div_hw);
-+
-+	clk_periph_set_parent(hw, parent_id);
-+}
-+
- const struct clk_ops tegra_clk_periph_ops = {
- 	.get_parent = clk_periph_get_parent,
- 	.set_parent = clk_periph_set_parent,
-@@ -108,6 +123,7 @@ const struct clk_ops tegra_clk_periph_ops = {
- 	.is_enabled = clk_periph_is_enabled,
- 	.enable = clk_periph_enable,
- 	.disable = clk_periph_disable,
-+	.restore_context = clk_periph_restore_context,
- };
+ extern const struct clk_ops tegra_clk_super_ops;
+ struct clk *tegra_clk_register_super_mux(const char *name,
+@@ -830,6 +834,7 @@ int tegra_pll_p_div_to_hw(struct tegra_clk_pll *pll, u8 p_div);
+ int div_frac_get(unsigned long rate, unsigned parent_rate, u8 width,
+ 		 u8 frac_width, u8 flags);
+ void tegra_clk_osc_resume(void __iomem *clk_base);
++void tegra_clk_set_pllp_out_cpu(bool enable);
  
- static const struct clk_ops tegra_clk_periph_nodiv_ops = {
-@@ -116,6 +132,7 @@ static const struct clk_ops tegra_clk_periph_nodiv_ops = {
- 	.is_enabled = clk_periph_is_enabled,
- 	.enable = clk_periph_enable,
- 	.disable = clk_periph_disable,
-+	.restore_context = clk_periph_restore_context,
- };
  
- static const struct clk_ops tegra_clk_periph_no_gate_ops = {
-@@ -124,6 +141,7 @@ static const struct clk_ops tegra_clk_periph_no_gate_ops = {
- 	.recalc_rate = clk_periph_recalc_rate,
- 	.round_rate = clk_periph_round_rate,
- 	.set_rate = clk_periph_set_rate,
-+	.restore_context = clk_periph_restore_context,
- };
- 
- static struct clk *_tegra_clk_register_periph(const char *name,
-diff --git a/drivers/clk/tegra/clk-sdmmc-mux.c b/drivers/clk/tegra/clk-sdmmc-mux.c
-index a5cd3e31dbae..8db48966b100 100644
---- a/drivers/clk/tegra/clk-sdmmc-mux.c
-+++ b/drivers/clk/tegra/clk-sdmmc-mux.c
-@@ -194,6 +194,17 @@ static void clk_sdmmc_mux_disable(struct clk_hw *hw)
- 	gate_ops->disable(gate_hw);
- }
- 
-+static void clk_sdmmc_mux_restore_context(struct clk_hw *hw)
-+{
-+	struct clk_hw *parent = clk_hw_get_parent(hw);
-+	unsigned long parent_rate = clk_hw_get_rate(parent);
-+	unsigned long rate = clk_hw_get_rate(hw);
-+	int parent_id = clk_hw_get_parent_index(hw, parent);
-+
-+	clk_sdmmc_mux_set_parent(hw, parent_id);
-+	clk_sdmmc_mux_set_rate(hw, rate, parent_rate);
-+}
-+
- static const struct clk_ops tegra_clk_sdmmc_mux_ops = {
- 	.get_parent = clk_sdmmc_mux_get_parent,
- 	.set_parent = clk_sdmmc_mux_set_parent,
-@@ -203,6 +214,7 @@ static const struct clk_ops tegra_clk_sdmmc_mux_ops = {
- 	.is_enabled = clk_sdmmc_mux_is_enabled,
- 	.enable = clk_sdmmc_mux_enable,
- 	.disable = clk_sdmmc_mux_disable,
-+	.restore_context = clk_sdmmc_mux_restore_context,
- };
- 
- struct clk *tegra_clk_register_sdmmc_mux_div(const char *name,
+ /* Combined read fence with delay */
 -- 
 2.7.4
 
