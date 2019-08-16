@@ -2,33 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8893D908D4
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 21:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FFF908D0
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 21:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727682AbfHPTny (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 15:43:54 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:13233 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727661AbfHPTm0 (ORCPT
+        id S1727620AbfHPTnx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 15:43:53 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:14965 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727651AbfHPTm0 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 15:42:26 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d5707230002>; Fri, 16 Aug 2019 12:42:27 -0700
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d57072d0001>; Fri, 16 Aug 2019 12:42:37 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 16 Aug 2019 12:42:24 -0700
+  Fri, 16 Aug 2019 12:42:25 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 16 Aug 2019 12:42:24 -0700
-Received: from HQMAIL110.nvidia.com (172.18.146.15) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Aug
- 2019 19:42:23 +0000
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by hqmail110.nvidia.com
- (172.18.146.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Aug
- 2019 19:42:23 +0000
+        by hqpgpgate101.nvidia.com on Fri, 16 Aug 2019 12:42:25 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Aug
+ 2019 19:42:25 +0000
 Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL101.nvidia.com
  (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 16 Aug 2019 19:42:23 +0000
+ Transport; Fri, 16 Aug 2019 19:42:25 +0000
 Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.166.126]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d57071d0000>; Fri, 16 Aug 2019 12:42:23 -0700
+        id <B5d57071f0001>; Fri, 16 Aug 2019 12:42:25 -0700
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
 To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
         <tglx@linutronix.de>, <jason@lakedaemon.net>,
@@ -43,9 +40,9 @@ CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
         <digetx@gmail.com>, <devicetree@vger.kernel.org>,
         <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
         <linux-pm@vger.kernel.org>
-Subject: [PATCH v9 05/22] clk: tegra: pll: Save and restore pll context
-Date:   Fri, 16 Aug 2019 12:41:50 -0700
-Message-ID: <1565984527-5272-6-git-send-email-skomatineni@nvidia.com>
+Subject: [PATCH v9 06/22] clk: tegra: Support for OSC context save and restore
+Date:   Fri, 16 Aug 2019 12:41:51 -0700
+Message-ID: <1565984527-5272-7-git-send-email-skomatineni@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com>
 References: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com>
@@ -53,189 +50,84 @@ X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1565984547; bh=cuX86Gbvu2GiH0TrxAcpwKRDIfjySVNpjUXIW6UATOE=;
+        t=1565984557; bh=QoM2s3Z1tZw1uxI7Hlj/Yx6/kLMLmgObc14os66PlbU=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:X-NVConfidentiality:MIME-Version:
          Content-Type;
-        b=H6QwagCnsCNMKbs5cfjCj4InXuQi9bP5kmm6r1goDxsGtWCDf9u7x/Ezy5O0J5Xcl
-         ual3piCRW+uGtE6v9crAyzUpFJPBz8EcV9ujWW/Q9ZqX9fDZ1VtHU42IE/g1o6LVbo
-         h6uJqiBeYCjv0PNJlHXUa/OpyHPBz46aPZ7Fql+yvMilpXJZn6u1MHAnYcd0tKsaQR
-         m7hmOAVtdpDDT0Sh67A5wmNG4KQQZcKyWPgWX4IeO40Q7IDkISXp2p3GQeKFiG0XVP
-         DZ0gR+8cJU5CbE84X4AiaSCjWP6dmLwFIJZWSfvCUCxK8UBZL0g2H6nPu2ybphhvm2
-         5R5jgXoAanUAg==
+        b=TnJe88sD2ISq9tdmE6CF7y8TkVuXDbUCMumMWWJpCdIl/CAKqvJ0XeuiegcU5UrGb
+         YjCu8T/UM1RnEEWdAOfQWjPTGMcE12+nZljJGk1EMJNcs7tEbbEBRGVhteeJ3V06vs
+         NKthXzydTtViebIMpB98O+rNx0LFeSN3dunuVtCo9/BaVsWayUm1QjV5c2FmQ2x3uB
+         fhtBumP6y8sXNSlUgVT0Ecd9Bda5o2+k66mO+s0UrPAAaBTV/ZbV7BwZjT62G9E1M4
+         IJWX9vR+Z+dLVaaF8wGlz+grptI3FK8HtenAS0Pg6Q70DPf8IMlvFwanDCQMSw8PWe
+         4r9TOBqyS3zWw==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch implements save and restore of PLL context.
+This patch adds support for saving OSC clock frequency and the
+drive-strength during OSC clock init and creates an API to restore
+OSC control register value from the saved context.
 
-During system suspend, core power goes off and looses the settings
-of the Tegra CAR controller registers.
-
-So during resume, pll context is restored based on cached rate
-and state.
+This API is invoked by Tegra210 clock driver during system resume
+to restore the  OSC clock settings.
 
 Acked-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- drivers/clk/tegra/clk-pll.c | 86 ++++++++++++++++++++++++++++-----------------
- 1 file changed, 54 insertions(+), 32 deletions(-)
+ drivers/clk/tegra/clk-tegra-fixed.c | 15 +++++++++++++++
+ drivers/clk/tegra/clk.h             |  1 +
+ 2 files changed, 16 insertions(+)
 
-diff --git a/drivers/clk/tegra/clk-pll.c b/drivers/clk/tegra/clk-pll.c
-index 1583f5fc992f..531c2b3d814e 100644
---- a/drivers/clk/tegra/clk-pll.c
-+++ b/drivers/clk/tegra/clk-pll.c
-@@ -1008,6 +1008,27 @@ static unsigned long clk_plle_recalc_rate(struct clk_hw *hw,
- 	return rate;
- }
+diff --git a/drivers/clk/tegra/clk-tegra-fixed.c b/drivers/clk/tegra/clk-tegra-fixed.c
+index 8d91b2b191cf..7c6c8abfcde6 100644
+--- a/drivers/clk/tegra/clk-tegra-fixed.c
++++ b/drivers/clk/tegra/clk-tegra-fixed.c
+@@ -17,6 +17,10 @@
+ #define OSC_CTRL			0x50
+ #define OSC_CTRL_OSC_FREQ_SHIFT		28
+ #define OSC_CTRL_PLL_REF_DIV_SHIFT	26
++#define OSC_CTRL_MASK			(0x3f2 |	\
++					(0xf << OSC_CTRL_OSC_FREQ_SHIFT))
++
++static u32 osc_ctrl_ctx;
  
-+static void tegra_clk_pll_restore_context(struct clk_hw *hw)
-+{
-+	struct tegra_clk_pll *pll = to_clk_pll(hw);
-+	struct clk_hw *parent = clk_hw_get_parent(hw);
-+	unsigned long parent_rate = clk_hw_get_rate(parent);
-+	unsigned long rate = clk_hw_get_rate(hw);
-+
-+	if (clk_pll_is_enabled(hw))
-+		return;
-+
-+	if (pll->params->set_defaults)
-+		pll->params->set_defaults(pll);
-+
-+	clk_pll_set_rate(hw, rate, parent_rate);
-+
-+	if (!__clk_get_enable_count(hw->clk))
-+		clk_pll_disable(hw);
-+	else
-+		clk_pll_enable(hw);
-+}
-+
- const struct clk_ops tegra_clk_pll_ops = {
- 	.is_enabled = clk_pll_is_enabled,
- 	.enable = clk_pll_enable,
-@@ -1015,6 +1036,7 @@ const struct clk_ops tegra_clk_pll_ops = {
- 	.recalc_rate = clk_pll_recalc_rate,
- 	.round_rate = clk_pll_round_rate,
- 	.set_rate = clk_pll_set_rate,
-+	.restore_context = tegra_clk_pll_restore_context,
- };
+ int __init tegra_osc_clk_init(void __iomem *clk_base, struct tegra_clk *clks,
+ 			      unsigned long *input_freqs, unsigned int num,
+@@ -29,6 +33,7 @@ int __init tegra_osc_clk_init(void __iomem *clk_base, struct tegra_clk *clks,
+ 	unsigned osc_idx;
  
- const struct clk_ops tegra_clk_plle_ops = {
-@@ -1802,6 +1824,27 @@ static int clk_pllu_tegra114_enable(struct clk_hw *hw)
+ 	val = readl_relaxed(clk_base + OSC_CTRL);
++	osc_ctrl_ctx = val & OSC_CTRL_MASK;
+ 	osc_idx = val >> OSC_CTRL_OSC_FREQ_SHIFT;
  
- 	return ret;
+ 	if (osc_idx < num)
+@@ -96,3 +101,13 @@ void __init tegra_fixed_clk_init(struct tegra_clk *tegra_clks)
+ 		*dt_clk = clk;
+ 	}
  }
 +
-+static void _clk_plle_tegra_init_parent(struct tegra_clk_pll *pll)
++void tegra_clk_osc_resume(void __iomem *clk_base)
 +{
-+	u32 val, val_aux;
++	u32 val;
 +
-+	/* ensure parent is set to pll_ref */
-+	val = pll_readl_base(pll);
-+	val_aux = pll_readl(pll->params->aux_reg, pll);
-+
-+	if (val & PLL_BASE_ENABLE) {
-+		if ((val_aux & PLLE_AUX_PLLRE_SEL) ||
-+		    (val_aux & PLLE_AUX_PLLP_SEL))
-+			WARN(1, "pll_e enabled with unsupported parent %s\n",
-+			     (val_aux & PLLE_AUX_PLLP_SEL) ? "pllp_out0" :
-+			     "pll_re_vco");
-+	} else {
-+		val_aux &= ~(PLLE_AUX_PLLRE_SEL | PLLE_AUX_PLLP_SEL);
-+		pll_writel(val_aux, pll->params->aux_reg, pll);
-+		fence_udelay(1, pll->clk_base);
-+	}
++	val = readl_relaxed(clk_base + OSC_CTRL) & ~OSC_CTRL_MASK;
++	val |= osc_ctrl_ctx;
++	writel_relaxed(val, clk_base + OSC_CTRL);
++	fence_udelay(2, clk_base);
 +}
- #endif
+diff --git a/drivers/clk/tegra/clk.h b/drivers/clk/tegra/clk.h
+index 905bf1096558..cbbca28bf7e4 100644
+--- a/drivers/clk/tegra/clk.h
++++ b/drivers/clk/tegra/clk.h
+@@ -829,6 +829,7 @@ u16 tegra_pll_get_fixed_mdiv(struct clk_hw *hw, unsigned long input_rate);
+ int tegra_pll_p_div_to_hw(struct tegra_clk_pll *pll, u8 p_div);
+ int div_frac_get(unsigned long rate, unsigned parent_rate, u8 width,
+ 		 u8 frac_width, u8 flags);
++void tegra_clk_osc_resume(void __iomem *clk_base);
  
- static struct tegra_clk_pll *_tegra_init_pll(void __iomem *clk_base,
-@@ -2214,27 +2257,12 @@ struct clk *tegra_clk_register_plle_tegra114(const char *name,
- {
- 	struct tegra_clk_pll *pll;
- 	struct clk *clk;
--	u32 val, val_aux;
  
- 	pll = _tegra_init_pll(clk_base, NULL, pll_params, lock);
- 	if (IS_ERR(pll))
- 		return ERR_CAST(pll);
- 
--	/* ensure parent is set to pll_re_vco */
--
--	val = pll_readl_base(pll);
--	val_aux = pll_readl(pll_params->aux_reg, pll);
--
--	if (val & PLL_BASE_ENABLE) {
--		if ((val_aux & PLLE_AUX_PLLRE_SEL) ||
--			(val_aux & PLLE_AUX_PLLP_SEL))
--			WARN(1, "pll_e enabled with unsupported parent %s\n",
--			  (val_aux & PLLE_AUX_PLLP_SEL) ? "pllp_out0" :
--					"pll_re_vco");
--	} else {
--		val_aux &= ~(PLLE_AUX_PLLRE_SEL | PLLE_AUX_PLLP_SEL);
--		pll_writel(val_aux, pll_params->aux_reg, pll);
--	}
-+	_clk_plle_tegra_init_parent(pll);
- 
- 	clk = _tegra_clk_register_pll(pll, name, parent_name, flags,
- 				      &tegra_clk_plle_tegra114_ops);
-@@ -2276,6 +2304,7 @@ static const struct clk_ops tegra_clk_pllss_ops = {
- 	.recalc_rate = clk_pll_recalc_rate,
- 	.round_rate = clk_pll_ramp_round_rate,
- 	.set_rate = clk_pllxc_set_rate,
-+	.restore_context = tegra_clk_pll_restore_context,
- };
- 
- struct clk *tegra_clk_register_pllss(const char *name, const char *parent_name,
-@@ -2520,11 +2549,19 @@ static void clk_plle_tegra210_disable(struct clk_hw *hw)
- 		spin_unlock_irqrestore(pll->lock, flags);
- }
- 
-+static void tegra_clk_plle_t210_restore_context(struct clk_hw *hw)
-+{
-+	struct tegra_clk_pll *pll = to_clk_pll(hw);
-+
-+	_clk_plle_tegra_init_parent(pll);
-+}
-+
- static const struct clk_ops tegra_clk_plle_tegra210_ops = {
- 	.is_enabled =  clk_plle_tegra210_is_enabled,
- 	.enable = clk_plle_tegra210_enable,
- 	.disable = clk_plle_tegra210_disable,
- 	.recalc_rate = clk_pll_recalc_rate,
-+	.restore_context = tegra_clk_plle_t210_restore_context,
- };
- 
- struct clk *tegra_clk_register_plle_tegra210(const char *name,
-@@ -2535,27 +2572,12 @@ struct clk *tegra_clk_register_plle_tegra210(const char *name,
- {
- 	struct tegra_clk_pll *pll;
- 	struct clk *clk;
--	u32 val, val_aux;
- 
- 	pll = _tegra_init_pll(clk_base, NULL, pll_params, lock);
- 	if (IS_ERR(pll))
- 		return ERR_CAST(pll);
- 
--	/* ensure parent is set to pll_re_vco */
--
--	val = pll_readl_base(pll);
--	val_aux = pll_readl(pll_params->aux_reg, pll);
--
--	if (val & PLLE_BASE_ENABLE) {
--		if ((val_aux & PLLE_AUX_PLLRE_SEL) ||
--			(val_aux & PLLE_AUX_PLLP_SEL))
--			WARN(1, "pll_e enabled with unsupported parent %s\n",
--			  (val_aux & PLLE_AUX_PLLP_SEL) ? "pllp_out0" :
--					"pll_re_vco");
--	} else {
--		val_aux &= ~(PLLE_AUX_PLLRE_SEL | PLLE_AUX_PLLP_SEL);
--		pll_writel(val_aux, pll_params->aux_reg, pll);
--	}
-+	_clk_plle_tegra_init_parent(pll);
- 
- 	clk = _tegra_clk_register_pll(pll, name, parent_name, flags,
- 				      &tegra_clk_plle_tegra210_ops);
+ /* Combined read fence with delay */
 -- 
 2.7.4
 
