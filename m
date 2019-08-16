@@ -2,33 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BB79089C
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 21:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31E79089B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 21:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbfHPTmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 15:42:46 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:15002 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727771AbfHPTmq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 15:42:46 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d57073f0000>; Fri, 16 Aug 2019 12:42:55 -0700
+        id S1727813AbfHPTmv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 15:42:51 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:13150 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727786AbfHPTmr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 15:42:47 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d5707380000>; Fri, 16 Aug 2019 12:42:48 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 16 Aug 2019 12:42:43 -0700
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 16 Aug 2019 12:42:46 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 16 Aug 2019 12:42:43 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Aug
- 2019 19:42:43 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Aug
- 2019 19:42:43 +0000
+        by hqpgpgate102.nvidia.com on Fri, 16 Aug 2019 12:42:46 -0700
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 16 Aug
+ 2019 19:42:45 +0000
 Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL105.nvidia.com
  (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 16 Aug 2019 19:42:43 +0000
+ Transport; Fri, 16 Aug 2019 19:42:45 +0000
 Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.166.126]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d5707320000>; Fri, 16 Aug 2019 12:42:43 -0700
+        id <B5d5707330001>; Fri, 16 Aug 2019 12:42:45 -0700
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
 To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
         <tglx@linutronix.de>, <jason@lakedaemon.net>,
@@ -43,9 +40,9 @@ CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
         <digetx@gmail.com>, <devicetree@vger.kernel.org>,
         <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
         <linux-pm@vger.kernel.org>
-Subject: [PATCH v9 12/22] cpufreq: tegra124: Add suspend and resume support
-Date:   Fri, 16 Aug 2019 12:41:57 -0700
-Message-ID: <1565984527-5272-13-git-send-email-skomatineni@nvidia.com>
+Subject: [PATCH v9 13/22] clk: tegra210: Use fence_udelay during PLLU init
+Date:   Fri, 16 Aug 2019 12:41:58 -0700
+Message-ID: <1565984527-5272-14-git-send-email-skomatineni@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com>
 References: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com>
@@ -53,120 +50,68 @@ X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1565984575; bh=rSVRfztdAfV7Ok5QARnAQVwc/9rAD37WZ7pkTb2I7hg=;
+        t=1565984568; bh=PRKOkpHyMl0u9ptcwmTgBDTAVVQUlEvBmGS6LChWh10=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:X-NVConfidentiality:MIME-Version:
          Content-Type;
-        b=iYFkUvL547ayxRaDynAkWJ3G6183YY7/793k1Sp9r+bcbO+4uQpN5SiStVDk2emlA
-         SCu7MM/N0RNrzku9htbXiH+YaMvtBUi3V+QB9BGBpEW+1rGxqsnGSVgnteVHGA9/m9
-         4DKy4PeEToGQ5lcO3YIiALwGgFNfRWC1cXRwlOlduGIh32faY8mHlESVNwWeA2lvrL
-         kKEw/j7uPq/Y0k/ih1Pmk8kX5jsU0h3FLlTANNpqDbcv41FaWQhc83Vvx9Qs/csjLB
-         2pOqPIn0tqusBMOSLAQejRzorlMrdVt0cLMgdIeUp8e+jdIOIP++y9L4UeIQ6uYcKp
-         WWfmltQO0RgSg==
+        b=NchmTv+jae/K4+4X7pQfrid9rAthJzgrqd5tqI6V7onAmGN2FV/qiRhNxdRK37wxY
+         CA/gQWnqyNTGIedTgw8cLGdNKdQnkxy0bk0iBuYLzixFW/tBKxD658RND31D7zRiS8
+         vo4YR4E/64OewUGtoWdstBuI3S7eeYjXz6wor7uqdP44pxHHU5ksVhNTaMxmcUUyq2
+         D3yJVEd8Y5/jM8VoB5p0qRjnzn1ebGoq6FeVJraWxlW70h7/3qOL8QoweI7Sac3thj
+         DkRgoNgAhWJ2QvYEC01gClpFHOVA1iPkQrS8C0xD0QLjTmEbij/DUVfV+DBCmB8Hwh
+         hb09CmPx2t1EA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds suspend and resume pm ops for cpufreq driver.
-
-PLLP is the safe clock source for CPU during system suspend and
-resume as PLLP rate is below the CPU Fmax at Vmin.
-
-CPUFreq driver suspend switches the CPU clock source to PLLP and
-disables the DFLL clock.
-
-During system resume, warmboot code powers up the CPU with PLLP
-clock source. So CPUFreq driver resume enabled DFLL clock and
-switches CPU back to DFLL clock source.
+This patch uses fence_udelay rather than udelay during PLLU
+initialization to ensure writes to clock registers happens before
+waiting for specified delay.
 
 Acked-by: Thierry Reding <treding@nvidia.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 ---
- drivers/cpufreq/tegra124-cpufreq.c | 59 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ drivers/clk/tegra/clk-tegra210.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cpufreq/tegra124-cpufreq.c b/drivers/cpufreq/tegra124-cpufreq.c
-index 4f0c637b3b49..7a1ea6fdcab6 100644
---- a/drivers/cpufreq/tegra124-cpufreq.c
-+++ b/drivers/cpufreq/tegra124-cpufreq.c
-@@ -6,6 +6,7 @@
- #define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
+diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-tegra210.c
+index df172d5772d7..4c9538bd28ad 100644
+--- a/drivers/clk/tegra/clk-tegra210.c
++++ b/drivers/clk/tegra/clk-tegra210.c
+@@ -2841,7 +2841,7 @@ static int tegra210_enable_pllu(void)
+ 	reg = readl_relaxed(clk_base + pllu.params->ext_misc_reg[0]);
+ 	reg &= ~BIT(pllu.params->iddq_bit_idx);
+ 	writel_relaxed(reg, clk_base + pllu.params->ext_misc_reg[0]);
+-	udelay(5);
++	fence_udelay(5, clk_base);
  
- #include <linux/clk.h>
-+#include <linux/cpufreq.h>
- #include <linux/err.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
-@@ -128,8 +129,66 @@ static int tegra124_cpufreq_probe(struct platform_device *pdev)
- 	return ret;
- }
+ 	reg = readl_relaxed(clk_base + PLLU_BASE);
+ 	reg &= ~GENMASK(20, 0);
+@@ -2849,7 +2849,7 @@ static int tegra210_enable_pllu(void)
+ 	reg |= fentry->n << 8;
+ 	reg |= fentry->p << 16;
+ 	writel(reg, clk_base + PLLU_BASE);
+-	udelay(1);
++	fence_udelay(1, clk_base);
+ 	reg |= PLL_ENABLE;
+ 	writel(reg, clk_base + PLLU_BASE);
  
-+static int __maybe_unused tegra124_cpufreq_suspend(struct device *dev)
-+{
-+	struct tegra124_cpufreq_priv *priv = dev_get_drvdata(dev);
-+	int err;
-+
-+	/*
-+	 * PLLP rate 408Mhz is below the CPU Fmax at Vmin and is safe to
-+	 * use during suspend and resume. So, switch the CPU clock source
-+	 * to PLLP and disable DFLL.
-+	 */
-+	err = clk_set_parent(priv->cpu_clk, priv->pllp_clk);
-+	if (err < 0) {
-+		dev_err(dev, "failed to reparent to PLLP: %d\n", err);
-+		return err;
-+	}
-+
-+	clk_disable_unprepare(priv->dfll_clk);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused tegra124_cpufreq_resume(struct device *dev)
-+{
-+	struct tegra124_cpufreq_priv *priv = dev_get_drvdata(dev);
-+	int err;
-+
-+	/*
-+	 * Warmboot code powers up the CPU with PLLP clock source.
-+	 * Enable DFLL clock and switch CPU clock source back to DFLL.
-+	 */
-+	err = clk_prepare_enable(priv->dfll_clk);
-+	if (err < 0) {
-+		dev_err(dev, "failed to enable DFLL clock for CPU: %d\n", err);
-+		goto disable_cpufreq;
-+	}
-+
-+	err = clk_set_parent(priv->cpu_clk, priv->dfll_clk);
-+	if (err < 0) {
-+		dev_err(dev, "failed to reparent to DFLL clock: %d\n", err);
-+		goto disable_dfll;
-+	}
-+
-+	return 0;
-+
-+disable_dfll:
-+	clk_disable_unprepare(priv->dfll_clk);
-+disable_cpufreq:
-+	disable_cpufreq();
-+
-+	return err;
-+}
-+
-+static const struct dev_pm_ops tegra124_cpufreq_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(tegra124_cpufreq_suspend,
-+				tegra124_cpufreq_resume)
-+};
-+
- static struct platform_driver tegra124_cpufreq_platdrv = {
- 	.driver.name	= "cpufreq-tegra124",
-+	.driver.pm	= &tegra124_cpufreq_pm_ops,
- 	.probe		= tegra124_cpufreq_probe,
- };
+@@ -2895,12 +2895,12 @@ static int tegra210_init_pllu(void)
+ 		reg = readl_relaxed(clk_base + XUSB_PLL_CFG0);
+ 		reg &= ~XUSB_PLL_CFG0_PLLU_LOCK_DLY_MASK;
+ 		writel_relaxed(reg, clk_base + XUSB_PLL_CFG0);
+-		udelay(1);
++		fence_udelay(1, clk_base);
  
+ 		reg = readl_relaxed(clk_base + PLLU_HW_PWRDN_CFG0);
+ 		reg |= PLLU_HW_PWRDN_CFG0_SEQ_ENABLE;
+ 		writel_relaxed(reg, clk_base + PLLU_HW_PWRDN_CFG0);
+-		udelay(1);
++		fence_udelay(1, clk_base);
+ 
+ 		reg = readl_relaxed(clk_base + PLLU_BASE);
+ 		reg &= ~PLLU_BASE_CLKENABLE_USB;
 -- 
 2.7.4
 
