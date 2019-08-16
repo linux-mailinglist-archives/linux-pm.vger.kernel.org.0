@@ -2,98 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B476590132
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 14:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3B3901D3
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 14:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbfHPMRf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 08:17:35 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:36584 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727104AbfHPMRf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 08:17:35 -0400
-Received: by mail-ot1-f65.google.com with SMTP id k18so9460219otr.3;
-        Fri, 16 Aug 2019 05:17:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c+E0MTqNRBEe9xkatPaAb5b/atYG4V6Eq0t4fHhQ7l4=;
-        b=dDQgkJ3q2WSLbfBMIj1lyRVP/chzsLN2s4Kskym3ZXmVihRqJtsSNPfWrRxNmOITLm
-         wqGUjOx3gt/LonlJByap5JWV1kHyEzoTmKK6ZVH8smY5rg/g0m2fe59oNtGshmcdTzcB
-         XWXKWNKeeb+5zMkTBWs8YCZdUMr02xgjWoG162Sk7vXnnY0258oN9p19YTfGfWVlEn2Q
-         DiS1+4YoquCWzFehjfgGdmnPkGQFAITxLCEHn07EDNAqXeEjdpnwD1n1vNy5DB6IqpIQ
-         cXUp2J46NBdVRC7hMozcjilADGFV9xP4QGgo8RU+HggeYUhXK0O5UdntJvJR30eRss/6
-         Q28A==
-X-Gm-Message-State: APjAAAU6HZQ+Hoo//yFqQyYlGAhgUMElee5e1Oy3U+aB2Yafe29DdN3p
-        aRICfd3qg+jvB0sgAVOHC0rR6oWjeU54JYuMp1Q=
-X-Google-Smtp-Source: APXvYqym7NDB50zYH7Yf+KESWoi1XYETeRiF8Jl2l+B2HiC/WoKKQwMz5cIVLInotMH/464Z+6+J5+xRniM1FVCYjSY=
-X-Received: by 2002:a9d:674c:: with SMTP id w12mr4137556otm.118.1565957854693;
- Fri, 16 Aug 2019 05:17:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <1565731976.8572.16.camel@lca.pw> <5d53b238.1c69fb81.d3cd3.cd53@mx.google.com>
- <20190814084014.GB52127@atomide.com> <CANA+-vDeSAYUNfTQzQPT2N_CUgvYr6i_LP_BdHT_zX+FPt8NHg@mail.gmail.com>
-In-Reply-To: <CANA+-vDeSAYUNfTQzQPT2N_CUgvYr6i_LP_BdHT_zX+FPt8NHg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 16 Aug 2019 14:17:23 +0200
-Message-ID: <CAJZ5v0hY8=0j=heXuAS-5cBafDSE8ZakLDW4NGCjAbxUAt3j4Q@mail.gmail.com>
-Subject: Re: "PM / wakeup: Show wakeup sources stats in sysfs" causes boot warnings
-To:     Tri Vo <trong@android.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Stephen Boyd <swboyd@chromium.org>, Qian Cai <cai@lca.pw>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727087AbfHPMlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 08:41:12 -0400
+Received: from laurent.telenet-ops.be ([195.130.137.89]:35340 "EHLO
+        laurent.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727159AbfHPMlM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 08:41:12 -0400
+Received: from ramsan ([84.194.98.4])
+        by laurent.telenet-ops.be with bizsmtp
+        id poh92000A05gfCL01oh9nz; Fri, 16 Aug 2019 14:41:10 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hybXZ-0005Gl-Jm; Fri, 16 Aug 2019 14:41:09 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hybXZ-00040w-HF; Fri, 16 Aug 2019 14:41:09 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Simon Horman <horms@verge.net.au>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] soc: renesas: rmobile-sysc: Set GENPD_FLAG_ALWAYS_ON for always-on domain
+Date:   Fri, 16 Aug 2019 14:41:06 +0200
+Message-Id: <20190816124106.15383-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 8:37 PM Tri Vo <trong@android.com> wrote:
->
-> On Wed, Aug 14, 2019 at 1:40 AM Tony Lindgren <tony@atomide.com> wrote:
-> >
-> > * Stephen Boyd <swboyd@chromium.org> [691231 23:00]:
-> > > I also notice that device_set_wakeup_capable() has a check to see if the
-> > > device is registered yet and it skips creating sysfs entries for the
-> > > device if it isn't created in sysfs yet. Why? Just so it can be called
-> > > before the device is created? I guess the same logic is handled by
-> > > dpm_sysfs_add() if the device is registered after calling
-> > > device_set_wakeup_*().
-> >
-> > Hmm just guessing.. It's maybe because drivers can enable and disable
-> > the wakeup capability at any point for example like driver/net drivers
-> > do based on WOL etc?
-> >
-> > > There's two approaches I see:
-> > >
-> > >       1) Do a similar check for device_set_wakeup_enable() and skip
-> > >       adding the wakeup class until dpm_sysfs_add().
-> > >
-> > >       2) Find each case where this happens and only call wakeup APIs
-> > >       on the device after the device is added.
-> > >
-> > > I guess it's better to let devices have wakeup modified on them before
-> > > they're registered with the device core?
-> >
-> > I think we should at least initially handle case #1 above as multiple
-> > places otherwise seem to break. Then maybe we could add a warning to
-> > help fix all the #2 cases if needed?
->
-> Makes sense. For case#1, we could also just register the wakeup source
-> without specifying the parent device if the latter hasn't been
-> registered yet. Userspace won't be able to associate a wakeup source
-> to the parent device. But I think it's a reasonable fix, assuming we
-> want to fix devices not being added before calling wakeup APIs #2.
+Currently the R-Mobile "always-on" PM Domain is implemented by returning
+-EBUSY from the generic_pm_domain.power_off() callback, and doing
+nothing in the generic_pm_domain.power_on() callback.  However, this
+means the PM Domain core code is not aware of the semantics of this
+special domain, leading to boot warnings like the following on
+SH/R-Mobile SoCs:
 
-Well, OK
+    sh_cmt e6130000.timer: PM domain c5 will not be powered off
 
-I'm going to drop the entire series from linux-next at this point and
-let's start over.
+Fix this by making the always-on nature of the domain explicit instead,
+by setting the GENPD_FLAG_ALWAYS_ON flag.  This removes the need for the
+domain to provide power control callbacks.
 
-Also note that all of this is not an issue until we start to add
-children under the device passed to device_set_wakeup_enable() and
-friends so maybe that is not a good idea after all?
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+To be queued in renesas-devel for v5.4.
+
+ drivers/soc/renesas/rmobile-sysc.c | 31 +++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/soc/renesas/rmobile-sysc.c b/drivers/soc/renesas/rmobile-sysc.c
+index 444c97f84ea5a76e..caecc24d5d68739c 100644
+--- a/drivers/soc/renesas/rmobile-sysc.c
++++ b/drivers/soc/renesas/rmobile-sysc.c
+@@ -48,12 +48,8 @@ struct rmobile_pm_domain *to_rmobile_pd(struct generic_pm_domain *d)
+ static int rmobile_pd_power_down(struct generic_pm_domain *genpd)
+ {
+ 	struct rmobile_pm_domain *rmobile_pd = to_rmobile_pd(genpd);
+-	unsigned int mask;
++	unsigned int mask = BIT(rmobile_pd->bit_shift);
+ 
+-	if (rmobile_pd->bit_shift == ~0)
+-		return -EBUSY;
+-
+-	mask = BIT(rmobile_pd->bit_shift);
+ 	if (rmobile_pd->suspend) {
+ 		int ret = rmobile_pd->suspend();
+ 
+@@ -80,14 +76,10 @@ static int rmobile_pd_power_down(struct generic_pm_domain *genpd)
+ 
+ static int __rmobile_pd_power_up(struct rmobile_pm_domain *rmobile_pd)
+ {
+-	unsigned int mask;
++	unsigned int mask = BIT(rmobile_pd->bit_shift);
+ 	unsigned int retry_count;
+ 	int ret = 0;
+ 
+-	if (rmobile_pd->bit_shift == ~0)
+-		return 0;
+-
+-	mask = BIT(rmobile_pd->bit_shift);
+ 	if (__raw_readl(rmobile_pd->base + PSTR) & mask)
+ 		return ret;
+ 
+@@ -122,11 +114,15 @@ static void rmobile_init_pm_domain(struct rmobile_pm_domain *rmobile_pd)
+ 	struct dev_power_governor *gov = rmobile_pd->gov;
+ 
+ 	genpd->flags |= GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP;
+-	genpd->power_off		= rmobile_pd_power_down;
+-	genpd->power_on			= rmobile_pd_power_up;
+-	genpd->attach_dev		= cpg_mstp_attach_dev;
+-	genpd->detach_dev		= cpg_mstp_detach_dev;
+-	__rmobile_pd_power_up(rmobile_pd);
++	genpd->attach_dev = cpg_mstp_attach_dev;
++	genpd->detach_dev = cpg_mstp_detach_dev;
++
++	if (!(genpd->flags & GENPD_FLAG_ALWAYS_ON)) {
++		genpd->power_off = rmobile_pd_power_down;
++		genpd->power_on = rmobile_pd_power_up;
++		__rmobile_pd_power_up(rmobile_pd);
++	}
++
+ 	pm_genpd_init(genpd, gov ? : &simple_qos_governor, false);
+ }
+ 
+@@ -270,6 +266,11 @@ static void __init rmobile_setup_pm_domain(struct device_node *np,
+ 		break;
+ 
+ 	case PD_NORMAL:
++		if (pd->bit_shift == ~0) {
++			/* Top-level always-on domain */
++			pr_debug("PM domain %s is always-on domain\n", name);
++			pd->genpd.flags |= GENPD_FLAG_ALWAYS_ON;
++		}
+ 		break;
+ 	}
+ 
+-- 
+2.17.1
+
