@@ -2,151 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 534D490A6E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 23:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AAA90AA6
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2019 00:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727756AbfHPVqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 17:46:22 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38261 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727717AbfHPVqW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 17:46:22 -0400
-Received: by mail-pg1-f194.google.com with SMTP id e11so3561924pga.5
-        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2019 14:46:21 -0700 (PDT)
+        id S1727734AbfHPWCV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 18:02:21 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:42799 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727732AbfHPWCV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 18:02:21 -0400
+Received: by mail-qk1-f196.google.com with SMTP id 201so5947532qkm.9
+        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2019 15:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:subject:from:cc:to:user-agent:date;
-        bh=gmTcK20VFhzJpyAdUQqTgMwvx7152jQ/nCZquZvlO1o=;
-        b=HQJ3its2EmWWKhCPXHYf1fOoQVe8SOjbDSSmHwnVxdCo+kQhFYinW7HtHvK3WzjIF/
-         k5CD4X+mMyNN8SthDXt614QIGAUR0jKy485gdloJZT1+s/qUgr1Rw4fvDQA2qFGXjOYR
-         PtyaZV9ab4vrwR3o3MkcSCDPodLfRhHj1T2ts=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cIdFGwAFSrX7ZRwqgTTFqmzXANmZBCVeaNYXvQ0ZoyU=;
+        b=dUJONrVPTpPrPScArOmcSXk2K3n6gMPUME0lg/JAo05DH5KjPKEObft+IvMnsF54PC
+         cdlSN+TqqDKcX8H/y0wGj7aYiFj5o+97V7xlnGGJjySN8HgwdAFlhcdn+RzcwrpAj3oE
+         6f37nXrGs5jWjp2vUtdD8Erckv9FzWgr1b192uQujyK171boGIJ98LdDYXsi+rOSnEwg
+         aNh5aLncqA3uQ4PD29IYKUMqA45Sji2ad3iGhgDEVIKSYSlJD+0sdJUXgbIAWg1XZCdt
+         jmtv16rt6wEphtlRbGW8D5coFLmUKNj0lGwCTQfJ5Qqp9/yXMHi5TIcUF/fOtu8M8JTO
+         bjiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
-         :user-agent:date;
-        bh=gmTcK20VFhzJpyAdUQqTgMwvx7152jQ/nCZquZvlO1o=;
-        b=DoleTd5RB39EZIRvXtXdCylKpOhTN8GsSM8oiK3cAfYzynZ7DOEhoHd/j+aWOtC6XP
-         O9tzDmphEPA7wemJX1Gg7qxZv4S+VFOmNaq5v3KQ7d5+L+c2HYq7bbFFvmXRxUsQ1iPS
-         /RLRzEeahxJykOW1n1MKcOmEbB6lUQ2JFzlXIZm5MrA/NcJ/cUshUGLqDJZod/h6Whp9
-         b9Rhu/PCgHR2Q2KkTQvVm7NNQ1Kya48MAH8rnyLtWDFPSWQlo+VK3GmPhusIV5rpYsED
-         wJymb4izZ0zDmHQ1DCM3uuYwGvztqvgcQbzWDdgMjw5DMgJgd0ORox19MuMlasheEjCh
-         YZzg==
-X-Gm-Message-State: APjAAAXPxNj1Jcti1p725l1hhbHpwqyU7xOfdtXJghtYed1TtWylYs6m
-        lT2QG1XgQ/06mhsUAhvbJCBnfMA7RoWIgQ==
-X-Google-Smtp-Source: APXvYqxC6w3p8TV+4amz1vlQWiAeDhF3PHlfUQeUspUO6UzVAEuOj5UgY2ux36waJExqyv5uWobG7A==
-X-Received: by 2002:a63:eb51:: with SMTP id b17mr9230742pgk.384.1565991981451;
-        Fri, 16 Aug 2019 14:46:21 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id e24sm6220844pgk.21.2019.08.16.14.46.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2019 14:46:20 -0700 (PDT)
-Message-ID: <5d57242c.1c69fb81.bba86.14f6@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cIdFGwAFSrX7ZRwqgTTFqmzXANmZBCVeaNYXvQ0ZoyU=;
+        b=GNb3D8Mr6c62LwWWyaOaGJn8wug8+Li1LdHRKKfm6kl5VX4kDlru9oQO3Lb0a/VNsA
+         DmM8t5IILBz6WfOer4+V1Sj/6vZ8AgPe7Us/APe77hD/f0fAVAmong7AMdrbrVHnSJnP
+         SwyjJc7ubjAVtddJnCM9ua+HutY2ZZLBmKYSZQoyrLkVhFtK6Ilz/zTObrvzp1qQYDj4
+         2XGpQACfI7CavE2329N6grRgYJ6NkRjQpCRAtqJXWM4UAS1PF4JsPIQqWNNDJnknHby9
+         2168wzYQH+ghtSpvbhPsvXIz/sJ/WuHZY5mGLrnLpWFX/UodLT9JkqQqU5B1H/jLFibe
+         ZRsg==
+X-Gm-Message-State: APjAAAWSCjrCdekpyVorZryy3oHtJHbSqZiz8RLyWO6d0BfBH3V4bWVd
+        jxVrhEffC3KhUi0a19Q0GaheydOkLuZFejKqL7ejqA==
+X-Google-Smtp-Source: APXvYqypnd3g6pObymvX1ggP+t1mK2WV/HTF38MOuIt/cN09z3g8TKh79RVWmSC6hH79TdcEYkJ2tm6koOa/IBMyAOw=
+X-Received: by 2002:a05:620a:5f7:: with SMTP id z23mr10726778qkg.106.1565992939659;
+ Fri, 16 Aug 2019 15:02:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CANA+-vB2_pYhYq5cmpyhiwJR3TuO+-2iBPehSXSjun-HN2wb5A@mail.gmail.com>
-References: <20190816145602.231163-1-swboyd@chromium.org> <CANA+-vB2_pYhYq5cmpyhiwJR3TuO+-2iBPehSXSjun-HN2wb5A@mail.gmail.com>
-Subject: Re: [PATCH] PM / wakeup: Register wakeup class kobj after device is added
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, Qian Cai <cai@lca.pw>
-To:     Tri Vo <trong@android.com>
-User-Agent: alot/0.8.1
-Date:   Fri, 16 Aug 2019 14:46:19 -0700
+References: <cover.1564091601.git.amit.kucheria@linaro.org>
+ <72bce036fa8cba3db6e5ba82249837ee46e9c077.1564091601.git.amit.kucheria@linaro.org>
+ <20190816213648.GA10244@bogus>
+In-Reply-To: <20190816213648.GA10244@bogus>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Sat, 17 Aug 2019 03:32:08 +0530
+Message-ID: <CAP245DVUKRxvU3wWygOFtZuwbvCxfW=wUH=xArOKmYiRZf+EXA@mail.gmail.com>
+Subject: Re: [PATCH 07/15] dt: thermal: tsens: Document interrupt support in
+ tsens driver
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Andy Gross <andy.gross@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Tri Vo (2019-08-16 14:27:35)
-> On Fri, Aug 16, 2019 at 7:56 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> > index 1b9c281cbe41..27ee00f50bd7 100644
-> > --- a/drivers/base/power/sysfs.c
-> > +++ b/drivers/base/power/sysfs.c
-> > @@ -5,6 +5,7 @@
-> >  #include <linux/export.h>
-> >  #include <linux/pm_qos.h>
-> >  #include <linux/pm_runtime.h>
-> > +#include <linux/pm_wakeup.h>
-> >  #include <linux/atomic.h>
-> >  #include <linux/jiffies.h>
-> >  #include "power.h"
-> > @@ -661,14 +662,21 @@ int dpm_sysfs_add(struct device *dev)
-> >                 if (rc)
-> >                         goto err_runtime;
-> >         }
-> > +       if (dev->power.wakeup) {
->=20
-> This conditional checks for the situation when wakeup source
-> registration have been previously attempted, but failed at
-> wakeup_source_sysfs_add(). My concern is that it's not easy to
-> understand what this check does without knowing exactly what
-> device_wakeup_enable() does to dev->power.wakeup before we reach this
-> point.
-
-Oh, actually this is wrong. It should be a check for
-dev->power.wakeup->dev being non-NULL. That's the variable that's set by
-wakeup_source_sysfs_add() upon success. So I should make it:
-
-	if (dev->power.wakeup && !dev->power.wakeup->dev)
-
-And there's the problem that CONFIG_PM_SLEEP could be unset. Let me fix
-it up with a new inline function like device_has_wakeup_dev().
-
->=20
-> > +               rc =3D wakeup_source_sysfs_add(dev, dev->power.wakeup);
-> > +               if (rc)
-> > +                       goto err_wakeup;
-> > +       }
-> >         if (dev->power.set_latency_tolerance) {
-> >                 rc =3D sysfs_merge_group(&dev->kobj,
-> >                                        &pm_qos_latency_tolerance_attr_g=
-roup);
-> >                 if (rc)
-> > -                       goto err_wakeup;
-> > +                       goto err_wakeup_source;
-> >         }
-> >         return 0;
+On Sat, Aug 17, 2019 at 3:06 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, Jul 26, 2019 at 03:48:42AM +0530, Amit Kucheria wrote:
+> > Define two new required properties to define interrupts and
+> > interrupt-names for tsens.
 > >
-> > + err_wakeup_source:
-> > +       wakeup_source_sysfs_remove(dev->power.wakeup);
-> >   err_wakeup:
-> >         sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
-> >   err_runtime:
-> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> > index f7925820b5ca..5817b51d2b15 100644
-> > --- a/drivers/base/power/wakeup.c
-> > +++ b/drivers/base/power/wakeup.c
-> > @@ -220,10 +220,12 @@ struct wakeup_source *wakeup_source_register(stru=
-ct device *dev,
+> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/thermal/qcom-tsens.txt | 5 +++++
+> >  1 file changed, 5 insertions(+)
 > >
-> >         ws =3D wakeup_source_create(name);
-> >         if (ws) {
-> > -               ret =3D wakeup_source_sysfs_add(dev, ws);
-> > -               if (ret) {
-> > -                       wakeup_source_free(ws);
-> > -                       return NULL;
-> > +               if (!dev || device_is_registered(dev)) {
->=20
-> Is there a possible race condition here? If dev->power.wakeup check in
-> dpm_sysfs_add() is done at the same time as device_is_registered(dev)
-> check here, then wakeup_source_sysfs_add() won't ever be called?
+> > diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > index 673cc1831ee9..3d3dd5dc6d36 100644
+> > --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > @@ -22,6 +22,8 @@ Required properties:
+> >
+> >  - #thermal-sensor-cells : Should be 1. See ./thermal.txt for a description.
+> >  - #qcom,sensors: Number of sensors in tsens block
+> > +- interrupts: Interrupts generated from Always-On subsystem (AOSS)
+> > +- interrupt-names: The name of the interrupt e.g. "tsens0", "tsens1"
+>
+> How many interrupts? A name with just indices isn't too useful.
 
-The same race exists for device_set_wakeup_capable() so I didn't bother
-to try to avoid it. I suppose wakeup_source_sysfs_add() could run
-completely, allocate the device and set the name, etc., but not call
-device_add() and then we can set ws->dev and call device_add() under a
-mutex so that we keep a very small window where the wakeup class is
-published to sysfs. Or just throw a big mutex around the whole wakeup
-class creation path so that there isn't a chance of a race. But really,
-is anyone going to call device_set_wakeup_*() on a device that is also
-being added to the system? Seems unlikely.
+Depending on the version of the tsens IP, there can be 1 (upper/lower
+threshold), 2 (upper/lower + critical threshold) or 3 (upper/lower +
+critical + zero degree) interrupts. This patch series only introduces
+support for a single interrupt (upper/lower).
 
->=20
-> > +                       ret =3D wakeup_source_sysfs_add(dev, ws);
-> > +                       if (ret) {
-> > +                               wakeup_source_free(ws);
+I used the names tsens0, tsens1 to encapsulate the controller instance
+since some SoCs have 1 controller, others have two. So we'll end up
+with something like the following in DT:
+
+tsens0: thermal-sensor@c263000 {
+                        compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
+                        reg = <0 0x0c263000 0 0x1ff>, /* TM */
+                              <0 0x0c222000 0 0x1ff>; /* SROT */
+                        #qcom,sensors = <13>;
+                        interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>,
+                                     <GIC_SPI 508 IRQ_TYPE_LEVEL_HIGH>;
+                        interrupt-names = "tsens0", "tsens0-critical";
+                        #thermal-sensor-cells = <1>;
+};
+
+tsens1: thermal-sensor@c265000 {
+                        compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
+                        reg = <0 0x0c265000 0 0x1ff>, /* TM */
+                              <0 0x0c223000 0 0x1ff>; /* SROT */
+                        #qcom,sensors = <8>;
+                        interrupts = <GIC_SPI 507 IRQ_TYPE_LEVEL_HIGH>,
+                                     <GIC_SPI 509 IRQ_TYPE_LEVEL_HIGH>;
+                        interrupt-names = "tsens1", "tsens1-critical";
+                        #thermal-sensor-cells = <1>;
+}
+
+Does that work?
+
+Regards,
+Amit
+
+> >  - Refer to Documentation/devicetree/bindings/nvmem/nvmem.txt to know how to specify
+> >  nvmem cells
+> >
+> > @@ -40,6 +42,9 @@ tsens0: thermal-sensor@c263000 {
+> >               reg = <0xc263000 0x1ff>, /* TM */
+> >                       <0xc222000 0x1ff>; /* SROT */
+> >               #qcom,sensors = <13>;
+> > +             interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>;
+> > +             interrupt-names = "tsens0";
+> > +
+> >               #thermal-sensor-cells = <1>;
+> >       };
+> >
+> > --
+> > 2.17.1
+> >
