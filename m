@@ -2,73 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBD790208
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 14:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF36902A1
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 15:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727203AbfHPMwa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 08:52:30 -0400
-Received: from albert.telenet-ops.be ([195.130.137.90]:40054 "EHLO
-        albert.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727104AbfHPMwa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 08:52:30 -0400
-Received: from ramsan ([84.194.98.4])
-        by albert.telenet-ops.be with bizsmtp
-        id posU2000705gfCL06osUDP; Fri, 16 Aug 2019 14:52:28 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hybiW-0005JJ-1L; Fri, 16 Aug 2019 14:52:28 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hybiW-0004C1-0Q; Fri, 16 Aug 2019 14:52:28 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 3/3] clk: renesas: cpg-mssr: Set GENPD_FLAG_ALWAYS_ON for clock domain
-Date:   Fri, 16 Aug 2019 14:52:25 +0200
-Message-Id: <20190816125225.16061-4-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190816125225.16061-1-geert+renesas@glider.be>
-References: <20190816125225.16061-1-geert+renesas@glider.be>
+        id S1727580AbfHPNLo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 09:11:44 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45015 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726597AbfHPNLj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 09:11:39 -0400
+Received: by mail-ot1-f66.google.com with SMTP id w4so9454706ote.11;
+        Fri, 16 Aug 2019 06:11:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=lWcyAmV1Uxrxcs0AfEFdOQKYxj1U/I3IYlhoxoBaFv4=;
+        b=d1exZ6gFOjqyrrwjklAFnTna3w5cB9QDE/sqHy9aswxR+Dj4p+ebYC+BWbYRRp+dSh
+         qvm0zOI76zvbhY5Qxpz1WZVwtbdNofRFAPWFTV++lfXkXW/9BGgLDBaNn/wft9LlGxlU
+         Fi8iFg1wqAjA7kjWomBt6uQJIBUBmIic3P28T+a84Ulltmfe3kJeFvfqFyJi9wM32qBm
+         rFCzHQdFaitkWqkHpLNPEbN/0XDv0L6DtSxO3Yr2LUQ3GG+M0GUPLxHW8DMqdNEBTV8X
+         XUP9q8BNsuEXDS06z5W/GOgtpCrI303bPlfVc177BwQXP8KPYktPVI6OiMRrl4pFjGdi
+         ljXw==
+X-Gm-Message-State: APjAAAVbL0ncbXuwtJ7YVqwE1S8Z/aekzmew5LPnLc8z8tw5qKylK6/y
+        6i2pzCH03ZmnTKkH2H2vLnpqSCrgShte45V5vAI=
+X-Google-Smtp-Source: APXvYqxP4hYrPfDsQFlbREk8hpApTYfpZUfHTFRUvPveFErL5wlerojyl24HOL2KJd1oY7iD0OgXXobaKRQhNdUEC84=
+X-Received: by 2002:a9d:674c:: with SMTP id w12mr4311320otm.118.1565961098308;
+ Fri, 16 Aug 2019 06:11:38 -0700 (PDT)
+MIME-Version: 1.0
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 16 Aug 2019 15:11:27 +0200
+Message-ID: <CAJZ5v0j4ezEuK1dk0J3wwjSuudzjhKWTXzJL=EkE1QG39HKRiw@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.3-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The CPG/MSSR Clock Domain driver does not implement the
-generic_pm_domain.power_{on,off}() callbacks, as the domain itself
-cannot be powered down.  Hence the domain should be marked as always-on
-by setting the GENPD_FLAG_ALWAYS_ON flag.
+Hi Linus,
 
-Note that this only affects RZ/A2 SoCs.  On R-Car Gen2 and Gen3 SoCs,
-the R-Car SYSC driver handles Clock Domain creation, and offloads only
-device attachment/detachment to the CPG/MSSR driver.
+Please pull from the tag
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/clk/renesas/renesas-cpg-mssr.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.3-rc5
 
-diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
-index d4075b13067429cd..132cc96895e3a978 100644
---- a/drivers/clk/renesas/renesas-cpg-mssr.c
-+++ b/drivers/clk/renesas/renesas-cpg-mssr.c
-@@ -551,7 +551,8 @@ static int __init cpg_mssr_add_clk_domain(struct device *dev,
- 
- 	genpd = &pd->genpd;
- 	genpd->name = np->name;
--	genpd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP;
-+	genpd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_ALWAYS_ON |
-+		       GENPD_FLAG_ACTIVE_WAKEUP;
- 	genpd->attach_dev = cpg_mssr_attach_dev;
- 	genpd->detach_dev = cpg_mssr_detach_dev;
- 	pm_genpd_init(genpd, &pm_domain_always_on_gov, false);
--- 
-2.17.1
+with top-most commit a3ee2477c45f73184a64d9c6cf97855a52732dc6
 
+ Merge branch 'pm-cpufreq'
+
+on top of commit d45331b00ddb179e291766617259261c112db872
+
+ Linux 5.3-rc4
+
+to receive power management fixes for 5.3-rc5.
+
+These add a check to avoid recent suspend-to-idle power regression on
+systems with NVMe drives where the PCIe ASPM policy is "performance"
+(or when the kernel is built without ASPM support), fix an issue
+related to frequency limits in the schedutil cpufreq governor and fix a
+mistake related to the PM QoS usage in the cpufreq core introduced
+recently.
+
+Specifics:
+
+ - Disable NVMe power optimization related to suspend-to-idle added
+   recently on systems where PCIe ASPM is not able to put PCIe links
+   into low-power states to prevent excess power from being drawn by
+   the system while suspended (Rafael Wysocki).
+
+ - Make the schedutil cpufreq governor handle frequency limits changes
+   properly in all cases (Viresh Kumar).
+
+ - Prevent the cpufreq core from treating positive values returned
+   by dev_pm_qos_update_request() as errors (Viresh Kumar).
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (2):
+      PCI/ASPM: Add pcie_aspm_enabled()
+      nvme-pci: Allow PCI bus-level PM to be used if ASPM is disabled
+
+Viresh Kumar (2):
+      cpufreq: dev_pm_qos_update_request() can return 1 on success
+      cpufreq: schedutil: Don't skip freq update when limits change
+
+---------------
+
+ drivers/cpufreq/cpufreq.c        |  2 +-
+ drivers/nvme/host/pci.c          | 13 ++++++++++---
+ drivers/pci/pcie/aspm.c          | 20 ++++++++++++++++++++
+ include/linux/pci.h              |  2 ++
+ kernel/sched/cpufreq_schedutil.c | 14 ++++++++++----
+ 5 files changed, 43 insertions(+), 8 deletions(-)
