@@ -2,76 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 027A190414
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 16:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BDC90440
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 16:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727371AbfHPOnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 10:43:35 -0400
-Received: from charlotte.tuxdriver.com ([70.61.120.58]:42833 "EHLO
-        smtp.tuxdriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727245AbfHPOnf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 10:43:35 -0400
-Received: from cpe-2606-a000-1405-226e-0-0-0-cbf.dyn6.twc.com ([2606:a000:1405:226e::cbf] helo=localhost)
-        by smtp.tuxdriver.com with esmtpsa (TLSv1:AES256-SHA:256)
-        (Exim 4.63)
-        (envelope-from <nhorman@tuxdriver.com>)
-        id 1hydRo-0001vH-GH; Fri, 16 Aug 2019 10:43:26 -0400
-Date:   Fri, 16 Aug 2019 10:42:45 -0400
-From:   Neil Horman <nhorman@tuxdriver.com>
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>, Pavel Machek <pavel@ucw.cz>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Chen Yu <yu.c.chen@intel.com>, Jonathan Corbet <corbet@lwn.net>
-Subject: Re: Non-random RDRAND Re: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID
- bit on AMD family 15h/16h
-Message-ID: <20190816144245.GA25489@localhost.localdomain>
-References: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com>
- <20190814232434.GA31769@amd>
- <20190815151224.GB18727@mit.edu>
+        id S1727468AbfHPO4E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 10:56:04 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:38627 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727359AbfHPO4E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 10:56:04 -0400
+Received: by mail-pl1-f196.google.com with SMTP id m12so2552138plt.5
+        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2019 07:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zNgTsW/toH/romghD8lLcdPbcwRsNKM6knNktVHRNQ8=;
+        b=S0kaE2za0xATgm2WQghaqBcWsnU5pJoTf84SiAygs9rGHfUJdXTr7foafGJWht0hPx
+         kadKTHVoWd4ufhpX/8+/O7FxFAO7bz87fgnUB4JpSIXJbvB14hj6u0WcO4e6LGmNGKJV
+         eY7ut/Umbmip2ORJwXJLQN2603DiHO3xKSsqY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zNgTsW/toH/romghD8lLcdPbcwRsNKM6knNktVHRNQ8=;
+        b=HHp/yFFFkOez4VJPyeh9FHnRgrab47KU9yJpC4aeLgAPoLhc3jt772k0o7nVpEMmS8
+         udBLm/E9U1EX6gZK1TBYqKYkOt2FJc+62FZLsDxz0qypUPhONOeNoyLMA61TKsa1XhHU
+         rFx6sqO4DOtIftSS0zFPlWcVDiQjyzwP8QzrhHYJIR0LBKpOGipetmSUAMmpUvnPMsmz
+         Fsw2f6aZ84QlwC9ZpTM4X7yvXRGLkChWIEdEJqdX+AAFXaXfrUFwwP9Ri2T+wOMl4XfY
+         GaKSKTpw+59yrYLMi7wNw9RSmPMmXCXxYY1NxKt4sxYxsnWCuyI+tpwwy6PPD3BOiRlJ
+         s+Zg==
+X-Gm-Message-State: APjAAAVlD5WXCvM6VV0C3muMa6jDfF+tfwsBS86Wt6WmWbs1XpN/jtUJ
+        gqMJUTWHdyVc5mudnKZGZpvXpT2VhY4/dw==
+X-Google-Smtp-Source: APXvYqzOhs2C1rGqnxFIZX/6Ew+FfLaZuWLtrlj5OzigHhc4Un1LsHxaE/KZ+CN/4TO5zJj41eGxrQ==
+X-Received: by 2002:a17:902:1107:: with SMTP id d7mr9560620pla.184.1565967363583;
+        Fri, 16 Aug 2019 07:56:03 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id z4sm6244583pfg.166.2019.08.16.07.56.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2019 07:56:03 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Qian Cai <cai@lca.pw>, Tri Vo <trong@android.com>
+Subject: [PATCH] PM / wakeup: Register wakeup class kobj after device is added
+Date:   Fri, 16 Aug 2019 07:56:02 -0700
+Message-Id: <20190816145602.231163-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190815151224.GB18727@mit.edu>
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-Spam-Score: -2.9 (--)
-X-Spam-Status: No
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 11:12:24AM -0400, Theodore Y. Ts'o wrote:
-> On Thu, Aug 15, 2019 at 01:24:35AM +0200, Pavel Machek wrote:
-> > Burn it with fire!
-> > 
-> > I mean... people were afraid RDRAND would be backdoored, and you now
-> > confirm ... it indeed _is_ backdoored? /., here's news for you!
-> 
-> To be fair to AMD, I wouldn't call it a backdoor.  Hanlon's razor is
-> applicable here:
-> 
-> 	"Never attribute to malice that which can be adequately
-> 	explained by neglect."
-> 
-> (Sometimes other words are used instead of neglect, but i'm trying to
-> be nice.)
-> 
-Is it worth setting up a quirk for the Excavator era cpus, that triggers
-a call to rdseed on resume?  Working under the assumption that calling
-rdseed would kick the rdrand instruction back into gear.
+The device_set_wakeup_enable() function can be called on a device that
+hasn't been registered with device_add() yet. This allows the device to
+be in a state where wakeup is enabled for it but the device isn't
+published to userspace in sysfs yet.
 
-Neil
+After commit 986845e747af ("PM / wakeup: Show wakeup sources stats in
+sysfs"), calling device_set_wakeup_enable() will fail for a device that
+hasn't been registered with the driver core via device_add(). This is
+because we try to create sysfs entries for the device and associate a
+wakeup class kobject with it before the device has been registered.
+Let's follow a similar approach that device_set_wakeup_capable() takes
+here and register the wakeup class either from
+device_set_wakeup_enable() when the device is already registered, or
+from dpm_sysfs_add() when the device is being registered with the driver
+core via device_add().
 
-> 
-> 					- Ted
-> 
-> P.S.   Also applicable:
-> 
-> 	https://www.youtube.com/watch?v=XZxzJGgox_E
-> 
+Fixes: 986845e747af ("PM / wakeup: Show wakeup sources stats in sysfs")
+Reported-by: Qian Cai <cai@lca.pw>
+Cc: Qian Cai <cai@lca.pw>
+Cc: Tri Vo <trong@android.com>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/base/power/sysfs.c  | 10 +++++++++-
+ drivers/base/power/wakeup.c | 10 ++++++----
+ 2 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+index 1b9c281cbe41..27ee00f50bd7 100644
+--- a/drivers/base/power/sysfs.c
++++ b/drivers/base/power/sysfs.c
+@@ -5,6 +5,7 @@
+ #include <linux/export.h>
+ #include <linux/pm_qos.h>
+ #include <linux/pm_runtime.h>
++#include <linux/pm_wakeup.h>
+ #include <linux/atomic.h>
+ #include <linux/jiffies.h>
+ #include "power.h"
+@@ -661,14 +662,21 @@ int dpm_sysfs_add(struct device *dev)
+ 		if (rc)
+ 			goto err_runtime;
+ 	}
++	if (dev->power.wakeup) {
++		rc = wakeup_source_sysfs_add(dev, dev->power.wakeup);
++		if (rc)
++			goto err_wakeup;
++	}
+ 	if (dev->power.set_latency_tolerance) {
+ 		rc = sysfs_merge_group(&dev->kobj,
+ 				       &pm_qos_latency_tolerance_attr_group);
+ 		if (rc)
+-			goto err_wakeup;
++			goto err_wakeup_source;
+ 	}
+ 	return 0;
+ 
++ err_wakeup_source:
++	wakeup_source_sysfs_remove(dev->power.wakeup);
+  err_wakeup:
+ 	sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
+  err_runtime:
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index f7925820b5ca..5817b51d2b15 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -220,10 +220,12 @@ struct wakeup_source *wakeup_source_register(struct device *dev,
+ 
+ 	ws = wakeup_source_create(name);
+ 	if (ws) {
+-		ret = wakeup_source_sysfs_add(dev, ws);
+-		if (ret) {
+-			wakeup_source_free(ws);
+-			return NULL;
++		if (!dev || device_is_registered(dev)) {
++			ret = wakeup_source_sysfs_add(dev, ws);
++			if (ret) {
++				wakeup_source_free(ws);
++				return NULL;
++			}
+ 		}
+ 		wakeup_source_add(ws);
+ 	}
+-- 
+Sent by a computer through tubes
+
