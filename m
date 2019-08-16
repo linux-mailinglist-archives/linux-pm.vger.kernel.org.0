@@ -2,142 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BDC90440
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 16:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D6390488
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Aug 2019 17:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727468AbfHPO4E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 10:56:04 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38627 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727359AbfHPO4E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 10:56:04 -0400
-Received: by mail-pl1-f196.google.com with SMTP id m12so2552138plt.5
-        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2019 07:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zNgTsW/toH/romghD8lLcdPbcwRsNKM6knNktVHRNQ8=;
-        b=S0kaE2za0xATgm2WQghaqBcWsnU5pJoTf84SiAygs9rGHfUJdXTr7foafGJWht0hPx
-         kadKTHVoWd4ufhpX/8+/O7FxFAO7bz87fgnUB4JpSIXJbvB14hj6u0WcO4e6LGmNGKJV
-         eY7ut/Umbmip2ORJwXJLQN2603DiHO3xKSsqY=
+        id S1727326AbfHPPUN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 11:20:13 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:44271 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727324AbfHPPUN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 11:20:13 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t14so2561408plr.11
+        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2019 08:20:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zNgTsW/toH/romghD8lLcdPbcwRsNKM6knNktVHRNQ8=;
-        b=HHp/yFFFkOez4VJPyeh9FHnRgrab47KU9yJpC4aeLgAPoLhc3jt772k0o7nVpEMmS8
-         udBLm/E9U1EX6gZK1TBYqKYkOt2FJc+62FZLsDxz0qypUPhONOeNoyLMA61TKsa1XhHU
-         rFx6sqO4DOtIftSS0zFPlWcVDiQjyzwP8QzrhHYJIR0LBKpOGipetmSUAMmpUvnPMsmz
-         Fsw2f6aZ84QlwC9ZpTM4X7yvXRGLkChWIEdEJqdX+AAFXaXfrUFwwP9Ri2T+wOMl4XfY
-         GaKSKTpw+59yrYLMi7wNw9RSmPMmXCXxYY1NxKt4sxYxsnWCuyI+tpwwy6PPD3BOiRlJ
-         s+Zg==
-X-Gm-Message-State: APjAAAVlD5WXCvM6VV0C3muMa6jDfF+tfwsBS86Wt6WmWbs1XpN/jtUJ
-        gqMJUTWHdyVc5mudnKZGZpvXpT2VhY4/dw==
-X-Google-Smtp-Source: APXvYqzOhs2C1rGqnxFIZX/6Ew+FfLaZuWLtrlj5OzigHhc4Un1LsHxaE/KZ+CN/4TO5zJj41eGxrQ==
-X-Received: by 2002:a17:902:1107:: with SMTP id d7mr9560620pla.184.1565967363583;
-        Fri, 16 Aug 2019 07:56:03 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id z4sm6244583pfg.166.2019.08.16.07.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2019 07:56:03 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Qian Cai <cai@lca.pw>, Tri Vo <trong@android.com>
-Subject: [PATCH] PM / wakeup: Register wakeup class kobj after device is added
-Date:   Fri, 16 Aug 2019 07:56:02 -0700
-Message-Id: <20190816145602.231163-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+        bh=Uq/BinxihOIL92bxz7COo1OH8fndOXzflXkJ66CJ19A=;
+        b=FxXYCkh2GJGzW+y3E6GB2GbD4JUyWi1I909xPQEFDK+/uBTdNviWz/3xCYRvYkILD+
+         aptxFpmBIVkQCuUDP8QU9jyvjRpPVoPSJ2kxH1CXneishDCT/oPHh7b6G368e6XPMCyP
+         euJIeceBbum1X17fm28m1pqWHvRL8sVydZWM4x5Bb27tGB8ih3RbZm+ZjONt6A913B8q
+         BFtw3tL3RiYdY0AIhcsO74HmsYX0JogVcDQQL2A4sH5qgAhXAh/5AqYZ2qq/d3PTXzg1
+         SyiYOFAF+OvF2D7PrQjf3q+rTuJuwDrLT7kDcCnbqZPczudI01driaiiJCLYEh6MGn+B
+         PxVQ==
+X-Gm-Message-State: APjAAAUAqz1xOc5KFR9aeQnDgMPhfFa8qLBf6Jd4ykvfulfPSkxibdsl
+        ROjLqYh85xYwHBeTpt482TgZGg==
+X-Google-Smtp-Source: APXvYqzFpiOvuE1Nb1T9iFvZuHhM5Z6kiBulQJFo5iggAoyERZSO6STGCj2ft+AMElV8wMfVwqHgvg==
+X-Received: by 2002:a17:902:7d84:: with SMTP id a4mr9646776plm.90.1565968812494;
+        Fri, 16 Aug 2019 08:20:12 -0700 (PDT)
+Received: from ?IPv6:2601:646:c200:1ef2:3602:86ff:fef6:e86b? ([2601:646:c200:1ef2:3602:86ff:fef6:e86b])
+        by smtp.googlemail.com with ESMTPSA id h9sm4839072pgk.10.2019.08.16.08.20.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Aug 2019 08:20:11 -0700 (PDT)
+Subject: Re: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family 15h/16h
+To:     "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Chen Yu <yu.c.chen@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+References: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Message-ID: <87dacbb4-1733-fd70-1356-7f8d5c69c029@kernel.org>
+Date:   Fri, 16 Aug 2019 08:19:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The device_set_wakeup_enable() function can be called on a device that
-hasn't been registered with device_add() yet. This allows the device to
-be in a state where wakeup is enabled for it but the device isn't
-published to userspace in sysfs yet.
+On 8/14/19 2:17 PM, Lendacky, Thomas wrote:
+> From: Tom Lendacky <thomas.lendacky@amd.com>
+> 
+> There have been reports of RDRAND issues after resuming from suspend on
+> some AMD family 15h and family 16h systems. This issue stems from BIOS
+> not performing the proper steps during resume to ensure RDRAND continues
+> to function properly.
 
-After commit 986845e747af ("PM / wakeup: Show wakeup sources stats in
-sysfs"), calling device_set_wakeup_enable() will fail for a device that
-hasn't been registered with the driver core via device_add(). This is
-because we try to create sysfs entries for the device and associate a
-wakeup class kobject with it before the device has been registered.
-Let's follow a similar approach that device_set_wakeup_capable() takes
-here and register the wakeup class either from
-device_set_wakeup_enable() when the device is already registered, or
-from dpm_sysfs_add() when the device is being registered with the driver
-core via device_add().
+Can you or someone from AMD document *precisely* what goes wrong here? 
+The APM is crystal clear:
 
-Fixes: 986845e747af ("PM / wakeup: Show wakeup sources stats in sysfs")
-Reported-by: Qian Cai <cai@lca.pw>
-Cc: Qian Cai <cai@lca.pw>
-Cc: Tri Vo <trong@android.com>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/base/power/sysfs.c  | 10 +++++++++-
- drivers/base/power/wakeup.c | 10 ++++++----
- 2 files changed, 15 insertions(+), 5 deletions(-)
+Hardware modifies the CF flag to indicate whether the value returned in 
+the destination register is valid. If CF = 1, the value is valid. If CF 
+= 0, the value is invalid.
 
-diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-index 1b9c281cbe41..27ee00f50bd7 100644
---- a/drivers/base/power/sysfs.c
-+++ b/drivers/base/power/sysfs.c
-@@ -5,6 +5,7 @@
- #include <linux/export.h>
- #include <linux/pm_qos.h>
- #include <linux/pm_runtime.h>
-+#include <linux/pm_wakeup.h>
- #include <linux/atomic.h>
- #include <linux/jiffies.h>
- #include "power.h"
-@@ -661,14 +662,21 @@ int dpm_sysfs_add(struct device *dev)
- 		if (rc)
- 			goto err_runtime;
- 	}
-+	if (dev->power.wakeup) {
-+		rc = wakeup_source_sysfs_add(dev, dev->power.wakeup);
-+		if (rc)
-+			goto err_wakeup;
-+	}
- 	if (dev->power.set_latency_tolerance) {
- 		rc = sysfs_merge_group(&dev->kobj,
- 				       &pm_qos_latency_tolerance_attr_group);
- 		if (rc)
--			goto err_wakeup;
-+			goto err_wakeup_source;
- 	}
- 	return 0;
- 
-+ err_wakeup_source:
-+	wakeup_source_sysfs_remove(dev->power.wakeup);
-  err_wakeup:
- 	sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
-  err_runtime:
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index f7925820b5ca..5817b51d2b15 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -220,10 +220,12 @@ struct wakeup_source *wakeup_source_register(struct device *dev,
- 
- 	ws = wakeup_source_create(name);
- 	if (ws) {
--		ret = wakeup_source_sysfs_add(dev, ws);
--		if (ret) {
--			wakeup_source_free(ws);
--			return NULL;
-+		if (!dev || device_is_registered(dev)) {
-+			ret = wakeup_source_sysfs_add(dev, ws);
-+			if (ret) {
-+				wakeup_source_free(ws);
-+				return NULL;
-+			}
- 		}
- 		wakeup_source_add(ws);
- 	}
--- 
-Sent by a computer through tubes
+If BIOS screws up and somehow RDRAND starts failing and returning CF = 
+0, then I think it's legitimate to call it a BIOS bug.  Some degree of 
+documentation would be nice, as would a way for BIOS to indicate to the 
+OS that it does not have this bug.
 
+But, from the reports, it sounds like RDRAND starts failing, setting CF 
+= 1, and returning 0xFFFF.... in the destination register.  If true, 
+then this is, in my book, a severe CPU bug.  Software is supposed to be 
+able to trust that, if RDRAND sets CF = 1, the result is a 
+cryptographically secure random number, even if everything else in the 
+system is actively malicious.  On a SEV-ES system, this should be 
+considered a security hole -- even if the hypervisor and BIOS collude, 
+RDRAND in the guest should work as defined by the manual.
+
+So, can you clarify what is actually going on?  And, if there is an 
+issue where the CPU does not behave as documented in the APM, and AMD 
+issue an erratum?  And ideally also fix it in microcode or in a stepping 
+and give an indication that the issue is fixed?
