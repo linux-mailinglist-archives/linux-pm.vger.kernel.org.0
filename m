@@ -2,152 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6F690B10
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2019 00:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF2790C8B
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2019 05:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbfHPWiT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 18:38:19 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42473 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727747AbfHPWiT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Aug 2019 18:38:19 -0400
-Received: by mail-ot1-f68.google.com with SMTP id j7so10992503ota.9
-        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2019 15:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n8CirlaHdh28gHLoP6h4JqrJrGvDIaVMTsL4o/hfB+Q=;
-        b=a3cDSghN76lmTismZG0JY1fRaRl8s1zZgZTjxVK+xaaaaNNs90B2T83Rml4/QmQ5L7
-         yfLiWFwyVeKL+BQnCjYloJqOxGfu6F7R1bUiLxfbh5kZoEDY5d08QKizcXOGAKsiBOri
-         Jeu1SafRJxBUH0jR/68px4blC5ni9fY6lFFNoVeOfnqD7DFsqZp9VMiawqCl8VgrSsFM
-         RsvCefaLOLf9t973heAsMqOJaeSuBqM17B3cQACIIelOALYiS7paaVYQ9qItOM0m+G4u
-         XfB4w/J44LUPWEnFS0Q2d5CruoJ5QqMkVVKH6ALvzzjvKm6+W1gCYeiWMX1HJFVfaxMP
-         tr1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n8CirlaHdh28gHLoP6h4JqrJrGvDIaVMTsL4o/hfB+Q=;
-        b=jcXhTTqZhaQSZj9wlYqeDbLGG+9y5RZySD4820bHFisuZsGqfkEmlBfTqYeDNDLRKy
-         sxmWYa9uE5BaEyzNUg7LrlZq85tSTjrFRoAI0okYcPydGdmsHbz6EN+5barC6VshZ8UW
-         8Usj+6NyHf9jDy4KjqlklvBkmdyZqAqclgOLt0p5JZ7LW1tJTmj09cKYF83yingbvM5i
-         quGCP/LoEvfNQPCjVlw4BKCWG8fmK+Xq1LfGRTW6C/28wMJmHri1CzCgxUwGAg+6nN2S
-         Lb+JXCtNqNFJ1mgL7g9+9d7jgVdpIBwAf90iWDBeAN12a3rFzWeJeKzqALbwosr0ThyZ
-         D2Fw==
-X-Gm-Message-State: APjAAAVdjcWxQ00TUmPkvUX/d5WsaaVCAnVTPKkxayqiV0sfyczW1j0z
-        MQe9IdIWblaflDTS15YxYqiBrWhAP+BotRZzsvPK2g==
-X-Google-Smtp-Source: APXvYqyLof2LMIjakexWruidxXTOuja6QYEBN71Wz09dSSdidzjc076P0/NGpcQ8yXPJKdtCNEZZ3ZWNW8ha6hRJgHA=
-X-Received: by 2002:a9d:3466:: with SMTP id v93mr9635813otb.312.1565995098349;
- Fri, 16 Aug 2019 15:38:18 -0700 (PDT)
+        id S1726132AbfHQDsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Aug 2019 23:48:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42612 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725938AbfHQDsN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 16 Aug 2019 23:48:13 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5435B21721;
+        Sat, 17 Aug 2019 03:48:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566013692;
+        bh=HxsSwNwiVHXbty9BjtNr6DuJclpMy2U5qUXHSszZxrM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=e8Au8v1YjIZnWREKfQOag1wlJ5dlrZgSMRbp90GK5UTPY+nUl2WJc1otkEjseKTHD
+         3520uhhDA1MOfMC6z+SshHGl8yLV5hAyKMxhpPm5HKjtVazIzaF8qeRTw9/o/K0lqr
+         o/oE9EuoQwMQ1Ku1q59wIcPUKdI9WFywtxJJo4W0=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20190816145602.231163-1-swboyd@chromium.org> <CANA+-vB2_pYhYq5cmpyhiwJR3TuO+-2iBPehSXSjun-HN2wb5A@mail.gmail.com>
- <5d57242c.1c69fb81.bba86.14f6@mx.google.com>
-In-Reply-To: <5d57242c.1c69fb81.bba86.14f6@mx.google.com>
-From:   Tri Vo <trong@android.com>
-Date:   Fri, 16 Aug 2019 15:38:07 -0700
-Message-ID: <CANA+-vDZqXS-yac9Q_K54oVrqZLtJojBSKa=ToJ9ZkfYHRcqbQ@mail.gmail.com>
-Subject: Re: [PATCH] PM / wakeup: Register wakeup class kobj after device is added
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, Qian Cai <cai@lca.pw>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAMuHMdVvwsXU2YwFRA2Y2K9KKzF4L-hqDudarmc-OeHXRMCifQ@mail.gmail.com>
+References: <20190816125225.16061-1-geert+renesas@glider.be> <20190816125225.16061-2-geert+renesas@glider.be> <20190816180123.6299720665@mail.kernel.org> <CAMuHMdVvwsXU2YwFRA2Y2K9KKzF4L-hqDudarmc-OeHXRMCifQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] clk: renesas: mstp: Set GENPD_FLAG_ALWAYS_ON for clock domain
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+User-Agent: alot/0.8.1
+Date:   Fri, 16 Aug 2019 20:48:11 -0700
+Message-Id: <20190817034812.5435B21721@mail.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 2:46 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Tri Vo (2019-08-16 14:27:35)
-> > On Fri, Aug 16, 2019 at 7:56 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> > > index 1b9c281cbe41..27ee00f50bd7 100644
-> > > --- a/drivers/base/power/sysfs.c
-> > > +++ b/drivers/base/power/sysfs.c
-> > > @@ -5,6 +5,7 @@
-> > >  #include <linux/export.h>
-> > >  #include <linux/pm_qos.h>
-> > >  #include <linux/pm_runtime.h>
-> > > +#include <linux/pm_wakeup.h>
-> > >  #include <linux/atomic.h>
-> > >  #include <linux/jiffies.h>
-> > >  #include "power.h"
-> > > @@ -661,14 +662,21 @@ int dpm_sysfs_add(struct device *dev)
-> > >                 if (rc)
-> > >                         goto err_runtime;
-> > >         }
-> > > +       if (dev->power.wakeup) {
-> >
-> > This conditional checks for the situation when wakeup source
-> > registration have been previously attempted, but failed at
-> > wakeup_source_sysfs_add(). My concern is that it's not easy to
-> > understand what this check does without knowing exactly what
-> > device_wakeup_enable() does to dev->power.wakeup before we reach this
-> > point.
->
-> Oh, actually this is wrong. It should be a check for
-> dev->power.wakeup->dev being non-NULL. That's the variable that's set by
-> wakeup_source_sysfs_add() upon success. So I should make it:
->
->         if (dev->power.wakeup && !dev->power.wakeup->dev)
-
-Oh ok, this makes more sense now :)
->
-> And there's the problem that CONFIG_PM_SLEEP could be unset. Let me fix
-> it up with a new inline function like device_has_wakeup_dev().
->
-> >
-> > > +               rc = wakeup_source_sysfs_add(dev, dev->power.wakeup);
-> > > +               if (rc)
-> > > +                       goto err_wakeup;
-> > > +       }
-> > >         if (dev->power.set_latency_tolerance) {
-> > >                 rc = sysfs_merge_group(&dev->kobj,
-> > >                                        &pm_qos_latency_tolerance_attr_group);
-> > >                 if (rc)
-> > > -                       goto err_wakeup;
-> > > +                       goto err_wakeup_source;
-> > >         }
-> > >         return 0;
+Quoting Geert Uytterhoeven (2019-08-16 12:59:32)
+> Hi Stephen,
+>=20
+> On Fri, Aug 16, 2019 at 8:01 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> > Quoting Geert Uytterhoeven (2019-08-16 05:52:23)
+> > > The CPG/MSTP Clock Domain driver does not implement the
+> > > generic_pm_domain.power_{on,off}() callbacks, as the domain itself
+> > > cannot be powered down.  Hence the domain should be marked as always-=
+on
+> > > by setting the GENPD_FLAG_ALWAYS_ON flag.
 > > >
-> > > + err_wakeup_source:
-> > > +       wakeup_source_sysfs_remove(dev->power.wakeup);
-> > >   err_wakeup:
-> > >         sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
-> > >   err_runtime:
-> > > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> > > index f7925820b5ca..5817b51d2b15 100644
-> > > --- a/drivers/base/power/wakeup.c
-> > > +++ b/drivers/base/power/wakeup.c
-> > > @@ -220,10 +220,12 @@ struct wakeup_source *wakeup_source_register(struct device *dev,
+> > > This gets rid of the following boot warning on RZ/A1:
 > > >
-> > >         ws = wakeup_source_create(name);
-> > >         if (ws) {
-> > > -               ret = wakeup_source_sysfs_add(dev, ws);
-> > > -               if (ret) {
-> > > -                       wakeup_source_free(ws);
-> > > -                       return NULL;
-> > > +               if (!dev || device_is_registered(dev)) {
+> > >     sh_mtu2 fcff0000.timer: PM domain cpg_clocks will not be powered =
+off
+> > >
+> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > ---
 > >
-> > Is there a possible race condition here? If dev->power.wakeup check in
-> > dpm_sysfs_add() is done at the same time as device_is_registered(dev)
-> > check here, then wakeup_source_sysfs_add() won't ever be called?
->
-> The same race exists for device_set_wakeup_capable() so I didn't bother
-> to try to avoid it. I suppose wakeup_source_sysfs_add() could run
-> completely, allocate the device and set the name, etc., but not call
-> device_add() and then we can set ws->dev and call device_add() under a
-> mutex so that we keep a very small window where the wakeup class is
-> published to sysfs. Or just throw a big mutex around the whole wakeup
-> class creation path so that there isn't a chance of a race. But really,
-> is anyone going to call device_set_wakeup_*() on a device that is also
-> being added to the system? Seems unlikely.
+> > Are you going to add a Fixes tag?
+>=20
+> I didn't add a Fixes tag, as there's no clear point in history where the
+> problem appeared: the Clock Domain code in this driver predates the
+> introduction of the GENPD_FLAG_ALWAYS_ON flag by ca. 18 months.
+>=20
+> Candidates are:
+> d716f4798ff8c65a ("PM / Domains: Support IRQ safe PM domains")
+> ffaa42e8a40b7f10 ("PM / Domains: Enable users of genpd to specify
+> always on PM domains")
+> 075c37d59ecd4a8b ("PM / Domains: Don't warn about IRQ safe device for
+> an always on PM domain")
+>=20
+> Do you think it's worth adding one or more of the above?
+> Thanks!
+>=20
 
-True. I don't have a strong opinion.
->
-> >
-> > > +                       ret = wakeup_source_sysfs_add(dev, ws);
-> > > +                       if (ret) {
-> > > +                               wakeup_source_free(ws);
+Well is it actually a problem to not specify the flag? I guess it's just
+a potential problem if the genpd is ever powered off, but given that the
+governor decides to leave it always enabled it doesn't actually matter?
+So it's not really fixing anything besides silencing a harmless warning?
+
