@@ -2,60 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2893390C8E
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2019 05:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E344990CA7
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Aug 2019 06:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725938AbfHQDwU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Aug 2019 23:52:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42756 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725829AbfHQDwU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 16 Aug 2019 23:52:20 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 268F32173B;
-        Sat, 17 Aug 2019 03:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566013940;
-        bh=4oxw9KmagPq4gSAaCNa0UfIBjp21fF7APgvTtgAbfh8=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=DcdqOF0UOe9NLgUEeGC/MOUbnT5TQ1k6ns/TnlozI+tFXSveq3eVKqnk4wiQ2O6jZ
-         W73j0LpAqXjrYw95uxe7Yrps6KzmDkAayy5sFqqZ08rEd6bj1LY4wYaspvhxwM1IVH
-         UYaYJaZczeJrg1PfGnYj4SklLdB80/ZCh2Pmbj2w=
+        id S1725945AbfHQEB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Aug 2019 00:01:56 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:35064 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbfHQEB4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Aug 2019 00:01:56 -0400
+Received: by mail-pf1-f194.google.com with SMTP id d85so4128066pfd.2
+        for <linux-pm@vger.kernel.org>; Fri, 16 Aug 2019 21:01:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:from:cc:to:user-agent:date;
+        bh=41DUNyHfGDYGOFlacUiPuaR42aKSRfTphWQX5UDtD6o=;
+        b=ixPLfl74xidyeGDAyESYrtkRAaaOMaad+qjnu1XULZZimjYFtEn181iLZpP1ym0gTA
+         PyreXM8okqrfOAAnHjzFtE/FnJKkFAp8pd4+9ldH2Wlq/lH1I1IyQLfzS8xi6udjNbnC
+         tvTGPUZ1nfHWe6ixN8ihl34CXoXxiNO57br9U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
+         :user-agent:date;
+        bh=41DUNyHfGDYGOFlacUiPuaR42aKSRfTphWQX5UDtD6o=;
+        b=ZpZKKyBBYDObe2JJ3NQPY9JjAQqjqWQMIstwdPLTVDlgXfEgNOkq8c2CWkMt3q12V/
+         WOaw/iA9iTqNkSezHyAnQMGghHa/1QWQCCNwQhSbW33C7HCekmv7g8IjI7ZGJTk0auzI
+         C2MSgkH2V/KSR6Dk8hH/fjaufW/PaOGeVxpMAFT8UisukTGscoJsRjGWNEtz945A4vpj
+         +SfKxj2l5jqsZ1jT8KmR1SyGEdGQ5MDUq+qSMwMKptwpVo4+TmIIrzTJ6HyZcf7vAMf7
+         lnkWYYg4dPvIzQX2Cep6g0NhG4ad5M37c88OSursMFG3kJNn7X2E4kUSkFULuuiADCgB
+         qlQA==
+X-Gm-Message-State: APjAAAVL8Pbt/eHBW/0Ha1NX90za/Fdt+6j8DlVkJpf+MYsxW+FPzlor
+        95IaHR0cBXbnbzYyHDHhOX9FG59GZtBztA==
+X-Google-Smtp-Source: APXvYqziDXUQ6baa9UVufZvuqukFBB8IgCHuhJBV0YUPgaMdR05hRMBSBQY/Mi09HZoEtziD5Ch3kA==
+X-Received: by 2002:a63:1046:: with SMTP id 6mr10700399pgq.111.1566014515650;
+        Fri, 16 Aug 2019 21:01:55 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id j15sm7429996pfr.146.2019.08.16.21.01.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2019 21:01:55 -0700 (PDT)
+Message-ID: <5d577c33.1c69fb81.f966d.6963@mx.google.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1565866783-19672-5-git-send-email-Anson.Huang@nxp.com>
-References: <1565866783-19672-1-git-send-email-Anson.Huang@nxp.com> <1565866783-19672-5-git-send-email-Anson.Huang@nxp.com>
-Subject: Re: [PATCH 5/6] clk: imx8mn: Add necessary frequency support for ARM PLL table
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Linux-imx@nxp.com
-To:     Anson.Huang@nxp.com, abel.vesa@nxp.com, devicetree@vger.kernel.org,
-        festevam@gmail.com, kernel@pengutronix.de, leonard.crestez@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        mark.rutland@arm.com, mturquette@baylibre.com, rjw@rjwysocki.net,
-        robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org,
-        viresh.kumar@linaro.org
+In-Reply-To: <9dc86fa912d9b6e21857598ad81ff88564468e5d.1564091601.git.amit.kucheria@linaro.org>
+References: <cover.1564091601.git.amit.kucheria@linaro.org> <9dc86fa912d9b6e21857598ad81ff88564468e5d.1564091601.git.amit.kucheria@linaro.org>
+Subject: Re: [PATCH 01/15] drivers: thermal: tsens: Get rid of id field in tsens_sensor
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-pm@vger.kernel.org
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, andy.gross@linaro.org,
+        bjorn.andersson@linaro.org, edubezval@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 User-Agent: alot/0.8.1
-Date:   Fri, 16 Aug 2019 20:52:19 -0700
-Message-Id: <20190817035220.268F32173B@mail.kernel.org>
+Date:   Fri, 16 Aug 2019 21:01:54 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Anson.Huang@nxp.com (2019-08-15 03:59:42)
-> diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
-> index ecd1062..3f1239a 100644
-> --- a/drivers/clk/imx/clk-imx8mn.c
-> +++ b/drivers/clk/imx/clk-imx8mn.c
-> @@ -82,6 +84,7 @@ static struct imx_pll14xx_clk imx8mn_dram_pll =3D {
->  static struct imx_pll14xx_clk imx8mn_arm_pll =3D {
->                 .type =3D PLL_1416X,
->                 .rate_table =3D imx8mn_pll1416x_tbl,
-> +               .rate_count =3D ARRAY_SIZE(imx8mn_pll1416x_tbl),
+Quoting Amit Kucheria (2019-07-25 15:18:36)
+> There are two fields - id and hw_id - to track what sensor an action was
+> to performed on. This was because the sensors connected to a TSENS IP
+> might not be contiguous i.e. 1, 2, 4, 5 with 3 being skipped.
+>=20
+> This causes confusion in the code which uses hw_id sometimes and id
+> other times (tsens_get_temp, tsens_get_trend).
+>=20
+> Switch to only using the hw_id field to track the physical ID of the
+> sensor. When we iterate through all the sensors connected to an IP
+> block, we use an index i to loop through the list of sensors, and then
+> return the actual hw_id that is registered on that index.
+>=20
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
 
-Why is rate_count added? That's not described in the commit text.
+Nice cleanup!
+
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
