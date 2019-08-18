@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAF391735
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Aug 2019 16:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E985A9172A
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Aug 2019 16:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726783AbfHROEQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Aug 2019 10:04:16 -0400
-Received: from mxwww.masterlogin.de ([95.129.51.220]:42944 "EHLO
+        id S1726757AbfHROFF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Aug 2019 10:05:05 -0400
+Received: from mxwww.masterlogin.de ([95.129.51.220]:43030 "EHLO
         mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbfHROEQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 10:04:16 -0400
+        with ESMTP id S1726806AbfHROEZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 10:04:25 -0400
 Received: from mxout1.routing.net (unknown [192.168.10.81])
-        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id 93D1696DFF;
-        Sun, 18 Aug 2019 13:56:33 +0000 (UTC)
+        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id 7913896E01;
+        Sun, 18 Aug 2019 13:56:34 +0000 (UTC)
 Received: from mxbox3.masterlogin.de (unknown [192.168.10.253])
-        by mxout1.routing.net (Postfix) with ESMTP id EB2E443D5A;
-        Sun, 18 Aug 2019 13:56:33 +0000 (UTC)
+        by mxout1.routing.net (Postfix) with ESMTP id AFF4243D5A;
+        Sun, 18 Aug 2019 13:56:34 +0000 (UTC)
 Received: from localhost.localdomain (fttx-pool-185.53.43.183.bambit.de [185.53.43.183])
-        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 7949C36008B;
-        Sun, 18 Aug 2019 15:56:31 +0200 (CEST)
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id E24203605A8;
+        Sun, 18 Aug 2019 15:56:33 +0200 (CEST)
 From:   Frank Wunderlich <frank-w@public-files.de>
 To:     linux-mediatek@lists.infradead.org
 Cc:     Frank Wunderlich <frank-w@public-files.de>,
@@ -38,9 +38,9 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         Sean Wang <sean.wang@mediatek.com>,
         Sebastian Reichel <sre@kernel.org>,
         "Tianping Fang" <tianping.fang@mediatek.com>
-Subject: [PATCH v6 12/13] MAINTAINERS: add Mediatek shutdown drivers
-Date:   Sun, 18 Aug 2019 15:56:10 +0200
-Message-Id: <20190818135611.7776-13-frank-w@public-files.de>
+Subject: [PATCH v6 13/13] arm: dts: mt6323: add keys, power-controller, rtc and codec
+Date:   Sun, 18 Aug 2019 15:56:11 +0200
+Message-Id: <20190818135611.7776-14-frank-w@public-files.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190818135611.7776-1-frank-w@public-files.de>
 References: <20190818135611.7776-1-frank-w@public-files.de>
@@ -51,37 +51,57 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Josef Friedl <josef.friedl@speed.at>
 
-add Section in MAINTAINERS file for poweroff driver
+support poweroff and power-related keys on bpi-r2
 
+Suggested-by: Frank Wunderlich <frank-w@public-files.de>
 Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 ---
 changes since v5: none
 changes since v4: none
-changes since v3: moved SOB
-changes since v2: none (=v2 part 6)
+changes since v3: none
+changes since v2: none (=v2 part 7)
 ---
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm/boot/dts/mt6323.dtsi | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6426db5198f0..4172a3177633 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10128,6 +10128,13 @@ S:	Maintained
- F:	drivers/net/dsa/mt7530.*
- F:	net/dsa/tag_mtk.c
- 
-+MEDIATEK BOARD LEVEL SHUTDOWN DRIVERS
-+M:	Sean Wang <sean.wang@mediatek.com>
-+L:	linux-pm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
-+F:	drivers/power/reset/mt6323-poweroff.c
+diff --git a/arch/arm/boot/dts/mt6323.dtsi b/arch/arm/boot/dts/mt6323.dtsi
+index ba397407c1dd..7fda40ab5fe8 100644
+--- a/arch/arm/boot/dts/mt6323.dtsi
++++ b/arch/arm/boot/dts/mt6323.dtsi
+@@ -238,5 +238,32 @@
+ 				regulator-enable-ramp-delay = <216>;
+ 			};
+ 		};
 +
- MEDIATEK JPEG DRIVER
- M:	Rick Chang <rick.chang@mediatek.com>
- M:	Bin Liu <bin.liu@mediatek.com>
++		mt6323keys: mt6323keys {
++			compatible = "mediatek,mt6323-keys";
++			mediatek,long-press-mode = <1>;
++			power-off-time-sec = <0>;
++
++			power {
++				linux,keycodes = <116>;
++				wakeup-source;
++			};
++
++			home {
++				linux,keycodes = <114>;
++			};
++		};
++
++		codec: mt6397codec {
++			compatible = "mediatek,mt6397-codec";
++		};
++
++		power-controller {
++			compatible = "mediatek,mt6323-pwrc";
++		};
++
++		rtc {
++			compatible = "mediatek,mt6323-rtc";
++		};
+ 	};
+ };
 -- 
 2.17.1
 
