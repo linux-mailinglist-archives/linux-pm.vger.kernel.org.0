@@ -2,121 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A5391589
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Aug 2019 10:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392639172F
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Aug 2019 16:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbfHRI1l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Aug 2019 04:27:41 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:34058 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbfHRI1k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 04:27:40 -0400
-Received: by mail-ot1-f66.google.com with SMTP id c7so13467780otp.1;
-        Sun, 18 Aug 2019 01:27:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iGsbphl0FQQGBuaRly5CWz/iJFmuKNjtWAnSJ2N4x+0=;
-        b=dUcsNVHIiueFDkN4qMQ/xgJKFVim6rXPU2vPe8DySPZ2y37HnkcLshStNYpR4m9sii
-         6BjsM/mR8P19NwiRHHOqv44CL5lduXAG+wrSVTe1S+WhshDVHk9pFaHziVlxHfjeJlQJ
-         vuU8PrHslBPFabqwqED5t/BWsh7fLsCwKkREKsJN8OTWQRG7H6XobgmFTC6Z313s2s5b
-         j0bPpA/ALsrdiA/AnLEVgyludy12ViUxvjfHyJS0X7iaMxQmRaPO/NAdazhTNQCa28C6
-         TokBhOQzQVJ96MZZjx93zzykHVKypgtISFkqhKBXAPHCmYQJbyzLvCkchoNqgX8kzCeX
-         rTwQ==
-X-Gm-Message-State: APjAAAVR+dERphw6MIArOIOHk/A39kk3zv++iNExY7dLZ3cYYWhC2EAN
-        01LEIKWat/TJJbPyTEp0Ve5nwzkYGxGd0j5H9Bk=
-X-Google-Smtp-Source: APXvYqx7IA3LHDxIT7relAV7fI5zU5sPnu2xMiAU9Hh4XnETjwrFtGdKnmornqsRB0cg2qycSCFuJg+2WRrk3UyjPh4=
-X-Received: by 2002:a9d:5c0c:: with SMTP id o12mr14124466otk.145.1566116859589;
- Sun, 18 Aug 2019 01:27:39 -0700 (PDT)
+        id S1726825AbfHROES (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Aug 2019 10:04:18 -0400
+Received: from mxwww.masterlogin.de ([95.129.51.220]:42936 "EHLO
+        mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbfHROER (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 10:04:17 -0400
+X-Greylist: delayed 472 seconds by postgrey-1.27 at vger.kernel.org; Sun, 18 Aug 2019 10:04:15 EDT
+Received: from mxout1.routing.net (unknown [192.168.10.81])
+        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id 09B50965DB;
+        Sun, 18 Aug 2019 13:56:21 +0000 (UTC)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.253])
+        by mxout1.routing.net (Postfix) with ESMTP id 50D3843D5A;
+        Sun, 18 Aug 2019 13:56:21 +0000 (UTC)
+Received: from localhost.localdomain (fttx-pool-185.53.43.183.bambit.de [185.53.43.183])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 5A90D36043A;
+        Sun, 18 Aug 2019 15:56:20 +0200 (CEST)
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        devicetree@vger.kernel.org,
+        "linux-arm-kernel @ lists . infradead . org Alessandro Zummo" 
+        <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Tianping Fang" <tianping.fang@mediatek.com>
+Subject: [PATCH v6 00/13] implement poweroff for mt6323 / bpi-r2
+Date:   Sun, 18 Aug 2019 15:55:58 +0200
+Message-Id: <20190818135611.7776-1-frank-w@public-files.de>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20190816125225.16061-1-geert+renesas@glider.be>
- <20190816125225.16061-2-geert+renesas@glider.be> <20190816180123.6299720665@mail.kernel.org>
- <CAMuHMdVvwsXU2YwFRA2Y2K9KKzF4L-hqDudarmc-OeHXRMCifQ@mail.gmail.com> <20190817034812.5435B21721@mail.kernel.org>
-In-Reply-To: <20190817034812.5435B21721@mail.kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 18 Aug 2019 10:27:28 +0200
-Message-ID: <CAMuHMdWpUEt-wxEdAK7NsAOadS5TtHYdO=JTGT=CtSROHuR+Pw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] clk: renesas: mstp: Set GENPD_FLAG_ALWAYS_ON for
- clock domain
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Stephen,
+mainline-driver does not support mt6323
 
-On Sat, Aug 17, 2019 at 5:48 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> Quoting Geert Uytterhoeven (2019-08-16 12:59:32)
-> > On Fri, Aug 16, 2019 at 8:01 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > Quoting Geert Uytterhoeven (2019-08-16 05:52:23)
-> > > > The CPG/MSTP Clock Domain driver does not implement the
-> > > > generic_pm_domain.power_{on,off}() callbacks, as the domain itself
-> > > > cannot be powered down.  Hence the domain should be marked as always-on
-> > > > by setting the GENPD_FLAG_ALWAYS_ON flag.
-> > > >
-> > > > This gets rid of the following boot warning on RZ/A1:
-> > > >
-> > > >     sh_mtu2 fcff0000.timer: PM domain cpg_clocks will not be powered off
-> > > >
-> > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > > ---
-> > >
-> > > Are you going to add a Fixes tag?
-> >
-> > I didn't add a Fixes tag, as there's no clear point in history where the
-> > problem appeared: the Clock Domain code in this driver predates the
-> > introduction of the GENPD_FLAG_ALWAYS_ON flag by ca. 18 months.
-> >
-> > Candidates are:
-> > d716f4798ff8c65a ("PM / Domains: Support IRQ safe PM domains")
-> > ffaa42e8a40b7f10 ("PM / Domains: Enable users of genpd to specify
-> > always on PM domains")
-> > 075c37d59ecd4a8b ("PM / Domains: Don't warn about IRQ safe device for
-> > an always on PM domain")
-> >
-> > Do you think it's worth adding one or more of the above?
->
-> Well is it actually a problem to not specify the flag? I guess it's just
-> a potential problem if the genpd is ever powered off, but given that the
-> governor decides to leave it always enabled it doesn't actually matter?
-> So it's not really fixing anything besides silencing a harmless warning?
+this series makes some cleanup to mt6397-rtc-driver, adds mt6323 and
+implement power-controller on it.
 
-The warning is indeed harmless.
+tested on bananapi-r2
 
-The "interesting" case is the case where no warning is printed, as no
-IRQ-safe device is present.  In that case, the absence of the
-GENPD_FLAG_ALWAYS_ON flag means that the core PM Domain code will
-consider the domain for power-off, and will loop over all devices part
-of it, which is suboptimal.  Setting the flag avoids that.
+Original Patch from Josef Friedl
 
-Thanks for your continued questions, it made me realize I need to add more
-meat to the description to these "simple" patches!
+changes since v5:
+	- splitted part 1 to separate changes and additions not related to pwrc
+	- move mfd/mt6397/core.h from v4.8 in separate patch "add mutex include"
+	- changed recipients (moved from To to Cc, removed committers)
+changes since v4:
+	- relative path in part 1+2
+	- drop change of copyright-year in part 5
+changes since v3:
+	- moved SOB in 2/10 and 9/10
+	- moved part 5 to 6 to be near driver-change
+	- changehistory of patches below ---
 
-For the PM people: would it make sense to add a
-WARN(!genpd->power_off && !genpd_is_always_on(genpd), "...") check to
-pm_genpd_init()?
-Or set GENPD_FLAG_ALWAYS_ON automatically if !genpd->power_off?
+changes since v2:
+	- Splitted some parts and rebased on 5.3-rc2:
 
-Thanks!
+	v2.1 dt-bindings: add powercontroller – try to make better subject
+	v2.2 separate rtc-mt6397.txt (suggested by Alexandre Belloni)
+	     add missing commit-message (suggested by Matthias Brugger)
+	v2.3 fix alloc after IRQ (suggested by Alexandre Belloni)
+	     new compatible (splitting suggested by Alexandre Belloni)
+	     needed due to different rtc-base/size see #7
+	v2.4 simplifications (Define-res-macros)
+	     add mt6323 rtc+pwrc
+	v2.5 add poweroff-driver (no change)
+	v2.6 MAINTAINERS (no change)
+	v2.7 DTS-Changes (no change)
 
-Gr{oetje,eeting}s,
 
-                        Geert
+Frank Wunderlich (1):
+  dt-bindings: mfd: mediatek: mt6397: change to relative paths
+
+Josef Friedl (12):
+  dt-bindings: mfd: mediatek: update rtc to include mt6323
+  dt-bindings: mfd: mediatek: add mt6323 power-controller
+  dt-bindings: rtc: mediatek: add missing mt6397 rtc
+  rtc: mt6397: move some common definitions into rtc.h
+  mfd: mt6397: add mutex include
+  rtc: mt6397: improvements of rtc driver
+  mfd: mt6323: some improvements of mt6397-core
+  rtc: mt6397: add compatible for mt6323
+  mfd: mt6323: add mt6323 rtc+pwrc
+  power: reset: add driver for mt6323 poweroff
+  MAINTAINERS: add Mediatek shutdown drivers
+  arm: dts: mt6323: add keys, power-controller, rtc and codec
+
+ .../devicetree/bindings/mfd/mt6397.txt        |  20 +++-
+ .../bindings/power/reset/mt6323-poweroff.txt  |  20 ++++
+ .../devicetree/bindings/rtc/rtc-mt6397.txt    |  29 +++++
+ MAINTAINERS                                   |   7 ++
+ arch/arm/boot/dts/mt6323.dtsi                 |  27 +++++
+ drivers/mfd/mt6397-core.c                     |  38 +++++--
+ drivers/power/reset/Kconfig                   |  10 ++
+ drivers/power/reset/Makefile                  |   1 +
+ drivers/power/reset/mt6323-poweroff.c         |  97 ++++++++++++++++
+ drivers/rtc/rtc-mt6397.c                      | 107 ++++--------------
+ include/linux/mfd/mt6397/core.h               |   2 +
+ include/linux/mfd/mt6397/rtc.h                |  71 ++++++++++++
+ 12 files changed, 327 insertions(+), 102 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+ create mode 100644 drivers/power/reset/mt6323-poweroff.c
+ create mode 100644 include/linux/mfd/mt6397/rtc.h
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.17.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
