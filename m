@@ -2,75 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE7F917D8
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Aug 2019 18:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735B9919E7
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 00:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbfHRQcm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Aug 2019 12:32:42 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:44787 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726005AbfHRQcl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 12:32:41 -0400
-Received: from pd9ef1cb8.dip0.t-ipconnect.de ([217.239.28.184] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hzO6Y-0008RU-Iy; Sun, 18 Aug 2019 18:32:30 +0200
-Date:   Sun, 18 Aug 2019 18:32:29 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-cc:     Borislav Petkov <bp@alien8.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Chen Yu <yu.c.chen@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family
- 15h/16h
-In-Reply-To: <919c80f1-53a5-44d2-d785-88890e449b38@citrix.com>
-Message-ID: <alpine.DEB.2.21.1908181831340.1923@nanos.tec.linutronix.de>
-References: <776cb5c2d33e7fd0d2893904724c0e52b394f24a.1565817448.git.thomas.lendacky@amd.com> <a24a2c7d-cfab-a049-37e8-7260a9063a7c@citrix.com> <20190815210547.GL15313@zn.tnic> <312b307b-19cc-84f8-97e6-07dbdf07dd12@citrix.com> <20190817084410.GA15364@zn.tnic>
- <919c80f1-53a5-44d2-d785-88890e449b38@citrix.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1726254AbfHRWUP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Aug 2019 18:20:15 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:36874 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726174AbfHRWUP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 18:20:15 -0400
+Received: by mail-lf1-f67.google.com with SMTP id c9so7548841lfh.4
+        for <linux-pm@vger.kernel.org>; Sun, 18 Aug 2019 15:20:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oDJV2qKgc2rE1ZecO56MT3ujkmelBSa9vGB/ZXufqTw=;
+        b=WQo7LW0wZCePzyiGp719cN5hGt2IqiOZor8+bvWmUAuHbV9PGpTkPF2bK8mSoOXKsk
+         cXos23XIkSNlw0j+eYIVrAy4wm2b3mzq63weuFYrOh9fayfx7WXFe8iSR6qpRdjO706B
+         rZ+5VK/R0mvml612IDYouJwZmejn8+fTgFXdMcvHDx9HRgqz5GEK4f9LALcvvM6rUbci
+         M4mKmHbo8CAYGNbRwBoRtp9vQBSecxXLMFdsHbhuwir5Dk/WpwGKyZBA0s/Rdsr5+nHk
+         jlS3RDdEtsGYcj1oAF3qTYjb6o7I26Q1FPM0SBih/XnZdml1vUXnn5vOE0lsOwhb0Ff8
+         6Chw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oDJV2qKgc2rE1ZecO56MT3ujkmelBSa9vGB/ZXufqTw=;
+        b=kbP47kA/kJ0PXLSVl9670dFd8uMuC6GvCHCPCIdMZaGpCdYi2an6sv06rHM7HWQq9e
+         HmOp2h5eUsEUbtiEaYWsrIEtixRvH3JpZIBYoP1fMcSsbCLRTNFBwoLEo1HrwIIbc0Su
+         P8v8LzvA5Gq/nOzsyEVYz6KkELm6U7soHEzmJbPGBNuDNqQZOgbbVH4BWIwZfYEr1JmA
+         AJ2pMyTBbSKmF9Ifue1xYqEoFnnBOAODCr34BvhnucIvATsuv0DLgFAqV3qkgQLuu8JN
+         P+Z1I5sjk+4cEY8EgQ5I9xcpAH8sjaAraqzcfiMSTeM6R3ybz9WpywuxUmd9Mf8wf6Yx
+         a4KA==
+X-Gm-Message-State: APjAAAVm8iVJh9O/9qwDPbWhlRQzTCv1HnO8uKC/7yOm9rgv7tXI6/Ph
+        cCJlXPKnh0rsO97BZRRJhg/naBL2Gwj3TBLfTj0MYw==
+X-Google-Smtp-Source: APXvYqy5zNUWEXYZ2BNwjMv+MHdjmq2+twXb9Dmljui/KTewQHGrsVYvarl4oFwHNOai9V/3ApArVT6G7+uz+EzX27Y=
+X-Received: by 2002:ac2:5939:: with SMTP id v25mr10723641lfi.115.1566166813184;
+ Sun, 18 Aug 2019 15:20:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+References: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com> <1565984527-5272-2-git-send-email-skomatineni@nvidia.com>
+In-Reply-To: <1565984527-5272-2-git-send-email-skomatineni@nvidia.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 19 Aug 2019 00:20:01 +0200
+Message-ID: <CACRpkdbTYON9nhrP1ritBNcm49u7-c190wL5zeufvUoGQt1jOw@mail.gmail.com>
+Subject: Re: [PATCH v9 01/22] pinctrl: tegra: Fix write barrier placement in pmx_writel
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        jckuo@nvidia.com, Joseph Lo <josephl@nvidia.com>, talho@nvidia.com,
+        linux-tegra@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>, spatra@nvidia.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        viresh kumar <viresh.kumar@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 17 Aug 2019, Andrew Cooper wrote:
-> On 17/08/2019 09:44, Borislav Petkov wrote:
-> > On Thu, Aug 15, 2019 at 10:25:24PM +0100, Andrew Cooper wrote:
-> >> I'm afraid that a number of hypervisors do write-discard, given the
-> >> propensity of OSes (certainly traditionally) to go poking at bits like
-> >> this without wrmsr_safe().
-> >>
-> >> You either need to read the MSR back and observe that the bit has really
-> >> changed, or in this case as Thomas suggests, look at CPUID again (which
-> >> will likely be the faster option for the non-virtualised case).
-> > One thing I didn't think of when we talked about this: this happens only
-> > after you resume the hypervisor.
-> 
-> :) It hadn't escaped my notice, hence the intervention on this thread.
-> 
-> > And the words "resume the hypervisor" already means an improbable use case.
-> 
-> Qubes and OpenXT are two laptop+hypervisor oriented distros where
-> suspend/resume is a big deal, and these will have to follow AMD's
-> recommendation here.
-> 
-> However, for servers which don't do S3/S4, we can reason about safely
-> leaving RDRAND enabled, irrespective of guest configuration.
+On Fri, Aug 16, 2019 at 9:42 PM Sowjanya Komatineni
+<skomatineni@nvidia.com> wrote:
+>
+> pmx_writel uses writel which inserts write barrier before the
+> register write.
+>
+> This patch has fix to replace writel with writel_relaxed followed
+> by a readback and memory barrier to ensure write operation is
+> completed for successful pinctrl change.
+>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 
-Let the administrator reason about it. Default is off for sanity sake.
+Took out the previous patches and applied this instead.
 
-Thanks,
-
-	tglx
+Yours,
+Linus Walleij
