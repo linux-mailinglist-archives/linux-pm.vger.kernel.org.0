@@ -2,373 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F54F91AE3
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 03:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C32591B06
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 04:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726242AbfHSByH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Aug 2019 21:54:07 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:2918 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726103AbfHSByH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 21:54:07 -0400
-X-UUID: 6969ec355a37434b83fa713a135105cc-20190819
-X-UUID: 6969ec355a37434b83fa713a135105cc-20190819
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <henryc.chen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 1044398000; Mon, 19 Aug 2019 09:53:58 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 19 Aug 2019 09:53:58 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 19 Aug 2019 09:53:58 +0800
-Message-ID: <1566179639.6371.14.camel@mtksdaap41>
-Subject: Re: [RFC V2 10/11] interconnect: mediatek: Add mt8183 interconnect
- provider driver
-From:   Henry Chen <henryc.chen@mediatek.com>
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Fan Chen <fan.chen@mediatek.com>,
-        James Liao <jamesjj.liao@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Mon, 19 Aug 2019 09:53:59 +0800
-In-Reply-To: <b8db4f70-4b95-5a98-38b4-9990bae023b4@linaro.org>
-References: <1556614265-12745-1-git-send-email-henryc.chen@mediatek.com>
-         <1556614265-12745-11-git-send-email-henryc.chen@mediatek.com>
-         <b8db4f70-4b95-5a98-38b4-9990bae023b4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726162AbfHSC0o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Aug 2019 22:26:44 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33869 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726132AbfHSC0o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 22:26:44 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b24so239325pfp.1
+        for <linux-pm@vger.kernel.org>; Sun, 18 Aug 2019 19:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=D27NEAPjmVHRvIAbVgVA3ytPoAPu40jjQqNHrVZHT48=;
+        b=AckAnRHGnL7XPKz8rixraSIpon7+sYMNLcrCyi2mP8ep27X6iBjFlqkFteTxNrvx2R
+         L1g+1jS0UaztK5DrINseql9Pvqigl6zzV1shhl7xPHt46y+GkHYwhYCFUdtjBBDXOzJP
+         uWyperagHVSi2zRXotnqK0yBJs58FVG+MJ6jbcrSvS34xFvjlSNvM+MtR8zumEuPBVxu
+         pasKEt9mauuWa1fs6PrvGIDqAgL6baAGpUbMk8PQ4N2RMCbBdZTrZFl2Fpeu2xDP3A6O
+         wcbkgTlNPRhcwezb5WAD7iRIHMnJ5D3wsk93KLfamegdmELQJp4Z9CuU7d5l7KRuHmfp
+         l8KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=D27NEAPjmVHRvIAbVgVA3ytPoAPu40jjQqNHrVZHT48=;
+        b=a4i2odDdTaT3joHwAxYLhqpOblqbZZn/rJxUxzJgEUrVaOS35Ew8QCoSVRHxw7ZSAI
+         Cv98FeGdZjceQTYRE8p3ateYrFBx/GzEXPZEJ3RfPOybW0lhFZmtBVxozbMGlmImMbET
+         A6MQ7R6BzCOOnUFHIqNQpG04CCfQkaoyp/Dkjn37RpBGBBQlo+EPY+Vl1htAZG8xsaBu
+         /uF6RimfQ43xgLWqkHZp5ZA+qMqYwNlR4wwVfP2dQlSRUZmfmRDFVdiAQOS+r2CA0xG5
+         JBaiLQ/I0KF0+imJrgVW0KBzF5vk34XMGakdAXeXl78OtKcgfYVbGRjnYLIgT0uNL6IX
+         Tuyg==
+X-Gm-Message-State: APjAAAWZYLXYj7qQcepxU1PYirOKZSZAz/HuoKoEQ+yjFyeD4GadvDYL
+        qq965osf2lEbxXHf0l3tFckzcA==
+X-Google-Smtp-Source: APXvYqzFkamjOjLS7iubUYiLHgSZJ2tU+Ta59qmQd8iUSUBlL4HURQlT702anrPYAArTzDSw43dvTw==
+X-Received: by 2002:a17:90a:374a:: with SMTP id u68mr18446548pjb.4.1566181603617;
+        Sun, 18 Aug 2019 19:26:43 -0700 (PDT)
+Received: from localhost ([122.172.76.219])
+        by smtp.gmail.com with ESMTPSA id a3sm14170158pfc.70.2019.08.18.19.26.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 18 Aug 2019 19:26:42 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 07:56:14 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 04/10] cpufreq: powerpc_cbe: Switch to QoS requests
+ instead of cpufreq notifier
+Message-ID: <20190819022614.oy5qdozde2afibwu@vireshk-i7>
+References: <cover.1563862014.git.viresh.kumar@linaro.org>
+ <524de8ace0596e68a24b57b3b4043c707db32ca7.1563862014.git.viresh.kumar@linaro.org>
+ <20190809023445.xn3mlv5qxjgz6bpp@vireshk-i7>
+ <CAJZ5v0gQ2RCZGo03=7DoUAxw86wSEaXdnJ2KtknU3uUtXCqmvQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gQ2RCZGo03=7DoUAxw86wSEaXdnJ2KtknU3uUtXCqmvQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Georgi,
+On 09-08-19, 11:01, Rafael J. Wysocki wrote:
+> On Fri, Aug 9, 2019 at 4:34 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 23-07-19, 11:44, Viresh Kumar wrote:
+> > > The cpufreq core now takes the min/max frequency constraints via QoS
+> > > requests and the CPUFREQ_ADJUST notifier shall get removed later on.
+> > >
+> > > Switch over to using the QoS request for maximum frequency constraint
+> > > for ppc_cbe_cpufreq driver.
+> > >
+> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > > ---
+> > >  drivers/cpufreq/ppc_cbe_cpufreq.c     | 19 +++++-
+> > >  drivers/cpufreq/ppc_cbe_cpufreq.h     |  8 +++
+> > >  drivers/cpufreq/ppc_cbe_cpufreq_pmi.c | 96 +++++++++++++++++----------
+> > >  3 files changed, 86 insertions(+), 37 deletions(-)
+> >
+> > -------------------------8<-------------------------
+> 
+> If you do it this way, Patchwork will not pick up the patch.
+> 
+> Please send afresh with "[Update]" or bumped up version number in the
+> subject (or both).
 
-Sorry for late reply.
+Okay, will take care of this in future. Was away on holidays and so
+the late reply. Thanks.
 
-On Tue, 2019-05-14 at 09:43 +0300, Georgi Djakov wrote:
-> Hi Henry,
-> 
-> On 4/30/19 11:51, Henry Chen wrote:
-> > Introduce Mediatek MT8183 specific provider driver using the
-> > interconnect framework.
-> > 
-> > Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
-> > ---
-> >  drivers/interconnect/Kconfig           |   1 +
-> >  drivers/interconnect/Makefile          |   1 +
-> >  drivers/interconnect/mediatek/Kconfig  |  13 ++
-> >  drivers/interconnect/mediatek/Makefile |   5 +
-> >  drivers/interconnect/mediatek/mt8183.c | 223 +++++++++++++++++++++++++++++++++
-> >  5 files changed, 243 insertions(+)
-> >  create mode 100644 drivers/interconnect/mediatek/Kconfig
-> >  create mode 100644 drivers/interconnect/mediatek/Makefile
-> >  create mode 100644 drivers/interconnect/mediatek/mt8183.c
-> > 
-> > diff --git a/drivers/interconnect/Kconfig b/drivers/interconnect/Kconfig
-> > index 07a8276..ac41ea6 100644
-> > --- a/drivers/interconnect/Kconfig
-> > +++ b/drivers/interconnect/Kconfig
-> > @@ -11,5 +11,6 @@ menuconfig INTERCONNECT
-> >  if INTERCONNECT
-> >  
-> >  source "drivers/interconnect/qcom/Kconfig"
-> > +source "drivers/interconnect/mediatek/Kconfig"
-> >  
-> >  endif
-> > diff --git a/drivers/interconnect/Makefile b/drivers/interconnect/Makefile
-> > index 28f2ab0..253f24a3 100644
-> > --- a/drivers/interconnect/Makefile
-> > +++ b/drivers/interconnect/Makefile
-> > @@ -4,3 +4,4 @@ icc-core-objs				:= core.o
-> >  
-> >  obj-$(CONFIG_INTERCONNECT)		+= icc-core.o
-> >  obj-$(CONFIG_INTERCONNECT_QCOM)		+= qcom/
-> > +obj-$(CONFIG_INTERCONNECT_MTK)		+= mediatek/
-> > diff --git a/drivers/interconnect/mediatek/Kconfig b/drivers/interconnect/mediatek/Kconfig
-> > new file mode 100644
-> > index 0000000..0686494
-> > --- /dev/null
-> > +++ b/drivers/interconnect/mediatek/Kconfig
-> > @@ -0,0 +1,13 @@
-> > +config INTERCONNECT_MTK
-> > +	bool "Mediatek Network-on-Chip interconnect drivers"
-> > +	depends on ARCH_MEDIATEK
-> > +	help
-> > +	  Support for Mediatek's Network-on-Chip interconnect hardware.
-> > +
-> > +config INTERCONNECT_MTK_MT8183
-> > +	tristate "Mediatek MT8183 interconnect driver"
-> > +	depends on INTERCONNECT_MTK
-> > +	depends on (MTK_DVFSRC && OF)
-> > +	help
-> > +	  This is a driver for the Mediatek Network-on-Chip on mt8183-based
-> > +	  platforms.
-> > diff --git a/drivers/interconnect/mediatek/Makefile b/drivers/interconnect/mediatek/Makefile
-> > new file mode 100644
-> > index 0000000..a39ceee
-> > --- /dev/null
-> > +++ b/drivers/interconnect/mediatek/Makefile
-> > @@ -0,0 +1,5 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +mtk-mt8183-objs			:= mt8183.o
-> > +
-> > +obj-$(CONFIG_INTERCONNECT_MTK_MT8183) += mtk-mt8183.o
-> > \ No newline at end of file
-> > diff --git a/drivers/interconnect/mediatek/mt8183.c b/drivers/interconnect/mediatek/mt8183.c
-> > new file mode 100644
-> > index 0000000..38ffe0b
-> > --- /dev/null
-> > +++ b/drivers/interconnect/mediatek/mt8183.c
-> > @@ -0,0 +1,223 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
-> > + *
-> > + */
-> > +
-> > +#include <dt-bindings/interconnect/mtk,mt8183.h>
-> > +#include <linux/device.h>
-> > +#include <linux/interconnect.h>
-> 
-> This is not needed.
-ok, thanks.
-> 
-> > +#include <linux/interconnect-provider.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/platform_device.h>
-> > +#include <soc/mediatek/mtk_dvfsrc.h>
-> > +
-> > +#define MT8183_MAX_LINKS	6
-> > +
-> > +/**
-> > + * struct mtk_icc_node - Mediatek specific interconnect nodes
-> > + * @name: the node name used in debugfs
-> > + * @ep: true if the node is an end point.
-> > + * @id: a unique node identifier
-> > + * @links: an array of nodes where we can go next while traversing
-> > + * @num_links: the total number of @links
-> > + * @buswidth: width of the interconnect between a node and the bus
-> 
-> Maybe mention the units?
-ok, I will add it.
-> 
-> > + * @sum_avg: current sum aggregate value of all avg bw requests
-> > + * @max_peak: current max aggregate value of all peak bw requests
-> 
-> units?
-> 
-> > + */
-> > +struct mtk_icc_node {
-> > +	unsigned char *name;
-> > +	bool ep;
-> > +	u16 id;
-> > +	u16 links[MT8183_MAX_LINKS];
-> > +	u16 num_links;
-> > +	u16 buswidth;
-> > +	u64 sum_avg;
-> > +	u64 max_peak;
-> > +};
-> > +
-> > +struct mtk_icc_desc {
-> > +	struct mtk_icc_node **nodes;
-> > +	size_t num_nodes;
-> > +};
-> > +
-> > +#define DEFINE_MNODE(_name, _id, _buswidth, _ep, _numlinks, ...)	\
-> 
-> We can drop the _numlinks and..
-ok, thank you for the advice.
-> 
-> > +		static struct mtk_icc_node _name = {			\
-> > +		.name = #_name,						\
-> > +		.id = _id,						\
-> > +		.buswidth = _buswidth,					\
-> > +		.ep = _ep,						\
-> > +		.num_links = _numlinks,					\
-> 
-> ..just use 	.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ }))
-> 
-> > +		.links = { __VA_ARGS__ },				\
-> > +}
-> > +
-> > +DEFINE_MNODE(ddr_emi, SLAVE_DDR_EMI, 1024, 1, 0, 0);
-> > +DEFINE_MNODE(mcusys, MASTER_MCUSYS, 256, 0, 1, SLAVE_DDR_EMI);
-> > +DEFINE_MNODE(gpu, MASTER_GPU, 256, 0, 1, SLAVE_DDR_EMI);
-> > +DEFINE_MNODE(mmsys, MASTER_MMSYS, 256, 0, 1, SLAVE_DDR_EMI);
-> > +DEFINE_MNODE(mm_vpu, MASTER_MM_VPU, 128, 0, 1, MASTER_MMSYS);
-> > +DEFINE_MNODE(mm_disp, MASTER_MM_DISP, 128, 0, 1, MASTER_MMSYS);
-> > +DEFINE_MNODE(mm_vdec, MASTER_MM_VDEC, 128, 0, 1, MASTER_MMSYS);
-> > +DEFINE_MNODE(mm_venc, MASTER_MM_VENC, 128, 0, 1, MASTER_MMSYS);
-> > +DEFINE_MNODE(mm_cam, MASTER_MM_CAM, 128, 0, 1, MASTER_MMSYS);
-> > +DEFINE_MNODE(mm_img, MASTER_MM_IMG, 128, 0, 1, MASTER_MMSYS);
-> > +DEFINE_MNODE(mm_mdp, MASTER_MM_MDP, 128, 0, 1, MASTER_MMSYS);
-> > +
-> > +static struct mtk_icc_node *mt8183_icc_nodes[] = {
-> > +	&ddr_emi,
-> > +	&mcusys,
-> > +	&gpu,
-> > +	&mmsys,
-> > +	&mm_vpu,
-> > +	&mm_disp,
-> > +	&mm_vdec,
-> > +	&mm_venc,
-> > +	&mm_cam,
-> > +	&mm_img,
-> > +	&mm_mdp,
-> > +};
-> > +
-> > +static struct mtk_icc_desc mt8183_icc = {
-> > +	.nodes = mt8183_icc_nodes,
-> > +	.num_nodes = ARRAY_SIZE(mt8183_icc_nodes),
-> > +};
-> > +
-> > +static int mt8183_icc_aggregate(struct icc_node *node, u32 avg_bw,
-> > +			      u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-> > +{
-> > +	struct mtk_icc_node *in;
-> > +
-> > +	in = node->data;
-> > +
-> > +	*agg_avg += avg_bw;
-> > +	*agg_peak = max_t(u32, *agg_peak, peak_bw);
-> > +
-> > +	in->sum_avg = *agg_avg;
-> > +	in->max_peak = *agg_peak;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mt8183_icc_set(struct icc_node *src, struct icc_node *dst)
-> > +{
-> > +	int ret = 0;
-> > +	struct mtk_icc_node *node;
-> > +
-> > +	node = dst->data;
-> > +	if (node->ep) {
-> > +		pr_debug("sum_avg (%llu), max_peak (%llu)\n",
-> > +			node->sum_avg, node->max_peak);
-> > +		mtk_dvfsrc_send_request(src->provider->dev->parent,
-> > +					MTK_DVFSRC_CMD_BW_REQUEST,
-> > +					node->max_peak);
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int mt8183_icc_probe(struct platform_device *pdev)
-> > +{
-> > +	int ret;
-> > +	const struct mtk_icc_desc *desc;
-> > +	struct icc_node *node;
-> > +	struct icc_onecell_data *data;
-> > +	struct icc_provider *provider;
-> > +	struct mtk_icc_node **mnodes;
-> > +	size_t num_nodes, i, j;
-> > +
-> > +	desc = of_device_get_match_data(&pdev->dev);
-> > +	if (!desc)
-> > +		return -EINVAL;
-> > +
-> > +	mnodes = desc->nodes;
-> > +	num_nodes = desc->num_nodes;
-> > +
-> > +	provider = devm_kzalloc(&pdev->dev, sizeof(*provider), GFP_KERNEL);
-> > +	if (!provider)
-> > +		return -ENOMEM;
-> > +
-> > +	data = devm_kcalloc(&pdev->dev, num_nodes, sizeof(*node), GFP_KERNEL);
-> > +	if (!data)
-> > +		return -ENOMEM;
-> > +
-> > +	provider->dev = &pdev->dev;
-> > +	provider->set = mt8183_icc_set;
-> > +	provider->aggregate = mt8183_icc_aggregate;
-> > +	provider->xlate = of_icc_xlate_onecell;
-> > +	INIT_LIST_HEAD(&provider->nodes);
-> > +	provider->data = data;
-> > +
-> > +	ret = icc_provider_add(provider);
-> > +	if (ret) {
-> > +		dev_err(&pdev->dev, "error adding interconnect provider\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	for (i = 0; i < num_nodes; i++) {
-> > +		node = icc_node_create(mnodes[i]->id);
-> > +		if (IS_ERR(node)) {
-> > +			ret = PTR_ERR(node);
-> > +			goto err;
-> > +		}
-> > +
-> > +		node->name = mnodes[i]->name;
-> > +		node->data = mnodes[i];
-> > +		icc_node_add(node, provider);
-> > +
-> > +		dev_dbg(&pdev->dev, "registered node %s, num link: %d\n",
-> > +			mnodes[i]->name, mnodes[i]->num_links);
-> > +
-> > +		/* populate links */
-> > +		for (j = 0; j < mnodes[i]->num_links; j++)
-> > +			icc_link_create(node, mnodes[i]->links[j]);
-> > +
-> > +		data->nodes[i] = node;
-> > +	}
-> > +	data->num_nodes = num_nodes;
-> > +
-> > +	platform_set_drvdata(pdev, provider);
-> > +
-> > +	return ret;
-> 
-> just return 0;
-ok.
-> 
-> > +err:
-> > +	list_for_each_entry(node, &provider->nodes, node_list) {
-> > +		icc_node_del(node);
-> > +		icc_node_destroy(node->id);
-> > +	}
-> > +
-> > +	icc_provider_del(provider);
-> > +	return ret;
-> > +}
-> > +
-> > +static int mt8183_icc_remove(struct platform_device *pdev)
-> > +{
-> > +	struct icc_provider *provider = platform_get_drvdata(pdev);
-> > +	struct icc_node *n;
-> > +
-> > +	list_for_each_entry(n, &provider->nodes, node_list) {
-> > +		icc_node_del(n);
-> > +		icc_node_destroy(n->id);
-> > +	}
-> > +
-> > +	return icc_provider_del(provider);
-> > +}
-> > +
-> > +static const struct of_device_id mt8183_icc_of_match[] = {
-> > +	{ .compatible = "mediatek,mt8183-emi-icc", .data = &mt8183_icc },
-> 
-> A separate -icc compatible should not be needed.
-ok.
-> 
-> Thanks,
-> Georgi
-
-
+-- 
+viresh
