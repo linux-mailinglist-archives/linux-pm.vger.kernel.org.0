@@ -2,210 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3371B94F36
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 22:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D01394F5A
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 22:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbfHSUlW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 16:41:22 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:37528 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728287AbfHSUlW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 16:41:22 -0400
-Received: by mail-ot1-f65.google.com with SMTP id f17so2959263otq.4;
-        Mon, 19 Aug 2019 13:41:21 -0700 (PDT)
+        id S1728177AbfHSUvl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 16:51:41 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:39099 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728018AbfHSUvl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 16:51:41 -0400
+Received: by mail-vs1-f66.google.com with SMTP id y62so2094516vsb.6
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 13:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+KzCPfliyJhvJ1c0iMQplTZBNeAA1mxUAJd/xcjNV38=;
+        b=ZihfdZckUcDLIFJ3PBKZNuHrFkrg+kl8Q6esH4q1/HG09NGkQVfscJhS9miTcnmWs9
+         hceJ+fMwhxQGzS0Dy9BDD+njDCPCL+AijCDXvK7SmVsHl+YoMxmceVUYrKOcgGznl2yS
+         OZjTRZi60IVwsHNDqxCqC/BCb48qPqWzB6cOmQCpoS+nSoynsxYXKC1v67kB7oEOMjUx
+         d4qS6L6FJPzQsjexyx1rl4fX21XNUBdvlwjtv2AFsPKyatA11Da4oAkHVQD+iG7UVRBp
+         s7RFnzAncWiSWDYWZEWm/VOXRHf3po8HA7y0L2/spCPNggZ+yUTZKNoz3vCGQ9w0mM53
+         VYCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tJdZNnplVegzt+TgRTqlzFyXprTlOmI4DpqvsRrDvYQ=;
-        b=l2OPHveQ6xDKzBAh87FZInvkowDwOMrjr0yo+BfAB8s+5Sm2WKTzsSeENgsJd69Bw+
-         WDOLogrTzar2KNQUQ0ODhPa4+ntmPVIcDPLKK3jhkYv+2sJXhz9Uup8a2UARdEOvPp39
-         dFSmNGfGK5wBldtdlU8rEOSit3ZqKmULI8C2eMui2C893zYePtNZKqJMuwJ7b6yGHhzG
-         sqBQj0L49eqojX2INr75MevpfZ+GS8ed4RSbRdaOrzhhkyRh5qK6tqEJ6uurDM1vV7k0
-         ndP8U0DvVNzrspdgvxEvW1EOoaeWL/fJoJ1J2z0tGNr2hX8GNc5N/APXkr4wXaGSMOa1
-         TErw==
-X-Gm-Message-State: APjAAAUlHSO+ozOm3C2iXE7K4eBbU1JrFuf+wBB700EVzFQo9mIeeMoD
-        KGhhmXnJh5VgeWGtADt/SwA88Rn4TmSaa9NoUlE=
-X-Google-Smtp-Source: APXvYqzlNkB2CXycQGwvCMQTD54KCcW0ivmSeyzaOsS0aBHWF90MFmq7Ki0D6IHaZGSMEW6akYBiWbNUuTYhsOCQsBE=
-X-Received: by 2002:a9d:65ca:: with SMTP id z10mr18716347oth.167.1566247280754;
- Mon, 19 Aug 2019 13:41:20 -0700 (PDT)
+        bh=+KzCPfliyJhvJ1c0iMQplTZBNeAA1mxUAJd/xcjNV38=;
+        b=YtuVCmOpgllo4yqPJ5w6ArmqWK1lJJehPESajaXpYScjceoTVVjf2oEAkXZyNcQEx/
+         b8XKgDpPAGVl9VKVWrsxwKFmyvZEwF+gQ9GW+KdhbI7rFhD+9kFABBxXHOLPu7S3N3ah
+         y3dxq6GaBsnPWda68vNXWM0PFKCGPIKwwmfz/1zW6dATPVbk7lL+i+/mkQJoBemqCRC8
+         Ycjzzp+aQavgYzyaZttX1mkwEAt8W2Sa21JILEdI9fzf8CLe5c1fXzy1/AlVkkPJbNyD
+         q6yfqg7G1dkV2Tzv83ffSA44ZI9ZEhgNX7PhTmJWYHXl4vwXl+tsLm2ECiE4kKn8NOCw
+         SDmw==
+X-Gm-Message-State: APjAAAXYqeg4dqiNRPPNWa7QuYV5IeBpkAXju7kErgb9GWBOs3ckb5aY
+        D3Qe4z4CQxQ7pj4hYOXrNzSn9tsZj8ntPYW7nEhBzQ==
+X-Google-Smtp-Source: APXvYqwMeMBbIPB8ft3bcughnTjtU/edJ5Dpzo878P9xKkEJ1gCCS8aAJV2Gg+izjIwwMP3lPY6yhB4o44HWe21dUZU=
+X-Received: by 2002:a67:df07:: with SMTP id s7mr11007757vsk.27.1566247899971;
+ Mon, 19 Aug 2019 13:51:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <5997740.FPbUVk04hV@kreacher> <800186a2-e912-3498-f08b-47469bbe8b0d@klausen.dk>
- <CAJZ5v0hfMS6aJP9G=dhZZ+3WTzM8=DzQkdJ7s9W3m5m9Dat5=g@mail.gmail.com>
- <1585707.yWhsc4YUgi@kreacher> <6bf51526-edf3-6698-b251-ef0c94b766fc@klausen.dk>
-In-Reply-To: <6bf51526-edf3-6698-b251-ef0c94b766fc@klausen.dk>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 19 Aug 2019 22:41:09 +0200
-Message-ID: <CAJZ5v0gw1Dw8FUgKmkeq5TCa=OqvFUVTq6aHgFw-D9O4YiiCKw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to suspend-to-idle
-To:     Kristian Klausen <kristian@klausen.dk>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+References: <cover.1564091601.git.amit.kucheria@linaro.org>
+ <07de61a57cf2362169d3b128405d7305eb20785f.1564091601.git.amit.kucheria@linaro.org>
+ <5d577f95.1c69fb81.6c07e.44da@mx.google.com>
+In-Reply-To: <5d577f95.1c69fb81.6c07e.44da@mx.google.com>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Tue, 20 Aug 2019 02:21:28 +0530
+Message-ID: <CAHLCerN+xBTQapOeJRuX2=-Fo1GSVBhG-84memLHS4bG+SHyLw@mail.gmail.com>
+Subject: Re: [PATCH 14/15] drivers: thermal: tsens: Create function to return
+ sign-extended temperature
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
+        Andy Gross <andy.gross@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 5:47 PM Kristian Klausen <kristian@klausen.dk> wrote:
+On Sat, Aug 17, 2019 at 9:46 AM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> On 19.08.2019 11.05, Rafael J. Wysocki wrote:
-> > On Monday, August 19, 2019 9:59:02 AM CEST Rafael J. Wysocki wrote:
-> >> On Fri, Aug 16, 2019 at 10:26 PM Kristian Klausen <kristian@klausen.dk> wrote:
-> >>> On 02.08.2019 12.33, Rafael J. Wysocki wrote:
-> >>>> Hi All,
-> >>>>
-> >>>>>> On top of the "Simplify the suspend-to-idle control flow" patch series
-> >>>>>> posted previously:
-> >>>>>>
-> >>>>>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
-> >>>>>>
-> >>>>>> sanitize the suspend-to-idle flow even further.
-> >>>>>>
-> >>>>>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
-> >>>>>>
-> >>>>>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
-> >>>>>> specification-compliant order with respect to suspending and resuming
-> >>>>>> devices (patch 2).
-> >>>>>>
-> >>>>>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
-> >>>>>> switch to prevent the LPS0 _DSM from being used.
-> >>>>> The v2 is because I found a (minor) bug in patch 1, decided to use a module
-> >>>>> parameter instead of a kernel command line option in patch 4.  Also, there
-> >>>>> are 4 new patches:
-> >>>>>
-> >>>>> Patch 5: Switch the EC over to polling during "noirq" suspend and back
-> >>>>> during "noirq" resume.
-> >>>>>
-> >>>>> Patch 6: Eliminate acpi_sleep_no_ec_events().
-> >>>>>
-> >>>>> Patch 7: Consolidate some EC code depending on PM_SLEEP.
-> >>>>>
-> >>>>> Patch 8: Add EC GPE dispatching debug message.
-> >>>> The v3 is just a rearranged v2 so as to move the post sensitive patch (previous patch 2)
-> >>>> to the end of the series.   [After applying the full series the code is the same as before.]
-> >>>>
-> >>>> For easier testing, the series (along with some previous patches depended on by it)
-> >>>> is available in the pm-s2idle-testing branch of the linux-pm.git tree at kernel.org:
-> >>>>
-> >>>> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
-> >>> It was just testing this patch series(461fc1caed55), to see if it would
-> >>> fix my charging issue
-> >>> (https://bugzilla.kernel.org/show_bug.cgi?id=201307), which it didn't.
-> >> It is unlikely to help in that case.
-> Do you have any idea what the issue could be?
-
-Basically, there are two possibilities: either the OS is expected to
-handle the AC/battery switching events, or the platform firmware
-should take care of them.  In the former case, the EC should generate
-events to be handled by the OS and in the latter one there needs to be
-a way to let the platform firmware that it needs to take care of those
-events going forward.
-
-In either case there may be a platform-specific action to be carried
-out during suspend and resume to set this up as expected which may be
-missing.
-
-> >>
-> >>> I did however notice that my laptop (ASUS Zenbook UX430UNR/i7-8550U)
-> >>> won't wake when opening the lid or pressing a key, the only way to wake
-> >>> the laptop is pressing the power button.
-> >>>
-> >>> I also tested mainline (5.3.0-rc4 b7e7c85dc7b0) and 5.2.8 and the laptop
-> >>> wakes without issue when the lid is opened or a key is presed.
-> >>>> Please refer to the changelogs for details.
-> >> Thanks for your report.
-> >>
-> >> I seem to see a similar issue with respect to the lid on one of my
-> >> test machines, looking into it right now.
-> > Well, my lid issue seems to be unrelated as it doesn't result from any patches in the
-> > series in question.
+> Quoting Amit Kucheria (2019-07-25 15:18:49)
+> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> > index 7ab2e740a1da..13a875b99094 100644
+> > --- a/drivers/thermal/qcom/tsens-common.c
+> > +++ b/drivers/thermal/qcom/tsens-common.c
+> > @@ -84,13 +84,35 @@ static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
+> >         return degc;
+> >  }
 > >
-> > First off, please clone 5.3-rc5 from kernel.org and double check if the issue is not
-> > present in that one.
-> >
-> > If that's not the case, merge the pm-s2idle-rework branch from my tree on top of it
-> > and retest.
-> >
-> > If you still see the issue then, apply the appended patch (on top of the pm-s2idle-reqork
-> > branch ) and, after starting the kernel, do
-> >
-> > # echo 1 > /sys/power/pm_debug_messages
-> >
-> > suspend the system and try to wake it up through all of the ways that stopped working.
-> >
-> > Then, wake it up with the power button, save the output of dmesg and send it to me.
-> >
-> > Thanks!
+> > +/**
+> > + * tsens_hw_to_mC - Return properly sign extended temperature in mCelsius,
 >
-> With 5.3-rc5 the laptops wakes up without any issue when pressing a key
-> or opening the lid.
-> With v5.3-rc5+pm-s2idle-testing I can only wake the laptop by pressing
-> the power button.
+> Can you make this proper kernel-doc? Describe the arguments and have a
+> "Return:" section.
 
-OK, thanks for verifying.
+Will fix.
 
-So it is unclear to me how the series can cause an issue like that to appear.
+> > + * whether in ADC code or deciCelsius depending on IP version.
+> > + * This function handles the different widths of the signed integer across IPs.
+> > + */
+> > +static int tsens_hw_to_mC(char *str, struct tsens_sensor *s, int field, int temp)
+> > +{
+> > +       struct tsens_priv *priv = s->priv;
+> > +       u32 mask;
+> > +
+> > +       if (priv->feat->adc) {
+> > +               /* Convert temperature from ADC code to milliCelsius */
+> > +               return code_to_degc(temp, s) * 1000;
+> > +       } else {
+>
+> Please deindent and drop the else because there's a return above.
 
-> dmesg with pm_debug_messages=1 and your patch:
-> [   55.646109] PM: suspend entry (s2idle)
-> [   55.698559] Filesystems sync: 0.052 seconds
-> [   55.698561] PM: Preparing system for sleep (s2idle)
-> [   55.700661] Freezing user space processes ... (elapsed 0.210 seconds)
-> done.
-> [   55.911494] OOM killer disabled.
-> [   55.911495] Freezing remaining freezable tasks ... (elapsed 0.001
-> seconds) done.
-> [   55.913192] PM: Suspending system (s2idle)
-> [   55.913195] printk: Suspending console(s) (use no_console_suspend to
-> debug)
-> [   55.914778] [drm] CT: disabled
-> [   55.916057] wlan0: deauthenticating from 64:70:02:a5:fd:02 by local
-> choice (Reason: 3=DEAUTH_LEAVING)
-> [   56.045634] sd 2:0:0:0: [sda] Synchronizing SCSI cache
-> [   56.046650] sd 2:0:0:0: [sda] Stopping disk
-> [   56.287622] PM: suspend of devices complete after 371.285 msecs
-> [   56.287627] PM: start suspend of devices complete after 373.684 msecs
-> [   56.307155] PM: late suspend of devices complete after 19.477 msecs
-> [   56.312479] ACPI: EC: interrupt blocked
-> [   56.352761] PM: noirq suspend of devices complete after 45.205 msecs
-> [   56.352770] ACPI: \_PR_.PR00: LPI: Device not power manageable
-> [   56.352774] ACPI: \_PR_.PR01: LPI: Device not power manageable
-> [   56.352776] ACPI: \_PR_.PR02: LPI: Device not power manageable
-> [   56.352779] ACPI: \_PR_.PR03: LPI: Device not power manageable
-> [   56.352782] ACPI: \_PR_.PR04: LPI: Device not power manageable
-> [   56.352785] ACPI: \_PR_.PR05: LPI: Device not power manageable
-> [   56.352788] ACPI: \_PR_.PR06: LPI: Device not power manageable
-> [   56.352790] ACPI: \_PR_.PR07: LPI: Device not power manageable
-> [   56.352793] ACPI: \_SB_.PCI0.GFX0: LPI: Device not power manageable
-> [   56.352800] ACPI: \_SB_.PCI0.RP06.PXSX: LPI: Device not power manageable
-> [   56.357057] PM: suspend-to-idle
-> [   69.338656] PM: Timekeeping suspended for 12.178 seconds
-> [   69.338701] PM: irq_pm_check_wakeup: IRQ 9
-> [   69.338704] PM: IRQ wakeup: IRQ 9
+Will fix.
 
-This clearly is the power button event causing the system to wake up.
-The other actions, whatever they were, didn't cause any interrupts to
-be triggered.
 
-I suspect that the issue is related to the EC, so please try to revert commit
+> > +               mask = GENMASK(priv->fields[field].msb,
+> > +                              priv->fields[field].lsb) >> priv->fields[field].lsb;
+>
+> Why is the mask generated, shifted right, sent into fls(), and then
+> passed to sign_extend32? Shoudln't it be something like
+>
+>         sign_extend32(temp, priv->fields[field].msg - priv->fiels[field].lsb - 1)
 
-fcd0a04267ac ACPI: PM: s2idle: Switch EC over to polling during "noirq" suspend
+Yes, that should work and greatly simply the function. Will fix.
 
-and see if that makes any difference (should revert cleanly).
-
-If that doesn't make any difference, please also try to revert commits
-(on top of the above revert)
-
-11f26633cccb PM: suspend: Fix platform_suspend_prepare_noirq()
-ac9eafbe930a ACPI: PM: s2idle: Execute LPS0 _DSM functions with
-suspended devices
-
-(in this order) and retest.
+> > +               dev_dbg(priv->dev, "%s: mask: %d\n", str, fls(mask));
+> > +               /* Convert temperature from deciCelsius to milliCelsius */
+> > +               return sign_extend32(temp, fls(mask) - 1) * 100;
+> > +       }
+> > +}
+> > +
+> > @@ -112,15 +134,7 @@ int get_temp_tsens_valid(struct tsens_sensor *s, int *temp)
+> >         if (ret)
+> >                 return ret;
+> >
+> > -       if (priv->feat->adc) {
+> > -               /* Convert temperature from ADC code to milliCelsius */
+> > -               *temp = code_to_degc(last_temp, s) * 1000;
+> > -       } else {
+> > -               mask = GENMASK(priv->fields[LAST_TEMP_0].msb,
+> > -                              priv->fields[LAST_TEMP_0].lsb);
+> > -               /* Convert temperature from deciCelsius to milliCelsius */
+> > -               *temp = sign_extend32(last_temp, fls(mask) - 1) * 100;
+>
+> Oh the code is copied. Seems really complicated still.
+>
+> > -       }
+> > +       *temp = tsens_hw_to_mC("get_temp", s, LAST_TEMP_0, last_temp);
