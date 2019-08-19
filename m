@@ -2,81 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A3A94C2D
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 19:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2819D94C35
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 19:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728128AbfHSR6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 13:58:23 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39205 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727957AbfHSR6W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 13:58:22 -0400
-Received: by mail-pg1-f196.google.com with SMTP id u17so1642502pgi.6
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 10:58:22 -0700 (PDT)
+        id S1728165AbfHSR7i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 13:59:38 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34705 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727835AbfHSR7i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 13:59:38 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b24so1610617pfp.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 10:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=message-id:mime-version:content-transfer-encoding:in-reply-to
          :references:subject:from:cc:to:user-agent:date;
-        bh=HoVmSkEe13oQswbHPUJHfU6oOJm3g2HoCRDfFS6v2nE=;
-        b=WRSqAnMYQuRmKa8OeeXjBJh7hCRuFuvWgw3KW8lNHU+42UKEiLm3GJsfYWFUWUKytk
-         YajmqMxJ6pqgduqWCTAMQtoStuBtKaMGVWmRpWGO6r7aZAk5ohA6+8OzL1TmME5HbInZ
-         Jne+raVcvh/vvA+rp+fFzaTSjISdN3IqM9Dsc=
+        bh=SJOOj6olxFQRqjrRfjeJgYnys/AXxatkSyB1FQQ9L/Q=;
+        b=XR6mmmgNNI2WavLy9/anETqmroNgKCK8LiC4+iFowHiVpZgmWbqyiEYy9IPM1CcHDK
+         bHb3Kgtya/1X7BARqYZEzum94Cj+ENuckx2Ja7F71V9iahCof6NgLEyzxBnu3Ia0hFeH
+         IGHW1m15ZLmZdnJmziTSdGSEmVpcxmMARdMdE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:mime-version
          :content-transfer-encoding:in-reply-to:references:subject:from:cc:to
          :user-agent:date;
-        bh=HoVmSkEe13oQswbHPUJHfU6oOJm3g2HoCRDfFS6v2nE=;
-        b=bQNA6qMDVSDrcBvXXoFKdgWjuokPvQ3k4oAgClA5LmJ0phmqTLb8m0SbJfNEpmQEYc
-         9fKQvripjdC54e8PILBjyD9IF3w47zEXmUNEpN5ckrEiYLOIzKht0CO4tOSGfYWJOmEI
-         pSOCS8yWMQk53xSgf+fw+hOUK/fNiyYOM9f9Um3ocS5kE6utLuvyTxdATLCi3WIaCMIb
-         DiSAysT7EJK09KuTCJW4vM3stcJ26UYxDtt8MKsX3zSRZR+BIEUoMic5Dut8Y4q1aYCQ
-         F/ACiGQEex14uDXxPZadF5WafBS5qvsnxTTvJuNuRUcJR6MThKYQEQP7WB9d1VFrhHYn
-         Og+Q==
-X-Gm-Message-State: APjAAAUi9o8i6DunZKpdBV6D/+EEtSa6fyLfRhtAe5ivAwJo9UiJOXor
-        mqA2LjkLvYUh0RYxF4i0ltyCPA==
-X-Google-Smtp-Source: APXvYqwjJi4PF0tOiJFK9Fzga9qOPXzicdB09KvGaSWb7z0d1TsMp2llrCLtwaNJ06hA69FTJDdx7A==
-X-Received: by 2002:a63:5a0a:: with SMTP id o10mr21379964pgb.282.1566237501974;
-        Mon, 19 Aug 2019 10:58:21 -0700 (PDT)
+        bh=SJOOj6olxFQRqjrRfjeJgYnys/AXxatkSyB1FQQ9L/Q=;
+        b=hPVVCnFFy+2am3tfLqKGSa3+IF3azSSjhVEvVaKIGPrCYDHJNgUJQj0AHbHdmeXzvN
+         82vyB+gpSX9PEUWsTCc4gFugWqg58+AA/Zw1G6VX7kfQl1Yt7/syYw7OaVNoxpgLKduR
+         0jAaEIfomkehRmd8iziLBA51auG1MhM0vBolypjfMmN6ODrlgnrSS20I/zszswqujsF6
+         LMQJPE0j4oYb6dSoBi9/SiaUiH7EmjwK2zXFHpzEah1EZNZRU/ZycWE2BRsMtHUJF8O/
+         7Uk3qdn2oo1fMUIA5aFtZUgsWCZazYKmzpIfBaZFtQ2tDao/T/6DeGyYQWD5HZTblLrU
+         qzkw==
+X-Gm-Message-State: APjAAAW0dVzOO42SwlG7NtTUPE3f3RqhANkCjoKYLCtVPDZvR76jTV9q
+        VrvVC6LbAyl4n6HBguMYv9AR0Q==
+X-Google-Smtp-Source: APXvYqzTOYVM7Zk78xk9eKa8c8LP/wSZ2lxqVDb2CVkjo0gNjyjiFXmm7q3184wtTzkvQK+Otp9tCw==
+X-Received: by 2002:a17:90a:c20e:: with SMTP id e14mr23074735pjt.0.1566237578018;
+        Mon, 19 Aug 2019 10:59:38 -0700 (PDT)
 Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id h70sm14930028pgc.36.2019.08.19.10.58.21
+        by smtp.gmail.com with ESMTPSA id ck8sm13839498pjb.25.2019.08.19.10.59.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 10:58:21 -0700 (PDT)
-Message-ID: <5d5ae33d.1c69fb81.49902.678d@mx.google.com>
+        Mon, 19 Aug 2019 10:59:37 -0700 (PDT)
+Message-ID: <5d5ae389.1c69fb81.cb730.3225@mx.google.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190819101238.17335-1-niklas.cassel@linaro.org>
-References: <20190725104144.22924-10-niklas.cassel@linaro.org> <20190819101238.17335-1-niklas.cassel@linaro.org>
-Subject: Re: [PATCH v3 09/14] dt-bindings: opp: Add qcom-opp bindings with properties needed for CPR
+In-Reply-To: <20190819100957.17095-1-niklas.cassel@linaro.org>
+References: <20190725104144.22924-7-niklas.cassel@linaro.org> <20190819100957.17095-1-niklas.cassel@linaro.org>
+Subject: Re: [PATCH v3 06/14] dt-bindings: cpufreq: qcom-nvmem: Support pstates provided by a power domain
 From:   Stephen Boyd <swboyd@chromium.org>
 Cc:     linux-arm-msm@vger.kernel.org, jorge.ramirez-ortiz@linaro.org,
         bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
         Niklas Cassel <niklas.cassel@linaro.org>,
+        Rob Herring <robh@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Andy Gross <agross@kernel.org>,
+To:     Andy Gross <agross@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
         Niklas Cassel <niklas.cassel@linaro.org>,
         Nishanth Menon <nm@ti.com>, Viresh Kumar <vireshk@kernel.org>
 User-Agent: alot/0.8.1
-Date:   Mon, 19 Aug 2019 10:58:20 -0700
+Date:   Mon, 19 Aug 2019 10:59:36 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Niklas Cassel (2019-08-19 03:12:38)
-> Add qcom-opp bindings with properties needed for Core Power Reduction
-> (CPR).
->=20
-> CPR is included in a great variety of Qualcomm SoCs, e.g. msm8916 and
-> msm8996. CPR was first introduced in msm8974.
->=20
-> Co-developed-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
-> ---
+Quoting Niklas Cassel (2019-08-19 03:09:57)
+> +
+> +soc {
+> +....
+> +       cprpd: cpr@b018000 {
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Maybe node name should be 'avs' for the industry standard adaptive
+voltage scaling acronym?
 
+
+> +               compatible =3D "qcom,qcs404-cpr", "qcom,cpr";
+> +               reg =3D <0x0b018000 0x1000>;
+> +               ....
+> +               vdd-apc-supply =3D <&pms405_s3>;
+> +               #power-domain-cells =3D <0>;
