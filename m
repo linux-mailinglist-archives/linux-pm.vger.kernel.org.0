@@ -2,132 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A9091FB0
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 11:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C4A9206A
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 11:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727357AbfHSJJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 05:09:33 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:40253 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727353AbfHSJJc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 05:09:32 -0400
-Received: by mail-pl1-f196.google.com with SMTP id h3so671132pls.7
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 02:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NbQHubvtE7M8Mm9C2LyqFuVWNwA8k3gi8WsBVYz2BKg=;
-        b=pc8kLgoVhNLslClp12JPBSjxR0z3JujowkefS6jDPR1UHNdaucastVWa59gQ8D8lbt
-         0MGRCHg9mrrnVUEfo2wUi3Iuo4Wu/u4lTKjXKpkr+Tlfx/BRr9ewsDbvTa439fOCKAWy
-         gTNy7KwC7wgAB85feFTYk/OxyRVTcFs813go5F4A5aBrEQw9RGPiNr2rZIGcrlgWyz5N
-         6pgP0WkpVzuKxOY1AQNKLZxQAzOGxLLYsNoE6uTn4EPuyi7iNjn+PiZk2iz7xo/9yaMa
-         nFp2BO9hS20XmNof1YVo4GXNSbggWhClhVXVv57TZFoKGOoMpANkEOqkT11+rV6L9FFv
-         LnKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NbQHubvtE7M8Mm9C2LyqFuVWNwA8k3gi8WsBVYz2BKg=;
-        b=R2KcHriWAWU6xVLTH8Ms+Xzi5pJVISeoiNLtsGbUzBHJQZNQdxHCexoVZ0N98IHFor
-         VxyNkFYnWO50ZA9UAlx2HxSQjTQ2xeLQxr9jX6zEcgQj2fWy4icoxoNK28fSTsStdkae
-         xDKB3YpAHWOfuHVtWp4xL6h/OnpTxL7Hjj3f1hLxp90WRCKa6GKWMZZqGb3SwdYJzoGT
-         FVgSjTz+/bbI5gT9bBSpuuGJSeuosMDU7iZr7kFG3RIyefryk5VsyieGTL8xGqtudB7F
-         NoXLxmxlw/40+YuBp5wJT3OPk1Cq7UnGfBrjsAvwaQ2KNUY2VP1unBWgBMEkb6+t7j7A
-         1Nfw==
-X-Gm-Message-State: APjAAAXPUtQucNrdccj91xaPaQ6+CVgsvptmdLknLUIQzsHoelJI0EeU
-        EVlvYt4RPJmK5/HFDuJtV0o0jQ==
-X-Google-Smtp-Source: APXvYqwkWKQ15NL5sU2NfelXo3wfOTdqz6Icamd3E43Zqn+osblR5WcJ5sPyUi8DObCUnMzd+CCJow==
-X-Received: by 2002:a17:902:a8:: with SMTP id a37mr6159528pla.316.1566205772237;
-        Mon, 19 Aug 2019 02:09:32 -0700 (PDT)
-Received: from localhost ([122.172.76.219])
-        by smtp.gmail.com with ESMTPSA id z19sm13413609pgv.35.2019.08.19.02.09.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 02:09:31 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 14:39:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>, krzk@kernel.org,
-        robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
-        kgene@kernel.org, pankaj.dubey@samsung.com,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com
-Subject: Re: [PATCH v2 0/9] Exynos Adaptive Supply Voltage support
-Message-ID: <20190819090928.pke6cov52n4exlbp@vireshk-i7>
-References: <CGME20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1@eucas1p1.samsung.com>
- <20190718143044.25066-1-s.nawrocki@samsung.com>
- <20190723020450.z2pqwetkn2tfhacq@vireshk-i7>
- <5ef302a4-5bbf-483d-dfdf-cf76f6f69cee@samsung.com>
- <20190725022343.p7lqalrh5svxvtu2@vireshk-i7>
- <562dd2e7-2b24-8492-d1c1-2dc4973f07be@samsung.com>
+        id S1726607AbfHSJdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 05:33:22 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:41410 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbfHSJdW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 05:33:22 -0400
+Received: from 79.184.254.79.ipv4.supernova.orange.pl (79.184.254.79) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
+ id 9d45e80d828adeac; Mon, 19 Aug 2019 11:33:19 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tri Vo <trong@android.com>, Tony Lindgren <tony@atomide.com>,
+        Qian Cai <cai@lca.pw>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: "PM / wakeup: Show wakeup sources stats in sysfs" causes boot warnings
+Date:   Mon, 19 Aug 2019 11:33:19 +0200
+Message-ID: <1682360.syUnOcd5pY@kreacher>
+In-Reply-To: <5d56bb77.1c69fb81.58e9d.1f86@mx.google.com>
+References: <1565731976.8572.16.camel@lca.pw> <CAJZ5v0hY8=0j=heXuAS-5cBafDSE8ZakLDW4NGCjAbxUAt3j4Q@mail.gmail.com> <5d56bb77.1c69fb81.58e9d.1f86@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <562dd2e7-2b24-8492-d1c1-2dc4973f07be@samsung.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-08-19, 17:58, Sylwester Nawrocki wrote:
-> Thank you for your suggestions.
+On Friday, August 16, 2019 4:19:35 PM CEST Stephen Boyd wrote:
+> Quoting Rafael J. Wysocki (2019-08-16 05:17:23)
+> > On Wed, Aug 14, 2019 at 8:37 PM Tri Vo <trong@android.com> wrote:
+> > >
+> > > On Wed, Aug 14, 2019 at 1:40 AM Tony Lindgren <tony@atomide.com> wrote:
+> > > >
+> > > > * Stephen Boyd <swboyd@chromium.org> [691231 23:00]:
+> > > > > I also notice that device_set_wakeup_capable() has a check to see if the
+> > > > > device is registered yet and it skips creating sysfs entries for the
+> > > > > device if it isn't created in sysfs yet. Why? Just so it can be called
+> > > > > before the device is created? I guess the same logic is handled by
+> > > > > dpm_sysfs_add() if the device is registered after calling
+> > > > > device_set_wakeup_*().
+> > > >
+> > > > Hmm just guessing.. It's maybe because drivers can enable and disable
+> > > > the wakeup capability at any point for example like driver/net drivers
+> > > > do based on WOL etc?
+> > > >
+> > > > > There's two approaches I see:
+> > > > >
+> > > > >       1) Do a similar check for device_set_wakeup_enable() and skip
+> > > > >       adding the wakeup class until dpm_sysfs_add().
+> > > > >
+> > > > >       2) Find each case where this happens and only call wakeup APIs
+> > > > >       on the device after the device is added.
+> > > > >
+> > > > > I guess it's better to let devices have wakeup modified on them before
+> > > > > they're registered with the device core?
+> > > >
+> > > > I think we should at least initially handle case #1 above as multiple
+> > > > places otherwise seem to break. Then maybe we could add a warning to
+> > > > help fix all the #2 cases if needed?
+> > >
+> > > Makes sense. For case#1, we could also just register the wakeup source
+> > > without specifying the parent device if the latter hasn't been
+> > > registered yet. Userspace won't be able to associate a wakeup source
+> > > to the parent device. But I think it's a reasonable fix, assuming we
+> > > want to fix devices not being added before calling wakeup APIs #2.
+> > 
+> > Well, OK
+> > 
+> > I'm going to drop the entire series from linux-next at this point and
+> > let's start over.
 > 
-> For some Exynos SoC variants the algorithm of selecting CPU voltage supply
-> is a bit more complex than just selecting a column in the frequency/voltage 
-> matrix, i.e. selecting a set of voltage values for whole frequency range.
+> I was going to send the first patch I floated as a more formal patch to
+> be applied to the PM tree. I was waiting to see if the semantics of
+> device_set_wakeup_*() could be clarified because I don't understand if
+> they're allowed to be called before device_add().
 > 
-> Frequency range could be divided into sub-ranges and to each such a sub-range 
-> part of different column could be assigned, depending on data fused in 
-> the CHIPID block registers.
+> > 
+> > Also note that all of this is not an issue until we start to add
+> > children under the device passed to device_set_wakeup_enable() and
+> > friends so maybe that is not a good idea after all?
 > 
-> We could create OPP node for each frequency and specify all needed voltages 
-> as a list of "opp-microvolt-<name>" properties but apart from the fact that 
-> it would have been quite many properties, e.g. 42 (3 tables * 14 columns), 
-> only for some SoC types the dev_pm_opp_set_prop_name() approach could be 
-> used. We would need to be able to set opp-microvolt-* property name 
-> separately for each frequency (OPP).
-> 
-> Probably most future proof would be a DT binding where we could still 
-> re-create those Exynos-specific ASV tables from DT. For example add named 
-> opp-microvolt-* properties or something similar to hold rows of each ASV 
-> table. But that conflicts with "operating-points-v2" binding, where 
-> multiple OPP voltage values are described by just named properties and 
-> multiple entries correspond to min/target/max.
-> 
-> opp_table0 {
-> 	compatible = "...", "operating-points-v2";
-> 	opp-shared;
-> 	opp-2100000000 {
-> 		opp-hz = /bits/ 64 <1800000000>;
-> 		opp-microvolt = <...>;
-> 		opp-microvolt-t1 = <1362500>, <1350000>, ....;
-> 		opp-microvolt-t2 = <1362500>, <1360000>, ....;
-> 		opp-microvolt-t3 = <1362500>, <1340000>, ....;
-> 	};
-> 	...
-> 	opp-200000000 {
-> 		opp-hz = /bits/ 64 <200000000>;
-> 		opp-microvolt = <...>;
-> 		opp-microvolt-t1 = <900000>, <900000>, ....;
-> 		opp-microvolt-t2 = <900000>, <900000>, ....;
-> 		opp-microvolt-t3 = <900000>, <900000>, ....;
-> 	};
-> };
-> 
-> I might be missing some information now on how those Exynos ASV tables 
-> are used on other SoCs that would need to be supported.
-> 
-> There will be even more data to include when adding support for the Body
-> Bias voltage, for each CPU supply voltage we could possibly have 
-> corresponding Body Bias voltage.
+> My primary goal is to know what wakeup is associated with a device. If
+> we delay creation of the sysfs node to the time that device_add() is
+> called then it will allow device_set_wakeup_enable() to be called before
+> the device is published to userspace. Is anything wrong with that? This
+> seems to be the intention of the API based on the way
+> device_set_wakeup_capable() is written. Furthermore, if we make this
+> change then we don't need to fix various drivers to reorder calls to
+> device_set_wakeup_enable() and device_add(), so it looks like the right
+> approach.
 
-Will something like this help ?
+Sounds reasonable.
 
-https://lore.kernel.org/lkml/1442623929-4507-3-git-send-email-sboyd@codeaurora.org/
 
-This never got merged but the idea was AVS only.
 
--- 
-viresh
