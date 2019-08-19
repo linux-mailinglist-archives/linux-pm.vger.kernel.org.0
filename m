@@ -2,79 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC57091D69
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 08:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD4591D6D
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 08:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbfHSG5J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 02:57:09 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38712 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726628AbfHSG5I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 02:57:08 -0400
-Received: by mail-pl1-f193.google.com with SMTP id m12so507463plt.5
-        for <linux-pm@vger.kernel.org>; Sun, 18 Aug 2019 23:57:08 -0700 (PDT)
+        id S1726742AbfHSG6R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 02:58:17 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36075 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726261AbfHSG6R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 02:58:17 -0400
+Received: by mail-pf1-f195.google.com with SMTP id w2so613776pfi.3
+        for <linux-pm@vger.kernel.org>; Sun, 18 Aug 2019 23:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=7k//502CULWRlumB5LUfrkH+oVCgs4LxV1yBK5FQWw8=;
-        b=n8Pzfswhm9FPBsuTbYIHw3yt1vfkqvLayOSdP1/ZW5QfVYXmUG6Uf15GKoYaiwOzM/
-         83br5UBUAxGwaXZEhBEF8hvzVqchUhiLfoSEWCUICWSFL+tG7LOQyxisR3JCGkAAtz2f
-         9QbVzrNmosPVKq8kNz3DCin3Mebh1i7kdOYyUBR2vdkxgcKVFE86fAMG+nWNzzqVb0Gx
-         uHCCEPU948leGvaytsBRo495cS4T3QwuqgTgrXicF4xyR64gNWoumRAoTkT4xbO7sGpl
-         KGH9DBNL8U7ANBSyYIJV7f7IGoXaLjiNMLDKIoIPOOFCdKxQdx6zviuTXH5joz29eJND
-         wOlg==
+        bh=HvtA+GBfwHC8fvnaQIIJLLxWYh1rn1153XxRWvxFdUs=;
+        b=P3rK6cja54D8TRyXeXPYfTuuwH5EeJR6miORU5/Kef4uXdnOfRpQE6kC2Vx8+smA4u
+         zhar+VQMpglRiotAhkMB5M6KLLM+0mIcJIGWxk+xdbnP8w8kZmTVVYAAEVJpYsFH4jtD
+         GcIzCPRcMWH3f5JHBPgNaFkRg0DUXIIuLamFhbKMg2HiPLPUN2rb9+rFSzJXp75fbLHx
+         Gv5bk4ZdFoEHuwr7EyUSc1p5UoLLng6CzOQUp179nmdihHBt/hSIhTsB20Rr9tr8LbQ7
+         ENeyGHfHo79eaE6efoimOa+FG1sYtV34yLMiZfJuhpSvgmufUDZJYCoVey+cMjxlmOCU
+         w4jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7k//502CULWRlumB5LUfrkH+oVCgs4LxV1yBK5FQWw8=;
-        b=OCLRTXjb/MrHUu0R+3+KslB3vokPuDoS0shTGHZIyWTi40cDX7gLhSP4TEIp3W5aY3
-         vdfaAGVFngbrV3KFG9BcTjTLgA+Mweo7vISBG/ny3Ct66/EPcCoobNq/dZTAZ/yWYes3
-         +0DZved861nvjkLPoy9+d75D+aHzn4DQg2RtPXSe/FGgzSW3Xdyc7qgEEhaynMoI0pGR
-         RcYEaoHNF2xA863CGJxs+KD50DxAFzfZgRovpMdvGWHL/w14KeQSz2E2KnUt+DAjhjB9
-         Ccq2J/ZR/qq3EKaXIVLe7rUYoagok8bxJaolz3gszn38PTbByOU/fwyiF7VlNSUcAD/A
-         1GhA==
-X-Gm-Message-State: APjAAAUzqgN8qVpoov4gOGCeSNO3k4Z5s2xBWqtb9WcEenjbHcG6d8Ak
-        bGOMW5Q211kNsF2xhjvyjk3a89QLTbM=
-X-Google-Smtp-Source: APXvYqwtIiM2jQQRDwVLMDAvkIOLbhorGtgsQRqJtncX40+Y0g09W50Mmph5+k2/rKckttxro5j/tA==
-X-Received: by 2002:a17:902:ca:: with SMTP id a68mr20639505pla.204.1566197828124;
-        Sun, 18 Aug 2019 23:57:08 -0700 (PDT)
+        bh=HvtA+GBfwHC8fvnaQIIJLLxWYh1rn1153XxRWvxFdUs=;
+        b=T8a51aBWXeu9mv8/nCA2ryEmkMqPjNJy6heP2ZmQUPq0qSAXVkIAX59y5gv43kEoJ+
+         bL+8UqOuXJSbYN/v2KbMeOh/A4nT6XmIguo+HnUWp27/IAFu3DispUnVy7hnHvOstiWs
+         ZPKyGztkoNxT8uF0MNHlhOa/B5hlcrsRwfk/vwU4wGfJqMd+QKl5Fueaoi7oDygrEjqs
+         wpRxKTmcTkULH7C5L0A2micjb1T70WHC47VfNILQNJUyzFSuvgYQuz0/WH5ifwQs+G02
+         HM62hD3xt9bPcJeUuIhqk7n9O0rVaFtZM5wSuKXEqEABKG52NCYidO78lU14W4qnEYsx
+         A2bA==
+X-Gm-Message-State: APjAAAXfgOrEH87Uy2pd4/ks0a8U9iaEPLKWK2XtM0pfKesaLrpMv4mO
+        vOskX0wv6cn7tjqF3OtuIl/Tzg==
+X-Google-Smtp-Source: APXvYqwmUeKAoNB6rJXK3rhuM5Ub/Wsz5p7XsyHuL0fBQNYaNS4bX0+QSzbe0jQR1GcmLgMOHn1YaA==
+X-Received: by 2002:a62:e910:: with SMTP id j16mr23217505pfh.123.1566197896522;
+        Sun, 18 Aug 2019 23:58:16 -0700 (PDT)
 Received: from localhost ([122.172.76.219])
-        by smtp.gmail.com with ESMTPSA id a23sm14891521pfo.80.2019.08.18.23.57.07
+        by smtp.gmail.com with ESMTPSA id f14sm15662246pfn.53.2019.08.18.23.58.15
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 18 Aug 2019 23:57:07 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 12:27:05 +0530
+        Sun, 18 Aug 2019 23:58:15 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 12:28:14 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Quentin Perret <quentin.perret@arm.com>
-Cc:     Douglas Raillard <douglas.raillard@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, agross@kernel.org
-Subject: Re: [PATCH 1/2] cpufreq: drivers: Enable frequency invariance in
- qcom-cpufreq-hw
-Message-ID: <20190819065705.qhcb4ohtsekik3q2@vireshk-i7>
-References: <20190808131857.21082-1-douglas.raillard@arm.com>
- <20190808173230.53ddupihjlr6uvne@queper01-lin>
- <14762a81-a81d-d05f-b42a-495dacb28168@arm.com>
- <20190809103704.fatayhzso2b62fmx@queper01-lin>
+To:     Colin King <colin.king@canonical.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: remove redundant assignment to ret
+Message-ID: <20190819065814.333kowws4mpw3qfx@vireshk-i7>
+References: <20190813122121.28160-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190809103704.fatayhzso2b62fmx@queper01-lin>
+In-Reply-To: <20190813122121.28160-1-colin.king@canonical.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-08-19, 11:37, Quentin Perret wrote:
-> Actually, one nit, the $subject should probably be formatted as:
+On 13-08-19, 13:21, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
->   cpufreq: qcom-hw: invoke frequency-invariance setter function
+> Variable ret is initialized to a value that is never read and it is
+> re-assigned later. The initialization is redundant and can be removed.
 > 
-> for consistency with other patches in this area.
+> Addresses-Coverity: ("Unused value")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index c28ebf2810f1..26d82e0a2de5 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2140,7 +2140,7 @@ int cpufreq_driver_target(struct cpufreq_policy *policy,
+>  			  unsigned int target_freq,
+>  			  unsigned int relation)
+>  {
+> -	int ret = -EINVAL;
+> +	int ret;
+>  
+>  	down_write(&policy->rwsem);
+>  
 
-Applied with these changes. Thanks.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
