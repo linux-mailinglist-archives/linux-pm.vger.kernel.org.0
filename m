@@ -2,98 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C05D91B7C
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 05:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DB391B82
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 05:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbfHSDdK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Aug 2019 23:33:10 -0400
-Received: from anchovy2.45ru.net.au ([203.30.46.146]:36982 "EHLO
-        anchovy2.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726132AbfHSDdK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Aug 2019 23:33:10 -0400
-Received: (qmail 12459 invoked by uid 5089); 19 Aug 2019 03:33:07 -0000
-Received: by simscan 1.2.0 ppid: 12386, pid: 12387, t: 0.3151s
-         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950 spam: 3.1.4
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on anchovy2
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.4 required=6.0 tests=ALL_TRUSTED,AWL
-        autolearn=disabled version=3.4.1
-Received: from unknown (HELO ?192.168.0.34?) (rtresidd@electromag.com.au@203.59.235.95)
-  by anchovy3.45ru.net.au with ESMTPA; 19 Aug 2019 03:33:06 -0000
-Subject: Re: [PATCH 1/1] dt-bindings: power/supply/sbs_sbs-battery: Addition
- of force_load binding Add device tree binding documentation for addition of
- force_load boolean value to allow loading a battery during boot even if not
- present at that time.
-To:     Rob Herring <robh@kernel.org>
-Cc:     sre@kernel.org, mark.rutland@arm.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1564037445-22936-1-git-send-email-rtresidd@electromag.com.au>
- <20190816211430.GA8175@bogus>
-From:   Richard Tresidder <rtresidd@electromag.com.au>
-Message-ID: <1baa2fe9-7649-f70a-9076-5b49464ae1cd@electromag.com.au>
-Date:   Mon, 19 Aug 2019 11:33:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726519AbfHSDeE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Aug 2019 23:34:04 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:47280 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726162AbfHSDeE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 18 Aug 2019 23:34:04 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 93D60F1F37B7C96B27CA;
+        Mon, 19 Aug 2019 11:33:59 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.439.0; Mon, 19 Aug 2019 11:33:51 +0800
+From:   Mao Wenan <maowenan@huawei.com>
+To:     <agross@kernel.org>, <georgi.djakov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <sboyd@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        "Mao Wenan" <maowenan@huawei.com>
+Subject: [PATCH v2 linux-next] qcom: qcs404: move COMPILE_TEST to INTERCONNECT_QCOM
+Date:   Mon, 19 Aug 2019 11:37:47 +0800
+Message-ID: <20190819033747.38339-1-maowenan@huawei.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190818010905.7AD602173B@mail.kernel.org>
+References: <20190818010905.7AD602173B@mail.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190816211430.GA8175@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-AU
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a force load option when loading the driver as a module.
-This adds the equivalent methodology for the binding path.
-Though I suppose you could in fact just force load if the gpio detect 
-isn't present.
-Thats a good idea, just wasn't the existing driver flow. I can't think 
-of any reason why we couldn't do that though.
+There is one compilation error when CONFIG_INTERCONNECT_QCOM_QCS404=y and
+CONFIG_INTERCONNECT_QCOM_SMD_RPM=y, as well as CONFIG_COMPILE_TEST=y,
+but CONFIG_QCOM_SMD_RPM is not set, logs as below:
 
-I'll update the patch and resubmit V3
-Will add a note about it in the docs
+drivers/interconnect/qcom/smd-rpm.o: In function `qcom_icc_rpm_smd_send':
+smd-rpm.c:(.text+0xe4): undefined reference to `qcom_rpm_smd_write'
+Makefile:1071: recipe for target 'vmlinux' failed
+make: *** [vmlinux] Error 1
 
-Please note I'd submitted this incorrectly when using our patch script 
-last time, it's now correctly part of the combined patch
+This is because
+INTERCONNECT_QCOM_QCS404 depends on QCOM_SMD_RPM || COMPILE_TEST.
+Here CONFIG_COMPILE_TEST=y, so CONFIG_INTERCONNECT_QCOM_SMD_RPM
+is selected. If CONFIG_QCOM_SMD_RPM is not set, then
+qcom_rpm_smd_write() is not defined, and compilation error happen.
+Fix this by moving COMPILE_TEST from CONFIG_INTERCONNECT_QCOM_QCS404 to
+CONFIG_INTERCONNECT_QCOM, qcom's interconnect drivers can be compiled on
+different platform.
 
-Regards
-   Richard Tresidder
-Richard Tresidder
+Fixes: 5e4e6c4d3ae0 ("interconnect: qcom: Add QCS404 interconnect provider driver")
+Signed-off-by: Mao Wenan <maowenan@huawei.com>
+---
+ v2: change subject of patch, and move COMPILE_TEST to INTERCONNECT_QCOM.
+ drivers/interconnect/qcom/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-**
-On 17/08/2019 5:14 am, Rob Herring wrote:
-> On Thu, Jul 25, 2019 at 02:50:45PM +0800, Richard Tresidder wrote:
->> Signed-off-by: Richard Tresidder <rtresidd@electromag.com.au>
->> ---
->>
->> Notes:
->>      Add device tree binding documentation for addition of force_load
->>      boolean value to allow loading a battery during boot even if not
->>      present at that time.
->>      Accompanying patch to drivers/power/supply/sbs-battery.c submitted to linux-pm@vger.kernel.org
->>
->>   Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
->> index 4e78e51..187d7bb 100644
->> --- a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
->> +++ b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
->> @@ -15,7 +15,8 @@ Optional properties :
->>      after an external change notification.
->>    - sbs,battery-detect-gpios : The gpio which signals battery detection and
->>      a flag specifying its polarity.
->> -
->> + - sbs,force-load : Allow loading of a hot-pluggable battery when there is no
->> +   GPIO detect available and the module is statically built.
-> What's a module? That's Linux specific and nothing to do with the
-> binding.
->
-> Can't you just force load if sbs,battery-detect-gpios is not present?
->
-> Rob
->
->
+diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+index 339e8f1..7207248 100644
+--- a/drivers/interconnect/qcom/Kconfig
++++ b/drivers/interconnect/qcom/Kconfig
+@@ -1,14 +1,14 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config INTERCONNECT_QCOM
+ 	bool "Qualcomm Network-on-Chip interconnect drivers"
+-	depends on ARCH_QCOM
++	depends on ARCH_QCOM || COMPILE_TEST
+ 	help
+ 	  Support for Qualcomm's Network-on-Chip interconnect hardware.
+ 
+ config INTERCONNECT_QCOM_QCS404
+ 	tristate "Qualcomm QCS404 interconnect driver"
+ 	depends on INTERCONNECT_QCOM
+-	depends on QCOM_SMD_RPM || COMPILE_TEST
++	depends on QCOM_SMD_RPM
+ 	select INTERCONNECT_QCOM_SMD_RPM
+ 	help
+ 	  This is a driver for the Qualcomm Network-on-Chip on qcs404-based
+-- 
+2.7.4
 
