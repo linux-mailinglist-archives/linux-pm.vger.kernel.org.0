@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F30920BB
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 11:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7127D920DF
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 12:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbfHSJv7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 05:51:59 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36710 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726604AbfHSJv7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 05:51:59 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l21so915854pgm.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 02:51:59 -0700 (PDT)
+        id S1726366AbfHSJ7Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 05:59:24 -0400
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:40736 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726594AbfHSJ7Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 05:59:24 -0400
+Received: by mail-pg1-f178.google.com with SMTP id w10so920585pgj.7
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 02:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=xGqFoegYFFErF3k96plvP+BoToF4gSQapUoW0Zrc4EI=;
-        b=tjBog+GFQi8eVR5IFt2HYmaEBLiJLQHxwfxJD321hYhOdjgK5Z3oqNtUNEwz5/DGUM
-         CgK2pwBoFXfPXDH/+suP2sgFZzD50XlOsXvAZez4WXG03lgGgRVPxog7eKGf5EjlDzna
-         6cIC492iG1do16x4weU/6N/DzEdydwxfFqjgp17sNZsOiNwPlY9dDzaDFb/7KRppt1xh
-         5H/dJvmoYdEwLttrr8+OCIrrbNijeXHXIkqoaF7oWUDtXew+OV5iEODi5hhMFjexa2dT
-         GAZLnxaJobyzQ8g5eE2mEWeChuuIqMtdY08D8RSuhTxX4hxQUt2qSDTYVxXrPZ7Ml5aF
-         wNgw==
+        bh=olmkP9Ue0IYi0nIG9Jgk3ly+FXYntmyDpFNEtwV9Avw=;
+        b=jVMofs4s+gnCUAI79Ip6xg3i2RYI+g/WOdXI6cIBBoHeRXdYRK95YSl51r2dCRiGoS
+         CiCQd8CQXBbUOr6+gF8VweGsgKMLsOcgsbdzsM35hExJDC8SuJ+8KO9GOiLG6J3lAZlM
+         JBekdQXJuGo3w80gSIoEBzWdp7/nrsEpbTVMw6PIzssbWVHlxegW8W6TKqil4zjQUMKw
+         UBZZopGFveiUcMuqZ4lF43p0BGxD8HqGxseLqoRLQeEuLwzYDRVodbbJ32/p2h9mj5ji
+         UoP5hP0x0uBcNzonEoOq3XHWSVYrDeNst784sV+x8X5/hR0xw+fivaQ/8nmLW6eRtpKb
+         L4vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xGqFoegYFFErF3k96plvP+BoToF4gSQapUoW0Zrc4EI=;
-        b=oiZwIbCUMgRgEh1SsvdH3ZgrTEZ+vGn2wAuUYPAItnQ/6/KBvLuuX7HkK5XzVAYQpZ
-         mI4wVeRiZJWYeGXKCe/WVYvbw8mNYhZSL+eJn//x/nb300TesM7nnfid/nZnenQgA12j
-         Zj4cR4AP+1ObreduOO+g1n9yT2WYpXPcx3QzRtXsjmg3XUPRlvHgLasdeUjr4uu662zO
-         E5cHX0fEoGTErBA21OqEtUPqEhu8niFtYEL3WkcgRDiVPoXmFXNe4u8Pdalzt6N+IWJz
-         V0OPhj90kvTkqOGkoq+ytzWNlaQmd7C8hj5xjo2Q4PLr29eEeTe4VbeadS1qnIj3vZmi
-         Zwvg==
-X-Gm-Message-State: APjAAAWpZrHwe1F9WAbqrvU6ni3PraCLTGctjwnEjPiSyslsjyMRvuGo
-        ltvz60An3Yy4qbBwX/EdGSiSsA==
-X-Google-Smtp-Source: APXvYqwefojTPrDuHM+2Bz8IW3MPXqRE/59Iakl1TK1LeLtzUvPNSDdCUFmUg0z973E3A07y52xJwg==
-X-Received: by 2002:a17:90a:fd8c:: with SMTP id cx12mr19976973pjb.95.1566208318998;
-        Mon, 19 Aug 2019 02:51:58 -0700 (PDT)
+        bh=olmkP9Ue0IYi0nIG9Jgk3ly+FXYntmyDpFNEtwV9Avw=;
+        b=eUDvPpRutVhXzFZiYMAhLx1q+Wm31epiRiAkbd0ViMrYg34oMRndAM7VQ2cKMgK3Fb
+         UfOfXveyarkBI3N2FL60EDonNi3rm5ulg2uKEv+VAWdb9D0x6mNpYr6hbtd1v0SJJk02
+         UO95GI7pxmFg8+sWcB5Ya1Vo6m15Vfltv2VQKYo4jRMGtYvx6dxOVtT63HxbVKQtcqgU
+         UUJAXM0qgPBB9cQTAZXIPkTmf8Ln4/88aCodi+ZMkUuyb0t3rqURmerXTlAs6aq+lypU
+         LZHauWDa0AFA7GD3FFmHWvoDWkoBc0a9JsUbV6EzpV3CzZd3YGK+0itzSQaw3y8bJ6qP
+         HCOQ==
+X-Gm-Message-State: APjAAAXaV9BwtLY0OSE6z6L4PO5iNsg6LaEP4ZHBkCjqClqbxyKMx6Je
+        ZEHjAvWZyB52ghiq0p4JutrWIXQsaUQ=
+X-Google-Smtp-Source: APXvYqzxIL7FNkeVE+u8/wl10luXKQYJ2XZM5P9oxQ0cMb5m0opTFk66svqyoJdFdPJeYTRamxtKbA==
+X-Received: by 2002:a65:5584:: with SMTP id j4mr18996392pgs.258.1566208763608;
+        Mon, 19 Aug 2019 02:59:23 -0700 (PDT)
 Received: from localhost ([122.172.76.219])
-        by smtp.gmail.com with ESMTPSA id b126sm2036018pfb.110.2019.08.19.02.51.58
+        by smtp.gmail.com with ESMTPSA id r4sm18937523pfl.127.2019.08.19.02.59.22
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 02:51:58 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 15:21:56 +0530
+        Mon, 19 Aug 2019 02:59:22 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 15:29:21 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
 Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -59,14 +59,14 @@ Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         srv_heupstream@mediatek.com, fan.chen@mediatek.com
-Subject: Re: [v4, 1/8] cpufreq: mediatek: change to regulator_get_optional
-Message-ID: <20190819095156.m3iltf5ni3pprrt7@vireshk-i7>
+Subject: Re: [v4, 3/8] cpufreq: mediatek: Add support for mt8183
+Message-ID: <20190819095921.sk2pltuylfaxklnx@vireshk-i7>
 References: <1565703113-31479-1-git-send-email-andrew-sh.cheng@mediatek.com>
- <1565703113-31479-2-git-send-email-andrew-sh.cheng@mediatek.com>
+ <1565703113-31479-4-git-send-email-andrew-sh.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1565703113-31479-2-git-send-email-andrew-sh.cheng@mediatek.com>
+In-Reply-To: <1565703113-31479-4-git-send-email-andrew-sh.cheng@mediatek.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -76,28 +76,38 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 13-08-19, 21:31, Andrew-sh.Cheng wrote:
 > From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
 > 
-> For new mediatek chip mt8183,
-> cci and little cluster share the same buck,
-> so need to modify the attribute of regulator from exclusive to optional
+> Add compatible string for mediatek mt8183
 > 
 > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
 > ---
->  drivers/cpufreq/mediatek-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  drivers/cpufreq/mediatek-cpufreq.c   | 1 +
+>  2 files changed, 2 insertions(+)
 > 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 03dc4244ab00..0f7e837a264e 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -117,6 +117,7 @@ static const struct of_device_id blacklist[] __initconst = {
+>  	{ .compatible = "mediatek,mt817x", },
+>  	{ .compatible = "mediatek,mt8173", },
+>  	{ .compatible = "mediatek,mt8176", },
+> +	{ .compatible = "mediatek,mt8183", },
+>  
+>  	{ .compatible = "nvidia,tegra124", },
+>  	{ .compatible = "nvidia,tegra210", },
 > diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index f14f3a85f2f7..a370577ffc73 100644
+> index acd9539e95de..4dce41b18369 100644
 > --- a/drivers/cpufreq/mediatek-cpufreq.c
 > +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -338,7 +338,7 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->  		goto out_free_resources;
->  	}
->  
-> -	proc_reg = regulator_get_exclusive(cpu_dev, "proc");
-> +	proc_reg = regulator_get_optional(cpu_dev, "proc");
->  	if (IS_ERR(proc_reg)) {
->  		if (PTR_ERR(proc_reg) == -EPROBE_DEFER)
->  			pr_warn("proc regulator for cpu%d not ready, retry.\n",
+> @@ -546,6 +546,7 @@ static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+>  	{ .compatible = "mediatek,mt817x", },
+>  	{ .compatible = "mediatek,mt8173", },
+>  	{ .compatible = "mediatek,mt8176", },
+> +	{ .compatible = "mediatek,mt8183", },
+
+Had to fix rebase conflict manually for this. Please always rebase on latest
+linux-next.
 
 Applied. Thanks.
 
