@@ -2,168 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C824094E51
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 21:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3371B94F36
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 22:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728510AbfHSTd5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 15:33:57 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:52861 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728375AbfHSTd5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 15:33:57 -0400
-Received: by mail-wm1-f67.google.com with SMTP id o4so573914wmh.2;
-        Mon, 19 Aug 2019 12:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=M8LYhD4lhXPC7C0Kz4FM0eI8Uon0RGyTbjZ7iSLdUwY=;
-        b=G/Xz5WNgJus57o+i2ehU+l0iHOMv8K+eX7esd5Hsp8ECu1hc9Ij2lFCCMT8c/TeTQx
-         KPxGFnwhHfLCIuhABPymGXDPH0oEnZlCiWXK4u0Ggx6yY8rqCwwB764VaXJ2WamY2LwK
-         V0y5VSxnkH2oPCLaRqgkNtJKf+KXfenR2Mgqd52G43nCPwFJY4jkEoY4yIi92vlt8HU8
-         ENKFx7T9KuXh511hTtpe7jujVFXmzEyWHXNhyrD9ZGosBFQgGvTbjw9aVwqtOnqp9XpT
-         2x3s4e6pw/JIijGy+an8s+tsrNoMURxBIKU583BC6tsFmleaeStVM3g3pSv6Oa0eeXSY
-         ZmYA==
+        id S1728336AbfHSUlW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 16:41:22 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:37528 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728287AbfHSUlW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 16:41:22 -0400
+Received: by mail-ot1-f65.google.com with SMTP id f17so2959263otq.4;
+        Mon, 19 Aug 2019 13:41:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=M8LYhD4lhXPC7C0Kz4FM0eI8Uon0RGyTbjZ7iSLdUwY=;
-        b=IXS76+FZTUGHBAxESpVXRK31XSmSe/DDlVeF+bU7jKIbF4YK3Xkf/vwiBPq5GeyfAe
-         0JUrzz8kK4lEub/vRBA7798Z5BpVpO9YibC00K7Re/B6whvXadpNDF6bR1dgEUFyX0Ob
-         xIfUjQ27Q375vBA93fmmlcXDd25TXiQxQhTUCTIVxj7tLvwff/eb4bnj4+MANDzx00RM
-         IsjzPFpqsr/33Ut1iVN+lc+14wTGE6klFIJSAu8rC8ZTgsVNsIM8jr0ODH6m/o8XItnb
-         8Qa7bzySeDyLy261UDcZ2IFuY4S2RJTxroPdegseoyLzEIXM1YSzNuqQUo+VCsiTtbjD
-         gZag==
-X-Gm-Message-State: APjAAAXbqmpx8WvcXLdjSltC2KXT19OzATWl6uDh88sEowKdFdJUEu3X
-        rPAkxo+6aTCwHH4fQQPu5Qazc4HH
-X-Google-Smtp-Source: APXvYqx3j1A+XbE8p3KzEPzhIilb1DSi7SDFHoAeZejzy26ay1t6am8l3zqKSE2XA96TglOR8BVogQ==
-X-Received: by 2002:a1c:d108:: with SMTP id i8mr23171852wmg.28.1566243233356;
-        Mon, 19 Aug 2019 12:33:53 -0700 (PDT)
-Received: from [192.168.2.145] ([94.29.34.218])
-        by smtp.googlemail.com with ESMTPSA id o11sm12528508wrw.19.2019.08.19.12.33.50
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 12:33:52 -0700 (PDT)
-Subject: Re: [PATCH v9 20/22] soc/tegra: pmc: Configure deep sleep control
- settings
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
-        jason@lakedaemon.net, marc.zyngier@arm.com,
-        linus.walleij@linaro.org, stefan@agner.ch, mark.rutland@arm.com
-Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org
-References: <1565984527-5272-1-git-send-email-skomatineni@nvidia.com>
- <1565984527-5272-21-git-send-email-skomatineni@nvidia.com>
- <bf5541d2-1bad-8a8c-fd9d-821b55861136@gmail.com>
- <2092e557-06cb-4a74-fe40-1d83bf67ccca@nvidia.com>
- <a8d65dbc-6924-c972-06e9-5bc47d66e94f@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <8f5630bd-2869-4f5b-c18d-7ee8326432d6@gmail.com>
-Date:   Mon, 19 Aug 2019 22:33:49 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tJdZNnplVegzt+TgRTqlzFyXprTlOmI4DpqvsRrDvYQ=;
+        b=l2OPHveQ6xDKzBAh87FZInvkowDwOMrjr0yo+BfAB8s+5Sm2WKTzsSeENgsJd69Bw+
+         WDOLogrTzar2KNQUQ0ODhPa4+ntmPVIcDPLKK3jhkYv+2sJXhz9Uup8a2UARdEOvPp39
+         dFSmNGfGK5wBldtdlU8rEOSit3ZqKmULI8C2eMui2C893zYePtNZKqJMuwJ7b6yGHhzG
+         sqBQj0L49eqojX2INr75MevpfZ+GS8ed4RSbRdaOrzhhkyRh5qK6tqEJ6uurDM1vV7k0
+         ndP8U0DvVNzrspdgvxEvW1EOoaeWL/fJoJ1J2z0tGNr2hX8GNc5N/APXkr4wXaGSMOa1
+         TErw==
+X-Gm-Message-State: APjAAAUlHSO+ozOm3C2iXE7K4eBbU1JrFuf+wBB700EVzFQo9mIeeMoD
+        KGhhmXnJh5VgeWGtADt/SwA88Rn4TmSaa9NoUlE=
+X-Google-Smtp-Source: APXvYqzlNkB2CXycQGwvCMQTD54KCcW0ivmSeyzaOsS0aBHWF90MFmq7Ki0D6IHaZGSMEW6akYBiWbNUuTYhsOCQsBE=
+X-Received: by 2002:a9d:65ca:: with SMTP id z10mr18716347oth.167.1566247280754;
+ Mon, 19 Aug 2019 13:41:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <a8d65dbc-6924-c972-06e9-5bc47d66e94f@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <5997740.FPbUVk04hV@kreacher> <800186a2-e912-3498-f08b-47469bbe8b0d@klausen.dk>
+ <CAJZ5v0hfMS6aJP9G=dhZZ+3WTzM8=DzQkdJ7s9W3m5m9Dat5=g@mail.gmail.com>
+ <1585707.yWhsc4YUgi@kreacher> <6bf51526-edf3-6698-b251-ef0c94b766fc@klausen.dk>
+In-Reply-To: <6bf51526-edf3-6698-b251-ef0c94b766fc@klausen.dk>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 19 Aug 2019 22:41:09 +0200
+Message-ID: <CAJZ5v0gw1Dw8FUgKmkeq5TCa=OqvFUVTq6aHgFw-D9O4YiiCKw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to suspend-to-idle
+To:     Kristian Klausen <kristian@klausen.dk>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-19.08.2019 22:07, Sowjanya Komatineni пишет:
-> 
-> On 8/19/19 11:20 AM, Sowjanya Komatineni wrote:
->>
->> On 8/19/19 9:48 AM, Dmitry Osipenko wrote:
->>> 16.08.2019 22:42, Sowjanya Komatineni пишет:
->>>> Tegra210 and prior Tegra chips have deep sleep entry and wakeup related
->>>> timings which are platform specific that should be configured before
->>>> entering into deep sleep.
->>>>
->>>> Below are the timing specific configurations for deep sleep entry and
->>>> wakeup.
->>>> - Core rail power-on stabilization timer
->>>> - OSC clock stabilization timer after SOC rail power is stabilized.
->>>> - Core power off time is the minimum wake delay to keep the system
->>>>    in deep sleep state irrespective of any quick wake event.
->>>>
->>>> These values depends on the discharge time of regulators and turn OFF
->>>> time of the PMIC to allow the complete system to finish entering into
->>>> deep sleep state.
->>>>
->>>> These values vary based on the platform design and are specified
->>>> through the device tree.
->>>>
->>>> This patch has implementation to configure these timings which are must
->>>> to have for proper deep sleep and wakeup operations.
->>>>
->>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>>> ---
->>>>   drivers/soc/tegra/pmc.c | 14 +++++++++++++-
->>>>   1 file changed, 13 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
->>>> index 53ed70773872..710969043668 100644
->>>> --- a/drivers/soc/tegra/pmc.c
->>>> +++ b/drivers/soc/tegra/pmc.c
->>>> @@ -88,6 +88,8 @@
->>>>     #define PMC_CPUPWRGOOD_TIMER        0xc8
->>>>   #define PMC_CPUPWROFF_TIMER        0xcc
->>>> +#define PMC_COREPWRGOOD_TIMER        0x3c
->>>> +#define PMC_COREPWROFF_TIMER        0xe0
->>>>     #define PMC_PWR_DET_VALUE        0xe4
->>>>   @@ -2277,7 +2279,7 @@ static const struct tegra_pmc_regs
->>>> tegra20_pmc_regs = {
->>>>     static void tegra20_pmc_init(struct tegra_pmc *pmc)
->>>>   {
->>>> -    u32 value;
->>>> +    u32 value, osc, pmu, off;
->>>>         /* Always enable CPU power request */
->>>>       value = tegra_pmc_readl(pmc, PMC_CNTRL);
->>>> @@ -2303,6 +2305,16 @@ static void tegra20_pmc_init(struct tegra_pmc
->>>> *pmc)
->>>>       value = tegra_pmc_readl(pmc, PMC_CNTRL);
->>>>       value |= PMC_CNTRL_SYSCLK_OE;
->>>>       tegra_pmc_writel(pmc, value, PMC_CNTRL);
->>>> +
->>>> +    /* program core timings which are applicable only for suspend
->>>> state */
->>>> +    if (pmc->suspend_mode != TEGRA_SUSPEND_NONE) {
->>>> +        osc = DIV_ROUND_UP(pmc->core_osc_time * 8192, 1000000);
->>>> +        pmu = DIV_ROUND_UP(pmc->core_pmu_time * 32768, 1000000);
->>>> +        off = DIV_ROUND_UP(pmc->core_off_time * 32768, 1000000);
->>>> +        tegra_pmc_writel(pmc, ((osc << 8) & 0xff00) | (pmu & 0xff),
->>>> +                 PMC_COREPWRGOOD_TIMER);
->>>> +        tegra_pmc_writel(pmc, off, PMC_COREPWROFF_TIMER);
->>>> +    }
->>>>   }
->>>>     static void tegra20_pmc_setup_irq_polarity(struct tegra_pmc *pmc,
->>>>
->>> In the previous version of this patch there were checks for zero values
->>> of the timers with intention to skip programming of the timers if value
->>> is zero. I'm a bit puzzled by the new version, given that SUSPEND_NONE
->>> means that suspending isn't available at all and thus PMC timers won't
->>> be utilized, hence it shouldn't matter what values are programmed for
->>> the counters, isn't it?
->>
->> Yes, as I see in documentation we already specify all these timings
->> are required properties when suspend mode is used, I updated in this
->> version to program core timings only when suspend mode is enabled.
->>
-> In other words, core timings are for SC7 entry only. So when SC7/suspend
-> mode is not used, these timings doesn't matter.
+On Mon, Aug 19, 2019 at 5:47 PM Kristian Klausen <kristian@klausen.dk> wrote:
+>
+> On 19.08.2019 11.05, Rafael J. Wysocki wrote:
+> > On Monday, August 19, 2019 9:59:02 AM CEST Rafael J. Wysocki wrote:
+> >> On Fri, Aug 16, 2019 at 10:26 PM Kristian Klausen <kristian@klausen.dk> wrote:
+> >>> On 02.08.2019 12.33, Rafael J. Wysocki wrote:
+> >>>> Hi All,
+> >>>>
+> >>>>>> On top of the "Simplify the suspend-to-idle control flow" patch series
+> >>>>>> posted previously:
+> >>>>>>
+> >>>>>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
+> >>>>>>
+> >>>>>> sanitize the suspend-to-idle flow even further.
+> >>>>>>
+> >>>>>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
+> >>>>>>
+> >>>>>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
+> >>>>>> specification-compliant order with respect to suspending and resuming
+> >>>>>> devices (patch 2).
+> >>>>>>
+> >>>>>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
+> >>>>>> switch to prevent the LPS0 _DSM from being used.
+> >>>>> The v2 is because I found a (minor) bug in patch 1, decided to use a module
+> >>>>> parameter instead of a kernel command line option in patch 4.  Also, there
+> >>>>> are 4 new patches:
+> >>>>>
+> >>>>> Patch 5: Switch the EC over to polling during "noirq" suspend and back
+> >>>>> during "noirq" resume.
+> >>>>>
+> >>>>> Patch 6: Eliminate acpi_sleep_no_ec_events().
+> >>>>>
+> >>>>> Patch 7: Consolidate some EC code depending on PM_SLEEP.
+> >>>>>
+> >>>>> Patch 8: Add EC GPE dispatching debug message.
+> >>>> The v3 is just a rearranged v2 so as to move the post sensitive patch (previous patch 2)
+> >>>> to the end of the series.   [After applying the full series the code is the same as before.]
+> >>>>
+> >>>> For easier testing, the series (along with some previous patches depended on by it)
+> >>>> is available in the pm-s2idle-testing branch of the linux-pm.git tree at kernel.org:
+> >>>>
+> >>>> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
+> >>> It was just testing this patch series(461fc1caed55), to see if it would
+> >>> fix my charging issue
+> >>> (https://bugzilla.kernel.org/show_bug.cgi?id=201307), which it didn't.
+> >> It is unlikely to help in that case.
+> Do you have any idea what the issue could be?
 
-In this case, it should be a bit more straightforward to always program
-the timers unconditionally. But since device-tree binding requires all
-the properties to be specified when suspend mode isn't NONE, then the
-new variant also makes sense. Either way is good to me, thanks.
+Basically, there are two possibilities: either the OS is expected to
+handle the AC/battery switching events, or the platform firmware
+should take care of them.  In the former case, the EC should generate
+events to be handled by the OS and in the latter one there needs to be
+a way to let the platform firmware that it needs to take care of those
+events going forward.
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+In either case there may be a platform-specific action to be carried
+out during suspend and resume to set this up as expected which may be
+missing.
+
+> >>
+> >>> I did however notice that my laptop (ASUS Zenbook UX430UNR/i7-8550U)
+> >>> won't wake when opening the lid or pressing a key, the only way to wake
+> >>> the laptop is pressing the power button.
+> >>>
+> >>> I also tested mainline (5.3.0-rc4 b7e7c85dc7b0) and 5.2.8 and the laptop
+> >>> wakes without issue when the lid is opened or a key is presed.
+> >>>> Please refer to the changelogs for details.
+> >> Thanks for your report.
+> >>
+> >> I seem to see a similar issue with respect to the lid on one of my
+> >> test machines, looking into it right now.
+> > Well, my lid issue seems to be unrelated as it doesn't result from any patches in the
+> > series in question.
+> >
+> > First off, please clone 5.3-rc5 from kernel.org and double check if the issue is not
+> > present in that one.
+> >
+> > If that's not the case, merge the pm-s2idle-rework branch from my tree on top of it
+> > and retest.
+> >
+> > If you still see the issue then, apply the appended patch (on top of the pm-s2idle-reqork
+> > branch ) and, after starting the kernel, do
+> >
+> > # echo 1 > /sys/power/pm_debug_messages
+> >
+> > suspend the system and try to wake it up through all of the ways that stopped working.
+> >
+> > Then, wake it up with the power button, save the output of dmesg and send it to me.
+> >
+> > Thanks!
+>
+> With 5.3-rc5 the laptops wakes up without any issue when pressing a key
+> or opening the lid.
+> With v5.3-rc5+pm-s2idle-testing I can only wake the laptop by pressing
+> the power button.
+
+OK, thanks for verifying.
+
+So it is unclear to me how the series can cause an issue like that to appear.
+
+> dmesg with pm_debug_messages=1 and your patch:
+> [   55.646109] PM: suspend entry (s2idle)
+> [   55.698559] Filesystems sync: 0.052 seconds
+> [   55.698561] PM: Preparing system for sleep (s2idle)
+> [   55.700661] Freezing user space processes ... (elapsed 0.210 seconds)
+> done.
+> [   55.911494] OOM killer disabled.
+> [   55.911495] Freezing remaining freezable tasks ... (elapsed 0.001
+> seconds) done.
+> [   55.913192] PM: Suspending system (s2idle)
+> [   55.913195] printk: Suspending console(s) (use no_console_suspend to
+> debug)
+> [   55.914778] [drm] CT: disabled
+> [   55.916057] wlan0: deauthenticating from 64:70:02:a5:fd:02 by local
+> choice (Reason: 3=DEAUTH_LEAVING)
+> [   56.045634] sd 2:0:0:0: [sda] Synchronizing SCSI cache
+> [   56.046650] sd 2:0:0:0: [sda] Stopping disk
+> [   56.287622] PM: suspend of devices complete after 371.285 msecs
+> [   56.287627] PM: start suspend of devices complete after 373.684 msecs
+> [   56.307155] PM: late suspend of devices complete after 19.477 msecs
+> [   56.312479] ACPI: EC: interrupt blocked
+> [   56.352761] PM: noirq suspend of devices complete after 45.205 msecs
+> [   56.352770] ACPI: \_PR_.PR00: LPI: Device not power manageable
+> [   56.352774] ACPI: \_PR_.PR01: LPI: Device not power manageable
+> [   56.352776] ACPI: \_PR_.PR02: LPI: Device not power manageable
+> [   56.352779] ACPI: \_PR_.PR03: LPI: Device not power manageable
+> [   56.352782] ACPI: \_PR_.PR04: LPI: Device not power manageable
+> [   56.352785] ACPI: \_PR_.PR05: LPI: Device not power manageable
+> [   56.352788] ACPI: \_PR_.PR06: LPI: Device not power manageable
+> [   56.352790] ACPI: \_PR_.PR07: LPI: Device not power manageable
+> [   56.352793] ACPI: \_SB_.PCI0.GFX0: LPI: Device not power manageable
+> [   56.352800] ACPI: \_SB_.PCI0.RP06.PXSX: LPI: Device not power manageable
+> [   56.357057] PM: suspend-to-idle
+> [   69.338656] PM: Timekeeping suspended for 12.178 seconds
+> [   69.338701] PM: irq_pm_check_wakeup: IRQ 9
+> [   69.338704] PM: IRQ wakeup: IRQ 9
+
+This clearly is the power button event causing the system to wake up.
+The other actions, whatever they were, didn't cause any interrupts to
+be triggered.
+
+I suspect that the issue is related to the EC, so please try to revert commit
+
+fcd0a04267ac ACPI: PM: s2idle: Switch EC over to polling during "noirq" suspend
+
+and see if that makes any difference (should revert cleanly).
+
+If that doesn't make any difference, please also try to revert commits
+(on top of the above revert)
+
+11f26633cccb PM: suspend: Fix platform_suspend_prepare_noirq()
+ac9eafbe930a ACPI: PM: s2idle: Execute LPS0 _DSM functions with
+suspended devices
+
+(in this order) and retest.
