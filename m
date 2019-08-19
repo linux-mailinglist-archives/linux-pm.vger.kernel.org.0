@@ -2,89 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DB391B82
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 05:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEBE91D26
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 08:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbfHSDeE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 18 Aug 2019 23:34:04 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:47280 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726162AbfHSDeE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 18 Aug 2019 23:34:04 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 93D60F1F37B7C96B27CA;
-        Mon, 19 Aug 2019 11:33:59 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.439.0; Mon, 19 Aug 2019 11:33:51 +0800
-From:   Mao Wenan <maowenan@huawei.com>
-To:     <agross@kernel.org>, <georgi.djakov@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <sboyd@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        "Mao Wenan" <maowenan@huawei.com>
-Subject: [PATCH v2 linux-next] qcom: qcs404: move COMPILE_TEST to INTERCONNECT_QCOM
-Date:   Mon, 19 Aug 2019 11:37:47 +0800
-Message-ID: <20190819033747.38339-1-maowenan@huawei.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190818010905.7AD602173B@mail.kernel.org>
-References: <20190818010905.7AD602173B@mail.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+        id S1726261AbfHSGcw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 02:32:52 -0400
+Received: from mga12.intel.com ([192.55.52.136]:51118 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725308AbfHSGcw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 19 Aug 2019 02:32:52 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Aug 2019 23:32:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,403,1559545200"; 
+   d="scan'208";a="202150762"
+Received: from rzhang-dell-9360.sh.intel.com ([10.239.198.73])
+  by fmsmga004.fm.intel.com with ESMTP; 18 Aug 2019 23:32:50 -0700
+Message-ID: <95dce698e7790dac7178e950a6a9dde71d231cae.camel@intel.com>
+Subject: Re: [PATCH][V2] drivers: thermal: processor_thermal_device: fix
+ missing bitwise-or operators
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Colin King <colin.king@canonical.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 19 Aug 2019 14:32:43 +0800
+In-Reply-To: <42db46c33466a12221e0968e82c4c4ee17b0341d.camel@linux.intel.com>
+References: <20190729120323.15838-1-colin.king@canonical.com>
+         <42db46c33466a12221e0968e82c4c4ee17b0341d.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is one compilation error when CONFIG_INTERCONNECT_QCOM_QCS404=y and
-CONFIG_INTERCONNECT_QCOM_SMD_RPM=y, as well as CONFIG_COMPILE_TEST=y,
-but CONFIG_QCOM_SMD_RPM is not set, logs as below:
+On Mon, 2019-07-29 at 14:09 -0700, Srinivas Pandruvada wrote:
+> On Mon, 2019-07-29 at 13:03 +0100, Colin King wrote:
+> > From: Colin Ian King <colin.king@canonical.com>
+> > 
+> > The variable val is having the top 8 bits cleared and then the
+> > variable is being
+> > re-assinged and setting just the top 8 bits.  I believe the
+> > intention
+> > was bitwise-or
+> > in the top 8 bits.  Fix this by replacing the = operators with &=
+> > and
+> > > = instead.
+> > 
+> > Addresses-Coverity: ("Unused value")
+> > Fixes: b0c74b08517e ("drivers: thermal: processor_thermal_device:
+> > Export sysfs inteface for TCC offset")
+> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> 
+> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com
+> >
 
-drivers/interconnect/qcom/smd-rpm.o: In function `qcom_icc_rpm_smd_send':
-smd-rpm.c:(.text+0xe4): undefined reference to `qcom_rpm_smd_write'
-Makefile:1071: recipe for target 'vmlinux' failed
-make: *** [vmlinux] Error 1
+Hi, Colin,
 
-This is because
-INTERCONNECT_QCOM_QCS404 depends on QCOM_SMD_RPM || COMPILE_TEST.
-Here CONFIG_COMPILE_TEST=y, so CONFIG_INTERCONNECT_QCOM_SMD_RPM
-is selected. If CONFIG_QCOM_SMD_RPM is not set, then
-qcom_rpm_smd_write() is not defined, and compilation error happen.
-Fix this by moving COMPILE_TEST from CONFIG_INTERCONNECT_QCOM_QCS404 to
-CONFIG_INTERCONNECT_QCOM, qcom's interconnect drivers can be compiled on
-different platform.
+thanks for the fix, as b0c74b08517e ("drivers: thermal:
+processor_thermal_device: Export sysfs inteface for TCC offset") has
+not been shipped in upstream yet, I will fold this fix into the
+original patch directly.
 
-Fixes: 5e4e6c4d3ae0 ("interconnect: qcom: Add QCS404 interconnect provider driver")
-Signed-off-by: Mao Wenan <maowenan@huawei.com>
----
- v2: change subject of patch, and move COMPILE_TEST to INTERCONNECT_QCOM.
- drivers/interconnect/qcom/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-index 339e8f1..7207248 100644
---- a/drivers/interconnect/qcom/Kconfig
-+++ b/drivers/interconnect/qcom/Kconfig
-@@ -1,14 +1,14 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config INTERCONNECT_QCOM
- 	bool "Qualcomm Network-on-Chip interconnect drivers"
--	depends on ARCH_QCOM
-+	depends on ARCH_QCOM || COMPILE_TEST
- 	help
- 	  Support for Qualcomm's Network-on-Chip interconnect hardware.
- 
- config INTERCONNECT_QCOM_QCS404
- 	tristate "Qualcomm QCS404 interconnect driver"
- 	depends on INTERCONNECT_QCOM
--	depends on QCOM_SMD_RPM || COMPILE_TEST
-+	depends on QCOM_SMD_RPM
- 	select INTERCONNECT_QCOM_SMD_RPM
- 	help
- 	  This is a driver for the Qualcomm Network-on-Chip on qcs404-based
--- 
-2.7.4
+thanks,
+rui
+> 
+> > ---
+> > 
+> > V2: Add in &= operator missing from V1. Doh.
+> > 
+> > ---
+> >  .../thermal/intel/int340x_thermal/processor_thermal_device.c  | 4
+> > ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git
+> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> > index 6f6ac6a8e82d..97333fc4be42 100644
+> > ---
+> > a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> > +++
+> > b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> > @@ -163,8 +163,8 @@ static int tcc_offset_update(int tcc)
+> >  	if (err)
+> >  		return err;
+> >  
+> > -	val = ~GENMASK_ULL(31, 24);
+> > -	val = (tcc & 0xff) << 24;
+> > +	val &= ~GENMASK_ULL(31, 24);
+> > +	val |= (tcc & 0xff) << 24;
+> >  
+> >  	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
+> >  	if (err)
+> 
+> 
 
