@@ -2,170 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CBD91F9E
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 11:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A9091FB0
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 11:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbfHSJFO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 05:05:14 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:61376 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbfHSJFO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 05:05:14 -0400
-Received: from 79.184.254.79.ipv4.supernova.orange.pl (79.184.254.79) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
- id 6e6f5f4fcc3cee42; Mon, 19 Aug 2019 11:05:11 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Kristian Klausen <kristian@klausen.dk>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to suspend-to-idle
-Date:   Mon, 19 Aug 2019 11:05:11 +0200
-Message-ID: <1585707.yWhsc4YUgi@kreacher>
-In-Reply-To: <CAJZ5v0hfMS6aJP9G=dhZZ+3WTzM8=DzQkdJ7s9W3m5m9Dat5=g@mail.gmail.com>
-References: <5997740.FPbUVk04hV@kreacher> <800186a2-e912-3498-f08b-47469bbe8b0d@klausen.dk> <CAJZ5v0hfMS6aJP9G=dhZZ+3WTzM8=DzQkdJ7s9W3m5m9Dat5=g@mail.gmail.com>
+        id S1727357AbfHSJJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 05:09:33 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40253 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727353AbfHSJJc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 05:09:32 -0400
+Received: by mail-pl1-f196.google.com with SMTP id h3so671132pls.7
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 02:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NbQHubvtE7M8Mm9C2LyqFuVWNwA8k3gi8WsBVYz2BKg=;
+        b=pc8kLgoVhNLslClp12JPBSjxR0z3JujowkefS6jDPR1UHNdaucastVWa59gQ8D8lbt
+         0MGRCHg9mrrnVUEfo2wUi3Iuo4Wu/u4lTKjXKpkr+Tlfx/BRr9ewsDbvTa439fOCKAWy
+         gTNy7KwC7wgAB85feFTYk/OxyRVTcFs813go5F4A5aBrEQw9RGPiNr2rZIGcrlgWyz5N
+         6pgP0WkpVzuKxOY1AQNKLZxQAzOGxLLYsNoE6uTn4EPuyi7iNjn+PiZk2iz7xo/9yaMa
+         nFp2BO9hS20XmNof1YVo4GXNSbggWhClhVXVv57TZFoKGOoMpANkEOqkT11+rV6L9FFv
+         LnKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NbQHubvtE7M8Mm9C2LyqFuVWNwA8k3gi8WsBVYz2BKg=;
+        b=R2KcHriWAWU6xVLTH8Ms+Xzi5pJVISeoiNLtsGbUzBHJQZNQdxHCexoVZ0N98IHFor
+         VxyNkFYnWO50ZA9UAlx2HxSQjTQ2xeLQxr9jX6zEcgQj2fWy4icoxoNK28fSTsStdkae
+         xDKB3YpAHWOfuHVtWp4xL6h/OnpTxL7Hjj3f1hLxp90WRCKa6GKWMZZqGb3SwdYJzoGT
+         FVgSjTz+/bbI5gT9bBSpuuGJSeuosMDU7iZr7kFG3RIyefryk5VsyieGTL8xGqtudB7F
+         NoXLxmxlw/40+YuBp5wJT3OPk1Cq7UnGfBrjsAvwaQ2KNUY2VP1unBWgBMEkb6+t7j7A
+         1Nfw==
+X-Gm-Message-State: APjAAAXPUtQucNrdccj91xaPaQ6+CVgsvptmdLknLUIQzsHoelJI0EeU
+        EVlvYt4RPJmK5/HFDuJtV0o0jQ==
+X-Google-Smtp-Source: APXvYqwkWKQ15NL5sU2NfelXo3wfOTdqz6Icamd3E43Zqn+osblR5WcJ5sPyUi8DObCUnMzd+CCJow==
+X-Received: by 2002:a17:902:a8:: with SMTP id a37mr6159528pla.316.1566205772237;
+        Mon, 19 Aug 2019 02:09:32 -0700 (PDT)
+Received: from localhost ([122.172.76.219])
+        by smtp.gmail.com with ESMTPSA id z19sm13413609pgv.35.2019.08.19.02.09.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 19 Aug 2019 02:09:31 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 14:39:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>, krzk@kernel.org,
+        robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
+        kgene@kernel.org, pankaj.dubey@samsung.com,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com
+Subject: Re: [PATCH v2 0/9] Exynos Adaptive Supply Voltage support
+Message-ID: <20190819090928.pke6cov52n4exlbp@vireshk-i7>
+References: <CGME20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1@eucas1p1.samsung.com>
+ <20190718143044.25066-1-s.nawrocki@samsung.com>
+ <20190723020450.z2pqwetkn2tfhacq@vireshk-i7>
+ <5ef302a4-5bbf-483d-dfdf-cf76f6f69cee@samsung.com>
+ <20190725022343.p7lqalrh5svxvtu2@vireshk-i7>
+ <562dd2e7-2b24-8492-d1c1-2dc4973f07be@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <562dd2e7-2b24-8492-d1c1-2dc4973f07be@samsung.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, August 19, 2019 9:59:02 AM CEST Rafael J. Wysocki wrote:
-> On Fri, Aug 16, 2019 at 10:26 PM Kristian Klausen <kristian@klausen.dk> wrote:
-> >
-> > On 02.08.2019 12.33, Rafael J. Wysocki wrote:
-> > > Hi All,
-> > >
-> > >>> On top of the "Simplify the suspend-to-idle control flow" patch series
-> > >>> posted previously:
-> > >>>
-> > >>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
-> > >>>
-> > >>> sanitize the suspend-to-idle flow even further.
-> > >>>
-> > >>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
-> > >>>
-> > >>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
-> > >>> specification-compliant order with respect to suspending and resuming
-> > >>> devices (patch 2).
-> > >>>
-> > >>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
-> > >>> switch to prevent the LPS0 _DSM from being used.
-> > >> The v2 is because I found a (minor) bug in patch 1, decided to use a module
-> > >> parameter instead of a kernel command line option in patch 4.  Also, there
-> > >> are 4 new patches:
-> > >>
-> > >> Patch 5: Switch the EC over to polling during "noirq" suspend and back
-> > >> during "noirq" resume.
-> > >>
-> > >> Patch 6: Eliminate acpi_sleep_no_ec_events().
-> > >>
-> > >> Patch 7: Consolidate some EC code depending on PM_SLEEP.
-> > >>
-> > >> Patch 8: Add EC GPE dispatching debug message.
-> > > The v3 is just a rearranged v2 so as to move the post sensitive patch (previous patch 2)
-> > > to the end of the series.   [After applying the full series the code is the same as before.]
-> > >
-> > > For easier testing, the series (along with some previous patches depended on by it)
-> > > is available in the pm-s2idle-testing branch of the linux-pm.git tree at kernel.org:
-> > >
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
-> > It was just testing this patch series(461fc1caed55), to see if it would
-> > fix my charging issue
-> > (https://bugzilla.kernel.org/show_bug.cgi?id=201307), which it didn't.
+On 09-08-19, 17:58, Sylwester Nawrocki wrote:
+> Thank you for your suggestions.
 > 
-> It is unlikely to help in that case.
+> For some Exynos SoC variants the algorithm of selecting CPU voltage supply
+> is a bit more complex than just selecting a column in the frequency/voltage 
+> matrix, i.e. selecting a set of voltage values for whole frequency range.
 > 
-> > I did however notice that my laptop (ASUS Zenbook UX430UNR/i7-8550U)
-> > won't wake when opening the lid or pressing a key, the only way to wake
-> > the laptop is pressing the power button.
-> >
-> > I also tested mainline (5.3.0-rc4 b7e7c85dc7b0) and 5.2.8 and the laptop
-> > wakes without issue when the lid is opened or a key is presed.
-> > > Please refer to the changelogs for details.
+> Frequency range could be divided into sub-ranges and to each such a sub-range 
+> part of different column could be assigned, depending on data fused in 
+> the CHIPID block registers.
 > 
-> Thanks for your report.
+> We could create OPP node for each frequency and specify all needed voltages 
+> as a list of "opp-microvolt-<name>" properties but apart from the fact that 
+> it would have been quite many properties, e.g. 42 (3 tables * 14 columns), 
+> only for some SoC types the dev_pm_opp_set_prop_name() approach could be 
+> used. We would need to be able to set opp-microvolt-* property name 
+> separately for each frequency (OPP).
 > 
-> I seem to see a similar issue with respect to the lid on one of my
-> test machines, looking into it right now.
+> Probably most future proof would be a DT binding where we could still 
+> re-create those Exynos-specific ASV tables from DT. For example add named 
+> opp-microvolt-* properties or something similar to hold rows of each ASV 
+> table. But that conflicts with "operating-points-v2" binding, where 
+> multiple OPP voltage values are described by just named properties and 
+> multiple entries correspond to min/target/max.
+> 
+> opp_table0 {
+> 	compatible = "...", "operating-points-v2";
+> 	opp-shared;
+> 	opp-2100000000 {
+> 		opp-hz = /bits/ 64 <1800000000>;
+> 		opp-microvolt = <...>;
+> 		opp-microvolt-t1 = <1362500>, <1350000>, ....;
+> 		opp-microvolt-t2 = <1362500>, <1360000>, ....;
+> 		opp-microvolt-t3 = <1362500>, <1340000>, ....;
+> 	};
+> 	...
+> 	opp-200000000 {
+> 		opp-hz = /bits/ 64 <200000000>;
+> 		opp-microvolt = <...>;
+> 		opp-microvolt-t1 = <900000>, <900000>, ....;
+> 		opp-microvolt-t2 = <900000>, <900000>, ....;
+> 		opp-microvolt-t3 = <900000>, <900000>, ....;
+> 	};
+> };
+> 
+> I might be missing some information now on how those Exynos ASV tables 
+> are used on other SoCs that would need to be supported.
+> 
+> There will be even more data to include when adding support for the Body
+> Bias voltage, for each CPU supply voltage we could possibly have 
+> corresponding Body Bias voltage.
 
-Well, my lid issue seems to be unrelated as it doesn't result from any patches in the
-series in question.
+Will something like this help ?
 
-First off, please clone 5.3-rc5 from kernel.org and double check if the issue is not
-present in that one.
+https://lore.kernel.org/lkml/1442623929-4507-3-git-send-email-sboyd@codeaurora.org/
 
-If that's not the case, merge the pm-s2idle-rework branch from my tree on top of it
-and retest.
+This never got merged but the idea was AVS only.
 
-If you still see the issue then, apply the appended patch (on top of the pm-s2idle-reqork
-branch ) and, after starting the kernel, do
-
-# echo 1 > /sys/power/pm_debug_messages
-
-suspend the system and try to wake it up through all of the ways that stopped working.
-
-Then, wake it up with the power button, save the output of dmesg and send it to me.
-
-Thanks!
-
----
- drivers/acpi/sleep.c        |    4 ++--
- drivers/base/power/wakeup.c |    2 ++
- kernel/irq/pm.c             |    2 ++
- 3 files changed, 6 insertions(+), 2 deletions(-)
-
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -1012,9 +1012,9 @@ static void acpi_s2idle_wake(void)
- 		acpi_os_wait_events_complete(); /* synchronize EC GPE processing */
- 		acpi_ec_flush_work();
- 		acpi_os_wait_events_complete(); /* synchronize Notify handling */
--	}
- 
--	rearm_wake_irq(acpi_sci_irq);
-+		rearm_wake_irq(acpi_sci_irq);
-+	}
- }
- 
- static void acpi_s2idle_restore_early(void)
-Index: linux-pm/drivers/base/power/wakeup.c
-===================================================================
---- linux-pm.orig/drivers/base/power/wakeup.c
-+++ linux-pm/drivers/base/power/wakeup.c
-@@ -871,6 +871,8 @@ void pm_wakeup_clear(bool reset)
- 
- void pm_system_irq_wakeup(unsigned int irq_number)
- {
-+	pm_pr_dbg("IRQ wakeup: IRQ %u\n", irq_number);
-+
- 	if (pm_wakeup_irq == 0) {
- 		pm_wakeup_irq = irq_number;
- 		pm_system_wakeup();
-Index: linux-pm/kernel/irq/pm.c
-===================================================================
---- linux-pm.orig/kernel/irq/pm.c
-+++ linux-pm/kernel/irq/pm.c
-@@ -15,6 +15,8 @@
- 
- bool irq_pm_check_wakeup(struct irq_desc *desc)
- {
-+	pm_pr_dbg("%s: IRQ %u\n", __func__, irq_desc_get_irq(desc));
-+
- 	if (irqd_is_wakeup_armed(&desc->irq_data)) {
- 		irqd_clear(&desc->irq_data, IRQD_WAKEUP_ARMED);
- 		desc->istate |= IRQS_SUSPENDED | IRQS_PENDING;
-
-
-
-
-
+-- 
+viresh
