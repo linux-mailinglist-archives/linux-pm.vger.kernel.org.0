@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B97FE922D5
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 13:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1704922DF
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 13:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727268AbfHSLzp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 07:55:45 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38306 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727094AbfHSLzo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 07:55:44 -0400
-Received: by mail-wr1-f66.google.com with SMTP id g17so8426447wrr.5
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 04:55:43 -0700 (PDT)
+        id S1727029AbfHSL5i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 07:57:38 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:53291 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727128AbfHSL5h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 07:57:37 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 10so1358219wmp.3
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 04:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=MeeVHddQ4glE5pzixF7wOIvmBwdUHzXVQouPtTV5sJo=;
-        b=IXX1HL56VxUB10/ZqGD4BT8I2j/IS10PJBIFP7u3fqOVxZTX9UdD4SBs4piQySDv+c
-         9gon1dabZG0daH8zHi5sFkEGL2wJpy3OzB5jpHFVl4poUT98KDSaQfz77LXdBALvbbVb
-         5Ft0Y+0xCvqkAC09i+mntS7o83tVODBE/szQJYm9bYJvFarjNHLAlnDeo0vauUQXIx99
-         PYpcMOxXTl54mwVfKS9B3As+6WHAq4BqHpO+1TnISv0USEpturBr1sjQOXctoMSIfsN7
-         S/wL0oKOufe/MHxZLLxWtu6XjbAlwUToHeETbJOT7JvGW2lG8Vn1md0nGa/YgRkU9uWL
-         qGQg==
+        bh=nkHscq1m7ao+XiUByv3cscwkzyepN0nNuuYvL3lwtI0=;
+        b=dlvsDDca8g3nR6CmGEOccpnHN5MuEZkf5vFpy3iq/FuI8w49ZHxcQPpI+AzxT6mn6F
+         MwyyFmShfhhk0BIiD/SiMc89ZU1orrS6hVnonrb8fUpzxtGyQJt59g1qx4WFXo73MHof
+         9XQgcRopm2WmEHbwsDgdYMWlJBbpxTUuI3kxewuP6InWcOm1cjLR5Vm9aWAijsOusFTP
+         4DRr7VWDTOTdfX9IkywUNRYwgvmiOiUc/pvRKkxiN6rDdZ7V7MZxIEx9Nz0vEY8H4MMQ
+         EhGRg68lrwuUYOnYor4XiOiX6vfSH8+gTIP3rbwev6DyOZi8Y++lMyirBNN+qSTfYfri
+         DqRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=MeeVHddQ4glE5pzixF7wOIvmBwdUHzXVQouPtTV5sJo=;
-        b=Yua3Dz3ZNfIoVp3w+QJeQJ71SJlPLZj/N3mPpBlKNq9xgM7iUAlsULY/Mbl0RDUe6z
-         z5f4LBI2bElgGLpMxiKYQUUbs2vJ0zHprr+f2vX3hhamg4FgCVIGTIv9QzDgLV9KqrEV
-         hgosjgy3RCh3vaAhZ7k4i0+TCWDVkp12DAQx3SKuvuiJrEds9cwcFgqvmRpGCZH1T39b
-         J0yiSg+v5nLWxOZexnNLC7qvf8J4xsgHg42zhUJDjH4jnA78b5omlzffbKFy+7+EBmNq
-         YAbBkw8VCtK8xz/OmSjI/Ogc4A/zQxdRo8IUjo2LnQoMVEBkR881DTpc4y0NgT22YKPA
-         ROrA==
-X-Gm-Message-State: APjAAAU/mgtN/UZfQ0zNIbjNz48oM5qweFRC18TIOVY16ePlXYQo+wEU
-        xfsZD5BvjIZkomdG6/XHZP8yRj2X2xw=
-X-Google-Smtp-Source: APXvYqx5m4TZGub2vPaD8trWD77/5MQrP20cMUZX8FTNzHvx1vsdHmFeWt26RmoZ5r7H9D16gGEQYA==
-X-Received: by 2002:adf:f3d1:: with SMTP id g17mr26630404wrp.38.1566215742563;
-        Mon, 19 Aug 2019 04:55:42 -0700 (PDT)
+        bh=nkHscq1m7ao+XiUByv3cscwkzyepN0nNuuYvL3lwtI0=;
+        b=Fn6Vzl6RPmjmGB1LroHj7MqI7iAjAd0+3dl86BNFT9u7nmzP8jERu2ZDkmGkqUdVtv
+         EA1mOi4hYn+e0iN8TjfEz4DGvNabB3tz6bbuFZrJ0qy/6De2Ln4zNqDNXVZirL/nRdOv
+         nq47odCo5XmFTHFSXbcV/8Atl7b8mf4d8P5rMqjarPkzWhhxQYz4w8JCBUlDaIVsdylo
+         r8k/aWshKk8gPCuLmJLUdctUp7VYidKOI0i4Af9rO8Ifwjkzj/lfXB0YMSGE+GsMK5Gb
+         R8ZDysxSRrzRuJwm61khFMVXuhJOlgLWvnmkf4ZaEoEBT/U+NrXcDAoab4xOOgCaCEme
+         OVwA==
+X-Gm-Message-State: APjAAAWuCy/9c+GTKsgKv/YxgyP1RmYHstL8PGVCDO2btaFG5WzXNln+
+        NRyCTu+ZPC0We79X1UwqFAkJIag2bNg=
+X-Google-Smtp-Source: APXvYqyyWYhM06iAJEH0P0v+25tT2kh/zfGPi4h5BtHE4mW6tFfpLkuv4Oy8IK9iRDIX96W5bbMW3g==
+X-Received: by 2002:a7b:ce1a:: with SMTP id m26mr20585268wmc.60.1566215854267;
+        Mon, 19 Aug 2019 04:57:34 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:e064:6ffc:b2bf:7be8? ([2a01:e34:ed2f:f020:e064:6ffc:b2bf:7be8])
-        by smtp.googlemail.com with ESMTPSA id m23sm24214885wml.41.2019.08.19.04.55.41
+        by smtp.googlemail.com with ESMTPSA id g2sm29376401wru.27.2019.08.19.04.57.32
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 04:55:41 -0700 (PDT)
-Subject: Re: [PATCH 01/15] drivers: thermal: tsens: Get rid of id field in
- tsens_sensor
+        Mon, 19 Aug 2019 04:57:33 -0700 (PDT)
+Subject: Re: [PATCH 02/15] drivers: thermal: tsens: Simplify code flow in
+ tsens_probe
 To:     Amit Kucheria <amit.kucheria@linaro.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         bjorn.andersson@linaro.org, edubezval@gmail.com,
@@ -57,7 +57,7 @@ To:     Amit Kucheria <amit.kucheria@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
 Cc:     linux-pm@vger.kernel.org
 References: <cover.1564091601.git.amit.kucheria@linaro.org>
- <9dc86fa912d9b6e21857598ad81ff88564468e5d.1564091601.git.amit.kucheria@linaro.org>
+ <355cd15c91e02716140d7114fd403559487b66b6.1564091601.git.amit.kucheria@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
@@ -120,12 +120,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  adkDXtr4MeL8BaB7Ij2oyRVjXUwhFQNKi5Z5Rve0a3zvGkkqw8Mz20BOksjSWjAF6g9byukl
  CUVjC03PdMSufNLK06x5hPc/c4tFR4J9cLrV+XxdCX7r0zGos9SzTPGNuIk1LK++S3EJhLFj
  4eoWtNhMWc1uiTf9ENza0ntqH9XBWEQ6IA1gubCniGG+Xg==
-Message-ID: <a5611371-fc07-3861-7931-f22cb2262b0d@linaro.org>
-Date:   Mon, 19 Aug 2019 13:55:40 +0200
+Message-ID: <8df96416-9aa0-9f1f-fb9e-2a1e00362e18@linaro.org>
+Date:   Mon, 19 Aug 2019 13:57:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <9dc86fa912d9b6e21857598ad81ff88564468e5d.1564091601.git.amit.kucheria@linaro.org>
+In-Reply-To: <355cd15c91e02716140d7114fd403559487b66b6.1564091601.git.amit.kucheria@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -135,23 +135,14 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 26/07/2019 00:18, Amit Kucheria wrote:
-> There are two fields - id and hw_id - to track what sensor an action was
-> to performed on. This was because the sensors connected to a TSENS IP
-> might not be contiguous i.e. 1, 2, 4, 5 with 3 being skipped.
-> 
-> This causes confusion in the code which uses hw_id sometimes and id
-> other times (tsens_get_temp, tsens_get_trend).
-> 
-> Switch to only using the hw_id field to track the physical ID of the
-> sensor. When we iterate through all the sensors connected to an IP
-> block, we use an index i to loop through the list of sensors, and then
-> return the actual hw_id that is registered on that index.
+> Move platform_set_drvdata up to avoid an extra 'if (ret)' check after
+> the call to tsens_register.
 > 
 > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 
 Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-
+[ ... ]
 
 
 -- 
