@@ -2,185 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AE091E62
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 09:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA8391E77
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 09:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbfHSH6g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 03:58:36 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:40163 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725790AbfHSH6f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 03:58:35 -0400
-Received: by mail-vs1-f67.google.com with SMTP id i128so597637vsc.7
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 00:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9FY2ZK8jbTU1ozDDRr8vUXsHqK4aXnekG9ru1GMfhss=;
-        b=Uyh+uiK8JClxk5NbW6qP4yg7djHjjtMS5906hdZ2wcI9WsqK7bhIsA2KGUdHiMavvS
-         MEk6YuncME4pW8B+5dX1MLBVL837L7fZdzZsXCKMmQDffEsZrZdbtVJILnUoUFbwzbyU
-         PbaNQH4YhAxb8u15DvaYs7Pyu2c/HvgEhP/qT0eRbyT8R9OiYLJNk2nBF4kf3s2CnEUC
-         urhgnaoKmLq9/Vv19XcizK6eAv6rvWMRDF27CrK32gk9k5cUYAMJXF4vM/Izb7yqbL89
-         UBxRSTKBhwNtQWSvoQhfv427fgcq7pU0vUB+rHD/eA36vvmdyzPcjijbgGC09vRxdN3r
-         RXnA==
+        id S1727032AbfHSH7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 03:59:15 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:35980 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbfHSH7P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 03:59:15 -0400
+Received: by mail-oi1-f196.google.com with SMTP id c15so645914oic.3;
+        Mon, 19 Aug 2019 00:59:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9FY2ZK8jbTU1ozDDRr8vUXsHqK4aXnekG9ru1GMfhss=;
-        b=lZJKdKh0/JxB381jESBAGaDN1p1M7zBZ/T0rbkSkVbU0sN+Jripzbn86VuE/TaZbXX
-         Uhw5DBWz9rttoXgxSZ/jPhseUh9ybiZb7aRkEpB4PzanrlBL+h6k76z9mDHUx1g7/WYa
-         vIZmtCrH5SYYctKWOGTtbu2rVhH4r4XpFOx72v/cqJpk/yLC1ldG7qqEj4ZAipaJG1Wo
-         WpaafUBiHVW+kfYeAA4p5f+USIXS7wIh8XvJp4CdC0DUVjuNYoPlp0RbdZH4fFrHnd8v
-         jbmG4fmcd++7oisoggP0uZEJH/bNEYJ2gT0zbaF47alBLgRcVg+5Qgv706Nf2pS0Xp6j
-         rHAw==
-X-Gm-Message-State: APjAAAVynVucVmYQQSEA0tIRyiWLfoLvrSgxwv/LFDw1LgI0oNseqAKb
-        2PuSDo2sNN/8ijJdl1LG5cw8LUGyzR3a1iHrP44Acw==
-X-Google-Smtp-Source: APXvYqyKxPz2CxmIKdzi0DiriB6KW6QXt5TbeeA74BFHRyo1yokK3Cf+d6g95NEFzI31kvr5e4xaRZ4hsjI4/jVHieE=
-X-Received: by 2002:a05:6102:7d5:: with SMTP id y21mr13140149vsg.9.1566201514268;
- Mon, 19 Aug 2019 00:58:34 -0700 (PDT)
+        bh=oUSptt+CdgIB8+WPNPFqtbQpxW0z2SyMLqmPWc3Ld64=;
+        b=j6nxumxAM9QVr1gFpXym+QDnOnewWmPCSmOdKJ2Z+UgqPdWMeCJ/aI1fkCgUdC0S2D
+         EMiOB/u5QAWDwW+M/ebWTz5YD9aEWj5aPGJPH1eDnlc8WRrBysqbuiPiDjzQRntqGArd
+         f4ffl4xnYsjA4UbOUFCmnj3BnrhRkYlpx5vyX6EhIEDFae6/VlABuwgIdZ/vdO4SSsh/
+         3ZtUlKbK3a0jUz7enR5Usg1Xzhqk+LlxzK57LGan/0DfygnZwcWnEXgc64LpdjDMlfeZ
+         iGhb01mPJ4QJMZGJ17dBVOSVAMJblSRrqh4a5BFazpVIqQ7i5C5/m4gPjsy6rCWWp0YH
+         XEXw==
+X-Gm-Message-State: APjAAAV/BWlr6wLMWgmQLJoZLulo8rSXHqQY/MI6sEllLQBd/Eo/Gteu
+        0Qis2z+fxglEqfcYpzjWGxBvMqzkZ0gHs/416SQ=
+X-Google-Smtp-Source: APXvYqy+Ohktf48Hgjc+LqovwWi+gDS9TCKQtL4iy1RpfaZLEyRA4hxtvvIrUaK4fP8JnnoOaCX/TAG+3uU0irs2xx4=
+X-Received: by 2002:aca:ab56:: with SMTP id u83mr13102034oie.57.1566201554075;
+ Mon, 19 Aug 2019 00:59:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1564091601.git.amit.kucheria@linaro.org>
- <534b5017c2210ba8d541c206dace204d6617b4c9.1564091601.git.amit.kucheria@linaro.org>
- <5d577d77.1c69fb81.b6b07.83e6@mx.google.com>
-In-Reply-To: <5d577d77.1c69fb81.b6b07.83e6@mx.google.com>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 19 Aug 2019 13:28:23 +0530
-Message-ID: <CAHLCerMpWTVquyM3fYQxz-ZhDvnY276hfnZvZOmjV--cgm53UQ@mail.gmail.com>
-Subject: Re: [PATCH 04/15] drivers: thermal: tsens: Add debugfs support
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Andy Gross <andy.gross@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+References: <5997740.FPbUVk04hV@kreacher> <800186a2-e912-3498-f08b-47469bbe8b0d@klausen.dk>
+In-Reply-To: <800186a2-e912-3498-f08b-47469bbe8b0d@klausen.dk>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 19 Aug 2019 09:59:02 +0200
+Message-ID: <CAJZ5v0hfMS6aJP9G=dhZZ+3WTzM8=DzQkdJ7s9W3m5m9Dat5=g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to suspend-to-idle
+To:     Kristian Klausen <kristian@klausen.dk>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
+        Zhang Rui <rui.zhang@intel.com>,
+        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Aug 17, 2019 at 9:37 AM Stephen Boyd <swboyd@chromium.org> wrote:
+On Fri, Aug 16, 2019 at 10:26 PM Kristian Klausen <kristian@klausen.dk> wrote:
 >
-> Quoting Amit Kucheria (2019-07-25 15:18:39)
-> > Dump some basic version info and sensor details into debugfs
+> On 02.08.2019 12.33, Rafael J. Wysocki wrote:
+> > Hi All,
 > >
->
-> Maybe you can put some sample output in the commit text.
-
-Will do.
-
-> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > ---
-> >  drivers/thermal/qcom/tsens-common.c | 85 +++++++++++++++++++++++++++++
-> >  drivers/thermal/qcom/tsens.c        |  2 +
-> >  drivers/thermal/qcom/tsens.h        |  6 ++
-> >  3 files changed, 93 insertions(+)
+> >>> On top of the "Simplify the suspend-to-idle control flow" patch series
+> >>> posted previously:
+> >>>
+> >>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
+> >>>
+> >>> sanitize the suspend-to-idle flow even further.
+> >>>
+> >>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
+> >>>
+> >>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
+> >>> specification-compliant order with respect to suspending and resuming
+> >>> devices (patch 2).
+> >>>
+> >>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
+> >>> switch to prevent the LPS0 _DSM from being used.
+> >> The v2 is because I found a (minor) bug in patch 1, decided to use a module
+> >> parameter instead of a kernel command line option in patch 4.  Also, there
+> >> are 4 new patches:
+> >>
+> >> Patch 5: Switch the EC over to polling during "noirq" suspend and back
+> >> during "noirq" resume.
+> >>
+> >> Patch 6: Eliminate acpi_sleep_no_ec_events().
+> >>
+> >> Patch 7: Consolidate some EC code depending on PM_SLEEP.
+> >>
+> >> Patch 8: Add EC GPE dispatching debug message.
+> > The v3 is just a rearranged v2 so as to move the post sensitive patch (previous patch 2)
+> > to the end of the series.   [After applying the full series the code is the same as before.]
 > >
-> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-> > index 7437bfe196e5..7ab2e740a1da 100644
-> > --- a/drivers/thermal/qcom/tsens-common.c
-> > +++ b/drivers/thermal/qcom/tsens-common.c
-> > @@ -3,6 +3,7 @@
-> >   * Copyright (c) 2015, The Linux Foundation. All rights reserved.
-> >   */
+> > For easier testing, the series (along with some previous patches depended on by it)
+> > is available in the pm-s2idle-testing branch of the linux-pm.git tree at kernel.org:
 > >
-> > +#include <linux/debugfs.h>
-> >  #include <linux/err.h>
-> >  #include <linux/io.h>
-> >  #include <linux/nvmem-consumer.h>
-> > @@ -139,6 +140,79 @@ int get_temp_common(struct tsens_sensor *s, int *temp)
-> >         return 0;
-> >  }
-> >
-> > +#ifdef CONFIG_DEBUG_FS
-> > +static int dbg_sensors_show(struct seq_file *s, void *data)
-> > +{
-> > +       struct platform_device *pdev = s->private;
-> > +       struct tsens_priv *priv = platform_get_drvdata(pdev);
-> > +       int i;
-> > +
-> > +       seq_printf(s, "max: %2d\nnum: %2d\n\n",
-> > +                  priv->feat->max_sensors, priv->num_sensors);
-> > +
-> > +       seq_puts(s, "      id   slope  offset\n------------------------\n");
-> > +       for (i = 0;  i < priv->num_sensors; i++) {
-> > +               seq_printf(s, "%8d%8d%8d\n", priv->sensor[i].hw_id,
+> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
+> It was just testing this patch series(461fc1caed55), to see if it would
+> fix my charging issue
+> (https://bugzilla.kernel.org/show_bug.cgi?id=201307), which it didn't.
+
+It is unlikely to help in that case.
+
+> I did however notice that my laptop (ASUS Zenbook UX430UNR/i7-8550U)
+> won't wake when opening the lid or pressing a key, the only way to wake
+> the laptop is pressing the power button.
 >
-> Does this not have spaces between the digits on purpose?
+> I also tested mainline (5.3.0-rc4 b7e7c85dc7b0) and 5.2.8 and the laptop
+> wakes without issue when the lid is opened or a key is presed.
+> > Please refer to the changelogs for details.
 
-Nice catch. The 8-char width above hid the problem. Will add.
+Thanks for your report.
 
-> > +                          priv->sensor[i].slope, priv->sensor[i].offset);
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int dbg_version_show(struct seq_file *s, void *data)
-> > +{
-> > +       struct platform_device *pdev = s->private;
-> > +       struct tsens_priv *priv = platform_get_drvdata(pdev);
-> > +       u32 maj_ver, min_ver, step_ver;
-> > +       int ret;
-> > +
-> > +       if (tsens_ver(priv) > VER_0_1) {
-> > +               ret = regmap_field_read(priv->rf[VER_MAJOR], &maj_ver);
-> > +               if (ret)
-> > +                       return ret;
-> > +               ret = regmap_field_read(priv->rf[VER_MINOR], &min_ver);
-> > +               if (ret)
-> > +                       return ret;
-> > +               ret = regmap_field_read(priv->rf[VER_STEP], &step_ver);
-> > +               if (ret)
-> > +                       return ret;
-> > +               seq_printf(s, "%d.%d.%d\n", maj_ver, min_ver, step_ver);
-> > +       } else {
-> > +               seq_puts(s, "0.1.0\n");
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +DEFINE_SHOW_ATTRIBUTE(dbg_version);
-> > +DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
-> > +
-> > +static void tsens_debug_init(struct platform_device *pdev)
-> > +{
-> > +       struct tsens_priv *priv = platform_get_drvdata(pdev);
-> > +       struct dentry *root, *file;
-> > +
-> > +       root = debugfs_lookup("tsens", NULL);
->
-> Does this get created many times? Why doesn't tsens have a pointer to
-> the root saved away somewhere globally?
->
-
-I guess we could call the statement below to create the root dir and
-save away the pointer. I was trying to avoid #ifdef CONFIG_DEBUG_FS in
-init_common() and instead have all of it in a single function that
-gets called once per instance of the tsens controller.
-
-> > +       if (!root)
-> > +               priv->debug_root = debugfs_create_dir("tsens", NULL);
-> > +       else
-> > +               priv->debug_root = root;
-> > +
-> > +       file = debugfs_lookup("version", priv->debug_root);
-> > +       if (!file)
-> > +               debugfs_create_file("version", 0444, priv->debug_root,
-> > +                                   pdev, &dbg_version_fops);
-> > +
-> > +       /* A directory for each instance of the TSENS IP */
-> > +       priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
-> > +       debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
-> > +
-> > +       return;
-> > +}
+I seem to see a similar issue with respect to the lid on one of my
+test machines, looking into it right now.
