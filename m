@@ -2,138 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2F8920F1
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 12:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9FA920FB
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 12:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbfHSKGq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 06:06:46 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33934 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbfHSKGq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 06:06:46 -0400
-Received: by mail-pf1-f193.google.com with SMTP id b24so903654pfp.1
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 03:06:45 -0700 (PDT)
+        id S1726728AbfHSKKM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 06:10:12 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:34062 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbfHSKKL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 06:10:11 -0400
+Received: by mail-lj1-f194.google.com with SMTP id x18so1206557ljh.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 03:10:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6YMARnBm7B+MKOmk57BApjS/es/AZIVLPWfQBAL1uiI=;
-        b=Ltly77eya2ZHkenw1lFaLukEhxN4gMQEVwOD4aajtliH0GlevR+LzfnfINIbGZldt+
-         mHPxjruDnwwIvRd6gq3XnLiTHK2LImnTWnSIb+B+aFkBTnq8MHl0pNBcZ+Ce4FM09cp8
-         ihEUSX6luQqwhsFviNrt8LTKObfhBe1Fqpm7Q0yewHvewovh+4DdcK4oiobEUB0hMsML
-         outXNkNvFunIK0jD+hq47Kz/r9r5meCFBIVov84gs4XdwKhVA2VAaMJ1K+TI4nmQ5eeR
-         cJY3Y7yo4U5sR4IZh3Ke1gn/JiYPrlO3KVT3L2UYghXy89dV2GnwoLwzYP3VtM1O9ltK
-         1eNQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bFsYBz11w/0+2ipDFc6RAzNYkyX/rGj3LfC3+f/vlp4=;
+        b=beyi9uGJnPpG8O0vT7qQxG//HWz2f6IINF0hBwHiHXB3kM5NEIyK3NG65ahyuzltQn
+         HwoxDU9bsUkPsLT2MHe2pzdSOftUh6tGgYxJ2PUa0Sw7H1uV3stySjV8LZplZKEUFRo1
+         1Maodh2jZXqnsXwBVOS+g7SjZozY0N2P2ppxGP3+EPBO5n3rpwN1+RvTcGELgeGjE/+c
+         SEYlGvgFZQlQ3cYuGhsm3Qg7gDua8/tTFp179tb3eMFcaWj5mh9KwHU7WogsqXdVypED
+         HPITvLx5YQBBjPJOA37N4CS1M6xlUFJupOFzYyH+79Fvw+WcGFoKXUvrZfAYTlPZMgRY
+         ZtCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6YMARnBm7B+MKOmk57BApjS/es/AZIVLPWfQBAL1uiI=;
-        b=SlTcGN6BlmUJhnbz6DwXam4jZkoI1coZBCdC3YA8HzMzCoohnQwLDDrGLmv8W+sROP
-         nrhjJ0RMdxgbeQ838pLN7gPysatPvVJtmK2eLk5d9TicTvYYeaDolkOHzY00WE4xd2fk
-         a8G3njAMzMB85OcipgsR4blxgl2Q7vJtuTmex24IyMGmBzF2bhz3XBuHVGtw92HhnD7M
-         6rCH7dVNZK/DWopYLyma2VdGFJ6A4rGCYDuA8Vi/qlUPuJTMERHpBsmAXIBJVgcmY99B
-         GotUIpmKjZY6lupp34VCb4LidbFscHuE5Yty2eagdro7Z+h0sQTbAWXwbLDKX709sbay
-         qkTw==
-X-Gm-Message-State: APjAAAW18yB2l4+JehZgUKwFdobHizywpef2VQmLfbGnO2ZuYypphgIw
-        HN7JOJMH90EbkjfFgoLioGAXzQ==
-X-Google-Smtp-Source: APXvYqzreJijvk3uX+BNwXXnkkyRrE/6662mwuSEGeb1CmdC9G2lWBgGtyuYEOtScyn90y57Rn3mlQ==
-X-Received: by 2002:a62:26c4:: with SMTP id m187mr23960820pfm.49.1566209205119;
-        Mon, 19 Aug 2019 03:06:45 -0700 (PDT)
-Received: from localhost ([122.172.76.219])
-        by smtp.gmail.com with ESMTPSA id 11sm21266551pgo.43.2019.08.19.03.06.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 03:06:44 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 15:36:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>, krzk@kernel.org,
-        robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
-        kgene@kernel.org, pankaj.dubey@samsung.com,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com
-Subject: Re: [PATCH v2 0/9] Exynos Adaptive Supply Voltage support
-Message-ID: <20190819100642.tvnzt6d5rikugycr@vireshk-i7>
-References: <CGME20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1@eucas1p1.samsung.com>
- <20190718143044.25066-1-s.nawrocki@samsung.com>
- <20190723020450.z2pqwetkn2tfhacq@vireshk-i7>
- <5ef302a4-5bbf-483d-dfdf-cf76f6f69cee@samsung.com>
- <20190725022343.p7lqalrh5svxvtu2@vireshk-i7>
- <562dd2e7-2b24-8492-d1c1-2dc4973f07be@samsung.com>
- <20190819090928.pke6cov52n4exlbp@vireshk-i7>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bFsYBz11w/0+2ipDFc6RAzNYkyX/rGj3LfC3+f/vlp4=;
+        b=s1uRvCIrNqTBP1SST/F3VlWQnyMmcnC5bAl0sdjIQGOKj4DIYweXwQ+JYwWh/Ee6EB
+         HKpjDvpcFWyKSjkzygRwpNkpT+djIRlxauB7tvU3Ers7XYp1ST0p+XaOInIAkS32ZJNA
+         PfUhhpPne1upVVXMWwFhb49kvk7Xi2GE0VlmP2wyUSJ+qk+9sjbxwOEAg4ctmmzpoh8y
+         7wu6Z3UPZVTXR+0832zVeND4z/CBYHtuyjDPMktIe3cqPe94cuaIbLMpgnf1hwodQw8+
+         1AS34ib3vrxwKEfQR39pEngFCQr09ZJ5rwSm6qLY9sVPeVsmQoAWe/VpgatFUOR/B0xN
+         296g==
+X-Gm-Message-State: APjAAAVcDDDQovTeuGSGPR4HuGHUIDG2AVp3aR44X24fQiJP1g6j8mHz
+        e/LiEoC91UvOUoW+QjlgFek/oQ==
+X-Google-Smtp-Source: APXvYqyKKUveTAbKAVd1czgb5WboXpJSisP+Hj43L+mlwuCq45a9rieZfHZEJUNuJ3gFablY68RhWA==
+X-Received: by 2002:a05:651c:29b:: with SMTP id b27mr12017195ljo.74.1566209409256;
+        Mon, 19 Aug 2019 03:10:09 -0700 (PDT)
+Received: from localhost.localdomain (ua-84-219-138-247.bbcust.telenor.se. [84.219.138.247])
+        by smtp.gmail.com with ESMTPSA id g9sm1401833lje.90.2019.08.19.03.10.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2019 03:10:08 -0700 (PDT)
+From:   Niklas Cassel <niklas.cassel@linaro.org>
+To:     Andy Gross <agross@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, jorge.ramirez-ortiz@linaro.org,
+        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 06/14] dt-bindings: cpufreq: qcom-nvmem: Support pstates provided by a power domain
+Date:   Mon, 19 Aug 2019 12:09:57 +0200
+Message-Id: <20190819100957.17095-1-niklas.cassel@linaro.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190725104144.22924-7-niklas.cassel@linaro.org>
+References: <20190725104144.22924-7-niklas.cassel@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190819090928.pke6cov52n4exlbp@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-08-19, 14:39, Viresh Kumar wrote:
-> On 09-08-19, 17:58, Sylwester Nawrocki wrote:
-> > Thank you for your suggestions.
-> > 
-> > For some Exynos SoC variants the algorithm of selecting CPU voltage supply
-> > is a bit more complex than just selecting a column in the frequency/voltage 
-> > matrix, i.e. selecting a set of voltage values for whole frequency range.
-> > 
-> > Frequency range could be divided into sub-ranges and to each such a sub-range 
-> > part of different column could be assigned, depending on data fused in 
-> > the CHIPID block registers.
-> > 
-> > We could create OPP node for each frequency and specify all needed voltages 
-> > as a list of "opp-microvolt-<name>" properties but apart from the fact that 
-> > it would have been quite many properties, e.g. 42 (3 tables * 14 columns), 
-> > only for some SoC types the dev_pm_opp_set_prop_name() approach could be 
-> > used. We would need to be able to set opp-microvolt-* property name 
-> > separately for each frequency (OPP).
-> > 
-> > Probably most future proof would be a DT binding where we could still 
-> > re-create those Exynos-specific ASV tables from DT. For example add named 
-> > opp-microvolt-* properties or something similar to hold rows of each ASV 
-> > table. But that conflicts with "operating-points-v2" binding, where 
-> > multiple OPP voltage values are described by just named properties and 
-> > multiple entries correspond to min/target/max.
-> > 
-> > opp_table0 {
-> > 	compatible = "...", "operating-points-v2";
-> > 	opp-shared;
-> > 	opp-2100000000 {
-> > 		opp-hz = /bits/ 64 <1800000000>;
-> > 		opp-microvolt = <...>;
-> > 		opp-microvolt-t1 = <1362500>, <1350000>, ....;
-> > 		opp-microvolt-t2 = <1362500>, <1360000>, ....;
-> > 		opp-microvolt-t3 = <1362500>, <1340000>, ....;
-> > 	};
-> > 	...
-> > 	opp-200000000 {
-> > 		opp-hz = /bits/ 64 <200000000>;
-> > 		opp-microvolt = <...>;
-> > 		opp-microvolt-t1 = <900000>, <900000>, ....;
-> > 		opp-microvolt-t2 = <900000>, <900000>, ....;
-> > 		opp-microvolt-t3 = <900000>, <900000>, ....;
-> > 	};
-> > };
-> > 
-> > I might be missing some information now on how those Exynos ASV tables 
-> > are used on other SoCs that would need to be supported.
-> > 
-> > There will be even more data to include when adding support for the Body
-> > Bias voltage, for each CPU supply voltage we could possibly have 
-> > corresponding Body Bias voltage.
-> 
-> Will something like this help ?
-> 
-> https://lore.kernel.org/lkml/1442623929-4507-3-git-send-email-sboyd@codeaurora.org/
-> 
-> This never got merged but the idea was AVS only.
+Some Qualcomm SoCs have support for Core Power Reduction (CPR).
+On these platforms, we need to attach to the power domain provider
+providing the performance states, so that the leaky device (the CPU)
+can configure the performance states (which represent different
+CPU clock frequencies).
 
-Here is a recent version under review.
+Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Changes since V2:
+-Picked up Rob's Reviewed-by on V2.
+-As Rob pointed out in V1, it should be
+"In 'cpu' nodes" and not "In 'cpus' nodes".
+-In Example 2: include the qcom,opp-fuse-level property rather than "...",
+since Rob pointed out in the review of V1 of "dt-bindings: opp: Add
+ qcom-opp bindings with properties needed for CPR", that this property was
+missing in this patch.
 
-https://lore.kernel.org/lkml/1565703113-31479-1-git-send-email-andrew-sh.cheng@mediatek.com
+ .../bindings/opp/qcom-nvmem-cpufreq.txt       | 113 +++++++++++++++++-
+ 1 file changed, 112 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+index c5ea8b90e35d..1e6261570f3e 100644
+--- a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
++++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+@@ -14,7 +14,7 @@ operating-points-v2 table when it is parsed by the OPP framework.
+ 
+ Required properties:
+ --------------------
+-In 'cpus' nodes:
++In 'cpu' nodes:
+ - operating-points-v2: Phandle to the operating-points-v2 table to use.
+ 
+ In 'operating-points-v2' table:
+@@ -23,6 +23,15 @@ In 'operating-points-v2' table:
+ 
+ Optional properties:
+ --------------------
++In 'cpu' nodes:
++- power-domains: A phandle pointing to the PM domain specifier which provides
++		the performance states available for active state management.
++		Please refer to the power-domains bindings
++		Documentation/devicetree/bindings/power/power_domain.txt
++		and also examples below.
++- power-domain-names: Should be
++	- 'cpr' for qcs404.
++
+ In 'operating-points-v2' table:
+ - nvmem-cells: A phandle pointing to a nvmem-cells node representing the
+ 		efuse registers that has information about the
+@@ -682,3 +691,105 @@ soc {
+ 		};
+ 	};
+ };
++
++Example 2:
++---------
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		CPU0: cpu@100 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x100>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cprpd>;
++			power-domain-names = "cpr";
++		};
++
++		CPU1: cpu@101 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x101>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cprpd>;
++			power-domain-names = "cpr";
++		};
++
++		CPU2: cpu@102 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x102>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cprpd>;
++			power-domain-names = "cpr";
++		};
++
++		CPU3: cpu@103 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x103>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cprpd>;
++			power-domain-names = "cpr";
++		};
++	};
++
++	cpu_opp_table: cpu-opp-table {
++		compatible = "operating-points-v2-kryo-cpu";
++		opp-shared;
++
++		opp-1094400000 {
++			opp-hz = /bits/ 64 <1094400000>;
++			required-opps = <&cpr_opp1>;
++		};
++		opp-1248000000 {
++			opp-hz = /bits/ 64 <1248000000>;
++			required-opps = <&cpr_opp2>;
++		};
++		opp-1401600000 {
++			opp-hz = /bits/ 64 <1401600000>;
++			required-opps = <&cpr_opp3>;
++		};
++	};
++
++	cpr_opp_table: cpr-opp-table {
++		compatible = "operating-points-v2-qcom-level";
++
++		cpr_opp1: opp1 {
++			opp-level = <1>;
++			qcom,opp-fuse-level = <1>;
++		};
++		cpr_opp2: opp2 {
++			opp-level = <2>;
++			qcom,opp-fuse-level = <2>;
++		};
++		cpr_opp3: opp3 {
++			opp-level = <3>;
++			qcom,opp-fuse-level = <3>;
++		};
++	};
++
++....
++
++soc {
++....
++	cprpd: cpr@b018000 {
++		compatible = "qcom,qcs404-cpr", "qcom,cpr";
++		reg = <0x0b018000 0x1000>;
++		....
++		vdd-apc-supply = <&pms405_s3>;
++		#power-domain-cells = <0>;
++		operating-points-v2 = <&cpr_opp_table>;
++		....
++	};
++};
 -- 
-viresh
+2.21.0
+
