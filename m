@@ -2,87 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C21B94CCD
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 20:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE0D94CF7
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 20:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728266AbfHSS04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 14:26:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52100 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727970AbfHSS0z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 19 Aug 2019 14:26:55 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A950222CF6;
-        Mon, 19 Aug 2019 18:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566239214;
-        bh=Ivyitg0Ej4OT9+wlNtHSfddysy0Yzo6f+ai2y1gszXo=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=yKwuiNEaKXSYTOZwJLHBcizgkZa/S9//ofj0LoEwmolfjTUp76LpNj7X/Gw2u9OVT
-         lA2rQ2cnpzqET0Sj2IWzg0jTiYtu6cz3rBpDG/h5df4HVfJVWcUGMAydFgak4HldCg
-         yjvbx6h0fC4neMZWruWmN2spKfWn+0bAiGb0txB4=
-Content-Type: text/plain; charset="utf-8"
+        id S1728377AbfHSSaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 14:30:55 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:33257 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728136AbfHSSaz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 14:30:55 -0400
+Received: by mail-ot1-f68.google.com with SMTP id q20so2607572otl.0
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 11:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E/VeAeKX1xTDl+s4tBgBAHJpn7eS0PK+CB1vnSZNpOE=;
+        b=nzaLeW0lOmuy34oquCtsLKqtgPATh1wWb/oREDrGAPrZMOi7mLLlCqwJDwHzuQI1zQ
+         nFQaknob2bqdEOyUP9e8S6auemmhPRtBmAsn1hYWWsgeyTnK/NTt3s+W80KuAGTbREo+
+         HJZVKXhv2NdFL2epDgHBMma/rfIYstd8Soysr4+OiXVDyyxAAne/xrVRaR4wozSrIX0j
+         LCDAMJexdqbJwN3F5eTUoEz2yCtV+r3nFFGEp/BRaVsoOfko4zwOgIoZfzjE92uNBKJ4
+         Mw+eS9L/SV/u6xj2Osl+u5p+i4hHMK1U5rzO5+qAAupURpQtqupRLpUOlA+JSLKzViM9
+         fvzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E/VeAeKX1xTDl+s4tBgBAHJpn7eS0PK+CB1vnSZNpOE=;
+        b=iXGlOC1d1YRk64+0qO6CXYR9Xw4HERoZiuY0RzV1Ju/2kPv5iGB9pqIVnoKgVJywBr
+         suZ6iAxmlmHMA8cUYStdCcgJzwazlHAQgJD+BWW7uR2KoVEyHa/v2arkTHk5g6zxy2Fx
+         g6t66PU19GBJMKdZF2O/mtu32DCLsL5E6A9hIXhb+giDU2VislCTElOefhFGFxk7KYiX
+         II2bFS4KFaIPOtN25ipmSMYAjwk2Xo9PJ9TeSfYo0hxm13SWqcbbk4ChnJd0+8GNYSx1
+         Yw7ZxhPUCgUzazc2bc8LjbCPaTmTQ6yRXbCWfLlji85mXYudD/on1fJ7JbJgbXlq0G50
+         5n5g==
+X-Gm-Message-State: APjAAAWret6iCTUBvNISX3Fae7k2bZbxGBomKCBJ0swcqaQNs5Xhwbrh
+        Fc2YaSUfINDA8cKzWMTShxtkYGysK2ssqEZv6ES6Ew==
+X-Google-Smtp-Source: APXvYqzSVE22VDiQu8uGHa8Q+AjRI72tU3whMdq4pqkn94MHCeMT3uvhcjwzyjipLlogSVD3xRNpahFaVw6maSbIuSo=
+X-Received: by 2002:a9d:5911:: with SMTP id t17mr18326897oth.159.1566239454336;
+ Mon, 19 Aug 2019 11:30:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190819165255.GA26807@tuxbook-pro>
-References: <1565037226-1684-1-git-send-email-jcrouse@codeaurora.org> <20190807234232.27AA720880@mail.kernel.org> <20190819165255.GA26807@tuxbook-pro>
-Subject: Re: [PATCH v2] drivers: qcom: Add BCM vote macro to header
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Jordan Crouse <jcrouse@codeaurora.org>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-clk@vger.kernel.org, Taniya Das <tdas@codeaurora.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-User-Agent: alot/0.8.1
-Date:   Mon, 19 Aug 2019 11:26:53 -0700
-Message-Id: <20190819182654.A950222CF6@mail.kernel.org>
+References: <20190819175457.231058-1-swboyd@chromium.org> <20190819175457.231058-2-swboyd@chromium.org>
+In-Reply-To: <20190819175457.231058-2-swboyd@chromium.org>
+From:   Tri Vo <trong@android.com>
+Date:   Mon, 19 Aug 2019 11:30:43 -0700
+Message-ID: <CANA+-vBZF+KkB-ZWhjpRS=hwhk+6pM0mmUsj8gwxy0VcKjqG2Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] PM / wakeup: Register wakeup class kobj after
+ device is added
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, Qian Cai <cai@lca.pw>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Bjorn Andersson (2019-08-19 09:52:55)
-> On Wed 07 Aug 16:42 PDT 2019, Stephen Boyd wrote:
->=20
-> > Quoting Jordan Crouse (2019-08-05 13:33:46)
-> > > The macro to generate a Bus Controller Manager (BCM) TCS command is u=
-sed
-> > > by the interconnect driver but might also be interesting to other
-> > > drivers that need to construct TCS commands for sub processors so move
-> > > it out of the sdm845 specific file and into the header.
-> > >=20
-> > > Signed-off-by: Jordan Crouse <jcrouse@codeaurora.org>
-> > > ---
-> >=20
-> > Acked-by: Stephen Boyd <sboyd@kernel.org>
-> >=20
-> > Unless this is supposed to be applied by me?
-> >=20
-> > BTW, I wonder why we need an rpm clk driver much at all nowadays, except
-> > maybe for the XO clk state. The big user, from what I can tell, is the
-> > interconnect driver and we don't use any of the features of the clk
-> > framework besides the API to set a frequency. Maybe it would be better
-> > to just push push the bus frequency logic into interconnect code, then
-> > XO clk is the only thing we need to keep, and it can be a simple on/off
-> > thing.
-> >=20
->=20
-> There's been a number of cases where we'll need to enable the buffered
-> XOs, but perhaps these are handled by other subsystems these days(?)
->=20
-> If so the one case that remains would be the operation of explicitly
-> holding CXO enabled during operations such as booting the remoteprocs.
->=20
+On Mon, Aug 19, 2019 at 10:55 AM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> The device_set_wakeup_enable() function can be called on a device that
+> hasn't been registered with device_add() yet. This allows the device to
+> be in a state where wakeup is enabled for it but the device isn't
+> published to userspace in sysfs yet.
+>
+> After commit 986845e747af ("PM / wakeup: Show wakeup sources stats in
+> sysfs"), calling device_set_wakeup_enable() will fail for a device that
+> hasn't been registered with the driver core via device_add(). This is
+> because we try to create sysfs entries for the device and associate a
+> wakeup class kobject with it before the device has been registered.
+>
+> Let's follow a similar approach that device_set_wakeup_capable() takes
+> here and register the wakeup class either from
+> device_set_wakeup_enable() when the device is already registered, or
+> from dpm_sysfs_add() when the device is being registered with the driver
+> core via device_add().
+>
+> Fixes: 986845e747af ("PM / wakeup: Show wakeup sources stats in sysfs")
+> Reported-by: Qian Cai <cai@lca.pw>
+> Cc: Qian Cai <cai@lca.pw>
+> Cc: Tri Vo <trong@android.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-Yes I think the XO (and the buffers) is the only thing that we really
-seem to care about for the clk tree. Otherwise, the sole user is
-interconnect code and thus handling it in the rpmh clk driver doesn't
-really gain us anything. In fact, it just makes it worse because it ties
-the clk tree up with things that could take a while to process on the
-RPM side.
-
+Reviewed-by: Tri Vo <trong@android.com>
