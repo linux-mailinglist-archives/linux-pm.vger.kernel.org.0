@@ -2,110 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA8391E77
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 09:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACCE91EA6
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 10:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfHSH7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 03:59:15 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:35980 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbfHSH7P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 03:59:15 -0400
-Received: by mail-oi1-f196.google.com with SMTP id c15so645914oic.3;
-        Mon, 19 Aug 2019 00:59:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oUSptt+CdgIB8+WPNPFqtbQpxW0z2SyMLqmPWc3Ld64=;
-        b=j6nxumxAM9QVr1gFpXym+QDnOnewWmPCSmOdKJ2Z+UgqPdWMeCJ/aI1fkCgUdC0S2D
-         EMiOB/u5QAWDwW+M/ebWTz5YD9aEWj5aPGJPH1eDnlc8WRrBysqbuiPiDjzQRntqGArd
-         f4ffl4xnYsjA4UbOUFCmnj3BnrhRkYlpx5vyX6EhIEDFae6/VlABuwgIdZ/vdO4SSsh/
-         3ZtUlKbK3a0jUz7enR5Usg1Xzhqk+LlxzK57LGan/0DfygnZwcWnEXgc64LpdjDMlfeZ
-         iGhb01mPJ4QJMZGJ17dBVOSVAMJblSRrqh4a5BFazpVIqQ7i5C5/m4gPjsy6rCWWp0YH
-         XEXw==
-X-Gm-Message-State: APjAAAV/BWlr6wLMWgmQLJoZLulo8rSXHqQY/MI6sEllLQBd/Eo/Gteu
-        0Qis2z+fxglEqfcYpzjWGxBvMqzkZ0gHs/416SQ=
-X-Google-Smtp-Source: APXvYqy+Ohktf48Hgjc+LqovwWi+gDS9TCKQtL4iy1RpfaZLEyRA4hxtvvIrUaK4fP8JnnoOaCX/TAG+3uU0irs2xx4=
-X-Received: by 2002:aca:ab56:: with SMTP id u83mr13102034oie.57.1566201554075;
- Mon, 19 Aug 2019 00:59:14 -0700 (PDT)
+        id S1726390AbfHSIPR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 04:15:17 -0400
+Received: from mail-eopbgr30068.outbound.protection.outlook.com ([40.107.3.68]:42734
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726366AbfHSIPQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 19 Aug 2019 04:15:16 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RDK3OMKIBi+VOMZFkiPDQpEjOnm6c3FOck72WAUYuCELnXFoFrGrmcRH54ozY43QzfBgqZqcjppMlvNig1uc3/ONxMK2sc2D+8QhRmYTFrCyVT3cDB1bkLAY8rv+k7wY8Bz/zXxA7Sl2St6Jvwm3ZYvS0auFgXK88PBDc7iUFBYuwSMbI+zp9YP6zQ7gDaQCVRFE5MEiEVk6Xnw88GvxArHo1JB2sMP3dNfrlekHifWCnwwyOjpRbk/jmJsY4k3vCy+Hbp4YXMmUtS/UZ7UzsAQ7B+9LDPn2MKEfdJKu921t9a1PKCs8sAbXGyrkJlOL56pIvWzXPvGhH6bwnktsKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1R4sHq13+IaHO8Cmfot74gAVxrLkdYHIEVatTcdtYAA=;
+ b=axtTiLU4ylr+ZCoPn8gJwXQm+RFmb2fxj21d/mesYb5wcWKK0dPiaAQLbfr7CirRqSXPQ6fS4HvwGDrj5nRkyidAX8CkuH5kN9dsmaqXkjj7HOb5Rho2dSEO4hAAII7uvV3PKCNG2IkM6EbJbVoc/jLU4guKxvV6aLBMIWuBeKR1oMbckfZx9M28Zb8H5b68jmgtkxzc/nXEXdNVQFhuC65NLA1evlvSiCR8v+0okwr/wgD3VLMHYe3k8f8yjUkbDRcsIYOGXiYXCvOQozSKxgMKiOdvcb7KwZpH6cgZieKqfjZa0CK39REosUa8YR8sB0tjyqXFbZWSpB78how2/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1R4sHq13+IaHO8Cmfot74gAVxrLkdYHIEVatTcdtYAA=;
+ b=qRuPGvY8/aVkILijABFrzdxs3xezzvxedjs3gq491zcVoI4nWvTgL2/I8Kue1JlYYuYzxd6DpUDh5Vg/rJm5FyuYFR/H+WGyf2U3ON0UIsUR9gdRsFCEJthFesUH12QsXrdaiRgrsrhKC63PAaedJCeU9SbmUNPpyFCmod8o2hk=
+Received: from DB8PR04MB6826.eurprd04.prod.outlook.com (52.133.240.82) by
+ DB8PR04MB6761.eurprd04.prod.outlook.com (20.179.251.89) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2178.16; Mon, 19 Aug 2019 08:14:32 +0000
+Received: from DB8PR04MB6826.eurprd04.prod.outlook.com
+ ([fe80::ad63:e8df:f0c2:7246]) by DB8PR04MB6826.eurprd04.prod.outlook.com
+ ([fe80::ad63:e8df:f0c2:7246%2]) with mapi id 15.20.2178.018; Mon, 19 Aug 2019
+ 08:14:32 +0000
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     Leo Li <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pavel Machek <pavel@ucw.cz>, Biwen Li <biwen.li@nxp.com>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH v5 1/3] PM: wakeup: Add routine to help fetch wakeup
+ source object.
+Thread-Topic: [PATCH v5 1/3] PM: wakeup: Add routine to help fetch wakeup
+ source object.
+Thread-Index: AQHVQfPC8fuUrwx+d0SKWP625Z9OpabsZPGAgBWwP7A=
+Date:   Mon, 19 Aug 2019 08:14:32 +0000
+Message-ID: <DB8PR04MB682632A586827032F8D6EA2DF1A80@DB8PR04MB6826.eurprd04.prod.outlook.com>
+References: <20190724074722.12270-1-ran.wang_1@nxp.com>
+ <4158639.B12JYek7R7@kreacher>
+In-Reply-To: <4158639.B12JYek7R7@kreacher>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ran.wang_1@nxp.com; 
+x-originating-ip: [92.121.36.198]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7024ef78-f04a-4d7a-b29b-08d7247d4416
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB8PR04MB6761;
+x-ms-traffictypediagnostic: DB8PR04MB6761:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB8PR04MB676179B6D34FED0D2FFAC9EEF1A80@DB8PR04MB6761.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1247;
+x-forefront-prvs: 0134AD334F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(136003)(376002)(396003)(366004)(346002)(189003)(51914003)(199004)(478600001)(229853002)(6916009)(8936002)(6116002)(8676002)(81166006)(81156014)(3846002)(66446008)(64756008)(76116006)(66946007)(9686003)(6436002)(55016002)(66476007)(66556008)(7736002)(305945005)(7416002)(74316002)(26005)(53546011)(6506007)(53936002)(186003)(102836004)(2906002)(476003)(11346002)(486006)(446003)(5660300002)(66066001)(6246003)(14454004)(5024004)(7696005)(256004)(71200400001)(14444005)(71190400001)(52536014)(99286004)(316002)(54906003)(76176011)(25786009)(33656002)(86362001)(4326008)(473944003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB6761;H:DB8PR04MB6826.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: ClAH81fPqPTIE38CHMUl7jsd5XpSd2OmrOHQ0Ol/Pkp2Vi2doqzx/YPLiunYNfLQb5b2tmc4Omz9qKP5p1PneDVHak3mosR/4WIzt6VSq3ffYcukwKNHcAVVseLZLgpZlZKI5KJ4lkkuZOp9X+quLJZJdSBlqw17A6cVWnbi1wi5RVz9QKoRqIwl25mpWTe/n30h9U0z2ed/DKxM9R8l1BJG5Qi5gkWeOb6XIMh2RgeiSR6ZhO/ZC0FYKX2ko2TDXYLjmk1gtg7STDoSbgCfeOHSj70EII73YsinEeAnk/hE8WJP7Mkfr+Cx/AbNdgl3Tj64bmeRDjhTQqyLNUK8s2bW5+D/f82T1alWb3DJqF4VR4URCt8A+WZw2e+LMXEuZQjloKsTwdpWatSYBu3w7fvOQpqZP8GSUOqgS6OnNHE=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <5997740.FPbUVk04hV@kreacher> <800186a2-e912-3498-f08b-47469bbe8b0d@klausen.dk>
-In-Reply-To: <800186a2-e912-3498-f08b-47469bbe8b0d@klausen.dk>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 19 Aug 2019 09:59:02 +0200
-Message-ID: <CAJZ5v0hfMS6aJP9G=dhZZ+3WTzM8=DzQkdJ7s9W3m5m9Dat5=g@mail.gmail.com>
-Subject: Re: [PATCH v3 0/8] PM / ACPI: sleep: Additional changes related to suspend-to-idle
-To:     Kristian Klausen <kristian@klausen.dk>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7024ef78-f04a-4d7a-b29b-08d7247d4416
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2019 08:14:32.6873
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Yx15X8XyY62S0HxtKc7BKR/zlRhf10FWXwHYcgqR7P9kjh8/oBFHkeYn6p2uXHo83ANLf85h/5YHE8Ze61eSBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6761
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 10:26 PM Kristian Klausen <kristian@klausen.dk> wrote:
->
-> On 02.08.2019 12.33, Rafael J. Wysocki wrote:
-> > Hi All,
+Hi Rafael,
+
+On Monday, August 05, 2019 17:59, Rafael J. Wysocki wrote:
+>=20
+> On Wednesday, July 24, 2019 9:47:20 AM CEST Ran Wang wrote:
+> > Some user might want to go through all registered wakeup sources and
+> > doing things accordingly. For example, SoC PM driver might need to do
+> > HW programming to prevent powering down specific IP which wakeup
+> > source depending on. So add this API to help walk through all
+> > registered wakeup source objects on that list and return them one by on=
+e.
 > >
-> >>> On top of the "Simplify the suspend-to-idle control flow" patch series
-> >>> posted previously:
-> >>>
-> >>> https://lore.kernel.org/lkml/71085220.z6FKkvYQPX@kreacher/
-> >>>
-> >>> sanitize the suspend-to-idle flow even further.
-> >>>
-> >>> First off, decouple EC wakeup from the LPS0 _DSM processing (patch 1).
-> >>>
-> >>> Next, reorder the code to invoke LPS0 _DSM Functions 5 and 6 in the
-> >>> specification-compliant order with respect to suspending and resuming
-> >>> devices (patch 2).
-> >>>
-> >>> Finally, rearrange lps0_device_attach() (patch 3) and add a command line
-> >>> switch to prevent the LPS0 _DSM from being used.
-> >> The v2 is because I found a (minor) bug in patch 1, decided to use a module
-> >> parameter instead of a kernel command line option in patch 4.  Also, there
-> >> are 4 new patches:
-> >>
-> >> Patch 5: Switch the EC over to polling during "noirq" suspend and back
-> >> during "noirq" resume.
-> >>
-> >> Patch 6: Eliminate acpi_sleep_no_ec_events().
-> >>
-> >> Patch 7: Consolidate some EC code depending on PM_SLEEP.
-> >>
-> >> Patch 8: Add EC GPE dispatching debug message.
-> > The v3 is just a rearranged v2 so as to move the post sensitive patch (previous patch 2)
-> > to the end of the series.   [After applying the full series the code is the same as before.]
+> > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> > ---
+> > Change in v5:
+> > 	- Update commit message, add decription of walk through all wakeup
+> > 	source objects.
+> > 	- Add SCU protection in function wakeup_source_get_next().
+> > 	- Rename wakeup_source member 'attached_dev' to 'dev' and move it
+> up
+> > 	(before wakeirq).
 > >
-> > For easier testing, the series (along with some previous patches depended on by it)
-> > is available in the pm-s2idle-testing branch of the linux-pm.git tree at kernel.org:
+> > Change in v4:
+> > 	- None.
 > >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-s2idle-testing
-> It was just testing this patch series(461fc1caed55), to see if it would
-> fix my charging issue
-> (https://bugzilla.kernel.org/show_bug.cgi?id=201307), which it didn't.
+> > Change in v3:
+> > 	- Adjust indentation of *attached_dev;.
+> >
+> > Change in v2:
+> > 	- None.
+> >
+> >  drivers/base/power/wakeup.c | 24 ++++++++++++++++++++++++
+> >  include/linux/pm_wakeup.h   |  3 +++
+> >  2 files changed, 27 insertions(+)
+> >
+> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> > index ee31d4f..2fba891 100644
+> > --- a/drivers/base/power/wakeup.c
+> > +++ b/drivers/base/power/wakeup.c
+> > @@ -14,6 +14,7 @@
+> >  #include <linux/suspend.h>
+> >  #include <linux/seq_file.h>
+> >  #include <linux/debugfs.h>
+> > +#include <linux/of_device.h>
+> >  #include <linux/pm_wakeirq.h>
+> >  #include <trace/events/power.h>
+> >
+> > @@ -226,6 +227,28 @@ void wakeup_source_unregister(struct
+> wakeup_source *ws)
+> >  	}
+> >  }
+> >  EXPORT_SYMBOL_GPL(wakeup_source_unregister);
+> > +/**
+> > + * wakeup_source_get_next - Get next wakeup source from the list
+> > + * @ws: Previous wakeup source object, null means caller want first on=
+e.
+> > + */
+> > +struct wakeup_source *wakeup_source_get_next(struct wakeup_source
+> > +*ws) {
+> > +	struct list_head *ws_head =3D &wakeup_sources;
+> > +	struct wakeup_source *next_ws =3D NULL;
+> > +	int idx;
+> > +
+> > +	idx =3D srcu_read_lock(&wakeup_srcu);
+> > +	if (ws)
+> > +		next_ws =3D list_next_or_null_rcu(ws_head, &ws->entry,
+> > +				struct wakeup_source, entry);
+> > +	else
+> > +		next_ws =3D list_entry_rcu(ws_head->next,
+> > +				struct wakeup_source, entry);
+> > +	srcu_read_unlock(&wakeup_srcu, idx);
+> > +
+>=20
+> This is incorrect.
+>=20
+> The SRCU cannot be unlocked until the caller of this is done with the obj=
+ect
+> returned by it, or that object can be freed while it is still being acces=
+sed.
 
-It is unlikely to help in that case.
+Thanks for the comment. Looks like I was not fully understanding your point=
+ on
+v4 discussion. So I will implement 3 APIs by referring wakeup_sources_stats=
+_seq_start/next/stop()
+=20
+> Besides, this patch conflicts with some general wakeup sources changes in=
+ the
+> works, so it needs to be deferred and rebased on top of those changes.
 
-> I did however notice that my laptop (ASUS Zenbook UX430UNR/i7-8550U)
-> won't wake when opening the lid or pressing a key, the only way to wake
-> the laptop is pressing the power button.
->
-> I also tested mainline (5.3.0-rc4 b7e7c85dc7b0) and 5.2.8 and the laptop
-> wakes without issue when the lid is opened or a key is presed.
-> > Please refer to the changelogs for details.
+Could you please tell me which is the right code base I should developing o=
+n?
+I just tried applying v5 patch on latest git://git.kernel.org/pub/scm/linux=
+/kernel/git/gregkh/usb.git branch master (d1abaeb Linux 5.3-rc5)
+and no conflict encountered.
 
-Thanks for your report.
+Thanks & Regards,
+Ran
 
-I seem to see a similar issue with respect to the lid on one of my
-test machines, looking into it right now.
+
