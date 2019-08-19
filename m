@@ -2,104 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C001991F10
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 10:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E9A91F66
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Aug 2019 10:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727248AbfHSIhY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 04:37:24 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36442 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726661AbfHSIhY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 04:37:24 -0400
-Received: by mail-pl1-f196.google.com with SMTP id f19so229293plr.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 01:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=MLF4tD6+FJYl38ePAWlkoj5Z15+ny3oYCgbHrSJNz8A=;
-        b=LCxXHuzlxnVHVppnji+DvHkFP/SZLymrp5bS89fSrkUX9wmkOXSaBohOb7SboQaqF4
-         lfmi3bvVVib3WfL4+7WDoC8xYs+s06jY207Ob2AfP/3njR2W7SomPIqQ9waB9mwUn0YN
-         c05eHQ8l8d9OizbMy/elctv0YCkurzezb34QQ710k/u2H/d4cQy/6Ws1kxU3yIiSnxvv
-         EIhQPimc5Zx+TnB2PZgZihS+V/hUdmY6H/AmZzhTg7XiFMYt6HB/JqGoTvjQ3h+b4FTl
-         cHD7uh1oD0VMfE203q/6vB2yuwb0rctRYFg/fFid3KKinDq1ArBn34NHt/+21a37+Al3
-         W3tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MLF4tD6+FJYl38ePAWlkoj5Z15+ny3oYCgbHrSJNz8A=;
-        b=ELdvz40hAeH1CqQ7YEMok4+Jd2jX6qVYUToqw6ijCA5ri3IiZ+sktsi0upSTsAdhCH
-         wSUg3bra5OBIqYBKEA3iavEY5jbosotn4TKViiZTF5uC5yOh+m6ipltxKZFcX4Ej/fFv
-         2uCSyKp4zcGki41vx+1TBWw2DX5/TguEiWSUHqmb4tGycL7HSARcpWKmluEO/gG1USLY
-         p16eDH3JS0oPLKxahmLsf0UP60GnxM32csF44nTeJ/kDL6EfAifXUDmvvTEnfHtyrr3m
-         sN/QYIQ6SGiBPayWpH2SRTg8CIlOzbR+mCDbXLsAycWH7dGC9xfy6czluPtwOHsBgqQ2
-         MrFg==
-X-Gm-Message-State: APjAAAXkErIIkB5jrZqD1oFbGWfT4XUJu/T6NRyNch97YmOjchD4C9KC
-        U9msRHrj8GoAmJfGmtTqjpCc7g==
-X-Google-Smtp-Source: APXvYqz9ND/C3CgHtCCh37J8vJRsiNrGnMOQWJPmZy8F/EO5ELC+GGDRZy6iFapGHd4fJ+RtC7S0RQ==
-X-Received: by 2002:a17:902:5a04:: with SMTP id q4mr21659669pli.280.1566203843709;
-        Mon, 19 Aug 2019 01:37:23 -0700 (PDT)
-Received: from localhost ([122.172.76.219])
-        by smtp.gmail.com with ESMTPSA id z24sm20403594pfr.51.2019.08.19.01.37.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 01:37:23 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 14:07:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org, rjw@rjwysocki.net,
-        leonard.crestez@nxp.com, abel.vesa@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH RESEND V2 4/7] cpufreq: imx-cpufreq-dt: Add i.MX8MN
- support
-Message-ID: <20190819083721.w75clbpu2vtoeocx@vireshk-i7>
-References: <1566109945-11149-1-git-send-email-Anson.Huang@nxp.com>
- <1566109945-11149-4-git-send-email-Anson.Huang@nxp.com>
+        id S1726905AbfHSIyq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 04:54:46 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:65094 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726661AbfHSIyq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 04:54:46 -0400
+Received: from 79.184.254.79.ipv4.supernova.orange.pl (79.184.254.79) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
+ id dd98f88ef098e161; Mon, 19 Aug 2019 10:54:44 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Ran Wang <ran.wang_1@nxp.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Leo Li <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pavel Machek <pavel@ucw.cz>, Biwen Li <biwen.li@nxp.com>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 1/3] PM: wakeup: Add routine to help fetch wakeup source object.
+Date:   Mon, 19 Aug 2019 10:54:43 +0200
+Message-ID: <2529818.3AUhDYJ4cv@kreacher>
+In-Reply-To: <DB8PR04MB6826475ACA623AE6D63617D7F1A80@DB8PR04MB6826.eurprd04.prod.outlook.com>
+References: <20190724074722.12270-1-ran.wang_1@nxp.com> <CAJZ5v0i58p-GsswzMGEsgD5OXDqJ_G5zXDYf8jq8JJbWxZv+nQ@mail.gmail.com> <DB8PR04MB6826475ACA623AE6D63617D7F1A80@DB8PR04MB6826.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1566109945-11149-4-git-send-email-Anson.Huang@nxp.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-08-19, 02:32, Anson Huang wrote:
-> i.MX8MN has different speed grading definition as below, it has 4 bits
-> to define speed grading, add support for it.
+On Monday, August 19, 2019 10:33:25 AM CEST Ran Wang wrote:
+> Hi Rafael,
 > 
->  SPEED_GRADE[3:0]    MHz
->     0000            2300
->     0001            2200
->     0010            2100
->     0011            2000
->     0100            1900
->     0101            1800
->     0110            1700
->     0111            1600
->     1000            1500
->     1001            1400
->     1010            1300
->     1011            1200
->     1100            1100
->     1101            1000
->     1110             900
->     1111             800
+> On Monday, August 19, 2019 16:20, Rafael J. Wysocki wrote:
+> > 
+> > On Mon, Aug 19, 2019 at 10:15 AM Ran Wang <ran.wang_1@nxp.com> wrote:
+> > >
+> > > Hi Rafael,
+> > >
+> > > On Monday, August 05, 2019 17:59, Rafael J. Wysocki wrote:
+> > > >
+> > > > On Wednesday, July 24, 2019 9:47:20 AM CEST Ran Wang wrote:
+> > > > > Some user might want to go through all registered wakeup sources
+> > > > > and doing things accordingly. For example, SoC PM driver might
+> > > > > need to do HW programming to prevent powering down specific IP
+> > > > > which wakeup source depending on. So add this API to help walk
+> > > > > through all registered wakeup source objects on that list and return them
+> > one by one.
+> > > > >
+> > > > > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> > > > > ---
+> > > > > Change in v5:
+> > > > >     - Update commit message, add decription of walk through all wakeup
+> > > > >     source objects.
+> > > > >     - Add SCU protection in function wakeup_source_get_next().
+> > > > >     - Rename wakeup_source member 'attached_dev' to 'dev' and move
+> > > > > it
+> > > > up
+> > > > >     (before wakeirq).
+> > > > >
+> > > > > Change in v4:
+> > > > >     - None.
+> > > > >
+> > > > > Change in v3:
+> > > > >     - Adjust indentation of *attached_dev;.
+> > > > >
+> > > > > Change in v2:
+> > > > >     - None.
+> > > > >
+> > > > >  drivers/base/power/wakeup.c | 24 ++++++++++++++++++++++++
+> > > > >  include/linux/pm_wakeup.h   |  3 +++
+> > > > >  2 files changed, 27 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/base/power/wakeup.c
+> > > > > b/drivers/base/power/wakeup.c index ee31d4f..2fba891 100644
+> > > > > --- a/drivers/base/power/wakeup.c
+> > > > > +++ b/drivers/base/power/wakeup.c
+> > > > > @@ -14,6 +14,7 @@
+> > > > >  #include <linux/suspend.h>
+> > > > >  #include <linux/seq_file.h>
+> > > > >  #include <linux/debugfs.h>
+> > > > > +#include <linux/of_device.h>
+> > > > >  #include <linux/pm_wakeirq.h>
+> > > > >  #include <trace/events/power.h>
+> > > > >
+> > > > > @@ -226,6 +227,28 @@ void wakeup_source_unregister(struct
+> > > > wakeup_source *ws)
+> > > > >     }
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(wakeup_source_unregister);
+> > > > > +/**
+> > > > > + * wakeup_source_get_next - Get next wakeup source from the list
+> > > > > + * @ws: Previous wakeup source object, null means caller want first one.
+> > > > > + */
+> > > > > +struct wakeup_source *wakeup_source_get_next(struct wakeup_source
+> > > > > +*ws) {
+> > > > > +   struct list_head *ws_head = &wakeup_sources;
+> > > > > +   struct wakeup_source *next_ws = NULL;
+> > > > > +   int idx;
+> > > > > +
+> > > > > +   idx = srcu_read_lock(&wakeup_srcu);
+> > > > > +   if (ws)
+> > > > > +           next_ws = list_next_or_null_rcu(ws_head, &ws->entry,
+> > > > > +                           struct wakeup_source, entry);
+> > > > > +   else
+> > > > > +           next_ws = list_entry_rcu(ws_head->next,
+> > > > > +                           struct wakeup_source, entry);
+> > > > > +   srcu_read_unlock(&wakeup_srcu, idx);
+> > > > > +
+> > > >
+> > > > This is incorrect.
+> > > >
+> > > > The SRCU cannot be unlocked until the caller of this is done with
+> > > > the object returned by it, or that object can be freed while it is still being
+> > accessed.
+> > >
+> > > Thanks for the comment. Looks like I was not fully understanding your
+> > > point on
+> > > v4 discussion. So I will implement 3 APIs by referring
+> > > wakeup_sources_stats_seq_start/next/stop()
+> > >
+> > > > Besides, this patch conflicts with some general wakeup sources
+> > > > changes in the works, so it needs to be deferred and rebased on top of those
+> > changes.
+> > >
+> > > Could you please tell me which is the right code base I should developing on?
+> > > I just tried applying v5 patch on latest
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git branch master
+> > (d1abaeb Linux 5.3-rc5) and no conflict encountered.
+> > 
+> > It is better to use the most recent -rc from Linus (5.3-rc5 as of
+> > today) as the base unless your patches depend on some changes that are not in
+> > there.
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> Reviewed-by: Leonard Crestez <leonard.crestez@nxp.com>
-> ---
-> No changes.
-> ---
->  drivers/cpufreq/imx-cpufreq-dt.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> OK, So I need to implement on latest git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git branch master, am I right?
+> 
+> However, I just checked v5.3-rc5 code and found it has the same HEAD (d1abaeb Linux 5.3-rc5
+> on which I did not observe v5 patch apply conflict, did I miss something? Thanks.
 
-Applied. Thanks.
+The conflict I mentioned earlier was with another patch series in the works
+which is not in 5.3-rc5.  However, there are problems with that series and it
+is not linux-next now even, so please just base your series on top of -rc5.
 
--- 
-viresh
+
+
+
