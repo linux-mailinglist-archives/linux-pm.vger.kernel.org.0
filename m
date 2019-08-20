@@ -2,139 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC5795A90
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2019 11:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9925595A99
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2019 11:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729273AbfHTJCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Aug 2019 05:02:43 -0400
-Received: from mail-eopbgr70047.outbound.protection.outlook.com ([40.107.7.47]:31085
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728545AbfHTJCn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 20 Aug 2019 05:02:43 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ksNO1x1z9R2ZWEaawOSfM8flPCZVsIXosXFdG2dhrZes5f/DtCxKTXHUIRUPWdmYDrAZ50MnvHKZN2mcHJOepcU/H27w1XBXseTr28/vDIPIqTJlVGedJnhJZlgqSvKUp7R8sGLIRK/ETXwCqPTuxlfYbFZ5D5YnzqUNtrLDrVvl/lQk+6XJ+axdW+D+qvk+Gk+31kCwukBxO9KEZJcYs8aao6dfFETyOjTtAcQibwkiCoyrRdzg4OFu94rJzpfs8VeMsnFm9HMTtiaVnMRnW1Y89GV3ibQyJO75ha7DJlYl3p6ZUfEeN8mmmI9nfM8KxENi89ztGn9nk2EEUCfcOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zobw+++3joPUNY5A9Q9I7TfXjTpMQbHC6Zadgy+tkdk=;
- b=CZV4gC9IBiMNRyTFX1S2c2yEdNdWqidRYu7aap8HESEv/arnRHbRoftapmNwcr7qcnIY3S9LR2jg47aY2RrhwNl+YnO1DLq2fj1dAr/GKaiP4Ep08q6c6rhSNQBHOQBMLbiRNejsVpYaicYcnW7mnjRychExR9zqk7SvCIHDPVBIBFikuS5KtoO1MQqdp9w8PcN5HEfGg62byT8SavfIoYZqpzAcJ8LFK+eajpB6wZSll8lhIcLdrlrRuXoSQcyv6W/dvYYxdLyDMBLFLm6fqITYb+7Y7OjqRBhX4sQtIz3ip3eHy8jSUmj+SB0zrmaaOXA9WIVmRY5b9XevaAD/Gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zobw+++3joPUNY5A9Q9I7TfXjTpMQbHC6Zadgy+tkdk=;
- b=H624Bg33ikbtGP3bAqBnuJN2x6rJa9aA9HF0/CkaIJ0neuMvST0knumXIokKUZ3vflzt8GvFoZK0/H11vhOYLpHkjJ4DkkSBVqfUvRlFkSEWc1seFHA3x7QEVU+oiX5Mo4LJ6PJJCdDFbBXUpwVKo3bmECmiOALl0LSpZhyu7go=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB4910.eurprd04.prod.outlook.com (20.177.49.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2178.16; Tue, 20 Aug 2019 09:02:39 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::c5e8:90f8:da97:947e]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::c5e8:90f8:da97:947e%3]) with mapi id 15.20.2178.018; Tue, 20 Aug 2019
- 09:02:39 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Saravana Kannan <saravanak@google.com>
-CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [RFC 0/4] opp: Parse required-opp as dev_pm_qos_request
-Thread-Topic: [RFC 0/4] opp: Parse required-opp as dev_pm_qos_request
-Thread-Index: AQHVVyPJOVFUQPWk/0qpH7QxdG3u2Q==
-Date:   Tue, 20 Aug 2019 09:02:39 +0000
-Message-ID: <VI1PR04MB70237DE1719FB78C0427A436EEAB0@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1565089196.git.leonard.crestez@nxp.com>
- <20190820065202.fet4ctxk4jku7ul2@vireshk-i7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 097ffa15-0c6a-4ce6-b025-08d7254d26f1
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR04MB4910;
-x-ms-traffictypediagnostic: VI1PR04MB4910:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <VI1PR04MB491028EC6C02F1324D847C38EEAB0@VI1PR04MB4910.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 013568035E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(136003)(396003)(376002)(39860400002)(346002)(189003)(199004)(186003)(14444005)(7416002)(316002)(6506007)(7696005)(66066001)(45080400002)(478600001)(2906002)(71200400001)(966005)(86362001)(14454004)(3846002)(54906003)(110136005)(71190400001)(99286004)(76176011)(229853002)(8936002)(6436002)(76116006)(91956017)(81156014)(305945005)(6116002)(64756008)(66946007)(66446008)(81166006)(74316002)(33656002)(8676002)(66476007)(66556008)(5660300002)(7736002)(102836004)(446003)(9686003)(55016002)(486006)(53936002)(53546011)(25786009)(44832011)(6246003)(476003)(6306002)(26005)(256004)(4326008)(52536014);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4910;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: wx3CG7DvdruepaSQtA4MeOL/pdQarhD9f7WnW4W3SyZxhLn+ioSTScEVVBcsPB49yFE+HI9c09LB1VeFceWBZDR5Zs6YrKl3fTOF7iWIqyl3YEFF0Z0zNTU8caPhtf7WxOljz/NNJie45MMNr5cTceIkRbzp0F9ACLFMVXMvipry2o3V7JuAtONdFN5n5rMlTsGwJbaWJmt09LINKKhLuJV6daPXfmdWlpnCiqGDZgEW7PL6coVG0RgQW6P1aUbDzbzmP7LbbEFl7dY6WuAYRG4y95nxdFUo/B/rs8DOBCoR39E5Nlzwzqbc3vVD6R8eGaSIgPVtl+4HvNO7708ICqCH5+RUIUb7BwN5252DhSKVFE9oZV69MY5gCbQ9l0wKHjkGLq8GMc7Swsu35u20+9hUnprwifkiDPNkX230jcA=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S1729471AbfHTJDP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Aug 2019 05:03:15 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:59141 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729444AbfHTJDP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Aug 2019 05:03:15 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190820090313euoutp0271e8358cee2cc192e49be2b4c713273c~8lhZwaH3h1537515375euoutp02X
+        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2019 09:03:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190820090313euoutp0271e8358cee2cc192e49be2b4c713273c~8lhZwaH3h1537515375euoutp02X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1566291793;
+        bh=3zMMcEr18biqTPjjpGx/QXtGczLZJ59EMRIX8XVsp4M=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Pis5QM29mpMBkwcjn2ppAKZVNzPam7ynnHaVKm4SUCh8i9GB6w+OSFsFlCl+PiUbU
+         rneorXSWb2zDUJH5gkp28CDFG+b3/sHP2vPIvXzvZgVyvai2fuOyQxkWorMFTjl46N
+         QfYFT1mCv0YMZF3zd97khieu5lHslpAeYTlbx5eU=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20190820090312eucas1p10400f7e3ec45efcd30f6d11d5926aab7~8lhY_mQr11704817048eucas1p1F;
+        Tue, 20 Aug 2019 09:03:12 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id BA.89.04374.057BB5D5; Tue, 20
+        Aug 2019 10:03:12 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190820090311eucas1p251e3f45bb9db6bcdd97ad07b691e1b5f~8lhYF39JE1805518055eucas1p2I;
+        Tue, 20 Aug 2019 09:03:11 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190820090311eusmtrp2e6d78b6cd4d260a29af70d3e9975f26e~8lhX3qCW02503525035eusmtrp2g;
+        Tue, 20 Aug 2019 09:03:11 +0000 (GMT)
+X-AuditID: cbfec7f5-92d689c000001116-cb-5d5bb75019d2
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id FC.53.04117.F47BB5D5; Tue, 20
+        Aug 2019 10:03:11 +0100 (BST)
+Received: from [106.120.51.75] (unknown [106.120.51.75]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190820090310eusmtip19a3c0a5f088ec510d5056c4d4f58e0cd~8lhW7CjcM0896908969eusmtip1g;
+        Tue, 20 Aug 2019 09:03:10 +0000 (GMT)
+Subject: Re: [PATCH v2 0/9] Exynos Adaptive Supply Voltage support
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>, krzk@kernel.org,
+        robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
+        kgene@kernel.org, pankaj.dubey@samsung.com,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <06ccff05-2152-4bcc-7537-8f24da75f163@samsung.com>
+Date:   Tue, 20 Aug 2019 11:03:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 097ffa15-0c6a-4ce6-b025-08d7254d26f1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2019 09:02:39.0726
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OcY0pNTboEA/nIc6RCckiP7jlqB6temY10uekJPDqOc90jCdG1zVmewHtYSZXsE3NuUR7ZPtlMLZSTGnm1pa1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4910
+In-Reply-To: <20190820030114.6flnn2omeys3lih3@vireshk-i7>
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0gUURjFvTs7O6M0dl0NP1YpWJJQUPMRTfjILHSgAsE/DEXcTQeV3NV2
+        fRaUVEpZmhalLZJaarlR6vp+4mN1kSILH6WWSgqSIUm6Qlia6yj53+8795x7vwOXJqQDpIxO
+        VKfyGrUySS6xETcP/h52D2uJij668E3G1pfUkmyZ8T3J3p/7QbDDw3UUa5gbJ9mR9lIJu5Jv
+        RGzJcLeIfW38SrHPmlYpNqfLSLH1Zo5tmB2UBDGcQX9Hwn0Z75RwDZXXuYJGPeJWDAfDyEgb
+        /zg+KTGd13gGKmwSWqf9U3px5kSbfzbKYfKQNQ3YF7qWG1EesqGl+CWCkp+bhDCsImj9VC0W
+        hhUE89OV5G5kclC/E3mBoKp3ZCeyhGBxbVRkcdnjYOhcN0vyEE07YDf4PsFbZAKPiaDdvM0S
+        7AX5AwXIwgwOhFuTOZSFxdgFCsf7tvkAvgC/ZvtJwWMHQ0/mxRa2xifg4eQCEu50hBurNaTA
+        h6BlqXR7H8CTFHyoqNvZ+gzkmccIge1h0dRICewMm21lIiFwE8G9jilKGAoRzJjKkeDyg37T
+        R9LShsCuUNvuKcinoGDUKLLIgG3h85KdsIQtPGguJgSZgdu5UsF9GNb1xSKBZXB3flNciOS6
+        PdV0e+ro9tTR/X+3HIn1yJFP06riea2Pms/w0CpV2jR1vEdsssqAtj7X2w2TuRV1/7nYhzCN
+        5PsY7nFktJRUpmuzVH0IaELuwGSWbklMnDLrCq9JjtGkJfHaPuREi+WOzFWr2Sgpjlem8pd4
+        PoXX7J6KaGtZNnLseN4jO+kSMmh1bgL2Y3WI6chGaVUEXUG/UszUJBiz1jaRrytXdM2r2uyc
+        PEXrMt60+TBBlFLRXSlZ5iYue3Puj8yGY6GFT6s8k9wbA7jgs06Rq+erW/w0IadDwzdi/rq8
+        SyHaihTHm4YSI+Zl5SOqnvAOb0VZamxuAHaTi7UJSi83QqNV/gN63SfcWAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOIsWRmVeSWpSXmKPExsVy+t/xu7r+26NjDR6slrbYOGM9q8X8I+dY
+        Lfofv2a2OH9+A7vFpsfXWC0u75rDZvG59wijxYzz+5gs1h65y26xaOsXdovWvUfYLTZ+9bDY
+        /OAYmwOvx6ZVnWwed67tYfPYvKTeo2/LKkaPz5vkAlij9GyK8ktLUhUy8otLbJWiDS2M9Awt
+        LfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DJ23LMpOChQcXOnTQNjK28XIyeHhICJxK1j
+        qxi7GLk4hASWMkq0fnzA1sXIAZSQkpjfogRRIyzx51oXG0TNa0aJ9m0bGEESwgJOEnt+fwWr
+        FxHQknh5MxWkhlngKpPE4j2XWCAazrFILFzZxA7SwCZgKNF7tA+smVfATqLlVitYnEVAVWLC
+        tUNgtqhAhMThHbOgagQlTs58wgJicwpYSky+9RwsziygLvFn3iVmCFtcounLSlYIW15i+9s5
+        zBMYhWYhaZ+FpGUWkpZZSFoWMLKsYhRJLS3OTc8tNtIrTswtLs1L10vOz93ECIzUbcd+btnB
+        2PUu+BCjAAejEg+vx7SoWCHWxLLiytxDjBIczEoivBVzgEK8KYmVValF+fFFpTmpxYcYTYGe
+        m8gsJZqcD0wieSXxhqaG5haWhubG5sZmFkrivB0CB2OEBNITS1KzU1MLUotg+pg4OKUaGK8e
+        c8h6tHljj/HthzJrP9/vk/g7gderrZOr7Xr/R2XnA+Uah/Y8Spc8ttRvc+3/BMf4twVBOy8W
+        sXpx8zJPsvV7dc5l9fQjm2ZmKm58+8hnreAPib/7f9192j5nr5BmkrpbtGq2xnzBujnHz6tG
+        n7dY+lHOImFxRtksx7vmH28eZdgnd/CM+iElluKMREMt5qLiRADUDE7C6gIAAA==
+X-CMS-MailID: 20190820090311eucas1p251e3f45bb9db6bcdd97ad07b691e1b5f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1
+References: <CGME20190718143117eucas1p1e534b9075d10fbbbe427c66192205eb1@eucas1p1.samsung.com>
+        <20190718143044.25066-1-s.nawrocki@samsung.com>
+        <20190723020450.z2pqwetkn2tfhacq@vireshk-i7>
+        <5ef302a4-5bbf-483d-dfdf-cf76f6f69cee@samsung.com>
+        <20190725022343.p7lqalrh5svxvtu2@vireshk-i7>
+        <562dd2e7-2b24-8492-d1c1-2dc4973f07be@samsung.com>
+        <20190819090928.pke6cov52n4exlbp@vireshk-i7>
+        <b831d7c5-c830-fd65-20cf-02e209889c28@samsung.com>
+        <20190819112533.bvfyinw7fsebkufr@vireshk-i7>
+        <b7093aaf-ea56-c390-781f-6f9d0780bd8e@samsung.com>
+        <20190820030114.6flnn2omeys3lih3@vireshk-i7>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20.08.2019 09:52, Viresh Kumar wrote:=0A=
-> On 06-08-19, 14:12, Leonard Crestez wrote:=0A=
->> The "required-opps" property can be placed on any device and point to=0A=
->> any OPP table according to bindings doc but this is not fully=0A=
->> implemented. In practice it can only point from the opp table of a=0A=
->> device to the opp table of a power domain.=0A=
->>=0A=
->> As part of my investingating QOS mechanisms I implemented support for=0A=
->> parsing "required-opps" into a DEV_PM_QOS_MIN_FREQUENCY=0A=
->> dev_pm_qos_request. Since OPPs can be shared between devices this only=
-=0A=
->> works when OPP tables are unshared.=0A=
->>=0A=
->> This would need to be called from a device probe function and any=0A=
->> suspend/resume handling (which likely means disabling the QOS requests)=
-=0A=
->> would also be handled manually by each driver.=0A=
->>=0A=
->> This is RFC mostly because I plan to use the "interconnect" framework=0A=
->> for device requests instead. In theory this could be used if you don't=
-=0A=
->> care about implementing smart aggregation and just want to "set bus freq=
-=0A=
->> to high".=0A=
->>=0A=
->> Devfreq support for dev_pm_qos is here: https://eur01.safelinks.protecti=
-on.outlook.com/?url=3Dhttps%3A%2F%2Fpatchwork.kernel.org%2Fpatch%2F11078475=
-%2F&amp;data=3D02%7C01%7Cleonard.crestez%40nxp.com%7C09dabcdb17434862317508=
-d7253aeac8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637018807295295723&=
-amp;sdata=3DvXvTIowhuqDkTxVZMHq%2BQxrKuqYv7n%2FU01ZDA7fdB0c%3D&amp;reserved=
-=3D0=0A=
-> =0A=
-> Some work is going on in related field. Please have a look at this as wel=
-l.=0A=
-=0A=
-I noticed that series but other than touching "required-opp" there is =0A=
-little in common. It seems to be mostly an expansion of the passive =0A=
-governor.=0A=
-=0A=
-My series doesn't even depend on devfreq; in theory you could even use =0A=
-required-opp =3D <&opp_1200mhz> on a cpu device.=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+On 8/20/19 05:01, Viresh Kumar wrote:
+> On 19-08-19, 15:39, Sylwester Nawrocki wrote:
+>> Unfortunately not, the patch set as I see it is another way of updating 
+>> an OPP after it was parsed from DT.  OPP remove/add could work equally 
+>> well in our use case.
+> 
+> Adding OPPs dynamically has limitations, you can't set many values which are
+> otherwise possible with DT. And removing/adding is not the right thing to do
+> technically.
+
+Thanks for explanation, I was not aware of that.
+
+>> The problem is that we have the information on how to translate the 
+>> common OPP voltage to a voltage specific to given silicon encoded jointly 
+>> in the ASV tables and the CHIPID registers (efuse/OTP memory). 
+>> Additionally, algorithm of selecting ASV data (OPP voltage) based on 
+>> the "key" data from registers is not generic, it is usually different 
+>> per each SoC type.
+>>
+>> I tried to identify some patterns in those tables in order to simplify 
+>> possible DT binding, but that was not really successful. I ended up just 
+>> keeping whole tables.
+> 
+> Sorry but I am unable to understand the difficulty you are facing now. So what I
+> suggest is something like this.
+
+The difficulty was about representing data from tables asv_{arm,kfc}_table[][]
+added in patch 3/9 of the series in devicetree.  If you have no objections
+about keeping those tables in the driver then I can't see any difficulties. 
+ 
+> - Use DT to get a frequency and voltage for each frequency.
+
+Yes, this is what happens now, we have common OPPs in DT that work for each SoC
+revision. 
+
+> - At runtime, based on SoC, registers, efuses, etc, update the voltage of the
+>   OPPs.
+> - This algo can be different for each SoC, no one is stopping you from doing
+>   that.
+> 
+> Am I missing something ?
+
+Not really, this is basically what happens in the $subject patch series. 
+
+Then IIUC what I would need to change is to modify exynos_asv_update_cpu_opps() 
+function in patch 3/9 to use dev_pm_opp_adjust_voltage() rather than 
+dev_pm_opp_remove(), dev_pm_opp_add().
+
+-- 
+Thanks,
+Sylwester
