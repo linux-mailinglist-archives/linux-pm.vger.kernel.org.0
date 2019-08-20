@@ -2,247 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60215955B0
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2019 05:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 909CD95723
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2019 08:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728975AbfHTDjd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 23:39:33 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:39406 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728777AbfHTDjc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 23:39:32 -0400
-Received: by mail-pg1-f194.google.com with SMTP id u17so2376976pgi.6
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 20:39:32 -0700 (PDT)
+        id S1729108AbfHTGNG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Aug 2019 02:13:06 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42900 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728878AbfHTGNF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Aug 2019 02:13:05 -0400
+Received: by mail-pl1-f194.google.com with SMTP id y1so2188946plp.9
+        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 23:13:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=DYGO86uLTSpBFsqyRPgG0kZAe1AG4hshV79weFR5920=;
-        b=mCEsjGHEV/007JwSzWPqAL6lNivgf0WcmcgTIxpLCH3P6kLl8PO6XhqagkWFSQwVG3
-         0nigHbGCULjYmojCXTzJbxmerZxC99eFsf34Rl9lwnGIimxMizNZZR/kod7JTk1xuaBm
-         wutn87TaESpTlsiYFDwI2mD8yEgXKVxDWorWE+SyHugrIfo1WCgGOgDjM7TpBhrWjNxX
-         y22qC45an5oM0evMP0ybn51EbI/K6vlPVv3IsB/sor+H03c9wTN4UlHfoazUZBUNijrc
-         iN9o2hhErrOZ3fgcae9W3EdtBIrR5XxgdB2mOQcihllJofU8jNxLCkxyQqUicaYwG8v2
-         IzFQ==
+        bh=4L1H8UAZlMHn0p2Ts3WDSXBKtsgxNg2xEuqMLeeVySs=;
+        b=i64qWvdRHZZjBpci/c66ngwbqQ4opTcwKStfh30IinU4DaU6dVIKv7Z8sx3uUIBBH9
+         bjqL5vOusq4RCXTDeusUS47ow8i5+AAfBATwc1MhCJCREHH6Rw4YvEh6yT3OoHJH9iJh
+         Y+J8dw1ExisMmBg3x9tBHRwZD+bLxWBJDgZDYHi7UAk4dyrGA1mniNnSbHgZWAvzqJu4
+         H1v9sgEmNXLk9RIYohlwBKKDij3/3786jlyvW4o5OKQdI68cfN0xGzPhrJYVQ350rArU
+         HneqGRLs2WOMSm2WIoZuY2zr3VAuweG+IYyI089/pTgUi8J5UBBHlCpqx0RJUzD3GlBa
+         Azpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DYGO86uLTSpBFsqyRPgG0kZAe1AG4hshV79weFR5920=;
-        b=ey0ld2QkRUCRvf9djK6VlqeTVvngguLxrx1Gke4a73SrCqEeoEUHMT4yAIoRGrijFK
-         hy3krlrG9sh7Inr1nmTTmZELdTlqLq/NKdJaytv+FGofbmnrCSnqoVf4levQbRjKUibm
-         rsxg2vlQnph9R6Ot31ECXv8uwv05az3yaHvWFZBaTBTqhXvVaXYmkXf1ttW9Gtusz4du
-         mvyU1+EjnnRvV6vsMj8xbOKuo2y7j4fKT/W9byibH1yvOUitii31Qmp1Zr8qUYTpY8VS
-         /NZB1dF0NKIeYVClOtNdhVLDFStpO0j7LQHT8VlZgMsndpQ4Dt8OVMQbjTC2ikROb9jB
-         Ks6g==
-X-Gm-Message-State: APjAAAUFRLX9IU+ZkmlIA03pxGMKZRuBZMCYvnb+UKGjetdUeQlRx9rs
-        0bqnI0ugeOl6sB8wplfKuAxzVQ==
-X-Google-Smtp-Source: APXvYqzFpEjUSmXBk62EUY/Mz1WvgYWKQh88SMa3hzj+OaxnG3lQPeO6zyJZ8hFl1UXHq9rv1X8Eug==
-X-Received: by 2002:a65:6415:: with SMTP id a21mr21550631pgv.98.1566272371730;
-        Mon, 19 Aug 2019 20:39:31 -0700 (PDT)
+        bh=4L1H8UAZlMHn0p2Ts3WDSXBKtsgxNg2xEuqMLeeVySs=;
+        b=Jci5KuyKXguctdIIg1/q+aHbBoa+W6N0zEWoxdN/FPjYjsgi+dA6YbjgRCv62tAyhX
+         bo7LlFhsVOeGXrQGwX5T4EVzt5mMJlOxveRAk6MTBFnNjY+1xceAt5rSQu3WH2d5VKU3
+         uxy3ormsD6kqrL5j9qd2wg4If352wqIZDeMGxPxfsxhaSDYBC8zxQiwZh00l8uGPPgGS
+         gsmDUDPoaJIAnr/jvlIC289BXjRB7Oz0Md16/EBpyetTcRqlpNLURZaaHXJebVGfB9XS
+         vUep+u8yS7zPDwJewA8YXJfxwJAcTaGv75wJrWHu/5HYpr4IVnhMMm2YuuCKvN/Xr8Vo
+         fhAA==
+X-Gm-Message-State: APjAAAV9imoye3tnzInISqMlIaPTgUMaCgFi+DZlPRgEHNl4pcK+6d3C
+        HZ0zt6huXmRo7WtQdjp3aeWayA==
+X-Google-Smtp-Source: APXvYqyFzTzO21rrXX8ctX7zGynDXIqF0/JJMnX15asxyvnKk6LEC+y8Cct7RTvzy5d8IBntRUzkOQ==
+X-Received: by 2002:a17:902:2f05:: with SMTP id s5mr26727203plb.170.1566281584586;
+        Mon, 19 Aug 2019 23:13:04 -0700 (PDT)
 Received: from localhost ([122.172.76.219])
-        by smtp.gmail.com with ESMTPSA id i137sm36834826pgc.4.2019.08.19.20.39.29
+        by smtp.gmail.com with ESMTPSA id a142sm21041119pfd.147.2019.08.19.23.13.02
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 20:39:30 -0700 (PDT)
-Date:   Tue, 20 Aug 2019 09:09:27 +0530
+        Mon, 19 Aug 2019 23:13:03 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 11:43:00 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com, fan.chen@mediatek.com
-Subject: Re: [v4, 7/8] cpufreq: mediatek: add opp notification for SVS support
-Message-ID: <20190820033927.72muldasu4xd6wb7@vireshk-i7>
-References: <1565703113-31479-1-git-send-email-andrew-sh.cheng@mediatek.com>
- <1565703113-31479-8-git-send-email-andrew-sh.cheng@mediatek.com>
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
+        daidavid1@codeaurora.org, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>, sibis@codeaurora.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] OPP: Add support for bandwidth OPP tables
+Message-ID: <20190820061300.wa2dirylb7fztsem@vireshk-i7>
+References: <20190807223111.230846-1-saravanak@google.com>
+ <20190807223111.230846-3-saravanak@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1565703113-31479-8-git-send-email-andrew-sh.cheng@mediatek.com>
+In-Reply-To: <20190807223111.230846-3-saravanak@google.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13-08-19, 21:31, Andrew-sh.Cheng wrote:
-> From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+On 07-08-19, 15:31, Saravana Kannan wrote:
+> Not all devices quantify their performance points in terms of frequency.
+> Devices like interconnects quantify their performance points in terms of
+> bandwidth. We need a way to represent these bandwidth levels in OPP. So,
+> add support for parsing bandwidth OPPs from DT.
 > 
-> cpufreq should listen opp notification and do proper actions
-> when receiving disable and voltage adjustment events,
-> which are triggered when SVS is enabled.
-> 
-> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 > ---
->  drivers/cpufreq/mediatek-cpufreq.c | 78 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 78 insertions(+)
+>  drivers/opp/of.c  | 41 ++++++++++++++++++++++++++++++++---------
+>  drivers/opp/opp.h |  4 +++-
+>  2 files changed, 35 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 4dce41b18369..9820c8003507 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -42,6 +42,10 @@ struct mtk_cpu_dvfs_info {
->  	struct list_head list_head;
->  	int intermediate_voltage;
->  	bool need_voltage_tracking;
-> +	struct mutex lock; /* avoid notify and policy race condition */
-> +	struct notifier_block opp_nb;
-> +	int opp_cpu;
-> +	unsigned long opp_freq;
->  };
->  
->  static LIST_HEAD(dvfs_info_list);
-> @@ -231,6 +235,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  	vproc = dev_pm_opp_get_voltage(opp);
->  	dev_pm_opp_put(opp);
->  
-> +	mutex_lock(&info->lock);
->  	/*
->  	 * If the new voltage or the intermediate voltage is higher than the
->  	 * current voltage, scale up voltage first.
-> @@ -242,6 +247,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  			pr_err("cpu%d: failed to scale up voltage!\n",
->  			       policy->cpu);
->  			mtk_cpufreq_set_voltage(info, old_vproc);
-> +			mutex_unlock(&info->lock);
->  			return ret;
->  		}
->  	}
-> @@ -253,6 +259,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  		       policy->cpu);
->  		mtk_cpufreq_set_voltage(info, old_vproc);
->  		WARN_ON(1);
-> +		mutex_unlock(&info->lock);
->  		return ret;
->  	}
->  
-> @@ -263,6 +270,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  		       policy->cpu);
->  		clk_set_parent(cpu_clk, armpll);
->  		mtk_cpufreq_set_voltage(info, old_vproc);
-> +		mutex_unlock(&info->lock);
->  		return ret;
->  	}
->  
-> @@ -273,6 +281,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  		       policy->cpu);
->  		mtk_cpufreq_set_voltage(info, inter_vproc);
->  		WARN_ON(1);
-> +		mutex_unlock(&info->lock);
->  		return ret;
->  	}
->  
-> @@ -288,15 +297,74 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  			clk_set_parent(cpu_clk, info->inter_clk);
->  			clk_set_rate(armpll, old_freq_hz);
->  			clk_set_parent(cpu_clk, armpll);
-> +			mutex_unlock(&info->lock);
->  			return ret;
->  		}
->  	}
->  
-> +	info->opp_freq = freq_hz;
-> +	mutex_unlock(&info->lock);
-> +
->  	return 0;
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index 1813f5ad5fa2..e1750033fef9 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -523,6 +523,35 @@ void dev_pm_opp_of_remove_table(struct device *dev)
 >  }
+>  EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
 >  
->  #define DYNAMIC_POWER "dynamic-power-coefficient"
->  
-> +static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
-> +				    unsigned long event, void *data)
+> +static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np)
 > +{
-> +	struct dev_pm_opp *opp = data;
-> +	struct dev_pm_opp *opp_item;
-> +	struct mtk_cpu_dvfs_info *info =
-> +		container_of(nb, struct mtk_cpu_dvfs_info, opp_nb);
-> +	unsigned long freq, volt;
-> +	struct cpufreq_policy *policy;
-> +	int ret = 0;
+> +	int ret;
+> +	u64 rate;
+> +	u32 bw;
 > +
-> +	if (event == OPP_EVENT_ADJUST_VOLTAGE) {
-> +		freq = dev_pm_opp_get_freq(opp);
-> +
-> +		mutex_lock(&info->lock);
-> +		if (info->opp_freq == freq) {
-> +			volt = dev_pm_opp_get_voltage(opp);
-> +			ret = mtk_cpufreq_set_voltage(info, volt);
-> +			if (ret)
-> +				dev_err(info->cpu_dev, "failed to scale voltage: %d\n",
-> +					ret);
-> +		}
-> +		mutex_unlock(&info->lock);
-> +	} else if (event == OPP_EVENT_DISABLE) {
-
-Does this ever get called for your platform ? Why are you using opp disable ?
-Maybe we can avoid it completely.
-
-> +		freq = info->opp_freq;
-> +		opp_item = dev_pm_opp_find_freq_ceil(info->cpu_dev, &freq);
-> +		if (!IS_ERR(opp_item))
-> +			dev_pm_opp_put(opp_item);
-> +		else
-> +			freq = 0;
-> +
-> +		/* case of current opp is disabled */
-> +		if (freq == 0 || freq != info->opp_freq) {
-> +			// find an enable opp item
-> +			freq = 1;
-> +			opp_item = dev_pm_opp_find_freq_ceil(info->cpu_dev,
-> +							     &freq);
-> +			if (!IS_ERR(opp_item)) {
-> +				dev_pm_opp_put(opp_item);
-> +				policy = cpufreq_cpu_get(info->opp_cpu);
-> +				if (policy) {
-> +					cpufreq_driver_target(policy,
-> +						freq / 1000,
-> +						CPUFREQ_RELATION_L);
-> +					cpufreq_cpu_put(policy);
-> +				}
-> +			} else
-> +				pr_err("%s: all opp items are disabled\n",
-> +				       __func__);
-> +		}
+> +	ret = of_property_read_u64(np, "opp-hz", &rate);
+> +	if (!ret) {
+> +		/*
+> +		 * Rate is defined as an unsigned long in clk API, and so
+> +		 * casting explicitly to its type. Must be fixed once rate is 64
+> +		 * bit guaranteed in clk API.
+> +		 */
+> +		new_opp->rate = (unsigned long)rate;
+> +		return 0;
 > +	}
 > +
-> +	return notifier_from_errno(ret);
+
+Please read opp-level also here and do error handling.
+
+> +	ret = of_property_read_u32(np, "opp-peak-kBps", &bw);
+> +	if (ret)
+> +		return ret;
+> +	new_opp->rate = (unsigned long) bw;
+> +
+> +	ret = of_property_read_u32(np, "opp-avg-kBps", &bw);
+> +	if (!ret)
+> +		new_opp->avg_bw = (unsigned long) bw;
+
+If none of opp-hz/level/peak-kBps are available, print error message here
+itself..
+
+> +
+> +	return 0;
+
+You are returning 0 on failure as well here.
+
 > +}
 > +
->  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->  {
->  	struct device *cpu_dev;
-> @@ -383,11 +451,21 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->  	info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
->  	dev_pm_opp_put(opp);
+>  /**
+>   * _opp_add_static_v2() - Allocate static OPPs (As per 'v2' DT bindings)
+>   * @opp_table:	OPP table
+> @@ -560,22 +589,16 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
+>  	if (!new_opp)
+>  		return ERR_PTR(-ENOMEM);
 >  
-> +	info->opp_cpu = cpu;
-> +	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
-> +	ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
-> +	if (ret) {
-> +		pr_warn("cannot register opp notification\n");
-> +		goto out_free_opp_table;
-> +	}
-> +
-> +	mutex_init(&info->lock);
->  	info->cpu_dev = cpu_dev;
->  	info->proc_reg = proc_reg;
->  	info->sram_reg = IS_ERR(sram_reg) ? NULL : sram_reg;
->  	info->cpu_clk = cpu_clk;
->  	info->inter_clk = inter_clk;
-> +	info->opp_freq = clk_get_rate(cpu_clk);
+> -	ret = of_property_read_u64(np, "opp-hz", &rate);
+> +	ret = _read_opp_key(new_opp, np);
+>  	if (ret < 0) {
+>  		/* "opp-hz" is optional for devices like power domains. */
+>  		if (!opp_table->is_genpd) {
+> -			dev_err(dev, "%s: opp-hz not found\n", __func__);
+> +			dev_err(dev, "%s: opp-hz or opp-peak-kBps not found\n",
+> +				__func__);
+>  			goto free_opp;
+>  		}
 >  
->  	/*
->  	 * If SRAM regulator is present, software "voltage tracking" is needed
+>  		rate_not_available = true;
+
+Move all above as well to read_opp_key().
+
+> -	} else {
+> -		/*
+> -		 * Rate is defined as an unsigned long in clk API, and so
+> -		 * casting explicitly to its type. Must be fixed once rate is 64
+> -		 * bit guaranteed in clk API.
+> -		 */
+> -		new_opp->rate = (unsigned long)rate;
+>  	}
+>  
+>  	of_property_read_u32(np, "opp-level", &new_opp->level);
+> diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+> index 01a500e2c40a..6bb238af9cac 100644
+> --- a/drivers/opp/opp.h
+> +++ b/drivers/opp/opp.h
+> @@ -56,7 +56,8 @@ extern struct list_head opp_tables;
+>   * @turbo:	true if turbo (boost) OPP
+>   * @suspend:	true if suspend OPP
+>   * @pstate: Device's power domain's performance state.
+> - * @rate:	Frequency in hertz
+> + * @rate:	Frequency in hertz OR Peak bandwidth in kilobytes per second
+> + * @avg_bw:	Average bandwidth in kilobytes per second
+
+Please add separate entry for peak_bw here.
+
+I know you reused rate because you don't want to reimplement the helpers we
+have. Maybe we can just update them to return peak_bw when opp-hz isn't present.
+
+>   * @level:	Performance level
+>   * @supplies:	Power supplies voltage/current values
+>   * @clock_latency_ns: Latency (in nanoseconds) of switching to this OPP's
+> @@ -78,6 +79,7 @@ struct dev_pm_opp {
+>  	bool suspend;
+>  	unsigned int pstate;
+>  	unsigned long rate;
+> +	unsigned long avg_bw;
+>  	unsigned int level;
+>  
+>  	struct dev_pm_opp_supply *supplies;
 > -- 
-> 2.12.5
+> 2.23.0.rc1.153.gdeed80330f-goog
 
 -- 
 viresh
