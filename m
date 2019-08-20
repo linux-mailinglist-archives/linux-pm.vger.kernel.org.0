@@ -2,57 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A31696C6E
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 00:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3400E96C78
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 00:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731067AbfHTWeo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Aug 2019 18:34:44 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:37984 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730886AbfHTWeo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Aug 2019 18:34:44 -0400
-Received: by mail-oi1-f194.google.com with SMTP id p124so125467oig.5
-        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2019 15:34:43 -0700 (PDT)
+        id S1730092AbfHTWhP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Aug 2019 18:37:15 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:35859 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730975AbfHTWhP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Aug 2019 18:37:15 -0400
+Received: by mail-oi1-f195.google.com with SMTP id n1so137306oic.3
+        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2019 15:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wW0cWS0eh3TlrDo6fyrKO5TnCZveD/eXLSqHEjO60kQ=;
-        b=NKg7jJl1l6lbCqiWVTNePZN2GTkmHu35mU+BCl8b7NWqGZorqm7+Zacj1b33yACq7T
-         v+raWi7luC+Co9ifi/WXXhjU5yJoGsTBzhBo/3/zl5oY4/oJVK9SsO4cICA1cZPPHxN5
-         SOfgQP1gXJ75QBmJmWdZi2zOS87/f24hHukrbfshHbpTb6cB+t4fS6rgEfXaEf/im5+e
-         B9ZZ0NQRlIYF8Uk+XPDqphnEqz8+TO9w/qk3iLK2YlhcEY+0+ERQCOuiOIvWsST5WiY7
-         pKsH/pUB2lYfeIy1xXnQmFeW9y5Z5bfu4gWn+pTLHVQq6+6mQU4wLP5FWVpSH5F/7P/y
-         AW/g==
+        bh=v3PNIe6PlFx6XUGmIctyG3Xxp0nI64KtXff/8z9lYQw=;
+        b=DrMO+Id3/F6kfiS8kA+XkmRwzKxg84gILs8dNH6dLLLovzZ/vvF83WQIo4xhkoeqV6
+         3RBYncd/vUDzwp+CNY3VcPvIk4uU+c7YhMIYp/jOBMZIpHYZCw2M5qSNBnH0of+4OBQL
+         XEScg+qnDqv1hG7QczO1oMYMvRb/ywFsl4n1D3Mn5PBoZos0Mf12KTnJB3kK2vuILj1q
+         FspaYSPNM9Cuuhn4p40bqZxiBRQHihLsa+6CehfCd4cRXA/DwtPcIr2EtTw2rZXz294p
+         CNHOT7IAuaNf5uttOcH7GkGHx1imDt89gkwkiMZvaQudFRv79OF3FkpvQO/gJXkNATWH
+         c/ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wW0cWS0eh3TlrDo6fyrKO5TnCZveD/eXLSqHEjO60kQ=;
-        b=b0+mqrsEmpf15joyRwJO9btanHwdBJ0eiybjSWN1GRm2EpbU1x20bo/iDgIP/FtXge
-         VdDIfVr94v81fo4mP/9mRCpppOFOvVb+igZ0ma5x5sVrx2mi8TRf1nuPB4vWcKdZ7csi
-         4SGRTlyBhlihjbnqPqYIC2yLeS2xqwXXIuGUV6xuPklkklMzQEyrCJSWy2/kHtEaY9Y4
-         40JSXXtkd6BZVfyX3Cx9BIhiaA2V7zr3/fi46cdXiMWXkgVLu+MQZ/D0OEQo5SR0tSuY
-         xDlKdU9786xwJNl8ZRCJN8g/tZe5DYg9IR48LSnJuuxJ8v+lngGAYr+b06L/A8ATDtK2
-         /NLw==
-X-Gm-Message-State: APjAAAVcxVJGiXD67ZcrHWti3FkzNOZg2zNQx+pbNrEV5olqV9yrpj6P
-        WfCzRap74c7TsAokaz4i4RTgrRXk6tXjxmVTj8y66g==
-X-Google-Smtp-Source: APXvYqzCK4bK7zyRJiy+KGcqESReBaEiNjLOmVgKh7dWTAFMwYMrrfcI4OQ8cbpTbfl+h48VAdzfMGWN1uTMOoNKgTA=
-X-Received: by 2002:aca:c396:: with SMTP id t144mr1691981oif.172.1566340482904;
- Tue, 20 Aug 2019 15:34:42 -0700 (PDT)
+        bh=v3PNIe6PlFx6XUGmIctyG3Xxp0nI64KtXff/8z9lYQw=;
+        b=MtQFV2X+yXxRv+0Q6jYihDbHnKWvXbj4MWaJUOPJLen1R6o9PUAD8J3IDg3LSomyRg
+         IttW+gNKqYH0trPyMiVONN3atFPE8lCNK7aL3OsA+X0J60ZlVOs7mGIa9Y16FIDyih+e
+         9DiYVVTRatdEV7+yA4I5IV4/QcwAHGY+Wye6jhXnec4PAtFxoz6AKExPOscY24+R1nOm
+         shjPZPbJe5bD8wx+gxTwRKhxwSz9khnp05xBgii+n7zZbtflysu1ezUe4toCb6/PCnz3
+         Ea/7HfYoL68niKmCpC8RYu0KXRYa5Z0cpcuC0Xbye00eVfRuRCd66jIn9AX/3sEMzMW7
+         Ba7Q==
+X-Gm-Message-State: APjAAAUV9IYBSfSyFjIZo6CL2p8niv/BJZBFlSPdRCH1zGbs5do+SpdO
+        ubPAItZJs/K7E0vJ0n5jeFDexVc4s26xboEWoug6Lw==
+X-Google-Smtp-Source: APXvYqz2R7/xK6d8AdXQAHLRwx7/BghrV4Nihx4FfF+VjmtffTiIbV+eNuYPOpVHE5wR2OKjyJRlAEmjWGHrDqWiu3Q=
+X-Received: by 2002:aca:cc81:: with SMTP id c123mr1785858oig.30.1566340634069;
+ Tue, 20 Aug 2019 15:37:14 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190807223111.230846-1-saravanak@google.com> <20190807223111.230846-3-saravanak@google.com>
- <20190816182131.A692E206C1@mail.kernel.org>
-In-Reply-To: <20190816182131.A692E206C1@mail.kernel.org>
+ <20190820061300.wa2dirylb7fztsem@vireshk-i7> <CAGETcx9BV9qj17LY30vgAaLtz+3rXt_CPpu4wB_AQCC5M7qOdA@mail.gmail.com>
+In-Reply-To: <CAGETcx9BV9qj17LY30vgAaLtz+3rXt_CPpu4wB_AQCC5M7qOdA@mail.gmail.com>
 From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 20 Aug 2019 15:34:07 -0700
-Message-ID: <CAGETcx8h2v054eS6pZ3iEsM2AGfN45_fqJGsVt+1UhbrK_dbdQ@mail.gmail.com>
+Date:   Tue, 20 Aug 2019 15:36:38 -0700
+Message-ID: <CAGETcx-xQika2MgTgA3Gft3u2_uXgvoYThXwEpW_G03QTEh-yQ@mail.gmail.com>
 Subject: Re: [PATCH v5 2/3] OPP: Add support for bandwidth OPP tables
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Georgi Djakov <georgi.djakov@linaro.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         "Sweeney, Sean" <seansw@qti.qualcomm.com>,
@@ -71,93 +72,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 11:21 AM Stephen Boyd <sboyd@kernel.org> wrote:
+On Tue, Aug 20, 2019 at 3:27 PM Saravana Kannan <saravanak@google.com> wrote:
 >
-> Quoting Saravana Kannan (2019-08-07 15:31:10)
-> > diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> > index 1813f5ad5fa2..e1750033fef9 100644
-> > --- a/drivers/opp/of.c
-> > +++ b/drivers/opp/of.c
-> > @@ -523,6 +523,35 @@ void dev_pm_opp_of_remove_table(struct device *dev)
-> >  }
-> >  EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
+> On Mon, Aug 19, 2019 at 11:13 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 > >
-> > +static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np)
-> > +{
-> > +       int ret;
-> > +       u64 rate;
-> > +       u32 bw;
-> > +
-> > +       ret = of_property_read_u64(np, "opp-hz", &rate);
-> > +       if (!ret) {
-> > +               /*
-> > +                * Rate is defined as an unsigned long in clk API, and so
-> > +                * casting explicitly to its type. Must be fixed once rate is 64
-> > +                * bit guaranteed in clk API.
-> > +                */
-> > +               new_opp->rate = (unsigned long)rate;
-> > +               return 0;
-> > +       }
-> > +
-> > +       ret = of_property_read_u32(np, "opp-peak-kBps", &bw);
-> > +       if (ret)
-> > +               return ret;
-> > +       new_opp->rate = (unsigned long) bw;
-> > +
-> > +       ret = of_property_read_u32(np, "opp-avg-kBps", &bw);
-> > +       if (!ret)
+> > On 07-08-19, 15:31, Saravana Kannan wrote:
+
+> > > +     ret = of_property_read_u32(np, "opp-peak-kBps", &bw);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +     new_opp->rate = (unsigned long) bw;
+> > > +
+> > > +     ret = of_property_read_u32(np, "opp-avg-kBps", &bw);
+> > > +     if (!ret)
+> > > +             new_opp->avg_bw = (unsigned long) bw;
+> >
+> > If none of opp-hz/level/peak-kBps are available, print error message here
+> > itself..
 >
-> I would write this as
+> But you don't print any error for opp-level today. Seems like it's optional?
 >
->         if (!of_property_read_u32(np, "opp-avg-kBps", &bw))
->                 new_opp->avg_bw = (unsigned long) bw;
+> >
+> > > +
+> > > +     return 0;
+> >
+> > You are returning 0 on failure as well here.
 >
-> because you don't care about the return value.
+> Thanks.
 
-Sure, will do.
-
->
-> > +               new_opp->avg_bw = (unsigned long) bw;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> >  /**
-> >   * _opp_add_static_v2() - Allocate static OPPs (As per 'v2' DT bindings)
-> >   * @opp_table: OPP table
-> > diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-> > index 01a500e2c40a..6bb238af9cac 100644
-> > --- a/drivers/opp/opp.h
-> > +++ b/drivers/opp/opp.h
-> > @@ -56,7 +56,8 @@ extern struct list_head opp_tables;
-> >   * @turbo:     true if turbo (boost) OPP
-> >   * @suspend:   true if suspend OPP
-> >   * @pstate: Device's power domain's performance state.
-> > - * @rate:      Frequency in hertz
-> > + * @rate:      Frequency in hertz OR Peak bandwidth in kilobytes per second
->
-> Why is Peak capitalized?
-
-Because it's another Key? :)
-
-Just kidding. I'll fix it.
-
-> > + * @avg_bw:    Average bandwidth in kilobytes per second
-> >   * @level:     Performance level
-> >   * @supplies:  Power supplies voltage/current values
-> >   * @clock_latency_ns: Latency (in nanoseconds) of switching to this OPP's
-> > @@ -78,6 +79,7 @@ struct dev_pm_opp {
-> >         bool suspend;
-> >         unsigned int pstate;
-> >         unsigned long rate;
->
-> If you're trying to save space why not make an anonymous union here of
-> 'rate' and 'bandwidth'? Then the code doesn't read all weird.
-
-It's not about saving space. It's about having to rewrite all the
-helper functions (see subsequent patch in this series) for different
-"keys" with zero difference in the actual comparisons/logic. I'm
-proposing I rename this to "key" in another email.
-
+Wait, no. This is not actually a failure. opp-avg-kBps is optional. So
+returning 0 is the right thing to do. If the mandatory properties
+aren't present an error is returned before you get to th end.
 
 -Saravana
