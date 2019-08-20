@@ -2,132 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3439E9525D
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2019 02:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B832A95283
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Aug 2019 02:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729004AbfHTASj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Aug 2019 20:18:39 -0400
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:41674 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728988AbfHTASh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 20:18:37 -0400
-Received: by mail-pg1-f202.google.com with SMTP id b18so3484086pgg.8
-        for <linux-pm@vger.kernel.org>; Mon, 19 Aug 2019 17:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=dNVh2iEH8Vj5QaP2UTGBHWYWiLKLUyALWKFvKJ3rNPk=;
-        b=s+DzVRUaCC07PkCzszpSdYfvTDGl8hxUTCDu/FpF5b4WNQAmCbk6BOrwtJXUoFR6Uz
-         qKm/vW6UcajgcQNbuCy/wUqoTzb68lOw8pytLYFdDjt3L0bszBv6MJlhpX/W5PUC9TpY
-         8AX7s/PxVrj8PbsOCZi0M6Dwr0BexH+KjnuS/B9q0DCyAkJ9k9Og7T4oCTwqUM3loX8X
-         APyKduoOLI+CQCWk+EDINB1/1Sy/dGLCuGyBGFyMwA8wNU1tWivpS7m1mJNEdM/ahsl+
-         888b9JvYy2AlusJGjtmnpS9xM8sUy6qm69rS3ahSS5Hw/shTovUguhjEUiK5vOG3eo0m
-         1c+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dNVh2iEH8Vj5QaP2UTGBHWYWiLKLUyALWKFvKJ3rNPk=;
-        b=czBxRm8bKxqpMfdU2VQoGaUtrpuPyF+GJGcQYn3h1rt5dciAtv8MgoGFBNk0RQ52pV
-         61RGgw7ONHt7phvQDT58jC+RiDaeCj/7sbt1MonNJ/ggZTJy/EonEM+Dmfon5iXSrsVc
-         kA6M1iaw/1fs12CbN5SVnkjyg9wM6udDOtonm+3ULFCNn6vUAgI15hshw0Iz2watC7fc
-         2h+yf2T4rOBVRKZdS5oybmI4nxDzKr0zakyRTTe21kXq3t6//fssqrDlzBAqQkYCNEoF
-         4cC3ODrGAAuRWTx/V8u+dKP/Z/G5f+ImMkM6tZiUpQGqV0H89QQsjw2pngidBXfy24Ho
-         YYyQ==
-X-Gm-Message-State: APjAAAWW/mGnMypCRH0fqxCHORGRSVPX5VXIHD/NyhyadsaxNw5FkFuD
-        tq+/Cfi7TfEeNq/EkCR7rFwiNi2Mjr/01cjP7JTtFg==
-X-Google-Smtp-Source: APXvYqw50UpcJtkF5rTCGf6S95KEpqO+4K8LOnMXigUv6lRcqmdRjDrchpQ3c4/aZXcS0zPEWytHlafdl8iJSlsaMVhMZg==
-X-Received: by 2002:a63:e48:: with SMTP id 8mr21980312pgo.389.1566260316132;
- Mon, 19 Aug 2019 17:18:36 -0700 (PDT)
-Date:   Mon, 19 Aug 2019 17:17:46 -0700
-In-Reply-To: <20190820001805.241928-1-matthewgarrett@google.com>
-Message-Id: <20190820001805.241928-11-matthewgarrett@google.com>
-Mime-Version: 1.0
-References: <20190820001805.241928-1-matthewgarrett@google.com>
-X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH V40 10/29] hibernate: Disable when the kernel is locked down
-From:   Matthew Garrett <matthewgarrett@google.com>
-To:     jmorris@namei.org
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Josh Boyer <jwboyer@fedoraproject.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>, rjw@rjwysocki.net,
-        pavel@ucw.cz, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1729196AbfHTATi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Aug 2019 20:19:38 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:64661 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728777AbfHTATh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Aug 2019 20:19:37 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190820001935epoutp020ae1dc9abd5e366f7ef27592ada99450~8eYNnBerT1299712997epoutp020
+        for <linux-pm@vger.kernel.org>; Tue, 20 Aug 2019 00:19:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190820001935epoutp020ae1dc9abd5e366f7ef27592ada99450~8eYNnBerT1299712997epoutp020
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1566260375;
+        bh=tiKuzbBFO1qPnOxWRqi4oSHOWLECBQ8oOkwty0cA6FU=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=E/fXgVUADJZ78+5uW0x+Cny6oJMuBucSHhYEjHsLzVfBMpXJV/3nMW7q07x4o11pf
+         UECHEqUE/fNsAt3RQ28GIovk06Acs4dQJ1cz03oSrjStBPKlofz4FEJOt8j7o5/+ls
+         WYgQSvw9upYHdAiKhn+kxtR+O+8YO+0367j9d3iM=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190820001935epcas1p2e66a7c771ad6735e0c2adce1f97fd23a~8eYNF9xo00333803338epcas1p2H;
+        Tue, 20 Aug 2019 00:19:35 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 46CBHm6XfGzMqYly; Tue, 20 Aug
+        2019 00:19:32 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F8.9C.04075.19C3B5D5; Tue, 20 Aug 2019 09:19:30 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190820001929epcas1p373b9a559be18d326fac7e82b69eb2a2c~8eYHqdI5D1547915479epcas1p3m;
+        Tue, 20 Aug 2019 00:19:29 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190820001929epsmtrp2b339e510f8b32c07efee19eb3198d6ab~8eYHpsbDk0760407604epsmtrp2h;
+        Tue, 20 Aug 2019 00:19:29 +0000 (GMT)
+X-AuditID: b6c32a36-b61ff70000000feb-a8-5d5b3c9154ae
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A6.05.03638.19C3B5D5; Tue, 20 Aug 2019 09:19:29 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190820001929epsmtip2c11ba8b82385296ba633598e132820e9~8eYHdM6LY2532325323epsmtip2A;
+        Tue, 20 Aug 2019 00:19:29 +0000 (GMT)
+Subject: Re: [PATCH v6 08/19] PM / devfreq: tegra30: Ensure that target freq
+ won't overflow
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <c85dbd27-7536-9c51-19a2-fe1c2c6342b9@samsung.com>
+Date:   Tue, 20 Aug 2019 09:23:23 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190811212315.12689-9-digetx@gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0hTcRTmt7vd3Umr28w8DSq79kBhc9e1dSsNqahFBoIQWdi8ucsm7sXu
+        jDICy16OlEwKupmVFvigBNFyQg10PbSHlhSVSUYWZbJKeyjRY9s18r/vfN93zu+c8zsEpmrG
+        1USB08t5nKydwmOk17qStJqTaTtydT0hxDR9eYOYQ0KtlHlwcFTO9HdU48x4eRAxZV8FnBk4
+        UI8zkx01UqbiymM8Q2FqH7yETH5hUG4qLw3hporWRmQab1mQJdtemGbjWAvnSeCc+S5LgdOa
+        Tm3ONq8zG4w6WkOvZFZQCU7WwaVT6zOzNBsK7OGGqITdrL0oTGWxPE+lrEnzuIq8XILNxXvT
+        Kc5tsbtXurU86+CLnFZtvsuxitbpUg1hY16h7WnXYeR+p9hz+Z6+BB0nfIgggFwOz3vifSiG
+        UJHtCJqv/cLFYAxBbeOrqeA7gqcfKjAfUkQzQo/uykXhBoIrAx+lYvAJwdVPNdKIK5bMhfsX
+        XqCIMIf8jaBsshSPCBiZA13+JkkE42QyBN4/i/KzyEXwZOINimAluQb8z/3RQlJyCVx6PRH1
+        x5HbYGyoSyZ6ZkP3meGoR0EaofFEORLrx8OL4fMSES+E0razWKQJIP/gECpplYgzrIcq4SUu
+        4lgYudMqF7EaxkM3pvh90NAdxMXkYwhaA30yUdBD4HKVJLI+jEyC5o4UkV4E/p/nppqYCaFv
+        x2XihpVw7IhKtCRC/9DgVAvzoO5oGX4CUcK0cYRpIwjTRhD+P3YBSRvRXM7NO6wcT7tTp/92
+        C4oea7KxHdU+zOxEJIGoGUrT6e25Khm7m9/r6ERAYNQc5Z7qMKW0sHuLOY/L7Cmyc3wnMoS3
+        XYmp4/Jd4dN3es20IVWv1zPLaaOBpql45cUJJldFWlkvV8hxbs7zL09CKNQlSBhZm96b07Ix
+        rn7JWO3qpZltDS83N93Mzk7JUB8J7pu5osZXkGQ9FwgMBYOqnKZN2lKNZjU/uRj6dGaJ/Nba
+        nkS8GjOc1R74UZUXs+PHrrzeFuPI2/idlcWWwLJqX/eXCpfSdn+g2H391NYam+V2xueTo/Nj
+        +0a37K/7UDncxg1SUt7G0smYh2f/AvbL5RzCAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsWy7bCSvO5Em+hYg5/PeCxWf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gsfu6ax2LRt/YSmwOnx467Sxg9ds66y+7R2/yO
+        zaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgyrh1uZSx4xlmx9LRxA2MPRxcjJ4eEgInEu4sn
+        2LsYuTiEBHYzSvSue8sOkZCUmHbxKHMXIweQLSxx+HAxSFhI4C2jxLRtbiC2sECsxJkFtxhB
+        ekUEmpgkNvVeAOtlFoiU6Jm7hQ1i6FZGib6fi1lBEmwCWhL7X9xgA7H5BRQlrv54zAhi8wrY
+        Sey8uZMFxGYRUJVY8vAHE4gtKhAhcXjHLKgaQYmTM5+A1XAKmEmsmtDLCLFMXeLPvEvMELa4
+        xK0n85kgbHmJ5q2zmScwCs9C0j4LScssJC2zkLQsYGRZxSiZWlCcm55bbFhglJdarlecmFtc
+        mpeul5yfu4kRHGFaWjsYT5yIP8QowMGoxMPrMS0qVog1say4MvcQowQHs5IIb8UcoBBvSmJl
+        VWpRfnxRaU5q8SFGaQ4WJXFe+fxjkUIC6YklqdmpqQWpRTBZJg5OqQZGy+la904+/mC9IX2G
+        9y4B0xkrMv6KxbarnboX8Lg3Y99xyyrbAPsnMUuPNTjdPj3bgb3ysnOsdFfTXv9fCsc19pVn
+        vWCflctrYbXFjGtD+83n+/V0mFeL14o0Pr6vWV1V3HyVy/fsxic69dfXLBc+6+GpuTWl6yC3
+        8uTvps9tGmp2H9EtU09QYinOSDTUYi4qTgQAfIr9lqwCAAA=
+X-CMS-MailID: 20190820001929epcas1p373b9a559be18d326fac7e82b69eb2a2c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190811212546epcas1p22be9fefe18908cdd17a518950d296983
+References: <20190811212315.12689-1-digetx@gmail.com>
+        <CGME20190811212546epcas1p22be9fefe18908cdd17a518950d296983@epcas1p2.samsung.com>
+        <20190811212315.12689-9-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Josh Boyer <jwboyer@fedoraproject.org>
+On 19. 8. 12. 오전 6:23, Dmitry Osipenko wrote:
+> We already had few integer overflow bugs, let's limit the freq for
+> consistency.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/devfreq/tegra30-devfreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index 70dce58212a4..ca499368ee81 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -430,7 +430,7 @@ static unsigned long actmon_update_target(struct tegra_devfreq *tegra,
+>  	target_freq = dev->avg_count / ACTMON_SAMPLING_PERIOD + dev->boost_freq;
+>  	target_freq = tegra_actmon_account_cpu_freq(tegra, dev, target_freq);
+>  
+> -	return target_freq;
+> +	return min(target_freq, tegra->max_freq);
 
-There is currently no way to verify the resume image when returning
-from hibernate.  This might compromise the signed modules trust model,
-so until we can work with signed hibernate images we disable it when the
-kernel is locked down.
+Once again, did you meet this case sometimes?
 
-Signed-off-by: Josh Boyer <jwboyer@fedoraproject.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: rjw@rjwysocki.net
-Cc: pavel@ucw.cz
-cc: linux-pm@vger.kernel.org
-Signed-off-by: James Morris <jmorris@namei.org>
----
- include/linux/security.h     | 1 +
- kernel/power/hibernate.c     | 3 ++-
- security/lockdown/lockdown.c | 1 +
- 3 files changed, 4 insertions(+), 1 deletion(-)
+Usually, we can prevent the overflow of target_freq
+when calculating the target frequency or this style.
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index b607a8ac97fe..80ac7fb27aa9 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -106,6 +106,7 @@ enum lockdown_reason {
- 	LOCKDOWN_MODULE_SIGNATURE,
- 	LOCKDOWN_DEV_MEM,
- 	LOCKDOWN_KEXEC,
-+	LOCKDOWN_HIBERNATION,
- 	LOCKDOWN_INTEGRITY_MAX,
- 	LOCKDOWN_CONFIDENTIALITY_MAX,
- };
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index cd7434e6000d..3c0a5a8170b0 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -30,6 +30,7 @@
- #include <linux/ctype.h>
- #include <linux/genhd.h>
- #include <linux/ktime.h>
-+#include <linux/security.h>
- #include <trace/events/power.h>
- 
- #include "power.h"
-@@ -68,7 +69,7 @@ static const struct platform_hibernation_ops *hibernation_ops;
- 
- bool hibernation_available(void)
- {
--	return (nohibernate == 0);
-+	return nohibernate == 0 && !security_locked_down(LOCKDOWN_HIBERNATION);
- }
- 
- /**
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index aaf30ad351f9..3462f7edcaac 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -21,6 +21,7 @@ static char *lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1] = {
- 	[LOCKDOWN_MODULE_SIGNATURE] = "unsigned module loading",
- 	[LOCKDOWN_DEV_MEM] = "/dev/mem,kmem,port",
- 	[LOCKDOWN_KEXEC] = "kexec of unsigned images",
-+	[LOCKDOWN_HIBERNATION] = "hibernation",
- 	[LOCKDOWN_INTEGRITY_MAX] = "integrity",
- 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
- };
+I think that if the overflow of target frequency happen frequently,
+it might have the problem of calculation way. 
+
+>  }
+>  
+>  static irqreturn_t actmon_thread_isr(int irq, void *data)
+> 
+
+
 -- 
-2.23.0.rc1.153.gdeed80330f-goog
-
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
