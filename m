@@ -2,158 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71512973F7
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 09:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CDE9745B
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 10:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbfHUHx0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Aug 2019 03:53:26 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:45004 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726389AbfHUHxZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Aug 2019 03:53:25 -0400
-Received: by mail-lf1-f68.google.com with SMTP id v16so1057887lfg.11
-        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2019 00:53:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4WkbNxIuQHcMyi/6jdTaT2GJS3hfGOuis/4XMY+Hqv0=;
-        b=XJpPbfj8P9QJPx+MXLpw/Zpk11zobJZrO2DKY2mgHVIboqYEIp2ho60EdmJ3Y6AYhx
-         QSp2QIWv3+2jDYAwohs4rK6Vso5/KH0plNFbkiVQOUBT0vvmNKlwTtmxhBUeNyVviVPx
-         n0fZo6b8dEC6PfFj/iWpjszsR9aKv8/foAkPe46cmiTYeN3GdlFzCc3FTBNrpw6P2R76
-         OT8VBJsJZ11Equt8nnFkW29jpyKvGrmiU9lOd3X/v46bDxzBHa36K1mJnZ5TV0a6SHaW
-         cM/oolufmA0f6Y6h+Se5FCifYLechXV2U57q5/+CIRUGI5wzReLVnaH0QEGrl+dt23hj
-         sLAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4WkbNxIuQHcMyi/6jdTaT2GJS3hfGOuis/4XMY+Hqv0=;
-        b=YgGzIKkoSTS/JgHMV3xfdieTNvqCfCugYJvfEUh824cj5ciPTScxpGIGwC4o2bokfO
-         PpA2f1/BAsPETNB+BVB5/QFQeRCV3xR30y/j4CPlPeqmQbLfTRsHAa18SECdLqEJCQHX
-         ixDryIo6CB+IiROd7tn18aeNX8q3XkCOLHc7WvctG/6cAIZlWU+6anJC7T/hUhMvzu04
-         zOtJjsYZOYAExsZa89Uk7tJh0BQ8Fnw5jGakljIjsywUOcNofzV72etyemvQwBQD7kld
-         QOJhfKGPa2fOn++42JlWZdJvbzkqzQ93oWKuXuSEBbqHuE3LhDxOQSu/g+kKWuiPiAKx
-         lmMA==
-X-Gm-Message-State: APjAAAVG5UDQyi4oXDK0mUD0k08hBNICFPZPpugKrqy4gxwz6hqG2Yzg
-        itPbO2fZHvyv63MmbYRTDz9Yw3gXbFk=
-X-Google-Smtp-Source: APXvYqyhZXLsc3Atd+lyJOsKNYthp6F6CwMZKFd5dNFZ+MASXA4v3XjQhoGKDCwuBYhc8sOqNq42Ww==
-X-Received: by 2002:ac2:4ac4:: with SMTP id m4mr17369662lfp.172.1566374003532;
-        Wed, 21 Aug 2019 00:53:23 -0700 (PDT)
-Received: from [192.168.27.209] ([37.157.136.206])
-        by smtp.googlemail.com with ESMTPSA id p28sm3254972lfh.55.2019.08.21.00.53.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 21 Aug 2019 00:53:22 -0700 (PDT)
-Subject: Re: [PATCH 1/2] venus: use on-chip interconnect API
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Vikash Garodia <vgarodia@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Aniket Masule <amasule@codeaurora.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <20190814084701.25455-1-stanimir.varbanov@linaro.org>
- <20190814084701.25455-2-stanimir.varbanov@linaro.org>
- <cc85f55c-3d21-c3b2-6848-e48513263e39@linaro.org>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <939ace85-e006-db6d-02d2-b55385fa5043@linaro.org>
-Date:   Wed, 21 Aug 2019 10:53:20 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726401AbfHUIGO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Aug 2019 04:06:14 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:63686 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfHUIGN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Aug 2019 04:06:13 -0400
+Received: from 79.184.254.79.ipv4.supernova.orange.pl (79.184.254.79) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
+ id 365a6345488f7933; Wed, 21 Aug 2019 10:06:10 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kristian Klausen <kristian@klausen.dk>,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH] ACPI: PM: s2idle: Always set up EC GPE for system wakeup
+Date:   Wed, 21 Aug 2019 10:06:09 +0200
+Message-ID: <2671465.Ihf76VL9xe@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <cc85f55c-3d21-c3b2-6848-e48513263e39@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Georgi,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks for the review!
+Commit 10a08fd65ec1 ("ACPI: PM: Set up EC GPE for system wakeup from
+drivers that need it") assumed that the EC GPE would only need to be
+set up for system wakeup if either the intel-hid or the intel-vbtn
+driver was in use, but that turns out to be incorrect.  In particular,
+on ASUS Zenbook UX430UNR/i7-8550U, if the EC GPE is not enabled while
+suspended, the system cannot be woken up by opening the lid or
+pressing a key, and that machine doesn't use any of the drivers
+mentioned above.
 
-On 8/20/19 12:34 PM, Georgi Djakov wrote:
-> Hi Stan,
-> 
-> On 8/14/19 11:47, Stanimir Varbanov wrote:
->> This aims to add a requests for bandwidth scaling depending
->> on the resolution and framerate (macroblocks per second). The
->> exact value ff the requested bandwidth is get from a
-> 
-> s/ff/of/
-> 
->> pre-calculated tables for encoder and decoder.
->>
->> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->> ---
->>  drivers/media/platform/qcom/venus/core.c    | 34 +++++++++++
->>  drivers/media/platform/qcom/venus/core.h    | 14 +++++
->>  drivers/media/platform/qcom/venus/helpers.c | 67 ++++++++++++++++++++-
->>  3 files changed, 114 insertions(+), 1 deletion(-)
-> 
-> It looks like venus can be built-in, so how about the case when venus is
-> built-in and the interconnect provider is a module? Maybe add a dependency in
-> Kconfig to depend on INTERCONNECT || !INTERCONNECT?
+For this reason, always set up the EC GPE for system wakeup from
+suspend-to-idle by setting and clearing its wake mask in the ACPI
+suspend-to-idle callbacks.
 
-yes, I forgot about that dependency.
+Fixes: 10a08fd65ec1 ("ACPI: PM: Set up EC GPE for system wakeup from drivers that need it")
+Reported-by: Kristian Klausen <kristian@klausen.dk>
+Tested-by: Kristian Klausen <kristian@klausen.dk>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-> 
->>
->> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
->> index 0acc7576cc58..19cbe9d5d028 100644
->> --- a/drivers/media/platform/qcom/venus/core.c
->> +++ b/drivers/media/platform/qcom/venus/core.c
->> @@ -5,6 +5,7 @@
->>   */
->>  #include <linux/clk.h>
->>  #include <linux/init.h>
->> +#include <linux/interconnect.h>
->>  #include <linux/ioctl.h>
->>  #include <linux/list.h>
->>  #include <linux/module.h>
->> @@ -239,6 +240,14 @@ static int venus_probe(struct platform_device *pdev)
->>  	if (IS_ERR(core->base))
->>  		return PTR_ERR(core->base);
->>  
->> +	core->video_path = of_icc_get(dev, "video-mem");
->> +	if (IS_ERR(core->video_path))
->> +		return PTR_ERR(core->video_path);
->> +
->> +	core->cpucfg_path = of_icc_get(dev, "cpu-cfg");
->> +	if (IS_ERR(core->cpucfg_path))
->> +		return PTR_ERR(core->cpucfg_path);
->> +
->>  	core->irq = platform_get_irq(pdev, 0);
->>  	if (core->irq < 0)
->>  		return core->irq;
->> @@ -273,6 +282,10 @@ static int venus_probe(struct platform_device *pdev)
->>  	if (ret)
->>  		return ret;
->>  
->> +	ret = icc_set_bw(core->cpucfg_path, 0, kbps_to_icc(1000));
->> +	if (ret)
->> +		return ret;
->> +
->>  	ret = hfi_create(core, &venus_core_ops);
->>  	if (ret)
->>  		return ret;
->> @@ -355,6 +368,9 @@ static int venus_remove(struct platform_device *pdev)
->>  	pm_runtime_put_sync(dev);
->>  	pm_runtime_disable(dev);
->>  
->> +	icc_put(core->video_path);
->> +	icc_put(core->cpucfg_path);
->> +
-> 
-> Do you have any plans to scale the bandwidth on suspend/resume too?
+Commit 10a08fd65ec1 is present in linux-next.
 
-Yes, we definitely need that in suspend/resume, but I guess the plan
-should be add it once we implement pm_runtime autosuspend functionality
-in order to easily test that.
+---
+ drivers/acpi/ec.c                 |    1 -
+ drivers/acpi/sleep.c              |   15 +++++++++++++--
+ drivers/platform/x86/intel-hid.c  |    5 +----
+ drivers/platform/x86/intel-vbtn.c |    5 +----
+ 4 files changed, 15 insertions(+), 11 deletions(-)
 
--- 
-regards,
-Stan
+Index: linux-pm/drivers/acpi/sleep.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/sleep.c
++++ linux-pm/drivers/acpi/sleep.c
+@@ -938,6 +938,13 @@ static int lps0_device_attach(struct acp
+ 	if (mem_sleep_default > PM_SUSPEND_MEM && !acpi_sleep_default_s3)
+ 		mem_sleep_current = PM_SUSPEND_TO_IDLE;
+ 
++	/*
++	 * Some LPS0 systems, like ASUS Zenbook UX430UNR/i7-8550U, require the
++	 * EC GPE to be enabled while suspended for certain wakeup devices to
++	 * work, so mark it as wakeup-capable.
++	 */
++	acpi_ec_mark_gpe_for_wake();
++
+ 	return 0;
+ }
+ 
+@@ -954,8 +961,10 @@ static int acpi_s2idle_begin(void)
+ 
+ static int acpi_s2idle_prepare(void)
+ {
+-	if (acpi_sci_irq_valid())
++	if (acpi_sci_irq_valid()) {
+ 		enable_irq_wake(acpi_sci_irq);
++		acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
++	}
+ 
+ 	acpi_enable_wakeup_devices(ACPI_STATE_S0);
+ 
+@@ -1034,8 +1043,10 @@ static void acpi_s2idle_restore(void)
+ 
+ 	acpi_disable_wakeup_devices(ACPI_STATE_S0);
+ 
+-	if (acpi_sci_irq_valid())
++	if (acpi_sci_irq_valid()) {
++		acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
+ 		disable_irq_wake(acpi_sci_irq);
++	}
+ }
+ 
+ static void acpi_s2idle_end(void)
+Index: linux-pm/drivers/platform/x86/intel-hid.c
+===================================================================
+--- linux-pm.orig/drivers/platform/x86/intel-hid.c
++++ linux-pm/drivers/platform/x86/intel-hid.c
+@@ -257,7 +257,6 @@ static int intel_hid_pm_prepare(struct d
+ 		struct intel_hid_priv *priv = dev_get_drvdata(device);
+ 
+ 		priv->wakeup_mode = true;
+-		acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
+ 	}
+ 	return 0;
+ }
+@@ -266,10 +265,8 @@ static void intel_hid_pm_complete(struct
+ {
+ 	struct intel_hid_priv *priv = dev_get_drvdata(device);
+ 
+-	if (priv->wakeup_mode) {
+-		acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
++	if (priv->wakeup_mode)
+ 		priv->wakeup_mode = false;
+-	}
+ }
+ 
+ static int intel_hid_pl_suspend_handler(struct device *device)
+Index: linux-pm/drivers/platform/x86/intel-vbtn.c
+===================================================================
+--- linux-pm.orig/drivers/platform/x86/intel-vbtn.c
++++ linux-pm/drivers/platform/x86/intel-vbtn.c
+@@ -205,7 +205,6 @@ static int intel_vbtn_pm_prepare(struct
+ 		struct intel_vbtn_priv *priv = dev_get_drvdata(dev);
+ 
+ 		priv->wakeup_mode = true;
+-		acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
+ 	}
+ 	return 0;
+ }
+@@ -214,10 +213,8 @@ static void intel_vbtn_pm_complete(struc
+ {
+ 	struct intel_vbtn_priv *priv = dev_get_drvdata(dev);
+ 
+-	if (priv->wakeup_mode) {
+-		acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
++	if (priv->wakeup_mode)
+ 		priv->wakeup_mode = false;
+-	}
+ }
+ 
+ static int intel_vbtn_pm_resume(struct device *dev)
+Index: linux-pm/drivers/acpi/ec.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/ec.c
++++ linux-pm/drivers/acpi/ec.c
+@@ -1970,7 +1970,6 @@ void acpi_ec_set_gpe_wake_mask(u8 action
+ 	if (pm_suspend_no_platform() && first_ec && !ec_no_wakeup)
+ 		acpi_set_gpe_wake_mask(NULL, first_ec->gpe, action);
+ }
+-EXPORT_SYMBOL_GPL(acpi_ec_set_gpe_wake_mask);
+ 
+ bool acpi_ec_dispatch_gpe(void)
+ {
+
+
+
