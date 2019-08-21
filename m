@@ -2,119 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AC9973D5
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 09:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71512973F7
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 09:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbfHUHtv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Aug 2019 03:49:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58362 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726028AbfHUHtv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 21 Aug 2019 03:49:51 -0400
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CADD7233FF;
-        Wed, 21 Aug 2019 07:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566373790;
-        bh=48hZbPJtzSxx3b/A53I4PAXECxqgXTQufB/rcB8xTZM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P7/gmtEOu+07urJK1FBTX+Ba4qDgS5ToQMx4eze7JbceXNNUR4u4m49iHD74LH3cp
-         ZheENFVTNDmU4heunGKuD/ax/z6UiPmx6Al6Q1gc9brqPjwPysWKUVE5GyeFPUNyvH
-         dXNfVYg87CsT9axD9YizhBrmwa4WId7PNziUkEjU=
-Received: by mail-lj1-f170.google.com with SMTP id x3so1228163lji.5;
-        Wed, 21 Aug 2019 00:49:49 -0700 (PDT)
-X-Gm-Message-State: APjAAAW3jPLlNI4HDPu2txBHd0BvA44pljrd4VYETRb4z2WeGoqa4dgh
-        rJtoteaF8SkbsbjCCh+B7xl8vh4c7iIExez2pwI=
-X-Google-Smtp-Source: APXvYqyKZ6hp0isd++pSIdiygMNPAboh6ydC5w3pg7nv0BqAltG/55Aw8qIwfJ3UWnul58T3CByp6jMBOZQDlen5WuM=
-X-Received: by 2002:a2e:9acf:: with SMTP id p15mr18348273ljj.13.1566373787954;
- Wed, 21 Aug 2019 00:49:47 -0700 (PDT)
+        id S1726955AbfHUHx0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Aug 2019 03:53:26 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:45004 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726389AbfHUHxZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Aug 2019 03:53:25 -0400
+Received: by mail-lf1-f68.google.com with SMTP id v16so1057887lfg.11
+        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2019 00:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4WkbNxIuQHcMyi/6jdTaT2GJS3hfGOuis/4XMY+Hqv0=;
+        b=XJpPbfj8P9QJPx+MXLpw/Zpk11zobJZrO2DKY2mgHVIboqYEIp2ho60EdmJ3Y6AYhx
+         QSp2QIWv3+2jDYAwohs4rK6Vso5/KH0plNFbkiVQOUBT0vvmNKlwTtmxhBUeNyVviVPx
+         n0fZo6b8dEC6PfFj/iWpjszsR9aKv8/foAkPe46cmiTYeN3GdlFzCc3FTBNrpw6P2R76
+         OT8VBJsJZ11Equt8nnFkW29jpyKvGrmiU9lOd3X/v46bDxzBHa36K1mJnZ5TV0a6SHaW
+         cM/oolufmA0f6Y6h+Se5FCifYLechXV2U57q5/+CIRUGI5wzReLVnaH0QEGrl+dt23hj
+         sLAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4WkbNxIuQHcMyi/6jdTaT2GJS3hfGOuis/4XMY+Hqv0=;
+        b=YgGzIKkoSTS/JgHMV3xfdieTNvqCfCugYJvfEUh824cj5ciPTScxpGIGwC4o2bokfO
+         PpA2f1/BAsPETNB+BVB5/QFQeRCV3xR30y/j4CPlPeqmQbLfTRsHAa18SECdLqEJCQHX
+         ixDryIo6CB+IiROd7tn18aeNX8q3XkCOLHc7WvctG/6cAIZlWU+6anJC7T/hUhMvzu04
+         zOtJjsYZOYAExsZa89Uk7tJh0BQ8Fnw5jGakljIjsywUOcNofzV72etyemvQwBQD7kld
+         QOJhfKGPa2fOn++42JlWZdJvbzkqzQ93oWKuXuSEBbqHuE3LhDxOQSu/g+kKWuiPiAKx
+         lmMA==
+X-Gm-Message-State: APjAAAVG5UDQyi4oXDK0mUD0k08hBNICFPZPpugKrqy4gxwz6hqG2Yzg
+        itPbO2fZHvyv63MmbYRTDz9Yw3gXbFk=
+X-Google-Smtp-Source: APXvYqyhZXLsc3Atd+lyJOsKNYthp6F6CwMZKFd5dNFZ+MASXA4v3XjQhoGKDCwuBYhc8sOqNq42Ww==
+X-Received: by 2002:ac2:4ac4:: with SMTP id m4mr17369662lfp.172.1566374003532;
+        Wed, 21 Aug 2019 00:53:23 -0700 (PDT)
+Received: from [192.168.27.209] ([37.157.136.206])
+        by smtp.googlemail.com with ESMTPSA id p28sm3254972lfh.55.2019.08.21.00.53.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 21 Aug 2019 00:53:22 -0700 (PDT)
+Subject: Re: [PATCH 1/2] venus: use on-chip interconnect API
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Vikash Garodia <vgarodia@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Aniket Masule <amasule@codeaurora.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+References: <20190814084701.25455-1-stanimir.varbanov@linaro.org>
+ <20190814084701.25455-2-stanimir.varbanov@linaro.org>
+ <cc85f55c-3d21-c3b2-6848-e48513263e39@linaro.org>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <939ace85-e006-db6d-02d2-b55385fa5043@linaro.org>
+Date:   Wed, 21 Aug 2019 10:53:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20190813150827.31972-1-s.nawrocki@samsung.com>
- <CGME20190813150852eucas1p2be4c0ab5ec2c079e3daf1af24283b27c@eucas1p2.samsung.com>
- <20190813150827.31972-3-s.nawrocki@samsung.com> <b5359603-b337-dcd8-b025-ca7dff5f4a06@nvidia.com>
- <CAJKOXPf597CMx=M2JmSTWe2GzBfcHFefgzSJbJ+njZGp-WfR1A@mail.gmail.com> <1e428c8e-f4b5-0810-77f9-2c899c040fc7@kernel.org>
-In-Reply-To: <1e428c8e-f4b5-0810-77f9-2c899c040fc7@kernel.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 21 Aug 2019 09:49:36 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcdeb08-2Xsmjpw_CsJCTah03GJaLUjQYw6n7=Xhiwoow@mail.gmail.com>
-Message-ID: <CAJKOXPcdeb08-2Xsmjpw_CsJCTah03GJaLUjQYw6n7=Xhiwoow@mail.gmail.com>
-Subject: Re: [PATCH v3 2/9] soc: samsung: Convert exynos-chipid driver to use
- the regmap API
-To:     Sylwester Nawrocki <snawrocki@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
-        kgene@kernel.org, pankaj.dubey@samsung.com,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
-        <b.zolnierkie@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <cc85f55c-3d21-c3b2-6848-e48513263e39@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 20 Aug 2019 at 23:38, Sylwester Nawrocki <snawrocki@kernel.org> wrote:
->
-> On 8/20/19 21:37, Krzysztof Kozlowski wrote:
-> >>> diff --git a/drivers/soc/samsung/exynos-chipid.c b/drivers/soc/samsung/exynos-chipid.c
->
-> >>> @@ -51,29 +48,24 @@ static const char * __init product_id_to_soc_id(unsigned int product_id)
-> >>>   int __init exynos_chipid_early_init(void)
-> >>>   {
-> >>>        struct soc_device_attribute *soc_dev_attr;
-> >>> -     void __iomem *exynos_chipid_base;
-> >>>        struct soc_device *soc_dev;
-> >>>        struct device_node *root;
-> >>> -     struct device_node *np;
-> >>> +     struct regmap *regmap;
-> >>>        u32 product_id;
-> >>>        u32 revision;
-> >>> +     int ret;
-> >>>
-> >>> -     /* look up for chipid node */
-> >>> -     np = of_find_compatible_node(NULL, NULL, "samsung,exynos4210-chipid");
-> >>> -     if (!np)
-> >>> -             return -ENODEV;
-> >>> -
-> >>> -     exynos_chipid_base = of_iomap(np, 0);
-> >>> -     of_node_put(np);
-> >>> -
-> >>> -     if (!exynos_chipid_base) {
-> >>> -             pr_err("Failed to map SoC chipid\n");
-> >>> -             return -ENXIO;
-> >>> +     regmap = syscon_regmap_lookup_by_compatible("samsung,exynos4210-chipid");
-> >>> +     if (IS_ERR(regmap)) {
-> >>> +             pr_err("Failed to get CHIPID regmap\n");
-> >>> +             return PTR_ERR(regmap);
-> >>>        }
-> >> Following this change, I am now seeing the above error on our Tegra
-> >> boards where this driver is enabled. This is triggering a kernel
-> >> warnings test we have to fail. Hence, I don't think that you can remove
-> >> the compatible node test here, unless you have a better way to determine
-> >> if this is a samsung device.
-> >
-> > Right, this is really wrong... I missed that it is not a probe but
-> > early init. And this init will be called on every board... Probably it
-> > should be converted to a regular driver.
->
-> I'm also inclined to have it converted to a regular driver.  We already
-> have "exynos-asv" driver matching on the chipid node (patch 3/9).
-> The ASV patches will not be merged soon anyway, all this needs some more
-> thought. Krzysztof, can we abandon the chipid patches for now? Your
-> pull request doesn't appear to be merged to arm-soc yet. Sorry about
-> that.
+Hi Georgi,
 
-Yes, let's abandon the pull request and rework the concept.
+Thanks for the review!
 
-Best regards,
-Krzysztof
+On 8/20/19 12:34 PM, Georgi Djakov wrote:
+> Hi Stan,
+> 
+> On 8/14/19 11:47, Stanimir Varbanov wrote:
+>> This aims to add a requests for bandwidth scaling depending
+>> on the resolution and framerate (macroblocks per second). The
+>> exact value ff the requested bandwidth is get from a
+> 
+> s/ff/of/
+> 
+>> pre-calculated tables for encoder and decoder.
+>>
+>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+>> ---
+>>  drivers/media/platform/qcom/venus/core.c    | 34 +++++++++++
+>>  drivers/media/platform/qcom/venus/core.h    | 14 +++++
+>>  drivers/media/platform/qcom/venus/helpers.c | 67 ++++++++++++++++++++-
+>>  3 files changed, 114 insertions(+), 1 deletion(-)
+> 
+> It looks like venus can be built-in, so how about the case when venus is
+> built-in and the interconnect provider is a module? Maybe add a dependency in
+> Kconfig to depend on INTERCONNECT || !INTERCONNECT?
+
+yes, I forgot about that dependency.
+
+> 
+>>
+>> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+>> index 0acc7576cc58..19cbe9d5d028 100644
+>> --- a/drivers/media/platform/qcom/venus/core.c
+>> +++ b/drivers/media/platform/qcom/venus/core.c
+>> @@ -5,6 +5,7 @@
+>>   */
+>>  #include <linux/clk.h>
+>>  #include <linux/init.h>
+>> +#include <linux/interconnect.h>
+>>  #include <linux/ioctl.h>
+>>  #include <linux/list.h>
+>>  #include <linux/module.h>
+>> @@ -239,6 +240,14 @@ static int venus_probe(struct platform_device *pdev)
+>>  	if (IS_ERR(core->base))
+>>  		return PTR_ERR(core->base);
+>>  
+>> +	core->video_path = of_icc_get(dev, "video-mem");
+>> +	if (IS_ERR(core->video_path))
+>> +		return PTR_ERR(core->video_path);
+>> +
+>> +	core->cpucfg_path = of_icc_get(dev, "cpu-cfg");
+>> +	if (IS_ERR(core->cpucfg_path))
+>> +		return PTR_ERR(core->cpucfg_path);
+>> +
+>>  	core->irq = platform_get_irq(pdev, 0);
+>>  	if (core->irq < 0)
+>>  		return core->irq;
+>> @@ -273,6 +282,10 @@ static int venus_probe(struct platform_device *pdev)
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> +	ret = icc_set_bw(core->cpucfg_path, 0, kbps_to_icc(1000));
+>> +	if (ret)
+>> +		return ret;
+>> +
+>>  	ret = hfi_create(core, &venus_core_ops);
+>>  	if (ret)
+>>  		return ret;
+>> @@ -355,6 +368,9 @@ static int venus_remove(struct platform_device *pdev)
+>>  	pm_runtime_put_sync(dev);
+>>  	pm_runtime_disable(dev);
+>>  
+>> +	icc_put(core->video_path);
+>> +	icc_put(core->cpucfg_path);
+>> +
+> 
+> Do you have any plans to scale the bandwidth on suspend/resume too?
+
+Yes, we definitely need that in suspend/resume, but I guess the plan
+should be add it once we implement pm_runtime autosuspend functionality
+in order to easily test that.
+
+-- 
+regards,
+Stan
