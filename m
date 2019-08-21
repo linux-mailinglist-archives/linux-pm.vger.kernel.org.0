@@ -2,91 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A069C9846E
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 21:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2D2985A6
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 22:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730196AbfHUTbI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Aug 2019 15:31:08 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:45444 "EHLO
+        id S1727014AbfHUUd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Aug 2019 16:33:56 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:43907 "EHLO
         mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730184AbfHUTbH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Aug 2019 15:31:07 -0400
-Received: by mail-ot1-f65.google.com with SMTP id m24so3135536otp.12;
-        Wed, 21 Aug 2019 12:31:07 -0700 (PDT)
+        with ESMTP id S1726998AbfHUUd4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Aug 2019 16:33:56 -0400
+Received: by mail-ot1-f65.google.com with SMTP id e12so3319364otp.10;
+        Wed, 21 Aug 2019 13:33:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=P+mIfgwF/Dx2fvxKM3KDec35UT4pGef1zpaBcJAd0yE=;
-        b=PUXY5/aAwqR7vNQWrircfHZtgN0Y6oxXxEgo6apwP6AGELCwtjJ2GOYbLjGze9cPTD
-         BDVp42PRI4aRcw3fFG5+iSPnG7Zb7+2jl8zafYvOg04ZlxtxHPSc7155+L0KaTL1nVgw
-         7NAIoynEqnbGKvnikY9PuQD8ikvq/QjrxcrRZ38NbFQ7iqBWWcsuKb7cHRGJMgzJVgBA
-         XiQJWSzodoq4wX03JBgyXp8DEZQtg7AeM27q0tVK6b+ZOIq3a+opDjGYZexXpF9+7Pyn
-         Zn5xDjS6g1NNhG+zW9O4qBinJRswS+0BYJxmAhFcNjOM0n2Jk5HP05vEik6ZD6dmPC5h
-         W1FA==
-X-Gm-Message-State: APjAAAUEqZ8f7Q/ibHeOqFIXYwld4MK03ijCg01YR3xyp73jeXHFmtoH
-        QdPZwYCvZEXmNHVbcFkxaw==
-X-Google-Smtp-Source: APXvYqw6uPnGkUwS9jVi2LxBcn0vQmq1CDVBqNIUieYulJDWQvedafQd3o4SAYeZa+ky0wbndYwwYQ==
-X-Received: by 2002:a9d:7e6:: with SMTP id 93mr28714164oto.143.1566415866696;
-        Wed, 21 Aug 2019 12:31:06 -0700 (PDT)
+        bh=qddeoYMCExSrGP0Z53XPfFm7HJjj7gnNcVMHSsnjg6k=;
+        b=Ta3529WtkXF6AqLEpIBRXK+4g98Gf8f4aAHE9ZCK4H7KtGs+Q3cGmUsSwwEkioMQzW
+         F3zuPr5gdVxuC1AhTtrTzVBBUGEMr4OryskNh6Bw0d4H0zizCz3etXqBW4HPE5/iF/az
+         PRR0unBboEU4P/6Nu1iKw8aBwCULEaJm2zHBpGYq+8nM8VraLTbNsaxzoJcDcZi3Miyx
+         042YNNpqaJqMffNwwUYt8zAzRG9IClj8iPeHShMUaqCLYppJW8TUh0rkaXDboHkDs9dv
+         o02gAuXKDa7e1fFlua6vJVHr3K+jEJByP5P1S1PBnZ+fHQekFX0PI2AaBRzzmQNc83cI
+         M2Bg==
+X-Gm-Message-State: APjAAAUWADW3/PD1Wd6Lir8cglVKvA2oSodXTcKGzmQjjCxI/ysDEBXC
+        zWTsDJDjXyF2Zd1xicLy+w==
+X-Google-Smtp-Source: APXvYqxhu2sMRWnxO1/JyTvViI5ZgZxKPzyjavAq7Q7nYMVfG75BxtNwatC+amOPfMkRDOIRBTP9hg==
+X-Received: by 2002:a9d:77c4:: with SMTP id w4mr28980235otl.40.1566419634795;
+        Wed, 21 Aug 2019 13:33:54 -0700 (PDT)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v17sm4961879ote.62.2019.08.21.12.31.05
+        by smtp.gmail.com with ESMTPSA id m26sm6204580oie.58.2019.08.21.13.33.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 12:31:06 -0700 (PDT)
-Date:   Wed, 21 Aug 2019 14:31:05 -0500
+        Wed, 21 Aug 2019 13:33:54 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 15:33:53 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Guillaume La Roque <glaroque@baylibre.com>
-Cc:     daniel.lezcano@linaro.org, khilman@baylibre.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/6] dt-bindings: thermal: Add DT bindings
- documentation for Amlogic Thermal
-Message-ID: <20190821193105.GA25977@bogus>
-References: <20190806130506.8753-1-glaroque@baylibre.com>
- <20190806130506.8753-2-glaroque@baylibre.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Saravana Kannan <saravanak@google.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        vincent.guittot@linaro.org, seansw@qti.qualcomm.com,
+        daidavid1@codeaurora.org, adharmap@codeaurora.org,
+        Rajendra Nayak <rnayak@codeaurora.org>, sibis@codeaurora.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] dt-bindings: opp: Introduce opp-peak-kBps and
+  opp-avg-kBps bindings
+Message-ID: <20190821203353.GA11783@bogus>
+References: <20190807223111.230846-1-saravanak@google.com>
+ <20190807223111.230846-2-saravanak@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190806130506.8753-2-glaroque@baylibre.com>
+In-Reply-To: <20190807223111.230846-2-saravanak@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 06, 2019 at 03:05:01PM +0200, Guillaume La Roque wrote:
-> Adding the devicetree binding documentation for the Amlogic temperature
-> sensor found in the Amlogic Meson G12 SoCs.
-> the G12A  and G12B SoCs are supported.
+On Wed,  7 Aug 2019 15:31:09 -0700, Saravana Kannan wrote:
+> Interconnects often quantify their performance points in terms of
+> bandwidth. So, add opp-peak-kBps (required) and opp-avg-kBps (optional) to
+> allow specifying Bandwidth OPP tables in DT.
 > 
-> Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+> opp-peak-kBps is a required property that replaces opp-hz for Bandwidth OPP
+> tables.
+> 
+> opp-avg-kBps is an optional property that can be used in Bandwidth OPP
+> tables.
+> 
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 > ---
->  .../bindings/thermal/amlogic,thermal.yaml     | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
+>  Documentation/devicetree/bindings/opp/opp.txt     | 15 ++++++++++++---
+>  .../devicetree/bindings/property-units.txt        |  4 ++++
+>  2 files changed, 16 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
-> new file mode 100644
-> index 000000000000..d25e59113398
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/amlogic,thermal.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/amlogic,thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Thermal
-> +
-> +maintainers:
-> +  - Guillaume La Roque <glaroque@baylibre.com>
-> +
-> +description: Binding for Amlogic Thermal Driver
-
-Bindings are for h/w blocks, not drivers.
-
-Other than that nit,
 
 Reviewed-by: Rob Herring <robh@kernel.org>
