@@ -2,197 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F82C975E2
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 11:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8B19762F
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 11:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726562AbfHUJTc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Aug 2019 05:19:32 -0400
-Received: from mga06.intel.com ([134.134.136.31]:43460 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbfHUJTc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 21 Aug 2019 05:19:32 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Aug 2019 02:19:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,412,1559545200"; 
-   d="scan'208";a="378886901"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Aug 2019 02:19:29 -0700
-Received: from andy by smile with local (Exim 4.92.1)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1i0Mm7-0005F9-EQ; Wed, 21 Aug 2019 12:19:27 +0300
-Date:   Wed, 21 Aug 2019 12:19:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kristian Klausen <kristian@klausen.dk>,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH] ACPI: PM: s2idle: Always set up EC GPE for system wakeup
-Message-ID: <20190821091927.GV30120@smile.fi.intel.com>
-References: <2671465.Ihf76VL9xe@kreacher>
+        id S1726616AbfHUJ3O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Aug 2019 05:29:14 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:37073 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727275AbfHUJ3O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Aug 2019 05:29:14 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190821092912euoutp029d3e0f6794af10c62100b4e64ab91146~85hX_lQ6d2499724997euoutp02T
+        for <linux-pm@vger.kernel.org>; Wed, 21 Aug 2019 09:29:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190821092912euoutp029d3e0f6794af10c62100b4e64ab91146~85hX_lQ6d2499724997euoutp02T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1566379752;
+        bh=VUfly4VaDq+D6LwLjJfuJq0OMCOq6n6x1SHaNaEmr08=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=t+1XNf6/S7qGiRz8UY04SVmmAcNFjKiI5aUlhprJtrudS3rq0yXBzznTviGQ0nyR9
+         qCnGmjHc2kNJnKHH7D6PjQdpQp8hwsfME1II31I2ODxNhH6BEVJOM1gtFDgb/AW0h3
+         IDsRmWomV1J8XKP5WaCf9sBQPKappCPN8a5olQJ8=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190821092911eucas1p241c599be5400e0e9cf692cc5472e48a7~85hW3Ey5h0660806608eucas1p2f;
+        Wed, 21 Aug 2019 09:29:11 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 75.7C.04374.7EE0D5D5; Wed, 21
+        Aug 2019 10:29:11 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20190821092910eucas1p1b38107511a80a4e870db991a2d356077~85hV9wt3Q0823408234eucas1p1o;
+        Wed, 21 Aug 2019 09:29:10 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190821092910eusmtrp23a29e749dd0908e9d433bef131ea886a~85hVvJfPr2265822658eusmtrp2Z;
+        Wed, 21 Aug 2019 09:29:10 +0000 (GMT)
+X-AuditID: cbfec7f5-4ddff70000001116-2a-5d5d0ee7d655
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 13.BE.04117.6EE0D5D5; Wed, 21
+        Aug 2019 10:29:10 +0100 (BST)
+Received: from [106.120.51.20] (unknown [106.120.51.20]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190821092909eusmtip16720b115a41677bd81b358c676fa8c37~85hU2I9yy1555115551eusmtip1t;
+        Wed, 21 Aug 2019 09:29:09 +0000 (GMT)
+Subject: Re: [PATCH v12 6/9] ARM: dts: exynos: add chipid label and syscon
+ compatible
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, b.zolnierkie@samsung.com, kgene@kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, cw00.choi@samsung.com,
+        kyungmin.park@samsung.com, m.szyprowski@samsung.com,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
+        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
+        treding@nvidia.com, digetx@gmail.com, gregkh@linuxfoundation.org,
+        willy.mh.wolff.ml@gmail.com
+From:   Lukasz Luba <l.luba@partner.samsung.com>
+Message-ID: <8cee8885-142f-d508-472b-334a73d30696@partner.samsung.com>
+Date:   Wed, 21 Aug 2019 11:29:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2671465.Ihf76VL9xe@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190724171049.GA11333@kozik-lap>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUyMcRz3u3veLp72uNDX+3ZbVNYLmv1GXkeesXmZDcuiw6NaXXKPEP44
+        Kiou7ZA6JUZTpxZpqZay7igdncZcanm7vCzSODHLW4/n0H+fz+f7+fy+38/2Y5TqXGoCE5e4
+        W9AnahM0lBdRfedbW9Ab76ioUEcqga/lVZDY+fkNiYtsbSS+8tGFcOrFCgqfbC1U4HvHdPiE
+        650SOxxXaXz/8Hsafzz+lMQP6woo7DbaEM5zNChwua2bxsXOdgVub12Guw6VUDj9po3G1vdH
+        Sfzz8TUCNz5agbsGvfGXlpdoEfBl58oQ/2XARPD9Hek0f9bQTvC15m6ar7RkUnxjYRnNG1M/
+        UHx2lQXx1+0HeHfllDUjI73CtwsJcXsEfciCaK/YrG8tdJJDtS/7RRFlQHfpLKRigAsD02Cp
+        Igt5MWquBEFXdo6HfEbw69RbD3EjyDzs+hcp6DlGyIPLCLofW0iZ9CG4ZS1CksuH2wAOYwkh
+        4TFcADh/fCUlrOTqCTCYxmchhqG4YKix7JJklouAQ0erFBImOD+oabH8sY/lNsKn51ZS9oyG
+        u/k9hBRVcSFQ/2SG/KIvdPYUKWQ8FW70FSilc4DrYMDQWUvJRy+F3j47krEP9DZXecpMgl+1
+        chg4EQzGCx7PQXCdKPR45oG1uZ2U9iqHqlTUhcjyYrCdciJJBs4bOvpGyyd4g6n6jFKWWcg4
+        opbd/lB1/IFn0Ti4XJZL5yCNeVgv87Ay5mFlzP/3nkeEBfkKyaIuRhBnJwp7g0WtTkxOjAne
+        tlNXiYZ+q/1n80ANavi+tQlxDNKMYqOdm6LUpHaPmKJrQsAoNWPYfQWRUWp2uzZlv6DfuUWf
+        nCCITWgiQ2h82QMjnm9SczHa3UK8ICQJ+r9TBaOaYEC2AYPL1Mt1hodt7ohcuXnu+rWZCXH3
+        Q7Ptg+Hlr1yxqfo58eySWVAaGzk4zd9kDJwTlxGE2IaRbdGhPq8DUH9xsWZ1fa7fwpOTc9jx
+        5tvz0wIeVgde2dC47sb1s6pxayPcOr/qHZO7I+ovnc63To/fkdbq/p63cnlr40yD+tmqUruG
+        EGO1MwOVelH7G6kNv/epAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNKsWRmVeSWpSXmKPExsVy+t/xu7rP+GJjDc48YrfYOGM9q8X1L89Z
+        LeYfOcdqsfrjY0aL5sXr2Swmn5rLZHGmO9ei//FrZovz5zewW5xtesNu8bHnHqvF5V1z2Cw+
+        9x5htJhxfh+Txdojd9ktll6/yGRx8ZSrxe3GFWwWrXuPsFscftPOavHv2kYWi/1XvCxu/+az
+        +HbiEaODhMeaeWsYPb59ncTi8f5GK7vH7IaLLB47Z91l99i0qpPNY//cNewevc3v2Dz6tqxi
+        9Nh8utrj8ya5AO4oPZui/NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzM
+        stQifbsEvYyunyfYC85zVvQ9nM/WwHiSvYuRk0NCwERizpNuli5GLg4hgaWMEudm9EMlxCQm
+        7dsOZQtL/LnWxQZR9JpR4sqUKWAJYYFwifO9K1hAbBEBTYnrf7+zghQxC+xhkXi19AoTRMc7
+        Ronlq/8DdXBwsAnoSexYVQjSwCvgJtHYvoUJxGYRUJXYcWIVK4gtKhAhcXjHLEaIGkGJkzOf
+        sIC0cgroS+y5qQ0SZhYwk5i3+SEzhC0ucevJfCYIW15i+9s5zBMYhWYh6Z6FpGUWkpZZSFoW
+        MLKsYhRJLS3OTc8tNtIrTswtLs1L10vOz93ECEwo24793LKDsetd8CFGAQ5GJR7eHTejY4VY
+        E8uKK3MPMUpwMCuJ8FbMiYoV4k1JrKxKLcqPLyrNSS0+xGgK9NtEZinR5HxgsssriTc0NTS3
+        sDQ0NzY3NrNQEuftEDgYIySQnliSmp2aWpBaBNPHxMEp1cB4KvD5s5UyFxlfsX64UMMt3xq9
+        dgufrOmD3mXOMcWK3dPXPzcMDrjR+ELwotex/d5bO46YHNljw+SyqvPSX/cP7rUm1+151vw7
+        sXKrgBzHzEMBDxv85iovOcJqXfVA2tqWJSP85eqaFUUS3wvn3+QVvi7WVmcrGbo2X7b1zMmw
+        TQpNyhyPQtqUWIozEg21mIuKEwFlndL4PgMAAA==
+X-CMS-MailID: 20190821092910eucas1p1b38107511a80a4e870db991a2d356077
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20190722094730eucas1p2f3f8298c43c8bf0d96135bca9a9e753b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20190722094730eucas1p2f3f8298c43c8bf0d96135bca9a9e753b
+References: <20190722094646.13342-1-l.luba@partner.samsung.com>
+        <CGME20190722094730eucas1p2f3f8298c43c8bf0d96135bca9a9e753b@eucas1p2.samsung.com>
+        <20190722094646.13342-7-l.luba@partner.samsung.com>
+        <20190724171049.GA11333@kozik-lap>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 21, 2019 at 10:06:09AM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+
+On 7/24/19 7:10 PM, Krzysztof Kozlowski wrote:
+> On Mon, Jul 22, 2019 at 11:46:43AM +0200, Lukasz Luba wrote:
+>> Add the chipid label which allows to use it in phandle from other device.
+>> Use syscon in compatible to get the regmap of the device register set.
+>> The chipid is used in DMC during initialization to compare compatibility.
+>>
 > 
-> Commit 10a08fd65ec1 ("ACPI: PM: Set up EC GPE for system wakeup from
-> drivers that need it") assumed that the EC GPE would only need to be
-> set up for system wakeup if either the intel-hid or the intel-vbtn
-> driver was in use, but that turns out to be incorrect.  In particular,
-> on ASUS Zenbook UX430UNR/i7-8550U, if the EC GPE is not enabled while
-> suspended, the system cannot be woken up by opening the lid or
-> pressing a key, and that machine doesn't use any of the drivers
-> mentioned above.
+> I cannot find its usage in DMC driver.
+You are right, it was used in the old versions. I will skip this patch.
+
+Regards,
+Lukasz
 > 
-> For this reason, always set up the EC GPE for system wakeup from
-> suspend-to-idle by setting and clearing its wake mask in the ACPI
-> suspend-to-idle callbacks.
-
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Couple of minor comments below.
-
-> Fixes: 10a08fd65ec1 ("ACPI: PM: Set up EC GPE for system wakeup from drivers that need it")
-> Reported-by: Kristian Klausen <kristian@klausen.dk>
-> Tested-by: Kristian Klausen <kristian@klausen.dk>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+> Best regards,
+> Krzysztof
 > 
-> Commit 10a08fd65ec1 is present in linux-next.
 > 
-> ---
->  drivers/acpi/ec.c                 |    1 -
->  drivers/acpi/sleep.c              |   15 +++++++++++++--
->  drivers/platform/x86/intel-hid.c  |    5 +----
->  drivers/platform/x86/intel-vbtn.c |    5 +----
->  4 files changed, 15 insertions(+), 11 deletions(-)
+>> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
+>> ---
+>>   arch/arm/boot/dts/exynos5.dtsi | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/exynos5.dtsi b/arch/arm/boot/dts/exynos5.dtsi
+>> index 67f9b4504a42..4801ca759feb 100644
+>> --- a/arch/arm/boot/dts/exynos5.dtsi
+>> +++ b/arch/arm/boot/dts/exynos5.dtsi
+>> @@ -35,8 +35,8 @@
+>>   		#size-cells = <1>;
+>>   		ranges;
+>>   
+>> -		chipid@10000000 {
+>> -			compatible = "samsung,exynos4210-chipid";
+>> +		chipid: chipid@10000000 {
+>> +			compatible = "samsung,exynos4210-chipid", "syscon";
+>>   			reg = <0x10000000 0x100>;
+>>   		};
+>>   
+>> -- 
+>> 2.17.1
+>>
 > 
-> Index: linux-pm/drivers/acpi/sleep.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/sleep.c
-> +++ linux-pm/drivers/acpi/sleep.c
-> @@ -938,6 +938,13 @@ static int lps0_device_attach(struct acp
->  	if (mem_sleep_default > PM_SUSPEND_MEM && !acpi_sleep_default_s3)
->  		mem_sleep_current = PM_SUSPEND_TO_IDLE;
->  
-> +	/*
-> +	 * Some LPS0 systems, like ASUS Zenbook UX430UNR/i7-8550U, require the
-> +	 * EC GPE to be enabled while suspended for certain wakeup devices to
-> +	 * work, so mark it as wakeup-capable.
-> +	 */
-> +	acpi_ec_mark_gpe_for_wake();
-> +
->  	return 0;
->  }
->  
-> @@ -954,8 +961,10 @@ static int acpi_s2idle_begin(void)
->  
->  static int acpi_s2idle_prepare(void)
->  {
-> -	if (acpi_sci_irq_valid())
-> +	if (acpi_sci_irq_valid()) {
->  		enable_irq_wake(acpi_sci_irq);
-> +		acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
-> +	}
->  
->  	acpi_enable_wakeup_devices(ACPI_STATE_S0);
->  
-> @@ -1034,8 +1043,10 @@ static void acpi_s2idle_restore(void)
->  
->  	acpi_disable_wakeup_devices(ACPI_STATE_S0);
->  
-> -	if (acpi_sci_irq_valid())
-> +	if (acpi_sci_irq_valid()) {
-> +		acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
->  		disable_irq_wake(acpi_sci_irq);
-> +	}
->  }
->  
->  static void acpi_s2idle_end(void)
-> Index: linux-pm/drivers/platform/x86/intel-hid.c
-> ===================================================================
-> --- linux-pm.orig/drivers/platform/x86/intel-hid.c
-> +++ linux-pm/drivers/platform/x86/intel-hid.c
-> @@ -257,7 +257,6 @@ static int intel_hid_pm_prepare(struct d
->  		struct intel_hid_priv *priv = dev_get_drvdata(device);
->  
->  		priv->wakeup_mode = true;
-> -		acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
->  	}
->  	return 0;
->  }
-> @@ -266,10 +265,8 @@ static void intel_hid_pm_complete(struct
->  {
->  	struct intel_hid_priv *priv = dev_get_drvdata(device);
->  
-> -	if (priv->wakeup_mode) {
-> -		acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
-
-> +	if (priv->wakeup_mode)
-
-But this now seems does not add any value and we can assign unconditionally.
-
->  		priv->wakeup_mode = false;
-> -	}
->  }
->  
->  static int intel_hid_pl_suspend_handler(struct device *device)
-> Index: linux-pm/drivers/platform/x86/intel-vbtn.c
-> ===================================================================
-> --- linux-pm.orig/drivers/platform/x86/intel-vbtn.c
-> +++ linux-pm/drivers/platform/x86/intel-vbtn.c
-> @@ -205,7 +205,6 @@ static int intel_vbtn_pm_prepare(struct
->  		struct intel_vbtn_priv *priv = dev_get_drvdata(dev);
->  
->  		priv->wakeup_mode = true;
-> -		acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
->  	}
->  	return 0;
->  }
-> @@ -214,10 +213,8 @@ static void intel_vbtn_pm_complete(struc
->  {
->  	struct intel_vbtn_priv *priv = dev_get_drvdata(dev);
->  
-> -	if (priv->wakeup_mode) {
-> -		acpi_ec_set_gpe_wake_mask(ACPI_GPE_DISABLE);
-
-> +	if (priv->wakeup_mode)
-
-Ditto.
-
->  		priv->wakeup_mode = false;
-> -	}
->  }
->  
->  static int intel_vbtn_pm_resume(struct device *dev)
-> Index: linux-pm/drivers/acpi/ec.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/ec.c
-> +++ linux-pm/drivers/acpi/ec.c
-> @@ -1970,7 +1970,6 @@ void acpi_ec_set_gpe_wake_mask(u8 action
->  	if (pm_suspend_no_platform() && first_ec && !ec_no_wakeup)
->  		acpi_set_gpe_wake_mask(NULL, first_ec->gpe, action);
->  }
-> -EXPORT_SYMBOL_GPL(acpi_ec_set_gpe_wake_mask);
->  
->  bool acpi_ec_dispatch_gpe(void)
->  {
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> 
