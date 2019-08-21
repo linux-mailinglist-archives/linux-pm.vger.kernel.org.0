@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 178EA96ED4
+	by mail.lfdr.de (Postfix) with ESMTP id 810B696ED5
 	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 03:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbfHUB06 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Aug 2019 21:26:58 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44393 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726932AbfHUB05 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Aug 2019 21:26:57 -0400
-Received: by mail-pg1-f193.google.com with SMTP id i18so310113pgl.11;
-        Tue, 20 Aug 2019 18:26:57 -0700 (PDT)
+        id S1726932AbfHUB1A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Aug 2019 21:27:00 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:37758 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726948AbfHUB07 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Aug 2019 21:26:59 -0400
+Received: by mail-pf1-f194.google.com with SMTP id 129so284428pfa.4;
+        Tue, 20 Aug 2019 18:26:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hTprmL6/4DTxYUWRYFqPS6Khlk6NQD+J3yhldvbHj+M=;
-        b=UlTC09iFBgZ1vv3LGqml6PI8vHWG/phATiJld18gslC7ZBu/5Mk5KTNdi1ai5cbJDZ
-         ApJ49DuFgufsoI1NfeVkTHSG1aYpN7r11+EqbizCZAzxquXriKEghdMCXq2yvES6mBPj
-         TT529qXi505rmr8seWGsVD2qKj7FX31BOrebYbbKuWKMpzk4Sw9zkSztjxoNv1Pn5o64
-         0tWrGR6NRvxDbIsFBOuma1ElIhksngBH7Qa+eSa15grLoJIqJRFMFiMcxMZpxr8fGp8t
-         xnntEjLZaGE0EEZisMl6Jz942MMwx+Ll3GHH5+5+F393HLVGUjtOzd4biNxu7lCuIzQt
-         Ht2w==
+        bh=ACiQ2TVINvEc8tRiSP1ADYbEBXNCOC0SJeWP6GOyKXE=;
+        b=BiywEQpIyuzwL8lv5/nBKRyppkyJdRXLlxObrygz6/DXtScyzUsJsgTFCyNw37fqcI
+         E3HBChQKSU6x05mimZ/AtPbO390x2s0wpGWg2wE1dkzPpsgEM5ZiWq4Ur+XNyv9f38cp
+         NEwg27jxdrc1tHtorO7YAAVCeBV/MRiKe1bBevl4szXvq9ruSgwFmb6wQYIGttvT2agX
+         oOjBD5Pgxpqn/IwAkvAB8OzPgaokJFFNaS8vSzibugvwI6zVQvOL83ACKpp3vLmMzlUL
+         vODJuyaKtJ01L44ibtWQXXMu+g6v9YaKnbYWESwlkz+7a2bzXD+NqWUyHz6S6UTOhmMu
+         dM2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hTprmL6/4DTxYUWRYFqPS6Khlk6NQD+J3yhldvbHj+M=;
-        b=cRPt6P+D2ydXRJkZnTVGiDxC+xsbMqNjnMBmdtt6CCDiODBJBo7S8nvPzqXnmqxkZc
-         3esZ2moRcUNSvI8sfDZ91ErdSVWDYqJZnCsQB/bvYf/g5MguTawEzLZzNIg8InM5ZS6k
-         +0ZShWL+NcHoE6NaV8Xm/zQrHKazzZjsm717hcBLqtcIqoANNdmUFIxSTtrQ1WuGL6s2
-         OwyL38EtO0TZOIm0eE2DaiQzgQ4vVC2NEMGvwjtsvlStTessIF3cF8LscVTMiZv/whka
-         Xoypn6vT0+EhJHgZozORJclUCNAQlGcdXNWwbOvtRIeZ3A4/lwbeLhI0gSMvriwKiDxf
-         xr7Q==
-X-Gm-Message-State: APjAAAXhKiprOCdRUIKPmHIqElzi1ea001sJX+hEfNxLaSFGiGUbvHwu
-        Ey955JEfQRb1BoMaT3gWNTjA5PT7x34=
-X-Google-Smtp-Source: APXvYqwtYF+tZ+/SeK7V0VxJ47xPzapQ6JIbUTwswucZuNqNe12F+DXbQCresW37CqeJic1SjZm/bg==
-X-Received: by 2002:a62:ac0d:: with SMTP id v13mr32415124pfe.129.1566350816550;
-        Tue, 20 Aug 2019 18:26:56 -0700 (PDT)
+        bh=ACiQ2TVINvEc8tRiSP1ADYbEBXNCOC0SJeWP6GOyKXE=;
+        b=ElkVbpDoymOTSRWBp+L380X+DHPb21UpbHtXF8eq6UxEeb/xsvxlvBTS6Y2xNveRC/
+         KkTq7m7LT+fg5oyTghKZa3Wgv7mk71hNnxj5y7z6Ektrt2uhnNsJUCJlVNa4XrdZ1Nhn
+         yArIQ+MNzvG16Hbuq145OxZBxUZ15y2mVmY8Kqa12Tr/6OkMp/hOcNTTMu2pIaCab+Ly
+         RSzf2fBfuc26NT3MQiSTjcyhPB3KvipamKTEL9S4Ck5qE3ktDPvtJefHjMlA7wmiTuOT
+         9APbH/S+lbd+PuiZnER02ZuYhytpijC2NT8vBLE6zDG374RHLjxcbkRQHsmuYOEuxqRW
+         YroA==
+X-Gm-Message-State: APjAAAVBpQ06z0gPo0qyWlyrrHos2Wefm36rVtWo47dtpLLbLYw0PlVq
+        5xtaA/YNVmlUQ6PZuC5DZ26NfjnnjYk=
+X-Google-Smtp-Source: APXvYqxmwtLvOje8reyjS/YW+rihedvgdMsnKI1d7gKMEmrpQs2HW+e6l5guTVDnIvwKWppfKSvUdg==
+X-Received: by 2002:a17:90a:bb0c:: with SMTP id u12mr2928902pjr.132.1566350818332;
+        Tue, 20 Aug 2019 18:26:58 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id bt18sm1162700pjb.1.2019.08.20.18.26.55
+        by smtp.gmail.com with ESMTPSA id bt18sm1162700pjb.1.2019.08.20.18.26.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 18:26:55 -0700 (PDT)
+        Tue, 20 Aug 2019 18:26:57 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-pm@vger.kernel.org
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Lucas Stach <l.stach@pengutronix.de>,
         Chris Healy <cphealy@gmail.com>,
         Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Angus Ainslie <angus@akkea.ca>, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v6 09/12] thermal: qoriq: Enable all sensors before registering them
-Date:   Tue, 20 Aug 2019 18:26:09 -0700
-Message-Id: <20190821012612.7823-10-andrew.smirnov@gmail.com>
+Subject: [RESEND PATCH v6 10/12] thermal: qoriq: Do not report invalid temperature reading
+Date:   Tue, 20 Aug 2019 18:26:10 -0700
+Message-Id: <20190821012612.7823-11-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190821012612.7823-1-andrew.smirnov@gmail.com>
 References: <20190821012612.7823-1-andrew.smirnov@gmail.com>
@@ -66,14 +66,12 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tmu_get_temp will get called as a part of sensor registration via
-devm_thermal_zone_of_sensor_register(). To prevent it from retruning
-bogus data we need to enable sensor monitoring before that. Looking at
-the datasheet (i.MX8MQ RM) there doesn't seem to be any harm in
-enabling them all, so, for the sake of simplicity, change the code to
-do just that.
+Before returning measured temperature data to upper layer we need to
+make sure that the reading was marked as "valid" to avoid reporting
+bogus data.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Tested-by: Lucas Stach <l.stach@pengutronix.de>
 Cc: Chris Healy <cphealy@gmail.com>
 Cc: Lucas Stach <l.stach@pengutronix.de>
@@ -84,61 +82,47 @@ Cc: linux-imx@nxp.com
 Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/thermal/qoriq_thermal.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ drivers/thermal/qoriq_thermal.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-index 08167ebe6060..5f964f806187 100644
+index 5f964f806187..2f8c5feb1a25 100644
 --- a/drivers/thermal/qoriq_thermal.c
 +++ b/drivers/thermal/qoriq_thermal.c
-@@ -23,6 +23,7 @@
- #define TMR_DISABLE	0x0
- #define TMR_ME		0x80000000
- #define TMR_ALPF	0x0c000000
-+#define TMR_MSITE_ALL	GENMASK(15, 0)
+@@ -37,6 +37,7 @@
+ #define REGS_TRITSR(n)	(0x100 + 16 * (n)) /* Immediate Temperature
+ 					    * Site Register
+ 					    */
++#define TRITSR_V	BIT(31)
+ #define REGS_TTRnCR(n)	(0xf10 + 4 * (n)) /* Temperature Range n
+ 					   * Control Register
+ 					   */
+@@ -62,8 +63,24 @@ static int tmu_get_temp(void *p, int *temp)
+ 	struct qoriq_sensor *qsensor = p;
+ 	struct qoriq_tmu_data *qdata = qoriq_sensor_to_data(qsensor);
+ 	u32 val;
++	/*
++	 * REGS_TRITSR(id) has the following layout:
++	 *
++	 * 31  ... 7 6 5 4 3 2 1 0
++	 *  V          TEMP
++	 *
++	 * Where V bit signifies if the measurement is ready and is
++	 * within sensor range. TEMP is an 8 bit value representing
++	 * temperature in C.
++	 */
++	if (regmap_read_poll_timeout(qdata->regmap,
++				     REGS_TRITSR(qsensor->id),
++				     val,
++				     val & TRITSR_V,
++				     USEC_PER_MSEC,
++				     10 * USEC_PER_MSEC))
++		return -ENODATA;
  
- #define REGS_TMTMIR	0x008	/* Temperature measurement interval Register */
- #define TMTMIR_DEFAULT	0x0000000f
-@@ -75,7 +76,10 @@ static const struct thermal_zone_of_device_ops tmu_tz_ops = {
- static int qoriq_tmu_register_tmu_zone(struct device *dev,
- 				       struct qoriq_tmu_data *qdata)
- {
--	int id, sites = 0;
-+	int id, ret;
-+
-+	regmap_write(qdata->regmap, REGS_TMR,
-+		     TMR_MSITE_ALL | TMR_ME | TMR_ALPF);
+-	regmap_read(qdata->regmap, REGS_TRITSR(qsensor->id), &val);
+ 	*temp = (val & 0xff) * 1000;
  
- 	for (id = 0; id < SITES_MAX; id++) {
- 		struct thermal_zone_device *tzd;
-@@ -86,21 +90,16 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
- 		tzd = devm_thermal_zone_of_sensor_register(dev, id,
- 							   sensor,
- 							   &tmu_tz_ops);
--		if (IS_ERR(tzd)) {
--			if (PTR_ERR(tzd) == -ENODEV)
-+		ret = PTR_ERR_OR_ZERO(tzd);
-+		if (ret) {
-+			if (ret == -ENODEV)
- 				continue;
--			else
--				return PTR_ERR(tzd);
--		}
- 
--		sites |= 0x1 << (15 - id);
-+			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
-+			return ret;
-+		}
- 	}
- 
--	/* Enable monitoring */
--	if (sites != 0)
--		regmap_write(qdata->regmap, REGS_TMR,
--			     sites | TMR_ME | TMR_ALPF);
--
  	return 0;
- }
- 
 -- 
 2.21.0
 
