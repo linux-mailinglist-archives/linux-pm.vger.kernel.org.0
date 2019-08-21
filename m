@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8C696ED0
+	by mail.lfdr.de (Postfix) with ESMTP id C110196ED1
 	for <lists+linux-pm@lfdr.de>; Wed, 21 Aug 2019 03:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbfHUB0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Aug 2019 21:26:53 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:37614 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726895AbfHUB0w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Aug 2019 21:26:52 -0400
-Received: by mail-pl1-f194.google.com with SMTP id bj8so387351plb.4;
-        Tue, 20 Aug 2019 18:26:52 -0700 (PDT)
+        id S1726908AbfHUB0z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Aug 2019 21:26:55 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43879 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726899AbfHUB0y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Aug 2019 21:26:54 -0400
+Received: by mail-pf1-f195.google.com with SMTP id v12so271017pfn.10;
+        Tue, 20 Aug 2019 18:26:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=g3ThpDDnRPQKbzTx4rzAtkgeF/0VhzJtrp8/5fptPe8=;
-        b=OlzGL1HmjsNys68Q5xVKMVXWgE8kFHWgVuwUM/iJn0s11XjN+ZX8pA22Ig6b8zD/82
-         s0f21GK9rRZYmGiMPBG1clN1D0fc1Iw/n35NpZPgRVzbozfJ5QjFSo3OacNJ7CePtBLc
-         rD+Kmt56t5jhJtVm5wkeRRuaWQ1/rk6xtcH0PISLcLRjSeqeE4FZqCeAxfOTPciDwyky
-         2wQuVMCEQQC/uT5urEpfc/ZQwHkPy2xFGY+Wl4KYp/tcZzL7/NPLd+YoSS9EVLjoc9JG
-         W0CSHDTMd5SRhoKjqHj49tJYujKD3U4a/VNYtiZMO2oKj1Lvum3yv1A6uQuyFq3Ve7fj
-         R2+g==
+        bh=AUIlWS4ZBAH1cCjNMwdLECp6SwpPOYQCnCUOnwztQcE=;
+        b=mJm74y2gMr77NhNSMvpFGC6L5X2r3wVfRNiCyOJl/JGz7kgvV3L6yQfBF0u2WMIDWS
+         Z3Ol9clSTZtxbhMks9H9DML3fFBqRVf4wWTEk8KtZyWMw0SgxATQCE9KRmXr94A2aszF
+         sIu9d7bte1TRXt8JVWISOylxxv6a9XUk8NCSGf/SSFxgwKHw2Is9r0AosnLpg6EOzixZ
+         ueTj39ExrBmPMia9tVGaI7Yi6R7cMQArWreUCY/fwWaHycOnwl25g9xhaYy/tRfbP7hV
+         YDIrhb1W3BWcw/hC7GPMLyNBycceFHsa2Gl8ObzS8sB1PkUBjHgIYgmB5CR2VD/5d8t8
+         zmAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=g3ThpDDnRPQKbzTx4rzAtkgeF/0VhzJtrp8/5fptPe8=;
-        b=TGFxS9NdNw4c712zPTRQqZT0RuzeFIdbxwj/mMu+arDUTTgb58sPS1nUdz3HkzKJqf
-         4n3HzOqx16DyyaLuuFVwvgpEYuU+e8LLTU4Ci/4urB7VIUJ6rZtCbJung85i8MZoNmKY
-         Jhz2InWQGJosjwKxbw8nBi4tBtT1qothKsFfXOyfcI9fanwDe08mvMYRBe5xi2Pdpdxk
-         jt2poo1oACjHAmYSUvROG0/lRDXFk33VCIaJwUzb3opKfX82jDOQ+foz0Y1//5Wjl8X+
-         njSN0L/q9hlsI/rMWF4SHk1W425amvmlKERsvPr8Mplp8Xj2qLJ8OUW9lU7uEZaI/K2e
-         xj0A==
-X-Gm-Message-State: APjAAAXJkl/5jafsqKe+n9nM6IjLXAsmvycCjMxqOL5Gx1vq2ir1qW9c
-        m66nJP1BMFVnbdt0gYGNMQQplYq4CF0=
-X-Google-Smtp-Source: APXvYqydvvxochp3aT/AKNQvC61LdEXbZDfhrrdqA0dX2cBChJq7Jmz4USwN+/0P8yHfrqswD+2+Gw==
-X-Received: by 2002:a17:902:26f:: with SMTP id 102mr1545786plc.189.1566350811964;
-        Tue, 20 Aug 2019 18:26:51 -0700 (PDT)
+        bh=AUIlWS4ZBAH1cCjNMwdLECp6SwpPOYQCnCUOnwztQcE=;
+        b=MUKv+CtiFFYyWlZc8VpdLa+lvwbkCiHjCQnvXk/p0IpdmZYisalsbsl/ZUsBC+Ow92
+         UzoI+9pJDEyI1y0uNjpkpm352qD+aMOa5gIc+Ogi7tA6m8pRmJ929ZdNWBWLxcuZROSy
+         N6AQHGlNn7xRiTPicFvynbvQOC0p89R5a6klmw7yua6ADdm37Yh6oSzULeYZ9EIwface
+         zJKig+9aKQ4yvifNkWjzp9JCyqQYazNR3Jxvu1b9F8QLVX5kMBRrN0+0jVo/coKCHXa5
+         +BXiwjSHjP3ydGLfjgvQDhgRPHHV2gTk39SmhSbUh1pdzC8npL6qFF+iFSpG9Bh1Aq5E
+         C6dA==
+X-Gm-Message-State: APjAAAXlh3atlMj2D6PJCkdnZo1H6mNU/8LmuK1KemjnBmmdMdykbJ/b
+        ctOnjh5W3JTj/BRoksOVd1LGTrRxhHo=
+X-Google-Smtp-Source: APXvYqxAPl7HUI42txJIOPn3z2SkK+0izmF6cRrW5dqTXjkISagMbVz5/jICkgpRbfkbaW+1HxTAxg==
+X-Received: by 2002:aa7:9191:: with SMTP id x17mr33134504pfa.23.1566350813243;
+        Tue, 20 Aug 2019 18:26:53 -0700 (PDT)
 Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id bt18sm1162700pjb.1.2019.08.20.18.26.50
+        by smtp.gmail.com with ESMTPSA id bt18sm1162700pjb.1.2019.08.20.18.26.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 18:26:51 -0700 (PDT)
+        Tue, 20 Aug 2019 18:26:52 -0700 (PDT)
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
 To:     linux-pm@vger.kernel.org
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
@@ -53,9 +53,9 @@ Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Angus Ainslie <angus@akkea.ca>, linux-imx@nxp.com,
         linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v6 06/12] thermal: qoriq: Pass data to qoriq_tmu_calibration() directly
-Date:   Tue, 20 Aug 2019 18:26:06 -0700
-Message-Id: <20190821012612.7823-7-andrew.smirnov@gmail.com>
+Subject: [RESEND PATCH v6 07/12] thermal: qoriq: Convert driver to use devm_ioremap()
+Date:   Tue, 20 Aug 2019 18:26:07 -0700
+Message-Id: <20190821012612.7823-8-andrew.smirnov@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190821012612.7823-1-andrew.smirnov@gmail.com>
 References: <20190821012612.7823-1-andrew.smirnov@gmail.com>
@@ -66,11 +66,8 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We can simplify error cleanup code if instead of passing a "struct
-platform_device *" to qoriq_tmu_calibration() and deriving a bunch of
-pointers from it, we pass those pointers directly. This way we won't
-be force to call platform_set_drvdata() as early in qoriq_tmu_probe()
-and consequently would be able to drop the "err_iomap" error path.
+Convert driver to use devm_ioremap() to simplify memory deallocation
+and error handling code. No functional change intended.
 
 Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
 Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
@@ -84,87 +81,70 @@ Cc: linux-imx@nxp.com
 Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/thermal/qoriq_thermal.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+ drivers/thermal/qoriq_thermal.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-index 61700881d9f0..62d7a0efb837 100644
+index 62d7a0efb837..80fe9adcc313 100644
 --- a/drivers/thermal/qoriq_thermal.c
 +++ b/drivers/thermal/qoriq_thermal.c
-@@ -140,16 +140,16 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
- 	return 0;
- }
+@@ -193,6 +193,7 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+ 	struct qoriq_tmu_data *data;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct device *dev = &pdev->dev;
++	struct resource *io;
  
--static int qoriq_tmu_calibration(struct platform_device *pdev)
-+static int qoriq_tmu_calibration(struct device *dev,
-+				 struct qoriq_tmu_data *data)
- {
- 	int i, val, len;
- 	u32 range[4];
- 	const u32 *calibration;
--	struct device_node *np = pdev->dev.of_node;
--	struct qoriq_tmu_data *data = platform_get_drvdata(pdev);
-+	struct device_node *np = dev->of_node;
+ 	data = devm_kzalloc(dev, sizeof(struct qoriq_tmu_data),
+ 			    GFP_KERNEL);
+@@ -201,7 +202,13 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
  
- 	if (of_property_read_u32_array(np, "fsl,tmu-range", range, 4)) {
--		dev_err(&pdev->dev, "missing calibration range.\n");
-+		dev_err(dev, "missing calibration range.\n");
- 		return -ENODEV;
- 	}
- 
-@@ -161,7 +161,7 @@ static int qoriq_tmu_calibration(struct platform_device *pdev)
- 
- 	calibration = of_get_property(np, "fsl,tmu-calibration", &len);
- 	if (calibration == NULL || len % 8) {
--		dev_err(&pdev->dev, "invalid calibration data.\n");
-+		dev_err(dev, "invalid calibration data.\n");
- 		return -ENODEV;
- 	}
- 
-@@ -199,20 +199,17 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
- 	if (!data)
- 		return -ENOMEM;
- 
--	platform_set_drvdata(pdev, data);
--
  	data->little_endian = of_property_read_bool(np, "little-endian");
  
- 	data->regs = of_iomap(np, 0);
+-	data->regs = of_iomap(np, 0);
++	io = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!io) {
++		dev_err(dev, "Failed to get memory region\n");
++		return -ENODEV;
++	}
++
++	data->regs = devm_ioremap(dev, io->start, resource_size(io));
  	if (!data->regs) {
  		dev_err(dev, "Failed to get memory region\n");
+ 		return -ENODEV;
+@@ -211,23 +218,17 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+ 
+ 	ret = qoriq_tmu_calibration(dev, data);	/* TMU calibration */
+ 	if (ret < 0)
+-		goto err_tmu;
++		return ret;
+ 
+ 	ret = qoriq_tmu_register_tmu_zone(dev, data);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Failed to register sensors\n");
 -		ret = -ENODEV;
--		goto err_iomap;
+-		goto err_tmu;
 +		return -ENODEV;
  	}
  
- 	qoriq_tmu_init_device(data);	/* TMU initialization */
+ 	platform_set_drvdata(pdev, data);
  
--	ret = qoriq_tmu_calibration(pdev);	/* TMU calibration */
-+	ret = qoriq_tmu_calibration(dev, data);	/* TMU calibration */
- 	if (ret < 0)
- 		goto err_tmu;
- 
-@@ -220,17 +217,16 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_err(dev, "Failed to register sensors\n");
- 		ret = -ENODEV;
--		goto err_iomap;
-+		goto err_tmu;
- 	}
- 
-+	platform_set_drvdata(pdev, data);
-+
  	return 0;
- 
- err_tmu:
- 	iounmap(data->regs);
- 
--err_iomap:
--	platform_set_drvdata(pdev, NULL);
 -
- 	return ret;
+-err_tmu:
+-	iounmap(data->regs);
+-
+-	return ret;
  }
  
+ static int qoriq_tmu_remove(struct platform_device *pdev)
+@@ -237,7 +238,6 @@ static int qoriq_tmu_remove(struct platform_device *pdev)
+ 	/* Disable monitoring */
+ 	tmu_write(data, TMR_DISABLE, &data->regs->tmr);
+ 
+-	iounmap(data->regs);
+ 	platform_set_drvdata(pdev, NULL);
+ 
+ 	return 0;
 -- 
 2.21.0
 
