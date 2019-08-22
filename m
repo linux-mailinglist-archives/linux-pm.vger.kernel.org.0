@@ -2,186 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE8A99074
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2019 12:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E157F99091
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2019 12:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733157AbfHVKLN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Aug 2019 06:11:13 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:55982 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfHVKLN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Aug 2019 06:11:13 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190822101110epoutp01eb38d7bae455a80c2ddb3208e064cad5~9NvTYBNeK0052100521epoutp01u
-        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2019 10:11:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190822101110epoutp01eb38d7bae455a80c2ddb3208e064cad5~9NvTYBNeK0052100521epoutp01u
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1566468670;
-        bh=7Ntwkl1U2OuS6n5AJKvGWth4LuW/2agHt3V1L/sQU+g=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=gR9wYDPgNJrwNge1k8dJeAj1uQzDgL9LhoIjv7JSJd9mEQNMW9v/7ki27b1oHynUa
-         Q/Bg8IabbuHxZ0lKlLblZHdyJ0+smEUuRrFRwgoX4rW4ZCgXbu62eWZO/3XB3VEUhq
-         vSt5eaGVRtnAdcvbODWLu2c8PKV1AunaCix/Znes=
-Received: from epsnrtp6.localdomain (unknown [182.195.42.167]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190822101109epcas1p1ac77ac1aaea2dc11e99f105e475ed472~9NvScSQ6Y1668716687epcas1p1j;
-        Thu, 22 Aug 2019 10:11:09 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp6.localdomain (Postfix) with ESMTP id 46DgKR2CYnzMqYkW; Thu, 22 Aug
-        2019 10:11:07 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        79.23.04085.B3A6E5D5; Thu, 22 Aug 2019 19:11:07 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20190822101106epcas1p4529de5a578a67294056eecb6db4b031f~9NvPakcfG0753007530epcas1p4T;
-        Thu, 22 Aug 2019 10:11:06 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190822101106epsmtrp25655c16d854d66d02cd64e3f7df91714~9NvPZqICO0051100511epsmtrp2z;
-        Thu, 22 Aug 2019 10:11:06 +0000 (GMT)
-X-AuditID: b6c32a39-d03ff70000000ff5-94-5d5e6a3b2b1c
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1D.AF.03706.A3A6E5D5; Thu, 22 Aug 2019 19:11:06 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190822101106epsmtip140efba1d8d4fb618e807ced4a86c0141~9NvPGflPc2300023000epsmtip1w;
-        Thu, 22 Aug 2019 10:11:06 +0000 (GMT)
-Subject: Re: [PATCH v3 1/2] PM / devfreq: Add dev_pm_qos support
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "cpgs (cpgs@samsung.com)" <cpgs@samsung.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <cca5be9f-5552-2aa1-e428-540545b9bdd3@samsung.com>
-Date:   Thu, 22 Aug 2019 19:14:45 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S1726190AbfHVKUK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Aug 2019 06:20:10 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:33677 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726142AbfHVKUH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Aug 2019 06:20:07 -0400
+Received: by mail-lf1-f66.google.com with SMTP id x3so4146405lfc.0
+        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2019 03:20:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wPBDtmTZhqkyTNz0MqWgEkHLzILpQif3A3GQnsT/mi8=;
+        b=YH8DY7eZIuy+N5wDuMxNcN/eV2PnncZNHKtZnk/Ev1sfTVb93MNfhwZaV0fFw0K1oy
+         5MX0uxb4PmY6nuTDa10FjmDjGjT3uN3XzwSpUuR+Bz7QcnSW7P2TwVHVyhV6P9XaoQLz
+         QmmsJQkd8i5rMJhzNKloN8I5jU4CAd6fR5XIQ44MvktPPGMJsFyiP2GgX8XRFmIZ0Vx8
+         Gy1DEAD8AsgKAjBGXuU1rY84orP8m6xmRP+LMIWYo0sR/38ud+lwnarD79w/o67x6CAJ
+         HO7mQU8/fs+LC/1uOI6N+X8QhWUsL11BYLNFs1h2pbi2o8B1H9z3fYGdqs733UEZhQ9A
+         52oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wPBDtmTZhqkyTNz0MqWgEkHLzILpQif3A3GQnsT/mi8=;
+        b=cAGpaQWDtrUwAaxpan4RgZhWvyAwCzGnH8+K1EqhQtNzNA59eOjk/t+iRbiBtE96Wn
+         eAB8YMZcxYpfH02PsAgxY4Z3yDYhGt2nTYReYs0URVLOSEvJ/t1htt24P/mc6cNlg/3j
+         kzy4abWU1AxUsb0wWuf2QbPWehGZDfmpGUjz+qojaxjTVgkzCXFUrk6sM8gM1VJgOHH0
+         sSCUXSXugoFGUfpvPyHW76Qo1mg6mRzInpe9DHBUbxKuIBBMZ5nM+izTGK+8zmYYpzck
+         pISROXubFuxe8J7DXMMHukMtetidNFNhoB/eaYwvLmIhBfVEuJnll7+55oqPuRwxLuCp
+         xFpg==
+X-Gm-Message-State: APjAAAX2HGdLeNw8i8wzWS6fUsEHWHgQA8GvEaSaEQSDiTHAjjz8Ywe+
+        5Kh2vnqRB6PLY1ntCrPU0Ty9fA==
+X-Google-Smtp-Source: APXvYqxDQXf3LY5Ds0SPDRViU/Z88Dzf56IoZrVylWXa05DGSliVoBFyyrB3KfXrpeflaqNyf452jQ==
+X-Received: by 2002:a19:e04f:: with SMTP id g15mr21819606lfj.46.1566469205557;
+        Thu, 22 Aug 2019 03:20:05 -0700 (PDT)
+Received: from centauri (ua-84-219-138-247.bbcust.telenor.se. [84.219.138.247])
+        by smtp.gmail.com with ESMTPSA id k8sm3758979lja.24.2019.08.22.03.20.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2019 03:20:04 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 12:20:02 +0200
+From:   Niklas Cassel <niklas.cassel@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
+        linux-arm-msm@vger.kernel.org, vireshk@kernel.org,
+        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 10/14] dt-bindings: power: avs: Add support for CPR
+ (Core Power Reduction)
+Message-ID: <20190822102002.GA8494@centauri>
+References: <20190725104144.22924-1-niklas.cassel@linaro.org>
+ <20190725104144.22924-11-niklas.cassel@linaro.org>
+ <5d579b36.1c69fb81.85eba.ff51@mx.google.com>
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB7023E05C5683C4392CEA5915EEAA0@VI1PR04MB7023.eurprd04.prod.outlook.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta0wTWRT29jEzGKqXKnKtWcUxJEJs6QjFWxeQxNcYjcFojCFWnNAJIH2l
-        06KoiawPVokYjFGEXQUTjIgmSqGKAlaKIrhal4gERYwRfuhmaVWswaCbbTsa+fed73znfOfc
-        ByVV9hMqqtDi4O0WzkQT02U3uhLV6l937TBoP5+Pwd5uN4mDfz0E+J03EVd1uAj85Ml1Ej8+
-        +C+JG4Y/yLFrZECOxyvuATz0WwOBr/g6CVzu/UbgpiCbpWADg0dIts7lZF2Nxwj25UA7wTbX
-        H2Cb/K0SttPfLmFPtDQCdtw1Pzsqpyi9gOeMvD2et+RZjYWW/Ax6/ebclbm6NC2jZvR4GR1v
-        4cx8Br1qQ7Z6TaEpNDQdX8yZnCEqmxMEOjkz3W51Ovj4AqvgyKB5m9Fk09s0AmcWnJZ8TZ7V
-        vJzRapfqQsKdRQVt/gTbQbjn+afYUjAaXQ6iKART0dv+UVk5mE4pYStAbWMVcjH4GAqCfRIx
-        +AxQoK9f9qOkynWfEBMdAJ3xXCbFIABQ83BAElbNglnI33YzopoNDwHk7hmL9JLCMSl69PgV
-        GVYRMAl53g4SYTwTLkTPJkZAGCtgJmpo7JaHsQwmoO72vggfC7ehj6+75KImBvVWj0ZmioIG
-        dKzMH9FIYRx6MVorEfECdMj9hzRsjKCLRI+e9nxfYhUKvqkFIp6F/nnQQopYhcb9HYSI96HL
-        vfcIsfgoQC2ev+ViIgV5Lp4KOVAhh0R07XaySC9EtybPfe+pQKVNk6Q4xAzkDx6Xh+Vh/miZ
-        UpQsQk9fD0sqwaKaKevUTFmhZsoKNT/N6oCsEczhbYI5nxcYm27qdbtA5EUn6VtBt2+DF0AK
-        0NGKSrXBoJRzxUKJ2QsQJaVnK/b8mWNQKoxcyV7ebs21O0284AW60GmflKpi86yh/2Fx5DK6
-        pSkpKTiVSdMxDB2nuDCBDUqYzzn4Ip638fYfdRIqSlUKlkcPXqDdHs3vdzbigC9zd2XWV0rv
-        flg9UMFQYxlfhs6+SNjUs/3M3Pp1suSrmt5raQ2nf/mWrserR6renzr9aV61ytdrvLRNs2Ia
-        WHJ3xdZm3/ZJmBpbZtIOxm2p+6/za5FxbX1MV8597YHDJT7dxIPdtYsDxftLio/HKWRDO++q
-        aZlQwDFJUrvA/Q9RrMY35wMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsWy7bCSnK5VVlyswfr1PBaHjm1lt/h6+hSj
-        xctDmhbT925iszh/fgO7xdmmN+wWK+5+ZLXY9Pgaq8Xn3iOMFrcbV7BZrD53kM2i69BfNouN
-        Xz0ceD3e32hl91iwqdRj06pONo871/aweWxeUu+x8d0OJo+D7/YwefRtWcXo8XmTXABnFJdN
-        SmpOZllqkb5dAlfG7neqBU0CFTe/iDYwPuHpYuTkkBAwkZi+6ShbFyMXh5DAbkaJp/1zWCAS
-        khLTLh5l7mLkALKFJQ4fLoaoecso0fd0DRtIjbCAg8S73dvBmkUEWhkl7pz+AeYwC7xnlth0
-        6BALRMsrJonrPyaDtbAJaEnsf3EDzOYXUJS4+uMxI4jNK2AnsWLVMVYQm0VAVeLYnotgcVGB
-        CInDO2ZB1QhKnJz5BOw8ToFYic62d2BxZgF1iT/zLjFD2OISt57MZ4Kw5SWat85mnsAoPAtJ
-        +ywkLbOQtMxC0rKAkWUVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpecn7uJkZwrGpp7mC8vCT+
-        EKMAB6MSD+8E3dhYIdbEsuLK3EOMEhzMSiK8FXOiYoV4UxIrq1KL8uOLSnNSiw8xSnOwKInz
-        Ps07FikkkJ5YkpqdmlqQWgSTZeLglGpgVM5Wylhzic1Q7Yv7QUN3wSnirofu3LjfOsvqUfQf
-        7aLS+2t+RURt2H2/5LTwy9OvDld94H/B+qR357ynv6/ufaNt1hm39Xntqp280z+rCAsvvqLl
-        M7uwKuBliN70DTrajOLB13MTkvwX5kVxHI39/z41ruLChTk5L5PXvuT1kcnxeMQWdllJXIml
-        OCPRUIu5qDgRAMbTWyfRAgAA
-X-CMS-MailID: 20190822101106epcas1p4529de5a578a67294056eecb6db4b031f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190820152410epcas4p214cadab5d2acfb2c659a777f2caa002b
-References: <cover.1566314535.git.leonard.crestez@nxp.com>
-        <CGME20190820152410epcas4p214cadab5d2acfb2c659a777f2caa002b@epcas4p2.samsung.com>
-        <3b93af7e61a573ea2a123c353255645b5ad2a805.1566314535.git.leonard.crestez@nxp.com>
-        <6134bb9e-9a16-b432-c191-c91f93844319@samsung.com>
-        <VI1PR04MB7023E05C5683C4392CEA5915EEAA0@VI1PR04MB7023.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d579b36.1c69fb81.85eba.ff51@mx.google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19. 8. 21. 오후 10:00, Leonard Crestez wrote:
-> On 21.08.2019 04:40, Chanwoo Choi wrote:
+On Fri, Aug 16, 2019 at 11:14:13PM -0700, Stephen Boyd wrote:
+> Quoting Niklas Cassel (2019-07-25 03:41:38)
+> > +       cpr@b018000 {
+> > +               compatible = "qcom,qcs404-cpr", "qcom,cpr";
+> > +               reg = <0x0b018000 0x1000>;
+> > +               interrupts = <0 15 IRQ_TYPE_EDGE_RISING>;
+> > +               clocks = <&xo_board>;
+> > +               clock-names = "ref";
+> > +               vdd-apc-supply = <&pms405_s3>;
+> > +               #power-domain-cells = <0>;
+> > +               operating-points-v2 = <&cpr_opp_table>;
+> > +               acc-syscon = <&tcsr>;
+> > +
+> > +               nvmem-cells = <&cpr_efuse_quot_offset1>,
+> > +                       <&cpr_efuse_quot_offset2>,
+> > +                       <&cpr_efuse_quot_offset3>,
+> > +                       <&cpr_efuse_init_voltage1>,
+> > +                       <&cpr_efuse_init_voltage2>,
+> > +                       <&cpr_efuse_init_voltage3>,
+> > +                       <&cpr_efuse_quot1>,
+> > +                       <&cpr_efuse_quot2>,
+> > +                       <&cpr_efuse_quot3>,
+> > +                       <&cpr_efuse_ring1>,
+> > +                       <&cpr_efuse_ring2>,
+> > +                       <&cpr_efuse_ring3>,
+> > +                       <&cpr_efuse_revision>;
+> > +               nvmem-cell-names = "cpr_quotient_offset1",
+> > +                       "cpr_quotient_offset2",
+> > +                       "cpr_quotient_offset3",
+> > +                       "cpr_init_voltage1",
+> > +                       "cpr_init_voltage2",
+> > +                       "cpr_init_voltage3",
+> > +                       "cpr_quotient1",
+> > +                       "cpr_quotient2",
+> > +                       "cpr_quotient3",
+> > +                       "cpr_ring_osc1",
+> > +                       "cpr_ring_osc2",
+> > +                       "cpr_ring_osc3",
+> > +                       "cpr_fuse_revision";
+> > +
+> > +               qcom,cpr-timer-delay-us = <5000>;
+> > +               qcom,cpr-timer-cons-up = <0>;
+> > +               qcom,cpr-timer-cons-down = <2>;
+> > +               qcom,cpr-up-threshold = <1>;
+> > +               qcom,cpr-down-threshold = <3>;
+> > +               qcom,cpr-idle-clocks = <15>;
+> > +               qcom,cpr-gcnt-us = <1>;
+> > +               qcom,vdd-apc-step-up-limit = <1>;
+> > +               qcom,vdd-apc-step-down-limit = <1>;
 > 
->> On 19. 8. 21. 오전 12:24, Leonard Crestez wrote:
->>> Add dev_pm_qos notifies to devfreq core in order to support frequency
->>> limits via the dev_pm_qos_add_request.
->>>
->>> +static unsigned long get_effective_min_freq(struct devfreq *devfreq)
->>
->> I'm not sure that 'effective' expression is correct.
->>  From this function, the devfreq can get the final target frequency.
->>
->> I think that we need to use the more correct expression
->> to give the meaning of function as following:
->>
->> get_min_freq
->> get_max_freq
-> 
-> OK, will rename to get_min_freq and get_max_freq
-> 
->>> @@ -636,21 +688,40 @@ struct devfreq *devfreq_add_device(struct device *dev,
->>>   		err = -ENOMEM;
->>>   		goto err_out;
->>>   	}
->>>   
->>>   	mutex_init(&devfreq->lock);
->>> -	mutex_lock(&devfreq->lock);
->>
->> Basically, I think that it is safe to lock when touch
->> the variable of the devfreq.
->>
->> it is not proper way for the dev_pm_qos because
->> it breaks the existing locking reason of devfreq's variables.
-> 
-> I don't understand what you mean. I'm initializing some stuff outside 
-> the lock to avoid circular lock warning between:
-> 
-> (&devfreq->lock){+.+.}, at: devfreq_qos_min_notifier_call+0x24/0x48
-> (&(n)->rwsem){++++}, at: blocking_notifier_call_chain+0x3c/0x78
-> 
-> In general you don't need to lock an object while initializing except 
-> after it becomes accessible from the outside so devfreq_add_device 
-> doesn't need to take the lock so early.
-> 
-> The QOS notifiers are registered on the parent device so in theory it's 
-> possible for somebody to add QOS requests while devfreq_add_device is 
-> executing. Maybe notifier registration should be moved at the end after 
-> unlock?
-
-I think that it is more clear to add notifier
-after mutex_unlock(&devfreq->lock) if there are no any issue.
-
-> 
-> --
-> Regards,
-> Leonard
+> Are any of these qcom,* properties going to change for a particular SoC?
+> They look like SoC config data that should just go into the driver and
+> change based on the SoC compatible string.
 > 
 
+Hello Stephen,
+thanks a lot for your reviews.
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+I agree with you, will drop these properties from the dt-binding
+and the driver once I respin the series.
+
+I'm hoping to get the cpufreq part of the patch series merged this
+merge window, so that the patch pile will decrease.
+
+
+Kind regards,
+Niklas
