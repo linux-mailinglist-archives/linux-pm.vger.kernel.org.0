@@ -2,121 +2,275 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 305A3997C4
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2019 17:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D36B997FF
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2019 17:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389025AbfHVPJf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Aug 2019 11:09:35 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:52288 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387755AbfHVPJf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Aug 2019 11:09:35 -0400
-Received: by mail-wm1-f65.google.com with SMTP id o4so6013619wmh.2;
-        Thu, 22 Aug 2019 08:09:33 -0700 (PDT)
+        id S1732002AbfHVPTp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Aug 2019 11:19:45 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:41633 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389147AbfHVPTp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Aug 2019 11:19:45 -0400
+Received: by mail-vs1-f66.google.com with SMTP id m62so4036977vsc.8
+        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2019 08:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=epm2bxhgoCj95Z6p1gy2pWq2N6Ff7EZzq5imHpCeV+4=;
-        b=lZHWEANJk9q8e3J5u6ELsHoHhgUAunenXbzK0S065hZGcXYJpjrA21l0Jh9RzjmoLp
-         XcyT/ax5hsAVKggrmLmnhZAzOb+irzZv0dHc5yMnbxijC5t3QXmBfHQS8uxRwEt2dX/U
-         kSuv5od6kXGLqdX2MafspALjJ1Ok0M0KWRA2m1n0j0HxOul1KfhD1+mAcZfkrIV+Tge3
-         hqZQ44uujiRlLU0kS+fFE5WzP6ZlyFDimsosAFkHUNecAH2dLtL9ekx+C6ztqRcC6hTJ
-         oVnqYMz2Dfy2IvEU5+/uNdcHLrIScplQiw+yvlglqBBW6zttoZc96eK/JIFKCyMPv7vs
-         cxsg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0YL8L0tV1l50JDm88/vMbIROFNJ/FU1iner7nW8kAxc=;
+        b=G+6Avqtj/KAC9DhPzAXHojIBsZVb+HRBOMPcXYYjEa496fbgly265J0bWULN0h0Vin
+         i3trVTFXmLUmxMUXvs0JYMUkA/zA+4wJWfEDeeINEpxtTge6JrnQuLxC8xvjxMsMyG/O
+         wQHeEvvABouHLX6GI05q5+L2cRUlAqcL5RptKwVp6kTcaTj6th/BNYwg16LQmy1XkdI0
+         1oCy34wODp59lfKLqv8qvDM3Ta0cXs6yAAtC2Qb5jnRqQi86w05HyXE2vJWOdoVjtbu8
+         QMjUrnDtyWAgY2jGkrPboeIKhmVHtP9jgILEBrv1xAzGxFHAKF47IkJX3v6GPLUM9yui
+         lJYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=epm2bxhgoCj95Z6p1gy2pWq2N6Ff7EZzq5imHpCeV+4=;
-        b=MrUSycZOCYZ+nMz1zMg76Uky0OknMuoHJWdz4aYm9LD0vZP2uMpvwtd8zl7AWpmMjQ
-         4E1Z0x6D4uUZl90Fj4pRGP7JvkZ7pUp4kKrR6C3pclEVprPa6RqJyS81tE+gNWttbMAy
-         0bgYcHPQfM7dhNFc/w+yh+foLLSLfGaZ2rmpQMkb7Aw8yvxLJRSt9y79OV+3DoHbzA5n
-         UFR3CVpTPQGH6KyfujWpDrTz6j6gTPm75nbF98ZC+Fu/9v8kB6T/I341A+doXXXWXDJU
-         efAjR4QcP6NwJf0sTUdq42XGJk83Gu1IyOAjqWtj39Ca6yYnJS/3NlbvEnbwcBQpz2nB
-         JcNw==
-X-Gm-Message-State: APjAAAWfYDCCceZti15NKAMp43TJknYKdGa6QBmGvG6FCCkpve3NJwEt
-        Evxg0uf/4moxM/SCLOEYdcQ=
-X-Google-Smtp-Source: APXvYqztOWmcfGgIEa/AcSEB1HKR9AkPS518AMmGWGqnFP955b4sP47G/L4meyzONf553c3+SAhNJA==
-X-Received: by 2002:a1c:20c3:: with SMTP id g186mr6968856wmg.15.1566486572549;
-        Thu, 22 Aug 2019 08:09:32 -0700 (PDT)
-Received: from 5WDYG62.mdi (static-css-cqn-143221.business.bouyguestelecom.com. [176.149.143.221])
-        by smtp.gmail.com with ESMTPSA id f17sm3458098wmf.27.2019.08.22.08.09.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 08:09:31 -0700 (PDT)
-From:   Romain Izard <romain.izard.pro@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Romain Izard <romain.izard.pro@gmail.com>
-Subject: [PATCH] power: supply: register HWMON devices with valid names
-Date:   Thu, 22 Aug 2019 17:09:19 +0200
-Message-Id: <20190822150919.18290-1-romain.izard.pro@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0YL8L0tV1l50JDm88/vMbIROFNJ/FU1iner7nW8kAxc=;
+        b=qlFprivMK4A/oMKl+g/nYEZGbX5bRuj4ol63CCSsb3cPbV2XKGmU8z0TV1D+2um7rN
+         lSEMRvDa1Dtua6vmyIplzPEeNcaAu0Et7N8BBsGDchod9QeXLHx1Wv3s9IZIJrZ2WE8Y
+         k6uBnDrXOw6F+tUXFuRxOWhhE2kR1wjI/5jmNfUr7bkoSewDSlKVNE+Hz5HtJbFuPLiF
+         +etk3vyJSQbU/wHP+RQeasb1zTLlcMy62mZH8l3zR7B6JPGR8/ur9bVHGscvvGz+yVBM
+         9k2REzOrc2DxX91Mv6VByvCZoJTTPLqkOoZJl8BrJ6niSoAnsKd0TiarVNqfBwuYiOU2
+         Vb8w==
+X-Gm-Message-State: APjAAAXdxnhsUCtXEoCofcfiQCkJi57vtihsPyeAl5uODIIfGolyKmMS
+        bWf47AEgtqIUFrufg/XdB3Ic4+JpFaYB4Fo6ATjiNuha8pY=
+X-Google-Smtp-Source: APXvYqzGiJd+Mkr+yyXy3pv59B85OMOGNOpSIXp4QuYq/4KygfFX5YKbEmPPB89bY8S4t/WjbZzfJuVxDkvY4rgXVo8=
+X-Received: by 2002:a67:347:: with SMTP id 68mr19393563vsd.35.1566487183694;
+ Thu, 22 Aug 2019 08:19:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org> <1565398727-23090-4-git-send-email-thara.gopinath@linaro.org>
+In-Reply-To: <1565398727-23090-4-git-send-email-thara.gopinath@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 22 Aug 2019 17:19:07 +0200
+Message-ID: <CAPDyKFoj=f4+r=PaRq-EEZjVooYGCy6k1crepS2TChgcHD0WRQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] thermal: qcom: Add RPMHPD cooling device driver.
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     qualcomm-lt@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With the introduction of the HWMON compatibility layer to the power
-supply framework in Linux 5.3, all power supply devices' names can be
-used directly to create HWMON devices with the same names.
+On Sat, 10 Aug 2019 at 02:58, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+>
+> The MX power domain in RPMH can be used to warm the
+> the SoC in SDM845. To support this feature, introduce
+> a RPMH power domain cooling device driver that can be
+> plugged into the thermal framework.(The thermal framework
+> itself requires further modifiction to support a warming
+> device in place of a cooling device. Those extensions are
+> not introduced in this patch series).
+>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+>  drivers/thermal/qcom/Kconfig            |   7 ++
+>  drivers/thermal/qcom/Makefile           |   1 +
+>  drivers/thermal/qcom/qcom-rpmhpd-cdev.c | 141 ++++++++++++++++++++++++++++++++
+>  3 files changed, 149 insertions(+)
+>  create mode 100644 drivers/thermal/qcom/qcom-rpmhpd-cdev.c
+>
+> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
+> index aa9c1d8..a540130 100644
+> --- a/drivers/thermal/qcom/Kconfig
+> +++ b/drivers/thermal/qcom/Kconfig
+> @@ -20,3 +20,10 @@ config QCOM_SPMI_TEMP_ALARM
+>           trip points. The temperature reported by the thermal sensor reflects the
+>           real time die temperature if an ADC is present or an estimate of the
+>           temperature based upon the over temperature stage value.
+> +
+> +config CONFIG_QCOM_RPMHPD_CDEV
+> +       tristate "Qualcomm RPMHPD based cooling device"
+> +       depends on QCOM_RPMHPD
+> +       help
+> +         This enables RPMHPD based cooling devices. On SDM845, this is
+> +         MX power domain.
+> diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
+> index 7c8dc6e..e4eb520 100644
+> --- a/drivers/thermal/qcom/Makefile
+> +++ b/drivers/thermal/qcom/Makefile
+> @@ -4,3 +4,4 @@ obj-$(CONFIG_QCOM_TSENS)        += qcom_tsens.o
+>  qcom_tsens-y                   += tsens.o tsens-common.o tsens-v0_1.o \
+>                                    tsens-8960.o tsens-v2.o tsens-v1.o
+>  obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)     += qcom-spmi-temp-alarm.o
+> +obj-$(CONFIG_QCOM_RPMHPD_CDEV)         += qcom-rpmhpd-cdev.o
+> diff --git a/drivers/thermal/qcom/qcom-rpmhpd-cdev.c b/drivers/thermal/qcom/qcom-rpmhpd-cdev.c
+> new file mode 100644
+> index 0000000..265523b
+> --- /dev/null
+> +++ b/drivers/thermal/qcom/qcom-rpmhpd-cdev.c
+> @@ -0,0 +1,141 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2019, Linaro Ltd
+> + */
+> +#include <linux/err.h>
+> +#include <linux/kernel.h>
+> +#include <linux/init.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/module.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/thermal.h>
+> +
+> +struct rpmhpd_cooling_device {
+> +       struct thermal_cooling_device *cdev;
+> +       struct device *pwr_domain;
+> +       int max_state;
+> +       int cur_state;
+> +       bool is_pwr_domain_on;
+> +};
+> +
+> +static const char sdm845_rpmhpd_cdev_name[] = "mx";
+> +
+> +static const struct of_device_id rpmhpd_cdev_match_table[] = {
+> +       { .compatible = "qcom,sdm845-rpmhpd-cdev", .data = &sdm845_rpmhpd_cdev_name },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, rpmhpd_cdev_match_table);
+> +
+> +static int rpmhpd_cdev_get_max_state(struct thermal_cooling_device *cdev,
+> +                                    unsigned long *state)
+> +{
+> +       struct rpmhpd_cooling_device *rpmhpd_cdev = cdev->devdata;
+> +
+> +       *state = rpmhpd_cdev->max_state;
+> +       return 0;
+> +}
+> +
+> +static int rpmhpd_cdev_get_cur_state(struct thermal_cooling_device *cdev,
+> +                                    unsigned long *state)
+> +{
+> +       struct rpmhpd_cooling_device *rpmhpd_cdev = cdev->devdata;
+> +       int perf_state;
+> +
+> +       dev_pm_genpd_get_performance_state(rpmhpd_cdev->pwr_domain,
+> +                                          &perf_state);
+> +       *state = perf_state;
+> +       return 0;
+> +}
+> +
+> +static int rpmhpd_cdev_set_cur_state(struct thermal_cooling_device *cdev,
+> +                                    unsigned long state)
+> +{
+> +       struct rpmhpd_cooling_device *rpmhpd_cdev = cdev->devdata;
+> +       struct device *pwr_domain = rpmhpd_cdev->pwr_domain;
 
-But HWMON has rules on allowable names that are different from the power
-supply framework. The dash character is forbidden, as it is used by the
-libsensors library in userspace as a separator, whereas this character
-is used in the device names in more than half of the existing power
-supply drivers. This last case is consistent with the typical naming
-usage with MFD and Device Tree.
+Nitpick: Using pwr_domain as the name of the variable is a bit
+confusing. Why not just name it "dev"?
 
-This leads to warnings in the kernel log, with the format:
+> +       int ret;
+> +
+> +       ret = dev_pm_genpd_set_performance_state(pwr_domain, state);
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (state && !rpmhpd_cdev->is_pwr_domain_on) {
 
-power_supply gpio-charger: hwmon: \
-	'gpio-charger' is not a valid name attribute, please fix
+Nitpick: To clarify, I would suggest to rename "is_pwr_domain_on" to
+"runtime_resumed".
 
-Add a protection to power_supply_add_hwmon_sysfs() that replaces any
-dash in the device name with an underscore when registering with the
-HWMON framework. Other forbidden characters (star, slash, space, tab,
-newline) are not replaced, as they are not in common use.
+> +               ret = pm_runtime_get_sync(pwr_domain);
+> +               rpmhpd_cdev->is_pwr_domain_on = true;
+> +       } else if (!state && rpmhpd_cdev->is_pwr_domain_on) {
+> +               ret = pm_runtime_put(pwr_domain);
+> +               rpmhpd_cdev->is_pwr_domain_on = false;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static struct thermal_cooling_device_ops rpmhpd_cooling_device_ops = {
+> +       .get_max_state = rpmhpd_cdev_get_max_state,
+> +       .get_cur_state = rpmhpd_cdev_get_cur_state,
+> +       .set_cur_state = rpmhpd_cdev_set_cur_state,
+> +};
+> +
+> +static int rpmhpd_cdev_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev, *pd_dev;
+> +       struct rpmhpd_cooling_device *rpmhpd_cdev;
+> +       const char *rpmhpd_cdev_name = of_device_get_match_data(dev);
+> +       unsigned int count;
+> +       int ret;
+> +
+> +       if (!dev->pm_domain) {
+> +               pd_dev = dev_pm_domain_attach_by_name(dev, rpmhpd_cdev_name);
 
-Fixes: e67d4dfc9ff1 ("power: supply: Add HWMON compatibility layer")
-Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
----
- drivers/power/supply/power_supply_hwmon.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+I don't think this is needed, unless you have multiple PM domains that
+can be attached per device.
 
-diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
-index 51fe60440d12..ebe964bd512c 100644
---- a/drivers/power/supply/power_supply_hwmon.c
-+++ b/drivers/power/supply/power_supply_hwmon.c
-@@ -284,6 +284,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 	struct device *dev = &psy->dev;
- 	struct device *hwmon;
- 	int ret, i;
-+	const char *name;
- 
- 	if (!devres_open_group(dev, power_supply_add_hwmon_sysfs,
- 			       GFP_KERNEL))
-@@ -334,7 +335,19 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 		}
- 	}
- 
--	hwmon = devm_hwmon_device_register_with_info(dev, psy->desc->name,
-+	name = psy->desc->name;
-+	if (strchr(name, '-')) {
-+		char *new_name;
-+
-+		new_name = devm_kstrdup(dev, name, GFP_KERNEL);
-+		if (!new_name) {
-+			ret = -ENOMEM;
-+			goto error;
-+		}
-+		strreplace(new_name, '-', '_');
-+		name = (const char *) new_name;
-+	}
-+	hwmon = devm_hwmon_device_register_with_info(dev, name,
- 						psyhw,
- 						&power_supply_hwmon_chip_info,
- 						NULL);
--- 
-2.17.1
+If there is only one PM domain the platform bus should already have
+attached it at this point.
 
+> +               if (IS_ERR(pd_dev))
+> +                       return PTR_ERR(pd_dev);
+> +       } else {
+> +               pd_dev = dev;
+> +       }
+> +
+> +       rpmhpd_cdev = devm_kzalloc(dev, sizeof(*rpmhpd_cdev), GFP_KERNEL);
+> +       if (!rpmhpd_cdev) {
+> +               ret = -ENOMEM;
+> +               goto detach_pd;
+> +       }
+> +
+> +       ret = dev_pm_genpd_performance_state_count(pd_dev, &count);
+> +       if (ret)
+> +               goto detach_pd;
+> +
+> +       rpmhpd_cdev->pwr_domain = pd_dev;
+> +       rpmhpd_cdev->max_state = count - 1;
+> +       rpmhpd_cdev->is_pwr_domain_on = false;
+> +
+> +       pm_runtime_enable(pd_dev);
+> +
+> +       rpmhpd_cdev->cdev = thermal_of_cooling_device_register
+> +                                       (dev->of_node, rpmhpd_cdev_name,
+> +                                        rpmhpd_cdev,
+> +                                        &rpmhpd_cooling_device_ops);
+> +       if (IS_ERR(rpmhpd_cdev->cdev)) {
+> +               dev_err(dev, "unable to register %s cooling device\n",
+> +                       rpmhpd_cdev_name);
+> +               ret = PTR_ERR(rpmhpd_cdev->cdev);
+> +               goto detach_pd;
+> +       }
+> +
+> +       return 0;
+> +
+> +detach_pd:
+> +       dev_pm_domain_detach(pd_dev, false);
+
+Not needed, see above.
+
+> +       return ret;
+> +}
+> +
+> +static struct platform_driver rpmhpd_cdev_driver = {
+> +       .driver = {
+> +               .name = "qcom-rpmhpd-cdev",
+> +               .of_match_table = rpmhpd_cdev_match_table,
+> +       },
+> +       .probe = rpmhpd_cdev_probe,
+
+Looks like you should implement a ->remove() callback as well. Or
+perhaps you think this should be a built-in-driver?
+
+> +};
+> +module_platform_driver(rpmhpd_cdev_driver);
+> +
+> +MODULE_DESCRIPTION("Qualcomm RPMHPD cooling device driver");
+> +MODULE_LICENSE("GPL v2");
+> --
+> 2.1.4
+>
+
+Kind regards
+Uffe
