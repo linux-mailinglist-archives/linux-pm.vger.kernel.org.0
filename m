@@ -2,138 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F5A98C85
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2019 09:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFF398D8C
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2019 10:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731525AbfHVHnx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Aug 2019 03:43:53 -0400
-Received: from mail.heine.tech ([195.201.24.99]:38346 "EHLO mail.heine.tech"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731487AbfHVHnx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 22 Aug 2019 03:43:53 -0400
-Received: from localhost (localhost [127.0.0.1]) (Authenticated sender: michael@nosthoff.rocks)
-        by mail.heine.tech (Postcow) with ESMTPSA id A125C181B72;
-        Thu, 22 Aug 2019 09:43:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heine.so; s=dkim;
-        t=1566459828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LBF24kxs2y5CPdaTB3ix8su3zSYdd7TmiR9uR2m89lU=;
-        b=nWHBaNObjJCf1C5QBo10CKMwIy6dLozT15lmiQuI58lUUfc/WJNJqFyjEUPMNfDxOEEhVE
-        VpN0MO3sfPRE7+ypaTBp1ysrMoMZ1TxufLzZvANSRPuq+JO25fiGAL4DM4Ou/wFI4xNdXV
-        Y7w8iu853U8h5h1Kv0wkwuIpIIyL3lM=
-Message-ID: <5D5E47B1.70604@heine.so>
-Date:   Thu, 22 Aug 2019 09:43:45 +0200
-From:   Michael Nosthoff <committed@heine.so>
-User-Agent: Postbox 5.0.25 (Macintosh/20180328)
+        id S1731668AbfHVIXg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Aug 2019 04:23:36 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:35940 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729708AbfHVIXg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Aug 2019 04:23:36 -0400
+Received: by mail-wr1-f66.google.com with SMTP id r3so4533185wrt.3
+        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2019 01:23:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:openpgp:autocrypt:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=pdSEt99/CAmqV4fLv18bovPaZEVnOI86pAE/GZZ1s8o=;
+        b=G8PGFUZfNXXmilf161dMeUTcpEBj+qTrlmsTnkGZuXZyum2+F9+g8Uj4QM9Ou+A/+z
+         QlSOh3eqahxos/JE8qqoby3HAWtEadv0K7tJAHNg3vMTkCoOh9MMuE3/JkaBnPsv19Mu
+         Zc+47ASy/6fCfJEiM1+2V3ttMKInkjAkWSrnkl5UrW1k38gmLEbCRA43mKcj1U9BGUdG
+         O8kr+27+CSQ41Yw7KCkv0UwP2zfK+fHMqINg8PtnUMk/s2tO0TNrhRpKSqRH0TJfXBFl
+         lw1RU1aTNxbVSoBqMwR+r5akQOdWyYCo+QJ2DqoNOma+h0JJE5G4L7xpgRCZPHaZKMh9
+         kbtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=pdSEt99/CAmqV4fLv18bovPaZEVnOI86pAE/GZZ1s8o=;
+        b=LPclfnTc1b6X+nUb1HTJmlfmu5Tr7toKKngLTOFb4suLi5CBZIwpOcM8f3A/MLDb6s
+         fg6eReS/C1ye8nQxdT6tHwsxYarUm74XO+HkHX0CAPnwaORNIXgL2pmGtoNzwoGwVCER
+         JPdTSCRw0MoKJWEmdGulRpfyi726RVogM5lb9bbBa1s+FXY/mDxL8eZvJRvdZOOYHC2w
+         WkktuLBa1fMH8EtNcBYpxFaAuTwIcENvX1FuKGjBmsi8Qd88XihGUZe9FWK2cNpVc2Xf
+         CpxINLTdx4p1xvLVHj2dkxIZtV8vHnAFTT0RHWDzlL/oGe0SyT09Qz7QLQ/MJry1PO/L
+         GfTg==
+X-Gm-Message-State: APjAAAU03r999YEzO4r7eq0oSbNcVgIEhfiFB8fW3PKfagdCZTtBrOIS
+        2iCJaRHigvthza+V+oU70ft6Cw==
+X-Google-Smtp-Source: APXvYqxZAhFzPIllWHgOfm1YJnUgWV3//Of7Tq/vW5OyikIqSWVvyroTMOmPiwWv1xAe+2JPFgJNSw==
+X-Received: by 2002:adf:a54d:: with SMTP id j13mr992885wrb.261.1566462213455;
+        Thu, 22 Aug 2019 01:23:33 -0700 (PDT)
+Received: from [192.168.1.62] (wal59-h01-176-150-251-154.dsl.sta.abo.bbox.fr. [176.150.251.154])
+        by smtp.gmail.com with ESMTPSA id f134sm4484687wmg.20.2019.08.22.01.23.32
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 22 Aug 2019 01:23:32 -0700 (PDT)
+Subject: Re: [PATCH 4/5] arm64: dts: meson-sm1-sei610: add HDMI display
+ support
+To:     Kevin Hilman <khilman@baylibre.com>, ulf.hansson@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20190821114121.10430-1-narmstrong@baylibre.com>
+ <20190821114121.10430-5-narmstrong@baylibre.com>
+ <7ho90i5c41.fsf@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ ZaTUOEkgIor5losDrePdPgE=
+Organization: Baylibre
+Message-ID: <09a5372b-3ff1-b6fc-9a06-d8f9c235e763@baylibre.com>
+Date:   Thu, 22 Aug 2019 10:23:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-To:     Brian Norris <briannorris@chromium.org>
-CC:     linux-pm@vger.kernel.org, stable@vger.kernel.org, sre@kernel.org
-Subject: Re: [PATCH] power: supply: sbs-battery: only return health when battery
- present
-References: <20190816075842.27333-1-committed@heine.so> <20190822014655.GA165945@google.com>
-In-Reply-To: <20190822014655.GA165945@google.com>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+In-Reply-To: <7ho90i5c41.fsf@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 22/08/2019 01:31, Kevin Hilman wrote:
+> Neil Armstrong <narmstrong@baylibre.com> writes:
+> 
+>> Update compatible of the pwc-vpu node and add the HDMI support nodes
+>> for the Amlogic SM1 Based SEI610 Board.
+> 
+> I think this changelog is out of date.  It's not doing anything with the
+> VPU pwrc node.
 
-Brian Norris wrote:
-> On Fri, Aug 16, 2019 at 09:58:42AM +0200, Michael Nosthoff wrote:
->> when the battery is set to sbs-mode and  no gpio detection is enabled
->> "health" is always returning a value even when the battery is not present.
->> All other fields return "not present".
->> This leads to a scenario where the driver is constantly switching between
->> "present" and "not present" state. This generates a lot of constant
->> traffic on the i2c.
->
-> That depends on how often you're checking the "health" attribute,
-> doesn't it? But anyway, the bug is real.
-At least on my Hardware I had constant traffic from the moment the 
-device was probed.
-I have no userland process accessing the device.
-I'm guessing that it has something todo with the call to 
-'power_supply_changed'.
-This done at the end of 'sbs_get_property' if the presence state changed and
-no gpio is used. I suspect it triggers a readout of all the properties 
-and leads to this
-endless loop?
->> This commit changes the response of "health" to an error when the battery
->> is not responding leading to a consistent "not present" state.
->
-> Ack, and thanks for the fix.
->
->> Fixes: 76b16f4cdfb8 ("power: supply: sbs-battery: don't assume
->> MANUFACTURER_DATA formats")
->>
->> Signed-off-by: Michael Nosthoff<committed@heine.so>
->> Cc: Brian Norris<briannorris@chromium.org>
->> Cc:<stable@vger.kernel.org>
->
-> Reviewed-by: Brian Norris<briannorris@chromium.org>
-> Tested-by: Brian Norris<briannorris@chromium.org>
-thanks for review!
->
+Exact, thanks for pointing it
+
+> 
+> Kevin
+> 
+>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 >> ---
->>   drivers/power/supply/sbs-battery.c | 25 ++++++++++++++++---------
->>   1 file changed, 16 insertions(+), 9 deletions(-)
+>>  .../boot/dts/amlogic/meson-sm1-sei610.dts     | 23 +++++++++++++++++++
+>>  1 file changed, 23 insertions(+)
 >>
->> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
->> index 2e86cc1e0e35..f8d74e9f7931 100644
->> --- a/drivers/power/supply/sbs-battery.c
->> +++ b/drivers/power/supply/sbs-battery.c
->> @@ -314,17 +314,22 @@ static int sbs_get_battery_presence_and_health(
->>   {
->>   	int ret;
->>
->> -	if (psp == POWER_SUPPLY_PROP_PRESENT) {
->> -		/* Dummy command; if it succeeds, battery is present. */
->> -		ret = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
->> -		if (ret<  0)
->> -			val->intval = 0; /* battery disconnected */
->> -		else
->> -			val->intval = 1; /* battery present */
->> -	} else { /* POWER_SUPPLY_PROP_HEALTH */
->> +	/* Dummy command; if it succeeds, battery is present. */
->> +	ret = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
+>> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts
+>> index 12dab0ba2f26..66bd3bfbaf91 100644
+>> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts
+>> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts
+>> @@ -51,6 +51,17 @@
+>>  		};
+>>  	};
+>>  
+>> +	hdmi-connector {
+>> +		compatible = "hdmi-connector";
+>> +		type = "a";
 >> +
->> +	if (ret<  0) { /* battery not present*/
->> +		if (psp == POWER_SUPPLY_PROP_PRESENT) {
->> +			val->intval = 0;
->> +			return 0;
->
-> Technically, you don't need the 'return 0' (and if we care about
-> symmetry: the TI version doesn't), since the caller knows that "not
-> present" will yield errors. I'm not sure which version makes more sense.
->
->> +		}
->> +		return ret;
->> +	}
+>> +		port {
+>> +			hdmi_connector_in: endpoint {
+>> +				remote-endpoint = <&hdmi_tx_tmds_out>;
+>> +			};
+>> +		};
+>> +	};
 >> +
->> +	if (psp == POWER_SUPPLY_PROP_PRESENT)
->> +		val->intval = 1; /* battery present */
->> +	else /* POWER_SUPPLY_PROP_HEALTH */
->>   		/* SBS spec doesn't have a general health command. */
->>   		val->intval = POWER_SUPPLY_HEALTH_UNKNOWN;
->> -	}
->>
->>   	return 0;
->>   }
->> @@ -626,6 +631,8 @@ static int sbs_get_property(struct power_supply *psy,
->>   		else
->>   			ret = sbs_get_battery_presence_and_health(client, psp,
->>   								  val);
+>>  	leds {
+>>  		compatible = "gpio-leds";
+>>  
+>> @@ -177,6 +188,18 @@
+>>  	phy-mode = "rmii";
+>>  };
+>>  
+>> +&hdmi_tx {
+>> +	status = "okay";
+>> +	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
+>> +	pinctrl-names = "default";
+>> +};
 >> +
->> +		/* this can only be true if no gpio is used */
->>   		if (psp == POWER_SUPPLY_PROP_PRESENT)
->>   			return 0;
->>   		break;
+>> +&hdmi_tx_tmds_port {
+>> +	hdmi_tx_tmds_out: endpoint {
+>> +		remote-endpoint = <&hdmi_connector_in>;
+>> +	};
+>> +};
+>> +
+>>  &i2c3 {
+>>  	status = "okay";
+>>  	pinctrl-0 = <&i2c3_sda_a_pins>, <&i2c3_sck_a_pins>;
 >> -- 
->> 2.20.1
->>
+>> 2.22.0
 
