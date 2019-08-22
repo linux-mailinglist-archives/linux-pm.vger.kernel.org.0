@@ -2,445 +2,793 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 074709952A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2019 15:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141D39954F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Aug 2019 15:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732190AbfHVNez (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Aug 2019 09:34:55 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:60378 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732813AbfHVNez (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Aug 2019 09:34:55 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190822133453euoutp019fc9386eced6a19f547f5d5a5152dd21~9QhKin32T2450924509euoutp01A
-        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2019 13:34:53 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190822133453euoutp019fc9386eced6a19f547f5d5a5152dd21~9QhKin32T2450924509euoutp01A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1566480893;
-        bh=ISRXkLXZPAXnwckdf6fmHNHgi8FTAkZ5Xn05li/Orso=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Ku3aBvu8g9B+pz5/FdXgzyaxqkSeKkq/b6LrFLrb9TSPLsKXNByYvCt/rvPLItVOP
-         j4POKSmNl2J+v3XxILyNc++2pDv2GPLN3398razIAB6i0iyeHVFmzRR+SnPUyhtmHk
-         A1LKFfYPSewGFkZef6nq6ni6IOx+CcdhFAjVpFBg=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190822133451eucas1p17120c9f1fa2393606ee4f34f55452148~9QhJX_N190655906559eucas1p1b;
-        Thu, 22 Aug 2019 13:34:51 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 8C.62.04469.BF99E5D5; Thu, 22
-        Aug 2019 14:34:51 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190822133451eucas1p1405e041220e236608fad9900ae19aa93~9QhIfp3qh1266212662eucas1p16;
-        Thu, 22 Aug 2019 13:34:51 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190822133450eusmtrp13ba9603adcc70d8430d7db62d1b4bad0~9QhIOsF3u3229032290eusmtrp1C;
-        Thu, 22 Aug 2019 13:34:50 +0000 (GMT)
-X-AuditID: cbfec7f2-994db9c000001175-c7-5d5e99fb1276
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 6C.F5.04117.AF99E5D5; Thu, 22
-        Aug 2019 14:34:50 +0100 (BST)
-Received: from [106.120.51.20] (unknown [106.120.51.20]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190822133449eusmtip18a766d673f80c63dd25808d8b84d4372~9QhHSDxXv0904109041eusmtip1O;
-        Thu, 22 Aug 2019 13:34:49 +0000 (GMT)
-Subject: Re: [PATCH v10 06/13] drivers: memory: extend of_memory by LPDDR3
- support
-To:     Krzysztof Kozlowski <krzk@kernel.org>, gregkh@linuxfoundation.org,
-        Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        =?UTF-8?Q?Bart=c5=82omiej_=c5=bbo=c5=82nierkiewicz?= 
-        <b.zolnierkie@samsung.com>, kgene@kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        kyungmin.park@samsung.com,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
-        treding@nvidia.com, digetx@gmail.com, willy.mh.wolff.ml@gmail.com
-From:   Lukasz Luba <l.luba@partner.samsung.com>
-Message-ID: <2e35d4bc-92b9-cba7-bd05-a41a1dcb300e@partner.samsung.com>
-Date:   Thu, 22 Aug 2019 15:34:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S2389139AbfHVNkj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Aug 2019 09:40:39 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:45293 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387603AbfHVNkj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Aug 2019 09:40:39 -0400
+Received: by mail-qk1-f194.google.com with SMTP id m2so5101225qki.12
+        for <linux-pm@vger.kernel.org>; Thu, 22 Aug 2019 06:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r7OCvWWarIaOda8gSWoZ9wMY3YZ9zx8R1m3Ht/i//yQ=;
+        b=MwGbGS3zXGHAwRCugMcUR5Nx5IkOuv07tZQmsbbWA2CHQKJ3kVEIfSq6cTtZ3CU0jp
+         tnKsLeN0Tvc9169Q93NMrc/RZXhs8jMERG23vUEeql9ErzP/HLnREUTi6XzjyGEmJsgq
+         zVDZybCP3XHIMIXy7KYWvq94pzu73gJBw12TPfelXXc6e9VtqH3tiYQuqLvPSbWN0TQ4
+         vv/FI2BjHVvX1Q61i5Oy60SnlEa3fly0fhLZcF50eltoB9UMiAwkT6lk4SGtc3k8ibt4
+         sqsIXgZGuWrjCE2EeN8a6APf6TxHZnnONkfPFBJaEbSOuAJlC99TBjd6PE2f0qx0yL1K
+         Vkng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r7OCvWWarIaOda8gSWoZ9wMY3YZ9zx8R1m3Ht/i//yQ=;
+        b=LskamRweipoeiyvBeK8PsYkMom+EtBARUK2oq6V+PDqyMtvSK/XV5ag8dxCdrqQcqA
+         DanUS7Y3Dp64xSvY0UFhVjQPLyiyBHnPrmhOZT+af7ZJm0rCBpu2TH47DiuXL+cjyHXq
+         vWhl8cEFJlCuxO5UxTxXDttupZUCohcn1ocEtPvkDWWZ6n//vSnxeHWq58IcbyDaSGIH
+         6nZCJ0DuxWe8d6sW+gU1VRp0lfUfweVuCvkj7Ci8+XKwSCix0CUKKtJKgWgu89Lnm6Pf
+         X8rUEgedRv+HjCn1NjKdDkcreAqj3RUYlSIKyCVbRgOUKxY4VpJpOCKnbClasmVYlruA
+         BUVw==
+X-Gm-Message-State: APjAAAWGvWzw/8gxSWKf699P4t7JospiQGC7H64YsLl46jl0LhE9CSZh
+        orUuReRhCZXpzOhtQvLKlJjg0f1lpk0HE6vpdiF6Og==
+X-Google-Smtp-Source: APXvYqwYKgf5Jf/0/syBaWyMlljkIRp5mZxSsc5nsXqwFpsKEc09zkvSO6/2ZLAH1cD7KrLKfVtW2Ahe4uzi0cfycs4=
+X-Received: by 2002:a05:620a:5f7:: with SMTP id z23mr35962471qkg.106.1566481237497;
+ Thu, 22 Aug 2019 06:40:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAJKOXPcDDyYmuX-RpkpxKSBK2JfV=tYakn+g8FM5Lau+rmkm+g@mail.gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0iTURjHO3uvjibHpflQUrTuQWrUhwPdo8tLBCUUiV1s1put3LK9atcP
-        K7uumaZddCkVJoVZOnVmMpLUtvLS0i5aUQw1ummXuRUlWM23yG+/539+h/N/4PCU2sKO4nWG
-        FNFo0CZpWCVd5fzhnt6ft3FDdEb2JGLLLWVIu+8tQy42PGTI9a9diKQXlrIkp7FAQZpP6klm
-        10eKuN1lHGk51MORr5bXDHlck8+SvowGRHLddxTkRsMrjrQ2LiEvD15jyS9HNUfqe44xZOCZ
-        jSa1T5aTl/3B5Nv9TrQgXPjmz6aFzx1HOOGCqZUWbltfcUJ58QlWqC0o4YSM9E+scKqyGAkV
-        TfuFvvIxq5RxyjlbxCRdmmiMmrdJue2Myc8lOxL2vEm3sSb0fpkZBfGAZ0GWs11hRkpeja8h
-        sDjLkDz4EFQ/PkwHLDXuQ1DkWfHvxtmfbbQsXUVwzOVh5KEXwYkbx6mANQKvhubapyjAoXgr
-        tLv7uYBE4R80OPN8rBnxPIsjobp4V8BR4aXQ6ShkA0zjiWDraRvkMBwLXk89Izsh8CCve7BR
-        EI6BnCv2QYfC4fCi+6JC5rFwqzefkps28+CoWSnzYujtvIdkHgEfXJWczBHQlGOhZZbAlHH5
-        r3MAujIL/jqzod7VygQqU3gqlNZEyfFC8N5rVARiwMHQ0RsiNwiG7KrzlByr4PhRtWxPgUrL
-        I4XMI+FqyTkuC2msQ/ayDtnFOmQX6/93LyG6GIWLqZI+UZRmGMTdkZJWL6UaEiM379SXoz9/
-        tGnA5a1G/raEOoR5pBmuum/euEHNaNOkvfo6BDylCVWlnf4TqbZo9+4TjTvjjalJolSHRvO0
-        Jly1f5hnnRonalPEHaKYLBr/nSr4oFEmpIi/+WFxyIGWMCkioi4q2har88P3y4aq7jnrB8pw
-        3Oxxp1oi1+yLscxqSLDXeFKU831fejKP6CZUfIzdPl+fnO97623y2D8VuNZeeuQN61Cnzwz9
-        fPd7lv/w7kLdmdxGQ0TV8BJYYziNueiiydud65jraG1omsP8fK69/519/CINLW3TzphGGSXt
-        b5pKwBifAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsVy+t/xu7q/ZsbFGkz8oGaxccZ6VovrX56z
-        Wsw/co7VYvXHx4wWzYvXs1lMPjWXyeJMd65F/+PXzBbnz29gtzjb9Ibd4mPPPVaLy7vmsFl8
-        7j3CaDHj/D4mi7VH7rJbXDzlanG7cQWbxf89O9gtDr9pZ7X4d20ji8X+K14Wt3/zWXw78YjR
-        Qdzj29dJLB7vb7Sye8xuuMjisXPWXXaPTas62Tz2z13D7tHb/I7No2/LKkaPzaerPT5vkgvg
-        itKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DLmNLw
-        lb1gT1LF0+aNbA2ML927GDk5JARMJKb+usTSxcjFISSwlFFi8tudTBAJMYlJ+7azQ9jCEn+u
-        dbFBFL1mlLhyfA0rSEJYIETizP6rjCC2iECaxOdpf8EmMQv8ZJFoPzcXauwEJokT1/cCdXBw
-        sAnoSexYVQjSwCvgJvFoz2I2EJtFQFVi45tLYLaoQITE4R2zGCFqBCVOznzCAmJzCgRKTF6y
-        FayGWcBMYt7mh8wQtrjErSfzmSBseYntb+cwT2AUmoWkfRaSlllIWmYhaVnAyLKKUSS1tDg3
-        PbfYSK84Mbe4NC9dLzk/dxMjMH1sO/Zzyw7GrnfBhxgFOBiVeHhPdMXFCrEmlhVX5h5ilOBg
-        VhLhLZsIFOJNSaysSi3Kjy8qzUktPsRoCvTcRGYp0eR8YGrLK4k3NDU0t7A0NDc2NzazUBLn
-        7RA4GCMkkJ5YkpqdmlqQWgTTx8TBKdXAeO3JGyGTFVsWhqzu/X6t2IfFOc5TySAg2kzG4/fJ
-        evFPe+TZPsdFKF3UL0+4KlSkuut2SeDzu4XRN9Q9S6Xr1h7Zm+azaGnYLsUlFRuWn3dobuYO
-        Ovno7czt85/1cVy69+XAK772piO7zHP69C5s2ySh9urxi9377ryYa7Z3o5rdtsb56Qtu/1Ri
-        Kc5INNRiLipOBACgnHdeNQMAAA==
-X-CMS-MailID: 20190822133451eucas1p1405e041220e236608fad9900ae19aa93
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190614095325eucas1p20083d9290b36eca945ec3f1428bdbd4f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190614095325eucas1p20083d9290b36eca945ec3f1428bdbd4f
-References: <CGME20190614095325eucas1p20083d9290b36eca945ec3f1428bdbd4f@eucas1p2.samsung.com>
-        <20190614095309.24100-1-l.luba@partner.samsung.com>
-        <20190614095309.24100-7-l.luba@partner.samsung.com>
-        <CAJKOXPcDDyYmuX-RpkpxKSBK2JfV=tYakn+g8FM5Lau+rmkm+g@mail.gmail.com>
+References: <cover.1564091601.git.amit.kucheria@linaro.org>
+ <3105ffc275c6e1106a17b8b9ad83a8f1816445eb.1564091601.git.amit.kucheria@linaro.org>
+ <20190817060916.3439321019@mail.kernel.org>
+In-Reply-To: <20190817060916.3439321019@mail.kernel.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Thu, 22 Aug 2019 19:10:26 +0530
+Message-ID: <CAP245DWNaKYz9L8aXb6ktToQ6v7ffeSi9YRWT+B2-z==eFnAPQ@mail.gmail.com>
+Subject: Re: [PATCH 15/15] drivers: thermal: tsens: Add interrupt support
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Gross <andy.gross@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Stephen,
 
+Thanks for the thorough review.
 
-On 6/14/19 2:43 PM, Krzysztof Kozlowski wrote:
-> On Fri, 14 Jun 2019 at 11:53, Lukasz Luba <l.luba@partner.samsung.com> wrote:
->>
->> The patch adds AC timings information needed to support LPDDR3 and memory
->> controllers. The structure is used in of_memory and currently in Exynos
->> 5422 DMC. Add parsing data needed for LPDDR3 support.
->> It is currently used in Exynos5422 Dynamic Memory Controller.
->>
->> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
->> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
->> ---
->>   drivers/memory/of_memory.c | 154 +++++++++++++++++++++++++++++++++++++
->>   drivers/memory/of_memory.h |  18 +++++
->>   include/memory/jedec_ddr.h |  62 +++++++++++++++
->>   3 files changed, 234 insertions(+)
-> 
-> Previously this was going through Greg, so if I am going to take it
-> along with drivers/memory/samsung patches, I need some acks.
-> 
-> Greg, Rob,
-> Are you okay with this patch and with taking it through samsung-soc?
+On Sat, Aug 17, 2019 at 11:39 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Amit Kucheria (2019-07-25 15:18:50)
+> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> > index 13a875b99094..f94ef79c37bc 100644
+> > --- a/drivers/thermal/qcom/tsens-common.c
+> > +++ b/drivers/thermal/qcom/tsens-common.c
+> > @@ -13,6 +13,22 @@
+> >  #include <linux/regmap.h>
+> >  #include "tsens.h"
+> >
+> > +/* IRQ state, mask and clear */
+> > +struct tsens_irq_data {
+> > +       u32 up_viol;
+>
+> Is viol a violation? Maybe some kernel doc would be useful here.
 
-Greg, Rob: gentle ping.
+Will fix.
 
-Currently there is a v13, with only minor changes to this patch:
-https://lkml.org/lkml/2019/8/21/289
-(you are on cc list of the patch set)
+> > +       int up_thresh;
+> > +       u32 up_irq_mask;
+> > +       u32 up_irq_clear;
+> > +       u32 low_viol;
+> > +       int low_thresh;
+> > +       u32 low_irq_mask;
+> > +       u32 low_irq_clear;
+> > +       u32 crit_viol;
+> > +       u32 crit_thresh;
+> > +       u32 crit_irq_mask;
+> > +       u32 crit_irq_clear;
+> > +};
+> > +
+> >  char *qfprom_read(struct device *dev, const char *cname)
+> >  {
+> >         struct nvmem_cell *cell;
+> > @@ -65,6 +81,18 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
+> >         }
+> >  }
+> >
+> > +static inline u32 degc_to_code(int degc, const struct tsens_sensor *sensor)
+> > +{
+> > +       u32 code = (degc * sensor->slope + sensor->offset) / SLOPE_FACTOR;
+>
+> This can't overflow 32-bits with the multiply and add?
 
-Could you please have a look. Thank you.
+Most of the public HW doesn't have any calibration data and the
+defaults values seem to avoid the problem. I'll check again.
+
+Perhaps best to just declare this as u64 and then clamp below?
+
+> > +
+> > +       if (code > THRESHOLD_MAX_ADC_CODE)
+> > +               code = THRESHOLD_MAX_ADC_CODE;
+> > +       else if (code < THRESHOLD_MIN_ADC_CODE)
+> > +               code = THRESHOLD_MIN_ADC_CODE;
+>
+> Looks like
+>
+>         return clamp(code, THRESHOLD_MIN_ADC_CODE, THRESHOLD_MAX_ADC_CODE);
+
+clamp_val works better with the #defines, but yes. Will fix.
+
+> > +       pr_debug("%s: raw_code: 0x%x, degc:%d\n", __func__, code, degc);
+> > +       return code;
+> > +}
+> > +
+> >  static inline int code_to_degc(u32 adc_code, const struct tsens_sensor *s)
+> >  {
+> >         int degc, num, den;
+> > @@ -106,6 +134,363 @@ static int tsens_hw_to_mC(char *str, struct tsens_sensor *s, int field, int temp
+> >         }
+> >  }
+> >
+> > +/**
+> > + * tsens_mC_to_hw - Return correct value to be written to threshold
+> > + * registers, whether in ADC code or deciCelsius depending on IP version
+> > + */
+> > +static int tsens_mC_to_hw(struct tsens_sensor *s, int temp)
+> > +{
+> > +       struct tsens_priv *priv = s->priv;
+> > +
+> > +       if (priv->feat->adc) {
+> > +               /* milli to C to adc code */
+> > +               return degc_to_code(temp / 1000, s);
+> > +       } else {
+> > +               /* milli to deci C */
+> > +               return (temp / 100);
+> > +       }
+>
+> Drop the else and just return without parenthesis.
+
+Will fix.
+
+> > +}
+> > +
+> > +static inline unsigned int tsens_ver(struct tsens_priv *priv)
+> > +{
+> > +       return priv->feat->ver_major;
+> > +}
+> > +
+> > +static inline u32 irq_mask(u32 hw_id)
+>
+> Is this used?
+
+Removed.
+
+> > +{
+> > +       return 1 << hw_id;
+> > +}
+> > +
+> > +/**
+> > + * tsens_set_interrupt_v1 - Disable an interrupt (enable = false)
+> > + *                          Re-enable an interrupt (enable = true)
+> > + */
+> > +static void tsens_set_interrupt_v1(struct tsens_priv *priv, const struct tsens_irq_data d,
+> > +                                  u32 hw_id, enum tsens_irq_type irq_type, bool enable)
+> > +{
+> > +       if (enable) {
+> > +               switch (irq_type) {
+> > +               case UPPER:
+> > +                       regmap_field_write(priv->rf[UP_INT_CLEAR_0 + hw_id], 0);
+> > +                       break;
+> > +               case LOWER:
+> > +                       regmap_field_write(priv->rf[LOW_INT_CLEAR_0 + hw_id], 0);
+> > +                       break;
+> > +               default:
+> > +                       dev_err(priv->dev, "%s: Invalid irq_type\n", __func__);
+> > +                       break;
+> > +               }
+> > +       } else {
+> > +               switch (irq_type) {
+> > +               case UPPER:
+> > +                       regmap_field_write(priv->rf[UP_INT_CLEAR_0 + hw_id], 1);
+> > +                       break;
+> > +               case LOWER:
+> > +                       regmap_field_write(priv->rf[LOW_INT_CLEAR_0 + hw_id], 1);
+> > +                       break;
+> > +               default:
+> > +                       dev_err(priv->dev, "%s: Invalid irq_type\n", __func__);
+> > +                       break;
+> > +               }
+> > +       }
+> > +}
+> > +
+> > +/**
+> > + * tsens_set_interrupt_v2 - Disable an interrupt (enable = false)
+> > + *                          Re-enable an interrupt (enable = true)
+> > + */
+> > +static void tsens_set_interrupt_v2(struct tsens_priv *priv, const struct tsens_irq_data d,
+> > +                                  u32 hw_id, enum tsens_irq_type irq_type, bool enable)
+> > +{
+> > +       if (enable) {
+> > +               switch (irq_type) {
+> > +               case UPPER:
+> > +                       regmap_field_write(priv->rf[UP_INT_MASK_0 + hw_id], 0);
+>
+> Maybe just have a variable like mask_reg that is equal to UP_INT_MASK,
+> etc? And then one regmap_field_write() call outside the switch that does
+> the write to 0?
+
+Agreed. Makes the code nicer.
+
+> > +                       break;
+> > +               case LOWER:
+> > +                       regmap_field_write(priv->rf[LOW_INT_MASK_0 + hw_id], 0);
+> > +                       break;
+> > +               case CRITICAL:
+> > +                       regmap_field_write(priv->rf[CRIT_INT_MASK_0 + hw_id], 0);
+> > +                       break;
+> > +               default:
+> > +                       dev_err(priv->dev, "%s: Invalid irq_type\n", __func__);
+> > +                       break;
+> > +               }
+> > +       } else {
+> > +               /* To disable the interrupt flag for a sensor:
+> > +                *  1. Mask further interrupts for this sensor
+> > +                *  2. Write 1 followed by 0 to clear the interrupt
+> > +                */
+> > +               switch (irq_type) {
+> > +               case UPPER:
+> > +                       regmap_field_write(priv->rf[UP_INT_MASK_0 + hw_id], 1);
+> > +                       regmap_field_write(priv->rf[UP_INT_CLEAR_0 + hw_id], 1);
+> > +                       regmap_field_write(priv->rf[UP_INT_CLEAR_0 + hw_id], 0);
+>
+> Same comment here. Use a local variable for mask and clear and then
+> write the register with three regmap_field_write() calls?
+
+Will fix.
+
+> > +                       break;
+> > +               case LOWER:
+> > +                       regmap_field_write(priv->rf[LOW_INT_MASK_0 + hw_id], 1);
+> > +                       regmap_field_write(priv->rf[LOW_INT_CLEAR_0 + hw_id], 1);
+> > +                       regmap_field_write(priv->rf[LOW_INT_CLEAR_0 + hw_id], 0);
+> > +                       break;
+> > +               case CRITICAL:
+> > +                       regmap_field_write(priv->rf[CRIT_INT_MASK_0 + hw_id], 1);
+> > +                       regmap_field_write(priv->rf[CRIT_INT_CLEAR_0 + hw_id], 1);
+> > +                       regmap_field_write(priv->rf[CRIT_INT_CLEAR_0 + hw_id], 0);
+> > +                       break;
+> > +               default:
+>
+> I'm not sure we actually need this. Modern compilers check for not
+> catching an enum value in a switch case so this shouldn't even really
+> matter.
+
+I didn't know that about enums. Will fix.
+
+> > +                       dev_err(priv->dev, "%s: Invalid irq_type\n", __func__);
+> > +                       break;
+> > +               }
+> > +       }
+> > +}
+> > +
+> > +/**
+> > + * tsens_set_interrupt - Disable an interrupt (enable = false)
+> > + *                       Re-enable an interrupt (enable = true)
+> > + */
+> > +static void tsens_set_interrupt(struct tsens_priv *priv, const struct tsens_irq_data d,
+>
+> Why not pass a pointer to tsens_irq_data?
+
+I actually wanted to remove tsens_irq_data completely - see comment
+below. I needed it in a previous iteration but now I noticed the data
+isn't used. So we can remove the parameter completely.
+
+> > +                               u32 hw_id, enum tsens_irq_type irq_type, bool enable)
+> > +{
+> > +       /* FIXME: remove tsens_irq_data */
+> > +       dev_dbg(priv->dev, "[%u] %s: %s -> %s\n", hw_id, __func__,
+> > +               irq_type ? ((irq_type == 1) ? "UP" : "CRITICAL") : "LOW",
+> > +               enable ? "en" : "dis");
+> > +       if (tsens_ver(priv) > VER_1_X)
+> > +               tsens_set_interrupt_v2(priv, d, hw_id, irq_type, enable);
+> > +       else
+> > +               tsens_set_interrupt_v1(priv, d, hw_id, irq_type, enable);
+> > +}
+> > +
+> > +static int tsens_read_irq_state(struct tsens_priv *priv, u32 hw_id,
+> > +                               struct tsens_sensor *s, struct tsens_irq_data *d)
+> > +{
+> > +       int ret, up_temp, low_temp;
+> > +
+> > +       if (hw_id > priv->num_sensors) {
+> > +               dev_err(priv->dev, "%s Invalid hw_id\n", __func__);
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       ret = regmap_field_read(priv->rf[UPPER_STATUS_0 + hw_id], &d->up_viol);
+> > +       if (ret)
+> > +               return ret;
+> > +       ret = regmap_field_read(priv->rf[UP_THRESH_0 + hw_id], &up_temp);
+> > +       if (ret)
+> > +               return ret;
+> > +       ret = regmap_field_read(priv->rf[LOWER_STATUS_0 + hw_id], &d->low_viol);
+> > +       if (ret)
+> > +               return ret;
+> > +       ret = regmap_field_read(priv->rf[LOW_THRESH_0 + hw_id], &low_temp);
+> > +       if (ret)
+> > +               return ret;
+> > +       ret = regmap_field_read(priv->rf[UP_INT_CLEAR_0 + hw_id], &d->up_irq_clear);
+> > +       if (ret)
+> > +               return ret;
+> > +       ret = regmap_field_read(priv->rf[LOW_INT_CLEAR_0 + hw_id], &d->low_irq_clear);
+> > +       if (ret)
+> > +               return ret;
+> > +       if (tsens_ver(priv) > VER_1_X) {
+> > +               ret = regmap_field_read(priv->rf[UP_INT_MASK_0 + hw_id], &d->up_irq_mask);
+> > +               if (ret)
+> > +                       return ret;
+> > +               ret = regmap_field_read(priv->rf[LOW_INT_MASK_0 + hw_id], &d->low_irq_mask);
+> > +               if (ret)
+> > +                       return ret;
+> > +       } else {
+> > +               /* No mask register on older TSENS */
+> > +               d->up_irq_mask = 0;
+> > +               d->low_irq_mask = 0;
+> > +       }
+> > +
+> > +       d->up_thresh = tsens_hw_to_mC("upthresh", s, UP_THRESH_0, up_temp);
+> > +       d->low_thresh = tsens_hw_to_mC("lowthresh", s, LOW_THRESH_0, low_temp);
+> > +
+> > +       dev_dbg(priv->dev, "[%u] %s%s: status(%u|%u) | clr(%u|%u) | mask(%u|%u)\n",
+> > +               hw_id, __func__, (d->up_viol || d->low_viol) ? "(V)" : "",
+> > +               d->low_viol, d->up_viol, d->low_irq_clear, d->up_irq_clear,
+> > +               d->low_irq_mask, d->up_irq_mask);
+> > +       dev_dbg(priv->dev, "[%u] %s%s: thresh: (%d:%d)\n", hw_id, __func__,
+> > +               (d->up_viol || d->low_viol) ? "(violation)" : "",
+> > +               d->low_thresh, d->up_thresh);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static inline u32 masked_irq(u32 hw_id, u32 mask, enum tsens_ver ver)
+> > +{
+> > +       if (ver > VER_1_X) {
+> > +               return mask & (1 << hw_id);
+> > +       } else {
+> > +               /* v1, v0.1 don't have a irq mask register */
+> > +               return 0;
+> > +       }
+>
+> Same return comment.
+
+Will fix.
+
+> > +}
+> > +
+> > +static unsigned long tsens_filter_active_sensors(struct tsens_priv *priv)
+> > +{
+> > +       int i, ret, up, low;
+> > +       unsigned long mask = 0;
+> > +
+> > +       for (i = 0; i < priv->num_sensors; i++) {
+> > +               struct tsens_sensor *s = &priv->sensor[i];
+> > +               u32 hw_id = s->hw_id;
+> > +
+> > +               if (IS_ERR(priv->sensor[i].tzd))
+> > +                       continue;
+> > +               ret = regmap_field_read(priv->rf[UPPER_STATUS_0 + hw_id], &up);
+> > +               if (ret)
+> > +                       return ret;
+>
+> Probably don't want to return ret here given that this returns a mask.
+> Maybe push this into the callsite loop and then break out or return an
+> error from there instead. Making a mask via a loop and then using that
+> again the second time to test the bit is more complicated.
+
+Right. I only wanted to iterate over sensors that had crossed their
+thresholds in the irq thread. Will move it back to the irq_thread
+function and split tsens_read_irq_state into two parts - one to just
+check if the sensor crossed a threshold, the other reading all other
+irq information.
+
+> > +               ret = regmap_field_read(priv->rf[LOWER_STATUS_0 + hw_id], &low);
+> > +               if (ret)
+> > +                       return ret;
+> > +               if (up || low)
+> > +                       set_bit(hw_id, &mask);
+> > +       }
+> > +       dev_dbg(priv->dev, "%s: hw_id mask: 0x%lx\n",  __func__, mask);
+> > +
+> > +       return mask;
+> > +}
+> > +
+> > +irqreturn_t tsens_irq_thread(int irq, void *data)
+> > +{
+> > +       struct tsens_priv *priv = data;
+> > +       int temp, ret, i;
+> > +       unsigned long flags;
+> > +       bool enable = true, disable = false;
+> > +       unsigned long mask = tsens_filter_active_sensors(priv);
+> > +
+> > +       if (!mask) {
+> > +               dev_err(priv->dev, "%s: Spurious interrupt?\n", __func__);
+>
+> Do we need the spurious irq print? Doesn't genirq already tell us about
+> spurious interrupts and shuts them down?
+
+Already got rid of this. I realised it isn't a spurious interrupt but
+the irq being level triggered and sometimes the temperature gets back
+to below the thresholds in the time where the irq thread is schduled.
+
+> > +               return IRQ_NONE;
+
+we return IRQ_HANDLED here, in that case.
+
+> > +       }
+> > +
+> > +       /* Check if any sensor raised an IRQ - for each sensor connected to the
+>
+> /*
+>  * Please make multiline comments
+>  * like this
+>  */
+
+Done.
+
+> > +        * TSENS block if it set the threshold violation bit.
+> > +        */
+> > +       for (i = 0; i < priv->num_sensors; i++) {
+> > +               struct tsens_sensor *s = &priv->sensor[i];
+> > +               struct tsens_irq_data d;
+> > +               u32 hw_id = s->hw_id;
+> > +               bool trigger = 0;
+> > +
+> > +               if (!test_bit(hw_id, &mask))
+> > +                       continue;
+> > +               if (IS_ERR(priv->sensor[i].tzd))
+> > +                       continue;
+> > +               ret = get_temp_tsens_valid(s, &temp);
+> > +               if (ret) {
+> > +                       dev_err(priv->dev, "[%u] %s: error reading sensor\n", hw_id, __func__);
+> > +                       continue;
+> > +               }
+> > +
+> > +               spin_lock_irqsave(&priv->ul_lock, flags);
+> > +
+> > +               tsens_read_irq_state(priv, hw_id, s, &d);
+> > +
+> > +               if (d.up_viol &&
+> > +                   !masked_irq(hw_id, d.up_irq_mask, tsens_ver(priv))) {
+> > +                       tsens_set_interrupt(priv, d, hw_id, UPPER, disable);
+> > +                       if (d.up_thresh > temp) {
+> > +                               dev_dbg(priv->dev, "[%u] %s: re-arm upper\n",
+> > +                                       priv->sensor[i].hw_id, __func__);
+> > +                               /* unmask the interrupt for this sensor */
+> > +                               tsens_set_interrupt(priv, d, hw_id, UPPER, enable);
+> > +                       } else {
+> > +                               trigger = 1;
+> > +                               /* Keep irq masked */
+> > +                       }
+> > +               } else if (d.low_viol &&
+> > +                          !masked_irq(hw_id, d.low_irq_mask, tsens_ver(priv))) {
+> > +                       tsens_set_interrupt(priv, d, hw_id, LOWER, disable);
+> > +                       if (d.low_thresh < temp) {
+> > +                               dev_dbg(priv->dev, "[%u] %s: re-arm low\n",
+> > +                                       priv->sensor[i].hw_id, __func__);
+> > +                               /* unmask the interrupt for this sensor */
+> > +                               tsens_set_interrupt(priv, d, hw_id, LOWER, enable);
+> > +                       } else {
+> > +                               trigger = 1;
+> > +                               /* Keep irq masked */
+> > +                       }
+> > +               }
+> > +
+> > +               /* TODO: (amit) REALLY??? */
+>
+> Remove it, and the mb?
+
+Already removed, this shouldn't have snuck through in v1.
+
+> > +               mb();
+> > +
+> > +               spin_unlock_irqrestore(&priv->ul_lock, flags);
+> > +
+> > +               if (trigger) {
+> > +                       dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+> > +                               hw_id, __func__, temp);
+> > +                       thermal_zone_device_update(priv->sensor[i].tzd,
+> > +                                                  THERMAL_EVENT_UNSPECIFIED);
+> > +               } else {
+> > +                       dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+> > +                               hw_id, __func__, temp);
+> > +               }
+> > +       }
+> > +
+> > +       return IRQ_HANDLED;
+> > +}
+> > +
+> > +int tsens_set_trips(void *_sensor, int low, int high)
+> > +{
+> > +       struct tsens_sensor *s = _sensor;
+> > +       struct tsens_priv *priv = s->priv;
+> > +       struct device *dev = priv->dev;
+> > +       struct tsens_irq_data d;
+> > +       unsigned long flags;
+> > +       int high_val, low_val, cl_high, cl_low;
+> > +       bool enable = true;
+> > +       u32 hw_id = s->hw_id;
+> > +
+> > +       dev_dbg(dev, "[%u] %s: proposed thresholds: (%d:%d)\n",
+> > +               hw_id, __func__, low, high);
+> > +
+> > +       cl_high = clamp_val(high, -40000, 120000);
+> > +       cl_low  = clamp_val(low, -40000, 120000);
+> > +
+> > +       high_val = tsens_mC_to_hw(s, cl_high);
+> > +       low_val  = tsens_mC_to_hw(s, cl_low);
+> > +
+> > +       spin_lock_irqsave(&priv->ul_lock, flags);
+> > +
+> > +       tsens_read_irq_state(priv, hw_id, s, &d);
+> > +
+> > +       /* Write the new thresholds and clear the status */
+> > +       regmap_field_write(priv->rf[LOW_THRESH_0 + hw_id], low_val);
+> > +       regmap_field_write(priv->rf[UP_THRESH_0 + hw_id], high_val);
+> > +       tsens_set_interrupt(priv, d, hw_id, LOWER, enable);
+> > +       tsens_set_interrupt(priv, d, hw_id, UPPER, enable);
+> > +
+> > +       /* TODO: (amit) REALLY??? */
+> > +       mb();
+>
+> Again!
+
+Done
+
+> > +
+> > +       spin_unlock_irqrestore(&priv->ul_lock, flags);
+> > +
+> > +       dev_dbg(dev, "[%u] %s: (%d:%d)->(%d:%d)\n",
+> > +               s->hw_id, __func__, d.low_thresh, d.up_thresh, cl_low, cl_high);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +int tsens_enable_irq(struct tsens_priv *priv)
+> > +{
+> > +       int ret;
+> > +       int val = (tsens_ver(priv) > VER_1_X) ? 7 : 1;
+>
+> Drop useless parenthesis.
+
+Will fix.
+
+> > +
+> > +       ret = regmap_field_write(priv->rf[INT_EN], val);
+> > +       if (ret < 0)
+> > +               dev_err(priv->dev, "%s: failed to enable interrupts\n", __func__);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +void tsens_disable_irq(struct tsens_priv *priv)
+> > +{
+> > +       regmap_field_write(priv->rf[INT_EN], 0);
+> > +}
+> > +
+> >  int get_temp_tsens_valid(struct tsens_sensor *s, int *temp)
+> >  {
+> >         struct tsens_priv *priv = s->priv;
+> > @@ -334,6 +719,88 @@ int __init init_common(struct tsens_priv *priv)
+> >                         goto err_put_device;
+> >                 }
+> >         }
+> > +       for (i = 0, j = UPPER_STATUS_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+> > +       for (i = 0, j = LOWER_STATUS_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+> > +       for (i = 0, j = CRITICAL_STATUS_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+>
+> Can you make a function for this? Takes priv, and a 'j' and then does
+> the allocation and returns failure if something went bad? Then it's a
+> simple
+>
+>         devm_tsens_regmap_field_alloc(dev, priv, CRITICAL_STATUS_0);
+>
+> pile of calls. Maybe it could even be iterated through for j too in
+> another loop, not sure how the registers are setup though.
+
+Yes, I will fix this. Some history for why I have this silly
+implementation: I was trying to figure out what bit fields were
+present in different versions of the IP while trying to save some
+bytes by only alloc'ing things are present on the version of the IP. I
+have reached the conclusion that we should just alloc in a loop is a
+lot simpler at the cost of some extra bytes.
+
+I will revisit this again.
+
+Thanks again for the review.
 
 Regards,
-Lukasz
+Amit
 
-> 
-> Best regards,
-> Krzysztof
->> diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
->> index 12a61f558644..30f3a3e75063 100644
->> --- a/drivers/memory/of_memory.c
->> +++ b/drivers/memory/of_memory.c
->> @@ -3,6 +3,12 @@
->>    * OpenFirmware helpers for memory drivers
->>    *
->>    * Copyright (C) 2012 Texas Instruments, Inc.
->> + * Copyright (C) 2019 Samsung Electronics Co., Ltd.
->> + *
->> + * This program is free software; you can redistribute it and/or modify
->> + * it under the terms of the GNU General Public License as published by
->> + * the Free Software Foundation; either version 2 of the License, or
->> + * (at your option) any later version.
->>    */
->>
->>   #include <linux/device.h>
->> @@ -148,3 +154,151 @@ const struct lpddr2_timings *of_get_ddr_timings(struct device_node *np_ddr,
->>          return lpddr2_jedec_timings;
->>   }
->>   EXPORT_SYMBOL(of_get_ddr_timings);
->> +
->> +/**
->> + * of_lpddr3_get_min_tck() - extract min timing values for lpddr3
->> + * @np: pointer to ddr device tree node
->> + * @device: device requesting for min timing values
->> + *
->> + * Populates the lpddr3_min_tck structure by extracting data
->> + * from device tree node. Returns a pointer to the populated
->> + * structure. If any error in populating the structure, returns NULL.
->> + */
->> +const struct lpddr3_min_tck *of_lpddr3_get_min_tck(struct device_node *np,
->> +                                                  struct device *dev)
->> +{
->> +       int                     ret = 0;
->> +       struct lpddr3_min_tck   *min;
->> +
->> +       min = devm_kzalloc(dev, sizeof(*min), GFP_KERNEL);
->> +       if (!min)
->> +               goto default_min_tck;
->> +
->> +       ret |= of_property_read_u32(np, "tRFC-min-tck", &min->tRFC);
->> +       ret |= of_property_read_u32(np, "tRRD-min-tck", &min->tRRD);
->> +       ret |= of_property_read_u32(np, "tRPab-min-tck", &min->tRPab);
->> +       ret |= of_property_read_u32(np, "tRPpb-min-tck", &min->tRPpb);
->> +       ret |= of_property_read_u32(np, "tRCD-min-tck", &min->tRCD);
->> +       ret |= of_property_read_u32(np, "tRC-min-tck", &min->tRC);
->> +       ret |= of_property_read_u32(np, "tRAS-min-tck", &min->tRAS);
->> +       ret |= of_property_read_u32(np, "tWTR-min-tck", &min->tWTR);
->> +       ret |= of_property_read_u32(np, "tWR-min-tck", &min->tWR);
->> +       ret |= of_property_read_u32(np, "tRTP-min-tck", &min->tRTP);
->> +       ret |= of_property_read_u32(np, "tW2W-C2C-min-tck", &min->tW2W_C2C);
->> +       ret |= of_property_read_u32(np, "tR2R-C2C-min-tck", &min->tR2R_C2C);
->> +       ret |= of_property_read_u32(np, "tWL-min-tck", &min->tWL);
->> +       ret |= of_property_read_u32(np, "tDQSCK-min-tck", &min->tDQSCK);
->> +       ret |= of_property_read_u32(np, "tRL-min-tck", &min->tRL);
->> +       ret |= of_property_read_u32(np, "tFAW-min-tck", &min->tFAW);
->> +       ret |= of_property_read_u32(np, "tXSR-min-tck", &min->tXSR);
->> +       ret |= of_property_read_u32(np, "tXP-min-tck", &min->tXP);
->> +       ret |= of_property_read_u32(np, "tCKE-min-tck", &min->tCKE);
->> +       ret |= of_property_read_u32(np, "tCKESR-min-tck", &min->tCKESR);
->> +       ret |= of_property_read_u32(np, "tMRD-min-tck", &min->tMRD);
->> +
->> +       if (ret) {
->> +               dev_warn(dev, "%s: errors while parsing min-tck values\n",
->> +                        __func__);
->> +               devm_kfree(dev, min);
->> +               goto default_min_tck;
->> +       }
->> +
->> +       return min;
->> +
->> +default_min_tck:
->> +       dev_warn(dev, "%s: using default min-tck values\n", __func__);
->> +       return NULL;
->> +}
->> +EXPORT_SYMBOL(of_lpddr3_get_min_tck);
->> +
->> +static int of_lpddr3_do_get_timings(struct device_node *np,
->> +                                   struct lpddr3_timings *tim)
->> +{
->> +       int ret;
->> +
->> +       /* The 'reg' param required since DT has changed, used as 'max-freq' */
->> +       ret = of_property_read_u32(np, "reg", &tim->max_freq);
->> +       ret |= of_property_read_u32(np, "min-freq", &tim->min_freq);
->> +       ret |= of_property_read_u32(np, "tRFC", &tim->tRFC);
->> +       ret |= of_property_read_u32(np, "tRRD", &tim->tRRD);
->> +       ret |= of_property_read_u32(np, "tRPab", &tim->tRPab);
->> +       ret |= of_property_read_u32(np, "tRPpb", &tim->tRPpb);
->> +       ret |= of_property_read_u32(np, "tRCD", &tim->tRCD);
->> +       ret |= of_property_read_u32(np, "tRC", &tim->tRC);
->> +       ret |= of_property_read_u32(np, "tRAS", &tim->tRAS);
->> +       ret |= of_property_read_u32(np, "tWTR", &tim->tWTR);
->> +       ret |= of_property_read_u32(np, "tWR", &tim->tWR);
->> +       ret |= of_property_read_u32(np, "tRTP", &tim->tRTP);
->> +       ret |= of_property_read_u32(np, "tW2W-C2C", &tim->tW2W_C2C);
->> +       ret |= of_property_read_u32(np, "tR2R-C2C", &tim->tR2R_C2C);
->> +       ret |= of_property_read_u32(np, "tFAW", &tim->tFAW);
->> +       ret |= of_property_read_u32(np, "tXSR", &tim->tXSR);
->> +       ret |= of_property_read_u32(np, "tXP", &tim->tXP);
->> +       ret |= of_property_read_u32(np, "tCKE", &tim->tCKE);
->> +       ret |= of_property_read_u32(np, "tCKESR", &tim->tCKESR);
->> +       ret |= of_property_read_u32(np, "tMRD", &tim->tMRD);
->> +
->> +       return ret;
->> +}
->> +
->> +/**
->> + * of_lpddr3_get_ddr_timings() - extracts the lpddr3 timings and updates no of
->> + * frequencies available.
->> + * @np_ddr: Pointer to ddr device tree node
->> + * @dev: Device requesting for ddr timings
->> + * @device_type: Type of ddr
->> + * @nr_frequencies: No of frequencies available for ddr
->> + * (updated by this function)
->> + *
->> + * Populates lpddr3_timings structure by extracting data from device
->> + * tree node. Returns pointer to populated structure. If any error
->> + * while populating, returns NULL.
->> + */
->> +const struct lpddr3_timings
->> +*of_lpddr3_get_ddr_timings(struct device_node *np_ddr, struct device *dev,
->> +                          u32 device_type, u32 *nr_frequencies)
->> +{
->> +       struct lpddr3_timings   *timings = NULL;
->> +       u32                     arr_sz = 0, i = 0;
->> +       struct device_node      *np_tim;
->> +       char                    *tim_compat = NULL;
->> +
->> +       switch (device_type) {
->> +       case DDR_TYPE_LPDDR3:
->> +               tim_compat = "jedec,lpddr3-timings";
->> +               break;
->> +       default:
->> +               dev_warn(dev, "%s: un-supported memory type\n", __func__);
->> +       }
->> +
->> +       for_each_child_of_node(np_ddr, np_tim)
->> +               if (of_device_is_compatible(np_tim, tim_compat))
->> +                       arr_sz++;
->> +
->> +       if (arr_sz)
->> +               timings = devm_kcalloc(dev, arr_sz, sizeof(*timings),
->> +                                      GFP_KERNEL);
->> +
->> +       if (!timings)
->> +               goto default_timings;
->> +
->> +       for_each_child_of_node(np_ddr, np_tim) {
->> +               if (of_device_is_compatible(np_tim, tim_compat)) {
->> +                       if (of_lpddr3_do_get_timings(np_tim, &timings[i])) {
->> +                               devm_kfree(dev, timings);
->> +                               goto default_timings;
->> +                       }
->> +                       i++;
->> +               }
->> +       }
->> +
->> +       *nr_frequencies = arr_sz;
->> +
->> +       return timings;
->> +
->> +default_timings:
->> +       dev_warn(dev, "%s: using default timings\n", __func__);
->> +       *nr_frequencies = 0;
->> +       return NULL;
->> +}
->> +EXPORT_SYMBOL(of_lpddr3_get_ddr_timings);
->> diff --git a/drivers/memory/of_memory.h b/drivers/memory/of_memory.h
->> index b077cc836b0b..e39ecc4c733d 100644
->> --- a/drivers/memory/of_memory.h
->> +++ b/drivers/memory/of_memory.h
->> @@ -14,6 +14,11 @@ extern const struct lpddr2_min_tck *of_get_min_tck(struct device_node *np,
->>   extern const struct lpddr2_timings
->>          *of_get_ddr_timings(struct device_node *np_ddr, struct device *dev,
->>          u32 device_type, u32 *nr_frequencies);
->> +extern const struct lpddr3_min_tck
->> +       *of_lpddr3_get_min_tck(struct device_node *np, struct device *dev);
->> +extern const struct lpddr3_timings
->> +       *of_lpddr3_get_ddr_timings(struct device_node *np_ddr,
->> +       struct device *dev, u32 device_type, u32 *nr_frequencies);
->>   #else
->>   static inline const struct lpddr2_min_tck
->>          *of_get_min_tck(struct device_node *np, struct device *dev)
->> @@ -27,6 +32,19 @@ static inline const struct lpddr2_timings
->>   {
->>          return NULL;
->>   }
->> +
->> +static inline const struct lpddr3_min_tck
->> +       *of_lpddr3_get_min_tck(struct device_node *np, struct device *dev)
->> +{
->> +       return NULL;
->> +}
->> +
->> +static inline const struct lpddr3_timings
->> +       *of_lpddr3_get_ddr_timings(struct device_node *np_ddr,
->> +       struct device *dev, u32 device_type, u32 *nr_frequencies)
->> +{
->> +       return NULL;
->> +}
->>   #endif /* CONFIG_OF && CONFIG_DDR */
->>
->>   #endif /* __LINUX_MEMORY_OF_REG_ */
->> diff --git a/include/memory/jedec_ddr.h b/include/memory/jedec_ddr.h
->> index ddad0f870e5d..3601825f807d 100644
->> --- a/include/memory/jedec_ddr.h
->> +++ b/include/memory/jedec_ddr.h
->> @@ -32,6 +32,7 @@
->>   #define DDR_TYPE_LPDDR2_S4     3
->>   #define DDR_TYPE_LPDDR2_S2     4
->>   #define DDR_TYPE_LPDDR2_NVM    5
->> +#define DDR_TYPE_LPDDR3                6
->>
->>   /* DDR IO width */
->>   #define DDR_IO_WIDTH_4         1
->> @@ -172,4 +173,65 @@ extern const struct lpddr2_timings
->>          lpddr2_jedec_timings[NUM_DDR_TIMING_TABLE_ENTRIES];
->>   extern const struct lpddr2_min_tck lpddr2_jedec_min_tck;
->>
->> +
->> +/*
->> + * Structure for timings for LPDDR3 based on LPDDR2 plus additional fields.
->> + * All parameters are in pico seconds(ps) unless explicitly indicated
->> + * with a suffix like tRAS_max_ns below
->> + */
->> +struct lpddr3_timings {
->> +       u32 max_freq;
->> +       u32 min_freq;
->> +       u32 tRFC;
->> +       u32 tRRD;
->> +       u32 tRPab;
->> +       u32 tRPpb;
->> +       u32 tRCD;
->> +       u32 tRC;
->> +       u32 tRAS;
->> +       u32 tWTR;
->> +       u32 tWR;
->> +       u32 tRTP;
->> +       u32 tW2W_C2C;
->> +       u32 tR2R_C2C;
->> +       u32 tWL;
->> +       u32 tDQSCK;
->> +       u32 tRL;
->> +       u32 tFAW;
->> +       u32 tXSR;
->> +       u32 tXP;
->> +       u32 tCKE;
->> +       u32 tCKESR;
->> +       u32 tMRD;
->> +};
->> +
->> +/*
->> + * Min value for some parameters in terms of number of tCK cycles(nCK)
->> + * Please set to zero parameters that are not valid for a given memory
->> + * type
->> + */
->> +struct lpddr3_min_tck {
->> +       u32 tRFC;
->> +       u32 tRRD;
->> +       u32 tRPab;
->> +       u32 tRPpb;
->> +       u32 tRCD;
->> +       u32 tRC;
->> +       u32 tRAS;
->> +       u32 tWTR;
->> +       u32 tWR;
->> +       u32 tRTP;
->> +       u32 tW2W_C2C;
->> +       u32 tR2R_C2C;
->> +       u32 tWL;
->> +       u32 tDQSCK;
->> +       u32 tRL;
->> +       u32 tFAW;
->> +       u32 tXSR;
->> +       u32 tXP;
->> +       u32 tCKE;
->> +       u32 tCKESR;
->> +       u32 tMRD;
->> +};
->> +
->>   #endif /* __LINUX_JEDEC_DDR_H */
->> --
->> 2.17.1
->>
-> 
-> 
+> > +       for (i = 0, j = UP_THRESH_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+> > +       for (i = 0, j = LOW_THRESH_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+> > +       for (i = 0, j = UP_INT_CLEAR_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+> > +       for (i = 0, j = LOW_INT_CLEAR_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+> > +       for (i = 0, j = UP_INT_MASK_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+> > +       for (i = 0, j = LOW_INT_MASK_0; i < priv->feat->max_sensors; i++, j++) {
+> > +               priv->rf[j] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                     priv->fields[j]);
+> > +               if (IS_ERR(priv->rf[j])) {
+> > +                       ret = PTR_ERR(priv->rf[j]);
+> > +                       goto err_put_device;
+> > +               }
+> > +       }
+> > +
+> > +       priv->rf[INT_EN] = devm_regmap_field_alloc(dev, priv->tm_map,
+> > +                                                  priv->fields[INT_EN]);
+> > +       if (IS_ERR(priv->rf[INT_EN])) {
+> > +               ret = PTR_ERR(priv->rf[INT_EN]);
+> > +               goto err_put_device;
+> > +       }
+> > +
+> > +       tsens_enable_irq(priv);
+> > +       spin_lock_init(&priv->ul_lock);
+>
+> Maybe you should initialize the spinlock before requesting the irq.
+>
+> >
+> >         tsens_debug_init(op);
+> >
+> > diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> > index 772aa76b50e1..bc83e40ac0cf 100644
+> > --- a/drivers/thermal/qcom/tsens.c
+> > +++ b/drivers/thermal/qcom/tsens.c
+> > @@ -7,6 +7,7 @@
+> >  #include <linux/err.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> > +#include <linux/of_platform.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/pm.h>
+> >  #include <linux/slab.h>
+> > @@ -78,12 +79,15 @@ MODULE_DEVICE_TABLE(of, tsens_table);
+> >  static const struct thermal_zone_of_device_ops tsens_of_ops = {
+> >         .get_temp = tsens_get_temp,
+> >         .get_trend = tsens_get_trend,
+> > +       .set_trips = tsens_set_trips,
+> >  };
+> >
+> >  static int tsens_register(struct tsens_priv *priv)
+> >  {
+> > -       int i;
+> > +       int i, ret, irq;
+> >         struct thermal_zone_device *tzd;
+> > +       struct resource *res;
+> > +       struct platform_device *op = of_find_device_by_node(priv->dev->of_node);
+>
+> What if this fails?
+>
+> >
+> >         for (i = 0;  i < priv->num_sensors; i++) {
+> >                 priv->sensor[i].priv = priv;
+> > @@ -96,7 +100,25 @@ static int tsens_register(struct tsens_priv *priv)
+> >                 if (priv->ops->enable)
+> >                         priv->ops->enable(priv, i);
+> >         }
+> > +
+> > +       res = platform_get_resource(op, IORESOURCE_IRQ, 0);
+> > +       if (res) {
+> > +               irq = res->start;
+> > +               ret = devm_request_threaded_irq(&op->dev, irq,
+> > +                                               NULL, tsens_irq_thread,
+> > +                                               IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+> > +                                               res->name, priv);
+> > +               if (ret) {
+> > +                       dev_err(&op->dev, "%s: failed to get irq\n", __func__);
+> > +                       goto err_put_device;
+> > +               }
+> > +               enable_irq_wake(irq);
+> > +       }
+> >         return 0;
+> > +
+> > +err_put_device:
+> > +       put_device(&op->dev);
+> > +       return ret;
+> >  }
+> >
+> >  static int tsens_probe(struct platform_device *pdev)
+> > diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> > index e1d6af71b2b9..aab47337b797 100644
+> > --- a/drivers/thermal/qcom/tsens.h
+> > +++ b/drivers/thermal/qcom/tsens.h
+> > @@ -13,8 +13,10 @@
+> >  #define CAL_DEGC_PT2           120
+> >  #define SLOPE_FACTOR           1000
+> >  #define SLOPE_DEFAULT          3200
+> > +#define THRESHOLD_MAX_ADC_CODE 0x3ff
+> > +#define THRESHOLD_MIN_ADC_CODE 0x0
+> >
+> > -
+> > +#include <linux/interrupt.h>
+>
+> Include this in the C driver?
+>
+> >  #include <linux/thermal.h>
+> >  #include <linux/regmap.h>
+> >
+> > @@ -26,6 +28,12 @@ enum tsens_ver {
+> >         VER_2_X,
+> >  };
+> >
+> > +enum tsens_irq_type {
+> > +       LOWER,
+> > +       UPPER,
