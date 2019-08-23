@@ -2,107 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FE59B22C
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 16:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 189DB9B2FB
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 17:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390787AbfHWOhN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Aug 2019 10:37:13 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:38522 "EHLO inva020.nxp.com"
+        id S1732881AbfHWPF7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Aug 2019 11:05:59 -0400
+Received: from mga05.intel.com ([192.55.52.43]:20136 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395343AbfHWOhM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 23 Aug 2019 10:37:12 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 83E9D1A06DE;
-        Fri, 23 Aug 2019 16:37:10 +0200 (CEST)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 774DB1A06D9;
-        Fri, 23 Aug 2019 16:37:10 +0200 (CEST)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 98D90205D9;
-        Fri, 23 Aug 2019 16:37:09 +0200 (CEST)
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        kernel@pengutronix.de, linux-imx@nxp.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [RFCv4 7/7] arm64: dts: imx8mm: Add interconnect properties
-Date:   Fri, 23 Aug 2019 17:37:00 +0300
-Message-Id: <8c3fb831b3c146cf3267c05e4b1f6c88613dceed.1566570260.git.leonard.crestez@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1566570260.git.leonard.crestez@nxp.com>
-References: <cover.1566570260.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1566570260.git.leonard.crestez@nxp.com>
-References: <cover.1566570260.git.leonard.crestez@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1732530AbfHWPF7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 23 Aug 2019 11:05:59 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Aug 2019 08:05:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,421,1559545200"; 
+   d="scan'208";a="186890433"
+Received: from unknown (HELO localhost.localdomain) ([10.232.112.69])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Aug 2019 08:05:58 -0700
+Date:   Fri, 23 Aug 2019 09:04:03 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 0/3] PCI: Add PCI_ERROR_RESPONSE, check for errors
+Message-ID: <20190823150403.GB16605@localhost.localdomain>
+References: <20190822200551.129039-1-helgaas@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190822200551.129039-1-helgaas@kernel.org>
+User-Agent: Mutt/1.9.1 (2017-09-22)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add #interconnect-cells and interconnect-node-id properties on devfreq
-nodes. The imx interconnect provider will scan these.
+On Thu, Aug 22, 2019 at 03:05:48PM -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Reads from a PCI device may fail if the device has been turned off (put
+> into D3cold), removed, or if some other error occurs.  The PCI host bridge
+> typically fabricates ~0 data to complete the CPU's read.
+> 
+> We check for that in a few places, but not in a consistent way.  This
+> series adds a PCI_ERROR_RESPONSE definition to make the checks more
+> consistent and easier to find.  Note that ~0 may indicate a PCI error, but
+> it may also be valid read data, so you need more information (such as
+> knowing that a register can never contain ~0) before concluding that it's
+> an error.
+> 
+> This series also adds a new check for PCI_ERROR_RESPONSE in the power
+> management code because that code frequently encounters devices in D3cold,
+> where we previously misinterpreted ~0 data.  It also uses pci_power_name()
+> to print D-state names more consistently.
+> 
+> Rafael, I didn't add your Reviewed-by to "PCI / PM: Return error when
+> changing power state from D3cold" because I made small changes to try to
+> make the messages more consistent, and I didn't want to presume they'd be
+> OK with you.
+> 
+> Changes since v1:
+>   - Add Rafael's Reviewed-By to the first two patches
+>   - Drop "PCI / PM: Check for error when reading PME status" because Rafael
+>     pointed out that some devices can signal PME even when in D3cold, so
+>     this would require additional rework
+>   - Drop "PCI / PM: Check for error when reading Power State" because
+>     Rafael thinks it's mostly redundant
+> 
+> Bjorn Helgaas (3):
+>   PCI: Add PCI_ERROR_RESPONSE definition
+>   PCI / PM: Decode D3cold power state correctly
+>   PCI / PM: Return error when changing power state from D3cold
 
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mm.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+Series looks good to me.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index 5474c50784c2..8b5442d8b1b2 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -6,10 +6,11 @@
- #include <dt-bindings/clock/imx8mm-clock.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/thermal/thermal.h>
-+#include <dt-bindings/interconnect/imx8mm.h>
- 
- #include "imx8mm-pinfunc.h"
- 
- / {
- 	compatible = "fsl,imx8mm";
-@@ -806,10 +807,12 @@
- 		noc: noc@32700000 {
- 			compatible = "fsl,imx8mm-noc", "fsl,imx8m-noc";
- 			reg = <0x32700000 0x100000>;
- 			clocks = <&clk IMX8MM_CLK_NOC>;
- 			devfreq = <&ddrc>;
-+			#interconnect-cells = <1>;
-+			interconnect-node-id = <IMX8MM_ICN_NOC>;
- 			operating-points-v2 = <&noc_opp_table>;
- 		};
- 
- 		aips4: bus@32c00000 {
- 			compatible = "fsl,aips-bus", "simple-bus";
-@@ -896,10 +899,12 @@
- 		};
- 
- 		ddrc: dram-controller@3d400000 {
- 			compatible = "fsl,imx8mm-ddrc", "fsl,imx8m-ddrc";
- 			reg = <0x3d400000 0x400000>;
-+			#interconnect-cells = <1>;
-+			interconnect-node-id = <IMX8MM_ICS_DRAM>;
- 			clock-names = "dram_core",
- 				      "dram_pll",
- 				      "dram_alt",
- 				      "dram_apb";
- 			clocks = <&clk IMX8MM_CLK_DRAM_CORE>,
--- 
-2.17.1
-
+Reviewed-by: Keith Busch <kbusch@kernel.org>
