@@ -2,85 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5549A7CF
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 08:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B669A8A5
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 09:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389682AbfHWGve (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Aug 2019 02:51:34 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:48900 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732321AbfHWGvd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 02:51:33 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 5ABF960E57; Fri, 23 Aug 2019 06:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1566543093;
-        bh=kv6YyZbAfmhHH6lQEwMxYC8DafkWAPVqggKZIIaBG4g=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GQYgNsrDoRfA3PN/q1STftgH5y8ba6EdQ59XbiSSsb5/eX0mUbgnX6fGs2eiGfX9n
-         2PFg7M12Og+FM/Cgj1bESUfI74FARFqqf+sTlY5SZvJecf1nUoOXZ0bMXNDiJQfAwL
-         rM6ZpkcWlG0rC+kVhVGTmjnub2GDjdTijaSL/cLw=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.242.6.109] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mkshah@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 877C0605A5;
-        Fri, 23 Aug 2019 06:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1566543092;
-        bh=kv6YyZbAfmhHH6lQEwMxYC8DafkWAPVqggKZIIaBG4g=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=NQR8OpyX+5dTGRSWj9jGppAWqlKEMya+KKsr5IypewBq8DCQ2cS0eCbMA8Qu7CsKe
-         /tcFDNwkqdg1rrt0xEP7yfrioU40YSNL9dqlG1lTOB5JXJOnMRN/i/b5uXksTwPPQI
-         jDHvuQe19pJqy9oBOr/TSip2+MR6ryV3+bdny4AY=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 877C0605A5
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
-Subject: Re: [PATCH 0/4] Add RSC power domain support
-To:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
-        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        bjorn.andersson@linaro.org, evgreen@chromium.org,
-        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
-        lsrao@codeaurora.org, ulf.hansson@linaro.org
-References: <20190813082442.25796-1-mkshah@codeaurora.org>
- <5d5450b2.1c69fb81.ec1c1.1cb2@mx.google.com>
-From:   Maulik Shah <mkshah@codeaurora.org>
-Message-ID: <def5e325-c797-b13e-1ea3-3664394a5896@codeaurora.org>
-Date:   Fri, 23 Aug 2019 12:21:26 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1733206AbfHWHWP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Aug 2019 03:22:15 -0400
+Received: from mga03.intel.com ([134.134.136.65]:21539 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731211AbfHWHWO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 23 Aug 2019 03:22:14 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Aug 2019 00:22:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,420,1559545200"; 
+   d="scan'208";a="196424280"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 23 Aug 2019 00:22:10 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 23 Aug 2019 10:22:09 +0300
+Date:   Fri, 23 Aug 2019 10:22:09 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 0/3] PCI: Add PCI_ERROR_RESPONSE, check for errors
+Message-ID: <20190823072209.GR19908@lahna.fi.intel.com>
+References: <20190822200551.129039-1-helgaas@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <5d5450b2.1c69fb81.ec1c1.1cb2@mx.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190822200551.129039-1-helgaas@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Aug 22, 2019 at 03:05:48PM -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> Reads from a PCI device may fail if the device has been turned off (put
+> into D3cold), removed, or if some other error occurs.  The PCI host bridge
+> typically fabricates ~0 data to complete the CPU's read.
+> 
+> We check for that in a few places, but not in a consistent way.  This
+> series adds a PCI_ERROR_RESPONSE definition to make the checks more
+> consistent and easier to find.  Note that ~0 may indicate a PCI error, but
+> it may also be valid read data, so you need more information (such as
+> knowing that a register can never contain ~0) before concluding that it's
+> an error.
+> 
+> This series also adds a new check for PCI_ERROR_RESPONSE in the power
+> management code because that code frequently encounters devices in D3cold,
+> where we previously misinterpreted ~0 data.  It also uses pci_power_name()
+> to print D-state names more consistently.
+> 
+> Rafael, I didn't add your Reviewed-by to "PCI / PM: Return error when
+> changing power state from D3cold" because I made small changes to try to
+> make the messages more consistent, and I didn't want to presume they'd be
+> OK with you.
+> 
+> Changes since v1:
+>   - Add Rafael's Reviewed-By to the first two patches
+>   - Drop "PCI / PM: Check for error when reading PME status" because Rafael
+>     pointed out that some devices can signal PME even when in D3cold, so
+>     this would require additional rework
+>   - Drop "PCI / PM: Check for error when reading Power State" because
+>     Rafael thinks it's mostly redundant
+> 
+> Bjorn Helgaas (3):
+>   PCI: Add PCI_ERROR_RESPONSE definition
+>   PCI / PM: Decode D3cold power state correctly
+>   PCI / PM: Return error when changing power state from D3cold
 
-On 8/14/2019 11:49 PM, Stephen Boyd wrote:
-> Quoting Maulik Shah (2019-08-13 01:24:38)
->> Resource State Coordinator (RSC) is responsible for powering off/lowering
->> the requirements from CPU subsystem for the associated hardware like buses,
->> clocks, and regulators when all CPUs and cluster is powered down.
->>
->> RSC power domain uses last-man activities provided by genpd framework based on
->> Ulf Hansoon's patch series[1], when the cluster of CPUs enter deepest idle
->> states. As a part of domain poweroff, RSC can lower resource state requirements
->> by flushing the cached sleep and wake state votes for resources.
-> This series looks like half the solution. Is there a full set of patches
-> that connects the RPMh power domain to cpuidle and genpds?
-Yes, i will include in next version.
+For the whole series,
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
