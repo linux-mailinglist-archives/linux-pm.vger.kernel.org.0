@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4679AA11
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 10:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565899AA14
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 10:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389522AbfHWISc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Aug 2019 04:18:32 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:42404 "EHLO
+        id S2388017AbfHWISl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Aug 2019 04:18:41 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:42490 "EHLO
         smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388631AbfHWISc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 04:18:32 -0400
+        with ESMTP id S2387683AbfHWISl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 04:18:41 -0400
 Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 2C160608CC; Fri, 23 Aug 2019 08:18:29 +0000 (UTC)
+        id E75DA611FA; Fri, 23 Aug 2019 08:18:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1566548310;
-        bh=1GbHG78SpJmojCXUdDitKC6EvtNM7lX/s2bc+Panfa8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=k4+9gztgTEKY8Slfd4OgSaJVM+hx9MLreb+6m5phqPyThV4A+Pa8L7LeeaTJlxDw2
-         7mWfBtrkYy/mHLDRlBnbYfaaAy391o5CaXBCQwDvs9E0RR61EKcHOZ6HrZN+47tqC+
-         WAaBn4S2jDvOvJrS7SYDn6ogIF5DcgmNqf1FejrI=
+        s=default; t=1566548320;
+        bh=UYou8hJmSvuFPlRRhJiTe1k+FP2oIIIP5pw1X06HsLw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QLaLfSSaaxN2Akojojh4bo7ATvHNzwEgFJNLMg2SGh3GMGW+YtrXPKZWk/G8/NzDe
+         vsitB8yaPpirIXA6epzGPmXosTIEUol3TBrhRcd6/f7pYWlPGjwHeSXxYCDR7Zusj/
+         yos4WUZys7o7aMNq/05dRuL6YPMOIyQAJs87FUOo=
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         pdx-caf-mail.web.codeaurora.org
 X-Spam-Level: 
@@ -30,16 +30,16 @@ Received: from mkshah-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-out
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: mkshah@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id CE6E0608CC;
-        Fri, 23 Aug 2019 08:18:23 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 51B3B61156;
+        Fri, 23 Aug 2019 08:18:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1566548308;
-        bh=1GbHG78SpJmojCXUdDitKC6EvtNM7lX/s2bc+Panfa8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=k9QzRQ+I81EFg07fzx9675Swl+AGsX7PXxXz/ZehUBf6rNy1cdaXSnI9D0yyBS91d
-         xgcnlqpSwRceKf1K+s+M4Z4x+4ZRpWRju1LaoOEymLYfDcZaAb39EJcnqJcaXqn+PZ
-         yA48ImCN+WgAUMEaq/mkofP66C4zn38+s+arRLpU=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CE6E0608CC
+        s=default; t=1566548318;
+        bh=UYou8hJmSvuFPlRRhJiTe1k+FP2oIIIP5pw1X06HsLw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JA/Oj71ixprx2MB/xT4vKcxoKKEdG1naMIg4efIPPb6Pv6xLdfzcGVW/Rwi5SUU7B
+         UinGLV1BZ8em5T78YRjWMwsHh4oCXvqtsAK0rqlCvQBg47AtOnMV4X95NbKXEy48FC
+         99gSa3GcXOanlH8zcCxpgeru4//f3IzQx2sJIHfM=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 51B3B61156
 Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
 From:   Maulik Shah <mkshah@codeaurora.org>
@@ -50,10 +50,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
         lsrao@codeaurora.org, ulf.hansson@linaro.org,
         Maulik Shah <mkshah@codeaurora.org>
-Subject: [PATCH v2 0/6] Add RSC power domain support
-Date:   Fri, 23 Aug 2019 13:46:57 +0530
-Message-Id: <20190823081703.17325-1-mkshah@codeaurora.org>
+Subject: [PATCH v2 1/6] drivers: qcom: rpmh: fix macro to accept NULL argument
+Date:   Fri, 23 Aug 2019 13:46:58 +0530
+Message-Id: <20190823081703.17325-2-mkshah@codeaurora.org>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190823081703.17325-1-mkshah@codeaurora.org>
+References: <20190823081703.17325-1-mkshah@codeaurora.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -61,40 +63,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Changes in v2:
-- Add Stephen's Reviewed-By to the first three patches
-- Addressed Stephen's comments on fourth patch
-- Include changes to connect rpmh domain to cpuidle and genpds
+Device argument matches with dev variable declared in RPMH message.
+Compiler reports error when the argument is NULL since the argument
+matches the name of the property. Rename dev argument to device to
+fix this.
 
-Resource State Coordinator (RSC) is responsible for powering off/lowering
-the requirements from CPU subsystem for the associated hardware like buses,
-clocks, and regulators when all CPUs and cluster is powered down.
+Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/soc/qcom/rpmh.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-RSC power domain uses last-man activities provided by genpd framework based on
-Ulf Hansoon's patch series[1], when the cluster of CPUs enter deepest idle
-states. As a part of domain poweroff, RSC can lower resource state requirements
-by flushing the cached sleep and wake state votes for resources.
-
-Dependencies:
-
-[1] https://lkml.org/lkml/2019/5/13/839
-
-Maulik Shah (6):
-  drivers: qcom: rpmh: fix macro to accept NULL argument
-  drivers: qcom: rpmh: remove rpmh_flush export
-  dt-bindings: soc: qcom: Add RSC power domain specifier
-  drivers: qcom: rpmh-rsc: Add RSC power domain support
-  arm64: dts: Convert to the hierarchical CPU topology layout for sdm845
-  arm64: dts: Add rsc power domain for sdm845
-
- .../devicetree/bindings/soc/qcom/rpmh-rsc.txt |   8 ++
- arch/arm64/boot/dts/qcom/sdm845.dtsi          | 105 +++++++++++++-----
- drivers/soc/qcom/rpmh-internal.h              |   3 +
- drivers/soc/qcom/rpmh-rsc.c                   |  84 ++++++++++++++
- drivers/soc/qcom/rpmh.c                       |  22 ++--
- include/soc/qcom/rpmh.h                       |   5 -
- 6 files changed, 185 insertions(+), 42 deletions(-)
-
+diff --git a/drivers/soc/qcom/rpmh.c b/drivers/soc/qcom/rpmh.c
+index 035091fd44b8..3a4579d056a4 100644
+--- a/drivers/soc/qcom/rpmh.c
++++ b/drivers/soc/qcom/rpmh.c
+@@ -23,7 +23,7 @@
+ 
+ #define RPMH_TIMEOUT_MS			msecs_to_jiffies(10000)
+ 
+-#define DEFINE_RPMH_MSG_ONSTACK(dev, s, q, name)	\
++#define DEFINE_RPMH_MSG_ONSTACK(device, s, q, name)	\
+ 	struct rpmh_request name = {			\
+ 		.msg = {				\
+ 			.state = s,			\
+@@ -33,7 +33,7 @@
+ 		},					\
+ 		.cmd = { { 0 } },			\
+ 		.completion = q,			\
+-		.dev = dev,				\
++		.dev = device,				\
+ 		.needs_free = false,				\
+ 	}
+ 
 -- 
 QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by The Linux Foundation.
 
