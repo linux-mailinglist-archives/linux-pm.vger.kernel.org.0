@@ -2,85 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B669A8A5
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 09:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4679AA11
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 10:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733206AbfHWHWP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Aug 2019 03:22:15 -0400
-Received: from mga03.intel.com ([134.134.136.65]:21539 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731211AbfHWHWO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 23 Aug 2019 03:22:14 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Aug 2019 00:22:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,420,1559545200"; 
-   d="scan'208";a="196424280"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 23 Aug 2019 00:22:10 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 23 Aug 2019 10:22:09 +0300
-Date:   Fri, 23 Aug 2019 10:22:09 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 0/3] PCI: Add PCI_ERROR_RESPONSE, check for errors
-Message-ID: <20190823072209.GR19908@lahna.fi.intel.com>
-References: <20190822200551.129039-1-helgaas@kernel.org>
+        id S2389522AbfHWISc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Aug 2019 04:18:32 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:42404 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388631AbfHWISc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 04:18:32 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 2C160608CC; Fri, 23 Aug 2019 08:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1566548310;
+        bh=1GbHG78SpJmojCXUdDitKC6EvtNM7lX/s2bc+Panfa8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=k4+9gztgTEKY8Slfd4OgSaJVM+hx9MLreb+6m5phqPyThV4A+Pa8L7LeeaTJlxDw2
+         7mWfBtrkYy/mHLDRlBnbYfaaAy391o5CaXBCQwDvs9E0RR61EKcHOZ6HrZN+47tqC+
+         WAaBn4S2jDvOvJrS7SYDn6ogIF5DcgmNqf1FejrI=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from mkshah-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mkshah@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CE6E0608CC;
+        Fri, 23 Aug 2019 08:18:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1566548308;
+        bh=1GbHG78SpJmojCXUdDitKC6EvtNM7lX/s2bc+Panfa8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=k9QzRQ+I81EFg07fzx9675Swl+AGsX7PXxXz/ZehUBf6rNy1cdaXSnI9D0yyBS91d
+         xgcnlqpSwRceKf1K+s+M4Z4x+4ZRpWRju1LaoOEymLYfDcZaAb39EJcnqJcaXqn+PZ
+         yA48ImCN+WgAUMEaq/mkofP66C4zn38+s+arRLpU=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CE6E0608CC
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
+From:   Maulik Shah <mkshah@codeaurora.org>
+To:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
+        lsrao@codeaurora.org, ulf.hansson@linaro.org,
+        Maulik Shah <mkshah@codeaurora.org>
+Subject: [PATCH v2 0/6] Add RSC power domain support
+Date:   Fri, 23 Aug 2019 13:46:57 +0530
+Message-Id: <20190823081703.17325-1-mkshah@codeaurora.org>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190822200551.129039-1-helgaas@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 03:05:48PM -0500, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Reads from a PCI device may fail if the device has been turned off (put
-> into D3cold), removed, or if some other error occurs.  The PCI host bridge
-> typically fabricates ~0 data to complete the CPU's read.
-> 
-> We check for that in a few places, but not in a consistent way.  This
-> series adds a PCI_ERROR_RESPONSE definition to make the checks more
-> consistent and easier to find.  Note that ~0 may indicate a PCI error, but
-> it may also be valid read data, so you need more information (such as
-> knowing that a register can never contain ~0) before concluding that it's
-> an error.
-> 
-> This series also adds a new check for PCI_ERROR_RESPONSE in the power
-> management code because that code frequently encounters devices in D3cold,
-> where we previously misinterpreted ~0 data.  It also uses pci_power_name()
-> to print D-state names more consistently.
-> 
-> Rafael, I didn't add your Reviewed-by to "PCI / PM: Return error when
-> changing power state from D3cold" because I made small changes to try to
-> make the messages more consistent, and I didn't want to presume they'd be
-> OK with you.
-> 
-> Changes since v1:
->   - Add Rafael's Reviewed-By to the first two patches
->   - Drop "PCI / PM: Check for error when reading PME status" because Rafael
->     pointed out that some devices can signal PME even when in D3cold, so
->     this would require additional rework
->   - Drop "PCI / PM: Check for error when reading Power State" because
->     Rafael thinks it's mostly redundant
-> 
-> Bjorn Helgaas (3):
->   PCI: Add PCI_ERROR_RESPONSE definition
->   PCI / PM: Decode D3cold power state correctly
->   PCI / PM: Return error when changing power state from D3cold
+Changes in v2:
+- Add Stephen's Reviewed-By to the first three patches
+- Addressed Stephen's comments on fourth patch
+- Include changes to connect rpmh domain to cpuidle and genpds
 
-For the whole series,
+Resource State Coordinator (RSC) is responsible for powering off/lowering
+the requirements from CPU subsystem for the associated hardware like buses,
+clocks, and regulators when all CPUs and cluster is powered down.
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+RSC power domain uses last-man activities provided by genpd framework based on
+Ulf Hansoon's patch series[1], when the cluster of CPUs enter deepest idle
+states. As a part of domain poweroff, RSC can lower resource state requirements
+by flushing the cached sleep and wake state votes for resources.
+
+Dependencies:
+
+[1] https://lkml.org/lkml/2019/5/13/839
+
+Maulik Shah (6):
+  drivers: qcom: rpmh: fix macro to accept NULL argument
+  drivers: qcom: rpmh: remove rpmh_flush export
+  dt-bindings: soc: qcom: Add RSC power domain specifier
+  drivers: qcom: rpmh-rsc: Add RSC power domain support
+  arm64: dts: Convert to the hierarchical CPU topology layout for sdm845
+  arm64: dts: Add rsc power domain for sdm845
+
+ .../devicetree/bindings/soc/qcom/rpmh-rsc.txt |   8 ++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          | 105 +++++++++++++-----
+ drivers/soc/qcom/rpmh-internal.h              |   3 +
+ drivers/soc/qcom/rpmh-rsc.c                   |  84 ++++++++++++++
+ drivers/soc/qcom/rpmh.c                       |  22 ++--
+ include/soc/qcom/rpmh.h                       |   5 -
+ 6 files changed, 185 insertions(+), 42 deletions(-)
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by The Linux Foundation.
+
