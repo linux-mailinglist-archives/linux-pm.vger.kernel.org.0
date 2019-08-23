@@ -2,84 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 716239A4E8
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 03:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861669A7C8
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 08:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732066AbfHWBbx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Aug 2019 21:31:53 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40185 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730934AbfHWBbx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Aug 2019 21:31:53 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w10so4757944pgj.7;
-        Thu, 22 Aug 2019 18:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=zbm2W6XHpS0o9PhGxMT9TLzTRXLWIz95ylnC0MpzjRg=;
-        b=KZ677euCxtMab8taDO/wlSoAYq71OUSPix+KiHFb9O146idZumCItHZl2o9lIZ17jP
-         kl/H8NZPklv75tjKVpUaKNdUkZp9w1U7YV2QMNYVIoMq+6uWI2lfvEtvaHuuIBNUiD02
-         9hjCJvJO23ioQgBnebHP2B/0oArjBV9/7bEK4rOoL3+cZNX4pA1101oZv6M+ehMDFljS
-         CnBcDpjVr/E1z+kqEPI2yGDU/0i+XftMx9fgbtoPIFVxZ4n43KkYuFmiMVHMX8WsZaVe
-         Rt0Ij9T6CO1p53yk5T+j6Bu5Ei0zf8pmJENMi4WBAn4VxhQ5oNq3f1Hu+c5fb3XmNW6t
-         AI+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zbm2W6XHpS0o9PhGxMT9TLzTRXLWIz95ylnC0MpzjRg=;
-        b=lUNkKc48VFFs6H23hmCy+a6Y8ChjJeSjdl27K3rWQYhGCaQpraSUalNsarGjarc7XK
-         fcQmwUIW+pWJf+LXYjC0VLvIKL8c6kIR+elDHeg3E9y8oyVH9JLHaJy0mUslbRZCYzTo
-         cyW71LMMf9FNKVzI4aEfaX89tr97L57s+LXfOwCztna3hqQ8wf5L7BoOqfKHSE7aE84P
-         aP1xLnTDJfb68YwDeBeQYd2+Qgioy9FzLgtZ8JCY2P8uUOH18uZRG/bC8HM5veOhMSdy
-         9+b03knRaYte3o8PQOaiTSOV/n/AhHpPp57MEosbPKdM4TcorX+xFzirj5npH6FXP3Bv
-         kz2A==
-X-Gm-Message-State: APjAAAVqtn5OahOz9VSQQ1YSBTeg5akPo4GztG2LWOtFrCljXNEic9BJ
-        GGD021hd2krgLiIbEhLWvz4=
-X-Google-Smtp-Source: APXvYqxAWiknUQM9s9bLrknCPab7TrgAbcx4NM00ohq5njwe2xBK3NtCB280gj8dVGMYoc1F6/fLVQ==
-X-Received: by 2002:a17:90a:d793:: with SMTP id z19mr2613966pju.36.1566523912675;
-        Thu, 22 Aug 2019 18:31:52 -0700 (PDT)
-Received: from localhost.localdomain ([106.51.105.240])
-        by smtp.gmail.com with ESMTPSA id v21sm636002pfe.131.2019.08.22.18.31.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 22 Aug 2019 18:31:52 -0700 (PDT)
-From:   Rishi Gupta <gupt21@gmail.com>
-To:     rui.zhang@intel.com
-Cc:     edubezval@gmail.com, daniel.lezcano@linaro.org,
-        alexios.zavras@intel.com, gregkh@linuxfoundation.org,
-        amit.kucheria@linaro.org, allison@lohutok.net, tglx@linutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rishi Gupta <gupt21@gmail.com>
-Subject: [PATCH] thermal: intel: int3403: replace printk(KERN_WARN...) with pr_warn(...)
-Date:   Fri, 23 Aug 2019 07:01:42 +0530
-Message-Id: <1566523902-9302-1-git-send-email-gupt21@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S2392391AbfHWGth (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Aug 2019 02:49:37 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:47746 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389682AbfHWGth (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 02:49:37 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 26848605A5; Fri, 23 Aug 2019 06:49:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1566542976;
+        bh=zRftSmw5mMkRbxhfik45KPdSZpa8uqSZjZ9T2j19Vbs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=lqjV+A+kO/pRBUmTm57hQbWedJya/PnB9dfifcWpL96v19eem1NlEfZGmT0mB00Cp
+         wIDKFfDtL6T6eaiZGHEdf4A0jm8VH/DiQNojLBCBOremDdX7wzfYPJ+4B+9CXrlE8s
+         fYXjo++7QiwXOXFAZ/rTZ6TtB/FHpjarHZ2iL3Q8=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.242.6.109] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mkshah@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 768E6605A5;
+        Fri, 23 Aug 2019 06:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1566542975;
+        bh=zRftSmw5mMkRbxhfik45KPdSZpa8uqSZjZ9T2j19Vbs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=OdtIrEbGiM/RpqnNa5Ih/949aB645D4jC/IygCzAyfY1L80egz/GhyNUmuh1xG+jl
+         dWqF1nVdJh8MxDsFInPbFq8BVELUuqAUUYJgj3g54VSqfekYIDyrLUX/C7UUn4Gsyq
+         LYGRO36+TDrb+fGNhQ9QMpB1S03io+1CRJm68Nks=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 768E6605A5
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
+Subject: Re: [PATCH 4/4] drivers: qcom: rpmh-rsc: Add RSC power domain support
+To:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
+        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
+        lsrao@codeaurora.org, ulf.hansson@linaro.org
+References: <20190813082442.25796-1-mkshah@codeaurora.org>
+ <20190813082442.25796-5-mkshah@codeaurora.org>
+ <5d5451fe.1c69fb81.ee115.1711@mx.google.com>
+From:   Maulik Shah <mkshah@codeaurora.org>
+Message-ID: <c1aba2c1-dfbb-0529-d982-f35106879b77@codeaurora.org>
+Date:   Fri, 23 Aug 2019 12:19:28 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <5d5451fe.1c69fb81.ee115.1711@mx.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Direct invocation of printk() is not preferred to emit logs.
-This commit replaces printk(KERN_WARNING) with corresponding
-pr_warn() function call.
 
-Signed-off-by: Rishi Gupta <gupt21@gmail.com>
----
- drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 8/14/2019 11:55 PM, Stephen Boyd wrote:
+> Quoting Maulik Shah (2019-08-13 01:24:42)
+>> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+>> index e278fc11fe5c..bd8e9f1a43b4 100644
+>> --- a/drivers/soc/qcom/rpmh-rsc.c
+>> +++ b/drivers/soc/qcom/rpmh-rsc.c
+>> @@ -498,6 +498,32 @@ static int tcs_ctrl_write(struct rsc_drv *drv, const struct tcs_request *msg)
+>>          return ret;
+>>   }
+>>   
+>> +/**
+>> + *  rpmh_rsc_ctrlr_is_idle: Check if any of the AMCs are busy.
+>> + *
+>> + *  @drv: The controller
+>> + *
+>> + *  Returns false if the TCSes are engaged in handling requests,
+>> + *  True if controller is idle.
+>> + */
+>> +static bool rpmh_rsc_ctrlr_is_idle(struct rsc_drv *drv)
+>> +{
+>> +       int m;
+>> +       struct tcs_group *tcs = get_tcs_of_type(drv, ACTIVE_TCS);
+>> +       bool ret = true;
+>> +
+>> +       spin_lock(&drv->lock);
+>> +       for (m = tcs->offset; m < tcs->offset + tcs->num_tcs; m++) {
+>> +               if (!tcs_is_free(drv, m)) {
+> Isn't this a copy of an existing function in the rpmh driver?
+No.  The changes to add this were previously posted but did not went it.
+>> +                       ret = false;
+>> +                       break;
+>> +               }
+>> +       }
+>> +       spin_unlock(&drv->lock);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>>   /**
+>>    * rpmh_rsc_write_ctrl_data: Write request to the controller
+>>    *
+>> @@ -521,6 +547,65 @@ int rpmh_rsc_write_ctrl_data(struct rsc_drv *drv, const struct tcs_request *msg)
+>>          return tcs_ctrl_write(drv, msg);
+>>   }
+>>   
+>> +int rpmh_domain_power_off(struct generic_pm_domain *rsc_pd)
+>> +{
+>> +       struct rsc_drv *drv = container_of(rsc_pd, struct rsc_drv, rsc_pd);
+>> +       int ret = 0;
+>> +
+>> +       /*
+>> +        * RPMh domain can not be powered off when there is pending ACK for
+>> +        * ACTIVE_TCS request. Exit when controller is busy.
+>> +        */
+>> +
+>> +       ret = rpmh_rsc_ctrlr_is_idle(drv);
+>> +       if (!ret)
+>> +               goto exit;
+> return 0? Shouldn't it return some negative value?
+Done.
+>> +
+>> +       ret = rpmh_flush(&drv->client);
+>> +       if (ret)
+>> +               goto exit;
+> Why not just return rpmh_flush(...)?
+>
+> The usage of goto in this function is entirely unnecessary.
+Done.
+>> +
+>> +exit:
+>> +       return ret;
+>> +}
+>> +
+>> +static int rpmh_probe_power_domain(struct platform_device *pdev,
+>> +                                  struct rsc_drv *drv)
+>> +{
+>> +       int ret = -ENOMEM;
+>> +       struct generic_pm_domain *rsc_pd = &drv->rsc_pd;
+>> +       struct device_node *dn = pdev->dev.of_node;
+>> +
+>> +       rsc_pd->name = kasprintf(GFP_KERNEL, "%s", dn->name);
+>> +       if (!rsc_pd->name)
+>> +               goto exit;
+> return -ENOMEM;
+Done.
+>> +
+>> +       rsc_pd->name = kbasename(rsc_pd->name);
+>> +       rsc_pd->power_off = rpmh_domain_power_off;
+>> +       rsc_pd->flags |= GENPD_FLAG_IRQ_SAFE;
+>> +
+>> +       ret = pm_genpd_init(rsc_pd, NULL, false);
+>> +       if (ret)
+>> +               goto free_name;
+>> +
+>> +       ret = of_genpd_add_provider_simple(dn, rsc_pd);
+>> +       if (ret)
+>> +               goto remove_pd;
+>> +
+>> +       pr_debug("init PM domain %s\n", rsc_pd->name);
+>> +
+>> +       return ret;
+> 	ret = of_genpd_add_provider_simple(...)
+> 	if (!ret)
+> 		return 0;
+>
+> Drop the pr_debug(), it's not useful.
+Done.
+>> +
+>> +remove_pd:
+>> +       pm_genpd_remove(rsc_pd);
+>> +
+>> +free_name:
+>> +       kfree(rsc_pd->name);
+>> +
+>> +exit:
+>> +       return ret;
+> Please remove newlines between labels above.
+Done.
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-index f5749d4..a7bbd85 100644
---- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-@@ -181,7 +181,7 @@ static int int3403_cdev_add(struct int3403_priv *priv)
- 
- 	p = buf.pointer;
- 	if (!p || (p->type != ACPI_TYPE_PACKAGE)) {
--		printk(KERN_WARNING "Invalid PPSS data\n");
-+		pr_warn("Invalid PPSS data\n");
- 		kfree(buf.pointer);
- 		return -EFAULT;
- 	}
 -- 
-2.7.4
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
 
