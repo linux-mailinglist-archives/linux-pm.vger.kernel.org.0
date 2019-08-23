@@ -2,184 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC9C9B321
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 17:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3738A9B5A4
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 19:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388569AbfHWPO1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Aug 2019 11:14:27 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39299 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730769AbfHWPO1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 11:14:27 -0400
-Received: by mail-lj1-f195.google.com with SMTP id x4so9203145ljj.6
-        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2019 08:14:24 -0700 (PDT)
+        id S1726567AbfHWRjJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Aug 2019 13:39:09 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:36024 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbfHWRjJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 13:39:09 -0400
+Received: by mail-qk1-f195.google.com with SMTP id d23so8891888qko.3
+        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2019 10:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:subject:openpgp:autocrypt:to:cc:message-id:date:mime-version
-         :content-language:content-transfer-encoding;
-        bh=NjFtUgkWgGqgPhIrvtkYQJ0NpkM0bLFq/cLwsEsxrLI=;
-        b=Pj7yLY4IOHq7i3TwRIPJpx3yhGcQ54DR7d3XcBcuN1exkgzDmlQM09HVoDq2k5/YpL
-         jfKNHB+v98u+6otGsd8XolmF/lI6vOXXYgwMbtHhcVttYrIwJ3LN8spSTTdP2836eZaI
-         C/r9dS7hOb38CXKUPBb3KBu2hY+FPWuO0ZrVS+EeIpuLaMCOlJcuPAjKJ5wyBFlnXJuk
-         4E7IEVv3FEn7xlVO5dwTbK5y/RK3VahqhxOqQsk0Myy1EWcO7yICs1fef7MLqydQZu2/
-         QsY88fiFiqX1Sa2u6dEQU0X083C5fIzlNXy3PMvNLEeLHrLsymBxxkiFQec7cE0eFJzw
-         7YXQ==
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=MNhZBrf2Gpk7K52Qd5+4iI4OZ9akBhWSkPaCAut1SFI=;
+        b=X09GAc3QfKTgEpHOXrN5LStC/GSKe33Zjtq9p4zqdEYRZcnaZXClxbJiKGRV9PoaQT
+         cRGH3DLjYw4ZB3vdIpbUd/O3z6c2X4fZOo6vnY8l3bfOAcghNqEqw9Q4iyUPDlL231Vg
+         FQ8D6/EmnXwsrdf2rN02dU6zTWVtddG/7slelKYteCj/fHB4NyGC4h9sne7texYkhTES
+         pJsf6W+43eA8qG84/UF5yHJhL9AX/4r1rUijaVCjRfaXe1+Ybbxvg0KF/N+1/eic7YAd
+         2Sx7hzW9hAgPOgrR0+rkOUTIB2rA3NTHgJr11KHl/s8vhzTRcnqExfmniN9gY80CmA53
+         CPPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:openpgp:autocrypt:to:cc:message-id
-         :date:mime-version:content-language:content-transfer-encoding;
-        bh=NjFtUgkWgGqgPhIrvtkYQJ0NpkM0bLFq/cLwsEsxrLI=;
-        b=bev4D4mMG80/SfEalLR0OL4Hl/mEqHlXCXV4+jkOjLJj9ADhh3ZMqiQorBL2Y0PpHX
-         7pDVdlECOD8HHmgiV1DeV9MIGY1gG8PljsS5CYoYmmbK1VKOIGlCYXzKDzASz4xifN/E
-         tkdsbyk0AKMti8bxD21SfCw22OWI+PAYeeSwjbQc+O/aJE4gMgA2d7lUJvQvpG/8tpRJ
-         s+TrxO45zem05r+AkTzWiZFsG9Z9lmcX4/vEsEZyK75Gj10RgWYx0S8ruXPsuPhhAvja
-         OlCb9fMyTa5EnqzT5t7xugucNHY8OAzF54Sai/t77bDD2WbhATlCFiwrqUGqikO8vclC
-         AJmA==
-X-Gm-Message-State: APjAAAVRitC35/vjz65MgDTp7GF3h31kLphbPqPWZPCIe9UTotUxzfvs
-        NYDFiHV/MShjC6T1Jkp9VNVW9g==
-X-Google-Smtp-Source: APXvYqxcTiXg6cr4CteT7jok31wyWrKvpE1uLWLnlTJtBBvfIOW4vtNrConNPv2ARbMxHDR8THkL0g==
-X-Received: by 2002:a2e:9903:: with SMTP id v3mr3376597lji.37.1566573263991;
-        Fri, 23 Aug 2019 08:14:23 -0700 (PDT)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id b27sm670355ljb.11.2019.08.23.08.14.22
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=MNhZBrf2Gpk7K52Qd5+4iI4OZ9akBhWSkPaCAut1SFI=;
+        b=k0eBNmAMs4J3HvBOciaYqZGTldkYY+ar4Hg4CwCxKTMBMrsGMJtowqvbDZj7Sx0P76
+         xmk514DxvQOyfpTJS0wLJ4XOOKXzuObdaJ1PIgBJ4zWe60KhbAswTaRjlZrqDY/8cKKu
+         JwblnJOMXWw/4sFrcLVR/KDYQTWh46lbckJFPqOEIgKji9CGDBHn2WdK5UcpiOLVU4f4
+         4WASuuYEVInfkM2vLEdR7dRJIG2vlLbqu4CQ188CQ0zrJ08tSETaw89K1apO3yjBC9TI
+         tTUULkB7iZTMDDtHdVIZSB1a9Msi4n10Bq1bfs8sowjlOFiKZd4sp5KT5mxyzCdeyb4W
+         BOfw==
+X-Gm-Message-State: APjAAAWmDCvYpzgmpJD7+gjyqc5raxQNm5L+YbQWhEwkp0pW1HRfIk2T
+        DqTQ5z29l+tRvPnz14Obk2rqYw==
+X-Google-Smtp-Source: APXvYqxCxDgCYB6/B42xtpWElmEzqzu2NHkWDeStuCKsqdLeCjscKkPaOffykk07JrigchPNLFHN3A==
+X-Received: by 2002:a37:4fc8:: with SMTP id d191mr5105944qkb.422.1566581948508;
+        Fri, 23 Aug 2019 10:39:08 -0700 (PDT)
+Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.gmail.com with ESMTPSA id i8sm1724377qkm.46.2019.08.23.10.39.06
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 23 Aug 2019 08:14:23 -0700 (PDT)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Subject: [GIT PULL] interconnect changes for 5.4
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Message-ID: <97f47b2a-7aee-ab4b-7510-43c509db982a@linaro.org>
-Date:   Fri, 23 Aug 2019 18:14:19 +0300
+        Fri, 23 Aug 2019 10:39:07 -0700 (PDT)
+Subject: Re: [PATCH 1/4] PM/Domains: Add support for retrieving genpd
+ performance states information
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
+ <1565398727-23090-2-git-send-email-thara.gopinath@linaro.org>
+ <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com>
+Cc:     qualcomm-lt@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <5D6024BA.7010702@linaro.org>
+Date:   Fri, 23 Aug 2019 13:39:06 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.5.1
 MIME-Version: 1.0
+In-Reply-To: <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
+Hi Ulf,
 
-This is a pull request with interconnect patches for the 5.4 merge window.
-The patches have been for a while in linux-next without reported issues. The
-details are in the signed tag. Please consider pulling into char-misc-next.
+Thanks for the review.
 
-Thanks,
-Georgi
+On 08/22/2019 11:03 AM, Ulf Hansson wrote:
+> On Sat, 10 Aug 2019 at 02:58, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+>>
+>> Add two new APIs in the genpd framework,
+>> dev_pm_genpd_get_performance_state to return the current performance
+>> state of a power domain and dev_pm_genpd_performance_state_count to
+>> return the total number of performance states supported by a
+>> power domain. Since the genpd framework does not maintain
+>> a count of number of performance states supported by a power domain,
+>> introduce a new callback(.get_performance_state_count) that can be used
+>> to retrieve this information from power domain drivers.
+> 
+> I think some brief background to *why* this is useful needs to be
+> squeezed into the changelog. Or at least state that following changes
+> makes use of it, somehow.
 
-The following changes since commit d45331b00ddb179e291766617259261c112db872:
+Will do.
+> 
+>>
+>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+>> ---
+>>  drivers/base/power/domain.c | 38 ++++++++++++++++++++++++++++++++++++++
+>>  include/linux/pm_domain.h   | 18 ++++++++++++++++++
+>>  2 files changed, 56 insertions(+)
+>>
+>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+>> index b063bc4..17e0375 100644
+>> --- a/drivers/base/power/domain.c
+>> +++ b/drivers/base/power/domain.c
+>> @@ -413,6 +413,44 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+>>  }
+>>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+>>
+>> +int dev_pm_genpd_get_performance_state(struct device *dev,
+>> +                                      unsigned int *state)
+>> +{
+>> +       struct generic_pm_domain *genpd;
+>> +
+>> +       genpd = dev_to_genpd(dev);
+> 
+> We need to verify that the there is a genpd attached before doing this
+> cast. Let me post a patch in a day or so, it will give you a helper
+> function that covers this.
 
-  Linux 5.3-rc4 (2019-08-11 13:26:41 -0700)
+Sounds good.. Thanks.. I will wait for it.
 
-are available in the Git repository at:
+> 
+>> +       if (IS_ERR(genpd))
+>> +               return -ENODEV;
+>> +
+>> +       genpd_lock(genpd);
+>> +       *state = genpd->performance_state;
+> 
+> Why not return the state, rather than assigning an out-parameter?
+We can. I will change it for this and dev_pm_genpd_performance_state_count.
 
-  https://git.linaro.org/people/georgi.djakov/linux.git tags/icc-5.4-rc1
+Regards
+Thara
 
-for you to fetch changes up to 6311b6521bcc804e4d2fd45a5640562a7b8b5241:
+> 
+>> +       genpd_unlock(genpd);
+>> +
+>> +       return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dev_pm_genpd_get_performance_state);
+>> +
+>> +int dev_pm_genpd_performance_state_count(struct device *dev,
+>> +                                        unsigned int *count)
+>> +{
+>> +       struct generic_pm_domain *genpd;
+>> +       int ret;
+>> +
+>> +       genpd = dev_to_genpd(dev);
+>> +       if (IS_ERR(genpd))
+>> +               return -ENODEV;
+>> +
+>> +       if (unlikely(!genpd->get_performance_state_count))
+>> +               return -EINVAL;
+>> +
+>> +       genpd_lock(genpd);
+>> +       ret = genpd->get_performance_state_count(genpd, count);
+> 
+> Why not having the callback to return the state, rather than using an
+> out-parameter?
+> 
+>> +       genpd_unlock(genpd);
+>> +
+>> +       return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dev_pm_genpd_performance_state_count);
+>> +
+>>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>>  {
+>>         unsigned int state_idx = genpd->state_idx;
+>> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+>> index 91d9bf4..0e5f502 100644
+>> --- a/include/linux/pm_domain.h
+>> +++ b/include/linux/pm_domain.h
+>> @@ -117,6 +117,8 @@ struct generic_pm_domain {
+>>                                                  struct dev_pm_opp *opp);
+>>         int (*set_performance_state)(struct generic_pm_domain *genpd,
+>>                                      unsigned int state);
+>> +       int (*get_performance_state_count)(struct generic_pm_domain *genpd,
+>> +                                          unsigned int *count);
+>>         struct gpd_dev_ops dev_ops;
+>>         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
+>>         bool max_off_time_changed;
+>> @@ -204,6 +206,10 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>>                   struct dev_power_governor *gov, bool is_off);
+>>  int pm_genpd_remove(struct generic_pm_domain *genpd);
+>>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+>> +int dev_pm_genpd_get_performance_state(struct device *dev,
+>> +                                      unsigned int *state);
+>> +int dev_pm_genpd_performance_state_count(struct device *dev,
+>> +                                        unsigned int *count);
+>>
+>>  extern struct dev_power_governor simple_qos_governor;
+>>  extern struct dev_power_governor pm_domain_always_on_gov;
+>> @@ -251,6 +257,18 @@ static inline int dev_pm_genpd_set_performance_state(struct device *dev,
+>>         return -ENOTSUPP;
+>>  }
+>>
+>> +static inline int dev_pm_genpd_get_performance_state(struct device *dev,
+>> +                                                    unsigned int *state);
+>> +{
+>> +       return -ENOTSUPP;
+>> +}
+>> +
+>> +static inline int dev_pm_genpd_performance_state_count(struct device *dev,
+>> +                                                      unsigned int *count);
+>> +{
+>> +       return -ENOTSUPP;
+>> +}
+>> +
+>>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
+>>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
+>>  #endif
+>> --
+>> 2.1.4
+>>
+> 
+> Kind regards
+> Uffe
+> 
 
-  drivers: qcom: Add BCM vote macro to header (2019-08-20 10:09:56 +0300)
 
-----------------------------------------------------------------
-interconnect patches for 5.4
-
-Here are the interconnect driver updates for the 5.4-rc1 merge window.
-
-- New feature is the path tagging support that helps with grouping and
-aggregating the bandwidth requests into separate buckets based on a tag.
-- The first user of the path tagging is the Qualcomm sdm845 driver that
-now implements support for wake/sleep sets. This allows consumer drivers
-to express their bandwidth needs for the different CPU power states.
-- New interconnect driver for the qcs404 platforms and a driver that
-communicates bandwidth requests with remote processor over shared memory.
-- Cleanups and fixes.
-
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-
-----------------------------------------------------------------
-Bjorn Andersson (1):
-      interconnect: qcom: Add QCS404 interconnect provider driver
-
-David Dai (1):
-      interconnect: qcom: Add tagging and wake/sleep support for sdm845
-
-Georgi Djakov (4):
-      interconnect: Add support for path tags
-      interconnect: Add pre_aggregate() callback
-      dt-bindings: interconnect: Add Qualcomm QCS404 DT bindings
-      interconnect: qcom: Add interconnect RPM over SMD driver
-
-Jordan Crouse (1):
-      drivers: qcom: Add BCM vote macro to header
-
-Mao Wenan (1):
-      interconnect: qcom: remove COMPILE_TEST from CONFIG_INTERCONNECT_QCOM_QCS404
-
- Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt |  45 +++++++++
- drivers/clk/qcom/clk-rpmh.c                                    |  16 +---
- drivers/interconnect/core.c                                    |  27 +++++-
- drivers/interconnect/qcom/Kconfig                              |  12 +++
- drivers/interconnect/qcom/Makefile                             |   4 +
- drivers/interconnect/qcom/qcs404.c                             | 539
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/interconnect/qcom/sdm845.c                             | 160
-+++++++++++++++++++++----------
- drivers/interconnect/qcom/smd-rpm.c                            |  77
-+++++++++++++++
- drivers/interconnect/qcom/smd-rpm.h                            |  15 +++
- include/dt-bindings/interconnect/qcom,qcs404.h                 |  88
-+++++++++++++++++
- include/linux/interconnect-provider.h                          |   7 +-
- include/linux/interconnect.h                                   |   5 +
- include/soc/qcom/tcs.h                                         |  20 +++-
- 13 files changed, 948 insertions(+), 67 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.txt
- create mode 100644 drivers/interconnect/qcom/qcs404.c
- create mode 100644 drivers/interconnect/qcom/smd-rpm.c
- create mode 100644 drivers/interconnect/qcom/smd-rpm.h
- create mode 100644 include/dt-bindings/interconnect/qcom,qcs404.h
+-- 
+Regards
+Thara
