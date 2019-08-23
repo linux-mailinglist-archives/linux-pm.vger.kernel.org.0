@@ -2,64 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3738A9B5A4
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 19:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6319E9B5DD
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Aug 2019 19:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbfHWRjJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Aug 2019 13:39:09 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:36024 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725976AbfHWRjJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 13:39:09 -0400
-Received: by mail-qk1-f195.google.com with SMTP id d23so8891888qko.3
-        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2019 10:39:09 -0700 (PDT)
+        id S2404598AbfHWRv3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Aug 2019 13:51:29 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:44645 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404583AbfHWRv3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Aug 2019 13:51:29 -0400
+Received: by mail-qt1-f193.google.com with SMTP id 44so11972066qtg.11
+        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2019 10:51:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:references:cc:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding;
-        bh=MNhZBrf2Gpk7K52Qd5+4iI4OZ9akBhWSkPaCAut1SFI=;
-        b=X09GAc3QfKTgEpHOXrN5LStC/GSKe33Zjtq9p4zqdEYRZcnaZXClxbJiKGRV9PoaQT
-         cRGH3DLjYw4ZB3vdIpbUd/O3z6c2X4fZOo6vnY8l3bfOAcghNqEqw9Q4iyUPDlL231Vg
-         FQ8D6/EmnXwsrdf2rN02dU6zTWVtddG/7slelKYteCj/fHB4NyGC4h9sne7texYkhTES
-         pJsf6W+43eA8qG84/UF5yHJhL9AX/4r1rUijaVCjRfaXe1+Ybbxvg0KF/N+1/eic7YAd
-         2Sx7hzW9hAgPOgrR0+rkOUTIB2rA3NTHgJr11KHl/s8vhzTRcnqExfmniN9gY80CmA53
-         CPPw==
+        bh=xWUh9AvHNgLqrzxP/xK+WD24eUE59TC5eLQx78jgBig=;
+        b=ltlZcnzqsGrvGraphXnSGhOZU9Su4FtVODn/08MzZ/PLBuyVb0fE/4X+SuFpZlLJzF
+         MxEabPuCHGK1xwCDsDumBc7cObKXfC3/kaZKjiR8o6phye0YfVmD96EB+64NQdAuU9GE
+         UMjYCyVyzQpIQ18UyaTWAunDfdMTQwGc6xc0RVekX01EVhXtO9SIvJsUeK3UjKNIp/oh
+         NfBP8+KB5giIZVgzydEE1mWL2JzQmx0cTzIJP6wviS7wJpapdesVwwfBQ8Y+RhSh5AAY
+         y7D1aFxw/tHbIUk4kQfB3irHk0RTzT1oIVbFh104vxdWTyWOr4o+mKlF8D4wfFhEsf/8
+         D7vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:references:cc:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=MNhZBrf2Gpk7K52Qd5+4iI4OZ9akBhWSkPaCAut1SFI=;
-        b=k0eBNmAMs4J3HvBOciaYqZGTldkYY+ar4Hg4CwCxKTMBMrsGMJtowqvbDZj7Sx0P76
-         xmk514DxvQOyfpTJS0wLJ4XOOKXzuObdaJ1PIgBJ4zWe60KhbAswTaRjlZrqDY/8cKKu
-         JwblnJOMXWw/4sFrcLVR/KDYQTWh46lbckJFPqOEIgKji9CGDBHn2WdK5UcpiOLVU4f4
-         4WASuuYEVInfkM2vLEdR7dRJIG2vlLbqu4CQ188CQ0zrJ08tSETaw89K1apO3yjBC9TI
-         tTUULkB7iZTMDDtHdVIZSB1a9Msi4n10Bq1bfs8sowjlOFiKZd4sp5KT5mxyzCdeyb4W
-         BOfw==
-X-Gm-Message-State: APjAAAWmDCvYpzgmpJD7+gjyqc5raxQNm5L+YbQWhEwkp0pW1HRfIk2T
-        DqTQ5z29l+tRvPnz14Obk2rqYw==
-X-Google-Smtp-Source: APXvYqxCxDgCYB6/B42xtpWElmEzqzu2NHkWDeStuCKsqdLeCjscKkPaOffykk07JrigchPNLFHN3A==
-X-Received: by 2002:a37:4fc8:: with SMTP id d191mr5105944qkb.422.1566581948508;
-        Fri, 23 Aug 2019 10:39:08 -0700 (PDT)
+        bh=xWUh9AvHNgLqrzxP/xK+WD24eUE59TC5eLQx78jgBig=;
+        b=UOGTt5RcERuUdPH+9lPeBgmS9wENpj4jjj2nbE/ZAapXhUQC8Ex97nEpQloTOcLHaN
+         oMpe0SoXyEajUWmgNjZfTgUfxfd7kLhDqSpnsU250n9TTzBbvySD+GbWzEcMVABDhCEC
+         MqoF2UHxWCsDVNJ/dmWApIxmZzd9Slvg+gwXqEy6gzGZfc9239/xVtRq1g6kIcVK98r3
+         DtxaFPCrlZx3ykmAraJ1nA4Os+NTsyR1OP/t4rOKqYSDQZ8BDhWz+CViTjJO47uXUq/J
+         oa+L9sGh18IoyOr9x1fQLp4Ut0s2ypgqKjPU6HbKBxdThTbkEtdBd94oG83EVwa24nbH
+         eNWw==
+X-Gm-Message-State: APjAAAUKFVrURwKLqUwRRAA9hcXdP5nrLIRZxKasyQ6fd5hvWFbtnOuJ
+        uzvu7bF8Ix+wvwNhuZXeg+chlA==
+X-Google-Smtp-Source: APXvYqyVD83AxBOV7BBR/pe1On+XIisUiaK/3kXjReFioJwdBo2QaNtWVS6Mtz7Jz9IbudfQeTJjKg==
+X-Received: by 2002:ac8:60c5:: with SMTP id i5mr5932695qtm.72.1566582688033;
+        Fri, 23 Aug 2019 10:51:28 -0700 (PDT)
 Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.gmail.com with ESMTPSA id i8sm1724377qkm.46.2019.08.23.10.39.06
+        by smtp.gmail.com with ESMTPSA id 136sm1786848qkg.96.2019.08.23.10.51.26
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 23 Aug 2019 10:39:07 -0700 (PDT)
-Subject: Re: [PATCH 1/4] PM/Domains: Add support for retrieving genpd
- performance states information
+        Fri, 23 Aug 2019 10:51:27 -0700 (PDT)
+Subject: Re: [PATCH 3/4] thermal: qcom: Add RPMHPD cooling device driver.
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
- <1565398727-23090-2-git-send-email-thara.gopinath@linaro.org>
- <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com>
+ <1565398727-23090-4-git-send-email-thara.gopinath@linaro.org>
+ <CAPDyKFoj=f4+r=PaRq-EEZjVooYGCy6k1crepS2TChgcHD0WRQ@mail.gmail.com>
 Cc:     qualcomm-lt@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rajendra Nayak <rnayak@codeaurora.org>
 From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <5D6024BA.7010702@linaro.org>
-Date:   Fri, 23 Aug 2019 13:39:06 -0400
+Message-ID: <5D60279E.1020601@linaro.org>
+Date:   Fri, 23 Aug 2019 13:51:26 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
  Thunderbird/38.5.1
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com>
+In-Reply-To: <CAPDyKFoj=f4+r=PaRq-EEZjVooYGCy6k1crepS2TChgcHD0WRQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -67,147 +66,235 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ulf,
-
-Thanks for the review.
-
-On 08/22/2019 11:03 AM, Ulf Hansson wrote:
+On 08/22/2019 11:19 AM, Ulf Hansson wrote:
 > On Sat, 10 Aug 2019 at 02:58, Thara Gopinath <thara.gopinath@linaro.org> wrote:
 >>
->> Add two new APIs in the genpd framework,
->> dev_pm_genpd_get_performance_state to return the current performance
->> state of a power domain and dev_pm_genpd_performance_state_count to
->> return the total number of performance states supported by a
->> power domain. Since the genpd framework does not maintain
->> a count of number of performance states supported by a power domain,
->> introduce a new callback(.get_performance_state_count) that can be used
->> to retrieve this information from power domain drivers.
-> 
-> I think some brief background to *why* this is useful needs to be
-> squeezed into the changelog. Or at least state that following changes
-> makes use of it, somehow.
-
-Will do.
-> 
+>> The MX power domain in RPMH can be used to warm the
+>> the SoC in SDM845. To support this feature, introduce
+>> a RPMH power domain cooling device driver that can be
+>> plugged into the thermal framework.(The thermal framework
+>> itself requires further modifiction to support a warming
+>> device in place of a cooling device. Those extensions are
+>> not introduced in this patch series).
 >>
 >> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 >> ---
->>  drivers/base/power/domain.c | 38 ++++++++++++++++++++++++++++++++++++++
->>  include/linux/pm_domain.h   | 18 ++++++++++++++++++
->>  2 files changed, 56 insertions(+)
+>>  drivers/thermal/qcom/Kconfig            |   7 ++
+>>  drivers/thermal/qcom/Makefile           |   1 +
+>>  drivers/thermal/qcom/qcom-rpmhpd-cdev.c | 141 ++++++++++++++++++++++++++++++++
+>>  3 files changed, 149 insertions(+)
+>>  create mode 100644 drivers/thermal/qcom/qcom-rpmhpd-cdev.c
 >>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index b063bc4..17e0375 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -413,6 +413,44 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
->>  }
->>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
->>
->> +int dev_pm_genpd_get_performance_state(struct device *dev,
->> +                                      unsigned int *state)
+>> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
+>> index aa9c1d8..a540130 100644
+>> --- a/drivers/thermal/qcom/Kconfig
+>> +++ b/drivers/thermal/qcom/Kconfig
+>> @@ -20,3 +20,10 @@ config QCOM_SPMI_TEMP_ALARM
+>>           trip points. The temperature reported by the thermal sensor reflects the
+>>           real time die temperature if an ADC is present or an estimate of the
+>>           temperature based upon the over temperature stage value.
+>> +
+>> +config CONFIG_QCOM_RPMHPD_CDEV
+>> +       tristate "Qualcomm RPMHPD based cooling device"
+>> +       depends on QCOM_RPMHPD
+>> +       help
+>> +         This enables RPMHPD based cooling devices. On SDM845, this is
+>> +         MX power domain.
+>> diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
+>> index 7c8dc6e..e4eb520 100644
+>> --- a/drivers/thermal/qcom/Makefile
+>> +++ b/drivers/thermal/qcom/Makefile
+>> @@ -4,3 +4,4 @@ obj-$(CONFIG_QCOM_TSENS)        += qcom_tsens.o
+>>  qcom_tsens-y                   += tsens.o tsens-common.o tsens-v0_1.o \
+>>                                    tsens-8960.o tsens-v2.o tsens-v1.o
+>>  obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)     += qcom-spmi-temp-alarm.o
+>> +obj-$(CONFIG_QCOM_RPMHPD_CDEV)         += qcom-rpmhpd-cdev.o
+>> diff --git a/drivers/thermal/qcom/qcom-rpmhpd-cdev.c b/drivers/thermal/qcom/qcom-rpmhpd-cdev.c
+>> new file mode 100644
+>> index 0000000..265523b
+>> --- /dev/null
+>> +++ b/drivers/thermal/qcom/qcom-rpmhpd-cdev.c
+>> @@ -0,0 +1,141 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2019, Linaro Ltd
+>> + */
+>> +#include <linux/err.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/init.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/module.h>
+>> +#include <linux/pm_domain.h>
+>> +#include <linux/pm_runtime.h>
+>> +#include <linux/thermal.h>
+>> +
+>> +struct rpmhpd_cooling_device {
+>> +       struct thermal_cooling_device *cdev;
+>> +       struct device *pwr_domain;
+>> +       int max_state;
+>> +       int cur_state;
+>> +       bool is_pwr_domain_on;
+>> +};
+>> +
+>> +static const char sdm845_rpmhpd_cdev_name[] = "mx";
+>> +
+>> +static const struct of_device_id rpmhpd_cdev_match_table[] = {
+>> +       { .compatible = "qcom,sdm845-rpmhpd-cdev", .data = &sdm845_rpmhpd_cdev_name },
+>> +       { }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, rpmhpd_cdev_match_table);
+>> +
+>> +static int rpmhpd_cdev_get_max_state(struct thermal_cooling_device *cdev,
+>> +                                    unsigned long *state)
 >> +{
->> +       struct generic_pm_domain *genpd;
+>> +       struct rpmhpd_cooling_device *rpmhpd_cdev = cdev->devdata;
 >> +
->> +       genpd = dev_to_genpd(dev);
-> 
-> We need to verify that the there is a genpd attached before doing this
-> cast. Let me post a patch in a day or so, it will give you a helper
-> function that covers this.
-
-Sounds good.. Thanks.. I will wait for it.
-
-> 
->> +       if (IS_ERR(genpd))
->> +               return -ENODEV;
->> +
->> +       genpd_lock(genpd);
->> +       *state = genpd->performance_state;
-> 
-> Why not return the state, rather than assigning an out-parameter?
-We can. I will change it for this and dev_pm_genpd_performance_state_count.
-
-Regards
-Thara
-
-> 
->> +       genpd_unlock(genpd);
->> +
+>> +       *state = rpmhpd_cdev->max_state;
 >> +       return 0;
 >> +}
->> +EXPORT_SYMBOL_GPL(dev_pm_genpd_get_performance_state);
 >> +
->> +int dev_pm_genpd_performance_state_count(struct device *dev,
->> +                                        unsigned int *count)
+>> +static int rpmhpd_cdev_get_cur_state(struct thermal_cooling_device *cdev,
+>> +                                    unsigned long *state)
 >> +{
->> +       struct generic_pm_domain *genpd;
+>> +       struct rpmhpd_cooling_device *rpmhpd_cdev = cdev->devdata;
+>> +       int perf_state;
+>> +
+>> +       dev_pm_genpd_get_performance_state(rpmhpd_cdev->pwr_domain,
+>> +                                          &perf_state);
+>> +       *state = perf_state;
+>> +       return 0;
+>> +}
+>> +
+>> +static int rpmhpd_cdev_set_cur_state(struct thermal_cooling_device *cdev,
+>> +                                    unsigned long state)
+>> +{
+>> +       struct rpmhpd_cooling_device *rpmhpd_cdev = cdev->devdata;
+>> +       struct device *pwr_domain = rpmhpd_cdev->pwr_domain;
+> 
+> Nitpick: Using pwr_domain as the name of the variable is a bit
+> confusing. Why not just name it "dev"?
+
+Sure! I will change it.
+
+> 
 >> +       int ret;
 >> +
->> +       genpd = dev_to_genpd(dev);
->> +       if (IS_ERR(genpd))
->> +               return -ENODEV;
+>> +       ret = dev_pm_genpd_set_performance_state(pwr_domain, state);
 >> +
->> +       if (unlikely(!genpd->get_performance_state_count))
->> +               return -EINVAL;
+>> +       if (ret)
+>> +               return ret;
 >> +
->> +       genpd_lock(genpd);
->> +       ret = genpd->get_performance_state_count(genpd, count);
+>> +       if (state && !rpmhpd_cdev->is_pwr_domain_on) {
 > 
-> Why not having the callback to return the state, rather than using an
-> out-parameter?
+> Nitpick: To clarify, I would suggest to rename "is_pwr_domain_on" to
+> "runtime_resumed".
+
+Done!
+
 > 
->> +       genpd_unlock(genpd);
+>> +               ret = pm_runtime_get_sync(pwr_domain);
+>> +               rpmhpd_cdev->is_pwr_domain_on = true;
+>> +       } else if (!state && rpmhpd_cdev->is_pwr_domain_on) {
+>> +               ret = pm_runtime_put(pwr_domain);
+>> +               rpmhpd_cdev->is_pwr_domain_on = false;
+>> +       }
 >> +
 >> +       return ret;
 >> +}
->> +EXPORT_SYMBOL_GPL(dev_pm_genpd_performance_state_count);
 >> +
->>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->>  {
->>         unsigned int state_idx = genpd->state_idx;
->> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
->> index 91d9bf4..0e5f502 100644
->> --- a/include/linux/pm_domain.h
->> +++ b/include/linux/pm_domain.h
->> @@ -117,6 +117,8 @@ struct generic_pm_domain {
->>                                                  struct dev_pm_opp *opp);
->>         int (*set_performance_state)(struct generic_pm_domain *genpd,
->>                                      unsigned int state);
->> +       int (*get_performance_state_count)(struct generic_pm_domain *genpd,
->> +                                          unsigned int *count);
->>         struct gpd_dev_ops dev_ops;
->>         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
->>         bool max_off_time_changed;
->> @@ -204,6 +206,10 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
->>                   struct dev_power_governor *gov, bool is_off);
->>  int pm_genpd_remove(struct generic_pm_domain *genpd);
->>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
->> +int dev_pm_genpd_get_performance_state(struct device *dev,
->> +                                      unsigned int *state);
->> +int dev_pm_genpd_performance_state_count(struct device *dev,
->> +                                        unsigned int *count);
->>
->>  extern struct dev_power_governor simple_qos_governor;
->>  extern struct dev_power_governor pm_domain_always_on_gov;
->> @@ -251,6 +257,18 @@ static inline int dev_pm_genpd_set_performance_state(struct device *dev,
->>         return -ENOTSUPP;
->>  }
->>
->> +static inline int dev_pm_genpd_get_performance_state(struct device *dev,
->> +                                                    unsigned int *state);
+>> +static struct thermal_cooling_device_ops rpmhpd_cooling_device_ops = {
+>> +       .get_max_state = rpmhpd_cdev_get_max_state,
+>> +       .get_cur_state = rpmhpd_cdev_get_cur_state,
+>> +       .set_cur_state = rpmhpd_cdev_set_cur_state,
+>> +};
+>> +
+>> +static int rpmhpd_cdev_probe(struct platform_device *pdev)
 >> +{
->> +       return -ENOTSUPP;
+>> +       struct device *dev = &pdev->dev, *pd_dev;
+>> +       struct rpmhpd_cooling_device *rpmhpd_cdev;
+>> +       const char *rpmhpd_cdev_name = of_device_get_match_data(dev);
+>> +       unsigned int count;
+>> +       int ret;
+>> +
+>> +       if (!dev->pm_domain) {
+>> +               pd_dev = dev_pm_domain_attach_by_name(dev, rpmhpd_cdev_name);
+> 
+> I don't think this is needed, unless you have multiple PM domains that
+> can be attached per device.
+> 
+> If there is only one PM domain the platform bus should already have
+> attached it at this point.
+
+I agree. I realized after sending the patches out. I will remove this at
+this point. If there is a need to have multiple power domains , we can
+add it back later. There is more changes needed in the driver to support
+multiple power domains anyways.
+
+> 
+>> +               if (IS_ERR(pd_dev))
+>> +                       return PTR_ERR(pd_dev);
+>> +       } else {
+>> +               pd_dev = dev;
+>> +       }
+>> +
+>> +       rpmhpd_cdev = devm_kzalloc(dev, sizeof(*rpmhpd_cdev), GFP_KERNEL);
+>> +       if (!rpmhpd_cdev) {
+>> +               ret = -ENOMEM;
+>> +               goto detach_pd;
+>> +       }
+>> +
+>> +       ret = dev_pm_genpd_performance_state_count(pd_dev, &count);
+>> +       if (ret)
+>> +               goto detach_pd;
+>> +
+>> +       rpmhpd_cdev->pwr_domain = pd_dev;
+>> +       rpmhpd_cdev->max_state = count - 1;
+>> +       rpmhpd_cdev->is_pwr_domain_on = false;
+>> +
+>> +       pm_runtime_enable(pd_dev);
+>> +
+>> +       rpmhpd_cdev->cdev = thermal_of_cooling_device_register
+>> +                                       (dev->of_node, rpmhpd_cdev_name,
+>> +                                        rpmhpd_cdev,
+>> +                                        &rpmhpd_cooling_device_ops);
+>> +       if (IS_ERR(rpmhpd_cdev->cdev)) {
+>> +               dev_err(dev, "unable to register %s cooling device\n",
+>> +                       rpmhpd_cdev_name);
+>> +               ret = PTR_ERR(rpmhpd_cdev->cdev);
+>> +               goto detach_pd;
+>> +       }
+>> +
+>> +       return 0;
+>> +
+>> +detach_pd:
+>> +       dev_pm_domain_detach(pd_dev, false);
+> 
+> Not needed, see above.
+> 
+>> +       return ret;
 >> +}
 >> +
->> +static inline int dev_pm_genpd_performance_state_count(struct device *dev,
->> +                                                      unsigned int *count);
->> +{
->> +       return -ENOTSUPP;
->> +}
+>> +static struct platform_driver rpmhpd_cdev_driver = {
+>> +       .driver = {
+>> +               .name = "qcom-rpmhpd-cdev",
+>> +               .of_match_table = rpmhpd_cdev_match_table,
+>> +       },
+>> +       .probe = rpmhpd_cdev_probe,
+> 
+> Looks like you should implement a ->remove() callback as well. Or
+> perhaps you think this should be a built-in-driver?
+
+Mmm.. I think I will add a remove.
+
+Regards
+Thara
+> 
+>> +};
+>> +module_platform_driver(rpmhpd_cdev_driver);
 >> +
->>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
->>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
->>  #endif
+>> +MODULE_DESCRIPTION("Qualcomm RPMHPD cooling device driver");
+>> +MODULE_LICENSE("GPL v2");
 >> --
 >> 2.1.4
 >>
