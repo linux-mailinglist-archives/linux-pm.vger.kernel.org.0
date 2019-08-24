@@ -2,82 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 036CF9BC28
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Aug 2019 08:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53559BED0
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Aug 2019 18:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725973AbfHXGIj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Aug 2019 02:08:39 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:41945 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbfHXGIj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Aug 2019 02:08:39 -0400
-Received: by mail-pg1-f195.google.com with SMTP id x15so7060515pgg.8
-        for <linux-pm@vger.kernel.org>; Fri, 23 Aug 2019 23:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PjXiDZcPg13ud8HX2Abc4oj6qqqpCxdm3e/7GRb5fno=;
-        b=OJs2u3evPGUEzhVYCBg4N1J4qGKecQSQSRnTpf/fHA1wjWiK/Pe8aFyeh8ygwlfITL
-         6iR0+/3QdmCP5gy3x9CvY8SkFE14poKKNcthhk/cJW7Y6g5eURfDE/6y2c2z47tfiuoZ
-         Do6x5sgMaKkOj17oNmqVCFdWW/Pgk2xVHaRDQMbpXHGEl+iJpzQXExwajljy25nB4QHQ
-         wTT4xWzatnN0ldf1bzSacLZaCZ7Xv3L+YuvXwVUC6u6zGJPCICrEMGzrGiDjYbiw8ndh
-         JBhhBetTQN8K9G3iWTqKBl2jMJHyMb4ZIrRTmrODGQugN4jowrmheTIjw7KtQMGDjb2p
-         xRfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PjXiDZcPg13ud8HX2Abc4oj6qqqpCxdm3e/7GRb5fno=;
-        b=XbgjZTf3b1HvTx773fvCLYrYu2gDHZ8l6Bncoy88jyQUDOx08YoKxHUXg3xYDjgYyx
-         J08nU1CmnBw/4VTndLIed2ukoRMrLAlW+908VoqJ0M+UQkLk4phevqRswgmfm4WL/ZGw
-         dk+c/7ZcD3yoxlm2qr96YE3n6wBXvvSIRQjxTYuFp5xS8n2RH/ijDROtxQsOTzb8t7pJ
-         CZn2Hmw9JaDdEuizbL4xfmcuHlCHvwSd2B4uNKACQ9Aqyiu77v1qPoaPG7g5VVQn8Z/i
-         zn8zqiP3cnXiwx5voQ/95yol9jUSND5OWNhyNz0+J0CjiqU0N+ZldBPNUp+K9FaETVHo
-         S7/g==
-X-Gm-Message-State: APjAAAVgj23dd9IwjqIN5TEcg4k+UReQMpsALw+zp8pUaKQbxXM3AIgm
-        7N8wCiMK1VcT6Sdp+630jg+jmDl8DRc=
-X-Google-Smtp-Source: APXvYqzRd62Rjvd0P04+Cf0fLZBN+f2z09RpLAUz0XuudewgZKjL3cb+Mwo53cfMd+6nI6xSNbfAow==
-X-Received: by 2002:a62:1941:: with SMTP id 62mr9344489pfz.188.1566626918459;
-        Fri, 23 Aug 2019 23:08:38 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id z6sm4247900pgk.18.2019.08.23.23.08.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2019 23:08:37 -0700 (PDT)
-Date:   Fri, 23 Aug 2019 23:10:29 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     qualcomm-lt@lists.linaro.org, linux-pm@vger.kernel.org,
-        ulf.hansson@linaro.org, rnayak@codeaurora.org
-Subject: Re: [PATCH 3/4] thermal: qcom: Add RPMHPD cooling device driver.
-Message-ID: <20190824061029.GT26807@tuxbook-pro>
-References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
- <1565398727-23090-4-git-send-email-thara.gopinath@linaro.org>
+        id S1727747AbfHXQap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Aug 2019 12:30:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51202 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726628AbfHXQap (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 24 Aug 2019 12:30:45 -0400
+Received: from localhost (unknown [8.46.76.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E87272133F;
+        Sat, 24 Aug 2019 16:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566664243;
+        bh=+JuKxCOgJyBntCQvY6U3JY+tJ2pkpRKpi7Kas9YX6aQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2JCsvY6KrYzxYIpv+m8WMh+iSkH0tmAKK2RhzWqbs9T4ahODOuEjgejLGapr5RUd9
+         tffZ1z1dcUGfhiBbn+/plVU7AmJxYa08G3zby2VydzN3K4cMa8xutpmhkbQBEWLw7d
+         dmhrbql6MJj0ka0EGuC9P5zWcopoMB8TBOVm/uo0=
+Date:   Sat, 24 Aug 2019 09:50:28 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-tip-commits@vger.kernel.org,
+        "x86@kernel.org" <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Juergen Gross <jgross@suse.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Borislav Petkov <bp@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [tip: x86/urgent] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD
+ family 15h/16h
+Message-ID: <20190824135028.GJ1581@sasha-vm>
+References: <7543af91666f491547bd86cebb1e17c66824ab9f.1566229943.git.thomas.lendacky@amd.com>
+ <156652264945.9541.4969272027980914591.tip-bot2@tip-bot2>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <1565398727-23090-4-git-send-email-thara.gopinath@linaro.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <156652264945.9541.4969272027980914591.tip-bot2@tip-bot2>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 09 Aug 17:58 PDT 2019, Thara Gopinath wrote:
+On Fri, Aug 23, 2019 at 01:10:49AM -0000, tip-bot2 for Tom Lendacky wrote:
+>The following commit has been merged into the x86/urgent branch of tip:
+>
+>Commit-ID:     c49a0a80137c7ca7d6ced4c812c9e07a949f6f24
+>Gitweb:        https://git.kernel.org/tip/c49a0a80137c7ca7d6ced4c812c9e07a949f6f24
+>Author:        Tom Lendacky <thomas.lendacky@amd.com>
+>AuthorDate:    Mon, 19 Aug 2019 15:52:35
+>Committer:     Borislav Petkov <bp@suse.de>
+>CommitterDate: Mon, 19 Aug 2019 19:42:52 +02:00
+>
+>x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family 15h/16h
+>
+>There have been reports of RDRAND issues after resuming from suspend on
+>some AMD family 15h and family 16h systems. This issue stems from a BIOS
+>not performing the proper steps during resume to ensure RDRAND continues
+>to function properly.
+>
+>RDRAND support is indicated by CPUID Fn00000001_ECX[30]. This bit can be
+>reset by clearing MSR C001_1004[62]. Any software that checks for RDRAND
+>support using CPUID, including the kernel, will believe that RDRAND is
+>not supported.
+>
+>Update the CPU initialization to clear the RDRAND CPUID bit for any family
+>15h and 16h processor that supports RDRAND. If it is known that the family
+>15h or family 16h system does not have an RDRAND resume issue or that the
+>system will not be placed in suspend, the "rdrand=force" kernel parameter
+>can be used to stop the clearing of the RDRAND CPUID bit.
+>
+>Additionally, update the suspend and resume path to save and restore the
+>MSR C001_1004 value to ensure that the RDRAND CPUID setting remains in
+>place after resuming from suspend.
+>
+>Note, that clearing the RDRAND CPUID bit does not prevent a processor
+>that normally supports the RDRAND instruction from executing it. So any
+>code that determined the support based on family and model won't #UD.
+>
+>Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+>Signed-off-by: Borislav Petkov <bp@suse.de>
+>Cc: Andrew Cooper <andrew.cooper3@citrix.com>
+>Cc: Andrew Morton <akpm@linux-foundation.org>
+>Cc: Chen Yu <yu.c.chen@intel.com>
+>Cc: "H. Peter Anvin" <hpa@zytor.com>
+>Cc: Ingo Molnar <mingo@redhat.com>
+>Cc: Jonathan Corbet <corbet@lwn.net>
+>Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+>Cc: Juergen Gross <jgross@suse.com>
+>Cc: Kees Cook <keescook@chromium.org>
+>Cc: "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+>Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+>Cc: Nathan Chancellor <natechancellor@gmail.com>
+>Cc: Paolo Bonzini <pbonzini@redhat.com>
+>Cc: Pavel Machek <pavel@ucw.cz>
+>Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+>Cc: <stable@vger.kernel.org>
+>Cc: Thomas Gleixner <tglx@linutronix.de>
+>Cc: "x86@kernel.org" <x86@kernel.org>
+>Link: https://lkml.kernel.org/r/7543af91666f491547bd86cebb1e17c66824ab9f.1566229943.git.thomas.lendacky@amd.com
+>---
+> Documentation/admin-guide/kernel-parameters.txt |  7 +-
+> arch/x86/include/asm/msr-index.h                |  1 +-
+> arch/x86/kernel/cpu/amd.c                       | 66 +------------
+> arch/x86/power/cpu.c                            | 86 ++--------------
+> 4 files changed, 13 insertions(+), 147 deletions(-)
+>
+>diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>index 4c19719..47d981a 100644
+>--- a/Documentation/admin-guide/kernel-parameters.txt
+>+++ b/Documentation/admin-guide/kernel-parameters.txt
+>@@ -4090,13 +4090,6 @@
+> 			Run specified binary instead of /init from the ramdisk,
+> 			used for early userspace startup. See initrd.
+>
+>-	rdrand=		[X86]
+>-			force - Override the decision by the kernel to hide the
+>-				advertisement of RDRAND support (this affects
+>-				certain AMD processors because of buggy BIOS
+>-				support, specifically around the suspend/resume
+>-				path).
+>-
 
-> The MX power domain in RPMH can be used to warm the
-> the SoC in SDM845. To support this feature, introduce
-> a RPMH power domain cooling device driver that can be
-> plugged into the thermal framework.(The thermal framework
-> itself requires further modifiction to support a warming
-> device in place of a cooling device. Those extensions are
-> not introduced in this patch series).
-> 
+Why is this being removed (along with supporting code)?
 
-This cooling device provides an interface to set a minimum state for a
-power domain.  So while it's used for controlling the MX rail exposed by
-the RPMh on some Qualcomm SoCs there's nothing Qualcomm/RPMh specific
-with it.
-
-Regards,
-Bjorn
+--
+Thanks,
+Sasha
