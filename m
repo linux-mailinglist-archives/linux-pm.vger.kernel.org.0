@@ -2,65 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 459D99C607
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2019 22:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DA59C61F
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2019 22:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728953AbfHYUAv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Aug 2019 16:00:51 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:45802 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726345AbfHYUAv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Aug 2019 16:00:51 -0400
-Received: by mail-ot1-f68.google.com with SMTP id m24so13284410otp.12;
-        Sun, 25 Aug 2019 13:00:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2BnqxOLA8r90y97Lp5feVAq8KO0vU53UAi87Q9EqgQA=;
-        b=AsbeQfzzSIJo+vyXHZwV6YfVP6kZ4Kohm8HBci2wkuTRoFc8tq+Yh3uXGgGe3Bc6N/
-         iJBherhwguu9LRd+ii94Iv6OG6fOSiE4V8msy7Wt23zzpNw5A3khVtR9FioVtJMNg3+j
-         bX2/S+Y9InIe1yICt5ARAoiTDiyiQLFIPSLJeBNfF5LeRMMvoZTjT5FdT0sgFhxdI0eZ
-         zyGXLU9ZNMWDuZ+MuYAp8IYKfyIrCOHGkwf6k4VpV3WPAxyN+GcdSsGxAv1w6SvOB8MK
-         btkLfJ75gpD+uABJUlo9Ma0PF2vVEWTfehO8O0TcB7QkRI03fAQO45tqsgEdcYrNFVTH
-         p96w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2BnqxOLA8r90y97Lp5feVAq8KO0vU53UAi87Q9EqgQA=;
-        b=Ng9ww7BEtrQ05dliay+B/spuskCjN4hn2R1TC7JpjWx9b11E0wn0uHGVna29o85EdF
-         sxTOfDWXIrbx/R9FnYdXvGgFOQfJ8eg9aXYD1pxxNa/bHGQo5nfdsonCdN8G3sSli/li
-         QGMVx6g7mldySJl5eoANJmHNBIZwtgEEdBCstOq/9ReXJe8kSOmbv2PmJxm6PJNgp+5W
-         R/0v1PYvgi70X5jrCmXGF8BFa3xiYxJjuczkaYBD2YcFHH8+vxC4/Oo6ySak2L6EPoro
-         T5PmvoDpkuwC48bEjGEaURRLpbzGH3u+6MRCVkXg095XkqtKtrrBQs22DApzdmTOrbRG
-         CYcQ==
-X-Gm-Message-State: APjAAAVAOEb6bDY2Qxdz+rgragba8dJthV/8dz5C51H54QsR55MmVSJA
-        /drG6gW33BC4Kx0+/JRTgxNkUbfNQadY0W60Lu9RwxDV
-X-Google-Smtp-Source: APXvYqyqDo8QI0aN4J75YWtE2lRXHhmIJArBPeiCvJHlr70ZxYAwAzvjeKsx3hcpNPj91nj2cogn9EDf0qfX7vzAkP0=
-X-Received: by 2002:a9d:6c0e:: with SMTP id f14mr8712052otq.6.1566763250104;
- Sun, 25 Aug 2019 13:00:50 -0700 (PDT)
+        id S1728991AbfHYUl5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Aug 2019 16:41:57 -0400
+Received: from onstation.org ([52.200.56.107]:46560 "EHLO onstation.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728467AbfHYUl5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 25 Aug 2019 16:41:57 -0400
+Received: from localhost (c-98-239-145-235.hsd1.wv.comcast.net [98.239.145.235])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: masneyb)
+        by onstation.org (Postfix) with ESMTPSA id 479863E8B6;
+        Sun, 25 Aug 2019 20:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onstation.org;
+        s=default; t=1566765716;
+        bh=WiaeHanYhnrEhirU8hAElFYgE0q/ORQXxd0mMPk5fwA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uTxYrxUAilLyyVOuEQdUrhtLJwOojFw0Urt+ZiT2giud8qo3MSKqVjLkWBeVpjA1C
+         9TwwgdzEdiocS2icnbKVZ81fwRmlc2+h0nwyWPUv0QA1bRNG5mAUZpM0u2f0QIi2HF
+         MRPpUPLdNpmQNTh/+kCKHAfLlrENwrde1EftnjRg=
+Date:   Sun, 25 Aug 2019 16:41:55 -0400
+From:   Brian Masney <masneyb@onstation.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        bjorn.andersson@linaro.org
+Cc:     robh+dt@kernel.org, agross@kernel.org, vkoul@kernel.org,
+        evgreen@chromium.org, daidavid1@codeaurora.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] interconnect: qcom: Add QCS404 interconnect
+ provider driver
+Message-ID: <20190825204155.GA6879@onstation.org>
+References: <20190723142339.27772-1-georgi.djakov@linaro.org>
+ <20190723142339.27772-5-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-References: <20190823090418.17148-1-narmstrong@baylibre.com> <20190823090418.17148-5-narmstrong@baylibre.com>
-In-Reply-To: <20190823090418.17148-5-narmstrong@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sun, 25 Aug 2019 22:00:39 +0200
-Message-ID: <CAFBinCBypL5D0Rs09V5xZBrV+Spnz-9H8WnFq+0KoLZbtEprfg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] arm64: dts: meson-sm1-sei610: add HDMI display support
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     khilman@baylibre.com, ulf.hansson@linaro.org,
-        linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190723142339.27772-5-georgi.djakov@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 11:06 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> Add the HDMI support nodes for the Amlogic SM1 Based SEI610 Board.
->
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-this looks sane so feel free to add my:
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Hi Georgi and Bjorn,
+
+I'm finishing up a msm8974 interconnect driver and I used qcs404 as a
+starting point. I have a question below.
+
+On Tue, Jul 23, 2019 at 05:23:38PM +0300, Georgi Djakov wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Add driver for the interconnect buses found in Qualcomm QCS404-based
+> platforms. The topology consists of three NoCs that are controlled by
+> a remote processor. This remote processor collects the aggregated
+> bandwidth for each master-slave pairs.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+
+[snip]
+
+> +enum {
+> +       QCS404_MASTER_AMPSS_M0 = 1,
+
+[snip]
+
+> +#define DEFINE_QNODE(_name, _id, _buswidth, _mas_rpm_id, _slv_rpm_id,	\
+> +		     ...)						\
+> +		static struct qcom_icc_node _name = {			\
+> +		.name = #_name,						\
+> +		.id = _id,						\
+> +		.buswidth = _buswidth,					\
+> +		.mas_rpm_id = _mas_rpm_id,				\
+> +		.slv_rpm_id = _slv_rpm_id,				\
+> +		.num_links = ARRAY_SIZE(((int[]){ __VA_ARGS__ })),	\
+> +		.links = { __VA_ARGS__ },				\
+> +	}
+> +
+> +DEFINE_QNODE(mas_apps_proc, QCS404_MASTER_AMPSS_M0, 8, 0, -1, QCS404_SLAVE_EBI_CH0, QCS404_BIMC_SNOC_SLV);
+
+[snip]
+
+> +static struct qcom_icc_node *qcs404_bimc_nodes[] = {
+> +	[MASTER_AMPSS_M0] = &mas_apps_proc,
+
+Should the id in DEFINE_QNODE() above be MASTER_AMPSS_M0 instead of
+QCS404_MASTER_AMPSS_M0?
+
+of_icc_xlate_onecell() looks up the id by the array index
+MASTER_AMPSS_M0 (1), however qnoc_probe() passes the id that's
+in struct qcom_icc_node to icc_node_create(), which is
+QCS404_MASTER_AMPSS_M0 (0). They have different values and I'm unsure
+why we can't just use the ids that are in qcom,qcs404.h and drop the
+enum above.
+
+Thanks,
+
+Brian
