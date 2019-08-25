@@ -2,85 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1419C2C8
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2019 11:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AF99C4BC
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Aug 2019 17:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726726AbfHYJvJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Aug 2019 05:51:09 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:50358 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725809AbfHYJvJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Aug 2019 05:51:09 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 07884812E3; Sun, 25 Aug 2019 11:50:53 +0200 (CEST)
-Date:   Sun, 25 Aug 2019 11:51:06 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Matthew Garrett <matthewgarrett@google.com>
-Cc:     jmorris@namei.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Josh Boyer <jwboyer@fedoraproject.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Kees Cook <keescook@chromium.org>, rjw@rjwysocki.net,
+        id S1727280AbfHYPly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 25 Aug 2019 11:41:54 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:45950 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727212AbfHYPly (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 25 Aug 2019 11:41:54 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 1C97387642;
+        Sun, 25 Aug 2019 15:41:54 +0000 (UTC)
+Received: from shalem.localdomain.com (ovpn-116-48.ams2.redhat.com [10.36.116.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0919919C70;
+        Sun, 25 Aug 2019 15:41:52 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
         linux-pm@vger.kernel.org
-Subject: Re: [PATCH V40 10/29] hibernate: Disable when the kernel is locked
- down
-Message-ID: <20190825095106.GD1644@amd>
-References: <20190820001805.241928-1-matthewgarrett@google.com>
- <20190820001805.241928-11-matthewgarrett@google.com>
+Subject: [PATCH 1/2] power: supply: axp288_fuel_gauge: Sort the DMI blacklist alphabetically
+Date:   Sun, 25 Aug 2019 17:41:51 +0200
+Message-Id: <20190825154152.80087-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="u65IjBhB3TIa72Vp"
-Content-Disposition: inline
-In-Reply-To: <20190820001805.241928-11-matthewgarrett@google.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Sun, 25 Aug 2019 15:41:54 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The blacklist is getting big enough that it is good to have some sort
+of fixed order for it, sort it alphabetically.
 
---u65IjBhB3TIa72Vp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/power/supply/axp288_fuel_gauge.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-On Mon 2019-08-19 17:17:46, Matthew Garrett wrote:
-> From: Josh Boyer <jwboyer@fedoraproject.org>
->=20
-> There is currently no way to verify the resume image when returning
-> from hibernate.  This might compromise the signed modules trust model,
-> so until we can work with signed hibernate images we disable it when the
-> kernel is locked down.
->=20
-> Signed-off-by: Josh Boyer <jwboyer@fedoraproject.org>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Cc: rjw@rjwysocki.net
-> Cc: pavel@ucw.cz
-> cc: linux-pm@vger.kernel.org
-> Signed-off-by: James Morris <jmorris@namei.org>
+diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+index 44169dabb705..6db2e86098e9 100644
+--- a/drivers/power/supply/axp288_fuel_gauge.c
++++ b/drivers/power/supply/axp288_fuel_gauge.c
+@@ -674,6 +674,7 @@ static void fuel_gauge_init_irq(struct axp288_fg_info *info)
+ /*
+  * Some devices have no battery (HDMI sticks) and the axp288 battery's
+  * detection reports one despite it not being there.
++ * Please keep this listed sorted alphabetically.
+  */
+ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
+ 	{
+@@ -696,6 +697,12 @@ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
+ 			DMI_EXACT_MATCH(DMI_BIOS_VERSION, "1.000"),
+ 		},
+ 	},
++	{
++		/* ECS EF20EA */
++		.matches = {
++			DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
++		},
++	},
+ 	{
+ 		/* Intel Cherry Trail Compute Stick, Windows version */
+ 		.matches = {
+@@ -719,12 +726,6 @@ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
+ 			DMI_MATCH(DMI_BOARD_VERSION, "V1.1"),
+ 		},
+ 	},
+-	{
+-		/* ECS EF20EA */
+-		.matches = {
+-			DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
+-		},
+-	},
+ 	{}
+ };
+ 
+-- 
+2.23.0
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
-
-									Pavel
-
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---u65IjBhB3TIa72Vp
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl1iWgoACgkQMOfwapXb+vJjIgCfUZfnFSM3yMH7xIKKwWsgpi8u
-qu4An2fFN+zbwRtWr/eFuPbuIfXNlZOF
-=jHC1
------END PGP SIGNATURE-----
-
---u65IjBhB3TIa72Vp--
