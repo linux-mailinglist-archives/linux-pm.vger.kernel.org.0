@@ -2,28 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 414E99CC73
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2019 11:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA4D9CC79
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2019 11:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730661AbfHZJUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Aug 2019 05:20:24 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:44725 "EHLO
+        id S1730613AbfHZJVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Aug 2019 05:21:13 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:41622 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbfHZJUY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Aug 2019 05:20:24 -0400
+        with ESMTP id S1726354AbfHZJVN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Aug 2019 05:21:13 -0400
 Received: from 79.184.255.249.ipv4.supernova.orange.pl (79.184.255.249) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.275)
- id 2b9292fac4598eca; Mon, 26 Aug 2019 11:20:21 +0200
+ id c30894ed6953de11; Mon, 26 Aug 2019 11:21:11 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Colin King <colin.king@canonical.com>
-Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: remove redundant assignment to ret
-Date:   Mon, 26 Aug 2019 11:20:21 +0200
-Message-ID: <2250924.CPEEF64KPg@kreacher>
-In-Reply-To: <20190819065814.333kowws4mpw3qfx@vireshk-i7>
-References: <20190813122121.28160-1-colin.king@canonical.com> <20190819065814.333kowws4mpw3qfx@vireshk-i7>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Qian Cai <cai@lca.pw>, Tri Vo <trong@android.com>
+Subject: Re: [PATCH v4 0/2] PM / wakeup: Fix wakeup class wrecakge in -next
+Date:   Mon, 26 Aug 2019 11:21:11 +0200
+Message-ID: <2610837.FtSX2PM0xo@kreacher>
+In-Reply-To: <20190819224158.62954-1-swboyd@chromium.org>
+References: <20190819224158.62954-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -32,38 +31,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, August 19, 2019 8:58:14 AM CEST Viresh Kumar wrote:
-> On 13-08-19, 13:21, Colin King wrote:
-> > From: Colin Ian King <colin.king@canonical.com>
-> > 
-> > Variable ret is initialized to a value that is never read and it is
-> > re-assigned later. The initialization is redundant and can be removed.
-> > 
-> > Addresses-Coverity: ("Unused value")
-> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index c28ebf2810f1..26d82e0a2de5 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -2140,7 +2140,7 @@ int cpufreq_driver_target(struct cpufreq_policy *policy,
-> >  			  unsigned int target_freq,
-> >  			  unsigned int relation)
-> >  {
-> > -	int ret = -EINVAL;
-> > +	int ret;
-> >  
-> >  	down_write(&policy->rwsem);
-> >  
+On Tuesday, August 20, 2019 12:41:56 AM CEST Stephen Boyd wrote:
+> Resending the patch series to pick up the tags and fix the subject
+> on patch #2. I didn't drop the "Fixes" tags even though they're
+> just in -next and the patches have been dropped in the latest version.
+> Please update them in the future so we know what commit they're fixing
+> if the commits change in the pm tree.
 > 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Changes from v3:
+>  * Picked up reviewed-by tags from Tri Vo
+>  * Fixed Cc tag on patch 2
+>  * Fixed subject on patch 2 to speak about proper symbols
 > 
+> Changes from v2:
+>  * Fix logic for not adding the wakeup class from dpm_sysfs_add()
+>  * Compile tested on !CONFIG_PM_SLEEP
+> 
+> Cc: Qian Cai <cai@lca.pw>
+> Cc: Tri Vo <trong@android.com>
+> 
+> Stephen Boyd (2):
+>   PM / wakeup: Register wakeup class kobj after device is added
+>   PM / wakeup: Unexport wakeup_source_sysfs_{add,remove}()
+> 
+>  drivers/base/power/power.h        |  9 +++++++++
+>  drivers/base/power/sysfs.c        |  6 ++++++
+>  drivers/base/power/wakeup.c       | 10 ++++++----
+>  drivers/base/power/wakeup_stats.c | 15 +++++++++++++--
+>  4 files changed, 34 insertions(+), 6 deletions(-)
+> 
+> 
+> base-commit: 0c3d3d648b3ed72b920a89bc4fd125e9b7aa5f23
 > 
 
-Patch applied, thanks!
+Both patches applied, thanks!
 
 
 
