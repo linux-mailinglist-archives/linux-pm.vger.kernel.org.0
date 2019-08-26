@@ -2,69 +2,395 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2242E9CB52
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2019 10:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF789CC09
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2019 10:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730357AbfHZINR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Aug 2019 04:13:17 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40598 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729808AbfHZINR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Aug 2019 04:13:17 -0400
-Received: by mail-oi1-f196.google.com with SMTP id h21so11461898oie.7;
-        Mon, 26 Aug 2019 01:13:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uEglIJSck7IpvTcUcp/K5Px+WMHxBVf+kk940fEm91E=;
-        b=R2C1BePn0leTKDoAOdVvB8k3bcGADzpGV2j/WX7vCMEEdRNSXTLPq+YdhQIFeB9V3a
-         QSVqJMSizyO3s++ADROboOCmYojk6yVb59dxt6qzNH0L3An8kuYDfH/Jw4FDA5K86AaA
-         8BJ0HHRrL05DQ9PLlioFhoIeoeV31F3oiwESN1Vo8SbELYUwZjLTEaktXF5wsnoc2C/2
-         dMDmrbUkaR8136nbL5PZvoIfnARi9plcJEIskiWWc7EYm0MhlebWFMHX0czpZNhE8pHl
-         AQtKMQUxyfu7gU4EfcK5UwfZIVvETxgb1OECSjpI5592CBT89+NFZMXcN5E672kxtS34
-         d1Kw==
-X-Gm-Message-State: APjAAAXQs+i+1kpcG/i4BvIcOzDXNMwyllbJTcv/Azpm+JHuNftdWn0N
-        vmAqFcSsveassCrxdkJC9bi+eKmCeSmrOJ66qYzsFQ==
-X-Google-Smtp-Source: APXvYqz+P+hENUjIN29s2OXuhavKXWBtsRFvPNVg1797rd1IlIBHtRdH+Fr7vSX1rcsTPdxu8rdJ6OPUcENe14BFxQY=
-X-Received: by 2002:aca:4dd8:: with SMTP id a207mr10887091oib.115.1566807196006;
- Mon, 26 Aug 2019 01:13:16 -0700 (PDT)
+        id S1730112AbfHZI7j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Aug 2019 04:59:39 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:47223 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729802AbfHZI7j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Aug 2019 04:59:39 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id CC3451EAC;
+        Mon, 26 Aug 2019 04:59:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 26 Aug 2019 04:59:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=EYQTmb
+        VD3CucO9GOAfqghBf89Pz6bGe9naRI2nQkTI0=; b=pqhdDrXxGgV0Px2XPZSaEc
+        JONcGGaCx7MnEy1Lyn9tqpcfGk0VsINL/a1dE8Op5NXmqr+FPmCIRAl7r+6rohWh
+        vS8li5ka2aEOg+9CvPE28Zy0pIyD6oA5AePIfiBG5yem5dVN/C4TFLq8CJ+dGX8Q
+        OEROqsyuTvXr7qCRvl3rb27xmKgOr6xmZHm4OF41Afmm9T2BgOANrC3FoJLixoOG
+        gdczluy5bsbyimEnuApmbS/bfid96bVQL7c8VO0bgg1A9nn2RZ1cORiSmu9/fU7Y
+        iHORjm86xmLl37eIIuqLwwvT1mzDlv2CYmpfYUAJKa93zZYbJRO/mTqsyW4UE6TA
+        ==
+X-ME-Sender: <xms:d59jXZFg2I-pNn_tBuO9se4QQUz1KfGSEcyyaWxedd9yfShM-51LQQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudehgedgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvffhfffkgggtgfesthekredttd
+    dtlfenucfhrhhomhepoehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhr
+    gheqnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepkeelrddvtdehrdduvd
+    ekrddvgeeinecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtgho
+    mhenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:d59jXV5Q_kPIfB-RWk8NNOvfzB0cYelq2nJzAtaAQJ4hjrKKNByMfQ>
+    <xmx:d59jXdbCL6xnKnUdMxxm1IUeuiykQF2n20DxdkHPygLHQAYCLe1XUw>
+    <xmx:d59jXZvZpRIJu3m-az1zZ6hSqNbvcZNEdC-Z-U2UHm-C16FaZbWGGw>
+    <xmx:eZ9jXekG9F0InlNR5Vu2VF8ga74OfzS1hNOY9zXJ498DBa4DabjJzA>
+Received: from localhost (unknown [89.205.128.246])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 2A8DD80059;
+        Mon, 26 Aug 2019 04:59:34 -0400 (EDT)
+Subject: FAILED: patch "[PATCH] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family 15h/16h" failed to apply to 4.4-stable tree
+To:     thomas.lendacky@amd.com, akpm@linux-foundation.org,
+        andrew.cooper3@citrix.com, bp@suse.de, corbet@lwn.net,
+        hpa@zytor.com, jgross@suse.com, jpoimboe@redhat.com,
+        keescook@chromium.org, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, mingo@redhat.com,
+        natechancellor@gmail.com, pavel@ucw.cz, pbonzini@redhat.com,
+        rjw@rjwysocki.net, stable@vger.kernel.org, tglx@linutronix.de,
+        x86@kernel.org, yu.c.chen@intel.com
+Cc:     <stable@vger.kernel.org>
+From:   <gregkh@linuxfoundation.org>
+Date:   Mon, 26 Aug 2019 10:59:33 +0200
+Message-ID: <1566809973112223@kroah.com>
 MIME-Version: 1.0
-References: <20190408161240.GA30623@embeddedor> <16370c2e-c5f9-a4cf-02fc-6b5b4ab65e1c@redhat.com>
- <1c208944-9162-0245-c3bd-016f4274511f@embeddedor.com> <CAJZ5v0jUfLpp_q7ozi33wgJfP7zHmvDh2Srun0KjVZj6Q7NOfw@mail.gmail.com>
- <52803932-12dc-3ea0-12ef-09b5b317818b@embeddedor.com> <CAJZ5v0gX1zTiJkCk51FpeywgwD58K46eGdqCcVjLL2zkhAG_wA@mail.gmail.com>
- <841150bdcbd88a00a30a7ba86272918263959699.camel@gmail.com>
-In-Reply-To: <841150bdcbd88a00a30a7ba86272918263959699.camel@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 26 Aug 2019 10:13:01 +0200
-Message-ID: <CAJZ5v0ii5pihh3uvQqckZmHCXYL+xROohd4sJSR+E-kzviicng@mail.gmail.com>
-Subject: Re: [PATCH] tools/power turbostat: fix file descriptor leaks
-To:     Artem Bityutskiy <dedekind1@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 10:02 AM Artem Bityutskiy <dedekind1@gmail.com> wrote:
->
-> On Mon, 2019-08-26 at 09:55 +0200, Rafael J. Wysocki wrote:
->
-> Technically, Len Brown is the turbostat maintainer and I have been
->
-> waiting for him to review the patch at least.  Let me talk to Len.
->
->
->
-> Hi Rafael,
->
->
-> I also sent a couple of turbostat patches waiting for being acted upon, may be you could include them to the conversation too?
 
-Yes, I will, thanks!
+The patch below does not apply to the 4.4-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
+
+thanks,
+
+greg k-h
+
+------------------ original commit in Linus's tree ------------------
+
+From c49a0a80137c7ca7d6ced4c812c9e07a949f6f24 Mon Sep 17 00:00:00 2001
+From: Tom Lendacky <thomas.lendacky@amd.com>
+Date: Mon, 19 Aug 2019 15:52:35 +0000
+Subject: [PATCH] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family 15h/16h
+
+There have been reports of RDRAND issues after resuming from suspend on
+some AMD family 15h and family 16h systems. This issue stems from a BIOS
+not performing the proper steps during resume to ensure RDRAND continues
+to function properly.
+
+RDRAND support is indicated by CPUID Fn00000001_ECX[30]. This bit can be
+reset by clearing MSR C001_1004[62]. Any software that checks for RDRAND
+support using CPUID, including the kernel, will believe that RDRAND is
+not supported.
+
+Update the CPU initialization to clear the RDRAND CPUID bit for any family
+15h and 16h processor that supports RDRAND. If it is known that the family
+15h or family 16h system does not have an RDRAND resume issue or that the
+system will not be placed in suspend, the "rdrand=force" kernel parameter
+can be used to stop the clearing of the RDRAND CPUID bit.
+
+Additionally, update the suspend and resume path to save and restore the
+MSR C001_1004 value to ensure that the RDRAND CPUID setting remains in
+place after resuming from suspend.
+
+Note, that clearing the RDRAND CPUID bit does not prevent a processor
+that normally supports the RDRAND instruction from executing it. So any
+code that determined the support based on family and model won't #UD.
+
+Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Chen Yu <yu.c.chen@intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Cc: Nathan Chancellor <natechancellor@gmail.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: <stable@vger.kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "x86@kernel.org" <x86@kernel.org>
+Link: https://lkml.kernel.org/r/7543af91666f491547bd86cebb1e17c66824ab9f.1566229943.git.thomas.lendacky@amd.com
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 47d981a86e2f..4c1971960afa 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4090,6 +4090,13 @@
+ 			Run specified binary instead of /init from the ramdisk,
+ 			used for early userspace startup. See initrd.
+ 
++	rdrand=		[X86]
++			force - Override the decision by the kernel to hide the
++				advertisement of RDRAND support (this affects
++				certain AMD processors because of buggy BIOS
++				support, specifically around the suspend/resume
++				path).
++
+ 	rdt=		[HW,X86,RDT]
+ 			Turn on/off individual RDT features. List is:
+ 			cmt, mbmtotal, mbmlocal, l3cat, l3cdp, l2cat, l2cdp,
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 6b4fc2788078..271d837d69a8 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -381,6 +381,7 @@
+ #define MSR_AMD64_PATCH_LEVEL		0x0000008b
+ #define MSR_AMD64_TSC_RATIO		0xc0000104
+ #define MSR_AMD64_NB_CFG		0xc001001f
++#define MSR_AMD64_CPUID_FN_1		0xc0011004
+ #define MSR_AMD64_PATCH_LOADER		0xc0010020
+ #define MSR_AMD64_OSVW_ID_LENGTH	0xc0010140
+ #define MSR_AMD64_OSVW_STATUS		0xc0010141
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 8d4e50428b68..68c363c341bf 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -804,6 +804,64 @@ static void init_amd_ln(struct cpuinfo_x86 *c)
+ 	msr_set_bit(MSR_AMD64_DE_CFG, 31);
+ }
+ 
++static bool rdrand_force;
++
++static int __init rdrand_cmdline(char *str)
++{
++	if (!str)
++		return -EINVAL;
++
++	if (!strcmp(str, "force"))
++		rdrand_force = true;
++	else
++		return -EINVAL;
++
++	return 0;
++}
++early_param("rdrand", rdrand_cmdline);
++
++static void clear_rdrand_cpuid_bit(struct cpuinfo_x86 *c)
++{
++	/*
++	 * Saving of the MSR used to hide the RDRAND support during
++	 * suspend/resume is done by arch/x86/power/cpu.c, which is
++	 * dependent on CONFIG_PM_SLEEP.
++	 */
++	if (!IS_ENABLED(CONFIG_PM_SLEEP))
++		return;
++
++	/*
++	 * The nordrand option can clear X86_FEATURE_RDRAND, so check for
++	 * RDRAND support using the CPUID function directly.
++	 */
++	if (!(cpuid_ecx(1) & BIT(30)) || rdrand_force)
++		return;
++
++	msr_clear_bit(MSR_AMD64_CPUID_FN_1, 62);
++
++	/*
++	 * Verify that the CPUID change has occurred in case the kernel is
++	 * running virtualized and the hypervisor doesn't support the MSR.
++	 */
++	if (cpuid_ecx(1) & BIT(30)) {
++		pr_info_once("BIOS may not properly restore RDRAND after suspend, but hypervisor does not support hiding RDRAND via CPUID.\n");
++		return;
++	}
++
++	clear_cpu_cap(c, X86_FEATURE_RDRAND);
++	pr_info_once("BIOS may not properly restore RDRAND after suspend, hiding RDRAND via CPUID. Use rdrand=force to reenable.\n");
++}
++
++static void init_amd_jg(struct cpuinfo_x86 *c)
++{
++	/*
++	 * Some BIOS implementations do not restore proper RDRAND support
++	 * across suspend and resume. Check on whether to hide the RDRAND
++	 * instruction support via CPUID.
++	 */
++	clear_rdrand_cpuid_bit(c);
++}
++
+ static void init_amd_bd(struct cpuinfo_x86 *c)
+ {
+ 	u64 value;
+@@ -818,6 +876,13 @@ static void init_amd_bd(struct cpuinfo_x86 *c)
+ 			wrmsrl_safe(MSR_F15H_IC_CFG, value);
+ 		}
+ 	}
++
++	/*
++	 * Some BIOS implementations do not restore proper RDRAND support
++	 * across suspend and resume. Check on whether to hide the RDRAND
++	 * instruction support via CPUID.
++	 */
++	clear_rdrand_cpuid_bit(c);
+ }
+ 
+ static void init_amd_zn(struct cpuinfo_x86 *c)
+@@ -860,6 +925,7 @@ static void init_amd(struct cpuinfo_x86 *c)
+ 	case 0x10: init_amd_gh(c); break;
+ 	case 0x12: init_amd_ln(c); break;
+ 	case 0x15: init_amd_bd(c); break;
++	case 0x16: init_amd_jg(c); break;
+ 	case 0x17: init_amd_zn(c); break;
+ 	}
+ 
+diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+index 24b079e94bc2..c9ef6a7a4a1a 100644
+--- a/arch/x86/power/cpu.c
++++ b/arch/x86/power/cpu.c
+@@ -12,6 +12,7 @@
+ #include <linux/smp.h>
+ #include <linux/perf_event.h>
+ #include <linux/tboot.h>
++#include <linux/dmi.h>
+ 
+ #include <asm/pgtable.h>
+ #include <asm/proto.h>
+@@ -23,7 +24,7 @@
+ #include <asm/debugreg.h>
+ #include <asm/cpu.h>
+ #include <asm/mmu_context.h>
+-#include <linux/dmi.h>
++#include <asm/cpu_device_id.h>
+ 
+ #ifdef CONFIG_X86_32
+ __visible unsigned long saved_context_ebx;
+@@ -397,15 +398,14 @@ static int __init bsp_pm_check_init(void)
+ 
+ core_initcall(bsp_pm_check_init);
+ 
+-static int msr_init_context(const u32 *msr_id, const int total_num)
++static int msr_build_context(const u32 *msr_id, const int num)
+ {
+-	int i = 0;
++	struct saved_msrs *saved_msrs = &saved_context.saved_msrs;
+ 	struct saved_msr *msr_array;
++	int total_num;
++	int i, j;
+ 
+-	if (saved_context.saved_msrs.array || saved_context.saved_msrs.num > 0) {
+-		pr_err("x86/pm: MSR quirk already applied, please check your DMI match table.\n");
+-		return -EINVAL;
+-	}
++	total_num = saved_msrs->num + num;
+ 
+ 	msr_array = kmalloc_array(total_num, sizeof(struct saved_msr), GFP_KERNEL);
+ 	if (!msr_array) {
+@@ -413,19 +413,30 @@ static int msr_init_context(const u32 *msr_id, const int total_num)
+ 		return -ENOMEM;
+ 	}
+ 
+-	for (i = 0; i < total_num; i++) {
+-		msr_array[i].info.msr_no	= msr_id[i];
++	if (saved_msrs->array) {
++		/*
++		 * Multiple callbacks can invoke this function, so copy any
++		 * MSR save requests from previous invocations.
++		 */
++		memcpy(msr_array, saved_msrs->array,
++		       sizeof(struct saved_msr) * saved_msrs->num);
++
++		kfree(saved_msrs->array);
++	}
++
++	for (i = saved_msrs->num, j = 0; i < total_num; i++, j++) {
++		msr_array[i].info.msr_no	= msr_id[j];
+ 		msr_array[i].valid		= false;
+ 		msr_array[i].info.reg.q		= 0;
+ 	}
+-	saved_context.saved_msrs.num	= total_num;
+-	saved_context.saved_msrs.array	= msr_array;
++	saved_msrs->num   = total_num;
++	saved_msrs->array = msr_array;
+ 
+ 	return 0;
+ }
+ 
+ /*
+- * The following section is a quirk framework for problematic BIOSen:
++ * The following sections are a quirk framework for problematic BIOSen:
+  * Sometimes MSRs are modified by the BIOSen after suspended to
+  * RAM, this might cause unexpected behavior after wakeup.
+  * Thus we save/restore these specified MSRs across suspend/resume
+@@ -440,7 +451,7 @@ static int msr_initialize_bdw(const struct dmi_system_id *d)
+ 	u32 bdw_msr_id[] = { MSR_IA32_THERM_CONTROL };
+ 
+ 	pr_info("x86/pm: %s detected, MSR saving is needed during suspending.\n", d->ident);
+-	return msr_init_context(bdw_msr_id, ARRAY_SIZE(bdw_msr_id));
++	return msr_build_context(bdw_msr_id, ARRAY_SIZE(bdw_msr_id));
+ }
+ 
+ static const struct dmi_system_id msr_save_dmi_table[] = {
+@@ -455,9 +466,58 @@ static const struct dmi_system_id msr_save_dmi_table[] = {
+ 	{}
+ };
+ 
++static int msr_save_cpuid_features(const struct x86_cpu_id *c)
++{
++	u32 cpuid_msr_id[] = {
++		MSR_AMD64_CPUID_FN_1,
++	};
++
++	pr_info("x86/pm: family %#hx cpu detected, MSR saving is needed during suspending.\n",
++		c->family);
++
++	return msr_build_context(cpuid_msr_id, ARRAY_SIZE(cpuid_msr_id));
++}
++
++static const struct x86_cpu_id msr_save_cpu_table[] = {
++	{
++		.vendor = X86_VENDOR_AMD,
++		.family = 0x15,
++		.model = X86_MODEL_ANY,
++		.feature = X86_FEATURE_ANY,
++		.driver_data = (kernel_ulong_t)msr_save_cpuid_features,
++	},
++	{
++		.vendor = X86_VENDOR_AMD,
++		.family = 0x16,
++		.model = X86_MODEL_ANY,
++		.feature = X86_FEATURE_ANY,
++		.driver_data = (kernel_ulong_t)msr_save_cpuid_features,
++	},
++	{}
++};
++
++typedef int (*pm_cpu_match_t)(const struct x86_cpu_id *);
++static int pm_cpu_check(const struct x86_cpu_id *c)
++{
++	const struct x86_cpu_id *m;
++	int ret = 0;
++
++	m = x86_match_cpu(msr_save_cpu_table);
++	if (m) {
++		pm_cpu_match_t fn;
++
++		fn = (pm_cpu_match_t)m->driver_data;
++		ret = fn(m);
++	}
++
++	return ret;
++}
++
+ static int pm_check_save_msr(void)
+ {
+ 	dmi_check_system(msr_save_dmi_table);
++	pm_cpu_check(msr_save_cpu_table);
++
+ 	return 0;
+ }
+ 
+
