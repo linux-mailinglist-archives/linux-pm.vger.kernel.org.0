@@ -2,154 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 600C09D78A
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2019 22:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC3B9D7D3
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Aug 2019 22:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbfHZUmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Aug 2019 16:42:46 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:56742 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727219AbfHZUmq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 26 Aug 2019 16:42:46 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 4532D281D1;
-        Mon, 26 Aug 2019 20:42:45 +0000 (UTC)
-Received: from amt.cnet (ovpn-112-6.gru2.redhat.com [10.97.112.6])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 962026092D;
-        Mon, 26 Aug 2019 20:42:44 +0000 (UTC)
-Received: from amt.cnet (localhost [127.0.0.1])
-        by amt.cnet (Postfix) with ESMTP id DF559105115;
-        Mon, 26 Aug 2019 17:40:57 -0300 (BRT)
-Received: (from marcelo@localhost)
-        by amt.cnet (8.14.7/8.14.7/Submit) id x7QKeped025832;
-        Mon, 26 Aug 2019 17:40:51 -0300
-Date:   Mon, 26 Aug 2019 17:40:50 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Wanpeng Li <kernellwp@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when
- dedicated physical CPUs are available
-Message-ID: <20190826204045.GA24697@amt.cnet>
-References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
- <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com>
- <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
- <20190803202058.GA9316@amt.cnet>
- <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
+        id S1726220AbfHZUzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Aug 2019 16:55:54 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40644 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726020AbfHZUzx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Aug 2019 16:55:53 -0400
+Received: by mail-pl1-f196.google.com with SMTP id h3so10608742pls.7
+        for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2019 13:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=FghN6Mc40EPJyH60IJRS3NSuxjYJJ6oJa+6cfkHbcEQ=;
+        b=CG3B73JctUodMjIEjMsdzkgftz3Lk7Hw301lt+ChJplNaD4WWljA7Mf07AXYJSksH1
+         zK8iBXNS71J22cYdDCipqCOVcu10jmcRPqdcB4jWsfUDB3moMUaJLamzkZumWqO4cAbv
+         x9nBWiUT7BbCgCsl6xfUyRcRXV8tN/eRY/9eo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=FghN6Mc40EPJyH60IJRS3NSuxjYJJ6oJa+6cfkHbcEQ=;
+        b=RntKXG2nx//MDh1YPKet/vmGYslWhi87uREourQEdUWjrN3NkglyeBxSaNiNxi7JyF
+         m75sTh18iQeMMpOqA9+n2j7B2mTIe2Hma/vcbqqDuVNwp3CyNx59RaCF9hamy/3Q5NMa
+         cBVrumMhDXiQhfeNyPd4tqgjThRtOrYgkU/JgNcVf1CQxzr9jbtpCOQclialRcSJ7Va+
+         VkjOrumzmR/EKTfyn2UBPwC2ewOg2Ip3isAd8fkKCIVI9i9wvXtFHqSXNTlHzMHNeDrI
+         zBUYmW5ryGWSEhYAiBGC1qyq12ZC4KL5GeKcJaArNf0KFiiiQgUQlrOBCqxErBpJYkAI
+         G+zw==
+X-Gm-Message-State: APjAAAVxzttZ4zN2qYpEcx16LTUjz7nWgPQNHo1JVwGmd4zYL2Dv/lkU
+        YSEX2gaYiHOjTeschTpL1ImU+A==
+X-Google-Smtp-Source: APXvYqx9XXxGe4Jgq3CTT3CN1lc1lQpUBmkZwGA+hD5RxJH41Dh4HIrKDUhBYRQDSJhlhN27af5CzA==
+X-Received: by 2002:a17:902:a40d:: with SMTP id p13mr20580372plq.92.1566852953013;
+        Mon, 26 Aug 2019 13:55:53 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id v184sm11039530pgd.34.2019.08.26.13.55.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2019 13:55:52 -0700 (PDT)
+Message-ID: <5d644758.1c69fb81.76a4f.cf59@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.71]); Mon, 26 Aug 2019 20:42:45 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAP245DV=pVF1oK2eFvK=iRng=Qxg=oDLWmHXBWtJH=VMxmmAvQ@mail.gmail.com>
+References: <cover.1564091601.git.amit.kucheria@linaro.org> <534b5017c2210ba8d541c206dace204d6617b4c9.1564091601.git.amit.kucheria@linaro.org> <5d577d77.1c69fb81.b6b07.83e6@mx.google.com> <CAHLCerMpWTVquyM3fYQxz-ZhDvnY276hfnZvZOmjV--cgm53UQ@mail.gmail.com> <5d5ab1e0.1c69fb81.d71db.1ca3@mx.google.com> <CAP245DV=pVF1oK2eFvK=iRng=Qxg=oDLWmHXBWtJH=VMxmmAvQ@mail.gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Gross <andy.gross@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 04/15] drivers: thermal: tsens: Add debugfs support
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Mon, 26 Aug 2019 13:55:51 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 08:55:29AM +0800, Wanpeng Li wrote:
-> On Sun, 4 Aug 2019 at 04:21, Marcelo Tosatti <mtosatti@redhat.com> wrote:
+Quoting Amit Kucheria (2019-08-21 05:55:39)
+> On Mon, Aug 19, 2019 at 7:57 PM Stephen Boyd <swboyd@chromium.org> wrote:
 > >
-> > On Thu, Aug 01, 2019 at 06:54:49PM +0200, Paolo Bonzini wrote:
-> > > On 01/08/19 18:51, Rafael J. Wysocki wrote:
-> > > > On 8/1/2019 9:06 AM, Wanpeng Li wrote:
-> > > >> From: Wanpeng Li <wanpengli@tencent.com>
-> > > >>
-> > > >> The downside of guest side polling is that polling is performed even
-> > > >> with other runnable tasks in the host. However, even if poll in kvm
-> > > >> can aware whether or not other runnable tasks in the same pCPU, it
-> > > >> can still incur extra overhead in over-subscribe scenario. Now we can
-> > > >> just enable guest polling when dedicated pCPUs are available.
-> > > >>
-> > > >> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > > >> Cc: Radim Krčmář <rkrcmar@redhat.com>
-> > > >> Cc: Marcelo Tosatti <mtosatti@redhat.com>
-> > > >> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> > Quoting Amit Kucheria (2019-08-19 00:58:23)
+> > > On Sat, Aug 17, 2019 at 9:37 AM Stephen Boyd <swboyd@chromium.org> wr=
+ote:
+> > > > > +
+> > > > > +static void tsens_debug_init(struct platform_device *pdev)
+> > > > > +{
+> > > > > +       struct tsens_priv *priv =3D platform_get_drvdata(pdev);
+> > > > > +       struct dentry *root, *file;
+> > > > > +
+> > > > > +       root =3D debugfs_lookup("tsens", NULL);
 > > > >
-> > > > Paolo, Marcelo, any comments?
+> > > > Does this get created many times? Why doesn't tsens have a pointer =
+to
+> > > > the root saved away somewhere globally?
+> > > >
 > > >
-> > > Yes, it's a good idea.
-> > >
-> > > Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-> > >
-> > > Paolo
+> > > I guess we could call the statement below to create the root dir and
+> > > save away the pointer. I was trying to avoid #ifdef CONFIG_DEBUG_FS in
+> > > init_common() and instead have all of it in a single function that
+> > > gets called once per instance of the tsens controller.
 > >
-> 
-> Hi Marcelo,
-> 
-> Sorry for the late response.
-> 
-> > I think KVM_HINTS_REALTIME is being abused somewhat.
-> > It has no clear meaning and used in different locations
-> > for different purposes.
-> 
-> ================== ============ =================================
-> KVM_HINTS_REALTIME 0                      guest checks this feature bit to
-> 
-> determine that vCPUs are never
-> 
-> preempted for an unlimited time
+> > Or call this code many times and try to create the tsens node if
+> > !tsens_root exists where the variable is some global.
+>=20
+> So I didn't quite understand this statement. The change you're
+> requesting is that the 'root' variable below should be a global?
+>=20
+> tsens_probe() will get called twice on platforms with two instances of
+> the controller. So I will need to check some place if the 'tsens' root
+> dir already exists in debugfs, no? That is what I'm doing below.
+>=20
 
-Unlimited time means infinite time, or unlimited time means 
-10s ? 1s ?
-
-The previous definition was much better IMO: HINTS_DEDICATED.
-
-
-> allowing optimizations
-> ================== ============ =================================
-> 
-> Now it disables pv queued spinlock, 
-
-OK. 
-
-> pv tlb shootdown, 
-
-OK.
-
-> pv sched yield
-
-"The idea is from Xen, when sending a call-function IPI-many to vCPUs,
-yield if any of the IPI target vCPUs was preempted. 17% performance
-increasement of ebizzy benchmark can be observed in an over-subscribe
-environment. (w/ kvm-pv-tlb disabled, testing TLB flush call-function
-IPI-many since call-function is not easy to be trigged by userspace
-workload)."
-
-This can probably hurt if vcpus are rarely preempted. 
-
-> which are not expected present in vCPUs are never preempted for an
-> unlimited time scenario.
-> 
-> >
-> > For example, i think that using pv queued spinlocks and
-> > haltpoll is a desired scenario, which the patch below disallows.
-> 
-> So even if dedicated pCPU is available, pv queued spinlocks should
-> still be chose if something like vhost-kthreads are used instead of
-> DPDK/vhost-user. 
-
-Can't you enable the individual features you need for optimizing 
-the overcommitted case? This is how things have been done historically:
-If a new feature is available, you enable it to get the desired
-performance. x2apic, invariant-tsc, cpuidle haltpoll...
-
-So in your case: enable pv schedyield, enable pv tlb shootdown.
-
-> kvm adaptive halt-polling will compete with
-> vhost-kthreads, however, poll in guest unaware other runnable tasks in
-> the host which will defeat vhost-kthreads.
-
-It depends on how much work vhost-kthreads needs to do, how successful 
-halt-poll in the guest is, and what improvement halt-polling brings.
-The amount of polling will be reduced to zero if polling 
-is not successful.
+Yeah. I was suggesting making a global instead of doing the lookup, but
+I guess the lookup is fine and avoids a global variable. It's all
+debugfs so it doesn't really matter. Sorry! Do whatever then.
 
