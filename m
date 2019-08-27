@@ -2,124 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B40C9DB5C
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2019 03:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F109DBC4
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2019 04:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728584AbfH0Bv1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Aug 2019 21:51:27 -0400
-Received: from mail-eopbgr30074.outbound.protection.outlook.com ([40.107.3.74]:50277
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726487AbfH0Bv0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 26 Aug 2019 21:51:26 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RjWP7zZkrDS6iYPE7ncOfoB61LbUzKD85Nv7HEsplBf4Flc4K0F89YKpr+UO6ZFFsXKKOQHoxuxvRLJei/1rvejFbztS1B60SmM8QMW3CNDydg7JzGMTdrSjjKyjbAYxi6/ux8qo3qDSme0se/T1clqHiFQTVRnEDFDaMTARpXXawl6hbH0PHtskcqZvd4VlEv+Cf4R0wZI+qXj9MJFHNrXg1Q2tDGa/MJ4/y6mJhWRfQhkLaIHLAfluJyMok1sThdm3fRDFTE3tOXEdTy0Gq6TdOIkYKIGtHtcfBTmonOO8427hStAwxSUIS/lWMkaT4b8KuKi44UDGmmN1zQjnAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=04kpSK0OjLxD75A8OFUUoZ1dPnRiJi30AynNX349/YU=;
- b=nuIwxYCNwhI2y+luVk9IWdymb7KvepiV9NyNr6G+uAFuYQWPwYXZ/2Kow8v96Rannx/y3/fQVwBpU+j1Y0xF5DAZBGBkEidfM3KgpDRTzOgV2zV5fOw74Psg/5xJhPVjqU2Ov2g7dSOwgHBiIjg2oCWUjCbCGGh/qmfgYAKpKmeSBGznYP+KWRgggWyWg/yRG4HxsGNqWFR1bQ+qCsRh2w8RmoxF2oJS0gkeqhu3YXEDluQ10aVexFIXgQacVkzoKYdBAXh7yeaRChn4bQ20jrt5lH6aYiKka0axjWFNwXQ1P3SVfQfeXq+zmpE0moVtKB3EwB7x0M/GeUAs+I5b7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=04kpSK0OjLxD75A8OFUUoZ1dPnRiJi30AynNX349/YU=;
- b=LjulPGvEN07kzCI9roCVlEkDXrKnha7tLQ2FSyvlTYM7njZ+VDI6hgzeDaHx0fSurfowJlNbx2dCbMWiID3zGuAzpUGJiWEJO7jKp2pa+RFlg7I4i4laYVRHDqWVDqjIMGWK3E3hTrp9vMcF7KcVhGuTxD2Mf3NJoBkUNGEY8Z0=
-Received: from AM6PR0402MB3911.eurprd04.prod.outlook.com (52.133.30.10) by
- AM6PR0402MB3894.eurprd04.prod.outlook.com (52.133.8.14) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2199.21; Tue, 27 Aug 2019 01:51:20 +0000
-Received: from AM6PR0402MB3911.eurprd04.prod.outlook.com
- ([fe80::c9d3:4e41:12b7:892]) by AM6PR0402MB3911.eurprd04.prod.outlook.com
- ([fe80::c9d3:4e41:12b7:892%5]) with mapi id 15.20.2199.021; Tue, 27 Aug 2019
- 01:51:20 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-CC:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>
-Subject: RE: [PATCH V3 1/5] thermal: qoriq: Add clock operations
-Thread-Topic: [PATCH V3 1/5] thermal: qoriq: Add clock operations
-Thread-Index: AQHVRn7U0xGc5nAWcEuPNmwDSS0IiacOZc9g
-Date:   Tue, 27 Aug 2019 01:51:20 +0000
-Message-ID: <AM6PR0402MB3911D45B3B148588A582F6C4F5A00@AM6PR0402MB3911.eurprd04.prod.outlook.com>
-References: <20190730022126.17883-1-Anson.Huang@nxp.com>
- <VI1PR04MB7023F219CA7B4187F86EAA42EEA10@VI1PR04MB7023.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB7023F219CA7B4187F86EAA42EEA10@VI1PR04MB7023.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5a8ee726-5a46-4b65-4006-08d72a910eed
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM6PR0402MB3894;
-x-ms-traffictypediagnostic: AM6PR0402MB3894:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR0402MB389462E7CF145C846171B4F1F5A00@AM6PR0402MB3894.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0142F22657
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(376002)(346002)(396003)(366004)(189003)(199004)(446003)(305945005)(4326008)(256004)(66476007)(2906002)(25786009)(8936002)(14444005)(229853002)(33656002)(316002)(110136005)(9686003)(53936002)(74316002)(6246003)(7416002)(54906003)(71190400001)(71200400001)(6436002)(7696005)(55016002)(76176011)(6506007)(53546011)(102836004)(26005)(66574012)(186003)(478600001)(66066001)(5660300002)(3846002)(86362001)(6116002)(486006)(76116006)(44832011)(14454004)(8676002)(7736002)(66556008)(64756008)(11346002)(66446008)(81156014)(81166006)(476003)(66946007)(99286004)(52536014);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR0402MB3894;H:AM6PR0402MB3911.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: RWJJNfUHL5JyuaUrNyghSSaJKQNH0b+1m7sDBjZ/7p7hfigLSotdP4MOWyTMbBqHGl9ijXxuTeq9Gk0Wnb7DmoWJrgCBbMWAJRLf1Emzp9qLq6517VFiIuDIMgTuV1rlRnYIiUF5ZN0nOeOdtHrXJaJuEISEsumimE+YNN8VN+YBzqYPoib2/gzdbEpOaF5b3hoHIO/dNM4FABiTrv0KXXjg0rHzZ37dvfTZduKzqFrgr18iXyS8yx+6E/m8EyLiiEPBdHiU2Bno43g/KWQ+uP1UPiIIGgBT1rTgCiKJJJKuIvlfip/VXqiQg7jcPHwsDhhZXGulMFhR++xMI4DnUOl/Fy2oVXs9Htb26vmKklVA0crtjztIZg9k9ZuKZ75yOEWwfXMI6YFvokv33owflL671FQrJSe4tn7p3P0l7dA=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727887AbfH0CuL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Aug 2019 22:50:11 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:33424 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728025AbfH0CuL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Aug 2019 22:50:11 -0400
+Received: by mail-qk1-f193.google.com with SMTP id w18so15894370qki.0
+        for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2019 19:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T2iPkJ7pf5gy03ZtFr13YyLMEqBiyBna8KsbdE4uLh4=;
+        b=OgO/muqhVUTgi3797A1/YaOoRiSxfCK9qTOuvdSWVO5kgttxZF8bud0CU1Q+TemszI
+         F4o710BbkBQiYhrPmrHcDtNOUH+xryGN5/3OjKQ5qLMZ5LZDeRnL+hif3HB1kLzLtwhI
+         9ed8gSxB4BgFPl432UuxuSCczBxpr9m5bO+SoILvSPaonHHooutjIR4fjNbRLmdXduIp
+         ZqFB7LiPb4vVfZ3+79KXKqVuTdRgwrOKGi9eFejvI4xdoLgugjdZwYUsv2rg/gGfy4Y5
+         EccSsMFQ7WD0PlCK43idSM/yPkdr0QGnkn4AUgnHESF3RfdIrFIjUjO9S2f748Vq9IjJ
+         iS5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T2iPkJ7pf5gy03ZtFr13YyLMEqBiyBna8KsbdE4uLh4=;
+        b=DnT8qRoroH6myeL9fnE7qCb8f/PM6DONOCpMiHCVkUVRZaCa1uDugvjDSG7BSZQ4ZK
+         XxLp8tS9KAZL3dAnCQyxjcMZk/B5+UVyPgRQJxpkTbxJnc8LqMnfwivkucTQkIAhAIi9
+         swwSBqwKccw4BsH0vQlSPBAlaoD32BKbkuTXjZ/7FTrFvSWh/wwqXUl1KPlH9B/9Rys0
+         k3krFO/0MvIawQflWbjeD09/5aHfxQDlxZt12cFz1xxIdO4CPc2PtyemgKSSUrc7cEKQ
+         WlXuPvKw1Ts5EO8uXVxJ0IFMs9sWVnRhLcKHLuc4em3PzugardYqRMJ4iXvzTDRDwp8T
+         LgXg==
+X-Gm-Message-State: APjAAAWe5/73i1bptDoLXxiH16Ig9rlR0FAhu0CKokFMU3xQnhYG9Ufe
+        5yIJ3guYwwPsJRsTwbEce6zQZElnboxDUDlgBJ4rSQ==
+X-Google-Smtp-Source: APXvYqyorHsPxknELIV3kZZaAxlw5KcVXN96cPbvisDKUGVl/1XaqwDQWul4lUcEGTeWYKVYdyq/febIl7qMeZWHlzk=
+X-Received: by 2002:ae9:c206:: with SMTP id j6mr19308064qkg.14.1566874210753;
+ Mon, 26 Aug 2019 19:50:10 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a8ee726-5a46-4b65-4006-08d72a910eed
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2019 01:51:20.3749
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8ksd2GJ3EzniwHaJ7u5Pnmy/Ic5wKmUf1XDKZlKD5aqqCvhE4Yvh1g/LhyKQuAMwNZaHL2KcSi3ImQe6rT1ZKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3894
+References: <CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com>
+ <CAJZ5v0g4T_0VD_oYMF_BF1VM-d1bg-BD8h8=STDrhVBgouPOPg@mail.gmail.com> <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com>
+In-Reply-To: <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Tue, 27 Aug 2019 10:49:59 +0800
+Message-ID: <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
+Subject: Re: Ryzen7 3700U xhci fails on resume from sleep
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Endless Linux Upstreaming Team <linux@endlessm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCj4gT24gNy8zMC8yMDE5IDU6MzEgQU0sIEFuc29uLkh1YW5nQG54cC5jb20gd3JvdGU6DQo+
-ID4gRnJvbTogQW5zb24gSHVhbmcgPEFuc29uLkh1YW5nQG54cC5jb20+DQo+ID4NCj4gPiBTb21l
-IHBsYXRmb3JtcyBsaWtlIGkuTVg4TVEgaGFzIGNsb2NrIGNvbnRyb2wgZm9yIHRoaXMgbW9kdWxl
-LCBuZWVkIHRvDQo+ID4gYWRkIGNsb2NrIG9wZXJhdGlvbnMgdG8gbWFrZSBzdXJlIHRoZSBkcml2
-ZXIgaXMgd29ya2luZyBwcm9wZXJseS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEFuc29uIEh1
-YW5nIDxBbnNvbi5IdWFuZ0BueHAuY29tPg0KPiA+IFJldmlld2VkLWJ5OiBHdWlkbyBHw7xudGhl
-ciA8YWd4QHNpZ3hjcHUub3JnPg0KPiANCj4gVGhpcyBzZXJpZXMgbG9va3MgZ29vZCwgZG8geW91
-IHRoaW5rIGl0IGNhbiBiZSBtZXJnZWQgaW4gdGltZSBmb3IgdjUuND8NCj4gVG9kYXkgd2FzIHY1
-LjMtcmM2Lg0KDQpJZiB0aGUgcXVlc3Rpb24gaXMgZm9yIG1lLCB0aGVuIEkgYW0gTk9UIHN1cmUs
-IHRoZSB0aGVybWFsIHBhdGNoZXMgYXJlIHBlbmRpbmcNCnRoZXJlIGZvciBhbG1vc3QgaGFsZiB5
-ZWFyIGFuZCBJIGRpZCBOT1QgcmVjZWl2ZSBhbnkgcmVzcG9uc2UsIGxvb2tzIGxpa2Ugbm8gb25l
-DQppcyBtYWludGFpbmluZyB0aGUgdGhlcm1hbCBzdWItc3lzdGVtPw0KDQo+IA0KPiBJbiBhbiBl
-YXJsaWVyIHNlcmllcyB0aGUgQ0xLX0lTX0NSSVRJQ0FMIGZsYWdzIHdhcyByZW1vdmVkIGZyb20g
-dGhlIFRNVQ0KPiBjbG9jayBzbyBpZiB0aGUgdGhlcm1hbCBkcml2ZXIgZG9lc24ndCBleHBsaWNp
-dGx5IGVuYWJsZSBpdCB0aGUgc3lzdGVtIHdpbGwgaGFuZw0KPiBvbiBwcm9iZS4gVGhpcyBpcyB3
-aGF0IGhhcHBlbnMgaW4gbGludXgtbmV4dCByaWdodCBub3chDQoNClRoZSB0aGVybWFsIGRyaXZl
-ciBzaG91bGQgYmUgYnVpbHQgd2l0aCBtb2R1bGUsIHNvIGRlZmF1bHQga2VybmVsIHNob3VsZCBj
-YW4gYm9vdA0KdXAsIGRvIHlvdSBtb2RpZnkgdGhlIHRoZXJtYWwgZHJpdmVyIGFzIGJ1aWx0LWlu
-Pw0KDQo+IA0KPiBVbmxlc3MgdGhpcyBwYXRjaGVzIGlzIG1lcmdlZCBzb29uIHdlJ2xsIGVuZCB1
-cCB3aXRoIGEgNS40LXJjMSB0aGF0IGRvZXNuJ3QNCj4gYm9vdCBvbiBpbXg4bXEuIEFuIGVhc3kg
-Zml4IHdvdWxkIGJlIHRvIGRyb3AvcmV2ZXJ0IGNvbW1pdA0KPiA5NTFjMWFlZjk2OTEgKCJjbGs6
-IGlteDhtcTogUmVtb3ZlIENMS19JU19DUklUSUNBTCBmbGFnIGZvcg0KPiBJTVg4TVFfQ0xLX1RN
-VV9ST09UIikgdW50aWwgdGhlIHRoZXJtYWwgcGF0Y2hlcyBhcmUgYWNjZXB0ZWQuDQoNCklmIHRo
-ZSB0aGVybWFsIGRyaXZlciBpcyBidWlsdCBhcyBtb2R1bGUsIEkgdGhpbmsgbm8gbmVlZCB0byBy
-ZXZlcnQgdGhlIGNvbW1pdCwgYnV0DQppZiBieSBkZWZhdWx0IHRoZXJtYWwgZHJpdmVyIGlzIGJ1
-aWx0LWluIG9yIG1vZCBwcm9iZWQsIHRoZW4geWVzLCBpdCBzaG91bGQgTk9UIGJyZWFrDQprZXJu
-ZWwgYm9vdCB1cC4NCg0KQW5zb24uDQoNCj4gDQo+IE1lcmdpbmcgcGF0Y2hlcyBvdXQtb2Ytb3Jk
-ZXIgd2hlbiB0aGV5IGhhdmUgaGFyZCAoYm9vdC1icmVha2luZykNCj4gZGVwZW5kZW5jaWVzIGFs
-c28gYnJlYWtzIGJpc2VjdC4NCj4gDQo+IC0tDQo+IFJlZ2FyZHMsDQo+IExlb25hcmQNCg==
+On Mon, Aug 26, 2019 at 9:32 PM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
+> On 26.8.2019 12.29, Rafael J. Wysocki wrote:
+> > I wonder if you can reproduce this with the pm-s2idle-rework branch
+> > from linux-pm.git merged in.
+>
+> Root cause looks similar to:
+> https://bugzilla.kernel.org/show_bug.cgi?id=203885
+>
+> Mika wrote a fix for that:
+> https://lore.kernel.org/linux-pci/20190821124519.71594-1-mika.westerberg@linux.intel.com/
+
+Thanks for the suggestions. Mika's patch was already applied then
+reverted, I applied it again but there's no change.
+Also merging in pm-s2idle-rework doesn't make any difference.
+
+Any other ideas? Or comments on my findings so far?
+Given that I can't shift D0-D3-D0 reliably directly with setpci before
+loading the driver, is that indicative of a fundamental problem with
+the platform, or is my test invalid?
+Or in terms of other ways of testing the power transition outside of
+the suspend path, if a PCI dev is runtime suspended with no driver
+loaded, should Linux not be attempting to put it into D3?
+
+Thanks
+Daniel
