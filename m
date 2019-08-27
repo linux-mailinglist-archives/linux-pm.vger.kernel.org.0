@@ -2,122 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 380B69F5F5
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 00:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364359F633
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 00:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbfH0WVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Aug 2019 18:21:37 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:34407 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbfH0WVh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Aug 2019 18:21:37 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n9so250121pgc.1
-        for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2019 15:21:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=+QV1lxfro+2xR75kWYH74+2iVl7rk3tcmnqLNLA7fCo=;
-        b=iJ+G8JlwHiPuZWkUcHmYZ1wNy1XV+y4WOsqYeulXbySkVPtadrhuD6PODEirTRSnKz
-         PcmSWctkTfOPUu2QdZLFCLjZgzPgHst9fW09h2thERpJdEd+shbFxcGg3NxGNiN8VNJj
-         j9c6N9CjbAt69F46n4zHU08vNJUrqAYEuBt4Aown2HorEx/NH++awnk3shP7rl07I5Y3
-         /uaAKAwkv9sRdPF2Uhz1rrW2zwQt9AGvzdnEJfrhJMjA0hqdBXf2Nq2W9HlLqJNzw2jQ
-         HsedPaxYFjjGYIDJ9uW+Nv3LIo/RUfG0ymLrYn+8NxYVgYNYVR14RlELOsfdzTfWzeDM
-         mTwA==
+        id S1726111AbfH0Wcz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Aug 2019 18:32:55 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:43238 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726025AbfH0Wcz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Aug 2019 18:32:55 -0400
+Received: by mail-ot1-f65.google.com with SMTP id e12so762450otp.10;
+        Tue, 27 Aug 2019 15:32:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=+QV1lxfro+2xR75kWYH74+2iVl7rk3tcmnqLNLA7fCo=;
-        b=pyf72CI24SSqEULX2oXXEke+J/BisFu+rRA1MjTnPUxOd1CQoThKimXtRjcZBE53ER
-         TeTb+CnSJBTAEE23kd6WaQd2bUkxv3OADDUPjLvesT4Lu9PNQ79hFg3S5FO7iwQux2Ux
-         IO2rDPTo8Ou88AayJgW8HnRD/dAaO+CKPqfV7tGfYhSLR327JHS6y726HzjFBUCh6p3l
-         s8yUlaO7ENOqJirFPX6i0nkhucC9clemxvCeaWzWSul30DOf0LZzT4JCBcWIcRQT+pTx
-         caeocB4LLi1boQy7NRFvG7ZK3ALocZTYHdH1nMikinEe1NEfbp5ZUIfcs7zzV14Kty51
-         AINQ==
-X-Gm-Message-State: APjAAAUQp67ZWbfYxoPlxvlY5DIohw2gidKkJkxb7kpdmyYkkXaiqSm/
-        LgEPUG53TJispbefozTqOa5yMA==
-X-Google-Smtp-Source: APXvYqyco51mSNQzAaGPYLSKHmnGSAdHb2J1OzexYesNtAuslu1oxLH/YK/Ojv+o6ZBh9nX/zUeuRA==
-X-Received: by 2002:a63:fc09:: with SMTP id j9mr600765pgi.377.1566944496183;
-        Tue, 27 Aug 2019 15:21:36 -0700 (PDT)
-Received: from localhost ([2601:602:9200:a1a5:cc35:e750:308e:47f])
-        by smtp.gmail.com with ESMTPSA id p189sm306576pfb.112.2019.08.27.15.21.35
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 27 Aug 2019 15:21:35 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>, ulf.hansson@linaro.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>, linux-pm@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] arm64: meson: add support for SM1 Power Domains
-In-Reply-To: <20190823090418.17148-1-narmstrong@baylibre.com>
-References: <20190823090418.17148-1-narmstrong@baylibre.com>
-Date:   Tue, 27 Aug 2019 15:21:35 -0700
-Message-ID: <7hef16uu4w.fsf@baylibre.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bG9bAPsPgtk0aXT02g27VLf1Saty2/UhvB2P1PQFez4=;
+        b=lFh0XojkxV22fnbW+8yeuTFoncb0V58PwmV6D1R0gHbEE8Fnl/sk3qJJbNsDFEem9S
+         IJgRLxQQenYX8WZAaUxPsCZHrsog3v12vAM+W6kzbyYl7/SRL6K4byR2nc0wa4AeBQsa
+         3+4DI+hppspWCQljpfstzZROzPbfC45xcc06SdhrATNNYp7cY5h7lVpXPWltFmHVX/0x
+         LCpyitPHpzTv1Zhk8bNEZINSOoNKRYT0FDW3A7a68cM+WSRFzCBRSbel8WrVkrXtejPj
+         +ARLIqx4jVTYuTfKRaeo5uL6cpwyKsp3tr3thFyLP2hmyZkg9DpoWHtWZT5yaGQe2AiY
+         Xzig==
+X-Gm-Message-State: APjAAAUHLRa46OaVpnGKiPC+BaXrntNieNfbix5rma9DDcQd4sfoUbRq
+        oW+qTEbiMXpYqTz3eXxSZUgLgo+FRw==
+X-Google-Smtp-Source: APXvYqxrYCEbW6Lei7IWDJP4LIXpA5Q0iwBYIAzLRZXOMhYN8gHCCf8NUNNEpuif/S+KC2JZ8UZZfg==
+X-Received: by 2002:a9d:6e93:: with SMTP id a19mr819140otr.29.1566945174143;
+        Tue, 27 Aug 2019 15:32:54 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id e27sm186531oig.53.2019.08.27.15.32.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 15:32:53 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 17:32:52 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Maulik Shah <mkshah@codeaurora.org>
+Cc:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, bjorn.andersson@linaro.org,
+        evgreen@chromium.org, dianders@chromium.org, rnayak@codeaurora.org,
+        ilina@codeaurora.org, lsrao@codeaurora.org, ulf.hansson@linaro.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] dt-bindings: soc: qcom: Add RSC power domain
+ specifier
+Message-ID: <20190827223252.GA26039@bogus>
+References: <20190823081703.17325-1-mkshah@codeaurora.org>
+ <20190823081703.17325-4-mkshah@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190823081703.17325-4-mkshah@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Neil Armstrong <narmstrong@baylibre.com> writes:
+On Fri, Aug 23, 2019 at 01:47:00PM +0530, Maulik Shah wrote:
+> In addition to transmitting resource state requests to the remote
+> processor, the RSC is responsible for powering off/lowering the
+> requirements from CPUs subsystem for the associated hardware like
+> buses, clocks, and regulators when all CPUs and cluster is powered down.
+> 
+> The power domain is configured to a low power state and when all the
+> CPUs are powered down, the RSC can lower resource state requirements
+> and power down the rails that power the CPUs.
+> 
+> Add PM domain specifier property for RSC controller.
+> 
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt b/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
+> index 9b86d1eff219..d0ab6e9b6745 100644
+> --- a/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
+> +++ b/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
+> @@ -83,6 +83,13 @@ Properties:
+>  	Value type: <string>
+>  	Definition: Name for the RSC. The name would be used in trace logs.
+>  
+> +- #power-domain-cells:
+> +	Usage: optional
+> +	Value type: <u32>
+> +	Definition: Number of cells in power domain specifier. Optional for
+> +		    controllers that may be in 'solver' state where they can
+> +		    be in autonomous mode executing low power modes.
 
-> This patchset introduces a new "Everything-Else Power Domain Controller"
-> designed to handle all the different non-Always On peripherals like :
-> - VPU
-> - Ethernet Memories
-> - USB, PCIe, Audio, NNA on SM1
->
-> The current "gx-vpu-pwrc" process has been integrated to support the VPU
-> and the other power domains in a single driver.
->
-> Support for SoC domains has been made generic and easily extendable.
->
-> In order to restart from clean architecture :
-> - the PWRC node has been moved into the HHI simple-mfd, this suits much
->   better than beeing in the AO RTI simple-mfd
-> - a brand new yaml bindings schemas has been written
-> - reset-names has been added to clarify which resets are needed, so we can
->   dispatch them to domains
->
-> For G12A, the PWRC now offers support for the ethmac memory power domain.
->
-> For SM1, it also offers support for PCIe, USB, NNA, ethmac and Audio power
-> domains.
->
-> The DOS domains has been excluded for now, but can be added very easily.
->
-> GX hasn't been integrated for now, but it would follow the same scheme
-> as G12A support.
->
-> Changes since v1 at [1]:
-> - removed open-coded reset & clock get, enable/assert, disable/deassert
-> - moved to clk_bulk and reset_array with count check with a warning
-> - removed remaining sm1_pwrc in probe
-> - reordered arguments for VPU_PD and TOP_PD
-> - added get_power for TOP_PD aswell
-> - ported special VPU handling from gx-vpu-pwrc
-> - added shutdown driver call to avoid errors on reboot
-> - fixed patch 4 commit log
-> - collected rob's review tag on patch 1
->
-> [1] https://patchwork.kernel.org/cover/11106393/
+What's the value? It's always 0?
 
-Series queued for v5.4...
-
-> Neil Armstrong (5):
->   dt-bindings: power: add Amlogic Everything-Else power domains bindings
->   soc: amlogic: Add support for Everything-Else power domains controller
-
-These two in v5.4/drivers,
-
->   arm64: meson-g12: add Everything-Else power domain controller
->   arm64: dts: meson-sm1-sei610: add HDMI display support
->   arm64: dts: meson-sm1-sei610: add USB support
-
-and these 3 in v5.4/dt64,
-
-Thanks,
-
-Kevin
+> +
+>  Drivers that want to use the RSC to communicate with RPMH must specify their
+>  bindings as child nodes of the RSC controllers they wish to communicate with.
+>  
+> @@ -112,6 +119,7 @@ TCS-OFFSET: 0xD00
+>  				  <SLEEP_TCS   3>,
+>  				  <WAKE_TCS    3>,
+>  				  <CONTROL_TCS 1>;
+> +		#power-domain-cells = <0>;
+>  	};
+>  
+>  Example 2:
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by The Linux Foundation.
+> 
