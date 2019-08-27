@@ -2,115 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6199E5FD
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2019 12:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351749E6A9
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2019 13:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729390AbfH0KoE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Aug 2019 06:44:04 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:41632 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbfH0KoD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Aug 2019 06:44:03 -0400
-Received: by mail-qk1-f193.google.com with SMTP id g17so16519711qkk.8;
-        Tue, 27 Aug 2019 03:44:03 -0700 (PDT)
+        id S1726435AbfH0LVt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Aug 2019 07:21:49 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:37132 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbfH0LVt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Aug 2019 07:21:49 -0400
+Received: by mail-lf1-f67.google.com with SMTP id w67so6696101lff.4
+        for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2019 04:21:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=f9GeRCCR5SPjUrQ9jGrB+qKSFZMP69pNIGHH3g1yTjk=;
-        b=bHRYz7z/a+G22RJLFz/56nZ/O2pmgXdi9tXILnjYPvuWQatkaRAkME+YPTHAF3Kxnv
-         s89Jviwb//DGIwxdvs1smTzs21d8NdnJX8AeN8xhckwIcdw5s1u3lYg5wqOC6d2XYeCE
-         iP+BTVrL6t8MxXPMiGZf8fAuD8VfnZjAHNuiYgezKqg3yt0ozJ5x28PjyzeZzxb16n2L
-         QDiRMxfT/pQPuuBoqKlBIMpG3kWJ5hpRctmVIzD/+RNs+2J+SidcBsE7rDnKjmZLR9oY
-         mjylrKc5nijSn9EQMuT/MEAliQXJu7tW9A8FcOCHzLon9eyM5u0GYd+Zs7tcMQ/Sit5x
-         ipkg==
+         :cc;
+        bh=D+MUi7W3UwD/DF/e2Cr5moLgnRLJItQ6PUbyO9QGLoU=;
+        b=tBVGkSsi7ARebfmEi/Fcfxe4vA+8X7qeq+l8ccBb7VHmpLE0qjNReurymd8ldJRUwS
+         0ujB5OVjSopZDzOEHykJ27r5MGyiK9sqgl1TMXkoC+r2gba9SPUSSGdyNZF8y7/VKYms
+         mK8xwTbcQ0Hk2bdOVbpRV64LMZquLzSlMeNtAW/kxb68/ZtrulReE6Va+x1aguaU/NO2
+         gTT8jXFOazSFmdskSVV8WToQC/33WI7s/rIsUAEj+9TOYv174P1p7pJxh6hOjfAoWyxw
+         fG1zam5afD9O8mkHZQwYhpZQwkLer10K5k7WhIje0N4yXjpGsabXUfLFh+mIDlvyu24U
+         WO2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=f9GeRCCR5SPjUrQ9jGrB+qKSFZMP69pNIGHH3g1yTjk=;
-        b=uO8hIweaOwjcfXABEvrc5BDz9fEEc7rW2x9/Amnykoth3RdYH/sJe8HCiIe9bZMmEa
-         XrcMJkCkXiI8S5XekFBfXBoRQFXrPPoN42WRFTBBpJ3fnWsvwD5hE1gHa8t8hDGKTm3Q
-         kGjC6EzW+BfT9KmIzHXirwaSTibRhubfYlDpNfNPM3z3z1S3cLD2GbbiXTRZz5GUoCEP
-         eU6dHlS+5Ggh5IpN0MZSSNuCHPIjfVxqa/wmUpMZ1UqE3zd4mHuVsvXdmPGJFcK3/TN+
-         tjm+CRS1KgwnvmzzvDvHfXU4p2jI7pxDHq3szJ4J4v72w4svXjgMgBhXUZhOhbm1gcc8
-         3Htg==
-X-Gm-Message-State: APjAAAXVMaMfoYKTThFdgfwUNMCaXPQh94EpYVlj3sKwAmJsN3PjXdGH
-        elpvxomQ+q7A16PnkBdFImIg7HdRCCoXGSSF+7k0e+5nxEU=
-X-Google-Smtp-Source: APXvYqzZDZf05Sas70kMvDsixqKd2t5xmSm25pG3LwXQoN2S0kMZ4h8RpZnO+9M8V7u/T1KtLsCqN0m4EBH/sxOkCiQ=
-X-Received: by 2002:a05:620a:1413:: with SMTP id d19mr20194944qkj.341.1566902642595;
- Tue, 27 Aug 2019 03:44:02 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=D+MUi7W3UwD/DF/e2Cr5moLgnRLJItQ6PUbyO9QGLoU=;
+        b=SkxBjoqPtV4w952Ks52AgT9Rw7WqACqxFSl+u10m2D4YpJO2nL7kAhCeTtYiaf1V6f
+         iJ+HXGychTKisXvl3lFccv/MCiOvtcloTwoHLwaFErwKWjlr+L5UdYzP9p/5WGnfSpJO
+         dmxYm3VkNRzaaw49MXIbYgilw4ihZ4vUUk5cQ2OdR7b/jMyPaYw5BYjIbJBMgXBBbSne
+         RdsRkkOr2Xuujjn+si+FMlEFQdkQRG/zCvmcDRKobhrQu86hcqrrgGUBLWF43vM96UGu
+         RBtBflExNURt4tqSN8ttugh/n8OL6DqRtcDDxe/0ZaKEAdfwUdmThgo8yDrqpYKFbnNn
+         UN+Q==
+X-Gm-Message-State: APjAAAX5t4T/+StkO8eC7ppUmsulSpGPYikW8tlDKgDDDbW9DIRG5Yjp
+        M7W74LuzJMSDOETv7G0tTiS8lmiIyXb/eKQLhvNIWQ==
+X-Google-Smtp-Source: APXvYqxReb1BWUue6JmUVfyEy65BlZkMiFr7+j19KiGElE8x6eO0c6VeyhPd2oh3rqdfDoM6IwBFGwV6O5bAoqwWPeo=
+X-Received: by 2002:a19:14f:: with SMTP id 76mr1708716lfb.92.1566904906939;
+ Tue, 27 Aug 2019 04:21:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190816073742.26866-1-committed@heine.so>
-In-Reply-To: <20190816073742.26866-1-committed@heine.so>
-From:   Enric Balletbo Serra <eballetbo@gmail.com>
-Date:   Tue, 27 Aug 2019 12:43:51 +0200
-Message-ID: <CAFqH_52bMDedbRWkyevriYnCGSDRKHFs7UeygPqD00MpLOFobA@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply: sbs-battery: use correct flags field
-To:     Michael Nosthoff <committed@heine.so>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Brian Norris <briannorris@chromium.org>,
-        stable@vger.kernel.org, Sebastian Reichel <sre@kernel.org>
+References: <20190717063222.5902-1-linus.walleij@linaro.org> <47cb523f-60ad-750e-4374-6563f8230593@linaro.org>
+In-Reply-To: <47cb523f-60ad-750e-4374-6563f8230593@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 27 Aug 2019 13:21:35 +0200
+Message-ID: <CACRpkdYqjW_SHHLaSqgWO64CsGeyoOVGsOhnav0mwVA5W2fbuw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: db8500: Finalize device tree conversion
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Michael,
+On Thu, Aug 22, 2019 at 8:16 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 
-I think that Sebastian is expected to be cc'ed, so adding him
-(otherwise he can miss your patch)
+> I've been through the DT and I don't understand why there is:
+>
+>         [ ... ]
+>         trip0-temp = <70000>;
+>         trip0-type = "active";
+>         trip0-cdev-num = <1>;
+>         trip0-cdev-name0 = "thermal-cpufreq-0";
+>         [ ... ]
+>
+> Those bindings already exists for the thermal no?
+>
+> Why not create a thermal-zone node and then add the values above?
 
-Missatge de Michael Nosthoff <committed@heine.so> del dia dv., 16
-d=E2=80=99ag. 2019 a les 9:38:
->
-> the type flag is stored in the chip->flags field not in the
-> client->flags field. This currently leads to never using the ti
-> specific health function as client->flags doesn't use that bit.
-> So it's always falling back to the general one.
->
-> Fixes: 76b16f4cdfb8 ("power: supply: sbs-battery: don't assume
-> MANUFACTURER_DATA formats")
->
-> Signed-off-by: Michael Nosthoff <committed@heine.so>
-> Reviewed-by: Brian Norris <briannorris@chromium.org>
-> Cc: <stable@vger.kernel.org>
+I guess you refer to arch/arm/boot/dts/ste-snowball.dts
+where this is in the thermal@801573c0 node.
+(I moved it to the main SoC file for the next kernel.)
 
-Found this patch while looking at another issue and LGTM, so in case
-this helps the patch landing
+I think the reason is that this was merged in:
+commit dc1956b5f84de7d453ec4d9fe68385fffd689686
+"Thermal: Add ST-Ericsson DB8500 thermal properties and platform data."
+Date:   Thu Nov 15 18:56:43 2012 +0800
 
-Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Thermal zones were not added until:
+commit 4e5e4705bf69ea450f58fc709ac5888f321a9299
+"thermal: introduce device tree parser"
+Date:   Wed Jul 3 15:35:39 2013 -0400
 
-Thanks,
- Enric
+Which is half a year after this device tree was written.
 
-> ---
-> Changes since v1:
-> * Changed comment according to Brian's suggestions
-> * Added Fixes tag
-> * Added reviewed and cc stable
+Apparently Hongbo stopped working on this driver before
+that and didn't convert the driver or consumers over to the
+new thermal zone APIs with trip points and cooling maps
+defined in the device tree (which by the way is an awesome
+feature).
+
+> Another point is there are too many trip points, two should be enough,
+> one for throttling and one for critical, the governor will handle that
+> properly by stepping the opps.
 >
->  drivers/power/supply/sbs-battery.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sb=
-s-battery.c
-> index 048d205d7074..2e86cc1e0e35 100644
-> --- a/drivers/power/supply/sbs-battery.c
-> +++ b/drivers/power/supply/sbs-battery.c
-> @@ -620,7 +620,7 @@ static int sbs_get_property(struct power_supply *psy,
->         switch (psp) {
->         case POWER_SUPPLY_PROP_PRESENT:
->         case POWER_SUPPLY_PROP_HEALTH:
-> -               if (client->flags & SBS_FLAGS_TI_BQ20Z75)
-> +               if (chip->flags & SBS_FLAGS_TI_BQ20Z75)
->                         ret =3D sbs_get_ti_battery_presence_and_health(cl=
-ient,
->                                                                      psp,=
- val);
->                 else
-> --
-> 2.20.1
->
+> And one last point is the trip point should be passive, not active.
+
+OK I get it, can we merge these two patches that just move
+the code to the thermal driver and then I can make
+a new patch or some new patches on top to migrate to
+Eduardo's new framework for device tree defined thermal
+zones?
+
+Yours,
+Linus Walleij
