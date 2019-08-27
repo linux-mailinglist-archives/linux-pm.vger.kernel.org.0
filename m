@@ -2,99 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFDE9E5F1
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2019 12:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6199E5FD
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2019 12:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728939AbfH0KmP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Aug 2019 06:42:15 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:42059 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbfH0KmP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Aug 2019 06:42:15 -0400
-Received: by mail-qt1-f196.google.com with SMTP id t12so20773567qtp.9
-        for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2019 03:42:14 -0700 (PDT)
+        id S1729390AbfH0KoE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Aug 2019 06:44:04 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:41632 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725793AbfH0KoD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Aug 2019 06:44:03 -0400
+Received: by mail-qk1-f193.google.com with SMTP id g17so16519711qkk.8;
+        Tue, 27 Aug 2019 03:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=HW0Up87SScdHrFzZ0SShtUIE9RDf120BeZe+stnrKi8=;
-        b=QDPc4MDrwprvwckvgYJdaGq0badzodt2SdzcCYeT7XN0yzq9QGEEplFzFoHXmSQzlB
-         Tpvx0L8dFEBf0UkrvmDWQKN85zeNlGVHoCHgQgipu9gqgrORy/mr18qf5shx/ScTkY/Y
-         WEHVB/XuFsocfpiqCgQI8wNUVKTf4kYHINKYBvbFcQW5tcSPWMi/fDoaaZ+VC/IGwDaV
-         6IMQHs8oWwb002sUU3cUd9eADMrP0stA/sOhL9oA+pXX3kLgwfQQ7Fe1GjvArdirCFNO
-         crzfzHnzoDzRyu9M2KZmxYg4yin8YAHyBq7hCm18J3OCUmNfnWxYkSzL28X+dNWXQu0o
-         creg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=f9GeRCCR5SPjUrQ9jGrB+qKSFZMP69pNIGHH3g1yTjk=;
+        b=bHRYz7z/a+G22RJLFz/56nZ/O2pmgXdi9tXILnjYPvuWQatkaRAkME+YPTHAF3Kxnv
+         s89Jviwb//DGIwxdvs1smTzs21d8NdnJX8AeN8xhckwIcdw5s1u3lYg5wqOC6d2XYeCE
+         iP+BTVrL6t8MxXPMiGZf8fAuD8VfnZjAHNuiYgezKqg3yt0ozJ5x28PjyzeZzxb16n2L
+         QDiRMxfT/pQPuuBoqKlBIMpG3kWJ5hpRctmVIzD/+RNs+2J+SidcBsE7rDnKjmZLR9oY
+         mjylrKc5nijSn9EQMuT/MEAliQXJu7tW9A8FcOCHzLon9eyM5u0GYd+Zs7tcMQ/Sit5x
+         ipkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=HW0Up87SScdHrFzZ0SShtUIE9RDf120BeZe+stnrKi8=;
-        b=i9aboQIAMarH9YdK5SBVxtXhYvd1QQUkM1BQsi+/oaGkOnEktmvjUCiPOn6Sy32x9k
-         6xE7l227v6BB5LmRbKFHS61GFHoj9wfikjM40oCaTbH6wFz5zCX/5FipqVH6x/MKYYd1
-         nvMH9hzseS04e2VM+8wbB0fY+2hxAiUFGD+fB/iIiLC00dgkYR04pueDvHslWcw1wy1H
-         0yrSZoEBMqDkgVhxtWD1iXvuTX147gyrebyJO0FRbCOT6/iUl/2TW0DXyOGPXQ1mDx+y
-         613fX+5kChE41QtmNM8xbTo2qoBz28iMTKzFl+f4+zKXCT2Qqu9VicDnD5TereaXZW86
-         rDxw==
-X-Gm-Message-State: APjAAAV8AI6heahf6MvS934gwxSzHu5z8smcfeezMUbyS6JkhMzFEFWw
-        3x/GkHmzese/M47GbcX14ZmxUA==
-X-Google-Smtp-Source: APXvYqxgGIYJa3ZsiHyOHwIsPZ5rZmSnZHUpM/421cYamaePu4Yy8A/pP6okpZW8QzANxkbuzUBUuw==
-X-Received: by 2002:ac8:3364:: with SMTP id u33mr22487663qta.115.1566902534214;
-        Tue, 27 Aug 2019 03:42:14 -0700 (PDT)
-Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.gmail.com with ESMTPSA id z7sm8271409qki.88.2019.08.27.03.42.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Aug 2019 03:42:13 -0700 (PDT)
-Subject: Re: [PATCH 3/4] thermal: qcom: Add RPMHPD cooling device driver.
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
- <1565398727-23090-4-git-send-email-thara.gopinath@linaro.org>
- <20190824061029.GT26807@tuxbook-pro>
-Cc:     qualcomm-lt@lists.linaro.org, linux-pm@vger.kernel.org,
-        ulf.hansson@linaro.org, rnayak@codeaurora.org
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <5D650904.1010402@linaro.org>
-Date:   Tue, 27 Aug 2019 06:42:12 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.5.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=f9GeRCCR5SPjUrQ9jGrB+qKSFZMP69pNIGHH3g1yTjk=;
+        b=uO8hIweaOwjcfXABEvrc5BDz9fEEc7rW2x9/Amnykoth3RdYH/sJe8HCiIe9bZMmEa
+         XrcMJkCkXiI8S5XekFBfXBoRQFXrPPoN42WRFTBBpJ3fnWsvwD5hE1gHa8t8hDGKTm3Q
+         kGjC6EzW+BfT9KmIzHXirwaSTibRhubfYlDpNfNPM3z3z1S3cLD2GbbiXTRZz5GUoCEP
+         eU6dHlS+5Ggh5IpN0MZSSNuCHPIjfVxqa/wmUpMZ1UqE3zd4mHuVsvXdmPGJFcK3/TN+
+         tjm+CRS1KgwnvmzzvDvHfXU4p2jI7pxDHq3szJ4J4v72w4svXjgMgBhXUZhOhbm1gcc8
+         3Htg==
+X-Gm-Message-State: APjAAAXVMaMfoYKTThFdgfwUNMCaXPQh94EpYVlj3sKwAmJsN3PjXdGH
+        elpvxomQ+q7A16PnkBdFImIg7HdRCCoXGSSF+7k0e+5nxEU=
+X-Google-Smtp-Source: APXvYqzZDZf05Sas70kMvDsixqKd2t5xmSm25pG3LwXQoN2S0kMZ4h8RpZnO+9M8V7u/T1KtLsCqN0m4EBH/sxOkCiQ=
+X-Received: by 2002:a05:620a:1413:: with SMTP id d19mr20194944qkj.341.1566902642595;
+ Tue, 27 Aug 2019 03:44:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190824061029.GT26807@tuxbook-pro>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
+References: <20190816073742.26866-1-committed@heine.so>
+In-Reply-To: <20190816073742.26866-1-committed@heine.so>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Tue, 27 Aug 2019 12:43:51 +0200
+Message-ID: <CAFqH_52bMDedbRWkyevriYnCGSDRKHFs7UeygPqD00MpLOFobA@mail.gmail.com>
+Subject: Re: [PATCH v2] power: supply: sbs-battery: use correct flags field
+To:     Michael Nosthoff <committed@heine.so>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Brian Norris <briannorris@chromium.org>,
+        stable@vger.kernel.org, Sebastian Reichel <sre@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/24/2019 02:10 AM, Bjorn Andersson wrote:
-> On Fri 09 Aug 17:58 PDT 2019, Thara Gopinath wrote:
-> 
->> The MX power domain in RPMH can be used to warm the
->> the SoC in SDM845. To support this feature, introduce
->> a RPMH power domain cooling device driver that can be
->> plugged into the thermal framework.(The thermal framework
->> itself requires further modifiction to support a warming
->> device in place of a cooling device. Those extensions are
->> not introduced in this patch series).
->>
-> 
-> This cooling device provides an interface to set a minimum state for a
-> power domain.  So while it's used for controlling the MX rail exposed by
-> the RPMh on some Qualcomm SoCs there's nothing Qualcomm/RPMh specific
-> with it.
-Hi Bjorn,
+Hi Michael,
 
-I agree that there is nothing Qualcomm specific. Are you suggesting a
-more generic driver here ?
+I think that Sebastian is expected to be cc'ed, so adding him
+(otherwise he can miss your patch)
 
-Regards
-Thara
+Missatge de Michael Nosthoff <committed@heine.so> del dia dv., 16
+d=E2=80=99ag. 2019 a les 9:38:
+>
+> the type flag is stored in the chip->flags field not in the
+> client->flags field. This currently leads to never using the ti
+> specific health function as client->flags doesn't use that bit.
+> So it's always falling back to the general one.
+>
+> Fixes: 76b16f4cdfb8 ("power: supply: sbs-battery: don't assume
+> MANUFACTURER_DATA formats")
+>
+> Signed-off-by: Michael Nosthoff <committed@heine.so>
+> Reviewed-by: Brian Norris <briannorris@chromium.org>
+> Cc: <stable@vger.kernel.org>
 
-> 
-> Regards,
-> Bjorn
-> 
+Found this patch while looking at another issue and LGTM, so in case
+this helps the patch landing
 
+Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
--- 
-Regards
-Thara
+Thanks,
+ Enric
+
+> ---
+> Changes since v1:
+> * Changed comment according to Brian's suggestions
+> * Added Fixes tag
+> * Added reviewed and cc stable
+>
+>  drivers/power/supply/sbs-battery.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sb=
+s-battery.c
+> index 048d205d7074..2e86cc1e0e35 100644
+> --- a/drivers/power/supply/sbs-battery.c
+> +++ b/drivers/power/supply/sbs-battery.c
+> @@ -620,7 +620,7 @@ static int sbs_get_property(struct power_supply *psy,
+>         switch (psp) {
+>         case POWER_SUPPLY_PROP_PRESENT:
+>         case POWER_SUPPLY_PROP_HEALTH:
+> -               if (client->flags & SBS_FLAGS_TI_BQ20Z75)
+> +               if (chip->flags & SBS_FLAGS_TI_BQ20Z75)
+>                         ret =3D sbs_get_ti_battery_presence_and_health(cl=
+ient,
+>                                                                      psp,=
+ val);
+>                 else
+> --
+> 2.20.1
+>
