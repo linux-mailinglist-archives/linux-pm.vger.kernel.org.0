@@ -2,87 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F109DBC4
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2019 04:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAFD9DBDF
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Aug 2019 05:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbfH0CuL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Aug 2019 22:50:11 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:33424 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728025AbfH0CuL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Aug 2019 22:50:11 -0400
-Received: by mail-qk1-f193.google.com with SMTP id w18so15894370qki.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Aug 2019 19:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T2iPkJ7pf5gy03ZtFr13YyLMEqBiyBna8KsbdE4uLh4=;
-        b=OgO/muqhVUTgi3797A1/YaOoRiSxfCK9qTOuvdSWVO5kgttxZF8bud0CU1Q+TemszI
-         F4o710BbkBQiYhrPmrHcDtNOUH+xryGN5/3OjKQ5qLMZ5LZDeRnL+hif3HB1kLzLtwhI
-         9ed8gSxB4BgFPl432UuxuSCczBxpr9m5bO+SoILvSPaonHHooutjIR4fjNbRLmdXduIp
-         ZqFB7LiPb4vVfZ3+79KXKqVuTdRgwrOKGi9eFejvI4xdoLgugjdZwYUsv2rg/gGfy4Y5
-         EccSsMFQ7WD0PlCK43idSM/yPkdr0QGnkn4AUgnHESF3RfdIrFIjUjO9S2f748Vq9IjJ
-         iS5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T2iPkJ7pf5gy03ZtFr13YyLMEqBiyBna8KsbdE4uLh4=;
-        b=DnT8qRoroH6myeL9fnE7qCb8f/PM6DONOCpMiHCVkUVRZaCa1uDugvjDSG7BSZQ4ZK
-         XxLp8tS9KAZL3dAnCQyxjcMZk/B5+UVyPgRQJxpkTbxJnc8LqMnfwivkucTQkIAhAIi9
-         swwSBqwKccw4BsH0vQlSPBAlaoD32BKbkuTXjZ/7FTrFvSWh/wwqXUl1KPlH9B/9Rys0
-         k3krFO/0MvIawQflWbjeD09/5aHfxQDlxZt12cFz1xxIdO4CPc2PtyemgKSSUrc7cEKQ
-         WlXuPvKw1Ts5EO8uXVxJ0IFMs9sWVnRhLcKHLuc4em3PzugardYqRMJ4iXvzTDRDwp8T
-         LgXg==
-X-Gm-Message-State: APjAAAWe5/73i1bptDoLXxiH16Ig9rlR0FAhu0CKokFMU3xQnhYG9Ufe
-        5yIJ3guYwwPsJRsTwbEce6zQZElnboxDUDlgBJ4rSQ==
-X-Google-Smtp-Source: APXvYqyorHsPxknELIV3kZZaAxlw5KcVXN96cPbvisDKUGVl/1XaqwDQWul4lUcEGTeWYKVYdyq/febIl7qMeZWHlzk=
-X-Received: by 2002:ae9:c206:: with SMTP id j6mr19308064qkg.14.1566874210753;
- Mon, 26 Aug 2019 19:50:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com>
- <CAJZ5v0g4T_0VD_oYMF_BF1VM-d1bg-BD8h8=STDrhVBgouPOPg@mail.gmail.com> <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com>
-In-Reply-To: <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Tue, 27 Aug 2019 10:49:59 +0800
-Message-ID: <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
-Subject: Re: Ryzen7 3700U xhci fails on resume from sleep
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Endless Linux Upstreaming Team <linux@endlessm.com>
+        id S1728968AbfH0DJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Aug 2019 23:09:22 -0400
+Received: from mga02.intel.com ([134.134.136.20]:31921 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728025AbfH0DJW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 26 Aug 2019 23:09:22 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Aug 2019 20:09:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,435,1559545200"; 
+   d="scan'208";a="180076066"
+Received: from deyangko-mobl.ccr.corp.intel.com ([10.249.168.35])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Aug 2019 20:09:17 -0700
+Message-ID: <57ecab7c3600802d544683fcb968f9455b2b25d8.camel@intel.com>
+Subject: Re: [PATCH V3 1/5] thermal: qoriq: Add clock operations
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Anson Huang <anson.huang@nxp.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Tue, 27 Aug 2019 11:09:16 +0800
+In-Reply-To: <AM6PR0402MB3911D45B3B148588A582F6C4F5A00@AM6PR0402MB3911.eurprd04.prod.outlook.com>
+References: <20190730022126.17883-1-Anson.Huang@nxp.com>
+         <VI1PR04MB7023F219CA7B4187F86EAA42EEA10@VI1PR04MB7023.eurprd04.prod.outlook.com>
+         <AM6PR0402MB3911D45B3B148588A582F6C4F5A00@AM6PR0402MB3911.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 9:32 PM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
-> On 26.8.2019 12.29, Rafael J. Wysocki wrote:
-> > I wonder if you can reproduce this with the pm-s2idle-rework branch
-> > from linux-pm.git merged in.
->
-> Root cause looks similar to:
-> https://bugzilla.kernel.org/show_bug.cgi?id=203885
->
-> Mika wrote a fix for that:
-> https://lore.kernel.org/linux-pci/20190821124519.71594-1-mika.westerberg@linux.intel.com/
+On Tue, 2019-08-27 at 01:51 +0000, Anson Huang wrote:
+> > On 7/30/2019 5:31 AM, Anson.Huang@nxp.com wrote:
+> > > From: Anson Huang <Anson.Huang@nxp.com>
+> > > 
+> > > Some platforms like i.MX8MQ has clock control for this module,
+> > > need to
+> > > add clock operations to make sure the driver is working properly.
+> > > 
+> > > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> > > Reviewed-by: Guido Günther <agx@sigxcpu.org>
+> > 
+> > This series looks good, do you think it can be merged in time for
+> > v5.4?
+> > Today was v5.3-rc6.
+> 
+> If the question is for me, then I am NOT sure, the thermal patches
+> are pending
+> there for almost half year and I did NOT receive any response,
 
-Thanks for the suggestions. Mika's patch was already applied then
-reverted, I applied it again but there's no change.
-Also merging in pm-s2idle-rework doesn't make any difference.
+which patch series you're referring to?
 
-Any other ideas? Or comments on my findings so far?
-Given that I can't shift D0-D3-D0 reliably directly with setpci before
-loading the driver, is that indicative of a fundamental problem with
-the platform, or is my test invalid?
-Or in terms of other ways of testing the power transition outside of
-the suspend path, if a PCI dev is runtime suspended with no driver
-loaded, should Linux not be attempting to put it into D3?
+>  looks like no one
+> is maintaining the thermal sub-system?
+> 
 
-Thanks
-Daniel
+Eduardo is maintaining all the thermal-soc driver changes. Thus I
+usually filtered out the soc driver patches in my mailbox.
+
+The last email from Eduardo is that he is offline during this July and
+will be back and taking patches in August.
+
+I will double check with Eduardo anyway.
+
+thanks,
+rui
+
+
+> > 
+> > In an earlier series the CLK_IS_CRITICAL flags was removed from the
+> > TMU
+> > clock so if the thermal driver doesn't explicitly enable it the
+> > system will hang
+> > on probe. This is what happens in linux-next right now!
+> 
+> The thermal driver should be built with module, so default kernel
+> should can boot
+> up, do you modify the thermal driver as built-in?
+> 
+> > 
+> > Unless this patches is merged soon we'll end up with a 5.4-rc1 that
+> > doesn't
+> > boot on imx8mq. An easy fix would be to drop/revert commit
+> > 951c1aef9691 ("clk: imx8mq: Remove CLK_IS_CRITICAL flag for
+> > IMX8MQ_CLK_TMU_ROOT") until the thermal patches are accepted.
+> 
+> If the thermal driver is built as module, I think no need to revert
+> the commit, but
+> if by default thermal driver is built-in or mod probed, then yes, it
+> should NOT break
+> kernel boot up.
+> 
+> Anson.
+> 
+> > 
+> > Merging patches out-of-order when they have hard (boot-breaking)
+> > dependencies also breaks bisect.
+> > 
+> > --
+> > Regards,
+> > Leonard
+
