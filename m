@@ -2,153 +2,515 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E7F9FD70
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 10:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92A69FD74
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 10:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726315AbfH1Itt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 04:49:49 -0400
-Received: from mail-eopbgr60049.outbound.protection.outlook.com ([40.107.6.49]:15965
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726259AbfH1Itt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Aug 2019 04:49:49 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vx+c1mDHU/vrIJFYNAwsTzVRLMgKratPaomf9VsRRQ9GL9Pc+1Grh/Eavi+qQr3jdeSkMXz4Po8XcQg1dQIUauRqwQQW6uX63T0ndPg56Hlt30aRk2ljZ40du1ci1b/3dhtu4D10NjwBV7AP9/cksulyOhkDCW1K2E06QIVAHkpzcl9ynh/2N9T0DzCFvV2TfpzF9QQc+znHJouXLkwycDjCu/TmugkWJO2PyZB5MlVb1VSIV+YQv9XPxv+ssqeuBItK/fkVYT67IGGUIXg3/GPAevSHkIpNpFsi7i5n5aOiLwmD26ohtwKCRRc9uAZfmOOGjM+Sk0SlHCbrDyrqSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7quiOdEkVI5Z36qWRv6XTFHjsfW3GhocFKQxMV6Tf6s=;
- b=Ms8w+OnDNnH5tWwx5B4VDTzXjTl/sXBXVslozbce/1Y4WvkLskNobaIUVSAK5RJgdkWCAEHjg2WSq3MkHnbUpfr6FS8VfDZGFrX2pY6YuD41Kg2eyOBmMm7GhVBxWCzeQke6zbfQNls9rGhw9ShIeNRvt1NUPtxNqLPYvpknFv6SYLLevm8YF9do8ahWDbZn+CpLSJiK3QVGat3DrtiNeF5kG31KpVta82C+nX8gEnDdt+XBNd5QdJujLMRK1YgJN+iYgYrGdds8AIon+UbIGGkGKLVn84zSfO/KgG28lnGEo0r60d4w59lGVxers3kjGEFI7auql4vMnbtNIWcBXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7quiOdEkVI5Z36qWRv6XTFHjsfW3GhocFKQxMV6Tf6s=;
- b=CQFw8iLo8PlU4hpQldKNdZmvQBhcsvxHP0DV8hzbkP3N5/43BEzdEd514KReAoOIbdBnSeNGg/9EWsfgDK6rhQHoaPQStoc1EyRP6utLsXcoN3FTOD0ygm+XKCRy8AkH3YgDfThCt6knK+G7yrzfomTXpaKc5sauzBxQQPDL5wU=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3914.eurprd04.prod.outlook.com (52.134.71.157) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2199.21; Wed, 28 Aug 2019 08:49:44 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::8958:299c:bc54:2a38]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::8958:299c:bc54:2a38%7]) with mapi id 15.20.2199.021; Wed, 28 Aug 2019
- 08:49:44 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>
-CC:     Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>
-Subject: RE: [PATCH V3 1/5] thermal: qoriq: Add clock operations
-Thread-Topic: [PATCH V3 1/5] thermal: qoriq: Add clock operations
-Thread-Index: AQHVRn7U0xGc5nAWcEuPNmwDSS0IiacQaSEAgAAA+YCAAAF2wA==
-Date:   Wed, 28 Aug 2019 08:49:44 +0000
-Message-ID: <DB3PR0402MB3916045AFDDF4EFA9AD50842F5A30@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <20190730022126.17883-1-Anson.Huang@nxp.com>
-         <VI1PR04MB7023F219CA7B4187F86EAA42EEA10@VI1PR04MB7023.eurprd04.prod.outlook.com>
-         <AM6PR0402MB3911D45B3B148588A582F6C4F5A00@AM6PR0402MB3911.eurprd04.prod.outlook.com>
-         <VI1PR04MB7023773DD477FF89E2D2181CEEA00@VI1PR04MB7023.eurprd04.prod.outlook.com>
-         <d9b428825654181fbdbfb4d613a6a3fd52330787.camel@intel.com>
- <afb235bf7390fb6fbd723c34b08feddd771d1f6c.camel@intel.com>
-In-Reply-To: <afb235bf7390fb6fbd723c34b08feddd771d1f6c.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3ed47425-464e-4ffb-685c-08d72b94ac81
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3914;
-x-ms-traffictypediagnostic: DB3PR0402MB3914:
-x-ms-exchange-purlcount: 1
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB39145E849BD7131F7BF264AFF5A30@DB3PR0402MB3914.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 014304E855
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(396003)(376002)(346002)(39860400002)(366004)(189003)(199004)(4326008)(6246003)(6306002)(25786009)(6436002)(7416002)(66446008)(66476007)(9686003)(66066001)(305945005)(52536014)(76116006)(45080400002)(229853002)(64756008)(66556008)(66946007)(256004)(3846002)(102836004)(44832011)(186003)(55016002)(14444005)(76176011)(6506007)(446003)(74316002)(53546011)(5660300002)(99286004)(26005)(486006)(476003)(7736002)(7696005)(11346002)(8936002)(33656002)(2906002)(71190400001)(71200400001)(8676002)(110136005)(6116002)(478600001)(81166006)(81156014)(14454004)(316002)(54906003)(53936002)(86362001)(966005);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3914;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: lJJ7TtySO9WzHG04wVwIEE6G5/GDihEuj0PHhcrue7ZJf6ThASZkxwXH3tOidToo5nV9rcdLsstr0wjZBrhb9SimV3HgY+Z25nT8RObqFS5pBrS5XZ/aGhaWarP6Mj+f2KDneiNloH4wOMqLS6JEg6i/S7Z606aBHTZHqnsBn2g0H11zOThySPyH3VfQ/03D6xSf7NthU45d7TVJsDE4985Lef6cV/Mq3vehvQ3nOyNrb4zSdkZ6R6FNNeYHkZBI5kSExOiJ8Dj8gLoZwUk7BedKLMzgG8AuMrKIZsdNQjydyZGkq/ML9mV/YbqqXKqPzhHRhYAK1Mb/JxPRB86Hy64lZKsL+U0rih90sC6NblacKtd0xw+HStQI4GFmG0qAhCVPpKXzfvwib5TSU4qPljwdeongG+5lKOSHnzJDZcs=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726415AbfH1IuV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Aug 2019 04:50:21 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33058 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726259AbfH1IuV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 04:50:21 -0400
+Received: by mail-pl1-f196.google.com with SMTP id go14so930079plb.0
+        for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2019 01:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+Nnv8QQTbl6/pTPsiKbtpWJmv+kviSXUlOqzZyVEImo=;
+        b=xhcPOf4JUVCsmsu4786wPuDswAHx6EjrHiu7JBN928Ur2OmJBgkJmq7Zk5ZiLcNu82
+         L7s7c/LWhKYbHh3o0WFv4JwcJ9gQx83/CS4O9ejMBxLzSo/aOxGsxZEFPk+Tca27Vjkc
+         WUhdwZO5tb0sWW91JMs2bX8equX1xf+C8ynwV/ZtBpSz1PKxYcMfVu6zqQAK8V9q4JCQ
+         uN8j5Vm/bNQ9dxtYdKRZwwwUUDBFcL6zBpUDAXKzZwtBppYuUd4cgn4h5TuC7CjwDpD2
+         +t+Q4J6ZIHhZBISMvIEDegKjdDicUoW9mr/ysUxQz3qNqtMA90YqwgbuPiDz6urrdg3G
+         dk6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+Nnv8QQTbl6/pTPsiKbtpWJmv+kviSXUlOqzZyVEImo=;
+        b=Q80JZMFP4/XfYBUkuyylCuVMLWmd929/CMwnSCw6ZRE6iGR3JO7qA2xccdeY0BLrgd
+         EyswoPy/KGiIoOAlszT9XjQJ6CCBWSpwU7Kw1JmTeGHXaipWt6WZzaFTRX5wokSM4rmO
+         0WXiByRE9lPlJA8qvXWrEHg0XmVKy65OabJb0Du7AzWowJ/H39TvmBKcyhWDUWrSsBVF
+         DiZ/wD5pBikEHf8xLyzku2cJoSoPFpnlKh3qWpNXdz6z+95locTXdfwSQpoO8Pc44t1r
+         /Z+1TdL/Pm/VHqzbn5x7Rd9W/iBh0GPLB4j7+9QsPfGNqG96aKVz/ZcXUwb2zWu1SfyT
+         8PBw==
+X-Gm-Message-State: APjAAAUkOU5LCJROcHy7/FyU6FFtsh4ohjAeh0t1cNKl6Yam1sbnEBo3
+        +ekmVRKzE5N04D10EcUSnync/Q==
+X-Google-Smtp-Source: APXvYqz4UJf4HPJLsPKQN1TRFxbv72N6qvCrGmuqVMEXvoXVZ5OGcOascXaCdasWwhADnZg7Cfeakw==
+X-Received: by 2002:a17:902:2ea2:: with SMTP id r31mr3246852plb.200.1566982220339;
+        Wed, 28 Aug 2019 01:50:20 -0700 (PDT)
+Received: from localhost ([122.171.230.51])
+        by smtp.gmail.com with ESMTPSA id s7sm2940771pfb.138.2019.08.28.01.50.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Aug 2019 01:50:19 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>, Len Brown <lenb@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Schmauss <erik.schmauss@intel.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Subject: [PATCH V3 05/10] ACPI: cpufreq: Switch to QoS requests instead of cpufreq notifier
+Date:   Wed, 28 Aug 2019 14:20:13 +0530
+Message-Id: <c9c771b358c7ce7315b1b5a374375de87899f35b.1566982038.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
+In-Reply-To: <86dc4a082ea00c278c0e1d7f3fcbdc4ab9af2eec.1563862014.git.viresh.kumar@linaro.org>
+References: <86dc4a082ea00c278c0e1d7f3fcbdc4ab9af2eec.1563862014.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ed47425-464e-4ffb-685c-08d72b94ac81
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Aug 2019 08:49:44.4701
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HZkHoRg0luEw7DxO0MuKuQmJlKWEoY3j0PbMFPE5KH0cBdP1KTxyRYQSXTsoiJhVptBz9ao629NDj9ql1FNS+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3914
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIFJ1aQ0KDQo+IE9uIFdlZCwgMjAxOS0wOC0yOCBhdCAxNjozMiArMDgwMCwgWmhhbmcgUnVp
-IHdyb3RlOg0KPiA+IE9uIFR1ZSwgMjAxOS0wOC0yNyBhdCAxMjo0MSArMDAwMCwgTGVvbmFyZCBD
-cmVzdGV6IHdyb3RlOg0KPiA+ID4gT24gMjcuMDguMjAxOSAwNDo1MSwgQW5zb24gSHVhbmcgd3Jv
-dGU6DQo+ID4gPiA+ID4gSW4gYW4gZWFybGllciBzZXJpZXMgdGhlIENMS19JU19DUklUSUNBTCBm
-bGFncyB3YXMgcmVtb3ZlZCBmcm9tDQo+ID4gPiA+ID4gdGhlIFRNVSBjbG9jayBzbyBpZiB0aGUg
-dGhlcm1hbCBkcml2ZXIgZG9lc24ndCBleHBsaWNpdGx5IGVuYWJsZQ0KPiA+ID4gPiA+IGl0IHRo
-ZSBzeXN0ZW0gd2lsbCBoYW5nIG9uIHByb2JlLiBUaGlzIGlzIHdoYXQgaGFwcGVucyBpbg0KPiA+
-ID4gPiA+IGxpbnV4LW5leHQgcmlnaHQgbm93IQ0KPiA+ID4gPg0KPiA+ID4gPiBUaGUgdGhlcm1h
-bCBkcml2ZXIgc2hvdWxkIGJlIGJ1aWx0IHdpdGggbW9kdWxlLCBzbyBkZWZhdWx0IGtlcm5lbA0K
-PiA+ID4gPiBzaG91bGQgY2FuIGJvb3QgdXAsIGRvIHlvdSBtb2RpZnkgdGhlIHRoZXJtYWwgZHJp
-dmVyIGFzIGJ1aWx0LWluPw0KPiA+ID4gPg0KPiA+ID4gPiA+IFVubGVzcyB0aGlzIHBhdGNoZXMg
-aXMgbWVyZ2VkIHNvb24gd2UnbGwgZW5kIHVwIHdpdGggYSA1LjQtcmMxDQo+ID4gPiA+ID4gdGhh
-dCBkb2Vzbid0IGJvb3Qgb24gaW14OG1xLiBBbiBlYXN5IGZpeCB3b3VsZCBiZSB0byBkcm9wL3Jl
-dmVydA0KPiA+ID4gPiA+IGNvbW1pdA0KPiA+ID4gPiA+IDk1MWMxYWVmOTY5MSAoImNsazogaW14
-OG1xOiBSZW1vdmUgQ0xLX0lTX0NSSVRJQ0FMIGZsYWcgZm9yDQo+ID4gPiA+ID4gSU1YOE1RX0NM
-S19UTVVfUk9PVCIpIHVudGlsIHRoZSB0aGVybWFsIHBhdGNoZXMgYXJlIGFjY2VwdGVkLg0KPiA+
-ID4gPg0KPiA+ID4gPiBJZiB0aGUgdGhlcm1hbCBkcml2ZXIgaXMgYnVpbHQgYXMgbW9kdWxlLCBJ
-IHRoaW5rIG5vIG5lZWQgdG8NCj4gPiA+ID4gcmV2ZXJ0IHRoZSBjb21taXQsIGJ1dCBpZiBieSBk
-ZWZhdWx0IHRoZXJtYWwgZHJpdmVyIGlzIGJ1aWx0LWluIG9yDQo+ID4gPiA+IG1vZCBwcm9iZWQs
-IHRoZW4geWVzLCBpdCBzaG91bGQgTk9UIGJyZWFrIGtlcm5lbCBib290IHVwLg0KPiA+ID4NCj4g
-PiA+IFRoZSBxb3JpcV90aGVybWFsIGRyaXZlciBpcyBidWlsdCBhcyBhIG1vZHVsZSBpbiBkZWZj
-b25maWcgYW5kIHdoZW4NCj4gPiA+IG1vZHVsZXMgYXJlIHByb3Blcmx5IGluc3RhbGxlZCBpbiBy
-b290ZnMgdGhleSB3aWxsIGJlIGF1dG9tYXRpY2FsbHkNCj4gPiA+IGJlIHByb2JlZCBvbiBib290
-IGFuZCBjYXVzZSBhIGhhbmcuDQo+ID4gPg0KPiA+ID4gSSB1c3VhbGx5IHJ1biBuZnNyb290IHdp
-dGggbW9kdWxlczoNCj4gPiA+DQo+ID4gPiAgICAgIG1ha2UgbW9kdWxlc19pbnN0YWxsIElOU1RB
-TExfTU9EX1BBVEg9L3Nydi9uZnMvaW14OC1yb290DQo+ID4NCj4gPiBzbyB3ZSBuZWVkIHRoaXMg
-cGF0Y2ggc2hpcHBlZCBpbiB0aGUgYmVnaW5uaW5nIG9mIHRoZSBtZXJnZSB3aW5kb3csDQo+ID4g
-cmlnaHQ/DQo+ID4gaWYgdGhlcmUgaXMgaGFyZCBkZXBlbmRlbmN5IGJldHdlZW4gcGF0Y2hlcywg
-aXQncyBiZXR0ZXIgdG8gc2VuZCB0aGVtDQo+ID4gaW4gb25lIHNlcmllcywgYW5kIGdldCBzaGlw
-cGVkIHZpYSBlaXRoZXIgdHJlZS4NCj4gPg0KPiA+IEJUVywgd2hvIGlzIG1haW50YWluaW5nIHFv
-cmlxIGRyaXZlciBmcm9tIE5YUD8gSWYgQW5zb24gaXMgbWFpbnRhaW5pbmcNCj4gPiBhbmQgZGV2
-ZWxvcGluZyB0aGlzIGRyaXZlciwgaXQncyBiZXR0ZXIgdG8gdXBkYXRlIHRoaXMgaW4gdGhlIGRy
-aXZlcg0KPiA+IG9yIHRoZSBNQUlOVEFJTkVSIGZpbGUsIEkgd2lsbCB0YWtlIHRoZSBkcml2ZXIg
-c3BlY2lmaWMgcGF0Y2hlcyBhcw0KPiA+IGxvbmcgYXMgd2UgaGF2ZSBBQ0svUmV2aWV3ZWQtQnkg
-ZnJvbSB0aGUgZHJpdmVyIG1haW50YWluZXIuDQoNCkkgYW0gTk9UIHN1cmUgd2hvIGlzIHRoZSBx
-b3JpcSBkcml2ZXIgZnJvbSBOWFAsIHNvbWUgb2Ygb3VyIGkuTVggU29DcyB1c2UNCnFvcmlxIHRo
-ZXJtYWwgSVAsIHNvIEkgaGF2ZSB0byBhZGQgc3VwcG9ydCBmb3IgdGhlbS4gIFRoZSBmaXJzdCBt
-YWludGFpbmVyIGZvcg0KdGhpcyBkcml2ZXIgaXMgaG9uZ3Rhby5qaWFAbnhwLmNvbSwgYnV0IEkg
-Y2FuIE5PVCBmaW5kIGl0IGZyb20gTlhQJ3MgbWFpbCBzeXN0ZW0sDQpOT1Qgc3VyZSBpZiBoZSBp
-cyBzdGlsbCBpbiBOWFAuIFRoZSBNQUlOVEFJTkVSIGZpbGUgZG9lcyBOT1QgaGF2ZSBpbmZvIGZv
-ciB0aGlzDQpEcml2ZXIncyBtYWludGFpbmVyLCBzbyBob3cgdG8gdXBkYXRlIGl0PyBKdXN0IGNo
-YW5nZSB0aGUgbmFtZSBpbiBkcml2ZXI/IE9yIGxlYXZlDQppdCBhcyB3aGF0IGl0IGlzPw0KDQog
-TU9EVUxFX0FVVEhPUigiSmlhIEhvbmd0YW8gPGhvbmd0YW8uamlhQG54cC5jb20+Iik7DQogTU9E
-VUxFX0RFU0NSSVBUSU9OKCJRb3JJUSBUaGVybWFsIE1vbml0b3JpbmcgVW5pdCBkcml2ZXIiKTsN
-CiBNT0RVTEVfTElDRU5TRSgiR1BMIHYyIik7DQoNCj4gDQo+IEFuZCBhbHNvLCBjYW4geW91IHBy
-b3ZpZGUgeW91ciBmZWVkYmFjayBmb3IgdGhpcyBvbmU/DQo+IGh0dHBzOi8vZXVyMDEuc2FmZWxp
-bmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRwcyUzQSUyRiUyRnBhdGNoDQo+IHdv
-cmsua2VybmVsLm9yZyUyRnBhdGNoJTJGMTA5NzQxNDclMkYmYW1wO2RhdGE9MDIlN0MwMSU3Q2Fu
-c29uLmgNCj4gdWFuZyU0MG54cC5jb20lN0M4ODdlN2M5MGY3Yzk0M2ZmMGQ5YjA4ZDcyYjkyYWVh
-MSU3QzY4NmVhMWQzYmMyDQo+IGI0YzZmYTkyY2Q5OWM1YzMwMTYzNSU3QzAlN0MwJTdDNjM3MDI1
-NzgxMzI1MjAzMzg0JmFtcDtzZGF0YT1YZw0KPiB0WDZtUGRBNTBOYmIlMkZtblMyb20yYkpOZXBU
-ZDF0aDZIbWZ3R3VVOUh3JTNEJmFtcDtyZXNlcnZlDQo+IGQ9MA0KDQpJIGNhbiB0YWtlIGEgbG9v
-ayBhdCBpdCBsYXRlci4NCg0KVGhhbmtzLA0KQW5zb24NCg==
+The cpufreq core now takes the min/max frequency constraints via QoS
+requests and the CPUFREQ_ADJUST notifier shall get removed later on.
+
+Switch over to using the QoS request for maximum frequency constraint
+for acpi driver.
+
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+V3:
+- Before updating qos request, make sure they are successfully added in
+  the first place using dev_pm_qos_request_active() helper.
+- reset ignore_ppc from acpi_processor_ignore_ppc_init().
+
+ drivers/acpi/processor_driver.c  |  39 ++++++++++--
+ drivers/acpi/processor_perflib.c | 100 ++++++++++++-------------------
+ drivers/acpi/processor_thermal.c |  84 +++++++++++++-------------
+ include/acpi/processor.h         |  26 +++++---
+ 4 files changed, 132 insertions(+), 117 deletions(-)
+
+diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
+index aea8d674a33d..08da9c29f1e9 100644
+--- a/drivers/acpi/processor_driver.c
++++ b/drivers/acpi/processor_driver.c
+@@ -284,6 +284,29 @@ static int acpi_processor_stop(struct device *dev)
+ 	return 0;
+ }
+ 
++bool acpi_processor_cpufreq_init;
++
++static int acpi_processor_notifier(struct notifier_block *nb,
++				   unsigned long event, void *data)
++{
++	struct cpufreq_policy *policy = data;
++	int cpu = policy->cpu;
++
++	if (event == CPUFREQ_CREATE_POLICY) {
++		acpi_thermal_cpufreq_init(cpu);
++		acpi_processor_ppc_init(cpu);
++	} else if (event == CPUFREQ_REMOVE_POLICY) {
++		acpi_processor_ppc_exit(cpu);
++		acpi_thermal_cpufreq_exit(cpu);
++	}
++
++	return 0;
++}
++
++static struct notifier_block acpi_processor_notifier_block = {
++	.notifier_call = acpi_processor_notifier,
++};
++
+ /*
+  * We keep the driver loaded even when ACPI is not running.
+  * This is needed for the powernow-k8 driver, that works even without
+@@ -310,8 +333,12 @@ static int __init acpi_processor_driver_init(void)
+ 	cpuhp_setup_state_nocalls(CPUHP_ACPI_CPUDRV_DEAD, "acpi/cpu-drv:dead",
+ 				  NULL, acpi_soft_cpu_dead);
+ 
+-	acpi_thermal_cpufreq_init();
+-	acpi_processor_ppc_init();
++	if (!cpufreq_register_notifier(&acpi_processor_notifier_block,
++				       CPUFREQ_POLICY_NOTIFIER)) {
++		acpi_processor_cpufreq_init = true;
++		acpi_processor_ignore_ppc_init();
++	}
++
+ 	acpi_processor_throttling_init();
+ 	return 0;
+ err:
+@@ -324,8 +351,12 @@ static void __exit acpi_processor_driver_exit(void)
+ 	if (acpi_disabled)
+ 		return;
+ 
+-	acpi_processor_ppc_exit();
+-	acpi_thermal_cpufreq_exit();
++	if (acpi_processor_cpufreq_init) {
++		cpufreq_unregister_notifier(&acpi_processor_notifier_block,
++					    CPUFREQ_POLICY_NOTIFIER);
++		acpi_processor_cpufreq_init = false;
++	}
++
+ 	cpuhp_remove_state_nocalls(hp_online);
+ 	cpuhp_remove_state_nocalls(CPUHP_ACPI_CPUDRV_DEAD);
+ 	driver_unregister(&acpi_processor_driver);
+diff --git a/drivers/acpi/processor_perflib.c b/drivers/acpi/processor_perflib.c
+index ee87cb6f6e59..2261713d1aec 100644
+--- a/drivers/acpi/processor_perflib.c
++++ b/drivers/acpi/processor_perflib.c
+@@ -50,57 +50,13 @@ module_param(ignore_ppc, int, 0644);
+ MODULE_PARM_DESC(ignore_ppc, "If the frequency of your machine gets wrongly" \
+ 		 "limited by BIOS, this should help");
+ 
+-#define PPC_REGISTERED   1
+-#define PPC_IN_USE       2
+-
+-static int acpi_processor_ppc_status;
+-
+-static int acpi_processor_ppc_notifier(struct notifier_block *nb,
+-				       unsigned long event, void *data)
+-{
+-	struct cpufreq_policy *policy = data;
+-	struct acpi_processor *pr;
+-	unsigned int ppc = 0;
+-
+-	if (ignore_ppc < 0)
+-		ignore_ppc = 0;
+-
+-	if (ignore_ppc)
+-		return 0;
+-
+-	if (event != CPUFREQ_ADJUST)
+-		return 0;
+-
+-	mutex_lock(&performance_mutex);
+-
+-	pr = per_cpu(processors, policy->cpu);
+-	if (!pr || !pr->performance)
+-		goto out;
+-
+-	ppc = (unsigned int)pr->performance_platform_limit;
+-
+-	if (ppc >= pr->performance->state_count)
+-		goto out;
+-
+-	cpufreq_verify_within_limits(policy, 0,
+-				     pr->performance->states[ppc].
+-				     core_frequency * 1000);
+-
+-      out:
+-	mutex_unlock(&performance_mutex);
+-
+-	return 0;
+-}
+-
+-static struct notifier_block acpi_ppc_notifier_block = {
+-	.notifier_call = acpi_processor_ppc_notifier,
+-};
++static bool acpi_processor_ppc_in_use;
+ 
+ static int acpi_processor_get_platform_limit(struct acpi_processor *pr)
+ {
+ 	acpi_status status = 0;
+ 	unsigned long long ppc = 0;
+-
++	int ret;
+ 
+ 	if (!pr)
+ 		return -EINVAL;
+@@ -112,7 +68,7 @@ static int acpi_processor_get_platform_limit(struct acpi_processor *pr)
+ 	status = acpi_evaluate_integer(pr->handle, "_PPC", NULL, &ppc);
+ 
+ 	if (status != AE_NOT_FOUND)
+-		acpi_processor_ppc_status |= PPC_IN_USE;
++		acpi_processor_ppc_in_use = true;
+ 
+ 	if (ACPI_FAILURE(status) && status != AE_NOT_FOUND) {
+ 		ACPI_EXCEPTION((AE_INFO, status, "Evaluating _PPC"));
+@@ -124,6 +80,17 @@ static int acpi_processor_get_platform_limit(struct acpi_processor *pr)
+ 
+ 	pr->performance_platform_limit = (int)ppc;
+ 
++	if (ppc >= pr->performance->state_count ||
++	    unlikely(!dev_pm_qos_request_active(&pr->perflib_req)))
++		return 0;
++
++	ret = dev_pm_qos_update_request(&pr->perflib_req,
++			pr->performance->states[ppc].core_frequency * 1000);
++	if (ret < 0) {
++		pr_warn("Failed to update perflib freq constraint: CPU%d (%d)\n",
++			pr->id, ret);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -184,23 +151,32 @@ int acpi_processor_get_bios_limit(int cpu, unsigned int *limit)
+ }
+ EXPORT_SYMBOL(acpi_processor_get_bios_limit);
+ 
+-void acpi_processor_ppc_init(void)
++void acpi_processor_ignore_ppc_init(void)
+ {
+-	if (!cpufreq_register_notifier
+-	    (&acpi_ppc_notifier_block, CPUFREQ_POLICY_NOTIFIER))
+-		acpi_processor_ppc_status |= PPC_REGISTERED;
+-	else
+-		printk(KERN_DEBUG
+-		       "Warning: Processor Platform Limit not supported.\n");
++	if (ignore_ppc < 0)
++		ignore_ppc = 0;
++}
++
++void acpi_processor_ppc_init(int cpu)
++{
++	struct acpi_processor *pr = per_cpu(processors, cpu);
++	int ret;
++
++	ret = dev_pm_qos_add_request(get_cpu_device(cpu),
++				     &pr->perflib_req, DEV_PM_QOS_MAX_FREQUENCY,
++				     INT_MAX);
++	if (ret < 0) {
++		pr_err("Failed to add freq constraint for CPU%d (%d)\n", cpu,
++		       ret);
++		return;
++	}
+ }
+ 
+-void acpi_processor_ppc_exit(void)
++void acpi_processor_ppc_exit(int cpu)
+ {
+-	if (acpi_processor_ppc_status & PPC_REGISTERED)
+-		cpufreq_unregister_notifier(&acpi_ppc_notifier_block,
+-					    CPUFREQ_POLICY_NOTIFIER);
++	struct acpi_processor *pr = per_cpu(processors, cpu);
+ 
+-	acpi_processor_ppc_status &= ~PPC_REGISTERED;
++	dev_pm_qos_remove_request(&pr->perflib_req);
+ }
+ 
+ static int acpi_processor_get_performance_control(struct acpi_processor *pr)
+@@ -477,7 +453,7 @@ int acpi_processor_notify_smm(struct module *calling_module)
+ 	static int is_done = 0;
+ 	int result;
+ 
+-	if (!(acpi_processor_ppc_status & PPC_REGISTERED))
++	if (!acpi_processor_cpufreq_init)
+ 		return -EBUSY;
+ 
+ 	if (!try_module_get(calling_module))
+@@ -513,7 +489,7 @@ int acpi_processor_notify_smm(struct module *calling_module)
+ 	 * we can allow the cpufreq driver to be rmmod'ed. */
+ 	is_done = 1;
+ 
+-	if (!(acpi_processor_ppc_status & PPC_IN_USE))
++	if (!acpi_processor_ppc_in_use)
+ 		module_put(calling_module);
+ 
+ 	return 0;
+@@ -742,7 +718,7 @@ acpi_processor_register_performance(struct acpi_processor_performance
+ {
+ 	struct acpi_processor *pr;
+ 
+-	if (!(acpi_processor_ppc_status & PPC_REGISTERED))
++	if (!acpi_processor_cpufreq_init)
+ 		return -EINVAL;
+ 
+ 	mutex_lock(&performance_mutex);
+diff --git a/drivers/acpi/processor_thermal.c b/drivers/acpi/processor_thermal.c
+index 50fb0107375e..ec2638f1df4f 100644
+--- a/drivers/acpi/processor_thermal.c
++++ b/drivers/acpi/processor_thermal.c
+@@ -35,7 +35,6 @@ ACPI_MODULE_NAME("processor_thermal");
+ #define CPUFREQ_THERMAL_MAX_STEP 3
+ 
+ static DEFINE_PER_CPU(unsigned int, cpufreq_thermal_reduction_pctg);
+-static unsigned int acpi_thermal_cpufreq_is_init = 0;
+ 
+ #define reduction_pctg(cpu) \
+ 	per_cpu(cpufreq_thermal_reduction_pctg, phys_package_first_cpu(cpu))
+@@ -61,35 +60,11 @@ static int phys_package_first_cpu(int cpu)
+ static int cpu_has_cpufreq(unsigned int cpu)
+ {
+ 	struct cpufreq_policy policy;
+-	if (!acpi_thermal_cpufreq_is_init || cpufreq_get_policy(&policy, cpu))
++	if (!acpi_processor_cpufreq_init || cpufreq_get_policy(&policy, cpu))
+ 		return 0;
+ 	return 1;
+ }
+ 
+-static int acpi_thermal_cpufreq_notifier(struct notifier_block *nb,
+-					 unsigned long event, void *data)
+-{
+-	struct cpufreq_policy *policy = data;
+-	unsigned long max_freq = 0;
+-
+-	if (event != CPUFREQ_ADJUST)
+-		goto out;
+-
+-	max_freq = (
+-	    policy->cpuinfo.max_freq *
+-	    (100 - reduction_pctg(policy->cpu) * 20)
+-	) / 100;
+-
+-	cpufreq_verify_within_limits(policy, 0, max_freq);
+-
+-      out:
+-	return 0;
+-}
+-
+-static struct notifier_block acpi_thermal_cpufreq_notifier_block = {
+-	.notifier_call = acpi_thermal_cpufreq_notifier,
+-};
+-
+ static int cpufreq_get_max_state(unsigned int cpu)
+ {
+ 	if (!cpu_has_cpufreq(cpu))
+@@ -108,7 +83,10 @@ static int cpufreq_get_cur_state(unsigned int cpu)
+ 
+ static int cpufreq_set_cur_state(unsigned int cpu, int state)
+ {
+-	int i;
++	struct cpufreq_policy *policy;
++	struct acpi_processor *pr;
++	unsigned long max_freq;
++	int i, ret;
+ 
+ 	if (!cpu_has_cpufreq(cpu))
+ 		return 0;
+@@ -121,33 +99,53 @@ static int cpufreq_set_cur_state(unsigned int cpu, int state)
+ 	 * frequency.
+ 	 */
+ 	for_each_online_cpu(i) {
+-		if (topology_physical_package_id(i) ==
++		if (topology_physical_package_id(i) !=
+ 		    topology_physical_package_id(cpu))
+-			cpufreq_update_policy(i);
++			continue;
++
++		pr = per_cpu(processors, i);
++
++		if (unlikely(!dev_pm_qos_request_active(&pr->thermal_req)))
++			continue;
++
++		policy = cpufreq_cpu_get(i);
++		if (!policy)
++			return -EINVAL;
++
++		max_freq = (policy->cpuinfo.max_freq * (100 - reduction_pctg(i) * 20)) / 100;
++
++		cpufreq_cpu_put(policy);
++
++		ret = dev_pm_qos_update_request(&pr->thermal_req, max_freq);
++		if (ret < 0) {
++			pr_warn("Failed to update thermal freq constraint: CPU%d (%d)\n",
++				pr->id, ret);
++		}
+ 	}
+ 	return 0;
+ }
+ 
+-void acpi_thermal_cpufreq_init(void)
++void acpi_thermal_cpufreq_init(int cpu)
+ {
+-	int i;
+-
+-	i = cpufreq_register_notifier(&acpi_thermal_cpufreq_notifier_block,
+-				      CPUFREQ_POLICY_NOTIFIER);
+-	if (!i)
+-		acpi_thermal_cpufreq_is_init = 1;
++	struct acpi_processor *pr = per_cpu(processors, cpu);
++	int ret;
++
++	ret = dev_pm_qos_add_request(get_cpu_device(cpu),
++				     &pr->thermal_req, DEV_PM_QOS_MAX_FREQUENCY,
++				     INT_MAX);
++	if (ret < 0) {
++		pr_err("Failed to add freq constraint for CPU%d (%d)\n", cpu,
++		       ret);
++		return;
++	}
+ }
+ 
+-void acpi_thermal_cpufreq_exit(void)
++void acpi_thermal_cpufreq_exit(int cpu)
+ {
+-	if (acpi_thermal_cpufreq_is_init)
+-		cpufreq_unregister_notifier
+-		    (&acpi_thermal_cpufreq_notifier_block,
+-		     CPUFREQ_POLICY_NOTIFIER);
++	struct acpi_processor *pr = per_cpu(processors, cpu);
+ 
+-	acpi_thermal_cpufreq_is_init = 0;
++	dev_pm_qos_remove_request(&pr->thermal_req);
+ }
+-
+ #else				/* ! CONFIG_CPU_FREQ */
+ static int cpufreq_get_max_state(unsigned int cpu)
+ {
+diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+index 1194a4c78d55..f936033cb9e6 100644
+--- a/include/acpi/processor.h
++++ b/include/acpi/processor.h
+@@ -4,6 +4,8 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/cpu.h>
++#include <linux/cpufreq.h>
++#include <linux/pm_qos.h>
+ #include <linux/thermal.h>
+ #include <asm/acpi.h>
+ 
+@@ -230,6 +232,8 @@ struct acpi_processor {
+ 	struct acpi_processor_limit limit;
+ 	struct thermal_cooling_device *cdev;
+ 	struct device *dev; /* Processor device. */
++	struct dev_pm_qos_request perflib_req;
++	struct dev_pm_qos_request thermal_req;
+ };
+ 
+ struct acpi_processor_errata {
+@@ -296,16 +300,22 @@ static inline void acpi_processor_ffh_cstate_enter(struct acpi_processor_cx
+ /* in processor_perflib.c */
+ 
+ #ifdef CONFIG_CPU_FREQ
+-void acpi_processor_ppc_init(void);
+-void acpi_processor_ppc_exit(void);
++extern bool acpi_processor_cpufreq_init;
++void acpi_processor_ignore_ppc_init(void);
++void acpi_processor_ppc_init(int cpu);
++void acpi_processor_ppc_exit(int cpu);
+ void acpi_processor_ppc_has_changed(struct acpi_processor *pr, int event_flag);
+ extern int acpi_processor_get_bios_limit(int cpu, unsigned int *limit);
+ #else
+-static inline void acpi_processor_ppc_init(void)
++static inline void acpi_processor_ignore_ppc_init(void)
+ {
+ 	return;
+ }
+-static inline void acpi_processor_ppc_exit(void)
++static inline void acpi_processor_ppc_init(int cpu)
++{
++	return;
++}
++static inline void acpi_processor_ppc_exit(int cpu)
+ {
+ 	return;
+ }
+@@ -421,14 +431,14 @@ static inline int acpi_processor_hotplug(struct acpi_processor *pr)
+ int acpi_processor_get_limit_info(struct acpi_processor *pr);
+ extern const struct thermal_cooling_device_ops processor_cooling_ops;
+ #if defined(CONFIG_ACPI_CPU_FREQ_PSS) & defined(CONFIG_CPU_FREQ)
+-void acpi_thermal_cpufreq_init(void);
+-void acpi_thermal_cpufreq_exit(void);
++void acpi_thermal_cpufreq_init(int cpu);
++void acpi_thermal_cpufreq_exit(int cpu);
+ #else
+-static inline void acpi_thermal_cpufreq_init(void)
++static inline void acpi_thermal_cpufreq_init(int cpu)
+ {
+ 	return;
+ }
+-static inline void acpi_thermal_cpufreq_exit(void)
++static inline void acpi_thermal_cpufreq_exit(int cpu)
+ {
+ 	return;
+ }
+-- 
+2.21.0.rc0.269.g1a574e7a288b
+
