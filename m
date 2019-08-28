@@ -2,109 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 364359F633
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 00:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C099F755
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 02:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbfH0Wcz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Aug 2019 18:32:55 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:43238 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726025AbfH0Wcz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Aug 2019 18:32:55 -0400
-Received: by mail-ot1-f65.google.com with SMTP id e12so762450otp.10;
-        Tue, 27 Aug 2019 15:32:54 -0700 (PDT)
+        id S1726415AbfH1Abr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Aug 2019 20:31:47 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33241 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726408AbfH1Abr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Aug 2019 20:31:47 -0400
+Received: by mail-pf1-f196.google.com with SMTP id g2so492090pfq.0
+        for <linux-pm@vger.kernel.org>; Tue, 27 Aug 2019 17:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=6DZabq8OOFr7SZFMrBCsezS6Py1mMQ+cwU1PePGAkIE=;
+        b=ngcmAUYZXtJo08EKY/VBWkbR9Y6m5d18wyRsXJer8ur7SxM9k+agOqehuEdH+Ycfdy
+         Pi+EmEsEwOnOxG36KNKWz8e3uqLo+w3XInaErt/dXflVRpust3rsqo3sHIA5aMTfgf1p
+         +Mc9OLlWFa+tmIaaicyodHEeYt7jVea8ulCTU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bG9bAPsPgtk0aXT02g27VLf1Saty2/UhvB2P1PQFez4=;
-        b=lFh0XojkxV22fnbW+8yeuTFoncb0V58PwmV6D1R0gHbEE8Fnl/sk3qJJbNsDFEem9S
-         IJgRLxQQenYX8WZAaUxPsCZHrsog3v12vAM+W6kzbyYl7/SRL6K4byR2nc0wa4AeBQsa
-         3+4DI+hppspWCQljpfstzZROzPbfC45xcc06SdhrATNNYp7cY5h7lVpXPWltFmHVX/0x
-         LCpyitPHpzTv1Zhk8bNEZINSOoNKRYT0FDW3A7a68cM+WSRFzCBRSbel8WrVkrXtejPj
-         +ARLIqx4jVTYuTfKRaeo5uL6cpwyKsp3tr3thFyLP2hmyZkg9DpoWHtWZT5yaGQe2AiY
-         Xzig==
-X-Gm-Message-State: APjAAAUHLRa46OaVpnGKiPC+BaXrntNieNfbix5rma9DDcQd4sfoUbRq
-        oW+qTEbiMXpYqTz3eXxSZUgLgo+FRw==
-X-Google-Smtp-Source: APXvYqxrYCEbW6Lei7IWDJP4LIXpA5Q0iwBYIAzLRZXOMhYN8gHCCf8NUNNEpuif/S+KC2JZ8UZZfg==
-X-Received: by 2002:a9d:6e93:: with SMTP id a19mr819140otr.29.1566945174143;
-        Tue, 27 Aug 2019 15:32:54 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id e27sm186531oig.53.2019.08.27.15.32.53
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=6DZabq8OOFr7SZFMrBCsezS6Py1mMQ+cwU1PePGAkIE=;
+        b=sN97a1RW9gOrUNxzgjzNsFQCySGDgWKW8PTb0gRFH7SJ9LzA3jaA41JOUagvLxRr6M
+         MwtFiLLUOwjeSG+SW585QlsjkX5II2dMpuduWkcH7EY2q6/GEfcmJPpQSfR1PPw5aK3P
+         1iiVlxrkCZ/7dyJc0j+V4hx07EMqIfFW6qIkNqsPo3ybnN7SEa0S2oCzGo+ahiQDbGul
+         LI8MglRnMOOT/ZecTvvC+HB0KCRqTUUrj6pdZ93qOJST0fPncmD55QQAOzV7jU2yeCiA
+         ek9Qzg9zXbqakd829r9TA+2d8dKJcZrC8m18SQ4505H6Z9mrz5yqq+bH5oX0bvHRP0B2
+         yz9A==
+X-Gm-Message-State: APjAAAWo80NaKVL9Y3gbOSnlpoOV12/x2DxLKtHu2unZpJ4FZO4OMuCL
+        gSbEdnbdZwnlVSYi56gwYRvUqCuQPoOkcA==
+X-Google-Smtp-Source: APXvYqyTAY2DIrm/6oafpYk02AMmWsUOJ5l6X62U+poE3/LzEAZrdfqAN9ZcibbeX1gFo/FrO0+5rQ==
+X-Received: by 2002:a17:90b:f12:: with SMTP id br18mr1374786pjb.127.1566952306919;
+        Tue, 27 Aug 2019 17:31:46 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id a6sm508542pfa.162.2019.08.27.17.31.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 15:32:53 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 17:32:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Maulik Shah <mkshah@codeaurora.org>
-Cc:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, dianders@chromium.org, rnayak@codeaurora.org,
-        ilina@codeaurora.org, lsrao@codeaurora.org, ulf.hansson@linaro.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] dt-bindings: soc: qcom: Add RSC power domain
- specifier
-Message-ID: <20190827223252.GA26039@bogus>
-References: <20190823081703.17325-1-mkshah@codeaurora.org>
- <20190823081703.17325-4-mkshah@codeaurora.org>
+        Tue, 27 Aug 2019 17:31:46 -0700 (PDT)
+Message-ID: <5d65cb72.1c69fb81.5472a.24f4@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190823081703.17325-4-mkshah@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <f41f53a77406c782042c0a27c180c99859b0673f.1566907161.git.amit.kucheria@linaro.org>
+References: <cover.1566907161.git.amit.kucheria@linaro.org> <f41f53a77406c782042c0a27c180c99859b0673f.1566907161.git.amit.kucheria@linaro.org>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 04/15] drivers: thermal: tsens: Add debugfs support
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, edubezval@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marc.w.gonzalez@free.fr, masneyb@onstation.org
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Tue, 27 Aug 2019 17:31:45 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 01:47:00PM +0530, Maulik Shah wrote:
-> In addition to transmitting resource state requests to the remote
-> processor, the RSC is responsible for powering off/lowering the
-> requirements from CPUs subsystem for the associated hardware like
-> buses, clocks, and regulators when all CPUs and cluster is powered down.
-> 
-> The power domain is configured to a low power state and when all the
-> CPUs are powered down, the RSC can lower resource state requirements
-> and power down the rails that power the CPUs.
-> 
-> Add PM domain specifier property for RSC controller.
-> 
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt b/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
-> index 9b86d1eff219..d0ab6e9b6745 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
-> +++ b/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
-> @@ -83,6 +83,13 @@ Properties:
->  	Value type: <string>
->  	Definition: Name for the RSC. The name would be used in trace logs.
->  
-> +- #power-domain-cells:
-> +	Usage: optional
-> +	Value type: <u32>
-> +	Definition: Number of cells in power domain specifier. Optional for
-> +		    controllers that may be in 'solver' state where they can
-> +		    be in autonomous mode executing low power modes.
+Quoting Amit Kucheria (2019-08-27 05:14:00)
+> Dump some basic version info and sensor details into debugfs. Example
+> from qcs404 below:
+>=20
+> --(/sys/kernel/debug) $ ls tsens/
+> 4a9000.thermal-sensor  version
+> --(/sys/kernel/debug) $ cat tsens/version
+> 1.4.0
+> --(/sys/kernel/debug) $ cat tsens/4a9000.thermal-sensor/sensors
+> max: 11
+> num: 10
+>=20
+>       id    slope   offset
+> ------------------------
 
-What's the value? It's always 0?
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-> +
->  Drivers that want to use the RSC to communicate with RPMH must specify their
->  bindings as child nodes of the RSC controllers they wish to communicate with.
->  
-> @@ -112,6 +119,7 @@ TCS-OFFSET: 0xD00
->  				  <SLEEP_TCS   3>,
->  				  <WAKE_TCS    3>,
->  				  <CONTROL_TCS 1>;
-> +		#power-domain-cells = <0>;
->  	};
->  
->  Example 2:
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by The Linux Foundation.
-> 
