@@ -2,89 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D89A0900
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 19:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE0BA09EB
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 20:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbfH1Rwr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 13:52:47 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45580 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726711AbfH1Rwq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 13:52:46 -0400
-Received: by mail-pf1-f194.google.com with SMTP id w26so251987pfq.12
-        for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2019 10:52:46 -0700 (PDT)
+        id S1726563AbfH1Stq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Aug 2019 14:49:46 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:37305 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726400AbfH1Stq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 14:49:46 -0400
+Received: by mail-pf1-f196.google.com with SMTP id y9so372016pfl.4
+        for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2019 11:49:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:subject:to:from:user-agent:date;
-        bh=Px8LkhnvRWF4dwuD/m3pQWcRskg4hOcGMoEJQEofQZ8=;
-        b=b8Su07oogeUnBWJ/0tg5akVGMO8eE2d43UCFFCgBPKGffQgjBkuv7y3A9eC/T4EjRA
-         i7cHOOuL3iwYyhXeVmkunHv4h61+Sh5KbLMZW3NkZo6fBsNGuzL8yykC9A1ECMrI54y1
-         ORagwvll1OSa52p8t4TebQyKcuNvQJi3NpzNA=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4uZspx4NWx0nFhhtAlnWtEbfBrasNUhrA/Iy70UI7ko=;
+        b=aesFtNLZCHVxwTTzHGcziFAJn9W0ws751gL42MQtSB5sT897fV8iCGwBYIeg048n3r
+         wfy+sK8h50KhNbMn2BX55hnizK6RYMhsYo3mH6zfxR6SduWeEjvFIHrdmAK/3+rPTInZ
+         fmiF0BDWMLuDEB1qH+5PtkyONcnts+vkiY6UD8dp03z/PIunlSU7IDSKMkZIWVD/W5CN
+         CTTd7DRpOboL3b4E0ah/0mQoG3QNvHMonSvbivAbig+7MyOjIkpfZDfJnJpedKGQZqNZ
+         0DpYu+pQ46NuD29OpjK0AJd/1CXt6NV+P72J1lvAJcUoD59JrNlAfE/XDtrfLwg3qqVA
+         UYRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
-         :user-agent:date;
-        bh=Px8LkhnvRWF4dwuD/m3pQWcRskg4hOcGMoEJQEofQZ8=;
-        b=W3ubLpeKM0k2qOucL1gIZdzRBbWwfG2CuRiQbdWXOl7LH4u7/3AXM3a0ERqHhHq0ov
-         xjklgVs3gQWyjenZ++m0LQClkVES+zgtUPM6v8NIUGkXlPCT8DwqBwSovoCxpVU0B++h
-         UGWSu7q/M+e1T9RZIaIwdtF8bDV4CArpLRpP/crxXOzIEyQVe2devx5yWRqCNleEm8m5
-         ztdwxlAopP2BWioZoN43bP7DmmLbJWL8Ky17+S8/cft8TkDN09Mq7hqgzq8/JWYtBvU8
-         /GMlbxoPB0Yylxq5ACTKxNlyM+xX8A1qEjXNcbuKa9/ADGVR57mDmmohZtIbDUJTmlNO
-         FaIQ==
-X-Gm-Message-State: APjAAAUcSGNTvqIuSMws7M5BXmEzpgMyW8M+hnGKrf4St1tCBAU4E6oB
-        oh4iQtJD+hmHMAp2ipcJv/btBQ==
-X-Google-Smtp-Source: APXvYqxCTQjvm1BM9NXD/WyFjJvnpm9d045wXvVon/BZtschRXgyy8tL19nyMEwFqWDkx1/sIvisKw==
-X-Received: by 2002:a65:6815:: with SMTP id l21mr4618991pgt.146.1567014766012;
-        Wed, 28 Aug 2019 10:52:46 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id e21sm3512214pfi.13.2019.08.28.10.52.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 10:52:45 -0700 (PDT)
-Message-ID: <5d66bf6d.1c69fb81.c7b73.8fdb@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4uZspx4NWx0nFhhtAlnWtEbfBrasNUhrA/Iy70UI7ko=;
+        b=RMl6qBDjN8ig2AlXqspMDptzfiYD13PbBQDyS06XA7XMBTzf1bcStZKNa4Vd+7ZMuJ
+         MYvQixhADKJ+Q0suJYFvGvIOM3CPYFHP06avJv9leyP7P2rIjaTHtbrwdy8LkYf4tPt7
+         TS+CgixMR8RS7GNpRxGT/2drwtgMRSCLVQdbc/v0VdAyBavScLe/emBxoi+KNBp7gAlO
+         0/u3M8yevzGjTcgYiifhB1C3rLKALDLoOGmzFyqQ4btLWtT3rAvRaTnRK0ARGLEVWpKZ
+         sIoOpnRsdA3o2FJUXdgTqs8KZGAOjLZ/iNK1wgA480WKpwZdL6E0B6kngi1zuRB0ctWW
+         4DaA==
+X-Gm-Message-State: APjAAAXVxntq9fek2PhTTVqdtJigE8dImDBBtf1ksZFs9ItAP4BeYaU+
+        7PTc5kJR/x7xs30gAoV3lRn4W7KOi8so+Oe3A0BikQ==
+X-Google-Smtp-Source: APXvYqzLT/GpLTIf3YXAybRqHLvDBymSGaNqO+J24tjnTmWcTbsfo3oTWe8/j33SPKMkONhxXM2yJh7xYFqJ2XFRkIQ=
+X-Received: by 2002:a17:90a:3ae7:: with SMTP id b94mr5745875pjc.73.1567018185100;
+ Wed, 28 Aug 2019 11:49:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190822102723.GB8494@centauri>
-References: <20190725104144.22924-7-niklas.cassel@linaro.org> <20190819100957.17095-1-niklas.cassel@linaro.org> <5d5ae389.1c69fb81.cb730.3225@mx.google.com> <20190822102723.GB8494@centauri>
-Cc:     Andy Gross <agross@kernel.org>, Ilia Lin <ilia.lin@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Viresh Kumar <vireshk@kernel.org>,
-        linux-arm-msm@vger.kernel.org, jorge.ramirez-ortiz@linaro.org,
-        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
-        Rob Herring <robh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 06/14] dt-bindings: cpufreq: qcom-nvmem: Support pstates provided by a power domain
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Wed, 28 Aug 2019 10:52:44 -0700
+References: <20190613184923.245935-1-nhuck@google.com> <27428324-129e-ee37-304a-0da2ed3810a0@linaro.org>
+ <CAJkfWY4X-YwuansL1R5w0rQNmE_hVJZKrMBJmOLp9G2DJPkNow@mail.gmail.com>
+ <CAKwvOdkEp=q+2B_iqqyHJLwwUaFH2jnO+Ey8t-hn=x4shTbdoA@mail.gmail.com>
+ <c2b821f2-545a-9839-3de6-d68dfee5b5dc@linaro.org> <20190819102131.41da667b@xps13>
+ <b94af6b2101f436c1bdeec744e164c78ee7c2682.camel@intel.com>
+In-Reply-To: <b94af6b2101f436c1bdeec744e164c78ee7c2682.camel@intel.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 28 Aug 2019 11:49:33 -0700
+Message-ID: <CAKwvOd=ej156MVjkVHAVbpWEew08YhCWpM-3BPYoLfeXHPJEMQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: armada: Fix -Wshift-negative-value
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        edubezval@gmail.com, linux-pm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Nathan Huckleberry <nhuck@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Niklas Cassel (2019-08-22 03:27:23)
-> On Mon, Aug 19, 2019 at 10:59:36AM -0700, Stephen Boyd wrote:
-> > Quoting Niklas Cassel (2019-08-19 03:09:57)
-> > > +
-> > > +soc {
-> > > +....
-> > > +       cprpd: cpr@b018000 {
-> >=20
-> > Maybe node name should be 'avs' for the industry standard adaptive
-> > voltage scaling acronym?
->=20
-> I see where this is coming from, but "git grep avs" gives a single result.
->=20
-> Also, since the label is cprpd, it doesn't make sense to simply rename the
-> node name, and I don't think that avspd would be a good name, since it is
-> less correct.
->=20
-> So if you don't insist, I would prefer to leave it as it is.
->=20
+On Wed, Aug 28, 2019 at 1:53 AM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> On Mon, 2019-08-19 at 10:21 +0200, Miquel Raynal wrote:
+> > Hello,
+> >
+> > Daniel Lezcano <daniel.lezcano@linaro.org> wrote on Thu, 15 Aug 2019
+> > 01:06:21 +0200:
+> >
+> > > On 15/08/2019 00:12, Nick Desaulniers wrote:
+> > > > On Tue, Aug 13, 2019 at 10:28 AM 'Nathan Huckleberry' via Clang
+> > > > Built
+> > > > Linux <clang-built-linux@googlegroups.com> wrote:
+> > > > >
+> > > > > Following up to see if this patch is going to be accepted.
+> > > >
+> > > > Miquel is listed as the maintainer of this file in MAINTAINERS.
+> > > > Miquel, can you please pick this up?  Otherwise Zhang, Eduardo,
+> > > > and
+> > > > Daniel are listed as maintainers for drivers/thermal/.
+> > >
+> > > I'm listed as reviewer, it is up to Zhang or Eduardo to take the
+> > > patches.
+> > >
+> > >
+> >
+> > Sorry for the delay, I don't manage a tree for this driver, I'll let
+> > Zhang or Eduardo take the patch with my
+> >
+> > Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> >
+>
+> Patch applied.
+>
+> thanks,
+> rui
 
-How about 'power-controller'?=20
+Thanks Rui, did you push the branch?  I guess I would have expected it
+in https://git.kernel.org/pub/scm/linux/kernel/git/rzhang/linux.git/log/?h=next?
+I'm trying to track where this lands in
+https://github.com/ClangBuiltLinux/linux/issues/532.
 
+-- 
+Thanks,
+~Nick Desaulniers
