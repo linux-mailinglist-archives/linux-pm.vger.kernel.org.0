@@ -2,136 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CBAA0D1F
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 00:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EECA0E3F
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 01:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726844AbfH1WFj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 18:05:39 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:57054 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726875AbfH1WFi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 18:05:38 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 74EDA820AE; Thu, 29 Aug 2019 00:05:21 +0200 (CEST)
-Date:   Thu, 29 Aug 2019 00:05:33 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Pavel Machek <pavel@denx.de>, Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH 4.19 72/98] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD
- family 15h/16h
-Message-ID: <20190828220533.GA24056@amd>
-References: <20190828103113.GA14677@amd>
- <alpine.DEB.2.21.1908281231480.1869@nanos.tec.linutronix.de>
- <20190828114947.GC8052@amd>
- <20190828120024.GF4920@zn.tnic>
- <20190828120935.GD8052@amd>
- <20190828121628.GG4920@zn.tnic>
- <20190828122913.GE8052@amd>
- <20190828124621.GI4920@zn.tnic>
- <20190828133713.GF8052@amd>
- <alpine.DEB.2.21.1908281610310.23149@nanos.tec.linutronix.de>
+        id S1726990AbfH1Xht convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 28 Aug 2019 19:37:49 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:42044 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726935AbfH1Xhs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 19:37:48 -0400
+Received: by mail-ot1-f68.google.com with SMTP id j7so1575123ota.9;
+        Wed, 28 Aug 2019 16:37:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0WiNNlZ19WAx+O8CTTiGYwNeR0ZDw2Ysbv/e1WoYV9o=;
+        b=NzkWW2rEUGn2hm/+Q47nfXQgS+iditfvHFjoCGWPnNViisDyUh6UvUmPOb65gsI/lF
+         zuaC7Xxrb5ctQXyRUOOyy/h1IwuZvE+zN4e3+oNsKirgxmXjvDpQQXuozaSvDkdVg9Cp
+         yqPjw/dg3dbI5/Ygmw+SLiOVx47+r9hQ2+sKrFCE54kekC0uAUDSjJmNq6a5x6LsTtsu
+         t12qTTd4XdWTL3BcYPeHfY0uNf3s5O6GBh3ASBHgNsaucY/E2wgXzYBjfv4zt9AfAxZN
+         4SVn5aoXJzcyXIZnLGEEcgVqdSk4nwYWL5ekaqJR/FcezLmm0qPxIUvNLOvGGgnXydFk
+         38Lw==
+X-Gm-Message-State: APjAAAXVjpTOUYRSE1sEn6DzPM323ZmQx3fqTW7nN/MexHDcm2EkcxuP
+        D9oo/0mzQclC1WrxeqBTfNX2zuOryNHIvMGHkkM=
+X-Google-Smtp-Source: APXvYqxk5XxurJ7D0mvitMxzIf9FQRgo2vpruN5+wj43N/LYuGLxqqtW3SsJxC+VaDntTllf2UOHc/U87dV9dPOR7W8=
+X-Received: by 2002:a9d:12d1:: with SMTP id g75mr5311313otg.189.1567035467967;
+ Wed, 28 Aug 2019 16:37:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="r5Pyd7+fXNt84Ff3"
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.1908281610310.23149@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
+ <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com> <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
+ <20190803202058.GA9316@amt.cnet> <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
+ <20190826204045.GA24697@amt.cnet> <CANRm+Cx0+V67Ek7FhSs61ZqZL3MgV88Wdy17Q6UA369RH7=dgQ@mail.gmail.com>
+ <CANRm+CxqYMzgvxYyhZLmEzYd6SLTyHdRzKVaSiHO-4SV+OwZUQ@mail.gmail.com>
+ <CAJZ5v0iQc0-WzqeyAh-6m5O-BLraRMj+Z7sqvRgGwh2u2Hp7cg@mail.gmail.com> <20190828143916.GA13725@amt.cnet>
+In-Reply-To: <20190828143916.GA13725@amt.cnet>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Aug 2019 01:37:35 +0200
+Message-ID: <CAJZ5v0jiBprGrwLAhmLbZKpKUvmKwG9w4_R7+dQVqswptis5Qg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when dedicated
+ physical CPUs are available
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wanpeng Li <kernellwp@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Aug 28, 2019 at 4:39 PM Marcelo Tosatti <mtosatti@redhat.com> wrote:
+>
+> On Wed, Aug 28, 2019 at 10:45:44AM +0200, Rafael J. Wysocki wrote:
+> > On Wed, Aug 28, 2019 at 10:34 AM Wanpeng Li <kernellwp@gmail.com> wrote:
+> > >
+> > > On Tue, 27 Aug 2019 at 08:43, Wanpeng Li <kernellwp@gmail.com> wrote:
+> > > >
+> > > > Cc Michael S. Tsirkin,
+> > > > On Tue, 27 Aug 2019 at 04:42, Marcelo Tosatti <mtosatti@redhat.com> wrote:
+> > > > >
+> > > > > On Tue, Aug 13, 2019 at 08:55:29AM +0800, Wanpeng Li wrote:
+> > > > > > On Sun, 4 Aug 2019 at 04:21, Marcelo Tosatti <mtosatti@redhat.com> wrote:
+> > > > > > >
+> > > > > > > On Thu, Aug 01, 2019 at 06:54:49PM +0200, Paolo Bonzini wrote:
+> > > > > > > > On 01/08/19 18:51, Rafael J. Wysocki wrote:
+> > > > > > > > > On 8/1/2019 9:06 AM, Wanpeng Li wrote:
+> > > > > > > > >> From: Wanpeng Li <wanpengli@tencent.com>
+> > > > > > > > >>
+> > > > > > > > >> The downside of guest side polling is that polling is performed even
+> > > > > > > > >> with other runnable tasks in the host. However, even if poll in kvm
+> > > > > > > > >> can aware whether or not other runnable tasks in the same pCPU, it
+> > > > > > > > >> can still incur extra overhead in over-subscribe scenario. Now we can
+> > > > > > > > >> just enable guest polling when dedicated pCPUs are available.
+> > > > > > > > >>
+> > > > > > > > >> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > > > > >> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > > > > > > > >> Cc: Radim Krčmář <rkrcmar@redhat.com>
+> > > > > > > > >> Cc: Marcelo Tosatti <mtosatti@redhat.com>
+> > > > > > > > >> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> > > > > > > > >
+> > > > > > > > > Paolo, Marcelo, any comments?
+> > > > > > > >
+> > > > > > > > Yes, it's a good idea.
+> > > > > > > >
+> > > > > > > > Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+> > >
+> > > Hi Marcelo,
+> > >
+> > > If you don't have more concern, I guess Rafael can apply this patch
+> > > now since the merge window is not too far.
+> >
+> > I will likely queue it up later today and it will go to linux-next
+> > early next week.
+> >
+> > Thanks!
+>
+> NACK patch.
 
---r5Pyd7+fXNt84Ff3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I got an ACK from Paolo on it, though.  Convince Paolo to withdraw his
+ACK if you want it to not be applied.
 
-On Wed 2019-08-28 16:15:06, Thomas Gleixner wrote:
-> On Wed, 28 Aug 2019, Pavel Machek wrote:
-> > On Wed 2019-08-28 14:46:21, Borislav Petkov wrote:
-> > > On Wed, Aug 28, 2019 at 02:29:13PM +0200, Pavel Machek wrote:
-> > > > This is not a way to have an inteligent conversation.
-> > >=20
-> > > No, this *is* the way to keep the conversation sane, without veering
-> > > off into some absurd claims.
-> > >=20
-> > > So, to cut to the chase: you can simply add "rdrand=3Dforce" to your
-> > > cmdline parameters and get back to using RDRAND.
-> > >=20
-> > > And yet if you still feel this fix does not meet your expectations,
-> > > you were told already to either produce patches or who to contact. I'm
-> > > afraid complaining on this thread won't get you anywhere but that's y=
-our
-> > > call.
-> >=20
-> > No, this does not meet my expectations, it violates stable kernel
-> > rules, and will cause regression to some users, while better solution
-> > is known to be available.
->=20
-> Your unqualified ranting does not meet my expectation either and it
-> violates any rule of common sense.
->=20
-> For the record:
->=20
->   Neither AMD nor we have any idea which particular machines have a fixed
->   BIOS and which have not. There is no technical indicator either at boot
->   time as the wreckage manifests itself only after resume.
->=20
->   So in the interest of users the only sensible decision is to disable
->   RDRAND for this class of CPUs.
+> Just don't load the haltpoll driver.
 
-No.
-
-Obviously best solution would be microcode update to fix the problem,
-or to enable kernel to fix the problem.
-
->   If you have a list of machines which have a fixed BIOS, then provide it
->   in form of patches. If not then stop claiming that there is a better
->   solution available.
-
-And yes, whitelist would be already better than present solution. It is
-not my duty to submit fixes to your proposed patch.
-
-> Anyway, I'm done with that and further rants of yours go directly to
-> /dev/null.
->=20
-> Thanks for wasting everyones time
-
-Thanks for your profesional attitude.
-
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---r5Pyd7+fXNt84Ff3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl1m+q0ACgkQMOfwapXb+vJDbwCeJQ0WoYyf8A/jB7OEGuIzpOov
-WaQAn2Wcm/aEi77wq5CWOsCPWQNaLvO6
-=Fjjn
------END PGP SIGNATURE-----
-
---r5Pyd7+fXNt84Ff3--
+And why would that be better?
