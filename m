@@ -2,34 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4F6A0526
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 16:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFE0A0554
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 16:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbfH1Ojx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 10:39:53 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34520 "EHLO mx1.redhat.com"
+        id S1726591AbfH1OtS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Aug 2019 10:49:18 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:51982 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726315AbfH1Ojx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Aug 2019 10:39:53 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        id S1726867AbfH1OtR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 28 Aug 2019 10:49:17 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 47863111A3D2;
-        Wed, 28 Aug 2019 14:39:52 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 6E6A02A09A7;
+        Wed, 28 Aug 2019 14:49:17 +0000 (UTC)
 Received: from amt.cnet (ovpn-112-8.gru2.redhat.com [10.97.112.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BB330601AC;
-        Wed, 28 Aug 2019 14:39:49 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 73B811001B00;
+        Wed, 28 Aug 2019 14:49:14 +0000 (UTC)
 Received: from amt.cnet (localhost [127.0.0.1])
-        by amt.cnet (Postfix) with ESMTP id 039CE105139;
-        Wed, 28 Aug 2019 11:39:23 -0300 (BRT)
+        by amt.cnet (Postfix) with ESMTP id 2ED72105139;
+        Wed, 28 Aug 2019 11:49:00 -0300 (BRT)
 Received: (from marcelo@localhost)
-        by amt.cnet (8.14.7/8.14.7/Submit) id x7SEdJ7Q013745;
-        Wed, 28 Aug 2019 11:39:19 -0300
-Date:   Wed, 28 Aug 2019 11:39:18 -0300
+        by amt.cnet (8.14.7/8.14.7/Submit) id x7SEmxv8014289;
+        Wed, 28 Aug 2019 11:48:59 -0300
+Date:   Wed, 28 Aug 2019 11:48:58 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Wanpeng Li <kernellwp@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+To:     Wanpeng Li <kernellwp@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
         Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
@@ -37,7 +36,7 @@ Cc:     Wanpeng Li <kernellwp@gmail.com>,
         "Michael S. Tsirkin" <mst@redhat.com>
 Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when
  dedicated physical CPUs are available
-Message-ID: <20190828143916.GA13725@amt.cnet>
+Message-ID: <20190828144858.GA14215@amt.cnet>
 References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
  <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com>
  <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
@@ -45,66 +44,48 @@ References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
  <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
  <20190826204045.GA24697@amt.cnet>
  <CANRm+Cx0+V67Ek7FhSs61ZqZL3MgV88Wdy17Q6UA369RH7=dgQ@mail.gmail.com>
- <CANRm+CxqYMzgvxYyhZLmEzYd6SLTyHdRzKVaSiHO-4SV+OwZUQ@mail.gmail.com>
- <CAJZ5v0iQc0-WzqeyAh-6m5O-BLraRMj+Z7sqvRgGwh2u2Hp7cg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iQc0-WzqeyAh-6m5O-BLraRMj+Z7sqvRgGwh2u2Hp7cg@mail.gmail.com>
+In-Reply-To: <CANRm+Cx0+V67Ek7FhSs61ZqZL3MgV88Wdy17Q6UA369RH7=dgQ@mail.gmail.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Wed, 28 Aug 2019 14:39:52 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Wed, 28 Aug 2019 14:49:17 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 10:45:44AM +0200, Rafael J. Wysocki wrote:
-> On Wed, Aug 28, 2019 at 10:34 AM Wanpeng Li <kernellwp@gmail.com> wrote:
+On Tue, Aug 27, 2019 at 08:43:13AM +0800, Wanpeng Li wrote:
+> > > kvm adaptive halt-polling will compete with
+> > > vhost-kthreads, however, poll in guest unaware other runnable tasks in
+> > > the host which will defeat vhost-kthreads.
 > >
-> > On Tue, 27 Aug 2019 at 08:43, Wanpeng Li <kernellwp@gmail.com> wrote:
-> > >
-> > > Cc Michael S. Tsirkin,
-> > > On Tue, 27 Aug 2019 at 04:42, Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> > > >
-> > > > On Tue, Aug 13, 2019 at 08:55:29AM +0800, Wanpeng Li wrote:
-> > > > > On Sun, 4 Aug 2019 at 04:21, Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> > > > > >
-> > > > > > On Thu, Aug 01, 2019 at 06:54:49PM +0200, Paolo Bonzini wrote:
-> > > > > > > On 01/08/19 18:51, Rafael J. Wysocki wrote:
-> > > > > > > > On 8/1/2019 9:06 AM, Wanpeng Li wrote:
-> > > > > > > >> From: Wanpeng Li <wanpengli@tencent.com>
-> > > > > > > >>
-> > > > > > > >> The downside of guest side polling is that polling is performed even
-> > > > > > > >> with other runnable tasks in the host. However, even if poll in kvm
-> > > > > > > >> can aware whether or not other runnable tasks in the same pCPU, it
-> > > > > > > >> can still incur extra overhead in over-subscribe scenario. Now we can
-> > > > > > > >> just enable guest polling when dedicated pCPUs are available.
-> > > > > > > >>
-> > > > > > > >> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > > >> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > > > > > > >> Cc: Radim Krčmář <rkrcmar@redhat.com>
-> > > > > > > >> Cc: Marcelo Tosatti <mtosatti@redhat.com>
-> > > > > > > >> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> > > > > > > >
-> > > > > > > > Paolo, Marcelo, any comments?
-> > > > > > >
-> > > > > > > Yes, it's a good idea.
-> > > > > > >
-> > > > > > > Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-> >
-> > Hi Marcelo,
-> >
-> > If you don't have more concern, I guess Rafael can apply this patch
-> > now since the merge window is not too far.
+> > It depends on how much work vhost-kthreads needs to do, how successful
+> > halt-poll in the guest is, and what improvement halt-polling brings.
+> > The amount of polling will be reduced to zero if polling
+> > is not successful.
 > 
-> I will likely queue it up later today and it will go to linux-next
-> early next week.
+> We observe vhost-kthreads compete with vCPUs adaptive halt-polling in
+> kvm, it hurt performance in over-subscribe product environment,
+> polling in guest can make it worse.
 > 
-> Thanks!
+> Regards,
+> Wanpeng Li
 
-NACK patch.
+Wanpeng,
 
-Just don't load the haltpoll driver.
+Polling should not be performed if there is other work to do. For
+example, halt-polling could check a host/guest shared memory 
+region indicating whether there are other runnable tasks in the host.
+
+Disabling polling means you will not achieve the improvement 
+even in the transitional periods where the system is not
+overcommitted (which should be frequent given that idling 
+is common).
+
+Again, about your patch: it brings no benefit to anyone. 
+
+Guest halt polling should be already disabled by default
+(the driver has to be loaded for guest polling to take place).
 
