@@ -2,59 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D27C19FDBD
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 11:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D913F9FDBE
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 11:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbfH1JAI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 05:00:08 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40256 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726272AbfH1JAH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 05:00:07 -0400
-Received: by mail-lf1-f66.google.com with SMTP id u29so1467773lfk.7
-        for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2019 02:00:05 -0700 (PDT)
+        id S1726368AbfH1JAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Aug 2019 05:00:10 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:46240 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbfH1JAK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 05:00:10 -0400
+Received: by mail-lf1-f65.google.com with SMTP id n19so1440287lfe.13
+        for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2019 02:00:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=o6/WQ8OyBRP6X3I/ZtBD+hIUAEwLu2Ivn3M2czCngrU=;
-        b=jOhJ+LW0AlXZCOi9+dlW1A5t220ThekSlY01z/TTaOIxpGotcmjjpX0zpGTnZ7488v
-         wnMKLjfFAkdSXvEyo2nqQDI+hU/yvHDAvZQStY8dCqzv3K3zt+HVtA5+FMU0MQ57VEg2
-         dGrSmJaQf1KkvHB3OyZcHIjMwcm0uOEn95ipPyRuD0H5xGCK79t+q7aLSCAuwBv09UpB
-         zpZobkbRpEyAtzx9zHvJAjpAJe1zUeRgeNLFAJHcRkJhySpXm+zn+v+shhVNJvNXsJjk
-         N4Tu4o/9ok5rc1IqNtwPognHXXmQ8wnehAgzKG1Y1kYIyDcEb1bHX8wyL/3hxGw80cEz
-         bErQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kVhz1OO0ZxhBZubMddXQ3Emt8VJvFbqDjLyJ6vpWrIk=;
+        b=mrE67/FATNYTkbwcyvOftkVNn3ekurlAE7PcNkTdGSxnIKJGmd5expXHgSP26S1Uji
+         jGOMyBAFVge4mBggchTNvfHVV1DCAgTVxuy6IFmSWlBOvLNNVtyPrb9CLvjEmYKQ9W1e
+         RxQ5ZCr/6V9DxgNqi4A3Q2lhSeck7hYL0EIj9Iyz3L9t8U74SmzyxJ9ga5FFCfEEheT+
+         Nh6KHmW9BTTr5OD/IS+8brdfNNWQh8QFr2A2E1Te48GiaiP2VJsuzXi0PYXGGFeyiCRq
+         tho0LDtXnTayP40aOs76mHj/hNYMXIe4gjcQpwlZFq9mmqvAJLiOO/O4ACRwqLbX7/L+
+         ufwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=o6/WQ8OyBRP6X3I/ZtBD+hIUAEwLu2Ivn3M2czCngrU=;
-        b=cYwMJr1YoPgtEtzZ0fCPntkW/RqKV4b5lznenN3xRD5g7d8gxKrUKy/tKiOzbARNU3
-         Nv2cHCB70BjdCucatM7LJ4vwTj5ErbN29IgEtkxPvh3TZh73dU+T7aZ/zoYVWE6p3ECf
-         25vvEqOowktf2k1ItKcFGT8g8AcX1I17vUViTTr94lyQcaF0J0M88tttejQF+iUsjHvy
-         N9EU9HSwVxPh5sYhxROe7pnudejrYQqB58qYM2lsMQeUeO47D4QyplPCmx61nOo7z2Ob
-         zbdmd2VpXXGznMWQEyHjAOUZD15+pi4zC+TsipHoztjxkxLQ1IcBavCiDN8T7+5im1BS
-         2mXw==
-X-Gm-Message-State: APjAAAVzPQX3ZRwIvel5Cj7MkWeyu/gS+B4VXvTPfjY9JZ22xsvKE7Kp
-        4/Vx7G+Tqwp0+qD3FHyF8ZUEgwZVj+4=
-X-Google-Smtp-Source: APXvYqx0pcIwAQo5dgSrzR3zwF4yE4Y/qlczam7OfZGVPVf61amcqRZ1+JuAD9rOz88VFV+zpT5nlg==
-X-Received: by 2002:a19:8017:: with SMTP id b23mr1853821lfd.132.1566982804638;
-        Wed, 28 Aug 2019 02:00:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kVhz1OO0ZxhBZubMddXQ3Emt8VJvFbqDjLyJ6vpWrIk=;
+        b=k3AMmFHZk1+FC0wr70c53mInfXkLPsfxLFoHr4qzS1wevxOLWwYmm6q9OpxMvgN4/Q
+         D7XMI1oUoctKSi0DLL1jTHhB7w6wALNDsF/ascIT54NoQNMD72RNgEzLUTnKMzQnjmf3
+         dz0Fwv1rT4QoOKw/Xux7DSucAVm2BlVERUZHF2YKFAkaH+9lfyl5lu7YLj9vdfZf6eMi
+         IQOZ7d70Jq56FowJRJaBlesEuisAAi/RARxBQRLbwv/IEFfcH7Yfhb61w+DWSE7IUK1b
+         tm68SGUg6Ki73saWeMmWvDpTFPvAGfvlTBJQk5mnFjRmMxfl8cKivL6sG/ZNFwHrPds3
+         b3gg==
+X-Gm-Message-State: APjAAAX1KvbM0n5reXsP0SYMJRJASQ9RGyLVXP712W1NDk8LY8n2sr1d
+        c9uzD4H/f+YwgKNSv3+L51r8dPtBk3U=
+X-Google-Smtp-Source: APXvYqwvhWXE3moSZqqiA86wdO47BchvG758g8iR3bH39ujOTqHk0LmsrvMJWw4o5gyBL0DV8V/Mng==
+X-Received: by 2002:a19:bed4:: with SMTP id o203mr1844927lff.110.1566982807463;
+        Wed, 28 Aug 2019 02:00:07 -0700 (PDT)
 Received: from genomnajs.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id c23sm449653ljf.105.2019.08.28.02.00.03
+        by smtp.gmail.com with ESMTPSA id c23sm449653ljf.105.2019.08.28.02.00.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 02:00:03 -0700 (PDT)
+        Wed, 28 Aug 2019 02:00:06 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Zhang Rui <rui.zhang@intel.com>,
         Eduardo Valentin <edubezval@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 1/3 v2] thermal: db8500: Finalize device tree conversion
-Date:   Wed, 28 Aug 2019 10:59:57 +0200
-Message-Id: <20190828085959.11510-1-linus.walleij@linaro.org>
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH 2/3 v2] thermal: db8500: Use dev helper variable
+Date:   Wed, 28 Aug 2019 10:59:58 +0200
+Message-Id: <20190828085959.11510-2-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190828085959.11510-1-linus.walleij@linaro.org>
+References: <20190828085959.11510-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -62,238 +63,125 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-At some point there was an attempt to convert the DB8500
-thermal sensor to device tree: a probe path was added
-and the device tree was augmented for the Snowball board.
-The switchover was never completed: instead the thermal
-devices came from from the PRCMU MFD device and the probe
-on the Snowball was confused as another set of configuration
-appeared from the device tree.
-
-Move over to a device-tree only approach, as we fixed up
-the device trees.
+The code gets easier to read like this.
 
 Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Acked-by: Lee Jones <lee.jones@linaro.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
 ChangeLog v1->v2:
 - No change, resending with the rest of the patches
 ---
- drivers/mfd/db8500-prcmu.c                   | 53 +-------------------
- drivers/thermal/Kconfig                      |  2 +-
- drivers/thermal/db8500_thermal.c             | 30 +++++------
- include/linux/platform_data/db8500_thermal.h | 29 -----------
- 4 files changed, 17 insertions(+), 97 deletions(-)
- delete mode 100644 include/linux/platform_data/db8500_thermal.h
+ drivers/thermal/db8500_thermal.c | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/mfd/db8500-prcmu.c b/drivers/mfd/db8500-prcmu.c
-index 3f21e26b8d36..a1e09bf06977 100644
---- a/drivers/mfd/db8500-prcmu.c
-+++ b/drivers/mfd/db8500-prcmu.c
-@@ -36,7 +36,6 @@
- #include <linux/regulator/db8500-prcmu.h>
- #include <linux/regulator/machine.h>
- #include <linux/platform_data/ux500_wdt.h>
--#include <linux/platform_data/db8500_thermal.h>
- #include "dbx500-prcmu-regs.h"
- 
- /* Index of different voltages to be used when accessing AVSData */
-@@ -2982,53 +2981,6 @@ static struct ux500_wdt_data db8500_wdt_pdata = {
- 	.timeout = 600, /* 10 minutes */
- 	.has_28_bits_resolution = true,
- };
--/*
-- * Thermal Sensor
-- */
--
--static struct resource db8500_thsens_resources[] = {
--	{
--		.name = "IRQ_HOTMON_LOW",
--		.start  = IRQ_PRCMU_HOTMON_LOW,
--		.end    = IRQ_PRCMU_HOTMON_LOW,
--		.flags  = IORESOURCE_IRQ,
--	},
--	{
--		.name = "IRQ_HOTMON_HIGH",
--		.start  = IRQ_PRCMU_HOTMON_HIGH,
--		.end    = IRQ_PRCMU_HOTMON_HIGH,
--		.flags  = IORESOURCE_IRQ,
--	},
--};
--
--static struct db8500_thsens_platform_data db8500_thsens_data = {
--	.trip_points[0] = {
--		.temp = 70000,
--		.type = THERMAL_TRIP_ACTIVE,
--		.cdev_name = {
--			[0] = "thermal-cpufreq-0",
--		},
--	},
--	.trip_points[1] = {
--		.temp = 75000,
--		.type = THERMAL_TRIP_ACTIVE,
--		.cdev_name = {
--			[0] = "thermal-cpufreq-0",
--		},
--	},
--	.trip_points[2] = {
--		.temp = 80000,
--		.type = THERMAL_TRIP_ACTIVE,
--		.cdev_name = {
--			[0] = "thermal-cpufreq-0",
--		},
--	},
--	.trip_points[3] = {
--		.temp = 85000,
--		.type = THERMAL_TRIP_CRITICAL,
--	},
--	.num_trips = 4,
--};
- 
- static const struct mfd_cell common_prcmu_devs[] = {
- 	{
-@@ -3052,10 +3004,7 @@ static const struct mfd_cell db8500_prcmu_devs[] = {
- 	},
- 	{
- 		.name = "db8500-thermal",
--		.num_resources = ARRAY_SIZE(db8500_thsens_resources),
--		.resources = db8500_thsens_resources,
--		.platform_data = &db8500_thsens_data,
--		.pdata_size = sizeof(db8500_thsens_data),
-+		.of_compatible = "stericsson,db8500-thermal",
- 	},
- };
- 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 9966364a6deb..001a21abcc28 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -310,7 +310,7 @@ config DOVE_THERMAL
- 
- config DB8500_THERMAL
- 	tristate "DB8500 thermal management"
--	depends on MFD_DB8500_PRCMU
-+	depends on MFD_DB8500_PRCMU && OF
- 	default y
- 	help
- 	  Adds DB8500 thermal management implementation according to the thermal
 diff --git a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
-index b71a999d17d6..d650ae5fdf2a 100644
+index d650ae5fdf2a..d250bcf3c10c 100644
 --- a/drivers/thermal/db8500_thermal.c
 +++ b/drivers/thermal/db8500_thermal.c
-@@ -13,13 +13,24 @@
- #include <linux/mfd/dbx500-prcmu.h>
- #include <linux/module.h>
- #include <linux/of.h>
--#include <linux/platform_data/db8500_thermal.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/thermal.h>
- 
- #define PRCMU_DEFAULT_MEASURE_TIME	0xFFF
- #define PRCMU_DEFAULT_LOW_TEMP		0
-+#define COOLING_DEV_MAX 8
-+
-+struct db8500_trip_point {
-+	unsigned long temp;
-+	enum thermal_trip_type type;
-+	char cdev_name[COOLING_DEV_MAX][THERMAL_NAME_LENGTH];
-+};
-+
-+struct db8500_thsens_platform_data {
-+	struct db8500_trip_point trip_points[THERMAL_MAX_TRIPS];
-+	int num_trips;
-+};
- 
- struct db8500_thermal_zone {
- 	struct thermal_zone_device *therm_dev;
-@@ -301,7 +312,6 @@ static void db8500_thermal_work(struct work_struct *work)
- 	dev_dbg(&pzone->therm_dev->device, "thermal work finished.\n");
+@@ -313,16 +313,16 @@ static void db8500_thermal_work(struct work_struct *work)
  }
  
--#ifdef CONFIG_OF
  static struct db8500_thsens_platform_data*
- 		db8500_thermal_parse_dt(struct platform_device *pdev)
+-		db8500_thermal_parse_dt(struct platform_device *pdev)
++		db8500_thermal_parse_dt(struct device *dev)
  {
-@@ -370,13 +380,6 @@ static struct db8500_thsens_platform_data*
- 	dev_err(&pdev->dev, "Parsing device tree data error.\n");
+ 	struct db8500_thsens_platform_data *ptrips;
+-	struct device_node *np = pdev->dev.of_node;
++	struct device_node *np = dev->of_node;
+ 	char prop_name[32];
+ 	const char *tmp_str;
+ 	u32 tmp_data;
+ 	int i, j;
+ 
+-	ptrips = devm_kzalloc(&pdev->dev, sizeof(*ptrips), GFP_KERNEL);
++	ptrips = devm_kzalloc(dev, sizeof(*ptrips), GFP_KERNEL);
+ 	if (!ptrips)
+ 		return NULL;
+ 
+@@ -377,7 +377,7 @@ static struct db8500_thsens_platform_data*
+ 	return ptrips;
+ 
+ err_parse_dt:
+-	dev_err(&pdev->dev, "Parsing device tree data error.\n");
++	dev_err(dev, "Parsing device tree data error.\n");
  	return NULL;
  }
--#else
--static inline struct db8500_thsens_platform_data*
--		db8500_thermal_parse_dt(struct platform_device *pdev)
--{
--	return NULL;
--}
--#endif
  
- static int db8500_thermal_probe(struct platform_device *pdev)
+@@ -385,18 +385,19 @@ static int db8500_thermal_probe(struct platform_device *pdev)
  {
-@@ -386,11 +389,10 @@ static int db8500_thermal_probe(struct platform_device *pdev)
+ 	struct db8500_thermal_zone *pzone = NULL;
+ 	struct db8500_thsens_platform_data *ptrips = NULL;
+-	struct device_node *np = pdev->dev.of_node;
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
  	int low_irq, high_irq, ret = 0;
  	unsigned long dft_low, dft_high;
  
--	if (np)
--		ptrips = db8500_thermal_parse_dt(pdev);
--	else
--		ptrips = dev_get_platdata(&pdev->dev);
-+	if (!np)
-+		return -EINVAL;
+ 	if (!np)
+ 		return -EINVAL;
  
-+	ptrips = db8500_thermal_parse_dt(pdev);
+-	ptrips = db8500_thermal_parse_dt(pdev);
++	ptrips = db8500_thermal_parse_dt(dev);
  	if (!ptrips)
  		return -EINVAL;
  
-@@ -498,13 +500,11 @@ static int db8500_thermal_resume(struct platform_device *pdev)
- 	return 0;
- }
+-	pzone = devm_kzalloc(&pdev->dev, sizeof(*pzone), GFP_KERNEL);
++	pzone = devm_kzalloc(dev, sizeof(*pzone), GFP_KERNEL);
+ 	if (!pzone)
+ 		return -ENOMEM;
  
--#ifdef CONFIG_OF
- static const struct of_device_id db8500_thermal_match[] = {
- 	{ .compatible = "stericsson,db8500-thermal" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, db8500_thermal_match);
--#endif
+@@ -410,31 +411,31 @@ static int db8500_thermal_probe(struct platform_device *pdev)
  
- static struct platform_driver db8500_thermal_driver = {
- 	.driver = {
-diff --git a/include/linux/platform_data/db8500_thermal.h b/include/linux/platform_data/db8500_thermal.h
-deleted file mode 100644
-index 55e55750a165..000000000000
---- a/include/linux/platform_data/db8500_thermal.h
-+++ /dev/null
-@@ -1,29 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * db8500_thermal.h - DB8500 Thermal Management Implementation
-- *
-- * Copyright (C) 2012 ST-Ericsson
-- * Copyright (C) 2012 Linaro Ltd.
-- *
-- * Author: Hongbo Zhang <hongbo.zhang@linaro.com>
-- */
--
--#ifndef _DB8500_THERMAL_H_
--#define _DB8500_THERMAL_H_
--
--#include <linux/thermal.h>
--
--#define COOLING_DEV_MAX 8
--
--struct db8500_trip_point {
--	unsigned long temp;
--	enum thermal_trip_type type;
--	char cdev_name[COOLING_DEV_MAX][THERMAL_NAME_LENGTH];
--};
--
--struct db8500_thsens_platform_data {
--	struct db8500_trip_point trip_points[THERMAL_MAX_TRIPS];
--	int num_trips;
--};
--
--#endif /* _DB8500_THERMAL_H_ */
+ 	low_irq = platform_get_irq_byname(pdev, "IRQ_HOTMON_LOW");
+ 	if (low_irq < 0) {
+-		dev_err(&pdev->dev, "Get IRQ_HOTMON_LOW failed.\n");
++		dev_err(dev, "Get IRQ_HOTMON_LOW failed.\n");
+ 		ret = low_irq;
+ 		goto out_unlock;
+ 	}
+ 
+-	ret = devm_request_threaded_irq(&pdev->dev, low_irq, NULL,
++	ret = devm_request_threaded_irq(dev, low_irq, NULL,
+ 		prcmu_low_irq_handler, IRQF_NO_SUSPEND | IRQF_ONESHOT,
+ 		"dbx500_temp_low", pzone);
+ 	if (ret < 0) {
+-		dev_err(&pdev->dev, "Failed to allocate temp low irq.\n");
++		dev_err(dev, "Failed to allocate temp low irq.\n");
+ 		goto out_unlock;
+ 	}
+ 
+ 	high_irq = platform_get_irq_byname(pdev, "IRQ_HOTMON_HIGH");
+ 	if (high_irq < 0) {
+-		dev_err(&pdev->dev, "Get IRQ_HOTMON_HIGH failed.\n");
++		dev_err(dev, "Get IRQ_HOTMON_HIGH failed.\n");
+ 		ret = high_irq;
+ 		goto out_unlock;
+ 	}
+ 
+-	ret = devm_request_threaded_irq(&pdev->dev, high_irq, NULL,
++	ret = devm_request_threaded_irq(dev, high_irq, NULL,
+ 		prcmu_high_irq_handler, IRQF_NO_SUSPEND | IRQF_ONESHOT,
+ 		"dbx500_temp_high", pzone);
+ 	if (ret < 0) {
+-		dev_err(&pdev->dev, "Failed to allocate temp high irq.\n");
++		dev_err(dev, "Failed to allocate temp high irq.\n");
+ 		goto out_unlock;
+ 	}
+ 
+@@ -442,11 +443,11 @@ static int db8500_thermal_probe(struct platform_device *pdev)
+ 		ptrips->num_trips, 0, pzone, &thdev_ops, NULL, 0, 0);
+ 
+ 	if (IS_ERR(pzone->therm_dev)) {
+-		dev_err(&pdev->dev, "Register thermal zone device failed.\n");
++		dev_err(dev, "Register thermal zone device failed.\n");
+ 		ret = PTR_ERR(pzone->therm_dev);
+ 		goto out_unlock;
+ 	}
+-	dev_info(&pdev->dev, "Thermal zone device registered.\n");
++	dev_info(dev, "Thermal zone device registered.\n");
+ 
+ 	dft_low = PRCMU_DEFAULT_LOW_TEMP;
+ 	dft_high = ptrips->trip_points[0].temp;
 -- 
 2.21.0
 
