@@ -2,131 +2,336 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F629FE54
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 11:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49ACD9FE97
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 11:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726378AbfH1JVn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 05:21:43 -0400
-Received: from mail-eopbgr150058.outbound.protection.outlook.com ([40.107.15.58]:43590
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726370AbfH1JVm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Aug 2019 05:21:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HpgXS7uP0ghnmwTpy80fa1m9mXzW8qi80M7jw4tmMcFqUj3pj2dqNA8IY+P6EDsniyl752X/+A70fUz30ok06y/LLIZZ8a2f1VLKWwxpzGYMx6lFin2H7sKC7xlgoc2e8svPdhuZXnc+9dUHVvR3Fkj+1NbB3XhW+X8yW0fjg7fJCHoxBd4ZmcDMAmG0Y6GvJY9Ri4PNoXIhByqBictj6du+eVLX6NT+ipQkcSsQUE87xXFVEGyV7WY79YElT0y1Y3JvZpqZbsmcp3lbi4NSuGYgJJCiJ71ruhkERviIqUV7z9irI+H1nR+n5iCyJPEa8F64OWIO0SO1sSG+CzB8gQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xKL2IsxJZOdhH7Q0shhslGeeIbmY3oWF+h7HeDZwG1U=;
- b=d8OaJWWrXmasbeaAyxM609zsQ1kBpxZs+scDnMRrK9Pwj8hjSty2aaj5sTTiVLcZGctMdPf+b4tC/hqEHAM0yUi8H4uUMDPTj/D/Oje4H74ijP23bozljoJqF88sBCGCYd4916dvRslaU5/Tx9vXxtAORIYJSIW5O+F/+y6Rb/eQG6LABjvJL36nM7C1RlcpnsD/aTFzU52j+hDjGwu80akrrBRTbTQi42ZdliyRv5ZO8bkL8fCEbDe1XXpoVt6oZ8cn+9Tua5lDGmyg26vG7PX1zdc4MFw2+U7enGeql/IZmq1ExbBQrRPZ7vAqhFLvvWeILbsKj8+bDsFUuIw4Jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xKL2IsxJZOdhH7Q0shhslGeeIbmY3oWF+h7HeDZwG1U=;
- b=WRrAvkH53Qk/fBvXka1c1dRKONpYZdaWaf83mH+TARAdcCZpbNkHeMVKo/InqYR/scu+VGu/5L8j5ml61caOADky/Bh/ZyhUtI5KPy0+OgK4GTuEahq/zCS4KyXwwGvZBkbGUkJDAcVCL5uXC2LrcuCHtfSwDgeFyQo0wACftuA=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3947.eurprd04.prod.outlook.com (52.134.67.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2199.19; Wed, 28 Aug 2019 09:20:58 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::8958:299c:bc54:2a38]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::8958:299c:bc54:2a38%7]) with mapi id 15.20.2199.021; Wed, 28 Aug 2019
- 09:20:58 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "edubezval@gmail.com" <edubezval@gmail.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "maxime.ripard@bootlin.com" <maxime.ripard@bootlin.com>,
-        "horms+renesas@verge.net.au" <horms+renesas@verge.net.au>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "jagan@amarulasolutions.com" <jagan@amarulasolutions.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "enric.balletbo@collabora.com" <enric.balletbo@collabora.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V15 1/5] dt-bindings: fsl: scu: add thermal binding
-Thread-Topic: [PATCH V15 1/5] dt-bindings: fsl: scu: add thermal binding
-Thread-Index: AQHVJXvnLQPj9qjL2U2LZTWuyBDONqaqeq9ggC7WvJCAN2WDgIAAARuQ
-Date:   Wed, 28 Aug 2019 09:20:58 +0000
-Message-ID: <DB3PR0402MB3916DF85E27F417C0A0BD93CF5A30@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <20190618021820.14885-1-Anson.Huang@nxp.com>
-         <DB3PR0402MB39162C5B5AF828B127DD871EF5E00@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-         <DB3PR0402MB39162EB555CD7AE75D58C582F5C60@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <ff3fd0ab2ba659e98070760be8e7c0f223e921f9.camel@intel.com>
-In-Reply-To: <ff3fd0ab2ba659e98070760be8e7c0f223e921f9.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9a2f4b00-a6c0-4126-97ed-08d72b990989
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3947;
-x-ms-traffictypediagnostic: DB3PR0402MB3947:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB3947D6264273B572F855CA76F5A30@DB3PR0402MB3947.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 014304E855
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(346002)(376002)(39860400002)(136003)(366004)(189003)(199004)(476003)(2906002)(66446008)(64756008)(9686003)(74316002)(2501003)(486006)(6246003)(44832011)(66556008)(55016002)(5660300002)(66476007)(11346002)(66946007)(478600001)(53936002)(316002)(71190400001)(71200400001)(102836004)(305945005)(7736002)(186003)(26005)(76116006)(446003)(7696005)(2201001)(81166006)(81156014)(14444005)(256004)(8676002)(66066001)(110136005)(6436002)(25786009)(52536014)(33656002)(7416002)(4326008)(86362001)(4744005)(3846002)(6506007)(229853002)(8936002)(6116002)(14454004)(99286004)(76176011)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3947;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: MXQzO9/Z9glsvEFDq0wUK3RvqHgIDcxt9tAn+zmWV0ewXQTVm5IoryLxlf72KGBeemctx8rEOdTmKalVc61JgItnwW6JxPo0ZT1NZAZoBLvBnuM4HMDUYVop8w1+O8xIToAaFVWd85agJMdK3cuDCZjgSbuVzqgqPxYjxZOnjfmXvoXZc9dn2OKNnVvCkTaYLY64gKBGxf2Mi7hZjyYwqSCNHJ09eZ+QpI7VsIOw8AiX+E9Y1y1LOsKiEDCjm+ihXD/QeX3CowHph2qXyUlQkIhZHyJeu1RexozYuvl7dShiVWfGFbRzIfC3QXz0P8LA7QXtdFrAhXqfTtHCW7FOUwFa7a8i2nos9TYsfDJ83d6nIVC9YKeT4B/pUhOHuA9Ht7tesMcJh+GD/Yl0HNkTKnd9gqTQrh275tRM7Ssfolg=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a2f4b00-a6c0-4126-97ed-08d72b990989
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Aug 2019 09:20:58.5188
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KavFyoMBK0926nykUjpW50qdbm5X/xiArMNLBsTzpiN2+05y/+Muk25/Z30UmuKQMlyo7NoSZlk6rMyOE2nHyg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3947
+        id S1726454AbfH1Jgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Aug 2019 05:36:36 -0400
+Received: from mga18.intel.com ([134.134.136.126]:6016 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726378AbfH1Jgg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 28 Aug 2019 05:36:36 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Aug 2019 02:36:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,440,1559545200"; 
+   d="scan'208";a="381226739"
+Received: from deyangko-mobl.ccr.corp.intel.com ([10.249.168.35])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Aug 2019 02:36:29 -0700
+Message-ID: <36f8f79c1353622bf0bb109296cd6229ac23e648.camel@intel.com>
+Subject: Re: [PATCH] thermal: mediatek: add suspend/resume callback
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     michael.kao@mediatek.com, Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Louis Yu <louis.yu@mediatek.com>
+Date:   Wed, 28 Aug 2019 17:36:38 +0800
+In-Reply-To: <1562058985-27538-1-git-send-email-michael.kao@mediatek.com>
+References: <1562058985-27538-1-git-send-email-michael.kao@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIFJ1aQ0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggVjE1IDEvNV0gZHQtYmluZGluZ3M6IGZz
-bDogc2N1OiBhZGQgdGhlcm1hbCBiaW5kaW5nDQo+IA0KPiBIaSwgQW5zb24sDQo+IA0KPiBXZSdy
-ZSBtaXNzaW5nIEFDSyBmcm9tIHRoZSBtYWludGFpbmVycyBmb3IgcGF0Y2ggNC81IGFuZCA1LzUs
-IGlmIHdlIHdhbnQgdG8NCj4gc2hpcHBlZCB0aGUgcGF0Y2ggdmlhIHRoZXJtYWwgdHJlZS4NCg0K
-SSB0aGluayA0LzUgYW5kIDUvNSBjYW4gYmUgdGFrZW4gYnkgU2hhd24gR3VvIG9uY2UgdGhlIGRy
-aXZlciBwYXJ0IGlzIHRha2VuLCBoZQ0Kbm9ybWFsbHkgZG8gaXQgaW4gdGhpcyB3YXksIG9uY2Ug
-ZHJpdmVyIGFuZCBkdC1iaW5kaW5nIGFyZSB0YWtlbiwgSSB3aWxsIG5vdGlmeSBoaW0uDQoNCj4g
-DQo+IEZvciBwYXRjaCAyLzUsIGFzIGl0IGludHJvZHVjZXMgYSBuZXcgQVBJIGZvciBPRl9USEVS
-TUFMLCBJJ2QgbGlrZSB0byBnZXQNCj4gRWR1YXJkbycgZmVlZGJhY2sgYmVmb3JlIHRha2luZyB0
-aGVtLg0KDQpPSywgTk9UIHN1cmUgd2hlbiBoZSBjYW4gdGFrZSBhIGxvb2sgYXQgaXQsIHdlIGFy
-ZSBraW5kIG9mIHBlbmRpbmcgb24gdGhpcyBmb3Igc29tZQ0KdGltZSwgbGV0J3Mgd2FpdC4gSWYg
-eW91IGhhdmUgY2hhbmNlIHRvIHRhbGsgdG8gaGltLCBwbGVhc2UgaGVscCBhc2sgZm9yIGhlbHAg
-ZnJvbSBoaW0gYWJvdXQNCnRoaXMgcGF0Y2ggc2VyaWVzLCB0aGFua3MgYSBsb3QhDQoNCnRoYW5r
-cywNCkFuc29uDQoNCg0K
+On Tue, 2019-07-02 at 17:16 +0800, michael.kao@mediatek.com wrote:
+> From: Louis Yu <louis.yu@mediatek.com>
+> 
+> Add suspend/resume callback to disable/enable Mediatek thermal sensor
+> respectively. Since thermal power domain is off in suspend, thermal
+> driver
+> needs re-initialization during resume.
+> 
+> Signed-off-by: Louis Yu <louis.yu@mediatek.com>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> ---
+> This patch series base on these patches [1][2][3].
+> 
+> [1]thermal: mediatek: mt8183: fix bank number settings (
+> https://patchwork.kernel.org/patch/10938817/)
+> [2]thermal: mediatek: add another get_temp ops for thermal sensors (
+> https://patchwork.kernel.org/patch/10938829/)
+> [3]thermal: mediatek: use spinlock to protect PTPCORESEL (
+> https://patchwork.kernel.org/patch/10938841/)
+> 
+all these patches are not sent to linux-pm mailing list, thus they
+never got chance to get merged. please resend them to linux-pm.
+
+I don't know what the first part of the patch set do, so I'm wondering
+if there is any dependency?
+
+thanks,
+rui
+
+>  drivers/thermal/mtk_thermal.c | 134
+> +++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 125 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/thermal/mtk_thermal.c
+> b/drivers/thermal/mtk_thermal.c
+> index 3d01153..61d4114 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/thermal.h>
+>  #include <linux/reset.h>
+>  #include <linux/types.h>
+> +#include <linux/iopoll.h>
+>  
+>  /* AUXADC Registers */
+>  #define AUXADC_CON1_SET_V	0x008
+> @@ -39,6 +40,8 @@
+>  
+>  #define APMIXED_SYS_TS_CON1	0x604
+>  
+> +#define APMIXED_SYS_TS_CON1_BUFFER_OFF	0x30
+> +
+>  /* Thermal Controller Registers */
+>  #define TEMP_MONCTL0		0x000
+>  #define TEMP_MONCTL1		0x004
+> @@ -46,6 +49,7 @@
+>  #define TEMP_MONIDET0		0x014
+>  #define TEMP_MONIDET1		0x018
+>  #define TEMP_MSRCTL0		0x038
+> +#define TEMP_MSRCTL1		0x03c
+>  #define TEMP_AHBPOLL		0x040
+>  #define TEMP_AHBTO		0x044
+>  #define TEMP_ADCPNP0		0x048
+> @@ -95,6 +99,9 @@
+>  #define TEMP_ADCVALIDMASK_VALID_HIGH		BIT(5)
+>  #define TEMP_ADCVALIDMASK_VALID_POS(bit)	(bit)
+>  
+> +#define TEMP_MSRCTL1_BUS_STA	(BIT(0) | BIT(7))
+> +#define TEMP_MSRCTL1_SENSING_POINTS_PAUSE	0x10E
+> +
+>  /* MT8173 thermal sensors */
+>  #define MT8173_TS1	0
+>  #define MT8173_TS2	1
+> @@ -266,6 +273,10 @@ struct mtk_thermal_data {
+>  struct mtk_thermal {
+>  	struct device *dev;
+>  	void __iomem *thermal_base;
+> +	void __iomem *apmixed_base;
+> +	void __iomem *auxadc_base;
+> +	u64 apmixed_phys_base;
+> +	u64 auxadc_phys_base;
+>  
+>  	struct clk *clk_peri_therm;
+>  	struct clk *clk_auxadc;
+> @@ -795,6 +806,42 @@ static void mtk_thermal_init_bank(struct
+> mtk_thermal *mt, int num,
+>  	mtk_thermal_put_bank(bank);
+>  }
+>  
+> +static int mtk_thermal_disable_sensing(struct mtk_thermal *mt, int
+> num)
+> +{
+> +	struct mtk_thermal_bank *bank = &mt->banks[num];
+> +	u32 val;
+> +	unsigned long timeout;
+> +	void __iomem *addr;
+> +	int ret = 0;
+> +
+> +	bank->id = num;
+> +	bank->mt = mt;
+> +
+> +	mtk_thermal_get_bank(bank);
+> +
+> +	val = readl(mt->thermal_base + TEMP_MSRCTL1);
+> +	/* pause periodic temperature measurement for sensing points */
+> +	writel(val | TEMP_MSRCTL1_SENSING_POINTS_PAUSE,
+> +	       mt->thermal_base + TEMP_MSRCTL1);
+> +
+> +	/* wait until temperature measurement bus idle */
+> +	timeout = jiffies + HZ;
+> +	addr = mt->thermal_base + TEMP_MSRCTL1;
+> +
+> +	ret = readl_poll_timeout(addr, val, (val &
+> TEMP_MSRCTL1_BUS_STA) == 0x0,
+> +				 0, timeout);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	/* disable periodic temperature meausrement on sensing points
+> */
+> +	writel(0x0, mt->thermal_base + TEMP_MONCTL0);
+> +
+> +out:
+> +	mtk_thermal_put_bank(bank);
+> +
+> +	return ret;
+> +}
+> +
+>  static u64 of_get_phys_base(struct device_node *np)
+>  {
+>  	u64 size64;
+> @@ -917,7 +964,6 @@ static int mtk_thermal_probe(struct
+> platform_device *pdev)
+>  	struct device_node *auxadc, *apmixedsys, *np = pdev-
+> >dev.of_node;
+>  	struct mtk_thermal *mt;
+>  	struct resource *res;
+> -	u64 auxadc_phys_base, apmixed_phys_base;
+>  	struct thermal_zone_device *tzdev;
+>  	struct mtk_thermal_zone *tz;
+>  
+> @@ -954,11 +1000,11 @@ static int mtk_thermal_probe(struct
+> platform_device *pdev)
+>  		return -ENODEV;
+>  	}
+>  
+> -	auxadc_phys_base = of_get_phys_base(auxadc);
+> +	mt->auxadc_phys_base = of_get_phys_base(auxadc);
+>  
+>  	of_node_put(auxadc);
+>  
+> -	if (auxadc_phys_base == OF_BAD_ADDR) {
+> +	if (mt->auxadc_phys_base == OF_BAD_ADDR) {
+>  		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
+>  		return -EINVAL;
+>  	}
+> @@ -969,11 +1015,12 @@ static int mtk_thermal_probe(struct
+> platform_device *pdev)
+>  		return -ENODEV;
+>  	}
+>  
+> -	apmixed_phys_base = of_get_phys_base(apmixedsys);
+> +	mt->apmixed_phys_base = of_get_phys_base(apmixedsys);
+> +	mt->apmixed_base = of_iomap(apmixedsys, 0);
+>  
+>  	of_node_put(apmixedsys);
+>  
+> -	if (apmixed_phys_base == OF_BAD_ADDR) {
+> +	if (mt->apmixed_phys_base == OF_BAD_ADDR) {
+>  		dev_err(&pdev->dev, "Can't get auxadc phys address\n");
+>  		return -EINVAL;
+>  	}
+> @@ -985,19 +1032,19 @@ static int mtk_thermal_probe(struct
+> platform_device *pdev)
+>  	ret = clk_prepare_enable(mt->clk_auxadc);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n",
+> ret);
+> -		return ret;
+> +		goto err_disable_clk_auxadc;
+>  	}
+>  
+>  	ret = clk_prepare_enable(mt->clk_peri_therm);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "Can't enable peri clk: %d\n",
+> ret);
+> -		goto err_disable_clk_auxadc;
+> +		goto err_disable_clk_peri_therm;
+>  	}
+>  
+>  	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ;
+> ctrl_id++)
+>  		for (i = 0; i < mt->conf->num_banks; i++)
+> -			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
+> -					      auxadc_phys_base,
+> ctrl_id);
+> +			mtk_thermal_init_bank(mt, i, mt-
+> >apmixed_phys_base,
+> +					      mt->auxadc_phys_base,
+> ctrl_id);
+>  
+>  	platform_set_drvdata(pdev, mt);
+>  
+> @@ -1041,11 +1088,80 @@ static int mtk_thermal_remove(struct
+> platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static int __maybe_unused mtk_thermal_suspend(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct mtk_thermal *mt = platform_get_drvdata(pdev);
+> +	int i, ret;
+> +
+> +	for (i = 0; i < mt->conf->num_banks; i++) {
+> +		ret = mtk_thermal_disable_sensing(mt, i);
+> +		if (ret)
+> +			goto out;
+> +	}
+> +
+> +	/* disable buffer */
+> +	writel(readl(mt->apmixed_base + APMIXED_SYS_TS_CON1) |
+> +	       APMIXED_SYS_TS_CON1_BUFFER_OFF,
+> +	       mt->apmixed_base + APMIXED_SYS_TS_CON1);
+> +
+> +	clk_disable_unprepare(mt->clk_peri_therm);
+> +	clk_disable_unprepare(mt->clk_auxadc);
+> +
+> +	return 0;
+> +
+> +out:
+> +	dev_err(&pdev->dev, "Failed to wait until bus idle\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static int __maybe_unused mtk_thermal_resume(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct mtk_thermal *mt = platform_get_drvdata(pdev);
+> +	int i, ret, ctrl_id;
+> +
+> +	ret = device_reset(&pdev->dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(mt->clk_auxadc);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Can't enable auxadc clk: %d\n",
+> ret);
+> +		goto err_disable_clk_auxadc;
+> +	}
+> +
+> +	ret = clk_prepare_enable(mt->clk_peri_therm);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Can't enable peri clk: %d\n",
+> ret);
+> +		goto err_disable_clk_peri_therm;
+> +	}
+> +
+> +	for (ctrl_id = 0; ctrl_id < mt->conf->num_controller ;
+> ctrl_id++)
+> +		for (i = 0; i < mt->conf->num_banks; i++)
+> +			mtk_thermal_init_bank(mt, i, mt-
+> >apmixed_phys_base,
+> +					      mt->auxadc_phys_base,
+> ctrl_id);
+> +
+> +	return 0;
+> +
+> +err_disable_clk_peri_therm:
+> +	clk_disable_unprepare(mt->clk_peri_therm);
+> +err_disable_clk_auxadc:
+> +	clk_disable_unprepare(mt->clk_auxadc);
+> +
+> +	return ret;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(mtk_thermal_pm_ops,
+> +			 mtk_thermal_suspend, mtk_thermal_resume);
+> +
+>  static struct platform_driver mtk_thermal_driver = {
+>  	.probe = mtk_thermal_probe,
+>  	.remove = mtk_thermal_remove,
+>  	.driver = {
+>  		.name = "mtk-thermal",
+> +		.pm = &mtk_thermal_pm_ops,
+>  		.of_match_table = mtk_thermal_of_match,
+>  	},
+>  };
+
