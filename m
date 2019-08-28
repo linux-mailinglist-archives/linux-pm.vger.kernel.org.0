@@ -2,94 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE3AA048C
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 16:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4F6A0526
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 16:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727004AbfH1OPT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 10:15:19 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:47494 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726847AbfH1OPT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 10:15:19 -0400
-Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1i2yj5-0005hU-A0; Wed, 28 Aug 2019 16:15:07 +0200
-Date:   Wed, 28 Aug 2019 16:15:06 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Pavel Machek <pavel@denx.de>
-cc:     Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+        id S1726428AbfH1Ojx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Aug 2019 10:39:53 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:34520 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726315AbfH1Ojx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 28 Aug 2019 10:39:53 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 47863111A3D2;
+        Wed, 28 Aug 2019 14:39:52 +0000 (UTC)
+Received: from amt.cnet (ovpn-112-8.gru2.redhat.com [10.97.112.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BB330601AC;
+        Wed, 28 Aug 2019 14:39:49 +0000 (UTC)
+Received: from amt.cnet (localhost [127.0.0.1])
+        by amt.cnet (Postfix) with ESMTP id 039CE105139;
+        Wed, 28 Aug 2019 11:39:23 -0300 (BRT)
+Received: (from marcelo@localhost)
+        by amt.cnet (8.14.7/8.14.7/Submit) id x7SEdJ7Q013745;
+        Wed, 28 Aug 2019 11:39:19 -0300
+Date:   Wed, 28 Aug 2019 11:39:18 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Wanpeng Li <kernellwp@gmail.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH 4.19 72/98] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD
- family 15h/16h
-In-Reply-To: <20190828133713.GF8052@amd>
-Message-ID: <alpine.DEB.2.21.1908281610310.23149@nanos.tec.linutronix.de>
-References: <20190827113604.GB18218@amd> <alpine.DEB.2.21.1908271525480.1939@nanos.tec.linutronix.de> <20190828103113.GA14677@amd> <alpine.DEB.2.21.1908281231480.1869@nanos.tec.linutronix.de> <20190828114947.GC8052@amd> <20190828120024.GF4920@zn.tnic>
- <20190828120935.GD8052@amd> <20190828121628.GG4920@zn.tnic> <20190828122913.GE8052@amd> <20190828124621.GI4920@zn.tnic> <20190828133713.GF8052@amd>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when
+ dedicated physical CPUs are available
+Message-ID: <20190828143916.GA13725@amt.cnet>
+References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
+ <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com>
+ <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
+ <20190803202058.GA9316@amt.cnet>
+ <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
+ <20190826204045.GA24697@amt.cnet>
+ <CANRm+Cx0+V67Ek7FhSs61ZqZL3MgV88Wdy17Q6UA369RH7=dgQ@mail.gmail.com>
+ <CANRm+CxqYMzgvxYyhZLmEzYd6SLTyHdRzKVaSiHO-4SV+OwZUQ@mail.gmail.com>
+ <CAJZ5v0iQc0-WzqeyAh-6m5O-BLraRMj+Z7sqvRgGwh2u2Hp7cg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iQc0-WzqeyAh-6m5O-BLraRMj+Z7sqvRgGwh2u2Hp7cg@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Wed, 28 Aug 2019 14:39:52 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 28 Aug 2019, Pavel Machek wrote:
-> On Wed 2019-08-28 14:46:21, Borislav Petkov wrote:
-> > On Wed, Aug 28, 2019 at 02:29:13PM +0200, Pavel Machek wrote:
-> > > This is not a way to have an inteligent conversation.
-> > 
-> > No, this *is* the way to keep the conversation sane, without veering
-> > off into some absurd claims.
-> > 
-> > So, to cut to the chase: you can simply add "rdrand=force" to your
-> > cmdline parameters and get back to using RDRAND.
-> > 
-> > And yet if you still feel this fix does not meet your expectations,
-> > you were told already to either produce patches or who to contact. I'm
-> > afraid complaining on this thread won't get you anywhere but that's your
-> > call.
+On Wed, Aug 28, 2019 at 10:45:44AM +0200, Rafael J. Wysocki wrote:
+> On Wed, Aug 28, 2019 at 10:34 AM Wanpeng Li <kernellwp@gmail.com> wrote:
+> >
+> > On Tue, 27 Aug 2019 at 08:43, Wanpeng Li <kernellwp@gmail.com> wrote:
+> > >
+> > > Cc Michael S. Tsirkin,
+> > > On Tue, 27 Aug 2019 at 04:42, Marcelo Tosatti <mtosatti@redhat.com> wrote:
+> > > >
+> > > > On Tue, Aug 13, 2019 at 08:55:29AM +0800, Wanpeng Li wrote:
+> > > > > On Sun, 4 Aug 2019 at 04:21, Marcelo Tosatti <mtosatti@redhat.com> wrote:
+> > > > > >
+> > > > > > On Thu, Aug 01, 2019 at 06:54:49PM +0200, Paolo Bonzini wrote:
+> > > > > > > On 01/08/19 18:51, Rafael J. Wysocki wrote:
+> > > > > > > > On 8/1/2019 9:06 AM, Wanpeng Li wrote:
+> > > > > > > >> From: Wanpeng Li <wanpengli@tencent.com>
+> > > > > > > >>
+> > > > > > > >> The downside of guest side polling is that polling is performed even
+> > > > > > > >> with other runnable tasks in the host. However, even if poll in kvm
+> > > > > > > >> can aware whether or not other runnable tasks in the same pCPU, it
+> > > > > > > >> can still incur extra overhead in over-subscribe scenario. Now we can
+> > > > > > > >> just enable guest polling when dedicated pCPUs are available.
+> > > > > > > >>
+> > > > > > > >> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > > > >> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > > > > > > >> Cc: Radim Krčmář <rkrcmar@redhat.com>
+> > > > > > > >> Cc: Marcelo Tosatti <mtosatti@redhat.com>
+> > > > > > > >> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> > > > > > > >
+> > > > > > > > Paolo, Marcelo, any comments?
+> > > > > > >
+> > > > > > > Yes, it's a good idea.
+> > > > > > >
+> > > > > > > Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+> >
+> > Hi Marcelo,
+> >
+> > If you don't have more concern, I guess Rafael can apply this patch
+> > now since the merge window is not too far.
 > 
-> No, this does not meet my expectations, it violates stable kernel
-> rules, and will cause regression to some users, while better solution
-> is known to be available.
+> I will likely queue it up later today and it will go to linux-next
+> early next week.
+> 
+> Thanks!
 
-Your unqualified ranting does not meet my expectation either and it
-violates any rule of common sense.
+NACK patch.
 
-For the record:
+Just don't load the haltpoll driver.
 
-  Neither AMD nor we have any idea which particular machines have a fixed
-  BIOS and which have not. There is no technical indicator either at boot
-  time as the wreckage manifests itself only after resume.
-
-  So in the interest of users the only sensible decision is to disable
-  RDRAND for this class of CPUs.
-
-  If you have a list of machines which have a fixed BIOS, then provide it
-  in form of patches. If not then stop claiming that there is a better
-  solution available.
-
-Anyway, I'm done with that and further rants of yours go directly to
-/dev/null.
-
-Thanks for wasting everyones time
-
-       tglx
