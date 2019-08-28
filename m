@@ -2,110 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA069FD31
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 10:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE41D9FD5D
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 10:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbfH1Iez (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 04:34:55 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:38477 "EHLO
+        id S1726340AbfH1Inm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Aug 2019 04:43:42 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:45165 "EHLO
         mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726253AbfH1Iey (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 04:34:54 -0400
-Received: by mail-oi1-f194.google.com with SMTP id q8so1460302oij.5;
-        Wed, 28 Aug 2019 01:34:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=U8FH7AFxalfo9kXqgzeqBM8w1kp/vA0EX4/dnehxzF8=;
-        b=TP06DYbD3V6ERHTB3g0KbjtgqWL9TuvRo0wmUzXGiDGjXKb3S3L4Mb2a/jtVlf2VmP
-         wioNJCGVxlZITAL0k7PPNPIdAr/7KSa7wvD2FvKUEaPfPJ4gFF46ZnXi49F+MOwodDHE
-         odc7xsPY51gjFc+ghK+35ZpYlu5JymD7y5dT9LxeZQJPCr5D45k+sUBfS7tgfeTCuuB5
-         b4BfOVEE7RxQAv/GGMsa3dRqzx8EaBvDD9rQ6Sw6rTuB9kj/+Dr+G8ORrBzRHG0ZMoWB
-         EEHYTIAdYESfcYmwuq272GcfrQmwEIxFkYSDbrQsqGTXXjdimdbmA8emXt+v76vaDsTN
-         hdOw==
+        with ESMTP id S1726292AbfH1Inl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 04:43:41 -0400
+Received: by mail-oi1-f194.google.com with SMTP id v12so1445289oic.12;
+        Wed, 28 Aug 2019 01:43:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=U8FH7AFxalfo9kXqgzeqBM8w1kp/vA0EX4/dnehxzF8=;
-        b=Ri9P7KNua3Xts6sgt7uNghB3hrfmn3j/UrWKi5potBso8GTK4IJdl+HNU8L5wYu4l2
-         FNX9PpDjxocl12w5yy3zWfleFWtsi/I3n0rIVPtroEbUFmEzhaw1+nJyBpcb616azkbu
-         LSIinBNAjqs84D2dLMDnkMc0x3Ufa51S2BnELjVp7uwCEXnPrcGhyfcI5reoRNmw42bY
-         NzVGOpoaM5H/QkEDUctX++NlgxuYRzXJzuCV0xI8oSTDdagBkCxgb6w6vRTR+ClN80ei
-         4PxVqfLmbtPIl/6e90qPBwZnvHHea521b+4VlXK2EUTMM5mElxgdjtPs+7uMlzi4EFe4
-         p7zw==
-X-Gm-Message-State: APjAAAXGjZwYLsUnwk2dS9wap9z/W7DlRBR5WWt/lyzZ5DkBlIdiXKbf
-        GaaA8VQvKbisl5gyx/fkMGLkjSGo0sDBcJJcU5E=
-X-Google-Smtp-Source: APXvYqzmD3lOi71p/BZRzvw9jM1MKLJ3Zwe/887SQPAbbvl+RMdE0RaTkaVm1kIc+BH0REmOSCceeJdskb95k+RqEqI=
-X-Received: by 2002:a54:488e:: with SMTP id r14mr1922852oic.174.1566981293845;
- Wed, 28 Aug 2019 01:34:53 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=f7pUEqpS8XYSbhqXawr72tizr49QR8+07pZyNaAucJk=;
+        b=Ea9oKdXRwvhnPpNGeICKXlctfcq3JpqpnUO8M4IbeR/Mo7I8XfTZoPwLa1lxwBevkh
+         hXTDlmi09BTENNAAzLc2rT1ypqenKPWDZUFoC42E9xgs8eO2k5zq1onocfXrsfcZL4qU
+         LO+K7sLb8nhwerMKRrax9iYTVihYQnt42WaCRXGx5wjgQGSNfKKhSDMxWYYm+YihcYgy
+         GkDkcCidRKEnIjIjjzRQgrdKQ22FiYvADsEbhBftnE9sQPKLJTwWVl2w9sevTC7YgdSB
+         PWN29mVzzDF60p93H20VIDmAj7J+CdQFslCPf91nnNbl3asI9Alhe0g+iSnSfc0TpGY2
+         litg==
+X-Gm-Message-State: APjAAAVV1Dr4be9dIctKaEbO/XOHMChYXW4hcuazzTeglOPAIXwJDnRn
+        GwDOzkJjbsFNHbl8eEFffGvW1vBSz9MQJuvW8SY=
+X-Google-Smtp-Source: APXvYqwoBZ9xngGjaLkB18eyYNqI3eSbzfST/fobzbGLBjwCx/DNWUL8p7tLnksoUmbv3wPK5B36UUGRk4SexyBNExI=
+X-Received: by 2002:aca:cfcb:: with SMTP id f194mr1988936oig.103.1566981820793;
+ Wed, 28 Aug 2019 01:43:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
- <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com> <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
- <20190803202058.GA9316@amt.cnet> <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
- <20190826204045.GA24697@amt.cnet> <CANRm+Cx0+V67Ek7FhSs61ZqZL3MgV88Wdy17Q6UA369RH7=dgQ@mail.gmail.com>
-In-Reply-To: <CANRm+Cx0+V67Ek7FhSs61ZqZL3MgV88Wdy17Q6UA369RH7=dgQ@mail.gmail.com>
-From:   Wanpeng Li <kernellwp@gmail.com>
-Date:   Wed, 28 Aug 2019 16:35:30 +0800
-Message-ID: <CANRm+CxqYMzgvxYyhZLmEzYd6SLTyHdRzKVaSiHO-4SV+OwZUQ@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when dedicated
- physical CPUs are available
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+References: <CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com>
+ <CAJZ5v0g4T_0VD_oYMF_BF1VM-d1bg-BD8h8=STDrhVBgouPOPg@mail.gmail.com>
+ <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com> <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
+ <CAJZ5v0gouaztf7tcKXBr90gjrVjOvqH70regD=o2r_d+9Bwvqg@mail.gmail.com> <CAD8Lp47oNJb5N5i4oUQfN5b=xCtUc1Lt852pnXxhNq0vyWj=yg@mail.gmail.com>
+In-Reply-To: <CAD8Lp47oNJb5N5i4oUQfN5b=xCtUc1Lt852pnXxhNq0vyWj=yg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 28 Aug 2019 10:43:29 +0200
+Message-ID: <CAJZ5v0j=x4HHOsJ6fCX-xOr29-4BMRzjR5H5UaoWW9v-Ci8ODQ@mail.gmail.com>
+Subject: Re: Ryzen7 3700U xhci fails on resume from sleep
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
+        Endless Linux Upstreaming Team <linux@endlessm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 27 Aug 2019 at 08:43, Wanpeng Li <kernellwp@gmail.com> wrote:
+On Wed, Aug 28, 2019 at 10:34 AM Daniel Drake <drake@endlessm.com> wrote:
 >
-> Cc Michael S. Tsirkin,
-> On Tue, 27 Aug 2019 at 04:42, Marcelo Tosatti <mtosatti@redhat.com> wrote=
-:
+> On Tue, Aug 27, 2019 at 3:48 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > That depends on what exactly happens when you try to do the D0-D3-D0
+> > with setpci.  If the device becomes unreachable (or worse) after that,
+> > it indicates a platform issue.  It should not do any harm at the
+> > least.
 > >
-> > On Tue, Aug 13, 2019 at 08:55:29AM +0800, Wanpeng Li wrote:
-> > > On Sun, 4 Aug 2019 at 04:21, Marcelo Tosatti <mtosatti@redhat.com> wr=
-ote:
-> > > >
-> > > > On Thu, Aug 01, 2019 at 06:54:49PM +0200, Paolo Bonzini wrote:
-> > > > > On 01/08/19 18:51, Rafael J. Wysocki wrote:
-> > > > > > On 8/1/2019 9:06 AM, Wanpeng Li wrote:
-> > > > > >> From: Wanpeng Li <wanpengli@tencent.com>
-> > > > > >>
-> > > > > >> The downside of guest side polling is that polling is performe=
-d even
-> > > > > >> with other runnable tasks in the host. However, even if poll i=
-n kvm
-> > > > > >> can aware whether or not other runnable tasks in the same pCPU=
-, it
-> > > > > >> can still incur extra overhead in over-subscribe scenario. Now=
- we can
-> > > > > >> just enable guest polling when dedicated pCPUs are available.
-> > > > > >>
-> > > > > >> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > >> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > > > > >> Cc: Radim Kr=C4=8Dm=C3=A1=C5=99 <rkrcmar@redhat.com>
-> > > > > >> Cc: Marcelo Tosatti <mtosatti@redhat.com>
-> > > > > >> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-> > > > > >
-> > > > > > Paolo, Marcelo, any comments?
-> > > > >
-> > > > > Yes, it's a good idea.
-> > > > >
-> > > > > Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+> > However, in principle D0-D3-D0 at the PCI level alone may not be
+> > sufficient, because ACPI may need to be involved.
+>
+> After using setpci to do D0-D3-D0 transitions, the xhci module fails to probe.
+>
+>   xhci_hcd 0000:03:00.3: WARN: xHC restore state timeout
+>   xhci_hcd 0000:03:00.3: PCI post-resume error -110!
+>
+> But maybe it's not a great test; as you say I'm not involving ACPI,
+> and also if Linux has a reason for not runtime suspending PCI devices
+> without drivers present then maybe I should also not be doing this.
+>
+> > I think that PM-runtime should suspend XHCI controllers without
+> > anything on the bus under them, so I wonder what happens if
+> > ".../power/control" is set to "on" and then to "auto" for that device,
+> > with the driver loaded.
+>
+> Good hint.
+>
+> # echo on > /sys/bus/pci/devices/0000\:03\:00.3/power/control
+> # echo auto > /sys/bus/pci/devices/0000\:03\:00.3/power/control
+> # echo 1 > /sys/bus/usb/devices/1-4/remove
+> # cat /sys/bus/pci/devices/0000\:03\:00.3/power/runtime_status
+> suspended
+> # echo on > /sys/bus/pci/devices/0000\:03\:00.3/power/control
+>
+> The final command there triggers these messages (including a printk I
+> added in pci_raw_set_power_state):
+>  xhci_hcd 0000:03:00.3: pci_raw_set_power_state from 3 to 0
+>  xhci_hcd 0000:03:00.3: Refused to change power state, currently in D3
+>  xhci_hcd 0000:03:00.3: pci_raw_set_power_state from 3 to 0
+>  xhci_hcd 0000:03:00.3: enabling device (0000 -> 0002)
+>  xhci_hcd 0000:03:00.3: WARN: xHC restore state timeout
+>  xhci_hcd 0000:03:00.3: PCI post-resume error -110!
+>  xhci_hcd 0000:03:00.3: HC died; cleaning up
+>
+> So we just reproduced the same issue using runtime PM, without having
+> to go through the whole suspend path.
+>
+> I guess that points towards a platform issue, although the weird thing
+> is that Windows presumably does the D3-D0-D3 transition during
+> suspend/resume and that appears to work fine.
 
-Hi Marcelo,
+It looks like the platform expects the OS to do something that our
+generic XHCI driver and the PCI/ACPI layer don't do.
 
-If you don't have more concern, I guess Rafael can apply this patch
-now since the merge window is not too far.
+A quirk or similar may be needed to address that.
 
-Regards,
-Wanpeng Li
+> I'll report it to the vendor,
+
+Yes, please.  At least try to get the information on what the exact
+platform expectations with respect to the OS are.  Quite evidently,
+they aren't just "do the usual thing".
+
+> but if you have any other debug ideas they would be much appreciated.
+
+With the git branch mentioned previously merged in, you can enable
+dynamic debug in device_pm.c, repeat the PM-runtime test and collect
+the log.  There should be some additional messages from the ACPI layer
+in it.
+
+
+>
+> Daniel
