@@ -2,101 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E14CDA055D
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 16:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3D9A0687
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Aug 2019 17:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726394AbfH1Oww (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Aug 2019 10:52:52 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:59846 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726368AbfH1Owv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Aug 2019 10:52:51 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 902B3A53271;
-        Wed, 28 Aug 2019 14:52:51 +0000 (UTC)
-Received: from amt.cnet (ovpn-112-8.gru2.redhat.com [10.97.112.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B2126060D;
-        Wed, 28 Aug 2019 14:52:49 +0000 (UTC)
-Received: from amt.cnet (localhost [127.0.0.1])
-        by amt.cnet (Postfix) with ESMTP id 8D696105139;
-        Wed, 28 Aug 2019 11:52:31 -0300 (BRT)
-Received: (from marcelo@localhost)
-        by amt.cnet (8.14.7/8.14.7/Submit) id x7SEqVZx014465;
-        Wed, 28 Aug 2019 11:52:31 -0300
-Date:   Wed, 28 Aug 2019 11:52:31 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Wanpeng Li <kernellwp@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when
- dedicated physical CPUs are available
-Message-ID: <20190828145231.GA14426@amt.cnet>
-References: <1564643196-7797-1-git-send-email-wanpengli@tencent.com>
- <7b1e3025-f513-7068-32ac-4830d67b65ac@intel.com>
- <c3fe182f-627f-88ad-cb4d-a4189202b438@redhat.com>
- <20190803202058.GA9316@amt.cnet>
- <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
- <20190826204045.GA24697@amt.cnet>
- <CANRm+Cx0+V67Ek7FhSs61ZqZL3MgV88Wdy17Q6UA369RH7=dgQ@mail.gmail.com>
- <20190828144858.GA14215@amt.cnet>
+        id S1726437AbfH1Pol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Aug 2019 11:44:41 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36888 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfH1Pol (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Aug 2019 11:44:41 -0400
+Received: by mail-pf1-f195.google.com with SMTP id y9so56714pfl.4
+        for <linux-pm@vger.kernel.org>; Wed, 28 Aug 2019 08:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=Jx78g9+c3oSx9PoQ5GPvw3BbBJk++uJnwmqxETMCaDw=;
+        b=FtdxS8G25sXjQIfGPQnEVNL1c1QtBlRqPlrr5X2IDZ8KqOJJcBbakYqZ1/RknvIHvU
+         q68jrefN9dYhDpTsG/9+Na8XE7aPe12tA2vKuUGe7r9vWiyeoiPOvtZCjPOaL5MGRDVT
+         HMXKC2QMK2prUDpXktHsEuQKQGE+8tSCmtNL0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=Jx78g9+c3oSx9PoQ5GPvw3BbBJk++uJnwmqxETMCaDw=;
+        b=ZxLVnSP1vGF8LMeFivdLQmb/g7bw2/drmVS4wAiwCWduTKD2ferZCcmGfsz2ATblVu
+         70RH2VglKxqVCXPewsWCv8jMc65Ws4jbIMpMA/8ekZmnxZfiJnKyMxFd72ry86+pSeYW
+         3y8xZ0hWkRSGQZtvsNMa3PS9iKj3mB4aCxmgUyzoJtd6IjmaL9i9Ylws1Rh+qda8DaZ+
+         sz9BGgxj1U3kFeuJJZ3NMIC++ChU76pageu/7B1e3e9bpJiJ3MysSzNaCspb1WX0MHws
+         YrSU5jp6isoh4ANXeV8GxTuMqT6iuj7b93g3YYFV/vnLnp3dIeoZATkNmlIX4Xc6bzZh
+         Urgw==
+X-Gm-Message-State: APjAAAVsr8v2kDNkq2GTgyNOL0LKS4BXz9Ge2o17tVHm6ELWCncexICV
+        65o+QNtcx5quT+tguQ1trEQSpYU1x4wKzw==
+X-Google-Smtp-Source: APXvYqzY9v6YG3rvk6EhG6cDIUiFdX3gZS5f2YMEto/kGAYjz8HV33Zv3cGN5nMxnqyoka5FceyNNg==
+X-Received: by 2002:aa7:946d:: with SMTP id t13mr5579110pfq.121.1567007080982;
+        Wed, 28 Aug 2019 08:44:40 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id m145sm4747764pfd.68.2019.08.28.08.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Aug 2019 08:44:40 -0700 (PDT)
+Message-ID: <5d66a168.1c69fb81.570fd.ae07@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190828144858.GA14215@amt.cnet>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.68]); Wed, 28 Aug 2019 14:52:51 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAP245DVGY6+vue_REqy=Tbvka2fcBx6XhSBePW4L3=pNagX=Dw@mail.gmail.com>
+References: <cover.1566907161.git.amit.kucheria@linaro.org> <64a3d07ebe5c4cfb4643d91f5f6605e8a4ffa48b.1566907161.git.amit.kucheria@linaro.org> <5d65ccfd.1c69fb81.95798.20d8@mx.google.com> <CAP245DVGY6+vue_REqy=Tbvka2fcBx6XhSBePW4L3=pNagX=Dw@mail.gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Brian Masney <masneyb@onstation.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 14/15] drivers: thermal: tsens: Create function to return sign-extended temperature
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Wed, 28 Aug 2019 08:44:39 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 11:48:58AM -0300, Marcelo Tosatti wrote:
-> On Tue, Aug 27, 2019 at 08:43:13AM +0800, Wanpeng Li wrote:
-> > > > kvm adaptive halt-polling will compete with
-> > > > vhost-kthreads, however, poll in guest unaware other runnable tasks in
-> > > > the host which will defeat vhost-kthreads.
-> > >
-> > > It depends on how much work vhost-kthreads needs to do, how successful
-> > > halt-poll in the guest is, and what improvement halt-polling brings.
-> > > The amount of polling will be reduced to zero if polling
-> > > is not successful.
-> > 
-> > We observe vhost-kthreads compete with vCPUs adaptive halt-polling in
-> > kvm, it hurt performance in over-subscribe product environment,
-> > polling in guest can make it worse.
-> > 
-> > Regards,
-> > Wanpeng Li
-> 
-> Wanpeng,
-> 
-> Polling should not be performed if there is other work to do. For
-> example, halt-polling could check a host/guest shared memory 
-> region indicating whether there are other runnable tasks in the host.
-> 
-> Disabling polling means you will not achieve the improvement 
-> even in the transitional periods where the system is not
-> overcommitted (which should be frequent given that idling 
-> is common).
-> 
-> Again, about your patch: it brings no benefit to anyone. 
-> 
-> Guest halt polling should be already disabled by default
-> (the driver has to be loaded for guest polling to take place).
+Quoting Amit Kucheria (2019-08-28 03:35:28)
+> (Resending, replied only to Stephen by mistake)
+>=20
+> On Wed, Aug 28, 2019 at 6:08 AM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Quoting Amit Kucheria (2019-08-27 05:14:10)
+> > > @@ -310,6 +328,10 @@ int __init init_common(struct tsens_priv *priv)
+> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 goto err_put_device;
+> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 }
+> > > =C2=A0 =C2=A0 =C2=A0 =C2=A0 }
+> > > +
+> > > + =C2=A0 =C2=A0 =C2=A0 /* Save away resolution of signed temperature =
+value for this IP */
+> > > + =C2=A0 =C2=A0 =C2=A0 priv->tempres =3D priv->fields[LAST_TEMP_0].ms=
+b - priv->fields
+> [LAST_TEMP_0].lsb;
+> > > +
+> >
+> > Why not just calculate this in the function that uses it? Is there a
+> > reason to stash it away in the struct?
+>=20
+> To avoid recalculating in an often-called function. It doesn't change for=
+ an IP
+> version.
+>=20
+> We can't make it static either inside that function since the initializer=
+ isn't
+> constant.
+>=20
 
-The most efficient solution would be to mwait on a memory 
-region that both host and guest would write to.
-
-No cpu cycles burned, full efficiency.
-
-However both host and guest would have to write to this region, which
-brings security concerns.
-
+This sounds like a super micro optimization. It's a couple derefs and a
+subtraction. If it isn't used anywhere else please just move it into the
+function where it's used.
 
