@@ -2,156 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 603DDA1C51
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF69A1CA8
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727707AbfH2OFE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 10:05:04 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:44328 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728072AbfH2OFD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 10:05:03 -0400
-Received: by mail-wr1-f68.google.com with SMTP id b6so773136wrv.11
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 07:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5GyUYiNK1pxGFGVMqeQUMFAAek9A8tVckoOeF4bV32Q=;
-        b=XA1DOwiB8cokG0MO/G4Rhedb2oX3Gvdu09OGfOjf37dcM1zTrBpBWcA2Zriw9sIzcJ
-         2aZUM0TChUUUinQsSurkmbpcIvU2801OMN4B0kVQdDGLaBmRcYvVFrrgb/W0YXAswDJj
-         kmkrQtdG+4LW36A+5t1k8JhsGlKzoWRWuzVJzrIgu1/WWyTz4Uu2uuR9SAyAO77iOuJ3
-         1ab4wic+E+nfJZVUV4nc3Bo5CI3t6of2c3W1Hol38mjFEtpwtjT9dboa59eDpploLep3
-         3fX0eFRD0rssbf8ZrcOu9oaRd6pKTDA/b5gRiCbk0zVrokgV/nsLBpwI2IYMjMYpYsxQ
-         uW+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5GyUYiNK1pxGFGVMqeQUMFAAek9A8tVckoOeF4bV32Q=;
-        b=SsPkuyKzJM6m+20xyf1g0/GX5qvsiWzArCZz7FMtIDiTeP/zu2Q+KEi8aEVX1fz1IC
-         0nyygi0w99TVAM8vTEBCHl/PJbdS+VjxhnXToAqXq389vGU/iRCrb3O0NCCuxMrKEJzR
-         czsXychWd8QI1MqSj6oRxa80IpISuRNXtNN1NdiU1mjEOS5V1aD/RoeRm4PXLRoMHnLf
-         9WG+q86n9xtCJRC3kifM4qRfiNSOHOzYb6wc/W9x/uokyFxAKS8NgbqCDeqRt9Uctfh3
-         0sN1QL0kHjcTUEvses/oIEcaoq/w5mKp2CfRfK0s0y4GEiCSEq9Z7VG+zkG5majjIfFw
-         rU1A==
-X-Gm-Message-State: APjAAAWwknOEiKep+UmsECyZ5GiJJ9GE1i/aPQW4gl9qouFvqY8rm7pY
-        lSBQGoP2KVzPbZM8mJjNN3LAWQ==
-X-Google-Smtp-Source: APXvYqxNs6Pa/y99Xudu9UeOa/L61A1XlI/TzeOYtU/SmLGRegBBSp4WRkM/aYjODZFAj7xrjlVUVA==
-X-Received: by 2002:adf:9e09:: with SMTP id u9mr11803588wre.169.1567087502052;
-        Thu, 29 Aug 2019 07:05:02 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id k9sm3704025wrq.15.2019.08.29.07.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 07:05:01 -0700 (PDT)
-Date:   Thu, 29 Aug 2019 15:04:59 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        bjorn.andersson@linaro.org, edubezval@gmail.com, agross@kernel.org,
-        sboyd@kernel.org, masneyb@onstation.org, marc.w.gonzalez@free.fr,
+        id S1727122AbfH2O0Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 10:26:24 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:34338 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727087AbfH2O0Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 10:26:24 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7TEDbY6121965;
+        Thu, 29 Aug 2019 14:24:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
+ cc : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=VM7U3ulJIpm8PedSQ9NraLh7L3JdiYZKsAXFk1U52Qc=;
+ b=P+21lZZxITVxHx+aPfRUoOUCXEfKe+E7iZQXYFydaAg8oRceDVyrSgD+tW+RFyx9kzIy
+ ybKMecU9u+u7C7tnQ8DoiXzj/mLcAwuigyzM3HFx6sozauciEbw/FcFXW2jqqsoT233A
+ SEfJoYLk6QMAefk8ZPl1fjhgz0SwyS12ESlZj8mhwCoo3ihVL/LazRmu2QB2RaAQeF70
+ 7FcXjaGotrkGJJSte2MYsZTEhszEZFtLq9TGyaXUY6Y6vuateUpOWbRFP/u8vk7XaWig
+ yQKHSOgoYL4RpJyTHdFm1EFhdgo13i2NqZXU4JWps0cbbhvPW1ICoDTOA0KmXRNQdGWk OQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 2upg74g6kx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 14:24:39 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7TECqF4055716;
+        Thu, 29 Aug 2019 14:24:38 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2upc8urv7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 14:24:38 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7TEOaT6028347;
+        Thu, 29 Aug 2019 14:24:36 GMT
+Received: from [10.175.160.184] (/10.175.160.184)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 29 Aug 2019 07:24:36 -0700
+Subject: Re: [PATCH v1] cpuidle-haltpoll: vcpu hotplug support
+From:   Joao Martins <joao.m.martins@oracle.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 03/15] drivers: thermal: tsens: Add __func__
- identifier to debug statements
-Message-ID: <20190829140459.szauzhennltrwvg4@holly.lan>
-References: <cover.1566907161.git.amit.kucheria@linaro.org>
- <93fa782bde9c66845993ff883532b3f1f02d99e4.1566907161.git.amit.kucheria@linaro.org>
+        linux-pm@vger.kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20190828185650.16923-1-joao.m.martins@oracle.com>
+ <20190829115634.GA4949@amt.cnet>
+ <8c459d91-bc47-2ff4-7d3b-243ed4e466cb@oracle.com>
+Message-ID: <311c2ffe-f840-9990-c1a7-5561cc5a0f54@oracle.com>
+Date:   Thu, 29 Aug 2019 15:24:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93fa782bde9c66845993ff883532b3f1f02d99e4.1566907161.git.amit.kucheria@linaro.org>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <8c459d91-bc47-2ff4-7d3b-243ed4e466cb@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9363 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=5 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=913
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908290157
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9363 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=5 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=975 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908290157
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 05:43:59PM +0530, Amit Kucheria wrote:
-> Printing the function name when enabling debugging makes logs easier to
-> read.
+On 8/29/19 2:50 PM, Joao Martins wrote:
+> On 8/29/19 12:56 PM, Marcelo Tosatti wrote:
+>> Hi Joao,
+>>
+>> On Wed, Aug 28, 2019 at 07:56:50PM +0100, Joao Martins wrote:
+>>> +static void haltpoll_uninit(void)
+>>> +{
+>>> +	unsigned int cpu;
+>>> +
+>>> +	cpus_read_lock();
+>>> +
+>>> +	for_each_online_cpu(cpu) {
+>>> +		struct cpuidle_device *dev =
+>>> +			per_cpu_ptr(haltpoll_cpuidle_devices, cpu);
+>>> +
+>>> +		if (!dev->registered)
+>>> +			continue;
+>>> +
+>>> +		arch_haltpoll_disable(cpu);
+>>> +		cpuidle_unregister_device(dev);
+>>> +	}
+>>
+>> 1)
+>>
+>>> +
+>>> +	cpuidle_unregister(&haltpoll_driver);
+>>
+>> cpuidle_unregister_driver.
 > 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-This should need to be manually added at each call site; it is already
-built into the logging system (the f flag for dynamic debug)?
-
-
-Daniel.
-
-> ---
->  drivers/thermal/qcom/tsens-common.c | 8 ++++----
->  drivers/thermal/qcom/tsens.c        | 6 +++---
->  2 files changed, 7 insertions(+), 7 deletions(-)
+> Will fix -- this was an oversight.
 > 
-> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-> index c037bdf92c663..7437bfe196e50 100644
-> --- a/drivers/thermal/qcom/tsens-common.c
-> +++ b/drivers/thermal/qcom/tsens-common.c
-> @@ -42,8 +42,8 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
->  
->  	for (i = 0; i < priv->num_sensors; i++) {
->  		dev_dbg(priv->dev,
-> -			"sensor%d - data_point1:%#x data_point2:%#x\n",
-> -			i, p1[i], p2[i]);
-> +			"%s: sensor%d - data_point1:%#x data_point2:%#x\n",
-> +			__func__, i, p1[i], p2[i]);
->  
->  		priv->sensor[i].slope = SLOPE_DEFAULT;
->  		if (mode == TWO_PT_CALIB) {
-> @@ -60,7 +60,7 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *p1,
->  		priv->sensor[i].offset = (p1[i] * SLOPE_FACTOR) -
->  				(CAL_DEGC_PT1 *
->  				priv->sensor[i].slope);
-> -		dev_dbg(priv->dev, "offset:%d\n", priv->sensor[i].offset);
-> +		dev_dbg(priv->dev, "%s: offset:%d\n", __func__, priv->sensor[i].offset);
->  	}
->  }
->  
-> @@ -209,7 +209,7 @@ int __init init_common(struct tsens_priv *priv)
->  	if (ret)
->  		goto err_put_device;
->  	if (!enabled) {
-> -		dev_err(dev, "tsens device is not enabled\n");
-> +		dev_err(dev, "%s: device not enabled\n", __func__);
->  		ret = -ENODEV;
->  		goto err_put_device;
->  	}
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 542a7f8c3d962..06c6bbd69a1a7 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -127,7 +127,7 @@ static int tsens_probe(struct platform_device *pdev)
->  		of_property_read_u32(np, "#qcom,sensors", &num_sensors);
->  
->  	if (num_sensors <= 0) {
-> -		dev_err(dev, "invalid number of sensors\n");
-> +		dev_err(dev, "%s: invalid number of sensors\n", __func__);
->  		return -EINVAL;
->  	}
->  
-> @@ -156,7 +156,7 @@ static int tsens_probe(struct platform_device *pdev)
->  
->  	ret = priv->ops->init(priv);
->  	if (ret < 0) {
-> -		dev_err(dev, "tsens init failed\n");
-> +		dev_err(dev, "%s: init failed\n", __func__);
->  		return ret;
->  	}
->  
-> @@ -164,7 +164,7 @@ static int tsens_probe(struct platform_device *pdev)
->  		ret = priv->ops->calibrate(priv);
->  		if (ret < 0) {
->  			if (ret != -EPROBE_DEFER)
-> -				dev_err(dev, "tsens calibration failed\n");
-> +				dev_err(dev, "%s: calibration failed\n", __func__);
->  			return ret;
->  		}
->  	}
-> -- 
-> 2.17.1
+>>
+>>> +	free_percpu(haltpoll_cpuidle_devices);
+>>> +	haltpoll_cpuidle_devices = NULL;
+>>> +
+>>> +	cpus_read_unlock();
+>>
+>> Any reason you can't cpus_read_unlock() at 1) ?
+>>
+> No, let me adjust that too.
 > 
+>> Looks good otherwise.
+>>
+
+BTW, should I take this as a Acked-by, Reviewed-by, or neither? :)
+
+	Joao
