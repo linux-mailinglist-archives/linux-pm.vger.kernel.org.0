@@ -2,104 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F9CA1CB2
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D9FA1D6B
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727171AbfH2O25 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 10:28:57 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:41730 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbfH2O25 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 10:28:57 -0400
-Received: by mail-vs1-f67.google.com with SMTP id m62so2531575vsc.8
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 07:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mIpyQ3wOb9bWqvkX0Kpr4MtQFBTIPyZmoRnHAHX/iC4=;
-        b=lHE8RghiwfW1Za7MXZfEj+tcRA5+wrEWmVF5Keow8qTDcQOlGf4062XfDSUn6uEXDh
-         lZNKY9YudWj2VwmIGrrk0z96f7MCwqTmToJ0qUx7s9qo5fMEKYT63v3iilBq/ykKVI0k
-         4uQGf2L0Qu4GxqfenZnbk3+E1Hyft/0qcstmSQbMSOP0hSUEeCdV4ho5986Zq2vC8vFd
-         /3xTmD1TXSCXRTRhGGM9PJzXP4mIJTDL8Uz9uL0aFnR4Pv2X7S+q6R+YjGzN16IA04xd
-         G/zNaTE1nZDJiQiJwhAZUOdxXwX36xfy+KGbSTMV406iQO+PaEU3HTP2Bd2sUPzNjmH9
-         9DGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mIpyQ3wOb9bWqvkX0Kpr4MtQFBTIPyZmoRnHAHX/iC4=;
-        b=ENLizzogJWsAI/X2SeY1Da0Ttwy7cgprNaEgubfDumlonVEuESl3w1Rq8Q8RZ3Pa/8
-         jcVRHqEmWkrE7jOG7+er33y6Z6uGSww74RXG/z7IiReo/eeB4fjwIi+XGJwTrK2ar34g
-         SZniJ1BYIWEfetnIEyKGPU5kX9elpIFy6HNko4frEOBXS/doedvbuKazAaIHwl3hGRDu
-         dRSGrX8mJogb5kuwqbpnNCVPFP2d1QwTRCJFiFSeybaVjg+MJQlisbIdGPNvUeiCFjB/
-         +AVFmAUk9OL+5ofrt++26kDl/bJTV8JSGfaBCFmOmYYgBdcoEJzvPGEUif9Asw/NX1Xc
-         zKMQ==
-X-Gm-Message-State: APjAAAUVlPuOQOkgH7n65/ZDhz24aQmjlLAWFajANgRZRdSFIe/cYOSR
-        Lz1GGM16z6r9mSmZoIRKh2kYMl5cxnPpnFrym4Dsng==
-X-Google-Smtp-Source: APXvYqzYJ6oqRwamIEDLJ3VtjU+XaOg77kkXW1O2XB+w4FxGCSBbCRCZltm1LjnvJjPK+WsK0l7De0RJSAqYnMnKyvI=
-X-Received: by 2002:a67:b009:: with SMTP id z9mr5725405vse.27.1567088936391;
- Thu, 29 Aug 2019 07:28:56 -0700 (PDT)
+        id S1727066AbfH2Ojl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 10:39:41 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:52689 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727899AbfH2Ojl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 29 Aug 2019 10:39:41 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id B31A820ABB;
+        Thu, 29 Aug 2019 14:39:40 +0000 (UTC)
+Received: from amt.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 724BB196B2;
+        Thu, 29 Aug 2019 14:39:38 +0000 (UTC)
+Received: from amt.cnet (localhost [127.0.0.1])
+        by amt.cnet (Postfix) with ESMTP id 6614A105140;
+        Thu, 29 Aug 2019 11:39:11 -0300 (BRT)
+Received: (from marcelo@localhost)
+        by amt.cnet (8.14.7/8.14.7/Submit) id x7TEd7P8014097;
+        Thu, 29 Aug 2019 11:39:07 -0300
+Date:   Thu, 29 Aug 2019 11:39:06 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Wanpeng Li <kernellwp@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: Re: [PATCH] cpuidle-haltpoll: Enable kvm guest polling when
+ dedicated physical CPUs are available
+Message-ID: <20190829143904.GA13983@amt.cnet>
+References: <CANRm+CwtHBOVWFcn+6Z3Ds7dEcNL2JP+b6hLRS=oeUW98A24MQ@mail.gmail.com>
+ <20190826204045.GA24697@amt.cnet>
+ <CANRm+Cx0+V67Ek7FhSs61ZqZL3MgV88Wdy17Q6UA369RH7=dgQ@mail.gmail.com>
+ <CANRm+CxqYMzgvxYyhZLmEzYd6SLTyHdRzKVaSiHO-4SV+OwZUQ@mail.gmail.com>
+ <CAJZ5v0iQc0-WzqeyAh-6m5O-BLraRMj+Z7sqvRgGwh2u2Hp7cg@mail.gmail.com>
+ <20190828143916.GA13725@amt.cnet>
+ <CAJZ5v0jiBprGrwLAhmLbZKpKUvmKwG9w4_R7+dQVqswptis5Qg@mail.gmail.com>
+ <20190829120422.GC4949@amt.cnet>
+ <CANRm+CwYq7NZeKffioWcHy_oWGyeHqXsygF_cppMD17mHuVgYw@mail.gmail.com>
+ <20190829125304.GA12214@amt.cnet>
 MIME-Version: 1.0
-References: <cover.1566907161.git.amit.kucheria@linaro.org>
- <93fa782bde9c66845993ff883532b3f1f02d99e4.1566907161.git.amit.kucheria@linaro.org>
- <20190829140459.szauzhennltrwvg4@holly.lan>
-In-Reply-To: <20190829140459.szauzhennltrwvg4@holly.lan>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Thu, 29 Aug 2019 19:58:45 +0530
-Message-ID: <CAHLCerNuycWTLmCvdffM0=GdG7UZ7zNoj0Jb0CeLTULzVmfSJw@mail.gmail.com>
-Subject: Re: [PATCH v2 03/15] drivers: thermal: tsens: Add __func__ identifier
- to debug statements
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190829125304.GA12214@amt.cnet>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.30]); Thu, 29 Aug 2019 14:39:40 +0000 (UTC)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 7:35 PM Daniel Thompson
-<daniel.thompson@linaro.org> wrote:
->
-> On Tue, Aug 27, 2019 at 05:43:59PM +0530, Amit Kucheria wrote:
-> > Printing the function name when enabling debugging makes logs easier to
-> > read.
-> >
-> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> > Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->
-> This should need to be manually added at each call site; it is already
-> built into the logging system (the f flag for dynamic debug)?
+On Thu, Aug 29, 2019 at 09:53:04AM -0300, Marcelo Tosatti wrote:
+> On Thu, Aug 29, 2019 at 08:16:41PM +0800, Wanpeng Li wrote:
+> > > Current situation regarding haltpoll driver is:
+> > >
+> > > overcommit group: haltpoll driver is not loaded by default, they are
+> > > happy.
+> > >
+> > > non overcommit group: boots without "realtime hints" flag, loads haltpoll driver,
+> > > happy.
+> > >
+> > > Situation with patch above:
+> > >
+> > > overcommit group: haltpoll driver is not loaded by default, they are
+> > > happy.
+> > >
+> > > non overcommit group: boots without "realtime hints" flag, haltpoll driver
+> > > cannot be loaded.
+> > 
+> > non overcommit group, if they don't care latency/performance, they
+> > don't need to enable haltpoll, "realtime hints" etc. Otherwise, they
+> > should better tune.
+> 
+> As mentioned before, "being overcommitted" is a property which is transitional.
+> 
+> A static true/false scheme reflects this poorly.
+> 
+> Therefore the OS should detect it and act accordingly.
 
-I assume you meant "shouldn't".
+Hi Wanpeng Li,
 
-I haven't yet integrated dynamic debug into my daily workflow.
+One suggestion for a dynamic "is overcommited" scheme:
 
-Last time I looked at it, it was a bit bothersome to use because I
-needed to lookup exact line numbers to trigger useful information. And
-those line numbers constantly keep changing as I work on the driver,
-so it was a bit painful to script. Not to mention the syntax to frob
-the correct files in debugfs to enable this functionality.
+If the amount of stolen time, in the past record_steal_time window, 
+is more than 20% of the time in that window, then mark system
+as overcommitted. Otherwise, clear it.
 
-As opposed to this, adding the following to the makefile is so easy. :-)
+Make that 20% configurable by as kvm module parameter.
 
-CFLAGS_tsens-common.o          := -DDEBUG
+Use that info to enable/disable overcommit features.
 
-Perhaps I am using it all wrong? How would I go about using dynamic
-debug instead of this patch?
+That should work, right?
 
-Regards,
-Amit
+
+
+
