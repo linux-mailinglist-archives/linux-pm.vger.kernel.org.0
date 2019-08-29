@@ -2,105 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A75A1E06
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61784A1E38
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 17:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728419AbfH2OyY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 10:54:24 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:37490 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727565AbfH2OyY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 10:54:24 -0400
-Received: by mail-pl1-f194.google.com with SMTP id bj8so1696548plb.4
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 07:54:23 -0700 (PDT)
+        id S1726950AbfH2PBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 11:01:55 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:41581 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbfH2PBy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 11:01:54 -0400
+Received: by mail-ua1-f68.google.com with SMTP id x2so1250027uar.8
+        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 08:01:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:subject:to:from:user-agent:date;
-        bh=GCLBREhsH0y+iPt4sZdcYSbSFOKA3tBuxEXbqgrezQs=;
-        b=GodzQTP7hIIoeFf5qkuQPtLv5FVme1IU5vK2YxaYFRfsd1+IIn7ODeDG9/hkE9TIzT
-         ZVaAR2V8JaM0aV7K3VGFj+Np41A23tJulYB9IWiY9oOAy0Ug7au3VF+WOffZ5AZBPL7Z
-         oxaXKYOIr+rFyeoJgVEWdvwhpUI6iWfCjLQk4=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NhdYEGuBZ86MZbgbGE/dU1jehprguGgfst5LEcPzq1E=;
+        b=k7qn4o8XRnCZKdy2eds9KzK+7DxiOfdnysWoofn67U6+ZwTG5CLIEKwFP0K2EmKGHE
+         nOsavr3pXeV8GWqYxuQrHRoT/Rdt1LwUw1WQIG2am00YkKRAUsULLmRv+hLiOkfTR2yJ
+         KsLagmm+cUP1b/g2RVJu+gf+h9UidaIu2nprXTXmzcBDUj45N1T8WfY2NVD0kLLbcatO
+         e/a7a4YSORcoGXB3QxIi7WXgOkTzt2gIjVcBWMF6t1arie4jr5uKpqgqdM+2j6YPUBEM
+         yTjqAMbrvFNvHjm2puTlitr0ZOBGQ2zh6eaJw58fuFEMHhrSr2hgEW/rBSaaYSAEpuNj
+         Go3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
-         :user-agent:date;
-        bh=GCLBREhsH0y+iPt4sZdcYSbSFOKA3tBuxEXbqgrezQs=;
-        b=eHgFBoCS68r8+oJVPOaH2ik8ylNPHhCW9EFhtBazxwcEFpAvoS6X7Oj9WIwSZ51alf
-         AjAKk2N0Ky+DAdhZXvdl9rlGh8mgFvFoGUPZCT/F0dpVCv995swPjDud41EN315s0E2Y
-         Vo9hCKdHS8xFDhIUnA6qU/KLHrGfdpdF0521o8hE4NrvM7TQyqpVCiu1xqfM4cQ6J3s7
-         bup9s/vjb/stLoDmmUh+B2FGAKdGL5AsMz0ig2v4b5Yx3fSSQ0J0Ud8AvDyuWzygfTvG
-         elrO6mOz7Rja8duk0XfwVrJZmebGl1qsbewi8w97leM+nemqrx0Nez393mTp0fym1mmE
-         vG3w==
-X-Gm-Message-State: APjAAAWcbeNU55eEMr9r5ezkmsZIfFhaF03JqYLkFbV7uVoyY4O4SIA5
-        DEnPlpjGwVYLwpuUV0GhQ03HMQ==
-X-Google-Smtp-Source: APXvYqz1wXQ3Fs4ACdKQNpbWss1Cxcv8o0j6fSXkYr+ALiIPpGyD8X9qfb6eDwoJXJOhVX94ja/i7Q==
-X-Received: by 2002:a17:902:6a84:: with SMTP id n4mr10430031plk.109.1567090463353;
-        Thu, 29 Aug 2019 07:54:23 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id z68sm2717912pgz.88.2019.08.29.07.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 07:54:22 -0700 (PDT)
-Message-ID: <5d67e71e.1c69fb81.6f885.6391@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NhdYEGuBZ86MZbgbGE/dU1jehprguGgfst5LEcPzq1E=;
+        b=lfurHxDs+2XW68awNp9f9C2fQms+lzm7X8hmRVFmi1rL1d3LuKyNmpGihD5tA37VY5
+         f3PJuBCvL0nBdivxd67rn1zrcAXW2TD57uVqmZi5PaW3AU+3pl0+KBEyFyx/Dfs9Zne6
+         2uecopTXLhElTI3s3ezBZZWRRIkfMvXJps0SUp8WWdjufNIJqQBU8+O2+gbsiQrlHXmx
+         u6uYpMeWUt62Lq7LR6fFMP6hrhk/Z5CQzKbDK52VPSQVN6g4PUm7JTbe+A1T5lVX1U/f
+         bvNi9vzlVpryaNzuMqXRBrp59Lhu0MMT9ZWPYlUK/pBuBc+Io2dlkDqid0IZ8SdZDOV3
+         s4/A==
+X-Gm-Message-State: APjAAAWFk0vYh8NyM6TVLfaTLffE0Thqxt9DAO97OIXopXKgb0p/DKJk
+        5rCvfWySI0EsM4jPblnEhIeG82FNc5yqfpROfgFbOg==
+X-Google-Smtp-Source: APXvYqxX36/V1p1AnOLcNBaPvF+8VSLAe25idk7689J03ITjm6zTXAuxww8U5ctx3KXYHY+di9XDyCttpqmHxAUkcBg=
+X-Received: by 2002:ab0:1562:: with SMTP id p31mr5086162uae.15.1567090913594;
+ Thu, 29 Aug 2019 08:01:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAP245DVV=7wfJqQdknoovqarXnHdzZzfhPQCkKxCy+heGrz9Ag@mail.gmail.com>
-References: <cover.1566907161.git.amit.kucheria@linaro.org> <a4666f8afa39471658602e06758b04a991f80828.1566907161.git.amit.kucheria@linaro.org> <5d66f545.1c69fb81.3663f.129d@mx.google.com> <CAP245DVV=7wfJqQdknoovqarXnHdzZzfhPQCkKxCy+heGrz9Ag@mail.gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Brian Masney <masneyb@onstation.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 15/15] drivers: thermal: tsens: Add interrupt support
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Thu, 29 Aug 2019 07:54:21 -0700
+References: <20190829144805.634-1-ulf.hansson@linaro.org>
+In-Reply-To: <20190829144805.634-1-ulf.hansson@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 29 Aug 2019 17:01:17 +0200
+Message-ID: <CAPDyKFoh7k=BwExr5FPSYnd9bNOQcONW3Pdo_n-a5T8+Cm+PrA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] PM / Domains: Simplify genpd_lookup_dev()
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Amit Kucheria (2019-08-29 05:30:59)
-> On Thu, Aug 29, 2019 at 3:12 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Amit Kucheria (2019-08-27 05:14:11)
-> > > +                       thermal_zone_device_update(priv->sensor[i].tz=
-d,
-> > > +                                                  THERMAL_EVENT_UNSP=
-ECIFIED);
-> > > +               } else {
-> > > +                       dev_dbg(priv->dev, "[%u] %s: no violation:  %=
-d\n",
-> > > +                               hw_id, __func__, temp);
-> > > +               }
-> > > +       }
-> > > +
-> > > +       return IRQ_HANDLED;
-> >
-> > Should we return IRQ_NONE in the case that the above for loop didn't
-> > find anything in those if/else-ifs?
->=20
-> The upper/lower interrupts are non-sticky, level-triggered. So if the
-> temp returns to within the thresholds in the time that a IRQ was
-> triggered and the handler scheduled, we might not see any threshold
-> violations/interrupt bits set.
->=20
-> It feels to me that this is a case of the IRQ being handled
-> (automagically) instead of IRQ_NONE. The definition of IRQ_NONE[1]
-> also seems to suggest that it should be used when the IRQ wasn't
-> handled. But it was handled in this case (although, automatically),
-> wasn't it?
+On Thu, 29 Aug 2019 at 16:48, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> genpd_lookup_dev(), is a bit unnecessary heavy, as it walks the gpd_list to
+> try to find a valid PM domain corresponding to the device's attached genpd.
+>
+> Instead of walking the gpd_list, let's use the fact that a genpd always has
+> the ->runtime_suspend() callback assigned to the genpd_runtime_suspend()
+> function.
+>
+> While changing this, let's take the opportunity to also rename
+> genpd_lookup_dev(), into dev_to_genpd_safe() to better reflect its purpose.
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/base/power/domain.c | 23 +++++++++--------------
+>  1 file changed, 9 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index b063bc41b0a9..27592b73061d 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -149,29 +149,24 @@ static inline bool irq_safe_dev_in_no_sleep_domain(struct device *dev,
+>         return ret;
+>  }
+>
+> +static int genpd_runtime_suspend(struct device *dev);
+> +
+>  /*
+>   * Get the generic PM domain for a particular struct device.
+>   * This validates the struct device pointer, the PM domain pointer,
+> - * and checks that the PM domain pointer is a real generic PM domain.
+> + * and checks that the PM domain pointer is real generic PM domain.
 
-Ok I see. Sounds fine then to always return IRQ_HANDLED. Maybe you can
-add a comment to this effect right above the return statement.
+Rafael, I thought I got rid of this line change. I can send a new
+version - or if you manually just drop this line of change when
+applying?
 
+Kind regards
+Uffe
+
+>   * Any failure results in NULL being returned.
+>   */
+> -static struct generic_pm_domain *genpd_lookup_dev(struct device *dev)
+> +static struct generic_pm_domain *dev_to_genpd_safe(struct device *dev)
+>  {
+> -       struct generic_pm_domain *genpd = NULL, *gpd;
+> -
+>         if (IS_ERR_OR_NULL(dev) || IS_ERR_OR_NULL(dev->pm_domain))
+>                 return NULL;
+>
+> -       mutex_lock(&gpd_list_lock);
+> -       list_for_each_entry(gpd, &gpd_list, gpd_list_node) {
+> -               if (&gpd->domain == dev->pm_domain) {
+> -                       genpd = gpd;
+> -                       break;
+> -               }
+> -       }
+> -       mutex_unlock(&gpd_list_lock);
+> +       /* A genpd's always have its ->runtime_suspend() callback assigned. */
+> +       if (dev->pm_domain->ops.runtime_suspend == genpd_runtime_suspend)
+> +               return pd_to_genpd(dev->pm_domain);
+>
+> -       return genpd;
+> +       return NULL;
+>  }
+>
+>  /*
+> @@ -1610,7 +1605,7 @@ static int genpd_remove_device(struct generic_pm_domain *genpd,
+>   */
+>  int pm_genpd_remove_device(struct device *dev)
+>  {
+> -       struct generic_pm_domain *genpd = genpd_lookup_dev(dev);
+> +       struct generic_pm_domain *genpd = dev_to_genpd_safe(dev);
+>
+>         if (!genpd)
+>                 return -EINVAL;
+> --
+> 2.17.1
+>
