@@ -2,87 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1360A1D90
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD631A1DE1
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727087AbfH2OsV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 10:48:21 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:47062 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727073AbfH2OsV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 10:48:21 -0400
-Received: by mail-lj1-f194.google.com with SMTP id f9so3264856ljc.13
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 07:48:19 -0700 (PDT)
+        id S1728862AbfH2OxF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 10:53:05 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33920 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728335AbfH2OxF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 10:53:05 -0400
+Received: by mail-pl1-f196.google.com with SMTP id d3so1706842plr.1
+        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 07:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=KCuLpwKkgO2woISAKHKSXhqDDj9RTnVSFiBEmqI8qvc=;
-        b=IUCAvPjTBFoyU9PWJ2c/uU/nyvDbzYckQ6DEt4UvZg+TPRW+wVXsF5o+KwpT09SVbG
-         CZHBf9LpzerenWeXgnRULTVrjizGumj5N8M7nQTd5UbJafylDSXX6vxlGL47gWk47gM5
-         hyOf0djwLpu6hMhe3xCWdMmDsR2P61YhXVyxfI0cMErFsklKsXOS70e+vGRaNMUg2wxe
-         spAj+Pb5gpfyCYLUc5lbRAg4SwvPzqA+V241FNd3jqBVeqhnm5ec7YzvXekJDKuBkaZ/
-         xGHlbaObHBUxBpi0ybt9MjEfvktEER9BCzVLVcKcUaHk+USXen82UPG4oVQaJm9cyC5t
-         sWOA==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=IVt1U8oT+FQK7aUwrMR2Tp9XbQQNNH4JQiQH6Rt7qf4=;
+        b=cP79UUZk928DGL+GxphxoDqthoR4vlD+VEpiHJe8dJnI74dSK5hHZDn/8xoNtlwaLH
+         IkL9g+CPoO3ERIm4twApQ3fSHH+/cFNlISlAnPCINnupwLmEXMmKVkw35ldVMfLUUOXK
+         yToPL4+v5EmLSwhPC+E3qcL0teiSDB+eD/bXw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=KCuLpwKkgO2woISAKHKSXhqDDj9RTnVSFiBEmqI8qvc=;
-        b=cmJ13JLXtcRoFCl78YkhBZjt79EwGrn/IdGNO9RkmmUYE2mv44FxvRqX/znhnooLjq
-         /qN0ZoNjnfdlYU/QohFRsfe2c0NFiBBs4awHQzVu4v+xu48DHv01K4aCHYYEhLO57bR4
-         NCzfXZ6nL+YhGxSDl0y8iJqxvgfx/92KOeKTqSjbdIvpeol2kuLlEK6oLuSaULzJsXtV
-         nfzhWYwb3PS9wI4+u/NSc7qk1kMewOUeTOjJDn8pMOVP/F177/pmC1tezSetGldn9ach
-         b/QcVm4qnljv08XGr2oqYzJ6F14uwArWWOjOzBzh0aH2sCyBce6ZBGMyphEHp7vOPVNk
-         ldtg==
-X-Gm-Message-State: APjAAAXPEj/bhpK07Txr+RON+ajri/9+qVm4tmT1kMRz+fRQrwo5krUM
-        f8lAm6AX95oNnZ169s3IeWhE42OhgpM=
-X-Google-Smtp-Source: APXvYqxnrAm5LDjdgQ6ZmgGYnHRwFhG95yl/IZaUiH1cnVVXHi49YcAQk26+ugMc5t8NW2tOLWMFrA==
-X-Received: by 2002:a2e:9a18:: with SMTP id o24mr5641521lji.235.1567090099148;
-        Thu, 29 Aug 2019 07:48:19 -0700 (PDT)
-Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id r3sm385980ljb.96.2019.08.29.07.48.17
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=IVt1U8oT+FQK7aUwrMR2Tp9XbQQNNH4JQiQH6Rt7qf4=;
+        b=Z6mq/VUlfUTszIRCwVg5s/qpvt889zTM+tzQh6teqMf+/DOrM/+4aeTSdllS53lMUg
+         mtVFAU4S241jwfHIrB+6rKfDqCkH4l3Tl2gmVpdMDaH4nrvSbHj9i5rx8etedvkQQ3hM
+         hLqSKtoqkKhYXLnYd+by6U9LE6HrCioFmJtx2odm5Uo309H5ifQLlAYF/N9XVFH0ciwc
+         KAvgEDOAWTzqPV71nvR5V2owaHESLu1YAU/9Iw7n7rzSgjBJuY1y8pia6Mu3duEE5Agh
+         fKxGlpBmDQZ3bC5hpRO9g+j2pEq5PVrz2SuL6zbi8HWKB9b4M6BPdrEzVZYRwAuax5xk
+         DCnQ==
+X-Gm-Message-State: APjAAAXJzVFJXuNhI6iOCLtkDOEubzbY/LIG9gFbFbaVkoFw9UQti4+g
+        Xyokpk7ttKweeRPZYHTkPLay0A==
+X-Google-Smtp-Source: APXvYqxCLdj3EhSbQwuRFHN9HLXmn0KH0bqkF8GZwr3xBMF5lOEAwyd/+Ll4gbD0AERbHDMcrTdDfg==
+X-Received: by 2002:a17:902:f217:: with SMTP id gn23mr10280979plb.21.1567090384357;
+        Thu, 29 Aug 2019 07:53:04 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id ev3sm16476457pjb.3.2019.08.29.07.53.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 07:48:18 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Subject: [PATCH 2/2] PM / Domains: Verify PM domain type in dev_pm_genpd_set_performance_state()
-Date:   Thu, 29 Aug 2019 16:48:15 +0200
-Message-Id: <20190829144815.686-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Thu, 29 Aug 2019 07:53:03 -0700 (PDT)
+Message-ID: <5d67e6cf.1c69fb81.5aec9.3b71@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAP245DWWKsZBHnvSqC40XOH48kGd-hykd+fr-UZfWTmvuG2KaA@mail.gmail.com>
+References: <cover.1566907161.git.amit.kucheria@linaro.org> <66ac3d3707d6296ef85bf1fa321f7f1ee0c02131.1566907161.git.amit.kucheria@linaro.org> <5d65cbe9.1c69fb81.1ceb.2374@mx.google.com> <CAP245DWWKsZBHnvSqC40XOH48kGd-hykd+fr-UZfWTmvuG2KaA@mail.gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Brian Masney <masneyb@onstation.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 07/15] dt: thermal: tsens: Document interrupt support in tsens driver
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 29 Aug 2019 07:53:02 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The dev_pm_genpd_set_performance_state() could in principle be called for a
-device that has a different PM domain type attached than a genpd. This
-would lead to a problem as dev_to_genpd() uses the container_of macro.
+Quoting Amit Kucheria (2019-08-29 01:48:27)
+> On Wed, Aug 28, 2019 at 6:03 AM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Quoting Amit Kucheria (2019-08-27 05:14:03)
+> > > Define two new required properties to define interrupts and
+> > > interrupt-names for tsens.
+> > >
+> > > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/thermal/qcom-tsens.txt | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt=
+ b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > > index 673cc1831ee9d..686bede72f846 100644
+> > > --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > > +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > > @@ -22,6 +22,8 @@ Required properties:
+> > >
+> > >  - #thermal-sensor-cells : Should be 1. See ./thermal.txt for a descr=
+iption.
+> > >  - #qcom,sensors: Number of sensors in tsens block
+> > > +- interrupts: Interrupts generated from Always-On subsystem (AOSS)
+> >
+> > Is it always one? interrupt-names makes it sound like it.
+> >
+> > > +- interrupt-names: Must be one of the following: "uplow", "critical"
+>=20
+> Will fix to "one or more of the following"
+>=20
 
-Address this problem by using dev_to_genpd_safe() instead.
-
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/domain.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 27592b73061d..2650ae2f46fd 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -380,8 +380,8 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
- 	unsigned int prev;
- 	int ret;
- 
--	genpd = dev_to_genpd(dev);
--	if (IS_ERR(genpd))
-+	genpd = dev_to_genpd_safe(dev);
-+	if (!genpd)
- 		return -ENODEV;
- 
- 	if (unlikely(!genpd->set_performance_state))
--- 
-2.17.1
+Can we get a known quantity of interrupts for a particular compatible
+string instead? Let's be as specific as possible. The index matters too,
+so please list them in the order that is desired.
 
