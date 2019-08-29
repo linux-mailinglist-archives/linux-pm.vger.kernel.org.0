@@ -2,186 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BFEA1B0E
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 15:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDFAA1BD8
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 15:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbfH2NL2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 09:11:28 -0400
-Received: from sauhun.de ([88.99.104.3]:38986 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727182AbfH2NL2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 29 Aug 2019 09:11:28 -0400
-Received: from localhost (p54B33070.dip0.t-ipconnect.de [84.179.48.112])
-        by pokefinder.org (Postfix) with ESMTPSA id C78242C001C;
-        Thu, 29 Aug 2019 15:11:24 +0200 (CEST)
-Date:   Thu, 29 Aug 2019 15:11:24 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Zhang Rui <rui.zhang@intel.com>, Simon Horman <horms@verge.net.au>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Nathan Huckleberry <nhuck@google.com>, edubezval@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
-        wsa+renesas@sang-engineering.com
-Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Fix Wshift-negative-value
-Message-ID: <20190829131124.GA2437@kunai>
-References: <20190613211228.34092-1-nhuck@google.com>
- <fd8b8a48-dfb7-1478-2d8d-0953acee39d3@linaro.org>
- <82458318837ed1154a183be0b96337fc7809c645.camel@intel.com>
+        id S1727233AbfH2Nvz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 09:51:55 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:38072 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbfH2Nvz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 09:51:55 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7TDnNxP095592;
+        Thu, 29 Aug 2019 13:50:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=Fd9hv6LyJBtuu9ZkSbuId7vkAVpMFdpT9DAMePfpKUs=;
+ b=LlGZy+/DG+OXEKjb+xgSZmFbX6eKUKcb8gVa0bmQ4CG/Nft6uZ7A55vWkTZ8J8gf0Jqv
+ bkwlXEK43cZ2rRynMhqsvtgTcWlgbG0SnaCO9mEcW679IAmJ2y5yRRe9nv/5zXCrtYC5
+ dLPADKS7e9opjOwx3OC2auQu9H58xe6zqbkGOziog91lNWaYK+/jv4vGXxfKcuc0JAdW
+ a443/QnB0NWV0yYwTQYGeO9hHwIP/ZQSp7KLoXxg/y898dqdKsyvKlgKksvfhXGc7uAc
+ KTezwu6PkHpNnf1VTzILbXK/dJWSaNpbKPgsS2B4mGv0ZOn6xo0+pzpaCNPiljXiJR4y wg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2upfwx808j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 13:50:31 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7TDm7t2074044;
+        Thu, 29 Aug 2019 13:50:30 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2untev2f8a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 13:50:30 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7TDoRYU028608;
+        Thu, 29 Aug 2019 13:50:27 GMT
+Received: from [10.175.160.184] (/10.175.160.184)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 29 Aug 2019 13:50:27 +0000
+Subject: Re: [PATCH v1] cpuidle-haltpoll: vcpu hotplug support
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20190828185650.16923-1-joao.m.martins@oracle.com>
+ <20190829115634.GA4949@amt.cnet>
+From:   Joao Martins <joao.m.martins@oracle.com>
+Message-ID: <8c459d91-bc47-2ff4-7d3b-243ed4e466cb@oracle.com>
+Date:   Thu, 29 Aug 2019 14:50:21 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zhXaljGHf11kAtnf"
-Content-Disposition: inline
-In-Reply-To: <82458318837ed1154a183be0b96337fc7809c645.camel@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190829115634.GA4949@amt.cnet>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9363 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=5 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=978
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908290152
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9363 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=5 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908290152
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 8/29/19 12:56 PM, Marcelo Tosatti wrote:
+> Hi Joao,
+> 
+> On Wed, Aug 28, 2019 at 07:56:50PM +0100, Joao Martins wrote:
+>> +static void haltpoll_uninit(void)
+>> +{
+>> +	unsigned int cpu;
+>> +
+>> +	cpus_read_lock();
+>> +
+>> +	for_each_online_cpu(cpu) {
+>> +		struct cpuidle_device *dev =
+>> +			per_cpu_ptr(haltpoll_cpuidle_devices, cpu);
+>> +
+>> +		if (!dev->registered)
+>> +			continue;
+>> +
+>> +		arch_haltpoll_disable(cpu);
+>> +		cpuidle_unregister_device(dev);
+>> +	}
+> 
+> 1)
+> 
+>> +
+>> +	cpuidle_unregister(&haltpoll_driver);
+> 
+> cpuidle_unregister_driver.
 
---zhXaljGHf11kAtnf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Will fix -- this was an oversight.
 
-On Wed, Aug 28, 2019 at 04:52:20PM +0800, Zhang Rui wrote:
-> On Fri, 2019-06-14 at 12:52 +0200, Daniel Lezcano wrote:
-> > Hi Nathan,
-> >=20
-> > On 13/06/2019 23:12, Nathan Huckleberry wrote:
-> > > Clang produces the following warning
-> > >=20
-> > > vers/thermal/rcar_gen3_thermal.c:147:33: warning: shifting a
-> > > negative
-> > > signed value is undefined [-Wshift-negative-value] / (ptat[0] -
-> > > ptat[2])) +
-> > > FIXPT_INT(TJ_3); ^~~~~~~~~~~~~~~
-> > > drivers/thermal/rcar_gen3_thermal.c:126:29
-> > > note: expanded from macro 'FIXPT_INT' #define FIXPT_INT(_x) ((_x)
-> > > <<
-> > > FIXPT_SHIFT) ~~~~ ^ drivers/thermal/rcar_gen3_thermal.c:150:18:
-> > > warning:
-> > > shifting a negative signed value is undefined [-Wshift-negative-
-> > > value]
-> > > tsc->tj_t - FIXPT_INT(TJ_3)); ~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-> > >=20
-> > > Upon further investigating it looks like there is no real reason
-> > > for
-> > > TJ_3 to be -41. Usages subtract -41, code would be cleaner to just
-> > > add.
-> >=20
-> > All the code seems broken regarding the negative value shifting as
-> > the
-> > macros pass an integer:
-> >=20
-> > eg.
-> >         tsc->coef.a2 =3D FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]),
-> >                                  tsc->tj_t - FIXPT_INT(ths_tj_1));
-> >=20
-> > thcode[1] is always < than thcode[0],
-> >=20
-> > thcode[1] - thcode[0] < 0
-> >=20
-> > FIXPT_INT(thcode[1] - thcode[0]) is undefined
-> >=20
-> >=20
-> > Is it done on purpose FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]) ?
-> >=20
-> > Try developing the macro with the coef.a2 computation ...
-> >=20
-> > The code quality of this driver could be better, it deserves a rework
-> > IMHO ...
-> >=20
-> > I suggest to revert:
-> >=20
-> > 4eb39f79ef443fa566d36bd43f1f578d5c140305
-> > bdc4480a669d476814061b4da6bb006f7048c8e5
-> > 6a310f8f97bb8bc2e2bb9db6f49a1b8678c8d144
-> >=20
-> > Rework the coefficient computation and re-introduce what was reverted
-> > in
-> > a nicer way.
->=20
-> Sounds reasonable to me.
->=20
-> Yoshihiro,
-> can you please clarify on this? Or else I will revert the above commits
-> first?
->=20
-> Also CC Wolfram Sang, the driver author.
+> 
+>> +	free_percpu(haltpoll_cpuidle_devices);
+>> +	haltpoll_cpuidle_devices = NULL;
+>> +
+>> +	cpus_read_unlock();
+> 
+> Any reason you can't cpus_read_unlock() at 1) ?
+> 
+No, let me adjust that too.
 
-CCing Simon Horman who worked with Kaneko-san on these changes.
+> Looks good otherwise.
+> 
+> Thanks!
+> 
+Thanks for the review!
 
-> thanks,
-> rui
-> >=20
-> >=20
-> > > Fixes: 4eb39f79ef44 ("thermal: rcar_gen3_thermal: Update value of
-> > > Tj_1")
-> > > Cc: clang-built-linux@googlegroups.com
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/531
-> > > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-> > > ---
-> > >  drivers/thermal/rcar_gen3_thermal.c | 8 ++++----
-> > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > >=20
-> > > diff --git a/drivers/thermal/rcar_gen3_thermal.c
-> > > b/drivers/thermal/rcar_gen3_thermal.c
-> > > index a56463308694..f4b4558c08e9 100644
-> > > --- a/drivers/thermal/rcar_gen3_thermal.c
-> > > +++ b/drivers/thermal/rcar_gen3_thermal.c
-> > > @@ -131,7 +131,7 @@ static inline void
-> > > rcar_gen3_thermal_write(struct rcar_gen3_thermal_tsc *tsc,
-> > >  #define RCAR3_THERMAL_GRAN 500 /* mili Celsius */
-> > > =20
-> > >  /* no idea where these constants come from */
-> > > -#define TJ_3 -41
-> > > +#define TJ_3 41
-> > > =20
-> > >  static void rcar_gen3_thermal_calc_coefs(struct
-> > > rcar_gen3_thermal_tsc *tsc,
-> > >  					 int *ptat, const int *thcode,
-> > > @@ -144,11 +144,11 @@ static void
-> > > rcar_gen3_thermal_calc_coefs(struct rcar_gen3_thermal_tsc *tsc,
-> > >  	 * the dividend (4095 * 4095 << 14 > INT_MAX) so keep it
-> > > unscaled
-> > >  	 */
-> > >  	tsc->tj_t =3D (FIXPT_INT((ptat[1] - ptat[2]) * 157)
-> > > -		     / (ptat[0] - ptat[2])) + FIXPT_INT(TJ_3);
-> > > +		     / (ptat[0] - ptat[2])) - FIXPT_INT(TJ_3);
-> > > =20
-> > >  	tsc->coef.a1 =3D FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[2]),
-> > > -				 tsc->tj_t - FIXPT_INT(TJ_3));
-> > > -	tsc->coef.b1 =3D FIXPT_INT(thcode[2]) - tsc->coef.a1 * TJ_3;
-> > > +				 tsc->tj_t + FIXPT_INT(TJ_3));
-> > > +	tsc->coef.b1 =3D FIXPT_INT(thcode[2]) + tsc->coef.a1 * TJ_3;
-> > > =20
-> > >  	tsc->coef.a2 =3D FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]),
-> > >  				 tsc->tj_t - FIXPT_INT(ths_tj_1));
-> > >=20
-> >=20
-> >=20
->=20
-
---zhXaljGHf11kAtnf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl1nzvgACgkQFA3kzBSg
-KbYx+g//f5G/Zdl+qgCmmyNNWXxl8l6bbTgwmYs9qlm05wSREnJW80SFptJOOmVX
-105JuRkTrXtoUnAmCxF/Z55HYly0hG4s0HByxuALCLpb3j+rcU+G0hdXrSdNICRk
-tN9HkHzYmKGszT5yaZY2EF730nUnpv71Pc4Z3wTY/H+5wz8uDv/6mW4IpcYM3Tnr
-9ueuEBNYWwGiR/29dGwgaVnh0f/nIZllMEQbuYKeCxRuY58gqQFA9Ng5bEDfNFHV
-qR5n9jKoQetVx3zacipFHYjwv9d1rnAfHonBmvp5FjkZ/5/U0EBhkeouPxFTIRuW
-u1e2DzblJ1hGPHyVlwrl5294e9bujd6iVEMetJZnEU21n6aGb3lenQnYy6ER6cUB
-J6Pg9fnwoGFYH9WUkQwQ8V1tLO1zRf2SvJexYZmQK40n/D1M5oUUqfbTBd7wwofv
-WvXAkuVfACXvWiLVhOtlGGIX+C+IRlvdbl1L/12eAT2PW28k+aUzV7HHxHykfGjW
-CgLj4Kli7gsQO2NF4hQcG79FZDTnx/FPYGGT0U1SUaLfBBnYMOZ6HJbko4TJmnII
-FrcgDCPNHS/yGT/PcOM1XfqXwMlODu1aeneScG8bxbZT46iWRFDS7PL0zH8qrDr0
-aCtkS4xv3uPyh6A9+o8Qpg/XEmoPpmZO1Z2bNR6B8wcYIuv3YDc=
-=a7UP
------END PGP SIGNATURE-----
-
---zhXaljGHf11kAtnf--
+	Joao
