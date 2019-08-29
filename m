@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD631A1DE1
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A75A1E06
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 16:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728862AbfH2OxF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 10:53:05 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33920 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728335AbfH2OxF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 10:53:05 -0400
-Received: by mail-pl1-f196.google.com with SMTP id d3so1706842plr.1
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 07:53:04 -0700 (PDT)
+        id S1728419AbfH2OyY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 10:54:24 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37490 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727565AbfH2OyY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 10:54:24 -0400
+Received: by mail-pl1-f194.google.com with SMTP id bj8so1696548plb.4
+        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 07:54:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=message-id:mime-version:content-transfer-encoding:in-reply-to
          :references:cc:subject:to:from:user-agent:date;
-        bh=IVt1U8oT+FQK7aUwrMR2Tp9XbQQNNH4JQiQH6Rt7qf4=;
-        b=cP79UUZk928DGL+GxphxoDqthoR4vlD+VEpiHJe8dJnI74dSK5hHZDn/8xoNtlwaLH
-         IkL9g+CPoO3ERIm4twApQ3fSHH+/cFNlISlAnPCINnupwLmEXMmKVkw35ldVMfLUUOXK
-         yToPL4+v5EmLSwhPC+E3qcL0teiSDB+eD/bXw=
+        bh=GCLBREhsH0y+iPt4sZdcYSbSFOKA3tBuxEXbqgrezQs=;
+        b=GodzQTP7hIIoeFf5qkuQPtLv5FVme1IU5vK2YxaYFRfsd1+IIn7ODeDG9/hkE9TIzT
+         ZVaAR2V8JaM0aV7K3VGFj+Np41A23tJulYB9IWiY9oOAy0Ug7au3VF+WOffZ5AZBPL7Z
+         oxaXKYOIr+rFyeoJgVEWdvwhpUI6iWfCjLQk4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:mime-version
          :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
          :user-agent:date;
-        bh=IVt1U8oT+FQK7aUwrMR2Tp9XbQQNNH4JQiQH6Rt7qf4=;
-        b=Z6mq/VUlfUTszIRCwVg5s/qpvt889zTM+tzQh6teqMf+/DOrM/+4aeTSdllS53lMUg
-         mtVFAU4S241jwfHIrB+6rKfDqCkH4l3Tl2gmVpdMDaH4nrvSbHj9i5rx8etedvkQQ3hM
-         hLqSKtoqkKhYXLnYd+by6U9LE6HrCioFmJtx2odm5Uo309H5ifQLlAYF/N9XVFH0ciwc
-         KAvgEDOAWTzqPV71nvR5V2owaHESLu1YAU/9Iw7n7rzSgjBJuY1y8pia6Mu3duEE5Agh
-         fKxGlpBmDQZ3bC5hpRO9g+j2pEq5PVrz2SuL6zbi8HWKB9b4M6BPdrEzVZYRwAuax5xk
-         DCnQ==
-X-Gm-Message-State: APjAAAXJzVFJXuNhI6iOCLtkDOEubzbY/LIG9gFbFbaVkoFw9UQti4+g
-        Xyokpk7ttKweeRPZYHTkPLay0A==
-X-Google-Smtp-Source: APXvYqxCLdj3EhSbQwuRFHN9HLXmn0KH0bqkF8GZwr3xBMF5lOEAwyd/+Ll4gbD0AERbHDMcrTdDfg==
-X-Received: by 2002:a17:902:f217:: with SMTP id gn23mr10280979plb.21.1567090384357;
-        Thu, 29 Aug 2019 07:53:04 -0700 (PDT)
+        bh=GCLBREhsH0y+iPt4sZdcYSbSFOKA3tBuxEXbqgrezQs=;
+        b=eHgFBoCS68r8+oJVPOaH2ik8ylNPHhCW9EFhtBazxwcEFpAvoS6X7Oj9WIwSZ51alf
+         AjAKk2N0Ky+DAdhZXvdl9rlGh8mgFvFoGUPZCT/F0dpVCv995swPjDud41EN315s0E2Y
+         Vo9hCKdHS8xFDhIUnA6qU/KLHrGfdpdF0521o8hE4NrvM7TQyqpVCiu1xqfM4cQ6J3s7
+         bup9s/vjb/stLoDmmUh+B2FGAKdGL5AsMz0ig2v4b5Yx3fSSQ0J0Ud8AvDyuWzygfTvG
+         elrO6mOz7Rja8duk0XfwVrJZmebGl1qsbewi8w97leM+nemqrx0Nez393mTp0fym1mmE
+         vG3w==
+X-Gm-Message-State: APjAAAWcbeNU55eEMr9r5ezkmsZIfFhaF03JqYLkFbV7uVoyY4O4SIA5
+        DEnPlpjGwVYLwpuUV0GhQ03HMQ==
+X-Google-Smtp-Source: APXvYqz1wXQ3Fs4ACdKQNpbWss1Cxcv8o0j6fSXkYr+ALiIPpGyD8X9qfb6eDwoJXJOhVX94ja/i7Q==
+X-Received: by 2002:a17:902:6a84:: with SMTP id n4mr10430031plk.109.1567090463353;
+        Thu, 29 Aug 2019 07:54:23 -0700 (PDT)
 Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id ev3sm16476457pjb.3.2019.08.29.07.53.03
+        by smtp.gmail.com with ESMTPSA id z68sm2717912pgz.88.2019.08.29.07.54.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 07:53:03 -0700 (PDT)
-Message-ID: <5d67e6cf.1c69fb81.5aec9.3b71@mx.google.com>
+        Thu, 29 Aug 2019 07:54:22 -0700 (PDT)
+Message-ID: <5d67e71e.1c69fb81.6f885.6391@mx.google.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAP245DWWKsZBHnvSqC40XOH48kGd-hykd+fr-UZfWTmvuG2KaA@mail.gmail.com>
-References: <cover.1566907161.git.amit.kucheria@linaro.org> <66ac3d3707d6296ef85bf1fa321f7f1ee0c02131.1566907161.git.amit.kucheria@linaro.org> <5d65cbe9.1c69fb81.1ceb.2374@mx.google.com> <CAP245DWWKsZBHnvSqC40XOH48kGd-hykd+fr-UZfWTmvuG2KaA@mail.gmail.com>
+In-Reply-To: <CAP245DVV=7wfJqQdknoovqarXnHdzZzfhPQCkKxCy+heGrz9Ag@mail.gmail.com>
+References: <cover.1566907161.git.amit.kucheria@linaro.org> <a4666f8afa39471658602e06758b04a991f80828.1566907161.git.amit.kucheria@linaro.org> <5d66f545.1c69fb81.3663f.129d@mx.google.com> <CAP245DVV=7wfJqQdknoovqarXnHdzZzfhPQCkKxCy+heGrz9Ag@mail.gmail.com>
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,50 +59,48 @@ Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Marc Gonzalez <marc.w.gonzalez@free.fr>,
         Brian Masney <masneyb@onstation.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 07/15] dt: thermal: tsens: Document interrupt support in tsens driver
+        Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 15/15] drivers: thermal: tsens: Add interrupt support
 To:     Amit Kucheria <amit.kucheria@linaro.org>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.8.1
-Date:   Thu, 29 Aug 2019 07:53:02 -0700
+Date:   Thu, 29 Aug 2019 07:54:21 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Amit Kucheria (2019-08-29 01:48:27)
-> On Wed, Aug 28, 2019 at 6:03 AM Stephen Boyd <swboyd@chromium.org> wrote:
+Quoting Amit Kucheria (2019-08-29 05:30:59)
+> On Thu, Aug 29, 2019 at 3:12 AM Stephen Boyd <swboyd@chromium.org> wrote:
 > >
-> > Quoting Amit Kucheria (2019-08-27 05:14:03)
-> > > Define two new required properties to define interrupts and
-> > > interrupt-names for tsens.
-> > >
-> > > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > > ---
-> > >  Documentation/devicetree/bindings/thermal/qcom-tsens.txt | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt=
- b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
-> > > index 673cc1831ee9d..686bede72f846 100644
-> > > --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
-> > > +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
-> > > @@ -22,6 +22,8 @@ Required properties:
-> > >
-> > >  - #thermal-sensor-cells : Should be 1. See ./thermal.txt for a descr=
-iption.
-> > >  - #qcom,sensors: Number of sensors in tsens block
-> > > +- interrupts: Interrupts generated from Always-On subsystem (AOSS)
+> > Quoting Amit Kucheria (2019-08-27 05:14:11)
+> > > +                       thermal_zone_device_update(priv->sensor[i].tz=
+d,
+> > > +                                                  THERMAL_EVENT_UNSP=
+ECIFIED);
+> > > +               } else {
+> > > +                       dev_dbg(priv->dev, "[%u] %s: no violation:  %=
+d\n",
+> > > +                               hw_id, __func__, temp);
+> > > +               }
+> > > +       }
+> > > +
+> > > +       return IRQ_HANDLED;
 > >
-> > Is it always one? interrupt-names makes it sound like it.
-> >
-> > > +- interrupt-names: Must be one of the following: "uplow", "critical"
+> > Should we return IRQ_NONE in the case that the above for loop didn't
+> > find anything in those if/else-ifs?
 >=20
-> Will fix to "one or more of the following"
+> The upper/lower interrupts are non-sticky, level-triggered. So if the
+> temp returns to within the thresholds in the time that a IRQ was
+> triggered and the handler scheduled, we might not see any threshold
+> violations/interrupt bits set.
 >=20
+> It feels to me that this is a case of the IRQ being handled
+> (automagically) instead of IRQ_NONE. The definition of IRQ_NONE[1]
+> also seems to suggest that it should be used when the IRQ wasn't
+> handled. But it was handled in this case (although, automatically),
+> wasn't it?
 
-Can we get a known quantity of interrupts for a particular compatible
-string instead? Let's be as specific as possible. The index matters too,
-so please list them in the order that is desired.
+Ok I see. Sounds fine then to always return IRQ_HANDLED. Maybe you can
+add a comment to this effect right above the return statement.
 
