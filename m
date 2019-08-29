@@ -2,169 +2,289 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E45AA20FA
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 18:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCC8A2202
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 19:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727978AbfH2Qe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 12:34:28 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45031 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727691AbfH2Qe2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 12:34:28 -0400
-Received: by mail-wr1-f68.google.com with SMTP id b6so1309100wrv.11
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 09:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qpanO385XMKPNBmgQ90ht9XRbAH606WeW99mEjSVvVY=;
-        b=c29yf1bhYfl0RZdawBGl7I49nhSZZSRY0hl6QJQAiqJCXrKcg/uIgy/7083pZzg7rX
-         grHC1gMYlrAA5wl+k15WnI224Pa1HjnEa46Fp7iJ93m3vx7rrqIQHC4wwG1cmYPYbqkm
-         OVQEf6ZxDcF0fiaSwFtWhLJLHPC68JOR3u9UPG48iyoC1tIorjP74WeiYz0itqFjgX2M
-         X3NW6urBo6wr0f2aW52MLhPI3trmAJ/UNEzhRTLZicILXxXuL2KIDXZFv64Zt1QfJsAx
-         20dNPxrJzoxmGJl2MM5j1WWFKR0a12ndp1CRrWJUnOu2NL4PLNlIA2Ak+tpDByGkxqnv
-         f6cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qpanO385XMKPNBmgQ90ht9XRbAH606WeW99mEjSVvVY=;
-        b=Jd1XP2AkLmb1T25NwOa0ecIkPlM79Nxo9CgbpaezwpTHcggFqSA4h/mxvzZnaEy7mz
-         jmt+N+nBZUdbsuiAFhE+6sYx0a9Kh4izZZlBVZnly+rJ/+maqdAbTjwyCfW19CJZI5Bd
-         vGQMPwGsw+MPXg0e8L7HspuXlI3dgEetVglg5FrMVa8UvLwj2Uf8ZPjJ6EtOFdB6zh6s
-         lxpgTtY4spFmho1b35l6BnL5DWlMIwFokPbu8/P4/y7IvBfSkKLiuI6aXAQu4t0dMLcR
-         1tXDjD5Tb9gzgimagzKE/0ejXCVAggexZPYsBsPt5G0ojZPNPGKuJVBM5jzmDwWd7KqQ
-         YnFw==
-X-Gm-Message-State: APjAAAX7zSDv9V9M8FZJyDRm/A81cJ7jXGcPB9JxHkzFyAHn/IAZsQLr
-        wLMEOM7vhMdwxSa5pQFT8HlXrA==
-X-Google-Smtp-Source: APXvYqzwkyl+arYcLkVl8UKy4eKXEIOA5iMHMNzJcrBTD+BVUCP6YPkNaqprGlXLZT0HMEHjckVcKQ==
-X-Received: by 2002:a5d:4108:: with SMTP id l8mr12623917wrp.113.1567096465889;
-        Thu, 29 Aug 2019 09:34:25 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id o9sm1994254wrm.88.2019.08.29.09.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 09:34:25 -0700 (PDT)
-Date:   Thu, 29 Aug 2019 17:34:23 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        id S1727388AbfH2RRq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 13:17:46 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:53804 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727270AbfH2RRq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 13:17:46 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7THDj1p103579;
+        Thu, 29 Aug 2019 17:16:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=ZdWf5nAKch2sAxvuPQKTnzRVXVUZevXhS0HZrqLFMAc=;
+ b=je3kftSxptgJIpWxFn1l6IvYKMirQ/nXSXbrQHs6R3kHlwtm5+htT8dzIn438Mu61l0C
+ R2lNW+mFAeEbTjlghAY5KYqB8Q4vQEZF+e61obUOe0G0vuW3a59mLvizN1vkFjCZH2zp
+ LEtaLf+mC85Lit0Pb5qZ5tbqhzsgcZtOWkGUFd1PPPIjRQAf+emvrP/UIRRNhNw/k/i+
+ uvLTtICXl5eSwVFvAeqMVuxekjTIJpuikYxzc5LJQnhFzjDXCcS8tpY00WK4sGRNbDuY
+ RqL2vbh00Tv1O695LxqY8Di+BLhqqdF9l58QEuwUZd+GIxwU9udXk575AXkXK//4EUjV eg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2upjss82qt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 17:16:13 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7THCw8M145631;
+        Thu, 29 Aug 2019 17:16:13 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2unvu0aarh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 17:16:13 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7THGBkE006501;
+        Thu, 29 Aug 2019 17:16:11 GMT
+Received: from [10.175.160.184] (/10.175.160.184)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 29 Aug 2019 10:16:10 -0700
+Subject: Is: Default governor regardless of cpuidle driver Was: [PATCH v2]
+ cpuidle-haltpoll: vcpu hotplug support
+To:     Marcelo Tosatti <mtosatti@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 03/15] drivers: thermal: tsens: Add __func__
- identifier to debug statements
-Message-ID: <20190829163423.2ibdsx6etsl6v5ua@holly.lan>
-References: <cover.1566907161.git.amit.kucheria@linaro.org>
- <93fa782bde9c66845993ff883532b3f1f02d99e4.1566907161.git.amit.kucheria@linaro.org>
- <20190829140459.szauzhennltrwvg4@holly.lan>
- <CAHLCerNuycWTLmCvdffM0=GdG7UZ7zNoj0Jb0CeLTULzVmfSJw@mail.gmail.com>
- <20190829151912.z6cflsaox2qnmqxw@holly.lan>
- <CAP245DWqbFnKVW9BYCzUMH=Ub+0j=3ycj-=MiPzRRW1Zv5LUmw@mail.gmail.com>
+        linux-pm@vger.kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+References: <20190829151027.9930-1-joao.m.martins@oracle.com>
+From:   Joao Martins <joao.m.martins@oracle.com>
+Message-ID: <c8cf8dcc-76a3-3e15-f514-2cb9df1bbbdc@oracle.com>
+Date:   Thu, 29 Aug 2019 18:16:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP245DWqbFnKVW9BYCzUMH=Ub+0j=3ycj-=MiPzRRW1Zv5LUmw@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190829151027.9930-1-joao.m.martins@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9364 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908290182
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9364 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908290183
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 09:44:04PM +0530, Amit Kucheria wrote:
-> On Thu, Aug 29, 2019 at 8:49 PM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> >
-> > On Thu, Aug 29, 2019 at 07:58:45PM +0530, Amit Kucheria wrote:
-> > > On Thu, Aug 29, 2019 at 7:35 PM Daniel Thompson
-> > > <daniel.thompson@linaro.org> wrote:
-> > > >
-> > > > On Tue, Aug 27, 2019 at 05:43:59PM +0530, Amit Kucheria wrote:
-> > > > > Printing the function name when enabling debugging makes logs easier to
-> > > > > read.
-> > > > >
-> > > > > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > > > > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> > > > > Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > > >
-> > > > This should need to be manually added at each call site; it is already
-> > > > built into the logging system (the f flag for dynamic debug)?
-> > >
-> > > I assume you meant "shouldn't".
-> >
-> > Quite so. Sorry about that.
-> >
-> > > I haven't yet integrated dynamic debug into my daily workflow.
-> > >
-> > > Last time I looked at it, it was a bit bothersome to use because I
-> > > needed to lookup exact line numbers to trigger useful information. And
-> > > those line numbers constantly keep changing as I work on the driver,
-> > > so it was a bit painful to script. Not to mention the syntax to frob
-> > > the correct files in debugfs to enable this functionality.
-> > >
-> > > As opposed to this, adding the following to the makefile is so easy. :-)
-> > >
-> > > CFLAGS_tsens-common.o          := -DDEBUG
-> > >
-> > > Perhaps I am using it all wrong? How would I go about using dynamic
-> > > debug instead of this patch?
-> >
-> > Throwing dyndbg="file <fname>.c +pf" onto the kernel command line is a
-> > good start (+p enables debug level prints, +f causes messages to include
-> > the function name).
+On 8/29/19 4:10 PM, Joao Martins wrote:
+> When cpus != maxcpus cpuidle-haltpoll will fail to register all vcpus
+> past the online ones and thus fail to register the idle driver.
+> This is because cpuidle_add_sysfs() will return with -ENODEV as a
+> consequence from get_cpu_device() return no device for a non-existing
+> CPU.
 > 
-> That's useful to know.
+> Instead switch to cpuidle_register_driver() and manually register each
+> of the present cpus through cpuhp_setup_state() callback and future
+> ones that get onlined. This mimmics similar logic that intel_idle does.
 > 
-> $ git grep __func__ | wc -l
-> 30914
-> 
-> Want to send some patches? :-)
+> Fixes: fa86ee90eb11 ("add cpuidle-haltpoll driver")
+> Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
+> Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+> ---
 
-I know. Sad isn't it?
+While testing the above, I found out another issue on the haltpoll series.
+But I am not sure what is best suited to cpuidle framework, hence requesting
+some advise if below is a reasonable solution or something else is preferred.
 
-To be fair plenty of patches already circulate tidying up this sort of
-thing (along with the removal of inane messages such as informing us
-that a function run).
+Essentially after haltpoll governor got introduced and regardless of the cpuidle
+driver the default governor is gonna be haltpoll for a guest (given haltpoll
+governor doesn't get registered for baremetal). Right now, for a KVM guest, the
+idle governors have these ratings:
 
+ * ladder            -> 10
+ * teo               -> 19
+ * menu              -> 20
+ * haltpoll          -> 21
+ * ladder + nohz=off -> 25
 
-> > When the C files map to module names (whether the modules are actually
-> > built-in or not) then <module>.dyndbg=+pf is a bit cleaner and allows
-> > you to debug the whole of a driver without how it is decomposed into
-> > files.
-> 
-> And if changing the kernel cmdline options isn't possible or is inconvenient?
+When a guest is booted with MWAIT and intel_idle is probed and sucessfully
+registered, we will end up with a haltpoll governor being used as opposed to
+'menu' (which used to be the default case). This would prevent IIUC that other
+C-states get used other than poll_state (state 0) and state 1.
 
-Architectures where this problem offer CONFIG_CMDLINE_FORCE meaning if
-you are already building a custom kernel you can override whatever
-cmdline the bootloader gives you.
+Given that haltpoll governor is largely only useful with a cpuidle-haltpoll
+it doesn't look reasonable to be the default? What about using haltpoll governor
+as default when haltpoll idle driver registers or modloads.
 
+My idea to achieve the above would be to decrease the rating to 9 (before the
+lowest rated governor) and retain old defaults before haltpoll. Then we would
+allow a cpuidle driver to define a preferred governor to switch on idle driver
+registration. Naturally all of would be ignored if overidden by
+cpuidle.governor=.
 
-> > There are (many) other controls to play with[1] but the above should be
-> > sufficient to simulate -DDEBUG .
-> 
-> The "hard" bit is explicitly poking the line number in a file to
-> activate a paricular pr_dbg statement. Even if I scripted it, those
-> lines numbers keep changing in an actively developed driver.
+The diff below the scissors line is an example of that.
 
-Line numbers? Nothing I suggested contained a line number.
+Thoughts?
 
+---------------------------------- >8 --------------------------------
 
-Daniel.
+From: Joao Martins <joao.m.martins@oracle.com>
+Subject: [PATCH] cpuidle: switch to prefered governor on registration
 
-> 
-> Somehow, I've always felt dyndbg was more useful to debug a production
-> system where recompiling the kernel wasn't an option e.g. reporting an
-> issue back to a distro-kernel vendor.
-> 
-> > Daniel.
-> >
-> > [1]
-> > https://www.kernel.org/doc/html/latest/admin-guide/dynamic-debug-howto.html
+Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
+---
+ drivers/cpuidle/cpuidle-haltpoll.c   |  1 +
+ drivers/cpuidle/cpuidle.h            |  1 +
+ drivers/cpuidle/driver.c             | 26 ++++++++++++++++++++++++++
+ drivers/cpuidle/governor.c           |  6 +++---
+ drivers/cpuidle/governors/haltpoll.c |  2 +-
+ include/linux/cpuidle.h              |  3 +++
+ 6 files changed, 35 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+index 8baade23f8d0..88a38c3c35e4 100644
+--- a/drivers/cpuidle/cpuidle-haltpoll.c
++++ b/drivers/cpuidle/cpuidle-haltpoll.c
+@@ -33,6 +33,7 @@ static int default_enter_idle(struct cpuidle_device *dev,
+
+ static struct cpuidle_driver haltpoll_driver = {
+ 	.name = "haltpoll",
++	.governor = "haltpoll",
+ 	.owner = THIS_MODULE,
+ 	.states = {
+ 		{ /* entry 0 is for polling */ },
+diff --git a/drivers/cpuidle/cpuidle.h b/drivers/cpuidle/cpuidle.h
+index d6613101af92..c046f49c1920 100644
+--- a/drivers/cpuidle/cpuidle.h
++++ b/drivers/cpuidle/cpuidle.h
+@@ -22,6 +22,7 @@ extern void cpuidle_install_idle_handler(void);
+ extern void cpuidle_uninstall_idle_handler(void);
+
+ /* governors */
++extern struct cpuidle_governor *cpuidle_find_governor(const char *str);
+ extern int cpuidle_switch_governor(struct cpuidle_governor *gov);
+
+ /* sysfs */
+diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
+index dc32f34e68d9..8b8b9d89ce58 100644
+--- a/drivers/cpuidle/driver.c
++++ b/drivers/cpuidle/driver.c
+@@ -87,6 +87,7 @@ static inline int __cpuidle_set_driver(struct cpuidle_driver *drv)
+ #else
+
+ static struct cpuidle_driver *cpuidle_curr_driver;
++static struct cpuidle_governor *cpuidle_default_governor = NULL;
+
+ /**
+  * __cpuidle_get_cpu_driver - return the global cpuidle driver pointer.
+@@ -254,12 +255,25 @@ static void __cpuidle_unregister_driver(struct
+cpuidle_driver *drv)
+  */
+ int cpuidle_register_driver(struct cpuidle_driver *drv)
+ {
++	struct cpuidle_governor *gov;
+ 	int ret;
+
+ 	spin_lock(&cpuidle_driver_lock);
+ 	ret = __cpuidle_register_driver(drv);
+ 	spin_unlock(&cpuidle_driver_lock);
+
++	if (!ret && !strlen(param_governor) && drv->governor &&
++	    (cpuidle_get_driver() == drv)) {
++		mutex_lock(&cpuidle_lock);
++		gov = cpuidle_find_governor(drv->governor);
++		if (gov) {
++			cpuidle_default_governor = cpuidle_curr_governor;
++			if (cpuidle_switch_governor(gov) < 0)
++				cpuidle_default_governor = NULL;
++		}
++		mutex_unlock(&cpuidle_lock);
++	}
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(cpuidle_register_driver);
+@@ -274,9 +288,21 @@ EXPORT_SYMBOL_GPL(cpuidle_register_driver);
+  */
+ void cpuidle_unregister_driver(struct cpuidle_driver *drv)
+ {
++	bool enabled = (cpuidle_get_driver() == drv);
++
+ 	spin_lock(&cpuidle_driver_lock);
+ 	__cpuidle_unregister_driver(drv);
+ 	spin_unlock(&cpuidle_driver_lock);
++
++	if (!enabled)
++		return;
++
++	mutex_lock(&cpuidle_lock);
++	if (cpuidle_default_governor) {
++		if (!cpuidle_switch_governor(cpuidle_default_governor))
++			cpuidle_default_governor = NULL;
++	}
++	mutex_unlock(&cpuidle_lock);
+ }
+ EXPORT_SYMBOL_GPL(cpuidle_unregister_driver);
+
+diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
+index 2e3e14192bee..e93c11dc8304 100644
+--- a/drivers/cpuidle/governor.c
++++ b/drivers/cpuidle/governor.c
+@@ -22,12 +22,12 @@ LIST_HEAD(cpuidle_governors);
+ struct cpuidle_governor *cpuidle_curr_governor;
+
+ /**
+- * __cpuidle_find_governor - finds a governor of the specified name
++ * cpuidle_find_governor - finds a governor of the specified name
+  * @str: the name
+  *
+  * Must be called with cpuidle_lock acquired.
+  */
+-static struct cpuidle_governor * __cpuidle_find_governor(const char *str)
++struct cpuidle_governor * cpuidle_find_governor(const char *str)
+ {
+ 	struct cpuidle_governor *gov;
+
+@@ -87,7 +87,7 @@ int cpuidle_register_governor(struct cpuidle_governor *gov)
+ 		return -ENODEV;
+
+ 	mutex_lock(&cpuidle_lock);
+-	if (__cpuidle_find_governor(gov->name) == NULL) {
++	if (cpuidle_find_governor(gov->name) == NULL) {
+ 		ret = 0;
+ 		list_add_tail(&gov->governor_list, &cpuidle_governors);
+ 		if (!cpuidle_curr_governor ||
+diff --git a/drivers/cpuidle/governors/haltpoll.c
+b/drivers/cpuidle/governors/haltpoll.c
+index 797477bda486..7a703d2e0064 100644
+--- a/drivers/cpuidle/governors/haltpoll.c
++++ b/drivers/cpuidle/governors/haltpoll.c
+@@ -133,7 +133,7 @@ static int haltpoll_enable_device(struct cpuidle_driver *drv,
+
+ static struct cpuidle_governor haltpoll_governor = {
+ 	.name =			"haltpoll",
+-	.rating =		21,
++	.rating =		9,
+ 	.enable =		haltpoll_enable_device,
+ 	.select =		haltpoll_select,
+ 	.reflect =		haltpoll_reflect,
+diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+index 1a9f54eb3aa1..2dc4c6b19c25 100644
+--- a/include/linux/cpuidle.h
++++ b/include/linux/cpuidle.h
+@@ -121,6 +121,9 @@ struct cpuidle_driver {
+
+ 	/* the driver handles the cpus in cpumask */
+ 	struct cpumask		*cpumask;
++
++	/* preferred governor to switch at register time */
++	const char		*governor;
+ };
+
+ #ifdef CONFIG_CPU_IDLE
+-- 
+2.17.1
