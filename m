@@ -2,135 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CA6A1550
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 12:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B04A1693
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 12:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbfH2KBp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 06:01:45 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:57458 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725990AbfH2KBo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 06:01:44 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7T9xONa068680;
-        Thu, 29 Aug 2019 10:01:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=zkvRpa/K3WJumV596fyuMKitaSxsrbHTsqVmSpQPotM=;
- b=c2bCkBgyoOtkVK/xIGPXM8PHo5Oh6WAT+PNms/EV79b0VHRR+5vf4AndEcKgHBc5MB2o
- OdF2EGM31n4yBFMosUp8VbPoEVNII1FPTcufiy8V+vQFacdC60X3siO1vxsxXrNtAgpC
- RJQdVdfGFhDSMSQAgIQ7ABcP3xRpX0n1I0PJ2rxWfzUAO+Lbgc4envxmnUN4nRqXsOa5
- I6KCeOMAdC2cvfkbRfprCXyTN4KLzgmvjlYgscK1Zpsfufvmh1GIkYt2MmAN8oRy0wXj
- VMur2KlvnD/G/Q2qsZkFQaGtfkHpWFP47hQz9dfk7aBLQbh2JHNDpqbADBtO3eTgADYq 1A== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2upcfwg27h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Aug 2019 10:01:25 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7T9rZ08022150;
-        Thu, 29 Aug 2019 09:56:25 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2unteurs3p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Aug 2019 09:56:24 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7T9uMwa022689;
-        Thu, 29 Aug 2019 09:56:23 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 29 Aug 2019 02:56:22 -0700
-Date:   Thu, 29 Aug 2019 12:56:14 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@01.org, Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     kbuild-all@01.org, linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [pm:devprop 1/4] drivers/base/swnode.c:656
- software_node_find_by_name() error: uninitialized symbol 'swnode'.
-Message-ID: <20190829095613.GD8372@kadam>
+        id S1727107AbfH2Ksa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 06:48:30 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:34728 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726416AbfH2Ksa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 06:48:30 -0400
+Received: by mail-wr1-f67.google.com with SMTP id s18so2952747wrn.1;
+        Thu, 29 Aug 2019 03:48:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=PsJQhq+Lb1i2V9/rJZmF77p+KpHip5cMLUFV9G3NyZI=;
+        b=joKpSF2U00dZDSDU2vPQdoUcaItKikz/KBQvVn/ERxo6Fle4D7KQqTzMQiwxwQxMPi
+         +Fzkfljag0qtAQSK/iHzI3vxVGBTAFntrU9hn7io9JHGes9BGMUGuJf66cNwfxYoCL0Z
+         tNa+dYcD3datXPvIKfAVdUemIa5+WWjuTrANEc8jk35qaRE+OQj5aJtletZG4NTNnM98
+         9uKPvY4aIPPfW/LFR/dL37gieZT+9bcyxuRyvSXu9vnNL2pQA1aePoexorqDMsdLOHkO
+         xnwQHHabj01yxi8uq6/YFZVRX0GlijDn3Z2yo0hvdaq8jGolZE68kZengzCjNjTBUXIn
+         rfMQ==
+X-Gm-Message-State: APjAAAUJm7igjVFEOQuUnArUtU/ooeZ7NDEHxbFWH6FO5/fnO8RlHoAt
+        FwAnNmn810O/2pve7jjiAiQ=
+X-Google-Smtp-Source: APXvYqz+mwNaosQtXx5CNE3MaHs77+QiSjijuafkqP8enEgtLarYorxtVZZrKCffia9rcNSYWy0hbA==
+X-Received: by 2002:a5d:4649:: with SMTP id j9mr6404113wrs.193.1567075708216;
+        Thu, 29 Aug 2019 03:48:28 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id a18sm2603027wrt.18.2019.08.29.03.48.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2019 03:48:26 -0700 (PDT)
+Subject: Re: [PATCH v8 01/28] linkage: new macros for assembler symbols
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Ingo Molnar <mingo@kernel.org>, jpoimboe@redhat.com,
+        Juergen Gross <jgross@suse.com>,
+        Len Brown <len.brown@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        xen-devel@lists.xenproject.org
+References: <20190808103854.6192-1-jslaby@suse.cz>
+ <20190808103854.6192-2-jslaby@suse.cz> <20190812170652.GJ23772@zn.tnic>
+From:   Jiri Slaby <jslaby@suse.cz>
+Openpgp: preference=signencrypt
+Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <f077becf-8ea7-cb4b-d704-5e59a8d69c56@suse.cz>
+Date:   Thu, 29 Aug 2019 12:48:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9363 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908290108
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9363 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908290110
+In-Reply-To: <20190812170652.GJ23772@zn.tnic>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/rafael/linux-pm.git devprop
-head:   149f3b87840e7d292ad059f5fc23f1fa2fc98b9e
-commit: 1666faedb567d03cde1d656ae24c6cc253e67373 [1/4] software node: Add software_node_find_by_name()
+On 12. 08. 19, 19:06, Borislav Petkov wrote:
+>> +  Again, every ``SYM_CODE_START*`` **shall** be coupled by ``SYM_CODE_END``.
+> 
+> Btw, this coupling: I haven't gone through the whole patchset but do we
+> have automatic checking which makes sure a starting macro is coupled
+> with the correct ending macro?
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+I do, but it's not part of this series. It's a pinch of link-time magic,
+but it works reliably (see e.g. 1cbec37b3f9c). I will post it if/after
+this gets merged. There were other approaches proposed in the past too
+-- using objtool for that (not implemented).
 
-New smatch warnings:
-drivers/base/swnode.c:656 software_node_find_by_name() error: uninitialized symbol 'swnode'.
+>> +Overriding Macros
+>> +~~~~~~~~~~~~~~~~~
+>> +Architecture can also override any of the macros in their own
+> 
+> "Other architectures... "
 
-Old smatch warnings:
-drivers/base/swnode.c:71 software_node_to_swnode() error: uninitialized symbol 'swnode'.
+Not only "other", x86 can override the types if need be too.
 
-git remote add pm https://kernel.googlesource.com/pub/scm/linux/kernel/git/rafael/linux-pm.git
-git remote update pm
-git checkout 1666faedb567d03cde1d656ae24c6cc253e67373
-vim +/swnode +656 drivers/base/swnode.c
+>> +``asm/linkage.h``, including macros specifying the type of a symbol
+>> +(``SYM_T_FUNC``, ``SYM_T_OBJECT``, and ``SYM_T_NONE``).  As every macro
+>> +described in this file is surrounded by ``#ifdef`` + ``#endif``, it is enough
+>> +to define the macros differently in the aforementioned architecture-dependent
+>> +header.
 
-59abd83672f70c Heikki Krogerus 2018-11-09  622  
-1666faedb567d0 Heikki Krogerus 2019-08-19  623  /**
-1666faedb567d0 Heikki Krogerus 2019-08-19  624   * software_node_find_by_name - Find software node by name
-1666faedb567d0 Heikki Krogerus 2019-08-19  625   * @parent: Parent of the software node
-1666faedb567d0 Heikki Krogerus 2019-08-19  626   * @name: Name of the software node
-1666faedb567d0 Heikki Krogerus 2019-08-19  627   *
-1666faedb567d0 Heikki Krogerus 2019-08-19  628   * The function will find a node that is child of @parent and that is named
-1666faedb567d0 Heikki Krogerus 2019-08-19  629   * @name. If no node is found, the function returns NULL.
-1666faedb567d0 Heikki Krogerus 2019-08-19  630   *
-1666faedb567d0 Heikki Krogerus 2019-08-19  631   * NOTE: you will need to drop the reference with fwnode_handle_put() after use.
-1666faedb567d0 Heikki Krogerus 2019-08-19  632   */
-1666faedb567d0 Heikki Krogerus 2019-08-19  633  const struct software_node *
-1666faedb567d0 Heikki Krogerus 2019-08-19  634  software_node_find_by_name(const struct software_node *parent, const char *name)
-1666faedb567d0 Heikki Krogerus 2019-08-19  635  {
-1666faedb567d0 Heikki Krogerus 2019-08-19  636  	struct swnode *swnode;
-1666faedb567d0 Heikki Krogerus 2019-08-19  637  	struct kobject *k;
-1666faedb567d0 Heikki Krogerus 2019-08-19  638  
-1666faedb567d0 Heikki Krogerus 2019-08-19  639  	if (!name)
-1666faedb567d0 Heikki Krogerus 2019-08-19  640  		return NULL;
-1666faedb567d0 Heikki Krogerus 2019-08-19  641  
-1666faedb567d0 Heikki Krogerus 2019-08-19  642  	spin_lock(&swnode_kset->list_lock);
-1666faedb567d0 Heikki Krogerus 2019-08-19  643  
-1666faedb567d0 Heikki Krogerus 2019-08-19  644  	list_for_each_entry(k, &swnode_kset->list, entry) {
-
-Can this list be empty?  Probably not, but if so then "swnode" could
-be uninitialized.
-
-1666faedb567d0 Heikki Krogerus 2019-08-19  645  		swnode = kobj_to_swnode(k);
-1666faedb567d0 Heikki Krogerus 2019-08-19  646  		if (parent == swnode->node->parent && swnode->node->name &&
-1666faedb567d0 Heikki Krogerus 2019-08-19  647  		    !strcmp(name, swnode->node->name)) {
-1666faedb567d0 Heikki Krogerus 2019-08-19  648  			kobject_get(&swnode->kobj);
-1666faedb567d0 Heikki Krogerus 2019-08-19  649  			break;
-1666faedb567d0 Heikki Krogerus 2019-08-19  650  		}
-1666faedb567d0 Heikki Krogerus 2019-08-19  651  		swnode = NULL;
-1666faedb567d0 Heikki Krogerus 2019-08-19  652  	}
-1666faedb567d0 Heikki Krogerus 2019-08-19  653  
-1666faedb567d0 Heikki Krogerus 2019-08-19  654  	spin_unlock(&swnode_kset->list_lock);
-1666faedb567d0 Heikki Krogerus 2019-08-19  655  
-1666faedb567d0 Heikki Krogerus 2019-08-19 @656  	return swnode ? swnode->node : NULL;
-1666faedb567d0 Heikki Krogerus 2019-08-19  657  }
-1666faedb567d0 Heikki Krogerus 2019-08-19  658  EXPORT_SYMBOL_GPL(software_node_find_by_name);
-1666faedb567d0 Heikki Krogerus 2019-08-19  659  
-
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+thanks,
+-- 
+js
+suse labs
