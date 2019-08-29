@@ -2,84 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B549A12AB
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 09:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CD5A133C
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 10:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727216AbfH2HeF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 03:34:05 -0400
-Received: from mail-qt1-f177.google.com ([209.85.160.177]:42907 "EHLO
-        mail-qt1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727114AbfH2HeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 03:34:05 -0400
-Received: by mail-qt1-f177.google.com with SMTP id t12so2592037qtp.9
-        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 00:34:04 -0700 (PDT)
+        id S1726081AbfH2IHf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 04:07:35 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46978 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbfH2IHf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 04:07:35 -0400
+Received: by mail-pl1-f196.google.com with SMTP id o3so1192250plb.13
+        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 01:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EpGvJ7EKGGEBGzwNMrB1KOMHeIIQeGtnYLRMPOtnsC8=;
-        b=cY73HBTSZGqQxAnB2Ouc5f33JHph9ps8DodTiZiOiYI+7gI7+6MtRGqD8krrIbeOur
-         sJRIocU+1w5GmpcIYRLzX4JQB6hEGH7zy3gQEiydOis0JBoMUfRL1tPu95TF+oSAQLuX
-         ufbNq2G9tTvK3eIMSwfT8IW8wGaCDwSPW88dBAxZKalgEVHWJ1gVIIVtwY4CGtnlfWpi
-         4OvbnUENKuf8kXbuUzNXmTrB2RgZ9sfnNXnfQtsox4eAU742HKaP45jTYHbrq70BLaVm
-         QSok0eTw3ygxxyiKLflWNXsLftWdcQNgm4lvfe8ISJCTJK5/wCvNWHMLH99oE4KiTaae
-         IwOg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nq8To/7J1PSl3z5Lxbp7yzGH/kF9sw7bMQzb25E4PoY=;
+        b=Iy0ht6TDTmGshmaHrPiBh24TX0AOyLc+aZTieNTwrNKdltnBow1I+wT9how0xATzcy
+         T8TdaugNXk89y2QVrWB796cybqqB4Dikq5iXUtErxvtwGNX7tSit17FeRbUsp3NRs+XB
+         kLuHjobpjXTEZUFzCJRlDt5rNF6mo6brysZcwCcfPefgcXv73TJZVhykZXQHH6LMB4ZJ
+         zKwzC5lHD5weE9RZ8BP5IclarFlphjIqZ1UiVrzies2f0YDEk7uWIFKe2s/27GDnQ8pS
+         LnzbkLLv1Zr4UFJThGWzARqALmWXqEkX6oWv+rdR4zpDv7gRNVjTy1tJrvjcoPRsDNCX
+         uGGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EpGvJ7EKGGEBGzwNMrB1KOMHeIIQeGtnYLRMPOtnsC8=;
-        b=fJxsrDhhoNTnixCQUdlvfMmGBnIhFH6sjcolTfysibqSDjIjA0PFGH3pfLy9wAkQrf
-         yRbEDyLevZrEYEM+2Dzx5A74FkJfPmRtToJAQojLZs+E7pzXmERU3LYwlqUve+hGhH0b
-         JxCimNdI5RrfJL0LNmNFfoa0GStODDyNVtpQziIQjObkwzG00p+kPzl0AUikwbTaGnUc
-         U+xFgAoEQGyJyC9u5Emx4DjM2gslskw0rPLfDKAkuJWKvv+Nvui3+kjaDrCh9mosYtV0
-         wdEm7NRYvV0vmxGn6kM8Ia5jO6Jxy4RPw4UUcf6m11Oew2JxtuYMkywpb18uNCM3AP7p
-         jT1Q==
-X-Gm-Message-State: APjAAAVMzmEeLQF+eWm5KTQpUp6wkwKYVvfBkt6U9lfraFWkRQB7U2k9
-        5u6HhKthRWbpqTHsBDEwkmaKNuMtpvRzDWZnL99DQw==
-X-Google-Smtp-Source: APXvYqzcSsF5r5FNbgh7+MkKHql3jCyXn3Puk4CXzNt55mwJXBHGhHIuqsjpfMbP5qG91pTx34BRVrTSqErcSw9fIBw=
-X-Received: by 2002:ac8:2cd6:: with SMTP id 22mr8220626qtx.80.1567064044315;
- Thu, 29 Aug 2019 00:34:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nq8To/7J1PSl3z5Lxbp7yzGH/kF9sw7bMQzb25E4PoY=;
+        b=RyFH3p3xcTJJ+WlJ7ILICVXf202a4xV/bVxUO+rQucLyDwjQ9yIiy1eNAGD0IJqKFw
+         Z2yCNXre3nx3dTMkIl+snOIC+tQ11CBavIlH2bPl5StKCyjHZY0FmOIxao0lGLcR9MTW
+         QKL1HlK4Do+tZLaM+IjCb1CHxrDKoVwZu1srFU+Nnhtc76vqrQ2P/pwK/DP4fv1c+mC+
+         djAZc3WmIr90pcOr9GTt4oTLlRtLqk6ysfU1f0RZfGEQLYK7c6d9kqz9tLIqRys1e8oq
+         HRaWuQ5qTs6o5YXkbmitZFQcVg7wDSZo8KHWJvoe7g5wtYjrSh5dsq0XQjk3GuRSLIMb
+         p/Pw==
+X-Gm-Message-State: APjAAAXbj/Kt2Ri37TANNBbwFhiA6/Hbmu6tWcEwLvGzgg1o8OPr3o97
+        eF/mYUJbAmMoj0WIJBVTlVaas6AspGw=
+X-Google-Smtp-Source: APXvYqwn8T2RbaqO4fQu08EiX8JEtixGnDXWzaiwBIkDe0YYnJRJnI5T0eem+sevwzX7ANjUv7sTyA==
+X-Received: by 2002:a17:902:8f85:: with SMTP id z5mr8752168plo.328.1567066054551;
+        Thu, 29 Aug 2019 01:07:34 -0700 (PDT)
+Received: from localhost ([122.167.132.221])
+        by smtp.gmail.com with ESMTPSA id p2sm2637128pfb.122.2019.08.29.01.07.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Aug 2019 01:07:33 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] interconnect: Disallow interconnect core to be built as a module
+Date:   Thu, 29 Aug 2019 13:37:29 +0530
+Message-Id: <b789cce388dd1f2906492f307dea6780c398bc6a.1567065991.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.21.0.rc0.269.g1a574e7a288b
 MIME-Version: 1.0
-References: <CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com>
- <CAJZ5v0g4T_0VD_oYMF_BF1VM-d1bg-BD8h8=STDrhVBgouPOPg@mail.gmail.com>
- <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com> <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
- <CAJZ5v0gouaztf7tcKXBr90gjrVjOvqH70regD=o2r_d+9Bwvqg@mail.gmail.com>
- <CAD8Lp47oNJb5N5i4oUQfN5b=xCtUc1Lt852pnXxhNq0vyWj=yg@mail.gmail.com> <CAJZ5v0j=x4HHOsJ6fCX-xOr29-4BMRzjR5H5UaoWW9v-Ci8ODQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j=x4HHOsJ6fCX-xOr29-4BMRzjR5H5UaoWW9v-Ci8ODQ@mail.gmail.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Thu, 29 Aug 2019 15:33:52 +0800
-Message-ID: <CAD8Lp451B44QLqx2Zx+5Gm8pRP53JefYFjdEVdRz_DOmMP3CcQ@mail.gmail.com>
-Subject: Re: Ryzen7 3700U xhci fails on resume from sleep
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Endless Linux Upstreaming Team <linux@endlessm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 4:43 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> With the git branch mentioned previously merged in, you can enable
-> dynamic debug in device_pm.c, repeat the PM-runtime test and collect
-> the log.  There should be some additional messages from the ACPI layer
-> in it.
+Building individual drivers as modules is fine but allowing a core
+framework to be built as a module makes it really complex and should be
+avoided.
 
-That's useful, thanks. Runtime suspend:
+Whatever uses the interconnect core APIs must also be built as a module
+if interconnect core is built as module, else we will see compilation
+failures.
 
-usb 1-4: USB disconnect, device number 2
-    power-0419 __acpi_power_off      : Power resource [P0U0] turned off
-device_pm-0278 device_set_power      : Device [XHC0] transitioned to D3hot
+If another core framework (like cpufreq, clk, etc), that can't be built
+as module, needs to use interconnect APIs then we will start seeing
+compilation failures with allmodconfig configurations as the symbols
+(like of_icc_get()) used in other frameworks will not be available in
+the built-in image.
 
-Runtime resume:
-    power-0363 __acpi_power_on       : Power resource [P0U0] turned on
-device_pm-0278 device_set_power      : Device [XHC0] transitioned to D0
-xhci_hcd 0000:03:00.3: Refused to change power state, currently in D3
-xhci_hcd 0000:03:00.3: enabling device (0000 -> 0002)
-xhci_hcd 0000:03:00.3: WARN: xHC restore state timeout
-xhci_hcd 0000:03:00.3: PCI post-resume error -110!
-xhci_hcd 0000:03:00.3: HC died; cleaning up
+Disallow the interconnect core to be built as a module to avoid all
+these issues.
+
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/interconnect/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/interconnect/Kconfig b/drivers/interconnect/Kconfig
+index bfa4ca3ab7a9..b6ea8f0a6122 100644
+--- a/drivers/interconnect/Kconfig
++++ b/drivers/interconnect/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menuconfig INTERCONNECT
+-	tristate "On-Chip Interconnect management support"
++	bool "On-Chip Interconnect management support"
+ 	help
+ 	  Support for management of the on-chip interconnects.
+ 
+-- 
+2.21.0.rc0.269.g1a574e7a288b
+
