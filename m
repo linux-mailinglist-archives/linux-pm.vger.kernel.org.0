@@ -2,76 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACD4A2224
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 19:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888ABA2299
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Aug 2019 19:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727691AbfH2RYR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Aug 2019 13:24:17 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:56564 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726661AbfH2RYQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 29 Aug 2019 13:24:16 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 233791801586;
-        Thu, 29 Aug 2019 17:24:15 +0000 (UTC)
-Received: from amt.cnet (ovpn-112-12.gru2.redhat.com [10.97.112.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 622F5614DB;
-        Thu, 29 Aug 2019 17:24:14 +0000 (UTC)
-Received: from amt.cnet (localhost [127.0.0.1])
-        by amt.cnet (Postfix) with ESMTP id B4DF810514D;
-        Thu, 29 Aug 2019 14:23:47 -0300 (BRT)
-Received: (from marcelo@localhost)
-        by amt.cnet (8.14.7/8.14.7/Submit) id x7THNhOf018913;
-        Thu, 29 Aug 2019 14:23:43 -0300
-Date:   Thu, 29 Aug 2019 14:23:43 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Joao Martins <joao.m.martins@oracle.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        id S1726661AbfH2RmM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Aug 2019 13:42:12 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:51532 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727628AbfH2RmL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Aug 2019 13:42:11 -0400
+Received: by mail-wm1-f67.google.com with SMTP id k1so4603447wmi.1
+        for <linux-pm@vger.kernel.org>; Thu, 29 Aug 2019 10:42:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UMNAJman5J6fTBXchBbEMpWvQUnKAN+BnKb9zDrC8vY=;
+        b=MjsZY8GiN7g7M0zifMrKtuimF46odqo9o8RZiPsn6ksEjsQaWUa1MJrMRAubhqblQ7
+         jD3nGeNFmrr4aFtdlhrQkolnFKPxdD6CunGISB+qAMIJguua+hRa0G/6/4mg6pJjCkPk
+         o3G9Km1P6IrkBCQHpU0HBxS+BDaUKuz20nto8TR68mLnsOF7sJY5LGtxIfmoMsJSWAVI
+         7OI+FO0e/76wBWNu3/8lVPds4MTHqe9Xa8MfqO+s2aADoyFne16XbiMkVd8VxgEmsGhI
+         1MuUja3lkvDIIYePLOnePYJsquOQxkAEsb4LFu8NZP10g7PSghYR7WLk511l5RIHdMG2
+         vK+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=UMNAJman5J6fTBXchBbEMpWvQUnKAN+BnKb9zDrC8vY=;
+        b=RqkU7SLu9xfGK48Rp0ia1AvH7nX4oo8tHe90N93H1yRJYV+jzkyKwcmOt/XrXBoYqX
+         ctIF1f33EyenB+Obl8TulmQU44jECjHFpexT9aHqHMVXHFwLVgmjSifBqI1w8xuKM6pd
+         z3/RXN0TcF/OQpZjuoROOHX6ASIYsEXzXNicodkauTRqkXQKbCVwGyCs84idntmDLcdN
+         N8JQb5ebev+KS7r3Weh1adEM0J+Y/IJcytv1tXHmU0FUSY92Nv2+ghh7tfbezMDFAbHv
+         Ibox5M7Srjn1J1HdeZ+Le/B1kDfypt0yuMd8V7HhEIu2tWYMPFLaIdzfbcRQ1dLk21pq
+         yJgg==
+X-Gm-Message-State: APjAAAWZqEYUPrgWrZc4tIzo2ytohHb2ylQXM2MQrGjdLB5RGBIa7UiP
+        oS9/z3yZ7MZSWhgj0TCSdQ4AZw==
+X-Google-Smtp-Source: APXvYqwLK30DiY3/Tglvw3f1YNsYrUjnd42t2bSe8g7GDRC5BCgz1P8ncIdpwy0guqbAnNndMa/kPQ==
+X-Received: by 2002:a1c:96c6:: with SMTP id y189mr6643502wmd.160.1567100528629;
+        Thu, 29 Aug 2019 10:42:08 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d9ce:7caa:c9ba:7f4c? ([2a01:e34:ed2f:f020:d9ce:7caa:c9ba:7f4c])
+        by smtp.googlemail.com with ESMTPSA id 12sm2273061wmi.34.2019.08.29.10.42.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Aug 2019 10:42:08 -0700 (PDT)
+Subject: Re: Is: Default governor regardless of cpuidle driver Was: [PATCH v2]
+ cpuidle-haltpoll: vcpu hotplug support
+To:     Joao Martins <joao.m.martins@oracle.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
         Sean Christopherson <sean.j.christopherson@intel.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>, linux-pm@vger.kernel.org,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Subject: Re: Is: Default governor regardless of cpuidle driver Was: [PATCH
- v2] cpuidle-haltpoll: vcpu hotplug support
-Message-ID: <20190829172343.GA18825@amt.cnet>
 References: <20190829151027.9930-1-joao.m.martins@oracle.com>
  <c8cf8dcc-76a3-3e15-f514-2cb9df1bbbdc@oracle.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <d1d4ade5-04a5-4288-d994-3963bb80fb6b@linaro.org>
+Date:   Thu, 29 Aug 2019 19:42:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <c8cf8dcc-76a3-3e15-f514-2cb9df1bbbdc@oracle.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.63]); Thu, 29 Aug 2019 17:24:15 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 06:16:05PM +0100, Joao Martins wrote:
+On 29/08/2019 19:16, Joao Martins wrote:
 > On 8/29/19 4:10 PM, Joao Martins wrote:
-> > When cpus != maxcpus cpuidle-haltpoll will fail to register all vcpus
-> > past the online ones and thus fail to register the idle driver.
-> > This is because cpuidle_add_sysfs() will return with -ENODEV as a
-> > consequence from get_cpu_device() return no device for a non-existing
-> > CPU.
-> > 
-> > Instead switch to cpuidle_register_driver() and manually register each
-> > of the present cpus through cpuhp_setup_state() callback and future
-> > ones that get onlined. This mimmics similar logic that intel_idle does.
-> > 
-> > Fixes: fa86ee90eb11 ("add cpuidle-haltpoll driver")
-> > Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
-> > Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> > ---
+>> When cpus != maxcpus cpuidle-haltpoll will fail to register all vcpus
+>> past the online ones and thus fail to register the idle driver.
+>> This is because cpuidle_add_sysfs() will return with -ENODEV as a
+>> consequence from get_cpu_device() return no device for a non-existing
+>> CPU.
+>>
+>> Instead switch to cpuidle_register_driver() and manually register each
+>> of the present cpus through cpuhp_setup_state() callback and future
+>> ones that get onlined. This mimmics similar logic that intel_idle does.
+>>
+>> Fixes: fa86ee90eb11 ("add cpuidle-haltpoll driver")
+>> Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
+>> Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+>> ---
 > 
 > While testing the above, I found out another issue on the haltpoll series.
 > But I am not sure what is best suited to cpuidle framework, hence requesting
@@ -79,11 +161,7 @@ On Thu, Aug 29, 2019 at 06:16:05PM +0100, Joao Martins wrote:
 > 
 > Essentially after haltpoll governor got introduced and regardless of the cpuidle
 > driver the default governor is gonna be haltpoll for a guest (given haltpoll
-> governor doesn't get registered for baremetal).
-
-Right.
-
-> Right now, for a KVM guest, the
+> governor doesn't get registered for baremetal). Right now, for a KVM guest, the
 > idle governors have these ratings:
 > 
 >  * ladder            -> 10
@@ -91,11 +169,7 @@ Right.
 >  * menu              -> 20
 >  * haltpoll          -> 21
 >  * ladder + nohz=off -> 25
-
-Yes. PowerPC KVM guests crash currently due to the use of the haltpoll
-governor (have a patch in my queue to fix this, but your solution
-embraces more cases).
-
+> 
 > When a guest is booted with MWAIT and intel_idle is probed and sucessfully
 > registered, we will end up with a haltpoll governor being used as opposed to
 > 'menu' (which used to be the default case). This would prevent IIUC that other
@@ -103,176 +177,26 @@ embraces more cases).
 > 
 > Given that haltpoll governor is largely only useful with a cpuidle-haltpoll
 > it doesn't look reasonable to be the default? What about using haltpoll governor
-> as default when haltpoll idle driver registers or modloads.
-> 
+> as default when haltpoll idle driver registers or modload.
+
+Are the guest and host kernel the same? IOW compiled with the same
+kernel config?
+
+
 > My idea to achieve the above would be to decrease the rating to 9 (before the
 > lowest rated governor) and retain old defaults before haltpoll. Then we would
 > allow a cpuidle driver to define a preferred governor to switch on idle driver
 > registration. Naturally all of would be ignored if overidden by
 > cpuidle.governor=.
 > 
-> The diff below the scissors line is an example of that.
-> 
-> Thoughts?
 
-Works for me. Rafael?
 
-> 
-> ---------------------------------- >8 --------------------------------
-> 
-> From: Joao Martins <joao.m.martins@oracle.com>
-> Subject: [PATCH] cpuidle: switch to prefered governor on registration
-> 
-> Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
-> ---
->  drivers/cpuidle/cpuidle-haltpoll.c   |  1 +
->  drivers/cpuidle/cpuidle.h            |  1 +
->  drivers/cpuidle/driver.c             | 26 ++++++++++++++++++++++++++
->  drivers/cpuidle/governor.c           |  6 +++---
->  drivers/cpuidle/governors/haltpoll.c |  2 +-
->  include/linux/cpuidle.h              |  3 +++
->  6 files changed, 35 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-> index 8baade23f8d0..88a38c3c35e4 100644
-> --- a/drivers/cpuidle/cpuidle-haltpoll.c
-> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
-> @@ -33,6 +33,7 @@ static int default_enter_idle(struct cpuidle_device *dev,
-> 
->  static struct cpuidle_driver haltpoll_driver = {
->  	.name = "haltpoll",
-> +	.governor = "haltpoll",
->  	.owner = THIS_MODULE,
->  	.states = {
->  		{ /* entry 0 is for polling */ },
-> diff --git a/drivers/cpuidle/cpuidle.h b/drivers/cpuidle/cpuidle.h
-> index d6613101af92..c046f49c1920 100644
-> --- a/drivers/cpuidle/cpuidle.h
-> +++ b/drivers/cpuidle/cpuidle.h
-> @@ -22,6 +22,7 @@ extern void cpuidle_install_idle_handler(void);
->  extern void cpuidle_uninstall_idle_handler(void);
-> 
->  /* governors */
-> +extern struct cpuidle_governor *cpuidle_find_governor(const char *str);
->  extern int cpuidle_switch_governor(struct cpuidle_governor *gov);
-> 
->  /* sysfs */
-> diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-> index dc32f34e68d9..8b8b9d89ce58 100644
-> --- a/drivers/cpuidle/driver.c
-> +++ b/drivers/cpuidle/driver.c
-> @@ -87,6 +87,7 @@ static inline int __cpuidle_set_driver(struct cpuidle_driver *drv)
->  #else
-> 
->  static struct cpuidle_driver *cpuidle_curr_driver;
-> +static struct cpuidle_governor *cpuidle_default_governor = NULL;
-> 
->  /**
->   * __cpuidle_get_cpu_driver - return the global cpuidle driver pointer.
-> @@ -254,12 +255,25 @@ static void __cpuidle_unregister_driver(struct
-> cpuidle_driver *drv)
->   */
->  int cpuidle_register_driver(struct cpuidle_driver *drv)
->  {
-> +	struct cpuidle_governor *gov;
->  	int ret;
-> 
->  	spin_lock(&cpuidle_driver_lock);
->  	ret = __cpuidle_register_driver(drv);
->  	spin_unlock(&cpuidle_driver_lock);
-> 
-> +	if (!ret && !strlen(param_governor) && drv->governor &&
-> +	    (cpuidle_get_driver() == drv)) {
-> +		mutex_lock(&cpuidle_lock);
-> +		gov = cpuidle_find_governor(drv->governor);
-> +		if (gov) {
-> +			cpuidle_default_governor = cpuidle_curr_governor;
-> +			if (cpuidle_switch_governor(gov) < 0)
-> +				cpuidle_default_governor = NULL;
-> +		}
-> +		mutex_unlock(&cpuidle_lock);
-> +	}
-> +
->  	return ret;
->  }
->  EXPORT_SYMBOL_GPL(cpuidle_register_driver);
-> @@ -274,9 +288,21 @@ EXPORT_SYMBOL_GPL(cpuidle_register_driver);
->   */
->  void cpuidle_unregister_driver(struct cpuidle_driver *drv)
->  {
-> +	bool enabled = (cpuidle_get_driver() == drv);
-> +
->  	spin_lock(&cpuidle_driver_lock);
->  	__cpuidle_unregister_driver(drv);
->  	spin_unlock(&cpuidle_driver_lock);
-> +
-> +	if (!enabled)
-> +		return;
-> +
-> +	mutex_lock(&cpuidle_lock);
-> +	if (cpuidle_default_governor) {
-> +		if (!cpuidle_switch_governor(cpuidle_default_governor))
-> +			cpuidle_default_governor = NULL;
-> +	}
-> +	mutex_unlock(&cpuidle_lock);
->  }
->  EXPORT_SYMBOL_GPL(cpuidle_unregister_driver);
-> 
-> diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
-> index 2e3e14192bee..e93c11dc8304 100644
-> --- a/drivers/cpuidle/governor.c
-> +++ b/drivers/cpuidle/governor.c
-> @@ -22,12 +22,12 @@ LIST_HEAD(cpuidle_governors);
->  struct cpuidle_governor *cpuidle_curr_governor;
-> 
->  /**
-> - * __cpuidle_find_governor - finds a governor of the specified name
-> + * cpuidle_find_governor - finds a governor of the specified name
->   * @str: the name
->   *
->   * Must be called with cpuidle_lock acquired.
->   */
-> -static struct cpuidle_governor * __cpuidle_find_governor(const char *str)
-> +struct cpuidle_governor * cpuidle_find_governor(const char *str)
->  {
->  	struct cpuidle_governor *gov;
-> 
-> @@ -87,7 +87,7 @@ int cpuidle_register_governor(struct cpuidle_governor *gov)
->  		return -ENODEV;
-> 
->  	mutex_lock(&cpuidle_lock);
-> -	if (__cpuidle_find_governor(gov->name) == NULL) {
-> +	if (cpuidle_find_governor(gov->name) == NULL) {
->  		ret = 0;
->  		list_add_tail(&gov->governor_list, &cpuidle_governors);
->  		if (!cpuidle_curr_governor ||
-> diff --git a/drivers/cpuidle/governors/haltpoll.c
-> b/drivers/cpuidle/governors/haltpoll.c
-> index 797477bda486..7a703d2e0064 100644
-> --- a/drivers/cpuidle/governors/haltpoll.c
-> +++ b/drivers/cpuidle/governors/haltpoll.c
-> @@ -133,7 +133,7 @@ static int haltpoll_enable_device(struct cpuidle_driver *drv,
-> 
->  static struct cpuidle_governor haltpoll_governor = {
->  	.name =			"haltpoll",
-> -	.rating =		21,
-> +	.rating =		9,
->  	.enable =		haltpoll_enable_device,
->  	.select =		haltpoll_select,
->  	.reflect =		haltpoll_reflect,
-> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> index 1a9f54eb3aa1..2dc4c6b19c25 100644
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -121,6 +121,9 @@ struct cpuidle_driver {
-> 
->  	/* the driver handles the cpus in cpumask */
->  	struct cpumask		*cpumask;
-> +
-> +	/* preferred governor to switch at register time */
-> +	const char		*governor;
->  };
-> 
->  #ifdef CONFIG_CPU_IDLE
-> -- 
-> 2.17.1
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
