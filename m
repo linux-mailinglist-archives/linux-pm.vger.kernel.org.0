@@ -2,119 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05762A33C0
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 11:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2314EA3462
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 11:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbfH3JYh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Aug 2019 05:24:37 -0400
-Received: from [110.188.70.11] ([110.188.70.11]:6051 "EHLO spam1.hygon.cn"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726461AbfH3JYg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 30 Aug 2019 05:24:36 -0400
-Received: from MK-DB.hygon.cn ([172.23.18.60])
-        by spam1.hygon.cn with ESMTP id x7U9Nl0h068530;
-        Fri, 30 Aug 2019 17:23:47 +0800 (GMT-8)
-        (envelope-from puwen@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-DB.hygon.cn with ESMTP id x7U9NP3W062188;
-        Fri, 30 Aug 2019 17:23:26 +0800 (GMT-8)
-        (envelope-from puwen@hygon.cn)
-Received: from pw-vbox.hygon.cn (172.23.18.44) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Fri, 30 Aug
- 2019 17:23:44 +0800
-From:   Pu Wen <puwen@hygon.cn>
-To:     <lenb@kernel.org>, <calvin.walton@kepstin.ca>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Pu Wen <puwen@hygon.cn>
-Subject: [RFC PATCH] tools/power turbostat: Add support for Hygon Fam 18h (Dhyana) RAPL
-Date:   Fri, 30 Aug 2019 17:23:28 +0800
-Message-ID: <1567157008-29679-1-git-send-email-puwen@hygon.cn>
-X-Mailer: git-send-email 2.7.4
+        id S1727936AbfH3Jpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Aug 2019 05:45:30 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:49392 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727751AbfH3Jpa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Aug 2019 05:45:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=sRzfMxg/wb0LZA+yxxNDj+QkDWg9yL2CpESWkv5XC/w=; b=l2LwR+WZLkNuEzUTAdmtkXcm3
+        oa334e4Rqs8Yq0Nq0CkLdOVet4f+H8YYMmJl5clWcQPgJMbRjzcpWXQ6/knfmZGiAbW+iUnLpPM86
+        Tpciv6IJKV3YWiNZ3Fao3+MXOt0npZRncrUeki+/Wi0i4AisF5qYv5mxoiFq5bCpO19dWGPkXBwFU
+        QTY7D5N0yj38gVn+oYJnJFElg/HqbY6ZYY+s1gFnZBlynLvagoR2ZoAqY0wxJDTPC0XUvNeBWsDgh
+        PDFR5latRRys33U67/D7R7baHn1Jz23RMdDtFJgbiytvOTchW1XXcDTFwFJA4qsyVcWRG/Ed21htd
+        26cnQEJDQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i3dSu-0000tZ-1d; Fri, 30 Aug 2019 09:45:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9B6A93035D7;
+        Fri, 30 Aug 2019 11:44:30 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 290FF29AD350F; Fri, 30 Aug 2019 11:45:05 +0200 (CEST)
+Date:   Fri, 30 Aug 2019 11:45:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Patrick Bellasi <patrick.bellasi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, cgroups@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Tejun Heo <tj@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>, Michal Koutny <mkoutny@suse.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alessio Balsini <balsini@android.com>
+Subject: Re: [PATCH v14 1/6] sched/core: uclamp: Extend CPU's cgroup
+ controller
+Message-ID: <20190830094505.GA2369@hirez.programming.kicks-ass.net>
+References: <20190822132811.31294-1-patrick.bellasi@arm.com>
+ <20190822132811.31294-2-patrick.bellasi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.23.18.44]
-X-ClientProxiedBy: cncheex01.Hygon.cn (172.23.18.10) To cncheex01.Hygon.cn
- (172.23.18.10)
-X-MAIL: spam1.hygon.cn x7U9Nl0h068530
-X-DNSRBL: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190822132811.31294-2-patrick.bellasi@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 9392bd98bba760be96ee ("tools/power turbostat: Add support for AMD
-Fam 17h (Zen) RAPL") and the commit 3316f99a9f1b68c578c5 ("tools/power
-turbostat: Also read package power on AMD F17h (Zen)") add AMD Fam 17h
-RAPL support.
+On Thu, Aug 22, 2019 at 02:28:06PM +0100, Patrick Bellasi wrote:
+> +#define _POW10(exp) ((unsigned int)1e##exp)
+> +#define POW10(exp) _POW10(exp)
 
-Hygon Family 18h(Dhyana) support RAPL in bit 14 of CPUID 0x80000007 EDX,
-and has MSRs RAPL_PWR_UNIT/CORE_ENERGY_STAT/PKG_ENERGY_STAT. So add Hygon
-Dhyana Family 18h support for RAPL.
+What is this magic? You're forcing a float literal into an integer.
+Surely that deserves a comment!
 
-Already tested on Hygon multi-node systems and it shows correct per-core
-energy usage and the total package power.
+> +struct uclamp_request {
+> +#define UCLAMP_PERCENT_SHIFT	2
+> +#define UCLAMP_PERCENT_SCALE	(100 * POW10(UCLAMP_PERCENT_SHIFT))
+> +	s64 percent;
+> +	u64 util;
+> +	int ret;
+> +};
+> +
+> +static inline struct uclamp_request
+> +capacity_from_percent(char *buf)
+> +{
+> +	struct uclamp_request req = {
+> +		.percent = UCLAMP_PERCENT_SCALE,
+> +		.util = SCHED_CAPACITY_SCALE,
+> +		.ret = 0,
+> +	};
+> +
+> +	buf = strim(buf);
+> +	if (strncmp("max", buf, 4)) {
 
-Signed-off-by: Pu Wen <puwen@hygon.cn>
----
- tools/power/x86/turbostat/turbostat.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+That is either a bug, and you meant to write: strncmp(buf, "max", 3), or
+it is not, and then you could've written: strcmp(buf, "max")
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 1cd28eb..f2629b1 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -60,6 +60,7 @@ unsigned int do_irtl_hsw;
- unsigned int units = 1000000;	/* MHz etc */
- unsigned int genuine_intel;
- unsigned int authentic_amd;
-+unsigned int hygon_genuine;
- unsigned int max_level, max_extended_level;
- unsigned int has_invariant_tsc;
- unsigned int do_nhm_platform_info;
-@@ -1714,7 +1715,7 @@ void get_apic_id(struct thread_data *t)
- 	if (!DO_BIC(BIC_X2APIC))
- 		return;
- 
--	if (authentic_amd) {
-+	if (authentic_amd || hygon_genuine) {
- 		unsigned int topology_extensions;
- 
- 		if (max_extended_level < 0x8000001e)
-@@ -3803,6 +3804,7 @@ double get_tdp_amd(unsigned int family)
- {
- 	switch (family) {
- 	case 0x17:
-+	case 0x18:
- 	default:
- 		/* This is the max stock TDP of HEDT/Server Fam17h chips */
- 		return 250.0;
-@@ -3982,6 +3984,7 @@ void rapl_probe_amd(unsigned int family, unsigned int model)
- 
- 	switch (family) {
- 	case 0x17: /* Zen, Zen+ */
-+	case 0x18:
- 		do_rapl = RAPL_AMD_F17H | RAPL_PER_CORE_ENERGY;
- 		if (rapl_joules) {
- 			BIC_PRESENT(BIC_Pkg_J);
-@@ -4018,7 +4021,7 @@ void rapl_probe(unsigned int family, unsigned int model)
- {
- 	if (genuine_intel)
- 		rapl_probe_intel(family, model);
--	if (authentic_amd)
-+	if (authentic_amd || hygon_genuine)
- 		rapl_probe_amd(family, model);
- }
- 
-@@ -4600,6 +4603,8 @@ void process_cpuid()
- 		genuine_intel = 1;
- 	else if (ebx == 0x68747541 && ecx == 0x444d4163 && edx == 0x69746e65)
- 		authentic_amd = 1;
-+	else if (ebx == 0x6f677948 && ecx == 0x656e6975 && edx == 0x6e65476e)
-+		hygon_genuine = 1;
- 
- 	if (!quiet)
- 		fprintf(outf, "CPUID(0): %.4s%.4s%.4s ",
--- 
-2.7.4
+But as written it doesn't make sense.
+
+> +		req.ret = cgroup_parse_float(buf, UCLAMP_PERCENT_SHIFT,
+> +					     &req.percent);
+> +		if (req.ret)
+> +			return req;
+> +		if (req.percent > UCLAMP_PERCENT_SCALE) {
+> +			req.ret = -ERANGE;
+> +			return req;
+> +		}
+> +
+> +		req.util = req.percent << SCHED_CAPACITY_SHIFT;
+> +		req.util = DIV_ROUND_CLOSEST_ULL(req.util, UCLAMP_PERCENT_SCALE);
+> +	}
+> +
+> +	return req;
+> +}
 
