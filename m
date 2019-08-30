@@ -2,123 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D552EA346D
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 11:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8CCA34F4
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 12:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727170AbfH3Jsp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Aug 2019 05:48:45 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:49438 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbfH3Jsp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Aug 2019 05:48:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=PKLkBBrwktzoIAL7/V9IuDoU+f4BVjGqlqVhW17S6o4=; b=As1pAFviZ2UU9B0+0SzNSBCYv
-        9+oue+ii5LBUF5/NUqfkAyYITd/SJz/5wQ2PYc5kOQtywSz1Q0SrjuAlUC0TlY60GmLqJWrXVoSY/
-        LRYhMgyEKpN2IP8uadwOqPYt6p0KIG6BNS2+DnjF0a0Y60VchqV0DXrWYMvpWyibEpAXcG5QrzM3g
-        EA9J74XOel0mtM2fyTPtoOMwMoNrc/TfPnjMy+tu6ZRwy1wQuth2hdDmd5KYjje0uko0UybFJMgEa
-        dCMIPX2o2AVt/F4b4HIwAam68PB09LKYH8l7L13plZRYYpSw2bEP7tKKT712sNnreNmk1/2Sl8lQr
-        U6kwSbDpg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i3dWG-0000vT-3f; Fri, 30 Aug 2019 09:48:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D56F7300489;
-        Fri, 30 Aug 2019 11:47:59 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3FB8529AD3511; Fri, 30 Aug 2019 11:48:34 +0200 (CEST)
-Date:   Fri, 30 Aug 2019 11:48:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Patrick Bellasi <patrick.bellasi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-api@vger.kernel.org, cgroups@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Tejun Heo <tj@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Paul Turner <pjt@google.com>, Michal Koutny <mkoutny@suse.com>,
-        Quentin Perret <quentin.perret@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Todd Kjos <tkjos@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alessio Balsini <balsini@android.com>
-Subject: Re: [PATCH v14 5/6] sched/core: uclamp: Update CPU's refcount on
- TG's clamp changes
-Message-ID: <20190830094834.GB2369@hirez.programming.kicks-ass.net>
-References: <20190822132811.31294-1-patrick.bellasi@arm.com>
- <20190822132811.31294-6-patrick.bellasi@arm.com>
+        id S1726902AbfH3K3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Aug 2019 06:29:23 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40956 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727521AbfH3K3X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Aug 2019 06:29:23 -0400
+Received: by mail-lj1-f194.google.com with SMTP id e27so5975759ljb.7
+        for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2019 03:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=77jjzv0Z9CzErPSRHF84ZQ30/TlT+daBnsbqrJqJCd4=;
+        b=Pf2xiclZwwkFi4pPMvFrD4oBHqaPKSusBqloCaplvgLWIbPC5oH6J8nSFdYgrMURxK
+         XNRzdtUAG1gZ1p4U0kmKOiFjF8bXqPCiUlsMYqjXNk7Gb66QODKm3AETHHzBqvHLieEd
+         0+i/nehhw3anG74awucIWO/fUwOk/jR0+3Woz3A7bzK4fpcBZOVXEABjHdcBZNj5hzk4
+         1UuJsIn7X+Vp/KBQsvl9cbl0c9w4hFmDvqRV8sqFenRUB7MKkE9Cphs/KuXdfTjHeqZj
+         +ERRSybPlqUD9bPHV5SPvwe+QgTmUNpg2klC11Bk4uXzy5CCfgwbhtVR84p7ueTI6duW
+         9KyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=77jjzv0Z9CzErPSRHF84ZQ30/TlT+daBnsbqrJqJCd4=;
+        b=bTSNq/vY8MSpEUKO87EyoDBtmEm+tnLOXK9vdwzf+T5TwQ9VhR8r5+Lfa2PiuHM4d7
+         GcjdH+sgZk4VTxAkACrzl3T/lDjJpeFXcmRkE8Zhwx2GiFAHSH30zXx5BdApy0rjtLSm
+         RT/7hCILcp1WNYzOUSKxFcB3i8rZEnaXke7mbf9yg2ZzEEIVum9HV5HP+bOUaloRIjmA
+         SM+PG4rhGLJVVeuLKCs07FwrUKhnonTYyjdiKm/x+UoAfc5oL7aVOYkS570yNOREbaJ1
+         DmzO8F4iG587MNwzaNHhP2sTC+bjLt7mMQEWLCnEbR0bTde9wArDo4haZNCP4FYSvoAI
+         FCQg==
+X-Gm-Message-State: APjAAAU1gI9c6x0AQxEfnNaUq0TZ7wbSkTfj7aj1bQtLeOi7tRPOwIRk
+        fM2MIbICRqeOmCRKrDVYmJsCRQ==
+X-Google-Smtp-Source: APXvYqxafQzvzz4MY5Rs0uUe86I235CVUgWRrKRXteTpBF1m851Sy/GmfwzhCJVCHjj32713TXhdvg==
+X-Received: by 2002:a2e:a313:: with SMTP id l19mr8299166lje.32.1567160960375;
+        Fri, 30 Aug 2019 03:29:20 -0700 (PDT)
+Received: from localhost.localdomain (ua-84-219-138-247.bbcust.telenor.se. [84.219.138.247])
+        by smtp.gmail.com with ESMTPSA id l8sm778786lja.38.2019.08.30.03.29.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2019 03:29:19 -0700 (PDT)
+From:   Niklas Cassel <niklas.cassel@linaro.org>
+To:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, jorge.ramirez-ortiz@linaro.org,
+        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        Niklas Cassel <niklas.cassel@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 06/14] dt-bindings: opp: qcom-nvmem: Support pstates provided by a power domain
+Date:   Fri, 30 Aug 2019 12:29:15 +0200
+Message-Id: <20190830102915.7418-1-niklas.cassel@linaro.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190819100957.17095-1-niklas.cassel@linaro.org>
+References: <20190819100957.17095-1-niklas.cassel@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190822132811.31294-6-patrick.bellasi@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 02:28:10PM +0100, Patrick Bellasi wrote:
+Some Qualcomm SoCs have support for Core Power Reduction (CPR).
+On these platforms, we need to attach to the power domain provider
+providing the performance states, so that the leaky device (the CPU)
+can configure the performance states (which represent different
+CPU clock frequencies).
 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 04fc161e4dbe..fc2dc86a2abe 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1043,6 +1043,57 @@ static inline void uclamp_rq_dec(struct rq *rq, struct task_struct *p)
->  		uclamp_rq_dec_id(rq, p, clamp_id);
->  }
->  
-> +static inline void
-> +uclamp_update_active(struct task_struct *p, unsigned int clamp_id)
-> +{
-> +	struct rq_flags rf;
-> +	struct rq *rq;
-> +
-> +	/*
-> +	 * Lock the task and the rq where the task is (or was) queued.
-> +	 *
-> +	 * We might lock the (previous) rq of a !RUNNABLE task, but that's the
-> +	 * price to pay to safely serialize util_{min,max} updates with
-> +	 * enqueues, dequeues and migration operations.
-> +	 * This is the same locking schema used by __set_cpus_allowed_ptr().
-> +	 */
-> +	rq = task_rq_lock(p, &rf);
+Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Changes since V3:
+-In Example 2: rename the node name from cpr to power-controller,
+and rename the label from cprpd to cpr.
 
-Since modifying cgroup parameters is priv only, this should be OK I
-suppose. Priv can already DoS the system anyway.
+ .../bindings/opp/qcom-nvmem-cpufreq.txt       | 113 +++++++++++++++++-
+ 1 file changed, 112 insertions(+), 1 deletion(-)
 
-> +	/*
-> +	 * Setting the clamp bucket is serialized by task_rq_lock().
-> +	 * If the task is not yet RUNNABLE and its task_struct is not
-> +	 * affecting a valid clamp bucket, the next time it's enqueued,
-> +	 * it will already see the updated clamp bucket value.
-> +	 */
-> +	if (!p->uclamp[clamp_id].active)
-> +		goto done;
-> +
-> +	uclamp_rq_dec_id(rq, p, clamp_id);
-> +	uclamp_rq_inc_id(rq, p, clamp_id);
-> +
-> +done:
+diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+index c5ea8b90e35d..4751029b9b74 100644
+--- a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
++++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+@@ -14,7 +14,7 @@ operating-points-v2 table when it is parsed by the OPP framework.
+ 
+ Required properties:
+ --------------------
+-In 'cpus' nodes:
++In 'cpu' nodes:
+ - operating-points-v2: Phandle to the operating-points-v2 table to use.
+ 
+ In 'operating-points-v2' table:
+@@ -23,6 +23,15 @@ In 'operating-points-v2' table:
+ 
+ Optional properties:
+ --------------------
++In 'cpu' nodes:
++- power-domains: A phandle pointing to the PM domain specifier which provides
++		the performance states available for active state management.
++		Please refer to the power-domains bindings
++		Documentation/devicetree/bindings/power/power_domain.txt
++		and also examples below.
++- power-domain-names: Should be
++	- 'cpr' for qcs404.
++
+ In 'operating-points-v2' table:
+ - nvmem-cells: A phandle pointing to a nvmem-cells node representing the
+ 		efuse registers that has information about the
+@@ -682,3 +691,105 @@ soc {
+ 		};
+ 	};
+ };
++
++Example 2:
++---------
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		CPU0: cpu@100 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x100>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cpr>;
++			power-domain-names = "cpr";
++		};
++
++		CPU1: cpu@101 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x101>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cpr>;
++			power-domain-names = "cpr";
++		};
++
++		CPU2: cpu@102 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x102>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cpr>;
++			power-domain-names = "cpr";
++		};
++
++		CPU3: cpu@103 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a53";
++			reg = <0x103>;
++			....
++			clocks = <&apcs_glb>;
++			operating-points-v2 = <&cpu_opp_table>;
++			power-domains = <&cpr>;
++			power-domain-names = "cpr";
++		};
++	};
++
++	cpu_opp_table: cpu-opp-table {
++		compatible = "operating-points-v2-kryo-cpu";
++		opp-shared;
++
++		opp-1094400000 {
++			opp-hz = /bits/ 64 <1094400000>;
++			required-opps = <&cpr_opp1>;
++		};
++		opp-1248000000 {
++			opp-hz = /bits/ 64 <1248000000>;
++			required-opps = <&cpr_opp2>;
++		};
++		opp-1401600000 {
++			opp-hz = /bits/ 64 <1401600000>;
++			required-opps = <&cpr_opp3>;
++		};
++	};
++
++	cpr_opp_table: cpr-opp-table {
++		compatible = "operating-points-v2-qcom-level";
++
++		cpr_opp1: opp1 {
++			opp-level = <1>;
++			qcom,opp-fuse-level = <1>;
++		};
++		cpr_opp2: opp2 {
++			opp-level = <2>;
++			qcom,opp-fuse-level = <2>;
++		};
++		cpr_opp3: opp3 {
++			opp-level = <3>;
++			qcom,opp-fuse-level = <3>;
++		};
++	};
++
++....
++
++soc {
++....
++	cpr: power-controller@b018000 {
++		compatible = "qcom,qcs404-cpr", "qcom,cpr";
++		reg = <0x0b018000 0x1000>;
++		....
++		vdd-apc-supply = <&pms405_s3>;
++		#power-domain-cells = <0>;
++		operating-points-v2 = <&cpr_opp_table>;
++		....
++	};
++};
+-- 
+2.21.0
 
-I'm thinking that:
-
-	if (p->uclamp[clamp_id].active) {
-		uclamp_rq_dec_id(rq, p, clamp_id);
-		uclamp_rq_inc_id(rq, p, clamp_id);
-	}
-
-was too obvious? ;-)
-
-> +
-> +	task_rq_unlock(rq, p, &rf);
-> +}
