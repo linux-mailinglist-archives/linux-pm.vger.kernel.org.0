@@ -2,125 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DA5A379A
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 15:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BB0A393E
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 16:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727718AbfH3NQH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Aug 2019 09:16:07 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:36078 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727620AbfH3NQH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Aug 2019 09:16:07 -0400
-Received: by mail-wr1-f68.google.com with SMTP id y19so6957786wrd.3;
-        Fri, 30 Aug 2019 06:16:05 -0700 (PDT)
+        id S1728029AbfH3O3U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Aug 2019 10:29:20 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:39917 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727729AbfH3O3U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Aug 2019 10:29:20 -0400
+Received: by mail-io1-f65.google.com with SMTP id d25so11836902iob.6
+        for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2019 07:29:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=/S9eKzefNd7RMHB9sZJ0C1DeLdzhViGsRQEhurBvj1g=;
-        b=A+3XGo8eLt+CGtuybCO9ryzkFPRMsbxbjBkOf4VjPVt2rsCOYMfHDej1Di6DOKJXly
-         SpSQu6uRxWh3yGTnqY1ZE16DixxGObQ/e2iV7A5lzp6yvh9nQAybLebOV5lsWnA9zy/d
-         3/pImBjcK0C0w8gI+jLlA1cbQc8PJ6c+leWm9ZvucIikXtKUEv04Hv3mLGU6IunDmYTN
-         6xBR+ITWi02Y8kNVUdiPsCSFBhSGHWKa3AnrM/2VlEvnccV09yikcVhwKlZt5AHqTeSK
-         4SG8eG0rDij/3dA363LL084hvv3/seTWBYIIvRXDIV1CNS2Q+3B4uRTdpw/0gMbalxGN
-         PBpA==
+        d=kepstin.ca; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=nALWCT0w/4IgpkaPDMmW8i7xojZhX1BM8LFM2iLzr84=;
+        b=eejwfPGzhvImQ5rQ6Qj0W1VGx7GEXZl6+k/BQeUXMgIcYSW8X/erRCeCoiphXyK6Ms
+         3Wn3R2Zq8EkiIfdBcro5M3vcicP7/F4L07CDl6HrsdF9iKAOJ8Ozz3r1UD81mVcaYIwj
+         B3k/MLM5xCtj582jfHxUPhV7Tch/rEE3VhCfw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=/S9eKzefNd7RMHB9sZJ0C1DeLdzhViGsRQEhurBvj1g=;
-        b=MT5jBdo5clXM813seWcMF9utNlgCbpYuyG4K5NJfu7kou9mBB2E3cb+ksOMQ9d9NMi
-         YiY2MX798FiLRMEZTpyeJNSq9ueOm3ft5nL97RuWHkbzcvkPHvPdlJ81JsP5Jq02DRuz
-         81IZL1qPhA79gOZoWuKdoVG8aGjgP0om2lMb3otlfmQGm5t/eHD1LWXkigP40jMF53h/
-         o/yJaBCl669Y69hFBsCanmNBMtdoPjoX2916U/2oeG0clchbmYR9zqqJ2YIo2KM/HzSe
-         c1oBoKJtlfnlp5Xd1Py5buXr+0Z4kO/84EvnEVhGDy20qaDBjMPmily6v2AVpZyR2dZG
-         pxHg==
-X-Gm-Message-State: APjAAAViB2yMaIQA+WkP154h/t1PL49rsxr/uxBrr45cJXmXoaBdHxGS
-        itcUj1kirDxmfq1bOrhhq4k=
-X-Google-Smtp-Source: APXvYqwXJjWiBE6NwdOXRxtwcsABPge0Ls8aIICSf4qJIPRfYa8/4rruesJBhd011tmXjtH1LkfrYA==
-X-Received: by 2002:adf:dfc8:: with SMTP id q8mr19146221wrn.121.1567170965131;
-        Fri, 30 Aug 2019 06:16:05 -0700 (PDT)
-Received: from 5WDYG62.mdi (static-css-cqn-143221.business.bouyguestelecom.com. [176.149.143.221])
-        by smtp.gmail.com with ESMTPSA id t19sm6384517wmi.29.2019.08.30.06.16.03
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=nALWCT0w/4IgpkaPDMmW8i7xojZhX1BM8LFM2iLzr84=;
+        b=moZhUIlTDxu3a5yeRJRJ+9qLuS96Ht8cu7ngVYE7WBTAklc4hWhB9lTpP9TL5F3cdp
+         tC/YtI83U1s0rY0lrB7J8m4yQQ7LVPHcHM8+4B5mmHyzdzpSk41M9HsUKKqQ/+JzeElR
+         6K5oeExPx+obzj+WWeWtUkG0iUMW7/gbNtKg140uuG00zU+BrE+A9tklM2gOY/QKvThk
+         Ulh4ub4lRZfPrhp0xrwNqT0HqKQcXmrx5btRsGjd0rk/8BF5ujfcMJXwLjf9lFn0Kim8
+         v+suZAvp1q1fhP/Ks2noC/RfY1kHK1YZ37+9XfiL721TyDtsgoM3KjZ6QXUhDj/xFky5
+         ebpA==
+X-Gm-Message-State: APjAAAXfRcIfICmCBm0yLWkB3xSD1Dr9XBxKLejClIcrrZPxhnE47rSn
+        EexrW6CYuP7WT0/V6KApLSI3hjMNpfhhCA==
+X-Google-Smtp-Source: APXvYqzMABslZm35OP2emany0n3ZDwgvDigPTjq3wXTQbTIjv/iS/DZ11voTizEK44QEZ7S59HLxCA==
+X-Received: by 2002:a05:6602:c7:: with SMTP id z7mr19125822ioe.130.1567175359361;
+        Fri, 30 Aug 2019 07:29:19 -0700 (PDT)
+Received: from rocky (CPEac1f6b45e387-CM9050ca1e1520.cpe.net.cable.rogers.com. [174.114.230.157])
+        by smtp.gmail.com with ESMTPSA id k9sm5491455ioa.10.2019.08.30.07.29.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2019 06:16:04 -0700 (PDT)
-From:   Romain Izard <romain.izard.pro@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Romain Izard <romain.izard.pro@gmail.com>
-Subject: [PATCH v2] power: supply: register HWMON devices with valid names
-Date:   Fri, 30 Aug 2019 15:15:56 +0200
-Message-Id: <20190830131556.10021-1-romain.izard.pro@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 30 Aug 2019 07:29:18 -0700 (PDT)
+Message-ID: <fea87715422ac21ca5d439e91ff45074069ada20.camel@kepstin.ca>
+Subject: Re: [RFC PATCH] tools/power turbostat: Add support for Hygon Fam
+ 18h (Dhyana) RAPL
+From:   Calvin Walton <calvin.walton@kepstin.ca>
+To:     Pu Wen <puwen@hygon.cn>, lenb@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 30 Aug 2019 10:27:46 -0400
+In-Reply-To: <1567157008-29679-1-git-send-email-puwen@hygon.cn>
+References: <1567157008-29679-1-git-send-email-puwen@hygon.cn>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With the introduction of the HWMON compatibility layer to the power
-supply framework in Linux 5.3, all power supply devices' names can be
-used directly to create HWMON devices with the same names.
+On Fri, 2019-08-30 at 17:23 +0800, Pu Wen wrote:
+> Commit 9392bd98bba760be96ee ("tools/power turbostat: Add support for
+> AMD
+> Fam 17h (Zen) RAPL") and the commit 3316f99a9f1b68c578c5
+> ("tools/power
+> turbostat: Also read package power on AMD F17h (Zen)") add AMD Fam
+> 17h
+> RAPL support.
+> 
+> Hygon Family 18h(Dhyana) support RAPL in bit 14 of CPUID 0x80000007
+> EDX,
+> and has MSRs RAPL_PWR_UNIT/CORE_ENERGY_STAT/PKG_ENERGY_STAT. So add
+> Hygon
+> Dhyana Family 18h support for RAPL.
+> 
+> Already tested on Hygon multi-node systems and it shows correct per-
+> core
+> energy usage and the total package power.
 
-But HWMON has rules on allowable names that are different from those
-used in the power supply framework. The dash character is forbidden, as
-it is used by the libsensors library in userspace as a separator,
-whereas this character is used in the device names in more than half of
-the existing power supply drivers. This last case is consistent with the
-typical naming usage with MFD and Device Tree.
+I was a bit worried about these two chunks, since as far as I know AMD
+has not yet released any processor with family 0x18, so there might be
+future conflicts:
 
-This leads to warnings in the kernel log, with the format:
+> @@ -3803,6 +3804,7 @@ double get_tdp_amd(unsigned int family)
+>  {
+>  	switch (family) {
+>  	case 0x17:
+> +	case 0x18:
+>  	default:
+> 
 
-power_supply gpio-charger: hwmon: \
-	'gpio-charger' is not a valid name attribute, please fix
+> @@ -3982,6 +3984,7 @@ void rapl_probe_amd(unsigned int family,
+> unsigned int model)
+>  
+>  	switch (family) {
+>  	case 0x17: /* Zen, Zen+ */
+> +	case 0x18:
+>  		do_rapl = RAPL_AMD_F17H | RAPL_PER_CORE_ENERGY;
+>  		if (rapl_joules) {
+>  			BIC_PRESENT(BIC_Pkg_J);
 
-Add a protection to power_supply_add_hwmon_sysfs() that replaces any
-dash in the device name with an underscore when registering with the
-HWMON framework. Other forbidden characters (star, slash, space, tab,
-newline) are not replaced, as they are not in common use.
+But the second switch is already guarded by the CPUID check for the
+rapl support, so it will either "just work" if AMD's family 0x18 chip
+uses the same RAPL registers - or cleanly skip the CPU if they changed
+it.
 
-Fixes: e67d4dfc9ff1 ("power: supply: Add HWMON compatibility layer")
-Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
+Please add a comment on the 0x18 case in the rapl_probe_amd function,
+something like:
+	case 0x18: /* Hygon Dhyana */
 
-v2: Remove a superfluous cast
+Feel free to add a
+Reviewed-by: Calvin Walton <calvin.walton@kepstin.ca>
 
- drivers/power/supply/power_supply_hwmon.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
-index 51fe60440d12..75cf861ba492 100644
---- a/drivers/power/supply/power_supply_hwmon.c
-+++ b/drivers/power/supply/power_supply_hwmon.c
-@@ -284,6 +284,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 	struct device *dev = &psy->dev;
- 	struct device *hwmon;
- 	int ret, i;
-+	const char *name;
- 
- 	if (!devres_open_group(dev, power_supply_add_hwmon_sysfs,
- 			       GFP_KERNEL))
-@@ -334,7 +335,19 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 		}
- 	}
- 
--	hwmon = devm_hwmon_device_register_with_info(dev, psy->desc->name,
-+	name = psy->desc->name;
-+	if (strchr(name, '-')) {
-+		char *new_name;
-+
-+		new_name = devm_kstrdup(dev, name, GFP_KERNEL);
-+		if (!new_name) {
-+			ret = -ENOMEM;
-+			goto error;
-+		}
-+		strreplace(new_name, '-', '_');
-+		name = new_name;
-+	}
-+	hwmon = devm_hwmon_device_register_with_info(dev, name,
- 						psyhw,
- 						&power_supply_hwmon_chip_info,
- 						NULL);
 -- 
-2.17.1
+Calvin Walton <calvin.walton@kepstin.ca>
 
