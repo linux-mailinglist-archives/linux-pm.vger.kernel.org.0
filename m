@@ -2,106 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C16FA3C3F
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 18:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378BCA40FE
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 01:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728399AbfH3Qkh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Aug 2019 12:40:37 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:35107 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728398AbfH3Qkh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Aug 2019 12:40:37 -0400
-Received: by mail-vs1-f66.google.com with SMTP id q16so5163319vsm.2
-        for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2019 09:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FFEm8wnPyI70hvEmm2P3x6q7Jm7rJLu+QxiBEYWlIyU=;
-        b=Az1Gi5TnAI4hFvybyYWbK+kY5uHpzIYo+o2d4fFMkAR8JxEWt1+SHjs8JUveORST6i
-         Gd64ynQza92S8iVFSgaTo8l3iE4CvAdDU2coF4oOsqwwJfBiYQJKYwbUX8LujJTsiWTN
-         wi/cOSOreMTOdb7b3mAoHJSXPGD6fzpyWxLIT329lNx6TGkuBvPre2rtLkRs/tnbRsd1
-         +yM5KS/siWcWBOs/K2sslc+UzXBGW+Zc0vw3iaR0/r09ZilQiD9lJiKOkOw3ErAyZMNg
-         K/AIETEuQOm1nWHlRnf0RDYI2pN+ijMN3IZ8pd95grX2lJr0DFw7Bg6DqEyWjwEnWykb
-         pryQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FFEm8wnPyI70hvEmm2P3x6q7Jm7rJLu+QxiBEYWlIyU=;
-        b=PU6fAiHMiH2xsWJDbmmPetiUV+mwPg6cEAR94nvkvJP9UoSN/kkA3/eXTUQUNZB23x
-         QZGYRf7zClF83bMiwPhoQdUGMbXPUWpQQo+LjNnuEtx3M0li0ddKGcftmBxy59QGP07l
-         hRjCbxRE4XKJZINQcxSurrG4pO5+b6hno9EPQHJJvY2e7PQ/pn60+drwtjvdVPMeuYS3
-         Zxr1LlIpmkM1jj8XVslgjH+JcvSlWVhRyNxb9Z4Y0aICXbTbT7ToSH/6747qUTcmLcMi
-         +Dygw499a0heA48JS9dREsWAkUsibjw9AVFId0als9mXAc8c0QKKw3qIFNayP1H7iIZA
-         3zXA==
-X-Gm-Message-State: APjAAAW5KGTGzlooAmFYR+Qlwqbpc3/W8BBP3Bg4pd1J8wSjBgA0oqHI
-        CtOjY41S0SePa6J1w0Om1d408feLnagKv8AlZ2gY9w==
-X-Google-Smtp-Source: APXvYqxSX6rgglBoPn04e5TToAhGtd/FXdxa1G/PbV8Cm/B9SvCHsyiX8a3uGPV5I0xaid3Rv899mDqEZOJRM5dDNMs=
-X-Received: by 2002:a67:b445:: with SMTP id c5mr4384433vsm.182.1567183236380;
- Fri, 30 Aug 2019 09:40:36 -0700 (PDT)
+        id S1728257AbfH3XXW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Aug 2019 19:23:22 -0400
+Received: from muru.com ([72.249.23.125]:59318 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728122AbfH3XXW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 30 Aug 2019 19:23:22 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 40C1D80D4;
+        Fri, 30 Aug 2019 23:23:50 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH] power: supply: cpcap-charger: Enable vbus boost voltage
+Date:   Fri, 30 Aug 2019 16:23:16 -0700
+Message-Id: <20190830232316.53750-1-tony@atomide.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <cover.1566907161.git.amit.kucheria@linaro.org>
- <66ac3d3707d6296ef85bf1fa321f7f1ee0c02131.1566907161.git.amit.kucheria@linaro.org>
- <5d65cbe9.1c69fb81.1ceb.2374@mx.google.com> <CAP245DWWKsZBHnvSqC40XOH48kGd-hykd+fr-UZfWTmvuG2KaA@mail.gmail.com>
- <5d67e6cf.1c69fb81.5aec9.3b71@mx.google.com> <CAP245DVjgnwGn5rUgbYrkBOi3vtyShz0Qbx_opx80xiOV7uXeA@mail.gmail.com>
- <CAHLCerMmBmS-59eywxkUJ+5-zSccx8Twx2=NELgBgShYhM7TOw@mail.gmail.com> <5d6946fa.1c69fb81.44ab7.8d72@mx.google.com>
-In-Reply-To: <5d6946fa.1c69fb81.44ab7.8d72@mx.google.com>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Fri, 30 Aug 2019 22:10:24 +0530
-Message-ID: <CAHLCerNJpOEevZBvN6s4FiaD5C=1C4xNRHYjVNM=0HpGCuf9RQ@mail.gmail.com>
-Subject: Re: [PATCH v2 07/15] dt: thermal: tsens: Document interrupt support
- in tsens driver
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Brian Masney <masneyb@onstation.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 30, 2019 at 9:25 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Amit Kucheria (2019-08-30 04:32:54)
-> > On Thu, Aug 29, 2019 at 10:04 PM Amit Kucheria <amit.kucheria@linaro.org> wrote:
-> > >
-> > > On Thu, Aug 29, 2019 at 8:23 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > > Can we get a known quantity of interrupts for a particular compatible
-> > > > string instead? Let's be as specific as possible. The index matters too,
-> > > > so please list them in the order that is desired.
-> > >
-> > > I *think* we can predict what platforms have uplow and critical
-> > > interrupts based on IP version currently[1]. For newer interrupt
-> > > types, we might need more fine-grained platform compatibles.
-> > >
-> > > [1] Caveat: this is based only on the list of platforms I've currently
-> > > looked at, there might be something internally that breaks these
-> > > rules.
-> >
-> > What do you think if we changed the wording to something like the following,
-> >
-> > - interrupt-names: Must be one of the following depending on IP version:
-> >    For compatibles qcom,msm8916-tsens, qcom,msm8974-tsens,
-> > qcom,qcs404-tsens, qcom,tsens-v1, use
-> >               interrupt-names = "uplow";
-> >    For compatibles qcom,msm8996-tsens, qcom,msm8998-tsens,
-> > qcom,sdm845-tsens, qcom,tsens-v2, use
-> >               interrupt-names = "uplow", "critical";
->
-> Ok. I would still prefer YAML/JSON schema for this binding so that it's
-> much more explicit about numbers and the order of interrupts, etc.
+We are currently not enabling VBUS boost for cpcap when in host mode.
+This means the VBUS is fed at the battery voltage level, which can cause
+flakeyness enumerating devices.
 
-OK, I'll look around for some examples.
+Looks like the boost control for VBUS is CPCAP_BIT_VBUS_SWITCH that we
+must enable in the charger for nice 4.92 V VBUS output. And looks like
+we must not use the STBY pin enabling but must instead use manual VBUS
+control in phy-cpcap-usb.
+
+We want to do this in cpcap_charger_vbus_work() and also set a flag for
+feeding_vbus to avoid races between USB detection and charger detection,
+and disable charging if feeding_vbus is set.
+
+Cc: Jacopo Mondi <jacopo@jmondi.org>
+Cc: Kishon Vijay Abraham I <kishon@ti.com>
+Cc: Marcel Partap <mpartap@gmx.net>
+Cc: Merlijn Wajer <merlijn@wizzup.org>
+Cc: Michael Scott <hashcode0f@gmail.com>
+Cc: NeKit <nekit1000@gmail.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Sebastian Reichel <sre@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/phy/motorola/phy-cpcap-usb.c |  8 +++++---
+ drivers/power/supply/cpcap-charger.c | 23 ++++++++++++++++++++---
+ 2 files changed, 25 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/phy/motorola/phy-cpcap-usb.c b/drivers/phy/motorola/phy-cpcap-usb.c
+--- a/drivers/phy/motorola/phy-cpcap-usb.c
++++ b/drivers/phy/motorola/phy-cpcap-usb.c
+@@ -231,8 +231,9 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 			goto out_err;
+ 
+ 		error = regmap_update_bits(ddata->reg, CPCAP_REG_USBC3,
+-					   CPCAP_BIT_VBUSSTBY_EN,
+-					   CPCAP_BIT_VBUSSTBY_EN);
++					   CPCAP_BIT_VBUSSTBY_EN |
++					   CPCAP_BIT_VBUSEN_SPI,
++					   CPCAP_BIT_VBUSEN_SPI);
+ 		if (error)
+ 			goto out_err;
+ 
+@@ -240,7 +241,8 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 	}
+ 
+ 	error = regmap_update_bits(ddata->reg, CPCAP_REG_USBC3,
+-				   CPCAP_BIT_VBUSSTBY_EN, 0);
++				   CPCAP_BIT_VBUSSTBY_EN |
++				   CPCAP_BIT_VBUSEN_SPI, 0);
+ 	if (error)
+ 		goto out_err;
+ 
+diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
+--- a/drivers/power/supply/cpcap-charger.c
++++ b/drivers/power/supply/cpcap-charger.c
+@@ -108,6 +108,9 @@
+ #define CPCAP_REG_CRM_ICHRG_1A596	CPCAP_REG_CRM_ICHRG(0xe)
+ #define CPCAP_REG_CRM_ICHRG_NO_LIMIT	CPCAP_REG_CRM_ICHRG(0xf)
+ 
++/* CPCAP_REG_VUSBC register bits needed for VBUS */
++#define CPCAP_BIT_VBUS_SWITCH		BIT(0)	/* VBUS boost to 5V */
++
+ enum {
+ 	CPCAP_CHARGER_IIO_BATTDET,
+ 	CPCAP_CHARGER_IIO_VOLTAGE,
+@@ -130,7 +133,8 @@ struct cpcap_charger_ddata {
+ 	struct power_supply *usb;
+ 
+ 	struct phy_companion comparator;	/* For USB VBUS */
+-	bool vbus_enabled;
++	unsigned int vbus_enabled:1;
++	unsigned int feeding_vbus:1;
+ 	atomic_t active;
+ 
+ 	int status;
+@@ -325,7 +329,6 @@ static bool cpcap_charger_vbus_valid(struct cpcap_charger_ddata *ddata)
+ }
+ 
+ /* VBUS control functions for the USB PHY companion */
+-
+ static void cpcap_charger_vbus_work(struct work_struct *work)
+ {
+ 	struct cpcap_charger_ddata *ddata;
+@@ -343,6 +346,7 @@ static void cpcap_charger_vbus_work(struct work_struct *work)
+ 			return;
+ 		}
+ 
++		ddata->feeding_vbus = true;
+ 		cpcap_charger_set_cable_path(ddata, false);
+ 		cpcap_charger_set_inductive_path(ddata, false);
+ 
+@@ -350,12 +354,23 @@ static void cpcap_charger_vbus_work(struct work_struct *work)
+ 		if (error)
+ 			goto out_err;
+ 
++		error = regmap_update_bits(ddata->reg, CPCAP_REG_VUSBC,
++					   CPCAP_BIT_VBUS_SWITCH,
++					   CPCAP_BIT_VBUS_SWITCH);
++		if (error)
++			goto out_err;
++
+ 		error = regmap_update_bits(ddata->reg, CPCAP_REG_CRM,
+ 					   CPCAP_REG_CRM_RVRSMODE,
+ 					   CPCAP_REG_CRM_RVRSMODE);
+ 		if (error)
+ 			goto out_err;
+ 	} else {
++		error = regmap_update_bits(ddata->reg, CPCAP_REG_VUSBC,
++					   CPCAP_BIT_VBUS_SWITCH, 0);
++		if (error)
++			goto out_err;
++
+ 		error = regmap_update_bits(ddata->reg, CPCAP_REG_CRM,
+ 					   CPCAP_REG_CRM_RVRSMODE, 0);
+ 		if (error)
+@@ -363,6 +378,7 @@ static void cpcap_charger_vbus_work(struct work_struct *work)
+ 
+ 		cpcap_charger_set_cable_path(ddata, true);
+ 		cpcap_charger_set_inductive_path(ddata, true);
++		ddata->feeding_vbus = false;
+ 	}
+ 
+ 	return;
+@@ -431,7 +447,8 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 	if (error)
+ 		return;
+ 
+-	if (cpcap_charger_vbus_valid(ddata) && s.chrgcurr1) {
++	if (!ddata->feeding_vbus && cpcap_charger_vbus_valid(ddata) &&
++	    s.chrgcurr1) {
+ 		int max_current;
+ 
+ 		if (cpcap_charger_battery_found(ddata))
+-- 
+2.23.0
