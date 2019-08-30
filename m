@@ -2,148 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A9EA356C
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 13:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EEEA35C5
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Aug 2019 13:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727948AbfH3LJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Aug 2019 07:09:22 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:47488 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726660AbfH3LJV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Aug 2019 07:09:21 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7UB7w6i107234;
-        Fri, 30 Aug 2019 11:08:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=WxH5c0AO/ppWqHS1hPmVJ/ebozPUhe7msAT0OzNYuVE=;
- b=Y/JS0lJ40hk3QYTWq1xwWGw9rjSc7JoY3MHqcpR00edYeHJQz4RE9GQ+9p4zHs2k7Jdv
- nichp2/QDARf6t0NwVvKnifdU+W5oWVUNB973KViWooKQbxWfTn9lrOw5UcVbn8YhQZp
- lVZ//+ojXfrIUd8Nvg/W2VlCNdPBBgW51Szi8oO5zKk4qd6TUW5FQ6B6jvhZzIr+xo/1
- dsi/ksiwmukPKQn1br8yhX1lIMPVSya+Ss3aJPbHeRo2uP/zBg6W8LLte4WxzAETxAA+
- tgR8cOqzYD79ftwx3CZwsIOuXRurTWGMcdVOQjegULjC2rkNuZ/jx0QwfW9cXEk4B1zL Tw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2uq2nc0036-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Aug 2019 11:08:11 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7UB40Lb177359;
-        Fri, 30 Aug 2019 11:07:10 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2uphav1gmr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Aug 2019 11:07:10 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7UB750V029324;
-        Fri, 30 Aug 2019 11:07:06 GMT
-Received: from [10.175.203.89] (/10.175.203.89)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 30 Aug 2019 04:07:05 -0700
-Subject: Re: Default governor regardless of cpuidle driver
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-pm@vger.kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-References: <20190829151027.9930-1-joao.m.martins@oracle.com>
- <c8cf8dcc-76a3-3e15-f514-2cb9df1bbbdc@oracle.com>
- <d1d4ade5-04a5-4288-d994-3963bb80fb6b@linaro.org>
- <6c8816af-934a-5bf7-6fb9-f67c05e2c8aa@oracle.com>
- <901ab688-5548-cf96-1dcb-ce50e617e917@linaro.org>
- <722bd6f6-6eee-b24b-9704-c9aecc06302f@oracle.com>
- <2e2a35c8-7f03-d7c8-4701-3bc9d91c1255@linaro.org>
- <f8c63af5-2509-310d-7ba0-7687b20e3b44@oracle.com>
- <b759d5a9-f418-817e-eefa-2302d17cb6ea@linaro.org>
-From:   Joao Martins <joao.m.martins@oracle.com>
-Message-ID: <b164bd75-bc9a-0f07-e831-004a0bb5fe1b@oracle.com>
-Date:   Fri, 30 Aug 2019 12:07:00 +0100
+        id S1728079AbfH3LdG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Aug 2019 07:33:06 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:38625 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727595AbfH3LdG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Aug 2019 07:33:06 -0400
+Received: by mail-ua1-f68.google.com with SMTP id 107so20429uau.5
+        for <linux-pm@vger.kernel.org>; Fri, 30 Aug 2019 04:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JH8DOOwQtK+X7/b2daR7scxGJ6hjfD5whpOG26LXoDw=;
+        b=pvpMdZNedhH1QV+sjozPkOnux4HLnj+LrfUwCIUPHZeKiDux6LH9ehglxbbUGDXs9f
+         Ni9mO+JvsAt6qPEw0qayCxsa+bIqiFhxn4J6p0ZWpEmHHk6kA9ctfT6zWcH8z/Wu9cLu
+         jEy4WymLK2uLBoeCX4kMxOflJGzYGFHOvzLNykjaSSFmTns/YlOkbDGkpAD1h1WE+Wy2
+         kEcp2aVWfrDMiijlNScHwfa+8znc56KTQ5TJry8CYTccpsYv5CYjZOfK19bIXu8y4zoz
+         oHq2/Nvg2J8yQ3/EdB+o+8Z3FivsvWNKu+cmLLT1bFbricqFrghabe4iWl1XyTtg562Q
+         PdFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JH8DOOwQtK+X7/b2daR7scxGJ6hjfD5whpOG26LXoDw=;
+        b=rg9XCxtWFHay2T5WxFM4nG6TZXF1dS+tMZqismxMLIvfE5t2y2xioG/429VY+olold
+         XEVuu3pXfS+hV220+h1gB33n16bv/UdVzjfH+YCq6sz5VwzGIT2S1tTD8S3TTL7MJByk
+         QVhYDxQhl6jC8fNnFCtj1O6tLg/S3tnM8fjXUUas5AM334/Gjim6bL+9wi6oohAmimlS
+         rQ3LNDWMrBbsVME1/SpWiNN/P8H9sgBox/DdtGtw5Q5TMFVXKD4fDffcndKEeE2DWW+C
+         yqv9oAf4AkplBbXHeFKSFX95YbrnNQZPE8QCuCIqq4XwwfE+f1vQA/lPGlvml4L9cEVx
+         R3Kg==
+X-Gm-Message-State: APjAAAXc+14CkgJ/Ul3uOkWQMm1LXsD0VlNUMdsH7WWscjq77bTDUK28
+        0mfaYXih+n+J7W4mTJSgOWQXLjKjne6XPzr4xBG/4g==
+X-Google-Smtp-Source: APXvYqwyAJiFOtO3nVw0kssYOlaNRtyRQw23dVLbV/BrLdfGSdqNBeAYzUS2CZDujoGL8gkYKGoz2tZmIKXnUBI6x2E=
+X-Received: by 2002:ab0:ed:: with SMTP id 100mr2070335uaj.48.1567164784854;
+ Fri, 30 Aug 2019 04:33:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <b759d5a9-f418-817e-eefa-2302d17cb6ea@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9364 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908300120
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9364 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908300120
+References: <cover.1566907161.git.amit.kucheria@linaro.org>
+ <66ac3d3707d6296ef85bf1fa321f7f1ee0c02131.1566907161.git.amit.kucheria@linaro.org>
+ <5d65cbe9.1c69fb81.1ceb.2374@mx.google.com> <CAP245DWWKsZBHnvSqC40XOH48kGd-hykd+fr-UZfWTmvuG2KaA@mail.gmail.com>
+ <5d67e6cf.1c69fb81.5aec9.3b71@mx.google.com> <CAP245DVjgnwGn5rUgbYrkBOi3vtyShz0Qbx_opx80xiOV7uXeA@mail.gmail.com>
+In-Reply-To: <CAP245DVjgnwGn5rUgbYrkBOi3vtyShz0Qbx_opx80xiOV7uXeA@mail.gmail.com>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Fri, 30 Aug 2019 17:02:54 +0530
+Message-ID: <CAHLCerMmBmS-59eywxkUJ+5-zSccx8Twx2=NELgBgShYhM7TOw@mail.gmail.com>
+Subject: Re: [PATCH v2 07/15] dt: thermal: tsens: Document interrupt support
+ in tsens driver
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Brian Masney <masneyb@onstation.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/29/19 10:51 PM, Daniel Lezcano wrote:
-> On 29/08/2019 23:12, Joao Martins wrote:
-> 
-> [ ... ]
-> 
->>>> Say you wanted to have a kvm specific config, you would still see the same
->>>> problem if you happen to compile intel_idle together with haltpoll
->>>> driver+governor. 
->>>
->>> Can a guest work with an intel_idle driver?
->>>
->> Yes.
->>
->> If you use Qemu you would add '-overcommit cpu-pm=on' to try it out. ofc,
->> assuming you're on a relatively recent Qemu (v3.0+) and a fairly recent kernel
->> version as host (v4.17+).
-> 
-> Ok, thanks for the clarification.
-> 
->>>> Creating two separate configs here, with and without haltpoll
->>>> for VMs doesn't sound effective for distros.
->>>
->>> Agree
->>>
->>>> Perhaps decreasing the rating of
->>>> haltpoll governor, but while a short term fix it wouldn't give much sensible
->>>> defaults without the one-off runtime switch.
-> 
-> The rating has little meaning because each governor fits a specific
-> situation (server, desktop, etc...) and it would probably make sense to
-> remove it and add a default governor in the config file like the cpufreq.
-> 
-ICYM, I had attached a patch in the first message of this thread [0] right below
-the scissors mark. It's not based on config file, but it's the same thing you're
-saying (IIUC) but at runtime and thus allowing a driver to state a 'preferred'
-governor to switch to at idle registration -- let me know if you think that
-looks a sensible approach. Note that the intent of that patch follows the
-thinking of leaving all defaults as before haltpoll governor was introduced, but
-once user modloads/uses cpuidle-haltpoll this governor then gets switched on.
+On Thu, Aug 29, 2019 at 10:04 PM Amit Kucheria <amit.kucheria@linaro.org> wrote:
+>
+> On Thu, Aug 29, 2019 at 8:23 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> >
+> > Quoting Amit Kucheria (2019-08-29 01:48:27)
+> > > On Wed, Aug 28, 2019 at 6:03 AM Stephen Boyd <swboyd@chromium.org> wrote:
+> > > >
+> > > > Quoting Amit Kucheria (2019-08-27 05:14:03)
+> > > > > Define two new required properties to define interrupts and
+> > > > > interrupt-names for tsens.
+> > > > >
+> > > > > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > > > > ---
+> > > > >  Documentation/devicetree/bindings/thermal/qcom-tsens.txt | 8 ++++++++
+> > > > >  1 file changed, 8 insertions(+)
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > > > > index 673cc1831ee9d..686bede72f846 100644
+> > > > > --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > > > > +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> > > > > @@ -22,6 +22,8 @@ Required properties:
+> > > > >
+> > > > >  - #thermal-sensor-cells : Should be 1. See ./thermal.txt for a description.
+> > > > >  - #qcom,sensors: Number of sensors in tsens block
+> > > > > +- interrupts: Interrupts generated from Always-On subsystem (AOSS)
+> > > >
+> > > > Is it always one? interrupt-names makes it sound like it.
+> > > >
+> > > > > +- interrupt-names: Must be one of the following: "uplow", "critical"
+> > >
+> > > Will fix to "one or more of the following"
+> > >
+> >
+> > Can we get a known quantity of interrupts for a particular compatible
+> > string instead? Let's be as specific as possible. The index matters too,
+> > so please list them in the order that is desired.
+>
+> I *think* we can predict what platforms have uplow and critical
+> interrupts based on IP version currently[1]. For newer interrupt
+> types, we might need more fine-grained platform compatibles.
+>
+> [1] Caveat: this is based only on the list of platforms I've currently
+> looked at, there might be something internally that breaks these
+> rules.
 
-[0] https://lore.kernel.org/kvm/c8cf8dcc-76a3-3e15-f514-2cb9df1bbbdc@oracle.com/
+What do you think if we changed the wording to something like the following,
 
-I would think a config-based preference on a governor would be good *if* one
-could actually switch idle governors at runtime like you can with cpufreq -- in
-case userspace wants something else other than the default. Right now we can't
-do that unless you toggle 'cpuidle_sysfs_switch', or picking one at boot with
-'cpuidle.governor='.
-
-> May be I missed the point from some previous discussion but IMHO the
-> problem you are facing is coming from the design: there is no need to
-> create a halt governor but move the code inside the cpuidle-halt driver
-> instead and ignore the state asked by the governor and return the state
-> the driver entered.
-> 
-Marcello's original patch series (first 3 revisions to be exact) actually had
-everything in the idle driver, but after some revisions (v4+) Rafael asked him
-to split the logic into a governor and unify it with poll state[1].
-
-[1]
-https://lore.kernel.org/kvm/CAJZ5v0gPbSXB3r71XaT-4Q7LsiFO_UVymBwOmU8J1W5+COk_1g@mail.gmail.com/
-
-	Joao
+- interrupt-names: Must be one of the following depending on IP version:
+   For compatibles qcom,msm8916-tsens, qcom,msm8974-tsens,
+qcom,qcs404-tsens, qcom,tsens-v1, use
+              interrupt-names = "uplow";
+   For compatibles qcom,msm8996-tsens, qcom,msm8998-tsens,
+qcom,sdm845-tsens, qcom,tsens-v2, use
+              interrupt-names = "uplow", "critical";
