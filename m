@@ -2,57 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9108BA45EB
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 21:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A9DA45EC
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 21:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728517AbfHaTf2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 31 Aug 2019 15:35:28 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:34669 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728477AbfHaTf2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Aug 2019 15:35:28 -0400
-Received: by mail-io1-f68.google.com with SMTP id s21so21166147ioa.1
-        for <linux-pm@vger.kernel.org>; Sat, 31 Aug 2019 12:35:27 -0700 (PDT)
+        id S1728519AbfHaTf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 31 Aug 2019 15:35:29 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:33337 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728477AbfHaTf3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Aug 2019 15:35:29 -0400
+Received: by mail-io1-f66.google.com with SMTP id z3so21192865iog.0
+        for <linux-pm@vger.kernel.org>; Sat, 31 Aug 2019 12:35:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=gZJL2iIhBB5yJYfE+IFqeqeHKpBTg3suwKsoFE3jUes=;
-        b=Gy5vAJtTN0q/XYWIidE6ZzKes+QqfcpW8Ksc7B0k81R8COC+3S6xTN292OhZZGOhzf
-         X6Nx2yhs/AXIXhK0ILT0Yc8pQdmbL9fzKAEdGUNHQRUrfq+Usd/hY2768qycanDviugy
-         eGehsbbJL4BTkxs4bnDInjeioftRShxtXNHA8ebbOeRcLdERSAMIln6yTrulT40pUB3a
-         DyvmNrj0fGgyFAytn9y8++mcIvb3zfmGYIeczWpx5ljIVEnpWAts1bQzsgcGXntduje5
-         tPy/YkydQGF+veGb07wYQMfs/9oXrXf/pAVeeAnsbjNVHdSBAk+x5KfCFLOTPq+EvGEx
-         VAbA==
+        bh=ife59CansJdiuUBisqVTeUVM1g1vLhLaLfQdgHpFelc=;
+        b=YW20kUuojr7RFMNv8I/JDd6DjUHGL8S3OzQf06g+tv+35fab1epRPSIKGGDf3yQYXt
+         BUiPBSByWWIEBtpqtIa9bnDXTrgBHCfv72RZwC9lpjvHNTPLxDoL8mV4jaH9vHblSK4u
+         Y2jHwH+rh8NoGRYYxHE31kmjYKL9yFKrZ5wqEOGQkuj4o1fW1toGv5NRo2F0BDnL8jLt
+         Sbuhv62OktQ08SfkXntaoMsL9qyxL8EOEP28Sh48L9Ux7qbtFquzjOqE5LYWB8Slv4Vz
+         PTOLfxivfD1Ag3osBv4+pk/UyyBn9IbLCs5pA5QuIdRY0AHP/QfQHUF9m1fsO59Jy6Vo
+         SCNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:reply-to:organization
          :content-transfer-encoding;
-        bh=gZJL2iIhBB5yJYfE+IFqeqeHKpBTg3suwKsoFE3jUes=;
-        b=lbuKatEmBi9hCYGNzFtZejAqubaIhHVgtSyBWwp08rxATix1Y2sKVfGcOBLs97LDNT
-         JXSZxPPYdp48KN/4otpGkFiTu4PJf7i+yqJICT5esneu2uYkoUxXNjpXNRocNQmGQpCt
-         pmtwAvpC99IC9l6JH+HgpO0CNzrpigKvIkuwpgoRZ5CCsQfW8MjFyWpomWLibAkQrjd2
-         UqnDCT39MsIyNcvUuNs2qGASY7B7GisS7UuHOVUQc6088+gZtdJBYtM6NH/AosiVArlj
-         QouILI20qWPCoY+2+wUQfVoatEQjXjPp1sWx1meafZ+0JNITqrBx8cGLExdLuZjrnAt8
-         XpPQ==
-X-Gm-Message-State: APjAAAUlrjN7+21rsgiTmIghDBJpzA/wd2xcHkfj++piCkcbA86xK2PP
-        2Wqdpp88p/rKHVxS2bDxTIrgIRMN
-X-Google-Smtp-Source: APXvYqyktVPQs4RHO3+1uvUSqjFAiqy0hfcs5IswK+LxoTMzUaokPTyN/m74dD9IjsruyuPvxVWntA==
-X-Received: by 2002:a5d:9551:: with SMTP id a17mr9884521ios.37.1567280127396;
-        Sat, 31 Aug 2019 12:35:27 -0700 (PDT)
+        bh=ife59CansJdiuUBisqVTeUVM1g1vLhLaLfQdgHpFelc=;
+        b=OBAgvd3KpWCQbCgBV2M7zyPl5If/Rvryb6+Rn3Bt+Tw2ZghB/d4G/DP9x3+h4o8dEQ
+         dG8q1v/ju5rV5FXvS8EZ0dRfO5EO0cKqERKnpFQoEfiyNgiNkr8TUUEC2zh4ySINzLn/
+         SZ0jfLH0Zb1V4KRTXoRk98i63/wp9wGFvtnAjUOnniKDPrT7kRwN+kobZx4u9Uutxt1s
+         kgZdNXQ1m1EZyMZqcvsGK9IWPZ4TxoU4oj48jR51Prnk1ygtcV6w02rBkE5K2JNWGWRB
+         vrNunvj3ZLpe+FTy0Dx+ceZEIjtgtUpnf2E0vzz7bUC+q5QtJDDuI2gnzw4qOdy9hCep
+         QzCg==
+X-Gm-Message-State: APjAAAXa3EUETnmzSadiz6wcGR6ijEtT6b/RAhVp+N90zXv8EPzFjQ9Y
+        6IO2/Y53IVnhLD+8uypBHVoQ8E7V
+X-Google-Smtp-Source: APXvYqwpLlvwxlwFXSI32Je8tI2O7F1WW17i8L78IW0EZrta8peIx8Ojg1ZjMBvXCgzxlP8236jMBQ==
+X-Received: by 2002:a5d:9d49:: with SMTP id k9mr10822195iok.106.1567280128468;
+        Sat, 31 Aug 2019 12:35:28 -0700 (PDT)
 Received: from nuc8.tds (h69-131-112-51.cntcnh.dsl.dynamic.tds.net. [69.131.112.51])
-        by smtp.gmail.com with ESMTPSA id r2sm6937376ioh.61.2019.08.31.12.35.26
+        by smtp.gmail.com with ESMTPSA id r2sm6937376ioh.61.2019.08.31.12.35.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Aug 2019 12:35:26 -0700 (PDT)
+        Sat, 31 Aug 2019 12:35:27 -0700 (PDT)
 From:   Len Brown <lenb@kernel.org>
 To:     linux-pm@vger.kernel.org
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Prarit Bhargava <prarit@redhat.com>,
+Cc:     Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
         Len Brown <len.brown@intel.com>
-Subject: [PATCH 08/19] tools/power turbostat: fix file descriptor leaks
-Date:   Sat, 31 Aug 2019 15:34:47 -0400
-Message-Id: <605736c6929d541c78a85dffae4d33a23b6b2149.1567277326.git.len.brown@intel.com>
+Subject: [PATCH 09/19] tools/power turbostat: fix buffer overrun
+Date:   Sat, 31 Aug 2019 15:34:48 -0400
+Message-Id: <eeb71c950bc6eee460f2070643ce137e067b234c.1567277326.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <adb8049097a9ec4acd09fbd3aa8636199a78df8a.1567277326.git.len.brown@intel.com>
 References: <adb8049097a9ec4acd09fbd3aa8636199a78df8a.1567277326.git.len.brown@intel.com>
@@ -65,32 +64,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+From: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
 
-Fix file descriptor leaks by closing fp before return.
+turbostat could be terminated by general protection fault on some latest
+hardwares which (for example) support 9 levels of C-states and show 18
+"tADDED" lines. That bloats the total output and finally causes buffer
+overrun.  So let's extend the buffer to avoid this.
 
-Addresses-Coverity-ID: 1444591 ("Resource leak")
-Addresses-Coverity-ID: 1444592 ("Resource leak")
-Fixes: 5ea7647b333f ("tools/power turbostat: Warn on bad ACPI LPIT data")
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-Reviewed-by: Prarit Bhargava <prarit@redhat.com>
+Signed-off-by: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 41cf1206273c..2fb5c155289b 100644
+index 2fb5c155289b..f8f4e1c130a6 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2918,6 +2918,7 @@ int snapshot_cpu_lpi_us(void)
- 	if (retval != 1) {
- 		fprintf(stderr, "Disabling Low Power Idle CPU output\n");
- 		BIC_NOT_PRESENT(BIC_CPU_LPI);
-+		fclose(fp);
- 		return -1;
- 	}
+@@ -5131,7 +5131,7 @@ int initialize_counters(int cpu_id)
  
+ void allocate_output_buffer()
+ {
+-	output_buffer = calloc(1, (1 + topo.num_cpus) * 1024);
++	output_buffer = calloc(1, (1 + topo.num_cpus) * 2048);
+ 	outp = output_buffer;
+ 	if (outp == NULL)
+ 		err(-1, "calloc output buffer");
 -- 
 2.20.1
 
