@@ -2,185 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B44F2A4321
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 09:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E5DA4575
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 18:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbfHaHkV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 31 Aug 2019 03:40:21 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:47636 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726135AbfHaHkV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Aug 2019 03:40:21 -0400
-Received: from penelope.horms.nl (ip4dab7138.direct-adsl.nl [77.171.113.56])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id B3F8F25AE77;
-        Sat, 31 Aug 2019 17:40:18 +1000 (AEST)
-Received: by penelope.horms.nl (Postfix, from userid 7100)
-        id 92FBBE218F0; Sat, 31 Aug 2019 09:40:16 +0200 (CEST)
-Date:   Sat, 31 Aug 2019 09:40:16 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Nathan Huckleberry <nhuck@google.com>, edubezval@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
-        wsa+renesas@sang-engineering.com
-Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Fix Wshift-negative-value
-Message-ID: <20190831074016.nqjtvqf3lesyz77z@verge.net.au>
-References: <20190613211228.34092-1-nhuck@google.com>
- <fd8b8a48-dfb7-1478-2d8d-0953acee39d3@linaro.org>
- <82458318837ed1154a183be0b96337fc7809c645.camel@intel.com>
- <20190829131124.GA2437@kunai>
+        id S1728274AbfHaQsp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 31 Aug 2019 12:48:45 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:40767 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727816AbfHaQso (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Aug 2019 12:48:44 -0400
+Received: by mail-ed1-f65.google.com with SMTP id v38so5683786edm.7;
+        Sat, 31 Aug 2019 09:48:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ztMy/qc6TZtxWztQakmFfR5mUH6yqYSc1RNJD7TlbZQ=;
+        b=s0DJ7pg3BA42rYndtdKLUHBIo9N2tWK9bc7/62X4w586Mz2sozc8X12oEH8IrZyxNC
+         c9iUvDNO2V1C+twP/W1CGx7WK8ay71ihd+CsYAtAPwDu4yRjPXZHOS0X+TKSfHX9t+mg
+         5xm4vdkVYN/Fyhh24QGD6KD7qweGTDz368CbcwpVFY9NoKiTaArhVMjsFiOQo3zZJHJj
+         95+ZUsHhGnjHyO6AJiDZ3GUoIbvny5RHVGZtFePhbaoA52BJTjRE+e6Ir2M7TOgTxIRp
+         I6uT+eun4MZ1pNDjHSJX5w8nJh6uTA68DBhc+TuI12nFYAg5x7u0I+5FYTREh7coDFCs
+         4TGg==
+X-Gm-Message-State: APjAAAX1hNbgDU3MD18mN5+nT/7/MxsnB5pScY7Hm+3xc8vyp1jsyG7e
+        LFlYwhW6d7LnxlFy/vrGpAOENLJgQwUIV8u4V86upA==
+X-Google-Smtp-Source: APXvYqyl4ibkLRkDUjYF8n0z5MtjgExy1a9DAIVq8L6fnpy7YHsbekFn804yrSKHc1SJcIQgcCR5/e/oZGJpW7b9VUQ=
+X-Received: by 2002:a50:bf4f:: with SMTP id g15mr21462355edk.92.1567270123028;
+ Sat, 31 Aug 2019 09:48:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190829131124.GA2437@kunai>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <20190325173232.216357-1-Yazen.Ghannam@amd.com>
+ <SN6PR12MB26394D7FEE4582FD19860104F8230@SN6PR12MB2639.namprd12.prod.outlook.com>
+ <SN6PR12MB2639ABA1421E220FF5813738F8100@SN6PR12MB2639.namprd12.prod.outlook.com>
+In-Reply-To: <SN6PR12MB2639ABA1421E220FF5813738F8100@SN6PR12MB2639.namprd12.prod.outlook.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Sat, 31 Aug 2019 12:48:32 -0400
+Message-ID: <CAJvTdKk28qQnVv-fMkd6dPGrbfYryp+7PRHgqyurLyavMHSGbw@mail.gmail.com>
+Subject: Re: [PATCH] tools/power turbostat: Make interval calculation per
+ thread to reduce jitter
+To:     "Ghannam, Yazen" <Yazen.Ghannam@amd.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 03:11:24PM +0200, Wolfram Sang wrote:
-> On Wed, Aug 28, 2019 at 04:52:20PM +0800, Zhang Rui wrote:
-> > On Fri, 2019-06-14 at 12:52 +0200, Daniel Lezcano wrote:
-> > > Hi Nathan,
-> > > 
-> > > On 13/06/2019 23:12, Nathan Huckleberry wrote:
-> > > > Clang produces the following warning
-> > > > 
-> > > > vers/thermal/rcar_gen3_thermal.c:147:33: warning: shifting a
-> > > > negative
-> > > > signed value is undefined [-Wshift-negative-value] / (ptat[0] -
-> > > > ptat[2])) +
-> > > > FIXPT_INT(TJ_3); ^~~~~~~~~~~~~~~
-> > > > drivers/thermal/rcar_gen3_thermal.c:126:29
-> > > > note: expanded from macro 'FIXPT_INT' #define FIXPT_INT(_x) ((_x)
-> > > > <<
-> > > > FIXPT_SHIFT) ~~~~ ^ drivers/thermal/rcar_gen3_thermal.c:150:18:
-> > > > warning:
-> > > > shifting a negative signed value is undefined [-Wshift-negative-
-> > > > value]
-> > > > tsc->tj_t - FIXPT_INT(TJ_3)); ~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-> > > > 
-> > > > Upon further investigating it looks like there is no real reason
-> > > > for
-> > > > TJ_3 to be -41. Usages subtract -41, code would be cleaner to just
-> > > > add.
-> > > 
-> > > All the code seems broken regarding the negative value shifting as
-> > > the
-> > > macros pass an integer:
-> > > 
-> > > eg.
-> > >         tsc->coef.a2 = FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]),
-> > >                                  tsc->tj_t - FIXPT_INT(ths_tj_1));
-> > > 
-> > > thcode[1] is always < than thcode[0],
-> > > 
-> > > thcode[1] - thcode[0] < 0
-> > > 
-> > > FIXPT_INT(thcode[1] - thcode[0]) is undefined
-> > > 
-> > > 
-> > > Is it done on purpose FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]) ?
-> > > 
-> > > Try developing the macro with the coef.a2 computation ...
-> > > 
-> > > The code quality of this driver could be better, it deserves a rework
-> > > IMHO ...
-> > > 
-> > > I suggest to revert:
-> > > 
-> > > 4eb39f79ef443fa566d36bd43f1f578d5c140305
-> > > bdc4480a669d476814061b4da6bb006f7048c8e5
-> > > 6a310f8f97bb8bc2e2bb9db6f49a1b8678c8d144
-> > > 
-> > > Rework the coefficient computation and re-introduce what was reverted
-> > > in
-> > > a nicer way.
-> > 
-> > Sounds reasonable to me.
-> > 
-> > Yoshihiro,
-> > can you please clarify on this? Or else I will revert the above commits
-> > first?
-> > 
-> > Also CC Wolfram Sang, the driver author.
-> 
-> CCing Simon Horman who worked with Kaneko-san on these changes.
+Yeah, I like this patch, and I have applied it.
 
-Hi,
+thanks!
+-Len
 
-I think that what has happened here is that these patches and moreover the
-driver has been through quite a few hands and I agree that zooming out and
-cleaning things up would make a lot of sense.  Personally I would take the
-approach of incrementally cleaning things up.  But I don't feel strongly
-about this.
-
-As for the specific question about a negative constant, I don't know of a
-specific reason that approach was taken and I don't recall investigating it
-at the time.
-
-Kind regards,
-Simon
-
-> 
-> > thanks,
-> > rui
-> > > 
-> > > 
-> > > > Fixes: 4eb39f79ef44 ("thermal: rcar_gen3_thermal: Update value of
-> > > > Tj_1")
-> > > > Cc: clang-built-linux@googlegroups.com
-> > > > Link: https://github.com/ClangBuiltLinux/linux/issues/531
-> > > > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
-> > > > ---
-> > > >  drivers/thermal/rcar_gen3_thermal.c | 8 ++++----
-> > > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/thermal/rcar_gen3_thermal.c
-> > > > b/drivers/thermal/rcar_gen3_thermal.c
-> > > > index a56463308694..f4b4558c08e9 100644
-> > > > --- a/drivers/thermal/rcar_gen3_thermal.c
-> > > > +++ b/drivers/thermal/rcar_gen3_thermal.c
-> > > > @@ -131,7 +131,7 @@ static inline void
-> > > > rcar_gen3_thermal_write(struct rcar_gen3_thermal_tsc *tsc,
-> > > >  #define RCAR3_THERMAL_GRAN 500 /* mili Celsius */
-> > > >  
-> > > >  /* no idea where these constants come from */
-
-Regarding the line above, I believe the constant comes
-from the documentation.
-
-> > > > -#define TJ_3 -41
-> > > > +#define TJ_3 41
-> > > >  
-> > > >  static void rcar_gen3_thermal_calc_coefs(struct
-> > > > rcar_gen3_thermal_tsc *tsc,
-> > > >  					 int *ptat, const int *thcode,
-> > > > @@ -144,11 +144,11 @@ static void
-> > > > rcar_gen3_thermal_calc_coefs(struct rcar_gen3_thermal_tsc *tsc,
-> > > >  	 * the dividend (4095 * 4095 << 14 > INT_MAX) so keep it
-> > > > unscaled
-> > > >  	 */
-> > > >  	tsc->tj_t = (FIXPT_INT((ptat[1] - ptat[2]) * 157)
-> > > > -		     / (ptat[0] - ptat[2])) + FIXPT_INT(TJ_3);
-> > > > +		     / (ptat[0] - ptat[2])) - FIXPT_INT(TJ_3);
-> > > >  
-> > > >  	tsc->coef.a1 = FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[2]),
-> > > > -				 tsc->tj_t - FIXPT_INT(TJ_3));
-> > > > -	tsc->coef.b1 = FIXPT_INT(thcode[2]) - tsc->coef.a1 * TJ_3;
-> > > > +				 tsc->tj_t + FIXPT_INT(TJ_3));
-> > > > +	tsc->coef.b1 = FIXPT_INT(thcode[2]) + tsc->coef.a1 * TJ_3;
-> > > >  
-> > > >  	tsc->coef.a2 = FIXPT_DIV(FIXPT_INT(thcode[1] - thcode[0]),
-> > > >  				 tsc->tj_t - FIXPT_INT(ths_tj_1));
-> > > > 
-> > > 
-> > > 
-> > 
+On Fri, Jun 7, 2019 at 12:28 PM Ghannam, Yazen <Yazen.Ghannam@amd.com> wrote:
+>
+> > -----Original Message-----
+> > From: Ghannam, Yazen <Yazen.Ghannam@amd.com>
+> > Sent: Tuesday, April 23, 2019 12:53 PM
+> > To: Ghannam, Yazen <Yazen.Ghannam@amd.com>; linux-pm@vger.kernel.org; len.brown@intel.com
+> > Cc: linux-kernel@vger.kernel.org; Len Brown <lenb@kernel.org>
+> > Subject: RE: [PATCH] tools/power turbostat: Make interval calculation per thread to reduce jitter
+> >
+> > > -----Original Message-----
+> > > From: linux-kernel-owner@vger.kernel.org <linux-kernel-owner@vger.kernel.org> On Behalf Of Ghannam, Yazen
+> > > Sent: Monday, March 25, 2019 12:33 PM
+> > > To: linux-pm@vger.kernel.org
+> > > Cc: Ghannam, Yazen <Yazen.Ghannam@amd.com>; linux-kernel@vger.kernel.org; lenb@kernel.org
+> > > Subject: [PATCH] tools/power turbostat: Make interval calculation per thread to reduce jitter
+> > >
+> > > From: Yazen Ghannam <yazen.ghannam@amd.com>
+> > >
+> > > Turbostat currently normalizes TSC and other values by dividing by an
+> > > interval. This interval is the delta between the start of one global
+> > > (all counters on all CPUs) sampling and the start of another. However,
+> > > this introduces a lot of jitter into the data.
+> > >
+> > > In order to reduce jitter, the interval calculation should be based on
+> > > timestamps taken per thread and close to the start of the thread's
+> > > sampling.
+> > >
+> > > Define a per thread time value to hold the delta between samples taken
+> > > on the thread.
+> > >
+> > > Use the timestamp taken at the beginning of sampling to calculate the
+> > > delta.
+> > >
+> > > Move the thread's beginning timestamp to after the CPU migration to
+> > > avoid jitter due to the migration.
+> > >
+> > > Use the global time delta for the average time delta.
+> > >
+> > > Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> > > ---
+> >
+> > Hi Len,
+> >
+> > Any comments on this patch?
+> >
+>
+> Hi Len,
+>
+> Just wanted to check in. Do you have any comments on this patch?
+>
+> Thanks,
+> Yazen
 
 
+
+-- 
+Len Brown, Intel Open Source Technology Center
