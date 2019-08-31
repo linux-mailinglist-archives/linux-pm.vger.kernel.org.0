@@ -2,55 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A41AAA45ED
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 21:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D33A45EE
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 21:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728526AbfHaTfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 31 Aug 2019 15:35:30 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:41362 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728477AbfHaTfa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Aug 2019 15:35:30 -0400
-Received: by mail-io1-f68.google.com with SMTP id j5so21051378ioj.8
-        for <linux-pm@vger.kernel.org>; Sat, 31 Aug 2019 12:35:30 -0700 (PDT)
+        id S1728528AbfHaTfb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 31 Aug 2019 15:35:31 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36483 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728477AbfHaTfb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Aug 2019 15:35:31 -0400
+Received: by mail-io1-f67.google.com with SMTP id o9so21126549iom.3
+        for <linux-pm@vger.kernel.org>; Sat, 31 Aug 2019 12:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=YtAgTdw/rysthovZPX64XjklJsUxVge/haMZznY1gms=;
-        b=Lz/E+JRiRVkEwgb419X69FWgmT/paqrh8oeJkaiAkpxodxwhoT0WzeM5Hd02ojyZ4o
-         41+CPioXKyBYXIDXPRuW3+C9N/I/itToREcA6klAoRotOyitWIy1GkSAB+S5GJ8SJ4Ub
-         OyO3nvOvClLuXFLPniM3nJr50n7BZfGQE4OS0dBMe4bijpNI1pdvkAxA9ZcwuQUWbZ7n
-         r0VsOJvQcvMnLuXuV+y0VZ5J1ChgSFazu4aZm3gNO4vVu/iZYKGmxhJ8hZmLtJzBBMxM
-         s9bMqGAKDVthdTJ5dRpSbrvUsePLwIaerLbDd2ejNAP+fshvfJR5vTxFJqwPWc6mhr56
-         VdtQ==
+        bh=xKyYA9KsO1EO5NoXY2+q1lFzQrl8ewmkWHBmX9CJ9h8=;
+        b=Oc0WBv1wp2Th5YIHJyG27V9qkYFpqvcZcCrlwBOdKCbwI/uYeRExwIy73iZ/F6QIbU
+         S0r3TFvMr4Idl3magmWf+ytjNAwv8O/DsyomJTwLiqggovTBi6kUu6Zlra4JfGy3vWsF
+         9SxQoFOzkmmuZf74EFKXPM/8VOjR3/oZ4qJSKreNxRwprGQFgy6eApbOGlJVMV8KmO9X
+         PrQY9zESKU95QLBUuyirTl0p//THsIh9EgmQA0sv7X3+w9sw7y2bWnwKgG11EwoQWJYc
+         6T8iWGW1brhDpypeT9i7Auz7pSRQRXh5wCjHd2rJsTbbY9Y+t2rk8DYi9BV0WqIW9z3x
+         YhpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:reply-to:organization
          :content-transfer-encoding;
-        bh=YtAgTdw/rysthovZPX64XjklJsUxVge/haMZznY1gms=;
-        b=ajO6C1LO/VFgYKjwcq+BlOeDy7JtKBbQqo1IImG3xwdo9BcLnLotsaynn88P/iTkTM
-         9imyKi/6nhYmZI2zCGIimkwJ6xyLm88tRRZumjztdlP+LlCTtdoQ6mvoXMgia6khiOo5
-         WHm/8//pcTFzFQBWWs9bzP2Vha3ujEx4Jx3S4YTYQF1L4BEQsZoQj22rvNfuwKM8Ymjn
-         nmIRM9xpiJJkqt7xpApsmklgbffUV1f/vSJJFFuBvYnf4K49RQEZLcFb9iZM4nUTfSBX
-         Lyk5CKEIpdhAlgBS0T571GiiKcPZ9KCljWHPEgsDUhMTAX76TVjO3cX3gXiGKTneYtGA
-         GoSw==
-X-Gm-Message-State: APjAAAX6qKSFjLda4nhYTS2kj4Ptrb+exiWkzwfPAEzhlMmTBKByWzQi
-        DFSjZynN9TRApU1/c7N3dYKvs5HJ
-X-Google-Smtp-Source: APXvYqwHejdJJvMW3icPtoD11xRClVxBAN5hnFCvFLAhfJXb0eLGFSC08Z0jGwBFT3+ZTD4ipjBQkg==
-X-Received: by 2002:a5d:8a10:: with SMTP id w16mr4605505iod.175.1567280129551;
-        Sat, 31 Aug 2019 12:35:29 -0700 (PDT)
+        bh=xKyYA9KsO1EO5NoXY2+q1lFzQrl8ewmkWHBmX9CJ9h8=;
+        b=AxCK6B2hS3qdXZTz4q8R3+g+WsJPgAFgvCXrmkow+P0ZQ8tW2kb2MKiNl4g6lI1yJp
+         zjh1IDcHGYHve9clVaSpMwBjyUahV7QkjmI5FI4JVuMZh0GCEqv6gcNEKCA8kRS4t+aW
+         1gRNSzVuAx3P5sO7v/RZcRtbkE3nGLsGxfkCHy0UW9yw8g18N8HuG65rO+0ov2tjG2CY
+         PZ6Y0m/7wtgEXIE6qfW1FkDpGaUV3t/R43Jz/tpvwySQfy+0/Cos6KZkZk4SC/Lo2zf6
+         yEUiRBakWpWiEcXz3APlUMyuT8OC47TpnpNPdbgQ+ueR/IIBS+4ceKRReWlNp5a1M6XG
+         zrww==
+X-Gm-Message-State: APjAAAVWzVEGTJQdCuyZgJN+PCjpoYnJVGk2QMWXsir++CMi15D8vzY/
+        8bkAgWR0PhhKz4yIWHdgNkl/Yfqe
+X-Google-Smtp-Source: APXvYqyWoO918KI09CabWk9bxpfwPVate1lncW2H2rscwhb6o7LWMDdzx/jZhirj7Mg5xjkEj+LzEA==
+X-Received: by 2002:a02:c652:: with SMTP id k18mr16761184jan.44.1567280130649;
+        Sat, 31 Aug 2019 12:35:30 -0700 (PDT)
 Received: from nuc8.tds (h69-131-112-51.cntcnh.dsl.dynamic.tds.net. [69.131.112.51])
-        by smtp.gmail.com with ESMTPSA id r2sm6937376ioh.61.2019.08.31.12.35.28
+        by smtp.gmail.com with ESMTPSA id r2sm6937376ioh.61.2019.08.31.12.35.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Aug 2019 12:35:28 -0700 (PDT)
+        Sat, 31 Aug 2019 12:35:30 -0700 (PDT)
 From:   Len Brown <lenb@kernel.org>
 To:     linux-pm@vger.kernel.org
-Cc:     Zhang Rui <rui.zhang@intel.com>, Len Brown <len.brown@intel.com>
-Subject: [PATCH 10/19] tools/power turbostat: add Jacobsville support
-Date:   Sat, 31 Aug 2019 15:34:49 -0400
-Message-Id: <b62b3184576b8f87ca655dd9bfd1ae02fd4e50a5.1567277326.git.len.brown@intel.com>
+Cc:     Len Brown <len.brown@intel.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Kosuke Tatsukawa <tatsu@ab.jp.nec.com>
+Subject: [PATCH 11/19] tools/power turbostat: Fix Haswell Core systems
+Date:   Sat, 31 Aug 2019 15:34:50 -0400
+Message-Id: <cd188af5282d9f9e65f63915b13239bafc746f8d.1567277326.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <adb8049097a9ec4acd09fbd3aa8636199a78df8a.1567277326.git.len.brown@intel.com>
 References: <adb8049097a9ec4acd09fbd3aa8636199a78df8a.1567277326.git.len.brown@intel.com>
@@ -63,30 +65,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Zhang Rui <rui.zhang@intel.com>
+From: Len Brown <len.brown@intel.com>
 
-Jacobsville behaves like Denverton.
+turbostat: cpu0: msr offset 0x630 read failed: Input/output error
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+because Haswell Core does not have C8-C10.
+
+Output C8-C10 only on Haswell ULT.
+
+Fixes: f5a4c76ad7de ("tools/power turbostat: consolidate duplicate model numbers")
+
+Reported-by: Prarit Bhargava <prarit@redhat.com>
+Suggested-by: Kosuke Tatsukawa <tatsu@ab.jp.nec.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index f8f4e1c130a6..35f4366a522e 100644
+index 35f4366a522e..78e7c94b94bf 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -4591,6 +4591,9 @@ unsigned int intel_model_duplicates(unsigned int model)
+@@ -3217,6 +3217,7 @@ int probe_nhm_msrs(unsigned int family, unsigned int model)
+ 		break;
+ 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_X:	/* HSX */
++	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
+ 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
+ 	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
+@@ -3413,6 +3414,7 @@ int has_config_tdp(unsigned int family, unsigned int model)
+ 	case INTEL_FAM6_IVYBRIDGE:	/* IVB */
+ 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_X:	/* HSX */
++	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
+ 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
+ 	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
+@@ -3849,6 +3851,7 @@ void rapl_probe_intel(unsigned int family, unsigned int model)
+ 	case INTEL_FAM6_SANDYBRIDGE:
+ 	case INTEL_FAM6_IVYBRIDGE:
+ 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
++	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
+ 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
+ 	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
+@@ -4040,6 +4043,7 @@ void perf_limit_reasons_probe(unsigned int family, unsigned int model)
  
- 	case INTEL_FAM6_ICELAKE_MOBILE:
- 		return INTEL_FAM6_CANNONLAKE_MOBILE;
-+
-+	case INTEL_FAM6_ATOM_TREMONT_X:
-+		return INTEL_FAM6_ATOM_GOLDMONT_X;
- 	}
- 	return model;
- }
+ 	switch (model) {
+ 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
++	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
+ 		do_gfx_perf_limit_reasons = 1;
+ 	case INTEL_FAM6_HASWELL_X:	/* HSX */
+@@ -4259,6 +4263,7 @@ int has_snb_msrs(unsigned int family, unsigned int model)
+ 	case INTEL_FAM6_IVYBRIDGE_X:	/* IVB Xeon */
+ 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_X:	/* HSW */
++	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
+ 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
+ 	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
+@@ -4292,7 +4297,7 @@ int has_hsw_msrs(unsigned int family, unsigned int model)
+ 		return 0;
+ 
+ 	switch (model) {
+-	case INTEL_FAM6_HASWELL_CORE:
++	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
+ 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
+ 	case INTEL_FAM6_SKYLAKE_MOBILE:	/* SKL */
+ 	case INTEL_FAM6_CANNONLAKE_MOBILE:	/* CNL */
+@@ -4576,9 +4581,6 @@ unsigned int intel_model_duplicates(unsigned int model)
+ 	case INTEL_FAM6_XEON_PHI_KNM:
+ 		return INTEL_FAM6_XEON_PHI_KNL;
+ 
+-	case INTEL_FAM6_HASWELL_ULT:
+-		return INTEL_FAM6_HASWELL_CORE;
+-
+ 	case INTEL_FAM6_BROADWELL_X:
+ 	case INTEL_FAM6_BROADWELL_XEON_D:	/* BDX-DE */
+ 		return INTEL_FAM6_BROADWELL_X;
 -- 
 2.20.1
 
