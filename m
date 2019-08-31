@@ -2,170 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 378BCA40FE
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 01:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280A4A41AE
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 04:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728257AbfH3XXW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Aug 2019 19:23:22 -0400
-Received: from muru.com ([72.249.23.125]:59318 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728122AbfH3XXW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 30 Aug 2019 19:23:22 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 40C1D80D4;
-        Fri, 30 Aug 2019 23:23:50 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Marcel Partap <mpartap@gmx.net>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Michael Scott <hashcode0f@gmail.com>,
-        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH] power: supply: cpcap-charger: Enable vbus boost voltage
-Date:   Fri, 30 Aug 2019 16:23:16 -0700
-Message-Id: <20190830232316.53750-1-tony@atomide.com>
-X-Mailer: git-send-email 2.23.0
+        id S1728368AbfHaCV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Aug 2019 22:21:26 -0400
+Received: from [110.188.70.11] ([110.188.70.11]:21853 "EHLO spam1.hygon.cn"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728364AbfHaCV0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 30 Aug 2019 22:21:26 -0400
+Received: from MK-DB.hygon.cn ([172.23.18.60])
+        by spam1.hygon.cn with ESMTP id x7V2KPaf005905;
+        Sat, 31 Aug 2019 10:20:25 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from cncheex01.Hygon.cn ([172.23.18.10])
+        by MK-DB.hygon.cn with ESMTP id x7V2K3Ou098399;
+        Sat, 31 Aug 2019 10:20:03 +0800 (GMT-8)
+        (envelope-from puwen@hygon.cn)
+Received: from pw-vbox.hygon.cn (172.23.18.44) by cncheex01.Hygon.cn
+ (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Sat, 31 Aug
+ 2019 10:20:23 +0800
+From:   Pu Wen <puwen@hygon.cn>
+To:     <lenb@kernel.org>, <calvin.walton@kepstin.ca>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, Pu Wen <puwen@hygon.cn>
+Subject: [RFC PATCH v2] tools/power turbostat: Fix caller parameter of get_tdp_amd()
+Date:   Sat, 31 Aug 2019 10:19:58 +0800
+Message-ID: <1567217998-4356-1-git-send-email-puwen@hygon.cn>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.23.18.44]
+X-ClientProxiedBy: cncheex02.Hygon.cn (172.23.18.12) To cncheex01.Hygon.cn
+ (172.23.18.10)
+X-MAIL: spam1.hygon.cn x7V2KPaf005905
+X-DNSRBL: 
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We are currently not enabling VBUS boost for cpcap when in host mode.
-This means the VBUS is fed at the battery voltage level, which can cause
-flakeyness enumerating devices.
+Commit 9392bd98bba760be96ee ("tools/power turbostat: Add support for AMD
+Fam 17h (Zen) RAPL") add a function get_tdp_amd(), the parameter is CPU
+family. But the rapl_probe_amd() function use wrong model parameter.
+Fix the wrong caller parameter of get_tdp_amd() to use family.
 
-Looks like the boost control for VBUS is CPCAP_BIT_VBUS_SWITCH that we
-must enable in the charger for nice 4.92 V VBUS output. And looks like
-we must not use the STBY pin enabling but must instead use manual VBUS
-control in phy-cpcap-usb.
-
-We want to do this in cpcap_charger_vbus_work() and also set a flag for
-feeding_vbus to avoid races between USB detection and charger detection,
-and disable charging if feeding_vbus is set.
-
-Cc: Jacopo Mondi <jacopo@jmondi.org>
-Cc: Kishon Vijay Abraham I <kishon@ti.com>
-Cc: Marcel Partap <mpartap@gmx.net>
-Cc: Merlijn Wajer <merlijn@wizzup.org>
-Cc: Michael Scott <hashcode0f@gmail.com>
-Cc: NeKit <nekit1000@gmail.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Sebastian Reichel <sre@kernel.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+Cc: <stable@vger.kernel.org> # v5.1+
+Signed-off-by: Pu Wen <puwen@hygon.cn>
+Reviewed-by: Calvin Walton <calvin.walton@kepstin.ca>
 ---
- drivers/phy/motorola/phy-cpcap-usb.c |  8 +++++---
- drivers/power/supply/cpcap-charger.c | 23 ++++++++++++++++++++---
- 2 files changed, 25 insertions(+), 6 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/phy/motorola/phy-cpcap-usb.c b/drivers/phy/motorola/phy-cpcap-usb.c
---- a/drivers/phy/motorola/phy-cpcap-usb.c
-+++ b/drivers/phy/motorola/phy-cpcap-usb.c
-@@ -231,8 +231,9 @@ static void cpcap_usb_detect(struct work_struct *work)
- 			goto out_err;
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 75fc4fb..1cd28eb 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -4002,7 +4002,7 @@ void rapl_probe_amd(unsigned int family, unsigned int model)
+ 	rapl_energy_units = ldexp(1.0, -(msr >> 8 & 0x1f));
+ 	rapl_power_units = ldexp(1.0, -(msr & 0xf));
  
- 		error = regmap_update_bits(ddata->reg, CPCAP_REG_USBC3,
--					   CPCAP_BIT_VBUSSTBY_EN,
--					   CPCAP_BIT_VBUSSTBY_EN);
-+					   CPCAP_BIT_VBUSSTBY_EN |
-+					   CPCAP_BIT_VBUSEN_SPI,
-+					   CPCAP_BIT_VBUSEN_SPI);
- 		if (error)
- 			goto out_err;
+-	tdp = get_tdp_amd(model);
++	tdp = get_tdp_amd(family);
  
-@@ -240,7 +241,8 @@ static void cpcap_usb_detect(struct work_struct *work)
- 	}
- 
- 	error = regmap_update_bits(ddata->reg, CPCAP_REG_USBC3,
--				   CPCAP_BIT_VBUSSTBY_EN, 0);
-+				   CPCAP_BIT_VBUSSTBY_EN |
-+				   CPCAP_BIT_VBUSEN_SPI, 0);
- 	if (error)
- 		goto out_err;
- 
-diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
---- a/drivers/power/supply/cpcap-charger.c
-+++ b/drivers/power/supply/cpcap-charger.c
-@@ -108,6 +108,9 @@
- #define CPCAP_REG_CRM_ICHRG_1A596	CPCAP_REG_CRM_ICHRG(0xe)
- #define CPCAP_REG_CRM_ICHRG_NO_LIMIT	CPCAP_REG_CRM_ICHRG(0xf)
- 
-+/* CPCAP_REG_VUSBC register bits needed for VBUS */
-+#define CPCAP_BIT_VBUS_SWITCH		BIT(0)	/* VBUS boost to 5V */
-+
- enum {
- 	CPCAP_CHARGER_IIO_BATTDET,
- 	CPCAP_CHARGER_IIO_VOLTAGE,
-@@ -130,7 +133,8 @@ struct cpcap_charger_ddata {
- 	struct power_supply *usb;
- 
- 	struct phy_companion comparator;	/* For USB VBUS */
--	bool vbus_enabled;
-+	unsigned int vbus_enabled:1;
-+	unsigned int feeding_vbus:1;
- 	atomic_t active;
- 
- 	int status;
-@@ -325,7 +329,6 @@ static bool cpcap_charger_vbus_valid(struct cpcap_charger_ddata *ddata)
- }
- 
- /* VBUS control functions for the USB PHY companion */
--
- static void cpcap_charger_vbus_work(struct work_struct *work)
- {
- 	struct cpcap_charger_ddata *ddata;
-@@ -343,6 +346,7 @@ static void cpcap_charger_vbus_work(struct work_struct *work)
- 			return;
- 		}
- 
-+		ddata->feeding_vbus = true;
- 		cpcap_charger_set_cable_path(ddata, false);
- 		cpcap_charger_set_inductive_path(ddata, false);
- 
-@@ -350,12 +354,23 @@ static void cpcap_charger_vbus_work(struct work_struct *work)
- 		if (error)
- 			goto out_err;
- 
-+		error = regmap_update_bits(ddata->reg, CPCAP_REG_VUSBC,
-+					   CPCAP_BIT_VBUS_SWITCH,
-+					   CPCAP_BIT_VBUS_SWITCH);
-+		if (error)
-+			goto out_err;
-+
- 		error = regmap_update_bits(ddata->reg, CPCAP_REG_CRM,
- 					   CPCAP_REG_CRM_RVRSMODE,
- 					   CPCAP_REG_CRM_RVRSMODE);
- 		if (error)
- 			goto out_err;
- 	} else {
-+		error = regmap_update_bits(ddata->reg, CPCAP_REG_VUSBC,
-+					   CPCAP_BIT_VBUS_SWITCH, 0);
-+		if (error)
-+			goto out_err;
-+
- 		error = regmap_update_bits(ddata->reg, CPCAP_REG_CRM,
- 					   CPCAP_REG_CRM_RVRSMODE, 0);
- 		if (error)
-@@ -363,6 +378,7 @@ static void cpcap_charger_vbus_work(struct work_struct *work)
- 
- 		cpcap_charger_set_cable_path(ddata, true);
- 		cpcap_charger_set_inductive_path(ddata, true);
-+		ddata->feeding_vbus = false;
- 	}
- 
- 	return;
-@@ -431,7 +447,8 @@ static void cpcap_usb_detect(struct work_struct *work)
- 	if (error)
- 		return;
- 
--	if (cpcap_charger_vbus_valid(ddata) && s.chrgcurr1) {
-+	if (!ddata->feeding_vbus && cpcap_charger_vbus_valid(ddata) &&
-+	    s.chrgcurr1) {
- 		int max_current;
- 
- 		if (cpcap_charger_battery_found(ddata))
+ 	rapl_joule_counter_range = 0xFFFFFFFF * rapl_energy_units / tdp;
+ 	if (!quiet)
 -- 
-2.23.0
+2.7.4
+
