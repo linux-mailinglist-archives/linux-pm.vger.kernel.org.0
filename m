@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A9DA45EC
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 21:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41AAA45ED
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Aug 2019 21:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728519AbfHaTf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 31 Aug 2019 15:35:29 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:33337 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728477AbfHaTf3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Aug 2019 15:35:29 -0400
-Received: by mail-io1-f66.google.com with SMTP id z3so21192865iog.0
-        for <linux-pm@vger.kernel.org>; Sat, 31 Aug 2019 12:35:29 -0700 (PDT)
+        id S1728526AbfHaTfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 31 Aug 2019 15:35:30 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:41362 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728477AbfHaTfa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 31 Aug 2019 15:35:30 -0400
+Received: by mail-io1-f68.google.com with SMTP id j5so21051378ioj.8
+        for <linux-pm@vger.kernel.org>; Sat, 31 Aug 2019 12:35:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=ife59CansJdiuUBisqVTeUVM1g1vLhLaLfQdgHpFelc=;
-        b=YW20kUuojr7RFMNv8I/JDd6DjUHGL8S3OzQf06g+tv+35fab1epRPSIKGGDf3yQYXt
-         BUiPBSByWWIEBtpqtIa9bnDXTrgBHCfv72RZwC9lpjvHNTPLxDoL8mV4jaH9vHblSK4u
-         Y2jHwH+rh8NoGRYYxHE31kmjYKL9yFKrZ5wqEOGQkuj4o1fW1toGv5NRo2F0BDnL8jLt
-         Sbuhv62OktQ08SfkXntaoMsL9qyxL8EOEP28Sh48L9Ux7qbtFquzjOqE5LYWB8Slv4Vz
-         PTOLfxivfD1Ag3osBv4+pk/UyyBn9IbLCs5pA5QuIdRY0AHP/QfQHUF9m1fsO59Jy6Vo
-         SCNA==
+        bh=YtAgTdw/rysthovZPX64XjklJsUxVge/haMZznY1gms=;
+        b=Lz/E+JRiRVkEwgb419X69FWgmT/paqrh8oeJkaiAkpxodxwhoT0WzeM5Hd02ojyZ4o
+         41+CPioXKyBYXIDXPRuW3+C9N/I/itToREcA6klAoRotOyitWIy1GkSAB+S5GJ8SJ4Ub
+         OyO3nvOvClLuXFLPniM3nJr50n7BZfGQE4OS0dBMe4bijpNI1pdvkAxA9ZcwuQUWbZ7n
+         r0VsOJvQcvMnLuXuV+y0VZ5J1ChgSFazu4aZm3gNO4vVu/iZYKGmxhJ8hZmLtJzBBMxM
+         s9bMqGAKDVthdTJ5dRpSbrvUsePLwIaerLbDd2ejNAP+fshvfJR5vTxFJqwPWc6mhr56
+         VdtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:reply-to:organization
          :content-transfer-encoding;
-        bh=ife59CansJdiuUBisqVTeUVM1g1vLhLaLfQdgHpFelc=;
-        b=OBAgvd3KpWCQbCgBV2M7zyPl5If/Rvryb6+Rn3Bt+Tw2ZghB/d4G/DP9x3+h4o8dEQ
-         dG8q1v/ju5rV5FXvS8EZ0dRfO5EO0cKqERKnpFQoEfiyNgiNkr8TUUEC2zh4ySINzLn/
-         SZ0jfLH0Zb1V4KRTXoRk98i63/wp9wGFvtnAjUOnniKDPrT7kRwN+kobZx4u9Uutxt1s
-         kgZdNXQ1m1EZyMZqcvsGK9IWPZ4TxoU4oj48jR51Prnk1ygtcV6w02rBkE5K2JNWGWRB
-         vrNunvj3ZLpe+FTy0Dx+ceZEIjtgtUpnf2E0vzz7bUC+q5QtJDDuI2gnzw4qOdy9hCep
-         QzCg==
-X-Gm-Message-State: APjAAAXa3EUETnmzSadiz6wcGR6ijEtT6b/RAhVp+N90zXv8EPzFjQ9Y
-        6IO2/Y53IVnhLD+8uypBHVoQ8E7V
-X-Google-Smtp-Source: APXvYqwpLlvwxlwFXSI32Je8tI2O7F1WW17i8L78IW0EZrta8peIx8Ojg1ZjMBvXCgzxlP8236jMBQ==
-X-Received: by 2002:a5d:9d49:: with SMTP id k9mr10822195iok.106.1567280128468;
-        Sat, 31 Aug 2019 12:35:28 -0700 (PDT)
+        bh=YtAgTdw/rysthovZPX64XjklJsUxVge/haMZznY1gms=;
+        b=ajO6C1LO/VFgYKjwcq+BlOeDy7JtKBbQqo1IImG3xwdo9BcLnLotsaynn88P/iTkTM
+         9imyKi/6nhYmZI2zCGIimkwJ6xyLm88tRRZumjztdlP+LlCTtdoQ6mvoXMgia6khiOo5
+         WHm/8//pcTFzFQBWWs9bzP2Vha3ujEx4Jx3S4YTYQF1L4BEQsZoQj22rvNfuwKM8Ymjn
+         nmIRM9xpiJJkqt7xpApsmklgbffUV1f/vSJJFFuBvYnf4K49RQEZLcFb9iZM4nUTfSBX
+         Lyk5CKEIpdhAlgBS0T571GiiKcPZ9KCljWHPEgsDUhMTAX76TVjO3cX3gXiGKTneYtGA
+         GoSw==
+X-Gm-Message-State: APjAAAX6qKSFjLda4nhYTS2kj4Ptrb+exiWkzwfPAEzhlMmTBKByWzQi
+        DFSjZynN9TRApU1/c7N3dYKvs5HJ
+X-Google-Smtp-Source: APXvYqwHejdJJvMW3icPtoD11xRClVxBAN5hnFCvFLAhfJXb0eLGFSC08Z0jGwBFT3+ZTD4ipjBQkg==
+X-Received: by 2002:a5d:8a10:: with SMTP id w16mr4605505iod.175.1567280129551;
+        Sat, 31 Aug 2019 12:35:29 -0700 (PDT)
 Received: from nuc8.tds (h69-131-112-51.cntcnh.dsl.dynamic.tds.net. [69.131.112.51])
-        by smtp.gmail.com with ESMTPSA id r2sm6937376ioh.61.2019.08.31.12.35.27
+        by smtp.gmail.com with ESMTPSA id r2sm6937376ioh.61.2019.08.31.12.35.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Aug 2019 12:35:27 -0700 (PDT)
+        Sat, 31 Aug 2019 12:35:28 -0700 (PDT)
 From:   Len Brown <lenb@kernel.org>
 To:     linux-pm@vger.kernel.org
-Cc:     Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        Len Brown <len.brown@intel.com>
-Subject: [PATCH 09/19] tools/power turbostat: fix buffer overrun
-Date:   Sat, 31 Aug 2019 15:34:48 -0400
-Message-Id: <eeb71c950bc6eee460f2070643ce137e067b234c.1567277326.git.len.brown@intel.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>, Len Brown <len.brown@intel.com>
+Subject: [PATCH 10/19] tools/power turbostat: add Jacobsville support
+Date:   Sat, 31 Aug 2019 15:34:49 -0400
+Message-Id: <b62b3184576b8f87ca655dd9bfd1ae02fd4e50a5.1567277326.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <adb8049097a9ec4acd09fbd3aa8636199a78df8a.1567277326.git.len.brown@intel.com>
 References: <adb8049097a9ec4acd09fbd3aa8636199a78df8a.1567277326.git.len.brown@intel.com>
@@ -64,32 +63,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+From: Zhang Rui <rui.zhang@intel.com>
 
-turbostat could be terminated by general protection fault on some latest
-hardwares which (for example) support 9 levels of C-states and show 18
-"tADDED" lines. That bloats the total output and finally causes buffer
-overrun.  So let's extend the buffer to avoid this.
+Jacobsville behaves like Denverton.
 
-Signed-off-by: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/power/x86/turbostat/turbostat.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 2fb5c155289b..f8f4e1c130a6 100644
+index f8f4e1c130a6..35f4366a522e 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5131,7 +5131,7 @@ int initialize_counters(int cpu_id)
+@@ -4591,6 +4591,9 @@ unsigned int intel_model_duplicates(unsigned int model)
  
- void allocate_output_buffer()
- {
--	output_buffer = calloc(1, (1 + topo.num_cpus) * 1024);
-+	output_buffer = calloc(1, (1 + topo.num_cpus) * 2048);
- 	outp = output_buffer;
- 	if (outp == NULL)
- 		err(-1, "calloc output buffer");
+ 	case INTEL_FAM6_ICELAKE_MOBILE:
+ 		return INTEL_FAM6_CANNONLAKE_MOBILE;
++
++	case INTEL_FAM6_ATOM_TREMONT_X:
++		return INTEL_FAM6_ATOM_GOLDMONT_X;
+ 	}
+ 	return model;
+ }
 -- 
 2.20.1
 
