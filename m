@@ -2,573 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 053B6A46C1
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2019 04:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2E1A4918
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2019 14:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728514AbfIACGd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 31 Aug 2019 22:06:33 -0400
-Received: from vps.xff.cz ([195.181.215.36]:43206 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727538AbfIACGd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 31 Aug 2019 22:06:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1567303590; bh=7KhoTyooAwT5WgVvu2mnLRyLJZxigkAs46qZpESqWnY=;
-        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
-        b=pjILNVNFTzHnNm0cAJTzluqDMnONzOe2A7r2s/aUYMOgNUKB1Z7gqcveOdSyHpsvG
-         nMv4+4c7nVRzNxeLPGwHFMY49sBfn+qKPtlPb+c4zeZObKFUAfSnmWANLhd18hgCxZ
-         ZTXu9XUWJD4YfD2ERuk50dMx1b0xWp5bWaRRhxlc=
-Date:   Sun, 1 Sep 2019 04:06:29 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        mchehab+samsung@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, Jonathan.Cameron@huawei.com,
-        nicolas.ferre@microchip.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 01/18] thermal: sun8i: add thermal driver for h6
-Message-ID: <20190901020629.lpzkmjpjs5wgu6e7@core.my.home>
-Mail-Followup-To: Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
-        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        mchehab+samsung@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, Jonathan.Cameron@huawei.com,
-        nicolas.ferre@microchip.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <20190810052829.6032-1-tiny.windzz@gmail.com>
- <20190810052829.6032-2-tiny.windzz@gmail.com>
+        id S1726903AbfIAMSR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Sep 2019 08:18:17 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42338 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726260AbfIAMSR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Sep 2019 08:18:17 -0400
+Received: by mail-wr1-f65.google.com with SMTP id b16so11211562wrq.9
+        for <linux-pm@vger.kernel.org>; Sun, 01 Sep 2019 05:18:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mRhHmMoHI/RdDWHCZVibJHqBdi3lQ0Wr18cPekRitog=;
+        b=uOYJocx5ny0GFhWmv9yPfTQPLUHqMh03pAe5RNbqmkRdPOvm8d5hTn2NShq44rDd0i
+         xYtqaMotkx5liQ4nvbw4EhGtVfi81Ws+4a6C7VtN7y0LIkgLtimRO9SNHfp0wnJ0jsNV
+         QgopcaI0VcFeXxZxJm48ynPqLPIWCCGU0YWHnFZSMQCf/gpfhGuHQFENTRTNMrq2V8gn
+         j0gQ8smHlYu6jTpSpiLEcbzZCgj2AmuQh9fNAdP4sBVO7KKZ1zIcUD2kBC8Iom2RktAH
+         vyxxCcTQCVZl0E/JQbzL8wzRgowonjnxBl0YX7wCu+bzo3xNEL9vmbx9DioD9tC0cDqg
+         geyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=mRhHmMoHI/RdDWHCZVibJHqBdi3lQ0Wr18cPekRitog=;
+        b=Dte6JQJ2UewjsktNnW5axUg6GF5wUcWiet4gvp4zSHo3CGSzqOpBtMqyFtZtF6SEsD
+         66kwBpLxxpW/Bag0W8a10aIfZ0/z5iCc1S5kmTJN7ITFDhBu8rOFUE+dbeOfigQ8K5GB
+         IUYB/au8eId6HJGcGUCh0eDAmE6A6TnwW5bbUTNe2tX9Yg8LNZG/0IzfGMFm+4viTHJW
+         vCVApO+s/V+sB904ykjntY+8SMDB1KF/fOsDAj+lle/NmRdP31hovXhErmO0efwngAMd
+         t/ptotuFKuHTRbdBsPjYxIzEKWEy0qDWp66p73r/jtel33Yng1Ofx19GotS5yWZo5Wlr
+         LBTw==
+X-Gm-Message-State: APjAAAXRqZmDROZSENlr2Fzu9dXkegIr7jEt6vn7D6HBXlc7u3o8cXnh
+        hY6KGuPdpfNtZZH1CiZEjgOdZFWF65Q=
+X-Google-Smtp-Source: APXvYqxbFUjX498DQJqCIZJiMqsK1+bfCavWOGpu7m7ti8XvIUiavMpOfrT1Gz+VAIO57nazk3jY1g==
+X-Received: by 2002:adf:8bd8:: with SMTP id w24mr30177991wra.273.1567340293466;
+        Sun, 01 Sep 2019 05:18:13 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:895a:d7d5:b3b4:2022? ([2a01:e34:ed2f:f020:895a:d7d5:b3b4:2022])
+        by smtp.googlemail.com with ESMTPSA id y13sm2946018wrg.8.2019.09.01.05.18.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 01 Sep 2019 05:18:12 -0700 (PDT)
+Subject: Re: [PATCH 1/2] cpuidle: play_idle: Increase the resolution to usec
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+References: <20190802173424.5844-1-daniel.lezcano@linaro.org>
+ <4512ae04-e9a5-f0aa-2e6f-bf7a17b069e4@linaro.org>
+ <CAJZ5v0jDTBkRab8+XmOokkpDiPtn7NoR1VhgZJLiWDQCO=00bg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ mQINBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
+ sXvtg3ehTOoyD0oFjKkHaia1Zpa1m/gnNdT/WvTveLfGA1gH+yGes2Sr53Ht8hWYZFYMZc8V
+ 2pbSKh8wepq4g8r5YI1XUy9YbcTdj5mVrTklyGWA49NOeJz2QbfytMT3DJmk40LqwK6CCSU0
+ 9Ed8n0a+vevmQoRZJEd3Y1qXn2XHys0F6OHCC+VLENqNNZXdZE9E+b3FFW0lk49oLTzLRNIq
+ 0wHeR1H54RffhLQAor2+4kSSu8mW5qB0n5Eb/zXJZZ/bRiXmT8kNg85UdYhvf03ZAsp3qxcr
+ xMfMsC7m3+ADOtW90rNNLZnRvjhsYNrGIKH8Ub0UKXFXibHbafSuq7RqyRQzt01Ud8CAtq+w
+ P9EftUysLtovGpLSpGDO5zQ++4ZGVygdYFr318aGDqCljKAKZ9hYgRimPBToDedho1S1uE6F
+ 6YiBFnI3ry9+/KUnEP6L8Sfezwy7fp2JUNkUr41QF76nz43tl7oersrLxHzj2dYfWUAZWXva
+ wW4IKF5sOPFMMgxoOJovSWqwh1b7hqI+nDlD3mmVMd20VyE9W7AgTIsvDxWUnMPvww5iExlY
+ eIC0Wj9K4UqSYBOHcUPrVOKTcsBVPQA6SAMJlt82/v5l4J0pSQARAQABtCpEYW5pZWwgTGV6
+ Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz6JAlcEEwEIAEECGwEFCwkIBwIGFQoJ
+ CAsCBBYCAwECHgECF4ACGQEWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXAkeagUJDRnjhwAK
+ CRCP9LjScWdVJ+vYEACStDg7is2JdE7xz1PFu7jnrlOzoITfw05BurgJMqlvoiFYt9tEeUMl
+ zdU2+r0cevsmepqSUVuUvXztN8HA/Ep2vccmWnCXzlE56X1AK7PRRdaQd1SK/eVsJVaKbQTr
+ ii0wjbs6AU1uo0LdLINLjwwItnQ83/ttbf1LheyN8yknlch7jn6H6J2A/ORZECTfJbG4ecVr
+ 7AEm4A/G5nyPO4BG7dMKtjQ+crl/pSSuxV+JTDuoEWUO+YOClg6azjv8Onm0cQ46x9JRtahw
+ YmXdIXD6NsJHmMG9bKmVI0I7o5Q4XL52X6QxkeMi8+VhvqXXIkIZeizZe5XLTYUvFHLdexzX
+ Xze0LwLpmMObFLifjziJQsLP2lWwOfg6ZiH8z8eQJFB8bYTSMqmfTulB61YO0mhd676q17Y7
+ Z7u3md3CLH7rh61wU1g7FcLm9p5tXXWWaAud9Aa2kne2O3sirO0+JhsKbItz3d9yXuWgv6w3
+ heOIF0b91JyrY6tjz42hvyjxtHywRr4cdAEQa2S7HeQkw48BQOG6PqQ9d3FYU34pt3WFJ19V
+ A5qqAiEjqc4N0uPkC79W32yLGdyg0EEe8v0Uhs3CxM9euGg37kr5fujMm+akMtR1ENITo+UI
+ fgsxdwjBD5lNb/UGodU4QvPipB/xx4zz7pS5+2jGimfLeoe7mgGJxrkBDQRb/8z6AQgAvSkg
+ 5w7dVCSbpP6nXc+i8OBz59aq8kuL3YpxT9RXE/y45IFUVuSc2kuUj683rEEgyD7XCf4QKzOw
+ +XgnJcKFQiACpYAowhF/XNkMPQFspPNM1ChnIL5KWJdTp0DhW+WBeCnyCQ2pzeCzQlS/qfs3
+ dMLzzm9qCDrrDh/aEegMMZFO+reIgPZnInAcbHj3xUhz8p2dkExRMTnLry8XXkiMu9WpchHy
+ XXWYxXbMnHkSRuT00lUfZAkYpMP7La2UudC/Uw9WqGuAQzTqhvE1kSQe0e11Uc+PqceLRHA2
+ bq/wz0cGriUrcCrnkzRmzYLoGXQHqRuZazMZn2/pSIMZdDxLbwARAQABiQI2BBgBCAAgFiEE
+ JNYm8lO+nofmzlv0j/S40nFnVScFAlv/zPoCGwwACgkQj/S40nFnVSf4OhAAhWJPjgUu6VfS
+ mV53AUGIyqpOynPvSaMoGJzhNsDeNUDfV5dEZN8K4qjuz2CTNvGIyt4DE/IJbtasvi5dW4wW
+ Fl85bF6xeLM0qpCaZtXAsU5gzp3uT7ut++nTPYW+CpfYIlIpyOIzVAmw7rZbfgsId2Lj7g1w
+ QCjvGHw19mq85/wiEiZZNHeJQ3GuAr/uMoiaRBnf6wVcdpUTFMXlkE8/tYHPWbW0YKcKFwJ3
+ uIsNxZUe6coNzYnL0d9GK2fkDoqKfKbFjNhW9TygfeL2Qhk949jMGQudFS3zlwvN9wwVaC0i
+ KC/D303DiTnB0WFPT8CltMAZSbQ1WEWfwqxhY26di3k9pj+X3BfOmDL9GBlnRTSgwjqjqzpG
+ VZsWouuTfXd9ZPPzvYdUBrlTKgojk1C8v4fhSqb+ard+bZcwNp8Tzl/EI9ygw6lYEATGCUYI
+ Wco+fjehCgG1FWvWavMU+jLNs8/8uwj1u+BtRpWFj4ug/VaDDIuiApKPwl1Ge+zoC7TLMtyb
+ c00W5/8EckjmNgLDIINEsOsidMH61ZOlwDKCxo2lbV+Ij078KHBIY76zuHlwonEQaHLCAdqm
+ WiI95pYZNruAJEqZCpvXDdClmBVMZRDRePzSljCvoHxn7ArEt3F14mabn2RRq/hqB8IhC6ny
+ xAEPQIZaxxginIFYEziOjR65AQ0EW//NCAEIALcJqSmQdkt04vIBD12dryF6WcVWYvVwhspt
+ RlZbZ/NZ6nzarzEYPFcXaYOZCOCv+Xtm6hB8fh5XHd7Y8CWuZNDVp3ozuqwTkzQuux/aVdNb
+ Fe4VNeKGN2FK1aNlguAXJNCDNRCpWgRHuU3rWwGUMgentJogARvxfex2/RV/5mzYG/N1DJKt
+ F7g1zEcQD3JtK6WOwZXd+NDyke3tdG7vsNRFjMDkV4046bOOh1BKbWYu8nL3UtWBxhWKx3Pu
+ 1VOBUVwL2MJKW6umk+WqUNgYc2bjelgcTSdz4A6ZhJxstUO4IUfjvYRjoqle+dQcx1u+mmCn
+ 8EdKJlbAoR4NUFZy7WUAEQEAAYkDbAQYAQgAIBYhBCTWJvJTvp6H5s5b9I/0uNJxZ1UnBQJb
+ /80IAhsCAUAJEI/0uNJxZ1UnwHQgBBkBCAAdFiEEGn3N4YVz0WNVyHskqDIjiipP6E8FAlv/
+ zQgACgkQqDIjiipP6E+FuggAl6lkO7BhTkrRbFhrcjCm0bEoYWnCkQtX9YFvElQeA7MhxznO
+ BY/r1q2Uf6Ifr3YGEkLnME/tQQzUwznydM94CtRJ8KDSa1CxOseEsKq6B38xJtjgYSxNdgQb
+ EIfCzUHIGfk94AFKPdV6pqqSU5VpPUagF+JxiAkoEPOdFiQCULFNRLMsOtG7yp8uSyJRp6Tz
+ cQ+0+1QyX1krcHBUlNlvfdmL9DM+umPtbS9F6oRph15mvKVYiPObI1z8ymHoc68ReWjhUuHc
+ IDQs4w9rJVAyLypQ0p+ySDcTc+AmPP6PGUayIHYX63Q0KhJFgpr1wH0pHKpC78DPtX1a7HGM
+ 7MqzQ4NbD/4oLKKwByrIp12wLpSe3gDQPxLpfGgsJs6BBuAGVdkrdfIx2e6ENnwDoF0Veeji
+ BGrVmjVgLUWV9nUP92zpyByzd8HkRSPNZNlisU4gnz1tKhQl+j6G/l2lDYsqKeRG55TXbu9M
+ LqJYccPJ85B0PXcy63fL9U5DTysmxKQ5RgaxcxIZCM528ULFQs3dfEx5euWTWnnh7pN30RLg
+ a+0AjSGd886Bh0kT1Dznrite0dzYlTHlacbITZG84yRk/gS7DkYQdjL8zgFr/pxH5CbYJDk0
+ tYUhisTESeesbvWSPO5uNqqy1dAFw+dqRcF5gXIh3NKX0gqiAA87NM7nL5ym/CNpJ7z7nRC8
+ qePOXubgouxumi5RQs1+crBmCDa/AyJHKdG2mqCt9fx5EPbDpw6Zzx7hgURh4ikHoS7/tLjK
+ iqWjuat8/HWc01yEd8rtkGuUcMqbCi1XhcAmkaOnX8FYscMRoyyMrWClRZEQRokqZIj79+PR
+ adkDXtr4MeL8BaB7Ij2oyRVjXUwhFQNKi5Z5Rve0a3zvGkkqw8Mz20BOksjSWjAF6g9byukl
+ CUVjC03PdMSufNLK06x5hPc/c4tFR4J9cLrV+XxdCX7r0zGos9SzTPGNuIk1LK++S3EJhLFj
+ 4eoWtNhMWc1uiTf9ENza0ntqH9XBWEQ6IA1gubCniGG+Xg==
+Message-ID: <4dc8a8fb-3a29-cf96-cd75-8a329c03a23a@linaro.org>
+Date:   Sun, 1 Sep 2019 14:18:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190810052829.6032-2-tiny.windzz@gmail.com>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
+In-Reply-To: <CAJZ5v0jDTBkRab8+XmOokkpDiPtn7NoR1VhgZJLiWDQCO=00bg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Yangtao,
 
-On Sat, Aug 10, 2019 at 05:28:12AM +0000, Yangtao Li wrote:
-> This patch adds the support for allwinner thermal sensor, within
-> allwinner SoC. It will register sensors for thermal framework
-> and use device tree to bind cooling device.
+Hi Rafael,
+
+On 12/08/2019 11:01, Rafael J. Wysocki wrote:
+> On Mon, Aug 12, 2019 at 10:59 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>>
+>> Hi Rafael,
+>>
+>> Can you consider these two patches for merging. There is no functional
+>> changes.
 > 
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> ---
->  MAINTAINERS                     |   7 +
->  drivers/thermal/Kconfig         |  14 ++
->  drivers/thermal/Makefile        |   1 +
->  drivers/thermal/sun8i_thermal.c | 399 ++++++++++++++++++++++++++++++++
->  4 files changed, 421 insertions(+)
->  create mode 100644 drivers/thermal/sun8i_thermal.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 47800d32cfbc..89dc43f4064d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -682,6 +682,13 @@ L:	linux-crypto@vger.kernel.org
->  S:	Maintained
->  F:	drivers/crypto/sunxi-ss/
->  
-> +ALLWINNER THERMAL DRIVER
-> +M:	Yangtao Li <tiny.windzz@gmail.com>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
-> +F:	drivers/thermal/sun8i_thermal.c
-> +
->  ALLWINNER VPU DRIVER
->  M:	Maxime Ripard <maxime.ripard@bootlin.com>
->  M:	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 9966364a6deb..f8b73b32b92d 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -262,6 +262,20 @@ config SPEAR_THERMAL
->  	  Enable this to plug the SPEAr thermal sensor driver into the Linux
->  	  thermal framework.
->  
-> +config SUN8I_THERMAL
-> +	tristate "Allwinner sun8i thermal driver"
-> +	depends on ARCH_SUNXI || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	depends on NVMEM
-> +	depends on OF
-> +	depends on RESET_CONTROLLER
-> +	help
-> +	  Support for the sun8i thermal sensor driver into the Linux thermal
-> +	  framework.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called sun8i-thermal.
-> +
->  config ROCKCHIP_THERMAL
->  	tristate "Rockchip thermal driver"
->  	depends on ARCH_ROCKCHIP || COMPILE_TEST
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 74a37c7f847a..fa6f8b206281 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -31,6 +31,7 @@ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
->  obj-y				+= broadcom/
->  obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
->  obj-$(CONFIG_SPEAR_THERMAL)	+= spear_thermal.o
-> +obj-$(CONFIG_SUN8I_THERMAL)     += sun8i_thermal.o
->  obj-$(CONFIG_ROCKCHIP_THERMAL)	+= rockchip_thermal.o
->  obj-$(CONFIG_RCAR_THERMAL)	+= rcar_thermal.o
->  obj-$(CONFIG_RCAR_GEN3_THERMAL)	+= rcar_gen3_thermal.o
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-> new file mode 100644
-> index 000000000000..2ce36fa3fec3
-> --- /dev/null
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -0,0 +1,399 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Thermal sensor driver for Allwinner SOC
-> + * Copyright (C) 2019 Yangtao Li
-> + *
-> + * Based on the work of Icenowy Zheng <icenowy@aosc.io>
-> + * Based on the work of Ondrej Jirman <megous@megous.com>
-> + * Based on the work of Josef Gajdusek <atx@atx.name>
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/device.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset.h>
-> +#include <linux/slab.h>
-> +#include <linux/thermal.h>
-> +
-> +#define MAX_SENSOR_NUM	4
-> +
-> +#define SUN50I_H6_SENSOR_NUM	2
-> +#define SUN50I_H6_OFFSET	-2794
-> +#define SUN50I_H6_SCALE		-67
-> +
-> +#define FT_TEMP_MASK				GENMASK(11, 0)
-> +#define TEMP_CALIB_MASK				GENMASK(11, 0)
-> +#define TEMP_TO_REG				672
-> +#define CALIBRATE_DEFAULT			0x800
-> +
-> +#define SUN50I_THS_CTRL0			0x00
-> +#define SUN50I_H6_THS_ENABLE			0x04
-> +#define SUN50I_H6_THS_PC			0x08
-> +#define SUN50I_H6_THS_DIC			0x10
-> +#define SUN50I_H6_THS_DIS			0x20
-> +#define SUN50I_H6_THS_MFC			0x30
-> +#define SUN50I_H6_THS_TEMP_CALIB		0xa0
-> +#define SUN50I_H6_THS_TEMP_DATA			0xc0
-> +
-> +#define SUN50I_THS_CTRL0_T_ACQ(x)		((GENMASK(15, 0) & (x)) << 16)
-> +#define SUN50I_THS_FILTER_EN			BIT(2)
-> +#define SUN50I_THS_FILTER_TYPE(x)		(GENMASK(1, 0) & (x))
-> +#define SUN50I_H6_THS_PC_TEMP_PERIOD(x)		((GENMASK(19, 0) & (x)) << 12)
-> +#define SUN50I_H6_THS_DATA_IRQ_STS(x)		BIT(x)
-> +
-> +/* millidegree celsius */
-> +#define SUN50I_H6_FT_DEVIATION			7000
-> +
-> +struct ths_device;
-> +
-> +struct tsensor {
-> +	struct ths_device		*tmdev;
-> +	struct thermal_zone_device	*tzd;
-> +	int				id;
-> +};
-> +
-> +struct ths_device {
-> +	struct device				*dev;
-> +	struct regmap				*regmap;
-> +	struct reset_control			*reset;
-> +	struct clk				*bus_clk;
-> +	struct tsensor				sensor[MAX_SENSOR_NUM];
-> +};
-> +
-> +/* Temp Unit: millidegree Celsius */
-> +static int sun8i_ths_reg2temp(struct ths_device *tmdev,
-> +			      int reg)
-> +{
-> +	return (reg + SUN50I_H6_OFFSET) * SUN50I_H6_SCALE;
-> +}
-> +
-> +static int sun8i_ths_get_temp(void *data, int *temp)
-> +{
-> +	struct tsensor *s = data;
-> +	struct ths_device *tmdev = s->tmdev;
-> +	int val;
-> +
-> +	regmap_read(tmdev->regmap, SUN50I_H6_THS_TEMP_DATA +
-> +		    0x4 * s->id, &val);
-> +
-> +	/* ths have no data yet */
-> +	if (!val)
-> +		return -EAGAIN;
-> +
-> +	*temp = sun8i_ths_reg2temp(tmdev, val);
-> +	/*
-> +	 * XX - According to the original sdk, there are some platforms(rarely)
-> +	 * that add a fixed offset value after calculating the temperature
-> +	 * value. We can't simply put it on the formula for calculating the
-> +	 * temperature above, because the formula for calculating the
-> +	 * temperature above is also used when the sensor is calibrated. If
-> +	 * do this, the correct calibration formula is hard to know.
-> +	 */
-> +	*temp += SUN50I_H6_FT_DEVIATION;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct thermal_zone_of_device_ops ths_ops = {
-> +	.get_temp = sun8i_ths_get_temp,
-> +};
-> +
-> +static const struct regmap_config config = {
-> +	.reg_bits = 32,
-> +	.val_bits = 32,
-> +	.reg_stride = 4,
-> +	.fast_io = true,
-> +};
-> +
-> +static irqreturn_t sun50i_h6_irq_thread(int irq, void *data)
-> +{
-> +	struct ths_device *tmdev = data;
-> +	int i, state;
-> +
-> +	regmap_read(tmdev->regmap, SUN50I_H6_THS_DIS, &state);
-> +
-> +	for (i = 0; i < SUN50I_H6_SENSOR_NUM; i++) {
-> +
-> +		if (state & SUN50I_H6_THS_DATA_IRQ_STS(i)) {
-> +			/* clear data irq pending */
-> +			regmap_write(tmdev->regmap, SUN50I_H6_THS_DIS,
-> +				     SUN50I_H6_THS_DATA_IRQ_STS(i));
-> +
-> +			thermal_zone_device_update(tmdev->sensor[i].tzd,
-> +						   THERMAL_EVENT_UNSPECIFIED);
-> +		}
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int sun50i_ths_calibrate(struct ths_device *tmdev)
-> +{
-> +	struct nvmem_cell *calcell;
-> +	struct device *dev = tmdev->dev;
-> +	u16 *caldata;
-> +	size_t callen;
-> +	int ft_temp;
-> +	int i, ret = 0;
-> +
-> +	calcell = devm_nvmem_cell_get(dev, "calib");
-> +	if (IS_ERR(calcell)) {
-> +		if (PTR_ERR(calcell) == -EPROBE_DEFER)
-> +			return -EPROBE_DEFER;
-> +		/*
-> +		 * Even if the external calibration data stored in sid is
-> +		 * not accessible, the THS hardware can still work, although
-> +		 * the data won't be so accurate.
-> +		 *
-> +		 * The default value of calibration register is 0x800 for
-> +		 * every sensor, and the calibration value is usually 0x7xx
-> +		 * or 0x8xx, so they won't be away from the default value
-> +		 * for a lot.
-> +		 *
-> +		 * So here we do not return error if the calibartion data is
-> +		 * not available, except the probe needs deferring.
-> +		 */
-> +		goto out;
-> +	}
-> +
-> +	caldata = nvmem_cell_read(calcell, &callen);
-> +	if (IS_ERR(caldata)) {
-> +		ret = PTR_ERR(caldata);
-> +		goto out;
-> +	}
-> +
-> +	if (!caldata[0] || callen < 2 + 2 * SUN50I_H6_SENSOR_NUM) {
-> +		ret = -EINVAL;
-> +		goto out_free;
-> +	}
-> +
-> +	/*
-> +	 * efuse layout:
-> +	 *
-> +	 *	0   11  16	 32
-> +	 *	+-------+-------+-------+
-> +	 *	|temp|  |sensor0|sensor1|
-> +	 *	+-------+-------+-------+
-> +	 *
-> +	 * The calibration data on the H6 is the ambient temperature and
-> +	 * sensor values that are filled during the factory test stage.
-> +	 *
-> +	 * The unit of stored FT temperature is 0.1 degreee celusis.
-> +	 * Through the stored ambient temperature and the data read
-> +	 * by the sensor, after a certain calculation, the calibration
-> +	 * value to be compensated can be obtained.
-> +	 */
-> +	ft_temp = caldata[0] & FT_TEMP_MASK;
-> +
-> +	for (i = 0; i < SUN50I_H6_SENSOR_NUM; i++) {
-> +		int reg = (int)caldata[i + 1];
-> +		int sensor_temp = sun8i_ths_reg2temp(tmdev, reg);
-> +		int delta, cdata, offset;
-> +
-> +		/*
-> +		 * To calculate the calibration value:
-> +		 *
-> +		 * X(in Celsius) = Ts - ft_temp
-> +		 * delta = X * 10000 / TEMP_TO_REG
-> +		 * cdata = CALIBRATE_DEFAULT - delta
-> +		 *
-> +		 * cdata: calibration value
-> +		 */
-> +		delta = (sensor_temp - ft_temp * 100) * 10 / TEMP_TO_REG;
-> +		cdata = CALIBRATE_DEFAULT - delta;
-> +		if (cdata & ~TEMP_CALIB_MASK) {
-> +			/*
-> +			 * Calibration value more than 12-bit, but calibration
-> +			 * register is 12-bit. In this case, ths hardware can
-> +			 * still work without calibration, although the data
-> +			 * won't be so accurate.
-> +			 */
-> +			dev_warn(dev, "sensor%d is not calibrated.\n", i);
-> +
-> +			continue;
-> +		}
-> +
-> +		offset = (i % 2) << 4;
-> +		regmap_update_bits(tmdev->regmap,
-> +				   SUN50I_H6_THS_TEMP_CALIB + ((i >> 1) * 4),
-> +				   0xfff << offset,
-> +				   cdata << offset);
-> +	}
-> +
-> +out_free:
-> +	kfree(caldata);
-> +out:
-> +	return ret;
-> +}
-> +
-> +static int sun8i_ths_resource_init(struct ths_device *tmdev)
-> +{
-> +	struct device *dev = tmdev->dev;
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct resource *mem;
-> +	void __iomem *base;
-> +	int ret;
-> +
-> +	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	base = devm_ioremap_resource(dev, mem);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	tmdev->regmap = devm_regmap_init_mmio(dev, base, &config);
-> +	if (IS_ERR(tmdev->regmap))
-> +		return PTR_ERR(tmdev->regmap);
-> +
-> +	tmdev->reset = devm_reset_control_get(dev, 0);
-> +	if (IS_ERR(tmdev->reset))
-> +		return PTR_ERR(tmdev->reset);
-> +
-> +	tmdev->bus_clk = devm_clk_get(&pdev->dev, "bus");
-> +	if (IS_ERR(tmdev->bus_clk))
-> +		return PTR_ERR(tmdev->bus_clk);
-> +
-> +	ret = reset_control_deassert(tmdev->reset);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = clk_prepare_enable(tmdev->bus_clk);
-> +	if (ret)
-> +		goto assert_reset;
-> +
-> +	ret = sun50i_ths_calibrate(tmdev);
-> +	if (ret)
-> +		goto bus_disable;
-> +
-> +	return 0;
-> +
-> +bus_disable:
-> +	clk_disable_unprepare(tmdev->bus_clk);
-> +assert_reset:
-> +	reset_control_assert(tmdev->reset);
-> +
-> +	return ret;
-> +}
-> +
-> +static int sun50i_h6_thermal_init(struct ths_device *tmdev)
-> +{
-> +	int val;
-> +
-> +	/*
-> +	 * clkin = 24MHz
-> +	 * T acquire = clkin / (x + 1)
-> +	 *           = 20us
-> +	 */
+> They are in my queue for review.
 
-I suggest something along the lines of:
+Can you consider them for merging now ?
 
-        /*                                                                                                                                                                                             
-         * T_acq = 20us                                                                                                                                                                                
-         * clkin = 24MHz                                                                                                                                                                               
-         *                                                                                                                                                                                             
-         * x = T_acq * clkin - 1                                                                                                                                                                       
-         *   = 479                                                                                                                                                                                     
-         */       
 
-Makes it much more clear how the value in SUN50I_THS_CTRL0_T_ACQ was
-arrived at and how to calculate a new one.
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> +	regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
-> +		     SUN50I_THS_CTRL0_T_ACQ(479));
-> +	/* average over 4 samples */
-> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
-> +		     SUN50I_THS_FILTER_EN |
-> +		     SUN50I_THS_FILTER_TYPE(1));
-> +	/* period = (x + 1) * 4096 / clkin; ~10ms */
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-As above, here I suggest:
-
-        /*
-         * clkin = 24MHz
-         * filter_samples = 4
-         * period = 0.25s
-         *
-         * x = period * clkin / 4096 / filter_samples - 1
-         *   = 365
-         */
-
-Also please change this to 365 from 58. I think 4 readings per second are
-enough. Certainly, 25 are a bit too much.
-
-> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
-> +		     SUN50I_H6_THS_PC_TEMP_PERIOD(58));
-> +	/* enable sensor */
-> +	val = GENMASK(SUN50I_H6_SENSOR_NUM - 1, 0);
-> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_ENABLE, val);
-> +	/* thermal data interrupt enable */
-> +	val = GENMASK(SUN50I_H6_SENSOR_NUM - 1, 0);
-> +	regmap_write(tmdev->regmap, SUN50I_H6_THS_DIC, val);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sun8i_ths_register(struct ths_device *tmdev)
-> +{
-> +	struct thermal_zone_device *tzd;
-> +	int i;
-> +
-> +	for (i = 0; i < SUN50I_H6_SENSOR_NUM; i++) {
-> +		tmdev->sensor[i].tmdev = tmdev;
-> +		tmdev->sensor[i].id = i;
-> +		tmdev->sensor[i].tzd =
-> +			devm_thermal_zone_of_sensor_register(tmdev->dev,
-> +							     i,
-> +							     &tmdev->sensor[i],
-> +							     &ths_ops);
-> +		if (IS_ERR(tmdev->sensor[i].tzd))
-> +			return PTR_ERR(tzd);
-
-This should return PTR_ERR(tmdev->sensor[i].tzd). Otherwise this succeeds even
-if tz registration fails, and you get NULL pointer exception tryin to udpate
-nonexisting tz from the interrupt handler.
-
-regards,
-	Ondrej
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int sun8i_ths_probe(struct platform_device *pdev)
-> +{
-> +	struct ths_device *tmdev;
-> +	struct device *dev = &pdev->dev;
-> +	int ret, irq;
-> +
-> +	tmdev = devm_kzalloc(dev, sizeof(*tmdev), GFP_KERNEL);
-> +	if (!tmdev)
-> +		return -ENOMEM;
-> +
-> +	tmdev->dev = dev;
-> +	platform_set_drvdata(pdev, tmdev);
-> +
-> +	ret = sun8i_ths_resource_init(tmdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +
-> +	ret = sun50i_h6_thermal_init(tmdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = sun8i_ths_register(tmdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/*
-> +	 * Avoid entering the interrupt handler, the thermal device is not
-> +	 * registered yet, we deffer the registration of the interrupt to
-> +	 * the end.
-> +	 */
-> +	ret = devm_request_threaded_irq(dev, irq, NULL,
-> +					sun50i_h6_irq_thread,
-> +					IRQF_ONESHOT, "ths", tmdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ret;
-> +}
-> +
-> +static int sun8i_ths_remove(struct platform_device *pdev)
-> +{
-> +	struct ths_device *tmdev = platform_get_drvdata(pdev);
-> +
-> +	clk_disable_unprepare(tmdev->bus_clk);
-> +	reset_control_assert(tmdev->reset);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_ths_match[] = {
-> +	{ .compatible = "allwinner,sun50i-h6-ths"},
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, of_ths_match);
-> +
-> +static struct platform_driver ths_driver = {
-> +	.probe = sun8i_ths_probe,
-> +	.remove = sun8i_ths_remove,
-> +	.driver = {
-> +		.name = "sun8i-thermal",
-> +		.of_match_table = of_ths_match,
-> +	},
-> +};
-> +module_platform_driver(ths_driver);
-> +
-> +MODULE_DESCRIPTION("Thermal sensor driver for Allwinner SOC");
-> +MODULE_LICENSE("GPL v2");
-> -- 
-> 2.17.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
