@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4849A4BB6
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2019 22:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAF9A4BB7
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2019 22:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729012AbfIAUNd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Sep 2019 16:13:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49388 "EHLO mail.kernel.org"
+        id S1729013AbfIAUNs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Sep 2019 16:13:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49462 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727033AbfIAUNd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 1 Sep 2019 16:13:33 -0400
+        id S1727033AbfIAUNs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 1 Sep 2019 16:13:48 -0400
 Received: from earth.universe (unknown [185.62.205.105])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29C872190F;
-        Sun,  1 Sep 2019 20:13:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 03A502190F;
+        Sun,  1 Sep 2019 20:13:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567368812;
-        bh=FpGeQN/2TrNtJwZWQqGwpAQLVtqjB3oj4oM4GNKdQ9A=;
+        s=default; t=1567368827;
+        bh=/pnvx7fXx7aB1zSkYAkxF9Mb5HZf517huqG1qnH5axI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EeRwWEpM52UPu5NaNIXd5pzKnL8c1KSFE5ekWxeuzQsEkOVeKkbvCGbJGsL+AGg31
-         zkMFlsvM37JZtVkcYpYHDyCPglnIkC5CIjmkUiuKbMi0iZ0gib6rrRjzPF9wKrAm8j
-         yfEwPFCva4Xmvyfu99IV5ZNhtth7dQdEzgD08B9M=
+        b=mSiJ+hOpiK/RShw6XMEbQRYgTXLzW6Tnnp6Hhkj0PLRAxKjid60xN0JKf+LVRgupq
+         kA/l60HntRllYA+gZCJlw9v+wwjJa4iLD7ENFJLRTA8pRz9tXirk4wpBMehfOUvFmX
+         pmLvbGI9BgQpt9NRwebMeEUMlZ1RGmPH5wMreTzw=
 Received: by earth.universe (Postfix, from userid 1000)
-        id E90753C0B7F; Sun,  1 Sep 2019 22:13:29 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 22:13:29 +0200
+        id AB50B3C0B7F; Sun,  1 Sep 2019 22:13:44 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 22:13:44 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/2] power: supply: axp288_fuel_gauge: Add Minix Neo
- Z83-4 to the blacklist
-Message-ID: <20190901201329.god5j3jer2xqvk2z@earth.universe>
-References: <20190825154152.80087-1-hdegoede@redhat.com>
- <20190825154152.80087-2-hdegoede@redhat.com>
+To:     Romain Izard <romain.izard.pro@gmail.com>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] power: supply: register HWMON devices with valid names
+Message-ID: <20190901201344.i2c26f4wrnle6kfa@earth.universe>
+References: <20190830131556.10021-1-romain.izard.pro@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mr2ni7e5rivkvypy"
+        protocol="application/pgp-signature"; boundary="c4buasnye3oatj63"
 Content-Disposition: inline
-In-Reply-To: <20190825154152.80087-2-hdegoede@redhat.com>
+In-Reply-To: <20190830131556.10021-1-romain.izard.pro@gmail.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -46,74 +46,108 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---mr2ni7e5rivkvypy
+--c4buasnye3oatj63
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, Aug 25, 2019 at 05:41:52PM +0200, Hans de Goede wrote:
-> The Minix Neo Z83-4 is another mini PC using the AXP288 PMIC where the
-> EFI code does not disable the charger part of the PMIC causing us to repo=
-rt
-> battery readings (of always 100%) to userspace even though there is no
-> battery in this wall-outlet powered device.
+On Fri, Aug 30, 2019 at 03:15:56PM +0200, Romain Izard wrote:
+> With the introduction of the HWMON compatibility layer to the power
+> supply framework in Linux 5.3, all power supply devices' names can be
+> used directly to create HWMON devices with the same names.
 >=20
-> Add it to the blacklist to avoid the bogus battery status reporting.
+> But HWMON has rules on allowable names that are different from those
+> used in the power supply framework. The dash character is forbidden, as
+> it is used by the libsensors library in userspace as a separator,
+> whereas this character is used in the device names in more than half of
+> the existing power supply drivers. This last case is consistent with the
+> typical naming usage with MFD and Device Tree.
 >=20
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> This leads to warnings in the kernel log, with the format:
+>=20
+> power_supply gpio-charger: hwmon: \
+> 	'gpio-charger' is not a valid name attribute, please fix
+>=20
+> Add a protection to power_supply_add_hwmon_sysfs() that replaces any
+> dash in the device name with an underscore when registering with the
+> HWMON framework. Other forbidden characters (star, slash, space, tab,
+> newline) are not replaced, as they are not in common use.
+>=20
+> Fixes: e67d4dfc9ff1 ("power: supply: Add HWMON compatibility layer")
+> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > ---
 
 Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/axp288_fuel_gauge.c | 7 +++++++
->  1 file changed, 7 insertions(+)
 >=20
-> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/sup=
-ply/axp288_fuel_gauge.c
-> index 6db2e86098e9..e1bc4e6e6f30 100644
-> --- a/drivers/power/supply/axp288_fuel_gauge.c
-> +++ b/drivers/power/supply/axp288_fuel_gauge.c
-> @@ -726,6 +726,13 @@ static const struct dmi_system_id axp288_fuel_gauge_=
-blacklist[] =3D {
->  			DMI_MATCH(DMI_BOARD_VERSION, "V1.1"),
->  		},
->  	},
-> +	{
-> +		/* Minix Neo Z83-4 mini PC */
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "MINIX"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Z83-4"),
-> +		}
-> +	},
->  	{}
->  };
+> v2: Remove a superfluous cast
+>=20
+>  drivers/power/supply/power_supply_hwmon.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
+pply/power_supply_hwmon.c
+> index 51fe60440d12..75cf861ba492 100644
+> --- a/drivers/power/supply/power_supply_hwmon.c
+> +++ b/drivers/power/supply/power_supply_hwmon.c
+> @@ -284,6 +284,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply =
+*psy)
+>  	struct device *dev =3D &psy->dev;
+>  	struct device *hwmon;
+>  	int ret, i;
+> +	const char *name;
 > =20
+>  	if (!devres_open_group(dev, power_supply_add_hwmon_sysfs,
+>  			       GFP_KERNEL))
+> @@ -334,7 +335,19 @@ int power_supply_add_hwmon_sysfs(struct power_supply=
+ *psy)
+>  		}
+>  	}
+> =20
+> -	hwmon =3D devm_hwmon_device_register_with_info(dev, psy->desc->name,
+> +	name =3D psy->desc->name;
+> +	if (strchr(name, '-')) {
+> +		char *new_name;
+> +
+> +		new_name =3D devm_kstrdup(dev, name, GFP_KERNEL);
+> +		if (!new_name) {
+> +			ret =3D -ENOMEM;
+> +			goto error;
+> +		}
+> +		strreplace(new_name, '-', '_');
+> +		name =3D new_name;
+> +	}
+> +	hwmon =3D devm_hwmon_device_register_with_info(dev, name,
+>  						psyhw,
+>  						&power_supply_hwmon_chip_info,
+>  						NULL);
 > --=20
-> 2.23.0
+> 2.17.1
 >=20
 
---mr2ni7e5rivkvypy
+--c4buasnye3oatj63
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1sJmkACgkQ2O7X88g7
-+prF5g/9GEyK6QpE4uDn1Vey5d1oenHbuOiw1ZwDJMQCtR4pgydej4+WTP0ICkOs
-HxZ+FlX3Zvb+Ew64l8uheON++45iAq340Ht6am3+DnTmC4Grgh8u7Jy4YpupOT2J
-1GDy//PlsGpGL6HzQHztGvInsC5e0E77jgDs4hdVb4qHW4KsnMDsuRiR0QX/FEQl
-Cem/T2OVoNdCxiZ9B1me2+0IxmBKLOfQW+xE7wqI/0eeAOVlDC89JP3h2l7o0kIE
-Z4LlCaCNKbub+1Ft4J68rJA/Z5QU6AVe8pnzdyiEenNmGMjNdJVViXMjYLjxro9H
-5UDqWqFTx4kEMTK5ECw7UNllenqqUqR5+rxHB8tjwUaQg1IqWjrcsvfG/woftMbN
-fcMHOQsqMb6Ez0UPLJPTx+WyMSNbQNxpnOVlGA2ds6ArXnC8rMyL8iKy35GXU7lZ
-vnfgoQjEY3kjmDkgEktCFko5xCrmZq9UhlOO/jQrAAkDAc4kGK2PocBtcENN+cCK
-rYSHI/+iRNvaGFdzrMxSzb8mt2F5J8SD05kEe5ZIQmv0PrQMPYH+/c4YeMzqUwq6
-GG8P9KMPC0Qv+KIFL+uI6unoyK18gdvsv/HiTelexiMiK5yvqUkERfD+0aS3JNYU
-V2uwnKjJmDJIo6+dJ+hIcaKxf7lw7UnejlHwNS7aHVML1jrlON0=
-=5fzI
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1sJngACgkQ2O7X88g7
++pp5aQ/+LkCU4NbcIvbNQMwVtFJ9tfxLqOZCeGxHvfwPlHAE3e+dvGDaX4A6e8JJ
+b6a42lqoxZTM4EEr9M9NMOJiLcqeQHrl0R684pGWkv/CbRGt1W3IWRS0/aDC+EUE
+6i4NdmXdmNuB3tjV4OmINIGQp2i2Yoa6+k4RJ/gI1yyQZgKTIiOI78FfHe433gm3
+o4VYnIAy4VK/jfxdgJm1A/LcGXeG5yDxLRMMzIqtEZ5bTdrMN48YSv6SNdC9XG7M
+0qccPbg+uW+dozdr7wRLizMF8makESodVz97Y/Dsa5daLB8u++gUB/f9WvKXo9FG
+xZ4gyJYXwZec67So/I/+Vz2szkWfawj8GjUfGIAz+s7weaHa96PwXu3TYKeJQaTT
+FTYCnNGivZfeBGZSdfcgIt0onCTBKLX893DvC4hiTTjFOqLYtuwPLgjFLJpZAxJx
+XHJpkju7+YVf4mue81+l/i81y0M/Y6klPYXFFU2WvI/E2DvZX7GTNTRA7hCtnZzZ
+T9xCzGT8GnaNn1FK7zSHZgJfqvksYEff7er///+OaZ3n4Vs0htIdb6JEWOLcqqlx
+vnrA5bVg1IbOIUaEcfdEx5PamKGXWSi3L6u31A7zTj7QwLy8Qj1V/kTZpThBqRfD
+NZHovFCL2zhvQ/Xvt33U5rGnSnAL33WJ2AOYUGE6K9Ttixgo5Fo=
+=HuKa
 -----END PGP SIGNATURE-----
 
---mr2ni7e5rivkvypy--
+--c4buasnye3oatj63--
