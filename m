@@ -2,56 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1ABA4BB4
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2019 22:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36392A4BB5
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2019 22:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728879AbfIAUMU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Sep 2019 16:12:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49002 "EHLO mail.kernel.org"
+        id S1729010AbfIAUNT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Sep 2019 16:13:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49328 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725955AbfIAUMT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 1 Sep 2019 16:12:19 -0400
+        id S1727033AbfIAUNT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 1 Sep 2019 16:13:19 -0400
 Received: from earth.universe (unknown [185.62.205.105])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5489D22CF7;
-        Sun,  1 Sep 2019 20:12:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D05EE2190F;
+        Sun,  1 Sep 2019 20:13:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567368738;
-        bh=2GpZPYwYi/qtMDsOkIAcU2oHeD8BeyPuCXPc2OucQIE=;
+        s=default; t=1567368798;
+        bh=xwERCMNbn31bRIYy50nY/WhqkdrEr3z8W+NIylZsaLI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VHBILDj8I2fTr0r12zBwrVa3QAubFoTj0YswnLRWiBK0RAxapTY6016WKRmqMFAMJ
-         +exeq4jVE+89GwZK8rVcVo0jAc5xUKjO5jYkS/cUThHZIlqDhDiQJBe3SgMV4stVi/
-         flOyohqIoknEBlxhAkV4tswZ9Q95fe05jgOYz8l4=
+        b=tnjn4LnsGqJW4NQkww5fKLw+ziFk/a2TcN4ZJs984LglC7V2Urs4fEADBEw7hmyq/
+         HriOMVxyLKoDyTvNK87teYsSKtZstb7WCvhqNc9ZL/azWoWthAb/cdTRL0MqfTXpBy
+         SKBjFiilXiczx6DPPrlFWnhbk7VwEvKIvct/L+fY=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 0FBCA3C0B7F; Sun,  1 Sep 2019 22:12:16 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 22:12:15 +0200
+        id A25343C0B7F; Sun,  1 Sep 2019 22:13:15 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 22:13:15 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "linux-arm-kernel @ lists . infradead . org Alessandro Zummo" 
-        <a.zummo@towertech.it>, linux-pm@vger.kernel.org,
-        Josef Friedl <josef.friedl@speed.at>,
-        linux-kernel@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 12/13] MAINTAINERS: add Mediatek shutdown drivers
-Message-ID: <20190901201215.lkjb54amhjjpjqrp@earth.universe>
-References: <20190818135611.7776-1-frank-w@public-files.de>
- <20190818135611.7776-13-frank-w@public-files.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/2] power: supply: axp288_fuel_gauge: Sort the DMI
+ blacklist alphabetically
+Message-ID: <20190901201315.nsusbkggjusa3sjt@earth.universe>
+References: <20190825154152.80087-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="enskgkpgm3vynalk"
+        protocol="application/pgp-signature"; boundary="7lump3ji3c3yc4od"
 Content-Disposition: inline
-In-Reply-To: <20190818135611.7776-13-frank-w@public-files.de>
+In-Reply-To: <20190825154152.80087-1-hdegoede@redhat.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -59,79 +45,91 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---enskgkpgm3vynalk
+--7lump3ji3c3yc4od
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, Aug 18, 2019 at 03:56:10PM +0200, Frank Wunderlich wrote:
-> From: Josef Friedl <josef.friedl@speed.at>
+On Sun, Aug 25, 2019 at 05:41:51PM +0200, Hans de Goede wrote:
+> The blacklist is getting big enough that it is good to have some sort
+> of fixed order for it, sort it alphabetically.
 >=20
-> add Section in MAINTAINERS file for poweroff driver
->=20
-> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> changes since v5: none
-> changes since v4: none
-> changes since v3: moved SOB
-> changes since v2: none (=3Dv2 part 6)
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Thanks, queued.
 
 -- Sebastian
 
->  MAINTAINERS | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  drivers/power/supply/axp288_fuel_gauge.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 >=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6426db5198f0..4172a3177633 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10128,6 +10128,13 @@ S:	Maintained
->  F:	drivers/net/dsa/mt7530.*
->  F:	net/dsa/tag_mtk.c
+> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/sup=
+ply/axp288_fuel_gauge.c
+> index 44169dabb705..6db2e86098e9 100644
+> --- a/drivers/power/supply/axp288_fuel_gauge.c
+> +++ b/drivers/power/supply/axp288_fuel_gauge.c
+> @@ -674,6 +674,7 @@ static void fuel_gauge_init_irq(struct axp288_fg_info=
+ *info)
+>  /*
+>   * Some devices have no battery (HDMI sticks) and the axp288 battery's
+>   * detection reports one despite it not being there.
+> + * Please keep this listed sorted alphabetically.
+>   */
+>  static const struct dmi_system_id axp288_fuel_gauge_blacklist[] =3D {
+>  	{
+> @@ -696,6 +697,12 @@ static const struct dmi_system_id axp288_fuel_gauge_=
+blacklist[] =3D {
+>  			DMI_EXACT_MATCH(DMI_BIOS_VERSION, "1.000"),
+>  		},
+>  	},
+> +	{
+> +		/* ECS EF20EA */
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
+> +		},
+> +	},
+>  	{
+>  		/* Intel Cherry Trail Compute Stick, Windows version */
+>  		.matches =3D {
+> @@ -719,12 +726,6 @@ static const struct dmi_system_id axp288_fuel_gauge_=
+blacklist[] =3D {
+>  			DMI_MATCH(DMI_BOARD_VERSION, "V1.1"),
+>  		},
+>  	},
+> -	{
+> -		/* ECS EF20EA */
+> -		.matches =3D {
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "EF20EA"),
+> -		},
+> -	},
+>  	{}
+>  };
 > =20
-> +MEDIATEK BOARD LEVEL SHUTDOWN DRIVERS
-> +M:	Sean Wang <sean.wang@mediatek.com>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
-> +F:	drivers/power/reset/mt6323-poweroff.c
-> +
->  MEDIATEK JPEG DRIVER
->  M:	Rick Chang <rick.chang@mediatek.com>
->  M:	Bin Liu <bin.liu@mediatek.com>
 > --=20
-> 2.17.1
+> 2.23.0
 >=20
->=20
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
---enskgkpgm3vynalk
+--7lump3ji3c3yc4od
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1sJh8ACgkQ2O7X88g7
-+prLXw/+IHmCR/FU/6lA6ifbZk9WSF+RGRWcKNrqqUkaVg3yMF0QizjvQ1zQQxRp
-hb8o6lo0muECVRhfppPXezPrd51ugSSrdo+h7knBwYHKcJ3ESAB3yuKDqPLSugkS
-AX0fFXGTLN3ey8Oq/ORuLhrK2VGMcLR6bAf8JzopXW8WIJMZyanXhuMp02BB75j7
-7bUwD94IiLrd3wntAinZB/ytEVKK3hRDf2IcCyrkL/qTDVsv0ngWn/CY0Sh0aWCo
-UgVxapwaDFttTGEaFKtp1pjlNw37zt9RVNFDwOJHPsbMMweB3CR0SHfQJcaXrHO2
-2Br+GFSOZu/EknnOsZhnAQECa5cRIsQF6K7U6gmDEhuZwwAQs3Hr+auawIOaqJpt
-BKW6ryw5mOKmaMJKMvyLgrO5JafA2/ul7LhXzzZBXZvW43YyGMs3h55rSECdHQNV
-iFrDYW3ujiNLmvn272Agi1tlwM7zzfMjT6r1jXtugPc40tDBoQcmg3URbI/TAM+c
-IQ5ha2j9FYFUaUOgrCHeu5fJVhWPHeRqxuxNwHmodGwgsaSWvYPoShJGQdr3lVp6
-ntKtlKrIpibl2TRJ4aHKutxKuOs+4R2CwIEVBH0e2bqBtmGGZQivvvOfmD0BqKqi
-1TIxjVbby9tddeROJxh1l7BPaXVKnkTKoxK2xoEv5Uzzb5I7RFM=
-=hSBs
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1sJlsACgkQ2O7X88g7
++prfog//aHGqdHjjoL5mp88gV0NK2HsAhq95wihfX2eZ7xKSE4K6Fj9rjszRnO5E
+96oj6iWHBiQPdM865SGlk0pG6FEeWEnBbDnrcD80NQPyNCzTW4+mPNTEKDxjLtOZ
+91gwEJ///UEzsggZWGAqifIetiUyKVXrPD69EOfyA6gLQl1esKlkWK3CBc9Q8LiM
+mAqzFrRomoLyPWRJiZJZ4k4+R/iauDhTAzsLj3qXyTmpda17Ze2BR1L8wep2xsuM
+Uk9IpJl3tslBYaPCV5ZiPqIqO1Myn5dBEeao98RVkTRfu1xEne3gYVnqyfM0fU8/
+7J7pxmo0lzfeuJIzpHFgAUKavXeBXbbPJ38WdgQmEpF0NKwQ23RQiMGOLm378cld
+jsV8C6kVZtS9vHUuNSxk7NrAmXBc8VzDz0D5QXfBWoWIWAxDyWHznSYjPch4xcws
+hNO7PJeoOyX7ShDhhm65S7x5DqJXu7D6+Aw0B1Z/pnOAtM/sr6beI7n7GR2Kv5gu
+Js2dSnOMkn3q5iTuARqktBgxP7nk+kHGrWKFu939Fi/1OIgdN9r+9ntV8ZOdWcG/
+mexVgUym33wsMKZZsCduPvTY26PT4YnKM/E9IzO5hqrXeEwhUDblo7dRGYX806VS
+Jt0dpGCN7ImijTxv4B0UHu8O+XxfOBwrKNxGIbQ9GqB1vj0auPk=
+=ZYr1
 -----END PGP SIGNATURE-----
 
---enskgkpgm3vynalk--
+--7lump3ji3c3yc4od--
