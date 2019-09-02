@@ -2,133 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4589DA58BD
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 16:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD06FA5A1D
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 17:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730842AbfIBOEN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 10:04:13 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:36654 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730825AbfIBOEM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 10:04:12 -0400
-Received: by mail-wm1-f66.google.com with SMTP id p13so14794385wmh.1;
-        Mon, 02 Sep 2019 07:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DETtNsa6CCp7MhS512rG6yCksW86dRIW7WvIg0/pnDg=;
-        b=omUXoxxGO4uVY6IVShKAw4vgYe79oLa84dtEG3I8wogo8h5rakBVjdkteMdwnEYiHy
-         V+B2t+5MwIsNccdYdh/AOc8SS3foDLHP5iSHY2vSoWo7d/IPPwzGCvN3BLg8hm2oShRM
-         jJuH3+0kcesRT5QWtBAec3c9QXOX721ddRkVCXGPYLdhujvXlYFgVXK4/cDVzE2w4WBZ
-         8WamAYRPtgpBTBQ44C02+ADpGEfW4rPeXE7graockJHcTSkQ1sYbdFGwJ6lUeAOdgR2/
-         rPImqm4kGL4PdaCw/K7k0L4hdJTuF7pu1m0sP4S0Rsn0tSm3Ivmbov1QYGpdIKsOwBxD
-         0ncQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DETtNsa6CCp7MhS512rG6yCksW86dRIW7WvIg0/pnDg=;
-        b=hTKklHAugkoYxshz8U8YGmbuvsBy+UOMwLOiXabLHrUPpfqqbO5bOC4fmAW57Y8A+b
-         F7sdK59RzNXqkP4U7YU8XO+Pw9B4SVfVK9zZwx3zaZUuYOmoR0Z8tdcUV0AsTEnuxEnR
-         7IAClryIMtxiYh/h2joWB5EE/lEhR/fbvaNigM14yk2OWis98tFA3rfCx8K4e3NTfm2W
-         DUofyxFvi0wXErP+X7VJOBgHk5tFwHsLMMO/z6NVL37stp9ZYLj2j7sCsyqnRfTS29PA
-         7c5JPjnNcV0nMI0UKGfcnMDFEN4mlY8jMcCu2CoWpNOSNtCiCTbJcQsB23n4BvH2grOZ
-         XFSg==
-X-Gm-Message-State: APjAAAUb759IRXrZoaPDai9CiGNvQrzussaEMq66tpozighGYCfE6QSf
-        u8WBYGdSjCYpKIuVmZou5ss=
-X-Google-Smtp-Source: APXvYqx+2wHQ2CkxCTviFYFgut/L74VUrTw3N/8LBVpAV6iOBvxtjl3yY1xkhVCTn3DH4vbXjPVmMA==
-X-Received: by 2002:a1c:2e8d:: with SMTP id u135mr36435035wmu.101.1567433050747;
-        Mon, 02 Sep 2019 07:04:10 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e34:eecb:7400:8425:c99f:73d7:9637])
-        by smtp.gmail.com with ESMTPSA id f186sm20020675wmg.21.2019.09.02.07.04.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2019 07:04:09 -0700 (PDT)
-From:   Erwan Velu <erwanaliasr1@gmail.com>
-X-Google-Original-From: Erwan Velu <e.velu@criteo.com>
-Cc:     Erwan Velu <e.velu@criteo.com>, Len Brown <lenb@kernel.org>,
-        linux-pm@vger.kernel.org (open list:TURBOSTAT UTILITY),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tools/power/x86/turbostat/turbostat: Report MSR_PLATFORM_INFO registers
-Date:   Mon,  2 Sep 2019 16:03:55 +0200
-Message-Id: <20190902140355.27891-1-e.velu@criteo.com>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        id S1730079AbfIBPDq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 11:03:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56352 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729942AbfIBPDq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Sep 2019 11:03:46 -0400
+Received: from localhost.localdomain (unknown [194.230.155.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1705B21744;
+        Mon,  2 Sep 2019 15:03:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567436625;
+        bh=1wk1GQ8X4lS4Dca0JNCtgnsQ9NhHwXl1gFunBzDNt1s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=1e5Zwa4tzaVfri87qVmA//3s69FnQrbqHU2QZAbhmSLMf+iITfQtwMVcimxOpesc4
+         cX3LYxqrQJ2sqsNehBBxHrXA57KxGkTW6fCBdrLV+FRw1VQOXIRJE+e5gsXDJiNDen
+         7FsLQdH3S3wHKazz59UOwqxieBi8A/+GVuHhFTEM=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH 1/2] dt-bindings: power: syscon-reboot: Convert bindings to json-schema
+Date:   Mon,  2 Sep 2019 17:03:35 +0200
+Message-Id: <20190902150336.3600-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This commit is about report all registers from MSR_PLATFORM_INFO.
-This helps understand the actual state of the processor.
+Convert the Syscon reboot bindings to DT schema format using
+json-schema.
 
-This patch also reports the min efficiency frequency.
-
-Signed-off-by: Erwan Velu <e.velu@criteo.com>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- tools/power/x86/turbostat/turbostat.c | 42 +++++++++++++++++++++++++--
- 1 file changed, 40 insertions(+), 2 deletions(-)
+ .../bindings/power/reset/syscon-reboot.txt    | 30 --------
+ .../bindings/power/reset/syscon-reboot.yaml   | 68 +++++++++++++++++++
+ 2 files changed, 68 insertions(+), 30 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 75fc4fb9901c..5f5b3132bbea 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2050,13 +2050,51 @@ dump_nhm_platform_info(void)
- 	unsigned int ratio;
- 
- 	get_msr(base_cpu, MSR_PLATFORM_INFO, &msr);
-+	fprintf(outf, "cpu%d: MSR_PLATFORM_INFO: 0x%08llx ", base_cpu, msr);
-+	fprintf(outf, " (%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%sCONFIG-TDP-LEVELS:%llu%s%s%s%s%s)\n",
-+		(msr & 1 << 0) ? "Bit0, " : "",
-+		(msr & 1 << 1) ? "Bit1, " : "",
-+		(msr & 1 << 2) ? "Bit2, " : "",
-+		(msr & 1 << 3) ? "Bit3, " : "",
-+		(msr & 1 << 4) ? "Bit4, " : "",
-+		(msr & 1 << 5) ? "Bit5, " : "",
-+		(msr & 1 << 6) ? "Bit6, " : "",
-+		(msr & 1 << 7) ? "Bit7, " : "",
-+		(msr & 1 << 16) ? "SMM-SAVE-CAP, " : "",
-+		(msr & 1 << 17) ? "TAPUNLOCK, " : "",
-+		(msr & 1 << 18) ? "Bit18, " : "",
-+		(msr & 1 << 19) ? "Bit19, " : "",
-+		(msr & 1 << 20) ? "Bit20, " : "",
-+		(msr & 1 << 21) ? "Bit21, " : "",
-+		(msr & 1 << 22) ? "Bit22, " : "",
-+		(msr & 1 << 23) ? "PPIN-CAP, " : "",
-+		(msr & 1 << 24) ? "OCVOLT-OVRD-AVAIL, " : "",
-+		(msr & 1 << 25) ? "Bit25, " : "",
-+		(msr & 1 << 26) ? "DCU_MODE_SELECT, " : "",
-+		(msr & 1 << 27) ? "SAMPLE-PART, " : "",
-+		(msr & 1 << 28) ? "PRG-TURBO-RATIO, " : "",
-+		(msr & 1 << 29) ? "PRG-TDP-LIM, " : "",
-+		(msr & 1 << 30) ? "PRG-TJ-OFFSET, " : "",
-+		(msr & 1 << 31) ? "CPUID-FAULTING, " : "",
-+		(msr & 1 << 32) ? "LOW-POWER-MODE-SUPPORT, " : "",
-+		(msr >> 33) & 0x3,
-+		(msr & 1 << 35) ? "PFAT, " : "",
-+		(msr & 1 << 36) ? "Bit36, " : "",
-+		(msr & 1 << 37) ? "TIMED_MWAIT, " : "",
-+		(msr & 1 << 38) ? "Bit38, " : "",
-+		(msr & 1 << 38) ? "Bit39, " : "");
-+
-+	// MIN_OPERATING_RATIO
-+	ratio = (msr >> 48) & 0xFF;
-+	fprintf(outf, "%d * %.1f = %.1f MHz min efficiency frequency\n",
-+		ratio, bclk, ratio * bclk);
- 
--	fprintf(outf, "cpu%d: MSR_PLATFORM_INFO: 0x%08llx\n", base_cpu, msr);
+diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.txt b/Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
+deleted file mode 100644
+index e23dea8344f8..000000000000
+--- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
++++ /dev/null
+@@ -1,30 +0,0 @@
+-Generic SYSCON mapped register reset driver
 -
-+	// MAX_EFFICIENCY_RATIO
- 	ratio = (msr >> 40) & 0xFF;
- 	fprintf(outf, "%d * %.1f = %.1f MHz max efficiency frequency\n",
- 		ratio, bclk, ratio * bclk);
- 
-+	// MAX_NON_TURBO_LIMIT_RATION
- 	ratio = (msr >> 8) & 0xFF;
- 	fprintf(outf, "%d * %.1f = %.1f MHz base frequency\n",
- 		ratio, bclk, ratio * bclk);
+-This is a generic reset driver using syscon to map the reset register.
+-The reset is generally performed with a write to the reset register
+-defined by the register map pointed by syscon reference plus the offset
+-with the value and mask defined in the reboot node.
+-
+-Required properties:
+-- compatible: should contain "syscon-reboot"
+-- regmap: this is phandle to the register map node
+-- offset: offset in the register map for the reboot register (in bytes)
+-- value: the reset value written to the reboot register (32 bit access)
+-
+-Optional properties:
+-- mask: update only the register bits defined by the mask (32 bit)
+-
+-Legacy usage:
+-If a node doesn't contain a value property but contains a mask property, the
+-mask property is used as the value.
+-
+-Default will be little endian mode, 32 bit access only.
+-
+-Examples:
+-
+-	reboot {
+-	   compatible = "syscon-reboot";
+-	   regmap = <&regmapnode>;
+-	   offset = <0x0>;
+-	   mask = <0x1>;
+-	};
+diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+new file mode 100644
+index 000000000000..a583f3dc8ef4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/reset/syscon-reboot.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic SYSCON mapped register reset driver
++
++maintainers:
++  - Sebastian Reichel <sre@kernel.org>
++
++description: |+
++  This is a generic reset driver using syscon to map the reset register.
++  The reset is generally performed with a write to the reset register
++  defined by the register map pointed by syscon reference plus the offset
++  with the value and mask defined in the reboot node.
++  Default will be little endian mode, 32 bit access only.
++
++properties:
++  compatible:
++    const: syscon-reboot
++
++  mask:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Update only the register bits defined by the mask (32 bit).
++    maxItems: 1
++
++  offset:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Offset in the register map for the reboot register (in bytes).
++    maxItems: 1
++
++  regmap:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: Phandle to the register map node.
++    maxItems: 1
++
++  value:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: The reset value written to the reboot register (32 bit access).
++    maxItems: 1
++
++required:
++  - compatible
++  - regmap
++  - offset
++
++allOf:
++  - if:
++      properties:
++        value:
++          not:
++            type: array
++    then:
++      required:
++        - mask
++    else:
++      required:
++        - value
++
++examples:
++  - |
++    reboot {
++      compatible = "syscon-reboot";
++      regmap = <&regmapnode>;
++      offset = <0x0>;
++      mask = <0x1>;
++    };
 -- 
-2.21.0
+2.17.1
 
