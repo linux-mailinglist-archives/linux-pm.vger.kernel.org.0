@@ -2,135 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E38A5DA8
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 23:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53D8A5DAF
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 23:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727663AbfIBVrS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 17:47:18 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:39973 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727603AbfIBVrR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 17:47:17 -0400
-Received: by mail-ot1-f68.google.com with SMTP id y39so4718896ota.7;
-        Mon, 02 Sep 2019 14:47:17 -0700 (PDT)
+        id S1727384AbfIBVze (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 17:55:34 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38090 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726964AbfIBVze (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 17:55:34 -0400
+Received: by mail-ot1-f66.google.com with SMTP id r20so14768725ota.5;
+        Mon, 02 Sep 2019 14:55:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7wynMwgJ6dPgxpqFm1W1fM1ypK/FfJKNuS0EDxY2Khs=;
-        b=Fc+7FnjFGnEcq1mDJw1ItJFkTBin7Joo7vp1yTg24fzsqQnW02nEEaYct/DRYL7waf
-         VLlRnXlvcu5zD2n+04vU5MRN0pwfnLPeAhNioGjGhilSK4Vn2Ob35127udhWgBXK2G0b
-         6U0BPXu39Feh0S3YVJIApLbv5zZpXRhsvBR9B4nHrMKO7x00UusB17Gu8nKzAKh7aoQ6
-         wB+EGeK6SU2bJ9TcVbjGahHOxXHg6rwovwAlkiOHxvNUF1CMzltfjFds/2WZk5ESZHWj
-         AZ9OYfUKcMXn07HLxJYRytBwF7Mi398TcDImjPaF2RzKRn73KkEc+w9SvkJf0S8hxi8o
-         kddA==
-X-Gm-Message-State: APjAAAXW17ym4I0AZQFTmRjv5HVMayJmYZmRUabF5g9lcaTXpCxj3PB6
-        gZuLityTqzFt+wjhlmzlauKf6Ynw9Xo/Pd/hhcQ=
-X-Google-Smtp-Source: APXvYqxFipaLyXSjK+dxktB3ibQpeRRm0TczNF1Vs+QeimDbFWDTwWAFvQgOhJQcYINPelboxk6cMBS9zSdvhpLl+gw=
-X-Received: by 2002:a05:6830:9a:: with SMTP id a26mr11598412oto.262.1567460836879;
- Mon, 02 Sep 2019 14:47:16 -0700 (PDT)
+        bh=kbkFoHfe8fPAibjd09tg9MHuZLwP83SyDJa1I+gY8Hg=;
+        b=LJm0sump3NCb87Q/JcoWYRQ6z6VQzjEbS7LtWk9lB2O/j2gVsqHRFayDT7/Y3XV33s
+         UhsnirDt83eiR1xHCN3V9KcqQssNaQ/7yCzn2kAQExB2bCLzkaUe6drn6WPqZuJpfXBu
+         kKQrOQvUmZB7f+Zd6jz8/8ucJYwuzr5VFXDFABYIMqt8OjrjncCTB63ZDqk2Wnj+fW2M
+         ninNfPkQsx5uUK7FxetZmOMtrsSDFUJ6nkOlqkUeT7UyxojLvA7INSn/6Dt2HIa1DThH
+         3QUrkn92U3Jetcnq9j0SBxZ64b9OjVThQWtgLariK3E63htMJJSEF0YluLRl8Xj8k+TP
+         WfYQ==
+X-Gm-Message-State: APjAAAXAv8fXP+DJFpgnCcOzeH5iOtoAdotOGYX73W4seviM/tdlRz0L
+        z11K1M6EmLoNT1Gmyh0QB/dXq6MMZKCKeH/xHDk=
+X-Google-Smtp-Source: APXvYqxAht9LVOa2t9u7X03tdDeqs7UpubwWSaIOwzY/uBk+antfAmoF/NxZoJYV/R6o1BdSzpUoMz8JSDDop2yZ5GU=
+X-Received: by 2002:a9d:7411:: with SMTP id n17mr5914286otk.118.1567461332790;
+ Mon, 02 Sep 2019 14:55:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <1567346932-16744-1-git-send-email-akinobu.mita@gmail.com> <1567346932-16744-2-git-send-email-akinobu.mita@gmail.com>
-In-Reply-To: <1567346932-16744-2-git-send-email-akinobu.mita@gmail.com>
+References: <20190829151027.9930-1-joao.m.martins@oracle.com>
+ <c8cf8dcc-76a3-3e15-f514-2cb9df1bbbdc@oracle.com> <20190829172343.GA18825@amt.cnet>
+In-Reply-To: <20190829172343.GA18825@amt.cnet>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 2 Sep 2019 23:47:05 +0200
-Message-ID: <CAJZ5v0g+NqasLwWRLA_LM+QEjrHquxzEgtvG4_P=4n=vzpOHWQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM-runtime: allow userspace to monitor runtime_status changes
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-leds@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Date:   Mon, 2 Sep 2019 23:55:21 +0200
+Message-ID: <CAJZ5v0j8BEjdNyAn=ut9BxSH5Gphs_AivADPwXX=rJ1TF1+88A@mail.gmail.com>
+Subject: Re: Is: Default governor regardless of cpuidle driver Was: [PATCH v2]
+ cpuidle-haltpoll: vcpu hotplug support
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        kvm-devel <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 1, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> wrote:
+On Thu, Aug 29, 2019 at 7:24 PM Marcelo Tosatti <mtosatti@redhat.com> wrote:
 >
-> This enables the /sys/devices/.../power/runtime_status attribute to
-> allow the user space to get notifications via poll/select when the device
-> runtime PM status is changed.
+> On Thu, Aug 29, 2019 at 06:16:05PM +0100, Joao Martins wrote:
+> > On 8/29/19 4:10 PM, Joao Martins wrote:
+> > > When cpus != maxcpus cpuidle-haltpoll will fail to register all vcpus
+> > > past the online ones and thus fail to register the idle driver.
+> > > This is because cpuidle_add_sysfs() will return with -ENODEV as a
+> > > consequence from get_cpu_device() return no device for a non-existing
+> > > CPU.
+> > >
+> > > Instead switch to cpuidle_register_driver() and manually register each
+> > > of the present cpus through cpuhp_setup_state() callback and future
+> > > ones that get onlined. This mimmics similar logic that intel_idle does.
+> > >
+> > > Fixes: fa86ee90eb11 ("add cpuidle-haltpoll driver")
+> > > Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
+> > > Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+> > > ---
+> >
+> > While testing the above, I found out another issue on the haltpoll series.
+> > But I am not sure what is best suited to cpuidle framework, hence requesting
+> > some advise if below is a reasonable solution or something else is preferred.
+> >
+> > Essentially after haltpoll governor got introduced and regardless of the cpuidle
+> > driver the default governor is gonna be haltpoll for a guest (given haltpoll
+> > governor doesn't get registered for baremetal).
 >
-> An example use case is to avoid unnecessary accesses for device statistics
-> (e.g. diskstats for block devices) while the device is in runtime suspend
-> by user space LED device actitity trigger.
+> Right.
 >
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-> ---
->  Documentation/ABI/testing/sysfs-devices-power | 2 ++
->  drivers/base/power/power.h                    | 1 +
->  drivers/base/power/runtime.c                  | 1 +
->  drivers/base/power/sysfs.c                    | 5 +++++
->  4 files changed, 9 insertions(+)
+> > Right now, for a KVM guest, the
+> > idle governors have these ratings:
+> >
+> >  * ladder            -> 10
+> >  * teo               -> 19
+> >  * menu              -> 20
+> >  * haltpoll          -> 21
+> >  * ladder + nohz=off -> 25
 >
-> diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentation/ABI/testing/sysfs-devices-power
-> index 3e50536..47dc357 100644
-> --- a/Documentation/ABI/testing/sysfs-devices-power
-> +++ b/Documentation/ABI/testing/sysfs-devices-power
-> @@ -269,3 +269,5 @@ Description:
->                 the current runtime PM status of the device, which may be
->                 "suspended", "suspending", "resuming", "active", "error" (fatal
->                 error), or "unsupported" (runtime PM is disabled).
-> +               This attribute allows the user space to get notifications via
-> +               poll/select when the device runtime PM status is changed.
-> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-> index ec33fbdb..8891bf4 100644
-> --- a/drivers/base/power/power.h
-> +++ b/drivers/base/power/power.h
-> @@ -74,6 +74,7 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
->  extern void pm_qos_sysfs_remove_flags(struct device *dev);
->  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
->  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
-> +extern void sysfs_notify_runtime_status(struct device *dev);
+> Yes. PowerPC KVM guests crash currently due to the use of the haltpoll
+> governor (have a patch in my queue to fix this, but your solution
+> embraces more cases).
 >
->  #else /* CONFIG_PM */
+> > When a guest is booted with MWAIT and intel_idle is probed and sucessfully
+> > registered, we will end up with a haltpoll governor being used as opposed to
+> > 'menu' (which used to be the default case). This would prevent IIUC that other
+> > C-states get used other than poll_state (state 0) and state 1.
+> >
+> > Given that haltpoll governor is largely only useful with a cpuidle-haltpoll
+> > it doesn't look reasonable to be the default? What about using haltpoll governor
+> > as default when haltpoll idle driver registers or modloads.
+> >
+> > My idea to achieve the above would be to decrease the rating to 9 (before the
+> > lowest rated governor) and retain old defaults before haltpoll. Then we would
+> > allow a cpuidle driver to define a preferred governor to switch on idle driver
+> > registration. Naturally all of would be ignored if overidden by
+> > cpuidle.governor=.
+> >
+> > The diff below the scissors line is an example of that.
+> >
+> > Thoughts?
 >
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index b753355..3a3e413 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -94,6 +94,7 @@ static void __update_runtime_status(struct device *dev, enum rpm_status status)
->  {
->         update_pm_runtime_accounting(dev);
->         dev->power.runtime_status = status;
-> +       sysfs_notify_runtime_status(dev);
+> Works for me. Rafael?
 
-There are concerns about this.
-
-First off, it adds overhead for devices that change the PM-runtime
-status relatively often.  I'm not sure if that's sufficiently
-justified.
-
-Second, it is called for status changes from "active" to "suspending"
-and from "suspending" to "suspended" (and analogously for resume)
-which may not be particularly useful.  At least, user space may not
-have enough time to act on such notifications.
-
-Finally, it is racy, because at the time user space does something on
-a device PM-runtime status change, it very well may have changed the
-other way around already.
-
->  }
->
->  static u64 rpm_get_accounted_time(struct device *dev, bool suspended)
-> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> index 1b9c281c..e86d8cb 100644
-> --- a/drivers/base/power/sysfs.c
-> +++ b/drivers/base/power/sysfs.c
-> @@ -734,3 +734,8 @@ void dpm_sysfs_remove(struct device *dev)
->         sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
->         sysfs_remove_group(&dev->kobj, &pm_attr_group);
->  }
-> +
-> +void sysfs_notify_runtime_status(struct device *dev)
-> +{
-> +       sysfs_notify(&dev->kobj, "power", "runtime_status");
-> +}
-> --
-> 2.7.4
->
+It works for me too, basically, except that I would rename
+cpuidle_default_governor in the patch to cpuidle_prev_governor.
