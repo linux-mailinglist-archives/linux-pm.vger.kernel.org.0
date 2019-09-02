@@ -2,118 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9317FA507F
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 09:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B17A5081
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 09:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729668AbfIBH7o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 03:59:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54888 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729535AbfIBH7o (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Sep 2019 03:59:44 -0400
-Received: from earth.universe (dyndsl-091-096-044-124.ewe-ip-backbone.de [91.96.44.124])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C28A022CF7;
-        Mon,  2 Sep 2019 07:59:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567411182;
-        bh=GjwmwKzURWQlyOOmKM2+qoYjiZfogOXfEh8/6H3ndVs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R1SYeQl2kRAg3UcGoRSgrjKKHloVq2t+5/ENNvNqxXP/oiASEbck/rSjNCsLJ2Zsh
-         yUw+L1esOby2OKmsIPcaeW6wDDpwZuFBrA32sRDLFHxgAwN4xPYZ6LDohAsaBuoGy6
-         +6DcphO78RIQphXh6dWKdslcMd5ZiqnEJ7YWUDtM=
-Received: by earth.universe (Postfix, from userid 1000)
-        id E8C493C0B7F; Mon,  2 Sep 2019 09:59:40 +0200 (CEST)
-Date:   Mon, 2 Sep 2019 09:59:40 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Michael Nosthoff <committed@heine.so>
-Cc:     linux-pm@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] power: supply: sbs-battery: use correct flags field
-Message-ID: <20190902075940.fawqc2obq4bq35gm@earth.universe>
-References: <20190816073742.26866-1-committed@heine.so>
+        id S1729907AbfIBH7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 03:59:47 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:58033 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729535AbfIBH7r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 03:59:47 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 61D2C8219A; Mon,  2 Sep 2019 09:59:30 +0200 (CEST)
+Date:   Mon, 2 Sep 2019 09:59:43 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>
+Subject: Re: [PATCH] power: supply: cpcap-charger: Enable vbus boost voltage
+Message-ID: <20190902075943.GB15850@amd>
+References: <20190830232316.53750-1-tony@atomide.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dn52uxvouw7dbvkr"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="QTprm0S8XgL7H0Dt"
 Content-Disposition: inline
-In-Reply-To: <20190816073742.26866-1-committed@heine.so>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190830232316.53750-1-tony@atomide.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---dn52uxvouw7dbvkr
+--QTprm0S8XgL7H0Dt
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi!
 
-On Fri, Aug 16, 2019 at 09:37:42AM +0200, Michael Nosthoff wrote:
-> the type flag is stored in the chip->flags field not in the
-> client->flags field. This currently leads to never using the ti
-> specific health function as client->flags doesn't use that bit.
-> So it's always falling back to the general one.
+> We are currently not enabling VBUS boost for cpcap when in host mode.
+> This means the VBUS is fed at the battery voltage level, which can cause
+> flakeyness enumerating devices.
 >=20
-> Fixes: 76b16f4cdfb8 ("power: supply: sbs-battery: don't assume
-> MANUFACTURER_DATA formats")
+> Looks like the boost control for VBUS is CPCAP_BIT_VBUS_SWITCH that we
+> must enable in the charger for nice 4.92 V VBUS output. And looks like
+> we must not use the STBY pin enabling but must instead use manual VBUS
+> control in phy-cpcap-usb.
 >=20
-> Signed-off-by: Michael Nosthoff <committed@heine.so>
-> Reviewed-by: Brian Norris <briannorris@chromium.org>
-> Cc: <stable@vger.kernel.org>
-> ---
+> We want to do this in cpcap_charger_vbus_work() and also set a flag for
+> feeding_vbus to avoid races between USB detection and charger detection,
+> and disable charging if feeding_vbus is set.
 
-Thanks, queued.
+I did not know phone is supposed to provide voltage on USB. USB mouse
+works for me.. in stock android, provided I conect USB hub and
+external power.
 
--- Sebastian
+This does not seem to work for me.. and it does not even work on stock
+kernel. What is going on here?
 
-> Changes since v1:
-> * Changed comment according to Brian's suggestions
-> * Added Fixes tag
-> * Added reviewed and cc stable
->=20
->  drivers/power/supply/sbs-battery.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sb=
-s-battery.c
-> index 048d205d7074..2e86cc1e0e35 100644
-> --- a/drivers/power/supply/sbs-battery.c
-> +++ b/drivers/power/supply/sbs-battery.c
-> @@ -620,7 +620,7 @@ static int sbs_get_property(struct power_supply *psy,
->  	switch (psp) {
->  	case POWER_SUPPLY_PROP_PRESENT:
->  	case POWER_SUPPLY_PROP_HEALTH:
-> -		if (client->flags & SBS_FLAGS_TI_BQ20Z75)
-> +		if (chip->flags & SBS_FLAGS_TI_BQ20Z75)
->  			ret =3D sbs_get_ti_battery_presence_and_health(client,
->  								     psp, val);
->  		else
-> --=20
-> 2.20.1
->=20
+Is there some kind of debug ineterface where I could test just the
+vbus switch? I do have voltmeter for the usb port...
 
---dn52uxvouw7dbvkr
+Best regards,
+								Pavel
+
+> diff --git a/drivers/phy/motorola/phy-cpcap-usb.c b/drivers/phy/motorola/=
+phy-cpcap-usb.c
+> --- a/drivers/phy/motorola/phy-cpcap-usb.c
+> +++ b/drivers/phy/motorola/phy-cpcap-usb.c
+> @@ -231,8 +231,9 @@ static void cpcap_usb_detect(struct work_struct *work)
+>  			goto out_err;
+> =20
+>  		error =3D regmap_update_bits(ddata->reg, CPCAP_REG_USBC3,
+> -					   CPCAP_BIT_VBUSSTBY_EN,
+> -					   CPCAP_BIT_VBUSSTBY_EN);
+> +					   CPCAP_BIT_VBUSSTBY_EN |
+> +					   CPCAP_BIT_VBUSEN_SPI,
+> +					   CPCAP_BIT_VBUSEN_SPI);
+>  		if (error)
+>  			goto out_err;
+> =20
+> @@ -240,7 +241,8 @@ static void cpcap_usb_detect(struct work_struct *work)
+>  	}
+> =20
+>  	error =3D regmap_update_bits(ddata->reg, CPCAP_REG_USBC3,
+> -				   CPCAP_BIT_VBUSSTBY_EN, 0);
+> +				   CPCAP_BIT_VBUSSTBY_EN |
+> +				   CPCAP_BIT_VBUSEN_SPI, 0);
+>  	if (error)
+>  		goto out_err;
+> =20
+> diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/=
+cpcap-charger.c
+> --- a/drivers/power/supply/cpcap-charger.c
+> +++ b/drivers/power/supply/cpcap-charger.c
+> @@ -108,6 +108,9 @@
+>  #define CPCAP_REG_CRM_ICHRG_1A596	CPCAP_REG_CRM_ICHRG(0xe)
+>  #define CPCAP_REG_CRM_ICHRG_NO_LIMIT	CPCAP_REG_CRM_ICHRG(0xf)
+> =20
+> +/* CPCAP_REG_VUSBC register bits needed for VBUS */
+> +#define CPCAP_BIT_VBUS_SWITCH		BIT(0)	/* VBUS boost to 5V */
+> +
+>  enum {
+>  	CPCAP_CHARGER_IIO_BATTDET,
+>  	CPCAP_CHARGER_IIO_VOLTAGE,
+> @@ -130,7 +133,8 @@ struct cpcap_charger_ddata {
+>  	struct power_supply *usb;
+> =20
+>  	struct phy_companion comparator;	/* For USB VBUS */
+> -	bool vbus_enabled;
+> +	unsigned int vbus_enabled:1;
+> +	unsigned int feeding_vbus:1;
+>  	atomic_t active;
+> =20
+>  	int status;
+> @@ -325,7 +329,6 @@ static bool cpcap_charger_vbus_valid(struct cpcap_cha=
+rger_ddata *ddata)
+>  }
+> =20
+>  /* VBUS control functions for the USB PHY companion */
+> -
+>  static void cpcap_charger_vbus_work(struct work_struct *work)
+>  {
+>  	struct cpcap_charger_ddata *ddata;
+> @@ -343,6 +346,7 @@ static void cpcap_charger_vbus_work(struct work_struc=
+t *work)
+>  			return;
+>  		}
+> =20
+> +		ddata->feeding_vbus =3D true;
+>  		cpcap_charger_set_cable_path(ddata, false);
+>  		cpcap_charger_set_inductive_path(ddata, false);
+> =20
+> @@ -350,12 +354,23 @@ static void cpcap_charger_vbus_work(struct work_str=
+uct *work)
+>  		if (error)
+>  			goto out_err;
+> =20
+> +		error =3D regmap_update_bits(ddata->reg, CPCAP_REG_VUSBC,
+> +					   CPCAP_BIT_VBUS_SWITCH,
+> +					   CPCAP_BIT_VBUS_SWITCH);
+> +		if (error)
+> +			goto out_err;
+> +
+>  		error =3D regmap_update_bits(ddata->reg, CPCAP_REG_CRM,
+>  					   CPCAP_REG_CRM_RVRSMODE,
+>  					   CPCAP_REG_CRM_RVRSMODE);
+>  		if (error)
+>  			goto out_err;
+>  	} else {
+> +		error =3D regmap_update_bits(ddata->reg, CPCAP_REG_VUSBC,
+> +					   CPCAP_BIT_VBUS_SWITCH, 0);
+> +		if (error)
+> +			goto out_err;
+> +
+>  		error =3D regmap_update_bits(ddata->reg, CPCAP_REG_CRM,
+>  					   CPCAP_REG_CRM_RVRSMODE, 0);
+>  		if (error)
+> @@ -363,6 +378,7 @@ static void cpcap_charger_vbus_work(struct work_struc=
+t *work)
+> =20
+>  		cpcap_charger_set_cable_path(ddata, true);
+>  		cpcap_charger_set_inductive_path(ddata, true);
+> +		ddata->feeding_vbus =3D false;
+>  	}
+> =20
+>  	return;
+> @@ -431,7 +447,8 @@ static void cpcap_usb_detect(struct work_struct *work)
+>  	if (error)
+>  		return;
+> =20
+> -	if (cpcap_charger_vbus_valid(ddata) && s.chrgcurr1) {
+> +	if (!ddata->feeding_vbus && cpcap_charger_vbus_valid(ddata) &&
+> +	    s.chrgcurr1) {
+>  		int max_current;
+> =20
+>  		if (cpcap_charger_battery_found(ddata))
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--QTprm0S8XgL7H0Dt
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1sy+wACgkQ2O7X88g7
-+pq94g//UI5/sH7Za6ygQYXPOe5x30DV82fpdWCXx6h1u9qSUyuoQeW9aha0HgLJ
-8enkkNpOPJv9AFvWUKS7IkEp599X48KBW/7L8s6g6pnuUnFxomxN5F80tluLOXG3
-pgr4VRQ7yrgdsk9iM87pXjybObDwsLQ4iJaqV0jIY93/BdQvPqk2Xf6LiSYWD+RW
-i+3IYvs3Z9Hw62wi994fBP8++25nTk74sjDwq55CLkY/c0o/3YeENewuCRQZsjP9
-7uz433NZtNEjD3M7XrUhEFfmo0R7MlyHmrsoIVhBw7BHwt749zsiBS6Yrku3RHU+
-6x0DNKZ9/tLM1L5H18L0YFwkz4kycdvyYM7E8yOIgtWoSKL2qhscNMSjEhQXhEUz
-f72q4kGqdLnuYDNh8roKK3YGpfnxfngfChmyZwt7SJrrDGjf1h2CzxddJtKysVE8
-1P2Y2NMYLmbleicj7xDazwIWCp+Fq6i2z888y63QLlfzwbdm7Mchedvz6M+emD46
-8a984ji2lxNEngDKgotagsYC5dcoZ1AMzLB4OyzCbv+x1spY0fwF+BPRGnUz1r0E
-JeUaGM39lE6aQiL6Ug92ifowkpD14A3RRfLp32SmRGSrRul9FuKBpAdwfaTWF3SF
-5iOkMdaHRGc6LlsZtNAHRH01MO+EW4MTQGwpN7g1VdDbw5Gu7Wg=
-=Rm5p
+iEYEARECAAYFAl1sy+8ACgkQMOfwapXb+vKc5wCdGy4C48hGf4R2WehOQzOw6AAy
+2+YAnj5B2/Lli8iBqDDqG1t5zSctNmxi
+=tuya
 -----END PGP SIGNATURE-----
 
---dn52uxvouw7dbvkr--
+--QTprm0S8XgL7H0Dt--
