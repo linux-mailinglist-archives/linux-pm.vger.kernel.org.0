@@ -2,44 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CF9A5C70
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 20:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE3EA5C7B
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 21:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbfIBS5v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 14:57:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33872 "EHLO mail.kernel.org"
+        id S1726997AbfIBTDN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 15:03:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35824 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726750AbfIBS5v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Sep 2019 14:57:51 -0400
+        id S1726773AbfIBTDN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Sep 2019 15:03:13 -0400
 Received: from earth.universe (unknown [185.62.205.105])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F01CC21883;
-        Mon,  2 Sep 2019 18:57:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0FCAF21883;
+        Mon,  2 Sep 2019 19:03:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567450670;
-        bh=b9q+F0oWgfqJemt7YPpgOVkZgFWsUthBT+dsjYcADps=;
+        s=default; t=1567450992;
+        bh=AWHxitr0Uqz89QQHhmQrpQCAfo/5quYPk/oro2ST544=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ucpxDPnqMNLEOYNQMdQBWre8nDFaw9ck65PeaIpDMfwUfFUwrMihvqEmmMYa/BVXl
-         5Rdh7dHeDnogDtM0cLGYdirddDYjHO5mLHnX5h6LtyNcLgi0I9Jy24FPrOhAa4gusP
-         0woltmtq1NHGubwcHsx2KafCSlPBVJyWvLGv8hxE=
+        b=VdztqFnanBJ+cfAc0ZvtQvOHoJv2wyldc2LIgPq0RJoaP+hKu8STi0QWt5wZskbEW
+         qNDLzm8ld0+lleK8yX5hziJ/rS4EDp05uB66fJIJnnf6+LVQY8SEvCCwFBnZ9dNdTz
+         9gdPhw2MoB5qAfMm6rG97SCnUlnBegKA0FiHCpBs=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 8B3A03C0B7F; Mon,  2 Sep 2019 20:57:47 +0200 (CEST)
-Date:   Mon, 2 Sep 2019 20:57:47 +0200
+        id A84963C0B7F; Mon,  2 Sep 2019 21:03:09 +0200 (CEST)
+Date:   Mon, 2 Sep 2019 21:03:09 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Artur Rojek <contact@artur-rojek.eu>
-Cc:     od@zcrc.me, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] power/supply: ingenic-battery: Don't change scale if
- there's only one
-Message-ID: <20190902185747.mt3jku4gfosfu4wz@earth.universe>
-References: <20190723024554.9248-1-paul@crapouillou.net>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] power: supply: max17042_battery: Fix a typo in function
+ names
+Message-ID: <20190902190309.yshdhrswhemdf7yb@earth.universe>
+References: <20190721160328.24660-1-christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="edm47sjsxpx3tepz"
+        protocol="application/pgp-signature"; boundary="geki2nibjgyihtcm"
 Content-Disposition: inline
-In-Reply-To: <20190723024554.9248-1-paul@crapouillou.net>
+In-Reply-To: <20190721160328.24660-1-christophe.jaillet@wanadoo.fr>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -47,79 +46,95 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---edm47sjsxpx3tepz
+--geki2nibjgyihtcm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Jul 22, 2019 at 10:45:54PM -0400, Paul Cercueil wrote:
-> The ADC in the JZ4740 can work either in high-precision mode with a 2.5V
-> range, or in low-precision mode with a 7.5V range. The code in place in
-> this driver will select the proper scale according to the maximum
-> voltage of the battery.
+On Sun, Jul 21, 2019 at 06:03:28PM +0200, Christophe JAILLET wrote:
+> It is likely that 'max10742_[un]lock_model()' functions should be
+> 'max17042_[un]lock_model()'
+> (0 and 7 switched in 10742)
 >=20
-> The JZ4770 however only has one mode, with a 6.6V range. If only one
-> scale is available, there's no need to change it (and nothing to change
-> it to), and trying to do so will fail with -EINVAL.
->=20
-> Fixes commit fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery
-> driver.")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
 
-There is a standard format for this. It should be
-
-Fixes: fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery driver.")
-
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: stable@vger.kernel.org
-
-Also it would be nice to have an Acked-by from Artur.
+Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/ingenic-battery.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/power/supply/max17042_battery.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >=20
-> diff --git a/drivers/power/supply/ingenic-battery.c b/drivers/power/suppl=
-y/ingenic-battery.c
-> index 35816d4b3012..5a53057b4f64 100644
-> --- a/drivers/power/supply/ingenic-battery.c
-> +++ b/drivers/power/supply/ingenic-battery.c
-> @@ -80,6 +80,10 @@ static int ingenic_battery_set_scale(struct ingenic_ba=
-ttery *bat)
->  	if (ret !=3D IIO_AVAIL_LIST || scale_type !=3D IIO_VAL_FRACTIONAL_LOG2)
->  		return -EINVAL;
+> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supp=
+ly/max17042_battery.c
+> index 581c6bd23388..da3904822929 100644
+> --- a/drivers/power/supply/max17042_battery.c
+> +++ b/drivers/power/supply/max17042_battery.c
+> @@ -511,7 +511,7 @@ static inline void max17042_override_por(struct regma=
+p *map,
+>  		regmap_write(map, reg, value);
+>  }
 > =20
-> +	/* Only one (fractional) entry - nothing to change */
-> +	if (scale_len =3D=3D 2)
-> +		return 0;
-> +
->  	max_mV =3D bat->info.voltage_max_design_uv / 1000;
+> -static inline void max10742_unlock_model(struct max17042_chip *chip)
+> +static inline void max17042_unlock_model(struct max17042_chip *chip)
+>  {
+>  	struct regmap *map =3D chip->regmap;
 > =20
->  	for (i =3D 0; i < scale_len; i +=3D 2) {
+> @@ -519,7 +519,7 @@ static inline void max10742_unlock_model(struct max17=
+042_chip *chip)
+>  	regmap_write(map, MAX17042_MLOCKReg2, MODEL_UNLOCK2);
+>  }
+> =20
+> -static inline void max10742_lock_model(struct max17042_chip *chip)
+> +static inline void max17042_lock_model(struct max17042_chip *chip)
+>  {
+>  	struct regmap *map =3D chip->regmap;
+> =20
+> @@ -577,7 +577,7 @@ static int max17042_init_model(struct max17042_chip *=
+chip)
+>  	if (!temp_data)
+>  		return -ENOMEM;
+> =20
+> -	max10742_unlock_model(chip);
+> +	max17042_unlock_model(chip);
+>  	max17042_write_model_data(chip, MAX17042_MODELChrTbl,
+>  				table_size);
+>  	max17042_read_model_data(chip, MAX17042_MODELChrTbl, temp_data,
+> @@ -589,7 +589,7 @@ static int max17042_init_model(struct max17042_chip *=
+chip)
+>  		temp_data,
+>  		table_size);
+> =20
+> -	max10742_lock_model(chip);
+> +	max17042_lock_model(chip);
+>  	kfree(temp_data);
+> =20
+>  	return ret;
 > --=20
-> 2.21.0.593.g511ec345e18
+> 2.20.1
 >=20
 
---edm47sjsxpx3tepz
+--geki2nibjgyihtcm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1tZigACgkQ2O7X88g7
-+pqIeA//bbrrfgxWrAbtsrO9ZahirCLvKBApSmv0pQQ7flaauiQiUxUNcDDnEVU/
-aAty+Pta0ZUOsFm9xfGWLYB1qU0jyRvv2mBaCZRpr3W/K2fs8dLJSPXbVcgOYElz
-0FdU5p72ksy2gr0vhPO++SccNNJYxVvCTs7ihiEpp2w6MVkcLLKfPPn8JsmteoJA
-ZtsbYcRJr3I8z2VMhe0oT2xbAq9h9N/VCdZqccEDgIh3pvReEVXNyfgvZ+3BdZ3T
-89eDpFST/XY9PZyWtlfBi18GEzd9Y9VQPgJro95/n1JoxmLOCyd0Bmh3Nc1Wykhv
-E1aEgvI3tjiufbpaY8Oy2SoXEKG8nR77hCMw8wEswnpcqvaFPNNExEj3HtEWGaJC
-Atyw/dppgRneeOgLXfxaIKqGHjyOTIZ/Q3Wm7CqHmQFAOHTcnQ48NRG0JjXzrxqO
-0ykLvhHfpQ64xYAfzY5CdKCKplHQs7dt8ql2+y+GCg6rOYpRl6pgcSCaaEqV1u2a
-L+Iu58ykLla3OXfniDl7ZywkhA+ssWjUUmjf0uf1ZC3EgiPA8bEaIZ+6AqaYpCES
-QdXX6VJEaoh9RbdbADMXp+5dk/3xXSTffFxncwUZoT2Jy37Pb0Kim8lB10v4TASo
-3GLpSDnixlny9WEapyG9oMC76dh1sZtQ6Bf/Ca5TgXAh+HwkBQI=
-=ANOV
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1tZ20ACgkQ2O7X88g7
++priMg//R7FBlaET+kgtJlE1Iw8yaVuXLYkOfpjDXo4asEFbs5SPxrD4VyTWAXTs
+McaDNnlAmVs5kinXneVN8LMYdU6MstWi0a3eV/5JYxGGMkvf9eBMOsqFvP6JOcsG
+bypNfnKdLbuhaxC5ZjHLRK/D3b9oZ6nSBqBZjHvRQt4lIeqmTyNw/z0XaHqLhVHU
+/eI6Y+FSx+v1agf+ycRfCOoIP95ZEEsxeBZLhe+aBlnUjD9WzmU4VZwmTM0PkmZt
+Xq6xvkp6WezD4QihyOx911i08KHSMuxBQu6kd5eXQW+T0IdcIDQpbp8WD7pzOjrY
+Gz9xE9f7T3kEjm4FRlBbGZe92X7GVpltqW/qOoeD1y87JbPAHNlLWkjv55KgysLK
+yfnB+mbSetnlZ/lBnmLaeQnyzNJowykvqveQYJO4t+iO4dEFmplTAFS9syZcTicF
+g0fAJWY4W9DZSLLQEG+f1PlxyaCwvabQpOTeQsHuPAc6FnA9ChxWePnoho9Y72Kk
+GNx50V4/KS3A5agpyQ0JwfY9Jz48sZ0wHz6gEnccNeobzoxGYLgOJjDwLw1EtRv9
+ACr3y/SbzjltKqjC5PgYHCfRESlCTXV7Ngt5Q1ZErvqH5ZeBnZwAhzV9hqY1shTc
+07x8g4NyCMzsq07FOSbNqRZgvk6vEXk+gmNohoLLSlXlt916Bss=
+=QS8p
 -----END PGP SIGNATURE-----
 
---edm47sjsxpx3tepz--
+--geki2nibjgyihtcm--
