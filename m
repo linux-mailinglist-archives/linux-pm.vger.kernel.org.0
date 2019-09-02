@@ -2,43 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CECA5C50
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 20:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CF9A5C70
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 20:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbfIBSh7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 14:37:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58718 "EHLO mail.kernel.org"
+        id S1726828AbfIBS5v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 14:57:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33872 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726750AbfIBSh6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Sep 2019 14:37:58 -0400
+        id S1726750AbfIBS5v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Sep 2019 14:57:51 -0400
 Received: from earth.universe (unknown [185.62.205.105])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B9C4C2087E;
-        Mon,  2 Sep 2019 18:37:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F01CC21883;
+        Mon,  2 Sep 2019 18:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567449477;
-        bh=/wM7s3NKrRlICYkMU4E2G6/DD4ggEHpOe/EtqV5iWvE=;
+        s=default; t=1567450670;
+        bh=b9q+F0oWgfqJemt7YPpgOVkZgFWsUthBT+dsjYcADps=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DG21VCKyBtbrWLmGDzDlfikGMekEU6o0oeUw7vLRJyHBSBun+UgG1Mize8hH/4f7e
-         OVWwP8PCGk0+KcemtzBLgOE6FWeUpeIibdlDCj0imQZBduxedGDcx+D1XqdzurA8mW
-         YfgBshdZp2b2kScZot/6XzES5+uPdOLdkv6l1Ip8=
+        b=ucpxDPnqMNLEOYNQMdQBWre8nDFaw9ck65PeaIpDMfwUfFUwrMihvqEmmMYa/BVXl
+         5Rdh7dHeDnogDtM0cLGYdirddDYjHO5mLHnX5h6LtyNcLgi0I9Jy24FPrOhAa4gusP
+         0woltmtq1NHGubwcHsx2KafCSlPBVJyWvLGv8hxE=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 586FA3C0B7F; Mon,  2 Sep 2019 20:37:55 +0200 (CEST)
-Date:   Mon, 2 Sep 2019 20:37:55 +0200
+        id 8B3A03C0B7F; Mon,  2 Sep 2019 20:57:47 +0200 (CEST)
+Date:   Mon, 2 Sep 2019 20:57:47 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: reset: gpio-restart: Fix typo when gpio reset is
- not found
-Message-ID: <20190902183755.72vpe4xn2gbw4kmy@earth.universe>
-References: <94b3d1f3ebeb6000c32a7bed6f8b9411bae9cf19.1567429238.git.michal.simek@xilinx.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Artur Rojek <contact@artur-rojek.eu>
+Cc:     od@zcrc.me, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] power/supply: ingenic-battery: Don't change scale if
+ there's only one
+Message-ID: <20190902185747.mt3jku4gfosfu4wz@earth.universe>
+References: <20190723024554.9248-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dulct22sl4bantvv"
+        protocol="application/pgp-signature"; boundary="edm47sjsxpx3tepz"
 Content-Disposition: inline
-In-Reply-To: <94b3d1f3ebeb6000c32a7bed6f8b9411bae9cf19.1567429238.git.michal.simek@xilinx.com>
+In-Reply-To: <20190723024554.9248-1-paul@crapouillou.net>
 User-Agent: NeoMutt/20180716
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -46,65 +47,79 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---dulct22sl4bantvv
+--edm47sjsxpx3tepz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Sep 02, 2019 at 03:00:40PM +0200, Michal Simek wrote:
-> Trivial patch which just corrects error message.
+On Mon, Jul 22, 2019 at 10:45:54PM -0400, Paul Cercueil wrote:
+> The ADC in the JZ4740 can work either in high-precision mode with a 2.5V
+> range, or in low-precision mode with a 7.5V range. The code in place in
+> this driver will select the proper scale according to the maximum
+> voltage of the battery.
 >=20
-> Fixes: 371bb20d6927 ("power: Add simple gpio-restart driver")
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> ---
+> The JZ4770 however only has one mode, with a 6.6V range. If only one
+> scale is available, there's no need to change it (and nothing to change
+> it to), and trying to do so will fail with -EINVAL.
+>=20
+> Fixes commit fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery
+> driver.")
 
-Thanks, queued.
+There is a standard format for this. It should be
+
+Fixes: fb24ccfbe1e0 ("power: supply: add Ingenic JZ47xx battery driver.")
+
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Cc: stable@vger.kernel.org
+
+Also it would be nice to have an Acked-by from Artur.
 
 -- Sebastian
 
+>  drivers/power/supply/ingenic-battery.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >=20
->  drivers/power/reset/gpio-restart.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/reset/gpio-restart.c b/drivers/power/reset/gpi=
-o-restart.c
-> index 2880cd5ae0d2..308ca9d9d276 100644
-> --- a/drivers/power/reset/gpio-restart.c
-> +++ b/drivers/power/reset/gpio-restart.c
-> @@ -65,7 +65,7 @@ static int gpio_restart_probe(struct platform_device *p=
-dev)
->  	gpio_restart->reset_gpio =3D devm_gpiod_get(&pdev->dev, NULL,
->  			open_source ? GPIOD_IN : GPIOD_OUT_LOW);
->  	if (IS_ERR(gpio_restart->reset_gpio)) {
-> -		dev_err(&pdev->dev, "Could net get reset GPIO\n");
-> +		dev_err(&pdev->dev, "Could not get reset GPIO\n");
->  		return PTR_ERR(gpio_restart->reset_gpio);
->  	}
+> diff --git a/drivers/power/supply/ingenic-battery.c b/drivers/power/suppl=
+y/ingenic-battery.c
+> index 35816d4b3012..5a53057b4f64 100644
+> --- a/drivers/power/supply/ingenic-battery.c
+> +++ b/drivers/power/supply/ingenic-battery.c
+> @@ -80,6 +80,10 @@ static int ingenic_battery_set_scale(struct ingenic_ba=
+ttery *bat)
+>  	if (ret !=3D IIO_AVAIL_LIST || scale_type !=3D IIO_VAL_FRACTIONAL_LOG2)
+>  		return -EINVAL;
 > =20
+> +	/* Only one (fractional) entry - nothing to change */
+> +	if (scale_len =3D=3D 2)
+> +		return 0;
+> +
+>  	max_mV =3D bat->info.voltage_max_design_uv / 1000;
+> =20
+>  	for (i =3D 0; i < scale_len; i +=3D 2) {
 > --=20
-> 2.17.1
+> 2.21.0.593.g511ec345e18
 >=20
 
---dulct22sl4bantvv
+--edm47sjsxpx3tepz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1tYYMACgkQ2O7X88g7
-+poRMw//V7Ow1mpLJIwknsKNr9wI/GzrbyKQnLvAYrBdPMVvx2m2PSBsvUw+kVQJ
-YmihXkkLacM7EQnWbKtr/R7Lq0Ld6wmSvCqhFyzvaPhydqgSEdhBh7JRk8yN8eW/
-7ptnYelb925VkFn5dcz7KAHZ7AIP6lP8CJGU06I4HSaYsYliQbyvcDL5vwSB7oGP
-qF/1ESwqh/x7Kq4u6EfHYGbT2gtD294ZWA2tUZK6R8hqh4242Nc6sdGkxnHw09Gt
-TGowAhfeJ9blsvtMV9MOHHJbSCn46fK/5IaoEcy/p4AYyatTKdLKV5BcQC1Y8OGU
-OdsSVOTOP/HYNCHgVPu9zgnkxymnVIM49/oe9+3Jn7h/s3cHLRCEi96gFOXTNpVF
-kmgoGE/cOod2jL9+65ToivZBtttcsePXnx06NzSUMzTwN/T086I51S2Vr/J0ufGn
-YCEBVG4+cm9jSGejUqs/ZGM+hJ583BLeOfFhxYGSM1/jAlg7jZzEwqEsgFDVWYlL
-2eZ23z3Ez1/peYgCPlE/AK9AEoup0Ot9S9+T5wg+xtHMpov1FK1TcS827Y1Av4w2
-xshXBOZAMM+jZP38bLJixQ+CCrs6psp3CRZj2qUQ+HvAS8+O2vqao/r5hcQb4aKF
-wi4ShqQ/Xfk+IQ7N77TwoTxdyP0tx1+SnGODczCGXE8RIMd+w8w=
-=m9Nx
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1tZigACgkQ2O7X88g7
++pqIeA//bbrrfgxWrAbtsrO9ZahirCLvKBApSmv0pQQ7flaauiQiUxUNcDDnEVU/
+aAty+Pta0ZUOsFm9xfGWLYB1qU0jyRvv2mBaCZRpr3W/K2fs8dLJSPXbVcgOYElz
+0FdU5p72ksy2gr0vhPO++SccNNJYxVvCTs7ihiEpp2w6MVkcLLKfPPn8JsmteoJA
+ZtsbYcRJr3I8z2VMhe0oT2xbAq9h9N/VCdZqccEDgIh3pvReEVXNyfgvZ+3BdZ3T
+89eDpFST/XY9PZyWtlfBi18GEzd9Y9VQPgJro95/n1JoxmLOCyd0Bmh3Nc1Wykhv
+E1aEgvI3tjiufbpaY8Oy2SoXEKG8nR77hCMw8wEswnpcqvaFPNNExEj3HtEWGaJC
+Atyw/dppgRneeOgLXfxaIKqGHjyOTIZ/Q3Wm7CqHmQFAOHTcnQ48NRG0JjXzrxqO
+0ykLvhHfpQ64xYAfzY5CdKCKplHQs7dt8ql2+y+GCg6rOYpRl6pgcSCaaEqV1u2a
+L+Iu58ykLla3OXfniDl7ZywkhA+ssWjUUmjf0uf1ZC3EgiPA8bEaIZ+6AqaYpCES
+QdXX6VJEaoh9RbdbADMXp+5dk/3xXSTffFxncwUZoT2Jy37Pb0Kim8lB10v4TASo
+3GLpSDnixlny9WEapyG9oMC76dh1sZtQ6Bf/Ca5TgXAh+HwkBQI=
+=ANOV
 -----END PGP SIGNATURE-----
 
---dulct22sl4bantvv--
+--edm47sjsxpx3tepz--
