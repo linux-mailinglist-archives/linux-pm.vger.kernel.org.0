@@ -2,157 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBA5A5091
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 10:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4A4A5193
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 10:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729626AbfIBIAq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 04:00:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55374 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729535AbfIBIAq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Sep 2019 04:00:46 -0400
-Received: from earth.universe (dyndsl-091-096-044-124.ewe-ip-backbone.de [91.96.44.124])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10DA122CF7;
-        Mon,  2 Sep 2019 08:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567411245;
-        bh=L83zCSB1qiwTYwMO95Zsb92WohQS4er/qeMOyrCaEvc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=npha/fxKlCxSrpKAu0q7t6vulPXDDZwH1O7a/jwXEwqLgNwoQUD+DyNsFTsCY8NJj
-         DL2Ek58sfD2J6glEz8zMNVmSC3sjqLzn6y2gajXHNtH4IB1ngez5w3DiAiL+fheqQZ
-         32EuL94JEk+H7L9mArHt/EQxmqgd/sWEeRXlyep4=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 4216C3C0B7F; Mon,  2 Sep 2019 10:00:43 +0200 (CEST)
-Date:   Mon, 2 Sep 2019 10:00:43 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel-team@android.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tri Vo <trong@android.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH] power: supply: Init device wakeup after device_add()
-Message-ID: <20190902080043.nx7rqf32fv7w6eoy@earth.universe>
-References: <20190801213330.81079-1-swboyd@chromium.org>
+        id S1729870AbfIBI3G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 04:29:06 -0400
+Received: from mail.myocards24.eu ([80.211.31.237]:42077 "EHLO
+        mail.myocards24.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726609AbfIBI3G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 04:29:06 -0400
+X-Greylist: delayed 310 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Sep 2019 04:29:05 EDT
+Received: by mail.myocards24.eu (Postfix, from userid 1001)
+        id 39EF2874AD; Mon,  2 Sep 2019 10:23:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=myocards24.eu;
+        s=mail; t=1567412633;
+        bh=xBN5KrwGBIuRv5p99N2Jwj7SQJMv5k+gy8ovi3P478A=;
+        h=Date:From:To:Subject:From;
+        b=AuAez2HiAj7KWUY094oijrFbjyMRI964YpohbvYnbHqUIN22FZg4SZZGe4PWh7gD7
+         gFKSa81WfyTDO0Gxwo7hz0/g34I/Cd2z0Fh03tdh3LghhMJCKnXHUJli2x0cV7mxZT
+         yYTsqqL7Z9NiYgJ33nOjv6wXsmh4Gm/v3KdDtWrA=
+Received: by mail.myocards24.eu for <linux-pm@vger.kernel.org>; Mon,  2 Sep 2019 08:23:51 GMT
+Message-ID: <20190902093341-0.1.6.1l9.0.hudg48f04h@myocards24.eu>
+Date:   Mon,  2 Sep 2019 08:23:51 GMT
+From:   =?UTF-8?Q? "Kapolcs_M=C3=A1ty=C3=A1s" ?= 
+        <kapolcs.matyas@myocards24.eu>
+To:     <linux-pm@vger.kernel.org>
+Subject: =?UTF-8?Q?Dolgoz=C3=B3i_juttat=C3=A1sok?=
+X-Mailer: mail.myocards24.eu
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fcu4abygg3rqtqkb"
-Content-Disposition: inline
-In-Reply-To: <20190801213330.81079-1-swboyd@chromium.org>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+=C3=9Cdv=C3=B6zl=C3=B6m,
 
---fcu4abygg3rqtqkb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+A c=C3=A9g=C3=A9t a konkurenci=C3=A1t=C3=B3l megk=C3=BCl=C3=B6nb=C3=B6zte=
+t=C5=91 olyan k=C3=BCl=C3=B6nleges eszk=C3=B6z=C3=B6k keres=C3=A9se sor=C3=
+=A1n, amelyek a munkav=C3=A1llal=C3=B3k =C3=A9s a munk=C3=A1ltat=C3=B3 sz=
+=C3=A1m=C3=A1ra egyar=C3=A1nt el=C5=91ny=C3=B6sek, =C3=A9rdemes megfontol=
+ni a juttat=C3=A1sk=C3=A9nt adhat=C3=B3 k=C3=A1rty=C3=A1k alkalmaz=C3=A1s=
+=C3=A1t.
 
-Hi,
+A k=C3=A1rty=C3=A1n szerepl=C5=91 =C3=B6sszeget az =C3=96n alkalmazottai =
+tetsz=C5=91leges c=C3=A9lra haszn=C3=A1lhatj=C3=A1k fel, =C3=A9s =C3=A9rt=
+=C3=A9kelni fogj=C3=A1k munk=C3=A1ltat=C3=B3juk elk=C3=B6telezetts=C3=A9g=
+=C3=A9t.=20
 
-On Thu, Aug 01, 2019 at 02:33:30PM -0700, Stephen Boyd wrote:
-> We may want to use the device pointer in device_init_wakeup() with
-> functions that expect the device to already be added with device_add().
-> For example, if we were to link the device initializing wakeup to
-> something in sysfs such as a class for wakeups we'll run into an error.
-> It looks like this code was written with the assumption that the device
-> would be added before initializing wakeup due to the order of operations
-> in power_supply_unregister().
->=20
-> Let's change the order of operations so we don't run into problems here.
->=20
-> Fixes: 948dcf966228 ("power_supply: Prevent suspend until power supply ev=
-ents are processed")
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>                      =
-                                                                           =
-                    =20
-> Cc: Tri Vo <trong@android.com>                                           =
-                                                                           =
-                      =20
-> Cc: Kalesh Singh <kaleshsingh@google.com>     =20
-> Cc: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
+Fizet=C3=A9semel=C3=A9s helyett is kiv=C3=A1l=C3=B3 alternat=C3=ADva, his=
+zen alacsonyabb k=C3=B6lts=C3=A9gekkel j=C3=A1r, =C3=A9s a munk=C3=A1ltat=
+=C3=B3 szab=C3=A1lyozhatja a k=C3=A1rty=C3=A1ra t=C3=B6ltend=C5=91 =C3=B6=
+sszeget pl. a munkav=C3=A1llal=C3=B3 eredm=C3=A9nyei, szolg=C3=A1lati ide=
+je, r=C3=A9szv=C3=A9tele stb. alapj=C3=A1n. A k=C3=A1rtya b=C3=A1rmikor l=
+emondhat=C3=B3.=20
 
-Thanks, queued.
+Mikor alkalmas =C3=96nnek, hogy besz=C3=A9lj=C3=BCnk a k=C3=A1rty=C3=A1k =
+alkalmaz=C3=A1si lehet=C5=91s=C3=A9geir=C5=91l az =C3=96n=C3=B6k c=C3=A9g=
+=C3=A9n=C3=A9l?
 
--- Sebastian
 
->=20
-> See this thread[1] for more information on how this will be necessary.
->=20
-> [1] https://lkml.kernel.org/r/20190731215514.212215-1-trong@android.com
->=20
->=20
->  drivers/power/supply/power_supply_core.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 82e84801264c..5c36c430ce8b 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -1051,14 +1051,14 @@ __power_supply_register(struct device *parent,
->  	}
-> =20
->  	spin_lock_init(&psy->changed_lock);
-> -	rc =3D device_init_wakeup(dev, ws);
-> -	if (rc)
-> -		goto wakeup_init_failed;
-> -
->  	rc =3D device_add(dev);
->  	if (rc)
->  		goto device_add_failed;
-> =20
-> +	rc =3D device_init_wakeup(dev, ws);
-> +	if (rc)
-> +		goto wakeup_init_failed;
-> +
->  	rc =3D psy_register_thermal(psy);
->  	if (rc)
->  		goto register_thermal_failed;
-> @@ -1101,8 +1101,8 @@ __power_supply_register(struct device *parent,
->  	psy_unregister_thermal(psy);
->  register_thermal_failed:
->  	device_del(dev);
-> -device_add_failed:
->  wakeup_init_failed:
-> +device_add_failed:
->  check_supplies_failed:
->  dev_set_name_failed:
->  	put_device(dev);
-> --=20
-> Sent by a computer through tubes
->=20
-
---fcu4abygg3rqtqkb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl1szCsACgkQ2O7X88g7
-+poKTg/+PPMWnxzv7N42HIkbJcOljQK+Bkv98IuSroLz7Sg3wsA07untO69B+e+A
-xZLwbmJo7hPCpBFyCIlN+LRSrvFPwpdbUKJiSpfkuUWMe/9hUhBSupZWftJbrz8H
-5BSBBxeXdNwULTZ/8Dg2j3I/0udexWUFxpUVSPTjzJrGXgNqY0P49957G6E5N4VE
-ul7HdgnkAqzo/cfrLn03WOOZbEstgni41hpj6cvtgC2CiZwDjaZK6+oNboIBYHZl
-HlvJMezAV2YaAnPwteNm2B4wDlQ83AjcUpPH0EkmuqlQr2Iq9zEuXO9/NjZeMKUK
-S7YHGj170r2IQRUjG1J1hGAbrWF5Xc1KgQMvdXM95eQP9aGrYzP/AzoRrOUpD1A4
-OOyG6PPHIfQ72jM5UiTDrWPhygLasvWPW6lPTu3xFQbwZ4lPUg63d0F6QicvBjl+
-a43tZJUeIjs/7mR8KM7A88FqOTu+NcR6JbDeJvnPiogBF3V+rrJ2AJL+hdHwSBn1
-xcMYoxz4p9Su/vdSV4baOpx0zEFDThXl7iIKiqH8xpIe8vqlYQRg8XsD4dRJYHZ4
-49QwK0l7ykeoM/jB7V9tj3pZ/OC2KA6NxBI76z3kgsuPSe5CqNexQfeKU6zT+VCe
-3o46oe3ZBCI9/Ehipnk28FE1y6KuZf+z9akmtbyWiVCA0ntdUWY=
-=XWqr
------END PGP SIGNATURE-----
-
---fcu4abygg3rqtqkb--
+Kapolcs M=C3=A1ty=C3=A1s
+Hungary Team Leader
