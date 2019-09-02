@@ -2,81 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1891A5497
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 13:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA31BA56D9
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 15:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731133AbfIBLB6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 07:01:58 -0400
-Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.104]:26823 "EHLO
-        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730995AbfIBLB6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 07:01:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1567422116;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=gyaJxhpKOrJkSBef5H5LmgKUYEaxN9j94o+XGsFhaN0=;
-        b=U2ZNL5KIJTn3EuJZkoVEh2sN5c5ozIftt4VHxQZhRPSLdswm0ZoH/tsUy3ifljBQA/
-        KEkBXDccmP+S+bG3dL4WhEWDApnUILDwM6RVFjdjp172FdyPlYELnUZTn2pmvt6GkRNZ
-        +ruDzCmM9tK8B36OZQFocypQC0nxPxRmGDFmVHfwaaRgyf4zph5iSzMmegANphriHrK+
-        PaN0Gsmjr05P5Spt70iUyiZdB1MQur+8aApxEX2tIrsSzv5UZExMVipSgZCasdeOVQld
-        oAOt+3EQS07veue/5D6snIQtfjCnp9n2wiMvqvT/9e0/TtEuhj2Md6QbNk/aFls4u7vi
-        Fxdw==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXL8GTnvuHRT"
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-        by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
-        with ESMTPSA id u036f9v82AtsPvm
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Mon, 2 Sep 2019 12:55:54 +0200 (CEST)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        =?UTF-8?q?Andr=C3=A9=20Roth?= <neolynx@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [RFC 5/5] ARM: dts: omap3-beagle: make explicitly compatible to ti,omap34xx
-Date:   Mon,  2 Sep 2019 12:55:51 +0200
-Message-Id: <150eb34a95b2e7ead8ac81a9ab275592ea31595b.1567421751.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <cover.1567421750.git.hns@goldelico.com>
-References: <cover.1567421750.git.hns@goldelico.com>
+        id S1731001AbfIBNAO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 09:00:14 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:44130 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730415AbfIBNAO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 09:00:14 -0400
+Received: by mail-wr1-f66.google.com with SMTP id 30so2992365wrk.11;
+        Mon, 02 Sep 2019 06:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CR+WyZAA9xMYW0zZtGve7PJv/lFxf7k0Ilvhu1URmfo=;
+        b=LxuOHy9CeNfh66hew9jbYLP7/yrWYuvIjk+SQAw37alTfS0HlaA59hIpg/f2JhdVTh
+         TxVntIVZdxc0g611JfMqOq+Vh0jqMXHfpBFkNeMTcTmiocTXdqXbYx41rfDj+6ev6wEZ
+         OcGXnB3hgSJ/mBZNzuhbIScHPA+FlhEPx3wRhoXyz7lfqYQblCRpwMGcDVHkPebOmRXy
+         Zxrh3nZN95i0WE59peE0/PnZBokMo8mcaDBP0kNXc6Kwu+/ywTT/s/PokxNmRsUwvE5z
+         kXaWoT/XTdRzebZTQrjYvB5ke/c5R4HYlJ23TAQjcHXe84FeEnb+D+z8xvEalqkVmgw5
+         ldvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CR+WyZAA9xMYW0zZtGve7PJv/lFxf7k0Ilvhu1URmfo=;
+        b=DeN6EsG6OOdBXBIurB0oryg6vFxntxARxQ4NoAbvvIAzLnOnZXaFjD82y/5dFXZC7f
+         iTCNiWIiFnrv6yW0GzsSMZ01pjd0oihzpaVKBQfnXX9j14RfmrshTksM8+My1bNxFSfr
+         51sJKL1pGzYjio/axEzPLiQ+dZVdzbjubi/JErKfBXDeanXboiHwcENbg6HI03MrdWNy
+         l7/cjkJjdRKwta/lbM4fVdLXufJ2h72SC25zIy1MjN87XDrD0aOCLNn/YlQQT6/7YH6U
+         +XRWKDEUGcHm2BFey3u8RcmOBqBbzVbfOkA4DF69yg52hMgRAmze45gWecct0F1A43TT
+         TkSQ==
+X-Gm-Message-State: APjAAAW1T1/PupYje9Vwuf7Wady32700650QXVupAlYoFpk7vVUqxGeF
+        p2WTgivPjDbaM/B05jsqAxo=
+X-Google-Smtp-Source: APXvYqy2E//Dcr0bFJY8gdWVaU6D1gsWSGVoa5CLXjgU5KRe7Z2OSvATAvGTqQrq1pFA6i5bByfd/w==
+X-Received: by 2002:adf:aa85:: with SMTP id h5mr23089367wrc.329.1567429211920;
+        Mon, 02 Sep 2019 06:00:11 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e34:eecb:7400:8425:c99f:73d7:9637])
+        by smtp.gmail.com with ESMTPSA id y14sm35168809wrd.84.2019.09.02.06.00.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2019 06:00:11 -0700 (PDT)
+From:   Erwan Velu <erwanaliasr1@gmail.com>
+X-Google-Original-From: Erwan Velu <e.velu@criteo.com>
+Cc:     Erwan Velu <e.velu@criteo.com>, Len Brown <lenb@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tools/power/x86/turbostat: Fixing PKG_MIN_PWR_LVL{1|2} values
+Date:   Mon,  2 Sep 2019 15:00:07 +0200
+Message-Id: <20190902130007.14854-1-e.velu@criteo.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Matching the ti-cpufreq driver needs to specify explicitly if
-a board uses an omap34xx or omap36xx chip.
+As per Intel's documentation, those 2 registers are starting from offset 47 and not 48.
+As a result, the reported values were incorrect.
 
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Signed-off-by: Erwan Velu <e.velu@criteo.com>
 ---
- arch/arm/boot/dts/omap3-beagle.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/power/x86/turbostat/turbostat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/omap3-beagle.dts b/arch/arm/boot/dts/omap3-beagle.dts
-index e3df3c166902..d47213c7a4d0 100644
---- a/arch/arm/boot/dts/omap3-beagle.dts
-+++ b/arch/arm/boot/dts/omap3-beagle.dts
-@@ -8,7 +8,7 @@
- 
- / {
- 	model = "TI OMAP3 BeagleBoard";
--	compatible = "ti,omap3-beagle", "ti,omap3";
-+	compatible = "ti,omap3-beagle", "ti,omap34xx", "ti,omap3";
- 
- 	cpus {
- 		cpu@0 {
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 75fc4fb9901c..76456de6b140 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -2370,7 +2370,7 @@ dump_config_tdp(void)
+ 	get_msr(base_cpu, MSR_CONFIG_TDP_LEVEL_1, &msr);
+ 	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_LEVEL_1: 0x%08llx (", base_cpu, msr);
+ 	if (msr) {
+-		fprintf(outf, "PKG_MIN_PWR_LVL1=%d ", (unsigned int)(msr >> 48) & 0x7FFF);
++		fprintf(outf, "PKG_MIN_PWR_LVL1=%d ", (unsigned int)(msr >> 47) & 0xFFFF);
+ 		fprintf(outf, "PKG_MAX_PWR_LVL1=%d ", (unsigned int)(msr >> 32) & 0x7FFF);
+ 		fprintf(outf, "LVL1_RATIO=%d ", (unsigned int)(msr >> 16) & 0xFF);
+ 		fprintf(outf, "PKG_TDP_LVL1=%d", (unsigned int)(msr) & 0x7FFF);
+@@ -2380,7 +2380,7 @@ dump_config_tdp(void)
+ 	get_msr(base_cpu, MSR_CONFIG_TDP_LEVEL_2, &msr);
+ 	fprintf(outf, "cpu%d: MSR_CONFIG_TDP_LEVEL_2: 0x%08llx (", base_cpu, msr);
+ 	if (msr) {
+-		fprintf(outf, "PKG_MIN_PWR_LVL2=%d ", (unsigned int)(msr >> 48) & 0x7FFF);
++		fprintf(outf, "PKG_MIN_PWR_LVL2=%d ", (unsigned int)(msr >> 47) & 0xFFFF);
+ 		fprintf(outf, "PKG_MAX_PWR_LVL2=%d ", (unsigned int)(msr >> 32) & 0x7FFF);
+ 		fprintf(outf, "LVL2_RATIO=%d ", (unsigned int)(msr >> 16) & 0xFF);
+ 		fprintf(outf, "PKG_TDP_LVL2=%d", (unsigned int)(msr) & 0x7FFF);
 -- 
-2.19.1
+2.21.0
 
