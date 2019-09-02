@@ -2,70 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B647DA5194
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 10:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF18AA5327
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 11:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730070AbfIBI3P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 04:29:15 -0400
-Received: from sonic305-20.consmr.mail.ne1.yahoo.com ([66.163.185.146]:46096
-        "EHLO sonic305-20.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730065AbfIBI3O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 04:29:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1567412953; bh=tPdyM4f7Tq8kspt5syr9wxbiHLUxanV8lkCr2Pkkkas=; h=Date:From:Reply-To:Subject:From:Subject; b=GLeqxm3YPHbhgihxMhf0X40A6UFhYnuKlKKzyMAe79JzKzwprNiLRlbKG4ifYjtlFHIuTY3cSNkB1NcVHCLWVtPDMToUHx+khmiUpQdngypn/n9rsZkThxOs6Q5v4jpNRRAyC8rFVovn/gjQE8JUYycxjDAESuIa48v7l2fCYghwMjwQyi8I6Qv+HFGATywtI3tziNMbLB7659I5zsq2xr62py7vuhvoKmW2Lg/u502K06WOLfDC/YrZoXWZiBRHDqENbvsD3H1ZfFJC5uVCxJ73gwjbUovaKuAFAXrfr9mzbh43oFzbSCLeuNvrgjYaXyK/VIegUeLhvjgMXZ6egQ==
-X-YMail-OSG: EGbqIn8VM1lR.pGuMQ9s3rMspiZkw3YBB1sFXUZj8ogrHWyEzi2.BXaVncoINJ2
- OO_G8NaWxi8ACHt6Mg8IXG_pbXPzAhlsQR8OgQ5ATK2ODw.c.VXiKNWsjTCHuz_AvLyPWd4QJg64
- k65G6XHxEuf8fIGpBtCl6BcdBdfH.Y3icRT.O1TZvcpipWOELsXLUVrI_jLZTAUp6SO0rt3.JAhF
- h0_k.tvfDiiRk_r0vT2Zp9vcxvJFnChcuBJPoyRD97sM0txlqQZbiQpNdAChAOh.9jO5gBqouSZZ
- IO05JenBwHNnkWe4Aid7BPOlG4UxTGKP6E61CFHFeTYFx4YTggIXpwMhibvySqSNWZcl.DHd2sLb
- GuZQbNK3PrYxUkOtOn8ikgKjQ9n2Y128bwuaIJJR37FqTZVMnNf0IQ0Z.8CkOhisDXdJQ8mqpNCd
- qnniURgjiYpoBPu2C73nFviPF44zvzDL3TKQl9Jr9bw6EcnkX49vXGFd74GpO47Br65G8MCe0k3g
- kQdh6JxJL59gKx4cEpMU1WdwdWSm2ZCo4vD9XQiGTqVtRlnVrEAlcsomXq5xhHXn7prFuR2w04Rg
- A7OPzwCGcTnSGauwVw4.LOrYWjDBnQO2YhOQLYP66MSpXHUsTgUtbi5NBwSXXufZAdf5ePCUZOP4
- 7l0syGY5tnyU.mnNOpxzdeKE60sZplhSnUE._AUY1SobFDCdUMk1.7_hrt6FZGE17hetXJCH291X
- EEUcdnf45Ird73P7nqvITD_CfaJiHmlTs4.i5Q99oBGbexXNrgKI2lpH.YjtbIED98piNC.kgFwZ
- .bed1NAp4VwvQPjcTRw6yJQPEIEIBVMyVyYzr7bYLmt_wCpS2X8Wj0SNhCpQaewXbD11kOa0iY3f
- x8mtBP5ydFDh_yk0zj8O1en9OTPmNETKDFFSV9Trgwgcah0CPBqlbaC4J45B_1gH2TJXnKIu9ZpY
- 556eveEws1rkLT9GjegcBDv3B4ctnodbLyqAMjY4VVatwcfQgMBKpmB3CVAGJbkgqX6B6zP29yJN
- 4fHXYMlui3zIeeCcbh1YvCBgUnWbtKYLOsCm2ut6PcqleBl727aLhC6JGihWv.z_UGSgbUPxJCr4
- OKM8qqnZLmoJrFXolR5WhGuLP__3XLZm9egGQjRRsTJ0mH.e3tbQfHskiHUsqluKSO0T0N2BIteV
- ci9JGTBplV9_OS5GjNLWcumY8iZ9L0QP1O3oZqihwB9vL3x5S7GQXmoa0sN8XxJhcsgCfh3ucNm6
- 6nFBRkTrXnXk8
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ne1.yahoo.com with HTTP; Mon, 2 Sep 2019 08:29:13 +0000
-Date:   Mon, 2 Sep 2019 08:29:11 +0000 (UTC)
-From:   Aisha Gaddafi <aishagnnnn@gmail.com>
-Reply-To: gaisha983@gmail.com
-Message-ID: <736087669.1118295.1567412951480@mail.yahoo.com>
-Subject: Dear Friend,
+        id S1730890AbfIBJnS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 05:43:18 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39237 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730680AbfIBJnS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 05:43:18 -0400
+Received: by mail-wm1-f66.google.com with SMTP id n2so12470512wmk.4
+        for <linux-pm@vger.kernel.org>; Mon, 02 Sep 2019 02:43:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=4d0l7N35iWoMyBbjAl4hMooElMfpWLjU+xP3/QM48gE=;
+        b=mhtkERu8jUQkzHnNqRbpGC8pMP8PM9wc9YYdW3YJzfxC+5CivPw0eN4Mx0FCBqkZ1k
+         MMpoWhfUGlcZ11BMUqW6LIGUqZ5vgXx8aarqN0fXE9js6Z524xGTXLKm6blIp1daoMKx
+         0J5VxGMjhAiQxIeU+zuC6dUZUtFUveEcznHTq14si0umE8rRYGiDKfwK+5RFTa/d29GI
+         /c/EdZUuoNeHEdVdE8Wk+3yh73Qi+0Ro5yqJlSh32RqsCQGOvjbi8PUiqBo7yQt4iXzn
+         6FzeKLgh7cF2NZ50ISsMteEICGPzKmU/mdoKRiwjs/fdB+p7i+EJT9EKTZ0LTnRwsHd+
+         Es7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=4d0l7N35iWoMyBbjAl4hMooElMfpWLjU+xP3/QM48gE=;
+        b=cfP54TxcqkQVSljNGdpAqbuVtw/63mDH8RtlFiZH5nNMxtp66muOsIAa2llJUHkMEC
+         QIpZRd2xYECgPg1U+gO/f/hlbJQR610G1p2gTxM4Wfv03EiwNBcT+zYqdInn8ANdy++M
+         ZDlSou3RC/7SaY6AMSp7QWy6dAHBVLThwFdqMmMGPim9ScRQxjut+8krTxDUB/2XZcNL
+         su/JTTPF1Qp2igQ0pdsCkzR+J3UNRrT4qVJm+TGxn8m5GitdFbbGh+XVHERLeLzBfa9s
+         EkJzHfjtV1rkxb5oDWMMcM4BwV8/2y/M1yWDzvVHW+9vgZ2ngzCtzY12CltuZv/5M8Vv
+         gHIA==
+X-Gm-Message-State: APjAAAXAjY4KHLwvb+JXrPLlgbCO3UzyOv7pvmJeREDdcOx+6tyzqrV8
+        jd8p2f+azpIC6AHDK1+eMRYrCA==
+X-Google-Smtp-Source: APXvYqzm2jMdu+QtRADNIC1TnhWQKqVD1sQ/ZS7+PqSLNP6Rmxvz386etPsBfvjnR60QuMOGSfWyEg==
+X-Received: by 2002:a7b:c935:: with SMTP id h21mr33247098wml.35.1567417396069;
+        Mon, 02 Sep 2019 02:43:16 -0700 (PDT)
+Received: from dell ([95.147.198.93])
+        by smtp.gmail.com with ESMTPSA id e4sm11403837wro.21.2019.09.02.02.43.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 02 Sep 2019 02:43:15 -0700 (PDT)
+Date:   Mon, 2 Sep 2019 10:43:13 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        "linux-arm-kernel @ lists . infradead . org Alessandro Zummo" 
+        <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>
+Subject: Re: [PATCH v6 01/13] dt-bindings: mfd: mediatek: mt6397: change to
+ relative paths
+Message-ID: <20190902094313.GP32232@dell>
+References: <20190818135611.7776-1-frank-w@public-files.de>
+ <20190818135611.7776-2-frank-w@public-files.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190818135611.7776-2-frank-w@public-files.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Friend,
+On Sun, 18 Aug 2019, Frank Wunderlich wrote:
 
-I came across your e-mail contact prior a private search while in need of 
-your assistance. My name is Aisha  Gaddafi a single Mother and a Widow with 
-three Children. I am the only biological Daughter of late Libyan President 
-(Late Colonel Muammar Gaddafi).
+> paths in dt-bindings should be relative as suggested by Lee Johnes
+> 
+> Suggested-By: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> changes since v5: splitted from dt-bindings: add powercontroller
+> ---
+>  Documentation/devicetree/bindings/mfd/mt6397.txt | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-I have investment funds worth Twenty Seven Million Five Hundred Thousand 
-United State Dollar ($27.500.000.00 ) and i need a trusted investment 
-Manager/Partner because of my current refugee status, however, I am 
-interested in you for investment project assistance in your country, may be 
-from there, we can build business relationship in the nearest future.
+Applied, thanks.
 
-I am willing to negotiate investment/business profit sharing ratio with you 
-base on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply urgent 
-to enable me provide you more information about the investment funds.
-
-Your Urgent Reply Will Be Appreciated.
-
-Best Regards
-Mrs Aisha Gaddafi
-(gaisha983@gmail.com)
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
