@@ -2,66 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A98AA57B6
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 15:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4589DA58BD
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 16:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730629AbfIBNfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 09:35:52 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:50438 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730626AbfIBNfw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 09:35:52 -0400
-Received: by mail-wm1-f65.google.com with SMTP id c10so2722580wmc.0;
-        Mon, 02 Sep 2019 06:35:50 -0700 (PDT)
+        id S1730842AbfIBOEN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 10:04:13 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36654 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730825AbfIBOEM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 10:04:12 -0400
+Received: by mail-wm1-f66.google.com with SMTP id p13so14794385wmh.1;
+        Mon, 02 Sep 2019 07:04:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=4IZYZ9SbbmiPIjFQQI3+tSC3aTTev4F8DX/N/W2gHEU=;
-        b=WgoZsB17OsI8b1BPxf2haYOv230TxFH5zo/P7pAa6FFCwGCxOCHDi3jZZFjE+kJQRq
-         1Bj8+IRGAbpqLrYL3MJdHGgzQySVIeT7b+gSj0wgfopR+sJ4pGvVDj/DhLfQ/fURh5Tb
-         WXx90oCHGaYyg7BPNIF4vk3mK8rwvM9Llan4vwVrBdLszjUCoO69N/puRqhwiXQ4sSYO
-         m1UUWZrhvgzcakY1vZAqz41vOPSg12J2JKhY+d9R911YteyvdGgaUnKK0Ke/aHMvsrlU
-         CUvEbhystl1J0cxR8QN4nWJK/kSI9yQkQp6ny2Akh2lzoIBuoqFoOXhGAvyYZHH7tuR7
-         ym5A==
+        bh=DETtNsa6CCp7MhS512rG6yCksW86dRIW7WvIg0/pnDg=;
+        b=omUXoxxGO4uVY6IVShKAw4vgYe79oLa84dtEG3I8wogo8h5rakBVjdkteMdwnEYiHy
+         V+B2t+5MwIsNccdYdh/AOc8SS3foDLHP5iSHY2vSoWo7d/IPPwzGCvN3BLg8hm2oShRM
+         jJuH3+0kcesRT5QWtBAec3c9QXOX721ddRkVCXGPYLdhujvXlYFgVXK4/cDVzE2w4WBZ
+         8WamAYRPtgpBTBQ44C02+ADpGEfW4rPeXE7graockJHcTSkQ1sYbdFGwJ6lUeAOdgR2/
+         rPImqm4kGL4PdaCw/K7k0L4hdJTuF7pu1m0sP4S0Rsn0tSm3Ivmbov1QYGpdIKsOwBxD
+         0ncQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=4IZYZ9SbbmiPIjFQQI3+tSC3aTTev4F8DX/N/W2gHEU=;
-        b=KzZ3jjUBQmLnhvNDRdTsEpIerVQ0S0oHzcfJeLCYyUj8+EahsW7Ie1rblXqZFbfH+v
-         yMFJx5rqa07uP/PnS8816uCjEiM0dcz6wEYp5dY+v0MSMF1lZAlth88s+mq3Cz0t1MmI
-         B88lqHtwy5Ie3Xl152s7mJDdPIhCybwqVx9cZnbjoHqMKUZ1oglon9+1o3PLUiqMiIPd
-         MTorI5QdZYgH6DaQmz4uBaHpmCMH1KSjjOAo6omS6sDTAvdMLQI+02giXCyCPVIee4mx
-         l8nbFOwR5pKrpTnD/sqv/KRj6yI6dlTmozSaPsk8jg0zN1A9y3qCpemAStzibGpOn6Df
-         oMtQ==
-X-Gm-Message-State: APjAAAWazOjJqdpvsF5GB06Wc2GCEezflRo0vsliNRdqRY67xTGSyi2D
-        Vb5n2D95K37Jh/o/FPB92cM=
-X-Google-Smtp-Source: APXvYqwzsJg7dJuqKEwIzVF50xAcslHhSLNS1ZuTGK9sjM8Uo68LREuLh2tlKO5iFRAzdobmqPoP9g==
-X-Received: by 2002:a7b:cd17:: with SMTP id f23mr36832272wmj.177.1567431349811;
-        Mon, 02 Sep 2019 06:35:49 -0700 (PDT)
+        bh=DETtNsa6CCp7MhS512rG6yCksW86dRIW7WvIg0/pnDg=;
+        b=hTKklHAugkoYxshz8U8YGmbuvsBy+UOMwLOiXabLHrUPpfqqbO5bOC4fmAW57Y8A+b
+         F7sdK59RzNXqkP4U7YU8XO+Pw9B4SVfVK9zZwx3zaZUuYOmoR0Z8tdcUV0AsTEnuxEnR
+         7IAClryIMtxiYh/h2joWB5EE/lEhR/fbvaNigM14yk2OWis98tFA3rfCx8K4e3NTfm2W
+         DUofyxFvi0wXErP+X7VJOBgHk5tFwHsLMMO/z6NVL37stp9ZYLj2j7sCsyqnRfTS29PA
+         7c5JPjnNcV0nMI0UKGfcnMDFEN4mlY8jMcCu2CoWpNOSNtCiCTbJcQsB23n4BvH2grOZ
+         XFSg==
+X-Gm-Message-State: APjAAAUb759IRXrZoaPDai9CiGNvQrzussaEMq66tpozighGYCfE6QSf
+        u8WBYGdSjCYpKIuVmZou5ss=
+X-Google-Smtp-Source: APXvYqx+2wHQ2CkxCTviFYFgut/L74VUrTw3N/8LBVpAV6iOBvxtjl3yY1xkhVCTn3DH4vbXjPVmMA==
+X-Received: by 2002:a1c:2e8d:: with SMTP id u135mr36435035wmu.101.1567433050747;
+        Mon, 02 Sep 2019 07:04:10 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e34:eecb:7400:8425:c99f:73d7:9637])
-        by smtp.gmail.com with ESMTPSA id f75sm21640290wmf.2.2019.09.02.06.35.48
+        by smtp.gmail.com with ESMTPSA id f186sm20020675wmg.21.2019.09.02.07.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2019 06:35:49 -0700 (PDT)
+        Mon, 02 Sep 2019 07:04:09 -0700 (PDT)
 From:   Erwan Velu <erwanaliasr1@gmail.com>
 X-Google-Original-From: Erwan Velu <e.velu@criteo.com>
-Cc:     Erwan Velu <e.velu@criteo.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Len Brown <lenb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Luwei Kang <luwei.kang@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH] tools/power/x86/turbostat: Reporting EPB as per Intel's spec
-Date:   Mon,  2 Sep 2019 15:35:07 +0200
-Message-Id: <20190902133509.24534-1-e.velu@criteo.com>
+Cc:     Erwan Velu <e.velu@criteo.com>, Len Brown <lenb@kernel.org>,
+        linux-pm@vger.kernel.org (open list:TURBOSTAT UTILITY),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] tools/power/x86/turbostat/turbostat: Report MSR_PLATFORM_INFO registers
+Date:   Mon,  2 Sep 2019 16:03:55 +0200
+Message-Id: <20190902140355.27891-1-e.velu@criteo.com>
 X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,88 +61,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The actual code is reporting the EPB mode by considering a single value,
-while Intel's specfication defines ranges.
+This commit is about report all registers from MSR_PLATFORM_INFO.
+This helps understand the actual state of the processor.
 
-This patch is about to report the EPB by considering ranges of energy_policy
-to actually report the state of the processor.
-
-This avoids reporting a "custom" value while the specification describes
-an explicit state of the processor for each value.
-
-0-3  : Maximum performance
-4-7  : Balanced Performance
-8-11 : Balanced Efficiency
-12-15: Powersave
-
-This patch also introduce ENERGY_PERF_BIAS_MIN_POWERSAVE.
-The first 3 performance profiles (ENERGY_PERF_BIAS_PERFORMANCE,
-ENERGY_PERF_BIAS_BALANCE_PERFORMANCE, ENERGY_PERF_BIAS_BALANCE_POWERSAVE) where defined
-by the lowest value of the associate range while ENERGY_PERF_BIAS_POWERSAVE was
-defined by the greatest value.
-
-This was a little bit inconsistent and made more difficult to report EPB value per range.
+This patch also reports the min efficiency frequency.
 
 Signed-off-by: Erwan Velu <e.velu@criteo.com>
 ---
- arch/x86/include/asm/msr-index.h      |  1 +
- tools/power/x86/turbostat/turbostat.c | 23 ++++++++++-------------
- 2 files changed, 11 insertions(+), 13 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 42 +++++++++++++++++++++++++--
+ 1 file changed, 40 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 271d837d69a8..120073dfb195 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -596,6 +596,7 @@
- #define ENERGY_PERF_BIAS_BALANCE_PERFORMANCE	4
- #define ENERGY_PERF_BIAS_NORMAL			6
- #define ENERGY_PERF_BIAS_BALANCE_POWERSAVE	8
-+#define ENERGY_PERF_BIAS_MIN_POWERSAVE		12
- #define ENERGY_PERF_BIAS_POWERSAVE		15
- 
- #define MSR_IA32_PACKAGE_THERM_STATUS		0x000001b1
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 75fc4fb9901c..9fa73b468f7e 100644
+index 75fc4fb9901c..5f5b3132bbea 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -3552,6 +3552,7 @@ dump_sysfs_pstate_config(void)
- int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- {
- 	unsigned long long msr;
-+	unsigned int perf_bias_value;
- 	char *epb_string;
- 	int cpu;
+@@ -2050,13 +2050,51 @@ dump_nhm_platform_info(void)
+ 	unsigned int ratio;
  
-@@ -3572,20 +3573,16 @@ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- 	if (get_msr(cpu, MSR_IA32_ENERGY_PERF_BIAS, &msr))
- 		return 0;
- 
--	switch (msr & 0xF) {
--	case ENERGY_PERF_BIAS_PERFORMANCE:
-+	 // Reporting perf_bias_performance as per intel specification
-+	perf_bias_value = msr & 0xF;
-+	epb_string = "powersave";
-+	if (perf_bias_value < ENERGY_PERF_BIAS_BALANCE_PERFORMANCE)
- 		epb_string = "performance";
--		break;
--	case ENERGY_PERF_BIAS_NORMAL:
--		epb_string = "balanced";
--		break;
--	case ENERGY_PERF_BIAS_POWERSAVE:
--		epb_string = "powersave";
--		break;
--	default:
--		epb_string = "custom";
--		break;
--	}
-+	else if (perf_bias_value < ENERGY_PERF_BIAS_BALANCE_POWERSAVE)
-+		epb_string = "balanced performance";
-+	else if (perf_bias_value < ENERGY_PERF_BIAS_MIN_POWERSAVE)
-+		epb_string = "balanced efficiency";
+ 	get_msr(base_cpu, MSR_PLATFORM_INFO, &msr);
++	fprintf(outf, "cpu%d: MSR_PLATFORM_INFO: 0x%08llx ", base_cpu, msr);
++	fprintf(outf, " (%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%sCONFIG-TDP-LEVELS:%llu%s%s%s%s%s)\n",
++		(msr & 1 << 0) ? "Bit0, " : "",
++		(msr & 1 << 1) ? "Bit1, " : "",
++		(msr & 1 << 2) ? "Bit2, " : "",
++		(msr & 1 << 3) ? "Bit3, " : "",
++		(msr & 1 << 4) ? "Bit4, " : "",
++		(msr & 1 << 5) ? "Bit5, " : "",
++		(msr & 1 << 6) ? "Bit6, " : "",
++		(msr & 1 << 7) ? "Bit7, " : "",
++		(msr & 1 << 16) ? "SMM-SAVE-CAP, " : "",
++		(msr & 1 << 17) ? "TAPUNLOCK, " : "",
++		(msr & 1 << 18) ? "Bit18, " : "",
++		(msr & 1 << 19) ? "Bit19, " : "",
++		(msr & 1 << 20) ? "Bit20, " : "",
++		(msr & 1 << 21) ? "Bit21, " : "",
++		(msr & 1 << 22) ? "Bit22, " : "",
++		(msr & 1 << 23) ? "PPIN-CAP, " : "",
++		(msr & 1 << 24) ? "OCVOLT-OVRD-AVAIL, " : "",
++		(msr & 1 << 25) ? "Bit25, " : "",
++		(msr & 1 << 26) ? "DCU_MODE_SELECT, " : "",
++		(msr & 1 << 27) ? "SAMPLE-PART, " : "",
++		(msr & 1 << 28) ? "PRG-TURBO-RATIO, " : "",
++		(msr & 1 << 29) ? "PRG-TDP-LIM, " : "",
++		(msr & 1 << 30) ? "PRG-TJ-OFFSET, " : "",
++		(msr & 1 << 31) ? "CPUID-FAULTING, " : "",
++		(msr & 1 << 32) ? "LOW-POWER-MODE-SUPPORT, " : "",
++		(msr >> 33) & 0x3,
++		(msr & 1 << 35) ? "PFAT, " : "",
++		(msr & 1 << 36) ? "Bit36, " : "",
++		(msr & 1 << 37) ? "TIMED_MWAIT, " : "",
++		(msr & 1 << 38) ? "Bit38, " : "",
++		(msr & 1 << 38) ? "Bit39, " : "");
 +
- 	fprintf(outf, "cpu%d: MSR_IA32_ENERGY_PERF_BIAS: 0x%08llx (%s)\n", cpu, msr, epb_string);
++	// MIN_OPERATING_RATIO
++	ratio = (msr >> 48) & 0xFF;
++	fprintf(outf, "%d * %.1f = %.1f MHz min efficiency frequency\n",
++		ratio, bclk, ratio * bclk);
  
- 	return 0;
+-	fprintf(outf, "cpu%d: MSR_PLATFORM_INFO: 0x%08llx\n", base_cpu, msr);
+-
++	// MAX_EFFICIENCY_RATIO
+ 	ratio = (msr >> 40) & 0xFF;
+ 	fprintf(outf, "%d * %.1f = %.1f MHz max efficiency frequency\n",
+ 		ratio, bclk, ratio * bclk);
+ 
++	// MAX_NON_TURBO_LIMIT_RATION
+ 	ratio = (msr >> 8) & 0xFF;
+ 	fprintf(outf, "%d * %.1f = %.1f MHz base frequency\n",
+ 		ratio, bclk, ratio * bclk);
 -- 
 2.21.0
 
