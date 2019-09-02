@@ -2,106 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 740CFA548E
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 12:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633D7A5493
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 13:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731133AbfIBK6T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 06:58:19 -0400
-Received: from vps.xff.cz ([195.181.215.36]:35122 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730702AbfIBK6T (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Sep 2019 06:58:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1567421896; bh=0+YtJ5mB5rWakjDiMfZibOLsuS/yEq29XZ5qfNzcLuU=;
-        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
-        b=ZbXSnUMVfg4rtkOpS+y5AV70FlL40OX7C2yA4xkApWMjPmylOteNvAaflG151OGc6
-         tKkEvcYvWlHD7DXmQqkU8jrSlXCGt5jIyUHDsmX+1pGoVjQ6Gx+M0dxSdNxKgSE+6H
-         3qfcFDTOsr6b01Q30YlcLFrpquM4afSkHVZkBWno=
-Date:   Mon, 2 Sep 2019 12:58:16 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
-        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, wens@csie.org, mchehab+samsung@kernel.org,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 00/18] add thermal driver for h6
-Message-ID: <20190902105816.zurkkh2vjfexft7t@core.my.home>
-Mail-Followup-To: Maxime Ripard <maxime.ripard@bootlin.com>,
-        Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
-        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, wens@csie.org, mchehab+samsung@kernel.org,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20190810052829.6032-1-tiny.windzz@gmail.com>
- <20190901215214.f4vbxemdd7mf3gun@core.my.home>
- <20190902072735.zkrueocyz4glc26n@flea>
+        id S1731232AbfIBLB6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 07:01:58 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:22095 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731133AbfIBLB6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Sep 2019 07:01:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1567422116;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=gh/3sTibgDq3nRs3zSWyY8xHtE864u/e8eeLmwdgoBQ=;
+        b=Tp/DLSZyOZCxJBj4+qWnzeNv91PCAHM4+pU3BUBuDQ3OW+71LQAR8Mse+X20owo7kS
+        wVnf0NO8R3A0y2y7BpDHnIlY17oqhhmq9RfWeJ70qe2kifu6Zb8k1vou1RfnMmjErMRZ
+        swovIYYtz9z7jAisEjkAdpEVlgqWK/8vOBXN9jXRT6aoDTKWFniaZeCKXNjhoxF0fFVk
+        7rQxlARpKNaeJvL6ZnDIN3nIfzpAbbUi+2oSNt6sUonuR8UkRdibGQQ00plhH3jpBLIi
+        bV/xESl+m6IKH2Vp3ltXrIrHMv5mgN8XLtuYqegr8jzk3tv5+nCyDwPQ16es9Qkx1AQw
+        e0KQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXL8GTnvuHRT"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+        by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
+        with ESMTPSA id u036f9v82AtqPvg
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Mon, 2 Sep 2019 12:55:52 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        =?UTF-8?q?Andr=C3=A9=20Roth?= <neolynx@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [RFC 0/5] OMAP3: convert opp-v1 to opp-v2 and read speed binned / 720MHz grade bits
+Date:   Mon,  2 Sep 2019 12:55:46 +0200
+Message-Id: <cover.1567421750.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190902072735.zkrueocyz4glc26n@flea>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Maxime,
+This patch set converts the opp tables to opp-v2 format
+and extends the ti-cpufreq to support omap3.
 
-On Mon, Sep 02, 2019 at 09:27:35AM +0200, Maxime Ripard wrote:
-> Hi,
-> 
-> On Sun, Sep 01, 2019 at 11:52:14PM +0200, Ondřej Jirman wrote:
-> > Hello Yangtao,
-> >
-> > On Sat, Aug 10, 2019 at 05:28:11AM +0000, Yangtao Li wrote:
-> > > This patchset add support for A64, H3, H5, H6 and R40 thermal sensor.
-> > >
-> > > Thx to Icenowy and Vasily.
-> > >
-> > > BTY, do a cleanup in thermal makfile.
-> >
-> > I've added support for A83T and also some cleanups, according to my
-> > feedback:
-> >
-> > https://megous.com/git/linux/log/?h=ths-5.3
-> >
-> > Feel free to pick up whatever you like from that tree.
-> >
-> > For others, there are also DTS patches in that tree for H3, H5, A83T, and H6, so
-> > that shoul make testing of this driver easier.
-> 
-> I'm not convinced that always expanding the number of SoC supported is
-> the best strategy to get this merged. Usually, keeping the same
-> feature set across version, consolidating that, and then once it's in
-> sending the new SoC support works best.
+It adds 720 MHz (omap34xx) and 1 GHz (omap36xx) OPPs but
+tells the ti-cpufreq driver to disable them if the speed
+binned / 720MHz grade eFuse bits indicate that the chip
+is not rated for that speed. 
 
-That's fine and all, but I've mostly added DT descriptions for already supported
-SoCs and fixed bugs in the driver, so that people can actually test the existing
-driver.
+It has been tested (for chip variant detection, not reliability
+of high speed OPPs) on:
+* BeagleBoard C2 (omap3430 600MHz)
+* BeagleBoard XM B (dm3730 800MHz)
+* GTA04A4 (dm3730 800MHz)
+* GTA04A5 (dm3730 1GHz)
 
-I think adding DT changes will actually help get needed exposure for this
-patch series.
 
-A83T support that I added, was actually just a small change to the driver.
+H. Nikolaus Schaller (5):
+  cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
+  ARM: dts: add support for opp-v2 for omap34xx and omap36xx
+  ARM: dts: omap3-evm-37xx: fix compatible from omap3630 to omap36xx
+  ARM: dts: omap3-n950-n9: remove opp-v1 table
+  ARM: dts: omap3-beagle: make explicitly compatible to ti,omap34xx
 
-regards,
-	o.
+ arch/arm/boot/dts/omap3-beagle.dts   |  2 +-
+ arch/arm/boot/dts/omap3-evm-37xx.dts |  2 +-
+ arch/arm/boot/dts/omap3-n950-n9.dtsi |  7 ---
+ arch/arm/boot/dts/omap34xx.dtsi      | 59 ++++++++++++++++---
+ arch/arm/boot/dts/omap36xx.dtsi      | 47 ++++++++++++---
+ drivers/cpufreq/cpufreq-dt-platdev.c |  2 +-
+ drivers/cpufreq/ti-cpufreq.c         | 86 +++++++++++++++++++++++++++-
+ 7 files changed, 176 insertions(+), 29 deletions(-)
 
-> Maxime
-> 
-> --
-> Maxime Ripard, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+-- 
+2.19.1
+
