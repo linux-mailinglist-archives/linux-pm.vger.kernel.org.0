@@ -2,118 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD22A4C5E
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Sep 2019 23:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E75FA4F4B
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 08:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728942AbfIAVwS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Sep 2019 17:52:18 -0400
-Received: from vps.xff.cz ([195.181.215.36]:53662 "EHLO vps.xff.cz"
+        id S1729476AbfIBGlP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 02:41:15 -0400
+Received: from foss.arm.com ([217.140.110.172]:48880 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728879AbfIAVwS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 1 Sep 2019 17:52:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1567374734; bh=jrClwa09Qi/Ap8hefr9nEz2+uFGxRJka1O26L0HZtjI=;
-        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
-        b=Gs/DjpJRQwS7k3GdVo1K8Mn4c10BiFj3iWCueQ+Eo7FUh8Em/o+SIw7lnOOqAsAbI
-         9w8oMEwqviwHd70mKfz2VBAUtI/Xo8ftiC3Ph7R1lOTF3l5cEN2efKdvf40fcER5I9
-         +OF110QXIozgqHCzD12if1ILel/HvTGPJCGZaEdM=
-Date:   Sun, 1 Sep 2019 23:52:14 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        mchehab+samsung@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, Jonathan.Cameron@huawei.com,
-        nicolas.ferre@microchip.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 00/18] add thermal driver for h6
-Message-ID: <20190901215214.f4vbxemdd7mf3gun@core.my.home>
-Mail-Followup-To: Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
-        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, maxime.ripard@bootlin.com, wens@csie.org,
-        mchehab+samsung@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, Jonathan.Cameron@huawei.com,
-        nicolas.ferre@microchip.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <20190810052829.6032-1-tiny.windzz@gmail.com>
+        id S1726375AbfIBGlP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Sep 2019 02:41:15 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05ADF337;
+        Sun,  1 Sep 2019 23:41:14 -0700 (PDT)
+Received: from darkstar (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 088393F71A;
+        Sun,  1 Sep 2019 23:43:05 -0700 (PDT)
+References: <20190822132811.31294-1-patrick.bellasi@arm.com> <20190822132811.31294-2-patrick.bellasi@arm.com> <20190830094505.GA2369@hirez.programming.kicks-ass.net>
+User-agent: mu4e 1.3.3; emacs 25.3.1
+From:   Patrick Bellasi <patrick.bellasi@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-api@vger.kernel.org, cgroups@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Tejun Heo <tj@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Paul Turner <pjt@google.com>, Michal Koutny <mkoutny@suse.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Todd Kjos <tkjos@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alessio Balsini <balsini@android.com>
+Subject: Re: [PATCH v14 1/6] sched/core: uclamp: Extend CPU's cgroup controller
+Message-ID: <87zhjnnqz2.fsf@arm.com>
+In-reply-to: <20190830094505.GA2369@hirez.programming.kicks-ass.net>
+Date:   Mon, 02 Sep 2019 07:38:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190810052829.6032-1-tiny.windzz@gmail.com>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Yangtao,
 
-On Sat, Aug 10, 2019 at 05:28:11AM +0000, Yangtao Li wrote:
-> This patchset add support for A64, H3, H5, H6 and R40 thermal sensor.
-> 
-> Thx to Icenowy and Vasily.
-> 
-> BTY, do a cleanup in thermal makfile.
+On Fri, Aug 30, 2019 at 09:45:05 +0000, Peter Zijlstra wrote...
 
-I've added support for A83T and also some cleanups, according to my
-feedback:
+> On Thu, Aug 22, 2019 at 02:28:06PM +0100, Patrick Bellasi wrote:
+>> +#define _POW10(exp) ((unsigned int)1e##exp)
+>> +#define POW10(exp) _POW10(exp)
+>
+> What is this magic? You're forcing a float literal into an integer.
+> Surely that deserves a comment!
 
-https://megous.com/git/linux/log/?h=ths-5.3
+Yes, I'm introducing the two constants:
+  UCLAMP_PERCENT_SHIFT,
+  UCLAMP_PERCENT_SCALE
+similar to what we have for CAPACITY. Moreover, I need both 100*100 (for
+the scale) and 100 further down in the code for the: 
 
-Feel free to pick up whatever you like from that tree.
+	percent = div_u64_rem(percent, POW10(UCLAMP_PERCENT_SHIFT), &rem);
 
-For others, there are also DTS patches in that tree for H3, H5, A83T, and H6, so
-that shoul make testing of this driver easier.
+used in cpu_uclamp_print().
 
-regards,
-	Ondrej
+That's why adding a compile time support to compute a 10^N is useful.
 
-> Icenowy Zheng (3):
->   thermal: sun8i: allow to use custom temperature calculation function
->   thermal: sun8i: add support for Allwinner H5 thermal sensor
->   thermal: sun8i: add support for Allwinner R40 thermal sensor
-> 
-> Vasily Khoruzhick (1):
->   thermal: sun8i: add thermal driver for A64
-> 
-> Yangtao Li (14):
->   thermal: sun8i: add thermal driver for h6
->   dt-bindings: thermal: add binding document for h6 thermal controller
->   thermal: fix indentation in makefile
->   thermal: sun8i: get ths sensor number from device compatible
->   thermal: sun8i: rework for sun8i_ths_get_temp()
->   thermal: sun8i: get ths init func from device compatible
->   thermal: sun8i: rework for ths irq handler func
->   thermal: sun8i: support mod clocks
->   thermal: sun8i: rework for ths calibrate func
->   dt-bindings: thermal: add binding document for h3 thermal controller
->   thermal: sun8i: add thermal driver for h3
->   dt-bindings: thermal: add binding document for a64 thermal controller
->   dt-bindings: thermal: add binding document for h5 thermal controller
->   dt-bindings: thermal: add binding document for r40 thermal controller
-> 
->  .../bindings/thermal/sun8i-thermal.yaml       | 157 +++++
->  MAINTAINERS                                   |   7 +
->  drivers/thermal/Kconfig                       |  14 +
->  drivers/thermal/Makefile                      |   9 +-
->  drivers/thermal/sun8i_thermal.c               | 596 ++++++++++++++++++
->  5 files changed, 779 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sun8i-thermal.yaml
->  create mode 100644 drivers/thermal/sun8i_thermal.c
-> 
-> ---
-> v5:
-> -add more support
-> -some trival fix
-> ---
-> 2.17.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+C provides the "1eN" literal, I just convert it to integer and to do
+that at compile time I need a two level macros.
+
+What if I add this comment just above the macro definitions:
+
+/*
+ * Integer 10^N with a given N exponent by casting to integer the literal "1eN"
+ * C expression. Since there is no way to convert a macro argument (N) into a
+ * character constant, use two levels of macros.
+ */
+
+is this clear enough?
+
+>
+>> +struct uclamp_request {
+>> +#define UCLAMP_PERCENT_SHIFT	2
+>> +#define UCLAMP_PERCENT_SCALE	(100 * POW10(UCLAMP_PERCENT_SHIFT))
+>> +	s64 percent;
+>> +	u64 util;
+>> +	int ret;
+>> +};
+>> +
+>> +static inline struct uclamp_request
+>> +capacity_from_percent(char *buf)
+>> +{
+>> +	struct uclamp_request req = {
+>> +		.percent = UCLAMP_PERCENT_SCALE,
+>> +		.util = SCHED_CAPACITY_SCALE,
+>> +		.ret = 0,
+>> +	};
+>> +
+>> +	buf = strim(buf);
+>> +	if (strncmp("max", buf, 4)) {
+>
+> That is either a bug, and you meant to write: strncmp(buf, "max", 3),
+> or it is not, and then you could've written: strcmp(buf, "max")
+
+I don't think it's a bug.
+
+The usage of 4 is intentional, to force a '\0' check while using
+strncmp(). Otherwise, strncmp(buf, "max", 3) would accept also strings
+starting by "max", which we don't want.
+
+> But as written it doesn't make sense.
+
+The code is safe but I agree that strcmp() does just the same and it
+does not generate confusion. That's actually a pretty good example
+on how it's not always better to use strncmp() instead of strcmp().
+
+Cheers,
+Patrick
+
