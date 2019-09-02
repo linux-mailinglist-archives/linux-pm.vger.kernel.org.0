@@ -2,165 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA41A5A20
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 17:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8522A5B40
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 18:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731846AbfIBPDt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 11:03:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56410 "EHLO mail.kernel.org"
+        id S1725990AbfIBQUu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 12:20:50 -0400
+Received: from muru.com ([72.249.23.125]:59480 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729942AbfIBPDt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Sep 2019 11:03:49 -0400
-Received: from localhost.localdomain (unknown [194.230.155.145])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5E4C217D7;
-        Mon,  2 Sep 2019 15:03:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567436627;
-        bh=bFvoIVZPGocM61oupTglGGc0FyftmOcB63lyHubofMg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PUhcqiku0QyWkiMJnjfhQ4itM+KUUMw0nfVKOlctNuI8bPPeGjg65V9TVpA/koFw/
-         kffWv61cg0CE1w5mmQk6Zf8svohVkFnKFRcNRRiX0j11uP4vnOEKR7IdNa5aCDDSph
-         E0YUoOa3g/npCAyJzrgGyc4yk6Vl3IsyHgKmUk7U=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 2/2] dt-bindings: power: syscon-poweroff: Convert bindings to json-schema
-Date:   Mon,  2 Sep 2019 17:03:36 +0200
-Message-Id: <20190902150336.3600-2-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190902150336.3600-1-krzk@kernel.org>
-References: <20190902150336.3600-1-krzk@kernel.org>
+        id S1725988AbfIBQUu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Sep 2019 12:20:50 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 5815A8022;
+        Mon,  2 Sep 2019 16:21:19 +0000 (UTC)
+Date:   Mon, 2 Sep 2019 09:20:46 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>
+Subject: Re: [PATCH] power: supply: cpcap-charger: Enable vbus boost voltage
+Message-ID: <20190902162046.GJ52127@atomide.com>
+References: <20190830232316.53750-1-tony@atomide.com>
+ <20190902075943.GB15850@amd>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190902075943.GB15850@amd>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert the Syscon poweroff bindings to DT schema format using
-json-schema.
+* Pavel Machek <pavel@ucw.cz> [190902 08:00]:
+> Hi!
+> 
+> > We are currently not enabling VBUS boost for cpcap when in host mode.
+> > This means the VBUS is fed at the battery voltage level, which can cause
+> > flakeyness enumerating devices.
+> > 
+> > Looks like the boost control for VBUS is CPCAP_BIT_VBUS_SWITCH that we
+> > must enable in the charger for nice 4.92 V VBUS output. And looks like
+> > we must not use the STBY pin enabling but must instead use manual VBUS
+> > control in phy-cpcap-usb.
+> > 
+> > We want to do this in cpcap_charger_vbus_work() and also set a flag for
+> > feeding_vbus to avoid races between USB detection and charger detection,
+> > and disable charging if feeding_vbus is set.
+> 
+> I did not know phone is supposed to provide voltage on USB. USB mouse
+> works for me.. in stock android, provided I conect USB hub and
+> external power.
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- .../bindings/power/reset/syscon-poweroff.txt  | 30 --------
- .../bindings/power/reset/syscon-poweroff.yaml | 68 +++++++++++++++++++
- 2 files changed, 68 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-poweroff.txt
- create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
+Yup that's standard USB OTG feature when ID pin is grounded.
 
-diff --git a/Documentation/devicetree/bindings/power/reset/syscon-poweroff.txt b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.txt
-deleted file mode 100644
-index 022ed1f3bc80..000000000000
---- a/Documentation/devicetree/bindings/power/reset/syscon-poweroff.txt
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Generic SYSCON mapped register poweroff driver
--
--This is a generic poweroff driver using syscon to map the poweroff register.
--The poweroff is generally performed with a write to the poweroff register
--defined by the register map pointed by syscon reference plus the offset
--with the value and mask defined in the poweroff node.
--
--Required properties:
--- compatible: should contain "syscon-poweroff"
--- regmap: this is phandle to the register map node
--- offset: offset in the register map for the poweroff register (in bytes)
--- value: the poweroff value written to the poweroff register (32 bit access)
--
--Optional properties:
--- mask: update only the register bits defined by the mask (32 bit)
--
--Legacy usage:
--If a node doesn't contain a value property but contains a mask property, the
--mask property is used as the value.
--
--Default will be little endian mode, 32 bit access only.
--
--Examples:
--
--	poweroff {
--	   compatible = "syscon-poweroff";
--	   regmap = <&regmapnode>;
--	   offset = <0x0>;
--	   mask = <0x7a>;
--	};
-diff --git a/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
-new file mode 100644
-index 000000000000..9336ffcf3ac8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/reset/syscon-poweroff.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Generic SYSCON mapped register poweroff driver
-+
-+maintainers:
-+  - Sebastian Reichel <sre@kernel.org>
-+
-+description: |+
-+  This is a generic poweroff driver using syscon to map the poweroff register.
-+  The poweroff is generally performed with a write to the poweroff register
-+  defined by the register map pointed by syscon reference plus the offset
-+  with the value and mask defined in the poweroff node.
-+  Default will be little endian mode, 32 bit access only.
-+
-+properties:
-+  compatible:
-+    const: syscon-poweroff
-+
-+  mask:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Update only the register bits defined by the mask (32 bit).
-+    maxItems: 1
-+
-+  offset:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Offset in the register map for the poweroff register (in bytes).
-+    maxItems: 1
-+
-+  regmap:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: Phandle to the register map node.
-+    maxItems: 1
-+
-+  value:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: The poweroff value written to the poweroff register (32 bit access).
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - regmap
-+  - offset
-+
-+allOf:
-+  - if:
-+      properties:
-+        value:
-+          not:
-+            type: array
-+    then:
-+      required:
-+        - mask
-+    else:
-+      required:
-+        - value
-+
-+examples:
-+  - |
-+    poweroff {
-+      compatible = "syscon-poweroff";
-+      regmap = <&regmapnode>;
-+      offset = <0x0>;
-+      mask = <0x7a>;
-+    };
--- 
-2.17.1
+> This does not seem to work for me.. and it does not even work on stock
+> kernel. What is going on here?
+
+Sounds like you're missing a USB micro-B cable with ID pin grounded
+and trying to use debugfs/sysfs instead to force the host mode.
+
+> Is there some kind of debug ineterface where I could test just the
+> vbus switch? I do have voltmeter for the usb port...
+
+Yeah well.. just ground the ID pin :) No debug interface should be
+needed here.
+
+If you really wanted to add some kind of debugfs interface for forcing
+host mode without ID pin grounded, you could try to have the USB phy
+driver enable ID pin pull-down via sysfs. That's the cpcap PMIC in this
+case, I think some combination of CPCAP_BIT_ID* bits might do the
+trick.
+
+Regards,
+
+Tony
 
