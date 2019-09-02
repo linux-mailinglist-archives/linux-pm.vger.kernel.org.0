@@ -2,87 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E54A5463
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 12:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740CFA548E
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Sep 2019 12:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730968AbfIBKuo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Sep 2019 06:50:44 -0400
-Received: from foss.arm.com ([217.140.110.172]:52070 "EHLO foss.arm.com"
+        id S1731133AbfIBK6T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Sep 2019 06:58:19 -0400
+Received: from vps.xff.cz ([195.181.215.36]:35122 "EHLO vps.xff.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730785AbfIBKuo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 2 Sep 2019 06:50:44 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 830B328;
-        Mon,  2 Sep 2019 03:50:43 -0700 (PDT)
-Received: from queper01-lin.cambridge.arm.com (queper01-lin.cambridge.arm.com [10.1.195.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F0333F246;
-        Mon,  2 Sep 2019 03:50:41 -0700 (PDT)
-From:   Quentin Perret <quentin.perret@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     peterz@infradead.org, mingo@redhat.com, rjw@rjwysocki.net,
-        vincent.guittot@linaro.org, juri.lelli@redhat.com, will@kernel.org,
-        catalin.marinas@arm.com, morten.rasmussen@arm.com,
-        chris.redpath@arm.com, dietmar.eggemann@arm.com,
-        patrick.bellasi@arm.com, valentin.schneider@arm.com,
-        qais.yousef@arm.com, qperret@qperret.net
-Subject: [PATCH] mailmap: Update email address for Quentin Perret
-Date:   Mon,  2 Sep 2019 11:50:36 +0100
-Message-Id: <20190902105036.32419-1-quentin.perret@arm.com>
-X-Mailer: git-send-email 2.22.1
+        id S1730702AbfIBK6T (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Sep 2019 06:58:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1567421896; bh=0+YtJ5mB5rWakjDiMfZibOLsuS/yEq29XZ5qfNzcLuU=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=ZbXSnUMVfg4rtkOpS+y5AV70FlL40OX7C2yA4xkApWMjPmylOteNvAaflG151OGc6
+         tKkEvcYvWlHD7DXmQqkU8jrSlXCGt5jIyUHDsmX+1pGoVjQ6Gx+M0dxSdNxKgSE+6H
+         3qfcFDTOsr6b01Q30YlcLFrpquM4afSkHVZkBWno=
+Date:   Mon, 2 Sep 2019 12:58:16 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
+        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, wens@csie.org, mchehab+samsung@kernel.org,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 00/18] add thermal driver for h6
+Message-ID: <20190902105816.zurkkh2vjfexft7t@core.my.home>
+Mail-Followup-To: Maxime Ripard <maxime.ripard@bootlin.com>,
+        Yangtao Li <tiny.windzz@gmail.com>, rui.zhang@intel.com,
+        edubezval@gmail.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, wens@csie.org, mchehab+samsung@kernel.org,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        Jonathan.Cameron@huawei.com, nicolas.ferre@microchip.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20190810052829.6032-1-tiny.windzz@gmail.com>
+ <20190901215214.f4vbxemdd7mf3gun@core.my.home>
+ <20190902072735.zkrueocyz4glc26n@flea>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190902072735.zkrueocyz4glc26n@flea>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-My @arm.com email address will stop working in a few weeks, so add an
-entry to .mailmap so others have a way to reach me if they want to.
+Hello Maxime,
 
-While at it, move some entries around to keep the file in alphabetical
-order.
+On Mon, Sep 02, 2019 at 09:27:35AM +0200, Maxime Ripard wrote:
+> Hi,
+> 
+> On Sun, Sep 01, 2019 at 11:52:14PM +0200, Ondřej Jirman wrote:
+> > Hello Yangtao,
+> >
+> > On Sat, Aug 10, 2019 at 05:28:11AM +0000, Yangtao Li wrote:
+> > > This patchset add support for A64, H3, H5, H6 and R40 thermal sensor.
+> > >
+> > > Thx to Icenowy and Vasily.
+> > >
+> > > BTY, do a cleanup in thermal makfile.
+> >
+> > I've added support for A83T and also some cleanups, according to my
+> > feedback:
+> >
+> > https://megous.com/git/linux/log/?h=ths-5.3
+> >
+> > Feel free to pick up whatever you like from that tree.
+> >
+> > For others, there are also DTS patches in that tree for H3, H5, A83T, and H6, so
+> > that shoul make testing of this driver easier.
+> 
+> I'm not convinced that always expanding the number of SoC supported is
+> the best strategy to get this merged. Usually, keeping the same
+> feature set across version, consolidating that, and then once it's in
+> sending the new SoC support works best.
 
-Signed-off-by: Quentin Perret <quentin.perret@arm.com>
----
-Hi guys,
+That's fine and all, but I've mostly added DT descriptions for already supported
+SoCs and fixed bugs in the driver, so that people can actually test the existing
+driver.
 
-Will/Catalin: any chance this could be merged via the arm64 tree ?
+I think adding DT changes will actually help get needed exposure for this
+patch series.
 
-Thanks,
-Quentin
----
- .mailmap | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+A83T support that I added, was actually just a small change to the driver.
 
-diff --git a/.mailmap b/.mailmap
-index afaad605284a..934d848f0b2f 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -180,6 +180,11 @@ Mythri P K <mythripk@ti.com>
- Nguyen Anh Quynh <aquynh@gmail.com>
- Nicolas Pitre <nico@fluxnic.net> <nicolas.pitre@linaro.org>
- Nicolas Pitre <nico@fluxnic.net> <nico@linaro.org>
-+Oleksij Rempel <linux@rempel-privat.de> <bug-track@fisher-privat.net>
-+Oleksij Rempel <linux@rempel-privat.de> <external.Oleksij.Rempel@de.bosch.com>
-+Oleksij Rempel <linux@rempel-privat.de> <fixed-term.Oleksij.Rempel@de.bosch.com>
-+Oleksij Rempel <linux@rempel-privat.de> <o.rempel@pengutronix.de>
-+Oleksij Rempel <linux@rempel-privat.de> <ore@pengutronix.de>
- Paolo 'Blaisorblade' Giarrusso <blaisorblade@yahoo.it>
- Patrick Mochel <mochel@digitalimplant.org>
- Paul Burton <paul.burton@mips.com> <paul.burton@imgtec.com>
-@@ -190,11 +195,7 @@ Pratyush Anand <pratyush.anand@gmail.com> <pratyush.anand@st.com>
- Praveen BP <praveenbp@ti.com>
- Punit Agrawal <punitagrawal@gmail.com> <punit.agrawal@arm.com>
- Qais Yousef <qsyousef@gmail.com> <qais.yousef@imgtec.com>
--Oleksij Rempel <linux@rempel-privat.de> <bug-track@fisher-privat.net>
--Oleksij Rempel <linux@rempel-privat.de> <external.Oleksij.Rempel@de.bosch.com>
--Oleksij Rempel <linux@rempel-privat.de> <fixed-term.Oleksij.Rempel@de.bosch.com>
--Oleksij Rempel <linux@rempel-privat.de> <o.rempel@pengutronix.de>
--Oleksij Rempel <linux@rempel-privat.de> <ore@pengutronix.de>
-+Quentin Perret <qperret@qperret.net> <quentin.perret@arm.com>
- Rajesh Shah <rajesh.shah@intel.com>
- Ralf Baechle <ralf@linux-mips.org>
- Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
--- 
-2.22.1
+regards,
+	o.
 
+> Maxime
+> 
+> --
+> Maxime Ripard, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
