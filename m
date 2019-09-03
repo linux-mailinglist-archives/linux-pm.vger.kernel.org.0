@@ -2,127 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63299A6423
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 10:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F2AA645E
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 10:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728094AbfICIo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Sep 2019 04:44:27 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:44142 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbfICIo0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Sep 2019 04:44:26 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 9A52B6058E; Tue,  3 Sep 2019 08:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1567500265;
-        bh=YuiLybM31Bk+gmnr2VNTbTZAla9U4l2MPe4lZBv0EOo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=AMxBdtL3ra39gRR94d0b9/rv9Fd13SSD6hzlIr2M5Udg+hZ7/DFxZ/nlX4yRy2Zwi
-         WOxvB/ZHXGE0gwg10orF6k4zAxgAzzqIc6/4qlrp+2Lh2IAjWnl0lBuiri8DT1ufkY
-         HDLi/OxVHkWwiJmfiauXEsw4mtVljUEEZW0IJxYg=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.206.13.37] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mkshah@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 63DB5602FC;
-        Tue,  3 Sep 2019 08:44:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1567500264;
-        bh=YuiLybM31Bk+gmnr2VNTbTZAla9U4l2MPe4lZBv0EOo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KYyFDWkN5rhhNRASYJ7GoKb52HX+KWkf9sGodOd5H5GF2GggZzBCUzsmEobUg5FQA
-         NIigv4wM/lzYF5pHVN1bXThpfW7W7fgfdVNfzKWzjzlYXmMekUlMKyclQQ6y/B6uTi
-         csOVLws36jhUuGOpNY22YLmOFEwwrfL4mASTvmwU=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 63DB5602FC
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
-Subject: Re: [PATCH v2 3/6] dt-bindings: soc: qcom: Add RSC power domain
- specifier
-To:     Rob Herring <robh@kernel.org>
-Cc:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, dianders@chromium.org, rnayak@codeaurora.org,
-        ilina@codeaurora.org, lsrao@codeaurora.org, ulf.hansson@linaro.org,
-        devicetree@vger.kernel.org
-References: <20190823081703.17325-1-mkshah@codeaurora.org>
- <20190823081703.17325-4-mkshah@codeaurora.org> <20190827223252.GA26039@bogus>
-From:   Maulik Shah <mkshah@codeaurora.org>
-Message-ID: <6002b812-b575-85c7-41a4-2b9a200b4ff3@codeaurora.org>
-Date:   Tue, 3 Sep 2019 14:14:17 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728198AbfICIw7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Sep 2019 04:52:59 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51498 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726557AbfICIw7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Sep 2019 04:52:59 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 3AF34B807;
+        Tue,  3 Sep 2019 08:52:57 +0000 (UTC)
+Date:   Tue, 3 Sep 2019 10:52:48 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Patrick Bellasi <patrick.bellasi@arm.com>,
+        Alessio Balsini <balsini@android.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Quentin Perret <quentin.perret@arm.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Paul Turner <pjt@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Todd Kjos <tkjos@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Tejun Heo <tj@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        linux-api@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v14 1/6] sched/core: uclamp: Extend CPU's cgroup
+ controller
+Message-ID: <20190903085248.GB8756@blackbody.suse.cz>
+References: <20190822132811.31294-1-patrick.bellasi@arm.com>
+ <20190822132811.31294-2-patrick.bellasi@arm.com>
+ <CAJuCfpGWtrg02LNE3PJZag9-LLVT=by2v+9x_tm1PyoXwZ8DqQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190827223252.GA26039@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="VrqPEDrXMn8OVzN4"
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpGWtrg02LNE3PJZag9-LLVT=by2v+9x_tm1PyoXwZ8DqQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On 8/28/2019 4:02 AM, Rob Herring wrote:
-> On Fri, Aug 23, 2019 at 01:47:00PM +0530, Maulik Shah wrote:
->> In addition to transmitting resource state requests to the remote
->> processor, the RSC is responsible for powering off/lowering the
->> requirements from CPUs subsystem for the associated hardware like
->> buses, clocks, and regulators when all CPUs and cluster is powered down.
->>
->> The power domain is configured to a low power state and when all the
->> CPUs are powered down, the RSC can lower resource state requirements
->> and power down the rails that power the CPUs.
->>
->> Add PM domain specifier property for RSC controller.
->>
->> Cc: devicetree@vger.kernel.org
->> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
->> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
->> ---
->>   Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt b/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
->> index 9b86d1eff219..d0ab6e9b6745 100644
->> --- a/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
->> +++ b/Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
->> @@ -83,6 +83,13 @@ Properties:
->>   	Value type: <string>
->>   	Definition: Name for the RSC. The name would be used in trace logs.
->>   
->> +- #power-domain-cells:
->> +	Usage: optional
->> +	Value type: <u32>
->> +	Definition: Number of cells in power domain specifier. Optional for
->> +		    controllers that may be in 'solver' state where they can
->> +		    be in autonomous mode executing low power modes.
-> What's the value? It's always 0?
+--VrqPEDrXMn8OVzN4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-yes. its value is always 0. i will update definition to mention this in 
-next version.
+On Mon, Sep 02, 2019 at 04:02:57PM -0700, Suren Baghdasaryan <surenb@google=
+=2Ecom> wrote:
+> > +static inline void cpu_uclamp_print(struct seq_file *sf,
+> > +                                   enum uclamp_id clamp_id)
+> > [...]
+> > +       rcu_read_lock();
+> > +       tg =3D css_tg(seq_css(sf));
+> > +       util_clamp =3D tg->uclamp_req[clamp_id].value;
+> > +       rcu_read_unlock();
+> > +
+> > +       if (util_clamp =3D=3D SCHED_CAPACITY_SCALE) {
+> > +               seq_puts(sf, "max\n");
+> > +               return;
+> > +       }
+> > +
+> > +       percent =3D tg->uclamp_pct[clamp_id];
+>=20
+> You are taking RCU lock when accessing tg->uclamp_req but not when
+> accessing tg->uclamp_pct.
+Good point.
 
->> +
->>   Drivers that want to use the RSC to communicate with RPMH must specify their
->>   bindings as child nodes of the RSC controllers they wish to communicate with.
->>   
->> @@ -112,6 +119,7 @@ TCS-OFFSET: 0xD00
->>   				  <SLEEP_TCS   3>,
->>   				  <WAKE_TCS    3>,
->>   				  <CONTROL_TCS 1>;
->> +		#power-domain-cells = <0>;
->>   	};
->>   
->>   Example 2:
->> -- 
->> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by The Linux Foundation.
->>
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+> Is that intentional? Can tg be destroyed under you?
+Actually, the rcu_read{,un}lock should be unnecessary in the context of
+the kernfs file op handler -- the tg/css won't go away as long as its
+kernfs file is being worked with.
 
+
+--VrqPEDrXMn8OVzN4
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEEoQaUCWq8F2Id1tNia1+riC5qSgFAl1uKdYACgkQia1+riC5
+qSjfnQ/7BeUT18FFFi99Yyw3HCELlyDCFeWq85E5tsiLPEIlUV0DWFe5st1TugIz
+RUQBMlHdM4UsgbRX8J//envlsT6aFD4ZMNp9LdYAK/PUMo8b68B63vsBBNLVfCNm
+ayv6/oowRNcbo4c3NQ2V5eiIt/X8V4JWQHRr4IpM+U6DwmWBQ9hpsKH7yXlcHYQv
+px/as6LKBxDtpURI4SUTm8sva7roOi1uixZ25BwPurRDisZlY990IGClMtOsW3S8
+Ik59LppHO1YHee5B+ifFdPvmqvv3QdJVOjQBL050MdLPS6advmVSvmt/GRSr1MAa
+kj7c8reeTo1jlHO9YmT2qqt+vsxfYMJxudnujXnQ5FZI60ibhSbLclDiEsc8028r
+HpNJFNFkTZiURjJd39wJr3zSuXoFafIkc24s4QYDywHoSajloMc9xrqUTv3z+pdW
+fhSdekB+3paS04Hesmnr4rV6a6Uo6hYatSEADG3XFbIv5TEBLOXK6bYv/KMKLj8X
+98U43Ude0YmGi/B3HH6UYJFbXqrU5kBhlD/3S/RwF/NBhwPJM8bSZmzVJhWvXVDw
+0DAcrfxiexS7Pp4kG2BFXlUGyTkN+2DRi+3ymiSW4y2+5DuYDvStFBw7Ud7eQZzN
+YkkBGQzTAmUzb0wpHOHhQ3diiq914WViZpwSuxVZ7FNaJgdGe3s=
+=B4jM
+-----END PGP SIGNATURE-----
+
+--VrqPEDrXMn8OVzN4--
