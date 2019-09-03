@@ -2,102 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3D6A69B5
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 15:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63259A69DB
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 15:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729391AbfICNZP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Sep 2019 09:25:15 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:33634 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729020AbfICNZO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Sep 2019 09:25:14 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x83DO2M3042149;
-        Tue, 3 Sep 2019 13:25:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=KM/hdDQyd8Z+6S0BJ3ZElEafo02FzH2F7BIJZJMmdtk=;
- b=l9sDZyu5HJrQ8N3sKPlLr9yrmFxj6JhIDDRNX5ipMZcVcBqNkM/7RZEsZW7iFNcNrDaN
- 0oopaJTECQwvZLMfTQZBeEX5DYMsxhgUEgRLIlxCEIyXRzrOQpFGs0E97cicPxw9tju6
- uYpCaY7nzJwYDKEUwGXvAhHZCF0ZcWj1Eecsa87AMTWFucZDKGYz0YtsUnPRSTIt2ued
- Sh+H0R/5vqSZjsWwxmD0pY95MruWkC/LhS3JAj+oDkJqa7MXxslq5UU5zPYFJakIkcRP
- cdhfY1+vXIFWXL8qm3tpWiZpqTCNlstzxAMfIHqANTpfLu9nwQY+S6oGIDc1350cidAB 5g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2usrw8r1fu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 Sep 2019 13:25:05 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x83DOF3j129247;
-        Tue, 3 Sep 2019 13:25:04 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2us5pguu5s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 Sep 2019 13:25:04 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x83DP3IJ000558;
-        Tue, 3 Sep 2019 13:25:03 GMT
-Received: from paddy.uk.oracle.com (/10.175.205.235)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 03 Sep 2019 06:25:03 -0700
-From:   Joao Martins <joao.m.martins@oracle.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Joao Martins <joao.m.martins@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org
-Subject: [PATCH v2 4/4] cpuidle-haltpoll: do not set an owner to allow modunload
-Date:   Tue,  3 Sep 2019 14:24:44 +0100
-Message-Id: <20190903132444.11808-5-joao.m.martins@oracle.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190903132444.11808-1-joao.m.martins@oracle.com>
-References: <20190903132444.11808-1-joao.m.martins@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9368 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=704
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1909030142
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9368 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=766 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1909030142
+        id S1729142AbfICN3e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Sep 2019 09:29:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32960 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729066AbfICN3d (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Sep 2019 09:29:33 -0400
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 498CA23402;
+        Tue,  3 Sep 2019 13:29:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567517372;
+        bh=NLqCL4CDXLU3XgXKCj95PxujHWeCjp562H7YUcMntWI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qaXN86v6cIyTWdnvtaZOQQfBuuLThLlMRA/EJyQNgmyoLCjT/75zE/M4mRQeArqAE
+         q4YgAkDS6yIyQVA1WxKIVB7rtdCigj9Sz0V6NzXh5PlLXZooECitbVO6sWthzskktB
+         K+ItPCsbY4BLi25J8cwa71OUpyPJxZShfeyXk83Q=
+Received: by mail-lf1-f44.google.com with SMTP id r134so12000449lff.12;
+        Tue, 03 Sep 2019 06:29:32 -0700 (PDT)
+X-Gm-Message-State: APjAAAXceZ1F0VtCGnv9s3brmXuw2bEDDN7WCQ0LhshmWuK9GoK3nIy0
+        07jSwK7TNhywRrFEtPhPHXfCyUK6Y2dMkQXBWdw=
+X-Google-Smtp-Source: APXvYqxqbuDcNwZVBZKdEn/yqco/nPvJHxybzLgeR8t1/wyDoTImujg8oF2KZNPIWeHPuUNFUp5BwgTKED9vOoaznqs=
+X-Received: by 2002:ac2:41c2:: with SMTP id d2mr6978921lfi.24.1567517370489;
+ Tue, 03 Sep 2019 06:29:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190902150336.3600-1-krzk@kernel.org> <CAL_JsqK_O+7zQDGxAhAHDW=AkMy+RtyijTXUuRStOgu8CYXe0g@mail.gmail.com>
+ <CAJKOXPfO0yBzGFPvF_WwsGGJBZSBGMLsFi2CQ2Eg5RVfyfW3nA@mail.gmail.com>
+ <CAL_JsqJUfGBRAv=StPyavQU1DiHnFwUseNCvP6Ce_ZMohJXTXQ@mail.gmail.com>
+ <CAJKOXPcjF9nERQxDdSVBLsfc2V_M1_BPZ6iM6EXvEx4tdr3rDQ@mail.gmail.com> <CAL_Jsq+1NEcmvrKPp9N=07CbxT3ZUsViXk7GGb1v0NzsxvWEdg@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+1NEcmvrKPp9N=07CbxT3ZUsViXk7GGb1v0NzsxvWEdg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Tue, 3 Sep 2019 15:29:19 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcGWuW7HP-_kj_OjpPyHtj9gr36bpVUeT5VF2V9wTZY9Q@mail.gmail.com>
+Message-ID: <CAJKOXPcGWuW7HP-_kj_OjpPyHtj9gr36bpVUeT5VF2V9wTZY9Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power: syscon-reboot: Convert bindings
+ to json-schema
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-cpuidle-haltpoll can be built as a module to allow optional late load.
-Given we are setting @owner to THIS_MODULE, cpuidle will attempt to grab a
-module reference every time a cpuidle_device is registered -- so
-essentially all online cpus get a reference.
+On Tue, 3 Sep 2019 at 15:12, Rob Herring <robh+dt@kernel.org> wrote:
+> > arch/arm/boot/dts/exynos3250-artik5-eval.dt.yaml: syscon-reboot:
+> > {'regmap': [[9]], 'mask': [[1]], '$nodename': ['syscon-reboot'],
+> > 'value': [[1]], 'offset': [[1024]], 'compatible': ['syscon-reboot']}
+> > is valid under each of {'required': ['mask']}, {'required': ['value',
+> > 'mask']}, {'required': ['value']}
+>
+> Ahh, right. 'anyOf' is what we want:
+>
+> anyOf:
+>   - required: [ value ]
+>   - required: [ mask ]
 
-This prevents for the module to be unloaded later, which makes the
-module_exit callback entirely unused. Thus remove the @owner and allow
-module to be unloaded.
+This triggers meta-schema error:
 
-Fixes: fa86ee90eb11 ("add cpuidle-haltpoll driver")
-Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
----
-v2:
-* Add missing Fixes tag
----
- drivers/cpuidle/cpuidle-haltpoll.c | 1 -
- 1 file changed, 1 deletion(-)
+  SCHEMA  Documentation/devicetree/bindings/processed-schema.yaml
+Traceback (most recent call last):
+  File "/home/kozik/.local/lib/python3.5/site-packages/dtschema/lib.py",
+line 429, in process_schema
+    DTValidator.check_schema(schema)
+  File "/home/kozik/.local/lib/python3.5/site-packages/dtschema/lib.py",
+line 575, in check_schema
+    raise jsonschema.SchemaError.create_from(error)
+jsonschema.exceptions.SchemaError: Additional properties are not
+allowed ('anyOf' was unexpected)
 
-diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-index 7a0239ef717e..49a65c6fe91e 100644
---- a/drivers/cpuidle/cpuidle-haltpoll.c
-+++ b/drivers/cpuidle/cpuidle-haltpoll.c
-@@ -35,7 +35,6 @@ static int default_enter_idle(struct cpuidle_device *dev,
- static struct cpuidle_driver haltpoll_driver = {
- 	.name = "haltpoll",
- 	.governor = "haltpoll",
--	.owner = THIS_MODULE,
- 	.states = {
- 		{ /* entry 0 is for polling */ },
- 		{
--- 
-2.17.1
+Failed validating 'additionalProperties' in metaschema['allOf'][0]:
+    {'$id': 'http://devicetree.org/meta-schemas/base.yaml#',
+     '$schema': 'http://json-schema.org/draft-07/schema#',
+     'additionalProperties': False,
+     'allOf': [{'$ref': 'http://json-schema.org/draft-07/schema#'}],
+     'description': 'Metaschema for devicetree binding documentation',
+     'properties': {'$id': {'pattern':
+'http://devicetree.org/schemas/.*\\.yaml#'},
+                    '$schema': {'enum':
+['http://devicetree.org/meta-schemas/core.yaml#',
 
+'http://devicetree.org/meta-schemas/base.yaml#']},
+                    'additionalProperties': {'type': 'boolean'},
+                    'allOf': {'items': {'propertyNames': {'enum': ['$ref',
+                                                                   'if',
+                                                                   'then',
+                                                                   'else']}}},
+                    'definitions': True,
+                    'dependencies': True,
+                    'description': True,
+                    'else': True,
+                    'examples': {'items': {'type': 'string'},
+                                 'type': 'array'},
+                    'if': True,
+                    'maintainers': {'items': {'format': 'email',
+                                              'type': 'string'},
+                                    'type': 'array'},
+                    'oneOf': True,
+                    'patternProperties': True,
+                    'properties': True,
+                    'required': True,
+                    'select': {'allOf': [{'$ref':
+'http://json-schema.org/draft-07/schema#'},
+                                         {'oneOf': [{'properties':
+{'properties': True,
+
+'required': True},
+                                                     'type': 'object'},
+                                                    {'type': 'boolean'}]}]},
+                    'then': True,
+                    'title': {'maxLength': 100},
+                    'unevaluatedProperties': {'type': 'boolean'}},
+     'required': ['$id', '$schema', 'title', 'maintainers']}
+
+Best regards,
+Krzysztof
