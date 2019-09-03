@@ -2,179 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 091D8A696C
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 15:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4323CA696E
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 15:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729067AbfICNMz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Sep 2019 09:12:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52630 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728854AbfICNMz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 3 Sep 2019 09:12:55 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3FD152341E;
-        Tue,  3 Sep 2019 13:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567516373;
-        bh=jqh61ZRENXFNnkp2fk/aJ+y/O3Jn9kv3bLoy/qT+bqg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=1JvYMpcor86uiFMCT8PbHaSUcLfTmZZeism41iD+N3okBf2BPcF9BCbTn1OK7W7/P
-         gjkCFKJfRA2pXq9G0VSfhE2ORc4CG8pTFbJ4RWjgovTdbRbNo0wT3tulerFAlV3ejY
-         1OC4odW3zt77QAPPe1xkfoChFbKXNNSR5+/nKzNI=
-Received: by mail-qt1-f178.google.com with SMTP id j10so2149719qtp.8;
-        Tue, 03 Sep 2019 06:12:53 -0700 (PDT)
-X-Gm-Message-State: APjAAAWSedJWg0MQZ+uwW3OlEJMQuw4HlR84Gu6VF1arTRu/xYVlaUo/
-        c/5u3xRWQXyM+64Rs6lG5PMY8GPOa4F7lDoeDg==
-X-Google-Smtp-Source: APXvYqzTFiN8oVBM9M+df2NK9b5HcT/TBeKqsGuElQNpHFl5OTlBBylsSu9yHtdqUe+TUte2geFjdWY9RWraZ7NlVPM=
-X-Received: by 2002:ac8:468c:: with SMTP id g12mr11929246qto.110.1567516372423;
- Tue, 03 Sep 2019 06:12:52 -0700 (PDT)
+        id S1728854AbfICNN2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Sep 2019 09:13:28 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34284 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728571AbfICNN1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Sep 2019 09:13:27 -0400
+Received: by mail-pl1-f193.google.com with SMTP id d3so7898763plr.1;
+        Tue, 03 Sep 2019 06:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5bkDAmHBMFK32nnuTqY8Dz+zY+pSRwll+hw9x/DOfxo=;
+        b=bWgvdyFlvd/gBZHW1UM8pZEOW5gm/3vhTBtl5kvNL+GJQPZEwPL5XUDDNF6mBbI/3W
+         2OkG0djgc+xn7fLgG8VnlW/VDNplJ4JMxUaNWH5awV+jnrfISRu5RPh6k09Mj+DQBysj
+         /aJ6gWQmoyywBhzT9GqxXJOJgjbb3toQnTDWBR2YArAbEylAqJl1qbNk8LcxY8vmCgRG
+         LwKhSWe4PZzuxJ79l5Gnd+wcwg/CDAtGNlY5DK3C4evcsOCEdRsvfbSvfO7uo1BE11qp
+         Peh7u9lJ+JNYLcvjZ9z+xM4Bm5oIOseTdgHyk9h+IlpdP97eJ03+GGh7ahneq8jq5fq7
+         qEYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5bkDAmHBMFK32nnuTqY8Dz+zY+pSRwll+hw9x/DOfxo=;
+        b=NiAg1DK1EElIexxzexZUpg9nBEPFKgJbTuWN40fXnkOlqNIu3Iojen6FBqf4ybM4zG
+         7h5lkmX79Fwr+k56LgTHZpOuwKAa2HrkKsncLAlE44j3PG+MD7B0LMtJBIh3UiRa7VWU
+         kHm+10fEy0Cofj+If2kytr/9Av8pt4nEX5qJk90AFBGiiti/oHYjNecD0LRaIfZC0CIE
+         QkVwDI+kWahKGb2R8GlKzNM3yR0EB5LnQBDG5rf5k9FeGjUui+6IROHwJitrcFOf9PBt
+         AED000DV2qn2nJdbSAt9VmGGP4jJTvQtxiDRyK0AyqvmC/jvaKSwXYMOE7PMT1ChcIsj
+         Fb3A==
+X-Gm-Message-State: APjAAAVvEbpcE3jFDBVjjRTiui/ttUOluaWsiCJXPbKoRwtwTXrqC/tN
+        hC/ehz5QzAhXSMGbdUiTigU4qeL+SKdnC2G/np9xAbS7vfU=
+X-Google-Smtp-Source: APXvYqx7JswKzeB3Zxp1QRSOlEKbG9I2BSeM7Z8hcpw+m/NQv4CPOiQGbxK6lTHzgn1znrx+lYDNTtn2uEELe1A+vko=
+X-Received: by 2002:a17:902:426:: with SMTP id 35mr35833244ple.192.1567516407027;
+ Tue, 03 Sep 2019 06:13:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190902150336.3600-1-krzk@kernel.org> <CAL_JsqK_O+7zQDGxAhAHDW=AkMy+RtyijTXUuRStOgu8CYXe0g@mail.gmail.com>
- <CAJKOXPfO0yBzGFPvF_WwsGGJBZSBGMLsFi2CQ2Eg5RVfyfW3nA@mail.gmail.com>
- <CAL_JsqJUfGBRAv=StPyavQU1DiHnFwUseNCvP6Ce_ZMohJXTXQ@mail.gmail.com> <CAJKOXPcjF9nERQxDdSVBLsfc2V_M1_BPZ6iM6EXvEx4tdr3rDQ@mail.gmail.com>
-In-Reply-To: <CAJKOXPcjF9nERQxDdSVBLsfc2V_M1_BPZ6iM6EXvEx4tdr3rDQ@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 3 Sep 2019 14:12:40 +0100
-X-Gmail-Original-Message-ID: <CAL_Jsq+1NEcmvrKPp9N=07CbxT3ZUsViXk7GGb1v0NzsxvWEdg@mail.gmail.com>
-Message-ID: <CAL_Jsq+1NEcmvrKPp9N=07CbxT3ZUsViXk7GGb1v0NzsxvWEdg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: power: syscon-reboot: Convert bindings
- to json-schema
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1567346932-16744-1-git-send-email-akinobu.mita@gmail.com>
+ <1567346932-16744-2-git-send-email-akinobu.mita@gmail.com> <CAJZ5v0g+NqasLwWRLA_LM+QEjrHquxzEgtvG4_P=4n=vzpOHWQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0g+NqasLwWRLA_LM+QEjrHquxzEgtvG4_P=4n=vzpOHWQ@mail.gmail.com>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Tue, 3 Sep 2019 22:13:16 +0900
+Message-ID: <CAC5umyhBkvWFaRpzJ=xtdnf_fLHe2OeJJ01sve8F6HA0=MuLMQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM-runtime: allow userspace to monitor runtime_status changes
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-leds@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 3, 2019 at 12:44 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+2019=E5=B9=B49=E6=9C=883=E6=97=A5(=E7=81=AB) 6:47 Rafael J. Wysocki <rafael=
+@kernel.org>:
 >
-> On Tue, 3 Sep 2019 at 11:00, Rob Herring <robh+dt@kernel.org> wrote:
+> On Sun, Sep 1, 2019 at 4:09 PM Akinobu Mita <akinobu.mita@gmail.com> wrot=
+e:
 > >
-> > On Tue, Sep 3, 2019 at 8:47 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > >
-> > > On Tue, 3 Sep 2019 at 09:14, Rob Herring <robh+dt@kernel.org> wrote:
-> > > >
-> > > > On Mon, Sep 2, 2019 at 4:03 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > > > >
-> > > > > Convert the Syscon reboot bindings to DT schema format using
-> > > > > json-schema.
-> > > > >
-> > > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > > > ---
-> > > > >  .../bindings/power/reset/syscon-reboot.txt    | 30 --------
-> > > > >  .../bindings/power/reset/syscon-reboot.yaml   | 68 +++++++++++++++++++
-> > > > >  2 files changed, 68 insertions(+), 30 deletions(-)
-> > > > >  delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
-> > > > >  create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..a583f3dc8ef4
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> > > > > @@ -0,0 +1,68 @@
-> > > > > +# SPDX-License-Identifier: GPL-2.0
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id: http://devicetree.org/schemas/power/reset/syscon-reboot.yaml#
-> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > +
-> > > > > +title: Generic SYSCON mapped register reset driver
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - Sebastian Reichel <sre@kernel.org>
-> > > > > +
-> > > > > +description: |+
-> > > > > +  This is a generic reset driver using syscon to map the reset register.
-> > > > > +  The reset is generally performed with a write to the reset register
-> > > > > +  defined by the register map pointed by syscon reference plus the offset
-> > > > > +  with the value and mask defined in the reboot node.
-> > > > > +  Default will be little endian mode, 32 bit access only.
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    const: syscon-reboot
-> > > > > +
-> > > > > +  mask:
-> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > > +    description: Update only the register bits defined by the mask (32 bit).
-> > > > > +    maxItems: 1
-> > > >
-> > > > Drop this as that is already defined for uint32.
-> > > >
-> > > > It also doesn't actually work. The $ref has to be under an 'allOf' if
-> > > > you have additional schemas. A quirk of json-schema...
-> > > >
-> > > > > +
-> > > > > +  offset:
-> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > > +    description: Offset in the register map for the reboot register (in bytes).
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  regmap:
-> > > > > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > > > > +    description: Phandle to the register map node.
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  value:
-> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > > +    description: The reset value written to the reboot register (32 bit access).
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +required:
-> > > > > +  - compatible
-> > > > > +  - regmap
-> > > > > +  - offset
-> > > > > +
-> > > > > +allOf:
-> > > > > +  - if:
-> > > > > +      properties:
-> > > > > +        value:
-> > > > > +          not:
-> > > > > +            type: array
-> > > >
-> > > > I think you could make this a bit more readable with:
-> > > >
-> > > > if:
-> > > >   not:
-> > > >     required:
-> > > >       - value
-> > >
-> > > I do not understand how does it work (value is not mentioned in the
-> > > required fields so why checking of it?)... but it works fine.
+> > This enables the /sys/devices/.../power/runtime_status attribute to
+> > allow the user space to get notifications via poll/select when the devi=
+ce
+> > runtime PM status is changed.
 > >
-> > What's under required doesn't have to be listed as a property.
+> > An example use case is to avoid unnecessary accesses for device statist=
+ics
+> > (e.g. diskstats for block devices) while the device is in runtime suspe=
+nd
+> > by user space LED device actitity trigger.
 > >
-> > > > However, if the tree is free of legacy usage, then you could just drop all this.
-> > >
-> > > One of them - mask or value - has to be provided.
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+> > ---
+> >  Documentation/ABI/testing/sysfs-devices-power | 2 ++
+> >  drivers/base/power/power.h                    | 1 +
+> >  drivers/base/power/runtime.c                  | 1 +
+> >  drivers/base/power/sysfs.c                    | 5 +++++
+> >  4 files changed, 9 insertions(+)
 > >
-> > Or both, right?
+> > diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentat=
+ion/ABI/testing/sysfs-devices-power
+> > index 3e50536..47dc357 100644
+> > --- a/Documentation/ABI/testing/sysfs-devices-power
+> > +++ b/Documentation/ABI/testing/sysfs-devices-power
+> > @@ -269,3 +269,5 @@ Description:
+> >                 the current runtime PM status of the device, which may =
+be
+> >                 "suspended", "suspending", "resuming", "active", "error=
+" (fatal
+> >                 error), or "unsupported" (runtime PM is disabled).
+> > +               This attribute allows the user space to get notificatio=
+ns via
+> > +               poll/select when the device runtime PM status is change=
+d.
+> > diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> > index ec33fbdb..8891bf4 100644
+> > --- a/drivers/base/power/power.h
+> > +++ b/drivers/base/power/power.h
+> > @@ -74,6 +74,7 @@ extern int pm_qos_sysfs_add_flags(struct device *dev)=
+;
+> >  extern void pm_qos_sysfs_remove_flags(struct device *dev);
+> >  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
+> >  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
+> > +extern void sysfs_notify_runtime_status(struct device *dev);
 > >
-> > Actually, a better way to express it is probably this:
+> >  #else /* CONFIG_PM */
 > >
-> > oneOf:
-> >   - required: [ value ]
-> >   - required: [ mask ]
-> >   - required: [ value, mask ]
+> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.=
+c
+> > index b753355..3a3e413 100644
+> > --- a/drivers/base/power/runtime.c
+> > +++ b/drivers/base/power/runtime.c
+> > @@ -94,6 +94,7 @@ static void __update_runtime_status(struct device *de=
+v, enum rpm_status status)
+> >  {
+> >         update_pm_runtime_accounting(dev);
+> >         dev->power.runtime_status =3D status;
+> > +       sysfs_notify_runtime_status(dev);
 >
-> This does not work mask+value would be valid everywhere:
+> There are concerns about this.
 >
-> arch/arm/boot/dts/exynos3250-artik5-eval.dt.yaml: syscon-reboot:
-> {'regmap': [[9]], 'mask': [[1]], '$nodename': ['syscon-reboot'],
-> 'value': [[1]], 'offset': [[1024]], 'compatible': ['syscon-reboot']}
-> is valid under each of {'required': ['mask']}, {'required': ['value',
-> 'mask']}, {'required': ['value']}
+> First off, it adds overhead for devices that change the PM-runtime
+> status relatively often.  I'm not sure if that's sufficiently
+> justified.
+>
+> Second, it is called for status changes from "active" to "suspending"
+> and from "suspending" to "suspended" (and analogously for resume)
+> which may not be particularly useful.  At least, user space may not
+> have enough time to act on such notifications.
+>
+> Finally, it is racy, because at the time user space does something on
+> a device PM-runtime status change, it very well may have changed the
+> other way around already.
 
-Ahh, right. 'anyOf' is what we want:
-
-anyOf:
-  - required: [ value ]
-  - required: [ mask ]
+I withdraw this patch now.  I hope I'll retry with a real use case example
+program.
