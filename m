@@ -2,98 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26036A679F
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 13:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59589A67B9
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 13:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728538AbfICLl6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Sep 2019 07:41:58 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:36134 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727639AbfICLl6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Sep 2019 07:41:58 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x83BdILQ148258;
-        Tue, 3 Sep 2019 11:41:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=2niyy18iMJJrJbnP8/27ZI5yggmyydzdGwzqDO8E1T8=;
- b=aiI+07M6+dErSEfDUqW5pKOo44r8JCLXMKr5mF6BjjMtUTynJnUJbcFw30BhtDIkiQGQ
- 5r++ansMeXQsb3WbKLEwd0fb5tQZZMfUiFwWsetT7dh/UYniwvMj2/7x/FNjltg7Am/t
- h01gutDr++PW63Ro3Bus98IDDQ/xF3l9YJVGadIdRjiSAtzdXHKw38BULJ+e5gT3s37k
- NyFHIU7oR+3QnWKSDsglTMrsGzhFckH+tXDP3wZQs/46Z3hleVhJxIAEHZ/bViVlGZ6R
- 8Odi23udtgDNdFlu1Ugu4cqfQOq4TkVeIjw2MsmZ+XSV+NiawRrP/Bu6DjmBolj88Z7b Gg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2uspv805x0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 Sep 2019 11:41:40 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x83BcdPp155219;
-        Tue, 3 Sep 2019 11:39:39 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2us4wdr040-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 Sep 2019 11:39:39 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x83BdcOe017661;
-        Tue, 3 Sep 2019 11:39:38 GMT
-Received: from paddy.uk.oracle.com (/10.175.205.235)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 03 Sep 2019 04:39:38 -0700
-From:   Joao Martins <joao.m.martins@oracle.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Joao Martins <joao.m.martins@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org
-Subject: [PATCH v1 4/4] cpuidle-haltpoll: do not set an owner to allow modunload
-Date:   Tue,  3 Sep 2019 12:39:13 +0100
-Message-Id: <20190903113913.9257-5-joao.m.martins@oracle.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190903113913.9257-1-joao.m.martins@oracle.com>
-References: <20190903113913.9257-1-joao.m.martins@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9368 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=716
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1909030123
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9368 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=778 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1909030123
+        id S1727005AbfICLoe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Sep 2019 07:44:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726936AbfICLoe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Sep 2019 07:44:34 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B59E22087E;
+        Tue,  3 Sep 2019 11:44:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567511074;
+        bh=GLV2PrI/w8WKtzeB6Jimizt3wNVcE7gXazlgmzVZ2VA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EnqJXBD8dkyrwGsBAUhGPddErCfaZwlTLTUa5f+8glfQltP2ohwel9bhSzZha9Sqz
+         UgceN2Su+cXuY4948X2puyubqSotGIyYVxXsOb3AETqjK/xEyB0/ki14jvvmgJIeEu
+         WasyBWRwQcna6q44TUF//BKBUv32kZLtmNiLNK9I=
+Received: by mail-lj1-f179.google.com with SMTP id l20so1224256ljj.3;
+        Tue, 03 Sep 2019 04:44:33 -0700 (PDT)
+X-Gm-Message-State: APjAAAUM8oSm9kQ99K2JLg0Cj1YCfl8fVd46N3YXPChGhrjaYogPMByH
+        9mii0dw+rtbsjsvoXfZhtblcKSi3L7l1/CGs+wA=
+X-Google-Smtp-Source: APXvYqyECBe/crmq4JV2MfBJDre5Qh7vIn7L4YZKge7PR+AYhXx56re52lOMKFQztCZLzQihgJt+s/Vw4EAIHMTM8ZU=
+X-Received: by 2002:a2e:99cc:: with SMTP id l12mr7148200ljj.5.1567511071966;
+ Tue, 03 Sep 2019 04:44:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190902150336.3600-1-krzk@kernel.org> <CAL_JsqK_O+7zQDGxAhAHDW=AkMy+RtyijTXUuRStOgu8CYXe0g@mail.gmail.com>
+ <CAJKOXPfO0yBzGFPvF_WwsGGJBZSBGMLsFi2CQ2Eg5RVfyfW3nA@mail.gmail.com> <CAL_JsqJUfGBRAv=StPyavQU1DiHnFwUseNCvP6Ce_ZMohJXTXQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqJUfGBRAv=StPyavQU1DiHnFwUseNCvP6Ce_ZMohJXTXQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Tue, 3 Sep 2019 13:44:20 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcjF9nERQxDdSVBLsfc2V_M1_BPZ6iM6EXvEx4tdr3rDQ@mail.gmail.com>
+Message-ID: <CAJKOXPcjF9nERQxDdSVBLsfc2V_M1_BPZ6iM6EXvEx4tdr3rDQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power: syscon-reboot: Convert bindings
+ to json-schema
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-cpuidle-haltpoll can be built as a module to allow optional late load.
-Given we are setting @owner to THIS_MODULE, cpuidle will attempt to grab a
-module reference every time a cpuidle_device is registered -- so
-essentially all online cpus get a reference.
+On Tue, 3 Sep 2019 at 11:00, Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Tue, Sep 3, 2019 at 8:47 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >
+> > On Tue, 3 Sep 2019 at 09:14, Rob Herring <robh+dt@kernel.org> wrote:
+> > >
+> > > On Mon, Sep 2, 2019 at 4:03 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > > >
+> > > > Convert the Syscon reboot bindings to DT schema format using
+> > > > json-schema.
+> > > >
+> > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > > > ---
+> > > >  .../bindings/power/reset/syscon-reboot.txt    | 30 --------
+> > > >  .../bindings/power/reset/syscon-reboot.yaml   | 68 +++++++++++++++++++
+> > > >  2 files changed, 68 insertions(+), 30 deletions(-)
+> > > >  delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
+> > > >  create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> > >
+> > > > diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..a583f3dc8ef4
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> > > > @@ -0,0 +1,68 @@
+> > > > +# SPDX-License-Identifier: GPL-2.0
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/power/reset/syscon-reboot.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Generic SYSCON mapped register reset driver
+> > > > +
+> > > > +maintainers:
+> > > > +  - Sebastian Reichel <sre@kernel.org>
+> > > > +
+> > > > +description: |+
+> > > > +  This is a generic reset driver using syscon to map the reset register.
+> > > > +  The reset is generally performed with a write to the reset register
+> > > > +  defined by the register map pointed by syscon reference plus the offset
+> > > > +  with the value and mask defined in the reboot node.
+> > > > +  Default will be little endian mode, 32 bit access only.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: syscon-reboot
+> > > > +
+> > > > +  mask:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description: Update only the register bits defined by the mask (32 bit).
+> > > > +    maxItems: 1
+> > >
+> > > Drop this as that is already defined for uint32.
+> > >
+> > > It also doesn't actually work. The $ref has to be under an 'allOf' if
+> > > you have additional schemas. A quirk of json-schema...
+> > >
+> > > > +
+> > > > +  offset:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description: Offset in the register map for the reboot register (in bytes).
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  regmap:
+> > > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > > > +    description: Phandle to the register map node.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  value:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description: The reset value written to the reboot register (32 bit access).
+> > > > +    maxItems: 1
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - regmap
+> > > > +  - offset
+> > > > +
+> > > > +allOf:
+> > > > +  - if:
+> > > > +      properties:
+> > > > +        value:
+> > > > +          not:
+> > > > +            type: array
+> > >
+> > > I think you could make this a bit more readable with:
+> > >
+> > > if:
+> > >   not:
+> > >     required:
+> > >       - value
+> >
+> > I do not understand how does it work (value is not mentioned in the
+> > required fields so why checking of it?)... but it works fine.
+>
+> What's under required doesn't have to be listed as a property.
+>
+> > > However, if the tree is free of legacy usage, then you could just drop all this.
+> >
+> > One of them - mask or value - has to be provided.
+>
+> Or both, right?
+>
+> Actually, a better way to express it is probably this:
+>
+> oneOf:
+>   - required: [ value ]
+>   - required: [ mask ]
+>   - required: [ value, mask ]
 
-This prevents for the module to be unloaded later, which makes the
-module_exit callback entirely unused. Thus remove the @owner and allow
-module to be unloaded.
+This does not work mask+value would be valid everywhere:
 
-Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
----
- drivers/cpuidle/cpuidle-haltpoll.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-index 7a0239ef717e..49a65c6fe91e 100644
---- a/drivers/cpuidle/cpuidle-haltpoll.c
-+++ b/drivers/cpuidle/cpuidle-haltpoll.c
-@@ -35,7 +35,6 @@ static int default_enter_idle(struct cpuidle_device *dev,
- static struct cpuidle_driver haltpoll_driver = {
- 	.name = "haltpoll",
- 	.governor = "haltpoll",
--	.owner = THIS_MODULE,
- 	.states = {
- 		{ /* entry 0 is for polling */ },
- 		{
--- 
-2.17.1
-
+arch/arm/boot/dts/exynos3250-artik5-eval.dt.yaml: syscon-reboot:
+{'regmap': [[9]], 'mask': [[1]], '$nodename': ['syscon-reboot'],
+'value': [[1]], 'offset': [[1024]], 'compatible': ['syscon-reboot']}
+is valid under each of {'required': ['mask']}, {'required': ['value',
+'mask']}, {'required': ['value']}
