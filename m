@@ -2,91 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A03AAA621B
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 09:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8F4A6257
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Sep 2019 09:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727236AbfICHA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Sep 2019 03:00:26 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:42792 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbfICHA0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Sep 2019 03:00:26 -0400
-Received: by mail-pg1-f195.google.com with SMTP id p3so8580233pgb.9
-        for <linux-pm@vger.kernel.org>; Tue, 03 Sep 2019 00:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=a26K1G4II4kSTCpPaGf8xIGxYORQ0ipUth+fFd+YiK8=;
-        b=UPU7L+KPhHP8odNhmO413net+8H+PjG3HBOL/x+TlXWTBUfqXIFOLxkNVDYSLJ2XLe
-         k9CtHzOGplSirS4CWcPWtl842R/pPk47Eop6wdsFo4tN1YtN3GJAZLlVR/fZYhF2EQe5
-         p6tuFG2kTLwUv2RGrYI5KUNKLA2OGq9RhwJdUPsO75BHOU/1VVqp2+JHXBuFskppDtTb
-         PqRtJF0EHcewXECVEwFz14qPujJgvMSCAc0VEIYb8oW8Uya94HLV3S8J2nhymFrGPd7k
-         5uz187MHG68fKQRwD8q1XQEUZ0EEGwVFqS1SWgmrXpEvrSMWIbOM0dRM4rypz/N2QO+7
-         fKCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=a26K1G4II4kSTCpPaGf8xIGxYORQ0ipUth+fFd+YiK8=;
-        b=UcJDj6fb0BKOxupKQFlCVaEZOZVPxKfNUGxBuE8S4Df6sXVoA/JHJ5KjUwF/sj3dEK
-         GPReosrsW7m5IeLcB0zdP6tWVTA61nn4QNYCeel+QlcnIsQAW8PBU9U3ptFK1CrXPa2i
-         snxAEMIDBA5pGaxFpH/WT6AX3Hs+z35EIoWgnVvLZXBycUcYG1hFjhtVK2Zmf8saFc6v
-         yLXB2stZy4OrW+KozqivWB6Gq/mDM3IF5Ky52nbO4HUF1z5Am7P3xOrTeOAWU4XbGiwT
-         DDxjahzrFOKZ9pgzjzwsQwzM3eyPLULmzY13A7RgMT2kbif5eVTu7vs99fKY8BJ1TVZF
-         oR4g==
-X-Gm-Message-State: APjAAAXzZoiKPvlPEM3MhAnfY0Z1kzpDiozlsZ/zzT/k1IyORT8LYn+R
-        0K28TgNlSmfd0nA0M2OhP+RQSg==
-X-Google-Smtp-Source: APXvYqymysOYUOCz8E4NKrZC4xIqdnSdzUBf34OpeOICcOfXYKfVlxK0NwEJqCB3TAzP2fUb9Xdx0g==
-X-Received: by 2002:a17:90a:32c8:: with SMTP id l66mr16676286pjb.44.1567494025517;
-        Tue, 03 Sep 2019 00:00:25 -0700 (PDT)
-Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id t12sm13376138pfe.58.2019.09.03.00.00.22
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 03 Sep 2019 00:00:25 -0700 (PDT)
-From:   Baolin Wang <baolin.wang@linaro.org>
-To:     stable@vger.kernel.org, sre@kernel.org
-Cc:     david@lechnology.com, linux-pm@vger.kernel.org, arnd@arndb.de,
-        baolin.wang@linaro.org, orsonzhai@gmail.com,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org
-Subject: [BACKPORT 4.14.y 6/8] power: supply: sysfs: ratelimit property read error message
-Date:   Tue,  3 Sep 2019 14:59:59 +0800
-Message-Id: <582e968f59d6ece6de33c3e4f3d65c5e4a198fa1.1567492316.git.baolin.wang@linaro.org>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <cover.1567492316.git.baolin.wang@linaro.org>
-References: <cover.1567492316.git.baolin.wang@linaro.org>
+        id S1726557AbfICHO5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Sep 2019 03:14:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57298 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726473AbfICHO4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Sep 2019 03:14:56 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 74981217D7;
+        Tue,  3 Sep 2019 07:14:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567494895;
+        bh=rmcusr+wX8XSoyTKS/POm0d6XCyEv2vtg7TEOgrvejY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DJPxAl2yzJI+3FIKE1T1OUwMcHqsYY+kv+DlJu92XYT6S/sz5ectt4g4SN98sH9hf
+         Az089OpQh3UZnaPX3g6S34Vf8t8Ud0K2rqxOKSz9aAY926Ddu2RpV6i2BIBq30H3MO
+         yFdQSh83KrRQ3FjSidynESJWedug5HIiZrPrsq/c=
+Received: by mail-qt1-f179.google.com with SMTP id r5so13211326qtd.0;
+        Tue, 03 Sep 2019 00:14:55 -0700 (PDT)
+X-Gm-Message-State: APjAAAVX3xwR6VxZ62aSr4mD3qiBFDvhWfsC03vELukiJ93MG8m/BUcq
+        FRRLgKiGSxBrvuBMHdJ+Ag9dGjw2ASwCEAbWYg==
+X-Google-Smtp-Source: APXvYqz5XsmuqNHJeQd9JXH675NAbzJ/857uySOgwZxnQXo+VM/m8JVVJovCqZIOtCBeOhAnCvckhUeip7egvh2w+c0=
+X-Received: by 2002:ac8:31b3:: with SMTP id h48mr32610749qte.300.1567494894631;
+ Tue, 03 Sep 2019 00:14:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190902150336.3600-1-krzk@kernel.org>
+In-Reply-To: <20190902150336.3600-1-krzk@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 3 Sep 2019 08:14:43 +0100
+X-Gmail-Original-Message-ID: <CAL_JsqK_O+7zQDGxAhAHDW=AkMy+RtyijTXUuRStOgu8CYXe0g@mail.gmail.com>
+Message-ID: <CAL_JsqK_O+7zQDGxAhAHDW=AkMy+RtyijTXUuRStOgu8CYXe0g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power: syscon-reboot: Convert bindings
+ to json-schema
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: David Lechner <david@lechnology.com>
+On Mon, Sep 2, 2019 at 4:03 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> Convert the Syscon reboot bindings to DT schema format using
+> json-schema.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  .../bindings/power/reset/syscon-reboot.txt    | 30 --------
+>  .../bindings/power/reset/syscon-reboot.yaml   | 68 +++++++++++++++++++
+>  2 files changed, 68 insertions(+), 30 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
 
-This adds rate limiting to the message that is printed when reading a
-power supply property via sysfs returns an error. This will prevent
-userspace applications from unintentionally dDOSing the system by
-continuously reading a property that returns an error.
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> new file mode 100644
+> index 000000000000..a583f3dc8ef4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/syscon-reboot.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic SYSCON mapped register reset driver
+> +
+> +maintainers:
+> +  - Sebastian Reichel <sre@kernel.org>
+> +
+> +description: |+
+> +  This is a generic reset driver using syscon to map the reset register.
+> +  The reset is generally performed with a write to the reset register
+> +  defined by the register map pointed by syscon reference plus the offset
+> +  with the value and mask defined in the reboot node.
+> +  Default will be little endian mode, 32 bit access only.
+> +
+> +properties:
+> +  compatible:
+> +    const: syscon-reboot
+> +
+> +  mask:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Update only the register bits defined by the mask (32 bit).
+> +    maxItems: 1
 
-Signed-off-by: David Lechner <david@lechnology.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
----
- drivers/power/supply/power_supply_sysfs.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Drop this as that is already defined for uint32.
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index eb5dc74..2ccaf4f 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -91,7 +91,8 @@ static ssize_t power_supply_show_property(struct device *dev,
- 				dev_dbg(dev, "driver has no data for `%s' property\n",
- 					attr->attr.name);
- 			else if (ret != -ENODEV && ret != -EAGAIN)
--				dev_err(dev, "driver failed to report `%s' property: %zd\n",
-+				dev_err_ratelimited(dev,
-+					"driver failed to report `%s' property: %zd\n",
- 					attr->attr.name, ret);
- 			return ret;
- 		}
--- 
-1.7.9.5
+It also doesn't actually work. The $ref has to be under an 'allOf' if
+you have additional schemas. A quirk of json-schema...
 
+> +
+> +  offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Offset in the register map for the reboot register (in bytes).
+> +    maxItems: 1
+> +
+> +  regmap:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Phandle to the register map node.
+> +    maxItems: 1
+> +
+> +  value:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: The reset value written to the reboot register (32 bit access).
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - regmap
+> +  - offset
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        value:
+> +          not:
+> +            type: array
+
+I think you could make this a bit more readable with:
+
+if:
+  not:
+    required:
+      - value
+
+However, if the tree is free of legacy usage, then you could just drop all this.
+
+Rob
