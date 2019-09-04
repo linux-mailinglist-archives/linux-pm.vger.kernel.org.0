@@ -2,106 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E13A8032
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 12:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9CBA8045
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 12:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729286AbfIDKRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Sep 2019 06:17:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43428 "EHLO mail.kernel.org"
+        id S1729068AbfIDKUo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Sep 2019 06:20:44 -0400
+Received: from onstation.org ([52.200.56.107]:60992 "EHLO onstation.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728402AbfIDKRG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Sep 2019 06:17:06 -0400
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727447AbfIDKUo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Sep 2019 06:20:44 -0400
+Received: from localhost (c-98-239-145-235.hsd1.wv.comcast.net [98.239.145.235])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 758B023404;
-        Wed,  4 Sep 2019 10:17:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567592224;
-        bh=2ey6sZwUX3qIGq8j1u1XlvD+weBFrsvta/y2/SgRYO8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ExpbtXwSbOkrsScqxyE87tz7tqmgZLb2I90CCXpW7DgMs9twdX+SkUOWtBesX7NOR
-         K0QMCVtyQ4MEDsxy3zdAoDWl100jhhg4EfEAnlOVaGmVW2w7j2c63lQDLfvXUULcXo
-         tTNEhkGa6Bg2QuDejirO+Ver4giFQmYlU2cflQ3E=
-Received: by mail-lf1-f52.google.com with SMTP id c12so15442251lfh.5;
-        Wed, 04 Sep 2019 03:17:04 -0700 (PDT)
-X-Gm-Message-State: APjAAAV7dg8YGnf35dE0X68d8hJBffbAJiaKOXV/JELe2fStdb0lDwcY
-        UGRp7A9pQHnBLAWoAV8yQX6mPLEPKRayD2BKLao=
-X-Google-Smtp-Source: APXvYqw/hwDzA5Mu4tWRBQjAR/A6Fp0eSBoYcr/oqkFnq3lt9L037MV1NoD9n2ZI6fGV9aSMAJqoKj9sszzXPIbkXyw=
-X-Received: by 2002:ac2:4853:: with SMTP id 19mr16737669lfy.69.1567592222558;
- Wed, 04 Sep 2019 03:17:02 -0700 (PDT)
+        (Authenticated sender: masneyb)
+        by onstation.org (Postfix) with ESMTPSA id 480EE3E941;
+        Wed,  4 Sep 2019 10:20:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onstation.org;
+        s=default; t=1567592443;
+        bh=Sfwij6Ng9IHqC2d6RyNy275EE/PaAvekn8zkt+QGOsk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dayeu+VwkGnpXYrJrLtmeDrxRJuYBbCtODSXinIHhl3Zssi/lPiDeRPYrUhxrDK1j
+         4tXWMfepOT6UWy17g9VAzjmlTEPOj47Th+iEX7MDgiXOjrTZPGS7O+XeYW2vvN7QSa
+         vr+tuGmZndKFK5xGfpxAnQw2IpPlSFug1I2RBmG4=
+Date:   Wed, 4 Sep 2019 06:20:42 -0400
+From:   Brian Masney <masneyb@onstation.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     georgi.djakov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 1/2] dt-bindings: interconnect: qcom: add msm8974
+ bindings
+Message-ID: <20190904102042.GA14484@onstation.org>
+References: <20190902211925.27169-1-masneyb@onstation.org>
+ <20190902211925.27169-2-masneyb@onstation.org>
+ <20190904050103.GE3081@tuxbook-pro>
 MIME-Version: 1.0
-References: <CGME20190821104316eucas1p2ecd715f3105921ec83e0acf1291201f8@eucas1p2.samsung.com>
- <20190821104303.32079-1-l.luba@partner.samsung.com>
-In-Reply-To: <20190821104303.32079-1-l.luba@partner.samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 4 Sep 2019 12:16:51 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPehHNDasNQDgTC+WtVpb_h-s0iTxXiDQY1WT=+zEdB18A@mail.gmail.com>
-Message-ID: <CAJKOXPehHNDasNQDgTC+WtVpb_h-s0iTxXiDQY1WT=+zEdB18A@mail.gmail.com>
-Subject: Re: [PATCH v13 0/8] Exynos5 Dynamic Memory Controller driver
-To:     Lukasz Luba <l.luba@partner.samsung.com>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
-        <b.zolnierkie@samsung.com>, kgene@kernel.org, mark.rutland@arm.com,
-        robh+dt@kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        kyungmin.park@samsung.com,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
-        treding@nvidia.com, digetx@gmail.com, gregkh@linuxfoundation.org,
-        willy.mh.wolff.ml@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190904050103.GE3081@tuxbook-pro>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 21 Aug 2019 at 12:43, Lukasz Luba <l.luba@partner.samsung.com> wrote:
->
-> Hi all,
->
-> This is v13 which makes cosmetic changes. It is based on current mainline
-> (v5.3-rc5) with with devfreq/for-next where there is a PPMU patch [1].
->
-> The patch set adds support of Dynamic Memory Controller for Exynos5422 SoC.
-> The driver supports Dynamic Voltage and Frequency Scaling
-> for the DMC and DRAM. It also provides needed timings for different
-> speed operations of the DRAM memory.
-> There is also new generic code in of_memory and headers which allows to parse
-> LPDDR3 memories defined in device-tree.
->
-> Here are the last changes suggested by Krzysztof during his review.
-> For the previous changes in older revisions please refer to [2], there is
-> more detailed change log.
->
-> changes:
-> v13:
-> - skipped patch with chipID changes in DT, since it is not used anymore,
-> - removed license comment in of_memory.c since SPDX has been merged,
-> - aligned comment to the current fields in the structure,
-> - changed printed warning when timings are not found,
->
-> Regards,
-> Lukasz Luba
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git/commit/?h=for-next&id=b617376df8f01c975dee66802f4da16291f92079
-> [2] https://lkml.org/lkml/2019/7/22/251
->
+On Tue, Sep 03, 2019 at 10:01:03PM -0700, Bjorn Andersson wrote:
+> On Mon 02 Sep 14:19 PDT 2019, Brian Masney wrote:
+> > +      mmssnoc: interconnect@fc478000 {
+> > +              reg = <0xfc478000 0x4000>;
+> > +              compatible = "qcom,msm8974-mmssnoc";
+> > +              #interconnect-cells = <1>;
+> > +              clock-names = "bus", "bus_a";
+> > +              clocks = <&rpmcc RPM_SMD_MMSSNOC_AHB_CLK>,
+> > +                       <&rpmcc RPM_SMD_MMSSNOC_AHB_A_CLK>;
+> 
+> Isn't MMSS_S0_AXI_CLK the bus clock of the mmssnoc (which somehow seems
+> to depend on mmssnoc_ahb_clk)?
 
-Hi Lukasz,
+I'll give that a try. Do you know which clock I should use for bus_a
+here? On the mmcc, I see the following mmss clocks available:
 
-Thanks for the effort and work on this patchset. The text-based
-bindings are slowly converted to JSON-schema but your patches were
-developed some time ago and have Rob's review. It would be nice if you
-or someone converted it to JSON schema later.
-Anyway, I'll pick up everything today evening either for this merge
-window or eventually postponed till next one. It is quite late in the
-cycle and I want the patches to sit in linux-next for some time.
+MMSS_AHB_CLK_SRC
+MMSS_AXI_CLK_SRC
+MMSS_RBCPR_CLK_SRC
+MMSS_MISC_AHB_CLK
+MMSS_MMSSNOC_AHB_CLK
+MMSS_MMSSNOC_BTO_AHB_CLK
+MMSS_MMSSNOC_AXI_CLK
+MMSS_S0_AXI_CLK
 
-Best regards,
-Krzysztof
+I'm also unsure of what's going on at the hardware level that the second
+clock (bus_a) is needed.
+
+> > +      mdss: mdss@fd900000 {
+> 
+> I think you can omit the client, as this adheres to the standard binding
+> for interconnect clients. And you don't need to have an example that
+> covers all compatibles either...
+
+OK, I'll drop some of these.
+
+> > diff --git a/include/dt-bindings/interconnect/qcom,msm8974.h b/include/dt-bindings/interconnect/qcom,msm8974.h
+> > new file mode 100644
+> > index 000000000000..58acf7196410
+> > --- /dev/null
+> > +++ b/include/dt-bindings/interconnect/qcom,msm8974.h
+> > @@ -0,0 +1,146 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> 
+> Would you mind dual licensing this part as well?
+
+Sure, that was an oversight on my part.
+
+> Apart from that, I think this binding looks good.
+
+Thanks,
+
+Brian
