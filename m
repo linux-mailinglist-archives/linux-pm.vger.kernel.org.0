@@ -2,97 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA117A8184
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 13:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 000D3A822B
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 14:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729594AbfIDLwY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Sep 2019 07:52:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34030 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725965AbfIDLwX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Sep 2019 07:52:23 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 49DAA2186A;
-        Wed,  4 Sep 2019 11:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567597942;
-        bh=kuCVKYWh39HzDMNH8mGuQqkKXwZBKKGFW1o2IwBcDNg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2oPxsAZPafFSsKg2yN0LcN0yRhMK6udynUICY5+314QrRk7gXHyPCNjgweDqCfI6z
-         /9cgxpryogget7bzs9QSfNXEm8WXn0EwnYWxXKlK+tq5dz0f67o1pCQAir8cZ9MtmQ
-         szy59+6QxWHJx6QXkp8fxhlZQHVY+Zs8lGuuExsY=
-Date:   Wed, 4 Sep 2019 13:52:20 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lukasz Luba <l.luba@partner.samsung.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        =?utf-8?Q?Bart=C5=82omiej_=C5=BBo=C5=82nierkiewicz?= 
-        <b.zolnierkie@samsung.com>, kgene@kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        kyungmin.park@samsung.com,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
-        treding@nvidia.com, digetx@gmail.com, willy.mh.wolff.ml@gmail.com
-Subject: Re: [PATCH v10 06/13] drivers: memory: extend of_memory by LPDDR3
- support
-Message-ID: <20190904115220.GA9370@kroah.com>
-References: <CGME20190614095325eucas1p20083d9290b36eca945ec3f1428bdbd4f@eucas1p2.samsung.com>
- <20190614095309.24100-1-l.luba@partner.samsung.com>
- <20190614095309.24100-7-l.luba@partner.samsung.com>
- <CAJKOXPcDDyYmuX-RpkpxKSBK2JfV=tYakn+g8FM5Lau+rmkm+g@mail.gmail.com>
- <2e35d4bc-92b9-cba7-bd05-a41a1dcb300e@partner.samsung.com>
+        id S1727722AbfIDMNq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Sep 2019 08:13:46 -0400
+Received: from hel-mailgw-01.vaisala.com ([193.143.230.17]:53008 "EHLO
+        hel-mailgw-01.vaisala.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbfIDMNp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Sep 2019 08:13:45 -0400
+IronPort-SDR: wSW1NYsqKpJIijW1m5xjctkQXDHcwJOSW+XW5M3EqzCc4ruQSi16XrKe9arVLtA+C9DWQeNheY
+ Hy5b8q3RN9+Z+Vrsng8tnYo74Dxj90g6/40I00oplmSIEyN+4gMv0iaQbMZOdPlSUS49SSOIlq
+ VHp7XM1Y6lCfTV3t0qnU7VU6CLU4pDN3TOqqGRnhlWR+pyGaWbueREUZRx6hbObnn3pVgu20XQ
+ aIvia4TLxK+Gb/rMNQyshAYmw8QY+Hi5c4VpD753/rxvcRl5GboX5sg7zgVut3ZF1Ba6SqWkhr
+ ALI=
+X-IronPort-AV: E=Sophos;i="5.64,465,1559509200"; 
+   d="scan'208";a="230947032"
+Subject: Re: [PATCH] power: reset: make reboot-mode user selectable
+To:     Sebastian Reichel <sre@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+References: <20190805075812.1056069-1-arnd@arndb.de>
+ <20190902203857.zusvlv3yv5arel6y@earth.universe>
+ <CAK8P3a3uNPepYweCN9+_cQNQyiSGdidwNGL0+xhti2vm8g9O_g@mail.gmail.com>
+ <20190903000454.lul7fn5nxqcvi5x5@earth.universe>
+From:   Nandor Han <nandor.han@vaisala.com>
+Message-ID: <a85385da-c631-4a9b-4b05-888daa640129@vaisala.com>
+Date:   Wed, 4 Sep 2019 15:13:43 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e35d4bc-92b9-cba7-bd05-a41a1dcb300e@partner.samsung.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190903000454.lul7fn5nxqcvi5x5@earth.universe>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-OriginalArrivalTime: 04 Sep 2019 12:13:43.0517 (UTC) FILETIME=[31EC58D0:01D5631A]
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 03:34:48PM +0200, Lukasz Luba wrote:
+On 9/3/19 3:04 AM, Sebastian Reichel wrote:
+> Hi,
 > 
+> On Mon, Sep 02, 2019 at 11:16:27PM +0200, Arnd Bergmann wrote:
+>> On Mon, Sep 2, 2019 at 10:39 PM Sebastian Reichel <sre@kernel.org> wrote:
+>>> This patch does not look good to me. Better patch would be to
+>>> allow compiling CONFIG_REBOOT_MODE without CONFIG_OF. Obviously
+>>> the configuration would not be useful for anything except compile
+>>> testing, but that is also true for this patch.
+>>
+>> Ok, I'd suggest we leave it with the bugfix you already applied then.
+>> [caa2b55784, power: reset: nvmem-reboot-mode: add CONFIG_OF dependency]
 > 
-> On 6/14/19 2:43 PM, Krzysztof Kozlowski wrote:
-> > On Fri, 14 Jun 2019 at 11:53, Lukasz Luba <l.luba@partner.samsung.com> wrote:
-> >>
-> >> The patch adds AC timings information needed to support LPDDR3 and memory
-> >> controllers. The structure is used in of_memory and currently in Exynos
-> >> 5422 DMC. Add parsing data needed for LPDDR3 support.
-> >> It is currently used in Exynos5422 Dynamic Memory Controller.
-> >>
-> >> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-> >> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> >> ---
-> >>   drivers/memory/of_memory.c | 154 +++++++++++++++++++++++++++++++++++++
-> >>   drivers/memory/of_memory.h |  18 +++++
-> >>   include/memory/jedec_ddr.h |  62 +++++++++++++++
-> >>   3 files changed, 234 insertions(+)
-> > 
-> > Previously this was going through Greg, so if I am going to take it
-> > along with drivers/memory/samsung patches, I need some acks.
-> > 
-> > Greg, Rob,
-> > Are you okay with this patch and with taking it through samsung-soc?
+> That's also fine with me.
 > 
-> Greg, Rob: gentle ping.
+> -- Sebastian
 > 
-> Currently there is a v13, with only minor changes to this patch:
-> https://lkml.org/lkml/2019/8/21/289
-> (you are on cc list of the patch set)
-> 
-> Could you please have a look. Thank you.
 
-I don't seem to be able to find this anywhere in my tree.  And I don't
-remember being the maintainer of drivers/memory/ so don't wait for
-anything from me!
+Sounds good to me.
 
-greg k-h
+--- Nandor
