@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DAAA8E4C
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 21:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEB9A8EDA
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 21:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387809AbfIDR5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Sep 2019 13:57:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34986 "EHLO mail.kernel.org"
+        id S2388064AbfIDSAY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Sep 2019 14:00:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39596 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387796AbfIDR5L (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Sep 2019 13:57:11 -0400
+        id S2388052AbfIDSAY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Sep 2019 14:00:24 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 494D122CED;
-        Wed,  4 Sep 2019 17:57:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9251421883;
+        Wed,  4 Sep 2019 18:00:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567619830;
-        bh=cWN8FC5ht4MZFx5IkZRNbAgyXkaDLc7cujPDAc4zT4M=;
+        s=default; t=1567620023;
+        bh=CW7iEPqWGqoT5eqCSZ882i4U6WjzIfLSqr8CIG2w6lI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jsZ0N/M5+ppJtcrdef9sHJUNtODghBZgZOzuJb3fGDub8ydsrrnqkN9VuLFosQE17
-         ihU28fHatUI5SnD5jRhEBSjB42tcqvr3xKZPJpeGeBRJe8x/LmsMWPmKjJeWrvyDca
-         tdpilePsbn14qjp9JE3aYE//FF0cypu7v5Sq0Ry0=
+        b=XXfSpyQos3ZHy9K+W5sHS9WyrvSfUTxxsYyticob1wKH/c7Gd2RLRoosO7TW/KLnF
+         RSSNujqe3qQvG38DwrET73upSSSrbE2Kq+r8G8QjwLr7lysNEtTvC4aXmf6UlmklPc
+         a9rx73zhQUG8wMF09yfqs3MAwFmkXQryXlkZSOoU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -44,12 +44,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         "x86@kernel.org" <x86@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 49/77] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family 15h/16h
-Date:   Wed,  4 Sep 2019 19:53:36 +0200
-Message-Id: <20190904175308.097832825@linuxfoundation.org>
+Subject: [PATCH 4.9 45/83] x86/CPU/AMD: Clear RDRAND CPUID bit on AMD family 15h/16h
+Date:   Wed,  4 Sep 2019 19:53:37 +0200
+Message-Id: <20190904175307.778430417@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190904175303.317468926@linuxfoundation.org>
-References: <20190904175303.317468926@linuxfoundation.org>
+In-Reply-To: <20190904175303.488266791@linuxfoundation.org>
+References: <20190904175303.488266791@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -116,10 +116,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  4 files changed, 147 insertions(+), 13 deletions(-)
 
 diff --git a/Documentation/kernel-parameters.txt b/Documentation/kernel-parameters.txt
-index 7a9fd54a0186a..5b94c0bfba859 100644
+index f4f0a1b9ba29e..61b73e42f488c 100644
 --- a/Documentation/kernel-parameters.txt
 +++ b/Documentation/kernel-parameters.txt
-@@ -3415,6 +3415,13 @@ bytes respectively. Such letter suffixes can also be entirely omitted.
+@@ -3829,6 +3829,13 @@ bytes respectively. Such letter suffixes can also be entirely omitted.
  			Run specified binary instead of /init from the ramdisk,
  			used for early userspace startup. See initrd.
  
@@ -134,10 +134,10 @@ index 7a9fd54a0186a..5b94c0bfba859 100644
  			Format (x86 or x86_64):
  				[w[arm] | c[old] | h[ard] | s[oft] | g[pio]] \
 diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index d4f5b8209393f..30183770132a0 100644
+index 38f94d07920d1..86166868db8c1 100644
 --- a/arch/x86/include/asm/msr-index.h
 +++ b/arch/x86/include/asm/msr-index.h
-@@ -311,6 +311,7 @@
+@@ -313,6 +313,7 @@
  #define MSR_AMD64_PATCH_LEVEL		0x0000008b
  #define MSR_AMD64_TSC_RATIO		0xc0000104
  #define MSR_AMD64_NB_CFG		0xc001001f
@@ -146,10 +146,10 @@ index d4f5b8209393f..30183770132a0 100644
  #define MSR_AMD64_OSVW_ID_LENGTH	0xc0010140
  #define MSR_AMD64_OSVW_STATUS		0xc0010141
 diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 6f2483292de0b..424d8a636615a 100644
+index 52a65f14db069..9428b54fff664 100644
 --- a/arch/x86/kernel/cpu/amd.c
 +++ b/arch/x86/kernel/cpu/amd.c
-@@ -684,6 +684,64 @@ static void init_amd_ln(struct cpuinfo_x86 *c)
+@@ -746,6 +746,64 @@ static void init_amd_ln(struct cpuinfo_x86 *c)
  	msr_set_bit(MSR_AMD64_DE_CFG, 31);
  }
  
@@ -214,8 +214,8 @@ index 6f2483292de0b..424d8a636615a 100644
  static void init_amd_bd(struct cpuinfo_x86 *c)
  {
  	u64 value;
-@@ -711,6 +769,13 @@ static void init_amd_bd(struct cpuinfo_x86 *c)
- 			wrmsrl_safe(0xc0011021, value);
+@@ -760,6 +818,13 @@ static void init_amd_bd(struct cpuinfo_x86 *c)
+ 			wrmsrl_safe(MSR_F15H_IC_CFG, value);
  		}
  	}
 +
@@ -228,7 +228,7 @@ index 6f2483292de0b..424d8a636615a 100644
  }
  
  static void init_amd_zn(struct cpuinfo_x86 *c)
-@@ -755,6 +820,7 @@ static void init_amd(struct cpuinfo_x86 *c)
+@@ -804,6 +869,7 @@ static void init_amd(struct cpuinfo_x86 *c)
  	case 0x10: init_amd_gh(c); break;
  	case 0x12: init_amd_ln(c); break;
  	case 0x15: init_amd_bd(c); break;
@@ -237,18 +237,18 @@ index 6f2483292de0b..424d8a636615a 100644
  	}
  
 diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index d5f64996394a9..2e5052b2d2382 100644
+index 29dc59baf0c21..c8f947a4aaf20 100644
 --- a/arch/x86/power/cpu.c
 +++ b/arch/x86/power/cpu.c
-@@ -12,6 +12,7 @@
- #include <linux/export.h>
+@@ -13,6 +13,7 @@
  #include <linux/smp.h>
  #include <linux/perf_event.h>
+ #include <linux/tboot.h>
 +#include <linux/dmi.h>
  
  #include <asm/pgtable.h>
  #include <asm/proto.h>
-@@ -23,7 +24,7 @@
+@@ -24,7 +25,7 @@
  #include <asm/debugreg.h>
  #include <asm/cpu.h>
  #include <asm/mmu_context.h>
@@ -257,7 +257,7 @@ index d5f64996394a9..2e5052b2d2382 100644
  
  #ifdef CONFIG_X86_32
  __visible unsigned long saved_context_ebx;
-@@ -347,15 +348,14 @@ static int __init bsp_pm_check_init(void)
+@@ -391,15 +392,14 @@ static int __init bsp_pm_check_init(void)
  
  core_initcall(bsp_pm_check_init);
  
@@ -278,7 +278,7 @@ index d5f64996394a9..2e5052b2d2382 100644
  
  	msr_array = kmalloc_array(total_num, sizeof(struct saved_msr), GFP_KERNEL);
  	if (!msr_array) {
-@@ -363,19 +363,30 @@ static int msr_init_context(const u32 *msr_id, const int total_num)
+@@ -407,19 +407,30 @@ static int msr_init_context(const u32 *msr_id, const int total_num)
  		return -ENOMEM;
  	}
  
@@ -314,7 +314,7 @@ index d5f64996394a9..2e5052b2d2382 100644
   * Sometimes MSRs are modified by the BIOSen after suspended to
   * RAM, this might cause unexpected behavior after wakeup.
   * Thus we save/restore these specified MSRs across suspend/resume
-@@ -390,7 +401,7 @@ static int msr_initialize_bdw(const struct dmi_system_id *d)
+@@ -434,7 +445,7 @@ static int msr_initialize_bdw(const struct dmi_system_id *d)
  	u32 bdw_msr_id[] = { MSR_IA32_THERM_CONTROL };
  
  	pr_info("x86/pm: %s detected, MSR saving is needed during suspending.\n", d->ident);
@@ -323,7 +323,7 @@ index d5f64996394a9..2e5052b2d2382 100644
  }
  
  static struct dmi_system_id msr_save_dmi_table[] = {
-@@ -405,9 +416,58 @@ static struct dmi_system_id msr_save_dmi_table[] = {
+@@ -449,9 +460,58 @@ static struct dmi_system_id msr_save_dmi_table[] = {
  	{}
  };
  
