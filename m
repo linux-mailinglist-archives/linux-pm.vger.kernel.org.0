@@ -2,107 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 942C3A7FB5
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 11:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E13A8032
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 12:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729122AbfIDJsR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Sep 2019 05:48:17 -0400
-Received: from mga05.intel.com ([192.55.52.43]:13728 "EHLO mga05.intel.com"
+        id S1729286AbfIDKRG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Sep 2019 06:17:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728259AbfIDJsR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Sep 2019 05:48:17 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Sep 2019 02:48:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,465,1559545200"; 
-   d="scan'208";a="334155828"
-Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.130.107]) ([10.249.130.107])
-  by orsmga004.jf.intel.com with ESMTP; 04 Sep 2019 02:48:14 -0700
-Subject: Re: [PATCH v2] cpuidle-haltpoll: Enable kvm guest polling when
- dedicated physical CPUs are available
-To:     Wanpeng Li <kernellwp@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <1567068597-22419-1-git-send-email-wanpengli@tencent.com>
-From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
- 173, 80-298 Gdansk
-Message-ID: <a70aeec2-1572-ea09-a0c5-299cd70ddc8a@intel.com>
-Date:   Wed, 4 Sep 2019 11:48:13 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728402AbfIDKRG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Sep 2019 06:17:06 -0400
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 758B023404;
+        Wed,  4 Sep 2019 10:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567592224;
+        bh=2ey6sZwUX3qIGq8j1u1XlvD+weBFrsvta/y2/SgRYO8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ExpbtXwSbOkrsScqxyE87tz7tqmgZLb2I90CCXpW7DgMs9twdX+SkUOWtBesX7NOR
+         K0QMCVtyQ4MEDsxy3zdAoDWl100jhhg4EfEAnlOVaGmVW2w7j2c63lQDLfvXUULcXo
+         tTNEhkGa6Bg2QuDejirO+Ver4giFQmYlU2cflQ3E=
+Received: by mail-lf1-f52.google.com with SMTP id c12so15442251lfh.5;
+        Wed, 04 Sep 2019 03:17:04 -0700 (PDT)
+X-Gm-Message-State: APjAAAV7dg8YGnf35dE0X68d8hJBffbAJiaKOXV/JELe2fStdb0lDwcY
+        UGRp7A9pQHnBLAWoAV8yQX6mPLEPKRayD2BKLao=
+X-Google-Smtp-Source: APXvYqw/hwDzA5Mu4tWRBQjAR/A6Fp0eSBoYcr/oqkFnq3lt9L037MV1NoD9n2ZI6fGV9aSMAJqoKj9sszzXPIbkXyw=
+X-Received: by 2002:ac2:4853:: with SMTP id 19mr16737669lfy.69.1567592222558;
+ Wed, 04 Sep 2019 03:17:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1567068597-22419-1-git-send-email-wanpengli@tencent.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <CGME20190821104316eucas1p2ecd715f3105921ec83e0acf1291201f8@eucas1p2.samsung.com>
+ <20190821104303.32079-1-l.luba@partner.samsung.com>
+In-Reply-To: <20190821104303.32079-1-l.luba@partner.samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 4 Sep 2019 12:16:51 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPehHNDasNQDgTC+WtVpb_h-s0iTxXiDQY1WT=+zEdB18A@mail.gmail.com>
+Message-ID: <CAJKOXPehHNDasNQDgTC+WtVpb_h-s0iTxXiDQY1WT=+zEdB18A@mail.gmail.com>
+Subject: Re: [PATCH v13 0/8] Exynos5 Dynamic Memory Controller driver
+To:     Lukasz Luba <l.luba@partner.samsung.com>
+Cc:     devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
+        <b.zolnierkie@samsung.com>, kgene@kernel.org, mark.rutland@arm.com,
+        robh+dt@kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        kyungmin.park@samsung.com,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
+        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
+        treding@nvidia.com, digetx@gmail.com, gregkh@linuxfoundation.org,
+        willy.mh.wolff.ml@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/29/2019 10:49 AM, Wanpeng Li wrote:
-> From: Wanpeng Li <wanpengli@tencent.com>
+On Wed, 21 Aug 2019 at 12:43, Lukasz Luba <l.luba@partner.samsung.com> wrote:
 >
-> The downside of guest side polling is that polling is performed even
-> with other runnable tasks in the host. However, even if poll in kvm
-> can aware whether or not other runnable tasks in the same pCPU, it
-> can still incur extra overhead in over-subscribe scenario. Now we can
-> just enable guest polling when dedicated pCPUs are available.
+> Hi all,
 >
-> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Radim Krčmář <rkrcmar@redhat.com>
-> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
-
-As stated before, I'm going to queue up this change for 5.4, with the 
-Paolo's ACK.
-
-BTW, in the future please CC power management changes to 
-linux-pm@vger.kernel.org for easier handling.
-
-> --
-> v1 -> v2:
->   * export kvm_arch_para_hints to fix haltpoll driver build as module error
->   * just disable haltpoll driver instead of both driver and governor
->     since KVM_HINTS_REALTIME is not defined in other arches, and governor
->     doesn't depend on x86, to fix the warning on powerpc
+> This is v13 which makes cosmetic changes. It is based on current mainline
+> (v5.3-rc5) with with devfreq/for-next where there is a PPMU patch [1].
 >
->   arch/x86/kernel/kvm.c              | 1 +
->   drivers/cpuidle/cpuidle-haltpoll.c | 3 ++-
->   2 files changed, 3 insertions(+), 1 deletion(-)
+> The patch set adds support of Dynamic Memory Controller for Exynos5422 SoC.
+> The driver supports Dynamic Voltage and Frequency Scaling
+> for the DMC and DRAM. It also provides needed timings for different
+> speed operations of the DRAM memory.
+> There is also new generic code in of_memory and headers which allows to parse
+> LPDDR3 memories defined in device-tree.
 >
-> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-> index f48401b..68463c1 100644
-> --- a/arch/x86/kernel/kvm.c
-> +++ b/arch/x86/kernel/kvm.c
-> @@ -711,6 +711,7 @@ unsigned int kvm_arch_para_hints(void)
->   {
->   	return cpuid_edx(kvm_cpuid_base() | KVM_CPUID_FEATURES);
->   }
-> +EXPORT_SYMBOL_GPL(kvm_arch_para_hints);
->   
->   static uint32_t __init kvm_detect(void)
->   {
-> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-> index 9ac093d..7aee38a 100644
-> --- a/drivers/cpuidle/cpuidle-haltpoll.c
-> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
-> @@ -53,7 +53,8 @@ static int __init haltpoll_init(void)
->   
->   	cpuidle_poll_state_init(drv);
->   
-> -	if (!kvm_para_available())
-> +	if (!kvm_para_available() ||
-> +		!kvm_para_has_hint(KVM_HINTS_REALTIME))
->   		return 0;
->   
->   	ret = cpuidle_register(&haltpoll_driver, NULL);
+> Here are the last changes suggested by Krzysztof during his review.
+> For the previous changes in older revisions please refer to [2], there is
+> more detailed change log.
+>
+> changes:
+> v13:
+> - skipped patch with chipID changes in DT, since it is not used anymore,
+> - removed license comment in of_memory.c since SPDX has been merged,
+> - aligned comment to the current fields in the structure,
+> - changed printed warning when timings are not found,
+>
+> Regards,
+> Lukasz Luba
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git/commit/?h=for-next&id=b617376df8f01c975dee66802f4da16291f92079
+> [2] https://lkml.org/lkml/2019/7/22/251
+>
 
+Hi Lukasz,
 
+Thanks for the effort and work on this patchset. The text-based
+bindings are slowly converted to JSON-schema but your patches were
+developed some time ago and have Rob's review. It would be nice if you
+or someone converted it to JSON schema later.
+Anyway, I'll pick up everything today evening either for this merge
+window or eventually postponed till next one. It is quite late in the
+cycle and I want the patches to sit in linux-next for some time.
+
+Best regards,
+Krzysztof
