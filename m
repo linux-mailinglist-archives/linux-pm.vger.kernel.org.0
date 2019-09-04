@@ -2,94 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C410A8325
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 14:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15CAA8418
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 15:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730017AbfIDMnm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 4 Sep 2019 08:43:42 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:41681 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbfIDMnl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Sep 2019 08:43:41 -0400
-X-Originating-IP: 86.250.200.211
-Received: from xps13 (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 1B4DA2000E;
-        Wed,  4 Sep 2019 12:43:33 +0000 (UTC)
-Date:   Wed, 4 Sep 2019 14:43:32 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     <rui.zhang@intel.com>, <edubezval@gmail.com>,
-        <daniel.lezcano@linaro.org>, <amit.kucheria@verdurent.com>,
-        <eric@anholt.net>, <wahrenst@gmx.net>, <f.fainelli@gmail.com>,
-        <rjui@broadcom.com>, <sbranden@broadcom.com>,
-        <mmayer@broadcom.com>, <computersforpeace@gmail.com>,
-        <gregory.0xf0@gmail.com>, <matthias.bgg@gmail.com>,
-        <agross@kernel.org>, <heiko@sntech.de>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
-        <marc.w.gonzalez@free.fr>, <mans@mansr.com>, <talel@amazon.com>,
-        <jun.nie@linaro.org>, <shawnguo@kernel.org>,
-        <phil@raspberrypi.org>, <gregkh@linuxfoundation.org>,
-        <david.hernandezsanchez@st.com>, <horms+renesas@verge.net.au>,
-        <wsa+renesas@sang-engineering.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rpi-kernel@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-rockchip@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: Re: [PATCH -next 01/15] thermal: armada: use
- devm_platform_ioremap_resource() to simplify code
-Message-ID: <20190904144332.46ab190f@xps13>
-In-Reply-To: <20190904122939.23780-2-yuehaibing@huawei.com>
-References: <20190904122939.23780-1-yuehaibing@huawei.com>
-        <20190904122939.23780-2-yuehaibing@huawei.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1730310AbfIDNDY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Sep 2019 09:03:24 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:34014 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729635AbfIDNDX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Sep 2019 09:03:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=2MLof/8M3zdWlEds/ZNBsOc7HjsrBhHVJc1nOPzW3qE=; b=Ndzdqfq1vg+rM4F89ARdzhUIQ
+        DAkWDXxYcrsfs7o9P2GYCA3bN8dR/Kjz3MweNZ+z4nT/3ZoGKM4T6meXLU10CSWpkqVR4M+mLMJff
+        /vRnAamV24CH+SuvFkWxqgSac8bdA4EwnXlDjCdqNuWGPg95z1Gtu1oa/rT8Pd3GzH2Je2QpyPMdJ
+        PvzDs06Wc+HJLV04Jskl4PsKI6vHb2ujtw64A0kTjA+7VNZ4twW1+naP/C2+UPKgi6iuHJAKu5oyp
+        HmxeNULb/dz3vvtRXLJfjLO2GMGrMmZAef7yrY9QNYyNKckUbV98qTWMVoxlRi5gFHjusPGOt6oe2
+        ADjn14bFA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i5UwP-0005VN-KT; Wed, 04 Sep 2019 13:03:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9A44C306027;
+        Wed,  4 Sep 2019 15:02:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2B3FD29D9EB6F; Wed,  4 Sep 2019 15:03:16 +0200 (CEST)
+Date:   Wed, 4 Sep 2019 15:03:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [RFC][PATCH] cpuidle: Consolidate disabled state checks
+Message-ID: <20190904130316.GR2332@hirez.programming.kicks-ass.net>
+References: <2136682.Ujdk25Y4fk@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2136682.Ujdk25Y4fk@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Yue,
-
-YueHaibing <yuehaibing@huawei.com> wrote on Wed, 4 Sep 2019 20:29:25
-+0800:
-
-> Use devm_platform_ioremap_resource() to simplify the code a bit.
-> This is detected by coccinelle.
+On Wed, Sep 04, 2019 at 12:41:23PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  drivers/thermal/armada_thermal.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> There are two reasons why CPU idle states may be disabled: either
+> because the driver has disabled them or because they have been
+> disabled by user space via sysfs.
 > 
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-> index 709a22f..70fe9c6 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -708,12 +708,10 @@ static int armada_thermal_probe_legacy(struct platform_device *pdev,
->  				       struct armada_thermal_priv *priv)
->  {
->  	struct armada_thermal_data *data = priv->data;
-> -	struct resource *res;
->  	void __iomem *base;
->  
->  	/* First memory region points towards the status register */
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	base = devm_ioremap_resource(&pdev->dev, res);
-> +	base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(base))
->  		return PTR_ERR(base);
->  
+> In the former case, the state's "disabled" flag is set once during
+> the initialization of the driver and it is never cleared later (it
+> is read-only effectively).  In the latter case, the "disable" field
+> of the given state's cpuidle_state_usage struct is set and it may be
+> changed via sysfs.  Thus checking whether or not an idle state has
+> been disabled involves reading these two flags every time.
+> 
+> In order to avoid the additional check of the state's "disabled" flag
+> (which is effectively read-only anyway), use the value of it at the
+> init time to set a (new) flag in the "disable" field of that state's
+> cpuidle_state_usage structure and use the sysfs interface to
+> manipulate another (new) flag in it.  This way the state is disabled
+> whenever the "disable" field of its cpuidle_state_usage structure is
+> nonzero, whatever the reason, and it is the only place to look into
+> to check whether or not the state has been disabled.
 
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Thanks,
-Miquèl
+Yay! That double disable stuff always confused me mightily. This seems
+like a sensible solution for it.
