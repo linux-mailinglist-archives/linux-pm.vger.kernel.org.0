@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D266A8AFB
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 21:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBCAA8B36
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 21:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732977AbfIDQBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Sep 2019 12:01:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36556 "EHLO mail.kernel.org"
+        id S1733219AbfIDQCS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Sep 2019 12:02:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38166 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732952AbfIDQBS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Sep 2019 12:01:18 -0400
+        id S1731990AbfIDQCR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Sep 2019 12:02:17 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8119C2339D;
-        Wed,  4 Sep 2019 16:01:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6784822CF5;
+        Wed,  4 Sep 2019 16:02:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567612877;
-        bh=cwgAFUwFMh2HCxi09ZDiFYIacY5CLnOxIn+IPjzlR80=;
+        s=default; t=1567612937;
+        bh=Gnb060WgRtLXs6JnHukAVdDIzLPHCh1bvcZjwA+WdiE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zGir64tSbSRzw5UACBm4y2Vna9dUFaF48tnIvUVP1B22VJoi4KZnn82CIrGV2IcKR
-         ns78OtGnZyeh0qOJTxdI6EMrhEQGg+WnBSAg/h25XXcUd8c+Wz62mUJkUvsqwB5GMW
-         uGFtyFsWBSJAd6yKSRpMCpnPkD3DraNZ0tfnwV2E=
+        b=KEKxKHfF9KlNYpruOaaAsSWD0coQo67VpHW3Z7tGk1AXsRMjs9H6UqoWqpXOMmZlt
+         aHtBGA0esfXpW4AqVy24thsB1ylIApmnXuQsWSdLUGfiaHLqNm+yuZjG8OIOYHy3TO
+         9JEhXXRsJMsQjUHuBgObkDb2DRjVpOw8LdRjkd7w=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
         Len Brown <len.brown@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 50/52] tools/power turbostat: fix buffer overrun
-Date:   Wed,  4 Sep 2019 12:00:02 -0400
-Message-Id: <20190904160004.3671-50-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 35/36] tools/power turbostat: fix buffer overrun
+Date:   Wed,  4 Sep 2019 12:01:21 -0400
+Message-Id: <20190904160122.4179-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190904160004.3671-1-sashal@kernel.org>
-References: <20190904160004.3671-1-sashal@kernel.org>
+In-Reply-To: <20190904160122.4179-1-sashal@kernel.org>
+References: <20190904160122.4179-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,10 +60,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index fbb53c952b739..71cf7e77291ad 100644
+index 3e5f8b3db2720..19e345cf8193e 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -4953,7 +4953,7 @@ int initialize_counters(int cpu_id)
+@@ -4488,7 +4488,7 @@ int initialize_counters(int cpu_id)
  
  void allocate_output_buffer()
  {
