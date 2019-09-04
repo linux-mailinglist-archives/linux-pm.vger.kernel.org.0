@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8BAA8302
+	by mail.lfdr.de (Postfix) with ESMTP id 78370A8303
 	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 14:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730291AbfIDMe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Sep 2019 08:34:58 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:57806 "EHLO huawei.com"
+        id S1730286AbfIDMe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Sep 2019 08:34:59 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:57848 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730253AbfIDMe5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Sep 2019 08:34:57 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 5003824D2CC81ADC7DA9;
+        id S1729996AbfIDMe6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Sep 2019 08:34:58 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 56C999540FCF8AE3D4A9;
         Wed,  4 Sep 2019 20:34:56 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 20:34:45 +0800
+Received: from localhost (10.133.213.239) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
+ 20:34:48 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
 To:     <miquel.raynal@bootlin.com>, <rui.zhang@intel.com>,
         <edubezval@gmail.com>, <daniel.lezcano@linaro.org>,
@@ -39,9 +39,9 @@ CC:     <bcm-kernel-feedback-list@broadcom.com>,
         <linux-arm-msm@vger.kernel.org>,
         <linux-rockchip@lists.infradead.org>,
         <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH -next 11/15] thermal: stm32: use devm_platform_ioremap_resource() to simplify code
-Date:   Wed, 4 Sep 2019 20:29:35 +0800
-Message-ID: <20190904122939.23780-12-yuehaibing@huawei.com>
+Subject: [PATCH -next 12/15] thermal: tango: use devm_platform_ioremap_resource() to simplify code
+Date:   Wed, 4 Sep 2019 20:29:36 +0800
+Message-ID: <20190904122939.23780-13-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 In-Reply-To: <20190904122939.23780-1-yuehaibing@huawei.com>
 References: <20190904122939.23780-1-yuehaibing@huawei.com>
@@ -60,30 +60,30 @@ This is detected by coccinelle.
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/thermal/st/stm_thermal.c | 4 +---
+ drivers/thermal/tango_thermal.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
-index cf9ddc5..a5d85f5 100644
---- a/drivers/thermal/st/stm_thermal.c
-+++ b/drivers/thermal/st/stm_thermal.c
-@@ -611,7 +611,6 @@ MODULE_DEVICE_TABLE(of, stm_thermal_of_match);
- static int stm_thermal_probe(struct platform_device *pdev)
- {
- 	struct stm_thermal_sensor *sensor;
--	struct resource *res;
- 	const struct thermal_trip *trip;
- 	void __iomem *base;
- 	int ret, i;
-@@ -630,8 +629,7 @@ static int stm_thermal_probe(struct platform_device *pdev)
+diff --git a/drivers/thermal/tango_thermal.c b/drivers/thermal/tango_thermal.c
+index 304b461..f44441b 100644
+--- a/drivers/thermal/tango_thermal.c
++++ b/drivers/thermal/tango_thermal.c
+@@ -73,7 +73,6 @@ static void tango_thermal_init(struct tango_thermal_priv *priv)
  
- 	sensor->dev = &pdev->dev;
+ static int tango_thermal_probe(struct platform_device *pdev)
+ {
+-	struct resource *res;
+ 	struct tango_thermal_priv *priv;
+ 	struct thermal_zone_device *tzdev;
+ 
+@@ -81,8 +80,7 @@ static int tango_thermal_probe(struct platform_device *pdev)
+ 	if (!priv)
+ 		return -ENOMEM;
  
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(&pdev->dev, res);
-+	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
+-	priv->base = devm_ioremap_resource(&pdev->dev, res);
++	priv->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
  
 -- 
 2.7.4
