@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94950A82E4
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 14:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE62A82E9
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Sep 2019 14:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729253AbfIDMee (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Sep 2019 08:34:34 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:5760 "EHLO huawei.com"
+        id S1728878AbfIDMeg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Sep 2019 08:34:36 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6645 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728878AbfIDMee (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Sep 2019 08:34:34 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 48C7748DF51CA27566B3;
+        id S1730101AbfIDMef (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Sep 2019 08:34:35 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 4F5D6F2F44281CFF02BF;
         Wed,  4 Sep 2019 20:34:32 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 20:34:22 +0800
+Received: from localhost (10.133.213.239) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
+ 20:34:24 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
 To:     <miquel.raynal@bootlin.com>, <rui.zhang@intel.com>,
         <edubezval@gmail.com>, <daniel.lezcano@linaro.org>,
@@ -39,9 +39,9 @@ CC:     <bcm-kernel-feedback-list@broadcom.com>,
         <linux-arm-msm@vger.kernel.org>,
         <linux-rockchip@lists.infradead.org>,
         <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH -next 02/15] thermal: bcm2835: use devm_platform_ioremap_resource() to simplify code
-Date:   Wed, 4 Sep 2019 20:29:26 +0800
-Message-ID: <20190904122939.23780-3-yuehaibing@huawei.com>
+Subject: [PATCH -next 03/15] thermal: brcmstb: use devm_platform_ioremap_resource() to simplify code
+Date:   Wed, 4 Sep 2019 20:29:27 +0800
+Message-ID: <20190904122939.23780-4-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 In-Reply-To: <20190904122939.23780-1-yuehaibing@huawei.com>
 References: <20190904122939.23780-1-yuehaibing@huawei.com>
@@ -60,31 +60,30 @@ This is detected by coccinelle.
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/thermal/broadcom/bcm2835_thermal.c | 4 +---
+ drivers/thermal/broadcom/brcmstb_thermal.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/broadcom/bcm2835_thermal.c b/drivers/thermal/broadcom/bcm2835_thermal.c
-index 3199977..01eec8e 100644
---- a/drivers/thermal/broadcom/bcm2835_thermal.c
-+++ b/drivers/thermal/broadcom/bcm2835_thermal.c
-@@ -166,7 +166,6 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
- 	const struct of_device_id *match;
- 	struct thermal_zone_device *tz;
- 	struct bcm2835_thermal_data *data;
+diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+index 5825ac5..de43c3e 100644
+--- a/drivers/thermal/broadcom/brcmstb_thermal.c
++++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+@@ -305,15 +305,13 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
+ {
+ 	struct thermal_zone_device *thermal;
+ 	struct brcmstb_thermal_priv *priv;
 -	struct resource *res;
- 	int err = 0;
- 	u32 val;
- 	unsigned long rate;
-@@ -180,8 +179,7 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
- 	if (!match)
- 		return -EINVAL;
+ 	int irq, ret;
+ 
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
  
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	data->regs = devm_ioremap_resource(&pdev->dev, res);
-+	data->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(data->regs)) {
- 		err = PTR_ERR(data->regs);
- 		dev_err(&pdev->dev, "Could not get registers: %d\n", err);
+-	priv->tmon_base = devm_ioremap_resource(&pdev->dev, res);
++	priv->tmon_base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(priv->tmon_base))
+ 		return PTR_ERR(priv->tmon_base);
+ 
 -- 
 2.7.4
 
