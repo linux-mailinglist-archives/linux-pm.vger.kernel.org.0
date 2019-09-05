@@ -2,117 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5D0AA983
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 19:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D4DAAA0B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 19:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390861AbfIERAb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 5 Sep 2019 13:00:31 -0400
-Received: from mga01.intel.com ([192.55.52.88]:5869 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389197AbfIERAb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 5 Sep 2019 13:00:31 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Sep 2019 10:00:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,470,1559545200"; 
-   d="scan'208";a="182883502"
-Received: from fmsmsx107.amr.corp.intel.com ([10.18.124.205])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Sep 2019 10:00:30 -0700
-Received: from fmsmsx116.amr.corp.intel.com (10.18.116.20) by
- fmsmsx107.amr.corp.intel.com (10.18.124.205) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Thu, 5 Sep 2019 10:00:30 -0700
-Received: from fmsmsx125.amr.corp.intel.com ([169.254.2.49]) by
- fmsmsx116.amr.corp.intel.com ([169.254.2.181]) with mapi id 14.03.0439.000;
- Thu, 5 Sep 2019 10:00:30 -0700
-From:   "Brown, Len" <len.brown@intel.com>
-To:     Sasha Levin <sashal@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH AUTOSEL 5.2 82/94] tools/power turbostat: fix file
- descriptor leaks
-Thread-Topic: [PATCH AUTOSEL 5.2 82/94] tools/power turbostat: fix file
- descriptor leaks
-Thread-Index: AQHVYznN/Ro8M0co9U+Uq7T0wLP1CKcdTlTA
-Date:   Thu, 5 Sep 2019 17:00:30 +0000
-Message-ID: <1A7043D5F58CCB44A599DFD55ED4C9486D97C3FA@FMSMSX125.amr.corp.intel.com>
-References: <20190904155739.2816-1-sashal@kernel.org>
- <20190904155739.2816-82-sashal@kernel.org>
-In-Reply-To: <20190904155739.2816-82-sashal@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ctpclassification: CTP_NT
-x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiNmU5M2FlNmUtODZkZC00ZWQ1LWIxODgtNmM2YWVmNzcwZDU4IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiWG5wb1wvM0tnU0FRdmt5cG5aRW11MjJmK2J0WnB2ZW1pSlNBZURvbGY1VlE1aHpSK3FqNVRDeko1K2RcLzh4T1wvQiJ9
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.1.200.108]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S2387663AbfIERct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Sep 2019 13:32:49 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46711 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732358AbfIERct (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 13:32:49 -0400
+Received: by mail-pg1-f196.google.com with SMTP id m3so1765369pgv.13
+        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2019 10:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=f/cxCSlkOSNQOctAxBzsNj20vu+MPJAWjCVom+scLtM=;
+        b=Ot/TAFXRnL1ZmSBNpKSGC1FPbPlYowycfY1zQqvDsox9CXGblA/G235sihbwPp3yP0
+         DOGup6hSau72ryFdD5B9O9BJQZ57Ae4n0g3KsbdMbfVG0PnALc8w3wdy9CMGNDtNwZzz
+         styv+zEQihKg+ge9nAwpeKgbUUgiR/ortszcA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=f/cxCSlkOSNQOctAxBzsNj20vu+MPJAWjCVom+scLtM=;
+        b=TxIuougAsPRXYIoG3deZ2g96LZwInjFF1E9VsL/UW/MD/JkblQRitfAg9U2C8bpFIA
+         5CvMQtGlB9BvVW/AVMmW1rrMcsXw2+Cg7kUyveCQhr0CwruW4xKZXahmF3ewsOGjPYHx
+         G08rGf+/psxV+XL8lRMQpKGdGksbAKaxGTO4493wUNgRdNzTHqpDUJQWmb1DWdJFuhzN
+         aH9m0bn57TgBMtBJTcg3jl32g46tR5WQ+nBgT6MHnEHJ4pLRFH+/253XEg5trcNyxi5G
+         qykVxGz6Ajgli7QJDbO4IVuYFyyV9ed/Wzn1PSmHXl5CUiJi/k3whIkK7AUOYwaXy17e
+         CBHA==
+X-Gm-Message-State: APjAAAVFT8muGZEctQk0ZNrvWF9ViQzIds4bdZtgmw+kfvmfWlHXF+gI
+        XUZvj3d/BJR+CKWk+KQW+E3drg==
+X-Google-Smtp-Source: APXvYqyDLEfQ9vrdfMKaCyaiKklkMkJv0KNpIFxh/WZng5+5VJVzUfSu2SI+sg3aGMVA/s+iuERd+A==
+X-Received: by 2002:a63:b904:: with SMTP id z4mr4150651pge.388.1567704767527;
+        Thu, 05 Sep 2019 10:32:47 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id d11sm3266103pfn.151.2019.09.05.10.32.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2019 10:32:46 -0700 (PDT)
+Message-ID: <5d7146be.1c69fb81.38760.7fb8@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190823081703.17325-5-mkshah@codeaurora.org>
+References: <20190823081703.17325-1-mkshah@codeaurora.org> <20190823081703.17325-5-mkshah@codeaurora.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
+        lsrao@codeaurora.org, ulf.hansson@linaro.org,
+        Maulik Shah <mkshah@codeaurora.org>
+Subject: Re: [PATCH v2 4/6] drivers: qcom: rpmh-rsc: Add RSC power domain support
+To:     Maulik Shah <mkshah@codeaurora.org>, agross@kernel.org,
+        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 05 Sep 2019 10:32:45 -0700
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-FWIW,
+Quoting Maulik Shah (2019-08-23 01:17:01)
+> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+> index e278fc11fe5c..884b39599e8f 100644
+> --- a/drivers/soc/qcom/rpmh-rsc.c
+> +++ b/drivers/soc/qcom/rpmh-rsc.c
+> @@ -498,6 +498,32 @@ static int tcs_ctrl_write(struct rsc_drv *drv, const=
+ struct tcs_request *msg)
+>         return ret;
+>  }
+> =20
+> +/**
+> + *  rpmh_rsc_ctrlr_is_idle: Check if any of the AMCs are busy.
+> + *
+> + *  @drv: The controller
+> + *
+> + *  Returns false if the TCSes are engaged in handling requests,
 
-The latest turbostat and x86_energy_perf_policy utilities in the upstream kernel tree should always be backward compatible with all old kernels.  If that is EVER not the case, I want to know about it.
+Please use kernel-doc style for returns here.
 
-Yes, I know that some distros ship old versions of these utilities built out of their matching kernel tree snapshots.
-Yes, applying upstream fixes to .stable for such distros is a good thing.
+> + *  True if controller is idle.
+> + */
+> +static bool rpmh_rsc_ctrlr_is_idle(struct rsc_drv *drv)
+> +{
+> +       int m;
+> +       struct tcs_group *tcs =3D get_tcs_of_type(drv, ACTIVE_TCS);
+> +       bool ret =3D true;
+> +
+> +       spin_lock(&drv->lock);
 
-However, the better solution for these particular utilities, is that they simply always use upstream utilities -- even with old kernels.
+I think these need to be irqsave/restore still.
 
-When somebody reports a problem and I need them to run these tools, 100% of the time, I start by sending them the latest upstream version to replace the old version shipped by the distro.
+> +       for (m =3D tcs->offset; m < tcs->offset + tcs->num_tcs; m++) {
+> +               if (!tcs_is_free(drv, m)) {
 
-Cheers,
--Len
+This snippet is from tcs_invalidate(). Please collapse it into some sort
+of function or macro like for_each_tcs().
 
+> +                       ret =3D false;
+> +                       break;
+> +               }
+> +       }
+> +       spin_unlock(&drv->lock);
+> +
+> +       return ret;
+> +}
+> +
+>  /**
+>   * rpmh_rsc_write_ctrl_data: Write request to the controller
+>   *
+> @@ -521,6 +547,53 @@ int rpmh_rsc_write_ctrl_data(struct rsc_drv *drv, co=
+nst struct tcs_request *msg)
+>         return tcs_ctrl_write(drv, msg);
+>  }
+> =20
+> +static int rpmh_domain_power_off(struct generic_pm_domain *rsc_pd)
+> +{
+> +       struct rsc_drv *drv =3D container_of(rsc_pd, struct rsc_drv, rsc_=
+pd);
+> +
+> +       /*
+> +        * RPMh domain can not be powered off when there is pending ACK f=
+or
+> +        * ACTIVE_TCS request. Exit when controller is busy.
+> +        */
+> +
 
+Nitpick: Remove this extra newline.
 
------Original Message-----
-From: Sasha Levin [mailto:sashal@kernel.org] 
-Sent: Wednesday, September 04, 2019 11:57 AM
-To: linux-kernel@vger.kernel.org; stable@vger.kernel.org
-Cc: Gustavo A. R. Silva <gustavo@embeddedor.com>; Prarit Bhargava <prarit@redhat.com>; Brown, Len <len.brown@intel.com>; Sasha Levin <sashal@kernel.org>; linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 82/94] tools/power turbostat: fix file descriptor leaks
+> +       if (!rpmh_rsc_ctrlr_is_idle(drv))
+> +               return -EBUSY;
+> +
+> +       return rpmh_flush(&drv->client);
+> +}
+> +
+> +static int rpmh_probe_power_domain(struct platform_device *pdev,
+> +                                  struct rsc_drv *drv)
+> +{
+> +       int ret;
+> +       struct generic_pm_domain *rsc_pd =3D &drv->rsc_pd;
+> +       struct device_node *dn =3D pdev->dev.of_node;
+> +
+> +       rsc_pd->name =3D kasprintf(GFP_KERNEL, "%s", dn->name);
 
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Maybe use devm_kasprintf?
 
-[ Upstream commit 605736c6929d541c78a85dffae4d33a23b6b2149 ]
+> +       if (!rsc_pd->name)
+> +               return -ENOMEM;
+> +
+> +       rsc_pd->name =3D kbasename(rsc_pd->name);
+> +       rsc_pd->power_off =3D rpmh_domain_power_off;
+> +       rsc_pd->flags |=3D GENPD_FLAG_IRQ_SAFE;
+> +
+> +       ret =3D pm_genpd_init(rsc_pd, NULL, false);
+> +       if (ret)
+> +               goto free_name;
+> +
+> +       ret =3D of_genpd_add_provider_simple(dn, rsc_pd);
+> +       if (ret)
+> +               goto remove_pd;
+> +
+> +       return ret;
+> +
+> +remove_pd:
+> +       pm_genpd_remove(rsc_pd);
+> +free_name:
+> +       kfree(rsc_pd->name);
 
-Fix file descriptor leaks by closing fp before return.
+And then drop this one?
 
-Addresses-Coverity-ID: 1444591 ("Resource leak")
-Addresses-Coverity-ID: 1444592 ("Resource leak")
-Fixes: 5ea7647b333f ("tools/power turbostat: Warn on bad ACPI LPIT data")
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-Reviewed-by: Prarit Bhargava <prarit@redhat.com>
-Signed-off-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
+> +       return ret;
+> +}
+> +
+>  static int rpmh_probe_tcs_config(struct platform_device *pdev,
+>                                  struct rsc_drv *drv)
+>  {
+> @@ -650,6 +723,17 @@ static int rpmh_rsc_probe(struct platform_device *pd=
+ev)
+>         if (ret)
+>                 return ret;
+> =20
+> +       /*
+> +        * Power domain is not required for controllers that support 'sol=
+ver'
+> +        * mode where they can be in autonomous mode executing low power =
+mode
+> +        * to power down.
+> +        */
+> +       if (of_property_read_bool(dn, "#power-domain-cells")) {
+> +               ret =3D rpmh_probe_power_domain(pdev, drv);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+>         spin_lock_init(&drv->lock);
+>         bitmap_zero(drv->tcs_in_use, MAX_TCS_NR);
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 71a931813de00..066bd43ed6c9f 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2912,6 +2912,7 @@ int snapshot_cpu_lpi_us(void)
- 	if (retval != 1) {
- 		fprintf(stderr, "Disabling Low Power Idle CPU output\n");
- 		BIC_NOT_PRESENT(BIC_CPU_LPI);
-+		fclose(fp);
- 		return -1;
- 	}
- 
--- 
-2.20.1
+What happens if it fails later on? The genpd provider is still sitting
+around and needs to be removed on probe failure later on in this
+function. It would be nicer if there wasn't another function to probe
+the power domain and it was just inlined here actually. That way we
+don't have to wonder about what's going on across two blocks of code.
 
