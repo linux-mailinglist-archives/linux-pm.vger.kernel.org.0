@@ -2,90 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 557E2AA831
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 18:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC572AA8BA
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 18:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388890AbfIEQSY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Sep 2019 12:18:24 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42056 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388824AbfIEQSX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 12:18:23 -0400
-Received: by mail-pf1-f193.google.com with SMTP id w22so2063292pfi.9
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2019 09:18:23 -0700 (PDT)
+        id S1731992AbfIEQSC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Sep 2019 12:18:02 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37319 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731660AbfIEQSB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 12:18:01 -0400
+Received: by mail-pl1-f195.google.com with SMTP id b10so1538286plr.4
+        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2019 09:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=KBEjaWO3Fe2PBzPolu3WMn8NTAUiCD8HB53ny3BQ6OI=;
-        b=plmQ8J8hM7P284lC2RlFaPT3UU/0f+9eU9WDxSbYt7bW8T1tbLLfVU8NYjquQ7LNE4
-         KnLS0x5VNgK3M6FqfPB2sD3wKmxbXx14Gobu/OwtOpbYXU/IkghbfCOdM1Mm7JXUh+Re
-         OGs1MQyDI9D6huwbn+67NCfvpkEUEztWZnuG+dI47z8mROznT1jdRnoaXcW7sxDawxXv
-         Prljpk4ow91RFRvrdX2X7chbuX2fROHQ8DJAAJyHeGbf0V0cbS24NfqzYiaVo4TwwtW2
-         kTkXUjGOt5qiIylni0ye87NDZ87V7CWg9z4DmQC6OdJUkaVDj8vy3LiXlIYHBzvmnKx/
-         lkjw==
+        h=from:to:cc:subject:date:message-id;
+        bh=mukYH+OPB5B2Q8cIXti1kEopT3yxftlik4aW1yItWl0=;
+        b=Kl4bnPESFCY769er88olLvIMydPIt7MSvRLFnbrMUBFJe2XGXC8oNJ+eB44CxUq8Z8
+         icVfI4Z7Zv2fzyYYpmgSfOeLpo80hrioId35SGiSFn9P8y2EAYTnu2zhJFWW2+ZCCuVB
+         Acsg/wxujlaWpromsOPO/XEkL8skQ8K6nxVzl/UgdDGnWguc6yvHxK/Wv797MeTMZZKg
+         uTS6IS/ihZs3WKvkhpct4BSG3iQljiRqCPgkcGGvlkMO9io8/jgOGOyYiaq1v5JzqePy
+         StJEuicwLxbARj/KoZGqt30jsFFl3ji38xfmmhdmOvICWnSF2ih5SFi0lKIRKtupViAc
+         aAVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=KBEjaWO3Fe2PBzPolu3WMn8NTAUiCD8HB53ny3BQ6OI=;
-        b=G8RhFWIW2w5CGLZ4GkIPgHu0Quud4pmmYU32XjDGC+HOZ+6gkc7KnwpC9tM2tAXAYm
-         n9PwT0yaDyTRexHka4uMZvq6atIv4RZKM9ud0wHPyPvr9KgHfC2TV126kpdlzfj+0ADh
-         ah4JxfYgMx6gLky3ZGrQfcNuXklSwkYXlL7/CUni+FaoDIawCxakIieijWur+jWvoofu
-         VabKgzNaTQNEQe+G5YKmLXVxPVopPfpparJXlybJ8abOjUHSFq+mvjTTJMF8+lK6oUzj
-         3hdTywjW1CFgdLP8lsHZmMBMKjlc263amW6PXEG97Xp89QOX6ooQN9vGpZmKkUz0fgAY
-         KanA==
-X-Gm-Message-State: APjAAAVojr7GghvJ/MoFJuqZlt7Et5+kjWF5gJ6+UX1okYBgZ6fsAjJ+
-        ntAQtMKJZPD1/0XvW6eOUuXHfg==
-X-Google-Smtp-Source: APXvYqzidpJMrA4iY307wddu1S9Lti1cpjYGyLo/7tWJzFGVVSA/c4srK97ZZ5J4SE3dFJjAXsP6BQ==
-X-Received: by 2002:a63:89c2:: with SMTP id v185mr3909722pgd.241.1567700303006;
-        Thu, 05 Sep 2019 09:18:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mukYH+OPB5B2Q8cIXti1kEopT3yxftlik4aW1yItWl0=;
+        b=eKZl5f/LpTF3lV+aKm2yamMg2GAJwUzAEAyJtyh8amsrdy7qnNF9zXcwKirRW26Z8t
+         LBv8qvUychc1AdHZJ2ImnbZ/KW3xkgCyT5DOsVBovVPRpGjW9X4D6kyPyxdKazz4hw7V
+         LjGnHssIs0s/Xt7gKB4Scck0lBFJUra0OptdvimFbdyXJXDINIQz7Zpj+xKHfPfgn4RO
+         hkcWIBIsNfy30RE8pBK6jbHXBaI/0LFpBNcR/yAIIawzYggn8PhMiJJ8qv3G1pmtcItp
+         2aAnvBpkhdsjaR+O8pattkGe2izljOL7nzqlBNoEUfn/zW4YpP/LiDsWxbcbfnL7lw4n
+         pIrg==
+X-Gm-Message-State: APjAAAX5wunpKfDZFZyOMPkS/NJv2tMZI4xF+8cY4HTdGHx6LN/2k5oi
+        0fZujoTQetNA4/nFY99anQtvbQEoqGM=
+X-Google-Smtp-Source: APXvYqzStzXxTWL+1VFEsqINN1zYVOMyUuv7eD3n8K9EXYt6eOChXB640bT4MB9P7QjeXftsWyVKSw==
+X-Received: by 2002:a17:902:b583:: with SMTP id a3mr4258322pls.52.1567700281066;
+        Thu, 05 Sep 2019 09:18:01 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.22
+        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.17.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 09:18:22 -0700 (PDT)
+        Thu, 05 Sep 2019 09:18:00 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     stable@vger.kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: [BACKPORT 4.14.y 18/18] cpufreq: ti-cpufreq: add missing of_node_put()
-Date:   Thu,  5 Sep 2019 10:17:59 -0600
-Message-Id: <20190905161759.28036-19-mathieu.poirier@linaro.org>
+Subject: [BACKPORT 4.14.y 00/18] Backport candidate from TI 4.14 product kernel 
+Date:   Thu,  5 Sep 2019 10:17:41 -0600
+Message-Id: <20190905161759.28036-1-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190905161759.28036-1-mathieu.poirier@linaro.org>
-References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Zumeng Chen <zumeng.chen@gmail.com>
+These patches are backport candidates picked out of TI's 4.14.y tree [1],
+with most of them already found in the 4.19.y stable tree.
 
-commit 248aefdcc3a7e0cfbd014946b4dead63e750e71b upstream
+The set apply and compiles cleanly on 4.14.141.
 
-call of_node_put to release the refcount of np.
+Thanks,
+Mathieu
 
-Signed-off-by: Zumeng Chen <zumeng.chen@gmail.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/cpufreq/ti-cpufreq.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-index 4bf47de6101f..cadc324bedb4 100644
---- a/drivers/cpufreq/ti-cpufreq.c
-+++ b/drivers/cpufreq/ti-cpufreq.c
-@@ -205,6 +205,7 @@ static int ti_cpufreq_init(void)
- 
- 	np = of_find_node_by_path("/");
- 	match = of_match_node(ti_cpufreq_of_match, np);
-+	of_node_put(np);
- 	if (!match)
- 		return -ENODEV;
- 
+[1]. http://git.ti.com/gitweb/?p=ti-linux-kernel/ti-linux-kernel.git;a=shortlog;h=refs/heads/ti-linux-4.14.y
+
+Andrew F. Davis (1):
+  ASoC: tlv320aic31xx: Handle inverted BCLK in non-DSP modes
+
+Arvind Yadav (1):
+  ASoC: davinci-mcasp: Handle return value of devm_kasprintf
+
+Christophe Jaillet (1):
+  ASoC: davinci-mcasp: Fix an error handling path in
+    'davinci_mcasp_probe()'
+
+Claudio Foellmi (1):
+  i2c: omap: Trigger bus recovery in lockup case
+
+Dan Carpenter (1):
+  misc: pci_endpoint_test: Prevent some integer overflows
+
+Gustavo A. R. Silva (1):
+  ASoC: tlv320dac31xx: mark expected switch fall-through
+
+Keerthy (2):
+  mfd: palmas: Assign the right powerhold mask for tps65917
+  PCI: dra7xx: Add shutdown handler to cleanly turn off clocks
+
+Kishon Vijay Abraham I (1):
+  misc: pci_endpoint_test: Fix BUG_ON error during pci_disable_msi()
+
+Niklas Cassel (1):
+  PCI: designware-ep: Fix find_first_zero_bit() usage
+
+Roger Quadros (1):
+  usb: dwc3: Allow disabling of metastability workaround
+
+Roman Yeryomin (1):
+  mtd: spi-nor: enable 4B opcodes for mx66l51235l
+
+Sudeep Holla (1):
+  mailbox: reset txdone_method TXDONE_BY_POLL if client knows_txdone
+
+Takashi Iwai (1):
+  ASoC: davinci: Kill BUG_ON() usage
+
+Tony Lindgren (1):
+  drm/omap: panel-dsi-cm: fix driver
+
+Vignesh R (2):
+  PCI: dra7xx: Fix legacy INTD IRQ handling
+  mtd: spi-nor: cadence-quadspi: add a delay in write sequence
+
+Zumeng Chen (1):
+  cpufreq: ti-cpufreq: add missing of_node_put()
+
+ .../devicetree/bindings/usb/dwc3.txt          |  2 +
+ drivers/cpufreq/ti-cpufreq.c                  |  1 +
+ .../gpu/drm/omapdrm/displays/panel-dsi-cm.c   | 56 +++++++++++++++++--
+ drivers/i2c/busses/i2c-omap.c                 | 25 ++++++++-
+ drivers/mailbox/mailbox.c                     |  4 +-
+ drivers/mailbox/pcc.c                         |  4 +-
+ drivers/mfd/palmas.c                          | 10 +++-
+ drivers/misc/pci_endpoint_test.c              | 17 ++++++
+ drivers/mtd/spi-nor/cadence-quadspi.c         | 27 ++++++++-
+ drivers/mtd/spi-nor/spi-nor.c                 |  2 +-
+ drivers/pci/dwc/pci-dra7xx.c                  | 20 ++++++-
+ drivers/pci/dwc/pcie-designware-ep.c          | 34 ++++++++---
+ drivers/pci/dwc/pcie-designware.h             |  8 ++-
+ drivers/usb/dwc3/core.c                       |  3 +
+ drivers/usb/dwc3/core.h                       |  3 +
+ drivers/usb/dwc3/gadget.c                     |  6 +-
+ include/linux/mfd/palmas.h                    |  3 +
+ sound/soc/codecs/tlv320aic31xx.c              | 30 ++++++----
+ sound/soc/davinci/davinci-mcasp.c             | 21 ++++++-
+ 19 files changed, 235 insertions(+), 41 deletions(-)
+
 -- 
 2.17.1
 
