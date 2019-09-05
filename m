@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 592D0A9B4D
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 09:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3AEA9B4F
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 09:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731842AbfIEHLX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Sep 2019 03:11:23 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:40282 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731840AbfIEHLX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 03:11:23 -0400
-Received: by mail-ot1-f67.google.com with SMTP id y39so1120289ota.7
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2019 00:11:22 -0700 (PDT)
+        id S1731749AbfIEHLw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Sep 2019 03:11:52 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37101 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731602AbfIEHLw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 03:11:52 -0400
+Received: by mail-ot1-f66.google.com with SMTP id s28so1133906otd.4
+        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2019 00:11:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LjoEATD0miVDu7pyOpuxosP++yRn/RCw/ZIg/aUYKR0=;
-        b=fznWh2TzWaMa6i2TsTeCViVKg8RKpceMBb4ZvHfmJVqmkCcgRCRTMInwfrChZVfeor
-         P+k1Nj2jM+3+5HT7MGi6BxSZug5P2L9ODp57biHy48ktpmt6O8KfKcRefEbbx7EtJnmf
-         iMw5qj9MWEoSp0HBJoCutbaLTdgbNgoIhrUqSu6LY45qUFXfipZO5NrqSsivuP6jOQ9M
-         zk1EAjg+p16QTZ026C6GcbwchGSdH4lE8YAIk6aLscI12J6ldI66CrNuF6xYm4vZit6/
-         0GNdHrubyWlcepcj4G9+50z4/MrZ3cfVYYRd5DJJ7Xqy42XOhrbhsH3OCb+l8K0Cri64
-         OlKw==
-X-Gm-Message-State: APjAAAV722tt7GR8OSb3+Bt3q4B+M7gjlIrl+zK5gUKeZs+W4sLCPGDi
-        0JYwC1KDE59cwrI0UTa8QuHPQYmSpDnrPZEZ41k=
-X-Google-Smtp-Source: APXvYqzyAkjFI69Wu1805p5zqO32qNBLwaNHY6C2SCak14T7OLGMIbrYW7p5F74YodPnKfnMPggNCBZFSL3cBSZlCDY=
-X-Received: by 2002:a9d:7411:: with SMTP id n17mr1215781otk.118.1567667482165;
- Thu, 05 Sep 2019 00:11:22 -0700 (PDT)
+        bh=tbehCZw0tfXlBPcCwyJ3AgjD06owLHnyHsT8jVPUCgs=;
+        b=BMV1I8cspfmj3/+zlH5JQf78kfBEh1coFOwlcG95v1ZCW92pAxaPOnSbw07CUW7QL7
+         r5OxW7+SWCHmTyHVtVMDHyTMnX/lkiMWvJ9gWW9Y7PV3nRj/yyuHlSs2k5BL7dvHG8uA
+         L2LRdxLvo54/5Z1I+ONed92EfdKlLj4oFuHidE1Cnp/KiXtHNyncH6K48JyKpROUCTUp
+         jCKbANwBintKwT7SieICJDC7oJxdT6K4Z00Ba2ZcSAHBRy2ScxyKBcIIWqk8iMpH4ZhM
+         n+Ud5T+HssOr5DVuRE/7EXXPRiHDvLCXXqswkE1+c1n981fcNspnFvnKtCd/+abKlUJb
+         3rsA==
+X-Gm-Message-State: APjAAAUUKJMOyngAulOKN2z9oE4wd9cTlzr0idG7DUFdpWT448pBjgmD
+        dCIYZET6Z6hB9JlY5yukhuvX4fRbvqdRRimnytQ=
+X-Google-Smtp-Source: APXvYqylI0Qbs8HwGy3XSTcW4Fn1jaM9FP2MDH409cWRuwXcRVX4+FHKgXqz/dJWZkeeCoFkJNJmJL6uwDKGG9x72s0=
+X-Received: by 2002:a9d:6d04:: with SMTP id o4mr1263601otp.189.1567667511510;
+ Thu, 05 Sep 2019 00:11:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190905031645.hvtfuafqt3sjinvb@vireshk-i7>
-In-Reply-To: <20190905031645.hvtfuafqt3sjinvb@vireshk-i7>
+References: <20190905031120.ds7aic7txzuapleh@vireshk-i7>
+In-Reply-To: <20190905031120.ds7aic7txzuapleh@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 5 Sep 2019 09:11:09 +0200
-Message-ID: <CAJZ5v0h0feHdWO0dFTijK-fbGy2YEfhq6dMXtH5Zzu14PPwcqA@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP changes for 5.4
+Date:   Thu, 5 Sep 2019 09:11:36 +0200
+Message-ID: <CAJZ5v0gtrt0QfWD1+u9Y5v==16vVwmKA66A9Hc-Wj+iTRkY4YA@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm changes for 5.4
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
@@ -45,34 +45,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 5, 2019 at 5:16 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, Sep 5, 2019 at 5:11 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
 > Hi Rafael,
 >
 > This pull request contains:
 >
-> - OPP core fixes to better support genpd devices (Viresh Kumar).
-> - OPP core changes to support multiple suspend-opps in DT (Anson Huang).
-> - New OPP API (dev_pm_opp_find_level_exact()) and Qcom OPP binding
->   changes for CPR (Niklas Cassel).
-> - Qcom minor update (Sricharan R).
-> - OPP Documentation fix (Yue Hu).
-> - OPP core support to enable/disable regulators (k.konieczny).
+> - Minor fixes for mediatek driver (Andrew-sh.Cheng and Fabien Parent).
+> - Minor updates for imx driver (Anson Huang).
+> - Minor fix for ti-cpufreq driver (Gustavo A. R. Silva).
+> - Minor fix for ap806 driver (Hariprasad Kelam).
+> - Significant updates to qcom cpufreq drivers, mostly to support CPR
+>   stuff (Jorge Ramirez-Ortiz, Niklas Cassel, Sibi Sankar, Douglas
+>   RAILLARD and Sricharan R).
+> - New sun50i cpufreq driver (Yangtao Li).
+>
+> - This pull request also contains few OPP changes as well, which were
+>   required because of dependencies for the qcom cpufreq changes. They
+>   will be detailed in the OPP pull request.
 >
 > --
 > viresh
 >
 > -------------------------8<-------------------------
+>
 > The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
 >
 >   Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
 >
 > are available in the Git repository at:
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
 >
-> for you to fetch changes up to 071afa50609d46f2f760851b90696f9a09714d24:
+> for you to fetch changes up to f75d2accca7785657311653c125bb22f342dc5d9:
 >
->   Merge branch 'opp/qcom-updates' into opp/linux-next (2019-09-03 07:54:17 +0530)
+>   Merge branch 'cpufreq/qcom-updates' into cpufreq/arm/linux-next (2019-09-03 07:55:22 +0530)
 
 Pulled and pushed out, thanks!
