@@ -2,75 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB99AAA10
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 19:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8783AAA90
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 20:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389737AbfIERdr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Sep 2019 13:33:47 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35530 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728769AbfIERdr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 13:33:47 -0400
-Received: by mail-pg1-f196.google.com with SMTP id n4so1797883pgv.2
-        for <linux-pm@vger.kernel.org>; Thu, 05 Sep 2019 10:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:subject:to:from:user-agent:date;
-        bh=QOU2fQSnEMLrYzBWOEmTCGpu7kl2KoRGYPyXWekRxFo=;
-        b=nLPdLSeZYkCdXYg47Zk8yaMIeE+E7vOm69Gu3zUn2kx8md33AAfro52hxkxX2stB/o
-         WZbR4YaWa7z0PLGI5OkJUNCAeYHYn43jqA19pbqd19b6rvoRCdz1i3mI68/sl7CH/tiG
-         /UCTKOdiJmyzTZoREfUPUxqxDdxgyXQC9hYtU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
-         :user-agent:date;
-        bh=QOU2fQSnEMLrYzBWOEmTCGpu7kl2KoRGYPyXWekRxFo=;
-        b=DwpqQsWBJ00IPk3KLjIblXLUAwhM5gpMGzO679KsP62+ZvPT6PbbOeTlZRopMxR/XG
-         8prK1CB7hEAaFfVKo5HSChad9IdhJPAOpiGhYj6IwZ4BAxIJqvCHRjyICUtVIxC0AC/L
-         dIyWT4Aj6axMSPMKH9wFxbCFYi2UVkIM4Kz6AhDduKhDKw6iN+O4i86yk1uLzAodn6ho
-         Nu3O8XhP3T9EqUK2esGoBw7NKnKd/pbLe5F2L/U+oBfhvEj6KLotnKuuRRqcQIvbyBk2
-         NzNYyEF8oPm10A9P4hj4U+EhiAQLtNVT4a7H+vH9r7fq/NtBgz/K/otccz56un8vcW9E
-         M6RQ==
-X-Gm-Message-State: APjAAAVOxOjDE4FTUoAJKhTjyY5DTcB5lSGucGwjIPlR2/7Z6g40A4gw
-        M34G11SJgsd91eztYUdP8V6JaA==
-X-Google-Smtp-Source: APXvYqz+0+yaaxJQM5pVlU26kNn+3QA/1QGN/LfY5TdaWbV7kBX334BYFDDtUf5aA8ZfofZhnEcc4w==
-X-Received: by 2002:a17:90a:356d:: with SMTP id q100mr5201262pjb.53.1567704826899;
-        Thu, 05 Sep 2019 10:33:46 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id g2sm3739214pfm.32.2019.09.05.10.33.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 10:33:46 -0700 (PDT)
-Message-ID: <5d7146fa.1c69fb81.8444a.8f49@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        id S2403843AbfIESHZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Sep 2019 14:07:25 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:47522 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726097AbfIESHZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 14:07:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=/YHGZhNkmcsx1NPPoqx+Bbf6Jpti46dNPrsa5dPeUfg=; b=TyPaxgvWyB/uMSa7rfCkZh00Q
+        AhIbiI8qWlStN/k3aMCgeSU3ById4HB0ZLI8w4vxKDx0L0y3ZAqTxxXDYDReIXwZ/xn5Goh435288
+        guhQkpZU3+OGMRDzXNBi3XtA9cZLn/QN+egWnIH0LpGSxqHXD8nbrIdCTQbsSXm1L220xSvcSe2wr
+        0ttmcoODPS/Gj3zKEQ1APyy6xPH7SUzAKkYdKiyCsJOgVYMHFrTSxCxkKgYAl+1ygkJmqiexFB3GX
+        NUjGa+/UWAoEg9Vq5G8cAK22oV3nI8caBM89qTx1rkdFIbm/psWW2w3sRZ95hukacAKlS7FhP7lpu
+        W9QDxpBSQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i5wAC-0002bi-Io; Thu, 05 Sep 2019 18:07:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CE725306044;
+        Thu,  5 Sep 2019 20:06:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E27C429D3538E; Thu,  5 Sep 2019 20:07:16 +0200 (CEST)
+Date:   Thu, 5 Sep 2019 20:07:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [RFC][PATCH] cpuidle: Use nanoseconds as the unit of time
+Message-ID: <20190905180716.GQ2349@hirez.programming.kicks-ass.net>
+References: <4106941.QTENAb3AiO@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190823081703.17325-7-mkshah@codeaurora.org>
-References: <20190823081703.17325-1-mkshah@codeaurora.org> <20190823081703.17325-7-mkshah@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        bjorn.andersson@linaro.org, evgreen@chromium.org,
-        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
-        lsrao@codeaurora.org, ulf.hansson@linaro.org,
-        Maulik Shah <mkshah@codeaurora.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] arm64: dts: Add rsc power domain for sdm845
-To:     Maulik Shah <mkshah@codeaurora.org>, agross@kernel.org,
-        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Thu, 05 Sep 2019 10:33:45 -0700
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4106941.QTENAb3AiO@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Maulik Shah (2019-08-23 01:17:03)
-> Add rsc power domain to enable sending sleep and wake votes
-> using generic power domain infrastructure.
->=20
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
-> ---
+On Thu, Sep 05, 2019 at 06:34:49PM +0200, Rafael J. Wysocki wrote:
+> The patch is rather large, but mostly straightforward.  There is a rather ugly piece
+> in the menu governor that first computes the expected idle duration in ns and
+> then converts it to us just in order to compute the typical interval value, and in
+> case that is less than the original expected idle duration value, converts it to ns
+> again.  However, if there is a nicer way to do it, I haven't found it so far.
 
-Can this be combined with the previous patch?
+	predicted_ns = div64_u64(data->next_timer_ns *
+					data->correction_factor[data->bucket],
+				 RESOLUTION * DECAY);
+	predicted_us = ktime_to_us(predicted_ns);
+	/*
+	 * Use the lowest expected idle interval to pick the idle state.
+	 */
+	typical_us = get_typical_interval(data, predicted_us);
+	if (typical_us < predicted_us) {
+		predicted_us = typical_us;
+		predicted_ns = (u64)typical_us * NSEC_PER_USEC;
+	}
 
+Yeah, that is a bit yuck.
+
+The first part:
+
+	predicted_ns = div64_u64(data->next_timer_ns *
+					data->correction_factor[data->bucket],
+				 RESOLUTION * DECAY);
+	predicted_us = ktime_to_us(predicted_ns);
+
+can of course be written like:
+
+	predicted_us = div_u64(data->next_timer_ns * data->correction_factor[data->bucket],
+			       RESOLUTION * DECAY * NSEC_PER_USEC);
+
+Since RESOLUTION * DECAY * NSEC_PER_USEC is only 8e6, that doesn't need
+to be a u64, so u64 / u32 is sufficient and cheaper.
+
+(looking at the original, you did loose the ROUND_CLOSEST bit, which can
+trivially be restored like:
+
+	predicted_us = div_u64(data->next_timer_ns * data->correction_factor[data->bucket] +
+			(RESOLUTION * DECAY * NSEC_PER_USEC) / 2, RESOLUTION * DECAY * NSEC_PER_USEC);
+
+So that reduces from: u64/u64 + u64/32 to u64/32, which should be lots
+on 32bit.
+
+After that it then becomes:
+
+	predicted_ns = (u64)min(predicted_us, get_typical_interval(data, predicted_us)) * NSEC_PER_USEC;
+
+Which is an unconditional multiplication with a constant, which is loads
+better than divisions.
+
+
+Granted, it's still not pretty, but it should be faster than it was.
+
+(this all assumes the initial multiplication doesn't overflow due to now
+using ->next_timer_ns of course)
