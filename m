@@ -2,137 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBFCA99EB
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 07:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7902AA9A6A
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 08:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730801AbfIEFDF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Sep 2019 01:03:05 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:42121 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbfIEFDF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 01:03:05 -0400
-Received: by mail-pl1-f195.google.com with SMTP id y1so672208plp.9
-        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2019 22:03:05 -0700 (PDT)
+        id S1730844AbfIEGPn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Sep 2019 02:15:43 -0400
+Received: from mail-vk1-f193.google.com ([209.85.221.193]:34083 "EHLO
+        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730809AbfIEGPn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 02:15:43 -0400
+Received: by mail-vk1-f193.google.com with SMTP id h192so227473vka.1
+        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2019 23:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4kF3e1zsFRcXZceVWYoKwvOb0B8jkCH1xLzvA0xA6lE=;
-        b=KizyhipGjkEgmtMTKybiHzm6jb3VM2fPNbn/ucG6Zjg04C6K6+tpxoJhQSYsUz0f+l
-         DgO2hmSz+dsjpN5r1fg2pFWZPto71JAv5pGRYUru6vOiP2h2DaSFsqGcnaBVA94fru2J
-         7T/ssB1SdbYipqOrsDHMY9TxljHSCKi+zsMKUmj7E7Vkf8nnB0WrFyQDRXFwMtojk0FN
-         yUnMeqIc3feZ5vuuoVYAcVjUAKHqnjiuIfmQddQ6GMdnR/Z7+jHPxU9VfTuFOiz6LBlN
-         UQEhe2S3skIdfY8seiu15fWsgR3JDrquku6DFAbjM8YiF4XWnuVtDTXJVdK8QF1lC28u
-         6aYg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Lxv2YjVDy5w6AQ+Z95Jd1OHt1865rQWbHzl1H0ckHb4=;
+        b=IurRXFpodLHrXjhNeDu0PBjJR6aKmlNT/dzeEONMU1V5mjYfCIsKTQIXkLXspZuRLT
+         SO2IeUW73ig0y4hTpIc1LeJScYwe/7jF3x1ItS7fkoJd9YSTWsUH2sI/3COuK4II6o/r
+         +Kj20DSoITETteLabp2V7jA4ju9DbWda2nuGTSuEzhZ1KGohbqZEVKqkpRJCAhcLSXD9
+         kEdWKNMJEgbkZzacsvDJtyDbgG7jhbcfx/K1U5vEhgoviC+KwrwJF0gUE3d7mSshVMHg
+         A0LYcz1miwyWZt1OUA9B7KkZFPklzUWf8pMOs0ddGs8nwCkutop0K9qwCxD0ooyRsoi+
+         ohUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4kF3e1zsFRcXZceVWYoKwvOb0B8jkCH1xLzvA0xA6lE=;
-        b=M+iPoeETCL8BR7vNsc3Ntm8gN2j5oh1T4+9LdfCgykpQjN90fckTH2BGPYKPWICLTh
-         YVH9uITTS9vAXf5asLZqrU/mIxDdokuEW1Nps5zfzyfluyDFOXJPEuRPmSetF4k+Jhja
-         ucemjKEdLoVnAPWh8PNa9MeCbp/JA46m3Cb7it89mriShWSl3G+0w3US84tRNfZtKTAY
-         Ow8YfsDWvA/U79N2UEeXuELHO5qdTCdODAphxFkkGll8iotMC+xiBdUlcMaTX/UFJSOW
-         VyvGKPALiqUz65JdaUf8+kBxV3e03xC5jOPG8QW0LODTHuHVMqBtKQqacKG3YE2YCHQk
-         wO4A==
-X-Gm-Message-State: APjAAAWZVhQYXPeUf8AJL4oLZnk6Yw0Z+4kDIecYUpMmMHXE9hNiMpy9
-        5UYSV0rkmneicQfKIV9/y7Qc4Rdceu0=
-X-Google-Smtp-Source: APXvYqyT6Wj0CVdxSGtdOLntILebZr38S2rX5CcajMvuY6Vi2Qck71OpHBK+DDdImEW/4d/3+ViFEg==
-X-Received: by 2002:a17:902:ba16:: with SMTP id j22mr1275680pls.253.1567659784719;
-        Wed, 04 Sep 2019 22:03:04 -0700 (PDT)
-Received: from localhost ([122.167.132.221])
-        by smtp.gmail.com with ESMTPSA id k14sm677205pgi.20.2019.09.04.22.03.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Sep 2019 22:03:03 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 10:33:02 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        =?utf-8?B?QW5kcsOp?= Roth <neolynx@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com
-Subject: Re: [RFC v2 0/3] OMAP3: convert opp-v1 to opp-v2 and read speed
- binned / 720MHz grade bits
-Message-ID: <20190905050302.t7dsmyl7xa25umjg@vireshk-i7>
-References: <cover.1567587220.git.hns@goldelico.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Lxv2YjVDy5w6AQ+Z95Jd1OHt1865rQWbHzl1H0ckHb4=;
+        b=GwQ5UgboE2Ggy6t/0ACoe3GkFLwoyAa+Q9JLp4AW5ko6oZ9sQbaV3mgN+w6u34CYBU
+         ZX2GPR7Fgf01+OsCCG+Bv8KjhR5B4l7Dh0Qafy5k6aha8wifwezIfTzvpnlxAjp3QMzb
+         x8epC/VWNteHI3/qnCPCIM7xYZWpUR6Yi4cEAi015PMiD0DBkgTnwY+C4JKSk5AZOdZY
+         4CT+NWtVEfXV+aHUQFsPzxM4Qv6CfGRjvG8Ysc6UB1zLwZmOT/HZWYJlONP7R8iK1U4o
+         6ukkg2mQs1a+C1GOGwprBa8O5w6+mGFkXbXrgYuwGj9CWghT6NhOGAkQJm01cVQs/bk7
+         6VUQ==
+X-Gm-Message-State: APjAAAXOO2EzMl45WxZfPlGDxCFVIDtN+dTYnHubc8AqTPAicW+J1zXu
+        dCkbxfs8RvLOrPLY8/vmNQS/SnhXS2uY+U1USrCTUA==
+X-Google-Smtp-Source: APXvYqwVi7szQ+w3nsCf0zPQZyYdR4HeVO1GXvtz/sWMMhtS2v2QWLsWh3Ip3Jb3oWwBQ9pfzHwoVyT/iOmN8ovRJtE=
+X-Received: by 2002:a1f:4981:: with SMTP id w123mr690507vka.13.1567664142296;
+ Wed, 04 Sep 2019 23:15:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1567587220.git.hns@goldelico.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20190904122939.23780-1-yuehaibing@huawei.com> <20190904122939.23780-9-yuehaibing@huawei.com>
+In-Reply-To: <20190904122939.23780-9-yuehaibing@huawei.com>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Thu, 5 Sep 2019 11:45:30 +0530
+Message-ID: <CAHLCerOVuNEAkCggBoDU4NgbzhTVxpdJXeTXVrTs5tp7ZVtSMg@mail.gmail.com>
+Subject: Re: [PATCH -next 08/15] thermal: tsens: use devm_platform_ioremap_resource()
+ to simplify code
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     miquel.raynal@bootlin.com, Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Eric Anholt <eric@anholt.net>, wahrenst@gmx.net,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        Markus Mayer <mmayer@broadcom.com>,
+        computersforpeace@gmail.com, gregory.0xf0@gmail.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        mans@mansr.com, talel@amazon.com, Jun Nie <jun.nie@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, phil@raspberrypi.org,
+        gregkh@linuxfoundation.org, david.hernandezsanchez@st.com,
+        horms+renesas@verge.net.au, wsa+renesas@sang-engineering.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        lakml <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04-09-19, 10:53, H. Nikolaus Schaller wrote:
-> Changes V2:
-> * merge separate patch to remove opp-v1 table from n950-n9 into
->   the general omap3xxx.dtsi patch
-> * add legacy compatibility to ti,omap3430 and ti,omap3630 for
->   the ti-cpufreq driver
-> * make driver and omap3xxx.dtsi patches pass checkpatch
-> * add bulk patch to explicitly define compatibility to ti,omap3430
->   and ti,omap36xx in addition to ti,omap3 of all in-tree boards
->   where it was missing
-> 
-> RFC V1 2019-09-02 12:55:55:
-> 
-> This patch set converts the opp tables to opp-v2 format
-> and extends the ti-cpufreq to support omap3.
-> 
-> It adds 720 MHz (omap34xx) and 1 GHz (omap36xx) OPPs but
-> tells the ti-cpufreq driver to disable them if the speed
-> binned / 720MHz grade eFuse bits indicate that the chip
-> is not rated for that speed. 
-> 
-> It has been tested (for chip variant detection, not reliability
-> of the high speed OPPs) on:
-> 
-> * BeagleBoard C2 (omap3430 600MHz)
-> * BeagleBoard XM B (dm3730 800MHz)
-> * GTA04A4 (dm3730 800MHz)
-> * GTA04A5 (dm3730 1GHz)
-> 
-> 
-> H. Nikolaus Schaller (3):
->   cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
->   ARM: dts: replace opp-v1 tables by opp-v2 for omap34xx and omap36xx
->   ARM: dts: omap3: bulk convert compatible to be explicitly ti,omap3430
->     or ti,omap36xx
-> 
->  arch/arm/boot/dts/am3517_mt_ventoux.dts       |  2 +-
->  .../boot/dts/logicpd-som-lv-35xx-devkit.dts   |  2 +-
->  .../boot/dts/logicpd-som-lv-37xx-devkit.dts   |  2 +-
->  .../boot/dts/logicpd-torpedo-35xx-devkit.dts  |  2 +-
->  .../boot/dts/logicpd-torpedo-37xx-devkit.dts  |  2 +-
->  arch/arm/boot/dts/omap3-beagle.dts            |  2 +-
->  arch/arm/boot/dts/omap3-cm-t3530.dts          |  2 +-
->  arch/arm/boot/dts/omap3-devkit8000-lcd43.dts  |  2 +-
->  arch/arm/boot/dts/omap3-devkit8000-lcd70.dts  |  2 +-
->  arch/arm/boot/dts/omap3-devkit8000.dts        |  2 +-
->  arch/arm/boot/dts/omap3-evm-37xx.dts          |  2 +-
->  arch/arm/boot/dts/omap3-ha-lcd.dts            |  2 +-
->  arch/arm/boot/dts/omap3-ha.dts                |  2 +-
->  arch/arm/boot/dts/omap3-ldp.dts               |  2 +-
->  arch/arm/boot/dts/omap3-n950-n9.dtsi          |  7 --
->  arch/arm/boot/dts/omap3-sbc-t3530.dts         |  2 +-
->  arch/arm/boot/dts/omap3-thunder.dts           |  2 +-
->  arch/arm/boot/dts/omap3430-sdp.dts            |  2 +-
->  arch/arm/boot/dts/omap34xx.dtsi               | 65 ++++++++++++--
->  arch/arm/boot/dts/omap36xx.dtsi               | 53 +++++++++--
->  drivers/cpufreq/cpufreq-dt-platdev.c          |  2 +-
->  drivers/cpufreq/ti-cpufreq.c                  | 87 ++++++++++++++++++-
->  22 files changed, 204 insertions(+), 44 deletions(-)
+On Wed, Sep 4, 2019 at 6:05 PM YueHaibing <yuehaibing@huawei.com> wrote:
+>
+> Use devm_platform_ioremap_resource() to simplify the code a bit.
+> This is detected by coccinelle.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Most of the stuff looks fine to me here. I will pick the patches when
-the SoC maintainers provide an Ack.
+Acked-by: Amit Kucheria <amit.kucheria@linaro.org>
 
--- 
-viresh
+> ---
+>  drivers/thermal/qcom/tsens-common.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> index 528df88..43ce4fb 100644
+> --- a/drivers/thermal/qcom/tsens-common.c
+> +++ b/drivers/thermal/qcom/tsens-common.c
+> @@ -155,7 +155,6 @@ int __init init_common(struct tsens_priv *priv)
+>  {
+>         void __iomem *tm_base, *srot_base;
+>         struct device *dev = priv->dev;
+> -       struct resource *res;
+>         u32 enabled;
+>         int ret, i, j;
+>         struct platform_device *op = of_find_device_by_node(priv->dev->of_node);
+> @@ -166,8 +165,7 @@ int __init init_common(struct tsens_priv *priv)
+>         if (op->num_resources > 1) {
+>                 /* DT with separate SROT and TM address space */
+>                 priv->tm_offset = 0;
+> -               res = platform_get_resource(op, IORESOURCE_MEM, 1);
+> -               srot_base = devm_ioremap_resource(&op->dev, res);
+> +               srot_base = devm_platform_ioremap_resource(op, 1);
+>                 if (IS_ERR(srot_base)) {
+>                         ret = PTR_ERR(srot_base);
+>                         goto err_put_device;
+> @@ -184,8 +182,7 @@ int __init init_common(struct tsens_priv *priv)
+>                 priv->tm_offset = 0x1000;
+>         }
+>
+> -       res = platform_get_resource(op, IORESOURCE_MEM, 0);
+> -       tm_base = devm_ioremap_resource(&op->dev, res);
+> +       tm_base = devm_platform_ioremap_resource(op, 0);
+>         if (IS_ERR(tm_base)) {
+>                 ret = PTR_ERR(tm_base);
+>                 goto err_put_device;
+> --
+> 2.7.4
+>
+>
