@@ -2,125 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BE6A98D4
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 05:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B40A99E6
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Sep 2019 07:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730804AbfIEDQt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Sep 2019 23:16:49 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41948 "EHLO
+        id S1731202AbfIEFB3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Sep 2019 01:01:29 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:33676 "EHLO
         mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730677AbfIEDQt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Sep 2019 23:16:49 -0400
-Received: by mail-pl1-f195.google.com with SMTP id m9so573060pls.8
-        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2019 20:16:48 -0700 (PDT)
+        with ESMTP id S1726088AbfIEFB2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Sep 2019 01:01:28 -0400
+Received: by mail-pl1-f195.google.com with SMTP id t11so708654plo.0
+        for <linux-pm@vger.kernel.org>; Wed, 04 Sep 2019 22:01:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=Rgs75OuBKSXEbqQZsOUPu8aIFF3It1D2O+9b0mi46XM=;
-        b=nlc0V2gfxEFTCr2TRMKEOf/vBqF6SPG7o/Vxq7V/ZinZwDQ9ePusnDk3JoE/EOQEdp
-         dS3u5YR/p3aFzmvOuXouPLHgt+CXDYVU90YHfAz+/uOk2eWn9+q5N+hg+Gq5ZLzehk6n
-         k6MY2Fcj6feF7QEdKCVn0Qm3vyN4T7X8yVW62pmY+mjeVaa+xnDetmdTbL/Cx6LXe9+f
-         RVAsvrgj1PRBqszrqtiif3pONvOdj93at1yill6IbnlER7nVEEo1hPT/KEzJ97YSHkj3
-         H7dz1fQMji/+/C2Pynkyg70QMOuIzjudKBVjDWt3dxS+RmmavV3AdUVe/kU2azGcHpjw
-         w5bA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=SUBeohh+HfbbNLC2vNWJGf1wy1Gdj58+BXfyMUrKjoc=;
+        b=lQNQsZxYsESZuNfE0/YmQ6QEjfkBMP2b5Cq9hW5SSuH4ZmInwZ+bEdgwHTQBKexs0l
+         mm0PIiuvSihKeJKrtU55xFyIXXKbfpkaUUHA6LciwO+kh3SqCIR9dRisUpjIKrdmLCH/
+         aEU5hKRqdQraaaOa2/U1+8xQssGgrCYcV84OknuhvYOam+Zusks1aoH2zBwhNfOdrPqw
+         WPpvMOU8e5zTBL/stzc3L/IDjgE+sj3e8ePSTkncNQklhRJacblNFNi5XBs2m3VZpkLp
+         PzcLlF6mvd+UN7b3K2oVTrAaCu+B9Jc1ZCiBw1+rbT9eITC/YqJtkEA2jAMHxi6euTGE
+         tnoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=Rgs75OuBKSXEbqQZsOUPu8aIFF3It1D2O+9b0mi46XM=;
-        b=jCInYykaAOx8ovV/F+JJh6v9F6Xt85Uz5MYOTua9gbSjZaZ7PuNbGQjjjfnB2QG44b
-         b6ATgM9ZO13ZNFcjtzfXurwCyJ1Zf/0J5+PlBXQg9XaziEtFDPSUcx+1QngDywqawn2I
-         OzYAkLEHSg4Nx9UZ6NqtP8Iqc6id7xq91OzE91/oshMEOjemOpXguIqD/EPk4pAR792N
-         qMcrDHruR0f1DdBIAMnFcTXTaROUusB8zw13JLkOIPg3L73zQubXmZmFMdqP3Et+mjUl
-         ne2yR1kBmJazl3xYovUgiyLQBuc9J4ZW6+8vZ3YOHUhlOcPYqd7YZCwGW3+ADApTfW+A
-         7vCQ==
-X-Gm-Message-State: APjAAAUT/qd/SJ14eIP9PXFW/aFnDT5krbd/kMJhNitmdnlLQkuNsh1o
-        EOKm/UqYgvn5a46xNLf6gVOs2AS63pQ=
-X-Google-Smtp-Source: APXvYqxD5rRMy3jpvvrX88V6fhlNaoYkfvRbCt+MBXbOVsqlZsAuL3DM2ahZO4hbWwszJkYIzSelHw==
-X-Received: by 2002:a17:902:7047:: with SMTP id h7mr970818plt.275.1567653408293;
-        Wed, 04 Sep 2019 20:16:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SUBeohh+HfbbNLC2vNWJGf1wy1Gdj58+BXfyMUrKjoc=;
+        b=bH7DwVL/L843G+l33YKXBWFCsWsruuatlNGZTCSLzigLtMYuQffmsZsz3EiUgcHWsR
+         FLlAjQLrnYf6VuAVEMM8NDmaSZLfkoUoFGjbLBH/iy0A+nhkX8tCQ+jYopEDha7MfJrN
+         xKcTiRcNgtHLQolXDxeXjc5JFRLvE3j0qaO0HaSUBRmrGLXsG8Yu9TXKTH6UJ1CpLFoF
+         C1SpIuZ+NBfZUFc1Yb/HemTgVaTMN2fGtsjGUZAx1TLzp/DjgnB0YIcQTutkTYxR3m8+
+         LRH/2E80oRw9cE5ss8EU5/Yoi35CNLAEzfXgumaSdfDqHnQV619QIR2cM6CK1GorFkak
+         73Fw==
+X-Gm-Message-State: APjAAAUX3tu2SzT0svnl5RxqLuA3qJht0zglw2Z/a8aotQPdp/vlr5R4
+        Ubew7sqpXfWwqRRA5n839EQq4A==
+X-Google-Smtp-Source: APXvYqxLKp/hQTBJFZg4bq2XsgfOo5v+1kCisfZEZTN8ZhsozLd3tLyYaMrWDgM/E+T8p4eXRva++Q==
+X-Received: by 2002:a17:902:a58c:: with SMTP id az12mr1410313plb.129.1567659688106;
+        Wed, 04 Sep 2019 22:01:28 -0700 (PDT)
 Received: from localhost ([122.167.132.221])
-        by smtp.gmail.com with ESMTPSA id m129sm480480pga.39.2019.09.04.20.16.47
+        by smtp.gmail.com with ESMTPSA id p189sm1181543pfp.163.2019.09.04.22.01.26
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Sep 2019 20:16:47 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 08:46:45 +0530
+        Wed, 04 Sep 2019 22:01:26 -0700 (PDT)
+Date:   Thu, 5 Sep 2019 10:31:24 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP changes for 5.4
-Message-ID: <20190905031645.hvtfuafqt3sjinvb@vireshk-i7>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>, krzk@kernel.org,
+        robh+dt@kernel.org, vireshk@kernel.org, devicetree@vger.kernel.org,
+        kgene@kernel.org, pankaj.dubey@samsung.com,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, b.zolnierkie@samsung.com
+Subject: Re: [PATCH v2 0/9] Exynos Adaptive Supply Voltage support
+Message-ID: <20190905050124.kopzxxouuuta37n6@vireshk-i7>
+References: <562dd2e7-2b24-8492-d1c1-2dc4973f07be@samsung.com>
+ <20190819090928.pke6cov52n4exlbp@vireshk-i7>
+ <b831d7c5-c830-fd65-20cf-02e209889c28@samsung.com>
+ <20190819112533.bvfyinw7fsebkufr@vireshk-i7>
+ <b7093aaf-ea56-c390-781f-6f9d0780bd8e@samsung.com>
+ <20190820030114.6flnn2omeys3lih3@vireshk-i7>
+ <06ccff05-2152-4bcc-7537-8f24da75f163@samsung.com>
+ <CGME20190820092123epcas2p2170ae19467a5fb19fcfc1acdbecf9381@epcas2p2.samsung.com>
+ <20190820092113.gojhe3romdnvm7eu@vireshk-i7>
+ <4e6379a7-0d4b-8e0d-c225-49976b2587e0@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <4e6379a7-0d4b-8e0d-c225-49976b2587e0@samsung.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On 04-09-19, 14:37, Sylwester Nawrocki wrote:
+> I have changed the code to use dev_pm_opp_adjust_voltage(). I was wondering 
+> though, what did you mean by "triplet" when commenting on this patch
+> https://patchwork.kernel.org/patch/11092245 ?
 
-This pull request contains:
+The voltage value in the OPP core is stored as a triplet,
+min/max/target kind of stuff. You can check DT binding for OPPs and
+see the details. That's called as triplet.
 
-- OPP core fixes to better support genpd devices (Viresh Kumar).
-- OPP core changes to support multiple suspend-opps in DT (Anson Huang).
-- New OPP API (dev_pm_opp_find_level_exact()) and Qcom OPP binding
-  changes for CPR (Niklas Cassel).
-- Qcom minor update (Sricharan R).
-- OPP Documentation fix (Yue Hu).
-- OPP core support to enable/disable regulators (k.konieczny).
-
---
+-- 
 viresh
-
--------------------------8<-------------------------
-The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
-
-  Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
-
-for you to fetch changes up to 071afa50609d46f2f760851b90696f9a09714d24:
-
-  Merge branch 'opp/qcom-updates' into opp/linux-next (2019-09-03 07:54:17 +0530)
-
-----------------------------------------------------------------
-Anson Huang (2):
-      dt-bindings: opp: Support multiple opp-suspend properties
-      opp: of: Support multiple suspend OPPs defined in DT
-
-Niklas Cassel (4):
-      opp: Add dev_pm_opp_find_level_exact()
-      dt-bindings: opp: qcom-nvmem: Make speedbin related properties optional
-      dt-bindings: opp: qcom-nvmem: Support pstates provided by a power domain
-      dt-bindings: opp: Add qcom-opp bindings with properties needed for CPR
-
-Sricharan R (1):
-      dt-bindings: opp: Re-organise kryo cpufreq to use it for other nvmem based qcom socs
-
-Viresh Kumar (4):
-      opp: Not all power-domains are scalable
-      opp: Return genpd virtual devices from dev_pm_opp_attach_genpd()
-      opp: Don't decrement uninitialized list_kref
-      Merge branch 'opp/qcom-updates' into opp/linux-next
-
-Yue Hu (1):
-      PM / OPP: Correct Documentation about library location
-
-k.konieczny@partner.samsung.com (1):
-      opp: core: add regulators enable and disable
-
- Documentation/devicetree/bindings/opp/opp.txt      |   4 +-
- .../{kryo-cpufreq.txt => qcom-nvmem-cpufreq.txt}   | 127 ++++++++++++++++++++-
- Documentation/devicetree/bindings/opp/qcom-opp.txt |  19 +++
- Documentation/power/opp.rst                        |   2 +-
- drivers/opp/core.c                                 |  85 +++++++++++---
- drivers/opp/of.c                                   |  30 ++---
- include/linux/pm_opp.h                             |  12 +-
- 7 files changed, 235 insertions(+), 44 deletions(-)
- rename Documentation/devicetree/bindings/opp/{kryo-cpufreq.txt => qcom-nvmem-cpufreq.txt} (87%)
- create mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
-
