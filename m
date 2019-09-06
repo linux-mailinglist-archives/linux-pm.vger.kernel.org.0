@@ -2,130 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A730AC196
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 22:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49874AC27B
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 00:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392318AbfIFUrB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Sep 2019 16:47:01 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:15204 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392301AbfIFUrB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 16:47:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1567802818;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=GekG4DGQmZmxyopgQNgSk7xa93ZINLYsz3ZXcUkShOA=;
-        b=AaHsJK7M2oEsxvV8by86+YlP+5EJ7qPAvzbdBcfG1kaQY720t1ZfMzJ3Y8IgXDPNkp
-        0KEBvH3wmW7au12WCbZq9gCWQaeg+Q9pNlcbBXk7jgFga2XZocmzc7leLRF37TkwxidK
-        HOyh9cGi+E55umZJPC4u6XkEDGwWxSgJxW9FnlKCdTvbuJmDKDJa5IxDKHnt1C4qlBjl
-        m88jgCM5yzyETQ0iMzFouf1B+FB/w6v9NNbBDSzrs/bNB43mXKmuSnanN9rtDmnQLM9N
-        euhKrEwJDvNZYw7zZE7bVsbyDQ/KTTZXZ+Bj5XdB9E7iVWrSgIxVx16Vt7LrMZB6tfes
-        vqGA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGH/PqwDqp5w=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
-        with ESMTPSA id u036f9v86Kknpyo
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Fri, 6 Sep 2019 22:46:49 +0200 (CEST)
+        id S2404880AbfIFWYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Sep 2019 18:24:25 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:35337 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404877AbfIFWYZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 18:24:25 -0400
+Received: by mail-qk1-f195.google.com with SMTP id d26so7342805qkk.2
+        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2019 15:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=NiVBanLevjq3SumitKHtlZU5/wGycLhsTsLa2SLZ6QM=;
+        b=kBOUcmWco+MXQZsTTaWPR1+tfSH8An+2xaIR2F1x9XArXt8eFneua6EPVJi4gTDmQw
+         Qq+0tp3SYJO8+HkDuwr04erj1r7kdbtg/CCONPmc+ZVsc7IPATzrGr9c2EdDq5kMM76S
+         Wg+H5vCDeqJ2FnxAXzyeYCs9mmVtywz1BYWcRF/rPCrnNftOn7OxzMRK+U/kBYYi0Sem
+         uWTU0tz3pvIdGz1d82hKApPNPIXm9EHyqiSza/6mB1h7ydm451x6H43UAwSFq+/NKBoL
+         sEIttwFGiZvtGAhNG9f4LH+o1sUvoT38DYO+KVjXoWrshe07rGcnXRBJuKVShko72tk/
+         HXZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=NiVBanLevjq3SumitKHtlZU5/wGycLhsTsLa2SLZ6QM=;
+        b=ZQ+IjqU19AnKf6vLmHBgvxCb5CzwpkdWfxftT/oy4grI3WSVjoc35lFjj4tXgM679U
+         OdL+KogFOiYrY+S+k30DA3mXruOD9ufIHeBA1qx1opNMh6fWCDSBtPL7dxV0vgqP1OAS
+         /w1XhZh9z7IITJZ4iYKpmeYJi6pCVUgTdnRa7VJEOGtNZdil+FF1JfDrywV5O0dT3Up1
+         eMp5+ppNxzuJhfRYy4IymnPVlJ82OLvSWNWZ2uo8Y4k9V+gjGipZOnWNLnVvQt6/S8Ci
+         bu8Erq6Z047ytuhOD4S58z4Aq5sUi5wPwOzYQYTv849pLuROneIHDrLVO6FNQZun3Ar3
+         n9lQ==
+X-Gm-Message-State: APjAAAV3CEbolAjRxpQOywfXA52UWIvlLcAWXjQ1vxKmPwJXPfWYKFh+
+        4GCuBJfirfknFc5yIp8KeBwB6Q==
+X-Google-Smtp-Source: APXvYqwG21tyXzmYmGqI4rcHaPmnIgnCWQBTkyveqD/LHQoBZDMEOkMFNSF3Ze8xrjDYCjMSEpO1Kw==
+X-Received: by 2002:a37:a503:: with SMTP id o3mr11298194qke.115.1567808663718;
+        Fri, 06 Sep 2019 15:24:23 -0700 (PDT)
+Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.gmail.com with ESMTPSA id z123sm3508455qke.96.2019.09.06.15.24.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 06 Sep 2019 15:24:21 -0700 (PDT)
+Subject: Re: [PATCH 1/4] PM/Domains: Add support for retrieving genpd
+ performance states information
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
+ <1565398727-23090-2-git-send-email-thara.gopinath@linaro.org>
+ <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com>
+Cc:     qualcomm-lt@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <5D72DC94.6040508@linaro.org>
+Date:   Fri, 6 Sep 2019 18:24:20 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.5.1
+MIME-Version: 1.0
+In-Reply-To: <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: [RFC v2 1/3] cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20190906030158.leuumg7rwsvowwfx@vireshk-i7>
-Date:   Fri, 6 Sep 2019 22:46:49 +0200
-Cc:     =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        =?utf-8?Q?Andr=C3=A9_Roth?= <neolynx@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1ED2450A-A445-42B8-8956-58A53F15DBE2@goldelico.com>
-References: <cover.1567587220.git.hns@goldelico.com> <a889b10386bebfbfd6cdb5491367235290d53247.1567587220.git.hns@goldelico.com> <20190905143226.GW52127@atomide.com> <20190906030158.leuumg7rwsvowwfx@vireshk-i7>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Tony Lindgren <tony@atomide.com>
-X-Mailer: Apple Mail (2.3124)
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 08/22/2019 11:03 AM, Ulf Hansson wrote:
+> On Sat, 10 Aug 2019 at 02:58, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+>>
+>> Add two new APIs in the genpd framework,
+>> dev_pm_genpd_get_performance_state to return the current performance
+>> state of a power domain and dev_pm_genpd_performance_state_count to
+>> return the total number of performance states supported by a
+>> power domain. Since the genpd framework does not maintain
+>> a count of number of performance states supported by a power domain,
+>> introduce a new callback(.get_performance_state_count) that can be used
+>> to retrieve this information from power domain drivers.
+> 
+> I think some brief background to *why* this is useful needs to be
+> squeezed into the changelog. Or at least state that following changes
+> makes use of it, somehow.
+> 
+>>
+>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+>> ---
+>>  drivers/base/power/domain.c | 38 ++++++++++++++++++++++++++++++++++++++
+>>  include/linux/pm_domain.h   | 18 ++++++++++++++++++
+>>  2 files changed, 56 insertions(+)
+>>
+>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+>> index b063bc4..17e0375 100644
+>> --- a/drivers/base/power/domain.c
+>> +++ b/drivers/base/power/domain.c
+>> @@ -413,6 +413,44 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+>>  }
+>>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+>>
+>> +int dev_pm_genpd_get_performance_state(struct device *dev,
+>> +                                      unsigned int *state)
+>> +{
+>> +       struct generic_pm_domain *genpd;
+>> +
+>> +       genpd = dev_to_genpd(dev);
+> 
+> We need to verify that the there is a genpd attached before doing this
+> cast. Let me post a patch in a day or so, it will give you a helper
+> function that covers this.
+> 
+>> +       if (IS_ERR(genpd))
+>> +               return -ENODEV;
+>> +
+>> +       genpd_lock(genpd);
+>> +       *state = genpd->performance_state;
+> 
+> Why not return the state, rather than assigning an out-parameter?
+> 
+>> +       genpd_unlock(genpd);
+>> +
+>> +       return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dev_pm_genpd_get_performance_state);
+>> +
+>> +int dev_pm_genpd_performance_state_count(struct device *dev,
+>> +                                        unsigned int *count)
+>> +{
+>> +       struct generic_pm_domain *genpd;
+>> +       int ret;
+>> +
+>> +       genpd = dev_to_genpd(dev);
+>> +       if (IS_ERR(genpd))
+>> +               return -ENODEV;
+>> +
+>> +       if (unlikely(!genpd->get_performance_state_count))
+>> +               return -EINVAL;
+>> +
+>> +       genpd_lock(genpd);
+>> +       ret = genpd->get_performance_state_count(genpd, count);
+> 
+> Why not having the callback to return the state, rather than using an
+> out-parameter?
+Hi Ulf,
+I just realized that returning the state instead of using a parameter
+will prevent me from access under lock. Is that okay ?
 
-> Am 06.09.2019 um 05:01 schrieb Viresh Kumar <viresh.kumar@linaro.org>:
->=20
-> On 05-09-19, 07:32, Tony Lindgren wrote:
->> * H. Nikolaus Schaller <hns@goldelico.com> [190904 08:54]:
->>> This adds code and tables to read the silicon revision and
->>> eFuse (speed binned / 720 MHz grade) bits for selecting
->>> opp-v2 table entries.
->>>=20
->>> Since these bits are not always part of the syscon register
->>> range (like for am33xx, am43, dra7), we add code to directly
->>> read the register values using ioremap() if syscon access fails.
->>=20
->> This is nice :) Seems to work for me based on a quick test
->> on at least omap36xx.
->>=20
->> Looks like n900 produces the following though:
->>=20
->> core: _opp_supported_by_regulators: OPP minuV: 1270000 maxuV: =
-1270000, not supported by regulator
->> cpu cpu0: _opp_add: OPP not supported by regulators (550000000)
->=20
-> That's a DT thing I believe where the voltage doesn't fit what the
-> regulator can support.
+Regards
+Thara
+> 
+>> +       genpd_unlock(genpd);
+>> +
+>> +       return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dev_pm_genpd_performance_state_count);
+>> +
+>>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>>  {
+>>         unsigned int state_idx = genpd->state_idx;
+>> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+>> index 91d9bf4..0e5f502 100644
+>> --- a/include/linux/pm_domain.h
+>> +++ b/include/linux/pm_domain.h
+>> @@ -117,6 +117,8 @@ struct generic_pm_domain {
+>>                                                  struct dev_pm_opp *opp);
+>>         int (*set_performance_state)(struct generic_pm_domain *genpd,
+>>                                      unsigned int state);
+>> +       int (*get_performance_state_count)(struct generic_pm_domain *genpd,
+>> +                                          unsigned int *count);
+>>         struct gpd_dev_ops dev_ops;
+>>         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
+>>         bool max_off_time_changed;
+>> @@ -204,6 +206,10 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>>                   struct dev_power_governor *gov, bool is_off);
+>>  int pm_genpd_remove(struct generic_pm_domain *genpd);
+>>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+>> +int dev_pm_genpd_get_performance_state(struct device *dev,
+>> +                                      unsigned int *state);
+>> +int dev_pm_genpd_performance_state_count(struct device *dev,
+>> +                                        unsigned int *count);
+>>
+>>  extern struct dev_power_governor simple_qos_governor;
+>>  extern struct dev_power_governor pm_domain_always_on_gov;
+>> @@ -251,6 +257,18 @@ static inline int dev_pm_genpd_set_performance_state(struct device *dev,
+>>         return -ENOTSUPP;
+>>  }
+>>
+>> +static inline int dev_pm_genpd_get_performance_state(struct device *dev,
+>> +                                                    unsigned int *state);
+>> +{
+>> +       return -ENOTSUPP;
+>> +}
+>> +
+>> +static inline int dev_pm_genpd_performance_state_count(struct device *dev,
+>> +                                                      unsigned int *count);
+>> +{
+>> +       return -ENOTSUPP;
+>> +}
+>> +
+>>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
+>>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
+>>  #endif
+>> --
+>> 2.1.4
+>>
+> 
+> Kind regards
+> Uffe
+> 
 
-I can confirm this on BeagleBoard C2:
 
-root@gta04:~# dmesg|fgrep -i opp
-[    2.347442] core: _opp_supported_by_regulators: OPP minuV: 1270000 =
-maxuV: 1270000, not supported by regulator
-[    2.359222] cpu cpu0: _opp_add: OPP not supported by regulators =
-(550000000)
-[    2.580993] omap2_set_init_voltage: unable to find boot up OPP for =
-vdd_core
-root@gta04:~#=20
-
->=20
->> But presumably that can be further patched.
-
-Well, the opp-v1 table also has this voltage point:
-
-			/* OMAP343x/OMAP35xx variants OPP1-5 */
-			operating-points =3D <
-				/* kHz    uV */
-				125000   975000
-				250000  1075000
-				500000  1200000
-				550000  1270000
-				600000  1350000
-			>;
-
-
-This is OPP4 which is recommended by OMAP3530 data sheet to be 1.27V +/- =
-5%
-
-Data sheet of tps65950 says
-
-	=E2=80=A2 VDD1: 1.2-A, buck DC/DC converter (VOUT =3D 0.6 V to =
-1.45 V, in steps of 12.5 mV)
-
-This means 1270 mV is not a "step" and rejected by the twl4030 driver.
-Maybe nobody did notice yet because the opp-v1 drivers did not warn...
-
-The closest value to 1.27V is 0.6V + 54 * 12.5mV is 1.275V
-
-So let's also change the OPP4 to 1275000 uV in the opp-v2 table.
-
-BR and thanks,
-Nikolaus=
+-- 
+Regards
+Thara
