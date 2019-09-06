@@ -2,123 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA43AB521
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 11:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E396AB54F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 12:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392978AbfIFJwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Sep 2019 05:52:11 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:46795 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392975AbfIFJwK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 05:52:10 -0400
-Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tip-bot2@linutronix.de>)
-        id 1i6AuS-000557-PG; Fri, 06 Sep 2019 11:52:04 +0200
-Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id 4B09D1C0DE8;
-        Fri,  6 Sep 2019 11:52:04 +0200 (CEST)
-Date:   Fri, 06 Sep 2019 09:52:04 -0000
-From:   "tip-bot2 for Jiri Slaby" <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/asm] x86/asm/suspend: Get rid of bogus_64_magic
-Cc:     Jiri Slaby <jslaby@suse.cz>, Borislav Petkov <bp@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "x86-ml" <x86@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
-In-Reply-To: <20190906075550.23435-1-jslaby@suse.cz>
-References: <20190906075550.23435-1-jslaby@suse.cz>
+        id S1731943AbfIFKFq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Sep 2019 06:05:46 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:11213 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728254AbfIFKFq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 06:05:46 -0400
+X-UUID: b3a6b3957d3e4cfe992546802938b40c-20190906
+X-UUID: b3a6b3957d3e4cfe992546802938b40c-20190906
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 627805015; Fri, 06 Sep 2019 18:05:37 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 6 Sep 2019 18:05:33 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 6 Sep 2019 18:05:33 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>, <yt.lee@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v5 0/3] PM / AVS: SVS: Introduce SVS engine
+Date:   Fri, 6 Sep 2019 18:05:12 +0800
+Message-ID: <20190906100514.30803-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Message-ID: <156776352423.24167.12782521075233555186.tip-bot2@tip-bot2>
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the x86/asm branch of tip:
+1. SVS driver use OPP adjust event in [1] to update OPP table voltage part.
+2. SVS dts node refers to CPU opp table [2] and GPU opp table [3].
+3. SVS dts node refers to thermal efuse [4] and PMIC regulator [5].
 
-Commit-ID:     559ceeed62a5121783a8955c63aeb18aaa0ef224
-Gitweb:        https://git.kernel.org/tip/559ceeed62a5121783a8955c63aeb18aaa0ef224
-Author:        Jiri Slaby <jslaby@suse.cz>
-AuthorDate:    Fri, 06 Sep 2019 09:55:49 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Fri, 06 Sep 2019 10:34:15 +02:00
+[1] https://patchwork.kernel.org/patch/11092245/
+[2] https://patchwork.kernel.org/patch/10934123/
+[3] https://patchwork.kernel.org/patch/11132381/
+[4] https://patchwork.kernel.org/patch/11093655/
+[5] https://patchwork.kernel.org/patch/11110493/
 
-x86/asm/suspend: Get rid of bogus_64_magic
+Roger Lu (3):
+  dt-bindings: soc: add mtk svs dt-bindings
+  arm64: dts: mt8183: add svs device information
+  PM / AVS: SVS: Introduce SVS engine
 
-bogus_64_magic is only a dead-end loop. There is no need for an
-out-of-order function (and unannotated local label), so just handle it
-in-place and also store 0xbad-m-a-g-i-c to %rcx beforehand, in case
-someone is inspecting registers.
-
-Here a qemu+gdb example:
-
-  Remote debugging using localhost:1235
-  wakeup_long64 () at arch/x86/kernel/acpi/wakeup_64.S:26
-  26              jmp 1b
-  (gdb) info registers
-  rax            0x123456789abcdef0       1311768467463790320
-  rbx            0x0      0
-  rcx            0xbad6d61676963  3286910041024867
-  		 ^^^^^^^^^^^^^^^
-
- [ bp: Add the gdb example. ]
-
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Len Brown <lenb@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: x86-ml <x86@kernel.org>
-Link: https://lkml.kernel.org/r/20190906075550.23435-1-jslaby@suse.cz
----
- arch/x86/kernel/acpi/wakeup_64.S | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kernel/acpi/wakeup_64.S b/arch/x86/kernel/acpi/wakeup_64.S
-index b0715c3..7f9ade1 100644
---- a/arch/x86/kernel/acpi/wakeup_64.S
-+++ b/arch/x86/kernel/acpi/wakeup_64.S
-@@ -18,8 +18,13 @@ ENTRY(wakeup_long64)
- 	movq	saved_magic, %rax
- 	movq	$0x123456789abcdef0, %rdx
- 	cmpq	%rdx, %rax
--	jne	bogus_64_magic
-+	je	2f
- 
-+	/* stop here on a saved_magic mismatch */
-+	movq $0xbad6d61676963, %rcx
-+1:
-+	jmp 1b
-+2:
- 	movw	$__KERNEL_DS, %ax
- 	movw	%ax, %ss	
- 	movw	%ax, %ds
-@@ -37,9 +42,6 @@ ENTRY(wakeup_long64)
- 	jmp	*%rax
- ENDPROC(wakeup_long64)
- 
--bogus_64_magic:
--	jmp	bogus_64_magic
--
- ENTRY(do_suspend_lowlevel)
- 	FRAME_BEGIN
- 	subq	$8, %rsp
+ .../devicetree/bindings/power/mtk-svs.txt     |   88 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |   16 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   38 +
+ drivers/power/avs/Kconfig                     |   10 +
+ drivers/power/avs/Makefile                    |    1 +
+ drivers/power/avs/mtk_svs.c                   | 2075 +++++++++++++++++
+ include/linux/power/mtk_svs.h                 |   23 +
+ 7 files changed, 2251 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/mtk-svs.txt
+ create mode 100644 drivers/power/avs/mtk_svs.c
+ create mode 100644 include/linux/power/mtk_svs.h
