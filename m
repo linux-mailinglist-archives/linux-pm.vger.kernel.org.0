@@ -2,90 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AFDAB8DF
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 15:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E3EABAE3
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 16:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405115AbfIFNHC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Sep 2019 09:07:02 -0400
-Received: from mout.gmx.net ([212.227.17.21]:57857 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732510AbfIFNHC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Sep 2019 09:07:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1567775184;
-        bh=0OF9nooHaaz9QiSyWV5QXoHDrg/gupxebmNBl1oIx/g=;
-        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
-         CC:From;
-        b=i19y1XQ+Sjb3Bf6S8JT/ov4XiVViT4w3FmhmkXSFhxP1ExYkhhJh5xlnkxozMzdPM
-         P/jf/5zVqMgnCM+ZJTXaIQfEy6GJvi3qWzmbPnthfVrnb79F3lpZgiWUo0Fb1Io/7i
-         MI9+Sml/1ZkmccIktxdk6XvudYj+hZ+5PL3LP8lU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.17.198.103] ([80.187.119.108]) by mail.gmx.com (mrgmx103
- [212.227.17.168]) with ESMTPSA (Nemesis) id 0LfC4q-1iUZHE1Ahk-00oo3Y; Fri, 06
- Sep 2019 15:06:24 +0200
-Date:   Fri, 06 Sep 2019 15:06:19 +0200
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20190818135611.7776-1-frank-w@public-files.de>
-References: <20190818135611.7776-1-frank-w@public-files.de>
+        id S2405434AbfIFOaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Sep 2019 10:30:20 -0400
+Received: from mcegress-30-lw-25.correio.biz ([191.252.30.25]:63064 "EHLO
+        mcegress-30-lw-25.correio.biz" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405433AbfIFOaT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 10:30:19 -0400
+X-Greylist: delayed 43811 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Sep 2019 10:30:17 EDT
+X-Sender-Id: x-authuser|contato@cortinasvilaprudente.com.br
+Received: from plesksa10.revendedordesite.com (mcingress0007.correio.biz [10.30.225.42])
+        by mcrelay.correio.biz (Postfix) with ESMTP id 7AF321500271;
+        Fri,  6 Sep 2019 11:30:15 -0300 (-03)
+X-Sender-Id: x-authuser|contato@cortinasvilaprudente.com.br
+Received: from plesksa10.revendedordesite.com (plesksa10.email.locaweb.com.br
+ [10.30.224.225])
+        by 0.0.0.0:2500 (trex/5.9.14);
+        Fri, 06 Sep 2019 11:30:16 -0300
+X-LW-Relay: Junk
+X-LW-SenderId: x-authuser|contato@cortinasvilaprudente.com.br
+Received: from plesksa10.revendedordesite.com (plesksmtp04.admincontrolpanel.com [187.45.216.237])
+        by plesksa10.revendedordesite.com (Postfix) with ESMTP id 16DDA1643CC;
+        Fri,  6 Sep 2019 11:30:15 -0300 (-03)
+Received: from iuri0032.hospedagemdesites.ws (iuri0032.hospedagemdesites.ws [191.252.107.153])
+        by plesksa10.revendedordesite.com (Postfix) with ESMTP id DFA8D120309;
+        Fri,  6 Sep 2019 11:30:14 -0300 (-03)
+Received: from [::1] (port=38680 helo=iuri0032.hospedagemdesites.ws)
+        by iuri0032.hospedagemdesites.ws with esmtpa (Exim 4.91)
+        (envelope-from <contato@cortinasvilaprudente.com.br>)
+        id 1i6FFd-00077l-OG; Fri, 06 Sep 2019 11:30:13 -0300
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v6 00/13] implement poweroff for mt6323 / bpi-r2
-Reply-to: frank-w@public-files.de
-To:     linux-mediatek@lists.infradead.org
-CC:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "linux-arm-kernel @ lists . infradead . org Alessandro Zummo" 
-        <a.zummo@towertech.it>, linux-pm@vger.kernel.org,
-        Josef Friedl <josef.friedl@speed.at>,
-        linux-kernel@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-From:   Frank Wunderlich <frank-w@public-files.de>
-Message-ID: <BB9183EF-A385-473B-A7D7-61D96499A291@public-files.de>
-X-Provags-ID: V03:K1:V5jGArpFSoQO8rcBj/oQ7M7hCM+ph33LHPzlmTu2/Uz+Z+NoTcX
- mrjNJebj4twFmn5jbSeWp4bZPiW/10grqByIrn4WtPCQgOCLPpXEaJ2yGFdgw7i6E5BUstR
- PmB+0+7nZYeOikJPMidf6hjMitlyBSpljFZhNe1dJmHRpmpIxFDwyq26Z8gJSLVkTUkP345
- sigUEW/eA5FXNm5okGVWA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LbUxFDSt/zk=:PJB+ZDjqw9jlHwGn0v8G+9
- ZoPPHWH6MdiweCHknS64vnRdhUSdAjXf2iNfRIxkJw/Wd9GGsqM2WFeltXxYoRLzbWs1Bf/ma
- t0Dxia/F/n4J39LCCmwCmOUR1z7II/VEuNpW2BH8tGbyq/TRXSY8DVL825VR1ldMhwbMI633Y
- p4kNR2U8011tsKhy70Z+3LXbkfQLmtT42pGZms01zWEoWm0adawZGytqFK+CziG19bKgzb4F5
- gjsweP9/ldVIUbBzlPV5/tYpUvvcdiTqwLKxMAACQQAn//hGZITZ5DJqk394LtxEzwXv1fRKX
- K77zFNi6jvITwa1drVRrZ5UKJjwXcyUdokLikgWtInMttdDl+vMw5VZszP0DkdAFXLWNgNwSj
- 7g4tbsc8Z7annB6R0NXWXX1iYyJy/oN0gxneOfrmofD8yUNhHBITrMEoZ63RHw3xZ+1vW9tz5
- zM6MFCwEs9gja5EsoR5EKOzGl7zx/xawvxzaOnjlRF8qqBz/Aq6kdD3RHXYJyQHnDgjX+lPMo
- sbqVCvlI27Udtg2KZzViMnT8DvM+BTlAdP7d5/tJr9/wEYaTmrkkBFpOlQTX17xxOSHxtHDL8
- ZeN+N3nM+8Y0XqPLfoyj77ug9jQblhYJ4WQhlZ4F+b3ltJzKX6T6RLtfDfjTjHw1Brng7YVUs
- L7WY6TYOEaiSow4rT9ZRMsO7fbYsClxiAIxBtLPYxy1yY0z5aH1KVAGQOeyB1UkIpDENZzNUn
- 6yDwSc602T5HwU4CSXILbA9GCgLK/9mi6TjoU7pXct4m1fe2OG1ODkTmHnTVFg4nz7j42262K
- UI+LtfGaufr8CDFFAr8dHUOuXpZqK7WATZgTAJ/miO5QtsyudWrnrAvbZMUV3CIsoqOD5FEKq
- Ok3P7JS/ZgEakHaXCM8OdKC68A3+VNdASSVzSQhNQzGDMf0nwkqBZVcQJCvuOVAcfTJPOFThX
- P5pye6mweyyWCnmCUF9koHbO0kR/1jayur2+9LEzO4xzN+9EFjlGAmRrssiuAzc0qFSkFLctC
- yx341pRqpYY5NmA585RnYd55lwz2IK0A0+wy3GdVOUEtQqOt8+Wlo0yuz78LR1NQE5p5nP6WP
- 7ZfAkS2I7zrD7knwe8/lk3PX0Ug1UJkFk16VDj0a6tsivIwSRnvwZCR5IdxQASTEl+j8xoGUR
- jpzoro+p01afJHGmXRY9lugwG2PLTqd6O6QNwYjgkjtvEVnj0nCbywyHVeT5b1wjSgVYlR7TY
- B0mvQACDg7E77Exb0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 06 Sep 2019 11:30:13 -0300
+From:   TRUST LOAN <contato@cortinasvilaprudente.com.br>
+To:     undisclosed-recipients:;
+Subject: LOAN OFFER NOW @ 3% INTEREST RATE
+Reply-To: info_trustloan@mail-on.us
+Mail-Reply-To: info_trustloan@mail-on.us
+Message-ID: <f5a774db90a2186012d45ffb1cea1d23@cortinasvilaprudente.com.br>
+X-Sender: contato@cortinasvilaprudente.com.br
+User-Agent: Roundcube Webmail/1.3.3
+X-AuthUser: contato@cortinasvilaprudente.com.br
+X-Cpanel-Webmail: yes
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-Just a friedly reminder=2E
 
-MFD-part was applied and visible in linux-next, the other parts acknowledg=
-ed by maintainers=2E Is anything additional needed before applying the rtc/=
-power/dts-parts?
+-- 
+DEAR SIR / MADAM,
 
-Regards Frank
+  ARE YOU TIRED OF SEEKING LOANS AND MORTGAGES? OR WERE YOU REJECTED BY
+BANKS AND OTHER FINANCIAL INSTITUTIONS? THIS IS TO INFORM YOU INSTANT 
+TRUST
+LOAN COMPANY OFFERS ALL TYPES OF CREDIT INTEREST @ 3%. CONTACT US WITH 
+THE
+FOLLOWING INFORMATION SO WE CAN MOVE ON TO THE NEXT STEP. OUR SERVICES
+INCLUDE: * PERSONAL LOANS (SECURE AND UNSECURED): * LOANS FOR BUSINESS
+(SECURE AND UNSECURED): * STUDENT LOAN: * DEBT CONSOLIDATION LOAN:
+*COMBINATION LOAN * PLUS: * LOANS XMAS (SECURE AND UNSECURED):
+  PLEASE PROVIDE THE FOLLOWING:
+  FULL NAMES:
+  ADDRESS:
+  AGE:
+  GENDER:
+  MONTHLY INCOME:
+  OCCUPATION:
+  PHONE:
+  AMOUNT OF LOAN:
+  DURATION:
+  PURPOSES OF CREDIT:
+  REGARDS
