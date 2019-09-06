@@ -2,89 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B2FABEA9
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 19:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42B4ABEDD
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 19:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391523AbfIFRYI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Sep 2019 13:24:08 -0400
-Received: from muru.com ([72.249.23.125]:60044 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729928AbfIFRYI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Sep 2019 13:24:08 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 560A580CC;
-        Fri,  6 Sep 2019 17:24:36 +0000 (UTC)
-Date:   Fri, 6 Sep 2019 10:24:03 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        =?utf-8?B?QW5kcsOp?= Roth <neolynx@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com
-Subject: Re: [RFC v2 3/3] ARM: dts: omap3: bulk convert compatible to be
- explicitly ti,omap3430 or ti,omap36xx
-Message-ID: <20190906172403.GG52127@atomide.com>
-References: <cover.1567587220.git.hns@goldelico.com>
- <a2b56edcada7b9000a6e906387a02c0ee42681db.1567587220.git.hns@goldelico.com>
- <20190905142734.GV52127@atomide.com>
- <4BC39938-D63E-4BDC-BA28-5132F77F602D@goldelico.com>
- <20190906154732.GC52127@atomide.com>
- <8C8644AC-FA12-4D26-B96A-76B78798612A@goldelico.com>
+        id S2388372AbfIFRjG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Sep 2019 13:39:06 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:44024 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726953AbfIFRjF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 13:39:05 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x86HbqCt034052;
+        Fri, 6 Sep 2019 17:38:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=DHtOPf/90YErXldIrRlZjeO6VQjHXm6Nw8CPIho1+Ao=;
+ b=TLDSPkvJuX7z7K2HOVV+Gdofu1owV2MioIU2SwZY/k+cj/htAc8X36667CavRbFwTEET
+ 3QXrbhL9fRj1Uz8qrb5xHgVp9JBxx4OoSV58a8dsrwnxAPYOu8klJC8DH/AOgb9xDFPP
+ P+zKqm/xjrXwxvZnAl704Xcow0bWU/dZSK77CUTWXqD3PqzXFzbxqYrvRcnrjBi+TZ5G
+ JDC8eogXIaa21PdG3FTwR/fBE1Q70seYZbpMtVqqCLxS7RxOUwvvYjSjPklPMXIne2UC
+ xHy+2LkXeunz8WWoCeqruBdIFqte7g+4mmUDVjIYc9yvKjBF5XGgktSCes6Udnn/ofo5 Ew== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2uuv16005u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 Sep 2019 17:38:59 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x86Hcrpa148893;
+        Fri, 6 Sep 2019 17:38:58 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2uu1b9ye3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 Sep 2019 17:38:58 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x86HcugU002308;
+        Fri, 6 Sep 2019 17:38:56 GMT
+Received: from [10.175.205.101] (/10.175.205.101)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 06 Sep 2019 10:38:56 -0700
+Subject: Re: [pm:bleeding-edge 175/181] drivers/cpuidle/driver.c:270:4: error:
+ 'cpuidle_prev_governor' undeclared; did you mean 'cpuidle_find_governor'?
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@01.org,
+        linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+References: <201909070020.yR8k4sTf%lkp@intel.com>
+From:   Joao Martins <joao.m.martins@oracle.com>
+Message-ID: <847405da-8a45-653b-d544-25b58ea48db1@oracle.com>
+Date:   Fri, 6 Sep 2019 18:38:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8C8644AC-FA12-4D26-B96A-76B78798612A@goldelico.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <201909070020.yR8k4sTf%lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9372 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=773
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1909060188
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9372 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=826 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1909060187
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* H. Nikolaus Schaller <hns@goldelico.com> [190906 17:09]:
-> for i in 3430 34xx 3630 36xx; do echo $i $(fgrep '"'ti,omap$i'"' arch/arm/boot/dts/*.dts* | wc -l); done
+On 9/6/19 5:44 PM, kbuild test robot wrote:
+> tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+> head:   79f0d67a241f0583b994c73437caa54a4e942737
+> commit: 73d2bcced00671c2b724a31c3a4b3401c3e278d0 [175/181] cpuidle: allow governor switch on cpuidle_register_driver()
+> config: arm-defconfig (attached as .config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 7.4.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git checkout 73d2bcced00671c2b724a31c3a4b3401c3e278d0
+>         # save the attached .config to linux build tree
+>         GCC_VERSION=7.4.0 make.cross ARCH=arm 
 > 
-> 3430 12
-> 34xx 28
-> 3630 3
-> 36xx 23
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
 > 
-> which would indicate that 34xx and 36xx are more common.
-
-Right, but the xx variants are against the device tree naming and
-that's why we should get rid of them in the dts. The compatible
-should be named after the first instance like "ti,omap3430" and
-similar devices can just use that.
-
-> BTW there is also some code that does special SoC detection based on
-> soc_device_match(), mainly in omapdrm/dss.
+> All errors (new ones prefixed by >>):
 > 
-> If we were to use this mechanism in the ti-cpufreq driver we could
-> match it to ti,omap3 and could avoid all these changes.
+>    drivers/cpuidle/driver.c: In function 'cpuidle_register_driver':
+>>> drivers/cpuidle/driver.c:270:4: error: 'cpuidle_prev_governor' undeclared (first use in this function); did you mean 'cpuidle_find_governor'?
+>        cpuidle_prev_governor = cpuidle_curr_governor;
+>        ^~~~~~~~~~~~~~~~~~~~~
+>        cpuidle_find_governor
+>    drivers/cpuidle/driver.c:270:4: note: each undeclared identifier is reported only once for each function it appears in
+>    drivers/cpuidle/driver.c: In function 'cpuidle_unregister_driver':
+>    drivers/cpuidle/driver.c:301:6: error: 'cpuidle_prev_governor' undeclared (first use in this function); did you mean 'cpuidle_find_governor'?
+>      if (cpuidle_prev_governor) {
+>          ^~~~~~~~~~~~~~~~~~~~~
+>          cpuidle_find_governor
 > 
-> But make it less maintainable and code more complex.
+Sorry, didn't build-test with CONFIG_CPU_IDLE_MULTIPLE_DRIVERS=y
 
-Hmm right, yeah using soc_device_match() would remove this issue.
-It might be worth doing as these SoC variants do not change
-much and the code should not need updating. Up to you to
-decide.
+Rafael, should I take this message that you queued the series (and thus I submit
+a follow up fixing this), or I can just submit a v3 of this particular series?
+You didn't answer on the cover letter, so I take it that it's the latter?
 
-> I'll also take a look at omap.txt bindings since that likely needs
-> an update as well to better describe what the official ones are
-> and which are legacy.
-
-OK. Just limit the compatible changes to the ones that
-need to be modified for this series, the rest can be
-done with a separate patches.
-
-Regards,
-
-Tony
+	Joao
