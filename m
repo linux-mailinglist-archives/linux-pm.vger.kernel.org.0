@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBA7AB660
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 12:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DB0AB682
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Sep 2019 12:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389620AbfIFKvP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Sep 2019 06:51:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36898 "EHLO mail.kernel.org"
+        id S2390788AbfIFK45 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Sep 2019 06:56:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45266 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725946AbfIFKvP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Sep 2019 06:51:15 -0400
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+        id S2388816AbfIFK45 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 6 Sep 2019 06:56:57 -0400
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D51F7214E0;
-        Fri,  6 Sep 2019 10:51:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7B505208C3;
+        Fri,  6 Sep 2019 10:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567767075;
-        bh=F40/vyERzL2PLT+u7CNuLPRmvSEYRMi6jl/F1YioOow=;
+        s=default; t=1567767415;
+        bh=eKqQLsZ1CqXLPChoayXDfV/yXKBUa6ki7SK6YURr7JQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XC7BjD4hpWNrKK1pOpCRX02SjWQJCOK5gbUvFoli/8DoHFwcrigpVQp1QjIv24WpF
-         3hJfKMDgOn65XmIZDcVCGO/8Sr3r8YzUkIFTLavQgHRoyJu9StYgFHDfQQAjBcVc19
-         ARQKYejAHq4EGjxZetUnrB+vwDkoilM7UE3eDMcE=
-Received: by mail-lj1-f173.google.com with SMTP id x18so5611106ljh.1;
-        Fri, 06 Sep 2019 03:51:14 -0700 (PDT)
-X-Gm-Message-State: APjAAAUh3hVUqSUtvNoPL9Hvk3wMzH3mgRGf+L8EaQysZkHZ9arQVoot
-        jxTyhOuiAabRMC2SAg8vm0gG6SQ1YA731I0QBIk=
-X-Google-Smtp-Source: APXvYqwz+PkOkcsh+hE8+0p+GyRXl5rEBYk6E+6at+bWRa6Bvz54E4CXhRKX/zpdsB3GgFZGBaVFW3t88k1Ohu8cSYo=
-X-Received: by 2002:a2e:8785:: with SMTP id n5mr1760238lji.210.1567767072972;
- Fri, 06 Sep 2019 03:51:12 -0700 (PDT)
+        b=iwe7A6POO/AXJafBwclGZTdDimAL7JL/4tkeyQ2Hmmn/p1RAKgcK1OXWpNcost0c6
+         vb6M7H3Hkn2NmTAYYE4TKKuMQBsOeTRnrzB3CLFIS0u69fCfWWPHZAnzndjTpfAjSt
+         FTUs49YdlcffPsxSnWGKYkGzC9ON7Sqxu9LEJ72k=
+Received: by mail-lf1-f46.google.com with SMTP id w67so4643365lff.4;
+        Fri, 06 Sep 2019 03:56:55 -0700 (PDT)
+X-Gm-Message-State: APjAAAX7QwOnVMGx9VyFBlAipKtctxddwMZyP5E2ngKc3f/PStM44rI4
+        BADpwCTBLEpKc+BXgcabB9zaf+m39yPd8ELcLtk=
+X-Google-Smtp-Source: APXvYqyuyvNE+DfCX2EXl+GcF9M9zNqpthnU+rCpM/ZylcfvRmscK9OYLhqRaqB/x8T/f9Qsn/DW81HgYTXkDGfiTR4=
+X-Received: by 2002:a19:c649:: with SMTP id w70mr5991002lff.33.1567767413630;
+ Fri, 06 Sep 2019 03:56:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190906101405eucas1p2e3da7b461810a3a520e76c636a06e486@eucas1p2.samsung.com>
- <20190906101344.3535-1-l.luba@partner.samsung.com> <20190906101344.3535-2-l.luba@partner.samsung.com>
-In-Reply-To: <20190906101344.3535-2-l.luba@partner.samsung.com>
+References: <CGME20190906101407eucas1p15eb0df53374b27497b4793eab24becf6@eucas1p1.samsung.com>
+ <20190906101344.3535-1-l.luba@partner.samsung.com> <20190906101344.3535-4-l.luba@partner.samsung.com>
+In-Reply-To: <20190906101344.3535-4-l.luba@partner.samsung.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Fri, 6 Sep 2019 12:51:01 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPdLhrvqR==k4a9w9cmdnwGRYaTXC1ya+vOeVaGpML0zcQ@mail.gmail.com>
-Message-ID: <CAJKOXPdLhrvqR==k4a9w9cmdnwGRYaTXC1ya+vOeVaGpML0zcQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] memory: Exynos5422: minor fixes in DMC
+Date:   Fri, 6 Sep 2019 12:56:42 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPfoYxTVvt_bMQOs1=BkHzUuW_WvL9zn0jTGS6LLpv=fhQ@mail.gmail.com>
+Message-ID: <CAJKOXPfoYxTVvt_bMQOs1=BkHzUuW_WvL9zn0jTGS6LLpv=fhQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] dt-bindings: ddr: Add bindings for Samsung LPDDR3 memories
 To:     Lukasz Luba <l.luba@partner.samsung.com>
 Cc:     devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -61,44 +61,40 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Fri, 6 Sep 2019 at 12:14, Lukasz Luba <l.luba@partner.samsung.com> wrote:
 >
-> Small fixes captured by static analyzes.
+> Add description of bindings for Samsung k3qf2f20db LPDDR3 memory.
+> Minor fixes in the old documentation.
+>
+> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
+> ---
+>  .../devicetree/bindings/ddr/lpddr3.txt        | 29 +++++++++++++++++--
+>  1 file changed, 27 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/ddr/lpddr3.txt b/Documentation/devicetree/bindings/ddr/lpddr3.txt
+> index 3b2485b84b3f..de0905239767 100644
+> --- a/Documentation/devicetree/bindings/ddr/lpddr3.txt
+> +++ b/Documentation/devicetree/bindings/ddr/lpddr3.txt
+> @@ -40,10 +40,34 @@ Child nodes:
+>    a given speed-bin. Please see Documentation/devicetree/
+>    bindings/ddr/lpddr3-timings.txt for more information on "lpddr3-timings"
+>
+> +Samsung K3QF2F20DB LPDDR3 memory
+> +------------------------------------------------------------
+> +
+> +This binding uses the LPDDR3 binding (described above)
+> +
+> +Required properties:
+> +- compatible:  Should be:
+> +               "samsung,K3QF2F20DB"
+> +               followed by "jedec,lpddr3"
+> +- density  : <u32> representing density in Mb (Mega bits)
+> +- io-width : <u32> representing bus width. Possible value 32
+> +- #address-cells: Must be set to 1
+> +- #size-cells: Must be set to 0
 
-Explain please what are the errors being fixed. Additionally error
-message from tool might be useful.
-
-Also:
-Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
+If you decided to repeat all properties again, then it deserves its
+own bindings file. However I though about simpler solution - just
+document compatible. Exactly the same as AT24 or AT25 EEPROM bindings.
+There is not much benefit from copying all these properties.
 
 Best regards,
 Krzysztof
-
-> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> ---
->  drivers/memory/samsung/exynos5422-dmc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-> index 8c2ec29a7d57..a809fa997c03 100644
-> --- a/drivers/memory/samsung/exynos5422-dmc.c
-> +++ b/drivers/memory/samsung/exynos5422-dmc.c
-> @@ -269,7 +269,7 @@ static int exynos5_init_freq_table(struct exynos5_dmc *dmc,
->         return 0;
->
->  err_free_tables:
-> -       kfree(dmc->opp);
-> +       devm_kfree(dmc->dev, dmc->opp);
->  err_opp:
->         dev_pm_opp_of_remove_table(dmc->dev);
->
-> @@ -732,7 +732,7 @@ static struct devfreq_dev_profile exynos5_dmc_df_profile = {
->   * statistics engine which supports only registered values. Thus, some alignment
->   * must be made.
->   */
-> -unsigned long
-> +static unsigned long
->  exynos5_dmc_align_init_freq(struct exynos5_dmc *dmc,
->                             unsigned long bootloader_init_freq)
->  {
-> --
-> 2.17.1
->
