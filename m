@@ -2,213 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49874AC27B
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 00:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644C8AC308
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 01:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404880AbfIFWYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Sep 2019 18:24:25 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:35337 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404877AbfIFWYZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 18:24:25 -0400
-Received: by mail-qk1-f195.google.com with SMTP id d26so7342805qkk.2
-        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2019 15:24:24 -0700 (PDT)
+        id S2392738AbfIFX3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Sep 2019 19:29:53 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:36001 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392731AbfIFX3x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 19:29:53 -0400
+Received: by mail-ed1-f66.google.com with SMTP id f2so1643310edw.3
+        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2019 16:29:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=NiVBanLevjq3SumitKHtlZU5/wGycLhsTsLa2SLZ6QM=;
-        b=kBOUcmWco+MXQZsTTaWPR1+tfSH8An+2xaIR2F1x9XArXt8eFneua6EPVJi4gTDmQw
-         Qq+0tp3SYJO8+HkDuwr04erj1r7kdbtg/CCONPmc+ZVsc7IPATzrGr9c2EdDq5kMM76S
-         Wg+H5vCDeqJ2FnxAXzyeYCs9mmVtywz1BYWcRF/rPCrnNftOn7OxzMRK+U/kBYYi0Sem
-         uWTU0tz3pvIdGz1d82hKApPNPIXm9EHyqiSza/6mB1h7ydm451x6H43UAwSFq+/NKBoL
-         sEIttwFGiZvtGAhNG9f4LH+o1sUvoT38DYO+KVjXoWrshe07rGcnXRBJuKVShko72tk/
-         HXZw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Eqinxltb4P+tBqyuO4WEtRUcfdT4qbszA3gfVj1CVng=;
+        b=CfxhObTVAmcNKpN/uttdeqMFFuot/dgQ8oBhunu1p3A2/KXMdnJc7eTmTJi6e2ocMn
+         NDFZD/Qh8ub6N+V6n8nGKJNHUKm6leUg+lflNX9keuez69bvdXFvHkCOlVvCSi5FCwQp
+         GqpsxbxIXF0lypQ9v5DbU9u4VRzHE/ky6Ttco=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=NiVBanLevjq3SumitKHtlZU5/wGycLhsTsLa2SLZ6QM=;
-        b=ZQ+IjqU19AnKf6vLmHBgvxCb5CzwpkdWfxftT/oy4grI3WSVjoc35lFjj4tXgM679U
-         OdL+KogFOiYrY+S+k30DA3mXruOD9ufIHeBA1qx1opNMh6fWCDSBtPL7dxV0vgqP1OAS
-         /w1XhZh9z7IITJZ4iYKpmeYJi6pCVUgTdnRa7VJEOGtNZdil+FF1JfDrywV5O0dT3Up1
-         eMp5+ppNxzuJhfRYy4IymnPVlJ82OLvSWNWZ2uo8Y4k9V+gjGipZOnWNLnVvQt6/S8Ci
-         bu8Erq6Z047ytuhOD4S58z4Aq5sUi5wPwOzYQYTv849pLuROneIHDrLVO6FNQZun3Ar3
-         n9lQ==
-X-Gm-Message-State: APjAAAV3CEbolAjRxpQOywfXA52UWIvlLcAWXjQ1vxKmPwJXPfWYKFh+
-        4GCuBJfirfknFc5yIp8KeBwB6Q==
-X-Google-Smtp-Source: APXvYqwG21tyXzmYmGqI4rcHaPmnIgnCWQBTkyveqD/LHQoBZDMEOkMFNSF3Ze8xrjDYCjMSEpO1Kw==
-X-Received: by 2002:a37:a503:: with SMTP id o3mr11298194qke.115.1567808663718;
-        Fri, 06 Sep 2019 15:24:23 -0700 (PDT)
-Received: from [192.168.1.169] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.gmail.com with ESMTPSA id z123sm3508455qke.96.2019.09.06.15.24.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Sep 2019 15:24:21 -0700 (PDT)
-Subject: Re: [PATCH 1/4] PM/Domains: Add support for retrieving genpd
- performance states information
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
- <1565398727-23090-2-git-send-email-thara.gopinath@linaro.org>
- <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com>
-Cc:     qualcomm-lt@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <5D72DC94.6040508@linaro.org>
-Date:   Fri, 6 Sep 2019 18:24:20 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.5.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Eqinxltb4P+tBqyuO4WEtRUcfdT4qbszA3gfVj1CVng=;
+        b=QAnOfTDkHVOXk9RHO79er2djDc3JKF4gZeuYSCOs/nYKbZ2+LAGq1nsXPKZecHi28z
+         BoPKwRPCcc6gE01KohnDyr6myo82B2RD6WtMS6BYGnJTGoSdOpnXwmF6MdB6FvzdbFaH
+         ECU6yML9fi5JXX8BfwGfnZNihvDqmfm2kgggemszl0trPiLbvUyF8UbZLiSUnir1BcyH
+         AO6OrmRyUk7PaWZ1Kg6a3mgj0VuLNXkiYS8CNRWQVtAdRa+RoMLPlWVHLjazDwj/S1vo
+         AtXtA+bmRwX3sIeUt3eLddi+176Z/RZ+eGlrCrb7cgDM3DUODmO1TJ9hnwxPhcLhQVjk
+         GePQ==
+X-Gm-Message-State: APjAAAUBim/BfnVNaLOpZ1kNMZxeiRyR+8nVBQlZrT5E7Z7c+Yc0Gm2A
+        X1ecj2qSs4+wF+WZIbuB6f+pixPfv1M=
+X-Google-Smtp-Source: APXvYqwaIstfa/ap5QHrOrcIUhwpIfUUQsL7Gkyd+35jbVqtazZSs/vuxKgakI0R1cLkK3q+50gjUA==
+X-Received: by 2002:a50:8d5e:: with SMTP id t30mr12489275edt.112.1567812591826;
+        Fri, 06 Sep 2019 16:29:51 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id f10sm734274ejd.30.2019.09.06.16.29.51
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Sep 2019 16:29:51 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id w13so8144536wru.7
+        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2019 16:29:51 -0700 (PDT)
+X-Received: by 2002:adf:de08:: with SMTP id b8mr8516944wrm.200.1567812179254;
+ Fri, 06 Sep 2019 16:22:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+References: <20190730191303.206365-1-thgarnie@chromium.org>
+ <20190806154347.GD25897@zn.tnic> <20190806155034.GP2349@hirez.programming.kicks-ass.net>
+ <CAJcbSZETvvQYmh6U_Oauptdsrp-emmSG_QsAZzKLv+0-b2Yxig@mail.gmail.com>
+In-Reply-To: <CAJcbSZETvvQYmh6U_Oauptdsrp-emmSG_QsAZzKLv+0-b2Yxig@mail.gmail.com>
+From:   Thomas Garnier <thgarnie@chromium.org>
+Date:   Fri, 6 Sep 2019 16:22:47 -0700
+X-Gmail-Original-Message-ID: <CAJcbSZEc07UJtWyM5i-DGRpNTtoxoY7cDpdyDh3N-Bb+G3s0gA@mail.gmail.com>
+Message-ID: <CAJcbSZEc07UJtWyM5i-DGRpNTtoxoY7cDpdyDh3N-Bb+G3s0gA@mail.gmail.com>
+Subject: Re: [PATCH v9 00/11] x86: PIE support to extend KASLR randomization
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Hellstrom <thellstrom@vmware.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Nadav Amit <namit@vmware.com>, Jann Horn <jannh@google.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Maran Wilson <maran.wilson@oracle.com>,
+        Enrico Weigelt <info@metux.net>,
+        Allison Randal <allison@lohutok.net>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/22/2019 11:03 AM, Ulf Hansson wrote:
-> On Sat, 10 Aug 2019 at 02:58, Thara Gopinath <thara.gopinath@linaro.org> wrote:
->>
->> Add two new APIs in the genpd framework,
->> dev_pm_genpd_get_performance_state to return the current performance
->> state of a power domain and dev_pm_genpd_performance_state_count to
->> return the total number of performance states supported by a
->> power domain. Since the genpd framework does not maintain
->> a count of number of performance states supported by a power domain,
->> introduce a new callback(.get_performance_state_count) that can be used
->> to retrieve this information from power domain drivers.
-> 
-> I think some brief background to *why* this is useful needs to be
-> squeezed into the changelog. Or at least state that following changes
-> makes use of it, somehow.
-> 
->>
->> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
->> ---
->>  drivers/base/power/domain.c | 38 ++++++++++++++++++++++++++++++++++++++
->>  include/linux/pm_domain.h   | 18 ++++++++++++++++++
->>  2 files changed, 56 insertions(+)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index b063bc4..17e0375 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -413,6 +413,44 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
->>  }
->>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
->>
->> +int dev_pm_genpd_get_performance_state(struct device *dev,
->> +                                      unsigned int *state)
->> +{
->> +       struct generic_pm_domain *genpd;
->> +
->> +       genpd = dev_to_genpd(dev);
-> 
-> We need to verify that the there is a genpd attached before doing this
-> cast. Let me post a patch in a day or so, it will give you a helper
-> function that covers this.
-> 
->> +       if (IS_ERR(genpd))
->> +               return -ENODEV;
->> +
->> +       genpd_lock(genpd);
->> +       *state = genpd->performance_state;
-> 
-> Why not return the state, rather than assigning an out-parameter?
-> 
->> +       genpd_unlock(genpd);
->> +
->> +       return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(dev_pm_genpd_get_performance_state);
->> +
->> +int dev_pm_genpd_performance_state_count(struct device *dev,
->> +                                        unsigned int *count)
->> +{
->> +       struct generic_pm_domain *genpd;
->> +       int ret;
->> +
->> +       genpd = dev_to_genpd(dev);
->> +       if (IS_ERR(genpd))
->> +               return -ENODEV;
->> +
->> +       if (unlikely(!genpd->get_performance_state_count))
->> +               return -EINVAL;
->> +
->> +       genpd_lock(genpd);
->> +       ret = genpd->get_performance_state_count(genpd, count);
-> 
-> Why not having the callback to return the state, rather than using an
-> out-parameter?
-Hi Ulf,
-I just realized that returning the state instead of using a parameter
-will prevent me from access under lock. Is that okay ?
+On Thu, Aug 29, 2019 at 12:55 PM Thomas Garnier <thgarnie@chromium.org> wrote:
+>
+> On Tue, Aug 6, 2019 at 8:51 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Tue, Aug 06, 2019 at 05:43:47PM +0200, Borislav Petkov wrote:
+> > > On Tue, Jul 30, 2019 at 12:12:44PM -0700, Thomas Garnier wrote:
+> > > > These patches make some of the changes necessary to build the kernel as
+> > > > Position Independent Executable (PIE) on x86_64. Another patchset will
+> > > > add the PIE option and larger architecture changes.
+> > >
+> > > Yeah, about this: do we have a longer writeup about the actual benefits
+> > > of all this and why we should take this all? After all, after looking
+> > > at the first couple of asm patches, it is posing restrictions to how
+> > > we deal with virtual addresses in asm (only RIP-relative addressing in
+> > > 64-bit mode, MOVs with 64-bit immediates, etc, for example) and I'm
+> > > willing to bet money that some future unrelated change will break PIE
+> > > sooner or later.
+>
+> The goal is being able to extend the range of addresses where the
+> kernel can be placed with KASLR. I will look at clarifying that in the
+> future.
+>
+> >
+> > Possibly objtool can help here; it should be possible to teach it about
+> > these rules, and then it will yell when violated. That should avoid
+> > regressions.
+> >
+>
+> I will look into that as well.
 
-Regards
-Thara
-> 
->> +       genpd_unlock(genpd);
->> +
->> +       return ret;
->> +}
->> +EXPORT_SYMBOL_GPL(dev_pm_genpd_performance_state_count);
->> +
->>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->>  {
->>         unsigned int state_idx = genpd->state_idx;
->> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
->> index 91d9bf4..0e5f502 100644
->> --- a/include/linux/pm_domain.h
->> +++ b/include/linux/pm_domain.h
->> @@ -117,6 +117,8 @@ struct generic_pm_domain {
->>                                                  struct dev_pm_opp *opp);
->>         int (*set_performance_state)(struct generic_pm_domain *genpd,
->>                                      unsigned int state);
->> +       int (*get_performance_state_count)(struct generic_pm_domain *genpd,
->> +                                          unsigned int *count);
->>         struct gpd_dev_ops dev_ops;
->>         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
->>         bool max_off_time_changed;
->> @@ -204,6 +206,10 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
->>                   struct dev_power_governor *gov, bool is_off);
->>  int pm_genpd_remove(struct generic_pm_domain *genpd);
->>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
->> +int dev_pm_genpd_get_performance_state(struct device *dev,
->> +                                      unsigned int *state);
->> +int dev_pm_genpd_performance_state_count(struct device *dev,
->> +                                        unsigned int *count);
->>
->>  extern struct dev_power_governor simple_qos_governor;
->>  extern struct dev_power_governor pm_domain_always_on_gov;
->> @@ -251,6 +257,18 @@ static inline int dev_pm_genpd_set_performance_state(struct device *dev,
->>         return -ENOTSUPP;
->>  }
->>
->> +static inline int dev_pm_genpd_get_performance_state(struct device *dev,
->> +                                                    unsigned int *state);
->> +{
->> +       return -ENOTSUPP;
->> +}
->> +
->> +static inline int dev_pm_genpd_performance_state_count(struct device *dev,
->> +                                                      unsigned int *count);
->> +{
->> +       return -ENOTSUPP;
->> +}
->> +
->>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
->>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
->>  #endif
->> --
->> 2.1.4
->>
-> 
-> Kind regards
-> Uffe
-> 
-
-
--- 
-Regards
-Thara
+Following a discussion with Kees. I will explore objtool in the
+follow-up patchset as we still have more elaborate pie changes in the
+second set. I like the idea overall and I think it would be great if
+it works.
