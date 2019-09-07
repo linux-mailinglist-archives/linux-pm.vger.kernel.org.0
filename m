@@ -2,88 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D94AC957
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 23:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A05BAC985
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 23:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406240AbfIGVHz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Sep 2019 17:07:55 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:39597 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727467AbfIGVHz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 17:07:55 -0400
-Received: by mail-oi1-f194.google.com with SMTP id w144so7789101oia.6;
-        Sat, 07 Sep 2019 14:07:54 -0700 (PDT)
+        id S1730881AbfIGVoG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 7 Sep 2019 17:44:06 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34422 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727500AbfIGVoG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 17:44:06 -0400
+Received: by mail-oi1-f195.google.com with SMTP id g128so7842625oib.1;
+        Sat, 07 Sep 2019 14:44:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lxihL36gTuIiKNJx4Op/WHeQVZ11JcB3rmyLaJHmdCo=;
-        b=sf/6BHf5PSn//m9LZMozqeRG/rdCZ6T1PataFU6dEOJA5v4ZEJgwAnr7CNxM8JMawg
-         oQcLaMhOzWwt91dw8IZhbWbnrE2kPx6ikqUv/6BaKRNAkT1o/UJe1czqBGMf7A4hwjIR
-         Uz4Ptl+nFKElMznt1AXspTcuFaKQPABPKEoGOSiDU+m26AvcWSD19BZYpmejF1oaIE7A
-         SFygmwRHDJg/185nmXJfvrx+dbRHlUcejElRECrmhCc0kaPU8FJwCkSmM5DUOloo10EE
-         QAc1oLyFwGa1biEcC8G7MBrFf6OqsodGN4poZL3Gjx14p+K/gLt+mEI0xMkgHnzaEdHM
-         usGg==
-X-Gm-Message-State: APjAAAXuOTlKpU5nq9PW/cwOfsViCPtWRpMfDCLfbp+2SBn6oNipr/gF
-        sjJ6vOlRvhMWMLJpA6TcnsQ+eouZoSMnjk/eYsc=
-X-Google-Smtp-Source: APXvYqxw6Q7ZI39fbj1Yg06z2Zfw+1ml3g9QHcrVcWjLu638sWzxbHZQyQ71pyD0sHmJVs/hoPWxndejKSyVjZ8RsHk=
-X-Received: by 2002:aca:da86:: with SMTP id r128mr12570871oig.103.1567890473848;
- Sat, 07 Sep 2019 14:07:53 -0700 (PDT)
+        bh=0lGLCZPFaINcLtxScVujk7xJFWveGfY1hBRQvY6nRng=;
+        b=Nv043mDe4w5TLDvfBbAGEKjz/jiuhxwn1mTXZmv5epaQzhXuHkYqX5YwOW6RxavdRy
+         sSdc60rLYApj5KxirFipp+Ft93kDIW6n0ODk35/3C/PLeVdL9uipIdZ9zUyQ4It56Ju8
+         YX9icn4obIPLMbJUKeZlXyeyUhxC/53QKNaqECvPZILC2ybF877MXQVufUpXuzvEBMJp
+         3Y9tzki2PdVxDVkFmuicF8HV1xLNAH6Vf05l6VSIzvOBuANKwOGJikFeL48n3B7vdwbW
+         8GtoytM8xAMYerXuO8XeGp+gimh2g1W/z/xt2SGY4rKa2BjFNpCanuukV9DLVoUsuaK/
+         9bGA==
+X-Gm-Message-State: APjAAAUbHs4TDRNY9YuggXqzr2QYwTHNTyGXFAKrnjPrhap8IrmYO0IF
+        TJGZFEr7k+SwKN2bB67Aj9B4zWrEyIFgrGw/7/Y=
+X-Google-Smtp-Source: APXvYqxI2VNjRqYr3XshJRYdDTMSyilEDy5yw0MO4dyZyuT1tzoqTI8vdxbY2Z8Ycpywkny1Mrj5eKP33PK+bPSs9RQ=
+X-Received: by 2002:aca:da86:: with SMTP id r128mr12645246oig.103.1567892644996;
+ Sat, 07 Sep 2019 14:44:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <201909070020.yR8k4sTf%lkp@intel.com> <847405da-8a45-653b-d544-25b58ea48db1@oracle.com>
-In-Reply-To: <847405da-8a45-653b-d544-25b58ea48db1@oracle.com>
+References: <3087ddf7-b0cc-fdf1-4dd2-5d6c630bdbba@linuxfoundation.org>
+In-Reply-To: <3087ddf7-b0cc-fdf1-4dd2-5d6c630bdbba@linuxfoundation.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 7 Sep 2019 23:07:39 +0200
-Message-ID: <CAJZ5v0i7Y6DSuYzh0H4n+S8Pd2YAqVZTM+0VCamzW9CBcqFs0g@mail.gmail.com>
-Subject: Re: [pm:bleeding-edge 175/181] drivers/cpuidle/driver.c:270:4: error:
- 'cpuidle_prev_governor' undeclared; did you mean 'cpuidle_find_governor'?
-To:     Joao Martins <joao.m.martins@oracle.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        kbuild test robot <lkp@intel.com>, kbuild-all@01.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Sat, 7 Sep 2019 23:43:53 +0200
+Message-ID: <CAJZ5v0ieuq_LPaoM3Nfh8bdK+a-reHBPkFK+bArre-FcMEJD=g@mail.gmail.com>
+Subject: Re: [GIT PULL] cpupower update for Linux 5.4-rc1
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Renninger <trenn@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 6, 2019 at 7:39 PM Joao Martins <joao.m.martins@oracle.com> wrote:
->
-> On 9/6/19 5:44 PM, kbuild test robot wrote:
-> > tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> > head:   79f0d67a241f0583b994c73437caa54a4e942737
-> > commit: 73d2bcced00671c2b724a31c3a4b3401c3e278d0 [175/181] cpuidle: allow governor switch on cpuidle_register_driver()
-> > config: arm-defconfig (attached as .config)
-> > compiler: arm-linux-gnueabi-gcc (GCC) 7.4.0
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         git checkout 73d2bcced00671c2b724a31c3a4b3401c3e278d0
-> >         # save the attached .config to linux build tree
-> >         GCC_VERSION=7.4.0 make.cross ARCH=arm
-> >
-> > If you fix the issue, kindly add following tag
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    drivers/cpuidle/driver.c: In function 'cpuidle_register_driver':
-> >>> drivers/cpuidle/driver.c:270:4: error: 'cpuidle_prev_governor' undeclared (first use in this function); did you mean 'cpuidle_find_governor'?
-> >        cpuidle_prev_governor = cpuidle_curr_governor;
-> >        ^~~~~~~~~~~~~~~~~~~~~
-> >        cpuidle_find_governor
-> >    drivers/cpuidle/driver.c:270:4: note: each undeclared identifier is reported only once for each function it appears in
-> >    drivers/cpuidle/driver.c: In function 'cpuidle_unregister_driver':
-> >    drivers/cpuidle/driver.c:301:6: error: 'cpuidle_prev_governor' undeclared (first use in this function); did you mean 'cpuidle_find_governor'?
-> >      if (cpuidle_prev_governor) {
-> >          ^~~~~~~~~~~~~~~~~~~~~
-> >          cpuidle_find_governor
-> >
-> Sorry, didn't build-test with CONFIG_CPU_IDLE_MULTIPLE_DRIVERS=y
->
-> Rafael, should I take this message that you queued the series (and thus I submit
-> a follow up fixing this), or I can just submit a v3 of this particular series?
+Hi Shuah,
 
-Please submit a v3.  Thanks!
+On Fri, Sep 6, 2019 at 5:36 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> Hi Rafael,
+>
+> Please pull the following update for Linux 5.4-rc1 or 5.4-rc2 depending
+> on your pull request schedule for Linus.
+>
+> This cpupower update for Linux 5.4-rc1 consists of bug fixes and
+> German translation updates from Benjamin Weis.
+>
+> diff is attached.
+>
+> thanks,
+> -- Shuah
+>
+> ----------------------------------------------------------------
+> The following changes since commit a55aa89aab90fae7c815b0551b07be37db359d76:
+>
+>    Linux 5.3-rc6 (2019-08-25 12:01:23 -0700)
+>
+> are available in the Git repository at:
+>
+>    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux
+> tags/linux-cpupower-5.4-rc1
+>
+> for you to fetch changes up to 87ce243206944a57383309dcbcdcc5750e6c905b:
+>
+>    cpupower: update German translation (2019-08-29 10:18:52 -0600)
+
+Pulled, thanks!
