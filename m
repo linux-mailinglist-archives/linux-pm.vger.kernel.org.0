@@ -2,281 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9A1AC52C
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 09:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13524AC58B
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 11:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405046AbfIGHh6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Sep 2019 03:37:58 -0400
-Received: from mo4-p03-ob.smtp.rzone.de ([81.169.146.172]:29584 "EHLO
-        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404968AbfIGHh5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 03:37:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1567841873;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=imBjKFWPpnQiffBQgBcoYSj19gYJyxmbsr48fIp/sx0=;
-        b=tlBXOpVTiwf3WSpLAs6TSNT6at1UPG+PrWaUfJcVSPafrYeDnrAPySufymyEZsp0UV
-        aHeu15H8/l/XifD81Ws1HMV2f55BBD62ZN2Bw3C6tf1sVmeGYysoUsx53aakA4zJnqhS
-        pGwQwAqBFMgDNaL8+bgtyx79bpva9MmQ439+52/3mIlzrUc9DVKogBSkoK+8/Lk4lU1S
-        SZpNGXDSp/GXKmFZrAqXKdW/xdIInVleN8lO+/NRGRC+4at+boga1Vdl8GqVkWrPmMnH
-        AnHUp09ZvNWCTNFGesrI1gpjNuIgNOA0T9vj36dPtQvQQwxCDD5lq1gtzww0CYV4QkXs
-        uc0w==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDVCaXAwLbA=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
-        with ESMTPSA id u036f9v877bZqbZ
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Sat, 7 Sep 2019 09:37:35 +0200 (CEST)
-Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: [PATCH 1/4] cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <0eb7129f6148faac0150d6299ac97347484c7125.1567839375.git.hns@goldelico.com>
-Date:   Sat, 7 Sep 2019 09:37:35 +0200
-Cc:     Linux-OMAP <linux-omap@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F12B47AA-DED2-4BD9-B144-2463A2AE6094@goldelico.com>
-References: <cover.1567839375.git.hns@goldelico.com> <0eb7129f6148faac0150d6299ac97347484c7125.1567839375.git.hns@goldelico.com>
-To:     =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        =?utf-8?Q?Andr=C3=A9_Roth?= <neolynx@gmail.com>,
+        id S2394619AbfIGJU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 7 Sep 2019 05:20:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59092 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388924AbfIGJU0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 7 Sep 2019 05:20:26 -0400
+Received: from localhost.localdomain (unknown [194.230.155.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 611E621871;
+        Sat,  7 Sep 2019 09:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567848024;
+        bh=YW3cSp+6yaPlzX+R34NGx4VQpIygRBkmXy1O+2BFvhA=;
+        h=From:To:Subject:Date:From;
+        b=POZiDSpXI7YV72+/U/6LtF4K3W/T9FkK8K54DJ88Shvk2AtYu+l7PLeqS1hE8lnCR
+         g75LZzcdJ09m2BIoMitqPtX0Pk1z2Qs56q5UCZAaOJRP5uXX+lddzdnHTYxJg/d5+A
+         4H9fFHbsnqfF2dOCv+kWFlf1CDnikg2Hz5fFu494=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Roger Quadros <rogerq@ti.com>,
-        Teresa Remmet <t.remmet@phytec.de>,
-        Nikolaus Schaller <hns@goldelico.com>
-X-Mailer: Apple Mail (2.3124)
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?q?Pawe=C5=82=20Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH v2 01/11] dt-bindings: power: syscon-reboot: Convert bindings to json-schema
+Date:   Sat,  7 Sep 2019 11:19:57 +0200
+Message-Id: <20190907092007.9946-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Convert the Syscon reboot bindings to DT schema format using
+json-schema.
 
-> Am 07.09.2019 um 08:56 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->=20
-> This adds code and tables to read the silicon revision and
-> eFuse (speed binned / 720 MHz grade) bits for selecting
-> opp-v2 table entries.
->=20
-> Since these bits are not always part of the syscon register
-> range (like for am33xx, am43, dra7), we add code to directly
-> read the register values using ioremap() if syscon access fails.
->=20
-> The format of the opp-supported-hw entries is that it has
-> two 32 bit bitfields. E.g.:
->=20
-> 	opp-supported-hw =3D <0xffffffff 3>
->=20
-> The first value is matched against the bit position of the
-> silicon revision which is (see TRM)
->=20
-> omap34xx:
-> BIT(0)	ES1.0
-> BIT(1)	ES2.0
-> BIT(2)	ES2.1
-> BIT(3)	ES3.0
-> BIT(4)	ES3.1
-> BIT(7)	ES3.1.2
->=20
-> omap36xx:
-> BIT(0)	ES1.0
-> BIT(1)	ES1.1
-> BIT(2)	ES1.2
->=20
-> The second value is matched against the speed grade eFuse:
->=20
-> BIT(0)	no high speed OPP
-> BIT(1)	high speed OPP
->=20
-> This means for the example above that it is always enabled
-> while e.g.
->=20
-> 	opp-supported-hw =3D <0x1 2>
->=20
-> enables the OPP only for ES1.0 BIT(0) and if the high speed
-> eFuse is set BIT(1).
->=20
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
-> drivers/cpufreq/ti-cpufreq.c | 91 +++++++++++++++++++++++++++++++++++-
-> 1 file changed, 89 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/ti-cpufreq.c =
-b/drivers/cpufreq/ti-cpufreq.c
-> index 2ad1ae17932d..f2f58d689320 100644
-> --- a/drivers/cpufreq/ti-cpufreq.c
-> +++ b/drivers/cpufreq/ti-cpufreq.c
-> @@ -31,6 +31,11 @@
-> #define DRA7_EFUSE_OD_MPU_OPP			BIT(1)
-> #define DRA7_EFUSE_HIGH_MPU_OPP			BIT(2)
->=20
-> +#define OMAP3_CONTROL_DEVICE_STATUS		0x4800244C
-> +#define OMAP3_CONTROL_IDCODE			0x4830A204
-> +#define OMAP34xx_ProdID_SKUID			0x4830A20C
-> +#define OMAP3_SYSCON_BASE	(0x48000000 + 0x2000 + 0x270)
-> +
-> #define VERSION_COUNT				2
->=20
-> struct ti_cpufreq_data;
-> @@ -84,6 +89,13 @@ static unsigned long dra7_efuse_xlate(struct =
-ti_cpufreq_data *opp_data,
-> 	return calculated_efuse;
-> }
->=20
-> +static unsigned long omap3_efuse_xlate(struct ti_cpufreq_data =
-*opp_data,
-> +				      unsigned long efuse)
-> +{
-> +	/* OPP enable bit ("Speed Binned") */
-> +	return BIT(efuse);
-> +}
-> +
-> static struct ti_cpufreq_soc_data am3x_soc_data =3D {
-> 	.efuse_xlate =3D amx3_efuse_xlate,
-> 	.efuse_fallback =3D AM33XX_800M_ARM_MPU_MAX_FREQ,
-> @@ -111,6 +123,56 @@ static struct ti_cpufreq_soc_data dra7_soc_data =3D=
- {
-> 	.multi_regulator =3D true,
-> };
->=20
-> +/*
-> + * OMAP35x TRM (SPRUF98K):
-> + *  CONTROL_IDCODE (0x4830 A204) describes Silicon revisions.
-> + *  Control OMAP Status Register 15:0 (Address 0x4800 244C)
-> + *    to separate between omap3503, omap3515, omap3525, omap3530
-> + *    and feature presence.
-> + *    There are encodings for versions limited to 400/266MHz
-> + *    but we ignore.
-> + *    Not clear if this also holds for omap34xx.
-> + *  some eFuse values e.g. CONTROL_FUSE_OPP1_VDD1
-> + *    are stored in the SYSCON register range
-> + *  Register 0x4830A20C [ProdID.SKUID] [0:3]
-> + *    0x0 for normal 600/430MHz device.
-> + *    0x8 for 720/520MHz device.
-> + *    Not clear what omap34xx value is.
-> + */
-> +
-> +static struct ti_cpufreq_soc_data omap34xx_soc_data =3D {
-> +	.efuse_xlate =3D omap3_efuse_xlate,
-> +	.efuse_offset =3D OMAP34xx_ProdID_SKUID - OMAP3_SYSCON_BASE,
-> +	.efuse_shift =3D 3,
-> +	.efuse_mask =3D BIT(3),
-> +	.rev_offset =3D OMAP3_CONTROL_IDCODE - OMAP3_SYSCON_BASE,
-> +	.multi_regulator =3D false,
-> +};
-> +
-> +/*
-> + * AM/DM37x TRM (SPRUGN4M)
-> + *  CONTROL_IDCODE (0x4830 A204) describes Silicon revisions.
-> + *  Control Device Status Register 15:0 (Address 0x4800 244C)
-> + *    to separate between am3703, am3715, dm3725, dm3730
-> + *    and feature presence.
-> + *   Speed Binned =3D Bit 9
-> + *     0 800/600 MHz
-> + *     1 1000/800 MHz
-> + *  some eFuse values e.g. CONTROL_FUSE_OPP 1G_VDD1
-> + *    are stored in the SYSCON register range.
-> + *  There is no 0x4830A20C [ProdID.SKUID] register (exists but
-> + *    seems to always read as 0).
-> + */
-> +
-> +static struct ti_cpufreq_soc_data omap36xx_soc_data =3D {
-> +	.efuse_xlate =3D omap3_efuse_xlate,
-> +	.efuse_offset =3D OMAP3_CONTROL_DEVICE_STATUS - =
-OMAP3_SYSCON_BASE,
-> +	.efuse_shift =3D 9,
-> +	.efuse_mask =3D BIT(9),
-> +	.rev_offset =3D OMAP3_CONTROL_IDCODE - OMAP3_SYSCON_BASE,
-> +	.multi_regulator =3D false,
-> +};
-> +
-> /**
->  * ti_cpufreq_get_efuse() - Parse and return efuse value present on =
-SoC
->  * @opp_data: pointer to ti_cpufreq_data context
-> @@ -127,7 +189,17 @@ static int ti_cpufreq_get_efuse(struct =
-ti_cpufreq_data *opp_data,
->=20
-> 	ret =3D regmap_read(opp_data->syscon, =
-opp_data->soc_data->efuse_offset,
-> 			  &efuse);
-> -	if (ret) {
-> +	if (ret =3D=3D -EIO) {
-> +		/* not a syscon register! */
-> +		void __iomem *regs =3D ioremap(OMAP3_SYSCON_BASE +
-> +				opp_data->soc_data->efuse_offset, 4);
-> +
-> +		if (!regs)
-> +			return -ENOMEM;
-> +		efuse =3D readl(regs);
-> +		iounmap(regs);
-> +		}
-> +	else if (ret) {
-> 		dev_err(dev,
-> 			"Failed to read the efuse value from syscon: =
-%d\n",
-> 			ret);
-> @@ -158,7 +230,17 @@ static int ti_cpufreq_get_rev(struct =
-ti_cpufreq_data *opp_data,
->=20
-> 	ret =3D regmap_read(opp_data->syscon, =
-opp_data->soc_data->rev_offset,
-> 			  &revision);
-> -	if (ret) {
-> +	if (ret =3D=3D -EIO) {
-> +		/* not a syscon register! */
-> +		void __iomem *regs =3D ioremap(OMAP3_SYSCON_BASE +
-> +				opp_data->soc_data->rev_offset, 4);
-> +
-> +		if (!regs)
-> +			return -ENOMEM;
-> +		revision =3D readl(regs);
-> +		iounmap(regs);
-> +		}
-> +	else if (ret) {
-> 		dev_err(dev,
-> 			"Failed to read the revision number from syscon: =
-%d\n",
-> 			ret);
-> @@ -190,6 +272,11 @@ static const struct of_device_id =
-ti_cpufreq_of_match[] =3D {
-> 	{ .compatible =3D "ti,am33xx", .data =3D &am3x_soc_data, },
-> 	{ .compatible =3D "ti,am43", .data =3D &am4x_soc_data, },
-> 	{ .compatible =3D "ti,dra7", .data =3D &dra7_soc_data },
-> +	{ .compatible =3D "ti,omap34xx", .data =3D &omap34xx_soc_data, =
-},
-> +	{ .compatible =3D "ti,omap36xx", .data =3D &omap36xx_soc_data, =
-},
-> +	/* legacy */
-> +	{ .compatible =3D "ti,omap3430", .data =3D &omap34xx_soc_data, =
-},
-> +	{ .compatible =3D "ti,omap3630", .data =3D &omap36xx_soc_data, =
-},
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Well, I just realized that with the latest DTS changes,
+---
 
-ti,omap34xx and ti,omap36xx are legacy and
-ti,omap3430 and ti,omap3630 are now official.
+Changes since v1:
+1. Remove unneeded maxItems from uint32 fields,
+2. Simplify if-else-then.
+---
+ .../bindings/power/reset/syscon-reboot.txt    | 30 ----------
+ .../bindings/power/reset/syscon-reboot.yaml   | 60 +++++++++++++++++++
+ 2 files changed, 60 insertions(+), 30 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
 
-> 	{},
-> };
->=20
-> --=20
-> 2.19.1
->=20
+diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.txt b/Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
+deleted file mode 100644
+index e23dea8344f8..000000000000
+--- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.txt
++++ /dev/null
+@@ -1,30 +0,0 @@
+-Generic SYSCON mapped register reset driver
+-
+-This is a generic reset driver using syscon to map the reset register.
+-The reset is generally performed with a write to the reset register
+-defined by the register map pointed by syscon reference plus the offset
+-with the value and mask defined in the reboot node.
+-
+-Required properties:
+-- compatible: should contain "syscon-reboot"
+-- regmap: this is phandle to the register map node
+-- offset: offset in the register map for the reboot register (in bytes)
+-- value: the reset value written to the reboot register (32 bit access)
+-
+-Optional properties:
+-- mask: update only the register bits defined by the mask (32 bit)
+-
+-Legacy usage:
+-If a node doesn't contain a value property but contains a mask property, the
+-mask property is used as the value.
+-
+-Default will be little endian mode, 32 bit access only.
+-
+-Examples:
+-
+-	reboot {
+-	   compatible = "syscon-reboot";
+-	   regmap = <&regmapnode>;
+-	   offset = <0x0>;
+-	   mask = <0x1>;
+-	};
+diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+new file mode 100644
+index 000000000000..a7920f5eef79
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/reset/syscon-reboot.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic SYSCON mapped register reset driver
++
++maintainers:
++  - Sebastian Reichel <sre@kernel.org>
++
++description: |+
++  This is a generic reset driver using syscon to map the reset register.
++  The reset is generally performed with a write to the reset register
++  defined by the register map pointed by syscon reference plus the offset
++  with the value and mask defined in the reboot node.
++  Default will be little endian mode, 32 bit access only.
++
++properties:
++  compatible:
++    const: syscon-reboot
++
++  mask:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Update only the register bits defined by the mask (32 bit).
++
++  offset:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Offset in the register map for the reboot register (in bytes).
++
++  regmap:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: Phandle to the register map node.
++
++  value:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: The reset value written to the reboot register (32 bit access).
++
++required:
++  - compatible
++  - regmap
++  - offset
++
++allOf:
++  - if:
++      not:
++        required:
++          - mask
++    then:
++      required:
++        - value
++
++examples:
++  - |
++    reboot {
++      compatible = "syscon-reboot";
++      regmap = <&regmapnode>;
++      offset = <0x0>;
++      mask = <0x1>;
++    };
+-- 
+2.17.1
 
