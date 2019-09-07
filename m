@@ -2,179 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31048AC34F
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 01:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6532CAC4E9
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 08:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405731AbfIFXka (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Sep 2019 19:40:30 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33480 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405243AbfIFXka (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Sep 2019 19:40:30 -0400
-Received: by mail-pl1-f196.google.com with SMTP id t11so3919123plo.0
-        for <linux-pm@vger.kernel.org>; Fri, 06 Sep 2019 16:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pxKRv8jsRZzTGKhj+ioFhgpVS6Dzsmm59+PKHULgKG4=;
-        b=f5qht4kBJty1w+M1QEqeEr7xM9Wdo7RR8Rao8IQtESokz+K0NhWhBs5VMOnCX7Rzey
-         n3kQ0m28gB61aIOoyjV4+gonSGVif7/x2NLw+5C8dnvbzZ1XYCWVrxayUITMuHWvrBRj
-         dD0g2Q/1aGyuTiMBmtgbjVBzyk5nKLsPhOcNw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pxKRv8jsRZzTGKhj+ioFhgpVS6Dzsmm59+PKHULgKG4=;
-        b=IXr1zTdRwtxgW993w4AlkJDgJzldNBtTkMxEd00qbyiffdxcnwjPFg5GKSRoP/Z5Hd
-         +m6D+aCPG+FxMz10D4qy+WoOdSGShw3n6Hy8PpVfMg+kQGihIqW38otr+EA6lDix6n7D
-         0sW2d30arkupT6r8X5GiTRLVkaeaEX9UfgP2YVjTxXat4wr95a8caJgfcJsJoRGkwv/i
-         xfsPhw7D5POiAUIt4QFAd1ae3Z/XM9exRLSpvDi31mVvDq4KBPypLXlYX52SnI6ip6MG
-         N68S/aM5lJ6rU558ZgzPGc61KXBLjCvQgQSiNiAaRZfMIL7SEkudjx00YVnDiqIEjT/b
-         aXCQ==
-X-Gm-Message-State: APjAAAVTEKmL/PNdJAiYAHagnYkKgcomhQJXf/VdEBNyfDd6ovVVfSTV
-        UxhiteP5D4x+Aoq+j83gSLzp2A==
-X-Google-Smtp-Source: APXvYqy5ATiCVXAmYBmhNqO3VIuKk8WRC1Ed+4dSQcZvN9PCdHTA/UhyJBc1yPjVotkulRJugBZxhQ==
-X-Received: by 2002:a17:902:864a:: with SMTP id y10mr11724408plt.294.1567813229347;
-        Fri, 06 Sep 2019 16:40:29 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
-        by smtp.gmail.com with ESMTPSA id m9sm927359pjf.11.2019.09.06.16.40.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Sep 2019 16:40:28 -0700 (PDT)
-Date:   Fri, 6 Sep 2019 16:40:25 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, rjw@rjwysocki.net, pavel@ucw.cz,
-        len.brown@intel.com, gregkh@linuxfoundation.org, bhe@redhat.com,
-        dyoung@redhat.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, tbroch@chromium.org, trong@google.com
-Subject: Re: [PATCH 1/2] power: sysfs: Add link to wakeup class device.
-Message-ID: <20190906234025.GD133864@google.com>
-References: <20190724174355.255314-1-ravisadineni@chromium.org>
- <20190724174355.255314-2-ravisadineni@chromium.org>
-MIME-Version: 1.0
+        id S2405759AbfIGGee (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 7 Sep 2019 02:34:34 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:22516 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733303AbfIGGee (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 02:34:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1567838071;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=GUX1eWsEK1Al1N1ta4hnlkUwJe6XR50RrgXmahK2eDg=;
+        b=dO7tIyh8N0bVjWVWI+hGom1sV6MO9Z1dlKXl/6LIMdq1IqgF5i2oQeICJVimb+sqk0
+        gtJd/EWtwHvejp18oLzJtWfs+qcQCM8XRxzCIAhVdnGasnRAg4H4tYQse6Kx0FgvGjSB
+        NWvO3PnY+561uTae0WyOHxNRl8Zm2agxK0S11yRHr3oz8fvg4jxCgHY855amMtf1Oz4r
+        q3D6O4kiZwo6XWguIe9yZcMfjwLcow8zutO42mgsdTOGNqMH2zYkgNoLSiSb/12wrU8H
+        7FfUbNyOzRbDO0LpCRlkkwlVuPjBqxS6TYiRlOBoiwGgjcOPCyggqGn8cIxnKdnxZxKQ
+        Tffg==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDVCaXAwLbA=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
+        with ESMTPSA id u036f9v876YFqUD
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Sat, 7 Sep 2019 08:34:15 +0200 (CEST)
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190724174355.255314-2-ravisadineni@chromium.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Subject: Re: [RFC v2 1/3] cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <1ED2450A-A445-42B8-8956-58A53F15DBE2@goldelico.com>
+Date:   Sat, 7 Sep 2019 08:34:14 +0200
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?utf-8?Q?Andr=C3=A9_Roth?= <neolynx@gmail.com>,
+        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        kernel@pyra-handheld.com, Linux-OMAP <linux-omap@vger.kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <12A8E9DF-3D58-48A7-BC91-898B21536E04@goldelico.com>
+References: <cover.1567587220.git.hns@goldelico.com> <a889b10386bebfbfd6cdb5491367235290d53247.1567587220.git.hns@goldelico.com> <20190905143226.GW52127@atomide.com> <20190906030158.leuumg7rwsvowwfx@vireshk-i7> <1ED2450A-A445-42B8-8956-58A53F15DBE2@goldelico.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Tony Lindgren <tony@atomide.com>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ravi,
 
-On Wed, Jul 24, 2019 at 10:43:54AM -0700, Ravi Chandra Sadineni wrote:
-> https://patchwork.kernel.org/patch/11045069/ creates a virtual
-> device
+> Am 06.09.2019 um 22:46 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+> Hi,
+>=20
+>> Am 06.09.2019 um 05:01 schrieb Viresh Kumar =
+<viresh.kumar@linaro.org>:
+>>=20
+>> On 05-09-19, 07:32, Tony Lindgren wrote:
+>>> * H. Nikolaus Schaller <hns@goldelico.com> [190904 08:54]:
+>>>> This adds code and tables to read the silicon revision and
+>>>> eFuse (speed binned / 720 MHz grade) bits for selecting
+>>>> opp-v2 table entries.
+>>>>=20
+>>>> Since these bits are not always part of the syscon register
+>>>> range (like for am33xx, am43, dra7), we add code to directly
+>>>> read the register values using ioremap() if syscon access fails.
+>>>=20
+>>> This is nice :) Seems to work for me based on a quick test
+>>> on at least omap36xx.
+>>>=20
+>>> Looks like n900 produces the following though:
+>>>=20
+>>> core: _opp_supported_by_regulators: OPP minuV: 1270000 maxuV: =
+1270000, not supported by regulator
+>>> cpu cpu0: _opp_add: OPP not supported by regulators (550000000)
+>>=20
+>> That's a DT thing I believe where the voltage doesn't fit what the
+>> regulator can support.
+>=20
+> I can confirm this on BeagleBoard C2:
+>=20
+> root@gta04:~# dmesg|fgrep -i opp
+> [    2.347442] core: _opp_supported_by_regulators: OPP minuV: 1270000 =
+maxuV: 1270000, not supported by regulator
+> [    2.359222] cpu cpu0: _opp_add: OPP not supported by regulators =
+(550000000)
+> [    2.580993] omap2_set_init_voltage: unable to find boot up OPP for =
+vdd_core
+> root@gta04:~#=20
+>=20
+>>=20
+>>> But presumably that can be further patched.
+>=20
+> Well, the opp-v1 table also has this voltage point:
+>=20
+> 			/* OMAP343x/OMAP35xx variants OPP1-5 */
+> 			operating-points =3D <
+> 				/* kHz    uV */
+> 				125000   975000
+> 				250000  1075000
+> 				500000  1200000
+> 				550000  1270000
+> 				600000  1350000
+> 			>;
+>=20
+>=20
+> This is OPP4 which is recommended by OMAP3530 data sheet to be 1.27V =
++/- 5%
+>=20
+> Data sheet of tps65950 says
+>=20
+> 	=E2=80=A2 VDD1: 1.2-A, buck DC/DC converter (VOUT =3D 0.6 V to =
+1.45 V, in steps of 12.5 mV)
+>=20
+> This means 1270 mV is not a "step" and rejected by the twl4030 driver.
+> Maybe nobody did notice yet because the opp-v1 drivers did not warn...
+>=20
+> The closest value to 1.27V is 0.6V + 54 * 12.5mV is 1.275V
+>=20
+> So let's also change the OPP4 to 1275000 uV in the opp-v2 table.
 
-To refer to unsubmitted patches in the commit message it is
-probably better to use the subject ("PM / wakeup: show wakeup
-sources stats in sysfs") and add a link after '---', or say
-"${subject}" [1] and put the link at the bottom of the commit message
+The OPP is now available. Only
 
-You might want to try again now that the patch has landed :)
+[    2.569519] omap2_set_init_voltage: unable to find boot up OPP for =
+vdd_core
 
-> under wakeup class for each wake capable device exposing all related
-> sysfs attributes. But there isn't a symlink from the actual device
-> node to these virtual devices. This patch creates a symlink from the
-> actual device to the corresponding wakeup_source device under wakeup
-> class.
+remains but this is a different issue (mismatch between U-Boot =
+clock/vdd_core
+setup and kernel table). Most likely U-Boot runs with an 300MHz OPP =
+which is
+not defined by data sheet or kernel opp tables.
 
-> Signed-off-by: Ravi Chandra Sadineni <ravisadineni@chromium.org>
-> ---
->  drivers/base/power/power.h  |  2 ++
->  drivers/base/power/sysfs.c  | 25 +++++++++++++++++++++++++
->  drivers/base/power/wakeup.c |  2 ++
->  3 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-> index c511def48b48..32b0f5c080a9 100644
-> --- a/drivers/base/power/power.h
-> +++ b/drivers/base/power/power.h
-> @@ -67,6 +67,8 @@ extern void dpm_sysfs_remove(struct device *dev);
->  extern void rpm_sysfs_remove(struct device *dev);
->  extern int wakeup_sysfs_add(struct device *dev);
->  extern void wakeup_sysfs_remove(struct device *dev);
-> +extern void wakeup_source_sysfs_link_add(struct device *dev);
-> +extern void wakeup_source_sysfs_link_remove(struct device *dev);
-
-the names seem a bit clunky, how about wakeup_sysfs_add/remove_link()?
-
->  extern int pm_qos_sysfs_add_resume_latency(struct device *dev);
->  extern void pm_qos_sysfs_remove_resume_latency(struct device *dev);
->  extern int pm_qos_sysfs_add_flags(struct device *dev);
-> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> index d713738ce796..fbbdb7b16ac5 100644
-> --- a/drivers/base/power/sysfs.c
-> +++ b/drivers/base/power/sysfs.c
-> @@ -95,6 +95,7 @@
->  const char power_group_name[] = "power";
->  EXPORT_SYMBOL_GPL(power_group_name);
->  
-> +static const char wakeup_source_symlink_name[] = "wakeup_source";
->  static const char ctrl_auto[] = "auto";
->  static const char ctrl_on[] = "on";
->  
-> @@ -679,6 +680,30 @@ int dpm_sysfs_add(struct device *dev)
->  	return rc;
->  }
->  
-> +void wakeup_source_sysfs_link_add(struct device *dev)
-> +{
-> +	struct wakeup_source *ws;
-> +	int err;
-> +
-> +	ws = dev->power.wakeup;
-> +	if (ws && ws->dev) {
-> +		err = sysfs_add_link_to_group(&dev->kobj, power_group_name,
-> +			&ws->dev->kobj, wakeup_source_symlink_name);
-> +		if (err) {
-> +			dev_err(dev,
-> +				"could not add %s symlink err %d\n",
-
-I'd suggest
-
-				"could not add '%s' symlink: %d\n",
-
-or
-
-				"could not add 'wakeup_source' symlink: %d\n",
-
-the latter is easier to grep.
-
-> +				wakeup_source_symlink_name,
-> +				err);
-> +		}
-> +	}
-> +}
-> +
-> +void wakeup_source_sysfs_link_remove(struct device *dev)
-> +{
-> +	sysfs_remove_link_from_group(&dev->kobj, power_group_name,
-> +		wakeup_source_symlink_name);
-> +}
-> +
->  int wakeup_sysfs_add(struct device *dev)
->  {
->  	return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index fe779fe13a7f..87dfe401b035 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -270,6 +270,7 @@ static int device_wakeup_attach(struct device *dev, struct wakeup_source *ws)
->  	if (dev->power.wakeirq)
->  		device_wakeup_attach_irq(dev, dev->power.wakeirq);
->  	spin_unlock_irq(&dev->power.lock);
-> +	wakeup_source_sysfs_link_add(dev);
->  	return 0;
->  }
->  
-> @@ -391,6 +392,7 @@ static struct wakeup_source *device_wakeup_detach(struct device *dev)
->  	ws = dev->power.wakeup;
->  	dev->power.wakeup = NULL;
->  	spin_unlock_irq(&dev->power.lock);
-> +	wakeup_source_sysfs_link_remove(dev);
-
-you want to do this before the wakeup source is detached.
+BR,
+Nikolaus=
