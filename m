@@ -2,80 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A05BAC985
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 23:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB0DACA09
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2019 01:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730881AbfIGVoG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Sep 2019 17:44:06 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:34422 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727500AbfIGVoG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 17:44:06 -0400
-Received: by mail-oi1-f195.google.com with SMTP id g128so7842625oib.1;
-        Sat, 07 Sep 2019 14:44:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0lGLCZPFaINcLtxScVujk7xJFWveGfY1hBRQvY6nRng=;
-        b=Nv043mDe4w5TLDvfBbAGEKjz/jiuhxwn1mTXZmv5epaQzhXuHkYqX5YwOW6RxavdRy
-         sSdc60rLYApj5KxirFipp+Ft93kDIW6n0ODk35/3C/PLeVdL9uipIdZ9zUyQ4It56Ju8
-         YX9icn4obIPLMbJUKeZlXyeyUhxC/53QKNaqECvPZILC2ybF877MXQVufUpXuzvEBMJp
-         3Y9tzki2PdVxDVkFmuicF8HV1xLNAH6Vf05l6VSIzvOBuANKwOGJikFeL48n3B7vdwbW
-         8GtoytM8xAMYerXuO8XeGp+gimh2g1W/z/xt2SGY4rKa2BjFNpCanuukV9DLVoUsuaK/
-         9bGA==
-X-Gm-Message-State: APjAAAUbHs4TDRNY9YuggXqzr2QYwTHNTyGXFAKrnjPrhap8IrmYO0IF
-        TJGZFEr7k+SwKN2bB67Aj9B4zWrEyIFgrGw/7/Y=
-X-Google-Smtp-Source: APXvYqxI2VNjRqYr3XshJRYdDTMSyilEDy5yw0MO4dyZyuT1tzoqTI8vdxbY2Z8Ycpywkny1Mrj5eKP33PK+bPSs9RQ=
-X-Received: by 2002:aca:da86:: with SMTP id r128mr12645246oig.103.1567892644996;
- Sat, 07 Sep 2019 14:44:04 -0700 (PDT)
+        id S1731749AbfIGXsG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 7 Sep 2019 19:48:06 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:33276 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726635AbfIGXsF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 19:48:05 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x87NkxF5070522;
+        Sat, 7 Sep 2019 23:47:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=corp-2019-08-05;
+ bh=a1Q/cZrBiYqtJgS1w+MNIlqMTk5J3IGv7ywqLf6HB3E=;
+ b=rtj5kdv9FDAGURwQWvLJJDOOwwEDaK/sugbUq8/XcHoumftrrtaZWH+67Waa+qftYRso
+ gK+XHItOhb6e0CaXtxiUf8+3fus3LF1IZ/elkjNI2TQuxkAUtb6YIjEc2RZtTq1ws8Kt
+ ICA2PgJ7afEXkdrUAPv9dGUJnzUdmb8/uQliMiXOP8TaocWCgvFlgezSL3WajmuHMomf
+ qhUJwooU69X0NKx933YiknFhORlfTaUtORNppOXZtm2AgL67Z2/yOK/Z6vuJDcKg8sAF
+ 1vpIckVgBZsvZ3pblLwbwM8q4aV3uhiybb6g5zqTibSgYlPFEDiQeCD9AQT0dbepecaQ MA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2uvpg28026-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 07 Sep 2019 23:47:56 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x87NhCmn145447;
+        Sat, 7 Sep 2019 23:45:56 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2uve9bcsqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 07 Sep 2019 23:45:56 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x87NjsqO013728;
+        Sat, 7 Sep 2019 23:45:54 GMT
+Received: from paddy.uk.oracle.com (/10.175.163.125)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sat, 07 Sep 2019 16:45:53 -0700
+From:   Joao Martins <joao.m.martins@oracle.com>
+To:     linux-pm@vger.kernel.org
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org
+Subject: [PATCH v3 0/4] cpuidle, haltpoll: governor switching on idle register
+Date:   Sun,  8 Sep 2019 00:45:20 +0100
+Message-Id: <20190907234524.5577-1-joao.m.martins@oracle.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-References: <3087ddf7-b0cc-fdf1-4dd2-5d6c630bdbba@linuxfoundation.org>
-In-Reply-To: <3087ddf7-b0cc-fdf1-4dd2-5d6c630bdbba@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sat, 7 Sep 2019 23:43:53 +0200
-Message-ID: <CAJZ5v0ieuq_LPaoM3Nfh8bdK+a-reHBPkFK+bArre-FcMEJD=g@mail.gmail.com>
-Subject: Re: [GIT PULL] cpupower update for Linux 5.4-rc1
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Thomas Renninger <trenn@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9373 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=837
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1909070260
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9373 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=967 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1909070260
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Shuah,
+Hey,
 
-On Fri, Sep 6, 2019 at 5:36 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> Hi Rafael,
->
-> Please pull the following update for Linux 5.4-rc1 or 5.4-rc2 depending
-> on your pull request schedule for Linus.
->
-> This cpupower update for Linux 5.4-rc1 consists of bug fixes and
-> German translation updates from Benjamin Weis.
->
-> diff is attached.
->
-> thanks,
-> -- Shuah
->
-> ----------------------------------------------------------------
-> The following changes since commit a55aa89aab90fae7c815b0551b07be37db359d76:
->
->    Linux 5.3-rc6 (2019-08-25 12:01:23 -0700)
->
-> are available in the Git repository at:
->
->    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux
-> tags/linux-cpupower-5.4-rc1
->
-> for you to fetch changes up to 87ce243206944a57383309dcbcdcc5750e6c905b:
->
->    cpupower: update German translation (2019-08-29 10:18:52 -0600)
+Presented herewith a series with aims to tie in together the haltpoll
+idle driver and governor, without sacrificing previous governor setups.
+In addition, there are a few fixes with respect to module loading for
+cpuidle-haltpoll. 
 
-Pulled, thanks!
+The series is organized as follows:
+
+ Patch 1: Allows idle driver stating a preferred governor that it
+          wants to use, based on discussion here:
+
+  https://lore.kernel.org/kvm/457e8ca1-beb3-ca39-b257-e7bc6bb35d4d@oracle.com/
+
+ Patch 2: Decrease rating of governor, and allows previous defaults
+	  to be as before haltpoll, while using @governor to switch to haltpoll
+	  when haltpoll driver is registered;
+
+ Patch 3 - 4: Module loading fixes. first is the incorrect error
+	      reporting and second is supportting module unloading.
+
+Thanks,
+	Joao
+
+v3:
+* Fixed ARM build issues.
+
+v2:
+* Add missing Fixes tag on patches 3 and 4.
+
+Joao Martins (4):
+  cpuidle: allow governor switch on cpuidle_register_driver()
+  cpuidle-haltpoll: set haltpoll as preferred governor
+  cpuidle-haltpoll: return -ENODEV on modinit failure
+  cpuidle-haltpoll: do not set an owner to allow modunload
+
+ drivers/cpuidle/cpuidle-haltpoll.c   |  4 ++--
+ drivers/cpuidle/cpuidle.h            |  2 ++
+ drivers/cpuidle/driver.c             | 25 +++++++++++++++++++++++++
+ drivers/cpuidle/governor.c           |  7 ++++---
+ drivers/cpuidle/governors/haltpoll.c |  2 +-
+ include/linux/cpuidle.h              |  3 +++
+ 6 files changed, 37 insertions(+), 6 deletions(-)
+
+-- 
+2.17.1
+
