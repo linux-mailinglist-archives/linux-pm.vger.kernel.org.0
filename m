@@ -2,145 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6532CAC4E9
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 08:35:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A523AAC4F4
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Sep 2019 08:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405759AbfIGGee (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Sep 2019 02:34:34 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:22516 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733303AbfIGGee (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 02:34:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1567838071;
+        id S2406497AbfIGG4k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 7 Sep 2019 02:56:40 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.170]:36650 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729409AbfIGG4k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 02:56:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1567839395;
         s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=GUX1eWsEK1Al1N1ta4hnlkUwJe6XR50RrgXmahK2eDg=;
-        b=dO7tIyh8N0bVjWVWI+hGom1sV6MO9Z1dlKXl/6LIMdq1IqgF5i2oQeICJVimb+sqk0
-        gtJd/EWtwHvejp18oLzJtWfs+qcQCM8XRxzCIAhVdnGasnRAg4H4tYQse6Kx0FgvGjSB
-        NWvO3PnY+561uTae0WyOHxNRl8Zm2agxK0S11yRHr3oz8fvg4jxCgHY855amMtf1Oz4r
-        q3D6O4kiZwo6XWguIe9yZcMfjwLcow8zutO42mgsdTOGNqMH2zYkgNoLSiSb/12wrU8H
-        7FfUbNyOzRbDO0LpCRlkkwlVuPjBqxS6TYiRlOBoiwGgjcOPCyggqGn8cIxnKdnxZxKQ
-        Tffg==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDVCaXAwLbA=="
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=H2SIQXvx8PjyvicidlZPlLPHdfve4slDgeqzzBpA4xM=;
+        b=FaHld9l/u1RCj+CS1wYct8cpNw2yju+I+mIPvPRfvfnFaBNPYOfVj0lI8tX3anBWaO
+        hKdrkpuZUxpbLwIFGsY/08ml5YLdO9BYxZM7GjoT0FU8TdDDZ7i1bLkVaPPZJ0S9YTrF
+        42O/TuBhU5rcs12zn4bLb1kSh71Khn2de2E5VHBS/Oc3BfPzMn/8abynBTdVwVdufCdo
+        xJEHkNiSNPTUoimqeMb6wh1+oIKWi6qF9IAXCKOB3WuWHwALfB9buZPU/Z2QDO0pVQc8
+        j0TVcZnYhcKkp3Dmvk9nbkWcXBDEdE07byYFwpI0AFZEMgo6E1KJBHWiucofbMv0Ohb0
+        V8/w==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXL8GTntuxg="
 X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
+Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
-        with ESMTPSA id u036f9v876YFqUD
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        with ESMTPSA id u036f9v876uGqXD
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
         (Client did not present a certificate);
-        Sat, 7 Sep 2019 08:34:15 +0200 (CEST)
-Content-Type: text/plain; charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: [RFC v2 1/3] cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
+        Sat, 7 Sep 2019 08:56:16 +0200 (CEST)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <1ED2450A-A445-42B8-8956-58A53F15DBE2@goldelico.com>
-Date:   Sat, 7 Sep 2019 08:34:14 +0200
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
         Rob Herring <robh+dt@kernel.org>,
-        =?utf-8?Q?Andr=C3=A9_Roth?= <neolynx@gmail.com>,
-        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        kernel@pyra-handheld.com, Linux-OMAP <linux-omap@vger.kernel.org>,
         Adam Ford <aford173@gmail.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <12A8E9DF-3D58-48A7-BC91-898B21536E04@goldelico.com>
-References: <cover.1567587220.git.hns@goldelico.com> <a889b10386bebfbfd6cdb5491367235290d53247.1567587220.git.hns@goldelico.com> <20190905143226.GW52127@atomide.com> <20190906030158.leuumg7rwsvowwfx@vireshk-i7> <1ED2450A-A445-42B8-8956-58A53F15DBE2@goldelico.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Tony Lindgren <tony@atomide.com>
-X-Mailer: Apple Mail (2.3124)
+        =?UTF-8?q?Andr=C3=A9=20Roth?= <neolynx@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Teresa Remmet <t.remmet@phytec.de>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/4] OMAP3: convert opp-v1 to opp-v2 and read speed binned / 720MHz grade bits
+Date:   Sat,  7 Sep 2019 08:56:11 +0200
+Message-Id: <cover.1567839375.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.19.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Changes PATCH V1:
+* fix typo in omap3-ldp.dts
+  (reported by Tony Lindgren <tony@atomide.com>)
+* extend commit message to describe the bit patterns needed
+  for opp-supported-hw
+* add error check to ioremap()
+  (suggested by Christ van Willegen <cvwillegen@gmail.com>)
+* update Documentation/devicetree/bindings/arm/omap/omap.txt
+* change bulk update to use "ti,omap3430" and "ti,omap3630"
+* update OPP4 of omap3430 to 1275 mV since it was not a valid
+  voltage for the twl4030 driver (reported by Tony Lindgren
+  <tony@atomide.com>)
 
-> Am 06.09.2019 um 22:46 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->=20
-> Hi,
->=20
->> Am 06.09.2019 um 05:01 schrieb Viresh Kumar =
-<viresh.kumar@linaro.org>:
->>=20
->> On 05-09-19, 07:32, Tony Lindgren wrote:
->>> * H. Nikolaus Schaller <hns@goldelico.com> [190904 08:54]:
->>>> This adds code and tables to read the silicon revision and
->>>> eFuse (speed binned / 720 MHz grade) bits for selecting
->>>> opp-v2 table entries.
->>>>=20
->>>> Since these bits are not always part of the syscon register
->>>> range (like for am33xx, am43, dra7), we add code to directly
->>>> read the register values using ioremap() if syscon access fails.
->>>=20
->>> This is nice :) Seems to work for me based on a quick test
->>> on at least omap36xx.
->>>=20
->>> Looks like n900 produces the following though:
->>>=20
->>> core: _opp_supported_by_regulators: OPP minuV: 1270000 maxuV: =
-1270000, not supported by regulator
->>> cpu cpu0: _opp_add: OPP not supported by regulators (550000000)
->>=20
->> That's a DT thing I believe where the voltage doesn't fit what the
->> regulator can support.
->=20
-> I can confirm this on BeagleBoard C2:
->=20
-> root@gta04:~# dmesg|fgrep -i opp
-> [    2.347442] core: _opp_supported_by_regulators: OPP minuV: 1270000 =
-maxuV: 1270000, not supported by regulator
-> [    2.359222] cpu cpu0: _opp_add: OPP not supported by regulators =
-(550000000)
-> [    2.580993] omap2_set_init_voltage: unable to find boot up OPP for =
-vdd_core
-> root@gta04:~#=20
->=20
->>=20
->>> But presumably that can be further patched.
->=20
-> Well, the opp-v1 table also has this voltage point:
->=20
-> 			/* OMAP343x/OMAP35xx variants OPP1-5 */
-> 			operating-points =3D <
-> 				/* kHz    uV */
-> 				125000   975000
-> 				250000  1075000
-> 				500000  1200000
-> 				550000  1270000
-> 				600000  1350000
-> 			>;
->=20
->=20
-> This is OPP4 which is recommended by OMAP3530 data sheet to be 1.27V =
-+/- 5%
->=20
-> Data sheet of tps65950 says
->=20
-> 	=E2=80=A2 VDD1: 1.2-A, buck DC/DC converter (VOUT =3D 0.6 V to =
-1.45 V, in steps of 12.5 mV)
->=20
-> This means 1270 mV is not a "step" and rejected by the twl4030 driver.
-> Maybe nobody did notice yet because the opp-v1 drivers did not warn...
->=20
-> The closest value to 1.27V is 0.6V + 54 * 12.5mV is 1.275V
->=20
-> So let's also change the OPP4 to 1275000 uV in the opp-v2 table.
+RFC V2 2019-09-04 10:53:43:
+* merge separate patch to remove opp-v1 table from n950-n9 into
+  the general omap3xxx.dtsi patch
+  (suggested by Viresh Kumar <viresh.kumar@linaro.org>)
+* add legacy compatibility to ti,omap3430 and ti,omap3630 for
+  the ti-cpufreq driver
+* make driver and omap3xxx.dtsi patches pass checkpatch
+* add bulk patch to explicitly define compatibility to ti,omap3430
+  and ti,omap36xx in addition to ti,omap3 of all in-tree boards
+  where it was missing
 
-The OPP is now available. Only
+RFC V1 2019-09-02 12:55:55:
 
-[    2.569519] omap2_set_init_voltage: unable to find boot up OPP for =
-vdd_core
+This patch set converts the omap3 opp tables to opp-v2 format
+and extends the ti-cpufreq to support omap3.
 
-remains but this is a different issue (mismatch between U-Boot =
-clock/vdd_core
-setup and kernel table). Most likely U-Boot runs with an 300MHz OPP =
-which is
-not defined by data sheet or kernel opp tables.
+It adds 720 MHz (omap34xx) and 1 GHz (omap36xx) OPPs but
+tells the ti-cpufreq driver to disable them if the speed
+binned / 720MHz grade eFuse bits indicate that the chip
+is not rated for that speed. 
 
-BR,
-Nikolaus=
+It has been tested (for chip variant detection, not reliability
+of the high speed OPPs) on:
+
+* BeagleBoard C2 (omap3530 600MHz)
+* BeagleBoard XM B (dm3730 800MHz)
+* GTA04A4 (dm3730 800MHz)
+* GTA04A5 (dm3730 1GHz)
+
+
+H. Nikolaus Schaller (4):
+  cpufreq: ti-cpufreq: add support for omap34xx and omap36xx
+  ARM: dts: replace opp-v1 tables by opp-v2 for omap34xx and omap36xx
+  ARM: dts: omap3: bulk convert compatible to be explicitly ti,omap3430
+    or ti,omap3630 or ti,am3517
+  DTS: bindings: omap: update bindings documentation
+
+ .../devicetree/bindings/arm/omap/omap.txt     | 30 +++---
+ arch/arm/boot/dts/am3517_mt_ventoux.dts       |  2 +-
+ .../boot/dts/logicpd-som-lv-35xx-devkit.dts   |  2 +-
+ .../boot/dts/logicpd-torpedo-35xx-devkit.dts  |  2 +-
+ arch/arm/boot/dts/omap3-beagle-xm.dts         |  2 +-
+ arch/arm/boot/dts/omap3-beagle.dts            |  2 +-
+ arch/arm/boot/dts/omap3-cm-t3530.dts          |  2 +-
+ arch/arm/boot/dts/omap3-cm-t3730.dts          |  2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd43.dts  |  2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd70.dts  |  2 +-
+ arch/arm/boot/dts/omap3-devkit8000.dts        |  2 +-
+ arch/arm/boot/dts/omap3-gta04.dtsi            |  2 +-
+ arch/arm/boot/dts/omap3-ha-lcd.dts            |  2 +-
+ arch/arm/boot/dts/omap3-ha.dts                |  2 +-
+ arch/arm/boot/dts/omap3-igep0020-rev-f.dts    |  2 +-
+ arch/arm/boot/dts/omap3-igep0020.dts          |  2 +-
+ arch/arm/boot/dts/omap3-igep0030-rev-g.dts    |  2 +-
+ arch/arm/boot/dts/omap3-igep0030.dts          |  2 +-
+ arch/arm/boot/dts/omap3-ldp.dts               |  2 +-
+ arch/arm/boot/dts/omap3-lilly-a83x.dtsi       |  2 +-
+ arch/arm/boot/dts/omap3-lilly-dbb056.dts      |  2 +-
+ arch/arm/boot/dts/omap3-n9.dts                |  2 +-
+ arch/arm/boot/dts/omap3-n950-n9.dtsi          |  7 --
+ arch/arm/boot/dts/omap3-n950.dts              |  2 +-
+ .../arm/boot/dts/omap3-overo-storm-alto35.dts |  2 +-
+ .../boot/dts/omap3-overo-storm-chestnut43.dts |  2 +-
+ .../boot/dts/omap3-overo-storm-gallop43.dts   |  2 +-
+ .../arm/boot/dts/omap3-overo-storm-palo35.dts |  2 +-
+ .../arm/boot/dts/omap3-overo-storm-palo43.dts |  2 +-
+ .../arm/boot/dts/omap3-overo-storm-summit.dts |  2 +-
+ arch/arm/boot/dts/omap3-overo-storm-tobi.dts  |  2 +-
+ .../boot/dts/omap3-overo-storm-tobiduo.dts    |  2 +-
+ arch/arm/boot/dts/omap3-pandora-1ghz.dts      |  2 +-
+ arch/arm/boot/dts/omap3-sbc-t3530.dts         |  2 +-
+ arch/arm/boot/dts/omap3-sbc-t3730.dts         |  2 +-
+ arch/arm/boot/dts/omap3-sniper.dts            |  2 +-
+ arch/arm/boot/dts/omap3-thunder.dts           |  2 +-
+ arch/arm/boot/dts/omap3-zoom3.dts             |  2 +-
+ arch/arm/boot/dts/omap3430-sdp.dts            |  2 +-
+ arch/arm/boot/dts/omap34xx.dtsi               | 65 +++++++++++--
+ arch/arm/boot/dts/omap36xx.dtsi               | 53 +++++++++--
+ drivers/cpufreq/cpufreq-dt-platdev.c          |  2 +-
+ drivers/cpufreq/ti-cpufreq.c                  | 91 ++++++++++++++++++-
+ 43 files changed, 245 insertions(+), 77 deletions(-)
+
+-- 
+2.19.1
+
