@@ -2,106 +2,374 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7085EACA00
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2019 01:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E72BACCAE
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Sep 2019 14:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395378AbfIGXqU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 Sep 2019 19:46:20 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:53916 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395359AbfIGXqS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 Sep 2019 19:46:18 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x87Nhp3c084817;
-        Sat, 7 Sep 2019 23:46:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=tRVOPXcmIvP6hLEjNyL59QRX+AnG9vh+uFcv9paTsEI=;
- b=eOTbzUj0NrHqeZRUqtae705XwbcUL4ns8+rSDShzWaMKUDr08/aiW9Z5lmecp0479NCG
- u2hu0sSQgG3Wv8sexdPnjsvO/SVCm5M2XNswjrM7uiC7B6VdeRx7PxiUxTrsdf8D1q6q
- qVwjiplK/5VyMY5Usp1lhD31Fxzrh8PUm3c79qDJaNhPgilOh294ylOnlMso/ssJnuZ1
- pbDw5WJpia3x0JkksAX/1hV9PgLxZ4pKV7BxMqm9+tmB2aJg2anjmpczbuC56Xag5Qqn
- iYnH/t/vMlishou28vxTGjw3xz+75hy4ZhD0Qs/eMmPQ4V2tuD3HNvp8Y00C0o7Wsqx8 yg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2uvpfqg06a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 07 Sep 2019 23:46:04 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x87NhnkH002272;
-        Sat, 7 Sep 2019 23:46:03 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2uv3wjr126-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 07 Sep 2019 23:46:03 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x87Nk3KR013835;
-        Sat, 7 Sep 2019 23:46:03 GMT
-Received: from paddy.uk.oracle.com (/10.175.163.125)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 07 Sep 2019 16:46:02 -0700
-From:   Joao Martins <joao.m.martins@oracle.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Joao Martins <joao.m.martins@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org
-Subject: [PATCH v3 4/4] cpuidle-haltpoll: do not set an owner to allow modunload
-Date:   Sun,  8 Sep 2019 00:45:24 +0100
-Message-Id: <20190907234524.5577-5-joao.m.martins@oracle.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190907234524.5577-1-joao.m.martins@oracle.com>
-References: <20190907234524.5577-1-joao.m.martins@oracle.com>
+        id S1729127AbfIHM3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 Sep 2019 08:29:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52366 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728922AbfIHM3w (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 8 Sep 2019 08:29:52 -0400
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5537C214D9;
+        Sun,  8 Sep 2019 12:29:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567945790;
+        bh=0ME8lxQlgIXI2GTkHugQVSj2YHJKSsaTU8trcri8oB8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mNSr/PVIPhGjv9a5n7+EYQ1GX8gflBbYS8shVzTsM8gfjTvAC7wIQd0BOTaJpI0Uz
+         WWkiA7wu6twROYcG7HjnF01NppaNb+5aZmW4c/e2oiJWA5RmeRLmmZGP4x83aovNqE
+         xEoKDJddRVEcSw+qKV5Qe3XMaCTpfiLvKBwRMT40=
+Date:   Sun, 8 Sep 2019 13:29:44 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 10/11] dt-bindings: iio: adc: exynos: Convert Exynos
+ ADC bindings to json-schema
+Message-ID: <20190908132944.029f3a93@archlinux>
+In-Reply-To: <20190907092007.9946-10-krzk@kernel.org>
+References: <20190907092007.9946-1-krzk@kernel.org>
+        <20190907092007.9946-10-krzk@kernel.org>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9373 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=732
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1909070260
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9373 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=796 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1909070260
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-cpuidle-haltpoll can be built as a module to allow optional late load.
-Given we are setting @owner to THIS_MODULE, cpuidle will attempt to grab a
-module reference every time a cpuidle_device is registered -- so
-essentially all online cpus get a reference.
+On Sat,  7 Sep 2019 11:20:06 +0200
+Krzysztof Kozlowski <krzk@kernel.org> wrote:
 
-This prevents for the module to be unloaded later, which makes the
-module_exit callback entirely unused. Thus remove the @owner and allow
-module to be unloaded.
+> Convert Samsung Exynos Analog to Digital Converter bindings to DT schema
+> format using json-schema.
+> 
+> This is a direct conversion of existing bindings so it also copies the
+> existing error in the bindings regarding the requirement of two register
+> address ranges for certain compatibles.  The inconsistency in binding
+> was caused by commit fafb37cfae6d ("iio: exyno-adc: use syscon for PMU
+> register access").
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Fixes: fa86ee90eb11 ("add cpuidle-haltpoll driver")
-Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
----
-v2:
- * Added Fixes tag
----
- drivers/cpuidle/cpuidle-haltpoll.c | 1 -
- 1 file changed, 1 deletion(-)
+To my less than experienced eye when it comes to yaml, this looks fine.
+I'll wait on more experienced review before I apply it however!
 
-diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-index 7a0239ef717e..49a65c6fe91e 100644
---- a/drivers/cpuidle/cpuidle-haltpoll.c
-+++ b/drivers/cpuidle/cpuidle-haltpoll.c
-@@ -35,7 +35,6 @@ static int default_enter_idle(struct cpuidle_device *dev,
- static struct cpuidle_driver haltpoll_driver = {
- 	.name = "haltpoll",
- 	.governor = "haltpoll",
--	.owner = THIS_MODULE,
- 	.states = {
- 		{ /* entry 0 is for polling */ },
- 		{
--- 
-2.17.1
+Thanks,
+
+Jonathan
+
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Rework reg, clocks and clock-names matching for specific compatibles,
+> 2. Make samsung,syscon-phandle required only on certain compatibles,
+> 3. Fix indentation.
+> ---
+>  .../bindings/iio/adc/samsung,exynos-adc.txt   | 107 ------------
+>  .../bindings/iio/adc/samsung,exynos-adc.yaml  | 163 ++++++++++++++++++
+>  2 files changed, 163 insertions(+), 107 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.txt
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.txt b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.txt
+> deleted file mode 100644
+> index e1fe02f3e3e9..000000000000
+> --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.txt
+> +++ /dev/null
+> @@ -1,107 +0,0 @@
+> -Samsung Exynos Analog to Digital Converter bindings
+> -
+> -The devicetree bindings are for the new ADC driver written for
+> -Exynos4 and upward SoCs from Samsung.
+> -
+> -New driver handles the following
+> -1. Supports ADC IF found on EXYNOS4412/EXYNOS5250
+> -   and future SoCs from Samsung
+> -2. Add ADC driver under iio/adc framework
+> -3. Also adds the Documentation for device tree bindings
+> -
+> -Required properties:
+> -- compatible:		Must be "samsung,exynos-adc-v1"
+> -				for Exynos5250 controllers.
+> -			Must be "samsung,exynos-adc-v2" for
+> -				future controllers.
+> -			Must be "samsung,exynos3250-adc" for
+> -				controllers compatible with ADC of Exynos3250.
+> -			Must be "samsung,exynos4212-adc" for
+> -				controllers compatible with ADC of Exynos4212 and Exynos4412.
+> -			Must be "samsung,exynos7-adc" for
+> -				the ADC in Exynos7 and compatibles
+> -			Must be "samsung,s3c2410-adc" for
+> -				the ADC in s3c2410 and compatibles
+> -			Must be "samsung,s3c2416-adc" for
+> -				the ADC in s3c2416 and compatibles
+> -			Must be "samsung,s3c2440-adc" for
+> -				the ADC in s3c2440 and compatibles
+> -			Must be "samsung,s3c2443-adc" for
+> -				the ADC in s3c2443 and compatibles
+> -			Must be "samsung,s3c6410-adc" for
+> -				the ADC in s3c6410 and compatibles
+> -			Must be "samsung,s5pv210-adc" for
+> -				the ADC in s5pv210 and compatibles
+> -- reg:			List of ADC register address range
+> -			- The base address and range of ADC register
+> -			- The base address and range of ADC_PHY register (every
+> -			  SoC except for s3c24xx/s3c64xx ADC)
+> -- interrupts: 		Contains the interrupt information for the timer. The
+> -			format is being dependent on which interrupt controller
+> -			the Samsung device uses.
+> -- #io-channel-cells = <1>; As ADC has multiple outputs
+> -- clocks		From common clock bindings: handles to clocks specified
+> -			in "clock-names" property, in the same order.
+> -- clock-names		From common clock bindings: list of clock input names
+> -			used by ADC block:
+> -			- "adc" : ADC bus clock
+> -			- "sclk" : ADC special clock (only for Exynos3250 and
+> -				   compatible ADC block)
+> -- vdd-supply		VDD input supply.
+> -
+> -- samsung,syscon-phandle Contains the PMU system controller node
+> -			(To access the ADC_PHY register on Exynos5250/5420/5800/3250)
+> -Optional properties:
+> -- has-touchscreen:	If present, indicates that a touchscreen is
+> -			connected an usable.
+> -
+> -Note: child nodes can be added for auto probing from device tree.
+> -
+> -Example: adding device info in dtsi file
+> -
+> -adc: adc@12d10000 {
+> -	compatible = "samsung,exynos-adc-v1";
+> -	reg = <0x12D10000 0x100>;
+> -	interrupts = <0 106 0>;
+> -	#io-channel-cells = <1>;
+> -	io-channel-ranges;
+> -
+> -	clocks = <&clock 303>;
+> -	clock-names = "adc";
+> -
+> -	vdd-supply = <&buck5_reg>;
+> -	samsung,syscon-phandle = <&pmu_system_controller>;
+> -};
+> -
+> -Example: adding device info in dtsi file for Exynos3250 with additional sclk
+> -
+> -adc: adc@126c0000 {
+> -	compatible = "samsung,exynos3250-adc", "samsung,exynos-adc-v2;
+> -	reg = <0x126C0000 0x100>;
+> -	interrupts = <0 137 0>;
+> -	#io-channel-cells = <1>;
+> -	io-channel-ranges;
+> -
+> -	clocks = <&cmu CLK_TSADC>, <&cmu CLK_SCLK_TSADC>;
+> -	clock-names = "adc", "sclk";
+> -
+> -	vdd-supply = <&buck5_reg>;
+> -	samsung,syscon-phandle = <&pmu_system_controller>;
+> -};
+> -
+> -Example: Adding child nodes in dts file
+> -
+> -adc@12d10000 {
+> -
+> -	/* NTC thermistor is a hwmon device */
+> -	ncp15wb473@0 {
+> -		compatible = "murata,ncp15wb473";
+> -		pullup-uv = <1800000>;
+> -		pullup-ohm = <47000>;
+> -		pulldown-ohm = <0>;
+> -		io-channels = <&adc 4>;
+> -	};
+> -};
+> -
+> -Note: Does not apply to ADC driver under arch/arm/plat-samsung/
+> -Note: The child node can be added under the adc node or separately.
+> diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> new file mode 100644
+> index 000000000000..dd58121f25b1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> @@ -0,0 +1,163 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/samsung,exynos-adc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Samsung Exynos Analog to Digital Converter (ADC)
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzk@kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - samsung,exynos-adc-v1                 # Exynos5250
+> +      - samsung,exynos-adc-v2
+> +      - samsung,exynos3250-adc
+> +      - samsung,exynos4212-adc                # Exynos4212 and Exynos4412
+> +      - samsung,exynos7-adc
+> +      - samsung,s3c2410-adc
+> +      - samsung,s3c2416-adc
+> +      - samsung,s3c2440-adc
+> +      - samsung,s3c2443-adc
+> +      - samsung,s3c6410-adc
+> +      - samsung,s5pv210-adc
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clocks:
+> +    description:
+> +      Phandle to ADC bus clock. For Exynos3250 additional clock is needed.
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    description:
+> +      Must contain clock names (adc, sclk) matching phandles in clocks
+> +      property.
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  "#io-channel-cells":
+> +    const: 1
+> +
+> +  vdd-supply:
+> +    description: VDD input supply
+> +    maxItems: 1
+> +
+> +  samsung,syscon-phandle:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +    description:
+> +      Phandle to the PMU system controller node (to access the ADC_PHY
+> +      register on Exynos5250/5420/5800/3250).
+> +
+> +  has-touchscreen:
+> +    description:
+> +      If present, indicates that a touchscreen is connected and usable.
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - "#io-channel-cells"
+> +  - vdd-supply
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - samsung,exynos-adc-v1
+> +              - samsung,exynos-adc-v2
+> +              - samsung,exynos3250-adc
+> +              - samsung,exynos4212-adc
+> +              - samsung,s5pv210-adc
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            # For S5P and Exynos
+> +            - description: base registers
+> +            - description: phy registers
+> +      required:
+> +        - samsung,syscon-phandle
+> +    else:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - description: base registers
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - samsung,exynos3250-adc
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +          maxItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: adc
+> +            - const: sclk
+> +    else:
+> +      properties:
+> +        clocks:
+> +          minItems: 1
+> +          maxItems: 1
+> +        clock-names:
+> +          items:
+> +            - const: adc
+> +
+> +examples:
+> +  - |
+> +    adc: adc@12d10000 {
+> +      compatible = "samsung,exynos-adc-v1";
+> +      reg = <0x12d10000 0x100>;
+> +      interrupts = <0 106 0>;
+> +      #io-channel-cells = <1>;
+> +      io-channel-ranges;
+> +
+> +      clocks = <&clock 303>;
+> +      clock-names = "adc";
+> +
+> +      vdd-supply = <&buck5_reg>;
+> +      samsung,syscon-phandle = <&pmu_system_controller>;
+> +
+> +      /* NTC thermistor is a hwmon device */
+> +      ncp15wb473@0 {
+> +        compatible = "murata,ncp15wb473";
+> +        pullup-uv = <1800000>;
+> +        pullup-ohm = <47000>;
+> +        pulldown-ohm = <0>;
+> +        io-channels = <&adc 4>;
+> +      };
+> +    };
+> +
+> +  - |
+> +    adc@126c0000 {
+> +      compatible = "samsung,exynos3250-adc";
+> +      reg = <0x126C0000 0x100>;
+> +      interrupts = <0 137 0>;
+> +      #io-channel-cells = <1>;
+> +      io-channel-ranges;
+> +
+> +      clocks = <&cmu 0>, // CLK_TSADC
+> +               <&cmu 1>; // CLK_SCLK_TSADC
+> +      clock-names = "adc", "sclk";
+> +
+> +      vdd-supply = <&buck5_reg>;
+> +      samsung,syscon-phandle = <&pmu_system_controller>;
+> +    };
 
