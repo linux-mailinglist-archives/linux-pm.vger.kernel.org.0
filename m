@@ -2,182 +2,288 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 503F7AD9FF
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2019 15:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7C5ADA30
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2019 15:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbfIINcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Sep 2019 09:32:19 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:41669 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726863AbfIINcT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Sep 2019 09:32:19 -0400
-Received: by mail-io1-f65.google.com with SMTP id r26so28566609ioh.8;
-        Mon, 09 Sep 2019 06:32:18 -0700 (PDT)
+        id S1730663AbfIINn1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Sep 2019 09:43:27 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:38182 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729438AbfIINn0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Sep 2019 09:43:26 -0400
+Received: by mail-io1-f66.google.com with SMTP id k5so3432464iol.5;
+        Mon, 09 Sep 2019 06:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uNPO18E9u4VFHR5eE6QVM48gJTzLZL8W/Knzhp286xk=;
-        b=kNHXD6JFZgQUAAdrzrOtXDHAaJeBL1xnN3iwN3mKbai6Q7jKlJxgRu39o/iTAD3TeH
-         JvQH/prFlc7xMpZHQ9hPTCS7xrImCip45XKaKwayev6LJ0XxQdwiKuVS0NJTbQ/fdCA9
-         FV5FpGnJrjYoTzpr0PQYsYAjo493bmJpXO1qNDuiO8dV24MeTQyQ2wDdU+Q3ktLeMGYq
-         lVYJ1vjR88/KtWt7zyDM1lxQFksTFp/6BgwKcTxAtl0ynEemsN44g/skL+sppOLiNvIc
-         o4KmNbsK9gPlf0bt9xe3YyJ9Li4sQdRhj52vGN3VgAfRIXbIyO54otGYNOjHIJMEcr0N
-         RivA==
+        bh=uj8cYXkJhMazfj5NVd7OEEcgf5lel1QFfUYYz9PuuUg=;
+        b=UqN2xHEmmSJ1Tbexwa/6YF0SY6Z9ftkKgsluGYRUfEyaZqnL/bopjFCtdThnhz94wb
+         DLnryRY7NutxIOR/1GcLArrU6bmd+HGgbRmoM3KqNSIM9agjAL8Aeru4AkTIb+rrz3v6
+         W8bjrNNMgdCn6XSulgErtfETBqXJH/O05uU7OYWzd/j8ubB0w/M/7CLBwmIukwTyVaRk
+         Tir3dBK+aqja3hUpyX/IWVMVkRSGIxJ9iHqyKMvCk51Z4EVY8Hi4m0SnEYzVlHV9W4vM
+         tnDKLv7EkZLrXKBDsaqBOvsYgiVgwM+AP8dF7rjf+eASRy9Fa9OJobz7Jx4LfjDLnBI/
+         00aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uNPO18E9u4VFHR5eE6QVM48gJTzLZL8W/Knzhp286xk=;
-        b=byFJoyiyhf/siJL9lvyV3xc7oIa1WhP3/UFd47yYW1MQCi7yd11t3BIDgwjX+W0wNN
-         aF2ooUlaGCJynwvdvyM7wADxSVBVn/Wm5TY0wu/fAfxNh5ojHiF7EAHaiJjLDgNoWIN/
-         KQ8A1QkoLltCy/ae1/E7btRYtpFxbvFeP/Kh9Carvnq+jaZrKakWX9WMicF6dwTh4BhK
-         TddS/A+z6vp0nkuGX/hqCqA8rZd+xPFInc0R3vJ9PvDtnMgSWf48l9dsy0lPw0IBdV3u
-         jvInAZzH41eXb0/RKg38IVPeshAknpIqxcfxiAuQq6h1jG1g64Pnz/c+bVhG7uHk8NEt
-         xIWw==
-X-Gm-Message-State: APjAAAWbQpFZw+kfn/IuUJtAuBdvgHiXqCo1L+tq7gX5Reh0iPFWl5QO
-        AIJ+gkO6tQqAQ9ZvY2sIOCQ//Ns2DtY0ci8YJYw=
-X-Google-Smtp-Source: APXvYqwLFSwDFF4ktapBCBuY9u/0Yh7kqig52d6DQ/Kmcw1NR1FMw1oGhVlizUKzQqVuwAUlzoNX4hC9NZnYBHbbLbg=
-X-Received: by 2002:a02:b395:: with SMTP id p21mr26999521jan.52.1568035937967;
- Mon, 09 Sep 2019 06:32:17 -0700 (PDT)
+        bh=uj8cYXkJhMazfj5NVd7OEEcgf5lel1QFfUYYz9PuuUg=;
+        b=Qe+81O0wlsze5tQjJI9UXtv+K9AOISEyr0Hcazo4KZekPTwpiVmzJ/AObqaI6YpjB9
+         jazEaJG3Wyp0ZA1GSjgmUEZHJ2Rq/dlw9r979HMM8NQ6soPEbaaccwYo9krZaKdTzb77
+         w/kgA5WyizD4aTQ0RR1aaU0yDDQ+OZJyy1PTqOr24kM1K5X9oTVbQtcuJQaj12SAYKs5
+         HWRtJoFhG6xae59mR6FF4MeKtSR0z1gTWuhToMf0YatS81829LGrYFoFVo+pXA/ejZnY
+         HU+E2GN/2UYroovXbP200iHrz2Cq6D6hh8B7wxmMwlBvuzobf6p+KM8Cnk0L2a76zkSn
+         1iJQ==
+X-Gm-Message-State: APjAAAU2n0AhUBoDLpHf3IeTliisxOE485lx2/KwxgUo1/YE7xXCayl+
+        iSzFOB1YSRtAWjYHunL/o+zWIITaYH9u9beQzcA=
+X-Google-Smtp-Source: APXvYqy1FVHSsfxS0gbdJaZ5R+pfPURTnvUsc65w9GB7f807rv62m+M+MNCwIT3h/4mgCrzpftjHKSoawakRZLLsqqo=
+X-Received: by 2002:a05:6638:627:: with SMTP id h7mr26456899jar.33.1568036604928;
+ Mon, 09 Sep 2019 06:43:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190814214319.24087-1-andreas@kemnade.info> <CAHCN7xL4K+1nJDXDRs7yVi6LhGL-4uPu9M+SN1dcOPu8=M8s2g@mail.gmail.com>
-In-Reply-To: <CAHCN7xL4K+1nJDXDRs7yVi6LhGL-4uPu9M+SN1dcOPu8=M8s2g@mail.gmail.com>
+References: <cover.1567878413.git.hns@goldelico.com> <784d0d08ee585fc436f15de4edb58b394d0f4452.1567878413.git.hns@goldelico.com>
+In-Reply-To: <784d0d08ee585fc436f15de4edb58b394d0f4452.1567878413.git.hns@goldelico.com>
 From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 9 Sep 2019 08:32:06 -0500
-Message-ID: <CAHCN7xJ0RmRQwo3bSF6FoLjOtrg5YZAMD9+=332LMzLLR1qdDA@mail.gmail.com>
-Subject: Re: [PATCH v2] regulator: twl: voltage lists for vdd1/2 on twl4030
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+Date:   Mon, 9 Sep 2019 08:43:13 -0500
+Message-ID: <CAHCN7xJU2oW3QggNtcY0qTMTH058EJxKZBC6tRign=kX2Jtg2g@mail.gmail.com>
+Subject: Re: [PATCH 2/4] ARM: dts: replace opp-v1 tables by opp-v2 for
+ omap34xx and omap36xx
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Andr=C3=A9_Roth?= <neolynx@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Teresa Remmet <t.remmet@phytec.de>,
         Linux-OMAP <linux-omap@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Nishanth Menon <nm@ti.com>, vireshk@kernel.org,
-        stable@vger.kernel.org
+        linux-pm@vger.kernel.org,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 5:47 AM Adam Ford <aford173@gmail.com> wrote:
+On Sat, Sep 7, 2019 at 12:47 PM H. Nikolaus Schaller <hns@goldelico.com> wrote:
 >
-> On Wed, Aug 14, 2019 at 5:18 PM Andreas Kemnade <andreas@kemnade.info> wrote:
-> >
-> > _opp_supported_by_regulators() wrongly ignored errors from
-> > regulator_is_supported_voltage(), so it considered errors as
-> > success. Since
-> > commit 498209445124 ("regulator: core: simplify return value on suported_voltage")
-> > regulator_is_supported_voltage() returns a real boolean, so
-> > errors make _opp_supported_by_regulators() return false.
-> >
-> > That reveals a problem with the declaration of the VDD1/2
-> > regulators on twl4030.
-> > The VDD1/VDD2 regulators on twl4030 are neither defined with
-> > voltage lists nor with the continuous flag set, so
-> > regulator_is_supported_voltage() returns false and an error
-> > before above mentioned commit (which was considered success)
-> > The result is that after the above mentioned commit cpufreq
-> > does not work properly e.g. dm3730.
-> >
-> > [    2.490997] core: _opp_supported_by_regulators: OPP minuV: 1012500 maxuV: 1012500, not supported by regulator
-> > [    2.501617] cpu cpu0: _opp_add: OPP not supported by regulators (300000000)
-> > [    2.509246] core: _opp_supported_by_regulators: OPP minuV: 1200000 maxuV: 1200000, not supported by regulator
-> > [    2.519775] cpu cpu0: _opp_add: OPP not supported by regulators (600000000)
-> > [    2.527313] core: _opp_supported_by_regulators: OPP minuV: 1325000 maxuV: 1325000, not supported by regulator
-> > [    2.537750] cpu cpu0: _opp_add: OPP not supported by regulators (800000000)
-> >
-> > The patch fixes declaration of VDD1/2 regulators by
-> > adding proper voltage lists.
-> >
-> > Fixes: 498209445124 ("regulator: core: simplify return value on suported_voltage")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> In addition, move omap3 from whitelist to blacklist in cpufreq-dt-platdev
+> in the same patch, because doing either first breaks operation and
+> may make trouble in bisect.
 >
-> Tested-by: Adam Ford <aford173@gmail.com> #logicpd-torpedo-37xx-devkit
+> We also can remove opp-v1 table for omap3-n950-n9 since it is now
+> automatically detected.
 >
+> We also fix a wrong OPP4 voltage for omap3430 which must be
+> 0.6V + 54*12.5mV = 1275mV. Otherwise the twl4030 driver will reject
+> this OPP.
+>
+thank you for your work on this.  I tested it on a a Logit PD DM3730
+Torpedo + Wireless kit, and appears to operate normally, but i have
+not tested it at temperature.
 
-I am not sure who the right maintainer is, but as of today, cpufreq
-for users of twl4030 on 5.3-RC8 is still broken without this patch.
-Is there any way it can be applied before the final release?
+Tested-by: Adam Ford <aford173@gmail.com>
 
-thank you,
-
-adam
-> > ---
-> > resent because it was rejected by mailing lists, due to technical
-> > issues, sorry for the noise.
-> > changes in v2:
-> >   using a proper voltage list instead of misusing the continuous flag
-> >   subject was regulator: twl: mark vdd1/2 as continuous on twl4030
-> >
-> >  drivers/regulator/twl-regulator.c | 23 ++++++++++++++++++++---
-> >  1 file changed, 20 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/regulator/twl-regulator.c b/drivers/regulator/twl-regulator.c
-> > index 6fa15b2d6fb3..866b4dd01da9 100644
-> > --- a/drivers/regulator/twl-regulator.c
-> > +++ b/drivers/regulator/twl-regulator.c
-> > @@ -359,6 +359,17 @@ static const u16 VINTANA2_VSEL_table[] = {
-> >         2500, 2750,
-> >  };
-> >
-> > +/* 600mV to 1450mV in 12.5 mV steps */
-> > +static const struct regulator_linear_range VDD1_ranges[] = {
-> > +       REGULATOR_LINEAR_RANGE(600000, 0, 68, 12500)
-> > +};
-> > +
-> > +/* 600mV to 1450mV in 12.5 mV steps, everything above = 1500mV */
-> > +static const struct regulator_linear_range VDD2_ranges[] = {
-> > +       REGULATOR_LINEAR_RANGE(600000, 0, 68, 12500),
-> > +       REGULATOR_LINEAR_RANGE(1500000, 69, 69, 12500)
-> > +};
-> > +
-> >  static int twl4030ldo_list_voltage(struct regulator_dev *rdev, unsigned index)
-> >  {
-> >         struct twlreg_info      *info = rdev_get_drvdata(rdev);
-> > @@ -427,6 +438,8 @@ static int twl4030smps_get_voltage(struct regulator_dev *rdev)
-> >  }
-> >
-> >  static const struct regulator_ops twl4030smps_ops = {
-> > +       .list_voltage   = regulator_list_voltage_linear_range,
-> > +
-> >         .set_voltage    = twl4030smps_set_voltage,
-> >         .get_voltage    = twl4030smps_get_voltage,
-> >  };
-> > @@ -466,7 +479,8 @@ static const struct twlreg_info TWL4030_INFO_##label = { \
-> >                 }, \
-> >         }
-> >
-> > -#define TWL4030_ADJUSTABLE_SMPS(label, offset, num, turnon_delay, remap_conf) \
-> > +#define TWL4030_ADJUSTABLE_SMPS(label, offset, num, turnon_delay, remap_conf, \
-> > +               n_volt) \
-> >  static const struct twlreg_info TWL4030_INFO_##label = { \
-> >         .base = offset, \
-> >         .id = num, \
-> > @@ -479,6 +493,9 @@ static const struct twlreg_info TWL4030_INFO_##label = { \
-> >                 .owner = THIS_MODULE, \
-> >                 .enable_time = turnon_delay, \
-> >                 .of_map_mode = twl4030reg_map_mode, \
-> > +               .n_voltages = n_volt, \
-> > +               .n_linear_ranges = ARRAY_SIZE(label ## _ranges), \
-> > +               .linear_ranges = label ## _ranges, \
-> >                 }, \
-> >         }
-> >
-> > @@ -518,8 +535,8 @@ TWL4030_ADJUSTABLE_LDO(VSIM, 0x37, 9, 100, 0x00);
-> >  TWL4030_ADJUSTABLE_LDO(VDAC, 0x3b, 10, 100, 0x08);
-> >  TWL4030_ADJUSTABLE_LDO(VINTANA2, 0x43, 12, 100, 0x08);
-> >  TWL4030_ADJUSTABLE_LDO(VIO, 0x4b, 14, 1000, 0x08);
-> > -TWL4030_ADJUSTABLE_SMPS(VDD1, 0x55, 15, 1000, 0x08);
-> > -TWL4030_ADJUSTABLE_SMPS(VDD2, 0x63, 16, 1000, 0x08);
-> > +TWL4030_ADJUSTABLE_SMPS(VDD1, 0x55, 15, 1000, 0x08, 68);
-> > +TWL4030_ADJUSTABLE_SMPS(VDD2, 0x63, 16, 1000, 0x08, 69);
-> >  /* VUSBCP is managed *only* by the USB subchip */
-> >  TWL4030_FIXED_LDO(VINTANA1, 0x3f, 1500, 11, 100, 0x08);
-> >  TWL4030_FIXED_LDO(VINTDIG, 0x47, 1500, 13, 100, 0x08);
-> > --
-> > 2.20.1
-> >
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Acked-by: Tony Lindgren <tony@atomide.com>
+> ---
+>  arch/arm/boot/dts/omap3-n950-n9.dtsi |  7 ---
+>  arch/arm/boot/dts/omap34xx.dtsi      | 65 ++++++++++++++++++++++++----
+>  arch/arm/boot/dts/omap36xx.dtsi      | 53 +++++++++++++++++++----
+>  drivers/cpufreq/cpufreq-dt-platdev.c |  2 +-
+>  4 files changed, 102 insertions(+), 25 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/omap3-n950-n9.dtsi b/arch/arm/boot/dts/omap3-n950-n9.dtsi
+> index 5441e9ffdbb4..e98b0c615f19 100644
+> --- a/arch/arm/boot/dts/omap3-n950-n9.dtsi
+> +++ b/arch/arm/boot/dts/omap3-n950-n9.dtsi
+> @@ -11,13 +11,6 @@
+>         cpus {
+>                 cpu@0 {
+>                         cpu0-supply = <&vcc>;
+> -                       operating-points = <
+> -                               /* kHz    uV */
+> -                               300000  1012500
+> -                               600000  1200000
+> -                               800000  1325000
+> -                               1000000 1375000
+> -                       >;
+>                 };
+>         };
+>
+> diff --git a/arch/arm/boot/dts/omap34xx.dtsi b/arch/arm/boot/dts/omap34xx.dtsi
+> index f572a477f74c..91154829f86a 100644
+> --- a/arch/arm/boot/dts/omap34xx.dtsi
+> +++ b/arch/arm/boot/dts/omap34xx.dtsi
+> @@ -16,19 +16,66 @@
+>  / {
+>         cpus {
+>                 cpu: cpu@0 {
+> -                       /* OMAP343x/OMAP35xx variants OPP1-5 */
+> -                       operating-points = <
+> -                               /* kHz    uV */
+> -                               125000   975000
+> -                               250000  1075000
+> -                               500000  1200000
+> -                               550000  1270000
+> -                               600000  1350000
+> -                       >;
+> +                       /* OMAP343x/OMAP35xx variants OPP1-6 */
+> +                       operating-points-v2 = <&cpu0_opp_table>;
+> +
+>                         clock-latency = <300000>; /* From legacy driver */
+>                 };
+>         };
+>
+> +       /* see Documentation/devicetree/bindings/opp/opp.txt */
+> +       cpu0_opp_table: opp-table {
+> +               compatible = "operating-points-v2-ti-cpu";
+> +               syscon = <&scm_conf>;
+> +
+> +               opp1-125000000 {
+> +                       opp-hz = /bits/ 64 <125000000>;
+> +                       /*
+> +                        * we currently only select the max voltage from table
+> +                        * Table 3-3 of the omap3530 Data sheet (SPRS507F).
+> +                        * Format is: <target min max>
+> +                        */
+> +                       opp-microvolt = <975000 975000 975000>;
+> +                       /*
+> +                        * first value is silicon revision bit mask
+> +                        * second one 720MHz Device Identification bit mask
+> +                        */
+> +                       opp-supported-hw = <0xffffffff 3>;
+> +               };
+> +
+> +               opp2-250000000 {
+> +                       opp-hz = /bits/ 64 <250000000>;
+> +                       opp-microvolt = <1075000 1075000 1075000>;
+> +                       opp-supported-hw = <0xffffffff 3>;
+> +                       opp-suspend;
+> +               };
+> +
+> +               opp3-500000000 {
+> +                       opp-hz = /bits/ 64 <500000000>;
+> +                       opp-microvolt = <1200000 1200000 1200000>;
+> +                       opp-supported-hw = <0xffffffff 3>;
+> +               };
+> +
+> +               opp4-550000000 {
+> +                       opp-hz = /bits/ 64 <550000000>;
+> +                       opp-microvolt = <1275000 1275000 1275000>;
+> +                       opp-supported-hw = <0xffffffff 3>;
+> +               };
+> +
+> +               opp5-600000000 {
+> +                       opp-hz = /bits/ 64 <600000000>;
+> +                       opp-microvolt = <1350000 1350000 1350000>;
+> +                       opp-supported-hw = <0xffffffff 3>;
+> +               };
+> +
+> +               opp6-720000000 {
+> +                       opp-hz = /bits/ 64 <720000000>;
+> +                       opp-microvolt = <1350000 1350000 1350000>;
+> +                       /* only high-speed grade omap3530 devices */
+> +                       opp-supported-hw = <0xffffffff 2>;
+> +               };
+> +       };
+> +
+>         ocp@68000000 {
+>                 omap3_pmx_core2: pinmux@480025d8 {
+>                         compatible = "ti,omap3-padconf", "pinctrl-single";
+> diff --git a/arch/arm/boot/dts/omap36xx.dtsi b/arch/arm/boot/dts/omap36xx.dtsi
+> index 6fb23ada1f64..44f25b0eb45b 100644
+> --- a/arch/arm/boot/dts/omap36xx.dtsi
+> +++ b/arch/arm/boot/dts/omap36xx.dtsi
+> @@ -19,15 +19,52 @@
+>         };
+>
+>         cpus {
+> -               /* OMAP3630/OMAP37xx 'standard device' variants OPP50 to OPP130 */
+> +               /* OMAP3630/OMAP37xx variants OPP50 to OPP130 and OPP1G */
+>                 cpu: cpu@0 {
+> -                       operating-points = <
+> -                               /* kHz    uV */
+> -                               300000  1012500
+> -                               600000  1200000
+> -                               800000  1325000
+> -                       >;
+> -                       clock-latency = <300000>; /* From legacy driver */
+> +                       operating-points-v2 = <&cpu0_opp_table>;
+> +
+> +                       clock-latency = <300000>; /* From omap-cpufreq driver */
+> +               };
+> +       };
+> +
+> +       /* see Documentation/devicetree/bindings/opp/opp.txt */
+> +       cpu0_opp_table: opp-table {
+> +               compatible = "operating-points-v2-ti-cpu";
+> +               syscon = <&scm_conf>;
+> +
+> +               opp50-300000000 {
+> +                       opp-hz = /bits/ 64 <300000000>;
+> +                       /*
+> +                        * we currently only select the max voltage from table
+> +                        * Table 4-19 of the DM3730 Data sheet (SPRS685B)
+> +                        * Format is: <target min max>
+> +                        */
+> +                       opp-microvolt = <1012500 1012500 1012500>;
+> +                       /*
+> +                        * first value is silicon revision bit mask
+> +                        * second one is "speed binned" bit mask
+> +                        */
+> +                       opp-supported-hw = <0xffffffff 3>;
+> +                       opp-suspend;
+> +               };
+> +
+> +               opp100-600000000 {
+> +                       opp-hz = /bits/ 64 <600000000>;
+> +                       opp-microvolt = <1200000 1200000 1200000>;
+> +                       opp-supported-hw = <0xffffffff 3>;
+> +               };
+> +
+> +               opp130-800000000 {
+> +                       opp-hz = /bits/ 64 <800000000>;
+> +                       opp-microvolt = <1325000 1325000 1325000>;
+> +                       opp-supported-hw = <0xffffffff 3>;
+> +               };
+> +
+> +               opp1g-1000000000 {
+> +                       opp-hz = /bits/ 64 <1000000000>;
+> +                       opp-microvolt = <1375000 1375000 1375000>;
+> +                       /* only on am/dm37x with speed-binned bit set */
+> +                       opp-supported-hw = <0xffffffff 2>;
+>                 };
+>         };
+>
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 03dc4244ab00..68b7fc4225f8 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -86,7 +86,6 @@ static const struct of_device_id whitelist[] __initconst = {
+>         { .compatible = "st-ericsson,u9540", },
+>
+>         { .compatible = "ti,omap2", },
+> -       { .compatible = "ti,omap3", },
+>         { .compatible = "ti,omap4", },
+>         { .compatible = "ti,omap5", },
+>
+> @@ -132,6 +131,7 @@ static const struct of_device_id blacklist[] __initconst = {
+>         { .compatible = "ti,am33xx", },
+>         { .compatible = "ti,am43", },
+>         { .compatible = "ti,dra7", },
+> +       { .compatible = "ti,omap3", },
+>
+>         { }
+>  };
+> --
+> 2.19.1
+>
