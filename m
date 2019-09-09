@@ -2,156 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B79FFAD5E8
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2019 11:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E6CAD7B1
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2019 13:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726581AbfIIJlR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Sep 2019 05:41:17 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:34729 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725818AbfIIJlR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Sep 2019 05:41:17 -0400
-Received: by mail-ua1-f66.google.com with SMTP id f25so4058164uap.1
-        for <linux-pm@vger.kernel.org>; Mon, 09 Sep 2019 02:41:15 -0700 (PDT)
+        id S2403947AbfIILNc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Sep 2019 07:13:32 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:45958 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731107AbfIILNc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Sep 2019 07:13:32 -0400
+Received: by mail-qk1-f195.google.com with SMTP id z67so12536528qkb.12
+        for <linux-pm@vger.kernel.org>; Mon, 09 Sep 2019 04:13:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8PuR1fcbJUiP6C3dnIS8EHaZBW3jUZPzLiy9Fdrqco4=;
-        b=jR6QDvR4q57Nli9dhXOVNkp77JY04qG/jULe56aBAb06+Epck8OR2qd5H6gmbEJ9SG
-         tkOpHu3/zvG2quV+pKM9FlATYU5YSaewjfqRrRouTmxtHssSV5nQ/Ol35zvYkVUyezXz
-         60cFb2P4TCJ1Fx+bnljCoR6cRSvMuYdWh4dZSDZjsg+PKnKMWajbhhz5WupBfNwmChVO
-         lslX+MCyo3BPO+QKMqYaamW4EpGC2uYVcCuT10yQQ1fMhiPPQf3AB+ree4Xo7EovCC2U
-         aKNxwVzCCphiQyj1TY/pCOxpE0efbJsrUsM6KNdl+dczi0IyQir7xzAG2O7xSxSKihzy
-         F4QA==
+        bh=lzbLF6sbAfnYGWD1gps2x+aTn+RTiERXdUTulw6z7hQ=;
+        b=Wy9JBMoInEpqgAuxp685QyKa5ze/CdmRctwNIx+YUn3diwI2ekQH827hLTqILdGdpH
+         ijLDyH3iJaljZelFRRQpN0VMLFiFqRG7FeEzjWX8yVrdWas01LjLQMvIseG8b818neLa
+         PDAylHjNa9xQapcnZV67KChPZj571VnAwAIdA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8PuR1fcbJUiP6C3dnIS8EHaZBW3jUZPzLiy9Fdrqco4=;
-        b=hfAoda+ZzsutK9pHCIjLbmShuL8IrpziAtVMZ5pcMDfg1snwz+aJzEMe53hkC1xwwr
-         gZK8vX9oI25irJ+6/lZn8dAVt32rqeaKPHBss1BxRsxqrHJJcawYsSxbIJtAHfhU7Nt/
-         vQGvNjm9ihlLhl27UHPH6GP1p+0yRY3cixH86cDLBB4YnZ71Wwyb4tHBLDQWV5LdiHuu
-         bYqeNFZvBTgbJ14XE+dPhtdC2U55y3dpY1fb4hnM0lWPtqm31uBJztV9IeW145n5HYtb
-         NqkPSH5fvHdO5JdsRBfluBo6vi/5s1IWU05JWjFqdz50UC2DSHLyuKPBptCAMmUodpSW
-         eesw==
-X-Gm-Message-State: APjAAAWsBPkL+75wHhaRPDKbnv/dxqtccBY2s+msugnlbvxvjU7DAs3/
-        1xfhN48YoEey+9ahmAImEbdlmjbUoYrwx4s25oB8AQ==
-X-Google-Smtp-Source: APXvYqxvtxq537xBknY78F5hjndWmAwtKqtvACJnUmpi4lvz08hFIHcUupwoDfa89KGdyO/HzUC7WtGn1IYhNopOLw4=
-X-Received: by 2002:a9f:24c4:: with SMTP id 62mr4001029uar.104.1568022074856;
- Mon, 09 Sep 2019 02:41:14 -0700 (PDT)
+        bh=lzbLF6sbAfnYGWD1gps2x+aTn+RTiERXdUTulw6z7hQ=;
+        b=Gup+cycvC67cIQ82PH32txTVwTBK9A5MihEo46DZmyYF2NBeXLzg9uJETtu3/8cOfc
+         AgwhX9Q+fTAhzFbTqrBzQ5rxEm8k51VfFxyk5kJT/2BkQtaFrOpv7gB+uW2Eg9g8iotF
+         g3e5F1p20ZxfVp8BHb/AXDlIiweb6f3bO2qDz8xpNxZjdGSplKIoOnQQQgw/KyjompCa
+         5uiWyi73XUOEHo1kBmgOI4N5m4fGYQJNpxtHn2eK2J0FMCqKnors3AKKKKQ5uGHp/IFE
+         HA3DdTZO5BIIGx44OE4ix93kvbqDyydIsFeYbG8SvoUTqRF0z/PzmRu2tZQh9HhHP4Bx
+         mUWw==
+X-Gm-Message-State: APjAAAVueL/VPISfpMsdLldj+WC4C3hqVxfyolAcuKsnYXMIgzGPyYef
+        aeGrUbb3B29XmCULeJnVEg/544SGFyxBVOt4Ma44PA==
+X-Google-Smtp-Source: APXvYqyq3aUpXGkyGgaCMRUaagfPTK6C+li0tdEdPnVUTi7iZ7wtjzbPg5aluymGe3qw3C73YRQ0Nw6f3LWEw1sUDMk=
+X-Received: by 2002:a37:9b0e:: with SMTP id d14mr21627093qke.315.1568027611116;
+ Mon, 09 Sep 2019 04:13:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
- <1565398727-23090-2-git-send-email-thara.gopinath@linaro.org>
- <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com> <5D72DC94.6040508@linaro.org>
-In-Reply-To: <5D72DC94.6040508@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 9 Sep 2019 11:40:37 +0200
-Message-ID: <CAPDyKFqXYCK1bMFHmdNyOp1VwTopJ8gTHCBL1FajOS8LY+MoPQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] PM/Domains: Add support for retrieving genpd
- performance states information
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     qualcomm-lt@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>
+References: <1557494826-6044-1-git-send-email-michael.kao@mediatek.com> <1557494826-6044-8-git-send-email-michael.kao@mediatek.com>
+In-Reply-To: <1557494826-6044-8-git-send-email-michael.kao@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Mon, 9 Sep 2019 19:13:05 +0800
+Message-ID: <CAJMQK-jNAX_ADa1jAXBeB-eyqNJKqNLtCJ54nGkB=n1A=fGZxw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+To:     "michael.kao" <michael.kao@mediatek.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 7 Sep 2019 at 00:24, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+On Fri, May 10, 2019 at 9:27 PM michael.kao <michael.kao@mediatek.com> wrote:
 >
-> On 08/22/2019 11:03 AM, Ulf Hansson wrote:
-> > On Sat, 10 Aug 2019 at 02:58, Thara Gopinath <thara.gopinath@linaro.org> wrote:
-> >>
-> >> Add two new APIs in the genpd framework,
-> >> dev_pm_genpd_get_performance_state to return the current performance
-> >> state of a power domain and dev_pm_genpd_performance_state_count to
-> >> return the total number of performance states supported by a
-> >> power domain. Since the genpd framework does not maintain
-> >> a count of number of performance states supported by a power domain,
-> >> introduce a new callback(.get_performance_state_count) that can be used
-> >> to retrieve this information from power domain drivers.
-> >
-> > I think some brief background to *why* this is useful needs to be
-> > squeezed into the changelog. Or at least state that following changes
-> > makes use of it, somehow.
-> >
-> >>
-> >> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> >> ---
-> >>  drivers/base/power/domain.c | 38 ++++++++++++++++++++++++++++++++++++++
-> >>  include/linux/pm_domain.h   | 18 ++++++++++++++++++
-> >>  2 files changed, 56 insertions(+)
-> >>
-> >> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> >> index b063bc4..17e0375 100644
-> >> --- a/drivers/base/power/domain.c
-> >> +++ b/drivers/base/power/domain.c
-> >> @@ -413,6 +413,44 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
-> >>
-> >> +int dev_pm_genpd_get_performance_state(struct device *dev,
-> >> +                                      unsigned int *state)
-> >> +{
-> >> +       struct generic_pm_domain *genpd;
-> >> +
-> >> +       genpd = dev_to_genpd(dev);
-> >
-> > We need to verify that the there is a genpd attached before doing this
-> > cast. Let me post a patch in a day or so, it will give you a helper
-> > function that covers this.
-> >
-> >> +       if (IS_ERR(genpd))
-> >> +               return -ENODEV;
-> >> +
-> >> +       genpd_lock(genpd);
-> >> +       *state = genpd->performance_state;
-> >
-> > Why not return the state, rather than assigning an out-parameter?
-> >
-> >> +       genpd_unlock(genpd);
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(dev_pm_genpd_get_performance_state);
-> >> +
-> >> +int dev_pm_genpd_performance_state_count(struct device *dev,
-> >> +                                        unsigned int *count)
-> >> +{
-> >> +       struct generic_pm_domain *genpd;
-> >> +       int ret;
-> >> +
-> >> +       genpd = dev_to_genpd(dev);
-> >> +       if (IS_ERR(genpd))
-> >> +               return -ENODEV;
-> >> +
-> >> +       if (unlikely(!genpd->get_performance_state_count))
-> >> +               return -EINVAL;
-> >> +
-> >> +       genpd_lock(genpd);
-> >> +       ret = genpd->get_performance_state_count(genpd, count);
-> >
-> > Why not having the callback to return the state, rather than using an
-> > out-parameter?
-> Hi Ulf,
-> I just realized that returning the state instead of using a parameter
-> will prevent me from access under lock. Is that okay ?
+> From: Michael Kao <michael.kao@mediatek.com>
+>
+> Provide thermal zone to read thermal sensor
+> in the SoC. We can read all the thermal sensors
+> value in the SoC by the node /sys/class/thermal/
+>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> ---
+>  drivers/thermal/mtk_thermal.c | 68 ++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 60 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index cb41e46..d5c78b0 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -230,6 +230,11 @@ enum {
+>
+>  struct mtk_thermal;
+>
+> +struct mtk_thermal_zone {
+> +       struct mtk_thermal *mt;
+> +       int id;
+> +};
+> +
+>  struct thermal_bank_cfg {
+>         unsigned int num_sensors;
+>         const int *sensors;
+> @@ -612,7 +617,7 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>                  * not immediately shut down.
+>                  */
+>                 if (temp > 200000)
+> -                       temp = 0;
+> +                       temp = -EACCES;
+Should we return -EAGAIN here? Otherwise there would be warning:
+[    0.344167] thermal thermal_zone5: failed to read out thermal zone (-13)
 
-Not sure I understand. Why can't you just assign a local variable and
-return that?
-
-Like this:
-
-genpd_lock();
-count = genpd->get_performance_state_count();
-genpd_unlock();
-
-return count;
-
-[...]
-
-Kind regards
-Uffe
+Since first read is bogus value, I think EAGAIN also makes sense here.
+>
+>                 if (temp > max)
+>                         max = temp;
+> @@ -623,7 +628,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>
+>  static int mtk_read_temp(void *data, int *temperature)
+>  {
+> -       struct mtk_thermal *mt = data;
+> +       struct mtk_thermal_zone *tz = data;
+> +       struct mtk_thermal *mt = tz->mt;
+>         int i;
+>         int tempmax = INT_MIN;
+>
+> @@ -636,16 +642,48 @@ static int mtk_read_temp(void *data, int *temperature)
+>
+>                 mtk_thermal_put_bank(bank);
+>         }
+> -
+>         *temperature = tempmax;
+>
+>         return 0;
+>  }
+>
+> +static int mtk_read_sensor_temp(void *data, int *temperature)
+> +{
+> +       struct mtk_thermal_zone *tz = data;
+> +       struct mtk_thermal *mt = tz->mt;
+> +       const struct mtk_thermal_data *conf = mt->conf;
+> +       int id = tz->id - 1;
+> +       int temp = INT_MIN;
+> +       u32 raw;
+> +
+> +       if (id < 0)
+> +               return  -EACCES;
+> +
+> +       raw = readl(mt->thermal_base + conf->msr[id]);
+> +
+> +       temp = raw_to_mcelsius(mt, id, raw);
+> +
+> +       /*
+> +        * The first read of a sensor often contains very high bogus
+> +        * temperature value. Filter these out so that the system does
+> +        * not immediately shut down.
+> +        */
+> +
+> +       if (temp > 200000)
+> +               return  -EACCES;
+Same here.
+> +
+> +       *temperature = temp;
+> +       return 0;
+> +}
+> +
+>  static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+>         .get_temp = mtk_read_temp,
+>  };
+>
+> +static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
+> +       .get_temp = mtk_read_sensor_temp,
+> +};
+> +
+>  static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>                                   u32 apmixed_phys_base, u32 auxadc_phys_base,
+>                                   int ctrl_id)
+> @@ -878,6 +916,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>         struct resource *res;
+>         u64 auxadc_phys_base, apmixed_phys_base;
+>         struct thermal_zone_device *tzdev;
+> +       struct mtk_thermal_zone *tz;
+>
+>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>         if (!mt)
+> @@ -959,11 +998,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>
+>         platform_set_drvdata(pdev, mt);
+>
+> -       tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+> -                                                    &mtk_thermal_ops);
+> -       if (IS_ERR(tzdev)) {
+> -               ret = PTR_ERR(tzdev);
+> -               goto err_disable_clk_peri_therm;
+> +       for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+> +               tz = kmalloc(sizeof(*tz), GFP_KERNEL);
+> +               if (!tz)
+> +                       return -ENOMEM;
+> +
+> +               tz->mt = mt;
+> +               tz->id = i;
+> +
+> +               tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i,
+> +                               tz, (i == 0) ?
+> +                               &mtk_thermal_ops : &mtk_thermal_sensor_ops);
+> +
+> +               if (IS_ERR(tzdev)) {
+> +                       if (IS_ERR(tzdev) != -EACCES) {
+> +                               ret = PTR_ERR(tzdev);
+> +                               goto err_disable_clk_peri_therm;
+> +                       }
+> +               }
+>         }
+>
+>         return 0;
+> --
+> 2.6.4
+>
