@@ -2,83 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE57AD1FE
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2019 04:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79FFAD5E8
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Sep 2019 11:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732992AbfIIChc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 Sep 2019 22:37:32 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54660 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731928AbfIIChc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 8 Sep 2019 22:37:32 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4B818AF25;
-        Mon,  9 Sep 2019 02:37:30 +0000 (UTC)
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     srinivas.pandruvada@linux.intel.com, tglx@linutronix.de,
-        mingo@redhat.com, peterz@infradead.org, bp@suse.de,
-        lenb@kernel.org, rjw@rjwysocki.net
-Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
-        matt@codeblueprint.co.uk, viresh.kumar@linaro.org,
-        juri.lelli@redhat.com, pjt@google.com, vincent.guittot@linaro.org,
-        qperret@qperret.net, dietmar.eggemann@arm.com,
-        Giovanni Gherdovich <ggherdovich@suse.cz>
-Subject: [PATCH 2/2] cpufreq: intel_pstate: Conditional frequency invariant accounting
-Date:   Mon,  9 Sep 2019 04:42:16 +0200
-Message-Id: <20190909024216.5942-3-ggherdovich@suse.cz>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20190909024216.5942-1-ggherdovich@suse.cz>
-References: <20190909024216.5942-1-ggherdovich@suse.cz>
+        id S1726581AbfIIJlR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Sep 2019 05:41:17 -0400
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:34729 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725818AbfIIJlR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Sep 2019 05:41:17 -0400
+Received: by mail-ua1-f66.google.com with SMTP id f25so4058164uap.1
+        for <linux-pm@vger.kernel.org>; Mon, 09 Sep 2019 02:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8PuR1fcbJUiP6C3dnIS8EHaZBW3jUZPzLiy9Fdrqco4=;
+        b=jR6QDvR4q57Nli9dhXOVNkp77JY04qG/jULe56aBAb06+Epck8OR2qd5H6gmbEJ9SG
+         tkOpHu3/zvG2quV+pKM9FlATYU5YSaewjfqRrRouTmxtHssSV5nQ/Ol35zvYkVUyezXz
+         60cFb2P4TCJ1Fx+bnljCoR6cRSvMuYdWh4dZSDZjsg+PKnKMWajbhhz5WupBfNwmChVO
+         lslX+MCyo3BPO+QKMqYaamW4EpGC2uYVcCuT10yQQ1fMhiPPQf3AB+ree4Xo7EovCC2U
+         aKNxwVzCCphiQyj1TY/pCOxpE0efbJsrUsM6KNdl+dczi0IyQir7xzAG2O7xSxSKihzy
+         F4QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8PuR1fcbJUiP6C3dnIS8EHaZBW3jUZPzLiy9Fdrqco4=;
+        b=hfAoda+ZzsutK9pHCIjLbmShuL8IrpziAtVMZ5pcMDfg1snwz+aJzEMe53hkC1xwwr
+         gZK8vX9oI25irJ+6/lZn8dAVt32rqeaKPHBss1BxRsxqrHJJcawYsSxbIJtAHfhU7Nt/
+         vQGvNjm9ihlLhl27UHPH6GP1p+0yRY3cixH86cDLBB4YnZ71Wwyb4tHBLDQWV5LdiHuu
+         bYqeNFZvBTgbJ14XE+dPhtdC2U55y3dpY1fb4hnM0lWPtqm31uBJztV9IeW145n5HYtb
+         NqkPSH5fvHdO5JdsRBfluBo6vi/5s1IWU05JWjFqdz50UC2DSHLyuKPBptCAMmUodpSW
+         eesw==
+X-Gm-Message-State: APjAAAWsBPkL+75wHhaRPDKbnv/dxqtccBY2s+msugnlbvxvjU7DAs3/
+        1xfhN48YoEey+9ahmAImEbdlmjbUoYrwx4s25oB8AQ==
+X-Google-Smtp-Source: APXvYqxvtxq537xBknY78F5hjndWmAwtKqtvACJnUmpi4lvz08hFIHcUupwoDfa89KGdyO/HzUC7WtGn1IYhNopOLw4=
+X-Received: by 2002:a9f:24c4:: with SMTP id 62mr4001029uar.104.1568022074856;
+ Mon, 09 Sep 2019 02:41:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <1565398727-23090-1-git-send-email-thara.gopinath@linaro.org>
+ <1565398727-23090-2-git-send-email-thara.gopinath@linaro.org>
+ <CAPDyKFrcK+Jub0gAeevrscoGaHA+PRGmVHZHxB2T6_3Fqm=ceA@mail.gmail.com> <5D72DC94.6040508@linaro.org>
+In-Reply-To: <5D72DC94.6040508@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 9 Sep 2019 11:40:37 +0200
+Message-ID: <CAPDyKFqXYCK1bMFHmdNyOp1VwTopJ8gTHCBL1FajOS8LY+MoPQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] PM/Domains: Add support for retrieving genpd
+ performance states information
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     qualcomm-lt@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Sat, 7 Sep 2019 at 00:24, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+>
+> On 08/22/2019 11:03 AM, Ulf Hansson wrote:
+> > On Sat, 10 Aug 2019 at 02:58, Thara Gopinath <thara.gopinath@linaro.org> wrote:
+> >>
+> >> Add two new APIs in the genpd framework,
+> >> dev_pm_genpd_get_performance_state to return the current performance
+> >> state of a power domain and dev_pm_genpd_performance_state_count to
+> >> return the total number of performance states supported by a
+> >> power domain. Since the genpd framework does not maintain
+> >> a count of number of performance states supported by a power domain,
+> >> introduce a new callback(.get_performance_state_count) that can be used
+> >> to retrieve this information from power domain drivers.
+> >
+> > I think some brief background to *why* this is useful needs to be
+> > squeezed into the changelog. Or at least state that following changes
+> > makes use of it, somehow.
+> >
+> >>
+> >> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> >> ---
+> >>  drivers/base/power/domain.c | 38 ++++++++++++++++++++++++++++++++++++++
+> >>  include/linux/pm_domain.h   | 18 ++++++++++++++++++
+> >>  2 files changed, 56 insertions(+)
+> >>
+> >> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> >> index b063bc4..17e0375 100644
+> >> --- a/drivers/base/power/domain.c
+> >> +++ b/drivers/base/power/domain.c
+> >> @@ -413,6 +413,44 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+> >>
+> >> +int dev_pm_genpd_get_performance_state(struct device *dev,
+> >> +                                      unsigned int *state)
+> >> +{
+> >> +       struct generic_pm_domain *genpd;
+> >> +
+> >> +       genpd = dev_to_genpd(dev);
+> >
+> > We need to verify that the there is a genpd attached before doing this
+> > cast. Let me post a patch in a day or so, it will give you a helper
+> > function that covers this.
+> >
+> >> +       if (IS_ERR(genpd))
+> >> +               return -ENODEV;
+> >> +
+> >> +       genpd_lock(genpd);
+> >> +       *state = genpd->performance_state;
+> >
+> > Why not return the state, rather than assigning an out-parameter?
+> >
+> >> +       genpd_unlock(genpd);
+> >> +
+> >> +       return 0;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(dev_pm_genpd_get_performance_state);
+> >> +
+> >> +int dev_pm_genpd_performance_state_count(struct device *dev,
+> >> +                                        unsigned int *count)
+> >> +{
+> >> +       struct generic_pm_domain *genpd;
+> >> +       int ret;
+> >> +
+> >> +       genpd = dev_to_genpd(dev);
+> >> +       if (IS_ERR(genpd))
+> >> +               return -ENODEV;
+> >> +
+> >> +       if (unlikely(!genpd->get_performance_state_count))
+> >> +               return -EINVAL;
+> >> +
+> >> +       genpd_lock(genpd);
+> >> +       ret = genpd->get_performance_state_count(genpd, count);
+> >
+> > Why not having the callback to return the state, rather than using an
+> > out-parameter?
+> Hi Ulf,
+> I just realized that returning the state instead of using a parameter
+> will prevent me from access under lock. Is that okay ?
 
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Not sure I understand. Why can't you just assign a local variable and
+return that?
 
-intel_pstate has two operating modes: active and passive. In "active"
-mode, the in-built scaling governor is used and in "passive" mode,
-the driver can be used with any governor like "schedutil". In "active"
-mode the utilization values from schedutil is not used and there is
-a requirement from high performance computing use cases, not to read
-any APERF/MPERF MSRs. In this case no need to use CPU cycles for
-frequency invariant accounting by reading APERF/MPERF MSRs.
-With this change frequency invariant account is only enabled in
-"passive" mode.
+Like this:
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
----
- drivers/cpufreq/intel_pstate.c | 5 +++++
- 1 file changed, 5 insertions(+)
+genpd_lock();
+count = genpd->get_performance_state_count();
+genpd_unlock();
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index cc27d4c59dca..d55da8604d50 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2381,6 +2381,8 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
- {
- 	int ret;
- 
-+	x86_arch_scale_freq_tick_disable();
-+
- 	memset(&global, 0, sizeof(global));
- 	global.max_perf_pct = 100;
- 
-@@ -2393,6 +2395,9 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
- 
- 	global.min_perf_pct = min_perf_pct_min();
- 
-+	if (driver == &intel_cpufreq)
-+		x86_arch_scale_freq_tick_enable();
-+
- 	return 0;
- }
- 
--- 
-2.16.4
+return count;
 
+[...]
+
+Kind regards
+Uffe
